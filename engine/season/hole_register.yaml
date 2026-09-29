@@ -488,12 +488,12 @@ rows:
     hole:      "⚠ PARTLY DISCHARGED AND THE ROW IS STALE (recorded 2026-09-03): write_matrix.yaml now carries `Proposition.exists`, `Petition.exists` and `Dispensation.exists` citing W2/H-43, and `utter` writes Proposition THROUGH THE GATE (`_eff_utter`). The Proposition half is built; the Petition/Dispensation halves have rows and no effects. Under G.4.8 an instrument may fill only what the register declares, so either this grade is wrong or a fill went off-register -- SPLIT THE ROW rather than regrading the whole. Petition, Dispensation and Proposition are 'created, not written' and so BYPASS `write()`. #353 `:1061-1064`: 'Either the gate applies the write, or direct assignment is made impossible.' An object created beside the gate is the unmarked-cell defect wearing a different hat"
     kind:      "PRODUCER"
     owner:     "the write gate (Part D)"
-    grade:     "absent"
-    default:   "none"
-    site:      ""
+    grade:     "ruled"
+    default:   "a petition and a dispensation are KINDS of `Record` (`rosters.yaml: record_kinds`), created THROUGH the gate on `(Record, exists)` by `loop/effects.py::_eff_petition` / `_eff_issue` with the maker's `hold`; the `(Petition, exists)` and `(Dispensation, exists)` rows and the two `World` dicts are deleted"
+    site:      "engine/season/loop/effects.py::_mint_document"
     sweep:     []
     unblocks:  "unmeasured"
-    cite:      ""
+    cite:      "CLOSED BY PLAN POSITION `15` (the Record-kind fold, 2026-09-29), on the ratified Layer-1 synthesis call `04_CODE_ARCHITECTURE.md` §B.5 -- *Petition and Dispensation become Record kinds ... two existence rows collapse into one*. Neither is created beside the gate any longer: both mint through `_mint_document`, the one body `create_record` already used, on the one `(Record, exists)` row. ⚠ WHAT THIS DOES NOT CLOSE, SO THE GRADE IS NOT READ WIDER THAN IT IS: `issue` is still NOT resolvable -- its `requires:` is prose the fold cannot evaluate (plan position `19`'s) -- so the dispensation half's effect is reached by no folded act yet; that is a precondition hole, not this creation hole. `petition` IS resolvable and files in computed play (measured, `test_record_kind_fold.py`)."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-44
     tier:      1

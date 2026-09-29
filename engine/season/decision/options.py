@@ -130,6 +130,16 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             ops = operands_for(p, row, q, subject, fx)
             if ops is None:
                 continue
+            # ⚠ AND A TWO-SIDED ACT NEEDS A SECOND SIDE (plan position `15`, `ED-IN-0210` ruling
+            # 2). The rule above, one column over: a row naming its `counterparty:` operand forms
+            # no Candidate whose counterparty is the person -- a petition to oneself is the
+            # Tenure(X,X) fiat ruling 1 names. Declined HERE, not refused in the fold, for the
+            # reason the contest rule gives: no read the fold makes can say *that is you*, so a
+            # refusal teaches nothing -- MEASURED, it fed itself (the refusal's claim about the
+            # petitioner raised the next question about them). Reads the row's column, never a
+            # verb name, and the loader guarantees the operand is carried.
+            if row.counterparty and ops.get(row.counterparty) == p.id:
+                continue
             if belief_contradicts(p, row, subject, ops):
                 continue
             out.append(Candidate(verb, subject, why=q.source, operands=ops))

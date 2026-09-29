@@ -32,7 +32,7 @@ from __future__ import annotations
 from typing import Callable, Optional
 
 from ..data.requires import UNKNOWN
-from ..data.rosters import FACTION_BY_PROP, QUESTION_SOURCES, RUNG_KINDS, TENURE_KINDS
+from ..data.rosters import FACTION_BY_PROP, QUESTION_SOURCES, RECORD_KINDS, RUNG_KINDS, TENURE_KINDS
 from ..gaps import Forbidden, Unspecified
 from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE (G3, plan position 6). The
@@ -992,6 +992,13 @@ class WorldReader:
             if arg in TENURE_KINDS:
                 return sum(1 for t in w.tenures
                            if t.kind == arg and t.object == subject and t.live)
+            # A RECORD KIND is a `record_kinds` member, and asks for a Record OF THAT KIND -- plan
+            # position `15`, where `Petition` stopped being a collection of its own and became a
+            # kind of `Record` (`04 §B.5`). `carry`'s cell is the reader. The two vocabularies are
+            # disjoint by a load-time refusal (`data/rosters.py`), so this order decides nothing.
+            if arg in RECORD_KINDS:
+                r = w.records.get(subject)
+                return 1 if r is not None and r.kind == arg else 0
             attr = arg.lower() + "s"
             if attr in World._STATE_COLLECTIONS:
                 return 1 if subject in getattr(w, attr) else 0

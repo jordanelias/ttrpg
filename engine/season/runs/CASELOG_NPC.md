@@ -113,15 +113,15 @@ corpus in the direction that flattered it.
 | Trading in goods whose true dangerous nature is unknown even to the seller must be able to produce consequences later, when the nature becomes known, that attach retroactively to the origina | — | UNMAPPED | nobody has authored an `exercises:` for this row |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | the source says it does not know |
 
-## NPC-012 — Rikard Solberg  ·  **BLOCKED**
-*person · 7 rows, 3 core · blockers: petition*
+## NPC-012 — Rikard Solberg  ·  **DEGRADED**
+*person · 7 rows, 3 core · blockers: none*
 *ends when:* his recall, by his own nation or via a player-brokered genuine stability treaty, or indefinite continuation of the status quo.
 
 | need | rests on | verdict | why |
 |---|---|---|---|
 | **[core]** A single office-holder's personal, unstated motive must be able to measurably bias every decision he makes in that office, in one consistent direction, without him or his superiors recognizi | `probe:P31` | PASS | P31: PASS |
 | **[core]** His employer's institutional evaluation of him must be able to stay positive -- he is 'too valuable to recall' -- specifically because of the state of the world he is unconsciously prolongin | `H-20` | **ASSUMED** | H-20: assumption -- rests on an injected default |
-| **[core]** A player who identifies his true motive must be able to offer him something categorically different from a bribe or a threat -- a real, verifiable path to recall -- and have that offer chang | `petition` · `H-04` | **GAP** | 'petition' is on the table and the fold cannot execute it: needs an effect · H-04: assumption -- rests on an injected default |
+| **[core]** A player who identifies his true motive must be able to offer him something categorically different from a bribe or a threat -- a real, verifiable path to recall -- and have that offer chang | `petition` · `H-04` | **ASSUMED** | 'petition' executes · H-04: assumption -- rests on an injected default |
 | His own faction's strategic decision-making must be able to independently recall or replace him based on faction-scale conditions, entirely apart from any player action. | — | UNMAPPED | nobody has authored an `exercises:` for this row |
 | If he is replaced, his successor's behavior must differ measurably from his (more aggressive arms flows, sharper intelligence, harsher trade terms) as a direct consequence of removing his sp | — | UNMAPPED | nobody has authored an `exercises:` for this row |
 | His private, non-work relationships (his children, growing up without him) must be able to exist as a motivating fact even though they are physically absent from every scene he could appear  | — | UNMAPPED | nobody has authored an `exercises:` for this row |

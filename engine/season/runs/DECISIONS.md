@@ -292,6 +292,10 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
 - *not taken:* raise (no Event, no witness, no arc)
 
+### petition by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
+- **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
+- *not taken:* raise (no Event, no witness, no arc)
+
 ### fight by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
 - **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
 - *not taken:* raise (no Event, no witness, no arc)
@@ -308,11 +312,6 @@ it did not take. A decision nobody records is a decision nobody can audit.
 
 ### date d_conf came due  ·  `S24`  ·  taken 1x
 - **chose:** fire-as-sitting  (1x)
-- *not taken:* block until a holder exists
-- *not taken:* defer to next season
-
-### date d_vacant came due  ·  `S24`  ·  taken 1x
-- **chose:** fire-and-lapse  (1x)
 - *not taken:* block until a holder exists
 - *not taken:* defer to next season
 

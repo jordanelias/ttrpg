@@ -1181,15 +1181,13 @@
    "name": "Rikard Solberg",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "DEGRADED",
    "rows": 7,
    "core": 3,
    "core_routed": 3,
    "core_unmapped": 0,
-   "core_blocked": 1,
-   "blockers": [
-    "petition"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "unbound": [],
    "routed": [
     {
@@ -1258,10 +1256,10 @@
      ],
      "resolved": [
       {
-       "ok": false,
+       "ok": true,
        "bound": true,
        "kind": "verb",
-       "detail": "'petition' is on the table and the fold cannot execute it: needs an effect"
+       "detail": "'petition' executes"
       },
       {
        "ok": true,
@@ -1274,8 +1272,8 @@
      ],
      "unbound": [],
      "verdict": {
-      "verdict": "GAP",
-      "detail": "'petition' is on the table and the fold cannot execute it: needs an effect \u00b7 H-04: assumption -- rests on an injected default",
+      "verdict": "ASSUMED",
+      "detail": "'petition' executes \u00b7 H-04: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -9502,7 +9500,7 @@
   "P36": {
    "id": "P36",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 28 candidates were OFFERED from the computed option set and only 21 of 39 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['interview', 'move', 'speak', 'surveil', 'utter', 'work'] -- 6 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 28 candidates were OFFERED from the computed option set and only 22 of 39 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['interview', 'move', 'petition', 'surveil', 'utter', 'work'] -- 6 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
    "kind": null,
    "section": "S17",
    "title": "a choice branches three ways",
@@ -9643,11 +9641,13 @@
   },
   "F13": {
    "id": "F13",
-   "verdict": "PASS",
-   "detail": "PASS: both dates FIRED; the vacant one ALLOCATED NOTHING AND LAPSED rather than blocking. Death does NOT open the conferral Date -- THE VACANCY IS A FACT, THE DATE IS AN OCCASION, AND CALENDAR IS WHERE FACTS BECOME OCCASIONS. CALENDAR decided nothing",
-   "kind": null,
-   "section": "S24",
+   "verdict": "GAP",
+   "detail": "(Date, fired) emits 'date.fired' with no `subject=`",
+   "kind": "FORBIDDEN",
+   "section": "S33",
    "title": "a vacancy opens the succession occasion",
+   "needs": "subject=<the record id>",
+   "law": "THE SUBJECT IS THE RECORD, NOT THE TRACE LABEL. The fallback was `subject or thing`, and `thing` is a human label for the trace line -- which is exactly the value that made every site's wear emit under the subject `\"condition\"`, so `last_emission_of` never matched and the clock re-rooted every season. Leaving the fallback in place meant emission was inherited by existing while the half that makes a clock CHAIN still had to be remembered -- and a one-shot emission with a forgotten `subject=` is silent. Found by the `W4` adversarial pass",
    "by": "construction",
    "tests": "when a post falls empty the process to fill it must be able to start"
   },
@@ -9712,7 +9712,7 @@
   "F18": {
    "id": "F18",
    "verdict": "PASS",
-   "detail": "PASS-STRUCTURALLY: a Petition rising from below and a Dispensation enumerating the same executor coexist WITH NO ARBITRATION ANYWHERE IN THE SHAPE. The governor's 5 acts are the only scarcity, so the conflict is REAL and is resolved BY THE PERSON, which is L1. Both objects are the probe's data, not the shape's -- nothing constructs either. See F19",
+   "detail": "PASS-STRUCTURALLY: a Petition rising from below and a Dispensation enumerating the same executor coexist WITH NO ARBITRATION ANYWHERE IN THE SHAPE. The governor's 5 acts are the only scarcity, so the conflict is REAL and is resolved BY THE PERSON, which is L1. Both objects are the probe's data here, planted as `Record`s of their two kinds. See F19",
    "kind": null,
    "section": "S36.1",
    "title": "a place's demands conflict with its superior's orders",
@@ -10831,6 +10831,15 @@
   },
   {
    "kind": "FORBIDDEN",
+   "what": "(Date, fired) emits 'date.fired' with no `subject=`",
+   "where": "S33",
+   "needs": "subject=<the record id>",
+   "law": "THE SUBJECT IS THE RECORD, NOT THE TRACE LABEL. The fallback was `subject or thing`, and `thing` is a human label for the trace line -- which is exactly the value that made every site's wear emit under the subject `\"condition\"`, so `last_emission_of` never matched and the clock re-rooted every season. Leaving the fallback in place meant emission was inherited by existing while the half that makes a clock CHAIN still had to be remembered -- and a one-shot emission with a forgotten `subject=` is silent. Found by the `W4` adversarial pass",
+   "case": "probe:F13",
+   "expected": false
+  },
+  {
+   "kind": "FORBIDDEN",
    "what": "aggregate 'held_ever' composed over 1 ENDED edge(s)",
    "where": "S22.4",
    "needs": "filter to until == null before summing",
@@ -11209,16 +11218,16 @@
   }
  ],
  "_trace_counts": {
-  "STEP": 7100,
+  "STEP": 7099,
   "BARRIER": 1871,
   "DECISION": 1888,
-  "QUERY": 23093,
+  "QUERY": 29929,
   "NOTE": 299,
-  "WRITE": 20426,
-  "EVENT": 20044,
+  "WRITE": 20427,
+  "EVENT": 20045,
   "ACT": 96,
-  "CLAIM": 2175,
-  "GAP": 86
+  "CLAIM": 2176,
+  "GAP": 87
  },
  "_corpus_defects": [
   "ARC1.yaml: committed inside a markdown fence with transcript preamble",

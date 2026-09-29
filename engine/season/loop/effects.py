@@ -48,9 +48,12 @@ all twelve, and both exist to keep every hash that is not `work`'s where it was:
 
 from __future__ import annotations
 
+from typing import Optional
+
+from ..data.requires import REQUIRES_OPERANDS
 from ..data.rosters import (
-    DECLARED, FIELD_CASUALTY_MODELS, LOST, PURSUIT_AXES, FELLED, RELEASABLE_KINDS, UNOPPOSED,
-    WOUND_HARM_MODELS, faction_prop_id, require_member,
+    DECLARED, FIELD_CASUALTY_MODELS, LOST, PURSUIT_AXES, FELLED, RECORD_CONTENT, RECORD_KIND_KEYS,
+    RELEASABLE_KINDS, UNOPPOSED, WOUND_HARM_MODELS, faction_prop_id, require_member,
 )
 
 from ..gaps import InstrumentDefect, Unspecified
@@ -494,9 +497,68 @@ def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) ->
     opened beside it is PUT BACK with the refusal -- so the maker does not end up holding a second
     edge on a record the act did not make. A differing Record on an existing id is still an
     overwrite, as it was; whether a Record id may be re-made at all is not this position's to
-    decide (`utter` refuses the same case for a Proposition by immutability, S14)."""
+    decide (`utter` refuses the same case for a Proposition by immutability, S14).
+
+    ⚠ PLAN POSITION `15`: THE MINT MOVED INTO `_mint_document`, UNCHANGED, SO `issue` AND
+    `petition` SHARE IT. What this verb adds is only its own reading of the act: the kind the act
+    declares (else `text`), the content the act carries verbatim, and the rung the act names (else
+    the actor -- r2 `02` §A.4 records that default as a defect and leaves it to `place_of`'s owner).
+    MEASURED, WITH A CONTROL: on the finished position with `petition` withheld from the option set,
+    `headless.run(3, 0)` and `populated.run(2, 0)` hash byte-identically to the tree before it -- the
+    Record, the `hold` and the `Change` are built exactly as they were, and the one hash move the
+    position makes is `petition` entering `resolvable_verbs()`."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    return _mint_document(w, a, d.get("kind") or "text", d.get("subject_matter"),
+                          d.get("rung") or a.actor)
+
+
+def _content_of(a: "Act", kind: str) -> Optional[dict]:
+    """WHAT A DOCUMENT OF `kind` SAYS, READ OFF THE ACT THAT MINTS IT -- `None` for a kind with no
+    keys (`text`), which is what every Record minted before `record_kinds` already carries.
+
+    ONE RULE FOR EVERY KEY, AND THE RULE IS DATA (`rosters.yaml: record_kinds.content`): a key is
+    read from the act's operand of the same name unless `read_from` names another (`terms` is the
+    act's `subject` -- what the document is ABOUT). A source that is a `requires_operands` member
+    goes through `_operand`, so a missing one is the caller defect it is everywhere else in this
+    file; a source that is NOT an operand (`at`, r2 `02` §A.6's place of discharge, which the closed
+    vocabulary cannot carry) is read as declared and may be absent. Nothing here names a kind's
+    keys: they come from the roster the constructor refuses against, so the two cannot disagree."""
+    keys = RECORD_KIND_KEYS[kind]
+    if not keys:
+        return None
+    read_from = RECORD_CONTENT.get("read_from") or {}
+    d = a.payload if isinstance(getattr(a, "payload", None), dict) else {}
+    out = {}
+    for key in keys:
+        src = read_from.get(key, key)
+        out[key] = _operand(a, src) if src in REQUIRES_OPERANDS else d.get(src)
+    return out
+
+
+def _addressed(content):
+    """`content` with its addressee key (`record_kinds.content.addressee`) as an id LIST. The one
+    owner of that shape: the mint stores it, and `_eff_petition` reads it before minting."""
+    addr = RECORD_CONTENT.get("addressee")
+    if not isinstance(content, dict) or content.get(addr) is None:
+        return content
+    v = content[addr]
+    return {**content, addr: list(v) if isinstance(v, (list, tuple)) else [v]}
+
+
+def _mint_document(w: "World", a: "Act", kind: str, content, rung: str) -> Change:
+    """THE ONE MINT: a `Record` of `kind` saying `content`, drawn up at `rung`, and the maker's
+    `hold` on it -- `create_record`, `issue` and `petition` are three readings of an act onto this
+    body, which is r2 `02` §A.6's *one function, three registrations* with the kind supplied by the
+    verb that knows it rather than by a table beside the effects (`OPENERS-DERIVE`'s precedent: the
+    construction is the single owner of what a verb makes).
+
+    ⚠ THE ADDRESSEE KEY IS STORED AS AN ID LIST, whatever the act carried (`record_kinds.content.
+    addressee`, r2 §A.9.1), so a petition to one person and a writ to five executors spell the
+    same key one way. The kind's KEY SET is not checked here: `Record.__post_init__` refuses a wrong one
+    (⊕L35), before anything is written, and a refusal written twice is two rules."""
     d = a.payload if isinstance(a.payload, dict) else {}
     rid = d.get("record") or f"rec:{a.id}"
+    content = _addressed(content)
     stages = list(d.get("stages") or [])
     if not stages:
         # `H-80`, DECLARED AND SWEPT. The act SHOULD declare these (#353 §13.1) and a computed
@@ -507,8 +569,7 @@ def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) ->
         n = w.fixtures.get("record_stages_default")
         term = w.fixtures.get("record_stage_term")
         stages = [(w.tick + (i + 1) * term, f"stage{i + 1}", a.id) for i in range(n)]
-    rec = Record(rid, d.get("rung") or a.actor, d.get("kind") or "text",
-                 subject_matter=d.get("subject_matter"), stages=stages)
+    rec = Record(rid, rung, kind, subject_matter=content, stages=stages)
     # S13: possession is a `hold` Tenure owned by the holder, never a field on the Record. The
     # maker holds what they made until they part with it.
     held = Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{rid}"),
@@ -518,6 +579,54 @@ def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) ->
         w.records[rid] = rec
         w.add_tenure(held)
     return Change((Subject.entity("records", rid),), perform)
+
+
+@effect_for("issue")
+def _eff_issue(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """§37.1: a DISPENSATION IS A `Record` OF KIND `dispensation`, minted with the issuer's `hold`
+    -- r2 `02` §A.3's schema `{terms, to, at}`: the OUGHT it carries (the act's `subject`), the
+    executors it names (`to`), and where it is discharged (`at`, absent unless declared).
+
+    ⚠ NOTHING REACHES THIS YET, AND THAT IS STATED SO IT IS NOT READ AS `issue` BECOMING REACHABLE.
+    `issue`'s `requires:` is prose with no predicate, so the fold raises before any effect runs and
+    `resolvable_verbs()` excludes the verb (plan position `19` owns the evaluable cell). This body is
+    here so that when the precondition lands, the thing it admits is already the Record kind.
+
+    WHERE IT IS DRAWN UP: THE ISSUER'S SEAT'S RUNG (r2 `03` §A.10 -- *a seat-borne act draws on the
+    SEAT's rung, and that is `Act.via`'s job*). `Record.rung` is required, so the answer is decided
+    here rather than defaulted: the seat the act was exercised through, read off `Act.via`, which
+    `remit:issue` eligibility requires. A seat with no rung (an office-cluster, `rung? = null`,
+    S6.2) has no place to draw a writ up in -- and a hand-built act may name no seat at all -- and
+    only then does the mint fall back to `create_record`'s own reading of the act, the one existing
+    default rather than a new one."""
+    seat = w.offices.get(a.via) if a.via else None
+    d = a.payload if isinstance(a.payload, dict) else {}
+    rung = seat.rung if seat is not None and seat.rung is not None else (d.get("rung") or a.actor)
+    return _mint_document(w, a, "dispensation", _content_of(a, "dispensation"), rung)
+
+
+@effect_for("petition")
+def _eff_petition(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """§36.1 / #353 §26.3: A PETITION IS A `Record` OF KIND `petition`, minted with the
+    petitioner's `hold` -- `{terms, to, from}`: what it is about (the act's `subject`), the person
+    it is addressed to (`to`), and the place it rises from (`from`). Drawn up where it rises from,
+    so `Record.rung` is a place and not the petitioner's id (the defect r2 `02` §A.4 measured on
+    every `create_record`).
+
+    ⚠ TWO-SIDED (`ED-IN-0210` ruling 2 -- *withdraw (petitioner) or deny (receiver)*): the row's
+    typed cell makes both sides EXIST, `opening_set` never forms a Candidate addressed to its own
+    petitioner (the row's `counterparty:`), and this body refuses the same case for a HAND-BUILT act,
+    which no person-side rule stands in front of. The grammar has no negation, so it is decided
+    here, and the fold emits `petition.refused` through the gate's no-op channel (`NO_CHANGE`) --
+    how every effect in this file declines. ⚠ WHAT THIS DOES NOT BUILD: the two closers. Ruling 2's
+    WITHDRAW and DENY both close `(Record, exists)`, whose one closer is `destroy_record` -- which
+    declines on both its eligibility alternatives today (`H-75`), and which the receiver can only
+    reach once `give` (position `16`) puts the petition in his hand. The fold makes both sides
+    NAMEABLE on the document; neither side can yet end it."""
+    content = _addressed(_content_of(a, "petition"))
+    if a.actor in content[RECORD_CONTENT.get("addressee")]:
+        return NO_CHANGE
+    return _mint_document(w, a, "petition", content, _operand(a, "from"))
 
 
 @effect_for("destroy_record")

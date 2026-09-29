@@ -155,7 +155,7 @@ def _entity_digest(obj: Any) -> str:
     if hasattr(obj, "__dataclass_fields__"):
         return repr(obj)
     if isinstance(obj, dict):
-        # `dates`, `petitions`, `dispensations` and `docket` hold PLAIN DICTS, not entities.
+        # `dates` and `docket` hold PLAIN DICTS, not entities.
         # `sorted` on the items makes the digest independent of insertion order (R4).
         return repr(sorted((str(k), repr(v)) for k, v in obj.items()))
     if hasattr(obj, "__dict__"):
@@ -187,9 +187,12 @@ class World:
         self.log = EventLog(self.gate, lambda: self.acts.ids())
         self.dates: dict[str, dict] = {}
         self.docket: list[dict] = []
-
-        self.petitions: dict[str, dict] = {}
-        self.dispensations: dict[str, dict] = {}
+        # ⚠ `petitions` AND `dispensations` WERE TWO PLAIN DICTS HERE AND ARE DELETED (plan position
+        # `15`, `04_CODE_ARCHITECTURE.md` §B.5): both are KINDS OF `Record` now, stored in
+        # `self.records` and named by `rosters.yaml: record_kinds`. No production world ever wrote
+        # either -- only `harness/probes.py` planted them -- so the content hash is unmoved by the
+        # deletion itself (an empty mapping folds nothing). A second home for a document is how a
+        # `hold` on a dispensation came to have nothing to point at.
         self.manifest: dict[str, str] = {}      # S43 -- role -> provider, resolved AT BOOT
         self.step: Optional[Step] = None
         self.frozen = False
@@ -1192,6 +1195,9 @@ class World:
     # exactly those (`_eff_create_record`, `_eff_destroy_record`, `_eff_utter`). So the same
     # blindness H-118 measured on `persons` was live on the collections the corpus actually
     # moves, behind a docstring saying otherwise.
+    # ⚠ `petitions` and `dispensations` LEFT THIS TUPLE WITH THEIR DICTS (plan position `15`) --
+    # both are Record kinds, folded here under `records`. MEASURED rather than assumed inert: no
+    # production builder populated either, so every world's hash is what it was.
     # roster-exempt: MECHANISM, on the same ground as `_STEP_CLASS` above. These are `World`'s
     # OWN PYTHON ATTRIBUTE NAMES -- what the object calls its own fields -- not the game's
     # vocabulary. `rosters.yaml` holds what the WORLD contains; this holds where THIS CLASS puts
@@ -1199,7 +1205,7 @@ class World:
     # the tuple is a hash ORDER and not a definition. Moving it to data would invite someone to
     # edit how the hash works while believing they were editing the game.
     _STATE_COLLECTIONS = ("persons", "rungs", "offices", "sites", "records", "propositions",
-                          "dates", "petitions", "dispensations")
+                          "dates")
     # roster-exempt: MECHANISM, as `_STATE_COLLECTIONS` directly above -- the one state field that
     # is a LIST rather than a mapping, split out because its order is semantic (S31's queue) and
     # it is therefore folded positionally rather than sorted.

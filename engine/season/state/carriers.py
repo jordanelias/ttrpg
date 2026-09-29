@@ -31,8 +31,8 @@ from typing import Any, Optional
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import MATRIX
 from ..data.rosters import (
-    BODY_FUNCTION, CONFERRAL_BASES, QUESTION_SOURCES, REMIT_ACTS, REVOCATION_BASES, RUNG_KINDS,
-    office_faction, require_member, title_domain,
+    BODY_FUNCTION, CONFERRAL_BASES, QUESTION_SOURCES, RECORD_KIND_KEYS, RECORD_KINDS, REMIT_ACTS,
+    REVOCATION_BASES, RUNG_KINDS, office_faction, require_member, title_domain,
 )
 from ..gaps import Forbidden, Unowned, Unspecified
 
@@ -542,7 +542,14 @@ class Site:
 @dataclass
 class Record:
     """S13 -- a LIVE CARRIER. S30.1: it has NO Partition row, so every Record write is an
-    unmarked cell -- which this instrument reports rather than papering over."""
+    unmarked cell -- which this instrument reports rather than papering over.
+
+    ⚠ PETITIONS AND DISPENSATIONS ARE KINDS OF THIS CLASS, NOT CLASSES OF THEIR OWN (plan position
+    `15`; `04_CODE_ARCHITECTURE.md` §B.5's synthesis call, PART A row 11). `World` carried them as
+    two plain dicts beside `records`, which no production code read -- so `forge`, `destroy_record`,
+    `hold` and `carry` could not reach them, and a `hold` on a dispensation had nothing to point at.
+    `kind` is now a `record_kinds` member and `subject_matter` is that kind's EXACT key set; both
+    are refused at construction (`__post_init__`, below)."""
     id: str
     rung: str
     kind: str
@@ -564,6 +571,51 @@ class Record:
     # act-declared, never MATTER-advanced"* — a MATTER-step Event claiming a change to the one
     # field the matrix forbids MATTER to touch.
     matured: bool = False
+
+    def __post_init__(self) -> None:
+        """⊕L35 (r2 `05_LEDGER_AND_BUILD.md:671`): A RECORD WHOSE `subject_matter` KEYS ARE NOT ITS
+        KIND'S IS REFUSED, AND SO IS A KIND THE ROSTER DOES NOT LIST.
+
+        ⚠ THE REFUSAL SHAPE IS `Rung`'s, COPIED RATHER THAN RE-INVENTED. `Rung.__init__` refuses an
+        unrostered kind and `Rung.__setattr__` refuses an undeclared field, each as `Forbidden`
+        naming the field, the section, what is needed and the law inline. The same two refusals
+        here, on the same terms: `kind` is a member of `record_kinds` or nothing, and the content's
+        keys are the kind's declared keys or nothing.
+
+        ⚠ `__post_init__` AND NOT `__setattr__`, AND THE DIFFERENCE IS DELIBERATE. `Rung` is a plain
+        class guarding a whitelist on every write; `Record` is a dataclass every mint constructs by
+        keyword, and its `subject_matter` has NO `write_matrix.yaml` row -- it is written once,
+        inside `(Record, exists)`'s gate, and never again by anything (r2 `02` §A.4: *verbatim or
+        not at all*). So construction is the only write there is to refuse, and `Office`'s
+        roster checks sit at the same place for the same reason.
+
+        ⚠ BOTH DIRECTIONS, because a missing key and an extra key are the same defect from two
+        sides: a missing one is an operand no reader can bind, an extra one is a second vocabulary.
+        `None` has no keys, which is why every `text` Record minted before this check stays lawful
+        and nothing already in a world is re-read by it."""
+        want = RECORD_KIND_KEYS.get(self.kind)
+        if want is None:
+            raise Forbidden(
+                f"Record.kind {self.kind!r} -- not a member of `record_kinds`", "ARCH §B.5",
+                needs=f"one of {sorted(RECORD_KINDS)}, or a new row in rosters.yaml: record_kinds",
+                law="ARCH §B.5 -- Petition and Dispensation are KINDS of Record, and a kind is a "
+                    "roster member: a free string would mint a document no key list describes")
+        sm = self.subject_matter
+        if sm is not None and not isinstance(sm, dict):
+            raise Forbidden(
+                f"Record {self.id!r} carries subject_matter of type {type(sm).__name__}",
+                "⊕L35", needs=f"a mapping over exactly {list(want)}, or None for a kind with none",
+                law="r2 02 §A.5 -- `subject_matter: Any` is a schema hole unless its keys are the "
+                    "kind's; a value with no keys cannot be checked against them")
+        have = set(sm or ())
+        if have != set(want):
+            raise Forbidden(
+                f"Record {self.id!r} of kind {self.kind!r} carries subject_matter keys "
+                f"{sorted(have)}", "⊕L35",
+                needs=f"exactly {list(want)} -- missing {sorted(set(want) - have)}, "
+                      f"extra {sorted(have - set(want))}",
+                law="r2 05 ⊕L35 -- a document's content is its kind's keys and no others. A missing "
+                    "key is an operand no reader can bind; an extra key is a second vocabulary")
 
 
 def subject_of(a: "Act") -> str:
@@ -783,9 +835,10 @@ def matrix_rows_without_a_field() -> dict:
     Part D is the SPECIFICATION and this file is one implementation of it, so a row naming a field
     the instrument has not built yet is a TODO for the instrument, not a defect in Part D.
 
-    Kinds the instrument models as DICTS rather than classes — `Date`, `DocketItem`, `Petition`,
-    `Dispensation`, `ConveningCondition` — cannot be checked at all and are reported separately,
-    so the number is never mistaken for a clean bill.
+    Kinds the instrument models as DICTS rather than classes — `Date`, `DocketItem`,
+    `ConveningCondition` — cannot be checked at all and are reported separately, so the number is
+    never mistaken for a clean bill. (`Petition` and `Dispensation` were two more until plan
+    position `15` folded both into `Record` kinds and deleted their matrix rows.)
 
     ⚠ `Rung` WAS IN THAT SECOND BUCKET AND DOES NOT BELONG THERE. The test was `is_dataclass`, and
     `Rung` is a plain class with an explicit `_DECLARED` field set — the whitelist S10 gives it, so

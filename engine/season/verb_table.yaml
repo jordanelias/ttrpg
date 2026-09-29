@@ -106,12 +106,13 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "none"
-    beneficiary_note: "the good accrues to the PETITIONER, and a `carry` Candidate carries the Petition (`subject`, kind `Petition`) rather than the person who filed it."
+    beneficiary_note: "the good accrues to the PETITIONER, and a `carry` Candidate carries the petition (`subject`, a `Record` of kind `petition`) rather than the person who filed it."
     requires:    "a Petition exists; costs budget like any act"
     requires_typed:
       form:      existence
       of:        subject
-      kind:      Petition
+      kind:      petition
+    kind_note:   "⚠ `Petition` -> `petition` AT PLAN POSITION `15`, AND IT IS A CHANGE OF WHAT IS ASKED, NOT A SPELLING. `exists:Petition` read `World.petitions`, a dict no production code wrote; that dict is deleted and a petition is a `Record` of kind `petition` (`04_CODE_ARCHITECTURE.md` §B.5 -- *`forge`, `destroy_record`, `hold` and `carry` reach them with no new rows*). `exists:petition` asks *a Record of that kind exists*, which `queries/world_q.py::WorldReader.read` answers from `rosters.yaml: record_kinds`. `carry` STILL DOES NOT EXECUTE: it writes `(DocketItem, matter)` and has no effect, because Part E never says WHAT a carried petition puts on which docket (`H-63`) -- probe `F7` still ends there, at the same clause as before, now over a petition `Record` its own petitioner filed through `_eff_petition`. Its precondition now reaches the carrier; its write is the open half."
     requires_typed_note: "§E3 `:415` — *a Petition exists; **costs budget like any act***. The second half is not a precondition; §26.3's budget is spent by every act and is charged in `pack_scenes`. ⚠ THE SCOPING IS A CHOICE AND IS DECLARED: the prose is INDEFINITE (*a* Petition) and this reads it as *the petition being carried*, which is the act's `subject`. The alternative — any Petition anywhere in the world — would admit a `carry` of a petition that does not exist, and `carry` writes `(DocketItem, matter)`, i.e. it carries a PARTICULAR one. Under-refusing is the failure `G4` weighs equally with an invention, so the tighter reading is taken and named."
     writes:      ["DocketItem.matter"]
     emits:       ["petition.carried"]
@@ -283,11 +284,12 @@ verbs:
     eligibility: ["remit:issue"]
     beneficiary: "none"
     requires:    "scope enumerates executors, not places (§37.1)"
-    writes:      ["Dispensation.exists"]
+    requires_note: "⚠ STILL PROSE, AND THAT IS WHY `issue` IS NOT RESOLVABLE EVEN WITH AN EFFECT (plan position `15`). The fold raises `Unspecified` on a `requires:` it cannot evaluate (`loop/resolve.py`'s `_gate`), so `_eff_issue` is reached by no act -- computed or declared -- until position `19` gives this cell an evaluable form (r2 `02` §A.6 proposes `commit`'s `existence of subject kind Proposition`). `resolvable_verbs()` excludes it on the same ground. Do not read the effect's existence as `issue` being reachable."
+    writes:      ["Record.exists"]
     emits:       ["dispensation.issued"]
     emits_on_refusal: ["issue.refused"]
     grade:       "ruled"
-    writes_note: "— (a Dispensation is not a state write — §37.3)  ||  ⚠ W3, ON THE W2 AUDIT: as `petition`. Part E's '(a Dispensation is not a state write)' is the bypass §1.4 hole 4 names, not a licence for one."
+    writes_note: "— (a Dispensation is not a state write — §37.3)  ||  ⚠ W3, ON THE W2 AUDIT: as `petition`. Part E's '(a Dispensation is not a state write)' is the bypass §1.4 hole 4 names, not a licence for one.  ||  ⚠ PLAN POSITION `15`: `Dispensation.exists` -> `Record.exists`. A dispensation is a `Record` of kind `dispensation` (`04_CODE_ARCHITECTURE.md` §B.5, `rosters.yaml: record_kinds`), minted with the issuer's `hold` by `loop/effects.py::_eff_issue`; `(Dispensation, exists)` is deleted from the matrix in the same commit, which the loader requires (an entry naming no row is refused at load)."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
     # ⚠ RENAMED `kill / wound` -> `fight`, 2026-09-29 (plan `FIGHT-RENAME`, contradiction 4;
     # `ED-IN-0261` item 3). ATOMIC KEY RENAME ONLY -- every other field on this row (`contests:`,
@@ -484,13 +486,25 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
-    requires:    "—"
-    requires_note: "— no dedup, no cap, no per-venue limit (§26.3)"
-    writes:      ["Petition.exists"]
+    requires:    "a petition has two sides and both exist: the person it is addressed to, and the place it rises from"
+    counterparty: to
+    counterparty_note: "⚠ THE OTHER PARTY TO THE ACT, NAMED BY THE OPERAND THAT CARRIES THEM (plan position `15`). `decision/options.py::opening_set` forms no Candidate whose counterparty is the person themselves -- the contested-verb rule one column over (*a person is not their own adversary*), for the same reason: being oneself is not a belief anyone can be wrong about, so it is declined person-side rather than attempted and refused. MEASURED before this column existed, `populated.run` seed 0: with the self-address declined only at the fold, self-addressed petitions went 1 -> 2 -> 5 per season, because each refusal deposited a claim about the petitioner that raised another question about them -- a feedback loop, never learned, since no read the fold makes can say *that is you*. The loader requires the operand to be one the row's typed cell BINDS, so the Candidate always carries it."
+    requires_typed:
+      all:
+        - form:      existence
+          of:        to
+          kind:      Person
+        - form:      existence
+          of:        from
+          kind:      Rung
+    requires_note: "— no dedup, no cap, no per-venue limit (§26.3). ⚠ THOSE THREE ABSENCES STAND; WHAT CHANGED AT PLAN POSITION `15` IS THAT A PETITION NOW NAMES WHOM IT IS FOR. The cell was `—` and the verb had no effect, so it was never folded; the moment it mints a document it must say to whom, or it is a fiat. ⚠ AND IT IS NOW RESOLVABLE -- typed precondition plus `_eff_petition` -- so NPCs form and file petitions in computed play: a declared behaviour change that moves every run whose chooser can reach it."
+    requires_typed_note: "⚠ TWO-SIDED, PER `ED-IN-0210` RULING 2 (Jordan, 2026-09-10): *`petition` <-> WITHDRAW (petitioner) or DENY (receiver) ... `petition`'s pair is TWO-SIDED (withdraw and deny close the same state from opposite sides), the first in the set where a counterparty is structurally required.* RULING 1 on the same row is what makes each side an EXISTENCE clause: *a fiat needs no counterparty, so nothing checked that the object of an `oblige` was an entity* -- so each named side must BE one, and the grammar's `existence` form is the check. ⚠ THE RECEIVER IS A PERSON, BECAUSE RULING 2 NAMES WHAT THE RECEIVER DOES -- *DENY* -- and only a person acts (AX-1); the next position's `give` (`16`, H-84) moves a Record *to another person*, which is how a petition reaches the hand that may deny it. THE SEAT READING WAS BUILT AND MEASURED, AND REFUSED ON THE MEASUREMENT: with `kind: Office`, `populated.run` seed 0 formed 28, 21, 24, 22 petitions over four seasons and FILED NONE -- no question's referent is ever a seat, so every one was refused, a constant scene tax with nothing behind it. The self-petition that `kind: Person` admits is declined person-side by `counterparty:` (above), not here: the grammar has no negation. `from` is the operand's one meaning (`decision/options.py::_derive_operand`: where the actor is) -- the place the petition rises from, #353 §36.1's *a demand rises from a hearth*. ⚠ WHAT A COMPUTED ACT CANNOT YET SAY: `to` and `subject` both bind the question's ONE referent (`_REFERENT_OPERANDS`), so a computed petition is addressed to the person it is about. That is `H-94`'s single-referent limit, not this cell's choice, and plan position `15c` (content operands) is what separates them."
+    writes:      ["Record.exists"]
     emits:       ["petition.filed"]
-    emits_on_refusal: []
+    emits_on_refusal: ["petition.refused"]
     grade:       "ruled"
-    writes_note: "— (a Petition is created, not written)  ||  ⚠ W3, ON THE W2 AUDIT: Part E says a Petition is 'created, not written', and PLAN §1.4 hole 4 says THAT IS THE DEFECT — #353 :1061-1064, 'Either the gate applies the write, or direct assignment is made impossible.' With `writes: []` the creation row W2 added was INERT and creation still bypassed the gate."
+    refusal_note: "PLAN POSITION `15`: added with the typed cell. §E2 -- 'failure emits, never raises'. Refusal condition: the addressee is not an existing person or the place of origin is no rung, or -- for a hand-built act only, since a computed one is never formed -- the petition is addressed to the petitioner (`_eff_petition` declines it: no counterparty)."
+    writes_note: "— (a Petition is created, not written)  ||  ⚠ W3, ON THE W2 AUDIT: Part E says a Petition is 'created, not written', and PLAN §1.4 hole 4 says THAT IS THE DEFECT — #353 :1061-1064, 'Either the gate applies the write, or direct assignment is made impossible.' With `writes: []` the creation row W2 added was INERT and creation still bypassed the gate.  ||  ⚠ PLAN POSITION `15`: `Petition.exists` -> `Record.exists`. A petition is a `Record` of kind `petition` (`04_CODE_ARCHITECTURE.md` §B.5, `rosters.yaml: record_kinds`), minted with the petitioner's `hold` by `loop/effects.py::_eff_petition`, so `forge`, `destroy_record`, `hold` and `carry` reach it with no new row. `(Petition, exists)` is deleted from the matrix in the same commit."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "construe"
     stratum:     "social"

@@ -817,14 +817,24 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     explanation for `69 -> 62`. MUTATION CHECK unchanged: deleting either helper's raise, or a
     call site skipping it, still fails the loader's own tests (`test_arrangements.py`) before this
     count could hide it -- the pin here is this file's OWN falsifier for the shape of the
-    refusal, not the only one."""
+    refusal, not the only one.
+
+    ⚠ 62 -> 63, 2026-09-29, plan position `15` (the Record-kind fold), ONE NEW LOAD-TIME REFUSAL.
+    `verbs.py` refuses a `counterparty:` column naming an operand the row's `requires_typed:` cell
+    does not bind -- the column `petition` gained for `ED-IN-0210` ruling 2's two-sidedness, whose
+    person-side rule compares the named operand with the person and would pass silently on an
+    operand the Candidate never carries. `verbs.py` 25 -> 26; no other file moved. Falsifier:
+    `test_record_kind_fold.py::test_the_loader_refuses_a_counterparty_the_typed_cell_does_not_bind`
+    plants `counterparty: site` on `petition` and the load raises naming it. (`record_kinds`'
+    two refusals -- ⊕L35 in `Record.__post_init__`, the tenure-kind overlap in `data/rosters.py`
+    -- are `Forbidden`/`Unspecified`, not `SystemExit`, so they are not counted here.)"""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 62, (
-        f"{total} load-time exits across the model set, expected 62. Per file: "
+    assert total == 63, (
+        f"{total} load-time exits across the model set, expected 63. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
@@ -4106,7 +4116,7 @@ def test_w4_every_matter_write_on_a_declaring_row_emits_or_is_registered_as_cond
     # never ran. Deleting the exemption from `write()` left all four `w4` tests green. A Record is
     # built here rather than hoped for. Found by the `W4` adversarial pass.
     assert "Record.ttl" in roster("conditional_emission_rows")
-    rec = Record("rec_w4", "S", "writ", ttl=2)
+    rec = Record("rec_w4", "S", "text", ttl=2)   # `record_kinds` closes the kind (position `15`)
     w.records[rec.id] = rec
     w.write("ttl", mint_token(w, WriteClass.MATTER), lambda: setattr(rec, "ttl", rec.ttl - 1),
             record_kind="Record", fieldname="ttl", driver="Event")
@@ -7056,8 +7066,15 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # genuinely `present_at` it. Full trace, including why `work` alone stays always-refused, at
     # `test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this`. The verb
     # named `fight` here (not `kill / wound`) since `FIGHT-RENAME` (plan position 5) landed first.
-    assert ever == {"create_record", "examine", "interview", "fight", "move", "reconstruct",
-                    "release", "research", "speak", "surveil", "tell", "transfer", "utter"}, (
+    # ⚠⚠ 13 -> 14, PLAN POSITION `15` (the Record-kind fold), 2026-09-29: `petition` EXECUTES --
+    # it gained an effect (`_eff_petition`) and a typed cell binding its two sides, so it entered
+    # `resolvable_verbs()`. Full measurement at
+    # `test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this`. ⚠ THIS TEST
+    # WAS ALREADY RED BEFORE POSITION `15` on its `H-96` behaviour count below (`11a`'s, per the
+    # `11b` commit's own note); this line re-pins only the membership move position `15` made.
+    assert ever == {"create_record", "examine", "interview", "fight", "move", "petition",
+                    "reconstruct", "release", "research", "speak", "surveil", "tell", "transfer",
+                    "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
     # ⚠ `move` JOINED `transfer` HERE, AND IT IS THE SAME HOLE. Both are refused for want of an
@@ -8552,13 +8569,21 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # actor is genuinely `present_at` it. `work` remains ALWAYS refused -- see the corrected
     # assertion below for why `work` alone stays. The verb named `fight` here (not `kill / wound`)
     # since `FIGHT-RENAME` landed first; both moves are on the merged tree.
+    # ⚠ 13 -> 14, PLAN POSITION `15` (the Record-kind fold), 2026-09-29: `petition` JOINS, BY A
+    # FIFTH ROUTE -- AN EFFECT. It had an `own` eligibility and a `—` precondition all along and
+    # was excluded from `resolvable_verbs()` for want of a body (`H-63`); `_eff_petition` mints a
+    # `Record` of kind `petition`, and the row gained a typed cell binding its two sides (`to`, a
+    # Person; `from`, a Rung -- `ED-IN-0210` ruling 2). MEASURED on this corpus pass: 101
+    # executions against 204 refusals -- the refusals are referents that are no person, the
+    # typed cell's honest answer, learned per referent like the investigation acts'.
     assert set(executed) == {"create_record", "examine", "interview", "fight", "move",
-                             "reconstruct", "release", "research", "speak", "surveil", "tell",
-                             "transfer", "utter"}, (
+                             "petition", "reconstruct", "release", "research", "speak", "surveil",
+                             "tell", "transfer", "utter"}, (
         f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
         "ED-FI-0009's, 10 -> 11 is `release`'s, 11 -> 12 is `H-71`'s, 12 -> 13 is the admission "
         "of `kill / wound`, 13 -> 12 is `R8.1`'s (`dispatch`, see above), 12 -> 13 again is "
-        "`11a`'s (`examine`, see above), and any further movement is a fresh one")
+        "`11a`'s (`examine`, see above), 13 -> 14 is position `15`'s (`petition`, see above), and "
+        "any further movement is a fresh one")
     # ⚠ `dispatch` JOINED `work` UNDER `R8.1` FOR A DIFFERENT REASON, stated above the executed-set
     # assertion: its precondition needs a PERSON referent, and the question that used to supply
     # one in NPC-033 is now outranked (hash order, `H-54`) by a `seen` claim about a rung. It is
@@ -8815,9 +8840,17 @@ def test_wc_a_candidate_declines_when_its_hearth_cannot_be_derived():
     assert ("transfer", "S") not in after, (
         "a person with no live containment was still offered `transfer`. `hearth(giver)` has "
         "nothing to bind to, so the act would be minted with a hole")
-    assert base - after == {("transfer", "S")}, (
-        f"the decline removed {sorted(base - after)} -- more than the one Candidate whose "
-        "operands it cannot bind. A derivation that declines everything is not a derivation")
+    # ⚠ `transfer` WAS THE ONLY CELL BINDING `from` UNTIL PLAN POSITION `15`, which typed
+    # `petition`'s *the place it rises from* as a second. The control is kept EXACT by deriving the
+    # expected set from the table rather than naming the one verb it used to be: every Candidate
+    # whose cell binds `from` must leave, and nothing else may.
+    binds_from = {(vb, "S") for vb, row in VERB_TABLE.items()
+                  if row.requires_typed is not None and "from" in row.requires_typed.operands()}
+    assert ("transfer", "S") in binds_from and len(binds_from) >= 2, binds_from
+    assert base - after == binds_from & base, (
+        f"the decline removed {sorted(base - after)}, expected exactly the Candidates whose cell "
+        f"binds `from` ({sorted(binds_from & base)}). A derivation that declines everything is not "
+        "a derivation")
     notes = [r for r in TRACE.rows[first:] if r.channel == "NOTE" and "H-94" in r.what]
     assert notes and all("'from'" in r.what for r in notes), (
         f"the decline was silent, or named the wrong operand: {[r.what for r in notes]}. "
@@ -10936,7 +10969,15 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # into) and, far more sharply, its divergence count -- the same channel firing much wider is
     # also why the `>=` separation assertion above moved off `>`.
     # [GROUNDED: measured 2026-09-29 on this tree, NPC-088 slice, seed 0, 4 seasons at 2 slots -- W-D genuine/diverged: `none` 36/10, `actor` 33/10, `total` 35/10]
-    assert (got["none"]["genuine"], got["none"]["diverged"]) == (36, 10), got
+    # ⚠⚠ **36/10 -> 36/9, PLAN POSITION `15` (the Record-kind fold), 2026-09-29 -- THE POPULATION
+    # UNMOVED IN ALL THREE ARMS, ONE DIVERGENCE MOVED IN TWO OF THEM.** `petition` became resolvable
+    # (an effect plus a typed cell), so it is a new member of every option set the chooser narrows
+    # to; a fork's alternative can now be a petition, and whether the forced act reaches a later
+    # decision shifts by one case at `none` (10 -> 9) and one at `total` (10 -> 11, below). `actor`
+    # is unmoved at 33/10. Genuine-fork counts (36/33/35) are identical, which is the control: the
+    # fork POPULATION is the same and one fork's reach moved each way.
+    # [GROUNDED: measured 2026-09-29 on this tree after position `15`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- W-D genuine/diverged: `none` 36/9, `actor` 33/10, `total` 35/11]
+    assert (got["none"]["genuine"], got["none"]["diverged"]) == (36, 9), got
     # Reproduce with the `fork_case` loop above, run at each `fan_out_mode`.
     # [GROUNDED: measured 2026-09-07 — 16 genuine forks, 0 divergences at the shipped arm]
     # ⚠ 14 of 18 -> 17 of 19 under `U4`: the sampled tie-break moved the act a fork's person takes,
@@ -10986,7 +11027,8 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # candidate wins a tied scene independent of behaviour) AND `11a` (31/7 -> 35/10, `total`'s own
     # rise from the genuine-population effect alone -- it fans every event to everyone regardless
     # of `11a`). Neither figure is current on the merged tree; re-derived below.
-    assert (got["total"]["genuine"], got["total"]["diverged"]) == (35, 10), got
+    # [GROUNDED: measured 2026-09-29 on this tree after position `15` -- `total` arm genuine UNMOVED at 35, diverged 10 -> 11. Mechanism in the `none`-arm block above (`petition` joining the option set).]
+    assert (got["total"]["genuine"], got["total"]["diverged"]) == (35, 11), got
     # AND THE TWO LAYERS ARE SEPARATED. The finding is the DECISION count above; this is the layer
     # beneath it — whether the fork moved the act stream at all.
     #
@@ -11379,7 +11421,12 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # `none`-arm block): `11a` widens Q2's admission, which raises this control arm's genuine-fork
     # population and, more sharply, its divergence count.
     # [GROUNDED: measured 2026-09-29 on this tree, NPC-088 slice, seed 0, 4 seasons at 2 slots -- fingerprint genuine/wide: `none` 36/10, `actor` 33/10, `total` 35/10]
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (36, 10), got
+    # ⚠⚠ **36/10 -> 36/9 AND `total` 35/10 -> 35/11, PLAN POSITION `15`, 2026-09-29 -- THE SIBLING
+    # TEST'S MOVE, TO THE CASE.** Same `fork_case` instrument, same cause: `petition` joined the
+    # resolvable option set, and one fork's reach moved each way at `none` and `total` while every
+    # arm's genuine-fork population held (36/33/35) and `actor` held at 33/10.
+    # [GROUNDED: measured 2026-09-29 on this tree after position `15`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- fingerprint genuine/wide: `none` 36/9, `actor` 33/10, `total` 35/11]
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (36, 9), got
     # [GROUNDED: re-measured 2026-09-10 under `U4` — `actor` wide 17 of 19 under the widened fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (29, 9) at the shipped arm]
     # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person a person-subject
@@ -11416,7 +11463,8 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # `W-D` decision-count test above -- this instrument shares `arm9_forking.fork_case` with it)
     # AND `11a` (31/7 -> 35/10, the same genuine-population rise as that test's `total` arm).
     # Neither figure is current on the merged tree; re-derived below.
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (35, 10), got
+    # [GROUNDED: measured 2026-09-29 on this tree after position `15` -- `total` genuine UNMOVED at 35, wide 10 -> 11; see the `none`-arm block above]
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (35, 11), got
 
 
 # ===========================================================================
@@ -12247,8 +12295,18 @@ def test_u2_the_one_round_arm_reproduces_the_pre_tick_loop():
     # `exists:`/holder claims plus what witnessing it deposits) while `claim.decayed` holds at 10
     # because the new claims have not yet aged the two seasons this probe runs.
     # [GROUNDED: measured 2026-09-29 on this tree, `HL.build_world(0)`, 2 seasons, `scene_budget=1` -- acts: `p_carin create_record einhir_texts`, `p_carin create_record rec:6bf46a143f347c12`, `p_bailiff create_record rec:6bf46a143f347c12`, `p_carin reconstruct rec:6bf46a143f347c12`, `p_carin research rec:6bf46a143f347c12`; kinds: claim.decayed 10, claim.deposited 39, condition.worn 2, finding.made 2, record.created 3, term.matured 1]
-    assert kinds == {"claim.decayed": 10, "claim.deposited": 39, "condition.worn": 2,
-                     "finding.made": 2, "record.created": 3, "term.matured": 1}, kinds
+    # ⚠⚠ **`petition.refused` 0 -> 1, `finding.made` 2 -> 1, `claim.deposited` 39 -> 40 UNDER PLAN
+    # POSITION `15`, 2026-09-29 -- UPSTREAM OF BOTH LOOPS, AS `11a`'s MOVE ABOVE WAS.** `petition`
+    # became resolvable (an effect, `_eff_petition`, and a typed cell), so it is in the option set
+    # `make_chooser` narrows to; `p_carin`'s `reconstruct` slot goes to `petition` on the same
+    # referent, `rec:6bf46a143f347c12` -- a Record, not a Person, so the typed cell's
+    # `existence(to: Person)` refuses it. Candidate FORMATION changed, which a one-pass loop reading
+    # the same `resolvable_verbs()` would show identically; the rounds mechanism did not diverge.
+    # The lost `finding.made` is `reconstruct`'s, and the extra claim is the refusal's.
+    # [GROUNDED: measured 2026-09-29 on this tree after position `15`, `HL.build_world(0)`, 2 seasons, `scene_budget=1` -- acts: `p_carin create_record einhir_texts`, `p_carin create_record rec:6bf46a143f347c12`, `p_bailiff create_record rec:6bf46a143f347c12`, `p_carin research rec:6bf46a143f347c12`, `p_carin petition rec:6bf46a143f347c12` (refused); kinds: claim.decayed 10, claim.deposited 40, condition.worn 2, finding.made 1, petition.refused 1, record.created 3, term.matured 1]
+    assert kinds == {"claim.decayed": 10, "claim.deposited": 40, "condition.worn": 2,
+                     "finding.made": 1, "petition.refused": 1, "record.created": 3,
+                     "term.matured": 1}, kinds
     assert d.resolved, "the one-round arm resolved nothing — the control has no behaviour in it"
 
 

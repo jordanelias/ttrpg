@@ -148,6 +148,50 @@ rosters:
       the world's collections is UNKNOWN, not wrong, for the `_rehome` reason stated above.
     values: [Person]
 
+  record_kinds:
+    source: >-
+      `architecture/meta/04_CODE_ARCHITECTURE.md` §B.5's synthesis call, ratified (ED-IN-0204): *"`Petition`
+      and `Dispensation` become `Record` kinds ... two existence rows collapse into one"*, and PART A row
+      11. The KEY LISTS are r2 `02_THE_WRIT_AND_THE_WORD.md` §A.3/§A.5's (ED-IN-0234, PROPOSED); plan
+      position `15` builds them.
+    open: true
+    note: >-
+      ⚠ THE KEYS ARE EXACT, NOT A MINIMUM. `Record.__post_init__` (`state/carriers.py`) refuses a
+      `subject_matter` whose key set is not its kind's IN EITHER DIRECTION, and refuses a kind that is
+      not listed here -- r2 `05_LEDGER_AND_BUILD.md`'s ⊕L35. A missing key is an operand no reader can
+      bind; an extra key is a second vocabulary. `text: []` is why every Record minted before this
+      roster stays lawful: its `subject_matter` is `None`, which has no keys.
+      ⚠ THREE KINDS, NOT r2's FIVE, AND THE OMISSION IS DELIBERATE. `commission` (r2 item 11, plan
+      position `19`) and `works` (r2 item 12, position `24e`) have no producer yet; each lands with the
+      effect that mints it. A kind nothing mints is a member no reader reaches (`ID-13`).
+      ⚠ THIS ROW IS ALSO A VOCABULARY OF THE `exists:` STEM. `requires_typed: {form: existence, kind:
+      petition}` asks *a Record of kind petition exists* (`queries/world_q.py::WorldReader.read`), so a
+      member here must never also be a `tenure_kinds` member -- `data/rosters.py` refuses the overlap at
+      load rather than letting one reading silently shadow the other.
+    values:
+      text:         []
+      dispensation: [terms, to, at]
+      petition:     [terms, to, from]
+    # HOW A MINTED DOCUMENT'S CONTENT IS READ OFF THE ACT, AND WHAT A HOLDER LEARNS FROM IT. One
+    # owner for three facts the mint (`loop/effects.py::_mint_document`) and the deposit rule
+    # (`loop/witness.py`) both read, so neither spells them.
+    content:
+      # A KEY IS READ FROM THE ACT'S OPERAND OF THE SAME NAME, EXCEPT WHERE IT IS LISTED HERE. `terms`
+      # is what the document is ABOUT, which is the act's `subject` -- the one entity a computed act
+      # always carries (`decision/choose.py::_payload_of`). A key naming a `requires_operands` member
+      # is required (a missing one is `_operand`'s caller defect); a key naming none -- `at`, r2 §A.6's
+      # place of discharge -- is read as declared and may be absent.
+      read_from:
+        terms: subject
+      # THE KEY THAT NAMES WHOM A DOCUMENT ADDRESSES, stored as an id LIST whatever the act carried
+      # (r2 §A.9.1 -- *"the id set under the addressee key its kind declares"*). One shape for one
+      # key across every kind that has it.
+      addressee: to
+      # THE DEPOSIT RULE'S PREDICATE STEM. A person who comes to hold a Record holds
+      # `(record, "content:<kind>", <subject_matter, frozen>)` in their own ledger (r2 §A.9;
+      # `loop/witness.py::content_value` owns the frozen shape).
+      predicate: content
+
   rung_kinds:
     source: "#353 §10 — the containment ladder. `contain : Rung → Rung`, one parent"
     open: true

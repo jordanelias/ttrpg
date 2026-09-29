@@ -66,10 +66,13 @@ def _entities(w) -> set:
     like a discovery. The guard against it is that the entity set is enumerated from `World`'s own
     `__init__` (`state/world.py:151-166`) rather than from what came to mind, and
     `test_the_entity_set_covers_every_world_collection_a_tenure_can_name` pins it there so a
-    collection added later cannot silently start reading as dangling."""
+    collection added later cannot silently start reading as dangling.
+
+    ⚠ `w.petitions` AND `w.dispensations` LEFT THIS SET WITH THEIR DICTS (plan position `15`). Both
+    are `Record` kinds now, so a petition or a writ is named by `w.records` above and no clause is
+    added for them -- a second clause would be the second home the fold deleted."""
     return (set(w.persons) | set(w.rungs) | set(w.offices) | set(w.propositions)
-            | set(w.sites) | set(w.records) | set(w.dates)
-            | set(w.petitions) | set(w.dispensations))
+            | set(w.sites) | set(w.records) | set(w.dates))
 
 
 def _all_tenures(w) -> list:

@@ -196,6 +196,15 @@ class VerbRow:
     # cannot arrive without one; an absent column would read as `false` for every verb, which is
     # the UNKNOWN/False collapse `operands_for` refuses one level down.
     beneficiary: str = ""
+    # ⚠ THE NINTH COLUMN, ADDED AT PLAN POSITION `15` -- THE OTHER PARTY, NAMED BY THE OPERAND
+    # THAT CARRIES THEM. `ED-IN-0210` ruling 1: *a real interaction has a COUNTERPARTY, an OBSTACLE
+    # and a DEGREE*; ruling 2: `petition` is *the first in the set where a counterparty is
+    # structurally required*. `decision/options.py::opening_set` reads it and forms no Candidate
+    # whose counterparty is the person themselves -- the contested-verb rule beside it (`contests:`
+    # makes `subject` the second claimant), generalised to a row that names its counterparty
+    # directly. `""` is the declared absence; the loader requires a named operand to be one the
+    # row's typed cell BINDS, so the Candidate always carries the thing compared.
+    counterparty: str = ""
 
     def eligibility_kinds(self) -> tuple:
         return tuple(a.split(":")[0].strip() for a in self.eligibility)
@@ -294,9 +303,34 @@ def _derive_openers_from_effects() -> dict:
     "declared means present" contract the hand-written roster kept -- because a kind with a
     `writes: Tenure.since` cell and no opener (`commit`, `oblige`, `succeed`, `tie`, `knot`) is a
     real, disclosed hole, not an absent declaration. MEASURED against the mapping it replaced: the
-    two agree exactly (`hold: [confer, create_record]`, `contain: [move]`, the other five empty)."""
+    two agree exactly (`hold: [confer, create_record]`, `contain: [move]`, the other five empty).
+
+    ⚠ THE WALK FOLLOWS A REGISTERED EFFECT INTO THE MODULE'S OWN HELPERS (plan position `15`).
+    `create_record`, `issue` and `petition` share ONE mint, `_mint_document`, and the `hold` it
+    opens is constructed there rather than in any decorated body -- so a walk confined to the
+    decorated function would have DROPPED `create_record` from `hold`'s openers the day the mint
+    was shared, a derived fact going quietly wrong in the direction nobody reads. A call to a
+    function defined at the top of `effects.py` is walked as if inlined (transitively, each helper
+    once); anything imported is not this file's and is not walked. MEASURED after the change:
+    `hold: [confer, create_record, issue, petition]`, every other kind unchanged."""
     openers: dict = {k: set() for k in TENURE_KINDS}
     tree = ast.parse(files.EFFECTS_PY.read_text(encoding="utf-8"))
+    helpers = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+
+    def _reached(fn) -> list:
+        """`fn` and every module-level helper it calls, transitively, each once."""
+        out, todo, seen = [], [fn], set()
+        while todo:
+            f = todo.pop()
+            if f.name in seen:
+                continue
+            seen.add(f.name)
+            out.append(f)
+            todo.extend(helpers[c.func.id] for c in ast.walk(f)
+                        if isinstance(c, ast.Call) and isinstance(c.func, ast.Name)
+                        and c.func.id in helpers)
+        return out
+
     for node in ast.walk(tree):
         if not isinstance(node, ast.FunctionDef):
             continue
@@ -308,7 +342,7 @@ def _derive_openers_from_effects() -> dict:
                 verb = dec.args[0].value
         if verb is None:
             continue
-        for call in ast.walk(node):
+        for call in (c for f in _reached(node) for c in ast.walk(f)):
             if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Name)
                     and call.func.id == "Tenure"):
                 continue
@@ -382,7 +416,17 @@ def _load_verb_table() -> dict:
                       by_degree, emits_by_degree,
                       build_typed_requires(name, r.get("requires_typed")),
                       str(r.get("requires_typed_note") or "").strip(),
-                      str(r.get("beneficiary") or "").strip())
+                      str(r.get("beneficiary") or "").strip(),
+                      str(r.get("counterparty") or "").strip())
+        # THE COUNTERPARTY IS AN OPERAND THE ACT CARRIES, OR IT IS NOTHING. `opening_set` compares
+        # it with the person; a name the typed cell does not BIND is absent from every Candidate,
+        # so the comparison would pass silently and the rule would be a column nothing enforced.
+        if row.counterparty and (row.requires_typed is None
+                                 or row.counterparty not in row.requires_typed.operands()):
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} names counterparty {row.counterparty!r}, which its "
+                "`requires_typed:` cell does not bind. A counterparty is compared with the person "
+                "forming the Candidate, and only a bound operand is always carried.")
         # A row that declares `requires_typed: none` must SAY WHY. The three admissible reasons
         # are a well-formedness constraint on the Act (§F.24a: `issue`, `open_case` -- *"they
         # belong in the `Act` schema and are refused at construction"*), a `per act` cell, and an

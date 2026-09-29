@@ -408,6 +408,26 @@ RELEASABLE_KINDS = frozenset(TENURE_KINDS) - {"contain"}
 # REFUSES instead of defaulting to a silent pass.
 HOLD_OBJECT_KINDS = roster("hold_object_kinds")
 HOLD_SUBJECT_KINDS = roster("hold_subject_kinds")
+# Plan position `15` -- `ARCH §B.5`'s fold: `Petition` and `Dispensation` are KINDS of `Record`, and
+# each kind declares the EXACT key set of its `subject_matter` (r2 `05`'s ⊕L35, refused in
+# `Record.__post_init__`). `RECORD_KINDS` is the member set; `RECORD_KIND_KEYS` is the mapping,
+# read through `roster_map` so an absent row refuses rather than answering `{}`; `RECORD_CONTENT`
+# is how a mint reads the keys off an act and what the deposit rule names the claim.
+RECORD_KINDS = roster("record_kinds")
+RECORD_KIND_KEYS = {k: tuple(v or ()) for k, v in roster_map("record_kinds", "values").items()}
+RECORD_CONTENT = roster_map("record_kinds", "content")
+# ⚠ ONE STEM READS BOTH VOCABULARIES, SO THEY MAY NOT SHARE A WORD. `exists:<kind>`
+# (`queries/world_q.py::WorldReader.read`) answers a `tenure_kinds` member as a live EDGE and a
+# `record_kinds` member as a Record OF THAT KIND; a word in both rosters would be answered by
+# whichever branch is tested first and the other reading would be silently unreachable. Refused
+# at load, where the two rosters first meet, rather than at the first act that asks.
+if RECORD_KINDS & TENURE_KINDS:
+    raise Unspecified(
+        f"`record_kinds` and `tenure_kinds` share {sorted(RECORD_KINDS & TENURE_KINDS)}",
+        "rosters.yaml -- record_kinds",
+        needs="rename one; each word the `exists:` stem reads must mean one thing",
+        law="`queries/world_q.py::WorldReader.read`'s `exists` branch reads both rosters; a "
+            "shared word is two questions spelled one way")
 # `U1`: verb -> the capability key its contested roll draws dice from. A MAPPING inside a roster
 # row, read through `roster_map` so an absent roster refuses rather than defaulting to `{}` -- the
 # polarity that function exists to hold. A verb with no row falls through to `pool_default` inside

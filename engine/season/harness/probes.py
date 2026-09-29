@@ -46,6 +46,7 @@ from ..loop.deliberate import sense
 # writes is standing in for the driver at a synthetic barrier, so it mints there rather than
 # building a `Token` itself -- `tests/test_g2_token.py` refuses a `Token(` anywhere but the driver.
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
+from ..loop.effects import EFFECTS
 from ..queries.world_q import questions_for
 from ..seam import ContestError, contest
 from ..state.attribution import anchor_of
@@ -518,7 +519,9 @@ def p9():
        tests="a character must be able to perform a repeated, multi-season task the engine tracks as ongoing")
 def p10():
     w = tiny_world()
-    r = Record("rec1", "Hh", "copy", stages=[("half", 2), ("done", 4)])
+    # `text`, not `copy`: `record_kinds` closes the kind (plan position `15`) and a copy that says
+    # nothing is a `text` Record -- the stages are what this probe is about.
+    r = Record("rec1", "Hh", "text", stages=[("half", 2), ("done", 4)])
     w.records[r.id] = r
     w.step = Step.RESOLVE
     w.write("carrier_exists", mint_token(w, WriteClass.ACTS), lambda: w.records.__setitem__(r.id, r),
@@ -828,7 +831,9 @@ def p21():
        tests="possession of an object must be able to make someone else's action unavailable or costlier")
 def p22():
     w = tiny_world()
-    w.records["rec_writ"] = Record("rec_writ", "S", "writ")
+    # `text`, not `writ`: `record_kinds` closes the kind (plan position `15`), and a writ with no
+    # content is a `text` Record -- possession is what this probe is about, not what it says.
+    w.records["rec_writ"] = Record("rec_writ", "S", "text")
     w.step = Step.RESOLVE
     w.write("Tenure", mint_token(w, WriteClass.ACTS),
             lambda: w.add_tenure(Tenure("t_hold", "p_low", "rec_writ", "hold", since=0)),
@@ -1246,10 +1251,24 @@ def f5():
     off = w.offices["off_dicastery"]
     assert off.rung is None
     scope = ["p_low", "p_king"]   # p_king sits under the realm, outside S's subtree
-    w.dispensations["disp1"] = dict(id="disp1", issuer=off.id, proposition="prop_x",
-                                    scope=scope, terms=[])
+    # ⚠ PLAN POSITION `15`: A DISPENSATION IS A `Record` OF KIND `dispensation`, AND THIS PROBE NOW
+    # MINTS IT WITH `issue`'s OWN EFFECT rather than planting a dict in `w.dispensations`, which is
+    # deleted. The effect is applied through the gate directly because `issue`'s `requires:` is
+    # still prose and the fold would refuse to evaluate it (position `19`'s); what is under test
+    # here is the WRIT, not the precondition. `_eff_issue` on a seat with no rung draws the writ up
+    # where its issuer stands -- the one fallback `Record.rung` has -- and the ASSERTION BELOW IS
+    # UNCHANGED, which is r2 `02`'s own test that the fold preserved the ratified property.
+    act = Act_(w, w.persons["p_mid"], "issue", payload={"subject": "prop_x", "to": scope},
+               via=off.id)
+    w.step = Step.RESOLVE
+    w.write("exists", mint_token(w, WriteClass.ACTS), None, record_kind="Record",
+            fieldname="exists", driver="Act", actor=act.actor, via=act.via,
+            change=EFFECTS["issue"](w, act))
+    disp = w.records[f"rec:{act.id}"]
+    assert disp.kind == "dispensation" and disp.subject_matter["to"] == scope, disp
+    assert world_q.hold_force(w, disp.id).subject == "p_mid", "the issuer does not hold the writ"
     sub = world_q.descendants(w, "S")
-    outside = [s for s in scope if s not in sub]
+    outside = [s for s in disp.subject_matter["to"] if s not in sub]
     assert all(s in w.persons for s in scope) and outside
     return (f"PASS: `rung? = null`, and SCOPE ENUMERATES EXECUTORS, NOT PLACES -- {outside} are "
             "outside the settlement's containment subtree entirely. A Dicastery, a chivalric order "
@@ -1270,8 +1289,19 @@ def f6():
        tests="someone with no power must be able to get a matter in front of someone who has it")
 def f7():
     w = tiny_world()
-    w.petitions["pet1"] = dict(id="pet1", petitioner="p_low", proposition="mend the harbour",
-                               respondent_venue="D", backing=[])
+    # ⚠ PLAN POSITION `15`: THE PETITION IS A `Record` OF KIND `petition`, FILED BY `petition`'s
+    # OWN EFFECT through the gate -- `w.petitions` is deleted. What the old dict called
+    # `respondent_venue="D"` is answered by the PERSON who sits the duchy's seat, `p_high`: a
+    # petition is addressed to someone who can deny it (the row's `requires_typed_note` says why),
+    # and `from` is the hearth it rises from.
+    filed = Act_(w, w.persons["p_low"], "petition",
+                 payload={"record": "pet1", "subject": "mend the harbour", "to": "p_high",
+                          "from": "Hh"})
+    w.step = Step.RESOLVE
+    w.write("exists", mint_token(w, WriteClass.ACTS), None, record_kind="Record",
+            fieldname="exists", driver="Act", actor=filed.actor, via=filed.via,
+            change=EFFECTS["petition"](w, filed))
+    assert w.records["pet1"].kind == "petition", w.records["pet1"]
     w.dates["d_sitting"] = dict(due_at=99, holder="D", fired=False)
     # ⚠ `payload={"subject": ...}`, NOT A BARE STRING. `W-A` typed `carry`'s `requires:` cell
     # (§E3 `:415`, *a Petition exists*), and the fold now BINDS its operands from the payload --
@@ -1568,16 +1598,21 @@ def f17():
        tests="a place must be able to generate demands of its own that cut against what the authority above ordered")
 def f18():
     w = tiny_world()
-    w.petitions["pet_local"] = dict(id="pet_local", petitioner="p_low",
-                                    proposition="mend the seam", respondent_venue="S", backing=[])
-    w.dispensations["disp_order"] = dict(id="disp_order", issuer="off_duke",
-                                         proposition="levy the grain", scope=["p_high"], terms=[])
+    # ⚠ PLAN POSITION `15`: BOTH ARE `Record`s NOW, ONE KIND EACH, in the one store -- which is the
+    # probe's point made structural: the two documents sit side by side with nothing arbitrating.
+    # Planted, not minted: this probe is about their coexistence, not about who makes them.
+    w.records["pet_local"] = Record(
+        "pet_local", "Hh", "petition",
+        subject_matter={"terms": "mend the seam", "to": ["p_high"], "from": "Hh"})
+    w.records["disp_order"] = Record(
+        "disp_order", "D", "dispensation",
+        subject_matter={"terms": "levy the grain", "to": ["p_high"], "at": None})
     b = w.fixtures.get("scene_budget")
     return (f"PASS-STRUCTURALLY: a Petition rising from below and a Dispensation enumerating the "
             f"same executor coexist WITH NO ARBITRATION ANYWHERE IN THE SHAPE. The governor's {b} "
             "acts are the only scarcity, so the conflict is REAL and is resolved BY THE PERSON, "
-            "which is L1. Both objects are the probe's data, not the shape's -- nothing constructs "
-            "either. See F19")
+            "which is L1. Both objects are the probe's data here, planted as `Record`s of their "
+            "two kinds. See F19")
 
 
 @probe("F19", "a place produces a demand with nobody petitioning", "S36.1", by="no-signature",
@@ -1716,7 +1751,7 @@ def w6():
        tests="a document must be able to lapse after a time")
 def w7():
     w = tiny_world()
-    rec = Record("rec_ttl", "S", "writ", ttl=2)
+    rec = Record("rec_ttl", "S", "text", ttl=2)   # `record_kinds` closes the kind (position `15`)
     w.records[rec.id] = rec
     w.step = Step.MATTER
     # `W4` / `H-86`: `(Record, ttl)` declares ONLY `record.expired`, which fires at zero -- so a
@@ -1736,7 +1771,9 @@ def w7():
        tests="a legal or institutional process must be able to advance against a character who is passive")
 def w8():
     w = tiny_world()
-    rec = Record("rec_case", "S", "case", stages=[("deposition", 1), ("tribunal", 3)])
+    # `text`, not `case`: `record_kinds` closes the kind (plan position `15`); `open_case` has no
+    # effect and so no kind of its own yet, and the stages are what this probe is about.
+    rec = Record("rec_case", "S", "text", stages=[("deposition", 1), ("tribunal", 3)])
     w.records[rec.id] = rec
     opened = Ev(w, "p_high", "case.opened", rec.id, [ROOT])
     w.log.append(opened)

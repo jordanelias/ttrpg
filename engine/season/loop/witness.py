@@ -19,16 +19,37 @@ from __future__ import annotations
 from ..data.matrix import Step
 from ..state.gate import Token
 from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN
-from ..data.rosters import OBSERVATION_DEPOSIT_MODES, WITNESS_CHANNELS, require_member
+from ..data.rosters import (
+    OBSERVATION_DEPOSIT_MODES, RECORD_CONTENT, WITNESS_CHANNELS, require_member,
+)
 from ..epistemic import SEEN_PREDICATE, act_refs, claim_subjects, observers_for, seen_of, seen_subject
 from ..queries import cache
 from ..queries.person_q import LedgerReader
+from ..queries.world_q import hold_force
 from ..state.attribution import actor_of
 from ..state.carriers import Claim, Event
 from ..state import ledgers
 from ..state.ids import H
 from ..trace_log import TRACE
 
+
+
+def content_value(subject_matter):
+    """A `content:<kind>` CLAIM'S VALUE: the document's `subject_matter`, FROZEN -- a tuple of
+    `(key, value)` pairs in the kind's own key order, every list a tuple, recursively. `dict(v)`
+    gives the mapping back.
+
+    ⚠ FROZEN AND HASHABLE ON `epistemic.Seen`'s PRECEDENT, AND FOR ITS REASON: claim values sit in
+    the sets the corpus harness builds over `(subject, predicate, value)`
+    (`harness/corpus_run.py`), and a `dict` there is a `TypeError` -- MEASURED, the first writing of
+    the deposit rule deposited the Record's mapping itself and `test_w18` died on it. Freezing is
+    also what the deep copy was for: a belief that cannot be mutated cannot alias the Record it
+    was read from, so nothing done to the document later reaches back into a ledger."""
+    if isinstance(subject_matter, dict):
+        return tuple((k, content_value(v)) for k, v in subject_matter.items())
+    if isinstance(subject_matter, (list, tuple)):
+        return tuple(content_value(v) for v in subject_matter)
+    return subject_matter
 
 
 def _told_content(w, act):
@@ -194,6 +215,30 @@ def witness(self, token: Token, events: list[Event]) -> int:
         subj = seen_subject(w, e, pid, mode)
         seen_by[(pid, e.id)] = (None if subj is None
                                 else (subj, seen_of(w, e, self.act_of.get(e.id), pid, mode)))
+    # THE DEPOSIT RULE'S TRIGGER (plan position `15`, r2 `02` §A.9): *a held document is a held
+    # belief.* A person who COMES TO HOLD a Record this season -- the Record is named in an Event's
+    # `changes[]` and its live `hold` opened at this tick -- learns what it says. Resolved per EVENT
+    # and before the parallel map, for `seen_by`'s reason: the holder depends on the Event and the
+    # world, never on which witness is being served, and `hold_force` reads `w.tenures`.
+    # ⚠ `hold_force` IS THE ONE OWNER OF *who holds this*, AND IT RAISES ON TWO. `holonic §15`'s
+    # `hold` is 1 PER OBJECT and nothing yet enforces it for Records (r2 `05`'s ⊕R14, position
+    # `16`'s release-before-mint); a document with two holders would make *whose belief is this*
+    # undecidable, and refusing loudly here is better than depositing into both.
+    # ⚠ A `None` CONTENT IS NOT DEPOSITED -- the observation block's precedent below (*a deposit the
+    # instrument cannot stand behind is not deposited*) and its cost argument: a claim that says
+    # nothing still takes a `ledger_cap` slot the eviction takes from somebody else. Every `text`
+    # Record carries `None`, so this rule deposits nothing for the Records the loop minted before
+    # it existed -- which is also why it moves no hash on a world that mints only those.
+    content_stem = RECORD_CONTENT.get("predicate")
+    newly_held: dict = {}
+    for e in events:
+        for c in e.changes:
+            rec = w.records.get(c.subject) if c.subject else None
+            if rec is None or rec.subject_matter is None:
+                continue
+            h = hold_force(w, rec.id)
+            if h is not None and h.since == w.tick:
+                newly_held.setdefault(e.id, {})[rec.id] = (h.subject, rec)
     w._in_parallel_map = True
     for pid, e, channel in fan:
         p = w.persons.get(pid)
@@ -336,6 +381,30 @@ def witness(self, token: Token, events: list[Event]) -> int:
                     lambda p=p, c=sc: p.ledger.append(c),
                     record_kind="Person", fieldname="claim_ledger", driver="Event",
                     emits="claim.deposited", subject=sc.id, causes=[e.id])
+            TRACE.claim(pid, e.id, src)
+            deposits += 1
+        # THE FOURTH DEPOSIT: THE CONTENT OF A DOCUMENT THIS WITNESS HAS COME TO HOLD (plan position
+        # `15`). `(record, "content:<kind>", <subject_matter, frozen>)` -- `content_value` above:
+        # the belief is what the document said when it reached this hand, and nothing done to the
+        # Record later reaches back into a ledger. `firsthand` like the deposits above, and it
+        # carries NO attribution: it says *this document says X*, never *the Duke wrote X* (r2 `02`
+        # §A.9 -- the separation is what makes a forgery playable). The exact-triple guard is the
+        # told channel's, for its reason: one belief is stored once.
+        for holder, rec in (newly_held.get(e.id) or {}).values():
+            if holder != pid:
+                continue
+            pred = f"{content_stem}:{rec.kind}"
+            said = content_value(rec.subject_matter)
+            if any(c.subject == rec.id and c.predicate == pred and c.value == said
+                   for c in p.ledger):
+                continue
+            dc = Claim(H(w.world_seed, w.tick, pid, f"content:{e.id}:{rec.id}"),
+                       pid, rec.id, pred, said, w.tick, src, conf,
+                       "own", self.round)   # `U2`: see the first deposit
+            w.write("claim_ledger", token,
+                    lambda p=p, c=dc: p.ledger.append(c),
+                    record_kind="Person", fieldname="claim_ledger", driver="Event",
+                    emits="claim.deposited", subject=dc.id, causes=[e.id])
             TRACE.claim(pid, e.id, src)
             deposits += 1
         # THE TOLD CHANNEL -- `claim_sources`' `told_by`, WHICH NOTHING WROTE.

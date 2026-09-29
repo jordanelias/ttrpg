@@ -115,13 +115,6 @@ rows:
     social:  "false"
     by:      "DR-3 · §24 has no actor"
     emits:   "`date.fired`"
-  - kind:    "Dispensation"
-    field:   "exists"
-    steps:   [RES]
-    class:   "ACTS"
-    social:  "true"
-    by:      "W2/H-43 -- as `(Petition, exists)`"
-    emits:   "`dispensation.issued`"
   - kind:    "DocketItem"
     field:   "matter"
     steps:   [CAL, RES]
@@ -242,13 +235,6 @@ rows:
     social:  "false"
     by:      "W2/H-49. ⚠ PROVENANCE CORRECTED by the adversarial pass: this said \"a §54 fold-in\" and #353 §54's adjudicated items :1893-1908 do NOT include `weight`. The FIELD is real -- `Person :=` at :324 carries it -- and that is the ground the row stands on. H-11's subsistence default reads it ('scaled by weight'), so every season touches it"
     emits:   "`weight.changed`"
-  - kind:    "Petition"
-    field:   "exists"
-    steps:   [RES]
-    class:   "ACTS"
-    social:  "true"
-    by:      "W2/H-43 -- Part E says a Petition is 'created, not written', which puts creation BESIDE the gate. #353 :1061-1064: 'Either the gate applies the write, or direct assignment is made impossible.' An object created beside the gate is the unmarked-cell defect in a new hat"
-    emits:   "`petition.filed`"
   - kind:    "Proposition"
     field:   "*"
     steps:   []
@@ -268,8 +254,8 @@ rows:
     steps:   [RES]
     class:   "ACTS"
     social:  "true"
-    by:      "D7 — `create` by an act (§13)"
-    emits:   "`record.created` · `record.destroyed`"
+    by:      "D7 — `create` by an act (§13). ⚠ PLAN POSITION `15` FOLDED TWO ROWS INTO THIS ONE: `(Petition, exists)` and `(Dispensation, exists)` (W2/H-43, both `[RES]`, ACTS, `social: true` -- identical to this row) are deleted, because a petition and a dispensation are KINDS of `Record` (`04_CODE_ARCHITECTURE.md` §B.5, `rosters.yaml: record_kinds`). H-43's point survives the fold unchanged: creation goes THROUGH the gate, on this row. Their two kinds are carried here so the fold drops nothing either row declared"
+    emits:   "`record.created` · `record.destroyed` · `petition.filed` · `dispensation.issued`"
   - kind:    "Record"
     field:   "forgery_quality"
     steps:   [RES]
