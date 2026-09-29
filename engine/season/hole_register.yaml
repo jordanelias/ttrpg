@@ -1533,8 +1533,10 @@ rows:
   #     is a build item.
   #   * ~~`Person.beliefs` survives with a matrix row where §D.1.1 deletes the field.~~ CLOSED
   #     2026-09-25: the row and the carrier field were deleted together (write_matrix.yaml `retired:`).
-  #   * `Rung._DECLARED` still carries `stake`, `transmission`, `judging_set_rule`; §B.3 deletes
-  #     all three, and Stage 4 §B.7 moves the judging set to a Query over seats.
+  #   * ~~`Rung._DECLARED` still carries `stake`, `transmission`, `judging_set_rule`; §B.3 deletes
+  #     all three, and Stage 4 §B.7 moves the judging set to a Query over seats.~~ CLOSED
+  #     2026-09-29 (plan position `18a`): all three left `_DECLARED` with their `__init__` lines;
+  #     the judging set is `queries/world_q.py::judging_set` (position `18`).
   #   * `Office.establishment` is a field with a matrix row AND a producing verb, where §B.7 and
   #     Stage 1 §D.6/§E.2.5 make it a Query over `oblige`. ⚠ THE PROSE WAS FIXED ON BOTH STAGE 1
   #     SITES THIS SESSION AND THE CODE WAS NOT, which is the gap between a design and its

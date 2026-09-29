@@ -274,8 +274,8 @@ def reach(w: World, p: Person) -> set[str]:
       2. mine                -- every live Tenure's object -- `questions_for`'s own `mine`, read
                                  the same way.
       3. the ladder above me -- `ancestors-or-self` of `home_of(w)[p.id]`, via `parent_of` -- the
-                                 identical walk `predicates.under_purview` and `conferral_path`
-                                 already make (a fourth hand copy is what `CLAUDE.md` §8 forbids).
+                                 walk `ancestry` (below) owns. `under_purview` and
+                                 `conferral_path` made it too, and are deleted (`13d-i`, `18a`).
       4. purview             -- `{seat.rung} | descendants(seat.rung)` over every live `hold` on
                                  an Office with a rung. `descendants` EXCLUDES its own rung
                                  (`state/containment.py`), so the seat's own rung must be unioned
@@ -940,8 +940,8 @@ def ancestry(w: World, rung_id: str) -> list[str]:
     ⚠ **IT EXISTS BECAUSE THREE SITES HAD ROLLED IT BY HAND**, which is the same reason and the
     same remedy as `home_of` above. `parent_of` owns ONE EDGE; every caller that wants the CHAIN
     was repeating the identical loop — step, guard with a visited set, stop at the root or on a
-    revisit — in `WorldReader._ancestry`, in `conferral_path`, and most recently in
-    `harness/governance_spine.census`. §8: the walk is a rule, and a rule lives once.
+    revisit — in `WorldReader._ancestry`, in `conferral_path` (deleted at `18a`), and most
+    recently in `harness/governance_spine.census`. §8: the walk is a rule, and a rule lives once.
 
     ⚠ **THE VISITED SET IS LOAD-BEARING, NOT DEFENSIVE.** `World.add_tenure` enforces strict
     ascent on a `contain` edge, so a well-formed world presents no cycle — but `contain_ascends`
@@ -969,23 +969,13 @@ def ancestry(w: World, rung_id: str) -> list[str]:
     return out
 
 
-def conferral_path(w: World, office_id: str) -> list[str]:
-    """The chain of seats from this office UP to the rung that confers it, by containment.
-
-    §11 gives an Office a `conferral` basis and a `rung?`; §10 gives the ladder. The path is the
-    walk from the office's own rung to the root, which is the same walk `under_purview` makes and
-    is why a Duke seated at the realm would have realm-wide purview.
-
-    ⚠ IT RETURNS RUNGS, NOT OFFICES, AND THAT IS A LIMIT RATHER THAN A CHOICE. `H-101` is graded
-    `absent` and says so in terms: *"NOTHING CAN BE UNDER ANYTHING, AT EITHER INSTITUTIONAL
-    SCALE. `factions` is a flat set of eight names and `Office` has no superior."* Until an
-    Office can name a superior office, the only real chain is the place ladder, and returning
-    rungs says that out loud instead of implying an institutional one exists."""
-    TRACE.query("conferral_path", "resolver")
-    off = w.offices.get(office_id)
-    if off is None or off.rung is None:
-        return []
-    return ancestry(w, off.rung)
+# ⚠ `conferral_path(w, office_id)` WAS HERE AND IS DELETED (plan position `18a`, r2 item 14). It
+# was `ancestry(w, off.rung)` behind a name and a TRACE line, and r2 `05:450-451` names what
+# supersedes it: *"superseded by `descendants(w, seat.rung)`, which `03`'s purview rule uses"* --
+# `13d-ii`'s purview walk. Its one caller was a TEST, the executed check of Jordan's 2026-09-13
+# subordination ruling (*"the duchy is underneath the Crown"*), and that test now asserts through
+# `ancestry(w, o.rung)`, the primitive this wrapped, so the check survives the wrapper. No game
+# code called it and no committed run artifact traced it.
 
 
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:

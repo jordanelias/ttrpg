@@ -585,7 +585,11 @@ class Site:
     rung: str
     kind: str
     condition: int
-    drawers: list[str] = field(default_factory=list)
+    # ⚠ `drawers: list[str]` WAS HERE AND IS DELETED (plan position `18a`, r2 item 14). Its matrix
+    # row was retired at W2 (no verb produced `drawers.changed`); `01_AXIOMS.md` §D.3 names it
+    # *"retired as a dead row with `Rung.stake`"*, and it had zero readers and zero writers. The
+    # `retired:` entry in `write_matrix.yaml` now says the carrier went too. `repr(Site)` folds into
+    # `World.content_hash`, so this is a declared hash move, not a behaviour change.
 
 
 @dataclass
@@ -755,7 +759,12 @@ class Office:
     # `retired:`), and so did `establish`'s `writes:` entry. ⚠ `repr(Office)` folds into
     # `World.content_hash` and carries every field NAME, so this deletion alone moves the digest of
     # every world holding an office -- a declared, controlled hash move, not a behaviour change.
-    dates: list[str] = field(default_factory=list)
+    # ⚠ `dates: list[str]` WAS HERE AND IS DELETED (plan position `18a`, r2 item 14, `05` §A.1.1(e)
+    # row 21). Zero readers and zero writers anywhere in the tree -- every `.dates` in the package
+    # is `World.dates`, the calendar's dict, never this -- and no matrix row. `04 §B.7`'s `Seat :=`
+    # spells `dates[]`; Jordan's `RR-B` ruling (limb `B-1`, 2026-09-17,
+    # `proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml`) AMENDS that line for `dates[]`,
+    # and `04:314` carries the amendment inline. Same declared hash move as `establishment`'s.
     # `04 §B.7`'s RATIFIED `Seat := ( …, upkeep, dates[], exists )` -- WHAT THE SEAT PAYS EACH
     # PERSON OBLIGED TO IT, PER TERM, out of its own rung's stores (`holonic_ARCHITECTURE.md:428`:
     # *"what the post pays its establishment out of the office's stake"*). Plan position `17b` typed
@@ -861,6 +870,8 @@ class Office:
         # written, by the plan's own "Contradiction 1" resolution as the reason position `18a` may
         # safely delete this field -- `18a` MAY NOT delete `scope_rung` as things stand; doing so
         # would silently reopen `H-32`. r2 `03` §A.8's deletion call needs re-deciding against this.
+        # `18a` (2026-09-29) re-derived it and KEPT the field: `judging_set` still reads it, and
+        # Jordan's `RR-B` ruling (limb `B-1`) KEEPS `scope?` in the ratified `Seat :=` besides.
         dom = title_domain(self.post)
         if dom is not None and self.scope_rung is None and self.rung is not None:
             self.scope_rung = self.rung
@@ -875,6 +886,24 @@ class Rung:
     WHITELIST over S10's declared field set -- a concept check rather than a term check.
     Any attribute not in S10's record raises, whatever it is called."""
 
+    # ⚠ `stake`, `transmission` AND `judging_set_rule` ARE DELETED (plan position `18a`, r2 item
+    # 14), each by name in `04 §B.3`: *"DELETED: stake (retired, no producer) · judging_set_rule ·
+    # transmission"*. None had a reader or a writer. The judging set is a Query over seats
+    # (`04:176`), `queries/world_q.py::judging_set`, built at position `18`; transmission is
+    # `succeed`, owned by the holder (`04:177`). Each whitelist entry went WITH its `__init__`
+    # line (r2 `05`'s ⊕ L40 coupling): the `object.__setattr__` calls bypass the whitelist, so a
+    # half-deletion would have kept writing a field `__setattr__` then refuses. A caller passing
+    # any of the three now meets the undeclared-fields refusal in `__init__`.
+    #
+    # ⚠ `sites`, `records` AND `dates` STAY, THOUGH r2's LIST DELETES THEM. `04 §B.3`'s RATIFIED
+    # `Rung := ( id, kind, matter(stores, sites[], records[]), dates[], envelope, exists )` declares
+    # all three (and `01_AXIOMS.md` §D.2 has a Rung OWN "its Sites, its Records ... dates"). Jordan's
+    # `RR-B` ruling amended `04` limb by limb and none of its eight limbs is this line, so deleting
+    # them would overwrite ratified text no ruling amends -- the ground on which `Office.upkeep` was
+    # kept (the one-order plan's contradiction 1, *"Layer 1 has the field"*). Zero readers each
+    # (`loop/matter.py` calls `sites` a back-reference nothing maintains): ID-13's defect, stated
+    # here rather than resolved by overwriting the ratified line.
+    #
     # roster-exempt: MECHANISM. These are the FIELD NAMES of this dataclass, checked so an
     # undeclared attribute raises. They are the code's own shape, not the game's vocabulary.
     # ⚠ `yield` IS PART D's FIELD NAME AND IT IS A PYTHON KEYWORD, so it is reached with
@@ -883,8 +912,7 @@ class Rung:
     # (§8) — the key is the same string Part D uses, and Part D says `yield`. `W8` added it: the
     # row existed in the matrix from the start and named a field the class did not have, which
     # `matrix_rows_without_a_field` now reports because it reads `_DECLARED` (see that function).
-    _DECLARED = {"id", "kind", "stores", "sites", "records", "dates", "stake",
-                 "envelope", "transmission", "judging_set_rule", "yield"}
+    _DECLARED = {"id", "kind", "stores", "sites", "records", "dates", "envelope", "yield"}
 
     def __init__(self, id: str, kind: str, **kw: Any):
         if kind not in RUNG_KINDS:
@@ -894,12 +922,8 @@ class Rung:
         # `yield` is #353 §25's *"only here"* row: what this rung PRODUCED this season, per
         # matter kind. Empty for a rung that produces nothing, which is most of them.
         for f_, d in (("stores", dict), ("sites", list), ("records", list),
-                      ("dates", list), ("stake", list), ("envelope", list), ("yield", dict)):
+                      ("dates", list), ("envelope", list), ("yield", dict)):
             object.__setattr__(self, f_, kw.pop(f_, None) or d())
-        object.__setattr__(self, "transmission", kw.pop("transmission", None))
-        # S10.2 caveat: `judging_set_rule` is UNSPECIFIED (S61). It is carried as a field so the
-        # record matches S10, and reading it raises -- see Query.judging_set.
-        object.__setattr__(self, "judging_set_rule", kw.pop("judging_set_rule", None))
         if kw:
             raise Forbidden(f"Rung given undeclared fields {sorted(kw)}", "S10.1",
                             law="S10.1 -- a Rung owns NO social aggregate: no norms, no densities, no reputation, no unrest, no legitimacy. EVERY ONE IS A QUERY")

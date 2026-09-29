@@ -13153,7 +13153,7 @@ def test_the_populated_world_has_a_governance_ladder_and_scarce_seats():
     own failure — an assertion that cannot observe the failure it excludes.
     """
     from ..harness.populated import build_realm
-    from ..queries.world_q import (members, leaders, sovereign_fraction, conferral_path,
+    from ..queries.world_q import (members, leaders, sovereign_fraction, ancestry,
                                    provinces_of)
     w = build_realm(seed=0)
 
@@ -13205,16 +13205,20 @@ def test_the_populated_world_has_a_governance_ladder_and_scarce_seats():
 
     # A TITLED SEAT SITS AT THE RUNG ITS TITLE GOVERNS, and the walk up from it is what
     # "the duchy is underneath the Crown" means mechanically (Jordan, 2026-09-13).
+    # ⚠ RE-POINTED AT `18a` FROM `conferral_path(w, o.id)` TO `ancestry(w, o.rung)`, the primitive
+    # it wrapped: for every seat here `o.rung is not None`, which was the wrapper's only branch, so
+    # the two return the same list and these assertions observe exactly what they did. The Query was
+    # deleted (r2 item 14); this check of the ruling was not.
     titled = [o for o in w.offices.values() if o.rung is not None]
     assert titled, "no office seated at a rung — no title ladder was built"
     for o in titled:
         assert o.scope_rung == o.rung, (
             f"{o.post} is seated at {o.rung} with scope {o.scope_rung}; a titled post's purview is "
             "the rung it governs (`Office.__post_init__`)")
-        path = conferral_path(w, o.id)
+        path = ancestry(w, o.rung)
         assert path and path[0] == o.rung and path[-1] in w.rungs, (
-            f"{o.post}: conferral_path {path} does not start at its own rung and climb")
-    assert any(len(conferral_path(w, o.id)) > 1 for o in titled), (
+            f"{o.post}: ancestry {path} does not start at its own rung and climb")
+    assert any(len(ancestry(w, o.rung)) > 1 for o in titled), (
         "no titled seat is contained in anything. A duchy that answers to nobody is the "
         "subordination Jordan's ruling describes, unbuilt")
 

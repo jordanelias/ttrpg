@@ -311,7 +311,7 @@ one IS the edges.**
 Seat := ( id, post, body?, scope? (null = a cluster), remit(acts[], binds)
         , conferral  -- which ACT fills it: confer by <seat> | determine by <judging seats> | succeed
         , revocation -- which seat may revoke, and the CONJUNCTS
-        , upkeep, dates[], exists )
+        , upkeep, dates[], exists )   -- ⚠ AMENDED: `dates[]` DELETED at plan position `18a` (Jordan, `RR-B` limb `B-1`, 2026-09-17: `dates[]` "amend[s] as the design proposes"; 0 readers). `upkeep` KEPT with a reader (`17b`); `scope?` KEPT (`B-1`) -- `state/carriers.py::Office`
 NEVER:   who holds it · who serves it · a modifier of any kind
 ```
 
