@@ -282,7 +282,7 @@ census, not the phase number, decides whether it may run beside a Phase-1 item.
 | 8 | **`13` W28-cast** | the `cast:` blocks and their reader in `build_at`; the harness loader's count | OPEN | — ; precondition of `17` and of `ED-FI-0009` |
 | 8a | **`13d-i` item (5)** | `offices.yaml` + its `harness/populated.py` wiring; the `titles` fold | OPEN | — ; before `18a` (placed by the author, §2.3) |
 | 9 | **`18` PROC-A** | re-host the 28 stress tests; `world_q.judging_set`; `convene` + the `rank` stem; `arrangements.yaml` through the one loader; D-6/D-7 as swept fixtures | OPEN | — (SC lane); a hard dependency of `18a` and `19` |
-| 10 | **`24f` — the design step** | specify who eats; **NAME the cohort producer** before any code | OPEN | — ; its code shares `matter.py` with item 7 |
+| 10 | **`24f` — the design step** | specify who eats; **NAME the cohort producer** before any code | **DONE** (§3.1 item 10 body text has the decision) | — ; the BUILD (Phase 2 tail) shares `matter.py` with item 7 |
 | 11 | **`25` MB-GOLDEN** + the MB hand pass | the golden-mode ruling; `ED-MB-0057`, `ED-MB-0044`, `config.py:315-317`; A5; A9; the unblocked Sequenced rows; `ED-MB-0075`'s option (2) after its superseding row | OPEN | — (MB lane, parallel) |
 | 12 | **PC lane** | the `partisan` deletion; Ob-from-defender (`core.py:79-83`) | OPEN | — (PC lane, parallel) |
 
@@ -461,18 +461,56 @@ here, and neither is Jordan's:
 the stub `18` replaced, `§3.9` edge 5) and of `19` (whose `determine` consumes `judging_set`). Its
 content owner is the old `_part2` position 18 plus `21_RECONCILIATION.md` PHASE 2.
 
-**10 · `24f`, the design step.** Its old gate was `5` (G2, because `24f` touches `matter.py`'s
-subsistence pass), and G2 is DONE, so it is ungated. Its old row says *"design before code"*. The
-design step comes first because its candidate (`weight > 1` eats) is **dead on arrival** until
-something mints cohorts (old §5 NOT-JORDAN table, attacked 2026-09-25). The step has three parts:
+**10 · `24f`, the design step. DECIDED (execution, 2026-09-29) — not Jordan's, per the old §5
+NOT-JORDAN table's own placement, resolved at §0's test 3 (answered by a design document, several
+of them, read together rather than singly).** Its old gate was `5` (G2, because `24f` touches
+`matter.py`'s subsistence pass), and G2 is DONE, so it was ungated. Its old row says *"design before
+code"*. The design step came first because its candidate (`weight > 1` eats) is **dead on arrival**
+until something mints cohorts. The step has three parts:
 
-- specify who eats;
-- **name the cohort producer and what it mints from** — this *is* narrative #13, *"populace as a
-  weighted person"*, the synecdoche Jordan's ruling asks for (`ED-IN-0255`);
-- do both before any code.
+- **Specify who eats — already answered by existing code, not a design gap.**
+  `engine/season/loop/matter.py`'s per-eater draw (the `weights`/`draws`/`short_by_person` loop,
+  `:268-289`) already draws each `subsistence_weight`-registered kind for every person `world_q
+  .home_of` returns, scaled by `person.weight`, up the larder ladder via `nearest_store`. That is
+  "who eats" — every housed person, weighted by cohort size — and it needed no new mechanism, only
+  a cohort to feed it (next bullet).
+- **Name the cohort producer and what it mints from — this *is* narrative #13, *"populace as a
+  weighted person"*, the synecdoche Jordan's ruling asks for (`ED-IN-0255`: *"NPC synecdoches that
+  just represent the overall population affected... it's a territorial issue"*).** Four already-
+  ruled constraints, read together, leave exactly one shape:
+  1. **`ED-WR-0011` (OI-05, Jordan, 2026-09-13, Option A) forbids a runtime/season-tick producer.**
+     *"World-gen NPC count, for now, is just the 46 NPCs we built... no season-tick generation at
+     all... World-gen seeds N persons from an authored roster."* A cohort producer that computes a
+     population figure at run time and mints a `Person` from it is exactly Option B, which Jordan
+     did not take. It must be AUTHORED, at world-gen, like the 46.
+  2. **`engine/season/npcs.yaml` cannot be that authored home — its own header forbids it.**
+     `:12-16`: *"THE NAMES AND THE WANTS ARE THE CORPUS'S, NOT AUTHORED HERE... Inventing an NPC in
+     this file would be exactly the fabrication `ED-WR-0011` is filed as a ruling to avoid... Every
+     row traces to a case id."* A population cohort traces to no case — it needs its own file, kept
+     visibly separate so a reader can tell at a glance it is an authored abstraction, not an
+     invented character wearing a case's clothes.
+  3. **No schema change is needed.** `state/carriers.py:469`, `Person`'s own docstring: *"S9. A
+     COHORT IS A PERSON AT `weight > 1`. ONE CLASS (S9.1)."* A cohort is an ordinary `Person` row.
+  4. **The weight number is a fixture, not a derivation — `ED-WR-0011`'s own text grants this
+     latitude explicitly**: *"the initial count N under either option is a fixture, not an axiom,
+     and can be swept — it does not need to be right on the first ruling."* So the producer does
+     not compute a weight from `capacity(w, rung)` (`ED-SE-0051`'s ruled dwelling-Site query,
+     position `24d-ii`) — it is AUTHORED per row, the same way the 46 are — but a cohort's authored
+     weight should never be asserted to *exceed* that rung's `capacity(w, rung)` once `24d-ii`
+     lands, matching `ED-SE-0051`'s *"SCOPED TO POPULATIONS"* framing of that query. A ceiling
+     check, not a generator.
 
-The build is the tail of Phase 2. It is serial with item 7 on `matter.py`. It must precede any
-`body_step` pick (`§3.9` edge 8; §5.1 item 8).
+  **THE PRODUCER, NAMED:** a new authored file, `engine/season/cohorts.yaml` (or equivalent — the
+  exact filename is the build's call, not this step's), one row per populated rung carrying a
+  hand-written `weight` and no `case`/`want`/`concerns` fields (npcs.yaml's schema does not fit and
+  should not be reused), read by world-gen the same way `npcs.yaml` already is —
+  `harness/populated.py`'s `build_realm` and/or `corpus_run.build_at`, alongside their existing
+  case-derived seeding, never inside it: `populated.py`'s own docstring (`:40-43`) is explicit that
+  *it* invents no NPC because *"the cast comes from the case"* — that discipline governs the
+  case-derived cast unchanged; the cohort step is a second, separate seed alongside it, not an edit
+  to it.
+- Both parts are decided; **the build is the tail of Phase 2.** It is serial with item 7 on
+  `matter.py`. It must precede any `body_step` pick (`§3.9` edge 8; §5.1 item 8).
 
 **11 · MB lane.**
 
