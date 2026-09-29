@@ -10,8 +10,6 @@
 #   * tools/ci_naming_check.py   — hard gate; flags any `legacy` name of an `enforce: block` entry.
 #   * tools/ci_naming_check.py --warn — report-only drift lint; flags `legacy` names of `enforce: warn`
 #                                 entries. Same tool, same rule, other tier (merged 2026-08-23, S6/D2).
-#   * tools/valoria_rename.py    — the "change once" executor: edit a `canonical` here (or run the
-#                                  tool) and every occurrence across docs/params/registries is rewritten.
 #   * tools/ci_names_consistency.py — asserts the mirror name fields in descriptor_registry.yaml /
 #                                  proper_noun_registry.yaml still match the `canonical` here.
 #
@@ -254,6 +252,8 @@ entries:
     legacy: ["conviction_projection", "CONVICTION_PROJECTION"]
     category: substrate
     enforce: warn
+
+  season.stance: {canonical: stance, legacy: [], category: substrate, enforce: warn}
 
   # ── PROPER-NOUN CORPUS FOLD-IN (2026-07-01, ED-1084) ─────────────────────────
   # Generated from references/proper_noun_registry.yaml (every category); warn-tier;

@@ -639,6 +639,20 @@ verbs:
       between a refusal, where the precondition failed and no contest occurred, and a loss, where
       the contest occurred and went against you. A telling deposits at WITNESS, not here, which is
       what this row's own `writes_note` has always said.
+      ⚠ POSITION 10 (U5/R-07) ATTEMPTED A `Person.stance` WRITE HERE AND REVERTED IT, BUILT AND
+      RUN RATHER THAN LEFT UNTRIED. `H-62` wants a producer; every candidate write target fails
+      structurally against `epistemic.py::claim_subjects` (`H-79`), whose fallback to "the claim
+      is about what was told" fires ONLY when `e.changes` is empty -- see that function's own
+      extensive comment on why an Event that wrote nothing is exactly where a telling lands. Any
+      real write here (on the actor: MEASURED to make `claim_subjects` report the claim as about
+      the TELLER, breaking `R3`'s propagation and the guard
+      `test_n3_..._a_telling_is_about_what_was_told` exists to hold; on the verb's own `subject`
+      operand: MEASURED to be a Rung, never a Person, on the live corpus, so `Person.stance`
+      cannot be written there at all) either corrupts the epistemic layer or cannot fire. Resolving
+      it means either changing `H-79`'s attribution rule (a separate, adversarially-hardened
+      mechanism with its own measured history) or naming a different write target than either
+      candidate -- both are design calls, not a session judgment. `H-62`'s producer gap for
+      `(Person, stance)` is already closed by `march` (M4); this row's own gap stays open.
       ⚠⚠ AND `speak` DID NOT GET ONE, WHICH `U1`'s PLAN EXPECTED IT TO. That plan names `tell` AND
       `speak`, on the ground that both carry `requires_typed`, form `own_ledger`. Measured against
       this table: `speak`'s `requires` is an em-dash and it carries NO typed cell. An untyped verb
