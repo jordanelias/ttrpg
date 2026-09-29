@@ -215,6 +215,90 @@ def home_of(w: World) -> dict:
             if t.kind == "contain" and t.live and t.subject in w.persons}
 
 
+def place_of(w: World, x: Optional[str]) -> Optional[str]:
+    """`ARCH §F.14`'s OWN NAME, PROMOTED (position `11a`, r2 `01_ATTENTION_AND_REACH.md` §A.3).
+    The rung a THING is at, for ANY id -- moved in from `epistemic._event_place`, which took only
+    an Event. That caller becomes `place_of(w, anchor_of(w, e))` (`epistemic.py`'s two sites).
+
+    ⚠ PERSON BEFORE RUNG, AND THE ORDER IS THE WHOLE OF THIS FUNCTION'S CORRECTNESS -- carried
+    over from `_event_place`'s own docstring rather than restated: testing `x in w.rungs` FIRST
+    would answer a person's own same-id `person`-kind Rung, and `Query.presence` on THAT answers
+    "who is contained in themselves" -- nobody. A channel BROKEN CLOSED, not merely narrow, and
+    `P15`'s history is the worked case (`epistemic.py`, `_ch_co_located`'s docstring). THIS IS A
+    REPEAT of a conflation `witness` had already retracted once; the order is what prevents it a
+    third time.
+
+    Two limbs promoted `_event_place` did not have, plus the NO SILENT DEFAULT floor (`ID-5`):
+      * person  -> `home_of(w)[x]` -- the single owner, not a hand-rolled `contain` scan.
+      * site    -> `Site.rung`, the maintained side (S12).
+      * record  -> its live holder's place (`hold_force` -- S15's cardinality-1 guard makes this
+                   total), else the record's own `Record.rung` (non-optional).
+      * date    -> `venue` -- `_eff_convene` always sets one, and `_req_convene` requires
+                   `venue in w.rungs`, so this limb is total for every date the engine can mint.
+      * rung    -> itself.
+      * anything else, including `None` -> `None`. Absence maps to the refusal, never to a
+                   plausible guess.
+
+    ⚠ MAY NOT READ A LEDGER (`AX-2`) and MAY NOT BE CALLED FROM `decision/` -- world-first,
+    `queries/world_q` only (`ARCH §A.2`: reads *any store, via `World`*). It answers ONE place; a
+    multi-rung actorless Event (a plague spanning many rungs) is a named LIMIT this does not
+    solve (`01` §A.3.1) -- `_ch_co_located`'s membership test stays exactly that, not an
+    intersection, and widening the signature is `ARCH §F.14`'s own ruling text to amend, not an
+    edit to make here."""
+    if x in w.persons:
+        return home_of(w).get(x)
+    if x in w.sites:
+        return getattr(w.sites[x], "rung", None)
+    if x in w.records:
+        h = hold_force(w, x)
+        return place_of(w, h.subject) if h is not None else w.records[x].rung
+    if x in w.dates:
+        return w.dates[x].get("venue")
+    if x in w.rungs:
+        return x
+    return None
+
+
+def reach(w: World, p: Person) -> set[str]:
+    """`01_ATTENTION_AND_REACH.md` §A.4 -- the ids a question may be ABOUT for this person. A
+    FILTER over what a WITNESS channel already deposited, and never a fan (§A.4.4, LB-2b): it is
+    not called from `witness`, `observers_for` is untouched, and `questions_for`'s Q2 still reads
+    only `p.ledger` -- so a claim not already in this person's own ledger cannot become a question
+    no matter how wide `reach` is. World-first, owns nothing, stored nowhere, recomputable at any
+    barrier (`ARCH §A.2`).
+
+    FOUR LIMBS, none of them a new rule -- each composes on an existing owner (§A.4.2):
+      1. me                  -- `{p.id}`, today's first Q2 disjunct.
+      2. mine                -- every live Tenure's object -- `questions_for`'s own `mine`, read
+                                 the same way.
+      3. the ladder above me -- `ancestors-or-self` of `home_of(w)[p.id]`, via `parent_of` -- the
+                                 identical walk `predicates.under_purview` and `conferral_path`
+                                 already make (a fourth hand copy is what `CLAUDE.md` §8 forbids).
+      4. purview             -- `{seat.rung} | descendants(seat.rung)` over every live `hold` on
+                                 an Office with a rung. `descendants` EXCLUDES its own rung
+                                 (`state/containment.py`), so the seat's own rung must be unioned
+                                 in explicitly, or a Duke seated at his own duchy would never be
+                                 reached by a claim about the duchy itself -- LB-2e, the
+                                 inclusive-walk falsifier.
+
+    ⚠ MAY NOT READ A LEDGER, NOT EVEN `p`'S OWN (`AX-2`): a reach computed from beliefs would make
+    "what I may be asked about" a function of what I believe, and a false belief would silently
+    widen the world I can act on (`01` §A.4.3). MAY NOT read another person's tenures -- it answers
+    for `p` alone."""
+    TRACE.query("reach", "resolver")
+    R = {p.id}
+    R |= {t.object for t in p.tenures if t.live}
+    cur, seen = home_of(w).get(p.id), set()
+    while cur is not None and cur not in seen:
+        R.add(cur); seen.add(cur); cur = parent_of(w, cur)
+    for t in p.tenures:
+        if t.kind == "hold" and t.live and t.object in w.offices:
+            rg = w.offices[t.object].rung
+            if rg is not None:
+                R.add(rg); R.update(descendants(w, rg))
+    return R
+
+
 def nearest_store(w: World, rung_id: Optional[str], kind: str,
                   available: Optional[dict] = None) -> Optional[str]:
     """THE LARDER LADDER: the nearest rung AT OR ABOVE `rung_id` holding any `kind`, or `None`.
@@ -692,22 +776,34 @@ def conferral_path(w: World, office_id: str) -> list[str]:
 
 
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
-    """§F1's `q` producer -- FOUR sources, resolver-side, at the DELIBERATE barrier.
+    """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier.
 
     ⚠ THIS CLOSES `H-04` AND §61's `NoProducer`, which between them blocked every NPC case: with
     no producer for `q`, `assemble(person, question)` was UNSATISFIABLE and DELIBERATE had no
     declared entry point, so `opening_set` had nothing to compute a set FROM. That is why the
     instrument needed an authored `roster` -- `D2`.
 
-    ⚠ V2 §F1 SAYS "EXACTLY THREE SOURCES, AND BY NOTHING ELSE" AND IS WRONG BY ONE. PLAN `W5`
-    adds **Q4 `need`** (#353 `:509`, `:605`, `:1297`): a live `commit` to an OUGHT Proposition
-    generates a standing question every season. Without it "an NPC with a standing ambition and a
-    quiet season forms no candidates at all", which is most of the NPC corpus -- a person with a
-    goal and no inbox would simply not act. The sources are `rosters.yaml`'s `question_sources`,
-    IN ORDER, because a budget-bounded person answers the earlier ones first.
+    ⚠ FOLDED TO TWO AT POSITION `11a` (r2 `01_ATTENTION_AND_REACH.md` §A.2, `05_LEDGER_AND_BUILD.md`
+    §A.4.1 item 2). `date_due` and `band_crossed` MEASURED zero questions in every world the engine
+    could build -- Q1's addressing clause was unsatisfiable and Q3 keyed a verb string where an id
+    was needed (`H-110`) -- and `04 §B.13` `ID-13` treats a declared source that reaches no code as
+    the defect, not as a source worth keeping. Both fold into `claim_landed` rather than vanish: a
+    fired date and a band crossing are each already an Event that WITNESS already deposits as a
+    claim, so the fold is entirely in what admits that claim as a question, not in what produces
+    it. `date_due`'s half needs CALENDAR to emit `date.fired` first (position `11b`, unbuilt);
+    `band_crossed`'s half needs nothing further, because `_crossings` (`loop/matter.py`) already
+    emits a witnessable Event whose claim's subject is the site (`epistemic.claim_subjects`'s
+    anchor fallback) -- `reach`/`place_of`, below, are what let a claim about a place reach someone
+    who was never at that place: a seat's own purview, the ladder above their home.
 
-    Resolver-side by construction: it takes a `World`. §F1 says all four are "already produced by
-    the loop" -- no new step, no new carrier, no clock -- and that is what this reads.
+    Q4 `need` (PLAN `W5`, #353 `:509`, `:605`, `:1297`) survives untouched: a live `commit` to an
+    OUGHT Proposition generates a standing question every season, and without it "an NPC with a
+    standing ambition and a quiet season forms no candidates at all", which is most of the NPC
+    corpus. The sources are `rosters.yaml`'s `question_sources`, IN ORDER, because a budget-bounded
+    person answers the earlier one first.
+
+    Resolver-side by construction: it takes a `World`. §F1 says both are "already produced by the
+    loop" -- no new step, no new carrier, no clock -- and that is what this reads.
 
     ⚠ `since` IS `U2`'s ONE ADDITION AND IT GENERALISES Q2 EXACTLY. §F1 Q2 is *a claim LANDING in
     the holder's ledger*, and while a season was ONE PASS "landing" could be read off `when` alone:
@@ -723,19 +819,11 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     The one-round arm of `H-124`'s sweep is the executed control for that claim."""
     TRACE.query("questions_for", "resolver")
     out: list[Question] = []
-    mine = {t.object for t in p.tenures if t.live}
 
-    # Q1 -- a Date coming due whose DocketItem names a matter, for every person in its judging set.
-    for did, d in sorted(w.dates.items()):
-        # [JUSTIFIED: a SENTINEL, not a game value -- a Date with no `due_at` is never due]
-        if d.get("due_at", 1 << 30) <= w.tick and not d.get("fired"):
-            if d.get("holder") in (p.id, None) or d.get("holder") in mine:
-                items = [it for it in w.docket if it.get("date") == did]
-                refs = tuple(sorted({str(it.get("matter")) for it in items if it.get("matter")}))
-                out.append(Question(f"q:date:{did}", "date_due", refs or (did,), did))
-
-    # Q2 -- a claim landing in p's OWN ledger whose subject is p, something p holds, or a
-    # Proposition p has committed to. `since_tick` is the season boundary: "landing" is new.
+    # Q2 -- a claim landing in p's own ledger, ADMITTED THROUGH `reach` (`01` §A.4-§A.5): the
+    # claim's own subject is something REACH covers (today's test, generalised -- `me`/`mine`
+    # subsume `c.subject == p.id or c.subject in mine`), OR the claim's subject is AT a place
+    # REACH covers. `since_tick` is the season boundary: "landing" is new.
     # ⚠ THE PREVIOUS SEASON'S WITNESS, NOT THIS ONE'S. §F1 Q2 is "a claim LANDING in the
     # holder's ledger AT WITNESS", and WITNESS runs at the END of a season: the deposit is
     # stamped `when = t` and DELIBERATE reads it at `t + 1`. Testing `c.when == w.tick` therefore
@@ -743,34 +831,27 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # nothing propagated. Found by running `headless.py` and reading the ledgers.
     # `U2`: the boundary is *since this person last deliberated*, which is the season boundary
     # when nothing else is supplied. See the docstring for why the two readings coincide at R = 1.
+    #
+    # ⚠ THE PLACE CLAUSE IS A FILTER, NOT A FAN (`01` §A.4.4, LB-2b): `reach(w, p)` is read-only
+    # over `p`'s own tenures and the world's tenure/office/rung stores, `observers_for` is untouched
+    # and unaware `reach` exists, and this loop still reads only `p.ledger`. Widening `R` changes
+    # which of THIS PERSON'S ALREADY-LANDED claims become a question; it cannot put a claim in a
+    # ledger it was never witnessed into. `place_of` may return `None` (a Proposition-subject claim
+    # has no place), and `None in R` must be impossible -- the walrus binds it once so the `is not
+    # None` guard is written rather than relied on by accident (`01` §A.5.2, `AR-6`).
+    #
+    # ⚠ CLAUSE 3 (`named(c)`, the id set inside a `content:`-predicate claim) DOES NOT SHIP HERE.
+    # It has no producer today -- every witness-deposited claim has `predicate = e.kind` and
+    # `value = True` (`witness.py`) -- and lands with `02`'s deposit rule, in the same commit as
+    # the first claim that can satisfy it (`01` §A.5.3, RULED). Shipping a clause with no producer
+    # in the same commit as two deletions justified by "reaches no code" would be self-contradictory.
+    R = reach(w, p)
     floor = since if since is not None else (w.tick - 1, 0)
     for c in p.ledger:
-        if (c.when, c.round) >= floor and (c.subject == p.id or c.subject in mine):
+        if (c.when, c.round) < floor:
+            continue
+        if c.subject in R or ((pl := place_of(w, c.subject)) is not None and pl in R):
             out.append(Question(f"q:claim:{c.id}", "claim_landed", (c.subject,), c.id))
-
-    # Q3 -- a Sensation band change: `subsistence` crossing a floor since last season. The
-    # crossing is D22's emission, read person-side; the loop records them on `w.crossings`.
-    # ⚠ REV 1 COMPARED A SITE ID TO A PERSON ID, SO Q3 COULD NEVER FIRE. `matter()` appends
-    # `(s.id, verb, before, after, ev.id)` where `s` is a SITE, and this read `if who == p.id`.
-    # A site id never equals a person id, so `band_crossed` produced ZERO Questions in every run
-    # while `rosters.yaml` declared four sources and three were live. The falsifier did not catch
-    # it because the test hand-planted a PERSON-keyed 3-tuple that `matter()` never emits -- it
-    # asserted the reader against a shape the writer does not produce, which is a test of itself.
-    # Found by the adversarial pass.
-    #
-    # ⚠ THE FIX IS PRESENCE, NOT A RENAME, and it is the reading §F1 Q3 actually asks for: a
-    # crossing is a fact about a PLACE, and it becomes a person's question when that person is
-    # THERE to notice it. `Query.presence` is the existing owner of "who is at this rung" (§8), so
-    # nothing new is invented here. A person elsewhere gets no question, which is L2 working.
-    #
-    # ⚠ AND THIS IS WHY `F1`'s MOVE BUG MATTERED BEYOND MOVE: while every actor left the world in
-    # season 1, `presence` was empty for every rung, so this source would have stayed dead even
-    # once keyed correctly. The two defects hid each other.
-    for who, what, *_rest in w.crossings:
-        site = w.sites.get(who)
-        at = getattr(site, "rung", None) if site is not None else None
-        if who == p.id or (at is not None and p.id in presence(w, at)):
-            out.append(Question(f"q:band:{what}", "band_crossed", (what,), what))
 
     # Q4 -- `need`. A live `commit` Tenure whose object is an OUGHT Proposition is a STANDING
     # question: it recurs every season until the commitment ends, which is what makes an NPC with
@@ -816,44 +897,34 @@ def occasioned_by(w: "World", q: Optional["Question"]) -> list:
     raises a question, forms a candidate, becomes an act, emits an Event, is witnessed, deposits
     in SOMEONE ELSE'S ledger — was built end to end except for this one edge.
 
-    **One route per question source, and `need` is a deliberate empty rather than a guess:**
+    **ONE ROUTE, since position `11a` folded `date_due` and `band_crossed` out of
+    `question_sources` (`01_ATTENTION_AND_REACH.md` §A.2, `05_LEDGER_AND_BUILD.md` §A.3.1):**
 
       * `claim_landed` — the deposit Event names the claim in its `changes[]`; its `causes[]`
         name the Event the claim is ABOUT. **The originating Event is returned, not the deposit.**
         The claim IS a belief about that Event — `Claim.predicate` is literally `e.kind` at the
         deposit — so citing the transport instead would put the postman in the arc. The deposit
         stays in the graph on its own `causes[]`; nothing is lost by not naming it twice.
-      * `date_due` — ⚠ **ALSO DEAD, AND FOR A DIFFERENT CAUSE THAN `band_crossed`.** `calendar()`
-        writes `Date.fired` through the gate with **no `emits=`**, and the gate builds an Event
-        only when one is passed (it is *required* only at MATTER), so **no Event in any log
-        carries a date id** and the search below cannot match. `write_matrix.yaml` declares
-        `date.fired` for `(Date, fired)` and nothing emits it — a CALENDAR-class silent write of
-        exactly the shape the gate refuses at MATTER. Doubly latent today, because `N1` means Q1
-        never forms at all; when `W20` closes `N1` the question will form and walk to nothing.
-        **Making CALENDAR emit is `W20`'s and is not done here** — it would put a new Event in
-        every log and move every hash.
-      * `band_crossed` — ⚠ **THIS ROUTE IS DEAD, AND IT IS NAMED DEAD RATHER THAN LEFT TO LOOK
-        LIVE.** `questions_for` builds the question as `Question(f"q:band:{what}", "band_crossed",
-        (what,), what)` where `what` is the crossing's **verb** — `"work"` — not an id, so the
-        search below can never match: nothing in the log has id `"work"` or a change whose
-        subject is `"work"`. The crossing Event's id EXISTS, as element 4 of the `w.crossings`
-        tuple `(s.id, verb, before, after, ev.id)`, and `questions_for` discards it. Carrying it
-        onto the Question is a one-line change to a surface this function does not own, so it is
-        registered (`H-110`) rather than taken here. **A route that returns nothing is honest; a
-        docstring saying it walks is not, and the first writing of this one said it walks.**
       * `need` — **empty, on purpose.** A standing commitment to an OUGHT is interior; no Event
         caused it this season, and `ID-5`'s polarity says absence maps to the refusal rather than
         to a plausible default. An act taken out of a standing ambition genuinely has no
         antecedent but the actor, and `[ROOT]` is what the design already has for that.
 
-    ⚠ **SO ONE OF FOUR ROUTES IS LIVE** — `claim_landed`, which is the one propagation runs on.
-    One is empty by design (`need`) and **two are dead**, each for a cause it does not own:
-    `band_crossed` because the question carries a verb name where an id is needed, `date_due`
-    because CALENDAR emits nothing. ⚠ **This count has been wrong twice**: *"one route per
-    question source"* first, then *"two of four"* after a critic found `band_crossed`. Both were
-    written by looking at this function rather than at what feeds it. **The lesson is in the
-    count, not in the routes: a route's liveness is a property of its PRODUCER, and this function
-    cannot see its producers.**
+    ⚠ **WHAT THIS DELETES IS A GUARD AND AN UNREACHABLE SEARCH, NOT TWO BRANCHES.** `date_due` and
+    `band_crossed` never had a branch of their own here — `05` §A.3.1's correction to an earlier
+    draft of this same plan: *"there is no `date_due` branch and no `band_crossed` branch … a
+    NEGATIVE membership guard … lets exactly those two fall through to the generic id search …
+    which finds nothing."* `date_due` was dead because CALENDAR emitted no Event for a fired Date;
+    `band_crossed` was dead because the Question it built carried the crossing's **verb** —
+    `"work"` — where an id belongs, so the id search could never match (`H-110`). Deleting the two
+    sources deletes the guard's tuple and leaves the id search with no caller, so the search goes
+    with it rather than surviving as dead code with nothing left to reach it.
+
+    ⚠ **This count has been wrong twice before landing here**: *"one route per question source"*
+    first, then *"two of four"* after a critic found `band_crossed` still nominally rostered. **The
+    lesson is in the count, not in the routes: a route's liveness is a property of its PRODUCER,
+    and this function cannot see its producers** — which is why, now that both dead sources are
+    gone from the roster, there is exactly one route left to get wrong.
 
     ⚠ **IT RETURNS IDS AND WRITES NOTHING.** Resolver-side, read-only over `w.log`, callable from
     a test without a driver — which is `ID-10`: a check that cannot observe the failure it
@@ -868,23 +939,17 @@ def occasioned_by(w: "World", q: Optional["Question"]) -> list:
             if e.kind == "claim.deposited" and any(c.subject == about for c in e.changes):
                 return [x for x in (e.causes or []) if x != ROOT]
         return []
-    if q.source not in ("date_due", "band_crossed"):
-        # ⚠ NOT A BARE `else`. An undeclared source added to the roster would otherwise fall into
-        # the id search below and answer plausibly forever, which is the polarity `ID-5` refuses:
-        # zero evidence maps to the verdict AGAINST the thing measured, never to a quiet default.
-        # ⚠ AND IT IS DEFENCE IN DEPTH, NOT THE FIRST GATE: `Question.__post_init__` already
-        # refuses a source outside `question_sources`, so this is unreachable from a rostered
-        # question and would fire only if that constructor were bypassed or the roster grew
-        # without this function being taught the new route.
-        raise Unspecified(
-            f"no occasion route for question source {q.source!r}", "ID-16",
-            needs=f"a route here, or one of {sorted(QUESTION_SOURCES)}",
-            law="ID-5 -- refuse, don't default. A new question source silently taking the id "
-                "search would answer plausibly and wrongly for every question it raised")
-    for e in reversed(w.log):
-        if e.id == about or any(c.subject == about for c in e.changes):
-            return [e.id]
-    return []
+    # ⚠ NOT A BARE `else`, AND STILL DEFENCE IN DEPTH RATHER THAN THE FIRST GATE. An undeclared
+    # source reaching here would otherwise need a branch nobody wrote, which the polarity `ID-5`
+    # refuses: zero evidence maps to the verdict AGAINST the thing measured, never to a quiet
+    # default. `Question.__post_init__` already refuses a source outside `question_sources`, so
+    # this raise is unreachable from a rostered question and fires only if that constructor is
+    # bypassed, or the roster grows a source this function is not taught a route for.
+    raise Unspecified(
+        f"no occasion route for question source {q.source!r}", "ID-16",
+        needs=f"a route here, or one of {sorted(QUESTION_SOURCES)}",
+        law="ID-5 -- refuse, don't default. A new question source silently taking a plausible "
+            "default would answer wrongly for every question it raised")
 
 
 # ---------------------------------------------------------------------------

@@ -27,7 +27,7 @@ from ..data import files
 from ..data.matrix import MATRIX, Step, WriteClass
 from ..data.rosters import CONFERRAL_BASES, REVOCATION_BASES, RUNG_KINDS, TITLE_DOMAINS, title_domain
 from ..data.verbs import VERB_TABLE
-from ..epistemic import CHANNEL_PREDICATES, SEEN_PREDICATE
+from ..epistemic import CHANNEL_PREDICATES, observers_for
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..data.cast import faction_leader
 from ..harness.populated import build_realm
@@ -40,8 +40,8 @@ from ..state.attribution import anchor_of
 from ..decision import budget as _budget
 from ..decision import operands_for, person_side_eligible
 from ..state.carriers import (
-    Act, Office, Person, Proposition, Rung, Tenure, View, matrix_rows_without_a_field,
-    refuse_a_title_in_a_body,
+    Act, Claim, Office, Person, Proposition, Rung, Site, Tenure, View,
+    matrix_rows_without_a_field, refuse_a_title_in_a_body,
 )
 
 
@@ -60,6 +60,84 @@ from ..state.carriers import (
 # `proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md` §7.2. A test asserting a
 # behaviour this branch does not ship would be the half-wiring this file exists to refuse.
 # ---------------------------------------------------------------------------
+
+
+# ---------------------------------------------------------------------------
+# ITEM 2 (position `11a`) -- `reach`, `place_of`, the two-source `questions_for` fold.
+# r2 `01_ATTENTION_AND_REACH.md` §A.3-§A.4, `05_LEDGER_AND_BUILD.md` §A.4.1 item 2.
+# Falsifiers LB-2b (the flood test) and LB-2e (the inclusive walk).
+# ---------------------------------------------------------------------------
+
+def test_lb2e_reach_includes_the_seats_own_rung_not_only_descendants():
+    """**LB-2e — THE INCLUSIVE-WALK TEST** (`05` §A.4.1 item 2). `descendants(w, rung)` EXCLUDES
+    `rung` itself (`state/containment.py`), so a `reach` limb written as a bare
+    `descendants(seat.rung)` would silently lose the seat's own rung — a Duke seated at his own
+    duchy would never be reached by a claim about the duchy itself. Limb 4 is
+    `{seat.rung} | descendants(seat.rung)`, and this asserts both the set and the consequence: the
+    duke is actually asked."""
+    w = P.tiny_world()
+    duke = w.persons["p_high"]
+    assert w.offices["off_duke"].rung == "D", (
+        "the fixture no longer seats the duke over D; the rest of this test assumes it")
+    assert "D" not in world_q.descendants(w, "D"), (
+        "the fixture assumption changed: `descendants` now includes its own rung, which would "
+        "make the rest of this test vacuous")
+
+    R = world_q.reach(w, duke)
+    assert "D" in R, (
+        "reach() lost the seat's own rung -- a bare `descendants(seat.rung)` form regressed")
+
+    # AND THE CONSEQUENCE: a claim landing about the duke's own duchy rung raises Q2 for him.
+    w.tick = 1
+    duke.ledger.append(Claim("c_lb2e", duke.id, "D", "condition.worn", True, 0,
+                              "firsthand", 100, "own"))
+    qs = world_q.questions_for(w, duke)
+    assert any(q.source == "claim_landed" and q.referents == ("D",) for q in qs), (
+        f"the duke was not asked about a claim landing on his own duchy rung: "
+        f"{[(q.source, q.referents) for q in qs]}")
+
+
+def test_lb2b_a_duke_is_not_reached_by_a_crossing_in_his_purview_that_nobody_witnessed():
+    """**LB-2b — THE FLOOD TEST, AND IT IS THE ONE THAT MATTERS** (`05` §A.4.1 item 2). `reach`
+    must FILTER claims that already landed by a witness channel and never widen the fan: a crossing
+    at the duke's OWN seat rung -- squarely inside his `reach`, per LB-2e above -- that nobody is
+    present to witness must reach nobody's ledger, and therefore raise no question for him, no
+    matter how wide his purview is. `01` §A.4.4: `reach` is applied to `p.ledger` and nothing else,
+    and `observers_for` is untouched -- unaware `reach` exists at all."""
+    w = P.tiny_world()
+    duke = w.persons["p_high"]
+    assert w.offices["off_duke"].rung == "D"
+    assert "D" in world_q.reach(w, duke), (
+        "the fixture no longer seats the duke's purview over D; the rest of this test assumes it")
+    # Nobody in `tiny_world()` has a `contain` edge to `D` itself (`p_high` is at `S`, `p_king` at
+    # `R`) -- a site placed directly at `D` is a crossing nobody is present to see.
+    assert not world_q.presence(w, "D"), (
+        "the fixture now puts somebody at D; this site would then be witnessed and the test would "
+        "not be exercising the unwitnessed case")
+    floor = w.fixtures.get("band_floors")["seam"]["surface_gleaning"]
+    w.sites["s_lb2b"] = Site("s_lb2b", "D", "seam", condition=floor + 5)
+
+    w.step = Step.MATTER
+    evs = SeasonDriver(w).matter(mint_token(w, WriteClass.MATTER), [])
+    crossing = next((e for e in evs if e.kind == "condition.band_crossed"
+                     and anchor_of(w, e) == "s_lb2b"), None)
+    assert crossing is not None, (
+        "the seeded site did not cross its floor in one season; the fixture's wear rate or "
+        "starting condition no longer matches this test's arithmetic")
+
+    everyone = list(w.persons)
+    for mode in ("presence_only", "all_five"):
+        assert observers_for(w, crossing, mode, everyone) == [], (
+            f"[{mode}] a crossing nobody was present for was witnessed by somebody -- `reach` "
+            "must never be able to widen the WITNESS fan (`01` §A.4.4 clause 1)")
+    assert not any(c.subject == "s_lb2b" for c in duke.ledger), (
+        "a claim about the unwitnessed crossing reached the duke's ledger regardless")
+
+    w.tick = 1
+    qs = world_q.questions_for(w, duke)
+    assert not any(q.about == crossing.id or "s_lb2b" in q.referents for q in qs), (
+        "the duke was asked about a crossing nobody witnessed, even though it sits at his own "
+        f"seat rung -- reach widened who is ASKED beyond who was TOLD: {qs}")
 
 
 # ---------------------------------------------------------------------------
@@ -1942,34 +2020,43 @@ def test_24d_i_the_loader_refuses_dwelling_without_its_wear_or_floor_row(monkeyp
     assert checked == 2, checked
 
 
-def test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_season(monkeypatch):
-    """FALSIFIER (c), and the `DONE·INERT` measurement it rests on, as a CONTROLLED comparison.
+def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
+    """FALSIFIER (c) -- AND `24d-i`'s `DONE·INERT` MEASUREMENT DOES NOT SURVIVE POSITION `11a`,
+    WHICH IS RECORDED HERE RATHER THAN HIDDEN. The name and the back half of this test changed;
+    the front half -- what `24d-i` actually built -- did not.
 
-    TREATMENT is `build_realm(0)`. CONTROL is the same world with its dwellings deleted before the
-    season. The control reproduces the pre-`24d-i` tree exactly: build hash and one-season hash
-    were both byte-identical to the checkout before this change when measured -- against `bcc9a1f`
-    (the commit immediately before `24d-i` landed) in a worktree:
-    build `fa6ea34ceeb85cb2d64f3d6bbf0fefc5`, one-season `65823840d82e1051cfaab49ce3e6f432`,
-    both reproduced exactly by the control arm on the current tree.
+    HISTORY, KEPT FOR THE RECORD. `24d-i` measured TREATMENT (`build_realm(0)`) against CONTROL
+    (the same world, dwellings deleted before the season) as byte-identical except for the
+    dwellings' own wear: build hash `fa6ea34ceeb85cb2d64f3d6bbf0fefc5`, one-season hash
+    `65823840d82e1051cfaab49ce3e6f432`, both matching the pre-`24d-i` checkout (`bcc9a1f`) exactly.
+    That identity is what `DONE·INERT` meant, and it held because NOTHING could turn a dwelling's
+    `condition.worn` claim into a Question: `band_crossed` (Q3) never carried a site id (`H-110`),
+    and Q2's admission test read only `c.subject == p.id or c.subject in mine`, which a dwelling id
+    is neither.
 
-    Treatment: no dwelling crossing reaches Q3, so no `band_crossed` Question comes from one, and
-    every dwelling emits exactly one `condition.worn` and keeps its condition. The Events are what
-    prove the wear loop visited them, so the zero is not an empty population.
-    Treatment against control: the same Questions by id, the same act COUNT and the same
-    act-subject distribution (not checked by act id -- see the assertion below), every other
-    non-deposit Event by id, and every control claim survives.
+    WHAT `11a` CHANGES, AND WHY THE OLD COMPARISON CANNOT SURVIVE IT. `reach`/`place_of`
+    (`queries/world_q.py`) give Q2 a PLACE clause: a claim is now also admitted when
+    `place_of(c.subject) in reach(w, p)`. A dwelling sits AT a hearth, and a resident's own home
+    RUNG (`home_of`) is that hearth -- limb 3 of `reach` starts there -- so every resident's own
+    dwelling wear claim is now `place_of(dwelling) == hearth == home_of(resident) ∈ R`: ADMITTED.
+    That is not a dwelling-specific channel; it is `01_ATTENTION_AND_REACH.md` §0.2(d)'s own
+    headline (561 → 1632 questions on `build_realm(0)`) landing on a concrete case this suite
+    already built a control arm for. MEASURED, same seed, one season: 132 of 3,710 questions now
+    name a dwelling; the treatment and control Question-id sets no longer overlap enough to compare
+    ("same Questions by id" -- FALSE); the resolved act COUNT differs (387 vs 378) and so does the
+    act-subject distribution; 230 control claims are gone from the treatment arm and 570 are added
+    (not a small, dwelling-shaped diff — `24d-i`'s old `added`/`control <= claims` bookkeeping no
+    longer describes a coherent set). `24d-i`'s own claim-displacement note already said dwellings
+    are "NOT SILENT" past season one; `11a` is what makes season ONE say so too.
 
-    ⚠ IT IS NOT SILENT, AND THIS POSITION IS NOT `DONE·INERT` BY THE PLAN'S TEST. CLAIMS MOVE. The
-    wear Events are witnessed through `co_located`, so each resident of a hearth gets one
-    firsthand `condition.worn` claim about that hearth's dwelling. This test pins the SHAPE of that
-    movement, not its count. ⚠ It is a ONE-season identity. Measured beyond it (reproduced directly,
-    `build_realm(0)`, both arms, seasons 1-4): claim displacement at `ledger_cap` starts season 2
-    (0 control claims missing from treatment at season 1, 8 at season 2, 24 at season 3, 60 at
-    season 4) and the resolved-act COUNT first differs at season 4 by exactly one (1457 vs 1458) --
-    but "one resolved act differs" describes the COUNT, not an isolated identity difference: the
-    act-identity sequence itself first diverges mid-season-4 (index 1309 of 1457/1458) and stays
-    diverged, 115 of the season's acts differing in id or verb by the season's end. One seed; not
-    swept."""
+    ⚠ THIS IS THE DESIGN'S OWN INTENDED CONSEQUENCE, NOT A REGRESSION `11a` INTRODUCED BY ACCIDENT
+    (`CLAUDE.md` §0's five-step gate, step 3): `01`'s own headline number is exactly this effect,
+    general rather than dwelling-specific, and the position's OBSERVABLE section declares a golden
+    re-record necessary on exactly this ground. What THIS test polices from here is narrower and
+    still true: the wear mechanism itself (visits every dwelling once, crosses no band, moves no
+    condition) is UNCHANGED, and the new dwelling questions are the ORDINARY `claim_landed` shape,
+    sourced from a real resident's real ledger claim about their own hearth's dwelling -- not a
+    new channel, a new referent kind, or a broadcast."""
     from ..harness import populated
     from ..loop import driver
 
@@ -2006,74 +2093,49 @@ def test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_seas
     assert worn == Counter(list(dw)), (
         f"the wear loop did not visit every dwelling exactly once: "
         f"{len(worn)} of {len(dw)} worn, {sum(worn.values())} Events")
-    # ⚠ A `band_crossed` QUESTION NEVER NAMES A SITE, so "Questions naming a dwelling" is
-    # attributed through Q3's ONLY input. `questions_for` builds one from each `w.crossings` tuple
-    # `(site, use, ...)` as `Question(..., (use,), use)`: its referent is the site-USE, the floor's
-    # key. A filter on dwelling ids over the Questions cannot fail. Measured with a planted
-    # `wear 10` / `{planted_use: 995}`: 211 dwelling crossings and 460 `band_crossed` Questions
-    # over two seasons, none carrying a dwelling id. No dwelling tuple means no dwelling Question.
-    crossed = [c for c in w.crossings if c[0] in dw]
-    assert crossed == [], f"{len(crossed)} dwelling crossings reach Q3 at the control arm"
+    # `band_crossed` is no longer a question source at all (position `11a` folded it into
+    # `claim_landed`, and `w.crossings` is deleted with it -- `AX-4`, one owner). This premise
+    # survives the fold unchanged, because it was never about the deleted source's SHAPE: a
+    # dwelling's `wear_per_season` is 0 and its `band_floors` are `{}` (`24d-i`), so its condition
+    # never moves and `_crossings` never fires for one AT ALL -- direct evidence off the Event log.
     assert not [e for e in w.log if e.kind == "condition.band_crossed" and anchor_of(w, e) in dw]
     assert all(w.sites[sid].condition == scale for sid in dw), "a dwelling's condition moved at wear 0"
-    assert not [q for q in qs if {q.about, *q.referents} & set(dw)], (
-        "some question source now names a dwelling. `work` binds a referent as its `site`, and "
-        "`world_q`'s `floor` read raises a bare `ValueError` on `band_floors.dwelling: {}`")
 
-    cw, cdw, cqs, cout = season(strip=True)
-    assert cdw == {}, "the control still has dwellings"
-    # By Question ID, not only by source: the same questions, to the same people, about the same
-    # things.
-    assert sorted(q.id for q in qs) == sorted(q.id for q in cqs), (
-        Counter(q.source for q in qs), Counter(q.source for q in cqs))
-    assert (out["acts"], out["act_subjects"]) == (cout["acts"], cout["act_subjects"])
-    # Every Event but the deposits is the control's, plus exactly the dwellings' own wear. The
-    # deposits are excluded because their ids are not stable across arms; measured, every
-    # `claim.deposited` id differs even where the claim id does not.
-    other = lambda log: {e.id for e in log if e.kind != "claim.deposited"}
-    worn_ids = {e.id for e in w.log if e.kind == "condition.worn" and anchor_of(w, e) in dw}
-    # ⚠ GARRISON'S OWN WEAR ALSO EXCLUDED, AND FOR A DIFFERENT REASON THAN DWELLING'S (M4,
-    # `ED-IN-0279` clause (a), build step 11). Dwelling is absent from the control arm entirely,
-    # so nothing needs subtracting on that side. Garrison exists in BOTH arms, with the SAME
-    # subjects -- but `world.write`'s Event id is `H(seed, tick, subj, f"emit:{emits}#{draw}")`,
-    # and `draw` is a GLOBAL, SEQUENTIAL counter (`H`'s own docstring: "unique per DRAW, not per
-    # operation"). Garrison Sites are minted after dwellings in `populated.py`, so in the control
-    # arm -- dwellings deleted, fewer prior draws consumed -- every garrison wear Event lands at
-    # an earlier draw ordinal than its treatment-arm counterpart for the SAME subject, and gets a
-    # DIFFERENT id purely from that shift. This is not a garrison-specific defect: it is the
-    # pre-existing draw-ordinal property of every Event id, first exercised by this exact
-    # comparison now that a second "sometimes-present" Site kind sits after dwellings in
-    # `w.sites`'s insertion order. Measured: 37 garrison wear Events per arm (one per settlement),
-    # same subjects, disjoint ids.
-    garrison_ids = {s.id for s in w.sites.values() if s.kind == "garrison"}
-    w_garrison_worn = {e.id for e in w.log
-                       if e.kind == "condition.worn" and anchor_of(w, e) in garrison_ids}
-    cw_garrison_worn = {e.id for e in cw.log
-                        if e.kind == "condition.worn" and anchor_of(cw, e) in garrison_ids}
-    assert other(w.log) - worn_ids - w_garrison_worn == other(cw.log) - cw_garrison_worn, (
-        f"{len((other(w.log) - worn_ids - w_garrison_worn) ^ (other(cw.log) - cw_garrison_worn))} "
-        "non-deposit Events differ between arms")
-
-    claims = {c.id: c for p in w.persons.values() for c in p.ledger}
-    control = {c.id for p in cw.persons.values() for c in p.ledger}
-    assert control and control <= set(claims), (
-        f"{len(control - set(claims))} control claims are gone from the treatment arm; the "
-        "dwellings displaced something in season one")
-    added = [claims[i] for i in set(claims) - control]
+    # ⚠ THE ASSERTION THIS REPLACES USED TO BE `assert not [...]` -- "no question names a
+    # dwelling". `11a` makes that FALSE by design (see the docstring); what is asserted now is
+    # that dwelling questions, where they exist, are the ORDINARY shape: `claim_landed`, and each
+    # one resolves to a real claim in ITS OWN ASKEE's ledger whose subject is a dwelling that
+    # askee actually lives beside.
+    dwelling_qs = [q for q in qs if {q.about, *q.referents} & set(dw)]
+    assert dwelling_qs, (
+        "no question named a dwelling -- if that is now true, `reach`/`place_of`'s place clause "
+        "regressed, or this world no longer witnesses a dwelling's own wear co-located")
+    assert {q.source for q in dwelling_qs} == {"claim_landed"}, (
+        f"a dwelling question came from a source other than claim_landed: "
+        f"{sorted({q.source for q in dwelling_qs})}")
     at = {rung: sid for sid, rung in dw.items()}
     home = world_q.home_of(w)
-    assert added, "no claim moved; if that is now true, `24d-i` IS `DONE·INERT` -- relabel it"
-    # ⚠ MERGE, 2026-09-27 (`R8.1`, `seen` claim): a resident is a CO-LOCATED WITNESS of their own
-    # dwelling's wear Event, so `seen`'s deposit fires beside `condition.worn` for the same Event --
-    # a second added claim about the same subject, not a claim on something else. `SEEN_PREDICATE`
-    # is admitted here for that reason; the subject check is unchanged and still the whole of what
-    # this test polices (a claim about ANYTHING else would still fail it).
-    assert {c.predicate for c in added} <= {"condition.worn", SEEN_PREDICATE}, (
-        f"an added claim carries a predicate this test does not expect: "
-        f"{sorted({c.predicate for c in added})}")
-    for c in added:
-        assert c.subject == at.get(home.get(c.holder)), (
-            f"an added claim is not a resident's claim on their own hearth's dwelling: {c}")
+    by_id = {c.id: c for p in w.persons.values() for c in p.ledger}
+    for p in w.persons.values():
+        for q in dwelling_qs:
+            if q.id not in {f"q:claim:{c.id}" for c in p.ledger}:
+                continue
+            c = by_id.get(q.about)
+            assert c is not None and c.subject == at.get(home.get(p.id)), (
+                f"{q.id} for {p.id} does not resolve to that person's own hearth's dwelling: {c}")
+
+    # ⚠ `24d-i`'s TREATMENT == CONTROL IDENTITY DOES NOT SURVIVE `11a`, AND IS NOT RE-ASSERTED.
+    # What is asserted instead is the honest negation, so a future change that silently restores
+    # dwelling-inertness (narrowing `reach` back down, or breaking the co-located witness) is
+    # caught here rather than read as a quiet improvement.
+    cw, cdw, cqs, cout = season(strip=True)
+    assert cdw == {}, "the control still has dwellings"
+    assert sorted(q.id for q in qs) != sorted(q.id for q in cqs), (
+        "the two arms' Question sets are identical again -- dwellings are DONE·INERT once more; "
+        "either relabel this test back to `24d-i`'s or find what silently narrowed `reach`")
+    assert out["acts"] != cout["acts"], (
+        f"both arms resolved {out['acts']} acts -- dwellings no longer move the act count, which "
+        "is the same regression the Question-id check above would also have caught")
 # H2 -- `ED-IN-0261`'s DEONTOLOGICAL GATE, `H-146`. A refusal at `opening_set`, not a score term:
 # the person's projected weight on the gating axis IS the threshold, and a verb that axis engages
 # past it never forms a Candidate. Roster-generic: the axis is whatever `Fixtures refusal_axis`

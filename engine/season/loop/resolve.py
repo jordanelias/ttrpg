@@ -217,8 +217,32 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
             # can make `belief_contradicts` fire, because `0 >= 1` is the one thing in this
             # grammar that evaluates False. Attaching only to the success would build the
             # channel and leave out the traffic.
-            verdict = evaluate(row.requires_typed, WorldReader(w, a.actor),
-                               binding_from_act(a))
+            #
+            # ⚠ POSITION `11a`: `S12.1`'s `floor` READ CAN RAISE HERE NOW, AND IT MUST BE CAUGHT
+            # THE WAY `PARTY-GAP` ALREADY IS BELOW (`contest()`'s call, same file) -- NAMED,
+            # NARROW, AND FALLING THROUGH TO THE ORDINARY REFUSAL. `WorldReader.read`'s `floor`
+            # stem raises `Unspecified("S12.1", ...)` for a site KIND with no registered band
+            # floors at all (`dwelling`/`garrison` ship `{}` ON PURPOSE, `24d-i`/M4) -- a real and
+            # documented case, but before `11a` no Question's referent could ever BE a Site id
+            # (Q1/Q3 were dead, Q2's admission test had no place clause), so `work`'s `site`
+            # operand could never bind to a dwelling and this raise was unreachable. `reach`/
+            # `place_of` (`queries/world_q.py`) make a claim about a co-located Site an ordinary
+            # `claim_landed` question, so it is reachable now, and MEASURED: `p_npc_090` mints
+            # `work` on `s_s_009_cottage_dwelling` in `build_realm(0)`'s very first season, which
+            # crashed every populated-world test before this catch existed. This paragraph's own
+            # polarity rule is what decides it: *"an unevaluable precondition is a refusal and
+            # never a silent admission"* -- `no band floors for this kind` IS zero evidence, not a
+            # software defect, so it resolves to `UNKNOWN` (refusal) rather than propagating.
+            # `where == "S12.1"` is this ONE raise's own tag, so a FUTURE raise `WorldReader.read`
+            # might grow for a different reason is not silently swallowed with it -- the same
+            # discipline `PARTY-GAP`'s own catch states for `ENGINE-UNAVAILABLE`.
+            try:
+                verdict = evaluate(row.requires_typed, WorldReader(w, a.actor),
+                                   binding_from_act(a))
+            except Unspecified as e:
+                if e.where != "S12.1":
+                    raise
+                verdict = Verdict(UNKNOWN, ())
             ok = verdict.value is True
         else:
             pred = REQUIRES_PREDICATES.get(a.verb)

@@ -728,13 +728,19 @@ def p18():
     _seed_near_floor(w, site)      # a harness fixture; see the helper for why. The loop stays.
     before = world_q.verbs(w, site, floors)
     n = 0
-    mine = lambda: [c for c in w.crossings if c[0] == site.id]
-    while not mine() and n < 400:
+    was = site.condition
+    # ⚠ NO SECOND CARRIER, SINCE POSITION `11a` DELETED `w.crossings` (`AX-4`: one owner). The
+    # crossing Event IS the record; `anchor_of` (tier 3, via `causes[0]`) answers which site it
+    # was emitted for, exactly what the deleted tuple's element 0 used to answer.
+    crossings = lambda: [e for e in w.log if e.kind == "condition.band_crossed"
+                         and anchor_of(w, e) == site.id]
+    while not crossings() and n < 400:
+        was = site.condition
         _run(w); n += 1
+    now = site.condition
     after = world_q.verbs(w, site, floors)
-    assert mine(), "no band edge was crossed at the site under test"
-    sid, verb, was, now, eid = mine()[0]
-    ev = next(e for e in w.log if e.id == eid)
+    assert crossings(), "no band edge was crossed at the site under test"
+    ev = crossings()[0]
     # ⚠ `W4`. THIS ASSERTED `ev.causes == [ROOT]` — IT PINNED THE DEFECT. `H-12` is RULED that
     # MATTER emits an Event per write *"so crossings have an antecedent"*, and the crossing was
     # rooted at the campaign seed, so the one Event in the barrier that exists to be walked back
@@ -748,13 +754,15 @@ def p18():
     assert antecedent is not None and antecedent.kind == "condition.worn" \
         and anchor_of(w, antecedent) == site.id, (
         f"the crossing names {ev.causes[0]!r}, which is not a `condition.worn` for {site.id}")
-    assert verb in before and verb not in after
+    dropped = sorted(before - after)
+    assert dropped, f"no verb left {site.kind}'s floor set: {sorted(before)} -> {sorted(after)}"
+    verb = dropped[0]
     social = [c for c in ev.changes if c.field in ("stance", "pursuits")]   # `beliefs` retired 2026-09-25
     assert not social and not ev.degree
     return (f"PASS, AND BOTH HALVES OF L5 RAN. ⚠ THE SITE IS SEEDED one season above its "
             f"highest floor (see `_seed_near_floor`), so {n} is NOT the unseeded pacing -- `A31b` "
             f"reports 11 for this same site, wear and floor, and that is the number to cite for "
-            f"pacing. `{sid}` crossed the `{verb}` floor in {n} seasons "
+            f"pacing. `{site.id}` crossed the `{verb}` floor in {n} seasons "
             f"({was} -> {now}). (1) IT CHANGED WHAT MAY BE CHOSEN: {sorted(before)} -> "
             f"{sorted(after)}. (2) IT EMITTED A WITNESSABLE EVENT into the one log "
             f"({ev.kind}) whose `causes[]` NAMES THE WEAR THAT CROSSED THE FLOOR "
@@ -2689,7 +2697,12 @@ def a31c():
         # -- the loop ran on until the UNRELATED `fishing` floor was crossed at season 81, and
         # the probe reported "11-81 seasons past the SHIPPING floor". Two different crossings
         # reported as one range.
-        mine = lambda: [c for c in w.crossings if c[0] == site.id and c[1] == "bulk_shipping"]
+        # ⚠ NO `w.crossings` SINCE POSITION `11a` (deleted; `AX-4`, one owner). Under `NOCHOOSE`
+        # (this probe's own note above) `Site.condition` only ever falls, so "`bulk_shipping` has
+        # left the site's verb set" and "a `bulk_shipping` crossing fired" are the same fact --
+        # `world_q.verbs` is the query that already reads it, one screen above in `A31b`.
+        harbour_floors = w.fixtures.get("band_floors")[site.kind]
+        mine = lambda: "bulk_shipping" not in world_q.verbs(w, site, harbour_floors)
         assert floor <= site.condition, (
             f"a floor of {floor} is above the site's starting condition {site.condition}, so "
             "the crossing under test can never occur and the sweep point is meaningless")

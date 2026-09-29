@@ -353,15 +353,26 @@ rosters:
     from_descriptor: axis_roster
 
   question_sources:
-    source: "ARCHITECTURE_V2.md §F1 (Q1–Q3) · PLAN.md `W5` (Q4 `need`)"
+    source: "ARCHITECTURE_V2.md §F1 (Q1–Q3) · PLAN.md `W5` (Q4 `need`) · folded to two at position `11a`, r2 `01_ATTENTION_AND_REACH.md` §A.2"
     open: true
     ordered: true
     note: >-
-      ⚠ V2 §F1 SAYS "EXACTLY THREE SOURCES, AND BY NOTHING ELSE" AND IS WRONG, which is why this
-      is a roster rather than a sentence. PLAN `W5`: "**Without Q4 an NPC with a standing ambition
-      and a quiet season forms no candidates at all**, which is most of the NPC corpus" (#353
-      `:509`, `:605`, `:1297`). A closed set that turned out to be missing a member is the
-      strongest possible argument for keeping closed sets in data.
+      ⚠ FOLDED FROM FOUR TO TWO AT POSITION `11a` (`ARCH §B.13` `ID-13` -- a declared source that
+      reaches no code is the defect, not a design worth keeping). `date_due` and `band_crossed`
+      MEASURED zero questions in every world the engine could build: Q1's addressing clause
+      admitted every person unconditionally and its route out was dead (CALENDAR emitted no Event
+      for a fired Date); Q3 keyed its Question on the crossing's VERB where an id was needed
+      (`H-110`), so `occasioned_by`'s search could never match. Both fold into `claim_landed`
+      rather than vanish -- the underlying Event (a fired date, a band crossing) is already
+      witnessable and already deposits a claim; what was missing was a way for that claim to reach
+      someone who was not literally standing where it happened, which `reach`/`place_of`
+      (`queries/world_q.py`) now supply as a FILTER over the claims a person's own ledger already
+      holds, never as a new witness channel (`01` §A.4.4).
+      ⚠ V2 §F1 SAYS "EXACTLY THREE SOURCES, AND BY NOTHING ELSE" AND WAS WRONG BY ONE. PLAN `W5`:
+      "**Without Q4 an NPC with a standing ambition and a quiet season forms no candidates at
+      all**, which is most of the NPC corpus" (#353 `:509`, `:605`, `:1297`). A closed set that
+      turned out to be missing a member is the strongest possible argument for keeping closed sets
+      in data.
       ORDER IS SEMANTIC: `q`s are produced in this order and a person's questions arrive in it, so
       editing the order changes which question a budget-bounded person answers first.
       ⚠ AND THIS ORDER IS ONLY HALF OF WHAT DECIDES THAT. `questions_for` sorts on
@@ -372,7 +383,7 @@ rosters:
       **801 of 1,068 deliberations**, so three quarters of the time this roster's order does not
       decide the answer and a hash does. Recorded 2026-09-04 by the `W-D` adversarial pass;
       disposition on `H-54`, no rule changed.
-    values: [date_due, claim_landed, band_crossed, need]
+    values: [claim_landed, need]
 
   person_predicates:
     source: "#353 §14 `:331` — `marks[]` … \"heritage · grade · Church standing · office · residence\""
@@ -1021,12 +1032,15 @@ rosters:
       their control arm. `wear_per_season` carries no such skip — MATTER writes every Site every
       season whatever its rate, so `dwelling: 0` still emits (see below). A dwelling sits AT a
       hearth and persons live in hearths. A non-zero rate
-      together with any floor in `band_floors.dwelling` would let a dwelling's condition cross
-      it, reach Q3's `presence` branch in `queries/world_q.questions_for`, and hand every
-      resident a live `band_crossed` Question. That would bring `band_crossed` alive on the
-      populated world, and plan position `11a`'s premise (the source it deletes contributes 0,
-      so its control is an identity) would break. Either half at its control arm blocks the
-      crossing; both ship there. At 0 no dwelling's condition moves.
+      together with any floor in `band_floors.dwelling` would let a dwelling's condition cross it;
+      the crossing Event is witnessed `co_located` regardless of any of this (position `11a` did
+      not touch witnessing), and the claim it deposits (subject = the dwelling) would then reach
+      every co-located resident as a live `claim_landed` question, once `reach`/`place_of`
+      (`queries/world_q.py`, `11a`) admit a claim about a place through a person's own ledger. That
+      would put a dwelling-condition Question in front of every resident every season, which is
+      exactly what `test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_season`'s
+      control-arm identity pins against. Either half at its control arm blocks the crossing; both
+      ship there. At 0 no dwelling's condition moves.
       ⚠ ZERO IS NOT SILENT. `loop/matter.py`'s wear loop still WRITES every Site every season,
       and `World.write` emits one `condition.worn` per write (`H-12`), so every dwelling emits
       one wear Event a season, and its residents witness it (`co_located`) as a claim. A non-zero

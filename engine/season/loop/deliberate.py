@@ -435,11 +435,13 @@ def _inputs_fingerprint(p: Person, qs: list, s: Sensation) -> tuple:
     the other five terms breaks NOTHING in that fixture — they are declared-and-unfalsified,
     not shown redundant, because no world there moves one without also moving `q_ids`.
 
-      * `q_ids`      — `questions_for`'s whole output. Covers Q1 (`w.dates` / `w.docket`), Q2 (a
-                       claim LANDING, which is why it is computed with `since`), Q3 (`w.crossings`
-                       and `Query.presence`) and Q4 (a live `commit` to an OUGHT). A world-level
-                       change that cannot reach this person cannot move this term, which is what
-                       keeps the skip from degenerating into "anything happened anywhere".
+      * `q_ids`      — `questions_for`'s whole output. Covers `claim_landed` (a claim LANDING,
+                       which is why it is computed with `since`, and now ADMITTED through
+                       `reach(w, p)` / `place_of` rather than only `c.subject == p.id or c.subject
+                       in mine` -- position `11a` folded `date_due` and `band_crossed` into it) and
+                       `need` (a live `commit` to an OUGHT). A world-level change that cannot reach
+                       this person cannot move this term, which is what keeps the skip from
+                       degenerating into "anything happened anywhere".
       * `subsistence` — `sense`'s first scalar, and `urgency(s.subsistence, fx)` is a term of the
                        chooser's score. ⚠ `standing` IS DELIBERATELY ABSENT: `Sensation.standing`
                        RAISES where the design fails to supply it (§18.2), and a fingerprint that
