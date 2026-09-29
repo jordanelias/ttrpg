@@ -397,8 +397,9 @@ def _ch_document_key(w: "World", e, pid) -> bool:
 
     ⚠ AND ONE INTERACTION THIS DOES NOT SETTLE, BECAUSE IT IS `PHASE 1` STEP 3's. A channel decides
     WHO witnesses, not WHAT they learn. Composed with the deposit layer as it stands -- `observers_for`
-    discards which channel admitted a person, and `claim_subjects` under the default `both` rule
-    starts from the Event's anchor, the actor -- a `document_key`-only witness learns WHO ACTED. `R8.5`
+    reports the admitting channel since position `15d`, but only the deposit's SOURCE reads it (a
+    `document_key`-only witness holds the event-kind claim `told_by`), and `claim_subjects` under the default
+    `both` rule starts from the Event's anchor, the actor -- a `document_key`-only witness learns WHO ACTED. `R8.5`
     cites a ratified line pointing the other way (*"a document holder saw only that the document
     changed"*). ⚠ WHEN THIS DOCSTRING WAS FIRST WRITTEN, ON THE PROTOTYPE, IT SAID THAT LINE
     *"lives on unmerged PR #371, not in this tree"*. That is no longer true of THIS file: #371 was
@@ -492,7 +493,14 @@ def _ch_chronicle(w: "World", e, pid) -> bool:
     over an empty generator for every Event the fold can currently produce.
     So the whole of `all_five - presence_only` is `document_key`. Recorded rather than papered
     over, and the register carries it as the reason `H-33`'s `all_five` arm is not yet a
-    measurement of five channels. Found by the `W6` adversarial pass."""
+    measurement of five channels. Found by the `W6` adversarial pass.
+
+    ⚠ TRUE OF CARIN'S WORLD, NOT OF THE REALM (measured at position `15d`). In
+    `populated.build_realm(0)`'s first season this channel is the STRONGEST admitting one for 131
+    (witness, Event) pairs, and `post_remit` for another 135 -- `order.given` (`dispatch`),
+    `date.scheduled` (`convene`), `tenure.closed`, `march.declared` -- every one a person nowhere
+    near the room. Since `15d` they hold those deposits `told_by`: 553 of that season's 4,294
+    claims, where every one was `firsthand` before."""
     return any(r.stratum == "binding_decision" for r in VERB_TABLE.values()
                if e.kind in (r.emits or ()))
 
@@ -556,17 +564,42 @@ def live_channels(mode: str) -> tuple:
 
 
 def observers_for(w: "World", e: "Event", mode: str, everyone: list) -> list:
-    """Who witnesses this Event, under the fan-out mode `H-33` declares.
+    """Who witnesses this Event, under the fan-out mode `H-33` declares -- as `(person, channel)`
+    pairs, ONE channel per person, in `everyone`'s order.
 
     `total` is the specified behaviour and the sweep's control. The other two arms are the hole's
     own sweep points. A mode outside the three REFUSES -- an unrecognised mode silently falling
     back to `total` would make every measurement of this sweep read the control. The refusals and
-    the mode -> channel dispatch live in `live_channels`, which the `seen` deposit shares."""
+    the mode -> channel dispatch live in `live_channels`, which the `seen` deposit shares.
+
+    PLAN POSITION `15d` (proceedings `19_PLAN.md` step 4 (a)). The channel is the one that ADMITTED
+    the person, and where several do, the STRONGEST: the first live channel in `WITNESS_CHANNELS`'
+    order, which `rosters.yaml` declares as the precedence. It is read here, once, so `witness` can
+    set a deposit's source from it (`CHANNEL_CLAIM_SOURCE`) instead of re-deriving *how did this
+    person come to know* a second way -- the ad hoc knot scan that stood in `loop/witness.py` did,
+    and disagreed with `_ch_witness_key` (it asked "is this person in ANY knot", the channel asks
+    "are they knotted to THIS Event's anchor"). ⚠ Precedence is iterated over the ROSTER, filtered
+    by the arm, not over `live_channels`' own return order, so a later arm that lists a subset in
+    another order cannot silently reorder the precedence.
+
+    Still short-circuits per person, now at the STRONGEST channel -- so a count of any one channel
+    taken through this function under-reports, as `_ch_document_key`'s docstring already warns.
+
+    ⚠ `total` CREDITS EVERYONE TO THE PRECEDENCE HEAD, UNIFORMLY, AND ASKS NO PREDICATE. It is
+    `H-33`'s control -- *"fans every event to every person"* identically, the maximal-information
+    design as written -- and `seen_of`/`seen_subject` already refuse to personalise it for that
+    reason. Asking the predicates here would make the control arm a narrow arm's source rule
+    wearing a total fan, and a person no predicate admits would have no channel to report."""
     live = live_channels(mode)
     if mode == "total":
-        return list(everyone)
-    return [pid for pid in everyone
-            if any(CHANNEL_PREDICATES[c](w, e, pid) for c in live if c in CHANNEL_PREDICATES)]
+        return [(pid, WITNESS_CHANNELS[0]) for pid in everyone]
+    order = [c for c in WITNESS_CHANNELS if c in live]
+    out = []
+    for pid in everyone:
+        ch = next((c for c in order if CHANNEL_PREDICATES[c](w, e, pid)), None)
+        if ch is not None:
+            out.append((pid, ch))
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -774,8 +807,8 @@ def seen_of(w: "World", e: "Event", act, pid: str, mode: str) -> Seen:
     """What `pid` SAW of `e`: the union of the terms shown by every live channel admitting them.
 
     ⚠ EVERY CHANNEL IS ASKED, NOT THE FIRST THAT MATCHES. `observers_for` short-circuits because it
-    only needs WHETHER; this needs WHAT, and a co-located knot partner is shown more than either
-    channel alone would show.
+    needs only WHETHER and the one STRONGEST channel (the deposit's source, position `15d`); this
+    needs WHAT, and a co-located knot partner is shown more than either channel alone would show.
 
     ⚠ `total` SHOWS EVERY TERM TO EVERY WITNESS. That arm is `H-33`'s control -- *"fans every event
     to every person"*, the maximal-information design as written -- so gating it on the channel

@@ -22,7 +22,8 @@ from ..data.matrix import Step
 from ..state.gate import Token
 from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN
 from ..data.rosters import (
-    OBSERVATION_DEPOSIT_MODES, RECORD_CONTENT, WITNESS_CHANNELS, require_member,
+    CHANNEL_CLAIM_SOURCE, OBSERVATION_DEPOSIT_MODES, RECORD_CONTENT, WITNESS_CHANNELS,
+    require_member,
 )
 from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, claim_subjects,
                          observers_for, seen_of, seen_subject)
@@ -229,8 +230,10 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # `total` is the specified behaviour and the sweep's control; the presence index this
     # barrier has always built was UNUSED until this line.
     mode = w.fixtures.get("fan_out_mode")
+    # Plan position `15d`: the third term is THE CHANNEL that admitted `pid` -- the strongest, by
+    # `WITNESS_CHANNELS`' declared precedence -- and no longer the mode, which is `mode` above.
     fan: list[tuple[str, Event, str]] = [
-        (pid, e, mode) for e in events for pid in observers_for(w, e, mode, everyone)]
+        (pid, e, ch) for e in events for pid, ch in observers_for(w, e, mode, everyone)]
     TRACE.decision(f"fan-out over {len(events)} events -> {len(fan)} deposits", "S28/S61",
                    chose=f"mode={mode} over {len(everyone)} persons "
                          f"({'#353 S61 as specified, and H-33 control' if mode == 'total' else 'H-33 arm; `all_five` is the ruled default since 2026-09-07, R7'})",
@@ -290,7 +293,20 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # 25 cases share one building, so one telling repeated a 200-entry copy-and-scan 25 times.
     # A plain local dict fixes it. ⚠ NOT `w.cache()` -- `cache_at_barrier` is `Forbidden` inside
     # `_in_parallel_map` (`state/world.py:474-476`), which is this whole region.
-    told_by_event: dict = {}
+    # ⚠⚠ AND IT IS FILLED HERE, BEFORE ANY DEPOSIT, NOT LAZILY AT THE FIRST HEARER (plan position
+    # `15d`, found building `19_PLAN.md` step 4 (c)'s falsifier). Filled lazily it read the teller's
+    # ledger PART-WAY THROUGH THIS BARRIER'S DEPOSITS, so the answer depended on whether the teller
+    # sorted before the first hearer in `w.persons`. When it did, the teller had already received
+    # this very telling's event-kind claim, `(subject, "news.told", True)` at `when = tick` --
+    # NEWER than anything they held before -- and `latest_about` returned THAT: the telling
+    # transmitted the fact of itself, which every hearer had just been given, and the exact-triple
+    # guard dropped it. MEASURED on `tiny_world`, teller `p_low` sorted first, holding the subject
+    # at confidence 37: no hearer was told anything; at 100 the held claim won only a `(when,
+    # confidence)` tie on append order. The teller tells what they held WHEN THEY CHOSE TO TELL,
+    # which is the ledger before WITNESS writes to it (RESOLVE writes no ledger).
+    told_by_event: dict = {
+        e.id: _told_content(w, self.act_of[e.id]) for e in events
+        if e.kind == "news.told" and self.act_of.get(e.id) is not None}
     # `R8.1` -- WHAT EACH WITNESS SAW, RESOLVED HERE AND NOT IN THE LOOP BELOW, BECAUSE THE LOOP IS
     # A PARALLEL MAP. `seen_of` asks every live channel which of them admits the witness, and
     # `co_located` reads the barrier's presence index -- which `cache_at_barrier` refuses inside
@@ -299,7 +315,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # deposited -- *something happened here and I know nothing about it* is `R8.5`'s document
     # holder exactly.
     seen_by: dict = {}
-    for pid, e, _m in fan:
+    for pid, e, _ch in fan:
         subj = seen_subject(w, e, pid, mode)
         seen_by[(pid, e.id)] = (None if subj is None
                                 else (subj, seen_of(w, e, self.act_of.get(e.id), pid, mode)))
@@ -340,11 +356,36 @@ def witness(self, token: Token, events: list[Event]) -> int:
         p = w.persons.get(pid)
         if p is None:
             continue
+        # PLAN POSITION `15d` (proceedings `19_PLAN.md` step 4 (b)). THE SOURCE IS THE ADMITTING
+        # CHANNEL'S, read off `rosters.yaml: witness_channels.claim_source` -- presence gives
+        # `firsthand`, a knot `firsthand_via_knot`, a document, a remit or the public record
+        # `told_by`. `channel` is the ONE `observers_for` credited this person to, the strongest by
+        # the roster's precedence, so a person in the room who also holds the changed thing is
+        # never downgraded to hearsay (step 4's *breaks if wrong*).
+        # ⚠ IT REPLACES A SECOND DERIVATION THAT DISAGREED WITH THE FIRST (§8). This line read
+        # `any(t.kind == "knot" and t.live and pid in (t.subject, t.object) for t in w.tenures)` --
+        # *is this person in ANY knot* -- while `_ch_witness_key`, the channel that admits by
+        # knot, asks *are they knotted to THIS Event's anchor*. So a person knotted to anybody at
+        # all took the knot source for every Event they saw, and the channel's own answer was
+        # discarded one call earlier. MEASURED before the change, headless 3 seasons + the realm's
+        # first season + the 143-case corpus at seed 0: the scan was False for every admitted
+        # witness, so deleting it moves nothing there. What DOES move is the other direction, and
+        # it is the channel's own definition: an anchor with no place, admitted only by
+        # `witness_key`'s self clause, now takes the knot source (`rosters.yaml:
+        # witness_channels`' note; probe `P21` is the one case that reaches it).
+        # ⚠ AND THE TELLING'S SPECIAL CASE IS NOT HERE, DELIBERATELY. `19_PLAN.md` step 4: *"for a
+        # telling event specifically, even co-located hearers get told_by -- they heard it told,
+        # they did not see the thing."* The THING told is the told channel's claim below, which is
+        # `told_by` for every hearer whatever channel admitted them. The event-kind claim this
+        # source is for is `(subject, "news.told", True)` -- THAT a telling happened -- and a
+        # co-located witness did see that; the same step's artifact is *"a witness who saw the
+        # speech directly holds it firsthand"*. Downgrading it would be the downgrade the
+        # precedence exists to prevent.
+        src = CHANNEL_CLAIM_SOURCE[channel]
         # S28: A KNOT DEPOSIT REUSES THE EVENT ID. Rev 1 wrote the rule and switched it off
-        # with `if False`. This is the rule, on.
-        via_knot = any(t.kind == "knot" and t.live and pid in (t.subject, t.object)
-                       for t in w.tenures)
-        src = "firsthand_via_knot" if via_knot else "firsthand"
+        # with `if False`. This is the rule, on -- keyed on the knot SOURCE, i.e. on `witness_key`
+        # being the strongest channel, as `rosters.yaml: witness_channel_predicates` defines it.
+        via_knot = src == "firsthand_via_knot"
         # `H-79`: WHAT A DEPOSIT IS ABOUT. #353 §20 types `Claim.subject` and never says what
         # it is for a WITNESS deposit; the instrument used `e.subject`, the ACTOR, which made
         # §F1's Q2 clause "a claim whose subject is SOMETHING THEY HOLD" unreachable and left
@@ -482,7 +523,10 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # THE FOURTH DEPOSIT: THE CONTENT OF A DOCUMENT THIS WITNESS HAS COME TO HOLD (plan position
         # `15`). `(record, "content:<kind>", <subject_matter, frozen>)` -- `content_value` above:
         # the belief is what the document said when it reached this hand, and nothing done to the
-        # Record later reaches back into a ledger. `firsthand` like the deposits above, and it
+        # Record later reaches back into a ledger. `src` like the deposits above -- the admitting
+        # channel's source, `firsthand` for every new holder the tree reaches (measured at
+        # position `15d`: every content claim the realm holds after one season and after three),
+        # and it
         # carries NO attribution: it says *this document says X*, never *the Duke wrote X* (r2 `02`
         # §A.9 -- the separation is what makes a forgery playable). The exact-triple guard is the
         # told channel's, for its reason: one belief is stored once.
@@ -544,9 +588,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
             # read -- a per-(hearer, telling) dict lookup left from the draft that scanned the
             # teller's ledger inline, before `_told_content` became its one owner. Removed rather
             # than kept: it read as though the teller were still consulted at this point.
-            if e.id not in told_by_event:
-                told_by_event[e.id] = _told_content(w, _act)
-            _held = told_by_event[e.id]
+            _held = told_by_event[e.id]   # resolved before the fan, above -- position `15d`
             # ⚠ `act_refs`, NOT A SECOND READ OF THE PAYLOAD. The first writing of this block
             # spelled `(_act.payload or {}).get("subject")` inline -- a copy of `epistemic`'s
             # own reader (`act_refs`, already imported at the top of this file and already

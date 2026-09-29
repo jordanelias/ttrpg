@@ -483,6 +483,23 @@ def remit_or_default(declared) -> list[str]:
 
 WITNESS_CHANNELS = roster("witness_channels", ordered=True)
 CLAIM_SOURCES = roster("claim_sources")
+# Plan position `15d` (proceedings `19_PLAN.md` step 4 (b)): the source a deposit carries is set by
+# the ONE channel `epistemic.observers_for` credits the witness to -- `WITNESS_CHANNELS`' order is
+# that precedence. Cross-validated here, where both rosters it is keyed on are bound, and at import:
+# a channel with no source would deposit under a source nothing declared (or `KeyError` mid-barrier,
+# inside WITNESS's parallel map), and a source outside `claim_sources` is a fifth way of coming to
+# hold a claim that the roster -- *"every value here is a way ONE person came to hold ONE claim"* --
+# does not have.
+CHANNEL_CLAIM_SOURCE = roster_map("witness_channels", "claim_source")
+if (set(CHANNEL_CLAIM_SOURCE) != set(WITNESS_CHANNELS)
+        or not set(CHANNEL_CLAIM_SOURCE.values()) <= set(CLAIM_SOURCES)):
+    raise Unspecified(
+        f"`witness_channels.claim_source` is {CHANNEL_CLAIM_SOURCE!r}; it must key exactly the "
+        f"channels {list(WITNESS_CHANNELS)} and name only {sorted(CLAIM_SOURCES)}",
+        "rosters.yaml",
+        needs="give every channel exactly one source from `claim_sources`",
+        law="19_PLAN.md step 4 (b) -- the claim's source is set FROM A CHANNEL->SOURCE MAP, so "
+            "the map is total over the channels and closed over the sources")
 STRATA = roster("strata", ordered=True)
 # ⚠⚠ **READ FROM THE LEAF, NOT FROM `rosters.yaml`, AND THIS IS THE ONE ROSTER THAT WORKS THAT
 # WAY.** Every other name here comes from `rosters.yaml` because Jordan ruled definitions must not

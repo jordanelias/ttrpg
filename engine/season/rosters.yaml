@@ -262,12 +262,42 @@ rosters:
     from_roster: remit_acts
 
   witness_channels:
-    source: "#353 §28 `:1004` — the five channels the fan-out computes an observer set from"
+    source: "#353 §28 `:1004` — the five channels the fan-out computes an observer set from · order and `claim_source:` from proceedings `19_PLAN.md` step 4 (a)/(b), plan position `15d`"
     open: true
     note: >-
       The channels are named; their PREDICATES are `H-33` and are graded `assumption` with total
       fan-out as the default and the control. Naming a channel is not specifying it.
-    values: [post_remit, co_located, witness_key, document_key, chronicle]
+      ⚠ ORDER IS SEMANTIC HERE (position `15d`): it is the PRECEDENCE, strongest first. A person
+      admitted to one Event by several channels is credited to the FIRST of them
+      (`epistemic.observers_for`), and that one channel sets the deposit's source through
+      `claim_source:` below. The order follows `19_PLAN.md`'s ordinal of remove (*firsthand >
+      knot-sourced > told*): presence first, so a person who WAS IN THE ROOM is never downgraded to
+      hearsay because they also hold the changed thing or sit in the office whose remit covers it
+      — which is what `19_PLAN.md` step 4's *breaks if wrong* names. Among the three `told_by`
+      channels the order decides only which channel is reported, never the source: the holder of
+      the changed thing before the office, the office before the public record. Editing the order
+      changes who holds what as hearsay, a game change, which is why it is data.
+      `claim_source:` is keyed on exactly these five and names only `claim_sources` members
+      (`data/rosters.py` refuses at import otherwise). `chronicle` is `told_by` on
+      `04_CODE_ARCHITECTURE.md` §C.6's own row; `post_remit` is `told_by` on `19_PLAN.md` step 4 —
+      §C.6's table says `inferred` for it, and this row follows the later plan the position
+      builds, `inferred` being `17a`'s to mint for obligees.
+      ⚠ `witness_key` ADMITS THE EVENT'S OWN ANCHOR AS WELL AS ITS KNOT PARTNERS
+      (`_ch_witness_key`'s `pid == anchor`), and one channel carries one source. So an actor with
+      NO PLACE -- whom `co_located` cannot admit -- holds their own act `firsthand_via_knot`, under
+      the event id (S28's knot deposit). §C.6 separates the two (*"change claims about self; via a
+      knot, the partner's deposits"*) and one channel cannot. MEASURED at `15d`: reached only by
+      probe `P21`'s placeless cohort (`crowd_1`, now `firsthand_via_knot` in `runs/TRACE.txt`,
+      where it was `firsthand`); in Carin's world, the realm and the 143-case corpus every anchor
+      that witnessed its own Event was also `co_located`, so presence credited it first.
+    ordered: true
+    values: [co_located, witness_key, document_key, post_remit, chronicle]
+    claim_source:
+      co_located:   firsthand
+      witness_key:  firsthand_via_knot
+      document_key: told_by
+      post_remit:   told_by
+      chronicle:    told_by
 
   claim_sources:
     source: "#353 §20 — how a Claim came to be held"

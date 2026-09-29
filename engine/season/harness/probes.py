@@ -656,9 +656,10 @@ def p15():
     e = Event(H(w.world_seed, w.tick, "p_low", "probe:p15"), "speech.made", [about("p_low")],
               [ROOT], w.tick)
     everyone = list(w.persons)
-    total = observers_for(w, e, "total", everyone)
-    narrow = observers_for(w, e, "presence_only", everyone)
-    five = observers_for(w, e, "all_five", everyone)
+    # Position `15d`: `observers_for` returns `(person, channel)` pairs; this probe asks only WHO.
+    total = [pid for pid, _ch in observers_for(w, e, "total", everyone)]
+    narrow = [pid for pid, _ch in observers_for(w, e, "presence_only", everyone)]
+    five = [pid for pid, _ch in observers_for(w, e, "all_five", everyone)]
     room = [x for x in world_q.presence(w, "Hh") if x in everyone]
     assert len(room) >= 2, "the fixture no longer puts two people in one rung; the test below is vacuous"
     assert set(total) == set(everyone), "the control arm is not the specified behaviour"

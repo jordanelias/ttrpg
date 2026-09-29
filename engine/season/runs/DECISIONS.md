@@ -15,7 +15,7 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (520x)
 - **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (58x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### MATTER's cross-owner operations  ·  `S31.1`  ·  taken 168x
@@ -36,21 +36,21 @@ it did not take. A decision nobody records is a decision nobody can audit.
 ### fan-out over 205 events  ·  `S28/S61`  ·  taken 36x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (36x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 1 events  ·  `S28/S61`  ·  taken 25x
 - **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (21x)
 - **chose:** mode=all_five over 6 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (4x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 6 events  ·  `S28/S61`  ·  taken 12x
 - **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (6x)
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (6x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### ordering 2 acts  ·  `S27/S32`  ·  taken 11x
@@ -67,7 +67,7 @@ it did not take. A decision nobody records is a decision nobody can audit.
 ### fan-out over 22 events  ·  `S28/S61`  ·  taken 6x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (6x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### site_seam crossed the `surface_gleaning` floor  ·  `S12.1/S3-L5`  ·  taken 6x
@@ -82,26 +82,26 @@ it did not take. A decision nobody records is a decision nobody can audit.
 ### fan-out over 37 events  ·  `S28/S61`  ·  taken 5x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (5x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 47 events  ·  `S28/S61`  ·  taken 5x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (5x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 57 events  ·  `S28/S61`  ·  taken 5x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (5x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 7 events  ·  `S28/S61`  ·  taken 4x
 - **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (3x)
 - **chose:** mode=all_five over 6 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (1x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### transfer by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 4x
@@ -111,37 +111,37 @@ it did not take. A decision nobody records is a decision nobody can audit.
 ### fan-out over 2 events  ·  `S28/S61`  ·  taken 4x
 - **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (4x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 68 events  ·  `S28/S61`  ·  taken 4x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (4x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 79 events  ·  `S28/S61`  ·  taken 4x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (4x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 89 events  ·  `S28/S61`  ·  taken 4x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (4x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 99 events  ·  `S28/S61`  ·  taken 4x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (4x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 109 events  ·  `S28/S61`  ·  taken 4x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (4x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### ordering 3 acts  ·  `S27/S32`  ·  taken 3x
@@ -153,73 +153,73 @@ it did not take. A decision nobody records is a decision nobody can audit.
 ### fan-out over 129 events  ·  `S28/S61`  ·  taken 3x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (3x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 139 events  ·  `S28/S61`  ·  taken 3x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (3x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 149 events  ·  `S28/S61`  ·  taken 3x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (3x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 159 events  ·  `S28/S61`  ·  taken 3x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (3x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 169 events  ·  `S28/S61`  ·  taken 3x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (3x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 179 events  ·  `S28/S61`  ·  taken 3x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (3x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 189 events  ·  `S28/S61`  ·  taken 3x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (3x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 199 events  ·  `S28/S61`  ·  taken 3x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (3x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 209 events  ·  `S28/S61`  ·  taken 3x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (3x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 23 events  ·  `S28/S61`  ·  taken 2x
 - **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (2x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 9 events  ·  `S28/S61`  ·  taken 2x
 - **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (2x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 8 events  ·  `S28/S61`  ·  taken 2x
 - **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (2x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### ordering 5 acts  ·  `S27/S32`  ·  taken 2x
@@ -235,37 +235,37 @@ it did not take. A decision nobody records is a decision nobody can audit.
 ### fan-out over 11 events  ·  `S28/S61`  ·  taken 2x
 - **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (2x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 120 events  ·  `S28/S61`  ·  taken 2x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (2x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 119 events  ·  `S28/S61`  ·  taken 2x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (2x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 217 events  ·  `S28/S61`  ·  taken 2x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (2x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 211 events  ·  `S28/S61`  ·  taken 2x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (2x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 206 events  ·  `S28/S61`  ·  taken 2x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (2x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### ordering 15 acts  ·  `S27/S32`  ·  taken 1x
@@ -277,7 +277,7 @@ it did not take. A decision nobody records is a decision nobody can audit.
 ### fan-out over 21 events  ·  `S28/S61`  ·  taken 1x
 - **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (1x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### dispatch by p_high: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
@@ -307,7 +307,7 @@ it did not take. A decision nobody records is a decision nobody can audit.
 ### fan-out over 3 events  ·  `S28/S61`  ·  taken 1x
 - **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (1x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### date d_conf came due  ·  `S24`  ·  taken 1x
@@ -322,79 +322,79 @@ it did not take. A decision nobody records is a decision nobody can audit.
 ### fan-out over 53 events  ·  `S28/S61`  ·  taken 1x
 - **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (1x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 98 events  ·  `S28/S61`  ·  taken 1x
 - **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (1x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 138 events  ·  `S28/S61`  ·  taken 1x
 - **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (1x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 67 events  ·  `S28/S61`  ·  taken 1x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (1x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 77 events  ·  `S28/S61`  ·  taken 1x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (1x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 87 events  ·  `S28/S61`  ·  taken 1x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (1x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 97 events  ·  `S28/S61`  ·  taken 1x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (1x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 107 events  ·  `S28/S61`  ·  taken 1x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (1x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 118 events  ·  `S28/S61`  ·  taken 1x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (1x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 218 events  ·  `S28/S61`  ·  taken 1x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (1x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 38 events  ·  `S28/S61`  ·  taken 1x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (1x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 49 events  ·  `S28/S61`  ·  taken 1x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (1x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 60 events  ·  `S28/S61`  ·  taken 1x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (1x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'post_remit', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### p_low attempted Ob=11 against Pool=5  ·  `S27.4`  ·  taken 1x
