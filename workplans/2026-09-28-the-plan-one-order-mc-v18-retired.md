@@ -184,7 +184,7 @@ four rows of that table found stale in this pass are corrected here, not there: 
 | # | handle | lane | `STATE` | `GATE` | placed at |
 |---|---|---|---|---|---|
 | 1 | **CLOSE-PASS** | IN | OPEN · partial | — | Phase 1 · 1 |
-| 2-i ✦ | **RET-SC (stub)** | IN/SC | OPEN | — | Phase 1 · 3 |
+| 2-i ✦ | **RET-SC (stub)** | IN/SC | **DONE** (stub retired pre-adoption at `0d881e8`; falsifier planted this session) | — | Phase 1 · 3 |
 | 2-ii ✦ | **RET-SC (kernel)** | IN/SC | BLOCKED | `28-iii`, `29b`, `22` | Phase 4 · k |
 | 3–7 | G1a · G1b · G2 · G3 · G4 | IN | **DONE** | — | §2.2 |
 | 7a | **COMMIT-EFFECT** | IN | OPEN | `15`, `15c`, `15b` | Phase 2 |
@@ -274,7 +274,7 @@ census, not the phase number, decides whether it may run beside a Phase-1 item.
 |---|---|---|---|---|
 | 1 | **CLOSE-PASS** (position `1`) | flip the 2026-09-18 plan's §2.1 rows with their citations; write §5.2's closures with theirs; ship the **fold-to-latest script** as the instrument (old §8.3) | **DONE** (`ec1a9d0`, §8.3) | — |
 | 2 | **`28-0` ORPHAN-DELETE** | `FORK:` rows + `git rm` for code with no live caller (list below, narrowed — §8.4) | **DONE**, narrowed scope (§8.4) | — ; precedent `ED-IN-0232` |
-| 3 | **`2-i` RET-SC (stub)** | `contest_legacy_stub.py` + its export ripple; the seam-import detector's one-hop falsifier | OPEN | — |
+| 3 | **`2-i` RET-SC (stub)** | `contest_legacy_stub.py` + its export ripple; the seam-import detector's one-hop falsifier | **DONE** (stub pre-existing, falsifier planted) | — |
 | 4 | **`28-i` (M5)** | port `tools/balance_oracle.py` onto the season harness; retire `campaign_output_probe.py`, `trace_execution_phases.py` and the execution-map cluster | OPEN | — |
 | 5 | **FIGHT-RENAME** | `kill / wound` → `fight`: one row key + one alignment key + re-pins; a declared hash move | OPEN | — ; **before `8`**; never interleaved with `8`, `9` or the cells commit (`§3.9` edge 10) |
 | 6 | **OPENERS-DERIVE** `[L1]` | derive the `openers:` roster from the `@effect_for` registry, or guard their equality | OPEN | — ; before any Phase-2 effect lands |
@@ -347,7 +347,12 @@ position's scope.
 ceiling on rows that cannot be followed, so new resolvable `FORK:` rows do not trip it. **Why first
 among the deletions:** it shrinks every later disposition table in `_part2` §1 and costs no gate.
 
-**3 · `2-i` RET-SC (stub).** Position `2` is split, because only half of it is gate-free.
+**3 · `2-i` RET-SC (stub).** Position `2` is split, because only half of it is gate-free. **DONE —
+`contest_legacy_stub.py` and its export ripple were already gone before this plan was adopted**
+(`0d881e8`, PR #432, 2026-09-26 — a grep of both cited export files at execution time found zero
+references, and `git log --follow` on the deleted path confirms that commit as the removal). Only
+the falsifier was still open; it is now planted, `tests/valoria/test_engine_does_not_import_systems.py
+::test_the_one_hop_relative_import_resolution_can_observe_the_seam_it_exists_to_catch`.
 
 - **`2-i`, now:** `contest_legacy_stub.py`, plus its export ripple (`engine/engine_params/sim_params.json:3851`,
   `value_pointer_links.json`), plus the seam-import detector's one-hop falsifier. That falsifier is a

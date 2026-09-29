@@ -450,6 +450,53 @@ def test_the_one_declared_path_seam_is_still_the_only_one():
     )
 
 
+def test_the_one_hop_relative_import_resolution_can_observe_the_seam_it_exists_to_catch(tmp_path):
+    """Plan position `2-i` (`workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` §3.1 item 3).
+
+    `_relative_module_files`'s own docstring discloses an honest gap: no file in the current tree
+    exercises its one-hop resolution (`_PC = files.PC_ENGINE_DIR` then `sys.path.insert(0,
+    str(_PC))`), so nothing proved the branch still works if it broke (§0.1 pt 2). This plants the
+    shape by hand: an `importer.py` that assigns a local name to an ATTRIBUTE of a relatively-
+    imported sibling module, then inserts that name onto `sys.path`; the sibling's own constant is
+    the one that actually reaches `"systems"`. Neither file alone contains the literal seam a naive
+    regex could catch — only the two-file hop does, which is exactly the shape that went blind on
+    2026-09-07 when an anchor consolidation moved a seam's literal one hop away.
+    """
+    anchor = tmp_path / 'files.py'
+    anchor.write_text(
+        'from pathlib import Path\n'
+        'PC_ENGINE_DIR = Path(__file__).parent.parent / "systems" / "combat"\n'
+    )
+    importer = tmp_path / 'combat_seam.py'
+    importer_text = (
+        'import sys\n'
+        'from . import files\n'
+        '_PC = files.PC_ENGINE_DIR\n'
+        'sys.path.insert(0, str(_PC))\n'
+    )
+    importer.write_text(importer_text)
+
+    resolved = _relative_module_files(importer_text, importer)
+    assert resolved == {'files': anchor}, (
+        f'the one-hop resolver did not find the sibling module: {resolved}'
+    )
+    assert _inserts_a_systems_path(importer_text, importer) is True, (
+        'planted one-hop seam (importer -> sibling.CONST -> "systems") went undetected — the '
+        'branch this test exists to prove is load-bearing is not catching its own target case'
+    )
+
+    # THE FAILURE THIS EXCLUDES: without the one-hop resolution, `_chain_hits` stops at the bare
+    # attribute `files.PC_ENGINE_DIR` (not a local NAME) and reports the file clean — the exact
+    # 2026-09-07 defect. Reproduced directly, not inferred: the same chain with the sibling's
+    # constant withheld from `assigned` (what `_relative_module_files` returning `{}` would starve
+    # it of) does not reach the literal.
+    names_re = re.compile(r"""['"]systems['"]|/systems/""")
+    assert _chain_hits('str(_PC)', {'_PC': 'files.PC_ENGINE_DIR'}, names_re) is False, (
+        'the local-assignment-only chain (no one-hop) unexpectedly reached "systems" on its own — '
+        'this planted case no longer isolates what the one-hop branch adds'
+    )
+
+
 def test_the_import_probe_can_observe_both_kinds_of_leak():
     """§0.1 pt 2 — the probe must be able to FAIL, and in BOTH the ways it is supposed to catch.
     Its whole result is "the list was empty", which is also what a broken probe returns.
