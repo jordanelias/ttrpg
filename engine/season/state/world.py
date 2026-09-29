@@ -615,6 +615,12 @@ class World:
         `test_season_shape.py` falsifiers that already wrap it in `w.write(...)`) already
         satisfies it, so this changes no existing behaviour or emission.
 
+        ⚠ THE CHECK IS "SOME WRITE OPEN", NOT "THE RIGHT WRITE OPEN" -- see `hole_register.yaml`
+        H-131's own further-narrowed correction (methodology close, terminal critique, 2026-09-29):
+        `is_open` cannot see WHICH `(record_kind, fieldname)` is open, only that one is. Not a live
+        gap (every real caller opens one of three pairs); disclosed there rather than tightened
+        here, since nothing exercises the gap today.
+
         ⚠⚠ CORRECTED (methodology close, antagonist pass, 2026-09-29): THE ORIGINAL WRITING OF THIS
         NOTE CLAIMED MORE THAN THE CODE THEN DELIVERED. `World.write`'s success path did not call
         `gate.close()` — only its two refusal branches did (H-131, `hole_register.yaml`, found this
@@ -626,13 +632,19 @@ class World:
         World, not the realistic misuse case (a world already in play) this note claimed to
         prevent. Fixed in the same pass: `World.write`'s success path now calls `self.gate.close()`
         too, symmetric with the two refusal-path calls, so the property genuinely holds now.
-        ⚠ THE LINE CITATION THIS PARAGRAPH ORIGINALLY GAVE (`:1056`) IS ALREADY STALE: the
-        hand-written success-path call it named was itself replaced one paragraph below, by the
-        `/simplify` pass the same day, with the single `finally:` (`:1090`) whose body calls
-        `self.gate.close()` at `:1109`.
-        Left unfixed it would be exactly `CLAUDE.md` §0.1 pt 3's *"a citation you have not
-        opened is not a citation"* — a reader following it would land on `Event(...)`
-        construction, not a gate call. MEASURED, not assumed: every existing death/`remove_person` test in
+        ⚠ THE LINE CITATION THIS PARAGRAPH ORIGINALLY GAVE (`:1056`) WAS ALREADY STALE, AND ITS OWN
+        REPLACEMENT (a line number to the `finally:`) WENT STALE AGAIN THE MOMENT IT WAS WRITTEN —
+        because a docstring correction added ABOVE code it cites shifts every line number below it,
+        making a numeric self-citation in this exact paragraph unfixable by construction, not merely
+        unlucky twice. Cited by SYMBOL instead, which a later edit cannot move: the hand-written
+        success-path call this paragraph named was replaced one paragraph below, by the
+        `/simplify` pass the same day, with the single `finally: self.gate.close()` closing this
+        same method (`World.write`) — there is exactly one `finally` clause in this class, so
+        `rg -n 'finally:' state/world.py` finds it without a line number going stale again.
+        Leaving a numeric citation here would be exactly `CLAUDE.md` §0.1 pt 3's *"a citation you
+        have not opened is not a citation"* — a reader following a stale one would land on
+        whatever code happened to drift into that slot instead. MEASURED, not assumed: every
+        existing death/`remove_person` test in
         `engine/season/tests` still passes unchanged (`test_march.py`, `test_g3_not_yours.py`,
         `test_season_shape.py`'s P24/P25 probes and its partition-seam test), and
         `test_gate_remove_person_requires_an_open_write.py` gained a second case exercising the
@@ -643,8 +655,8 @@ class World:
         ⚠⚠ CORRECTED AGAIN, SAME DAY (methodology close, `/simplify` ALTITUDE pass, 2026-09-29):
         the fix directly above added a THIRD hand-written `self.gate.close()` at the success
         return, mirroring the two refusal-branch calls already there (F3 `not_yours`, F9 `no_op`)
-        — and missed a FOURTH exit that already existed and still leaked: the S33 `Forbidden` a
-        few lines below this docstring (a declared emission with no `subject=`) also raises after
+        — and missed a FOURTH exit that already existed and still leaked: later in this same
+        method's body, the S33 `Forbidden` (a declared emission with no `subject=`) also raises after
         `.opening()`, with no `close()` on that path either. Enumerating exits by hand to patch
         them one at a time is exactly how the first gap survived three days and how this second
         one survived the first fix. Replaced all three scattered calls with the body wrapped in
@@ -952,10 +964,14 @@ class World:
 
         # G1a. THE WINDOW OPENS HERE -- after every refusal above has had its chance and
         # immediately before the mutation, so a write that is going to be refused never
-        # authorizes a mint. It stays open past `apply()` deliberately: `loop/resolve.py`'s
-        # `_apply_write` learns WHAT it changed from inside that closure and mints its receipts
-        # after this call returns. `state/gate.py`'s header states the bound that buys and the
-        # one it does not.
+        # authorizes a mint. ⚠ CORRECTED (methodology close, terminal critique, 2026-09-29): this
+        # comment described the PRE-G4 shape, where the window stayed open past `apply()` so
+        # `loop/resolve.py`'s `_apply_write` could mint from outside, after this call returned.
+        # Since G4 the gate mints internally -- for a `Change`, at both `self.gate.mint(...)` call
+        # sites below, inside this same `try` -- and the fold mints nothing; the window now closes,
+        # unconditionally,
+        # before THIS call returns (the `finally` at the method's end), never surviving past it.
+        # `state/gate.py`'s header states the bound that buys and the one it does not.
         self.gate.opening(record_kind, fieldname, wclass.value, self.tick)
         try:
             # G3 -- F3, `04 §C.2`: WHO WROTE EACH TENURE. The store is observed around `apply()`
@@ -1093,17 +1109,20 @@ class World:
             # two refusal branches above closed the window by hand (`not_yours`, `no_op`); the
             # SUCCESS path did not, so `gate.is_open` stayed permanently True after any world's
             # first successful write, never resetting at a season/step boundary — making
-            # `remove_person`'s bare-call guard (`:627`) vacuous the instant a season actually ran,
+            # `remove_person`'s bare-call guard (its `if not self.gate.is_open:` line, above)
+            # vacuous the instant a season actually ran,
             # since it could only ever catch a call on a pristine, never-written World. The first
             # fix added a THIRD hand-written `close()` at the success return, matching the two —
-            # and missed a FOURTH exit that already existed: the S33 `Forbidden` a few lines above
+            # and missed a FOURTH exit that already existed: the S33 `Forbidden`, earlier in this
+            # same try block,
             # (no `subject=` on a declared emission) also raises after `opening()`, and nothing had
             # ever closed the window on THAT path either. Enumerating exits by hand is exactly the
             # failure mode that let both gaps stand — the SECOND pass (ALTITUDE lens, same
             # methodology close) replaced all three hand-written calls with this ONE unconditional
             # `finally`, so window-closure no longer depends on anyone remembering to add it at a
             # new or overlooked exit. Safe for the same reason as before: `is_open` has exactly one
-            # production reader (`remove_person`, `:627`) and `mint()` has exactly one caller
+            # production reader (`remove_person`'s bare-call guard, above) and `mint()` has exactly
+            # one caller
             # (`World.write` itself, both calls inside this `try`, so nothing after it still needs
             # the window). Narrower than H-131's own open question (closing at ORDINARY BARRIER
             # TRANSITIONS independent of any write) — this closes only the window THIS call opened.

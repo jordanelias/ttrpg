@@ -3,7 +3,7 @@ called with no gate write open, making AX-4 (`04:115`, "one write path") mechani
 function instead of a discipline on its three callers (`state/world.py::remove_person`'s own
 docstring has the full history).
 
-THREE ARMS, so this is a measurement and not a one-sided claim (`CLAUDE.md` §0.1 pt 4):
+FOUR ARMS, so this is a measurement and not a one-sided claim (`CLAUDE.md` §0.1 pt 4):
 
   1. THE FALSIFIER. A bare `w.remove_person(...)` -- no `World.write` window open -- raises
      `InstrumentDefect` and touches nothing: the check is the function's first line, before any
@@ -27,8 +27,10 @@ THREE ARMS, so this is a measurement and not a one-sided claim (`CLAUDE.md` §0.
   4. THE MID-WRITE EXCEPTION CASE, added the same close, one `/simplify` ALTITUDE pass later. Arm 3's
      own fix (a third hand-written `close()` at the success return) missed a FOURTH exit that
      already existed: `write()`'s S33 check (a declared emission with no `subject=`) raises
-     `Forbidden` AFTER the mutation and the mint have already happened, and nothing closed the
-     window on that path either -- the same leak arm 3 fixed, at a site nobody had enumerated.
+     `Forbidden` AFTER the mutation has already happened -- on a closure write with no `subject=`,
+     no mint has happened yet either, since S33 fires before the `Event`/`gate.mint(...)` block it
+     guards -- and nothing closed the window on that path either -- the same leak arm 3 fixed, at a
+     site nobody had enumerated.
      Fixed by replacing every hand-written `close()` with one `try`/`finally`, so closure no longer
      depends on catching every exit by name. This arm exercises exactly that exit: a write whose
      mutation SUCCEEDS but which then raises from deep in its own tail, proving the gate still
@@ -100,12 +102,13 @@ def test_a_bare_call_after_a_prior_successful_write_still_raises():
 
 
 def test_a_write_that_raises_from_its_own_tail_still_closes_the_gate():
-    """The mid-write exception case: the mutation succeeds, the mint already happened, and THEN
-    the S33 check (a declared emission with no `subject=`) raises `Forbidden` from deep in
-    `write()`'s own tail -- an exit that existed before this position and that the first,
-    hand-written `close()` fix never touched. If the window leaked open here, this test could not
-    tell it apart from a correctly-closed one just by checking `is_open` once; the second bare
-    call on an unrelated victim is what actually proves it."""
+    """The mid-write exception case: the mutation succeeds, and THEN the S33 check (a declared
+    emission with no `subject=`) raises `Forbidden` from deep in `write()`'s own tail -- before any
+    mint on this path, since S33 guards the `Event`/`gate.mint(...)` block that would otherwise
+    follow it -- an exit that existed before this position and that the first, hand-written
+    `close()` fix never touched. If the window leaked open here, this test could not tell it apart
+    from a correctly-closed one just by checking `is_open` once; the second bare call on an
+    unrelated victim is what actually proves it."""
     w = tiny_world()
     w.step = Step.MATTER
 

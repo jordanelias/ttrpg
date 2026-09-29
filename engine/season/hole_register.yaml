@@ -350,8 +350,8 @@ rows:
     owner:     "Rung"
     grade:     "assumption"
     default:   "live holders of a `hold` on an Office whose `remit.acts` includes `determine` AND whose `scope_rung` contains the sitting's rung; EMPTY SET -> the date fires and lapses"
-    site:      "sitting.judging_set"
-    sweep:     ["remit+scope (the default)", "remit only", "scope only"]
+    site:      "sitting.judging_set -- ⚠ STALE (methodology close, terminal critique, 2026-09-29): `judging_set` was BUILT at `queries/world_q.py::judging_set(w, venue, matter=None)` (plan position `18`/PROC-A, 2026-09-29), not as a `sitting.` method; this row was never repointed"
+    sweep:     ["remit+scope (the default)", "remit only", "scope only"] # ⚠ NOT BUILT (same correction): the shipped function hardcodes `basis = \"determine\"` with no fixture or arm-switching mechanism -- there is nothing to sweep with today, so \"swept predicate\" elsewhere in this row's history is aspirational, not run
     unblocks:  "2"
     cite:      "PLAN §3.2. Shape ruled: `judging_set(w, ...)` is listed among the RESOLVER-SIDE Queries at #353 :599, so its shape is settled and only the predicate is open. The empty-set behaviour is #353 :835 VERBATIM: \"A vacant date fires, allocates nothing, and lapses. It does not block.\" ⚠ PLAN §3.2 cites :837 for that sentence; it is at :835. Verified by hand 2026-09-02."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent** | V2's default cell: none. ⚠ **nothing is decided at a sitting**"
@@ -3277,7 +3277,21 @@ rows:
       calls preceding where the new `close()` sits) and the falsifier file gained a second case
       for the realistic scenario. AX-4 now holds by construction as originally claimed; it did not
       between position 7's own commit and this correction. See `H-131`'s own updated `cite:` for
-      the fuller account."
+      the fuller account.
+
+      ⚠⚠ 'BY CONSTRUCTION' NARROWED AGAIN, CORRECTED 2026-09-29 (methodology-close terminal
+      critique, same day as the two corrections above). Both prior corrections fixed WHEN the
+      window closes; neither checked WHICH window `remove_person`'s guard accepts. It reads only
+      `self.gate.is_open` -- true for ANY open write, whatever `(record_kind, fieldname)` pair it
+      is for -- though `Gate`'s `_Window` already records both. So a hypothetical future closure
+      wrongly declared under an unrelated pair, mid-write, would still pass this guard: 'by
+      construction' still means 'inside some open write', not 'inside the write this function's
+      own callers use'. NOT a live bug: every one of today's five call sites opens with
+      `(Person, body)`, `(Person, exists)` or `(Tenure, until)`, so a one-line tightening
+      (`self.gate._open.record_kind, .fieldname` against that allowed set) would change nothing
+      observable today. Deliberately not built here -- narrowing a guard against no live caller is
+      the inverse of a guard earning its existence (`CLAUDE.md` §0.1 pt 5) -- disclosed instead, so
+      a future reader does not re-derive 'by construction' more strongly than the code delivers."
     source:    "M4 review pass (`valoria-critic`, second correctional round), on
       `loop/effects.py::_eff_march`'s own `remove_person` fix from the first correctional round.
       The gate-bypass closure note is `GATE-REMOVE-PERSON`, plan position 7, 2026-09-29."

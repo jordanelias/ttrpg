@@ -153,7 +153,7 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
     own snapshot instead, the same as `person_side_eligible`.
 
     ⚠ `matter` IS ACCEPTED, NOT YET LOAD-BEARING. The design's signature is
-    `judging_set(w, venue, matter)` because a per-arrangement `bench_basis` (`data/arrangements.yaml`,
+    `judging_set(w, venue, matter)` because a per-arrangement `bench_basis` (`engine/season/arrangements.yaml`,
     part 3 of this same position) is meant to select the remit act a matter's disposal reads --
     but nothing yet maps a docketed matter to its governing arrangement row (that is PHASE 2 step
     10's docketing, explicitly weighed and left OPEN by this position's own record rather than
@@ -166,7 +166,20 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
 
     ⚠ A SEAT WITH NO `scope_rung` REACHES NOTHING -- the office-cluster case (S6.2, `Office.rung
     is None`) has no ground to be contained on, exactly as `purview_reaches` treats it. It is a
-    CONTENT fact about such a seat, not a bug here."""
+    CONTENT fact about such a seat, not a bug here.
+
+    ⚠ CORRECTED (methodology close, terminal critique, 2026-09-29): THE PARAGRAPH ABOVE OVERSTATES
+    THE EQUIVALENCE. `off.scope_rung is None` does NOT only happen in the office-cluster case
+    (`off.rung is None`) -- `carriers.py::Office.__post_init__` auto-sets `scope_rung` ONLY for a
+    TITLED post (`title_domain(self.post)` non-`None`); a seated, RANKED, non-titled office
+    (`off.rung` set, no title) gets no `scope_rung` unless one is authored for it by hand in
+    `offices.yaml`, and this function excludes such a seat from EVERY bench, silently, the same way
+    it excludes a true cluster seat -- a different content fact than the one this docstring claimed,
+    not the same one restated. `state/gate.py::purview_reaches` asks the same containment question of
+    `off.rung` (always set for a seated office) and would not exclude it. This function reads
+    `scope_rung` rather than `rung`/`purview_reaches` by `H-32`'s own ruled default
+    (`hole_register.yaml`, H-32), which is precedent this correction does not reopen -- it corrects
+    only the FALSE claim that the two fields' `None` cases coincide, not the choice of field."""
     TRACE.query("judging_set", "resolver")
     basis = "determine"
     reach = set(ancestry(w, venue))
@@ -461,8 +474,9 @@ def sovereign_fraction(w: World, rung_id: str) -> tuple[float, int]:
 
     ⚠⚠ `undetermined_count` IS NOT "UNHELD TERRITORY", AND THIS DOCSTRING USED TO SAY *"sovereignty
     is over TERRITORY"*, WHICH INVITED EXACTLY THAT READING -- a reviewer made it. EVERY OTHER rung
-    kind in the denominator is GOVERNABLE: `rosters.yaml: titles` declares a title for each, and
-    `TITLE_DOMAINS` is the roster -- `Family Head` governs `hearth`, `Community Leader` governs
+    kind in the denominator is GOVERNABLE: `offices.yaml: titles: domains:` declares a title for
+    each (moved from `rosters.yaml: titles`, position `8a`, 2026-09-29 -- `TITLE_DOMAINS`/
+    `title_domain` in `data/rosters.py` read the survivor), and `Family Head` governs
     `community`, `Mayor` governs `settlement`, `Lord` territory, `Duke`/`Duchess` duchy,
     `King`/`Queen` realm. So an unheld hearth is a governable seat nobody holds, not noise.
 

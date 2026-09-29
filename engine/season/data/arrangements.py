@@ -22,7 +22,7 @@ explicitly out of this position's five parts). So the check, read as a hard load
 refuse EVERY row this loader could ever carry -- `determine` opens nothing today, for any Tenure kind,
 and neither does any verb yet open an `oblige` on a mutual disposal's behalf. Enforcing it would make
 the loader vacuous, contradicting this position's own stated artifact ("twelve rows load"). Built
-instead as a REPORT (`arrangements_disposal_openers()`), on the exact precedent
+instead as a REPORT (`arrangements_without_a_disposal_opener()`), on the exact precedent
 `tenure_kinds_without_an_opener()` already sets one file over for the identical kind of fact: a kind
 with a declared `writes:` cell and no opener is *"a real, disclosed hole, not an absent declaration."*
 A row failing C-1 today is disclosed by that function, not silently admitted and not blocked.
@@ -254,11 +254,16 @@ def arrangements_without_a_disposal_opener() -> list[str]:
     id whose `disposes` kind has no opener naming `determine` -- or, for `disposal: mutual`, whose
     `oblige` has no opener at all -- in `data/verbs.py::_derive_openers_from_effects()`'s map.
 
-    ⚠ MEASURED, NOT ASSUMED: at this position's own commit, `determine` opens nothing (no
-    `_eff_determine` exists) and `oblige` has no opener either (`rosters.yaml: tenure_kinds`'s own
-    note: "the other five empty"), so EVERY seeded row reports here today. That is the disclosed
-    gap this function exists to make checkable rather than silent -- the same shape
-    `tenure_kinds_without_an_opener()` already reports one file over."""
+    ⚠ MEASURED, NOT ASSUMED, AND CORRECTED (methodology close, terminal critique, 2026-09-29):
+    at this position's own commit, `determine` opens nothing (no `_eff_determine` exists) and
+    `oblige` has no opener either (`rosters.yaml: tenure_kinds`'s own note: "the other five
+    empty") -- but that reports only the seeded rows this check actually ASKS: a row disposing
+    `Record` or `none` is excluded below (`continue`, "C-1 is about a TENURE kind's opener; neither
+    is one"), so it is the seeded rows disposing a real Tenure kind or `mutual` that report today,
+    not every seeded row -- `test_arrangements.py` pins this exactly (`["arbitration"]`, the one
+    seeded row disposing a Tenure kind, against two `Record`-disposing rows that are correctly
+    absent). That is the disclosed gap this function exists to make checkable rather than silent --
+    the same shape `tenure_kinds_without_an_opener()` already reports one file over."""
     from .verbs import _OPENERS_FROM_EFFECTS as openers
     out = []
     for name, row in ARRANGEMENTS.items():

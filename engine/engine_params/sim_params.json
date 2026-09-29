@@ -3,16 +3,16 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 172,
-    "total": 424,
-    "uncited": 252,
+    "total": 421,
+    "uncited": 249,
     "of_which_assumption_grade": 11
   },
-  "count": 424,
+  "count": 421,
   "by_module": {
     "engine.autoload": 14,
-    "engine.cross_scale": 13,
+    "engine.cross_scale": 9,
     "engine": 1,
-    "engine.season": 7,
+    "engine.season": 8,
     "characters": 7,
     "combat": 12,
     "factions": 65,
@@ -201,55 +201,6 @@
       "citation_grade": "source"
     },
     {
-      "key": "engine.cross_scale.ACCORD_ECHO_PER_TERRITORY_CAP",
-      "name": "ACCORD_ECHO_PER_TERRITORY_CAP",
-      "value": 1,
-      "kind": "scalar",
-      "module": "engine.cross_scale",
-      "file": "engine/cross_scale/domain_echo.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "engine.cross_scale.ECHO_AMOUNT_BY_DEGREE",
-      "name": "ECHO_AMOUNT_BY_DEGREE",
-      "value": {
-        "Overwhelming": 2,
-        "Success": 1,
-        "Partial": 0,
-        "Failure": -1
-      },
-      "kind": "table",
-      "module": "engine.cross_scale",
-      "file": "engine/cross_scale/domain_echo.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "engine.cross_scale.ECHO_STAT_CAP",
-      "name": "ECHO_STAT_CAP",
-      "value": 2,
-      "kind": "scalar",
-      "module": "engine.cross_scale",
-      "file": "engine/cross_scale/domain_echo.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "engine.cross_scale.PP_329_ECHO_PER_SCENE_PER_FACTION",
-      "name": "PP_329_ECHO_PER_SCENE_PER_FACTION",
-      "value": 1,
-      "kind": "scalar",
-      "module": "engine.cross_scale",
-      "file": "engine/cross_scale/domain_echo.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
       "key": "engine.cross_scale.GENERAL_DUEL_EXCHANGES_PER_TURN",
       "name": "GENERAL_DUEL_EXCHANGES_PER_TURN",
       "value": 1,
@@ -388,6 +339,17 @@
       "note": "[JUSTIFIED: #353 `:333` types the row `(referent, valence -5..+5, weight 0..5)` — the type's own bound, not a tuning; ED-IN-0229]",
       "citation": "ED-IN-0229",
       "citation_grade": "source"
+    },
+    {
+      "key": "engine.season.Z_THRESHOLD",
+      "name": "Z_THRESHOLD",
+      "value": 1.96,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/harness/arms.py",
+      "note": "two-sided 5%",
+      "citation": null,
+      "citation_grade": null
     },
     {
       "key": "engine.season.DEFAULT_SEASONS",
