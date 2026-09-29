@@ -2397,85 +2397,12 @@ class Subunit:
             return "flank_engaged"
         return "normal"
 
-    # [canonical: Jordan design — cell capacity, discipline-gated merge, midpoint facing on formation breakdown]
-    def resolve_internal_collisions(self, unit_discipline):
-        """v13: discipline-gated formation hold.
-
-        After advance_cells + halt_before_enemy, detect cells of THIS subunit that
-        occupy the same absolute position. Bottom-up: a cell has finite capacity;
-        two cells cannot meaningfully occupy the same battlefield position without
-        merging — and merging is a tactical failure (lost formation, broken facing).
-
-        For each collision cluster (>1 cells at same abs pos):
-          - Anchor: cell with smallest orig_r (formation-front position)
-          - For each trailing cell:
-            - Roll d10 vs unit_discipline
-            - PASS (roll <= discipline): trailing cell reverts to its previous
-              position (snapshot from start of this turn's advance_cells). Formation
-              held; cell stays in its assigned slot.
-            - FAIL (roll > discipline): cells merge at the collision position.
-              Their cell_facing_vec is averaged (midpoint vector). This propagates
-              through per-cell octagon angle — misaligned facing produces YELLOW/RED
-              zones more often, modelling vulnerability of broken formation.
-
-        Returns (n_halted, n_merged) for diagnostics.
-        Citation: see preceding canonical comment.
-        """
-        if not self._prev_offsets:
-            return (0, 0)  # First turn, no snapshot to revert to
-        op = _oriented(self)
-        pos_to_cells = {}
-        for orig_r, orig_c, or_r, or_c in op:
-            ar = (self.starting_position[0] + or_r
-                  + self.cell_offsets.get((orig_r, orig_c), 0) * self.advance_dir)
-            ac = (self.starting_position[1] + or_c
-                  + self.cell_offsets_c.get((orig_r, orig_c), 0))
-            pos_to_cells.setdefault((ar, ac), []).append((orig_r, orig_c))
-        n_halted = 0
-        n_merged = 0
-        for pos, cells in pos_to_cells.items():
-            if len(cells) <= 1:
-                continue
-            # Anchor: smallest orig_r (front-most in formation) breaks ties by orig_c
-            cells_sorted = sorted(cells, key=lambda c: (c[0], c[1]))
-            anchor = cells_sorted[0]
-            for trailing in cells_sorted[1:]:
-                # Discipline check: a single d10 rolled UNDER the unit's discipline
-                # (p = discipline/10). NOT a TN — TN is 7, always, everywhere
-                # [Jordan, 2026-08-25: "TN7 always. Never change TN anywhere ever."].
-                # The prior comment read "[canonical: params/core.md — d10 vs TN; here
-                # TN = unit_discipline]", which mislabelled a roll-under attribute check as a
-                # varying TN. Canon frames it as discipline (mass_battle_integration_v30.md),
-                # and the live discipline checks elsewhere in this engine roll discipline as a
-                # POOL against an Ob (orchestration.py feigned-retreat and morale-cascade),
-                # not roll-under.
-                # RELABEL ONLY, no behaviour change: `resolve_internal_collisions` has zero
-                # call sites (orchestration.py:1948 says so), so this primitive is dead. If it
-                # is ever wired, the MB lane picks between roll-under and the pool-vs-Ob shape
-                # its siblings use — that is a design call, not a comment fix. (ED-IN-0196)
-                roll = rngsource.get().randint(1, 10)
-                if roll <= unit_discipline:
-                    # PASS: revert trailing cell to its previous position (formation held)
-                    self.cell_offsets[trailing] = self._prev_offsets.get(trailing, 0)
-                    self.cell_offsets_c[trailing] = self._prev_offsets_c.get(trailing, 0)
-                    self.cell_facing_vec[trailing] = self._prev_facings.get(
-                        trailing, (self.advance_dir, 0)
-                    )
-                    n_halted += 1
-                else:
-                    # FAIL: cells merge with midpoint facing (formation broken)
-                    anc_fv = self.cell_facing_vec.get(anchor, (self.advance_dir, 0))
-                    tr_fv = self.cell_facing_vec.get(trailing, (self.advance_dir, 0))
-                    mid_fv = (
-                        (anc_fv[0] + tr_fv[0]) / 2,
-                        (anc_fv[1] + tr_fv[1]) / 2,
-                    )
-                    self.cell_facing_vec[anchor] = mid_fv
-                    self.cell_facing_vec[trailing] = mid_fv
-                    self.merged_cells.add(anchor)
-                    self.merged_cells.add(trailing)
-                    n_merged += 1
-        return (n_halted, n_merged)
+    # `resolve_internal_collisions` (v13 discipline-gated formation hold; zero call sites since
+    # 2026-05-29) DELETED per ED-MB-0057's re-adjudicated disposition (superseding row, 2026-09-15;
+    # proposals/2026-09-25-squad-engagement-synthesis.md Part B: "the concept's cells never move
+    # alone anyway; delete it with ED-MB-0057's dispositions" — its co-location case is closed by
+    # ED-MB-0059's same-side field exclusion instead). Full text at
+    # `references/restructure_ledger.md` FORK: this commit.
 
 
 class _ToiCell:

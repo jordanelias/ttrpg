@@ -487,3 +487,19 @@ one, mirroring `build_army`'s own fix and the pre-existing DG-4 per-subunit mora
 this constructor already follows. Does not backport DG-4's morale fix itself — `make_mixed_unit` still
 leaves per-subunit morale unseeded unless a spec sets it explicitly, a pre-existing gap unrelated to
 A6, left alone.
+
+## 2026-09-29 — R3 gauge row fixed: a test-fixture defect, not a balance finding (`ED-MB-0044`)
+
+**Not a coverage-extent change — R3 ('Ranged vs Ranged mirror') was already in the battery; it was
+measuring nothing.** Both sides carried `stance:'hold'`, and `hold` is an unconditional early-return
+from steering on both the node and legacy paths (`hierarchy/units.py`'s `_node_advance`/
+`advance_cells`) — so at tier-3 spawn separation (15 cells, outside `VOLLEY_MAX_RANGE=8`) neither side
+ever moved or fired: a structural 100%-draw/0%-casualty result every run, confirmed before this fix
+(`decA=50.0, dec_n=0, a_cas=0.0, b_cas=0.0` at n=20). `ED-MB-0044`'s superseding row (2026-09-15)
+named the one-line fix its own analysis recommended over bypassing the engine's `hold` semantics
+(load-bearing elsewhere — `build_envelopment`'s `freeze_wings`, `build_refused_flank`'s refused wing):
+change the SCENARIO, not the engine. Both sides now build `stance='balanced'` + `instructions=('kite',)`,
+letting `_kite_goal`'s band-seeking primitive close to volley range and hold it. Verified non-vacuous
+at the gauge's own production sample size (n=60, multi mode): `decA=47.2` (band 42-58, PASS), draws
+11.7% (well under the 30% low-draw ceiling, though R3's own `draw_exp` is `'high'` and does not require
+it). No other gauge row changed shape or kwargs.
