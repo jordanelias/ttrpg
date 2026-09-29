@@ -11212,13 +11212,25 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # this RED. `roll_net` also substring-matches `roll_net_continuous`, which is why the whole
     # package is re-scanned rather than the one file trusted.
     # [GROUNDED: measured 2026-09-11 over `files.package_modules()` minus the test module -- the margin-producing lines are exactly the two in `seam/wrappers/sigma.py`]
+    #
+    # ⚠ `harness/arms.py`'s retired `_pool_arm` (plan position `28-i`, `1320045`) monkeypatches
+    # `engine.autoload.sigma_leverage.roll_net_continuous` -- a DIFFERENT, older dice-engine
+    # function this test does not guard, coincidentally sharing the `roll_net` substring the
+    # comment above already named as this scan's known hazard. It is historical/unwired (same
+    # status `tools/balance_oracle.py` gave it), reads and monkeypatches an existing attribute, and
+    # composes no margin of its own -- not the second producer `S27.2` refuses. Excluded by exact
+    # path, not by widening the regex, so a REAL second producer anywhere else still turns this red.
+    _FALSE_POSITIVE_NOT_A_PRODUCER = {"harness/arms.py"}
     producers = set()
     for f in files.package_modules():
         if f == files.TEST_PY:
             continue
+        rel = f.relative_to(files.PACKAGE_DIR).as_posix()
+        if rel in _FALSE_POSITIVE_NOT_A_PRODUCER:
+            continue
         for i, line in enumerate(_code_only_lines(f), 1):
             if re.search(r"\bnet\b\s*=|roll_pool|roll_net|net_boost|\bsuccesses\b", line):
-                producers.add(f.relative_to(files.PACKAGE_DIR).as_posix())
+                producers.add(rel)
     assert producers == {"seam/wrappers/sigma.py"}, (
         f"the margin producers are {sorted(producers)}. Exactly one module may produce a margin — "
         "`S27.2` names a second resolver as this architecture's highest-value refusal, and the "
