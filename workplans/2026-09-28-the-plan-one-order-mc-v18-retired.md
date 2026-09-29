@@ -279,7 +279,7 @@ census, not the phase number, decides whether it may run beside a Phase-1 item.
 | 5 | **FIGHT-RENAME** | `kill / wound` → `fight`: one row key + one alignment key + re-pins; a declared hash move | **DONE** (§8.6) | — ; **before `8`**; never interleaved with `8`, `9` or the cells commit (`§3.9` edge 10) |
 | 6 | **OPENERS-DERIVE** `[L1]` | derive the `openers:` roster from the `@effect_for` registry, or guard their equality | OPEN | — ; before any Phase-2 effect lands |
 | 7 | **GATE-REMOVE-PERSON** `[L1]` | route `World.remove_person` through `World.write`; a declared hash move | OPEN | — ; shares `loop/matter.py` with `24f`'s build — serial |
-| 8 | **`13` W28-cast** | the `cast:` blocks and their reader in `build_at`; the harness loader's count | OPEN | — ; precondition of `17` and of `ED-FI-0009` |
+| 8 | **`13` W28-cast** | the `cast:` blocks and their reader in `build_at`; the harness loader's count | **DONE**, narrowed scope — 5 of 46 NPC cases (§8.7) | — ; precondition of `17` and of `ED-FI-0009` |
 | 8a | **`13d-i` item (5)** | `offices.yaml` + its `harness/populated.py` wiring; the `titles` fold | OPEN | — ; before `18a` (placed by the author, §2.3) |
 | 9 | **`18` PROC-A** | re-host the 28 stress tests; `world_q.judging_set`; `convene` + the `rank` stem; `arrangements.yaml` through the one loader; D-6/D-7 as swept fixtures | OPEN | — (SC lane); a hard dependency of `18a` and `19` |
 | 10 | **`24f` — the design step** | specify who eats; **NAME the cohort producer** before any code | **DONE** (§3.1 item 10 body text has the decision) | — ; the BUILD (Phase 2 tail) shares `matter.py` with item 7 |
@@ -1448,6 +1448,83 @@ grep confirms no committed file pins `corpus_run`'s literal stdout (only its own
 load-bearing follow-ons the brief's file list did not name** (the `EFFECTS` registration, the two
 corpus-case `exercises:` tokens, and the two synthetic-placeholder collisions) **and the required
 re-pins, each re-measured rather than guessed.** Nothing here needed Jordan.
+
+### 8.7 · Made at position `8`'s execution — `13` W28-cast, `cast:` blocks + the reader in `build_at`
+
+**Scope taken, and why it is narrower than the 2026-09-18 plan's `_part2` §13.** That entry's schema
+(`who_acts`, `one_line`, `knowledge`, `WAITS-ON-PLAYER`) and `architecture/PLAN.md`'s `W27`/`W28`
+("cast size is the case's, not three") describe the FULL consumption — every `who_acts` entry
+resolved to a person, an office or a non-actor, and `build_at` seating more than three. This
+position's OWN instruction (`§3.1` row 8) names a narrower deliverable — *"the `cast:` blocks and
+their reader in `build_at`"* — and explicitly makes `17` ("ambitions from the cast") the position
+that "builds ambitions from the cast." Read together with `_part2` §13's own line — *"this position
+owns `build_at`'s `cast:` consumption; position `17` does not"* — the two do not contradict: this
+position owns WHERE the reader lives (in `build_at`, never in a later unit), not the FULL shape of
+what it eventually reads. What is built here is the minimum that makes that placement real and
+unblocks `ED-FI-0009`'s own named blocker: `p_a`'s `capability`, written once from an authored
+`cast:` overlay, at world-gen (`04_CODE_ARCHITECTURE.md` F.6, `:1087`). Seating `p_b`/`p_c` from the
+cast, resolving the rest of `who_acts` into offices and `WAITS-ON-PLAYER`, and the `one_line` →
+OUGHT / `knowledge` → Claims wiring stay `17`'s, undone here, named rather than silently dropped.
+
+**The overlay, not the chain, and why.** 27 of the 46 NPC-lane cases live in
+`cases/chain/NPC1..3.yaml` — a predecessor proposal's committed evidence `corpus_run.py::rescales`'s
+own docstring already refuses to edit in place (*"editing another chain's extraction would destroy
+the record of what was extracted"*). `cases/exercises/*.yaml` is the established overlay for exactly
+this — the same directory `rescales()` already reads a `scale:`/`office:` key from — so `cast:` is a
+THIRD top-level key on the SAME per-case files, never a second overlay mechanism. Applied uniformly
+to all five authored cases regardless of whether the underlying case is chain-sourced or owned by
+this session's own `cases/NPC4.yaml`/`NPC5.yaml` (`NPC-039`, `NPC-080`), so `build_at`'s reader has
+one code path rather than branching on a case's source.
+
+**Coverage: 5 of 46 NPC-lane cases, not all of them, and that is a deliberate stop rather than an
+oversight.** `NPC-088` (Carin Vedel), `NPC-005`, `NPC-004`, `NPC-039`, `NPC-080` — spread across both
+chain-sourced and session-owned files. The spine (`2026-09-11-arc-sequence-spine.md:56`) says "NPC
+lane first (46)" for the FULL `W27`/`W28` authoring deliverable, which needs a genuinely-authored
+`one_line` per `who_acts` entry (part 2 §13's own falsifier: *"a `one_line` token-matched from the
+case prose rather than authored"*) across a median of 4 entries × 46 cases — real per-entry editorial
+judgment this session did not attempt at that volume without a critic pass, rather than risk shallow,
+templated authoring wearing the schema's clothes (`01_AXIOMS.md` ID-13). Five cases are enough to (a)
+prove the reader is general and not special-cased to one entity (`CLAUDE.md`'s own guardrail), (b)
+exercise both file-source paths, and (c) ground one real `capability` value. **The other 41 NPC cases
+and the full 97-case ARC lane carry no `cast:` overlay yet** — `build_at` for those is byte-identical
+to before this commit (the CONTROL below), which is the honest, `[GAP: deferred]`-shaped state this
+repo's own `references/npc_registry.yaml` already uses for 17 of 46 `stats:` cells, not a claim of
+completion.
+
+**`capability`'s magnitude is a named judgment call, not a derivation.** `NPC-088` is the one
+grounded entry: her own `one_line` and her first `season_requires` need both name her vocation as
+REPEATED COPYING of a suppressed text, which is exactly the one key `rosters.yaml: verb_capability`
+maps `tell`/`speak` onto (`copying`) — so reading a capability KEY off her case text is not
+invention. The MAGNITUDE is: no ruled scale for `capability` exists anywhere in the tree
+(`hole_register.yaml` H-126/H-127 grade the whole mechanism `assumption`; F.6 leaves the season
+WRITER open, not a world-gen number). `3` — one point above `Fixtures.pool_default` (2), the number
+every corpus person draws in her place today — is chosen to be visibly non-default and is named as a
+judgment call in the overlay file's own comment and here, per `CLAUDE.md`'s no-fabrication
+discipline; it is not read off any canon source and should not be cited as one. The other four
+authored cases carry `who`/`role` only — no `capability` — because none of their case text names a
+vocation the one rostered key covers, and an invented number there would be the exact fabrication
+this section is careful not to commit for `NPC-088`.
+
+**What was verified.** `python3 -m pytest engine/season/tests/test_season_shape.py -q -n auto` — 208
+passed (the file `corpus_run.build_at`'s own tests live in, run whole rather than filtered, per
+`CLAUDE.md` §0.4's "the file covering what you touched"). The new
+`test_w28_cast_capability_is_authored_world_gen_not_a_zeroed_default` asserts, end to end: `p_a`'s
+capability for `NPC-088` reads `{"copying": 3}` and reaches `seam/wrappers/sigma.py::_pool_of` as a
+3-dice pool for `tell`/`speak` (checked by hand at a REPL, not asserted in the test, since the test's
+own job is the carrier, not the seam); a case with no overlay (`NPC-020`) builds with `capability ==
+{}`, unchanged from before this commit — `_part2` §13's own CONTROL line (*"with `cast:` absent,
+`build_at` still seats three and the tallies are unchanged"*); and the cast-entry COUNT is read by an
+independent structural YAML parse of `cases/exercises/*.yaml`, asserted equal to `corpus_run.CAST` —
+never a `grep`, which is the position's own instruction (*"the harness loader's count, never a
+grep"*) and the exact mistake the 2026-09-18 plan's `§6` GAP records an antagonist making once
+already on a different corpus count (`chain/*.yaml`'s markdown fences and truncated head defeat a
+text scan; only `_tolerant_yaml` parses them, and this position's count goes through the same kind of
+structured YAML read, not through that file's literal bytes).
+
+**Concurrency note.** `engine/season/tests/test_season_shape.py` carried an unrelated, uncommitted
+hunk from position `6` (OPENERS-DERIVE, `44 -> 43` load-time-raise count) when this position started
+editing it. `git add -p` staged only this position's appended test function; the other hunk was left
+unstaged, untouched and uncommitted, for that position's own session to land.
 
 ---
 

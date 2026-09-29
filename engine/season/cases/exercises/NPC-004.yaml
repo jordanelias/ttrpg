@@ -1,0 +1,14 @@
+# NPC-004 — `cast:` overlay only (`W28-cast`, position 8). No `exercises:` rows authored here yet;
+# this file exists to carry the case's `cast:` block through the SAME per-case overlay mechanism
+# `rescales()` and the other `cases/exercises/*.yaml` files already use, rather than editing
+# `cases/chain/NPC2.yaml` in place -- that file is a predecessor proposal's committed evidence this
+# repo reads and does not own (`corpus_run.py::rescales`'s own docstring).
+#
+# `who` restates the case's own `name:`; no `capability` -- Sæmund's case text is about LATENT
+# Thread perception he does not recognise as such, not about a skill the `verb_capability` roster
+# (`copying` is its only key today) has anything to say about. Absent is the honest reading
+# (S42.2's polarity rule), not a placeholder zero.
+case: NPC-004
+cast:
+- who: Sæmund Haelgrund
+  role: protagonist

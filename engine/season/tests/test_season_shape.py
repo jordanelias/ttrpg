@@ -12524,3 +12524,65 @@ def test_the_generic_ladder_is_seven_deep_and_splits_once():
     assert set(a) & set(b) == {"lr_realm"}, (
         f"the two chains share more than the realm: {sorted(set(a) & set(b))} — a decision could "
         "reach the sibling chain through a shared rung rather than by propagating")
+
+
+def test_w28_cast_capability_is_authored_world_gen_not_a_zeroed_default():
+    """`W28-cast` (position 8, `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md`).
+
+    `04_CODE_ARCHITECTURE.md` F.6 (`:1087`): *"capability's season writer ... world-gen writes it
+    once; nothing else does."* Until this position, the ONE writer in the tree ZEROED
+    `Person.capability` on every corpus person (`probes.py::p11`'s own comment: *"`capability` at
+    zero ... for EVERY corpus person"*), which is `ED-FI-0009`'s own named blocker (*"no attribute
+    values on any corpus person (W27's cast)"*). This asserts the mechanism end to end: an
+    authored `cast:` overlay reaches `build_at`'s `p_a`, a case carrying none is unmoved, and the
+    COUNT of authored cast entries is read the way the plan's own GAP note requires — a structured
+    YAML parse of each overlay file, independent of `cast_overlay()`'s own filter, never a `grep`
+    over the case corpus. That is the exact mistake the plan's `§6` GAP records an antagonist
+    making once already on a different corpus count (`chain/*.yaml` is markdown-fenced and
+    truncated in places; a text scan does not see what `_tolerant_yaml` recovers)."""
+    import yaml as _y
+    from ..harness import corpus_run as C
+    from ..harness import run_cases as R
+    from ..data import files as F
+
+    # ---- THE GROUNDED CASE: `capability` carries an authored, non-default value. ----
+    npc = {c["id"]: c for c in R.load_cases("NPC")}
+    w = C.build_at(npc["NPC-088"], seed=0)
+    cap = w.persons["p_a"].capability
+    assert cap == {"copying": 3}, (
+        f"NPC-088's `cast:` overlay should have written p_a's capability, got {cap!r}")
+    assert cap != {}, "capability is still the old zeroed default — the reader did not fire"
+
+    # ---- THE CONTROL: a case with NO `cast:` overlay is unmoved. Part 2 `§13`'s own falsifier
+    # line is *"with `cast:` absent, `build_at` still seats three and the tallies are unchanged"* —
+    # asserted here as a fact about THIS reader, not merely about `Person`'s own
+    # `default_factory=dict`. ----
+    assert "NPC-020" not in C.CAST, "NPC-020 was not meant to carry a `cast:` overlay in this pass"
+    w_ctl = C.build_at(npc["NPC-020"], seed=0)
+    assert w_ctl.persons["p_a"].capability == {}, (
+        "a case with no `cast:` overlay must build exactly as it did before this position")
+
+    # ---- THE COUNT, READ STRUCTURALLY, NEVER BY GREP. An independent structural parse of the
+    # SAME directory `cast_overlay()` reads — not a call into that function, so a bug in its own
+    # filter cannot mark its own homework. ----
+    authored = {}
+    for f in sorted(F.EXERCISES_DIR.glob("*.yaml")):
+        doc = _y.safe_load(f.read_text()) or {}
+        entries = doc.get("cast")
+        if doc.get("case") and isinstance(entries, list):
+            authored[doc["case"]] = entries
+    assert authored == C.CAST, (
+        f"`cast_overlay()`'s count disagrees with a fresh structural parse of the same directory: "
+        f"{sorted(authored)} vs {sorted(C.CAST)}")
+    assert len(C.CAST) >= 5, f"fewer `cast:` overlays than this position authored: {sorted(C.CAST)}"
+    for cid in ("NPC-088", "NPC-005", "NPC-004", "NPC-039", "NPC-080"):
+        assert cid in C.CAST, f"{cid}'s `cast:` overlay did not load"
+        assert C.CAST[cid][0].get("who"), f"{cid}'s primary cast entry carries no `who:`"
+
+    # ---- EVERY AUTHORED CASE ID IS REAL, IN EITHER LANE. An overlay naming a case that exists in
+    # neither lane is bound to nothing — `exercises.py::orphan_cases` names the identical hazard
+    # for the `rows:` key of the SAME per-case file; `cast:` shares the file and the `case:` key,
+    # so it shares the hazard. ----
+    known = {c["id"] for c in R.load_cases("NPC")} | {c["id"] for c in R.load_cases("ARC")}
+    orphans = sorted(cid for cid in C.CAST if cid not in known)
+    assert not orphans, f"a `cast:` overlay names a case in neither lane: {orphans}"

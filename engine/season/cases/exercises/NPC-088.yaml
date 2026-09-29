@@ -15,6 +15,22 @@ case: NPC-088
 name: Carin Vedel
 source: '#353 S13.1 (`:477`, `:485-500`) + the case''s own `season_requires`'
 authored_after_first_run: true
+# `W28-cast` (position 8). `who`/`role` restate what the case already owns (`name:` above) rather
+# than retype it; `capability` is the one grounded entry in the corpus today. Her own `one_line`
+# and her first `season_requires` need both name her vocation as REPEATED COPYING of a suppressed
+# text — the exact key `rosters.yaml: verb_capability` already maps `tell`/`speak` onto
+# (`copying`), so this is a read of her own case text, not an invention of a new axis.
+# ⚠ THE MAGNITUDE IS A JUDGMENT CALL AND IS NAMED AS ONE. No ruled scale for `capability` exists —
+# `hole_register.yaml` H-126/H-127 grade the whole mechanism `assumption`, and `04_CODE_ARCHITECTURE.md`
+# F.6 leaves the season WRITER open, not the world-gen magnitude. `3` is one point above
+# `Fixtures.pool_default` (2) — the number every corpus person draws today in her place — chosen to
+# be visibly non-default rather than derived from canon. Revisit once F.6 or `ED-FI-0009`'s own
+# work rules a real scale; do not read `3` as anything but "more than the injected default".
+cast:
+- who: Carin Vedel
+  role: protagonist
+  capability:
+    copying: 3
 rows:
 - need_sha: b5fddf1339e9
   hardness: core
