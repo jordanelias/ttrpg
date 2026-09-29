@@ -50,7 +50,15 @@ def _crossings(w: "World", subject_id: str, floors: dict, before, after,
 
     ⚠ THE ANTECEDENT IS THE WRITE THAT CROSSED THE FLOOR (`W4` / `H-12` — *"MATTER emits an Event
     per write SO CROSSINGS HAVE AN ANTECEDENT"*). Passing `None` roots it at the seed, which is
-    what made the one Event in this barrier that exists to be walked back from walk nowhere."""
+    what made the one Event in this barrier that exists to be walked back from walk nowhere.
+
+    ⚠ THE EVENT IS THE ONLY CARRIER, SINCE POSITION `11a`. A second one, `w.crossings` (a
+    `(subject_id, verb, before, after, ev.id)` tuple, never pruned), used to be appended here too
+    -- `01_ATTENTION_AND_REACH.md` §A.1.3 pt 3 named it a violation of `AX-4`'s protected property
+    in the thing it protects: *"two readers of one fact, and they disagree about what the fact
+    is"* (the tuple named the site; `questions_for`'s old `band_crossed` source named the VERB,
+    `H-110`). Deleted rather than kept in step: `anchor_of(w, ev)` (tier 3, via `ev.causes[0]`)
+    answers the same subject the tuple did, with one owner instead of two."""
     out: list = []
     for verb, floor in sorted(floors.items()):
         if before >= floor > after:
@@ -65,7 +73,6 @@ def _crossings(w: "World", subject_id: str, floors: dict, before, after,
                        causes=[cause] if cause else [ROOT], emitted_at=w.tick)
             w.log.append(ev)
             out.append(ev)
-            w.crossings.append((subject_id, verb, before, after, ev.id))
             TRACE.event(ev.id, ev.kind, ev.causes)
             TRACE.decision(f"{subject_id} crossed the `{verb}` floor", "S12.1/S3-L5",
                            chose="EMIT a witnessable Event; write no social row; produce no outcome",

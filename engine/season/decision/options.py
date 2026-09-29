@@ -482,21 +482,26 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
 
     ⚠ THE REFERENT IS WORLD-SOURCED, AND THAT IS §F1'S OWN SHAPE RATHER THAN A WIDENING OF IT.
     Raised by the `W-C` adversarial pass and closed here rather than escalated, because it is
-    answered: three of the four question sources read the world (`questions_for` Q1 from
-    `w.dates`/`w.docket`, Q3 from `w.crossings`/`w.sites`, Q4 from `w.propositions`; only Q2 is
-    ledger-sourced), and `W-C` promotes that referent from *which Candidate forms* to *an operand
-    of the minted act*. §F1 states the derivation in terms -- `subject ∈ referents(q)`, "what the
+    answered: one of the two question sources reads the world directly (`questions_for` Q4 `need`
+    from `w.propositions`); Q2 `claim_landed` is ledger-sourced -- `for c in p.ledger`, unchanged --
+    but ADMITTED through `reach`/`place_of` (`queries/world_q.py`, position `11a`), which read
+    world state (`w.tenures`, `w.offices`, `w.rungs`) to decide whether the person may be ASKED
+    about a claim their own ledger already holds. ⚠ `date_due` and `band_crossed` -- the two other
+    world-reading sources this paragraph used to name -- were folded out at `11a`: both MEASURED
+    zero questions in every buildable world, and both fold into `claim_landed` rather than into a
+    third route. `W-C` promotes that referent from *which Candidate forms* to *an operand of the
+    minted act*. §F1 states the derivation in terms -- `subject ∈ referents(q)`, "what the
     question is ABOUT" -- and puts the epistemic constraint in a DIFFERENT clause: `requires(verb)
     not KNOWN-false FROM p's OWN CLAIMS`, with its own warning that softening THAT clause is the
     breach. So the belief filter is on the requirement, never on the referent; and `to`/`site` are
     the referent under the two other names the closed operand vocabulary has for it, not a second
     channel.
     Two things make the promotion safe rather than merely licensed, and both are properties of
-    code above rather than of this paragraph. (a) EVERY SOURCE IS ADDRESSED TO THE PERSON: Q1
-    requires the Date's holder to be them or something they hold, Q2 reads their own ledger, Q3
-    requires them to be PRESENT where the band crossed, Q4 is their own live `commit`. A person
-    cannot be handed a referent they have no reach to. (b) THE REFERENT PROPOSES AND THE FOLD
-    DISPOSES: naming a receiver is not moving matter to it. `_eff_transfer` returns nothing when a
+    code above rather than of this paragraph. (a) EVERY SOURCE IS ADDRESSED TO THE PERSON: Q2
+    reads their own ledger, filtered by `reach(w, p)` -- never another person's, and never widening
+    who WITNESSED (`01` §A.4.4) -- and Q4 is their own live `commit`. A person cannot be handed a
+    referent they have no reach to. (b) THE REFERENT PROPOSES AND THE FOLD DISPOSES: naming a
+    receiver is not moving matter to it. `_eff_transfer` returns nothing when a
     side is no rung and the fold emits `transfer.refused`; `move`'s `contain_path` cell reads
     UNKNOWN off the world and `contain_ascends` blocks a sibling. Measured over the corpus: 21 of
     723 transfers refused, 73 of 723 moves blocked -- so world-sourced ids do not DECIDE where

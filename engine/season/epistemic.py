@@ -6,8 +6,11 @@ halves that belong together because they are the two ends of one channel:
   * **what is knowable** — `belief_contradicts` (§F1 clause 4, the one place a person's OWN
     ledger can refuse a candidate), and the two functions that decide what a deposit is ABOUT
     (`act_refs`, `claim_subjects`).
-  * **who learns it** — `_event_place`, the five `_ch_*` witness-channel predicates, the
-    `CHANNEL_PREDICATES` table built from the roster, `live_channels` and `observers_for`.
+  * **who learns it** — the five `_ch_*` witness-channel predicates, the `CHANNEL_PREDICATES`
+    table built from the roster, `live_channels` and `observers_for`. ⚠ **`_event_place` MOVED OUT
+    AT POSITION `11a`**, promoted to `queries.world_q.place_of` (`ARCH §F.14`'s own name, taking
+    any id rather than only an Event); its two callers here, `_ch_co_located` and `seen_subject`,
+    now read `world_q.place_of(w, anchor_of(w, e))`.
   * **what they saw** — `R8.1`'s `Seen` struct, its `_term_*` readers and `seen_of` /
     `seen_subject`, which `loop/witness.py` deposits as the `seen` claim.
 
@@ -298,42 +301,6 @@ def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = Non
 # argument; it arrived as a measurement.
 # ---------------------------------------------------------------------------
 
-def _event_place(w: "World", e: "Event") -> Optional[str]:
-    """The rung an Event happened at, derived from its subject.
-
-    ⚠ A PERSON IS ASKED BEFORE A RUNG, AND THE ORDER IS THE WHOLE OF THIS FUNCTION'S CORRECTNESS.
-    The first version tested `e.subject in w.rungs` FIRST — and `probes.py` gives every person a
-    same-id `person`-kind Rung, so for a person-subject Event this returned the person's own rung
-    and `Query.presence` then answered *"who is contained IN p_high"*, which is nobody. Under the
-    `presence_only` arm that excluded THE SPEAKER AND EVERYONE STANDING IN THE ROOM, and `P15`
-    read the resulting empty set as a channel predicate excluding people. It was a channel BROKEN
-    CLOSED, and `P15`'s only assertion (`narrow < total`) could not tell the two apart — §0.1 pt 2.
-    **THIS IS A REPEAT.** `witness`'s own rev-2 retraction records the identical conflation:
-    *"because every person has a `person`-kind Rung, made almost every Event private to its own
-    subject"*, and `PLAN.md` §D4 names it as a standing hazard. Found by the `W6` adversarial
-    pass."""
-    # G1b. THE LOOKUP ORDER IS UNCHANGED AND THE HAZARD NOTE ABOVE STILL BINDS -- only the
-    # SOURCE of the id moved, from the overloaded field to `anchor_of`, which returns the same
-    # value on every event measured. Person-before-rung remains the whole of this function's
-    # correctness.
-    anchor = anchor_of(w, e)
-    if anchor is None:
-        return None
-    if anchor in w.persons:
-        for t in w.tenures:
-            if t.kind == "contain" and t.subject == anchor and t.live:
-                return t.object
-        return None
-    if anchor in w.sites:
-        return getattr(w.sites[anchor], "rung", None)
-    if anchor in w.rungs:
-        return anchor
-    for t in w.tenures:
-        if t.kind == "contain" and t.subject == anchor and t.live:
-            return t.object
-    return None
-
-
 def _ch_co_located(w: "World", e, pid) -> bool:
     """⚠ READS THE BARRIER'S PRESENCE INDEX, WHICH IS WHAT MAKES THE CLAIM ABOUT IT TRUE. `W6`
     published *"the presence index this barrier has always built was UNUSED until this line"* while
@@ -342,8 +309,20 @@ def _ch_co_located(w: "World", e, pid) -> bool:
     the failure `shape.py`'s own fidelity rule names: *a false claim of enforcement is worse than
     none, because it stops the next reader from checking.* It is also where the narrow arm's cost
     went. `cache_at_barrier` is safe here because the fan is built BEFORE `witness` enters its
-    parallel map. Found by the `W6` adversarial pass."""
-    place = _event_place(w, e)
+    parallel map. Found by the `W6` adversarial pass.
+
+    ⚠ **`world_q.place_of(w, anchor_of(w, e))`, NOT A LOCAL LOOKUP -- MOVED AT POSITION `11a`.**
+    This site's own private `_event_place` used to answer it, testing person-before-rung in an
+    order its docstring called *"the whole of this function's correctness"*: the first version
+    tested `e.subject in w.rungs` FIRST, and `probes.py` gives every person a same-id `person`-kind
+    Rung, so a person-subject Event returned the person's OWN rung and `Query.presence` then
+    answered *"who is contained IN p_high"* — nobody. Under `presence_only` that excluded THE
+    SPEAKER AND EVERYONE STANDING IN THE ROOM, and `P15`'s only assertion (`narrow < total`) could
+    not tell a channel broken CLOSED from one working — §0.1 pt 2. **THIS WAS A REPEAT**:
+    `witness`'s own rev-2 retraction records the identical conflation. `world_q.place_of` carries
+    the same order forward (its own docstring names the hazard) and adds the Record/Date limbs
+    `ARCH §F.14` promotion asked for; nothing about the person-before-rung guarantee moved."""
+    place = world_q.place_of(w, anchor_of(w, e))
     if place is None:
         return False
     index = cache.presence_index(w)
@@ -765,7 +744,10 @@ def seen_subject(w: "World", e: "Event", pid: str, mode: str) -> Optional[str]:
 
     `None` when the Event changed nothing and has no place; then nothing is deposited, because a
     claim about nothing raises no question and occupies a ledger slot the cap evicts somebody
-    else for."""
+    else for.
+
+    ⚠ `world_q.place_of(w, anchor_of(w, e))`, NOT `_event_place` -- MOVED AT POSITION `11a`, same
+    reasoning as `_ch_co_located` above."""
     changed = []
     for c in e.changes:
         if not c.subject:
@@ -778,7 +760,7 @@ def seen_subject(w: "World", e: "Event", pid: str, mode: str) -> Optional[str]:
             return changed[0]
         mine = {t.object for t in w.persons[pid].tenures if t.live}
         return next((s for s in changed if s in mine), changed[0])
-    return _event_place(w, e)
+    return world_q.place_of(w, anchor_of(w, e))
 
 
 def seen_of(w: "World", e: "Event", act, pid: str, mode: str) -> Seen:

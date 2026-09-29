@@ -208,7 +208,6 @@ class World:
         # (`take_staged`), so it is empty at every barrier -- which is why the content hash does not
         # fold it (and `test_h118`'s underscore exclusion is the right one, not an oversight).
         self._staged: dict[tuple, list] = {}
-        self.crossings: list[tuple] = []        # S12.1/L5 -- band-edge crossings, EMISSIONS
         # S33: "`purpose` must be unique per DRAW, not per operation, or two draws inside one
         # act collide." A per-TICK ordinal is unique within the tick AND identical across runs
         # of the same seed -- a global counter would be unique but NOT REPRODUCIBLE, which
