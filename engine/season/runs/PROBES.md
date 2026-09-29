@@ -358,7 +358,7 @@ either** — they are listed individually below and should be discounted accordi
 ### `F2` — a memberless faction's holdings become contestable  ·  **FORBIDDEN**  ·  `F3`  ·  by `probe-model`
 **what:** a (Tenure, until) write by p_high exercising no seat wrote Tenures it has no basis for: th_dead (hold owned by p_low on S, changed)
 
-**needs:** T-m (the actor owns the edge), T-o (via present, the actor seated in it, the seat's revocation basis reaching it), conferral (via's purview over a seat that declares a conferral basis), or cascade (the edge names something this same write removed). T-n is unbuilt: Tenure carries no term
+**needs:** T-m (the actor owns the edge), T-o (via present, the actor seated in it, the seat's revocation basis reaching it), conferral (via's purview over a seat that declares a conferral basis), cascade (the edge names something this same write removed), or handover (a `hold` on something that is not a seat, opened in the same write that ended the actor's own live `hold` on it -- one opening per ending). T-n is unbuilt: Tenure carries no term
 **law:** 04 §C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner writes only under a declared basis. Per-verb eligibility enforced this by CONVENTION until G3; a revocation with no seat in Act.via is refused here, so 'a superior may revoke' cannot degrade into 'anyone with a remit string'
 
 ### `F21` — a member's individual position is recorded in a body's collective output  ·  **UNSPECIFIED**  ·  `S61`  ·  by `construction`

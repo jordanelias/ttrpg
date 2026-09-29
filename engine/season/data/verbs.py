@@ -59,7 +59,7 @@ from typing import Optional
 from . import files
 from ..gaps import Forbidden, Unspecified
 from .matrix import MATRIX, Step
-from .requires import TypedRequires, build_typed_requires
+from .requires import REQUIRES_OPERANDS, TypedRequires, build_typed_requires
 from .rosters import (
     PURSUIT_AXES, PURSUITS, RELEASABLE_KINDS, RUNG_KINDS, STRATA, TENURE_KINDS, load_yaml,
     require_member, roster, roster_map,
@@ -203,7 +203,9 @@ class VerbRow:
     # whose counterparty is the person themselves -- the contested-verb rule beside it (`contests:`
     # makes `subject` the second claimant), generalised to a row that names its counterparty
     # directly. `""` is the declared absence; the loader requires a named operand to be one the
-    # row's typed cell BINDS, so the Candidate always carries the thing compared.
+    # row's typed cell BINDS, so the Candidate always carries the thing compared -- or, on an
+    # UNTYPED row (plan position 16, `give`), a `requires_operands` member no Candidate can carry,
+    # which makes `opening_set` form none: a second party the grammar cannot yet name.
     counterparty: str = ""
 
     def eligibility_kinds(self) -> tuple:
@@ -421,12 +423,21 @@ def _load_verb_table() -> dict:
         # THE COUNTERPARTY IS AN OPERAND THE ACT CARRIES, OR IT IS NOTHING. `opening_set` compares
         # it with the person; a name the typed cell does not BIND is absent from every Candidate,
         # so the comparison would pass silently and the rule would be a column nothing enforced.
-        if row.counterparty and (row.requires_typed is None
-                                 or row.counterparty not in row.requires_typed.operands()):
+        # ⚠ AN UNTYPED ROW MAY NAME ONE (plan position 16, `give`), AND IT MEANS SOMETHING ELSE
+        # THERE: no cell binds it, so no Candidate carries it, and `opening_set` forms none -- the
+        # row declares a second party the grammar cannot yet name, and a person does not mint an
+        # act with that hole (`operands_for`'s rule, reached through the one column that says the
+        # hole is there). The name must still be a `requires_operands` member, so a typo is refused
+        # rather than silently making a verb unformable. A TYPED row keeps the stricter rule: a
+        # counterparty its own cell does not bind is a typo, not a declaration.
+        if row.counterparty and (
+                row.counterparty not in REQUIRES_OPERANDS if row.requires_typed is None
+                else row.counterparty not in row.requires_typed.operands()):
             raise SystemExit(
                 f"verb_table.yaml: {name!r} names counterparty {row.counterparty!r}, which its "
-                "`requires_typed:` cell does not bind. A counterparty is compared with the person "
-                "forming the Candidate, and only a bound operand is always carried.")
+                "`requires_typed:` cell does not bind (or, on an untyped row, which is no "
+                "`requires_operands` member). A counterparty is compared with the person forming "
+                "the Candidate, and only a bound operand is always carried.")
         # A row that declares `requires_typed: none` must SAY WHY. The three admissible reasons
         # are a well-formedness constraint on the Act (§F.24a: `issue`, `open_case` -- *"they
         # belong in the `Act` schema and are refused at construction"*), a `per act` cell, and an

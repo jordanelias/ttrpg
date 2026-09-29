@@ -40,6 +40,7 @@ it AT ALL: it closes unconditionally at the end of every `World.write` call, suc
 never carrying open into a next write or a step barrier. The paragraph above is kept as the
 history of why the window shape existed and what G4 did to it; it does not describe `opening()`'s
 current lifetime, which is `World.write`'s docstring and `close()`'s own docstring below."""
+from collections import Counter
 from dataclasses import dataclass
 from typing import Any, Callable, Optional
 
@@ -111,7 +112,10 @@ class NoToken(InstrumentDefect):
 # plus the clause `04 §C.2` does not carry and `proposals/2026-09-05-proceedings-subsystem/
 # 04_VERBS.md` (the `determine` row's correction ⑴) found missing: *"a conferral-basis opener
 # matches none of the four. So does `confer`, today"*. The plan (position 6) makes this the ONLY
-# place the F3 branch is authored, so it is authored here, once, as the fifth basis.
+# place the F3 branch is authored, so it is authored here, once, as the fifth basis. The SIXTH,
+# `handover`, was settled by G3's pre-flight and built at plan position 16 with `give` -- see
+# `tenure_write_basis` and `refuse_unauthored`, which is where the one judgment that spans two
+# Tenures of the same write is made.
 #
 # WHAT IS HERE AND WHAT IS NOT. This module owns the JUDGMENT -- which basis, if any, admits one
 # Tenure change -- and the seat-authority rules the judgment composes on (ruling (3)'s revocation
@@ -151,6 +155,13 @@ T_M = "T-m"
 T_O = "T-o"
 CASCADE = "cascade"
 CONFERRAL = "conferral"
+# THE SIXTH BASIS (plan position 16, `give`): a `hold` on something that is not a seat, opened in
+# the same write that ended the actor's own live `hold` on it under `T-m`. Named, like `cascade`
+# and `conferral`, for the thing that licenses it -- the giver's own edge, handed over -- and in
+# the ordinary word for passing a thing into another's keeping. ⚠ NOT A `T-` LETTER: `T-a`..`T-o`
+# are `architecture/meta/01_AXIOMS.md`'s theorem labels, of which only `T-m`/`T-n`/`T-o` are
+# tenure bases, and the obvious next letter for a GIVE, `T-g`, is already that file's OBSTRUCTION.
+HANDOVER = "handover"
 
 
 def seat_hold(w: "World", actor: Optional[str], via: Optional[str]) -> Optional[Tenure]:
@@ -317,15 +328,40 @@ def may_fill(w: "World", actor: Optional[str], via: Optional[str], off: Office) 
     return purview_reaches(w, w.offices[via], off.rung)
 
 
+def _moved(t: Tenure, was: Optional[Tenure]) -> Optional[set]:
+    """Which of an existing edge's four non-end fields the write changed; `None` for an edge the
+    write OPENED. The ends (`subject`, `object`, `kind`) are not listed: rewriting them is refused
+    before this is read (`tenure_write_basis`'s *nothing admits rewriting an edge's ends*)."""
+    if was is None:
+        return None
+    return {name for name, now, then in (
+        ("since", t.since, was.since), ("until", t.until, was.until),
+        ("degree", t.degree, was.degree), ("payload", t.payload, was.payload)) if now != then}
+
+
+def _closes(t: Tenure, was: Optional[Tenure]) -> bool:
+    """A PURE CLOSURE: an edge that was live before the write, has `until` set after it, and had
+    nothing else moved. The one change `cascade` and `T-o` may make -- and, since position 16, the
+    change on the giver's side that licenses a `handover` on the receiver's. One test for all
+    three, so what counts as *ended in this write* cannot differ between them."""
+    return (was is not None and was.until is None and t.until is not None
+            and _moved(t, was) == {"until"})
+
+
 def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Optional[str],
-                       via: Optional[str], gone: frozenset) -> Optional[str]:
+                       via: Optional[str], gone: frozenset,
+                       released: frozenset = frozenset()) -> Optional[str]:
     """F3's JUDGMENT FOR ONE CHANGED TENURE: the name of the basis that admits it, or `None`.
 
     `t` is the Tenure as it stands after the write; `was` is a detached copy of it from before, or
     `None` if the write OPENED it. `gone` is every id the same write removed from the world -- the
     existence changes THIS act caused, observed by the store rather than claimed by the caller.
+    `released` is every OBJECT on which the same write ended the actor's own live `hold` under
+    `T-m` and has not yet handed it on -- computed by `refuse_unauthored` from the batch it holds,
+    because this function sees one Tenure and cannot (see `handover` below). Empty by default, so a
+    caller judging a Tenure alone gets the five-basis answer.
 
-    THE FIVE BASES, AND WHAT EACH MAY WRITE -- a basis admits a KIND of change, not any change:
+    THE SIX BASES, AND WHAT EACH MAY WRITE -- a basis admits a KIND of change, not any change:
 
       `T-m`       the actor IS the owner -- `was.subject` for an existing edge, `t.subject` for a
                   new one. Anything the owner does to their own edge (`release`, `move`'s legs,
@@ -347,6 +383,10 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
       `conferral` an OPENING of a `hold` on a SEAT, or a change to that `hold`'s grant (`payload`)
                   alone, by `may_fill`. The re-grant is `establish`'s re-stamp (`13f`): the grant a
                   seat confers on its holder, written by the authority that may fill the seat.
+      `handover`  an OPENING of a `hold` on something that is NOT a seat, whose object is in
+                  `released` -- the actor ended their own live `hold` on that object under `T-m`
+                  in this same write. `give` (plan position 16) is the verb; the basis is general
+                  over every non-seat `hold` object. See the block below.
 
     ⚠ JUDGED ON THE WORLD THE WRITE LEAVES. `World.write` asks this after `apply()`, so `T-o` and
     `conferral` read `seat_hold` -- is the actor seated in `via`? -- AFTER the effect ran. `04 §B.8`'s
@@ -360,42 +400,37 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     existing Tenure is a different edge wearing this one's id, and no basis licenses it -- not even
     `T-m`, because the new subject is somebody else's store.
 
-    ⚠ `give` (PLAN POSITION 16 ≡ `15a`) IS SETTLED HERE AND NOT BUILT HERE -- the plan's G3
-    pre-flight asks for the decision, and the orchestrator scoped it to decision only. The giver's
-    close is `T-m`. The RECEIVER'S open matches none of the five: it is not the receiver's act, no
-    seat is exercised (`give` is `own`-eligible, `via` is `None`), and nothing ceased to exist. It
-    needs ITS OWN basis, and the one that fits is CAUSATION-BOUND like the cascade, not
-    authority-bound like T-o: *a `hold` opened on an object that is NOT a seat, of the same kind
-    and object as an edge the actor OWNED, was live before, and closed under `T-m` in this same
-    write*. The authority to open the receiver's edge is the giver's own edge, ended in the same
-    act -- so *release-before-mint* (r2 `05` row 6, ⊕ R14) becomes the gate's condition rather than
-    the effect's discipline, and a `give` that forgets the release is refused here before
-    `hold_force` ever sees two holders. SEATS ARE EXCLUDED: a seat passes by its conferral basis,
-    never by its holder handing it on. It does NOT compose with `via` (no seat is exercised), and it
-    is NOT the receiver's own act (position 16 specifies one two-party verb by the giver).
-    ⚠ CORRECTED 2026-09-26, ANTAGONIST PASS: this docstring claimed position 16 "adds it as the
-    sixth clause of this function, and nothing else here moves" -- FALSE AS STATED. This function
-    judges ONE changed Tenure at a time and has no visibility into what happened to any OTHER
-    Tenure the same write touched; `gone` carries only EXISTENCE removals (`W-4`'s `_entity_stores`
-    diff), never Tenure closures. "Closed under T-m in this same write" is information nothing
-    passed to `tenure_write_basis` or `refuse_unauthored` currently carries -- `until == w.tick`
-    cannot distinguish a closure THIS write made from one an earlier write made the same tick.
-    Position 16 needs more than a sixth clause: `refuse_unauthored` (below) must also compute and
-    pass forward which ids were closed under T-m in the SAME batch of `changes` it already holds,
-    or the receiver's basis cannot be judged. That plumbing is position 16's to add; it is not
-    built here because nothing exercises it yet and an unreachable plumbing change is unverifiable
-    (`CLAUDE.md` §0.1 pt 5) -- but the docstring must not claim the gap does not exist."""
+    ⚠ `handover` -- `give` (PLAN POSITION 16 ≡ `15a`) -- SETTLED BY G3's PRE-FLIGHT (`ED-IN-0277`),
+    BUILT AT POSITION 16. The giver's close is `T-m`. The RECEIVER'S open matches none of the other
+    five: it is not the receiver's act, no seat is exercised (`give` is `own`-eligible, `via` is
+    `None`), and nothing ceased to exist. So it has its own basis, CAUSATION-BOUND like the cascade
+    rather than authority-bound like T-o: *a `hold` opened on an object that is NOT a seat, of the
+    same kind and object as an edge the actor OWNED, was live before, and closed under `T-m` in this
+    same write*. The authority to open the receiver's edge is the giver's own edge, ended in the
+    same act -- so *release-before-mint* (r2 `05` row 6, ⊕ R14) is the GATE'S condition rather than
+    the effect's discipline, and a `give` that forgets the release is refused here (`NotYours`,
+    store put back) before `hold_force` ever sees two holders. SEATS ARE EXCLUDED: a seat passes by
+    its conferral basis, never by its holder handing it on. It does NOT read `via` (no seat is
+    exercised), and it is NOT the receiver's own act (position 16 specifies one two-party verb, by
+    the giver). ⚠ `hold` ONLY, as the settled rule says: `hold` is the custody edge, one per object
+    (`holonic §15`), and so the one edge there is something to hand on; a `commit` or a `tie` is the
+    holder's own relation and an ending of one licenses nobody else's opening.
+    ⚠ THE CLAUSE IS JUDGED HERE, THE LICENCE IS COMPUTED IN `refuse_unauthored` -- CORRECTED
+    2026-09-26 (antagonist pass on G3) and built that way at position 16. This function judges ONE
+    changed Tenure and cannot see what the same write did to any OTHER; `gone` carries existence
+    removals only, and `until == w.tick` cannot tell this write's closure from an earlier write's in
+    the same tick. So `refuse_unauthored`, which holds the whole batch, judges every change first,
+    collects the objects of the `hold`s this actor ended under `T-m` (`_closes` -- the same closure
+    test `cascade` and `T-o` use), and passes the ones not yet handed on in as `released`. ⚠ ONE
+    ENDING HANDS ON ONE EDGE: a write that ends one `hold` and opens two on the same object gets one
+    `handover`, and the second opening is refused -- otherwise the gate would admit the two holders
+    the basis exists to prevent."""
     opened = was is None
     owner = t.subject if opened else was.subject
     if not opened and (t.subject, t.object, t.kind) != (was.subject, was.object, was.kind):
         return None
-    if opened:
-        moved = None
-    else:
-        moved = {name for name, now, then in (
-            ("since", t.since, was.since), ("until", t.until, was.until),
-            ("degree", t.degree, was.degree), ("payload", t.payload, was.payload)) if now != then}
-    closed = (not opened and was.until is None and t.until is not None and moved == {"until"})
+    moved = _moved(t, was)
+    closed = _closes(t, was)
     seat = w.offices.get(t.object) if t.kind == "hold" else None
     # ⚠ T-M NEVER ADMITS OPENING OR RE-GRANTING A SEAT-HOLD, EVEN THE ACTOR'S OWN (found by the
     # antagonist pass, 2026-09-26: "the wrong answer is a quietly permissive gate" was exactly
@@ -413,6 +448,8 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
         return T_M
     if closed and (t.subject in gone or t.object in gone):
         return CASCADE
+    if opened and t.kind == "hold" and seat is None and t.object in released:
+        return HANDOVER
     if seat is None:
         return None
     if closed and may_revoke(w, actor, via, seat):
@@ -428,9 +465,31 @@ def refuse_unauthored(w: "World", changes: list, actor: Optional[str], via: Opti
 
     Asked by `World.write` after `apply()` and before anything is traced as written. It returns
     rather than raises so the store can put the tenures back FIRST: the refusal is only honest if
-    the edge it refused is as it was (`NotYours`' own raise is `World.write`'s, via `not_yours`)."""
-    return [(t, was) for t, was in changes
-            if tenure_write_basis(w, t, was, actor, via, gone) is None]
+    the edge it refused is as it was (`NotYours`' own raise is `World.write`'s, via `not_yours`).
+
+    TWO PASSES, BECAUSE ONE BASIS SPANS TWO TENURES (position 16). The first judges every change
+    on its own -- the five bases that need nothing but the change, the actor, `via` and `gone`.
+    From those verdicts it takes the `handover` licence: the object of every `hold` this actor
+    ENDED under `T-m` in this write, counted. The second re-judges only what the first refused,
+    now with the licence, and spends one unit of it per `handover` it admits. The two passes are
+    exact rather than approximate: `handover` admits only an OPENED edge, which `T-m` never admits
+    for anyone but the actor, and the licence is read off `T-m` closures, which never depend on it.
+    ⚠ THE LICENCE IS COMPUTED HERE AND NOT IN `World.write`, which is why `World.write`'s call did
+    not change: *which change was a `T-m` closure* is a judgment, and the store observes changes
+    and never judges them -- the split this module's G3 header states."""
+    bases = [tenure_write_basis(w, t, was, actor, via, gone) for t, was in changes]
+    released = Counter(was.object for (t, was), basis in zip(changes, bases)
+                       if _closes(t, was) and basis == T_M and was.kind == "hold")
+    refused = []
+    for (t, was), basis in zip(changes, bases):
+        # `+released` is the Counter with its spent (zero) entries dropped: what is left to hand on.
+        if basis is None and +released:
+            basis = tenure_write_basis(w, t, was, actor, via, gone, frozenset(+released))
+            if basis == HANDOVER:
+                released[t.object] -= 1
+        if basis is None:
+            refused.append((t, was))
+    return refused
 
 
 # [JUSTIFIED: a MESSAGE LENGTH, not a game value -- how many refused edges a `NotYours` names before it counts the rest; nothing in the model reads it]
@@ -453,8 +512,10 @@ def not_yours(refused: list, actor: Optional[str], via: Optional[str], record_ki
         f"for: {shown}{more}", "F3",
         needs=f"{T_M} (the actor owns the edge), {T_O} (via present, the actor seated in it, the "
               f"seat's revocation basis reaching it), {CONFERRAL} (via's purview over a seat "
-              f"that declares a conferral basis), or {CASCADE} (the edge names something this "
-              f"same write removed). T-n is unbuilt: Tenure carries no term",
+              f"that declares a conferral basis), {CASCADE} (the edge names something this "
+              f"same write removed), or {HANDOVER} (a `hold` on something that is not a seat, "
+              f"opened in the same write that ended the actor's own live `hold` on it -- one "
+              f"opening per ending). T-n is unbuilt: Tenure carries no term",
         law="04 §C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner "
             "writes only under a declared basis. Per-verb eligibility enforced this by "
             "CONVENTION until G3; a revocation with no seat in Act.via is refused here, so 'a "

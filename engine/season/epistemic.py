@@ -129,7 +129,10 @@ def _tenure_by_id(w: "World", tid: str):
     precedent `state/attribution.py::_event_by_id` states for the log: a lookup that is not hot
     does not earn a second structure to keep in step with `w.tenures`. Not called on a hot path
     -- measured over a 44.6s / 143-case corpus run, this lookup is reached 52 times against
-    39,932 `claim_subjects` calls total, 0.111s of the run (`ED-IN-0267`'s own measurement)."""
+    39,932 `claim_subjects` calls total, 0.111s of the run (`ED-IN-0267`'s own measurement).
+    ⚠ A THIRD CALLER SINCE PLAN POSITION 16: `loop/witness.py`'s deposit trigger reads every change
+    of every Event through `_hold_tenure_ends`. MEASURED 2026-09-29 on `populated.run(2, 0)`: 8,944
+    calls, 0.18s of a ~43s run over 637 Tenures -- still not enough to earn an index."""
     for t in w.tenures:
         if t.id == tid:
             return t
@@ -386,7 +389,11 @@ def _ch_document_key(w: "World", e, pid) -> bool:
     route above is open; the RECORD route is not, and `PHASE 1` step 1's own falsifier is written
     about Records. That is a PRODUCER hole with its own row and its own owner (*Part E -- the verb
     that would do it*), and `H-84` forbids in terms inventing a `give_record` here to make a case
-    pass. Nothing was invented.
+    pass. Nothing was invented. ⚠ AND NOTHING WAS INVENTED LATER EITHER: the verb came from its
+    owner, Part E -- `give`, ratified plan position 16 (2026-09-29), a row in `verb_table.yaml`
+    with its own effect. This channel did not change for it: once the receiver's `hold` is live,
+    an Event changing the Record reaches the receiver here, and the giver's closed `hold` reaches
+    nobody. No person forms a `give` until `15c` carries a receiver (see `H-84`'s row).
 
     ⚠ AND ONE INTERACTION THIS DOES NOT SETTLE, BECAUSE IT IS `PHASE 1` STEP 3's. A channel decides
     WHO witnesses, not WHAT they learn. Composed with the deposit layer as it stands -- `observers_for`

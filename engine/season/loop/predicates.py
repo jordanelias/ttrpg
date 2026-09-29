@@ -1,5 +1,6 @@
-"""`season.loop.predicates` — the six `requires:` cells the grammar does not type (five until
-`establish` joined them at plan position `13f`, 2026-09-25; the count below is the older one).
+"""`season.loop.predicates` — the seven `requires:` cells the grammar does not type (five until
+`establish` joined them at plan position `13f`, 2026-09-25, and `give` at position `16`,
+2026-09-29; the count below is the older one).
 
 EXTRACTED, step 5 of the decomposition (a PURE MOVE but for two call sites, named below). The
 registry and its decorator travel with the functions they register, which is the rule step 3
@@ -339,6 +340,40 @@ def _req_release(w: "World", a: "Act") -> bool:
                for t in w.tenures)
 
 
+@requires_predicate("give")
+def _req_give(w: "World", a: "Act") -> bool:
+    """Plan position 16 (`H-84`): *"the actor holds the subject, and the receiver is present where
+    the actor is"* (r2 `02` §A.7's cell). The subject is the Record; the receiver is the `to`
+    operand. `release`'s and `revoke`'s route -- prose `requires:` plus this predicate -- because
+    the second conjunct has no stem (the row's `requires_typed_note:` says why).
+
+    FOUR CLAUSES, IN THE ORDER A WORLD FACT CAN REFUSE THEM, EACH COMPOSED ON ITS OWNER:
+      1. the subject is a Record (`w.records`) -- `give` hands on a DOCUMENT; the `handover` basis
+         at the gate is general over every non-seat `hold`, and this row narrows the verb;
+      2. the actor is its holder -- `world_q.hold_force`, the one owner of *who holds this*, which
+         RAISES on two live holders rather than picking one (`holonic §15`'s 1 per object);
+      3. the receiver is a person other than the actor -- ED-IN-0210 ruling 1, a two-party act
+         needs its second party, and a give to oneself would close and reopen the same custody;
+      4. the receiver is where the actor is -- `world_q.place_of` for both, the one owner of *the
+         rung a thing is at* (`_ch_co_located` reads the same function), compared for equality.
+    ⚠ A MISSING `to` REFUSES, ON `_req_confer`'s PRECEDENT (a missing `office`). No PERSON reaches
+    this with one: the row is untyped, so `operands_for` carries nothing, and the row's
+    `counterparty: to` makes `opening_set` form no Candidate whose receiver it cannot name. So a
+    `give` executes from an act that names `to` -- a hand-built one today, a person's once `15c`
+    derives `to` from a held writ."""
+    rid = subject_of(a)
+    if not rid or rid not in w.records:
+        return False
+    holder = world_q.hold_force(w, rid)
+    if holder is None or holder.subject != a.actor:
+        return False
+    to = a.payload.get("to") if isinstance(a.payload, dict) else None
+    if not to or to == a.actor or to not in w.persons:
+        return False
+    here = world_q.place_of(w, a.actor)
+    return here is not None and world_q.place_of(w, to) == here
+
+
 @requires_predicate("revoke")
 def _req_revoke(w: "World", a: "Act") -> bool:
     """Part E: *"the office's **revocation basis**, and a live `hold` exists"*.
@@ -456,4 +491,10 @@ def _req_convene(w: "World", a: "Act") -> bool:
 # ⚠ THE SIXTH IS `establish` (`13f`, 2026-09-25), `remit:`-eligible like the first four. Its
 # operands -- post, rung, remit, body/faction, conferral -- are not in `requires_operands`, and its
 # clauses ask the `Office` constructor and `World.class_of`, neither of which is a grammar form.
+# ⚠ THE SEVENTH IS `give` (position `16`, 2026-09-29), an `own` row like `release` and for the
+# same kind of reason: its first conjunct types (`succeed`'s `held_by`) and its second -- *the
+# receiver is present where the actor is* -- has no stem, because `Relation` pairs its operand with
+# the ACTOR and `present_at` asks where the ACTOR is. A typed cell AND a predicate on one row is
+# what `test_wa_one_owner_...` forbids, so the whole cell is the predicate's. ⚠ IF A PERSON-TO-
+# PERSON CO-LOCATION STEM IS EVER RULED, THIS CELL IS THE ONE WAITING FOR IT (r2 `02` §A.7).
 # ---------------------------------------------------------------------------

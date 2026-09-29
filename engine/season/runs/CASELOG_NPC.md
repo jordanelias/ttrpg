@@ -21,21 +21,21 @@ corpus in the direction that flattered it.
 | `INSTRUMENT-ERROR` | a declared token **names nothing** — a typo in the overlay, not a finding about the design. It is kept out of `blockers` and its case is not graded |
 | `SOURCE-UNCLEAR` | the CASE SOURCE fails to say something; the source failing, not the shape |
 
-## NPC-088 — Carin Vedel  ·  **BLOCKED**
-*person · 10 rows, 6 core · blockers: H-84*
+## NPC-088 — Carin Vedel  ·  **DEGRADED**
+*person · 10 rows, 6 core · blockers: none*
 *ends when:* never automatically -- only by discovery, arrest, or death, or by a player-driven resolution; the source names no natural conclusion.
 
 | need | rests on | verdict | why |
 |---|---|---|---|
 | **[core]** A person holding no office, post, or command must be able to perform a repeated, multi-week task (copying a text) that the engine tracks as ongoing work-in-progress with a start and an end,  | `create_record` · `H-80` | **ASSUMED** | 'create_record' executes · H-80: assumption -- rests on an injected default |
 | **[core]** The physical product of her labor (a copied text) must be able to exist as a persistent object that can be found, carried, hidden, given away, or destroyed independently of her. | `create_record` · `destroy_record` | PASS | 'create_record' executes · 'destroy_record' executes |
-| **[core]** Simply possessing the product of her labor must be able to trigger consequences for whoever holds it, independent of whether the act of copying was ever observed. | `H-79` · `H-84` | **GAP** | H-79: assumption -- rests on an injected default · H-84: absent |
+| **[core]** Simply possessing the product of her labor must be able to trigger consequences for whoever holds it, independent of whether the act of copying was ever observed. | `H-79` · `H-84` | **ASSUMED** | H-79: assumption -- rests on an injected default · H-84: ruled |
 | Her work must be able to accumulate institutional attention gradually across multiple undiscovered seasons, not only through a single detected incident. | `probe:P17` | **GAP** | P17: GAP |
 | **[core]** A person with no faction rank, no assigned Duty, and no tracked Standing must still be able to generate a scene opportunity that brings a player into contact with her. | `speak` · `H-04` | **ASSUMED** | 'speak' executes · H-04: assumption -- rests on an injected default |
-| **[core]** A person with no political voice must be able to become personally significant -- worth a scene, worth a decision -- purely through the discovered effect of her private labor, without her ev | `H-79` · `H-84` | **GAP** | H-79: assumption -- rests on an injected default · H-84: absent |
+| **[core]** A person with no political voice must be able to become personally significant -- worth a scene, worth a decision -- purely through the discovered effect of her private labor, without her ev | `H-79` · `H-84` | **ASSUMED** | H-79: assumption -- rests on an injected default · H-84: ruled |
 | Her season must be able to end through means that require no institutional process at all -- being found and killed, or simply vanishing -- not only through an arrest, trial, or faction-tree | `fight` | PASS | 'fight' executes |
 | **[core]** The engine must represent something about a season of her life beyond identity-only reference data -- some tracked state that a player interaction can actually change -- for at least the sea | `create_record` · `term.matured` | PASS | 'create_record' executes · term.matured: declared in an emits: column (static, not a run) |
-| A single scene of investigation, discovery, or protection involving her must be able to permanently change a persistent fact about her (protected / exposed / arrested / dead) that carries fo | `H-84` | **GAP** | H-84: absent |
+| A single scene of investigation, discovery, or protection involving her must be able to permanently change a persistent fact about her (protected / exposed / arrested / dead) that carries fo | `H-84` | PASS | H-84: ruled |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | the source says it does not know |
 
 ## NPC-087 — Uwe Askeland  ·  **DEGRADED**
@@ -98,13 +98,13 @@ corpus in the direction that flattered it.
 | If her covert status is exposed publicly, the consequence must convert what she gained secretly into an explicit, larger public loss, rather than simply erasing the secret gain. | — | UNMAPPED | nobody has authored an `exercises:` for this row |
 | Her overt institutional rank and her covert rank must be able to move independently -- advancement or disgrace in one must not automatically imply the same in the other. | — | UNMAPPED | nobody has authored an `exercises:` for this row |
 
-## NPC-010 — Dalla Virke  ·  **BLOCKED**
-*person · 8 rows, 4 core · blockers: H-84*
+## NPC-010 — Dalla Virke  ·  **DEGRADED**
+*person · 8 rows, 4 core · blockers: none*
 *ends when:* never explicitly named; presumably her exposure or recall event, or indefinite continuation.
 
 | need | rests on | verdict | why |
 |---|---|---|---|
-| **[core]** A non-faction, non-institutional actor must be able to hold and trade a resource (information, trust, access) that no faction's own action economy owns or produces -- a market that exists ou | `transfer` · `H-84` | **GAP** | 'transfer' executes · H-84: absent |
+| **[core]** A non-faction, non-institutional actor must be able to hold and trade a resource (information, trust, access) that no faction's own action economy owns or produces -- a market that exists ou | `transfer` · `H-84` | PASS | 'transfer' executes · H-84: ruled |
 | **[core]** Information she sells must be able to be true, false, or fabricated, with the buyer unable to distinguish which in advance, and her incentive to fabricate must rise specifically when honest  | `H-79` · `probe:P31` | **ASSUMED** | H-79: assumption -- rests on an injected default · P31: PASS |
 | **[core]** She must be discoverable, killable, buyable, or turnable by an outside actor as four textually distinct outcomes with different consequences for her network, not variations on one generic 'r | `fight` · `surveil` · `interview` · `tell` | PASS | 'fight' executes · 'surveil' executes · 'interview' executes · 'tell' executes |
 | **[core]** Her personal judgment about a specific past transaction (vetting goods as safe and legitimate) must be able to be wrong in a way that is discoverable later and attributable specifically to h | `H-22` · `H-79` | **ASSUMED** | H-22: ruled · H-79: assumption -- rests on an injected default |

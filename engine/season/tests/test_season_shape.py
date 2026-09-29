@@ -2224,11 +2224,12 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
     # AND THE CONTROL: the shipped table loads. Without this the two arms above would pass on a
     # loader that refused everything.
     # ⚠ 37 -> 38, `release` (`04 §A.3` row 14), 2026-09-11; 38 -> 39, `march` (M4,
-    # `ED-IN-0279` clause (a)), 2026-09-28. This is a CONTROL, not a claim about
+    # `ED-IN-0279` clause (a)), 2026-09-28; 39 -> 40, `give` (plan position 16), 2026-09-29. This
+    # is a CONTROL, not a claim about
     # the roster: its job is to fail if the loader started refusing everything, so it moves with
     # the table by construction and the number is read from the file rather than chosen.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops both arms above passing on a loader that refuses everything]
-    assert len(VERBS._load_verb_table()) == 39
+    assert len(VERBS._load_verb_table()) == 40
 
 
 def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
@@ -11744,9 +11745,10 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # Pins the roster against silent growth.
     # ⚠ 37 -> 38, `release` (`04 §A.3` row 14), 2026-09-11; 38 -> 39, `march` (M4,
     # `ED-IN-0279` clause (a)), 2026-09-28 -- AND THIS ONE DOES touch the contested set asserted
-    # above, per the note there.
+    # above, per the note there; 39 -> 40, `give` (plan position 16, `H-84`), 2026-09-29, which
+    # declares no `contests:` and leaves that set alone.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
-    assert len(VERB_TABLE) == 39, len(VERB_TABLE)
+    assert len(VERB_TABLE) == 40, len(VERB_TABLE)
     # AND THE SIX ARE SIX, not a row that says six. This is the half of the pin that the old
     # count could not express: a table carrying the placeholder passed `== 32` while no act in it
     # could be formed, and `runs/CASELOG_NPC.md:64` reported the same case as a blocked one.

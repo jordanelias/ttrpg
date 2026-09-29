@@ -5,15 +5,13 @@
    "name": "Carin Vedel",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "DEGRADED",
    "rows": 10,
    "core": 6,
    "core_routed": 6,
    "core_unmapped": 0,
-   "core_blocked": 2,
-   "blockers": [
-    "H-84"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "unbound": [],
    "routed": [
     {
@@ -102,17 +100,17 @@
        "detail": "H-79: assumption -- rests on an injected default"
       },
       {
-       "ok": false,
+       "ok": true,
        "bound": true,
        "kind": "hole",
-       "detail": "H-84: absent",
-       "grade": "absent"
+       "detail": "H-84: ruled",
+       "grade": "ruled"
       }
      ],
      "unbound": [],
      "verdict": {
-      "verdict": "GAP",
-      "detail": "H-79: assumption -- rests on an injected default \u00b7 H-84: absent",
+      "verdict": "ASSUMED",
+      "detail": "H-79: assumption -- rests on an injected default \u00b7 H-84: ruled",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -201,17 +199,17 @@
        "detail": "H-79: assumption -- rests on an injected default"
       },
       {
-       "ok": false,
+       "ok": true,
        "bound": true,
        "kind": "hole",
-       "detail": "H-84: absent",
-       "grade": "absent"
+       "detail": "H-84: ruled",
+       "grade": "ruled"
       }
      ],
      "unbound": [],
      "verdict": {
-      "verdict": "GAP",
-      "detail": "H-79: assumption -- rests on an injected default \u00b7 H-84: absent",
+      "verdict": "ASSUMED",
+      "detail": "H-79: assumption -- rests on an injected default \u00b7 H-84: ruled",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -287,17 +285,17 @@
      ],
      "resolved": [
       {
-       "ok": false,
+       "ok": true,
        "bound": true,
        "kind": "hole",
-       "detail": "H-84: absent",
-       "grade": "absent"
+       "detail": "H-84: ruled",
+       "grade": "ruled"
       }
      ],
      "unbound": [],
      "verdict": {
-      "verdict": "GAP",
-      "detail": "H-84: absent",
+      "verdict": "PASS",
+      "detail": "H-84: ruled",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -987,15 +985,13 @@
    "name": "Dalla Virke",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "DEGRADED",
    "rows": 8,
    "core": 4,
    "core_routed": 4,
    "core_unmapped": 0,
-   "core_blocked": 1,
-   "blockers": [
-    "H-84"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "unbound": [],
    "routed": [
     {
@@ -1014,17 +1010,17 @@
        "detail": "'transfer' executes"
       },
       {
-       "ok": false,
+       "ok": true,
        "bound": true,
        "kind": "hole",
-       "detail": "H-84: absent",
-       "grade": "absent"
+       "detail": "H-84: ruled",
+       "grade": "ruled"
       }
      ],
      "unbound": [],
      "verdict": {
-      "verdict": "GAP",
-      "detail": "'transfer' executes \u00b7 H-84: absent",
+      "verdict": "PASS",
+      "detail": "'transfer' executes \u00b7 H-84: ruled",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -9500,7 +9496,7 @@
   "P36": {
    "id": "P36",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 28 candidates were OFFERED from the computed option set and only 22 of 39 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['interview', 'move', 'petition', 'surveil', 'utter', 'work'] -- 6 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 28 candidates were OFFERED from the computed option set and only 23 of 40 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['interview', 'move', 'petition', 'surveil', 'utter', 'work'] -- 6 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
    "kind": null,
    "section": "S17",
    "title": "a choice branches three ways",
@@ -9524,7 +9520,7 @@
    "kind": "FORBIDDEN",
    "section": "F3",
    "title": "a memberless faction's holdings become contestable",
-   "needs": "T-m (the actor owns the edge), T-o (via present, the actor seated in it, the seat's revocation basis reaching it), conferral (via's purview over a seat that declares a conferral basis), or cascade (the edge names something this same write removed). T-n is unbuilt: Tenure carries no term",
+   "needs": "T-m (the actor owns the edge), T-o (via present, the actor seated in it, the seat's revocation basis reaching it), conferral (via's purview over a seat that declares a conferral basis), cascade (the edge names something this same write removed), or handover (a `hold` on something that is not a seat, opened in the same write that ended the actor's own live `hold` on it -- one opening per ending). T-n is unbuilt: Tenure carries no term",
    "law": "04 \u00a7C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner writes only under a declared basis. Per-verb eligibility enforced this by CONVENTION until G3; a revocation with no seat in Act.via is refused here, so 'a superior may revoke' cannot degrade into 'anyone with a remit string'",
    "by": "probe-model",
    "tests": "when everyone abandons a cause, what it held must be able to be taken by someone else"
@@ -10779,7 +10775,7 @@
    "kind": "FORBIDDEN",
    "what": "a (Tenure, until) write by p_high exercising no seat wrote Tenures it has no basis for: th_dead (hold owned by p_low on S, changed)",
    "where": "F3",
-   "needs": "T-m (the actor owns the edge), T-o (via present, the actor seated in it, the seat's revocation basis reaching it), conferral (via's purview over a seat that declares a conferral basis), or cascade (the edge names something this same write removed). T-n is unbuilt: Tenure carries no term",
+   "needs": "T-m (the actor owns the edge), T-o (via present, the actor seated in it, the seat's revocation basis reaching it), conferral (via's purview over a seat that declares a conferral basis), cascade (the edge names something this same write removed), or handover (a `hold` on something that is not a seat, opened in the same write that ended the actor's own live `hold` on it -- one opening per ending). T-n is unbuilt: Tenure carries no term",
    "law": "04 \u00a7C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner writes only under a declared basis. Per-verb eligibility enforced this by CONVENTION until G3; a revocation with no seat in Act.via is refused here, so 'a superior may revoke' cannot degrade into 'anyone with a remit string'",
    "case": "probe:F2",
    "expected": false

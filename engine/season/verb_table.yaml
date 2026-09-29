@@ -277,6 +277,24 @@ verbs:
     emits_on_refusal: []
     grade:       "assumption"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "give"
+    stratum:     "social"
+    eligibility: ["own", "hold:<record>"]
+    beneficiary: "none"
+    beneficiary_note: "the RECEIVER is who a gift is for, and the receiver is the `to` operand -- which this row cannot carry, because it is untyped (`requires_typed: none`, below) and the loader refuses `beneficiary: to` on a row whose cell binds no `to`. `exchange`'s shape: the other party is exactly what the row cannot hold. `subject` is the Record, and a beneficiary that is not a person is the `none` member."
+    requires:    "the actor holds the subject, and the receiver is present where the actor is"
+    requires_typed: none
+    requires_typed_note: "⚠ `none` FOR THE GRAMMAR'S REASON, ON `release`'s AND `revoke`'s ROUTE (r2 `02` §A.7, RULED there): a prose `requires:` read by the registered predicate `loop/predicates.py::_req_give`. The FIRST conjunct types -- `{form: relation, of: subject, relation: held_by}`, `succeed`'s live cell. The SECOND cannot: `Relation.check` pairs its `of:` operand with the ACTOR, and `present_at` asks whether the ACTOR is at a site or rung, so no stem in `data/requires.py: REQUIRES_STEMS` asks *are these two persons in the same place*. Typing the first conjunct alone is the dropped-conjunct over-admission `_req_confer` was corrected for, and a typed cell beside a predicate is two owners of one cell (`test_wa_one_owner_...`). ⚠ IF A PERSON-TO-PERSON CO-LOCATION STEM IS EVER RULED, THIS IS THE CELL WAITING FOR IT. ⚠ THE CONSEQUENCE, STATED: `operands_for` carries nothing for an untyped row, so no Candidate a person forms can name the receiver -- which is why the row declares `counterparty: to` (below). A `give` EXECUTES from an act that names `to`; a person forms one when plan position `15c` derives `to` from a held writ."
+    counterparty: to
+    counterparty_note: "THE RECEIVER, and on this UNTYPED row the declaration does the other half of its job: no cell binds `to`, so no Candidate carries it, and `decision/options.py::opening_set` forms NONE (`ops.get(counterparty)` is absent) rather than minting a gift with no receiver for the fold to refuse. MEASURED without it: 3 person-formed `give`s in `headless.run(3, 0)` and 41 in `populated.run(2, 0)`, every one `give.refused`, and `release` fell out of the corpus's executed set -- the constant scene tax the `petition` row's seat reading was refused for. The loader admits an unbound counterparty only on an untyped row and only if it is a `requires_operands` member (`data/verbs.py`). When `15c` carries `to`, the same column declines a gift to oneself, as it does a petition."
+    writes:      ["Tenure.until", "Tenure.since"]
+    writes_note: "ONE PER SIDE, `confer`'s pair: the giver's `hold` closes (`Tenure.until`) and the receiver's opens (`Tenure.since`), in ONE effect (`loop/effects.py::_eff_give`), so the fold never sees two live holders. The gate admits the close as `T-m` and the open as `handover` (`state/gate.py`), and the second requires the first IN THE SAME WRITE -- release-before-mint is the gate's condition, not the effect's habit (r2 `05` row 6, ⊕ R14). No `write_matrix.yaml` row is added: both pairs exist."
+    emits:       ["record.given"]
+    emits_on_refusal: ["give.refused"]
+    emits_note: "⚠ A NEW KIND, AND IT MUST NOT BE `record.created` OR `tenure.opened`/`tenure.closed`. `epistemic.py::_ch_chronicle` broadcasts every kind a `binding_decision` row emits and `_ch_post_remit` every kind a `remit:`-eligible row emits, both by kind; `confer`, `revoke` and `release` emit the tenure kinds and `issue` shares `record.created`'s family, so reusing either would make every handover in the realm public. `record.given` is emitted by this row alone, `social` and `own`-eligible, so neither channel reads it."
+    grade:       "ruled"
+    grade_note:  "RATIFIED PROGRAM POSITION 16 -- *one two-party verb ... `own` + `hold:<record>` eligibility, writing the holder's `hold` closed and the receiver's open* -- named against `architecture/VOCABULARY.md` (no row for give, grant, hand, convey or deliver; checked again at the build), and the gate's basis for the receiver's edge settled at G3's pre-flight (`ED-IN-0277`). `hold:<record>` is a PLACEHOLDER and declines on both sides (`H-75`); `own` admits first, as `transfer`'s `own | hold:<store>` does."
+    source:      "plan `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` position 16 (≡ `15a`); r2 `proposals/2026-09-17-governance-and-holdings-r2/02_THE_WRIT_AND_THE_WORD.md` §A.7 (the row, the predicate, the name); `hole_register.yaml` H-84"
   - verb:        "issue"
     scale:   "province"
     scale_note: "a Dispensation's `scope` enumerates executors -- §37.1 -- so its reach is the domain the issuer governs"

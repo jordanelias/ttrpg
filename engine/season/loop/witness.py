@@ -22,7 +22,8 @@ from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN
 from ..data.rosters import (
     OBSERVATION_DEPOSIT_MODES, RECORD_CONTENT, WITNESS_CHANNELS, require_member,
 )
-from ..epistemic import SEEN_PREDICATE, act_refs, claim_subjects, observers_for, seen_of, seen_subject
+from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, claim_subjects,
+                         observers_for, seen_of, seen_subject)
 from ..queries import cache
 from ..queries.person_q import LedgerReader
 from ..queries.world_q import hold_force
@@ -229,16 +230,24 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # nothing still takes a `ledger_cap` slot the eviction takes from somebody else. Every `text`
     # Record carries `None`, so this rule deposits nothing for the Records the loop minted before
     # it existed -- which is also why it moves no hash on a world that mints only those.
+    # ⚠ AND THE RECORD MAY BE NAMED THROUGH ITS `hold` (plan position `16`). `give`'s receipts name
+    # the two custody EDGES, not the Record -- `_eff_confer`'s rule on what a receipt may assert --
+    # so each change passes through `_hold_tenure_ends` first, the one owner of *a `hold` receipt
+    # is about its holder and what it holds* that `claim_subjects` and `seen_subject` already read.
+    # That is r2 `02` §A.9's own trigger, *a `hold`-on-Record appearing in `changes[]`*. A Record
+    # named directly (`record.created`) passes through unchanged, and a `release` of a Record's
+    # `hold` finds no live holder and deposits nothing -- so only a handover newly reaches here.
     content_stem = RECORD_CONTENT.get("predicate")
     newly_held: dict = {}
     for e in events:
         for c in e.changes:
-            rec = w.records.get(c.subject) if c.subject else None
-            if rec is None or rec.subject_matter is None:
-                continue
-            h = hold_force(w, rec.id)
-            if h is not None and h.since == w.tick:
-                newly_held.setdefault(e.id, {})[rec.id] = (h.subject, rec)
+            for named in (_hold_tenure_ends(w, c.subject) if c.subject else ()):
+                rec = w.records.get(named)
+                if rec is None or rec.subject_matter is None:
+                    continue
+                h = hold_force(w, rec.id)
+                if h is not None and h.since == w.tick:
+                    newly_held.setdefault(e.id, {})[rec.id] = (h.subject, rec)
     w._in_parallel_map = True
     for pid, e, channel in fan:
         p = w.persons.get(pid)

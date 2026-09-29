@@ -58,7 +58,7 @@ from ..data.rosters import (
 
 from ..gaps import InstrumentDefect, Unspecified
 from ..loop.predicates import office_described_by
-from ..queries.world_q import holder_faction_of
+from ..queries.world_q import hold_force, holder_faction_of
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.gate import NO_CHANGE, Change, Subject
 from ..state.ids import H
@@ -627,6 +627,47 @@ def _eff_petition(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
     if a.actor in content[RECORD_CONTENT.get("addressee")]:
         return NO_CHANGE
     return _mint_document(w, a, "petition", content, _operand(a, "from"))
+
+
+@effect_for("give")
+def _eff_give(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """Plan position 16 (`H-84`): the actor's `hold` on the Record ENDS and the receiver's OPENS, in
+    ONE write -- the first verb that moves a Record to another person.
+
+    CLOSE, THEN OPEN, INSIDE ONE `apply`, AND THE ORDER IS THE GATE'S CONDITION RATHER THAN THIS
+    BODY'S DISCIPLINE. The giver's close is `T-m`; the receiver's open is admitted only under the
+    `handover` basis (`state/gate.py::tenure_write_basis`), which requires the actor to have ended
+    their own live `hold` on the same object in the SAME write. So a `give` that forgot the release
+    is `NotYours` with both edges put back -- `hold_force` never sees two holders -- and one that
+    released in an earlier write finds no licence in this one.
+
+    WHICH EDGE CLOSES: the ONE live `hold` on the Record, read through `hold_force` (the owner of
+    *who holds this*, which raises on two rather than choosing), and only if it is the ACTOR's --
+    `_eff_confer` closes every hold on its object because a conferral displaces the incumbent;
+    a gift displaces nobody but the giver, and closing another person's edge here would be
+    refused by the gate anyway. Anything else declines (`NO_CHANGE` -> `give.refused`). Whether the
+    receiver may be given it at all (a person, not the giver, standing here) is `_req_give`'s, asked
+    first; it is not asked twice.
+
+    G4 -- WHAT IT NAMES: the two edges, OPENED FIRST as `_eff_confer` names them. Both are `edge`
+    subjects the tenure diff judges, and both earn the row's one kind, `record.given`. The receipts
+    therefore name TENURES, not the Record -- `_eff_confer`'s lesson on what a receipt may assert --
+    and every reader that wants the Record goes through `epistemic._hold_tenure_ends`, which is
+    `claim_subjects`' and `seen_subject`'s route and, since this position, WITNESS's deposit rule's.
+
+    THE RECEIVER'S EDGE ID carries the act (`hold:<record>:<act>`): a Record handed A -> B -> A
+    inside one tick would otherwise re-mint A's first `hold` id, and two Tenures sharing an id is
+    what `World._tenure_changes` tolerates rather than wants."""
+    rid, to = _operand(a, "subject"), _operand(a, "to")
+    held = hold_force(w, rid) if rid in w.records else None
+    if held is None or held.subject != a.actor:
+        return NO_CHANGE
+    nt = Tenure(H(w.world_seed, w.tick, to, f"hold:{rid}:{a.id}"), to, rid, "hold", since=w.tick)
+
+    def perform() -> None:
+        held.until = w.tick                # the giver's release, FIRST
+        w.add_tenure(nt)                   # then the receiver's hold
+    return Change((Subject.edge(nt), Subject.edge(held)), perform)
 
 
 @effect_for("destroy_record")
