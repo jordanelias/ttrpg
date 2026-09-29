@@ -133,6 +133,35 @@ COHERENCE_COST_BY_SCALE = {
 # [canonical: §3.2 — "FR surcharge cap exemption (PP-196)"]
 FR_SURCHARGE = -1
 
+# P-25 "Scale-based Mending Stability" — the SCALE TERM on Mending Stability, authored here because
+# ED-WR-0008's superseding row (2026-09-15, registers/editorial_ledger_wr_archive.jsonl) says so:
+# the P-25 override table was truncated at authoring to its header plus the label `Object`, NOTHING
+# READ IT, and "the scale term is authored IN CODE with its citation when position 27 runs, and the
+# doc follows" (ED-WR-0010's ruled row, consequence 3). Position 27 is this change.
+# THE OVERRIDE IS A FORMULA ON `COHERENCE_COST_BY_SCALE`, NOT A SECOND TABLE. A hand-kept
+# `MS_COST_BY_SCALE_BAND` literal was tried first; its own test proved every one of its 14 cells
+# equalled `Partial = COHERENCE_COST_BY_SCALE[scale]`, `Failure = Partial - 1` with zero exceptions
+# across all seven scales — a second hand-kept copy of one fact (CLAUDE.md §8 "every rule lives
+# once"; found by an adversarial /simplify pass on this position).
+# ⚠ THE MAGNITUDES ARE NOT NEW, BUT PRICING MENDING STABILITY OFF COHERENCE'S TABLE IS ITS OWN
+# UNCITED CHOICE (found by the Phase-3 terminal critique on this position). `COHERENCE_COST_BY_SCALE`
+# is cited to §3.2 "Coherence Reduction" — a practitioner-Coherence price, not a Mending-Stability
+# one — and nothing in `RULINGS.md`/`07_drift.md` says the two are the same quantity. `opposing.py`
+# makes the identical move and names it what it is: "use scale cost as proxy". This override does the
+# same, reusing already-invented numbers rather than inventing new ones, but the REUSE is the
+# invention. A nearer, unused precedent exists in the quarantined reference
+# (`.designs/systems/threadwork/reference/threadwork_v30.md:589-595`): MS -1..-5 over P-25's own five
+# bands, a steeper ladder than this proxy — which ladder to run is a design call for Jordan, not
+# settled here.
+# THE SHAPE: the override replaces the degree table's Partial/Failure values where the degree table
+# applies (Weaving/Pulling) and leaves Locking/Dissolution's flat binding cost (`ms_delta = -1` in
+# `_resolve_operation` below) untouched — that flat cost PREDATES this position and is itself a
+# divergence from threadwork_v30.md's own Locking/Dissolution degree tables (`:398-403`'s Partial/
+# Failure -2/-3, `:433-438`'s -6/-8), out of ED-WR-0008's scope to correct here. At the
+# Relational/Territorial tier the formula reproduces the old degree-only table (-1/-2) EXACTLY, so
+# the term moves only the ends. See the P-25 branch in `_resolve_operation` below for the formula
+# itself — and HANDOFF_WR.md for the fact that nothing yet reads its result.
+
 
 @dataclass
 class OperationResult:
@@ -176,10 +205,12 @@ def _actor_pool(actor) -> int:
 
 def _resolve_operation(operation: str, actor, ob: int, tn: int,
                        coherence_delta: int, world=None,
-                       rng=None) -> OperationResult:
+                       rng=None, scale: str = "Object") -> OperationResult:
     """Shared resolution path for all Thread operations.
 
     Rolls actor's pool, computes degree, applies Coherence delta.
+    `scale` is read only by the P-25 Mending Stability override (Weaving/Pulling); its default is
+    the same Object fallback attempt_weaving/attempt_pulling apply to a target with no scale.
     Returns OperationResult.
     """
     pool = _actor_pool(actor)
@@ -210,18 +241,14 @@ def _resolve_operation(operation: str, actor, ob: int, tn: int,
     if effective_coh != 0:
         apply_coherence_delta(actor_id, effective_coh, f"{operation} {degree}", world=world)
 
-    # Mending Stability impact per §2.4 tables (degree-driven for non-Mending ops)
+    # Mending Stability impact. Weaving/Pulling: the degree table's Partial/Failure values,
+    # OVERRIDDEN by scale per P-25 (ED-WR-0008, see the comment above): Partial = the scale's
+    # own Coherence cost, Failure = Partial - 1. The retired degree-only form was Partial -1 /
+    # Failure -2 at every scale.
     ms_delta = 0
-    if operation == "Weaving":
-        if degree == "Partial":
-            ms_delta = -1
-        elif degree == "Failure":
-            ms_delta = -2
-    elif operation == "Pulling":
-        if degree == "Partial":
-            ms_delta = -1
-        elif degree == "Failure":
-            ms_delta = -2
+    if operation in ("Weaving", "Pulling") and degree in ("Partial", "Failure"):
+        base = COHERENCE_COST_BY_SCALE.get(scale, 0)
+        ms_delta = base if degree == "Partial" else base - 1
     elif operation in ("Locking", "Dissolution"):
         ms_delta = -1  # Binding ops always cost MS
 
@@ -272,7 +299,7 @@ def attempt_weaving(actor, target: dict, world=None, rng=None) -> OperationResul
     ob = DEPTH_OB.get(scale, 1)
     coh = COHERENCE_COST_BY_SCALE.get(scale, 0)
     return _resolve_operation("Weaving", actor, ob, TN_STANDARD,
-                              coherence_delta=coh, world=world, rng=rng)
+                              coherence_delta=coh, world=world, rng=rng, scale=scale)
 
 
 def attempt_pulling(actor, target: dict, world=None, rng=None) -> OperationResult:
@@ -281,7 +308,7 @@ def attempt_pulling(actor, target: dict, world=None, rng=None) -> OperationResul
     ob = DEPTH_OB.get(scale, 1)
     coh = COHERENCE_COST_BY_SCALE.get(scale, 0)
     return _resolve_operation("Pulling", actor, ob, TN_STANDARD,
-                              coherence_delta=coh, world=world, rng=rng)
+                              coherence_delta=coh, world=world, rng=rng, scale=scale)
 
 
 def attempt_past_pulling(actor, target_moment: dict, world=None, rng=None) -> OperationResult:

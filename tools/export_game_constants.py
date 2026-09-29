@@ -56,10 +56,12 @@ MAPPING = {
     'OB_FLOOR':                      'factions.OB_FLOOR',
     'WEAPON_TN_BASE':                'combat.WEAPON_TN_BASE',
     'COMBAT_POOL_MINIMUM':           'combat.COMBAT_POOL_MIN',
-    'COHERENCE_START':               'threadwork.COHERENCE_START',
-    'COHERENCE_MAX':                 'threadwork.COHERENCE_MAX',
-    'COHERENCE_MIN':                 'threadwork.COHERENCE_MIN',
-    'COHERENCE_FRACTURED_THRESHOLD': 'threadwork.COHERENCE_FRACTURED',
+    # COHERENCE_START / _MAX / _MIN / _FRACTURED_THRESHOLD LEFT THIS TABLE at position 27 (WR-SCOPE,
+    # 2026-09-29). Their Python owners were the retired 10-0 depleting track, and the oracle now
+    # models Coherence as a distance with two quantities (systems/threadwork/sim/coherence.py), so
+    # no Python constant is the same quantity as any of the four. Pairing them to the new constants
+    # by name would be exactly the matching this file forbids; the disagreement is recorded in
+    # DIVERGENCES['coherence_bands'] instead, where it is a model difference and not a value copy.
     'KNOT_FORMATION_TN':             'fieldwork.KNOT_FORMATION_TN',
     'KNOT_FORMATION_OB':             'fieldwork.KNOT_FORMATION_OB',
     'SEASONS_PER_YEAR':              'overview.SEASONS_PER_YEAR',
@@ -123,16 +125,26 @@ DIVERGENCES = {
         'needs': 'ruling — which model is canonical',
     },
     'coherence_bands': {
-        'engine': "SIX bands with LOW-edge encoding: Stable >=8, Dissonant 7-5 (COHERENCE_DISSONANT_LOW=5), "
-                  "Fragmented 4-3 (COHERENCE_FRAGMENTED_LOW=3), Fractured ==2, Severed ==1, "
-                  "Rendering Crisis ==0 (systems/threadwork/sim/coherence.py:43-47,119-125,170).",
-        'port':   "FOUR bands with TOP-edge encoding: DISSONANT_THRESHOLD=6, FRAGMENTED_THRESHOLD=4, "
-                  "FRACTURED_THRESHOLD=2, SEVERED_THRESHOLD=0 (Constants.gd:54-57). No Crisis band, and "
-                  "the port's SEVERED=0 collides with the engine's CRISIS=0 while the engine's SEVERED=1.",
-        'why_it_matters': "The ladders disagree in band COUNT, in EDGE CONVENTION, and at the Dissonant "
-                          "boundary (engine 5 vs port 6). COHERENCE_FRACTURED is the only rung that "
-                          "coincides, which is why it is the one coherence band in MAPPING.",
-        'needs': 'ruling — band count and edge convention',
+        'engine': "Coherence is a DISTANCE from the human equilibrium (0 = on it), held as TWO "
+                  "quantities: a resting point that moves out only by permanent set, and elastic "
+                  "displacement that recovers (canon/philosophy/07_drift.md §7.1). Four displacement "
+                  "bands read PRESENT displacement — Stable, Dissonant >= DISPLACEMENT_DISSONANT_LOW, "
+                  "Fragmented >= DISPLACEMENT_FRAGMENTED_LOW, Fractured >= DISPLACEMENT_FRACTURED_LOW — "
+                  "and the terminal 'Coherence failure' reads the RESTING point leaving the human band "
+                  "(> HUMAN_BAND_LIMIT). No Severed band; nothing depletes "
+                  "(systems/threadwork/sim/coherence.py, CoherenceState.band).",
+        'port':   "The retired 10-0 DEPLETING track: the four COHERENCE_* constants MAPPING paired "
+                  "until 2026-09-29 (START 10, MAX 10, MIN 0, FRACTURED_THRESHOLD 2 — the values last "
+                  "exported for parity; not re-read from the port here), and FOUR bands with TOP-edge "
+                  "encoding: DISSONANT_THRESHOLD=6, FRAGMENTED_THRESHOLD=4, FRACTURED_THRESHOLD=2, "
+                  "SEVERED_THRESHOLD=0 (Constants.gd:54-57).",
+        'why_it_matters': "Different state models, not different numbers: the port has one quantity "
+                          "that runs down, the oracle two that measure distance outward, with "
+                          "different remedies. No port constant pairs with an oracle constant, which "
+                          "is why the four COHERENCE_* pairs left MAPPING at position 27 (2026-09-29) "
+                          "rather than being re-pointed by name.",
+        'needs': 'port rebuild to the ruled two-quantity model (ED-WR-0010, RULINGS.md Batch 8-9) — '
+                 'a model port, not a value copy (CLAUDE.md §6: a port never corrects its oracle)',
     },
 }
 
