@@ -484,11 +484,18 @@ def refuse_unauthored(w: "World", changes: list, actor: Optional[str], via: Opti
     not change: *which change was a `T-m` closure* is a judgment, and the store observes changes
     and never judges them -- the split this module's G3 header states.
 
-    ⚠ `closes` IS BUILT ALONGSIDE `bases`, NOT RE-DERIVED FROM `_closes(t, was)` A SECOND TIME PER
-    CHANGE -- BATCH-CLOSE FINDING (methodology-close Phase 2, EFFICIENCY): the `released` Counter
-    used to call `_closes(t, was)` fresh for every change purely to rebuild what
-    `tenure_write_basis` already computed (and discarded) inside its own first-pass call. One list,
-    zipped alongside `bases`, is the same answer without the second pass through `_moved`/`_closes`."""
+    ⚠ `closes` IS A NAMED LIST, NOT AN EFFICIENCY FIX -- CORRECTED (BATCH-CLOSE, methodology-close
+    Phase 3 terminal critique, F5): the Phase 2 EFFICIENCY finding this replaced claimed it removed
+    "the second pass through `_moved`/`_closes`," and that claim was false. `_closes(t, was)` is
+    still called exactly once per change here (now via this list comprehension, before it was
+    inline in the `released` Counter's own generator) -- the SAME count as before, only relocated
+    -- and `tenure_write_basis` still computes its own `_moved`/`_closes` internally, one call per
+    change, inside the `bases` comprehension two lines up. The two calls per change (one inside
+    `tenure_write_basis`, one here) are UNCHANGED by this list; eliminating that pair would need
+    `tenure_write_basis` to return `closed` alongside its basis, a signature change to the write
+    gate's own judgment function not attempted here. What this list actually buys: `closed` is a
+    named, reused value inside the `zip` loop below rather than re-spelled inline -- a readability
+    change, not a performance one, and the docstring saying otherwise was the defect."""
     bases = [tenure_write_basis(w, t, was, actor, via, gone) for t, was in changes]
     closes = [_closes(t, was) for t, was in changes]
     released = Counter(was.object for (t, was), basis, closed in zip(changes, bases, closes)

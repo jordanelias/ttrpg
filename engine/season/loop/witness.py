@@ -637,7 +637,19 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 # `_told_value` -- the same hash mints the Claim id below and the same stem was
                 # already derived for the `LEDGER_DERIVED_STEMS` guard above (BATCH-CLOSE, Phase 2
                 # EFFICIENCY finding; see `_told_value`'s own docstring).
-                _told_hash = H(w.world_seed, w.tick, pid, f"told:{e.id}")
+                # ⚠ COMPUTED ONLY AT `Partial`, NOT UNCONDITIONALLY -- CORRECTED (BATCH-CLOSE,
+                # methodology-close Phase 3 terminal critique, F5): the first writing of this line
+                # computed the hash for every degree, before the dedup guard below -- but
+                # `_told_value` never touches it outside `Partial` (its own first line: `if
+                # e.degree != "Partial": return held.value`), and the dedup guard drops most
+                # tellings regardless of degree (measured: 175 of 180 corpus-wide). So the
+                # unconditional version PAID a blake2b digest on every non-Partial telling this
+                # channel reaches, a cost neither the pre-fix code nor `_told_value` itself ever
+                # incurred there -- the opposite of the efficiency this fix claimed. Deferred to the
+                # Claim-id site below for any degree that is not `Partial`, matching what the
+                # pre-fix code actually did.
+                _told_hash = (H(w.world_seed, w.tick, pid, f"told:{e.id}")
+                              if e.degree == "Partial" else None)
                 _told_val = _told_value(w, pid, e, _held, _told_hash, _held_stem)
                 # ⚠⚠ **A TELLING THAT TELLS SOMEBODY WHAT THEY ALREADY SAW DEPOSITS
                 # NOTHING, AND WITHOUT THIS LINE THE CHANNEL IS ALMOST ENTIRELY THAT.**
@@ -675,7 +687,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                     # channel's own content-owner directory. `_act.actor` is already in scope
                     # (bound above, this same guard), so this is exactly the one-argument edit
                     # the ruling names -- `Claim.teller`, `state/carriers.py` -- not a lookup.
-                    tc = Claim(_told_hash,
+                    tc = Claim(_told_hash or H(w.world_seed, w.tick, pid, f"told:{e.id}"),
                                pid, _held.subject, _held.predicate, _told_val, w.tick,
                                "told_by", _held.confidence, "own", self.round, _act.actor)
                     w.write("claim_ledger", token,

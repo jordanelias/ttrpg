@@ -9637,13 +9637,11 @@
   },
   "F13": {
    "id": "F13",
-   "verdict": "GAP",
-   "detail": "(Date, fired) emits 'date.fired' with no `subject=`",
-   "kind": "FORBIDDEN",
-   "section": "S33",
+   "verdict": "PASS",
+   "detail": "PASS: both dates FIRED; the vacant one ALLOCATED NOTHING AND LAPSED rather than blocking. Death does NOT open the conferral Date -- THE VACANCY IS A FACT, THE DATE IS AN OCCASION, AND CALENDAR IS WHERE FACTS BECOME OCCASIONS. CALENDAR decided nothing",
+   "kind": null,
+   "section": "S24",
    "title": "a vacancy opens the succession occasion",
-   "needs": "subject=<the record id>",
-   "law": "THE SUBJECT IS THE RECORD, NOT THE TRACE LABEL. The fallback was `subject or thing`, and `thing` is a human label for the trace line -- which is exactly the value that made every site's wear emit under the subject `\"condition\"`, so `last_emission_of` never matched and the clock re-rooted every season. Leaving the fallback in place meant emission was inherited by existing while the half that makes a clock CHAIN still had to be remembered -- and a one-shot emission with a forgotten `subject=` is silent. Found by the `W4` adversarial pass",
    "by": "construction",
    "tests": "when a post falls empty the process to fill it must be able to start"
   },
@@ -10827,15 +10825,6 @@
   },
   {
    "kind": "FORBIDDEN",
-   "what": "(Date, fired) emits 'date.fired' with no `subject=`",
-   "where": "S33",
-   "needs": "subject=<the record id>",
-   "law": "THE SUBJECT IS THE RECORD, NOT THE TRACE LABEL. The fallback was `subject or thing`, and `thing` is a human label for the trace line -- which is exactly the value that made every site's wear emit under the subject `\"condition\"`, so `last_emission_of` never matched and the clock re-rooted every season. Leaving the fallback in place meant emission was inherited by existing while the half that makes a clock CHAIN still had to be remembered -- and a one-shot emission with a forgotten `subject=` is silent. Found by the `W4` adversarial pass",
-   "case": "probe:F13",
-   "expected": false
-  },
-  {
-   "kind": "FORBIDDEN",
    "what": "aggregate 'held_ever' composed over 1 ENDED edge(s)",
    "where": "S22.4",
    "needs": "filter to until == null before summing",
@@ -11214,16 +11203,16 @@
   }
  ],
  "_trace_counts": {
-  "STEP": 7099,
+  "STEP": 7100,
   "BARRIER": 1871,
-  "DECISION": 1888,
+  "DECISION": 1889,
   "QUERY": 29930,
   "NOTE": 299,
-  "WRITE": 20427,
-  "EVENT": 20045,
+  "WRITE": 20429,
+  "EVENT": 20047,
   "ACT": 96,
   "CLAIM": 2176,
-  "GAP": 87
+  "GAP": 86
  },
  "_corpus_defects": [
   "ARC1.yaml: committed inside a markdown fence with transcript preamble",

@@ -18,9 +18,9 @@ checking.* So every probe declares its provenance:
 
 ## ⚠ THE ENFORCEMENT SPLIT — the single most important number in this ledger
 
-**Of 60 PROBES that did not pass, 30 were raised BY THE SHAPE ITSELF and 23 exist only because THERE IS NO SIGNATURE TO CALL.**
+**Of 59 PROBES that did not pass, 29 were raised BY THE SHAPE ITSELF and 23 exist only because THERE IS NO SIGNATURE TO CALL.**
 
-> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 87 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 60 of 121. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
+> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 86 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 59 of 121. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
 
 That is close to an even split, and it matters more than any case verdict. A refusal a
 gate enforces and a refusal that exists because nobody wrote the function are different
@@ -32,7 +32,7 @@ has no module system and no visibility modifiers, so the guarantee there is
 a contributor closes by simply writing the function — no gate fires, no test goes red,
 and the design's own §27.2 admission applies: *enforced by a person noticing*.
 
-**And 13 of 61 PASSes are not by construction
+**And 13 of 62 PASSes are not by construction
 either** — they are listed individually below and should be discounted accordingly. A
 `probe-model` PASS means the instrument supplied something the design does not.
 
@@ -66,7 +66,6 @@ either** — they are listed individually below and should be discounted accordi
 | `A7` | **UNSPECIFIED** | construction | S39.4 | a fight, a hearing and an argument must be able to be the same machinery |
 | `A9` | **FORBIDDEN** | no-signature | S4 | one place must be able to see what is happening in another |
 | `F11` | **FORBIDDEN** | no-signature | S38 | a character must be able to know how strong their own faction is |
-| `F13` | **FORBIDDEN** | construction | S33 | when a post falls empty the process to fill it must be able to start |
 | `F14` | **FORBIDDEN** | construction | S22.4 | a faction's territory must be countable as it gains and loses ground |
 | `F15` | **UNSPECIFIED** | no-signature | S54 item 13 / S61 | a post must be able to employ people whose competence is what actually gets used |
 | `F16b` | **FORBIDDEN** | construction | S10.1 | a faction must be able to hold a pooled level of loyalty, unrest or legitimacy |
@@ -118,6 +117,7 @@ either** — they are listed individually below and should be discounted accordi
 | `F1` | PASS | construction | S14.2 | a group of people must be able to share a cause that spans places and outlives its founder |
 | `F10` | PASS | probe-model | S54.1 | several live demands on one matter must be able to resolve without cancelling each other |
 | `F12` | PASS | construction | S11 | a post must be able to be given and taken away by named people at named occasions |
+| `F13` | PASS | construction | S24 | when a post falls empty the process to fill it must be able to start |
 | `F16` | PASS | construction | S10 | a faction must be able to hold a pooled resource that its members' actions raise and lower |
 | `F18` | PASS | probe-model | S36.1 | a place must be able to generate demands of its own that cut against what the authority above ordered |
 | `F20` | PASS | probe-model | S14 | a standing agreement between two polities must be able to constrain what people on either side may do |
@@ -318,12 +318,6 @@ either** — they are listed individually below and should be discounted accordi
 
 **needs:** `leaders_as_claimed` / `norm_as_claimed` -- what they CLAIM about it
 **law:** S38 -- every lateral traversal is RESOLVER-SIDE (['descendants', 'lateral', 'presence', 'r1_aggregate', 'hold_force']), World FIRST, and `choose` has no World, so the call fails at the call site for want of an argument. The person-side surface is ['assemble', 'opening_set', 'budget', 'entrenchment']. THIS IS NOT A LIMITATION TO WORK AROUND: it is why a person CANNOT know their faction's true strength, only what they claim about it
-
-### `F13` — a vacancy opens the succession occasion  ·  **FORBIDDEN**  ·  `S33`  ·  by `construction`
-**what:** (Date, fired) emits 'date.fired' with no `subject=`
-
-**needs:** subject=<the record id>
-**law:** THE SUBJECT IS THE RECORD, NOT THE TRACE LABEL. The fallback was `subject or thing`, and `thing` is a human label for the trace line -- which is exactly the value that made every site's wear emit under the subject `"condition"`, so `last_emission_of` never matched and the clock re-rooted every season. Leaving the fallback in place meant emission was inherited by existing while the half that makes a clock CHAIN still had to be remembered -- and a one-shot emission with a forgotten `subject=` is silent. Found by the `W4` adversarial pass
 
 ### `F14` — a faction's holdings-ever are counted  ·  **FORBIDDEN**  ·  `S22.4`  ·  by `construction`
 **what:** aggregate 'held_ever' composed over 1 ENDED edge(s)

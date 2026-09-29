@@ -1505,8 +1505,19 @@ def f12():
        tests="when a post falls empty the process to fill it must be able to start")
 def f13():
     w = tiny_world()
-    w.dates["d_conf"] = dict(due_at=0, holder="D", fired=False)
-    w.dates["d_vacant"] = dict(due_at=0, holder=None, fired=False)
+    # ⚠ `venue="D"` ADDED -- CORRECTED (BATCH-CLOSE, methodology-close Phase 3 terminal critique,
+    # F3): plan position `11b` made `calendar()`'s `date.fired` write chain on the venue
+    # (`subject=d.get("venue")`, `loop/calendar.py:46,49`), and `World.write` refuses any
+    # `emits=`-declared write whose `subject` is `None` (`Forbidden` "S33",
+    # `state/world.py:1052-1063`) -- so both bare dates here, with no `venue` key at all,
+    # raised uncaught the moment this probe ran `SeasonDriver(w).calendar(...)`. The raise was
+    # never this probe's own PASS/FAIL: it escaped the probe function entirely and the harness
+    # recorded F13 as a design REFUSAL, which is not what happened -- a malformed fixture, not a
+    # finding about the design. `"D"` matches `holder="D"` (the same duchy rung `tiny_world()`
+    # already seats `off_duke` on) and every real `Date` this engine mints (`loop/effects.py`'s
+    # `_eff_convene`, `harness/corpus_run.py:388`), which always carries a `venue`.
+    w.dates["d_conf"] = dict(due_at=0, holder="D", fired=False, venue="D")
+    w.dates["d_vacant"] = dict(due_at=0, holder=None, fired=False, venue="D")
     SeasonDriver(w).calendar(mint_token(w, WriteClass.CALENDAR))
     assert w.dates["d_conf"]["fired"] and w.dates["d_vacant"]["fired"]
     assert len(w.docket) == 1

@@ -3,7 +3,7 @@
 Every branch the shape took that could have gone another way, with the alternatives
 it did not take. A decision nobody records is a decision nobody can audit.
 
-**1888 decisions taken, 70 distinct.**
+**1889 decisions taken, 71 distinct.**
 
 ### ordering 0 acts  ·  `S27/S32`  ·  taken 717x
 - **chose:** five strata, then a content-derived hash key over one global array  (717x)
@@ -312,6 +312,11 @@ it did not take. A decision nobody records is a decision nobody can audit.
 
 ### date d_conf came due  ·  `S24`  ·  taken 1x
 - **chose:** fire-as-sitting  (1x)
+- *not taken:* block until a holder exists
+- *not taken:* defer to next season
+
+### date d_vacant came due  ·  `S24`  ·  taken 1x
+- **chose:** fire-and-lapse  (1x)
 - *not taken:* block until a holder exists
 - *not taken:* defer to next season
 

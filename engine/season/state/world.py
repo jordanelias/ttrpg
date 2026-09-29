@@ -1165,7 +1165,14 @@ class World:
         sweep arm and needs its own decision, not a side effect of this position's field deletion.
         Every OTHER caller of this method (the six kinds above) is unaffected: each names a kind
         with exactly one emitter, MATTER's own auto-emission block, so tier 2 still returns `subj`
-        by construction for all of them."""
+        by construction for all of them. ⚠ "SIX", NOT SEVEN, AND "MATTER'S OWN" NO LONGER COVERS
+        EVERY ONE -- STALE, NOT WRONG (BATCH-CLOSE, methodology-close Phase 3 terminal critique,
+        F12, 2026-09-29): plan position `11b` added a seventh caller, CALENDAR's own `date.fired`
+        chain (`loop/calendar.py:46`), with a single emitter of its OWN (CALENDAR's explicit
+        `emits=`, not MATTER's auto-emission block), and the same tier-2-by-construction argument
+        holds for it -- one emitter, one match, `subj` returned by construction -- just not for
+        the reason this sentence states. Not corrected further here: the count is cosmetic and
+        the property this paragraph defends is unaffected."""
         for e in reversed(self.log):
             if e.kind == kind and anchor_of(self, e) == subject:
                 return e.id
