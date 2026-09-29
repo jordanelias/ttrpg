@@ -459,6 +459,18 @@ def containing_rung_of(p: Person) -> Optional[str]:
     return next((t.object for t in p.tenures if t.kind == "contain" and t.live), None)
 
 
+def _claim_by_id(p: Person, claim_id) -> Optional["Claim"]:
+    """THE ONE CLAIM IN `p`'S OWN LEDGER WITH THIS ID, or `None`. `store_kind_of` and
+    `_from_content_claim` (both below) each look a claim up by `q.about` before reading its
+    predicate -- this is that lookup, factored once so it is not two loops over `p.ledger` written
+    the same way. §20's constraint (a person's own ledger, never the world) lives at the call
+    site, not here: this takes the ledger it is handed."""
+    for c in p.ledger:
+        if c.id == claim_id:
+            return c
+    return None
+
+
 def store_kind_of(p: Person, q: "Question") -> Optional[str]:
     """The matter kind THE QUESTION IS ABOUT, from the person's own ledger. `None` if it says none.
 
@@ -473,15 +485,14 @@ def store_kind_of(p: Person, q: "Question") -> Optional[str]:
     resolver read wearing a person's signature."""
     if q is None or not q.about:
         return None
-    for c in p.ledger:
-        if c.id != q.about:
-            continue
-        # `stores` is `transfer`'s own `scalar:`, and `f"{scalar}:{key}"` is how `Observation`
-        # derives the predicate -- so this reads the namespace the cell writes rather than a
-        # second vocabulary. A claim about anything else names no matter kind.
-        stem, sep, arg = str(c.predicate).partition(":")
-        return arg if sep and arg and stem == "stores" else None
-    return None
+    c = _claim_by_id(p, q.about)
+    if c is None:
+        return None
+    # `stores` is `transfer`'s own `scalar:`, and `f"{scalar}:{key}"` is how `Observation`
+    # derives the predicate -- so this reads the namespace the cell writes rather than a
+    # second vocabulary. A claim about anything else names no matter kind.
+    stem, sep, arg = str(c.predicate).partition(":")
+    return arg if sep and arg and stem == "stores" else None
 
 
 def _from_content_claim(p: Person, q: "Question", name: str):
@@ -517,17 +528,16 @@ def _from_content_claim(p: Person, q: "Question", name: str):
     floor does; exactly one is not a choice at all, so it is not held back."""
     if q is None or not q.about:
         return None
-    for c in p.ledger:
-        if c.id != q.about:
-            continue
-        stem, sep, _ = str(c.predicate).partition(":")
-        if not sep or stem != RECORD_CONTENT.get("predicate") or c.value is None:
-            return None
-        v = dict(c.value).get(name)
-        if isinstance(v, tuple):
-            return v[0] if len(v) == 1 else None
-        return v
-    return None
+    c = _claim_by_id(p, q.about)
+    if c is None:
+        return None
+    stem, sep, _ = str(c.predicate).partition(":")
+    if not sep or stem != RECORD_CONTENT.get("predicate") or c.value is None:
+        return None
+    v = dict(c.value).get(name)
+    if isinstance(v, tuple):
+        return v[0] if len(v) == 1 else None
+    return v
 
 
 def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"):

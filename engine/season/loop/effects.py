@@ -1086,7 +1086,21 @@ def _eff_commit(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     referent, measured `commitment.made : 0` / `commitment.refused : 42` on one populated season --
     a structural gap in `operands_for`/`questions_for`, not in this body, and HELD rather than
     shipped. Items 5/7/8 (here `15`, `15c`, `15b`) are what BO-10 named as opening that aperture;
-    this effect is unchanged from the held draft, because the diagnosis put the gap upstream of it."""
+    this effect is unchanged from the held draft, because the diagnosis put the gap upstream of it.
+
+    ⚠ NOT FACTORED WITH `_eff_oblige` BELOW, THOUGH THE TWO BODIES ARE IDENTICAL BUT FOR ONE STRING
+    -- BATCH-CLOSE FINDING (methodology-close Phase 2, REUSE/SIMPLIFICATION lenses), REVERTED after
+    trying it: `_derive_openers_from_effects` (`data/verbs.py::OPENERS-DERIVE`) is an AST walk over
+    THIS FILE's own source that reads which verb opens which `tenure_kinds` member off a STRING
+    LITERAL at each `Tenure(...)` call site, by design (its docstring: *"every site today names
+    `kind` as a STRING LITERAL"*). A shared helper taking `kind` as a parameter makes that literal
+    disappear from this file's source, and the walker silently stopped seeing `commit`/`oblige` as
+    openers at all (`test_obligees.py::test_17a_oblige_is_resolvable_and_takes_releases_route`
+    caught it: `_OPENERS_FROM_EFFECTS.get("oblige")` went from `["oblige"]` to `[]`). The
+    duplication is real and the fix is not -- this is `create_record`/`issue`/`petition`'s
+    `_mint_document` in reverse: that helper is safe to share because all three name the SAME
+    literal kind (`hold`) inside it; `commit` and `oblige` do not, so nothing here can be factored
+    without either losing the literal or hand-editing the derived roster back into a second copy."""
     prop_id = _operand(a, "subject")
     nt = Tenure(H(w.world_seed, w.tick, a.actor, f"commit:{prop_id}:{a.id}"), a.actor, prop_id,
                 "commit", since=w.tick)
@@ -1119,7 +1133,11 @@ def _eff_oblige(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
 
     WHAT THE EDGE IS FOR: `queries/world_q.py::establishment_of` reads it (the seat's members, `ARCH
     §B.7` call 2), and through that the obligee channel (`epistemic._ch_post_remit`) -- an obligee
-    standing at the seat holds what the seat does `inferred`. `release` ends it (`04 §A.3` row 14)."""
+    standing at the seat holds what the seat does `inferred`. `release` ends it (`04 §A.3` row 14).
+
+    ⚠ NOT FACTORED WITH `_eff_commit` ABOVE -- see its docstring: the two are `Tenure(..., kind,
+    ...)` calls whose `kind` differs, and `_derive_openers_from_effects` needs that string literal
+    visible at THIS call site to derive the opener roster. Read there for what was tried."""
     seat = _operand(a, "subject")
     nt = Tenure(H(w.world_seed, w.tick, a.actor, f"oblige:{seat}:{a.id}"), a.actor, seat, "oblige",
                 since=w.tick)

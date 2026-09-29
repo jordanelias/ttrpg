@@ -339,13 +339,19 @@ def _moved(t: Tenure, was: Optional[Tenure]) -> Optional[set]:
         ("degree", t.degree, was.degree), ("payload", t.payload, was.payload)) if now != then}
 
 
-def _closes(t: Tenure, was: Optional[Tenure]) -> bool:
+def _closes(t: Tenure, was: Optional[Tenure], moved: Optional[set] = None) -> bool:
     """A PURE CLOSURE: an edge that was live before the write, has `until` set after it, and had
     nothing else moved. The one change `cascade` and `T-o` may make -- and, since position 16, the
     change on the giver's side that licenses a `handover` on the receiver's. One test for all
-    three, so what counts as *ended in this write* cannot differ between them."""
-    return (was is not None and was.until is None and t.until is not None
-            and _moved(t, was) == {"until"})
+    three, so what counts as *ended in this write* cannot differ between them.
+
+    `moved` is the caller's own `_moved(t, was)`, when it already has one -- `tenure_write_basis`
+    computes it the line above its own `_closes` call (BATCH-CLOSE, methodology-close Phase 2,
+    SIMPLIFICATION/EFFICIENCY findings: this recomputed it internally on every call). `None`
+    derives it here exactly as before, so every other caller is unaffected."""
+    if moved is None:
+        moved = _moved(t, was)
+    return (was is not None and was.until is None and t.until is not None and moved == {"until"})
 
 
 def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Optional[str],
@@ -430,7 +436,7 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     if not opened and (t.subject, t.object, t.kind) != (was.subject, was.object, was.kind):
         return None
     moved = _moved(t, was)
-    closed = _closes(t, was)
+    closed = _closes(t, was, moved)
     seat = w.offices.get(t.object) if t.kind == "hold" else None
     # ⚠ T-M NEVER ADMITS OPENING OR RE-GRANTING A SEAT-HOLD, EVEN THE ACTOR'S OWN (found by the
     # antagonist pass, 2026-09-26: "the wrong answer is a quietly permissive gate" was exactly
@@ -476,10 +482,17 @@ def refuse_unauthored(w: "World", changes: list, actor: Optional[str], via: Opti
     for anyone but the actor, and the licence is read off `T-m` closures, which never depend on it.
     ⚠ THE LICENCE IS COMPUTED HERE AND NOT IN `World.write`, which is why `World.write`'s call did
     not change: *which change was a `T-m` closure* is a judgment, and the store observes changes
-    and never judges them -- the split this module's G3 header states."""
+    and never judges them -- the split this module's G3 header states.
+
+    ⚠ `closes` IS BUILT ALONGSIDE `bases`, NOT RE-DERIVED FROM `_closes(t, was)` A SECOND TIME PER
+    CHANGE -- BATCH-CLOSE FINDING (methodology-close Phase 2, EFFICIENCY): the `released` Counter
+    used to call `_closes(t, was)` fresh for every change purely to rebuild what
+    `tenure_write_basis` already computed (and discarded) inside its own first-pass call. One list,
+    zipped alongside `bases`, is the same answer without the second pass through `_moved`/`_closes`."""
     bases = [tenure_write_basis(w, t, was, actor, via, gone) for t, was in changes]
-    released = Counter(was.object for (t, was), basis in zip(changes, bases)
-                       if _closes(t, was) and basis == T_M and was.kind == "hold")
+    closes = [_closes(t, was) for t, was in changes]
+    released = Counter(was.object for (t, was), basis, closed in zip(changes, bases, closes)
+                       if closed and basis == T_M and was.kind == "hold")
     refused = []
     for (t, was), basis in zip(changes, bases):
         # `+released` is the Counter with its spent (zero) entries dropped: what is left to hand on.

@@ -108,7 +108,7 @@ def _told_content(w, act):
             or LedgerReader(teller.ledger).latest_about(subj))
 
 
-def _told_value(w, pid: str, e: Event, held) -> object:
+def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = None) -> object:
     """PLAN POSITION `15b` (r2 `02_THE_WRIT_AND_THE_WORD.md` §A.10, `ED-IN-0222`). WHAT A HEARER
     ACTUALLY RECEIVES, as opposed to what the teller holds: `held.value` unchanged at every band
     but `Partial`, where the copy may be lossy by exactly one of two mechanisms and never both.
@@ -155,11 +155,23 @@ def _told_value(w, pid: str, e: Event, held) -> object:
     the season, which §A.10.4 forbids in terms: *"the lossy copy must not perturb the stream."*
     Per HEARER, not per telling, because `pid` is in the mix -- two hearers of one telling lose
     different things (§A.10.4's own point: a rumour fans into disagreement, not into one shared
-    distortion)."""
+    distortion).
+
+    `told_hash`/`stem` are the caller's own precomputed values, when it has them -- BATCH-CLOSE
+    FINDING (methodology-close Phase 2, EFFICIENCY): `witness()`'s call site already derives this
+    same hash (to mint the Claim id, `f"told:{e.id}"` unchanged) and this same stem (its
+    `LEDGER_DERIVED_STEMS` guard, one statement above the call) before ever reaching here, so
+    recomputing either a second time was two extra ops -- one a blake2b digest, not a builtin
+    `hash()` -- on every hearer x telling deposit at `Partial`. Both default to `None` and are
+    derived exactly as before when omitted, so a caller with no precomputed value (the direct-call
+    test in `test_season_shape.py`) is unaffected."""
     if e.degree != "Partial":
         return held.value
-    sel = int(H(w.world_seed, w.tick, pid, f"told:{e.id}"), 16)
-    stem = str(held.predicate).partition(":")[0]
+    if told_hash is None:
+        told_hash = H(w.world_seed, w.tick, pid, f"told:{e.id}")
+    sel = int(told_hash, 16)
+    if stem is None:
+        stem = str(held.predicate).partition(":")[0]
     if stem == RECORD_CONTENT.get("predicate") and isinstance(held.value, tuple):
         addressee = RECORD_CONTENT.get("addressee")
         mapping = dict(held.value)
@@ -611,8 +623,9 @@ def witness(self, token: Token, events: list[Event]) -> int:
             # (`probes.py` builds string payloads), which is §8 exactly. Caught by an
             # adversarial pass, not by a test, because no `tell` reaches that branch today --
             # latent, and latent is still two owners.
+            _held_stem = str(_held.predicate).partition(":")[0] if _held is not None else None
             if (_held is not None
-                    and str(_held.predicate).partition(":")[0] not in LEDGER_DERIVED_STEMS):
+                    and _held_stem not in LEDGER_DERIVED_STEMS):
                 # PLAN POSITION `15b` (r2 `02` §A.10, `ED-IN-0222`). WHAT LANDS IN THE HEARER'S
                 # LEDGER IS `_told_value`'s RETURN, NOT `_held.value` DIRECTLY -- verbatim at
                 # every band but `Partial`, lossy by exactly one mechanism there. Computed here,
@@ -620,7 +633,12 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 # itself stays the teller's own, untouched, for the dedup guard below to compare
                 # PREDICATE and SUBJECT against (those two never drift, §A.10.3) while comparing
                 # VALUE against what is actually about to be deposited.
-                _told_val = _told_value(w, pid, e, _held)
+                # `_told_hash`/`_held_stem` are handed down rather than recomputed inside
+                # `_told_value` -- the same hash mints the Claim id below and the same stem was
+                # already derived for the `LEDGER_DERIVED_STEMS` guard above (BATCH-CLOSE, Phase 2
+                # EFFICIENCY finding; see `_told_value`'s own docstring).
+                _told_hash = H(w.world_seed, w.tick, pid, f"told:{e.id}")
+                _told_val = _told_value(w, pid, e, _held, _told_hash, _held_stem)
                 # ⚠⚠ **A TELLING THAT TELLS SOMEBODY WHAT THEY ALREADY SAW DEPOSITS
                 # NOTHING, AND WITHOUT THIS LINE THE CHANNEL IS ALMOST ENTIRELY THAT.**
                 # MEASURED over the 89 corpus worlds before this guard: 180 `told_by`
@@ -657,7 +675,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                     # channel's own content-owner directory. `_act.actor` is already in scope
                     # (bound above, this same guard), so this is exactly the one-argument edit
                     # the ruling names -- `Claim.teller`, `state/carriers.py` -- not a lookup.
-                    tc = Claim(H(w.world_seed, w.tick, pid, f"told:{e.id}"),
+                    tc = Claim(_told_hash,
                                pid, _held.subject, _held.predicate, _told_val, w.tick,
                                "told_by", _held.confidence, "own", self.round, _act.actor)
                     w.write("claim_ledger", token,

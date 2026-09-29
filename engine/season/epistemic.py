@@ -482,7 +482,20 @@ def _ch_post_remit(w: "World", e, pid) -> bool:
     So `inferred` is 0 in the realm and the corpus, by content rather than by mechanism -- MEASURED
     at `17a`: the corpus's 178 built worlds hold 90,988 claims, every one `firsthand`, identical
     before and after. The channel is exercised by acts that name their seat
-    (`tests/test_obligees.py`, through the real fold and WITNESS)."""
+    (`tests/test_obligees.py`, through the real fold and WITNESS).
+
+    ⚠ NOT CACHED AT THE BARRIER, THOUGH `establishment_of` RE-SCANS `w.tenures` ON EVERY CALL --
+    TRIED AND REVERTED (methodology-close Phase 2, EFFICIENCY finding). r2 `05` §A.1.5 RULED (d) is
+    in words, not only in the call: *"the Query has a caller, and the channel has no second copy of
+    the set"* -- `test_obligees.py::test_17a_the_channel_reads_the_obligee_set_through_establishment_of`
+    is that ruling as a falsifier, monkeypatching `establishment_of` mid-test and asserting this
+    channel's answer moves with it. A barrier-scoped cache is a second copy by exactly the
+    definition the ruling excludes: it would hold the Query's answer from the first call in the
+    barrier across every later one, obligee membership no longer live for the rest of it. The
+    re-scan is real cost and the fix stays declined -- `establishment_of` is a small Query over a
+    Tenure set no world today grows large (§0.1 pt 5's predicate: correctness the ruling already
+    named beats a saving nothing here is currently paying for -- `inferred` credits nobody in the
+    corpus, per the MEASURED paragraph above)."""
     act = causing_act(w, e)
     seat = w.offices.get(act.via) if act is not None and act.via else None
     if seat is None:
