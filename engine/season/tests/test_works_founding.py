@@ -293,3 +293,210 @@ def test_24e_restore_raises_a_works_fabric_to_its_ceiling_and_then_stalls():
     _ripen(w, d, 1)
     harbour.condition = 333                  # planted back over the barrier's wear
     assert _kinds(_fold(w, d, _restore("r3"))) == ["site.restored"] and harbour.condition == 666
+
+
+# ======================================================================================
+# 5 -- `found`: A WORKS STAKES A PLACE, AND THE GATE ADMITS ITS EDGE AS A FOUNDING
+# ======================================================================================
+
+def _found(key, works, actor=ABSENT):
+    return Act(id=key, actor=actor, verb="found", payload={"subject": works})
+
+
+def _spy_bases(monkeypatch):
+    """Every basis the real `tenure_write_basis` returns, observed rather than inferred."""
+    from ..state import gate as G
+    seen, real = [], G.tenure_write_basis
+
+    def spy(*a, **k):
+        b = real(*a, **k)
+        seen.append((a[1].kind, a[1].subject, b))
+        return b
+    monkeypatch.setattr(G, "tenure_write_basis", spy)
+    return seen
+
+
+def test_24e_found_mints_one_rung_of_the_plan_under_its_at_and_census_shows_exactly_one_more(
+        monkeypatch):
+    """THE PLAN'S OBSERVABLE: *"`census` shows exactly one more rung after one `found`"* -- read off
+    `harness/populated.census`, which counts rungs by kind FROM THE WORLD. The new rung is the works'
+    plan kind, its one parent is the works' `at` (the ladder walks up through it to the realm), and
+    its `contain` edge is admitted at the gate under `founding` and nothing else."""
+    from ..harness.populated import census
+    from ..state.gate import FOUNDING
+    w, d = _world()
+    _declare(w, d, "wk", "hearth", SETTLEMENT)
+    before = census(w)["rungs"]
+    seen = _spy_bases(monkeypatch)
+    out = _fold(w, d, _found("f1", "wk"))
+    assert _kinds(out) == ["rung.founded"], _kinds(out)
+    after = census(w)["rungs"]
+    assert after.get("hearth", 0) == before.get("hearth", 0) + 1, (before, after)
+    assert sum(after.values()) == sum(before.values()) + 1, (before, after)
+    new = next(r for r in w.rungs if r not in ("R", "D", "S", "Hh") and w.rungs[r].kind == "hearth")
+    assert world_q.parent_of(w, new) == SETTLEMENT
+    assert world_q.ancestry(w, new)[-1] == "R"
+    assert new in world_q.descendants(w, "D")
+    assert ("contain", new, FOUNDING) in seen, seen
+    assert not w.rungs[new].stores and world_q.hold_force(w, new) is None   # founded empty, held by none
+
+
+@pytest.mark.parametrize("case", ["not_the_master", "a_text_record", "does_not_ascend",
+                                  "same_kind", "plans_a_site", "founded_twice", "r2_nested_plan"])
+def test_24e_found_is_refused_on_each_of_its_own_preconditions_and_makes_nothing(case):
+    """EACH REFUSAL, AND NOTHING MADE ON ANY OF THEM: `found.refused` and the rung count unchanged.
+    The maker's standing (another person does not hold the works), a well-formed operand (a `text`
+    Record is no works), strict ascent (a duchy planned under a settlement -- and a hearth under a
+    hearth: ascent is STRICT, an equal kind is not above), a plan that is not a rung kind (a
+    dwelling is `build`'s), one works founding once -- and r2's nested `{as, kind}` plan, which is
+    no plain kind, reads as no target and refuses rather than crashing a keyed lookup in RESOLVE."""
+    w, d = _world()
+    plan, key, actor = "hearth", "wk", ABSENT
+    if case == "a_text_record":
+        _declare(w, d, key, plan, SETTLEMENT, kind="text")
+    elif case == "does_not_ascend":
+        _declare(w, d, key, "duchy", SETTLEMENT)
+    elif case == "same_kind":
+        _declare(w, d, key, "hearth", HEARTH)
+    elif case == "r2_nested_plan":
+        _declare(w, d, key, {"as": "rung", "kind": plan}, SETTLEMENT)
+    elif case == "plans_a_site":
+        _declare(w, d, key, "dwelling", SETTLEMENT)
+    else:
+        _declare(w, d, key, plan, SETTLEMENT)
+    if case == "not_the_master":
+        actor = "p_mid"
+    if case == "founded_twice":
+        assert _kinds(_fold(w, d, _found("f0", key))) == ["rung.founded"]
+    n = len(w.rungs)
+    out = _fold(w, d, _found("f1", key, actor=actor))
+    assert _kinds(out) == ["found.refused"], (case, _kinds(out))
+    assert len(w.rungs) == n, case
+
+
+def test_24e_the_founding_basis_admits_a_newborns_one_parent_and_nothing_else():
+    """THE NINTH BASIS, ASKED DIRECTLY OF THE REAL `tenure_write_basis`, each admission with its refused
+    twin one clause away: a `contain` opened for a rung the SAME write brought into existence is
+    `founding`; the same edge when the rung was not born in this write is refused (no basis: a Rung
+    is nobody's, so `T-m` cannot reach it); a second live parent for the newborn is refused; and an
+    edge of another kind from the newborn is refused."""
+    from ..state import gate as G
+    from ..state.carriers import Rung, Tenure
+    w, _d = _world()
+    w.rungs["Hn"] = Rung("Hn", "hearth")
+    t = w.add_tenure(Tenure("tn", "Hn", SETTLEMENT, "contain", since=w.tick))
+    born = frozenset({"Hn"})
+    assert G.tenure_write_basis(w, t, None, ABSENT, None, frozenset(), born=born) == G.FOUNDING
+    assert G.tenure_write_basis(w, t, None, ABSENT, None, frozenset()) is None
+    w.rungs["Hm"] = Rung("Hm", "hearth")          # a SECOND newborn, with no parent yet at all
+    tie = w.add_tenure(Tenure("tt", "Hm", "Hh", "tie", since=w.tick))
+    assert G.tenure_write_basis(w, tie, None, ABSENT, None, frozenset(),
+                                born=frozenset({"Hm"})) is None
+    w.add_tenure(Tenure("tn2", "Hn", "D", "contain", since=w.tick))
+    assert G.tenure_write_basis(w, t, None, ABSENT, None, frozenset(), born=born) is None
+
+
+# ======================================================================================
+# 6 -- `build`, AND THE PLAN'S CORRECTED FALSIFIER: A FULL RUNG STILL GROWS
+# ======================================================================================
+
+def _build(key, works, actor=ABSENT):
+    return Act(id=key, actor=actor, verb="build", payload={"subject": works})
+
+
+def _dwellings_under(w, rung):
+    """The dwelling Sites at `rung` and at every rung below it -- `24d-ii`'s derivation (`capacity`'s
+    count, before its floor), done here because `capacity` itself is `19c`'s and is not built."""
+    under = {rung, *world_q.descendants(w, rung)}
+    return sum(1 for s in w.sites.values() if s.kind == "dwelling" and s.rung in under)
+
+
+def test_24e_build_stands_a_site_of_the_plan_at_condition_zero_and_once():
+    """`build` makes the works' plan at its `at`, at CONDITION 0 (r2 §A.7.1: *"a fabric begins at
+    NOTHING"*), and a works builds once. CONTROLS: a works planning a RUNG kind is `found`'s and
+    `build` refuses it; a person who does not hold the works is refused."""
+    w, d = _world()
+    _declare(w, d, "wk", "harbour", HEARTH)
+    assert _kinds(_fold(w, d, _build("b0", "wk", actor="p_mid"))) == ["build.refused"]
+    n = len(w.sites)
+    out = _fold(w, d, _build("b1", "wk"))
+    assert _kinds(out) == ["site.built"], _kinds(out)
+    assert len(w.sites) == n + 1
+    built = [s for s in w.sites.values() if s.rung == HEARTH and s.kind == "harbour"]
+    assert len(built) == 1 and built[0].condition == 0, built
+    assert _kinds(_fold(w, d, _build("b2", "wk"))) == ["build.refused"] and len(w.sites) == n + 1
+    _declare(w, d, "wr", "hearth", SETTLEMENT, actor="p_mid")
+    assert _kinds(_fold(w, d, _build("b3", "wr", actor="p_mid"))) == ["build.refused"]
+
+
+def test_24e_a_found_then_a_build_at_a_full_rung_succeeds_and_every_ancestors_dwellings_rise_by_one():
+    """THE PLAN'S FALSIFIER, AS CORRECTED 2026-09-25 (the original was inverted): *"A `found` then a
+    `build` of a `dwelling` at a rung whose population is at capacity SUCCEEDS, and that rung's
+    dwelling count, and so every ancestor's count, rises by exactly one. Assert the count before and
+    after, not only the success Event."* `S` is FULL by the only reading the tree can compute: one
+    dwelling (planted at `Hh`) under four persons (`p_high` at `S`, three at `Hh`), every dwelling
+    occupied. `capacity` is `19c`'s and is not built (asserted, so this test is re-read the day it
+    lands -- the plan: *"if the build lands with `19c`, read the rise through `capacity`"*); so the
+    count is `24d-ii`'s derivation, done by hand. The refusal for a full rung is `migrate`'s."""
+    from ..state.carriers import Site
+    assert not hasattr(world_q, "capacity"), (
+        "`capacity` exists now (`19c`/`24d-ii`): read this rise through it, as the plan instructs, "
+        "and assert that `found`/`build` never consult it")
+    w, d = _world()
+    w.sites["dw_hh"] = Site("dw_hh", HEARTH, "dwelling", condition=w.fixtures.get("condition_scale"))
+    persons_under_s = [p for p in w.persons
+                       if world_q.home_of(w).get(p) in {SETTLEMENT, *world_q.descendants(w, SETTLEMENT)}]
+    assert len(persons_under_s) == 4 and _dwellings_under(w, SETTLEMENT) == 1, persons_under_s
+    chain = world_q.ancestry(w, SETTLEMENT)                       # S, D, R
+    before = {r: _dwellings_under(w, r) for r in chain}
+    _declare(w, d, "wf", "hearth", SETTLEMENT)
+    assert _kinds(_fold(w, d, _found("f1", "wf"))) == ["rung.founded"]
+    hearth = next(r for r in world_q.descendants(w, SETTLEMENT) if r.endswith(":wf"))
+    assert _dwellings_under(w, hearth) == 0                      # founded: no dwelling until BUILT
+    _declare(w, d, "wb", "dwelling", hearth)
+    assert _kinds(_fold(w, d, _build("b1", "wb"))) == ["site.built"]
+    after = {r: _dwellings_under(w, r) for r in chain}
+    assert all(after[r] == before[r] + 1 for r in chain), (before, after)
+    assert _dwellings_under(w, hearth) == 1 and _dwellings_under(w, HEARTH) == 1
+
+
+def test_24e_the_whole_lifecycle_runs_declare_ripen_found_build_move_in_and_raise():
+    """r2 §A.6.2's four moments, end to end through the real fold and the real MATTER barrier: a
+    works is DECLARED (`create_record`), its terms RIPEN (MATTER, through the gate), the plot is
+    STAKED (`found`) and the fabric RAISED into being (`build`, at 0), and it is BUILT UP (`restore`
+    by a person who moved in) -- exactly as far as the terms allow: two of three ripe, 666, and no
+    further until the third ripens, then full."""
+    w, d = _world()
+    scale = w.fixtures.get("condition_scale")
+    _declare(w, d, "wf", "hearth", SETTLEMENT)
+    assert _kinds(_fold(w, d, _found("f1", "wf"))) == ["rung.founded"]
+    hearth = next(r for r in world_q.descendants(w, SETTLEMENT) if r.endswith(":wf"))
+    _declare(w, d, "wb", "dwelling", hearth, terms=3)
+    assert _kinds(_fold(w, d, _build("b1", "wb"))) == ["site.built"]
+    dwelling = next(s for s in w.sites.values() if s.rung == hearth)
+    moved = _fold(w, d, Act(id="mv", actor=ABSENT, verb="move", payload={"to": hearth}))
+    assert _kinds(moved) == ["travel.moved"] and ABSENT in world_q.presence(w, hearth), _kinds(moved)
+    assert _kinds(_fold(w, d, _restore("r0", actor=ABSENT, site=dwelling.id))) == ["restore.refused"]
+    _ripen(w, d, 2)
+    assert _kinds(_fold(w, d, _restore("r1", actor=ABSENT, site=dwelling.id))) == ["site.restored"]
+    assert dwelling.condition == 2 * scale // 3, dwelling.condition
+    assert _kinds(_fold(w, d, _restore("r2", actor=ABSENT, site=dwelling.id))) == ["restore.refused"]
+    _ripen(w, d, 1)
+    assert _kinds(_fold(w, d, _restore("r3", actor=ABSENT, site=dwelling.id))) == ["site.restored"]
+    assert dwelling.condition == scale
+
+
+@pytest.mark.parametrize("verb", ["found", "build"])
+def test_24e_a_works_whose_plan_or_at_is_no_plain_id_is_refused_not_a_crash(verb):
+    """r2's nested `{as, kind}` plan and a list for `at` are no target (`works_target`): both verbs
+    refuse, and neither reaches a keyed lookup that would raise `TypeError` inside RESOLVE --
+    `site_kinds` is a frozenset and `w.rungs` a dict, so an unhashable plan or `at` would."""
+    w, d = _world()
+    kind = "dwelling" if verb == "build" else "hearth"
+    _declare(w, d, "wp", {"as": "site" if verb == "build" else "rung", "kind": kind}, HEARTH)
+    _declare(w, d, "wa", kind, [HEARTH], actor="p_mid")
+    n = (len(w.rungs), len(w.sites))
+    for key, works, actor in (("x1", "wp", ABSENT), ("x2", "wa", "p_mid")):
+        out = _fold(w, d, Act(id=key, actor=actor, verb=verb, payload={"subject": works}))
+        assert _kinds(out) == [f"{verb}.refused"], (works, _kinds(out))
+    assert (len(w.rungs), len(w.sites)) == n

@@ -149,6 +149,20 @@ def _written_fields(t: Tenure, copy: bool) -> tuple:
     return (t.subject, t.object, t.kind, t.since, t.until, t.degree, p, t.term)
 
 
+def rung_kind_ascends(child_kind: str, parent_kind: str) -> bool:
+    """THE §10 LADDER RULE, ONCE, ON KINDS: may a rung of `child_kind` be contained in one of
+    `parent_kind`? Strictly above on `rung_kinds` (an ORDERED roster, `person` first) -- strict
+    ascent, not adjacency, so a hearth under a settlement is lawful and a duchy under a hearth is not.
+
+    Factored out of `World.contain_ascends` at plan position `24e`, which reads it unchanged,
+    because `found` must ask the rule of a Rung that does not exist yet -- `contain_ascends` answers
+    `True` for an id it cannot resolve (its own docstring: *"Non-rungs pass"*), so asking it before
+    the new Rung is stored would admit anything and let `add_tenure` raise inside RESOLVE. One owner,
+    three readers: `add_tenure` raises on it, `_eff_move` and `_eff_found` decline on it."""
+    order = list(RUNG_KINDS)
+    return order.index(parent_kind) > order.index(child_kind)
+
+
 def _entity_digest(obj: Any) -> str:
     """`H-118`: a deterministic string for ONE entity's own state, for `World.content_hash`.
     `Person`, `Site` and `Tenure` are `@dataclass` -- their auto-generated `__repr__` lists every
@@ -268,8 +282,7 @@ class World:
         sub, obj = self.rungs.get(subject), self.rungs.get(object_)
         if sub is None or obj is None:
             return True
-        order = list(RUNG_KINDS)
-        return order.index(obj.kind) > order.index(sub.kind)
+        return rung_kind_ascends(sub.kind, obj.kind)
 
     def add_tenure(self, t: Tenure) -> Tenure:
         """The ONE writer. Routes to `t.subject`'s own list, or to `_unowned` when the subject is
@@ -1035,7 +1048,12 @@ class World:
                 if changes:
                     gone = frozenset().union(*(was_ids - set(store) for was_ids, (_, store)
                                                in zip(existed, self._entity_stores())))
-                    refused = refuse_unauthored(self, changes, actor, via, gone)
+                    # `24e`: AND `born`, THE MIRROR -- every id this same write ADDED, observed the
+                    # same way, for the `founding` basis (a newborn Rung's `contain` edge). The
+                    # caller claims neither set; the store's before-and-after is the evidence.
+                    born = frozenset().union(*(set(store) - was_ids for was_ids, (_, store)
+                                               in zip(existed, self._entity_stores())))
+                    refused = refuse_unauthored(self, changes, actor, via, gone, born)
                     if refused:
                         # THE REFUSAL IS ONLY HONEST IF THE EDGE IS AS IT WAS: the store goes back
                         # first, the trace records a refused write, and the mint window SHUTS -- a

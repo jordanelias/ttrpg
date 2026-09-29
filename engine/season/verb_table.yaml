@@ -309,6 +309,70 @@ verbs:
     emits_on_refusal: []
     grade:       "assumption"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  # ===========================================================================================
+  # PLAN POSITION `24e` -- WORKS & FOUNDING. `ARCH` F.20 (`04_CODE_ARCHITECTURE.md`): *"the world
+  # only decays -- nothing is ever founded or built"*. `(Rung, exists)` and `(Site, exists)` were
+  # declared matrix rows with no producer (`H-41`); these two rows are the producers. Both make what
+  # a WORKS plans (`rosters.yaml: record_kinds`, `works: [plan, at]` -- *"a <plan> at <at>"*), which
+  # `create_record` declares and its maker holds: the works carries the kind and the place, which
+  # the closed operand vocabulary cannot (`at` is no `requires_operands` member and must not
+  # become one), so each act's only operand is `subject`, the works.
+  # ⚠ TWO VERBS, NOT r2's ONE. r2 `04` §A.7.1 folds both into one `found` writing two rows, one
+  # earned per act, citing round one's *"there is no `build`"*. The plan's `24e` (2026-09-25, later
+  # and the position's own text) names both -- *"a `found` row and `_eff_found` ... Then a `build` row
+  # and `_eff_build`"* -- and says why they are two: *"A founded hearth has no dwelling until one is
+  # BUILT"*. They make different carriers (a Rung and its `contain` edge; a Site, which has no edge),
+  # admit different gate bases (`founding`; none), and a person founding a hearth and a person
+  # raising a house in it are different acts with different preconditions on the plan's kind.
+  # ⚠ NEITHER CARRIES A CAPACITY REFUSAL (the plan's CORRECTION, 2026-09-25): they are how capacity
+  # GROWS; a `found` refused at a full rung would deadlock it. The refusal is `19c`'s `migrate`'s.
+  # ===========================================================================================
+  - verb:        "found"
+    stratum:     "uncontested_material"
+    eligibility: ["own"]
+    beneficiary: "none"
+    beneficiary_note: "a founded place is a Rung, and a Rung is no carrier the Candidate holds; who benefits from a new hearth is whoever comes to live or hold there, a WORLD read, which is `restore`'s and `work`'s shape. No `hold` on the new Rung is minted (`H-166`)."
+    requires:    "the subject is a works, and the actor holds it -- the maker's standing"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        subject
+          kind:      works
+        - form:      relation
+          of:        subject
+          relation:  held_by
+    requires_typed_note: "PLAN POSITION `24e`, whose CORRECTED text gives `found` exactly *'its own preconditions (well-formed operands, the maker's standing, strict ascent)'* and no capacity refusal. TWO CONJUNCTS, BOTH EXISTING FORMS AND STEMS -- no form, operand, combinator or stem added. `existence` of `subject`, `kind: works` -- a Record OF THAT KIND (`WorldReader.read`'s `record_kinds` branch, `carry`'s route): the WELL-FORMED OPERAND, a works and not any id. `relation` of `subject`, `held_by` -- `succeed`'s live cell: THE MAKER'S STANDING, read as r2 `04` §A.6.2 reads it, the actor holds the works (*'held by the actor'*), which `create_record` mints for its maker and `give` hands on (so a rival may become master of a works and found it). STRICT ASCENT is not a cell: the plan's kind and its `at` live in the works' content, which no stem reads, so `loop/effects.py::_eff_found` declines it through `rung_kind_ascends`, the one owner `add_tenure` raises on (`_eff_move`'s precedent). ⚠ r2 §A.7.1's THIRD CONJUNCT, `matured >= 1`, IS NOT TAKEN: the plan's corrected list omits it, and the grammar cannot spell it without a new stem and a constant threshold read. The terms bind where r2 itself put their teeth -- at the fabric's `ceiling` -- so a plot may be staked before a term ripens and nothing built on it can be raised until one does. ⚠ AND r2's `cardinality` CONJUNCT (one works per target) LIVES AT THE PRODUCER: `create_record` declines a second live works on a target (`queries/world_q.py::works_for`)."
+    writes:      ["Rung.exists", "Tenure.since"]
+    writes_note: "`Rung.exists` is the first pair and the effect's own: the new Rung, whole. `Tenure.since` is the `contain` edge placing it in the works' `at`, opened through `World.add_tenure` in the same `apply` and admitted at the gate under the NINTH basis, `founding` (`state/gate.py`: a `contain` opened for a thing this same write brought into existence, its only parent -- the mirror of `cascade`). Declared on `establish`'s precedent (`Tenure.payload`): the fold gates exactly the pairs a verb declares, so this second pair is checked for class, step and partition; the effect runs once, on the first. No `write_matrix.yaml` row is added: both pairs exist, and `(Rung, exists)`'s `unproduced:` is deleted in the same commit (loader invariant 2)."
+    emits:       ["rung.founded"]
+    emits_on_refusal: ["found.refused"]
+    grade:       "assumption"
+    grade_note:  "the matrix row `(Rung, exists)` is the tree's (`W2/H-41`); the VERB is plan position `24e`'s, on r2 `04` §A.7.1's reading, and its preconditions are the plan's corrected list -- an argued addition, graded as `succeed`, `utter` and `forge` are."
+    refusal_note: "FLAT: one kind for every failable clause, which a flat row declares (`data/verbs.py`, invariant 4). Refusal conditions: the subject is no works, or the actor does not hold it (the cell); the works plans no `rung_kinds` member, names no rung, has already founded, or its plan does not strictly ascend into its `at` (the effect's decline, the `write` clause)."
+    source:      "plan `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` 24e (as corrected 2026-09-25); r2 `proposals/2026-09-17-governance-and-holdings-r2/04_MATTER_AND_WORKS.md` §A.6.2 moment 3, §A.7.1; `write_matrix.yaml` `(Rung, exists)` (W2/H-41)"
+  - verb:        "build"
+    stratum:     "uncontested_material"
+    eligibility: ["own"]
+    beneficiary: "none"
+    beneficiary_note: "a built fabric is a Site, and a Site is no carrier the Candidate holds -- `found`'s reason, and `restore`'s and `work`'s: who benefits from a new dwelling or harbour is a WORLD read."
+    requires:    "the subject is a works, and the actor holds it -- the maker's standing"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        subject
+          kind:      works
+        - form:      relation
+          of:        subject
+          relation:  held_by
+    requires_typed_note: "`found`'s cell, conjunct for conjunct and for `found`'s reasons: a works (the well-formed operand), held by the actor (the maker's standing). No ascent clause -- a Site hangs off its rung by a field, not a ladder edge -- and no capacity refusal (the plan's correction of 2026-09-25: building at a full rung is how its capacity grows). Whether the works plans a `site_kinds` member, names a rung, or has already built is `loop/effects.py::_eff_build`'s decline, the `write` clause."
+    writes:      ["Site.exists"]
+    writes_note: "`(Site, exists)`'s first producer (`W2/H-41`, *'building a site'*): the Site the works plans, at the rung it names, at condition 0 (r2 §A.7.1: *'a fabric begins at NOTHING'*). `Site.rung`, `Site.kind` and the initial `condition` are the Site's own construction inside this one write -- no `(Site, condition)` pair is declared, as `create_record` declares none for a Record's content; the condition then RISES only through `restore`/`work` on the accumulator. `(Site, exists)`'s `unproduced:` is deleted in the same commit (loader invariant 2)."
+    emits:       ["site.built"]
+    emits_on_refusal: ["build.refused"]
+    grade:       "assumption"
+    grade_note:  "`found`'s grade and reason: the matrix row is the tree's, the verb is plan position `24e`'s."
+    refusal_note: "FLAT, as `found`'s. Refusal conditions: the subject is no works, or the actor does not hold it (the cell); the works plans no `site_kinds` member, names no rung, or has already built (the effect's decline)."
+    source:      "plan `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` 24e (*'Then a `build` row and `_eff_build` minting a Site of a `site_kinds` member'*); r2 `04_MATTER_AND_WORKS.md` §A.7.1 (the Site half of its one-verb `found`); `write_matrix.yaml` `(Site, exists)` (W2/H-41)"
   - verb:        "give"
     stratum:     "social"
     eligibility: ["own", "hold:<record>"]

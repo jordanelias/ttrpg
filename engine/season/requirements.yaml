@@ -165,7 +165,9 @@ rows:
       DECISION, SO THE FIGURE THIS ROW IS ABOUT IS 1,104 IN FIVE VERBS.** `restore` is not in
       `resolvable_verbs()` (it writes `Site.condition` with no `EFFECTS` entry) and `choose.py`
       applies the `verbs=` filter AFTER `opening_set` returns, so clause 4 drops a Candidate that
-      was never going to be offered. Measured too: `examine` and `restore` fire on the IDENTICAL
+      was never going to be offered. ⚠ TRUE ON 2026-09-10 AND NO LONGER: plan position `24e`
+      (2026-09-29) gave `restore` its effect, so it IS resolvable and its clause-4 drops can now
+      move a decision; the 1,104 above was not re-measured for it. Measured too: `examine` and `restore` fire on the IDENTICAL
       EIGHT SUBJECTS — same cell shape, so one belief counted under two verbs. The better statement
       of the change is the PREDICATE count: clause 4 went from ONE reachable predicate
       (`contain.path`) to FIVE (`+ exists:Site` · `exists:Record` · `exists:Person` ·

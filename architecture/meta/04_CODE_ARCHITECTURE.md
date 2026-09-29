@@ -557,6 +557,11 @@ gate.write(token, kind, field, id, change, actor?, via?) -> Receipt
   -- "conferral-basis opener" that entry said it could not add itself, re-derived: `determine` opens an
   -- `oblige` ON via, not a `hold` on another seat, by a bench's ground, not purview -- `conferral` refuses
   -- all three, so not a wider reading. `may_determine`, `state/gate.py`.
+  -- ⚠ `24e` (WORKS & FOUNDING, plan `_part2` "24e", 2026-09-29): `founding` ADDED -- `found` opens
+  -- `contain : <new Rung> -> <its parent>`, an edge whose subject is a Rung and so nobody's (S15.1):
+  -- T-m cannot reach it, and every other basis reads a seat, an `oblige` or a `hold`. The licence is
+  -- the BIRTH, observed by the store (`born`, `gone`'s mirror), never claimed; the mirror of the
+  -- cascade. One parent, checked on the store the write leaves. `tenure_write_basis`, `state/gate.py`.
   kind is Tenure => one of:
       actor == subject(id)                                   -- T-m, the owner's discretion
       cause is this Tenure's declared `term` maturation       -- T-n: no actor, a pure closure, term due (`17b`)
@@ -570,6 +575,8 @@ gate.write(token, kind, field, id, change, actor?, via?) -> Receipt
       via IS a judging Seat, actor seated, OPENING an `oblige`
         on it for another person its bench's ground holds     -- determination: a bench binds (`19`)
       cause is an existence change this same act caused       -- destroy's cascade
+      opening a `contain` for a thing this same act brought
+        into existence, its only parent                       -- founding: a place founded (`24e`, F.20)
     otherwise                                                 raise NotYours
 
   before = get(); store._set(); after = get()                             -- THE GATE APPLIES THE WRITE
@@ -1126,7 +1133,7 @@ number filled to make a reference resolve.**
 | **F.17** | how a person joins an establishment | `oblige`'s `requires` reads the seat's `binds` | if admission is a seat's own act, the closed remit roster **needs a sixth member — a ruling, not a row** |
 | **F.18** | **upkeep's source** — *"out of the office's stake"*, and `stake` was retired | unpaid; establishment persists until released | **no economic pressure on any office**, and *"finite, contested"* has no mechanism. A MATTER payment would be a fourth clock, so the repair is a verb |
 | **F.19** | the envelope, individuation, and `weight` | individuation decrements a band and mints at weight 1 | without the construal spread, **a cohort at weight 200 chooses as one mind** |
-| **F.20** | ⚠ **FOUNDING VERBS** — no stage names a verb that founds a hearth or builds a site | the rows are dropped until a verb is ruled | **the world only decays — nothing is ever founded or built.** This is what blocks build step 2 |
+| **F.20** | ⚠ **FOUNDING VERBS** — no stage names a verb that founds a hearth or builds a site | the rows are dropped until a verb is ruled | **the world only decays — nothing is ever founded or built.** This is what blocks build step 2. ⚠ **ANSWERED IN CODE at plan position `24e` (2026-09-29):** `found` and `build` (`verb_table.yaml`, `loop/effects.py`) produce `(Rung, exists)` and `(Site, exists)` from a `works` Record (r2 `04_MATTER_AND_WORKS.md` §A.6), `restore` raises a fabric, and the gate admits a founded Rung's `contain` edge under `founding` (§C.2). The verbs are the plan's, graded `assumption`, not ruled here |
 | **F.20a** | ⚠ **NEW (F5) · NO VERB WRITES ANY `Person` INTERIOR FIELD.** `§B.2` carries `convictions`, `stance[]`, `scar[axis]`, `axis_count[axis]` and names a reader for each; **it names no writer for any of them.** The four are `RES`-stepped matrix rows with no producing verb | that a consequence table would supply them | **every interior consequence is inert.** A person's convictions cannot move, so `choose` scores against a constant, `standing` has nothing to diverge from, and the epistemic layer has no moral layer to disagree with. ⚠ **This is the gap the degree-keyed column (`§C.4`, `F6`) is the shape of the answer to** — an interior write is a *consequence of an outcome*, which is exactly what the sixth column declares |
 | **F.20b** | ⚠ **NEW (F13) · THE FOLD MINTS EVENT KINDS NO COLUMN DECLARES.** The live implementation emits `act.ineligible`, `act.refused` and `contest.resolved` as **body literals**, as a fallback where a row declares no refusal kind | that invariant 7's derived roster covers every kind | **invariant 7 refuses all three at `append`**, so the loop as built cannot run under the loader as specified. Either the three become declared columns — an eligibility-refusal kind per verb (`F7`, invariant 4 widened) and a `contest.resolved` emission column — **or the derived roster is not derived.** A definition living as a literal in a body is what `ID-12` refuses |
 | **F.21** | the rank of a cluster seat (`scope = null`) | no rank; the loader forbids a `higher_rank` conjunct on one | church seats become revocable by purview alone — **which they also lack** |

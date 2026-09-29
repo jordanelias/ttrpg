@@ -304,9 +304,8 @@ rows:
     steps:   [RES]
     class:   "ACTS"
     social:  "true"
-    by:      "W2/H-41 -- founding a hearth. Part D's existence rows covered only `Person` and `Record`"
+    by:      "W2/H-41 -- founding a hearth. Part D's existence rows covered only `Person` and `Record`. ⚠ PRODUCED SINCE PLAN POSITION `24e`: `found` (`verb_table.yaml`, `loop/effects.py::_eff_found`) mints a Rung of a works' plan kind and its `contain` edge, admitted at the gate under `founding`; the `unproduced:` cell is deleted in the same commit, as loader invariant 2 requires"
     emits:   "`rung.founded`"
-    unproduced: "H-41: founding a hearth -- Part D's existence rows had no producer for Rung"
   - kind:    "Rung"
     field:   "stores"
     steps:   [MAT, RES]
@@ -333,9 +332,8 @@ rows:
     steps:   [RES]
     class:   "ACTS"
     social:  "true"
-    by:      "W2/H-41 -- building a site"
+    by:      "W2/H-41 -- building a site. ⚠ PRODUCED SINCE PLAN POSITION `24e`: `build` (`verb_table.yaml`, `loop/effects.py::_eff_build`) mints a Site of a works' plan kind at the rung it names, at condition 0; the `unproduced:` cell is deleted in the same commit, as loader invariant 2 requires"
     emits:   "`site.built`"
-    unproduced: "H-41: building a site -- no founding verb writes Site.exists (HANDOFF item 2d)"
   - kind:    "Tenure"
     field:   "degree"
     steps:   [RES]

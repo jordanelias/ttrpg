@@ -434,6 +434,11 @@ if RECORD_KINDS & TENURE_KINDS:
 # the wrapper, which is the `assumption` grade's own reading (`08 §3`) and not a refusal.
 VERB_CAPABILITY = roster_map("verb_capability", "values")
 RUNG_KINDS = roster("rung_kinds", ordered=True)
+# Plan position `24e`: the kinds `build` may make -- a works' `plan` is a Site only if it is one of
+# these (`loop/effects.py::_eff_build`). Bound beside `RUNG_KINDS`, `found`'s twin roster, rather
+# than read by a bare `roster(...)` at the one call site. `data/fixtures.py` reads the same row for
+# its both-direction table checks, so a kind here always has a wear and a band-floor row.
+SITE_KINDS = roster("site_kinds")
 REMIT_ACTS = roster("remit_acts")
 # `data/arrangements.py`'s four content rosters -- plan position `18` (PROC-A). Bound here beside
 # their nearest kin (`RUNG_KINDS`/`REMIT_ACTS`, both read by the same loader) rather than left to a

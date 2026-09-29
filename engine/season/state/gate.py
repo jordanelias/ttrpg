@@ -196,6 +196,14 @@ HANDOVER = "handover"
 # C-1): read cold, *"the disposal basis"* is a licence to throw an edge away, which is the opposite of
 # what it admits (`CLAUDE.md` §4's idempotence test). See `may_determine`.
 DETERMINATION = "determination"
+# THE NINTH BASIS (plan position `24e`, `found`): an OPENING of a `contain` edge whose SUBJECT the
+# SAME write brought into existence -- a newly founded Rung placed in its parent. Named, like
+# `conferral` and `determination`, for the act it licenses (found is to founding as confer is to
+# conferral) and in the ordinary word for bringing a place into being. CAUSATION-BOUND, the mirror of
+# `cascade`: a Tenure lives and dies THROUGH its object (`holonic §15.3`), so what closes an edge
+# through a death may also open one through a birth -- and nothing else. See the block in
+# `tenure_write_basis`.
+FOUNDING = "founding"
 
 # THE REMIT ACT THAT MAKES A SEAT A JUDGING SEAT -- `H-32`'s swept default, and the `bench_basis` of
 # every seeded `arrangements.yaml` row. ONE OWNER, read by `queries/world_q.py::judging_set` (which
@@ -504,19 +512,24 @@ def _closes(t: Tenure, was: Optional[Tenure], moved: Optional[set] = None) -> bo
 
 def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Optional[str],
                        via: Optional[str], gone: frozenset,
-                       released: frozenset = frozenset()) -> Optional[str]:
+                       released: frozenset = frozenset(), *,
+                       born: frozenset = frozenset()) -> Optional[str]:
     """F3's JUDGMENT FOR ONE CHANGED TENURE: the name of the basis that admits it, or `None`.
 
     `t` is the Tenure as it stands after the write; `was` is a detached copy of it from before, or
     `None` if the write OPENED it. `gone` is every id the same write removed from the world -- the
     existence changes THIS act caused, observed by the store rather than claimed by the caller.
+    `born` is its mirror (plan position `24e`): every id the same write ADDED to the world, observed
+    the same way (`World.write` diffs the same collections either side of `apply()`), keyword-only
+    and empty by default so every caller that predates it is unchanged.
     `released` is every OBJECT on which the same write ended the actor's own live `hold` under
     `T-m` and has not yet handed it on -- computed by `refuse_unauthored` from the batch it holds,
     because this function sees one Tenure and cannot (see `handover` below). Empty by default, so a
-    caller judging a Tenure alone gets the answer of every basis but `handover` (seven, since `19`
-    added `determination`; six since `17b` built `T-n` and added `renewal`; five before).
+    caller judging a Tenure alone gets the answer of every basis but `handover` (eight, since `24e`
+    added `founding`; seven since `19` added `determination`; six since `17b` built `T-n` and added
+    `renewal`; five before).
 
-    THE EIGHT BASES, AND WHAT EACH MAY WRITE -- a basis admits a KIND of change, not any change:
+    THE NINE BASES, AND WHAT EACH MAY WRITE -- a basis admits a KIND of change, not any change:
 
       `T-m`       the actor IS the owner -- `was.subject` for an existing edge, `t.subject` for a
                   new one. Anything the owner does to their own edge (`release`, `move`'s legs,
@@ -574,6 +587,15 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                   effect declines one -- one `oblige` per person and seat, `_req_oblige`'s rule).
                   The term the opening carries is the opening act's declaration (T-n), as
                   `_eff_oblige`'s is, so it is the edge's own and not a write this basis judges.
+      `founding`  an OPENING of a `contain` edge whose SUBJECT is in `born` -- a thing this same
+                  write brought into existence -- and which is that subject's ONLY live `contain`
+                  (*"`contain : Rung → Rung`, one parent"*, `rosters.yaml: rung_kinds`' source).
+                  Plan position `24e`: `found` mints a Rung and places it in the works' `at`,
+                  `add_tenure` enforcing strict ascent. CAUSATION-BOUND, the MIRROR OF `cascade`:
+                  the cascade may close an edge through the death of what it names, and nothing
+                  else; this may open the edge that places what was just born, and nothing else --
+                  not a second parent, not an edge from a thing that already existed, not any kind
+                  but `contain`. See the block at the clause for why it is a basis at all.
 
     ⚠ JUDGED ON THE WORLD THE WRITE LEAVES. `World.write` asks this after `apply()`, so `T-o` and
     `conferral` read `seat_hold` -- is the actor seated in `via`? -- AFTER the effect ran. `04 §B.8`'s
@@ -635,6 +657,26 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
         return T_M
     if closed and (t.subject in gone or t.object in gone):
         return CASCADE
+    # `24e`: THE FOUNDING -- `cascade` read in the other direction. WHY A NINTH BASIS AND NOT AN
+    # EXISTING ONE, re-derived against this function's current body rather than assumed: the edge
+    # `found` opens is `contain : <the new Rung> -> <its parent>`, and S15.1 makes a Tenure its
+    # SUBJECT's -- here a Rung, which is nobody's (`World._unowned` holds every such edge). So `T-m`
+    # can never admit it (no actor IS a Rung); `conferral`/`T-o` read seats and `determination`/
+    # `renewal` read `oblige` edges on `via`; `handover` admits only a `hold` licensed by a closure;
+    # and `cascade` admits only CLOSING. Before `24e` no act ever opened a Rung-subject edge -- every
+    # one was a builder's, written outside the gate -- so the question had never been asked. The
+    # licence is the BIRTH, observed by the store (`born`), never claimed by the caller; the authority
+    # to found at all is the precondition's (`found`'s typed cell: the subject is a works the actor
+    # holds), which is `may_fill`/`_req_confer`'s split -- the gate observes Tenures, and a works'
+    # plan is not one. REJECTED: an authority-bound reading (the actor holds the works naming this
+    # parent) -- it would make the gate read a Record's content, which no basis does, and duplicate
+    # the precondition in a second owner. ⚠ ONE PARENT, CHECKED ON THE WORLD THE WRITE LEAVES: a
+    # write that opened two `contain` edges for one newborn sees each beside the other, and both are
+    # refused -- the ladder's *one parent* is a property of the store, not of this effect's habit.
+    if (opened and t.kind == "contain" and t.subject in born
+            and not any(o is not t and o.kind == "contain" and o.subject == t.subject and o.live
+                        for o in w.tenures)):
+        return FOUNDING
     if (closed and actor is None and was.term is not None
             and was.term.matures_at <= w.tick):
         return T_N
@@ -663,17 +705,19 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
 
 
 def refuse_unauthored(w: "World", changes: list, actor: Optional[str], via: Optional[str],
-                      gone: frozenset) -> list:
+                      gone: frozenset, born: frozenset = frozenset()) -> list:
     """Every `(t, was)` in `changes` that NO basis admits, as `(t, was)` pairs -- `[]` admits all.
+    `born` (plan position `24e`) is passed through to every judgment, for `founding`.
 
     Asked by `World.write` after `apply()` and before anything is traced as written. It returns
     rather than raises so the store can put the tenures back FIRST: the refusal is only honest if
     the edge it refused is as it was (`NotYours`' own raise is `World.write`'s, via `not_yours`).
 
     TWO PASSES, BECAUSE ONE BASIS SPANS TWO TENURES (position 16). The first judges every change
-    on its own -- the seven bases that need nothing but the change, the actor, `via` and `gone`
-    (five until plan position `17b` built `T-n` and added `renewal`, six until `19` added
-    `determination`; none of the three reads another Tenure of the batch).
+    on its own -- the eight bases that need nothing but the change, the actor, `via`, `gone` and
+    `born` (five until plan position `17b` built `T-n` and added `renewal`, six until `19` added
+    `determination`, seven until `24e` added `founding`; none of the four reads another CHANGE of
+    the batch -- `founding`'s one-parent check reads the store the write left, which holds them).
     From those verdicts it takes the `handover` licence: the object of every `hold` this actor
     ENDED under `T-m` in this write, counted. The second re-judges only what the first refused,
     now with the licence, and spends one unit of it per `handover` it admits. The two passes are
@@ -695,7 +739,7 @@ def refuse_unauthored(w: "World", changes: list, actor: Optional[str], via: Opti
     gate's own judgment function not attempted here. What this list actually buys: `closed` is a
     named, reused value inside the `zip` loop below rather than re-spelled inline -- a readability
     change, not a performance one, and the docstring saying otherwise was the defect."""
-    bases = [tenure_write_basis(w, t, was, actor, via, gone) for t, was in changes]
+    bases = [tenure_write_basis(w, t, was, actor, via, gone, born=born) for t, was in changes]
     closes = [_closes(t, was) for t, was in changes]
     released = Counter(was.object for (t, was), basis, closed in zip(changes, bases, closes)
                        if closed and basis == T_M and was.kind == "hold")
@@ -703,7 +747,8 @@ def refuse_unauthored(w: "World", changes: list, actor: Optional[str], via: Opti
     for (t, was), basis in zip(changes, bases):
         # `+released` is the Counter with its spent (zero) entries dropped: what is left to hand on.
         if basis is None and +released:
-            basis = tenure_write_basis(w, t, was, actor, via, gone, frozenset(+released))
+            basis = tenure_write_basis(w, t, was, actor, via, gone, frozenset(+released),
+                                       born=born)
             if basis == HANDOVER:
                 released[t.object] -= 1
         if basis is None:
@@ -736,8 +781,10 @@ def not_yours(refused: list, actor: Optional[str], via: Optional[str], record_ki
               f"opened in the same write that ended the actor's own live `hold` on it -- one "
               f"opening per ending), {T_N} (an actorless closure of an edge whose own declared "
               f"term has matured), {RENEWAL} (a live `oblige` edge's term pushed later, by "
-              f"its seat's own seated holder exercising it), or {DETERMINATION} (an `oblige` "
-              f"opened on the judging seat exercised, for a person its bench's ground holds)",
+              f"its seat's own seated holder exercising it), {DETERMINATION} (an `oblige` "
+              f"opened on the judging seat exercised, for a person its bench's ground holds), or "
+              f"{FOUNDING} (a `contain` opened for a thing this same write brought into "
+              f"existence, its only parent)",
         law="04 §C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner "
             "writes only under a declared basis. Per-verb eligibility enforced this by "
             "CONVENTION until G3; a revocation with no seat in Act.via is refused here, so 'a "

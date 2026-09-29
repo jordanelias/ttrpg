@@ -193,10 +193,16 @@ def works_target(kind: Optional[str], content) -> tuple:
     `plan` is a KIND (a `rung_kinds` member for `found`, a `site_kinds` member for `build`) and `at`
     is a RUNG id, so a works reads *"a <plan> at <at>"* (`rosters.yaml: record_kinds`' note says why
     r2's `{plan: {as, kind}}` was not taken). The key set is `Record.__post_init__`'s to refuse; this
-    only declines to read what is not there, so a hand-planted Record cannot crash a reader."""
+    only declines to read what is not there, so a hand-planted Record cannot crash a reader -- and a
+    `plan` or `at` that is not a plain id (r2's nested `{as, kind}`, a list) reads as no target at
+    all, since every reader looks both up in a keyed store and an unhashable one would raise inside
+    RESOLVE (`WorldReader.read`'s own unhashable-subject rule, one reader over)."""
     if kind != WORKS_KIND or not isinstance(content, dict):
         return (None, None)
-    return (content.get("plan"), content.get("at"))
+    plan, at = content.get("plan"), content.get("at")
+    if not isinstance(plan, str) or not isinstance(at, str):
+        return (None, None)
+    return (plan, at)
 
 
 def works_for(w: World, at: Optional[str], plan: Optional[str]) -> list:
