@@ -462,9 +462,13 @@ def load_yaml(path, default=_RAISE):
     honestly. An adversarial pass re-earned it here within one commit.
 
     Migrated: 12 call sites, both idioms — `yaml.safe_load(open(x))` and
-    `with open(x) as f: y = yaml.safe_load(f)`. **21 bare `yaml.safe_load` calls
+    `with open(x) as f: y = yaml.safe_load(f)`. **20 bare `yaml.safe_load` calls
     remain in `tools/`**, each of which does something this helper does not (loads
     a stream, a string, a StringIO, or wants the exception on a missing file).
+    (21 -> 20 on 2026-09-29, plan position `28-i`/M5, `1320045`: `tools/build_execution_map.py`,
+    which held one bare call, was retired with the execution-map cluster — the corpus shrank,
+    nothing was migrated. Found by `/code-review` at the Phase-1 methodology close; the ratchet
+    caught the docstring drifting from the count it exists to pin.)
     **24 -> 21 on 2026-09-16 by RETIREMENT again** (ED-IN-0232): `build_contract_index.py` and
     `export_module_contracts.py` left `tools/` with the Key substrate carrying 2 bare calls, and
     `m1_acceptance.py`'s `row_key_log_closure` — which read the retired emits:/consumes: blocks —
