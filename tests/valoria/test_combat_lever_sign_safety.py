@@ -436,7 +436,6 @@ DEFAULT_SIGMA_PINS = {
     'nandao': ('0x1.88372cd2872e5p-2', '-0x1.cbe7dbff973abp-3', '-0x1.28b69e73594f3p-4'),
     'odachi': ('0x1.8ffab895b7708p-1', '-0x1.490d2ba665c9ap-1', '-0x1.a8951f8c624e8p-3'),
     'paired_short': ('-0x1.b47088bfb45b4p-2', '0x1.0d694ccab3edep-1', '0x1.5ba0a52695961p-3'),
-    'partisan': ('0x1.5956c53fcdbb0p+0', '-0x1.67e13f5eb2617p+0', '-0x1.d05c72ccc522fp-2'),
     'podao': ('0x1.730d87d56ad91p-1', '-0x1.172f4f416666ap+0', '-0x1.683d0b6d294aap-2'),
     'poleaxe': ('0x1.858ebba999e1cp+0', '-0x1.3689f25ca94e2p-1', '-0x1.90b1feeb2d0a0p-3'),
     'pulwar': ('0x1.6b4f9db703cf2p-5', '-0x1.7cd49a7f25517p-8', '-0x1.eb64e861fe9aap-10'),

@@ -1988,6 +1988,96 @@ would otherwise have used; this one is `§8.11` for exactly that reason.
 
 ---
 
+### 8.12 · Made at position `12`'s execution — PC lane: the `partisan` deletion, Ob-from-defender, `ED-PC-0058`
+
+**The administrative item first, per the brief's own instruction.** `references/id_reservations.yaml`
+line 124's PC lane was not actually blocked — the "exhausted" note dated to a 2026-07-30 walk-back
+(ED-IN-0098) whose freeze had already been lifted the same day, and 0056/0057 allocated normally since.
+Read `next_free: 58`, allocated `ED-PC-0058`, bumped to 59, co-committed — normal protocol, no release
+needed. `HANDOFF_PC.md`'s row corrected to stop calling the lane exhausted.
+
+**The `partisan` deletion.** Jordan, 2026-09-20, choosing renaming vs. deleting the polearm to resolve
+its naming collision with the new `pursuit_axes` pole of the same name: *"use partisan. we can just get
+rid of it as a polearms."* (`HANDOFF_PC_history.md`; not in `ED-IN-0261`'s own ledger text, which covers
+only the character-model ruling). Deleted the weapon record and its `_EDGES` row (`weapons.py`); five
+stale citations RE-POINTED rather than left dangling (`weapons.py:51`, `combat_systems.py:361,464`,
+`weapon_physics.py:266`, `core.py`'s penetration-threshold comment) — the two carrying a specific
+measured number were re-pointed to **guandao**, not a fresh spetum/ranseur measurement: guandao's
+adef_cap 0.169 and 12-damage figure were ALREADY independently recorded two lines over in the same
+comment, so reusing it is zero new risk against fabricating a number nobody measured. Three golden
+files (`r3_identity_golden.json`, `golden_element_parity.json`, `golden_heft_percussion_snapshot.json`)
+and two test files (`test_combat_lever_sign_safety.py`'s `DEFAULT_SIGMA_PINS`,
+`test_combat_audit_pins.py`'s parametrize list) lost their `partisan` row. **One re-measurement
+methodology finding, not otherwise this position's business but load-bearing for the close:**
+`workbench/armour_participation.py --update`, re-run against an UNCHANGED tree in a throwaway
+worktree, moved dozens of OTHER weapons' cells by up to 0.118 — pure process-to-process
+hash-seed jitter the gate's own 0.15 tolerance already absorbs, confirmed by `drift(tolerance=0.15)`
+reporting zero moved cells at that same unmodified HEAD. A blind `--update` after only deleting
+`partisan` would have committed that jitter as if it were caused by the deletion; fixed by a surgical
+single-key removal for this pass instead (`added=[] removed=[] moved=[]`, gate green). Two collateral
+test floors, both hard counts over the full roster, needed lowering by exactly what `partisan`
+contributed and nothing more: `test_combat_edges.py` 68→65 authored-edges elements (its 3 elements);
+`test_combat_audit_pins.py` 55→51 cut_thrust versatile-head cells (its 4 tier cells).
+
+**Ob-from-defender — the first half of Jordan's 2026-08-15 ruling only, not the ladder migration.**
+Verbatim: *"DECISIVE_OB for combat is stupid as hell and is dead because Ob should be determined by
+your opponent more than anything."* The same ruling fixes the order: derive Ob from the defender
+FIRST, then migrate the ladder — reversing it was already measured (`ED-IN-0187`) to break
+`test_plate_participation_tracks_armour_defeat_capability`. This build is the first half only. Added
+`core.ob_from_defender(defender) = defender.history / 2.0` (History is this resolver's own single
+score — the same one `resolution_pool()` derives dice from; combat_engine_v1 has no separate
+"capability" surface). No per-instance modifier: wound impairment already has its owner
+(`combat_systems.wound_impairment`, folded into `net_sigma`), and adding a second wound term onto Ob
+would double-count it. `core.resolve()`'s `ob` is now a REQUIRED 4th argument — no silent
+`DECISIVE_OB` fallback — and all three `wrapper.py` call sites (main exchange, stop-thrust,
+disengage-pursuit) pass `ob_from_defender` for whichever role is actually struck if the roll lands.
+`DECISIVE_OB` survives only as `strike()`'s unrelated severity-tail reference. `core.py`'s HELD-ladder
+docstring and `test_degree_ladder_single_owner.py`'s `RULINGS`/`HELD` text are corrected IN PLACE
+(not appended past) — including one imprecise sentence found in the existing `HELD` entry ("delete
+this entry when the Ob derivation lands") that would have wrongly licensed deleting the hold now; the
+hold is unaffected, since `degree()`'s own band-boundary formula is untouched and the mechanical
+divergence test still passes.
+
+**This moves outcomes broadly, on purpose, and it was verified rather than assumed.** A typical
+defender's derived Ob (~1.5 at the default History=3) sits well below the old fixed 3, so fights
+decide faster across the whole roster. Three re-pinned falsifiers, each re-measured with a stated
+figure rather than loosened blind: `test_combat_tradition_levers.py`'s per-fight-texture divergence
+rate roughly halved (katana/arming 12.5%→5.25%, dagger/arming 13%→7.75%, re-measured at n=400 for
+power; floor 5%→2%, same ~2.5x margin the prior re-baseline used); `test_combat_draw_stream.py`'s
+heavy/none draw-ratio at seed 4242 fell 2.95x→1.38x (floor 2.0x→1.2x, informed by a 10-seed spot-check
+showing this ratio is naturally noisy, 0.95x-3.1x); `workbench/data/combat_armour_reference.json`
+regenerated a second time — this pass IS real signal, unlike the partisan-only pass above — and
+verified green by its own committed-reference gate.
+
+**Verified.** The ~40-file targeted PC-lane `tests/valoria` battery (`test_combat_*`,
+`test_degree_ladder_single_owner.py`, plus shape/currency/structure guards that import
+`combat_engine_v1`): 484 passed / 21 skipped / 0 failed (baseline before this build: 490/21/0 — the
+six-test drop is collected-parametrization shrinkage from the smaller roster, not a suppressed
+failure). `engine/tests/test_pipeline_reach.py`, `test_f7_smoke_oracle.py`,
+`test_combat_bridge_seam.py`: 23 passed, unmoved (dispatched with the Ob change already live).
+`python3 tools/valoria_local.py --staged`: all local gates pass (`ci_claim_provenance_check.py` caught
+a real defect first try — `MEASURED-BY: direct` parsed "direct" as a claimed file path; fixed by
+naming the actual re-runnable instruments). Not run: the full `pytest tests/valoria` suite (§0.4 —
+this position's own targeted battery already covers everything `combat_engine_v1` touches) and a
+fresh CI push.
+
+**⚠ Concurrency, recorded plainly, matching §8.11's own finding.** This position shared the tree with
+at least two other live sessions (MB lane: position `11`, §8.10; a governance/phase-2 position,
+§8.11). One concrete effect: `references/id_reservations.yaml` and `references/id_reservations_history.md`
+— both edited here for the `ED-PC-0058` allocation — were swept into the MB lane's own commit
+(`6286f45`, "MB lane ledger: file ED-MB-0076/0077...") rather than landing in this position's own
+commit, almost certainly because that session staged the whole working tree rather than named files
+while this edit sat uncommitted in the shared checkout. The CONTENT is correct and verified
+byte-identical to what this position intended (`git diff HEAD` on both files is empty); only the
+commit ATTRIBUTION is wrong — a PC-lane ID allocation citing `ED-PC-0058` sits in an MB-lane commit
+message that never mentions it. Not corrected here: rewriting another lane's already-shared commit is
+its own hazard, and the orchestrator is better positioned to decide whether a follow-up note is worth
+it. `git status` mid-session also showed `engine/season/`, `systems/mass_battle/` and
+`tests/sim/gauge_mb.py` dirty throughout — left alone, per this brief's own instruction, never staged
+or committed by this position.
+
+---
+
 ## 9. NOT VERIFIED IN THIS PASS
 
 Carried forward honestly, not resolved here.

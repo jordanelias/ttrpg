@@ -1806,57 +1806,6 @@
     },
     "static_moment": 0.040725000000000004
   },
-  "partisan": {
-    "MoI": 3.1819818975,
-    "PoB_frac": 0.39243637937827736,
-    "PoB_m": 0.9029961089494163,
-    "afforded": {
-      "cut_thrust": [
-        0.7,
-        "shear_or_puncture"
-      ]
-    },
-    "agility": 0.1612260406556293,
-    "gap": 0.47,
-    "length_m": 2.301,
-    "m_head": 1.02,
-    "perc_auth": 0.0,
-    "select_mode": {
-      "heavy": [
-        "puncture",
-        "cut_thrust",
-        0.47,
-        null,
-        0.5,
-        0.7
-      ],
-      "light": [
-        "puncture",
-        "cut_thrust",
-        0.47,
-        null,
-        0.5,
-        0.7
-      ],
-      "medium": [
-        "puncture",
-        "cut_thrust",
-        0.47,
-        null,
-        0.5,
-        0.7
-      ],
-      "none": [
-        "shear",
-        "cut_thrust",
-        0.47,
-        null,
-        0.5,
-        0.7
-      ]
-    },
-    "static_moment": 2.3207
-  },
   "podao": {
     "MoI": 2.0877717533333335,
     "PoB_frac": 0.4298412176808749,

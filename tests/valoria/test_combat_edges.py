@@ -109,7 +109,10 @@ def test_authored_data_conforms_invariants():
     conditional invariant ever fires. It has been non-vacuous only indirectly, because weapons.py's bake asserts
     elsewhere — an accident of another module, not a property of this test. The counted floors below close that
     (§0.1 point 2). Measured 2026-07-29: 68 elements carry an `edges` block (7 do not), invariant (1) fires on 4
-    of them and invariant (2) on 9."""
+    of them and invariant (2) on 9. RE-MEASURED 2026-09-29 (ED-PC-0058, the `partisan` deletion): the roster
+    lost the weapon's 3 authored-edges elements (`_E(2)` central blade, `_E(1)` x2 wing-lugs, none sides==0 and
+    none carrying a false edge), so `checked` floors down 68->65 and the other two floors are untouched by the
+    same measurement."""
     checked = ek_fired = fef_fired = 0
     for n, w in WEAPONS.items():
         if 'base' in w:
@@ -130,7 +133,7 @@ def test_authored_data_conforms_invariants():
             if fef > 0:
                 fef_fired += 1
                 assert sides == 1, f"{n}: false_edge_frac {fef} > 0 but sides {sides} != 1"
-    assert checked >= 68, f"only {checked} elements carry an authored edges block (was 68) — the conformance sweep is narrowing"
+    assert checked >= 65, f"only {checked} elements carry an authored edges block (was 65, ED-PC-0058) — the conformance sweep is narrowing"
     assert ek_fired >= 4, f"invariant (1) (sides==0 => ek<=0.1) fired on {ek_fired} elements (was 4) — it is going vacuous"
     assert fef_fired >= 9, f"invariant (2) (false_edge_frac>0 => sides==1) fired on {fef_fired} elements (was 9) — it is going vacuous"
 

@@ -72,15 +72,30 @@ def degree(net, ob):
     exactly what ED-PC-0038/0039 ratified this guard to prevent.
 
     Re-recording that golden would hide the collision; relaxing the guard would discard the ruling
-    it was built to protect. So this site is HELD and the collision is Jordan's to resolve. It is
-    also entangled with the OTHER half of the same ruling — "for rolling against a character the
-    obstacle is their score/2 plus modifiers" — which this resolver does not do at all: it rolls
-    against a FIXED `DECISIVE_OB = 3` and carries the opposition in `net_sigma` instead. Deriving
-    Ob from the defender would change the band placement again, so calibrating against the current
-    fixed-Ob form first would be work thrown away.
+    it was built to protect. So this site is HELD and the collision is Jordan's to resolve.
 
-    `tests/valoria/test_degree_ladder_single_owner.py` records this as a declared hold with the
-    same reasoning, so the divergence is visible in the guard rather than silently tolerated.
+    ⚠ THE OTHER HALF OF THE SAME RULING NOW LANDS (ED-PC-0058, 2026-09-29; workplan position `12`,
+    "PC lane"). Jordan, 2026-08-15, verbatim, ON THE ORDER: "DECISIVE_OB for combat is stupid as
+    hell and is dead because Ob should be determined by your opponent more than anything" — and
+    the order is settled and is the opposite of the obvious one: derive Ob from the DEFENDER first
+    (score/2 plus that instance's modifiers), THEN the owner's ladder applies. `resolve()` below no
+    longer carries a fixed Ob; every call site now passes `ob_from_defender(defender)`.
+    `DECISIVE_OB` SURVIVES only as `strike()`'s unrelated severity-tail reference (a distinct,
+    unruled formula measuring how far a roll sits past the overwhelming bar) — it is no longer read
+    by anything that decides a degree. THIS FUNCTION'S OWN BAND-BOUNDARY FORMULA IS UNCHANGED: the
+    HELD ladder below still bands on the fixed-form thresholds relative to whatever `ob` it is
+    given, so a fight against a low-score defender (small `ob`) now clears Overwhelming far more
+    easily than the old fixed-3 form did — that IS the ruling ("Ob should be determined by your
+    opponent"), not a defect of this migration. Migrating the LADDER ITSELF (this function's
+    band-boundary formula, to the owner's margin form) is the SEPARATE, still-open step this
+    docstring's paragraph above describes — that recalibration has NOT happened, and doing it
+    without recalibrating the damage constants against the new Ob distribution is still the wasted
+    work this docstring warned about. Ob-from-defender does not require it: this function takes
+    whatever `ob` it is given and bands exactly as before.
+
+    `tests/valoria/test_degree_ladder_single_owner.py` records the ladder-migration half as a
+    declared hold with the same reasoning, so the divergence is visible in the guard rather than
+    silently tolerated.
 
     ---- the held ladder, unchanged ----
 
@@ -95,13 +110,37 @@ def degree(net, ob):
     if net >= ob - 0.5: return 'success'                          # discrete net >= ob
     return 'partial'                                              # discrete 1 <= net < ob
 
-def resolve(pool, net_sigma, rng):
-    """Canonical mu-shift resolution (sigma_leverage_handoff §1): base Ob fixed at DECISIVE_OB; the sigma-leverage
-    boosts the ROLL (boost = eff_sigma*sigma_N = soft_cap(net_sigma)*sigma_n(pool)), it does NOT shift the Ob.
+def ob_from_defender(defender):
+    """RULED Ob-derivation (Jordan, 2026-08-15, verbatim: "DECISIVE_OB for combat is stupid as hell and is dead
+    because Ob should be determined by your opponent more than anything" — tests/valoria/test_degree_ladder_
+    single_owner.py's RULINGS dict, entry "2026-08-15 — combat, and the sequence"). Score/2 plus that instance's
+    modifiers, the SAME reading engine/season/seam/wrappers/sigma.py::_obstacle_of applies for a person subject
+    on the season side. This resolver's own score is `history` — the SAME score resolution_pool() derives dice
+    from (ED-901); combat_engine_v1 has no separate 'capability' surface, so History (a person's combat
+    aptitude) is the natural single reading, not a second one invented for this call site.
+    NO INSTANCE MODIFIER IS ADDED HERE. Wound impairment already has its OWNER
+    (combat_systems.wound_impairment, ED-1041) and is folded into net_sigma at every call site (bind_sigma,
+    the defence assembly, reach_sigma, pursuit_sigma) — adding a second wound term onto Ob would double-count
+    it, exactly the class of defect wrapper.py:316-317 already guards against for defence_sigma ("NOT re-scaled
+    by dsig, which already shaped the roll via net_sigma (audit C-2: avoid double-counting defender skill)").
+    If a genuine per-instance Ob modifier is ever needed here, it is a NEW term with its own owner, not folded
+    into this function silently. Pure."""
+    return defender.history / 2.0
+
+
+def resolve(pool, net_sigma, rng, ob):
+    """Canonical mu-shift resolution (sigma_leverage_handoff §1): the sigma-leverage boosts the ROLL
+    (boost = eff_sigma*sigma_N = soft_cap(net_sigma)*sigma_n(pool)), it does NOT shift the Ob.
     SL.eff_ob is display-only per its own docstring; resolving via the floored Ob-shift distorted the degree
-    bands (overwhelming trivialised by the Ob-floor). Returns (deg, net)."""
+    bands (overwhelming trivialised by the Ob-floor).
+    `ob`: the RULED Ob-from-defender value (Jordan 2026-08-15) — callers pass `ob_from_defender(defender)`,
+    never `DECISIVE_OB` (retired as a resolution input; it survives only as strike()'s severity-tail
+    reference, an unrelated formula). REQUIRED rather than defaulted: the ruling is "Ob should be determined
+    by your opponent", so a silent DECISIVE_OB fallback would let a caller skip the derivation exactly as
+    every call site did before ED-PC-0058.
+    Returns (deg, net)."""
     net = roll_net(pool, rng) + SL.soft_cap(net_sigma) * SL.sigma_n(pool)
-    return degree(net, DECISIVE_OB), net
+    return degree(net, ob), net
 
 # ---- damage (Impact x Coupling x Quality) — CONTINUOUS transmission, NO tanh saturation ----
 # Adopts the ground-up linear damage model [damage_model.py / damage_model_design, Jordan 2026-05-30,
@@ -538,8 +577,8 @@ def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc
     raw = impact * coupling(weapon_head, armor, perc=perc, gap_prec=gap, eff=eff, thrust_auth=thrust_auth, eff_cut=eff_cut, eff_thrust=eff_thrust) * qf * DMG_SCALE   # FIX-1b: perc scales blunt transmit vs rigid armour; gap: the situational gap game (thrust seeks the reach-ladder gaps); eff: the 'cut' token's own edge-quality scaling; thrust_auth (PC-5): the point-to-hand lever authority
     # PENETRATION THRESHOLD (ED-PC-0032), now CAPABILITY-RELATIVE (ED-PC-0038). The knee used to key on RAW magnitude
     # alone, which let a heavy-headed weapon buy its way through a harness it demonstrably cannot defeat: measured vs
-    # plate, a partisan (adef_cap 0.176 against a 0.72 threshold — the worst armour-defeat on the board) landed 11
-    # damage, a guandao (0.169) landed 12, while a spear with BETTER capability (0.288) landed 3 and a yari 2. The
+    # plate, a guandao (adef_cap 0.169 against a 0.72 threshold — the worst armour-defeat on the board) landed 12
+    # damage, while a spear with BETTER capability (0.288) landed 3 and a yari 2. The
     # damage path was rewarding head mass exactly where the sigma path says the weapon cannot find a gap, which is
     # both physically inverted (a narrow point seeks a gap better than a broad blade) and a silent contradiction of
     # the armour-defeat model the rest of the engine resolves on. The threshold now RISES with the weapon's own

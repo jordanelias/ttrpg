@@ -35,7 +35,7 @@ def _corrupt(c, armor):
 
 
 @pytest.mark.parametrize('weapon', ['guisarme', 'katana', 'guandao', 'hook_sword', 'spear', 'yari',
-                                    'poleaxe', 'partisan', 'ranseur', 'staff', 'longsword', 'estoc', 'odachi'])
+                                    'poleaxe', 'ranseur', 'staff', 'longsword', 'estoc', 'odachi'])
 @pytest.mark.parametrize('armor', ['medium', 'heavy'])
 def test_represent_measure_p_is_path_independent(weapon, armor):
     """ED-PC-0034 (F1). The re-presentation gate is evaluated at ENGAGEMENT START, outside the per-beat loop that
@@ -185,7 +185,10 @@ def test_cut_thrust_label_gate_is_not_vacuous():
     success. Because the gate is parametrised one-cell-per-invocation, the count has to live in its own sweep.
 
     Measured 2026-07-29: 55 of 76 cells (19 cut_thrust weapons x 4 tiers) select the versatile head and are really
-    asserted; 21 skip. The floor is the measured value, so a drop is a signal rather than a silent narrowing."""
+    asserted; 21 skip. The floor is the measured value, so a drop is a signal rather than a silent narrowing.
+    RE-MEASURED 2026-09-29 (ED-PC-0058, the `partisan` deletion): partisan was cut_thrust and all 4 of its tier
+    cells selected the versatile head, so the roster drops to 18 cut_thrust weapons (72 cells) and the floor
+    drops 55->51 by exactly that removal — not a narrowing of the property itself."""
     ct = [n for n, r in WEAPONS.items() if r.get('head') == 'cut_thrust']
     checked = 0
     for weapon in ct:
@@ -194,8 +197,8 @@ def test_cut_thrust_label_gate_is_not_vacuous():
             _dm, head, _gap, _perc, _pc, _eff = S.select_mode(c, armor, True, CFG, measure_gap=0.0)
             if head == 'cut_thrust':
                 checked += 1
-    assert checked >= 55, (
-        f"only {checked} of {len(ct) * 4} cut_thrust cells still select the versatile head (was 55) — "
+    assert checked >= 51, (
+        f"only {checked} of {len(ct) * 4} cut_thrust cells still select the versatile head (was 51, ED-PC-0058) — "
         f"test_cut_thrust_label_matches_the_arm_actually_paid is skipping its way to a vacuous green")
 
 
