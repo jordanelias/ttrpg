@@ -117,6 +117,13 @@ class NoToken(InstrumentDefect):
 # `tenure_write_basis` and `refuse_unauthored`, which is where the one judgment that spans two
 # Tenures of the same write is made.
 #
+# ⚠ PLAN POSITION `17b` (TERM · UPKEEP) BUILT `T-n`, THE ONE CLAUSE ABOVE THAT ADMITTED NOTHING,
+# AND ADDED A SEVENTH, `renewal`. `T-n` needed `Tenure.term`, which did not exist until `17b` added
+# it (`state/carriers.py::Term`). `renewal` is the write `T-n`'s own rule cannot cover: a seat's
+# holder PAYING an obligee's `upkeep` (`_eff_transfer`) winds the clock on an `oblige` edge the
+# OBLIGEE owns, which is no maturation, no revocation, no conferral and not the owner's act. Both
+# are in `04 §C.2`'s enumeration now, amended inline the same day with the plan position cited.
+#
 # WHAT IS HERE AND WHAT IS NOT. This module owns the JUDGMENT -- which basis, if any, admits one
 # Tenure change -- and the seat-authority rules the judgment composes on (ruling (3)'s revocation
 # rule, ruling (4)'s purview, the conferral-basis test). `World.write` owns the OBSERVATION: it
@@ -153,8 +160,16 @@ class NotYours(Forbidden):
 # declared conferral basis -- rather than coined.
 T_M = "T-m"
 T_O = "T-o"
+# `04 §B.8`'s own name, BUILT at plan position `17b`: the actorless closure of an edge whose declared
+# `term` has matured -- MATTER's write, the second cause `04 §B.8`'s synthesis call licenses.
+T_N = "T-n"
 CASCADE = "cascade"
 CONFERRAL = "conferral"
+# THE SEVENTH BASIS (plan position `17b`): a seat's seated holder, exercising that very seat,
+# extending the `term` of an `oblige` edge on it -- the post paying its establishment (`04 §B.7`'s
+# `upkeep`; `F.18`: *"the repair is a verb"*). Named, like `conferral`, in the ordinary word for
+# the change it admits. See `may_renew` and the block in `tenure_write_basis`.
+RENEWAL = "renewal"
 # THE SIXTH BASIS (plan position 16, `give`): a `hold` on something that is not a seat, opened in
 # the same write that ended the actor's own live `hold` on it under `T-m`. Named, like `cascade`
 # and `conferral`, for the thing that licenses it -- the giver's own edge, handed over -- and in
@@ -328,15 +343,52 @@ def may_fill(w: "World", actor: Optional[str], via: Optional[str], off: Office) 
     return purview_reaches(w, w.offices[via], off.rung)
 
 
+def may_renew(w: "World", actor: Optional[str], via: Optional[str], off: Office) -> bool:
+    """THE RENEWAL BASIS, AS ONE PREDICATE (plan position `17b`): may `actor`, exercising `via`,
+    wind the `term` of somebody's `oblige` edge on the seat `off`?
+
+    Two conjuncts: `via` IS `off` -- the seat pays its OWN establishment, *"what the post pays its
+    establishment out of the office's stake"* (`holonic_ARCHITECTURE.md:428`), so a renewal is the
+    seat's act and is asked of the seat exercised (`04 §B.7`'s purview invariant) -- and the actor SITS in it
+    (`seat_hold`, *"refused the instant the occupant is not seated"*). Asked by the gate for every
+    extended `oblige` term, and by `_eff_transfer` before it names one, so the effect never writes a
+    renewal the gate would refuse (a `NotYours` out of the fold would end the season, not refuse the
+    act): one owner, two readers, `may_fill`'s shape.
+
+    ⚠ REFLEXIVE ON THE SEAT, THE OPPOSITE OF `may_fill`, AND FOR THE REASON THAT FUNCTION GIVES.
+    `may_fill` refuses `via == off` because a holder filling the seat he exercises is authority over
+    himself. Paying the seat's own obligees is authority over nothing but the seat's own treasury;
+    it is the only seat that may. ⚠ THREE READINGS REJECTED, each with the reason:
+      * PURVIEW (`purview_reaches`, a superior seat paying a subordinate's establishment). `04
+        §B.7`'s upkeep is what the seat pays ITS establishment; a Duke paying his reeve's men is a
+        gift to them, and gifts renew no one's service.
+      * NO SEAT AT ALL -- whoever moves matter from the treasury to an obligee's home renews. That
+        is causation-bound, `handover`'s shape, and it would need the gate to observe STORES, which
+        it does not (it observes Tenures; `World.write` owns the only before/after read of a rung).
+        And it would make paying a man's wages something a thief can do for you.
+      * THE OBLIGEE'S OWN ACT (`T-m`). A term the servant can extend for himself is not a term.
+
+    ⚠ WHAT IT DOES NOT DECIDE: whether the payment was ENOUGH, or from the right store. Those are
+    `_eff_transfer`'s (with `queries/world_q.py::upkeep_of`), because the gate observes Tenures and
+    never a rung's stores -- the split `may_fill` already has with `_req_confer`."""
+    return via == off.id and seat_hold(w, actor, via) is not None
+
+
 def _moved(t: Tenure, was: Optional[Tenure]) -> Optional[set]:
-    """Which of an existing edge's four non-end fields the write changed; `None` for an edge the
+    """Which of an existing edge's five non-end fields the write changed; `None` for an edge the
     write OPENED. The ends (`subject`, `object`, `kind`) are not listed: rewriting them is refused
-    before this is read (`tenure_write_basis`'s *nothing admits rewriting an edge's ends*)."""
+    before this is read (`tenure_write_basis`'s *nothing admits rewriting an edge's ends*).
+
+    ⚠ `term` IS THE FIFTH (plan position `17b`), AND LEAVING IT OUT WOULD HAVE ADMITTED A TERM
+    REWRITE UNDER EVERY BASIS THAT TESTS `moved`: a `T-o` closure that also shortened the edge's
+    term would read as `{"until"}`, a pure closure, and a `conferral` re-grant that also wound a
+    term would read as `{"payload"}`. Each basis now sees the term as the change it is."""
     if was is None:
         return None
     return {name for name, now, then in (
         ("since", t.since, was.since), ("until", t.until, was.until),
-        ("degree", t.degree, was.degree), ("payload", t.payload, was.payload)) if now != then}
+        ("degree", t.degree, was.degree), ("payload", t.payload, was.payload),
+        ("term", t.term, was.term)) if now != then}
 
 
 def _closes(t: Tenure, was: Optional[Tenure], moved: Optional[set] = None) -> bool:
@@ -365,20 +417,31 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     `released` is every OBJECT on which the same write ended the actor's own live `hold` under
     `T-m` and has not yet handed it on -- computed by `refuse_unauthored` from the batch it holds,
     because this function sees one Tenure and cannot (see `handover` below). Empty by default, so a
-    caller judging a Tenure alone gets the five-basis answer.
+    caller judging a Tenure alone gets the answer of every basis but `handover` (six, since `17b`
+    built `T-n` and added `renewal`; five before).
 
-    THE SIX BASES, AND WHAT EACH MAY WRITE -- a basis admits a KIND of change, not any change:
+    THE SEVEN BASES, AND WHAT EACH MAY WRITE -- a basis admits a KIND of change, not any change:
 
       `T-m`       the actor IS the owner -- `was.subject` for an existing edge, `t.subject` for a
                   new one. Anything the owner does to their own edge (`release`, `move`'s legs,
                   `create_record`'s `hold`, a self-conferral's opening). ⚠ The owner is read from
                   BEFORE the write, so an effect cannot make itself the owner by rewriting
                   `subject` and then be admitted as it.
-      `T-n`       ⚠ NOT BUILT, AND NOT BUILDABLE HERE: `Tenure` carries no `term` (`04 §B.8`'s
-                  `term?` is unbuilt; `write_matrix.yaml` says `Tenure.payload` is to be
-                  "REPLACED by `term?`"). No write can cite a term maturation, so this basis admits
-                  nothing today; a branch testing a field that does not exist would be `ID-13`'s
-                  dead carrier. It is the first thing to add when `term?` lands.
+      `T-n`       an ACTORLESS CLOSURE (`until` set, nothing else, no actor) of an edge whose OWN
+                  declared `term` -- read from BEFORE the write -- has `matures_at <= w.tick`.
+                  BUILT AT PLAN POSITION `17b`, which added `Tenure.term`; until then this entry
+                  read *"NOT BUILT, AND NOT BUILDABLE HERE: `Tenure` carries no `term`"*, and it
+                  was right to admit nothing rather than test a field that did not exist. The
+                  cause is the term itself, so it is CAUSATION-BOUND like `cascade` and reads no
+                  seat: `04 §B.8`, *"an actorless row may write `until` only where its cause is
+                  the existence change it also caused, OR the maturation of a term declared by
+                  the act that opened this Tenure"*. MATTER is its one writer
+                  (`loop/matter.py`'s tenure-term branch). ⚠ ACTORLESS ONLY: an ACT closing an
+                  edge whose term has come is that actor's act and needs that actor's basis
+                  (`T-m`, `T-o`); a term that matured licenses its own lapse, never a stranger's
+                  hand. ⚠ The term is read from `was`, so a write cannot shorten a term and then
+                  be admitted as its maturation -- and `_moved` lists `term`, so such a write is
+                  not a pure closure anyway.
       `cascade`   a CLOSURE (`until` set, nothing else) of an edge whose subject or object is in
                   `gone`. `04 §B.8`: *"`destroy` sets `until` on every Tenure naming the id AND
                   NOTHING ELSE"* -- so the cascade may close and may not open, grade or re-grant.
@@ -393,6 +456,18 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                   `released` -- the actor ended their own live `hold` on that object under `T-m`
                   in this same write. `give` (plan position 16) is the verb; the basis is general
                   over every non-seat `hold` object. See the block below.
+      `renewal`   a change to `term` ALONE on a LIVE `oblige` edge, that pushes a term the edge
+                  already carried LATER, by `may_renew` -- `via` IS the seat the edge is on and the
+                  actor sits in it. Plan position `17b`: the post paying its establishment's
+                  `upkeep` (`_eff_transfer`) winds each paid obligee's clock. AUTHORITY-BOUND like
+                  `T-o` (a seat's act through `Act.via`), and NARROWER than every other basis in
+                  what it may write: it cannot open, close, grade or re-grant, cannot ADD a term
+                  to an edge that had none (payment renews a term; it does not impose one), and
+                  cannot SHORTEN one (an earlier `matures_at` is a revocation wearing a receipt,
+                  and revocation is `T-o`'s). `oblige` ONLY, because upkeep is what the seat pays
+                  those obliged to it (`04 §B.7` call 2: *"the size is whatever the holder admits
+                  and the upkeep pays"*); a `hold` on the seat is its holder's own seat and a term
+                  on it is not this position's.
 
     ⚠ JUDGED ON THE WORLD THE WRITE LEAVES. `World.write` asks this after `apply()`, so `T-o` and
     `conferral` read `seat_hold` -- is the actor seated in `via`? -- AFTER the effect ran. `04 §B.8`'s
@@ -408,7 +483,7 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
 
     ⚠ `handover` -- `give` (PLAN POSITION 16 ≡ `15a`) -- SETTLED BY G3's PRE-FLIGHT (`ED-IN-0277`),
     BUILT AT POSITION 16. The giver's close is `T-m`. The RECEIVER'S open matches none of the other
-    five: it is not the receiver's act, no seat is exercised (`give` is `own`-eligible, `via` is
+    five (nor `17b`'s `renewal`, which admits no opening): it is not the receiver's act, no seat is exercised (`give` is `own`-eligible, `via` is
     `None`), and nothing ceased to exist. So it has its own basis, CAUSATION-BOUND like the cascade
     rather than authority-bound like T-o: *a `hold` opened on an object that is NOT a seat, of the
     same kind and object as an edge the actor OWNED, was live before, and closed under `T-m` in this
@@ -454,8 +529,17 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
         return T_M
     if closed and (t.subject in gone or t.object in gone):
         return CASCADE
+    if (closed and actor is None and was.term is not None
+            and was.term.matures_at <= w.tick):
+        return T_N
     if opened and t.kind == "hold" and seat is None and t.object in released:
         return HANDOVER
+    if (not opened and t.kind == "oblige" and t.live and moved == {"term"}
+            and was.term is not None and t.term is not None
+            and t.term.matures_at > was.term.matures_at):
+        served = w.offices.get(t.object)
+        if served is not None and may_renew(w, actor, via, served):
+            return RENEWAL
     if seat is None:
         return None
     if closed and may_revoke(w, actor, via, seat):
@@ -474,7 +558,9 @@ def refuse_unauthored(w: "World", changes: list, actor: Optional[str], via: Opti
     the edge it refused is as it was (`NotYours`' own raise is `World.write`'s, via `not_yours`).
 
     TWO PASSES, BECAUSE ONE BASIS SPANS TWO TENURES (position 16). The first judges every change
-    on its own -- the five bases that need nothing but the change, the actor, `via` and `gone`.
+    on its own -- the six bases that need nothing but the change, the actor, `via` and `gone`
+    (five until plan position `17b` built `T-n` and added `renewal`, neither of which reads
+    another Tenure of the batch).
     From those verdicts it takes the `handover` licence: the object of every `hold` this actor
     ENDED under `T-m` in this write, counted. The second re-judges only what the first refused,
     now with the licence, and spends one unit of it per `handover` it admits. The two passes are
@@ -533,9 +619,11 @@ def not_yours(refused: list, actor: Optional[str], via: Optional[str], record_ki
         needs=f"{T_M} (the actor owns the edge), {T_O} (via present, the actor seated in it, the "
               f"seat's revocation basis reaching it), {CONFERRAL} (via's purview over a seat "
               f"that declares a conferral basis), {CASCADE} (the edge names something this "
-              f"same write removed), or {HANDOVER} (a `hold` on something that is not a seat, "
+              f"same write removed), {HANDOVER} (a `hold` on something that is not a seat, "
               f"opened in the same write that ended the actor's own live `hold` on it -- one "
-              f"opening per ending). T-n is unbuilt: Tenure carries no term",
+              f"opening per ending), {T_N} (an actorless closure of an edge whose own declared "
+              f"term has matured), or {RENEWAL} (a live `oblige` edge's term pushed later, by "
+              f"its seat's own seated holder exercising it)",
         law="04 §C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner "
             "writes only under a declared basis. Per-verb eligibility enforced this by "
             "CONVENTION until G3; a revocation with no seat in Act.via is refused here, so 'a "

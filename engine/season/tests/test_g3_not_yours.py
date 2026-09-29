@@ -561,7 +561,10 @@ def test_g3_every_basis_name_the_gate_can_return_is_reached_in_this_file():
     """The six bases, less the unbuilt `T-n`, each observed ADMITTING at least once through the
     real `tenure_write_basis` -- so a basis whose branch stopped being reachable cannot hide behind
     the refusal tests above, which observe only what is refused. The sixth, `handover`, arrived
-    with `give` at plan position 16; its own refusals are `test_give.py`'s."""
+    with `give` at plan position 16; its own refusals are `test_give.py`'s. ⚠ AMENDED (plan position
+    `17b`): `T-n` is BUILT now and a seventh basis, `renewal`, was added with it; both are observed
+    admitting -- and each refused one clause away -- in `test_term_upkeep.py`, whose world (an
+    `oblige` with a declared term, a treasury) this file's governance world does not build."""
     import engine.season.state.gate as G
     seen = set()
     real = G.tenure_write_basis

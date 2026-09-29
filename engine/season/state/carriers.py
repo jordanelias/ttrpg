@@ -37,6 +37,35 @@ from ..data.rosters import (
 from ..gaps import Forbidden, Unowned, Unspecified
 
 
+@dataclass(frozen=True)
+class Term:
+    """`04 §B.8`'s `term?` -- A DECLARED END ON A TENURE, and the field `T-n` has always needed.
+    Plan position `17b` (`workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` §3.2 row 10 and
+    its "Contradiction 1" box; `04` §F's `F.3` row: *"`Tenure.term`; MATTER matures it"*).
+
+    `matures_at` is the tick at whose MATTER barrier the term matures -- `loop/matter.py`'s tenure-
+    term branch closes the edge there, through the gate's `T-n` basis, with `causes[] =
+    [declared_by]` (`04 §B.8`: *"a `matures_at` MATTER matures with `causes[] = term.declared_by`"*;
+    AX-5: *"a matured term cites the act that wound it"*). `declared_by` is that act's id -- the
+    opening act, or the act that last RENEWED the term (`_eff_transfer`'s payment of `upkeep`), so a
+    lapse always cites whoever last wound the clock, which is the act that makes it a story rather
+    than a timer.
+
+    ⚠ FROZEN, AND A RENEWAL REPLACES IT WHOLE. A term is a value, not a place: an act that winds it
+    again writes a new `Term`, so `World._tenure_snapshot` can compare it by value with no copy, and
+    no effect can advance a clock in place where the tenure diff cannot see it.
+
+    ⚠ `closer` IS NOT CARRIED, AND THAT IS `ID-13`, NOT AN OMISSION. `04 §B.8` spells `term?
+    (matures_at, declared_by, closer)` and then says of `closer` itself: *"`Seat.revocation` is
+    authoritative and `term.closer` names a basis, not a second authority"*. Ending a hold early is
+    already `T-o`, the seat's revocation basis through `Act.via`, and nothing at `17b` reads a
+    per-term closer -- a field declared for a reader that does not exist is the defect the deleted
+    `Tenure.conferrer` (below) was. The day a term needs a closer the seat's own basis cannot
+    express, it is added with that reader."""
+    matures_at: int
+    declared_by: str
+
+
 @dataclass
 class Tenure:
     """S15 -- THE ONE EDGE. Owned by its SUBJECT (S15.1)."""
@@ -58,6 +87,17 @@ class Tenure:
     # would be a second home for a fact the act already holds — `ID-2`.
     degree: Optional[str] = None
     payload: Any = None
+    # `04 §B.8`'s `term?` -- plan position `17b`; `Term`'s own docstring says what it is and who
+    # writes it. ⚠ ADDED BESIDE `payload`, NOT IN ITS PLACE, WHATEVER `04 §B.8`'s *"Replaces
+    # payload?"* AND `write_matrix.yaml`'s 2026-09-03 note ASKED. Both were written while `payload`
+    # had no writer; it has had one since `H-71` (`World._grant_remit`, the remit grant a seat confers
+    # on its holder), a reader in `granted_acts` below, and the gate's `conferral` re-grant clause
+    # (`moved == {"payload"}`). A grant and a declared end are two facts, so they are two fields --
+    # the plan's own §3.2 row 12 says the same: *"Not `Tenure.payload`, which is live."*
+    # ⚠ `repr(Tenure)` FOLDS INTO `World.content_hash` AND CARRIES EVERY FIELD NAME, so this line
+    # alone moves the digest of every world holding a Tenure -- a declared, structural hash move,
+    # the `Office.establishment` deletion's shape in reverse, not a behaviour change.
+    term: Optional[Term] = None
 
     @property
     def live(self) -> bool:
@@ -716,7 +756,16 @@ class Office:
     # `World.content_hash` and carries every field NAME, so this deletion alone moves the digest of
     # every world holding an office -- a declared, controlled hash move, not a behaviour change.
     dates: list[str] = field(default_factory=list)
-    upkeep: Any = None
+    # `04 §B.7`'s RATIFIED `Seat := ( …, upkeep, dates[], exists )` -- WHAT THE SEAT PAYS EACH
+    # PERSON OBLIGED TO IT, PER TERM, out of its own rung's stores (`holonic_ARCHITECTURE.md:428`:
+    # *"what the post pays its establishment out of the office's stake"*). Plan position `17b` typed
+    # it (it was `Any`, declared and unread, and r2 `05:1659` refused deleting it on `F.18`'s own
+    # resolution, *"the repair is a verb"*) and gave it its reader: `queries/world_q.py::upkeep_of`,
+    # which `_eff_transfer` asks when a seated holder pays an obligee. `None` -- every seat any
+    # builder makes today -- is not "free": it defers to the fixture `default_upkeep` (`H-158`),
+    # read at that one owner, so no caller substitutes a number of its own. Units of whatever matter
+    # the paying `transfer` carries; see `upkeep_of` for the limit that states.
+    upkeep: Optional[int] = None
     # ⚠ `H-99`, AND THESE FIELDS EXIST BECAUSE THE FIRST VERSION VALIDATED THEM AND THREW THEM
     # AWAY. `corpus_run._check_office` called `office_faction(...)` at overlay load and DISCARDED
     # the return; `Office` had no faction and no body, so nothing downstream could read either.
@@ -783,6 +832,19 @@ class Office:
             "rosters.yaml -- binds_bases",
             law="ARCH F.17 -- how a person joins a seat is a CLOSED set; an off-roster basis "
                 "would admit no `oblige`, silently, forever")
+        # WHAT THE SEAT PAYS EACH OBLIGEE -- plan position `17b`. `None` defers to the fixture (see
+        # the field); a declared value must be a whole, non-negative amount, because `upkeep_of`'s
+        # reader divides a payment by it and a negative or fractional upkeep would renew a number
+        # of terms nobody could state. `bool` is refused by name: `True` is an `int` to Python and
+        # an upkeep of one unit to nobody.
+        if self.upkeep is not None and (isinstance(self.upkeep, bool)
+                                        or not isinstance(self.upkeep, int) or self.upkeep < 0):
+            raise Forbidden(
+                f"office {self.id!r} declares the upkeep {self.upkeep!r}", "ARCH §B.7",
+                needs="a whole, non-negative amount per obligee per term, or None for the "
+                      "fixture `default_upkeep`",
+                law="ARCH §B.7 `Seat := ( …, upkeep, … )` / F.18 -- upkeep is what the seat pays "
+                    "each person obliged to it; `_eff_transfer` counts how many a payment covers")
         # A TITLE IS NOT AN OFFICE -- the refusal and its reasoning live in the function
         # (`refuse_a_title_in_a_body`'s own docstring has the fuller history; `offices.yaml`'s
         # loader, position `8a`, now exists too, and calls `title_domain` the same way).

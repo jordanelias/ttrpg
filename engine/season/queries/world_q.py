@@ -759,6 +759,40 @@ def establishment_of(w: World, office_id: str) -> list[str]:
             if t.kind == "oblige" and t.object == office_id and t.live and t.subject in w.persons]
 
 
+def upkeep_of(w: World, office_id: str) -> int:
+    """`Office.upkeep`'S READER -- plan position `17b`, and the field's first since the ratified `04
+    §B.7` `Seat := ( …, upkeep, dates[], exists )` declared it. WHAT THIS SEAT PAYS EACH PERSON
+    OBLIGED TO IT, PER TERM: the seat's own declared amount, or the fixture `default_upkeep`
+    (`H-158`) when it declares none. The ONE place that fallback is read, so no caller carries a
+    number of its own -- `_eff_transfer` asks it to count how many obligees a payment covers.
+
+    `F.18` is the gap it answers: *"upkeep's source -- 'out of the office's stake', and `stake` was
+    retired ... no economic pressure on any office. A MATTER payment would be a fourth clock, so the
+    repair is a verb."* The verb is the existing `transfer` (the plan's Contradiction-1 box, and the
+    retirement plan's G2: *"treasury = `Rung.stores` at the office's own rung; payment = the
+    existing `transfer` verb"*), so this Query supplies the amount and nothing moves on its own.
+
+    ⚠ UNITS OF WHATEVER MATTER THE PAYING `transfer` CARRIES -- A LIMIT, STATED. `04 §B.7` names the
+    field and no document names its matter kind, so a grain payment and a salt payment count alike
+    here. Keying upkeep by kind (`{grain: 2}`) would need a kind nobody has ruled and a second
+    schema for one Seat field; the int is the smallest type that makes a payment countable, and
+    `H-158`'s row carries the kind question rather than this body deciding it."""
+    TRACE.query("upkeep_of", "resolver")
+    off = w.offices[office_id]
+    if off.upkeep is not None:
+        return off.upkeep                 # `Office.__post_init__` already refused a bad declaration
+    v = w.fixtures.get("default_upkeep")
+    # THE FIXTURE GETS THE SAME REFUSAL THE FIELD DOES, here at its one reader: a sweep arm of `0.5`
+    # or `-1` would otherwise count fractional or negative obligees and renew a number nobody set.
+    if isinstance(v, bool) or not isinstance(v, int) or v < 0:
+        raise Forbidden(
+            f"fixture default_upkeep is {v!r}", "ARCH §B.7",
+            needs="a whole, non-negative amount per obligee per term (H-158's sweep is 0 / 1 / 3)",
+            law="ARCH §B.7 / F.18 -- upkeep counts how many obligees a payment covers; "
+                "`Office.__post_init__` refuses the same value on the field")
+    return v
+
+
 def ancestry(w: World, rung_id: str) -> list[str]:
     """`[rung_id, its parent, ..., the root]` — the containment walk up from a rung.
 

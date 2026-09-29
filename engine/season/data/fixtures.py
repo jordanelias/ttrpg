@@ -598,4 +598,35 @@ DEFAULT_FIXTURES = Fixtures(
     # actually lossy at `Partial`, not one parked inert pending a later ruling.
     # [JUSTIFIED: engine/season/hole_register.yaml H-155 -- the drift band; r2 states the direction and leaves the magnitude, and the sweep brackets no-drift / shipped / aggressive]
     told_drift_band=0.5,               # `H-155`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
+    # `H-159` (plan position `17b`, `04 §B.8`'s `term?`; `T-n`, `architecture/meta/01_AXIOMS.md`:
+    # *"the opening act declares the terms"*). HOW MANY SEASONS AN `oblige` RUNS BEFORE IT MATURES
+    # UNPAID -- the term `_eff_oblige` declares on the edge it opens (`matures_at = tick + this`),
+    # and the length each paying act winds it on by (`_eff_transfer`'s renewal: `matures_at + this`,
+    # from where the term STOOD, so a payment made early buys the next term rather than being lost).
+    # `H-80`'s shape exactly, and `record_stage_term` above is its precedent: the ACT declares the
+    # term, a computed act carries no operands to declare one with, so this is the instrument's
+    # declared stand-in. Injection sites: `loop/effects.py::_eff_oblige` and `_eff_transfer`.
+    # ⚠ `None` IS THE CONTROL AND IT IS THE PRE-`17b` TREE EXACTLY: no `oblige` carries a term,
+    # nothing matures at MATTER, no payment renews anything, and an establishment persists until
+    # released -- `F.18`'s own *"assumed"* column. `1` is the shortest term the loop can express, and
+    # it is harsh in a way worth knowing: RESOLVE runs AFTER MATTER within a tick, so the only window
+    # to pay is the rest of the season in which the oblige was taken. `4` is SHIPPED: a holder has
+    # three further seasons to pay in. NOT MEASURED, AND IT CANNOT BE YET -- no computed act forms an
+    # `oblige` (its row is untyped; plan position `17a`'s own docstring), so no corpus run mints a
+    # term and the shipped value moves no artifact; the falsifiers set it explicitly.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-159 -- the term an oblige is declared for; T-n rules THAT the opening act declares it and no document gives the length, so it is injected and swept None / 1 / 4]
+    oblige_term=4,                     # `H-159`, swept None (control) / 1 / 4 (SHIPPED)
+    # `H-158` (plan position `17b`, `04 §B.7` `Seat := ( …, upkeep, … )`, `F.18`). WHAT A SEAT PAYS
+    # EACH PERSON OBLIGED TO IT, PER TERM, WHEN THE SEAT DECLARES NO `upkeep` OF ITS OWN -- which is
+    # every seat any builder makes today. Read at ONE place, `queries/world_q.py::upkeep_of`, which
+    # `_eff_transfer` asks when a seated holder pays out of the seat's own rung. `default_transfer_
+    # amount`'s precedent (`H-94`, above) for both the shape and the arms: *"direction ruled,
+    # magnitude open, is exactly a fixture."* `0` is the CONTROL of the MAGNITUDE -- keeping an
+    # establishment costs nothing, so any payment at all renews every obligee at the home it
+    # reaches; it is not the pre-`17b` tree (that is `oblige_term = None`), because the TERM still
+    # matures unless somebody pays. `1` is SHIPPED: `default_transfer_amount`'s own unit, so the
+    # default computed transfer, were one ever to pay, covers exactly one obligee. `3` makes an
+    # establishment three times as dear.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-158 -- the per-obligee upkeep; ARCH §B.7 declares the field and F.18 its mechanism, and no document gives the amount, so it is injected and swept 0 / 1 / 3]
+    default_upkeep=1,                  # `H-158`, swept 0 (control) / 1 (SHIPPED) / 3
 )

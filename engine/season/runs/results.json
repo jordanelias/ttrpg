@@ -9374,12 +9374,12 @@
   "P25": {
    "id": "P25",
    "verdict": "GAP",
-   "detail": "an actorless row wrote Tenure.until with no (Person, exists) change of its own",
+   "detail": "an actorless row wrote Tenure.until with no (Person, exists) change of its own and no matured term",
    "kind": "FORBIDDEN",
    "section": "S15.3",
    "title": "a storm ends a tenure",
-   "needs": "the same row must cause the death it ends a tenure through",
-   "law": "S15.3 -- a plague that kills the praefect ends his tenure THROUGH THE DEATH; A STORM CANNOT TOUCH IT. A second such seam means the column is the wrong mechanism",
+   "needs": "the same row must cause the death it ends a tenure through, or name the Tenure whose declared term matured (T-n)",
+   "law": "S15.3 -- a plague that kills the praefect ends his tenure THROUGH THE DEATH; A STORM CANNOT TOUCH IT. 04 \u00a7B.8 generalises the causation rule to a second cause, a term an act declared, and to no third",
    "by": "construction",
    "tests": "the world must be able to end a person's position without anyone acting"
   },
@@ -9520,7 +9520,7 @@
    "kind": "FORBIDDEN",
    "section": "F3",
    "title": "a memberless faction's holdings become contestable",
-   "needs": "T-m (the actor owns the edge), T-o (via present, the actor seated in it, the seat's revocation basis reaching it), conferral (via's purview over a seat that declares a conferral basis), cascade (the edge names something this same write removed), or handover (a `hold` on something that is not a seat, opened in the same write that ended the actor's own live `hold` on it -- one opening per ending). T-n is unbuilt: Tenure carries no term",
+   "needs": "T-m (the actor owns the edge), T-o (via present, the actor seated in it, the seat's revocation basis reaching it), conferral (via's purview over a seat that declares a conferral basis), cascade (the edge names something this same write removed), handover (a `hold` on something that is not a seat, opened in the same write that ended the actor's own live `hold` on it -- one opening per ending), T-n (an actorless closure of an edge whose own declared term has matured), or renewal (a live `oblige` edge's term pushed later, by its seat's own seated holder exercising it)",
    "law": "04 \u00a7C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner writes only under a declared basis. Per-verb eligibility enforced this by CONVENTION until G3; a revocation with no seat in Act.via is refused here, so 'a superior may revoke' cannot degrade into 'anyone with a remit string'",
    "by": "probe-model",
    "tests": "when everyone abandons a cause, what it held must be able to be taken by someone else"
@@ -9912,7 +9912,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (7241c4d6dd37...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (3571bad62a73...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -10717,10 +10717,10 @@
   },
   {
    "kind": "FORBIDDEN",
-   "what": "an actorless row wrote Tenure.until with no (Person, exists) change of its own",
+   "what": "an actorless row wrote Tenure.until with no (Person, exists) change of its own and no matured term",
    "where": "S15.3",
-   "needs": "the same row must cause the death it ends a tenure through",
-   "law": "S15.3 -- a plague that kills the praefect ends his tenure THROUGH THE DEATH; A STORM CANNOT TOUCH IT. A second such seam means the column is the wrong mechanism",
+   "needs": "the same row must cause the death it ends a tenure through, or name the Tenure whose declared term matured (T-n)",
+   "law": "S15.3 -- a plague that kills the praefect ends his tenure THROUGH THE DEATH; A STORM CANNOT TOUCH IT. 04 \u00a7B.8 generalises the causation rule to a second cause, a term an act declared, and to no third",
    "case": "probe:P25",
    "expected": false
   },
@@ -10773,7 +10773,7 @@
    "kind": "FORBIDDEN",
    "what": "a (Tenure, until) write by p_high exercising no seat wrote Tenures it has no basis for: th_dead (hold owned by p_low on S, changed)",
    "where": "F3",
-   "needs": "T-m (the actor owns the edge), T-o (via present, the actor seated in it, the seat's revocation basis reaching it), conferral (via's purview over a seat that declares a conferral basis), cascade (the edge names something this same write removed), or handover (a `hold` on something that is not a seat, opened in the same write that ended the actor's own live `hold` on it -- one opening per ending). T-n is unbuilt: Tenure carries no term",
+   "needs": "T-m (the actor owns the edge), T-o (via present, the actor seated in it, the seat's revocation basis reaching it), conferral (via's purview over a seat that declares a conferral basis), cascade (the edge names something this same write removed), handover (a `hold` on something that is not a seat, opened in the same write that ended the actor's own live `hold` on it -- one opening per ending), T-n (an actorless closure of an edge whose own declared term has matured), or renewal (a live `oblige` edge's term pushed later, by its seat's own seated holder exercising it)",
    "law": "04 \u00a7C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner writes only under a declared basis. Per-verb eligibility enforced this by CONVENTION until G3; a revocation with no seat in Act.via is refused here, so 'a superior may revoke' cannot degrade into 'anyone with a remit string'",
    "case": "probe:F2",
    "expected": false
@@ -11208,7 +11208,7 @@
   "DECISION": 1889,
   "QUERY": 29930,
   "NOTE": 299,
-  "WRITE": 20429,
+  "WRITE": 20430,
   "EVENT": 20047,
   "ACT": 96,
   "CLAIM": 2176,

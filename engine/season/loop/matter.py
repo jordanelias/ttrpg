@@ -1,4 +1,4 @@
-"""`loop/matter.py` -- MATTER -- barrier 2. `04 §A.2`: owns the three motions and the maturation of declared terms; emits per matrix row; token MATTER.
+"""`loop/matter.py` -- MATTER -- barrier 2. `04 §A.2`: owns the three motions and the maturation of declared terms; emits per matrix row; token MATTER. (A Record's act-declared stages, and -- since plan position `17b` -- a Tenure's declared `term`.)
 
 ⚠ **THE BODY IS THE DRIVER'S OWN, BOUND BACK ONTO THE CLASS -- NOT A DELEGATING STUB.**
 `loop/driver.py` ends with `SeasonDriver.matter = matter`, so `SeasonDriver.matter` IS this
@@ -180,6 +180,44 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                     lambda rec=rec: setattr(rec, "matured", True),
                     record_kind="Record", fieldname="matured", driver="Event",
                     emits="term.matured", subject=rid, causes=[prior])
+
+    # -- A TENURE'S DECLARED TERM MATURES (`T-n`, plan position `17b`) ---------------------
+    # `04 §A.2` gives this barrier *"the maturation of declared terms"* and `04 F.3` names the
+    # carrier and the writer: *"`Tenure.term`; MATTER matures it; the causation rule generalises to
+    # two causes"*. So every LIVE edge whose `term.matures_at` has come is closed here, one gate write
+    # each, with `causes = [term.declared_by]` -- `04 §B.8`: *"a `matures_at` MATTER matures with
+    # `causes[] = term.declared_by`"*; AX-5: *"a matured term cites the act that wound it"*. That act
+    # is the `oblige` that opened the edge, or the last `transfer` that paid its upkeep, so a lapse is
+    # a story with an author, walkable back to the hand that last wound the clock.
+    #
+    # ⚠ THROUGH CALENDAR WAS REJECTED BY LAYER 1 BY NAME, AND IT WAS THE OBVIOUS SIBLING. `Date.due_at`
+    # vs `w.tick` is structurally the same comparison, but `04 §B.8`'s synthesis call: *"Rejected:
+    # routing term expiry through CALENDAR, which makes a term un-endable when nobody acts -- the
+    # exact ratchet `T-n` exists to forbid."* A term is matter's clock (AX-5), not the calendar's.
+    #
+    # ⚠ THE OPPOSITE POLARITY FROM THE RECORD BRANCH ABOVE, AND DELIBERATELY. A half-made copy STOPS
+    # when its copyist is gone, because PRODUCTION needs a maker. A term of service LAPSES whether or
+    # not anyone is left to pay it, because a lapse needs nobody -- that is its whole point: an
+    # interregnum that leaves nobody seated to pay dissolves the household, with nobody acting.
+    #
+    # ⚠ THE GATE, NOT THIS LOOP, DECIDES THAT IT IS LAWFUL. `matured_term` is S15.3's pre-check
+    # generalised to its second cause (`World.write`); F3 then observes the write and admits it only
+    # as `T-n` -- actorless, a pure closure, of an edge whose own term (read from BEFORE the write)
+    # has `matures_at <= w.tick` (`state/gate.py::tenure_write_basis`). `<=` and not `==`: a term
+    # that should have matured at a barrier this world skipped (a hand-driven fold, a builder that
+    # starts mid-campaign) still lapses at the next one rather than living forever.
+    # ⚠ ORDER: SORTED BY EDGE ID (subject, then object, breaking ties), so the emission order -- and
+    # with it every emission id's draw ordinal -- is a property of the world, not of store order (R4).
+    # Nothing matures in any corpus run today: no computed act forms an `oblige`, the only kind
+    # opened with a term (`17a`), so this branch moves no artifact until one does.
+    for t in sorted((t for t in w.tenures if t.live and t.term is not None
+                     and t.term.matures_at <= w.tick),
+                    key=lambda t: (t.id, t.subject, t.object)):
+        w.write("until", token,
+                lambda t=t: setattr(t, "until", w.tick),
+                record_kind="Tenure", fieldname="until", driver="Event",
+                emits="tenure.closed", subject=t.id, causes=[t.term.declared_by],
+                matured_term=t.id)
 
     # -- CLAIM CONFIDENCE DECAY (`W4` / `H-40`) --------------------------
     # THE THIRD LICENSED CLOCK (#353 `:864`), and until now the only one of the three with no

@@ -52,6 +52,13 @@
 #   NINE after #358 rev.2's two schema changes land: `Person.beliefs` is DELETED (§D.1.1 -- a
 #   belief is a `commit` to an OUGHT, not a field) and `Tenure.payload` is REPLACED by `term?`
 #   (§B.8). Both figures are true of their own basis; a session citing either must say which.
+#   ⚠ AMENDED 2026-09-29 (plan position `17b`): THE SECOND HALF OF THAT SENTENCE DID NOT HAPPEN AND
+#   WILL NOT. `term` landed as its OWN field beside `payload` (`state/carriers.py::Term`, and the
+#   `(Tenure, term)` row below), because `payload` gained a writer and readers after this note was
+#   written -- `H-71`'s remit grant (`World._grant_remit`, `Tenure.granted_acts`) and the gate's
+#   `conferral` re-grant clause -- and the plan's own §3.2 row 12 says *"Not `Tenure.payload`, which
+#   is live."* `04 §B.8`'s *"Replaces payload?"* was a question, and this is its answer. The 2026-09-03
+#   text is kept as the record of what was expected, not as an instruction.
 #
 #   Date.fired is now fixed in place (below) -- it was a data error, not a hole.
 #
@@ -351,11 +358,18 @@ rows:
     by:      "DR-2 — `confer`, `commit`, `oblige`, `tie`"
     emits:   "`tenure.opened`"
   - kind:    "Tenure"
+    field:   "term"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "PLAN POSITION `17b` (TERM · UPKEEP), `04_CODE_ARCHITECTURE.md` §B.8's `term? (matures_at, declared_by, …)` and F.3 (*'`Tenure.term`; MATTER matures it'*). Written ONLY BY AN ACT, which is why it is RES and `social: true`: `oblige` declares it on the edge it opens (T-n, *'the opening act declares the terms'*), and a `transfer` paying a seat's `upkeep` renews it (F.18, *'the repair is a verb'*). MATTER never writes this cell -- a term is MATURED by closing its edge, which is `(Tenure, until)`'s MAT cell below, never by moving the term."
+    emits:   "`term.renewed`"
+  - kind:    "Tenure"
     field:   "until"
     steps:   [MAT, RES]
     class:   "MATTER/ACTS"
     social:  "false"
-    by:      "stated in chain — §15.3, the one declared seam, bounded by causation"
+    by:      "stated in chain — §15.3, the one declared seam, bounded by causation. ⚠ AMENDED 2026-09-29 (plan position `17b`): the causation rule now admits the SECOND cause `04 §B.8`'s synthesis call licenses -- *'an actorless row may write `until` only where its cause is the existence change it also caused, OR the maturation of a term declared by the act that opened this Tenure'* -- so MATTER's MAT cell is reached by a death's cascade AND by a matured `Tenure.term` (`loop/matter.py`, gate basis `T-n`). One seam, two causes, both citing an author; `World.write`'s S15.3 pre-check takes `matured_term=` beside `caused_person_exists=`."
     emits:   "`tenure.closed`"
 
 # ---------------------------------------------------------------------------

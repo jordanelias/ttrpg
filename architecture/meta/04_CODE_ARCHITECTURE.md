@@ -340,7 +340,7 @@ NEVER:   who holds it · who serves it · a modifier of any kind
 
 ```
 Tenure := ( id, kind, subject (THE OWNER), object, since, until?
-          , term? (matures_at, declared_by : ActId, closer)   -- T-n. Replaces payload?
+          , term? (matures_at, declared_by : ActId, closer)   -- T-n. Replaces payload? ⚠ No: built at plan position `17b` BESIDE the live `payload`, without `closer` (ID-13) -- `state/carriers.py::Term`
           , degree? )
 tie · knot   DIRECTED     succeed : Person -> Person     hold.subject : Person only
 NEVER: deletion.  LIVE: tenures.live(...) is the default iterator; tenures.ended(...) is separate and named
@@ -550,14 +550,17 @@ gate.write(token, kind, field, id, change, actor?, via?) -> Receipt
   -- sixth, causation-bound basis -- and settled, not built"; BUILT at plan position 16): an
   -- OPENING of a `hold` on an object that is NOT a seat, whose object the SAME write closed under
   -- T-m -- the authority is the giver's own edge, ended in the same act, never a seat's basis.
+  -- ⚠ `17b` (TERM · UPKEEP, plan §3.2 row 10, 2026-09-29): T-n BUILT (actorless, closing only) + `renewal` ADDED.
   kind is Tenure => one of:
       actor == subject(id)                                   -- T-m, the owner's discretion
-      cause is this Tenure's declared `term` maturation       -- T-n
+      cause is this Tenure's declared `term` maturation       -- T-n: no actor, a pure closure, term due (`17b`)
       via is a Seat whose `revocation` basis reaches it       -- T-o, and `via` MUST be present
       via is a Seat whose `conferral` basis reaches it,
         opening or re-granting a `hold` ON that seat          -- conferral (`ED-IN-0277`)
       opening a non-seat `hold` whose object the SAME write
         closed under T-m, not yet handed on                   -- handover (`ED-IN-0277`, built at 16)
+      via IS the Seat, actor seated, a live `oblige` on it:
+        its `term` pushed later, nothing else moved           -- renewal: upkeep paid (`17b`, F.18)
       cause is an existence change this same act caused       -- destroy's cascade
     otherwise                                                 raise NotYours
 

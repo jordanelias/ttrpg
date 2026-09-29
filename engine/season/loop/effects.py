@@ -56,11 +56,11 @@ from ..data.rosters import (
     RELEASABLE_KINDS, UNOPPOSED, WOUND_HARM_MODELS, faction_prop_id, require_member,
 )
 
-from ..gaps import InstrumentDefect, Unspecified
+from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from ..loop.predicates import office_described_by
-from ..queries.world_q import hold_force, holder_faction_of
-from ..state.carriers import Proposition, Record, Tenure
-from ..state.gate import NO_CHANGE, Change, Subject
+from ..queries.world_q import hold_force, holder_faction_of, home_of, upkeep_of
+from ..state.carriers import Proposition, Record, Tenure, Term
+from ..state.gate import NO_CHANGE, Change, Subject, may_renew
 from ..state.ids import H
 from ..trace_log import TRACE
 
@@ -1137,11 +1137,42 @@ def _eff_oblige(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
 
     ⚠ NOT FACTORED WITH `_eff_commit` ABOVE -- see its docstring: the two are `Tenure(..., kind,
     ...)` calls whose `kind` differs, and `_derive_openers_from_effects` needs that string literal
-    visible at THIS call site to derive the opener roster. Read there for what was tried."""
+    visible at THIS call site to derive the opener roster. Read there for what was tried.
+
+    ⚠ PLAN POSITION `17b`: THE EDGE IS OPENED WITH A DECLARED TERM, AND THIS IS THE ACT THAT DECLARES
+    IT. `T-n` (`01_AXIOMS.md:1240`): *"So the opening act declares the terms"*; the retirement plan's
+    G2: *"`oblige` Tenures carry a term (T-n) the paying act renews; unpaid terms mature and shrink
+    the office's establishment"*. `matures_at` is `w.tick + oblige_term` (the fixture is the
+    declared stand-in for a term a computed act cannot yet carry -- `H-159`, `record_stage_term`'s
+    shape), and `declared_by` is THIS act, so an unpaid lapse at MATTER cites the oblige that wound
+    it. Only `oblige` is given one: `commit`, `tie` and the rest carry `term=None`, which `04 §B.8`
+    makes lawful (`term?`) and which no MATTER branch matures. The fixture's control arm `None`
+    opens the edge exactly as `17a` did, with no term. A service nobody pays for now ENDS -- which
+    is `F.18`'s *"no economic pressure on any office"* answered, and `release` is still the obligee's
+    own way out before then."""
     seat = _operand(a, "subject")
+    n = _oblige_term(w)
     nt = Tenure(H(w.world_seed, w.tick, a.actor, f"oblige:{seat}:{a.id}"), a.actor, seat, "oblige",
-                since=w.tick)
+                since=w.tick, term=None if n is None else Term(w.tick + n, a.id))
     return Change((Subject.edge(nt),), lambda: w.add_tenure(nt))
+
+
+def _oblige_term(w: "World") -> Optional[int]:
+    """THE LENGTH, IN SEASONS, OF THE TERM AN `oblige` IS DECLARED FOR -- and that a paying act winds
+    it on by -- read ONCE for both of its readers (`_eff_oblige`, `_renewals`), with the refusal
+    in the same place. `None` is `H-159`'s control arm: no term at all. Anything else must be a
+    whole number of seasons, at least one: a term of `0` would mature in the season that declared
+    it (MATTER has already run when RESOLVE opens the edge, so it lapses at the next barrier with
+    no window to pay), and a renewal by `0` moves no clock and would be refused as no renewal at
+    all -- a number that looks like a setting and behaves like a defect."""
+    n = w.fixtures.get("oblige_term")
+    if n is not None and (isinstance(n, bool) or not isinstance(n, int) or n < 1):
+        raise Forbidden(
+            f"fixture oblige_term is {n!r}", "T-n",
+            needs="None (no term: H-159's control) or a whole number of seasons >= 1",
+            law="04 §B.8 `term?` / T-n -- the opening act declares a term that MATTER matures at a "
+                "later barrier; a term that cannot outlive its own season is not one")
+    return n
 
 
 @effect_for("transfer")
@@ -1193,12 +1224,92 @@ def _eff_transfer(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
                        alternatives=["move the giver's side anyway (matter leaves the world)"])
         return NO_CHANGE
 
+    renewed = _renewals(w, a, src.id, dst.id, amount)
+
     def perform() -> None:
         src.stores = dict(src.stores or {})
         src.stores[kind] = src.stores.get(kind, 0) - amount
         dst.stores = dict(dst.stores or {})
         dst.stores[kind] = dst.stores.get(kind, 0) + amount
+        for t, term in renewed:
+            t.term = term
     # BOTH SIDES, because §E3 says `transfer` writes `(Rung, stores)` twice -- one per side -- and
     # a one-sided report would make the Event name half of what it did. The `if r is not None`
     # filter that stood here is gone with the branch above that made it necessary.
-    return Change((Subject.entity("rungs", src.id), Subject.entity("rungs", dst.id)), perform)
+    # ⚠ PLAN POSITION `17b`: EACH SUBJECT NOW NAMES THE KIND IT EARNS. The row declares
+    # `term.renewed` beside `transfer.made`, and a subject earning `None` earns EVERY declared kind
+    # (`loop/resolve.py::_fold`) -- so left as they were, the two rungs would publish a renewal on
+    # every transfer that renewed nothing, and one renewed edge would earn `term.renewed` ALONE and
+    # silently drop `transfer.made`. Named per kind, an ordinary transfer emits exactly what it
+    # always did. The renewed edges ride as `edge` subjects, judged by G3's diff (`renewal`).
+    # ⚠ THEIR RECEIPTS CARRY THE FIRST PAIR'S FIELD, `stores`, not `term` -- the fold mints every
+    # subject's receipt against the write pair the effect ran on (`_eff_confer`'s docstring has the
+    # history; `establish`'s re-stamped holds carry `exists` the same way). A known limit of the
+    # one-effect-per-act fold, not a claim that a Tenure's stores moved.
+    return Change((Subject.entity("rungs", src.id, "transfer.made"),
+                   Subject.entity("rungs", dst.id, "transfer.made"))
+                  + tuple(Subject.edge(t, "term.renewed") for t, _ in renewed), perform)
+
+
+def _renewals(w: "World", a: "Act", src: str, dst: str, amount) -> list:
+    """PLAN POSITION `17b` -- WHICH `oblige` TERMS A `transfer` RENEWS, as `[(edge, its new Term)]`.
+    The whole of *"payment by `transfer` renewing `oblige` terms"* (the plan's Contradiction-1 box;
+    the retirement plan's G2: *"treasury = `Rung.stores` at the office's own rung; payment = the
+    existing `transfer` verb; `oblige` Tenures carry a term (T-n) the paying act renews"*), and
+    `04 F.18`'s repair: *"A MATTER payment would be a fourth clock, so the repair is a verb."*
+
+    A TRANSFER IS A PAYMENT OF UPKEEP WHEN, AND ONLY WHEN, all of these hold:
+      1. it is exercised THROUGH A SEAT (`Act.via`) whose seated holder is the actor -- `may_renew`,
+         the gate's own `renewal` test, asked here first so the effect never names an edge the gate
+         would refuse (a `NotYours` would escape the fold and end the season);
+      2. it is paid OUT OF THAT SEAT'S OWN RUNG -- *"what the post pays its establishment out of the
+         office's stake"* (`holonic_ARCHITECTURE.md:428`). A holder paying from his own hearth is
+         giving a gift, not keeping a seat; a seat with no rung has no treasury and cannot pay;
+      3. matter actually MOVED: another rung, a positive amount. A transfer from a rung to itself
+         cancels to nothing (G4 already refuses it as a no-op), and without this clause a seat whose
+         obligee lives at the seat's own rung could renew a term by paying itself;
+      4. the receiving rung is an obligee's HOME (`home_of`, the one owner of *where a person
+         lives*) -- the larder upkeep fills.
+    Then it renews, of that seat's live `oblige` edges carrying a term whose subject lives at the
+    receiving rung, as many as the amount covers at `upkeep_of(seat)` apiece (`0`: all of them),
+    SOONEST-MATURING FIRST, ties by edge id -- the man about to lapse is paid first, and the order
+    is a rule, not an accident of the store. Each new term runs `oblige_term` seasons ON FROM WHERE
+    THE OLD ONE STOOD (so paying early buys the next term; it is not lost), and is `declared_by`
+    this act, so the next lapse -- if nobody pays again -- cites this payment as the last hand to
+    wind the clock (AX-5).
+
+    ⚠ NO ENTITY IS NAMED AND NO OUTCOME IS SCRIPTED. Embezzlement -- narrative #3, *"already runs"*
+    (`proposals/2026-09-12-emergent-narrative-primitives-v2/01_THE_TEN.md` §3) -- is not a branch
+    here: a steward who moves the treasury to his own hearth simply meets clause 4 for nobody, the
+    terms he did not pay mature at MATTER, and the seat's `establishment_of` shrinks. That is the
+    observable this position gives #3, and it falls out of the rule rather than being written.
+
+    ⚠ ONE TERM PER OBLIGEE PER PAYMENT, and any excess is simply transferred. Buying several terms
+    for one man with one large payment is a reading the fixture does not rule on, and taking it
+    would make "how far ahead may a seat prepay" a second quantity with no row.
+
+    ⚠ WHAT NO COMPUTED ACT CAN REACH TODAY, STATED RATHER THAN IMPLIED. Clause 1 needs `Act.via` on a
+    `transfer`, and `decision/options.py::exercised_seat` sets `via` only for a `remit:` alternative
+    -- `transfer` is `own | hold:<store>`, so every computed transfer carries `via=None` and renews
+    nothing. And no computed act forms an `oblige` (its row is untyped, `17a`). So the mechanism is
+    EXECUTED by hand-built acts (`tests/test_term_upkeep.py`) and by MATTER's maturation, which needs
+    no act at all; a person CHOOSING to pay upkeep is `H-158`'s `unblocks:`, not this body's.
+
+    The cheap refusals come first, so an ordinary transfer (no `via`) reaches no Query and moves no
+    trace line."""
+    seat = w.offices.get(a.via) if a.via else None
+    if seat is None or seat.rung != src or src == dst or amount <= 0:
+        return []
+    if not may_renew(w, a.actor, a.via, seat):
+        return []
+    n = _oblige_term(w)
+    if n is None:
+        return []                         # `H-159`'s control: no term exists to renew
+    homes = home_of(w)
+    due = sorted((t for t in w.tenures
+                  if t.kind == "oblige" and t.object == seat.id and t.live
+                  and t.term is not None and homes.get(t.subject) == dst),
+                 key=lambda t: (t.term.matures_at, t.id))
+    each = upkeep_of(w, seat.id)
+    covered = len(due) if each == 0 else min(len(due), amount // each)
+    return [(t, Term(t.term.matures_at + n, a.id)) for t in due[:covered]]

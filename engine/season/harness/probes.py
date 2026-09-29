@@ -1186,7 +1186,8 @@ def f2():
     # ANSWERING, NOT THE PROBE BREAKING. Its first write closes `th_dead` -- `p_low`'s OWN holding --
     # on behalf of somebody else, and before G3 the gate admitted it because the gate never asked
     # who wrote a Tenure (it carried no actor at all). `04 §C.2`'s F3 now does, and a person's
-    # holding of a RUNG may be ended only by its owner (`T-m`), a declared term (`T-n`, unbuilt),
+    # holding of a RUNG may be ended only by its owner (`T-m`), a declared term (`T-n` -- built at
+    # plan position `17b`, and only for an edge that carries a term, which this holding does not),
     # a seat's revocation basis (`T-o` -- which a holding does not have: only a SEAT declares one),
     # or a cascade from something ceasing to exist. The taker (`p_high`, written as the actor so the
     # refusal names him rather than an absent author) has none of them. So S54 item 20, as this

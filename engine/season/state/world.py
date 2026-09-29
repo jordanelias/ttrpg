@@ -134,13 +134,19 @@ for _n in _TenureView._MUTATORS:
 
 
 def _written_fields(t: Tenure, copy: bool) -> tuple:
-    """The seven fields a write can change on a Tenure, in `Tenure`'s constructor order after `id`
+    """The eight fields a write can change on a Tenure, in `Tenure`'s constructor order after `id`
     -- so `Tenure(t.id, *fields)` rebuilds it. `copy=True` deep-copies the payload (see
-    `World._tenure_snapshot`); comparison needs no copy, because `==` on a dict is by value."""
+    `World._tenure_snapshot`); comparison needs no copy, because `==` on a dict is by value.
+
+    ⚠ `term` IS THE EIGHTH, ADDED AT PLAN POSITION `17b`, AND OMITTING IT HERE WOULD HAVE BEEN THE
+    WHOLE FEATURE'S BYPASS: a renewal writes nothing but `term`, so a snapshot blind to it reports
+    no change, F3 judges nothing, and F9 refuses the renewal as a no-op -- or, through a closure,
+    admits an unjudged clock-wind on another person's edge. `Term` is frozen, so it needs no copy:
+    a renewal replaces the object, and the snapshot still holds the old one."""
     p = t.payload
     if copy and p is not None:
         p = _copymod.deepcopy(p)
-    return (t.subject, t.object, t.kind, t.since, t.until, t.degree, p)
+    return (t.subject, t.object, t.kind, t.since, t.until, t.degree, p, t.term)
 
 
 def _entity_digest(obj: Any) -> str:
@@ -360,7 +366,7 @@ class World:
     # the snapshot itself and produces no diff at all. Every shipped effect defers its mutation
     # into `Change.apply`, which this observation does cover; nothing enforces that they must.
     def _tenure_snapshot(self) -> list:
-        """`(tenure, its seven written fields)` for every Tenure in the store, owner-first.
+        """`(tenure, its eight written fields)` for every Tenure in the store, owner-first.
 
         The payload is DEEP-copied: `_grant_remit(force=True)` re-stamps `payload["remit_acts"]`
         IN PLACE, so a reference would compare equal to itself after the write and the re-stamp
@@ -406,7 +412,7 @@ class World:
                 for lst in ((owner.tenures,) if owner is not None else ()) + (self._unowned,):
                     lst[:] = [x for x in lst if x is not t]
             else:
-                (t.subject, t.object, t.kind, t.since, t.until, t.degree, t.payload) = \
+                (t.subject, t.object, t.kind, t.since, t.until, t.degree, t.payload, t.term) = \
                     _written_fields(was, copy=False)
 
     # -- G4: WHAT A SUBJECT READS, BEFORE AND AFTER A WRITE ------------------------------------
@@ -775,7 +781,8 @@ class World:
               subject: Optional[str] = None,
               actor: Optional[str] = None,
               via: Optional[str] = None,
-              change: Optional[Change] = None) -> Any:
+              change: Optional[Change] = None,
+              matured_term: Optional[str] = None) -> Any:
         """`G4`. A WRITE IS HANDED EITHER A CLOSURE (`apply`) OR A `Change` (`change`), NEVER BOTH.
 
         A `Change` is the fold's: the subjects an effect writes, named before it runs, and the
@@ -928,14 +935,25 @@ class World:
                     "licensed clock, and §25.1 says the three are exhaustive")
 
         # S15.3 -- THE SEAM IS BOUNDED BY A CAUSATION RULE, NOT BY THE COLUMN. An actorless row
-        # may write Tenure.until ONLY on a (Person, exists) change THE SAME ROW ALSO CAUSED.
+        # may write Tenure.until ONLY on a (Person, exists) change THE SAME ROW ALSO CAUSED -- OR,
+        # SINCE PLAN POSITION `17b`, ON THE MATURATION OF A TERM DECLARED BY AN ACT. That second
+        # cause is not a second seam: `04 §B.8`'s synthesis call rules it ONE seam with the rule
+        # generalised, *"an actorless row may write `until` only where its cause is the existence
+        # change it also caused, OR the maturation of a term declared by the act that opened this
+        # Tenure. Both are causation-bound; both cite an author."* `matured_term` is the caller's
+        # word for the second cause exactly as `caused_person_exists` is for the first; neither is
+        # trusted alone -- F3 below observes the change and admits it only as `T-n` (a pure closure
+        # of an edge whose own `term.matures_at` has come) or `cascade`, so a caller naming a term
+        # that has not matured is refused there, with the store put back.
         if (record_kind, fieldname) == ("Tenure", "until") and driver != "Act":
-            if caused_person_exists is None:
+            if caused_person_exists is None and matured_term is None:
                 TRACE.write(thing, wclass.value, sname, False)
                 raise Forbidden(
-                    "an actorless row wrote Tenure.until with no (Person, exists) change of its own",
-                    "S15.3", needs="the same row must cause the death it ends a tenure through",
-                    law="S15.3 -- a plague that kills the praefect ends his tenure THROUGH THE DEATH; A STORM CANNOT TOUCH IT. A second such seam means the column is the wrong mechanism")
+                    "an actorless row wrote Tenure.until with no (Person, exists) change of its own "
+                    "and no matured term",
+                    "S15.3", needs="the same row must cause the death it ends a tenure through, "
+                                   "or name the Tenure whose declared term matured (T-n)",
+                    law="S15.3 -- a plague that kills the praefect ends his tenure THROUGH THE DEATH; A STORM CANNOT TOUCH IT. 04 §B.8 generalises the causation rule to a second cause, a term an act declared, and to no third")
         # S30.2: "AND THE GATE MUST APPLY THE WRITE." A gate that validates, logs and returns
         # true while the mutation happens beside it is worse than no gate.
         # -- W4: THE EMISSION, GATED ON THE SAME ROW AS THE WRITE ------------------------
