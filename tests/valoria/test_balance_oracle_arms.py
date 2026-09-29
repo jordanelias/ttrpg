@@ -1,112 +1,144 @@
-"""The balance oracle's arms still construct, and they still differ (ED-SC-0032).
+"""The season-side arms still construct, and the live pair still differs (plan position `28-i`).
 
-WHY THIS EXISTS, and why it is not apparatus-guarding-apparatus. `tools/balance_oracle.py` is the
-n>=100 campaign balance instrument CLAUDE.md §7 names, and ED-SC-0031 cited its `--n 120` run as
-THE control licensing six golden re-pins. It is deliberately NOT a CI gate — 240 campaigns take
-~13 minutes and a gate that slow gets skipped. The consequence is that nothing executes it, so it
-has no freshness relationship to the code it measures.
+WHY THIS EXISTS, and why it is not apparatus-guarding-apparatus. `engine/season/harness/arms.py`
+is the n-seed two-arm balance instrument that replaces `tools/balance_oracle.py` for
+`engine/season`-only mechanics — CLAUDE.md names the class of control this is (§0.1 pt 4), and
+`rosters.yaml`'s `field_casualty_models` note names this SPECIFIC mechanic as one
+`tools/balance_oracle.py` structurally could not observe. It is deliberately NOT a CI gate — a
+realm build alone costs the better part of a second and a season run costs tens of seconds, so an
+n>=10 comparison is minutes, not something CI should run on every push. The consequence, same as
+the file it replaces, is that nothing executes the FULL comparison automatically — so this file
+constructs and undoes every arm cheaply (milliseconds; no campaigns, no realms) and exercises the
+live pair's actual write once, on a real fold, which is the falsifier CLAUDE.md §0.1 pt 4 demands:
+"a number without a control is not a measurement."
 
-That consequence bit within one commit. ED-SC-0032 moved `degree` and `OVERWHELM_SIGMA` out of
-`engine/autoload/sigma_leverage.py` into the subsystem that owns them, and the oracle's live arm
-read both off the engine. `python3 tools/balance_oracle.py` raised AttributeError on its first
-arm — the instrument that produced the previous commit's control, disabled by that commit's own
-successor, found by an adversarial pass rather than by anything automated.
+WHAT MOVED, AND WHY (`arms.py`'s own module docstring has the full account). The old live pair,
+`private_ladder`/`owner_ladder`, is retired rather than ported: verified against the live tree that
+it is NOT season-reachable (`engine/season/seam/ladder.py`'s `degree_of` never calls
+`systems.social_contest.sim.contest.resolver`; the season loop's own margin path imports
+`engine.autoload.dice_engine.degree_from_net` directly), and porting it even as inert historical
+code would add a NEW nested `engine -> systems` import `test_engine_does_not_import_systems.py`'s
+`NESTED_BASELINE = 0` ratchet forbids. Its code survives at this commit's `FORK:` row in
+`references/restructure_ledger.md` for `tools/balance_oracle.py`. The three OTHER retired pairs
+(`_ARMS_POOL`, `_ARMS_FLOOR`, `_ARMS_BOUNDS`) import nothing from `systems/` and are ported
+unchanged, same status as before: historical record, importable, not wired into `ARMS`.
 
-CLAUDE.md §0.1 point 5 admits this guard: the defective artifact is load-bearing on a JORDAN
-DECISION and on the game — its output is what a golden re-pin is justified by, and a broken arm
-either raises (loud) or, worse, silently produces two identical arms and a meaningless z. The
-guard is cheap by construction: it constructs and undoes the arms and bands a handful of values.
-It runs NO campaigns, so it costs milliseconds and can never become the slow gate the oracle
-deliberately is not.
-
-FALSIFIER: `test_the_pre_ruling_arm_actually_changes_the_ladder` fails if an arm stops reaching
-the contest's degree path — which is exactly what a moved binding does, and what would have made
-a reported balance result worthless.
+The live pair is now `field_casualty_model` — `total` (the pre-M4 control, "losing costs
+everything") vs `scaled_by_degree` (the ruled default, `Person.body` scaled by the engine's own
+survivor ratio and floored at 1). Both are read by exactly one call site,
+`engine/season/loop/effects.py::_eff_march`, on a LOST field battle.
 """
 from __future__ import annotations
 
-import importlib.util
-import pathlib
-import sys
-
-import pytest
-
-REPO = pathlib.Path(__file__).resolve().parents[2]
-if str(REPO) not in sys.path:
-    sys.path.insert(0, str(REPO))
+from engine.season.data.rosters import FIELD_CASUALTY_MODELS
+from engine.season.harness import arms as oracle
+from engine.season.harness.populated import build_realm
+from engine.season.loop.driver import SeasonDriver, mint_token
+from engine.season.data.matrix import Step, WriteClass
+from engine.season.queries import world_q
 
 
-@pytest.fixture(scope="module")
-def oracle():
-    """Load the tool by path — it is a script, not an importable package member."""
-    spec = importlib.util.spec_from_file_location(
-        "_balance_oracle_probe", REPO / "tools" / "balance_oracle.py")
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+def _march_act(actor: str, target: str, via: str):
+    from engine.season.state.carriers import Act
+    return Act(id="m1", actor=actor, verb="march", payload={"subject": target}, via=via)
 
 
-def test_every_arm_constructs_and_undoes(oracle):
-    """The failure this file exists for: an arm whose symbols moved raises on setup."""
+def _fold_one(w, act, contest_max_depth=2):
+    """Fold ONE `march` act through the real driver, RESOLVE then ENCOUNTER — the same helper
+    `engine/season/tests/test_march.py` uses to exercise this exact fixture, kept small here
+    rather than imported cross-file (a test module is not a library)."""
+    d = SeasonDriver(w)
+    w.step = Step.RESOLVE
+    w.frozen = False
+    events = d.resolve(mint_token(w, WriteClass.ACTS), [act], contest_max_depth)
+    events = events + d.encounter(mint_token(w, WriteClass.ACTS), events, contest_max_depth)
+    return events
+
+
+def test_the_live_arms_are_two_distinct_registered_fixture_values():
+    """The construction-only check: exactly two arms, both real `field_casualty_models` members,
+    and they differ. Two arms with the same value would be a fake control, not a null result —
+    the same property `tools/balance_oracle.py`'s own test asserted of its arm count."""
     assert len(oracle.ARMS) == 2, f"expected exactly two arms, got {sorted(oracle.ARMS)}"
-    for name, setup in oracle.ARMS.items():
-        undo = setup()
-        assert callable(undo), f"arm {name!r} returned a non-callable undo"
-        undo()
+    values = set(oracle.ARMS.values())
+    assert len(values) == 2, "the two arms have the same value; the comparison is a fake control"
+    assert values <= set(FIELD_CASUALTY_MODELS), (
+        f"arm value(s) {values - set(FIELD_CASUALTY_MODELS)} are not in the roster "
+        f"({sorted(FIELD_CASUALTY_MODELS)})")
 
 
-def test_the_pre_ruling_arm_actually_changes_the_ladder(oracle):
-    """THE FALSIFIER. Two arms that band identically are a fake control, not a null result.
-
-    `degree(3, 3)` is the cell Jordan's 2026-08-14 ruling moved — Success under the retired
-    private ladder, Partial under the owner's. If the arm no longer reaches the contest's path,
-    this reads 1 in both arms and fails.
+def test_the_total_arm_actually_changes_the_casualty_write():
+    """THE FALSIFIER. Two arms that write the same body value are a fake control, not a null
+    result — same kind of claim `tools/balance_oracle.py`'s ladder falsifier made, now on the
+    mechanic that replaces it: a real `march` act, folded through the real driver against
+    `build_realm`'s own fixture (`test_march.py`'s own worked 2-v-6 mismatch), must produce a
+    DIFFERENT losing-side body under `total` than under `scaled_by_degree`.
     """
-    from systems.social_contest.sim.contest import degree_extension as CD
-    from systems.social_contest.sim.contest import resolver as R
+    attackers_before = None
+    bodies = {}
+    for arm_name in ("total", "scaled_by_degree"):
+        w = build_realm(0)
+        w.fixtures = w.fixtures.sweep("field_casualty_model", oracle.ARMS[arm_name])
+        attackers = world_q.mustered(w, "set_s_014", "fac_crown")
+        defenders = world_q.mustered(w, "set_s_036", "fac_church_of_solmund")
+        assert len(attackers) == 2 and len(defenders) == 6, (
+            f"the fixture no longer gives a 2-v-6 mismatch here ({attackers}, {defenders}); "
+            "pick an origin/target pair that still does")
+        if attackers_before is None:
+            attackers_before = {pid: w.persons[pid].body for pid in attackers}
+        act = _march_act("p_npc_033", "set_s_036", "off_npc_033")
+        events = _fold_one(w, act, contest_max_depth=2)
+        kinds = [(e.kind, e.degree) for e in events]
+        assert ("field.lost", "Lost") in kinds, (
+            f"this fixture no longer produces a LOST field battle for the arm to grade: {kinds}")
+        # `total` drives body to 0 AND `_eff_march.perform()` removes the person outright
+        # (`w.remove_person`, the same `body <= 0` precedent `_eff_kill` sets) — so a felled
+        # attacker is simply ABSENT from `w.persons` afterwards, not present at body 0. Both are
+        # "no body left"; a missing key reads as 0 here rather than raising `KeyError`.
+        bodies[arm_name] = {pid: (w.persons[pid].body if pid in w.persons else 0)
+                            for pid in attackers}
 
-    baseline = CD.degree(3, 3)
-    undo = oracle.ARMS['private_ladder']()
-    try:
-        patched_adapter = CD.degree(3, 3)
-        patched_ladder = R.degree_from_net(3, 3)
-    finally:
-        undo()
-
-    assert baseline == 1, f"the owner's ladder bands degree(3,3) as {baseline}, expected Partial"
-    assert patched_adapter == 2, (
-        "the private_ladder arm did not change the contest adapter's answer — the arm has lost "
-        "its grip on the degree path and any balance result from it would be fake")
-    assert patched_ladder.value == "success", (
-        "the private_ladder arm did not change the LIVE resolver binding — `resolver._reception` "
-        "would still run the owner's ladder in both arms")
-    assert CD.degree(3, 3) == baseline, "the arm's undo did not restore the owner's ladder"
-
-
-def test_the_owner_arm_is_a_true_no_op(oracle):
-    """The control arm must change nothing at all, or the comparison has two treatments."""
-    from systems.social_contest.sim.contest import degree_extension as CD
-    from systems.social_contest.sim.contest import resolver as R
-
-    before = ([CD.degree(n, 2, p) for n in range(0, 9) for p in (None, 2, 8, 20)],
-              R.degree_from_net)
-    undo = oracle.ARMS['owner_ladder']()
-    try:
-        during = ([CD.degree(n, 2, p) for n in range(0, 9) for p in (None, 2, 8, 20)],
-                  R.degree_from_net)
-    finally:
-        undo()
-    assert during == before
+    for pid in attackers_before:
+        assert bodies["total"][pid] == 0, (
+            f"the `total` arm did not zero (or remove) {pid} — it has lost its grip on "
+            f"`field_casualty_model` and any comparison run under it would be fake")
+        assert bodies["scaled_by_degree"][pid] > 0, (
+            f"the `scaled_by_degree` arm killed {pid} outright — a wound (never `total`) cannot "
+            f"kill on this arm; it has lost its grip on the fixture")
+        assert bodies["total"][pid] != bodies["scaled_by_degree"][pid], (
+            f"{pid} took the same body write under both arms — the two arms are not distinguishable")
 
 
-def test_the_retired_pair_definitions_still_import(oracle):
-    """The retired comparisons are kept as the record of what the old behaviour WAS.
+def test_two_proportion_z_generalises_the_equal_n_case():
+    """`tools/balance_oracle.py`'s original assumed one shared `n`. This one takes two, and the
+    equal-`n` call must reduce to exactly the old formula (checked against a hand-computed value)
+    rather than silently changing what a shared-`n` caller gets."""
+    z_new = oracle.two_proportion_z(30, 100, 40, 100)
+    pooled = (30 + 40) / 200
+    se = (pooled * (1 - pooled) * (1 / 100 + 1 / 100)) ** 0.5
+    z_expected = (0.40 - 0.30) / se
+    assert abs(z_new - z_expected) < 1e-9
 
-    They are the only surviving statement of three superseded mechanics, so a rename that breaks
-    them silently deletes that record. Constructing them is enough to prove the symbols resolve.
-    """
+
+def test_two_proportion_z_is_degenerate_safe():
+    """An empty arm (zero acts) must not raise a `ZeroDivisionError` — the same defensive shape
+    the original's pooled-rate guard had, extended to the new per-arm denominators."""
+    assert oracle.two_proportion_z(0, 0, 5, 10) == 0.0
+    assert oracle.two_proportion_z(5, 10, 0, 0) == 0.0
+    assert oracle.two_proportion_z(0, 10, 0, 10) == 0.0   # pooled rate 0 -- degenerate
+
+
+def test_the_retired_pair_definitions_still_import():
+    """The three retired comparisons are kept as the record of what the old behaviour WAS — same
+    status `tools/balance_oracle.py` gave them. Constructing them is enough to prove the symbols
+    resolve. `_contest_ladder_arm` (`private_ladder`/`owner_ladder`) is NOT among them; see
+    `arms.py`'s own module docstring for why it has no surviving code in this tree at all (its
+    record is the `FORK:` row for `tools/balance_oracle.py`, not a fourth retired dict here)."""
     for attr in ('_ARMS_POOL', '_ARMS_FLOOR', '_ARMS_BOUNDS'):
         retired = getattr(oracle, attr)
         assert len(retired) == 2, f"{attr} should keep both arms of its pair"
         for setup in retired.values():
             setup()()
+    assert not hasattr(oracle, '_ARMS_CONTEST_LADDER'), (
+        "the contest-ladder pair was deliberately not carried into engine/season/ — "
+        "see the module docstring; do not resurrect it here without re-checking both findings")

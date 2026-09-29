@@ -387,10 +387,26 @@ RETIRED_SYMBOLS = frozenset({
 # row — they were UNTRACKED, so no ref holds them and a row would promise content that is not
 # there (see the ledger's own note). Their builders ARE forked, which is the stronger provenance:
 # re-run `build_key_graph.py` or `build_contract_index.py` at `c6e82105` and the file comes back.
+#
+# `references/execution_map.json`, `references/EXECUTION_MAP.md` and
+# `references/execution_trace.json` joined this set 2026-09-29 (plan position `28-i`, M5 — the
+# execution-map cluster retired alongside its two feeders, `tools/build_execution_map.py` and
+# `tools/trace_execution_phases.py`). All three are `.gitignore`d (lines 49-51) and were never
+# committed — confirmed with `git ls-files`, which finds none of them — so a `FORK:` row for any
+# would be a row `git cat-file -e <ref>:<path>` can never satisfy, which
+# `tests/valoria/test_forked_status.py::test_the_evacuated_content_is_actually_at_the_ref` checks
+# for every row in the ledger and would fail on: it asserts the unresolvable count stays AT its
+# ceiling, not merely under it, so one new unfollowable row breaks it in the direction that reads
+# as a REGRESSION, exactly the failure mode `RETIRED_GENERATED` exists to route around. Their two
+# builders ARE forked (`references/restructure_ledger.md`) — same stronger-provenance shape as the
+# two rows above: re-run one and its files come back.
 RETIRED_GENERATED = frozenset({
     'references/key_graph.json',
     'references/KEY_INDEX.md',
     'references/CONTRACT_INDEX.md',
+    'references/execution_map.json',
+    'references/EXECUTION_MAP.md',
+    'references/execution_trace.json',
 })
 
 

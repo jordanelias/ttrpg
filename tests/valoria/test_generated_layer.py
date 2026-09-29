@@ -52,11 +52,14 @@ def test_the_layer_is_not_vacuous(generated_layer_paths):
     """Guards the guard. If `_GENERATED_LAYER` were emptied — or every builder retired without its
     artifacts being dropped from the tuple — the test above would pass over an empty list and this
     file would assert nothing at all."""
-    assert len(generated_layer_paths) >= 7, (
+    assert len(generated_layer_paths) >= 4, (
         f'only {len(generated_layer_paths)} artifacts declared in conftest._GENERATED_LAYER; the '
-        f'layer had 7 after ED-IN-0232. Fewer means a builder was retired — drop its row from the '
-        f'tuple and lower this floor in the same commit, deliberately.')
+        f'layer had 4 after plan position `28-i` (M5). Fewer means a builder was retired — drop its '
+        f'row from the tuple and lower this floor in the same commit, deliberately.')
     # FLOOR LOWERED 10 -> 7 (2026-09-16, ED-IN-0232), which is the deliberate act the message above
     # asks for rather than a loosening. Two builders retired with the Key substrate —
     # `build_key_graph.py` (1 artifact) and `build_contract_index.py` (2: CONTRACT_INDEX.md and
     # KEY_INDEX.md) — and their rows came out of the tuple in the same commit. 10 - 3 = 7.
+    # FLOOR LOWERED 7 -> 4 (2026-09-29, plan position `28-i`, M5): `trace_execution_phases.py` (1
+    # artifact, `execution_trace.json`) and `build_execution_map.py` (2: `execution_map.json` and
+    # `EXECUTION_MAP.md`) retired with the execution-map cluster, `FORK:6f740d9`. 7 - 3 = 4.

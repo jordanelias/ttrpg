@@ -239,7 +239,7 @@ four rows of that table found stale in this pass are corrected here, not there: 
 | 26 | **GO-VERSION** | GO | **JORDAN** | §5.1 item 9 | Phase 4 · p |
 | 27 | **WR-SCOPE** | WR | OPEN | — (`ED-WR-0010` ruled IN SCOPE) | Phase 3 (parallel) |
 | 28-0 ✦ | **ORPHAN-DELETE** | IN | OPEN | — | Phase 1 · 2 |
-| 28-i ✦ | **M5 — tools** | IN | OPEN | — | Phase 1 · 4 |
+| 28-i ✦ | **M5 — tools** | IN | **DONE** (§8.5) | — | Phase 1 · 4 |
 | 28-ii ✦ | **M6 — successor goldens** | IN | BLOCKED | `28-i` | Phase 4 · c |
 | 28-iii ✦ | **SPINE-DELETE** | IN | BLOCKED | `28-ii` | Phase 4 · d |
 | 29a–29f ✦ | **Step B, per tree** | IN | BLOCKED | per tree (§3.4 f–j) | Phase 4 · f–j |
@@ -275,7 +275,7 @@ census, not the phase number, decides whether it may run beside a Phase-1 item.
 | 1 | **CLOSE-PASS** (position `1`) | flip the 2026-09-18 plan's §2.1 rows with their citations; write §5.2's closures with theirs; ship the **fold-to-latest script** as the instrument (old §8.3) | **DONE** (`ec1a9d0`, §8.3) | — |
 | 2 | **`28-0` ORPHAN-DELETE** | `FORK:` rows + `git rm` for code with no live caller (list below, narrowed — §8.4) | **DONE**, narrowed scope (§8.4) | — ; precedent `ED-IN-0232` |
 | 3 | **`2-i` RET-SC (stub)** | `contest_legacy_stub.py` + its export ripple; the seam-import detector's one-hop falsifier | **DONE** (stub pre-existing, falsifier planted) | — |
-| 4 | **`28-i` (M5)** | port `tools/balance_oracle.py` onto the season harness; retire `campaign_output_probe.py`, `trace_execution_phases.py` and the execution-map cluster | OPEN | — |
+| 4 | **`28-i` (M5)** | port `tools/balance_oracle.py` onto the season harness; retire `campaign_output_probe.py`, `trace_execution_phases.py` and the execution-map cluster | **DONE** (§8.5) | — |
 | 5 | **FIGHT-RENAME** | `kill / wound` → `fight`: one row key + one alignment key + re-pins; a declared hash move | OPEN | — ; **before `8`**; never interleaved with `8`, `9` or the cells commit (`§3.9` edge 10) |
 | 6 | **OPENERS-DERIVE** `[L1]` | derive the `openers:` roster from the `@effect_for` registry, or guard their equality | OPEN | — ; before any Phase-2 effect lands |
 | 7 | **GATE-REMOVE-PERSON** `[L1]` | route `World.remove_person` through `World.write`; a declared hash move | OPEN | — ; shares `loop/matter.py` with `24f`'s build — serial |
@@ -364,21 +364,43 @@ the falsifier was still open; it is now planted, `tests/valoria/test_engine_does
 The old `_part2` position 2 remains the content owner. **Relocate the demote-only rule first**, as it
 says.
 
-**4 · `28-i` (M5).**
+**4 · `28-i` (M5). DONE — full record at §8.5.**
 
 - **Port `tools/balance_oracle.py` → `engine/season/harness/arms.py`**, as an n-seed two-arm comparison
   over `build_realm` outputs. There is no win-share on the season side; the quantities are
   `harness/report.py`'s and `delta.py`'s, and `corpus_run`'s. Re-point
   `tests/valoria/test_balance_oracle_arms.py`, and update the `references/ci_checks_registry.yaml:454`
-  row.
+  row. **DONE, with a correction: the "quantities" this brief pointed at (`harness/report.py`'s and
+  `delta.py`'s) are the shape.py/corpus-grading harness's probe/gap/verdict counts, not a quantity
+  `build_realm`+season-loop execution produces — verified by reading both files (§8.5). The actual
+  live comparison reuses `populated.run()`'s own `act_subjects` census field (the same quantity
+  `creed_sweep` already treats as its effect signal), on the season-reachable `field_casualty_model`
+  mechanic (H-148) rather than on the old `private_ladder`/`owner_ladder` pair, which is verified
+  season-unreachable and does not survive the port even as inert code — §8.5 has the full reasoning.**
 - **Retire `tools/campaign_output_probe.py`**, which `harness.report`/`delta` + `content_hash`
-  supersede.
+  supersede. **DONE, with a correction: "supersede" is true in substance (the season side has better
+  tools for this class of question) and false as a literal claim — nothing assembles those pieces into
+  this tool's specific one-shot dump/`--compare` CLI contract. Retired anyway, per this item's own
+  instruction: its subject, `engine.mc_v18`, is itself deprecated in place and its reason to exist
+  goes with it (§8.5).**
 - **Retire `tools/trace_execution_phases.py`, and with it the execution-map cluster it feeds:**
   `tools/build_execution_map.py`, `references/execution_map.json`, `references/EXECUTION_MAP.md` and
   `tests/valoria/test_execution_map.py`. That cluster's ED, `ED-IN-0123`, was closed in the old §2.1
-  under test 1; its "spine" is hand-transcribed from `mc_v18.py`/`engine_clock.py`.
+  under test 1; its "spine" is hand-transcribed from `mc_v18.py`/`engine_clock.py`. **DONE, with a
+  correction: `ED-IN-0123` is NOT this cluster — it is the unrelated Godot fork-plan/port-readiness
+  question. The miscitation traces to `test_execution_map.py`'s own module-docstring self-citation,
+  which this brief appears to have inherited rather than independently checked (§8.5 has the full
+  trace). The retirement itself stands on its OWN sound, independently-documented basis: both
+  `build_execution_map.py`'s and `test_execution_map.py`'s own docstrings already concede the premise
+  stale ("describe the code, not hand-transcribe it").**
 - **Check `tests/valoria/conftest.py` and `test_flow_skeletons.py`'s reads of `execution_map.json`
-  first** — not verified in this pass (§9).
+  first** — not verified in this pass (§9). **DONE (§9 struck below): `conftest.py`'s
+  `_build_the_layer()` already skips a missing builder and needed no edit; `test_flow_skeletons.py`
+  needed one companion edit outside this position's original file list — `references/execution_map.json`
+  and `references/EXECUTION_MAP.md` are both `.gitignore`d and were never committed, so they get no
+  `FORK:` row (one would be unfollowable and would trip `test_forked_status.py`'s ceiling); they join
+  `RETIRED_GENERATED` instead, the same mechanism already covering their three sibling untracked
+  artifacts.**
 
 **Why here:** it is gate-free, and `28-ii` depends on it. It also closes MOD 8 (the balance
 instrument sitting on the spine).
@@ -1207,6 +1229,96 @@ that: its `_OI17_FULL_MODULE_ENTRYPOINTS` list (`:276-290`) holds
   (a scheduling correction, not a design one); two (`territory_transfer_*`) are removed from this
   position's scope on a standing ruling already on record. Nothing here needed Jordan.
 
+### 8.5 · Made at position `4`'s execution — `28-i` (M5), one citation corrected, one mechanic retired
+
+**The `ED-IN-0123` citation is wrong, and the correction does not touch the retirement it was cited
+for.** This item's own brief said the execution-map cluster's ED "was closed in the old §2.1 under
+test 1." Checked against the ledger rather than trusted: `ED-IN-0123`
+(`registers/archive/editorial_ledger_in_archive_pre-2026-09.yaml:623-685`, superseded `:3580-3594`) is
+about the Godot fork-plan/port-readiness question — unrelated. The "closed under test 1" row the
+brief is thinking of
+(`workplans/2026-09-18-governance-settlement-behaviour-plan.md:112`) closes a DIFFERENT batch
+(`ED-1051, ED-1043, ED-MB-0065, ED-IN-0123, ED-IN-0124`) for a mass-battle/port-target reason, also
+unrelated. The likely source: `tests/valoria/test_execution_map.py`'s own module docstring self-cites
+"(ED-IN-0123)" in its title, a pre-existing miscitation this brief appears to have inherited rather
+than independently checked. **What IS independently true, and is the actual, sound basis the
+retirement stands on:** `build_execution_map.py`'s own docstring and `test_execution_map.py`'s both
+concede the premise stale — the spine is hand-transcribed from `mc_v18.py`/`engine_clock.py`, "not
+derivable by AST" — its own author already conceded "describe the code, not hand-transcribe it." The
+cluster is retired on THAT basis, which needs no ED at all.
+
+**`arms.py`'s design decision, and why.** The brief named `harness/report.py`'s and `delta.py`'s
+"quantities" as the season-side equivalent of a win-share. Read in full (not merely cited): both
+operate on the shape.py/corpus-grading harness's `results.json` — probe verdicts, gap counts, per-case
+PASS/GAP/UNMAPPED tallies for the 143 authored NPC/ARC cases — not on `build_realm`+season-loop
+execution at all, and neither takes a seed sweep as its subject. So the brief's own pointer does not
+resolve to a runnable design; this is the "one genuinely creative part" the position names.
+
+Two structural findings, both verified against the live tree rather than assumed, decided the shape:
+
+1. **The OLD live arm pair does not survive the port, even as inert historical code.**
+   `_contest_ladder_arm` (`private_ladder`/`owner_ladder`) patches
+   `systems.social_contest.sim.contest.resolver.degree_from_net`/`degree_extension.degree`. Traced
+   the season loop's own dispatch (`engine/season/seam/ladder.py::degree_of`, the ONLY place a
+   subsystem result becomes a band the loop writes on): its `net`/`ob` branch imports
+   `engine.autoload.dice_engine.degree_from_net` BY DOTTED PATH, directly — never the subsystem's
+   copy. So this mechanic is not season-reachable at all; porting it would leave both arms of a
+   `build_realm`-based comparison identical by construction, the exact "campaign-unreachable
+   change" CLAUDE.md §7 names as a fake control. Separately, carrying its `systems.social_contest`
+   import into any file under `engine/` — even dead, unwired code — would add a NEW nested
+   `engine -> systems` import that `tests/valoria/test_engine_does_not_import_systems.py`'s
+   `NESTED_BASELINE = 0` ratchet forbids without a deliberate bump, which is outside this position's
+   file scope. Both findings independently rule it out; it is retired in full (`FORK:6f740d9` for
+   `tools/balance_oracle.py` is its only surviving record) rather than carried forward as dead code.
+2. **`rosters.yaml`'s own `field_casualty_models` note (H-148, M4) already names the replacement, by
+   name, verbatim:** *"`tools/balance_oracle.py` DOES NOT APPLY TO THIS QUESTION ... `march` and
+   `field_casualty_model` live entirely in `engine/season/`, which `mc_v18` cannot reach ... If this
+   arm is ever re-examined, the instrument is a `field_casualty_model` sweep through
+   `engine/season`."* This port IS that re-examination. `field_casualty_model` is read by exactly one
+   site, `loop/effects.py::_eff_march`, on a LOST field battle: `total` (pre-M4 control, "losing costs
+   everything") vs `scaled_by_degree` (ruled default, floors at 1 — a wound, never a kill). Each
+   `World` owns its own `Fixtures`, so an arm is a per-world `w.fixtures.sweep(...)` — no monkeypatch,
+   no undo, the same idiom `harness/populated.py::creed_sweep` and
+   `engine/season/tests/test_march.py` already use for this exact fixture.
+
+**The outcome metric**: `populated.run()`'s own `act_subjects` census field (self / another person /
+not a person) — the same quantity `creed_sweep` (ED-IN-0229) already treats as its effect signal —
+summed across `n` seeds per arm, on the SAME seed sequence (the paired-sample control). `two_proportion_z`
+is generalised to take each arm's own denominator (total resolved acts), since a fatality under
+`total` and not under `scaled_by_degree` changes who is left to act in later seasons — the equal-`n`
+case reduces to the original formula exactly (checked by test).
+
+**What this session verified, and what it explicitly did not:**
+- `python -m pytest tests/valoria/test_balance_oracle_arms.py -q` — 5 passed, including a real fold
+  of a `march` act through the actual `SeasonDriver` (RESOLVE then ENCOUNTER) against
+  `build_realm(0)`'s own fixture, asserting the two arms write a genuinely different body value —
+  the falsifier this position's own instructions asked to preserve.
+- `python -m pytest tests/valoria/test_mc_v18_is_deprecated.py -q` — 3 passed, after removing all
+  three tool-lane `ALLOWED_IMPORTERS` entries (roster 6 → 3, zero non-test importers remain).
+- `python -m pytest tests/valoria/test_flow_skeletons.py -q` — 95 passed, after the 5 tracked-file
+  `FORK:` rows and the companion `RETIRED_GENERATED` edit (below) for the 2 untracked ones.
+- `python3 -c "import yaml; yaml.safe_load(open('references/ci_checks_registry.yaml'))"` — parses;
+  no dedicated schema/order validator exists for this file (checked `tools/` and `tests/valoria/` for
+  one; found none).
+- **One companion edit outside this position's original file list, made and justified rather than
+  worked around:** `references/execution_map.json` and `references/EXECUTION_MAP.md` are both
+  `.gitignore`d and were never committed (`git ls-files` finds neither) — a `FORK:` row for either
+  would be unfollowable by `git cat-file -e` and would raise `test_forked_status.py`'s unresolvable
+  count above its pinned ceiling, in the direction that reads as a regression. Both join
+  `tests/valoria/test_flow_skeletons.py`'s `RETIRED_GENERATED` set instead — the same mechanism
+  already covering their three sibling untracked artifacts (`key_graph.json`/`KEY_INDEX.md`/
+  `CONTRACT_INDEX.md`); the builder's own `FORK:` row is the stronger provenance, same precedent.
+- **NOT run in this pass**, said plainly rather than implied: `arms.py`'s own default invocation
+  (`--n 10 --seasons 2`) end to end. One seed's cost was measured (`build_realm(0)`: 0.77s;
+  `populated.run(seasons=2, seed=0)`: 46.7s) and used to size the default, but whether that default
+  produces enough resolved field battles to move `act_subjects` by a measurable amount is unverified
+  — `arms.py`'s own module docstring says so, and this record repeats it rather than letting the tool
+  imply otherwise.
+- `tests/valoria/test_forked_status.py` is pre-existing KNOWN-RED in this container (shallow clone,
+  `.git/shallow` present, CLAUDE.md §0.4's documented case) — confirmed this position's own 5 new
+  rows resolve cleanly in isolation (`git cat-file -e 6f740d9:<path>`, all five return 0); the
+  container-wide failure (78 → 254 unresolvable) is inherited, not introduced here.
+
 ---
 
 ## 9. NOT VERIFIED IN THIS PASS
@@ -1216,8 +1328,8 @@ Carried forward honestly, not resolved here.
 - The MB/PC `needs_jordan` rows in §5.1 item 13 — not opened.
 - Whether any WITNESS channel predicate filters refusal kinds (§5.2, `H-111`) — one probe.
 - Which existing test is the named same-seed hash pin (`28-ii` (1)).
-- `tests/valoria/conftest.py`'s and `test_flow_skeletons.py`'s exact dependence on
-  `execution_map.json` (`28-i`).
+- ~~`tests/valoria/conftest.py`'s and `test_flow_skeletons.py`'s exact dependence on
+  `execution_map.json` (`28-i`).~~ **VERIFIED at `28-i`'s execution — §8.5.**
 - RR-P's text for the AX-7 wiring's third function (`belief_contradicts`), given that `Person.beliefs`
   is deleted (`10`).
 - `ED-916`'s full row — only its head was read (*"fieldwork.py + investigation.py are

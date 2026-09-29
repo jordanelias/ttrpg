@@ -76,10 +76,14 @@ ALLOWED_IMPORTERS = {
     # its claim needs a full campaign driven through real organic triggers, which only
     # `engine.mc_v18.run_campaign` can currently do. See that file's own docstring.
     # ─────────────────────────────────────────────────────────────────────────────────────────
-    # tools
-    'tools/balance_oracle.py',
-    'tools/campaign_output_probe.py',
-    'tools/trace_execution_phases.py',
+    # THREE LINES DELETED 2026-09-29 (plan position `28-i`, M5) — the last of the "tools" block
+    # below, now empty. `tools/campaign_output_probe.py` and `tools/trace_execution_phases.py`
+    # (plus the execution-map cluster the second one fed) were RETIRED outright: no code ported
+    # off them, `engine.mc_v18` (what both probed) is itself deprecated in place and its own
+    # reason to exist goes with it. `tools/balance_oracle.py` was PORTED, not retired bare-handed —
+    # `engine/season/harness/arms.py` is its successor, and it does NOT import `mc_v18` at all
+    # (the season loop has no campaign for it to drive). All three FORK: rows are in
+    # `references/restructure_ledger.md`.
     # ─────────────────────────────────────────────────────────────────────────────────────────
     # SIX LINES DELETED 2026-09-16 (ED-IN-0232), which is the visible migration record the
     # assertion below demands rather than a quiet trim. None of the six was PORTED off mc_v18 —
@@ -100,10 +104,11 @@ ALLOWED_IMPORTERS = {
     # unpack three values" — a reason that stopped being true in the same commit that wrote it. An
     # adversarial pass caught it; the file is deleted, not kept as a convenience nobody uses.
     #
-    # ROSTER 16 -> 9 -> 6 (the second drop is the THREE LINES DELETED block above), counted from
-    # this tuple rather than from arithmetic; the AST scan below finds the same 6. None of the
-    # three non-test importers that remain (`balance_oracle`, `campaign_output_probe`,
-    # `trace_execution_phases`) is shipped engine code — they are tools.
+    # ROSTER 16 -> 9 -> 6 -> 3 (the 6->3 drop is the THREE LINES DELETED 2026-09-29 block above),
+    # counted from this tuple rather than from arithmetic; the AST scan below finds the same 3.
+    # ZERO non-test importers remain: the three tools that used to import `mc_v18` are gone (two
+    # retired, one ported to a successor that does not import it). Every surviving entry is under
+    # `engine/tests/` — CI job `sim-regression`.
     # ─────────────────────────────────────────────────────────────────────────────────────────
 }
 
