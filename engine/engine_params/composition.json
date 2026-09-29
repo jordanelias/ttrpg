@@ -58,16 +58,6 @@
       "kind": "callable",
       "needed_by": "engine/cross_scale/scene_dispatch.py \u2014 the promoted \u00a7Agon kernel (ED-SC-0006), paired with scene_builder.contest"
     },
-    "scene_resolver.fieldwork": {
-      "target": "systems.fieldwork.sim.fieldwork:run_fieldwork_scene",
-      "kind": "callable",
-      "needed_by": "engine/cross_scale/scene_dispatch.py \u2014 OI-02, stub-wired pending ED-916"
-    },
-    "scene_resolver.investigation": {
-      "target": "systems.fieldwork.sim.investigation:resolve_npe_response",
-      "kind": "callable",
-      "needed_by": "engine/cross_scale/scene_dispatch.py \u2014 OI-02, stub-wired pending ED-916"
-    },
     "season_driver": {
       "target": "systems.overview.sim.season:run_season",
       "kind": "callable",

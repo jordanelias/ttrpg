@@ -99,7 +99,7 @@ named as owed (§8.2).
 | the FA-lane distinction — *"`parliamentary_*` roles are consumed by retained `systems/factions/sim/parliamentary_*.py`, NOT by the spine"* | **It holds for the ROLES, but the consumers are themselves spine-dead.** The three roles' only `composition.require` caller is `systems/factions/sim/parliamentary_transfer.py:263-270`; `parliamentary_action.py:41` imports `parliamentary_vote` directly. `parliamentary_transfer.py` has **no production importer**: `faction_action.py:55-60` imports `crown_initiative, excommunication, absolution, council_solmund, parliamentary_action`, not `parliamentary_transfer`. Its `territory_transfer_*` roles have been NOBODY since ED-IN-0232, and `test_f7_smoke_oracle.py`'s header reads *"the only restoration path, parliamentary_transfer, is never called"*. `parliamentary_action.py` is reached only via `faction_action` ← `mc_v18`. **So when Step B retires `systems/factions/`, the three `parliamentary_*` roles and `systems/social_contest/sim/parliamentary_{vote,stay}.py` become orphans. `HANDOFF_SC.md`'s carve-out** (*"NOT in scope — live FA-lane callers … re-measure inbound references before executing"*) **expires by its own condition at that moment. `systems/factions/sim/` is NOT "retained": it is in the retire set** (`requirements.yaml:75-78`) | a grep of `from systems.` across `systems/factions/sim/*.py`. `parliamentary_stay` has zero importers outside a docstring (`parliamentary_transfer.py:35`) |
 | ARMATURE §2.5's importer table gives `engine/tests/test_combat_bridge_seam.py` the stage "—" | it is **M6-class with NO successor needed** (`_part2` §1.4) | its own docstring, `:11-27` |
 | `HANDOFF_IN.md` — *"step 11 (garrison Sites) not started; no review pass has run on M4"* | stale on both counts. `ecacb57` seeds garrisons (`harness/populated.py:396-414`), and its message records all four review passes (ARMATURE §1.2 item 5) | record edit, **made in this commit** (§8.1) |
-| — | **Two spine modules are ALREADY orphaned, with zero importers anywhere.** `engine/autoload/npc_ai.py`: only its package docstring names it, and its header reads *"may contain contamination per Jordan diagnosis 2026-05-17 — audit pending"*. `engine/cross_scale/domain_echo.py`: *"the §5 Domain Echo COMPUTATION survives"* (`cross_scale/__init__.py`), and its transport was retired by ED-IN-0232 | the AST scan above. **Deletable today with a `FORK:` row and no gate** → position `28-0` |
+| — | **Two spine modules are ALREADY orphaned, with zero importers anywhere.** `engine/autoload/npc_ai.py`: only its package docstring names it, and its header reads *"may contain contamination per Jordan diagnosis 2026-05-17 — audit pending"*. `engine/cross_scale/domain_echo.py`: *"the §5 Domain Echo COMPUTATION survives"* (`cross_scale/__init__.py`), and its transport was retired by ED-IN-0232 | the AST scan above. **Deletable today with a `FORK:` row and no gate** → position `28-0` ⚠ **CORRECTED at position `28-0`'s execution (§8.4): `npc_ai.py` is NOT zero-caller.** The `ast` scan is blind to `engine/tests/test_pipeline_reach.py`'s dynamic, string-keyed `_OI17_FULL_MODULE_ENTRYPOINTS` probe, which names `engine.autoload.npc_ai` by dotted path and calls it every run. Only `domain_echo.py` of this row's two was actually deletable today; `npc_ai.py` waits on `28-iii` with the other eleven OI-17 targets |
 | — | `tests/valoria/test_engine_does_not_import_systems.py` also carries a snapshot-role guard (`:523 test_every_snapshot_state_role_resolves_to_something_restore_world_can_call`), and it uses `systems.factions.sim.treaty` / `faction_action` as planted fixtures (`:183-196`, `:462`) | both are Step-B ride-alongs: the guard dies at `28-iii`, and the fixtures are re-pointed at `29b` |
 
 ---
@@ -272,8 +272,8 @@ census, not the phase number, decides whether it may run beside a Phase-1 item.
 
 | # | handle | what runs | `STATE` | `GATE` / notes |
 |---|---|---|---|---|
-| 1 | **CLOSE-PASS** (position `1`) | flip the 2026-09-18 plan's §2.1 rows with their citations; write §5.2's closures with theirs; ship the **fold-to-latest script** as the instrument (old §8.3) | OPEN · partial | — |
-| 2 | **`28-0` ORPHAN-DELETE** | `FORK:` rows + `git rm` for code with no live caller (list below) | OPEN | — ; precedent `ED-IN-0232` |
+| 1 | **CLOSE-PASS** (position `1`) | flip the 2026-09-18 plan's §2.1 rows with their citations; write §5.2's closures with theirs; ship the **fold-to-latest script** as the instrument (old §8.3) | **DONE** (`ec1a9d0`, §8.3) | — |
+| 2 | **`28-0` ORPHAN-DELETE** | `FORK:` rows + `git rm` for code with no live caller (list below, narrowed — §8.4) | **DONE**, narrowed scope (§8.4) | — ; precedent `ED-IN-0232` |
 | 3 | **`2-i` RET-SC (stub)** | `contest_legacy_stub.py` + its export ripple; the seam-import detector's one-hop falsifier | OPEN | — |
 | 4 | **`28-i` (M5)** | port `tools/balance_oracle.py` onto the season harness; retire `campaign_output_probe.py`, `trace_execution_phases.py` and the execution-map cluster | OPEN | — |
 | 5 | **FIGHT-RENAME** | `kill / wound` → `fight`: one row key + one alignment key + re-pins; a declared hash move | OPEN | — ; **before `8`**; never interleaved with `8`, `9` or the cells commit (`§3.9` edge 10) |
@@ -311,20 +311,35 @@ changed since that entry was written:
 > row, `needs_jordan: true`, covering C1 + C2, with C3/C4 as its siblings. Close-pass inherits it and
 > writes nothing further for it.
 
-**2 · `28-0` ORPHAN-DELETE.** Everything on this list has zero importers by the `ast` scan, or is a
-stub whose only caller is a stub branch. Each removal is a `FORK:` row plus `git rm`:
+**2 · `28-0` ORPHAN-DELETE.** ⚠ **NARROWED AT EXECUTION — see §8.4.** "Zero importers by the `ast`
+scan" is true of every item below and was taken as license to delete all of them; it does not mean
+zero *callers*, and for most of this list it isn't one. Executed now, each a `FORK:` row plus `git
+rm`, then one `tools/export_composition.py` regeneration:
 
-- `engine/autoload/npc_ai.py` and `engine/cross_scale/domain_echo.py` (§1);
-- `systems/overview/sim/{rs_track,ip_track}.py`, with the role `rs_track_delta`;
-- the roles `territory_transfer_candidate` and `territory_transfer_proposal` (registry rows only);
-- the six FA stubs `systems/factions/sim/{charter_liberties,hafenmark_equipment,home_sanctuary,infrastructure_reclamation,varfell_mandate_action,varfell_territorial_acquisition}.py`
-  (ARMATURE §3.4);
+- `engine/cross_scale/domain_echo.py` (§1) — confirmed zero callers anywhere, including
+  dynamically;
 - `systems/fieldwork/sim/{fieldwork,investigation}.py`, with the roles
   `scene_resolver.fieldwork/investigation` and `scene_dispatch.py:354-356`'s stub branch. The branch
-  removal is a deletion edit only. `ED-916` closes under test 2 — this is its subject;
-- `systems/world/sim/{miraculous_event,restoration_movement}.py`;
-- `systems/characters/sim/companion.py`;
-- then a `tools/export_composition.py` regeneration.
+  removal is a deletion edit only, falling the two scene_types through to the existing total-mapping
+  stub fallback (same `stub=True` shape). `ED-916` closes under this — this is its subject.
+
+**DEFERRED to `28-iii`, when `engine/tests/test_pipeline_reach.py` itself retires (§3.4) — not
+gate-free today, §8.4:** `engine/autoload/npc_ai.py`; `systems/overview/sim/{rs_track,ip_track}.py`
+with the role `rs_track_delta`; the six FA stubs
+`systems/factions/sim/{charter_liberties,hafenmark_equipment,home_sanctuary,infrastructure_reclamation,varfell_mandate_action,varfell_territorial_acquisition}.py`;
+`systems/world/sim/{miraculous_event,restoration_movement}.py`; `systems/characters/sim/companion.py`
+— all thirteen are `_OI17_FULL_MODULE_ENTRYPOINTS` targets, dynamically probed every run by a
+currently-passing test this plan's own §3.4 schedules for later retirement. Deleting any of them now
+would fail that test today for no gain.
+
+**REMOVED FROM THIS POSITION'S SCOPE, not merely deferred — `references/module_contracts.yaml`
+already ruled it, §8.4:** the roles `territory_transfer_candidate` and `territory_transfer_proposal`.
+Their own registry rows (`:116-122`) already say why they stay: the targets
+(`systems/factions/sim/parliamentary_transfer.py`, a permanent, non-orphaned module) resolve,
+`tools/export_composition.py` imports them at export time, and deleting the rows would hide a real,
+working mechanic with no driver behind a tidy registry rather than leave the gap named. No position
+in this plan gates that ruling; it stands until someone builds the driver, which is out of this
+position's scope.
 
 `beliefs.py` joins this list after `28-iii`, when it becomes orphaned. The precedent is
 `ED-IN-0232`, which retired six files with the substrate and recorded the roster shrink in
@@ -1093,6 +1108,61 @@ owner, and this table records what changed the facts underneath it since it was 
   second ride-along, "strike `HANDOFF.md:463-469`'s 'THE STEP TO TAKE: S7'", has no live target —
   root `HANDOFF.md` is 61 lines today, a pure pointer index with no such text anywhere (grepped).
   An earlier, unrelated rewrite already removed it. Nothing to strike.
+
+### 8.4 · Made at position `2`'s execution — narrowing `28-0` before deleting anything
+
+Before running any `git rm`, §0.1 pt 3's discipline again: verify "zero importers" rather than trust
+it, this time by grepping each of the thirteen-plus targets for every caller, not only literal
+`import` statements. **The `ast` scan the brief cites cannot see a dynamic, string-keyed caller**,
+and `engine/tests/test_pipeline_reach.py` (kept live and in scope until `28-iii`, §3.4) is exactly
+that: its `_OI17_FULL_MODULE_ENTRYPOINTS` list (`:276-290`) holds
+`(module_path, func_name, args_fn)` tuples that `test_oi17_full_module_conversions_are_stub_wired`
+(`:293-305`) probes at runtime via `importlib`, never a source-level `import`.
+
+- **Twelve of this position's fourteen module targets are OI-17 entrypoints, invisible to the
+  brief's own justification for calling them zero-importer.** `engine/autoload/npc_ai.py`,
+  `systems/overview/sim/{rs_track,ip_track}.py`, all six FA stubs,
+  `systems/world/sim/{miraculous_event,restoration_movement}.py` and
+  `systems/characters/sim/companion.py` are named, by full dotted path, in that list today.
+  Deleting any of them before `28-iii` retires that test would turn a currently-green
+  `sim-regression` job red for a deletion this plan's own §3.4 already schedules later, for no
+  reason to do it sooner. Only `engine/cross_scale/domain_echo.py` and
+  `systems/fieldwork/sim/{fieldwork,investigation}.py` are absent from that list — confirmed by
+  grep, not assumed — and only those three modules are executed in this commit.
+- **The two `scene_resolver.*` roles and their stub branch are a self-contained unit, checked
+  independently.** `references/module_contracts.yaml:194-199`'s `needed_by:` field for both named
+  only `engine/cross_scale/scene_dispatch.py`'s `st in ("fieldwork", "investigation")` branch,
+  and a grep of `run_fieldwork_scene`/`resolve_npe_response` tree-wide turned up only their own
+  definition sites — no second caller. Deleting the branch drops those two scene_types into the
+  same file's existing total-mapping `else` (`:361-372`), which sets `out["stub"] = True` the same
+  way the deleted branch did, so `test_scene_type_total_mapping_resolves_or_stub_flags`
+  (`engine/tests/test_pipeline_reach.py:168-201`) is unaffected — verified by running it, not
+  inferred. `ED-916` ("Zero continuous-engine validation at fieldwork parameters") is superseded
+  in `registers/editorial_ledger.jsonl` on that basis (§0 test 2: its subject is gone).
+- **`territory_transfer_candidate`/`territory_transfer_proposal` were never orphaned in the sense
+  this position's list implies, and the registry says so in the same file the brief read.**
+  `references/module_contracts.yaml:110-115` (immediately above the `territory_transfer_candidate`
+  row) already carries a reasoned ruling to KEEP both rows — the target module
+  (`systems/factions/sim/parliamentary_transfer.py`) is permanent, its functions resolve,
+  `tools/export_composition.py` imports them at export time, and "giving it a driver is a design
+  call nobody has taken." Nothing in this session's execution, or in `28-iii`, changes that
+  reasoning. §0's five-step test resolves this at step 3 (answered by a design document — the
+  registry entry itself) without going to Jordan: the rows are removed from this position's scope
+  entirely, not deferred.
+- **`rs_track_delta` carries the identical "kept, not orphaned" ruling** at
+  `references/module_contracts.yaml:200-203`, *and* its target module (`rs_track.py`) is itself an
+  OI-17 entrypoint. Both reasons block it today; only the second is time-gated (`28-iii`), so this
+  role's fate is coupled to its module's, not to the other two roles' — noted so a future session
+  does not delete it the moment `rs_track.py` goes without re-checking whether the standing "kept"
+  ruling still applies at that point.
+- **Verified, not asserted:** `python -m pytest tests/valoria/test_engine_does_not_import_systems.py
+  engine/tests/test_pipeline_reach.py -q` — 24 passed, after the three deletions, the
+  `scene_dispatch.py` branch removal, the two registry role rows removed, the now-orphaned
+  `domain_echo` adapter/wiring rows removed from `references/module_contracts.yaml`, and
+  `tools/export_composition.py` re-run clean.
+- **Net: this position ships 3 of its originally-listed ~15 targets.** Twelve wait on `28-iii`
+  (a scheduling correction, not a design one); two (`territory_transfer_*`) are removed from this
+  position's scope on a standing ruling already on record. Nothing here needed Jordan.
 
 ---
 
