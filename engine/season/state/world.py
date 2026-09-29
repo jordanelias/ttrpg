@@ -575,12 +575,14 @@ class World:
     def remove_person(self, who: str) -> list:
         """THE ONE DEATH CASCADE: every live edge naming this person closes, then they are gone.
 
-        ⚠⚠ IT IS FACTORED OUT OF `_eff_kill` BECAUSE IT NOW HAS TWO CALLERS, AND A SECOND COPY IS
-        HOW THE TWO WOULD DRIFT. `kill / wound` at RESOLVE was the only way to die; item 3b gives
-        MATTER a second — a body that reaches 0 from an empty larder — and `(Person, body)` is
-        licensed at **both** steps by the write matrix (`[MAT, RES]`, `social: false`, emitting
-        `body.changed` and `person.died`). Two sites closing tenures by hand is the shape §8 is
-        about: *the rule lives once*.
+        ⚠⚠ IT IS FACTORED OUT OF `_eff_kill` BECAUSE IT NOW HAS THREE CALLERS, AND A SECOND COPY IS
+        HOW THEY WOULD DRIFT. `kill / wound` (now `fight`) at RESOLVE was the only way to die;
+        item 3b gives MATTER a second — a body that reaches 0 from an empty larder
+        (`loop/matter.py`) — and the M4 review pass's correctional round gave `_eff_march`'s
+        `total`-casualty-model arm a third (`H-152`). `(Person, body)` is licensed at **both**
+        steps by the write matrix (`[MAT, RES]`, `social: false`, emitting `body.changed` and
+        `person.died`). Three sites closing tenures by hand is the shape §8 is about: *the rule
+        lives once*.
 
         ⚠ `self.tenures`, NOT `p.tenures`, AND THAT IS `W-E`'s OWN FINDING CARRIED ACROSS RATHER
         THAN RE-DERIVED. A Tenure is owned by its SUBJECT (§15.1), so scanning the dead person's
@@ -588,21 +590,50 @@ class World:
         in `tiny_world`: a live `tie` from `p_low` to `p_mid` survived `p_mid`'s death and then
         DANGLED. §15.3 is explicit that the tenure ends THROUGH the death.
 
-        ⚠ IT MUTATES AND RETURNS THE IDS IT TOUCHED; IT DOES NOT CALL `write`. Both callers are
-        already inside a gated write when they reach here — `_eff_kill` through its `Change`'s
-        `apply`, which the gate calls (G4; `_eff_kill` no longer reads the return value, the gate
-        reads the victim instead), MATTER through its own `w.write` — and a nested write would be
-        a write inside a write. ⚠ CORRECTED (antagonist pass, 2026-09-27): this said "which the
-        gate refuses" and nothing does -- `World.write` has no re-entrancy check of any kind. The
-        property holds today only because every current caller of `remove_person` is careful to
-        call it from inside its own already-open write rather than opening a second one; it is a
-        discipline on the two call sites, not a guarantee the gate enforces.
+        ⚠ IT MUTATES AND RETURNS THE IDS IT TOUCHED; IT DOES NOT CALL `write`. Every caller is
+        already inside a gated write when it reaches here — `_eff_kill` and `_eff_march` through
+        their own `Change`'s `apply`, which the gate calls (G4; neither effect reads the return
+        value, the gate reads the victim instead), MATTER through its own `w.write` closure — and
+        a nested write would be a write inside a write. ⚠ CORRECTED (antagonist pass, 2026-09-27):
+        this said "which the gate refuses" and nothing did -- `World.write` has no re-entrancy
+        check of any kind, so the property held only because every caller was careful to call this
+        from inside its own already-open write rather than opening a second one -- a discipline on
+        the call sites, not a guarantee the gate enforced.
+
+        ⚠⚠ MADE MECHANICAL (`GATE-REMOVE-PERSON`, plan position 7, 2026-09-29): the check below
+        reads `self.gate.is_open` (`state/gate.py::Gate`), true for exactly the span `World.write`
+        holds a window open around `apply()`/`change.apply()` (`.opening()` before, `.close()` on
+        refusal, the NEXT `.opening()` on success) — which is precisely "already inside a gated
+        write" made CHECKABLE instead of trusted, one more property AX-4 (`04:115`, "one write
+        path") now holds through `World.write` + the gate's own state rather than through caller
+        discipline. It is not a second, nested `world.write(...)` call — that would check a
+        (kind, field) pair this function does not itself declare and would re-open a window
+        already open — it is a REFUSAL of the one failure mode the discipline above could not
+        catch: a future caller reaching this function with no write open at all. Every call site
+        in the tree today (`_eff_kill`, `_eff_march`, `loop/matter.py`, and the two
+        `harness/probes.py` / `test_season_shape.py` falsifiers that already wrap it in
+        `w.write(...)`) already satisfies it, so this changes no existing behaviour or emission —
+        MEASURED, not assumed: every existing death/`remove_person` test in `engine/season/tests`
+        still passes unchanged (`test_march.py`, `test_g3_not_yours.py`, `test_season_shape.py`'s
+        P24/P25 probes and its partition-seam test), and the new falsifier
+        (`test_gate_remove_person_requires_an_open_write.py`) is the one that calls this bare and
+        asserts the raise.
 
         ⚠ G3: AND THAT IS WHAT MAKES THE CASCADE ATTRIBUTABLE. The gate's F3 clause admits an edge
         closed by a non-owner -- or by no actor at all, at MATTER -- only as `destroy's cascade`:
         the edge names an id THE SAME WRITE removed. `write` observes the removal (the id is in a
         collection before `apply()` and absent after), so the closures below and the `pop` below
         must stay in one `apply()`. Split them across two writes and every closure is refused."""
+        if not self.gate.is_open:
+            raise InstrumentDefect(
+                f"World.remove_person({who!r}) was called with no gate write open. AX-4 (`04:115`, "
+                "'one write path that applies the write and returns a receipt') requires every "
+                "mutation to happen inside `World.write`'s window -- call this from inside an "
+                "effect's `Change` (`_eff_kill`/`_eff_march`'s own pattern: return a `Change` whose "
+                "`perform()` calls `w.remove_person(...)`) or a `world.write(..., apply=lambda: "
+                "w.remove_person(...))` closure (`loop/matter.py`'s own pattern), never bare. This "
+                "is a CALL-SITE BUG, exactly `NoToken`'s reasoning (`state/gate.py`): whoever called "
+                "this was never handed an open write to mutate inside of.")
         for t in list(self.tenures):
             if (t.subject == who or t.object == who) and t.live:
                 t.until = self.tick

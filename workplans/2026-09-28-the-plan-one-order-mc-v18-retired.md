@@ -277,8 +277,8 @@ census, not the phase number, decides whether it may run beside a Phase-1 item.
 | 3 | **`2-i` RET-SC (stub)** | `contest_legacy_stub.py` + its export ripple; the seam-import detector's one-hop falsifier | **DONE** (stub pre-existing, falsifier planted) | — |
 | 4 | **`28-i` (M5)** | port `tools/balance_oracle.py` onto the season harness; retire `campaign_output_probe.py`, `trace_execution_phases.py` and the execution-map cluster | **DONE** (§8.5) | — |
 | 5 | **FIGHT-RENAME** | `kill / wound` → `fight`: one row key + one alignment key + re-pins; a declared hash move | **DONE** (§8.6) | — ; **before `8`**; never interleaved with `8`, `9` or the cells commit (`§3.9` edge 10) |
-| 6 | **OPENERS-DERIVE** `[L1]` | derive the `openers:` roster from the `@effect_for` registry, or guard their equality | OPEN | — ; before any Phase-2 effect lands |
-| 7 | **GATE-REMOVE-PERSON** `[L1]` | route `World.remove_person` through `World.write`; a declared hash move | OPEN | — ; shares `loop/matter.py` with `24f`'s build — serial |
+| 6 | **OPENERS-DERIVE** `[L1]` | derive the `openers:` roster from the `@effect_for` registry, or guard their equality | **DONE** (§8.8) | — ; before any Phase-2 effect lands |
+| 7 | **GATE-REMOVE-PERSON** `[L1]` | route `World.remove_person` through `World.write`; a declared hash move | **DONE** (§8.8) | — ; shares `loop/matter.py` with `24f`'s build — serial |
 | 8 | **`13` W28-cast** | the `cast:` blocks and their reader in `build_at`; the harness loader's count | **DONE**, narrowed scope — 5 of 46 NPC cases (§8.7) | — ; precondition of `17` and of `ED-FI-0009` |
 | 8a | **`13d-i` item (5)** | `offices.yaml` + its `harness/populated.py` wiring; the `titles` fold | OPEN | — ; before `18a` (placed by the author, §2.3) |
 | 9 | **`18` PROC-A** | re-host the 28 stress tests; `world_q.judging_set`; `convene` + the `rank` stem; `arrangements.yaml` through the one loader; D-6/D-7 as swept fixtures | OPEN | — (SC lane); a hard dependency of `18a` and `19` |
@@ -1525,6 +1525,91 @@ structured YAML read, not through that file's literal bytes).
 hunk from position `6` (OPENERS-DERIVE, `44 -> 43` load-time-raise count) when this position started
 editing it. `git add -p` staged only this position's appended test function; the other hunk was left
 unstaged, untouched and uncommitted, for that position's own session to land.
+
+---
+
+### 8.8 · Made at positions `6` and `7`'s execution — OPENERS-DERIVE and GATE-REMOVE-PERSON
+
+**6 · OPENERS-DERIVE.** DERIVE, not guard, per this position's own stated test — deriving needed no
+change to `effects.py` at all. `rosters.yaml`'s `tenure_kinds.openers` mapping is deleted (the "hole"
+prose is kept as a comment, not a data key). `data/verbs.py::_derive_openers_from_effects` is the new
+single owner: an AST walk over `loop/effects.py`'s own source (read as TEXT via a new
+`files.EFFECTS_PY` constant, never imported — no `data` → `loop` import edge), finding every
+`@effect_for("<verb>")`-decorated function and every `Tenure(...)` construction inside it, reading
+`kind` as a string literal (positional arg 3, or a `kind=` keyword — every site today uses the
+positional form). MEASURED against the mapping it replaced, before deleting it: byte-identical —
+`hold: [confer, create_record]`, `contain: [move]`, the other five kinds empty (a standalone dry run
+printed the derived dict and it matched `rosters.yaml`'s old values exactly, verb for verb).
+
+Loader invariant 6's second half kept its `_stray` check (an opener naming a verb `verb_table.yaml`
+does not have) unchanged in shape, now reading the derived dict. Its SIBLING check —
+`set(_openers) != set(TENURE_KINDS)` — is DELETED rather than kept unreachable: the derivation seeds
+every `TENURE_KINDS` member with an empty list before it reads anything, so the failure mode that
+check tested (a kind with no `openers:` entry) is impossible by construction now, and `CLAUDE.md`
+§0.1 pt 2 forbids keeping an assertion that cannot observe the failure it excludes. That is one fewer
+`raise SystemExit` across the model set — 44 → 43 — recorded as a dated history line in both
+`test_h115_the_fourteen_load_time_raises_are_unchanged`'s docstring and its pinned `assert total ==`,
+in the same commit (`CLAUDE.md` §8; a pinned count that moves without its own history line is how a
+`raise SystemExit` audit trail rots).
+
+**7 · GATE-REMOVE-PERSON.** `World.remove_person`'s own docstring already conceded the gap precisely:
+*"the property holds today only because every current caller ... is careful ... it is a discipline
+... not a guarantee the gate enforces."* Made mechanical with the SMALLEST change that satisfies the
+position's own constraint — never a second, nested `world.write(...)` call, because `remove_person`
+does not itself declare a `(kind, field)` pair and every caller already reaches it from inside its own
+open write. The fix reads `self.gate.is_open` (`state/gate.py::Gate`, already public, already true for
+exactly the span `World.write` holds a window open around `apply()`/`change.apply()`) as the function's
+first line, and raises `InstrumentDefect` — the same taxonomy class as `NoToken`, on the same
+reasoning: a missing window is a CALL-SITE BUG, not the design refusing a case. This makes AX-4
+(`04:115`, "one write path") hold BY CONSTRUCTION for this function, closing the gate-bypass half of
+`H-152` (the register's own `cite:` field carries the closure note, dated, beside the still-open
+emission gap it does not touch — never silently overwritten) and turning the abandoned AX-4 setter
+scan (`HANDOFF_IN.md`'s `S2`) into a CONVENTION duplicate of a now-mechanical check, without
+un-abandoning it.
+
+**Read fresh, all three current callers, before deciding the shape:** `_eff_kill`
+(`loop/effects.py`, `Change.perform` calls `w.remove_person`), `_eff_march` (same shape, added in the
+M4 review pass's correctional round — the docstring's stale "TWO CALLERS" was corrected to "THREE" in
+the same edit), and `loop/matter.py`'s `w.write("exists", token, lambda pid=pid:
+w.remove_person(pid), ...)`. A fourth and fifth call site exist only in test/probe code
+(`harness/probes.py`'s P24, `test_season_shape.py`'s partition-seam test), both already wrapping the
+call in `w.write(...)`. **No change was needed at any of the five** — the check is satisfied by every
+one of them today, which is the whole point: it converts a property that held by caller care into one
+that holds by construction, with no behaviour change for any existing caller.
+
+**No hash move, verified rather than assumed, against the position's own anticipation that one might
+be needed.** Every existing death/`remove_person` test passes UNCHANGED: `test_march.py`,
+`test_g3_not_yours.py`, `test_governance_build.py`, `test_g2_token.py` (104 passed together), and
+`test_season_shape.py` run whole BEFORE this position's edit (207 passed, confirming `6` alone) — the
+new falsifier/control pair (below) is what actually exercises the new check, and nothing in the tree
+reaches `World.content_hash()` any differently, because the check only ever fires on a path that does
+not exist yet (no sixth caller). A declared hash move records a VALUE that changed; here nothing did,
+and saying so plainly is `CLAUDE.md` §0.1 pt 3's own discipline against manufacturing a claim to match
+an instruction's anticipation.
+
+**The falsifier and its control, both executed, one new file:**
+`engine/season/tests/test_gate_remove_person_requires_an_open_write.py` — (1) a bare
+`w.remove_person(...)` with no write open raises `InstrumentDefect` and mutates nothing (the check is
+the function's first line, checked by asserting the victim's edges are still live and the person is
+still present after the raise); (2) the same call wrapped in `loop/matter.py`'s own pattern
+(`w.write(..., apply=lambda: w.remove_person(...))`) still succeeds, unchanged — 2 passed.
+
+**Concurrency note, symmetric to `8`'s own (above).** A full `test_season_shape.py -q -n auto` run
+taken AFTER this position's edits, to re-verify `7`'s `world.py` change, raced a THIRD concurrent,
+uncommitted position in the shared tree (`8a`, `13d-i` item 5 — `engine/season/data/rosters.py`,
+`harness/populated.py`, the new `offices.yaml`, none of them touched by this position): 206 passed, 2
+failed, neither traceable to this diff. (a) `test_h115_the_fourteen_load_time_raises_are_unchanged`'s
+pinned `assert total == 43` read 44, because `8a`'s own new `raise SystemExit`
+(`data/rosters.py::_load_offices`, "offices.yaml not found") was sitting uncommitted beside this
+position's `44 → 43` bump at the moment the full file ran — `git diff --stat HEAD --
+engine/season/tests/test_season_shape.py` for this position's own change is a clean, isolated
+16-line hunk (confirmed AFTER position `8`'s own commit, `9cb7e22`, had already landed), and the test
+passes in isolation once `8a`'s dirty files are set aside. (b)
+`test_w15_the_run_cases_entrypoint_writes_nothing`'s fingerprint sweep caught `harness/populated.py`'s
+mtime changing mid-run — `8a`'s own in-progress edit, live in the same window. **Whichever of `7` and
+`8a` commits second must bump the pinned count once more** (43 → 44, with its own dated history
+line) — the same shape `8`'s own concurrency note already recorded once, one position earlier, and
+not something either session can close alone in a shared tree.
 
 ---
 

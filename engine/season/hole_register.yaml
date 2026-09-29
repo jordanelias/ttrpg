@@ -3234,9 +3234,35 @@ rows:
       happens inside. What IS real is the missing `person.died` Event, which is this row.
       FALSIFIER, TO BE WRITTEN: sweep `field_casualty_model=\"total\"`, fold a real march to
       `Lost`, and show no `person.died` Event names the removed person's id in the round's
-      events, while `w.persons` no longer contains them."
+      events, while `w.persons` no longer contains them.
+
+      ⚠⚠ THE GATE-BYPASS HALF THIS CITE NAMES IS CLOSED, 2026-09-29, `GATE-REMOVE-PERSON` (plan
+      position 7, `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` §3.1 item 7). The
+      passage above is CORRECT AS WRITTEN and is left standing rather than edited: `remove_person`
+      still mutates directly and still never calls `w.write` -- that description is unchanged.
+      What changed is that the property it describes (every caller reaches this function from
+      inside its own already-open write) is now MECHANICAL rather than a discipline the two-then-
+      three callers happened to keep: `remove_person`'s own first line reads
+      `self.gate.is_open` (`state/gate.py::Gate`, true for exactly the span `World.write` holds a
+      write window open) and raises `InstrumentDefect` on a bare call, making AX-4's `one write
+      path` (`04:115`) hold BY CONSTRUCTION for this function instead of by caller care. This is
+      NOT a second, nested `world.write(...)` call -- the note above is right that one would be a
+      write inside a write -- it is a refusal of the one failure mode caller discipline could not
+      catch on its own: a future call with no write open at all. Falsifier and control, both run:
+      `engine/season/tests/test_gate_remove_person_requires_an_open_write.py`. MEASURED, not
+      assumed, that nothing else moved: every death/`remove_person` test in `engine/season/tests`
+      (`test_march.py`, `test_g3_not_yours.py`, `test_governance_build.py`, `test_g2_token.py`,
+      `test_season_shape.py` in full, including its P24/P25 probes and the partition-seam test)
+      passes unchanged, and `World.content_hash()` moves for no seeded run, because every one of
+      the five call sites in the tree today (`_eff_kill`, `_eff_march`, `loop/matter.py`, and the
+      two probe/test falsifiers that already wrap the call in `w.write(...)`) already satisfies
+      the new check -- there is no declared hash move to record because nothing that reaches
+      `content_hash` changed. THE MISSING `person.died` EVENT THIS ROW NAMES IS UNCHANGED AND
+      STILL OPEN; this closure is the gate-bypass half only, per this position's own scope, not
+      `H-152` whole."
     source:    "M4 review pass (`valoria-critic`, second correctional round), on
-      `loop/effects.py::_eff_march`'s own `remove_person` fix from the first correctional round"
+      `loop/effects.py::_eff_march`'s own `remove_person` fix from the first correctional round.
+      The gate-bypass closure note is `GATE-REMOVE-PERSON`, plan position 7, 2026-09-29."
 
 
 discharges:
