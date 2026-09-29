@@ -127,7 +127,7 @@ rows:
     steps:   [CAL, RES]
     class:   "CALENDAR/ACTS"
     social:  "false"
-    by:      "DR-3 · §24 *\"dockets form\"*, no actor"
+    by:      "DR-3 · §24 *\"dockets form\"*, no actor. ⚠ PLAN POSITION `19`: the RES cell has its first two producers -- `open_case` puts a matter ON the docket (`{date: None, matter: <subject>}`) and `determine` takes it OFF (the item's `matter` written back to `None`), both through their own effects (`loop/effects.py`). CALENDAR still forms the actorless empty slot."
     emits:   "`docket.formed`"
   - kind:    "Office"
     field:   "exists"
@@ -343,6 +343,7 @@ rows:
     social:  "true"
     by:      "DR-2"
     emits:   "`tenure.graded`"
+    unproduced: "H-162: plan position `19` took `Tenure.degree` off `determine`, its only declared writer, which never wrote it -- an UNCONTESTED determination grades nothing (`loop/resolve.py::_fold`: an uncontested act carries no degree). The graded disposal is the CONTESTED determination (`04_VERBS.md` §B.2's degree-keyed row, proceedings PHASE 2 steps 13-15)"
   - kind:    "Tenure"
     field:   "payload"
     steps:   [RES]

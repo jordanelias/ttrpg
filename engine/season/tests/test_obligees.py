@@ -94,7 +94,12 @@ def test_17a_oblige_is_resolvable_and_takes_releases_route():
     assert "oblige" in EF.EFFECTS and "oblige" in REQUIRES_PREDICATES
     assert row.requires_typed is None, "a typed cell AND a predicate is two readings of one cell"
     assert row.emits == ("duty.taken",) and row.emits_on_refusal == ("duty.refused",)
-    assert _OPENERS_FROM_EFFECTS.get("oblige") == ["oblige"], _OPENERS_FROM_EFFECTS.get("oblige")
+    # ⚠ `["oblige"]` UNTIL PLAN POSITION `19`, WHICH ADDED THE SECOND OPENER DELIBERATELY: `determine`'s
+    # disposal is an `oblige` owned by the party on the judging seat (`_eff_determine`), and the
+    # derived opener map is what `21_RECONCILIATION.md` C-1's report reads (`test_u7_remit.py`). The
+    # joiner's own opener is still here, and it is still the only `own`-eligible one.
+    assert _OPENERS_FROM_EFFECTS.get("oblige") == ["determine", "oblige"], (
+        _OPENERS_FROM_EFFECTS.get("oblige"))
 
 
 def test_17a_an_oblige_opens_its_tenure_and_the_query_reads_it(monkeypatch):

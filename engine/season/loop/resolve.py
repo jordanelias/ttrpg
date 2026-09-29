@@ -25,7 +25,7 @@ from ..data.rosters import STRATA
 from typing import Optional
 from ..data.matrix import Step, matrix_row
 from ..data.requires import UNKNOWN, Verdict, binding_from_act, evaluate
-from ..data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow
+from ..data.verbs import ELIGIBILITY_CLAUSE, NO_PRECONDITION, VERB_TABLE, WRITE_CLAUSE, VerbRow
 from ..gaps import Forbidden, Unspecified
 from ..loop.effects import EFFECTS
 from ..loop.predicates import REQUIRES_PREDICATES
@@ -189,10 +189,17 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
     `emits_on_refusal` is what a reader sees, the act still cost a scene, and the distinction
     between a LOSS (the contest ran and went against you) and a REFUSAL (it never ran) is the
     one the row's degree bands were built to keep."""
+    # ⚠ PLAN POSITION `19`: EVERY REFUSAL BELOW IS `row.refusal_for(<clause>)` -- `04 §C.4`'s own
+    # spelling, `emit(row.refusal_for(ELIGIBILITY))` / `emit(row.refusal_for(failed_conjunct))`.
+    # On a FLAT row it is `row.emits_on_refusal`, byte for byte what these lines emitted before; on a
+    # KEYED row (`data/verbs.py`, invariant 4's per-conjunct half) it is the failing clause's own kind,
+    # so a refusal says WHICH clause refused -- the gap `★` measured on `confer`/`establish`/`revoke`,
+    # whose refusals *"carry no conjunct"*.
     if not self._eligible(w, a, row):
         TRACE.decision(f"{a.actor} is not eligible for {a.verb}", "E4",
                        chose="emit the refusal", alternatives=["raise", "silently drop"])
-        return (False, row.emits_on_refusal or ("act.ineligible",), Verdict(UNKNOWN, ()))
+        return (False, row.refusal_for(ELIGIBILITY_CLAUSE) or ("act.ineligible",),
+                Verdict(UNKNOWN, ()))
     verdict = Verdict(UNKNOWN, ())
     if row.requires.strip() not in NO_PRECONDITION:
         if row.requires_typed is not None:
@@ -262,7 +269,9 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
             TRACE.decision(f"{a.verb} by {a.actor}: precondition unmet", "E2/S27.1",
                            chose="emit the refusal -- scarcity falls out of the fold",
                            alternatives=["raise (no Event, no witness, no arc)"])
-            return (False, row.emits_on_refusal or ("act.refused",), verdict)
+            # `verdict.failed` is the conjunct that decided it (`data/requires.py::evaluate`); a
+            # predicate row and an unnamed cell carry `None`, which only a flat row reaches.
+            return (False, row.refusal_for(verdict.failed) or ("act.refused",), verdict)
     return (True, (), verdict)
 
 
@@ -420,7 +429,7 @@ def _fold(self, w: "World", token: Token, a: Act,
                            chose="emit the refusal, not the success",
                            alternatives=["emit `emits:` anyway (publishes an event for a "
                                          "state change that did not happen)"])
-            return ev(row.emits_on_refusal or ("act.refused",), [a.id])
+            return ev(row.refusal_for(WRITE_CLAUSE) or ("act.refused",), [a.id])
     # The act's proposed changes ride on the success Events -- §27.3's accumulator sums
     # them across the fold and clamps ONCE, which is order-independent as a fact.
     # ⚠ `[a.id]`, NOT `[ROOT]`, AND THIS WAS THE SUBSTRATE OF THE WHOLE NARRATIVE CLAIM.
@@ -866,7 +875,9 @@ def _refuse_after_the_fact(self, w: "World", out: list, act_ids: list) -> None:
         a = self.act_of[out[at[0]].id]
         row = VERB_TABLE.get(a.verb)
         first = out[at[0]]
-        refusal = _act_events(w, a, row.emits_on_refusal or ("act.refused",), [a.id],
+        # `WRITE_CLAUSE` (plan position `19`): the accumulator's write moved nothing, which is F9's
+        # refusal one step later -- the same clause a declining effect refuses at.
+        refusal = _act_events(w, a, row.refusal_for(WRITE_CLAUSE) or ("act.refused",), [a.id],
                               degree=first.degree, observed=first.observed)
         for i in at:
             self.act_of.pop(out[i].id, None)

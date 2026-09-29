@@ -68,7 +68,8 @@ from .state.carriers import Event, Person
 from .state.world import World
 
 
-def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict) -> bool:
+def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
+                       via: "str | None" = None) -> bool:
     """§F1 clause 4 -- is `requires(verb)` KNOWN-FALSE from `p`'s OWN claims?
 
     ⚠ THE ASYMMETRY IS THE WHOLE POINT AND MUST NOT BE SOFTENED TO "requires holds". This returns
@@ -103,11 +104,18 @@ def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict) 
     from the fold and getting a defensible-looking answer to the wrong question. `operands` is the
     same bag the Act will carry, passed through the same `binding_of`, so the two sides now differ
     only in WHAT THEY READ (one ledger, one world) and in POLARITY -- which is the difference
-    that is supposed to be there."""
+    that is supposed to be there.
+
+    ⚠ PLAN POSITION `19`: AND THE SEAT, FOR THE SAME REASON. `via` is the seat the Candidate's act
+    will be exercised through -- `decision/options.py::exercised_seat`, the value `pack_scenes` puts
+    on `Act.via` -- and `binding_of` carries it exactly as `binding_from_act` does for the fold, so a
+    `basis` conjunct (§F.24a form 7, `data/requires.py::Basis`) asks the person's ledger about THE
+    SAME seat the fold will ask the world about. Omitted (`None`), the conjunct is UNKNOWN, which
+    contradicts nothing -- the pre-`19` answer for every caller that passes none."""
     if (row.requires or "").strip() in NO_PRECONDITION:
         return False
     return evaluate(row.requires_typed, LedgerReader(p.ledger),
-                    binding_of(p.id, operands)).value is False
+                    binding_of(p.id, operands, via)).value is False
 
 
 def act_refs(a) -> list:

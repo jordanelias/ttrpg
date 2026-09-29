@@ -58,7 +58,7 @@ from ..data.rosters import (
 
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from ..loop.predicates import office_described_by
-from ..queries.world_q import hold_force, holder_faction_of, home_of, upkeep_of
+from ..queries.world_q import docketed, hold_force, holder_faction_of, home_of, upkeep_of
 from ..state.carriers import Proposition, Record, Tenure, Term
 from ..state.gate import NO_CHANGE, Change, Subject, may_renew
 from ..state.ids import H
@@ -583,28 +583,156 @@ def _mint_document(w: "World", a: "Act", kind: str, content, rung: str) -> Chang
     return Change((Subject.entity("records", rid),), perform)
 
 
+def _seat_rung(w: "World", a: "Act") -> str:
+    """WHERE A SEAT-BORNE DOCUMENT IS DRAWN UP: the rung of the seat the act exercises (r2 `03`
+    §A.10 -- *a seat-borne act draws on the SEAT's rung, and that is `Act.via`'s job*). `Record.rung`
+    is required, so the answer is decided here rather than defaulted: the seat named by `Act.via`.
+    A seat with no rung (an office-cluster, `rung? = null`, S6.2) has no place to draw a document up
+    in -- and a hand-built act may name no seat at all -- and only then does the mint fall back to
+    `create_record`'s own reading of the act, the one existing default rather than a new one.
+
+    ⚠ FACTORED AT PLAN POSITION `19` OUT OF `_eff_issue`, WHERE IT WAS THREE INLINE LINES, BECAUSE
+    `_eff_open_case` DRAWS ITS CASE FILE UP THE SAME WAY (§8). For both, the fallback is now
+    unreachable from an ADMITTED act: each row's `purview` conjunct (`data/requires.py::Basis`)
+    refuses a rungless seat -- a cluster seat has purview nowhere -- so a seat that reaches the
+    mint always has a rung. It stays for the hand-built act that skips the precondition."""
+    seat = w.offices.get(a.via) if a.via else None
+    d = a.payload if isinstance(a.payload, dict) else {}
+    return seat.rung if seat is not None and seat.rung is not None else (d.get("rung") or a.actor)
+
+
 @effect_for("issue")
 def _eff_issue(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """§37.1: a DISPENSATION IS A `Record` OF KIND `dispensation`, minted with the issuer's `hold`
     -- r2 `02` §A.3's schema `{terms, to, at}`: the OUGHT it carries (the act's `subject`), the
     executors it names (`to`), and where it is discharged (`at`, absent unless declared).
 
-    ⚠ NOTHING REACHES THIS YET, AND THAT IS STATED SO IT IS NOT READ AS `issue` BECOMING REACHABLE.
-    `issue`'s `requires:` is prose with no predicate, so the fold raises before any effect runs and
-    `resolvable_verbs()` excludes the verb (plan position `19` owns the evaluable cell). This body is
-    here so that when the precondition lands, the thing it admits is already the Record kind.
+    ⚠ REACHABLE SINCE PLAN POSITION `19`, WHICH GAVE `issue` ITS EVALUABLE CELL -- the executor
+    exists and is a person, and the issuing seat's purview reaches him (`verb_table.yaml`'s `issue`
+    row). Until then this docstring said *"NOTHING REACHES THIS YET"*: the prose `requires:` had no
+    predicate, the fold raised before any effect ran, and `resolvable_verbs()` excluded the verb.
+    This body is UNCHANGED by `19` but for the rung, factored into `_seat_rung` (`_eff_open_case`
+    draws up the same way): the thing `15` built it to mint is what the precondition now admits.
 
-    WHERE IT IS DRAWN UP: THE ISSUER'S SEAT'S RUNG (r2 `03` §A.10 -- *a seat-borne act draws on the
-    SEAT's rung, and that is `Act.via`'s job*). `Record.rung` is required, so the answer is decided
-    here rather than defaulted: the seat the act was exercised through, read off `Act.via`, which
-    `remit:issue` eligibility requires. A seat with no rung (an office-cluster, `rung? = null`,
-    S6.2) has no place to draw a writ up in -- and a hand-built act may name no seat at all -- and
-    only then does the mint fall back to `create_record`'s own reading of the act, the one existing
-    default rather than a new one."""
-    seat = w.offices.get(a.via) if a.via else None
+    ⚠ A COMPUTED `issue` IS ADDRESSED TO WHAT IT IS ABOUT -- `terms` and `to` both bind the
+    question's one referent (`H-94`'s single-referent limit), so its `terms` names the executor
+    himself: a writ to a man about that man. `petition`'s row records the identical limit for the
+    identical reason, and `15c`'s held-writ `to` is what separates the two when a person holds one."""
+    return _mint_document(w, a, "dispensation", _content_of(a, "dispensation"), _seat_rung(w, a))
+
+
+@effect_for("open_case")
+def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """PLAN POSITION `19` -- A CASE IS OPENED: the matter goes on the docket, and a case file is
+    drawn up at the opening seat's rung. The plan's `19`: *"`open_case` gains `writes:
+    DocketItem.matter` and the world reader a `docket` branch: a proceeding with zero authored acts
+    needs somebody to have put the matter before the room, and no step did that."* CALENDAR forms
+    docket SLOTS (`matter: None`, `loop/calendar.py`) and nothing ever filled one; this is the act
+    that puts a matter before a bench, and `determine`'s docket conjunct is the act that needs it.
+
+    WHAT IT WRITES, IN ONE `apply`:
+      * THE CASE FILE -- `_mint_document`, the one mint (`create_record`/`issue`/`petition`'s), so
+        the row's `Record.exists`/`Record.stages` are written exactly as `create_record` writes them:
+        the act's declared stages, else `H-80`'s default (*"its typed cell declares stages, as
+        `create_record`'s does"*). Kind `text`, with no content: a `case` kind with its own keys is
+        a `record_kinds` member with no reader yet (that roster's own note: a kind lands WITH the
+        reader that needs it), and the matter is carried where it is read -- on the docket.
+      * THE DOCKET ITEM -- `{"date": None, "matter": <subject>}`, `World.docket`'s own shape, with
+        no date because no sitting was convened for it (`convene`'s dates fire VACANT in every
+        computed world: nothing sets a date's holder, so CALENDAR never forms a slot to fill).
+
+    G4 -- WHAT IT NAMES: THE CASE FILE, whole, as `create_record` names its Record; it always moves
+    (a new id). ⚠ THE DOCKET APPEND IS NOT A NAMED SUBJECT AND CANNOT BE ONE: `Subject`'s three shapes
+    are an entity in a `_STATE_COLLECTIONS` member, an edge, and a staged cell, and `docket` is a
+    SEQUENCE (`World._STATE_SEQUENCES`), which the gate has no `get()` for. So the append rides on
+    the Record's receipt, the way `create_record`'s maker's `hold` does -- and, like that hold, a
+    refused write would NOT put it back (the gate restores Tenures only). Two declines therefore come
+    FIRST, before anything is built: a matter ALREADY on the docket (`docketed`, the one owner --
+    it is before the room already, and a second item would let it be determined twice), and an act
+    naming a case-file id that already exists (the only way the mint could be a no-op).
+
+    Where it is drawn up: `_seat_rung`, as `issue`. `via.scope`'s purview reaching the matter is the
+    row's precondition (`Basis`, `purview`), asked before this runs."""
+    matter = _operand(a, "subject")
     d = a.payload if isinstance(a.payload, dict) else {}
-    rung = seat.rung if seat is not None and seat.rung is not None else (d.get("rung") or a.actor)
-    return _mint_document(w, a, "dispensation", _content_of(a, "dispensation"), rung)
+    if docketed(w, matter) or d.get("record") in w.records:
+        return NO_CHANGE
+    made = _mint_document(w, a, "text", None, _seat_rung(w, a))
+    item = {"date": None, "matter": matter}
+
+    def perform() -> None:
+        made.apply()
+        w.docket.append(item)
+    return Change(made.subjects, perform)
+
+
+@effect_for("determine")
+def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """PLAN POSITION `19` -- A DETERMINATION DISPOSES OF A MATTER: it binds the party to the bench,
+    and takes the matter off the docket. `21_RECONCILIATION.md:575`, the plan's corrected observable:
+    *"a determination opens the disposal Tenure on its subject via the seat"*.
+
+    THE DISPOSAL TENURE, AND WHY IT IS THIS ONE -- each choice named with the reading it rejects:
+      * KIND `oblige`. `arrangements.yaml`'s one seeded `disposes:` that is a Tenure kind is
+        `arbitration`'s `oblige`; the other two dispose a `Record`. C-1 (`21_RECONCILIATION.md:167`,
+        RULED A there): *"who owns the Tenure a determiner opens: its SUBJECT ... exactly `confer`,
+        which opens a `hold` whose subject is the conferee"*, and its price, stated: *"the subject
+        may `release` what the finding opened (T-m) ... a convict can discharge his own penance"* --
+        `oblige` is in `release`'s domain, so that price is paid as ruled. The kind is a LITERAL
+        here because `data/verbs.py::_derive_openers_from_effects` reads a `Tenure(...)` site's kind
+        off its string literal (`_eff_commit`'s docstring records what factoring it cost), and
+        that derivation is what `data/arrangements.py::arrangements_without_a_disposal_opener`
+        (C-1's load check, REPORTED) reads: `arbitration` leaves that report with this line.
+        REJECTED: a `hold` on a seat -- `04 §B.7`'s *"conferral: ... determine by <judging seats>"*,
+        a determination FILLING a seat -- because a computed act carries one referent and that
+        reading needs two (whom, and which seat): `confer`'s 100% refusal at `★` is that trap.
+      * OWNED BY THE SUBJECT, the party the matter names -- C-1's owner, and `_eff_oblige`'s edge
+        shape exactly (`subject` a person, `object` a seat).
+      * ON THE SEAT EXERCISED (`via`) -- *"via the seat"*: the party is bound to the bench that bound
+        him, and so joins its `establishment_of` like any obligee. REJECTED: the seat that opened
+        the case -- the docket item does not record it, and adding a key nobody else reads would be
+        a field for one reader.
+      * CARRYING `_eff_oblige`'s TERM (`oblige_term`, `H-159`), declared by THIS act (T-n: *"the
+        opening act declares the terms"*), so a disposal lapses at MATTER like any unpaid service,
+        citing the determination that wound it (AX-5). `None` (the control) opens it with none.
+      * NO `degree`. The row wrote `Tenure.degree` and nothing ever did; an UNCONTESTED act carries
+        no degree -- `loop/resolve.py::_fold`'s own rule, *"`None` on every uncontested act, which is
+        honest: no contest graded it"*. A graded disposal is the CONTESTED determination
+        (`04_VERBS.md` §B.2's degree-keyed row, PHASE 2 steps 13-15), `H-162`'s.
+
+    AND IT TAKES THE MATTER OFF THE DOCKET: every item naming the party is written back to
+    `matter: None` -- the row's `DocketItem.matter` -- so the slot a sitting formed survives and the
+    matter leaves it. That is what makes a second determination of one matter in one fold REFUSE
+    (the docket conjunct reads 0), §27.1's scarcity on a docket as `levy`'s is on a larder.
+
+    TWO DECLINES (`NO_CHANGE` -> `determine.refused` on the `write` clause), both NEGATIONS the
+    grammar cannot spell: the party already owes this seat a live `oblige` (one edge per person and
+    seat -- `_req_oblige` clause 4's rule; a second would list him twice in `establishment_of`), and
+    the party is the actor (a judge does not bind himself; `may_determine` refuses it too).
+
+    G3 -- THE EDGE IS SOMEBODY ELSE'S, AND ITS BASIS IS `determination` (`state/gate.py::
+    may_determine`, the EIGHTH): a judging seat the actor sits in, whose bench's ground holds the
+    party's home. The row's `bench` conjunct asks that same function first, so the fold refuses (and
+    emits) before this runs rather than meeting `NotYours` here. ⚠ The docket write is not a Tenure
+    and the gate does not restore it: were the gate ever to refuse this write, the matter would be
+    off the docket with no edge opened. The shared predicate is what keeps that unreachable.
+
+    G4 -- WHAT IT NAMES: THE EDGE, which always moves (absent -> present)."""
+    party, seat = _operand(a, "subject"), a.via
+    if (seat is None or party == a.actor
+            or any(t.kind == "oblige" and t.subject == party and t.object == seat and t.live
+                   for t in w.tenures)):
+        return NO_CHANGE
+    n = _oblige_term(w)
+    nt = Tenure(H(w.world_seed, w.tick, party, f"oblige:{seat}:{a.id}"), party, seat, "oblige",
+                since=w.tick, term=None if n is None else Term(w.tick + n, a.id))
+    items = docketed(w, party)
+
+    def perform() -> None:
+        w.add_tenure(nt)
+        for item in items:
+            item["matter"] = None
+    return Change((Subject.edge(nt),), perform)
 
 
 @effect_for("petition")
@@ -1227,10 +1355,7 @@ def _eff_transfer(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
     renewed = _renewals(w, a, src.id, dst.id, amount)
 
     def perform() -> None:
-        src.stores = dict(src.stores or {})
-        src.stores[kind] = src.stores.get(kind, 0) - amount
-        dst.stores = dict(dst.stores or {})
-        dst.stores[kind] = dst.stores.get(kind, 0) + amount
+        _shift(src, dst, kind, amount)
         for t, term in renewed:
             t.term = term
     # BOTH SIDES, because §E3 says `transfer` writes `(Rung, stores)` twice -- one per side -- and
@@ -1249,6 +1374,62 @@ def _eff_transfer(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
     return Change((Subject.entity("rungs", src.id, "transfer.made"),
                    Subject.entity("rungs", dst.id, "transfer.made"))
                   + tuple(Subject.edge(t, "term.renewed") for t, _ in renewed), perform)
+
+
+def _shift(src, dst, kind: str, amount) -> None:
+    """MATTER MOVES FROM ONE RUNG'S STORES TO ANOTHER'S, CONSERVED: `src` down by `amount` of `kind`,
+    `dst` up by the same. The one body of every act that moves stores between two rungs -- `transfer`
+    and, since plan position `19`, `levy` -- factored so the W3 audit's lesson is written once:
+    *"six grain left the world and arrived nowhere"* was a transfer that decremented one side and
+    forgot the other. Each store is copied before it is written, as `_eff_transfer` always did, so
+    no other holder of the old dict sees it change. Called only from inside a `Change.apply`: the
+    gate reads both rungs either side of it (G4)."""
+    src.stores = dict(src.stores or {})
+    src.stores[kind] = src.stores.get(kind, 0) - amount
+    dst.stores = dict(dst.stores or {})
+    dst.stores[kind] = dst.stores.get(kind, 0) + amount
+
+
+@effect_for("levy")
+def _eff_levy(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """PLAN POSITION `19` -- A LEVY MOVES A RUNG'S STORES INTO THE LEVYING SEAT'S TREASURY. The row's
+    `scale_note`, *"a levy moves a Rung's stores -- the rung IS the subject"*; the retirement plan's
+    G2 names where it goes, *"treasury = `Rung.stores` at the office's own rung"* -- the rung of the
+    seat the act exercises (`Act.via`), the same treasury `_renewals` pays upkeep OUT of. So a levy is
+    `transfer`'s shape with both sides fixed by the act's seat and subject rather than by the actor's
+    home: `_shift` moves `amount` of `kind` from the levied rung to the seat's rung, conserved.
+
+    ⚠ `writes: [Rung.stores, Rung.stores]`, ONE PER SIDE, AND THAT IS A CHANGE TO THE ROW. It declared
+    ONE, as `transfer` once did, and the W3 audit's lesson is that a one-sided write annihilates
+    matter. The second pair is check-only (class, step, partition), like `transfer`'s.
+
+    WHAT THE ROW'S PRECONDITION HAS ALREADY ASKED, SO THIS DOES NOT: the seat's purview reaches the
+    levied rung (`Basis`, `purview` -- which also refuses a rungless seat, so a seat that gets here
+    has a treasury), and the rung holds `stores(subject, kind) >= amount` (`transfer`'s own form-2
+    cell). §27.1's scarcity is that second conjunct read against the world THIS fold has left: two
+    levies on one larder, and the second finds it short and emits `levy.refused`.
+
+    DECLINES (`NO_CHANGE` -> the row's `write` clause, `levy.refused`): a side that is no rung --
+    the hand-built act that skipped the precondition, `_eff_transfer`'s branch -- and, through G4
+    rather than a line here, a levy of a seat's own rung into itself (both sides one store: nothing
+    moves, `NoOpReceipt`), or of `0`.
+
+    G4 -- WHAT IT NAMES: BOTH RUNGS, levied first, each whole and each earning `levy.taken`, as
+    `_eff_transfer` names its two. NOT a Tenure write, so F3 asks nothing of it: the seat's authority
+    over the rung is the precondition's `purview` conjunct, and the gate never observes stores
+    (`may_renew`'s docstring states the same split)."""
+    # THE TREASURY IS THE SEAT'S RUNG AND NOTHING ELSE -- deliberately NOT `_seat_rung`, whose
+    # fallback (`payload.rung`, else the actor) is where a DOCUMENT may be drawn up; matter levied
+    # through no seat, or a rungless one, has no treasury to go to, and the actor's own person-rung
+    # is not one.
+    seat = w.offices.get(a.via) if a.via else None
+    src = w.rungs.get(_operand(a, "subject"))
+    dst = w.rungs.get(seat.rung) if seat is not None and seat.rung is not None else None
+    kind, amount = _operand(a, "kind"), _operand(a, "amount")
+    if src is None or dst is None:
+        return NO_CHANGE
+    return Change((Subject.entity("rungs", src.id), Subject.entity("rungs", dst.id)),
+                  lambda: _shift(src, dst, kind, amount))
 
 
 def _renewals(w: "World", a: "Act", src: str, dst: str, amount) -> list:

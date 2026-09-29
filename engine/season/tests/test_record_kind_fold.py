@@ -32,10 +32,9 @@ from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.rosters import RECORD_CONTENT, RECORD_KIND_KEYS
 from engine.season.data.verbs import _OPENERS_FROM_EFFECTS, VERB_TABLE
 from engine.season.decision.options import opening_set
-from engine.season.gaps import Forbidden, Unspecified
+from engine.season.gaps import Forbidden
 from engine.season.harness import invariants as I
 from engine.season.harness import probes as P
-from engine.season.loop import predicates as _predicates
 from engine.season.loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from engine.season.loop.effects import EFFECTS
 from engine.season.loop.witness import content_value
@@ -117,13 +116,15 @@ def test_l35_refuses_a_missing_key_an_extra_key_an_unknown_kind_and_a_non_mappin
 # 3 -- WHAT IS REACHABLE, MEASURED
 # ======================================================================================
 
-def test_petition_is_resolvable_and_issue_and_carry_are_not():
+def test_petition_and_issue_are_resolvable_and_carry_is_not():
+    """⚠ RENAMED AT PLAN POSITION `19` from `..._and_issue_and_carry_are_not`: this position gave
+    `issue`'s prose cell its evaluable form (`verb_table.yaml`, `executors` + `authority`), so the
+    effect `15` built is reachable through RESOLVE -- the flip `15`'s own assertion anticipated."""
     rv = resolvable_verbs()
     assert "petition" in rv, "petition has a typed precondition and an effect and is not resolvable"
     assert "issue" in EFFECTS, "issue lost its effect"
-    assert "issue" not in rv, (
-        "`issue` is reported resolvable -- its `requires:` is still prose (position `19`'s), so the "
-        "fold cannot evaluate it and no act may reach `_eff_issue` through RESOLVE")
+    assert "issue" in rv, "`issue` has a typed precondition (position `19`) and an effect (`15`)"
+    assert VERB_TABLE["issue"].requires_typed is not None
     assert "carry" not in rv, "`carry` writes `(DocketItem, matter)` and has no effect (`H-63`)"
     for verb in ("issue", "petition"):
         assert VERB_TABLE[verb].writes == ("Record.exists",), VERB_TABLE[verb].writes
@@ -184,24 +185,30 @@ def test_a_filed_petition_deposits_its_content_in_the_petitioners_own_ledger():
     assert d.resolved, "no act reached RESOLVE"
 
 
-def test_the_dispensation_artifact_runs_with_a_stand_in_precondition_and_not_without(monkeypatch):
+def test_the_dispensation_artifact_runs_through_the_real_precondition(monkeypatch):
     """r2 `05:1245`'s artifact -- *a season log showing a `content:dispensation` claim in the
-    issuer's ledger*. `issue`'s precondition is position `19`'s, so a STAND-IN predicate (always
-    true) is planted for this test only; everything after it is the shipped fold, effect and
-    WITNESS. The control is the unpatched run, which must refuse to evaluate the prose cell."""
-    def choose_for(w):
+    issuer's ledger*. ⚠ PLAN POSITION `19` RETIRED THE STAND-IN THIS TEST PLANTED (an always-true
+    `REQUIRES_PREDICATES["issue"]`, *"for this test only"*, while the cell was prose) and renamed it
+    from `..._with_a_stand_in_precondition_and_not_without`: the shipped cell now runs -- the
+    executor is a person and `off_duke`'s purview reaches his home -- and everything after it is the
+    shipped fold, effect and WITNESS, as before. THE CONTROL moved with it: the unpatched run used
+    to refuse to EVALUATE the prose cell (`Unspecified`); now the same writ through NO seat is
+    evaluated and refused (`issue.unauthorized`), and mints nothing. ⚠ `to` IS ONE ID, NOT A LIST:
+    the cell's `existence` conjunct asks about one executor (the row's `requires_typed_note`); the
+    mint still stores the addressee as a list, which the assertions below read."""
+    def choose_for(w, via="off_duke"):
         def choose(p, v, s, ask_budget):
             if p.id == "p_high":
-                return [P.Act_(w, p, "issue", via="off_duke",
-                               payload={"subject": "prop_x", "to": ["p_low"]})]
+                return [P.Act_(w, p, "issue", via=via,
+                               payload={"subject": "prop_x", "to": "p_low"})]
             return []
         return choose
 
     w = P.tiny_world()
-    with pytest.raises(Unspecified, match="cannot evaluate"):
-        P._run_d(w, choose_for(w))
+    P._run_d(w, choose_for(w, via=None))
+    assert "issue.unauthorized" in [e.kind for e in w.log], [e.kind for e in w.log]
+    assert not [r for r in w.records.values() if r.kind == "dispensation"]
 
-    monkeypatch.setitem(_predicates.REQUIRES_PREDICATES, "issue", lambda w, a: True)
     w = P.tiny_world()
     P._run_d(w, choose_for(w))
     assert "dispensation.issued" in [e.kind for e in w.log]

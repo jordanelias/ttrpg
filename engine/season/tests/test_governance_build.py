@@ -749,6 +749,18 @@ _LEVY_ROW = (
     '    beneficiary: "actor"\n'
 )
 
+# ⚠ PLAN POSITION `19` TYPED `levy` (`transfer`'s form-2 cell plus a `basis` conjunct), and a typed
+# cell's `needs:` ADMITS `to` -- so `beneficiary: to` on `levy` became CARRIABLE and stopped being the
+# dead reference `test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load` plants.
+# That test needs an UNTYPED row, and `forge` is one (`requires: —`, no cell). The two tests above keep
+# `levy`: a missing or off-roster beneficiary is refused whatever the row's cell.
+_FORGE_ROW = (
+    '  - verb:        "forge"\n'
+    '    stratum:     "uncontested_material"\n'
+    '    eligibility: ["own"]\n'
+    '    beneficiary: "actor"\n'
+)
+
 
 def test_lb6d_every_verb_declares_a_rostered_beneficiary():
     """**LB-6d.** `CAT-2`: *"DECLARE IT -- and declare it as a STATIC COLUMN ON `verb_table.yaml`
@@ -817,7 +829,7 @@ def test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load():
     formed, silently, forever."""
     src = _verb_table_text()
     unbindable = src.replace(
-        _LEVY_ROW, _LEVY_ROW.replace('beneficiary: "actor"', 'beneficiary: "to"'), 1)
+        _FORGE_ROW, _FORGE_ROW.replace('beneficiary: "actor"', 'beneficiary: "to"'), 1)
     assert unbindable != src, "the substitution did not apply -- this test is asserting nothing"
     with pytest.raises(SystemExit, match="neither binds nor admits"):
         _load_with(unbindable)

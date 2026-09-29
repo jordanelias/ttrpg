@@ -52,7 +52,7 @@ from .carriers import Office, Receipt, Tenure
 # import-cycle instrument (`tests/valoria/test_import_cycle_game_state_npe.py`) reads a guarded
 # import as an edge like any other. The functions below take the `World` they are handed and name
 # its type as a string only.
-from .containment import descendants, parent_of
+from .containment import ancestry, descendants, home_of, parent_of
 
 
 @dataclass(frozen=True)
@@ -124,6 +124,18 @@ class NoToken(InstrumentDefect):
 # OBLIGEE owns, which is no maturation, no revocation, no conferral and not the owner's act. Both
 # are in `04 §C.2`'s enumeration now, amended inline the same day with the plan position cited.
 #
+# ⚠ PLAN POSITION `19` (U7-remit) ADDED AN EIGHTH, `determination`, AND THE QUESTION IT ANSWERS IS
+# THE ONE THE PLAN'S OWN `19` ENTRY SAID IT COULD NOT ADD ITSELF -- *"a determination that opens a
+# Tenure on another's subject needs that fourth case, and position 6 is the only place the gate's F3
+# branch is written"*. Position 6 wrote it for `confer` (`conferral`), and `19` re-derived whether
+# `determine`'s write is that shape: it is NOT, on all three of `conferral`'s terms at once -- the
+# edge is an `oblige`, not a `hold`; its object is the seat EXERCISED (`via`), which `may_fill`
+# refuses by name (*"exclusive on the SEAT"*); and what licenses it is a BENCH's jurisdiction over
+# the person bound, not a seat's purview over another seat. A reading of `conferral` wide enough to
+# admit it would have to flip its reflexivity, which is a different rule wearing the old name. So it
+# is written here, once, as `may_determine`, and `04 §C.2`'s enumeration is amended inline the same
+# day, with the plan position cited (`conferral`/`handover`/`renewal`'s route).
+#
 # WHAT IS HERE AND WHAT IS NOT. This module owns the JUDGMENT -- which basis, if any, admits one
 # Tenure change -- and the seat-authority rules the judgment composes on (ruling (3)'s revocation
 # rule, ruling (4)'s purview, the conferral-basis test). `World.write` owns the OBSERVATION: it
@@ -177,6 +189,20 @@ RENEWAL = "renewal"
 # are `architecture/meta/01_AXIOMS.md`'s theorem labels, of which only `T-m`/`T-n`/`T-o` are
 # tenure bases, and the obvious next letter for a GIVE, `T-g`, is already that file's OBSTRUCTION.
 HANDOVER = "handover"
+# THE EIGHTH BASIS (plan position `19`, U7-remit): a judging seat's seated holder, exercising that
+# very seat, OPENING an `oblige` on it for the person a determination binds. Named, like `conferral`,
+# for the thing that licenses it -- confer is to `conferral` as determine is to `determination` --
+# and NOT `disposal`, the unratified proceedings design's word for the edge (`21_RECONCILIATION.md`
+# C-1): read cold, *"the disposal basis"* is a licence to throw an edge away, which is the opposite of
+# what it admits (`CLAUDE.md` §4's idempotence test). See `may_determine`.
+DETERMINATION = "determination"
+
+# THE REMIT ACT THAT MAKES A SEAT A JUDGING SEAT -- `H-32`'s swept default, and the `bench_basis` of
+# every seeded `arrangements.yaml` row. ONE OWNER, read by `queries/world_q.py::judging_set` (which
+# carried it as a local literal until `19`) and by `may_determine` below, so *who sits in judgment*
+# cannot mean one thing to the bench and another to the gate. A per-arrangement basis
+# (`judging_set`'s `bench_basis_of(w, matter)`, not built) would narrow it HERE.
+BENCH_BASIS = "determine"
 
 
 def seat_hold(w: "World", actor: Optional[str], via: Optional[str]) -> Optional[Tenure]:
@@ -374,6 +400,76 @@ def may_renew(w: "World", actor: Optional[str], via: Optional[str], off: Office)
     return via == off.id and seat_hold(w, actor, via) is not None
 
 
+def sits_over(w: "World", seat: Office, rung: Optional[str]) -> bool:
+    """THE BENCH'S CONTAINMENT TEST, ONCE: does `seat` sit in judgment over `rung`?
+
+    `H-32`'s ruled default, verbatim in substance: *"an Office ... whose `scope_rung` contains the
+    sitting's rung"* -- `seat.scope_rung` is `rung` itself or one of its ancestors (`ancestry`, the
+    one owner of the walk up), so a seat scoped one rung above still finds it (`21_RECONCILIATION.md`
+    PHASE 2 step 7's own falsifier). Extracted at plan position `19` from `queries/world_q.py::
+    judging_set`'s loop, which now asks it, so the bench `judging_set` lists and the bench the write
+    gate's `determination` basis admits are ONE test (`CLAUDE.md` §8).
+
+    ⚠ `scope_rung`, NOT `rung` -- AND SO NOT `purview_reaches`, AND THE DIFFERENCE IS KEPT, NOT
+    PAPERED OVER. `purview_reaches` asks ruling (4)'s purview of `Office.rung` (`04:330`'s `via.scope`);
+    `judging_set` reads `scope_rung` by `H-32`'s own default, which its methodology-close correction
+    (`judging_set`'s docstring, 2026-09-29) declined to reopen. The two agree on every TITLED seat
+    (`Office.__post_init__` sets `scope_rung = rung` for a titled post) and differ on a ranked,
+    untitled seat with no authored `scope_rung`, which purview reaches and no bench seats. Whether a
+    bench's ground IS its purview is `H-32`'s sweep (*"remit+scope · remit only · scope only"*), not
+    this function's to decide. A rung of `None` is judged by nobody."""
+    if seat.scope_rung is None or rung is None:
+        return False
+    return seat.scope_rung in ancestry(w, rung)
+
+
+def may_determine(w: "World", actor: Optional[str], via: Optional[str], party: Optional[str]) -> bool:
+    """THE DETERMINATION BASIS, AS ONE PREDICATE (plan position `19`): may `actor`, exercising
+    `via`, open an `oblige` on that seat that `party` will own -- bind `party` to the bench?
+
+    Three conjuncts, each the ONE owner of its rule:
+      1. `via` is a JUDGING seat the actor SITS in: `seat_hold` (*"refused the instant the occupant
+         is not seated"*, `04 §B.8`) and its GRANT carries `BENCH_BASIS` -- the snapshot on the
+         hold (`Tenure.granted_acts`, `13e`), exactly what `judging_set` and the fold's `remit:`
+         eligibility read, never the office's live field.
+      2. `party` is a PERSON other than the actor. Only a person owns an `oblige` (`holonic §15`;
+         `_req_oblige` clause 1's lesson from `ED-IN-0211`), and a judge does not bind himself --
+         the occupant is not his own seat's obligee (`_req_oblige` clause 3's rule, one step over).
+      3. the bench's ground holds the party: `sits_over(w, via, <party's home>)`, the SAME test
+         `judging_set` lists a bench by, asked of where the person bound actually lives (`home_of`,
+         the one owner of *where a person is*, moved to `state/` for this) -- `04:330`'s *"purview is
+         asked of the seat, never the actor"*, with the bench's ground as the seat's reach.
+
+    ⚠ WHY A NEW BASIS AND NOT A WIDER READING OF `conferral` -- the question plan position `19`
+    carried in from its own entry (*"a conferral-basis opener"*), re-derived rather than taken on
+    trust. `conferral` admits an opening of a `hold` ON A SEAT OTHER THAN `via`, by `via`'s
+    purview over that seat. This admits an opening of an `oblige` ON `via` ITSELF, by the bench's
+    ground over a PERSON. Kind, object and authority all differ, and `may_fill` refuses the object
+    case by name (*"exclusive on the SEAT"*). Its nearest sibling is `renewal` -- an `oblige` on the
+    seat exercised, by its seated holder -- which may only push an existing term later and never
+    open; this is the opening `renewal` refuses, licensed by judgment rather than by payment.
+
+    ⚠ WHAT IT DOES NOT DECIDE, AND WHERE THAT LIVES -- `may_fill`/`_req_confer`'s split. The DOCKET
+    (was the matter put before the room?) and the QUORUM (is the bench large enough to sit?) are
+    the precondition's (`verb_table.yaml`'s `determine` cell), because the gate observes Tenures and
+    the determination takes the matter off the docket IN THE SAME WRITE -- a licence the write
+    consumes cannot be read after it (`handover`'s problem, which that basis solves only because
+    its licence IS a Tenure). The bench conjunct of the precondition is this function, asked early
+    through `WorldReader`'s `bench` stem, so the fold refuses (and emits) exactly what this refuses
+    (and raises): a precondition with its own copy would surface as `NotYours` killing a season.
+
+    ⚠ `oblige` ONLY, AND NOT `hold`, `commit` OR A `Record`. `arrangements.yaml`'s one seeded
+    `disposes:` that is a Tenure kind is `arbitration`'s `oblige`; the two others dispose a `Record`,
+    which is minted under `T-m` and needs no basis. A disposal of another kind arrives with its row
+    and widens THIS predicate, not the gate's chain."""
+    t = seat_hold(w, actor, via)
+    if t is None or BENCH_BASIS not in t.granted_acts:
+        return False
+    if party is None or party == actor or party not in w.persons:
+        return False
+    return sits_over(w, w.offices[via], home_of(w).get(party))
+
+
 def _moved(t: Tenure, was: Optional[Tenure]) -> Optional[set]:
     """Which of an existing edge's five non-end fields the write changed; `None` for an edge the
     write OPENED. The ends (`subject`, `object`, `kind`) are not listed: rewriting them is refused
@@ -417,10 +513,10 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     `released` is every OBJECT on which the same write ended the actor's own live `hold` under
     `T-m` and has not yet handed it on -- computed by `refuse_unauthored` from the batch it holds,
     because this function sees one Tenure and cannot (see `handover` below). Empty by default, so a
-    caller judging a Tenure alone gets the answer of every basis but `handover` (six, since `17b`
-    built `T-n` and added `renewal`; five before).
+    caller judging a Tenure alone gets the answer of every basis but `handover` (seven, since `19`
+    added `determination`; six since `17b` built `T-n` and added `renewal`; five before).
 
-    THE SEVEN BASES, AND WHAT EACH MAY WRITE -- a basis admits a KIND of change, not any change:
+    THE EIGHT BASES, AND WHAT EACH MAY WRITE -- a basis admits a KIND of change, not any change:
 
       `T-m`       the actor IS the owner -- `was.subject` for an existing edge, `t.subject` for a
                   new one. Anything the owner does to their own edge (`release`, `move`'s legs,
@@ -468,6 +564,16 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                   those obliged to it (`04 §B.7` call 2: *"the size is whatever the holder admits
                   and the upkeep pays"*); a `hold` on the seat is its holder's own seat and a term
                   on it is not this position's.
+      `determination` an OPENING of an `oblige` whose OBJECT is `via` itself and whose owner is
+                  someone other than the actor, by `may_determine` -- `via` is a judging seat the
+                  actor sits in and its bench's ground holds the owner's home. Plan position `19`:
+                  `determine`'s disposal, *"a determination opens the disposal Tenure on its
+                  subject via the seat"* (`21_RECONCILIATION.md:575`). AUTHORITY-BOUND like `T-o`
+                  and `renewal`, and OPENING ONLY: it cannot close, grade, re-grant or touch a term
+                  on an edge that exists (a second sentence on a bound man is a new edge, and the
+                  effect declines one -- one `oblige` per person and seat, `_req_oblige`'s rule).
+                  The term the opening carries is the opening act's declaration (T-n), as
+                  `_eff_oblige`'s is, so it is the edge's own and not a write this basis judges.
 
     ⚠ JUDGED ON THE WORLD THE WRITE LEAVES. `World.write` asks this after `apply()`, so `T-o` and
     `conferral` read `seat_hold` -- is the actor seated in `via`? -- AFTER the effect ran. `04 §B.8`'s
@@ -540,6 +646,13 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
         served = w.offices.get(t.object)
         if served is not None and may_renew(w, actor, via, served):
             return RENEWAL
+    # `19`: THE BENCH'S DISPOSAL. Asked only of an OPENED `oblige` ON THE SEAT EXERCISED -- the one
+    # shape `may_determine` licenses -- so no existing edge, no other kind and no other seat reaches
+    # it. `via is not None` is `may_determine`'s own first conjunct too (`seat_hold`); it is written
+    # here as well so the object test cannot match a `None` object on a malformed edge.
+    if (opened and t.kind == "oblige" and via is not None and t.object == via
+            and may_determine(w, actor, via, t.subject)):
+        return DETERMINATION
     if seat is None:
         return None
     if closed and may_revoke(w, actor, via, seat):
@@ -558,9 +671,9 @@ def refuse_unauthored(w: "World", changes: list, actor: Optional[str], via: Opti
     the edge it refused is as it was (`NotYours`' own raise is `World.write`'s, via `not_yours`).
 
     TWO PASSES, BECAUSE ONE BASIS SPANS TWO TENURES (position 16). The first judges every change
-    on its own -- the six bases that need nothing but the change, the actor, `via` and `gone`
-    (five until plan position `17b` built `T-n` and added `renewal`, neither of which reads
-    another Tenure of the batch).
+    on its own -- the seven bases that need nothing but the change, the actor, `via` and `gone`
+    (five until plan position `17b` built `T-n` and added `renewal`, six until `19` added
+    `determination`; none of the three reads another Tenure of the batch).
     From those verdicts it takes the `handover` licence: the object of every `hold` this actor
     ENDED under `T-m` in this write, counted. The second re-judges only what the first refused,
     now with the licence, and spends one unit of it per `handover` it admits. The two passes are
@@ -622,8 +735,9 @@ def not_yours(refused: list, actor: Optional[str], via: Optional[str], record_ki
               f"same write removed), {HANDOVER} (a `hold` on something that is not a seat, "
               f"opened in the same write that ended the actor's own live `hold` on it -- one "
               f"opening per ending), {T_N} (an actorless closure of an edge whose own declared "
-              f"term has matured), or {RENEWAL} (a live `oblige` edge's term pushed later, by "
-              f"its seat's own seated holder exercising it)",
+              f"term has matured), {RENEWAL} (a live `oblige` edge's term pushed later, by "
+              f"its seat's own seated holder exercising it), or {DETERMINATION} (an `oblige` "
+              f"opened on the judging seat exercised, for a person its bench's ground holds)",
         law="04 §C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner "
             "writes only under a declared basis. Per-verb eligibility enforced this by "
             "CONVENTION until G3; a revocation with no seat in Act.via is refused here, so 'a "

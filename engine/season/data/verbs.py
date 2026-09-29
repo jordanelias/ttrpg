@@ -57,7 +57,7 @@ from dataclasses import dataclass, field, fields
 from typing import Optional
 
 from . import files
-from ..gaps import Forbidden, Unspecified
+from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .matrix import MATRIX, Step
 from .requires import REQUIRES_OPERANDS, TypedRequires, build_typed_requires
 from .rosters import (
@@ -207,6 +207,37 @@ class VerbRow:
     # UNTYPED row (plan position 16, `give`), a `requires_operands` member no Candidate can carry,
     # which makes `opening_set` form none: a second party the grammar cannot yet name.
     counterparty: str = ""
+    # ⚠ THE TENTH COLUMN'S SECOND SHAPE, ADDED AT PLAN POSITION `19` -- `04 §B.13` INVARIANT 4'S
+    # PER-CONJUNCT HALF (F7): *"every failable clause has a refusal kind -- not only a verb with a
+    # `requires`, but each CONJUNCT of it, and any eligibility alternative that can decline."* §C.4's
+    # fold spells the reader: `emit(row.refusal_for(ELIGIBILITY))` and
+    # `emit(row.refusal_for(failed_conjunct))`. A row may declare `emits_on_refusal:` as a MAPPING
+    # from a FAILABLE CLAUSE to its kinds, and this holds it; `emits_on_refusal` above holds the
+    # UNION, so every reader that asks *is this Event one of the row's refusals* (`corpus_run`,
+    # `loop/driver.py`, `loop/deliberate.py`) is unchanged. `writes`/`writes_by_degree` is the
+    # precedent, one column over. Empty = a flat row, whose every refusal emits the flat tuple exactly
+    # as before `19` -- so no row that did not opt in moves by a byte.
+    refusals_by_clause: dict = field(default_factory=dict)
+
+    def refusal_for(self, clause: Optional[str]) -> tuple:
+        """`04 §C.4`'s `row.refusal_for(clause)`: the kinds a refusal AT `clause` emits.
+
+        A FLAT row answers its flat tuple for every clause, which is every row's behaviour before
+        plan position `19`. A KEYED row answers the clause's own kinds -- and a clause it does not
+        key RAISES, because the loader has already required a key for every clause that can fail
+        (`ELIGIBILITY_CLAUSE` if an alternative can decline, each named conjunct, `WRITE_CLAUSE` if
+        the row writes). Reaching this with an unkeyed clause is therefore a FOLD defect -- a new
+        refusal point nobody declared -- and emitting the union instead would publish kinds for
+        conjuncts that did not fail, which is `ID-9` inside the scarcity channel."""
+        if not self.refusals_by_clause:
+            return self.emits_on_refusal
+        if clause not in self.refusals_by_clause:
+            raise InstrumentDefect(
+                f"{self.verb!r} keys its refusals on {sorted(self.refusals_by_clause)} and was "
+                f"refused at {clause!r}, which it does not key. The loader requires a kind for every "
+                f"failable clause, so a clause arriving here unkeyed is a refusal point the fold "
+                f"added without declaring it (04 §B.13 #4, F7)")
+        return self.refusals_by_clause[clause]
 
     def eligibility_kinds(self) -> tuple:
         return tuple(a.split(":")[0].strip() for a in self.eligibility)
@@ -282,10 +313,21 @@ class VerbRow:
         return tuple(self.writes_by_degree[degree])
 
 # Loader invariant 10's verb-row key set, DERIVED from `VerbRow` rather than listed: every field a
-# YAML column fills (the two `*_by_degree` maps are built from `writes:`/`emits:`, not read), plus
-# `domain` (read for `release`, invariant 6) and `source` (every row's provenance column).
-_VERB_ROW_KEYS = (frozenset(f.name for f in fields(VerbRow) if not f.name.endswith("_by_degree"))
+# YAML column fills (the two `*_by_degree` maps are built from `writes:`/`emits:`, and `19`'s
+# `refusals_by_clause` from `emits_on_refusal:`, not read), plus `domain` (read for `release`,
+# invariant 6) and `source` (every row's provenance column).
+_VERB_ROW_KEYS = (frozenset(f.name for f in fields(VerbRow)
+                            if not f.name.endswith(("_by_degree", "_by_clause")))
                   | {"domain", "source"})
+
+# THE TWO FAILABLE CLAUSES THE FOLD OWNS, BESIDE A ROW'S OWN NAMED CONJUNCTS (plan position `19`) --
+# the keys a keyed `emits_on_refusal:` uses for them. `ELIGIBILITY_CLAUSE` is `04 §C.4`'s own
+# `refusal_for(ELIGIBILITY)`: no alternative of the row admitted the actor. `WRITE_CLAUSE` is F9's:
+# the precondition held and the write moved nothing (`NoOpReceipt`, `state/gate.py`) -- an effect
+# that DECLINED, which is a refusal the row must name like any other. Defined here, beside the loader
+# that requires them, and imported by the fold (`loop/resolve.py`) that emits them.
+ELIGIBILITY_CLAUSE = "eligibility"
+WRITE_CLAUSE = "write"
 
 
 def _derive_openers_from_effects() -> dict:
@@ -410,16 +452,27 @@ def _load_verb_table() -> dict:
             flat_emits = tuple(dict.fromkeys(e for v in emits_by_degree.values() for e in v))
         else:
             flat_emits = tuple(raw_emits)
+        # ⚠ `emits_on_refusal:` TAKES TWO SHAPES TOO (plan position `19`, invariant 4's per-conjunct
+        # half). A mapping is keyed by FAILABLE CLAUSE; a sequence is the flat form. The union is the
+        # flat column either way, so every reader of *is this a refusal* sees the same kinds.
+        raw_refusals = r["emits_on_refusal"]
+        by_clause: dict = {}
+        if isinstance(raw_refusals, dict):
+            by_clause = {str(k): tuple(v or ()) for k, v in raw_refusals.items()}
+            flat_refusals = tuple(dict.fromkeys(k for v in by_clause.values() for k in v))
+        else:
+            flat_refusals = tuple(raw_refusals)
         row = VerbRow(name, r["stratum"], tuple(r["eligibility"]), r["requires"],
                       flat, flat_emits,
-                      tuple(r["emits_on_refusal"]), r["grade"],
+                      flat_refusals, r["grade"],
                       str(r.get("scale") or "person").strip(),
                       str(r.get("contests") or "").strip(),
                       by_degree, emits_by_degree,
                       build_typed_requires(name, r.get("requires_typed")),
                       str(r.get("requires_typed_note") or "").strip(),
                       str(r.get("beneficiary") or "").strip(),
-                      str(r.get("counterparty") or "").strip())
+                      str(r.get("counterparty") or "").strip(),
+                      refusals_by_clause=by_clause)
         # THE COUNTERPARTY IS AN OPERAND THE ACT CARRIES, OR IT IS NOTHING. `opening_set` compares
         # it with the person; a name the typed cell does not BIND is absent from every Candidate,
         # so the comparison would pass silently and the rule would be a column nothing enforced.
@@ -595,10 +648,12 @@ def _load_verb_table() -> dict:
         # REFUSAL KIND. A clause can fail if the row has a `requires` cell, or if any eligibility
         # alternative is other than `own` (which cannot decline). Such a row with an empty
         # `emits_on_refusal` would refuse by emitting a kind nobody declared.
-        # ⚠ THE PER-CONJUNCT HALF OF F7 IS NOT ENFORCED HERE. `emits_on_refusal` is one flat
-        # tuple per row, so a multi-conjunct `requires_typed` cell (`restore`, `examine` and
-        # `surveil` carry an `AllOf` of two today) cannot say which conjunct a kind refuses for
-        # without a keyed schema; that schema does not exist.
+        # ⚠ THE PER-CONJUNCT HALF OF F7 IS ENFORCED BELOW SINCE PLAN POSITION `19`, FOR A KEYED ROW.
+        # It said *"NOT ENFORCED HERE ... that schema does not exist"* until `19` built the schema
+        # for its first consumers (`levy`, `open_case`, `determine`, `issue`). A FLAT row is still
+        # checked at row grain only (the block directly below): `restore`, `examine` and `surveil`
+        # carry an `AllOf` of two and one flat kind, which is lawful -- a flat row DECLARES that all
+        # its conjuncts refuse alike -- and moving them is not `19`'s.
         _failable = (row.requires.strip() not in NO_PRECONDITION
                      or any(k != "own" for k in row.eligibility_kinds()))
         if _failable and not row.emits_on_refusal:
@@ -607,6 +662,53 @@ def _load_verb_table() -> dict:
                 f"eligibility other than `own`: {list(row.eligibility)}) and an empty "
                 "`emits_on_refusal:`. 04 §B.13 #4 (F7) -- every failable clause has a refusal "
                 "kind; a refusal with no declared kind is a fabricated emission.")
+        # LOADER INVARIANT 4, PER-CONJUNCT HALF (plan position `19`; `04:465-468`, F7): A KEYED ROW
+        # KEYS EXACTLY ITS FAILABLE CLAUSES. The clause set is DERIVED from the row, never listed:
+        #   * `ELIGIBILITY_CLAUSE`  iff an eligibility alternative can decline (anything but `own`);
+        #   * every NAMED top-level conjunct of its typed cell (`conjunct:`, `data/requires.py`) --
+        #     and a keyed row with a precondition must be TYPED and name EVERY conjunct, because a
+        #     predicate's conjuncts (`REQUIRES_PREDICATES`) live in `loop/`, which this loader may not
+        #     import, so a keyed predicate row is a set of keys nothing here can check;
+        #   * `WRITE_CLAUSE`         iff the row writes (an effect can decline, F9's `NoOpReceipt`).
+        # MISSING is a failable clause with no kind -- the fold would reach `refusal_for` and raise;
+        # EXTRA is a kind for a clause that cannot fail, read by nothing (`ID-13`). A name on a FLAT
+        # row is refused for the same reason: nothing keys it. A CONTESTED row may not key its
+        # refusals yet: the seam's party gap (`loop/resolve.py::_party_gap_refusal`) is a refusal
+        # point this schema has no clause for, and it would emit the union. ONE refusal names every
+        # defect found, so a table edit that breaks three things is told all three.
+        _names = row.requires_typed.conjuncts() if row.requires_typed is not None else ()
+        if by_clause or _names:
+            _expected, _defects = set(_names), []
+            if any(k != "own" for k in row.eligibility_kinds()):
+                _expected.add(ELIGIBILITY_CLAUSE)
+            if row.writes:
+                _expected.add(WRITE_CLAUSE)
+            if not by_clause:
+                _defects.append(f"names conjuncts {list(_names)} and keys no refusal to them")
+            if row.requires.strip() not in NO_PRECONDITION and (
+                    row.requires_typed is None or not row.requires_typed.names
+                    or None in row.requires_typed.names):
+                _defects.append("keys its refusals, so its precondition must be a typed cell with "
+                                "EVERY top-level conjunct named")
+            if row.contests:
+                _defects.append("declares `contests:`, whose party-gap refusal no clause names")
+            if set(_names) & {ELIGIBILITY_CLAUSE, WRITE_CLAUSE}:
+                _defects.append(f"names a conjunct after a fold clause "
+                                f"({sorted(set(_names) & {ELIGIBILITY_CLAUSE, WRITE_CLAUSE})})")
+            _missing = sorted(_expected - set(by_clause)) if by_clause else []
+            _extra = sorted(set(by_clause) - _expected)
+            _empty = sorted(k for k, v in by_clause.items() if not v)
+            if _missing:
+                _defects.append(f"keys no refusal for the failable clause(s) {_missing}")
+            if _extra:
+                _defects.append(f"keys refusals for {_extra}, which is no failable clause of it")
+            if _empty:
+                _defects.append(f"keys an EMPTY refusal for {_empty}")
+            if _defects:
+                raise SystemExit(
+                    f"verb_table.yaml: {name!r} " + "; ".join(_defects) + ". 04 §B.13 #4 (F7), "
+                    "the per-conjunct half -- every failable clause has a refusal kind, and a key "
+                    f"is a failable clause. Its failable clauses: {sorted(_expected)}.")
         out[name] = row
     # -----------------------------------------------------------------------
     # LOADER INVARIANT 6 (`04_CODE_ARCHITECTURE.md` PART D row 15, MECHANICAL at load):

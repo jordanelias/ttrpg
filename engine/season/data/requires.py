@@ -126,6 +126,14 @@ class Verdict:
     exist* failure, one seam over."""
     value: Any
     observed: tuple = ()
+    # ⚠ PLAN POSITION `19` -- WHICH NAMED CONJUNCT DECIDED A VERDICT THAT IS NOT `True`: the first
+    # clause that read False, else the first that read UNKNOWN (`AllOf`'s own precedence: FALSE
+    # dominates UNKNOWN). `None` for a True verdict, an unnamed clause, or a cell with no names --
+    # every row before `19`. It is `04 §C.4`'s `(ok, failed_conjunct) = eval(row.requires, ...)`,
+    # the second half of that tuple, and the fold reads it as `row.refusal_for(failed_conjunct)`
+    # (`loop/resolve.py::_admits`). It is NOT on the Event: which conjunct refused is carried by the
+    # refusal KIND the row keys to it, and `observed` already carries the reads.
+    failed: Optional[str] = None
 
 def _as_number(v):
     """A read coerced to a number, or UNKNOWN. A string is UNKNOWN rather than an error: a ledger
@@ -141,6 +149,12 @@ def _bound(binding: dict, name: str):
     return binding.get(name, UNKNOWN) if binding.get(name, UNKNOWN) is not None else UNKNOWN
 
 COMPARATORS = {">=": lambda a, b: a >= b, "<=": lambda a, b: a <= b}
+
+# THE SEAT AN ACT EXERCISES, AS A BINDING KEY (plan position `19`). Structural like `actor` -- the
+# Act carries it (`Act.via`), the payload never does -- so it is NOT a `requires_operands` member and
+# `binding_of` adds it beside the actor. One spelling for the writer (`binding_of`) and the one
+# reader (`Basis.check`).
+VIA = "via"
 
 REQUIREMENT_TYPES: dict = {}
 
@@ -368,6 +382,75 @@ class OwnLedger(Requirement):
         v = _observe(reader, subj, "claim.held", observed)
         return UNKNOWN if v is UNKNOWN else bool(v)
 
+@requirement_form("basis")
+@dataclass(frozen=True)
+class Basis(Requirement):
+    """§F.24a form 7 -- *a basis lookup on the exercised seat* (`04_CODE_ARCHITECTURE.md:1144`),
+    IMPLEMENTED AT PLAN POSITION `19` (U7-remit). The form was in the closed roster from the start
+    (`rosters.yaml: requires_forms`, `needs: [subject, from, to]`) with no class behind it, because
+    its only live cells -- `confer`'s and `revoke`'s -- stayed on `REQUIRES_PREDICATES`; `_build_clause`
+    refused any cell naming it (*"IN the grammar and has no implementation"*). So this is the
+    grammar's own seventh form given its body, NOT a widening: no form, no operand and no combinator is
+    added. What `19` adds to the vocabulary is two STEMS, below.
+
+    WHY IT IS THE FORM `19` NEEDED. The plan's `19` gives four remit verbs *"a predicate reading
+    `via.scope`"*, and three of them (`levy`, `issue`, `determine`) also need OPERANDS a computed act
+    can carry -- `kind`/`amount`, the executor `to` -- which only a TYPED cell earns
+    (`decision/options.py::operands_for` returns `{}` for an untyped row). A predicate beside a
+    typed cell is two owners of one cell (`test_wa_one_owner_...`, `give`'s and `oblige`'s notes),
+    so without this form the choice was *operands or the seat, never both* -- and `transfer`'s own
+    form-2 cell, which the plan names for `levy`, could not be written at all.
+
+    THE SEAT IS STRUCTURAL, NOT AN OPERAND -- the correction `04_VERBS.md`'s own determine row
+    records (⑵: *"the conjunct binds `subject`; the actor is the acting person by construction and
+    needs no operand"*). `Act.via` is to the binding what `Act.actor` is: carried by the Act itself,
+    never by the payload, and put into the binding by `binding_of`'s `via=` (`04:120` AX-1, *"a seat
+    enters through `Act.via`"*). `via` is NOT a `requires_operands` member and this form does not
+    make it one -- coining it would be *"filling `H-94` by keyword argument"*. An act exercising NO
+    seat binds no `via`, and the clause is UNKNOWN, which the fold refuses (§42.2): that is the
+    plan's own falsifier for `19`, *"any of the five executing with `via=None`"*, made structural.
+
+    THE PREDICATE CARRIES THE SEAT: `f"{basis}:{via}"`, the way `Relation` carries the actor
+    (`held_by:<actor>`). So an Observation of it -- deposited at WITNESS like any other read (`W-B`)
+    -- is an ABSOLUTE fact about one seat and one subject (*`off_duke`'s purview does not reach
+    `R`*), never a seat-relative one a later reader would misapply to a different seat.
+
+    `basis:` NAMES WHICH SEAT RULE IS ASKED, and the rule is the WRITE GATE'S OWN, never a copy
+    (`state/gate.py` -- `_req_confer`/`may_fill`'s one-owner shape): `purview` is ruling (4),
+    `purview_reaches` over the subject's place (`04:330`'s *"purview is asked of the seat exercised,
+    never the actor"*); `bench` is `may_determine`, the `determination` basis's own predicate. Each is
+    a `REQUIRES_STEMS` member, so a misspelt rule refuses at load rather than reading UNKNOWN forever.
+
+    ⚠ OCCUPANCY IS ELIGIBILITY'S, NOT THIS FORM'S -- except where the gate's own predicate asks it.
+    `purview` reads the seat's authority only; that the actor SITS in `via` is `_eligible`'s `remit:`
+    branch (`seat_hold`), which every row using this form admits through. `levy`'s second
+    alternative, `presence:<rung>`, declines unconditionally today (`H-75`); the day it admits, a
+    `purview` read would have to ask `seat_hold` too, and this sentence is where that is written.
+    `bench` does ask it, because `may_determine` is the gate's whole test and is taken whole.
+
+    ⚠ PERSON-SIDE the seat is the one `decision/options.py::exercised_seat` names, passed to the same
+    `binding_of` (`epistemic.belief_contradicts`), so §F1 clause 4 asks the cell the fold asks: a
+    person who has watched `off_duke`'s levy of `R` refused holds `(R, purview:off_duke, False)` and
+    stops forming it -- a belief, not a world read (`LedgerReader`)."""
+    of: str
+    basis: str
+
+    def operands(self) -> tuple:
+        return (self.of,)
+
+    def entity_operands(self) -> tuple:
+        return (self.of,)
+
+    def stems(self) -> tuple:
+        return (self.basis,)
+
+    def check(self, reader, binding, observed):
+        subj, seat = _bound(binding, self.of), _bound(binding, VIA)
+        if subj is UNKNOWN or seat is UNKNOWN:
+            return UNKNOWN
+        v = _observe(reader, subj, f"{self.basis}:{seat}", observed)
+        return UNKNOWN if v is UNKNOWN else bool(v)
+
 @dataclass(frozen=True)
 class AllOf(Requirement):
     """CONJUNCTION, AND IT IS NOT AN EIGHTH FORM. `restore`'s cell is *the site exists AND the
@@ -393,14 +476,23 @@ class AllOf(Requirement):
         return tuple(x for c in self.clauses for x in c.stems())
 
     def check(self, reader, binding, observed):
-        unknown = False
-        for c in self.clauses:
+        return self.decide(reader, binding, observed)[0]
+
+    def decide(self, reader, binding, observed) -> tuple:
+        """`(value, index)` -- `check`'s verdict and the position of the clause that DECIDED it:
+        the first False, else the first UNKNOWN, else `None` (True). Plan position `19`: the
+        per-conjunct half of `04 §B.13` invariant 4 needs to know WHICH conjunct refused, and this
+        is `check`'s own loop returning what it already knew -- one body, so the reads, their order
+        and the short-circuit on False are exactly `check`'s (a second loop could observe
+        differently and move every Event's `observed`)."""
+        unknown_at = None
+        for i, c in enumerate(self.clauses):
             r = c.check(reader, binding, observed)
             if r is False:
-                return False
-            if r is UNKNOWN:
-                unknown = True
-        return UNKNOWN if unknown else True
+                return False, i
+            if r is UNKNOWN and unknown_at is None:
+                unknown_at = i
+        return (True, None) if unknown_at is None else (UNKNOWN, unknown_at)
 
 @dataclass(frozen=True)
 class TypedRequires:
@@ -415,8 +507,33 @@ class TypedRequires:
     invented and `_eff_transfer` would then raise on the very same operands being absent from the
     payload -- a precondition and an effect reading different acts. The values moved to
     `DEFAULT_FIXTURES` (`default_store_kind`, `default_transfer_amount`), unchanged, where the
-    person derives them and the act CARRIES them."""
+    person derives them and the act CARRIES them.
+
+    ⚠ `names` (plan position `19`) -- THE CELL'S TOP-LEVEL CONJUNCTS, NAMED, one per clause of a
+    top-level `all:` (or one for a single clause), `None` where a clause carries no `conjunct:`. They
+    exist for ONE reader, the keyed `emits_on_refusal:` (`data/verbs.py`, loader invariant 4's
+    per-conjunct half), which maps each name to the refusal kind that conjunct emits; the loader
+    refuses a name on a row that keys nothing to it, so a name is never a dead label (`ID-13`)."""
     requirement: Requirement
+    names: tuple = ()
+
+    def conjuncts(self) -> tuple:
+        """The named top-level conjuncts, in order, `None`s dropped."""
+        return tuple(n for n in self.names if n is not None)
+
+    def decide(self, reader, binding, observed) -> tuple:
+        """`(value, failed)` -- the verdict and the NAME of the conjunct that decided a non-True one
+        (`None` if True or unnamed). A top-level `AllOf` reports its deciding clause by position,
+        which `names` turns into the name; a single clause decides alone. Nested conjunctions are
+        one conjunct of their parent: only the top level is named."""
+        req = self.requirement
+        if isinstance(req, AllOf):
+            value, i = req.decide(reader, binding, observed)
+        else:
+            value = req.check(reader, binding, observed)
+            i = None if value is True else 0
+        name = self.names[i] if i is not None and i < len(self.names) else None
+        return value, name
 
     def operands(self) -> tuple:
         return self.requirement.operands()
@@ -456,9 +573,12 @@ def evaluate(req: Optional[TypedRequires], reader, binding: dict) -> Verdict:
     # this block is built on.
     b = {k: v for k, v in (binding or {}).items() if v is not None}
     observed: list = []
-    return Verdict(req.check(reader, b, observed), tuple(observed))
+    # `19`: `decide`, not `check` -- the same reads in the same order (`AllOf.check` IS `decide`'s
+    # first half), plus the name of the conjunct that decided a refusal, for `refusal_for`.
+    value, failed = req.decide(reader, b, observed)
+    return Verdict(value, tuple(observed), failed)
 
-def binding_of(actor: str, operands: dict) -> dict:
+def binding_of(actor: str, operands: dict, via: Optional[str] = None) -> dict:
     """THE ONE BINDING. An actor, plus the operands something carries -- and BOTH READERS BUILD IT
     HERE, which is `W-C`'s whole point.
 
@@ -478,9 +598,19 @@ def binding_of(actor: str, operands: dict) -> dict:
     already holds (`ID-2`).
 
     Operands outside `requires_operands` are dropped: a payload is also where `record`, `stages`,
-    `venue` and `harm` ride, and the grammar's vocabulary is closed."""
-    return {"actor": actor,
-            **{k: v for k, v in (operands or {}).items() if k in REQUIRES_OPERANDS}}
+    `venue` and `harm` ride, and the grammar's vocabulary is closed.
+
+    ⚠ `via=` (plan position `19`) -- THE SEAT THE ACT EXERCISES, STRUCTURAL ON BOTH SIDES FOR THE
+    REASON `actor` IS: `Act.via` for the fold (`binding_from_act`), `exercised_seat(p, row)` for the
+    person (`epistemic.belief_contradicts`). It is read by one form, `Basis` (§F.24a form 7), and
+    is added only when there is one, so a seatless act's binding is byte-for-byte what it was and a
+    `basis` clause over it reads UNKNOWN. It is never taken from the payload: `via` is not an
+    operand, and a payload key of that name would be dropped by the filter above like any other."""
+    out = {"actor": actor,
+           **{k: v for k, v in (operands or {}).items() if k in REQUIRES_OPERANDS}}
+    if via is not None:
+        out[VIA] = via
+    return out
 
 def binding_from_act(a) -> dict:
     """THE RESOLVER'S BINDING -- `Act.payload`, plus the actor.
@@ -493,7 +623,8 @@ def binding_from_act(a) -> dict:
     whatever its author put on the payload, and an author who omits one still gets UNKNOWN and a
     refusal -- which is the polarity §42.2 wants and the reason this is not asserted here."""
     return binding_of(a.actor,
-                      a.payload if isinstance(getattr(a, "payload", None), dict) else {})
+                      a.payload if isinstance(getattr(a, "payload", None), dict) else {},
+                      getattr(a, "via", None))
 
 # `WorldReader` and `LedgerReader` -- the two dispatchers `read()` on the stems below -- live in
 # `shape.py`, not here (see this module's docstring). `REQUIRES_STEMS` is the closed vocabulary
@@ -517,9 +648,15 @@ def binding_from_act(a) -> dict:
 # indistinguishable, which is the silent-wrong-answer shape this file refuses everywhere else.
 # roster-exempt: MECHANISM. These are the grammar's own predicate stems -- what a REQUIREMENT MAY
 # ASK -- not the game's vocabulary; `rosters.yaml` says what the world contains.
+# ⚠ PLAN POSITION `19` ADDED FOUR, EACH A QUESTION A REMIT VERB'S CELL ASKS AND NONE A NEW FORM:
+# `purview` and `bench` are `Basis`'s (§F.24a form 7) two seat rules -- ruling (4)'s purview and the
+# `determination` basis's bench, each the write gate's own predicate read early; `bench.size` and
+# `quorum` are `determine`'s quorum conjunct, a `scalar_threshold` (form 2) of the bench's size
+# against a SECOND READ, `work`'s `floor` shape, so no operand is added to `cardinality` (the
+# widening `21_RECONCILIATION.md` A.1 struck). `WorldReader.read` answers all four.
 REQUIRES_STEMS = frozenset({
     "exists", "stores", "condition", "floor", "contain.path", "held_by", "present_at",
-    "claim.held", "rank",
+    "claim.held", "rank", "purview", "bench", "bench.size", "quorum",
 })
 
 # THE STEMS WHOSE VALUE IS COMPUTED **FROM THE HOLDER'S OWN LEDGER** -- and which therefore MAY
@@ -583,6 +720,12 @@ def _check_shortfall_stem(stem, requires_stems: frozenset, content_stem) -> None
 
 _check_shortfall_stem(SHORTFALL_PREDICATE, REQUIRES_STEMS, RECORD_CONTENT.get("predicate"))
 
+# THE KEY A TOP-LEVEL `requires_typed:` CLAUSE IS NAMED BY (plan position `19`), so a keyed
+# `emits_on_refusal:` can say which refusal kind that conjunct emits. One spelling for the builder
+# above and the verb loader (`data/verbs.py`), which checks the names against the keys.
+CONJUNCT_KEY = "conjunct"
+
+
 def _require_known_stem(stem: str, where: str) -> None:
     """A predicate stem outside `REQUIRES_STEMS` REFUSES AT LOAD rather than reading UNKNOWN
     forever. The three sibling closure checks below already do this for forms and operands; this
@@ -598,6 +741,14 @@ def _build_clause(verb: str, cell: dict) -> Requirement:
     if not isinstance(cell, dict):
         raise SystemExit(f"verb_table.yaml: {verb!r} `requires_typed:` clause is not a mapping: "
                          f"{cell!r}")
+    # ⚠ `conjunct:` IS A TOP-LEVEL NAME ONLY (plan position `19`). `build_typed_requires` strips it
+    # from each top-level clause before this runs; one arriving HERE sits inside a nested `all:`,
+    # which is one conjunct of its parent and cannot have a refusal kind of its own. Refused rather
+    # than ignored: a name nothing can key to is the dead label `ID-13` refuses.
+    if CONJUNCT_KEY in cell:
+        raise SystemExit(f"verb_table.yaml: {verb!r} names a `{CONJUNCT_KEY}:` inside a nested "
+                         f"`all:` ({cell[CONJUNCT_KEY]!r}); only a top-level conjunct can be keyed "
+                         "to a refusal kind")
     if "all" in cell:
         clauses = tuple(_build_clause(verb, c) for c in (cell["all"] or ()))
         if len(clauses) < 2:
@@ -662,4 +813,23 @@ def build_typed_requires(verb: str, cell) -> Optional[TypedRequires]:
     # would read as accepted. `_build_clause` raises on any key the form does not take, so the
     # refusal is already structural -- this comment is here so the next reader knows the absence
     # is a decision and not an oversight.
-    return TypedRequires(_build_clause(verb, cell))
+    # ⚠ PLAN POSITION `19`: EACH TOP-LEVEL CONJUNCT MAY CARRY A `conjunct:` NAME -- stripped here,
+    # before the form is built (a form takes only its own fields), and kept on the cell as
+    # `TypedRequires.names`, which is what a keyed `emits_on_refusal:` maps from. Whether every
+    # conjunct is named, and every name keyed, is the VERB loader's check (`data/verbs.py`,
+    # invariant 4's per-conjunct half), because only the row knows whether it keys its refusals.
+    tops = cell["all"] if "all" in cell and isinstance(cell.get("all"), list) else [cell]
+    names = tuple(c.get(CONJUNCT_KEY) if isinstance(c, dict) else None for c in tops)
+    named = [n for n in names if n is not None]
+    if (any(not isinstance(n, str) or not n.strip() for n in named)
+            or len(set(named)) != len(named)):
+        raise SystemExit(f"verb_table.yaml: {verb!r} names its conjuncts {list(names)}; each "
+                         f"`{CONJUNCT_KEY}:` is a non-empty word, and no two alike -- a keyed "
+                         "`emits_on_refusal:` maps each to ONE refusal kind")
+
+    def strip(c):
+        return {k: v for k, v in c.items() if k != CONJUNCT_KEY} if isinstance(c, dict) else c
+    stripped = ({**cell, "all": [strip(c) for c in tops]} if "all" in cell and tops is cell["all"]
+                else strip(cell))
+    return TypedRequires(_build_clause(verb, stripped),
+                         names if any(n is not None for n in names) else ())

@@ -42,6 +42,14 @@ from ..state.carriers import Person, Question, Site, Tenure
 # and the gate is in `state/`, which may not import this module. The bodies moved down unchanged;
 # these names are the same function objects, so every `world_q.parent_of(...)` call is unaffected.
 from ..state.containment import descendants, parent_of  # noqa: F401 -- re-exported
+# ⚠ AND `ancestry`/`home_of` BY THE SAME ROUTE (plan position `19`, U7-remit): the write gate's
+# `determination` basis asks the bench's containment test of the party's home, so both walks moved
+# down, unchanged. Same function objects; every `world_q.ancestry(...)`/`world_q.home_of(...)` caller
+# is unaffected.
+from ..state.containment import ancestry, home_of  # noqa: F401 -- re-exported
+# `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
+# the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
+from ..state.gate import BENCH_BASIS, may_determine, purview_reaches, sits_over
 from ..state.ids import ROOT
 from ..state.world import World
 from ..trace_log import TRACE
@@ -135,6 +143,28 @@ def hold_force(w: World, obj: str) -> Optional[Tenure]:
                         law="S15 -- `hold` cardinality is 1 PER OBJECT")
     return live[0] if live else None
 
+# The write matrix's name for the carrier `World.docket` holds (`(DocketItem, matter)`) -- the kind an
+# `existence` cell names to ask *is this matter on a docket* (`WorldReader.read`'s `docket` branch).
+DOCKET_KIND = "DocketItem"
+
+
+def docketed(w: World, matter: Optional[str]) -> list[dict]:
+    """THE DOCKET ITEMS NAMING `matter` -- the one owner of *is this matter before a room* (plan
+    position `19`; `21_RECONCILIATION.md` PHASE 2 step 10). Read by the reader's `docket` branch
+    (`exists:DocketItem`, `determine`'s docket conjunct) and by the two effects that write the
+    cell: `open_case` declines a matter already on it, and `determine` takes the matter off it.
+
+    A docket item is a plain dict on `World.docket` (a `_STATE_SEQUENCES` member, so the content
+    hash folds it): CALENDAR forms one per sitting with `matter: None` (`loop/calendar.py`, an empty
+    slot), and `open_case` appends `{"date": None, "matter": <subject>}`. `matter is None` is never
+    docketed -- an empty slot names nothing, and a `None` subject asks about nothing -- so a
+    determination that CLEARS an item's matter (writes it back to `None`) takes the matter off the
+    docket without deleting the slot the calendar formed."""
+    if matter is None:
+        return []
+    return [d for d in w.docket if d.get("matter") == matter]
+
+
 def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]:
     """`H-32`, BUILT -- plan position `18` (PROC-A), `21_RECONCILIATION.md` PHASE 2 step 7 /
     `03_PARAMETERS.md` §D's `bench_basis`. Live holders of a `hold` Tenure GRANTED the bench's
@@ -181,40 +211,30 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
     `off.rung` (always set for a seated office) and would not exclude it. This function reads
     `scope_rung` rather than `rung`/`purview_reaches` by `H-32`'s own ruled default
     (`hole_register.yaml`, H-32), which is precedent this correction does not reopen -- it corrects
-    only the FALSE claim that the two fields' `None` cases coincide, not the choice of field."""
+    only the FALSE claim that the two fields' `None` cases coincide, not the choice of field.
+
+    ⚠ PLAN POSITION `19`: THE TWO RULES THIS LOOP APPLIED ARE NOW NAMED AND OWNED IN `state/gate.py`,
+    UNCHANGED -- the basis (`BENCH_BASIS`, was the local literal `basis = "determine"`) and the
+    containment test (`sits_over`, was `off.scope_rung in set(ancestry(w, venue))`). The write gate's
+    `determination` basis (`may_determine`) asks both of the seat a determination is exercised
+    through, and a bench listed here by one reading and admitted there by another is the
+    disagreement §8 forbids. Same answers: `test_field_deletions.py`/`test_stress_proceedings_
+    rehost.py` pin them, and `ancestry` stays trace-free."""
     TRACE.query("judging_set", "resolver")
-    basis = "determine"
-    reach = set(ancestry(w, venue))
     seats: list[str] = []
     for t in w.tenures:
-        if t.kind != "hold" or not t.live or basis not in t.granted_acts:
+        if t.kind != "hold" or not t.live or BENCH_BASIS not in t.granted_acts:
             continue
         off = w.offices.get(t.object)
-        if off is None or off.scope_rung is None or off.scope_rung not in reach:
+        if off is None or not sits_over(w, off, venue):
             continue
         seats.append(t.subject)
     return seats
 
-def home_of(w: World) -> dict:
-    """`{person id: containing rung id}` for every person with a live `contain` edge.
-
-    ⚠ **THE INVERSE OF `presence`, AND IT EXISTS BECAUSE FOUR SITES HAD ROLLED IT BY HAND.**
-    `presence(w, rung)` answers *who is here*; this answers *where is everyone*, which is the
-    question `harness/populated.py` (twice — the `by_home`/`home_of` index and `census`),
-    `tools/export_npc_roster.py` and `engine/season/tests/test_season_shape.py` were each
-    computing with their own copy of `t.kind == "contain" and t.live and t.subject in w.persons`.
-    That is load-bearing rather than cosmetic: `export_npc_roster.py --check` detects drift by
-    comparing ITS notion of home against the builder's, so the two agreeing by coincidence is the
-    whole point of the check, and `census`'s `largest_building` is asserted in the suite. A change
-    to what counts as home — a dead tenure, a person with two contain edges — had to land in four
-    places with nothing to catch a miss (§8, and the §0.1 pt 5 pattern-defect signature).
-
-    ⚠ LAST WRITE WINS on a person with more than one live `contain`, which `World.add_tenure`
-    does not forbid. That is the incumbent behaviour of every site this replaces, preserved
-    deliberately rather than quietly tightened here."""
-    TRACE.query("home_of", "resolver")
-    return {t.subject: t.object for t in w.tenures
-            if t.kind == "contain" and t.live and t.subject in w.persons}
+# ⚠ `home_of(w)` WAS HERE; IT MOVED DOWN TO `state/containment.py` AT PLAN POSITION `19`, body and
+# `TRACE` line unchanged, and is re-exported by this module's import block (`world_q.home_of is
+# containment.home_of`). The write gate's `determination` basis asks where the PARTY a determination
+# binds lives, and `state/` may not import `queries/`: `parent_of`/`descendants`' G3 route.
 
 
 def place_of(w: World, x: Optional[str]) -> Optional[str]:
@@ -934,39 +954,10 @@ def upkeep_of(w: World, office_id: str) -> int:
     return v
 
 
-def ancestry(w: World, rung_id: str) -> list[str]:
-    """`[rung_id, its parent, ..., the root]` — the containment walk up from a rung.
-
-    ⚠ **IT EXISTS BECAUSE THREE SITES HAD ROLLED IT BY HAND**, which is the same reason and the
-    same remedy as `home_of` above. `parent_of` owns ONE EDGE; every caller that wants the CHAIN
-    was repeating the identical loop — step, guard with a visited set, stop at the root or on a
-    revisit — in `WorldReader._ancestry`, in `conferral_path` (deleted at `18a`), and most
-    recently in `harness/governance_spine.census`. §8: the walk is a rule, and a rule lives once.
-
-    ⚠ **THE VISITED SET IS LOAD-BEARING, NOT DEFENSIVE.** `World.add_tenure` enforces strict
-    ascent on a `contain` edge, so a well-formed world presents no cycle — but `contain_ascends`
-    passes any edge whose endpoints are not both resolvable rungs, so a half-built world can. The
-    three hand copies each carried their own guard and agreed; consolidating keeps that agreement
-    a property of one function rather than a coincidence of three.
-
-    The start rung is INCLUDED, so `len(ancestry(w, r)) - 1` is its depth and a root returns
-    `[root]`. An unknown id returns `[id]` — this reports the containment edges that exist and
-    does not assert the rung does.
-
-    ⚠ **IT DOES NOT `TRACE`, AND THAT IS THE EXTRACTION BEING CORRECT RATHER THAN AN OMISSION.**
-    The first writing called `TRACE.query("ancestry", "resolver")` like its neighbours, and
-    `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte` went red on `TRACE.txt`
-    and `results.json`: `conferral_path` traces its own name and would now have traced twice, and
-    `WorldReader._ancestry` traced nothing and would have started. A helper extracted to remove
-    duplication must be INVISIBLE to its callers -- the moment it emits, consolidating three copies
-    becomes a behaviour change, and the callers own their query names."""
-    out: list[str] = []
-    seen: set[str] = set()
-    cur: str | None = rung_id
-    while cur is not None and cur not in seen:
-        out.append(cur); seen.add(cur)
-        cur = parent_of(w, cur)
-    return out
+# ⚠ `ancestry(w, rung_id)` WAS HERE; IT MOVED DOWN TO `state/containment.py` AT PLAN POSITION `19`,
+# body unchanged, beside `home_of` (above), and is re-exported by this module's import block -- the
+# write gate's `determination` basis asks the bench's containment test, and `state/` may not import
+# `queries/`. `world_q.ancestry is containment.ancestry`; its docstring moved with it.
 
 
 # ⚠ `conferral_path(w, office_id)` WAS HERE AND IS DELETED (plan position `18a`, r2 item 14). It
@@ -1199,6 +1190,16 @@ class WorldReader:
 
     def read(self, subject, predicate: str):
         w = self._w
+        # ⚠ AN UNHASHABLE SUBJECT IS A QUESTION ABOUT NO ONE THING, AND IT REFUSES RATHER THAN CRASHES
+        # (plan position `19`). Every stem below looks the subject up in a keyed store, and a LIST
+        # raised `TypeError` from inside `_admits`, ending the season where the row's refusal should
+        # emit. It is reachable once `issue`'s cell reads `to`: a hand-built writ may name several
+        # executors (r2 §A.3 types the addressee as a list), and a cell that asks about ONE id cannot
+        # say which. UNKNOWN is the grammar's answer to an operand it cannot read (§42.2's polarity).
+        try:
+            hash(subject)
+        except TypeError:
+            return UNKNOWN
         stem, _, arg = str(predicate).partition(":")
         if stem == "exists":
             # An EDGE kind is a `tenure_kinds` member and an OBJECT class is one of `World`'s own
@@ -1213,6 +1214,14 @@ class WorldReader:
             if arg in RECORD_KINDS:
                 r = w.records.get(subject)
                 return 1 if r is not None and r.kind == arg else 0
+            # ⚠ THE `docket` BRANCH (plan position `19`; `21_RECONCILIATION.md` PHASE 2 step 10:
+            # *"a `docket` reader branch so `exists:DocketItem` evaluates"*, whose falsifier is *"the
+            # cell still returns UNKNOWN"* -- and it did: `DocketItem` is a SEQUENCE of dicts, not
+            # one of `_STATE_COLLECTIONS`, so the fallback below read `docketitems` and answered
+            # UNKNOWN in every world). It counts the docket items naming `subject` as their matter,
+            # through `docketed`, the one owner of that question.
+            if arg == DOCKET_KIND:
+                return len(docketed(w, subject))
             attr = arg.lower() + "s"
             if attr in World._STATE_COLLECTIONS:
                 return 1 if subject in getattr(w, attr) else 0
@@ -1295,4 +1304,33 @@ class WorldReader:
             # person address exactly as for any other rung, at rank 0.
             r = w.rungs.get(subject)
             return UNKNOWN if r is None else RUNG_KINDS.index(r.kind)
+        # ⚠ PLAN POSITION `19` -- THE FOUR STEMS OF THE REMIT VERBS' CELLS. The first two are
+        # `Basis`'s (§F.24a form 7, *"a basis lookup on the exercised seat"*): the argument is THE
+        # SEAT (`purview:<via>`), which the form reads off the binding (`Act.via`, structural like
+        # the actor), so each answer is a fact about one seat and one subject. Neither is a rule
+        # of this reader's: each ASKS the write gate's own predicate, so the precondition refuses
+        # exactly what the gate would (`_req_confer`/`may_fill`'s one-owner shape, `CLAUDE.md` §8).
+        if stem == "purview":
+            # Ruling (4), `04:330`: the seat's purview reaches the place the subject is AT --
+            # `place_of`, the one owner of *the rung a thing is at*. A thing with no place (a
+            # Proposition) is reached by nothing, which `purview_reaches` answers `False`.
+            seat = w.offices.get(arg)
+            return UNKNOWN if seat is None else purview_reaches(w, seat, place_of(w, subject))
+        if stem == "bench":
+            # `may_determine`, the `determination` basis whole: the seat is a judging seat the ACTOR
+            # sits in, and its bench's ground holds the subject's home. Actor-relative through
+            # `seat_hold`, which is why this reader holds the one actor it was built for.
+            return UNKNOWN if arg not in w.offices else may_determine(w, self._actor, arg, subject)
+        if stem == "bench.size":
+            # `determine`'s quorum, the LEFT side: how many persons sit on the bench for the
+            # subject's place -- `judging_set`, the one owner of the bench (`H-32`). Distinct
+            # PERSONS, the design's *"members of the bench"*; a seat held twice by one person is not
+            # two members. A subject with no place has no bench to count: UNKNOWN, which refuses.
+            venue = place_of(w, subject)
+            return UNKNOWN if venue is None else len(set(judging_set(w, venue, subject)))
+        if stem == "quorum":
+            # The RIGHT side, a second read on the same subject as `work`'s `floor` is: the fixture
+            # `bench_quorum` (`H-161`), the stand-in for an arrangement's own `quorum:` until a
+            # docketed matter maps to its arrangement row. The same for every subject today.
+            return w.fixtures.get("bench_quorum")
         return UNKNOWN

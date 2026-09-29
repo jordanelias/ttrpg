@@ -629,4 +629,21 @@ DEFAULT_FIXTURES = Fixtures(
     # establishment three times as dear.
     # [JUSTIFIED: engine/season/hole_register.yaml H-158 -- the per-obligee upkeep; ARCH §B.7 declares the field and F.18 its mechanism, and no document gives the amount, so it is injected and swept 0 / 1 / 3]
     default_upkeep=1,                  # `H-158`, swept 0 (control) / 1 (SHIPPED) / 3
+    # `H-161` (plan position `19`, `determine`; `21_RECONCILIATION.md:575`'s observable, *"below
+    # quorum, `determine.refused`"*). HOW MANY PERSONS MUST SIT ON A BENCH FOR IT TO DETERMINE A
+    # MATTER -- the RIGHT side of `determine`'s quorum conjunct (`bench.size >= quorum`, read by
+    # `WorldReader`'s `quorum` stem, the only injection site). QUORUM IN ITS ORDINARY SENSE, the
+    # members a body needs to transact business, and NOT the proceedings design's vote threshold (C-7:
+    # live `commit`s to the disposition >= the quorum), which needs a disposition Proposition the
+    # members commit to and the two grammar entries A.1 declared -- the SC lane's PHASE 2 step 15,
+    # not `19`'s. `arrangements.yaml` owns a real `quorum:` key, required only on `disposal:
+    # declared` rows, and no docketed matter maps to its arrangement yet (`judging_set`'s
+    # docstring), so this is the stand-in for that key, `record_stage_term`'s shape.
+    # `1` is SHIPPED and it is the LOOSEST value, not an argued one: the one seeded arrangement whose
+    # disposal is a Tenure (`arbitration`) has ONE decider, so a bench of one must be able to sit --
+    # `speech_kinds`' *"the loosest floor rather than an authored restriction"* (`arrangements.yaml`).
+    # At `1` the conjunct cannot refuse an actor the bench conjunct admitted (he is himself a member),
+    # which is stated, not hidden: it is observable at `2` and `3`, where a lone judge is refused.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-161 -- the bench quorum; the observable rules THAT a determination below quorum refuses, and no document gives the number for a bench-disposal arrangement, so it is injected and swept 1 / 2 / 3]
+    bench_quorum=1,                    # `H-161`, swept 1 (SHIPPED, loosest) / 2 / 3
 )

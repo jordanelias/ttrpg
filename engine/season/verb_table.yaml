@@ -202,13 +202,45 @@ verbs:
     stratum:     "binding_decision"
     eligibility: ["remit:determine"]
     beneficiary: "none"
-    beneficiary_note: "who a determination FAVOURS is the `judging_set`, which `requires` itself records as *D11, absent*. `none` here is that absence declared, not a reading of the verb."
+    beneficiary_note: "who a determination FAVOURS is the `judging_set`, which `requires` itself records as *D11, absent*. `none` here is that absence declared, not a reading of the verb. ⚠ PLAN POSITION `19`: the bench now EXISTS (`judging_set`, `18`) and the determination binds the party it names (`counterparty:`, below) -- but a finding is taken AGAINST the party and FOR no carrier the Candidate holds (the bench's seat), `revoke`'s and `dispatch`'s shape, so `none` stands."
     requires:    "a fired Date with a DocketItem; judging_set — D11, absent"
-    writes:      ["Tenure.degree"]
+    requires_note: "PLAN POSITION `19` (U7-remit) EVALUATES THIS, AS THE TYPED CELL BELOW, AND THE READING OF EACH HALF IS STATED. *A fired Date with a DocketItem* is read as `existence` of a DocketItem naming the matter -- the proceedings design's own corrected cell (`proposals/2026-09-05-proceedings-subsystem/04_VERBS.md` §B.2: `{form: existence, of: subject, kind: DocketItem}`), which drops the date: in a computed world no date fires with a holder (nothing sets one), so CALENDAR never forms a slot, and `open_case` dockets a matter with no date at all. *judging_set* is two conjuncts: the seat exercised SITS ON THE BENCH for the party (`basis: bench`, the write gate's own `may_determine` -- `judging_set`'s containment test, `H-32`'s default, asked of the party's home), and the bench MEETS QUORUM (`bench.size >= quorum`, the fixture `bench_quorum`, `H-161`). `D11` is `H-32`, built at `18`, so the grade moves `absent` -> `assumption`. The subject must be a PERSON (`party`): the disposal is an edge he owns."
+    requires_typed:
+      all:
+        - form:      existence
+          of:        subject
+          kind:      Person
+          conjunct:  party
+        - form:      existence
+          of:        subject
+          kind:      DocketItem
+          conjunct:  docket
+        - form:      basis
+          of:        subject
+          basis:     bench
+          conjunct:  bench
+        - form:      scalar_threshold
+          of:        subject
+          scalar:    "bench.size"
+          threshold_predicate: quorum
+          conjunct:  quorum
+    requires_typed_note: "FOUR CONJUNCTS, EACH NAMED FOR THE KEYED REFUSAL IT EMITS, IN THE ORDER A READER CAN TELL THEM APART. `party` -- the matter is a person (only a person owns an `oblige`). `docket` -- somebody put the matter before the room (`open_case`, `19`'s other half), read through `world_q.docketed`, the reader's `docket` branch. `bench` -- `Basis` (§F.24a form 7, `data/requires.py`) with the `bench` rule: the SAME predicate the write gate's `determination` basis asks, so the fold refuses (`determine.unauthorized`) exactly what the gate would raise on. `quorum` -- `scalar_threshold` (form 2) of `bench.size` against the SECOND READ `quorum`, `work`'s `floor` shape: the bench's distinct seated members against the fixture, with NO operand added to `cardinality` (`21_RECONCILIATION.md` A.1 struck that as a widening) and NOTHING STORED (C-7: *'no stored tally'*; a grep for `count`/`tally`/`quorum_reached` finds no field). ⚠ QUORUM IN ITS ORDINARY SENSE -- the members a bench needs to sit -- NOT C-7's vote threshold (live `commit`s to the disposition), which needs a disposition Proposition and two grammar entries and is `H-161`'s recorded alternative. ⚠ AT THE SHIPPED `bench_quorum = 1` THE QUORUM CONJUNCT CANNOT REFUSE an actor the bench admitted (he is a member): the observable *below quorum, `determine.refused`* is run at 2 and 3 (`tests/test_u7_remit.py`)."
+    counterparty: subject
+    counterparty_note: "PLAN POSITION `19`: THE PARTY IS THE SECOND SIDE (`ED-IN-0210` ruling 1, *a real interaction has a COUNTERPARTY*), and a judge does not bind himself -- `may_determine` refuses it at the fold and the gate. Declined person-side here, on `petition`'s precedent, so a self-determination is never formed: no read the fold makes can teach a person *that is you*, so a refusal would only tax his scenes."
+    writes:      ["Tenure.since", "DocketItem.matter"]
+    writes_note: "⚠ PLAN POSITION `19` REWROTE THIS COLUMN, AND DROPPED A WRITE. It read `[Tenure.degree]` -- a verb that could GRADE an edge and not OPEN one, the defect `04_VERBS.md` §B.2 correction ⑴ names -- and no effect ever wrote it. `21_RECONCILIATION.md:575`'s observable is *'a determination OPENS the disposal Tenure on its subject via the seat'*, so the first pair is `Tenure.since`: `loop/effects.py::_eff_determine` opens an `oblige` owned by the party on the seat exercised, admitted at the gate under the EIGHTH basis, `determination` (`state/gate.py::may_determine`). The second pair is `DocketItem.matter`, check-only: the same effect takes the matter off the docket, so it is determined once. `Tenure.degree` is GONE because an uncontested act carries no degree (`loop/resolve.py::_fold`: *'None on every uncontested act, which is honest'*); the degree-keyed row that grades a disposal is the CONTESTED determination, PHASE 2 steps 13-15, and `write_matrix.yaml`'s `(Tenure, degree)` row now declares `unproduced: H-162`."
     emits:       ["matter.determined"]
-    emits_on_refusal: ["determine.refused"]
-    grade:       "absent"
-    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+    emits_on_refusal:
+      eligibility: ["determine.unauthorized"]
+      party:       ["determine.refused"]
+      docket:      ["determine.refused"]
+      bench:       ["determine.unauthorized"]
+      quorum:      ["determine.refused"]
+      write:       ["determine.refused"]
+    refusal_note: "PLAN POSITION `19`: KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half, F7; `data/verbs.py` checks the keys are exactly this row's failable clauses). Two kinds, split by WHO said no. `determine.unauthorized` -- the SEAT: none exercised grants `determine`, or the one exercised does not sit in judgment over the party. `determine.refused` -- the WORLD: the matter is no person, is on no docket, the bench is below quorum, or the effect found nothing to open (the party already owes this seat an `oblige`). ⚠ `determine.unseated`, the proceedings design's second kind (`04_VERBS.md` §B.2), is NOT taken: read cold it names an Event in which somebody was UNSEATED -- `revoke`'s outcome -- which is the opposite of a refusal; `unauthorized` is the ordinary word for *not permitted by any authority the act carries* (`CLAUDE.md` §4). The design's struck `determine.unheard` (P-23) stays struck."
+    grade:       "assumption"
+    grade_note:  "PLAN POSITION `19`: was `absent` on `D11` (`judging_set` raised unconditionally). `18` built it (`H-32`, graded `assumption`), and the quorum is a swept fixture (`H-161`), so the row is `assumption`, not `ruled`."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed; precondition, disposal, keyed refusals and writes at plan position `19` (`workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` `19 — INSTRUCTION`; `21_RECONCILIATION.md:575`)"
   - verb:        "dispatch"
     scale:   "territory"
     scale_note: "a dispatch sends a person across rungs; its reach is the territory, not the sender"
@@ -302,10 +334,28 @@ verbs:
     eligibility: ["remit:issue"]
     beneficiary: "none"
     requires:    "scope enumerates executors, not places (§37.1)"
-    requires_note: "⚠ STILL PROSE, AND THAT IS WHY `issue` IS NOT RESOLVABLE EVEN WITH AN EFFECT (plan position `15`). The fold raises `Unspecified` on a `requires:` it cannot evaluate (`loop/resolve.py`'s `_gate`), so `_eff_issue` is reached by no act -- computed or declared -- until position `19` gives this cell an evaluable form (r2 `02` §A.6 proposes `commit`'s `existence of subject kind Proposition`). `resolvable_verbs()` excludes it on the same ground. Do not read the effect's existence as `issue` being reachable."
+    requires_note: "⚠ EVALUABLE SINCE PLAN POSITION `19`, AND SO `issue` IS RESOLVABLE (it had the effect since `15`). This note read *'STILL PROSE, AND THAT IS WHY `issue` IS NOT RESOLVABLE EVEN WITH AN EFFECT'*: the fold raised `Unspecified` on the prose and `resolvable_verbs()` excluded the verb. ⚠ r2 `02` §A.6's proposal -- `commit`'s `existence of subject kind Proposition` -- is NOT taken: the prose says nothing about the terms, and a computed act binds `subject` and `to` to the question's ONE referent (`H-94`), so the Proposition conjunct and the executor conjunct could never hold at once and every computed `issue` would refuse -- `confer`'s 100% at `★`, for a clause the row does not state."
+    requires_typed:
+      all:
+        - form:      existence
+          of:        to
+          kind:      Person
+          conjunct:  executors
+        - form:      basis
+          of:        to
+          basis:     purview
+          conjunct:  authority
+    requires_typed_note: "PLAN POSITION `19`. §F.24a calls this cell *'a constraint on the well-formedness of the Act ... refused at construction'* -- and the Act schema does not refuse it, so the fold does, as two conjuncts. `executors` -- *scope enumerates EXECUTORS, not places*: the addressee (`to`, the dispensation's addressee key) exists and is a PERSON, so a writ addressed to a rung is refused. `authority` -- `Basis` (§F.24a form 7) with the `purview` rule: the issuing seat's purview reaches where the executor lives -- the row's `scale_note`, *'its reach is the domain the issuer governs'*, and `04:330`, purview asked of the seat exercised. ⚠ ONE EXECUTOR PER ACT: `existence` reads one id, and `decision/options.py::_from_content_claim` collapses a held writ's addressee list to its one member or declines; a hand-built act naming several is outside what this cell can ask."
+    counterparty: to
+    counterparty_note: "PLAN POSITION `19`: THE EXECUTOR IS THE SECOND SIDE, AND AN ISSUER IS NOT HIS OWN. `petition`'s precedent exactly: its typed cell binds `to`, and `opening_set` forms no Candidate whose `to` is the person -- a writ a man addresses to himself would EXECUTE (he is a person, and his seat's purview reaches his own home) and mint a document that orders nobody, a constant scene tax the fold could never refuse."
     writes:      ["Record.exists"]
     emits:       ["dispensation.issued"]
-    emits_on_refusal: ["issue.refused"]
+    emits_on_refusal:
+      eligibility: ["issue.unauthorized"]
+      executors:   ["issue.refused"]
+      authority:   ["issue.unauthorized"]
+      write:       ["issue.refused"]
+    refusal_note: "PLAN POSITION `19`: KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half). `issue.unauthorized` -- the SEAT: none exercised grants `issue`, or its purview does not reach the executor. `issue.refused` -- the WORLD: the addressee is no person, or the mint moved nothing. `unauthorized` is `determine`'s word for the same refusal, and its note says why it is not `unseated`."
     grade:       "ruled"
     writes_note: "— (a Dispensation is not a state write — §37.3)  ||  ⚠ W3, ON THE W2 AUDIT: as `petition`. Part E's '(a Dispensation is not a state write)' is the bypass §1.4 hole 4 names, not a licence for one.  ||  ⚠ PLAN POSITION `15`: `Dispensation.exists` -> `Record.exists`. A dispensation is a `Record` of kind `dispensation` (`04_CODE_ARCHITECTURE.md` §B.5, `rosters.yaml: record_kinds`), minted with the issuer's `hold` by `loop/effects.py::_eff_issue`; `(Dispensation, exists)` is deleted from the matrix in the same commit, which the loader requires (an entry naming no row is refused at load)."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
@@ -427,13 +477,34 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["remit:issue", "presence:<rung>"]
     beneficiary: "actor"
+    beneficiary_note: "UNCHANGED BY PLAN POSITION `19`, AND STATED BECAUSE THE EFFECT NOW SAYS WHERE THE MATTER GOES: into the SEAT'S treasury (the rung of `Act.via`), not the actor's hearth. `revoke`/`dispatch` read *taken for the remit* as `none`; this row declared `actor` before `19` and the column's semantics are `CAT-2`'s, not this position's to re-rule."
     requires:    "stores(...) >= amount"
-    writes:      ["Rung.stores"]
+    requires_typed:
+      all:
+        - form:      basis
+          of:        subject
+          basis:     purview
+          conjunct:  authority
+        - form:      scalar_threshold
+          of:        subject
+          scalar:    stores
+          key:       kind
+          threshold: amount
+          comparator: ">="
+          conjunct:  stores
+    requires_typed_note: "PLAN POSITION `19`: *'`requires: stores(...) >= amount` is untyped: author it as `transfer`'s own form-2 `stores >= amount` cell'* -- and it is, field for field, with `of: subject` where `transfer` has `of: from`: the row's own `scale_note` makes the levied rung THE SUBJECT. So `operands_for` carries `subject`, `kind` and `amount` for a computed levy exactly as for a transfer (`kind`/`amount` from a held shortfall claim, else the fixtures, `H-94`). PLUS the conjunct the plan gives every remit verb, *'a predicate reading `via.scope`'*: `Basis` (§F.24a form 7, `data/requires.py`) with the `purview` rule, so the levying seat's purview must reach the levied rung (ruling (4), `04:330`) -- and a rungless seat, which reaches nothing, is refused before the effect could look for a treasury it lacks. ONE OWNER: the whole cell is typed, no predicate beside it (`test_wa_one_owner_...`)."
+    writes:      ["Rung.stores", "Rung.stores"]
+    writes_note: "×2, ONE PER SIDE -- PLAN POSITION `19`, `transfer`'s shape and the W3 audit's reason (*'six grain left the world and arrived nowhere'*): the levied rung goes down and the seat's treasury, the rung of `Act.via`, goes up by the same, in one effect (`loop/effects.py::_eff_levy`, through `_shift`, the one body of every move between two rungs' stores). The second pair is check-only. It declared ×1 before `19` and no effect existed to perform even that."
     emits:       ["levy.taken"]
-    emits_on_refusal: ["levy.refused"]
+    emits_on_refusal:
+      eligibility: ["levy.unauthorized"]
+      authority:   ["levy.unauthorized"]
+      stores:      ["levy.refused"]
+      write:       ["levy.refused"]
+    refusal_note: "PLAN POSITION `19`: KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half). `levy.refused` is §27.1's SCARCITY channel -- *the second claimant on an emptied granary gets a DIFFERENT Event* -- and it is now the `stores` conjunct's alone: two levies on one larder in one fold, and the second finds it short (`tests/test_u7_remit.py`). `levy.unauthorized` is the SEAT refusing: none exercised grants `issue`, or its purview does not reach the rung. A seat that could not reach the larder and a larder that could not cover the levy were one Event before; a witness can now tell them apart."
     grade:       "assumption"
     eligibility_note: "⚠ W3 AUDIT: §E3's eligibility cell carried a PRECONDITION as well as the remit act — `remit:levy + ...`. The fold split on the first `:` and tested the whole tail against the remit roster, so it NEVER MATCHED and a holder of the remit was silently refused. The act is the eligibility; the basis is a `requires`."
-    eligibility_substitution_note: "⚠ DECLARED 2026-09-03 rather than left silent. The source cell named `remit:levy`, and `levy` IS NOT IN `remit_acts` (issue · determine · confer · revoke · dispatch · convene, a CLOSED roster). W3 substituted `remit:issue` and wrote no note, which is an off-register fill under §42.2/G.4.8 — an instrument may fill exactly what the register declares. Either `levy` joins the roster (a ruling: it is a SEVENTH remit act) or `issue` is genuinely the remit a levy exercises (defensible — a levy is issued). Injected as `issue`, declared here, swept at the site. The same substitution is live on `establish`, which uses `remit:confer` and is likewise not a remit act."
+    eligibility_substitution_note: "⚠ DECLARED 2026-09-03 rather than left silent. The source cell named `remit:levy`, and `levy` IS NOT IN `remit_acts` (issue · determine · confer · revoke · dispatch · convene, a CLOSED roster). W3 substituted `remit:issue` and wrote no note, which is an off-register fill under §42.2/G.4.8 — an instrument may fill exactly what the register declares. Either `levy` joins the roster (a ruling: it is a SEVENTH remit act) or `issue` is genuinely the remit a levy exercises (defensible — a levy is issued). Injected as `issue`, declared here, swept at the site. The same substitution is live on `establish`, which uses `remit:confer` and is likewise not a remit act. ⚠ PLAN POSITION `19` INHERITS IT AND DOES NOT DECIDE IT (the plan's own `19` entry: *'stays an open eligibility question this position inherits (a neighbour of `H-52`)'*). What `19` changes is that the substitution now EXECUTES -- a holder granted `issue` can levy -- so the open question has live consequences it did not have while no levy could run; `H-52`'s row carries the pair."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "march"
     scale:   "settlement"
@@ -500,9 +571,21 @@ verbs:
     beneficiary: "none"
     beneficiary_note: "whom a case serves is the party it is opened on behalf of; the act writes a `Record` and carries no such person."
     requires:    "the act DECLARES the stages and their terms (§13.1)"
-    writes:      ["Record.exists", "Record.stages"]
+    requires_note: "⚠ THE PROSE IS §F.24a's WELL-FORMEDNESS CONSTRAINT, NOT A QUESTION OF THE WORLD (*'they belong in the `Act` schema and are refused at construction'*), and it is met the way `create_record` meets it: the act's declared stages, else `H-80`'s declared default, minted by `_mint_document`. PLAN POSITION `19` gives the row the precondition the plan gives every remit verb, *'a predicate reading `via.scope`'* -- the typed cell below -- which the prose does not state and which is attributed there rather than written into the transcribed cell."
+    requires_typed:
+      form:      basis
+      of:        subject
+      basis:     purview
+      conjunct:  authority
+    requires_typed_note: "PLAN POSITION `19`: ONE CONJUNCT, `Basis` (§F.24a form 7) with the `purview` rule -- the seat exercised has purview over the place the matter is AT (`world_q.place_of`, the one owner; ruling (4), `04:330`). A cluster seat reaches nowhere and opens nothing. The matter is the act's `subject`, any id a question can be about: a person, a Record, a rung. Whether the matter is ALREADY before a room is a NEGATION the grammar cannot spell, so `_eff_open_case` declines it (`case.refused`, the `write` clause)."
+    writes:      ["Record.exists", "Record.stages", "DocketItem.matter"]
+    writes_note: "PLAN POSITION `19` ADDED `DocketItem.matter`: *'`open_case` gains `writes: DocketItem.matter` ... a proceeding with zero authored acts needs somebody to have put the matter before the room, and no step did that'*. `loop/effects.py::_eff_open_case` draws the case file up at the opening seat's rung (`Record.exists`/`Record.stages`, `_mint_document`) and appends `{date: None, matter: <subject>}` to `World.docket` in the same `apply` -- the one write of that cell by an ACT; CALENDAR's is actorless and forms empty slots. The second and third pairs are check-only (`(DocketItem, matter)` admits RES in the ACTS class)."
     emits:       ["case.opened"]
-    emits_on_refusal: ["case.refused"]
+    emits_on_refusal:
+      eligibility: ["case.unauthorized"]
+      authority:   ["case.unauthorized"]
+      write:       ["case.refused"]
+    refusal_note: "PLAN POSITION `19`: KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half). `case.unauthorized` -- the SEAT: none exercised grants `determine` (this row's eligibility, `H-52`), or its purview does not reach the matter. `case.refused` -- the matter is already on a docket, or the mint moved nothing. The family is `case.*`, the row's own `case.opened`."
     grade:       "assumption"
     eligibility_note: "W3: graded `assumption`, NOT `ruled`. #353's five remit acts are CLOSED -- issue, determine, confer, revoke, dispatch -- and opening a case is not among them, so V2 invented this eligibility. `own` is a different game (anyone may open a case), which is why it is swept rather than chosen. The roster is `rosters.yaml: remit_acts`."
     eligibility_sweep_note: ["remit:determine (V2's value)", "own", "hold:<the matter's record>"]

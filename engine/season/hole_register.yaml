@@ -350,8 +350,8 @@ rows:
     owner:     "Rung"
     grade:     "assumption"
     default:   "live holders of a `hold` on an Office whose `remit.acts` includes `determine` AND whose `scope_rung` contains the sitting's rung; EMPTY SET -> the date fires and lapses"
-    site:      "sitting.judging_set -- ⚠ STALE (methodology close, terminal critique, 2026-09-29): `judging_set` was BUILT at `queries/world_q.py::judging_set(w, venue, matter=None)` (plan position `18`/PROC-A, 2026-09-29), not as a `sitting.` method; this row was never repointed"
-    sweep:     ["remit+scope (the default)", "remit only", "scope only"] # ⚠ NOT BUILT (same correction): the shipped function hardcodes `basis = \"determine\"` with no fixture or arm-switching mechanism -- there is nothing to sweep with today, so \"swept predicate\" elsewhere in this row's history is aspirational, not run
+    site:      "`queries/world_q.py::judging_set(w, venue, matter=None)` (plan position `18`/PROC-A) -- REPOINTED at plan position `19` from the stale `sitting.judging_set`. Its two rules are owned by the write gate since `19`: the basis `state/gate.py::BENCH_BASIS` (was the local literal `basis = \"determine\"`) and the containment test `state/gate.py::sits_over` (`scope_rung in ancestry(w, venue)`), which `may_determine` -- the gate's `determination` basis and `determine`'s `bench` conjunct -- asks of the party's home, so the bench listed and the bench that may bind are one test. Its first GAME reader is `determine` (`WorldReader`'s `bench.size` stem, the quorum's left side)"
+    sweep:     ["remit+scope (the default)", "remit only", "scope only"] # ⚠ NOT BUILT (same correction): the shipped function reads ONE basis (`BENCH_BASIS`, `\"determine\"`, one constant since `19`) with no fixture or arm-switching mechanism -- there is nothing to sweep with today, so \"swept predicate\" elsewhere in this row's history is aspirational, not run
     unblocks:  "2"
     cite:      "PLAN §3.2. Shape ruled: `judging_set(w, ...)` is listed among the RESOLVER-SIDE Queries at #353 :599, so its shape is settled and only the predicate is open. The empty-set behaviour is #353 :835 VERBATIM: \"A vacant date fires, allocates nothing, and lapses. It does not block.\" ⚠ PLAN §3.2 cites :837 for that sentence; it is at :835. Verified by hand 2026-09-02."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent** | V2's default cell: none. ⚠ **nothing is decided at a sitting**"
@@ -593,14 +593,14 @@ rows:
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-52
     tier:      1
-    hole:      "`open_case`'s eligibility. V2 gates it on `remit:determine` and #353's CLOSED five remit acts do not include it. V2 invented an eligibility, and the alternative (`own`) is a different game"
+    hole:      "`open_case`'s eligibility. V2 gates it on `remit:determine` and #353's CLOSED five remit acts do not include it. V2 invented an eligibility, and the alternative (`own`) is a different game. ⚠ PLAN POSITION `19` INHERITS IT AND DOES NOT DECIDE IT -- and it now has CONSEQUENCES: `open_case` EXECUTES (it dockets the matter `determine` needs), so which persons can put a matter before a bench is decided by this unruled column. Its NEIGHBOUR, stated here because the plan's `19` entry pairs them: `levy`'s `remit:issue` stands in for a `remit:levy` the closed roster lacks (`verb_table.yaml`, `levy`'s `eligibility_substitution_note`), and it executes too since `19`"
     kind:      "RULING"
     owner:     "the design; the resolver (Part E)"
     grade:     "absent"
     default:   "none"
     site:      ""
     sweep:     []
-    unblocks:  "unmeasured"
+    unblocks:  "unmeasured -- the populated realm's `open_case`/`levy` attempts at `19` are the first execution either substitution has; `python -m engine.season.harness.aperture` reports them per holder"
     cite:      ""
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-53
@@ -3488,6 +3488,32 @@ rows:
     unblocks:  "the retirement plan's G3 on the SHIPPED worlds rather than on its test world, and `24f`'s territorial quantity (`demanded` over a settlement is that quantity once cohorts exist). Which limit to lift first is a design order, not a number: (1) is `H-158`'s `unblocks:` (a seated holder paying out of the seat's own rung needs `Act.via` on a computed transfer) or a builder that seats someone where the stock is; (2) would be a sixth witness channel or a widened `document_key`, which r2 `01` refused for the place-blind broadcast it becomes; (3) is the crossing semantics `loop/matter.py` states, and `24f`'s body chain (`H-125`) is the design's other voice for a place that stays hungry; (4) is `H-54`'s own ruling"
     cite:      "MEASURED 2026-09-29 at `19d`. (1) `populated.build_realm(0)`, three seasons: 27 of 27 computed `transfer`s refused (12 / 9 / 6), every one naming a `from` that is a HEARTH holding 0 of its kind; 4,810 units produced a season against 138 demanded by 46 eaters at build (135 by 45 after season 1) -- the retirement plan's *35x surplus* holds as a ratio, and its *so transfer is refused* does not hold as a cause. (3) the same world, one season: every eater's walk finds no stock (the draw precedes the first yield: `source None`), so no larder is drained and nothing is recorded; every later season is in surplus. The committed `runs/` and four worlds' content hashes (`headless.run(3)`, `governance_spine` x3, `tiny_world` x4, `build_realm(0)` x2) are byte-identical before and after `19d`. (2)+(4) `harness/scarce.py`, four seasons, the shipped chooser, `question_aggregation_rule` at each of `first`/`all`/`one_per_source`: the steward holds both shortfall claims (`told_by`, through `document_key`) and deliberates 15 / 19 / 15 times, and none of those deliberations is about a shortfall claim, because claims about his own granary sort first. With the question named (the driver's probe override), the shipped chooser and fold execute `transfer(from=set_granary, to=set_hungry, kind=salt, amount=8)` -- the claim's own kind and amount -- as `transfer.made`, and with no `hold` the steward holds no claim (`tests/test_demand_delivery.py`). CLAUDE.md §0's ladder: not superseded; not irrelevant (G3 is positioned); no design document gives a fifth witness route or a seat-treasury `from` for a computed act; the precedent for (2) is r2 `01`'s refusal of place-blind channels; what makes sense for the architecture is to register the four and lift none inside `19d`, because each is another position's surface -- a record of limits, not a ruling request"
     source:    "plan position `19d` (DEMAND · DELIVERY), 2026-09-29"
+
+  - id:        H-161
+    tier:      1
+    hole:      "HOW MANY PERSONS MUST SIT ON A BENCH FOR IT TO DETERMINE A MATTER -- the RIGHT side of `determine`'s quorum conjunct (`bench.size >= quorum`). `21_RECONCILIATION.md:575` rules THAT a determination below quorum is refused (*'below quorum, `determine.refused`'*); `arrangements.yaml` owns a real `quorum:` key, but only on a `disposal: declared` row (none is seeded), and no docketed matter maps to its arrangement row yet (`judging_set`'s docstring: that mapping is PHASE 2 step 10's open half). So the number is injected."
+    kind:      "NUMBER"
+    owner:     "queries/world_q.py -- `WorldReader.read`'s `quorum` stem, the one read; `verb_table.yaml` -- `determine`'s `quorum` conjunct"
+    grade:     "assumption"
+    default:   "1 -- SHIPPED, AND THE LOOSEST VALUE, NOT AN ARGUED ONE: the one seeded arrangement whose disposal is a Tenure (`arbitration`) has ONE decider, so a bench of one must be able to sit (`arrangements.yaml`'s own *'the loosest floor rather than an authored restriction'*). AT 1 THE CONJUNCT CANNOT REFUSE an actor the `bench` conjunct admitted -- he is himself a member -- so the populated realm never shows it refusing; `2` and `3` do (`tests/test_u7_remit.py`, a lone judge refused). ⚠ QUORUM IN ITS ORDINARY SENSE -- the members a body needs to transact business -- and NOT the proceedings design's reading (`21_RECONCILIATION.md` C-7 / `19_PLAN.md` step 15: *live commitments to the disposition, held by members of the bench, of at least the quorum*), which is a VOTE threshold and needs a disposition Proposition the members `commit` to, plus the two grammar entries A.1 declared. That is the recorded alternative, and the SC lane's step 15, not plan position `19`'s"
+    site:      "Fixtures bench_quorum, read ONLY by `queries/world_q.py::WorldReader.read`'s `quorum` stem (the second read of `determine`'s `scalar_threshold` quorum conjunct, `work`'s `floor` shape); the left side is the `bench.size` stem, `len(set(judging_set(w, place_of(subject), subject)))`, nothing stored"
+    sweep:     [1, 2, 3]
+    unblocks:  "a bench that cannot sit short-handed -- the observable half *'below quorum, `determine.refused`'*, executed at 2/3. Moving it off 1 changes which determinations the populated realm can reach at all, because only the realm's TITLED seats carry a `scope_rung` (`Office.__post_init__`), so a bench there is a handful of judges at most"
+    cite:      "`21_RECONCILIATION.md:575` (step 11's artifact, the plan's corrected OBSERVABLE); `:307-325` (C-7, RULED there: *'no verb, no stored tally'* -- satisfied: the size is a Query over live holds); `:45-68` (A.1: an `amount` operand on `cardinality` is a widening, struck -- avoided: the threshold is a SECOND READ, not an operand). CLAUDE.md §0's ladder: not superseded; not irrelevant (the observable is the position's); no design document gives a number for a bench-disposal arrangement; the precedent is `H-80`/`H-159`'s declared stand-in with a sweep -- an assumption, not a ruling"
+    source:    "plan position `19` (U7-remit), 2026-09-29"
+
+  - id:        H-162
+    tier:      1
+    hole:      "`(Tenure, degree)` HAS NO PRODUCER. `determine` declared `writes: [Tenure.degree]` since W3 and no effect ever wrote it; plan position `19` built `determine` as an UNCONTESTED act that OPENS the disposal edge (`Tenure.since`) and took the degree write off, because an uncontested act carries no degree (`loop/resolve.py::_fold`: *'None on every uncontested act, which is honest: no contest graded it'*). A GRADED disposal is the proceedings design's CONTESTED determination -- `04_VERBS.md` §B.2's degree-keyed row (`Overwhelming`/`Success`: `Tenure.since` + `Tenure.degree`; `Partial`: `Tenure.degree`; `Failure`: `[]`), with the speech contest and the provider (PHASE 2 steps 12-15)"
+    kind:      "PRODUCER"
+    owner:     "verb_table.yaml -- `determine`'s `writes:`; write_matrix.yaml -- `(Tenure, degree)`'s `unproduced:` names this row; the SC lane's proceedings PHASE 2 steps 12-15 -- the contest that would grade a finding"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a disposal that binds HARDER OR SOFTER by how the hearing went -- `Tenure.degree`'s first writer and, with it, `19_PLAN.md` step 15's *'the finding's degree (a writer and no reader until now)'*. Until then every disposal is ungraded, and the degree field on every Tenure stays `None`"
+    cite:      "MEASURED at plan position `19`: `grep` for any `.degree =` on a Tenure in `engine/season/` finds none before or after; `determine` was the only row declaring `Tenure.degree`. Loader invariant 2 (`data/verbs.py`) now requires the matrix row's `unproduced:`, which names this row. CLAUDE.md §0's ladder: not superseded; not irrelevant (the matrix row is `04 §B.8`'s `degree?`); the design document that answers it is the unratified proceedings `04_VERBS.md` §B.2 row, whose contest is not built -- so a record of a missing producer, not a ruling request"
+    source:    "plan position `19` (U7-remit), 2026-09-29"
 
 
 discharges:

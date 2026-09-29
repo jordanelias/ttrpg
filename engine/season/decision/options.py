@@ -105,6 +105,9 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             TRACE.note(f"{p.id} refuses {verb!r}: its `{axis}` alignment exceeds their own "
                        f"projected weight {tolerance:+.3f} (ED-IN-0261)", "H-146")
             continue
+        # `19`: the seat this row's act would exercise -- `exercised_seat`, the same untraced walk
+        # `pack_scenes` names `Act.via` by -- for the belief test's `basis` conjunct below.
+        seat = exercised_seat(p, row)
         for subject in q.referents:
             # ⚠⚠ A CONTEST NEEDS TWO CLAIMANTS, AND A PERSON IS NOT THEIR OWN ADVERSARY.
             # `move`'s `contain_path` cell keeps the same shape of rule -- *"a node is not a path
@@ -152,7 +155,10 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             # row's seat reading was refused for.
             if row.counterparty and ops.get(row.counterparty) in (None, p.id):
                 continue
-            if belief_contradicts(p, row, subject, ops):
+            # `19`: THE SEAT THE ACT WILL BE EXERCISED THROUGH rides into the belief test as it rides
+            # onto `Act.via` (`pack_scenes`), so a `basis` conjunct is asked of the same seat both
+            # sides. `seat` is `exercised_seat`, read once per row above.
+            if belief_contradicts(p, row, subject, ops, seat):
                 continue
             out.append(Candidate(verb, subject, why=q.source, operands=ops))
     return out
