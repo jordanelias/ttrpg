@@ -187,13 +187,13 @@ four rows of that table found stale in this pass are corrected here, not there: 
 | 2-i ✦ | **RET-SC (stub)** | IN/SC | **DONE** (stub retired pre-adoption at `0d881e8`; falsifier planted this session) | — | Phase 1 · 3 |
 | 2-ii ✦ | **RET-SC (kernel)** | IN/SC | BLOCKED | `28-iii`, `29b`, `22` | Phase 4 · k |
 | 3–7 | G1a · G1b · G2 · G3 · G4 | IN | **DONE** | — | §2.2 |
-| 7a | **COMMIT-EFFECT** | IN | OPEN | `15`, `15c`, `15b` | Phase 2 |
+| 7a | **COMMIT-EFFECT** | IN | **DONE** | `15`, `15c`, `15b` | Phase 2 |
 | 8 | **H-98 (b)** | IN/PC | OPEN | `FIGHT-RENAME` (serial edge, §3.5); 7 ✓ | Phase 3 |
 | 9 | **PC-SURRENDER** | PC | **JORDAN** | §5.1 item 7 | Phase 3 |
 | 10 | **U5 / R-07** | IN | OPEN | 7 ✓ | Phase 3 (head) |
 | 11 | **U6** | IN | OPEN | `10` | Phase 3 |
-| 11a | **REACH** | IN | OPEN | S4 ✓ (closed, old `_part2:750`) · 4 ✓ | Phase 2 (head) |
-| 11b | **CALENDAR-EMIT** | IN | OPEN | `11a` | Phase 2 |
+| 11a | **REACH** | IN | **DONE** | S4 ✓ (closed, old `_part2:750`) · 4 ✓ | Phase 2 (head) |
+| 11b | **CALENDAR-EMIT** | IN | **DONE** | `11a` | Phase 2 |
 | 12 | **H-62-rest** | IN | BLOCKED | the cells commit (`12b`/`12c`) | Phase 3 |
 | 12b | **AFFILIATIONS** | IN | **JORDAN** | §5.1 items 1, 3 | Phase 3 (cells commit) |
 | 12c | **THE FIFTEEN** | IN | **JORDAN** | §5.1 items 1, 2 | Phase 3 (cells commit) |
@@ -204,22 +204,22 @@ four rows of that table found stale in this pass are corrected here, not there: 
 | 13d-i | **OFFICES AS DATA** | IN | **DONE, all five items (item 5 at §8.9, narrowed scope)** | — | Phase 1 · 8a |
 | 13d-ii | **PURVIEW** | IN | **DONE (by 6)** | — | §2.2 |
 | 14 | **U7-own** | IN | BLOCKED | `12`, `13` | Phase 3 |
-| 15 | **Record-kind fold** | IN | OPEN | `11a` | Phase 2 |
+| 15 | **Record-kind fold** | IN | **DONE** | `11a` | Phase 2 |
 | 15a | ≡ `16` | IN | — | — | merged 2026-09-25 |
-| 15b | **LOSSY TELL** | IN | BLOCKED | `15` | Phase 2 |
-| 15c | **CONTENT OPERANDS** | IN | BLOCKED | `15`, `16` | Phase 2 |
-| 15d ✦ | **`told_by` (a)/(b)** | IN/SC | BLOCKED | `15b` | Phase 2 |
-| 16 | **H-84 · GIVE** | IN | OPEN | `15` | Phase 2 |
+| 15b | **LOSSY TELL** | IN | **DONE** | `15` | Phase 2 |
+| 15c | **CONTENT OPERANDS** | IN | **DONE** | `15`, `16` | Phase 2 |
+| 15d ✦ | **`told_by` (a)/(b)** | IN/SC | **DONE** | `15b` | Phase 2 |
+| 16 | **H-84 · GIVE** | IN | **DONE** | `15` | Phase 2 |
 | 17 | **U8 / R-06b** | IN | OPEN | `13` | Phase 3 |
-| 17a | **OBLIGEES** | IN | OPEN | `7a`, 13e ✓ | Phase 2 |
-| 17b ✦ | **TERM · UPKEEP** | IN/SE | BLOCKED | `17a` | Phase 2 |
-| 18 | **PROC-A** | SC | OPEN | — | Phase 1 · 9 |
-| 18a | **FIELD DELETIONS — eleven** | IN | OPEN | `17a`, `13d-i` (incl. item 5), 13d-ii ✓, `18` | Phase 2 |
-| ★ | **APERTURE RE-MEASUREMENT** | IN | OPEN | `18a` | Phase 2 |
+| 17a | **OBLIGEES** | IN | **DONE** | `7a`, 13e ✓ | Phase 2 |
+| 17b ✦ | **TERM · UPKEEP** | IN/SE | **DONE** | `17a` | Phase 2 |
+| 18 | **PROC-A** | SC | **DONE, narrowed scope (§8.11); code-verified at ★'s execution** | — | Phase 1 · 9 |
+| 18a | **FIELD DELETIONS — five** (not eleven -- re-derived at execution) | IN | **DONE** | `17a`, `13d-i` (incl. item 5), 13d-ii ✓, `18` | Phase 2 |
+| ★ | **APERTURE RE-MEASUREMENT** | IN | **DONE** | `18a` | Phase 2 |
 | 19 | **U7-remit** | IN | OPEN | `★`, 6 ✓, `15`/`15c`, `18` | Phase 2 |
 | 19b | **U7-disp** | IN | OPEN | **JORDAN** (`ED-IN-0210`, §5.1 item 6) + `15`/`15c` | Phase 2 |
 | 19c | **MIGRATE** (+ `24d-ii`) | IN/SE | OPEN | 24d-i ✓ | Phase 2 |
-| 19d ✦ | **DEMAND · DELIVERY** | SE/IN | BLOCKED | `15c` | Phase 2 |
+| 19d ✦ | **DEMAND · DELIVERY** | SE/IN | **DONE** | `15c` | Phase 2 |
 | 20-i ✦ | **faction scale, first cut** | IN | **DONE** | — | §2.2 (`ecacb57`) |
 | 20-ii ✦ | **U9 / R-04 — faction queries** | IN | BLOCKED | `★` | Phase 4 · a |
 | 20-iii ✦ | **the information cluster** | IN/FI | BLOCKED | `15` (20-i ✓) | Phase 2 |
