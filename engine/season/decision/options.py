@@ -7,8 +7,8 @@ rebind surface needs the MODULE by name. "Option set" is the tree's own existing
 this returns, so the filename is idiomatic rather than coined (`CLAUDE.md` §4).
 
 `opening_set` and its operand machinery (`operands_for`, `_derive_operand`, `_REFERENT_OPERANDS`,
-`containing_rung_of`, `store_kind_of`), the eligibility predicate, and the two agreement/standing
-readers.
+`containing_rung_of`, `store_kind_of`, `_from_content_claim`), the eligibility predicate, and the
+two agreement/standing readers.
 
 ⚠ `entrenchment` SITS HERE PROVISIONALLY AND L3 RE-ADJUDICATES IT. Three functions in the old
 `decision.py` self-declared as person-side Queries via `TRACE.query(..., "person")`: `budget`,
@@ -25,7 +25,7 @@ from __future__ import annotations
 
 from typing import Optional
 from ..data.pursuits import to_axes
-from ..data.rosters import PERSON_PREDICATES, PURSUIT_AXES, require_member
+from ..data.rosters import PERSON_PREDICATES, PURSUIT_AXES, RECORD_CONTENT, require_member
 from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL, ELIGIBILITY_KINDS, VERB_TABLE
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
@@ -483,6 +483,52 @@ def store_kind_of(p: Person, q: "Question") -> Optional[str]:
     return None
 
 
+def _from_content_claim(p: Person, q: "Question", name: str):
+    """AN OPERAND READ OFF A HELD (or merely witnessed) WRIT -- position `15c`, r2
+    `02_THE_WRIT_AND_THE_WORD.md` §A.13: *"the operands are the WRIT's, not the fixtures'."*
+    Modelled on `store_kind_of`, one paragraph above: both read a claim by `q.about`, never by
+    the referent, because a document's content is what the PERSON HOLDING IT believes, and
+    `AX-2` puts a belief nowhere else (§20) -- `subject`/the referent is a different fact and
+    stays on its own branch below.
+
+    `None` when `q.about` names no claim in `p`'s own ledger, the claim's predicate does not
+    start `content:`, or its value has no key `name`. ⚠ THAT LAST CASE IS THE LIVE ONE FOR TWO
+    OF THE THREE CALLERS. `record_kinds`'s two schemas actually built (`15`) are
+    `dispensation: [terms, to, at]` and `petition: [terms, to, from]` -- so a call for `to`
+    resolves (both kinds address someone), and a call for `kind`/`amount` declines EVERY TIME
+    today, because neither schema carries either key; the caller's existing fixture/referent
+    fallback runs exactly as it does for a person naming no writ at all. That is a fact about
+    today's two live schemas, not a limit of this function -- a later kind that does carry
+    `kind`/`amount` needs no change here.
+
+    ⚠ A SINGLETON LIST COLLAPSES TO ITS ONE ID; ANY OTHER COUNT DECLINES. `to`'s writ-side type
+    is `[PersonId|OfficeId]` (r2 §A.3) -- a LIST, because a document may address several people
+    -- but every operand this vocabulary has ever carried is a SCALAR (`_derive_operand`'s own
+    `to`/`subject`/`site` branches, `_eff_transfer`'s single `w.rungs.get(...)`). FOUND BY
+    RUNNING THE POPULATED CORPUS, not reasoned in advance (`CLAUDE.md` §0.1 pt 3): the first
+    writing of this function returned the raw tuple, and 173 `petition`/`transfer` Candidates
+    formed carrying it verbatim -- each one UNABLE TO EVER RESOLVE, because `w.persons`/
+    `w.rungs` key on strings and a tuple matches nothing there, EVEN WHEN the sole named
+    addressee genuinely exists. That is the instrument inventing a NEW way to refuse an act for
+    a reason that is not there (§42.2's polarity), on top of the ones the design already has.
+    Naming WHICH of several addressees a scalar operand means is a choice nobody has ruled --
+    `ID-13`'s `floor` precedent -- so more than one, or none, declines exactly as an unreadable
+    floor does; exactly one is not a choice at all, so it is not held back."""
+    if q is None or not q.about:
+        return None
+    for c in p.ledger:
+        if c.id != q.about:
+            continue
+        stem, sep, _ = str(c.predicate).partition(":")
+        if not sep or stem != RECORD_CONTENT.get("predicate") or c.value is None:
+            return None
+        v = dict(c.value).get(name)
+        if isinstance(v, tuple):
+            return v[0] if len(v) == 1 else None
+        return v
+    return None
+
+
 def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"):
     """ONE OPERAND, FROM THE PERSON'S OWN STATE. `None` means THIS PERSON CANNOT SUPPLY IT.
 
@@ -498,6 +544,27 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     VALUE FOR IS A FIXTURE. That is why `subject`, `to` and `site` all bind the referent and are
     not one name -- the cells name them differently because they mean different things TO THE
     VERB, and the person answers all three the same way, with the thing they were asked about.
+
+    ⚠ POSITION `15c` ADDS A FOURTH READING, CHECKED FIRST FOR THREE OF THE EIGHT NAMES: AN OPERAND
+    THE PERSON'S OWN HELD WRIT ANSWERS BINDS THE WRIT, not the referent and not the fixture.
+    `to`/`kind`/`amount` -- the three of `transfer`'s own operands not already `from` (r2 §A.13:
+    *"the executor's act is `transfer`, whose operands -- `from`, `to`, `kind`, `amount` -- are
+    all in the closed eight"*) -- ask `_from_content_claim` first. `from` is DELIBERATELY EXCLUDED
+    from this check: r2's own ruling keeps *where you are* off the writ (*"a writ that could name
+    `from` would let a Duke's document reach into a larder the executor is not standing in"*), so
+    it stays on `containing_rung_of` alone, below. `at` -- the writ's OWN place of discharge -- is
+    also excluded here, and DELIBERATELY: `at` is not (and r2 rules it must not become, *"I do not
+    coin a ninth operand"*) a member of `requires_operands`, so no typed cell can ever ask
+    `operands_for` for it and `_derive_operand` is never called with `name == "at"` at all -- a
+    branch here would be dead code no test could reach (`ID-13`). `13f`/`19`/`19b`/`found` are
+    where a NEW verb cell earns `at` a roster place, if one ever needs to bind it directly; this
+    position supplies the READER those positions build on, not the roster edit.
+
+    ⚠ S5 (round-1 `01_THE_BUILD_ORDER.md`, row S5): this widening adds no fifth carrier.
+    `beneficiary_kinds` (`rosters.yaml`) stays four members (`actor, subject, to, none`) --
+    CAT-2 closed the beneficiary as a STATIC verb-table column resolving to a carrier the
+    Candidate already holds, never a new operand name, so `benefits_me(c)` inherits nothing new
+    to read from this branch.
 
     ⚠ THE REFERENT IS WORLD-SOURCED, AND THAT IS §F1'S OWN SHAPE RATHER THAN A WIDENING OF IT.
     Raised by the `W-C` adversarial pass and closed here rather than escalated, because it is
@@ -535,6 +602,14 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     alternative, `min` over every kind's floors, is a number nobody chose."""
     if name == "actor":
         return p.id
+    # THE WRIT ANSWERS FIRST, for the three names it can ever carry today (see this function's
+    # own docstring for why `from`/`at` are not asked here). A person naming no writ at all, or
+    # one whose kind has no such key, falls straight through to the referent/fixture below --
+    # `_from_content_claim` returning `None` is silent by design, not a special case of this one.
+    if name in ("to", "kind", "amount"):
+        v = _from_content_claim(p, q, name)
+        if v is not None:
+            return v
     # What the act is ABOUT -- three cell-side names for the one thing the person was asked about.
     if name == "subject":
         return subject

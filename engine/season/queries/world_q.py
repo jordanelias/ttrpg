@@ -32,7 +32,9 @@ from __future__ import annotations
 from typing import Callable, Optional
 
 from ..data.requires import UNKNOWN
-from ..data.rosters import FACTION_BY_PROP, QUESTION_SOURCES, RECORD_KINDS, RUNG_KINDS, TENURE_KINDS
+from ..data.rosters import (
+    FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, RUNG_KINDS, TENURE_KINDS,
+)
 from ..gaps import Forbidden, Unspecified
 from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE (G3, plan position 6). The
@@ -297,6 +299,31 @@ def reach(w: World, p: Person) -> set[str]:
             if rg is not None:
                 R.add(rg); R.update(descendants(w, rg))
     return R
+
+
+def named(c) -> tuple:
+    """CLAUSE 3's `named(c)` -- position `15c`, r2 `01_ATTENTION_AND_REACH.md` §A.5.3/§A.5.4 and
+    `02_THE_WRIT_AND_THE_WORD.md` §A.9.1. The id set inside a `content:<kind>` claim's value, so
+    that a writ can name someone into a question WITHOUT a place query -- `holonic §37.3`'s
+    *"scope enumerates EXECUTORS, not places."*
+
+    ⚠ **RULED: read from `record_kinds`, never from the value's strings.** `RECORD_CONTENT`'s
+    `addressee` key (`rosters.yaml: record_kinds.content`) names the ONE key, shared by every
+    kind that has one, under which an addressee id list sits -- `to`, for `dispensation` and
+    `petition` alike. A generic *"every id anywhere in the value"* would make a `works` plan's
+    site ids into addressees and a petition's `from` into a summons; this reads the roster that
+    types the schema, which is one owner for both facts. A kind with no such key (`works`,
+    `text`) simply has no `to` entry, so this returns `()` for it without a second branch.
+
+    `()` -- never `None`, so a bare caller need not guard -- for a claim whose `predicate` does
+    not start `content:`, or whose `value` names nobody. Takes a `Claim`, not a `World`: it reads
+    one object already in hand, the same shape as `place_of(w, c.subject)` beside it in `Q2`, and
+    is not a second read of `p.ledger` (`AX-2` stays satisfied by the caller's own loop)."""
+    stem, sep, _ = str(c.predicate).partition(":")
+    if not sep or stem != RECORD_CONTENT.get("predicate") or c.value is None:
+        return ()
+    ids = dict(c.value).get(RECORD_CONTENT.get("addressee"))
+    return tuple(ids) if ids else ()
 
 
 def nearest_store(w: World, rung_id: Optional[str], kind: str,
@@ -840,17 +867,22 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # has no place), and `None in R` must be impossible -- the walrus binds it once so the `is not
     # None` guard is written rather than relied on by accident (`01` §A.5.2, `AR-6`).
     #
-    # ⚠ CLAUSE 3 (`named(c)`, the id set inside a `content:`-predicate claim) DOES NOT SHIP HERE.
-    # It has no producer today -- every witness-deposited claim has `predicate = e.kind` and
-    # `value = True` (`witness.py`) -- and lands with `02`'s deposit rule, in the same commit as
-    # the first claim that can satisfy it (`01` §A.5.3, RULED). Shipping a clause with no producer
-    # in the same commit as two deletions justified by "reaches no code" would be self-contradictory.
+    # ⚠ CLAUSE 3 (`named(c)`, the id set inside a `content:`-predicate claim) SHIPS HERE, at
+    # position `15c` (r2 `01` §A.5.3/§A.5.4, `02` §A.9.1): the deposit rule landed at positions
+    # `15`/`16` (`loop/witness.py`'s content deposit), so a `content:<kind>` claim now carries the
+    # Record's real `subject_matter` instead of `True` -- the producer §A.5.3 was waiting for.
+    # ⚠ NOT A FOURTH SOURCE, NOT A WIDENED REFERENT (§A.5.4). One `Question` shape, one `source`
+    # string ("claim_landed", unchanged), one `occasioned_by` route. The Question is still
+    # `(c.subject,)` -- clause 3 only ADMITS the claim into `out`; it does not change what the
+    # Question is ABOUT. `requires_operands` is untouched by this clause for exactly that reason.
     R = reach(w, p)
     floor = since if since is not None else (w.tick - 1, 0)
     for c in p.ledger:
         if (c.when, c.round) < floor:
             continue
-        if c.subject in R or ((pl := place_of(w, c.subject)) is not None and pl in R):
+        if (c.subject in R                                       # clause 1 -- the thing itself
+                or ((pl := place_of(w, c.subject)) is not None and pl in R)   # clause 2 -- where it is
+                or any(x in R for x in named(c))):                # clause 3 -- whom the CONTENT names
             out.append(Question(f"q:claim:{c.id}", "claim_landed", (c.subject,), c.id))
 
     # Q4 -- `need`. A live `commit` Tenure whose object is an OUGHT Proposition is a STANDING
