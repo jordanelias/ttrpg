@@ -1,9 +1,9 @@
 ---
-name: methodology
+name: methodology-close
 description: >
-  METHODOLOGY — the three-phase agonist/antagonist pipeline for verifying a nontrivial code change
-  against a stated plan, before it closes. PHASE 1: a fan of Sonnet reviewers (agonists, effort
-  high), each holding one lens over the diff, reconciled by a single Sonnet cross-examiner
+  METHODOLOGY-CLOSE — the three-phase agonist/antagonist pipeline for verifying a nontrivial code
+  change against a stated plan, before it closes. PHASE 1: a fan of Sonnet reviewers (agonists,
+  effort high), each holding one lens over the diff, reconciled by a single Sonnet cross-examiner
   (antagonist, effort xhigh) checking accuracy, fidelity to plan, correctness, compliance with code
   architecture, and logic — the same five lenses double as the default agonist roster, sized to
   the plan's own independent parts, never a fixed count. PHASE 2: the native `/code-review --fix`,
@@ -13,17 +13,19 @@ description: >
   and forward/backward sweeps, run as a top-down holistic pass that HANDSHAKES a bottom-up granular
   one (every altitude-level finding traced to the site that causes it, and back). Reuses
   `valoria-critic` for every critic dispatch in all three phases; mints no new roster entry. Use
-  for: "run methodology", a finished implementation that needs checking against its plan before
-  `/close`, "agonist antagonist pass", "final adversarial critique", pre-commit deep review of a
-  code change. Not for: design-quality grading (`ners`), a target that resolves by a draw
-  (`resolution-diagnostic`), Layer placement checked on its own with no code change to verify
-  (`layer-conformance` directly), or a change with no stated plan — write the plan first
-  (CLAUDE.md §0's first bullet).
+  for: "run methodology-close", "close this position", a finished implementation that needs
+  checking against its plan before `/close`, "agonist antagonist pass", "final adversarial
+  critique", pre-commit deep review of a code change **that already exists**. If the diff does not
+  exist yet and needs building first, use `methodology-execute` instead — it runs this pipeline as
+  its own closing phases, verbatim, after its own build phase. Not for: design-quality grading
+  (`ners`), a target that resolves by a draw (`resolution-diagnostic`), Layer placement checked on
+  its own with no code change to verify (`layer-conformance` directly), or a change with no stated
+  plan — write the plan first (CLAUDE.md §0's first bullet).
 ---
 
-# METHODOLOGY — the agonist/antagonist verification pipeline
+# METHODOLOGY-CLOSE — the agonist/antagonist verification pipeline
 
-## Created 2026-09-28 (ED-IN-0280), per Jordan's directive to add this pipeline as a skill. Invocable as a project skill through the symlink `.claude/skills/methodology`.
+## Created 2026-09-28 (ED-IN-0280) as `methodology`, per Jordan's directive to add this pipeline as a skill. Split 2026-09-29 into `methodology-close` (this file, unchanged in content) and `methodology-execute` (adds a build phase ahead of it), when Jordan asked for the pipeline to also orchestrate the build. Invocable as a project skill through the symlink `.claude/skills/methodology-close`.
 
 ## What this skill owns, and what it copies
 
@@ -52,11 +54,18 @@ means *one independent first-pass reviewer, holding one lens over an already-exi
 working tree*. Both roles run on the same tool-restricted agent (`valoria-critic`) — what differs
 is the prompt: which lens, and whether it is handed one output or several. CLAUDE.md §4 binds a
 coinage to mean one thing read cold; this paragraph is that definition, and it does not travel
-back to `valoria-critic.md`'s own producer/critic sense.
+back to `valoria-critic.md`'s own producer/critic sense — **nor does it travel forward into
+`methodology-execute`'s build phase.** That skill's build dispatches are `valoria-author`, a
+producer, and are never called agonist or antagonist; this is the one definition of both words in
+the `methodology-*` family, and `methodology-execute` cites it rather than restating or widening
+it.
 
-**Relation to `/close`.** This pipeline runs *before* `/close`, on a diff that is otherwise ready
-to commit. `/close` step 4 also runs `layer-conformance`; Phase 2 below is not a duplicate of
-that step, it is why that step should find nothing new by the time it runs.
+**Relation to `/close` and to `methodology-execute`.** This pipeline runs *before* `/close`, on a
+diff that is otherwise ready to commit — whether that diff already existed, or
+`methodology-execute` just built it. `/close` step 4 also runs `layer-conformance`; Phase 2 below
+is not a duplicate of that step, it is why that step should find nothing new by the time it runs.
+`methodology-execute`'s Phases 1–3 **are** this file's Phases 1–3, invoked by reference, not
+copied; a change to the sequence, the tiers or the checklists below is made once, here.
 
 ---
 
@@ -237,7 +246,8 @@ Same as 1.5 — the orchestrator applies or rejects with a measurement, in this 
 
 ## GUARDRAILS
 
-- **Produces edits, not documents.** No directory beyond `skills/methodology/`, no findings file.
+- **Produces edits, not documents.** No directory beyond `skills/methodology-close/`, no findings
+  file.
   The prohibitions `layer-conformance` states in its own WHAT THIS PASS MAY NOT PRODUCE section —
   each with its own failure clause — bind here without restatement.
 - **A clean phase is not evidence about the others.** Phase 1 finding nothing is not licence to

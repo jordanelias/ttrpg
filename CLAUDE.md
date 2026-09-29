@@ -604,7 +604,8 @@ pyyaml only, which is why the provisioner exists (§0.3). The cadence deciding W
 | Assembling a canonical artifact | `valoria-compiler` |
 | "Where are we?" / does the milestone run | `python tools/m1_acceptance.py --summary` — the only reading §0.2 accepts. Season loop: `--requirements` on the season register |
 | "What's the state of the repo?" | No tool, by design. `/currency`, then read the tree |
-| Verifying a nontrivial code change against its own stated plan, before close | `methodology` — a Sonnet agonist/antagonist pass, then `/code-review`+`/simplify`+`layer-conformance` fixed in sequence, then one terminal Opus critique |
+| Verifying a nontrivial code change that already exists, against its own stated plan, before close | `methodology-close` — a Sonnet agonist/antagonist pass, then `/code-review`+`/simplify`+`layer-conformance` fixed in sequence, then one terminal Opus critique |
+| Building a workplan phase/task (many positions) AND verifying it, before close | `methodology-execute` — `valoria-author` builds each item and commits it, cheap; `methodology-close`'s full pipeline + the pytest suite run once per BATCH (a phase, or a sub-batch), not per item |
 | Closing a commit | `/close` |
 | Reviewing a diff / a PR / your own just-finished work | the native `/code-review`, a fresh-context reviewer that never saw your reasoning. It is the only review surface; nothing grades repo-wide signals any more, and nothing is supposed to |
 | Many mechanical numbers before any judgment | `valoria-measure` on Haiku — batched only; one delegated grep loses the tier arithmetic |
