@@ -1071,10 +1071,15 @@ def _eff_commit(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     exist) is the typed precondition's, asked before this ever runs, and there is nothing left for
     the effect itself to decline.
 
-    THE ID SALTS ON THE OBJECT, `_eff_confer`'s `f"hold:{obj}"` pattern (`H`'s `subject_id` slot is
-    the new Tenure's own subject, its `purpose` is `f"{kind}:{object}"`) -- so two different
-    actors committing to the same Proposition in the same tick still mint distinct ids, because
-    each one's `subject_id` is its own actor.
+    THE ID SALTS ON THE OBJECT AND THE ACT, `_eff_give`'s `f"hold:{rid}:{a.id}"` pattern (`H`'s
+    `subject_id` slot is the new Tenure's own subject, its `purpose` is `f"{kind}:{object}:{act}"`)
+    -- BATCH-CLOSE FINDING (methodology-close Phase 1, antagonist), corrected from the plain
+    `f"commit:{prop_id}"` this shipped with: two different actors committing to the same
+    Proposition already minted distinct ids (each one's `subject_id` is its own actor), but an
+    actor who releases a `commit` and re-commits to the SAME Proposition within the same tick
+    would otherwise mint the identical id as the now-closed one -- the same collision `_eff_give`'s
+    own docstring names and salts against. `commit` has no `release`-then-reopen path reachable
+    today (untyped, chooser-unreachable), but the fix is one token and costs nothing to carry.
 
     ⚠ BUILD-ORDER BO-9/BO-10 (`proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md`
     §7.2): the first build of this effect, before any question source offered a Proposition
@@ -1083,8 +1088,8 @@ def _eff_commit(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     shipped. Items 5/7/8 (here `15`, `15c`, `15b`) are what BO-10 named as opening that aperture;
     this effect is unchanged from the held draft, because the diagnosis put the gap upstream of it."""
     prop_id = _operand(a, "subject")
-    nt = Tenure(H(w.world_seed, w.tick, a.actor, f"commit:{prop_id}"), a.actor, prop_id, "commit",
-                since=w.tick)
+    nt = Tenure(H(w.world_seed, w.tick, a.actor, f"commit:{prop_id}:{a.id}"), a.actor, prop_id,
+                "commit", since=w.tick)
     return Change((Subject.edge(nt),), lambda: w.add_tenure(nt))
 
 
@@ -1099,7 +1104,12 @@ def _eff_oblige(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     ⚠ `_eff_commit`'s SHAPE, EXACTLY -- the barest opener: no seat EXERCISED (`oblige` is
     `own`-eligible, `via` is `None`), no closure, no per-kind branch. The edge names the actor as
     its own subject and is admitted under `T-m` (`state/gate.py::tenure_write_basis`). The id salts
-    on the object, `f"oblige:{seat}"`, so two persons obliging to one seat in one tick mint two ids.
+    on the object AND the act, `f"oblige:{seat}:{a.id}"` (`_eff_give`'s pattern, and `_eff_commit`'s
+    since the same antagonist pass) -- BATCH-CLOSE FINDING (methodology-close Phase 1), corrected
+    from the plain `f"oblige:{seat}"` this shipped with: an actor who releases their `oblige` to a
+    seat and re-obliges to the SAME seat within the same tick would otherwise mint the identical id
+    as the now-closed one. `oblige` has no such path reachable today (untyped, chooser-
+    unreachable), but the fix is one token.
 
     ⚠ IT WAS WRITTEN AND REVERTED ONCE (`ED-IN-0211`): it opened a Tenure to `einhir_texts`, a bare
     string naming no entity. What changed is not this body but that `_req_oblige` now asks first --
@@ -1111,7 +1121,7 @@ def _eff_oblige(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     §B.7` call 2), and through that the obligee channel (`epistemic._ch_post_remit`) -- an obligee
     standing at the seat holds what the seat does `inferred`. `release` ends it (`04 §A.3` row 14)."""
     seat = _operand(a, "subject")
-    nt = Tenure(H(w.world_seed, w.tick, a.actor, f"oblige:{seat}"), a.actor, seat, "oblige",
+    nt = Tenure(H(w.world_seed, w.tick, a.actor, f"oblige:{seat}:{a.id}"), a.actor, seat, "oblige",
                 since=w.tick)
     return Change((Subject.edge(nt),), lambda: w.add_tenure(nt))
 

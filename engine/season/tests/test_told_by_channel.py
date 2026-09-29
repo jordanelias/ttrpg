@@ -190,10 +190,20 @@ def test_15d_a_telling_is_hearsay_for_what_was_said_and_firsthand_for_that_it_wa
         "told, they did not see it")
     assert told[0].confidence == held_conf, (
         f"the told claim carries {told[0].confidence}, not the teller's own {held_conf}")
+    # BATCH-CLOSE FINDING (methodology-close Phase 1, antagonist): `RULINGS.yaml` CAT-3, CLOSED --
+    # "STORE THE TELLER" -- shipped with the field but no falsifier. A deletion of `_act.actor` at
+    # the told-deposit's `Claim(...)` construction (`loop/witness.py`) would turn no test red
+    # without this line.
+    assert told[0].teller == teller, (
+        f"the told claim's teller is {told[0].teller!r}, not {teller!r} -- CAT-3's 'store the "
+        "teller' is the one thing this deposit is FOR")
     spoke = [c for c in mine if c.predicate == "news.told"]
     assert spoke and {c.source for c in spoke} == {"firsthand"}, (
         f"the co-located hearer holds THAT the telling happened as {[c.source for c in spoke]} -- "
         "they saw the speech; only its content is hearsay")
+    assert all(c.teller is None for c in spoke), (
+        "the event-kind claim (that a telling happened) is not a told-channel deposit and must "
+        "not carry a teller -- only the told channel's own content claim does")
 
 
 def test_15d_falsifier_the_realm_holds_hearsay_no_telling_minted(monkeypatch):

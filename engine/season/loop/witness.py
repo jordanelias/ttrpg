@@ -342,6 +342,20 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # `hold` finds no live holder and deposits nothing -- so only a handover newly reaches here.
     content_stem = RECORD_CONTENT.get("predicate")
     newly_held: dict = {}
+    # ⚠⚠ `hold_force(w, rec.id)` ANSWERS THE RECORD'S FINAL HOLDER FOR THE WHOLE BARRIER, NOT WHO
+    # THIS EVENT'S OWN CHANGE INSTALLED (BATCH-CLOSE, methodology-close Phase 1, LOGIC lens). If
+    # the same Record changes hold TWICE within one `witness()` call's `events` (e.g. two chained
+    # `give`s in one round, A->B then B->C), both events' entries here resolve to the SAME final
+    # holder (C) -- so B, who genuinely held the Record however briefly and is the one who received
+    # it at their own event, never gets listed as a holder anywhere and mints no `content:<kind>`
+    # claim for it; the later dedup (below) then suppresses even the eventual C-side deposit if C
+    # also witnessed the first event. UNREACHABLE ON THE CURRENT TREE: `give` is the only verb this
+    # loop's `_hold_tenure_ends` scan reaches (`oblige` opens no `hold`, so it never enters
+    # `newly_held` at all), and `give` is chooser-unreachable (untyped, `operands_for` never derives
+    # it) -- no hand-built test exercises two gives of one Record in one round either. A real fix
+    # keys this off the CHANGE's own before/after Tenure diff (`_hold_tenure_ends` already walks
+    # it) rather than a fresh `hold_force` read; not taken here, since nothing on the tree reaches
+    # this branch to verify a fix against.
     for e in events:
         for c in e.changes:
             for named in (_hold_tenure_ends(w, c.subject) if c.subject else ()):
@@ -636,9 +650,16 @@ def witness(self, token: Token, events: list[Event]) -> int:
                     # differing-value collisions, no such case was ever measured here (the channel
                     # deposits 8 claims across the whole 89-world corpus). Two guards where one
                     # observes the failure is the defect §0.1 pt 2 names.
+                    # BATCH-CLOSE FINDING (methodology-close Phase 1, FIDELITY TO PLAN lens):
+                    # `RULINGS.yaml` CAT-3 -- store the teller, "one argument, not a lookup" --
+                    # was ruled and CLOSED before this position and was missed on a search that
+                    # did not reach `proposals/2026-09-17-governance-and-behaviour/`, this
+                    # channel's own content-owner directory. `_act.actor` is already in scope
+                    # (bound above, this same guard), so this is exactly the one-argument edit
+                    # the ruling names -- `Claim.teller`, `state/carriers.py` -- not a lookup.
                     tc = Claim(H(w.world_seed, w.tick, pid, f"told:{e.id}"),
                                pid, _held.subject, _held.predicate, _told_val, w.tick,
-                               "told_by", _held.confidence, "own", self.round)
+                               "told_by", _held.confidence, "own", self.round, _act.actor)
                     w.write("claim_ledger", token,
                             lambda p=p, c=tc: p.ledger.append(c),
                             record_kind="Person", fieldname="claim_ledger", driver="Event",

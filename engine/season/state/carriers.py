@@ -242,6 +242,15 @@ class Claim:
     confidence: int
     visibility: str
     round: int = 0
+    # ⚠ BATCH-CLOSE FINDING (methodology-close Phase 1, FIDELITY TO PLAN lens, position `15b`).
+    # `RULINGS.yaml` CAT-3 (`proposals/2026-09-17-governance-and-behaviour/`), CLOSED: *"a claim's
+    # value is modified by the hearer's BELIEF about their relation to the teller (lord > peer >
+    # enemy)... STORE THE TELLER... The edit is one argument, not a lookup."* The `round` docstring
+    # above bounds workplan item U2 specifically ("the only carrier field U2 ADDS") and is not a
+    # freeze on this dataclass as a whole -- CAT-3's own text corrects the mis-read that blocked
+    # this the first time. `None` for every claim with no teller (firsthand, seen, inferred,
+    # content-deposit) -- only the told channel's own deposit sets it (`loop/witness.py`).
+    teller: Optional[str] = None
 
 
 

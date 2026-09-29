@@ -605,7 +605,17 @@ def observers_for(w: "World", e: "Event", mode: str, everyone: list) -> list:
     `H-33`'s control -- *"fans every event to every person"* identically, the maximal-information
     design as written -- and `seen_of`/`seen_subject` already refuse to personalise it for that
     reason. Asking the predicates here would make the control arm a narrow arm's source rule
-    wearing a total fan, and a person no predicate admits would have no channel to report."""
+    wearing a total fan, and a person no predicate admits would have no channel to report.
+
+    ⚠ CREDITING `total` TO ROSTER POSITION 0 IS DELIBERATE, NOT AN ACCIDENTAL COUPLING (BATCH-CLOSE,
+    methodology-close Phase 1 antagonist, confirming rather than overturning a Phase-1 agonist
+    concern raised against this same line): `WITNESS_CHANNELS[0]` is `co_located` by the roster's
+    own precedence rule (presence first, `rosters.yaml: witness_channels`), and
+    `test_told_by_channel.py` pins `CHANNEL_CLAIM_SOURCE[WITNESS_CHANNELS[0]] == "firsthand"`
+    directly, so a reorder that moved a non-`firsthand` channel to the head would fail loudly. Not
+    dispatching on the literal string `"firsthand"` here is also deliberate, not an omission: naming
+    a `claim_sources` member in this function's own body is the hardcoding this repo's rule already
+    forbids -- reading the roster's position is the correct way to ask it."""
     live = live_channels(mode)
     if mode == "total":
         return [(pid, WITNESS_CHANNELS[0]) for pid in everyone]

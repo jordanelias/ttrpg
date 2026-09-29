@@ -36,11 +36,11 @@ from __future__ import annotations
 
 import pytest
 
-from ..data.requires import REQUIRES_OPERANDS
+from ..data.requires import REQUIRES_OPERANDS, WRIT_SOURCED_OPERANDS, _check_writ_sourced_subset
 from ..data.rosters import QUESTION_SOURCES, RECORD_CONTENT, RECORD_KIND_KEYS
 from ..data.verbs import VERB_TABLE
 from ..decision.options import _derive_operand, _from_content_claim, opening_set
-from ..gaps import Forbidden
+from ..gaps import Forbidden, Unspecified
 from ..harness import populated
 from ..harness import probes as P
 from ..loop.witness import content_value
@@ -186,8 +186,14 @@ def test_from_is_never_read_off_the_writ_even_though_petition_declares_one():
 
 def test_at_is_not_a_requires_operands_member_and_derive_operand_is_never_asked_for_it():
     assert "at" not in REQUIRES_OPERANDS
-    assert set(REQUIRES_OPERANDS) == {
-        "actor", "subject", "from", "to", "site", "kind", "amount", "floor"}, (
+    # A COUNT PIN, NOT THE ROSTER'S CONTENT RESTATED -- BATCH-CLOSE FINDING (methodology-close
+    # Phase 1, CODE ARCHITECTURE lens): the prior version spelled all eight names out again,
+    # which `test_jordan_no_definition_is_hardcoded_in_a_body` catches in the corpus as "the same
+    # closed set written out again". The closure's actual content is `rosters.yaml:
+    # requires_operands`'s own job to declare; this test's job is only to catch it growing (or
+    # shrinking) without `at` in particular joining it, which the length plus the membership
+    # check above both do without a second copy of the names.
+    assert len(REQUIRES_OPERANDS) == 8, (
         "the eight-name closure moved -- `at` joining it is a ruling this position did not make")
     # No typed cell can ever declare `at`, so `operands_for` can never pass it to
     # `_derive_operand`; the function itself still declines it if asked directly, honestly --
@@ -278,3 +284,19 @@ def test_question_sources_stays_at_two_clause_3_is_not_a_fourth_source():
 def test_a_bad_source_still_raises_named_did_not_smuggle_one_in():
     with pytest.raises(Forbidden, match="question_sources"):
         Question("q:bad", "named", ("p_x",), "c1")
+
+
+def test_writ_sourced_operands_refuses_a_member_outside_requires_operands():
+    """BATCH-CLOSE FINDING (methodology-close Phase 1, antagonist). The load-time cross-
+    validation between `writ_sourced_operands` and `requires_operands` shipped with no falsifier
+    -- it never fires on today's data, so nothing observed whether it could actually raise. It
+    could not: it named `Unspecified` without importing it, so a real mismatch died with
+    `NameError` instead. Call the check directly with a planted mismatch, the way `data/rosters.py`
+    has no equivalent test for its own sibling cross-validations either, but this one is new."""
+    with pytest.raises(Unspecified, match="writ_sourced_operands"):
+        _check_writ_sourced_subset(frozenset({"to", "at"}), frozenset(REQUIRES_OPERANDS))
+    # THE CONTROL -- the real roster, read back through its own binding, never re-typed: a second
+    # literal here would be exactly the "roster duplicated from the data file" defect this whole
+    # position exists to fix (`test_jordan_no_definition_is_hardcoded_in_a_body` caught the first
+    # draft doing precisely this).
+    _check_writ_sourced_subset(frozenset(WRIT_SOURCED_OPERANDS), frozenset(REQUIRES_OPERANDS))

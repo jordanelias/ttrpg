@@ -38,11 +38,31 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Optional
 
+from ..gaps import Unspecified
 from .rosters import roster, roster_map
 
 REQUIRES_FORMS = roster("requires_forms")
 REQUIRES_OPERANDS = roster("requires_operands")
 REQUIRES_FORM_NEEDS = roster_map("requires_forms", "needs")
+
+def _check_writ_sourced_subset(writ_sourced: frozenset, operands: frozenset) -> None:
+    """Plan position `15c`. `writ_sourced` is a SUBSET of `operands`, never a second vocabulary --
+    refused if it names anything the closed operand roster does not, the same discipline
+    `record_kinds` and `tenure_kinds` are cross-validated against each other by in
+    `data/rosters.py`. Factored into a function -- BATCH-CLOSE FINDING, methodology-close Phase 1
+    antagonist -- so a test can call it with a planted mismatch rather than only exercising the
+    branch that never fires on today's data (§0.1 pt 3: a refusal that nothing can observe fail)."""
+    if not writ_sourced <= operands:
+        raise Unspecified(
+            f"rosters.yaml: writ_sourced_operands names {sorted(writ_sourced - operands)}, "
+            "not in requires_operands",
+            "rosters.yaml -- writ_sourced_operands",
+            needs="every writ_sourced_operands member to also be a requires_operands member",
+            law="a writ answers FOR an existing operand name; it does not coin a new one")
+
+
+WRIT_SOURCED_OPERANDS = roster("writ_sourced_operands")
+_check_writ_sourced_subset(frozenset(WRIT_SOURCED_OPERANDS), frozenset(REQUIRES_OPERANDS))
 
 class _Unknown:
     """THE THIRD TRUTH VALUE, AND IT IS NOT `False`.

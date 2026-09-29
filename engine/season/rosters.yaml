@@ -1388,6 +1388,21 @@ rosters:
       predicates did.
     values: [actor, subject, from, to, site, kind, amount, floor]
 
+  writ_sourced_operands:
+    source: >-
+      r2 `02_THE_WRIT_AND_THE_WORD.md` §A.13 -- *"the executor's act is `transfer`, whose operands --
+      `from`, `to`, `kind`, `amount` -- are all in the closed eight"*; plan position `15c`.
+    note: >-
+      ⚠ A SUBSET OF `requires_operands`, NEVER A SECOND VOCABULARY -- `data/requires.py` refuses at
+      import if a member here is not also a `requires_operands` member. THE THREE NAMES A HELD WRIT
+      MAY ANSWER FOR, before `decision/options.py::_derive_operand` falls through to the referent or
+      the fixture. `from` IS DELIBERATELY EXCLUDED: r2's own ruling keeps *where the actor stands* off
+      the writ -- a document naming `from` would let a Duke's writ reach into a larder the executor is
+      not standing in. `at` stays off this roster too, but for a different reason: it is not (and per
+      r2 must not become, *"I do not coin a ninth operand"*) a `requires_operands` member at all, so
+      no typed cell can ever pass `name == "at"` to `_derive_operand` in the first place.
+    values: [to, kind, amount]
+
   beneficiary_kinds:
     source: >-
       `CAT-2`, closed at step 5 (`proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml`).

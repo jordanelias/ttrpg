@@ -25,6 +25,7 @@ from __future__ import annotations
 
 from typing import Optional
 from ..data.pursuits import to_axes
+from ..data.requires import WRIT_SOURCED_OPERANDS
 from ..data.rosters import PERSON_PREDICATES, PURSUIT_AXES, RECORD_CONTENT, require_member
 from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL, ELIGIBILITY_KINDS, VERB_TABLE
 from ..epistemic import belief_contradicts
@@ -602,11 +603,16 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     alternative, `min` over every kind's floors, is a number nobody chose."""
     if name == "actor":
         return p.id
-    # THE WRIT ANSWERS FIRST, for the three names it can ever carry today (see this function's
-    # own docstring for why `from`/`at` are not asked here). A person naming no writ at all, or
-    # one whose kind has no such key, falls straight through to the referent/fixture below --
-    # `_from_content_claim` returning `None` is silent by design, not a special case of this one.
-    if name in ("to", "kind", "amount"):
+    # THE WRIT ANSWERS FIRST, for the names `rosters.yaml: writ_sourced_operands` declares (see
+    # this function's own docstring for why `from`/`at` are not among them). A person naming no
+    # writ at all, or one whose kind has no such key, falls straight through to the referent/
+    # fixture below -- `_from_content_claim` returning `None` is silent by design, not a special
+    # case of this one. BATCH-CLOSE FINDING (methodology-close Phase 1, CODE ARCHITECTURE lens):
+    # this was a literal `("to", "kind", "amount")` tuple, caught by
+    # `test_jordan_no_definition_is_hardcoded_in_a_body` -- moved to the roster rather than
+    # exempted, since it names a real design fact (which operand names a writ may answer) with a
+    # cited source, not a mechanism.
+    if name in WRIT_SOURCED_OPERANDS:
         v = _from_content_claim(p, q, name)
         if v is not None:
             return v
