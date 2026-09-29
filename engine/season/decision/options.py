@@ -7,8 +7,8 @@ rebind surface needs the MODULE by name. "Option set" is the tree's own existing
 this returns, so the filename is idiomatic rather than coined (`CLAUDE.md` §4).
 
 `opening_set` and its operand machinery (`operands_for`, `_derive_operand`, `_REFERENT_OPERANDS`,
-`containing_rung_of`, `store_kind_of`, `_from_content_claim`), the eligibility predicate, and the
-two agreement/standing readers.
+`containing_rung_of`, `store_kind_of`, `_from_content_claim`, `_from_shortfall_claim`), the
+eligibility predicate, and the two agreement/standing readers.
 
 ⚠ `entrenchment` SITS HERE PROVISIONALLY AND L3 RE-ADJUDICATES IT. Three functions in the old
 `decision.py` self-declared as person-side Queries via `TRACE.query(..., "person")`: `budget`,
@@ -25,7 +25,9 @@ from __future__ import annotations
 
 from typing import Optional
 from ..data.pursuits import to_axes
-from ..data.requires import WRIT_SOURCED_OPERANDS
+from ..data.requires import (
+    SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS, WRIT_SOURCED_OPERANDS,
+)
 from ..data.rosters import PERSON_PREDICATES, PURSUIT_AXES, RECORD_CONTENT, require_member
 from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL, ELIGIBILITY_KINDS, VERB_TABLE
 from ..epistemic import belief_contradicts
@@ -540,6 +542,61 @@ def _from_content_claim(p: Person, q: "Question", name: str):
     return v
 
 
+def _from_shortfall_claim(p: Person, q: "Question", name: str):
+    """AN OPERAND READ OFF A HELD SHORTFALL CLAIM. Plan position `19d`, the retirement plan's G3:
+    *"wiring the existing `transfer` verb's operands from a shortfall claim"*. The claim is
+    `(rung, "shortfall:<kind>", units)`. MATTER records it on the write of a larder its draw ran
+    dry with a mouth unfed, as `demanded - delivered` over the rung's subtree
+    (`queries/world_q.py`), and WITNESS deposits it into those who saw that write. So a person
+    asked about it knows WHICH matter the place lacks and HOW MUCH. This reads the two:
+      * `kind`   -- the predicate's argument (`store_kind_of`'s own move, one stem over);
+      * `amount` -- the claim's value, when it is a positive whole number of units.
+    Both are read by `q.about` from `p`'s OWN ledger, never by the referent, on
+    `_from_content_claim`'s precedent (§20, `AX-2`).
+
+    ⚠ `to` IS NOT READ HERE. For a `claim_landed` question the referent IS the claim's subject, so
+    the referent rule already binds `to` to the drained rung (`rosters.yaml:
+    shortfall_sourced_operands`' note). ⚠ `from` IS NOT READ HERE EITHER. The giver gives from where
+    they stand (`containing_rung_of`), for r2 §A.13's reason: a claim about somewhere else must not
+    reach into a larder the actor is not standing in.
+
+    ⚠ `None` IS SILENT BY DESIGN. It means no claim by `q.about` in `p`'s own ledger, a predicate
+    that is not `shortfall:<kind>`, or an amount that is not a positive whole number, and the caller
+    falls through to `store_kind_of`/the fixtures exactly as before. A drifted retelling (`15b`'s
+    `_told_value`) stays positive by construction: it preserves sign and never crosses zero. So a
+    rumour can misstate how short a place is, and it can never turn the shortfall into a surplus.
+
+    REJECTED SHAPES, each for a reason:
+      * A `content:` WRIT CARRYING `kind`/`amount` (`15c`'s reader, a new record kind). The writ is
+        a document someone ISSUES. Here nobody asks: the larder ran dry and a witness saw it.
+        Minting a document for a fact nobody authored is the automatic promotion S36.1 forbids
+        (probe `F19`'s law).
+      * THE `stores:<kind>` OBSERVATION `store_kind_of` already reads. That is a store LEVEL. A
+        level is not a lack: a larder at 30 is plenty for three mouths and a famine for thirty, and
+        a person cannot know the mouths (`demanded` is a world read).
+      * THE PER-PERSON SHORTFALL, as witnessed through item 3b's `body.changed`.
+        (`World._subsistence_shortfall` is census-only and is no claim at all.) That claim is about
+        a PERSON, so its referent is no rung and a transfer to it refuses (`_eff_transfer`: no
+        rung, no transfer). It carries no kind or amount either (`value` is `True`). It is also the
+        per-person scale `ED-IN-0255` ruled away from: *"i don't think having lords and guild
+        members etc worry about subsistence is worthwhile"*, *"it's a territorial issue"*."""
+    if q is None or not q.about:
+        return None
+    c = _claim_by_id(p, q.about)
+    if c is None:
+        return None
+    stem, sep, kind = str(c.predicate).partition(":")
+    if not sep or not kind or stem != SHORTFALL_PREDICATE:
+        return None
+    if name == "kind":
+        return kind
+    if name == "amount":
+        v = c.value
+        ok = isinstance(v, int) and not isinstance(v, bool) and v > 0
+        return v if ok else None
+    return None
+
+
 def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"):
     """ONE OPERAND, FROM THE PERSON'S OWN STATE. `None` means THIS PERSON CANNOT SUPPLY IT.
 
@@ -570,6 +627,10 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     branch here would be dead code no test could reach (`ID-13`). `13f`/`19`/`19b`/`found` are
     where a NEW verb cell earns `at` a roster place, if one ever needs to bind it directly; this
     position supplies the READER those positions build on, not the roster edit.
+
+    ⚠ POSITION `19d` ADDS A FIFTH SOURCE, FOR TWO NAMES: `kind` and `amount` are read off a held
+    SHORTFALL claim (`_from_shortfall_claim`), ahead of `store_kind_of` and the fixtures. `to` is
+    not among them, because a shortfall claim's subject already IS the question's referent.
 
     ⚠ S5 (round-1 `01_THE_BUILD_ORDER.md`, row S5): this widening adds no fifth carrier.
     `beneficiary_kinds` (`rosters.yaml`) stays four members (`actor, subject, to, none`) --
@@ -624,6 +685,16 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     # cited source, not a mechanism.
     if name in WRIT_SOURCED_OPERANDS:
         v = _from_content_claim(p, q, name)
+        if v is not None:
+            return v
+    # AND A HELD SHORTFALL CLAIM ANSWERS NEXT (plan position `19d`), for the names
+    # `rosters.yaml: shortfall_sourced_operands` declares (`kind`, `amount`). A question has one
+    # `about`, and a claim is either a writ's or a shortfall's, never both, so the two readers
+    # never compete for one operand and their order does not matter. Both come before
+    # `store_kind_of` and the fixtures: a claim that NAMES the matter and the quantity outranks
+    # a default that names neither.
+    if name in SHORTFALL_SOURCED_OPERANDS:
+        v = _from_shortfall_claim(p, q, name)
         if v is not None:
             return v
     # What the act is ABOUT -- three cell-side names for the one thing the person was asked about.

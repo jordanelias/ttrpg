@@ -375,6 +375,147 @@ def nearest_store(w: World, rung_id: Optional[str], kind: str,
     return None
 
 
+def subsistence_draw(w: World) -> dict:
+    """THE LARDER DRAW, AS A RECORD: `{person id: (home rung, {kind: (want, take, source)})}` -- what
+    every housed eater asks of the larder ladder this season, what the ladder gives them, and from
+    which rung. Read-only; it writes nothing. Plan position `19d`.
+
+    ⚠ EXTRACTED FROM MATTER, NOT WRITTEN BESIDE IT. `loop/matter.py`'s larder pass (item 3a) did
+    exactly this arithmetic inline, and `demanded`/`delivered` below need the same arithmetic. With
+    two copies of *what an eater wants, and what the walk gives them*, MATTER could feed a person
+    whom the Queries report as hungry (§8). MATTER now calls this and derives its writes and its
+    `_subsistence_shortfall` from the record; the two Queries sum it over a subtree. So there is
+    one owner, and the Queries cannot disagree with the draw that actually runs.
+
+    THE ARITHMETIC IS ITEM 3a's, UNCHANGED, and every clause keeps its reason (see MATTER's pass):
+      * per housed person (`home_of`), in SORTED id order: the write order must be deterministic;
+      * per `subsistence_weight` kind, SORTED: `want = weight x Person.weight`, skipped when `<= 0`.
+        `Person.weight` is the cohort multiplier, *"A COHORT IS A PERSON AT weight > 1"*, so a
+        synecdoche of two hundred wants what two hundred eat (`24f`'s territorial quantity is this);
+      * the source is `nearest_store` over the RUNNING view `left`, so two eaters cannot spend the
+        same unit (`nearest_store`'s own `available` paragraph);
+      * `take = min(want, held)`, and the remainder is NOT walked further up. `source None` means
+        no rung at or above the home holds any of that kind.
+    No weights registered gives `{}`, which is MATTER's own `if weights:`.
+
+    ⚠ IT DOES NOT `TRACE`, on `ancestry`'s rule: a helper extracted to remove duplication must be
+    INVISIBLE to its callers. The `home_of` and per-eater `nearest_store` calls inside it trace
+    exactly as MATTER's inline loop did, in the same order, so MATTER's trace and every committed
+    artifact are unchanged by the extraction. MEASURED at `19d`: the regenerated `runs/` are
+    byte-identical, and so are four worlds' content hashes, event counts and claim counts
+    (`headless`, `governance_spine`, `tiny_world`, `populated.build_realm(0)`). The in-tree control
+    is `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte`."""
+    weights = w.fixtures.get("subsistence_weight")
+    out: dict = {}
+    if not weights:
+        return out
+    homes = home_of(w)
+    left: dict = {}           # (rung, kind) -> units still unspent this draw
+    for pid in sorted(homes):
+        person = w.persons[pid]
+        row: dict = {}
+        # `H-11`'s rule, unchanged: the loop is over the WEIGHTS registry, so a kind with no weight
+        # is not drawn at all -- a missing row is never read as a weight of zero.
+        for k, wt in sorted(weights.items()):
+            want = wt * person.weight
+            if want <= 0:
+                continue
+            src = nearest_store(w, homes[pid], k, available=left)
+            if src is None:
+                row[k] = (want, 0, None)
+                continue
+            held = left.get((src, k))
+            if held is None:
+                held = (w.rungs[src].stores or {}).get(k, 0)
+            take = min(want, held)
+            left[(src, k)] = held - take
+            row[k] = (want, take, src)
+        out[pid] = (homes[pid], row)
+    return out
+
+
+def demanded(w: World, rung_id: str, draw: Optional[dict] = None) -> dict:
+    """`{kind: units}`: WHAT THE PEOPLE UNDER `rung_id` NEED FROM THE LARDER IN A SEASON. It is the
+    sum of every housed eater's `want` whose home is `rung_id` or any rung beneath it. Plan position
+    `19d`, the retirement plan's G3: *"two new read-only queries (`demanded`, `delivered`)"*.
+
+    ⚠ A NEED IS A QUERY, NOT A THING A PLACE HAS. `01_AXIOMS.md` §D.10 (ratified): *"a need | a
+    `Sensation` plus a Query"*, and *"every aggregate | a Query, owned by Nobody (T-a)"*. A Rung owns
+    *"arrangements, not wants"* (probe `F19`'s law, S36.1), so this Query is not a demand the place
+    makes. Nobody files it. It is the arithmetic of the mouths under a roof, and something happens
+    about it only when a person learns of it and acts: `loop/matter.py` records the gap on the
+    drained larder's own write, WITNESS deposits it as a claim, and
+    `decision/options.py::_from_shortfall_claim` reads that claim into a `transfer`.
+
+    ⚠ AN R-1 AGGREGATE OVER THE CONTAINMENT SUBTREE (`_subtree`: the rung and its descendants), and
+    §22.4 clause 2 does not bar it. That clause forbids a Query that sums a per-person TALLY across
+    holders, which is a monotone counter in a ledger. `want` is `Person.weight` (a cohort's head
+    count, `T-l`) times a registered table, so this is `density`'s weighted HEADCOUNT and not a
+    tally. It reads live `contain` edges only, through `home_of` (clause 3).
+
+    ⚠ `draw` is MATTER's own record when MATTER asks, so the numbers are the draw that ran. When it
+    is omitted, it is the draw the stores AS THEY NOW STAND would give. For `demanded` the two agree
+    anyway: `want` reads no store. Kinds are those `subsistence_weight` registers with a positive
+    want; `delivered` returns the same keys.
+
+    REJECTED READINGS, each for a reason:
+      * ROUND ONE'S `demanded(levy, rung)` -- the share a `levy:` policy clause demanded of a rung
+        (`proposals/2026-09-17-governance-and-holdings/01_SEATS_AND_POLICY.md` §A.13). Its carrier
+        is gone: r2 withdrew both Queries (`04_MATTER_AND_WORKS.md` §A.3.4, §B.2), superseded the
+        policy clauses with the writ (`02_THE_WRIT_AND_THE_WORD.md`), and ruled `levy` deleted
+        (§A.20). What a writ demands is already `15c`'s `_from_content_claim`.
+      * THE STORES THEMSELVES (`Rung.stores` against some notion of population). A store is supply,
+        not need; a rung holding nothing still has mouths under it.
+      * THE EATERS WHOSE WALK *ENDS* AT `rung_id`. That set depends on which rungs hold stock, so an
+        empty settlement would demand nothing: the need would vanish exactly where it is unmet."""
+    TRACE.query("demanded", "resolver")
+    return _drawn_under(w, rung_id, draw, 0)
+
+
+def delivered(w: World, rung_id: str, draw: Optional[dict] = None) -> dict:
+    """`{kind: units}`: WHAT THE LARDER LADDER DELIVERS AGAINST `demanded(w, rung_id)`. It is the sum
+    of the same eaters' `take`, from whichever larder at or above their home the walk found. So
+    `demanded - delivered`, per kind, is exactly the unmet subsistence of the people under the rung.
+    That is the shortfall. Plan position `19d`, G3's second Query.
+
+    ⚠ IT IS THE DRAW ITSELF, NOT A LEDGER OF WHAT ARRIVED. Given MATTER's record (`draw`), this is
+    what MATTER delivered. Without it, this is what MATTER's draw would deliver from the stores as
+    they now stand: the arithmetic of the next draw, read without writing. It is never stored.
+    `Rung.__setattr__` refuses an aggregate field (*"L3 -- every aggregate is a function, never a
+    field"*).
+
+    REJECTED READINGS, each for a reason:
+      * MATTER DELIVERED IN BY `transfer` (G3's phrase *"delivery between settlements"*, read
+        literally as the `transfer.made` receipts landing on the rung). A transfer lands in STORES,
+        and the draw already reads stores. Counting both measures one flow twice. A count over past
+        receipts is also monotone in the log, which is §22.4 clause 3's ratchet. The act restocks
+        the larder, and the larder feeds the people: r2 `04` §A.3, *"MATTER STAYS WHERE IT IS
+        PRODUCED. IT MOVES ONLY BY `transfer`. EATERS DRAW UP THE CONTAINMENT LADDER, AND THE WALK
+        IS THE WHOLE MECHANISM."*
+      * `World._subsistence_shortfall` subtracted from `demanded`. That field is census-only. Its
+        own site says *"never read by the loop"*. It is also a snapshot of the last MATTER, so
+        subtracting it from a LIVE demand mixes two instants. A person who moved since would count
+        in one term and not the other.
+      * ROUND ONE'S `delivered(levy, rung, season)`, for `demanded`'s reason above."""
+    TRACE.query("delivered", "resolver")
+    return _drawn_under(w, rung_id, draw, 1)
+
+
+def _drawn_under(w: World, rung_id: str, draw: Optional[dict], i: int) -> dict:
+    """The shared body of `demanded` (`i = 0`, want) and `delivered` (`i = 1`, take): one pass over
+    the draw record, keeping the eaters homed in `rung_id`'s subtree. Both read the same cells, so
+    both return the same keys. Does not `TRACE`; its two callers own their names."""
+    here = _subtree(w, rung_id)
+    record = subsistence_draw(w) if draw is None else draw
+    out: dict = {}
+    for _pid, (home, row) in record.items():
+        if home not in here:
+            continue
+        for k, cell in row.items():
+            out[k] = out.get(k, 0) + cell[i]
+    return dict(sorted(out.items()))
+
+
 def presence(w: World, rung_id: str) -> list[str]:
     """S28 -- the PRESENCE INDEX the global fan-out reads."""
     TRACE.query("presence", "resolver")

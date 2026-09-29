@@ -489,7 +489,18 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # wear, a calendar crossing) `e.subject` held the record it concerned, never a person id,
         # so `pid == e.subject` was already always False there -- `actor_of` returning `None`
         # preserves that by construction rather than by an id-namespace coincidence.
-        if obs_mode != "none" and (obs_mode == "total" or pid == actor_of(w, e)):
+        # ⚠ PLAN POSITION `19d`: AN EVENT NO PERSON ACTED HAS NO ACTOR TO KEEP ITS READS PRIVATE TO,
+        # SO ITS WITNESSES RECEIVE THEM. `H-122`'s `actor` arm deposits *an act's* reads to the
+        # actor alone because the fold reads FROM THE ACTOR'S POSITION: `from` is their own rung,
+        # so the value is theirs. MATTER's larder pass is now the one actorless writer of
+        # `observed` (`loop/matter.py`, `19d`). What it records is a named rung's shortfall,
+        # relative to no holder, and it is what anyone standing at the drained larder or holding it
+        # saw. Before `19d`, no actorless Event carried an observation (MATTER's and CALENDAR's
+        # emitted `()`), so this clause changed no deposit on any world that existed. The
+        # `e.observed` test comes first only to skip `actor_of` for the common empty case. `none`
+        # is still the control and deposits nothing.
+        if (obs_mode != "none" and e.observed
+                and (obs_mode == "total" or (who := actor_of(w, e)) is None or pid == who)):
             seen_obs = seen_obs_by_pid.setdefault(pid, set())
             # `e.observed`, NOT `getattr(e, "observed", ())`. The field is on `Event` now, so
             # a default here would be a guard for a case that cannot arise -- and it would

@@ -39,30 +39,42 @@ from dataclasses import dataclass
 from typing import Any, Optional
 
 from ..gaps import Unspecified
-from .rosters import roster, roster_map
+from .rosters import RECORD_CONTENT, roster, roster_map
 
 REQUIRES_FORMS = roster("requires_forms")
 REQUIRES_OPERANDS = roster("requires_operands")
 REQUIRES_FORM_NEEDS = roster_map("requires_forms", "needs")
 
-def _check_writ_sourced_subset(writ_sourced: frozenset, operands: frozenset) -> None:
+def _check_writ_sourced_subset(writ_sourced: frozenset, operands: frozenset,
+                               name: str = "writ_sourced_operands") -> None:
     """Plan position `15c`. `writ_sourced` is a SUBSET of `operands`, never a second vocabulary --
     refused if it names anything the closed operand roster does not, the same discipline
     `record_kinds` and `tenure_kinds` are cross-validated against each other by in
     `data/rosters.py`. Factored into a function -- BATCH-CLOSE FINDING, methodology-close Phase 1
     antagonist -- so a test can call it with a planted mismatch rather than only exercising the
-    branch that never fires on today's data (§0.1 pt 3: a refusal that nothing can observe fail)."""
+    branch that never fires on today's data (§0.1 pt 3: a refusal that nothing can observe fail).
+    `name` is the claim-sourced roster being checked: `writ_sourced_operands` since `15c`, and
+    `shortfall_sourced_operands` since `19d` uses the same rule rather than a second copy of it."""
     if not writ_sourced <= operands:
         raise Unspecified(
-            f"rosters.yaml: writ_sourced_operands names {sorted(writ_sourced - operands)}, "
+            f"rosters.yaml: {name} names {sorted(writ_sourced - operands)}, "
             "not in requires_operands",
-            "rosters.yaml -- writ_sourced_operands",
-            needs="every writ_sourced_operands member to also be a requires_operands member",
-            law="a writ answers FOR an existing operand name; it does not coin a new one")
+            f"rosters.yaml -- {name}",
+            needs=f"every {name} member to also be a requires_operands member",
+            law="a claim answers FOR an existing operand name; it does not coin a new one")
 
 
 WRIT_SOURCED_OPERANDS = roster("writ_sourced_operands")
 _check_writ_sourced_subset(frozenset(WRIT_SOURCED_OPERANDS), frozenset(REQUIRES_OPERANDS))
+# Plan position `19d`. The operand names a SHORTFALL claim answers (`kind`, `amount`), and the
+# predicate stem it is recorded under: `(rung, "<stem>:<kind>", units)`. MATTER writes the claim
+# (`loop/matter.py`) and `decision/options.py::_from_shortfall_claim` reads it, so the stem
+# lives here once and neither side spells it. The stem's collision checks (it may be neither a
+# `requires` stem nor the content stem) sit below `REQUIRES_STEMS`, which they need.
+SHORTFALL_SOURCED_OPERANDS = roster("shortfall_sourced_operands")
+_check_writ_sourced_subset(frozenset(SHORTFALL_SOURCED_OPERANDS), frozenset(REQUIRES_OPERANDS),
+                           "shortfall_sourced_operands")
+SHORTFALL_PREDICATE = roster_map("shortfall_sourced_operands", "claim").get("predicate")
 
 class _Unknown:
     """THE THIRD TRUTH VALUE, AND IT IS NOT `False`.
@@ -543,6 +555,33 @@ REQUIRES_STEMS = frozenset({
 # roster-exempt: MECHANISM, as `REQUIRES_STEMS` above -- this is a property of the GRAMMAR'S
 # predicates (which of them read the ledger), not vocabulary the world contains.
 LEDGER_DERIVED_STEMS = frozenset({"claim.held"})
+
+
+def _check_shortfall_stem(stem, requires_stems: frozenset, content_stem) -> None:
+    """Plan position `19d`. THE SHORTFALL CLAIM'S STEM MUST MEAN ONE THING, so it may be neither a
+    stem the `requires` grammar reads nor the `content:` stem. The first collision would have
+    `LedgerReader` answer the claim as a belief about a store LEVEL, and `belief_contradicts` would
+    then decline a transfer on a number that was never a level. The second would have
+    `_from_content_claim` read a shortfall as a document. `record_kinds`/`tenure_kinds`' overlap
+    refusal (`data/rosters.py`) is the precedent: one stem, one reading. An absent or non-string
+    stem refuses too, because the writer would otherwise spell `None:grain`. Factored into a
+    function so the test can plant each collision (§0.1 pt 3)."""
+    if not isinstance(stem, str) or not stem or ":" in stem:
+        raise Unspecified(
+            f"rosters.yaml: shortfall_sourced_operands.claim.predicate is {stem!r}",
+            "rosters.yaml -- shortfall_sourced_operands",
+            needs="a bare predicate stem (a word with no `:`)",
+            law="the claim is `<stem>:<kind>`; a stem that is absent or already holds a `:` "
+                "cannot be split back into the kind the reader needs")
+    if stem in requires_stems or stem == content_stem:
+        raise Unspecified(
+            f"rosters.yaml: shortfall_sourced_operands.claim.predicate {stem!r} is already a "
+            f"stem another reader answers", "rosters.yaml -- shortfall_sourced_operands",
+            needs="a stem no `requires` form reads and that is not the content stem",
+            law="one stem, one reading -- a shared word is two questions spelled one way")
+
+
+_check_shortfall_stem(SHORTFALL_PREDICATE, REQUIRES_STEMS, RECORD_CONTENT.get("predicate"))
 
 def _require_known_stem(stem: str, where: str) -> None:
     """A predicate stem outside `REQUIRES_STEMS` REFUSES AT LOAD rather than reading UNKNOWN

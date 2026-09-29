@@ -782,7 +782,8 @@ class World:
               actor: Optional[str] = None,
               via: Optional[str] = None,
               change: Optional[Change] = None,
-              matured_term: Optional[str] = None) -> Any:
+              matured_term: Optional[str] = None,
+              observed: tuple = ()) -> Any:
         """`G4`. A WRITE IS HANDED EITHER A CLOSURE (`apply`) OR A `Change` (`change`), NEVER BOTH.
 
         A `Change` is the fold's: the subjects an effect writes, named before it runs, and the
@@ -847,7 +848,14 @@ class World:
         Emission lives HERE rather than at each call site because §8's invariant is that every rule
         lives once: keyed on `(record_kind, fieldname)`, which is the same key the write class and
         the social partition are already read from, so a new MATTER write inherits its emission by
-        existing rather than by remembering."""
+        existing rather than by remembering.
+
+        `observed=` (plan position `19d`) is WHAT THE WRITER READ TO REACH THIS WRITE: a tuple of
+        `data/requires.py::Observation`, put on the Event this call emits, which is `Event.observed`'s
+        own meaning (`W-B`). The fold fills that field from a Verdict. The one writer here is MATTER's
+        larder pass, which records the shortfall a drained larder left (`loop/matter.py`, `19d`).
+        ⚠ IT RIDES ONLY ON AN EMISSION: observations passed with no `emits=` are refused rather than
+        dropped, since a read no Event carries reaches no witness and would be lost silently."""
         # G2. NO TOKEN, NO WRITE -- and nothing else is consulted first, so the refusal is
         # attributable. `isinstance` rather than duck-typing: a bare `WriteClass` has a `.value`
         # and would otherwise pass straight through to the class check, which is the pre-G2 call
@@ -877,6 +885,13 @@ class World:
                 f"change. An effect returns a `state/gate.py::Change` -- the subjects it writes and "
                 f"the write -- so the gate can read them before and after (G4); an effect still "
                 f"mutating and returning ids is on the retired contract")
+        # `19d`. Checked after the token and the closure-or-Change checks, so those refusals stay
+        # the first ones a malformed call meets (G2's attributability).
+        if observed and emits is None:
+            raise InstrumentDefect(
+                f"World.write({thing!r}, ...) was handed {len(observed)} observation(s) and no "
+                f"`emits=`. An Observation reaches a witness only on the Event this write emits "
+                f"(`Event.observed`), so with no emission it would vanish without a trace")
         wclass = token.write_class
         step = self.step
         sname = step.value if step else "-"
@@ -1109,7 +1124,8 @@ class World:
                     # emergent-narrative claim", and a default root populates it with nothing. A
                     # caller with no antecedent must say so by passing `[ROOT]` itself.
                     causes=list(causes if causes is not None else []),
-                    emitted_at=self.tick)
+                    emitted_at=self.tick,
+                    observed=tuple(observed))
                 # ⚠ NO EMPTY-`causes[]` CHECK HERE. `Event.__post_init__` already refuses one at
                 # S19.4, and re-implementing it would be `CLAUDE.md` §8's violation one constructor
                 # apart — the first version of this block did exactly that and shipped two messages

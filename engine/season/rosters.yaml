@@ -1403,6 +1403,33 @@ rosters:
       no typed cell can ever pass `name == "at"` to `_derive_operand` in the first place.
     values: [to, kind, amount]
 
+  shortfall_sourced_operands:
+    source: >-
+      plan position `19d` (DEMAND · DELIVERY), `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md`
+      §3.2 row 11, and the mc_v18 retirement plan's G3: *"wiring the existing `transfer` verb's
+      operands from a shortfall claim"*.
+    note: >-
+      ⚠ `writ_sourced_operands`' SHAPE, ONE ROW DOWN, FOR A SECOND KIND OF CLAIM: the operand names a
+      SHORTFALL CLAIM may answer, before `decision/options.py::_derive_operand` falls through to the
+      referent or the fixture. A subset of `requires_operands`, refused at import otherwise
+      (`data/requires.py`). The claim is `(rung, "<predicate>:<kind>", units)`: MATTER records it
+      on the `stores.changed` Event of a larder the draw ran dry with a mouth unfed, as `demanded -
+      delivered` over the rung's subtree (`queries/world_q.py`), and WITNESS deposits it into those
+      who witness that write.
+      ⚠ TWO NAMES, NOT THREE, AND `to` IS LEFT OUT ON PURPOSE. For a `claim_landed` question the
+      referent IS the claim's subject (`questions_for` builds `(c.subject,)`), so `to` already binds
+      the drained rung through the referent rule. A claim branch for it would always return the same
+      value as the fallback beneath it, and a branch that can never change an outcome is `ID-13`.
+      The writ lists `to` because a writ's addressee is NOT its subject (the Record). `from` stays
+      the actor's own rung for r2 §A.13's reason: a claim about somewhere else must not reach into a
+      larder the actor is not standing in.
+      ⚠ THE PREDICATE STEM IS DATA, AND IT MAY NOT BE A WORD THE `requires` GRAMMAR READS: a claim
+      whose stem `LedgerReader` answered would become a belief about a store LEVEL. It may not be
+      the content stem either. `data/requires.py` refuses both collisions at import.
+    claim:
+      predicate: shortfall
+    values: [kind, amount]
+
   beneficiary_kinds:
     source: >-
       `CAT-2`, closed at step 5 (`proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml`).

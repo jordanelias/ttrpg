@@ -1179,7 +1179,12 @@ rows:
       run over the corpus; `site` is the referent where a cell reads one; and `kind`/`amount` — the two
       the design supplies no value for — are the fixtures `default_store_kind` (grain, declared and
       swept on its OWN row `H-121`) and `default_transfer_amount` (1, swept here), the instrument's
-      declared stand-in. A cell naming an operand nobody can derive forms NO Candidate.
+      declared stand-in. A cell naming an operand nobody can derive forms NO Candidate. ⚠ AMENDED
+      2026-09-29: two sources now come before the fixtures for `kind`/`amount`. A held writ
+      (`15c`, `_from_content_claim`) can name them, though neither live record kind yet carries
+      either key. A held SHORTFALL claim (`19d`, `_from_shortfall_claim`: `(rung,
+      "shortfall:<kind>", units)`, recorded by MATTER on a drained larder's write) names both.
+      The fixtures stand in where the question names neither.
     site:      >-
       `decision.operands_for` / `decision._derive_operand` / `decision.containing_rung_of` — the derivation;
       fixture `default_transfer_amount` in `DEFAULT_FIXTURES` — the value the design does not supply,
@@ -2389,7 +2394,10 @@ rows:
       `default_store_kind = "grain"` in `DEFAULT_FIXTURES`, taken second: a person deliberating ABOUT a
       store already knows which one, so `store_kind_of` reads it from the person's own ledger where the
       question names a claim whose predicate is `stores:<kind>`, and the fixture stands in only where
-      the question names none.
+      the question names none. ⚠ AMENDED 2026-09-29 (plan position `19d`): taken THIRD now. A
+      question about a held SHORTFALL claim, `(rung, "shortfall:<kind>", units)`, names its kind
+      first (`decision/options.py::_from_shortfall_claim`, `rosters.yaml:
+      shortfall_sourced_operands`). The fixture still answers every question that names neither.
     site:      >-
       fixture `default_store_kind` in `shape.DEFAULT_FIXTURES`, read by `decision._derive_operand` for the
       `kind` operand (after `decision.store_kind_of`), carried on the Candidate and into `Act.payload` by
@@ -3465,6 +3473,19 @@ rows:
     unblocks:  "`T-n`'s declared-ends half, built at `17b` for the one kind given a term: a service nobody pays for ENDS, at MATTER, citing the act that last wound it (`04 §B.8`'s *'causes[] = term.declared_by'*) -- and with it narrative #4 (*declared terms*) and the observable half of narrative #3 (*embezzlement already runs*: a treasury moved elsewhere is an establishment that lapses). Proceedings PHASE 4 step 22 (`Tenure.term`, placed at `17b` by the plan's own §2.1) rides this field; `22b` still owns the rest of PHASE 4"
     cite:      "`architecture/meta/04_CODE_ARCHITECTURE.md` §B.8 (`term? (matures_at, declared_by : ActId, closer) -- T-n`) and its synthesis call, verbatim: *'an actorless row may write until only where its cause is the existence change it also caused, or the maturation of a term declared by the act that opened this Tenure ... Rejected: routing term expiry through CALENDAR, which makes a term un-endable when nobody acts'*; its F.3 row: *'Tenure.term; MATTER matures it; the causation rule generalises to two causes'*. `architecture/meta/01_AXIOMS.md:1240`: *'So the opening act declares the terms'*. CLAUDE.md §0's ladder run for the LENGTH: not superseded, not irrelevant, no design document gives one, the precedent is `record_stage_term` (`H-80`) -- an assumption with a sweep. ⚠ `closer` (the third member of §B.8's `term?`) is NOT carried: §B.8 itself makes `Seat.revocation` authoritative and `term.closer` 'not a second authority', and nothing reads a per-term closer -- `ID-13`, recorded on `state/carriers.py::Term`"
     source:    "plan position `17b` (TERM · UPKEEP), 2026-09-29"
+
+  - id:        H-160
+    tier:      1
+    kind:      "WIRING"
+    hole:      "A SHORTFALL REACHES SOMEBODY WHO CAN ANSWER IT ONLY IN A WORLD BUILT FOR IT. Plan position `19d` built the chain: `world_q.demanded`/`delivered`; MATTER records `demanded - delivered` on the write of a larder its draw ran dry with a mouth unfed; WITNESS deposits it; `_from_shortfall_claim` reads `kind`/`amount` into a `transfer`. It EXECUTES in `harness/scarce.py`. FOUR SEPARATE LIMITS stand between that and the shipped worlds, each measured, none of them a defect in the chain itself: (1) FROM -- `transfer`'s `from` is the actor's own containing rung (`H-94` reading A; r2 §A.13 keeps it off any claim), every person in `populated.build_realm` lives in a hearth, and yield lands only at settlements, so NO computed transfer there can pass `stores(from, kind) >= amount`, however scarce or rich the realm; (2) WHO SEES -- the record reaches those standing at the drained rung (`co_located`) or holding it (`document_key`), and nobody else. Purview is a term of `reach` (Q2's filter), not a witness channel, so a lord whose seat covers the town but who neither holds it nor stands in it never learns; (3) THE CROSSING, NOT THE STATE -- a larder never stocked is never drawn, so it writes nothing and reports nothing, and a larder emptied and left empty reports once. Its people stay short (`_subsistence_shortfall`) in silence; (4) WHICH QUESTION -- `H-54`: the claim-sourced Candidate forms, but a person answers `qs[0]` by hash under `first`, and under `all`/`one_per_source` the folded question carries `qs[0].about` alone (`decision/questions.py`), so a claim-sourced operand is unreachable unless its question sorts first. That last clause binds `15c`'s writ operands identically"
+    owner:     "decision/options.py -- `containing_rung_of` (limit 1, with `H-94`/`H-75`/`H-158`); epistemic.py -- the witness channels (limit 2); loop/matter.py -- the shortfall record on the larder write (limit 3); decision/questions.py -- `aggregate_questions` (limit 4, `H-54`)"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "the retirement plan's G3 on the SHIPPED worlds rather than on its test world, and `24f`'s territorial quantity (`demanded` over a settlement is that quantity once cohorts exist). Which limit to lift first is a design order, not a number: (1) is `H-158`'s `unblocks:` (a seated holder paying out of the seat's own rung needs `Act.via` on a computed transfer) or a builder that seats someone where the stock is; (2) would be a sixth witness channel or a widened `document_key`, which r2 `01` refused for the place-blind broadcast it becomes; (3) is the crossing semantics `loop/matter.py` states, and `24f`'s body chain (`H-125`) is the design's other voice for a place that stays hungry; (4) is `H-54`'s own ruling"
+    cite:      "MEASURED 2026-09-29 at `19d`. (1) `populated.build_realm(0)`, three seasons: 27 of 27 computed `transfer`s refused (12 / 9 / 6), every one naming a `from` that is a HEARTH holding 0 of its kind; 4,810 units produced a season against 138 demanded by 46 eaters at build (135 by 45 after season 1) -- the retirement plan's *35x surplus* holds as a ratio, and its *so transfer is refused* does not hold as a cause. (3) the same world, one season: every eater's walk finds no stock (the draw precedes the first yield: `source None`), so no larder is drained and nothing is recorded; every later season is in surplus. The committed `runs/` and four worlds' content hashes (`headless.run(3)`, `governance_spine` x3, `tiny_world` x4, `build_realm(0)` x2) are byte-identical before and after `19d`. (2)+(4) `harness/scarce.py`, four seasons, the shipped chooser, `question_aggregation_rule` at each of `first`/`all`/`one_per_source`: the steward holds both shortfall claims (`told_by`, through `document_key`) and deliberates 15 / 19 / 15 times, and none of those deliberations is about a shortfall claim, because claims about his own granary sort first. With the question named (the driver's probe override), the shipped chooser and fold execute `transfer(from=set_granary, to=set_hungry, kind=salt, amount=8)` -- the claim's own kind and amount -- as `transfer.made`, and with no `hold` the steward holds no claim (`tests/test_demand_delivery.py`). CLAUDE.md §0's ladder: not superseded; not irrelevant (G3 is positioned); no design document gives a fifth witness route or a seat-treasury `from` for a computed act; the precedent for (2) is r2 `01`'s refusal of place-blind channels; what makes sense for the architecture is to register the four and lift none inside `19d`, because each is another position's surface -- a record of limits, not a ruling request"
+    source:    "plan position `19d` (DEMAND · DELIVERY), 2026-09-29"
 
 
 discharges:

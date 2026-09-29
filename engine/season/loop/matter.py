@@ -22,6 +22,7 @@ from __future__ import annotations
 from typing import Optional
 from ..data.fixtures import SITE_YIELD
 from ..data.matrix import Step
+from ..data.requires import SHORTFALL_PREDICATE, Observation
 from ..queries import world_q
 from ..state.carriers import Event
 from ..state.gate import Token
@@ -272,7 +273,6 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     #
     # ⚠ BODIES AND TRAVEL ARE STILL NOT BUILT. Naming them here would suggest otherwise; the
     # `not_implemented` list in this barrier's decision row is where they are recorded.
-    weights = w.fixtures.get("subsistence_weight")
     factor = w.fixtures.get("season_factor")
     scale_ = w.fixtures.get("condition_scale")
 
@@ -307,31 +307,73 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # `H-38` closed with *"`Site.condition` is the model"*, and this spends that closure rather
     # than minting a `band_floors.person` second scheme.
     floors_body = (w.fixtures.get("band_floors") or {}).get("body", {})
+    # ⚠ PLAN POSITION `19d`: THE ARITHMETIC ABOVE NOW LIVES IN ONE OWNER, `world_q.subsistence_draw`,
+    # and this pass derives its writes from the record it returns. The inline loop that stood here
+    # (per housed eater, sorted; per weighted kind, sorted; `nearest_store` over the running `left`
+    # view; `take = min(want, held)`) moved there VERBATIM, because `demanded`/`delivered` need the
+    # same arithmetic. A second copy would let MATTER feed a person the Queries call hungry. The
+    # derivation below reproduces `draws` and `short_by_person` exactly, in the same insertion
+    # order. That order reaches `r.stores.update(...)`'s key order, and with it the content hash.
+    record = world_q.subsistence_draw(w)
     draws: dict = {}          # source rung -> {kind: units it gives up}
     short_by_person: dict = {}
-    left: dict = {}           # (rung, kind) -> units still unspent this season
-    if weights:
-        homes = world_q.home_of(w)
-        for pid in sorted(homes):
-            person = w.persons[pid]
-            # `H-11`'s rule, unchanged: the loop is over the WEIGHTS registry, so a kind with no
-            # weight RAISES rather than silently drawing nothing.
-            for k, wt in sorted(weights.items()):
-                want = wt * person.weight
-                if want <= 0:
-                    continue
-                src = world_q.nearest_store(w, homes[pid], k, available=left)
-                if src is None:
-                    short_by_person.setdefault(pid, {})[k] = want
-                    continue
-                held = left.get((src, k))
-                if held is None:
-                    held = (w.rungs[src].stores or {}).get(k, 0)
-                take = min(want, held)
-                left[(src, k)] = held - take
+    drained: dict = {}        # source rung -> {kinds it RAN OUT OF with a mouth still unfed}
+    for pid, (_home, row) in record.items():
+        for k, (want, take, src) in row.items():
+            if src is not None:
                 draws.setdefault(src, {})[k] = draws.setdefault(src, {}).get(k, 0) + take
-                if take < want:
-                    short_by_person.setdefault(pid, {})[k] = want - take
+            if take < want:
+                short_by_person.setdefault(pid, {})[k] = want - take
+                if src is not None:
+                    drained.setdefault(src, set()).add(k)
+    # -- THE SHORTFALL RIDES ON THE DRAINED LARDER'S OWN WRITE (plan position `19d`) -------------
+    #
+    # A larder that runs dry while a mouth is still unfed is the one moment the gap between
+    # `demanded` and `delivered` becomes a fact at a PLACE. This records it there as an
+    # `Observation` on the `stores.changed` Event that the same write already emits:
+    # `(rung, "shortfall:<kind>", demanded - delivered)`. WITNESS deposits it into whoever witnesses
+    # that write: anyone standing at the rung (`co_located`) and anyone holding it
+    # (`document_key`). `decision/options.py::_from_shortfall_claim` then reads `kind` and `amount`
+    # off the claim, so a `transfer` formed from the question the claim raises carries both, and its
+    # `to` is the drained rung itself (the question's referent).
+    #
+    # ⚠ NO NEW EVENT, NO NEW KIND, NO NEW WRITE, AND EACH IS REFUSED FOR A REASON. A shortfall is not
+    # a state change (L3: an aggregate is never a field, so there is nothing to write), and a
+    # hand-built `subsistence.short` Event would need an anchor that `anchor_of` can reach. `_crossings`
+    # anchors on the write that crossed; a rung with no write has no receipt to name. The larder
+    # write DOES exist at exactly this moment. A drained source was drawn (`take >= 1`: `nearest_store`
+    # only returns a rung holding `> 0`), so the gate emits `stores.changed` there, and
+    # `Event.observed` is the field for *what was read to reach this Event* (`W-B`). Only its
+    # writer is new, here at MATTER.
+    #
+    # ⚠ L5 HOLDS: THE OBSERVATION DECIDES NOTHING. Nobody is starved into an act here. A witness holds
+    # a claim, the claim may raise a `claim_landed` question, and any transfer is that person's own
+    # choice (S36.1: *"every arrow is a person's act"*).
+    #
+    # ⚠ WHAT THIS DOES NOT REPORT, and it is registered, not hidden (`H-160`):
+    #   * A LARDER THAT WAS NEVER STOCKED. An eater whose walk finds nothing (`source None`) drains
+    #     no rung, so no write carries the gap. The emission is the CROSSING into dearth, not the
+    #     state: once a place has run dry and been reported, its next empty season is silent, like a
+    #     band that is crossed once.
+    #   * A GOVERNOR WHO NEITHER STANDS AT THE RUNG NOR HOLDS IT. Purview is a term of `reach`
+    #     (Q2's filter), not a witness channel, so a claim never deposited cannot be admitted.
+    # The value is the SUBTREE's gap (`demanded(w, S) - delivered(w, S)`), not only the part owed by
+    # eaters whose walk ended at `S`. It counts people under `S` fed short by a larder below `S`,
+    # and so NESTS: a hearth larder and its settlement's can both report one hungry household. That
+    # is the Query's own meaning, and it is stated here rather than hidden.
+    #
+    # ⚠ MEASURED ON THE SHIPPED WORLDS (2026-09-29): none drains a larder with a mouth unfed. The
+    # populated realm holds nothing before its first yield (every eater's `source` is `None`) and is
+    # in surplus after it. `tiny_world` never runs its hearth dry mid-take. The corpus's 178 built
+    # worlds hold stock (234 `transfer.made` among them) and record 0 shortfalls. So every
+    # committed artifact is byte-identical, and the mechanism fires only where the world is
+    # actually scarce (`harness/scarce.py`).
+    short_seen: dict = {}     # drained rung -> (Observation, ...), sorted by kind
+    for src in sorted(drained):
+        need, got = world_q.demanded(w, src, record), world_q.delivered(w, src, record)
+        short_seen[src] = tuple(
+            Observation(src, f"{SHORTFALL_PREDICATE}:{k}", need[k] - got.get(k, 0))
+            for k in sorted(drained[src]) if need.get(k, 0) > got.get(k, 0))
     if short_by_person:
         # ⚠ A SHORTFALL EMITS NOTHING AND DECIDES NOTHING, on L5's rule: a threshold crossing
         # *"MAY NEVER PRODUCE AN OUTCOME"*. Inventing starvation here would be the outcome L5
@@ -409,11 +451,15 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
             after = {k: have.get(k, 0) - amt for k, amt in draw.items()}
             if any(after[k] != have.get(k, 0) for k in after):
                 prior = w.last_emission_of("stores.changed", rid)
+                # `observed=`: the shortfall this draw left at `rid` if it ran dry here (`19d`,
+                # above). Empty for every larder that met its mouths, which is every one the
+                # shipped worlds draw.
                 w.write("stores", token,
                         lambda r=r, after=after: r.stores.update(after),
                         record_kind="Rung", fieldname="stores", driver="Event",
                         emits="stores.changed", subject=rid,
-                        causes=[prior] if prior else [ROOT])
+                        causes=[prior] if prior else [ROOT],
+                        observed=short_seen.get(rid, ()))
         # `yield` — #353 §25's *"only here"* row. The base is the SITE's, scaled by its
         # condition and then by `season_factor`, so a worn place produces less without a
         # second wear concept (`H-93`, and `rosters.yaml: site_yield` for why).
