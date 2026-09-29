@@ -46,20 +46,129 @@ from ..state.carriers import (
 
 
 # ---------------------------------------------------------------------------
-# ITEM 1 -- `@effect_for("commit")` is WRITTEN AND HELD, NOT SHIPPED. There is no test here.
-#
-# The effect ran, `resolvable_verbs()` went 18 -> 19, and four falsifiers passed -- and one
-# populated season then measured `commitment.made: 0 / commitment.refused: 42`, because no
-# question source in `questions_for` offers a Proposition as a referent and `commit`'s typed cell
-# is `existence(of: subject, kind: Proposition)`. Landing it breached a CONTROL BOUND (not a
-# golden) in `test_wd_a_fork_changes_a_later_decision_...`, whose own message names the breach:
-# *"some FOURTH channel reaches `opening_set`, and every other figure in `W-D` is confounded."*
-#
-# The measurement, the reasoning and the re-scheduling (item 1 moves to PHASE 2, after item 7,
-# with `commitment.made > 0` as its artifact) are in
-# `proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md` §7.2. A test asserting a
-# behaviour this branch does not ship would be the half-wiring this file exists to refuse.
+# ITEM 1 (plan position `7a`) -- `@effect_for("commit")`, SHIPPED at G4 after BO-10's gate
+# (`15`/`15c`/`15b`). Falsifier LB-1, in two halves: the mechanism, isolated on a hand-built world
+# where a Proposition referent genuinely exists; and BO-9/BO-10's own re-measurement on the
+# populated corpus, reported HONESTLY rather than repaired.
 # ---------------------------------------------------------------------------
+
+
+def test_lb1_commit_opens_a_tenure_and_q4_then_sees_it():
+    """**LB-1, half one — THE MECHANISM.** `commit`'s row (`verb_table.yaml`) is `own`-eligible,
+    `beneficiary: actor`, typed `existence(of: subject, kind: Proposition)`,
+    `writes: ["Tenure.since"]`, `emits: ["commitment.made"]`. Given a genuine Proposition referent
+    (which BO-9/BO-10 found no live question source supplies, below), the effect must open a live
+    `commit` Tenure -- subject the actor, object the Proposition -- AND a downstream reader must
+    then see it: Q4 (`queries/world_q.py::questions_for`) raises a standing "need" question from
+    every live `commit` to an OUGHT. A test observing only the write is the half-wiring this file
+    exists to refuse."""
+    w = P.tiny_world()
+    w.propositions["prop_want"] = Proposition("prop_want", "OUGHT", "p_mid", "wants a raise",
+                                              None, 0)
+    d = SeasonDriver(w)
+    out = d.resolve(mint_token(w, WriteClass.ACTS),
+                    [Act(id="c_lb1", actor="p_mid", verb="commit",
+                         payload={"subject": "prop_want"})],
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert [e.kind for e in out] == ["commitment.made"], (
+        f"commit on a live Proposition did not report a clean success: {[e.kind for e in out]}")
+    nt = next((t for t in w.tenures if t.kind == "commit" and t.object == "prop_want"), None)
+    assert nt is not None and nt.subject == "p_mid" and nt.live, (
+        "no live `commit` Tenure opened naming the actor as subject and the Proposition as object")
+
+    w.tick = 1
+    qs = world_q.questions_for(w, w.persons["p_mid"])
+    assert any(q.source == "need" and q.about == "prop_want" for q in qs), (
+        f"Q4 did not raise a standing question from the new `commit` Tenure: "
+        f"{[(q.source, q.about) for q in qs]}")
+
+
+def test_lb1_commit_refuses_a_proposition_that_does_not_exist():
+    """**LB-1, the refusal path.** The row's own `refusal_note`: *the Proposition does not exist
+    (§14 -- immutable, must be uttered first)*. This is the typed precondition's, asked before the
+    effect ever runs (`loop/resolve.py::_admits`) -- so a `commit` naming an id that names no
+    Proposition never reaches `_eff_commit` at all and opens nothing."""
+    w = P.tiny_world()
+    d = SeasonDriver(w)
+    out = d.resolve(mint_token(w, WriteClass.ACTS),
+                    [Act(id="c_lb1r", actor="p_mid", verb="commit",
+                         payload={"subject": "prop_nonexistent"})],
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert [e.kind for e in out] == ["commitment.refused"], (
+        f"commit on a nonexistent Proposition did not refuse cleanly: {[e.kind for e in out]}")
+    assert not any(t.kind == "commit" for t in w.tenures), (
+        "a refused `commit` still opened a Tenure")
+
+
+def test_lb1_removing_the_effects_body_mints_no_tenure(monkeypatch):
+    """**LB-1's own control, isolating the effect as the producer.** With `EFFECTS["commit"]`
+    replaced by a stub returning `NO_CHANGE` -- "the effect with its body removed" -- the IDENTICAL
+    act that opens a Tenure in the mechanism test above must not. Without this, the Tenure seen
+    there could in principle come from `add_tenure` being reached some other way; this confirms it
+    comes from `_eff_commit` and nothing else."""
+    from ..loop.effects import EFFECTS
+    from ..state.gate import NO_CHANGE
+    w = P.tiny_world()
+    w.propositions["prop_want"] = Proposition("prop_want", "OUGHT", "p_mid", "wants a raise",
+                                              None, 0)
+    monkeypatch.setitem(EFFECTS, "commit", lambda w, a, res=None: NO_CHANGE)
+    d = SeasonDriver(w)
+    out = d.resolve(mint_token(w, WriteClass.ACTS),
+                    [Act(id="c_lb1c", actor="p_mid", verb="commit",
+                         payload={"subject": "prop_want"})],
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert [e.kind for e in out] == ["commitment.refused"], (
+        f"a no-op effect body did not read as the fold's own no-op refusal: {[e.kind for e in out]}")
+    assert not any(t.kind == "commit" for t in w.tenures), (
+        "a stubbed-out effect still minted a Tenure -- something else is opening it")
+
+
+def test_lb1_bo10_gate_still_open_after_15_15c_15b_report_not_repair():
+    """**LB-1, half two — BO-9/BO-10's OWN RE-MEASUREMENT, HONEST RATHER THAN REPAIRED.**
+    `01_THE_BUILD_ORDER.md` §7.2 measured `commitment.made: 0 / commitment.refused: 42` on one
+    populated season before this effect shipped, diagnosed as structural: no source in
+    `questions_for` offers a Proposition as a REFERENT (`decision/options.py::_REFERENT_OPERANDS`
+    binds `commit`'s `subject` to the question's referent, and every live referent today is a
+    person id), and BO-10 named items 5/7/8 (`15`/`15c`/`15b`) as what would open that channel.
+
+    ⚠ THEY ARE ALL DONE, AND THE GATE IS STILL SHUT. `15c`'s operand-widening
+    (`decision/options.py::_derive_operand`) answers `to`/`kind`/`amount` from a held writ's
+    content; `15b`/`15`'s content-claim/deposit machinery widens which `claim_landed` questions
+    REACH a person (`world_q.questions_for`'s clause 3, `named(c)`). Neither touches `subject`,
+    which stays a bare `_REFERENT_OPERANDS` bind to the question's own referent. So `commit`'s
+    typed cell (`existence(of: subject, kind: Proposition)`) still asks about a person id and
+    still refuses, every time, on this corpus. **This test asserts that gap is still open, on
+    purpose** — the falsifier this position's brief named explicitly refuses to invent a repair
+    (widening Q4 was tried and refused in §7.2, with its own measurement: 1 made / 57 refused,
+    because a standing question cannot be the producer of the commitment that raises it). The one
+    thing that DID move is `resolvable_verbs()`, which is asserted moving the other way."""
+    from collections import Counter
+    from ..decision import make_chooser
+    from ..state.ids import H, draw_factory
+    w = build_realm(0)
+    d = SeasonDriver(w)
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    chooser = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                           draw=draw_factory(w.world_seed, lambda: w.tick))
+    d.season(chooser, question=None, subsistence=P.SUBSIST,
+             contest_max_depth=w.fixtures.get("contest_max_depth"))
+    kinds = Counter(e.kind for e in w.log)
+
+    assert "commit" in resolvable_verbs(), (
+        "`commit` dropped back out of `resolvable_verbs()` -- the effect registration regressed")
+    commit_acts = [a for a in d.resolved if a.verb == "commit"]
+    assert commit_acts, "no `commit` act formed at all on this corpus -- the gate moved further"
+    referents_seen = {(a.payload or {}).get("subject") for a in commit_acts}
+    assert referents_seen and not (referents_seen & set(w.propositions)), (
+        f"a `commit` act named a real Proposition as its subject -- BO-9/BO-10's diagnosis no "
+        f"longer holds and this position's own claim should be revisited: {referents_seen}")
+    assert kinds.get("commitment.made", 0) == 0, (
+        f"commitment.made is {kinds.get('commitment.made', 0)}, not 0 -- BO-10's gate has closed "
+        "since this test was written; update this test AND this position's own report rather "
+        "than re-pinning the number silently")
+    assert kinds.get("commitment.refused", 0) > 0, (
+        "no `commit` refusals at all -- the verb stopped being attempted, which is a different "
+        "regression from the one this test documents")
 
 
 # ---------------------------------------------------------------------------

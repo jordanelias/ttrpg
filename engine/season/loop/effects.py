@@ -1046,6 +1046,46 @@ def _eff_utter(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
                   lambda: w.propositions.__setitem__(pid, prop))
 
 
+@effect_for("commit")
+def _eff_commit(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """§E3 `:426`: commits the actor to a Proposition -- a new `commit` Tenure opens, subject the
+    actor, object the Proposition the act names (`Act.subject`, the row's typed precondition:
+    *the Proposition exists, immutable, §14*). Plan position `7a`. `commit` is a `tenure_kinds`
+    member (`rosters.yaml`) with no opener until this effect -- `tenure_kinds_without_an_opener()`
+    reported it, and `resolvable_verbs()` (`loop/driver.py`) excluded the verb for want of one,
+    per §E3's `writes: ["Tenure.since"]` with nothing to perform it.
+
+    ⚠ THE BAREST OPENER IN THIS FILE: no seat, no closure, no per-kind branch. `commit` is
+    `own`-eligible with `beneficiary: actor` and carries no `via`, so the edge it opens names the
+    actor as its own subject and is admitted under `T-m` (`state/gate.py::tenure_write_basis`) --
+    the same basis `_eff_confer`'s new `hold` and `_eff_release`'s closures stand on. Read
+    `_eff_confer` above for the general shape (name the edge, defer the mint into the closure);
+    its seat/incumbent-closure logic does not apply here, because nothing closes and no `via` is
+    read.
+
+    G4 -- WHAT IT NAMES: THE EDGE, whole -- the one write the row declares. It always moves
+    (absent -> present: `add_tenure` mints a fresh Tenure, never overwrites one), so a `commit`
+    that reaches this effect is never a no-op; the row's one refusal (the Proposition does not
+    exist) is the typed precondition's, asked before this ever runs, and there is nothing left for
+    the effect itself to decline.
+
+    THE ID SALTS ON THE OBJECT, `_eff_confer`'s `f"hold:{obj}"` pattern (`H`'s `subject_id` slot is
+    the new Tenure's own subject, its `purpose` is `f"{kind}:{object}"`) -- so two different
+    actors committing to the same Proposition in the same tick still mint distinct ids, because
+    each one's `subject_id` is its own actor.
+
+    ⚠ BUILD-ORDER BO-9/BO-10 (`proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md`
+    §7.2): the first build of this effect, before any question source offered a Proposition
+    referent, measured `commitment.made : 0` / `commitment.refused : 42` on one populated season --
+    a structural gap in `operands_for`/`questions_for`, not in this body, and HELD rather than
+    shipped. Items 5/7/8 (here `15`, `15c`, `15b`) are what BO-10 named as opening that aperture;
+    this effect is unchanged from the held draft, because the diagnosis put the gap upstream of it."""
+    prop_id = _operand(a, "subject")
+    nt = Tenure(H(w.world_seed, w.tick, a.actor, f"commit:{prop_id}"), a.actor, prop_id, "commit",
+                since=w.tick)
+    return Change((Subject.edge(nt),), lambda: w.add_tenure(nt))
+
+
 @effect_for("transfer")
 def _eff_transfer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """§54 item 7's mirror: the giver's store goes DOWN and the receiver's goes UP.
