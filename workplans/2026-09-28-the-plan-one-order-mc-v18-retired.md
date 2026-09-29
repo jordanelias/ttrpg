@@ -216,7 +216,7 @@ four rows of that table found stale in this pass are corrected here, not there: 
 | 18 | **PROC-A** | SC | **DONE, narrowed scope (§8.11); code-verified at ★'s execution** | — | Phase 1 · 9 |
 | 18a | **FIELD DELETIONS — five** (not eleven -- re-derived at execution) | IN | **DONE** | `17a`, `13d-i` (incl. item 5), 13d-ii ✓, `18` | Phase 2 |
 | ★ | **APERTURE RE-MEASUREMENT** | IN | **DONE** | `18a` | Phase 2 |
-| 19 | **U7-remit** | IN | OPEN | `★`, 6 ✓, `15`/`15c`, `18` | Phase 2 |
+| 19 | **U7-remit** | IN | **DONE** | `★`, 6 ✓, `15`/`15c`, `18` | Phase 2 |
 | 19b | **U7-disp** | IN | OPEN | **JORDAN** (`ED-IN-0210`, §5.1 item 6) + `15`/`15c` | Phase 2 |
 | 19c | **MIGRATE** (+ `24d-ii`) | IN/SE | OPEN | 24d-i ✓ | Phase 2 |
 | 19d ✦ | **DEMAND · DELIVERY** | SE/IN | **DONE** | `15c` | Phase 2 |
