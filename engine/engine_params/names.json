@@ -3,7 +3,7 @@
   "schema_version": 1,
   "source": "references/names_index.yaml",
   "registry_version": 3,
-  "count": 122,
+  "count": 123,
   "canonical": {
     "agg.body": "Body",
     "agg.mind": "Mind",
@@ -56,6 +56,7 @@
     "season.pursuits": "pursuits",
     "season.role_template": "role_template_pursuits",
     "season.seed": "seed_pursuits",
+    "season.stance": "stance",
     "set.defense": "Defense",
     "set.facility_tier": "Facility Tier",
     "set.legitimacy": "Legitimacy",

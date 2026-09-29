@@ -343,21 +343,6 @@ def _resolve_slot(slot, world, rng):
                 fid = ctx.get("faction")
                 ctx["echo"] = {"actor_faction": fid, "target_faction": fid,
                               "most_relevant_stat": "L", "degree": echo_degree}
-        elif st in ("fieldwork", "investigation"):
-            # OI-02 (ED-IN-0091 plan §2.2/§3 Wave 1 stage 3): design-gated on ED-916 ("Zero
-            # continuous-engine validation at fieldwork parameters") — routes to the stub-wired
-            # resolver rather than raising or silently deferring. The stub's own args are inert
-            # (stubwire.stub_resolve ignores them by construction — no-fabrication contract);
-            # ctx/world are threaded through so a future real resolver drop-in needs no call-site
-            # change here.
-            if st == "fieldwork":
-                stub = composition.require('scene_resolver.fieldwork')(ctx.get("scene"))
-            else:
-                stub = composition.require('scene_resolver.investigation')(
-                    ctx.get("npc_id"), ctx.get("prompt"), world)
-            out["reason"] = stub.reason
-            out["stub"] = stub.stub
-            return out
         else:
             # OI-02 total-mapping fallback (ED-IN-0091 plan §2.2): every scene_type is either a
             # canonical resolver (above) or an explicitly-flagged stub-wire call — never a silent

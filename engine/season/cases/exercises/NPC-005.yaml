@@ -9,6 +9,13 @@ case: NPC-005
 name: Sigrid Torsvald
 source: 'the case''s own `season_requires` + #353 and the hole register, cited per row'
 authored_after_first_run: true
+# `W28-cast` (position 8). `who` restates the `name:` above; no `capability` -- her case text names
+# a covert operative's tradecraft, which the `verb_capability` roster has no key for today
+# (`copying` is the only rostered key), so a number here would be invented rather than read off her
+# text. Absent is the honest reading (S42.2's polarity rule), not a placeholder zero.
+cast:
+- who: Sigrid Torsvald
+  role: protagonist
 rows:
 - need_sha: 9a9cea9eafec
   hardness: core

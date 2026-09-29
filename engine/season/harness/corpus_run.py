@@ -106,11 +106,7 @@ def rescales() -> dict:
     do, so a keyword rule would cover half the corpus and silently mis-scale the rest — the ROUTER
     `W10` deleted, returning as a corpus tool. Measured before deciding not to build one."""
     out: dict = {}
-    d = files.EXERCISES_DIR
-    if not d.is_dir():
-        return out
-    for f in sorted(d.glob("*.yaml")):
-        doc = load_yaml(f.read_text()) or {}
+    for f, doc in _exercise_docs():
         sc = doc.get("scale")
         if doc.get("case") and isinstance(sc, dict):
             if not sc.get("why"):
@@ -119,6 +115,22 @@ def rescales() -> dict:
             _check_office(f.name, sc.get("office"))
             out[doc["case"]] = sc
     return out
+
+
+def _exercise_docs():
+    """The one directory walk `rescales()` and `cast_overlay()` both read a different top-level
+    key off — `cases/exercises/*.yaml`, "ONE OVERLAY MECHANISM, NOT TWO" (this module's own
+    header). Factored out (methodology close, 2026-09-29, `/simplify` REUSE lens) after the two
+    functions carried this loop byte-for-byte twice, differing only in which key and which type
+    check each reads afterward — a third overlay key (already anticipated: position `17`'s
+    roles/offices) would otherwise have copied it a third time. Yields `(path, doc)` so a caller
+    can still cite the file by name in its own error messages; tolerant of a missing directory
+    (no `sorted(d.glob(...))` on a `d` that doesn't exist)."""
+    d = files.EXERCISES_DIR
+    if not d.is_dir():
+        return
+    for f in sorted(d.glob("*.yaml")):
+        yield f, (load_yaml(f.read_text()) or {})
 
 
 def _check_office(where: str, off) -> None:
@@ -171,6 +183,43 @@ def apply_rescale(case: dict) -> dict:
     if sc.get("office"):
         c["office"] = sc["office"]
     return c
+
+
+def cast_overlay() -> dict:
+    """`W28-cast`. The corpus's per-case `cast:` authoring, `{case_id: [entry, ...]}` — an OVERLAY,
+    read the SAME way `rescales()` reads `scale:`/`office:` and for the identical reason: 27 of the
+    46 NPC-lane cases are CHAIN-sourced (`cases/chain/NPC1..3.yaml`), a predecessor proposal's
+    committed evidence this repo reads and does not own, so a `cast:` block is never written into
+    those files in place. `cases/exercises/*.yaml` is the established overlay directory (its own
+    header: *"ONE OVERLAY MECHANISM, NOT TWO"*) — this reads a THIRD top-level key from the SAME
+    per-case files `rescales()` already reads `scale:`/`office:` from, rather than inventing a
+    second directory or a second per-case file convention.
+
+    ⚠ EACH ENTRY IS `{who, role, capability}`. `who` names a cast member — for every entry authored
+    so far, the case's own PROTAGONIST, i.e. its `name:` field, never retyped independently (a
+    second copy of a fact the case already owns is the hazard `CLAUDE.md` §0.05 cl.3 names). `role`
+    is `"protagonist"` on every entry authored so far; resolving the REST of a case's `who_acts`
+    prose into further roles, offices and `WAITS-ON-PLAYER` non-actors is position `17`'s
+    (`ambitions(p) and build_at from the cast`), not this position's. `capability` is present only
+    where the case's OWN text grounds a number — absent is the honest reading (§42.2's polarity
+    rule), never a placeholder zero standing in for one.
+
+    ⚠ COUNT THIS WITH THIS FUNCTION, NEVER WITH A GREP OVER THE CASE FILES. The historical GAP this
+    position's own plan entry names in terms: an antagonist once re-derived a corpus count by
+    grepping raw YAML and got it wrong, because `_tolerant_yaml` is what actually parses the
+    chain's non-standard files (markdown fences, a truncated head) and a grep sees none of that
+    parsing. `len(cast_overlay())` (or `len(CAST)`) is the harness's own count; a
+    `grep -c 'who:' cases/**/*.yaml` is not, and will over- or under-count the moment a comment or
+    an unrelated `who:`-shaped string appears in a file this function does not read as one."""
+    out: dict = {}
+    for _f, doc in _exercise_docs():
+        entries = doc.get("cast")
+        if doc.get("case") and isinstance(entries, list):
+            out[doc["case"]] = entries
+    return out
+
+
+CAST = cast_overlay()
 
 
 def seasons_for(case: dict) -> int:
@@ -229,6 +278,23 @@ def build_at(case: dict, seed: int = 0) -> World:
         if chain:
             w.add_tenure(Tenure(f"t_{pid}_in", pid, ids[chain[0]], "contain", 0))
         w.persons[pid].pursuits = seed_pursuits(seed, str(case.get("id")), pid)
+    # ⚠ `W28-cast`: THE CAST'S AUTHORED `capability`, WRITTEN ONCE, AT WORLD-GEN, AND NOWHERE ELSE.
+    # `04_CODE_ARCHITECTURE.md` F.6 (`:1087`): *"capability's season writer ... world-gen writes it
+    # once; nothing else does."* Until this, the one writer in the tree ZEROED the dict --
+    # `probes.py::p11`'s own comment: *"`capability` at zero ... for EVERY corpus person"* -- which
+    # is why R-09's roll varies by SEED and FIXTURE and never by PERSON (`hole_register.yaml`
+    # H-126/H-127). `p_a` is the person this function already privileges as the case's own actor --
+    # the docket two blocks down names ONE matter, and it is `cast[0]`'s, i.e. `p_a`'s -- so a
+    # case's authored `cast:` overlay writes its PRIMARY entry's `capability` onto `p_a` and
+    # nothing else. A case with no overlay, or an overlay with no `capability`, leaves `p_a`
+    # exactly as before: `Person`'s own empty-dict default, never a fabricated non-zero fill.
+    # Resolving who `p_b`/`p_c` ARE, seating more than three, and reading the rest of `who_acts`
+    # is `17`'s (`ambitions(p) and build_at from the cast`), not this function's.
+    cast_entries = CAST.get(str(case.get("id"))) or []
+    if cast_entries:
+        cap = cast_entries[0].get("capability")
+        if isinstance(cap, dict) and cap:
+            w.persons["p_a"].capability = dict(cap)
     # ⚠ `W28`: THE CASE MAY SEAT ITS OWN ACTOR ON AN OFFICE. A re-scaled case carries
     # `office: {post, remit, why}` — `post` names the office the prose names, `remit` the acts it
     # carries, and `why` records the DERIVATION, because that is what makes this authoring rather

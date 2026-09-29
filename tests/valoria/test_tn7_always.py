@@ -257,13 +257,18 @@ def test_the_hand_rolled_scan_actually_reaches_a_hand_roller():
     """Assert that it asserted (§0.1 point 2).
 
     If every hand-rolled d10 were refactored away the scan would go vacuously green, so it
-    must keep finding at least one file to inspect. `units.py` still rolls its own — the
-    discipline check at units.py:2106 — which is the live example that keeps this honest.
-    Note orchestration.py is deliberately NOT the anchor any more: ED-MB-0066 removed its
-    hand-rolled volley loop, which is exactly the outcome this guard wants.
+    must keep finding at least one file to inspect. `resolution.py`'s `roll_pool` still rolls
+    its own — `f = rngsource.get().randint(1, 10)` at resolution.py:50, the canonical
+    pool-roller every non-volley MB resolution calls through — which is the live example that
+    keeps this honest. `units.py` was the anchor until ED-MB-0057's re-adjudicated disposition
+    deleted `Subunit.resolve_internal_collisions` (its only hand-rolled d10, zero call sites
+    since 2026-05-29) at plan position `11`, 2026-09-29 — re-pointed here rather than left
+    naming a file the scan can no longer reach. Note orchestration.py is deliberately NOT the
+    anchor either: ED-MB-0066 removed its hand-rolled volley loop, which is exactly the outcome
+    this guard wants.
     """
     files = dict(_files_that_roll_their_own_d10s())
     assert files, "no file rolls its own d10 any more — this scan is now vacuous"
-    assert "systems/mass_battle/sim/hierarchy/units.py" in files, sorted(files)
+    assert "systems/mass_battle/sim/resolution.py" in files, sorted(files)
     parsed = sum(1 for _p, t in files.items() for _ in [ast.parse(t)])
     assert parsed >= 2, f"only {parsed} hand-rolling file(s) parsed"

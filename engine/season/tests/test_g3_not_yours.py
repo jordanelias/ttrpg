@@ -12,9 +12,10 @@ What each block proves, and the control that stops it passing vacuously:
   1. THE PLAN'S FALSIFIER. A T-o write whose `via` names a seat whose basis does NOT reach the edge
      is refused -- by an actor who ALSO holds a seat that would reach it, so a basis walk still
      reading the actor (any seat he holds) admits it and this goes red. Control: the reaching seat.
-  2. ONE REFUSAL PER LIVE VIOLATION, COUNTED. `revoke`, `confer` and `kill / wound` each wrote
-     another person's edge under the old gate; each unlawful twin is refused (`>= 3`, and the SET
-     of verbs refused is asserted), and each lawful twin is admitted.
+  2. ONE REFUSAL PER LIVE VIOLATION, COUNTED. `revoke`, `confer` and `fight` (renamed from
+     `kill / wound`, plan `FIGHT-RENAME`) each wrote another person's edge under the old gate;
+     each unlawful twin is refused (`>= 3`, and the SET of verbs refused is asserted), and each
+     lawful twin is admitted.
   3. THE FIFTH CLAUSE, BOTH ARMS. A conferral-basis opener is admitted through a seat with purview
      over a seat declaring a basis, and refused without `via`, through a seat without purview, on a
      seat with no basis, and through the seat being conferred.
@@ -144,8 +145,9 @@ def test_g3_every_live_violation_is_refused_without_its_basis_and_admitted_with_
 
       * `revoke` of the duke's seat with NO seat exercised;
       * `confer` of the unheld reeve's seat onto `p_mid` with NO seat exercised;
-      * `kill / wound` whose victim's edges close while the victim DOES NOT cease to exist --
-        `remove_person` stubbed to close and not remove -- the cascade claimed, not caused.
+      * `fight` (renamed from `kill / wound`) whose victim's edges close while the victim DOES
+        NOT cease to exist -- `remove_person` stubbed to close and not remove -- the cascade
+        claimed, not caused.
 
     COUNTED, and the set is asserted, so a gate that refuses one and admits two cannot pass. Then
     each lawful twin -- the King's seat, the duke's seat, a real death -- is admitted."""
@@ -178,12 +180,12 @@ def test_g3_every_live_violation_is_refused_without_its_basis_and_admitted_with_
     w.remove_person = close_without_removing
     with pytest.raises(NotYours):
         d._fold(w, mint_token(w, WriteClass.ACTS),
-                Act(id="kw0", actor="p_low", verb="kill / wound", payload={"subject": "p_mid"}),
+                Act(id="kw0", actor="p_low", verb="fight", payload={"subject": "p_mid"}),
                 _felled("p_mid"))
     assert all(t.live for t in victim_edges), "the refused cascade left the victim's edges closed"
-    refused.append("kill / wound")
+    refused.append("fight")
 
-    assert len(refused) >= 3 and set(refused) == {"revoke", "confer", "kill / wound"}, refused
+    assert len(refused) >= 3 and set(refused) == {"revoke", "confer", "fight"}, refused
 
     # THE LAWFUL TWINS -- the same three effects, each with its basis present.
     w, d = _gov_world()
@@ -199,7 +201,7 @@ def test_g3_every_live_violation_is_refused_without_its_basis_and_admitted_with_
     w, d = _gov_world()
     victim_edges = [t for t in w.tenures if t.subject == "p_mid" and t.live]
     out = d._fold(w, mint_token(w, WriteClass.ACTS),
-                  Act(id="kw1", actor="p_low", verb="kill / wound", payload={"subject": "p_mid"}),
+                  Act(id="kw1", actor="p_low", verb="fight", payload={"subject": "p_mid"}),
                   _felled("p_mid"))
     assert "p_mid" not in w.persons and victim_edges and not any(t.live for t in victim_edges)
 
@@ -578,7 +580,7 @@ def test_g3_every_basis_name_the_gate_can_return_is_reached_in_this_file():
                               payload={"office": "off_duke"}, via="off_crown"))          # T-o
         d._fold(w, tok(), Act(id="c", actor="p_low", verb="release",
                               payload={"subject": "p_mid"}))                              # T-m
-        d._fold(w, tok(), Act(id="k", actor="p_low", verb="kill / wound",
+        d._fold(w, tok(), Act(id="k", actor="p_low", verb="fight",
                               payload={"subject": "p_mid"}), _felled("p_mid"))            # cascade
     finally:
         G.tenure_write_basis = real

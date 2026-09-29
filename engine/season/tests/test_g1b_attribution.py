@@ -19,8 +19,13 @@ actor channel"* -- without the field to compare against:
   2. THE CORPUS COUNT. Every logged Event in the probe corpus anchors, over a population floor
      so an empty corpus cannot pass -- the population where the blocker class lived.
   3. THE LIVE RUNS, AGAINST INDEPENDENT RECORDS. `actor_of` against the id the fold MINTED FROM
-     the actor; each tier-2 anchor against the gate's own mint ledger; each tier-3 crossing
-     against `w.crossings`, which `_crossings` writes from its own argument.
+     the actor; each tier-2 anchor against the gate's own mint ledger. ⚠ THE TIER-3 CROSSING CHECK
+     AGAINST `w.crossings` NAMED HERE IS RETIRED, NOT REPLACED: position `11a` deleted the
+     attribute (`AX-4` -- the crossing Event, `_crossings` writes, is now the one carrier of the
+     fact), so there is no longer a second record to check tier 3 against independently of the
+     mechanism under test. `test_w4_a_band_crossing_walks_back_to_the_wear_that_caused_it`
+     (`test_season_shape.py`) carries the tier-3 crossing falsifier forward, against a fixture
+     whose site id is known from the BUILD rather than from a second attribution reader.
 """
 import dataclasses
 
@@ -223,23 +228,23 @@ def test_every_logged_event_in_the_probe_corpus_anchors(monkeypatch):
             except Exception:                               # noqa: BLE001 -- see docstring
                 pass
 
+    # ⚠ THE TIER-3-AGAINST-AN-INDEPENDENT-RECORD CHECK THIS LOOP USED TO ALSO RUN IS RETIRED, NOT
+    # WEAKENED IN PLACE. It read `w.crossings` -- `(subject_id, verb, before, after, ev.id)`,
+    # appended from `_crossings`'s OWN argument, independent of `anchor_of` -- and asserted every
+    # crossing's anchor agreed with it. Position `11a` deleted the attribute (`AX-4`: one owner of
+    # the fact, the crossing Event itself), so there is no second record left to check tier 3
+    # against without recomputing the same thing `anchor_of` already computes. The general
+    # anonymous/anchored counts below still cover every crossing Event AS AN EVENT (it must anchor
+    # on something, not `None`); the crossing-specific ground-truth check moved to
+    # `test_w4_a_band_crossing_walks_back_to_the_wear_that_caused_it` (`test_season_shape.py`),
+    # which checks against a fixture whose site id is known from the BUILD.
     anchored, anonymous = 0, []
-    crossings_checked = 0
     for w in worlds:
-        by_id = {e.id: e for e in w.log}
         for e in w.log:
             if anchor_of(w, e) is None:
                 anonymous.append((e.kind, e.id))
             else:
                 anchored += 1
-        # TIER 3 AGAINST AN INDEPENDENT RECORD: `_crossings` appends
-        # `(subject_id, verb, before, after, ev.id)` from its OWN argument, so a crossing whose
-        # anchor disagrees with the site it was emitted for is caught here, not merely counted.
-        for sid, _verb, _was, _now, eid in w.crossings:
-            assert anchor_of(w, by_id[eid]) == sid, (
-                f"crossing {eid} was emitted for {sid!r} and anchors on "
-                f"{anchor_of(w, by_id[eid])!r}")
-            crossings_checked += 1
 
     assert not anonymous, (
         f"{len(anonymous)} logged probe Event(s) anchor on NOTHING: {anonymous[:5]} -- an "
@@ -247,8 +252,6 @@ def test_every_logged_event_in_the_probe_corpus_anchors(monkeypatch):
         "`harness/probes.py::about(...)`, or it is witnessed by nobody")
     # [JUSTIFIED: A VACUITY FLOOR, not a game value -- measured 2026-09-26 at 10,559 logged Events over 111 Worlds (76 by act, 10,469 by change, 14 by cause); 5,000 is half that, and a corpus that stopped building Worlds or logging Events fails here instead of passing on an empty loop]
     assert anchored >= 5000, f"only {anchored} anchored Events -- this check is near-vacuous"
-    # [JUSTIFIED: A VACUITY FLOOR -- measured 14 crossings in the corpus; the tier-3 check above is vacuous at 0, and this is the only population that reaches it]
-    assert crossings_checked >= 10, f"only {crossings_checked} crossings checked"
 
 
 # -- FALSIFIER 3: live runs, against records the accessors do not read ---------------------

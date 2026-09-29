@@ -121,7 +121,17 @@ def test_levers_add_texture_without_shifting_balance():
     overcommit_exposure floor-fix moved katana 4->3 without touching a single lever.) The old docstring's "observed
     ~16-28%" was never reproducible at n=60. Fixed by RAISING n to 200 (a stronger instrument, ~4s) and setting the
     floor at a proportional 5% — ~2.5x margin below the true 12-13%, while still failing loudly if the levers go dead
-    (which reads 0). This tightens rigour rather than relaxing the guard."""
+    (which reads 0). This tightens rigour rather than relaxing the guard.
+    [RE-BASELINED AGAIN, ED-PC-0058, 2026-09-29] Ob-from-defender (core.ob_from_defender, replacing the fixed
+    DECISIVE_OB=3) legitimately moves this measurement: a typical defender's derived Ob (history/2, ~1.5 at the
+    default history=3) is well below the old fixed 3, so more fights decide in fewer beats and the situational
+    levers this test watches (edge/spine/grab/choke/facing — all closed-phase/bind-adjacent) get fewer chances to
+    ever fire before the fight is over. RE-MEASURED at n=400 (katana/arming 21/400=5.25%, dagger/arming
+    31/400=7.75%, both flip rates unmoved at <=2.25%): the true rate roughly HALVED (12-13% -> 5-8%), which is
+    the ruling's own effect (Ob determined by the opponent, not a fixed centre), not a defect in the levers.
+    n raised 200->400 (halving the true rate at fixed n would otherwise halve the statistical power too) and the
+    floor lowered to a proportional 2% (~2.5x margin below the new true minimum, same margin ED-PC-0034 used
+    against the old true rate) — still failing loudly if the levers go dead."""
     import os as _os
     _wb = _os.path.join(ENGINE, 'workbench'); sys.path.insert(0, _wb)
     from trace import run_traced_fight  # noqa: E402
@@ -140,7 +150,7 @@ def test_levers_add_texture_without_shifting_balance():
         return tuple(o)
 
     for wa, wb in (('katana', 'arming'), ('dagger', 'arming')):
-        n, diverged, flipped = 200, 0, 0
+        n, diverged, flipped = 400, 0, 0
         for s in range(n):
             r_on, ev_on = run_traced_fight(Combatant('A', weapon=wa), Combatant('B', weapon=wb), cfg=CFG, seed=s)
             r_off, ev_off = run_traced_fight(Combatant('A', weapon=wa), Combatant('B', weapon=wb), cfg=OFF, seed=s)
@@ -148,7 +158,7 @@ def test_levers_add_texture_without_shifting_balance():
                 diverged += 1
             if r_on != r_off:
                 flipped += 1
-        assert diverged >= n * 0.05, f"{wa} vs {wb}: levers produced almost no per-fight texture ({diverged}/{n} diverged; true rate ~12-13%)"
+        assert diverged >= n * 0.02, f"{wa} vs {wb}: levers produced almost no per-fight texture ({diverged}/{n} diverged; true rate ~5-8%, ED-PC-0058)"
         assert flipped <= n * 0.20, f"{wa} vs {wb}: levers shifted the OUTCOME too often ({flipped}/{n}) — not balance-neutral"
 
 

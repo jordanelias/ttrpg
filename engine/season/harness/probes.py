@@ -728,13 +728,19 @@ def p18():
     _seed_near_floor(w, site)      # a harness fixture; see the helper for why. The loop stays.
     before = world_q.verbs(w, site, floors)
     n = 0
-    mine = lambda: [c for c in w.crossings if c[0] == site.id]
-    while not mine() and n < 400:
+    was = site.condition
+    # ⚠ NO SECOND CARRIER, SINCE POSITION `11a` DELETED `w.crossings` (`AX-4`: one owner). The
+    # crossing Event IS the record; `anchor_of` (tier 3, via `causes[0]`) answers which site it
+    # was emitted for, exactly what the deleted tuple's element 0 used to answer.
+    crossings = lambda: [e for e in w.log if e.kind == "condition.band_crossed"
+                         and anchor_of(w, e) == site.id]
+    while not crossings() and n < 400:
+        was = site.condition
         _run(w); n += 1
+    now = site.condition
     after = world_q.verbs(w, site, floors)
-    assert mine(), "no band edge was crossed at the site under test"
-    sid, verb, was, now, eid = mine()[0]
-    ev = next(e for e in w.log if e.id == eid)
+    assert crossings(), "no band edge was crossed at the site under test"
+    ev = crossings()[0]
     # ⚠ `W4`. THIS ASSERTED `ev.causes == [ROOT]` — IT PINNED THE DEFECT. `H-12` is RULED that
     # MATTER emits an Event per write *"so crossings have an antecedent"*, and the crossing was
     # rooted at the campaign seed, so the one Event in the barrier that exists to be walked back
@@ -748,13 +754,15 @@ def p18():
     assert antecedent is not None and antecedent.kind == "condition.worn" \
         and anchor_of(w, antecedent) == site.id, (
         f"the crossing names {ev.causes[0]!r}, which is not a `condition.worn` for {site.id}")
-    assert verb in before and verb not in after
+    dropped = sorted(before - after)
+    assert dropped, f"no verb left {site.kind}'s floor set: {sorted(before)} -> {sorted(after)}"
+    verb = dropped[0]
     social = [c for c in ev.changes if c.field in ("stance", "pursuits")]   # `beliefs` retired 2026-09-25
     assert not social and not ev.degree
     return (f"PASS, AND BOTH HALVES OF L5 RAN. ⚠ THE SITE IS SEEDED one season above its "
             f"highest floor (see `_seed_near_floor`), so {n} is NOT the unseeded pacing -- `A31b` "
             f"reports 11 for this same site, wear and floor, and that is the number to cite for "
-            f"pacing. `{sid}` crossed the `{verb}` floor in {n} seasons "
+            f"pacing. `{site.id}` crossed the `{verb}` floor in {n} seasons "
             f"({was} -> {now}). (1) IT CHANGED WHAT MAY BE CHOSEN: {sorted(before)} -> "
             f"{sorted(after)}. (2) IT EMITTED A WITNESSABLE EVENT into the one log "
             f"({ev.kind}) whose `causes[]` NAMES THE WEAR THAT CROSSED THE FLOOR "
@@ -1292,9 +1300,28 @@ def f7():
 @probe("F8", "the sitting decides", "S61", by="construction",
        tests="the body a matter reaches must be able to decide it")
 def f8():
+    """`H-32`, BUILT -- plan position `18` (PROC-A), 2026-09-29. `judging_set` used to raise
+    `Unspecified` unconditionally, which is why this probe used to end at `return "UNREACHABLE"`
+    without ever reaching it. Now it does, and the falsifiers it names run for real: `off_duke`
+    holds `determine` in its remit at `scope_rung='D'`, so the bench `D` reaches CAN decide it --
+    and the SAME seat still reaches `S`, one rung inside `D` (*"a purview walk one rung up still
+    finds it"*), by the same containment walk `ancestry` already owns."""
     w = tiny_world()
-    world_q.judging_set(w, "D")
-    return "UNREACHABLE"
+    seats_d = world_q.judging_set(w, "D")
+    assert seats_d == ["p_high"], seats_d
+    seats_s = world_q.judging_set(w, "S")
+    assert seats_s == ["p_high"], seats_s
+    # THE GRANT, NOT THE OFFICE -- `judging_set` reads `Tenure.granted_acts` (plan position `13e`'s
+    # consolidation), so removing the remit means re-stamping the SEAT's own snapshot, not the
+    # office's field (which `test_13e_...` would flag as a stale reader, and which would not even
+    # reach `judging_set` if it did -- that is the whole point of the consolidation).
+    t = next(t for t in w.tenures if t.kind == "hold" and t.object == "off_duke" and t.live)
+    t.payload = dict(t.payload); t.payload["remit_acts"] = ("issue",)
+    assert world_q.judging_set(w, "D") == [], "removing `determine` from the seat's grant did not empty the bench"
+    return (f"PASS: judging_set(w, 'D') = {seats_d!r}; judging_set(w, 'S') = {seats_s!r} -- one "
+            "seat (`off_duke`, remit `determine`, `scope_rung='D'`) reaches both its own rung and "
+            "the settlement one rung inside it. Stripping the remit act EMPTIES the bench: the "
+            "date fires and lapses (S61), never a forced decision")
 
 
 @probe("F9", "petition spray", "S26.3", by="construction",
@@ -1969,8 +1996,17 @@ def a8():
     w = tiny_world()
     r = contest(w, "S", "x", ["p_low"], depth=3, max_depth=3, causes=[ROOT])
     assert isinstance(r, ContestError) and r.depth == r.max_depth
+    # ⚠ VERB DELIBERATELY NOT A `VERB_TABLE` ROW, so `resolve()`'s admission (`_admits`) is
+    # skipped by construction and the act reaches `_contest` unconditionally, exercising the
+    # depth-cap Forbidden this probe is about rather than any real verb's own eligibility or
+    # `requires_typed`. RENAMED from the literal `"fight"` 2026-09-29 (plan `FIGHT-RENAME`): that
+    # spelling was always an arbitrary placeholder here, chosen before any real verb was named
+    # `fight`, and the rename made it collide with the real row -- `payload="S"` is not a dict, so
+    # the real row's typed `subject` precondition failed at admission instead of ever reaching the
+    # depth cap this probe tests. `no_such_verb` is chosen to be readable as a placeholder, never
+    # a real verb row.
     def choose(p, v, s, ask_budget):
-        return [Act_(w, p, "fight", contests=["the barn"], payload="S")] if p.id == "p_low" else []
+        return [Act_(w, p, "no_such_verb", contests=["the barn"], payload="S")] if p.id == "p_low" else []
     try:
         _run(w, choose)
         no_cap_raised = False
@@ -2549,9 +2585,25 @@ def f20():
        by="construction",
        tests="a character sitting on a collective body must be able to have their individual position registered distinctly from the body's decision")
 def f21():
+    """`H-32` CLOSES `judging_set` (plan position `18`/PROC-A) but this probe was never really
+    ABOUT the bench resolving -- `judging_set` only says WHO sits; this asks whether a member's
+    OWN vote survives distinctly from the body's collective ruling, which is `arrangements.yaml`'s
+    `records_dissent` key (`03_PARAMETERS.md` PART D) -- data this position's part 3 loads, with
+    NO write anywhere that records an individual seat's position (`grep -rn "dissent"
+    engine/season/loop/ engine/season/state/` returns nothing). judging_set finding a real bench
+    is necessary and does not by itself make a division recordable, so the gap is real and is
+    raised explicitly now rather than inherited as a side effect of a stub that no longer exists."""
     w = tiny_world()
-    world_q.judging_set(w, "D")
-    return "UNREACHABLE"
+    seats = world_q.judging_set(w, "D")
+    assert seats, "no bench to have an individual position on -- a DIFFERENT gap than the one this probe names"
+    raise Unspecified(
+        "records_dissent", "S61",
+        needs="a write that records ONE seat's position distinctly from the bench's collective "
+              "ruling -- `arrangements.yaml`'s `records_dissent` key (part 3, plan position "
+              "`18`/PROC-A) is DATA on the row; nothing writes a per-seat division yet",
+        law="S61 -- a bench DECIDING is `judging_set` (H-32, now built); a bench's INDIVIDUAL "
+            "members each being ON THE RECORD is a second, undischarged claim this probe's title "
+            "names and `judging_set` alone does not answer")
 
 
 # ===========================================================================
@@ -2645,7 +2697,12 @@ def a31c():
         # -- the loop ran on until the UNRELATED `fishing` floor was crossed at season 81, and
         # the probe reported "11-81 seasons past the SHIPPING floor". Two different crossings
         # reported as one range.
-        mine = lambda: [c for c in w.crossings if c[0] == site.id and c[1] == "bulk_shipping"]
+        # ⚠ NO `w.crossings` SINCE POSITION `11a` (deleted; `AX-4`, one owner). Under `NOCHOOSE`
+        # (this probe's own note above) `Site.condition` only ever falls, so "`bulk_shipping` has
+        # left the site's verb set" and "a `bulk_shipping` crossing fired" are the same fact --
+        # `world_q.verbs` is the query that already reads it, one screen above in `A31b`.
+        harbour_floors = w.fixtures.get("band_floors")[site.kind]
+        mine = lambda: "bulk_shipping" not in world_q.verbs(w, site, harbour_floors)
         assert floor <= site.condition, (
             f"a floor of {floor} is above the site's starting condition {site.condition}, so "
             "the crossing under test can never occur and the sweep point is meaningless")

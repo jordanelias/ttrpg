@@ -19,18 +19,27 @@ receipt when it did not.**
 ABOUT THAT. The obvious design is `write() -> Receipt`, and G1a found it did not fit the one caller
 that matters: `loop/resolve.py`'s `_apply_write` could not know WHAT it changed until the effect
 had run, because the effect reported touched ids from inside the `apply()` closure. So the window
-opens when a gate write begins and stays open until the NEXT gate write opens its own, or the step
-barrier closes it; `mint()` outside a window raises. The property that buys: **you cannot mint a
-receipt without having just performed a real gate write.** What it does not buy: a second receipt
-minted after an unrelated later write would be attributed to that write.
+opens when a gate write begins and, AT THE TIME G1a/G4 SHIPPED, stayed open until the NEXT gate
+write opened its own, or the step barrier closed it; `mint()` outside a window raises. The property
+that buys: **you cannot mint a receipt without having just performed a real gate write.** What it
+does not buy: a second receipt minted after an unrelated later write would be attributed to that
+write.
 
 G4 makes the obvious design fit. An effect now hands the gate a `Change` that NAMES ITS SUBJECTS
 BEFORE IT RUNS, so `World.write` reads each subject before and after applying it and mints the
 receipts itself, for the subjects that moved and no others (`04 §C.2`: *"before = get();
 store._set(); after = get() / before == after or raise NoOpReceipt / r = Receipt(...)"*). The fold
-mints nothing any more. The window's open-past-the-write property therefore has no production
-consumer left; it is unchanged here because closing it is `H-131`'s barrier question, not G4's.
-"""
+mints nothing any more. The window's open-past-the-write property therefore had no production
+consumer left at the time G4 shipped; it was unchanged BY G4 because closing it was `H-131`'s
+barrier question, not G4's.
+
+⚠ CORRECTED (methodology close, terminal critique, 2026-09-29): THE LIFETIME DESCRIBED ABOVE IS
+STALE. `H-131` was answered, in two passes the same day, by `World.write` wrapping its whole body
+in `try`/`finally: self.gate.close()` — so the window no longer survives past the write that opened
+it AT ALL: it closes unconditionally at the end of every `World.write` call, success or exception,
+never carrying open into a next write or a step barrier. The paragraph above is kept as the
+history of why the window shape existed and what G4 did to it; it does not describe `opening()`'s
+current lifetime, which is `World.write`'s docstring and `close()`'s own docstring below."""
 from dataclasses import dataclass
 from typing import Any, Callable, Optional
 
@@ -176,8 +185,12 @@ def purview_reaches(w: "World", seat: Office, rung: Optional[str]) -> bool:
     True iff `rung` is the seat's own rung or lies inside it -- `descendants(w, seat.rung)`, the
     walk the plan names for this ruling (part 2 `18a`, r2 `05:450-451`). `Office.rung` IS `via.scope`:
     `04 §B.7`'s `scope? (null = a cluster)` is the field this tree spells `rung: Optional[str]`, with
-    the same null. (`Office.scope_rung` is not it -- it has no reader in the game and `18a` deletes
-    it.)
+    the same null. `Office.scope_rung` is a DIFFERENT field, this one, from a DIFFERENT purview
+    question (a bench's, `judging_set`'s `H-32` containment test) -- CORRECTED (methodology close,
+    antagonist pass, 2026-09-29): this docstring said `scope_rung` "has no reader in the game and
+    `18a` deletes it", true when written (`13d-i`, 2026-09-26) and false since `queries/world_q.py
+    ::judging_set` (position `18`/PROC-A, 2026-09-29) made it that mechanism's only containment
+    check. `18a` MAY NOT delete it as things stand; see `carriers.py`'s matching correction.
 
     ⚠ THE READING OF "HIGHEST", STATED BECAUSE THE RULING ADMITS TWO. (a) ADOPTED: every seat on
     the chain above a rung has purview over it -- the Duke over a territory in his duchy, and the
@@ -645,8 +658,10 @@ class Gate:
         self._open = _Window(record_kind, fieldname, wclass, tick)
 
     def close(self) -> None:
-        """Called at a step barrier. A window left open across a barrier would let the next
-        step's first hand-built change mint against the previous step's write."""
+        """Called by `World.write`'s own `finally`, unconditionally, at the end of every write --
+        not only at a step barrier (CORRECTED, methodology close, terminal critique, 2026-09-29;
+        this docstring described the pre-`H-131`-fix lifetime). A window left open past its own
+        write would let a LATER write's first hand-built change mint against this one's instead."""
         self._open = None
 
     @property

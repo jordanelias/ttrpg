@@ -1,0 +1,496 @@
+# `engine/season/offices.yaml` -- WORLD-GEN CONTENT: the governance ladder's titles, and the
+# authored seats of the built realm. Plan position `8a` (`13d-i` item 5, the last open item of
+# that unit; items 1-4 landed `CONFERRAL_BASES`/`REVOCATION_BASES`/`refuse_a_title_in_a_body`).
+#
+# ⚠ TWO THINGS FOLD IN HERE, AND NEITHER WAS THIS SESSION'S TO DECIDE.
+#
+# 1. THE `titles:` SECTION BELOW IS `rosters.yaml: titles` MOVED, NOT COPIED -- Layer 1
+#    (`architecture/meta/04_CODE_ARCHITECTURE.md` §B.7:308, *"there is no `Title` type"*) and §E.1
+#    (`:1067`, *"`titles.domains` moves off the critical path... world-generation content read at
+#    step 9"*) rule it world-gen DATA, and `proposals/2026-09-17-governance-and-holdings-r2/
+#    05_LEDGER_AND_BUILD.md` RULED (c) settles the destination: *"`titles`, the roster
+#    (`rosters.yaml:692`) -- RESIDUE. Its only code reader is `title_domain`... its domains move
+#    into `offices.yaml`... and the roster goes."*
+#    ⚠⚠ THE ROSTER'S PHYSICAL DELETION WAS DEFERRED ONE SESSION, NAMED RATHER THAN HIDDEN, AND HAS
+#    NOW LANDED. `engine/season/rosters.yaml` was declared owned by a CONCURRENT plan position in
+#    this same shared working tree at the time this file was authored (2026-09-29) -- deleting its
+#    `titles:` block was a `rosters.yaml` edit that session did not make, to avoid a collision with
+#    a sibling agent's in-flight work on that file. `data/rosters.py::TITLE_DOMAINS`/`title_domain`
+#    were already repointed at THIS file, so `rosters.yaml: titles` stood as orphaned residue for
+#    exactly one session -- `S11`'s own shape (*"loads clean, `roster()` raises at READ, not at
+#    load"*) -- until the Phase-1 methodology close (2026-09-29, `/simplify` ALTITUDE lens)
+#    physically deleted it, the follow-up `HANDOFF_IN.md` had named. The full Jordan-quoted
+#    ruling this file's own `titles:` header already carries below is now the only copy.
+#
+# 2. THE `seats:` SECTION'S SHAPE IS `proposals/2026-09-17-governance-and-holdings-r2/
+#    03_SEATS_AND_CONTENT.md` §A.14/§A.15 -- the fully adjudicated derivation of
+#    `proposals/2026-09-16-term-ownership/offices_draft.yaml` (570 lines, transcribed-from-canon,
+#    verified against the live rosters row by row: 12 seats transfer post+body only, 9 are authored
+#    fresh from a draft row, 4 are dropped as superseded by the 2026-09-13 NPC-behaviour ruling or
+#    unconstructable against today's rosters; see `03` §A.13 for the full row-by-row disposition).
+#    ⚠ THAT DOCUMENT'S OWN `conferral`/`revocation` COLUMNS ARE SUPERSEDED AND ARE NOT COPIED.
+#    `03:1043-1056` proposed `conferral_bases: [confer, determine, succeed]` and
+#    `revocation_bases: [purview, holdings, none]` -- both dated before Jordan's ruling and both
+#    replaced, in `rosters.yaml` (already, at plan items 1-4) and again here, by `ED-IN-0256`:
+#    ruling (2), VERBATIM *"appointed, elected, annex"* -- HOW A SEAT IS FILLED; ruling (3),
+#    VERBATIM *"rung above of same faction"* -- WHO MAY STRIP IT, a single structural rule replacing
+#    BOTH the old purview-for-an-office and purview+holdings+rank-for-a-title readings. Every row
+#    below carries `03`'s STRUCTURE (id, post, rung anchor, body/faction, remit_acts, holder,
+#    source) with `conferral`/`revocation` RECOMPUTED against the two ED-IN-0256 rosters, never
+#    against `03`'s own superseded value sets. The translation, and why each row landed where it did:
+#      * `confer` (a superior names the holder) -> `appointed`.
+#      * `determine` (an assembly, forum or college elects/determines the holder) -> `elected`.
+#      * `succeed` (hereditary succession -- King, Queen, Heir, Princess, and the Crown's own
+#        `Duke of Valorsmark` seat) -> **left `null`, a JUDGMENT CALL flagged for attack.**
+#        `ED-IN-0256`'s three values are HOW A SEAT IS FILLED and none of them is heredity; a
+#        monarch's heir is not "appointed" in the sense the roster's own note gives the word
+#        (*"which act fills an elected or an annex seat is not ruled"* -- ruling (2) is silent on
+#        succession entirely). `Office.conferral` is OPTIONAL (`state/carriers.py`: `if self.
+#        conferral is not None: require_member(...)`), so `null` is lawful and matches what these
+#        six seats already carry in the live build today. Heredity is `ARCH §B.8`'s separate
+#        `succeed` Tenure/verb (`own`-eligible, a typed `relation` cell, no `@effect_for` body yet)
+#        -- outside `Office.conferral`'s ruled roster, not silently folded into it.
+#      * `purview`/`holdings` (old: purview alone for an office, purview+holdings+rank for a title)
+#        -> `rung_above_same_faction` wherever a rung above could in principle hold a same-faction
+#        seat (22 of 29 rows) -- the two old bases collapse to ED-IN-0256's one structural rule,
+#        which is dispatched dynamically at revoke-time by `state/gate.py::seated_on_the_rung_above`
+#        against WHOEVER actually holds that seat, not precomputed here.
+#      * `none` (a seat with no revoker at all -- realm-scale seats with no rung above them, and
+#        the two Church/Restoration seats canon calls sovereign or informal) -> stays `null`, 7 of
+#        29 rows, preserving `03`'s own judgment about WHICH seats are protected rather than
+#        re-deriving it.
+#
+# ⚠⚠ WIRING SCOPE, THIS SESSION (`8a`, 2026-09-29). `harness/populated.py`'s existing per-case
+# loop already seats 19 of these 29 as `Office`s from `references/npc_registry.yaml` data (title,
+# sub-organization, or a case overlay) -- verified by construction, not assumed: all 19 `holder`
+# case ids below resolve to a live office in `build_realm(0)` today, each with `conferral=None,
+# revocation=None`, the dataclass default. THIS FILE'S `conferral`/`revocation` are now overlaid
+# onto those 19 (`harness/populated.py`'s WHO GOVERNS block, matched by `holder` case id) --
+# `remit_acts` is NOT overlaid (see the note there: `dispatch` is still a live remit act in this
+# tree, r2's own remit column assumed it already deleted, and narrowing 19 seats' authority by a
+# verb ED-IN-0256 never ruled on is outside this item's scope). The 10 rows marked `[NEW]` below
+# (9 people not currently seated as officeholders, plus the King's second seat) are AUTHORED
+# CONTENT ONLY this session -- minting them needs a rung-ANCHOR resolver in `populated.py` (four
+# anchor forms: `{realm: true}` · `{duchy: "<faction>"}` · `{territory: "<code>"}` ·
+# `{settlement: "<code>"}`) and moves the corpus's office/seat census, which is follow-up work
+# named in `HANDOFF_IN.md` rather than done here.
+
+meta:
+  source: "engine/season/offices.yaml -- the governance ladder's titles, and 29 authored seats."
+  derivation: "proposals/2026-09-16-term-ownership/offices_draft.yaml, per r2 03_SEATS_AND_CONTENT.md §A.13-§A.15, with conferral/revocation recomputed against ED-IN-0256 (see the header above)"
+  rule: "one seat = one row. `rung` is an ANCHOR (never an id), resolved at load against the world being built -- `CLAUDE.md` §5's hand-transcription hazard, one layer earlier."
+
+# ⚠ MOVED FROM `rosters.yaml: titles`, VERBATIM CONTENT, NOT RE-DERIVED. Jordan, 2026-09-02,
+# quoted in full at the roster's original site (kept there as residue -- see the header above):
+# governing authority (this ladder), sovereign power (Parliament, deliberately not monopolised in
+# the ruler -- RULED AND NOT BUILT, `H-90`) and holdings (what you actually own, disjoint from what
+# you govern) are three different things and this roster models only the first. Delegation
+# (*"all of Kings, Dukes, Counts and Lords can assign others of lesser rank to govern any of their
+# holdings in their stead"*) is registered as open, not built.
+titles:
+  source: "JORDAN, 2026-09-02, VERBATIM. `H-90`. Folded from `rosters.yaml: titles` per r2 05 RULED (c) -- see this file's header."
+  note: >-
+    TOTAL OVER `rung_kinds` -- Jordan, 2026-09-02: *"realm = king/queen, duchy = duke/duchess,
+    province = count/countess, territory = lord, settlement = mayor, community = community leader,
+    hearth = family head, person = own autonomous individual."* Every rung has a governing title,
+    down to a person governing themselves -- which is why Part E's `own` eligibility is not a
+    special kind of permission: it is this ladder at scale `person`. A LORD IS THE ONE ASYMMETRY:
+    territories *"that have not been assembled into a province"*, so a Lord may govern SEVERAL
+    territories where a Count governs ONE -- rank is the ordinal in `rung_kinds`, never a headcount.
+    Membership lives once, in `domains:` -- no parallel `values:` list, so a name added to one and
+    not the other cannot go silently unread by the other (the exact defect the single-list shape
+    forecloses; `rosters.yaml`'s original note names the incident this fixed).
+  domains:
+    King:              "realm"
+    Queen:              "realm"
+    Duke:               "duchy"
+    Duchess:            "duchy"
+    Count:              "province"
+    Countess:           "province"
+    Lord:               "territory"
+    Mayor:              "settlement"
+    "Community Leader": "community"
+    "Family Head":      "hearth"
+    Individual:         "person"
+
+# THE TWENTY-NINE SEATS -- id, post, rung anchor, body/faction, remit_acts, conferral, revocation,
+# holder (a case id in the 46-row cast), obligees, source. `[LIVE]` = `harness/populated.py`'s
+# existing per-case loop already seats this holder as an Office today; `[NEW]` = authored content
+# only, not yet minted (see the wiring-scope note above).
+seats:
+  - id:         off_king
+    post:       "King"
+    rung:       {realm: true}
+    body:       null
+    faction:    "Crown"
+    remit_acts: [issue, determine, confer, revoke, convene]
+    conferral:  null   # hereditary succession; see the header's translation note
+    revocation: null   # no rung above the realm
+    holder:     "NPC-020"
+    obligees:   []
+    source:     "systems/world/reference/worldbuilding_v30.md:24"
+    note:       "[LIVE]. draft `titles:` row 1 (r2 03 §A.15 row 1)."
+
+  - id:         off_duke_valorsmark
+    post:       "Duke"
+    rung:       {duchy: "Crown"}
+    body:       null
+    faction:    "Crown"
+    remit_acts: [issue, confer, revoke, convene]
+    conferral:  null
+    revocation: null
+    holder:     "NPC-020"
+    obligees:   []
+    source:     "harness/populated.py:302-310 -- \"the Crown's duchy is Valorsmark, and Almud holds the realm seat AS WELL\""
+    note:       "[NEW], not minted this session. r2 03 §A.15 row 2: `duchy_valorsmark` exists and has no seat today; `hold` is 1-per-OBJECT, so a second seat for NPC-020 is lawful."
+
+  - id:         off_duchess_hafenmark
+    post:       "Duchess"
+    rung:       {duchy: "Hafenmark"}
+    body:       null
+    faction:    "Hafenmark"
+    remit_acts: [issue, confer, revoke, convene]
+    conferral:  null
+    revocation: rung_above_same_faction
+    holder:     "NPC-050"
+    obligees:   []
+    source:     "systems/world/reference/worldbuilding_v30.md:26"
+    note:       "[LIVE]. draft `titles:` row 3 (r2 03 §A.15 row 3). Old basis was `holdings` (a King with Hafenmark in his holdings could revoke); ED-IN-0256 (3) is same-faction only, so this seat is revocation-eligible in principle and unreachable by the Crown specifically -- a real consequence of the ruling, not smoothed over."
+
+  - id:         off_duke_varfell
+    post:       "Duke"
+    rung:       {duchy: "Varfell"}
+    body:       null
+    faction:    "Varfell"
+    remit_acts: [issue, confer, revoke, convene]
+    conferral:  elected
+    revocation: rung_above_same_faction
+    holder:     "NPC-052"
+    obligees:   []
+    source:     "systems/world/reference/worldbuilding_v30.md:25; faction_politics_v30.md:246 (\"first among the Jarls, not a monarch\")"
+    note:       "[LIVE]. `conferral: elected`, not hereditary -- the Jarl Assembly determines him. Same revocation note as row 3 applies (old basis `holdings`)."
+
+  - id:         off_widow_regent
+    post:       "Queen"
+    rung:       {realm: true}
+    body:       null
+    faction:    "Crown"
+    remit_acts: [issue, determine, confer, revoke, convene]
+    conferral:  null
+    revocation: null
+    holder:     "NPC-032"
+    obligees:   []
+    source:     "harness/populated.py -- post normalised from the live \"Queen (Widow Regent if Almud eliminated)\", which is not on `titles.domains` verbatim; the condition moves to this note"
+    note:       "[LIVE]. r2 03 §A.15 row 5: a parenthesis is what stopped this seat reading as a title at all -- `title_domain` matches on the bare post."
+
+  - id:         off_heir
+    post:       "Prince (Heir Apparent)"
+    rung:       {realm: true}
+    body:       null
+    faction:    "Crown"
+    remit_acts: []
+    conferral:  null
+    revocation: null
+    holder:     "NPC-031"
+    obligees:   []
+    source:     "systems/world/reference/worldbuilding_v30.md"
+    note:       "[LIVE]. `ARCH F.22`: the named heir is eligible by `own`."
+
+  - id:         off_princess
+    post:       "Princess"
+    rung:       {realm: true}
+    body:       null
+    faction:    "Crown"
+    remit_acts: []
+    conferral:  null
+    revocation: null
+    holder:     "NPC-030"
+    obligees:   []
+    source:     "harness/populated.py -- no draft row; kept as one of the two Royal Family succession seats"
+    note:       "[LIVE]. No `offices_draft.yaml` row; r2 03 §A.13.2 argues the Royal Family seats stay against the draft's silence."
+
+  - id:         off_royal_marshal
+    post:       "Royal Marshal"
+    rung:       {territory: "T1"}
+    body:       "Inner Circle"
+    faction:    null
+    remit_acts: [issue, convene]
+    conferral:  appointed
+    revocation: rung_above_same_faction
+    holder:     "NPC-036"
+    obligees:   []
+    source:     "systems/factions/reference/faction_politics_v30.md:194"
+    note:       "[LIVE]. draft row 1 (standing 7)."
+
+  - id:         off_lord_treasurer
+    post:       "Lord Treasurer"
+    rung:       {territory: "T1"}
+    body:       "Inner Circle"
+    faction:    null
+    remit_acts: [issue]
+    conferral:  appointed
+    revocation: rung_above_same_faction
+    holder:     "NPC-037"
+    obligees:   []
+    source:     "systems/factions/reference/faction_politics_v30.md:195"
+    note:       "[LIVE]. draft row 2."
+
+  - id:         off_spymaster
+    post:       "Crown's Spymaster"
+    rung:       {territory: "T1"}
+    body:       null
+    faction:    "Crown"
+    remit_acts: [issue]
+    conferral:  appointed
+    revocation: rung_above_same_faction
+    holder:     "NPC-033"
+    obligees:   []
+    source:     "systems/factions/reference/faction_politics_v30.md:196; cases/exercises/NPC-033.yaml (authored office overlay)"
+    note:       "[LIVE]. draft body `Schattendienst` is off the live `office_bodies` roster and is dropped, not transferred (r2 03 §A.13.2 note *)."
+
+  - id:         off_parliamentary_clerk
+    post:       "Chief Parliamentary Clerk"
+    rung:       {territory: "T1"}
+    body:       "Ministries"
+    faction:    null
+    remit_acts: [issue]
+    conferral:  appointed
+    revocation: rung_above_same_faction
+    holder:     "NPC-008"
+    obligees:   []
+    source:     "cases/exercises/NPC-008.yaml (authored office overlay)"
+    note:       "[LIVE]. draft row DOUBLY superseded (r2 03 §A.13.2 ***): its own note records an unresolved cross-document conflict, and Peder Almstedt is one of five names the 2026-09-13 NPC-behaviour ruling drops from Hafenmark's council -- the live `Ministries`/Crown seating wins, not the draft's `Senior Parliamentary Chair`/Hafenmark reading."
+
+  - id:         off_guard_captain
+    post:       "Royal Guard Captain"
+    rung:       {territory: "T1"}
+    body:       null
+    faction:    "Crown"
+    remit_acts: []
+    conferral:  appointed
+    revocation: rung_above_same_faction
+    holder:     "NPC-035"
+    obligees:   []
+    source:     "faction_canon_v30.md; draft `Captain of the Royal Guard / Löwenritter Liaison`"
+    note:       "[LIVE]."
+
+  - id:         off_lord_steward
+    post:       "Lord Steward"
+    rung:       {territory: "T1"}
+    body:       null
+    faction:    "Crown"
+    remit_acts: [issue]
+    conferral:  appointed
+    revocation: rung_above_same_faction
+    holder:     "NPC-009"
+    obligees:   []
+    source:     "faction_canon_v30.md -- Crown \"Member NPCs\""
+    note:       "[NEW], not minted this session. draft row; its own note: \"Not one of the five §1.1d Inner Circle NPCs\" -- so no body."
+
+  - id:         off_archbishops_rep
+    post:       "Archbishop's Representative"
+    rung:       {territory: "T1"}
+    body:       null
+    faction:    "Church of Solmund"
+    remit_acts: []
+    conferral:  appointed
+    revocation: rung_above_same_faction
+    holder:     "NPC-034"
+    obligees:   []
+    source:     "systems/factions/reference/faction_politics_v30.md:197"
+    note:       "[LIVE]. draft says `faction: Crown`; the live derivation (`Church of Solmund`, from the registry's dual-loyalty note) wins -- r2 03 §A.13.2 note **, gate 4 precedent."
+
+  - id:         off_confessor
+    post:       "Confessor"
+    rung:       {territory: "T9"}
+    body:       "Holy See"
+    faction:    null
+    remit_acts: [issue, determine, confer, revoke, convene]
+    conferral:  elected
+    revocation: null
+    holder:     "NPC-021"
+    obligees:   []
+    source:     "systems/world/reference/worldbuilding_v30.md:27"
+    note:       "[NEW], not minted this session. draft `titles:` row 4. `governs: \"ecclesiastical institution\"` is not a rung kind, so the rung is authored (T9 Himmelenger, the Church's one territory) rather than transferred; `Confessor` is not on `titles.domains`, so a body is lawful. `conferral: elected` -- the Cardinals elect. `revocation: null`, matching the old `none` basis rather than re-deriving one the ruling never named for this seat."
+
+  - id:         off_cardinal_fortitude
+    post:       "Cardinal of Fortitude"
+    rung:       {territory: "T9"}
+    body:       "Cardinal of Fortitude"
+    faction:    null
+    remit_acts: [issue, convene]
+    conferral:  appointed
+    revocation: rung_above_same_faction
+    holder:     "NPC-040"
+    obligees:   []
+    source:     "systems/world/reference/worldbuilding_v30.md:39"
+    note:       "[NEW], not minted this session. draft row; body remapped from the draft's `Dicastery for the Defense of the Faith` to the live `Cardinal of Fortitude` roster row (already on `office_bodies`, zero new rows needed)."
+
+  - id:         off_cardinal_justice
+    post:       "Cardinal of Justice"
+    rung:       {territory: "T9"}
+    body:       "Cardinal of Justice"
+    faction:    null
+    remit_acts: [issue, determine, convene]
+    conferral:  appointed
+    revocation: rung_above_same_faction
+    holder:     "NPC-038"
+    obligees:   []
+    source:     "systems/world/reference/worldbuilding_v30.md:40; cases/exercises/NPC-038.yaml (authored office overlay)"
+    note:       "[LIVE] (post `Cardinal Justice` in the live build; normalised to `Cardinal of Justice` here). Body remapped from the draft's `Dicastery for Doctrinal Adjudication`."
+
+  - id:         off_cardinal_prudence
+    post:       "Cardinal of Prudence"
+    rung:       {territory: "T9"}
+    body:       "Cardinal of Prudence"
+    faction:    null
+    remit_acts: [issue]
+    conferral:  appointed
+    revocation: rung_above_same_faction
+    holder:     "NPC-013"
+    obligees:   []
+    source:     "systems/world/reference/worldbuilding_v30.md:41"
+    note:       "[NEW], not minted this session. draft row; body remapped from `Dicastery for Temporal Affairs`."
+
+  - id:         off_cardinal_temperance
+    post:       "Cardinal of Temperance"
+    rung:       {territory: "T9"}
+    body:       "Cardinal of Temperance"
+    faction:    null
+    remit_acts: [issue]
+    conferral:  appointed
+    revocation: rung_above_same_faction
+    holder:     "NPC-039"
+    obligees:   []
+    source:     "systems/world/reference/worldbuilding_v30.md:42"
+    note:       "[NEW], not minted this session. draft row; body remapped from `Dicastery for Doctrine and Archives`."
+
+  - id:         off_senior_inquisitor
+    post:       "Senior Inquisitor"
+    rung:       {territory: "T9"}
+    body:       "Cardinal of Justice"
+    faction:    null
+    remit_acts: [determine]
+    conferral:  appointed
+    revocation: rung_above_same_faction
+    holder:     "NPC-004"
+    obligees:   []
+    source:     "faction_politics_v30.md -- \"Cardinal Justice (alternate) / Senior Inquisitor\""
+    note:       "[NEW], not minted this session. Two seats on one body is lawful -- a body is not a seat."
+
+  - id:         off_legal_advisor_hm
+    post:       "Legal Advisor to Baralta"
+    rung:       {duchy: "Hafenmark"}
+    body:       "Inner Council"
+    faction:    null
+    remit_acts: []
+    conferral:  appointed
+    revocation: rung_above_same_faction
+    holder:     "NPC-071"
+    obligees:   []
+    source:     "faction_canon_v30.md; npc_behavior_v30.md §2.16 (one of Hafenmark's ruled two)"
+    note:       "[LIVE]."
+
+  - id:         off_military_commander_hm
+    post:       "Military Commander"
+    rung:       {duchy: "Hafenmark"}
+    body:       "Inner Council"
+    faction:    null
+    remit_acts: [convene]
+    conferral:  appointed
+    revocation: rung_above_same_faction
+    holder:     "NPC-072"
+    obligees:   []
+    source:     "faction_canon_v30.md; npc_behavior_v30.md §2.16 (the second of Hafenmark's ruled two)"
+    note:       "[LIVE]. `convene`: a muster is a sitting."
+
+  - id:         off_commune_rep_hm
+    post:       "Commune Representative (Banneret)"
+    rung:       {duchy: "Hafenmark"}
+    body:       "Inner Council"
+    faction:    null
+    remit_acts: []
+    conferral:  elected
+    revocation: rung_above_same_faction
+    holder:     "NPC-081"
+    obligees:   []
+    source:     "harness/populated.py -- no draft row"
+    note:       "[LIVE], `proposed` status in the registry. Exceeds `npc_behavior` §2.16's ruled two; kept with `harness/populated.py`'s own declared marginal call. `conferral: elected` -- a commune elects."
+
+  - id:         off_guild_comptroller
+    post:       "Guild Comptroller"
+    rung:       {duchy: "Hafenmark"}
+    body:       "Guild"
+    faction:    null
+    remit_acts: []
+    conferral:  elected
+    revocation: rung_above_same_faction
+    holder:     "NPC-007"
+    obligees:   []
+    source:     "faction_canon_v30.md; the 2026-09-13 ruling drops Feldhaus from Hafenmark's COUNCIL, not the world -- her registry primary role is \"Guilds Representative\""
+    note:       "[NEW], not minted this session. Re-seated on `Guild` (live roster, faction Guilds), not on Hafenmark's council. `conferral: elected` -- the Guild Forum. r2 03 §A.15 flags this row for attack first; carried forward unattacked here."
+
+  - id:         off_senior_jarl_west
+    post:       "Senior Jarl of the Western Highlands"
+    rung:       {duchy: "Varfell"}
+    body:       "Jarl Council"
+    faction:    null
+    remit_acts: [determine]
+    conferral:  elected
+    revocation: rung_above_same_faction
+    holder:     "NPC-073"
+    obligees:   []
+    source:     "faction_politics_v30.md; ED-637 rename to Björn Holdar"
+    note:       "[LIVE]. draft body `Council of the Highlands` and draft `rung_kind: province` are both dropped -- the world has zero `province` rungs."
+
+  - id:         off_skald_chief
+    post:       "Skald-Chief"
+    rung:       {duchy: "Varfell"}
+    body:       "Jarl Council"
+    faction:    null
+    remit_acts: [determine]
+    conferral:  elected
+    revocation: rung_above_same_faction
+    holder:     "NPC-074"
+    obligees:   []
+    source:     "faction_politics_v30.md; ED-638 rename to Ingrid Stenskald"
+    note:       "[LIVE]. `determine` remit is canon: the draft's own note -- \"any Deed-Claim succession in Varfell needs the Skald-Chief's endorsement\"."
+
+  - id:         off_military_jarl
+    post:       "Military Jarl"
+    rung:       {duchy: "Varfell"}
+    body:       "Jarl Council"
+    faction:    null
+    remit_acts: [convene]
+    conferral:  elected
+    revocation: rung_above_same_faction
+    holder:     "NPC-082"
+    obligees:   []
+    source:     "harness/populated.py -- no draft row"
+    note:       "[LIVE], `proposed` status. Same marginal call as `off_commune_rep_hm`."
+
+  - id:         off_grand_master
+    post:       "Grand Master"
+    rung:       {territory: "T1"}
+    body:       "Lions' Table"
+    faction:    null
+    remit_acts: [convene]
+    conferral:  appointed
+    revocation: rung_above_same_faction
+    holder:     "NPC-070"
+    obligees:   []
+    source:     "systems/world/reference/worldbuilding_v30.md:109"
+    note:       "[NEW], not minted this session. The one draft seat that constructs against today's rosters unmodified (`Lions' Table` is live). Rung authored: the Löwenritter hold no territory of their own; T1 is the capital. The draft's own note flags the holder's first name (\"Lisbeth\") as untiered -- only the case id transfers, not `holder_name`."
+
+  - id:         off_restoration_leader
+    post:       "Leader"
+    rung:       {territory: "T15"}
+    body:       null
+    faction:    "Restoration Movement"
+    remit_acts: [issue]
+    conferral:  elected
+    revocation: null
+    holder:     "NPC-003"
+    obligees:   ["NPC-041"]
+    source:     "systems/world/reference/worldbuilding_v30.md §8 (\"informal\")"
+    note:       "[NEW], not minted this session. r2 03 §A.15 flags this as the weakest row: canon gives the movement no organ and no territory, so `body: null` is honest and the rung (T15 Askeheim, the one realm territory no faction holds) is authored. `revocation: null` follows from canon's own \"informal\"."

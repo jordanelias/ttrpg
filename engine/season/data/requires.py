@@ -487,7 +487,7 @@ def binding_from_act(a) -> dict:
 # ASK -- not the game's vocabulary; `rosters.yaml` says what the world contains.
 REQUIRES_STEMS = frozenset({
     "exists", "stores", "condition", "floor", "contain.path", "held_by", "present_at",
-    "claim.held",
+    "claim.held", "rank",
 })
 
 # THE STEMS WHOSE VALUE IS COMPUTED **FROM THE HOLDER'S OWN LEDGER** -- and which therefore MAY

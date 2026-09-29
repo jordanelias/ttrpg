@@ -94,14 +94,16 @@ AUTHORED_PARSERS = {
     # whole subject was the registry<->Key-type join. `module_contracts.yaml` is back to having no
     # exporter and no destination for a new reader. It is recorded here rather than in a finding
     # because this set is where the next person will look.
+    # `tools/build_execution_map.py` and `tools/trace_execution_phases.py` REMOVED 2026-09-29
+    # (plan position `28-i`, M5) — GOOD, banked the same commit this test's own docstring asks
+    # for: both tools retired in full (the execution-map cluster; `FORK:6f740d9`,
+    # `references/restructure_ledger.md`), so neither parses anything any more.
     'module_contracts.yaml': {'tools/export_composition.py',
-                              'tools/build_execution_map.py',
                               'tools/build_engine_atlas.py',
                               'tools/build_fork.py',
                               'tools/ci_quantity_vocabulary_check.py',
                               'tools/evacuation_plan.py',
-                              'tools/m1_acceptance.py',
-                              'tools/trace_execution_phases.py'},
+                              'tools/m1_acceptance.py'},
 }
 
 _PATHISH = re.compile(r"(os\.path\.join|Path\(|open\(|load_yaml|safe_load|read_text|/ ['\"])")

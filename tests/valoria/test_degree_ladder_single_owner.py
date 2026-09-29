@@ -41,10 +41,17 @@ checking integers alone gave a WRONG answer: a continuity correction is invisibl
 which is the one domain a continuous resolver never runs on. Nets come off the continuous engine
 already, so the fractional cells are where the game actually lives.
 
-⚠ Do NOT read this file as saying obstacles are score/2 plus modifiers. Jordan RULED that, and it
-is implemented NOWHERE -- every call site still passes a hand-set Ob. An earlier draft of this
-paragraph asserted it as fact, which is the failure mode this module exists to guard against,
-committed in the guard's own docstring.
+⚠ Do NOT read this file as saying obstacles are score/2 plus modifiers EVERYWHERE. Jordan RULED
+that, and this file's own DOMAIN (the `(net, ob)` pairs every ladder is swept over) is agnostic to
+where `ob` came from -- it does not itself compute Ob for anyone. STATUS, corrected 2026-09-29
+(ED-PC-0058) rather than left to re-drift: `combat_engine_v1/core.py::ob_from_defender` now derives
+it (defender.history/2, no per-instance modifier yet) and every `resolve()` call site passes it;
+`engine/season/seam/wrappers/sigma.py::_obstacle_of` derives it for a person subject on the season
+side (H-127 covers the non-person fallback only). Neither of those is this file's ladder-migration
+concern below, and this paragraph makes no claim about any OTHER subsystem's call sites, which this
+file has not swept. An earlier draft asserted "implemented NOWHERE" as an unqualified fact, which
+is the failure mode this module exists to guard against, committed in the guard's own docstring --
+corrected here rather than repeated.
 """
 import importlib
 import importlib.util
@@ -231,7 +238,13 @@ RULINGS = {
         "should be determined by your opponent more than anything.' The order is settled and is "
         "the opposite of the obvious one: derive Ob from the DEFENDER first (score/2 plus that "
         "instance's modifiers), THEN the owner's ladder applies. Migrating combat's bands against "
-        "the fixed Ob first is wasted work."),
+        "the fixed Ob first is wasted work. ⚠ THE FIRST HALF EXECUTED 2026-09-29 (ED-PC-0058): "
+        "core.ob_from_defender(defender) = defender.history/2 (no per-instance modifier surface "
+        "exists yet at this call boundary; wound impairment keeps its own owner, folded into "
+        "net_sigma, ED-1041), and every core.resolve() call site in combat_engine_v1/wrapper.py "
+        "now passes it instead of the retired DECISIVE_OB constant. THE SECOND HALF — migrating "
+        "this resolver's own band-boundary formula to the owner's margin ladder — remains open; "
+        "see the HELD entry below, which still asserts the divergence."),
     '2026-08-25 — the combat ceiling, EXECUTED 2026-08-27': (
         "Jordan, 2026-08-25, verbatim: 'one degree ladder. guandao should be 47.5%, and 40% "
         "ceiling is to be abolished.' ⚠ THIS ENTRY READ 'NOT EXECUTED' UNTIL 2026-08-27 AND THAT "
@@ -243,8 +256,9 @@ RULINGS = {
         "when guandao gets there. WHAT REMAINS OPEN is the other half and only the other half: "
         "combat's ladder still has not migrated, and per this same 2026-08-15 ruling the step "
         "that comes FIRST is deriving Ob from the DEFENDER (score/2 plus that instance's "
-        "modifiers), which is new mechanism rather than a re-siting. That is the live PC-lane "
-        "item. ⚠ THE FAILURE THIS CORRECTION RECORDS: for the length of one commit this dict "
+        "modifiers), which is new mechanism rather than a re-siting. ⚠ THAT STEP EXECUTED "
+        "2026-09-29 (ED-PC-0058) — see the '2026-08-15 — combat, and the sequence' entry above. "
+        "The live PC-lane item now is the ladder migration ALONE. ⚠ THE FAILURE THIS CORRECTION RECORDS: for the length of one commit this dict "
         "held two entries contradicting each other about whether the ceiling existed — the "
         "2026-08-27 row said ABOLISHED and this one still said NOT EXECUTED, forty lines apart. "
         "Found by an adversarial pass, and it is verbatim the defect the comment at the bottom of "
@@ -271,9 +285,15 @@ HELD = {
         "anything'. So this site MIGRATES. It is still held here because the ORDER is now settled and "
         "is the opposite of the obvious one: derive Ob from the defender FIRST (score/2 + that "
         "instance's modifiers), THEN the owner's ladder applies directly. Migrating the bands against "
-        "the fixed Ob first is precisely the wasted work core.py's own docstring predicted. Delete "
-        "this entry when the Ob derivation lands, not before. Original reason follows, still true of "
-        "the fixed-Ob form: "
+        "the fixed Ob first is precisely the wasted work core.py's own docstring predicted. "
+        "⚠ THE OB DERIVATION LANDED 2026-09-29 (ED-PC-0058) — core.ob_from_defender, every "
+        "core.resolve() call site updated — and this entry is NOT deleted, because that sentence's "
+        "own reading of 'when the Ob derivation lands' was imprecise: THIS FUNCTION'S BANDS ARE "
+        "STILL THE PRE-2026-08-14 FORM, degree()'s own body is untouched, so `_combat_engine()` "
+        "still diverges from the owner over the domain exactly as before — correctly, since the "
+        "test below asserts it. Delete this entry when the LADDER ITSELF migrates to the owner's "
+        "margin form, not before — that is the step still owed. Original reason follows, still true "
+        "of the fixed-Ob form (now a variable, defender-derived Ob, but the SAME held formula): "
         "Migrating it moves the Failure edge two whole successes (at DECISIVE_OB=3: fail <0.5 -> "
         "<2.5) and breaks a ratified invariant — guandao, armour-defeat capability 0.13, goes from "
         "settling 2.5% of plate fights to 47.5% against a 40% ceiling "

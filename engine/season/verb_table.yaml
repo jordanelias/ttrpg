@@ -63,16 +63,20 @@
 # corrected four others. Run against THIS table, the rewritten loader refuses it in three places.
 # They are recorded here rather than fixed silently, because two of the three need a ruling.
 #
-# 1. `scale:` ON TEN ROWS FAILS INVARIANT 10 (unknown key; `scale:` refused BY NAME).
-#    Rows: confer, convene, determine, dispatch, establish, exchange, issue, levy, revoke, succeed.
+# 1. `scale:` ON NINE ROWS FAILS INVARIANT 10 (unknown key; `scale:` refused BY NAME).
+#    Rows: confer, determine, dispatch, establish, exchange, issue, levy, revoke, succeed.
 #    #358 §E.3 and Stage 2 §C.3: scale is a POSITION IN THE CONTAINMENT TREE, derived on demand,
 #    stored nowhere -- "a label cannot be walked", and indexing code by scale deletes the property
 #    that makes one type with many kinds worth having.
-#    ⚠ DO NOT DELETE THE TEN KEYS YET. They answer a real Jordan question ("is it unnecessary to
+#    ⚠ DO NOT DELETE THE NINE KEYS YET. They answer a real Jordan question ("is it unnecessary to
 #    nest these and instead just explicitly define scale?"), and #358 rev.2 supplies the answer:
 #    THE SCOPE OF THE SEAT BEING EXERCISED -- `Act.via.scope` -- not a column on the verb. The key
 #    is retired when `Act.via` carries the scope; until then each row's `scale_note` is the
 #    provenance that would be lost. Tracked as the conditioning item, not as a hole.
+#    ⚠ `convene`'s WAS THE TENTH AND IS GONE (plan position `18`/PROC-A, 2026-09-29). It is the one
+#    row `Act.via` did not need to earn: Jordan's 2026-09-05 correction replaces it with an ordinal
+#    read off the act's own `subject` operand rather than the exercising seat's scope, so it did
+#    not wait on the general retirement condition above -- see the row's own `requires_note:`.
 #
 # 2. `kill / wound` NOW CARRIES A `Degree`-KEYED `writes` (invariant 12, #358 §C.4 / F6).
 #    Done, in this file. It is the only row declaring `contests:`, so it is the only row affected.
@@ -159,12 +163,11 @@ verbs:
     eligibility_note: "⚠ W3 AUDIT: §E3's eligibility cell carried a PRECONDITION as well as the remit act — `remit:confer + ...`. The fold split on the first `:` and tested the whole tail against the remit roster, so it NEVER MATCHED and a holder of the remit was silently refused. The act is the eligibility; the basis is a `requires`."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "convene"
-    scale:   "settlement"
-    scale_note: "a convening gathers a venue's rung, not a person -- ARCHITECTURE_V2 :`the venue's container resolves`"
     stratum:     "binding_decision"
     eligibility: ["remit:convene"]
     beneficiary: "none"
-    requires:    "the venue's container resolves, or is NONE (§6.2)"
+    requires:    "rank(subject.kind) > rank(person) -- an ordinal floor above the person tier, or subject is NONE (§6.2)"
+    requires_note: "⚠ `scale: \"settlement\"` IS DELETED (plan position `18`/PROC-A, `21_RECONCILIATION.md` PHASE 2 step 9). Jordan, 2026-09-05, correcting the row: *\"convene could happen at any scale except individual/person\"* -- and on the reason, *\"unless you mean convene as limited by physical location of participants, but this game can assume people will travel to somewhere ... the `person` kind is the address slot and the `Person` is who stands in it. A proceeding convenes at a place; a person-rung is an address, not a place.\"* `rung_kinds` is an ORDERED roster (person first), so the lawful expression is the ordinal `rank(venue.kind) > rank(person)`, not a kind enumeration (`03_PARAMETERS.md` §C.1's own falsifier: change the roster's membership and see what breaks). Evaluated in `loop/predicates.py::_req_convene`, NOT as a `requires_typed: scalar_threshold` cell -- that form's `check()` reads both sides off the SAME bound entity, so it has no channel for a literal constant without either coining a `requires_operands` member or overloading `floor`'s already-declared, structurally different meaning (`decision/options.py::_derive_operand`'s own stated rule: one meaning per operand name, never a per-verb table). The venue rides the act's `subject` operand -- C-11 (`21_RECONCILIATION.md:379`): *\"subject already binds the rung\"* -- not a `venue` key `requires_operands` has never carried."
     writes:      ["Date.due_at", "ConveningCondition.attached"]
     emits:       ["date.scheduled"]
     emits_on_refusal: ["convene.refused"]
@@ -286,7 +289,21 @@ verbs:
     grade:       "ruled"
     writes_note: "— (a Dispensation is not a state write — §37.3)  ||  ⚠ W3, ON THE W2 AUDIT: as `petition`. Part E's '(a Dispensation is not a state write)' is the bypass §1.4 hole 4 names, not a licence for one."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
-  - verb:        "kill / wound"
+    # ⚠ RENAMED `kill / wound` -> `fight`, 2026-09-29 (plan `FIGHT-RENAME`, contradiction 4;
+    # `ED-IN-0261` item 3). ATOMIC KEY RENAME ONLY -- every other field on this row (`contests:`,
+    # `requires_typed:`, the band machinery below) is unchanged, because that machinery already IS
+    # the attempt-verb semantics `ED-IN-0261` ruled for `fight` (opponent is `subject`, needs a
+    # typed precondition). Jordan, 2026-09-27, verbatim: "a character can only attempt to kill or
+    # wound, never choose the outcome directly" -- read as a rename of THIS row, not as the SPLIT
+    # (`kill`/`wound`/`challenge`->`accept`), which still rides the ALIGNMENT re-cell commit (H6 +
+    # H8) and is NOT built here. Declared content-hash move, per `governance_spine.yaml:7`'s own
+    # convention: `Act.verb` carries the row's key into `World.content_hash()`, so any world whose
+    # log includes this verb digests differently under the new name -- accepted rather than hidden,
+    # and no test in this tree pins a literal hash value (checked, not assumed: `git grep
+    # "content_hash() =="` under `engine/season/tests/` finds only relative before/after
+    # comparisons). The event kinds below (`kill.refused`, `person.died`) are NOT verb-table keys
+    # and are unchanged -- they are `write_matrix.yaml`/`emits:` vocabulary, a different namespace.
+  - verb:        "fight"
     stratum:     "contested_physical"
     eligibility: ["own"]
     beneficiary: "actor"
@@ -622,6 +639,20 @@ verbs:
       between a refusal, where the precondition failed and no contest occurred, and a loss, where
       the contest occurred and went against you. A telling deposits at WITNESS, not here, which is
       what this row's own `writes_note` has always said.
+      ⚠ POSITION 10 (U5/R-07) ATTEMPTED A `Person.stance` WRITE HERE AND REVERTED IT, BUILT AND
+      RUN RATHER THAN LEFT UNTRIED. `H-62` wants a producer; every candidate write target fails
+      structurally against `epistemic.py::claim_subjects` (`H-79`), whose fallback to "the claim
+      is about what was told" fires ONLY when `e.changes` is empty -- see that function's own
+      extensive comment on why an Event that wrote nothing is exactly where a telling lands. Any
+      real write here (on the actor: MEASURED to make `claim_subjects` report the claim as about
+      the TELLER, breaking `R3`'s propagation and the guard
+      `test_n3_..._a_telling_is_about_what_was_told` exists to hold; on the verb's own `subject`
+      operand: MEASURED to be a Rung, never a Person, on the live corpus, so `Person.stance`
+      cannot be written there at all) either corrupts the epistemic layer or cannot fire. Resolving
+      it means either changing `H-79`'s attribution rule (a separate, adversarially-hardened
+      mechanism with its own measured history) or naming a different write target than either
+      candidate -- both are design calls, not a session judgment. `H-62`'s producer gap for
+      `(Person, stance)` is already closed by `march` (M4); this row's own gap stays open.
       ⚠⚠ AND `speak` DID NOT GET ONE, WHICH `U1`'s PLAN EXPECTED IT TO. That plan names `tell` AND
       `speak`, on the ground that both carry `requires_typed`, form `own_ledger`. Measured against
       this table: `speak`'s `requires` is an em-dash and it carries NO typed cell. An untyped verb

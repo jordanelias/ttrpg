@@ -92,23 +92,25 @@ import pytest as _pytest
 
 _REPO = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), '..', '..'))
 
-# (builder, [artifacts it produces]) in DEPENDENCY ORDER. TWO edges make the order load-bearing:
-#   * `references/execution_trace.json` is read by build_engine_atlas and build_execution_map
-#   * `references/execution_map.json` is read by build_engine_atlas
-# It was FOUR until 2026-09-16 (ED-IN-0232): the other two were `references/key_graph.json`, read by
-# three builders, and it retired with the Key substrate along with `build_key_graph.py` and
-# `build_contract_index.py`. Recount when you add a builder rather than trusting this comment.
+# (builder, [artifacts it produces]) in DEPENDENCY ORDER.
 #
-# `trace_execution_phases.py` is the expensive one (~9.5s — it profiles a full seeded campaign) and
-# it is FIRST rather than omitted on cost grounds. Omitting it does not fail: both consumers report
-# an absent input rather than absorbing it (`test_engine_atlas.py::
-# test_missing_input_is_reported_not_silently_absorbed` pins that), so the layer would build green
-# with every subsystem reading as "not observed at this seed". That is the false-absence error the
-# tracer's own docstring warns about, arrived at by a fixture rather than by a reader — worse than
-# the 9.5s, and paid once per session.
+# It was FOUR edges/builders lost before this: `references/key_graph.json`, read by three
+# builders, retired with the Key substrate on 2026-09-16 (ED-IN-0232) along with
+# `build_key_graph.py` and `build_contract_index.py`. Recount when you add a builder rather than
+# trusting this comment.
+#
+# TWO MORE ROWS LEFT 2026-09-29 (plan position `28-i`, M5): `trace_execution_phases.py` (fed
+# `references/execution_trace.json`, consumed by `build_engine_atlas.py` and
+# `build_execution_map.py`) and `build_execution_map.py` itself (fed `references/execution_map.json`
+# + `EXECUTION_MAP.md`, the first of which `build_engine_atlas.py` also read) were RETIRED — the
+# whole execution-map cluster went in one commit, `FORK:6f740d9`,
+# `references/restructure_ledger.md`. `_build_the_layer()` below already degrades gracefully on a
+# missing builder (`continue`), which is what made this an easy edit to miss: the layer still built
+# green with the stale rows in place, silently producing three fewer artifacts than declared. The
+# rows are removed rather than left for the skip to keep hiding, per `ID-13` — a declared row
+# nothing can ever populate again is not a weak entry, it is one that does not exist. The paired
+# floor is `test_generated_layer.py::test_the_layer_is_not_vacuous`, lowered in the same commit.
 _GENERATED_LAYER = (
-    ('trace_execution_phases.py',  ['references/execution_trace.json']),
-    ('build_execution_map.py',     ['references/execution_map.json', 'references/EXECUTION_MAP.md']),
     ('build_engine_atlas.py',      ['references/engine_atlas.json', 'references/ENGINE_ATLAS.md']),
     ('build_identifier_census.py', ['references/identifier_census.json']),
     ('definitions_store.py',       ['references/definitions/definitions.yaml']),

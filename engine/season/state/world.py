@@ -208,7 +208,6 @@ class World:
         # (`take_staged`), so it is empty at every barrier -- which is why the content hash does not
         # fold it (and `test_h118`'s underscore exclusion is the right one, not an oversight).
         self._staged: dict[tuple, list] = {}
-        self.crossings: list[tuple] = []        # S12.1/L5 -- band-edge crossings, EMISSIONS
         # S33: "`purpose` must be unique per DRAW, not per operation, or two draws inside one
         # act collide." A per-TICK ordinal is unique within the tick AND identical across runs
         # of the same seed -- a global counter would be unique but NOT REPRODUCIBLE, which
@@ -575,12 +574,14 @@ class World:
     def remove_person(self, who: str) -> list:
         """THE ONE DEATH CASCADE: every live edge naming this person closes, then they are gone.
 
-        ⚠⚠ IT IS FACTORED OUT OF `_eff_kill` BECAUSE IT NOW HAS TWO CALLERS, AND A SECOND COPY IS
-        HOW THE TWO WOULD DRIFT. `kill / wound` at RESOLVE was the only way to die; item 3b gives
-        MATTER a second — a body that reaches 0 from an empty larder — and `(Person, body)` is
-        licensed at **both** steps by the write matrix (`[MAT, RES]`, `social: false`, emitting
-        `body.changed` and `person.died`). Two sites closing tenures by hand is the shape §8 is
-        about: *the rule lives once*.
+        ⚠⚠ IT IS FACTORED OUT OF `_eff_kill` BECAUSE IT NOW HAS THREE CALLERS, AND A SECOND COPY IS
+        HOW THEY WOULD DRIFT. `kill / wound` (now `fight`) at RESOLVE was the only way to die;
+        item 3b gives MATTER a second — a body that reaches 0 from an empty larder
+        (`loop/matter.py`) — and the M4 review pass's correctional round gave `_eff_march`'s
+        `total`-casualty-model arm a third (`H-152`). `(Person, body)` is licensed at **both**
+        steps by the write matrix (`[MAT, RES]`, `social: false`, emitting `body.changed` and
+        `person.died`). Three sites closing tenures by hand is the shape §8 is about: *the rule
+        lives once*.
 
         ⚠ `self.tenures`, NOT `p.tenures`, AND THAT IS `W-E`'s OWN FINDING CARRIED ACROSS RATHER
         THAN RE-DERIVED. A Tenure is owned by its SUBJECT (§15.1), so scanning the dead person's
@@ -588,21 +589,98 @@ class World:
         in `tiny_world`: a live `tie` from `p_low` to `p_mid` survived `p_mid`'s death and then
         DANGLED. §15.3 is explicit that the tenure ends THROUGH the death.
 
-        ⚠ IT MUTATES AND RETURNS THE IDS IT TOUCHED; IT DOES NOT CALL `write`. Both callers are
-        already inside a gated write when they reach here — `_eff_kill` through its `Change`'s
-        `apply`, which the gate calls (G4; `_eff_kill` no longer reads the return value, the gate
-        reads the victim instead), MATTER through its own `w.write` — and a nested write would be
-        a write inside a write. ⚠ CORRECTED (antagonist pass, 2026-09-27): this said "which the
-        gate refuses" and nothing does -- `World.write` has no re-entrancy check of any kind. The
-        property holds today only because every current caller of `remove_person` is careful to
-        call it from inside its own already-open write rather than opening a second one; it is a
-        discipline on the two call sites, not a guarantee the gate enforces.
+        ⚠ IT MUTATES AND RETURNS THE IDS IT TOUCHED; IT DOES NOT CALL `write`. Every caller is
+        already inside a gated write when it reaches here — `_eff_kill` and `_eff_march` through
+        their own `Change`'s `apply`, which the gate calls (G4; neither effect reads the return
+        value, the gate reads the victim instead), MATTER through its own `w.write` closure — and
+        a nested write would be a write inside a write. ⚠ CORRECTED (antagonist pass, 2026-09-27):
+        this said "which the gate refuses" and nothing did -- `World.write` has no re-entrancy
+        check of any kind, so the property held only because every caller was careful to call this
+        from inside its own already-open write rather than opening a second one -- a discipline on
+        the call sites, not a guarantee the gate enforced.
+
+        ⚠⚠ MADE MECHANICAL (`GATE-REMOVE-PERSON`, plan position 7, 2026-09-29): the check below
+        reads `self.gate.is_open` (`state/gate.py::Gate`), true for exactly the span `World.write`
+        holds a window open around `apply()`/`change.apply()` (`.opening()` before the `try`, an
+        unconditional `.close()` in its `finally`, whatever the exit) — which is precisely
+        "already inside a gated write" made CHECKABLE instead of trusted, one more property AX-4
+        (`04:115`, "one write path") now
+        holds through `World.write` + the gate's own state rather than through caller discipline.
+        It is not a second, nested `world.write(...)` call — that would check a (kind, field) pair
+        this function does not itself declare and would re-open a window already open — it is a
+        REFUSAL of the one failure mode the discipline above could not catch: a future caller
+        reaching this function with no write open at all. Every call site in the tree today
+        (`_eff_kill`, `_eff_march`, `loop/matter.py`, and the two `harness/probes.py` /
+        `test_season_shape.py` falsifiers that already wrap it in `w.write(...)`) already
+        satisfies it, so this changes no existing behaviour or emission.
+
+        ⚠ THE CHECK IS "SOME WRITE OPEN", NOT "THE RIGHT WRITE OPEN" -- see `hole_register.yaml`
+        H-131's own further-narrowed correction (methodology close, terminal critique, 2026-09-29):
+        `is_open` cannot see WHICH `(record_kind, fieldname)` is open, only that one is. Not a live
+        gap (every real caller opens one of three pairs); disclosed there rather than tightened
+        here, since nothing exercises the gap today.
+
+        ⚠⚠ CORRECTED (methodology close, antagonist pass, 2026-09-29): THE ORIGINAL WRITING OF THIS
+        NOTE CLAIMED MORE THAN THE CODE THEN DELIVERED. `World.write`'s success path did not call
+        `gate.close()` — only its two refusal branches did (H-131, `hole_register.yaml`, found this
+        gap unwired three days earlier for a DIFFERENT reason, `gate.mint()`'s reuse safety, and
+        judged it harmless because `opening()` always resets `_open` before any mint; H-131 never
+        analyzed a bare `is_open` READ, which is what THIS check is). So `is_open` stayed
+        permanently True after a World's first successful write and never reset at a season or step
+        boundary — the check below could only ever catch a call on a PRISTINE, never-written
+        World, not the realistic misuse case (a world already in play) this note claimed to
+        prevent. Fixed in the same pass: `World.write`'s success path now calls `self.gate.close()`
+        too, symmetric with the two refusal-path calls, so the property genuinely holds now.
+        ⚠ THE LINE CITATION THIS PARAGRAPH ORIGINALLY GAVE (`:1056`) WAS ALREADY STALE, AND ITS OWN
+        REPLACEMENT (a line number to the `finally:`) WENT STALE AGAIN THE MOMENT IT WAS WRITTEN —
+        because a docstring correction added ABOVE code it cites shifts every line number below it,
+        making a numeric self-citation in this exact paragraph unfixable by construction, not merely
+        unlucky twice. Cited by SYMBOL instead, which a later edit cannot move: the hand-written
+        success-path call this paragraph named was replaced one paragraph below, by the
+        `/simplify` pass the same day, with the single `finally: self.gate.close()` closing this
+        same method (`World.write`) — there is exactly one `finally` clause in this class, so
+        `rg -n 'finally:' state/world.py` finds it without a line number going stale again.
+        Leaving a numeric citation here would be exactly `CLAUDE.md` §0.1 pt 3's *"a citation you
+        have not opened is not a citation"* — a reader following a stale one would land on
+        whatever code happened to drift into that slot instead. MEASURED, not assumed: every
+        existing death/`remove_person` test in
+        `engine/season/tests` still passes unchanged (`test_march.py`, `test_g3_not_yours.py`,
+        `test_season_shape.py`'s P24/P25 probes and its partition-seam test), and
+        `test_gate_remove_person_requires_an_open_write.py` gained a second case exercising the
+        REALISTIC scenario (a world that already completed a legitimate write, then a later bare
+        call) — the one the original falsifier, testing only a pristine world, could not
+        distinguish from the vacuous-guard failure mode.
+
+        ⚠⚠ CORRECTED AGAIN, SAME DAY (methodology close, `/simplify` ALTITUDE pass, 2026-09-29):
+        the fix directly above added a THIRD hand-written `self.gate.close()` at the success
+        return, mirroring the two refusal-branch calls already there (F3 `not_yours`, F9 `no_op`)
+        — and missed a FOURTH exit that already existed and still leaked: later in this same
+        method's body, the S33 `Forbidden` (a declared emission with no `subject=`) also raises after
+        `.opening()`, with no `close()` on that path either. Enumerating exits by hand to patch
+        them one at a time is exactly how the first gap survived three days and how this second
+        one survived the first fix. Replaced all three scattered calls with the body wrapped in
+        `try`/`finally: self.gate.close()`, so closure is unconditional on how `write()` exits
+        rather than manually mirrored at each raise or return site — self-healing against any
+        exit this function gains later, known or not yet written. `before` (the return value) is
+        assigned only inside the `try` but stays readable after it ends, Python scoping being
+        function-level, so `return before` sits outside the `try`/`finally`, unchanged in what it
+        returns on the success path.
 
         ⚠ G3: AND THAT IS WHAT MAKES THE CASCADE ATTRIBUTABLE. The gate's F3 clause admits an edge
         closed by a non-owner -- or by no actor at all, at MATTER -- only as `destroy's cascade`:
         the edge names an id THE SAME WRITE removed. `write` observes the removal (the id is in a
         collection before `apply()` and absent after), so the closures below and the `pop` below
         must stay in one `apply()`. Split them across two writes and every closure is refused."""
+        if not self.gate.is_open:
+            raise InstrumentDefect(
+                f"World.remove_person({who!r}) was called with no gate write open. AX-4 (`04:115`, "
+                "'one write path that applies the write and returns a receipt') requires every "
+                "mutation to happen inside `World.write`'s window -- call this from inside an "
+                "effect's `Change` (`_eff_kill`/`_eff_march`'s own pattern: return a `Change` whose "
+                "`perform()` calls `w.remove_person(...)`) or a `world.write(..., apply=lambda: "
+                "w.remove_person(...))` closure (`loop/matter.py`'s own pattern), never bare. This "
+                "is a CALL-SITE BUG, exactly `NoToken`'s reasoning (`state/gate.py`): whoever called "
+                "this was never handed an open write to mutate inside of.")
         for t in list(self.tenures):
             if (t.subject == who or t.object == who) and t.live:
                 t.until = self.tick
@@ -885,143 +963,169 @@ class World:
 
         # G1a. THE WINDOW OPENS HERE -- after every refusal above has had its chance and
         # immediately before the mutation, so a write that is going to be refused never
-        # authorizes a mint. It stays open past `apply()` deliberately: `loop/resolve.py`'s
-        # `_apply_write` learns WHAT it changed from inside that closure and mints its receipts
-        # after this call returns. `state/gate.py`'s header states the bound that buys and the
-        # one it does not.
+        # authorizes a mint. ⚠ CORRECTED (methodology close, terminal critique, 2026-09-29): this
+        # comment described the PRE-G4 shape, where the window stayed open past `apply()` so
+        # `loop/resolve.py`'s `_apply_write` could mint from outside, after this call returned.
+        # Since G4 the gate mints internally -- for a `Change`, at both `self.gate.mint(...)` call
+        # sites below, inside this same `try` -- and the fold mints nothing; the window now closes,
+        # unconditionally,
+        # before THIS call returns (the `finally` at the method's end), never surviving past it.
+        # `state/gate.py`'s header states the bound that buys and the one it does not.
         self.gate.opening(record_kind, fieldname, wclass.value, self.tick)
-        # G3 -- F3, `04 §C.2`: WHO WROTE EACH TENURE. The store is observed around `apply()`
-        # (`_tenure_snapshot` says why it cannot be asked beforehand), and every Tenure the write
-        # changed must meet a basis in `state/gate.py::tenure_write_basis`. `gone` is the set of ids
-        # this same write removed from the world -- the existence changes it CAUSED, observed here
-        # rather than claimed: `caused_person_exists` is the caller's word for S15.3's pre-check
-        # above, and the cascade basis does not take it.
-        # G4: A `Change` IS ALWAYS WATCHED -- its `edge` subjects are judged from this same
-        # observation -- whatever its class. Every fold write is ACTS, which is watched anyway.
-        watch = wclass in TENURE_WRITE_CLASSES or change is not None
-        changes: list = []
-        if watch:
-            snap = self._tenure_snapshot()
-            existed = [set(store) for _, store in self._entity_stores()]
-        if change is None:
-            before = apply()
-        else:
-            # `04 §C.2`: *"before = get(); store._set(); after = get()"*. `edge` subjects have no
-            # `get()` of their own: the tenure diff below is theirs.
-            was = [None if s.ref[0] == EDGE else self.state_of(s) for s in change.subjects]
-            change.apply()
-            before = None
-        if watch:
-            changes = self._tenure_changes(snap)
-            if changes:
-                gone = frozenset().union(*(was_ids - set(store) for was_ids, (_, store)
-                                           in zip(existed, self._entity_stores())))
-                refused = refuse_unauthored(self, changes, actor, via, gone)
-                if refused:
-                    # THE REFUSAL IS ONLY HONEST IF THE EDGE IS AS IT WAS: the store goes back
-                    # first, the trace records a refused write, and the mint window SHUTS -- a
-                    # refused write must not be able to issue a receipt after it
-                    # (`H-131`'s `close()`, given a caller).
-                    self._restore_tenures(changes)
-                    TRACE.write(thing, wclass.value, sname, False)
-                    self.gate.close()
-                    raise not_yours(refused, actor, via, record_kind, fieldname)
-        moved: list = []
-        if change is not None:
-            # F9, AFTER F3 AND NEVER BEFORE IT (the docstring says why). An `edge` subject moved
-            # iff the diff lists that Tenure -- by identity, changed or opened.
-            edged = {id(t) for t, _ in changes}
-            moved = [s for s, b in zip(change.subjects, was)
-                     if (id(s.ref[1]) in edged if s.ref[0] == EDGE else self.state_of(s) != b)]
-            if not moved:
-                # NOTHING IT NAMED MOVED, SO NOTHING IT DID STANDS WHERE THE GATE CAN SEE IT: a
-                # Tenure the closure touched anyway goes back, as on `NotYours` -- otherwise the
-                # refusal Event would stand beside an edge the refused write opened.
+        try:
+            # G3 -- F3, `04 §C.2`: WHO WROTE EACH TENURE. The store is observed around `apply()`
+            # (`_tenure_snapshot` says why it cannot be asked beforehand), and every Tenure the write
+            # changed must meet a basis in `state/gate.py::tenure_write_basis`. `gone` is the set of ids
+            # this same write removed from the world -- the existence changes it CAUSED, observed here
+            # rather than claimed: `caused_person_exists` is the caller's word for S15.3's pre-check
+            # above, and the cascade basis does not take it.
+            # G4: A `Change` IS ALWAYS WATCHED -- its `edge` subjects are judged from this same
+            # observation -- whatever its class. Every fold write is ACTS, which is watched anyway.
+            watch = wclass in TENURE_WRITE_CLASSES or change is not None
+            changes: list = []
+            if watch:
+                snap = self._tenure_snapshot()
+                existed = [set(store) for _, store in self._entity_stores()]
+            if change is None:
+                before = apply()
+            else:
+                # `04 §C.2`: *"before = get(); store._set(); after = get()"*. `edge` subjects have no
+                # `get()` of their own: the tenure diff below is theirs.
+                was = [None if s.ref[0] == EDGE else self.state_of(s) for s in change.subjects]
+                change.apply()
+                before = None
+            if watch:
+                changes = self._tenure_changes(snap)
                 if changes:
-                    self._restore_tenures(changes)
-                TRACE.write(thing, wclass.value, sname, False, where="F9")
-                self.gate.close()
-                raise no_op(list(change.subjects), actor, record_kind, fieldname)
-        TRACE.write(thing, wclass.value, sname, True)
-        self.writes.append((thing, wclass.value, sname, record_kind, fieldname, driver))
-        if change is not None:
-            # THE GATE MINTS, AND ONLY FOR WHAT MOVED -- `04 §C.2`'s `r = Receipt(...)` after the
-            # no-op check, so a receipt for a write that did not happen is never issued at all.
-            # Field and mode are the pair's and `"set"`, the receipt the fold used to mint by hand.
-            before = [(s, self.gate.mint(s.id, "set", driver, fieldname)) for s in moved]
-        if emits is not None:
-            # ⚠ THE SUBJECT IS THE RECORD, NOT THE TRACE LABEL. `thing` is a human label for the
-            # trace line (`"condition"`); the emission's subject has to be the RECORD ID or
-            # nothing can find the emission again. The first version used `thing`, so every
-            # site's wear emitted under the subject `"condition"` — and `last_emission_of`
-            # therefore never matched, so season 1's wear re-rooted at `[ROOT]` and the clock did
-            # not chain. That is exactly the failure `W4`'s ROOT-count proof exists to catch, and
-            # it caught it.
-            #
-            # ⚠ `subject=` OUTLIVED `Event.subject` (G1b, 2026-09-26), AND IT HAD TO. The plan
-            # said to delete both; this parameter is not the field. It is the ONLY place the gate
-            # learns WHICH RECORD it wrote -- `thing` is a label, `apply` is opaque -- and it goes
-            # on the minted receipt below as `Receipt.subject`, which is `anchor_of`'s tier 2 and
-            # therefore what `last_emission_of` matches on. Deleting it would have vacated the
-            # change channel on every gate emission and re-rooted every MATTER clock: the
-            # "channel goes quiet" failure G1b's own plan row warns of.
-            if subject is None:
-                raise Forbidden(
-                    f"({record_kind}, {fieldname}) emits {emits!r} with no `subject=`", "S33",
-                    needs="subject=<the record id>",
-                    law="THE SUBJECT IS THE RECORD, NOT THE TRACE LABEL. The fallback was "
-                        "`subject or thing`, and `thing` is a human label for the trace line -- "
-                        "which is exactly the value that made every site's wear emit under the "
-                        "subject `\"condition\"`, so `last_emission_of` never matched and the clock "
-                        "re-rooted every season. Leaving the fallback in place meant emission was "
-                        "inherited by existing while the half that makes a clock CHAIN still had "
-                        "to be remembered -- and a one-shot emission with a forgotten `subject=` "
-                        "is silent. Found by the `W4` adversarial pass")
-            subj = subject
-            # ⚠ THE DRAW ORDINAL IS PART OF THE ID, AND IT WAS NOT. Without it the id is
-            # `(seed, tick, subject, kind)`, so TWO EMISSIONS OF ONE KIND ON ONE SUBJECT IN ONE
-            # TICK GET THE SAME ID — and `W8` produces exactly that: MATTER's larder draw and its
-            # yield credit both write `(Rung, stores)` and both emit `stores.changed` for the same
-            # rung in the same season. The `W4` adversarial pass named this months of work ago in
-            # the abstract (*"the emission id carries no draw ordinal; `new_draw()` has zero
-            # callers"*) and nothing could reach it until there were two same-kind writes; the
-            # uniqueness guard caught it the moment there were. S33's ordinal is the mechanism the
-            # design already carries, reset per tick by `season()`, so ids stay reproducible: the
-            # write order is deterministic (every loop here is sorted) and the counter follows it.
-            ev = Event(
-                # ⚠ IN `purpose`, NOT AS A FIFTH ARGUMENT. `H`'s own docstring states the
-                # contract — *"`purpose` must be unique per DRAW, not per operation"* — so the
-                # ordinal belongs inside the string the design already reserves for it, and
-                # widening `H`'s signature would have been a second way to say the same thing.
-                id=H(self.world_seed, self.tick, subj, f"emit:{emits}#{self.new_draw()}"),
-                kind=emits,
-                # G1a. MINTED, NOT CONSTRUCTED. This Event is the gate's own emission, so its
-                # change is the one receipt in the tree whose provenance was never in doubt --
-                # which is exactly why it is the right place to prove the mint works end to end.
-                # `Receipt` subclasses `StateChange` and adds no hashed field, so this line moves
-                # no content hash and `runs/` stays byte-identical.
-                changes=[self.gate.mint(subj, "set", wclass.value, fieldname, None)],
-                # ⚠ `causes` IS REQUIRED IN SUBSTANCE AND THE DEFAULT IS NOT `[ROOT]`. Handing an
-                # un-caused emission the root is how every Event in the `W9` artifact came to
-                # carry `causes=[ROOT]` — #353 §19.4 calls that field "the substrate of the entire
-                # emergent-narrative claim", and a default root populates it with nothing. A
-                # caller with no antecedent must say so by passing `[ROOT]` itself.
-                causes=list(causes if causes is not None else []),
-                emitted_at=self.tick)
-            # ⚠ NO EMPTY-`causes[]` CHECK HERE. `Event.__post_init__` already refuses one at
-            # S19.4, and re-implementing it would be `CLAUDE.md` §8's violation one constructor
-            # apart — the first version of this block did exactly that and shipped two messages
-            # for one rule. The Event constructor raises before this line is reached.
-            self.log.append(ev)
-            TRACE.event(ev.id, ev.kind, ev.causes)
-            # ⚠ BUFFERED ONLY AT MATTER, AND THE SCOPE IS THE POINT. `matter()` drains this to
-            # decide what WITNESS fans out. A WITNESS-step emission (`claim.deposited`) left in
-            # the buffer survives into the NEXT season's MATTER and is fanned there, which closes
-            # a loop: a deposit emits, the emission is witnessed, that deposit emits. Measured
-            # before this guard: `claim.deposited` reached 249 in a two-season run and was
-            # accelerating. The buffer is MATTER's, so only MATTER fills it.
-            if step is Step.MATTER:
-                self._emitted_by_write.append(ev)
+                    gone = frozenset().union(*(was_ids - set(store) for was_ids, (_, store)
+                                               in zip(existed, self._entity_stores())))
+                    refused = refuse_unauthored(self, changes, actor, via, gone)
+                    if refused:
+                        # THE REFUSAL IS ONLY HONEST IF THE EDGE IS AS IT WAS: the store goes back
+                        # first, the trace records a refused write, and the mint window SHUTS -- a
+                        # refused write must not be able to issue a receipt after it
+                        # (`H-131`'s `close()`, given a caller).
+                        self._restore_tenures(changes)
+                        TRACE.write(thing, wclass.value, sname, False)
+                        raise not_yours(refused, actor, via, record_kind, fieldname)
+            moved: list = []
+            if change is not None:
+                # F9, AFTER F3 AND NEVER BEFORE IT (the docstring says why). An `edge` subject moved
+                # iff the diff lists that Tenure -- by identity, changed or opened.
+                edged = {id(t) for t, _ in changes}
+                moved = [s for s, b in zip(change.subjects, was)
+                         if (id(s.ref[1]) in edged if s.ref[0] == EDGE else self.state_of(s) != b)]
+                if not moved:
+                    # NOTHING IT NAMED MOVED, SO NOTHING IT DID STANDS WHERE THE GATE CAN SEE IT: a
+                    # Tenure the closure touched anyway goes back, as on `NotYours` -- otherwise the
+                    # refusal Event would stand beside an edge the refused write opened.
+                    if changes:
+                        self._restore_tenures(changes)
+                    TRACE.write(thing, wclass.value, sname, False, where="F9")
+                    raise no_op(list(change.subjects), actor, record_kind, fieldname)
+            TRACE.write(thing, wclass.value, sname, True)
+            self.writes.append((thing, wclass.value, sname, record_kind, fieldname, driver))
+            if change is not None:
+                # THE GATE MINTS, AND ONLY FOR WHAT MOVED -- `04 §C.2`'s `r = Receipt(...)` after the
+                # no-op check, so a receipt for a write that did not happen is never issued at all.
+                # Field and mode are the pair's and `"set"`, the receipt the fold used to mint by hand.
+                before = [(s, self.gate.mint(s.id, "set", driver, fieldname)) for s in moved]
+            if emits is not None:
+                # ⚠ THE SUBJECT IS THE RECORD, NOT THE TRACE LABEL. `thing` is a human label for the
+                # trace line (`"condition"`); the emission's subject has to be the RECORD ID or
+                # nothing can find the emission again. The first version used `thing`, so every
+                # site's wear emitted under the subject `"condition"` — and `last_emission_of`
+                # therefore never matched, so season 1's wear re-rooted at `[ROOT]` and the clock did
+                # not chain. That is exactly the failure `W4`'s ROOT-count proof exists to catch, and
+                # it caught it.
+                #
+                # ⚠ `subject=` OUTLIVED `Event.subject` (G1b, 2026-09-26), AND IT HAD TO. The plan
+                # said to delete both; this parameter is not the field. It is the ONLY place the gate
+                # learns WHICH RECORD it wrote -- `thing` is a label, `apply` is opaque -- and it goes
+                # on the minted receipt below as `Receipt.subject`, which is `anchor_of`'s tier 2 and
+                # therefore what `last_emission_of` matches on. Deleting it would have vacated the
+                # change channel on every gate emission and re-rooted every MATTER clock: the
+                # "channel goes quiet" failure G1b's own plan row warns of.
+                if subject is None:
+                    raise Forbidden(
+                        f"({record_kind}, {fieldname}) emits {emits!r} with no `subject=`", "S33",
+                        needs="subject=<the record id>",
+                        law="THE SUBJECT IS THE RECORD, NOT THE TRACE LABEL. The fallback was "
+                            "`subject or thing`, and `thing` is a human label for the trace line -- "
+                            "which is exactly the value that made every site's wear emit under the "
+                            "subject `\"condition\"`, so `last_emission_of` never matched and the clock "
+                            "re-rooted every season. Leaving the fallback in place meant emission was "
+                            "inherited by existing while the half that makes a clock CHAIN still had "
+                            "to be remembered -- and a one-shot emission with a forgotten `subject=` "
+                            "is silent. Found by the `W4` adversarial pass")
+                subj = subject
+                # ⚠ THE DRAW ORDINAL IS PART OF THE ID, AND IT WAS NOT. Without it the id is
+                # `(seed, tick, subject, kind)`, so TWO EMISSIONS OF ONE KIND ON ONE SUBJECT IN ONE
+                # TICK GET THE SAME ID — and `W8` produces exactly that: MATTER's larder draw and its
+                # yield credit both write `(Rung, stores)` and both emit `stores.changed` for the same
+                # rung in the same season. The `W4` adversarial pass named this months of work ago in
+                # the abstract (*"the emission id carries no draw ordinal; `new_draw()` has zero
+                # callers"*) and nothing could reach it until there were two same-kind writes; the
+                # uniqueness guard caught it the moment there were. S33's ordinal is the mechanism the
+                # design already carries, reset per tick by `season()`, so ids stay reproducible: the
+                # write order is deterministic (every loop here is sorted) and the counter follows it.
+                ev = Event(
+                    # ⚠ IN `purpose`, NOT AS A FIFTH ARGUMENT. `H`'s own docstring states the
+                    # contract — *"`purpose` must be unique per DRAW, not per operation"* — so the
+                    # ordinal belongs inside the string the design already reserves for it, and
+                    # widening `H`'s signature would have been a second way to say the same thing.
+                    id=H(self.world_seed, self.tick, subj, f"emit:{emits}#{self.new_draw()}"),
+                    kind=emits,
+                    # G1a. MINTED, NOT CONSTRUCTED. This Event is the gate's own emission, so its
+                    # change is the one receipt in the tree whose provenance was never in doubt --
+                    # which is exactly why it is the right place to prove the mint works end to end.
+                    # `Receipt` subclasses `StateChange` and adds no hashed field, so this line moves
+                    # no content hash and `runs/` stays byte-identical.
+                    changes=[self.gate.mint(subj, "set", wclass.value, fieldname, None)],
+                    # ⚠ `causes` IS REQUIRED IN SUBSTANCE AND THE DEFAULT IS NOT `[ROOT]`. Handing an
+                    # un-caused emission the root is how every Event in the `W9` artifact came to
+                    # carry `causes=[ROOT]` — #353 §19.4 calls that field "the substrate of the entire
+                    # emergent-narrative claim", and a default root populates it with nothing. A
+                    # caller with no antecedent must say so by passing `[ROOT]` itself.
+                    causes=list(causes if causes is not None else []),
+                    emitted_at=self.tick)
+                # ⚠ NO EMPTY-`causes[]` CHECK HERE. `Event.__post_init__` already refuses one at
+                # S19.4, and re-implementing it would be `CLAUDE.md` §8's violation one constructor
+                # apart — the first version of this block did exactly that and shipped two messages
+                # for one rule. The Event constructor raises before this line is reached.
+                self.log.append(ev)
+                TRACE.event(ev.id, ev.kind, ev.causes)
+                # ⚠ BUFFERED ONLY AT MATTER, AND THE SCOPE IS THE POINT. `matter()` drains this to
+                # decide what WITNESS fans out. A WITNESS-step emission (`claim.deposited`) left in
+                # the buffer survives into the NEXT season's MATTER and is fanned there, which closes
+                # a loop: a deposit emits, the emission is witnessed, that deposit emits. Measured
+                # before this guard: `claim.deposited` reached 249 in a two-season run and was
+                # accelerating. The buffer is MATTER's, so only MATTER fills it.
+                if step is Step.MATTER:
+                    self._emitted_by_write.append(ev)
+        finally:
+            # H-131 / GATE-REMOVE-PERSON, TWICE (methodology close, 2026-09-29). FIRST PASS: the
+            # two refusal branches above closed the window by hand (`not_yours`, `no_op`); the
+            # SUCCESS path did not, so `gate.is_open` stayed permanently True after any world's
+            # first successful write, never resetting at a season/step boundary — making
+            # `remove_person`'s bare-call guard (its `if not self.gate.is_open:` line, above)
+            # vacuous the instant a season actually ran,
+            # since it could only ever catch a call on a pristine, never-written World. The first
+            # fix added a THIRD hand-written `close()` at the success return, matching the two —
+            # and missed a FOURTH exit that already existed: the S33 `Forbidden`, earlier in this
+            # same try block,
+            # (no `subject=` on a declared emission) also raises after `opening()`, and nothing had
+            # ever closed the window on THAT path either. Enumerating exits by hand is exactly the
+            # failure mode that let both gaps stand — the SECOND pass (ALTITUDE lens, same
+            # methodology close) replaced all three hand-written calls with this ONE unconditional
+            # `finally`, so window-closure no longer depends on anyone remembering to add it at a
+            # new or overlooked exit. Safe for the same reason as before: `is_open` has exactly one
+            # production reader (`remove_person`'s bare-call guard, above) and `mint()` has exactly
+            # one caller
+            # (`World.write` itself, both calls inside this `try`, so nothing after it still needs
+            # the window). Narrower than H-131's own open question (closing at ORDINARY BARRIER
+            # TRANSITIONS independent of any write) — this closes only the window THIS call opened.
+            self.gate.close()
         return before
 
     # -- S4: a Query MAY be cached. Built AT a barrier, read-only until the next, DISCARDED there.

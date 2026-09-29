@@ -609,20 +609,27 @@ def refuse_a_title_in_a_body(office_id: str, post: Optional[str], body: Optional
 
     WHY IT IS A FUNCTION NOW. r2 `03_SEATS_AND_CONTENT.md` §A.8 re-homes this clause from the
     constructor to `offices.yaml`'s loader as a CONTENT rule, "same refusal, same law string". That
-    loader does not exist yet (the deferred `offices.yaml` unit), so the rule is given a name the
-    loader can call, and `Office.__post_init__` goes on calling it until then -- MOVED, never
-    dropped: every office is still refused on construction exactly as before.
+    loader did not exist yet when this was written (the deferred `offices.yaml` unit), so the rule
+    was given a name the loader could call once built, and `Office.__post_init__` went on calling
+    it meanwhile -- MOVED, never dropped: every office is still refused on construction exactly as
+    before. ⚠ THE LOADER NOW EXISTS (plan position `8a`, 2026-09-29, `data/rosters.py::_load_offices`)
+    -- this paragraph is kept as the history of why the function-not-inline shape was chosen, not as
+    a live "not built yet" note.
 
-    ⚠ IT STILL ASKS `title_domain`, AND IT HAS TO. *Is this post a title?* has exactly one owner in
-    the tree, `rosters.yaml: titles` through `title_domain` -- `Office` carries no title flag and
-    `post` is a free name (`AX` ID-4). So the plan's instruction to delete `titles` and
-    `title_domain` cannot be carried out while this refusal lives: r2 `03` §A.12 keeps the roster
-    for this reason, r2 `05` RULED (c) deletes it, and the plan follows `05` for the deletion and
-    `03:661` for this re-home. Deleting the roster makes this refusal unstatable in its same form."""
+    ⚠ IT STILL ASKS `title_domain`, AND IT HAS TO -- CORRECTED (methodology close, terminal
+    critique, 2026-09-29): *Is this post a title?* has exactly one owner in the tree, but it is no
+    longer `rosters.yaml: titles`. Position `8a` folded that roster into
+    `offices.yaml: titles: domains:` and physically deleted the `rosters.yaml` copy (methodology
+    close, same day); `title_domain`/`TITLE_DOMAINS` (`data/rosters.py`) now read the survivor. The
+    plan's OLD instruction to delete `titles` and `title_domain` outright, described below as
+    blocked by this refusal, was itself superseded by the fold: the roster moved rather than being
+    deleted, so this refusal never had to become unstatable. r2 `03` §A.12's and r2 `05`'s RULED (c)
+    are both about the now-superseded shape; a reader should not re-derive a "cannot be carried out"
+    blocker from them today."""
     if body is not None and title_domain(post) is not None:
         raise Forbidden(
             f"office {office_id!r} names the TITLE {post!r} and the body {body!r}",
-            "rosters.yaml -- titles vs office_bodies",
+            "offices.yaml -- titles vs office_bodies",
             needs="a title is held at a rung on the governance ladder, not seated in an organ",
             law="Jordan 2026-09-02 -- the title ladder turns on holdings and purview; an "
                 "office belongs to a faction's body. A post is one or the other, never both")
@@ -698,15 +705,22 @@ class Office:
                 "rosters.yaml -- revocation_bases",
                 law="ED-IN-0256 (3) -- who may strip a seat is a CLOSED set of rules; an "
                     "off-roster basis would admit no revocation, silently, forever")
-        # A TITLE IS NOT AN OFFICE -- the refusal and its reasoning live in the function, which
-        # `offices.yaml`'s loader calls once it exists (`13d-i` item 4, r2 `03` §A.8).
+        # A TITLE IS NOT AN OFFICE -- the refusal and its reasoning live in the function
+        # (`refuse_a_title_in_a_body`'s own docstring has the fuller history; `offices.yaml`'s
+        # loader, position `8a`, now exists too, and calls `title_domain` the same way).
         refuse_a_title_in_a_body(self.id, self.post, self.body)
         # A titled post must sit at the rung its title governs. Otherwise a Duke seated at the
         # realm has realm-wide purview (`under_purview` walks up to the SEAT), which is the
         # governance canon inverted by a data-entry slip.
-        # ⚠ (`13d-i`, 2026-09-26) `under_purview` IS DELETED and `scope_rung` has NO READER in the
-        # game -- only `test_season_shape.py`'s populated-realm assertion. Left standing because it
-        # goes with the field, which r2 `03` §A.8 deletes and this position does not own.
+        # ⚠ (`13d-i`, 2026-09-26) `under_purview` IS DELETED. `scope_rung` had NO READER in the game
+        # at that date -- only `test_season_shape.py`'s populated-realm assertion -- but GAINED ONE
+        # 2026-09-29 (plan position `18`/PROC-A, `H-32`): `queries/world_q.py::judging_set` reads
+        # `off.scope_rung` directly as the whole mechanism by which a bench's purview reaches a
+        # venue. CORRECTED (methodology close, antagonist pass, 2026-09-29): this comment and
+        # `state/gate.py::purview_reaches`'s docstring both said the opposite and were cited, as
+        # written, by the plan's own "Contradiction 1" resolution as the reason position `18a` may
+        # safely delete this field -- `18a` MAY NOT delete `scope_rung` as things stand; doing so
+        # would silently reopen `H-32`. r2 `03` §A.8's deletion call needs re-deciding against this.
         dom = title_domain(self.post)
         if dom is not None and self.scope_rung is None and self.rung is not None:
             self.scope_rung = self.rung

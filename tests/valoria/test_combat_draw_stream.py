@@ -247,20 +247,30 @@ def test_static_inventory_matches_dynamic_reach():
 # ---------------------------------------------------------------------------
 def test_same_seed_is_not_the_same_experiment_across_armour():
     """The hazard made executable rather than asserted in prose. `wrapper.py:93`'s own comment states
-    the represent gate draws no RNG off-plate; the consequence is that one seed buys a ~3x longer
+    the represent gate draws no RNG off-plate; the consequence is that one seed buys a longer
     stream at heavy armour than at none, so "we used the same seeds" is not a control when the
     contexts differ.
 
     Measured at 8535cea, longsword vs arming, seed 4242: none 57 underlying, light 53, medium 116,
-    heavy 168. The assertion takes a 2.0x floor, well inside the measured 2.95x."""
+    heavy 168 (ratio 2.95x).
+    RE-MEASURED 2026-09-29 (ED-PC-0058, Ob-from-defender): none 55, light 41, medium 59, heavy 76
+    (ratio 1.38x). Ob-from-defender legitimately shortens fights across every tier (a typical
+    defender's derived Ob, history/2, sits well below the old fixed DECISIVE_OB=3), which compresses
+    the tier-to-tier differential this test measures along with the absolute counts — this is NOT a
+    represent-gate regression, it is the ruled change reducing how many beats any fight needs,
+    including the heavy-armour ones that used to run long. Per-seed variance on this ratio is large
+    (a 10-seed spot-check the same session ranged 0.95x-3.1x), so the floor was never meant to track
+    2.95x tightly; it only needs to stay clearly above 1.0 (the represent gate still fires, the
+    contexts are still not equivalent). Floor lowered 2.0x -> 1.2x, comfortably below the new
+    measurement with margin for this specific seed's variance."""
     counts = {}
     for armour in SWEEP_ARMOURS:
         _, rec = _fight('longsword', 'arming', 4242, armour)
         counts[armour] = rec.underlying
     assert all(v > 0 for v in counts.values()), counts
     ratio = counts['heavy'] / counts['none']
-    assert ratio >= 2.0, (
-        f'heavy/none underlying-draw ratio fell to {ratio:.2f} (measured 2.95 at 8535cea): {counts}. '
+    assert ratio >= 1.2, (
+        f'heavy/none underlying-draw ratio fell to {ratio:.2f} (measured 1.38 at ED-PC-0058, 2.95 at 8535cea): {counts}. '
         f'If this converged to 1.0 the stream became context-independent, which would be good news '
         f'and must be verified, not assumed — re-check the represent gate at wrapper.py:93.')
 
