@@ -769,7 +769,26 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     loop). #2: a RES matrix row no verb writes that carries no `unproduced:` cell, and an
     `unproduced:` cell on a row a verb DOES write (stale). #6: `tenure_kinds.openers` not covering
     exactly the roster, and an opener naming no verb. An EMPTY opener set is reported
-    (`tenure_kinds_without_an_opener`), not raised, so it adds nothing here."""
+    (`tenure_kinds_without_an_opener`), not raised, so it adds nothing here.
+
+    ⚠ 44 -> 43, 2026-09-29, `OPENERS-DERIVE`, A DELETION RATHER THAN A MOVE. `verbs.py`'s
+    `tenure_kinds.openers` mapping stopped being hand-authored in `rosters.yaml` and became
+    `_derive_openers_from_effects()`, an AST walk over `loop/effects.py` seeded with every
+    `TENURE_KINDS` member first -- so "a kind with no `openers:` entry" is impossible BY
+    CONSTRUCTION now, not merely checked, and the `set(_openers) != set(TENURE_KINDS)` refusal
+    that used to test it is unreachable code rather than a live check (`CLAUDE.md` §0.1 pt 2 --
+    "an assertion must be able to observe the failure it excludes"). Deleted, not kept for
+    appearances. The sibling half of #6 -- an opener naming a verb `verb_table.yaml` does not have
+    -- survives unchanged, reading the derived dict instead of the roster.
+
+    ⚠ 43 -> 44, 2026-09-29, plan position `8a` (`13d-i` item 5). `data/rosters.py::_load_offices`
+    (the new loader for `engine/season/offices.yaml`, the `titles`/seats fold) raises
+    `SystemExit(f"offices.yaml not found at {OFFICES_YAML}")` on a missing file, the same shape
+    `_load_rosters` already raises for a missing `rosters.yaml` -- a second file this package
+    cannot run without, counted the same way. `rosters.py`'s per-file count moves 1 -> 2; no other
+    file in the model set changed. Concurrent with `OPENERS-DERIVE`'s own 44 -> 43 bump immediately
+    above -- both land, in file-append order, per `CLAUDE.md` §0.4's own precedent for two positions
+    landing the same pinned count in one shared tree: neither reverts the other's history line."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"

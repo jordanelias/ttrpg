@@ -103,20 +103,19 @@ rosters:
     open: true
     values: [hold, contain, commit, oblige, succeed, tie, knot]
     # ⚠ LOADER INVARIANT 6's SECOND HALF (`04 §B.13 #6`, `04:466-467`, `ID-14`): every kind's OPENER
-    # set is declared. MEASURED 2026-09-25 from `engine/season/loop/effects.py`, the only module
-    # in the loop that constructs a `Tenure`: `_eff_confer` and `_eff_create_record` open `hold`,
-    # `_eff_move` opens `contain`, and no `_eff_*` opens any other kind. The loader
-    # (`data/verbs.py`) refuses a kind with no entry and an opener that names no verb; an EMPTY
-    # list is REPORTED, not refused (`tenure_kinds_without_an_opener`), because a kind no act can
-    # open today may be correct for now.
-    openers:
-      hold: [confer, create_record]
-      contain: [move]
-      commit: []    # hole: `commit` declares `writes: Tenure.since` and has no effect that opens a Tenure
-      oblige: []    # hole: as `commit`
-      succeed: []   # hole: as `commit`
-      tie: []       # hole: `tie / knot` declares `writes: Tenure.since` and has no effect that opens a Tenure
-      knot: []      # hole: as `tie`
+    # set is declared. THIS ROW USED TO CARRY THE MAPPING BY HAND -- `openers: {hold: [confer,
+    # create_record], contain: [move], commit: [], oblige: [], succeed: [], tie: [], knot: []}` --
+    # a SECOND COPY of a fact `engine/season/loop/effects.py`'s own `_eff_*` bodies already state
+    # structurally (which verb's `Tenure(...)` construction names which `kind`). Correct the day it
+    # was hand-transcribed (2026-09-25) and silently wrong the day a new opener effect landed with
+    # no matching edit here -- `CLAUDE.md` §8's every-rule-lives-once hazard. Plan position
+    # `OPENERS-DERIVE` (2026-09-29) DELETED the hand-written mapping: `data/verbs.py`'s
+    # `_derive_openers_from_effects()` reads the same fact by walking `effects.py`'s own source (an
+    # AST scan for `Tenure(...)` calls inside each `@effect_for`-registered function), so there is
+    # one owner and no second copy to fall behind. The holes are UNCHANGED and still true, MEASURED
+    # the same way, now computed rather than read off this roster: `commit`, `oblige`, `succeed`,
+    # `tie` and `knot` each declare `writes: Tenure.since` (verb_table.yaml) and no effect
+    # constructs a Tenure of that kind -- `tenure_kinds_without_an_opener()` still reports them.
 
   hold_object_kinds:
     source: "`architecture/holonic_ARCHITECTURE.md` §15's Tenure table — *\"`hold` | Person → Office | Rung | Record | Proposition | 1 per object\"*. Item 16 of `proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md` (⊕ R13)."

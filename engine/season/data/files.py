@@ -110,6 +110,10 @@ ENDINGS_CLASSIFIED_YAML = PACKAGE_DIR / "ENDINGS_CLASSIFIED.yaml"
 # is this module's own -- narrower than a bare grep for `__file__` (see the module docstring
 # above): this module owns every path to a registry the package loads.
 GOVERNANCE_SPINE_YAML = PACKAGE_DIR / "governance_spine.yaml"
+# `offices.yaml` -- the governance ladder's titles (folded from `rosters.yaml: titles`, plan
+# position `8a`, `13d-i` item 5) and the 29 authored seats. Anchored here for the same reason
+# `GOVERNANCE_SPINE_YAML` is: one path owner, never a local `__file__` a house move rots.
+OFFICES_YAML = PACKAGE_DIR / "offices.yaml"
 
 # The degree sweep's two arm modules (plus their shared `sweep_core`), imported by source in two
 # tests. Moved out of `proposals/2026-09-04-degree-sweep` to `engine/reference/degree-sweep/` so
@@ -155,6 +159,10 @@ LOOP_DIR = PACKAGE_DIR / "loop"
 # used to read `SHAPE_PY` for `SeasonDriver` code read this instead -- `shape.py` was deleted at
 # step 10, so a scan pointed there fails to open a file rather than passing by finding nothing.
 DRIVER_PY = LOOP_DIR / "driver.py"
+# `data/verbs.py::_derive_openers_from_effects` reads this by AST -- never imports it, so there is
+# no `data` -> `loop` import edge, only a file-level read of `loop`'s own text (`OPENERS-DERIVE`,
+# 2026-09-29). The same idiom `loop_source`/`loop_modules` already use one section down.
+EFFECTS_PY = LOOP_DIR / "effects.py"
 
 
 def loop_modules() -> tuple:

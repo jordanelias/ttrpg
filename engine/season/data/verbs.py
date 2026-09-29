@@ -52,6 +52,7 @@ harmless -- a `dict` type hint on a name the next line immediately rebinds.
 
 from __future__ import annotations
 
+import ast
 from dataclasses import dataclass, field, fields
 from typing import Optional
 
@@ -274,6 +275,52 @@ class VerbRow:
 # `domain` (read for `release`, invariant 6) and `source` (every row's provenance column).
 _VERB_ROW_KEYS = (frozenset(f.name for f in fields(VerbRow) if not f.name.endswith("_by_degree"))
                   | {"domain", "source"})
+
+
+def _derive_openers_from_effects() -> dict:
+    """LOADER INVARIANT 6'S SECOND HALF, DERIVED RATHER THAN HAND-COPIED (`OPENERS-DERIVE`,
+    2026-09-29, `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` §3.1 item 6).
+    `rosters.yaml`'s `tenure_kinds` row used to carry an `openers:` mapping BY HAND, kept in sync
+    by a human re-reading `loop/effects.py` -- correct the day it was transcribed (2026-09-25) and
+    silently wrong the day a new opener effect landed with no matching edit here (`CLAUDE.md` §8's
+    every-rule-lives-once hazard). The single owner of "which verb opens which kind" is the
+    `Tenure(...)` construction itself, inside the function `@effect_for` registers for that verb:
+    every site today names `kind` as a STRING LITERAL -- `Tenure(id, subject, object, kind, ...)`,
+    positional, or a `kind=` keyword -- so an AST walk over `effects.py`'s own source (read as
+    TEXT, via `files.EFFECTS_PY`, never imported -- no `data` -> `loop` import edge) reads the
+    identical fact the hand-written roster used to transcribe, with no second copy to fall behind.
+
+    Returns EVERY tenure kind, including the ones no effect opens today -- an empty list, the same
+    "declared means present" contract the hand-written roster kept -- because a kind with a
+    `writes: Tenure.since` cell and no opener (`commit`, `oblige`, `succeed`, `tie`, `knot`) is a
+    real, disclosed hole, not an absent declaration. MEASURED against the mapping it replaced: the
+    two agree exactly (`hold: [confer, create_record]`, `contain: [move]`, the other five empty)."""
+    openers: dict = {k: set() for k in TENURE_KINDS}
+    tree = ast.parse(files.EFFECTS_PY.read_text(encoding="utf-8"))
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.FunctionDef):
+            continue
+        verb = None
+        for dec in node.decorator_list:
+            if (isinstance(dec, ast.Call) and isinstance(dec.func, ast.Name)
+                    and dec.func.id == "effect_for" and dec.args
+                    and isinstance(dec.args[0], ast.Constant)):
+                verb = dec.args[0].value
+        if verb is None:
+            continue
+        for call in ast.walk(node):
+            if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Name)
+                    and call.func.id == "Tenure"):
+                continue
+            kind = None
+            if len(call.args) > 3 and isinstance(call.args[3], ast.Constant):
+                kind = call.args[3].value
+            else:
+                kind = next((kw.value.value for kw in call.keywords
+                            if kw.arg == "kind" and isinstance(kw.value, ast.Constant)), None)
+            if kind is not None:
+                openers.setdefault(kind, set()).add(verb)
+    return {k: sorted(v) for k, v in openers.items()}
 
 
 def _load_verb_table() -> dict:
@@ -520,9 +567,10 @@ def _load_verb_table() -> dict:
     # nothing can end.
     #
     # ⚠ ROW 15's SECOND HALF -- `04:466-467`, *"every kind's OPENER set is declared too"* -- IS
-    # BELOW, after this check: `tenure_kinds.openers` in `rosters.yaml`, measured from
-    # `loop/effects.py`. Declared-and-empty is REPORTED (`tenure_kinds_without_an_opener`), not
-    # refused.
+    # BELOW, after this check: `_derive_openers_from_effects()`, an AST walk over
+    # `loop/effects.py`'s own `Tenure(...)` construction sites (`OPENERS-DERIVE`, 2026-09-29;
+    # `rosters.yaml`'s `tenure_kinds` row carried this mapping by hand before this and no longer
+    # does). Declared-and-empty is REPORTED (`tenure_kinds_without_an_opener`), not refused.
     if "release" not in out:
         raise SystemExit(
             "verb_table.yaml: no `release` row. Loader invariant 6 (04 PART D row 15) is the "
@@ -541,21 +589,21 @@ def _load_verb_table() -> dict:
             "domain is an edge that can be opened and never closed, and a kind here and "
             "not in the roster is a closer for a relation that does not exist.")
     # LOADER INVARIANT 6, SECOND HALF (`04 §B.13 #6`, `04:466-467`, `ID-14`): EVERY KIND'S OPENER
-    # SET IS DECLARED. Declared means present: a kind with no `openers:` entry, or an entry for a
-    # kind the roster does not have, or an opener naming no verb, refuses. An EMPTY set is a
-    # declaration too -- the kind has no opener today -- and `tenure_kinds_without_an_opener`
-    # reports it rather than refusing, since a relation nothing can open yet may be correct.
-    _openers = roster_map("tenure_kinds", "openers")
-    if set(_openers) != set(TENURE_KINDS):
-        raise SystemExit(
-            f"rosters.yaml: `tenure_kinds.openers` declares {sorted(_openers)} and the roster is "
-            f"{sorted(TENURE_KINDS)}. 04 §B.13 #6 -- every kind's opener set is declared, and "
-            "only for a kind that exists.")
+    # SET IS DECLARED. `_derive_openers_from_effects()` seeds every `TENURE_KINDS` member with an
+    # empty list before it reads anything, so "a kind with no entry" is now impossible BY
+    # CONSTRUCTION rather than checked -- the `set(_openers) != set(TENURE_KINDS)` refusal this
+    # block carried before `OPENERS-DERIVE` (2026-09-29) tested a failure mode only a HAND-WRITTEN
+    # roster could reach; deleted rather than kept unreachable (`CLAUDE.md` §0.1 pt 2 -- "an
+    # assertion must be able to observe the failure it excludes"; 44 -> 43 `raise SystemExit`s
+    # across the model set, `test_season_shape.py`'s own pinned count). What survives is the check
+    # a derivation cannot rule out by construction: an opener naming a verb `verb_table.yaml` does
+    # not have -- a typo or an orphaned `@effect_for` registration in `loop/effects.py`.
+    _openers = _derive_openers_from_effects()
     _stray = sorted((k, v) for k, vs in _openers.items() for v in (vs or []) if v not in out)
     if _stray:
         raise SystemExit(
-            f"rosters.yaml: `tenure_kinds.openers` names opener(s) that are no verb: {_stray}. "
-            "04 §B.13 #6 -- an opener is a row of verb_table.yaml.")
+            f"loop/effects.py: a `Tenure(...)` construction names opener(s) that are no verb: "
+            f"{_stray}. 04 §B.13 #6 -- an opener is a row of verb_table.yaml.")
     # LOADER INVARIANT 2 (`04 §B.13 #2`, `04:459`): EVERY MATRIX ROW WITH `RES` HAS A PRODUCING
     # VERB -- or DECLARES that it has none, and why, in its `unproduced:` column. `04:1025` (PART
     # E step 2) records the literal invariant as unsatisfiable today; the column is what lets the
@@ -585,11 +633,14 @@ def _produced_pairs(table: dict) -> set:
 
 
 def tenure_kinds_without_an_opener() -> list:
-    """Loader invariant 6's second half, as a REPORT: the tenure kinds whose declared opener set
-    (`rosters.yaml` `tenure_kinds.openers`) is empty -- relations no act can open today. Reported,
-    not refused: an unopenable kind may be correct for now, and which of them are holes is a
-    judgement the roster's `# hole` comments record."""
-    return sorted(k for k, vs in roster_map("tenure_kinds", "openers").items() if not vs)
+    """Loader invariant 6's second half, as a REPORT: the tenure kinds whose DERIVED opener set
+    (`_derive_openers_from_effects()`, an AST walk over `loop/effects.py`) is empty -- relations no
+    act can open today. Reported, not refused: an unopenable kind may be correct for now, and
+    which of them are holes is a judgement `rosters.yaml`'s `tenure_kinds` row comment records
+    (`commit`/`oblige`/`succeed`/`tie`/`knot`, unchanged since `OPENERS-DERIVE` replaced the
+    hand-written mapping with this function -- the same holes, MEASURED the same way, computed now
+    instead of read off the roster)."""
+    return sorted(k for k, vs in _derive_openers_from_effects().items() if not vs)
 
 VERB_TABLE: dict = {}          # filled after STRATA loads, at the bottom of the roster block
 
