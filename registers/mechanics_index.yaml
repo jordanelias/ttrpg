@@ -144,10 +144,13 @@ mechanics:
   coherence_zero_transition:
     scale: primitive
     faction: universal
-    canon_sources: ["engine/params/core.md#Coherence 0 NPC Transition"]
+    canon_sources: ["canon/philosophy/07_drift.md#§7.6", "canon/02_canon_constraints.md#section-a-p-15"]
     sim_module: systems/threadwork/sim/coherence.py
-    test_status: not_implemented
-    notes: "PP-261. Coherence reaches 0 -> NPC."
+    test_status: provisional
+    notes: "Position 27 (2026-09-29): the crossing (resting point leaves the human band) is
+      check_coherence_failure_transition (renamed from check_coherence_zero_transition — on a
+      distance where 0 is the equilibrium, 'zero' now names the opposite end). PP-261's engine/params
+      citation is superseded; see coherence_track below."
 
   ed_301_orthogonality:
     scale: primitive
@@ -446,12 +449,17 @@ mechanics:
     scale: thread
     faction: universal
     canon_sources:
-      - "systems/threadwork/threadwork_v30.md#part-3"
+      - "canon/philosophy/07_drift.md#§7.1"
+      - "canon/philosophy/07_drift.md#§7.4"
       - "canon/02_canon_constraints.md#section-a-p-10"
       - "canon/02_canon_constraints.md#section-a-p-15"
     sim_module: systems/threadwork/sim/coherence.py
-    test_status: not_implemented
-    notes: "Coherence 10-to-0 track per Foundations P-10, P-15."
+    test_status: provisional
+    notes: "Position 27 (2026-09-29): reshaped from the retired 10-to-0 depleting track (the old
+      threadwork_v30.md#part-3 citation is superseded, ED-WR-0010) to two quantities -- a resting
+      point (permanent set) and elastic displacement -- per the RULINGS.md elastic/plastic model.
+      tests/valoria/test_coherence_elastic_plastic.py covers the mechanics; provisional because
+      no balance/Monte-Carlo pass has run against it."
 
   co_movement:
     scale: thread
