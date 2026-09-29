@@ -235,7 +235,7 @@ four rows of that table found stale in this pass are corrected here, not there: 
 | 24f | **SUBSISTENCE IS TERRITORIAL** | SE | OPEN — **ungated: its gate, 5 = G2, is DONE** | design before code | design Phase 1 · 10; build Phase 2 (tail) |
 | 24g ✦ | **bodies clock + P3 individuation** | SE | BLOCKED | `24d-ii`, `24f`'s cohort producer, `ED-IN-0247` (**JORDAN**, §5.1 item 8) | Phase 4 · n |
 | 24h ✦ | **S5 — revolt (P5), forswearing (P6)** | SE/IN | BLOCKED | `20-ii`; P7 **JORDAN** (§5.1 item 11) | Phase 4 · o |
-| 25 | **MB-GOLDEN** | MB | OPEN | — (`ED-MB-0016` is `needs_jordan: false`) | Phase 1 · 11 |
+| 25 | **MB-GOLDEN** | MB | **DONE** (§8.10) | — (`ED-MB-0016` is `needs_jordan: false`) | Phase 1 · 11 |
 | 26 | **GO-VERSION** | GO | **JORDAN** | §5.1 item 9 | Phase 4 · p |
 | 27 | **WR-SCOPE** | WR | OPEN | — (`ED-WR-0010` ruled IN SCOPE) | Phase 3 (parallel) |
 | 28-0 ✦ | **ORPHAN-DELETE** | IN | OPEN | — | Phase 1 · 2 |
@@ -283,7 +283,7 @@ census, not the phase number, decides whether it may run beside a Phase-1 item.
 | 8a | **`13d-i` item (5)** | `offices.yaml` + its `harness/populated.py` wiring; the `titles` fold | **DONE, narrowed scope (§8.9)** | — ; before `18a` (placed by the author, §2.3) |
 | 9 | **`18` PROC-A** | re-host the 28 stress tests; `world_q.judging_set`; `convene` + the `rank` stem; `arrangements.yaml` through the one loader; D-6/D-7 as swept fixtures | OPEN | — (SC lane); a hard dependency of `18a` and `19` |
 | 10 | **`24f` — the design step** | specify who eats; **NAME the cohort producer** before any code | **DONE** (§3.1 item 10 body text has the decision) | — ; the BUILD (Phase 2 tail) shares `matter.py` with item 7 |
-| 11 | **`25` MB-GOLDEN** + the MB hand pass | the golden-mode ruling; `ED-MB-0057`, `ED-MB-0044`, `config.py:315-317`; A5; A9; the unblocked Sequenced rows; `ED-MB-0075`'s option (2) after its superseding row | OPEN | — (MB lane, parallel) |
+| 11 | **`25` MB-GOLDEN** + the MB hand pass | the golden-mode ruling; `ED-MB-0057`, `ED-MB-0044`, `config.py:315-317`; A5; A9; the unblocked Sequenced rows; `ED-MB-0075`'s option (2) after its superseding row | **DONE, with named exceptions (§8.10)** | — (MB lane, parallel) |
 | 12 | **PC lane** | the `partisan` deletion; Ob-from-defender (`core.py:79-83`) | OPEN | — (PC lane, parallel) |
 
 **Each item — why here, and what it must satisfy.**
@@ -535,17 +535,26 @@ until something mints cohorts. The step has three parts:
 - Both parts are decided; **the build is the tail of Phase 2.** It is serial with item 7 on
   `matter.py`. It must precede any `body_step` pick (`§3.9` edge 8; §5.1 item 8).
 
-**11 · MB lane.**
+**11 · MB lane. DONE, with two named exceptions (§8.10).**
 
 - `25` MB-GOLDEN applies the golden-mode ruling. `ED-MB-0016`'s governing row is `needs_jordan: false`
-  (2026-09-15), so the position is OPEN, not Jordan's.
+  (2026-09-15), so the position is OPEN, not Jordan's. **DONE — §8.10**: the CEV friction and the
+  golden re-record were already applied by intervening work; the three stale `config.py` comments
+  were the only remaining scope.
 - The **MB hand pass**: `ED-MB-0057`'s dead-primitive dispositions (`resolve_internal_collisions`
   re-adjudicated to DELETE), `ED-MB-0044`'s gauge fix (`tests/sim/gauge_mb.py:330-331`), and the
-  `config.py:315-317` comment.
-- A5 and A9.
+  `config.py:315-317` comment. **DONE — §8.10**, all three sub-items (the census's other two
+  dispositions, `_octagon_dmg_mod`/`_SHAPE_BUILD` and `provenance.py`, are unrelated to this hand
+  pass's three named items and remain open under `ED-MB-0057`).
+- A5 and A9. **SCOPED DOWN, not built — §8.10**: A5 needs a design pass naming which of seven inert
+  instruction keywords maps to which primitive; A9 is conditional on its own text ("only if... the
+  turning-points report is wanted") and nothing asked for it.
 - The **Sequenced rows the MB work has now unblocked**: headless duels (the provider exists), the
-  generated map (A1 is done), and AI generals (A1–A4 are done).
-- **`ED-MB-0075`'s option (2)**, built after its superseding row (§5.2).
+  generated map (A1 is done), and AI generals (A1–A4 are done). **GATES VERIFIED MET, not built —
+  §8.10**: headless duels' provider is confirmed live (`engine/season/` territory, out of MB-lane
+  scope); the generated map and AI generals are each their own future subsystem.
+- **`ED-MB-0075`'s option (2)**, built after its superseding row (§5.2). **DONE — §8.10**: goldens
+  re-recorded, verified before/after.
 
 Per-cell Q and army-scale envelopment (the multiunit Phase 0 spike) keep their existing gates. These
 are lane items, not positions — the old plan's *"parked, with reasons"* convention for a hand pass.
@@ -1726,6 +1735,109 @@ line is correct and this position's own — only the commit attribution is not t
 recorded here rather than silently passed over. `data/rosters.py`, `harness/populated.py`,
 `test_governance_build.py` and `offices.yaml` were never staged by any other position and land in
 this position's own commit.
+
+---
+
+### 8.10 · Made at position `11`'s execution — MB lane: `25` MB-GOLDEN + the MB hand pass, `ED-MB-0075` option (2), two named exceptions
+
+**`25` MB-GOLDEN's own remaining scope, re-derived from the live tree rather than the older
+workplan's 2026-09-18 framing.** `_part2:1736`'s three actions ("re-record the goldens once; make
+the three flags whose env defaults contradict their own comments say what they do; apply the CEV
+friction") turned out to be almost entirely ALREADY DONE by the intervening two months of MB-lane
+work this session inherited: `ED-MB-0016`'s superseding row (2026-09-15) confirms the CEV friction
+is applied (`config.py:317` defaults `'1'`) and `ED-MB-0061`'s confirms the goldens are already
+re-recorded at all-ON. What was left, and the only thing this position actually executed for `25`:
+three stale `config.py` comments (`MB_FRICTION_CEV`, plus its two same-shaped siblings
+`MB_CLOSE_RANKS`/`MB_CELL_DAMAGE`, all saying "Default OFF" against a live `'1'` default) —
+comment-only, verified not to move any golden.
+
+**The MB hand pass, all three named sub-items executed.** (1) `ED-MB-0057`'s re-adjudicated
+disposition for `resolve_internal_collisions` (DELETE) executed — the method deleted from
+`hierarchy/units.py`, a symbol-level `FORK:` row added to `restructure_ledger.md` (the file itself
+is live and unchanged otherwise; the row's "old path" is the containing file, since the ledger's own
+`git cat-file -e <ref>:<path>` check is file-path-shaped and a synthetic `file.py::symbol` key would
+be unfollowable and break `test_forked_status.py`'s pinned `UNRESOLVABLE_CEILING`). One unplanned
+casualty, found and fixed in the same commit: `test_tn7_always.py`'s "hand-rolled scan reaches a
+hand roller" control test had hardcoded `units.py` as its anchor — this method was its only
+hand-rolled d10 — and broke the moment it was deleted; re-pointed at `resolution.py`'s `roll_pool`,
+the canonical pool-roller every non-volley MB resolution already calls through, a more durable
+anchor than a primitive marked for deletion ever was. (2) `ED-MB-0044`'s R3 gauge fix applied —
+`tests/sim/gauge_mb.py`'s R3 row (`'Ranged vs Ranged mirror'`) had both sides at `stance:'hold'`, an
+unconditional early-return from steering, so it was a structural 100%-draw/0%-casualty test-fixture
+defect, not a balance finding (falsifier verified before AND after this fix, matching the row's own
+named falsifier). Fixed per the row's own recommended alternative — change the scenario
+(`stance='balanced'` + `instructions=('kite',)`), not the engine's `hold` semantics, which stays
+load-bearing for `build_envelopment`/`build_refused_flank` elsewhere. `tests/coverage_matrix.md`
+gained a dated entry (`ci_co_file_checker.py`'s sim-output co-file rule). (3) the `config.py:315-317`
+comment — the same edit as `25` MB-GOLDEN's own item above; the two are one fix, cited twice by the
+plan's own text.
+
+**`ED-MB-0075`'s option (2), built after its superseding row, exactly as specified — no
+re-litigation.** `resolve_engagements`'s pre-combat delta-sigma penalty on the shocked unit's own
+net successes (the two `elif MB_ENVELOP_SHOCK and *_fixed_other and *_angle_mod <= -0.5` branches)
+is replaced by a `shocked_a`/`shocked_b` boolean, threaded through `resolve_engagements`'s return
+dict (including its empty-pairs early return) and `resolve_engagements_cascading`'s sub-phase
+OR-accumulation, mirroring the existing `cell_dmg_a`/`cell_dmg_b` conditional-merge idiom rather
+than inventing a new one — exactly the plumbing the superseding row's item 3 named regardless of
+check-form. `run_battle`'s per-tick loop, after damage commits (the scale the row's item 2 names —
+not `run_multi_unit_battle`'s cross-pair post-processing, a different scale of the simulation),
+then rolls `discipline_check_cascade` (Ob 1) for any unit flagged shocked this tick; on FAIL, erodes
+morale by `dmg / (agg_discipline x command)` via `cascade_morale_hit` — the same formula and idiom
+`run_multi_unit_battle`'s `freed_attacker` path already uses. The sibling CHARGE-shock branches
+immediately above (a different, already-ratified mechanism, `engine.py:58` status WIRED) are
+untouched, as the row specified. PER_CELL-gated by construction (the whole puncture/shock block
+this composes on requires `PER_CELL=1`), so `unit_legacy_mor0`/`unit_field_mor0` are PROVABLY
+unaffected — `shocked_a`/`b` can only be set `True` inside that gated branch, verified by direct
+execution (`[BYTE-EXACT OK]`, unmoved), not merely asserted from the gating alone. Goldens
+re-recorded as the row's own item 5 disclosed they would: `cell_field_mor0`
+(`41a2e984...` → `d1399c9c...`) and `cell_legacy_mor1` (`cc6ab475...` → `63475d34...`), both
+PER_CELL=1 — OLD digest verified `[BYTE-EXACT FAIL]` before the re-record (the falsifier §0.1 pt 3
+row 4 asks for), NEW verified `[BYTE-EXACT OK]` after, via `tools/ci_golden_modes_check.py`'s
+`FIELD_PINS` directly (the tool the CI job actually runs, not a hand-rolled invocation of `bat.py`).
+`unit_legacy_mor0`/`cell_legacy_mor0` (the separate, pre-existing `_PINNED_OFF`-path drift
+`ED-MB-0070`/`ED-MB-0061` already disclosed) keep their exact pre-existing xfail/skip suite shape —
+not touched, not conflated with this change's own re-record. Two new ledger rows filed
+(`ED-MB-0076`, `ED-MB-0077`), Lane-B protocol followed (`next_free` read at 76, allocated both,
+bumped to 78, co-committed).
+
+**Two named exceptions — genuinely scoped down, not silently under-delivered.** (1) **A5 (role
+instincts)** — `ROLE_SPEC`'s own header already calls it a "SCAFFOLD... INERT" data table, and
+grepping its instruction vocabulary confirms why: `harass`/`screen`/`pursue`/`lure`/`pin`/`push`/
+`loose` have zero readers anywhere in the package outside `config.py` itself, while only
+`envelop`/`sweep`/`kite`/`hold`/`brace` are actually wired (`hierarchy/units.py`'s
+`_resolve_maneuver_goal`, the real "what a sub-unit does absent a live order" fallback chain).
+Giving the other seven real behaviour is the "instruction→primitive modulation... behaviour-
+cascading" wiring the scaffold's own banner already defers — a design pass naming which keyword
+maps to which primitive, which this position is not positioned to invent unilaterally, not a small
+addition. (2) **A9 (causes on trace rows)** — `resolution.trace_event(cat, **kw)` already accepts
+an arbitrary `causes=` kwarg with zero code change needed to the seam itself; the proposal's own
+text conditions the whole item on *"only if the concept's turning-points report is wanted"*, and
+nothing in this session — no ledger row, no ruling — says it is wanted. Deciding what counts as a
+"cause" (how far back a rout's attribution chain reaches) is a design judgment, not wiring; building
+it speculatively would be inventing a report nobody asked for. Both named in `HANDOFF_MB.md` rather
+than silently dropped.
+
+**The Sequenced rows, gates re-verified against the live tree rather than trusted from the
+proposal's stale text.** Per this session's own established discipline (never trust a plan's "X is
+done" claim without checking): **headless duels'** stated gate — a mass_battle provider on the
+season seam — is now MET, confirmed directly (`seam/wrappers/mass_battle.py` registers
+`provider: "mass_battle"` and calls `massbattle.py:resolve_field`), contradicting the proposal's own
+2026-09-25 "NO PROVIDER" text, which predates `ED-IN-0279`/M3's build (landed elsewhere this
+session, `engine/season/` territory, out of MB-lane scope and not touched here). **The generated
+map** and **AI generals** rows' gates are likewise MET (A1 done; A1-A4 done) but each names its own
+substantial subsystem in the proposal's own words (a seeded terrain-shaped generator; an AI planner
+authoring Orders) — not a quick unblock a hand pass should absorb. Not built; named as their own
+future positions in `HANDOFF_MB.md`.
+
+**Verified:** the ~28-file targeted MB `tests/valoria` battery plus
+`test_mass_battle_officers.py`/`test_mass_battle_terrain.py`/`test_rout_contagion.py` (all green,
+264 passed/5 xfailed on the larger run), `test_tn7_always.py` (17 passed, re-pointed anchor),
+`tools/ci_golden_modes_check.py`'s three modes directly (all `[BYTE-EXACT OK]`),
+`tools/validate_ed_citations.py` (clean of new findings — one phrasing fix was needed on the new
+`restructure_ledger.md` row to avoid a false `OPEN_AS_BASIS` trip on citing `ED-MB-0057`, whose
+`status` field stays `open` under this repo's own supersession convention), `tools/valoria_local.py
+--staged` (blocking gates pass on every commit). Not run: the full `pytest tests/valoria` suite
+(§0.4 — mid-session cadence is the file covering the edit, not the whole gate) and a fresh CI push.
 
 ---
 
