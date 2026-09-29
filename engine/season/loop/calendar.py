@@ -17,6 +17,7 @@ from __future__ import annotations
 
 from ..data.matrix import Step
 from ..state.gate import Token
+from ..state.ids import ROOT
 from ..trace_log import TRACE
 
 
@@ -34,8 +35,19 @@ def calendar(self, token: Token) -> None:
         TRACE.decision(f"date {did} came due", "S24",
                        chose="fire-and-lapse" if vacant else "fire-as-sitting",
                        alternatives=["block until a holder exists", "defer to next season"])
+        # ⚠ CHAINED ON THE VENUE, NOT `did` -- `last_emission_of`'s second argument must equal
+        # the write's own `subject=`, because it matches `anchor_of(...) == subject` and
+        # `anchor_of`'s tier 2 reads back exactly the `subject=` a write passed (`W4`,
+        # `state/world.py:1042-1046`). Every MATTER clock this mirrors (`body.changed`/`pid`,
+        # `stores.changed`/`yield.taken`/`rid` in `loop/matter.py`) uses the SAME value in both
+        # places; chaining on `did` here would look for a prior Event whose subject is `did`,
+        # which no `date.fired` Event ever carries (its subject is always the venue) -- so the
+        # chain would silently never leave `[ROOT]`, on every date, forever.
+        prior = w.last_emission_of("date.fired", d.get("venue"))
         w.write("Date", token, lambda d=d: d.__setitem__("fired", True),
-                record_kind="Date", fieldname="fired", driver="Event")
+                record_kind="Date", fieldname="fired", driver="Event",
+                emits="date.fired", subject=d.get("venue"),
+                causes=[prior] if prior else [ROOT])
         if not vacant:
             w.write("DocketItem", token,
                     lambda did=did: w.docket.append({"date": did, "matter": None}),

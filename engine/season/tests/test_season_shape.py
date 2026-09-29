@@ -4213,6 +4213,130 @@ def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate(
 
 
 # ===========================================================================
+# 11b — CALENDAR EMITS `date.fired`, WITH THE VENUE AS SUBJECT. Plan position `11b`, r2
+# `05_LEDGER_AND_BUILD.md:792-817`. `loop/calendar.py:37-38` used to write `Date.fired` through
+# the gate with no `emits=` and no `subject=`, so no `date.fired` Event ever existed.
+# ===========================================================================
+
+def test_calendar_emits_date_fired_with_the_venue_as_subject_and_chains_by_venue():
+    """Four clauses in one write: `emits="date.fired"`, `subject=<venue>`, and `causes=` chained
+    through `last_emission_of` exactly as the other clocks do (`loop/matter.py`'s
+    `body.changed`/`stores.changed`/`yield.taken`, all of which look themselves up under the SAME
+    value they emit under).
+
+    CONTROL, FIRST: no date planted at all -- CALENDAR runs and the log gains nothing of this
+    kind. Then a date whose `due_at` is not the tick: nothing fires. Then a date due now: it
+    fires, and its Event anchors on the venue (`state/attribution.anchor_of`'s tier 2, off the
+    minted receipt) with `causes=[ROOT]` -- its GENUINE FIRST emission. A second date, later, at
+    the SAME venue: its Event's `causes` names the first one, not `[ROOT]` -- the chain the other
+    clocks have and this write did not, before `11b`."""
+    w = P.tiny_world()
+    d = SeasonDriver(w)
+
+    assert not [e for e in w.log if e.kind == "date.fired"], (
+        "control: a fresh tiny_world already carries a date.fired Event")
+    d.calendar(mint_token(w, WriteClass.CALENDAR))
+    assert not [e for e in w.log if e.kind == "date.fired"], (
+        "CALENDAR emitted with no date ever planted -- the control failed")
+
+    # a date whose `due_at` is not the current tick: nothing fires. Due far in the future, not
+    # `tick + 1` -- the chain check below advances the tick by exactly one and a `due_at` this
+    # date shares would make it fire there too, which is a fixture bug, not a second finding.
+    w.dates["d_future"] = dict(id="d_future", venue="D", due_at=w.tick + 100, holder=None, fired=False)
+    d.calendar(mint_token(w, WriteClass.CALENDAR))
+    assert w.dates["d_future"]["fired"] is False, "a date due later fired early"
+    assert not [e for e in w.log if e.kind == "date.fired"], "a date due later emitted anyway"
+
+    # a date due NOW: it fires, anchors on the venue, and roots at ROOT (its genuine first).
+    w.dates["d_now"] = dict(id="d_now", venue="D", due_at=w.tick, holder=None, fired=False)
+    d.calendar(mint_token(w, WriteClass.CALENDAR))
+    fired = [e for e in w.log if e.kind == "date.fired"]
+    assert len(fired) == 1, fired
+    ev1 = fired[0]
+    assert anchor_of(w, ev1) == "D" and ev1.causes == [ROOT], (
+        f"first firing at a venue: anchor={anchor_of(w, ev1)!r}, causes={ev1.causes}")
+
+    # a SECOND date, firing LATER at the SAME venue, chains through `last_emission_of` rather
+    # than re-rooting -- the whole point of passing `causes=` instead of defaulting it.
+    w.tick += 1
+    w.dates["d_later"] = dict(id="d_later", venue="D", due_at=w.tick, holder=None, fired=False)
+    d.calendar(mint_token(w, WriteClass.CALENDAR))
+    fired2 = [e for e in w.log if e.kind == "date.fired" and e.id != ev1.id]
+    assert len(fired2) == 1, fired2
+    ev2 = fired2[0]
+    assert ev2.causes == [ev1.id], (
+        f"a second date firing at the same venue carries causes={ev2.causes}, not [{ev1.id!r}] "
+        "-- the chain re-rooted instead of naming its own previous emission at this venue")
+
+
+def test_calendar_a_forced_corpus_date_fires_and_emits_but_deposits_no_claim():
+    """The plan's own OBSERVABLE for `11b`: `harness/corpus_run.build_at` plants `d_forced`
+    (`due_at: 1`, no holder) on every case `cases/ENDINGS_CLASSIFIED.yaml` marks
+    `forced_by_threshold` -- COUNTED here, not assumed, and asserted `>= 1` so this is never a
+    vacuous population.
+
+    On at least one such world, running its season(s) fires `d_forced` and the fired Event now
+    anchors on the venue (`11b`'s own change) rather than not existing at all.
+
+    ⚠ NO CLAIM LANDS IN ANYONE'S LEDGER ABOUT IT, AND THAT IS A SEPARATE, UNCLOSED GAP -- NOT
+    `11b`'s TO FIX. `loop/driver.py::season` calls `self.calendar(...)` BEFORE the round loop and
+    never captures its return (`calendar` returns `None`); `matter()`'s own `_emitted_by_write`
+    buffer only fills `if step is Step.MATTER` (`state/world.py:1104`), so CALENDAR's own write
+    never enters it either. The Event this position added lands in `w.log` -- reachable by
+    `last_emission_of` and any direct log scan -- but it is never among the `events` `season()`
+    hands to `witness()` (`loop/driver.py:462`), so WITNESS's `claim.deposited` never fires for it.
+    MEASURED on this corpus (2026-09-29): 0 of 0 attempts. Recording the absence rather than
+    asserting the presence the plan's prose assumed -- `CLAUDE.md` §0.1 pt 3's row on "X is
+    absent": run the thing that would show presence, and this ran it."""
+    from ..harness import corpus_run as CR
+    from ..harness import run_cases as RC
+
+    endings = CR.endings()
+    cases = RC.load_cases("NPC") + RC.load_cases("ARC")
+    forced = [c for c in cases
+              if (endings.get(str(c.get("id"))) or {}).get("forced_by_threshold")]
+    assert len(forced) >= 1, "no corpus case is classified forced_by_threshold -- the population is empty"
+    # `run_case`'s own filter (`corpus_run.py:478`): an UNREPRESENTABLE scale is not a rung kind
+    # and `build_at` cannot build a chain for it -- §42.2's polarity rule sends that verdict
+    # against the thing measured rather than folding it onto the nearest rung.
+    forced = [c for c in forced if str(c.get("scale")) in set(RUNG_KINDS)]
+    assert forced, "every forced_by_threshold case has an UNREPRESENTABLE scale"
+
+    fired_any = False
+    claimed_any = False
+    for case in forced:
+        w = CR.build_at(case, seed=0)
+        if "d_forced" not in w.dates:
+            continue
+        d = SeasonDriver(w)
+        mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+        ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                          draw=draw_factory(w.world_seed, lambda: w.tick))
+        for _ in range(CR.seasons_for(case)):
+            d.season(ch, question=None, subsistence=P.SUBSIST,
+                     contest_max_depth=w.fixtures.get("contest_max_depth"))
+        fired = [e for e in w.log if e.kind == "date.fired"]
+        if not fired:
+            continue
+        fired_any = True
+        venue = w.dates["d_forced"].get("venue")
+        assert anchor_of(w, fired[0]) == venue, (
+            f"{case.get('id')}: a fired date's Event anchors on {anchor_of(w, fired[0])!r}, "
+            f"not its venue {venue!r}")
+        for p in w.persons.values():
+            for c in p.ledger:
+                if c.predicate == "date.fired" or any(e.id == getattr(c, "value", None)
+                                                       for e in fired):
+                    claimed_any = True
+    assert fired_any, (
+        "no forced_by_threshold world fired its planted date -- 11b's OBSERVABLE is unreachable "
+        "on this corpus")
+    assert not claimed_any, (
+        "a claim now references date.fired -- WITNESS's fan-out changed to reach CALENDAR's "
+        "emission; update this test's docstring, it no longer describes the gap it once measured")
+
+
+# ===========================================================================
 # W6 — WITNESS CHANNEL PREDICATES, AND LEDGER FLOOD CONTROL. `H-33`.
 # ===========================================================================
 
