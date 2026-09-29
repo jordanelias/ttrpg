@@ -537,10 +537,27 @@ gate.write(token, kind, field, id, change, actor?, via?) -> Receipt
   row.writer == act_only => token.class == ACTS  or raise
 
   -- ⚠ F3 · AX-4 CLAUSE 2, ENFORCED HERE FOR THE FIRST TIME
+  -- ⚠ TWO MORE BASES, ADDED AFTER THIS ENUMERATION WAS WRITTEN, NEVER UNTIL NOW RECONCILED HERE
+  -- (BATCH-CLOSE, methodology-close Phase 2 layer-conformance pass, 2026-09-29 -- found by a
+  -- producer/critic relay: the critic's citation-trace showed the workplan's own justification
+  -- for these two bases pointed at an UNRATIFIED proposal document sharing the "04" filename
+  -- prefix by coincidence, `proposals/2026-09-05-proceedings-subsystem/04_VERBS.md`, never at
+  -- THIS file -- so the code was correct and independently verified, and this enumeration was
+  -- simply stale, exactly the gap M4's own inline citation two rows below closes for a different
+  -- clause). `conferral` (`ED-IN-0277`, 2026-09-26, plan position 6): a seat-authorized OPENING
+  -- or re-grant of a `hold` on that seat, via `Act.via`'s purview walk -- `may_fill`,
+  -- `state/gate.py`. `handover` (`ED-IN-0277`'s own row, "give (position 16) is decided -- a
+  -- sixth, causation-bound basis -- and settled, not built"; BUILT at plan position 16): an
+  -- OPENING of a `hold` on an object that is NOT a seat, whose object the SAME write closed under
+  -- T-m -- the authority is the giver's own edge, ended in the same act, never a seat's basis.
   kind is Tenure => one of:
       actor == subject(id)                                   -- T-m, the owner's discretion
       cause is this Tenure's declared `term` maturation       -- T-n
       via is a Seat whose `revocation` basis reaches it       -- T-o, and `via` MUST be present
+      via is a Seat whose `conferral` basis reaches it,
+        opening or re-granting a `hold` ON that seat          -- conferral (`ED-IN-0277`)
+      opening a non-seat `hold` whose object the SAME write
+        closed under T-m, not yet handed on                   -- handover (`ED-IN-0277`, built at 16)
       cause is an existence change this same act caused       -- destroy's cascade
     otherwise                                                 raise NotYours
 

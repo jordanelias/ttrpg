@@ -7107,8 +7107,25 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this`. ⚠ THIS TEST
     # WAS ALREADY RED BEFORE POSITION `15` on its `H-96` behaviour count below (`11a`'s, per the
     # `11b` commit's own note); this line re-pins only the membership move position `15` made.
+    # ⚠⚠ 14 -> 13, `release` LEAVES, PLAN POSITION `7a` (`commit`), FOUND AT BATCH-CLOSE
+    # (methodology-close Phase 2, 2026-09-29) RATHER THAN AT `7a` ITSELF -- IT WAS NEVER
+    # PROPAGATED INTO THIS TEST'S RE-PIN, ONLY INTO THE MEMBERSHIP MOVE POSITION `15` MADE ONE
+    # PARAGRAPH UP. ⚠ FIRST WRITTEN HERE AS `give`/POSITION `16` AND WRONG -- caught by a
+    # `git worktree` bisection through every commit `b63e1b3d`..HEAD: `release` is still IN `ever`
+    # at `give`'s own commit and through `15c`/`15b`/`15d`, and leaves only at `7a`'s. The correct
+    # cause is `test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this`'s own
+    # paragraph, already dated 2026-09-29 at that test's `13 -> 14`/`14 -> 13` lines (that test's
+    # re-pin was done correctly when `7a` landed; only THIS one was missed): `commit` never
+    # executes (BO-9/BO-10, 0 of 802 attempts corpus-wide, unchanged by this position) but joining
+    # `resolvable_verbs()` (23 -> 24) makes it a new, always-eligible `own` Candidate with no
+    # operand cost in every world's ranking, and it crowds `release` out of the scene budget
+    # everywhere `release` used to win one -- `release` still FORMS (its precondition is
+    # untouched) but is refused in every world now (239 attempts, 0 executions per that test's own
+    # measurement). A ranking effect, not a change to `_req_release`/`_eff_release`. Confirmed here
+    # independently rather than merely cross-cited: running this test at HEAD shows `ever` missing
+    # exactly `release` and nothing else, matching that cause and that test's own numbers.
     assert ever == {"create_record", "examine", "interview", "fight", "move", "petition",
-                    "reconstruct", "release", "research", "speak", "surveil", "tell", "transfer",
+                    "reconstruct", "research", "speak", "surveil", "tell", "transfer",
                     "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
@@ -7143,7 +7160,17 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # different, more specific reason (most of its refused attempts bind `site` to a referent that
     # is not a Site at all; the rest bind a real site whose condition never clears the floor) —
     # full trace at `test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this`.
-    assert refused_only == {"work", "dispatch"}, (
+    # ⚠⚠ TWO -> FOUR, `commit` AND `release` JOIN, FOUND AT BATCH-CLOSE (methodology-close Phase 2,
+    # 2026-09-29), SAME UNDER-PROPAGATION AS THE `ever` ASSERTION ABOVE, AND BOTH FOR THE SAME
+    # CAUSE -- PLAN POSITION `7a` (`commit`), NOT `16` (`give`; see the `ever` assertion's own
+    # correction above for why the first writing of this pointed at `give` and was wrong). `commit`
+    # is attempted and always refused, never executed, the moment it entered `resolvable_verbs()`
+    # (BO-9/BO-10, `_eff_commit`'s own docstring: 0 of 802 attempts corpus-wide). `release` lands
+    # here rather than merely leaving `ever`, refused in every world now rather than absent from
+    # it, for the ranking-crowding reason the `ever` assertion's paragraph traces in full. Confirmed
+    # directly (`refused_only` computed against this same `live`): `{"commit", "dispatch",
+    # "release", "work"}`, exactly two more than the set this line pinned.
+    assert refused_only == {"commit", "dispatch", "release", "work"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -7420,7 +7447,52 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # another candidate. `11a`: `reach`/`place_of` give Q2 a place clause, so `examine` newly joins
     # the varying set (a verb in ~8 of 89 worlds splits every existing group along that line, which
     # is most of a rise on its own). Re-measured fresh on the merged tree below.
-    assert len(by_sig) == 44, (
+    # ⚠⚠ **44 WAS NEVER MEASURED — IT IS `77f7f6c`'S OWN MERGE-CONFLICT PLACEHOLDER, AND THE
+    # FOLLOW-UP PASS THAT COMMIT PROMISED IS THIS ONE, EIGHT COMMITS LATE.** That commit's own
+    # message: *"Per Jordan's explicit instruction, these are NOT re-measured on the merged tree
+    # in this commit -- each is marked inline with both prior deltas and why neither is current,
+    # using placeholder values from one side of the conflict. This commit's tests are EXPECTED RED
+    # on those pins until a follow-up re-measurement pass."* 44 is FIGHT-RENAME's own solo figure
+    # (cited two paragraphs up), carried over unmeasured on the merged tree. Confirmed directly via
+    # a `git worktree` at `77f7f6c` itself (this file's own established technique): the MERGED
+    # tree's real value that day was already **59**, not 44 — and `11b`'s own commit message says
+    # as much without naming the number ("the same 10 pre-existing failures as the unmodified tree
+    # (position `11a`'s reach/place_of widening)"). Every commit from `11b` through this session's
+    # own `BATCH-CLOSE` Phase 2 carried the debt forward untouched; this pass pays it off and
+    # accounts for everything landed since, not only this session's own work.
+    # ⚠⚠ **59 -> 69, MEASURED PER COMMIT VIA `git worktree` CHECKOUTS OF EACH POSITION IN TURN — A
+    # SINGLE CAUSE WAS NOT OBVIOUS FROM THE FINAL DELTA ALONE, SO NONE IS CLAIMED.** Same 89 live
+    # worlds throughout, seed 0:
+    #
+    #     b63e1b3d  (pre-batch control, = `77f7f6c`'s real value)        59
+    #     0f417bf   `11b`  CALENDAR emits `date.fired`                   56   (-3)
+    #     4eb6dbd   `15`   Petition and Dispensation fold into Records   72   (+16)
+    #     7c0295b   `16`   give                                         72   ( 0)
+    #     c4353c4   `15c`  operands read off a held writ                71   (-1)
+    #     09d922d   `15b`  a Partial telling is a lossy telling         71   ( 0)
+    #     84e492f   `15d`  the observer walk reports its channel        71   ( 0)
+    #     d6eb420   `7a`   commit opens its Tenure                      69   (-2)
+    #     bcf33b7   `17a`  obligees                                     69   ( 0)
+    #     d82da94   BATCH-CLOSE Phase 1                                 69   ( 0)
+    #     87ed612   BATCH-CLOSE Phase 2 (HEAD)                          69   ( 0)
+    #
+    # `11b` moves it on `content_hash` alone — its own commit message's "`content_hash` now moves
+    # on any world where a date fires" perturbs the undeclared hash tiebreak the `G1a` note above
+    # already names as this exact channel. `15` (`petition`) is the whole of the rise: petition
+    # enters `ever` in SOME of the 89 worlds and not others (it is `varying`, asserted below), and
+    # a verb that splits the corpus rather than uniting or missing it multiplies signatures the
+    # same way `kill / wound`'s admission did (44 -> 57, above). `16` (`give`) moves it not at
+    # all — `give` never executes and never even FORMS a Candidate anywhere in this corpus
+    # (confirmed at the never-attempted-set assertion below), so it cannot split anything. `15c`/
+    # `15b`/`15d` are one consolidation and two no-ops. `7a` (`commit`) falls for the mirror
+    # reason `16` was a no-op: `commit` competes for a scene slot in every one of the 89 worlds
+    # without ever executing (`_eff_commit`'s own BO-9/BO-10 note: `commitment.made` stays 0),
+    # which crowds `release` out of the executed set everywhere at once — collapsing every
+    # signature that used to differ only in whether `release` fired into one. `17a` (`oblige`)
+    # moves it not at all, on the identical ground `give` did not: `oblige` forms no Candidate in
+    # this corpus either (never-attempted set, below). Both BATCH-CLOSE passes touch no engine
+    # behaviour and move nothing.
+    assert len(by_sig) == 69, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -7505,7 +7577,21 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # SAME-BREATH CHECK THE `by_sig` MESSAGE ABOVE DEMANDS.** One world's scene slots now go
     # elsewhere under the denser Q2 slate; `utter` alone stays at 89 of 89.
     # [GROUNDED: measured 2026-09-27 on this tree with `seen` (`R8.1`) live -- universal `{create_record, utter}` -> `{utter}`; `create_record` 88 of 89 worlds]
-    assert universal == {"utter"}, sorted(universal)
+    # ⚠⚠ **`{"utter"}` WAS ALSO A `77f7f6c` PLACEHOLDER, AND THE MOVE PREDATES THIS BATCH ENTIRELY.**
+    # Checked at each of the ten commits between the pre-batch control and HEAD (the same sweep the
+    # `by_sig` note above tabulates): `universal` reads `{"create_record", "utter"}` at EVERY one
+    # of them, unmoved by `11b` through `17a` or either BATCH-CLOSE pass. The move away from
+    # `{"utter"}` alone happened at `77f7f6c` itself — confirmed via `git worktree`: `{"utter"}`
+    # alone still holds through `489151b`/`c6f4252`, immediately upstream of the merge, and reads
+    # `{"create_record", "utter"}` at `77f7f6c` the moment FIGHT-RENAME and `11a` land together —
+    # the same commit that left `by_sig` unmeasured, on the same instruction, for the same reason:
+    # two changes merged (`H-96`'s rename-seeded tie-break and `11a`'s Q2 widening) with neither
+    # side measured alone on the combined tree. Which of the two returned `create_record` to
+    # universal is not re-derived here — it is no more this session's question than `by_sig`'s
+    # per-unit history before `11b` is — what is confirmed is that the set has been stable at this
+    # value for the eleven commits measured, the pre-batch control included, so nothing this
+    # session landed moved it.
+    assert universal == {"create_record", "utter"}, sorted(universal)
     # `dispatch` LEAVES THE VARYING SET ENTIRELY UNDER `R8.1` -- NOT INTO UNIVERSAL, OUT OF `ever`
     # ALTOGETHER. It no longer executes in any live world (NPC-033 included); it is still
     # ATTEMPTED and refused there, so it moves to `refused_only` rather than to the never-attempted
@@ -7517,6 +7603,15 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # 2026-09-20 the personal-combat provider had no person-side door, so
     # `@provider("contest","personal_combat")` was registered and unreachable from a season.
     # [GROUNDED: measured 2026-09-27 on this tree with `seen` (`R8.1`) live -- varying loses `dispatch` (now `refused_only`, 0 of 89 executed) and gains `create_record` (88 of 89, ex-universal); `kill / wound` moves 47 -> 35 of 89, membership in the set unaffected]
+    # ⚠⚠ `varying` MOVES WITH `ever`, MEASURED ON THE SAME `git worktree` SWEEP AS THE `by_sig`
+    # NOTE ABOVE. `petition` JOINS AT POSITION `15` (the same commit that takes `by_sig` 56 -> 72:
+    # petition executes in SOME of the 89 worlds and not others, which is what makes it `varying`
+    # rather than `universal`) and `release` LEAVES AT POSITION `7a`, when `commit`'s scene-budget
+    # competition crowds it out of the executed set everywhere at once (`by_sig` 71 -> 69 in the
+    # same worktree step; `release` is confirmed absent from `ever` starting at that commit and no
+    # earlier one — see the `never-attempted` note below for what does and does not follow `give`
+    # and `oblige` in). `create_record` is not a member here because it is `universal`, asserted
+    # immediately above; both sets were read off the same corpus run in the same breath.
     # ⚠⚠ 35 -> 9 OF 89, 2026-09-29 (plan `FIGHT-RENAME`, `kill / wound` -> `fight`), AND THIS IS A
     # REAL MOVE, NOT A RELABEL -- corrected from this session's own first guess, which claimed the
     # count was unchanged without having run it (§0.1 pt 3 row 4). `H-96`'s tie-break
@@ -7527,8 +7622,8 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠⚠ `examine` ALSO JOINS, POSITION `11a`, 2026-09-29 -- see the `ever`/`by_sig` notes above. It
     # executes in worlds that are never all and never none, so it is squarely `varying` rather than
     # universal or absent. Both moves are on the merged tree; re-measured below rather than summed.
-    assert varying == {"create_record", "examine", "interview", "fight", "move", "release",
-                       "research", "reconstruct", "speak", "surveil", "tell", "transfer"}, (
+    assert varying == {"examine", "fight", "interview", "move", "petition", "reconstruct",
+                       "research", "speak", "surveil", "tell", "transfer"}, (
         sorted(varying))
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
     # BROKE BROKE FOR A REASON THIS TEST WANTS. A one-season case still never reaches `tell` —
@@ -7556,12 +7651,21 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠ AND THE SEASON COUNT STILL BOUNDS SOMETHING, WHICH IS WHY `lo` IS KEPT: cases without
     # `tell` still run 1..6 seasons, so reaching it is not a function of length alone.
     # [GROUNDED: measured 2026-09-11 under `U2` over the 89 live corpus cases, seed 0 -- `min(hi) == 1`; under the one-pass loop it was 2, and the reason was that WITNESS ran once per season]
-    assert min(hi) == 1, (
-        f"the shortest case reaching `tell` runs {min(hi)} seasons. A 2 means the INTRA-SEASON "
-        "channel has closed: a one-season case has no PREVIOUS season's WITNESS, so the only way "
-        "it can reach `tell` is a claim deposited by an earlier ROUND of its own season — which "
-        "is R-03's channel and what `U2` built. Look at `Claim.round` and `questions_for`'s "
-        "`since` before touching this line")
+    # ⚠⚠ `min(hi)` MOVES 1 -> 2 AT POSITION `7a`, THE SAME COMMIT THAT MOVES `by_sig` AND `ever`,
+    # MEASURED ON THE SAME WORKTREE SWEEP. `hi` (the season counts of cases that DO reach `tell`)
+    # reads `{1,2,3,4,5,6}` through `84e492f` (position `15d`) and loses its `1` exactly at
+    # `d6eb420` (`7a`, `commit`) — the intra-season channel `U2` built is not what closed; `lo`
+    # shows the mechanism in the same breath. It briefly widened to `{1, 2, 6}` at position `15`
+    # (a `petition`-crowded case reaching `tell` two seasons later than before, at season 6 rather
+    # than 2) and returned to `{1, 2}` at `7a`: `commit`'s scene-budget competition — the same
+    # crowding that displaces `release`, above — pushes the earliest `tell` in every one-season
+    # case that used to reach it back out to season 2. `max(lo)` is UNCHANGED at 2 throughout this
+    # whole sweep, so the assertion below is not touched.
+    assert min(hi) == 2, (
+        f"the shortest case reaching `tell` runs {min(hi)} seasons. A 1 means the INTRA-SEASON "
+        "channel `U2` built (a claim deposited by an earlier ROUND of the SAME season) is once "
+        "again the binding constraint rather than `7a`'s scene-budget crowding — re-derive which "
+        "one is current before touching this line, do not just restore 1")
     assert lo and max(lo) > 1, (
         f"cases WITHOUT `tell` run {sorted(lo)} seasons. If every case that misses `tell` is a "
         "one-season case, reaching it has become a function of LENGTH alone and the scene budget "
@@ -7595,13 +7699,28 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # returns `{}` for it in every corpus world, and `_req_march`'s typed requirement (an
     # existing Rung `subject`) then refuses the empty operand set. It executes only from a
     # hand-built `Act` (`test_march.py`), not from anything the corpus forms on its own.
+    # ⚠⚠ SIX -> EIGHT: `give` (POSITION `16`) AND `oblige` (POSITION `17a`) JOIN, NEITHER INTO
+    # `ever` NOR `refused_only`. Both rows are untyped and deliberately so (`give`'s and
+    # `oblige`'s own `counterparty_note`s in `verb_table.yaml`), so `decision/options.py::
+    # opening_set` forms NO Candidate for either verb in this corpus at all — not "formed and
+    # always refused" like `commit`, but never even attempted, confirmed via the same `git
+    # worktree` sweep as the `by_sig` note above: `give` enters this set the moment `7c0295b`
+    # (`16`) lands and `oblige` the moment `bcf33b7` (`17a`) does, neither one ever showing in
+    # `ever` or in a live case's `refused` list at any commit checked, this session's own included.
+    # `give`'s own row cites a measurement on a DIFFERENT corpus (`headless.run`/`populated.run`)
+    # where it DOES form and refuse every time — that corpus is not this one, and the two must not
+    # be conflated. `oblige`'s own row states the mechanism for itself: no Question's referent is
+    # ever a seat in this corpus (the same fact `petition`'s seat-reading row was refused for,
+    # `H-63`), so a computed `oblige` has nothing to bind its one operand to.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
-                                              "destroy_record", "march"}, (
+                                              "destroy_record", "march", "give", "oblige"}, (
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
-        "the six are the governance verbs no corpus overlay grants (`establish` is "
-        "`remit:confer`-eligible); the sixth, `march`, is eligible in NPC-033 but has no corpus "
-        "operands. `H-71` is CLOSED, so the governance five's reason is the corpus's offices, "
-        "and march's is its own missing `operands_for` arm, not the eligibility branch")
+        "the original six are the governance verbs no corpus overlay grants (`establish` is "
+        "`remit:confer`-eligible); `march` is eligible in NPC-033 but has no corpus operands; "
+        "`give` and `oblige` are untyped rows whose Candidate never forms in this corpus at all. "
+        "`H-71` is CLOSED, so the governance five's reason is the corpus's offices, march's is "
+        "its own missing `operands_for` arm, and give/oblige's is that neither row's one operand "
+        "ever has a referent to bind here")
 
 
 
