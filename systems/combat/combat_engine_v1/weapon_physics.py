@@ -263,8 +263,8 @@ def phi_grip(w, grip, sel_head, sel_pc=None):
     S_g-ratio (Phi_swing, SWING_FLOOR `[SIM-CALIBRATE]`), THEN blends by the SELECTED element's OWN
     point_concentration (`sel_pc`, sourced from c.sel_pc — D2b/I2; None falls back to the native whole-weapon
     point_concentration): Phi_grip = pc_sel*1.0 + (1-pc_sel)*Phi_swing — the within-mode thrust-ness a pure cutter
-    still carries (guandao pc=0.30) as well as a genuinely versatile cut_thrust blade (JD-8: partisan/spetum
-    retain their swing degradation weighted by their own low pc). Verified against the plan's own measured
+    still carries (guandao pc=0.30) as well as a genuinely versatile cut_thrust blade (JD-8: spetum
+    retains its swing degradation weighted by its own low pc). Verified against the plan's own measured
     fixed-pc table: guandao (curved_cut, pc=0.30, g=1.0) -> 0.650 exact; bardiche (straight_cut, pc=0.18, g=0.627)
     -> 0.743 exact. At grip=0, rho(0)==1.0 always, so Phi_swing==1.0 and the blend collapses to 1.0 for EVERY
     head — the byte-identical default. Pure."""

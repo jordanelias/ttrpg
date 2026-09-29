@@ -425,8 +425,15 @@ def test_d9c_max_depth_has_no_default_anywhere():
     assert "caller_supplied_max_depth" not in _model_code()
     assert inspect.signature(contest).parameters["max_depth"].default is inspect.Parameter.empty
     w = _w()
+    # ⚠ VERB DELIBERATELY NOT A `VERB_TABLE` ROW (RENAMED from the literal `"fight"`, 2026-09-29,
+    # plan `FIGHT-RENAME`): that spelling was an arbitrary placeholder, chosen before any real verb
+    # was named `fight`, and the rename made it collide with the real row -- `payload="S"` is not
+    # a dict, so the real row's typed `subject` precondition now failed at admission (`_admits`)
+    # instead of ever reaching the max-depth-is-None `Forbidden` this test is about. The chooser
+    # keeps the name `fight` (irrelevant -- it is a Python closure, never introspected by name);
+    # only the ACT's verb STRING changes, to one guaranteed absent from `VERB_TABLE`.
     def fight(p, v, s, ask_budget):
-        return [P.Act_(w, p, "fight", contests=["x"], payload="S")] if p.id == "p_low" else []
+        return [P.Act_(w, p, "no_such_verb", contests=["x"], payload="S")] if p.id == "p_low" else []
     with pytest.raises(Forbidden):
         P._run(w, fight)
 
@@ -593,11 +600,11 @@ def test_h115_the_degree_branches_raise_unspecified_not_systemexit():
     it would propagate past this test's own `try`."""
     w = _w()
     d = SeasonDriver(w)
-    act = Act(id="sweep_kw", actor="p_low", verb="kill / wound", payload={"subject": "p_mid"})
+    act = Act(id="sweep_kw", actor="p_low", verb="fight", payload={"subject": "p_mid"})
     with pytest.raises(Unspecified):
         d._fold(w, mint_token(w, WriteClass.ACTS), act)
     # THE CATCH LIST run_case ACTUALLY USES (corpus_run.py:350), not a copy of it (§8).
-    act2 = Act(id="sweep_kw2", actor="p_low", verb="kill / wound", payload={"subject": "p_mid"})
+    act2 = Act(id="sweep_kw2", actor="p_low", verb="fight", payload={"subject": "p_mid"})
     caught_as_gap = False
     try:
         d._fold(w, mint_token(w, WriteClass.ACTS), act2)
@@ -762,14 +769,59 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     loop). #2: a RES matrix row no verb writes that carries no `unproduced:` cell, and an
     `unproduced:` cell on a row a verb DOES write (stale). #6: `tenure_kinds.openers` not covering
     exactly the roster, and an opener naming no verb. An EMPTY opener set is reported
-    (`tenure_kinds_without_an_opener`), not raised, so it adds nothing here."""
+    (`tenure_kinds_without_an_opener`), not raised, so it adds nothing here.
+
+    ⚠ 44 -> 43, 2026-09-29, `OPENERS-DERIVE`, A DELETION RATHER THAN A MOVE. `verbs.py`'s
+    `tenure_kinds.openers` mapping stopped being hand-authored in `rosters.yaml` and became
+    `_derive_openers_from_effects()`, an AST walk over `loop/effects.py` seeded with every
+    `TENURE_KINDS` member first -- so "a kind with no `openers:` entry" is impossible BY
+    CONSTRUCTION now, not merely checked, and the `set(_openers) != set(TENURE_KINDS)` refusal
+    that used to test it is unreachable code rather than a live check (`CLAUDE.md` §0.1 pt 2 --
+    "an assertion must be able to observe the failure it excludes"). Deleted, not kept for
+    appearances. The sibling half of #6 -- an opener naming a verb `verb_table.yaml` does not have
+    -- survives unchanged, reading the derived dict instead of the roster.
+
+    ⚠ 43 -> 44, 2026-09-29, plan position `8a` (`13d-i` item 5). `data/rosters.py::_load_offices`
+    (the new loader for `engine/season/offices.yaml`, the `titles`/seats fold) raises
+    `SystemExit(f"offices.yaml not found at {OFFICES_YAML}")` on a missing file, the same shape
+    `_load_rosters` already raises for a missing `rosters.yaml` -- a second file this package
+    cannot run without, counted the same way. `rosters.py`'s per-file count moves 1 -> 2; no other
+    file in the model set changed. Concurrent with `OPENERS-DERIVE`'s own 44 -> 43 bump immediately
+    above -- both land, in file-append order, per `CLAUDE.md` §0.4's own precedent for two positions
+    landing the same pinned count in one shared tree: neither reverts the other's history line.
+
+    ⚠ 44 -> 69, 2026-09-29, plan position `18` (PROC-A), part 3. `data/arrangements.py` is a NEW
+    FILE in the model set -- the ONE loader for `arrangements.yaml` (`04_CODE_ARCHITECTURE.md:131`
+    puts every closed set and the one loader in `data/`) -- and it carries 25 load-time refusals of
+    its own: one per malformed field across the thirteen-key arrangement schema and the
+    `speech_kinds` schema (unknown key, an enum value outside its closed set, a roster member
+    outside its roster, the `quorum`/`disposal: declared` cross-check in both directions), on the
+    exact discipline `verbs.py`'s own per-field checks already use -- a schema this large produces
+    a refusal this large, not a defect to trim. `data/verbs.py`'s own 25 is coincidence, not a
+    mirrored count; the two schemas are unrelated in size, and both close on their own fields.
+
+    ⚠ 69 -> 62, 2026-09-29, Phase-1 methodology close, `/simplify` REUSE and SIMPLIFICATION lenses
+    (convergent findings), NOT A DROPPED REFUSAL -- A CONSOLIDATION. `data/arrangements.py` carried
+    nine near-identical "value must be a roster member" blocks (five single-value, four
+    list-of-values) as its own inline `raise SystemExit`s -- copy-paste with the field/roster name
+    varying, the same shape `matrix.py`/`verbs.py` each also carry their own single inline version
+    of (a THIRD divergent implementation, per the REUSE lens). Factored into two local helpers,
+    `_refuse_not_in`/`_refuse_any_not_in`, each with ONE `raise SystemExit`; the nine call sites
+    call one or the other instead of repeating the check. Every checked FIELD and ROSTER is
+    unchanged -- same nine values validated, same conditions refused -- only the SystemExit
+    statement counted here is now shared rather than repeated nine times, so `arrangements.py`'s
+    own count moves 25 -> 18 (nine sites collapsed to two), a `-7` that is this test's whole
+    explanation for `69 -> 62`. MUTATION CHECK unchanged: deleting either helper's raise, or a
+    call site skipping it, still fails the loader's own tests (`test_arrangements.py`) before this
+    count could hide it -- the pin here is this file's OWN falsifier for the shape of the
+    refusal, not the only one."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 44, (
-        f"{total} load-time exits across the model set, expected 44. Per file: "
+    assert total == 62, (
+        f"{total} load-time exits across the model set, expected 62. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
@@ -2147,10 +2199,10 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
     # ARM 2 — the converse, which the `writes:` half has always refused: a contested verb whose
     # emissions are flat reports the same outcome whichever way the contest went (`ID-9`).
     def flatten_the_emits(doc):
-        row = next(r for r in doc["verbs"] if r["verb"] == "kill / wound")
+        row = next(r for r in doc["verbs"] if r["verb"] == "fight")
         row["emits"] = ["person.died"]
     msg = loads(flatten_the_emits)
-    assert "FLAT" in msg and "kill / wound" in msg, msg
+    assert "FLAT" in msg and "fight" in msg, msg
 
     # AND THE CONTROL: the shipped table loads. Without this the two arms above would pass on a
     # loader that refused everything.
@@ -2232,8 +2284,31 @@ def test_w2_the_class_column_is_derived_and_cross_checked():
 # the honest reading is that the guard is right and the site is genuinely mechanism — not that
 # the ceiling is a formality. If a third arrives for a reason that is not "language or grammar",
 # that is the creep this ratchet exists to make visible.
-# [JUSTIFIED: a RATCHET COUNT, not a magnitude -- it is the number of declared `roster-exempt:` sites in the model set, and the argument for each increment is the comment block directly above. Fitted to the tree by construction: run the guard and it reports the true count. 2026-09-19: 14 -> 15 for `rosters.py`'s `_ptrs`.]
-EXEMPT_CEILING = 15
+# 15 -> 26, 2026-09-29, plan position `18` (PROC-A), part 3: `data/arrangements.py`, THE NEW FILE,
+# earns four exemption sites this ratchet counts once per matching AST node (a site is a NODE, not
+# a comment -- one comment covering several adjacent literals is several sites):
+#   (a) the five grammar-only closed sets (`_DISPOSAL_VALUES`, `_FLOOR_FORMS`, `_ORDER_VALUES`,
+#       `_DISPOSAL_REACH_FORMS`, `_DISPOSES_LITERALS`) -- THIS LOADER'S OWN SCHEMA, which values a
+#       KEY ON THE ROW ITSELF may take, the same class `data/requires.py`'s
+#       `REQUIRES_STEMS`/`COMPARATORS` already establish as the direct precedent for a closed set
+#       that stays a Python frozenset rather than a `rosters.yaml` entry;
+#   (b) `_ARRANGEMENT_KEYS`/`_SPEECH_KIND_KEYS` -- the ROW'S OWN FIELD NAMES, the identical shape
+#       `state/carriers.py::Rung._DECLARED` is exempted for;
+#   (c) the two loader functions' own RETURN-DICT LITERALS (`_load_speech_kind`,
+#       `_load_arrangement`) -- the parsed row handed back to the caller, keyed by the same field
+#       names as (b) and not a second roster for having been typed out as a dict once more.
+# Content rosters (`interposition_kinds`, `genres`, `proofs`, `ladder_rungs`) went to
+# `rosters.yaml`, exactly as `04_CODE_ARCHITECTURE.md:131` asks; the degree ladder did NOT get a
+# `rosters.yaml` roster of its own at all -- a `degree_bands` roster with the same four values
+# collided with a pre-existing, unrelated literal in `tests/test_mass_battle_provider.py` (this
+# guard, correctly, reading two owners of one fact) and is instead imported from
+# `engine/autoload/dice_engine.py::DEGREE_LABEL`, the single owner, so it contributes no exemption
+# site at all. None of (a)/(b)/(c) is the game's vocabulary -- they are the grammar and the shape a
+# designer's row is checked against and handed back as, on the same footing as `REQUIRES_FORMS`'s
+# own `needs:` table. One new loader, one schema, all for the identical reason, is the file earning
+# its own exemption block rather than the creep this ratchet exists to catch.
+# [JUSTIFIED: a RATCHET COUNT, not a magnitude -- it is the number of declared `roster-exempt:` sites in the model set, and the argument for each increment is the comment block directly above. Fitted to the tree by construction: run the guard and it reports the true count. 2026-09-19: 14 -> 15 for `rosters.py`'s `_ptrs`. 2026-09-29: 15 -> 26 for `data/arrangements.py`'s schema, field-name and return-shape sets.]
+EXEMPT_CEILING = 26
 
 
 def test_jordan_no_definition_is_hardcoded_in_a_body():
@@ -4636,7 +4711,7 @@ def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
             Act(id="g_confer", actor=duke, verb="confer",
                   payload={"office": "off_dicastery", "to": "p_mid"}, via="off_duke"),
             Act(id="g_convene", actor=duke, verb="convene",
-                  payload={"venue": "S", "when": w.tick + 1}, via="off_duke"),
+                  payload={"subject": "S", "when": w.tick + 1}, via="off_duke"),
             Act(id="g_dispatch", actor=duke, verb="dispatch",
                   payload={"subject": "p_low"}, via="off_duke"),
         ]
@@ -4654,9 +4729,12 @@ def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
     assert "date.scheduled" in kinds, f"`convene` scheduled no sitting: {sorted(kinds)}"
     assert "order.given" in kinds, f"`dispatch` gave no order: {sorted(kinds)}"
     # AND THE SCALE IS CARRIED, not merely declared: each of these reaches a rung above the person.
-    for v in ("confer", "convene"):
-        assert VERB_TABLE[v].scale == "settlement", VERB_TABLE[v].scale
+    # ⚠ `convene` DROPPED OUT OF THIS LOOP (plan position `18`/PROC-A): its `scale:` key is
+    # deleted (`03_PARAMETERS.md` §C.1) and the ordinal check below is the row's own falsifier now.
+    assert VERB_TABLE["confer"].scale == "settlement", VERB_TABLE["confer"].scale
     assert VERB_TABLE["dispatch"].scale == "territory"
+    assert RUNG_KINDS.index(w.rungs["S"].kind) > 0, (
+        "`convene`'s ordinal read `S` (settlement) as at or below the person tier")
     print(f"\n  governance slice — emitted {sorted(kinds)}; "
           f"{len(resolvable_verbs())} of {len(VERB_TABLE)} verbs now execute")
 
@@ -4727,6 +4805,13 @@ def test_the_title_ladder_is_total_over_the_rungs():
     # `_ROSTERS.get("titles") or {}`, so deleting the roster returned `None` for every post and
     # `_req_revoke` fell back to purview-for-everything — a guard failing OPEN into the exact
     # behaviour Jordan's fourth message forbids. `roster_map` is the single owner of the refusal.
+    # ⚠ `rosters.yaml: titles` ITSELF IS NOW GONE (Phase-1 methodology close, 2026-09-29, `/simplify`
+    # ALTITUDE lens -- the fold to `offices.yaml` this same test's docstring covers), so both calls
+    # below refuse for the same reason (no roster named `titles` at all) rather than two distinct
+    # ones (an absent roster; a present roster with an absent key) as when this was first written.
+    # Kept as two assertions anyway: a future roster reusing the name `titles` for something else
+    # would still need `roster_map` to refuse an unknown sub-key on it, and this is where that
+    # would be caught.
     with pytest.raises(Unspecified):
         roster_map("titles_that_do_not_exist", "domains")
     with pytest.raises(Unspecified):
@@ -6667,7 +6752,7 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # (20 in NPC-033, 16 in NPC-038), executed nowhere. `kill / wound`'s admission is UNAFFECTED
     # by this -- the two changes are independent membership moves on this set. Full trace at
     # `test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this`.
-    assert ever == {"create_record", "interview", "kill / wound", "move", "reconstruct",
+    assert ever == {"create_record", "interview", "fight", "move", "reconstruct",
                     "release", "research", "speak", "surveil", "tell", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
@@ -6965,8 +7050,22 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # already-diagnosed `questions_for` content-hash perturbation this integration traced the
     # `dispatch` regression to elsewhere in this file -- and the never-attempted set is UNCHANGED
     # by it, checked in the same breath at the assertion below.
-    # [GROUNDED: measured 2026-09-27 on this tree with BOTH `seen` (`R8.1`) and G4's self-transfer refusal live -- distinct executed sets 45 over the same 89 live worlds (not 41, not 64: neither delta alone); per-verb world counts: utter 89, create_record 88, reconstruct 86, tell 81, speak 77, surveil 66, research 61, move 60, transfer 51, kill / wound 32, interview 19, release 1; universal `{utter}`; `dispatch` refused-only]
-    assert len(by_sig) == 45, (
+    # [GROUNDED: measured 2026-09-27 on this tree with BOTH `seen` (`R8.1`) and G4's self-transfer refusal live -- distinct executed sets 45 over the same 89 live worlds (not 41, not 64: neither delta alone); per-verb world counts: utter 89, create_record 88, reconstruct 86, tell 81, speak 77, surveil 66, research 61, move 60, transfer 51, `kill / wound` 32, interview 19, release 1; universal `{utter}`; `dispatch` refused-only]
+    # ⚠⚠ 45 -> 44, 2026-09-29 (plan `FIGHT-RENAME`, `kill / wound` -> `fight`), AND THIS IS A REAL
+    # MOVE, NOT A RELABEL -- corrected from this session's own first guess, which claimed the count
+    # was unchanged without having run it (the defect §0.1 pt 3 row 4 names). RE-RUN, not guessed:
+    # `decision/choose.py::_sample_order` seeds each candidate's Gumbel draw from
+    # `f"choice:{c.verb}:{c.subject}"` and ties break on `(-(score/tau+g), c.verb, ...)` (`H-96`),
+    # so the verb's own NAME is an input to which tied candidate wins a scene -- renaming it moves
+    # every world where this verb was tied against another candidate, and it MEASURABLY DOES:
+    # `fight` itself falls from 32 to 9 of 89 worlds. Full per-verb breakdown, same 89 live worlds:
+    # utter 89, create_record 88, reconstruct 86, tell 81, speak 79, surveil 68, move 62, research
+    # 55, transfer 51, interview 27, `fight` 9, release 4; universal still `{utter}`. Every other
+    # figure in this test file that names `fight`'s SET MEMBERSHIP (never, ever, varying, executed)
+    # is unaffected -- 9 of 89 is still > 0, so membership does not change, only the count, which
+    # only this assertion and its sibling below pin.
+    # [GROUNDED: measured 2026-09-29 on this tree with `fight` (renamed from `kill / wound`, plan `FIGHT-RENAME`) live -- distinct executed sets 44 over the same 89 live worlds; per-verb world counts: utter 89, create_record 88, reconstruct 86, tell 81, speak 79, surveil 68, move 62, research 55, transfer 51, interview 27, fight 9, release 4; universal `{utter}`]
+    assert len(by_sig) == 44, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -7057,13 +7156,23 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ATTEMPTED and refused there, so it moves to `refused_only` rather than to the never-attempted
     # set, checked in the same breath at the assertion below. `create_record` takes its place in
     # this set, having left `universal` above rather than `ever`.
-    # `kill / wound` JOINS THE VARYING SET AND NOT THE UNIVERSAL ONE — 47 live worlds of 89, which
-    # is the same-breath check the distinct-behaviour message above demands. It is the first
-    # CONTESTED verb ever to appear in either set: until 2026-09-20 the personal-combat provider
-    # had no person-side door, so `@provider("contest","personal_combat")` was registered and
-    # unreachable from a season.
+    # `fight` (renamed from `kill / wound`, plan `FIGHT-RENAME`) JOINS THE VARYING SET AND NOT THE
+    # UNIVERSAL ONE — 47 live worlds of 89, which is the same-breath check the distinct-behaviour
+    # message above demands. It is the first CONTESTED verb ever to appear in either set: until
+    # 2026-09-20 the personal-combat provider had no person-side door, so
+    # `@provider("contest","personal_combat")` was registered and unreachable from a season.
     # [GROUNDED: measured 2026-09-27 on this tree with `seen` (`R8.1`) live -- varying loses `dispatch` (now `refused_only`, 0 of 89 executed) and gains `create_record` (88 of 89, ex-universal); `kill / wound` moves 47 -> 35 of 89, membership in the set unaffected]
-    assert varying == {"create_record", "interview", "kill / wound", "move", "release", "research",
+    # ⚠⚠ 35 -> 9 OF 89, 2026-09-29 (plan `FIGHT-RENAME`, `kill / wound` -> `fight`), AND THIS IS A
+    # REAL MOVE, NOT A RELABEL -- corrected from this session's own first guess, which claimed the
+    # count was unchanged without having run it (§0.1 pt 3 row 4). `H-96`'s tie-break
+    # (`decision/choose.py::_sample_order` keys on `c.verb`) makes the verb's own spelling an input
+    # to which tied candidate wins a scene, and `fight` measurably loses more ties than
+    # `kill / wound` did. MEASURED standalone, reproducing this test's own corpus loop: `fight`
+    # executes in 9 of the 89 live worlds (was 35). Membership in `varying` is UNCHANGED (9 > 0),
+    # which is the only thing this assertion actually checks; full corpus breakdown at the `by_sig`
+    # measurement above.
+    # [GROUNDED: measured 2026-09-29 on this tree with `fight` (renamed from `kill / wound`, plan `FIGHT-RENAME`) live -- varying set membership unchanged; `fight` moves 35 -> 9 of 89, still > 0 so still `varying` and not `ever`-only]
+    assert varying == {"create_record", "interview", "fight", "move", "release", "research",
                        "reconstruct", "speak", "surveil", "tell", "transfer"}, sorted(varying)
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
     # BROKE BROKE FOR A REASON THIS TEST WANTS. A one-season case still never reaches `tell` —
@@ -8111,7 +8220,7 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # this is one more question entering the hash-ordered stream, not a change to `dispatch`
     # itself. `kill / wound` is unaffected -- independent membership moves. Still formed in
     # NPC-033 and NPC-038 (16), refused in both, so it moves to the always-refused set below.
-    assert set(executed) == {"create_record", "interview", "kill / wound", "move",
+    assert set(executed) == {"create_record", "interview", "fight", "move",
                              "reconstruct", "release", "research", "speak", "surveil", "tell",
                              "transfer", "utter"}, (
         f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
@@ -9111,23 +9220,32 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # healthy direction this block has tracked throughout, not the eviction the message below
     # warns against.
     # [GROUNDED: measured 2026-09-27 on this tree with `seen` (`R8.1`) live -- 17 grammar-vocabulary claims held at the end of the `actor` run (`actor_arm` is also 17: none evicted), from 11 before `R8.1`; set diff verified by Counter subtraction, not by eye]
-    assert actor_end == [("einhir_texts", "exists:Record", 0),
-                         ("hearth_ostvik", "exists:Person", 0),
+    # ⚠ ONE CLAIM SWAPPED, 2026-09-29 (plan `FIGHT-RENAME`, `kill / wound` -> `fight`), COUNT
+    # UNCHANGED AT 17 -- THE SAME FOLD-ORDER PERTURBATION NAMED THROUGHOUT THIS FILE, one step
+    # further: `H-96`'s tie-break (`c.verb` in `decision/choose.py::_sample_order`) moves which
+    # candidate a person acts on when scores tie, which moves the fold's own act sequence, which
+    # moves which Events reach WITNESS. Verified by Counter subtraction, not by eye:
+    # `("hearth_ostvik", "exists:Site", 0)` drops one of its two occurrences; a NEW claim,
+    # `("einhir_texts", "exists:Person", 0)`, appears. Every other entry and its multiplicity is
+    # identical to the `R8.1` pin above -- this is the smallest possible move, not a re-derivation.
+    # [GROUNDED: measured 2026-09-29 on this tree with `fight` (renamed from `kill / wound`, plan `FIGHT-RENAME`) live -- 17 grammar-vocabulary claims held at the end of the `actor` run, none evicted; one claim moved, `("hearth_ostvik", "exists:Site", 0)` (one of two occurrences) -> `("einhir_texts", "exists:Person", 0)`]
+    assert actor_end == [("einhir_texts", "exists:Person", 0),
+                         ("einhir_texts", "exists:Record", 0),
                          ("hearth_ostvik", "exists:Record", 0),
                          ("rec:2dd19669944564b8", "exists:Record", 1),
                          ("p_carin", "exists:Record", 0),
                          ("hearth_ostvik", "exists:Site", 0),
+                         ("hearth_ostvik", "exists:Person", 0),
                          ("rec:2dd19669944564b8", "exists:Record", 1),
                          ("rec:6793bf781be64133", "exists:Record", 1),
                          ("hearth_ostvik", "stores:grain", 0),
                          ("rec:ce02153ff96f8921", "exists:Record", 1),
                          ("rec:9ae24e0c6cf97bd4", "exists:Record", 1),
-                         ("hearth_ostvik", "exists:Site", 0),
+                         ("hearth_ostvik", "exists:Person", 0),
                          ("hearth_ostvik", "exists:Record", 0),
                          ("rec:30a013a313fa2ee0", "exists:Record", 1),
                          ("rec:30a013a313fa2ee0", "exists:Person", 0),
-                         ("rec:30a013a313fa2ee0", "exists:Record", 1),
-                         ("hearth_ostvik", "exists:Person", 0)], (
+                         ("rec:30a013a313fa2ee0", "exists:Record", 1)], (
         f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
         "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
         "default moved back toward `total`, or a new deposit channel opened — and every `H-40` / "
@@ -9500,7 +9618,7 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # only one in the set whose subject is a PERSON: the drop is a person declining to form an
     # attack on somebody they hold a claim says is dead. That is §F1 clause 4 reaching the moral
     # layer's own vocabulary through the same grammar cell as a granary.
-    assert {v for v, _ in hl_live} == {"examine", "interview", "kill / wound", "research",
+    assert {v for v, _ in hl_live} == {"examine", "interview", "fight", "research",
                                        "restore", "transfer"}, (
         f"the headless drops are on {sorted({v for v, _ in hl_live})}. `transfer` must stay — "
         "that chain is the acceptance's own, `stores:grain` read by a `transfer.refused` and read "
@@ -9628,6 +9746,15 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # 'rec:30a013a313fa2ee0')` are new. The channel is firing WIDER (10 > 9), which is the healthy
     # direction this block has tracked throughout.
     # [GROUNDED: measured 2026-09-27 on this tree with `seen` (`R8.1`) live -- 10 executable clause-4 drops on `build_world(0)`: `('examine', 'hearth_ostvik')`, `('interview', 'hearth_ostvik')`, `('interview', 'rec:30a013a313fa2ee0')`, `('kill / wound', 'hearth_ostvik')`, `('kill / wound', 'rec:30a013a313fa2ee0')`, `('research', 'hearth_ostvik')`, `('research', 'p_carin')`, `('transfer', 'p_carin')`, `('transfer', 'rec:9ae24e0c6cf97bd4')`, `('transfer', 'rec:ce02153ff96f8921')`]
+    # ⚠ RELABELED 2026-09-29 (plan `FIGHT-RENAME`, `kill / wound` -> `fight`), AND VERIFIED, NOT
+    # ASSUMED, BECAUSE THE SIBLING MEASUREMENT BELOW (ARC-01, THE SAME `belief_contradicts` WRAPPER)
+    # DID NOT SURVIVE A LABEL SWAP UNCHANGED -- `H-96`'s tie-break (`c.verb` in
+    # `decision/choose.py::_sample_order`) can move a multi-season case's later rounds, so this
+    # single `build_world(0)`, 3-season measurement was re-run standalone rather than trusted:
+    # the id-SET and count are exactly unchanged at 10, only the printed key differs (`fight` in
+    # place of `kill / wound`, both pairs). This is the SHORTER-RUN, LOWER-COMPOUNDING case, unlike
+    # ARC-01's below.
+    # [GROUNDED: measured 2026-09-29 on this tree with `fight` (renamed from `kill / wound`, plan `FIGHT-RENAME`) live -- 10 executable clause-4 drops on `build_world(0)`: `('examine', 'hearth_ostvik')`, `('interview', 'hearth_ostvik')`, `('interview', 'rec:30a013a313fa2ee0')`, `('fight', 'hearth_ostvik')`, `('fight', 'rec:30a013a313fa2ee0')`, `('research', 'hearth_ostvik')`, `('research', 'p_carin')`, `('transfer', 'p_carin')`, `('transfer', 'rec:9ae24e0c6cf97bd4')`, `('transfer', 'rec:ce02153ff96f8921')`]
     assert len(dropped) == 10, (
         f"{len(dropped)} executable clause-4 drops, not 6. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
@@ -9753,7 +9880,18 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # direction, and it is recorded as a cost rather than netted off, consistent with `U2`'s own
     # "reported rather than netted off" clause above.
     # [GROUNDED: measured 2026-09-27 on this tree with `seen` (`R8.1`) live -- ARC-01 shipped drops on {examine, interview, kill / wound, research, restore, surveil}, 43 of them (research 12, interview 11, kill / wound 11, surveil 5, examine 2, restore 2); `move` is absent from the drop set AND from every Event kind in the world's log]
-    assert {v for v, _ in live} == {"examine", "interview", "kill / wound", "research",
+    # ⚠⚠ 43 -> 175 TOTAL, 2026-09-29 (plan `FIGHT-RENAME`, `kill / wound` -> `fight`), AND THE SET
+    # IS THE PART THAT DOES NOT MOVE -- corrected from this session's own first guess, which
+    # assumed a relabel and was wrong: this is a MULTI-SEASON case (`C.seasons_for(ARC-01)`), so a
+    # tie-break perturbation early in the run (`H-96`, `decision/choose.py::_sample_order` keys on
+    # `c.verb`) compounds across every later round's candidate formation rather than firing once,
+    # unlike `hl_drops`'s single `build_world(0)` measurement above (which the id-set stayed exact
+    # under). RE-RUN, not guessed, reproducing `drops(DEFAULT_FIXTURES)` on this case standalone:
+    # research 34, interview 36, `fight` 36, surveil 5, examine 32, restore 32 (175 total). The SET
+    # this assertion actually checks -- {examine, interview, fight, research, restore, surveil} --
+    # is unchanged; only the per-verb counts, which this test does not assert on, moved.
+    # [GROUNDED: measured 2026-09-29 on this tree with `fight` (renamed from `kill / wound`, plan `FIGHT-RENAME`) live -- ARC-01 shipped drops on {examine, interview, fight, research, restore, surveil}, 175 of them (interview 36, fight 36, research 34, examine 32, restore 32, surveil 5); `move` still absent from the drop set AND from every Event kind in the world's log]
+    assert {v for v, _ in live} == {"examine", "interview", "fight", "research",
                                     "restore", "surveil"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
@@ -10404,7 +10542,17 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # [GROUNDED: measured 2026-09-20 through the season driver, both arms at seed 0 over the same cases, control from this tree with the five files of the `kill / wound` admission stashed -- W-D `total` arm: genuine 31 UNMOVED, diverged 7 -> 8; `none` 4 and `actor` 6 both unmoved. The denominator holding while the rate moves is the control: the fork population is the same and a contested act is the first verb whose outcome is drawn rather than computed]
     # [GROUNDED: measured 2026-09-27 on this tree with `seen` (`R8.1`) live -- `total` arm: genuine UNMOVED at 31, diverged 8 -> 6. Mechanism in the `none`-arm block above.]
     # [GROUNDED: measured 2026-09-27 after merging main's G4 (self-transfer refusal) on top -- `total` arm diverged 6 -> 7, `none` and `actor` unmoved at 2 and 6]
-    assert (got["total"]["genuine"], got["total"]["diverged"]) == (31, 7), got
+    # ⚠ 7 -> 6 AT THE `total` ARM, 2026-09-29 (plan `FIGHT-RENAME`, `kill / wound` -> `fight`), AND
+    # THE OTHER TWO ARMS DID NOT MOVE (`none` 2, `actor` 6, both re-measured). NOT A BALANCE
+    # FINDING: `decision/choose.py::_sample_order` seeds each candidate's Gumbel draw from
+    # `f"choice:{c.verb}:{c.subject}"` and, at a tie, breaks on `(-(score/tau+g), c.verb, ...)`
+    # (`H-96`) -- so a verb's own NAME is an input to which act wins a tied scene, and renaming the
+    # row changes that input for every candidate that verb forms, independent of anything about the
+    # verb's behaviour. RE-MEASURED, not guessed: `pytest engine/season/tests/test_season_shape.py
+    # -k test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_at_the_control`
+    # on this tree.
+    # [GROUNDED: measured 2026-09-29 on this tree with `fight` (renamed from `kill / wound`, plan `FIGHT-RENAME`) live -- `total` arm: genuine UNMOVED at 31, diverged 7 -> 6; `none` (30, 2) and `actor` (30, 6) both unmoved]
+    assert (got["total"]["genuine"], got["total"]["diverged"]) == (31, 6), got
     # AND THE TWO LAYERS ARE SEPARATED. The finding is the DECISION count above; this is the layer
     # beneath it — whether the fork moved the act stream at all.
     #
@@ -10788,7 +10936,13 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # [GROUNDED: measured 2026-09-20 through the season driver, both arms at seed 0 over the same cases, control from this tree with the five files of the `kill / wound` admission stashed -- W-D `total` arm: genuine 31 UNMOVED, diverged 7 -> 8; `none` 4 and `actor` 6 both unmoved. The denominator holding while the rate moves is the control: the fork population is the same and a contested act is the first verb whose outcome is drawn rather than computed]
     # [GROUNDED: measured 2026-09-27 on this tree with `seen` (`R8.1`) live -- `total` arm: genuine UNMOVED at 31, wide 8 -> 6. Mechanism in the `none`-arm block above.]
     # [GROUNDED: measured 2026-09-27 after merging main's G4 (self-transfer refusal) on top -- `total` arm wide 6 -> 7, `none` and `actor` unmoved at 2 and 6]
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (31, 7), got
+    # ⚠ 7 -> 6 AT THE `total` ARM, 2026-09-29 (plan `FIGHT-RENAME`, `kill / wound` -> `fight`) --
+    # THE SAME SHIFT AS THE `W-D` DECISION-COUNT TEST ABOVE, BY THE SAME MECHANISM: this instrument
+    # shares `arm9_forking.fork_case` with it (see that test's own comment), and `H-96`'s tie-break
+    # keys on `c.verb` (`decision/choose.py::_sample_order`), so renaming the verb moves which
+    # tied candidate wins a scene independent of any behaviour change. RE-MEASURED, not guessed.
+    # [GROUNDED: measured 2026-09-29 on this tree with `fight` (renamed from `kill / wound`, plan `FIGHT-RENAME`) live -- `total` arm: genuine UNMOVED at 31, wide 7 -> 6; `none` and `actor` unmoved]
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (31, 6), got
 
 
 # ===========================================================================
@@ -10800,7 +10954,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
 # ===========================================================================
 
 def _we_bands(model="scene_fraction", ids=range(24)):
-    """Fold `kill / wound` through the REAL road -- `SeasonDriver.resolve` -> `contest()` ->
+    """Fold `fight` through the REAL road -- `SeasonDriver.resolve` -> `contest()` ->
     `combat_seam` -> `wrapper.fight` -- once per act id, and report what each band did.
 
     The act id is the only thing that varies: `combat_seam` seeds its RNG from
@@ -10813,7 +10967,7 @@ def _we_bands(model="scene_fraction", ids=range(24)):
         w.fixtures = w.fixtures.sweep("wound_harm_model", model)
         before = w.persons["p_mid"].body
         d = SeasonDriver(w)
-        act = Act(id=f"we{i}", actor="p_low", verb="kill / wound",
+        act = Act(id=f"we{i}", actor="p_low", verb="fight",
                     payload={"subject": "p_mid"})
         evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], w.fixtures.get("contest_max_depth"))
         deg = evs[0].degree if evs else None
@@ -10893,7 +11047,7 @@ def test_we_a_contested_acts_consequence_differs_by_degree():
         f"emit the REFUSAL rather than the success; got {ctl2[WOUNDED]}")
     assert ctl2[WOUNDED]["body_after"] == ctl2[WOUNDED]["body_before"], ctl2[WOUNDED]
 
-    print(f"\n  W-E — kill / wound, tiny_world, 24 act ids, seed as tiny_world sets it:"
+    print(f"\n  W-E — fight, tiny_world, 24 act ids, seed as tiny_world sets it:"
           f"\n    scene_fraction {[(k, v['kinds'], v['alive'], v['body_after']) for k, v in sorted(seen.items())]}"
           f"\n    total (control) {[(k, v['kinds'], v['alive']) for k, v in sorted(ctl.items())]}"
           f"\n    none  (control) {[(k, v['kinds'], v['alive']) for k, v in sorted(ctl2.items())]}")
@@ -10936,7 +11090,7 @@ def test_we_emits_at_has_a_caller_and_the_band_selects_the_kind():
     from ..seam.wrappers import combat as C
     if C.engine() is None:
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
-    row = VERB_TABLE["kill / wound"]
+    row = VERB_TABLE["fight"]
     union = set(row.emits)
     assert len(union) >= 3, f"the union is no longer bigger than a branch ({union}); re-derive"
     seen = _we_bands()
@@ -11060,7 +11214,7 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only` is the falsifier this
     # comment's own demand for "its own measurement" asked for -- a real fight, through the real
     # driver, whose degree actually selects `_eff_march`'s write set.
-    assert contested == {"kill / wound": "the body", "tell": "a standing", "march": "a field"}, (
+    assert contested == {"fight": "the body", "tell": "a standing", "march": "a field"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
         "can be graded today is scoped to this set. A FOURTH entry is a real widening and wants "
         "its own measurement; losing one of these three means its prize row or its verb row has "
@@ -11136,13 +11290,30 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # this RED. `roll_net` also substring-matches `roll_net_continuous`, which is why the whole
     # package is re-scanned rather than the one file trusted.
     # [GROUNDED: measured 2026-09-11 over `files.package_modules()` minus the test module -- the margin-producing lines are exactly the two in `seam/wrappers/sigma.py`]
+    #
+    # ⚠⚠ THE SUBSTRING HAZARD FIRED FOR REAL 2026-09-29 AND WAS FIXED TWICE, THE SECOND TIME AT
+    # THE RIGHT DEPTH (`/simplify` ALTITUDE pass, same methodology close as the fix below).
+    # `harness/arms.py`'s retired `_pool_arm` (plan position `28-i`, `1320045`) monkeypatches
+    # `engine.autoload.sigma_leverage.roll_net_continuous` -- a DIFFERENT, older dice-engine
+    # function this test does not guard, coincidentally sharing the `roll_net` substring this
+    # comment already named as the scan's known hazard. THE FIRST FIX excluded the one file by
+    # exact path (`_FALSE_POSITIVE_NOT_A_PRODUCER = {"harness/arms.py"}`) rather than touching the
+    # regex -- a bandaid that would need a new entry every time another retired/historical module
+    # happens to reference a similarly-prefixed symbol. THE SECOND FIX repairs the scan itself:
+    # `\broll_net\b`/`\bnet_boost\b` (word-boundary anchors) match the real producer's own calls
+    # and imports exactly as before (`roll_net(pool) + net_boost(lev, pool)`, `from . import
+    # net_boost, roll_net`) while no longer matching `roll_net_continuous` as a bare substring --
+    # verified against both files directly before landing. No exemption set needed; a real second
+    # producer anywhere else still turns this red, and no future file collides with this pattern
+    # by accident the way `arms.py` did.
     producers = set()
     for f in files.package_modules():
         if f == files.TEST_PY:
             continue
+        rel = f.relative_to(files.PACKAGE_DIR).as_posix()
         for i, line in enumerate(_code_only_lines(f), 1):
-            if re.search(r"\bnet\b\s*=|roll_pool|roll_net|net_boost|\bsuccesses\b", line):
-                producers.add(f.relative_to(files.PACKAGE_DIR).as_posix())
+            if re.search(r"\bnet\b\s*=|roll_pool|\broll_net\b|\bnet_boost\b|\bsuccesses\b", line):
+                producers.add(rel)
     assert producers == {"seam/wrappers/sigma.py"}, (
         f"the margin producers are {sorted(producers)}. Exactly one module may produce a margin — "
         "`S27.2` names a second resolver as this architecture's highest-value refusal, and the "
@@ -11209,7 +11380,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
 
     w2 = _w(); w2.step = Step.RESOLVE
     d = SeasonDriver(w2)
-    evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="we0", actor="p_low", verb="kill / wound",
+    evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="we0", actor="p_low", verb="fight",
                            payload={"subject": "p_mid"})], 2)
     assert [e.kind for e in evs] == ["body.changed"], [(e.kind, e.degree) for e in evs]
     assert "p_mid" in w2.persons, (
@@ -12436,3 +12607,65 @@ def test_the_generic_ladder_is_seven_deep_and_splits_once():
     assert set(a) & set(b) == {"lr_realm"}, (
         f"the two chains share more than the realm: {sorted(set(a) & set(b))} — a decision could "
         "reach the sibling chain through a shared rung rather than by propagating")
+
+
+def test_w28_cast_capability_is_authored_world_gen_not_a_zeroed_default():
+    """`W28-cast` (position 8, `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md`).
+
+    `04_CODE_ARCHITECTURE.md` F.6 (`:1087`): *"capability's season writer ... world-gen writes it
+    once; nothing else does."* Until this position, the ONE writer in the tree ZEROED
+    `Person.capability` on every corpus person (`probes.py::p11`'s own comment: *"`capability` at
+    zero ... for EVERY corpus person"*), which is `ED-FI-0009`'s own named blocker (*"no attribute
+    values on any corpus person (W27's cast)"*). This asserts the mechanism end to end: an
+    authored `cast:` overlay reaches `build_at`'s `p_a`, a case carrying none is unmoved, and the
+    COUNT of authored cast entries is read the way the plan's own GAP note requires — a structured
+    YAML parse of each overlay file, independent of `cast_overlay()`'s own filter, never a `grep`
+    over the case corpus. That is the exact mistake the plan's `§6` GAP records an antagonist
+    making once already on a different corpus count (`chain/*.yaml` is markdown-fenced and
+    truncated in places; a text scan does not see what `_tolerant_yaml` recovers)."""
+    import yaml as _y
+    from ..harness import corpus_run as C
+    from ..harness import run_cases as R
+    from ..data import files as F
+
+    # ---- THE GROUNDED CASE: `capability` carries an authored, non-default value. ----
+    npc = {c["id"]: c for c in R.load_cases("NPC")}
+    w = C.build_at(npc["NPC-088"], seed=0)
+    cap = w.persons["p_a"].capability
+    assert cap == {"copying": 3}, (
+        f"NPC-088's `cast:` overlay should have written p_a's capability, got {cap!r}")
+    assert cap != {}, "capability is still the old zeroed default — the reader did not fire"
+
+    # ---- THE CONTROL: a case with NO `cast:` overlay is unmoved. Part 2 `§13`'s own falsifier
+    # line is *"with `cast:` absent, `build_at` still seats three and the tallies are unchanged"* —
+    # asserted here as a fact about THIS reader, not merely about `Person`'s own
+    # `default_factory=dict`. ----
+    assert "NPC-020" not in C.CAST, "NPC-020 was not meant to carry a `cast:` overlay in this pass"
+    w_ctl = C.build_at(npc["NPC-020"], seed=0)
+    assert w_ctl.persons["p_a"].capability == {}, (
+        "a case with no `cast:` overlay must build exactly as it did before this position")
+
+    # ---- THE COUNT, READ STRUCTURALLY, NEVER BY GREP. An independent structural parse of the
+    # SAME directory `cast_overlay()` reads — not a call into that function, so a bug in its own
+    # filter cannot mark its own homework. ----
+    authored = {}
+    for f in sorted(F.EXERCISES_DIR.glob("*.yaml")):
+        doc = _y.safe_load(f.read_text()) or {}
+        entries = doc.get("cast")
+        if doc.get("case") and isinstance(entries, list):
+            authored[doc["case"]] = entries
+    assert authored == C.CAST, (
+        f"`cast_overlay()`'s count disagrees with a fresh structural parse of the same directory: "
+        f"{sorted(authored)} vs {sorted(C.CAST)}")
+    assert len(C.CAST) >= 5, f"fewer `cast:` overlays than this position authored: {sorted(C.CAST)}"
+    for cid in ("NPC-088", "NPC-005", "NPC-004", "NPC-039", "NPC-080"):
+        assert cid in C.CAST, f"{cid}'s `cast:` overlay did not load"
+        assert C.CAST[cid][0].get("who"), f"{cid}'s primary cast entry carries no `who:`"
+
+    # ---- EVERY AUTHORED CASE ID IS REAL, IN EITHER LANE. An overlay naming a case that exists in
+    # neither lane is bound to nothing — `exercises.py::orphan_cases` names the identical hazard
+    # for the `rows:` key of the SAME per-case file; `cast:` shares the file and the `case:` key,
+    # so it shares the hazard. ----
+    known = {c["id"] for c in R.load_cases("NPC")} | {c["id"] for c in R.load_cases("ARC")}
+    orphans = sorted(cid for cid in C.CAST if cid not in known)
+    assert not orphans, f"a `cast:` overlay names a case in neither lane: {orphans}"

@@ -739,6 +739,11 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
     None -> computed locally from `pairs` (direct callers / non-cascading path -> identical, same pairs)."""
     dmg_a, dmg_b = 0, 0
     cell_dmg_a, cell_dmg_b = {}, {}   # [ED-MB-0040] {id(atom): (atom, {abs_cell: dmg})}, MB_CELL_DAMAGE only
+    # [ED-MB-0075 option (2)] Unit-level envelopment-shock flags, OR-accumulated over every pair this call
+    # resolves (mirrors dmg_a/dmg_b's own per-pair accumulation, at the same Unit granularity
+    # cascade_morale_hit consumes). Set below in place of the old pre-combat delta-sigma penalty; consumed
+    # by run_battle's per-tick loop (discipline-gated erosion) after damage commits, not here.
+    shocked_a = shocked_b = False
     if eng_counts is None:
         eng_counts = count_engagements_per_atom(pairs)
     # [ED-MB-0018 fix, balance-critic A1/A1-gap + arch-critic #1] MULTI-SIDE = the set of DISTINCT octagon
@@ -1156,19 +1161,28 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                     elif MB_ENVELOP_SHOCK and b_fixed_other and b_angle_mod <= -0.5:
                         # B (envelopment shock): a subunit FIXED frontally by a separate body and struck on
                         # its flank/rear cannot face the new threat -- the du Picq moral shock of envelopment
-                        # fires even WITHOUT a momentum charge (the charge path's gap). Reuses the calibrated
-                        # _charge_shock_sigma (zone/brace/depth/shaken gated: a braced+deep+disciplined line
-                        # resists, a loose/shaken/shallow one shatters -- Cannae). elif -> mutually exclusive
-                        # with the charge path (no double-count); b_fixed_other -> provably inert single-subunit.
-                        # [canonical: Cannae 216 BC; du Picq Battle Studies -- the unfaceable attack on a pinned line.]
-                        _zb = "YELLOW" if b_angle_mod > -1.5 else "RED"
-                        ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b, t)
+                        # fires even WITHOUT a momentum charge (the charge path's gap). elif -> mutually
+                        # exclusive with the charge path (no double-count); b_fixed_other -> provably inert
+                        # single-subunit. [canonical: Cannae 216 BC; du Picq Battle Studies -- the
+                        # unfaceable attack on a pinned line.]
+                        # [ED-MB-0075 option (2), superseding row 2026-09-28] REPLACES the prior pre-combat
+                        # delta-sigma penalty on B's own net successes (`ns_b += _charge_shock_sigma(...)`,
+                        # zone-graded by `_zb`) -- C2/C3 (ED-MB-0067 Part C) ruled the rear/flank damage
+                        # itself a CONTRIBUTING CAUSE of morale collapse, checked against Discipline, not a
+                        # second combat-effectiveness penalty layered on top of the charge-shock mechanism
+                        # this elif already stays mutually exclusive with. Flag only, here: the roll-gated
+                        # erosion (discipline_check_cascade against dmg / (agg_discipline x command), the
+                        # same formula run_multi_unit_battle's freed_attacker path uses) applies once per
+                        # UNIT per TICK in run_battle's per-tick loop, after damage commits -- not per-pair,
+                        # here, pre-combat, against net successes.
+                        shocked_b = True
                     if b_pen > 0:
                         _za = "GREEN" if a_angle_mod > -0.5 else ("YELLOW" if a_angle_mod > -1.5 else "RED")  # [canonical: config.py:65 ANGLE_DEF_MOD zone midpoints — see the _zb line above]
                         ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a, t)
                     elif MB_ENVELOP_SHOCK and a_fixed_other and a_angle_mod <= -0.5:
-                        _za = "YELLOW" if a_angle_mod > -1.5 else "RED"  # [canonical: config.py:65 ANGLE_DEF_MOD zone midpoints — -1.5=mid(YELLOW -1, RED -2)]
-                        ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a, t)
+                        # A (envelopment shock), mirror of the B branch above — see its comment for the
+                        # [ED-MB-0075 option (2)] rationale: flag only, no pre-combat net-successes penalty.
+                        shocked_a = True
                     # Reciprocal charge-recoil (the missing historical term): a charge driven home into a
                     # BRACED + deep + disciplined wall shatters the charger (Courtrai/Swiss/Waterloo squares).
                     # Charger = higher-momentum side; recoil scales with the wall's prep (discipline x depth).
@@ -1374,7 +1388,8 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                     a_net=round(a_net, 2), b_net=round(b_net, 2),
                     a_deg=a_deg, b_deg=b_deg)
     return {"dmg_a": dmg_a, "dmg_b": dmg_b, "engagements": len(pairs),
-            "cell_dmg_a": cell_dmg_a, "cell_dmg_b": cell_dmg_b}
+            "cell_dmg_a": cell_dmg_a, "cell_dmg_b": cell_dmg_b,
+            "shocked_a": shocked_a, "shocked_b": shocked_b}
 
 def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
     """F-iii: cascading sub-phase resolution with facing rotation.
@@ -1407,6 +1422,9 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
 
     total_dmg_a = total_dmg_b = 0
     total_cell_a, total_cell_b = {}, {}   # [ED-MB-0040] per-cell damage merged across sub-phases
+    # [ED-MB-0075 option (2)] OR-accumulated across every sub-phase — a unit flagged shocked in ANY
+    # sub-phase this tick stays shocked for the tick, mirroring total_dmg_a/total_dmg_b's own summing.
+    shocked_a_any = shocked_b_any = False
     resolved_keys = set()
 
     # Sort by attacker depth; group into sub-phases by proximity (1-row buckets)
@@ -1414,7 +1432,7 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
     if not sorted_pairs:
         return {"dmg_a": 0, "dmg_b": 0, "engagements": 0, "cell_dmg_a": {}, "cell_dmg_b": {},
                 "truncated_groups": 0, "truncated_pairs": 0, "truncated_troops": 0.0,
-                "n_groups": 0}
+                "n_groups": 0, "shocked_a": False, "shocked_b": False}
 
     groups = []
     cur_group = [sorted_pairs[0]]
@@ -1483,6 +1501,8 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
         total_dmg_a += result["dmg_a"]
         total_dmg_b += result["dmg_b"]
         total_engagements += result["engagements"]
+        shocked_a_any = shocked_a_any or result.get("shocked_a", False)
+        shocked_b_any = shocked_b_any or result.get("shocked_b", False)
         if MB_CELL_DAMAGE:   # [ED-MB-0040] accumulate this sub-phase's cellular placement
             _merge_cell_damage(total_cell_a, result.get("cell_dmg_a", {}))
             _merge_cell_damage(total_cell_b, result.get("cell_dmg_b", {}))
@@ -1496,7 +1516,8 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
     return {"dmg_a": total_dmg_a, "dmg_b": total_dmg_b, "engagements": total_engagements,
             "cell_dmg_a": total_cell_a, "cell_dmg_b": total_cell_b,
             "truncated_groups": truncated_groups, "truncated_pairs": truncated_pairs,
-            "truncated_troops": truncated_troops, "n_groups": n_groups}
+            "truncated_troops": truncated_troops, "n_groups": n_groups,
+            "shocked_a": shocked_a_any, "shocked_b": shocked_b_any}
 
 # ─── VOLLEY (Phase 2 — ranged fire at distance) ──────────────────────────────
 # [canonical: mass_battle_v30.md §A.7 Phase 2 — Volley fires before Manoeuvre.
@@ -1998,9 +2019,10 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         # [canonical: Jordan design 2026-05-12 — same-cell contention rules]
         resolve_cross_side_contention(unit_a, unit_b)
         # v13: within-side discipline-gated formation hold (Subunit method
-        # resolve_internal_collisions) is implemented but not invoked here —
-        # it over-tuned battery (12/13 -> 9/13). Left available for future use
-        # when paired with a proper bad-facing trigger.
+        # resolve_internal_collisions, DELETED per ED-MB-0057's re-adjudicated disposition —
+        # zero call sites since 2026-05-29; it over-tuned battery 12/13 -> 9/13 and its
+        # co-location case is closed by ED-MB-0059's same-side field exclusion below instead).
+        # No replacement call site: nothing here invokes it, before or after.
         pairs = find_contacts(unit_a, unit_b)
         # v20: stamina drain proportional to cells in contact (bottom-up).
         # More front-line cells fighting = more exhaustion. Emergent from formation.
@@ -2196,6 +2218,32 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
             if u.command <= 0:
                 u.set_morale(0.0)   # [ED-MB-0042 sweep] must reach the cells, else the rout never lands
                 continue  # rout check below
+
+        # [ED-MB-0075 option (2), superseding row 2026-09-28 — C2/C3, ED-MB-0067 Part C] Envelopment-shock
+        # damage-to-morale coupling. C2 ruled the rear/flank damage multiplier (ED-MB-0018) a CONTRIBUTING
+        # CAUSE of morale collapse; C3 ruled it "checked against Discipline". This is that check, at the
+        # scale run_battle already commits damage at (above, dmg_a/dmg_b — NOT run_multi_unit_battle's
+        # cross-pair post-processing, a different scale of the simulation). A unit flagged shocked this
+        # tick (result["shocked_a"/"shocked_b"], OR-accumulated over every engaged pair/sub-phase) rolls
+        # discipline_check_cascade (Ob 1); on FAIL (does not resist), the damage it received this tick
+        # erodes morale by the SAME formula run_multi_unit_battle's freed_attacker path uses (erosion =
+        # dmg / (agg_discipline x command), via cascade_morale_hit) rather than the erosion formula-only
+        # (no-roll) or roll-scaled-by-margin alternatives Part D also specified and did not recommend.
+        # REPLACES the prior pre-combat delta-sigma penalty on the shocked unit's own net successes
+        # (resolve_engagements's old `ns_a/ns_b += _charge_shock_sigma(...)` in this same elif) — the
+        # sibling CHARGE-shock branches (the `if a_pen/b_pen > 0` arms immediately above them in
+        # resolve_engagements) are untouched: a different, already-ratified mechanism (engine.py:58,
+        # status WIRED), out of scope here. MB_ENVELOP_SHOCK-gated defensively even though shocked_a/b can
+        # only be True when it is already on (resolve_engagements only sets them inside its own
+        # MB_ENVELOP_SHOCK-gated elif) — byte-exact OFF, same convention as every other MB_ flag here.
+        if MB_ENVELOP_SHOCK:
+            for u, _shocked, _dmg in ((unit_a, result.get("shocked_a", False), result["dmg_a"]),
+                                       (unit_b, result.get("shocked_b", False), result["dmg_b"])):
+                if not _shocked or u.routed or u.broken:
+                    continue
+                _sdisc = u.agg_discipline()
+                if _sdisc > 0 and u.command > 0 and not discipline_check_cascade(u):
+                    u.cascade_morale_hit(_dmg / (_sdisc * u.command))
 
         # Rout check AFTER both erosions applied — per-subunit, then derive the unit rout
         # [ED-MB-0041 Tier-2] The two rout triggers are now aligned. Morale collapse was checked here,

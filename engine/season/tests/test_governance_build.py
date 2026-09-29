@@ -462,7 +462,7 @@ def test_lb3b_the_zero_arm_is_the_pre_item_tree_exactly():
 
 def test_lb3c_death_at_body_zero_closes_every_tenure_through_the_same_owner_as_kill():
     """**LB-3c.** A body reaching 0 at MATTER must end every live edge NAMING that person — the
-    same cascade `kill / wound` runs at RESOLVE, through the same owner.
+    same cascade `fight` runs at RESOLVE, through the same owner.
 
     ⚠ IT PLANTS THE EDGE `W-E` MEASURED DANGLING: a `tie` **another person owns** that names the
     dying one as its OBJECT. `p.tenures` is the edges this person is the SUBJECT of (§15.1), so a
@@ -638,17 +638,17 @@ def test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load():
 def test_lb6d_kill_is_declared_to_benefit_the_actor_not_the_person_it_writes_on():
     """⚠ THE ROW THAT PROVES THE COLUMN CANNOT BE DERIVED FROM `writes:`.
 
-    `kill / wound` writes `Person.body` and `Person.exists` ON THE SUBJECT. A rule reading the
+    `fight` writes `Person.body` and `Person.exists` ON THE SUBJECT. A rule reading the
     write column would name the victim as the beneficiary of their own killing, because A WRITE
     CAN BE A HARM. This is the falsifier for the claim that the declaration is load-bearing: if
     someone later derives this column, THIS is the assertion that goes red."""
     from ..data.verbs import VERB_TABLE
 
-    row = VERB_TABLE["kill / wound"]
+    row = VERB_TABLE["fight"]
     assert "Person.body" in row.writes and "Person.exists" in row.writes, (
         "the row no longer writes on its subject, so this test's premise is gone")
     assert row.beneficiary == "actor", (
-        "`kill / wound`'s beneficiary was derived from `writes:` and now names the victim")
+        "`fight`'s beneficiary was derived from `writes:` and now names the victim")
 
 
 def test_lb6d_none_and_an_unbound_carrier_are_different_answers():
@@ -773,7 +773,7 @@ def _scar_bands(scar_step, ids=range(24)):
         w.step = _Step.RESOLVE
         w.fixtures = w.fixtures.sweep("scar_step", scar_step)
         d = SeasonDriver(w)
-        act = _Act(id=f"scar{i}", actor="p_low", verb="kill / wound",
+        act = _Act(id=f"scar{i}", actor="p_low", verb="fight",
                    payload={"subject": "p_mid"})
         evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], w.fixtures.get("contest_max_depth"))
         deg = evs[0].degree if evs else None
@@ -813,9 +813,9 @@ def test_lb6e_a_wound_scars_and_the_axes_come_from_the_alignment_table():
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
 
     engaged = {ax for ax in PURSUIT_AXES
-               if float(ALIGNMENT.get(ax, {}).get("kill / wound", ALIGNMENT_DEFAULT_CELL))}
+               if float(ALIGNMENT.get(ax, {}).get("fight", ALIGNMENT_DEFAULT_CELL))}
     if not engaged:
-        pytest.skip("`kill / wound` engages no axis in ALIGNMENT, so this item has nothing to key "
+        pytest.skip("`fight` engages no axis in ALIGNMENT, so this item has nothing to key "
                     "a scar on -- a data state, reported rather than asserted around")
 
     seen = _scar_bands(scar_step=10)
@@ -863,7 +863,7 @@ def test_lb6e_the_zero_arm_writes_no_scar_and_reports_none():
     # worth pinning is that the table has not GROWN the kind while the magnitude is still 0 --
     # which is a claim about the data, so it is asserted against the data.
     from ..data.verbs import VERB_TABLE
-    row = VERB_TABLE["kill / wound"]
+    row = VERB_TABLE["fight"]
     declared = {k for band in row.emits_by_degree for k in row.emits_by_degree[band]}
     assert "scar.taken" not in declared, (
         "`scar.taken` has been added to this verb's `emits:` while `scar_step` still ships at 0, "
@@ -888,10 +888,10 @@ def test_lb6e_a_verb_that_engages_no_axis_scars_nothing():
         f"a verb engaging no axis still scarred {p.scar} -- `_scar` is not reading ALIGNMENT, it "
         "is writing every axis unconditionally")
     # AND THE POSITIVE ARM, so this is not a test that passes because `_scar` never writes.
-    engaged = [ax for ax in PURSUIT_AXES if ALIGNMENT_OF("kill / wound", ax)]
+    engaged = [ax for ax in PURSUIT_AXES if ALIGNMENT_OF("fight", ax)]
     if engaged:
         q = Person(id="p_test2")
-        _scar(w, q, "kill / wound")
+        _scar(w, q, "fight")
         assert q.scar, "`_scar` wrote nothing for a verb that DOES engage an axis; the negative "\
                        "arm above proves nothing on its own"
 
@@ -1706,6 +1706,124 @@ def test_13d_i_revoke_executes_in_the_fold_for_the_seat_above_and_refuses_the_ot
     kinds = run("rv_king", "c_king")
     assert "tenure.closed" in kinds and "revoke.refused" not in kinds, kinds
     assert not held(), "the fold accepted the revocation and the duke's hold survived"
+
+
+# =================================================================================================
+# PLAN POSITION `8a` -- `13d-i` ITEM 5, THE LAST OPEN ITEM OF THE UNIT ABOVE: `offices.yaml` AND
+# ITS `harness/populated.py` WIRING. `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md`,
+# position `8a`. Two folds, neither Jordan's: `title_domain`/`TITLE_DOMAINS` now read
+# `engine/season/offices.yaml: titles: domains:` rather than `rosters.yaml: titles` (Layer 1 §B.7/
+# §E.1, r2 `05_LEDGER_AND_BUILD.md` RULED (c)); and `offices.yaml`'s 29 authored seats carry
+# `conferral`/`revocation` recomputed against `ED-IN-0256` (r2 `03`'s own value sets are superseded
+# -- see `offices.yaml`'s own header for the row-by-row translation). FALSIFIERS: the fold changes
+# no answer `title_domain` gives; every authored seat constructs against the live rosters; the 19
+# seats this loop already seats before this position carry a REAL basis afterward, not the
+# dataclass default; and a full season still executes end to end (§0.2).
+# =================================================================================================
+
+def test_8a_title_domain_now_reads_offices_yaml_and_answers_identically():
+    """THE FOLD CHANGED WHERE, NOT WHAT. `rosters.yaml: titles` was left in place for one session
+    as orphaned residue (a concurrent plan position owned that file -- `offices.yaml`'s own header
+    names the scope decision) and is now physically deleted (Phase-1 methodology close, 2026-09-29,
+    `/simplify` ALTITUDE lens) -- nothing read it through `title_domain` even before the deletion:
+    `TITLE_DOMAINS` is bound from `engine/season/offices.yaml` at import. `PINNED` is the byte-exact
+    reading of `rosters.yaml: titles: domains:` taken at the fold (position `8a`) and verified
+    against it there; with the source roster gone, this is now the record the fold stays honest
+    against, not a second live copy (the same declared-literal shape `harness/arms.py`'s retired
+    arm pairs use for the same reason)."""
+    from ..data import files
+    from ..data.rosters import load_yaml
+
+    # roster-exempt: PINNED HISTORY, not the game's vocabulary -- `rosters.yaml: titles: domains:`,
+    # byte-identical to what it read before its physical deletion (verified at that deletion).
+    PINNED = {
+        "King": "realm", "Queen": "realm", "Duke": "duchy", "Duchess": "duchy",
+        "Count": "province", "Countess": "province", "Lord": "territory",
+        "Mayor": "settlement", "Community Leader": "community",
+        "Family Head": "hearth", "Individual": "person",
+    }
+    assert dict(TITLE_DOMAINS) == PINNED, (
+        "offices.yaml: titles: domains: disagrees with the pinned reading of the roster it folded "
+        f"from: {TITLE_DOMAINS} != {PINNED}")
+    assert set(TITLE_DOMAINS.values()) == set(RUNG_KINDS), (
+        "the ladder is no longer total over the rungs after the fold")
+    for post, dom in TITLE_DOMAINS.items():
+        assert title_domain(post) == dom, f"title_domain({post!r}) disagrees with the mapping it reads"
+    assert title_domain("Dicastery") is None, "a non-title post reads as a title after the fold"
+
+    doc = load_yaml(files.OFFICES_YAML.read_text(encoding="utf-8"))
+    assert doc["titles"]["domains"] == PINNED, "offices.yaml's own file text disagrees with the pinned fold"
+
+
+def test_8a_every_authored_seat_constructs_against_the_live_rosters():
+    """`offices.yaml`'s 29 seats are a REAL content file, not documentation -- every row must build
+    a lawful `Office` against today's `office_bodies`/`factions`/`remit_acts`/`conferral_bases`/
+    `revocation_bases`, the same construction-time proof r2 `03` §A.13 ran against
+    `offices_draft.yaml` (which found 15 of 25 draft rows COULD NOT construct). `rung` is passed as
+    a placeholder string: this test is about `body`/`faction`/`remit_acts`/`conferral`/`revocation`
+    membership, not about anchor resolution, which this position does not build (see the file's own
+    header)."""
+    from ..data import files
+    from ..data.rosters import load_yaml
+
+    doc = load_yaml(files.OFFICES_YAML.read_text(encoding="utf-8"))
+    seats = doc["seats"]
+    assert len(seats) == 29, f"expected 29 authored seats, found {len(seats)}"
+    ids = [s["id"] for s in seats]
+    assert len(ids) == len(set(ids)), f"duplicate seat id(s): {sorted(i for i in ids if ids.count(i) > 1)}"
+    for s in seats:
+        Office(s["id"], s["post"], "PLACEHOLDER_RUNG", list(s["remit_acts"]),
+               body=s.get("body"), faction=s.get("faction"),
+               conferral=s.get("conferral"), revocation=s.get("revocation"))
+    # `03` §A.15's own distribution counts, re-derived here rather than trusted: seven bases must
+    # sum to 29 or a count in this file's header is wrong, exactly the defect `CLAUDE.md` §0.1 pt 4
+    # names (a distribution that does not sum to the table's own row count).
+    cnf = Counter(s["conferral"] for s in seats)
+    rvk = Counter(s["revocation"] for s in seats)
+    assert sum(cnf.values()) == 29 and sum(rvk.values()) == 29
+    assert cnf == Counter({"appointed": 15, "elected": 8, None: 6}), cnf
+    assert rvk == Counter({"rung_above_same_faction": 22, None: 7}), rvk
+
+
+def test_8a_the_nineteen_live_seats_carry_a_real_basis_after_the_overlay():
+    """`harness/populated.py`'s per-case loop already seats 19 of `offices.yaml`'s 29 holders as
+    `Office`s (verified by construction, not assumed -- `offices.yaml`'s own header names all 19).
+    Before this position every one carried `conferral=None, revocation=None`, the dataclass
+    default, regardless of what `ED-IN-0256` says of the seat. This asserts the overlay actually
+    ran: the 19 match `offices.yaml`'s authored basis, and the four hereditary/no-revoker seats
+    (King, Queen, Heir, Princess) correctly keep `None` -- a passing test that could not tell
+    'overlaid with None' from 'never overlaid' would not observe the failure it excludes
+    (`CLAUDE.md` §0.1 pt 2), so this checks a NON-None seat on each axis too."""
+    from ..data import files
+    from ..data.rosters import load_yaml
+    from ..harness.populated import _slug
+
+    doc = load_yaml(files.OFFICES_YAML.read_text(encoding="utf-8"))
+    w = build_realm(seed=0)
+    checked_a_real_conferral = checked_a_real_revocation = False
+    for s in doc["seats"]:
+        if s["note"].startswith("[NEW]"):
+            continue   # not minted this session -- see the file's own header
+        oid = f"off_{_slug(s['holder'])}"
+        off = w.offices.get(oid)
+        assert off is not None, f"{s['holder']} ({s['post']!r}) is marked [LIVE] but built no office"
+        assert off.conferral == s["conferral"], (
+            f"{oid} ({off.post!r}): conferral={off.conferral!r}, offices.yaml says {s['conferral']!r}")
+        assert off.revocation == s["revocation"], (
+            f"{oid} ({off.post!r}): revocation={off.revocation!r}, offices.yaml says {s['revocation']!r}")
+        checked_a_real_conferral = checked_a_real_conferral or off.conferral is not None
+        checked_a_real_revocation = checked_a_real_revocation or off.revocation is not None
+    assert checked_a_real_conferral and checked_a_real_revocation, (
+        "every seat checked had a None basis -- this test cannot tell the overlay ran")
+
+
+def test_8a_a_season_still_executes_end_to_end_with_the_overlay_wired():
+    """§0.2 -- DONE MEANS IT RUNS. The overlay changes what nineteen live offices declare; this
+    confirms a full season over the populated world still resolves rather than raising, which a
+    construction-only check (the two tests above) cannot show."""
+    from ..harness import populated
+    out = populated.run(seasons=1, seed=0)
+    assert out.get("acts", 0) > 0, "a populated season formed no acts with the overlay wired"
 
 
 # =================================================================================================

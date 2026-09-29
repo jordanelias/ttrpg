@@ -20,8 +20,9 @@ What each block proves, and the control that stops it passing vacuously:
      standing. The control: the same effect minus the unlawful write is `NoOpReceipt`.
   4. A NO-OP PUTS BACK THE TENURES ITS CLOSURE TOUCHED, even lawful ones, so a refusal Event never
      stands beside an edge the refused write opened.
-  5. PER-EFFECT DECISIONS, EACH WITH ITS CONTROL: `kill / wound` judges body and existence and not
-     the scar; a second identical `convene` in one season is refused and a reschedule is not; a
+  5. PER-EFFECT DECISIONS, EACH WITH ITS CONTROL: `fight` (renamed from `kill / wound`, plan
+     `FIGHT-RENAME`) judges body and existence and not the scar; a second identical `convene` in
+     one season is refused and a reschedule is not; a
      `transfer` from a rung to itself is refused and a real one is made.
 
 `work`'s own falsifier -- per act AND per site, both judgments -- is
@@ -171,7 +172,7 @@ def _wounded(victim, full, left):
 def _kill(w, aid, res):
     d = _driver(w)
     return [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS),
-                                    Act(id=aid, actor="p_low", verb="kill / wound",
+                                    Act(id=aid, actor="p_low", verb="fight",
                                         payload={"subject": "p_mid"}), res)]
 
 
@@ -209,7 +210,7 @@ def test_g4_a_second_identical_convening_is_refused_and_a_reschedule_is_not():
     fold = lambda aid, when: [e.kind for e in d._fold(
         w, mint_token(w, WriteClass.ACTS),
         Act(id=aid, actor="p_high", via="off_duke", verb="convene",
-            payload={"venue": "S", "when": when}))]
+            payload={"subject": "S", "when": when}))]
     assert fold("g4_c0", 3) == ["date.scheduled"]
     assert fold("g4_c1", 3) == ["convene.refused"]
     assert fold("g4_c2", 4) == ["date.scheduled"]

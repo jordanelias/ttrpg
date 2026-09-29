@@ -103,20 +103,19 @@ rosters:
     open: true
     values: [hold, contain, commit, oblige, succeed, tie, knot]
     # ⚠ LOADER INVARIANT 6's SECOND HALF (`04 §B.13 #6`, `04:466-467`, `ID-14`): every kind's OPENER
-    # set is declared. MEASURED 2026-09-25 from `engine/season/loop/effects.py`, the only module
-    # in the loop that constructs a `Tenure`: `_eff_confer` and `_eff_create_record` open `hold`,
-    # `_eff_move` opens `contain`, and no `_eff_*` opens any other kind. The loader
-    # (`data/verbs.py`) refuses a kind with no entry and an opener that names no verb; an EMPTY
-    # list is REPORTED, not refused (`tenure_kinds_without_an_opener`), because a kind no act can
-    # open today may be correct for now.
-    openers:
-      hold: [confer, create_record]
-      contain: [move]
-      commit: []    # hole: `commit` declares `writes: Tenure.since` and has no effect that opens a Tenure
-      oblige: []    # hole: as `commit`
-      succeed: []   # hole: as `commit`
-      tie: []       # hole: `tie / knot` declares `writes: Tenure.since` and has no effect that opens a Tenure
-      knot: []      # hole: as `tie`
+    # set is declared. THIS ROW USED TO CARRY THE MAPPING BY HAND -- `openers: {hold: [confer,
+    # create_record], contain: [move], commit: [], oblige: [], succeed: [], tie: [], knot: []}` --
+    # a SECOND COPY of a fact `engine/season/loop/effects.py`'s own `_eff_*` bodies already state
+    # structurally (which verb's `Tenure(...)` construction names which `kind`). Correct the day it
+    # was hand-transcribed (2026-09-25) and silently wrong the day a new opener effect landed with
+    # no matching edit here -- `CLAUDE.md` §8's every-rule-lives-once hazard. Plan position
+    # `OPENERS-DERIVE` (2026-09-29) DELETED the hand-written mapping: `data/verbs.py`'s
+    # `_derive_openers_from_effects()` reads the same fact by walking `effects.py`'s own source (an
+    # AST scan for `Tenure(...)` calls inside each `@effect_for`-registered function), so there is
+    # one owner and no second copy to fall behind. The holes are UNCHANGED and still true, MEASURED
+    # the same way, now computed rather than read off this roster: `commit`, `oblige`, `succeed`,
+    # `tie` and `knot` each declare `writes: Tenure.since` (verb_table.yaml) and no effect
+    # constructs a Tenure of that kind -- `tenure_kinds_without_an_opener()` still reports them.
 
   hold_object_kinds:
     source: "`architecture/holonic_ARCHITECTURE.md` §15's Tenure table — *\"`hold` | Person → Office | Rung | Record | Proposition | 1 per object\"*. Item 16 of `proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md` (⊕ R13)."
@@ -915,81 +914,15 @@ rosters:
         cite:     "as `a standing`. Same ruling, same clause-(3) tension, same repoint."
     # NO `values:` — the members ARE the `prizes:` mapping above, read with `roster_map()`. A `values: []` stood here and was a declared-but-unread key (`04 §B.13` ID-12): `roster()` returned an EMPTY frozenset, which is the silent-false this file's own header forbids. Line-neutral edit — 209 citations index this file by line.
 
-  titles:
-    source: "JORDAN, 2026-09-02, VERBATIM. None of this was in the architecture: `ARCHITECTURE_V2.md` contains no `sovereign`, no `Parliament`, and no title ladder."
-    cite: "H-90"
-    note: >-
-      ⚠ THREE THINGS THAT ARE NOT THE SAME, AND THE TREE MODELLED NONE OF THEM.
-      *"While a King/Queen may have governing authority over the country, they do not necessarily
-      have sovereign power of all territories/provinces/duchies nor do they necessarily have all
-      territories/provinces/duchies in their holdings."*
-        · GOVERNING AUTHORITY — what a title gives you over a domain. The ladder below.
-        · SOVEREIGN POWER — *"uncontested and absolute"*, and deliberately NOT monopolised:
-          *"the politics of this game are set up such that there is a Parliament, so there is no
-          monopoly of power in the ruler."*
-        · HOLDINGS — what you actually own. Disjoint from what you govern.
-      ⚠ AND THE LADDER IS `rung_kinds`, WHICH ALREADY EXISTS. Each title's `domain` is the rung
-      kind it governs, so rank IS the ordinal position in that roster and needs no second scale.
-      A `Lord` is the exception worth reading twice: territories *"that have not been assembled
-      into a province"*, so a Lord may govern SEVERAL territories while a Count governs ONE
-      province — rank is not headcount.
-      ⚠ DELEGATION. *"All of Kings, Dukes, Counts and Lords can assign others of lesser rank to
-      govern any of their holdings in their stead"* — a governor for a duchy (which is how regency
-      and puppet rulers arise), a council for a province, mayoral elections for a settlement. NOT
-      BUILT: this roster is the ladder only, and delegation is registered as open.
-      ⚠⚠ THE REVOCATION RULE BELOW IS SUPERSEDED (`13d-i`, 2026-09-26) BY ED-IN-0256 ruling (3),
-      *"rung above of same faction"* -- `revocation_bases`. `_req_revoke` no longer reads this
-      roster, and `title_rank`/`titles_held`/`highest_title_rank` are deleted. What still reads it
-      is `title_domain`: world-gen (`harness/populated.py`) and two `Office.__post_init__` clauses.
-      The two 2026-09-02 rules, kept as the record of what the ruling replaced:
-        · an ORDINARY office — *"a Duke can revoke office from any individual in that office so
-          long as that office is for a holding under their purview"* — purview alone;
-        · a TITLE — *"King/Queen cannot revoke title of Duke/Duchess if they do not have duchy is
-          in their holdings. King/Queen can revoke title of Duke/Duchess if the duchy is one of
-          their holdings."* — purview AND holdings AND strictly higher rank.
-      ⚠ AND `remit:<act>` IS NOT SETTLED. Jordan's *"so long as"* makes purview SUFFICIENT while
-      Part E keeps `remit:revoke` NECESSARY; the code applies both, which is an over-refusal
-      against the ruling. Registered as `H-91` rather than fixed by editing a transcribed column.
-    # ⚠ MEMBERSHIP LIVES ONCE, IN `domains:`, AND THAT IS A CORRECTION. The first version carried
-    # a `values:` list repeating all eleven names beside the mapping -- the exact shape
-    # `witness_channel_predicates` twelve rows above forbids in terms (*"a definition lived twice
-    # in one file and a test had to guard that the two copies agreed -- guarding a duplicate is
-    # the shape §8 asks you not to create"*), written by the same session that wrote that note.
-    # The guard was ASYMMETRIC too: the totality test read `values`, so a name added to `domains`
-    # alone was invisible to the test and LIVE IN THE MECHANISM -- add `Steward: duchy` and an
-    # office posted `Steward` silently became a title, flipping its revocation from the purview
-    # rule to the holdings rule with 133 tests green. Found by the governance-canon pass.
-    #
-    # ⚠ `ordered: true` IS ALSO GONE. It had no consumer, and its order ran OPPOSITE to
-    # `rung_kinds` -- King-first descending against person-first ascending -- so two ladders sat
-    # in one file pointing in different directions and the unread one was a §4 idempotence trap
-    # for whoever read it next. Rank is the rung ordinal; there is no second ordering.
-    # ⚠ TOTAL OVER `rung_kinds` — Jordan, 2026-09-02: *"realm = king/queen, duchy = duke/duchess,
-    # province = count/countess, territory = lord, settlement = mayor, community = community
-    # leader, hearth = family head, person = own autonomous individual."* EVERY rung has a
-    # governing title, and the ladder bottoms out at a person governing themselves.
-    #
-    # ⚠ AND THAT BOTTOM RUNG IS WHY `own` ELIGIBILITY IS NOT A SPECIAL CASE. Part E's `own` is the
-    # person-scale rung of THIS ladder, not a separate kind of permission: *"person = own
-    # autonomous individual"*. A verb eligible by `own` is a governance act at scale `person`,
-    # performed by the only title-holder of that domain. Recorded as an observation, not acted on
-    # — collapsing `own` into the ladder would change `_eligible`, which is not this item's to do.
-    #
-    # ⚠ A LORD IS THE ONE ASYMMETRY: territories *"that have not been assembled into a province"*,
-    # so a Lord may govern SEVERAL territories where a Count governs ONE province. Rank is the
-    # ordinal in `rung_kinds`, never a headcount.
-    domains:
-      King:              "realm"
-      Queen:             "realm"
-      Duke:              "duchy"
-      Duchess:           "duchy"
-      Count:             "province"
-      Countess:          "province"
-      Lord:              "territory"
-      Mayor:             "settlement"
-      "Community Leader": "community"
-      "Family Head":     "hearth"
-      Individual:        "person"
+  # titles: DELETED (methodology close, 2026-09-29, /simplify ALTITUDE lens -- plan position
+  # 8a's own r2 05_LEDGER_AND_BUILD.md RULED (c): "...its domains move into offices.yaml...
+  # and the roster goes." Deferred at 8a's own commit only because a concurrent plan position
+  # owned this file in the same shared working tree that day (offices.yaml's own header names
+  # the scope decision); that window closed by the end of the same session's Phase 1, so the
+  # physical deletion HANDOFF_IN.md's position-8a row named as follow-up lands here. Full text
+  # (Jordan's 2026-09-02 ruling, the H-90/H-91 history, the superseded revocation rule) survives
+  # at `engine/season/offices.yaml: titles:`'s own header and in this file's git history --
+  # nothing here reads this key any more (`data/rosters.py::TITLE_DOMAINS` reads `offices.yaml`).
 
   conditional_emission_rows:
     source: "`W4`. Part D's `emits:` column does not distinguish a kind emitted ON EVERY WRITE from one emitted only WHEN A CONDITION HOLDS, and the two are different things."
@@ -1490,6 +1423,56 @@ rosters:
       the roster cannot grow a value the resolver silently treats as another.
     values: [rung_above_same_faction]
 
+  interposition_kinds:
+    source: "`proposals/2026-09-05-proceedings-subsystem/03_PARAMETERS.md` PART D's `interposed:` schema comment -- Fig. 24 -- and §E.2's twelve worked rows, every one of which draws its `interposed:` list from exactly this set. Plan position `18` (PROC-A)."
+    open: true
+    note: >-
+      ⚠ WHAT AN ARRANGEMENT'S `interposed:` KEY IS A SUBSET OF (`data/arrangements.py`'s loader
+      checks membership against this roster, not a local literal). `latitude` is DERIVED from
+      `interposed[]` (§B.1) -- never stored, never a roster value of its own -- so this roster
+      names WHO OR WHAT MAY STAND BETWEEN A PARTY AND THE ROOM, not the derived quantity.
+      `pair` is two envoys who must agree before anything is reported (§E.2, "negotiation through
+      envoys") -- a genuine sixth kind, not a multiplicity of `person`.
+    values: [person, office, document, procedure, ceremony, pair]
+
+  genres:
+    source: "`03_PARAMETERS.md` §B.3 / Fig. 23 -- the genre triangle. `genre` is DERIVED from the bench's remit acts (a Query, never an authored key on a row -- §B.3: \"not a field on the game\"), and is a SET, not a single value (the assembly-as-magistrate bend needs both `forensic` and `deliberative` at once). This roster is the closed CODOMAIN that derivation may return into, the same relationship `rung_kinds` has to `title_domain`."
+    open: true
+    note: >-
+      `forensic` -- a PAST matter, did it happen: the issue ladder runs. `deliberative` -- a
+      FUTURE matter, shall we do it: no issue ladder: the fact is not in dispute. `epideictic` --
+      no bench at all: amplification; the only prize is standing. ⚠ NOTHING DERIVES `genre` YET
+      (the Query is `19_PLAN.md` PHASE 2/3 work, not this position's five parts) -- this roster is
+      the closed set that derivation will read into, authored now because `speech_kinds`' own
+      "which genres it is apt in" column already needs somewhere closed to point at.
+    values: [forensic, deliberative, epideictic]
+
+  proofs:
+    source: "`03_PARAMETERS.md` PART D's `proofs:` schema comment -- Fig. 6 -- and §E.2's worked rows (`record`, `testimony`, `oath`, `confession` are the four names actually used across all twelve games)."
+    open: true
+    note: >-
+      ⚠ A KNOWN-THIN ROSTER, NAMED RATHER THAN PADDED. `03_PARAMETERS.md` §E.2's own examination
+      row flags a strain: what an examination weighs is a *performance*, and Fig. 6 (which this
+      roster transcribes) enumerates what a FORENSIC proceeding admits -- so `proofs` may need a
+      fifth member (`performance`) once a non-forensic proof-bearing game is authored, registered
+      there as `10_LOOPS_AND_GAPS.md` `P-13` and NOT invented here. Adding a member is a roster
+      edit, never a code change -- the closure claim this roster exists to make survives the gap.
+    values: [record, testimony, oath, confession]
+
+  ladder_rungs:
+    source: "`18_FINDINGS.md`:180 and §5 item 5 (Fig. 27) -- the forensic ISSUE LADDER a party descends under `interrogation`'s `order: scripted` / `registers: [restricted]`, verbatim: \"deny, cite something incompatible, impugn the motive, concede the fact, concede the harm, hand the error back.\" Plan position `18` (PROC-A)."
+    open: true
+    note: >-
+      ⚠ SIX RUNGS, ORDERED HIGH-TO-LOW (deny is the strongest position; handing the error back
+      concedes everything). `speech_kinds` reuses these SAME SIX AS ITS ONLY SIX MEMBERS (below,
+      itself flagged partial against the ten `19_PLAN.md` step 7 promises) rather than minting a
+      second vocabulary for what is, on this corpus's own reading, one ladder read two ways -- a
+      RUNG one descends and a KIND OF SPEECH one performs to descend it are the same six acts.
+      `impugn_motive` is `18_FINDINGS.md`'s *"Partial by construction"* figure (Fig. 24's fixed
+      native band, §5 item 5) -- reachable-bands data on `speech_kinds`' own row, not a second
+      roster.
+    values: [deny, cite_incompatible, impugn_motive, concede_fact, concede_harm, hand_error_back]
+
 tables:
 
   site_yield:
@@ -1762,8 +1745,9 @@ tables:
       alignment` constant across verbs, so convictions cannot discriminate at all. A verdict that
       does NOT move between `declared` and `uniform` is a verdict the table was never deciding.
       VERB KEYS ARE VERB-TABLE KEYS, spelled exactly as `verb_table.yaml` spells them (`evade /
-      defy`, `kill / wound`). The loader raises on a key naming no verb, so a rename over there
-      cannot leave a silently dead cell over here.
+      defy`, `fight`). The loader raises on a key naming no verb, so a rename over there cannot
+      leave a silently dead cell over here -- exactly what caught this cell when `kill / wound`
+      was renamed to `fight` (2026-09-29, plan `FIGHT-RENAME`).
     cells:
       # ⚠⚠ **ALL FOUR BLOCKS ARE RE-AUTHORED BY `U3`, AND THE OLD FOUR WERE NOT AXES.** This table
       # was keyed `Precedent / self_preservation / suspicion / harm_borne` — one conviction and
@@ -1831,7 +1815,10 @@ tables:
         # institutions this setting has not ruled is a different thing, because a later
         # reader takes it for canon. The cell is kept at the same magnitude and the reason
         # is restated as the judgment it actually is.
-        kill / wound:    0.3    # a body-contest is settled before witnesses, which is the only consecrating frame this table has
+        # ⚠ RENAMED `kill / wound` -> `fight`, 2026-09-29 (plan `FIGHT-RENAME`; `verb_table.yaml`'s
+        # own row-rename note). Same verb, same weight, only the spelling moved -- the loader
+        # (`data/verbs.py::_load_alignment`) raises if this key does not match a `VERB_TABLE` row.
+        fight:           0.3    # a body-contest is settled before witnesses, which is the only consecrating frame this table has
         evade / defy:   -0.3    # refusing what a vow or office asked undercuts the oath behind the demand, not just the demand
         destroy_record: -0.3    # erasing what a ruling produced touches the same desecration `traditional` scores harder
         forge:          -0.5    # counterfeiting a record for advantage is the false-witness shape, dressed as evidence

@@ -451,25 +451,35 @@ ci_checks:
   # debt on the ledgers, not apparatus debt, so if they are to be watched again the instrument
   # should be a ledger-subject one, not a five-ceiling repository ratchet.
 
-  - path: tools/balance_oracle.py
+  - path: engine/season/harness/arms.py
     level: 5
     subject: compliance
     posture: harden
     role: >-
-      The n>=100 CONTROLLED balance comparison. Runs the same seeds twice in one process with a
-      mechanic patched to its old and new behaviour, and reports a per-faction win-share delta with
-      a two-proportion z. It is the control CLAUDE.md 0.1 pt 4 requires before re-recording a
-      seeded golden.
+      The n-seed two-arm CONTROLLED comparison over `build_realm` + season-loop execution. Runs
+      the same seed sequence once per arm, in one process, with `field_casualty_model` set to
+      each of two registered values, and reports a per-act-subject-category delta (self / another
+      person / not a person) with a two-proportion z. It is the control CLAUDE.md 0.1 pt 4
+      requires before re-recording a seeded golden that touches `engine/season`-only code.
     ci_job: ""
     notes: >-
-      DELIBERATELY NOT WIRED INTO CI, and that is not an oversight. 240 campaigns take ~13 minutes;
-      a gate that slow gets skipped, which is worse than a tool that gets run. Added 2026-08-21
-      (ED-IN-0194 / M1 juncture 1) to close the gap engine/tests/test_f7_smoke_oracle.py:8 has
-      asked for since it was written and CLAUDE.md 7 records twice: the seeded goldens run at n=2
-      and n=8, where one campaign flip is 50pp and 12.5pp, so they cannot tell a balance regression
-      from noise -- and nothing verified that a golden regeneration was intended. First use
-      measured fractional dice pools as NOT moving balance (all |z| < 0.53 at n=120 per arm), which
-      is what the six golden re-records of 2026-08-21 rest on.
+      Ported 2026-09-29 (plan position `28-i`, M5) from `tools/balance_oracle.py`, which is
+      retired (`FORK:6f740d9`, `references/restructure_ledger.md`) -- it drove
+      `engine.mc_v18.run_campaign`, a faction/strategic-scale campaign with no season-side
+      equivalent, and `rosters.yaml`'s own `field_casualty_models` note says by name that tool
+      "cannot observe" an `engine/season`-only mechanic. This is NOT the same comparison the old
+      tool ran twice (same-seeds-twice-in-one-process, private-ladder-vs-owner-ladder): that
+      mechanic was verified season-unreachable and has no surviving code, even as inert historical
+      record (it would add a new nested `engine -> systems` import
+      `tests/valoria/test_engine_does_not_import_systems.py`'s `NESTED_BASELINE = 0` ratchet
+      forbids). The live arms are now `field_casualty_model`'s `total` (pre-M4 control) vs
+      `scaled_by_degree` (the ruled default), read by `loop/effects.py::_eff_march` on a lost
+      field battle -- H-148, `ED-IN-0279` clause (a).
+      DELIBERATELY NOT WIRED INTO CI, same reason as before: a realm build plus a season run costs
+      tens of seconds per seed (measured 2026-09-29: 0.77s build + 46.7s for 2 seasons, one seed),
+      so an n>=10 comparison is minutes, and a gate that slow gets skipped. This session did NOT
+      run the tool's own default `--n`/`--seasons` invocation end to end -- see the module
+      docstring for what that means for anyone citing a result from it.
 
   - path: tools/m1_acceptance.py
     level: 5
@@ -500,6 +510,39 @@ ci_checks:
       so there is nothing green to protect. It stops being tolerable the moment a juncture passes:
       whoever greens the first row must restore a blocking form in the same commit, with a
       baseline, or the gate that defines `done` will be advisory at exactly the point it matters.
+
+  - path: tools/fold_ledger_to_latest.py
+    level: 5
+    subject: compliance
+    posture: harden
+    role: >-
+      The editorial-ledger queue instrument (plan position `1` CLOSE-PASS's own deliverable,
+      `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` §3.1 item 1). Folds every
+      `registers/editorial_ledger*.jsonl` row to the last row per id (the ED-IN-0149 precedent)
+      and reports `needs_jordan: true` at any status — HANDOFF.md's own definition of "rows
+      awaiting Jordan" — plus the narrower `∧ status: open` subset old plan position 1's own
+      OBSERVABLE text names, replacing four disagreeing hand counts (108/158, 151/105, 41/51/77,
+      37) with one reproducible command. A Phase-3 terminal critique of this tool's own first
+      cut found that reporting ONLY the narrower subset silently excludes real, live Jordan
+      items filed under a status other than `open` (`ED-IN-0210`/`ruled`, `ED-IN-0261`/`partial`,
+      `ED-IN-0247`/`resolved` all carry `needs_jordan: true` and are all still his) — a fifth
+      disagreeing figure rather than a retirement of the first four. Both counts are reported now.
+    ci_job: ""
+    notes: >-
+      DELIBERATELY NOT WIRED INTO CI, matching `tools/balance_oracle.py`'s precedent (two rows
+      above this one — `tools/m1_acceptance.py` sits directly above and IS wired into CI, so
+      "immediately above" would misname the sibling this matches): this is a measurement
+      instrument for a queue Jordan reviews by hand, not a gate over game state, and nothing
+      here should fail a build. Manual invocation only:
+      `python tools/fold_ledger_to_latest.py --queue`. Does NOT scan the older, pre-migration
+      `registers/archive/*.yaml` corpus, structurally separate from the `.jsonl` ledgers this
+      tool reads — a row resolved only there reads as "not found," not as resolved, to `--id`
+      (exact-id lookup only; it does not accept a fragment or a prefix). That corpus is not
+      reliably all-terminal either: `registers/archive/*.yaml`'s own ED-IN-0245 ruling archives a
+      row on EITHER of two criteria (pre-current-month OR terminal status, not terminal status
+      alone), so a live, flagged row can in principle sit there — benign today (every such row
+      checked has a later, terminal superseding row in the same file) but not something this tool
+      itself verifies.
 
 
 # ── Level 1-2 (text/skill, supervisory only) ─────────────────────────────────

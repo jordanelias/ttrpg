@@ -338,8 +338,21 @@ TESTS = [
     ('H11','Arrowhead vs Envelopment (rev H4)',_command_army('Arrowhead'),_envelop_army,{},{},38,55,'high'),   # [canonical: mass_battle_gauge_grounding.md §3 — H11 symmetric H4; ED-MB-0038 matched granularity]
     ('R1','Ranged vs Line (open field)','Line','Line',
         {'unit_type':'ranged','stance':'hold'},{},0,30,'low'),                             # [canonical: mass_battle_gauge_grounding.md §3 — R1 ranged loses open field]
+    # [ED-MB-0044 superseding row, 2026-09-15] Was both sides {'stance':'hold'} — 'hold' is an
+    # UNCONDITIONAL early-return from steering on both paths (hierarchy/units.py's _node_advance and
+    # advance_cells), so with tier-3 Lines spawning 15 cells apart (outside VOLLEY_MAX_RANGE=8) and
+    # neither side ever moving, the row was a structural 100%-draw/0%-casualty test-fixture defect,
+    # not a balance finding. Fixed per the row's own recommended, lower-blast-radius alternative
+    # (changing the SCENARIO, not the engine's hold semantics, which stays load-bearing for
+    # build_envelopment's freeze_wings and build_refused_flank's refused wing): 'balanced' stance +
+    # the 'kite' instruction lets the band-seeking primitive _kite_goal close to volley range and
+    # hold it. Falsifier verified before this edit (matching the row's own falsifier): the OLD
+    # kwargs reproduce 100% draw / 0.0% casualties both sides at n=60 multi mode; the NEW kwargs
+    # give decA=47.2 (band 42-58, PASS) with 11.7% draws (well under the 30% low-draw threshold,
+    # not that this row needs it — draw_exp is 'high').
     ('R3','Ranged vs Ranged (mirror)','Line','Line',
-        {'unit_type':'ranged','stance':'hold'},{'unit_type':'ranged','stance':'hold'},42,58,'high'),  # [canonical: mass_battle_gauge_grounding.md §3 — R3 ranged mirror]
+        {'unit_type':'ranged','stance':'balanced','instructions':('kite',)},
+        {'unit_type':'ranged','stance':'balanced','instructions':('kite',)},42,58,'high'),  # [canonical: mass_battle_gauge_grounding.md §3 — R3 ranged mirror]
 ]
 
 CAV = {'troop_type':'cavalry','speed':'Fast'}

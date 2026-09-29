@@ -358,7 +358,7 @@ def mode_sigma(mode, aggressor, defender, commit, read_win, fat_d, cfg):
 def adef_cap(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
     """Armour-defeat CAPABILITY — see core.adef_cap, which now OWNS this rule.
     [ED-PC-0038] Relocated to core so the DAMAGE path can consult the same capability the sigma path does. They had
-    disagreed: a partisan (adef_cap 0.176, the worst on the board vs plate's 0.72 threshold) was landing 11 damage
+    disagreed: a guandao (adef_cap 0.169, the worst on the board vs plate's 0.72 threshold) was landing 12 damage
     through a harness while a spear with BETTER capability (0.288) landed 3, because damage keyed on head mass and
     capability keyed on gap access. Duplicating the formula in core would have broken the repo's own "every rule
     lives once" invariant, so it moved and this delegates. Signature and results are unchanged."""
@@ -461,7 +461,7 @@ def _mode_elements(w):
     own per-element geometry grounded against Phase 0 specimen research — see designs/audit/2026-07-02-morphology-
     rearch-phase0/). A weapon with no explicit `mode_elements` (everything else — including composites whose extra
     mass elements are a mass-model subdivision only, e.g. flamberge's forte/tip/ricasso, or catching hardware like
-    a partisan's wing-lugs) synthesizes ONE element carrying its own whole-weapon head token + baked geo, so the
+    a spetum's wing-lugs) synthesizes ONE element carrying its own whole-weapon head token + baked geo, so the
     element-union below is the weapon's existing single-mode behaviour unchanged. Mirrors weapon_physics.
     _head_elements on the mass side. Pure."""
     els = w.get('mode_elements')

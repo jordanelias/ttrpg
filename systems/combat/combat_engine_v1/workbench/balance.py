@@ -34,7 +34,7 @@ WEAPONS = ["rapier", "arming", "longsword", "greatsword", "sabre", "dagger",
            # primitive-composed (elements/guards/mode_elements — see designs/scene/combat_engine_v1/weapons.py).
            # longsword_halfsword/estoc_halfsword excluded — auto-switch FORMS, never a starting loadout (matches
            # the existing exclusion note above for the original 11).
-           "yari", "kama_yari", "dangpa", "bear_spear", "ranseur", "spetum", "partisan", "naginata", "glaive",
+           "yari", "kama_yari", "dangpa", "bear_spear", "ranseur", "spetum", "naginata", "glaive",
            "guandao", "podao", "fauchard", "bardiche", "sparr_axe", "voulge", "guisarme", "ji", "bec_de_corbin",
            "lucerne_hammer", "goedendag", "katana", "tachi", "odachi", "tsurugi", "changdao", "nandao", "jian",
            "scimitar", "pulwar", "shamshir", "szabla", "cinquedea", "flamberge", "estoc", "falchion", "rondel",

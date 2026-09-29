@@ -191,12 +191,6 @@ composition_roles:
     target: "systems.social_contest.sim.contest:B"
     kind: value
     needed_by: "engine/cross_scale/scene_dispatch.py — ED-SC-0002 emergency-council verdict -> echo degree"
-  scene_resolver.fieldwork:
-    target: "systems.fieldwork.sim.fieldwork:run_fieldwork_scene"
-    needed_by: "engine/cross_scale/scene_dispatch.py — OI-02, stub-wired pending ED-916"
-  scene_resolver.investigation:
-    target: "systems.fieldwork.sim.investigation:resolve_npe_response"
-    needed_by: "engine/cross_scale/scene_dispatch.py — OI-02, stub-wired pending ED-916"
   rs_track_delta:
     target: "systems.overview.sim.rs_track:apply_rs_delta"
     needed_by: "NOBODY since 2026-09-16 (ED-IN-0232). Was engine/cross_scale/echo_transport.py — the §5.5 Accord Domain Echo's RS leg, which retired with the Key substrate. Kept for the same reason as territory_transfer_* above: the target resolves, the exporter imports it, and an orphaned role is more useful named than deleted."
@@ -1258,7 +1252,7 @@ golden_path:
   note: The only unit where Python oracle + typed export + GDScript port all exist. This is the template
     every other port copies.
 
-# ADAPTERS (8 — the KeyBus / GameDirector seam). Cross-scale bridges; conversion units too
+# ADAPTERS (7 — the KeyBus / GameDirector seam). Cross-scale bridges; conversion units too
 # (godot_conversion_strategy_v1 §I.3 cross-cutting). Tags resolve to engine/cross_scale/<name>.py.
 adapters:
   scene_dispatch:
@@ -1275,12 +1269,6 @@ adapters:
     note: 'IN-side combat dispatch bridge (ED-IN-0093, OI-01): faction aggregates -> Combatant pair -> wrapper.fight,
       behind DISPATCH_COMBAT_BRIDGE (default OFF); seam = wrapper.fight + Combatant ctor, PC-owned, consumed
       as-is.'
-  domain_echo:
-    build: gated
-    godot: python-oracle
-    port_rank: 2
-    parity: key-log
-    note: compute_domain_echo/accord/thread.
   zoom_in_out:
     build: gated
     godot: python-oracle

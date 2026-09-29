@@ -53,6 +53,7 @@ is adoption, not authorship.
 """
 import ast
 import glob
+import json
 import os
 import re
 import subprocess
@@ -461,9 +462,13 @@ def load_yaml(path, default=_RAISE):
     honestly. An adversarial pass re-earned it here within one commit.
 
     Migrated: 12 call sites, both idioms — `yaml.safe_load(open(x))` and
-    `with open(x) as f: y = yaml.safe_load(f)`. **21 bare `yaml.safe_load` calls
+    `with open(x) as f: y = yaml.safe_load(f)`. **20 bare `yaml.safe_load` calls
     remain in `tools/`**, each of which does something this helper does not (loads
     a stream, a string, a StringIO, or wants the exception on a missing file).
+    (21 -> 20 on 2026-09-29, plan position `28-i`/M5, `1320045`: `tools/build_execution_map.py`,
+    which held one bare call, was retired with the execution-map cluster — the corpus shrank,
+    nothing was migrated. Found by `/code-review` at the Phase-1 methodology close; the ratchet
+    caught the docstring drifting from the count it exists to pin.)
     **24 -> 21 on 2026-09-16 by RETIREMENT again** (ED-IN-0232): `build_contract_index.py` and
     `export_module_contracts.py` left `tools/` with the Key substrate carrying 2 bare calls, and
     `m1_acceptance.py`'s `row_key_log_closure` — which read the retired emits:/consumes: blocks —
@@ -558,6 +563,158 @@ def load_yaml(path, default=_RAISE):
 # that indirection is what made the breakage invisible to `import ci_common`.
 #
 # The lane roster itself (`LANE_CODES`) is a first-class definition ABOVE and is unaffected.
+
+
+# ── the editorial ledger reader (the first real caller, plan position `1` CLOSE-PASS,
+#    `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` §3.1) ───────────────────
+# The block above says exactly when to add this: "If a future tool needs to read the
+# editorial ledgers, write the reader here, in stdlib, as a first-class function." This is
+# that reader. `json` is stdlib, so `import ci_common` still never pulls in PyYAML.
+#
+# ⚠ KNOWN PRIOR ART, NOT ALL OF IT MIGRATED, NAMED HERE RATHER THAN LEFT FOR THE NEXT
+# SESSION TO REDISCOVER (a `/simplify` reuse pass found both): `tools/triage_work_items.py
+# ::work_items` already read every `registers/editorial_ledger*.jsonl` file and folded to
+# the last row per id — it now calls `fold_ledger_to_latest()` below instead, unconditionally
+# (this commit; its own `root` parameter, never passed non-`None` anywhere, now raises rather
+# than keeping a second, divergent hand-rolled loop alive for a case nothing exercises).
+# `tools/validate_ed_citations.py::build_status_map` is narrower and NOT migrated: it
+# canonicalizes `PP-`/lane-tagged ids together (a concern this reader has no need of) and takes
+# an already-gathered `entries` iterable rather than reading files itself — collapsing it would
+# touch that file's own id-canonicalization surface, out of this position's scope. Nor is
+# `tools/validate_ed_citations.py::load_ed_universe`, which additionally reads the OLDER,
+# pre-migration `registers/archive/*.yaml` corpus this function does not (see below) — the
+# READ ORDER convention it establishes (archives loaded first, the active ledger last, "so
+# that build_status_map's last-write-wins ordering lets a current active-ledger status
+# override any stale archived copy") is followed here even though the population is not.
+#
+# `broken_dependency_checker.py`'s `LANE_LEDGER_PATHS` builds the same per-lane list from
+# `ci_common.LANE_CODES` independently. It is NOT migrated onto this function: the population
+# below also covers the FLAT archive (`registers/editorial_ledger_archive.jsonl`), which
+# `LANE_LEDGER_PATHS` never included, so swapping it in would widen a BLOCKING gate's scanned
+# population as a drive-by of an unrelated position —
+# `workplans/2026-09-18-governance-settlement-behaviour-plan.md:177`'s per-step cadence
+# ("BUILD: the position's change, and nothing else. No widening"), still binding per
+# `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` §0, forbids exactly that. Left
+# for the commit that actually touches `check_editorial_ledger`'s coverage.
+#
+# ED-IN-0245's archive pass moves a row to an `_archive` sibling on EITHER of two criteria —
+# dated before the current month, OR a terminal status (the ruling's own two-criteria text,
+# `registers/archive/editorial_ledger_in_archive_pre-2026-09.yaml:1-6`; `needs_jordan` is
+# deliberately NOT a third criterion, `ci_register_size_check.py`'s own comment on the point —
+# archiving does not bury a question). So an archived row is not reliably terminal, and both
+# siblings of every lane belong in this reader's population — not, as an earlier draft of this
+# comment said, because status never matters to the move; it does, it just is not the whole
+# rule and a live row can still land there on date alone.
+def editorial_ledger_paths(repo_root=None):
+    """Every `registers/editorial_ledger*.jsonl` file, REPO-relative, sorted ARCHIVE-BEFORE-LIVE
+    per lane — live and archive, every lane. A GLOB, not a `LANE_CODES`-keyed list:
+    `sim_reference_roots()` above states the reason once and it applies verbatim here — "a NEW
+    subsystem [lane] gains its [ledger files] automatically, which is the property the hardcoded
+    list never had" — and two existing sites in this same directory (`triage_work_items.py`,
+    `currency_consistency_check.py`) already glob this exact population rather than enumerating
+    lanes, which this function now matches instead of adding a fourth, differently-derived
+    enumeration.
+
+    The sort key puts every `_archive.jsonl` immediately before its own live sibling (plain
+    lexicographic sort does the opposite — `.` sorts before `_`, so `editorial_ledger.jsonl` <
+    `editorial_ledger_archive.jsonl` — which is backwards from `load_ed_universe`'s established
+    read-order precedent above). Splits are forbidden by
+    `tests/valoria/test_ledger_hygiene.py::test_no_ed_has_rows_split_between_a_live_ledger_and_its_archive`,
+    so this ordering changes today's fold for no id — but it is the direction a last-write-wins
+    fold should read in if that guard were ever wrong, matching the active-ledger-is-authoritative
+    convention rather than the reverse.
+    """
+    root = repo_root or REPO
+    paths = sorted(glob.glob(os.path.join(root, 'registers', 'editorial_ledger*.jsonl')),
+                    key=lambda p: (os.path.basename(p).replace('_archive.jsonl', '.jsonl'),
+                                   '_archive' not in p))
+    return [os.path.relpath(p, root).replace(os.sep, '/') for p in paths]
+
+
+def read_editorial_ledger_rows(paths=None):
+    """Yield every parseable JSONL line across the editorial ledgers as
+    `(path, line_no, entry)`, in file-then-line order.
+
+    `paths` defaults to `editorial_ledger_paths()`, resolved against `REPO` so this reads
+    correctly regardless of the caller's CWD — the two older, bare-`open()` register readers
+    in this file (`load_yaml`, `read_text`) do not do this and are a known, pre-existing,
+    file-wide inconsistency; not this function's to fix, but this one's specific job (ground
+    truth for a count four prior ad-hoc measurements disagreed on) makes a silent wrong answer
+    costlier than in their existing call sites, so it does not repeat the gap. A path that
+    does not exist is skipped, not raised: `editorial_ledger_paths()` only lists files that
+    exist at call time, but an explicit `paths=` argument may still name one that doesn't (a
+    lane file exists only once that lane has allocated its first ED, `CLAUDE.md` §4, and an
+    `_archive` sibling exists only once that lane's live file has overflowed,
+    `ci_register_size_check.py`).
+
+    A line that fails to parse as JSON, or that parses to something other than a JSON object
+    (a bare string/number/array — legal JSON, not a ledger row), is skipped, not raised.
+    Reporting malformed lines is `broken_dependency_checker.py`'s concern (it surfaces them
+    defensively as live); this reader is for measurement (the fold, and the queue count),
+    where a line this reader cannot even parse as a row cannot be folded either way. Each
+    file is read independently for `OSError` (a missing file, a permission error): that one
+    file is skipped rather than aborting every other file's read. A `UnicodeDecodeError` on a
+    file's bytes is NOT caught here and propagates — this reader's ledgers are hand-authored
+    JSONL under `CLAUDE.md`'s own convention, and a genuine encoding corruption in one is a
+    louder problem than a silently short count would surface.
+    """
+    if paths is None:
+        paths = editorial_ledger_paths()
+    rows = []
+    for path in paths:
+        full_path = os.path.join(REPO, path)
+        try:
+            with open(full_path, encoding='utf-8') as fh:
+                lines = fh.readlines()
+        except OSError:
+            continue
+        for line_no, raw in enumerate(lines, start=1):
+            raw = raw.strip()
+            if not raw:
+                continue
+            try:
+                entry = json.loads(raw)
+            except ValueError:
+                continue
+            if not isinstance(entry, dict):
+                continue
+            rows.append((path, line_no, entry))
+    return rows
+
+
+def fold_ledger_to_latest(rows=None):
+    """Fold append-only ledger rows to the latest row per `id` — the ED-IN-0149 precedent
+    every existing "SUPERSEDING ROW" entry already cites verbatim: "the earlier row is NOT
+    rewritten — an id's effective status is its LAST row." `rows` defaults to
+    `read_editorial_ledger_rows()`.
+
+    Folding is PER ID, not per file. `tests/valoria/test_ledger_hygiene.py`'s
+    `test_no_ed_has_rows_split_between_a_live_ledger_and_its_archive` guarantees no id splits
+    between a live `.jsonl` ledger and ITS OWN same-basename `_archive.jsonl` sibling — with a
+    named, live exception, `SPLIT_GRANDFATHERED` (four pre-cutover ids). That exception is
+    DOCUMENTED, not asserted, as a byte-identical duplicate in both files (`_PRECUTOVER_DUP`'s
+    own prose there, not a comparison the test itself runs) — read by hand, the four rows do
+    match, so cross-file order is immaterial for them regardless of which copy this function's
+    sorted read order reads last, but that rests on eyeballing four rows, not a guard. That test
+    does NOT cover, and no other test does either, an id appearing across two DIFFERENT lane
+    files (e.g. duplicated into both `_mb.jsonl` and `_pc.jsonl`, or split between one lane's
+    live file and a different lane's archive) — a narrower guarantee than "every id lives in
+    exactly one file among all of `editorial_ledger_paths()`," which is unproven, not just
+    untested-and-true. In practice, ids are filed by lane-tag convention and no such collision
+    is known to exist; treat this as a live limit of the fold, not a settled property.
+
+    Returns `{id: (path, line_no, entry)}` — the last occurrence of each id, in the order
+    `rows` was given.
+    """
+    if rows is None:
+        rows = read_editorial_ledger_rows()
+    latest = {}
+    for path, line_no, entry in rows:
+        eid = entry.get('id')
+        if eid is None:
+            continue
+        latest[eid] = (path, line_no, entry)
+    return latest
 
 
 def __getattr__(name):

@@ -25,7 +25,7 @@ from __future__ import annotations
 
 from typing import Optional
 
-from ..data.rosters import RELEASABLE_KINDS
+from ..data.rosters import RELEASABLE_KINDS, RUNG_KINDS
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..queries import world_q
 from ..state.carriers import Office, subject_of
@@ -389,17 +389,45 @@ def _req_dispatch(w: "World", a: "Act") -> bool:
 
 @requires_predicate("convene")
 def _req_convene(w: "World", a: "Act") -> bool:
-    """Part E: *the venue's **container** resolves, or is NONE* (§6.2).
+    """CORRECTED (plan position `18`/PROC-A, 2026-09-29; `21_RECONCILIATION.md` PHASE 2 step 9;
+    `03_PARAMETERS.md` §C.1). Part E's cell was *the venue's **container** resolves, or is NONE*
+    (§6.2) -- a bug the ordinal test below both fixes and replaces: a REALM has no container by
+    construction (it IS the root of the containment tree), so that clause refused a convening at
+    the top of the ladder, which Jordan's ruling admits explicitly: *"convene could happen at any
+    scale except individual/person."* The lawful clause is the ordinal (`03_PARAMETERS.md` §C.1):
 
-    ⚠ THE FIRST VERSION TESTED THE WRONG THING -- `venue in w.rungs` asks whether the venue IS a
-    rung, not whether its CONTAINER resolves, so a top rung (which has no container) passed. And
-    `Query.parent_of` already existed, so re-deriving a weaker test here was §8-adjacent. Found by
-    the governance-slice adversarial pass."""
+        rank(subject.kind) > rank(person)
+
+    `rung_kinds` is ORDERED with `person` first (rank 0), so this is
+    `RUNG_KINDS.index(kind) > 0` -- correct if a sub-settlement tier is ever added, where an
+    enumerated kind list would not be. ⚠ THE GROUND IS A TYPE FACT, NOT AN OCCUPANCY FACT: *"the
+    `person` kind is the address slot and the `Person` is who stands in it ... a proceeding
+    convenes at a place; a person-rung is an address, not a place"* (§C.1, verbatim) -- so this
+    reads `Rung.kind`, never who or how many live there.
+
+    ⚠ THE VENUE RIDES `subject`, NOT `venue` -- C-11 (`21_RECONCILIATION.md:379`): *"subject
+    already binds the rung."* `requires_operands` has never carried a `venue` member and a
+    computed act cannot bind one; `_derive_operand`'s `subject` branch already returns the
+    Question's own referent, so a person-formed convening needs no new plumbing. `_eff_convene`
+    reads the same key.
+
+    ⚠ NOT A `scalar_threshold` TYPED CELL, AND THAT IS A NAMED SCOPE-DOWN. That form's `check()`
+    reads BOTH sides off the SAME bound entity (`subj`), so it has no channel for a literal
+    constant: `threshold:` must be a `requires_operands` NAME carrying ONE meaning across every
+    verb (`decision/options.py::_derive_operand`'s own stated rule -- *"a per-verb table would be
+    the special case G2 is actually about"*), and `threshold_predicate:` is a second READ on the
+    SAME subject, never a different one, so it cannot compare against `rank(person)` as a
+    constant. Coining a ninth `requires_operands` member or overloading `floor`'s already-declared
+    (and structurally different, per-site-kind) meaning would be exactly the collision that rule
+    exists to forbid. The `rank` STEM is real, general infrastructure (`REQUIRES_STEMS`,
+    `WorldReader.read`) for whatever next needs it typed; this predicate reads the same roster
+    ordinal directly rather than smuggling a second stem in to dodge the constant."""
     d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    venue = d.get("venue")
-    if venue is None:
+    subject = d.get("subject")
+    if subject is None:
         return True                        # §6.2's carve-out
-    return venue in w.rungs and world_q.parent_of(w, venue) is not None
+    r = w.rungs.get(subject)
+    return r is not None and RUNG_KINDS.index(r.kind) > 0
 
 
 # ---------------------------------------------------------------------------

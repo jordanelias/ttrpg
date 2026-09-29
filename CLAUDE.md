@@ -529,9 +529,14 @@ schemas: implement from none of them.
 a campaign-level balance claim needs a campaign-level instrument.** The seeded goldens under
 `engine/tests/` observe any output-moving change to campaign-reachable code but cannot separate a balance
 regression from noise, and nothing verifies a golden re-pin was intended — so say plainly when you
-re-record one. Use `tools/balance_oracle.py` for balance questions (deliberately not a CI gate; slow).
-⚠ It is a **campaign** instrument: for a campaign-unreachable change both arms are identical by
-construction and running it is a fake control. Ledger provenance is advisory — schemas differ, provenance
+re-record one. ⚠ **`tools/balance_oracle.py` IS RETIRED (2026-09-29, plan position `28-i`/M5, `FORK:` row
+in `references/restructure_ledger.md`)** — it ran the mc_v18 campaign driver, itself DEPRECATED (§0.2), so
+the campaign-level instrument this rule names has **no live successor**: that gap is open, not silently
+covered. `python -m engine.season.harness.arms` is NOT a replacement for it — a narrower, season-loop-only
+n-seed comparison over one mechanic (`field_casualty_model`; its own docstring's `FORK:` note says why the
+old campaign-wide comparison did not come along), useful for that question and no wider one. Whichever
+instrument you use: running it on a campaign-unreachable change (or, for `arms.py`, a season-unreachable
+one) is a fake control — both arms come out identical by construction. Ledger provenance is advisory — schemas differ, provenance
 fields are unchecked, none pin a generating SHA — so verify a cited `PP-NNN`/`ED-NNN` by hand.
 `engine/tests/` is CI job `sim-regression`; the reference model is partly stubbed
 (`NotImplementedError`) and its README's "all modules are stubs" line is stale — grep for the stubs.

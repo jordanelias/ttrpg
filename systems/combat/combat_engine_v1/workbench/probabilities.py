@@ -8,7 +8,19 @@ sampled outcome); this module turns those inputs into the local distribution.
 Single source of truth: every canonical value (per-die mean, sigma_n, the soft-cap, the decisive Ob,
 the degree thresholds) is IMPORTED from the engine (core / m1), never re-declared here — so a tuning
 change to the engine flows through automatically and the sim-fabrication discipline holds by import.
-Degree banding mirrors core.degree() exactly (the ER-2 continuity-corrected k-0.5 thresholds)."""
+Degree banding mirrors core.degree() exactly (the ER-2 continuity-corrected k-0.5 thresholds).
+
+⚠ THAT LAST SENTENCE IS FALSE AS OF PLAN POSITION 12 (ED-PC-0058, 2026-09-29), FOUND BY THE
+METHODOLOGY-CLOSE TERMINAL CRITIQUE, NOT YET FIXED. `core.resolve` no longer bands at the fixed
+`DECISIVE_OB` this module still imports below — it takes `ob` as a required 4th argument, computed
+per-defender by `core.ob_from_defender(defender) = defender.history / 2.0` (typically ~1.5 at
+default History, against the old fixed 3). `degree_distribution` below has no `defender` parameter
+and no way to get one from its two callers' inputs, so its output is systematically wrong until it
+is threaded through: the 'roll'/'stophit' trace events (`wrapper.py`) would need to emit `ob`, and
+this function would need to take it rather than read `core.DECISIVE_OB`. Nothing in CI or the test
+suite calls this module (workbench-only, dev tooling), so the drift is silent rather than red;
+narrate.py/server.py/commentary.py's displayed distributions and presets.py's `decisive_Ob` knob
+are all downstream of this same stale value."""
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../../tests/sim/v32-combat-balance'))  # measurement harness reaches into the FROZEN v32 validation station BY DESIGN (dev tooling; doctrine container-hygiene exclusion, ED-1085)

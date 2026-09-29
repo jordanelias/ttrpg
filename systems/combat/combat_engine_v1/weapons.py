@@ -48,7 +48,7 @@ RECORD SCHEMA (per weapon):
              geometry, grounded against Phase 0 specimen research and independently adversarially verified. This
              is a PARALLEL view onto the mass-model `elements` (a composite can have multiple mass elements
              without multiple modes, e.g. flamberge's forte/tip/ricasso — one continuous edge, no mode_elements;
-             JD-5's other three mass-model-only composites — dangpa/spetum/partisan — are pure bind/catch wings/
+             JD-5's other two mass-model-only composites — dangpa/spetum — are pure bind/catch wings/
              lugs, documented inline at each record). **`element_ref`** (I0/D0) — explicit integer index into the
              SAME record's `elements[]` (NOT list order, though every current mode_elements list happens to be an
              index-order PREFIX of its elements list — verified per-weapon at authoring time, e.g. voulge's 3
@@ -317,22 +317,6 @@ WEAPONS = {
     ],
    haft=dict(x_m=0.6605, mass_kg=1.42, extent_m=2.199),
    geometry=dict(curvature=0.0, point_concentration=0.72, cross_section=0.72, edge_keenness=0.55, strike_concentration=0.0)),
- # JD-5 (I0, D0): mass-model-only by design — the wing-lugs are pure bind/catch/trap surfaces (already carried
- # as dual_role guards below), not a distinct strike mode; no mode_elements authored.
- 'partisan': dict(
-   mass=2.57, head_len=1.76451, grip_len=0.53649, hands=2, head='cut_thrust', hand_guard=0.15, blade_guard=0.6,
-   wclass='hafted_tip', hilt='none',
-   elements=[
-     dict(x_m=1.45, mass_kg=0.82, extent_m=0.629, orient_deg=0, material='steel'),  # central ox-tongue blade (broad triangular/leaf main blade)
-     dict(x_m=0.9, mass_kg=0.1, extent_m=0.2, orient_deg=50, material='steel'),  # left wing-lug (basal flange)
-     dict(x_m=0.9, mass_kg=0.1, extent_m=0.2, orient_deg=-50, material='steel'),  # right wing-lug (basal flange)
-    ],
-   guards=[
-     dict(x_m=0.9, mass_kg=0.0, extent_m=0.2, type='wing', orient_deg=50, material='steel', dual_role_element=True),  # left wing-lug (documented active trap-and-bind catching surface, Manciolino)
-     dict(x_m=0.9, mass_kg=0.0, extent_m=0.2, type='wing', orient_deg=-50, material='steel', dual_role_element=True),  # right wing-lug
-    ],
-   haft=dict(x_m=0.614, mass_kg=1.55, extent_m=2.301),
-   geometry=dict(curvature=0.0, point_concentration=0.5, cross_section=0.68, edge_keenness=0.7, strike_concentration=0.0)),
  'naginata': dict(
    mass=1.35, head_len=1.08, grip_len=1.02, hands=2, head='cut_thrust', hand_guard=0.15, blade_guard=0.15,
    wclass='hafted_tip', hilt='none',
@@ -849,7 +833,7 @@ _EDGES = {
   'goedendag':[None,_E(0)],
   'kama_yari':[_E(2),_E(1),_E(1)],   # main_point double (su-yari), two kama cross-blades single
   'dangpa':[_E(2),_E(1),_E(1)],      # center prong double; flank tines single (corrected from S3 draft double — catch-lugs, not blades)
-  'spetum':[_E(2),_E(1),_E(1)], 'partisan':[_E(2),_E(1),_E(1)],   # central blade double; sharpened wing-lugs single
+  'spetum':[_E(2),_E(1),_E(1)],   # central blade double; sharpened wing-lugs single
   'guandao':[_E(1),_E(0)], 'fauchard':[_E(1),_E(0)], 'guisarme':[_E(1),_E(0)], 'hook_sword':[_E(1),_E(0)],
   'voulge':[_E(1),_E(1),_E(1)],      # cleaver + heel-spike (corrected from S3 draft double) + rear-fluke, all single
   'ji':[_E(2),_E(1)],                # straight jian-like spearhead double; yueyadao crescent single

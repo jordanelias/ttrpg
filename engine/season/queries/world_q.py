@@ -32,7 +32,7 @@ from __future__ import annotations
 from typing import Callable, Optional
 
 from ..data.requires import UNKNOWN
-from ..data.rosters import FACTION_BY_PROP, QUESTION_SOURCES, TENURE_KINDS
+from ..data.rosters import FACTION_BY_PROP, QUESTION_SOURCES, RUNG_KINDS, TENURE_KINDS
 from ..gaps import Forbidden, Unspecified
 from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE (G3, plan position 6). The
@@ -133,9 +133,65 @@ def hold_force(w: World, obj: str) -> Optional[Tenure]:
                         law="S15 -- `hold` cardinality is 1 PER OBJECT")
     return live[0] if live else None
 
-def judging_set(w: World, rung_id: str) -> list[str]:
-    raise Unspecified("judging_set_rule", "S61", needs="who decides at a sitting",
-                      law="S61 -- NOTHING IS DECIDED AT A SITTING. T5's 'filtered at a rung' runs straight through it, and S10.2's 'arrangements, not choices' cannot be confirmed until it is")
+def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]:
+    """`H-32`, BUILT -- plan position `18` (PROC-A), `21_RECONCILIATION.md` PHASE 2 step 7 /
+    `03_PARAMETERS.md` §D's `bench_basis`. Live holders of a `hold` Tenure GRANTED the bench's
+    basis AND whose Office's `scope_rung` CONTAINS `venue` -- the containment walk
+    `ancestry(w, venue)` already owns (§8: the walk is a rule, lives once), not a bare equality,
+    which is the "a purview walk one rung up still finds it" falsifier: a seat scoped one rung
+    above `venue` still governs it. EMPTY SET -> the date fires and lapses; no forced decision
+    (S61 -- *"nothing is decided at a sitting"* by fiat of this Query, only by who is actually
+    seated).
+
+    ⚠ THE GRANT, NOT THE OFFICE'S OWN FIELD -- plan position `13e`'s consolidation
+    (`Tenure.granted_acts`, `H-71` arm 2). *"An office whose remit changes does so by an ACT ...
+    a hand-mutation reaches nobody."* Reading `off.remit_acts` here would be a SIXTH reader of the
+    field `13e` moved every consumer off of, and would let a bare attribute edit change who may
+    judge without a `confer`/`establish` ever running -- exactly the drift that consolidation
+    exists to stop. `test_13e_no_remit_acts_attribute_read_outside_the_three_allow_listed_sites`
+    is the AST guard that catches a new reader of the retired field; this one reads the Tenure's
+    own snapshot instead, the same as `person_side_eligible`.
+
+    ⚠ `matter` IS ACCEPTED, NOT YET LOAD-BEARING. The design's signature is
+    `judging_set(w, venue, matter)` because a per-arrangement `bench_basis` (`engine/season/arrangements.yaml`,
+    part 3 of this same position) is meant to select the remit act a matter's disposal reads --
+    but nothing yet maps a docketed matter to its governing arrangement row (that is PHASE 2 step
+    10's docketing, explicitly weighed and left OPEN by this position's own record rather than
+    built here). Until that mapping exists, `matter` is carried on the signature the design
+    specifies and the basis is `H-32`'s own swept default, `"determine"` -- the one remit act any
+    live matter in the corpus currently asks a bench to exercise. Wiring `matter` through is one
+    line here (`basis = bench_basis_of(w, matter) or "determine"`) once that mapping exists, and
+    is deliberately NOT invented now (§0.05: a mapping this position does not own is not smuggled
+    in to make the signature look busier).
+
+    ⚠ A SEAT WITH NO `scope_rung` REACHES NOTHING -- the office-cluster case (S6.2, `Office.rung
+    is None`) has no ground to be contained on, exactly as `purview_reaches` treats it. It is a
+    CONTENT fact about such a seat, not a bug here.
+
+    ⚠ CORRECTED (methodology close, terminal critique, 2026-09-29): THE PARAGRAPH ABOVE OVERSTATES
+    THE EQUIVALENCE. `off.scope_rung is None` does NOT only happen in the office-cluster case
+    (`off.rung is None`) -- `carriers.py::Office.__post_init__` auto-sets `scope_rung` ONLY for a
+    TITLED post (`title_domain(self.post)` non-`None`); a seated, RANKED, non-titled office
+    (`off.rung` set, no title) gets no `scope_rung` unless one is authored for it by hand in
+    `offices.yaml`, and this function excludes such a seat from EVERY bench, silently, the same way
+    it excludes a true cluster seat -- a different content fact than the one this docstring claimed,
+    not the same one restated. `state/gate.py::purview_reaches` asks the same containment question of
+    `off.rung` (always set for a seated office) and would not exclude it. This function reads
+    `scope_rung` rather than `rung`/`purview_reaches` by `H-32`'s own ruled default
+    (`hole_register.yaml`, H-32), which is precedent this correction does not reopen -- it corrects
+    only the FALSE claim that the two fields' `None` cases coincide, not the choice of field."""
+    TRACE.query("judging_set", "resolver")
+    basis = "determine"
+    reach = set(ancestry(w, venue))
+    seats: list[str] = []
+    for t in w.tenures:
+        if t.kind != "hold" or not t.live or basis not in t.granted_acts:
+            continue
+        off = w.offices.get(t.object)
+        if off is None or off.scope_rung is None or off.scope_rung not in reach:
+            continue
+        seats.append(t.subject)
+    return seats
 
 def home_of(w: World) -> dict:
     """`{person id: containing rung id}` for every person with a live `contain` edge.
@@ -418,8 +474,9 @@ def sovereign_fraction(w: World, rung_id: str) -> tuple[float, int]:
 
     ⚠⚠ `undetermined_count` IS NOT "UNHELD TERRITORY", AND THIS DOCSTRING USED TO SAY *"sovereignty
     is over TERRITORY"*, WHICH INVITED EXACTLY THAT READING -- a reviewer made it. EVERY OTHER rung
-    kind in the denominator is GOVERNABLE: `rosters.yaml: titles` declares a title for each, and
-    `TITLE_DOMAINS` is the roster -- `Family Head` governs `hearth`, `Community Leader` governs
+    kind in the denominator is GOVERNABLE: `offices.yaml: titles: domains:` declares a title for
+    each (moved from `rosters.yaml: titles`, position `8a`, 2026-09-29 -- `TITLE_DOMAINS`/
+    `title_domain` in `data/rosters.py` read the survivor), and `Family Head` governs
     `community`, `Mayor` governs `settlement`, `Lord` territory, `Duke`/`Duchess` duchy,
     `King`/`Queen` realm. So an unheld hearth is a governable seat nobody holds, not noise.
 
@@ -942,4 +999,14 @@ class WorldReader:
         if stem == "claim.held":
             p = w.persons.get(self._actor)
             return UNKNOWN if p is None else any(c.subject == subject for c in p.ledger)
+        if stem == "rank":
+            # `21_RECONCILIATION.md` PHASE 2 step 9 / `03_PARAMETERS.md` §C.1 -- THE ORDINAL, NOT
+            # A KIND CHECK. `rung_kinds` is an ORDERED roster (`person` first), so a rung's rank
+            # is its own kind's position in it -- correct if a sub-settlement tier is ever added,
+            # where an enumerated kind list would not be (§C.2's falsifier: change the roster's
+            # membership and see what breaks). A Person's own rung carries kind `"person"`
+            # (`tiny_world`'s `w.rungs[pid] = Rung(pid, "person")`), so this stem answers for a
+            # person address exactly as for any other rung, at rank 0.
+            r = w.rungs.get(subject)
+            return UNKNOWN if r is None else RUNG_KINDS.index(r.kind)
         return UNKNOWN

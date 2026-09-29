@@ -87,8 +87,18 @@ def test_adjust_is_the_only_thing_that_clamps_a_faction_stat():
             if "faction_bounds(" in line and "def faction_bounds" not in line:
                 callers.append(f"{p}:{i}")
     assert callers, "nothing calls faction_bounds — the registry has stopped reaching the engine"
+    # `engine/season/harness/arms.py` (methodology-close CI-red follow-up, 2026-09-29, PR #439):
+    # the n-seed two-arm comparison instrument ported from `tools/balance_oracle.py` (plan position
+    # `28-i`/M5), which this whitelist already exempted. Its retired `_pre_ruling_bounds_arm`/
+    # `_floor_arm` pairs monkey-patch `descriptors.faction_bounds`/`Faction.adjust` for a controlled
+    # BEFORE/AFTER comparison, kept as a historical record and never composed into `ARMS` or any
+    # live season run (`arms.py`'s own "RETIRED ARMS" section header) — the same measurement-only
+    # shape as the `tools/` prefix already allows, just relocated with the rest of the file it was
+    # ported from. Exempting the one file rather than all of `engine/season/harness/` keeps this
+    # guard's reach over any FUTURE harness file that starts clamping a live faction stat.
     assert all(c.startswith("engine/autoload/game_state.py") or
                c.startswith("engine/substrate/descriptors.py") or
+               c.startswith("engine/season/harness/arms.py") or
                c.startswith("tools/") for c in callers), (
         f"faction_bounds is consulted outside the owner: {callers}")
 

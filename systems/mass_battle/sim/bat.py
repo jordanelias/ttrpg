@@ -551,7 +551,20 @@ EXPECTED = {
     # the sweep DID move it; 0.6 was chosen instead once adversarial review found 0.5 under-evidenced
     # — see config.py's own comment — and 0.6 happens to be byte-identical to 1.0 here). unit_field_mor0
     # (PER_CELL=0, same battery) also does not move, for the same "never crosses this boundary" reason.
-    'cell_field_mor0': '41a2e98485f31420d70e248238d93a24695684dde33a04791ffbd2697ecffecd',
+    # [ED-MB-0075 option (2), superseding row 2026-09-28 — C2/C3, ED-MB-0067 Part C] RE-RECORDED. The
+    # envelopment-shock coupling in orchestration.py's resolve_engagements/run_battle moved from a
+    # pre-combat delta-sigma penalty on the shocked unit's own net successes to a POST-damage,
+    # roll-gated Discipline check (discipline_check_cascade) that erodes morale by dmg/(agg_discipline
+    # x command) on FAIL — a genuine behaviour change on this battery's envelop/cannae/oblique rows,
+    # which build fixed+flanked subunits by construction (b_fixed_other/a_fixed_other true). PER_CELL=1
+    # only (the whole puncture/shock block this composes on is `if PER_CELL:`-gated) — unit_field_mor0
+    # (PER_CELL=0, same battery) is PROVABLY UNAFFECTED, not merely re-verified unchanged: shocked_a/b
+    # can only be set True inside the PER_CELL-gated branch, so run_battle's new coupling block always
+    # sees both flags False there and never rolls discipline_check_cascade (zero RNG draws added).
+    # Verified by direct execution (before/after): OLD digest [BYTE-EXACT FAIL] confirms the move (the
+    # falsifier this row's own re-record discipline requires), NEW digest [BYTE-EXACT OK] below.
+    # was 41a2e98485f31420d70e248238d93a24695684dde33a04791ffbd2697ecffecd
+    'cell_field_mor0': 'd1399c9cb66a380ffadaec9aefc8b09b0026a19310973876ee626c3004399686',
     # ─── [ED-MB-0053 / plan-v2 §4a, 2026-07-29] THE FIFTH MODE — freshly recorded ───────────────
     # PER_CELL=1 + MB_CELL_MORALE=1 (grid). The other four all run at MB_CELL_MORALE=0, where the
     # three cell-morale maps are EMPTY, so they verify float-order over every per-cell map EXCEPT
@@ -621,7 +634,12 @@ EXPECTED = {
     # [A8, ED-MB-0067 Part A / ED-MB-0071, 2026-09-27] ROUT_CASCADE_FRAC default 1.0 -> 0.6 does NOT
     # move this digest either — see cell_field_mor0's note above for the mechanism and the 0.5-vs-0.6
     # correction, identical reasoning here. Confirmed by direct re-run at the shipped 0.6.
-    'cell_legacy_mor1': 'cc6ab475a5ebedec42d551aae42be77ec3d130a1e3ddd4d2924249cfa2e616df',
+    # [ED-MB-0075 option (2), superseding row 2026-09-28] RE-RECORDED — same mechanism, same PER_CELL=1
+    # scope, same "PROVABLY unaffected on PER_CELL=0" argument as cell_field_mor0's note immediately
+    # above; this mode's own envelop/cannae/oblique rows trip b_fixed_other/a_fixed_other too. OLD
+    # digest verified [BYTE-EXACT FAIL] before this re-record, NEW verified [BYTE-EXACT OK] after.
+    # was cc6ab475a5ebedec42d551aae42be77ec3d130a1e3ddd4d2924249cfa2e616df
+    'cell_legacy_mor1': '63475d3492ba32fae91cb2bf43f8fdcdb9399db58f8c98f33749fe2f57967ef5',
 }
 
 

@@ -1,0 +1,13 @@
+# NPC-080 — `cast:` overlay only (`W28-cast`, position 8). No `exercises:` rows authored here yet;
+# see `NPC-004.yaml` in this directory for why a `cast:` block lives in this overlay rather than in
+# `cases/NPC5.yaml` (this case's own file, which this session DOES own) -- uniformity with the 27
+# chain-sourced NPC cases keeps `build_at`'s reader to one code path regardless of a case's source,
+# rather than branching on where a case happens to live.
+#
+# `who` restates the case's own `name:`; no `capability` -- his case text is about completing a
+# covert order's aborted missions, not a skill the `verb_capability` roster (`copying` is its only
+# key today) maps to. Absent is the honest reading (S42.2's polarity rule), not a placeholder zero.
+case: NPC-080
+cast:
+- who: Vidar Haldorsen
+  role: protagonist
