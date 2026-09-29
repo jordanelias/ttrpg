@@ -31,8 +31,8 @@ from typing import Any, Optional
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import MATRIX
 from ..data.rosters import (
-    BODY_FUNCTION, CONFERRAL_BASES, QUESTION_SOURCES, RECORD_KIND_KEYS, RECORD_KINDS, REMIT_ACTS,
-    REVOCATION_BASES, RUNG_KINDS, office_faction, require_member, title_domain,
+    BINDS_BASES, BODY_FUNCTION, CONFERRAL_BASES, QUESTION_SOURCES, RECORD_KIND_KEYS, RECORD_KINDS,
+    REMIT_ACTS, REVOCATION_BASES, RUNG_KINDS, office_faction, require_member, title_domain,
 )
 from ..gaps import Forbidden, Unowned, Unspecified
 
@@ -698,7 +698,14 @@ class Office:
     binds: str = "members_by_admission"
     conferral: Optional[str] = None
     revocation: Optional[str] = None
-    establishment: list[str] = field(default_factory=list)
+    # ⚠ `establishment: list[str]` WAS HERE AND IS DELETED (plan position `17a`, r2 item 9). `ARCH
+    # §B.7` call 2: *"`establishment` is a Query over `oblige`, not a field. A set of persons on a
+    # seat is two homes for one fact."* It was `[]` on every office in every world -- `establish`
+    # declared it and never wrote it -- and `queries/world_q.py::establishment_of` now answers the
+    # same question over live `oblige` Tenures. Its matrix row went with it (`write_matrix.yaml`
+    # `retired:`), and so did `establish`'s `writes:` entry. ⚠ `repr(Office)` folds into
+    # `World.content_hash` and carries every field NAME, so this deletion alone moves the digest of
+    # every world holding an office -- a declared, controlled hash move, not a behaviour change.
     dates: list[str] = field(default_factory=list)
     upkeep: Any = None
     # ⚠ `H-99`, AND THESE FIELDS EXIST BECAUSE THE FIRST VERSION VALIDATED THEM AND THREW THEM
@@ -757,6 +764,16 @@ class Office:
                 "rosters.yaml -- revocation_bases",
                 law="ED-IN-0256 (3) -- who may strip a seat is a CLOSED set of rules; an "
                     "off-roster basis would admit no revocation, silently, forever")
+        # HOW THE SEAT TAKES ON THOSE WHO SERVE IT -- r2 `05` RULED (b), `ARCH F.17`, plan position
+        # `17a`. The two clauses above, one field along. Never `None`: the field has a default, so
+        # every seat declares one, and an off-roster value would make a seat nobody can join while
+        # `_req_oblige` looked like a working precondition.
+        require_member(
+            self.binds, BINDS_BASES,
+            f"office {self.id!r} declares the binds basis {self.binds!r}",
+            "rosters.yaml -- binds_bases",
+            law="ARCH F.17 -- how a person joins a seat is a CLOSED set; an off-roster basis "
+                "would admit no `oblige`, silently, forever")
         # A TITLE IS NOT AN OFFICE -- the refusal and its reasoning live in the function
         # (`refuse_a_title_in_a_body`'s own docstring has the fuller history; `offices.yaml`'s
         # loader, position `8a`, now exists too, and calls `title_domain` the same way).

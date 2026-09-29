@@ -253,8 +253,9 @@ DEFAULT_FIXTURES = Fixtures(
     # claim->question link, while `all_five` removes 91% of the deposits and leaves that link
     # exactly where `total` had it. So the arm chosen is the one that buys the epistemic gap
     # without paying for it upstream. (`all_five` names five channels and is currently a
-    # measurement of THREE -- `chronicle` matches nobody and `post_remit` needs an office whose
-    # remit covers the emitting verb; `test_w6_every_named_channel_has_a_predicate…` asserts
+    # measurement of THREE -- `chronicle` matches nobody and `post_remit` needs an obligee at the
+    # seat an act was exercised through (since `17a`; before it, an office whose remit covers the
+    # emitting verb); `test_w6_every_named_channel_has_a_predicate…` asserts
     # exactly which two are inert.)
     #
     # ⛔⛔ AND IT IS NOT FREE -- **THE COST IS LARGER THAN THE REASON, AND THIS COMMENT FIRST SAID

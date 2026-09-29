@@ -215,8 +215,10 @@ def _eff_establish(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     precondition, the constructor's raise is the backstop and is left loud. `None` (an operand
     missing) is `NO_CHANGE`, and the fold emits `establish.refused`.
 
-    A NEW id: the office is stored with `establishment` at its default -- `17a` deletes that field,
-    its matrix row and the `writes:` entry together, and this effect does not pre-empt it. An
+    A NEW id: the office is stored as the precondition admitted it. (It carried `establishment` at
+    its default until plan position `17a` deleted that field, its matrix row and this row's
+    `writes:` entry together: who serves a seat is `world_q.establishment_of`, a Query over live
+    `oblige` Tenures, which no `establish` writes.) An
     EXISTING id: `remit_acts` is rewritten in place and nothing else is touched (the precondition
     refused any other difference). It earns `remit.changed` only if the remit actually moved.
 
@@ -1082,6 +1084,34 @@ def _eff_commit(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     this effect is unchanged from the held draft, because the diagnosis put the gap upstream of it."""
     prop_id = _operand(a, "subject")
     nt = Tenure(H(w.world_seed, w.tick, a.actor, f"commit:{prop_id}"), a.actor, prop_id, "commit",
+                since=w.tick)
+    return Change((Subject.edge(nt),), lambda: w.add_tenure(nt))
+
+
+@effect_for("oblige")
+def _eff_oblige(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """§E3 `oblige`: the actor takes a duty to a seat -- a new `oblige` Tenure opens, subject the
+    actor, object the seat the act names (`Act.subject`). Plan position `17a` (r2 item 9, `03` §A.9:
+    *"`@effect_for("oblige")`: mint the Tenure the row already declares"*). `oblige` is a
+    `tenure_kinds` member with no opener until this effect, so `resolvable_verbs()` excluded it
+    for want of one, per its `writes: ["Tenure.since"]` with nothing to perform it.
+
+    ⚠ `_eff_commit`'s SHAPE, EXACTLY -- the barest opener: no seat EXERCISED (`oblige` is
+    `own`-eligible, `via` is `None`), no closure, no per-kind branch. The edge names the actor as
+    its own subject and is admitted under `T-m` (`state/gate.py::tenure_write_basis`). The id salts
+    on the object, `f"oblige:{seat}"`, so two persons obliging to one seat in one tick mint two ids.
+
+    ⚠ IT WAS WRITTEN AND REVERTED ONCE (`ED-IN-0211`): it opened a Tenure to `einhir_texts`, a bare
+    string naming no entity. What changed is not this body but that `_req_oblige` now asks first --
+    the subject is a seat, its `binds` admits the joiner, the actor does not sit in it, and no live
+    `oblige` from him to it -- so by the time this runs there is nothing left to decline, and the
+    edge it opens always moves (absent -> present), never a no-op.
+
+    WHAT THE EDGE IS FOR: `queries/world_q.py::establishment_of` reads it (the seat's members, `ARCH
+    §B.7` call 2), and through that the obligee channel (`epistemic._ch_post_remit`) -- an obligee
+    standing at the seat holds what the seat does `inferred`. `release` ends it (`04 §A.3` row 14)."""
+    seat = _operand(a, "subject")
+    nt = Tenure(H(w.world_seed, w.tick, a.actor, f"oblige:{seat}"), a.actor, seat, "oblige",
                 since=w.tick)
     return Change((Subject.edge(nt),), lambda: w.add_tenure(nt))
 

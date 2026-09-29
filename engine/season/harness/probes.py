@@ -692,7 +692,8 @@ def p15():
             f"which arm ships and says nothing about what the five predicates are. What is closed "
             f"is that an exclusion is now EXPRESSIBLE and swept, not "
             f"that #353 said how. ⚠ TWO OF THE FIVE ADMIT NOBODY IN THIS WORLD -- `post_remit` "
-            f"needs an office whose remit covers the emitting verb, and `chronicle` fires only on "
+            f"needs an obligee standing at the seat an act was exercised through (since `17a`; an "
+            f"office whose remit covers the emitting verb before it), and `chronicle` fires only on "
             f"a binding decision; neither is reachable from the verbs the fold can execute")
 
 
@@ -1530,8 +1531,8 @@ def f14():
        tests="a post must be able to employ people whose competence is what actually gets used")
 def f15():
     w = tiny_world()
-    off = w.offices["off_duke"]
-    assert off.establishment == []
+    # `17a`: the field is deleted; who serves a seat is the Query over live `oblige` Tenures.
+    assert world_q.establishment_of(w, "off_duke") == []
     raise Unspecified(
         "establishment size", "S54 item 13 / S61",
         needs="how many people an office employs, and how they are chosen",

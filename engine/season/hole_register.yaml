@@ -372,12 +372,12 @@ rows:
     hole:      "establishment size per office kind"
     kind:      "NUMBER"
     owner:     "params"
-    grade:     "assumption"
-    default:   "a per-kind number"
-    site:      ""
+    grade:     "ruled"
+    default:   "no per-kind number exists to supply: an office's establishment is `queries/world_q.py::establishment_of`, the persons holding a live `oblige` Tenure to the seat, so its size is however many have obliged, and nothing reads a size per office kind"
+    site:      "engine/season/queries/world_q.py::establishment_of"
     sweep:     []
     unblocks:  "1"
-    cite:      ""
+    cite:      "CLOSED BY PLAN POSITION `17a` (r2 item 9, 2026-09-29) AS MOOT, NOT ANSWERED: the question's subject was deleted. The number was the size of `Office.establishment`, a `list[str]` field that was `[]` on every office in every world (nothing wrote it). `17a` deleted the field, its `(Office, establishment)` matrix row and `establish`'s third `writes:` entry, and rewrote `establishment_of` as a Query over live `oblige` Tenures. The deletion executes the ratified Layer-1 synthesis call `architecture/meta/04_CODE_ARCHITECTURE.md` §B.7 call 2 -- \"A set of persons on a seat is two homes for one fact\" -- which rejects this very number by name: \"Rejected: the chain's field, with establishment size as a number nobody can source\". So `ruled` records the ratified call that REJECTED a per-kind number, on `H-43`'s precedent (closed on the ratified §B.5 call, graded `ruled`); it does not claim any design supplied such a number, and no default is injected anywhere. r2 `proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md` §C.5 lists this row closed by deletion with item 9. `hole:`, `kind:`, `owner:`, `unblocks:` and `source:` are LEFT AS TRANSCRIBED, on the `H-109`/`H-33` precedent: they record V2's original finding, not the post-closure state. WHAT THIS DOES NOT CLOSE: whether an establishment is *finite, contested* (§11) -- `ARCH F.18`'s upkeep, unpaid today, is what would bound how many a seat keeps; that is not a size per office kind and is not this row."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **assumption**"
   - id:        H-35
     tier:      1

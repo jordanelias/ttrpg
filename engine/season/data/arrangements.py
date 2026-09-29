@@ -256,8 +256,9 @@ def arrangements_without_a_disposal_opener() -> list[str]:
 
     ⚠ MEASURED, NOT ASSUMED, AND CORRECTED (methodology close, terminal critique, 2026-09-29):
     at this position's own commit, `determine` opens nothing (no `_eff_determine` exists) and
-    `oblige` has no opener either (`rosters.yaml: tenure_kinds`'s own note: "the other five
-    empty") -- but that reports only the seeded rows this check actually ASKS: a row disposing
+    `oblige` had no opener either (`rosters.yaml: tenure_kinds`'s own note: "the other five
+    empty") -- it has one since plan position `17a` (`_eff_oblige`, the joiner's own act), so a
+    `disposal: mutual` row now passes this check -- but that reports only the seeded rows this check actually ASKS: a row disposing
     `Record` or `none` is excluded below (`continue`, "C-1 is about a TENURE kind's opener; neither
     is one"), so it is the seeded rows disposing a real Tenure kind or `mutual` that report today,
     not every seeded row -- `test_arrangements.py` pins this exactly (`["arbitration"]`, the one

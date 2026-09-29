@@ -130,13 +130,6 @@ rows:
     by:      "W2/H-41 -- establishing an office"
     emits:   "`office.established`"
   - kind:    "Office"
-    field:   "establishment"
-    steps:   [RES]
-    class:   "ACTS"
-    social:  "true"
-    by:      "DR-2. ⚠ RETIRED BY W2 for having no producing verb, RETURNED BY W3 WITH `establish`, which is the discipline the retirement rule encodes: a row exists because a producer produces it. Its SIZE per office kind is H-34 and stays `assumption`"
-    emits:   "`establishment.changed`"
-  - kind:    "Office"
     # ⚠ RENAMED `remit` -> `remit_acts` 2026-09-25 (plan position `13f`, the key reconciled at its
     # owner, `CLAUDE.md` §0.05 cl.3). V2 wrote `(Office, remit)` and `Office` has no `remit` field --
     # `matrix_rows_without_a_field()['absent']` listed this row -- so the gate licensed a cell
@@ -391,3 +384,15 @@ retired:
     needs: >-
       nothing -- a `commit` to an OUGHT is the mechanism now (§D.1.1); do not re-add this field or
       route belief-writes here
+  - name: "Office.establishment"
+    reason: >-
+      DELETED 2026-09-29 (plan position `17a`, r2 item 9) WITH ITS CARRIER FIELD AND `establish`'s
+      `writes:` ENTRY -- r2 `05:214-221`, three edits, not one. `ARCH §B.7` call 2: *"`establishment`
+      is a Query over `oblige`, not a field. A set of persons on a seat is two homes for one fact."*
+      The field was `[]` on every office in every world (`establish` declared it and never wrote
+      it), and `queries/world_q.py::establishment_of` now answers over live `oblige` Tenures. The
+      row's own `by:` cell carried H-34's *establishment size per office kind*, which `ARCH §B.7`
+      rejected by name as *"a number nobody can source"*: the size is however many have obliged.
+    needs: >-
+      nothing -- a person joins a seat by `oblige` and leaves by `release`, each writing their own
+      `Tenure`; do not re-add this field or route membership writes here

@@ -702,9 +702,10 @@ def tenure_kinds_without_an_opener() -> list:
     (`_derive_openers_from_effects()`, an AST walk over `loop/effects.py`) is empty -- relations no
     act can open today. Reported, not refused: an unopenable kind may be correct for now, and
     which of them are holes is a judgement `rosters.yaml`'s `tenure_kinds` row comment records
-    (`commit`/`oblige`/`succeed`/`tie`/`knot`, unchanged since `OPENERS-DERIVE` replaced the
-    hand-written mapping with this function -- the same holes, MEASURED the same way, computed now
-    instead of read off the roster)."""
+    (`commit`/`oblige`/`succeed`/`tie`/`knot` when `OPENERS-DERIVE` replaced the hand-written
+    mapping with this function; `succeed`/`tie`/`knot` since `commit` gained its opener at plan
+    position `7a` and `oblige` at `17a` -- computed, not read off the roster, so neither needed an
+    edit here to leave the list)."""
     return sorted(k for k, vs in _OPENERS_FROM_EFFECTS.items() if not vs)
 
 VERB_TABLE: dict = {}          # filled after STRATA loads, at the bottom of the roster block

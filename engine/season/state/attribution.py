@@ -82,10 +82,21 @@ def actor_of(w, e: "Event") -> Optional[str]:
     the occasion ids after it. Measured: 201 of 201 act-caused events agree with the field this
     replaces, so the first-match rule is the field's own rule rather than a new one.
     """
+    a = causing_act(w, e)
+    return a.actor if a is not None else None
+
+
+def causing_act(w, e: "Event"):
+    """THE ACT THAT CAUSED THIS EVENT, or `None` -- `actor_of`'s first-match rule, returning the
+    whole `Act` rather than its actor. `actor_of` reads it here, so the rule lives once (§8).
+
+    Plan position `17a`: the obligee channel (`epistemic._ch_post_remit`) asks which SEAT an act was
+    exercised through -- `Act.via`, `04 §B.9`'s *"a seat enters through `Act.via`"* -- and a person
+    id cannot carry that. `None` is the same real answer it is for `actor_of`: nobody acted."""
     for c in e.causes:
         a = w.acts.get(c)
         if a is not None:
-            return a.actor
+            return a
     return None
 
 

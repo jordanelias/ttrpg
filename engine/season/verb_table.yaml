@@ -231,8 +231,8 @@ verbs:
     beneficiary: "none"
     requires:    "the establishing office's conferral basis, and a rung to establish it at"
     requires_note: "`13f` (2026-09-25) evaluates this as `_req_establish` in `loop/predicates.py`, and THE READING IS STATED THERE: *the establishing office* is the office the act describes -- the one being founded, or re-remitted on an id that exists -- NOT the office the actor sits in. That office's declared `conferral` must pass the SAME basis test `_req_confer` asks (`has_conferral_basis`), so an establish can never found a seat `confer` would refuse forever. Operands ride on the payload: `office`, `post`, `rung`, `remit`, `body` and/or `faction`, `conferral`, optional `revocation` -- the office overlay's own keys. A computed act carries none of them (`requires_typed` is absent, so `operands_for` returns `{}`) and REFUSES until `15c` widens the operand vocabulary."
-    writes:      ["Office.exists", "Office.remit_acts", "Office.establishment", "Tenure.payload"]
-    writes_note: "`13f`: `Office.remit` -> `Office.remit_acts`, the key reconciled at the matrix row (see that row). `Tenure.payload` ADDED because the effect re-stamps the grant on every live `hold` on the office it writes, through `World._grant_remit`, and the fold gates exactly the pairs a verb declares -- undeclared, that write would ride under the `Office` pair's gate. `Office.establishment` stays declared and UNWRITTEN (the effect leaves it at its default) until `17a` deletes the field, its matrix row and this entry together."
+    writes:      ["Office.exists", "Office.remit_acts", "Tenure.payload"]
+    writes_note: "`13f`: `Office.remit` -> `Office.remit_acts`, the key reconciled at the matrix row (see that row). `Tenure.payload` ADDED because the effect re-stamps the grant on every live `hold` on the office it writes, through `World._grant_remit`, and the fold gates exactly the pairs a verb declares -- undeclared, that write would ride under the `Office` pair's gate. ⚠ `Office.establishment` WAS THE THIRD ENTRY, declared and never written, and plan position `17a` DELETED it with the field and its matrix row (r2 `05:214-221`, *three edits, not one*): who serves a seat is `world_q.establishment_of`, a Query over live `oblige` Tenures, which this verb does not write."
     emits:       ["office.established", "remit.changed", "tenure.payload_set"]
     emits_on_refusal: ["establish.refused"]
     grade:       "assumption"
@@ -481,12 +481,18 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
-    requires:    "—"
+    requires:    "the subject is a seat whose `binds` admits the joiner, the actor does not hold it, and the actor has no live `oblige` to it"
+    requires_note: "PLAN POSITION `17a` (r2 item 9, `03_SEATS_AND_CONTENT.md` §A.9, `05` §A.1.5 RULED (b)). §E3's cell was `—`, and with no effect the verb was never folded; the moment it OPENS a Tenure it must name a real seat, or it is the fiat `ED-IN-0211` reverted (`einhir_texts`, a bare string). Evaluated by `loop/predicates.py::_req_oblige`, which states the four clauses and why each is there. ⚠ `03` §A.9 REFUSED reading `binds`; `05` RULED (b) reversed that on `ARCH F.17`'s own resolution, and the later ruling is the one built."
+    requires_typed: none
+    requires_typed_note: "⚠ `none` FOR THE GRAMMAR'S REASON, ON `release`'s AND `give`'s ROUTE: a prose `requires:` read by the registered predicate `loop/predicates.py::_req_oblige`. Clause 1 would type (`existence` of `subject`, `kind: Office`), and the rest cannot: clause 2 reads a field OF the seat (`Office.binds`) against a roster, and no stem reads a seat's own field; clause 4 is a NEGATION (no live `oblige` from the actor to it already), and the grammar has no `not` -- the wall `release`'s disjunction hits from the other side. A typed cell AND a predicate on one row is what `test_wa_one_owner_...` forbids, so the whole cell is the predicate's."
+    counterparty: subject
+    counterparty_note: "⚠ THE SEAT IS THE SECOND SIDE, AND THE CHOOSER CANNOT NAME ONE (plan position `17a`, on `give`'s precedent, plan position 16). `ED-IN-0210` ruling 1 names this verb: *a fiat needs no counterparty, so nothing checked that the object of an `oblige` was an entity*. On this UNTYPED row no operand is carried, so `decision/options.py::opening_set` forms no `oblige` Candidate at all -- for any question, a seat-referent one included -- and it must not yet: no Question's referent is ever a seat (plan position `15` measured it for `petition`'s seat reading: 28, 21, 24, 22 petitions formed over four seasons, none filed), so a computed `oblige` would be `duty.refused` every time, a constant scene tax with nothing behind it (`7a`'s `commit` measured what that tax does to the corpus). MEASURED at `17a`: before this column the untyped row DID form `oblige` Candidates (the chooser then dropped them, the verb being unresolvable), so `opening_set`'s output falls by exactly that one verb -- `test_wb_a_refusals_reads_land_...`'s denominator 28 -> 27, and results.json's probe counts 28 -> 27 verbs / 56 -> 54 candidates. An `oblige` executes from an act that names its seat on `subject`; a person forms one only once this row binds `subject` in a typed cell AND a question can be about a seat -- neither is this position's."
     writes:      ["Tenure.since"]
     emits:       ["duty.taken"]
-    emits_on_refusal: []
+    emits_on_refusal: ["duty.refused"]
     grade:       "ruled"
-    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+    refusal_note: "PLAN POSITION `17a`: added with the precondition. §E2 -- 'failure emits, never raises'; W3's rule, *a verb with a `requires` and no refusal channel* produces no Event, no witness and no arc. Refusal condition: the subject is no seat, or the seat's `binds` is off `binds_bases`, or the actor holds the seat, or he is already obliged to it."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed; body, precondition and refusal from r2 item 9 / `03` §A.9 at plan position `17a`"
   - verb:        "open_case"
     stratum:     "social"
     eligibility: ["remit:determine"]

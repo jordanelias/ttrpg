@@ -4514,8 +4514,9 @@ def test_w6_every_named_channel_has_a_predicate_and_they_are_data():
     # [GROUNDED: measured 2026-09-11 at `build_world(0)`, 2 seasons -- under `release` alone `chronicle` fired once on a `tenure.closed`; under `U2` the executed verb set in this world is {create_record, move, reconstruct, research, transfer, work} and it admits nobody]
     assert inert == ["chronicle", "post_remit"], (
         f"the inert channels are {inert}, not the two this item published. `post_remit` needs an "
-        "office whose remit covers the emitting verb and nothing the fold can execute supplies "
-        "one. `chronicle` fires only on a `binding_decision` verb: it came alive with `release` on "
+        "obligee standing at the seat an act was exercised through (since `17a`; before it, an "
+        "office whose remit covers the emitting verb), and nobody in this world obliges. "
+        "`chronicle` fires only on a `binding_decision` verb: it came alive with `release` on "
         "2026-09-11 and went dark again under `U2`, because the scene tick changed which acts win "
         "a scene in THIS world. If `chronicle` is out of this list a binding-decision verb is "
         "executing here again, which is a GAIN and should be re-pinned rather than reverted; if a "
@@ -5884,7 +5885,11 @@ def test_a_binding_decision_lights_the_two_witness_channels_that_needed_one():
     half of that finding — with governance running, the channels are reachable.
 
     `chronicle` is an event-kind filter (it does not read `pid`) and `post_remit` needs the witness
-    to hold an office whose remit covers the emitting verb, so the two admit different people."""
+    to be OBLIGED to the seat the act was exercised through and to stand at it, so the two admit
+    different people. ⚠ `post_remit` READ THE REMIT until plan position `17a` -- *hold an office whose
+    remit covers the emitting verb*, which admitted the duke himself -- and `17a` re-based it onto
+    obligees (r2 item 9); the assertion below moved with the predicate, and the duke is now the
+    control: he holds the seat, obliges to nothing, and is admitted by `co_located` instead."""
     # ⚠ THE EVENT COMES FROM A RUN, NOT FROM A CONSTRUCTOR. The first version built an
     # `S.Event(...)` by hand and called the predicates directly — and since neither predicate
     # consults `REQUIRES_PREDICATES`, `EFFECTS` or `resolvable_verbs()`, **it would have passed
@@ -5900,6 +5905,9 @@ def test_a_binding_decision_lights_the_two_witness_channels_that_needed_one():
     w.offices["off_dicastery"].conferral = "appointed"
     # G3: ground for the seat conferred, and the duke's seat named -- see the governance-slice test.
     w.offices["off_dicastery"].rung = "S"
+    # `17a`: `p_low` serves the duke's seat -- an `oblige` Tenure, planted, since the verb's own
+    # falsifiers are `tests/test_obligees.py`'s. `p_low` stands in `Hh`, inside `D`, the seat's rung.
+    w.add_tenure(Tenure("t_ob_low", "p_low", "off_duke", "oblige", since=0))
     d = SeasonDriver(w)
     d.matter(mint_token(d.w, WriteClass.MATTER), [])
     out = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="g_conf", actor=duke, verb="confer",
@@ -5913,9 +5921,9 @@ def test_a_binding_decision_lights_the_two_witness_channels_that_needed_one():
         "`chronicle` does not fire on a binding decision's emission — then it can never fire at "
         "all, and `all_five` is permanently a measurement of fewer channels than it names")
     remit = [pid for pid in everyone if CHANNEL_PREDICATES["post_remit"](w, e, pid)]
-    assert remit == [duke], (
-        f"`post_remit` admits {remit}; it should admit exactly the holder of an office whose "
-        "remit covers the verb that emitted this kind")
+    assert remit == ["p_low"], (
+        f"`post_remit` admits {remit}; it should admit exactly the one obligee of the seat the act "
+        "was exercised through (`off_duke`) who stands at it -- not the duke, who holds the seat")
 
 
 def test_h71_others_half_a_witness_learns_who_was_seated_on_what():
@@ -9467,7 +9475,15 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # the same single `transfer` drop, and the denominator is what moved.
     # [GROUNDED: measured 2026-09-10 -- 22 -> 27 Candidates when five of the six investigation acts became resolvable; the DELTA of one is the property, the absolute pair is the denominator]
     # [GROUNDED: measured 2026-09-11 -- 28 -> 27 Candidates with `release` resolvable; the drop is still exactly `transfer` and the delta is still one]
-    assert (len(before), len(after)) == (28, 27), (
+    # ⚠ 28 -> 27, plan position `17a` (2026-09-29): the other direction, and for the reason
+    # `give` set. `oblige`'s row gained `counterparty: subject`, and on an UNTYPED row nothing is
+    # carried, so `opening_set` no longer forms the one `oblige` Candidate it formed on `S` before
+    # (the chooser dropped it then, the verb being unresolvable). The delta is untouched -- still
+    # exactly `transfer` -- and the denominator lost exactly that Candidate: RE-DERIVED, not
+    # adjusted -- with `oblige`'s `counterparty` cleared by `dataclasses.replace`, this test passes
+    # at (28, 27) unchanged.
+    # [GROUNDED: measured 2026-09-29 -- (27, 26) as built, (28, 27) with `oblige`'s counterparty column cleared; the drop is still exactly `transfer`]
+    assert (len(before), len(after)) == (27, 26), (
         f"the absolute counts moved to {(len(before), len(after))}. They are the denominator the "
         "delta above is read against, and the delta alone does not reproduce them — re-derive "
         "`H-122`'s reading rather than adjusting this line")

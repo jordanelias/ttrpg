@@ -449,6 +449,10 @@ LADDER_RUNGS = roster("ladder_rungs", ordered=True)
 # pass, 2026-09-27 -- this said `loop/predicates.py`).
 CONFERRAL_BASES = roster("conferral_bases")
 REVOCATION_BASES = roster("revocation_bases")
+# Plan position `17a` (r2 `05` RULED (b), `ARCH F.17`): HOW A SEAT TAKES ON THOSE WHO SERVE IT, the
+# third basis beside the two above and bound the same way. `Office.__post_init__` refuses a value
+# off it; `loop/predicates.py::_req_oblige` admits an `oblige` only to a seat whose `binds` is on it.
+BINDS_BASES = roster("binds_bases")
 # ⚠ A TESTING FIXTURE, NOT CANON — see the roster's own note. Jordan, 2026-09-18: "for testing
 # purposes for now, just build out a generic remit". It fills an EMPTY remit and never overwrites
 # a grounded one.

@@ -1171,7 +1171,8 @@ def test_13f_a_planted_establish_founds_the_office_and_grants_a_hold_opened_befo
     off = w.offices["off_reeve"]
     assert (off.post, off.rung, off.remit_acts, off.faction, off.conferral) == (
         "Reeve", "S", ["issue", "dispatch"], "Crown", "appointed"), off
-    assert off.establishment == [], "the effect wrote `establishment`, which is `17a`'s to delete"
+    assert not hasattr(off, "establishment") and world_q.establishment_of(w, off.id) == [], (
+        "`17a` deleted `Office.establishment`; a founding obliges nobody, so the Query is empty")
     assert t.granted_acts == ("issue", "dispatch"), (
         f"the early holder's grant is {t.granted_acts} -- the act did not re-stamp it")
     assert person_side_eligible(mid, VERB_TABLE["dispatch"]), (
@@ -1460,7 +1461,8 @@ def test_13f_the_restamp_skips_a_non_hold_tenure_and_a_dead_hold_on_the_same_off
 # =================================================================================================
 # PLAN POSITION `13e` -- ONE READING OF THE REMIT.
 # `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md`, position `13e`. Routes
-# `loop/resolve.py`'s `_eligible` and `epistemic.py`'s `_ch_post_remit` off the live
+# `loop/resolve.py`'s `_eligible` and `epistemic.py`'s `_ch_post_remit` (a remit reader until `17a`
+# re-based it onto obligees) off the live
 # `w.offices[...].remit_acts` and onto the Tenure's own `t.granted_acts` -- the same store
 # `decision/options.py` already read, closing the THREE-readings-over-two-stores gap
 # `epistemic.py`'s `_ch_post_remit` docstring tracked. FALSIFIER, both arms in one world: a `hold`
@@ -1529,39 +1531,14 @@ def test_13e_hand_created_office_refuses_act_established_office_admits():
     assert person_side_eligible(w.persons["p_low"], dispatch)
 
 
-def test_13e_the_witness_channel_also_reads_the_snapshot_not_the_live_office():
-    """`epistemic._ch_post_remit`'s HALF of this position's fix has no behavioural test elsewhere:
-    `test_a_binding_decision_lights_the_two_witness_channels_that_needed_one`
-    (`test_season_shape.py`) exercises `post_remit` on `off_duke`, whose remit already carries
-    `confer` at seating -- it passes identically whether the channel reads `t.granted_acts` or the
-    live office, because the two never disagree there. This test builds the disagreement: a holder
-    whose OFFICE gains `confer` only AFTER seating (live-only, never in the snapshot), witnessing a
-    REAL `confer` Event performed by someone else. Pre-`13e`, `_ch_post_remit` read `w.offices.get
-    (t.object).remit_acts` live and would have wrongly admitted this holder as a remit-covering
-    witness; post-`13e` it reads `t.granted_acts`, which the live-only grant never reached."""
-    w, d = _establish_world()
-    w.add_tenure(Tenure("t_hand", "p_mid", "off_hand", "hold", 0))
-    [t_hand] = [t for t in w.tenures if t.id == "t_hand"]
-    assert "off_hand" not in w.offices, "fixture: not seated yet"
-    w.offices["off_hand"] = Office("off_hand", "Reeve", "S", ["issue", "dispatch", "confer"],
-                                    conferral="appointed", faction="Crown")
-    assert t_hand.granted_acts == (), (
-        "a hand-created office re-granted a sitting holder -- fixture is not the snapshot case")
-
-    w.offices["off_dicastery"].conferral = "appointed"      # rostered since `13d-i`
-    w.offices["off_dicastery"].rung = "S"                    # G3: ground inside the duke's purview
-    out = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="g_conf", actor="p_high", verb="confer",
-                          payload={"office": "off_dicastery", "to": "p_low"}, via="off_duke")],
-                    contest_max_depth=w.fixtures.get("contest_max_depth"))
-    e = next((x for x in out if x.kind == "tenure.opened"), None)
-    assert e is not None, f"fixture: confer did not open a Tenure: {[x.kind for x in out]}"
-
-    assert CHANNEL_PREDICATES["post_remit"](w, e, "p_high"), (
-        "control: the duke's own snapshot genuinely carries `confer` -- the channel should admit")
-    assert not CHANNEL_PREDICATES["post_remit"](w, e, "p_mid"), (
-        "`post_remit` admitted a witness whose OFFICE carries `confer` only live, never in their "
-        "own Tenure's snapshot -- it is still reading `w.offices[...].remit_acts` instead of "
-        "`t.granted_acts`")
+# ⚠ `test_13e_the_witness_channel_also_reads_the_snapshot_not_the_live_office` STOOD HERE AND IS
+# DELETED WITH ITS SUBJECT (plan position `17a`). It pinned `epistemic._ch_post_remit`'s half of
+# `13e`: a remit-holding witness admitted off `t.granted_acts`, never the live office. `17a` retired
+# that predicate outright -- r2 item 9 re-bases the channel onto the OBLIGEES of the seat an act was
+# exercised through, which reads no remit at all -- so there is no longer a remit reading at that
+# site to hold to the snapshot. `13e`'s resolver half is still pinned above, and its AST clause below
+# still guards every `Office.remit_acts` read. The obligee channel's own falsifiers are in
+# `tests/test_obligees.py`.
 
 
 def _remit_acts_attribute_reads_outside_allowlist() -> list:

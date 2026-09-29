@@ -732,20 +732,31 @@ def holder_faction_of(w: World, rung_id: str) -> Optional[str]:
 
 
 def establishment_of(w: World, office_id: str) -> list[str]:
-    """§11 -- *"the named persons the office employs. Finite, contested, durable."*
+    """§11 -- *"the named persons the office employs. Finite, contested, durable."* -- AS A QUERY
+    OVER LIVE `oblige` TENURES, the persons obliged to this seat, in `w.tenures` order.
 
-    Reads the Office's own field, which §22's ownership table gives to the Office
-    (`establishment[]` is listed there beside `post` and `remit`). It is NOT the holder: §22 is
-    explicit that an Office never owns *who holds it* -- that is a `hold` Tenure owned by the
-    holder -- so this returns staff and `hold_force` returns the seat's occupant.
+    ⚠ REWRITTEN AT PLAN POSITION `17a` (r2 item 9, `03_SEATS_AND_CONTENT.md` §A.9): the body is
+    §A.9's own, verbatim, and the name and signature did not move. It read `Office.establishment`,
+    a field `[]` on every office in every world (nothing wrote it), and `ARCH §B.7` call 2 deletes
+    it: *"`establishment` is a Query over `oblige`, not a field. A set of persons on a seat is two
+    homes for one fact. A person joins by `oblige : Person -> Seat` and leaves by `release`."* The
+    field is gone; this is the one home. A council is one seat whose members oblige (`AX §E.2.5`).
 
-    ⚠ HOW MANY PERSONS AN OFFICE EMPLOYS IS `H-34`, GRADED `assumption`, AND IS NOT SUPPLIED
-    HERE. This reads whatever the world was built with and invents no default."""
+    ⚠ WITH A CALLER, OR NOT AT ALL (r2 `05` §A.1.5 RULED (d)). It had ZERO callers for as long as
+    it read the field, and a Query with no consumer is a false N-line. Its consumer is
+    `epistemic._ch_post_remit`, the obligee channel, which asks it rather than re-deriving the set --
+    so the witness layer and anything else that asks *who serves this seat* get one answer.
+
+    It is NOT the holder: §22 is explicit that an Office never owns *who holds it* -- that is a
+    `hold` Tenure -- so this returns those who serve and `hold_force` returns the seat's occupant.
+    `_req_oblige` refuses the holder obliging to his own seat, so the two do not overlap by an act.
+
+    ⚠ `H-34`'s *"establishment size per office kind"* is no longer a number anybody must supply:
+    the size is however many have obliged. `ARCH §B.7` call 2 rejected that number by name (*"a
+    number nobody can source"*); closed in `hole_register.yaml` at `17a`."""
     TRACE.query("establishment_of", "resolver")
-    off = w.offices.get(office_id)
-    if off is None:
-        return []
-    return [p for p in off.establishment if p in w.persons]
+    return [t.subject for t in w.tenures
+            if t.kind == "oblige" and t.object == office_id and t.live and t.subject in w.persons]
 
 
 def ancestry(w: World, rung_id: str) -> list[str]:

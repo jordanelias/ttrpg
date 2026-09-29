@@ -60,7 +60,8 @@ from .data.rosters import (
     WITNESS_CHANNELS, require_member)
 from .data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow
 from .gaps import Unspecified
-from .state.attribution import anchor_of
+from .state.attribution import anchor_of, causing_act
+from .state.gate import purview_reaches
 from .queries import cache, world_q
 from .queries.person_q import LedgerReader
 from .state.carriers import Event, Person
@@ -428,54 +429,67 @@ def _ch_witness_key(w: "World", e, pid) -> bool:
 
 
 def _ch_post_remit(w: "World", e, pid) -> bool:
-    """⚠ THIS COULD NEVER RETURN `True`. It compared `t.object` -- AN OFFICE ID -- against a set of
-    REMIT ACT NAMES, and fell back to `getattr(t, "remit", None)` on a `Tenure` that has no such
-    field. So `off_duke` was tested against `{"issue"}` and `None` against `{"issue"}`, and a
-    channel that admits nobody in every possible world was reported as one of five carrying a
-    predicate.
+    """THE OBLIGEE CHANNEL (plan position `17a`, r2 item 9): `pid` is obliged to the seat the
+    Event's act was exercised through, and stands AT that seat. Mints `inferred` (`rosters.yaml:
+    witness_channels.claim_source`, `ARCH §C.6`'s row: *"the change claims, `inferred`"*) -- an
+    obligee at his post did not see the act, and knows it from the business of the office he serves.
 
-    ⚠⚠ THIS PARAGRAPH SAID *"the correct lookup ALREADY LIVES ONCE, in `_eligible`"*, AND THAT
-    BECAME FALSE ON 2026-09-18 — in the commit that closed `H-71`, which did not come back and
-    amend it. ~~There are now THREE readings of *does this holder have this remit* over TWO
-    stores: this site and `loop/resolve.py:56` read the live `w.offices[...].remit_acts`, while
-    `decision/options.py` reads the SNAPSHOT on the `hold` Tenure (`Tenure.granted_acts`, written
-    by `World._grant_remit` at `add_tenure`). They agree today and are not guaranteed to: a hold
-    opened BEFORE its office exists gets an empty snapshot and is never revisited, so the person
-    side refuses while both world-side readings admit; and any future write to `Office.remit_acts`
-    is a silent no-op person-side — §0.1 pt 1's read/write asymmetry, with no guard shipped.~~
-    **CLOSED 2026-09-26, position `13e`.** The three readings are now ONE STORE, though still
-    three call sites that each ask it independently (this site, `loop/resolve.py`'s `_eligible`,
-    and `decision/options.py`) — a further §8 move a later reader may make, not claimed here: this
-    site and `_eligible` both admit on `t.granted_acts` (`remits & set(t.granted_acts)` here,
-    `arg in t.granted_acts` there) — the same store `decision/options.py` already read — and the
-    `w.offices.get(t.object)` lookup that made each a live-world reading is deleted from both. The
-    read/write asymmetry this paragraph named is gone with it: the only readers of
-    `Office.remit_acts` left in `engine/season/`'s non-test code are `_grant_remit`,
-    `Office.__post_init__` and `_eff_establish` (an AST scan in `test_governance_build.py`'s `13e`
-    section pins that set over the package, excluding `tests/`).
+    THREE CLAUSES, EACH COMPOSED ON ITS OWNER:
+      1. THE SEAT is `Act.via` of the act that caused the Event (`state/attribution.causing_act`,
+         `actor_of`'s own first-match rule) -- `04:120` (AX-1): *"only a person acts ... a seat
+         enters through `Act.via`"*. An Event no act caused, or an act exercised through no seat
+         (every `own` verb), admits nobody here. The retired predicate's EVENT side -- kinds a
+         `remit:` verb emits -- is what `via` now says exactly: the acts a post did under its remit.
+      2. THE OBLIGEES are `world_q.establishment_of(w, seat)`, a Query over live `oblige` Tenures,
+         and this channel is its caller -- r2 `05` §A.1.5 RULED (d): *"`establishment_of` becomes the
+         single owner of the obligee set and `_ch_post_remit` calls it, in the same commit"*, the
+         rule living once rather than re-derived here (§8).
+      3. AT THE SEAT: the seat's rung is where `pid` stands or above it -- `state/gate.py::
+         purview_reaches(w, seat, place_of(w, pid))`, the owner of *is this rung within this seat*,
+         asked of the seat and not of anything `pid` holds. A seat with no rung (the office-cluster
+         case, S6.2) has no ground, so nobody stands at it. r2 `05`'s falsifier: *"an obligee
+         ELSEWHERE does not witness."*
 
-    ~~⚠ THE CONSOLIDATION IS SCHEDULED, NOT FORGOTTEN: position `13e` of
-    `workplans/2026-09-18-governance-settlement-behaviour-plan.md` routes this site and `_eligible`
-    onto `t.granted_acts`; `13f` gates it, because whether a remit change reaches SITTING holders
-    (snapshot) or only future ones (mirror) is undecided and arrives with `establish`'s effect.~~
-    **DONE 2026-09-26.** `13f` (2026-09-25) landed first and settled the gating question —
-    `establish` re-stamps every live `hold` on the office it writes, so a remit change reaches
-    sitting holders by an ACT and not by a hand-mutation — and `13e` then routed both readings
-    above onto the snapshot that decision established. THREE structurally independent read-only
-    review lanes had rediscovered this separately before either position landed, which was §10's
-    rank-by-independent-rediscovery signal rather than three copies of one opinion. The original
-    W6 finding above stands; it is the §8 lesson this file then had to relearn.
+    ⚠ WHY *AT THE SEAT* AND NOT *IN THE ROOM*. r2 says *"obligees co-located"*. Co-located with the
+    EVENT is `_ch_co_located`, which precedes this channel, so an obligee standing where the act
+    happened is credited there and holds it `firsthand` -- read that way this channel could never
+    be the one credited and `inferred` would be unreachable by construction (§0.1 pt 2). So the
+    co-location is with the SEAT, which keeps the channel place-bound (r2 `01`: *"which keeps it
+    place-bound"*) while reaching the staff who were not in the room.
 
-    Found by the `W6` adversarial pass."""
-    remits = {x.split(":", 1)[1] for r in VERB_TABLE.values() if e.kind in (r.emits or ())
-              for x in (r.eligibility or ()) if x.startswith("remit:")}
-    if not remits:
+    ⚠⚠ WHAT THIS REPLACED, AND IT WAS RETIRED, NOT WIDENED. Until `17a` this channel admitted any
+    person holding a live `hold` whose granted remit covered a `remit:` verb emitting the Event's
+    kind -- every such office-holder, anywhere in the realm (`W6` found it could never fire; `13e`
+    made it read `t.granted_acts`, the snapshot). That is the place-blind broadcast r2 `02` §A.7
+    and `01` both delete (*"would make every seat with `remit:issue` witness every handover in the
+    realm"*), and r2 item 9 re-bases it rather than keeping it beside the obligee rule -- a sixth
+    channel or a union would have kept the broadcast. MEASURED on `populated.build_realm(0)`'s first
+    season (all_five), the same world and seed before and after: the remit channel was the
+    strongest admitting channel for 105 (witness, Event) pairs; 58 of them were `chronicle`'s too
+    and are now credited there, `told_by` as before (so moving `post_remit` behind `chronicle` in
+    the roster changes no claim -- controlled: the old predicate under the new order reproduces the
+    old hash exactly, the field-deletion repr aside); the other 47 -- every one a `march.declared`,
+    heard by `remit:dispatch` holders nowhere near the march -- reach nobody now. Claims `told_by`
+    400 -> 318 over the season as the later rounds re-form (events 5,471 -> 5,378), `inferred` 0 ->
+    0, because nobody in the realm obliges; `post_remit` credits nobody there.
+    `13e`'s snapshot consolidation is unaffected where it still reads -- `loop/resolve.py`'s
+    `_eligible` and `decision/options.py` -- and this site is simply no longer one of them.
+
+    ⚠ WHO CAN REACH IT TODAY: nobody the chooser drives. `oblige`'s row is untyped and declares
+    `counterparty: subject`, so `opening_set` forms no `oblige` Candidate (plan position 16's
+    precedent -- and no Question's referent is ever a seat anyway), and no world builder seeds an
+    `oblige` Tenure: `offices.yaml`'s one authored obligee sits on a `[NEW]` seat nothing mints yet.
+    So `inferred` is 0 in the realm and the corpus, by content rather than by mechanism -- MEASURED
+    at `17a`: the corpus's 178 built worlds hold 90,988 claims, every one `firsthand`, identical
+    before and after. The channel is exercised by acts that name their seat
+    (`tests/test_obligees.py`, through the real fold and WITNESS)."""
+    act = causing_act(w, e)
+    seat = w.offices.get(act.via) if act is not None and act.via else None
+    if seat is None:
         return False
-    for t in w.tenures:
-        if t.subject == pid and t.kind == "hold" and t.live:
-            if remits & set(t.granted_acts):
-                return True
-    return False
+    if pid not in world_q.establishment_of(w, seat.id):
+        return False
+    return purview_reaches(w, seat, world_q.place_of(w, pid))
 
 
 def _ch_chronicle(w: "World", e, pid) -> bool:
@@ -500,7 +514,9 @@ def _ch_chronicle(w: "World", e, pid) -> bool:
     (witness, Event) pairs, and `post_remit` for another 135 -- `order.given` (`dispatch`),
     `date.scheduled` (`convene`), `tenure.closed`, `march.declared` -- every one a person nowhere
     near the room. Since `15d` they hold those deposits `told_by`: 553 of that season's 4,294
-    claims, where every one was `firsthand` before."""
+    claims, where every one was `firsthand` before. ⚠ RE-MEASURED AT `17a`, which moved this
+    channel AHEAD of `post_remit` (the ordinal: told before inferred) and re-based `post_remit` onto
+    obligees: this channel is now the strongest for 162 pairs there, `post_remit` for none."""
     return any(r.stratum == "binding_decision" for r in VERB_TABLE.values()
                if e.kind in (r.emits or ()))
 

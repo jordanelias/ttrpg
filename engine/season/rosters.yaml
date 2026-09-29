@@ -113,9 +113,11 @@ rosters:
     # `_derive_openers_from_effects()` reads the same fact by walking `effects.py`'s own source (an
     # AST scan for `Tenure(...)` calls inside each `@effect_for`-registered function), so there is
     # one owner and no second copy to fall behind. The holes are UNCHANGED and still true, MEASURED
-    # the same way, now computed rather than read off this roster: `commit`, `oblige`, `succeed`,
-    # `tie` and `knot` each declare `writes: Tenure.since` (verb_table.yaml) and no effect
-    # constructs a Tenure of that kind -- `tenure_kinds_without_an_opener()` still reports them.
+    # the same way, now computed rather than read off this roster: `succeed`, `tie` and `knot` each
+    # declare `writes: Tenure.since` (verb_table.yaml) and no effect constructs a Tenure of that
+    # kind -- `tenure_kinds_without_an_opener()` still reports them. `commit` left the list at plan
+    # position `7a` (`_eff_commit`) and `oblige` at `17a` (`_eff_oblige`), each by gaining an
+    # opener, which the derivation saw without an edit here.
 
   hold_object_kinds:
     source: "`architecture/holonic_ARCHITECTURE.md` §15's Tenure table — *\"`hold` | Person → Office | Rung | Record | Proposition | 1 per object\"*. Item 16 of `proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md` (⊕ R13)."
@@ -273,15 +275,26 @@ rosters:
       `claim_source:` below. The order follows `19_PLAN.md`'s ordinal of remove (*firsthand >
       knot-sourced > told*): presence first, so a person who WAS IN THE ROOM is never downgraded to
       hearsay because they also hold the changed thing or sit in the office whose remit covers it
-      — which is what `19_PLAN.md` step 4's *breaks if wrong* names. Among the three `told_by`
+      — which is what `19_PLAN.md` step 4's *breaks if wrong* names. Between the two `told_by`
       channels the order decides only which channel is reported, never the source: the holder of
-      the changed thing before the office, the office before the public record. Editing the order
-      changes who holds what as hearsay, a game change, which is why it is data.
+      the changed thing before the public record. Editing the order changes who holds what as
+      hearsay, a game change, which is why it is data.
+      ⚠ `post_remit` IS LAST, AND THAT IS THE SAME ORDINAL TAKEN ONE STEP FURTHER (plan position
+      `17a`, 2026-09-29). `19_PLAN.md`'s ordinal of remove is *firsthand > knot-sourced > told >
+      inferred* in full (`:517`), and `post_remit` now mints `inferred`, so it ranks below both
+      `told_by` channels: an obligee who is ALSO admitted by the public record (`chronicle`, every
+      `binding_decision` emission) holds the Event `told_by`, never downgraded to `inferred`. At
+      `15d` it sat fourth with source `told_by`, where its place among the told channels decided
+      nothing; left there with `inferred` it would have decided the source against the ordinal.
       `claim_source:` is keyed on exactly these five and names only `claim_sources` members
       (`data/rosters.py` refuses at import otherwise). `chronicle` is `told_by` on
-      `04_CODE_ARCHITECTURE.md` §C.6's own row; `post_remit` is `told_by` on `19_PLAN.md` step 4 —
-      §C.6's table says `inferred` for it, and this row follows the later plan the position
-      builds, `inferred` being `17a`'s to mint for obligees.
+      `04_CODE_ARCHITECTURE.md` §C.6's own row, and so is `post_remit`'s `inferred` (§C.6: *"the
+      change claims, `inferred`"*). ⚠ `post_remit` WAS `told_by` from `15d` to `17a`, following
+      `19_PLAN.md` step 4 (*"a document or a remit gives told_by"*) -- right for the channel it
+      then was, a remit-holder learning of every covered act realm-wide. `17a` REPLACED that
+      channel (r2 item 9: *"the place-blind remit channel -> obligees co-located, minting
+      `inferred`"*), so step 4's remit clause describes a predicate that no longer exists; see
+      `epistemic._ch_post_remit` for what was retired and what it cost, measured.
       ⚠ `witness_key` ADMITS THE EVENT'S OWN ANCHOR AS WELL AS ITS KNOT PARTNERS
       (`_ch_witness_key`'s `pid == anchor`), and one channel carries one source. So an actor with
       NO PLACE -- whom `co_located` cannot admit -- holds their own act `firsthand_via_knot`, under
@@ -291,13 +304,13 @@ rosters:
       where it was `firsthand`); in Carin's world, the realm and the 143-case corpus every anchor
       that witnessed its own Event was also `co_located`, so presence credited it first.
     ordered: true
-    values: [co_located, witness_key, document_key, post_remit, chronicle]
+    values: [co_located, witness_key, document_key, chronicle, post_remit]
     claim_source:
       co_located:   firsthand
       witness_key:  firsthand_via_knot
       document_key: told_by
-      post_remit:   told_by
       chronicle:    told_by
+      post_remit:   inferred
 
   claim_sources:
     source: "#353 §20 — how a Claim came to be held"
@@ -727,8 +740,9 @@ rosters:
       returned everyone and these predicates were **never consulted**; under `all_five` they decide
       every deposit in the game. An `assumption`-grade `FORMULA x5` went from decorative to
       load-bearing on the whole epistemic layer -- and only THREE of the five can admit anyone in a
-      world the fold can currently drive (`chronicle` matches nobody, `post_remit` needs an office
-      whose remit covers the emitting verb; `test_w6_every_named_channel_has_a_predicate_and_they_are_data`
+      world the fold can currently drive (`chronicle` matches nobody, `post_remit` needs an obligee
+      standing at the seat an act was exercised through -- since `17a`; before it, an office whose
+      remit covers the emitting verb; `test_w6_every_named_channel_has_a_predicate_and_they_are_data`
       asserts exactly which two are inert). That is the risk this row is carrying, said here rather
       than left for a reader to derive.
       Every predicate below is computed from WORLD STATE and never from a recipient the emitter
@@ -754,7 +768,7 @@ rosters:
       co_located:    "the person shares a live `contain` Tenure with the Event's place -- the presence index S28 already builds and the fan-out never read"
       document_key:  "the person holds a live `hold` Tenure over something THIS EVENT CHANGED -- a subject named in `changes[]` (a Record, a store). ⚠ THIS ROW READ *the Event's SUBJECT* until `R8.4`, and that clause is why the channel could not fire on a single act: every fold-emitted Event sets `subject = a.actor` and no `hold` takes a PERSON as object, so the equality held only on `MATTER`/`CALENDAR` kinds, which carry no verb and no actor. The parenthetical was always right and the clause it qualified was wrong. Corrected here in the same change as the predicate, because this row is where the meaning lives (see the note above) and `R5` quotes it verbatim as the channel's definition"
       witness_key:   "the person IS the Event's anchor (`state/attribution.py::anchor_of` -- the actor where one acted, the written thing otherwise; it read the deleted `Event.subject` until G1b), or shares a live `knot` Tenure with it -- S28's knot deposit, which already reuses the Event id"
-      post_remit:    "the person holds a live office Tenure whose remit covers the verb that emitted this kind"
+      post_remit:    "the person is an OBLIGEE of the seat the Event's act was exercised through (`Act.via`) -- a live `oblige` Tenure to it, read through `queries/world_q.py::establishment_of`, the one owner of that set -- AND stands AT that seat: the seat's rung is where they are or above it (`state/gate.py::purview_reaches`). Plan position `17a`, r2 item 9. ⚠ THIS ROW READ *the person holds a live office Tenure whose remit covers the verb that emitted this kind* until `17a` -- a remit-holder learning of every covered act anywhere in the realm, the place-blind broadcast r2 `02` §A.7 and `01` both delete. An Event no act caused, or an act exercised through no seat, admits nobody here"
       chronicle:     "the kind is emitted by a `binding_decision` verb -- a matter of record, and public because the decision is institutional"
 
   observation_terms:
@@ -1510,6 +1524,26 @@ rosters:
       2026-09-27), which refuses at IMPORT if a member here has no rule there or the reverse, so
       the roster cannot grow a value the resolver silently treats as another.
     values: [rung_above_same_faction]
+
+  binds_bases:
+    source: "`ARCH §B.7`'s ratified `Seat :=` line, `remit(acts[], binds)`, and `ARCH F.17`'s own resolution of *how a person joins an establishment* -- *\"`oblige`'s `requires` reads the seat's `binds`\"*. r2 `05_LEDGER_AND_BUILD.md` §A.1.5 RULED (b). Plan position `17a`."
+    open: false
+    note: >-
+      HOW A SEAT TAKES ON THOSE WHO SERVE IT -- the seat's third rostered basis, beside
+      `conferral_bases` (how it is filled) and `revocation_bases` (who may strip it), in the same
+      shape. ONE VALUE, because one was ruled: `members_by_admission`, the `Office.binds` default on
+      every seat in the tree. A person joins by their OWN `oblige` (`own`-eligible), so admission is
+      the joiner's act and `remit_acts` needs no sixth member -- the cost `ARCH F.17` warns of
+      (*"a ruling, not a row"*), avoided.
+      READ BY: `Office.__post_init__`, which refuses a declared value off this list (the sibling
+      rosters' refusal, so a typo is loud rather than a seat nobody can ever join), and
+      `loop/predicates.py::_req_oblige`, which admits an `oblige` only to a seat whose `binds` is a
+      member -- `has_conferral_basis`'s shape one field along.
+      ⚠ A ROSTER WITH ONE VALUE AND ONE READER, CONCEDED IN r2 `05` RULED (b)'s own counter-argument:
+      today every seat answers the same, and what answers that is the reader landing the same day.
+      `open: false` -- a second way to bind is a design change, and it arrives WITH its rule in
+      `_req_oblige`, not as a table edit the predicate would read as this one.
+    values: [members_by_admission]
 
   interposition_kinds:
     source: "`proposals/2026-09-05-proceedings-subsystem/03_PARAMETERS.md` PART D's `interposed:` schema comment -- Fig. 24 -- and §E.2's twelve worked rows, every one of which draws its `interposed:` list from exactly this set. Plan position `18` (PROC-A)."

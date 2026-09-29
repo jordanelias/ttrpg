@@ -9230,7 +9230,7 @@
   "P11": {
    "id": "P11",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, and it is a stronger pass than rev 2's: the option set is now COMPUTED from the verb table, so this observes that zeroing capability removes none of the 28 verbs it computes. Rev 2 compared a caller's authored roster with itself, which no capability gate could have changed either. `capability` appears in no clause of \u00a7F1 and the eligibility roster FORBIDS it as a fifth kind",
+   "detail": "PASS BY CONSTRUCTION, and it is a stronger pass than rev 2's: the option set is now COMPUTED from the verb table, so this observes that zeroing capability removes none of the 27 verbs it computes. Rev 2 compared a caller's authored roster with itself, which no capability gate could have changed either. `capability` appears in no clause of \u00a7F1 and the eligibility roster FORBIDS it as a fifth kind",
    "kind": null,
    "section": "S9.2",
    "title": "capability gates no verb",
@@ -9240,7 +9240,7 @@
   "P12": {
    "id": "P12",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION. `opening_set('p', 'v', 'q', 'fx')` -- THE ROSTER PARAMETER IS GONE, which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the property the type protects was not, because S61 left `q` with no producer so there was nothing to compute from. `questions_for()` is that producer. 56 candidates over 28 verbs, every one a verb-table row",
+   "detail": "PASS BY CONSTRUCTION. `opening_set('p', 'v', 'q', 'fx')` -- THE ROSTER PARAMETER IS GONE, which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the property the type protects was not, because S61 left `q` with no producer so there was nothing to compute from. `questions_for()` is that producer. 54 candidates over 27 verbs, every one a verb-table row",
    "kind": null,
    "section": "S17",
    "title": "opening_set returns Candidate[], not Act[]",
@@ -9270,7 +9270,7 @@
   "P15": {
    "id": "P15",
    "verdict": "PASS",
-   "detail": "PASS, BY CONSTRUCTION, AND IN BOTH DIRECTIONS: the same Event reaches 5 person(s) under `total` (S61's specified behaviour, and `H-33`'s control) and 3 under `presence_only` -- it ADMITS the 3 people standing in the emitter's rung and EXCLUDES ['p_high', 'p_king'], who are elsewhere. Admitting is asserted as well as excluding, because a channel broken CLOSED also shrinks the set and that is what the first version of this probe was reading. \u26a0 THE DESIGN STILL SUPPLIES NO PREDICATE: these are an INJECTED default, `H-33` stays `assumption`, and `total` remains #353's SPECIFIED behaviour and this sweep's control -- but it is NO LONGER THE DEFAULT. It was, on the ground that the specified behaviour should ship; `R7` (2026-09-06) overtakes that by ruling the architecture model over the echo model, and `total` is the echo model at the deposit layer. The default is `all_five` from 2026-09-07. The GRADE is untouched: `R7` rules which arm ships and says nothing about what the five predicates are. What is closed is that an exclusion is now EXPRESSIBLE and swept, not that #353 said how. \u26a0 TWO OF THE FIVE ADMIT NOBODY IN THIS WORLD -- `post_remit` needs an office whose remit covers the emitting verb, and `chronicle` fires only on a binding decision; neither is reachable from the verbs the fold can execute",
+   "detail": "PASS, BY CONSTRUCTION, AND IN BOTH DIRECTIONS: the same Event reaches 5 person(s) under `total` (S61's specified behaviour, and `H-33`'s control) and 3 under `presence_only` -- it ADMITS the 3 people standing in the emitter's rung and EXCLUDES ['p_high', 'p_king'], who are elsewhere. Admitting is asserted as well as excluding, because a channel broken CLOSED also shrinks the set and that is what the first version of this probe was reading. \u26a0 THE DESIGN STILL SUPPLIES NO PREDICATE: these are an INJECTED default, `H-33` stays `assumption`, and `total` remains #353's SPECIFIED behaviour and this sweep's control -- but it is NO LONGER THE DEFAULT. It was, on the ground that the specified behaviour should ship; `R7` (2026-09-06) overtakes that by ruling the architecture model over the echo model, and `total` is the echo model at the deposit layer. The default is `all_five` from 2026-09-07. The GRADE is untouched: `R7` rules which arm ships and says nothing about what the five predicates are. What is closed is that an exclusion is now EXPRESSIBLE and swept, not that #353 said how. \u26a0 TWO OF THE FIVE ADMIT NOBODY IN THIS WORLD -- `post_remit` needs an obligee standing at the seat an act was exercised through (since `17a`; an office whose remit covers the emitting verb before it), and `chronicle` fires only on a binding decision; neither is reachable from the verbs the fold can execute",
    "kind": null,
    "section": "S61",
    "title": "a person's private act stays private",
@@ -9496,7 +9496,7 @@
   "P36": {
    "id": "P36",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 28 candidates were OFFERED from the computed option set and only 24 of 40 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['interview', 'move', 'petition', 'surveil', 'utter', 'work'] -- 6 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 27 candidates were OFFERED from the computed option set and only 25 of 40 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['interview', 'move', 'petition', 'surveil', 'utter', 'work'] -- 6 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
    "kind": null,
    "section": "S17",
    "title": "a choice branches three ways",
@@ -9914,7 +9914,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (2d8f8fb923f0...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (81a331a947fc...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -11217,7 +11217,7 @@
   "STEP": 7099,
   "BARRIER": 1871,
   "DECISION": 1888,
-  "QUERY": 29929,
+  "QUERY": 29930,
   "NOTE": 299,
   "WRITE": 20427,
   "EVENT": 20045,
