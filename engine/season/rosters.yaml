@@ -1762,8 +1762,9 @@ tables:
       alignment` constant across verbs, so convictions cannot discriminate at all. A verdict that
       does NOT move between `declared` and `uniform` is a verdict the table was never deciding.
       VERB KEYS ARE VERB-TABLE KEYS, spelled exactly as `verb_table.yaml` spells them (`evade /
-      defy`, `kill / wound`). The loader raises on a key naming no verb, so a rename over there
-      cannot leave a silently dead cell over here.
+      defy`, `fight`). The loader raises on a key naming no verb, so a rename over there cannot
+      leave a silently dead cell over here -- exactly what caught this cell when `kill / wound`
+      was renamed to `fight` (2026-09-29, plan `FIGHT-RENAME`).
     cells:
       # ⚠⚠ **ALL FOUR BLOCKS ARE RE-AUTHORED BY `U3`, AND THE OLD FOUR WERE NOT AXES.** This table
       # was keyed `Precedent / self_preservation / suspicion / harm_borne` — one conviction and
@@ -1831,7 +1832,10 @@ tables:
         # institutions this setting has not ruled is a different thing, because a later
         # reader takes it for canon. The cell is kept at the same magnitude and the reason
         # is restated as the judgment it actually is.
-        kill / wound:    0.3    # a body-contest is settled before witnesses, which is the only consecrating frame this table has
+        # ⚠ RENAMED `kill / wound` -> `fight`, 2026-09-29 (plan `FIGHT-RENAME`; `verb_table.yaml`'s
+        # own row-rename note). Same verb, same weight, only the spelling moved -- the loader
+        # (`data/verbs.py::_load_alignment`) raises if this key does not match a `VERB_TABLE` row.
+        fight:           0.3    # a body-contest is settled before witnesses, which is the only consecrating frame this table has
         evade / defy:   -0.3    # refusing what a vow or office asked undercuts the oath behind the demand, not just the demand
         destroy_record: -0.3    # erasing what a ruling produced touches the same desecration `traditional` scores harder
         forge:          -0.5    # counterfeiting a record for advantage is the false-witness shape, dressed as evidence

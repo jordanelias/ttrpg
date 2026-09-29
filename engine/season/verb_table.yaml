@@ -286,7 +286,21 @@ verbs:
     grade:       "ruled"
     writes_note: "— (a Dispensation is not a state write — §37.3)  ||  ⚠ W3, ON THE W2 AUDIT: as `petition`. Part E's '(a Dispensation is not a state write)' is the bypass §1.4 hole 4 names, not a licence for one."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
-  - verb:        "kill / wound"
+    # ⚠ RENAMED `kill / wound` -> `fight`, 2026-09-29 (plan `FIGHT-RENAME`, contradiction 4;
+    # `ED-IN-0261` item 3). ATOMIC KEY RENAME ONLY -- every other field on this row (`contests:`,
+    # `requires_typed:`, the band machinery below) is unchanged, because that machinery already IS
+    # the attempt-verb semantics `ED-IN-0261` ruled for `fight` (opponent is `subject`, needs a
+    # typed precondition). Jordan, 2026-09-27, verbatim: "a character can only attempt to kill or
+    # wound, never choose the outcome directly" -- read as a rename of THIS row, not as the SPLIT
+    # (`kill`/`wound`/`challenge`->`accept`), which still rides the ALIGNMENT re-cell commit (H6 +
+    # H8) and is NOT built here. Declared content-hash move, per `governance_spine.yaml:7`'s own
+    # convention: `Act.verb` carries the row's key into `World.content_hash()`, so any world whose
+    # log includes this verb digests differently under the new name -- accepted rather than hidden,
+    # and no test in this tree pins a literal hash value (checked, not assumed: `git grep
+    # "content_hash() =="` under `engine/season/tests/` finds only relative before/after
+    # comparisons). The event kinds below (`kill.refused`, `person.died`) are NOT verb-table keys
+    # and are unchanged -- they are `write_matrix.yaml`/`emits:` vocabulary, a different namespace.
+  - verb:        "fight"
     stratum:     "contested_physical"
     eligibility: ["own"]
     beneficiary: "actor"

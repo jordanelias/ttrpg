@@ -81,7 +81,7 @@ rows:
   need: Her season must be able to end through means that require no institutional process at all -- being
     found and killed, or simply vanishing -- not only through an arrest, trial, or faction-tree escalation.
   exercises:
-  - kill / wound
+  - fight
   from: '#353 `:499` -- "kill the man who must renew it". `(Person, exists)` as an ending, with every
     Tenure ending THROUGH the death (S15.3) rather than beside it.'
 - need_sha: 65ec2ab80cd9

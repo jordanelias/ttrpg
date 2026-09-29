@@ -37,7 +37,7 @@ from engine.season.state.carriers import Act
 
 def test_non_mass_battle_branch_matches_the_pre_m4_fold_exactly():
     w = build_realm(0)
-    a = Act(id="a1", actor="p_npc_008", verb="kill / wound", payload={"subject": "p_npc_009"})
+    a = Act(id="a1", actor="p_npc_008", verb="fight", payload={"subject": "p_npc_009"})
     claimants, subject, rung = sides_of(w, a, "p_npc_009", "the body")
     assert claimants == ["p_npc_008", "p_npc_009"]
     assert subject == "p_npc_009"

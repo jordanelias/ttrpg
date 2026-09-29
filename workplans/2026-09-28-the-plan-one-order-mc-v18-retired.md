@@ -243,7 +243,7 @@ four rows of that table found stale in this pass are corrected here, not there: 
 | 28-ii ✦ | **M6 — successor goldens** | IN | BLOCKED | `28-i` | Phase 4 · c |
 | 28-iii ✦ | **SPINE-DELETE** | IN | BLOCKED | `28-ii` | Phase 4 · d |
 | 29a–29f ✦ | **Step B, per tree** | IN | BLOCKED | per tree (§3.4 f–j) | Phase 4 · f–j |
-| — | **FIGHT-RENAME** | IN | OPEN | — | Phase 1 · 5 |
+| — | **FIGHT-RENAME** | IN | **DONE** (§8.6) | — | Phase 1 · 5 |
 | — | **OPENERS-DERIVE** | IN | OPEN | — | Phase 1 · 6 |
 | — | **GATE-REMOVE-PERSON** | IN | OPEN | — | Phase 1 · 7 |
 
@@ -276,7 +276,7 @@ census, not the phase number, decides whether it may run beside a Phase-1 item.
 | 2 | **`28-0` ORPHAN-DELETE** | `FORK:` rows + `git rm` for code with no live caller (list below, narrowed — §8.4) | **DONE**, narrowed scope (§8.4) | — ; precedent `ED-IN-0232` |
 | 3 | **`2-i` RET-SC (stub)** | `contest_legacy_stub.py` + its export ripple; the seam-import detector's one-hop falsifier | **DONE** (stub pre-existing, falsifier planted) | — |
 | 4 | **`28-i` (M5)** | port `tools/balance_oracle.py` onto the season harness; retire `campaign_output_probe.py`, `trace_execution_phases.py` and the execution-map cluster | **DONE** (§8.5) | — |
-| 5 | **FIGHT-RENAME** | `kill / wound` → `fight`: one row key + one alignment key + re-pins; a declared hash move | OPEN | — ; **before `8`**; never interleaved with `8`, `9` or the cells commit (`§3.9` edge 10) |
+| 5 | **FIGHT-RENAME** | `kill / wound` → `fight`: one row key + one alignment key + re-pins; a declared hash move | **DONE** (§8.6) | — ; **before `8`**; never interleaved with `8`, `9` or the cells commit (`§3.9` edge 10) |
 | 6 | **OPENERS-DERIVE** `[L1]` | derive the `openers:` roster from the `@effect_for` registry, or guard their equality | OPEN | — ; before any Phase-2 effect lands |
 | 7 | **GATE-REMOVE-PERSON** `[L1]` | route `World.remove_person` through `World.write`; a declared hash move | OPEN | — ; shares `loop/matter.py` with `24f`'s build — serial |
 | 8 | **`13` W28-cast** | the `cast:` blocks and their reader in `build_at`; the harness loader's count | OPEN | — ; precondition of `17` and of `ED-FI-0009` |
@@ -405,7 +405,8 @@ says.
 **Why here:** it is gate-free, and `28-ii` depends on it. It also closes MOD 8 (the balance
 instrument sitting on the spine).
 
-**5 · FIGHT-RENAME.** This is contradiction 4 of the armature's nine (ARMATURE §1.2).
+**5 · FIGHT-RENAME. DONE — full record at §8.6.** This is contradiction 4 of the armature's nine
+(ARMATURE §1.2).
 
 > **Contradiction 4 · the `kill / wound` rename — RESOLVED: rename the row STANDALONE NOW to `fight`;
 > the SPLIT (`kill`, `wound`, `challenge` → `accept`) still rides the cells commit (H6 + H8). Both
@@ -1318,6 +1319,135 @@ case reduces to the original formula exactly (checked by test).
   `.git/shallow` present, CLAUDE.md §0.4's documented case) — confirmed this position's own 5 new
   rows resolve cleanly in isolation (`git cat-file -e 6f740d9:<path>`, all five return 0); the
   container-wide failure (78 → 254 unresolvable) is inherited, not introduced here.
+
+### 8.6 · Made at position `5`'s execution — FIGHT-RENAME, and what the atomic rename actually touched
+
+The two primary edits are exactly the contradiction-4 text's own scope, verified rather than
+assumed: `engine/season/verb_table.yaml:303` (was `:289` before this commit's own explanatory
+comment shifted it) — `verb: "kill / wound"` → `verb: "fight"`, every other field on the row
+(`contests`, `requires_typed`, `writes`, notes) untouched — plus `engine/season/rosters.yaml:1838`
+(was `:1834`) — the `alignment.cells.sacred` block's `kill / wound: 0.3` → `fight: 0.3`, weight and
+trailing comment untouched. **Confirmed the ONLY cell key**, not merely grepped once: `grep -n
+"kill / wound" rosters.yaml` before this edit returned three lines total, and reading each showed
+two were prose (`:530`, `:1765`, explanatory comments naming the row as an example) and exactly one
+(`:1834`) was an actual `cells:` key. `python3 -c "from engine.season.data import verbs"` raised
+nothing after both edits — `_load_alignment`'s cross-check passed on the first try because both
+halves of the atomic rename landed together, as the contradiction text specifies.
+
+**What the brief's own file list did not name, and had to be found by tracing the dispatch chain
+rather than by grep alone:**
+
+1. **`engine/season/loop/effects.py:610`** — `@effect_for("kill / wound")` registers `_eff_kill` in
+   the `EFFECTS` dict keyed by the LITERAL VERB STRING, a second place the old name was load-bearing
+   beside the two the brief named. Missing this would have left `EFFECTS["fight"]` unset while
+   `VERB_TABLE["fight"].writes` was non-empty — the exact "a verb with a `writes:` and no effect
+   REFUSES" case `effects.py`'s own module docstring names, silently turning every `fight` fold into
+   an `Unspecified`. Fixed to `@effect_for("fight")`, one line, comment added citing the rename.
+2. **`engine/season/cases/exercises/NPC-010.yaml:41` and `NPC-088.yaml:84`** — both `exercises:`
+   lists named `kill / wound` as a `<verb>` token, resolved by `harness/exercises.py::resolve`
+   against `verb_table` by exact key (`:310`, `if token not in verb_table: ... bound=False`). Left
+   unrenamed, both rows would have silently flipped from a bound, executing verb to an unbound
+   authoring-error gap the next time `run_cases`/`register --requirements` graded them. Renamed to
+   `fight`; NPC-010's adjacent `from:` prose (same row, same sentence) renamed with it for internal
+   consistency, since it is case-authoring rationale, not a historical quote.
+3. **A genuine collision the rename itself created, found only by running the suite, not by
+   reading the brief:** `engine/season/harness/probes.py:1973` (probe `A8`) and
+   `engine/season/tests/test_season_shape.py:428-429`
+   (`test_d9c_max_depth_has_no_default_anywhere`) both minted a synthetic `Act` with the literal
+   verb string `"fight"` — chosen, before this row existed, as an arbitrary placeholder GUARANTEED
+   ABSENT from `VERB_TABLE`, so `resolve()`'s admission (`_admits`) would be skipped
+   (`_row = VERB_TABLE.get(a.verb)`; `None` short-circuits to auto-admit) and the act would reach
+   the depth-cap `Forbidden` raise each test is actually about. Renaming the row made `"fight"`
+   real, so `_admits` started running the row's own `eligibility`/`requires_typed` against a
+   `payload="S"` (a bare string, not a dict) — refusing the act at admission instead of ever
+   reaching the depth cap, and both tests failed `DID NOT RAISE Forbidden` / silently swallowed the
+   probe's expected `Forbidden`. Fixed by renaming the PLACEHOLDER, not the real row: both sites now
+   use `"no_such_verb"` (confirmed absent from `VERB_TABLE`), with a comment at each site explaining
+   why the string must never be a real verb name. This is the one place this position's own
+   five-step closure test was actually exercised — resolved at step 5 (answered by what makes sense
+   for the architecture: the test's INTENT needs an absent verb, not literally the string `"fight"`)
+   without going to Jordan.
+
+**The declared content-hash move, and what it actually moved (measured, not asserted).**
+`decision/choose.py::_sample_order` (`H-96`) seeds each candidate's Gumbel draw from
+`f"choice:{c.verb}:{c.subject}"` and breaks residual ties on `(-(score/tau+g), c.verb, c.subject)`
+— so the verb's own spelling is an input to which tied candidate wins a scene, independent of
+anything about the verb's behaviour. This is not a hypothesis: it is the mechanism `H-96`'s own
+docstring already names (*"the triage is decided, for most candidates, BY ALPHABETICAL ORDER OF THE
+VERB'S NAME"*) and had already been measured once, for a different verb, in the same docstring. Six
+`test_season_shape.py` assertions pin exact corpus counts that moved as a result, each re-measured
+standalone (not guessed — CLAUDE.md §0.1 pt 3 row 4) and each re-pinned with a dated `[GROUNDED: ...]`
+citation appended beside the superseded one, never overwriting it:
+- `len(by_sig)` (distinct executed-behaviour signatures over the 89 live corpus worlds): 45 → 44;
+  `fight` itself falls from 32 to 9 of 89 worlds executed (full per-verb breakdown in the comment).
+- The `varying` set's comment (membership unchanged, `fight` still > 0): count corrected 47 → 9 of
+  89 (this session's own first guess of "35" was wrong, caught by actually running the test rather
+  than trusting an unrun edit — the defect §0.1 pt 3 row 4 names, corrected before it shipped).
+- `test_wd_a_fork_changes_a_later_decision_...` and its sibling
+  `test_wd_the_decision_fingerprint_is_verbs_only_...` (same shared instrument,
+  `arm9_forking.fork_case`): the `total` arm's diverged/wide count, 7 → 6; `none` and `actor` both
+  re-measured unmoved.
+- `test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_do`: one claim swapped
+  in a 17-item pinned list (`("hearth_ostvik","exists:Site",0)` loses one of two occurrences,
+  `("einhir_texts","exists:Person",0)` appears), count held at 17.
+- `test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_the_control`'s two
+  sub-measurements diverged in kind: the single `build_world(0)`, 3-season case
+  (`hl_drops`) reproduced the EXACT same 10-pair id set, re-verified standalone rather than assumed;
+  the multi-season ARC-01 case (`drops`) compounds the same perturbation across every later round
+  and moved from 43 to 175 total hits — the SET the assertion actually checks
+  (`{examine, interview, fight, research, restore, surveil}`) is unchanged, only the uncoded,
+  per-verb prose breakdown, which is corrected in the comment.
+
+**The runs/ artifacts are load-bearing, not a discretionary regenerate — found by running the
+suite, corrected from this session's own first (wrong) assumption.** This session first reasoned
+`engine/season/runs/results.json` was a stale, self-consistent snapshot paired only with the
+committed `CASELOG_*.md` files and safe to leave untouched. `test_w15_report_py_reproduces_every_
+committed_artifact_byte_for_byte` (`test_season_shape.py:1614`) disproved that directly: it EXECUTES
+`python -m engine.season.harness.report` and asserts the fresh output is byte-identical to every
+committed file under `engine/season/runs/`, which is precisely the mechanism CLAUDE.md §7 asks for
+("say plainly when you re-record one") — a golden with a `--check`, not a citation trusted by eye.
+Regenerated via `python -m engine.season.harness.report`; five of ten files changed byte-for-byte
+(`CASELOG_NPC.md`, `DECISIONS.md`, `STEPS.md`, `TRACE.txt`, `results.json` — `CASELOG_ARC.md`,
+`PROBES.md`, `UNMAPPED_ARC.md`, `UNMAPPED_NPC.md`, `ASSUMPTIONS.md` byte-identical), and the test
+now passes.
+
+**What survives this rename unedited, checked rather than assumed, and why:**
+- `engine/season/loop/driver.py`, `resolve.py`, `sides.py`, `predicates.py`, `seam/contest.py`,
+  `seam/ladder.py`, `seam/wrappers/combat.py`, `state/gate.py`, `state/world.py`,
+  `decision/options.py`, `harness/headless.py`, `harness/probes.py` (besides the one collision
+  above), `data/verbs.py` — every `kill / wound` mention read in context is a comment or docstring,
+  none a live string comparison; confirmed by a restricted grep for the literal inside `.py` files
+  excluding lines whose stripped text starts with `#` and cross-checking the remainder by hand.
+- `engine/season/hole_register.yaml`, `requirements.yaml` — `register.py --requirements` only
+  checks `measured:`/`status:` fields are non-empty (`register.py:692`), never matches their prose
+  against `VERB_TABLE`; every mention is a dated citation of a past ruling or measurement (Jordan's
+  2026-09-02/09-03 verbatim quotes, the `ED-IN-0261` admission narrative) and stays as history.
+- `engine/reference/degree-sweep/sweep_core.py` and `proposals/2026-09-04-degree-sweep/*.py` —
+  confirmed by grep with no importer anywhere outside their own tree; inert reference code, the
+  Layer-1 backlog's own "moved to `engine/reference/`" disposition, not wired into any runner.
+- `workplans/`, `proposals/`, `registers/handoffs/` (besides the one standing-order row this
+  position's own instruction names) and `architecture/*.md` — historical record and Layer-1
+  reference (CLAUDE.md §0.05); untouched by design, not by oversight.
+
+**Verified, not asserted:** `python -m pytest engine/season/tests/test_season_shape.py
+engine/season/tests/test_g3_not_yours.py engine/season/tests/test_g4_no_op_receipt.py
+engine/season/tests/test_governance_build.py engine/season/tests/test_sides.py
+tests/valoria/test_season_providers_are_registered.py -q -n auto` — 310 passed, 1 failed
+(`test_we_only_a_verb_that_declares_contests_can_be_graded_today`). **That one failure is
+PRE-EXISTING and unrelated, confirmed by `git stash` against this position's own uncommitted diff
+and re-running in isolation on the resulting clean tree**: `harness/arms.py` (added by position `4`,
+commit `1320045`, §8.5) contains `roll_net_continuous`, which the test's `roll_net` substring scan
+(`test_season_shape.py:11220`) now matches, making it a second "margin producer" beside
+`seam/wrappers/sigma.py` — a regression from position `4`'s own commit, already present before this
+position touched anything, and out of this position's file scope to fix. `python -m
+engine.season.harness.corpus_run` was also run clean: "WHERE THE 39 GO" and "VERBS THAT EXECUTED"
+both print `fight` correctly, `DISTINCT EXECUTED SETS` reads 44 (matching the re-pin above), and a
+grep confirms no committed file pins `corpus_run`'s literal stdout (only its own source prints it).
+
+**Net: both primary edits landed exactly as the contradiction-4 text specifies, plus three
+load-bearing follow-ons the brief's file list did not name** (the `EFFECTS` registration, the two
+corpus-case `exercises:` tokens, and the two synthetic-placeholder collisions) **and the required
+re-pins, each re-measured rather than guessed.** Nothing here needed Jordan.
 
 ---
 

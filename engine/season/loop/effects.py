@@ -607,7 +607,8 @@ def _scar(w: "World", p, verb: str) -> None:
         p.scar = {k: p.scar[k] for k in sorted(p.scar)}
 
 
-@effect_for("kill / wound")
+@effect_for("fight")  # RENAMED from "kill / wound", 2026-09-29 (plan `FIGHT-RENAME`) -- same
+# effect, same body; only the `EFFECTS` dict key (and its `verb_table.yaml` row) moved.
 def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """§E3: writes `(Person, body)`, `(Person, exists)` and `(Tenure, until)`.
 

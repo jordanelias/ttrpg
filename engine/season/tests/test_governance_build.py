@@ -462,7 +462,7 @@ def test_lb3b_the_zero_arm_is_the_pre_item_tree_exactly():
 
 def test_lb3c_death_at_body_zero_closes_every_tenure_through_the_same_owner_as_kill():
     """**LB-3c.** A body reaching 0 at MATTER must end every live edge NAMING that person — the
-    same cascade `kill / wound` runs at RESOLVE, through the same owner.
+    same cascade `fight` runs at RESOLVE, through the same owner.
 
     ⚠ IT PLANTS THE EDGE `W-E` MEASURED DANGLING: a `tie` **another person owns** that names the
     dying one as its OBJECT. `p.tenures` is the edges this person is the SUBJECT of (§15.1), so a
@@ -638,17 +638,17 @@ def test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load():
 def test_lb6d_kill_is_declared_to_benefit_the_actor_not_the_person_it_writes_on():
     """⚠ THE ROW THAT PROVES THE COLUMN CANNOT BE DERIVED FROM `writes:`.
 
-    `kill / wound` writes `Person.body` and `Person.exists` ON THE SUBJECT. A rule reading the
+    `fight` writes `Person.body` and `Person.exists` ON THE SUBJECT. A rule reading the
     write column would name the victim as the beneficiary of their own killing, because A WRITE
     CAN BE A HARM. This is the falsifier for the claim that the declaration is load-bearing: if
     someone later derives this column, THIS is the assertion that goes red."""
     from ..data.verbs import VERB_TABLE
 
-    row = VERB_TABLE["kill / wound"]
+    row = VERB_TABLE["fight"]
     assert "Person.body" in row.writes and "Person.exists" in row.writes, (
         "the row no longer writes on its subject, so this test's premise is gone")
     assert row.beneficiary == "actor", (
-        "`kill / wound`'s beneficiary was derived from `writes:` and now names the victim")
+        "`fight`'s beneficiary was derived from `writes:` and now names the victim")
 
 
 def test_lb6d_none_and_an_unbound_carrier_are_different_answers():
@@ -773,7 +773,7 @@ def _scar_bands(scar_step, ids=range(24)):
         w.step = _Step.RESOLVE
         w.fixtures = w.fixtures.sweep("scar_step", scar_step)
         d = SeasonDriver(w)
-        act = _Act(id=f"scar{i}", actor="p_low", verb="kill / wound",
+        act = _Act(id=f"scar{i}", actor="p_low", verb="fight",
                    payload={"subject": "p_mid"})
         evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], w.fixtures.get("contest_max_depth"))
         deg = evs[0].degree if evs else None
@@ -813,9 +813,9 @@ def test_lb6e_a_wound_scars_and_the_axes_come_from_the_alignment_table():
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
 
     engaged = {ax for ax in PURSUIT_AXES
-               if float(ALIGNMENT.get(ax, {}).get("kill / wound", ALIGNMENT_DEFAULT_CELL))}
+               if float(ALIGNMENT.get(ax, {}).get("fight", ALIGNMENT_DEFAULT_CELL))}
     if not engaged:
-        pytest.skip("`kill / wound` engages no axis in ALIGNMENT, so this item has nothing to key "
+        pytest.skip("`fight` engages no axis in ALIGNMENT, so this item has nothing to key "
                     "a scar on -- a data state, reported rather than asserted around")
 
     seen = _scar_bands(scar_step=10)
@@ -863,7 +863,7 @@ def test_lb6e_the_zero_arm_writes_no_scar_and_reports_none():
     # worth pinning is that the table has not GROWN the kind while the magnitude is still 0 --
     # which is a claim about the data, so it is asserted against the data.
     from ..data.verbs import VERB_TABLE
-    row = VERB_TABLE["kill / wound"]
+    row = VERB_TABLE["fight"]
     declared = {k for band in row.emits_by_degree for k in row.emits_by_degree[band]}
     assert "scar.taken" not in declared, (
         "`scar.taken` has been added to this verb's `emits:` while `scar_step` still ships at 0, "
@@ -888,10 +888,10 @@ def test_lb6e_a_verb_that_engages_no_axis_scars_nothing():
         f"a verb engaging no axis still scarred {p.scar} -- `_scar` is not reading ALIGNMENT, it "
         "is writing every axis unconditionally")
     # AND THE POSITIVE ARM, so this is not a test that passes because `_scar` never writes.
-    engaged = [ax for ax in PURSUIT_AXES if ALIGNMENT_OF("kill / wound", ax)]
+    engaged = [ax for ax in PURSUIT_AXES if ALIGNMENT_OF("fight", ax)]
     if engaged:
         q = Person(id="p_test2")
-        _scar(w, q, "kill / wound")
+        _scar(w, q, "fight")
         assert q.scar, "`_scar` wrote nothing for a verb that DOES engage an axis; the negative "\
                        "arm above proves nothing on its own"
 

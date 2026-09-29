@@ -1969,8 +1969,17 @@ def a8():
     w = tiny_world()
     r = contest(w, "S", "x", ["p_low"], depth=3, max_depth=3, causes=[ROOT])
     assert isinstance(r, ContestError) and r.depth == r.max_depth
+    # ⚠ VERB DELIBERATELY NOT A `VERB_TABLE` ROW, so `resolve()`'s admission (`_admits`) is
+    # skipped by construction and the act reaches `_contest` unconditionally, exercising the
+    # depth-cap Forbidden this probe is about rather than any real verb's own eligibility or
+    # `requires_typed`. RENAMED from the literal `"fight"` 2026-09-29 (plan `FIGHT-RENAME`): that
+    # spelling was always an arbitrary placeholder here, chosen before any real verb was named
+    # `fight`, and the rename made it collide with the real row -- `payload="S"` is not a dict, so
+    # the real row's typed `subject` precondition failed at admission instead of ever reaching the
+    # depth cap this probe tests. `no_such_verb` is chosen to be readable as a placeholder, never
+    # a real verb row.
     def choose(p, v, s, ask_budget):
-        return [Act_(w, p, "fight", contests=["the barn"], payload="S")] if p.id == "p_low" else []
+        return [Act_(w, p, "no_such_verb", contests=["the barn"], payload="S")] if p.id == "p_low" else []
     try:
         _run(w, choose)
         no_cap_raised = False
