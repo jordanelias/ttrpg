@@ -519,6 +519,24 @@ Allocation note: `next_free` 238 → 240 across the two. The `ED-IN-0236/0237` r
 used to be duplicated on the `IN:` lane row lives at the subsection above it — one owner, per §0.05
 clause 3, which is why the row now carries state and a pointer only.
 
+### 2026-09-27/28 — ED-IN-0279, 0280, 0281 allocated; a sixth within-lane collision, renumbered
+
+**`ED-IN-0279`** allocated 2026-09-27 (`needs_jordan`): the `mc_v18` retirement plan's Stage M4, the
+field-battle verb and what a loss writes.
+
+**`ED-IN-0280`/`ED-IN-0281` COLLIDED, 2026-09-28** — the same class as the 2026-09-10/16 collisions
+above: two concurrent sessions both read `next_free: 280` and both allocated `ED-IN-0280`.
+`origin/main`'s PR #437 (the `methodology` skill) merged first and keeps `ED-IN-0280` (status
+resolved, not `needs_jordan`: the skill added at `skills/methodology/SKILL.md`, per Jordan's
+directive). This branch's PR #438 renumbered its own allocation to **`ED-IN-0281`** (status resolved,
+no ruling needed): THE PLAN re-adopted as the single order, superseding the 2026-09-18 plan and
+retiring `mc_v18` in full (`workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md`). Neither
+commit's content changed, only the number. `next_free` 280 → 282.
+
+Moved here from the `IN:` lane row 2026-09-29, because the row's narrative reached 804 characters
+against the 600 cap — `test_narrative_does_not_creep_back_into_the_state_file` caught it. The lane
+row keeps a one-line summary and this pointer, as every prior instance of this same pattern does.
+
 ## IN — the 2026-07-14 duplicate-key repair (ED-IN-0064, finding OBS-IN-1)
 
 <a id="dup-key"></a>
