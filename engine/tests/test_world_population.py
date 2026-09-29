@@ -143,7 +143,12 @@ def test_knots_stay_unpopulated_honest_deferral():
     personal-scale actor fields absent from the aggregate World — no world-gen/season formation
     rule exists in canon. world.knots must stay empty across several seasons of the season loop,
     with the season's own scene-dispatch phase (where a fieldwork-mechanic call site is most
-    likely to eventually land — `_resolve_slot` already has a "fieldwork" branch) actually run.
+    likely to eventually land — CORRECTED 2026-09-29, methodology-close antagonist pass:
+    `_resolve_slot` no longer has a dedicated "fieldwork" branch; plan position `2`/`28-0`
+    deleted it (both `systems/fieldwork/sim/{fieldwork,investigation}.py` were confirmed
+    zero-caller and retired), and the two scene_types now fall through to the generic
+    total-mapping stub instead. This test's own assertion (`world.knots == {}`) is unaffected)
+    actually run.
 
     REWRITTEN 2026-09-27 (mc_v18-retirement plan M1, corrected by an antagonist pass same day):
     previously drove `engine.mc_v18.run_campaign` to get a multi-season World. The FIRST rewrite

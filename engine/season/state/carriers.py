@@ -704,9 +704,15 @@ class Office:
         # A titled post must sit at the rung its title governs. Otherwise a Duke seated at the
         # realm has realm-wide purview (`under_purview` walks up to the SEAT), which is the
         # governance canon inverted by a data-entry slip.
-        # ⚠ (`13d-i`, 2026-09-26) `under_purview` IS DELETED and `scope_rung` has NO READER in the
-        # game -- only `test_season_shape.py`'s populated-realm assertion. Left standing because it
-        # goes with the field, which r2 `03` §A.8 deletes and this position does not own.
+        # ⚠ (`13d-i`, 2026-09-26) `under_purview` IS DELETED. `scope_rung` had NO READER in the game
+        # at that date -- only `test_season_shape.py`'s populated-realm assertion -- but GAINED ONE
+        # 2026-09-29 (plan position `18`/PROC-A, `H-32`): `queries/world_q.py::judging_set` reads
+        # `off.scope_rung` directly as the whole mechanism by which a bench's purview reaches a
+        # venue. CORRECTED (methodology close, antagonist pass, 2026-09-29): this comment and
+        # `state/gate.py::purview_reaches`'s docstring both said the opposite and were cited, as
+        # written, by the plan's own "Contradiction 1" resolution as the reason position `18a` may
+        # safely delete this field -- `18a` MAY NOT delete `scope_rung` as things stand; doing so
+        # would silently reopen `H-32`. r2 `03` §A.8's deletion call needs re-deciding against this.
         dom = title_domain(self.post)
         if dom is not None and self.scope_rung is None and self.rung is not None:
             self.scope_rung = self.rung

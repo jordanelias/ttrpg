@@ -1642,8 +1642,8 @@ rows:
     site:      ""
     sweep:     []
     unblocks:  "nothing today -- `Gate.opening()` unconditionally REPLACES `self._open` on every `World.write` call, and `World.write` is the only production caller of `gate.mint()`, so every mint is preceded by a fresh `opening()` in the same call regardless of whether the previous window was ever closed. The gap `close()` exists to prevent -- a stray direct `gate.mint()` call reusing a stale cross-barrier window -- has no current caller to exploit it"
-    cite:      "FOUND BY AN ANTAGONIST PASS ON G2 (plan position 5, 2026-09-26), grepping every call site of `gate.close` and `.close(` under `engine/season/` while auditing the token/window design G2 sits beside. NOT CAUSED BY G2: the gap is G1a's own, present since the gate was built. Registered rather than fixed: wiring `close()` into `loop/driver.py`'s barrier transitions is a design decision about WHERE in `season()` each barrier ends (before or after the token drops), not a one-line correction, and CLAUDE.md §0.1 pt 5's predicate withholds a guard for a gap nothing currently reaches. ⚠⚠ `close()` GAINED A GAME CALLER 2026-09-26 (`G3`, plan position 6, `ED-IN-0277`): `World.write` now calls `self.gate.close()` on an F3 `NotYours` refusal, so the mint window is provably shut before the raise -- STILL NOT WIRED AT ORDINARY BARRIER TRANSITIONS, which is what this row's `hole:` and `unblocks:` describe, so the row stays open on that half. The reachability argument in `unblocks:` is otherwise unchanged: `opening()` still unconditionally replaces `self._open` on every `World.write` call, so a stray cross-barrier window still has nothing to exploit it"
-    source:    "antagonist pass on G2, plan position 5, 2026-09-26; noted by G3, plan position 6, 2026-09-26"
+    cite:      "FOUND BY AN ANTAGONIST PASS ON G2 (plan position 5, 2026-09-26), grepping every call site of `gate.close` and `.close(` under `engine/season/` while auditing the token/window design G2 sits beside. NOT CAUSED BY G2: the gap is G1a's own, present since the gate was built. Registered rather than fixed: wiring `close()` into `loop/driver.py`'s barrier transitions is a design decision about WHERE in `season()` each barrier ends (before or after the token drops), not a one-line correction, and CLAUDE.md §0.1 pt 5's predicate withholds a guard for a gap nothing currently reaches. ⚠⚠ `close()` GAINED A GAME CALLER 2026-09-26 (`G3`, plan position 6, `ED-IN-0277`): `World.write` now calls `self.gate.close()` on an F3 `NotYours` refusal, so the mint window is provably shut before the raise -- STILL NOT WIRED AT ORDINARY BARRIER TRANSITIONS, which is what this row's `hole:` and `unblocks:` describe, so the row stays open on that half. The reachability argument in `unblocks:` is otherwise unchanged: `opening()` still unconditionally replaces `self._open` on every `World.write` call, so a stray cross-barrier window still has nothing to exploit it. ⚠⚠ THE `unblocks:` REASONING STOPPED BEING THE WHOLE STORY 2026-09-29 (plan position 7, `GATE-REMOVE-PERSON`, methodology-close antagonist pass): position 7 added `World.remove_person`'s bare-call guard, a NEW production reader of `gate.is_open` this row never analyzed -- `unblocks:` only ever argued `mint()`'s reuse is safe regardless of `close()` being unwired (`opening()` always resets `_open` first), and a bare `is_open` READ has no such protection. Found and fixed in the same pass: `World.write`'s SUCCESS path (not just its two refusal branches) now also calls `self.gate.close()` (`state/world.py`, immediately before `return before`), so `is_open` no longer stays permanently True after a world's first write. This closes the window at the END OF THE SAME `write()` CALL THAT OPENED IT -- narrower than, and does not answer, this row's own still-open question (closing independently at ORDINARY BARRIER TRANSITIONS, i.e. even when a barrier passes with zero writes in between). The row stays open on that original, coarser-grained half; the new, narrower gap it exposed is closed"
+    source:    "antagonist pass on G2, plan position 5, 2026-09-26; noted by G3, plan position 6, 2026-09-26; re-examined by the Phase-1 methodology-close antagonist pass, 2026-09-29, after position 7 added a new reader"
 
   - id:        H-132
     tier:      1
@@ -3259,7 +3259,25 @@ rows:
       the new check -- there is no declared hash move to record because nothing that reaches
       `content_hash` changed. THE MISSING `person.died` EVENT THIS ROW NAMES IS UNCHANGED AND
       STILL OPEN; this closure is the gate-bypass half only, per this position's own scope, not
-      `H-152` whole."
+      `H-152` whole.
+
+      ⚠⚠ THE 'BY CONSTRUCTION' CLAIM TWO PARAGRAPHS ABOVE WAS OVERSTATED, CORRECTED 2026-09-29
+      (Phase-1 methodology-close antagonist pass, same day). `gate.is_open` reads `Gate._open is
+      not None`, and `World.write`'s SUCCESS path did not call `gate.close()` -- only its two
+      refusal branches did (`H-131`, three days earlier, found this exact gap unwired, for a
+      different reason: `gate.mint()`'s reuse safety, not a bare `is_open` read). So `is_open`
+      stayed permanently True after a world's first successful write and never reset at a season
+      or step boundary -- the check above could only ever catch a call on a PRISTINE,
+      never-written `World`, not the realistic case (a world already in play, then a stray bare
+      call) this paragraph describes preventing. `test_gate_remove_person_requires_an_open_write
+      .py`'s shipped falsifier tested only the pristine case, which is why this passed review.
+      FIXED IN THE SAME PASS: `World.write`'s success path now also calls `self.gate.close()`
+      (`state/world.py`, immediately before `return before`), verified safe (`is_open`'s only
+      production reader is `remove_person`; `mint()`'s only caller is `World.write` itself, both
+      calls preceding where the new `close()` sits) and the falsifier file gained a second case
+      for the realistic scenario. AX-4 now holds by construction as originally claimed; it did not
+      between position 7's own commit and this correction. See `H-131`'s own updated `cite:` for
+      the fuller account."
     source:    "M4 review pass (`valoria-critic`, second correctional round), on
       `loop/effects.py::_eff_march`'s own `remove_person` fix from the first correctional round.
       The gate-bypass closure note is `GATE-REMOVE-PERSON`, plan position 7, 2026-09-29."

@@ -176,8 +176,12 @@ def purview_reaches(w: "World", seat: Office, rung: Optional[str]) -> bool:
     True iff `rung` is the seat's own rung or lies inside it -- `descendants(w, seat.rung)`, the
     walk the plan names for this ruling (part 2 `18a`, r2 `05:450-451`). `Office.rung` IS `via.scope`:
     `04 §B.7`'s `scope? (null = a cluster)` is the field this tree spells `rung: Optional[str]`, with
-    the same null. (`Office.scope_rung` is not it -- it has no reader in the game and `18a` deletes
-    it.)
+    the same null. `Office.scope_rung` is a DIFFERENT field, this one, from a DIFFERENT purview
+    question (a bench's, `judging_set`'s `H-32` containment test) -- CORRECTED (methodology close,
+    antagonist pass, 2026-09-29): this docstring said `scope_rung` "has no reader in the game and
+    `18a` deletes it", true when written (`13d-i`, 2026-09-26) and false since `queries/world_q.py
+    ::judging_set` (position `18`/PROC-A, 2026-09-29) made it that mechanism's only containment
+    check. `18a` MAY NOT delete it as things stand; see `carriers.py`'s matching correction.
 
     ⚠ THE READING OF "HIGHEST", STATED BECAUSE THE RULING ADMITS TWO. (a) ADOPTED: every seat on
     the chain above a rung has purview over it -- the Duke over a territory in his duchy, and the

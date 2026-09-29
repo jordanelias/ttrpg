@@ -327,10 +327,16 @@ rm`, then one `tools/export_composition.py` regeneration:
 gate-free today, §8.4:** `engine/autoload/npc_ai.py`; `systems/overview/sim/{rs_track,ip_track}.py`
 with the role `rs_track_delta`; the six FA stubs
 `systems/factions/sim/{charter_liberties,hafenmark_equipment,home_sanctuary,infrastructure_reclamation,varfell_mandate_action,varfell_territorial_acquisition}.py`;
-`systems/world/sim/{miraculous_event,restoration_movement}.py`; `systems/characters/sim/companion.py`
-— all thirteen are `_OI17_FULL_MODULE_ENTRYPOINTS` targets, dynamically probed every run by a
-currently-passing test this plan's own §3.4 schedules for later retirement. Deleting any of them now
-would fail that test today for no gain.
+`systems/world/sim/{miraculous_event,restoration_movement}.py`; `systems/characters/sim/companion.py`;
+and `systems/threadwork/sim/rendering.py` (`apply_rs_strain`) — CORRECTED at the Phase-1 methodology
+close (ACCURACY/antagonist passes, 2026-09-29): this last one is the true 13th
+`_OI17_FULL_MODULE_ENTRYPOINTS` target (`engine/tests/test_pipeline_reach.py:288`) and was missing
+from this enumeration although the count beside it already said "thirteen" — all thirteen are
+dynamically probed every run by a currently-passing test this plan's own §3.4 schedules for later
+retirement. Deleting any of them now would fail that test today for no gain. The guard itself was
+never at risk (`test_pipeline_reach.py`'s own executable list is complete and would refuse a
+premature deletion regardless of this prose); the risk was a future reader trusting this list over
+that test.
 
 **REMOVED FROM THIS POSITION'S SCOPE, not merely deferred — `references/module_contracts.yaml`
 already ruled it, §8.4:** the roles `territory_transfer_candidate` and `territory_transfer_proposal`.
@@ -618,11 +624,23 @@ added here is written once, to the G4 contract: build the object locally and ret
 >   so the repair is a **verb**"*. That is exactly the retirement plan's G2 shape. Payment is the
 >   existing `transfer`. `oblige` Tenures carry a T-n term that the paying act renews. `Office.upkeep`
 >   is the per-obligee amount, typed, with a fixture default and a 3-point sweep.
-> - **Consequence: `18a` deletes eleven fields, not twelve.** The other two Layer-1 collisions on that
->   list were checked. `Office.scope_rung` has NO reader (`state/carriers.py:707`: *"`scope_rung` has NO
->   READER"*; `state/gate.py:177-179`: *"`Office.rung` IS `via.scope` … `18a` deletes"*), so it is safe
->   to delete. `Office.dates` has no reader in `engine/season` non-test code, so it is safe too. Only
->   `upkeep` collides.
+> - **Consequence: `18a` deletes TEN fields, not twelve, and `Office.scope_rung` comes OFF its list
+>   too — CORRECTED at the Phase-1 methodology close (antagonist pass, 2026-09-29), after this
+>   document's own position `9`/PROC-A landed.** The claim below was true when this paragraph was
+>   written and is false now: `queries/world_q.py::judging_set` (`H-32`, built at position `9`,
+>   THIS SAME PLAN, DONE) reads `off.scope_rung` directly as the entire containment mechanism by
+>   which a bench's purview reaches a venue — see that position's own §3.1 body text and its
+>   `§8.11` record. `state/carriers.py:707-709` and `state/gate.py:176-180` are corrected in place
+>   (same pass) to say so, rather than left citing each other into a stale conclusion. **`18a`
+>   deletes `Office.dates` and the ten upkeep-adjacent fields untouched by this correction; it may
+>   NOT delete `scope_rung` as things stand** — re-derive that field's disposition fresh when `18a`
+>   is actually built, against `carriers.py`'s and `gate.py`'s corrected comments, not against this
+>   paragraph's original (now-struck) claim. Original text, kept for the record rather than
+>   silently rewritten: ~~"The other two Layer-1 collisions on that list were checked.
+>   `Office.scope_rung` has NO reader (`state/carriers.py:707`: 'scope_rung has NO READER';
+>   `state/gate.py:177-179`: 'Office.rung IS via.scope … 18a deletes'), so it is safe to delete."~~
+>   `Office.dates` has no reader in `engine/season` non-test code (unchanged by this correction, not
+>   independently re-verified here), so it stays safe. Only `upkeep` and now `scope_rung` collide.
 > - **What `17b` is.** It is the retirement plan's own proposed handle. It carries `Tenure.term` — F.3,
 >   work-order item 6, and the edge half of `21` C-10: the field T-n needs, which G3 left "unbuildable".
 >   It also carries the T-n basis at the gate, `upkeep`'s reader, and payment by `transfer` renewing
@@ -1581,6 +1599,22 @@ reasoning: a missing window is a CALL-SITE BUG, not the design refusing a case. 
 emission gap it does not touch — never silently overwritten) and turning the abandoned AX-4 setter
 scan (`HANDOFF_IN.md`'s `S2`) into a CONVENTION duplicate of a now-mechanical check, without
 un-abandoning it.
+
+> ⚠⚠ **THIS PARAGRAPH OVERSTATED WHAT LANDED, CORRECTED AT THE PHASE-1 METHODOLOGY CLOSE
+> (antagonist pass, 2026-09-29, same day).** `World.write`'s SUCCESS path did not call
+> `gate.close()` when this position first shipped — only its two refusal branches did (`H-131`,
+> three days earlier, found this exact gap unwired, for a different reason: `gate.mint()`'s reuse
+> safety, never a bare `is_open` read). So `gate.is_open` stayed permanently True after a world's
+> FIRST successful write and never reset at a season/step boundary — the check above could only
+> ever catch a call on a pristine, never-written `World`, not the realistic case (a world already
+> in play) this paragraph claims to prevent. "Hold BY CONSTRUCTION" was false between this
+> position's own commit and this correction. FIXED IN THE SAME PASS: `World.write`'s success path
+> now also calls `self.gate.close()` (`state/world.py`, before `return before`, symmetric with the
+> two refusal-path calls) — verified safe (`is_open`'s only production reader is `remove_person`;
+> `mint()`'s only caller is `World.write` itself, both preceding the new call) — and
+> `test_gate_remove_person_requires_an_open_write.py` gained a third case for the realistic
+> scenario the original two could not distinguish from the vacuous-guard failure. AX-4 now holds
+> by construction as claimed. `H-131`'s own `cite:` carries the fuller account.
 
 **Read fresh, all three current callers, before deciding the shape:** `_eff_kill`
 (`loop/effects.py`, `Change.perform` calls `w.remove_person`), `_eff_march` (same shape, added in the

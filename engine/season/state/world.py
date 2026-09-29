@@ -603,21 +603,35 @@ class World:
         ⚠⚠ MADE MECHANICAL (`GATE-REMOVE-PERSON`, plan position 7, 2026-09-29): the check below
         reads `self.gate.is_open` (`state/gate.py::Gate`), true for exactly the span `World.write`
         holds a window open around `apply()`/`change.apply()` (`.opening()` before, `.close()` on
-        refusal, the NEXT `.opening()` on success) — which is precisely "already inside a gated
-        write" made CHECKABLE instead of trusted, one more property AX-4 (`04:115`, "one write
-        path") now holds through `World.write` + the gate's own state rather than through caller
-        discipline. It is not a second, nested `world.write(...)` call — that would check a
-        (kind, field) pair this function does not itself declare and would re-open a window
-        already open — it is a REFUSAL of the one failure mode the discipline above could not
-        catch: a future caller reaching this function with no write open at all. Every call site
-        in the tree today (`_eff_kill`, `_eff_march`, `loop/matter.py`, and the two
-        `harness/probes.py` / `test_season_shape.py` falsifiers that already wrap it in
-        `w.write(...)`) already satisfies it, so this changes no existing behaviour or emission —
-        MEASURED, not assumed: every existing death/`remove_person` test in `engine/season/tests`
-        still passes unchanged (`test_march.py`, `test_g3_not_yours.py`, `test_season_shape.py`'s
-        P24/P25 probes and its partition-seam test), and the new falsifier
-        (`test_gate_remove_person_requires_an_open_write.py`) is the one that calls this bare and
-        asserts the raise.
+        refusal or on a normal return) — which is precisely "already inside a gated write" made
+        CHECKABLE instead of trusted, one more property AX-4 (`04:115`, "one write path") now
+        holds through `World.write` + the gate's own state rather than through caller discipline.
+        It is not a second, nested `world.write(...)` call — that would check a (kind, field) pair
+        this function does not itself declare and would re-open a window already open — it is a
+        REFUSAL of the one failure mode the discipline above could not catch: a future caller
+        reaching this function with no write open at all. Every call site in the tree today
+        (`_eff_kill`, `_eff_march`, `loop/matter.py`, and the two `harness/probes.py` /
+        `test_season_shape.py` falsifiers that already wrap it in `w.write(...)`) already
+        satisfies it, so this changes no existing behaviour or emission.
+
+        ⚠⚠ CORRECTED (methodology close, antagonist pass, 2026-09-29): THE ORIGINAL WRITING OF THIS
+        NOTE CLAIMED MORE THAN THE CODE THEN DELIVERED. `World.write`'s success path did not call
+        `gate.close()` — only its two refusal branches did (H-131, `hole_register.yaml`, found this
+        gap unwired three days earlier for a DIFFERENT reason, `gate.mint()`'s reuse safety, and
+        judged it harmless because `opening()` always resets `_open` before any mint; H-131 never
+        analyzed a bare `is_open` READ, which is what THIS check is). So `is_open` stayed
+        permanently True after a World's first successful write and never reset at a season or step
+        boundary — the check below could only ever catch a call on a PRISTINE, never-written
+        World, not the realistic misuse case (a world already in play) this note claimed to
+        prevent. Fixed in the same pass: `World.write`'s success path now calls `self.gate.close()`
+        too (`:1056`, symmetric with the two refusal-path calls), so the property genuinely holds
+        now. MEASURED, not assumed: every existing death/`remove_person` test in
+        `engine/season/tests` still passes unchanged (`test_march.py`, `test_g3_not_yours.py`,
+        `test_season_shape.py`'s P24/P25 probes and its partition-seam test), and
+        `test_gate_remove_person_requires_an_open_write.py` gained a second case exercising the
+        REALISTIC scenario (a world that already completed a legitimate write, then a later bare
+        call) — the one the original falsifier, testing only a pristine world, could not
+        distinguish from the vacuous-guard failure mode.
 
         ⚠ G3: AND THAT IS WHAT MAKES THE CASCADE ATTRIBUTABLE. The gate's F3 clause admits an edge
         closed by a non-owner -- or by no actor at all, at MATTER -- only as `destroy's cascade`:
@@ -1053,6 +1067,19 @@ class World:
             # accelerating. The buffer is MATTER's, so only MATTER fills it.
             if step is Step.MATTER:
                 self._emitted_by_write.append(ev)
+        # H-131 / GATE-REMOVE-PERSON antagonist finding (methodology close, 2026-09-29): the two
+        # refusal branches above already close the window (`:958`, `:974`); the SUCCESS path did
+        # not, so `gate.is_open` stayed permanently True after any world's first successful write,
+        # never resetting at a season/step boundary. `remove_person`'s bare-call guard (`:627`)
+        # reads exactly that flag, so the gap made the guard vacuous the instant a season actually
+        # ran — it could only ever catch a call on a pristine, never-written World. Closing here
+        # is symmetric with the two existing calls and safe: `is_open` has exactly one production
+        # reader (`remove_person`, `:627`) and `mint()` has exactly one caller (`World.write`
+        # itself, both calls above this line, so nothing after this point still needs the window).
+        # Narrower than H-131's own open question (closing at ORDINARY BARRIER TRANSITIONS
+        # independent of any write) — this closes only the window THIS write opened, at the end of
+        # the same call that opened it.
+        self.gate.close()
         return before
 
     # -- S4: a Query MAY be cached. Built AT a barrier, read-only until the next, DISCARDED there.
