@@ -11,15 +11,16 @@
 #    05_LEDGER_AND_BUILD.md` RULED (c) settles the destination: *"`titles`, the roster
 #    (`rosters.yaml:692`) -- RESIDUE. Its only code reader is `title_domain`... its domains move
 #    into `offices.yaml`... and the roster goes."*
-#    ⚠⚠ THE ROSTER HAS NOT GONE YET, AND THAT IS A SCOPE DECISION, NAMED RATHER THAN HIDDEN.
-#    `engine/season/rosters.yaml` was declared owned by a CONCURRENT plan position in this same
-#    shared working tree at the time this file was authored (2026-09-29) -- deleting its `titles:`
-#    block is a `rosters.yaml` edit this session did not make, to avoid a collision with a sibling
-#    agent's in-flight work on that file. `data/rosters.py::TITLE_DOMAINS`/`title_domain` are
-#    repointed at THIS file below, so `rosters.yaml: titles` is orphaned residue from this commit
-#    forward -- `S11`'s own shape (*"loads clean, `roster()` raises at READ, not at load"*) -- and
-#    its physical deletion is follow-up for whoever next opens `rosters.yaml` (recorded in
-#    `HANDOFF_IN.md`).
+#    ⚠⚠ THE ROSTER'S PHYSICAL DELETION WAS DEFERRED ONE SESSION, NAMED RATHER THAN HIDDEN, AND HAS
+#    NOW LANDED. `engine/season/rosters.yaml` was declared owned by a CONCURRENT plan position in
+#    this same shared working tree at the time this file was authored (2026-09-29) -- deleting its
+#    `titles:` block was a `rosters.yaml` edit that session did not make, to avoid a collision with
+#    a sibling agent's in-flight work on that file. `data/rosters.py::TITLE_DOMAINS`/`title_domain`
+#    were already repointed at THIS file, so `rosters.yaml: titles` stood as orphaned residue for
+#    exactly one session -- `S11`'s own shape (*"loads clean, `roster()` raises at READ, not at
+#    load"*) -- until the Phase-1 methodology close (2026-09-29, `/simplify` ALTITUDE lens)
+#    physically deleted it, the follow-up `HANDOFF_IN.md` had named. The full Jordan-quoted
+#    ruling this file's own `titles:` header already carries below is now the only copy.
 #
 # 2. THE `seats:` SECTION'S SHAPE IS `proposals/2026-09-17-governance-and-holdings-r2/
 #    03_SEATS_AND_CONTENT.md` §A.14/§A.15 -- the fully adjudicated derivation of

@@ -798,14 +798,30 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     outside its roster, the `quorum`/`disposal: declared` cross-check in both directions), on the
     exact discipline `verbs.py`'s own per-field checks already use -- a schema this large produces
     a refusal this large, not a defect to trim. `data/verbs.py`'s own 25 is coincidence, not a
-    mirrored count; the two schemas are unrelated in size, and both close on their own fields."""
+    mirrored count; the two schemas are unrelated in size, and both close on their own fields.
+
+    ⚠ 69 -> 62, 2026-09-29, Phase-1 methodology close, `/simplify` REUSE and SIMPLIFICATION lenses
+    (convergent findings), NOT A DROPPED REFUSAL -- A CONSOLIDATION. `data/arrangements.py` carried
+    nine near-identical "value must be a roster member" blocks (five single-value, four
+    list-of-values) as its own inline `raise SystemExit`s -- copy-paste with the field/roster name
+    varying, the same shape `matrix.py`/`verbs.py` each also carry their own single inline version
+    of (a THIRD divergent implementation, per the REUSE lens). Factored into two local helpers,
+    `_refuse_not_in`/`_refuse_any_not_in`, each with ONE `raise SystemExit`; the nine call sites
+    call one or the other instead of repeating the check. Every checked FIELD and ROSTER is
+    unchanged -- same nine values validated, same conditions refused -- only the SystemExit
+    statement counted here is now shared rather than repeated nine times, so `arrangements.py`'s
+    own count moves 25 -> 18 (nine sites collapsed to two), a `-7` that is this test's whole
+    explanation for `69 -> 62`. MUTATION CHECK unchanged: deleting either helper's raise, or a
+    call site skipping it, still fails the loader's own tests (`test_arrangements.py`) before this
+    count could hide it -- the pin here is this file's OWN falsifier for the shape of the
+    refusal, not the only one."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 69, (
-        f"{total} load-time exits across the model set, expected 69. Per file: "
+    assert total == 62, (
+        f"{total} load-time exits across the model set, expected 62. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
@@ -4789,6 +4805,13 @@ def test_the_title_ladder_is_total_over_the_rungs():
     # `_ROSTERS.get("titles") or {}`, so deleting the roster returned `None` for every post and
     # `_req_revoke` fell back to purview-for-everything — a guard failing OPEN into the exact
     # behaviour Jordan's fourth message forbids. `roster_map` is the single owner of the refusal.
+    # ⚠ `rosters.yaml: titles` ITSELF IS NOW GONE (Phase-1 methodology close, 2026-09-29, `/simplify`
+    # ALTITUDE lens -- the fold to `offices.yaml` this same test's docstring covers), so both calls
+    # below refuse for the same reason (no roster named `titles` at all) rather than two distinct
+    # ones (an absent roster; a present roster with an absent key) as when this was first written.
+    # Kept as two assertions anyway: a future roster reusing the name `titles` for something else
+    # would still need `roster_map` to refuse an unknown sub-key on it, and this is where that
+    # would be caught.
     with pytest.raises(Unspecified):
         roster_map("titles_that_do_not_exist", "domains")
     with pytest.raises(Unspecified):
@@ -11268,23 +11291,28 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # package is re-scanned rather than the one file trusted.
     # [GROUNDED: measured 2026-09-11 over `files.package_modules()` minus the test module -- the margin-producing lines are exactly the two in `seam/wrappers/sigma.py`]
     #
-    # ⚠ `harness/arms.py`'s retired `_pool_arm` (plan position `28-i`, `1320045`) monkeypatches
+    # ⚠⚠ THE SUBSTRING HAZARD FIRED FOR REAL 2026-09-29 AND WAS FIXED TWICE, THE SECOND TIME AT
+    # THE RIGHT DEPTH (`/simplify` ALTITUDE pass, same methodology close as the fix below).
+    # `harness/arms.py`'s retired `_pool_arm` (plan position `28-i`, `1320045`) monkeypatches
     # `engine.autoload.sigma_leverage.roll_net_continuous` -- a DIFFERENT, older dice-engine
-    # function this test does not guard, coincidentally sharing the `roll_net` substring the
-    # comment above already named as this scan's known hazard. It is historical/unwired (same
-    # status `tools/balance_oracle.py` gave it), reads and monkeypatches an existing attribute, and
-    # composes no margin of its own -- not the second producer `S27.2` refuses. Excluded by exact
-    # path, not by widening the regex, so a REAL second producer anywhere else still turns this red.
-    _FALSE_POSITIVE_NOT_A_PRODUCER = {"harness/arms.py"}
+    # function this test does not guard, coincidentally sharing the `roll_net` substring this
+    # comment already named as the scan's known hazard. THE FIRST FIX excluded the one file by
+    # exact path (`_FALSE_POSITIVE_NOT_A_PRODUCER = {"harness/arms.py"}`) rather than touching the
+    # regex -- a bandaid that would need a new entry every time another retired/historical module
+    # happens to reference a similarly-prefixed symbol. THE SECOND FIX repairs the scan itself:
+    # `\broll_net\b`/`\bnet_boost\b` (word-boundary anchors) match the real producer's own calls
+    # and imports exactly as before (`roll_net(pool) + net_boost(lev, pool)`, `from . import
+    # net_boost, roll_net`) while no longer matching `roll_net_continuous` as a bare substring --
+    # verified against both files directly before landing. No exemption set needed; a real second
+    # producer anywhere else still turns this red, and no future file collides with this pattern
+    # by accident the way `arms.py` did.
     producers = set()
     for f in files.package_modules():
         if f == files.TEST_PY:
             continue
         rel = f.relative_to(files.PACKAGE_DIR).as_posix()
-        if rel in _FALSE_POSITIVE_NOT_A_PRODUCER:
-            continue
         for i, line in enumerate(_code_only_lines(f), 1):
-            if re.search(r"\bnet\b\s*=|roll_pool|roll_net|net_boost|\bsuccesses\b", line):
+            if re.search(r"\bnet\b\s*=|roll_pool|\broll_net\b|\bnet_boost\b|\bsuccesses\b", line):
                 producers.add(rel)
     assert producers == {"seam/wrappers/sigma.py"}, (
         f"the margin producers are {sorted(producers)}. Exactly one module may produce a margin — "

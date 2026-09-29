@@ -543,8 +543,10 @@ MARCH_TARGET_KINDS = roster("march_target_kinds")
 # `13d-i` item 5 -- Layer 1 `04_CODE_ARCHITECTURE.md` §B.7/§E.1 rules `titles.domains` world-gen
 # DATA, and r2 `05_LEDGER_AND_BUILD.md` RULED (c) names the destination). Same mapping, same
 # eleven entries, moved rather than copied -- read `_load_offices`'s docstring for the refusal
-# shape and `offices.yaml`'s own header for why `rosters.yaml: titles` is not yet physically
-# deleted (a concurrent position owned that file this session).
+# shape. `rosters.yaml: titles` is physically deleted as of the Phase-1 methodology close
+# (2026-09-29, `/simplify` ALTITUDE lens) -- it stood as orphaned residue for one session while a
+# concurrent plan position owned that file, per `offices.yaml`'s own header, and the deletion
+# HANDOFF_IN.md named as follow-up lands here.
 TITLE_DOMAINS = dict(_OFFICES_DOC["titles"]["domains"])
 
 # ⚠ THE OFFICE'S THREE CANON AXES -- `H-99`, and they are BOUND AT IMPORT for the reason the

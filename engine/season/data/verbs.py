@@ -323,6 +323,16 @@ def _derive_openers_from_effects() -> dict:
     return {k: sorted(v) for k, v in openers.items()}
 
 
+#: Computed ONCE, same discipline as `effects.py`'s own source not changing mid-process
+#: (`_OFFICES_DOC`/`OFFICES_SEATS` in `rosters.py` cache their own derivation the same way).
+#: Found uncached at the Phase-1 methodology close (2026-09-29, `/simplify`, EFFICIENCY and
+#: SIMPLIFICATION lenses, convergent): all three call sites below re-read and re-parsed
+#: `loop/effects.py` from scratch on every call, though the derivation "once instead of a second
+#: copy" was the function's own whole premise -- the same discipline now applies to the
+#: derivation's runtime cost, not only to the source file it replaces.
+_OPENERS_FROM_EFFECTS = _derive_openers_from_effects()
+
+
 def _load_verb_table() -> dict:
     import yaml as _y
     if not VERB_TABLE_YAML.exists():
@@ -598,7 +608,7 @@ def _load_verb_table() -> dict:
     # across the model set, `test_season_shape.py`'s own pinned count). What survives is the check
     # a derivation cannot rule out by construction: an opener naming a verb `verb_table.yaml` does
     # not have -- a typo or an orphaned `@effect_for` registration in `loop/effects.py`.
-    _openers = _derive_openers_from_effects()
+    _openers = _OPENERS_FROM_EFFECTS
     _stray = sorted((k, v) for k, vs in _openers.items() for v in (vs or []) if v not in out)
     if _stray:
         raise SystemExit(
@@ -640,7 +650,7 @@ def tenure_kinds_without_an_opener() -> list:
     (`commit`/`oblige`/`succeed`/`tie`/`knot`, unchanged since `OPENERS-DERIVE` replaced the
     hand-written mapping with this function -- the same holes, MEASURED the same way, computed now
     instead of read off the roster)."""
-    return sorted(k for k, vs in _derive_openers_from_effects().items() if not vs)
+    return sorted(k for k, vs in _OPENERS_FROM_EFFECTS.items() if not vs)
 
 VERB_TABLE: dict = {}          # filled after STRATA loads, at the bottom of the roster block
 

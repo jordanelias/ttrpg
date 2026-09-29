@@ -1722,18 +1722,29 @@ def test_13d_i_revoke_executes_in_the_fold_for_the_seat_above_and_refuses_the_ot
 # =================================================================================================
 
 def test_8a_title_domain_now_reads_offices_yaml_and_answers_identically():
-    """THE FOLD CHANGED WHERE, NOT WHAT. `rosters.yaml: titles` is left in place this session as
-    orphaned residue (a concurrent plan position owned that file -- `offices.yaml`'s own header
-    names the scope decision), but nothing reads it through `title_domain` any more: `TITLE_DOMAINS`
-    is bound from `engine/season/offices.yaml` at import. The eleven names and their rung kinds
-    must be byte-identical to the roster this replaces, or the fold silently changed a fact."""
+    """THE FOLD CHANGED WHERE, NOT WHAT. `rosters.yaml: titles` was left in place for one session
+    as orphaned residue (a concurrent plan position owned that file -- `offices.yaml`'s own header
+    names the scope decision) and is now physically deleted (Phase-1 methodology close, 2026-09-29,
+    `/simplify` ALTITUDE lens) -- nothing read it through `title_domain` even before the deletion:
+    `TITLE_DOMAINS` is bound from `engine/season/offices.yaml` at import. `PINNED` is the byte-exact
+    reading of `rosters.yaml: titles: domains:` taken at the fold (position `8a`) and verified
+    against it there; with the source roster gone, this is now the record the fold stays honest
+    against, not a second live copy (the same declared-literal shape `harness/arms.py`'s retired
+    arm pairs use for the same reason)."""
     from ..data import files
-    from ..data.rosters import load_yaml, roster_map
+    from ..data.rosters import load_yaml
 
-    old = roster_map("titles", "domains")   # `rosters.yaml`'s own copy, still on disk, unread
-    assert dict(TITLE_DOMAINS) == old, (
-        "the fold moved the mapping and changed it -- `offices.yaml: titles: domains:` disagrees "
-        f"with the untouched `rosters.yaml: titles: domains:`: {TITLE_DOMAINS} != {old}")
+    # roster-exempt: PINNED HISTORY, not the game's vocabulary -- `rosters.yaml: titles: domains:`,
+    # byte-identical to what it read before its physical deletion (verified at that deletion).
+    PINNED = {
+        "King": "realm", "Queen": "realm", "Duke": "duchy", "Duchess": "duchy",
+        "Count": "province", "Countess": "province", "Lord": "territory",
+        "Mayor": "settlement", "Community Leader": "community",
+        "Family Head": "hearth", "Individual": "person",
+    }
+    assert dict(TITLE_DOMAINS) == PINNED, (
+        "offices.yaml: titles: domains: disagrees with the pinned reading of the roster it folded "
+        f"from: {TITLE_DOMAINS} != {PINNED}")
     assert set(TITLE_DOMAINS.values()) == set(RUNG_KINDS), (
         "the ladder is no longer total over the rungs after the fold")
     for post, dom in TITLE_DOMAINS.items():
@@ -1741,7 +1752,7 @@ def test_8a_title_domain_now_reads_offices_yaml_and_answers_identically():
     assert title_domain("Dicastery") is None, "a non-title post reads as a title after the fold"
 
     doc = load_yaml(files.OFFICES_YAML.read_text(encoding="utf-8"))
-    assert doc["titles"]["domains"] == old, "offices.yaml's own file text disagrees with the roster it folded"
+    assert doc["titles"]["domains"] == PINNED, "offices.yaml's own file text disagrees with the pinned fold"
 
 
 def test_8a_every_authored_seat_constructs_against_the_live_rosters():

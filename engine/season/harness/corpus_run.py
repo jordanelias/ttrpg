@@ -106,11 +106,7 @@ def rescales() -> dict:
     do, so a keyword rule would cover half the corpus and silently mis-scale the rest — the ROUTER
     `W10` deleted, returning as a corpus tool. Measured before deciding not to build one."""
     out: dict = {}
-    d = files.EXERCISES_DIR
-    if not d.is_dir():
-        return out
-    for f in sorted(d.glob("*.yaml")):
-        doc = load_yaml(f.read_text()) or {}
+    for f, doc in _exercise_docs():
         sc = doc.get("scale")
         if doc.get("case") and isinstance(sc, dict):
             if not sc.get("why"):
@@ -119,6 +115,22 @@ def rescales() -> dict:
             _check_office(f.name, sc.get("office"))
             out[doc["case"]] = sc
     return out
+
+
+def _exercise_docs():
+    """The one directory walk `rescales()` and `cast_overlay()` both read a different top-level
+    key off — `cases/exercises/*.yaml`, "ONE OVERLAY MECHANISM, NOT TWO" (this module's own
+    header). Factored out (methodology close, 2026-09-29, `/simplify` REUSE lens) after the two
+    functions carried this loop byte-for-byte twice, differing only in which key and which type
+    check each reads afterward — a third overlay key (already anticipated: position `17`'s
+    roles/offices) would otherwise have copied it a third time. Yields `(path, doc)` so a caller
+    can still cite the file by name in its own error messages; tolerant of a missing directory
+    (no `sorted(d.glob(...))` on a `d` that doesn't exist)."""
+    d = files.EXERCISES_DIR
+    if not d.is_dir():
+        return
+    for f in sorted(d.glob("*.yaml")):
+        yield f, (load_yaml(f.read_text()) or {})
 
 
 def _check_office(where: str, off) -> None:
@@ -200,11 +212,7 @@ def cast_overlay() -> dict:
     `grep -c 'who:' cases/**/*.yaml` is not, and will over- or under-count the moment a comment or
     an unrelated `who:`-shaped string appears in a file this function does not read as one."""
     out: dict = {}
-    d = files.EXERCISES_DIR
-    if not d.is_dir():
-        return out
-    for f in sorted(d.glob("*.yaml")):
-        doc = load_yaml(f.read_text()) or {}
+    for _f, doc in _exercise_docs():
         entries = doc.get("cast")
         if doc.get("case") and isinstance(entries, list):
             out[doc["case"]] = entries

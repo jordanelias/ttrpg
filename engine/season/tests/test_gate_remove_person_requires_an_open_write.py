@@ -23,13 +23,22 @@ THREE ARMS, so this is a measurement and not a one-sided claim (`CLAUDE.md` §0.
      `H-131`). This arm proves the fix: a write succeeds, the gate closes again, and a LATER bare
      call still raises -- the scenario arm 1 alone could not distinguish from the vacuous-guard
      failure mode, because a pristine world and a "closed again after one write" world both start
-     that assertion with `is_open` False."""
+     that assertion with `is_open` False.
+  4. THE MID-WRITE EXCEPTION CASE, added the same close, one `/simplify` ALTITUDE pass later. Arm 3's
+     own fix (a third hand-written `close()` at the success return) missed a FOURTH exit that
+     already existed: `write()`'s S33 check (a declared emission with no `subject=`) raises
+     `Forbidden` AFTER the mutation and the mint have already happened, and nothing closed the
+     window on that path either -- the same leak arm 3 fixed, at a site nobody had enumerated.
+     Fixed by replacing every hand-written `close()` with one `try`/`finally`, so closure no longer
+     depends on catching every exit by name. This arm exercises exactly that exit: a write whose
+     mutation SUCCEEDS but which then raises from deep in its own tail, proving the gate still
+     closes on the way out through an exception, not only on a clean `return`."""
 from __future__ import annotations
 
 import pytest
 
 from ..data.matrix import Step, WriteClass
-from ..gaps import InstrumentDefect
+from ..gaps import Forbidden, InstrumentDefect
 from ..harness.probes import tiny_world
 from ..loop.driver import mint_token
 from ..state.ids import ROOT
@@ -83,6 +92,33 @@ def test_a_bare_call_after_a_prior_successful_write_still_raises():
     assert not w.gate.is_open, (
         "the gate stayed open after a successful write -- the exact regression this test exists "
         "to catch (H-131 / the methodology-close antagonist finding on plan position 7)")
+
+    with pytest.raises(InstrumentDefect):
+        w.remove_person("p_other")
+
+    assert "p_other" in w.persons, "the refused call removed the person anyway"
+
+
+def test_a_write_that_raises_from_its_own_tail_still_closes_the_gate():
+    """The mid-write exception case: the mutation succeeds, the mint already happened, and THEN
+    the S33 check (a declared emission with no `subject=`) raises `Forbidden` from deep in
+    `write()`'s own tail -- an exit that existed before this position and that the first,
+    hand-written `close()` fix never touched. If the window leaked open here, this test could not
+    tell it apart from a correctly-closed one just by checking `is_open` once; the second bare
+    call on an unrelated victim is what actually proves it."""
+    w = tiny_world()
+    w.step = Step.MATTER
+
+    with pytest.raises(Forbidden, match="S33"):
+        w.write("Tenure", mint_token(w, WriteClass.MATTER), lambda: w.remove_person("p_high"),
+                record_kind="Tenure", fieldname="until", driver="Event",
+                caused_person_exists="p_high", emits="tenure.closed", subject=None,
+                causes=[ROOT])
+
+    assert "p_high" not in w.persons, "fixture: the mutation must have happened before S33 fires"
+    assert not w.gate.is_open, (
+        "the gate leaked open past a write that raised from its own tail -- the S33 exit "
+        "the first close() fix (arm 3) did not cover")
 
     with pytest.raises(InstrumentDefect):
         w.remove_person("p_other")

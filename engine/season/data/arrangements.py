@@ -83,6 +83,34 @@ def _refuse_unknown(row: dict, declared: frozenset, name: str, kind: str) -> Non
             f"ones this loader reads ({sorted(declared)}).")
 
 
+def _refuse_not_in(name: str, field: str, value, roster, roster_label: str = "", *,
+                    repr_fn=sorted) -> None:
+    """A single value must be a roster member. `repr_fn` formats the roster for the message --
+    `sorted` by default, or `list` where order is semantic (`RUNG_KINDS`'s rank order), passed
+    rather than re-derived so a rank-ordered roster keeps displaying in rank order.
+    `roster_label` describes the roster (e.g. "a `rung_kinds` member"); omitted, the message
+    reads "not one of {repr}" with no parenthesised citation, for a roster with no name worth
+    citing (a literal value set declared right here, not read from another file)."""
+    if value not in roster:
+        if roster_label:
+            raise SystemExit(
+                f"arrangements.yaml: {name!r} has `{field}: {value!r}`, not {roster_label} "
+                f"({repr_fn(roster)}).")
+        raise SystemExit(
+            f"arrangements.yaml: {name!r} has `{field}: {value!r}`, not one of "
+            f"{repr_fn(roster)}.")
+
+
+def _refuse_any_not_in(name: str, kind: str, field_label: str, values, roster, roster_label: str,
+                        *, repr_fn=sorted) -> None:
+    """Every value in a list must be a roster member."""
+    bad = [v for v in values if v not in roster]
+    if bad:
+        raise SystemExit(
+            f"arrangements.yaml: {kind} {name!r} names {field_label} {bad} outside "
+            f"{roster_label} ({repr_fn(roster)}).")
+
+
 def _parse_floor(name: str, raw: Any) -> tuple:
     """`open | closed | admitted:<remit act>` -- the one key with an embedded parameter. Returns
     `(form, basis_or_None)`. `admitted` alone (no `:<basis>`) is admitted too: `03_PARAMETERS.md`'s
@@ -106,24 +134,17 @@ def _load_speech_kind(row: dict) -> dict:
     name = str(row["id"])
     _refuse_unknown(row, _SPEECH_KIND_KEYS, name, "speech_kinds row")
     genres = list(row.get("genres") or ())
-    bad_genres = [g for g in genres if g not in GENRES]
-    if bad_genres:
-        raise SystemExit(
-            f"arrangements.yaml: speech_kinds row {name!r} names genre(s) {bad_genres} outside "
-            f"`rosters.yaml: genres` ({sorted(GENRES)}).")
+    _refuse_any_not_in(name, "speech_kinds row", "genre(s)", genres, GENRES, "`rosters.yaml: genres`")
     min_rank = row.get("min_rank")
-    if min_rank is not None and min_rank not in RUNG_KINDS:
-        raise SystemExit(
-            f"arrangements.yaml: speech_kinds row {name!r} has `min_rank: {min_rank!r}`, not a "
-            f"`rung_kinds` member ({list(RUNG_KINDS)}).")
+    if min_rank is not None:
+        _refuse_not_in(name, "min_rank", min_rank, RUNG_KINDS, "a `rung_kinds` member",
+                       repr_fn=list)
     bands = list(row.get("reachable_bands") or ())
-    bad_bands = [b for b in bands if b not in DEGREE_BANDS]
-    if bad_bands:
-        raise SystemExit(
-            f"arrangements.yaml: speech_kinds row {name!r} names reachable band(s) {bad_bands} "
-            f"outside `dice_engine.py: DEGREE_LABEL` ({sorted(DEGREE_BANDS)}). Loader invariant per "
-            f"`19_PLAN.md` step 7: \"the loader refuses a kind whose reachable bands name a band "
-            f"outside the ladder.\"")
+    _refuse_any_not_in(name, "speech_kinds row", "reachable band(s)", bands, DEGREE_BANDS,
+                       "`dice_engine.py: DEGREE_LABEL`")
+    # ⚠ Loader invariant per `19_PLAN.md` step 7: "the loader refuses a kind whose reachable
+    # bands name a band outside the ladder" -- carried as a code comment, not repeated per row,
+    # since `_refuse_any_not_in`'s message above already names the exact defect and the roster.
     # roster-exempt: MECHANISM -- the return shape's own field names, not a second roster.
     return {"id": name, "genres": tuple(genres), "min_rank": min_rank,
             "reachable_bands": tuple(bands)}
@@ -142,50 +163,32 @@ def _load_arrangement(row: dict) -> dict:
         return row[key]
 
     disposal = need("disposal")
-    if disposal not in _DISPOSAL_VALUES:
-        raise SystemExit(
-            f"arrangements.yaml: {name!r} has `disposal: {disposal!r}`, not one of "
-            f"{sorted(_DISPOSAL_VALUES)}.")
+    _refuse_not_in(name, "disposal", disposal, _DISPOSAL_VALUES)
     bench_basis = need("bench_basis")
-    if bench_basis != "none" and bench_basis not in REMIT_ACTS:
-        raise SystemExit(
-            f"arrangements.yaml: {name!r} has `bench_basis: {bench_basis!r}`, not `none` or a "
-            f"`remit_acts` member ({sorted(REMIT_ACTS)}).")
+    if bench_basis != "none":
+        _refuse_not_in(name, "bench_basis", bench_basis, REMIT_ACTS, "`none` or a `remit_acts` member")
     floor_form, floor_basis = _parse_floor(name, need("floor"))
     records_dissent = need("records_dissent")
     if not isinstance(records_dissent, bool):
         raise SystemExit(f"arrangements.yaml: {name!r} has `records_dissent: {records_dissent!r}`, "
                          "not `true`/`false`.")
     venue_min_rank = need("venue_min_rank")
-    if venue_min_rank not in RUNG_KINDS:
-        raise SystemExit(
-            f"arrangements.yaml: {name!r} has `venue_min_rank: {venue_min_rank!r}`, not a "
-            f"`rung_kinds` member ({list(RUNG_KINDS)}).")
+    _refuse_not_in(name, "venue_min_rank", venue_min_rank, RUNG_KINDS, "a `rung_kinds` member",
+                   repr_fn=list)
     term_required = need("term_required")
     if not isinstance(term_required, bool):
         raise SystemExit(f"arrangements.yaml: {name!r} has `term_required: {term_required!r}`, "
                          "not `true`/`false`.")
     appeal_basis = need("appeal_basis")
-    if appeal_basis != "none" and appeal_basis not in REMIT_ACTS:
-        raise SystemExit(
-            f"arrangements.yaml: {name!r} has `appeal_basis: {appeal_basis!r}`, not `none` or a "
-            f"`remit_acts` member ({sorted(REMIT_ACTS)}).")
+    if appeal_basis != "none":
+        _refuse_not_in(name, "appeal_basis", appeal_basis, REMIT_ACTS, "`none` or a `remit_acts` member")
     interposed = list(need("interposed") or ())
-    bad_interposed = [i for i in interposed if i not in INTERPOSITION_KINDS]
-    if bad_interposed:
-        raise SystemExit(
-            f"arrangements.yaml: {name!r} names interposed kind(s) {bad_interposed} outside "
-            f"`rosters.yaml: interposition_kinds` ({sorted(INTERPOSITION_KINDS)}).")
+    _refuse_any_not_in(name, "arrangement", "interposed kind(s)", interposed, INTERPOSITION_KINDS,
+                       "`rosters.yaml: interposition_kinds`")
     order = need("order")
-    if order not in _ORDER_VALUES:
-        raise SystemExit(f"arrangements.yaml: {name!r} has `order: {order!r}`, not one of "
-                         f"{sorted(_ORDER_VALUES)}.")
+    _refuse_not_in(name, "order", order, _ORDER_VALUES)
     proofs = list(need("proofs") or ())
-    bad_proofs = [p for p in proofs if p not in PROOFS]
-    if bad_proofs:
-        raise SystemExit(
-            f"arrangements.yaml: {name!r} names proof(s) {bad_proofs} outside `rosters.yaml: "
-            f"proofs` ({sorted(PROOFS)}).")
+    _refuse_any_not_in(name, "arrangement", "proof(s)", proofs, PROOFS, "`rosters.yaml: proofs`")
     disposes = need("disposes")
     if disposes not in _DISPOSES_LITERALS and disposes not in TENURE_KINDS:
         raise SystemExit(
@@ -256,8 +259,7 @@ def arrangements_without_a_disposal_opener() -> list[str]:
     note: "the other five empty"), so EVERY seeded row reports here today. That is the disclosed
     gap this function exists to make checkable rather than silent -- the same shape
     `tenure_kinds_without_an_opener()` already reports one file over."""
-    from .verbs import _derive_openers_from_effects
-    openers = _derive_openers_from_effects()
+    from .verbs import _OPENERS_FROM_EFFECTS as openers
     out = []
     for name, row in ARRANGEMENTS.items():
         if row["disposal"] == "mutual":
