@@ -16,8 +16,8 @@ description: >
   for: "run methodology-close", "close this position", a finished implementation that needs
   checking against its plan before `/close`, "agonist antagonist pass", "final adversarial
   critique", pre-commit deep review of a code change **that already exists**. If the diff does not
-  exist yet and needs building first, use `methodology-execute` instead — it runs this pipeline as
-  its own closing phases, verbatim, after its own build phase. Not for: design-quality grading
+  exist yet and needs building first, use `methodology-execute` instead — it runs this pipeline,
+  verbatim, as its BATCH-CLOSE, once per batch of items it built rather than once per item. Not for: design-quality grading
   (`ners`), a target that resolves by a draw (`resolution-diagnostic`), Layer placement checked on
   its own with no code change to verify (`layer-conformance` directly), or a change with no stated
   plan — write the plan first (CLAUDE.md §0's first bullet).
@@ -64,8 +64,9 @@ it.
 diff that is otherwise ready to commit — whether that diff already existed, or
 `methodology-execute` just built it. `/close` step 4 also runs `layer-conformance`; Phase 2 below
 is not a duplicate of that step, it is why that step should find nothing new by the time it runs.
-`methodology-execute`'s Phases 1–3 **are** this file's Phases 1–3, invoked by reference, not
-copied; a change to the sequence, the tiers or the checklists below is made once, here.
+`methodology-execute`'s BATCH-CLOSE **is** this file's Phases 1–3, invoked by reference, not
+copied, run once against a whole batch's cumulative diff rather than once per item; a change to
+the sequence, the tiers or the checklists below is made once, here.
 
 ---
 

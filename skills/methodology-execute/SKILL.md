@@ -15,8 +15,9 @@ description: >
   `layer-conformance`, and no agonist/antagonist fan or terminal critique after each item** — those
   are BATCH-CLOSE's job, not Phase 0's, run once per batch (a plan-phase's worth of items, or a
   smaller sub-batch when a phase is large) or at the run's own final `/close`, never per item.
-  BATCH-CLOSE: `methodology-close`'s full Phases 1–3, run once against the batch's cumulative diff
-  — invoked verbatim, not copied here. Use for: "run methodology-execute",
+  BATCH-CLOSE: `methodology-close`'s full Phases 1–3, run once against the batch's commit-range
+  diff (its recorded starting SHA through HEAD, since every item already committed) — invoked
+  verbatim, not copied here. Use for: "run methodology-execute",
   "/methodology-execute <task>", "build out this phase/area", a workplan position, phase, or
   free-text area of work that has not been built yet and needs both building and verifying before
   `/close`. Not for: a diff that already exists and only needs verifying — use `methodology-close`
@@ -101,10 +102,10 @@ scoped to a batch.
 faction"*), not a position handle. A vague area of work is not one buildable unit, and this file
 does not guess which unit was meant.
 
-1. **Search the live workplan first.** Run `/currency` if you have not already this session, then
-   check `CURRENT.md` and the live plan (today, `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md`
-   + its `_part2` — re-check via `/currency`, this pointer will go stale) for a position whose
-   handle or `what runs` plausibly matches the text.
+1. **Search the live workplan first.** Run `/currency` and follow `CURRENT.md` to whichever
+   document it names as the live plan — this file does not name that document itself, because a
+   filename written here would be exactly the stale pointer `CLAUDE.md` §1 exists to prevent. Check
+   that document for a position whose handle or `what runs` plausibly matches the text.
 2. **Classify what the search found:**
    - **Exactly one position, `GATE` already met** — proceed straight to 0.2 with that position's
      content-owner entry. No confirmation needed: the position's own gate already establishes it
@@ -163,13 +164,18 @@ When fanned:
   message — CLAUDE.md §10 point 3, the same cache-priming step `methodology-close` §1.3 uses for
   its agonist fan.
 
-### 0.4 Integrate
+**Either way — one producer or several — the producer never commits** (0.5); that is always the
+**orchestrator's** own next action once a receipt (or, when fanned, 0.4's integration) is in hand.
+The default, single-producer path has no worktree to merge, so it skips 0.4 and goes straight from
+receipt to the orchestrator's commit.
+
+### 0.4 Integrate — only when fanned
 
 The **orchestrator**, not a subagent, merges each worktree into the working branch, in an order
-that respects any named serial edge between the sub-parts. **If two lanes touched the same file,
-the split was wrong, not the merge** — stop, do not resolve the collision by hand, and rebuild that
-file's portion as one producer instead. A silent auto-merge of a same-file collision is exactly the
-failure the `FALSIFIERS` table below is written to catch.
+that respects any named serial edge between the sub-parts, **then commits.** **If two lanes touched
+the same file, the split was wrong, not the merge** — stop, do not resolve the collision by hand,
+and rebuild that file's portion as one producer instead. A silent auto-merge of a same-file
+collision is exactly the failure the `FALSIFIERS` table below is written to catch.
 
 ### 0.5 What this phase must not do
 
@@ -195,6 +201,14 @@ Phase 1's fan or Phase 3's critique to hold) before splitting; name what a small
 0.1 resolution is trivially its own one-item batch — there is nothing to wait for, so BATCH-CLOSE
 runs right after it.
 
+**Record the batch's starting commit before Phase 0 builds its first item.** Every item commits
+immediately (0.1 step 3), so by the time BATCH-CLOSE runs, the working tree is clean — there is no
+uncommitted diff left, which is what `methodology-close`'s Phase 1 and Phase 3 assume they are
+handed when run on their own. The batch's diff is the **commit range from that recorded starting
+SHA to `HEAD`** (`git diff <batch-start-sha>..HEAD` for the content; `/code-review`'s own
+branch/PR-target mode, not its bare "current diff" mode, for the dispatch itself). BATCH-CLOSE
+below hands every phase that range, not a working-tree diff.
+
 **A batch boundary is also always the run's final `/close`, if nothing follows it.** When the
 resolved sequence (or the current batch) is the last one in this invocation, BATCH-CLOSE is
 immediately followed by `/close` itself (full suite — already run by BATCH-CLOSE's Phase 2, not
@@ -206,14 +220,15 @@ continues to the next batch.
 
 ## BATCH-CLOSE · PHASES 1–3, ONCE PER BATCH, BY REFERENCE
 
-Run `methodology-close`'s Phases 1 through 3 **once**, against the **cumulative diff of every item
-built in this batch** since the last BATCH-CLOSE (or since the run started, for the first batch) —
-not against any single item's diff alone.
+Run `methodology-close`'s Phases 1 through 3 **once**, against the **commit-range diff** §BATCHING
+had you record (`<batch-start-sha>..HEAD`) — not against any single item's diff alone, and not
+against a working-tree diff, since nothing is left uncommitted by the time a batch ends.
 
 - Its **Phase 1 precondition** ("there must be a plan to check fidelity against") is satisfied by
-  the batch's own instructions taken together — the plan-phase's stated scope, or the concatenation
-  of the ad hoc instructions 0.2 read for each item in the batch. FIDELITY TO PLAN now means
-  fidelity to *that*, not to one item's `WHERE` in isolation.
+  the batch's own instructions taken together — the plan-phase's stated scope; the union of
+  whichever positions 0.1 resolved into this batch, even if they span more than one of the plan's
+  named phases; or the concatenation of the ad hoc instructions 0.2 read for each item in the
+  batch. FIDELITY TO PLAN now means fidelity to *that*, not to one item's `WHERE` in isolation.
 - Its **fan sizing, dispatch order, cache-priming step, and reconciliation** (§1.2–1.5) apply as
   written there, sized to the batch's own independent parts — which will usually be larger than a
   single item's, since a batch holds several items' worth of change.
@@ -256,7 +271,7 @@ Nothing in this section is restated in full here; a change to any of it is made 
 | "one producer was enough" | the instruction itself named independent, file-disjoint sub-parts, and only one dispatch ran with no stated reason to collapse them |
 | "the build matched the instruction" | the produced diff's scope is broader or narrower than the instruction's own `WHERE`, or silently substitutes a different fix for the one named — this is exactly what BATCH-CLOSE's FIDELITY TO PLAN lens exists to catch; if it passed anyway, name why |
 | "fanned lanes integrated cleanly" | 0.4's merge resolved a same-file collision instead of stopping and rebuilding that file as one producer |
-| "the gate was met before building" | an item's `GATE` column named a position or a Jordan decision that had not actually landed |
+| "the gate was met before building" | a workplan-position item's `GATE` column named a position or a Jordan decision that had not actually landed (an ad hoc item has no `GATE` and is exempt from this one) |
 | "the batch size was right" | a phase was carried whole through BATCH-CLOSE with no stated reason not to split it, or a sub-batch was split with no stated reason the whole phase would have been too large |
 | "BATCH-CLOSE ran once per batch" | the full pytest suite, `/code-review`, `/simplify`, `layer-conformance`, the agonist/antagonist fan, or the terminal critique ran between two items of the *same* batch, or did not run at all before the batch's items were reported done |
 | every Phase 1–3 claim, at BATCH-CLOSE | `methodology-close`'s own falsifier table, unchanged, checked against the batch's cumulative post-Phase-0 diff |
