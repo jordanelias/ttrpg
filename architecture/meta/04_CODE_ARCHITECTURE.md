@@ -465,7 +465,9 @@ that would have hit it:**
 4. **every failable clause has a refusal kind** — ⚠ **WIDENED (F7)**: not only a verb with a
 `requires`, but each **conjunct** of it, and any eligibility alternative that can decline. The first
 wording covered `requires` alone and was satisfied by luck, because every verb with no `requires` is
-`own`, which cannot fail ·
+`own`, which cannot fail. ⚠ *(plan position `19`, 2026-09-29: the per-conjunct half is enforced for a
+row that KEYS its `emits_on_refusal:` by clause -- eligibility, each named conjunct, the write --
+`data/verbs.py`; a flat row still declares one kind for all its clauses)* ·
 5. **`act_only` ⇒ steps ⊆ {RES}; `MAT` ⇒ `world_or_act`** — the fourth-clock refusal, at load ·
 6. ⚠ **CORRECTED (F4): `release`'s kind domain == `tenure_kinds \ {contain}`**, and **every kind's
 OPENER set is declared too** (`ID-14`'s added half) ·
@@ -551,6 +553,10 @@ gate.write(token, kind, field, id, change, actor?, via?) -> Receipt
   -- OPENING of a `hold` on an object that is NOT a seat, whose object the SAME write closed under
   -- T-m -- the authority is the giver's own edge, ended in the same act, never a seat's basis.
   -- ⚠ `17b` (TERM · UPKEEP, plan §3.2 row 10, 2026-09-29): T-n BUILT (actorless, closing only) + `renewal` ADDED.
+  -- ⚠ `19` (U7-remit, plan `_part2` "19 — INSTRUCTION", 2026-09-29): `determination` ADDED -- the
+  -- "conferral-basis opener" that entry said it could not add itself, re-derived: `determine` opens an
+  -- `oblige` ON via, not a `hold` on another seat, by a bench's ground, not purview -- `conferral` refuses
+  -- all three, so not a wider reading. `may_determine`, `state/gate.py`.
   kind is Tenure => one of:
       actor == subject(id)                                   -- T-m, the owner's discretion
       cause is this Tenure's declared `term` maturation       -- T-n: no actor, a pure closure, term due (`17b`)
@@ -561,6 +567,8 @@ gate.write(token, kind, field, id, change, actor?, via?) -> Receipt
         closed under T-m, not yet handed on                   -- handover (`ED-IN-0277`, built at 16)
       via IS the Seat, actor seated, a live `oblige` on it:
         its `term` pushed later, nothing else moved           -- renewal: upkeep paid (`17b`, F.18)
+      via IS a judging Seat, actor seated, OPENING an `oblige`
+        on it for another person its bench's ground holds     -- determination: a bench binds (`19`)
       cause is an existence change this same act caused       -- destroy's cascade
     otherwise                                                 raise NotYours
 

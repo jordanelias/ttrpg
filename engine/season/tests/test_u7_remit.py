@@ -306,6 +306,11 @@ def test_19_two_determinations_of_one_matter_in_one_fold_the_second_refuses():
     out = _fold(w, d, _determine("dt1"), _determine("dt2"))
     assert sorted(_kinds(out)) == ["determine.refused", "matter.determined"], _kinds(out)
     assert len(_obliges(w)) == 1
+    # AND IT IS THE DOCKET THAT REFUSED, NOT THE EFFECT'S ONE-EDGE-PER-PAIR DECLINE (which would also
+    # refuse a second binding): the refusal's last read -- the conjunct that decided it -- is the
+    # docket, now empty.
+    refused, = [e for e in out if e.kind == "determine.refused"]
+    assert (refused.observed[-1].predicate, refused.observed[-1].value) == ("exists:DocketItem", 0)
 
 
 @pytest.mark.parametrize("quorum", [1, 2, 3])
@@ -511,6 +516,8 @@ def _plant(monkeypatch, verb, mutate):
     ("unnamed", r"EVERY top-level conjunct named"),
     ("flat named", r"keys no refusal to them"),
     ("empty", r"keys an EMPTY refusal"),
+    ("twice", r"no two alike"),
+    ("nested", r"inside a nested `all:`"),
 ])
 def test_19_the_loader_refuses_a_keyed_row_that_does_not_key_exactly_its_clauses(monkeypatch, defect,
                                                                                     match):
@@ -527,6 +534,13 @@ def test_19_the_loader_refuses_a_keyed_row_that_does_not_key_exactly_its_clauses
             ref.pop("stores")
         elif defect == "flat named":
             r["emits_on_refusal"] = ["levy.refused"]
+        elif defect == "twice":
+            cell[1]["conjunct"] = cell[0]["conjunct"]
+        elif defect == "nested":
+            inner = {k: v for k, v in cell[0].items() if k != "conjunct"}
+            cell[0] = {"all": [dict(inner, conjunct="inner"),
+                               {"form": "existence", "of": "subject", "kind": "Rung"}],
+                       "conjunct": "authority"}
         else:
             ref["stores"] = []
     _plant(monkeypatch, "levy", mutate)

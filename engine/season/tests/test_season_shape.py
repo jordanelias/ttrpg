@@ -827,14 +827,24 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     `test_record_kind_fold.py::test_the_loader_refuses_a_counterparty_the_typed_cell_does_not_bind`
     plants `counterparty: site` on `petition` and the load raises naming it. (`record_kinds`'
     two refusals -- ⊕L35 in `Record.__post_init__`, the tenure-kind overlap in `data/rosters.py`
-    -- are `Forbidden`/`Unspecified`, not `SystemExit`, so they are not counted here.)"""
+    -- are `Forbidden`/`Unspecified`, not `SystemExit`, so they are not counted here.)
+
+    ⚠ 63 -> 66, 2026-09-29, plan position `19` (U7-remit), THREE NEW LOAD-TIME REFUSALS, all for the
+    keyed `emits_on_refusal:` schema (`04 §B.13` invariant 4's per-conjunct half). `verbs.py` 26 ->
+    27: a keyed row whose keys are not exactly its failable clauses (eligibility, each named
+    conjunct, the write) -- ONE raise naming every defect found. `requires.py` 13 -> 15: a
+    `conjunct:` name inside a nested `all:` (only a top-level conjunct can be keyed), and a
+    malformed or repeated top-level name. Falsifiers:
+    `test_u7_remit.py::test_19_the_loader_refuses_a_keyed_row_that_does_not_key_exactly_its_clauses`
+    plants five defects on `levy`'s row and each load raises naming it. (`Basis`, §F.24a form 7,
+    added no refusal: `_build_clause`'s existing checks close its operand and stem.)"""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 63, (
-        f"{total} load-time exits across the model set, expected 63. Per file: "
+    assert total == 66, (
+        f"{total} load-time exits across the model set, expected 66. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
@@ -7124,7 +7134,17 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # measurement). A ranking effect, not a change to `_req_release`/`_eff_release`. Confirmed here
     # independently rather than merely cross-cited: running this test at HEAD shows `ever` missing
     # exactly `release` and nothing else, matching that cause and that test's own numbers.
-    assert ever == {"create_record", "examine", "interview", "fight", "move", "petition",
+    # ⚠⚠ 13 -> 14, PLAN POSITION `19` (U7-remit), 2026-09-29: `issue` EXECUTES, AND THE NULL THE
+    # `H-71` PARAGRAPH ABOVE LEFT UNEXPLAINED IS NOW EXPLAINED BY ITS FIX -- *"`issue` IS GRANTED IN
+    # ALL THREE AND DOES NOT EXECUTE, AND WHY IS NOT ESTABLISHED HERE"*: its `requires:` was prose
+    # with no predicate, so it was not in `resolvable_verbs()` and no chooser ever offered it. `19`
+    # typed the cell (the executor is a person, and the issuing seat's purview reaches him) and it
+    # executes in NPC-008, the one seated case whose question names a person inside the seat's
+    # ground; it is refused there too. MEASURED by a one-off script over this same `live` set at
+    # seed 0, before (a worktree at `429ddaf`) and after: `ever` gains exactly `issue`, nothing
+    # leaves, and the status census is identical (63 RUNS-UNDECLARED · 54 UNREPRESENTABLE · 25
+    # SPAN-UNAUTHORED · 1 RUNS-ALONE-UNDECLARED).
+    assert ever == {"create_record", "examine", "interview", "fight", "issue", "move", "petition",
                     "reconstruct", "research", "speak", "surveil", "tell", "transfer",
                     "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
@@ -7170,7 +7190,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # it, for the ranking-crowding reason the `ever` assertion's paragraph traces in full. Confirmed
     # directly (`refused_only` computed against this same `live`): `{"commit", "dispatch",
     # "release", "work"}`, exactly two more than the set this line pinned.
-    assert refused_only == {"commit", "dispatch", "release", "work"}, (
+    # ⚠⚠ FOUR -> FIVE, PLAN POSITION `19`, 2026-09-29: `levy` JOINS. It became resolvable (typed:
+    # `transfer`'s form-2 stores cell plus the seat's `purview`) and is attempted in the two corpus
+    # worlds that seat an `issue`-granting office (NPC-008, NPC-033), refused in both: every seat
+    # the overlays mint has NO RUNG, so it has purview nowhere and no treasury to levy into -- the
+    # populated realm's *"16 of 19 seats have no rung"* (`★`), one corpus over. A fact about the
+    # seats these worlds build, not about the verb; `open_case` and `determine` are attempted in no
+    # corpus world at all (measured by the same one-off script as the `ever` note above).
+    assert refused_only == {"commit", "dispatch", "levy", "release", "work"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -7622,7 +7649,9 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠⚠ `examine` ALSO JOINS, POSITION `11a`, 2026-09-29 -- see the `ever`/`by_sig` notes above. It
     # executes in worlds that are never all and never none, so it is squarely `varying` rather than
     # universal or absent. Both moves are on the merged tree; re-measured below rather than summed.
-    assert varying == {"examine", "fight", "interview", "move", "petition", "reconstruct",
+    # ⚠⚠ `issue` JOINS, PLAN POSITION `19`, 2026-09-29: it executes in ONE world (NPC-008, see the
+    # `ever` note above), so it is `varying` by construction -- in some worlds, not all.
+    assert varying == {"examine", "fight", "interview", "issue", "move", "petition", "reconstruct",
                        "research", "speak", "surveil", "tell", "transfer"}, (
         sorted(varying))
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
@@ -7712,8 +7741,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # be conflated. `oblige`'s own row states the mechanism for itself: no Question's referent is
     # ever a seat in this corpus (the same fact `petition`'s seat-reading row was refused for,
     # `H-63`), so a computed `oblige` has nothing to bind its one operand to.
+    # ⚠⚠ EIGHT -> TEN: `open_case` AND `determine` JOIN, PLAN POSITION `19`, 2026-09-29. Both became
+    # resolvable (typed cells, keyed refusals, effects), and both are `remit:determine`-eligible --
+    # granted in ONE corpus world, NPC-038 -- and neither is attempted in any corpus world:
+    # measured by the one-off script named at the `ever` note above (no live case lists either in
+    # `executed` or `refused`). `issue` went to `ever` and `levy` to `refused_only` instead.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
-                                              "destroy_record", "march", "give", "oblige"}, (
+                                              "destroy_record", "march", "give", "oblige",
+                                              "open_case", "determine"}, (
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033 but has no corpus operands; "
@@ -8739,15 +8774,21 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # same question) but is refused in every world now (239 attempts, 0 executions), which is a
     # ranking effect and not a change to `_req_release` or `_eff_release`, neither touched by this
     # position. `release` moves to the always-refused set below rather than vanishing from both.
-    assert set(executed) == {"create_record", "examine", "interview", "fight", "move",
+    # ⚠⚠ 13 -> 14, PLAN POSITION `19` (U7-remit), 2026-09-29: `issue` JOINS, BY THE ROUTE THIS
+    # LIST CALLS A PRECONDITION -- it had its effect since `15` and a prose `requires:` no fold
+    # could evaluate; `19` typed it (the executor is a person, and the issuing seat's purview
+    # reaches him). It executes in NPC-008 alone, the one seated world whose question names a
+    # person inside the seat's ground (measured by `test_the_corpus_runs_and_the_ranking_cannot_
+    # discriminate`'s one-off script, same corpus, same seed), and is refused there too.
+    assert set(executed) == {"create_record", "examine", "interview", "fight", "issue", "move",
                              "petition", "reconstruct", "research", "speak", "surveil",
                              "tell", "transfer", "utter"}, (
         f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
         "ED-FI-0009's, 10 -> 11 is `release`'s, 11 -> 12 is `H-71`'s, 12 -> 13 is the admission "
         "of `kill / wound`, 13 -> 12 is `R8.1`'s (`dispatch`, see above), 12 -> 13 again is "
         "`11a`'s (`examine`, see above), 13 -> 14 is position `15`'s (`petition`, see above), "
-        "14 -> 13 is position `7a`'s (`release` crowded out, see above), and any further "
-        "movement is a fresh one")
+        "14 -> 13 is position `7a`'s (`release` crowded out, see above), 13 -> 14 is position "
+        "`19`'s (`issue`, see above), and any further movement is a fresh one")
     # ⚠ `dispatch` JOINED `work` UNDER `R8.1` FOR A DIFFERENT REASON, stated above the executed-set
     # assertion: its precondition needs a PERSON referent, and the question that used to supply
     # one in NPC-033 is now outranked (hash order, `H-54`) by a `seen` claim about a rung. It is
@@ -8773,14 +8814,19 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # `S12.1` catch `loop/resolve.py`'s `_admits` gained for `11a` (`build_realm`'s governance
     # scale seeds those kinds; this 89-world NPC/ARC corpus does not; `queries/world_q.py:960`'s
     # `Unspecified` never fires for a single `work` attempt here, checked).
-    assert set(refused) - set(executed) == {"work", "dispatch", "release", "commit"}, (
+    # ⚠⚠ PLAN POSITION `19`, 2026-09-29: `levy` JOINS. Resolvable since `19`, attempted in the two
+    # worlds that seat an `issue`-granting office (NPC-008, NPC-033), refused in both -- every seat
+    # those overlays mint has no rung, so its purview reaches nothing (`levy.unauthorized`). A fact
+    # about the corpus's seats, not the verb: a rung-bearing seat levies (`test_u7_remit.py`).
+    assert set(refused) - set(executed) == {"work", "dispatch", "release", "commit", "levy"}, (
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
         "condition never clears the floor in this corpus; `dispatch` because its one executing "
         "question lost the hash-ordered race to a `seen` claim about a rung (`R8.1`); `release` "
         "because `commit`'s new competition crowds it out of the budget everywhere (position "
         "`7a`, see above); `commit` because BO-9/BO-10's referent-binding gap is still open "
-        "(`subject` never binds to a Proposition -- do not widen Q4 to close this here)")
+        "(`subject` never binds to a Proposition -- do not widen Q4 to close this here); `levy` "
+        "because no corpus seat has a rung, so none has purview anywhere (position `19`)")
     # ⚠ AND THE HONEST READING OF "IT EXECUTES", MEASURED RATHER THAN ASSUMED — and the first
     # writing of this arm ASSUMED, from one sampled case, that every corpus transfer was a
     # SELF-transfer, and was wrong. Measured over the whole corpus: 650 of 723 have `from == to`
@@ -9079,7 +9125,14 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # verified directly) -- `person_side_eligible` declines it before the requirement is ever
     # typed-bound, which is the SAME gate this test's own comment names as licensing an entry
     # here, not a new exception invented for this verb.
-    WALK_EXCLUDES: frozenset = frozenset({"march"})
+    # ⚠ PLAN POSITION `19` (U7-remit) ADDED FOUR, FOR THE SAME LICENSED REASON AS `march`: `levy`,
+    # `open_case`, `determine` and `issue` became typed, and each admits only through a `remit:`
+    # alternative (`levy`'s second, `presence:<rung>`, declines unconditionally, `H-75`), which
+    # `p_low` holds none of. They are NOT dropped from the walk: they are walked below through the
+    # one seated person in the fixture, `p_high` (`off_duke`), which is the only way the binding's
+    # new structural member -- the seat, `via` -- can be observed at all.
+    WALK_REMIT: frozenset = frozenset({"levy", "open_case", "determine", "issue"})
+    WALK_EXCLUDES: frozenset = frozenset({"march"}) | WALK_REMIT
     cands = [c for c in decision.opening_set(p, v, q, w.fixtures)
              if VERB_TABLE[c.verb].requires_typed is not None]
     assert {c.verb for c in cands} == all_typed - WALK_EXCLUDES, (
@@ -9104,6 +9157,26 @@ def test_wc_the_fold_binds_what_the_person_bound():
                 "it -- the two agree only because both are empty")
             checked += 1
     assert checked >= 10, f"only {checked} operands were exercised; the walk proves too little"
+
+    # ⚠ PLAN POSITION `19`: THE SEAT IS A BINDING MEMBER NOW, AND ONE DECLARATION READ TWICE STILL
+    # HAS TO BE ONE BINDING READ TWICE. `binding_from_act` adds `Act.via`; the person's side is
+    # `binding_of(p.id, operands, exercised_seat(p, row))` -- the seat `pack_scenes` names `Act.via`
+    # by, which is what `opening_set` hands `belief_contradicts`. Walked over the four remit verbs
+    # through the seated `p_high`, and not vacuously: the seat is present on both sides.
+    from ..decision.options import exercised_seat
+    duke = w.persons["p_high"]
+    remit = [c for c in decision.opening_set(duke, View(duke.id, [], w.fixtures.get("view_k"), q),
+                                             q, w.fixtures) if c.verb in WALK_REMIT]
+    assert {c.verb for c in remit} == WALK_REMIT, sorted({c.verb for c in remit})
+    for c in remit:
+        act = [a for sc in pack_scenes(duke, [c], 5, w.fixtures, mint, occasion=q)
+               for a in sc.acts][0]
+        seat = exercised_seat(duke, VERB_TABLE[c.verb])
+        assert seat == act.via == "off_duke", (c.verb, seat, act.via)
+        fold = binding_from_act(act)
+        assert binding_of(duke.id, c.operands, seat) == fold and fold.get("via") == seat, (
+            f"{c.verb} x {c.subject}: the person bound {binding_of(duke.id, c.operands, seat)} and "
+            f"the fold binds {fold}")
 
     # ⚠ AND THE UNTYPED HALF OF THE SCOPE NOTE, ASSERTED AGAINST THE RESOLVER'S OWN SOURCE. The
     # claim is that the fold builds NO BINDING for an untyped verb, and what makes it true is that

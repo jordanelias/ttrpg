@@ -195,6 +195,11 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
     line here (`basis = bench_basis_of(w, matter) or "determine"`) once that mapping exists, and
     is deliberately NOT invented now (§0.05: a mapping this position does not own is not smuggled
     in to make the signature look busier).
+    ⚠ PLAN POSITION `19` BUILT THE DOCKETING HALF AND NOT THE MAPPING: `open_case` now puts a matter
+    on `World.docket` (`docketed`, above), and `determine` asks this function -- through `WorldReader`'s
+    `bench.size` stem -- for the bench at the matter's PLACE (`place_of`). What still does not exist
+    is the docket item naming its ARRANGEMENT row, so `matter` stays unused here and the basis stays
+    the one constant (`BENCH_BASIS`).
 
     ⚠ A SEAT WITH NO `scope_rung` REACHES NOTHING -- the office-cluster case (S6.2, `Office.rung
     is None`) has no ground to be contained on, exactly as `purview_reaches` treats it. It is a

@@ -26,6 +26,16 @@ instead as a REPORT (`arrangements_without_a_disposal_opener()`), on the exact p
 `tenure_kinds_without_an_opener()` already sets one file over for the identical kind of fact: a kind
 with a declared `writes:` cell and no opener is *"a real, disclosed hole, not an absent declaration."*
 A row failing C-1 today is disclosed by that function, not silently admitted and not blocked.
+
+⚠ SUPERSEDED IN ITS PREMISE AT PLAN POSITION `19` (U7-remit), 2026-09-29, AND LEFT A REPORT: the
+paragraph above is true of `18`'s commit and no longer of the tree -- `loop/effects.py::_eff_determine`
+EXISTS and opens an `oblige` (the disposal), the derived opener map reads `determine` beside
+`oblige`'s own opener, and the report is EMPTY over the seeded rows (`test_arrangements.py`,
+`test_u7_remit.py`). So the reason given for reporting rather than refusing -- *"`determine` opens
+nothing today"* -- is gone. `19` did not turn it into a load refusal: the refusal would have to read
+`data/verbs.py`'s derived map at `_load()` time, an import-order question for this module's owner,
+and nothing seeded fails it. A row disposing a Tenure kind `determine` does not open (`hold`,
+`commit`, ...) would still only be REPORTED.
 """
 
 from __future__ import annotations
@@ -264,7 +274,11 @@ def arrangements_without_a_disposal_opener() -> list[str]:
     not every seeded row -- `test_arrangements.py` pins this exactly (`["arbitration"]`, the one
     seeded row disposing a Tenure kind, against two `Record`-disposing rows that are correctly
     absent). That is the disclosed gap this function exists to make checkable rather than silent --
-    the same shape `tenure_kinds_without_an_opener()` already reports one file over."""
+    the same shape `tenure_kinds_without_an_opener()` already reports one file over.
+
+    ⚠ AND THE GAP CLOSED AT PLAN POSITION `19`: `_eff_determine` opens the disposal `oblige`, so
+    `arbitration` is no longer reported and the pinned report is `[]` (see the module docstring's
+    `19` paragraph for why it stays a report)."""
     from .verbs import _OPENERS_FROM_EFFECTS as openers
     out = []
     for name, row in ARRANGEMENTS.items():

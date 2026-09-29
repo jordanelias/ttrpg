@@ -65,3 +65,4 @@ exercised by this run.**
 | `told_drift_band` | `0.5` | no — a harness fixture |
 | `oblige_term` | `4` | no — a harness fixture |
 | `default_upkeep` | `1` | no — a harness fixture |
+| `bench_quorum` | `1` | no — a harness fixture |
