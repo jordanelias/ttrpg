@@ -788,14 +788,24 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     cannot run without, counted the same way. `rosters.py`'s per-file count moves 1 -> 2; no other
     file in the model set changed. Concurrent with `OPENERS-DERIVE`'s own 44 -> 43 bump immediately
     above -- both land, in file-append order, per `CLAUDE.md` §0.4's own precedent for two positions
-    landing the same pinned count in one shared tree: neither reverts the other's history line."""
+    landing the same pinned count in one shared tree: neither reverts the other's history line.
+
+    ⚠ 44 -> 69, 2026-09-29, plan position `18` (PROC-A), part 3. `data/arrangements.py` is a NEW
+    FILE in the model set -- the ONE loader for `arrangements.yaml` (`04_CODE_ARCHITECTURE.md:131`
+    puts every closed set and the one loader in `data/`) -- and it carries 25 load-time refusals of
+    its own: one per malformed field across the thirteen-key arrangement schema and the
+    `speech_kinds` schema (unknown key, an enum value outside its closed set, a roster member
+    outside its roster, the `quorum`/`disposal: declared` cross-check in both directions), on the
+    exact discipline `verbs.py`'s own per-field checks already use -- a schema this large produces
+    a refusal this large, not a defect to trim. `data/verbs.py`'s own 25 is coincidence, not a
+    mirrored count; the two schemas are unrelated in size, and both close on their own fields."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 44, (
-        f"{total} load-time exits across the model set, expected 44. Per file: "
+    assert total == 69, (
+        f"{total} load-time exits across the model set, expected 69. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
@@ -2258,8 +2268,31 @@ def test_w2_the_class_column_is_derived_and_cross_checked():
 # the honest reading is that the guard is right and the site is genuinely mechanism — not that
 # the ceiling is a formality. If a third arrives for a reason that is not "language or grammar",
 # that is the creep this ratchet exists to make visible.
-# [JUSTIFIED: a RATCHET COUNT, not a magnitude -- it is the number of declared `roster-exempt:` sites in the model set, and the argument for each increment is the comment block directly above. Fitted to the tree by construction: run the guard and it reports the true count. 2026-09-19: 14 -> 15 for `rosters.py`'s `_ptrs`.]
-EXEMPT_CEILING = 15
+# 15 -> 26, 2026-09-29, plan position `18` (PROC-A), part 3: `data/arrangements.py`, THE NEW FILE,
+# earns four exemption sites this ratchet counts once per matching AST node (a site is a NODE, not
+# a comment -- one comment covering several adjacent literals is several sites):
+#   (a) the five grammar-only closed sets (`_DISPOSAL_VALUES`, `_FLOOR_FORMS`, `_ORDER_VALUES`,
+#       `_DISPOSAL_REACH_FORMS`, `_DISPOSES_LITERALS`) -- THIS LOADER'S OWN SCHEMA, which values a
+#       KEY ON THE ROW ITSELF may take, the same class `data/requires.py`'s
+#       `REQUIRES_STEMS`/`COMPARATORS` already establish as the direct precedent for a closed set
+#       that stays a Python frozenset rather than a `rosters.yaml` entry;
+#   (b) `_ARRANGEMENT_KEYS`/`_SPEECH_KIND_KEYS` -- the ROW'S OWN FIELD NAMES, the identical shape
+#       `state/carriers.py::Rung._DECLARED` is exempted for;
+#   (c) the two loader functions' own RETURN-DICT LITERALS (`_load_speech_kind`,
+#       `_load_arrangement`) -- the parsed row handed back to the caller, keyed by the same field
+#       names as (b) and not a second roster for having been typed out as a dict once more.
+# Content rosters (`interposition_kinds`, `genres`, `proofs`, `ladder_rungs`) went to
+# `rosters.yaml`, exactly as `04_CODE_ARCHITECTURE.md:131` asks; the degree ladder did NOT get a
+# `rosters.yaml` roster of its own at all -- a `degree_bands` roster with the same four values
+# collided with a pre-existing, unrelated literal in `tests/test_mass_battle_provider.py` (this
+# guard, correctly, reading two owners of one fact) and is instead imported from
+# `engine/autoload/dice_engine.py::DEGREE_LABEL`, the single owner, so it contributes no exemption
+# site at all. None of (a)/(b)/(c) is the game's vocabulary -- they are the grammar and the shape a
+# designer's row is checked against and handed back as, on the same footing as `REQUIRES_FORMS`'s
+# own `needs:` table. One new loader, one schema, all for the identical reason, is the file earning
+# its own exemption block rather than the creep this ratchet exists to catch.
+# [JUSTIFIED: a RATCHET COUNT, not a magnitude -- it is the number of declared `roster-exempt:` sites in the model set, and the argument for each increment is the comment block directly above. Fitted to the tree by construction: run the guard and it reports the true count. 2026-09-19: 14 -> 15 for `rosters.py`'s `_ptrs`. 2026-09-29: 15 -> 26 for `data/arrangements.py`'s schema, field-name and return-shape sets.]
+EXEMPT_CEILING = 26
 
 
 def test_jordan_no_definition_is_hardcoded_in_a_body():
@@ -4662,7 +4695,7 @@ def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
             Act(id="g_confer", actor=duke, verb="confer",
                   payload={"office": "off_dicastery", "to": "p_mid"}, via="off_duke"),
             Act(id="g_convene", actor=duke, verb="convene",
-                  payload={"venue": "S", "when": w.tick + 1}, via="off_duke"),
+                  payload={"subject": "S", "when": w.tick + 1}, via="off_duke"),
             Act(id="g_dispatch", actor=duke, verb="dispatch",
                   payload={"subject": "p_low"}, via="off_duke"),
         ]
@@ -4680,9 +4713,12 @@ def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
     assert "date.scheduled" in kinds, f"`convene` scheduled no sitting: {sorted(kinds)}"
     assert "order.given" in kinds, f"`dispatch` gave no order: {sorted(kinds)}"
     # AND THE SCALE IS CARRIED, not merely declared: each of these reaches a rung above the person.
-    for v in ("confer", "convene"):
-        assert VERB_TABLE[v].scale == "settlement", VERB_TABLE[v].scale
+    # ⚠ `convene` DROPPED OUT OF THIS LOOP (plan position `18`/PROC-A): its `scale:` key is
+    # deleted (`03_PARAMETERS.md` §C.1) and the ordinal check below is the row's own falsifier now.
+    assert VERB_TABLE["confer"].scale == "settlement", VERB_TABLE["confer"].scale
     assert VERB_TABLE["dispatch"].scale == "territory"
+    assert RUNG_KINDS.index(w.rungs["S"].kind) > 0, (
+        "`convene`'s ordinal read `S` (settlement) as at or below the person tier")
     print(f"\n  governance slice — emitted {sorted(kinds)}; "
           f"{len(resolvable_verbs())} of {len(VERB_TABLE)} verbs now execute")
 

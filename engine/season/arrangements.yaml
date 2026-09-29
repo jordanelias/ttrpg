@@ -1,0 +1,137 @@
+# `engine/season/arrangements.yaml` -- A CLOSED SET IN DATA (`ID-12`). Changing one is a data edit.
+#
+# Plan position `18` (PROC-A), `21_RECONCILIATION.md` PHASE 2 step 6 / `19_PLAN.md` step 11 /
+# `03_PARAMETERS.md` PART D. Read through `data/arrangements.py`, the ONE loader -- unknown keys
+# REJECTED (`04_CODE_ARCHITECTURE.md:468`, the same invariant `verb_table.yaml`'s `scale:` correction
+# names). "The claim under test: a proceeding is just defined parameters."
+#
+# ⚠ THIRTEEN KEYS, NOT FIFTEEN. `03_PARAMETERS.md` PART D specified fifteen; `19_PLAN.md` step 11
+# deletes THREE (`registers[]` -- the roster never existed and the idea folds into aptness;
+# `verdict_reasons` -- its only lawful mechanism is identical to `records_dissent`'s, so one key
+# carries both; `stakes_grade` -- a grade is a summary of what `disposes` writes and whether that
+# write is closable) and ADDS ONE (`quorum`, required exactly when `disposal: declared`). Net:
+# 15 - 3 + 1 = 13. `21_RECONCILIATION.md` PHASE 2 step 6's own falsifier table is written against
+# this count: "a fourteenth key fails naming the row."
+#
+# ⚠ SEEDED WITH THREE OF THE TWELVE GAMES `03_PARAMETERS.md` §E.2 WORKS IN FULL, NOT ALL TWELVE --
+# NAMED SCOPE-DOWN (`CLAUDE.md`'s size-warning permission, this position's brief). All three are
+# `disposal: bench`, chosen because they are the only rows in §E.2 whose OLD FIFTEEN-KEY `disposes:`
+# cell is a RESOLVED tenure kind or `Record` rather than the source's own unresolved `<tenure>`
+# placeholder (present on `interrogation`, `legal trial`, `tribunal` and `inquisition hearing` --
+# four of the twelve, in the source document itself, not lost in translation here) -- and whose OLD
+# `records_dissent`/`verdict_reasons` pair agrees under the new one-key collapse (`arbitration`'s single
+# decider makes the collapse trivial rather than assumed; `parliamentary debate` and `council of state`
+# agree outright: true+given, false+withheld). `negotiation` (`disposal: mutual`) and `public debate`
+# (`disposal: none`) are the clean candidates for the remaining two `disposal` values but their old
+# `records_dissent`/`verdict_reasons` pair DISAGREES (false+given) with no stated collapse rule to
+# resolve it, and `public debate`'s old `disposes: standing` does not match the row's own `disposes:
+# <tenure kind> | Record | none` enum at all -- both are real, corpus-level inconsistencies, named
+# rather than guessed past. `disposal: declared` (the ONE new value `19_PLAN.md` step 11 adds) has NO
+# worked example anywhere in the source; the loader accepts it (with `quorum:` required) but no row
+# here uses it. The remaining seven bench-disposal games are unseeded for the same placeholder/
+# ambiguity reasons, plainly, not because the loader could not carry them -- "the loader accepts a
+# thirteenth arrangement with no code change" is the artifact, and it is true of any well-formed row,
+# seeded or not.
+
+speech_kinds:
+  # `19_PLAN.md` step 7: "the roster the design promised and never wrote... Ten members; the two
+  # starred kinds are not rostered." ⚠ SIX OF TEN, NAMED SCOPE-DOWN. These six are Fig. 27's forensic
+  # issue ladder (`18_FINDINGS.md:180`, §5 item 5, verbatim: "deny, cite something incompatible,
+  # impugn the motive, concede the fact, concede the harm, hand the error back" -- `rosters.yaml:
+  # ladder_rungs`, reused rather than re-coined, see that roster's own note). The remaining four
+  # (including the two D-6/D-7 name as newly authorable, `H-153`/`H-154`) are NOT in the source's own
+  # worked figures within this position's scope and are not invented here.
+  #
+  # `genres`, `min_rank`: Fig. 27's ladder is invoked specifically for a FORENSIC bench
+  # (`interrogation`'s row); no source states a rung floor for it, so `min_rank: hearth` is the
+  # loosest floor rather than an authored restriction -- flagged per-row, not silently assumed.
+  #
+  # `reachable_bands`: `[]` means no cap is authored (the full ladder is reachable); ONLY
+  # `impugn_motive` carries a real one -- `18_FINDINGS.md` item 5, verbatim: "*Impugn the accuser's
+  # motive* is **Partial by construction**" (Fig. 24's fixed native band). Demote-only, never a
+  # lookup that returns a band (`19_PLAN.md` step 7's own falsifier).
+  - id:               deny
+    genres:            [forensic]
+    min_rank:           hearth
+    reachable_bands:    []
+  - id:               cite_incompatible
+    genres:            [forensic]
+    min_rank:           hearth
+    reachable_bands:    []
+  - id:               impugn_motive
+    genres:            [forensic]
+    min_rank:           hearth
+    reachable_bands:    [Partial]
+  - id:               concede_fact
+    genres:            [forensic]
+    min_rank:           hearth
+    reachable_bands:    []
+  - id:               concede_harm
+    genres:            [forensic]
+    min_rank:           hearth
+    reachable_bands:    []
+  - id:               hand_error_back
+    genres:            [forensic]
+    min_rank:           hearth
+    reachable_bands:    []
+
+arrangements:
+  # ── arbitration — one decider, chosen by the parties, and no appeal ───────────────────────────
+  # `03_PARAMETERS.md` §E.2. `records_dissent: false` is THIS LOADING'S OWN READING, not a direct
+  # transcription: the source's worked block does not state the key for this row at all (only
+  # `verdict_reasons: given` is shown). A single arbiter is a bench of one, and "is a division
+  # recorded" is vacuous over a bench with nobody to divide from -- so `false` (nothing to record)
+  # and `given` (the arbiter's reasons ARE known to the parties) are not in tension the way they
+  # would be for a multi-member bench; recorded here rather than left silent.
+  - id:               arbitration
+    disposal:          bench
+    bench_basis:        determine
+    floor:              closed
+    records_dissent:    false
+    venue_min_rank:     hearth
+    term_required:      true
+    appeal_basis:       none
+    interposed:         []
+    order:              alternating
+    proofs:             [record, testimony, oath]
+    disposes:           oblige
+    disposal_reach:      room
+
+  # ── parliamentary debate — many who must be persuaded, and no issue ladder ────────────────────
+  # `03_PARAMETERS.md` §E.2, transcribed in full. `records_dissent: true` and the old
+  # `verdict_reasons: given` AGREE outright -- no collapse judgment needed.
+  - id:               parliamentary_debate
+    disposal:          bench
+    bench_basis:        determine
+    floor:              open
+    records_dissent:    true
+    venue_min_rank:     duchy
+    term_required:      true
+    appeal_basis:       none
+    interposed:         [procedure]
+    order:              rank
+    proofs:             []
+    disposes:           Record
+    disposal_reach:      realm
+
+  # ── council of state — the same shape, and the opposite trade ─────────────────────────────────
+  # `03_PARAMETERS.md` §E.2: "the same shape, and the opposite trade... Four keys differ from the
+  # parliament" -- `floor`, `records_dissent`, `venue_min_rank` (shown in the diff but UNCHANGED at
+  # `duchy`) and `disposal_reach` (explicitly "UNCHANGED from the parliament... the deliberation is
+  # sealed, the decree is proclaimed"). Every other key inherits `parliamentary_debate`'s row,
+  # transcribed rather than referenced, because this loader has no "inherits:" mechanism and
+  # inventing one for two rows would be apparatus this position does not need.
+  # `records_dissent: false` and the old `verdict_reasons: withheld` AGREE outright.
+  - id:               council_of_state
+    disposal:          bench
+    bench_basis:        determine
+    floor:              closed
+    records_dissent:    false
+    venue_min_rank:     duchy
+    term_required:      true
+    appeal_basis:       none
+    interposed:         [procedure]
+    order:              rank
+    proofs:             []
+    disposes:           Record
+    disposal_reach:      realm

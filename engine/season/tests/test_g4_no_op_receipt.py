@@ -210,7 +210,7 @@ def test_g4_a_second_identical_convening_is_refused_and_a_reschedule_is_not():
     fold = lambda aid, when: [e.kind for e in d._fold(
         w, mint_token(w, WriteClass.ACTS),
         Act(id=aid, actor="p_high", via="off_duke", verb="convene",
-            payload={"venue": "S", "when": when}))]
+            payload={"subject": "S", "when": when}))]
     assert fold("g4_c0", 3) == ["date.scheduled"]
     assert fold("g4_c1", 3) == ["convene.refused"]
     assert fold("g4_c2", 4) == ["date.scheduled"]

@@ -415,6 +415,13 @@ HOLD_SUBJECT_KINDS = roster("hold_subject_kinds")
 VERB_CAPABILITY = roster_map("verb_capability", "values")
 RUNG_KINDS = roster("rung_kinds", ordered=True)
 REMIT_ACTS = roster("remit_acts")
+# `data/arrangements.py`'s four content rosters -- plan position `18` (PROC-A). Bound here beside
+# their nearest kin (`RUNG_KINDS`/`REMIT_ACTS`, both read by the same loader) rather than left to a
+# bare `roster(...)` call at the one call site, on this file's own established convention.
+INTERPOSITION_KINDS = roster("interposition_kinds")
+GENRES = roster("genres")
+PROOFS = roster("proofs")
+LADDER_RUNGS = roster("ladder_rungs", ordered=True)
 # ED-IN-0256 rulings (2) and (3), plan position `13d-i`: HOW A SEAT IS FILLED and WHO MAY STRIP IT.
 # Bound at import for `TITLE_DOMAINS`' reason below -- an unbound roster is the one whose absence
 # goes unnoticed. `Office.__post_init__` refuses a declared basis off either; `state/gate.py`'s

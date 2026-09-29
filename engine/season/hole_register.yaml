@@ -3263,6 +3263,71 @@ rows:
     source:    "M4 review pass (`valoria-critic`, second correctional round), on
       `loop/effects.py::_eff_march`'s own `remove_person` fix from the first correctional round.
       The gate-bypass closure note is `GATE-REMOVE-PERSON`, plan position 7, 2026-09-29."
+  # -------------------------------------------------------------------------
+  # PROC-A (plan position `18`), part 4 -- SWEPT FIXTURES, THE `H-128` SHAPE. ⚠ `D-6`/`D-7` BELOW
+  # ARE `proposals/2026-09-05-proceedings-subsystem/19_PLAN.md`'s OWN LOCAL LABELS (`:952-960`),
+  # NOT THIS FILE'S `discharges:` MAP -- that map's `D6`/`D7` already name `H-20`/`H-22`, an
+  # unrelated pair from Part B of the original architecture chain. Two different documents coined
+  # the same short label for different findings; neither is renamed (`CLAUDE.md` §4 -- coin
+  # nothing, but a COLLISION between two ALREADY-COINED labels in different documents is not this
+  # row's to fix), and neither H-153 nor H-154 is added to `discharges:` below.
+  # -------------------------------------------------------------------------
+  - id:        H-153
+    tier:      1
+    hole:      "D-6 (`19_PLAN.md:952-955`), NOT JORDAN'S (`HANDOFF_SC.md`, `workplans/2026-09-28-
+      the-plan-one-order-mc-v18-retired.md` §5.2). THE ONE CORPUS FAULT THAT DOES NOT RECONCILE
+      WITH FAIL-FORWARD: *'whoever touches it is killed'* is the single terminal fault with no
+      corpus-supplied next move, and it blocks one row of the `speech_kinds` roster (the roster
+      itself carries only six of the ten `19_PLAN.md` step 7 promises, this being one of the
+      missing four)."
+    kind:      "RULING"
+    owner:     "swept fixture, answered as this position's own — §0's five-test ladder, test 5"
+    grade:     "assumption"
+    default:   "\"removal\" -- THE CONTROL ARM, SHIPPED. D-6's own text: 'Handed forward
+      unsoftened' -- softening a corpus figure this position did not author would be the invented
+      direction; treating the terminal fault as removal from the world (a different contest
+      entirely) is the reading the source states outright, so it ships rather than the coin-flip
+      alternative"
+    site:      "Fixtures speech_kind_terminal_fault (`data/fixtures.py`). NOTHING READS IT YET --
+      the speech-kind resolution ladder this would gate is `19_PLAN.md` PHASE 2/3 work (steps
+      12-18), not this position's five parts, so the shipped arm changes no behaviour today, on
+      `H-128`'s own precedent (a fixture with no reader is a disclosed gap, not a silent one)"
+    sweep:     ["removal", "softened"]
+    unblocks:  "the one `speech_kinds` row D-6 names, once the resolution ladder that reads this fixture is built"
+    cite:      "`proposals/2026-09-05-proceedings-subsystem/19_PLAN.md` PART H's D-6, verbatim: \"The one corpus fault that does not
+      reconcile with fail-forward. 'Whoever touches it is killed' is the single terminal fault
+      with no corpus-supplied next move. Options: treat it as the one place the ladder's failure
+      is not the outcome — the outcome is removal from the world, which is a different contest
+      entirely — or soften the corpus. Handed forward unsoftened. Blocks: one row of the
+      speech-kind roster.\" Answered here per `CLAUDE.md` §0's NOT-JORDAN'S ladder test 5 (no
+      ruling, no precedent and no design document settle it, so the architecturally sound reading
+      — the one the corpus itself states — is taken and recorded)."
+    source:    "plan position `18` (PROC-A) part 4, 2026-09-29"
+  - id:        H-154
+    tier:      1
+    hole:      "D-7 (`19_PLAN.md:957-958`), NOT JORDAN'S. TWO CORPUS-VERSUS-EVIDENCE BRANCHES:
+      (a) whether a detailed denial outperforms a brief one; (b) whether displayed anger extracts
+      concessions -- and the study marks the evidence for (b) UNVERIFIED ITSELF. Blocks two rows
+      of the `speech_kinds` roster (with H-153, three of the four rows the roster is short of its
+      stated ten)."
+    kind:      "NUMBER"
+    owner:     "swept fixtures, answered as this position's own"
+    grade:     "assumption"
+    default:   "branch (a): \"equal\" -- THE CONTROL ARM, SHIPPED (neither denial style
+      distinguished, since the resolution ladder that would read this does not exist yet). Branch
+      (b): `False` -- THE CONTROL ARM, SHIPPED (no extraction effect), on `H-128`'s
+      neutral-start precedent, and the weaker-warranted of the two: D-7's own text says the
+      corpus's evidence for this branch is unverified even by the study that supplies it"
+    site:      "Fixtures denial_detail_outperforms / displayed_anger_extracts_concessions
+      (`data/fixtures.py`). NOTHING READS EITHER YET, same reason as `H-153`"
+    sweep:     ["denial_detail_outperforms: [equal, detailed, brief]", "displayed_anger_extracts_concessions: [False, True]"]
+    unblocks:  "the two `speech_kinds` rows D-7 names, once the resolution ladder that reads these fixtures is built"
+    cite:      "`proposals/2026-09-05-proceedings-subsystem/19_PLAN.md` PART H's D-7, verbatim: \"Two corpus-versus-evidence branches. Whether
+      a detailed denial outperforms a brief one; whether displayed anger extracts concessions —
+      and the study marks the evidence for the second unverified itself. Data authoring, per
+      branch, low stakes, sweepable either way. Blocks: two roster rows.\" Answered per §0's
+      NOT-JORDAN'S ladder test 5, same as `H-153`."
+    source:    "plan position `18` (PROC-A) part 4, 2026-09-29"
 
 
 discharges:

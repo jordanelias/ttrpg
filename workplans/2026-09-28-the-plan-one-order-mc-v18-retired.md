@@ -281,10 +281,10 @@ census, not the phase number, decides whether it may run beside a Phase-1 item.
 | 7 | **GATE-REMOVE-PERSON** `[L1]` | route `World.remove_person` through `World.write`; a declared hash move | **DONE** (§8.8) | — ; shares `loop/matter.py` with `24f`'s build — serial |
 | 8 | **`13` W28-cast** | the `cast:` blocks and their reader in `build_at`; the harness loader's count | **DONE**, narrowed scope — 5 of 46 NPC cases (§8.7) | — ; precondition of `17` and of `ED-FI-0009` |
 | 8a | **`13d-i` item (5)** | `offices.yaml` + its `harness/populated.py` wiring; the `titles` fold | **DONE, narrowed scope (§8.9)** | — ; before `18a` (placed by the author, §2.3) |
-| 9 | **`18` PROC-A** | re-host the 28 stress tests; `world_q.judging_set`; `convene` + the `rank` stem; `arrangements.yaml` through the one loader; D-6/D-7 as swept fixtures | OPEN | — (SC lane); a hard dependency of `18a` and `19` |
+| 9 | **`18` PROC-A** | re-host 38 (not 28) stress tests; `world_q.judging_set`; `convene` + the `rank` stem; `arrangements.yaml` through the one loader; D-6/D-7 as swept fixtures | **DONE, narrowed scope (§8.11)** | — (SC lane); a hard dependency of `18a` and `19` |
 | 10 | **`24f` — the design step** | specify who eats; **NAME the cohort producer** before any code | **DONE** (§3.1 item 10 body text has the decision) | — ; the BUILD (Phase 2 tail) shares `matter.py` with item 7 |
 | 11 | **`25` MB-GOLDEN** + the MB hand pass | the golden-mode ruling; `ED-MB-0057`, `ED-MB-0044`, `config.py:315-317`; A5; A9; the unblocked Sequenced rows; `ED-MB-0075`'s option (2) after its superseding row | **DONE, with named exceptions (§8.10)** | — (MB lane, parallel) |
-| 12 | **PC lane** | the `partisan` deletion; Ob-from-defender (`core.py:79-83`) | OPEN | — (PC lane, parallel) |
+| 12 | **PC lane** | the `partisan` deletion; Ob-from-defender (`core.py:79-83`) | **DONE** (§8.12) | — (PC lane, parallel) |
 
 **Each item — why here, and what it must satisfy.**
 
@@ -470,15 +470,21 @@ here, and neither is Jordan's:
   canon first. r2 `03:1043-1056`'s roster VALUES are superseded by `ED-IN-0256` rulings (2) and (3);
   r2 supplies the structure.
 
-**9 · `18` PROC-A.**
+**9 · `18` PROC-A. DONE, narrowed scope — full record at §8.11.**
 
-- Re-host the 28 stress tests, whose tracer is gone.
-- Build `world_q.judging_set(w, venue, matter)`.
-- Add `convene` and the `rank` stem.
-- Load `arrangements.yaml` through the one loader.
+- Re-host 38 (not 28 — the header's "twenty-eight" is the FINDINGS count) stress tests, whose
+  tracer is gone. **Five re-hosted** (`ST-03`/`04`/`08`/`23`/`30`, all directly resolved or reversed
+  by this position's own build); the other 33 need machinery this position does not build (§8.11).
+- Build `world_q.judging_set(w, venue, matter)`. **DONE** — reads the seat's own grant
+  (`Tenure.granted_acts`), not `Office.remit_acts` (plan position `13e`).
+- Add `convene`'s ordinal and the `rank` stem. **DONE**, corrected in the hand predicate rather than
+  a `requires_typed: scalar_threshold` cell — named deviation, reasoned at §8.11.
+- Load `arrangements.yaml` through the one loader. **DONE** — `data/arrangements.py`, new; seeded
+  with 3 of 12 games, two absences named.
 - Implement **D-6/D-7 (the `speech_kinds` roster defaults) as swept fixtures**, in the `H-128` shape
-  (§0 test 5; §5.2). They are not Jordan's.
-- Fold in proceedings PHASE 2 steps 6, 7, 9 and 10.
+  (§0 test 5; §5.2). They are not Jordan's. **DONE** — `H-153`/`H-154`.
+- Fold in proceedings PHASE 2 steps 6, 7, 9 and 10. **Steps 6/7/9 done; step 10 (docketing) DECIDED
+  OUT OF SCOPE**, named and reasoned at §8.11, not silently dropped.
 
 **Why here:** it is gate-free and in the SC lane. It is a hard dependency of `18a` (which deletes only
 the stub `18` replaced, `§3.9` edge 5) and of `19` (whose `determine` consumes `judging_set`). Its
@@ -559,7 +565,7 @@ until something mints cohorts. The step has three parts:
 Per-cell Q and army-scale envelopment (the multiunit Phase 0 spike) keep their existing gates. These
 are lane items, not positions — the old plan's *"parked, with reasons"* convention for a hand pass.
 
-**12 · PC lane.** The `partisan` deletion (`weapons.py:322,852`) and Ob-from-defender
+**12 · PC lane. DONE (§8.12).** The `partisan` deletion (`weapons.py:322,852`) and Ob-from-defender
 (`combat_engine_v1/core.py:79-83`). Both are ruled and ungated. Beside them is one administrative item,
 not a design call: the PC `ED-` id block is exhausted (`references/id_reservations.yaml:124`), so a
 reservation comes first, under the file's own Lane-B procedure.
@@ -1838,6 +1844,147 @@ future positions in `HANDOFF_MB.md`.
 `status` field stays `open` under this repo's own supersession convention), `tools/valoria_local.py
 --staged` (blocking gates pass on every commit). Not run: the full `pytest tests/valoria` suite
 (§0.4 — mid-session cadence is the file covering the edit, not the whole gate) and a fresh CI push.
+
+---
+
+### 8.11 · Made at position `9`'s execution — `18` PROC-A, four of five parts built, docketing named out of scope
+
+**Corrected against the brief's own compressed bullets before building anything, per this position's
+own dispatch instructions** (its content owner is `_part2:1274-1287`, not the bullets at `_part2`
+§3.1 item 9): the stress count is **38**, not 28 (the header's "twenty-eight" is the FINDINGS count,
+F-01..F-28, not the case count — `grep -oE "ST-[0-9]+" stress/stress_proceedings.py | sort -u | wc -l`
+= 38, and `20_STRESS_TESTS.md`'s own summary line already says so: *"38 stress tests ... 28
+findings"*); the stress file itself lives at
+`proposals/2026-09-05-proceedings-subsystem/stress/`, not `2026-09-01-season-loop-tests/stress/`.
+
+**Part 1 · `world_q.judging_set(w, venue, matter)` — BUILT, real signature, real predicate.**
+Live holders of a `hold` Tenure whose GRANT (`Tenure.granted_acts`, not `Office.remit_acts` — see
+below) names the basis, whose Office's `scope_rung` contains `venue` by the containment walk
+(`ancestry`). `matter` is carried on the signature and is not yet load-bearing (no mapping from a
+docketed matter to its governing arrangement exists — that is the docketing question, held out
+below). Falsifiers, both executed: removing a seat's grant empties the bench; the same seat still
+reaches a rung one below its own (`off_duke`, scoped at `D`, reaches `S`). **Corrected mid-build**:
+the first draft read `Office.remit_acts` directly and was refused by
+`test_13e_no_remit_acts_attribute_read_outside_the_three_allow_listed_sites` (plan position `13e`,
+committed since the brief was written) — rewritten to read the seat's own grant, matching
+`person_side_eligible`'s pattern. Two probes that used to raise `Unspecified` unconditionally
+(`F8`, `F21` — `harness/probes.py`) now execute for real: `F8` is rewritten as a genuine PASS
+demonstrating both falsifiers; `F21` (a DIFFERENT, undischarged claim — an individual bench
+member's position surviving distinctly from the collective ruling) is rewritten to raise
+`Unspecified` explicitly, naming `arrangements.yaml`'s `records_dissent` key as the still-missing
+mechanism, rather than silently inheriting a stale reason. `runs/{TRACE.txt,PROBES.md,results.json}`
+regenerated (`python -m engine.season.harness.report`); the delta is exactly these two probes'
+verdicts, nothing else moved.
+
+**Part 2 · `convene` corrected — NOT via the `scalar_threshold` typed-cell grammar, a named
+deviation.** `scale: "settlement"` deleted (the tenth and last of the ten rows `verb_table.yaml`'s
+own header names as pending `Act.via` carrying scope — this one did not wait, because Jordan's
+2026-09-05 correction replaces it with an ordinal read off the act's own `subject` operand rather
+than the exercising seat's scope). The `rank` stem is real: added to `REQUIRES_STEMS` and to
+`WorldReader.read` (`RUNG_KINDS.index(kind)`), general infrastructure for whatever next types
+against it. **`_req_convene` stays a hand predicate, corrected in place**, rather than becoming a
+`requires_typed: scalar_threshold` cell as the compressed bullet's literal wording suggests: that
+form's `check()` reads both sides off the SAME bound entity, so it has no channel for a literal
+constant (`rank(person) == 0`) without either coining a ninth `requires_operands` member or
+overloading `floor`'s already-declared, structurally different (per-site-kind) meaning —
+`decision/options.py::_derive_operand`'s own stated rule is one meaning per operand name, never a
+per-verb table. The venue rides `subject` (C-11: *"subject already binds the rung"*), not `venue` —
+`_eff_convene` and every hand-built test payload updated to match. Falsifiers executed: a convening
+at `S` (settlement) and at the realm both admit; one at a person-rung is refused by the ordinal —
+the OLD "container resolves" clause would have wrongly refused a REALM venue too (no container by
+construction), which the ordinal both fixes and replaces.
+
+**Part 3 · `arrangements.yaml` + its loader (`data/arrangements.py`, new) + four of six named
+rosters — BUILT, seeded with three of twelve games, two absences named rather than invented.**
+Thirteen-key schema (`19_PLAN.md` step 11's correction of `03_PARAMETERS.md` PART D's fifteen:
+delete `registers`/`verdict_reasons`/`stakes_grade`, add `quorum`), unknown keys refused, C-1
+(disposal opener check) built as a REPORT rather than a load-time refusal — refusing it today would
+make the loader vacuous, since `determine` has no effect function at all yet (that is PHASE 2 step
+11, not this position) and no verb opens `oblige` either. Seeded with **arbitration,
+parliamentary_debate, council_of_state** (all `disposal: bench`) rather than all twelve: the other
+nine either carry the source's own unresolved `<tenure>` `disposes` placeholder (`interrogation`,
+`legal trial`, `tribunal`, `inquisition hearing` — four, in the source document itself) or their old
+`records_dissent`/`verdict_reasons` pair disagrees under the new one-key collapse with no stated
+rule to resolve it (`negotiation`, `public debate` — the two clean candidates for `disposal:
+mutual`/`none`), named rather than guessed past. `disposal: declared` has no worked example
+anywhere in the source; the loader accepts it (`quorum:` required, checked both directions) with no
+seeded row. Four rosters land in `rosters.yaml` (`interposition_kinds`, `genres`, `proofs`,
+`ladder_rungs`); `speech_kinds` (six of the ten `19_PLAN.md` step 7 promises — Fig. 27's forensic
+ladder, reused as its own membership rather than a second vocabulary) lives inside
+`arrangements.yaml` beside the arrangements it governs, since its three-column shape does not fit
+either `roster()` or `table()`. The degree ladder (`Failure · Partial · Success · Overwhelming`) is
+imported from `engine/autoload/dice_engine.py::DEGREE_LABEL`, the single owner, rather than given a
+sixth `rosters.yaml` roster — a first draft DID add one and it collided with a pre-existing,
+unrelated literal in `tests/test_mass_battle_provider.py` that
+`test_jordan_no_definition_is_hardcoded_in_a_body` correctly read as two owners of one fact the
+moment a second was written down; importing the enum's own labels is the one-owner fix. Two
+pinned-count guards moved and are recorded at their own sites rather than here a second time:
+`test_h115_the_fourteen_load_time_raises_are_unchanged` (44 → 69, one new loader) and
+`test_jordan_no_definition_is_hardcoded_in_a_body`'s `EXEMPT_CEILING` (15 → 26, the new loader's
+schema/field-name/return-shape sets).
+
+**Part 4 · D-6/D-7 as swept fixtures, the `H-128` shape — BUILT.** `H-153` (D-6, *"whoever touches
+it is killed"* has no corpus-supplied next move): `speech_kind_terminal_fault`, shipped `"removal"`
+(the source's own unsoftened reading), swept `["removal", "softened"]`. `H-154` (D-7, two
+corpus-versus-evidence branches): `denial_detail_outperforms`, shipped `"equal"`; and
+`displayed_anger_extracts_concessions`, shipped `False` — the weaker-warranted of the two, since D-7
+names its own evidence unverified. Both hole-register rows are answered per `CLAUDE.md` §0's
+NOT-JORDAN'S test 5 (no ruling, precedent or design document settles either; the architecturally
+sound reading — the one the corpus states — is taken), citing
+`proposals/2026-09-05-proceedings-subsystem/19_PLAN.md` by its FULL repo-relative path in `cite:`,
+not the bare filename the first draft used — a bare filename collided with `CITE_SOURCES`'
+substring-matched tokens (`PLAN.md`, `CLAUDE.md`) and `test_w1_every_citation_in_the_register_
+resolves_in_353` correctly reported the quote FABRICATED against the wrong two files until the path
+was spelled in full. Nothing reads either fixture yet — the resolution ladder they would gate is
+PHASE 2/3 work — so the shipped arms change no behaviour today, on `H-128`'s own precedent.
+
+**Part 5 · Five of thirty-eight stress cases re-hosted, named scope-down.**
+`engine/season/tests/test_stress_proceedings_rehost.py` re-hosts ST-03, ST-04, ST-08 (all three
+reversed against this position's own build), and ST-23/ST-30 (reinterpreted as engine-side execution
+claims rather than the document-header-word check the originals asked, which this position's own
+`03_PARAMETERS.md` correction already settled before this session and is not an `engine.season`
+question at all). The other 33 are NOT ported — named rather than silently dropped: most need
+`speak`/`determine` resolution machinery (PHASE 2 steps 11-16), the docket reader (PHASE 2 step 10,
+below) or the season driver end to end, none of which this position's five parts build; re-hosting
+them against a tracer that does not exist would either fabricate a second tracer or manufacture a
+pass against machinery not yet built (`CLAUDE.md` §0.1 pt 3 row 1).
+
+**Docketing (PHASE 2 step 10) — DECIDED OUT OF SCOPE, not silently dropped.** The old plan's own
+bullet list names four PHASE-2 steps together ("fold in proceedings PHASE 2 steps 6, 7, 9 and 10");
+this position's five parts discharge 6 (rosters+arrangements), 7 (judging_set) and 9 (convene), and
+this record makes the fourth an explicit, reasoned deferral rather than an omission nobody
+acknowledged. Measured: `open_case` is formable (`verb_table.yaml`) but has NO effect function at
+all (`grep -rn "open_case" loop/effects.py loop/predicates.py` returns nothing) and no
+`DocketItem.matter` write exists; `world_q`'s generic `exists:` reader genuinely evaluates
+`exists:DocketItem` as `UNKNOWN` today, matching the old plan's own stated falsifier. Building it —
+a new `_eff_open_case`, a `write_matrix.yaml` row for a carrier (`DocketItem`) that is not yet even
+a `World._STATE_COLLECTIONS` member, and a new `WorldReader.read` branch — is comparable in size to
+this position's own parts 1/2, not a trivial rider, and the brief's own five parts did not name it.
+Named as PROC-A's own natural follow-up, closer to position `19`'s job (whose `determine` is what
+would actually consume a docketed matter) than to a position already this large.
+
+**Verified.** `engine/season/tests/{test_arrangements,test_stress_proceedings_rehost}.py` (new, 14
+passed); `test_governance_build.py`, `test_g4_no_op_receipt.py`, `test_g3_not_yours.py` (97/26/12
+passed); the full `engine/season/tests/test_season_shape.py` TWICE — once before part 3 (306 passed,
+confirming parts 1-2 alone), once after all five parts (208 passed with `-n auto`, the file's own
+count differing only by parallel-worker item grouping, not by a failure) — each run legitimate per
+§0.4 because `data/arrangements.py` is a NEW file this package's own `_model_modules()` AST-scans,
+which no narrower file-level run would have caught. `python3 tools/valoria_local.py --staged`:
+blocking gates pass (naming, co-file, quarantine, PP-frozen); the one report-only finding
+(`validate_ed_citations.py` on `ED-PC-0058`) is the concurrent PC-lane session's, not this commit's.
+Not run: the full `pytest tests/valoria` suite and `engine/tests/` (untouched by this position) and
+a fresh CI push.
+
+**⚠ Concurrency, recorded plainly.** This position's whole execution shared the working tree with at
+least two other live sessions (MB lane: position `11`, §8.10 above; PC lane: `ED-PC-0058` and
+`registers/handoffs/HANDOFF_PC.md`, both mid-flight). Two effects, both handled without touching
+either lane's files: `git status` mid-session showed files this position never touched
+(`systems/mass_battle/`, `references/id_reservations*`, `tests/valoria/test_combat_*`,
+`golden_*.json`) — left alone, per this brief's own instruction, and reported here rather than
+silently worked around; and the git INDEX was reset by one of those sessions' own commits partway
+through (this position's staged files reverted to "modified, not staged" with their CONTENT intact,
+verified by re-running the new test files before re-staging). §8.10 claimed the number this section
+would otherwise have used; this one is `§8.11` for exactly that reason.
 
 ---
 

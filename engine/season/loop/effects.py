@@ -347,13 +347,19 @@ def _eff_convene(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     already due when it says and already attached -- it moves nothing, and is now
     `convene.refused` where it used to publish a second `date.scheduled` for a date that was
     scheduled once. A different `when` moves `due_at` and is a real reschedule. Measured before
-    this position on `build_realm(0)`: no convening in four seasons repeats one, so no run moves."""
+    this position on `build_realm(0)`: no convening in four seasons repeats one, so no run moves.
+
+    ⚠ THE VENUE RIDES `subject` NOW, NOT `venue` (plan position `18`/PROC-A, 2026-09-29; C-11,
+    `21_RECONCILIATION.md:379`: *"subject already binds the rung"*). `w.dates[...]["venue"]` is
+    the DATE'S own field name, unrelated to and unchanged by the act's payload key, and
+    `corpus_run.py`'s hand-built dates still set it directly."""
     d = (a.payload or {}) if isinstance(a.payload, dict) else {}
     when = int(d.get("when", w.tick + 1))
-    did = H(w.world_seed, w.tick, a.actor, f"convene:{d.get('venue') or '-'}")
+    venue = d.get("subject")
+    did = H(w.world_seed, w.tick, a.actor, f"convene:{venue or '-'}")
 
     def perform() -> None:
-        date = w.dates.setdefault(did, {"id": did, "venue": d.get("venue")})
+        date = w.dates.setdefault(did, {"id": did, "venue": venue})
         date["due_at"] = when
         date["convening_attached"] = True
     return Change((Subject.entity("dates", did),), perform)

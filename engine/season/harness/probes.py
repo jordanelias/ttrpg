@@ -1292,9 +1292,28 @@ def f7():
 @probe("F8", "the sitting decides", "S61", by="construction",
        tests="the body a matter reaches must be able to decide it")
 def f8():
+    """`H-32`, BUILT -- plan position `18` (PROC-A), 2026-09-29. `judging_set` used to raise
+    `Unspecified` unconditionally, which is why this probe used to end at `return "UNREACHABLE"`
+    without ever reaching it. Now it does, and the falsifiers it names run for real: `off_duke`
+    holds `determine` in its remit at `scope_rung='D'`, so the bench `D` reaches CAN decide it --
+    and the SAME seat still reaches `S`, one rung inside `D` (*"a purview walk one rung up still
+    finds it"*), by the same containment walk `ancestry` already owns."""
     w = tiny_world()
-    world_q.judging_set(w, "D")
-    return "UNREACHABLE"
+    seats_d = world_q.judging_set(w, "D")
+    assert seats_d == ["p_high"], seats_d
+    seats_s = world_q.judging_set(w, "S")
+    assert seats_s == ["p_high"], seats_s
+    # THE GRANT, NOT THE OFFICE -- `judging_set` reads `Tenure.granted_acts` (plan position `13e`'s
+    # consolidation), so removing the remit means re-stamping the SEAT's own snapshot, not the
+    # office's field (which `test_13e_...` would flag as a stale reader, and which would not even
+    # reach `judging_set` if it did -- that is the whole point of the consolidation).
+    t = next(t for t in w.tenures if t.kind == "hold" and t.object == "off_duke" and t.live)
+    t.payload = dict(t.payload); t.payload["remit_acts"] = ("issue",)
+    assert world_q.judging_set(w, "D") == [], "removing `determine` from the seat's grant did not empty the bench"
+    return (f"PASS: judging_set(w, 'D') = {seats_d!r}; judging_set(w, 'S') = {seats_s!r} -- one "
+            "seat (`off_duke`, remit `determine`, `scope_rung='D'`) reaches both its own rung and "
+            "the settlement one rung inside it. Stripping the remit act EMPTIES the bench: the "
+            "date fires and lapses (S61), never a forced decision")
 
 
 @probe("F9", "petition spray", "S26.3", by="construction",
@@ -2558,9 +2577,25 @@ def f20():
        by="construction",
        tests="a character sitting on a collective body must be able to have their individual position registered distinctly from the body's decision")
 def f21():
+    """`H-32` CLOSES `judging_set` (plan position `18`/PROC-A) but this probe was never really
+    ABOUT the bench resolving -- `judging_set` only says WHO sits; this asks whether a member's
+    OWN vote survives distinctly from the body's collective ruling, which is `arrangements.yaml`'s
+    `records_dissent` key (`03_PARAMETERS.md` PART D) -- data this position's part 3 loads, with
+    NO write anywhere that records an individual seat's position (`grep -rn "dissent"
+    engine/season/loop/ engine/season/state/` returns nothing). judging_set finding a real bench
+    is necessary and does not by itself make a division recordable, so the gap is real and is
+    raised explicitly now rather than inherited as a side effect of a stub that no longer exists."""
     w = tiny_world()
-    world_q.judging_set(w, "D")
-    return "UNREACHABLE"
+    seats = world_q.judging_set(w, "D")
+    assert seats, "no bench to have an individual position on -- a DIFFERENT gap than the one this probe names"
+    raise Unspecified(
+        "records_dissent", "S61",
+        needs="a write that records ONE seat's position distinctly from the bench's collective "
+              "ruling -- `arrangements.yaml`'s `records_dissent` key (part 3, plan position "
+              "`18`/PROC-A) is DATA on the row; nothing writes a per-seat division yet",
+        law="S61 -- a bench DECIDING is `judging_set` (H-32, now built); a bench's INDIVIDUAL "
+            "members each being ON THE RECORD is a second, undischarged claim this probe's title "
+            "names and `judging_set` alone does not answer")
 
 
 # ===========================================================================

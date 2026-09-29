@@ -1489,6 +1489,56 @@ rosters:
       the roster cannot grow a value the resolver silently treats as another.
     values: [rung_above_same_faction]
 
+  interposition_kinds:
+    source: "`proposals/2026-09-05-proceedings-subsystem/03_PARAMETERS.md` PART D's `interposed:` schema comment -- Fig. 24 -- and §E.2's twelve worked rows, every one of which draws its `interposed:` list from exactly this set. Plan position `18` (PROC-A)."
+    open: true
+    note: >-
+      ⚠ WHAT AN ARRANGEMENT'S `interposed:` KEY IS A SUBSET OF (`data/arrangements.py`'s loader
+      checks membership against this roster, not a local literal). `latitude` is DERIVED from
+      `interposed[]` (§B.1) -- never stored, never a roster value of its own -- so this roster
+      names WHO OR WHAT MAY STAND BETWEEN A PARTY AND THE ROOM, not the derived quantity.
+      `pair` is two envoys who must agree before anything is reported (§E.2, "negotiation through
+      envoys") -- a genuine sixth kind, not a multiplicity of `person`.
+    values: [person, office, document, procedure, ceremony, pair]
+
+  genres:
+    source: "`03_PARAMETERS.md` §B.3 / Fig. 23 -- the genre triangle. `genre` is DERIVED from the bench's remit acts (a Query, never an authored key on a row -- §B.3: \"not a field on the game\"), and is a SET, not a single value (the assembly-as-magistrate bend needs both `forensic` and `deliberative` at once). This roster is the closed CODOMAIN that derivation may return into, the same relationship `rung_kinds` has to `title_domain`."
+    open: true
+    note: >-
+      `forensic` -- a PAST matter, did it happen: the issue ladder runs. `deliberative` -- a
+      FUTURE matter, shall we do it: no issue ladder: the fact is not in dispute. `epideictic` --
+      no bench at all: amplification; the only prize is standing. ⚠ NOTHING DERIVES `genre` YET
+      (the Query is `19_PLAN.md` PHASE 2/3 work, not this position's five parts) -- this roster is
+      the closed set that derivation will read into, authored now because `speech_kinds`' own
+      "which genres it is apt in" column already needs somewhere closed to point at.
+    values: [forensic, deliberative, epideictic]
+
+  proofs:
+    source: "`03_PARAMETERS.md` PART D's `proofs:` schema comment -- Fig. 6 -- and §E.2's worked rows (`record`, `testimony`, `oath`, `confession` are the four names actually used across all twelve games)."
+    open: true
+    note: >-
+      ⚠ A KNOWN-THIN ROSTER, NAMED RATHER THAN PADDED. `03_PARAMETERS.md` §E.2's own examination
+      row flags a strain: what an examination weighs is a *performance*, and Fig. 6 (which this
+      roster transcribes) enumerates what a FORENSIC proceeding admits -- so `proofs` may need a
+      fifth member (`performance`) once a non-forensic proof-bearing game is authored, registered
+      there as `10_LOOPS_AND_GAPS.md` `P-13` and NOT invented here. Adding a member is a roster
+      edit, never a code change -- the closure claim this roster exists to make survives the gap.
+    values: [record, testimony, oath, confession]
+
+  ladder_rungs:
+    source: "`18_FINDINGS.md`:180 and §5 item 5 (Fig. 27) -- the forensic ISSUE LADDER a party descends under `interrogation`'s `order: scripted` / `registers: [restricted]`, verbatim: \"deny, cite something incompatible, impugn the motive, concede the fact, concede the harm, hand the error back.\" Plan position `18` (PROC-A)."
+    open: true
+    note: >-
+      ⚠ SIX RUNGS, ORDERED HIGH-TO-LOW (deny is the strongest position; handing the error back
+      concedes everything). `speech_kinds` reuses these SAME SIX AS ITS ONLY SIX MEMBERS (below,
+      itself flagged partial against the ten `19_PLAN.md` step 7 promises) rather than minting a
+      second vocabulary for what is, on this corpus's own reading, one ladder read two ways -- a
+      RUNG one descends and a KIND OF SPEECH one performs to descend it are the same six acts.
+      `impugn_motive` is `18_FINDINGS.md`'s *"Partial by construction"* figure (Fig. 24's fixed
+      native band, §5 item 5) -- reachable-bands data on `speech_kinds`' own row, not a second
+      roster.
+    values: [deny, cite_incompatible, impugn_motive, concede_fact, concede_harm, hand_error_back]
+
 tables:
 
   site_yield:

@@ -561,4 +561,26 @@ DEFAULT_FIXTURES = Fixtures(
     # unruled design choice, not because the axis is unavailable -- whether to arm it before or wait
     # for `H6`'s 15-pursuit landing is for the orchestrator/Jordan to decide, not this row.
     refusal_axis=None,                 # `H-146`, control None (SHIPPED)
+    # `H-153` (D-6, `19_PLAN.md:952-955`) -- THE ONE CORPUS FAULT THAT DOES NOT RECONCILE WITH
+    # FAIL-FORWARD: *"whoever touches it is killed"* has no corpus-supplied next move. Swept
+    # fixture, in the `H-128` shape: nothing reads it (the speech-kind resolution ladder this
+    # would gate is PHASE 2/3 work, not this position's five parts), so the control arm changes
+    # no behaviour today. `"removal"` is shipped -- the design's own two options are *"treat it as
+    # the one place the ladder's failure is not the outcome -- the outcome is removal from the
+    # world, which is a different contest entirely"* or *"soften the corpus."* D-6 itself: *"Handed
+    # forward unsoftened."* Softening a corpus figure this position did not author is the invented
+    # direction; the unsoftened reading is the one the source states, so it is the default rather
+    # than a coin flip. [JUSTIFIED: engine/season/hole_register.yaml H-153 -- swept fixture, not Jordan's, `18`/PROC-A part 4]
+    speech_kind_terminal_fault="removal",   # `H-153`, swept removal (control, SHIPPED) / softened
+    # `H-154` (D-7 branch a, `19_PLAN.md:957`) -- WHETHER A DETAILED DENIAL OUTPERFORMS A BRIEF
+    # ONE. *"Data authoring, per branch, low stakes, sweepable either way."* `"equal"` is the
+    # control: the reading under which the resolution ladder (unbuilt, same reason as `H-153`
+    # above) draws no distinction between the two, so shipping it changes nothing today.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-154 -- swept fixture, not Jordan's, `18`/PROC-A part 4]
+    denial_detail_outperforms="equal",      # `H-154`, swept equal (control, SHIPPED) / detailed / brief
+    # `H-154`'s second branch (D-7 branch b) -- WHETHER DISPLAYED ANGER EXTRACTS CONCESSIONS, and
+    # *"the study marks the evidence for the second unverified itself"* -- the weakest-warranted
+    # branch in this position's whole set. `False` is the control (no extraction effect), matching
+    # `H-128`'s neutral-start convention; nothing reads it today for the same reason as above.
+    displayed_anger_extracts_concessions=False,   # `H-154`, swept False (control, SHIPPED) / True
 )

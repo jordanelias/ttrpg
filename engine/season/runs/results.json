@@ -9589,13 +9589,11 @@
   },
   "F8": {
    "id": "F8",
-   "verdict": "GAP",
-   "detail": "judging_set_rule",
-   "kind": "UNSPECIFIED",
+   "verdict": "PASS",
+   "detail": "PASS: judging_set(w, 'D') = ['p_high']; judging_set(w, 'S') = ['p_high'] -- one seat (`off_duke`, remit `determine`, `scope_rung='D'`) reaches both its own rung and the settlement one rung inside it. Stripping the remit act EMPTIES the bench: the date fires and lapses (S61), never a forced decision",
+   "kind": null,
    "section": "S61",
    "title": "the sitting decides",
-   "needs": "who decides at a sitting",
-   "law": "S61 -- NOTHING IS DECIDED AT A SITTING. T5's 'filtered at a rung' runs straight through it, and S10.2's 'arrangements, not choices' cannot be confirmed until it is",
    "by": "construction",
    "tests": "the body a matter reaches must be able to decide it"
   },
@@ -10362,12 +10360,12 @@
   "F21": {
    "id": "F21",
    "verdict": "GAP",
-   "detail": "judging_set_rule",
+   "detail": "records_dissent",
    "kind": "UNSPECIFIED",
    "section": "S61",
    "title": "a member's individual position is recorded in a body's collective output",
-   "needs": "who decides at a sitting",
-   "law": "S61 -- NOTHING IS DECIDED AT A SITTING. T5's 'filtered at a rung' runs straight through it, and S10.2's 'arrangements, not choices' cannot be confirmed until it is",
+   "needs": "a write that records ONE seat's position distinctly from the bench's collective ruling -- `arrangements.yaml`'s `records_dissent` key (part 3, plan position `18`/PROC-A) is DATA on the row; nothing writes a per-seat division yet",
+   "law": "S61 -- a bench DECIDING is `judging_set` (H-32, now built); a bench's INDIVIDUAL members each being ON THE RECORD is a second, undischarged claim this probe's title names and `judging_set` alone does not answer",
    "by": "construction",
    "tests": "a character sitting on a collective body must be able to have their individual position registered distinctly from the body's decision"
   },
@@ -10815,15 +10813,6 @@
   },
   {
    "kind": "UNSPECIFIED",
-   "what": "judging_set_rule",
-   "where": "S61",
-   "needs": "who decides at a sitting",
-   "law": "S61 -- NOTHING IS DECIDED AT A SITTING. T5's 'filtered at a rung' runs straight through it, and S10.2's 'arrangements, not choices' cannot be confirmed until it is",
-   "case": "probe:F8",
-   "expected": false
-  },
-  {
-   "kind": "UNSPECIFIED",
    "what": "verb 'petition0' is on no row of the verb table",
    "where": "S27/E2",
    "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'petition0' as a verb. This is the CALLER'S invention and the gap is the caller's",
@@ -11193,10 +11182,10 @@
   },
   {
    "kind": "UNSPECIFIED",
-   "what": "judging_set_rule",
+   "what": "records_dissent",
    "where": "S61",
-   "needs": "who decides at a sitting",
-   "law": "S61 -- NOTHING IS DECIDED AT A SITTING. T5's 'filtered at a rung' runs straight through it, and S10.2's 'arrangements, not choices' cannot be confirmed until it is",
+   "needs": "a write that records ONE seat's position distinctly from the bench's collective ruling -- `arrangements.yaml`'s `records_dissent` key (part 3, plan position `18`/PROC-A) is DATA on the row; nothing writes a per-seat division yet",
+   "law": "S61 -- a bench DECIDING is `judging_set` (H-32, now built); a bench's INDIVIDUAL members each being ON THE RECORD is a second, undischarged claim this probe's title names and `judging_set` alone does not answer",
    "case": "probe:F21",
    "expected": false
   },
@@ -11223,13 +11212,13 @@
   "STEP": 7100,
   "BARRIER": 1871,
   "DECISION": 1888,
-  "QUERY": 23089,
+  "QUERY": 23093,
   "NOTE": 299,
   "WRITE": 20426,
   "EVENT": 20044,
   "ACT": 96,
   "CLAIM": 2175,
-  "GAP": 87
+  "GAP": 86
  },
  "_corpus_defects": [
   "ARC1.yaml: committed inside a markdown fence with transcript preamble",
