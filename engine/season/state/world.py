@@ -625,8 +625,14 @@ class World:
         boundary — the check below could only ever catch a call on a PRISTINE, never-written
         World, not the realistic misuse case (a world already in play) this note claimed to
         prevent. Fixed in the same pass: `World.write`'s success path now calls `self.gate.close()`
-        too (`:1056`, symmetric with the two refusal-path calls), so the property genuinely holds
-        now. MEASURED, not assumed: every existing death/`remove_person` test in
+        too, symmetric with the two refusal-path calls, so the property genuinely holds now.
+        ⚠ THE LINE CITATION THIS PARAGRAPH ORIGINALLY GAVE (`:1056`) IS ALREADY STALE: the
+        hand-written success-path call it named was itself replaced one paragraph below, by the
+        `/simplify` pass the same day, with the single `finally:` (`:1090`) whose body calls
+        `self.gate.close()` at `:1109`.
+        Left unfixed it would be exactly `CLAUDE.md` §0.1 pt 3's *"a citation you have not
+        opened is not a citation"* — a reader following it would land on `Event(...)`
+        construction, not a gate call. MEASURED, not assumed: every existing death/`remove_person` test in
         `engine/season/tests` still passes unchanged (`test_march.py`, `test_g3_not_yours.py`,
         `test_season_shape.py`'s P24/P25 probes and its partition-seam test), and
         `test_gate_remove_person_requires_an_open_write.py` gained a second case exercising the
