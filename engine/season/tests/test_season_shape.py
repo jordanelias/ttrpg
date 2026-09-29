@@ -12525,6 +12525,26 @@ def test_u2_the_round_index_is_a_driver_local_and_no_carrier_but_claim_has_one()
         "whole claim is that it is not one")
 
 
+def _tell_and_witness(w, teller: str, subject: str, held: Claim, degree: str):
+    """Plant `held` on `teller`'s own ledger, mint one `tell` Act/Event pointed at `subject`, at
+    `degree`, and run it through `witness()` alone -- the `_wb_fold_one` pattern, skipping RESOLVE
+    entirely because a hand-set `degree` is more direct than steering the contest seam to land on
+    one. Returns `(driver, event)`. `w.acts.append` is required for `state/attribution.py`'s
+    `actor_of`/`anchor_of` (tier 1) to resolve the teller from `causes=[act.id]` -- `d.act_of` alone
+    is this driver's OWN memo and is not what the co-located/witness_key channel predicates read."""
+    act = Act(id=f"a_tell_{teller}_{subject}_{degree}", actor=teller, verb="tell",
+              payload={"subject": subject})
+    w.acts.append(act)
+    ev = Event(H(w.world_seed, w.tick, teller, f"ev:news.told:{act.id}"), "news.told",
+               [], [act.id], w.tick, degree, ())
+    w.log.append(ev)
+    w.persons[teller].ledger.append(held)
+    d = SeasonDriver(w)
+    d.act_of[ev.id] = act
+    d.witness(mint_token(w, WriteClass.INTERIOR), [ev])
+    return d, ev
+
+
 def test_a_telling_deposits_what_was_told_and_the_teller_is_not_told_their_own_news():
     """THE TOLD CHANNEL — `rosters.yaml: claim_sources` declared four sources and the loop wrote
     one. `tell` is the verb whose entire purpose is transmission and, until this landed, a witness
@@ -12535,119 +12555,219 @@ def test_a_telling_deposits_what_was_told_and_the_teller_is_not_told_their_own_n
     a deposit that invented its content, so the assertion pairs every `told_by` claim with a claim
     THE TELLER ACTUALLY HOLDS.
 
-    ⚠⚠ **AND THE MUTATION THIS PARAGRAPH ORIGINALLY NAMED DOES NOT REDDEN IT — THE PROSE CLAIMED
-    A FALSIFIER THE ASSERTION DOES NOT DELIVER, WHICH IS §0.1 pt 2 EXACTLY.** It read *"deleting
-    the `_held` lookup and minting a claim from the Event instead still gives a non-zero count and
-    reddens this"*. It does not: an Event-minted claim is `(subj, "news.told", True)`, and because
-    `tell` writes nothing, `claim_subjects` falls through to `act_refs` and every other witness of
-    that telling holds that exact triple firsthand — so the "somebody else holds it" test passes.
-    The mutation that WAS run used the predicate `"hearsay:" + e.kind`, which nobody holds, and
-    that is a weaker mutation wearing the stronger one's name. Found by an adversarial pass, not by
-    running it. The assertion below is therefore strengthened to name the TELLER specifically
-    rather than "anyone else", which is the claim the prose was making all along.
-
     ⚠ AND THE TELLER IS ASSERTED ABSENT FROM THE RECIPIENTS, because the nearest wrong version of
     this rule is the self-witness rule `witness`'s own REV 3 removed one channel along: a person
     holding a `told_by` copy of their own telling has been told the news by themselves.
 
-    ⚠⚠⚠ **THE FIXTURE MOVED FROM `HL.build_world(0)` TO A CORPUS CASE UNDER `R8.1`, AND THE
-    REASON IS `W27`'S OWN FINDING RECURRING IN A SMALLER WORLD, NOT A NEW DEFECT.** The `seen`
-    deposit lands a claim about a witnessed subject to EVERY co-located witness on EVERY event,
-    and `build_world(0)`'s 3 persons are close enough, all season, that by the time any `tell`
-    fires its recipients already hold the told content firsthand via `seen` — the dedup guard
-    below (the reason `175 of the first cut's 180 deposits were this`) correctly drops every copy,
-    and `told_by` measures **zero in that world at every seed 0-9** (checked). That is the
-    identical mechanism `corpus_run.build_at`'s all-in-one-rung worlds were already recorded
-    hitting (`test_wb_clause_four_…`'s corpus block: *"a corpus of co-located omniscient witnesses
-    cannot exercise transmission"*) reaching `build_world` too, now that `seen` widens who counts
-    as already-informed. **The channel is not dead**: measured across the live 89-world corpus,
-    `told_by` still lands 5 times over 3 worlds — persons there are NOT all co-located, so `tell`
-    still crosses a boundary `seen` does not. This test now builds one of those worlds, so the
-    teller-attribution and content-match assertions below execute against a real deposit again
-    rather than iterating an empty list.
-    ⚠ **THE WORLD NAMED HERE MOVED AGAIN, 2026-09-27, MERGING MAIN's G4 (SELF-TRANSFER REFUSAL) ON
-    TOP.** `SCN-11` (2 told_by claims) went to zero under G4 too; the live set on the fully-merged
-    tree is `ARC-09` (1), `ARC-34` (2, 6 seasons) and `ARC-40` (2, 3 seasons) — `ARC-40` is the
-    cheapest of those and is what this test builds now. If it goes to zero again, re-measure
-    `told_holders` across the corpus rather than guessing the next case.
-    [GROUNDED: measured 2026-09-27 on this tree with `seen` (`R8.1`) live -- `build_world(0)` gives 0 `told_by` claims at every seed 0-9 over 4 seasons; `corpus_run.build_at(SCN-11, 0)` gives 2 over its 2 seasons, from 2 `tell` acts by `p_c` and `p_a`]
-    [GROUNDED: re-measured 2026-09-27 after merging main's G4 on top -- `SCN-11` falls to 0; `ARC-40` gives 2 `told_by` claims over its 3 seasons]"""
-    from ..harness import corpus_run as CR
-    from ..harness import run_cases as RC
-    from ..state.carriers import Claim
-
-    case = next(c for c in RC.load_cases("ARC") if c["id"] == "ARC-40")
-    w = CR.build_at(case, 0)
-    d = SeasonDriver(w)
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    for _ in range(CR.seasons_for(case)):
-        d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                              draw=draw_factory(w.world_seed, lambda: w.tick)),
-                 question=None, subsistence=CR.P.SUBSIST,
-                 contest_max_depth=w.fixtures.get("contest_max_depth"))
+    ⚠⚠⚠⚠ **THE FIXTURE MOVED OFF THE CORPUS ENTIRELY, PLAN POSITION `15b`, AND THE REASON IS THE
+    SAME ONE THIS DOCSTRING ALREADY NAMED THREE TIMES ACROSS `HL.build_world(0)`, `SCN-11` and
+    `ARC-40` — A CORPUS CASE THAT HAPPENS TO PRODUCE A `told_by` CLAIM TODAY IS NOT A CONTRACT THAT
+    IT STILL WILL AFTER THE NEXT UNRELATED LANDING.** MEASURED on this tree (after positions `15`
+    and `15c`, which touch the CONTENT-claim deposit and operand derivation, neither the told
+    channel): `ARC-40` gives **0**, and a sweep of every `ARC` case at seeds 0-2 AND every case in
+    every other lane at seed 0 gives **0** — the fourth recurrence of the identical mechanism this
+    docstring's own history already narrates (`seen`/co-location making every candidate a
+    duplicate the exact-triple guard correctly drops). Chasing a fifth corpus case is the same
+    pattern defect wearing a new number; this test now builds the two-person scenario directly
+    (`_tell_and_witness`, above), which is a CONTROL an unrelated commit cannot silently zero.
+    [GROUNDED: measured 2026-09-29 on this tree — `CR.build_at(case, 0)` for every ARC case at
+    seeds 0-2, and every NPC/SCN case at seed 0, yields 0 `told_by` claims throughout]"""
+    w = P.tiny_world()
+    teller, other_hearer = "p_low", "p_other"
+    # `p_mid` is `tiny_world`'s OTHER co-located resident of `Hh`; both it and `p_other` hear.
+    held = Claim("c_held", teller, "Hh", "stores:grain", 8, 0, "firsthand", 100, "own")
+    d, ev = _tell_and_witness(w, teller, "Hh", held, "Success")  # non-`Partial` — verbatim only
 
     told = [(pid, c) for pid, p in w.persons.items() for c in p.ledger if c.source == "told_by"]
     assert told, (
-        f"no `told_by` claim reached any ledger over {CR.seasons_for(case)} seasons of `ARC-40`. "
-        "Either no `tell` succeeded — check `news.told` against `news.untold`, the degree decides "
-        "it — or the deposit in `loop/witness.py` stopped firing, or `seen`'s reach widened enough "
-        "to make even this non-co-located case omniscient (in which case find another corpus case "
-        "with a nonzero `told_holders` count and switch to it, per the fixture note above)")
+        "no `told_by` claim reached any ledger. Either the deposit in `loop/witness.py` stopped "
+        "firing, or `tiny_world`'s `p_low`/`p_mid`/`p_other` are no longer co-located at `Hh`")
 
-    # WHAT WAS TOLD IS WHAT THE TELLER HELD. Not a claim minted from the Event.
-    # THE TELLER, NAMED. `told:{event}` is in the claim id, so the telling that produced each
-    # deposit is recoverable exactly — no "somebody, anybody" test, which under a co-located fan
-    # is near-tautological.
-    tellers = {}
-    for e_id, a in d.act_of.items():
-        if a.verb == "tell":
-            tellers[e_id] = a.actor
     for pid, c in told:
-        src_actor = None
-        for e_id, actor in tellers.items():
-            # `c.when` IS the tick the id was minted with (`loop/witness.py` stamps both from
-            # `w.tick` in one construction), so the claim's own field answers exactly what a
-            # sweep over every tick was guessing at. The `forbidden` set below keeps its range,
-            # and that is not an oversight: it names ids the teller must NOT hold, and a claim
-            # that does not exist has no `.when` to read.
-            if c.id == H(w.world_seed, c.when, pid, f"told:{e_id}"):
-                src_actor = actor
-                break
-        assert src_actor is not None, (
-            f"{pid} holds a `told_by` claim {c.id} that no `tell` act in this run produced. A "
-            "told claim's id is minted from the telling's Event; one with no telling behind it "
-            "came from somewhere this test cannot see")
-        teller_holds = {(x.subject, x.predicate, x.value)
-                        for x in w.persons[src_actor].ledger if x.source != "told_by"}
-        assert (c.subject, c.predicate, c.value) in teller_holds, (
-            f"{pid} was told {(c.subject, c.predicate, c.value)} by {src_actor}, who does NOT "
-            "hold that triple firsthand. A telling transmits a claim ITS TELLER already had; "
-            "anything else was minted rather than transmitted, which is the fabrication the "
-            "deposit reads `LedgerReader.latest_about` to avoid")
-        # AND IT TOLD THEM SOMETHING THEY DID NOT ALREADY HAVE.
-        assert len([x for x in w.persons[pid].ledger
-                    if x.source != "told_by" and (x.subject, x.predicate, x.value)
-                    == (c.subject, c.predicate, c.value)]) == 0, (
-            f"{pid} was told {(c.subject, c.predicate, c.value)} they already held firsthand. "
-            "That is one belief stored twice — the defect the observation block forbids — and it "
-            "costs a `ledger_cap` slot. 175 of the first cut's 180 deposits were this")
+        assert pid != teller, f"{teller} was told their own news"
+        # WHAT WAS TOLD IS WHAT THE TELLER HELD, VERBATIM AT THIS (non-`Partial`) DEGREE.
+        assert (c.subject, c.predicate, c.value) == (held.subject, held.predicate, held.value), (
+            f"{pid} was told {(c.subject, c.predicate, c.value)}, which does not match the "
+            f"teller's own held claim {(held.subject, held.predicate, held.value)} at degree "
+            f"{ev.degree!r} — a telling transmits a claim ITS TELLER already had, verbatim, "
+            "outside `Partial`")
         assert isinstance(c, Claim) and c.visibility == "own", (
             "a told claim lands in ONE holder's own ledger, like every other claim (§20)")
+        # THE TELLER'S OWN LEDGER IS BYTE-IDENTICAL (RR-P's test, as an assertion): the plant is
+        # read, never mutated, whatever else this barrier also deposits onto the teller.
+        assert held in w.persons[teller].ledger, (
+            "the teller's own planted claim no longer reads identically — the told channel wrote "
+            "back to the teller it read from")
 
-    # THE TELLER IS NEVER AMONG THE TOLD, for their own telling.
-    for e_id, a in d.act_of.items():
-        if a.verb != "tell":
-            continue
-        teller = w.persons.get(a.actor)
-        if teller is None:
-            continue
-        # THE ID IS THE LINK. A told claim is minted `H(seed, tick, holder, f"told:{event}")`,
-        # so the claim the teller WOULD hold from their own telling is computable exactly, at
-        # every tick it could have been deposited — no heuristic on the ledger.
-        forbidden = {H(w.world_seed, t, a.actor, f"told:{e_id}") for t in range(w.tick + 1)}
-        assert not [c for c in teller.ledger if c.id in forbidden], (
-            f"{a.actor} received a `told_by` claim from their OWN telling {e_id}. The teller holds "
-            "it firsthand already; a told copy is the self-witness rule `witness` REV 3 removed")
+    # THE TELLER IS NEVER AMONG THE TOLD, for their own telling — the ID IS THE LINK, computed
+    # exactly rather than scanned for.
+    forbidden = H(w.world_seed, w.tick, teller, f"told:{ev.id}")
+    assert not [c for c in w.persons[teller].ledger if c.id == forbidden], (
+        f"{teller} received a `told_by` claim from their OWN telling. The teller holds it "
+        "firsthand already; a told copy is the self-witness rule `witness` REV 3 removed")
+
+
+# ---------------------------------------------------------------------------
+# PLAN POSITION `15b` — LOSSY TELL (r2 `02_THE_WRIT_AND_THE_WORD.md` §A.10, `ED-IN-0222`).
+#
+# `tell`'s degree-keyed `writes:` are `[]` at every band (lawful, `04 §C.4`) — the loss function
+# is a WITNESS-side deposit change, `loop/witness.py::_told_value`, keyed on `e.degree`.
+# ---------------------------------------------------------------------------
+
+
+def test_tell_at_a_non_partial_degree_deposits_an_identical_copy():
+    """THE CONTROL FOR THE WHOLE POSITION. `Overwhelming` and `Success` are the two non-`Partial`
+    success bands `tell`'s row can emit `news.told` at (`verb_table.yaml:653-657`); neither is
+    lossy, so the hearer's copy equals the teller's exactly, on the SAME content shape `Partial`
+    would corrupt below."""
+    from ..loop.witness import content_value
+
+    val = content_value({"terms": "prop_1", "to": ("p_a", "p_b", "p_c"), "at": "S"})
+    for degree in ("Overwhelming", "Success"):
+        w = P.tiny_world()
+        held = Claim("c_held", "p_low", "rec_1", "content:dispensation", val, 0,
+                     "firsthand", 100, "own")
+        d, ev = _tell_and_witness(w, "p_low", "rec_1", held, degree)
+        told = [c for p in w.persons.values() for c in p.ledger
+                if c.source == "told_by" and c.subject == "rec_1"]
+        assert told, f"no `told_by` claim landed at degree={degree!r}"
+        for c in told:
+            assert c.value == val, (
+                f"at degree={degree!r} the hearer's copy drifted: {c.value!r} != {val!r} — only "
+                "`Partial` may deposit a lossy copy (`ED-IN-0222`)")
+
+
+def test_tell_partial_omits_exactly_one_addressee_never_the_last_never_the_hearers_own_id():
+    """§A.10.1. At `Partial`, a `content:<kind>` claim's hearer-copy may lose ONE id from `to` —
+    never two, never all, and never the hearer's own id if they are named in it."""
+    from ..loop.witness import content_value
+
+    # (a) three addressees, none of them the hearer -- exactly one of the three is dropped.
+    val = content_value({"terms": "prop_1", "to": ("p_a", "p_b", "p_c"), "at": "S"})
+    w = P.tiny_world()
+    held = Claim("c_held", "p_low", "rec_1", "content:dispensation", val, 0,
+                 "firsthand", 100, "own")
+    d, ev = _tell_and_witness(w, "p_low", "rec_1", held, "Partial")
+    told = [c for p in w.persons.values() for c in p.ledger
+            if c.source == "told_by" and c.subject == "rec_1"]
+    assert told, "no `told_by` claim landed at Partial"
+    for c in told:
+        got = dict(c.value)
+        assert dict(val)["terms"] == got["terms"] and dict(val)["at"] == got["at"], (
+            f"§A.10.3: `terms`/`at` may never change; got {got!r}")
+        dropped = set(dict(val)["to"]) - set(got["to"])
+        assert len(dropped) == 1 and len(got["to"]) == 2, (
+            f"expected exactly one omitted addressee, got {got['to']!r} from {dict(val)['to']!r}")
+
+    # (b) the hearer IS one of the two addressees -- their own id is never the one dropped.
+    w2 = P.tiny_world()
+    val2 = content_value({"terms": "prop_1", "to": ("p_mid", "p_other"), "at": "S"})
+    held2 = Claim("c_held2", "p_low", "rec_2", "content:dispensation", val2, 0,
+                  "firsthand", 100, "own")
+    d2, ev2 = _tell_and_witness(w2, "p_low", "rec_2", held2, "Partial")
+    for pid in ("p_mid", "p_other"):
+        c = next((c for c in w2.persons[pid].ledger
+                  if c.source == "told_by" and c.subject == "rec_2"), None)
+        assert c is not None, f"{pid} received no told_by claim"
+        assert pid in dict(c.value)["to"], (
+            f"{pid}'s own id was dropped from their copy of `to` — a rumour may misinform a "
+            "hearer about who ELSE was named, but §A.10.1 forbids it ever removing the hearer's "
+            "own id, since that would be the rumour deciding whether they are bound")
+
+
+def test_tell_partial_with_one_addressee_omits_nothing():
+    """§A.10.1's floor: `len(to) == 1` forbids the omission ("an empty `to` is a writ addressed
+    to nobody, which is moot") and this shape has no numeric operand for §A.10.2's drift branch
+    to reach either (see `_told_value`'s own docstring) — so the honest deposit is verbatim."""
+    from ..loop.witness import content_value
+
+    val = content_value({"terms": "prop_1", "to": ("p_a",), "at": "S"})
+    w = P.tiny_world()
+    held = Claim("c_held", "p_low", "rec_1", "content:dispensation", val, 0,
+                 "firsthand", 100, "own")
+    d, ev = _tell_and_witness(w, "p_low", "rec_1", held, "Partial")
+    told = [c for p in w.persons.values() for c in p.ledger
+            if c.source == "told_by" and c.subject == "rec_1"]
+    assert told, "no `told_by` claim landed at Partial"
+    for c in told:
+        assert c.value == val, (
+            f"a single-addressee content claim drifted at Partial: {c.value!r} != {val!r}")
+
+
+def test_tell_partial_drifts_a_bare_numeric_claim_within_the_band_sign_preserved():
+    """§A.10.2, applied to the ONE shape the live carrier actually supplies a number in: an
+    observation-sourced claim (`stores:<kind>`, `condition`, ...) whose `value` is a plain number
+    -- never a `content:` claim, which carries no numeric field (see `_told_value`'s docstring for
+    the measured mismatch with r2's own "number inside the terms" wording). Recomputes the exact
+    expected value from the SAME formula `_told_value` uses, per §0.1 pt 2 -- a assertion that can
+    observe drift by the wrong amount, not only "it differs"."""
+    import math
+
+    from ..loop.witness import _told_value
+
+    for before in (10, -6):
+        w = P.tiny_world()
+        held = Claim("c_held", "p_low", "Hh", "stores:grain", before, 0, "firsthand", 100, "own")
+        d, ev = _tell_and_witness(w, "p_low", "Hh", held, "Partial")
+        told = [c for p in w.persons.values() for c in p.ledger
+                if c.source == "told_by" and c.subject == "Hh" and c.predicate == "stores:grain"]
+        assert told, f"no `told_by` claim landed for before={before}"
+        band = w.fixtures.get("told_drift_band")
+        max_delta = math.ceil(band * abs(before))
+        for c in told:
+            assert c.value != before, f"before={before} did not drift at all"
+            delta = c.value - before
+            assert 1 <= abs(delta) <= max_delta, (
+                f"drift {delta} outside the bound |after-before| <= ceil(band*|before|) = "
+                f"{max_delta} (§A.10.2)")
+            assert (before > 0) == (c.value > 0) and c.value != 0, (
+                f"before={before}, after={c.value} — crossed zero or flipped sign (§A.10.2)")
+            # RE-DERIVE THE EXACT VALUE `_told_value` WOULD PRODUCE FOR THIS HEARER, so the
+            # assertion pins the FORMULA and not merely "some in-band drift happened".
+            pid = c.holder
+            expected = _told_value(w, pid, ev, held)
+            assert c.value == expected, (
+                f"{pid}'s deposit {c.value} does not match `_told_value`'s own recomputation "
+                f"{expected} — the deterministic selection (§A.10.4) is not reproducible")
+
+
+def test_tell_partial_leaves_a_non_numeric_non_content_claim_verbatim():
+    """Neither branch of §A.10 has an operand to act on for a bare boolean (an event-kind claim's
+    `True`/`False`) or any other non-numeric, non-`content:` value — MEASURED to be exactly the
+    shape of the one told-channel candidate the live 89-world corpus reaches at `Partial`
+    (`ARC-13`, seed 0, a `finding.none` claim). The honest deposit is verbatim rather than an
+    invented corruption."""
+    w = P.tiny_world()
+    held = Claim("c_held", "p_low", "rec_1", "finding.none", True, 0, "firsthand", 100, "own")
+    d, ev = _tell_and_witness(w, "p_low", "rec_1", held, "Partial")
+    told = [c for p in w.persons.values() for c in p.ledger
+            if c.source == "told_by" and c.subject == "rec_1"]
+    assert told, "no `told_by` claim landed at Partial"
+    for c in told:
+        assert c.value is True, f"a boolean claim drifted at Partial: {c.value!r}"
+
+
+def test_tell_partial_never_writes_back_to_the_tellers_own_ledger():
+    """RR-P's test, as an assertion (r2 `02` §A.10.3's table row): the teller's own ledger is
+    byte-identical before and after a lossy telling, for BOTH lossy shapes. `_told_content` READS
+    the teller's claim; `_told_value` never mutates it and the caller deposits into the HEARER's
+    ledger only."""
+    import copy
+
+    from ..loop.witness import content_value
+
+    val = content_value({"terms": "prop_1", "to": ("p_a", "p_b", "p_c"), "at": "S"})
+    for predicate, value in (("content:dispensation", val), ("stores:grain", 10)):
+        w = P.tiny_world()
+        held = Claim("c_held", "p_low", "rec_1" if "content" in predicate else "Hh",
+                     predicate, value, 0, "firsthand", 100, "own")
+        before = copy.deepcopy(held)
+        subject = held.subject
+        _tell_and_witness(w, "p_low", subject, held, "Partial")
+        after = next(c for c in w.persons["p_low"].ledger if c.id == "c_held")
+        assert after == before, (
+            f"the teller's own claim changed from {before!r} to {after!r} — the lossy branch "
+            "must read `held` and never write it")
 
 
 def test_the_populated_world_is_not_everybody_in_one_room():

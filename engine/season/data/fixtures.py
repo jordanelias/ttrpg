@@ -583,4 +583,18 @@ DEFAULT_FIXTURES = Fixtures(
     # branch in this position's whole set. `False` is the control (no extraction effect), matching
     # `H-128`'s neutral-start convention; nothing reads it today for the same reason as above.
     displayed_anger_extracts_concessions=False,   # `H-154`, swept False (control, SHIPPED) / True
+    # `H-155` (plan position `15b`, r2 `02_THE_WRIT_AND_THE_WORD.md` §A.10.2, `ED-IN-0222`). HOW
+    # FAR A RUMOUR MAY DRIFT A BARE NUMBER at `Partial`. r2's own words give the fixture its
+    # licence on `default_transfer_amount`'s precedent (`:432-436` above): "direction ruled,
+    # magnitude open, is exactly a fixture." `0` is the CONTROL -- `_told_value`'s drift branch
+    # reads `math.ceil(band * abs(before))` and a `0` band makes that `0`, so no draw can ever
+    # clear the `max_delta < 1` floor and the branch is a verbatim no-op, reproducing the
+    # pre-15b told channel exactly for a numeric claim. Shipped at `0.5`, not the control: unlike
+    # `body_step` (H-125), this magnitude scales PROPORTIONALLY to whatever the claim already
+    # carries rather than adding an absolute quantity into an economy the corpus may not stock, so
+    # the "famine with no larder" hazard that forced `body_step` to the control does not apply
+    # here, and the mechanism's own falsifier (§A.10's OBSERVABLE) asks for a telling that is
+    # actually lossy at `Partial`, not one parked inert pending a later ruling.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-155 -- the drift band; r2 states the direction and leaves the magnitude, and the sweep brackets no-drift / shipped / aggressive]
+    told_drift_band=0.5,               # `H-155`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
 )

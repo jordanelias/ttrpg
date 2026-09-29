@@ -3360,6 +3360,51 @@ rows:
       branch, low stakes, sweepable either way. Blocks: two roster rows.\" Answered per §0's
       NOT-JORDAN'S ladder test 5, same as `H-153`."
     source:    "plan position `18` (PROC-A) part 4, 2026-09-29"
+  - id:        H-155
+    tier:      1
+    hole:      "HOW FAR A RUMOUR MAY DRIFT A BARE NUMBER at `Partial`. r2
+      `02_THE_WRIT_AND_THE_WORD.md` §A.10 rules that a lossy telling may drift ONE numeric operand
+      by AT MOST a fraction of its own magnitude, sign-preserving, never crossing zero -- the
+      DIRECTION and the CLAUSES are ruled; the fraction itself is not."
+    kind:      "NUMBER"
+    owner:     "the told channel's loss function (plan position `15b` / r2 item 8)"
+    grade:     "assumption"
+    default:   "0.5 -- SHIPPED, not the control. `default_transfer_amount`'s precedent
+      (`data/fixtures.py:432-436`) states the shape exactly: 'direction ruled, magnitude open, is
+      exactly a fixture.' `0` is the control arm (see `site:` -- it makes `max_delta < 1` for
+      every draw, so the drift branch is a verbatim no-op and the pre-15b told channel is
+      reproduced exactly for a numeric claim); `0.5` ships live because this position's own
+      falsifier asks for a `Partial` telling that IS lossy, and because the magnitude scales
+      proportionally to whatever the claim already carries rather than adding an absolute
+      quantity into a possibly-empty economy -- the `body_step` (H-125) hazard of a famine with no
+      larder does not apply to a proportional band"
+    site:      "Fixtures told_drift_band, read by `loop/witness.py::_told_value`'s numeric
+      branch -- a told claim whose `value` is a bare `int`/`float` (an observation claim's
+      `stores:<kind>` or `condition`, never a `content:<kind>` claim -- those carry no numeric
+      field, see that function's own docstring) drifts by `1 + sel % ceil(band * abs(before))`,
+      signed to keep `before`'s own sign and never reach zero, `sel` derived from the SAME hash
+      the deposit's own claim id mints from (no `w.draw()` spent, §A.10.4)"
+    sweep:     [0.0, 0.5, 1.0]
+    unblocks:  "the numeric half of position `15b`'s loss function (r2 item 8) -- the addressee-
+      omission half (§A.10.1) needs no fixture and ships unconditionally at `Partial`"
+    cite:      "`proposals/2026-09-17-governance-and-holdings-r2/02_THE_WRIT_AND_THE_WORD.md`
+      §A.10.2, verbatim: \"exactly one numeric operand inside the terms may drift by at most
+      `fixtures.told_drift_band` (a fraction; content, declared, swept -- the H-80/H-94 shape).\"
+      The same bullet list's next clause states the bound and the sign rule in symbolic form
+      (after-before's magnitude capped at the ceiling of band times before's own magnitude, never
+      crossing zero or flipping sign) -- paraphrased rather than quoted here, because the source
+      typesets it with non-ASCII minus/less-than-or-equal/times glyphs this checker's normaliser
+      does not fold to ASCII, and an ASCII retyping of it would be an UNVERIFIABLE quote rather
+      than a verified one. MEASURED against the live `record_kinds` roster before choosing where
+      this fixture is actually read: a
+      `content:dispensation`/`content:petition` claim's `subject_matter` carries `terms` (a
+      `PropositionId`, a bare id string, never touched per §A.10.3), `to` (the addressee list,
+      §A.10.1's own mechanism, no fixture) and `at`/`from` (a rung/person id, also never touched)
+      -- NO numeric field exists in that shape, so r2's own worked example (a number 'inside the
+      terms') has nothing to act on for a document claim. This fixture therefore gates the OTHER
+      shape the told channel reaches: a bare numeric observation claim, which is where a number
+      genuinely lives in the carrier as shipped."
+    source:    "plan position `15b` (r2 item 8), 2026-09-29"
 
 
 discharges:

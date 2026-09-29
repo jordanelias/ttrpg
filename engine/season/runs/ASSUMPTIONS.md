@@ -62,3 +62,4 @@ exercised by this run.**
 | `speech_kind_terminal_fault` | `removal` | no — a harness fixture |
 | `denial_detail_outperforms` | `equal` | no — a harness fixture |
 | `displayed_anger_extracts_concessions` | `False` | no — a harness fixture |
+| `told_drift_band` | `0.5` | no — a harness fixture |
