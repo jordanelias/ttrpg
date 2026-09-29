@@ -163,9 +163,19 @@ rosters:
       not listed here -- r2 `05_LEDGER_AND_BUILD.md`'s ⊕L35. A missing key is an operand no reader can
       bind; an extra key is a second vocabulary. `text: []` is why every Record minted before this
       roster stays lawful: its `subject_matter` is `None`, which has no keys.
-      ⚠ THREE KINDS, NOT r2's FIVE, AND THE OMISSION IS DELIBERATE. `commission` (r2 item 11, plan
-      position `19`) and `works` (r2 item 12, position `24e`) have no producer yet; each lands with the
-      effect that mints it. A kind nothing mints is a member no reader reaches (`ID-13`).
+      ⚠ FOUR KINDS, NOT r2's FIVE, AND THE OMISSION IS DELIBERATE. `commission` (r2 item 11, plan
+      position `19`) has no producer yet and lands with the effect that mints it. A kind nothing mints
+      is a member no reader reaches (`ID-13`).
+      ⚠ `works` LANDED AT PLAN POSITION `24e` (r2 item 12, `04_MATTER_AND_WORKS.md` §A.6) WITH ITS
+      READERS: `found` and `build` make what its `plan` names at the rung its `at` names, and
+      `queries/world_q.py::ceiling` bounds a Site's condition by how many of its declared terms have
+      matured. Its PRODUCER is the `create_record` that already runs (r2 §A.6.2 moment 1): an act
+      declaring `kind: works` and `subject_matter: {plan, at}`. `plan` is a KIND -- a `rung_kinds`
+      member for `found`, a `site_kinds` member for `build` -- and `at` is a RUNG id: "a <plan> at
+      <at>". r2's `{plan: {as, kind}}` is not taken: the verb says whether a Rung or a Site is made,
+      so an `as` key would be a second place saying it. ⚠ THERE IS NO `stage` KEY -- r2 §A.6.1
+      RULED it out (an ungated write on `subject_matter`, which has no matrix row, and a second
+      progress ladder beside `Site.condition`); the terms are `Record.stages`, matured at MATTER.
       ⚠ THIS ROW IS ALSO A VOCABULARY OF THE `exists:` STEM. `requires_typed: {form: existence, kind:
       petition}` asks *a Record of kind petition exists* (`queries/world_q.py::WorldReader.read`), so a
       member here must never also be a `tenure_kinds` member -- `data/rosters.py` refuses the overlap at
@@ -174,6 +184,7 @@ rosters:
       text:         []
       dispensation: [terms, to, at]
       petition:     [terms, to, from]
+      works:        [plan, at]
     # HOW A MINTED DOCUMENT'S CONTENT IS READ OFF THE ACT, AND WHAT A HOLDER LEARNS FROM IT. One
     # owner for three facts the mint (`loop/effects.py::_mint_document`) and the deposit rule
     # (`loop/witness.py`) both read, so neither spells them.
@@ -1085,9 +1096,12 @@ rosters:
       it forces the same two rows `dwelling` forced, for the same loader reason, and it has no
       `site_yield` row for `dwelling`'s reason: a wall produces nothing. **UPGRADING ONE IS NOT
       BUILT BY M4** -- the pre-existing, declared `restore` verb (`verb_table.yaml`,
-      `writes: Site.condition`) is the disclosed route and it ships this plan still unimplemented
+      `writes: Site.condition`) is the disclosed route and it shipped M4 still unimplemented
       (no `_eff_restore`, excluded from `resolvable_verbs()`); M4 only reads the field a field
-      battle already needs, at whatever condition a garrison was seeded with.
+      battle already needs, at whatever condition a garrison was seeded with. ⚠ AMENDED
+      2026-09-29 (plan position `24e`): `_eff_restore` EXISTS and `restore` is resolvable, raising
+      any fabric its actor stands at toward the ceiling a works allows (the full scale where none
+      names it).
     values: [harbour, seam, body, dwelling, garrison]
 
   matter_kinds:
@@ -1140,6 +1154,10 @@ rosters:
       every field battle's fortification term toward zero over a long campaign. That is exactly
       the undisclosed drift `dwelling`'s note above refuses. A non-zero rate is chosen once
       `restore` exists to answer it, never here.
+      ⚠ `restore` EXISTS SINCE PLAN POSITION `24e` (2026-09-29), SO THIS NOTE'S STATED REASON HAS
+      LAPSED AND THE RATE IS STILL `0`: choosing one is a pacing decision (where every fabric sits
+      at rest), `24e`'s instruction does not make it, and it is registered rather than taken --
+      `H-165` (the reason `restore` never executes on the populated realm) and `H-07` (the rate).
     rates:
       harbour:  10
       seam:     10

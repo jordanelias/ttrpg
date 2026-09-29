@@ -5446,12 +5446,36 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     # only the ability to see the drain's MAGNITUDE attributed, and the `no_move` arm supplies it.
     # [GROUNDED: measured 2026-09-11 under `U1`, `tiny_world`, ten seasons, control from a worktree at 2ebab0c -- full-arm granted out-of-S drain 5 -> 0 while the `no_move` arm still drains 2; `tell` 32 -> 25 acts of which 20 now fail]
     no_transfer, _, no_transfer_d = _ten_seasons(P.tiny_world(), verbs=resolvable_verbs() - {"transfer"})
-    assert no_transfer[-1]["S"].get("grain", 0) - settle[-1] == drained, (
-        f"the settlement ends at {settle[-1]} and at "
-        f"{no_transfer[-1]['S'].get('grain', 0)} with `transfer` suppressed, a difference of "
-        f"{no_transfer[-1]['S'].get('grain', 0) - settle[-1]} against {drained} grain actually "
-        "carried out of `S` by granted transfers. Something OTHER than `transfer` is moving the "
-        "settlement's larder and the docstring's attribution is confounded again")
+    # ⚠⚠ PLAN POSITION `24e`, 2026-09-29: `levy` IS A SECOND ACT THAT MOVES `S`'s LARDER, AND IT HAD
+    # BEEN HIDING INSIDE THIS EQUALITY SINCE POSITION `19` BY A COINCIDENCE. `19` made `levy`
+    # execute: the duke, exercising `off_duke`, `_shift`s grain out of `S` into his seat's treasury
+    # at `D` -- the same body as `transfer`. At `19` it levied `S` exactly ONCE IN EVERY ARM, so the
+    # two sides of this equality each carried one levied grain and it held with `drained == 0`.
+    # `restore` joining `resolvable_verbs()` (`24e`, `_eff_restore`) moves scene competition, and
+    # the coincidence broke: the full arm now levies once AND grants one real transfer, the
+    # `no_transfer` arm levies nothing. Measured against a clean worktree at `432c179`, `tiny_world`,
+    # ten seasons, S_end / transfer drain / levy drain -- BEFORE: full 305/0/1, no_transfer 305/0/1,
+    # no_move 305/0/1; AFTER: full 304/1/1, no_transfer 306/0/0, no_move 305/0/1 -- and
+    # `S_end + transfer + levy == 306` in all six cells, so NOTHING ELSE moves the larder. `restore`
+    # is not a cause: every one it attempts here is `restore.refused` (the Hh residents are not
+    # present at `S`), so it reaches the larder only through which OTHER act wins the scene. The
+    # equality now takes each arm's own levy drain off its end state, and still attributes the
+    # remaining gap to `transfer` alone -- the docstring's claim, with the second act named.
+    def _levied_from_s(drv) -> int:
+        lv_ids = {e.id for e in drv.w.log}
+        return sum(int((a.payload or {}).get("amount", 0)) for a in drv.resolved
+                   if a.verb == "levy" and (a.payload or {}).get("subject") == "S"
+                   and getattr(drv.w.offices.get(a.via), "rung", "S") != "S"
+                   and any(H(drv.w.world_seed, t, a.actor, f"levy.taken:{a.id}") in lv_ids
+                           for t in range(len(hist) + 1)))
+    levied, nt_levied = _levied_from_s(d), _levied_from_s(no_transfer_d)
+    gap = (no_transfer[-1]["S"].get("grain", 0) + nt_levied) - (settle[-1] + levied)
+    assert gap == drained, (
+        f"the settlement ends at {settle[-1]} (levied {levied}) and at "
+        f"{no_transfer[-1]['S'].get('grain', 0)} (levied {nt_levied}) with `transfer` suppressed, "
+        f"a gap of {gap} once each arm's levy is taken off, against {drained} grain actually "
+        "carried out of `S` by granted transfers. Something OTHER than `transfer` and `levy` is "
+        "moving the settlement's larder and the docstring's attribution is confounded again")
     # ⚠ THIS ASSERTED `no_move[-1] == settle[-1]` AND FIRED ON THE `R7` FAN-OUT FLIP (2026-09-07),
     # and the re-attribution its message demanded was RUN rather than reasoned. What it found is
     # that the docstring's conclusion survives and its scope does not:
@@ -5524,11 +5548,17 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
         f"{no_transfer_survivors}, no_move={no_move_survivors} of 3) — re-derive the `S`-total "
         "comparison below against whichever arm now loses residents, rather than reusing the "
         "equality this replaced")
-    assert no_move[-1]["S"].get("grain", 0) == no_transfer[-1]["S"].get("grain", 0), (
-        f"`S` ends at {no_move[-1]['S'].get('grain', 0)} with `move` suppressed against "
-        f"{no_transfer[-1]['S'].get('grain', 0)} with `transfer` suppressed — with equal survivor "
-        "counts in both arms (asserted above) the two totals should match; if they differ, "
-        "something other than the survivor-count channel is moving `S` again")
+    # ⚠ PLAN POSITION `24e`: EACH ARM'S LEVY DRAIN COMES OFF ITS OWN END STATE HERE TOO -- see the
+    # `levy` note above the first equality (no_move 305 levied 1, no_transfer 306 levied 0, both 306
+    # undrained). With `nm_drained == 0` asserted above, `transfer` moves neither side of this one.
+    nm_levied = _levied_from_s(no_move_d)
+    assert (no_move[-1]["S"].get("grain", 0) + nm_levied
+            == no_transfer[-1]["S"].get("grain", 0) + nt_levied), (
+        f"`S` ends at {no_move[-1]['S'].get('grain', 0)} (levied {nm_levied}) with `move` "
+        f"suppressed against {no_transfer[-1]['S'].get('grain', 0)} (levied {nt_levied}) with "
+        "`transfer` suppressed — with equal survivor counts in both arms (asserted above) the two "
+        "undrained totals should match; if they differ, something other than the survivor-count "
+        "channel and `levy` is moving `S` again")
     # ⚠ **ASSERT THAT IT ASSERTED (§0.1 pt 2), OVER BOTH ARMS.** This guard sat on the full arm
     # alone as `assert drained > 0` and fired under `U1`, where that arm's granted out-of-`S`
     # drain went 5 -> 0. Both equalities above are still exclusions at zero — they go red if
@@ -7144,8 +7174,13 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # seed 0, before (a worktree at `429ddaf`) and after: `ever` gains exactly `issue`, nothing
     # leaves, and the status census is identical (63 RUNS-UNDECLARED · 54 UNREPRESENTABLE · 25
     # SPAN-UNAUTHORED · 1 RUNS-ALONE-UNDECLARED).
+    # ⚠⚠ 14 -> 15, PLAN POSITION `24e` (WORKS & FOUNDING), 2026-09-29: `restore` EXECUTES -- it had
+    # a typed cell since W3 and gained its effect (`_eff_restore`), so it entered
+    # `resolvable_verbs()`. Measured at `test_wc_transfer_executes_in_the_corpus_and_the_executed_set_
+    # is_exactly_this` (3 executed / 79 refused over the same corpus, seed 0, against a clean
+    # worktree at `432c179`); `ever` gains exactly `restore`, nothing leaves.
     assert ever == {"create_record", "examine", "interview", "fight", "issue", "move", "petition",
-                    "reconstruct", "research", "speak", "surveil", "tell", "transfer",
+                    "reconstruct", "research", "restore", "speak", "surveil", "tell", "transfer",
                     "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
@@ -7519,7 +7554,18 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # moves it not at all, on the identical ground `give` did not: `oblige` forms no Candidate in
     # this corpus either (never-attempted set, below). Both BATCH-CLOSE passes touch no engine
     # behaviour and move nothing.
-    assert len(by_sig) == 69, (
+    # ⚠⚠ **69 -> 72, PLAN POSITION `24e` (WORKS & FOUNDING), 2026-09-29, MEASURED AGAINST A CLEAN
+    # WORKTREE AT `432c179` (69 there, same 89 live worlds, seed 0).** `restore` gained its effect and
+    # joined `resolvable_verbs()`; it executes in THREE worlds (`ARC-13`, `EMG-C2`, `EMG-X7`) and so is
+    # `varying`, splitting signatures the way `petition` did at `15` -- but only ONE of the three new
+    # signatures is that split (72 with `restore` in the signature, 71 with it struck out). The other
+    # two are scene competition: `restore` is formed and refused in many more worlds than it executes
+    # in (79 refusals, `test_wc_transfer_executes_...`'s `24e` note), and a refused attempt still
+    # costs a slot, so which other verbs win one moves at the margin (per-verb world counts, before
+    # -> after: `examine` 7 -> 5, `fight` 16 -> 17, `interview` 37 -> 36, `move` 47 -> 46, `petition`
+    # 50 -> 52, `research` 58 -> 59, `speak` 69 -> 68, `surveil` 47 -> 45, `tell` 66 -> 64). The
+    # universal set is unchanged (`create_record`, `utter`), asserted below.
+    assert len(by_sig) == 72, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -7651,8 +7697,10 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # universal or absent. Both moves are on the merged tree; re-measured below rather than summed.
     # ⚠⚠ `issue` JOINS, PLAN POSITION `19`, 2026-09-29: it executes in ONE world (NPC-008, see the
     # `ever` note above), so it is `varying` by construction -- in some worlds, not all.
+    # ⚠⚠ `restore` JOINS, PLAN POSITION `24e`, 2026-09-29: it executes in THREE worlds (`ARC-13`,
+    # `EMG-C2`, `EMG-X7`; the `by_sig` note above), so it is `varying` by the same construction.
     assert varying == {"examine", "fight", "interview", "issue", "move", "petition", "reconstruct",
-                       "research", "speak", "surveil", "tell", "transfer"}, (
+                       "research", "restore", "speak", "surveil", "tell", "transfer"}, (
         sorted(varying))
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
     # BROKE BROKE FOR A REASON THIS TEST WANTS. A one-season case still never reaches `tell` —
@@ -8780,15 +8828,24 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # reaches him). It executes in NPC-008 alone, the one seated world whose question names a
     # person inside the seat's ground (measured by `test_the_corpus_runs_and_the_ranking_cannot_
     # discriminate`'s one-off script, same corpus, same seed), and is refused there too.
+    # ⚠⚠ 14 -> 15, PLAN POSITION `24e` (WORKS & FOUNDING), 2026-09-29: `restore` JOINS, BY
+    # `petition`'s ROUTE -- AN EFFECT. Its typed cell (the site exists and the actor stands at it)
+    # was W3's; what kept it out of `resolvable_verbs()` was the missing body, and `_eff_restore`
+    # (one rise with `work`, `loop/effects.py::_rise`) supplies it. MEASURED on this corpus pass
+    # against a clean worktree at `432c179`: `restore` 0/0 -> 3 executed / 79 refused -- the
+    # refusals are referents that are no Site, or a Site the actor does not stand at; the three
+    # executions repair a worn fabric no works names. Nothing leaves either set; the other verbs'
+    # counts move by single digits (scene competition: e.g. `create_record` 1186 -> 1172).
     assert set(executed) == {"create_record", "examine", "interview", "fight", "issue", "move",
-                             "petition", "reconstruct", "research", "speak", "surveil",
+                             "petition", "reconstruct", "research", "restore", "speak", "surveil",
                              "tell", "transfer", "utter"}, (
         f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
         "ED-FI-0009's, 10 -> 11 is `release`'s, 11 -> 12 is `H-71`'s, 12 -> 13 is the admission "
         "of `kill / wound`, 13 -> 12 is `R8.1`'s (`dispatch`, see above), 12 -> 13 again is "
         "`11a`'s (`examine`, see above), 13 -> 14 is position `15`'s (`petition`, see above), "
         "14 -> 13 is position `7a`'s (`release` crowded out, see above), 13 -> 14 is position "
-        "`19`'s (`issue`, see above), and any further movement is a fresh one")
+        "`19`'s (`issue`, see above), 14 -> 15 is position `24e`'s (`restore`, see above), and "
+        "any further movement is a fresh one")
     # ⚠ `dispatch` JOINED `work` UNDER `R8.1` FOR A DIFFERENT REASON, stated above the executed-set
     # assertion: its precondition needs a PERSON referent, and the question that used to supply
     # one in NPC-033 is now outranked (hash order, `H-54`) by a `seen` claim about a rung. It is

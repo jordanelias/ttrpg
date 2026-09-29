@@ -165,6 +165,138 @@ def docketed(w: World, matter: Optional[str]) -> list[dict]:
     return [d for d in w.docket if d.get("matter") == matter]
 
 
+# ===========================================================================
+# THE WORKS -- plan position `24e` (WORKS & FOUNDING), r2 `04_MATTER_AND_WORKS.md` §A.6. RESOLVER-SIDE
+# Queries, World first, owned by nobody and storing nothing (`AX` T-a).
+# ===========================================================================
+
+# THE `record_kinds` MEMBER A WORKS IS. r2 §A.6's ruling: *"a `works` IS A `Record` KIND WITH
+# ACT-DECLARED STAGES, OPENED BY THE `create_record` THAT ALREADY RUNS"* -- so it is named once here,
+# `DOCKET_KIND`'s shape, for its four readers (`works_for` below, and `create_record`'s one-per-target
+# decline, `found` and `build` in `loop/effects.py`). Refused at import if the roster stops carrying
+# it: every works Query would otherwise match nothing forever and read as an honest absence.
+WORKS_KIND = "works"
+if WORKS_KIND not in RECORD_KINDS:
+    raise Unspecified(
+        f"record kind {WORKS_KIND!r} is not a `record_kinds` member ({sorted(RECORD_KINDS)})",
+        "rosters.yaml -- record_kinds",
+        needs=f"a `{WORKS_KIND}: [plan, at]` row, or every works reader retired with it",
+        law="r2 04 §A.6 -- a works is a Record KIND; a reader keyed on a kind the roster does not "
+            "carry answers 'none' for every world, which is a dead reader wearing a query's clothes")
+
+
+def works_target(kind: Optional[str], content) -> tuple:
+    """`(plan, at)` -- WHAT A WORKS MAKES AND WHERE -- read off a document of `kind` saying
+    `content` (a Record's `kind` and `subject_matter`, or an act's declared ones before the mint), or
+    `(None, None)` for a document that is no works or whose content is malformed.
+
+    `plan` is a KIND (a `rung_kinds` member for `found`, a `site_kinds` member for `build`) and `at`
+    is a RUNG id, so a works reads *"a <plan> at <at>"* (`rosters.yaml: record_kinds`' note says why
+    r2's `{plan: {as, kind}}` was not taken). The key set is `Record.__post_init__`'s to refuse; this
+    only declines to read what is not there, so a hand-planted Record cannot crash a reader."""
+    if kind != WORKS_KIND or not isinstance(content, dict):
+        return (None, None)
+    return (content.get("plan"), content.get("at"))
+
+
+def works_for(w: World, at: Optional[str], plan: Optional[str]) -> list:
+    """EVERY LIVE WORKS PLANNING A `plan` AT `at` -- the one owner of *which works names this*.
+
+    LIVE means HELD: a works whose master's `hold` has ended (he died -- `World.remove_person` closes
+    it -- or he destroyed the Record) bounds nothing and plans nothing, r2 §A.6.3's *"a works with no
+    master is not a bound"*. `hold_force` is the reader of *who holds this*, and it RAISES on two
+    holders rather than choosing. The kind and target are compared FIRST, so a world with no works
+    reaches no `hold_force` scan at all (every world built before `24e`).
+
+    ⚠ THE TARGET IS THE PAIR `(at, plan)`, AND ONE LIVE WORKS PER TARGET IS KEPT AT ITS ONE PRODUCER.
+    r2 §A.6.3 rules *"one works per target"* and has `ceiling` RAISE on two, because a Query that
+    picked one of two would answer *plausibly and wrongly, forever* (`AX` ID-5). r2 put the guard on
+    `found`'s precondition as a `cardinality` conjunct -- but `cardinality` has no implementation
+    (`data/requires.py`), and the thing that could make a second works is `create_record`, not
+    `found`. So `_eff_create_record` declines a works whose target already has a live one (the
+    grammar has no negation to spell it in the row), and `ceiling`'s raise is unreachable from any
+    act -- a backstop against a hand-built world, not a refusal a season can meet."""
+    if at is None or plan is None:
+        return []
+    return [r for r in (w.records[k] for k in sorted(w.records))
+            if works_target(r.kind, r.subject_matter) == (plan, at)
+            and hold_force(w, r.id) is not None]
+
+
+def matured_terms(w: World, rid: str) -> int:
+    """HOW MANY OF A RECORD'S DECLARED TERMS HAVE RIPENED -- counted off the log, r2 §A.6.3 DECIDED:
+    *"the carrier for 'how many stages have ripened' is `w.log`"*. `Record.matured` is ONE bool for
+    the whole Record (Jordan, 2026-09-10), so it cannot say how many.
+
+    MATTER emits `term.matured` once PER RIPENING STAGE (`loop/matter.py`'s per-stage loop, through
+    the gate on the `(Record, matured)` row, which declares exactly that kind), and the gate gives
+    each emission a distinct id (`World.new_draw`), so N stages ripening in one tick are N Events.
+    Matched on the MINTED RECEIPT's subject -- the Record the write named -- and NOT through
+    `anchor_of`: tier 1 wins for an Event whose cause resolves to an act (a hand-built Record whose
+    creating Event is not in the log falls back to the act that wound the clock), and that tier
+    would answer the MAKER, not the Record (`H-129`'s shape). `matter.py`'s own `prior` lookup reads
+    the receipt the same way."""
+    return sum(1 for e in w.log
+               if e.kind == "term.matured" and any(c.subject == rid for c in e.changes))
+
+
+def ceiling(w: World, site: Site) -> int:
+    """HOW FAR A FABRIC MAY BE RAISED NOW -- r2 `04` §A.6.3's `ceiling`, DECIDED OFF THE EMISSION LOG:
+    `condition_scale x matured // declared` for the one live works naming the site, and the full
+    scale when none does (or when it declares no terms).
+
+    *"Progress is the condition and PERMISSION TO PROGRESS is the ceiling, so nothing needs
+    counting"* (r2 §A.6.1, which refused a `stage` key on the works for that reason). So
+    *"you cannot hurry mortar"*: a fabric at its ceiling is raised by nobody until another term
+    ripens, which is arithmetic, not a cooldown (r2 §A.6.6's TERM-STALL).
+
+    A works NAMES a site when it plans that site's KIND at that site's RUNG (`works_for`), so one
+    works bounds both the fabric it builds (`build` makes a `<plan>` at `<at>`) and the fabric of
+    that kind already standing there -- which is r2's *"building and repairing are one act at
+    different bands"* without a second matching rule.
+
+    ⚠ MULTIPLY FIRST, DIVIDE LAST: `scale * n // d`, so a 2-of-3 works reads 666 and not 0 -- the
+    fixed-point discipline `condition` is kept in (S48). `min(matured, declared)` makes the ratio
+    total if a later act shortened the declared list below what the log has seen ripen.
+
+    ⚠ IT IS A BOUND ON THE RISE AND NEVER A CUT. r2 wrote the clamp as `min(ceiling, condition +
+    total)`, which would LOWER a standing fabric the moment a works naming it was declared (0 terms
+    ripe: ceiling 0) and any delta was staged. The fold's one clamp (`loop/resolve.py::resolve`)
+    therefore takes `max(condition, ceiling)` as its upper bound: a ceiling below a fabric's
+    condition stops it rising, and takes nothing away that stands."""
+    scale = w.fixtures.get("condition_scale")
+    live = works_for(w, site.rung, site.kind)
+    if len(live) > 1:
+        raise Forbidden(
+            f"{len(live)} live works plan a {site.kind!r} at {site.rung!r}: "
+            f"{[r.id for r in live]}", "S15",
+            law="r2 04 §A.6.3 -- one works per target, `hold_force`'s cardinality reading one "
+                "object up; `create_record` declines a second, so this world was built by hand")
+    if not live:
+        return scale
+    declared = len(live[0].stages)
+    if declared == 0:
+        return scale
+    return scale * min(matured_terms(w, live[0].id), declared) // declared
+
+
+def share(w: World, site: Site) -> tuple:
+    """`share(w, ...)` -- DECLARED in `holonic_ARCHITECTURE.md` §17's resolver-side roster (`:600`)
+    and never implemented until plan position `24e`. An actor's share of a fabric as a RATIO,
+    `(1, n)`, where `n` is how many persons stand at its rung (`presence`), floored at one so a
+    fabric nobody stands at is not divided by zero.
+
+    r2 `04` §A.6.4, RULED: *"an actor's share of a fabric is one over the number of persons present
+    at its rung. It is derived from a live edge, needs no field, and is the reading that keeps the
+    commons."* NOT `Site.drawers` (deleted at `18a`; nothing could write it) and NOT `1` (mandatory
+    single holdership, which makes single-act closure of a commons possible -- r2 cites
+    `proposals/2026-08-31-ideal/10_SUPERSEDING.md:1275-1279`). ⚠ r2 DECLARES A SWEEP
+    (`presence_reciprocal, holders_reciprocal, one`) and it is NOT built: a sweep is a fixture with a
+    register row, and no measurement here needs a second arm yet -- the shape is ruled, the reading
+    is the default, and `H-164` carries the unbuilt arms."""
+    return (1, max(1, len(presence(w, site.rung))))
+
+
 def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]:
     """`H-32`, BUILT -- plan position `18` (PROC-A), `21_RECONCILIATION.md` PHASE 2 step 7 /
     `03_PARAMETERS.md` §D's `bench_basis`. Live holders of a `hold` Tenure GRANTED the bench's

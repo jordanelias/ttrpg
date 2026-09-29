@@ -58,7 +58,10 @@ from ..data.rosters import (
 
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from ..loop.predicates import office_described_by
-from ..queries.world_q import docketed, hold_force, holder_faction_of, home_of, upkeep_of
+from ..queries.world_q import (
+    WORKS_KIND, ceiling, docketed, hold_force, holder_faction_of, home_of, share, upkeep_of,
+    works_for, works_target,
+)
 from ..state.carriers import Proposition, Record, Tenure, Term
 from ..state.gate import NO_CHANGE, Change, Subject, may_renew
 from ..state.ids import H
@@ -467,8 +470,32 @@ def _eff_work(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     ⚠ THE DELTA IS READ FROM THE ACT'S OWN DECLARED CHANGES, ON ITS OWN SITE, AND NOWHERE ELSE.
     Before G4 the accumulator summed every integer delta on ANY success Event's `changes[]` for ANY
     site -- so an act of a verb whose row writes no `Site.condition` could move a site by riding a
-    delta on its Event, a write the matrix never saw declared. Now only `work` stages, and only on
-    the site it names. Unreachable from a computed act (none carries a delta: `H-94`)."""
+    delta on its Event, a write the matrix never saw declared. Now only an act whose row writes
+    `Site.condition` stages -- `work`, and since plan position `24e` `restore` -- and only on the site
+    it names. The DECLARED delta is unreachable from a computed act (none carries one: `H-94`).
+
+    ⚠⚠ PLAN POSITION `24e` -- *"`work` advances `stage` (and inherits G4's accumulator answer)"* --
+    AND WHAT THAT MEANS HERE, READ AGAINST THE CONTENT OWNER. A computed `work` carries no declared
+    delta, so before `24e` it staged nothing and every one was `work.unavailable` (`H-105`: *"a loop
+    with one arm cut is a RATCHET wearing a loop's clothes"*). It now has a SECOND source, used only
+    when the act declares none: THE WORKS NAMING THE SITE. When a live works plans this site's kind
+    at this site's rung (`queries/world_q.py::works_for`), the act stages `_rise` -- the headroom to
+    the works' `ceiling`, shared among those standing at the fabric -- through the SAME accumulator,
+    judged at the same two writes. So the works ADVANCES: each ripened term lifts the ceiling, and
+    labour raises the fabric toward it. ⚠ NOT A `stage` KEY ADVANCED ON THE RECORD, which r2 `04`
+    §A.6.1 RULED out on three grounds, the third decisive (*"progress is the condition and permission
+    to progress is the ceiling, so nothing needs counting"*): `subject_matter` has no matrix row, so
+    moving a stage there is an ungated write, and it would be a second progress ladder beside
+    `Site.condition`. The stage a works has reached IS its fabric's condition against its ceiling.
+    ⚠ AND NOT A THIRD FORMULA: `_rise` is `restore`'s own (`_eff_restore`), one owner for one
+    quantity (§0.06 S: *"calculations consistent in methodology"*). What separates the two verbs is
+    their preconditions, not their arithmetic -- `work` asks that the site clear its floor, `restore`
+    that the actor stand at it -- and that `work` advances ONLY a works: a site no works names
+    stages nothing from here, which is the position's control (*"a `text` Record is NOT advanced
+    by `work`"*: a text Record has no `plan`, so it can never be the works a site is named by).
+    REJECTED: summing the declared delta AND the works' rise -- one act would then move a fabric by
+    two magnitudes from two owners, and the hand-built channel (`H-94`) would stop meaning what the
+    act declared."""
     # ⚠ NO FALLBACK. This read `or next((x for x in sorted(w.sites)), None)` -- the alphabetically
     # FIRST site in the world -- so a `work` with no site named one nobody chose. `_eff_move`
     # refused the identical situation and this did not; found by the W-A adversarial pass, which
@@ -477,7 +504,76 @@ def _eff_work(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     site = _operand(a, "site")
     delta = sum(c.delta for c in (a.changes or ())
                 if c.subject == site and c.field == "condition" and isinstance(c.delta, int))
+    fabric = w.sites.get(site)
+    if not delta and fabric is not None and works_for(w, fabric.rung, fabric.kind):
+        delta = _rise(w, fabric)
     cell = Subject.staged("Site", site, "condition")
+    return Change((cell,), lambda: w.stage(cell.ref[1], a.id, delta))
+
+
+def _rise(w: "World", site) -> int:
+    """HOW FAR ONE ACT RAISES A FABRIC -- the ONE owner of `restore`'s formula, which `work` also
+    reads when it advances a works (plan position `24e`). `verb_table.yaml`'s `restore` row:
+    `Δ = +(1 − condition) × f(degree) × share` (§54 item 7's mirror), in fixed point:
+
+      * `(1 − condition)` IS THE HEADROOM TO THE CEILING, `ceiling(w, site) − condition` -- r2 `04`
+        §A.6.5's units decision (`condition` is an int on `condition_scale`, S48), bounded by the
+        works (`queries/world_q.py::ceiling`, the full scale where no works names the site). Floored
+        at 0: a fabric above its ceiling is not raised, and is not lowered here either.
+      * `× share` IS `queries/world_q.py::share`, `(1, n)` for `n` persons standing at the fabric --
+        r2 §A.6.4's commons: at a harbour forty stand at, one act moves a fortieth of the headroom.
+        Multiply first, divide last, so the fraction is exact to the int.
+      * ⚠ `× f(degree)` IS NOT BUILT, AND THE REASON IS THE FOLD'S, NOT THE FORMULA'S. r2 §A.6.5 reads
+        it off `res.degree` (*"the existing degree ladder, not a new one"*), but `restore` and `work`
+        are UNCONTESTED -- no `contests:` -- and `_fold` hands every such act `resolution=None`
+        (*"`None` on every uncontested act, which is honest: no contest graded it"*), so r2's own
+        body would raise on `None.degree`. The term is therefore the IDENTITY: an act no contest
+        graded is taken whole. REJECTED: a fixture factor (an invented number standing where the
+        design says a degree goes) and routing `restore` through a contest (a prize no subsystem
+        claims, `rosters.yaml: contest_subsystems`). `H-164` carries the term, and the sweep r2
+        declares for `share`.
+
+    So the pace of a works is its TERMS (the ceiling) and its COMMONS (the share), never a rate:
+    one hand alone at a fabric raises it to its ceiling in one act, and then nobody can raise it
+    further until another term ripens -- r2 §A.6.6's TERM-STALL, arithmetic and not a cooldown."""
+    headroom = max(0, ceiling(w, site) - site.condition)
+    if not headroom:
+        return 0
+    num, den = share(w, site)
+    return (headroom * num) // den
+
+
+@effect_for("restore")
+def _eff_restore(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """PLAN POSITION `24e` -- `restore` RAISES A FABRIC. The row was TYPED (`verb_table.yaml`, W3's
+    cell: *the site exists and the actor is present at it*) and had NO EFFECT, so
+    `resolvable_verbs()` excluded it: `★` measured it formed 46 times in a populated season and
+    offered never. r2 `04` §A.6.2's moment 4, *"BUILD IT UP"*, and §A.6.5's body, built as
+    specified but for the degree term (`_rise` says why that is the identity).
+
+    `work`'s ACCUMULATOR SHAPE, EXACTLY (G4, `_eff_work`'s docstring): the act STAGES its delta on
+    `(Site, condition)` through `World.stage`, named as a `staged` subject, and `resolve()` sums every
+    act's delta on the site and clamps ONCE, under the works' ceiling -- so two hands at one fabric
+    commute and neither's delta is applied alone. It is judged twice, as `work` is: a delta of 0 (a
+    fabric already at its ceiling -- *"you cannot hurry mortar"*) stages nothing and is
+    `NoOpReceipt` -> `restore.refused` at its own write; a sum the clamp eats is refused after the
+    fact (`loop/resolve.py::_refuse_after_the_fact`), which reads the row's refusal and so needed
+    no line for `restore`.
+
+    BUILDING AND REPAIRING ARE ONE ACT AT DIFFERENT BANDS (r2 §A.6.3's table, and its RULED
+    heading): at a fabric no works names the ceiling is the full scale, so this repairs wear; at a
+    works' fabric it raises the first courses as far as the ripened terms allow. No works is needed
+    to restore, and no office: `own` admits and presence binds in the precondition, so *"a rival may
+    finish what somebody else began"* (r2 §A.6.7) with no special case anywhere.
+
+    DECLINES: a site that does not exist (a hand-built act that skipped the precondition) is
+    `NO_CHANGE` -> `restore.refused`."""
+    sid = _operand(a, "site")
+    site = w.sites.get(sid)
+    if site is None:
+        return NO_CHANGE
+    delta = _rise(w, site)
+    cell = Subject.staged("Site", sid, "condition")
     return Change((cell,), lambda: w.stage(cell.ref[1], a.id, delta))
 
 
@@ -508,10 +604,25 @@ def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) ->
     MEASURED, WITH A CONTROL: on the finished position with `petition` withheld from the option set,
     `headless.run(3, 0)` and `populated.run(2, 0)` hash byte-identically to the tree before it -- the
     Record, the `hold` and the `Change` are built exactly as they were, and the one hash move the
-    position makes is `petition` entering `resolvable_verbs()`."""
+    position makes is `petition` entering `resolvable_verbs()`.
+
+    ⚠ PLAN POSITION `24e`: THIS IS THE `works`' PRODUCER, AND IT DECLINES A SECOND LIVE WORKS ON ONE
+    TARGET. r2 `04` §A.6.2's moment 1 -- *"DECLARE the works: `create_record` -- exists, RUNS"* -- so
+    the kind needed no new verb: an act declaring `kind: works` and `subject_matter: {plan, at}`
+    mints one, with the maker's `hold` that makes him its master. The one thing added is r2 §A.6.3's
+    *"one works per target"*: `queries/world_q.py::ceiling` cannot say which of two works bounds a
+    fabric, so a works whose `(plan, at)` a live works already plans is `NO_CHANGE` -- the refusal
+    the fold emits for any declined mint (`act.refused`, this row declaring no kind of its own;
+    `F.20b`). r2 put the guard on `found` as a `cardinality` conjunct; see `works_for` for why it
+    lives at the producer instead. Every other kind, and a computed act (which carries no payload
+    and so always mints `text`), reads exactly as before -- no world built before `24e` holds a
+    works, so no hash moves."""
     d = a.payload if isinstance(a.payload, dict) else {}
-    return _mint_document(w, a, d.get("kind") or "text", d.get("subject_matter"),
-                          d.get("rung") or a.actor)
+    kind = d.get("kind") or "text"
+    plan, at = works_target(kind, d.get("subject_matter"))      # (None, None) for any other kind
+    if works_for(w, at, plan):
+        return NO_CHANGE
+    return _mint_document(w, a, kind, d.get("subject_matter"), d.get("rung") or a.actor)
 
 
 def _content_of(a: "Act", kind: str) -> Optional[dict]:

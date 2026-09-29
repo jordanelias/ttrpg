@@ -31,7 +31,7 @@ from ..loop.effects import EFFECTS
 from ..loop.predicates import REQUIRES_PREDICATES
 from ..loop.sides import sides_of
 from .. import manifest
-from ..queries.world_q import WorldReader, occasioned_by
+from ..queries.world_q import WorldReader, ceiling, occasioned_by
 from ..seam import ContestError, Resolution, contest, degree_of
 from ..state.carriers import Act, Event, StateChange
 from ..state.gate import Change, NoOpReceipt, Subject, Token, seat_hold
@@ -817,10 +817,19 @@ def resolve(self, token: Token, acts: list[Act],
         deltas = [d for _aid, d in contribs]
         total = sum(deltas)
         site = w.sites.get(sid)
+        # ⚠ PLAN POSITION `24e`: THE UPPER BOUND IS THE WORKS' CEILING, NOT ONLY THE SCALE -- r2 `04`
+        # §A.6.3, RULED: *"the ceiling is one more term in that one `min`"*, and `ceiling` returns the
+        # scale when no works names the site, so the bound is unchanged for every site in every world
+        # built before `24e`. ⚠ `max(condition, ceiling)`, NOT r2's bare `ceiling`: the ceiling bounds
+        # the RISE and never takes away what stands (a works declared on a standing fabric has 0 terms
+        # ripe, ceiling 0, and r2's form would drop the fabric to 0 on the next staged delta).
+        # Computed from the world BEFORE the sum, not from the deltas, so the clamp stays
+        # order-independent AS A FACT (S32/S48): one bound per site, whatever order the acts staged in.
+        hi = scale if site is None else min(scale, max(site.condition, ceiling(w, site)))
 
-        def clamp_once(site=site, total=total) -> None:
+        def clamp_once(site=site, total=total, hi=hi) -> None:
             if site is not None:
-                site.condition = max(0, min(scale, site.condition + total))
+                site.condition = max(0, min(hi, site.condition + total))
         try:
             w.write("condition", token, None,
                     record_kind="Site", fieldname="condition", driver="Act",
