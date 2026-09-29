@@ -71,8 +71,8 @@ from ..data import cast, files
 from ..queries.world_q import home_of as home_of_q
 from ..gaps import Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
-from ..data.rosters import (BODY_FACTION, FACTIONS, ROLE_TEMPLATE_OF, faction_prop_id,
-                            load_yaml, remit_or_default, title_domain)
+from ..data.rosters import (BODY_FACTION, FACTIONS, OFFICES_BY_HOLDER, ROLE_TEMPLATE_OF,
+                            faction_prop_id, load_yaml, remit_or_default, title_domain)
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..state.carriers import Office, Person, Proposition, Rung, Site, Tenure
@@ -790,11 +790,37 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         # nothing and keep `body=None`, which is honest — each names two allegiances and canon has
         # no organ for either shape.
         body = over.get("body") if over else (_sub if _sub in BODY_FACTION else None)
+        # ⚠ `offices.yaml`'S CONFERRAL/REVOCATION OVERLAY (plan position `8a`, `13d-i` item 5).
+        # `ED-IN-0256` rulings (2)/(3) name HOW a seat is filled and WHO may strip it; nothing in
+        # this loop declared either before this fold, so every office built here carried the
+        # dataclass default (`None`, `None`) regardless of what canon says of the seat. 19 of
+        # `offices.yaml`'s 29 authored seats already construct through this exact loop (verified:
+        # every `holder` case id below resolves to a live office in `build_realm(0)` today) --
+        # this overlays THOSE 19 with their authored basis. It does NOT touch `remit_acts`:
+        # `offices.yaml`'s remit column assumes the `dispatch` verb already deleted (r2 `03`'s own
+        # precondition), which has not happened in this tree, and narrowing 19 seats' authority by
+        # a verb ED-IN-0256 never addressed is outside this fold's scope (see `offices.yaml`'s own
+        # header). It does NOT mint the 10 `[NEW]` rows (nine unseated cases plus the King's second
+        # seat) -- that needs a rung-ANCHOR resolver this position does not build; named follow-up
+        # in `HANDOFF_IN.md`.
+        # A case may name MORE than one row (NPC-020 holds two): match on `post` first, the one
+        # field both this loop and `offices.yaml` author independently. `offices.yaml`'s `post` is
+        # a NORMALISED spelling for three rows (`03` §A.15 rows 5, 14, 17 -- a live registry post
+        # carrying a parenthetical condition or a co-title, e.g. "Queen (Widow Regent if Almud
+        # eliminated)" against the authored `Queen`), so a holder with exactly ONE row is matched
+        # on the case id alone rather than left unmatched by a spelling this fold does not correct.
+        _off_candidates = OFFICES_BY_HOLDER.get(cid, ())
+        if len(_off_candidates) == 1:
+            _off_row = _off_candidates[0]
+        else:
+            _off_row = next((cand for cand in _off_candidates if cand.get("post") == post), None)
         oid = f"off_{_slug(cid)}"
         w.offices[oid] = Office(
             oid, post, rung, remit_or_default(over.get("remit")),
             body=body,
             faction=(over.get("faction") if over else None) or (None if body else fac_name),
+            conferral=(_off_row or {}).get("conferral"),
+            revocation=(_off_row or {}).get("revocation"),
         )
         w.add_tenure(Tenure(f"t_{oid}_hold", pid, oid, "hold", 0))
         seated += 1

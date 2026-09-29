@@ -1709,6 +1709,113 @@ def test_13d_i_revoke_executes_in_the_fold_for_the_seat_above_and_refuses_the_ot
 
 
 # =================================================================================================
+# PLAN POSITION `8a` -- `13d-i` ITEM 5, THE LAST OPEN ITEM OF THE UNIT ABOVE: `offices.yaml` AND
+# ITS `harness/populated.py` WIRING. `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md`,
+# position `8a`. Two folds, neither Jordan's: `title_domain`/`TITLE_DOMAINS` now read
+# `engine/season/offices.yaml: titles: domains:` rather than `rosters.yaml: titles` (Layer 1 §B.7/
+# §E.1, r2 `05_LEDGER_AND_BUILD.md` RULED (c)); and `offices.yaml`'s 29 authored seats carry
+# `conferral`/`revocation` recomputed against `ED-IN-0256` (r2 `03`'s own value sets are superseded
+# -- see `offices.yaml`'s own header for the row-by-row translation). FALSIFIERS: the fold changes
+# no answer `title_domain` gives; every authored seat constructs against the live rosters; the 19
+# seats this loop already seats before this position carry a REAL basis afterward, not the
+# dataclass default; and a full season still executes end to end (§0.2).
+# =================================================================================================
+
+def test_8a_title_domain_now_reads_offices_yaml_and_answers_identically():
+    """THE FOLD CHANGED WHERE, NOT WHAT. `rosters.yaml: titles` is left in place this session as
+    orphaned residue (a concurrent plan position owned that file -- `offices.yaml`'s own header
+    names the scope decision), but nothing reads it through `title_domain` any more: `TITLE_DOMAINS`
+    is bound from `engine/season/offices.yaml` at import. The eleven names and their rung kinds
+    must be byte-identical to the roster this replaces, or the fold silently changed a fact."""
+    from ..data import files
+    from ..data.rosters import load_yaml, roster_map
+
+    old = roster_map("titles", "domains")   # `rosters.yaml`'s own copy, still on disk, unread
+    assert dict(TITLE_DOMAINS) == old, (
+        "the fold moved the mapping and changed it -- `offices.yaml: titles: domains:` disagrees "
+        f"with the untouched `rosters.yaml: titles: domains:`: {TITLE_DOMAINS} != {old}")
+    assert set(TITLE_DOMAINS.values()) == set(RUNG_KINDS), (
+        "the ladder is no longer total over the rungs after the fold")
+    for post, dom in TITLE_DOMAINS.items():
+        assert title_domain(post) == dom, f"title_domain({post!r}) disagrees with the mapping it reads"
+    assert title_domain("Dicastery") is None, "a non-title post reads as a title after the fold"
+
+    doc = load_yaml(files.OFFICES_YAML.read_text(encoding="utf-8"))
+    assert doc["titles"]["domains"] == old, "offices.yaml's own file text disagrees with the roster it folded"
+
+
+def test_8a_every_authored_seat_constructs_against_the_live_rosters():
+    """`offices.yaml`'s 29 seats are a REAL content file, not documentation -- every row must build
+    a lawful `Office` against today's `office_bodies`/`factions`/`remit_acts`/`conferral_bases`/
+    `revocation_bases`, the same construction-time proof r2 `03` §A.13 ran against
+    `offices_draft.yaml` (which found 15 of 25 draft rows COULD NOT construct). `rung` is passed as
+    a placeholder string: this test is about `body`/`faction`/`remit_acts`/`conferral`/`revocation`
+    membership, not about anchor resolution, which this position does not build (see the file's own
+    header)."""
+    from ..data import files
+    from ..data.rosters import load_yaml
+
+    doc = load_yaml(files.OFFICES_YAML.read_text(encoding="utf-8"))
+    seats = doc["seats"]
+    assert len(seats) == 29, f"expected 29 authored seats, found {len(seats)}"
+    ids = [s["id"] for s in seats]
+    assert len(ids) == len(set(ids)), f"duplicate seat id(s): {sorted(i for i in ids if ids.count(i) > 1)}"
+    for s in seats:
+        Office(s["id"], s["post"], "PLACEHOLDER_RUNG", list(s["remit_acts"]),
+               body=s.get("body"), faction=s.get("faction"),
+               conferral=s.get("conferral"), revocation=s.get("revocation"))
+    # `03` §A.15's own distribution counts, re-derived here rather than trusted: seven bases must
+    # sum to 29 or a count in this file's header is wrong, exactly the defect `CLAUDE.md` §0.1 pt 4
+    # names (a distribution that does not sum to the table's own row count).
+    cnf = Counter(s["conferral"] for s in seats)
+    rvk = Counter(s["revocation"] for s in seats)
+    assert sum(cnf.values()) == 29 and sum(rvk.values()) == 29
+    assert cnf == Counter({"appointed": 15, "elected": 8, None: 6}), cnf
+    assert rvk == Counter({"rung_above_same_faction": 22, None: 7}), rvk
+
+
+def test_8a_the_nineteen_live_seats_carry_a_real_basis_after_the_overlay():
+    """`harness/populated.py`'s per-case loop already seats 19 of `offices.yaml`'s 29 holders as
+    `Office`s (verified by construction, not assumed -- `offices.yaml`'s own header names all 19).
+    Before this position every one carried `conferral=None, revocation=None`, the dataclass
+    default, regardless of what `ED-IN-0256` says of the seat. This asserts the overlay actually
+    ran: the 19 match `offices.yaml`'s authored basis, and the four hereditary/no-revoker seats
+    (King, Queen, Heir, Princess) correctly keep `None` -- a passing test that could not tell
+    'overlaid with None' from 'never overlaid' would not observe the failure it excludes
+    (`CLAUDE.md` §0.1 pt 2), so this checks a NON-None seat on each axis too."""
+    from ..data import files
+    from ..data.rosters import load_yaml
+    from ..harness.populated import _slug
+
+    doc = load_yaml(files.OFFICES_YAML.read_text(encoding="utf-8"))
+    w = build_realm(seed=0)
+    checked_a_real_conferral = checked_a_real_revocation = False
+    for s in doc["seats"]:
+        if s["note"].startswith("[NEW]"):
+            continue   # not minted this session -- see the file's own header
+        oid = f"off_{_slug(s['holder'])}"
+        off = w.offices.get(oid)
+        assert off is not None, f"{s['holder']} ({s['post']!r}) is marked [LIVE] but built no office"
+        assert off.conferral == s["conferral"], (
+            f"{oid} ({off.post!r}): conferral={off.conferral!r}, offices.yaml says {s['conferral']!r}")
+        assert off.revocation == s["revocation"], (
+            f"{oid} ({off.post!r}): revocation={off.revocation!r}, offices.yaml says {s['revocation']!r}")
+        checked_a_real_conferral = checked_a_real_conferral or off.conferral is not None
+        checked_a_real_revocation = checked_a_real_revocation or off.revocation is not None
+    assert checked_a_real_conferral and checked_a_real_revocation, (
+        "every seat checked had a None basis -- this test cannot tell the overlay ran")
+
+
+def test_8a_a_season_still_executes_end_to_end_with_the_overlay_wired():
+    """§0.2 -- DONE MEANS IT RUNS. The overlay changes what nineteen live offices declare; this
+    confirms a full season over the populated world still resolves rather than raising, which a
+    construction-only check (the two tests above) cannot show."""
+    from ..harness import populated
+    out = populated.run(seasons=1, seed=0)
+    assert out.get("acts", 0) > 0, "a populated season formed no acts with the overlay wired"
+
+
+# =================================================================================================
 # PLAN POSITION `24d-i` -- THE DWELLING SUBSTRATE (`ED-SE-0055`).
 # `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md`, position `24d-i`. `dwelling`
 # joins `site_kinds` with the two rows the loader forces, both at the CONTROL arm

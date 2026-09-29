@@ -127,6 +127,59 @@ def _load_rosters() -> tuple:
 
 _ROSTERS, _TABLES = _load_rosters()
 
+OFFICES_YAML = files.OFFICES_YAML
+
+
+def _load_offices() -> dict:
+    """`engine/season/offices.yaml`, parsed once at import -- world-gen content: the governance
+    ladder's titles (folded from `rosters.yaml: titles`, plan position `8a`, `13d-i` item 5) and
+    the 29 authored seats. Not a `rosters.yaml` row, so it does not go through `_load_rosters`'s
+    `from_descriptor`/`from_names`/`from_roster` pointer machinery -- it is a sibling content file
+    with its own top-level shape (`meta:`, `titles:`, `seats:`), read the same way
+    `harness/governance_spine.py::spec` reads `governance_spine.yaml`: through this module's own
+    `load_yaml` (the duplicate-key refusal), never a bare `yaml.safe_load`.
+
+    ⚠ SAME REFUSAL SHAPE AS THE ROSTER IT REPLACED. `TITLE_DOMAINS`'s own comment (below) records
+    why `titles` was bound at import rather than read lazily: an absent or empty mapping fails OPEN
+    into `_req_revoke`'s old purview-for-everything default, which `ED-IN-0256` superseded but a
+    silently-empty `title_domain` would still misfire on today's title-in-a-body refusal
+    (`state/carriers.py::refuse_a_title_in_a_body`). This file inherits that refusal rather than
+    dropping it because the source moved."""
+    if not OFFICES_YAML.exists():
+        raise SystemExit(f"offices.yaml not found at {OFFICES_YAML}")
+    doc = load_yaml(OFFICES_YAML.read_text()) or {}
+    domains = (doc.get("titles") or {}).get("domains")
+    if not isinstance(domains, dict) or not domains:
+        raise Unspecified(
+            "offices.yaml has no `titles: domains:` mapping, or it is empty", "offices.yaml",
+            needs="give `titles:` a `domains:` mapping",
+            law="carried from `rosters.yaml`'s former `TITLE_DOMAINS` refusal at the `8a` fold -- "
+                "an absent or empty mapping fails OPEN into a behaviour Jordan ruled against")
+    if not doc.get("seats"):
+        raise Unspecified(
+            "offices.yaml has no `seats:` list, or it is empty", "offices.yaml",
+            needs="give `seats:` at least one row",
+            law="`04_CODE_ARCHITECTURE.md` §B.13 ID-12 -- a declared-but-empty section is the "
+                "defect this file's own loader refuses, applied to its own top level")
+    return doc
+
+
+_OFFICES_DOC = _load_offices()
+# Every authored seat, in file order. `harness/populated.py` is the one caller (the `8a` overlay);
+# read directly rather than through a second index for anything that must see BOTH of NPC-020's
+# two rows (`off_king`, `off_duke_valorsmark`) -- `OFFICES_BY_HOLDER` below deliberately is not
+# that reader.
+OFFICES_SEATS = tuple(_OFFICES_DOC.get("seats") or ())
+# case id -> every seat row that names it as `holder`, so a caller matches on POST rather than
+# guessing which of a multi-seat holder's rows applies (NPC-020 holds two). A list, not a single
+# row, because `roster_map`'s single-mapping shape would silently keep the LAST of NPC-020's two
+# and make the choice invisible at the call site -- the same defect `load_yaml`'s duplicate-key
+# refusal exists to catch one layer up, avoided here by not building a lossy map at all.
+OFFICES_BY_HOLDER: dict = {}
+for _seat in OFFICES_SEATS:
+    OFFICES_BY_HOLDER.setdefault(_seat["holder"], []).append(_seat)
+del _seat
+
 
 def roster(name: str, ordered: bool = False):
     """A closed set, from `rosters.yaml`. `ordered=True` returns a tuple because the order is
@@ -479,7 +532,13 @@ MARCH_TARGET_KINDS = roster("march_target_kinds")
 # (ED-IN-0256 ruling (3)), so the fail-open above is history. An empty mapping would now make
 # every post a non-title: `Office` would stop refusing a title in a body and `build_realm` would
 # seat no titled office. Still worth the import-time refusal.
-TITLE_DOMAINS = roster_map("titles", "domains")
+# ⚠⚠ FOLDED FROM `rosters.yaml: titles` INTO `engine/season/offices.yaml` (plan position `8a`,
+# `13d-i` item 5 -- Layer 1 `04_CODE_ARCHITECTURE.md` §B.7/§E.1 rules `titles.domains` world-gen
+# DATA, and r2 `05_LEDGER_AND_BUILD.md` RULED (c) names the destination). Same mapping, same
+# eleven entries, moved rather than copied -- read `_load_offices`'s docstring for the refusal
+# shape and `offices.yaml`'s own header for why `rosters.yaml: titles` is not yet physically
+# deleted (a concurrent position owned that file this session).
+TITLE_DOMAINS = dict(_OFFICES_DOC["titles"]["domains"])
 
 # ⚠ THE OFFICE'S THREE CANON AXES -- `H-99`, and they are BOUND AT IMPORT for the reason the
 # comment above gives: an unbound roster is the one whose absence goes unnoticed. Jordan asked
@@ -550,16 +609,19 @@ def office_faction(body: str | None, declared: str | None) -> str:
     return declared
 
 
-# `title_domain` -- RELOCATED FROM shape.py's governance slice (step 2). A pure roster read
-# (`TITLE_DOMAINS`), not a verb, so it belongs beside the roster it reads rather than beside the
-# governance verbs that once called it.
+# `title_domain` -- RELOCATED FROM shape.py's governance slice (step 2). A pure content read
+# (`TITLE_DOMAINS`), not a verb, so it belongs beside the roster/content layer rather than beside
+# the governance verbs that once called it.
 # ⚠ `title_rank` IS DELETED (`13d-i`, 2026-09-26). Its one decision was `_req_revoke`'s
 # strictly-higher-rank conjunct, and ED-IN-0256 ruling (3) makes revocation *"rung above of same
 # faction"* -- structural, not a rank comparison. `title_domain` SURVIVES THAT POSITION, and not by
 # choice: `harness/populated.py`'s office seating calls it to decide who holds a titled seat and
-# at which rung (the deferred `offices.yaml` unit's to replace), and `Office.__post_init__`'s
-# title-in-a-body refusal cannot be stated without it (see `state/carriers.py`).
+# at which rung, and `Office.__post_init__`'s title-in-a-body refusal cannot be stated without it
+# (see `state/carriers.py`).
+# ⚠⚠ `TITLE_DOMAINS` NO LONGER READS `rosters.yaml: titles` (plan position `8a`, `13d-i` item 5).
+# It is folded into `engine/season/offices.yaml: titles: domains:`, same eleven entries, moved
+# rather than copied -- see `_load_offices` above and `offices.yaml`'s own header.
 def title_domain(post: Optional[str]) -> Optional[str]:
-    """The rung kind a title governs, from `rosters.yaml: titles`. `None` for a post that is not
-    a title — a Dicastery is an office, not a rank."""
+    """The rung kind a title governs, from `offices.yaml: titles: domains:`. `None` for a post
+    that is not a title -- a Dicastery is an office, not a rank."""
     return TITLE_DOMAINS.get(str(post or ""))

@@ -201,7 +201,7 @@ four rows of that table found stale in this pass are corrected here, not there: 
 | 12e ✦ | **H12 / H13, held** | IN | BLOCKED | H12: a post-H6 re-measure (not Jordan, §5.2); H13: §5.1 item 5 | Phase 3 |
 | 13 | **W28-cast** | IN | OPEN | — | Phase 1 · 8 |
 | 13b · 13e · 13f | | IN | **DONE** | — | §2.2 |
-| 13d-i | **OFFICES AS DATA** | IN | items (1)–(4) DONE · **item (5) OPEN** | — | Phase 1 · 8a |
+| 13d-i | **OFFICES AS DATA** | IN | **DONE, all five items (item 5 at §8.9, narrowed scope)** | — | Phase 1 · 8a |
 | 13d-ii | **PURVIEW** | IN | **DONE (by 6)** | — | §2.2 |
 | 14 | **U7-own** | IN | BLOCKED | `12`, `13` | Phase 3 |
 | 15 | **Record-kind fold** | IN | OPEN | `11a` | Phase 2 |
@@ -280,7 +280,7 @@ census, not the phase number, decides whether it may run beside a Phase-1 item.
 | 6 | **OPENERS-DERIVE** `[L1]` | derive the `openers:` roster from the `@effect_for` registry, or guard their equality | **DONE** (§8.8) | — ; before any Phase-2 effect lands |
 | 7 | **GATE-REMOVE-PERSON** `[L1]` | route `World.remove_person` through `World.write`; a declared hash move | **DONE** (§8.8) | — ; shares `loop/matter.py` with `24f`'s build — serial |
 | 8 | **`13` W28-cast** | the `cast:` blocks and their reader in `build_at`; the harness loader's count | **DONE**, narrowed scope — 5 of 46 NPC cases (§8.7) | — ; precondition of `17` and of `ED-FI-0009` |
-| 8a | **`13d-i` item (5)** | `offices.yaml` + its `harness/populated.py` wiring; the `titles` fold | OPEN | — ; before `18a` (placed by the author, §2.3) |
+| 8a | **`13d-i` item (5)** | `offices.yaml` + its `harness/populated.py` wiring; the `titles` fold | **DONE, narrowed scope (§8.9)** | — ; before `18a` (placed by the author, §2.3) |
 | 9 | **`18` PROC-A** | re-host the 28 stress tests; `world_q.judging_set`; `convene` + the `rank` stem; `arrangements.yaml` through the one loader; D-6/D-7 as swept fixtures | OPEN | — (SC lane); a hard dependency of `18a` and `19` |
 | 10 | **`24f` — the design step** | specify who eats; **NAME the cohort producer** before any code | **DONE** (§3.1 item 10 body text has the decision) | — ; the BUILD (Phase 2 tail) shares `matter.py` with item 7 |
 | 11 | **`25` MB-GOLDEN** + the MB hand pass | the golden-mode ruling; `ED-MB-0057`, `ED-MB-0044`, `config.py:315-317`; A5; A9; the unblocked Sequenced rows; `ED-MB-0075`'s option (2) after its superseding row | OPEN | — (MB lane, parallel) |
@@ -1610,6 +1610,122 @@ mtime changing mid-run — `8a`'s own in-progress edit, live in the same window.
 `8a` commits second must bump the pinned count once more** (43 → 44, with its own dated history
 line) — the same shape `8`'s own concurrency note already recorded once, one position earlier, and
 not something either session can close alone in a shared tree.
+
+**RESOLVED, at `8a`'s own execution (§8.9): `8a` was second.** `test_h115`'s `43 → 44` bump landed
+in this file at `8a`'s own commit, with its own dated history line — but landed physically inside
+position `6`'s commit (`b48dca5`), not `8a`'s, because `8a` had already run a bare `git add` on the
+whole file before `6` committed the rest of it. Recorded plainly at §8.9 rather than re-attributed
+after the fact.
+
+---
+
+### 8.9 · Made at position `8a`'s execution — `13d-i` item 5, `offices.yaml` + the `populated.py` overlay
+
+**Two folds landed, neither Jordan's, both already answered before this position started.**
+`04_CODE_ARCHITECTURE.md` §B.7:308 (*"there is no `Title` type"*) and §E.1:1067 (*"`titles.domains`
+moves off the critical path... world-generation content read at step 9"*) rule `titles` world-gen
+DATA; r2 `05_LEDGER_AND_BUILD.md` RULED (c) names the destination (*"its domains move into
+`offices.yaml`... and the roster goes"*). `engine/season/offices.yaml` is the new content file —
+placed at the package root beside `rosters.yaml`/`npcs.yaml`/`governance_spine.yaml`, **not** at
+r2 `03`'s own proposed `engine/season/data/offices.yaml`: `data/` in this tree holds only `.py`
+loaders (`cast.py`, `fixtures.py`, `rosters.py`, `verbs.py`, `requires.py`, `matrix.py`, `files.py`)
+and every YAML content file the package owns sits one level up. r2's path predates that convention
+having settled, or never checked it; the live sibling pattern governs.
+
+**The `titles:` fold.** `data/rosters.py::TITLE_DOMAINS`/`title_domain` now read
+`offices.yaml: titles: domains:` — the same eleven entries, moved rather than copied, verified
+byte-identical against the untouched `rosters.yaml: titles: domains:` by
+`test_8a_title_domain_now_reads_offices_yaml_and_answers_identically`. ⚠ **`rosters.yaml: titles`
+is NOT physically deleted.** `engine/season/rosters.yaml` was dirty under a concurrent plan
+position's edit for this entire session (positions `6`/`7`, both landed mid-session); deleting a
+roster block from a file another agent is actively writing, in a shared working tree with no
+`isolation: worktree`, is exactly the collision `CLAUDE.md`'s concurrency note exists to prevent.
+The roster is now orphaned residue — `S11`'s own shape, *"loads clean, `roster()` raises at READ,
+not at load"* — costing nothing until someone deletes it. Named in `HANDOFF_IN.md`, not silently
+left for a session to rediscover.
+
+**The `seats:` fold.** r2 `03_SEATS_AND_CONTENT.md` §A.13-§A.15 already ran the canon-verification
+pass this position's own brief asked for — `offices_draft.yaml`'s 570 lines reduced to 44 usable
+rows and adjudicated seat by seat (12 transfer post+body only, 9 authored fresh, 4 dropped as
+superseded by the 2026-09-13 NPC-behaviour ruling or unconstructable against today's rosters) — so
+this position used that table rather than re-deriving it, which `CLAUDE.md` §8 makes the right
+call (never re-implement a rule that already lives once) rather than a shortcut. **What did NOT
+transfer: `03:1043-1056`'s `conferral_bases`/`revocation_bases` VALUE SETS, and by extension every
+row's `cnf`/`rvk` cell in §A.15's table**, both dated before `ED-IN-0256` and both already
+superseded in `rosters.yaml` at `13d-i` items 1-4 (`conferral_bases: [appointed, elected, annex]`,
+`revocation_bases: [rung_above_same_faction]`). Every one of the 29 rows was RECOMPUTED against the
+live rosters, not copied: `confer`→`appointed` (15), `determine`→`elected` (8),
+`purview`/`holdings`→`rung_above_same_faction` (22), `none`→`null` (7). **One judgment call, named
+rather than silently decided:** `succeed` (hereditary succession — King, Queen, Heir, Princess, and
+the Crown's own `Duke of Valorsmark` seat) has no home in `ED-IN-0256`'s three values, which are
+silent on heredity entirely; left `conferral: null` for those six seats — lawful (`Office.conferral`
+is optional) and unchanged from what the live build already carries for them. Flagged in
+`offices.yaml`'s own header for the next session to attack.
+
+**Verified, not assumed:** all 29 rows construct a lawful `Office` against the live
+`office_bodies`/`factions`/`remit_acts`/`conferral_bases`/`revocation_bases` rosters (§0.1 pt 3 —
+zero construction errors, checked by script before either test file existed); the seven-way
+conferral/revocation distribution sums to 29 on both axes (§0.1 pt 4's own defect, caught the same
+way r2 caught it in its own table). `python3 -c "import yaml; yaml.safe_load(open('engine/season/
+offices.yaml'))"` parses; `data/rosters.py::_load_offices` (the package's own duplicate-key-safe
+reader) loads it at import with no error.
+
+**The `harness/populated.py` wiring — real, not declared-but-unread.** The existing per-case loop
+in `build_realm`'s "WHO GOVERNS" section already seats 19 of `offices.yaml`'s 29 holders as
+`Office`s (verified by construction: every `holder` case id resolves to a live office at seed 0,
+each carrying `conferral=None, revocation=None`, the dataclass default, before this position). That
+loop now looks up the matching `offices.yaml` row (by case id, disambiguated by `post` for
+NPC-020's two rows) and passes its authored `conferral`/`revocation` into the SAME `Office(...)`
+constructor call, so `__post_init__`'s existing roster-membership refusal runs on it rather than
+being bypassed by a post-hoc mutation. Measured at seed 0: all 19 now carry the authored basis
+(`test_8a_the_nineteen_live_seats_carry_a_real_basis_after_the_overlay`), and a full season still
+resolves end to end (`test_8a_a_season_still_executes_end_to_end_with_the_overlay_wired`, §0.2).
+
+**Two things deliberately NOT done, named rather than silently scoped out:**
+
+1. **`remit_acts` is not overlaid.** `offices.yaml`'s remit column follows r2 `03`'s own
+   precondition — *"after `02` deletes `dispatch` the roster is `[issue, determine, confer, revoke,
+   convene]`"* — but `dispatch` is still a live, undeleted remit act in this tree (measured:
+   `roster('remit_acts')` carries it today). Narrowing 19 seats' authority by a verb `ED-IN-0256`
+   never addressed, on the strength of a precondition this tree has not met, is outside this fold's
+   scope; the generic `remit_or_default`/case-overlay mechanism is untouched.
+2. **The 10 `[NEW]` seats are not minted.** Nine cases `offices.yaml` names as holders build no
+   office in `build_realm` today (Lord Steward, Confessor, the four Cardinals, Senior Inquisitor,
+   Guild Comptroller, Grand Master, Restoration Leader), plus NPC-020's second seat (`Duke of
+   Valorsmark`). Minting them needs a rung-ANCHOR resolver this position does not build (the four
+   forms r2 `03` names: `{realm: true}` · `{duchy: "<faction>"}` · `{territory: "<code>"}` ·
+   `{settlement: "<code>"}`) and moves `build_realm`'s office/seat census, which nothing in this
+   position's own scope re-measures. Named in `HANDOFF_IN.md` as follow-up, not built here.
+
+**What was checked before either was ruled out, rather than assumed:** the overlay's blast radius
+was measured empirically before deciding its scope — `engine/season/tests/test_governance_build.py`
+(74 passed), the nine governance/office-scoped tests in `test_season_shape.py` selected by name
+(`test_the_title_ladder_is_total_over_the_rungs` and its siblings, 9 passed),
+`test_jordan_no_definition_is_hardcoded_in_a_body` (still green — no hardcoded collection was
+introduced), `tests/valoria/test_balance_oracle_arms.py` (5 passed, the one `tests/valoria` file
+importing `build_realm`), and every other test file importing `harness.populated` in this package
+(`test_faction_q.py`, `test_march.py`, `test_mass_battle_provider.py`, `test_sides.py`,
+`test_g1b_attribution.py` — all green). No pinned exact count anywhere in this package asserts an
+office census or a `resolvable_verbs()` figure that the overlay could have moved; the only office
+count assertion is `0 < seats < len(w.persons)`, a range unaffected by conferral/revocation. This is
+why the overlay was judged safe to wire for real rather than built-but-uncalled.
+
+**Concurrency note, and the git-index hazard it surfaced.** `rosters.yaml`, `data/verbs.py`,
+`state/world.py` and `hole_register.yaml` were dirty under positions `6`/`7` for most of this
+session; none was touched by this position. `engine/season/data/files.py` was NOT excluded and was
+edited (`OFFICES_YAML` added beside `GOVERNANCE_SPINE_YAML`); it picked up position `6`'s own
+concurrent hunk (`EFFECTS_PY`) between this position's read and edit, applied cleanly, left
+untouched. ⚠ **A plain `git add <file>` on a file another position is mid-editing stages BOTH
+hunks**, since this tree has one shared index, not `isolation: worktree`. This position's own `git
+add engine/season/tests/test_season_shape.py` (to stage its `test_h115` `43 → 44` fix) caught
+position `6`'s still-unstaged `44 → 43` hunk in the same file at that moment; position `6` committed
+the whole file shortly after, absorbing both hunks into `b48dca5` rather than a commit of this
+position's own. Likewise `HANDOFF_IN.md` and this file landed inside position `7`'s commit
+(`16d6f7d`), whose own session had staged them first. Neither is a content error — every absorbed
+line is correct and this position's own — only the commit attribution is not this position's,
+recorded here rather than silently passed over. `data/rosters.py`, `harness/populated.py`,
+`test_governance_build.py` and `offices.yaml` were never staged by any other position and land in
+this position's own commit.
 
 ---
 
