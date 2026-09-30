@@ -764,7 +764,7 @@ def residence_of(w: World) -> dict:
     return out
 
 
-def population(w: World, rung_id: str) -> int:
+def population(w: World, rung_id: str, residence: Optional[dict] = None) -> int:
     """HOW MANY LIVE UNDER `rung_id`: the summed `Person.weight` of everyone whose `residence_of` is
     the rung or any rung beneath it. RR-2's capacity bounds POPULATION (its floor is *"applied here
     to births rather than acts"*), and this is the population it bounds. Plan position `19c`.
@@ -786,10 +786,15 @@ def population(w: World, rung_id: str) -> int:
     it would be a read of a dead carrier (`ID-13`). `24f` did not give it one: the territorial
     population it builds is carried by authored cohort PERSONS (`cohorts.yaml`, S9's one class), so
     it is counted above through `weight`, and `envelope` stays the ratified-but-unwritten field
-    `04 §B.3` declares (`H-171`)."""
+    `04 §B.3` declares (`H-171`).
+
+    `residence` -- a precomputed `residence_of(w)`, for a caller (`_eff_migrate`) that already built
+    one this same act and would otherwise pay the full-Tenure scan twice (`/simplify`, BATCH-CLOSE
+    Phase 2). `None` (every existing caller) computes it here exactly as before."""
     TRACE.query("population", "resolver")
     here = _subtree(w, rung_id)
-    return sum(w.persons[pid].weight for pid, home in residence_of(w).items() if home in here)
+    residents = residence_of(w) if residence is None else residence
+    return sum(w.persons[pid].weight for pid, home in residents.items() if home in here)
 
 
 # THE `site_kinds` MEMBER `capacity` COUNTS -- Jordan's `ED-SE-0055` (2026-09-25): *"add a `dwelling`

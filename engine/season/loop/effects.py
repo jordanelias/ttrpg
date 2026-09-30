@@ -378,6 +378,18 @@ def _eff_convene(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     return Change((Subject.entity("dates", did),), perform)
 
 
+def _decline_ascent(msg: str) -> Change:
+    """The shared §10-ladder refusal: `move`, `migrate` and `found` each require their
+    destination/parent to ascend the containment ladder and decline identically when it does not
+    -- one owner for the `chose`/`alternatives` pair rather than a third hand-copy of it
+    (`/simplify`, BATCH-CLOSE Phase 2). Callers still build their own message, since what "not up
+    the ladder" names differs (a destination for `move`/`migrate`, a parent rung for `found`)."""
+    TRACE.decision(msg, "S10/E3", chose="change nothing, so the fold emits the refusal",
+                   alternatives=["write the edge anyway (add_tenure raises and the season "
+                                 "dies)", "let the precondition admit it and crash later"])
+    return NO_CHANGE
+
+
 @effect_for("move")
 def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """§D4 / #353 §15.1: travel is a TENURE ALTER, owned by the traveller as the Tenure's subject.
@@ -418,11 +430,8 @@ def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         # ⚠ THE INSTANCE DETAIL SITS AFTER ` -> `, WHICH IS `report.py`'s CLUSTER KEY
         # (`d.what.split(" -> ")[0]`). Putting the actor and the destination in the prefix would
         # mint one register entry per pair and leave the label reading mid-sentence.
-        TRACE.decision(f"a move's destination is not up the §10 ladder -> {a.actor} into {dest!r}",
-                       "S10/E3", chose="change nothing, so the fold emits the refusal",
-                       alternatives=["write the edge anyway (add_tenure raises and the season "
-                                     "dies)", "let the precondition admit it and crash later"])
-        return NO_CHANGE
+        return _decline_ascent(
+            f"a move's destination is not up the §10 ladder -> {a.actor} into {dest!r}")
     # ⚠ PLAN POSITION `19c`: WHAT A `move` LEAVES BEHIND IS THE MOVER'S `reside` EDGE -- it is not
     # touched here, so a traveller still lives where he lived (`_eff_migrate`'s docstring).
     return Change((Subject.entity("persons", a.actor),), lambda: _relocate(w, a, dest))
@@ -515,12 +524,10 @@ def _eff_migrate(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     S defect (*calculations consistent in methodology*)."""
     dest = _operand(a, "to")
     if not w.contain_ascends(a.actor, dest):
-        TRACE.decision(f"a migration's destination is not up the §10 ladder -> {a.actor} into "
-                       f"{dest!r}", "S10/E3", chose="change nothing, so the fold emits the refusal",
-                       alternatives=["write the edge anyway (add_tenure raises and the season "
-                                     "dies)", "let the precondition admit it and crash later"])
-        return NO_CHANGE
-    home = residence_of(w).get(a.actor)
+        return _decline_ascent(
+            f"a migration's destination is not up the §10 ladder -> {a.actor} into {dest!r}")
+    residence = residence_of(w)
+    home = residence.get(a.actor)
     if home == dest:
         TRACE.decision(f"a migration to where the migrant already lives -> {a.actor} into {dest!r}",
                        "19c", chose="change nothing, so the fold emits the refusal",
@@ -533,7 +540,7 @@ def _eff_migrate(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
         # here, and it has no weight to house -- `move`'s reading of the same case.
         return NO_CHANGE
     newcomer = home is None or dest not in ancestry(w, home)
-    if newcomer and population(w, dest) + migrant.weight > capacity(w, dest):
+    if newcomer and population(w, dest, residence) + migrant.weight > capacity(w, dest):
         TRACE.decision(f"a migration into a rung at capacity -> {a.actor} into {dest!r}",
                        "RR-2/24d-ii", chose="change nothing, so the fold emits the refusal",
                        alternatives=["admit him anyway (capacity bounds nothing)",
@@ -775,12 +782,9 @@ def _eff_found(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     if rid in w.rungs:
         return NO_CHANGE
     if not rung_kind_ascends(plan, parent.kind):
-        TRACE.decision(f"a founding does not ascend the §10 ladder -> a {plan} under the "
-                       f"{parent.kind} {parent.id!r}", "S10/E3",
-                       chose="change nothing, so the fold emits the refusal",
-                       alternatives=["write the edge anyway (add_tenure raises and the season "
-                                     "dies)", "let the precondition admit it and crash later"])
-        return NO_CHANGE
+        return _decline_ascent(
+            f"a founding does not ascend the §10 ladder -> a {plan} under the "
+            f"{parent.kind} {parent.id!r}")
     rung = Rung(rid, plan)
     placed = Tenure(H(w.world_seed, w.tick, rid, f"contain:{parent.id}:{a.id}"), rid, parent.id,
                     "contain", since=w.tick)
@@ -1088,9 +1092,8 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
             or any(t.kind == "oblige" and t.subject == party and t.object == seat and t.live
                    for t in w.tenures)):
         return NO_CHANGE
-    n = _oblige_term(w)
     nt = Tenure(H(w.world_seed, w.tick, party, f"oblige:{seat}:{a.id}"), party, seat, "oblige",
-                since=w.tick, term=None if n is None else Term(w.tick + n, a.id))
+                since=w.tick, term=_new_oblige_term(w, a))
     items = docketed(w, party)
 
     def perform() -> None:
@@ -1711,9 +1714,8 @@ def _eff_oblige(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     is `F.18`'s *"no economic pressure on any office"* answered, and `release` is still the obligee's
     own way out before then."""
     seat = _operand(a, "subject")
-    n = _oblige_term(w)
     nt = Tenure(H(w.world_seed, w.tick, a.actor, f"oblige:{seat}:{a.id}"), a.actor, seat, "oblige",
-                since=w.tick, term=None if n is None else Term(w.tick + n, a.id))
+                since=w.tick, term=_new_oblige_term(w, a))
     return Change((Subject.edge(nt),), lambda: w.add_tenure(nt))
 
 
@@ -1733,6 +1735,15 @@ def _oblige_term(w: "World") -> Optional[int]:
             law="04 §B.8 `term?` / T-n -- the opening act declares a term that MATTER matures at a "
                 "later barrier; a term that cannot outlive its own season is not one")
     return n
+
+
+def _new_oblige_term(w: "World", a: "Act") -> Optional["Term"]:
+    """The `Term` an `oblige` edge OPENS with, for the two writers that mint one from scratch
+    (`_eff_oblige`, `_eff_determine`) -- one owner for the `None if n is None else Term(...)`
+    ternary rather than a second hand-copy of it (`/simplify`, BATCH-CLOSE Phase 2). `_renewals`
+    winds an EXISTING term rather than minting one and is not one of these two."""
+    n = _oblige_term(w)
+    return None if n is None else Term(w.tick + n, a.id)
 
 
 @effect_for("transfer")
@@ -1822,6 +1833,14 @@ def _shift(src, dst, kind: str, amount) -> None:
     dst.stores[kind] = dst.stores.get(kind, 0) + amount
 
 
+def _exercised_office(w: "World", a: "Act") -> Optional["Office"]:
+    """The Office an act's `via` names, or `None` -- the one-line resolution `_eff_levy` and
+    `_renewals` both did inline (`/simplify`, BATCH-CLOSE Phase 2). NOT `_seat_rung`: that helper's
+    fallback (a document's `payload.rung`, else the actor) is for a Record write, not for either of
+    these two, which have their own reasons to want the bare Office or nothing."""
+    return w.offices.get(a.via) if a.via else None
+
+
 @effect_for("levy")
 def _eff_levy(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """PLAN POSITION `19` -- A LEVY MOVES A RUNG'S STORES INTO THE LEVYING SEAT'S TREASURY. The row's
@@ -1854,7 +1873,7 @@ def _eff_levy(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # fallback (`payload.rung`, else the actor) is where a DOCUMENT may be drawn up; matter levied
     # through no seat, or a rungless one, has no treasury to go to, and the actor's own person-rung
     # is not one.
-    seat = w.offices.get(a.via) if a.via else None
+    seat = _exercised_office(w, a)
     src = w.rungs.get(_operand(a, "subject"))
     dst = w.rungs.get(seat.rung) if seat is not None and seat.rung is not None else None
     kind, amount = _operand(a, "kind"), _operand(a, "amount")
@@ -1910,7 +1929,7 @@ def _renewals(w: "World", a: "Act", src: str, dst: str, amount) -> list:
 
     The cheap refusals come first, so an ordinary transfer (no `via`) reaches no Query and moves no
     trace line."""
-    seat = w.offices.get(a.via) if a.via else None
+    seat = _exercised_office(w, a)
     if seat is None or seat.rung != src or src == dst or amount <= 0:
         return []
     if not may_renew(w, a.actor, a.via, seat):
