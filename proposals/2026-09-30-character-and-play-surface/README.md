@@ -76,7 +76,7 @@ on W-1, W-2 and W-3 (C-4, C-5); W-5's ability predicates serve K-5; S-3's journa
 over S-2; B-1 → M-4 (the Plan layer's own precondition); U-4 and K-6 after K-2; U-6 with U-2; L-4 is
 the plan's.
 
-**Held with the proceedings design:** P-4, V-4, and V-5's speech-kind name.
+**With the proceedings design** (partly built under plan position `22`; its proposal is held back): P-4, V-4, and V-5's speech-kind name.
 
 **Standing rules:** S-7, B-4, K-7, V-2, C-3.
 

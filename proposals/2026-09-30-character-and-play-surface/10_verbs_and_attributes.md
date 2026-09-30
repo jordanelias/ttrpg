@@ -12,7 +12,7 @@ implications"*, *"the other subsystems [that] may call for [them] that aren't bu
 word definitions and etymologies themselves."*
 
 **Answer.** Sort the verbs by what they *draw*, not by theme. Three of the 44 contest today, and the
-held-back proceedings design would add seven; only those have work for an attribute, and in every
+proceedings design (partly built, its proposal held back) would add seven; only those have work for an attribute, and in every
 engine that is built the attribute reaches them through a faculty, never as dice of its own. The
 thematic sort given in the session assigned attributes to verbs that never roll; §2.2 withdraws that
 part.
@@ -68,8 +68,9 @@ contest today:**
 | `march` | a field | `resolve_field` | nowhere on the season path — `_weighted_unit` fixes power at 4 and morale at 5 ([08](08_mass_battle_units.md)) |
 | `tell` | a standing | the σ-leverage provider | the capability key `copying` (`rosters.yaml: verb_capability`), empty for most persons |
 
-**Seven more would contest under the held-back proceedings design** (`04_VERBS.md` §B.1, §B.2,
-§B.3.2):
+**Seven more would contest under the proceedings design** (`04_VERBS.md` §B.1, §B.2, §B.3.2). Its
+proposal is held back, and the build is partial: plan position `22` has steps 6, 7, 9 and 10 done and
+the contest-resolution core, steps 11–16, open. None of these verbs contests yet:
 
 | verb | proposed prize |
 |---|---|
