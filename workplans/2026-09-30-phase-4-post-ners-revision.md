@@ -131,7 +131,7 @@ for these rows only; its non-Phase-4 rows are unchanged and not restated)
 | — | **REGISTER/PLAN FIXES** | IN | **DONE** | NERS/FABLE PASS | `30dc8c65` |
 | — | **EFFECTS-SPLIT** | IN | **DONE** | — (independent of the NERS pass; the settled modularity requirement) | `309a17d9`; 683 passed / 1 pre-existing failure (`engine/season/tests`, independently reproduced against both the split and the pre-split commit) |
 | — | **CITATION-FIX** | IN | **DONE** | EFFECTS-SPLIT | `a882cc32` |
-| b | **`21`** U10 | IN | **OPEN, PARTIAL** — items 1-2 done; item 3 (reconcile `workplan_v6_progress.yaml`) NOT attempted; a genuine upstream break in `wd_collect.py` leaves R-01/R-02 `not_met` | `20-ii` ✓ | `03de9d47` |
+| b | **`21`** U10 | IN | **OPEN, PARTIAL** — items 1-2 done; item 3 (reconcile `workplan_v6_progress.yaml`) NOT attempted; a genuine upstream break in `wd_collect.py` leaves R-01/R-02 `not_met` — the collector is re-based at `1e5e1d4`; the number is position `11`'s to take | `20-ii` ✓ | `03de9d47` |
 | c | **`28-ii`** (M6) successor goldens | IN | **DONE** — one disclosed, out-of-scope gap, narrowed to `corpus_run` specifically (§3 `c · 28-ii`) | `28-i` ✓ | `013a5b1b` (mislabeled, see `03de9d47`); corrected by `7ba66fde`, `6090af6b`, and this pass |
 | d | **`28-iii`** SPINE-DELETE | IN | **OPEN** (unblocked -- `28-ii` is DONE) | `28-ii` ✓ | — |
 | e | **`20-iv`** d.1 + terrain/garrison | MB/IN | BLOCKED | `20-ii` ✓, `28-iii` | — |
