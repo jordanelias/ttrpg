@@ -121,7 +121,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                    chose="serial: the actorless event channel; then parallel over Sites",
                    alternatives=["shard the event channel per rung (breaks causes[]: one cause is one id)"],
                    not_implemented=["the death cascade (S31.1 exception 2)",
-                                    "bodies, larders, yield, travel (S25's other rows)"])
+                                    "bodies, larders, yield (S25's other rows)"])
     for e in (actorless or []):
         w.log.append(e); emitted.append(e)
         TRACE.event(e.id, e.kind, e.causes)
@@ -271,8 +271,8 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # substantive difference — the reverse order would let a rung eat what it had not yet
     # produced, and no rung could ever run short. `test_w8_...order...` asserts it.
     #
-    # ⚠ BODIES AND TRAVEL ARE STILL NOT BUILT. Naming them here would suggest otherwise; the
-    # `not_implemented` list in this barrier's decision row is where they are recorded.
+    # ⚠ BODIES AND TRAVEL WERE NOT BUILT WHEN THIS WAS WRITTEN; BOTH ARE NOW (item 3b below, and
+    # the travel pass after the yield loop, plan position `19c`), each in #353's order.
     factor = w.fixtures.get("season_factor")
     scale_ = w.fixtures.get("condition_scale")
 
@@ -493,6 +493,51 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                 record_kind="Rung", fieldname="stores", driver="Event",
                 emits="stores.changed", subject=rid,
                 causes=[prior_s] if prior_s else [ROOT])
+
+    # -- TRAVEL: A LEG ENDS HERE (plan position `19c`, the ride-along) --------------------------
+    #
+    # ⚠⚠ THE MATTER HALF OF `(Person, travel_leg)`'s `steps: [MAT, RES]`, AND ITS ABSENCE WAS A
+    # LIVE DEFECT, NOT A MISSING FEATURE. `_eff_move` appends every destination to
+    # `Person.travel_leg` at RESOLVE and nothing ever emptied it (the only other writer was a probe),
+    # while `decision/budget.py` subtracts `len(p.travel_leg) * budget_leg_penalty` from EVERY
+    # season's budget. So a person who had moved N times in their life was N scenes short in every
+    # season after -- MEASURED before this pass on `build_realm(0)`: 14 legs held after two seasons,
+    # 14 moves executed, and none ever returned. `ARCHITECTURE_V2.md` §D4 names the field *"the
+    # movement in progress"* and gives arrival to the `contain` edge, which `_eff_move` already
+    # re-homes at RESOLVE; what was never written is the end of the movement. #353 §25 names
+    # TRAVEL as one of MATTER's motions, in this order: *"Events resolve FIRST, then bodies,
+    # larders, yield, travel, wear"* -- so it sits after the larder/yield loop above and before
+    # the wear loop below, which is where it is.
+    #
+    # WHAT THE PENALTY NOW MEANS. A `move` in season t adds a leg at RESOLVE; the rounds after it in
+    # season t read the leg (`deliberate.py`'s queue key carries `travel_leg`, so the smaller budget
+    # re-opens the traveller's triage), and season t+1's MATTER ends it. The distance penalty is a
+    # cost of THE SEASON YOU TRAVEL IN, and nothing after it.
+    #
+    # ⚠ ONE WRITE PER TRAVELLER, AND IT EMITS, BECAUSE `H-12` IS RULED: *"MATTER emits an Event per
+    # write so crossings have an antecedent"*, and `World.write` refuses a MATTER write on a row that
+    # declares `emits:` without naming one. `travel.moved` would report a move that did not happen,
+    # so the row declares a second kind, `travel.ended` (`write_matrix.yaml`). It is witnessed like
+    # every MATTER emission -- the traveller and whoever stands where they arrived learn that the
+    # journey is over. Its cause is the move that laid the last leg, so the walk is
+    # `travel.ended -> travel.moved -> the act`; a leg no act laid (a probe's hand-set list) roots
+    # at `[ROOT]`, as a licensed clock's genuine first emission does.
+    #
+    # REJECTED, each for a reason: ending the leg at the traveller's NEXT act (it would never end for
+    # a person who then does nothing, which is the defect with a delay); a per-leg tick so `budget`
+    # counts only this season's legs (the list would still grow without bound, and `budget` is
+    # person-side and reads no clock); a guard over `travel_leg` (`CLAUDE.md` §0.1 pt 5 -- a one-off
+    # defect, fixed at its one missing writer; the plan says *"No guard"*).
+    for pid in sorted(w.persons):
+        traveller = w.persons[pid]
+        if not traveller.travel_leg:
+            continue
+        prior_leg = w.last_emission_of("travel.moved", pid)
+        w.write("travel_leg", token,
+                lambda traveller=traveller: setattr(traveller, "travel_leg", []),
+                record_kind="Person", fieldname="travel_leg", driver="Event",
+                emits="travel.ended", subject=pid,
+                causes=[prior_leg] if prior_leg else [ROOT])
 
     # S25: NO SOCIAL QUANTITY MOVES HERE. L4 at its sharpest.
     w._in_parallel_map = True

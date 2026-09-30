@@ -7607,7 +7607,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # splits signatures rather than merging them; `release` returns in one world and `restore` moves
     # (`ever`, below). With `restore` struck from every signature the count is 75 -- one split is
     # still its. The universal set is unchanged.
-    assert len(by_sig) == 76, (
+    # ⚠⚠ **76 -> 77, PLAN POSITION `19c`'s RIDE-ALONG (a `travel_leg` ends at the next MATTER),
+    # MEASURED AGAINST A STASHED `1a13443` (76 there, same 89 live worlds, seed 0).** Before it a
+    # person who had moved N times was N scenes short in every later season; now the penalty lasts
+    # the season travelled in. The scenes travellers get back go to the varying verbs (per-verb
+    # world counts, before -> after: `examine` 6 -> 8, `restore` 2 -> 4, `interview` 33 -> 32,
+    # `petition` 51 -> 49), which splits one signature. `ever`, the refused-only set and the
+    # universal set are unchanged.
+    assert len(by_sig) == 77, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "

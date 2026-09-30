@@ -226,8 +226,8 @@ rows:
     steps:   [MAT, RES]
     class:   "MATTER/ACTS"
     social:  "false"
-    by:      "DR-1, D10 — see §D4"
-    emits:   "`travel.moved`"
+    by:      "DR-1, D10 — see §D4. ⚠ THE `MAT` STEP GAINED ITS WRITER AT PLAN POSITION `19c` (2026-09-30): `loop/matter.py`'s travel pass ends every leg at the next MATTER, so `decision/budget.py`'s distance penalty is a cost of the season travelled in and not, as it was, of every season after. `travel.ended` is that write's emission (`H-12`: MATTER emits per write, and `travel.moved` would report a move that did not happen)"
+    emits:   "`travel.moved` · `travel.ended`"
   - kind:    "Person"
     field:   "weight"
     steps:   [CEN]
