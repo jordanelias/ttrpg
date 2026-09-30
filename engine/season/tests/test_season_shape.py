@@ -7348,6 +7348,25 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # refused across the full `live` set now, up from 0), and nothing already in `ever` leaves.
     # MEASURED by a one-off script over this same `live` set, seed 0, against a clean worktree at
     # `882e86e` (BATCH-CLOSE Phase 2, immediately before this position).
+    # ⚠ `march` GAINS AN `operands_for` ARM AT PLAN POSITION `28-ii` (M6, SUCCESSOR GOLDENS),
+    # 2026-09-30, AND `ever`/`by_sig`/`varying` DO NOT MOVE -- VERIFIED, NOT ASSUMED, TWICE OVER.
+    # `decision/options.py::opening_set` gains a march-specific referent widening: `subject`
+    # ranges over `q.referents` PLUS `containing_rung_of(p)` (`from`'s own reading, "where the
+    # actor is") -- because no `questions_for` source ever offers a SETTLEMENT as a referent
+    # (measured over every person in `build_realm(0)` at tick 0: 0 of 81), so `march`'s Candidate
+    # never formed at all under clause 3 read literally, corpus-wide. A FIRST VERSION OF THIS ARM
+    # bound `subject` to `containing_rung_of(p)` UNCONDITIONALLY (replacing the referent, not
+    # widening it) and DID move `march` into `ever` here -- one world, `NPC-038`, `Declared` only,
+    # never a real field battle -- but that shape makes a genuine cross-settlement target
+    # structurally unreachable through `opening_set` forever (the actor's own hearth is never an
+    # enemy's), which a direct, real-chooser demonstration needs (`test_march.py`'s own new
+    # `test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle`). The widened
+    # (additive) shape shipped instead, and it changes what competes for a scene in `NPC-038`'s one
+    # round where `dispatch` is granted -- re-measured at seed 0 over this same `live` set: `ever`,
+    # `refused_only`, `by_sig` (115) and `varying` are ALL exactly the pre-`28-ii` values, `march`
+    # included in neither `ever` nor `refused_only`. The one world where `march` is eligible at all
+    # (`remit:dispatch`, NPC-033/038, the never-attempted-set note below) draws one candidate among
+    # many at this seed, and neither of `march`'s two now-wider Candidates wins it.
     assert ever == {"create_record", "examine", "interview", "fight", "issue", "move", "petition",
                     "reconstruct", "release", "research", "restore", "speak", "surveil", "tell",
                     "transfer", "utter"}, (
@@ -7809,6 +7828,9 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # over the same 143-case corpus, seed 0, against a clean worktree at `882e86e` (BATCH-CLOSE
     # Phase 2, immediately before this position): 77 signatures over 89 live worlds there, 115
     # over 143 here.
+    # ⚠ STILL 115 AT PLAN POSITION `28-ii` (M6), 2026-09-30 -- `march`'s `operands_for` arm (the
+    # `ever` note above) does not move this count: re-measured at seed 0 against the SAME `live`
+    # set, `march` executes in no world, so no signature gains or loses it.
     assert len(by_sig) == 115, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
@@ -7967,6 +7989,9 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `ever` for the first time (the `ever` note earlier in this function: it executes in exactly
     # one of the 54 newly-representable worlds, `ARC-32`). Both are read off the same corpus run
     # in the same breath as `universal` and `by_sig`.
+    # ⚠ `march` DOES NOT JOIN, PLAN POSITION `28-ii` (M6), 2026-09-30 -- see the `ever` note above
+    # for why, and for the direct, real-chooser demonstration this position ships instead of a
+    # corpus-membership move.
     assert varying == {"create_record", "examine", "fight", "interview", "issue", "move",
                        "petition", "reconstruct", "release", "research", "restore", "speak",
                        "surveil", "tell", "transfer", "utter"}, (
@@ -8063,16 +8088,32 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # granted in ONE corpus world, NPC-038 -- and neither is attempted in any corpus world:
     # measured by the one-off script named at the `ever` note above (no live case lists either in
     # `executed` or `refused`). `issue` went to `ever` and `levy` to `refused_only` instead.
+    # ⚠⚠ `march` STAYS, PLAN POSITION `28-ii` (M6, SUCCESSOR GOLDENS), 2026-09-30 -- AND THE
+    # REASON ABOVE ("`operands_for` has no march-specific arm") IS NOW STALE, corrected here rather
+    # than left to mislead the next reader. `operands_for` HAS an arm: `decision/
+    # options.py::opening_set` widens `march`'s own `subject` range to `q.referents` PLUS
+    # `containing_rung_of(p)` (the `ever` assertion's own note, several paragraphs up, has the
+    # full account -- including the FIRST version of this arm, which DID move `march` out of this
+    # set, and why that shape was rejected). `march` is still eligible in exactly one world
+    # (NPC-033/NPC-038 share the `remit:dispatch` grant) and still forms a real Candidate there on
+    # both of its now-two referent readings -- it simply does not WIN either draw at seed 0,
+    # re-measured on this exact tree. `H-151`'s `cite:` field (`hole_register.yaml`) is corrected
+    # in the same commit: the same-faction scenario it describes is no longer categorically
+    # unreachable from the corpus (a constructed Question can reach it, as `test_march.py`'s new
+    # `test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle` demonstrates
+    # for the CROSS-faction case), and it stays unfixed on purpose -- this position's scope is the
+    # arm, not that bug.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "give", "oblige",
                                               "open_case", "determine"}, (
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
-        "`remit:confer`-eligible); `march` is eligible in NPC-033 but has no corpus operands; "
+        "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and now has a real "
+        "`operands_for` arm (two widened referent readings) but wins no draw here at seed 0; "
         "`give` and `oblige` are untyped rows whose Candidate never forms in this corpus at all. "
         "`H-71` is CLOSED, so the governance five's reason is the corpus's offices, march's is "
-        "its own missing `operands_for` arm, and give/oblige's is that neither row's one operand "
-        "ever has a referent to bind here")
+        "that its arm's Candidates lose every tie at this seed, and give/oblige's is that "
+        "neither row's one operand ever has a referent to bind here")
 
 
 

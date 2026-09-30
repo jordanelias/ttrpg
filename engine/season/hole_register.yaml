@@ -3203,12 +3203,20 @@ rows:
     unblocks:  "march targeting being safe against every faction relationship, not only
       opposition and emptiness"
     cite:      "FOUND by `valoria-critic`'s adversarial pass on the M4 diff, M4 review stage.
-      Currently UNREACHABLE from the corpus either way: `march` is in `test_season_shape.py`'s
-      never-attempted-verb set (`operands_for` has no march arm), so this only matters for a
-      hand-built `Act`, exactly like `H-149`'s settlement restriction did before this same pass
-      enforced it. FALSIFIER, TO BE WRITTEN: a settlement held by the actor's own faction WITH
-      that faction's people present as the only occupants; march there and show the real fight
-      happens (or, once ruled, that it refuses)."
+      ⚠ CORRECTED, PLAN POSITION `28-ii` (M6, SUCCESSOR GOLDENS), 2026-09-30: this row used to say
+      `march` was UNREACHABLE from the corpus either way, citing `operands_for` as having no march
+      arm at all -- that arm now exists (`decision/options.py::opening_set`, a march-specific
+      referent widening: `subject` ranges over `q.referents` PLUS `containing_rung_of(p)`, the
+      actor's own position), so the categorical claim no longer holds. It remains true that
+      `march` is still in `test_season_shape.py`'s never-attempted-verb set, corpus-wide, at seed
+      0 -- its real Candidates simply lose every draw there, not that none form -- so THIS row's
+      own scenario is still not exercised by the corpus TODAY, only by a constructed `Act` or
+      `Question`. Still not a hand-built `Act` requirement in principle: `containing_rung_of(p)`
+      genuinely can equal a HELD settlement the actor's own faction controls (the corpus's
+      march-eligible people simply never happen to stand at one), so a person built that way would
+      reach this row through the real chooser. FALSIFIER, TO BE WRITTEN: a settlement held by the
+      actor's own faction WITH that faction's people present as the only occupants; march there
+      and show the real fight happens (or, once ruled, that it refuses)."
     source:    "M4 review pass (`valoria-critic`), `ED-IN-0279` clause (a)'s own ruling text
       supplying the reasoning, not a fresh Jordan ruling"
 

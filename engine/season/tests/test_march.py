@@ -17,18 +17,31 @@ the control that stops it passing vacuously:
      checked directly rather than inferred from the verb row's empty `writes:` cells.
   5. THE THREE `field_casualty_model` ARMS DIFFER, and `none`'s control isolates the write from
      the band exactly as `wound_harm_model`'s own `none` arm does.
+  6. A CHOOSER-FORMED DECISION, NOT A HAND-BUILT `Act` -- plan position `28-ii` (M6, successor
+     goldens). Every test above mints its `Act` by hand (`_march_act`); `test_a_real_chooser_
+     forms_and_folds_a_march_that_reaches_a_real_field_battle` does not. It calls
+     `decision.options.opening_set` on a real (constructed) `Question`, takes the REAL Candidate
+     it returns, converts it to a payload through `decision.choose._payload_of` (the same
+     function `make_chooser`'s own `choose()` uses), mints it through the real `mint_token`, and
+     folds it through the same RESOLVE -> ENCOUNTER pipeline as every other test in this file --
+     proving `march`'s own `operands_for` arm (`decision/options.py::opening_set`, the referent
+     widening) carries a REAL settlement target end to end, not merely that a hand-authored
+     payload can.
 """
 
 import random
 
 from engine.season.data.matrix import Step, WriteClass
+from engine.season.decision.choose import _payload_of
+from engine.season.decision.options import opening_set
 from engine.season.harness.populated import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.loop.effects import EFFECTS
 from engine.season.queries import world_q
 from engine.season.seam.contest import Resolution
-from engine.season.state.carriers import Act
+from engine.season.state.carriers import Act, Question, View
 from engine.season.state.gate import NO_CHANGE
+from engine.season.state.ids import H
 
 
 def _march_act(actor: str, target: str, via: str, act_id: str = "m1") -> Act:
@@ -291,3 +304,67 @@ def test_the_none_casualty_model_writes_stance_only():
             ("fac_church_of_solmund", -1.0, grudge_w),
             ("fac_crown", -1.0, morale_w),
         }, f"{pid} gained {after_new}, not exactly the grudge/morale pair, under the `none` model"
+
+
+def test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle():
+    """PLAN POSITION `28-ii` (M6, SUCCESSOR GOLDENS) -- THE GATE THIS SESSION WAS BUILT TO CLOSE:
+    *"a battle executing from a real, chooser-formed decision"* (the retirement plan's own §6,
+    `CLAUDE.md` §0.1 pt 3 row 4 -- a claim that a mechanism works must show the run, not the code
+    path). Every other test in this file hand-authors its `Act`, including its `payload`. This
+    one does not touch `payload` at all.
+
+    `p_npc_033` (Crown, `off_npc_033`, `remit:dispatch`) is asked a real `Question` whose referent
+    is `set_s_036` (Church of Solmund) -- the SAME cross-faction pair `test_a_lost_field_...`
+    above hand-builds, chosen here so the falsifier is comparable rather than novel. `march`'s OWN
+    `operands_for` arm (`decision/options.py::opening_set`, the march-only referent widening) is
+    what carries that referent into a real `Candidate`; nothing here supplies `subject` by hand.
+    """
+    w = build_realm(0)
+    p = w.persons["p_npc_033"]
+    q = Question("q:28ii_chooser_march", "need", ("set_s_036",))
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
+
+    cands = opening_set(p, v, q, w.fixtures)
+    march_cands = {c.subject: c for c in cands if c.verb == "march"}
+    # FALSIFIER for the widening itself: BOTH the referent-named settlement and the actor's own
+    # position (`containing_rung_of`, the corpus-attempted arm) must be offered, or this test
+    # would be exercising only one half of `opening_set`'s march-specific branch.
+    assert "set_s_036" in march_cands, (
+        f"the referent-named settlement never became a march Candidate subject; got "
+        f"{sorted(march_cands)}")
+    assert "b_s_014_barracks" in march_cands, (
+        "`containing_rung_of(p)` (p_npc_033's own hearth) is missing from the widened set -- "
+        f"got {sorted(march_cands)}")
+    c = march_cands["set_s_036"]
+    assert c.operands == {"subject": "set_s_036", "to": "set_s_036"}, c.operands
+
+    # THE REAL PAYLOAD, THROUGH THE REAL FUNCTION `make_chooser`'s OWN `choose()` USES.
+    payload = _payload_of(c)
+    assert payload == {"subject": "set_s_036", "to": "set_s_036"}
+    act_id = H(w.world_seed, w.tick, p.id, f"act:march:{c.subject}")
+    act = Act(id=act_id, actor=p.id, verb="march", payload=payload, via="off_npc_033")
+
+    attackers = world_q.mustered(w, "set_s_014", "fac_crown")
+    defenders = world_q.mustered(w, "set_s_036", "fac_church_of_solmund")
+    assert len(attackers) == 2 and len(defenders) == 6, (
+        f"the fixture no longer gives a 2-v-6 mismatch here ({attackers}, {defenders}); "
+        "pick an origin/target pair that still does")
+    before_a = {pid: w.persons[pid].body for pid in attackers}
+    before_d = {pid: w.persons[pid].body for pid in defenders}
+
+    events = _fold_one(w, act, contest_max_depth=2)
+    kinds = [(e.kind, e.degree) for e in events]
+    assert ("march.declared", "Declared") in kinds
+    # THE FALSIFIER: a REAL field battle, not merely a formed-and-declared attempt. `Lost` is the
+    # ATTACKER's own outcome (`seam/ladder.py::field_degree`) at this fixture's 2-v-6 mismatch,
+    # matching `test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only` above.
+    assert ("field.lost", "Lost") in kinds, (
+        f"expected a real field battle (`field.lost`), got {kinds} -- the chooser-formed act "
+        "never reached a fight")
+
+    for pid in attackers:
+        assert w.persons[pid].body < before_a[pid], (
+            f"{pid} (the losing side, chooser-formed) took no casualties")
+    for pid in defenders:
+        assert w.persons[pid].body == before_d[pid], (
+            f"{pid} (the WINNING side) was written")
