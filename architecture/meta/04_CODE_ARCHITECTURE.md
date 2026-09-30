@@ -353,6 +353,14 @@ NEVER: deletion.  LIVE: tenures.live(...) is the default iterator; tenures.ended
 | **a revocation on the seat** (T-o) ⚠ **ADDED — and the count needs saying, because two readings of *three* were in circulation.** This table's three were `T-m`, `T-n` and the cascade; Stage 1 `§E.1.2`'s three are the **declared** ways — `T-m`, `T-n`, `T-o` — with the cascade filed separately as an existence change. **The type section was one short of Stage 1's set and the heading hid it** | the **Seat's** `revocation` basis, exercised through `Act.via`, refused the instant the occupant is not seated. **`PART D` row 10a already gates it; the type section never named it** | RESOLVE |
 | **subject or object ceases to exist** | `destroy` sets `until` on every Tenure naming the id **and nothing else** | MATTER (death) or RESOLVE (kill) |
 
+⚠ **AMENDED: FOUR PATHS HERE, NINE AT §C.2 -- THIS TABLE IS NOT RE-EXTENDED TO MATCH.** `conferral`,
+`handover` (`ED-IN-0277`), `renewal` (`17b`), `determination` (`19`) and `founding` (`24e`) each admit
+a write this table's four do not cover, and `T-m`'s own row above is narrower than the code: it may
+NOT rewind an existing edge's `term` (BATCH-CLOSE, methodology-close Phase 1, 2026-09-30 -- see
+`state/gate.py::tenure_write_basis`'s own T-m clause). **§C.2's pseudocode is the current, complete
+enumeration of every basis and what each may write; per `CLAUDE.md` §0.05 this table is reference and
+is not rewritten to chase it.**
+
 > **Synthesis call, and it resolves a real tension.** #353 says death's `until` is *the only Tenure
 > write in the MATTER class* and that *a second such seam means the column is the wrong mechanism.*
 > Stage 1's `T-n` — which is later and governs — needs a term of service to end without an act.
@@ -562,6 +570,15 @@ gate.write(token, kind, field, id, change, actor?, via?) -> Receipt
   -- T-m cannot reach it, and every other basis reads a seat, an `oblige` or a `hold`. The licence is
   -- the BIRTH, observed by the store (`born`, `gone`'s mirror), never claimed; the mirror of the
   -- cascade. One parent, checked on the store the write leaves. `tenure_write_basis`, `state/gate.py`.
+  -- ⚠ T-M ITSELF NARROWED TWICE, NEVER RECONCILED HERE UNTIL NOW (found by the second sub-batch's
+  -- layer-conformance pass, 2026-09-30, reading this line against `state/gate.py`'s own docstring):
+  -- the bare `actor == subject(id)` below is NOT what the gate tests. (1) 2026-09-26, antagonist
+  -- pass on G3: T-m never admits OPENING or RE-GRANTING a seat-`hold`, even the actor's own --
+  -- purview is asked of the seat, never the actor. (2) BATCH-CLOSE, methodology-close Phase 1,
+  -- 2026-09-30: T-m never admits a REWRITE of an existing edge's `term` either -- that is
+  -- `renewal`'s to admit, on a seat's authority, never the owner's own. Both are narrowings of what
+  -- `actor == subject(id)` alone would admit, not new bases; `tenure_write_basis`, `state/gate.py`,
+  -- is the current, complete test.
   kind is Tenure => one of:
       actor == subject(id)                                   -- T-m, the owner's discretion
       cause is this Tenure's declared `term` maturation       -- T-n: no actor, a pure closure, term due (`17b`)
@@ -991,7 +1008,7 @@ the assumption is the failure mode.**
 | 8 | a stored aggregate | no field slot; a Query is a function; a cache is driver-local | STRUCTURAL at the type; CONVENTION at a schema edit |
 | 9 | **an Event with an actor, target or subject** | the fields do not exist; `changes[]` is plural | STRUCTURAL |
 | 10 | two homes for one relation | one store keyed by subject; the object side is a cache | STRUCTURAL |
-| **10a** | ⚠ **NEW (F3) · a write by a non-owner** | the gate checks `actor == subject(id)` on every Tenure write, and admits three declared exceptions only — `T-n`'s matured term, `T-o`'s seat revocation **with `Act.via` present**, and a destroy cascade citing the existence change that caused it | MECHANICAL at the gate — **and it was CONVENTION before, enforced by per-verb eligibility alone** |
+| **10a** | ⚠ **NEW (F3) · a write by a non-owner** | the gate checks `actor == subject(id)` on every Tenure write. ⚠ **AMENDED: "three declared exceptions only" is now NINE — `conferral`, `handover` (`ED-IN-0277`), `renewal` (`17b`), `determination` (`19`) and `founding` (`24e`) joined `T-n`'s matured term, `T-o`'s seat revocation **with `Act.via` present**, and a destroy cascade. §C.2's pseudocode is the current, complete enumeration; this cell is not rewritten to match it, per `CLAUDE.md` §0.05 -- see §C.2 for what each of the nine may write** | MECHANICAL at the gate — **and it was CONVENTION before, enforced by per-verb eligibility alone** |
 | 11 | a seat that knows its holder | no field | STRUCTURAL |
 | 12 | **a relation with two owners** | directed `tie`/`knot`; no symmetric kind exists | STRUCTURAL |
 | 13 | a relation whose subject cannot act | `subject` admits `RungId` for `contain` only | STRUCTURAL (typed) |

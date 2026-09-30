@@ -532,8 +532,9 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     THE NINE BASES, AND WHAT EACH MAY WRITE -- a basis admits a KIND of change, not any change:
 
       `T-m`       the actor IS the owner -- `was.subject` for an existing edge, `t.subject` for a
-                  new one. Anything the owner does to their own edge EXCEPT rewind its `term`
-                  (`release`, `move`'s legs, `create_record`'s `hold`, a self-conferral's opening)
+                  new one. Anything the owner does to their own edge EXCEPT open or re-grant a
+                  seat-`hold` (never T-m's, even the actor's own -- `conferral`'s alone) or rewind
+                  its `term` (`release`, `move`'s legs, `create_record`'s `hold` are what remains)
                   -- a `term` rewrite on an existing edge is `T-n`'s or `renewal`'s to admit, never
                   T-m's (BATCH-CLOSE, methodology-close Phase 1, 2026-09-30: the bare guard once
                   admitted it too, the same over-admission class the seat carve-out below exists

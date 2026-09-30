@@ -407,8 +407,11 @@ def test_19_the_determination_basis_refuses_each_clause_it_needs(case):
 
 def test_19_determination_admits_an_opening_only():
     """AUTHORITY TO BIND IS NOT AUTHORITY TO RE-GRADE: an EXISTING `oblige` on the seat, owned by the
-    party, changed in any field through the judge's seat, meets no basis -- `determination` asks
-    `opened` first."""
+    party, RE-GRADED (its `degree` changed) through the judge's seat, meets no basis --
+    `determination` asks `opened` first. ⚠ NARROWED FROM "changed in any field" (found by the
+    second sub-batch's layer-conformance critic, 2026-09-30): a `term` pushed later on this same
+    edge through this same seat IS admitted, under `renewal` (`gate.py::may_renew`) -- a different
+    basis, not this one, and this test does not exercise it."""
     w, _ = _world()
     t = Tenure("t_old", PARTY, SEAT, "oblige", since=w.tick)
     w.add_tenure(t)

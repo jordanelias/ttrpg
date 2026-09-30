@@ -3646,6 +3646,20 @@ rows:
     source:    "BATCH-CLOSE Phase 2 close, second sub-batch, 2026-09-30 -- traced to plan position `11a`"
 
 
+  - id:        H-173
+    tier:      1
+    kind:      "RULING"
+    hole:      "A DETERMINATION-OPENED `oblige` IS A `renewal` CANDIDATE LIKE ANY OTHER, WHICH `_req_oblige`'s DESIGN NEVER CONSIDERED. `_eff_determine` (`loop/effects.py:1096`) opens the disposal `oblige` with a term exactly as `_eff_oblige` does (`_new_oblige_term`), and the seat's own upkeep pass (`_renewals`, `loop/effects.py:1886`) renews every LIVE `oblige` on that seat whose term it can push later, with no test distinguishing a service edge (`17a`'s obligee) from a disposal edge (`19`'s convict). So a judging seat paying its establishment's upkeep would, as a side effect, also lengthen the term of anyone it has bound to it -- a bench's payroll extending a sentence. Found by the second sub-batch's layer-conformance critic (2026-09-30), reading the code rather than running it: no computed act reaches this today, because a computed `transfer` (the only act `_renewals` fires from) always carries `via=None` (`decision/options.py::exercised_seat` sets `via` only for a `remit:` alternative), so the interaction is LATENT, not executed."
+    owner:     "loop/effects.py -- _renewals (the upkeep pass) and _eff_determine (the disposal opening); decision/options.py::exercised_seat (why no computed act reaches it yet)"
+    grade:     "assumption"
+    default:   "none -- neither ruled nor built; the gate admits it because `renewal`'s basis (`state/gate.py::may_renew`) reads only kind (`oblige`), seat and term direction, never why the edge was opened"
+    site:      ""
+    sweep:     []
+    unblocks:  "whichever future position gives a person the CHOICE to pay upkeep (`H-158`'s own `unblocks:`, since that is what would first let a computed act reach `_renewals` with `via` set) or otherwise makes `determine` and `transfer`'s upkeep pass reachable in the same run. The design order is Jordan's: whether a disposal's term is meant to renew under the same upkeep a service term does, or whether `_renewals` should exclude an edge `_eff_determine` opened (a carrier distinction `Tenure` does not have today -- `T-n`'s `declared_by` names the opening act's id, not its verb)."
+    cite:      "MEASURED 2026-09-30 during BATCH-CLOSE Phase 2 (second sub-batch) layer-conformance pass, reading `loop/effects.py` (`_eff_determine`, `_new_oblige_term`, `_renewals`), `state/gate.py` (`may_renew`, the `RENEWAL` clause of `tenure_write_basis`) and `decision/options.py::exercised_seat`. CLAUDE.md §0's ladder: not superseded; not irrelevant (the mechanism is live and load-bearing, gated only by an unrelated producer-side gap); no design document distinguishes a disposal term from a service term; no precedent answers it (17a's obligees and 19's disposal are the only two `oblige`-opening positions, and neither addresses the other's upkeep); this is a live design choice with two defensible readings that would materially change how disposal is felt in play, so it is escalated rather than answered by architecture alone."
+    source:    "BATCH-CLOSE Phase 2 close, second sub-batch, layer-conformance pass, 2026-09-30"
+
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"
