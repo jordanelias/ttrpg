@@ -345,8 +345,12 @@ def test_24d_ii_capacity_has_a_caller_outside_the_tests():
     """`24d-ii`'s third falsifier, *an AST check that `capacity(` has a caller outside `tests/`*
     (`ID-13`: a Query nobody calls is a declared row nobody reads). Parsed, not grepped, over every
     module of the season package except its tests and `world_q.py` itself (its own definition and
-    docstring are not callers); and ANTI-VACUITY: the walk must reach `loop/effects.py`, the file the
-    caller is in."""
+    docstring are not callers); and ANTI-VACUITY: the walk must reach `loop/effects_migration.py`,
+    the file the caller is in.
+
+    ⚠ `effects_migration.py`, NOT `effects.py`, SINCE THE PHASE-4 PER-SUBSYSTEM SPLIT (2026-09-30):
+    `migrate` -- `capacity`'s caller (`19c`'s `_eff_migrate`) -- moved out of the monolith into its
+    own domain file; `effects.py` is now a thin aggregator that imports it but calls nothing."""
     import ast
     from ..data import files
     callers, seen = [], set()
@@ -359,5 +363,6 @@ def test_24d_ii_capacity_has_a_caller_outside_the_tests():
                     (isinstance(node.func, ast.Name) and node.func.id == "capacity")
                     or (isinstance(node.func, ast.Attribute) and node.func.attr == "capacity")):
                 callers.append(f.name)
-    assert "effects.py" in seen, sorted(seen)
-    assert "effects.py" in callers, f"`capacity` is called from nowhere outside the tests: {callers}"
+    assert "effects_migration.py" in seen, sorted(seen)
+    assert "effects_migration.py" in callers, (
+        f"`capacity` is called from nowhere outside the tests: {callers}")

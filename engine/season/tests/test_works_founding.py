@@ -437,7 +437,13 @@ def test_24e_a_found_then_a_build_at_a_full_rung_succeeds_and_every_ancestors_dw
     `world_q` and at the one module that imports them by name. The refusal for a full rung is
     `migrate`'s (`tests/test_migrate_capacity.py`). The founded hearth, with no dwelling yet, reads the
     FLOOR -- `24d-ii`'s *never 0* -- and building one lifts it no further than the floor already had."""
-    from ..loop import effects
+    # ⚠ `effects_founding`, NOT `effects`, SINCE THE PHASE-4 PER-SUBSYSTEM SPLIT (2026-09-30):
+    # `found`/`build` moved to `effects_founding.py`, which never imports `capacity`/`population`
+    # at all (neither call needs either), so `raising=False` -- the guard is now enforced
+    # structurally (a bare reference to either name in that module would be a NameError, caught by
+    # any test that exercises `found`/`build`) rather than by this patch alone; kept for the same
+    # defence-in-depth `world_q`'s half still gives.
+    from ..loop import effects_founding
     from ..state.carriers import Site
     w, d = _world()
     w.sites["dw_hh"] = Site("dw_hh", HEARTH, "dwelling", condition=w.fixtures.get("condition_scale"))
@@ -448,9 +454,9 @@ def test_24e_a_found_then_a_build_at_a_full_rung_succeeds_and_every_ancestors_dw
 
     def _consulted(*_a, **_k):
         raise AssertionError("`found`/`build` consulted the throttle they exist to lift")
-    for mod in (world_q, effects):
+    for mod in (world_q, effects_founding):
         for name in ("capacity", "population"):
-            monkeypatch.setattr(mod, name, _consulted)
+            monkeypatch.setattr(mod, name, _consulted, raising=False)
     _declare(w, d, "wf", "hearth", SETTLEMENT)
     assert _kinds(_fold(w, d, _found("f1", "wf"))) == ["rung.founded"]
     hearth = next(r for r in world_q.descendants(w, SETTLEMENT) if r.endswith(":wf"))

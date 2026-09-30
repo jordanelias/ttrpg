@@ -340,8 +340,8 @@ def _derive_openers_from_effects() -> dict:
     `Tenure(...)` construction itself, inside the function `@effect_for` registers for that verb:
     every site today names `kind` as a STRING LITERAL -- `Tenure(id, subject, object, kind, ...)`,
     positional, or a `kind=` keyword -- so an AST walk over `effects.py`'s own source (read as
-    TEXT, via `files.EFFECTS_PY`, never imported -- no `data` -> `loop` import edge) reads the
-    identical fact the hand-written roster used to transcribe, with no second copy to fall behind.
+    TEXT, never imported -- no `data` -> `loop` import edge) reads the identical fact the
+    hand-written roster used to transcribe, with no second copy to fall behind.
 
     Returns EVERY tenure kind, including the ones no effect opens today -- an empty list, the same
     "declared means present" contract the hand-written roster kept -- because a kind with a
@@ -354,50 +354,69 @@ def _derive_openers_from_effects() -> dict:
     opens is constructed there rather than in any decorated body -- so a walk confined to the
     decorated function would have DROPPED `create_record` from `hold`'s openers the day the mint
     was shared, a derived fact going quietly wrong in the direction nobody reads. A call to a
-    function defined at the top of `effects.py` is walked as if inlined (transitively, each helper
-    once); anything imported is not this file's and is not walked. MEASURED after the change:
-    `hold: [confer, create_record, issue, petition]`, every other kind unchanged."""
+    function defined at the top of the SAME FILE is walked as if inlined (transitively, each helper
+    once); anything imported -- including a cross-file helper in a SIBLING `effects_*.py` -- is not
+    this file's and is not walked. MEASURED after the change: `hold: [confer, create_record, issue,
+    petition]`, every other kind unchanged.
+
+    ⚠⚠ SEVEN FILES, NOT ONE, SINCE THE PHASE-4 PER-SUBSYSTEM SPLIT (2026-09-30). `effects.py` itself
+    is now a thin aggregator -- no `@effect_for`, no `Tenure(...)` -- and every decorated function
+    moved into one of its `effects_*.py` siblings (`files.effects_modules()`, discovered by name
+    rather than hand-listed, `loop_modules`'s own lesson one split down). Each sibling is walked on
+    its OWN parse tree, so `helpers` is per-file too: a decorated function's cross-file calls (to
+    `effects_shared.py`'s `_operand`, `_decline_ascent`, `_new_oblige_term`, `_shift`,
+    `_exercised_office`, `_oblige_term`) are not followed, because none of them construct a Tenure
+    -- checked by hand against every shared helper's body, not assumed. Had one, a split confined to
+    one file at a time would MISS it the same way a walk confined to `EFFECTS_PY` alone now misses
+    everything; the day a shared helper is given a `Tenure(...)` call, this docstring's claim goes
+    false and this function must walk `effects_shared.py` from every sibling that reaches it, not
+    only from its own file."""
     openers: dict = {k: set() for k in TENURE_KINDS}
-    tree = ast.parse(files.EFFECTS_PY.read_text(encoding="utf-8"))
-    helpers = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
 
-    def _reached(fn) -> list:
-        """`fn` and every module-level helper it calls, transitively, each once."""
-        out, todo, seen = [], [fn], set()
-        while todo:
-            f = todo.pop()
-            if f.name in seen:
-                continue
-            seen.add(f.name)
-            out.append(f)
-            todo.extend(helpers[c.func.id] for c in ast.walk(f)
-                        if isinstance(c, ast.Call) and isinstance(c.func, ast.Name)
-                        and c.func.id in helpers)
-        return out
+    for path in files.effects_modules():
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        helpers = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
 
-    for node in ast.walk(tree):
-        if not isinstance(node, ast.FunctionDef):
-            continue
-        verb = None
-        for dec in node.decorator_list:
-            if (isinstance(dec, ast.Call) and isinstance(dec.func, ast.Name)
-                    and dec.func.id == "effect_for" and dec.args
-                    and isinstance(dec.args[0], ast.Constant)):
-                verb = dec.args[0].value
-        if verb is None:
-            continue
-        for call in (c for f in _reached(node) for c in ast.walk(f)):
-            if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Name)
-                    and call.func.id == "Tenure"):
+        def _reached(fn, helpers=helpers) -> list:
+            """`fn` and every module-level helper IN THIS SAME FILE it calls, transitively, each
+            once. `helpers` is bound as a default argument so each closure keeps ITS OWN file's
+            map rather than the loop variable's final value (the late-binding trap `/simplify`
+            exists to catch)."""
+            out, todo, seen = [], [fn], set()
+            while todo:
+                f = todo.pop()
+                if f.name in seen:
+                    continue
+                seen.add(f.name)
+                out.append(f)
+                todo.extend(helpers[c.func.id] for c in ast.walk(f)
+                            if isinstance(c, ast.Call) and isinstance(c.func, ast.Name)
+                            and c.func.id in helpers)
+            return out
+
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.FunctionDef):
                 continue
-            kind = None
-            if len(call.args) > 3 and isinstance(call.args[3], ast.Constant):
-                kind = call.args[3].value
-            else:
-                kind = next((kw.value.value for kw in call.keywords
-                            if kw.arg == "kind" and isinstance(kw.value, ast.Constant)), None)
-            if kind is not None:
-                openers.setdefault(kind, set()).add(verb)
+            verb = None
+            for dec in node.decorator_list:
+                if (isinstance(dec, ast.Call) and isinstance(dec.func, ast.Name)
+                        and dec.func.id == "effect_for" and dec.args
+                        and isinstance(dec.args[0], ast.Constant)):
+                    verb = dec.args[0].value
+            if verb is None:
+                continue
+            for call in (c for f in _reached(node) for c in ast.walk(f)):
+                if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Name)
+                        and call.func.id == "Tenure"):
+                    continue
+                kind = None
+                if len(call.args) > 3 and isinstance(call.args[3], ast.Constant):
+                    kind = call.args[3].value
+                else:
+                    kind = next((kw.value.value for kw in call.keywords
+                                if kw.arg == "kind" and isinstance(kw.value, ast.Constant)), None)
+                if kind is not None:
+                    openers.setdefault(kind, set()).add(verb)
     return {k: sorted(v) for k, v in openers.items()}
 
 
