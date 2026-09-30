@@ -129,7 +129,7 @@ for these rows only; its non-Phase-4 rows are unchanged and not restated)
 | — | **REGISTER/PLAN FIXES** | IN | **DONE** | NERS/FABLE PASS | `30dc8c65` |
 | — | **EFFECTS-SPLIT** | IN | **DONE** | — (independent of the NERS pass; the settled modularity requirement) | `309a17d9`; 683 passed / 1 pre-existing failure (`engine/season/tests`, independently reproduced against both the split and the pre-split commit) |
 | — | **CITATION-FIX** | IN | **DONE** | EFFECTS-SPLIT | `a882cc32` |
-| b | **`21`** U10 | IN | **OPEN, PARTIAL** — bookkeeping done; a genuine upstream break in `wd_collect.py` leaves R-01/R-02 `not_met` | `20-ii` ✓ | `03de9d47` |
+| b | **`21`** U10 | IN | **OPEN, PARTIAL** — items 1-2 done; item 3 (reconcile `workplan_v6_progress.yaml`) NOT attempted; a genuine upstream break in `wd_collect.py` leaves R-01/R-02 `not_met` | `20-ii` ✓ | `03de9d47` |
 | c | **`28-ii`** (M6) successor goldens | IN | **DONE** — one disclosed, out-of-scope gap (corpus-organic reachability) | `28-i` ✓ | `013a5b1b` (see correction in `03de9d47`) |
 | d | **`28-iii`** SPINE-DELETE | IN | **OPEN** (unblocked -- `28-ii` is DONE) | `28-ii` ✓ | — |
 | e | **`20-iv`** d.1 + terrain/garrison | MB/IN | BLOCKED | `20-ii` ✓, `28-iii` | — |
@@ -160,6 +160,16 @@ this section adds only what the NERS pass, Fable's review, or the effects split 
 **b · `21` (U10).** No change. Not an effects-domain position (a measurement, `measured:` from
 instrument output only) — no `loop/effects_*.py` file is touched.
 
+⚠ **DISCLOSED, NOT "BOOKKEEPING DONE" (BATCH-CLOSE Phase-1 antagonist finding)**: U10 names three
+items (`workplans/2026-09-09-r-execution-plan.md:1678-1700`); this position closed items 1 and 2
+(`measured:` lines re-derived from instrument output; the `shape.py:NNNN` citation claim
+retracted) but item 3 — reconcile `workplans/workplan_v6_progress.yaml` against what actually ran
+— was NOT attempted. That file is still stamped `as_of: sha: "c75c561", date: "2026-08-19"`, and
+this board is what feeds `tools/m1_acceptance.py`'s DOC-DERIVED **row 3 of 4**
+(`ROWS = [row_stub_invocations, row_determinism, row_m1_junctures, row_invariant_violations]` —
+`row_m1_junctures` is the third element and the only one the tool's own `collect()` note calls
+DOC-DERIVED), not "row 4" as an earlier commit message on this branch (`013a5b1b`) described it.
+
 **c · `28-ii` (M6).** No change to what it builds. **Effect-file target: `engine/season/loop/
 effects_combat.py`** — `march` lives there now (with `fight`), not in a monolithic `effects.py`; the
 `operands_for` arm this position adds is a `data/verbs.py`/`rosters.yaml` change, and the typed-cell
@@ -175,18 +185,24 @@ independently by both producers and by the orchestrator) — DONE, one disclosed
   through the real `SeasonDriver`/`make_chooser`, run twice, `content_hash()` compared byte-identical,
   plus a seed-0-vs-seed-1 divergence control. Neither existing candidate (`test_m1_acceptance_probe.py`,
   `test_r4_event_ids_are_unique...`) actually pinned `build_realm` — checked, not assumed. 2 passed.
-- **The `operands_for` march arm**: `decision/options.py::opening_set` — **a correction to the plan's
-  own diagnosis, verified before building**: `operands_for` already produced a non-empty operand dict
-  for `march`; the real blocker was that no `questions_for` source ever offers a SETTLEMENT as a
-  referent (measured: 0 of 81 referents in `build_realm(0)`). The arm widens `march`'s referent set to
-  include `containing_rung_of(p)` (the actor's own position — the same reading `from` already uses),
-  additive rather than a replacement. `test_march.py::test_a_real_chooser_forms_and_folds_a_march...`
-  runs a real chooser through the genuine RESOLVE→ENCOUNTER pipeline to a real `field.lost` with
-  casualties — mutation-verified (fails correctly with the arm stashed out). 10 passed.
-- **`H-151`'s `cite:` corrected** to match: the "unreachable from the corpus either way" claim no
-  longer holds now that a real arm exists; the row's own scenario (same-faction march) is still not
-  exercised by the natural corpus, for the disclosed reason below, not for the reason the old citation
-  gave.
+- **`operands_for` needed no arm, and never did** (`decision/options.py::opening_set` —
+  **CORRECTED per the BATCH-CLOSE Phase-1 antagonist reconciliation**: the first writing of this
+  position added a march-specific referent-widening arm whose own justification was
+  self-contradicting, and it has been reverted). Re-verified directly rather than assumed:
+  `operands_for` already produced a non-empty operand dict for `march` (this half of the original
+  diagnosis was correct); clause 3's PRE-EXISTING `q.referents` reading — no new code — already
+  forms a real `Candidate` whenever a Question names a settlement referent. The actual, still-real
+  blocker is unchanged: no `questions_for` SOURCE in the natural corpus ever offers one (measured:
+  0 of 81 referents in `build_realm(0)`), which is `H-80`-adjacent and correctly out of this
+  position's scope. `test_march.py::test_a_real_chooser_forms_and_folds_a_march...` runs a real
+  chooser (`make_chooser`/`pack_scenes`, not a hand-built `Act`) through the genuine
+  RESOLVE→ENCOUNTER pipeline to a real `field.lost` with casualties, with `Act.via` read off the
+  chooser's own derivation rather than hand-set. 10 passed.
+- **`H-151`'s `cite:` corrected** to match: the "unreachable from the corpus either way" claim
+  never held on close examination — a constructed `Question` reaches it through clause 3's
+  pre-existing reading alone, no arm involved; the row's own scenario (same-faction march) is
+  still not exercised by the NATURAL corpus, for the disclosed reason below (no source offers a
+  settlement referent), not for the reason the old citation gave.
 - **`test_combat_bridge_seam.py` confirmed to need no successor**, its three covering tests re-run
   (6 passed) — one citation drift caught and worth a future note: `seam/wrappers/combat.py:203-208`
   has moved to `:195-201`.
@@ -197,12 +213,16 @@ independently by both producers and by the orchestrator) — DONE, one disclosed
 ⚠ **THE DISCLOSED GAP, NOT CLOSED BY THIS POSITION**: the natural corpus (`build_realm(0)`'s own
 organic Questions) never offers a settlement referent to anyone, so a real field battle reachable from
 zero test-authored input is not demonstrated — only a chooser-formed one against a constructed
-Question, which is real (the genuine chooser/opening_set/choose/mint_token/RESOLVE pipeline, not a
-hand-built `Act`) but not corpus-organic. This is `H-80`-adjacent (a `questions_for` source gap) and
-was correctly left out of this position's scope. **Read against the retirement plan's own gate
-wording** (`PROPOSAL.md:104`: *"a battle executing from a real chooser-formed decision"*, explicitly
-contrasted with a hand-built `Act`) **this satisfies the gate as written** — the chooser, not the test,
-forms the decision. `28-iii` is accordingly unblocked.
+Question, which is now genuinely chooser-formed (`make_chooser`/`pack_scenes`, not a hand-built
+`Act` — CORRECTED per the BATCH-CLOSE Phase-1 antagonist: the first writing of this test built its
+`payload` off a real `Candidate` but then hand-set `Act.via`, exactly the hand-built-`Act` shape
+the gate exists to rule out; `via` is now read off the chooser's own derivation) but not
+corpus-organic. This is `H-80`-adjacent (a `questions_for` source gap) and was correctly left out
+of this position's scope. **Read against the retirement plan's own gate wording** (`PROPOSAL.md:104`:
+*"a battle executing from a real chooser-formed decision"* — the word "hand-built" does not appear
+in that document at all; CORRECTED, the earlier claim of an explicit contrast there was invented
+and is removed) **this now satisfies the gate as written** — the chooser, not the test, forms the
+decision. `28-iii` is accordingly unblocked.
 
 **d · `28-iii` (SPINE-DELETE).** No change. No `loop/effects_*.py` file is touched (it deletes
 `engine/mc_v18.py` and `engine/cross_scale/`, neither of which the split touched).

@@ -108,31 +108,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # `19`: the seat this row's act would exercise -- `exercised_seat`, the same untraced walk
         # `pack_scenes` names `Act.via` by -- for the belief test's `basis` conjunct below.
         seat = exercised_seat(p, row)
-        # ⚠ `march`'S OWN ARM (M6, plan position `28-ii`), AND THE ONE DISCLOSED WIDENING OF
-        # CLAUSE 3 IN THIS FILE. Clause 3 is `subject ∈ referents(q)` -- right for a verb asked
-        # about a person or a record, and empty by construction for `march`: no `questions_for`
-        # source ever offers a SETTLEMENT as a referent (measured over every person in
-        # `build_realm(0)` at tick 0: 0 of 81 referents are settlement-kind), so `march` forms NO
-        # Candidate in ANY corpus world under clause 3 read literally -- indistinguishable from
-        # "no arm at all" at the corpus's own never-attempted-verb-set reading
-        # (`test_season_shape.py`). `containing_rung_of` -- ALREADY the reading `from` uses for
-        # "where the actor is" -- is STATE, not a choice and not a fixture (`H-94`'s own
-        # three-way split): the actor always has one, an EXISTING Rung, so it is ADDED to this
-        # one verb's referent set rather than substituted for it -- a genuinely offered
-        # settlement referent (a constructed Question, or a future Question source) is tried
-        # exactly as any other referent always was, and `march` additionally always has ITS OWN
-        # position to try even when nothing else names one. `sides_of`'s `H-149`/PARTY-GAP gates
-        # decide from there whether either carries a fight -- exactly as they already do for a
-        # hand-built `Act` (`test_march.py`). This is what makes `H-151`'s same-faction scenario
-        # reachable from the corpus rather than only by hand when the actor's own position IS a
-        # held settlement; it stays unfixed on purpose (`hole_register.yaml`, out of this
-        # position's scope).
-        referents = q.referents
-        if row.verb == "march":
-            own = containing_rung_of(p)
-            if own is not None and own not in referents:
-                referents = tuple(referents) + (own,)
-        for subject in referents:
+        for subject in q.referents:
             # ⚠⚠ A CONTEST NEEDS TWO CLAIMANTS, AND A PERSON IS NOT THEIR OWN ADVERSARY.
             # `move`'s `contain_path` cell keeps the same shape of rule -- *"a node is not a path
             # to itself"* -- as the reader's own, and this is that rule one seam over. It reads

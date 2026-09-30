@@ -364,10 +364,16 @@ rows:
       executes with `Act.via` set") as proof a re-scaled world produces a genuine seat-based act,
       not a relabelled person-scale one — is in the ALWAYS-REFUSED set this same fresh run prints
       (`VERBS ONLY REFUSED: 8 — ['build', 'commit', 'dispatch', 'found', 'levy', 'migrate',
-      'survey', 'work']`); `H-163` already registers why (formed only where a seat grants
-      `remit:issue`, which no corpus person holds). So no MEASURED decision has yet exercised the
-      seat/`via` mechanism the rescale was meant to make reachable — the census cleared before the
-      mechanism it was meant to exercise did. (2) The deeper gap this row opened with is
+      'survey', 'work']`); `H-163` already registers why, and CORRECTED here (BATCH-CLOSE Phase-1
+      antagonist finding) — it is NOT that no corpus person holds the grant. `levy` forms wherever
+      a seat grants `remit:issue` (two of 89 corpus worlds, NPC-008 and NPC-033) and is refused
+      there every time on a DIFFERENT conjunct — `authority`/purview: no corpus seat those
+      overlays mint has a rung to give it purview (`H-163` limit 1). So `levy` SPECIFICALLY has
+      not yet exercised the seat/`via` mechanism the rescale was meant to make reachable through a
+      completed decision — narrower than "no MEASURED decision has," since `issue`, a different
+      remit act gated the same way, already executes in the corpus (`ever`,
+      `test_season_shape.py`); the census cleared before `levy`'s own purview gap did.
+      (2) The deeper gap this row opened with is
       UNCHANGED: `engine/mc_v18.py` still runs the faction scale and the two are still not joined;
       no `Faction`-as-actor or Domain-Action mechanism exists in `engine/season/`. A duchy/realm
       case now runs through the SAME ordinary person-scale verb table as before, at a higher rung

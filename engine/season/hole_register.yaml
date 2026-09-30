@@ -3205,18 +3205,21 @@ rows:
     cite:      "FOUND by `valoria-critic`'s adversarial pass on the M4 diff, M4 review stage.
       ⚠ CORRECTED, PLAN POSITION `28-ii` (M6, SUCCESSOR GOLDENS), 2026-09-30: this row used to say
       `march` was UNREACHABLE from the corpus either way, citing `operands_for` as having no march
-      arm at all -- that arm now exists (`decision/options.py::opening_set`, a march-specific
-      referent widening: `subject` ranges over `q.referents` PLUS `containing_rung_of(p)`, the
-      actor's own position), so the categorical claim no longer holds. It remains true that
-      `march` is still in `test_season_shape.py`'s never-attempted-verb set, corpus-wide, at seed
-      0 -- its real Candidates simply lose every draw there, not that none form -- so THIS row's
-      own scenario is still not exercised by the corpus TODAY, only by a constructed `Act` or
-      `Question`. Still not a hand-built `Act` requirement in principle: `containing_rung_of(p)`
-      genuinely can equal a HELD settlement the actor's own faction controls (the corpus's
-      march-eligible people simply never happen to stand at one), so a person built that way would
-      reach this row through the real chooser. FALSIFIER, TO BE WRITTEN: a settlement held by the
-      actor's own faction WITH that faction's people present as the only occupants; march there
-      and show the real fight happens (or, once ruled, that it refuses)."
+      arm at all -- CORRECTED AGAIN (BATCH-CLOSE Phase-1 antagonist finding): no arm was ever added
+      or needed. `operands_for` was never missing anything; the real prior staleness was believing
+      clause 3 (`decision/options.py::opening_set`'s pre-existing `subject in q.referents` reading)
+      could never offer a settlement referent at all -- a constructed `Question` disproves that
+      directly. The 'categorically unreachable' retraction stays correct on that basis: this row's
+      same-faction scenario is reachable via a constructed `Question` whose one referent is a
+      same-faction-held settlement, through clause 3 alone, with no widening and no march-specific
+      code. `test_march.py` demonstrates the CROSS-faction case only
+      (`test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle`); this row's
+      own same-faction scenario is still not exercised by the corpus TODAY (no `questions_for`
+      source ever offers a settlement referent naturally), only by a constructed `Act` or
+      `Question`. FALSIFIER, TO BE WRITTEN: a constructed `Question` naming a settlement held by
+      the actor's own faction, with that faction's people present as the only occupants; march
+      there through the real chooser and show the real fight happens (or, once ruled, that it
+      refuses)."
     source:    "M4 review pass (`valoria-critic`), `ED-IN-0279` clause (a)'s own ruling text
       supplying the reasoning, not a fresh Jordan ruling"
 

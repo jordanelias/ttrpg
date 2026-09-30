@@ -18,6 +18,20 @@ the retired golden actually exercised (two-campaign, many-tick). This is that pi
 `build_realm(0)`, the SAME seed, run for `_SEASONS` seasons through the REAL `SeasonDriver`/
 `make_chooser`, TWICE, independently, comparing `World.content_hash()`.
 
+⚠ A THIRD, EQUIVALENT PIN ALREADY EXISTS, AND IT IS NARROWER (BATCH-CLOSE Phase-1 antagonist
+finding, disclosed rather than left for a later session to rediscover):
+`test_aperture.py::test_aperture_the_measured_season_is_the_populated_season` (its module-scoped
+`realm` fixture, `test_aperture.py:32-34`) already builds `build_realm(0)` TWICE via
+`harness/aperture.py::measure_world` -- once through `populated.run` (the control arm) and once
+through `instrumented_season` (the measured arm) -- and asserts `c["hash"] == realm["hash"]` at
+`test_aperture.py:44-47`. A dedicated pin here still earns its place: that equality is between
+`populated.run` and `aperture.py`'s OWN instrumentation wrapper around the same driver, so a
+failure there is ambiguous between a real `build_realm`/`SeasonDriver` non-determinism and a bug
+in the instrumentation `aperture.py` adds on top (the counterfactual re-aggregation, the funnel
+bookkeeping). This file's pin runs the SAME `build_realm`/`run` pairing on BOTH sides with no
+instrumentation in between, so a failure here is unambiguously `build_realm`/`SeasonDriver`'s own
+determinism, not `aperture.py`'s wrapper.
+
 ⚠ `_SEASONS = 1`, MEASURED RATHER THAN GUESSED, AND FOR A DIFFERENT REASON THAN THE OLD GOLDEN'S
 50. This pin is a REGRESSION TRIPWIRE for `CLAUDE.md` §7's/the retirement plan's own gate -- "a
 same-seed hash pin ... must have actually RUN" -- not a balance instrument (`harness/arms.py`,
@@ -45,6 +59,11 @@ def test_build_realm_seed_0_is_deterministic_across_n_seasons():
     successor to `test_mc_v18_regression.py::test_mc_v18_batch_is_deterministic`, over
     `engine/season` (the head) rather than the superseded `engine/mc_v18` campaign driver."""
     w1 = build_realm(_SEED)
+    # ⚠ CAPTURED BEFORE `run()`, AND CHECKED BELOW (BATCH-CLOSE Phase-1 antagonist finding,
+    # CLAUDE.md §0.1 pt 2 -- "assert it asserted"): without this, `len(h1) == 32` holds even for a
+    # world the season never touched, so this test could not tell "the season ran and changed
+    # nothing" apart from "the season never ran at all".
+    pre = w1.content_hash()
     run(seasons=_SEASONS, seed=_SEED, w=w1)
     w2 = build_realm(_SEED)
     run(seasons=_SEASONS, seed=_SEED, w=w2)
@@ -55,6 +74,9 @@ def test_build_realm_seed_0_is_deterministic_across_n_seasons():
     # Falsifier for a vacuous pass (CLAUDE.md §0.1 pt 2): a constant/empty hash would satisfy
     # equality trivially without the run having done anything.
     assert h1 and len(h1) == 32, f"content_hash() returned {h1!r}, not a real 32-hex digest"
+    assert h1 != pre, (
+        f"the {_SEASONS}-season run left `content_hash()` unchanged from before it started "
+        f"({pre!r}) -- this pin would pass identically whether the season ran at all")
 
 
 def test_build_realm_hash_is_sensitive_to_what_the_season_did():
