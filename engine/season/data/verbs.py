@@ -748,10 +748,13 @@ def _load_verb_table() -> dict:
     # ⚠ `RELEASABLE_KINDS` AND NOT A SECOND `frozenset(TENURE_KINDS) - {"contain"}`. The
     # derivation lives once, in `data/rosters.py` beside the roster it reads; this is the
     # comparison against the verb table's DECLARED column, which is the whole point of the column.
+    # The excluded kinds are READ OFF the derivation rather than spelled, so the message cannot go
+    # stale when the exclusion grows (`contain`, and `reside` since plan position `19c`).
     if _release_domain != RELEASABLE_KINDS:
         raise SystemExit(
             f"verb_table.yaml: `release` declares domain {sorted(_release_domain)}, and "
-            f"`tenure_kinds \\ {{contain}}` is {sorted(RELEASABLE_KINDS)}. Loader invariant 6 "
+            f"`tenure_kinds \\ {sorted(frozenset(TENURE_KINDS) - RELEASABLE_KINDS)}` is "
+            f"{sorted(RELEASABLE_KINDS)}. Loader invariant 6 "
             "(04 PART D row 15) requires them equal: a kind in the roster and not in this "
             "domain is an edge that can be opened and never closed, and a kind here and "
             "not in the roster is a closer for a relation that does not exist.")

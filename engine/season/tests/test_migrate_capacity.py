@@ -94,3 +94,82 @@ def test_19c_after_n_moves_the_legs_end_at_the_next_matter_and_the_penalty_retur
 
     # ... and a season with no move ends nothing: the pass is keyed on a leg, not on a person.
     assert not [e for e in _season(w, d) if e.kind == "travel.ended"]
+
+
+# ======================================================================================
+# 2 -- RESIDENCE: EVERY BUILDER MINTS IT, `move` LEAVES IT, `migrate` RE-HOMES IT
+# ======================================================================================
+
+def _live(w, pid, kind):
+    return [t for t in w.tenures if t.subject == pid and t.kind == kind and t.live]
+
+
+def test_19c_every_builder_houses_every_person_where_he_stands():
+    """`world_q.residence_of` reads ONE edge kind and never falls back to presence (its docstring),
+    so a builder that forgot to mint would leave its people of no fixed abode -- and a `population`
+    of zero under every rung. Asserted over every builder the season engine ships, with the person
+    count `>= 1` so an empty world cannot pass, and residence EQUAL to presence at build: the two
+    diverge only when somebody travels."""
+    from ..harness import corpus_run as C, governance_spine as G, headless as HL, populated
+    from ..harness import run_cases as R, scarce
+    from ..queries import world_q
+    case = next(c for c in R.load_cases("NPC") if str(c.get("scale")) == "person")
+    for name, w in (("tiny_world", P.tiny_world()), ("spine", G.build(0)),
+                    ("realm", populated.build_realm(0)), ("headless", HL.build_world(0)),
+                    ("scarce", scarce.build(0)), ("corpus", C.build_at(case, 0))):
+        lives, stands = world_q.residence_of(w), world_q.home_of(w)
+        assert len(w.persons) >= 1 and set(lives) == set(w.persons), (name, sorted(w.persons))
+        assert lives == stands, (name, {p: (lives.get(p), stands.get(p)) for p in w.persons
+                                        if lives.get(p) != stands.get(p)})
+
+
+def test_19c_a_migrate_from_chain_a_to_chain_b_changes_residence_and_a_move_does_not():
+    """The plan's OBSERVABLE, on the governance spine's two disjoint chains: *a `migrate` from chain
+    `a` to chain `b` changes residence; a `move` does not* -- and the plan's falsifier *a `move`
+    leaves `residence` unchanged*, asserted on the SAME person, destination and world, so the verb is
+    the only difference. The `move` re-homes presence and leaves the `reside` edge where it was; the
+    `migrate` then re-homes residence, closing the old edge in the same write (exactly one live
+    `reside` after, and the old one's `until` is this tick)."""
+    from ..harness import governance_spine as G
+    from ..queries import world_q
+    w, d = _world(lambda: G.build(0))
+    who, home, there = "lp_hearth_a", "lr_hearth_a", "lr_hearth_b"
+    assert world_q.residence_of(w)[who] == world_q.home_of(w)[who] == home
+
+    moved = _fold(w, d, _move("mv", there, actor=who))
+    assert _kinds(moved) == ["travel.moved"], _kinds(moved)
+    assert world_q.home_of(w)[who] == there, "the move did not re-home presence"
+    assert world_q.residence_of(w)[who] == home, "a `move` changed where he lives"
+
+    settled = _fold(w, d, Act(id="mg", actor=who, verb="migrate", payload={"to": there}))
+    assert _kinds(settled) == ["residence.changed"], _kinds(settled)
+    assert world_q.residence_of(w)[who] == there and world_q.home_of(w)[who] == there
+    live = _live(w, who, world_q.RESIDE_KIND)
+    assert [t.object for t in live] == [there], live
+    ended = [t for t in w.tenures if t.subject == who and t.kind == world_q.RESIDE_KIND
+             and not t.live]
+    assert [(t.object, t.until) for t in ended] == [(home, w.tick)], ended
+    assert w.persons[who].travel_leg == [there, there], "a migration is a journey too"
+
+
+def test_19c_a_migrate_declines_where_it_changes_no_residence_and_where_the_ladder_refuses():
+    """The effect's two declines, each emitting the `write` clause's `migrate.refused` and writing
+    nothing: a migrant who already lives at the destination (a migration that changes no residence
+    is none -- `H-140`'s shape, answered for this verb), and a destination the §10 ladder will not
+    seat him in (a sibling PERSON-rung, `move`'s own decline). And the `path` clause, which emits
+    `move`'s `travel.blocked` because it is the same fact: a destination with no containment path.
+    CONTROL: the same migrant, the same fold, a destination he does not live in and can reach, is
+    admitted -- so each refusal is its clause's and not the verb's."""
+    from ..harness import governance_spine as G
+    from ..queries import world_q
+    w, d = _world(lambda: G.build(0))
+    who = "lp_hearth_a"
+    before = (world_q.residence_of(w)[who], list(w.persons[who].travel_leg))
+    for key, to, kind in (("same", "lr_hearth_a", "migrate.refused"),
+                          ("sideways", "lp_hearth_b", "migrate.refused"),
+                          ("nowhere", "ls_hearth_b_dwelling", "travel.blocked")):
+        out = _fold(w, d, Act(id=key, actor=who, verb="migrate", payload={"to": to}))
+        assert _kinds(out) == [kind], (key, _kinds(out))
+        assert (world_q.residence_of(w)[who], list(w.persons[who].travel_leg)) == before, key
+    ok = _fold(w, d, Act(id="ok", actor=who, verb="migrate", payload={"to": "lr_settlement_a"}))
+    assert _kinds(ok) == ["residence.changed"], _kinds(ok)

@@ -102,6 +102,8 @@ def build(seed: int = 0, fixtures=DEFAULT_FIXTURES, steward_holds: bool = True) 
         w.persons[pid] = Person(pid, name, weight=weight)
         w.rungs[pid] = Rung(pid, "person")
         w.add_tenure(Tenure(f"t_{pid}_in", pid, home, "contain", 0))
+        # Plan position `19c`: and they live there (`populated.build_realm`'s rule).
+        w.add_tenure(Tenure(f"t_{pid}_home", pid, home, world_q.RESIDE_KIND, 0))
     if steward_holds:
         w.add_tenure(Tenure("t_steward_holds_hungry", STEWARD, HUNGRY, "hold", 0))
     return w

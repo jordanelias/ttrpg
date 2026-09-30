@@ -68,7 +68,7 @@ import sys
 from collections import Counter, defaultdict
 
 from ..data import cast, files
-from ..queries.world_q import home_of as home_of_q
+from ..queries.world_q import RESIDE_KIND, home_of as home_of_q
 from ..gaps import Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.rosters import (BODY_FACTION, FACTIONS, OFFICES_BY_HOLDER, ROLE_TEMPLATE_OF,
@@ -462,6 +462,10 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         w.persons[pid] = Person(pid, str(case.get("name") or cid))
         w.rungs[pid] = Rung(pid, "person")
         w.add_tenure(Tenure(f"t_{pid}_in", pid, home, "contain", 0))
+        # Plan position `19c`: and they LIVE there -- the `reside` edge a `move` leaves behind and
+        # only a `migrate` re-homes (`loop/effects.py::_eff_migrate`). Every builder mints it beside
+        # the first `contain`, so `world_q.residence_of` reads one edge and never falls back.
+        w.add_tenure(Tenure(f"t_{pid}_home", pid, home, RESIDE_KIND, 0))
         # ⚠⚠ AUTHORED, NOT DRAWN — AND THE DRAW REMAINS AS THE NAMED FALLBACK IT ALWAYS WAS.
         # `references/npc_registry.yaml` carries a weighted conviction vector for all 46 of these
         # people, cited to canon, using only the canonical thirteen. Nothing that executes had ever

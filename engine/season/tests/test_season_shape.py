@@ -2235,12 +2235,13 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
     # loader that refused everything.
     # ⚠ 37 -> 38, `release` (`04 §A.3` row 14), 2026-09-11; 38 -> 39, `march` (M4,
     # `ED-IN-0279` clause (a)), 2026-09-28; 39 -> 40, `give` (plan position 16), 2026-09-29;
-    # 40 -> 42, `found` and `build` (plan position `24e`), 2026-09-29. This
+    # 40 -> 42, `found` and `build` (plan position `24e`), 2026-09-29; 42 -> 43, `migrate` (plan
+    # position `19c`), 2026-09-30. This
     # is a CONTROL, not a claim about
     # the roster: its job is to fail if the loader started refusing everything, so it moves with
     # the table by construction and the number is read from the file rather than chosen.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops both arms above passing on a loader that refuses everything]
-    assert len(VERBS._load_verb_table()) == 42
+    assert len(VERBS._load_verb_table()) == 43
 
 
 def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
@@ -7267,7 +7268,12 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # not known-false) and refused every time (no referent is a works: no computed act declares
     # one, `H-165`) -- 166 and 65 refusals. `release` executes in one world again (see `ever`, above)
     # and so is no longer always-refused. The `commit` shape (`H-156`) twice more, registered there.
-    assert refused_only == {"build", "commit", "dispatch", "found", "levy", "work"}, (
+    # ⚠⚠ SIX -> SEVEN, PLAN POSITION `19c`, 2026-09-30: `migrate` JOINS. It binds `to` from the
+    # question's single referent (`H-94`), as `move` does, and in these worlds that referent is the
+    # migrant's own hearth, a person, a Record or a Site -- so it is refused as already-resident, off
+    # the ladder, or pathless, in 52 of the 89 worlds and executed in none. Measured and registered
+    # (`H-168`); the `found`/`build` shape once more.
+    assert refused_only == {"build", "commit", "dispatch", "found", "levy", "migrate", "work"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -7614,7 +7620,16 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # world counts, before -> after: `examine` 6 -> 8, `restore` 2 -> 4, `interview` 33 -> 32,
     # `petition` 51 -> 49), which splits one signature. `ever`, the refused-only set and the
     # universal set are unchanged.
-    assert len(by_sig) == 77, (
+    # ⚠⚠ **77 -> 76, THE SAME POSITION'S SECOND COMMIT (`reside` minted by every builder, `migrate`
+    # resolvable), MEASURED AGAINST ITS FIRST.** `migrate` is formed wherever `move` is and refused
+    # in 52 worlds (`H-168`); the scenes it takes come off the varying verbs (`examine` 8 -> 5,
+    # `fight` 18 -> 15, `research` 61 -> 57, `interview` 32 -> 30, one world each off `move`,
+    # `petition`, `restore`, `speak`, `surveil`, `tell`), which merges one pair of signatures. The
+    # `reside` edges themselves move no act: a person's residence is in `reach` exactly where his
+    # presence already was until somebody travels -- MEASURED, the control arm (the same tree with
+    # `migrate` withheld from `corpus_run`'s `resolvable_verbs`) stays at 77 with every per-verb
+    # world count unmoved. `ever` and the universal set are unchanged.
+    assert len(by_sig) == 76, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -8931,8 +8946,11 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # about the corpus's seats, not the verb: a rung-bearing seat levies (`test_u7_remit.py`).
     # ⚠⚠ PLAN POSITION `24e`, 2026-09-29: `found` and `build` JOIN (formed on every referent,
     # refused every time: no referent is a works) and `release` LEAVES (it executes once again).
+    # ⚠⚠ PLAN POSITION `19c`, 2026-09-30: `migrate` JOINS -- formed where `move` is, on the question's
+    # one referent, which in this corpus is the migrant's own hearth (already his residence), a
+    # person (off the ladder), a Record or a Site (no path). Executed nowhere; `H-168`.
     assert set(refused) - set(executed) == {"work", "dispatch", "commit", "levy", "found",
-                                            "build"}, (
+                                            "build", "migrate"}, (
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
         "condition never clears the floor in this corpus; `dispatch` because its one executing "
@@ -9795,7 +9813,13 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # that `S` is no works), which is clause 4's asymmetry working. The drop is still exactly
     # `transfer`; the candidate list, measured, is the 27 before plus `build` and `found`.
     # [GROUNDED: measured 2026-09-29 at plan position `24e` -- 29 Candidates, `sorted` verbs = the 27 before + ['build', 'found']; after the deposit 28, the drop still `transfer`]
-    assert (len(before), len(after)) == (29, 28), (
+    # ⚠ 29 -> 30, plan position `19c` (2026-09-30): `migrate` is a new row with `move`'s cell
+    # (`contain_path` of `actor` to `to`), so it forms one Candidate on `S` exactly where `move` does
+    # -- person-side the path is UNKNOWN, not known-false. The drop is still exactly `transfer`; it
+    # forms whether or not `migrate` is resolvable, because `opening_set` does not filter on the
+    # fold (MEASURED: the same (30, 29) with `migrate`'s `@effect_for` removed).
+    # [GROUNDED: measured 2026-09-30 at plan position `19c` -- 30 Candidates, the 29 before + ['migrate']; after the deposit 29, the drop still `transfer`]
+    assert (len(before), len(after)) == (30, 29), (
         f"the absolute counts moved to {(len(before), len(after))}. They are the denominator the "
         "delta above is read against, and the delta alone does not reproduce them — re-derive "
         "`H-122`'s reading rather than adjusting this line")
@@ -10841,12 +10865,26 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
     # `none`) still holds, which is the signature of volume doing this rather than a fan-out
     # default moving back to a wider setting under one arm only.
     # [GROUNDED: measured 2026-09-29 on this tree, `HL.build_world(0)`, 3 seasons -- evictions by (mode, rate): none (0,5,20)=(8,10,10); actor=(13,13,13); total=(221,221,221); `total > actor > none` at every rate]
-    assert all(out["total"][r][2] > out["actor"][r][2] > out["none"][r][2] > 0
+    # ⚠⚠ `total > actor` IS DROPPED AT PLAN POSITION `19c` (2026-09-30), BECAUSE IT WAS NEVER A
+    # PROPERTY OF THE MODE AT THIS WORLD'S SIZE -- MEASURED BOTH WAYS. The three arms are three
+    # DIFFERENT RUNS: a deposited read is a belief, a belief moves `belief_contradicts`, and so the
+    # act mix, and with it the claim volume, differs between arms. Three persons, mostly alone at
+    # their acts, leave `total` little extra audience to broadcast to, so the two wide arms land
+    # within a handful of each other and the trajectory decides their order. `19c`'s tree, rate 5
+    # (every rate evicts alike, the rate being inert, asserted below): with `migrate` WITHHELD from
+    # the chooser, `none` 46 / `actor` 79 / `total` 98; with it, `none` 46 / `actor` 90 / `total` 86
+    # -- `migrate`'s three refused attempts per arm deposit different `contain.path` beliefs and
+    # the order of the two wide arms flips while no fan-out default moved (none did: `19c` touches
+    # no fixture). What the mode DOES bound, and what stays asserted: every arm evicts (the volume
+    # `11a` added), and the no-broadcast arm evicts least.
+    # [GROUNDED: measured 2026-09-30 at plan position `19c`, `HL.build_world(0)`, 3 seasons, rate 5 -- evictions (none, actor, total): (46, 79, 98) with `migrate` withheld, (46, 90, 86) with it]
+    assert all(min(out["total"][r][2], out["actor"][r][2]) > out["none"][r][2] > 0
                for r in (0, 5, 20)), (
         f"the cap eviction ordering broke: {out}. `11a`'s volume increase should still leave "
-        "`total` evicting the most (broadcasts to everyone) and `none` the least (no broadcast at "
-        "all), and all three now above zero — if `none` or `actor` reads 0 again the volume "
-        "increase reversed, and if the ordering inverts a fan-out default moved, not just traffic")
+        "`none` evicting the least (no broadcast at all) and all three above zero — if `none` or "
+        "`actor` reads 0 again the volume increase reversed, and if `none` overtakes a wide arm a "
+        "fan-out default moved, not just traffic (`total` against `actor` is traffic at this size; "
+        "see the `19c` note above)")
     # ⚠ AND THE RATE ITSELF IS BEHAVIOURALLY INERT IN ALL THREE ARMS — ASSERTED, BECAUSE IT IS THE
     # FINDING (`H-40`). Rate 5 and rate 20 leave the same claims in the same ledgers and produce
     # the same acts; the only thing that moves is the confidence NUMBER, and it moves by
@@ -11421,7 +11459,13 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # (35 -> 32); `total` fans every event to everyone regardless, so its own drop is smaller in
     # proportion than `none`'s or `actor`'s but moves the same direction.
     # [GROUNDED: measured 2026-09-29 on this tree after position `7a`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- `total` arm genuine 32, diverged 10]
-    assert (got["total"]["genuine"], got["total"]["diverged"]) == (32, 10), got
+    # ⚠ 32/10 -> 32/11, PLAN POSITION `19c`, 2026-09-30: the denominator is UNMOVED at 32 (the
+    # control this message asks for -- the fork population is the same) and one more fork changes a
+    # later decision: `migrate` is formed wherever `move` is, so a fork that moves a person's
+    # referent now changes two candidates, not one. `none` and `actor` unmoved. With `migrate`'s
+    # `@effect_for` removed the pair is back at 32/10.
+    # [GROUNDED: measured 2026-09-30 at plan position `19c`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- `total` arm genuine 32, diverged 11; 32/10 with `migrate` unresolvable]
+    assert (got["total"]["genuine"], got["total"]["diverged"]) == (32, 11), got
     # AND THE TWO LAYERS ARE SEPARATED. The finding is the DECISION count above; this is the layer
     # beneath it — whether the fork moved the act stream at all.
     #
@@ -11881,7 +11925,12 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # [GROUNDED: measured 2026-09-29 on this tree after position `15` -- `total` genuine UNMOVED at 35, wide 10 -> 11; see the `none`-arm block above]
     # ⚠⚠ **35/11 -> 32/10, PLAN POSITION `7a`, 2026-09-29 -- SAME MECHANISM AS THE OTHER TWO ARMS.**
     # [GROUNDED: measured 2026-09-29 on this tree after position `7a`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- `total` genuine 32, wide 10]
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (32, 10), got
+    # ⚠ 32/10 -> 32/11, PLAN POSITION `19c`, 2026-09-30 -- the `W-D` decision-count test's own move
+    # (it shares `arm9_forking.fork_case`): denominator unmoved, one more wide divergence, `migrate`
+    # formed wherever `move` is. `wide` still equals `verbonly` (11 both); 32/10 with `migrate`
+    # unresolvable.
+    # [GROUNDED: measured 2026-09-30 at plan position `19c`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- `total` genuine 32, wide 11 (= verbonly 11); 32/10 with `migrate`'s `@effect_for` removed]
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (32, 11), got
 
 
 # ===========================================================================
@@ -12163,9 +12212,10 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # `ED-IN-0279` clause (a)), 2026-09-28 -- AND THIS ONE DOES touch the contested set asserted
     # above, per the note there; 39 -> 40, `give` (plan position 16, `H-84`), 2026-09-29, which
     # declares no `contests:` and leaves that set alone; 40 -> 42, `found` and `build` (plan position
-    # `24e`, WORKS & FOUNDING), 2026-09-29, neither contested.
+    # `24e`, WORKS & FOUNDING), 2026-09-29, neither contested; 42 -> 43, `migrate` (plan position
+    # `19c`), 2026-09-30, uncontested.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
-    assert len(VERB_TABLE) == 42, len(VERB_TABLE)
+    assert len(VERB_TABLE) == 43, len(VERB_TABLE)
     # AND THE SIX ARE SIX, not a row that says six. This is the half of the pin that the old
     # count could not express: a table carrying the placeholder passed `== 32` while no act in it
     # could be formed, and `runs/CASELOG_NPC.md:64` reported the same case as a blocked one.

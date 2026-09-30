@@ -223,7 +223,7 @@ Person := ( id, weight, capability, body, exists, travel_leg
 -- renamed/dropped 2026-09-24, ED-IN-0261 item 1: `convictions` -> `pursuits` (season-side name
    only, values unchanged); `marks[]` dropped (retired write_matrix.yaml field, zero readers)
 NOT ON IT:  beliefs (a commit to an OUGHT) · ties_index (Nobody's) · any aggregate · anything about another person
-LOCATION:   the person-kind Rung sharing its n; its contain edge is where they are
+LOCATION:   the person-kind Rung sharing its n; its contain edge is where they are -- and its live `reside` edge (Person -> Rung, one) is where they LIVE: `move` re-homes `contain` and leaves it, only `migrate` re-homes it (plan position `19c`, 2026-09-30; `loop/effects.py::_eff_migrate` carries the split)
 ```
 
 | invariant | grade (Py / GD) | construction |
@@ -366,7 +366,7 @@ NEVER: deletion.  LIVE: tenures.live(...) is the default iterator; tenures.ended
 | invariant | grade | construction |
 |---|---|---|
 | one home, one writer | STRUCTURAL | one store keyed by subject; the object side is a barrier cache |
-| **what an act can open, an act can close** (ID-14) | MECHANICAL at load | the loader asserts `release`'s kind domain equals `tenure_kinds \ {contain}` ⚠ *(this cell and `D-15` both said **equals `tenure_kinds`** after invariant 6 was corrected for F4 — `contain`'s subject can never act, so the unqualified form is unsatisfiable. Corrected 2026-09-03)* |
+| **what an act can open, an act can close** (ID-14) | MECHANICAL at load | the loader asserts `release`'s kind domain equals `tenure_kinds \ {contain}` ⚠ *(this cell and `D-15` both said **equals `tenure_kinds`** after invariant 6 was corrected for F4 — `contain`'s subject can never act, so the unqualified form is unsatisfiable. Corrected 2026-09-03)* ⚠ *AMENDED at plan position `19c` (2026-09-30): `tenure_kinds \ {contain, reside}`. `reside` (where a person lives) is closed by the act that opens its successor — `migrate` — so ID-14 holds through that verb, and a `release` of it would leave a person living nowhere; `data/rosters.py::RELEASABLE_KINDS` is the one derivation* |
 | no ratchet over ended edges | MECHANICAL | `ended()` is separate; a scan forbids an int-returning `world_q` function from calling it |
 | **a symmetric relation with one owner** | STRUCTURAL | `tie`/`knot` are directed; no symmetric kind exists. *I have cut you off and you do not know it* is free |
 | **a relation whose subject cannot act** | STRUCTURAL (typed) | the subject type admits `RungId` for `contain` only |
@@ -469,7 +469,7 @@ wording covered `requires` alone and was satisfied by luck, because every verb w
 row that KEYS its `emits_on_refusal:` by clause -- eligibility, each named conjunct, the write --
 `data/verbs.py`; a flat row still declares one kind for all its clauses)* ·
 5. **`act_only` ⇒ steps ⊆ {RES}; `MAT` ⇒ `world_or_act`** — the fourth-clock refusal, at load ·
-6. ⚠ **CORRECTED (F4): `release`'s kind domain == `tenure_kinds \ {contain}`**, and **every kind's
+6. ⚠ **CORRECTED (F4): `release`'s kind domain == `tenure_kinds \ {contain}`** *(`\ {contain, reside}` since plan position `19c` — §B.8's ID-14 row)*, and **every kind's
 OPENER set is declared too** (`ID-14`'s added half) ·
 7. the Event-kind roster is **derived** from every emission column, and the log accepts no other kind ·
 8. alignment keys ⊆ axes × verbs, and not all zero · 9. contest prizes ⊆ the subsystem roster ·

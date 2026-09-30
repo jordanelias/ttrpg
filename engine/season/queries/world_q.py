@@ -688,6 +688,59 @@ def presence(w: World, rung_id: str) -> list[str]:
 
 
 # ===========================================================================
+# RESIDENCE -- plan position `19c` (MIGRATE). Where a person LIVES, as distinct from where they ARE.
+# ===========================================================================
+
+# THE `tenure_kinds` MEMBER A RESIDENCE IS, named once for its readers here and for the builders that
+# mint one per person (`WORKS_KIND`'s shape). `loop/effects.py::_eff_migrate` spells the literal at
+# its one `Tenure(...)` construction, because `data/verbs.py::_derive_openers_from_effects` reads a
+# kind off that call as a string CONSTANT. Refused at import if the roster stops carrying it: every
+# residence Query would otherwise match nothing and read as a world where nobody lives anywhere.
+RESIDE_KIND = "reside"
+if RESIDE_KIND not in TENURE_KINDS:
+    raise Unspecified(
+        f"tenure kind {RESIDE_KIND!r} is not a `tenure_kinds` member ({sorted(TENURE_KINDS)})",
+        "rosters.yaml -- tenure_kinds",
+        needs=f"a `{RESIDE_KIND}` member, or every residence reader retired with it",
+        law="plan position `19c` -- a residence is a Tenure; a reader keyed on a kind the roster "
+            "does not carry answers 'nobody lives here' for every world")
+
+
+def residence_of(w: World) -> dict:
+    """`{person id: the rung they LIVE in}` for every person with a live `reside` edge -- `home_of`'s
+    mirror, and the reason the two are separate Queries is the whole of plan position `19c`.
+
+    `home_of` reads `contain`: WHERE A PERSON IS (`04_CODE_ARCHITECTURE.md` §B, *"its contain edge is
+    where they are"*), which `move` re-homes. This reads `reside`: WHERE THEY LIVE, which only
+    `migrate` changes (`_eff_migrate`'s docstring carries the design and the rejected carriers). Every
+    world builder mints a `reside` beside each person's first `contain`, so at build the two agree
+    and they diverge exactly when somebody travels without settling.
+
+    ⚠ A PERSON WITH NO LIVE `reside` IS ABSENT FROM THE MAP, NEVER DEFAULTED TO WHERE THEY STAND. A
+    fallback to `contain` would make every writer of `contain` a silent writer of residence -- the
+    read/write asymmetry `CLAUDE.md` §0.1 pt 1 names -- and a `move` would then re-home everyone a
+    builder did not mint for. Absent means of no fixed abode (a hand-built world, today), and such a
+    person counts toward no rung's `population`.
+
+    ⚠ TWO LIVE `reside` EDGES FOR ONE PERSON RAISE, on `hold_force`'s rule: `_eff_migrate` closes the
+    old edge in the same write that opens the new, so two can only come from a hand-built world, and
+    a Query that picked one would answer plausibly and wrongly forever (`AX` ID-5)."""
+    TRACE.query("residence_of", "resolver")
+    out: dict = {}
+    for t in w.tenures:
+        if t.kind != RESIDE_KIND or not t.live or t.subject not in w.persons:
+            continue
+        if t.subject in out:
+            raise Forbidden(
+                f"{t.subject!r} has two live `{RESIDE_KIND}` edges ({out[t.subject]!r}, "
+                f"{t.object!r})", "S15",
+                law="plan position `19c` -- a person lives in ONE place; `migrate` closes the old "
+                    "residence as it opens the new, so this world was built by hand")
+        out[t.subject] = t.object
+    return out
+
+
+# ===========================================================================
 # §14.2 -- THE POLITY QUERIES. "A faction IS a Proposition plus its `commit` edges."
 #
 # §22's `Nobody` row assigns FACTION, LEADERS, PRESENCE, DENSITY and FOOTPRINT to nobody, as

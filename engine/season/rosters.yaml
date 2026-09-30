@@ -99,9 +99,20 @@
 rosters:
 
   tenure_kinds:
-    source: "#353 §15 `:537-544` — the seven Tenure kinds and their cardinalities"
+    source: "#353 §15 `:537-544` — the seven Tenure kinds and their cardinalities; `reside` is plan position `19c`'s"
     open: true
-    values: [hold, contain, commit, oblige, succeed, tie, knot]
+    note: >-
+      ⚠ `reside` (Person -> Rung, ONE live per person) IS THE EIGHTH, ADDED AT PLAN POSITION `19c`
+      (MIGRATE, 2026-09-30), AND IT IS WHERE A PERSON LIVES AS DISTINCT FROM WHERE THEY ARE. `contain`
+      is where they are (`04_CODE_ARCHITECTURE.md` §B: *"its contain edge is where they are"*) and
+      `move` re-homes it; `reside` is opened only by `migrate` (and minted beside the first
+      `contain` by every world builder), so a `move` leaves it behind. It is what `world_q.population`
+      counts and `world_q.capacity` throttles (`RULINGS.yaml` RR-2). Like `contain`, it is NOT in
+      `release`'s domain: its end is a relocation (`migrate` closes the old edge as it opens the
+      new), and a released residence would leave a person living nowhere. The reasoning for a
+      Tenure kind over a claim, a `Person` field or a flag on `contain` is `loop/effects.py::
+      _eff_migrate`'s docstring.
+    values: [hold, contain, commit, oblige, succeed, tie, knot, reside]
     # ⚠ LOADER INVARIANT 6's SECOND HALF (`04 §B.13 #6`, `04:466-467`, `ID-14`): every kind's OPENER
     # set is declared. THIS ROW USED TO CARRY THE MAPPING BY HAND -- `openers: {hold: [confer,
     # create_record], contain: [move], commit: [], oblige: [], succeed: [], tie: [], knot: []}` --
@@ -794,7 +805,8 @@ rosters:
       `None`). `stratum` is the coarse WHAT (`strata`), never the verb TOKEN -- a witness can say
       *someone was doing something social* without naming `tell`. ⚠ Not never the INFORMATION:
       `movement` has exactly one member (`move`), so that one stratum is bijective with its verb --
-      see `epistemic._term_stratum`'s docstring, found by adversarial review. `marks` is the
+      see `epistemic._term_stratum`'s docstring, found by adversarial review. (⚠ TWO since plan
+      position `19c` added `migrate` to it; a `movement` witness no longer knows which.) `marks` is the
       actor's appearance; `Person.marks` itself was DELETED 2026-09-24 (`ED-IN-0261` item 1) as a
       zero-reader/zero-writer field, so this term now reads nothing rather than a deleted
       attribute and is `()` for every actor (see `epistemic._term_marks`) -- `()` still means

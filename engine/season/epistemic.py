@@ -722,7 +722,9 @@ def _term_stratum(w: "World", e: "Event", act) -> Optional[str]:
     that the event-kind claim beside this one already names `e.kind` under `both`/`per_change`
     (`claim_subjects`), so this term is not the leak's only source; it is not a leak this term
     closes for a bijective stratum, which R8.5's *"someone was doing something social"* example
-    (a stratum with several members) does not have to contend with."""
+    (a stratum with several members) does not have to contend with. ⚠ NARROWED AT PLAN POSITION
+    `19c`: `movement` has two members now (`move`, `migrate`), so the stratum alone no longer names
+    the verb -- the event-kind claim still does."""
     row = VERB_TABLE.get(getattr(act, "verb", None)) if act is not None else None
     return getattr(row, "stratum", None)
 

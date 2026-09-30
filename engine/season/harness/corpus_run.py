@@ -55,7 +55,7 @@ from ..data.verbs import VERB_TABLE
 from ..decision import align, make_chooser
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, Unspecified
 from ..loop.driver import SeasonDriver, resolvable_verbs
-from ..queries.world_q import questions_for
+from ..queries.world_q import RESIDE_KIND, questions_for
 from ..state.carriers import Act, Event, Office, Person, Proposition, Rung, Site, Tenure
 from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
@@ -277,6 +277,8 @@ def build_at(case: dict, seed: int = 0) -> World:
         # -- rather than in a person-shaped container, which is what the ladder actually says.
         if chain:
             w.add_tenure(Tenure(f"t_{pid}_in", pid, ids[chain[0]], "contain", 0))
+            # Plan position `19c`: and they live there (`populated.build_realm`'s rule).
+            w.add_tenure(Tenure(f"t_{pid}_home", pid, ids[chain[0]], RESIDE_KIND, 0))
         w.persons[pid].pursuits = seed_pursuits(seed, str(case.get("id")), pid)
     # ⚠ `W28-cast`: THE CAST'S AUTHORED `capability`, WRITTEN ONCE, AT WORLD-GEN, AND NOWHERE ELSE.
     # `04_CODE_ARCHITECTURE.md` F.6 (`:1087`): *"capability's season writer ... world-gen writes it

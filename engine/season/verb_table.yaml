@@ -597,6 +597,35 @@ verbs:
     emits_on_refusal: ["march.refused"]
     grade:       "ruled"
     source:      "M4 of the mc_v18-retirement plan (`ED-IN-0279`), Jordan's ruling on both open clauses of that row (verb name: `march`; loss effects: casualties/morale/grudge). No `ARCHITECTURE_V2.md` cell -- this verb does not exist in the chain."
+  # ===========================================================================================
+  # PLAN POSITION `19c` -- MIGRATE (`RULINGS.yaml` RR-2: *"must be able to build hearths and accept
+  # people who move settlements"*; *"migration is a verb persons take"*). `move` is travel: it
+  # re-homes `contain`, where a person IS. `migrate` is travel AND settling: it re-homes `contain`
+  # and `reside`, where a person LIVES, and is throttled by the destination's `capacity`. The split
+  # and the rejected carriers are `loop/effects.py::_eff_migrate`'s docstring.
+  # ===========================================================================================
+  - verb:        "migrate"
+    stratum:     "movement"
+    eligibility: ["own"]
+    beneficiary: "actor"
+    beneficiary_note: "`move`'s column and reason: the migrant goes where he chose to live. No operand beneficiary -- the destination is a Rung, which no Candidate carrier holds."
+    requires:    "a contain path exists"
+    requires_typed:
+      form:      contain_path
+      of:        actor
+      to:        to
+      conjunct:  path
+    requires_typed_note: "`move`'s cell, clause for clause and for `move`'s reasons (§E3 `:408`, *a `contain` path exists*): the journey is the same journey, so a person who believes there is no road (`contain.path:<to>` False, deposited off a `travel.blocked`) forms neither a `move` nor a `migrate` there, through the one reader (`belief_contradicts`). NAMED `path` because the row keys its refusals. The destination's ROOM is not a cell: the grammar compares one entity's scalar against an operand or a second read on the SAME entity, and room is the destination's capacity against its residents PLUS the migrant's own weight, minus himself if he already lives under it -- so it is the effect's decline, on `_eff_found`'s precedent for what the grammar cannot spell. So is a destination the ladder will not seat him in, and one he already lives in."
+    writes:      ["Person.travel_leg", "Tenure.until", "Tenure.since"]
+    writes_note: "`move`'s three pairs, because the journey is `move`'s (`loop/effects.py::_relocate`, one body for both verbs): the leg (ended at the next MATTER), the old `contain` closed and the new opened. The `reside` edges ride the same two Tenure pairs -- the old residence's `until`, the new one's `since` -- which is why no pair is added. No `write_matrix.yaml` row is added: a Tenure's `since`/`until` rows are kind-agnostic, and the gate's F3 judges each edge (all four are the migrant's own, `T-m`)."
+    emits:       ["residence.changed"]
+    emits_on_refusal:
+      path:  ["travel.blocked"]
+      write: ["migrate.refused"]
+    refusal_note: "KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half, plan position `19`'s shape). `path` is the journey failing, and it emits `move`'s own `travel.blocked` because it IS the same fact -- *there is no road from here to there* -- so a witness of either verb learns the same thing. `write` is the destination refusing the settler: the ladder will not seat him there, or he already lives there. ELIGIBILITY is `own`, which cannot decline, so it keys nothing."
+    grade:       "assumption"
+    grade_note:  "the VERB is RR-2's (ruled: *a verb persons take*); its row -- the cell, the writes, the kinds, the throttle's place -- is plan position `19c`'s, argued at `_eff_migrate`, graded as `found`'s and `build`'s are. No `alignment` cell: `default_cell` 0.0 is the declared answer for an unlisted pair, and a settler's motive has no argued axis weight yet."
+    source:      "plan `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` 19c (MIGRATE, carrying 24d-ii); `proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml` RR-2; `01_THE_BUILD_ORDER.md` S9"
   - verb:        "move"
     stratum:     "movement"
     eligibility: ["own"]

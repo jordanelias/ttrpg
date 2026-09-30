@@ -401,7 +401,12 @@ TENURE_KINDS = roster("tenure_kinds")
 # declared-there/derived-here argument is satisfied by ONE derivation, not two. Today the
 # exclusion is a single member so drift would be cheap; the moment it is not, two code sites would
 # have to move together and only one of them is guarded. Found by the `release` adversarial pass.
-RELEASABLE_KINDS = frozenset(TENURE_KINDS) - {"contain"}
+# ⚠ TWO MEMBERS SINCE PLAN POSITION `19c`, FOR `contain`'s OWN REASON: `reside` (where a person
+# lives) ends by a relocation too -- `_eff_migrate` closes the old edge as it opens the new -- and a
+# releasable residence would let a person leave a home for nowhere. Still ONE derivation (this
+# line): `verb_table.yaml`'s declared `release` domain is unchanged, because the six kinds it lists
+# are exactly what remains, and loader invariant 6 compares the two.
+RELEASABLE_KINDS = frozenset(TENURE_KINDS) - {"contain", "reside"}
 # `holonic §15`'s DOMAIN and CODOMAIN for the `hold` row, read by `World._refuse_bad_hold`.
 # Rostered rather than inlined at the guard (Jordan, 2026-09-02 -- *definitions are not
 # hardcoded*), so widening `hold` to a new carrier is a data edit and an absent roster

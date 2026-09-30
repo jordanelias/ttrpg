@@ -111,6 +111,12 @@ def tiny_world(fixtures: Fixtures = DEFAULT_FIXTURES) -> World:
     edge("p_high", "S", "contain"); edge("p_king", "R", "contain")
     edge("p_high", "off_duke", "hold")
     edge("p_low", "p_mid", "tie")
+    # Plan position `19c`: every person LIVES where he stands at build -- the `reside` edge a `move`
+    # leaves behind (`populated.build_realm`'s rule). Minted LAST, so every earlier edge keeps the
+    # `t<n>` id a probe or a test may already name.
+    for pid, home in (("p_low", "Hh"), ("p_mid", "Hh"), ("p_other", "Hh"), ("p_high", "S"),
+                      ("p_king", "R")):
+        edge(pid, home, world_q.RESIDE_KIND)
     w.manifest = {"contest": "seam.contest_resolver", "order": "core.canonical_order"}
     return w
 
