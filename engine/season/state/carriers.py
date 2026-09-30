@@ -577,6 +577,16 @@ class Person:
         if self.weight < 1:
             raise Forbidden("Person.weight < 1", "S9", law="S9 -- weight >= 1, default 1")
 
+    @property
+    def is_cohort(self) -> bool:
+        """S9's own sentence as a predicate: *"A COHORT IS A PERSON AT weight > 1"*. One owner for
+        the test, because plan position `24f` (`ED-IN-0255`) made it decide something: the larder
+        draw feeds cohorts and exempts the individual (`queries/world_q.py::subsistence_draw`).
+        A PROPERTY, NOT A FIELD: it is read off `weight` every time, so it can never disagree with
+        the field it is about, and it is not state (`matrix_rows_without_a_field` reads fields,
+        and no write-matrix row names it)."""
+        return self.weight > 1
+
 
 @dataclass
 class Site:

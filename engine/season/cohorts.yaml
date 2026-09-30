@@ -1,0 +1,101 @@
+# `engine/season/cohorts.yaml` -- WORLD-GEN CONTENT: THE POPULATION SYNECDOCHES. Plan position `24f`
+# (SUBSISTENCE IS TERRITORIAL), the build step of the design Phase 1 item 10 decided
+# (`workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` §3.1 item 10).
+#
+# ⭐ THE RULING (`ED-IN-0255`, Jordan, 2026-09-18), verbatim: *"subsistence/starvation should
+# largely be an abstract/governance issue, and we can just have NPC synecdoches that just represent
+# the overall population affected? i don't think having lords and guild members etc worry about
+# subsistence is worthwhile"*; *"it's a territorial issue"*.
+#
+# WHAT A ROW IS. One `Person` at `weight > 1`, standing for the people of one populated rung: *"S9.
+# A COHORT IS A PERSON AT weight > 1. ONE CLASS (S9.1)"* (`state/carriers.py::Person`). No schema
+# change and no second carrier: the draw already scales a person's want by `weight`
+# (`queries/world_q.py::subsistence_draw`), and `population` already counts it. Since `24f` the
+# draw feeds ONLY such persons -- a person at `weight == 1` is a named individual, the ruling's
+# *"lords and guild members"*, and does not eat from the larder. So this file is what keeps the
+# subsistence pass from emptying: without a row here a world has no eater at all.
+#
+# ⚠ WHY A FILE OF ITS OWN AND NOT `npcs.yaml`. That file's header forbids it: *"THE NAMES AND THE
+# WANTS ARE THE CORPUS'S, NOT AUTHORED HERE ... Every row traces to a case id."* A population
+# traces to no case. Kept visibly separate, a reader can tell at a glance that these rows are an
+# authored abstraction and not an invented character wearing a case's clothes. So a row carries no
+# `case`, `want`, `concerns`, `institution` or `tie`, and the reader REFUSES any field it does not
+# declare (`harness/populated.py::cohort_rows`).
+#
+# ⚠ AUTHORED AT WORLD-GEN, NEVER MINTED BY A CLOCK OR A FORMULA. `ED-WR-0011` (OI-05, Jordan
+# 2026-09-13) took Option A, *"A CLOSED AUTHORED CAST. World-gen seeds N persons from an authored
+# roster; there is no season-tick generation at all."* A producer that computed a population and
+# minted a `Person` from it would be Option B, which he did not take. CENSUS, which owns `weight`
+# and `envelope`, still generates nothing (`loop/census.py`). This file is read ONCE, by
+# `build_realm`, after the case-derived cast is complete -- a second seed beside it, never an edit
+# to it. The cast's ties, memberships and offices are therefore decided before a cohort exists, and
+# `tools/export_npc_roster.py --check` cannot see one.
+#
+# ⚠ THE WEIGHT IS A FIXTURE, CEILING-CHECKED AGAINST `capacity` AND NEVER DERIVED FROM IT.
+# `ED-WR-0011` grants the latitude: *"the initial count N under either option is a fixture, not an
+# axiom, and can be swept"*. `ED-SE-0051` rules capacity a QUERY over the rung's dwelling Sites,
+# *"never a fixture table"*, and *"SCOPED TO POPULATIONS"*. A weight copied from that Query would
+# put a second copy of a fact the Sites carry here (`CLAUDE.md` §0.05 cl.3), so the loader only
+# REFUSES a row whose weight passes `capacity(w, rung)` on the built world. It does not fill one.
+# ⚠ EVERY ROW IS AT 2, THE SMALLEST WEIGHT S9 CALLS A COHORT, AND THAT IS A CHOICE AGAINST
+# INVENTING A MAGNITUDE. No document supplies a settlement's population in `capacity`'s units (one
+# dwelling, one weight), and any spread across these rows would be a number nobody chose. `H-170`
+# grades it, names the sweep, and carries what it moves: the draw, and `migrate`'s throttle, which
+# counts a cohort's weight in `population`.
+#
+# WHICH RUNGS. Every settlement `build_realm` builds: the rung whose larder the yield fills
+# (`loop/matter.py`: sites hang from settlements), and whose dwellings (4 to 9, one per building)
+# make it populated under `ED-SE-0051`'s own quantity. Not only the 13 settlements the case corpus
+# happens to seat a named NPC in: that reading would make the territorial population a function of
+# where the cases live, which is the person scale the ruling moved away from. S-037 (Schoenland) is
+# a foreign root and is still a place people live and eat.
+#
+# ⚠ ONLY `build_realm` READS THIS. The rung ids are the canonical map's, which no other builder
+# builds; `corpus_run.build_at`, `probes.tiny_world`, `headless.build_world` and
+# `governance_spine.build` seat no cohort and so have no eater (`H-171`).
+#
+# FIELDS
+#   rung    the rung the cohort LIVES in (a live `contain` and `reside` edge are minted to it), as
+#           `build_realm` names it: `set_` + the geography id, slugged. The comment is the place's
+#           canon name, for a reader; the builder takes the name from the geography, not from here.
+#   weight  how many people the cohort stands for, in `capacity`'s units. An int `> 1`, and never
+#           above `capacity(w, rung)`.
+
+cohorts:
+- {rung: set_s_001, weight: 2}   # S-001 Valorsplatz (Seat, T1)
+- {rung: set_s_002, weight: 2}   # S-002 Auerheim (Town, T1)
+- {rung: set_s_003, weight: 2}   # S-003 Königsbrück (Town, T1)
+- {rung: set_s_004, weight: 2}   # S-004 Kronmark (Town, T2)
+- {rung: set_s_005, weight: 2}   # S-005 Saatfeld (Village, T2)
+- {rung: set_s_006, weight: 2}   # S-006 Goldenfurt (Town, T2)
+- {rung: set_s_007, weight: 2}   # S-007 Lowenskyst Fortress (Fortress, T3)
+- {rung: set_s_008, weight: 2}   # S-008 Tiefental (Village, T3)
+- {rung: set_s_009, weight: 2}   # S-009 Feldmark (Town, T5)
+- {rung: set_s_010, weight: 2}   # S-010 Erntehof (Village, T5)
+- {rung: set_s_011, weight: 2}   # S-011 Spelzdorf (Village, T5)
+- {rung: set_s_012, weight: 2}   # S-012 Stillhelm (Town, T6)
+- {rung: set_s_013, weight: 2}   # S-013 Aschenbach (Village, T6)
+- {rung: set_s_014, weight: 2}   # S-014 Ehrenfeld (Fortress-City, T14)
+- {rung: set_s_015, weight: 2}   # S-015 Nordhain (Village, T14)
+- {rung: set_s_016, weight: 2}   # S-016 Rendstad (Town, T7)
+- {rung: set_s_017, weight: 2}   # S-017 Holzbrück (Village, T7)
+- {rung: set_s_018, weight: 2}   # S-018 Gransol (City, T8)
+- {rung: set_s_019, weight: 2}   # S-019 Niedersol (Town, T8)
+- {rung: set_s_020, weight: 2}   # S-020 Saltbrück (Town, T8)
+- {rung: set_s_021, weight: 2}   # S-021 Spartfell Fortress (Fortress, T10)
+- {rung: set_s_022, weight: 2}   # S-022 Gelbgrund (Village, T10)
+- {rung: set_s_023, weight: 2}   # S-023 Halvarshelm Town (Town, T17)
+- {rung: set_s_024, weight: 2}   # S-024 Erzbach (Village, T17)
+- {rung: set_s_025, weight: 2}   # S-025 Schmiedhof (Village, T17)
+- {rung: set_s_026, weight: 2}   # S-026 Grauwald (Town, T4)
+- {rung: set_s_027, weight: 2}   # S-027 Skogheim (Village, T4)
+- {rung: set_s_028, weight: 2}   # S-028 Halvardshelm (Town, T11)
+- {rung: set_s_029, weight: 2}   # S-029 Geirsvik (Village, T11)
+- {rung: set_s_030, weight: 2}   # S-030 Yrnastead (Village, T11)
+- {rung: set_s_031, weight: 2}   # S-031 Sigurdshelm (Seat, T12)
+- {rung: set_s_032, weight: 2}   # S-032 Brynjard (Town, T12)
+- {rung: set_s_033, weight: 2}   # S-033 Sundfjord (Town, T12)
+- {rung: set_s_034, weight: 2}   # S-034 Oastad (Town, T13)
+- {rung: set_s_035, weight: 2}   # S-035 Salgrund (Village, T13)
+- {rung: set_s_036, weight: 2}   # S-036 Himmelenger (Cathedral-City, T9)
+- {rung: set_s_037, weight: 2}   # S-037 Schoenland (City, T16)

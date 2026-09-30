@@ -119,6 +119,11 @@ OFFICES_YAML = PACKAGE_DIR / "offices.yaml"
 # data edit"), read through `data/arrangements.py`, the ONE loader. Anchored here for the same
 # reason every sibling registry above is: one path owner, never a local `__file__`.
 ARRANGEMENTS_YAML = PACKAGE_DIR / "arrangements.yaml"
+# `cohorts.yaml` -- plan position `24f` (SUBSISTENCE IS TERRITORIAL, `ED-IN-0255`): the AUTHORED
+# population synecdoches, one `weight > 1` `Person` per populated rung, read once at world-gen by
+# `harness/populated.py::build_realm` beside the case-derived cast. Anchored here for the same
+# reason every sibling registry above is: one path owner, never a local `__file__`.
+COHORTS_YAML = PACKAGE_DIR / "cohorts.yaml"
 
 # The degree sweep's two arm modules (plus their shared `sweep_core`), imported by source in two
 # tests. Moved out of `proposals/2026-09-04-degree-sweep` to `engine/reference/degree-sweep/` so

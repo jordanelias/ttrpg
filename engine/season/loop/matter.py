@@ -289,9 +289,19 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     #
     # ⚠ `p.weight`, NOT `len(eaters)`, AND THE OLD LOOP DROPPED IT. `Person.weight` is the cohort
     # multiplier — *"A COHORT IS A PERSON AT weight > 1"* (`state/carriers.py`) — so counting
-    # heads makes a cohort of two hundred eat like one man. Every person in the shipped corpus is
-    # at weight 1, which is exactly why this was invisible and why it is fixed while it costs
+    # heads makes a cohort of two hundred eat like one man. Every person in the shipped corpus was
+    # at weight 1, which is exactly why this was invisible and why it was fixed while it cost
     # nothing to fix.
+    #
+    # ⚠⚠ AND SINCE PLAN POSITION `24f` ONLY A COHORT EATS (`ED-IN-0255`: subsistence is *"a
+    # territorial issue"*, carried by *"NPC synecdoches"*, and *"lords and guild members"* do not
+    # worry about it). The exemption is `world_q.subsistence_draw`'s, the one owner, so nothing
+    # below changes: a `weight == 1` person is simply absent from `record`, so he is never in
+    # `draws`, never in `short_by_person`, and item 3b below never falls his body for dearth. The
+    # eaters are `cohorts.yaml`'s authored rows, one per populated rung, seated at world-gen by
+    # `harness/populated.py::build_realm`. `tests/test_territorial_subsistence.py` holds the
+    # falsifier on the built realm: under a non-zero `body_step`, an office-holder under a
+    # settlement in dearth keeps his body while that settlement's cohort draws and its body falls.
     #
     # ⚠ THE PRE-PASS EXISTS TO KEEP THE EMISSION ORDER, not because the arithmetic needs it. The
     # draw could be hoisted into its own pass over persons, and that would reorder every
@@ -380,7 +390,8 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
         # forbids, and it would be a social consequence written at MATTER, which is L4. It is
         # recorded so a run can be read. ⚠ IT IS NOW KEYED ON THE PERSON RATHER THAN THE RUNG,
         # which is the shape item 3b needs — the shortfall is what falls a BODY, and a body
-        # belongs to a person. 3b is not built here and this line does not pretend it is.
+        # belongs to a person. Since `24f` that person is always a cohort: the territorial
+        # population's body, never a lord's.
         sample = dict(sorted(short_by_person.items())[:5])
         TRACE.note(
             f"{len(short_by_person)} eater(s) could not meet subsistence; "

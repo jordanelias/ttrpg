@@ -551,8 +551,27 @@ def subsistence_draw(w: World) -> dict:
     `_subsistence_shortfall` from the record; the two Queries sum it over a subtree. So there is
     one owner, and the Queries cannot disagree with the draw that actually runs.
 
+    ⚠⚠ ONLY A COHORT EATS (plan position `24f`, `ED-IN-0255`, Jordan 2026-09-18: *"NPC synecdoches
+    that just represent the overall population affected ... i don't think having lords and guild
+    members etc worry about subsistence is worthwhile"*; *"it's a territorial issue"*). A person at
+    `weight == 1` -- a named individual, the office-holder the ruling names -- is NOT IN THE RECORD:
+    he wants nothing, draws nothing, is never short, and so MATTER never falls his body for dearth.
+    The test is `Person.is_cohort`, S9's own sentence, owned once on the carrier. It is HERE, in the
+    one owner, and not at MATTER's loop, so `demanded`/`delivered` and the body write cannot
+    disagree about who eats (§8). WHO EATS INSTEAD is `cohorts.yaml`: authored `weight > 1` rows,
+    one per populated rung, seated by `harness/populated.py::build_realm` at world-gen
+    (`ED-WR-0011` option A -- nothing mints one at run time). The exemption landed IN THE SAME
+    COMMIT as that producer, because alone it empties this record on every built world: `Person
+    .weight` defaults to 1 and no builder set it higher (the plan's own attack on the candidate,
+    `_part2` 24f). A world with no authored cohort -- the corpus's `build_at`, `tiny_world`,
+    `headless`, the spine -- therefore has no eater, and `H-171` says so.
+    REJECTED, each for a reason: exempting by OFFICE (a seat is not what the ruling measures -- a
+    guild member holds none, and an unseated lord is still a lord); exempting at MATTER only (the
+    Queries would then report a hunger the draw no longer feeds); keeping the individual in the
+    record at `want = 0` (a row that can never be short is noise every reader must skip).
+
     THE ARITHMETIC IS ITEM 3a's, UNCHANGED, and every clause keeps its reason (see MATTER's pass):
-      * per housed person (`home_of`), in SORTED id order: the write order must be deterministic;
+      * per housed COHORT (`home_of`), in SORTED id order: the write order must be deterministic;
       * per `subsistence_weight` kind, SORTED: `want = weight x Person.weight`, skipped when `<= 0`.
         `Person.weight` is the cohort multiplier, *"A COHORT IS A PERSON AT weight > 1"*, so a
         synecdoche of two hundred wants what two hundred eat (`24f`'s territorial quantity is this);
@@ -577,6 +596,8 @@ def subsistence_draw(w: World) -> dict:
     left: dict = {}           # (rung, kind) -> units still unspent this draw
     for pid in sorted(homes):
         person = w.persons[pid]
+        if not person.is_cohort:
+            continue                  # `24f`: the individual does not eat from the larder (above)
         row: dict = {}
         # `H-11`'s rule, unchanged: the loop is over the WEIGHTS registry, so a kind with no weight
         # is not drawn at all -- a missing row is never read as a weight of zero.
@@ -600,7 +621,9 @@ def subsistence_draw(w: World) -> dict:
 
 def demanded(w: World, rung_id: str, draw: Optional[dict] = None) -> dict:
     """`{kind: units}`: WHAT THE PEOPLE UNDER `rung_id` NEED FROM THE LARDER IN A SEASON. It is the
-    sum of every housed eater's `want` whose home is `rung_id` or any rung beneath it. Plan position
+    sum of every housed eater's `want` whose home is `rung_id` or any rung beneath it -- and since
+    `24f` an eater is a COHORT (`subsistence_draw`), so this is the TERRITORIAL quantity `ED-IN-0255`
+    asks for: the need of the population synecdoches under a rung, never a lord's. Plan position
     `19d`, the retirement plan's G3: *"two new read-only queries (`demanded`, `delivered`)"*.
 
     ⚠ A NEED IS A QUERY, NOT A THING A PLACE HAS. `01_AXIOMS.md` §D.10 (ratified): *"a need | a
@@ -751,12 +774,19 @@ def population(w: World, rung_id: str) -> int:
     refuses, and `move` the one it does not (`_eff_migrate`'s docstring). `weight`, not a head count,
     because *"a cohort IS a Person at weight > 1"* (`state/carriers.py`): a household of two hundred
     fills two hundred places, as it eats for two hundred at the larder (`subsistence_draw`).
+    ⚠ THE INDIVIDUAL STILL COUNTS HERE, THOUGH SINCE `24f` HE NO LONGER EATS THERE. The exemption is
+    the larder's (`ED-IN-0255`: a lord does not worry about subsistence), not the roof's: a named
+    person occupies a dwelling whether or not he draws on the granary, so housing and eating are two
+    Queries and read `weight` two ways on purpose.
 
     ⚠ AN R-1 AGGREGATE AND §22.4 DOES NOT BAR IT, on `density`'s and `demanded`'s ground: a weighted
     headcount over live `reside` edges, not a per-person tally summed across holders (clause 2), and
     no ended edge is read (clause 3). ⚠ `Rung.envelope` -- the population not individuated as persons
     -- is NOT counted: it has no producer anywhere (`loop/census.py` writes nothing), so a term for
-    it would be a read of a dead carrier (`ID-13`)."""
+    it would be a read of a dead carrier (`ID-13`). `24f` did not give it one: the territorial
+    population it builds is carried by authored cohort PERSONS (`cohorts.yaml`, S9's one class), so
+    it is counted above through `weight`, and `envelope` stays the ratified-but-unwritten field
+    `04 §B.3` declares (`H-171`)."""
     TRACE.query("population", "resolver")
     here = _subtree(w, rung_id)
     return sum(w.persons[pid].weight for pid, home in residence_of(w).items() if home in here)
