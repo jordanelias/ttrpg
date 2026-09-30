@@ -3213,13 +3213,24 @@ rows:
       same-faction scenario is reachable via a constructed `Question` whose one referent is a
       same-faction-held settlement, through clause 3 alone, with no widening and no march-specific
       code. `test_march.py` demonstrates the CROSS-faction case only
-      (`test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle`); this row's
-      own same-faction scenario is still not exercised by the corpus TODAY (no `questions_for`
-      source ever offers a settlement referent naturally), only by a constructed `Act` or
-      `Question`. FALSIFIER, TO BE WRITTEN: a constructed `Question` naming a settlement held by
-      the actor's own faction, with that faction's people present as the only occupants; march
-      there through the real chooser and show the real fight happens (or, once ruled, that it
-      refuses)."
+      (`test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle`).
+      ⚠ CORRECTED A SECOND TIME, the Phase 3 terminal critique's reconciliation, 2026-09-30: this
+      cite previously read 'no questions_for source ever offers a settlement referent naturally'
+      as the reason this row's same-faction scenario stays constructed-only -- that was the
+      broad, categorical claim `H-175` names and retracts, measured false:
+      `python -m engine.season.harness.aperture 1 0` shows march naturally forming, being
+      offered, attempted and executed in `build_realm(0)`/`populated.run`, unaided, with zero
+      constructed `Question` or `Act` (see `H-175`). What remains genuinely unmeasured, and is
+      THIS row's own narrower question, not the broad one: whether any of the settlement
+      referents march is naturally offered in `build_realm(0)` happen to be held by the
+      ACTOR'S OWN faction -- aperture's funnel counts march's attempts and refusals but does not
+      break them out by holder-faction, so the same-faction case specifically is still only
+      exercised by a constructed `Act` or `Question` today. FALSIFIER, TO BE WRITTEN: a
+      constructed `Question` naming a settlement held by the actor's own faction, with that
+      faction's people present as the only occupants; march there through the real chooser and
+      show the real fight happens (or, once ruled, that it refuses) -- OR, more cheaply, read
+      `build_realm(0)`'s naturally-offered march referents off from a re-run of `aperture.py`
+      instrumented to report holder-faction per attempt, which this pass did not build."
     source:    "M4 review pass (`valoria-critic`), `ED-IN-0279` clause (a)'s own ruling text
       supplying the reasoning, not a fresh Jordan ruling"
 
@@ -3690,78 +3701,108 @@ rows:
 
   - id:        H-175
     tier:      1
-    hole:      "WHY `march` STAYS IN THE NEVER-ATTEMPTED SET IS UNMEASURED -- an earlier writing
-      of this row named the wrong cause and is corrected here, not merely restated. CANDIDATE
-      FORMATION DOES NOT DEPEND ON REFERENT KIND: `decision/options.py::opening_set`'s referent
-      loop (`for subject in q.referents:`, clause 3) applies no kind-based filter to `march` or to
-      any other verb, confirmed directly against the code rather than inferred -- `march`'s own
-      `requires_typed` cell (`verb_table.yaml`) asks only `kind: Rung` (generic existence), so a
-      march Candidate forms on ANY Rung-kind referent a Question offers, not only a
-      settlement-kind one. `engine/season/tests/test_march.py`'s chooser-formed test proves this
-      against a CONSTRUCTED `Question`. ⚠ RETRACTED AS THIS ROW'S STATED CAUSE: an earlier writing
-      measured '0 of 81 referents are settlement-kind' in `build_realm(0)` at tick 0 and concluded
-      that absence was WHY `march` never forms a computed Candidate -- that measured the wrong
-      variable, since formation was never gated on referent KIND, only on referent EXISTENCE as a
-      Rung. THE REAL CAUSE IS UNMEASURED, and this row does not invent a replacement one:
-      `queries/world_q.py::questions_for`'s two sources (`claim_landed`, `need`) may still never
-      emit a Rung-kind referent of ANY kind in the natural corpus, which would be a real, different
-      blocker -- or the bottleneck may sit in selection, scene packing, or question availability
-      instead. The antagonist's own reverted-arm evidence
-      (`engine/season/tests/test_season_shape.py`'s never-attempted-set note, ~7361-7368: removing
-      a march-specific referent-widening arm 'never moved' the executed/refused sets either way)
-      is suggestive AGAINST referent-kind filtering as the mechanism and TOWARD selection, packing
-      or question-availability instead -- but it is not a measurement of any of those sites and
-      confirms none of them over another."
+    hole:      "CORRECTED A THIRD TIME, AND THIS TIME BY RUNNING THE INSTRUMENT RATHER THAN
+      REPLACING THE CAUSE AGAIN: `march` DOES form, is offered, is attempted and EXECUTES via
+      natural computed play in `build_realm(0)`/`populated.run`, MEASURED, not inferred --
+      retracting the prior categorical claim that no `questions_for` source ever offers march a
+      workable referent. `python -m engine.season.harness.aperture 1 0`, run twice this session,
+      reproducibly: its REALM section -- `build_realm(0)`, the SAME world
+      `test_build_realm_determinism.py` builds and runs -- prints the `march` funnel row
+      `elig 23/0 formed 23 offered 23 att 6 ex 6 ref 6 both 6 neither 0`. The SAME invocation's
+      SPINE section -- `governance_spine.build(0)`, a DIFFERENT, smaller, 13-seat test fixture,
+      not `build_realm` and not what `test_build_realm_determinism.py` runs -- separately prints
+      `elig 13/0 formed 8 offered 8 att 1 ex 1 ref 1 both 1 neither 0` for march, corroborating
+      the same mechanism in an unrelated, regular-census world. `formed`/`offered` go through
+      `decision/options.py::opening_set`
+      exactly as `test_march.py` already showed for a constructed `Question`; what is NEW here is
+      `attempted`/`executed`/`refused`, through the real, UNRESTRICTED chooser
+      (`make_chooser(..., verbs=resolvable_verbs())`, `populated.run`'s own call -- not a
+      march-only `verbs=` restriction), with zero constructed `Question` and zero hand-built
+      `Act` anywhere in the run.
+      ⚠ SCOPE, STATED SO IT IS NOT BLURRED AGAIN: this measures `build_realm(0)`/`populated.run`
+      ONLY. `corpus_run`'s separate 143-case NPC/ARC corpus is a different, narrower,
+      individually-authored scenario set, and a fresh `python -m engine.season.harness.corpus_run`
+      run this same session RE-CONFIRMS `march` still sits in THAT corpus's never-attempted set
+      (`WHERE THE 44 GO: ... 10 foldable but never even attempted`, march among them, unchanged
+      from the prior reading). `march` executing in `build_realm(0)` does not mean it executes in
+      `corpus_run`, and measured, it does not. WHY `corpus_run`'s 143 individually-authored cases
+      never supply march a workable referent while the populated realm does is UNMEASURED -- a
+      real, narrower, now-correctly-scoped question, not the broad one this row previously asked.
+      (Full prior history, kept rather than deleted: the FIRST writing measured '0 of 81 referents
+      are settlement-kind' in `build_realm(0)` at tick 0 and named that absence as the cause --
+      WRONG, since formation is not gated on referent kind at all. The SECOND writing retracted
+      that cause and declared the real one UNMEASURED, full stop, without scoping which corpus it
+      meant -- also wrong, in a narrower way: the one instrument that actually measures the
+      claim, `harness/aperture.py`, existed and had not been run against this question before this
+      pass. Both retractions stand; they are cumulative corrections of two different mistakes, not
+      alternative tellings of one.)"
     kind:      "PRODUCER"
-    owner:     "no owner exists yet -- a candidate site is `queries/world_q.py::questions_for`,
-      which would need either a third source or a generalization of one of the existing two to
-      supply `march` (and any similarly above-person-scale verb) a workable referent; whether that
-      referent must be settlement-kind specifically, or the real gap sits elsewhere entirely
-      (selection, scene packing, question availability), is the still-unmeasured question `hole:`
-      above leaves open"
+    owner:     "MOOT for `build_realm(0)`: some existing `questions_for` source already supplies
+      march a workable Rung-kind referent there, unaided, today -- WHICH of the two sources
+      (`claim_landed`, `need`) is unmeasured, and nothing needs building to close this half of the
+      row. For `corpus_run`'s 143-case set specifically, still no owner identified: a candidate
+      site remains `queries/world_q.py::questions_for`'s two sources, but whether the gap there is
+      a producer absence, a property of the individually-authored cases themselves (fewer claims,
+      narrower casts, fewer rungs than the populated realm's 412), or something in selection or
+      scene packing is UNMEASURED."
     grade:     "assumption"
-    default:   "NONE SHIPPED. IF a future measurement confirms `queries/world_q.py::questions_for`'s
-      source set as the site -- deciding what should make an NPC treat a settlement as a referent
-      worth acting on (a hostile-presence claim, a standing casus belli, a border dispute) is a
-      live design choice with materially different game outcomes, not a mechanical derivation --
-      this row does not invent one, on the same discipline `H-150` follows for garrison strength.
-      That is conditional on `owner:` above being where the real cause turns out to live, not
-      asserted as the confirmed fix."
-    site:      "engine/season/queries/world_q.py -- `questions_for` (two sources; whether either
-      ever emits a Rung-kind referent of ANY kind in the natural corpus, not only a settlement-kind
-      one, is unmeasured -- see `hole:` above); engine/season/decision/options.py -- `opening_set`
-      clause 3 (the generic reader, confirmed working against a constructed Question, not the site
-      of this hole)"
+    default:   "NONE SHIPPED, and `build_realm(0)` needs no fix at all -- it already
+      attempts/executes march unaided (see `hole:`). IF a future measurement identifies why
+      `corpus_run`'s 143 cases specifically never supply one, deciding what should make an NPC
+      treat a settlement as a referent worth acting on (a hostile-presence claim, a standing
+      casus belli, a border dispute) is a live design choice with materially different game
+      outcomes, not a mechanical derivation -- this row does not invent one, on the same
+      discipline `H-150` follows for garrison strength."
+    site:      "engine/season/harness/aperture.py -- the instrument that measured the
+      `build_realm(0)` half of this row (`python -m engine.season.harness.aperture 1 0`, cited in
+      `hole:`); engine/season/harness/corpus_run.py -- the instrument that re-confirmed the
+      `corpus_run` half is still open; engine/season/queries/world_q.py -- `questions_for`
+      (candidate site for the still-open `corpus_run` question only); engine/season/decision/
+      options.py -- `opening_set` clause 3 (the generic reader, confirmed working in both corpora,
+      not the site of either open half of this hole)"
     sweep:     []
-    unblocks:  "`march` being ATTEMPTED -- chosen and folded, whether it executes or refuses --
-      from a computed act in the natural corpus (currently only reachable via a constructed
-      `Question`, as `test_march.py` demonstrates); a settlement-kind referent specifically would
-      additionally be needed for such an attempt to reach a real battle rather than refuse at
-      `sides_of`'s `H-149` check, which this row does not claim to unblock on its own; any future
-      verb whose only referent kind sits above person-scale; `H-151`'s same-faction-march scenario
-      becoming corpus-reachable rather than only reachable by a constructed `Question` or a
-      hand-built `Act`."
+    unblocks:  "`march` being ATTEMPTED in `corpus_run`'s 143-case corpus specifically (already
+      unblocked, measured, in `build_realm(0)`/`populated.run` -- see `hole:`); `H-151`'s
+      same-faction-march scenario becoming `corpus_run`-reachable rather than only reachable by a
+      constructed `Question` or a hand-built `Act`."
     cite:      "FOUND at plan position `28-ii` (M6, successor goldens), 2026-09-30, by the
       BATCH-CLOSE Phase-1 antagonist reconciliation of that position's own build -- the full
       add-then-revert history of a referent-widening arm this row's diagnosis once misattributed
-      the hole to is in that commit's own message, not repeated here. ⚠ CORRECTED AGAIN, the
-      layer-conformance ATTACK stage, BATCH-CLOSE Phase 2, 2026-09-30: this row's own `hole:` field
-      originally cited '0 of 81 referents are settlement-kind' as WHY `march` never forms a
-      computed Candidate -- that measured the wrong variable (formation is not gated on referent
-      kind; see `hole:` above) and is retracted as the stated cause here. THE REAL CAUSE IS
-      UNMEASURED, not replaced with a different assumed one. Related: `H-80` (the general per-verb
-      `operands_for`-arm gap this row is adjacent to but distinct from -- that row is about missing
-      OPERAND derivation; this one is about whether `questions_for` ever SUPPLIES a usable referent
-      at all, a different clause) and `H-151` (the same-faction-march scenario this row's eventual
-      fix would also make corpus-reachable). FALSIFIER, TO BE WRITTEN: run the natural corpus and
-      show `march` is ATTEMPTED -- chosen and folded, whether it executes or refuses -- for a
-      dispatch-holding actor, with a stated control (a verb already known to attempt today, to
-      confirm the harness itself is not the reason nothing attempts)."
+      the hole to is in that commit's own message, not repeated here. CORRECTED, the
+      layer-conformance ATTACK stage, BATCH-CLOSE Phase 2, 2026-09-30: retracted '0 of 81
+      referents are settlement-kind' as the stated cause (wrong variable; formation is not gated
+      on referent kind) without asserting a replacement, leaving the real cause marked UNMEASURED,
+      unscoped. ⚠ CORRECTED A THIRD TIME, the Phase 3 terminal critique's reconciliation,
+      2026-09-30: that second correction's own UNMEASURED claim was itself never checked against
+      the one instrument built to check it. `python -m engine.season.harness.aperture 1 0`
+      (`harness/aperture.py`, built at this same plan position, for exactly this question) was run
+      against it for the first time in this pass: in `build_realm(0)` (the instrument's REALM
+      section), march forms 23 times, is offered every time it forms, is attempted 6 times, and
+      both executes and refuses in those attempts, via the real, unrestricted chooser -- stronger
+      evidence than `test_march.py`'s constructed-Question test, since nothing here is hand-built
+      and march competes against every other verb's real candidates rather than being the
+      chooser's only option (`verbs=frozenset({\"march\"})` there, `verbs=resolvable_verbs()`
+      here). The SAME invocation's SPINE section (`governance_spine.build(0)`, a smaller,
+      UNRELATED 13-seat fixture, not `build_realm`) shows the identical mechanism independently
+      (formed 8, offered 8, attempted 1, executed and refused 1) -- corroboration, not a second
+      measurement of `build_realm(0)`, and not to be quoted as though it were. A fresh
+      `corpus_run` confirms the `corpus_run` half is unchanged: march still never attempted there.
+      Related: `H-80` (the general per-verb `operands_for`-arm gap this row is adjacent to but
+      distinct from) and `H-151` (the same-faction-march scenario this row's eventual `corpus_run`
+      fix would also make corpus_run-reachable). FALSIFIER, NOW COMMITTED RATHER THAN AD HOC:
+      `test_build_realm_seed_0_is_deterministic_across_n_seasons`
+      (`engine/season/tests/test_build_realm_determinism.py`) now asserts
+      `march.declared`/`march.refused`-family events appear in `build_realm(0)`'s log over the
+      real season it already runs for the hash pin -- added this same pass, 2 passed; see the
+      2026-09-30 plan doc's `c . 28-ii` subsection for the full statement."
     source:    "BATCH-CLOSE Phase 2, position 28-ii's Phase-1 antagonist reconciliation, 2026-09-30
       -- `/simplify`'s ALTITUDE lens recommended minting this row rather than leaving the gap as a
       footnote on H-151 (a RULING-kind row scoped to a different question, same-faction combat).
-      CORRECTED the same session, BATCH-CLOSE Phase 2's layer-conformance ATTACK stage: this row's
-      own causal claim was itself wrong on first writing; see `hole:`/`cite:` above."
+      CORRECTED the same session, BATCH-CLOSE Phase 2's layer-conformance ATTACK stage. CORRECTED A
+      THIRD TIME, the Phase 3 terminal critique's reconciliation, 2026-09-30: three successive
+      rounds of fixes to this row each replaced the stated CAUSE while never running the one
+      instrument that measures the ABSENCE itself -- this pass ran it, and the result narrows the
+      row's scope rather than replacing its cause again."
 
 
 discharges:

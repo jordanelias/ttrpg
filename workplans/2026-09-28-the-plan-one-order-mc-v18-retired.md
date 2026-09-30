@@ -783,6 +783,12 @@ vector a field of its own (`04:292`), and a seat *"adds no verb and no modifier"
   `test_season_shape.py:6996`'s never-attempted set. This succeeds `test_f7_smoke_oracle.py`'s
   `battles_mean`. That file's `VICTORY_THRESHOLD` dead-param tripwire dies with `DEFAULT_PARAMS`, and
   its Hafenmark-lockout claim closes under test 2.
+  ⚠ **STALE, superseded by `28-ii`'s actual build (`workplans/2026-09-30-phase-4-post-ners-
+  revision.md` §3 `c · 28-ii`): no `operands_for` march arm was ever added or needed, and
+  `march` is now measured forming/attempting/executing naturally in `build_realm(0)` via
+  `harness/aperture.py` (`hole_register.yaml` H-175) — this prediction's diagnosis and its cited
+  fix were both wrong. Left here rather than rewritten, per this document's own §0 correction
+  discipline; read the current state at the row named above, not here.**
 - **`test_combat_bridge_seam.py` needs NO successor.** Its remaining `mc_v18` test asserts a flag-ON
   no-op on the OLD loop, and the flag dies with the file. Its shape tests are already carried by
   `seam/wrappers/combat.py:195-201` (moved from `:203-208`, caught and fixed at BATCH-CLOSE Phase

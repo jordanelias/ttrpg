@@ -94,19 +94,31 @@ scales:
   - scale:    "mass battles / strategy warfare"
     subsystem: ["systems/mass_battle (33 py)"]
     retention: RETAINED
-    in_loop:   "seam built; reached only via a constructed `Question`, not yet a natural one"
+    in_loop:   "seam built; reached via a constructed `Question` (`test_march.py`) AND, measured,
+      via natural computed play in `build_realm(0)`/`populated.run` (`harness/aperture.py`); not
+      yet reached naturally in `corpus_run`'s separate 143-case NPC/ARC corpus"
     note: >-
       The seam exists (`ecacb57`, PR #436): `march` declares `contests: a field` and resolves
       through `seam/wrappers/mass_battle.py` → the `mass_battle.resolve_field` composition role.
       `test_march.py::test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle`
       (plan position `28-ii`, M6) demonstrates a real chosen act reaching it, through the real
-      chooser, off a constructed `Question` naming a settlement referent. `march` still sits in
-      `test_season_shape.py`'s never-attempted set for the
-      NATURAL corpus, though: `decision/options.py::opening_set`'s clause 3 applies no
-      referent-kind filter and `operands_for` already carries `march`'s operands correctly
-      (neither is the gap), but WHY no `questions_for` source in the natural corpus ever
-      supplies march a workable referent is UNMEASURED (`hole_register.yaml` H-175's `cite:`,
-      correcting H-151's prior, retracted citation of a missing `operands_for` arm).
+      chooser, off a constructed `Question` naming a settlement referent.
+      ⚠ CORRECTED, the Phase 3 terminal critique's reconciliation, 2026-09-30: this note used to
+      say march "still sits in `test_season_shape.py`'s never-attempted set for the NATURAL
+      corpus" and that "no `questions_for` source in the natural corpus ever supplies march a
+      workable referent" -- measured FALSE for `build_realm(0)`/`populated.run`:
+      `python -m engine.season.harness.aperture 1 0`, run twice reproducibly, shows march
+      forming, being offered, being attempted and executing there via the real, unrestricted
+      chooser, with zero constructed `Question` and zero hand-built `Act` (`hole_register.yaml`
+      H-175). `march` DOES still sit in `test_season_shape.py`'s never-attempted set, but that
+      set is drawn from `corpus_run`'s separate, narrower, individually-authored 143-case NPC/ARC
+      corpus, not from the natural corpus generally -- a fresh `corpus_run` this same session
+      re-confirms march is still absent there. `decision/options.py::opening_set`'s clause 3
+      applies no referent-kind filter and `operands_for` already carries `march`'s operands
+      correctly (neither was ever the gap). WHY `corpus_run`'s 143 cases specifically never
+      supply march a workable referent, while the populated realm does, is UNMEASURED
+      (`hole_register.yaml` H-175's `cite:`). `H-151`'s OWN `cite:` field, not H-175's, is where
+      the earlier retraction of a stale "missing `operands_for` arm" citation actually lives.
   - scale:    "personal combat / grid-based map combat with units"
     subsystem: ["systems/combat/combat_engine_v1 (29 py)"]
     retention: "RETAINED, NOT DONE (Jordan, 2026-09-05: \"combat engine isn't done\")"

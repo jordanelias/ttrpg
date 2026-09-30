@@ -30,6 +30,17 @@ the control that stops it passing vacuously:
      than hand-set, and folds it through the same RESOLVE -> ENCOUNTER pipeline as every other
      test in this file -- proving a real settlement target reaches a real field battle end to end
      through the real chooser, not merely that a hand-authored payload can.
+
+     ⚠ THIS TEST'S OWN CHOOSER IS RESTRICTED (`verbs=frozenset({"march"})`), SO IT DOES NOT
+     RANK MARCH AGAINST ANY COMPETING CANDIDATE -- a Phase 3 terminal critique's finding,
+     2026-09-30. `python -m engine.season.harness.aperture 1 0`, run against `build_realm(0)`
+     through the real, UNRESTRICTED chooser (`verbs=resolvable_verbs()`, `populated.run`'s own
+     call), is the STRONGER demonstration: march forms, is offered, is attempted and executes
+     there too, competing against every other verb's real candidates, with zero constructed
+     `Question` and zero hand-built `Act` anywhere in the run (`hole_register.yaml` H-175). Both
+     stand together; this test still proves the chooser-vs-constructed-`Act` distinction
+     end-to-end at the unit level, and aperture proves the same mechanism holds under the real,
+     unrestricted chooser in natural play.
 """
 
 import random
@@ -335,10 +346,17 @@ def test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle
     march_cands = {c.subject: c for c in cands if c.verb == "march"}
     # FALSIFIER: the referent-named settlement forms a march Candidate under clause 3's own
     # `q.referents` reading, unaided -- clause 3 applies no kind filter, so any Rung-kind referent
-    # would do the same. WHY the natural corpus's `questions_for` sources never hand a person a
-    # workable referent is UNMEASURED (`hole_register.yaml` H-175); what this assertion rules OUT
-    # is a missing `operands_for` arm for march, which this Question (constructed, not
-    # corpus-drawn) was never short of.
+    # would do the same. What this assertion rules OUT is a missing `operands_for` arm for march,
+    # which this Question (constructed, not corpus-drawn) was never short of.
+    # ⚠ CORRECTED, Phase 3 terminal critique, 2026-09-30: this comment used to say WHY the
+    # natural corpus's `questions_for` sources never hand a person a workable referent was
+    # UNMEASURED, full stop -- measured FALSE for `build_realm(0)`/`populated.run`:
+    # `python -m engine.season.harness.aperture 1 0` shows march naturally forming, being
+    # offered, being attempted and executing there, unaided, via the real unrestricted chooser
+    # (see the module docstring's new note above and `hole_register.yaml` H-175). What remains
+    # unmeasured is narrower and different: WHY `corpus_run`'s separate 143-case NPC/ARC corpus
+    # specifically never supplies march a workable referent, confirmed still absent there by a
+    # fresh `corpus_run` run this same session.
     assert "set_s_036" in march_cands, (
         f"the referent-named settlement never became a march Candidate subject; got "
         f"{sorted(march_cands)}")

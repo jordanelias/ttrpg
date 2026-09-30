@@ -98,6 +98,24 @@ def test_build_realm_seed_0_is_deterministic_across_n_seasons(seed0_hash):
     assert h1 != pre, (
         f"the {_SEASONS}-season run left `content_hash()` unchanged from before it started "
         f"({pre!r}) -- this pin would pass identically whether the season ran at all")
+    # ⚠ ADDED, Phase 3 terminal critique's reconciliation, 2026-09-30 -- THE COMMITTED VERSION OF
+    # AN AD HOC MEASUREMENT (`python -m engine.season.harness.aperture 1 0`, cited in full at
+    # `hole_register.yaml` H-175), reusing `w1` ABOVE rather than a third fresh build+run: this
+    # exact world/season already ran, so checking its own log costs nothing extra. `march.declared`
+    # fires on EVERY march Act that reaches RESOLVE's fold (`verb_table.yaml`'s `emits: Declared:
+    # [march.declared]`), whether it later executes a real field battle or refuses --
+    # `march.refused` fires on the refusal path (`emits_on_refusal`). Either kind's presence is
+    # therefore a real falsifier for "march never reaches the fold from a computed act in this
+    # world", not a vacuous one: a log with neither kind present would mean march formed and was
+    # offered (as `test_march.py`'s constructed-Question test already shows) but never actually
+    # got chosen and folded this season -- the gap this row's own history spent three rounds
+    # mis-diagnosing before anyone ran the instrument.
+    kinds = {e.kind for e in w1.log}
+    assert "march.declared" in kinds or "march.refused" in kinds, (
+        "no `march.declared`/`march.refused` event reached the log this season -- march formed "
+        "and was offered (per `test_march.py`) but was never chosen and folded by the real "
+        "chooser in this run, which would retract the `aperture 1 0` measurement this test now "
+        "stands in for")
 
 
 def test_build_realm_hash_is_sensitive_to_what_the_season_did(seed0_hash):
@@ -106,7 +124,17 @@ def test_build_realm_hash_is_sensitive_to_what_the_season_did(seed0_hash):
     collide, or `content_hash()` would not actually be keyed on campaign content and the
     determinism pin above would be trivially satisfiable by a constant. The seed-0 side reuses
     `seed0_hash` (already proven reproducible by the test above) rather than a third from-scratch
-    build+run of the same seed."""
+    build+run of the same seed.
+
+    ⚠ DISCLOSED, Phase 3 terminal critique, 2026-09-30 -- WEAKER THAN "SENSITIVE TO WHAT THE
+    SEASON DID" LITERALLY CLAIMS. `state/ids.py::H` folds `world_seed` into every minted act/event
+    id (`f"v1|{world_seed}|{tick}|{subject_id}|{purpose}"`), and `content_hash()` folds those ids
+    in, so seed 0 and seed 1 are expected to diverge on ID STRINGS ALONE even in the
+    (hypothetical) case where the two seeds drove every person to the identical sequence of
+    decisions. This test therefore does not rule out that possibility -- it only rules out the
+    weaker, still-real failure modes named above (a constant hash, a no-op run). A genuinely
+    content-sensitive companion would need to compare something id-independent (event KINDS and
+    counts, say) across the two seeds, which this test does not attempt."""
     w2 = build_realm(_SEED + 1)
     run(seasons=_SEASONS, seed=_SEED + 1, w=w2)
     assert seed0_hash != w2.content_hash(), (

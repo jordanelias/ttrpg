@@ -87,7 +87,9 @@ mid-pass and corrected everywhere it was cited (`H-156`, the `H-163` levy paragr
 paragraph, and the predecessor plan's §5.1 item 14): `20-ii`'s 54 new scale-overlay cases include one
 (`ARC-32`) where `release` now executes, moving it out of the always-refused set and back into the
 executed set (16 verbs, not 15 — independently re-verified this session by a live `corpus_run`,
-matching the pinned `ever` set in `test_season_shape.py:7351-7353` verb-for-verb). **Any Phase-4
+matching the pinned `ever` set in `test_season_shape.py:7378-7380` verb-for-verb — re-located,
+citation drifted since first written, this batch's own edits inserted commentary above it).
+**Any Phase-4
 position that cites the always-refused count (`28-ii`'s battle-execution work, in particular, since it
 adds `march` to the executed set next) must cite eight, not nine, and must not assume `release` is
 still crowded out** — `20-ii` already fixed that, incidentally, as a side effect of the corpus growing
@@ -130,7 +132,7 @@ for these rows only; its non-Phase-4 rows are unchanged and not restated)
 | — | **EFFECTS-SPLIT** | IN | **DONE** | — (independent of the NERS pass; the settled modularity requirement) | `309a17d9`; 683 passed / 1 pre-existing failure (`engine/season/tests`, independently reproduced against both the split and the pre-split commit) |
 | — | **CITATION-FIX** | IN | **DONE** | EFFECTS-SPLIT | `a882cc32` |
 | b | **`21`** U10 | IN | **OPEN, PARTIAL** — items 1-2 done; item 3 (reconcile `workplan_v6_progress.yaml`) NOT attempted; a genuine upstream break in `wd_collect.py` leaves R-01/R-02 `not_met` | `20-ii` ✓ | `03de9d47` |
-| c | **`28-ii`** (M6) successor goldens | IN | **DONE** — one disclosed, out-of-scope gap (corpus-organic reachability) | `28-i` ✓ | `013a5b1b` (see correction in `03de9d47`) |
+| c | **`28-ii`** (M6) successor goldens | IN | **DONE** — one disclosed, out-of-scope gap, narrowed to `corpus_run` specifically (§3 `c · 28-ii`) | `28-i` ✓ | `013a5b1b` (mislabeled, see `03de9d47`); corrected by `7ba66fde`, `6090af6b`, and this pass |
 | d | **`28-iii`** SPINE-DELETE | IN | **OPEN** (unblocked -- `28-ii` is DONE) | `28-ii` ✓ | — |
 | e | **`20-iv`** d.1 + terrain/garrison | MB/IN | BLOCKED | `20-ii` ✓, `28-iii` | — |
 | f | **`29a`** overview | IN | BLOCKED | `28-iii` (+ `27` for `ms_track`) | — |
@@ -170,6 +172,13 @@ this board is what feeds `tools/m1_acceptance.py`'s DOC-DERIVED **row 3 of 4**
 `row_m1_junctures` is the third element and the only one the tool's own `collect()` note calls
 DOC-DERIVED), not "row 4" as an earlier commit message on this branch (`013a5b1b`) described it.
 
+⚠ **NARROWER DISCLOSURE, Phase 3 terminal critique, 2026-09-30**: "items 1-2 done" above is
+itself narrower than it reads. U10 item 1 asks that "every row U1-U9 moved" be refreshed against
+fresh instrument output; checked against `requirements.yaml` directly, R-03 and R-09 (both under
+that item's U1/U9 span) still carry their original measurement dates (2026-09-11) with no
+2026-09-30 re-derivation — only a subset of the U1-U9 rows were actually refreshed this pass, not
+the full span item 1 claims. Named here rather than re-graded.
+
 **c · `28-ii` (M6).** No change to what it builds. **Effect-file target: `engine/season/loop/
 effects_combat.py`** — `march` lives there now (with `fight`). ⚠ **STRUCK (`/simplify`, BATCH-CLOSE
 Phase 2): this subsection originally predicted an `operands_for` arm landing in `data/verbs.py`/
@@ -179,13 +188,25 @@ nine, and do not assume `release` is still crowded out of the scene budget** —
 returned it to the executed set.
 
 ⚠ **BUILT 2026-09-30, landed in commit `013a5b1b` (mislabeled — see the correction in commit
-`03de9d47`'s message; the content is `28-ii`'s, verified byte-identical against the working tree
-independently by both producers and by the orchestrator) — DONE, one disclosed, out-of-scope gap.**
+`03de9d47`'s message) — DONE, corrected twice more since by `7ba66fde` (BATCH-CLOSE Phase-1
+antagonist findings: reverted a self-contradicting referent-widening arm, rewrote the
+chooser-formed test to stop hand-setting `via`) and `6090af6b` (layer-conformance ATTACK stage:
+retracted H-175's own wrong-variable causal claim) — and now once more by this Phase 3 terminal
+critique's own reconciliation (below). At the time `013a5b1b`/`03de9d47` were written, the
+content WAS verified byte-identical against the working tree, independently, by both producers
+and by the orchestrator — stated in the past tense because it no longer describes the CURRENT
+state: `7ba66fde` and `6090af6b` both edited the files that comparison covered
+(`decision/options.py`, `test_march.py`, `test_season_shape.py`, `hole_register.yaml`), so the
+working tree has moved past that snapshot. The commits that hold the current, correct state are
+`7ba66fde` and `6090af6b`, plus this pass's own commit for the corrections below.**
 
 - **The hash pin**: `engine/season/tests/test_build_realm_determinism.py` (new) — `build_realm(0)`
   through the real `SeasonDriver`/`make_chooser`, run twice, `content_hash()` compared byte-identical,
   plus a seed-0-vs-seed-1 divergence control. Neither existing candidate (`test_m1_acceptance_probe.py`,
   `test_r4_event_ids_are_unique...`) actually pinned `build_realm` — checked, not assumed. 2 passed.
+  ⚠ **EXTENDED, Phase 3 terminal critique, 2026-09-30**: the same test now also asserts
+  `march.declared`/`march.refused` appear in `w1`'s log over that same run — the committed
+  falsifier the earlier ad hoc `aperture` measurement below did not yet have. Still 2 passed.
 - **`operands_for` needed no arm, and never did** (`decision/options.py::opening_set` —
   **CORRECTED per the BATCH-CLOSE Phase-1 antagonist reconciliation**: the first writing of this
   position added a march-specific referent-widening arm whose own justification was
@@ -197,18 +218,27 @@ independently by both producers and by the orchestrator) — DONE, one disclosed
   ATTACK stage, BATCH-CLOSE Phase 2**: this bullet previously named "no `questions_for` SOURCE
   ever offers a settlement referent (measured: 0 of 81 referents in `build_realm(0)`)" as the
   actual, still-real blocker — that measured the wrong variable, since Candidate formation is not
-  gated on referent kind. **The real reason `march` stays in the never-attempted set is
-  UNMEASURED** (`hole_register.yaml` H-175); the retraction is not replaced with a different
-  assumed cause. `test_march.py::test_a_real_chooser_forms_and_folds_a_march...` runs a real
-  chooser (`make_chooser`/`pack_scenes`, not a hand-built `Act`) through the genuine
+  gated on referent kind. It then declared the real reason UNMEASURED, full stop, without scoping
+  which corpus that covered. ⚠ **CORRECTED A THIRD TIME, this Phase 3 terminal critique's own
+  reconciliation, 2026-09-30**: that "UNMEASURED" claim was never itself checked against the one
+  instrument built to check it. `python -m engine.season.harness.aperture 1 0`, run and
+  independently reproduced this pass, shows march naturally forming, being offered, being
+  attempted, and executing/refusing in `build_realm(0)`/`populated.run` — unaided, with zero
+  constructed `Question` and zero hand-built `Act` (full funnel numbers and the corrected
+  `hole_register.yaml` H-175 row below). This retracts the general claim; it does **not** extend
+  to `corpus_run`'s separate 143-case corpus, where a fresh run this same session re-confirms
+  march is still never attempted. `test_march.py::test_a_real_chooser_forms_and_folds_a_march...`
+  runs a real chooser (`make_chooser`/`pack_scenes`, not a hand-built `Act`) through the genuine
   RESOLVE→ENCOUNTER pipeline to a real `field.lost` (kind check only — the casualty-body
   assertions were dropped from this test in the same `/simplify` pass noted above), with
   `Act.via` read off the chooser's own derivation rather than hand-set. 10 passed.
 - **`H-151`'s `cite:` corrected** to match: the "unreachable from the corpus either way" claim
   never held on close examination — a constructed `Question` reaches it through clause 3's
-  pre-existing reading alone, no arm involved; the row's own scenario (same-faction march) is
-  still not exercised by the NATURAL corpus, for the same UNMEASURED reason H-175 now names, not
-  for the reason the old citation gave.
+  pre-existing reading alone, no arm involved; the row's own scenario (same-faction march
+  specifically, not march generally) is still not exercised naturally today — `aperture`'s funnel
+  does not break march's natural attempts out by holder-faction, so whether any of them happen to
+  be same-faction is a narrower, still-open question, corrected to say so rather than repeat the
+  broad "no source ever offers a settlement referent" framing the old citation gave.
 - **`test_combat_bridge_seam.py` confirmed to need no successor**, its three covering tests re-run
   (6 passed) — one citation drift caught and fixed directly rather than parked:
   `seam/wrappers/combat.py:203-208` had moved to `:195-201`; the stale citation in
@@ -217,16 +247,48 @@ independently by both producers and by the orchestrator) — DONE, one disclosed
   rather than trusting the plan's prediction that `VICTORY_THRESHOLD`/Hafenmark "die"/"close" here —
   they don't; both files are `28-iii`'s (SPINE-DELETE) own `FORK:` set, not this position's.
 
-⚠ **THE DISCLOSED GAP, NOT CLOSED BY THIS POSITION**: the natural corpus (`build_realm(0)`'s own
-organic Questions) never offers a settlement referent to anyone, so a real field battle reachable
-from zero test-authored input is not demonstrated — only the chooser-formed one against a
-constructed Question described above (BUILT bullet 2; genuinely chooser-formed as of the antagonist
-correction, not corpus-organic). WHY the natural corpus never offers one is UNMEASURED
-(`hole_register.yaml` H-175, `H-80`-adjacent but distinct) and was correctly left out of this
-position's scope. Read against the retirement plan's own gate wording
-(`PROPOSAL.md:104`: *"a battle executing from a real chooser-formed decision"*) **this now
-satisfies the gate as written** — the chooser, not the test, forms the decision. `28-iii` is
-accordingly unblocked.
+⚠ **THE DISCLOSED GAP, NARROWED RATHER THAN CLOSED, Phase 3 terminal critique, 2026-09-30.** This
+subsection used to say the natural corpus (`build_realm(0)`'s own organic Questions) never offers
+a settlement referent to anyone, so a real field battle reachable from zero test-authored input
+was not demonstrated — **measured FALSE.** `python -m engine.season.harness.aperture 1 0`, run
+twice this session, reproducibly: its REALM section (`build_realm(0)`, the SAME world
+`test_build_realm_determinism.py` builds and runs) prints march's funnel row as
+`elig 23/0 formed 23 offered 23 att 6 ex 6 ref 6 both 6 neither 0` — formed, offered, ATTEMPTED
+and EXECUTED, through the real, UNRESTRICTED chooser (`verbs=resolvable_verbs()`,
+`populated.run`'s own call, not the `verbs=frozenset({"march"})` restriction
+`test_march.py`'s chooser-formed test uses), with zero constructed `Question` and zero hand-built
+`Act` anywhere in the run. The SAME invocation's SPINE section (`governance_spine.build(0)`, a
+DIFFERENT, smaller, 13-seat test fixture, not `build_realm`) shows the identical mechanism
+independently (`formed 8 offered 8 att 1 ex 1 ref 1`) — corroboration in an unrelated world, not a
+second reading of `build_realm(0)`.
+
+**Why this is STRONGER evidence for the gate than the constructed-Question test, not merely
+additional evidence for the same claim**: `test_march.py`'s own chooser-formed test restricts the
+chooser to `verbs=frozenset({"march"})`, so with exactly one candidate offered, the chooser does
+not actually RANK anything — a real concern the terminal critique raised. The aperture run uses
+the UNRESTRICTED chooser, so march's 23 formed candidates competed against every other verb's
+real candidates for the same person's same deliberations, and 6 were still chosen, attempted and
+folded. Read against `04_CODE_ARCHITECTURE.md:1109`'s step-8 bar — *"ONE NPC'S SEASON RUNS END TO
+END FROM Q1–Q4 WITH ZERO AUTHORED ACTS"* — and `PROPOSAL.md:61`'s M6 wording — *"an actual battle
+executing from a real in-season decision"* — the aperture run satisfies BOTH more literally than
+the constructed-Question test did: nothing in `aperture.py`'s REALM run is authored by a test at
+all, not even a `Question`, whereas `test_march.py`'s test still constructs one by hand. Read
+against the retirement plan's own gate wording (`PROPOSAL.md:104`: *"a battle executing from a
+real chooser-formed decision"*) **this satisfies the gate as written, more solidly than before** —
+the chooser, not the test, forms the decision, and it does so under competition. `28-iii` remains
+accordingly unblocked, on firmer ground than the prior writing of this subsection gave it.
+
+**What is still open, correctly scoped now rather than left broad**: WHY `corpus_run`'s separate,
+narrower, individually-authored 143-case NPC/ARC corpus never supplies march a workable referent
+— confirmed still true by a fresh `corpus_run` run this same session — while the populated realm
+does, is UNMEASURED (`hole_register.yaml` H-175, `H-80`-adjacent but distinct). This is a real,
+different, narrower question than the one this subsection previously left open, and it is
+correctly out of this position's scope. **The committed falsifier**: this pass added an assertion
+to `test_build_realm_determinism.py` (2 passed) checking `march.declared`/`march.refused`
+presence in the log over the exact run the hash pin already performs — cheap, since that world
+and season already run there — rather than leaving the `aperture` command as the only evidence.
+The full funnel numbers and per-corpus scoping live at `hole_register.yaml` H-175, corrected in
+the same pass as this subsection.
 
 **d · `28-iii` (SPINE-DELETE).** No change. No `loop/effects_*.py` file is touched (it deletes
 `engine/mc_v18.py` and `engine/cross_scale/`, neither of which the split touched).
@@ -263,6 +325,20 @@ disposal `oblige` correctly; it was missing the citation of D-5's ruling for why
 route, now added). **Step 7 carries a disclosed, pre-existing caveat**: `judging_set`'s `matter`
 parameter is accepted but not yet load-bearing (`world_q.py:326-341`'s own docstring), since nothing
 yet maps a docketed matter to a governing arrangement row.
+
+⚠ **FURTHER DISCLOSURE, Phase 3 terminal critique, 2026-09-30 — the DONE claim's own evidence
+gap, named rather than re-graded.** Step 6's falsifier table (`21_RECONCILIATION.md`'s PHASE 2
+step 6 row) reads "twelve rows load; a fourteenth key fails naming the row... a `disposes` kind
+with no opener fails the load," and its roster `standing_routes`. Checked directly:
+`engine/season/arrangements.yaml`'s `arrangements:` block carries THREE rows (`arbitration`,
+`parliamentary_debate`, `council_of_state`), not twelve, and `standing_routes` does not exist
+anywhere in `engine/season/rosters.yaml`. The file's own header (`arrangements.yaml:16-34`) says
+why — three of twelve games seeded, the rest scoped down deliberately — so this is not silently
+wrong, but step 6's DONE grade rests on a falsifier its own row count does not satisfy as
+written. Step 7's falsifier ("removing the seat's remit empties the bench...") currently holds,
+but only because `matter` is not yet load-bearing (the caveat named above) — the property under
+test is vacuously true today, not confirmed true of the mechanism the step actually specifies.
+Named for a future session or Jordan to weigh; this pass does not re-grade either step.
 
 **Steps 11 (partially), 12, 13, 14, 15, 16 are OPEN, and together constitute the proceedings
 subsystem's actual contest-resolution core — a new provider module, an obstacle model, and

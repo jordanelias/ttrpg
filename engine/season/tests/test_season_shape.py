@@ -7354,12 +7354,23 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `Candidate` whenever a Question offers a Rung-kind referent -- `test_march.py`'s own
     # `test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle` demonstrates
     # this against a CONSTRUCTED Question. `march` stays in the never-attempted set below because
-    # no computed act reaches it here, only a hand-built or chooser-driven one given a
-    # constructed Question. WHY no `questions_for` SOURCE in the
-    # natural corpus ever supplies march a workable referent is UNMEASURED
-    # (`hole_register.yaml` H-175, corrected by the layer-conformance ATTACK stage, BATCH-CLOSE
-    # Phase 2: an earlier measurement, "0 of 81 referents are settlement-kind", answered the
-    # wrong question -- formation never filtered on referent kind, so settlement-kind
+    # no computed act reaches it in THIS FILE'S OWN CORPUS (`corpus_run`'s 143-case NPC/ARC set,
+    # the one `live`/`ever` are built from a few lines above -- `give`'s own row, further down
+    # this function, already flags this corpus as distinct from `headless.run`/`populated.run`;
+    # the same distinction applies here), only a hand-built or chooser-driven one given a
+    # constructed Question.
+    # ⚠ CORRECTED, the Phase 3 terminal critique's reconciliation, 2026-09-30: this comment used
+    # to say WHY no `questions_for` source in "the natural corpus" ever supplies march a workable
+    # referent was UNMEASURED, without naming WHICH corpus -- readable, wrongly, as covering
+    # `populated.run` too. Measured FALSE for `populated.run`/`build_realm(0)`:
+    # `python -m engine.season.harness.aperture 1 0` shows march naturally forming, being
+    # offered, being attempted and executing there, unaided, via the real unrestricted chooser,
+    # with zero constructed `Question` or `Act` (`hole_register.yaml` H-175). WHY it is
+    # specifically `corpus_run`'s 143 individually-authored cases that never supply one -- while
+    # `build_realm(0)` does -- is UNMEASURED (`hole_register.yaml` H-175, corrected by the
+    # layer-conformance ATTACK stage, BATCH-CLOSE Phase 2, and narrowed to this scope by the
+    # Phase 3 terminal critique: an earlier measurement, "0 of 81 referents are settlement-kind",
+    # answered the wrong question -- formation never filtered on referent kind, so settlement-kind
     # specifically was never the gate). A referent-widening arm was once added here and then
     # reverted within this same branch; that add/revert history is in this session's commit
     # messages, not repeated here -- `ever`, `refused_only`, `by_sig` (115) and `varying` were
@@ -8103,13 +8114,21 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # forms a real march Candidate whenever a Question offers ANY Rung-kind referent --
     # `test_march.py`'s own `test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle`
     # proves this against a constructed Question. `march` stays in the never-attempted set
-    # because no computed act reaches it here; WHY no `questions_for` SOURCE in this natural
-    # corpus ever supplies march a workable referent is UNMEASURED
+    # because no computed act reaches it in THIS FUNCTION'S OWN CORPUS (`corpus_run`'s 143-case
+    # NPC/ARC set, `live` above -- NPC-033/038 are cases of it); WHY no `questions_for` SOURCE in
+    # THIS corpus ever supplies march a workable referent is UNMEASURED
     # (`hole_register.yaml` H-175 -- an earlier measurement, "0 of 81 referents are
     # settlement-kind", answered the wrong question, since formation was never gated on referent
-    # kind, and is retracted there, not replaced with a different assumed cause). `H-151`'s
-    # `cite:` field is corrected to match: the same-faction scenario it describes was never
-    # categorically unreachable -- a constructed Question naming a same-faction-held Rung
+    # kind, and is retracted there, not replaced with a different assumed cause).
+    # ⚠ CORRECTED, the Phase 3 terminal critique's reconciliation, 2026-09-30: this "unmeasured"
+    # claim was unscoped and is measured FALSE for `populated.run`/`build_realm(0)`, a DIFFERENT
+    # corpus from this function's own: `python -m engine.season.harness.aperture 1 0` shows march
+    # naturally forming, being offered, being attempted and executing there, unaided, with zero
+    # constructed `Question` or `Act`. WHY `corpus_run`'s 143 cases specifically never supply one
+    # -- confirmed still true by a fresh `corpus_run` run the same session -- remains the open,
+    # narrower question `hole_register.yaml` H-175 now correctly scopes itself to.
+    # `H-151`'s `cite:` field is corrected to match: the same-faction scenario it describes was
+    # never categorically unreachable -- a constructed Question naming a same-faction-held Rung
     # referent reaches it through clause 3 alone, exactly as `test_march.py`'s own chooser-formed
     # test demonstrates for the cross-faction case.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
@@ -8120,10 +8139,13 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
         "Candidate under clause 3's own pre-existing `q.referents` reading given ANY Rung-kind "
         "referent (no kind filter applies) -- WHY no `questions_for` source ever supplies one in "
-        "this corpus is unmeasured (`hole_register.yaml` H-175); `give` and `oblige` are untyped "
-        "rows whose Candidate never forms in this corpus at all. `H-71` is CLOSED, so the "
-        "governance five's reason is the corpus's offices, march's is the unmeasured H-175 gap, "
-        "and give/oblige's is that neither row's one operand ever has a referent to bind here")
+        "THIS corpus (`corpus_run`'s 143-case set) is unmeasured (`hole_register.yaml` H-175) -- "
+        "march DOES get one naturally in `populated.run`/`build_realm(0)`, measured via "
+        "`harness/aperture.py`, a different corpus; `give` and `oblige` are untyped rows whose "
+        "Candidate never forms in this corpus at all. `H-71` is CLOSED, so the governance five's "
+        "reason is the corpus's offices, march's is the unmeasured H-175 gap (scoped to this "
+        "corpus only), and give/oblige's is that neither row's one operand ever has a referent "
+        "to bind here")
 
 
 
