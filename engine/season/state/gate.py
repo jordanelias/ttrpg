@@ -136,6 +136,17 @@ class NoToken(InstrumentDefect):
 # is written here, once, as `may_determine`, and `04 §C.2`'s enumeration is amended inline the same
 # day, with the plan position cited (`conferral`/`handover`/`renewal`'s route).
 #
+# ⚠ PLAN POSITION `24e` (WORKS & FOUNDING) ADDED A NINTH, `founding` -- THE MIRROR OF THE CASCADE
+# RATHER THAN A SEAT-AUTHORITY BASIS LIKE THE THREE BEFORE IT. `found` opens a `contain` edge whose
+# SUBJECT is a newly minted Rung, and a Tenure lives and dies through its object (`holonic §15.3`):
+# what closes an edge through a death (`cascade`) may also open one through a birth, and nothing
+# else reaches it -- `T-m` cannot (a Rung is nobody's actor), and `conferral`/`T-o`/`renewal`/
+# `determination` all read a seat or an `oblige`, neither of which a founding Rung's `contain` edge
+# is. Written here, once, as the `FOUNDING` clause in `tenure_write_basis`, and `04 §C.2`'s
+# enumeration amended inline the same day (⚠ COMPLETING THIS HEADER'S OWN COUNT, terminal
+# whole-of-Phase-2 critique, 2026-09-30: this narrative stopped at eight for a full close before
+# being read against `04`'s own nine-clause enumeration).
+#
 # WHAT IS HERE AND WHAT IS NOT. This module owns the JUDGMENT -- which basis, if any, admits one
 # Tenure change -- and the seat-authority rules the judgment composes on (ruling (3)'s revocation
 # rule, ruling (4)'s purview, the conferral-basis test). `World.write` owns the OBSERVATION: it
