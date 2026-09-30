@@ -129,7 +129,16 @@ axioms say what the owned-state sets are.**
 ```
 state/       the owned stores · the gate · the log · the ledgers · the id mint
 data/        every closed set, table, fixture, the write matrix, the verb table — and the ONE loader
-queries/     ownerless functions: world_q (World first) · person_q (asker first) · cache (barrier-built)
+queries/     ownerless functions: world_q (World first) · person_q (asker first) · cache
+             (barrier-built) · faction_q (§B.6.1's VIEW, §B.10-12's `resolve`/`at_war`)
+             ⚠ EDITED AT PLAN POSITION `20-ii` (2026-09-30), NOT BEFORE. This line named three
+             members from 2026-09-03 to `20-ii` while §B.6.1/§B.10-12/§C.5.1 already named
+             `faction_q.resolve`/`at_war` by their own dotted paths -- `layer-conformance` B4's
+             third disposition, an internal ambiguity between this spec's own clauses, repaired
+             by completing the fourth module rather than by editing this line to match code that
+             was still partial (`CLAUDE.md` §0.05: "a spec edited to match its implementation
+             checks nothing"). `faction_q.py`'s own docstring and `queries/__init__.py` record the
+             history; this line is now current rather than stale.
 decision/    AX-2's island: questions · opening_set · choose · budget.   NO World in scope.
 loop/        driver + seven steps.  The driver is the ONLY constructor of write tokens.
              ⚠ M4 (`ED-IN-0279` clause (a), 2026-09-28) added ENCOUNTER between RESOLVE and
