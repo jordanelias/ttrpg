@@ -532,9 +532,13 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     THE NINE BASES, AND WHAT EACH MAY WRITE -- a basis admits a KIND of change, not any change:
 
       `T-m`       the actor IS the owner -- `was.subject` for an existing edge, `t.subject` for a
-                  new one. Anything the owner does to their own edge (`release`, `move`'s legs,
-                  `create_record`'s `hold`, a self-conferral's opening). ⚠ The owner is read from
-                  BEFORE the write, so an effect cannot make itself the owner by rewriting
+                  new one. Anything the owner does to their own edge EXCEPT rewind its `term`
+                  (`release`, `move`'s legs, `create_record`'s `hold`, a self-conferral's opening)
+                  -- a `term` rewrite on an existing edge is `T-n`'s or `renewal`'s to admit, never
+                  T-m's (BATCH-CLOSE, methodology-close Phase 1, 2026-09-30: the bare guard once
+                  admitted it too, the same over-admission class the seat carve-out below exists
+                  to prevent, one kind over -- see the clause's own comment). ⚠ The owner is read
+                  from BEFORE the write, so an effect cannot make itself the owner by rewriting
                   `subject` and then be admitted as it.
       `T-n`       an ACTORLESS CLOSURE (`until` set, nothing else, no actor) of an edge whose OWN
                   declared `term` -- read from BEFORE the write -- has `matures_at <= w.tick`.
@@ -653,7 +657,27 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     # PURE CLOSURE is unaffected -- voluntary resignation of one's own seat (`release`) is still
     # T-m, because closing what you hold is not an act of authority over the seat, it is giving it
     # up. Only `closed` distinguishes the two; `is_seat_hold` alone would also refuse `release`.
-    if actor is not None and actor == owner and not (seat is not None and not closed):
+    #
+    # ⚠ T-M NEVER ADMITS A CHANGE TO AN EXISTING EDGE'S `term`, EITHER -- CORRECTED (BATCH-CLOSE,
+    # methodology-close Phase 1, CORRECTNESS lens + antagonist, 2026-09-30): the seat carve-out
+    # above is computed only for `t.kind == "hold"` (`seat` is `None` for every other kind), so an
+    # `oblige` edge's T-m guard reduced to bare `actor == owner` -- no check on `moved` at all. The
+    # same class of over-admission the seat carve-out exists to prevent, one kind over: `may_renew`'s
+    # own docstring REJECTS "the obligee's own act (T-m) -- a term the servant can extend for
+    # himself is not a term," and the bare guard admitted exactly that read for ANY term rewrite
+    # (extend, shorten, add, remove) an obligee makes on their own edge, bypassing `renewal`'s
+    # `may_renew` seat-authorization and its later-only direction. LATENT, NOT REACHABLE TODAY: the
+    # one non-test writer of an existing `.term` is `_eff_transfer`'s `_renewals` (`loop/effects.py`),
+    # which already calls `may_renew` before ever proposing a change -- so no shipped effect
+    # currently exploits the gap, and the admitted OUTCOME does not move. The gate itself was not
+    # the backstop for the invariant its own docstring states; only `_renewals`' incidental
+    # discipline was. `moved` (computed above, not yet spent when this clause was first written)
+    # is the fix: T-m admits an owner's own OPENING (`moved is None`) and PURE CLOSURE (`release`,
+    # including a convict discharging his own penance) exactly as before, and now excludes a `term`
+    # rewrite on an existing edge, which is `T-n`'s or `renewal`'s to admit.
+    if (actor is not None and actor == owner
+            and not (seat is not None and not closed)
+            and not (moved and "term" in moved)):
         return T_M
     if closed and (t.subject in gone or t.object in gone):
         return CASCADE

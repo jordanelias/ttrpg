@@ -425,6 +425,12 @@ _RENEWAL_REFUSED = {
     "imposing a term on an edge that had none": (_termless, Term(4, "x"), {}),
     "an ended oblige":                (_closed, Term(4, "x"), {}),
     "an edge on the seat that is not an oblige": (_a_tie_on_the_seat, Term(4, "x"), {}),
+    # BATCH-CLOSE FINDING (methodology-close Phase 1, CORRECTNESS lens + antagonist, 2026-09-30):
+    # the obligee is the edge's own OWNER (`was.subject`), so before the T-m fix below this row a
+    # bare `actor==owner` reduced T-m's guard to true for any `oblige` write, regardless of `moved`
+    # -- admitting exactly the reading `may_renew`'s own docstring rejects ("a term the servant can
+    # extend for himself is not a term"). No `via` at all, unlike the control: T-m never reads it.
+    "the obligee winding his own term": (lambda w, t: t, Term(4, "x"), dict(actor="p_mid", via=None)),
 }
 
 
