@@ -1,0 +1,3647 @@
+{
+ "mode": "none",
+ "slots": "2x3",
+ "seconds": 122.5,
+ "n_cases_attempted": 35,
+ "n_cases_ok": 35,
+ "n_cases_failed": 0,
+ "failures": [],
+ "fork_rows_failed": 0,
+ "probed": 2040,
+ "no_live_window": 516,
+ "inert": 978,
+ "genuine": 546,
+ "reconverged": 414,
+ "diverged": 132,
+ "reconvergence_rate": 0.7582417582417582,
+ "window_slots_checked": 1638,
+ "window_slots_same_tick": 0,
+ "acts_differ": 540,
+ "hash_differ": 540,
+ "stream_only": 408,
+ "changed_distribution": {
+  "0": 414,
+  "3": 43,
+  "1": 84,
+  "2": 5
+ },
+ "divergences": [
+  {
+   "case": "EMG-C2",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    4,
+    5,
+    6
+   ]
+  },
+  {
+   "case": "EMG-C3",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "research",
+   "to_verb": "petition",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    4,
+    5,
+    6
+   ]
+  },
+  {
+   "case": "EMG-C3",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "create_record",
+   "to_verb": "utter",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    4,
+    5,
+    6
+   ]
+  },
+  {
+   "case": "EMG-C4",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "research",
+   "to_verb": "petition",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    4,
+    5,
+    6
+   ]
+  },
+  {
+   "case": "EMG-C4",
+   "lane": "ARC",
+   "at": 6,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "interview",
+   "to_verb": "petition",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    8,
+    9,
+    10
+   ],
+   "changed_idx": [
+    8,
+    9,
+    10
+   ]
+  },
+  {
+   "case": "EMG-C4",
+   "lane": "ARC",
+   "at": 8,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "release",
+   "to_verb": "reconstruct",
+   "in_budget": 3,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "EMG-C4",
+   "lane": "ARC",
+   "at": 10,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "examine",
+   "to_verb": "petition",
+   "in_budget": 3,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "EMG-X5",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "research",
+   "to_verb": "petition",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5,
+    6,
+    7
+   ]
+  },
+  {
+   "case": "EMG-X5",
+   "lane": "ARC",
+   "at": 1,
+   "take": 3,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "create_record",
+   "to_verb": "speak",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5,
+    6,
+    7
+   ]
+  },
+  {
+   "case": "EMG-X5",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "utter",
+   "in_budget": 3,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5
+   ]
+  },
+  {
+   "case": "EMG-X5",
+   "lane": "ARC",
+   "at": 10,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "release",
+   "to_verb": "reconstruct",
+   "in_budget": 3,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    15,
+    16,
+    17
+   ],
+   "changed_idx": [
+    16
+   ]
+  },
+  {
+   "case": "EMG-X6",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5,
+    6,
+    7
+   ]
+  },
+  {
+   "case": "EMG-X6",
+   "lane": "ARC",
+   "at": 1,
+   "take": 3,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "create_record",
+   "to_verb": "fight",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5,
+    6,
+    7
+   ]
+  },
+  {
+   "case": "EMG-X6",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "create_record",
+   "to_verb": "reconstruct",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5,
+    6,
+    7
+   ]
+  },
+  {
+   "case": "EMG-X6",
+   "lane": "ARC",
+   "at": 5,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "fight",
+   "to_verb": "research",
+   "in_budget": 3,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    10,
+    11,
+    12
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "EMG-X6",
+   "lane": "ARC",
+   "at": 14,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "create_record",
+   "to_verb": "found",
+   "in_budget": 3,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    15,
+    16,
+    17
+   ],
+   "changed_idx": [
+    16
+   ]
+  },
+  {
+   "case": "EMG-X7",
+   "lane": "ARC",
+   "at": 3,
+   "take": 1,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "EMG-X7",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "EMG-X7",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "EMG-X8",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5,
+    6,
+    7
+   ]
+  },
+  {
+   "case": "EMG-X8",
+   "lane": "ARC",
+   "at": 7,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "create_record",
+   "to_verb": "research",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    11,
+    12,
+    13
+   ],
+   "changed_idx": [
+    11,
+    12,
+    13
+   ]
+  },
+  {
+   "case": "NSC-01",
+   "lane": "ARC",
+   "at": 1,
+   "take": 3,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "found",
+   "to_verb": "petition",
+   "in_budget": 3,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "NSC-01",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 3,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "NSC-01",
+   "lane": "ARC",
+   "at": 10,
+   "take": 1,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "NSC-02",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "petition",
+   "to_verb": "move",
+   "in_budget": 3,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5
+   ]
+  },
+  {
+   "case": "NSC-03",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "research",
+   "in_budget": 3,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "NSC-03",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    4,
+    5,
+    6
+   ]
+  },
+  {
+   "case": "NSC-03",
+   "lane": "ARC",
+   "at": 6,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "examine",
+   "to_verb": "interview",
+   "in_budget": 3,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    8,
+    9,
+    10
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NSC-03",
+   "lane": "ARC",
+   "at": 7,
+   "take": 3,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "commit",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    8,
+    9,
+    10
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NSC-04",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    4,
+    5,
+    6
+   ]
+  },
+  {
+   "case": "NSC-04",
+   "lane": "ARC",
+   "at": 6,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "create_record",
+   "to_verb": "research",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "case": "NSC-04",
+   "lane": "ARC",
+   "at": 13,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    14,
+    15,
+    16
+   ],
+   "changed_idx": [
+    15
+   ]
+  },
+  {
+   "case": "NSC-05",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "research",
+   "to_verb": "petition",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5,
+    6,
+    7
+   ]
+  },
+  {
+   "case": "NSC-05",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "create_record",
+   "to_verb": "research",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5,
+    6,
+    7
+   ]
+  },
+  {
+   "case": "NSC-06",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "research",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "NSC-06",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "create_record",
+   "to_verb": "research",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "NSC-06",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "NSC-06",
+   "lane": "ARC",
+   "at": 4,
+   "take": 3,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "commit",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "NSC-07",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "surveil",
+   "to_verb": "interview",
+   "in_budget": 3,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    5
+   ]
+  },
+  {
+   "case": "NSC-07",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    4,
+    5,
+    6
+   ]
+  },
+  {
+   "case": "NSC-07",
+   "lane": "ARC",
+   "at": 4,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "surveil",
+   "to_verb": "interview",
+   "in_budget": 3,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    11
+   ]
+  },
+  {
+   "case": "NSC-07",
+   "lane": "ARC",
+   "at": 6,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "create_record",
+   "to_verb": "research",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "case": "NSC-07",
+   "lane": "ARC",
+   "at": 9,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "petition",
+   "to_verb": "surveil",
+   "in_budget": 3,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    14,
+    15,
+    16
+   ],
+   "changed_idx": [
+    15
+   ]
+  },
+  {
+   "case": "NSC-07",
+   "lane": "ARC",
+   "at": 13,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    14,
+    15,
+    16
+   ],
+   "changed_idx": [
+    16
+   ]
+  },
+  {
+   "case": "NSC-07",
+   "lane": "ARC",
+   "at": 13,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    14,
+    15,
+    16
+   ],
+   "changed_idx": [
+    16
+   ]
+  },
+  {
+   "case": "NSC-07",
+   "lane": "ARC",
+   "at": 13,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "fight",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    14,
+    15,
+    16
+   ],
+   "changed_idx": [
+    16
+   ]
+  },
+  {
+   "case": "NSC-08",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    3,
+    4,
+    5
+   ],
+   "changed_idx": [
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "case": "NSC-08",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "reconstruct",
+   "to_verb": "create_record",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "NSC-08",
+   "lane": "ARC",
+   "at": 4,
+   "take": 3,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "transfer",
+   "to_verb": "move",
+   "in_budget": 3,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "NSC-09",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "research",
+   "in_budget": 3,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    7
+   ]
+  },
+  {
+   "case": "NSC-09",
+   "lane": "ARC",
+   "at": 1,
+   "take": 3,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "petition",
+   "to_verb": "found",
+   "in_budget": 3,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    7
+   ]
+  },
+  {
+   "case": "NSC-09",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5,
+    6,
+    7
+   ]
+  },
+  {
+   "case": "NSC-09",
+   "lane": "ARC",
+   "at": 4,
+   "take": 3,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "create_record",
+   "to_verb": "research",
+   "in_budget": 3,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    7
+   ]
+  },
+  {
+   "case": "NSC-09",
+   "lane": "ARC",
+   "at": 7,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    10,
+    11,
+    12
+   ],
+   "changed_idx": [
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "case": "NSC-09",
+   "lane": "ARC",
+   "at": 8,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "reconstruct",
+   "in_budget": 3,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    10,
+    11,
+    12
+   ],
+   "changed_idx": [
+    11,
+    12
+   ]
+  },
+  {
+   "case": "NSC-09",
+   "lane": "ARC",
+   "at": 12,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "create_record",
+   "to_verb": "work",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    16,
+    17,
+    18
+   ],
+   "changed_idx": [
+    16,
+    17,
+    18
+   ]
+  },
+  {
+   "case": "SCN-01",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "surveil",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5,
+    6
+   ]
+  },
+  {
+   "case": "SCN-01",
+   "lane": "ARC",
+   "at": 9,
+   "take": 2,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "commit",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    10,
+    11,
+    12
+   ],
+   "changed_idx": [
+    11
+   ]
+  },
+  {
+   "case": "SCN-02",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5,
+    6,
+    7
+   ]
+  },
+  {
+   "case": "SCN-02",
+   "lane": "ARC",
+   "at": 1,
+   "take": 3,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "create_record",
+   "to_verb": "speak",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5,
+    6
+   ]
+  },
+  {
+   "case": "SCN-02",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 3,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5
+   ]
+  },
+  {
+   "case": "SCN-02",
+   "lane": "ARC",
+   "at": 4,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "SCN-02",
+   "lane": "ARC",
+   "at": 4,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "SCN-02",
+   "lane": "ARC",
+   "at": 4,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "SCN-02",
+   "lane": "ARC",
+   "at": 5,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "research",
+   "to_verb": "fight",
+   "in_budget": 3,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    10,
+    11,
+    12
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "SCN-02",
+   "lane": "ARC",
+   "at": 10,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "research",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    16,
+    17,
+    18
+   ],
+   "changed_idx": [
+    16,
+    17,
+    18
+   ]
+  },
+  {
+   "case": "SCN-02",
+   "lane": "ARC",
+   "at": 13,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    16,
+    17,
+    18
+   ],
+   "changed_idx": [
+    16
+   ]
+  },
+  {
+   "case": "SCN-02",
+   "lane": "ARC",
+   "at": 13,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    16,
+    17,
+    18
+   ],
+   "changed_idx": [
+    16
+   ]
+  },
+  {
+   "case": "SCN-03",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "create_record",
+   "to_verb": "utter",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "SCN-03",
+   "lane": "ARC",
+   "at": 5,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    7
+   ]
+  },
+  {
+   "case": "SCN-03",
+   "lane": "ARC",
+   "at": 16,
+   "take": 3,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "migrate",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18
+   ]
+  },
+  {
+   "case": "SCN-04",
+   "lane": "ARC",
+   "at": 1,
+   "take": 3,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "create_record",
+   "to_verb": "work",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5,
+    6,
+    7
+   ]
+  },
+  {
+   "case": "SCN-04",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "reconstruct",
+   "to_verb": "create_record",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5,
+    6,
+    7
+   ]
+  },
+  {
+   "case": "SCN-04",
+   "lane": "ARC",
+   "at": 3,
+   "take": 1,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5
+   ]
+  },
+  {
+   "case": "SCN-04",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "transfer",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5
+   ]
+  },
+  {
+   "case": "SCN-04",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "interview",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5
+   ]
+  },
+  {
+   "case": "SCN-05",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "surveil",
+   "to_verb": "interview",
+   "in_budget": 3,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "SCN-05",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "create_record",
+   "to_verb": "utter",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5,
+    6,
+    7
+   ]
+  },
+  {
+   "case": "SCN-05",
+   "lane": "ARC",
+   "at": 5,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "surveil",
+   "to_verb": "speak",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    10,
+    11,
+    12
+   ],
+   "changed_idx": [
+    10,
+    12
+   ]
+  },
+  {
+   "case": "SCN-06",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    3,
+    4,
+    5
+   ],
+   "changed_idx": [
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "case": "SCN-06",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "reconstruct",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    7,
+    8,
+    9
+   ],
+   "changed_idx": [
+    7,
+    8,
+    9
+   ]
+  },
+  {
+   "case": "SCN-06",
+   "lane": "ARC",
+   "at": 5,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "survey",
+   "to_verb": "surveil",
+   "in_budget": 3,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    7,
+    8,
+    9
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "SCN-08",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 3,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "SCN-08",
+   "lane": "ARC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "interview",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "SCN-09",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "surveil",
+   "to_verb": "interview",
+   "in_budget": 3,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5
+   ]
+  },
+  {
+   "case": "SCN-09",
+   "lane": "ARC",
+   "at": 12,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "surveil",
+   "to_verb": "fight",
+   "in_budget": 3,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    15,
+    16,
+    17
+   ],
+   "changed_idx": [
+    16
+   ]
+  },
+  {
+   "case": "SCN-09",
+   "lane": "ARC",
+   "at": 14,
+   "take": 3,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "commit",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    15,
+    16,
+    17
+   ],
+   "changed_idx": [
+    15
+   ]
+  },
+  {
+   "case": "SCN-10",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "research",
+   "to_verb": "petition",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    4,
+    5,
+    6
+   ]
+  },
+  {
+   "case": "SCN-10",
+   "lane": "ARC",
+   "at": 1,
+   "take": 3,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "petition",
+   "to_verb": "research",
+   "in_budget": 3,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    4
+   ]
+  },
+  {
+   "case": "SCN-10",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "reconstruct",
+   "to_verb": "utter",
+   "in_budget": 3,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    4
+   ]
+  },
+  {
+   "case": "SCN-12",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "surveil",
+   "to_verb": "interview",
+   "in_budget": 3,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    5
+   ]
+  },
+  {
+   "case": "SCN-12",
+   "lane": "ARC",
+   "at": 7,
+   "take": 1,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    8,
+    9,
+    10
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "SCN-12",
+   "lane": "ARC",
+   "at": 8,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "petition",
+   "in_budget": 3,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "SCN-12",
+   "lane": "ARC",
+   "at": 10,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "fight",
+   "to_verb": "utter",
+   "in_budget": 3,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "SCN-12",
+   "lane": "ARC",
+   "at": 11,
+   "take": 3,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "fight",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "SCN-13",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "create_record",
+   "to_verb": "move",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "SCN-13",
+   "lane": "ARC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    7
+   ]
+  },
+  {
+   "case": "SCN-13",
+   "lane": "ARC",
+   "at": 5,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "reconstruct",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    7
+   ]
+  },
+  {
+   "case": "SCN-13",
+   "lane": "ARC",
+   "at": 5,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    7
+   ]
+  },
+  {
+   "case": "SCN-13",
+   "lane": "ARC",
+   "at": 10,
+   "take": 3,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "fight",
+   "to_verb": "create_record",
+   "in_budget": 3,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "SCN-13",
+   "lane": "ARC",
+   "at": 11,
+   "take": 1,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "SCN-14",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "research",
+   "to_verb": "commit",
+   "in_budget": 3,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "SCN-14",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "move",
+   "to_verb": "transfer",
+   "in_budget": 3,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    4
+   ]
+  },
+  {
+   "case": "SCN-14",
+   "lane": "ARC",
+   "at": 3,
+   "take": 1,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    4
+   ]
+  },
+  {
+   "case": "SCN-15",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "research",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "SCN-15",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "create_record",
+   "to_verb": "utter",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "SCN-15",
+   "lane": "ARC",
+   "at": 4,
+   "take": 1,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "create_record",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "SCN-15",
+   "lane": "ARC",
+   "at": 4,
+   "take": 2,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "create_record",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "SCN-15",
+   "lane": "ARC",
+   "at": 4,
+   "take": 3,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "create_record",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "SCN-15",
+   "lane": "ARC",
+   "at": 9,
+   "take": 2,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "SCN-15",
+   "lane": "ARC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "reconstruct",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "SCN-LOOP-A",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "research",
+   "to_verb": "petition",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    4,
+    5,
+    6
+   ]
+  },
+  {
+   "case": "SCN-LOOP-A",
+   "lane": "ARC",
+   "at": 1,
+   "take": 3,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "found",
+   "in_budget": 3,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    4
+   ]
+  },
+  {
+   "case": "SCN-LOOP-A",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "reconstruct",
+   "to_verb": "create_record",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    4,
+    5,
+    6
+   ]
+  },
+  {
+   "case": "SCN-LOOP-A",
+   "lane": "ARC",
+   "at": 6,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "petition",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    8,
+    9,
+    10
+   ],
+   "changed_idx": [
+    8,
+    9,
+    10
+   ]
+  },
+  {
+   "case": "SCN-LOOP-A",
+   "lane": "ARC",
+   "at": 10,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13,
+    14
+   ]
+  },
+  {
+   "case": "SCN-LOOP-B",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "surveil",
+   "to_verb": "interview",
+   "in_budget": 3,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    5,
+    6
+   ]
+  },
+  {
+   "case": "SCN-LOOP-B",
+   "lane": "ARC",
+   "at": 1,
+   "take": 3,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "research",
+   "in_budget": 3,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    4
+   ]
+  },
+  {
+   "case": "SCN-LOOP-B",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "move",
+   "to_verb": "transfer",
+   "in_budget": 3,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    4
+   ]
+  },
+  {
+   "case": "SCN-LOOP-B",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "commit",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    4
+   ]
+  },
+  {
+   "case": "SCN-LOOP-B",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "commit",
+   "to_verb": "reconstruct",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "SCN-LOOP-B",
+   "lane": "ARC",
+   "at": 13,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    14,
+    15,
+    16
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "SCN-LOOP-B",
+   "lane": "ARC",
+   "at": 13,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    14,
+    15,
+    16
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "SCN-LOOP-C",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "surveil",
+   "to_verb": "interview",
+   "in_budget": 3,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    4,
+    5,
+    6
+   ],
+   "changed_idx": [
+    5
+   ]
+  },
+  {
+   "case": "SCN-LOOP-C",
+   "lane": "ARC",
+   "at": 7,
+   "take": 1,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "found",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    8,
+    9,
+    10
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "SCN-LOOP-C",
+   "lane": "ARC",
+   "at": 7,
+   "take": 2,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "found",
+   "to_verb": "build",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    8,
+    9,
+    10
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "SCN-LOOP-C",
+   "lane": "ARC",
+   "at": 11,
+   "take": 1,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "migrate",
+   "to_verb": "speak",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "SCN-LOOP-D",
+   "lane": "ARC",
+   "at": 0,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "research",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5,
+    6,
+    7
+   ]
+  },
+  {
+   "case": "SCN-LOOP-D",
+   "lane": "ARC",
+   "at": 2,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "move",
+   "in_budget": 3,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    5
+   ]
+  },
+  {
+   "case": "SCN-LOOP-D",
+   "lane": "ARC",
+   "at": 4,
+   "take": 1,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "create_record",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    7
+   ]
+  },
+  {
+   "case": "SCN-LOOP-D",
+   "lane": "ARC",
+   "at": 4,
+   "take": 2,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "create_record",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    7
+   ]
+  },
+  {
+   "case": "SCN-LOOP-D",
+   "lane": "ARC",
+   "at": 4,
+   "take": 3,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "create_record",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    5,
+    6,
+    7
+   ],
+   "changed_idx": [
+    7
+   ]
+  }
+ ],
+ "rows": [
+  {
+   "case": "EMG-C2",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 16,
+   "n_forks": 48,
+   "n_real_forks": 10,
+   "n_no_live_window": 12,
+   "n_inert": 26,
+   "n_reconverged": 9,
+   "n_diverged": 1,
+   "mean_changed": 0.3,
+   "baseline_decisions": 16,
+   "lane": "ARC"
+  },
+  {
+   "case": "EMG-C3",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 16,
+   "n_forks": 48,
+   "n_real_forks": 11,
+   "n_no_live_window": 12,
+   "n_inert": 25,
+   "n_reconverged": 9,
+   "n_diverged": 2,
+   "mean_changed": 0.5454545454545454,
+   "baseline_decisions": 16,
+   "lane": "ARC"
+  },
+  {
+   "case": "EMG-C4",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 16,
+   "n_forks": 48,
+   "n_real_forks": 16,
+   "n_no_live_window": 12,
+   "n_inert": 20,
+   "n_reconverged": 12,
+   "n_diverged": 4,
+   "mean_changed": 0.5,
+   "baseline_decisions": 16,
+   "lane": "ARC"
+  },
+  {
+   "case": "EMG-X5",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 20,
+   "n_forks": 60,
+   "n_real_forks": 17,
+   "n_no_live_window": 15,
+   "n_inert": 28,
+   "n_reconverged": 13,
+   "n_diverged": 4,
+   "mean_changed": 0.47058823529411764,
+   "baseline_decisions": 20,
+   "lane": "ARC"
+  },
+  {
+   "case": "EMG-X6",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 20,
+   "n_forks": 60,
+   "n_real_forks": 17,
+   "n_no_live_window": 15,
+   "n_inert": 28,
+   "n_reconverged": 12,
+   "n_diverged": 5,
+   "mean_changed": 0.6470588235294118,
+   "baseline_decisions": 20,
+   "lane": "ARC"
+  },
+  {
+   "case": "EMG-X7",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 20,
+   "n_forks": 60,
+   "n_real_forks": 12,
+   "n_no_live_window": 15,
+   "n_inert": 33,
+   "n_reconverged": 9,
+   "n_diverged": 3,
+   "mean_changed": 0.25,
+   "baseline_decisions": 20,
+   "lane": "ARC"
+  },
+  {
+   "case": "EMG-X8",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 23,
+   "n_forks": 69,
+   "n_real_forks": 18,
+   "n_no_live_window": 18,
+   "n_inert": 33,
+   "n_reconverged": 16,
+   "n_diverged": 2,
+   "mean_changed": 0.3333333333333333,
+   "baseline_decisions": 23,
+   "lane": "ARC"
+  },
+  {
+   "case": "NSC-01",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 16,
+   "n_no_live_window": 18,
+   "n_inert": 38,
+   "n_reconverged": 13,
+   "n_diverged": 3,
+   "mean_changed": 0.1875,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "NSC-02",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 20,
+   "n_forks": 60,
+   "n_real_forks": 13,
+   "n_no_live_window": 15,
+   "n_inert": 32,
+   "n_reconverged": 12,
+   "n_diverged": 1,
+   "mean_changed": 0.07692307692307693,
+   "baseline_decisions": 20,
+   "lane": "ARC"
+  },
+  {
+   "case": "NSC-03",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 16,
+   "n_forks": 48,
+   "n_real_forks": 14,
+   "n_no_live_window": 12,
+   "n_inert": 22,
+   "n_reconverged": 10,
+   "n_diverged": 4,
+   "mean_changed": 0.42857142857142855,
+   "baseline_decisions": 16,
+   "lane": "ARC"
+  },
+  {
+   "case": "NSC-04",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 19,
+   "n_forks": 57,
+   "n_real_forks": 21,
+   "n_no_live_window": 15,
+   "n_inert": 21,
+   "n_reconverged": 18,
+   "n_diverged": 3,
+   "mean_changed": 0.3333333333333333,
+   "baseline_decisions": 19,
+   "lane": "ARC"
+  },
+  {
+   "case": "NSC-05",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 19,
+   "n_forks": 57,
+   "n_real_forks": 18,
+   "n_no_live_window": 12,
+   "n_inert": 27,
+   "n_reconverged": 16,
+   "n_diverged": 2,
+   "mean_changed": 0.3333333333333333,
+   "baseline_decisions": 19,
+   "lane": "ARC"
+  },
+  {
+   "case": "NSC-06",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 20,
+   "n_no_live_window": 18,
+   "n_inert": 34,
+   "n_reconverged": 16,
+   "n_diverged": 4,
+   "mean_changed": 0.4,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "NSC-07",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 19,
+   "n_forks": 57,
+   "n_real_forks": 21,
+   "n_no_live_window": 15,
+   "n_inert": 21,
+   "n_reconverged": 13,
+   "n_diverged": 8,
+   "mean_changed": 0.5714285714285714,
+   "baseline_decisions": 19,
+   "lane": "ARC"
+  },
+  {
+   "case": "NSC-08",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 13,
+   "n_forks": 39,
+   "n_real_forks": 9,
+   "n_no_live_window": 12,
+   "n_inert": 18,
+   "n_reconverged": 6,
+   "n_diverged": 3,
+   "mean_changed": 0.7777777777777778,
+   "baseline_decisions": 13,
+   "lane": "ARC"
+  },
+  {
+   "case": "NSC-09",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 22,
+   "n_forks": 66,
+   "n_real_forks": 13,
+   "n_no_live_window": 18,
+   "n_inert": 35,
+   "n_reconverged": 6,
+   "n_diverged": 7,
+   "mean_changed": 1.0769230769230769,
+   "baseline_decisions": 22,
+   "lane": "ARC"
+  },
+  {
+   "case": "SCN-01",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 20,
+   "n_forks": 60,
+   "n_real_forks": 16,
+   "n_no_live_window": 15,
+   "n_inert": 29,
+   "n_reconverged": 14,
+   "n_diverged": 2,
+   "mean_changed": 0.1875,
+   "baseline_decisions": 20,
+   "lane": "ARC"
+  },
+  {
+   "case": "SCN-02",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 22,
+   "n_forks": 66,
+   "n_real_forks": 21,
+   "n_no_live_window": 18,
+   "n_inert": 27,
+   "n_reconverged": 11,
+   "n_diverged": 10,
+   "mean_changed": 0.7142857142857143,
+   "baseline_decisions": 22,
+   "lane": "ARC"
+  },
+  {
+   "case": "SCN-03",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 25,
+   "n_no_live_window": 18,
+   "n_inert": 29,
+   "n_reconverged": 22,
+   "n_diverged": 3,
+   "mean_changed": 0.2,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "SCN-04",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 22,
+   "n_forks": 66,
+   "n_real_forks": 17,
+   "n_no_live_window": 18,
+   "n_inert": 31,
+   "n_reconverged": 12,
+   "n_diverged": 5,
+   "mean_changed": 0.5294117647058824,
+   "baseline_decisions": 22,
+   "lane": "ARC"
+  },
+  {
+   "case": "SCN-05",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 20,
+   "n_forks": 60,
+   "n_real_forks": 13,
+   "n_no_live_window": 15,
+   "n_inert": 32,
+   "n_reconverged": 10,
+   "n_diverged": 3,
+   "mean_changed": 0.46153846153846156,
+   "baseline_decisions": 20,
+   "lane": "ARC"
+  },
+  {
+   "case": "SCN-06",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 15,
+   "n_forks": 45,
+   "n_real_forks": 14,
+   "n_no_live_window": 12,
+   "n_inert": 19,
+   "n_reconverged": 11,
+   "n_diverged": 3,
+   "mean_changed": 0.5,
+   "baseline_decisions": 15,
+   "lane": "ARC"
+  },
+  {
+   "case": "SCN-07",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 16,
+   "n_forks": 48,
+   "n_real_forks": 10,
+   "n_no_live_window": 12,
+   "n_inert": 26,
+   "n_reconverged": 10,
+   "n_diverged": 0,
+   "mean_changed": 0.0,
+   "baseline_decisions": 16,
+   "lane": "ARC"
+  },
+  {
+   "case": "SCN-08",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 22,
+   "n_no_live_window": 18,
+   "n_inert": 32,
+   "n_reconverged": 20,
+   "n_diverged": 2,
+   "mean_changed": 0.09090909090909091,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "SCN-09",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 20,
+   "n_forks": 60,
+   "n_real_forks": 18,
+   "n_no_live_window": 15,
+   "n_inert": 27,
+   "n_reconverged": 15,
+   "n_diverged": 3,
+   "mean_changed": 0.16666666666666666,
+   "baseline_decisions": 20,
+   "lane": "ARC"
+  },
+  {
+   "case": "SCN-10",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 17,
+   "n_forks": 51,
+   "n_real_forks": 8,
+   "n_no_live_window": 15,
+   "n_inert": 28,
+   "n_reconverged": 5,
+   "n_diverged": 3,
+   "mean_changed": 0.625,
+   "baseline_decisions": 17,
+   "lane": "ARC"
+  },
+  {
+   "case": "SCN-11",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 10,
+   "n_no_live_window": 18,
+   "n_inert": 44,
+   "n_reconverged": 10,
+   "n_diverged": 0,
+   "mean_changed": 0.0,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "SCN-12",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 16,
+   "n_forks": 48,
+   "n_real_forks": 16,
+   "n_no_live_window": 12,
+   "n_inert": 20,
+   "n_reconverged": 11,
+   "n_diverged": 5,
+   "mean_changed": 0.3125,
+   "baseline_decisions": 16,
+   "lane": "ARC"
+  },
+  {
+   "case": "SCN-13",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 17,
+   "n_no_live_window": 18,
+   "n_inert": 37,
+   "n_reconverged": 11,
+   "n_diverged": 6,
+   "mean_changed": 0.47058823529411764,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "SCN-14",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 16,
+   "n_forks": 48,
+   "n_real_forks": 16,
+   "n_no_live_window": 12,
+   "n_inert": 20,
+   "n_reconverged": 13,
+   "n_diverged": 3,
+   "mean_changed": 0.1875,
+   "baseline_decisions": 16,
+   "lane": "ARC"
+  },
+  {
+   "case": "SCN-15",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 22,
+   "n_no_live_window": 18,
+   "n_inert": 32,
+   "n_reconverged": 15,
+   "n_diverged": 7,
+   "mean_changed": 0.5,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "SCN-LOOP-A",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 16,
+   "n_forks": 48,
+   "n_real_forks": 11,
+   "n_no_live_window": 12,
+   "n_inert": 25,
+   "n_reconverged": 6,
+   "n_diverged": 5,
+   "mean_changed": 1.1818181818181819,
+   "baseline_decisions": 16,
+   "lane": "ARC"
+  },
+  {
+   "case": "SCN-LOOP-B",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 18,
+   "n_forks": 54,
+   "n_real_forks": 16,
+   "n_no_live_window": 12,
+   "n_inert": 26,
+   "n_reconverged": 9,
+   "n_diverged": 7,
+   "mean_changed": 0.5,
+   "baseline_decisions": 18,
+   "lane": "ARC"
+  },
+  {
+   "case": "SCN-LOOP-C",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 15,
+   "n_forks": 45,
+   "n_real_forks": 16,
+   "n_no_live_window": 9,
+   "n_inert": 20,
+   "n_reconverged": 12,
+   "n_diverged": 4,
+   "mean_changed": 0.25,
+   "baseline_decisions": 15,
+   "lane": "ARC"
+  },
+  {
+   "case": "SCN-LOOP-D",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 20,
+   "n_forks": 60,
+   "n_real_forks": 12,
+   "n_no_live_window": 15,
+   "n_inert": 33,
+   "n_reconverged": 7,
+   "n_diverged": 5,
+   "mean_changed": 0.5833333333333334,
+   "baseline_decisions": 20,
+   "lane": "ARC"
+  }
+ ],
+ "chunk": [
+  108,
+  143
+ ]
+}

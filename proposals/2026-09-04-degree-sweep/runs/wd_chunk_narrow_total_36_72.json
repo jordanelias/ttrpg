@@ -1,0 +1,9832 @@
+{
+ "mode": "total",
+ "slots": "narrow",
+ "seconds": 178.6,
+ "n_cases_attempted": 36,
+ "n_cases_ok": 36,
+ "n_cases_failed": 0,
+ "failures": [],
+ "fork_rows_failed": 0,
+ "probed": 2574,
+ "no_live_window": 636,
+ "inert": 632,
+ "genuine": 1306,
+ "reconverged": 906,
+ "diverged": 400,
+ "reconvergence_rate": 0.6937212863705973,
+ "window_slots_checked": 3918,
+ "window_slots_same_tick": 0,
+ "acts_differ": 619,
+ "hash_differ": 619,
+ "stream_only": 219,
+ "changed_distribution": {
+  "0": 906,
+  "1": 225,
+  "2": 122,
+  "3": 53
+ },
+ "divergences": [
+  {
+   "case": "NPC-072",
+   "lane": "NPC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "NPC-072",
+   "lane": "NPC",
+   "at": 4,
+   "take": 2,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "transfer",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "NPC-072",
+   "lane": "NPC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "fight",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "NPC-072",
+   "lane": "NPC",
+   "at": 5,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "NPC-072",
+   "lane": "NPC",
+   "at": 5,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    8
+   ]
+  },
+  {
+   "case": "NPC-072",
+   "lane": "NPC",
+   "at": 9,
+   "take": 2,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "work",
+   "to_verb": "create_record",
+   "in_budget": 2,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "NPC-072",
+   "lane": "NPC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "work",
+   "to_verb": "utter",
+   "in_budget": 2,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "NPC-072",
+   "lane": "NPC",
+   "at": 10,
+   "take": 1,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "move",
+   "to_verb": "transfer",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "NPC-072",
+   "lane": "NPC",
+   "at": 10,
+   "take": 2,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "move",
+   "to_verb": "work",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "NPC-072",
+   "lane": "NPC",
+   "at": 10,
+   "take": 3,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "move",
+   "to_verb": "release",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "NPC-072",
+   "lane": "NPC",
+   "at": 11,
+   "take": 2,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "NPC-072",
+   "lane": "NPC",
+   "at": 11,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "NPC-072",
+   "lane": "NPC",
+   "at": 16,
+   "take": 3,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "release",
+   "to_verb": "work",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "NPC-073",
+   "lane": "NPC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "build",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "NPC-073",
+   "lane": "NPC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "NPC-073",
+   "lane": "NPC",
+   "at": 5,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "create_record",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "NPC-074",
+   "lane": "NPC",
+   "at": 3,
+   "take": 1,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "petition",
+   "to_verb": "transfer",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "NPC-074",
+   "lane": "NPC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "petition",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "NPC-074",
+   "lane": "NPC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "petition",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "NPC-074",
+   "lane": "NPC",
+   "at": 9,
+   "take": 1,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "research",
+   "to_verb": "move",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    14
+   ]
+  },
+  {
+   "case": "NPC-074",
+   "lane": "NPC",
+   "at": 9,
+   "take": 2,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "research",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13,
+    14
+   ]
+  },
+  {
+   "case": "NPC-074",
+   "lane": "NPC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13,
+    14
+   ]
+  },
+  {
+   "case": "NPC-074",
+   "lane": "NPC",
+   "at": 11,
+   "take": 1,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "NPC-074",
+   "lane": "NPC",
+   "at": 11,
+   "take": 2,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "NPC-074",
+   "lane": "NPC",
+   "at": 11,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "NPC-074",
+   "lane": "NPC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    17,
+    18,
+    19
+   ],
+   "changed_idx": [
+    17
+   ]
+  },
+  {
+   "case": "NPC-074",
+   "lane": "NPC",
+   "at": 15,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    17,
+    18,
+    19
+   ],
+   "changed_idx": [
+    17
+   ]
+  },
+  {
+   "case": "NPC-080",
+   "lane": "NPC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    7,
+    8
+   ]
+  },
+  {
+   "case": "NPC-080",
+   "lane": "NPC",
+   "at": 5,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "NPC-080",
+   "lane": "NPC",
+   "at": 5,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    8
+   ]
+  },
+  {
+   "case": "NPC-080",
+   "lane": "NPC",
+   "at": 11,
+   "take": 2,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "reconstruct",
+   "to_verb": "petition",
+   "in_budget": 2,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "NPC-081",
+   "lane": "NPC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "move",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "NPC-081",
+   "lane": "NPC",
+   "at": 11,
+   "take": 1,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "NPC-081",
+   "lane": "NPC",
+   "at": 11,
+   "take": 2,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "NPC-081",
+   "lane": "NPC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "move",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "NPC-081",
+   "lane": "NPC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 2,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "NPC-081",
+   "lane": "NPC",
+   "at": 17,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "petition",
+   "in_budget": 2,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "NPC-082",
+   "lane": "NPC",
+   "at": 3,
+   "take": 1,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7
+   ]
+  },
+  {
+   "case": "NPC-082",
+   "lane": "NPC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "NPC-082",
+   "lane": "NPC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    8
+   ]
+  },
+  {
+   "case": "NPC-082",
+   "lane": "NPC",
+   "at": 5,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "NPC-082",
+   "lane": "NPC",
+   "at": 9,
+   "take": 1,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13
+   ]
+  },
+  {
+   "case": "NPC-082",
+   "lane": "NPC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "NPC-082",
+   "lane": "NPC",
+   "at": 11,
+   "take": 1,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "interview",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "NPC-082",
+   "lane": "NPC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "found",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "NPC-082",
+   "lane": "NPC",
+   "at": 15,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "found",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "NPC-082",
+   "lane": "NPC",
+   "at": 15,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "found",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "NPC-082",
+   "lane": "NPC",
+   "at": 17,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "NPC-082",
+   "lane": "NPC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "NPC-082",
+   "lane": "NPC",
+   "at": 17,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "case": "NPC-084",
+   "lane": "NPC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "NPC-084",
+   "lane": "NPC",
+   "at": 5,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "NPC-084",
+   "lane": "NPC",
+   "at": 9,
+   "take": 2,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "reconstruct",
+   "in_budget": 2,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "NPC-084",
+   "lane": "NPC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "examine",
+   "in_budget": 2,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    14
+   ]
+  },
+  {
+   "case": "NPC-084",
+   "lane": "NPC",
+   "at": 11,
+   "take": 1,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "NPC-084",
+   "lane": "NPC",
+   "at": 17,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "NPC-085",
+   "lane": "NPC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "create_record",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "NPC-085",
+   "lane": "NPC",
+   "at": 5,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "create_record",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "NPC-089",
+   "lane": "NPC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "release",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "NPC-089",
+   "lane": "NPC",
+   "at": 4,
+   "take": 2,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "transfer",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "NPC-089",
+   "lane": "NPC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "NPC-089",
+   "lane": "NPC",
+   "at": 5,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "interview",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "NPC-089",
+   "lane": "NPC",
+   "at": 5,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "NPC-089",
+   "lane": "NPC",
+   "at": 9,
+   "take": 2,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13,
+    14
+   ]
+  },
+  {
+   "case": "NPC-089",
+   "lane": "NPC",
+   "at": 10,
+   "take": 3,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "reconstruct",
+   "to_verb": "move",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "NPC-089",
+   "lane": "NPC",
+   "at": 11,
+   "take": 2,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13,
+    14
+   ]
+  },
+  {
+   "case": "NPC-089",
+   "lane": "NPC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "found",
+   "to_verb": "transfer",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "NPC-089",
+   "lane": "NPC",
+   "at": 15,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "found",
+   "to_verb": "migrate",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "NPC-089",
+   "lane": "NPC",
+   "at": 15,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "found",
+   "to_verb": "work",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "NPC-089",
+   "lane": "NPC",
+   "at": 16,
+   "take": 3,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "reconstruct",
+   "to_verb": "move",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 3,
+   "take": 1,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "work",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "release",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "move",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 4,
+   "take": 1,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "commit",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 4,
+   "take": 2,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 4,
+   "take": 3,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "commit",
+   "to_verb": "speak",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "move",
+   "to_verb": "reconstruct",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 5,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "move",
+   "to_verb": "transfer",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 5,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "move",
+   "to_verb": "work",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 9,
+   "take": 2,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "reconstruct",
+   "to_verb": "work",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "reconstruct",
+   "to_verb": "move",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 10,
+   "take": 1,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "commit",
+   "to_verb": "migrate",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 10,
+   "take": 2,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "commit",
+   "to_verb": "fight",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 10,
+   "take": 3,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 11,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 15,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 16,
+   "take": 1,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "surveil",
+   "to_verb": "release",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 16,
+   "take": 2,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "surveil",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 16,
+   "take": 3,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "surveil",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 17,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "move",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "NPC-090",
+   "lane": "NPC",
+   "at": 17,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    20
+   ]
+  },
+  {
+   "case": "ARC-01",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-01",
+   "lane": "ARC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-01",
+   "lane": "ARC",
+   "at": 5,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-01",
+   "lane": "ARC",
+   "at": 9,
+   "take": 1,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-01",
+   "lane": "ARC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-01",
+   "lane": "ARC",
+   "at": 10,
+   "take": 2,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "research",
+   "in_budget": 2,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13
+   ]
+  },
+  {
+   "case": "ARC-01",
+   "lane": "ARC",
+   "at": 10,
+   "take": 3,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 2,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13
+   ]
+  },
+  {
+   "case": "ARC-01",
+   "lane": "ARC",
+   "at": 11,
+   "take": 1,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-01",
+   "lane": "ARC",
+   "at": 17,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-01",
+   "lane": "ARC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-01",
+   "lane": "ARC",
+   "at": 17,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "case": "ARC-02",
+   "lane": "ARC",
+   "at": 3,
+   "take": 1,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-02",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-02",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "build",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-02",
+   "lane": "ARC",
+   "at": 4,
+   "take": 3,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-02",
+   "lane": "ARC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    7,
+    8
+   ]
+  },
+  {
+   "case": "ARC-02",
+   "lane": "ARC",
+   "at": 5,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    7,
+    8
+   ]
+  },
+  {
+   "case": "ARC-02",
+   "lane": "ARC",
+   "at": 5,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "ARC-02",
+   "lane": "ARC",
+   "at": 10,
+   "take": 1,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-02",
+   "lane": "ARC",
+   "at": 10,
+   "take": 3,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-02",
+   "lane": "ARC",
+   "at": 11,
+   "take": 1,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-02",
+   "lane": "ARC",
+   "at": 11,
+   "take": 2,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-02",
+   "lane": "ARC",
+   "at": 11,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-02",
+   "lane": "ARC",
+   "at": 16,
+   "take": 1,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-02",
+   "lane": "ARC",
+   "at": 16,
+   "take": 2,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "ARC-02",
+   "lane": "ARC",
+   "at": 16,
+   "take": 3,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-02",
+   "lane": "ARC",
+   "at": 17,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19,
+    20
+   ]
+  },
+  {
+   "case": "ARC-02",
+   "lane": "ARC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19,
+    20
+   ]
+  },
+  {
+   "case": "ARC-02",
+   "lane": "ARC",
+   "at": 17,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19,
+    20
+   ]
+  },
+  {
+   "case": "ARC-03",
+   "lane": "ARC",
+   "at": 3,
+   "take": 1,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-03",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7
+   ]
+  },
+  {
+   "case": "ARC-03",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-03",
+   "lane": "ARC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "release",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-03",
+   "lane": "ARC",
+   "at": 9,
+   "take": 1,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "fight",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13
+   ]
+  },
+  {
+   "case": "ARC-03",
+   "lane": "ARC",
+   "at": 9,
+   "take": 2,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "interview",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-03",
+   "lane": "ARC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "build",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13
+   ]
+  },
+  {
+   "case": "ARC-03",
+   "lane": "ARC",
+   "at": 11,
+   "take": 1,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "interview",
+   "to_verb": "transfer",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-03",
+   "lane": "ARC",
+   "at": 11,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "interview",
+   "to_verb": "release",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "ARC-03",
+   "lane": "ARC",
+   "at": 17,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "migrate",
+   "to_verb": "release",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "ARC-03",
+   "lane": "ARC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "migrate",
+   "to_verb": "restore",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-03",
+   "lane": "ARC",
+   "at": 17,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "migrate",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-04",
+   "lane": "ARC",
+   "at": 3,
+   "take": 1,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    8
+   ]
+  },
+  {
+   "case": "ARC-04",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    8
+   ]
+  },
+  {
+   "case": "ARC-04",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    8
+   ]
+  },
+  {
+   "case": "ARC-04",
+   "lane": "ARC",
+   "at": 4,
+   "take": 3,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "surveil",
+   "to_verb": "move",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-04",
+   "lane": "ARC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    7
+   ]
+  },
+  {
+   "case": "ARC-04",
+   "lane": "ARC",
+   "at": 5,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    7
+   ]
+  },
+  {
+   "case": "ARC-04",
+   "lane": "ARC",
+   "at": 5,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "ARC-04",
+   "lane": "ARC",
+   "at": 9,
+   "take": 1,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "fight",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-04",
+   "lane": "ARC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "build",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-04",
+   "lane": "ARC",
+   "at": 10,
+   "take": 1,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "surveil",
+   "to_verb": "interview",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-04",
+   "lane": "ARC",
+   "at": 10,
+   "take": 3,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "surveil",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-04",
+   "lane": "ARC",
+   "at": 11,
+   "take": 1,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "ARC-04",
+   "lane": "ARC",
+   "at": 11,
+   "take": 2,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-04",
+   "lane": "ARC",
+   "at": 11,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "speak",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "ARC-04",
+   "lane": "ARC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18
+   ]
+  },
+  {
+   "case": "ARC-04",
+   "lane": "ARC",
+   "at": 15,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18
+   ]
+  },
+  {
+   "case": "ARC-04",
+   "lane": "ARC",
+   "at": 15,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "interview",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18
+   ]
+  },
+  {
+   "case": "ARC-04",
+   "lane": "ARC",
+   "at": 16,
+   "take": 1,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "speak",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "ARC-04",
+   "lane": "ARC",
+   "at": 16,
+   "take": 2,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "speak",
+   "to_verb": "release",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18
+   ]
+  },
+  {
+   "case": "ARC-04",
+   "lane": "ARC",
+   "at": 16,
+   "take": 3,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "speak",
+   "to_verb": "restore",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "ARC-05",
+   "lane": "ARC",
+   "at": 3,
+   "take": 1,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "ARC-05",
+   "lane": "ARC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "move",
+   "to_verb": "transfer",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    7
+   ]
+  },
+  {
+   "case": "ARC-05",
+   "lane": "ARC",
+   "at": 10,
+   "take": 2,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 2,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-05",
+   "lane": "ARC",
+   "at": 10,
+   "take": 3,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "research",
+   "to_verb": "commit",
+   "in_budget": 2,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-05",
+   "lane": "ARC",
+   "at": 11,
+   "take": 1,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "move",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-05",
+   "lane": "ARC",
+   "at": 17,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "move",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "ARC-05",
+   "lane": "ARC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18
+   ]
+  },
+  {
+   "case": "ARC-05",
+   "lane": "ARC",
+   "at": 17,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    20
+   ]
+  },
+  {
+   "case": "ARC-06",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "fight",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "ARC-06",
+   "lane": "ARC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "ARC-06",
+   "lane": "ARC",
+   "at": 5,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "ARC-06",
+   "lane": "ARC",
+   "at": 5,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "interview",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "ARC-06",
+   "lane": "ARC",
+   "at": 9,
+   "take": 1,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13
+   ]
+  },
+  {
+   "case": "ARC-06",
+   "lane": "ARC",
+   "at": 9,
+   "take": 2,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "ARC-06",
+   "lane": "ARC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-06",
+   "lane": "ARC",
+   "at": 11,
+   "take": 1,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-06",
+   "lane": "ARC",
+   "at": 11,
+   "take": 2,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-06",
+   "lane": "ARC",
+   "at": 11,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-06",
+   "lane": "ARC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "ARC-06",
+   "lane": "ARC",
+   "at": 15,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "ARC-06",
+   "lane": "ARC",
+   "at": 15,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "ARC-06",
+   "lane": "ARC",
+   "at": 16,
+   "take": 1,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "release",
+   "to_verb": "fight",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "case": "ARC-06",
+   "lane": "ARC",
+   "at": 16,
+   "take": 2,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "release",
+   "to_verb": "speak",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18
+   ]
+  },
+  {
+   "case": "ARC-06",
+   "lane": "ARC",
+   "at": 16,
+   "take": 3,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "release",
+   "to_verb": "survey",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18
+   ]
+  },
+  {
+   "case": "ARC-07",
+   "lane": "ARC",
+   "at": 3,
+   "take": 1,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-07",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-07",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-07",
+   "lane": "ARC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "surveil",
+   "to_verb": "release",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-07",
+   "lane": "ARC",
+   "at": 5,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "surveil",
+   "to_verb": "survey",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-07",
+   "lane": "ARC",
+   "at": 5,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "surveil",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-07",
+   "lane": "ARC",
+   "at": 9,
+   "take": 1,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "ARC-07",
+   "lane": "ARC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "interview",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "ARC-07",
+   "lane": "ARC",
+   "at": 10,
+   "take": 3,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "create_record",
+   "to_verb": "research",
+   "in_budget": 2,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-07",
+   "lane": "ARC",
+   "at": 11,
+   "take": 1,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "examine",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-07",
+   "lane": "ARC",
+   "at": 11,
+   "take": 2,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "examine",
+   "to_verb": "release",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-07",
+   "lane": "ARC",
+   "at": 11,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "examine",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-07",
+   "lane": "ARC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "case": "ARC-07",
+   "lane": "ARC",
+   "at": 15,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-07",
+   "lane": "ARC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19,
+    20
+   ]
+  },
+  {
+   "case": "ARC-08",
+   "lane": "ARC",
+   "at": 3,
+   "take": 1,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7
+   ]
+  },
+  {
+   "case": "ARC-08",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7
+   ]
+  },
+  {
+   "case": "ARC-08",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "fight",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7
+   ]
+  },
+  {
+   "case": "ARC-08",
+   "lane": "ARC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "move",
+   "to_verb": "transfer",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    7,
+    8
+   ]
+  },
+  {
+   "case": "ARC-08",
+   "lane": "ARC",
+   "at": 10,
+   "take": 2,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "transfer",
+   "to_verb": "research",
+   "in_budget": 2,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-08",
+   "lane": "ARC",
+   "at": 10,
+   "take": 3,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "transfer",
+   "to_verb": "work",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "ARC-08",
+   "lane": "ARC",
+   "at": 11,
+   "take": 2,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "work",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-08",
+   "lane": "ARC",
+   "at": 11,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-08",
+   "lane": "ARC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    20
+   ]
+  },
+  {
+   "case": "ARC-08",
+   "lane": "ARC",
+   "at": 15,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    20
+   ]
+  },
+  {
+   "case": "ARC-08",
+   "lane": "ARC",
+   "at": 15,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "fight",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    20
+   ]
+  },
+  {
+   "case": "ARC-08",
+   "lane": "ARC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "work",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "ARC-09",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "move",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7
+   ]
+  },
+  {
+   "case": "ARC-09",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "release",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-09",
+   "lane": "ARC",
+   "at": 4,
+   "take": 1,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7
+   ]
+  },
+  {
+   "case": "ARC-09",
+   "lane": "ARC",
+   "at": 4,
+   "take": 2,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    7
+   ]
+  },
+  {
+   "case": "ARC-09",
+   "lane": "ARC",
+   "at": 4,
+   "take": 3,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "fight",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7
+   ]
+  },
+  {
+   "case": "ARC-09",
+   "lane": "ARC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-09",
+   "lane": "ARC",
+   "at": 5,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "ARC-09",
+   "lane": "ARC",
+   "at": 5,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    7
+   ]
+  },
+  {
+   "case": "ARC-09",
+   "lane": "ARC",
+   "at": 9,
+   "take": 1,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "move",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13
+   ]
+  },
+  {
+   "case": "ARC-09",
+   "lane": "ARC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "migrate",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-09",
+   "lane": "ARC",
+   "at": 10,
+   "take": 1,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13
+   ]
+  },
+  {
+   "case": "ARC-09",
+   "lane": "ARC",
+   "at": 10,
+   "take": 2,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "commit",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13
+   ]
+  },
+  {
+   "case": "ARC-09",
+   "lane": "ARC",
+   "at": 10,
+   "take": 3,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "commit",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-09",
+   "lane": "ARC",
+   "at": 11,
+   "take": 1,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-09",
+   "lane": "ARC",
+   "at": 11,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-09",
+   "lane": "ARC",
+   "at": 15,
+   "take": 2,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    17,
+    18,
+    19
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "ARC-09",
+   "lane": "ARC",
+   "at": 15,
+   "take": 3,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    17,
+    18,
+    19
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "ARC-09",
+   "lane": "ARC",
+   "at": 16,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "fight",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    17,
+    18,
+    19
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "ARC-09",
+   "lane": "ARC",
+   "at": 16,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    17,
+    18,
+    19
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "ARC-09",
+   "lane": "ARC",
+   "at": 16,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    17,
+    18,
+    19
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "ARC-10",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "release",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7
+   ]
+  },
+  {
+   "case": "ARC-10",
+   "lane": "ARC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-10",
+   "lane": "ARC",
+   "at": 5,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-10",
+   "lane": "ARC",
+   "at": 11,
+   "take": 1,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "examine",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-10",
+   "lane": "ARC",
+   "at": 11,
+   "take": 2,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "examine",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-10",
+   "lane": "ARC",
+   "at": 11,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "examine",
+   "to_verb": "survey",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-10",
+   "lane": "ARC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "surveil",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "case": "ARC-10",
+   "lane": "ARC",
+   "at": 17,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19,
+    20
+   ]
+  },
+  {
+   "case": "ARC-10",
+   "lane": "ARC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "ARC-10",
+   "lane": "ARC",
+   "at": 17,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "fight",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "case": "ARC-11",
+   "lane": "ARC",
+   "at": 5,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-11",
+   "lane": "ARC",
+   "at": 11,
+   "take": 1,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-11",
+   "lane": "ARC",
+   "at": 17,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    20
+   ]
+  },
+  {
+   "case": "ARC-11",
+   "lane": "ARC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-11",
+   "lane": "ARC",
+   "at": 17,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-12",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "release",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-12",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "release",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7
+   ]
+  },
+  {
+   "case": "ARC-12",
+   "lane": "ARC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-12",
+   "lane": "ARC",
+   "at": 5,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-12",
+   "lane": "ARC",
+   "at": 9,
+   "take": 1,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13
+   ]
+  },
+  {
+   "case": "ARC-12",
+   "lane": "ARC",
+   "at": 9,
+   "take": 2,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "survey",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-12",
+   "lane": "ARC",
+   "at": 10,
+   "take": 2,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "research",
+   "to_verb": "utter",
+   "in_budget": 2,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13
+   ]
+  },
+  {
+   "case": "ARC-12",
+   "lane": "ARC",
+   "at": 10,
+   "take": 3,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 2,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13
+   ]
+  },
+  {
+   "case": "ARC-12",
+   "lane": "ARC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "surveil",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18
+   ]
+  },
+  {
+   "case": "ARC-12",
+   "lane": "ARC",
+   "at": 15,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "surveil",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18
+   ]
+  },
+  {
+   "case": "ARC-12",
+   "lane": "ARC",
+   "at": 17,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19,
+    20
+   ]
+  },
+  {
+   "case": "ARC-12",
+   "lane": "ARC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "fight",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-12",
+   "lane": "ARC",
+   "at": 17,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-13",
+   "lane": "ARC",
+   "at": 3,
+   "take": 1,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "release",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-13",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "release",
+   "to_verb": "build",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-13",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "release",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-13",
+   "lane": "ARC",
+   "at": 10,
+   "take": 2,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 2,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-13",
+   "lane": "ARC",
+   "at": 10,
+   "take": 3,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "research",
+   "to_verb": "work",
+   "in_budget": 2,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-13",
+   "lane": "ARC",
+   "at": 11,
+   "take": 2,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "surveil",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-13",
+   "lane": "ARC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "surveil",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "case": "ARC-13",
+   "lane": "ARC",
+   "at": 17,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "transfer",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "ARC-13",
+   "lane": "ARC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "release",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "ARC-13",
+   "lane": "ARC",
+   "at": 17,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "ARC-14",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7
+   ]
+  },
+  {
+   "case": "ARC-14",
+   "lane": "ARC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-14",
+   "lane": "ARC",
+   "at": 5,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-14",
+   "lane": "ARC",
+   "at": 9,
+   "take": 2,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "reconstruct",
+   "to_verb": "work",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-14",
+   "lane": "ARC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "reconstruct",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "ARC-14",
+   "lane": "ARC",
+   "at": 11,
+   "take": 1,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    14
+   ]
+  },
+  {
+   "case": "ARC-14",
+   "lane": "ARC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18
+   ]
+  },
+  {
+   "case": "ARC-14",
+   "lane": "ARC",
+   "at": 15,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18
+   ]
+  },
+  {
+   "case": "ARC-14",
+   "lane": "ARC",
+   "at": 15,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "ARC-14",
+   "lane": "ARC",
+   "at": 17,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-14",
+   "lane": "ARC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19,
+    20
+   ]
+  },
+  {
+   "case": "ARC-14",
+   "lane": "ARC",
+   "at": 17,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    20
+   ]
+  },
+  {
+   "case": "ARC-15",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7
+   ]
+  },
+  {
+   "case": "ARC-15",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7
+   ]
+  },
+  {
+   "case": "ARC-15",
+   "lane": "ARC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    8
+   ]
+  },
+  {
+   "case": "ARC-15",
+   "lane": "ARC",
+   "at": 9,
+   "take": 1,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13
+   ]
+  },
+  {
+   "case": "ARC-15",
+   "lane": "ARC",
+   "at": 9,
+   "take": 2,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-15",
+   "lane": "ARC",
+   "at": 11,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-15",
+   "lane": "ARC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "ARC-15",
+   "lane": "ARC",
+   "at": 15,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "ARC-15",
+   "lane": "ARC",
+   "at": 15,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "commit",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "ARC-15",
+   "lane": "ARC",
+   "at": 17,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-15",
+   "lane": "ARC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-15",
+   "lane": "ARC",
+   "at": 17,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-16",
+   "lane": "ARC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "create_record",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    8
+   ]
+  },
+  {
+   "case": "ARC-17",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "build",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-17",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-17",
+   "lane": "ARC",
+   "at": 4,
+   "take": 1,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    7
+   ]
+  },
+  {
+   "case": "ARC-17",
+   "lane": "ARC",
+   "at": 4,
+   "take": 2,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "commit",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    7
+   ]
+  },
+  {
+   "case": "ARC-17",
+   "lane": "ARC",
+   "at": 4,
+   "take": 3,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "commit",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    7
+   ]
+  },
+  {
+   "case": "ARC-17",
+   "lane": "ARC",
+   "at": 10,
+   "take": 1,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-18",
+   "lane": "ARC",
+   "at": 3,
+   "take": 1,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "research",
+   "to_verb": "transfer",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-18",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "research",
+   "to_verb": "reconstruct",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-18",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "research",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-18",
+   "lane": "ARC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "release",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-18",
+   "lane": "ARC",
+   "at": 9,
+   "take": 2,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "reconstruct",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-18",
+   "lane": "ARC",
+   "at": 10,
+   "take": 2,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "research",
+   "to_verb": "interview",
+   "in_budget": 2,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-18",
+   "lane": "ARC",
+   "at": 10,
+   "take": 3,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "research",
+   "to_verb": "examine",
+   "in_budget": 2,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13
+   ]
+  },
+  {
+   "case": "ARC-18",
+   "lane": "ARC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "ARC-18",
+   "lane": "ARC",
+   "at": 17,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "surveil",
+   "to_verb": "transfer",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-18",
+   "lane": "ARC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "surveil",
+   "to_verb": "fight",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-18",
+   "lane": "ARC",
+   "at": 17,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "surveil",
+   "to_verb": "move",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-R16",
+   "lane": "ARC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "ARC-R16",
+   "lane": "ARC",
+   "at": 5,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "interview",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "ARC-R16",
+   "lane": "ARC",
+   "at": 5,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "ARC-R16",
+   "lane": "ARC",
+   "at": 9,
+   "take": 1,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-R16",
+   "lane": "ARC",
+   "at": 9,
+   "take": 2,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-R16",
+   "lane": "ARC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "ARC-R16",
+   "lane": "ARC",
+   "at": 10,
+   "take": 1,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "release",
+   "to_verb": "move",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-R16",
+   "lane": "ARC",
+   "at": 10,
+   "take": 2,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "release",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-R16",
+   "lane": "ARC",
+   "at": 10,
+   "take": 3,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "release",
+   "to_verb": "transfer",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-R16",
+   "lane": "ARC",
+   "at": 11,
+   "take": 1,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-R16",
+   "lane": "ARC",
+   "at": 11,
+   "take": 2,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-R16",
+   "lane": "ARC",
+   "at": 11,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-R16",
+   "lane": "ARC",
+   "at": 15,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "ARC-R16",
+   "lane": "ARC",
+   "at": 15,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18
+   ]
+  },
+  {
+   "case": "ARC-R16",
+   "lane": "ARC",
+   "at": 16,
+   "take": 1,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "release",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "ARC-R16",
+   "lane": "ARC",
+   "at": 16,
+   "take": 3,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "release",
+   "to_verb": "work",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "ARC-R16",
+   "lane": "ARC",
+   "at": 17,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19,
+    20
+   ]
+  },
+  {
+   "case": "ARC-R16",
+   "lane": "ARC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19,
+    20
+   ]
+  },
+  {
+   "case": "ARC-R16",
+   "lane": "ARC",
+   "at": 17,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    20
+   ]
+  },
+  {
+   "case": "ARC-R17",
+   "lane": "ARC",
+   "at": 3,
+   "take": 1,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-R17",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "build",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-R17",
+   "lane": "ARC",
+   "at": 5,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "move",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-R17",
+   "lane": "ARC",
+   "at": 9,
+   "take": 1,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-R17",
+   "lane": "ARC",
+   "at": 9,
+   "take": 2,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "reconstruct",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-R17",
+   "lane": "ARC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "fight",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "ARC-R17",
+   "lane": "ARC",
+   "at": 11,
+   "take": 1,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-R17",
+   "lane": "ARC",
+   "at": 11,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-R17",
+   "lane": "ARC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "case": "ARC-R17",
+   "lane": "ARC",
+   "at": 15,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-R17",
+   "lane": "ARC",
+   "at": 17,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "transfer",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19,
+    20
+   ]
+  },
+  {
+   "case": "ARC-R17",
+   "lane": "ARC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "case": "ARC-R17",
+   "lane": "ARC",
+   "at": 17,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "case": "ARC-R18",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "move",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    8
+   ]
+  },
+  {
+   "case": "ARC-R18",
+   "lane": "ARC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-R18",
+   "lane": "ARC",
+   "at": 5,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-R18",
+   "lane": "ARC",
+   "at": 9,
+   "take": 1,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "reconstruct",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-R18",
+   "lane": "ARC",
+   "at": 9,
+   "take": 2,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "work",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-R18",
+   "lane": "ARC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "move",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "ARC-R18",
+   "lane": "ARC",
+   "at": 11,
+   "take": 2,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-R18",
+   "lane": "ARC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18
+   ]
+  },
+  {
+   "case": "ARC-R18",
+   "lane": "ARC",
+   "at": 17,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-R18",
+   "lane": "ARC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    20
+   ]
+  },
+  {
+   "case": "ARC-R18",
+   "lane": "ARC",
+   "at": 17,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    20
+   ]
+  },
+  {
+   "case": "ARC-R19",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-R19",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "build",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-R19",
+   "lane": "ARC",
+   "at": 5,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "create_record",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-R19",
+   "lane": "ARC",
+   "at": 9,
+   "take": 2,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "ARC-R19",
+   "lane": "ARC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 2,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-20",
+   "lane": "ARC",
+   "at": 3,
+   "take": 1,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "fight",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-20",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "fight",
+   "to_verb": "build",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-20",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "fight",
+   "to_verb": "release",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-20",
+   "lane": "ARC",
+   "at": 4,
+   "take": 3,
+   "tick": 0,
+   "person": "p_b",
+   "from_verb": "commit",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-20",
+   "lane": "ARC",
+   "at": 9,
+   "take": 1,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "reconstruct",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-20",
+   "lane": "ARC",
+   "at": 9,
+   "take": 2,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    14
+   ]
+  },
+  {
+   "case": "ARC-20",
+   "lane": "ARC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "survey",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-20",
+   "lane": "ARC",
+   "at": 10,
+   "take": 1,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-20",
+   "lane": "ARC",
+   "at": 10,
+   "take": 2,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "fight",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-20",
+   "lane": "ARC",
+   "at": 10,
+   "take": 3,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-20",
+   "lane": "ARC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "found",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "ARC-20",
+   "lane": "ARC",
+   "at": 15,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "found",
+   "to_verb": "transfer",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "ARC-20",
+   "lane": "ARC",
+   "at": 15,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "found",
+   "to_verb": "migrate",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "ARC-21",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "release",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7
+   ]
+  },
+  {
+   "case": "ARC-21",
+   "lane": "ARC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-21",
+   "lane": "ARC",
+   "at": 9,
+   "take": 1,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    14
+   ]
+  },
+  {
+   "case": "ARC-21",
+   "lane": "ARC",
+   "at": 9,
+   "take": 2,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "survey",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-21",
+   "lane": "ARC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-21",
+   "lane": "ARC",
+   "at": 11,
+   "take": 1,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-21",
+   "lane": "ARC",
+   "at": 11,
+   "take": 2,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-21",
+   "lane": "ARC",
+   "at": 11,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "commit",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-21",
+   "lane": "ARC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "surveil",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "ARC-21",
+   "lane": "ARC",
+   "at": 15,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "surveil",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "ARC-22",
+   "lane": "ARC",
+   "at": 3,
+   "take": 2,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "release",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "ARC-22",
+   "lane": "ARC",
+   "at": 5,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "move",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    7,
+    8
+   ]
+  },
+  {
+   "case": "ARC-22",
+   "lane": "ARC",
+   "at": 5,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "case": "ARC-22",
+   "lane": "ARC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-22",
+   "lane": "ARC",
+   "at": 11,
+   "take": 2,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-22",
+   "lane": "ARC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "petition",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    20
+   ]
+  },
+  {
+   "case": "ARC-22",
+   "lane": "ARC",
+   "at": 15,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "found",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    20
+   ]
+  },
+  {
+   "case": "ARC-22",
+   "lane": "ARC",
+   "at": 17,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  },
+  {
+   "case": "ARC-22",
+   "lane": "ARC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    20
+   ]
+  },
+  {
+   "case": "ARC-22",
+   "lane": "ARC",
+   "at": 17,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "move",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18
+   ]
+  },
+  {
+   "case": "ARC-23",
+   "lane": "ARC",
+   "at": 3,
+   "take": 1,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-23",
+   "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "build",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    6
+   ]
+  },
+  {
+   "case": "ARC-23",
+   "lane": "ARC",
+   "at": 5,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "move",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-23",
+   "lane": "ARC",
+   "at": 5,
+   "take": 3,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "move",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-23",
+   "lane": "ARC",
+   "at": 9,
+   "take": 1,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    14
+   ]
+  },
+  {
+   "case": "ARC-23",
+   "lane": "ARC",
+   "at": 9,
+   "take": 2,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "reconstruct",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-23",
+   "lane": "ARC",
+   "at": 9,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
+   "case": "ARC-23",
+   "lane": "ARC",
+   "at": 11,
+   "take": 1,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13,
+    14
+   ]
+  },
+  {
+   "case": "ARC-23",
+   "lane": "ARC",
+   "at": 11,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
+   "case": "ARC-23",
+   "lane": "ARC",
+   "at": 15,
+   "take": 1,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "create_record",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19
+   ]
+  },
+  {
+   "case": "ARC-23",
+   "lane": "ARC",
+   "at": 15,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "research",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "case": "ARC-23",
+   "lane": "ARC",
+   "at": 15,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "fight",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    20
+   ]
+  },
+  {
+   "case": "ARC-23",
+   "lane": "ARC",
+   "at": 17,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "fight",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    20
+   ]
+  },
+  {
+   "case": "ARC-23",
+   "lane": "ARC",
+   "at": 17,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "transfer",
+   "to_verb": "work",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    19
+   ]
+  }
+ ],
+ "rows": [
+  {
+   "case": "NPC-072",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 40,
+   "n_no_live_window": 18,
+   "n_inert": 14,
+   "n_reconverged": 27,
+   "n_diverged": 13,
+   "mean_changed": 0.35,
+   "baseline_decisions": 24,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-073",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 24,
+   "n_no_live_window": 18,
+   "n_inert": 30,
+   "n_reconverged": 21,
+   "n_diverged": 3,
+   "mean_changed": 0.125,
+   "baseline_decisions": 24,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-074",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 22,
+   "n_forks": 66,
+   "n_real_forks": 32,
+   "n_no_live_window": 15,
+   "n_inert": 19,
+   "n_reconverged": 21,
+   "n_diverged": 11,
+   "mean_changed": 0.78125,
+   "baseline_decisions": 22,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-080",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 21,
+   "n_no_live_window": 18,
+   "n_inert": 33,
+   "n_reconverged": 17,
+   "n_diverged": 4,
+   "mean_changed": 0.2857142857142857,
+   "baseline_decisions": 24,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-081",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 34,
+   "n_no_live_window": 18,
+   "n_inert": 20,
+   "n_reconverged": 28,
+   "n_diverged": 6,
+   "mean_changed": 0.20588235294117646,
+   "baseline_decisions": 24,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-082",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 36,
+   "n_no_live_window": 18,
+   "n_inert": 18,
+   "n_reconverged": 23,
+   "n_diverged": 13,
+   "mean_changed": 0.6388888888888888,
+   "baseline_decisions": 24,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-084",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 32,
+   "n_no_live_window": 18,
+   "n_inert": 22,
+   "n_reconverged": 26,
+   "n_diverged": 6,
+   "mean_changed": 0.25,
+   "baseline_decisions": 24,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-085",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 22,
+   "n_no_live_window": 18,
+   "n_inert": 32,
+   "n_reconverged": 20,
+   "n_diverged": 2,
+   "mean_changed": 0.09090909090909091,
+   "baseline_decisions": 24,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-089",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 23,
+   "n_forks": 69,
+   "n_real_forks": 44,
+   "n_no_live_window": 15,
+   "n_inert": 10,
+   "n_reconverged": 32,
+   "n_diverged": 12,
+   "mean_changed": 0.6590909090909091,
+   "baseline_decisions": 23,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-090",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 23,
+   "n_forks": 69,
+   "n_real_forks": 45,
+   "n_no_live_window": 15,
+   "n_inert": 9,
+   "n_reconverged": 22,
+   "n_diverged": 23,
+   "mean_changed": 0.7333333333333333,
+   "baseline_decisions": 23,
+   "lane": "NPC"
+  },
+  {
+   "case": "ARC-01",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 39,
+   "n_no_live_window": 18,
+   "n_inert": 15,
+   "n_reconverged": 28,
+   "n_diverged": 11,
+   "mean_changed": 0.38461538461538464,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-02",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 38,
+   "n_no_live_window": 18,
+   "n_inert": 16,
+   "n_reconverged": 20,
+   "n_diverged": 18,
+   "mean_changed": 0.6842105263157895,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-03",
+   "scale": "duchy",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 39,
+   "n_no_live_window": 18,
+   "n_inert": 15,
+   "n_reconverged": 27,
+   "n_diverged": 12,
+   "mean_changed": 0.4358974358974359,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-04",
+   "scale": "duchy",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 44,
+   "n_no_live_window": 18,
+   "n_inert": 10,
+   "n_reconverged": 24,
+   "n_diverged": 20,
+   "mean_changed": 0.7272727272727273,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-05",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 33,
+   "n_no_live_window": 18,
+   "n_inert": 21,
+   "n_reconverged": 25,
+   "n_diverged": 8,
+   "mean_changed": 0.36363636363636365,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-06",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 44,
+   "n_no_live_window": 18,
+   "n_inert": 10,
+   "n_reconverged": 28,
+   "n_diverged": 16,
+   "mean_changed": 0.7045454545454546,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-07",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 38,
+   "n_no_live_window": 18,
+   "n_inert": 16,
+   "n_reconverged": 23,
+   "n_diverged": 15,
+   "mean_changed": 0.5789473684210527,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-08",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 40,
+   "n_no_live_window": 18,
+   "n_inert": 14,
+   "n_reconverged": 28,
+   "n_diverged": 12,
+   "mean_changed": 0.525,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-09",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 23,
+   "n_forks": 69,
+   "n_real_forks": 42,
+   "n_no_live_window": 18,
+   "n_inert": 9,
+   "n_reconverged": 22,
+   "n_diverged": 20,
+   "mean_changed": 0.8333333333333334,
+   "baseline_decisions": 23,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-10",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 40,
+   "n_no_live_window": 18,
+   "n_inert": 14,
+   "n_reconverged": 30,
+   "n_diverged": 10,
+   "mean_changed": 0.55,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-11",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 28,
+   "n_no_live_window": 18,
+   "n_inert": 26,
+   "n_reconverged": 23,
+   "n_diverged": 5,
+   "mean_changed": 0.25,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-12",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 40,
+   "n_no_live_window": 18,
+   "n_inert": 14,
+   "n_reconverged": 27,
+   "n_diverged": 13,
+   "mean_changed": 0.45,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-13",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 40,
+   "n_no_live_window": 18,
+   "n_inert": 14,
+   "n_reconverged": 30,
+   "n_diverged": 10,
+   "mean_changed": 0.425,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-14",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 40,
+   "n_no_live_window": 18,
+   "n_inert": 14,
+   "n_reconverged": 28,
+   "n_diverged": 12,
+   "mean_changed": 0.425,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-15",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 36,
+   "n_no_live_window": 18,
+   "n_inert": 18,
+   "n_reconverged": 24,
+   "n_diverged": 12,
+   "mean_changed": 0.5555555555555556,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-16",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 22,
+   "n_no_live_window": 18,
+   "n_inert": 32,
+   "n_reconverged": 21,
+   "n_diverged": 1,
+   "mean_changed": 0.09090909090909091,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-17",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 31,
+   "n_no_live_window": 18,
+   "n_inert": 23,
+   "n_reconverged": 25,
+   "n_diverged": 6,
+   "mean_changed": 0.1935483870967742,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-18",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 40,
+   "n_no_live_window": 18,
+   "n_inert": 14,
+   "n_reconverged": 29,
+   "n_diverged": 11,
+   "mean_changed": 0.375,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-R16",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 45,
+   "n_no_live_window": 18,
+   "n_inert": 9,
+   "n_reconverged": 26,
+   "n_diverged": 19,
+   "mean_changed": 0.6666666666666666,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-R17",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 37,
+   "n_no_live_window": 18,
+   "n_inert": 17,
+   "n_reconverged": 24,
+   "n_diverged": 13,
+   "mean_changed": 0.5405405405405406,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-R18",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 40,
+   "n_no_live_window": 18,
+   "n_inert": 14,
+   "n_reconverged": 29,
+   "n_diverged": 11,
+   "mean_changed": 0.35,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-R19",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 25,
+   "n_no_live_window": 18,
+   "n_inert": 29,
+   "n_reconverged": 20,
+   "n_diverged": 5,
+   "mean_changed": 0.2,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-20",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 36,
+   "n_no_live_window": 18,
+   "n_inert": 18,
+   "n_reconverged": 23,
+   "n_diverged": 13,
+   "mean_changed": 0.4722222222222222,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-21",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 34,
+   "n_no_live_window": 18,
+   "n_inert": 20,
+   "n_reconverged": 24,
+   "n_diverged": 10,
+   "mean_changed": 0.4411764705882353,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-22",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 23,
+   "n_forks": 69,
+   "n_real_forks": 45,
+   "n_no_live_window": 15,
+   "n_inert": 9,
+   "n_reconverged": 35,
+   "n_diverged": 10,
+   "mean_changed": 0.4888888888888889,
+   "baseline_decisions": 23,
+   "lane": "ARC"
+  },
+  {
+   "case": "ARC-23",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 24,
+   "n_forks": 72,
+   "n_real_forks": 40,
+   "n_no_live_window": 18,
+   "n_inert": 14,
+   "n_reconverged": 26,
+   "n_diverged": 14,
+   "mean_changed": 0.5,
+   "baseline_decisions": 24,
+   "lane": "ARC"
+  }
+ ],
+ "chunk": [
+  36,
+  72
+ ]
+}
