@@ -257,7 +257,12 @@ def test_19c_the_throttle_on_the_populated_realm_admits_an_empty_hearth_once():
     from ..queries import world_q
     w, d = _world(lambda: populated.build_realm(0))
     lives = world_q.residence_of(w)
-    first, second = sorted(lives)[:2]
+    # ⚠ PLAN POSITION `24f`: THE FIRST TWO INDIVIDUALS, NOT THE FIRST TWO RESIDENTS. The realm now
+    # seats one authored cohort per settlement (`cohorts.yaml`), and `cohort_set_s_...` sorts ahead
+    # of `p_npc_...`. A cohort of weight 2 cannot move into a one-dwelling hearth at all -- `population
+    # + weight` passes `capacity` on the first migration -- which is the throttle counting WEIGHT,
+    # asserted below, and not the one-person-per-dwelling sequence this test is about.
+    first, second = sorted(p for p in lives if not w.persons[p].is_cohort)[:2]
     town_of = {p: world_q.ancestry(w, lives[p])[1] for p in (first, second)}
     empty = next(r for r, rung in sorted(w.rungs.items())
                  if rung.kind == "hearth" and world_q.population(w, r) == 0
@@ -271,6 +276,15 @@ def test_19c_the_throttle_on_the_populated_realm_admits_an_empty_hearth_once():
     assert world_q.residence_of(w)[second] == lives[second]
     visit = _fold(w, d, _move("r3", empty, actor=second))
     assert _kinds(visit) == ["travel.moved"] and world_q.residence_of(w)[second] == lives[second]
+    # AND A COHORT IS THROTTLED BY ITS WEIGHT (`24f`): the next empty hearth houses one, and a
+    # settlement's people -- weight 2 -- are refused there where a single newcomer was admitted.
+    crowd = sorted(p for p in lives if w.persons[p].is_cohort)[0]
+    spare = next(r for r, rung in sorted(w.rungs.items())
+                 if rung.kind == "hearth" and world_q.population(w, r) == 0
+                 and lives[crowd] not in world_q.ancestry(w, r))
+    assert world_q.capacity(w, spare) == 1 < w.persons[crowd].weight
+    refused = _fold(w, d, Act(id="r4", actor=crowd, verb="migrate", payload={"to": spare}))
+    assert _kinds(refused) == ["migrate.refused"], _kinds(refused)
 
 
 # ======================================================================================

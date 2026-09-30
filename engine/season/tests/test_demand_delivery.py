@@ -96,15 +96,17 @@ def _mass(w) -> int:
 
 def test_19d_demanded_is_the_weighted_headcount_under_a_rung():
     w = S.build()
-    cohort, steward = _want(S.COHORT_WEIGHT), _want(1)
+    cohort, one = _want(S.COHORT_WEIGHT), _want(1)
     assert world_q.demanded(w, S.HUNGRY) == cohort
-    assert world_q.demanded(w, S.GRANARY) == steward
-    # AN R-1 AGGREGATE OVER THE SUBTREE: the territory and the realm hold both settlements' mouths.
-    both = {k: cohort[k] + steward[k] for k in cohort}
-    assert world_q.demanded(w, "terr_march") == both
-    assert world_q.demanded(w, "r_realm") == both
+    # ⚠ `24f` (`ED-IN-0255`): THE STEWARD IS AN INDIVIDUAL AND IS EXEMPT FROM THE DRAW, so the
+    # granary, housing only him, demands nothing. Until `24f` it demanded his one-person want.
+    assert world_q.demanded(w, S.GRANARY) == {}
+    # AN R-1 AGGREGATE OVER THE SUBTREE: the territory and the realm hold both settlements' mouths,
+    # which since `24f` are the cohort's alone.
+    assert world_q.demanded(w, "terr_march") == cohort
+    assert world_q.demanded(w, "r_realm") == cohort
     # `Person.weight` IS THE HEADCOUNT: one cohort of ten wants what ten people want.
-    assert cohort == {k: v * S.COHORT_WEIGHT for k, v in steward.items()}
+    assert cohort == {k: v * S.COHORT_WEIGHT for k, v in one.items()}
 
 
 def test_19d_delivered_is_the_draw_against_the_stores_as_they_stand():
@@ -112,7 +114,8 @@ def test_19d_delivered_is_the_draw_against_the_stores_as_they_stand():
     stock = dict(w.rungs[S.HUNGRY].stores)
     got = world_q.delivered(w, S.HUNGRY)
     assert got == {k: min(v, stock.get(k, 0)) for k, v in _want(S.COHORT_WEIGHT).items()}
-    assert world_q.delivered(w, S.GRANARY) == _want(1), "the stocked granary feeds its steward"
+    # `24f`: the stocked granary feeds nobody -- its steward does not eat from it (`ED-IN-0255`).
+    assert world_q.delivered(w, S.GRANARY) == {}, "the steward, an individual, drew on the granary"
     # THE SAME KEYS AS `demanded`, so `demanded - delivered` needs no `.get` default at a caller.
     assert set(got) == set(world_q.demanded(w, S.HUNGRY))
 
@@ -156,7 +159,8 @@ def test_19d_a_drained_larder_carries_its_shortfall_on_its_own_write_and_nothing
     assert _shortfalls([e]) == [(S.HUNGRY, f"{SHORTFALL_PREDICATE}:{k}", need[k] - got[k])
                                 for k in sorted(need) if need[k] > got[k]]
     assert all(v > 0 for _, _, v in _shortfalls([e]))
-    # CONTROL: the granary was drawn too (its steward ate), met its mouth, and carries nothing.
+    # CONTROL: the granary's own larder write -- since `24f` its harbour's yield credit, because its
+    # steward is exempt and nobody draws on it -- carries nothing.
     granary = [x for x in emitted if x.kind == "stores.changed"
                and x.changes and x.changes[0].subject == S.GRANARY]
     assert granary and not _shortfalls(granary)
@@ -176,11 +180,18 @@ def test_19d_a_larder_that_was_never_stocked_reports_nothing_and_is_still_short(
 
 @pytest.mark.parametrize("build,seasons", [(P.tiny_world, 3), (lambda: HL.build_world(0), 3)])
 def test_19d_the_shipped_worlds_record_no_shortfall(build, seasons):
-    """WHY THE COMMITTED ARTIFACTS DO NOT MOVE. `tiny_world`'s hearth meets its mouths and its salt
-    is never stocked anywhere (`source None`: silent); `headless` holds no dearth mid-draw. Measured
-    out-of-band, because each costs minutes: the populated realm (its first draw precedes its first
-    yield, and it is in surplus after), and the corpus's 178 built worlds (0 shortfalls recorded)."""
+    """WHY THE COMMITTED ARTIFACTS DO NOT MOVE ON THIS MECHANISM. ⚠ SINCE `24f` THESE TWO HAVE NO
+    EATER AT ALL: neither seats a cohort, and only a cohort draws (`ED-IN-0255`, `H-171` limit 1),
+    so no larder of theirs is ever drawn and nothing can be recorded -- asserted first, so this test
+    says WHY it is green rather than being green by an accident it cannot see. (Before `24f`,
+    `tiny_world`'s hearth met its mouths and `headless` held no dearth mid-draw.) The world that DOES
+    eat is the populated realm, and its no-shortfall half is asserted in
+    `tests/test_territorial_subsistence.py`'s drain guard: its first draw finds no stock (silent)
+    and its second is in surplus."""
     w = build()
+    assert world_q.subsistence_draw(w) == {}, (
+        "this world has an eater now; the reason given above is stale and the no-shortfall claim "
+        "below has become a measurement again")
     for _ in range(seasons):
         _season(w)
     assert _shortfalls(w.log) == []

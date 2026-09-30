@@ -26,9 +26,11 @@ says *"today's default world runs a 35x surplus, so `transfer` is refused every 
 SO THIS WORLD NEEDS TWO THINGS THE REALM LACKS, AND BOTH ARE STATED RATHER THAN SMUGGLED:
   1. A LARDER THAT RUNS DRY WITH MOUTHS UNFED. `set_hungry` starts with a little grain and salt and
      no producing site. Its people are ONE COHORT, a `Person` at `weight > 1`: the population
-     synecdoche `24f` will mint (`ED-IN-0255`: *"NPC synecdoches that just represent the overall
-     population affected ... it's a territorial issue"*). It uses `harness/probes.py`'s crowd
-     precedent, not a new carrier.
+     synecdoche `24f` mints for the realm from `cohorts.yaml` (`ED-IN-0255`: *"NPC synecdoches that
+     just represent the overall population affected ... it's a territorial issue"*). It uses
+     `harness/probes.py`'s crowd precedent, not a new carrier. ⚠ SINCE `24f` IT IS THE ONLY EATER
+     HERE: the steward, at weight 1, is exempt from the larder draw (`world_q.subsistence_draw`), so
+     `set_granary` is drawn by nobody and its stock is what the steward can GIVE, not what he eats.
   2. A GIVER WHO STANDS IN A STOCKED LARDER AND CAN SEE THE HUNGRY ONE. `p_steward` lives AT
      `set_granary`, the rung itself, as `probes.tiny_world` seats its duke in the settlement. So
      `from` is a store with stock. The steward HOLDS `set_hungry` (a `hold` on a Rung, lawful by
@@ -71,8 +73,9 @@ STEWARD, POPULACE = "p_steward", "p_populace"
 # four times the hungry larder's opening stock and well under the granary's.
 COHORT_WEIGHT = 10
 # The two opening larders. `set_hungry` holds a quarter of the cohort's season want, so its first
-# draw runs it dry with the cohort unfed. `set_granary` holds several seasons of its steward's want,
-# plus its harbour's yield, so it can give.
+# draw runs it dry with the cohort unfed. `set_granary` holds several seasons of what one person
+# eats, plus its harbour's yield, so it can give (since `24f` nobody draws on it: its steward is
+# exempt).
 # [JUSTIFIED: a test-fixture stock, not a game value -- sized only so the first draw drains one larder and not the other]
 GRANARY_STOCK = {"grain": 60, "salt": 30}
 # [JUSTIFIED: a test-fixture stock, not a game value -- a quarter of the cohort's season want at the shipped subsistence_weight]

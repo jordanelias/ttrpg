@@ -32,7 +32,7 @@ from typing import Any, Callable, Optional
 
 from .. import decision
 from ..queries import person_q, world_q
-from ..data.fixtures import DEFAULT_FIXTURES, Fixtures, SUBSISTENCE_WEIGHTS
+from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import CLAIM_SOURCES, RUNG_KINDS, STRATA, WITNESS_CHANNELS, roster, table
 from ..data.verbs import VERB_TABLE
@@ -119,6 +119,23 @@ def tiny_world(fixtures: Fixtures = DEFAULT_FIXTURES) -> World:
         edge(pid, home, world_q.RESIDE_KIND)
     w.manifest = {"contest": "seam.contest_resolver", "order": "core.canonical_order"}
     return w
+
+
+def plant_cohort(w: World, pid: str, rung: str, weight: int = 2, name: str = "") -> str:
+    """PLANT A COHORT IN A HAND-BUILT WORLD -- a `Person` at `weight > 1` living at `rung`, minted the
+    way every builder mints a person (a `person` rung, a `contain` edge and a `reside` edge), and
+    returned by id. Plan position `24f`: only a cohort eats (`world_q.subsistence_draw`,
+    `ED-IN-0255`), and `tiny_world` seats none, so a test of the larder draw on it plants its eaters
+    here. ⚠ A TEST FIXTURE, NOT THE PRODUCER: the realm's cohorts come from `cohorts.yaml` through
+    `harness/populated.py::seat_cohorts`, which also checks the weight against `capacity`. This
+    checks nothing past S9's own floor (the `Person` constructor), because a hand-built world has no
+    dwellings and every rung would read the capacity floor. `weight` defaults to 2, the smallest
+    cohort S9 admits and the weight `cohorts.yaml` ships (`H-170`)."""
+    w.persons[pid] = Person(pid, name or f"the people of {rung}", weight=weight)
+    w.rungs[pid] = Rung(pid, "person")
+    w.add_tenure(Tenure(f"t_{pid}_in", pid, rung, "contain", 0))
+    w.add_tenure(Tenure(f"t_{pid}_home", pid, rung, world_q.RESIDE_KIND, 0))
+    return pid
 
 
 # The instrument's own subsistence model, INJECTED (S42.2.1) rather than invented inside the
@@ -1392,10 +1409,16 @@ def f10():
     # transfers were folded and BOTH were refused — the probe stopped measuring scarcity closing a
     # matter and started measuring an empty larder. The seed is computed from the same registry
     # the draw reads, so the fixture tracks the economy instead of restating a number.
+    # ⚠ PLAN POSITION `24f`: AND NOW FROM THE DRAW'S OWN OWNER, NOT A HEAD COUNT BESIDE IT. This read
+    # `grain weight x len(presence(Hh))`, a second copy of *who eats* that assumed every resident
+    # did. Since `24f` only a cohort eats (`world_q.subsistence_draw`, `ED-IN-0255`) and `tiny_world`
+    # seats none, so the copy seeded 6 grain too many and BOTH transfers were granted -- the
+    # opposite failure to the one the paragraph above records. `demanded(Hh)` is what the hearth's
+    # people take from its larder before RESOLVE whenever the larder can meet it, which the seed
+    # guarantees; it is 0 on today's fixture.
     def seeded():
         ww = tiny_world()
-        _eaters = len(world_q.presence(ww, "Hh"))
-        _drawn = SUBSISTENCE_WEIGHTS.get("grain", 0) * _eaters
+        _drawn = world_q.demanded(ww, "Hh").get("grain", 0)
         assert not [s_ for s_ in ww.sites.values() if s_.rung == "Hh"], (
             "the hearth has acquired a site and now PRODUCES grain; this seed assumes the draw is "
             "the only MATTER effect on its larder, and the probe would silently measure the wrong "

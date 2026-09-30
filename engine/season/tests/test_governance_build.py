@@ -382,7 +382,32 @@ def _matter_once(w, *, keep_yield=False):
 
 
 def _eaters_at(w, rung_id):
-    return [pid for pid, home in world_q.home_of(w).items() if home == rung_id]
+    """The EATERS standing at `rung_id` -- since plan position `24f`, its COHORTS only: a person at
+    `weight == 1` is exempt from the larder draw (`world_q.subsistence_draw`, `ED-IN-0255`)."""
+    return [pid for pid, home in world_q.home_of(w).items()
+            if home == rung_id and w.persons[pid].is_cohort]
+
+
+# The cohort planted at `S` by `_cohort_tiny_world`: `tiny_world` seats only its duke there.
+S_COHORT = "c_people_of_s"
+
+
+def _cohort_tiny_world():
+    """`tiny_world`, RE-PLANTED FOR `24f`. Every LB-3 test below was written when every housed person
+    ate, and `tiny_world` holds nobody at `weight > 1`, so under `24f` it has no eater at all
+    (`H-171`). The ladder, the running view, the body write and the death cascade are unchanged, so
+    the tests keep their subjects and move their eaters onto cohorts, the carrier the ruling names:
+      * the three hearth residents at `Hh` become the smallest cohort (weight 2) -- the hearth's
+        people, which is what three anonymous `p_low`/`p_mid`/`p_other` stood for;
+      * one cohort is planted at `S` (`P.plant_cohort`), since its only resident is the duke, whom
+        `24f` exempts.
+    `p_high` (the duke) and `p_king` stay individuals and are the exemption's control here."""
+    w = P.tiny_world()
+    for pid, home in world_q.home_of(w).items():
+        if home == "Hh":
+            w.persons[pid].weight = 2
+    P.plant_cohort(w, S_COHORT, "S")
+    return w
 
 
 def _heads(w, eaters):
@@ -416,7 +441,7 @@ def test_lb3a_a_hearth_with_no_larder_eats_from_its_settlement():
     them at the 37 settlement rungs and none at the 211 hearths**, 46 persons in 26 hearths, and
     **0 rungs with both eaters and stores** — so the per-rung draw counted zero eaters wherever
     there was anything to eat, and the subsistence step was inert on the world that ships."""
-    w = P.tiny_world()
+    w = _cohort_tiny_world()
     w.rungs["Hh"].stores = {}                      # the hearth's own larder is bare
     eaters = _eaters_at(w, "Hh") + _eaters_at(w, "S")
     assert _eaters_at(w, "Hh"), "nobody lives in the hearth; this test would pass vacuously"
@@ -445,7 +470,7 @@ def test_lb3a_control_a_hearth_with_its_own_larder_eats_locally_and_unchanged():
     feeds its own people exactly as the per-rung loop did. **If this arm moves, the walk is not a
     generalisation** — it is a new rule wearing one's clothes, and every reading of the populated
     world would then be confounded by a second change nobody asked for."""
-    w = P.tiny_world()
+    w = _cohort_tiny_world()
     at_hh, at_s = _eaters_at(w, "Hh"), _eaters_at(w, "S")
     assert at_hh and at_s, "the fixture needs eaters at both rungs for the control to mean anything"
     # Each rung stocked to exactly ITS OWN eaters' need. If the walk reached past a stocked hearth,
@@ -473,15 +498,20 @@ def test_lb3a_the_root_larder_at_zero_feeds_nobody_and_raises_nothing():
     `nearest_store` returns `None` at the root and the caller records a shortfall. Raising here
     would make an empty larder an instrument defect, and a season that dies on a bare world is a
     season nobody can run the starving case in."""
-    w = P.tiny_world()
+    w = _cohort_tiny_world()
     for rid in ("R", "D", "S", "Hh"):
         w.rungs[rid].stores = {}
 
     evs = _matter_once(w)                      # must not raise
 
     assert w._subsistence_shortfall, "nobody is short on a world with no food anywhere"
-    assert set(w._subsistence_shortfall) == set(world_q.home_of(w)), (
-        "some eater is neither fed nor recorded short — the loop skipped them silently")
+    # Since `24f` the eaters are the cohorts; the duke and the king, individuals, are neither fed
+    # nor short -- they are not in the draw at all (`ED-IN-0255`).
+    cohorts = {pid for pid in world_q.home_of(w) if w.persons[pid].is_cohort}
+    assert set(w._subsistence_shortfall) == cohorts, (
+        "some eater is neither fed nor recorded short — the loop skipped them silently — or an "
+        "individual was counted short, which `24f` exempts")
+    assert not {"p_high", "p_king"} & set(w._subsistence_shortfall)
     assert not [e for e in evs if e.kind == "stores.changed"], (
         f"a store changed on a world that holds nothing: {[anchor_of(w, e) for e in evs]}")
 
@@ -492,8 +522,9 @@ def test_lb3a_a_cohort_eats_by_its_weight_and_not_by_its_head_count():
     `state/carriers.py`: *"A COHORT IS A PERSON AT weight > 1"*. The per-rung draw was
     `wt * len(eaters)`, so two hundred people eat like one man. Every person in the shipped corpus
     is at weight 1 — which is exactly why this was invisible, and why a test has to plant the
-    cohort rather than wait for the corpus to grow one."""
-    w = P.tiny_world()
+    cohort rather than wait for the corpus to grow one. (Since `24f` the realm's cohorts are
+    `cohorts.yaml`'s; this test's cohort is still planted, one weight above its neighbours.)"""
+    w = _cohort_tiny_world()
     w.rungs["Hh"].stores = {}
     eaters = _eaters_at(w, "Hh") + _eaters_at(w, "S")
     cohort = _eaters_at(w, "Hh")[0]
@@ -517,7 +548,7 @@ def test_lb3a_two_eaters_cannot_spend_the_same_unit():
     show every eater the FULL larder — the defect `loop/effects.py`'s own header names for
     `transfer` (*"`transfer` twice from a one-unit larder succeeds twice"*). With one grain
     between three eaters, exactly one grain may leave the larder and the rest must be short."""
-    w = P.tiny_world()
+    w = _cohort_tiny_world()
     w.rungs["Hh"].stores = {"grain": 1}
     for rid in ("R", "D", "S"):
         w.rungs[rid].stores = {}
@@ -551,8 +582,9 @@ def _starving_world(body_step=10):
     the control arm because all 86 buildable corpus worlds hold zero stores, so any nonzero
     default starves 258 people in worlds that model a scene rather than an economy. The MECHANISM
     is exercised here at a live arm — which is what keeps it a built behaviour rather than a
-    branch nothing reaches (§0.2) — and `test_lb3b_the_zero_arm_...` pins the shipped one."""
-    w = P.tiny_world()
+    branch nothing reaches (§0.2) — and `test_lb3b_the_zero_arm_...` pins the shipped one.
+    ⚠ ON `_cohort_tiny_world` SINCE `24f`: only a cohort eats, so only a cohort can starve."""
+    w = _cohort_tiny_world()
     for rid in ("R", "D", "S", "Hh"):
         w.rungs[rid].stores = {}
     w.sites.clear()
@@ -595,6 +627,10 @@ def test_lb3b_a_short_larder_falls_a_body_a_band_and_narrows_the_season():
         f"the band was crossed and the budget did not move ({start_budget} -> "
         f"{decision_budget(w, who)}). The MATTER write landed somewhere `decision.budget` does "
         "not read — which is the read/write asymmetry this test exists for")
+    # `24f`, AT THIS WORLD'S SCALE: the duke starved beside the hearth's people for as many seasons
+    # and his body never moved (`ED-IN-0255`). The realm-scale falsifier is
+    # `tests/test_territorial_subsistence.py`.
+    assert w.persons["p_high"].body == start_body, "the duke worried about subsistence"
 
 
 def test_lb3b_control_a_stocked_world_moves_no_body_and_no_budget():
@@ -604,7 +640,7 @@ def test_lb3b_control_a_stocked_world_moves_no_body_and_no_budget():
     `CLAUDE.md` §0.1 pt 4: a number without a control is not a measurement. Without this arm, a
     body write that fired unconditionally — on the fed as well as the starving — would pass every
     assertion in the test above."""
-    w = P.tiny_world()
+    w = _cohort_tiny_world()
     at = {rid: _eaters_at(w, rid) for rid in ("R", "D", "S", "Hh")}
     for rid, eaters in at.items():
         w.rungs[rid].stores = dict(_need(w, eaters)) if eaters else {}

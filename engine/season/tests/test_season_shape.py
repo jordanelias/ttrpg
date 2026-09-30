@@ -4613,8 +4613,20 @@ def _r7_tiny_run(mode: str, seasons: int = 2, seed: int = 0):
     identical stream forever and no secret between two present, active people is reachable there
     at any seed (checked 0-14) or season count (checked 2-6). `tiny_world`'s separation is
     structural -- the Duke at `S`, the King at `R`, three commoners at `Hh` -- and does not depend
-    on anyone CHOOSING to travel, so it is not vulnerable to the same crowding-out."""
+    on anyone CHOOSING to travel, so it is not vulnerable to the same crowding-out.
+
+    ⚠⚠ PLAN POSITION `24f`, 2026-09-30: A COHORT IS PLANTED AT `Hh`, BECAUSE WITHOUT ONE NOTHING
+    HAPPENS THERE. The three commoners are individuals, and since `24f` an individual does not eat
+    from the larder (`ED-IN-0255`). Their own draw on `Hh`'s larder was the ONLY event at the
+    hearth, so without it they witnessed nothing, held no claim and never acted: MEASURED, shipped
+    arm, two seasons, on the bare fixture -- every witness set empty but the duke's (14), 17 acts
+    all his, and the test's secret gone (every difference against a person holding nothing). With
+    `P.plant_cohort` seating the hearth's people -- the eater the ruling names -- beside the three
+    commoners, the hearth has its draw again and the separation is back: under `all_five` the duke
+    holds 19, the hearth's four persons 43 each and the King nothing; under `total` all six hold
+    the same 43. [GROUNDED: measured 2026-09-30 at plan position `24f`, both arms, two seasons]"""
     w = P.tiny_world(DEFAULT_FIXTURES.sweep("fan_out_mode", mode))
+    P.plant_cohort(w, "c_people_of_hh", "Hh")
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     dep = 0
@@ -4639,7 +4651,10 @@ def test_r7_two_persons_hold_different_things_and_at_total_they_cannot():
     all -- see that helper's own docstring for the mechanism. [GROUNDED: measured 2026-09-29,
     `tiny_world`, shipped arm (`all_five`), 2 seasons -- FIVE differing pairs, every one both
     non-empty: `(p_high, p_king)`, `(p_high, p_low)`, `(p_high, p_mid)`, `(p_king, p_low)`,
-    `(p_king, p_mid)`; under `total` all four persons' sets are identical and non-empty (size 29)]"""
+    `(p_king, p_mid)`; under `total` all four persons' sets are identical and non-empty (size 29)]
+    [GROUNDED: re-measured 2026-09-30 at plan position `24f`, with the hearth's cohort planted
+    (`_r7_tiny_run`'s note) -- FOUR differing pairs, every one both non-empty, each the duke
+    against one of the hearth's four persons (62 apart); `total` identical at 43 across all six]"""
     ctl, _, ctl_dep = _r7_tiny_run("total")
     ctl_sets = _r7_witness_claims(ctl)
     assert ctl_dep and all(ctl_sets.values()), (
@@ -5256,14 +5271,21 @@ def test_w8_matter_draws_before_it_produces_which_is_353s_stated_order():
     clause exists to catch becomes unreachable by construction.
 
     Asserted on the EMITTED ORDER rather than on the source, because the source is what a reader
-    checks and the log is what ran."""
+    checks and the log is what ran.
+
+    ⚠ PLAN POSITION `24f`: A COHORT IS PLANTED AT `S`, BECAUSE NOBODY IN `tiny_world` EATS ANY MORE.
+    `S`'s one resident is the duke, and since `24f` an individual is exempt from the larder draw
+    (`ED-IN-0255`), so `S` produced and was never drawn and the order had nothing to be observed
+    on (`['yield.taken', 'stores.changed']`, the credit alone). The planted cohort is the eater the
+    ruling names; the claim about the ORDER is unchanged."""
     w = P.tiny_world()
+    P.plant_cohort(w, "c_people_of_s", "S")
     d = SeasonDriver(w)
     w.step = Step.MATTER
     evs = d.matter(mint_token(d.w, WriteClass.MATTER), [])
     order = [(e.kind, anchor_of(w, e)) for e in evs if e.kind in ("stores.changed", "yield.taken")]
     assert order, f"MATTER emitted no economy events at all: {[e.kind for e in evs]}"
-    # `S` both draws (one person present) and produces (it owns both sites), so it is the one
+    # `S` both draws (the planted cohort) and produces (it owns both sites), so it is the one
     # rung where the order is observable at all.
     s_evs = [k for k, subj in order if subj == "S"]
     assert s_evs[:1] == ["stores.changed"], (
@@ -5383,9 +5405,22 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     hist, minted, d = _ten_seasons(w)
     hearth = [h["Hh"].get("grain", 0) for h in hist]
     settle = [h["S"].get("grain", 0) for h in hist]
-    assert hearth == sorted(hearth, reverse=True) and hearth[-1] == 0, (
-        f"the hearth no longer starves: {hearth}. `W8`'s proof clause may now be reachable — "
-        "re-run it as a measurement instead of citing this test")
+    # ⚠⚠ PLAN POSITION `24f`, 2026-09-30: THIS ASSERTED THE HEARTH STARVES, AND ITS OWN MESSAGE WAS
+    # FOLLOWED -- *"re-run it as a measurement instead of citing this test"*. RE-RUN: `Hh`'s grain is
+    # now 8 in all ten seasons. Not fed -- UNEATEN. Since `24f` only a cohort draws on a larder
+    # (`world_q.subsistence_draw`, `ED-IN-0255`), and `tiny_world` seats none (`H-171` limit 1), so
+    # the three commoners who ate the hearth bare by season 2 are exempt individuals and nothing
+    # ever leaves it. So the proof clause is STILL NOT MET, by the other half alone: the settlement
+    # still overflows monotonically (asserted next), and the hearth, which cannot produce, holds
+    # its opening stock forever. It is flat because no mouth reaches it, which is no evidence that
+    # the economy balances -- the clause's *"neither deplete nor overflow"* is not satisfied by a
+    # larder nobody draws on. [GROUNDED: measured 2026-09-30 at plan position `24f`, `tiny_world`,
+    # ten seasons, computed chooser -- `Hh` grain 8 x 10, `S` monotone up]
+    assert world_q.subsistence_draw(w) == {}, (
+        "`tiny_world` has an eater again; re-measure the hearth rather than reading this note")
+    assert hearth == [hearth[0]] * len(hearth), (
+        f"the hearth moved with nobody drawing on it: {hearth}. Something other than the draw now "
+        "writes `Hh`'s larder -- re-attribute it before re-pinning")
     assert settle == sorted(settle) and settle[-1] > settle[0], (
         f"the settlement no longer overflows: {settle}")
     assert minted, "the chooser minted nothing; this test cannot observe H-94"
@@ -5481,11 +5516,18 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     # ONLY FOR DEATHS FROM SEASON 1: a death in season 0 misses a draw on `Hh`'s last two grain and
     # would read as a mismatch here -- which is this block going red and asking to be re-derived.
     grain_draw = roster_map("subsistence_weight", "weights")["grain"]
+    # ⚠⚠ PLAN POSITION `24f`: A DEATH LOSES A DRAW ONLY IF THE DEAD ATE. This counted every death
+    # among `p_low`/`p_mid`/`p_other`; since `24f` those three are exempt individuals and never draw
+    # (`ED-IN-0255`), so their deaths move `S` by nothing, and the eaters are the world's COHORTS at
+    # build -- none in `tiny_world` (`H-171`), so this is 0 in every arm by construction and the
+    # population channel is closed here rather than accounted for. Kept as the general formula, one
+    # draw per season per unit of weight, so a fixture that plants a cohort is accounted correctly.
+    eaters_at_build = {pid: p.weight for pid, p in P.tiny_world().persons.items() if p.is_cohort}
 
     def _lost_draws_on_s(drv) -> int:
         died = {c.subject: e.emitted_at for e in drv.w.log if e.kind == "person.died"
-                for c in e.changes if c.subject in ("p_low", "p_mid", "p_other")}
-        return sum(len(hist) - 1 - k for k in died.values())
+                for c in e.changes if c.subject in eaters_at_build}
+        return sum((len(hist) - 1 - k) * eaters_at_build[pid] for pid, k in died.items())
     lost, nt_lost = _lost_draws_on_s(d), _lost_draws_on_s(no_transfer_d)
     gap = ((no_transfer[-1]["S"].get("grain", 0) + nt_levied - grain_draw * nt_lost)
            - (settle[-1] + levied - grain_draw * lost))
@@ -5585,6 +5627,13 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     # every arm reads 306. So the equality below replaces "both arms keep all three" with "both arms
     # agree once their dead are accounted for", which holds at 3/3 survivors as well.
     # [GROUNDED: measured 2026-09-29 at plan position `24e`, `tiny_world`, ten seasons -- see above]
+    # ⚠⚠ PLAN POSITION `24f`, 2026-09-30 -- RE-MEASURED, AND THE IDENTITY HOLDS WITH ONE CHANNEL FEWER.
+    # Nobody in `tiny_world` eats any more (`ED-IN-0255`; `_lost_draws_on_s` is 0 by construction),
+    # so `S` moves only by yield, `levy` and `transfer`. S_end / transfer / levy -> undrained: full
+    # 377/0/1 -> 378, no_transfer 378/0/0 -> 378 (the duke dies in a fight that arm, so nobody
+    # levies), no_move 377/0/1 -> 378. No arm grants a transfer out of `S` now, so both drains are
+    # 0 and the equalities are exclusions at zero, as this block's own note allows.
+    # [GROUNDED: measured 2026-09-30 at plan position `24f`, scratch script over `_ten_seasons`]
     nm_levied, nm_lost = _levied_from_s(no_move_d), _lost_draws_on_s(no_move_d)
     undrained_nm = (no_move[-1]["S"].get("grain", 0) + nm_levied + nm_drained
                     - grain_draw * nm_lost)
@@ -5629,11 +5678,16 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     # `transfer` moves the larder. What is dropped is only the demand that SOME arm drain, which
     # under the ruling is a demand that a lord haul grain.
     #
-    # ⚠ WHAT REPLACES IT IS NOT WRITTEN YET AND IS NOT THIS TEST'S JOB. The ruling makes
-    # subsistence territorial with population synecdoches, which is positions 24 / 24d / 24e of
-    # the plan and bears on `ED-IN-0247`'s `body_step` (a per-PERSON body write, whose scale the
-    # ruling puts in question). When that lands, the non-vacuity guard belongs on the TERRITORIAL
-    # quantity, and this comment is the pointer to rebuild it there rather than here.
+    # ⚠ WHAT REPLACES IT IS NOT THIS TEST'S JOB. The ruling makes subsistence territorial with
+    # population synecdoches and bears on `ED-IN-0247`'s `body_step` (a per-PERSON body write, whose
+    # scale the ruling puts in question), and this comment was the pointer to rebuild the
+    # non-vacuity guard on the TERRITORIAL quantity rather than here.
+    # ⭐ REBUILT AT PLAN POSITION `24f` (2026-09-30), THERE AND NOT HERE:
+    # `tests/test_territorial_subsistence.py::test_24f_drain_guard_a_cohort_draws_stock_on_the_
+    # built_realm_and_matter_is_conserved` asserts, on `build_realm(0)` and not on a probe crowd,
+    # that at least one authored cohort (`cohorts.yaml`) draws real stock and matter is conserved
+    # across the draw exactly. `tiny_world` seats no cohort, so since `24f` NOBODY in this test's
+    # world eats at all (`H-171` limit 1): its hearth residents are individuals, exempt from the draw.
     # ⚠ NO REPLACEMENT ASSERTION, AND A TAUTOLOGY WOULD BE WORSE THAN NONE. The first writing of
     # this retirement put `assert drained + nm_drained >= 0` here, which `/code-review` correctly
     # called a tautology: it cannot observe any failure, and with both arms at 0 the two equalities
@@ -7255,8 +7309,16 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # at the margin (`release` 1 execution, `restore` 3) and both go to 0. Full measurement at
     # `test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this`'s `20-iii` note
     # (a one-off script, seed 0, against a clean worktree at `19dac7e`). `H-156`, a fourth instance.
+    # ⚠⚠ 14 -> 15, PLAN POSITION `24f` (SUBSISTENCE IS TERRITORIAL), 2026-09-30: `restore` RETURNS,
+    # AND NOTHING ABOUT `restore` CHANGED. A `build_at` world seats no cohort, and since `24f` only a
+    # cohort draws on a larder (`ED-IN-0255`; `H-171` limit 1), so its three persons stopped eating:
+    # the draw's `stores.changed` Events and the claims they deposited are gone from all 89 live
+    # worlds, which re-ranks the scenes they competed in. `restore`, at the margin since `20-iii`,
+    # executes in two worlds again (`ARC-10`, `ARC-25`; 2 executed / 60 refused), and nothing
+    # leaves. The status census, the live count and `redeposits` are identical. MEASURED by a
+    # one-off script over this same `live` set, seed 0, against a clean worktree at `ae8e08a`.
     assert ever == {"create_record", "examine", "interview", "fight", "issue", "move", "petition",
-                    "reconstruct", "research", "speak", "surveil", "tell",
+                    "reconstruct", "research", "restore", "speak", "surveil", "tell",
                     "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
@@ -7321,8 +7383,9 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠⚠ SEVEN -> TEN, PLAN POSITION `20-iii`, 2026-09-30: `survey` JOINS (no corpus person coheres
     # under a faction, so every attempt is its effect's decline), and `release` and `restore` JOIN
     # with it -- still attempted, crowded out of the executions they had (see `ever`, above).
+    # ⚠⚠ TEN -> NINE, PLAN POSITION `24f`, 2026-09-30: `restore` LEAVES, back into `ever` (above).
     assert refused_only == {"build", "commit", "dispatch", "found", "levy", "migrate", "work",
-                            "survey", "release", "restore"}, (
+                            "survey", "release"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -7690,7 +7753,19 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # merging pairs. The universal set is unchanged (`create_record`, `utter`), and so is the
     # status census (63 RUNS-UNDECLARED · 54 UNREPRESENTABLE · 25 SPAN-UNAUTHORED · 1
     # RUNS-ALONE-UNDECLARED). `H-156`'s shape, a fourth instance, registered there.
-    assert len(by_sig) == 72, (
+    # ⚠⚠ **72 -> 77, PLAN POSITION `24f` (SUBSISTENCE IS TERRITORIAL), 2026-09-30, MEASURED AGAINST
+    # A CLEAN WORKTREE AT `ae8e08a` (72 there, same 89 live worlds, seed 0).** THE UNIT AND THE
+    # DIRECTION: variety ROSE, and no verb changed. Every `build_at` world lost its larder draw
+    # (only a cohort eats since `24f`, and `build_at` seats none -- `H-171` limit 1), so the draw's
+    # Events and the claims they deposited left every world's question stream and the scenes
+    # re-ranked. Per-verb world counts, before -> after: `interview` 30 -> 37, `tell` 63 -> 57,
+    # `move` 44 -> 41, `fight` 15 -> 12, `examine` 5 -> 6, `speak` 56 -> 55, `petition` 46 -> 45,
+    # `utter` 89 -> 88, `restore` 0 -> 2 (`ever`, above); the rest unmoved. AND THE SAME-BREATH
+    # CHECK THIS MESSAGE DEMANDS: the universal set SHRANK in the same move -- `utter` misses one
+    # world -- so variety rose while universality fell, the unremarkable direction. The status
+    # census is identical (63 RUNS-UNDECLARED · 54 UNREPRESENTABLE · 25 SPAN-UNAUTHORED · 1
+    # RUNS-ALONE-UNDECLARED).
+    assert len(by_sig) == 77, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -7789,7 +7864,11 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # per-unit history before `11b` is — what is confirmed is that the set has been stable at this
     # value for the eleven commits measured, the pre-batch control included, so nothing this
     # session landed moved it.
-    assert universal == {"create_record", "utter"}, sorted(universal)
+    # ⚠⚠ **`utter` LEAVES THE UNIVERSAL SET, PLAN POSITION `24f`, 2026-09-30 -- 88 OF 89 WORLDS.**
+    # The re-ranking the `by_sig` note above measures (the `build_at` worlds' larder draw gone)
+    # costs `utter` its scene in one world; it moves to `varying`, asserted below.
+    # [GROUNDED: measured 2026-09-30 at plan position `24f` against a clean worktree at `ae8e08a` -- universal `{create_record, utter}` -> `{create_record}`; `utter` 89 -> 88 of 89]
+    assert universal == {"create_record"}, sorted(universal)
     # `dispatch` LEAVES THE VARYING SET ENTIRELY UNDER `R8.1` -- NOT INTO UNIVERSAL, OUT OF `ever`
     # ALTOGETHER. It no longer executes in any live world (NPC-033 included); it is still
     # ATTEMPTED and refused there, so it moves to `refused_only` rather than to the never-attempted
@@ -7828,8 +7907,11 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠⚠ `release` AND `restore` BOTH LEAVE, PLAN POSITION `20-iii`, 2026-09-30: `survey`'s refusals
     # (no corpus person coheres under a faction) take the margin both executed at, so each now
     # executes in NO world and leaves `ever` altogether (the `ever`/`by_sig` notes above).
+    # ⚠⚠ `restore` AND `utter` JOIN, PLAN POSITION `24f`, 2026-09-30: `restore` executes in two
+    # worlds again and `utter` in 88 of 89 (the `ever`/`universal` notes above).
     assert varying == {"examine", "fight", "interview", "issue", "move", "petition", "reconstruct",
-                       "research", "speak", "surveil", "tell", "transfer"}, (
+                       "research", "restore", "speak", "surveil", "tell", "transfer",
+                       "utter"}, (
         sorted(varying))
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
     # BROKE BROKE FOR A REASON THIS TEST WANTS. A one-season case still never reaches `tell` —
@@ -8979,8 +9061,17 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # clean worktree at `19dac7e`. `H-156`'s shape a fourth time, registered there -- and unlike
     # `commit`/`found`/`build`, `survey` DOES execute where factions exist (the populated realm:
     # `tests/test_information_cluster.py`'s last test and `python -m engine.season.harness.aperture`).
+    # ⚠⚠ PLAN POSITION `24f` (SUBSISTENCE IS TERRITORIAL), 2026-09-30: `restore` RETURNS, 0 -> 2
+    # executions (51 -> 60 refused), in `ARC-10` and `ARC-25`. Nothing about `restore` changed: a
+    # `build_at` world seats no cohort and since `24f` only a cohort draws on a larder
+    # (`ED-IN-0255`; `H-171` limit 1), so these worlds' persons stopped eating, the draw's Events
+    # and claims left every question stream, and the scenes re-ranked. Nothing leaves. The rest move
+    # by single digits or low tens (`interview` 44 -> 56, `speak` 104 -> 92, `tell` 128 -> 117,
+    # `move` 64 -> 57, `petition` 80 -> 75, `transfer` 117 -> 115; `migrate` refused 167 -> 140,
+    # `survey` 87 -> 104). MEASURED by a one-off script over this same pass, seed 0, against a
+    # clean worktree at `ae8e08a`.
     assert set(executed) == {"create_record", "examine", "interview", "fight", "issue", "move",
-                             "petition", "reconstruct", "research", "speak",
+                             "petition", "reconstruct", "research", "restore", "speak",
                              "surveil", "tell", "transfer", "utter"}, (
         f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
         "ED-FI-0009's, 10 -> 11 is `release`'s, 11 -> 12 is `H-71`'s, 12 -> 13 is the admission "
@@ -8989,7 +9080,8 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
         "14 -> 13 is position `7a`'s (`release` crowded out, see above), 13 -> 14 is position "
         "`19`'s (`issue`, see above), 14 -> 15 is position `24e`'s (`restore`, see above), "
         "15 -> 16 is its second half's (`release` back, see above), 16 -> 14 is position "
-        "`20-iii`'s (`release` and `restore` crowded out by `survey`'s refusals, see above), and "
+        "`20-iii`'s (`release` and `restore` crowded out by `survey`'s refusals, see above), "
+        "14 -> 15 is `24f`'s (`restore` back once the corpus stopped eating, see above), and "
         "any further movement is a fresh one")
     # ⚠ `dispatch` JOINED `work` UNDER `R8.1` FOR A DIFFERENT REASON, stated above the executed-set
     # assertion: its precondition needs a PERSON referent, and the question that used to supply
@@ -9029,9 +9121,9 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # faction, so every attempt is its effect's decline -- 87 of 87), and `release` and `restore`
     # JOIN with it: still formed and attempted, crowded out of every execution they had (see the
     # executed-set note above). `H-156`, a fourth instance.
+    # ⚠⚠ PLAN POSITION `24f`, 2026-09-30: `restore` LEAVES, executing again (the executed-set note).
     assert set(refused) - set(executed) == {"work", "dispatch", "commit", "levy", "found",
-                                            "build", "migrate", "survey", "release",
-                                            "restore"}, (
+                                            "build", "migrate", "survey", "release"}, (
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
         "condition never clears the floor in this corpus; `dispatch` because its one executing "
@@ -9040,8 +9132,9 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
         "Proposition -- do not widen Q4 to close this here); `levy` because no corpus seat has a "
         "rung, so none has purview anywhere (position `19`); `found`/`build` because no referent "
         "is a works, since no computed act declares one (position `24e`, `H-165`); `survey` "
-        "because no corpus person coheres under a faction, and `release`/`restore` because "
-        "`survey`'s refusals took the margin they executed at (position `20-iii`, `H-156`)")
+        "because no corpus person coheres under a faction, and `release` because `survey`'s "
+        "refusals took the margin it executed at (position `20-iii`, `H-156`); `restore` left "
+        "this set again at `24f`")
     # ⚠ AND THE HONEST READING OF "IT EXECUTES", MEASURED RATHER THAN ASSUMED — and the first
     # writing of this arm ASSUMED, from one sampled case, that every corpus transfer was a
     # SELF-transfer, and was wrong. Measured over the whole corpus: 650 of 723 have `from == to`
@@ -11486,7 +11579,15 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # channel wide. Both none/actor/total genuine populations fall together (36/33/35 -> 33/31/32),
     # which is the control that this is a population effect and not a targeted one.
     # [GROUNDED: measured 2026-09-29 on this tree after position `7a`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- W-D genuine/diverged: `none` 33/4, `actor` 31/7, `total` 32/10]
-    assert (got["none"]["genuine"], got["none"]["diverged"]) == (33, 4), got
+    # ⚠⚠ **33/4 -> 32/4, PLAN POSITION `24f`, 2026-09-30 -- EVERY ARM'S DIVERGENCE UNMOVED, EVERY
+    # ARM'S POPULATION MOVED BY ONE OR TWO.** NPC-088's world is a `build_at` world, which seats no
+    # cohort, so since `24f` nobody in it draws on a larder (`ED-IN-0255`; `H-171` limit 1). The
+    # draw's `stores.changed` Events and the claims they deposited are gone, which re-ranks some
+    # deliberations and moves which probes are inert (`none` 21 -> 22, `actor` 23 -> 22, `total`
+    # 19 -> 21) -- a population effect, and the control for that reading is the divergence count,
+    # identical in all three arms (4 / 7 / 11) before and after.
+    # [GROUNDED: measured 2026-09-30 at plan position `24f`, NPC-088 slice, seed 0, 4 seasons at 2 slots, against a clean worktree at `ae8e08a` -- genuine/diverged BEFORE `none` 33/4, `actor` 31/7, `total` 32/11; AFTER 32/4, 32/7, 30/11]
+    assert (got["none"]["genuine"], got["none"]["diverged"]) == (32, 4), got
     # Reproduce with the `fork_case` loop above, run at each `fan_out_mode`.
     # [GROUNDED: measured 2026-09-07 — 16 genuine forks, 0 divergences at the shipped arm]
     # ⚠ 14 of 18 -> 17 of 19 under `U4`: the sampled tie-break moved the act a fork's person takes,
@@ -11513,7 +11614,8 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # (BO-9/BO-10), which is one more off-budget-alternative channel closing on some
     # deliberations; the genuine population falls with the control's (33 -> 31).
     # [GROUNDED: measured 2026-09-29 on this tree after position `7a`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- shipped arm genuine 31, diverged 7]
-    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (31, 7), (
+    # [GROUNDED: 31/7 -> 32/7 at plan position `24f`, 2026-09-30 -- divergence unmoved; mechanism in the `none`-arm `24f` block above]
+    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (32, 7), (
         f"the shipped default diverged {got['actor']['diverged']} times of "
         f"{got['actor']['genuine']}: {got}. `W-D`'s acceptance was lost at `all_five` on "
         "2026-09-07 and recovered on 2026-09-10 when §F1 clause 4 got producers other than "
@@ -11553,7 +11655,8 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # referent now changes two candidates, not one. `none` and `actor` unmoved. With `migrate`'s
     # `@effect_for` removed the pair is back at 32/10.
     # [GROUNDED: measured 2026-09-30 at plan position `19c`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- `total` arm genuine 32, diverged 11; 32/10 with `migrate` unresolvable]
-    assert (got["total"]["genuine"], got["total"]["diverged"]) == (32, 11), got
+    # [GROUNDED: 32/11 -> 30/11 at plan position `24f`, 2026-09-30 -- divergence unmoved; mechanism in the `none`-arm `24f` block above]
+    assert (got["total"]["genuine"], got["total"]["diverged"]) == (30, 11), got
     # AND THE TWO LAYERS ARE SEPARATED. The finding is the DECISION count above; this is the layer
     # beneath it — whether the fork moved the act stream at all.
     #
@@ -11661,7 +11764,16 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
         # genuine forks move the act stream -- and the floor assertion above (`4 * acts_differ >
         # genuine`) still holds in all three: 48 > 33, 36 > 31, 60 > 32.
         # [GROUNDED: measured 2026-09-29 on this tree after position `7a`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- (acts_differ, genuine): `none` (12, 33), `actor` (9, 31), `total` (15, 32)]
-        "none": (12, 33), "actor": (9, 31), "total": (15, 32)}, (
+        # ⚠⚠ **RE-PINNED UNDER PLAN POSITION `24f`, 2026-09-30, DELIBERATELY, AND THE DIRECTION IS
+        # MIXED.** The `build_at` world stopped drawing on its larder (only a cohort eats,
+        # `ED-IN-0255`, and it seats none), which removes the draw's Events and claims and re-ranks
+        # some deliberations -- the population effect the `diverged` pins above record, with every
+        # `diverged` count unmoved. Here `none` 12/33 -> 11/32 (36% -> 34%), `actor` 9/31 -> 12/32
+        # (29% -> 38%), `total` 15/32 -> 12/30 (47% -> 40%): the shipped arm recovers MORE, the two
+        # others less, and the floor above (`4 * acts_differ > genuine`) holds in all three: 44 >
+        # 32, 48 > 32, 48 > 30.
+        # [GROUNDED: measured 2026-09-30 at plan position `24f`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- (acts_differ, genuine): `none` (11, 32), `actor` (12, 32), `total` (12, 30)]
+        "none": (11, 32), "actor": (12, 32), "total": (12, 30)}, (
         f"the recoverability figures moved: {{k: (v['acts_differ'], v['genuine']) for k, v in got.items()}}. "
         "This is a RE-PIN DECISION, not necessarily a failure — but it is one somebody has to "
         "make deliberately, because `acts_differ / genuine` is how much of a fork the scene tick "
@@ -11970,7 +12082,8 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # block): `commit` competing for a slot without ever executing closes some off-budget
     # alternatives, falling the genuine population together with the divergence count.
     # [GROUNDED: measured 2026-09-29 on this tree after position `7a`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- fingerprint genuine/wide: `none` 33/4, `actor` 31/7, `total` 32/10]
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (33, 4), got
+    # [GROUNDED: measured 2026-09-30 at plan position `24f` -- fingerprint genuine/wide: `none` 32/4, `actor` 32/7, `total` 30/11 (from 33/4, 31/7, 32/11); every `wide` count unmoved, the populations moved by the `build_at` world losing its larder draw -- see `test_wd_a_fork_changes_...`'s `24f` block]
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (32, 4), got
     # [GROUNDED: re-measured 2026-09-10 under `U4` — `actor` wide 17 of 19 under the widened fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (29, 9) at the shipped arm]
     # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person a person-subject
@@ -11987,7 +12100,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # ⚠⚠ **33/10 -> 31/7, PLAN POSITION `7a`, 2026-09-29 -- SAME MECHANISM AS THE `none`-ARM BLOCK
     # ABOVE, AND `wide` STILL EQUALS `verbonly` (7 both).**
     # [GROUNDED: measured 2026-09-29 on this tree after position `7a`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- shipped arm genuine 31, wide 7]
-    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (31, 7), got
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (32, 7), got     # `24f`: 31/7 -> 32/7
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- `total` 5 of 18 under the widened (verb, subject) fingerprint]
     # [GROUNDED: re-measured 2026-09-10 under `U4` -- `total` 5 of 19 under the widened (verb, subject) fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (28, 3) at the `total` arm]
@@ -12018,7 +12131,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # formed wherever `move` is. `wide` still equals `verbonly` (11 both); 32/10 with `migrate`
     # unresolvable.
     # [GROUNDED: measured 2026-09-30 at plan position `19c`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- `total` genuine 32, wide 11 (= verbonly 11); 32/10 with `migrate`'s `@effect_for` removed]
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (32, 11), got
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (30, 11), got    # `24f`: 32/11 -> 30/11
 
 
 # ===========================================================================
@@ -13347,8 +13460,18 @@ def test_the_populated_world_is_not_everybody_in_one_room():
     w = POP.build_realm(0)
     c = POP.census(w)
 
-    assert c["persons"] == len(load_cases("NPC")), (
-        f"{c['persons']} persons seated against {len(load_cases('NPC'))} NPC cases. One person "
+    # ⚠ PLAN POSITION `24f`: THE WORLD NOW HOLDS TWO KINDS OF PERSON, AND EVERY CLAIM BELOW IS ABOUT
+    # THE CAST. `cohorts.yaml` seats one authored population synecdoche per settlement
+    # (`ED-IN-0255`), a `Person` at `weight > 1` (S9's one class), AFTER the case-derived cast and
+    # beside it. A cohort is no NPC season loop, wants nothing, commits to nothing and belongs to no
+    # faction, so the cast's invariants are asserted over `cast`, and the cohorts are counted
+    # against their own file rather than folded into the NPC lane's count.
+    cast = {pid for pid, p in w.persons.items() if not p.is_cohort}
+    n_cast = len(cast)
+    assert c["cohorts"] == len(POP.cohort_rows()) and c["persons"] == n_cast + c["cohorts"], (
+        f"{c['cohorts']} cohorts against {len(POP.cohort_rows())} authored rows")
+    assert n_cast == len(load_cases("NPC")), (
+        f"{n_cast} persons seated against {len(load_cases('NPC'))} NPC cases. One person "
         "per NPC season loop is the whole specification; ARC cases are situations and are not "
         "people, which is why the count is the NPC lane's and not the corpus's")
 
@@ -13373,8 +13496,8 @@ def test_the_populated_world_is_not_everybody_in_one_room():
     assert c["distinct_buildings_inhabited"] > 1, (
         "every person is in ONE building. That is `build_at`'s defect rebuilt — see this test's "
         "docstring for what it costs every downstream measurement")
-    assert c["largest_building"] < c["persons"] / 2, (
-        f"the largest building holds {c['largest_building']} of {c['persons']}. A world where "
+    assert c["largest_building"] < n_cast / 2, (
+        f"the largest building holds {c['largest_building']} of {n_cast}. A world where "
         "most of the cast shares a roof is co-located in effect whatever the rung count says")
 
     # EVERY PERSON WANTS SOMETHING, AND IT IS THEIR OWN CASE'S WANT.
@@ -13389,14 +13512,14 @@ def test_the_populated_world_is_not_everybody_in_one_room():
     # have passed had two people shared a want and a third had none.
     wants = {k: p for k, p in w.propositions.items() if k.startswith("prop_")}
     factions_held = {k: p for k, p in w.propositions.items() if k.startswith("fac_")}
-    assert len(wants) == c["persons"], (
-        f"{len(wants)} want-propositions for {c['persons']} persons. A person with no live "
+    assert len(wants) == n_cast, (
+        f"{len(wants)} want-propositions for {n_cast} persons. A person with no live "
         "`commit` raises no Q4 question, forms no candidate and does not act at all — measured, "
         "the unseeded world ran a full season with 0 acts by 0 actors")
     committed = {t.subject for t in w.tenures
                  if t.kind == "commit" and t.live and t.object in wants}
-    assert committed == set(w.persons), (
-        f"{len(set(w.persons) - committed)} person(s) hold no live `commit` to a want. This is "
+    assert committed == cast, (
+        f"{len(cast - committed)} person(s) hold no live `commit` to a want. This is "
         "what the old `propositions == persons` count was standing in for, asserted on the edges "
         "rather than on a total")
 
@@ -13408,14 +13531,14 @@ def test_the_populated_world_is_not_everybody_in_one_room():
     member_edges = {t.subject for t in w.tenures
                     if t.kind == "commit" and t.live and t.object in factions_held}
     assert member_edges, "no `commit` edge points at a faction — membership is unbuilt"
-    assert len(member_edges) + len(w._unplaced_cast) == c["persons"], (
-        f"{len(member_edges)} placed + {len(w._unplaced_cast)} unplaced != {c['persons']} persons. "
+    assert len(member_edges) + len(w._unplaced_cast) == n_cast, (
+        f"{len(member_edges)} placed + {len(w._unplaced_cast)} unplaced != {n_cast} persons. "
         "Every person is either a member of a rostered faction or explicitly counted as unplaced; "
         "a person who is neither has been dropped silently")
 
     matters = {p.predicate for p in wants.values()}
-    assert len(matters) > c["persons"] / 2, (
-        f"only {len(matters)} distinct wants across {c['persons']} people. The first cut gave "
+    assert len(matters) > n_cast / 2, (
+        f"only {len(matters)} distinct wants across {n_cast} people. The first cut gave "
         "every person the string 'a standing ambition'; `wants_of` reads the case's own first "
         "`core` row from `season_requires`, of which the corpus declares 427")
 
@@ -13455,8 +13578,8 @@ def test_the_populated_world_is_not_everybody_in_one_room():
         assert prop.scope, f"{fid}'s creed carries no `role_template` in `scope` — it has no content"
     weights = [row[1] * row[2] for p in w.persons.values() for row in p.stance
                if row[0] in leaders_named]
-    assert len(weights) > c["persons"] / 2, (
-        f"only {len(weights)} loyalty stance rows across {c['persons']} people. Every member of a "
+    assert len(weights) > n_cast / 2, (
+        f"only {len(weights)} loyalty stance rows across {n_cast} people. Every member of a "
         "faction with a creed carries one; far fewer means the membership loop stopped writing "
         "them and `stance_toward` reads nothing")
     assert min(weights) < 0 < max(weights), (

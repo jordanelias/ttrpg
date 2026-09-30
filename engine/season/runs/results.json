@@ -9100,7 +9100,7 @@
   "P1": {
    "id": "P1",
    "verdict": "PASS",
-   "detail": "PASS: a postless person produced an Act that reached RESOLVE and emitted an Event (speech.made), whose `causes[]` names the act. The season emitted 11 Events in total -- the rest are the world's licensed clocks (`W4`), and none of them is hers",
+   "detail": "PASS: a postless person produced an Act that reached RESOLVE and emitted an Event (speech.made), whose `causes[]` names the act. The season emitted 9 Events in total -- the rest are the world's licensed clocks (`W4`), and none of them is hers",
    "kind": null,
    "section": "S3-L1",
    "title": "a person holding no office acts",
@@ -9606,7 +9606,7 @@
   "F10": {
    "id": "F10",
    "verdict": "PASS",
-   "detail": "PASS: granted=1, refused=9, larder=0 (never negative), total store mass 113 == the no-act control's 113. THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions never closed each other; the matter closed AT RESOLVE BY SCARCITY. S54 item 7's precondition is what makes this true rather than minting",
+   "detail": "PASS: granted=1, refused=9, larder=0 (never negative), total store mass 115 == the no-act control's 115. THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions never closed each other; the matter closed AT RESOLVE BY SCARCITY. S54 item 7's precondition is what makes this true rather than minting",
    "kind": null,
    "section": "S54.1",
    "title": "a matter closes by scarcity, not by cancelling",
@@ -9794,7 +9794,7 @@
   "W6": {
    "id": "W6",
    "verdict": "PASS",
-   "detail": "PASS: ONE Event spanning many rungs, with ONE id, emitted SERIALLY before the parallel section. Sharding it per rung would BREAK causes[], because ONE CAUSE IS ONE ID (S31.1 exception 3). It reached 18 ledger(s) through WITNESS",
+   "detail": "PASS: ONE Event spanning many rungs, with ONE id, emitted SERIALLY before the parallel section. Sharding it per rung would BREAK causes[], because ONE CAUSE IS ONE ID (S31.1 exception 3). It reached 10 ledger(s) through WITNESS",
    "kind": null,
    "section": "S31.1",
    "title": "a plague spans many rungs as one event",
@@ -9912,7 +9912,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (454bd547f9e5...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (f91da50cd2f8...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -10174,7 +10174,7 @@
   "A28": {
    "id": "A28",
    "verdict": "PASS",
-   "detail": "PASS over 484 events from a real run: id uniqueness, a NON-DECREASING season index, a stable content hash, and referential integrity on causes[] against log UNION resolved -- 20 causes name an ACT and 459 name an EVENT, zero dangle. \u26a0 THE UNION IS `H-82` AND IT IS A READING, NOT A GIVEN: #353 `:658` and `:1377` cannot both hold as written, and this probe asserts the reading `W9` took rather than leaving it in a code comment",
+   "detail": "PASS over 416 events from a real run: id uniqueness, a NON-DECREASING season index, a stable content hash, and referential integrity on causes[] against log UNION resolved -- 20 causes name an ACT and 392 name an EVENT, zero dangle. \u26a0 THE UNION IS `H-82` AND IT IS A READING, NOT A GIVEN: #353 `:658` and `:1377` cannot both hold as written, and this probe asserts the reading `W9` took rather than leaving it in a code comment",
    "kind": null,
    "section": "S19.1",
    "title": "the log's invariants hold",
@@ -11206,13 +11206,13 @@
   "STEP": 7100,
   "BARRIER": 1871,
   "DECISION": 1889,
-  "QUERY": 29930,
-  "NOTE": 299,
-  "WRITE": 20429,
-  "EVENT": 20046,
+  "QUERY": 28254,
+  "WRITE": 15423,
+  "EVENT": 15218,
   "ACT": 96,
-  "CLAIM": 2175,
-  "GAP": 86
+  "CLAIM": 1679,
+  "GAP": 86,
+  "NOTE": 131
  },
  "_corpus_defects": [
   "ARC1.yaml: committed inside a markdown fence with transcript preamble",

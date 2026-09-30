@@ -42,6 +42,7 @@ from __future__ import annotations
 import pytest
 
 from ..data.matrix import Step, WriteClass
+from ..data.requires import SHORTFALL_PREDICATE
 from ..gaps import ShapeGap
 from ..harness import populated as POP
 from ..harness import probes as P
@@ -322,3 +323,10 @@ def test_24f_drain_guard_a_cohort_draws_stock_on_the_built_realm_and_matter_is_c
     assert held_after == held_before - sum(drawing.values()) + produced, (
         f"matter is not conserved across the draw: {held_before} held, {sum(drawing.values())} "
         f"drawn, {produced} produced, {held_after} held after")
+    # AND THE REALM IS IN SURPLUS ON ITS SECOND DRAW: every cohort is fed in full, so no larder ran
+    # dry with a mouth unfed and no write carries a shortfall (`19d`'s record; its first draw found
+    # no stock at all, which `loop/matter.py` states is silent).
+    assert all(cell[1] == cell[0] for _p, (_h, row) in record.items() for cell in row.values()), (
+        "a cohort went short on the realm's second draw -- the realm is no longer in surplus")
+    assert not [o for e in evs for o in e.observed
+                if str(o.predicate).partition(":")[0] == SHORTFALL_PREDICATE]
