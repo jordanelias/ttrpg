@@ -33,7 +33,8 @@ from typing import Callable, Optional
 
 from ..data.requires import UNKNOWN
 from ..data.rosters import (
-    FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, RUNG_KINDS, TENURE_KINDS,
+    FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, RUNG_KINDS, SITE_KINDS,
+    TENURE_KINDS,
 )
 from ..gaps import Forbidden, Unspecified
 from ..state.carriers import Person, Question, Site, Tenure
@@ -738,6 +739,69 @@ def residence_of(w: World) -> dict:
                     "residence as it opens the new, so this world was built by hand")
         out[t.subject] = t.object
     return out
+
+
+def population(w: World, rung_id: str) -> int:
+    """HOW MANY LIVE UNDER `rung_id`: the summed `Person.weight` of everyone whose `residence_of` is
+    the rung or any rung beneath it. RR-2's capacity bounds POPULATION (its floor is *"applied here
+    to births rather than acts"*), and this is the population it bounds. Plan position `19c`.
+
+    RESIDENTS, NOT PERSONS PRESENT: a traveller standing in a town lives elsewhere and does not fill
+    it, which is what makes `migrate` -- the act that makes someone a resident -- the one a full rung
+    refuses, and `move` the one it does not (`_eff_migrate`'s docstring). `weight`, not a head count,
+    because *"a cohort IS a Person at weight > 1"* (`state/carriers.py`): a household of two hundred
+    fills two hundred places, as it eats for two hundred at the larder (`subsistence_draw`).
+
+    ⚠ AN R-1 AGGREGATE AND §22.4 DOES NOT BAR IT, on `density`'s and `demanded`'s ground: a weighted
+    headcount over live `reside` edges, not a per-person tally summed across holders (clause 2), and
+    no ended edge is read (clause 3). ⚠ `Rung.envelope` -- the population not individuated as persons
+    -- is NOT counted: it has no producer anywhere (`loop/census.py` writes nothing), so a term for
+    it would be a read of a dead carrier (`ID-13`)."""
+    TRACE.query("population", "resolver")
+    here = _subtree(w, rung_id)
+    return sum(w.persons[pid].weight for pid, home in residence_of(w).items() if home in here)
+
+
+# THE `site_kinds` MEMBER `capacity` COUNTS -- Jordan's `ED-SE-0055` (2026-09-25): *"add a `dwelling`
+# SITE KIND; `build_realm` mints one dwelling Site per hearth rung; `capacity(w, rung)` queries
+# descendant Sites of that kind"*. Named once, `WORKS_KIND`'s shape, and refused at import if the
+# roster stops carrying it: `capacity` would otherwise count nothing and every rung would read its
+# floor forever.
+DWELLING_KIND = "dwelling"
+if DWELLING_KIND not in SITE_KINDS:
+    raise Unspecified(
+        f"site kind {DWELLING_KIND!r} is not a `site_kinds` member ({sorted(SITE_KINDS)})",
+        "rosters.yaml -- site_kinds",
+        needs=f"a `{DWELLING_KIND}` member, or `capacity` retired with it",
+        law="ED-SE-0055 -- capacity counts the rung's dwelling Sites; a count keyed on a kind the "
+            "roster does not carry is a dead reader wearing a query's clothes")
+
+
+def capacity(w: World, rung_id: str) -> int:
+    """`ED-SE-0051` / RR-2, RULED: *"a `capacity(w, rung)` QUERY over the rung's dwelling Sites,
+    with a FLOOR -- never a fixture table"*. Plan position `24d-ii`, landed IN THE SAME COMMIT AS ITS
+    FIRST CALLER, `19c`'s `migrate` (a Query nobody calls is `ID-13`'s shape).
+
+        capacity(w, rung) = max( floor[dwelling],  the dwelling Sites at `rung` and below it )
+
+    * THE DERIVED QUANTITY IS THE SITES THEMSELVES: what one dwelling houses is not a cell (plan
+      `24d-ii`, corrected 2026-09-25) -- a per-kind *houses N* is the `hearth_capacity` fixture RR-2
+      refused. So `found` + `build` (`24e`) GROW capacity by standing a dwelling, and a `migrate` into
+      a rung whose `population` would pass it is REFUSED -- RR-2's *"`found` is the throttle"*, read
+      as the lever that lifts the bound rather than an act the bound refuses (`24d`'s reading).
+    * THE FLOOR is `rosters.yaml: capacity_floor` (`H-167`, swept), read through the fixtures so a
+      sweep reaches it. A lower bound on the derived count, `W5`'s floor-of-1 shape RR-2 cites: a rung
+      with no dwelling at all still houses the floor, never zero.
+    * THE RUNG'S OWN SITES COUNT: `descendants` EXCLUDES its own rung (`state/containment.py`), and a
+      hearth's own dwelling hangs off the hearth by `Site.rung`, so the rung is unioned in explicitly
+      (`_subtree`) -- a hearth counts its dwelling, and every ancestor counts it again. That is what
+      makes one more dwelling under a rung raise its capacity and every ancestor's by the same step.
+    * NOTHING IS STORED: `Rung.__setattr__` refuses an aggregate field, and this is recomputed at
+      every call (`AX` T-a)."""
+    TRACE.query("capacity", "resolver")
+    here = _subtree(w, rung_id)
+    built = sum(1 for s in w.sites.values() if s.kind == DWELLING_KIND and s.rung in here)
+    return max(w.fixtures.get("capacity_floor")[DWELLING_KIND], built)
 
 
 # ===========================================================================

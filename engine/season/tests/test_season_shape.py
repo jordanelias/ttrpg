@@ -6307,7 +6307,17 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # [GROUNDED: measured 2026-09-29 -- depths {0: 0, 3: 16, 6: 17}, maturation counts unchanged in
     # kind (still discriminate; asserted below); deepest chain at both arms confirmed act-mixed by
     # inspection, both citing `p_carin` AND `p_bailiff`]
-    assert (depths[3], depths[6]) == (16, 17), (
+    # ⚠ RE-PINNED, PLAN POSITION `19c`, 2026-09-30: (16, 17) -> (12, 12). THE UNIT IS `migrate`
+    # joining `resolvable_verbs()`: it is formed wherever `move` is and executes nowhere in this
+    # world (`headless.run(3)`, measured: three attempts, three `travel.blocked`), which spends
+    # scenes the deepest chain's links used to take -- the act mix this note says sets the ceiling.
+    # CONTROL: with `migrate`'s `@effect_for` removed the pair is (16, 17) again, and the test then
+    # fails exactly where it failed at `1a13443`, on the `total` arm's COUNT (114 against 111). With
+    # `migrate` live that clause passes -- the same act-mix move carried the count back to
+    # discriminating, which is trajectory, not a repair of the clause, and is recorded as such.
+    # `depths[6]` does not exceed `depths[3]` (level), so the walk-the-chain condition is not hit.
+    # [GROUNDED: measured 2026-09-30 at plan position `19c` -- depths {0: 0, 3: 12, 6: 12}; (16, 17) with `migrate` unresolvable]
+    assert (depths[3], depths[6]) == (12, 12), (
         f"the maturation depth ceiling moved: {depths}. This is a MEASUREMENT of a mixed chain "
         "whose length the act mix sets, not a discriminator — `H-80`'s discriminator is the COUNT, "
         "asserted below and still live. Re-pin these two numbers with the unit that moved them. "
@@ -6362,7 +6372,8 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # [GROUNDED: re-measured 2026-09-11 under `U3` -- the five-season chain reads 8 against the seven-season arm's 10; the RELATION this clause tests (the ceiling rises with the season count, so the two stage arms are saturated rather than coincidentally equal) is unchanged, and both figures fall together because the denser ranking forms fewer `create_record` chains]
     # [GROUNDED: re-measured 2026-09-11 with `Record.matured` written through the gate -- the five-season chain reads 9 against the seven-season arm's 13; the RELATION (the ceiling rises with the season count) is unchanged and is what this clause is for]
     # [GROUNDED: re-measured at the `R8.1` commit (`seen` claims) -- the five-season chain reads 11 against the seven-season arm's 13; the act mix moved (the `seen` claim's rung subject raises Q2 for everyone standing there) and the RELATION this clause tests still holds]
-    assert max(depth5(e) for e in mats5) == 11 < depths[3], (
+    # [GROUNDED: re-measured at plan position `19c`, 2026-09-30 -- the five-season chain reads 10 against the seven-season arm's 12, moved by the same unit as the pin above (`migrate` formed and refused, spending scenes); the RELATION still holds, and with `migrate` unresolvable the pin reads 11 again]
+    assert max(depth5(e) for e in mats5) == 10 < depths[3], (
         f"the longest maturation chain over FIVE seasons is {max(depth5(e) for e in mats5)}, not "
         "the 9 measured under `U2`, or it is not below the seven-season figure above. The ceiling "
         "MOVING with the season count is what makes the 3-stage and 6-stage arms saturated there "

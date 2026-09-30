@@ -108,19 +108,7 @@ def _load_matter_tables() -> tuple:
     floors = table("band_floors")
     weights = roster_map("subsistence_weight", "weights")
     for name, got in (("wear_per_season", set(rates)), ("band_floors", set(floors))):
-        if got - kinds:
-            raise Forbidden(
-                f"{name} names site kind(s) no roster carries: {sorted(got - kinds)}",
-                "rosters.yaml",
-                needs="add the kind to `site_kinds`, or drop the row",
-                law="S42.2.1 -- an unregistered kind must RAISE, and a table keyed past its own "
-                    "roster is that same silent answer arriving through the data file")
-        if kinds - got:
-            raise Ungraded(
-                f"{name} has no row for site kind(s): {sorted(kinds - got)}", "rosters.yaml",
-                needs=f"a {name} row per site kind",
-                law="S42.2.1 -- 'a wear table that returns 20 for an unregistered site kind does "
-                    "not fail -- it answers, plausibly and wrongly, forever'")
+        _check_keyed_on_site_kinds(name, got, kinds)
     yields = table("site_yield")
     if set(yields) - kinds:
         raise Forbidden(
@@ -151,7 +139,41 @@ def _load_matter_tables() -> tuple:
             law="#353 §10.4 -- MatterKind is a REGISTRY. Open means addable, not unchecked")
     return rates, floors, weights, yields
 
+
+def _check_keyed_on_site_kinds(name: str, got: set, kinds: set) -> None:
+    """THE BOTH-DIRECTION KEY CHECK every per-site-kind mapping gets: a row for a kind no roster
+    carries is FORBIDDEN, and a site kind with no row is UNGRADED. One owner since plan position
+    `19c` gave it a third caller (`capacity_floor`), extracted unchanged from `_load_matter_tables`'s
+    loop so the three mappings cannot come to disagree about what "keyed on `site_kinds`" means (§8)."""
+    if got - kinds:
+        raise Forbidden(
+            f"{name} names site kind(s) no roster carries: {sorted(got - kinds)}",
+            "rosters.yaml",
+            needs="add the kind to `site_kinds`, or drop the row",
+            law="S42.2.1 -- an unregistered kind must RAISE, and a table keyed past its own "
+                "roster is that same silent answer arriving through the data file")
+    if kinds - got:
+        raise Ungraded(
+            f"{name} has no row for site kind(s): {sorted(kinds - got)}", "rosters.yaml",
+            needs=f"a {name} row per site kind",
+            law="S42.2.1 -- 'a wear table that returns 20 for an unregistered site kind does "
+                "not fail -- it answers, plausibly and wrongly, forever'")
+
+
+def _load_capacity_floor() -> dict:
+    """`24d-ii`'s FLOOR (landed with its caller, plan position `19c`): `rosters.yaml:
+    capacity_floor.floors`, `{site kind: the lower bound on world_q.capacity}`, checked in both
+    directions against `site_kinds` exactly as `wear_per_season` and `band_floors` are. The row says
+    why its cells hold the floor and nothing else, and `H-167` grades and sweeps the number. A
+    SEPARATE loader rather than a fifth value of `_load_matter_tables`: that function's four-tuple
+    is unpacked by callers outside this module, and the floor is not a matter-economy table."""
+    floors = roster_map("capacity_floor", "floors")
+    _check_keyed_on_site_kinds("capacity_floor", set(floors), set(roster("site_kinds")))
+    return floors
+
+
 WEAR_RATES, BAND_FLOORS, SUBSISTENCE_WEIGHTS, SITE_YIELD = _load_matter_tables()
+CAPACITY_FLOORS = _load_capacity_floor()
 
 DEFAULT_FIXTURES = Fixtures(
     # S48: condition is an int on an EXPORTED scale. S22 assigns the scale to `params`, and the
@@ -367,6 +389,9 @@ DEFAULT_FIXTURES = Fixtures(
     # fixed the other three and left these hardcoded in probe bodies, unswept.
     # roster-exempt: Fixtures keys, as `wear_per_season` above. These are H-08 and are swept.
     band_floors=BAND_FLOORS,          # `W8` -- `rosters.yaml: tables.band_floors`, `H-08`
+    # `24d-ii`, landed with its caller at plan position `19c`: the lower bound on
+    # `world_q.capacity`, per site kind, read off `rosters.yaml: capacity_floor` (`H-167`, swept).
+    capacity_floor=CAPACITY_FLOORS,
     # ⚠ `W8` / `H-26`. #353 §22.3 names *"`season_factor`'s distribution"* as a value with NO
     # OWNER, and §25 says `yield` is *"blocked on"* it -- so the SHAPE ruled is a DISTRIBUTION and
     # what is injected here is a degenerate one. The sweep is on its value, which is the only axis

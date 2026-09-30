@@ -1177,6 +1177,35 @@ rosters:
       dwelling: 0
       garrison: 0
 
+  capacity_floor:
+    source: "`RULINGS.yaml` RR-2 (`ED-SE-0051`, ruled 2026-09-17): *\"a `capacity(w, rung)` QUERY over the rung's dwelling Sites, with a FLOOR — never a fixture table\"*; `01_THE_BUILD_ORDER.md` S10: *\"the floor is a table keyed on site kind, beside `band_floors`\"*. Plan position `24d-ii`, landed with its caller at `19c`."
+    row: H-167
+    sweep: [declared, zero, doubled]
+    note: >-
+      ⚠ ITS CELLS HOLD THE FLOOR AND NOTHING ELSE (plan `24d-ii`, corrected 2026-09-25). A cell is a
+      LOWER BOUND on `queries/world_q.py::capacity`'s derived quantity -- `max(floor, the dwelling
+      Sites at the rung and below)` -- never what one dwelling houses: a per-kind *houses N* cell is
+      capacity AUTHORED per kind, the `hearth_capacity` fixture RR-2 refused, a second home for a
+      fact the Sites carry. What is derived is the count of Sites itself.
+      ⚠ WHY 1 FOR `dwelling`: RR-2's own reasoning -- the floor keeps a population from being
+      throttled to zero by a rung with no dwelling at all, *"the same shape as `W5`'s own
+      floor-of-1 choice for budget"*. The number is that precedent's, not a ruling's, so `H-167`
+      grades it and sweeps it: `zero` is RR-2's refused reading and the CONTROL (a rung with no
+      dwelling houses nobody), `doubled` the other side.
+      ⚠ THE OTHER FOUR CELLS ARE 0 AND `capacity` READS NONE OF THEM TODAY: it counts `dwelling`
+      Sites (`world_q.DWELLING_KIND`, Jordan's `ED-SE-0055`: *"capacity queries descendant Sites
+      of that kind"*). They are here because the table is keyed on the whole `site_kinds` roster
+      and `data/fixtures.py` checks it in both directions, as it checks `wear_per_season` and
+      `band_floors` -- so a missing `dwelling` row REFUSES at load instead of silently flooring
+      every rung at nothing. A second housing kind is a roster row, a cell here, and `capacity`'s
+      count widened with it.
+    floors:
+      harbour:  0
+      seam:     0
+      body:     0
+      dwelling: 1
+      garrison: 0
+
   subsistence_weight:
     source: "`H-11` — *the subsistence formula over an OPEN MatterKind registry*. ARCHITECTURE_V2.md's default: *draw from the containing rung's stores, scaled by weight*."
     row: H-11

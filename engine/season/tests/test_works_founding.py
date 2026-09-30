@@ -404,13 +404,6 @@ def _build(key, works, actor=ABSENT):
     return Act(id=key, actor=actor, verb="build", payload={"subject": works})
 
 
-def _dwellings_under(w, rung):
-    """The dwelling Sites at `rung` and at every rung below it -- `24d-ii`'s derivation (`capacity`'s
-    count, before its floor), done here because `capacity` itself is `19c`'s and is not built."""
-    under = {rung, *world_q.descendants(w, rung)}
-    return sum(1 for s in w.sites.values() if s.kind == "dwelling" and s.rung in under)
-
-
 def test_24e_build_stands_a_site_of_the_plan_at_condition_zero_and_once():
     """`build` makes the works' plan at its `at`, at CONDITION 0 (r2 §A.7.1: *"a fabric begins at
     NOTHING"*), and a works builds once. CONTROLS: a works planning a RUNG kind is `found`'s and
@@ -429,35 +422,44 @@ def test_24e_build_stands_a_site_of_the_plan_at_condition_zero_and_once():
     assert _kinds(_fold(w, d, _build("b3", "wr", actor="p_mid"))) == ["build.refused"]
 
 
-def test_24e_a_found_then_a_build_at_a_full_rung_succeeds_and_every_ancestors_dwellings_rise_by_one():
+def test_24e_a_found_then_a_build_at_a_full_rung_succeeds_and_every_ancestors_dwellings_rise_by_one(
+        monkeypatch):
     """THE PLAN'S FALSIFIER, AS CORRECTED 2026-09-25 (the original was inverted): *"A `found` then a
     `build` of a `dwelling` at a rung whose population is at capacity SUCCEEDS, and that rung's
     dwelling count, and so every ancestor's count, rises by exactly one. Assert the count before and
-    after, not only the success Event."* `S` is FULL by the only reading the tree can compute: one
-    dwelling (planted at `Hh`) under four persons (`p_high` at `S`, three at `Hh`), every dwelling
-    occupied. `capacity` is `19c`'s and is not built (asserted, so this test is re-read the day it
-    lands -- the plan: *"if the build lands with `19c`, read the rise through `capacity`"*); so the
-    count is `24d-ii`'s derivation, done by hand. The refusal for a full rung is `migrate`'s."""
+    after, not only the success Event."* `S` is FULL: one dwelling (planted at `Hh`) under four
+    residents (`p_high` at `S`, three at `Hh`), read through `world_q.population`/`capacity` since
+    plan position `19c` landed both -- the plan: *"if the build lands with `19c`, read the rise
+    through `capacity`"*, which this test asserted the day `capacity` did not exist and now does.
+    ⚠ AND `found`/`build` NEVER CONSULT IT (the same message's second half, and `24d`'s reading of
+    *"throttle"*: they are how capacity GROWS, and a full rung refusing them would stay full forever).
+    Observed, not read off the source: both Queries are replaced by a raise for the two folds, at
+    `world_q` and at the one module that imports them by name. The refusal for a full rung is
+    `migrate`'s (`tests/test_migrate_capacity.py`). The founded hearth, with no dwelling yet, reads the
+    FLOOR -- `24d-ii`'s *never 0* -- and building one lifts it no further than the floor already had."""
+    from ..loop import effects
     from ..state.carriers import Site
-    assert not hasattr(world_q, "capacity"), (
-        "`capacity` exists now (`19c`/`24d-ii`): read this rise through it, as the plan instructs, "
-        "and assert that `found`/`build` never consult it")
     w, d = _world()
     w.sites["dw_hh"] = Site("dw_hh", HEARTH, "dwelling", condition=w.fixtures.get("condition_scale"))
-    persons_under_s = [p for p in w.persons
-                       if world_q.home_of(w).get(p) in {SETTLEMENT, *world_q.descendants(w, SETTLEMENT)}]
-    assert len(persons_under_s) == 4 and _dwellings_under(w, SETTLEMENT) == 1, persons_under_s
+    floor = w.fixtures.get("capacity_floor")[world_q.DWELLING_KIND]
+    assert world_q.population(w, SETTLEMENT) == 4 > world_q.capacity(w, SETTLEMENT) == 1
     chain = world_q.ancestry(w, SETTLEMENT)                       # S, D, R
-    before = {r: _dwellings_under(w, r) for r in chain}
+    before = {r: world_q.capacity(w, r) for r in chain}
+
+    def _consulted(*_a, **_k):
+        raise AssertionError("`found`/`build` consulted the throttle they exist to lift")
+    for mod in (world_q, effects):
+        for name in ("capacity", "population"):
+            monkeypatch.setattr(mod, name, _consulted)
     _declare(w, d, "wf", "hearth", SETTLEMENT)
     assert _kinds(_fold(w, d, _found("f1", "wf"))) == ["rung.founded"]
     hearth = next(r for r in world_q.descendants(w, SETTLEMENT) if r.endswith(":wf"))
-    assert _dwellings_under(w, hearth) == 0                      # founded: no dwelling until BUILT
     _declare(w, d, "wb", "dwelling", hearth)
     assert _kinds(_fold(w, d, _build("b1", "wb"))) == ["site.built"]
-    after = {r: _dwellings_under(w, r) for r in chain}
+    monkeypatch.undo()
+    after = {r: world_q.capacity(w, r) for r in chain}
     assert all(after[r] == before[r] + 1 for r in chain), (before, after)
-    assert _dwellings_under(w, hearth) == 1 and _dwellings_under(w, HEARTH) == 1
+    assert world_q.capacity(w, hearth) == max(floor, 1) and world_q.capacity(w, HEARTH) == 1
 
 
 def test_24e_the_whole_lifecycle_runs_declare_ripen_found_build_move_in_and_raise():

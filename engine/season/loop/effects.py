@@ -60,8 +60,8 @@ from ..data.rosters import (
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from ..loop.predicates import office_described_by
 from ..queries.world_q import (
-    RESIDE_KIND, ceiling, docketed, hold_force, holder_faction_of, home_of, residence_of, share,
-    upkeep_of, works_for, works_target,
+    RESIDE_KIND, ancestry, capacity, ceiling, docketed, hold_force, holder_faction_of, home_of,
+    population, residence_of, share, upkeep_of, works_for, works_target,
 )
 from ..state.carriers import Proposition, Record, Rung, Site, Tenure, Term
 from ..state.gate import NO_CHANGE, Change, Subject, may_renew
@@ -497,7 +497,16 @@ def _eff_migrate(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
       * a destination he ALREADY LIVES IN -- a migration that changes no residence is none, and
         re-opening the same residence under a new id would be a digest move F9 publishes as a
         migration (`H-140`'s shape, answered for this verb rather than left open);
-    and the capacity refusal lands in the same clause with `capacity` (this position's third commit).
+      * A DESTINATION AT CAPACITY -- RR-2's throttle, and `capacity`'s first caller (plan `24d-ii`,
+        which lands here). A NEWCOMER is refused where `population(dest) + his weight` would pass
+        `capacity(dest)`; the refusal is the destination's, read at the destination only, as the
+        plan instructs (*"throttled by `capacity` at the destination"*). A migrant who ALREADY lives
+        under `dest` (settling from his hearth into its settlement) is no newcomer to it: he is in
+        its population before and after, so the move grows nothing and nothing throttles it.
+        REJECTED: checking every ancestor too -- a newcomer to a hearth is a newcomer to its
+        settlement, but a settlement's room is its hearths' room summed, and refusing a hearth
+        with space because the town above is crowded would make the throttle a second, coarser
+        census the ruling did not ask for; and throttling a `move` -- presence fills no house.
     REJECTED: settling without travelling (no leg) -- a settler makes the journey a traveller makes,
     and the distance penalty is the journey's, so two verbs pricing one journey two ways would be the
     S defect (*calculations consistent in methodology*)."""
@@ -508,11 +517,24 @@ def _eff_migrate(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
                        alternatives=["write the edge anyway (add_tenure raises and the season "
                                      "dies)", "let the precondition admit it and crash later"])
         return NO_CHANGE
-    if residence_of(w).get(a.actor) == dest:
+    home = residence_of(w).get(a.actor)
+    if home == dest:
         TRACE.decision(f"a migration to where the migrant already lives -> {a.actor} into {dest!r}",
                        "19c", chose="change nothing, so the fold emits the refusal",
                        alternatives=["re-open the same residence under a new id (a digest move "
                                      "published as a migration)", "treat it as a move"])
+        return NO_CHANGE
+    migrant = w.persons.get(a.actor)
+    if migrant is None:
+        # Not a person: `act.ineligible` stops it before the fold, so only a hand-built act lands
+        # here, and it has no weight to house -- `move`'s reading of the same case.
+        return NO_CHANGE
+    newcomer = home is None or dest not in ancestry(w, home)
+    if newcomer and population(w, dest) + migrant.weight > capacity(w, dest):
+        TRACE.decision(f"a migration into a rung at capacity -> {a.actor} into {dest!r}",
+                       "RR-2/24d-ii", chose="change nothing, so the fold emits the refusal",
+                       alternatives=["admit him anyway (capacity bounds nothing)",
+                                     "refuse at every ancestor as well (a second, coarser census)"])
         return NO_CHANGE
     settled = [t for t in w.tenures if t.subject == a.actor and t.kind == RESIDE_KIND and t.live]
 

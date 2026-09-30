@@ -3567,6 +3567,19 @@ rows:
     cite:      "MEASURED at plan position `24e`, 2026-09-29, by reading every write `_eff_found`/`_eff_build`/`_eff_restore` make: a Rung and a `contain` edge, a Site, a staged `(Site, condition)` delta -- no `(Rung, stores)` write, no `hold`, and no verb in `verb_table.yaml` writes `(Rung, exists)` or `(Site, exists)` to absent. CLAUDE.md §0's ladder: not superseded; not irrelevant (all four are on the objects this position made); no design document in the chain gives the cost or the holder -- P4 (`04_EVALUATION.md`) is an unratified evaluation and r2 names the payment without a debit; the precedent is `H-162`'s, a record of what the producer does not yet do rather than a ruling request"
     source:    "plan position `24e` (WORKS & FOUNDING), 2026-09-29"
 
+  - id:        H-167
+    tier:      1
+    kind:      "NUMBER ×kinds"
+    hole:      "THE CAPACITY FLOOR -- the lower bound on `queries/world_q.py::capacity` (`max(floor, the dwelling Sites at the rung and below)`). RR-2 (`ED-SE-0051`) rules the SHAPE -- a Query over dwelling Sites *with a FLOOR, never a fixture table* -- and gives the floor's REASON (a rung with no dwelling must not throttle a population to zero, *'the same shape as `W5`'s own floor-of-1 choice for budget'*) and no NUMBER."
+    owner:     "params"
+    grade:     "assumption"
+    default:   "1 for `dwelling`, `W5`'s floor-of-1 precedent that RR-2's reasoning cites; 0 for the four kinds `capacity` does not count (the table is keyed on the whole `site_kinds` roster so a missing `dwelling` row refuses at load)"
+    site:      "rosters.yaml `capacity_floor.floors`, loaded and both-direction checked by `data/fixtures.py::_load_capacity_floor`, read through DEFAULT_FIXTURES `capacity_floor` by `queries/world_q.py::capacity`"
+    sweep:     ["declared -- 1 per rung (the default)", "zero -- no floor: a rung with no dwelling houses nobody, RR-2's refused reading and the CONTROL", "doubled -- 2"]
+    unblocks:  "RR-2's throttle on the one caller in scope, `migrate` (plan position `19c`) -- and, when something grows a population, the birth-side consumer the ruling reasons about (`24d-ii`: *'the population throttle the ruling describes has no subject until a birth-side consumer exists'*)"
+    cite:      "`proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml` RR-2 (ruled 2026-09-17, decision and reasoning); `01_THE_BUILD_ORDER.md` S10 (*'the floor is a table keyed on site kind, beside `band_floors`'*); plan `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` `24d-ii` (*'Its cells hold the FLOOR and nothing else'*; *'declared with a `row:` and a `sweep:` like every injected table'*). The sweep's arms are EXECUTED by `tests/test_migrate_capacity.py` (`Fixtures.sweep('capacity_floor', ...)`: a dwelling-less rung reads 0 / 1 / 2). CLAUDE.md §0's ladder: not superseded; not irrelevant (the throttle's caller is built); the design documents give the shape and the reason, not the number; the precedent is `W5`'s floor-of-1, which the ruling itself names -- an assumption with a sweep, not a ruling request"
+    source:    "plan position `24d-ii` (CAPACITY), landed with its caller at `19c` (MIGRATE), 2026-09-30"
+
   - id:        H-168
     tier:      1
     kind:      "WIRING"
