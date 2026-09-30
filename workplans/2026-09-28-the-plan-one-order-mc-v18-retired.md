@@ -218,11 +218,11 @@ four rows of that table found stale in this pass are corrected here, not there: 
 | ★ | **APERTURE RE-MEASUREMENT** | IN | **DONE** | `18a` | Phase 2 |
 | 19 | **U7-remit** | IN | **DONE** | `★`, 6 ✓, `15`/`15c`, `18` | Phase 2 |
 | 19b | **U7-disp** | IN | OPEN | **JORDAN** (`ED-IN-0210`, §5.1 item 6) + `15`/`15c` | Phase 2 |
-| 19c | **MIGRATE** (+ `24d-ii`) | IN/SE | OPEN | 24d-i ✓ | Phase 2 |
+| 19c | **MIGRATE** (+ `24d-ii`) | IN/SE | **DONE** | 24d-i ✓ | Phase 2 |
 | 19d ✦ | **DEMAND · DELIVERY** | SE/IN | **DONE** | `15c` | Phase 2 |
 | 20-i ✦ | **faction scale, first cut** | IN | **DONE** | — | §2.2 (`ecacb57`) |
 | 20-ii ✦ | **U9 / R-04 — faction queries** | IN | BLOCKED | `★` | Phase 4 · a |
-| 20-iii ✦ | **the information cluster** | IN/FI | BLOCKED | `15` (20-i ✓) | Phase 2 |
+| 20-iii ✦ | **the information cluster** | IN/FI | OPEN — its gate, `15`, is DONE | `15` (20-i ✓) | Phase 2 |
 | 20-iv ✦ | **d.1 + terrain on the season path** | MB/IN | BLOCKED | `20-ii`, `28-iii` | Phase 4 · e |
 | 21 | **U10** | IN | BLOCKED | `20-ii` | Phase 4 · b |
 | 22 | **PROC-B** | SC | BLOCKED | `18`, `★` | Phase 4 · l |
