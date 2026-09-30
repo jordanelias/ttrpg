@@ -399,7 +399,23 @@ def positive_control(cases, slots: str = "narrow", mode: str = "none") -> dict:
     path `W-B` opened.
 
     Run at `none`, where the unplanted answer is 0 divergences. If the plant does not move the
-    scorer off 0, the scorer is blind and every 100% in this file means nothing."""
+    scorer off 0, the scorer is blind and every 100% in this file means nothing.
+
+    ⚠ THAT LAST SENTENCE IS NO LONGER TRUE SINCE U2/R-03 (2026-09-30, WD-REBASE): `none`'s own
+    UNPLANTED answer is not 0 any more -- several live channels move it in every arm (the rounds
+    loop among them, not isolated from the others -- see `wd_collect.py`'s SAME-EXPT comment).
+    `wd_collect.py` now scores each plant against the UNPLANTED `none` arm on the SAME sample
+    (its `control_baseline_*` keys), not against a bare `diverged > 0`; the `detected` field this
+    function returns is kept under its historical name but is vacuous whenever that baseline
+    itself diverges.
+
+    ⚠⚠ AND, SEPARATELY, THE PLANT BELOW IS CURRENTLY INERT (found by the same pass): plan
+    position `19` added a `via` parameter to `belief_contradicts`
+    (`engine/season/epistemic.py:71-72`), and `opening_set` calls it with five positional
+    arguments (`engine/season/decision/options.py:161`). The `bc(p, row, subject, operands,
+    _p=pred)` closure below binds its fifth positional argument -- `seat`, not a second
+    predicate -- onto `_p`, clobbering the intended plant. Not fixed here (this file's code is
+    outside the WD-REBASE unit's edit surface); stated so the next reader does not re-derive it."""
     fx = fixtures_for(mode, slots)
     out = []
     for pred in PLANT_PREDICATES:
