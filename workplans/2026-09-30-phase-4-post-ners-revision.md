@@ -129,9 +129,9 @@ for these rows only; its non-Phase-4 rows are unchanged and not restated)
 | — | **REGISTER/PLAN FIXES** | IN | **DONE** | NERS/FABLE PASS | `30dc8c65` |
 | — | **EFFECTS-SPLIT** | IN | **DONE** | — (independent of the NERS pass; the settled modularity requirement) | `309a17d9`; 683 passed / 1 pre-existing failure (`engine/season/tests`, independently reproduced against both the split and the pre-split commit) |
 | — | **CITATION-FIX** | IN | **DONE** | EFFECTS-SPLIT | `a882cc32` |
-| b | **`21`** U10 | IN | **OPEN** (unblocked -- `20-ii` is DONE) | `20-ii` ✓ | — |
-| c | **`28-ii`** (M6) successor goldens | IN | **OPEN** (unblocked -- `28-i` is DONE) | `28-i` ✓ | — |
-| d | **`28-iii`** SPINE-DELETE | IN | BLOCKED | `28-ii` | — |
+| b | **`21`** U10 | IN | **OPEN, PARTIAL** — bookkeeping done; a genuine upstream break in `wd_collect.py` leaves R-01/R-02 `not_met` | `20-ii` ✓ | `03de9d47` |
+| c | **`28-ii`** (M6) successor goldens | IN | **DONE** — one disclosed, out-of-scope gap (corpus-organic reachability) | `28-i` ✓ | `013a5b1b` (see correction in `03de9d47`) |
+| d | **`28-iii`** SPINE-DELETE | IN | **OPEN** (unblocked -- `28-ii` is DONE) | `28-ii` ✓ | — |
 | e | **`20-iv`** d.1 + terrain/garrison | MB/IN | BLOCKED | `20-ii` ✓, `28-iii` | — |
 | f | **`29a`** overview | IN | BLOCKED | `28-iii` (+ `27` for `ms_track`) | — |
 | g | **`29b`** factions + `game_state.py` | IN | BLOCKED | `20-ii` ✓, `28-iii`, `29a` | — |
@@ -166,6 +166,43 @@ effects_combat.py`** — `march` lives there now (with `fight`), not in a monoli
 precedent it follows (`kill / wound`'s per-verb workaround) is `_eff_kill`, also in `effects_combat.py`.
 **Accounting correction (§1.4): cite eight always-refused verbs, not nine, and do not assume `release`
 is still crowded out of the scene budget** — `20-ii` already returned it to the executed set.
+
+⚠ **BUILT 2026-09-30, landed in commit `013a5b1b` (mislabeled — see the correction in commit
+`03de9d47`'s message; the content is `28-ii`'s, verified byte-identical against the working tree
+independently by both producers and by the orchestrator) — DONE, one disclosed, out-of-scope gap.**
+
+- **The hash pin**: `engine/season/tests/test_build_realm_determinism.py` (new) — `build_realm(0)`
+  through the real `SeasonDriver`/`make_chooser`, run twice, `content_hash()` compared byte-identical,
+  plus a seed-0-vs-seed-1 divergence control. Neither existing candidate (`test_m1_acceptance_probe.py`,
+  `test_r4_event_ids_are_unique...`) actually pinned `build_realm` — checked, not assumed. 2 passed.
+- **The `operands_for` march arm**: `decision/options.py::opening_set` — **a correction to the plan's
+  own diagnosis, verified before building**: `operands_for` already produced a non-empty operand dict
+  for `march`; the real blocker was that no `questions_for` source ever offers a SETTLEMENT as a
+  referent (measured: 0 of 81 referents in `build_realm(0)`). The arm widens `march`'s referent set to
+  include `containing_rung_of(p)` (the actor's own position — the same reading `from` already uses),
+  additive rather than a replacement. `test_march.py::test_a_real_chooser_forms_and_folds_a_march...`
+  runs a real chooser through the genuine RESOLVE→ENCOUNTER pipeline to a real `field.lost` with
+  casualties — mutation-verified (fails correctly with the arm stashed out). 10 passed.
+- **`H-151`'s `cite:` corrected** to match: the "unreachable from the corpus either way" claim no
+  longer holds now that a real arm exists; the row's own scenario (same-faction march) is still not
+  exercised by the natural corpus, for the disclosed reason below, not for the reason the old citation
+  gave.
+- **`test_combat_bridge_seam.py` confirmed to need no successor**, its three covering tests re-run
+  (6 passed) — one citation drift caught and worth a future note: `seam/wrappers/combat.py:203-208`
+  has moved to `:195-201`.
+- **`test_f7_smoke_oracle.py`/`test_mc_v18_regression.py` deliberately left untouched**: read in full
+  rather than trusting the plan's prediction that `VICTORY_THRESHOLD`/Hafenmark "die"/"close" here —
+  they don't; both files are `28-iii`'s (SPINE-DELETE) own `FORK:` set, not this position's.
+
+⚠ **THE DISCLOSED GAP, NOT CLOSED BY THIS POSITION**: the natural corpus (`build_realm(0)`'s own
+organic Questions) never offers a settlement referent to anyone, so a real field battle reachable from
+zero test-authored input is not demonstrated — only a chooser-formed one against a constructed
+Question, which is real (the genuine chooser/opening_set/choose/mint_token/RESOLVE pipeline, not a
+hand-built `Act`) but not corpus-organic. This is `H-80`-adjacent (a `questions_for` source gap) and
+was correctly left out of this position's scope. **Read against the retirement plan's own gate
+wording** (`PROPOSAL.md:104`: *"a battle executing from a real chooser-formed decision"*, explicitly
+contrasted with a hand-built `Act`) **this satisfies the gate as written** — the chooser, not the test,
+forms the decision. `28-iii` is accordingly unblocked.
 
 **d · `28-iii` (SPINE-DELETE).** No change. No `loop/effects_*.py` file is touched (it deletes
 `engine/mc_v18.py` and `engine/cross_scale/`, neither of which the split touched).
