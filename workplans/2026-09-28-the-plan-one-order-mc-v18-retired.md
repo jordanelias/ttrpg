@@ -722,6 +722,25 @@ gate: a retire-set tree may go only when the loop expresses its scale.** That ga
 tree** (`29a`–`29f`), never as one wave. Jordan's 2026-09-28 instruction is consistent with it:
 superseding the CALLS means the loop subsumes the SCALES.
 
+**What retiring `mc_v18` buys, and what it does not.** Deleting the spine is an E gain -- ONE engine,
+ONE vocabulary, no second codepath answering the same questions twice -- verified directly rather
+than assumed: every importer of `engine.mc_v18` is a test file (`engine/tests/test_combat_bridge_seam.py`,
+`test_f7_smoke_oracle.py`, `test_mc_v18_regression.py`, per `tests/valoria/test_mc_v18_is_deprecated.py`'s
+own `ALLOWED_IMPORTERS`), and no game code imports it. **It is NOT itself an S gain.** `mc_v18` has no
+faction ladder to compare the season loop against -- `_faction_actions_callback` takes ONE weighted
+draw per faction and stops, no propagation -- so there is no sibling calculation for the retirement to
+bring into methodological line with. Whatever S this batch buys comes specifically from `20-ii` (just
+landed, the faction-scale ladder itself), `20-iv` (terrain/garrison on the season path) and `28-ii`'s
+second half (a battle from a real, chooser-formed decision) -- not from the deletion. **And the
+retirement has a real, named cost.** Deleting `mc_v18` removes the last campaign-scale regression
+oracle: `28-ii`'s named same-seed hash pin is a regression TRIPWIRE, not a balance instrument, and
+`tools/balance_oracle.py` -- the campaign-level instrument `CLAUDE.md` §7 names -- was retired with no
+live successor (`CLAUDE.md` §7; `28-i`/M5's `FORK:` row). This is not free, and this section does not
+present it as free.
+
+⚠ STATE HERE IS NOT THE OWNER -- §2.3 IS. This column is reference only and may be stale; read §2.3
+for the current state.
+
 | # | handle | what runs | `STATE` | `GATE` |
 |---|---|---|---|---|
 | a | **`20-ii`** faction queries (U9 / R-04) | `faction_q.{holdings,purview,superiors,subordinates,at_war}`; `head` via `Tenure.degree` (F.4's first reader); `scale_of_rung`; the 44 faction-scale re-scales and the 10 world cases; **edit `04 §A.2:132`** to name the fourth `queries/` module | **DONE** | `★` ✓ |
@@ -1038,37 +1057,46 @@ record is.
 14. **H-156 · the always-refused verb crowding the corpus's scene budget** — is the crowding a cost
     to accept, a call to grade some of the crowding verbs (giving the chooser a real reason to
     prefer or reject one before it forms), or a call to widen their preconditions so fewer form
-    only to be refused? Option (a), as `H-156` states it, would answer four of the nine verbs the
-    terminal whole-of-Phase-2 critique measured in the corpus's always-refused set (2026-09-30):
-    `commit`, `found`, `build`, `migrate` (`survey`, `levy` and `release` are the same shape,
-    registered separately at `H-168`/`H-169`/`H-163` and not yet cross-cited to this row).
+    only to be refused? Option (a), as `H-156` states it, would answer its own four of the eight
+    verbs the terminal whole-of-Phase-2 critique measured in the corpus's always-refused set
+    (2026-09-30, count corrected for `20-ii`'s landing): `commit`, `found`, `build`, `survey`.
+    `migrate` (`H-168`) and `levy` (`H-163` limit 1) are the same shape, cross-cited from `H-156`
+    but not folded into its own option (a). `release` is a seventh case, but a different one: it is
+    zeroed BY the other verbs' crowding rather than introduced by this chain, and moves in and out
+    of the always-refused set as later positions (`24f`, `20-ii`) uncrowd it again.
     - *Why it is his:* two defensible designs (accept the cost / grade the verbs / widen the
       preconditions) lead to materially different play, and no design document rules between them.
     - *Blocks:* nothing directly; shapes how many future verbs repeat this pattern before it is
       answered once.
     - *Ledger:* `engine/season/hole_register.yaml` H-156 (kind: RULING).
-15. **H-173 · does a determination-opened `oblige` (a sentence) answer to every `oblige` reader as a
-    service edge does, or does `Tenure` need a marker distinguishing them?** Four consequences if
-    left as one carrier: the seat's own upkeep pass can renew a sentence; the convict joins the
-    bench's establishment and becomes an informant on its later business; a bench's own servant
-    cannot be sentenced by it; and the sentence-length fixture (`H-159`) was chosen and reasoned
-    about as a service term only.
+15. **H-173 · should a determination-opened `oblige` (a sentence) answer to every `oblige` reader as
+    a service edge does, or should renewal, the witness channel, the one-edge rule and the
+    term-length fixture each read it differently from a service?** Four consequences if left as one
+    carrier: the seat's own upkeep pass can renew a sentence (for whichever convicts it reaches, not
+    all of them); the convict joins the bench's establishment and becomes an informant on its later
+    business; a bench's own servant cannot be sentenced by it; and the sentence-length fixture
+    (`H-159`) was chosen and reasoned about as a service term only. The opening act's verb is already
+    recoverable without a new carrier field (`w.acts[term.declared_by].verb` before any renewal, or
+    always via the log's `tenure.opened` Event through `causing_act`), so the live question is
+    whether a reader SHOULD distinguish a sentence from a service, not whether it CAN.
     - *Why it is his:* a live design choice with materially different readings for how disposal is
       felt in play, escalated rather than answered by architecture alone (found reading `19`'s and
       `17a`'s code together, which neither position's own close was scoped to do).
-    - *Blocks:* nothing today -- `determine` executes in no shipped world (H-165 limit 3) -- but
+    - *Blocks:* nothing today -- `determine` executes in no shipped world (`H-163`) -- but
       shapes whichever future position first makes it reachable.
     - *Ledger:* `engine/season/hole_register.yaml` H-173 (kind: RULING).
-16. **H-174 · should a bench's jurisdiction and a seat's upkeep follow where a person IS PRESENT
-    (`home_of`, the shipped reading) or where he LIVES (`residence_of`, `19c`'s own split)?**
-    Two readers (`state/gate.py::may_determine`'s bench-ground test; `loop/effects.py::_renewals`'
-    upkeep target) predate `19c`'s presence/residence split and were never revisited once it landed.
-    - *Why it is his:* a bench's authority and a seat's payroll are two different questions and may
-      take two different answers, not necessarily the same one the shipped default assumes by
-      leaving both on `home_of`.
-    - *Blocks:* nothing today -- neither reader is reached by a computed act -- but decides whose
-      bench binds a traveller and whose upkeep a payment reaches once `migrate`/`determine` traffic
-      exists.
+16. **H-174 · should a bench's jurisdiction follow where a person IS PRESENT (`home_of`, the shipped
+    reading) or where he LIVES (`residence_of`, `19c`'s own split)?** `state/gate.py::may_determine`'s
+    bench-ground test predates `19c`'s presence/residence split and was never revisited once it
+    landed. (This row also carried a second reader, `loop/effects.py::_renewals`' upkeep target --
+    that half is now ANSWERED, not open: `home_of` is the architecture's own standing definition of
+    *where a person is*, so a payment reaching the obligee it finds is the existing answer, and it no
+    longer escalates.)
+    - *Why it is his:* a bench's authority over a traveller who is merely present, versus one who
+      lives there, is a live design call with materially different readings for how jurisdiction is
+      felt in play.
+    - *Blocks:* nothing today -- `may_determine` is not yet reached by a `move` crossing two benches'
+      grounds in the same run -- but decides whose bench binds a traveller once that traffic exists.
     - *Ledger:* `engine/season/hole_register.yaml` H-174 (kind: RULING).
 
 ### 5.2 · DEMOTED — answered, with the closing citation close-pass writes. Do NOT let these ride back into §5.1

@@ -1642,7 +1642,8 @@ def _eff_commit(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     actor who releases a `commit` and re-commits to the SAME Proposition within the same tick
     would otherwise mint the identical id as the now-closed one -- the same collision `_eff_give`'s
     own docstring names and salts against. `commit` has no `release`-then-reopen path reachable
-    today (untyped, chooser-unreachable), but the fix is one token and costs nothing to carry.
+    today (`commit` never executes in computed play -- H-156 -- so no edge exists to release and
+    re-open), but the fix is one token and costs nothing to carry.
 
     ⚠ BUILD-ORDER BO-9/BO-10 (`proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md`
     §7.2): the first build of this effect, before any question source offered a Proposition
