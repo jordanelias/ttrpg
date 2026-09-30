@@ -7,13 +7,14 @@
 **What this is.** One session's questions about Valoria — how the season loop runs, how the game stands
 against its precedents, what an interface could play, the bout and its two proposed modes, weapons and
 armour, mass-battle units, the character sheet, and the verbs' demands on attributes — digested into ten
-documents. Each pairs an analysis with recommendations, and each recommendation carries its falsifier.
+documents. Each pairs an analysis with recommendations, and each recommendation names its falsifier
+where one exists.
 
 **What it changes in `engine/season/`** (`CLAUDE.md` §3 asks this of any new directory here): nothing
 directly. The recommendations that would touch it, if taken up, are S-1, S-2 and L-1 (a client's read
 and write boundary), M-1 (return the fight trace), K-2, K-3 and K-4 (the person's fields and a writer
-for capability), P-1, P-2 and P-3 (relationships, scarcity, faction heads), V-1 (a verb-table row) and
-U-1 (musters). The rest touch `systems/` or are standing rules.
+for capability), P-1, P-2 and P-3 (relationships, scarcity, faction heads), S-6 (graded inquiries)
+and U-1 (musters). The rest touch `systems/` or are standing rules.
 
 ---
 
@@ -43,8 +44,9 @@ Ranked by what each unblocks, then by cost. Ids resolve to the rows in each docu
 1. **S-1** a dispatching `choose` — the whole single-player hook; its control is a hash comparison.
 2. **M-1 / S-4** return the combat trace the seam already captures — needed by B-3 and by any grid
    display.
-3. **S-2** a per-person projection as the only thing a client reads — the epistemic contract in code.
-4. **B-3** measure tradition identity per event at the nine moments — it gates B-1 and M-4.
+3. **S-2** a per-person projection as the only thing a client reads — the epistemic contract in code;
+   **L-1**, a supported per-person record of the season, is its read side.
+4. **B-3** measure tradition identity per event at the nine moments — it gates M-4.
 5. **K-2** an unseeded `attributes` dict on `Person` — it unblocks K-1, K-6 and U-4 without pre-empting
    the roster.
 6. **K-3** the two licensed practitioner fields, and a typed `thread_read` — the sixth inquiry becomes
@@ -55,18 +57,23 @@ Ranked by what each unblocks, then by cost. Ids resolve to the rows in each docu
 7. **P-1** more acts write stance rows, each carrying its cause — the emergence gap (R-01, R-02).
 8. **P-3** seat faction heads and let a head act — factions from structure to agency.
 9. **P-2** give scarcity teeth, with a control arm.
-10. **K-1** build the `Combatant` from the person — a character's build reaches their fights.
-11. **K-4** a `practice` verb as capability's writer — heeding 10 §2.3: the chooser must see what was
-    acquired.
-12. **U-2, then U-1** one equipment model for both scales; musters with inputs beyond headcount.
-13. **L-3** name the zero-leverage state, and choose a producer for σ-leverage advantage.
-14. **M-2, M-3, M-5** the duel and grid cadences, after the two items below are ruled.
+10. **K-1, then K-5** build the `Combatant` from the person, and carry weapon and armour as holdings —
+    a character's build and kit reach their fights.
+11. **K-4, with V-3** a `practice` verb as capability's writer, and `faculty(domain)` as the one owner
+    of the aptitude slot — heeding 10 §2.3: the chooser must see what was acquired.
+12. **S-6** give the inquiries a graded outcome, and make `thread_read` attemptable.
+13. **U-2, then U-1** one equipment model for both scales; musters with inputs beyond headcount. U-3
+    wires role instructions to primitives.
+14. **L-3** name the zero-leverage state, and choose a producer for σ-leverage advantage.
+15. **M-2, M-3, M-5, M-6** the duel and grid cadences, after the two items below are ruled; M-6
+    prototypes the grid as mass battle at weight 1.
 
-**Repairs — trivial, any time:** L-2, B-2, W-4, P-5, and V-5's gloss; W-3 puts the recovery tail on
-the balance harness.
+**Repairs — trivial, any time:** L-2, B-2, W-4, P-5, U-5, and V-5's gloss; W-3 puts the recovery tail
+on the balance harness.
 
-**Ordered behind other work:** C-1, the weapon card, is buildable now, but C-2's words wait on W-1,
-W-2 and W-3 (C-4, C-5); B-1 → M-4 (the Plan layer's own precondition); U-4 and K-6 after K-2; L-4 is
+**Ordered behind other work:** C-1 (also S-5), the weapon card, is buildable now, but C-2's words wait
+on W-1, W-2 and W-3 (C-4, C-5); W-5's ability predicates serve K-5; S-3's journal of belief is built
+over S-2; B-1 → M-4 (the Plan layer's own precondition); U-4 and K-6 after K-2; U-6 with U-2; L-4 is
 the plan's.
 
 **Held with the proceedings design:** P-4, V-4, and V-5's speech-kind name.
@@ -77,15 +84,17 @@ the plan's.
 
 ## For Jordan
 
-Three items survive `CLAUDE.md` §0's five tests:
+Two new items survive `CLAUDE.md` §0's five tests:
 
 1. **05 §4.1** — do fights nobody watches resolve inside one act, or span scenes as a grid fight does?
 2. **05 §4.2** — does duel mode open any of the three closed moments? Recommended: no.
-3. **10 V-1** — split `evade / defy` into two rows; it amends a ratified §E3 row.
 
-Already his, and not re-opened here: the attribute roster (OPT-AV-1; the plan's D2), Focus and
-Charisma (the August proposal), and the Godot version. 08 records where a levy/professional `Muster`
-split would sit if pursued; it is not proposed.
+One item is evidence for a question already his: **10 V-1**, splitting `evade / defy`, belongs inside
+ED-IN-0210 (*is `comply` one verb or two*, open, blocking `19b`).
+
+Already his, and not re-opened here: naming the tenth attribute (the plan's D2; the count is ruled at
+ten, ED-IN-0193) and the Godot version. 08 records where a levy/professional `Muster` split would sit
+if pursued; it is not proposed.
 
 ---
 
@@ -102,12 +111,12 @@ The documents carry the corrected figures.
 | the poleaxe switches to its hammer at plate | the poleaxe punctures at every tier; the **bec de corbin** switches to percussion at heavy — 06 |
 | a badly balanced sword parries and winds worse | those affinities move by hundredths; the penalty is in recoverability (×2.2) and tempo, and because `material` has no reader a blunt copy clears heavy plate whether it is wood or steel — 06, 07 |
 | seven of twelve levers carry abilities | seven of **fifteen** — 04 |
-| standing does not exist in code | `standing_of` exists and measures a perception gap; no 0–7 rank exists — 09 |
+| standing does not exist in code | `standing_of` exists and measures a perception gap; the retiring contest kernel carries a 0–10 `Standing` and the old `Faction` an integer one; no person carries a 0–7 rank — 09 |
 | capability's one writer zeroes it | the corpus cast writes authored values; a probe zeroes it — 09 |
 | R-04 not met; faction queries blocked | R-04 **partial**; `20-ii` **done** — 01, 02 |
 | 42 verbs; social 14, material 10, movement 1 | **44**; social 15, material 13, movement 2 — 10 |
 | `examine` and `surveil` are contested because they are exposed | the stratum is an ordering band over what an act touches — 10 |
-| attributes for seat, bond and decree verbs | none of them contests, and §E4 forbids a modifier on them — 10 |
+| attributes for seat, bond and decree verbs | none of them contests; §E4 bars an office from adding a modifier, and the decree verbs do not yet execute — 10 |
 | `confer` is consultative | it bestows a seat — 10 |
 | 22 `_emit` sites; nothing in the seam sets `_TRACE` | **20** sites; the seam captures the trace and keeps only `bouts` — 04, 05 |
 | fieldwork's sim is stubs | only `knots.py` remains, uncalled by the season loop — 03 |

@@ -38,9 +38,9 @@ Three details of that seam matter to both modes:
 
 ### 1.2 The bout is already recorded — and reduced to one number
 
-`wrapper.py` has a trace hook, `_TRACE`, fired at **20** call sites across fourteen event kinds
+`wrapper.py` has a trace hook, `_TRACE`, fired at **20** call sites across fifteen event kinds
 (`fight_start, turn_start, engagement_start, approach, stophit, commit, read, mode, roll, outcome,
-contact, separation, engagement_end, fight_result`). It draws no random number and mutates nothing, so
+contact, separation, disengage, engagement_end, fight_result`). It draws no random number and mutates nothing, so
 capturing it cannot change a result. The seam **already sets it** — `wrapper._TRACE = trace.append` for
 the duration of the fight — and then returns `bouts = count(turn_start)`, discarding everything else.
 The blow-by-blow a Fire Emblem-style bout screen would play is collected on every fight and dropped at
