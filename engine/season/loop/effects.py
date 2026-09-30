@@ -616,10 +616,15 @@ def _eff_work(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # noted the two are the same defect one verb along. `W-C` gave that answer ONE owner
     # (`_operand`) rather than two copies of it.
     site = _operand(a, "site")
-    delta = sum(c.delta for c in (a.changes or ())
-                if c.subject == site and c.field == "condition" and isinstance(c.delta, int))
+    site_deltas = tuple(c.delta for c in (a.changes or ())
+                        if c.subject == site and c.field == "condition" and isinstance(c.delta, int))
+    delta = sum(site_deltas)
     fabric = w.sites.get(site)
-    if not delta and fabric is not None and works_for(w, fabric.rung, fabric.kind):
+    # `not site_deltas`, NOT `not delta`: the fallback is for an act that declares NO delta on this
+    # site, not for one that declares an explicit `0` -- the two read alike through `sum(())`,
+    # `sum((0,))`, so testing the summed value would also replace a hand-built act's declared `0`
+    # with the works' rise, which is not what "the act declares none" (above) says.
+    if not site_deltas and fabric is not None and works_for(w, fabric.rung, fabric.kind):
         delta = _rise(w, fabric)
     cell = Subject.staged("Site", site, "condition")
     return Change((cell,), lambda: w.stage(cell.ref[1], a.id, delta))

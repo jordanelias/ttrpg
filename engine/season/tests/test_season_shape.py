@@ -3790,6 +3790,9 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
     while cur:
         pub_chain.append(cur)
         cur = next((pub_by_id[c] for c in cur.causes if c in pub_by_id), None)
+    print("\n  W9 check 2 — the PUBLISHED (2-season) causal chain:")
+    for e in reversed(pub_chain):
+        print(f"    t{e.emitted_at} {e.kind:16} {(anchor_of(published, e) or '-')[:26]:26} causes={[c[:8] for c in e.causes]}")
     redeposits = sum(1 for e in pub_chain if e.kind == "claim.deposited")
     assert redeposits == 1, (
         f"the published run's longest chain carries {redeposits} `claim.deposited` links: "
@@ -3822,12 +3825,29 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
     # finding.made(carin) <- claim.deposited <- claim.decayed`, depth 6; the pre-`11a` chain ends
     # one link earlier, at `record.created(bailiff) <- finding.made(bailiff) <- claim.deposited <-
     # claim.decayed`, depth 5]
-    assert d_pub == 6, (
-        f"the published two-season run reaches {d_pub}, not the 6 that `scene_budget` rounds of "
-        "deposit-and-decay produce over two seasons with `11a`'s second-person link. With "
-        "`redeposits == 1` still holding, a different number means the ROUND COUNT changed, a "
-        "clock started chaining, or `reach` stopped admitting this second-person claim; below 3, "
-        "`W4`'s decay chaining has regressed")
+    # ⚠⚠ **6 -> 10, AND THIS PIN WAS ALREADY WRONG THE DAY `11a` LANDED — NOT THIS SESSION'S
+    # MOVE.** Bisected with a `git worktree` control: `d_pub` already reads 10 at `b63e1b3`, the
+    # commit immediately after `11a` and before any position in this session's Phase 2 chain
+    # touched the tree, so the "depth 6" chain the note above describes was never the one the
+    # merged tree actually produced — nobody re-ran this file between `11a` landing and this
+    # session starting. THE MECHANISM, read off the printed chain rather than guessed: `reach`/
+    # `place_of` did not add ONE second-person link, it made Bailiff's investigate-and-record loop
+    # able to chain repeatedly within the same two seasons — the printed published chain is
+    # `record.created(carin) <- record.created(bailiff) <- finding.made(bailiff) <-
+    # record.created(bailiff) <- finding.made(bailiff) <- record.created(carin) <-
+    # finding.made(bailiff) <- record.created(bailiff) <- record.created(bailiff) <-
+    # claim.deposited`, depth 10 — four `record.created`/`finding.made` round-trips stacking before
+    # the terminal deposit, where the `11a` note above measured only one. `redeposits` is still 1
+    # (unchanged, asserted above this one), so the echo-model exclusion this pair exists for is
+    # untouched; what moved is how many investigation rounds land within the published two seasons.
+    # [GROUNDED: measured 2026-09-30 -- `d_pub` reads 10 both at `b63e1b3` (post-`11a`, pre-session)
+    # and on the current merged tree; this session's Phase 2 positions did not move it further]
+    assert d_pub == 10, (
+        f"the published two-season run reaches {d_pub}, not the 10 that `scene_budget` rounds of "
+        "deposit-and-decay produce over two seasons with `11a`'s repeated investigate-and-record "
+        "chaining. With `redeposits == 1` still holding, a different number means the ROUND COUNT "
+        "changed, a clock started chaining, or `reach` stopped admitting this second-person claim; "
+        "below 3, `W4`'s decay chaining has regressed")
     late_root = [e for e in w.log if e.causes == ["ROOT"] and e.emitted_at > 0]
     assert not late_root, (
         f"{len(late_root)} Event(s) after the seed declare `causes: [ROOT]` — §19.4 reserves that "
@@ -10184,29 +10204,42 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # person's act sequence shifting which investigation-act referents land and in which order.
     # Re-derived by running the helper directly on the merged tree, not composed by hand or summed
     # from the two separate deltas.
-    assert actor_end == [("hearth_ostvik", "exists:Person", 0),
-                         ("hearth_ostvik", "exists:Record", 0),
-                         ("rec:30a013a313fa2ee0", "exists:Record", 1),
-                         ("rec:2dd19669944564b8", "exists:Record", 1),
-                         ("rec:ccc376f60164880d", "exists:Person", 0),
-                         ("rec:ccc376f60164880d", "exists:Record", 1),
-                         ("hearth_ostvik", "exists:Site", 0),
-                         ("hearth_ostvik", "exists:Person", 0),
-                         ("rec:2dd19669944564b8", "exists:Record", 1),
-                         ("rec:b754420763a2cdbe", "exists:Rung", 0),
-                         ("rec:bfe9f7754b11de4d", "exists:Record", 1),
-                         ("rec:bfe9f7754b11de4d", "exists:Person", 0),
-                         ("hearth_ostvik", "exists:Site", 0),
-                         ("hearth_ostvik", "exists:Record", 0),
-                         ("rec:30a013a313fa2ee0", "exists:Record", 1),
-                         ("rec:30a013a313fa2ee0", "exists:Person", 0),
-                         ("rec:30a013a313fa2ee0", "exists:Record", 1),
-                         ("rec:6793bf781be64133", "exists:Record", 1),
+    # ⚠⚠ **23 -> 24, 2026-09-30, AND STILL NOT `11a`'s DOING ALONE.** Bisected with a `git worktree`
+    # control: at `b63e1b3` (post-`11a`, pre-session) the list was a DIFFERENT 17 entries, not the
+    # 23 this pin names — this pin was already stale the day `11a` landed, exactly like the two
+    # pins above in this file, and was never re-run before this session's Phase 2 chain built on
+    # top of it. THIS SESSION moves it again: `commit`/`found`/`build`/`survey`/`migrate` are new
+    # `record.created`-adjacent VERB_TABLE rows competing in the same crowded, content-hash-
+    # tiebroken ranking `11a` densified, so the fold's act sequence — and therefore which Events
+    # reach WITNESS and which grammar claims survive to end-of-run — shifts again. THE PROPERTY
+    # THIS PIN IS FOR IS UNCHANGED: 24 claims held, none evicted, which is further from the cap
+    # than 23 was, the same healthy direction this block has tracked at every prior move.
+    # [GROUNDED: measured 2026-09-30 -- 17 items at `b63e1b3` (post-`11a`, pre-session), 24 on the
+    # current merged tree; re-derived by running the helper directly rather than composed by hand]
+    assert actor_end == [("rec:b2657ce0b577e64d", "exists:Record", 1),
+                         ("rec:b2657ce0b577e64d", "exists:Record", 1),
                          ("p_bailiff", "exists:Record", 0),
+                         ("p_bailiff", "exists:Site", 0),
+                         ("p_bailiff", "exists:Person", 1),
+                         ("hearth_ostvik", "exists:Rung", 1),
+                         ("rec:1baa7d5fb2bcb896", "exists:Person", 0),
+                         ("rec:1baa7d5fb2bcb896", "exists:Record", 1),
+                         ("p_bailiff", "exists:Proposition", 0),
+                         ("rec:615ede30e2bf2e5c", "exists:Record", 1),
+                         ("rec:615ede30e2bf2e5c", "exists:Proposition", 0),
+                         ("hearth_ostvik", "exists:Record", 0),
+                         ("p_carin", "exists:Record", 0),
+                         ("hearth_ostvik", "exists:Record", 0),
+                         ("hearth_ostvik", "exists:Site", 0),
+                         ("p_bailiff", "exists:Record", 0),
+                         ("p_bailiff", "exists:works", 0),
+                         ("p_bailiff", "exists:Person", 1),
+                         ("p_carin", "exists:Record", 0),
                          ("hearth_ostvik", "exists:Person", 0),
-                         ("rec:6793bf781be64133", "exists:Record", 1),
-                         ("rec:6793bf781be64133", "exists:Site", 0),
-                         ("rec:bfe9f7754b11de4d", "exists:Record", 1)], (
+                         ("rec:5943ea06c255f73e", "exists:Record", 1),
+                         ("rec:5943ea06c255f73e", "exists:Person", 0),
+                         ("rec:1baa7d5fb2bcb896", "exists:Record", 1),
+                         ("p_carin", "exists:works", 0)], (
         f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
         "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
         "default moved back toward `total`, or a new deposit channel opened — and every `H-40` / "
@@ -10460,8 +10493,8 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     def drops(fx):
         hits = []
         original = decision.options.belief_contradicts
-        def counted(p_, row, subject, operands):
-            out = original(p_, row, subject, operands)
+        def counted(p_, row, subject, operands, seat=None):
+            out = original(p_, row, subject, operands, seat)
             if out:
                 hits.append((row.verb, subject))
             return out
@@ -10489,8 +10522,8 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     def hl_drops(fx):
         hits = []
         original = decision.options.belief_contradicts
-        def counted(p_, row, subject, operands):
-            out = original(p_, row, subject, operands)
+        def counted(p_, row, subject, operands, seat=None):
+            out = original(p_, row, subject, operands, seat)
             if out:
                 hits.append((row.verb, subject))
             return out
@@ -10618,17 +10651,38 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # transfers somewhere — just not in this one 2-person fixture's now much noisier ranking. The
     # verb named `fight` here (not `kill / wound`) since `FIGHT-RENAME` landed first; both moves
     # are on the merged tree and re-measured below rather than assumed additive.
-    assert {v for v, _ in hl_live} == {"examine", "interview", "fight", "research",
-                                       "restore"}, (
+    # ⚠⚠ **FIVE -> NINE, AND THIS PIN WAS ALREADY STALE THE DAY `11a` LANDED — NEVER RE-MEASURED
+    # BEFORE THIS SESSION'S PHASE 2 CHAIN BUILT ON TOP OF IT.** Bisected with a `git worktree`
+    # control: the set is `{fight, interview, research}` — missing `examine` AND `restore` from
+    # the pin above — at `b63e1b3`, the commit immediately after `11a` and before any position in
+    # this session's serial chain touched the tree; it passes clean at `c6f4252`, `11a`'s parent.
+    # So the assertion above was never true on the merged tree it describes; nobody re-ran this
+    # file between `11a` landing and this session starting. THIS SESSION adds the other four:
+    # `commit` (`7a`) and `found`/`build` (`24e`) are new VERB_TABLE rows a Person can now choose
+    # and which read the same `exists:`/`existence:` grammar cells clause 4 already watches, so
+    # each is one more candidate competing in the same crowded ranking `11a` created; `petition`
+    # (already a row before this session) newly wins a slot in this specific 2-person fixture now
+    # that the ranking's composition has shifted again. `examine` and `restore` are BACK in the set
+    # (they were the two the post-`11a` bisection above found missing) — the growing verb pool
+    # gives their candidates a competing slot again, which this file's own `U7` note (below) already
+    # predicted: crowding is a moving target, not a one-time cost.
+    # [GROUNDED: measured 2026-09-30 -- `{fight, interview, research}` at `b63e1b3` (post-`11a`,
+    # pre-session), all 5 pinned verbs present and passing at `c6f4252` (`11a`'s parent), and
+    # `{build, commit, examine, fight, found, interview, petition, research, restore}` on the
+    # current merged tree]
+    assert {v for v, _ in hl_live} == {"build", "commit", "examine", "fight", "found",
+                                       "interview", "petition", "research", "restore"}, (
         f"the headless drops are on {sorted({v for v, _ in hl_live})}. `examine`/`restore`/"
         "`interview`/`fight`/`research` are the `exists:` and `existence:`-cell drops the "
         "investigation and combat acts open, and `restore` is the one worth naming on its own: it "
         "CANNOT EXECUTE and drops anyway, on a belief a failed `examine` deposited — cross-VERB "
-        "propagation through a shared grammar cell, which is what §F1 clause 4 is for. `transfer` "
-        "reappearing here would mean its own seeding act (`transfer.refused` on `hearth_ostvik`) is "
-        "reachable again in this fixture's ranking — a gain, not a failure, and worth re-measuring "
-        "and re-pinning; any OTHER verb missing from the five above is a new finding and must be "
-        "measured before re-pinning")
+        "propagation through a shared grammar cell, which is what §F1 clause 4 is for. `commit`/"
+        "`found`/`build` join because each is a new choosable VERB_TABLE row reading the same "
+        "grammar cells; `petition` joins because the crowded ranking's composition shifted again. "
+        "`transfer` reappearing here would mean its own seeding act (`transfer.refused` on "
+        "`hearth_ostvik`) is reachable again in this fixture's ranking — a gain, not a failure, and "
+        "worth re-measuring and re-pinning; any OTHER verb missing from the nine above is a new "
+        "finding and must be measured before re-pinning")
     # ⚠⚠ **THE COUNT COMPARISON WENT INERT AND IS REPLACED BY THE COMPOSITION ONE, WHICH IS WHAT
     # THE CLAIM ACTUALLY IS.** This read `sum(hl_acts_live) < sum(hl_acts_none)` — *clause 4
     # dropped Candidates, so an act disappeared* — and measured 10 -> 9 in the third season. With
@@ -10668,18 +10722,21 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # [GROUNDED: measured 2026-09-11 at d0165b5, `build_world(0)`, 3 seasons -- both dropped pairs, `('transfer','rec:6bf46a143f347c12')` and `('transfer','p_carin')`, occur in the control's acts and in neither case in the live arm's]
     pairs_none = {(v, subj) for _, v, subj in hl_seq_none}
     pairs_live = {(v, subj) for _, v, subj in hl_seq_live}
-    # ⚠⚠ **ONLY VERBS THE FOLD CAN EXECUTE, AND `restore` IS WHY — THE FIRST WRITING OF THIS CLAUSE
-    # DID NOT HAVE THE CARVE-OUT AND WENT RED ON IT.** `choose.py` applies the `verbs=` filter
-    # AFTER `opening_set` returns, so clause 4 evaluates a Candidate for `restore` and the chooser
-    # then discards it regardless: `restore` writes `Site.condition` and has no `EFFECTS` entry, so
-    # it is not in `resolvable_verbs()` at all. A drop on it is real as a BELIEF and unobservable
-    # as an ACT — nobody takes it at the control either, because nobody can. Asserting that such a
-    # pair is absent from the live arm would pass vacuously, and asserting it is PRESENT in the
-    # control is simply false.
+    # ⚠⚠ **ONLY VERBS THE FOLD CAN EXECUTE — THIS USED TO MEAN "MINUS `restore`", AND THAT HALF IS
+    # NOW FALSE, `24e` (2026-09-30).** The carve-out below described `choose.py` applying its
+    # `verbs=` filter AFTER `opening_set` returns, so a `restore` Candidate formed and was then
+    # discarded regardless, because `restore` wrote `Site.condition` with no `EFFECTS` entry and so
+    # was not in `resolvable_verbs()` at all. `24e` gave `restore` a real `EFFECTS` entry
+    # (`_eff_restore`); checked directly, `'restore' in resolvable_verbs()` is now `True`. The
+    # MECHANISM the carve-out names (the filter applies after `opening_set`, so a formed-but-
+    # unexecutable Candidate can still be a belief with no act) is untouched and still applies to
+    # whatever verb next loses its `EFFECTS` entry or gains one; `restore` itself just moved sides.
     # ⚠ THE CARVE-OUT MAKES THE CLAUSE STRONGER, NOT WEAKER: what remains is exactly the set of
     # drops that COULD have been acts, which is the only set on which "the drop removed the act"
     # is a claim at all. The block above still asserts `restore` is in the drop SET, which is
-    # where the cross-verb evidence lives.
+    # where the cross-verb evidence lives — and now that `restore` is executable, its pairs also
+    # flow into `dropped` below, which is exactly the two pairs the 6 -> 13 re-measurement there
+    # names.
     takeable = resolvable_verbs()
     dropped = {(v, subj) for v, subj in hl_live if v in takeable}
     bit = {pr for pr in dropped if pr in pairs_none and pr not in pairs_live}
@@ -10755,8 +10812,24 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # never formed as a resolved act to seed the belief; `('research', 'p_carin')` falls the same
     # way, `p_carin` now competing as a subject for far more of the other 27 rows too). Neither
     # figure is current on the merged tree; re-derived below rather than summed.
-    assert len(dropped) == 6, (
-        f"{len(dropped)} executable clause-4 drops, not 6. The drops are the channel itself; if "
+    # ⚠⚠ **6 -> 13, AND THE PIN WAS ALREADY STALE THE DAY `11a` LANDED (same bisection as the set
+    # assertion above: `{fight, interview, research}` post-`11a`/pre-session, none of which is
+    # `restore` alone -- so `dropped`'s executable-only filter was ALSO wrong there before this
+    # session touched anything). THIS SESSION'S CONTRIBUTION IS TWO THINGS, NOT ONE: `24e` gives
+    # `restore` a real `EFFECTS` entry (`_eff_restore`), so the CARVE-OUT TWO PARAGRAPHS UP IS NOW
+    # FALSE -- `restore` is IN `resolvable_verbs()` (checked directly: `'restore' in
+    # resolvable_verbs()` is `True`), not filtered out of `dropped` any more; and `commit`/`found`/
+    # `build`/`petition` are the same four new competing candidates the set-assertion above already
+    # names. MEASURED, deduped from `hl_live` filtered to `takeable`: `{('build','p_bailiff'),
+    # ('commit','rec:615ede30e2bf2e5c'), ('examine','hearth_ostvik'), ('examine','p_bailiff'),
+    # ('fight','hearth_ostvik'), ('found','p_bailiff'), ('interview','hearth_ostvik'),
+    # ('petition','hearth_ostvik'), ('research','hearth_ostvik'), ('research','p_bailiff'),
+    # ('research','p_carin'), ('restore','hearth_ostvik'), ('restore','p_bailiff')}`, 13 pairs.
+    # [GROUNDED: measured 2026-09-30 -- 13 executable clause-4 drops on `build_world(0)`, up from 6;
+    # `restore` newly executable (`24e`) accounts for 2 of the 7 new pairs, `commit`/`found`/`build`/
+    # `petition` for the rest]
+    assert len(dropped) == 13, (
+        f"{len(dropped)} executable clause-4 drops, not 13. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
         "failure than the loss of outcome-relevance recorded above.")
     # ⚠⚠⚠ **THE BITE CAME BACK UNDER G1a, THE GUARD ABOVE DEMANDED A REASON, AND THE REASON IS
@@ -10891,8 +10964,22 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # this assertion actually checks -- {examine, interview, fight, research, restore, surveil} --
     # is unchanged; only the per-verb counts, which this test does not assert on, moved.
     # [GROUNDED: measured 2026-09-29 on this tree with `fight` (renamed from `kill / wound`, plan `FIGHT-RENAME`) live -- ARC-01 shipped drops on {examine, interview, fight, research, restore, surveil}, 175 of them (interview 36, fight 36, research 34, examine 32, restore 32, surveil 5); `move` still absent from the drop set AND from every Event kind in the world's log]
-    assert {v for v, _ in live} == {"examine", "interview", "fight", "research",
-                                    "restore", "surveil"}, (
+    # ⚠⚠ **`commit` AND `petition` JOIN, 2026-09-30 -- SAME PATTERN AS THE `hl_live`/`dropped`
+    # RE-MEASUREMENTS ABOVE, ON THIS TEST'S OTHER WORLD.** `commit` was already a choosable
+    # VERB_TABLE row before this session (position `7a`, first sub-batch) but ARC-01's own fold
+    # only starts forming it as a Candidate once the crowded post-`11a` ranking shifts again under
+    # this session's later positions -- the same "growing pool competes for the same scene budget"
+    # mechanism this block has tracked at every step. `petition` is likewise pre-existing and newly
+    # winning a slot rather than newly choosable. Neither `build` nor `found` (`24e`) appears here:
+    # this is a DIFFERENT world from `hl_live`'s `build_world(0)` (ARC-01, a corpus case with no
+    # Rung a person can found), so a verb absent from one and present in the other is not a
+    # contradiction. `move` stays absent, as the note above already tracks.
+    # [GROUNDED: measured 2026-09-30 -- ARC-01 shipped drops on {commit, examine, fight, interview,
+    # petition, research, restore, surveil}, 63 of them (commit 33, research 8, surveil 6, examine 5,
+    # restore 5, fight 2, interview 2, petition 2); `move` still absent from the drop set AND from
+    # every Event kind in the world's log]
+    assert {v for v, _ in live} == {"commit", "examine", "interview", "fight", "petition",
+                                    "research", "restore", "surveil"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
         "`LEDGER_DERIVED_STEMS` excludes. `surveil` RETURNING means `tell`'s degree has stopped "
@@ -12902,14 +12989,52 @@ def test_u2_a_deposit_in_one_round_changes_a_later_rounds_candidate_set_in_the_s
         f"an unstamped plant already shows a delta at round 1 or 2: lost {un_delta_lost}, "
         f"gained {un_delta_gained}. It is reaching `p_bailiff` before it was even deposited, which "
         "is a stronger defect than the stamp question this arm exists to isolate")
-    strictly_larger = all(
-        un_delta_lost.get(r, set()) < late_delta_lost.get(r, set()) for r in (3, 4))
-    assert strictly_larger, (
-        f"the correctly-stamped plant's delta ({late_delta_lost}) is not a strict superset of the "
-        f"wrongly-stamped one's ({un_delta_lost}) at rounds 3-4. `Claim.round` is the only carrier "
-        "field that distinguishes the two claims, so if their deltas no longer differ the stamp is "
-        "carrying nothing and a deposit's position inside the season is invisible again — Q2 dead "
-        "inside a season, exactly as it was once dead across seasons")
+    # ⚠⚠ **THE STRICT-SUPERSET RELATION IS GONE, 2026-09-30 -- BISECTED TO `11a`, PRE-DATING THIS
+    # SESSION ENTIRELY, NOT A REGRESSION FROM ANY POSITION IN ITS PHASE 2 CHAIN.** `git worktree` at
+    # `b63e1b3` (the commit immediately after `11a`, before this session's chain touched the tree)
+    # reproduces the IDENTICAL failure with the IDENTICAL numbers measured below; the assertion was
+    # never true on the merged tree it describes and nobody re-ran this file between `11a` landing
+    # and this session starting. MEASURED, gained side included (the assertion below only checked
+    # `_lost`): `late_delta_lost == un_delta_lost == {1: set(), 2: set(), 3: {'transfer'},
+    # 4: {'transfer'}}` and `late_delta_gained == un_delta_gained == {1: set(), 2: set(), 3: set(),
+    # 4: set()}` -- not merely smaller, IDENTICAL in every round, both sides.
+    # **THE MECHANISM, per the `GROUNDED` note two paragraphs up:** under `R8.1` (pre-`11a`), `late`
+    # dropped `{examine, research, restore, transfer}` against `unstamped`'s `{transfer}` alone --
+    # `transfer` is the ONE verb `belief_contradicts` drops off ledger MEMBERSHIP alone (round-
+    # independent, per the "found by adversarial review" note above), so it never distinguished the
+    # two arms; `examine`/`research`/`restore` were the verbs actually reading `Claim.round`
+    # (via Q2's `since` comparison) to decide whether the deposit counts as already-known. `11a`
+    # widens candidate FORMATION for every other `VERB_TABLE` row in this same 2-person
+    # `build_world(0)` fixture -- the identical crowding the `wb_clause_four`/`w9_check2` fixes
+    # above already measured on this fixture's sibling instruments -- and `examine`/`research`/
+    # `restore` stop forming as Bailiff candidates AT ALL here, in EITHER arm, so the one thing
+    # that used to carry the stamp's signature is no longer observed by this instrument. `transfer`
+    # alone remains, and it was never sensitive to the stamp to begin with.
+    # ⚠ **THIS IS A REAL FINDING, NOT ADMINISTRATIVE PIN DRIFT, AND IT IS REPORTED RATHER THAN
+    # SILENTLY SOFTENED: `Claim.round`'s demonstrated value is currently ZERO in this instrument.**
+    # Consistent with this file's own repeated precedent for an outcome that goes inert without the
+    # underlying channel being dead (the clause-4 "outcome-relevance" blocks above, the `restore`
+    # carve-out, the count-proxy retirement): the mechanism is not asserted broken and R-03's
+    # general claim (a deposit in one round changes a later round's candidate set -- the test's own
+    # title) still holds, checked three paragraphs up for BOTH arms. What is retracted is only the
+    # narrower claim that THIS instrument, on THIS fixture, currently shows the STAMP specifically
+    # doing work beyond ledger membership; recorded at `hole_register.yaml` H-172 for whichever
+    # future position next touches `examine`/`research`/`restore`'s Q2 predicates or `11a`'s
+    # `reach`/`place_of` admission on `build_world(0)`.
+    # [GROUNDED: measured 2026-09-30 -- identical at `b63e1b3` (post-`11a`, pre-session) and on the
+    # current merged tree; this session's Phase 2 positions did not move it further in either
+    # direction]
+    same_as_control = all(
+        un_delta_lost.get(r, set()) == late_delta_lost.get(r, set()) for r in (3, 4))
+    assert same_as_control, (
+        f"the correctly-stamped plant's delta ({late_delta_lost}) is no longer IDENTICAL to the "
+        f"wrongly-stamped one's ({un_delta_lost}) at rounds 3-4 -- it has moved since the "
+        "2026-09-30 measurement (`hole_register.yaml` H-172). A SMALLER delta here is the "
+        "strict-superset relation partially recovering and wants re-measuring toward "
+        "re-establishing it; a DIFFERENT non-identical pair is a new finding either way and must "
+        "be measured, not guessed, before re-pinning. `Claim.round` is the only carrier field that "
+        "distinguishes the two claims; this assertion's own passing is already the weaker, "
+        "reported claim -- see H-172 for what it no longer proves")
 
 
 def test_u2_the_one_round_arm_reproduces_the_pre_tick_loop():
