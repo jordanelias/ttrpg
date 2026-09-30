@@ -129,8 +129,8 @@ for these rows only; its non-Phase-4 rows are unchanged and not restated)
 | — | **REGISTER/PLAN FIXES** | IN | **DONE** | NERS/FABLE PASS | `30dc8c65` |
 | — | **EFFECTS-SPLIT** | IN | **DONE** | — (independent of the NERS pass; the settled modularity requirement) | `309a17d9`; 683 passed / 1 pre-existing failure (`engine/season/tests`, independently reproduced against both the split and the pre-split commit) |
 | — | **CITATION-FIX** | IN | **DONE** | EFFECTS-SPLIT | `a882cc32` |
-| b | **`21`** U10 | IN | BLOCKED | `20-ii` ✓ — now unblocked, not yet started | — |
-| c | **`28-ii`** (M6) successor goldens | IN | BLOCKED | `28-i` ✓ | — |
+| b | **`21`** U10 | IN | **OPEN** (unblocked -- `20-ii` is DONE) | `20-ii` ✓ | — |
+| c | **`28-ii`** (M6) successor goldens | IN | **OPEN** (unblocked -- `28-i` is DONE) | `28-i` ✓ | — |
 | d | **`28-iii`** SPINE-DELETE | IN | BLOCKED | `28-ii` | — |
 | e | **`20-iv`** d.1 + terrain/garrison | MB/IN | BLOCKED | `20-ii` ✓, `28-iii` | — |
 | f | **`29a`** overview | IN | BLOCKED | `28-iii` (+ `27` for `ms_track`) | — |
