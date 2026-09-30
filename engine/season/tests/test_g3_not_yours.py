@@ -41,7 +41,8 @@ from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.seam import Resolution
 from engine.season.state.carriers import Act, Candidate, Office, Rung, Tenure
 from engine.season.state.gate import (
-    CASCADE, CONFERRAL, T_M, T_O, NotYours, may_fill, may_revoke, purview_reaches, seat_hold)
+    CASCADE, CONFERRAL, HANDOVER, T_M, T_O, NotYours, may_fill, may_revoke, purview_reaches,
+    seat_hold)
 from engine.season.state.ids import H
 
 _RUNG_ABOVE = "rung_above_same_faction"
@@ -557,9 +558,13 @@ def test_g3_the_chooser_mints_via_from_the_grant_eligibility_admitted_on():
 
 
 def test_g3_every_basis_name_the_gate_can_return_is_reached_in_this_file():
-    """The five bases, less the unbuilt `T-n`, each observed ADMITTING at least once through the
+    """The six bases, less the unbuilt `T-n`, each observed ADMITTING at least once through the
     real `tenure_write_basis` -- so a basis whose branch stopped being reachable cannot hide behind
-    the refusal tests above, which observe only what is refused."""
+    the refusal tests above, which observe only what is refused. The sixth, `handover`, arrived
+    with `give` at plan position 16; its own refusals are `test_give.py`'s. ⚠ AMENDED (plan position
+    `17b`): `T-n` is BUILT now and a seventh basis, `renewal`, was added with it; both are observed
+    admitting -- and each refused one clause away -- in `test_term_upkeep.py`, whose world (an
+    `oblige` with a declared term, a treasury) this file's governance world does not build."""
     import engine.season.state.gate as G
     seen = set()
     real = G.tenure_write_basis
@@ -578,10 +583,16 @@ def test_g3_every_basis_name_the_gate_can_return_is_reached_in_this_file():
                               payload={"office": "off_reeve", "to": "p_mid"}, via="off_duke"))
         d._fold(w, tok(), Act(id="a", actor="p_king", verb="revoke",
                               payload={"office": "off_duke"}, via="off_crown"))          # T-o
+        # `p_low` and `p_mid` share a hearth: a Record made and handed over before the fight below
+        # takes `p_mid` out of the world.
+        d._fold(w, tok(), Act(id="r", actor="p_low", verb="create_record",
+                              payload={"record": "rec_g"}))
+        d._fold(w, tok(), Act(id="g", actor="p_low", verb="give",
+                              payload={"subject": "rec_g", "to": "p_mid"}))               # handover
         d._fold(w, tok(), Act(id="c", actor="p_low", verb="release",
                               payload={"subject": "p_mid"}))                              # T-m
         d._fold(w, tok(), Act(id="k", actor="p_low", verb="fight",
                               payload={"subject": "p_mid"}), _felled("p_mid"))            # cascade
     finally:
         G.tenure_write_basis = real
-    assert {T_M, T_O, CONFERRAL, CASCADE} <= seen, sorted(map(str, seen))
+    assert {T_M, T_O, CONFERRAL, CASCADE, HANDOVER} <= seen, sorted(map(str, seen))

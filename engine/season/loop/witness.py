@@ -16,19 +16,44 @@ fails if it does.
 
 from __future__ import annotations
 
+import math
+
 from ..data.matrix import Step
 from ..state.gate import Token
 from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN
-from ..data.rosters import OBSERVATION_DEPOSIT_MODES, WITNESS_CHANNELS, require_member
-from ..epistemic import SEEN_PREDICATE, act_refs, claim_subjects, observers_for, seen_of, seen_subject
+from ..data.rosters import (
+    CHANNEL_CLAIM_SOURCE, OBSERVATION_DEPOSIT_MODES, RECORD_CONTENT, WITNESS_CHANNELS,
+    require_member,
+)
+from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, claim_subjects,
+                         observers_for, seen_of, seen_subject)
 from ..queries import cache
 from ..queries.person_q import LedgerReader
+from ..queries.world_q import hold_force
 from ..state.attribution import actor_of
 from ..state.carriers import Claim, Event
 from ..state import ledgers
 from ..state.ids import H
 from ..trace_log import TRACE
 
+
+
+def content_value(subject_matter):
+    """A `content:<kind>` CLAIM'S VALUE: the document's `subject_matter`, FROZEN -- a tuple of
+    `(key, value)` pairs in the kind's own key order, every list a tuple, recursively. `dict(v)`
+    gives the mapping back.
+
+    ⚠ FROZEN AND HASHABLE ON `epistemic.Seen`'s PRECEDENT, AND FOR ITS REASON: claim values sit in
+    the sets the corpus harness builds over `(subject, predicate, value)`
+    (`harness/corpus_run.py`), and a `dict` there is a `TypeError` -- MEASURED, the first writing of
+    the deposit rule deposited the Record's mapping itself and `test_w18` died on it. Freezing is
+    also what the deep copy was for: a belief that cannot be mutated cannot alias the Record it
+    was read from, so nothing done to the document later reaches back into a ledger."""
+    if isinstance(subject_matter, dict):
+        return tuple((k, content_value(v)) for k, v in subject_matter.items())
+    if isinstance(subject_matter, (list, tuple)):
+        return tuple(content_value(v) for v in subject_matter)
+    return subject_matter
 
 
 def _told_content(w, act):
@@ -83,6 +108,103 @@ def _told_content(w, act):
             or LedgerReader(teller.ledger).latest_about(subj))
 
 
+def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = None) -> object:
+    """PLAN POSITION `15b` (r2 `02_THE_WRIT_AND_THE_WORD.md` §A.10, `ED-IN-0222`). WHAT A HEARER
+    ACTUALLY RECEIVES, as opposed to what the teller holds: `held.value` unchanged at every band
+    but `Partial`, where the copy may be lossy by exactly one of two mechanisms and never both.
+
+    ⚠ THIS READS `held`; IT NEVER WRITES IT AND NEVER TOUCHES THE TELLER'S LEDGER. The caller
+    deposits the RETURN VALUE into the HEARER's own ledger; `held` (the teller's own Claim, read
+    by `_told_content`) is not mutated anywhere in this module, which is `RR-P`'s test satisfied
+    as an assertion (r2 `02` §A.10.3's table row, verbatim: *"the teller's own ledger --
+    `_told_content` READS it and the branch writes the HEARER's ... the draw decided what the
+    listener took away, never what the teller meant"*).
+
+    ⚠ TWO BRANCHES, KEYED ON SHAPE, BECAUSE `held.value` IS NOT ALWAYS ABOUT A DOCUMENT. r2 `02`
+    §A.10.1/§A.10.2 write the loss function against a `content:<kind>` claim specifically -- one
+    dropped `to` id (§A.10.1), or one drifted number "inside the terms" (§A.10.2). MEASURED
+    against the live `record_kinds` roster (`rosters.yaml`): `dispensation`/`petition` carry
+    `[terms, to, at]` / `[terms, to, from]`, and `terms` is a `PropositionId` -- a bare id string,
+    and per §A.10.3 NEVER touched ("the rumour may misremember a number; it may not misremember
+    WHICH OUGHT"); `at`/`from` are a rung/person id, also never touched, same row. So a content
+    claim's ONLY droppable field is `to`, and there is no numeric field anywhere in this shape for
+    the drift branch to act on -- a mismatch between r2's prose (written against a `terms`
+    structure that carries a number) and the shipped carrier, said here rather than papered over.
+    A content claim whose `to` cannot lose an id (absent, or down to its last remaining member --
+    §A.10.1's own floor) is therefore deposited VERBATIM, not drifted: THE HONEST READING WHEN THE
+    DESIGN NAMES A MECHANISM THE CARRIER HAS NO OPERAND FOR, rather than inventing one.
+
+    ⚠ THE SECOND BRANCH IS WHERE A BARE NUMBER ACTUALLY LIVES: a claim whose `value` IS itself a
+    plain number -- an observation claim's `stores:<kind>` or `condition`, never a `content:`
+    claim -- has no `to` key and no document shape, but IS the numeric operand §A.10.2 names.
+    Drifted within `told_drift_band` (`H-155`), sign-preserving, never crossing zero -- §A.10.2's
+    three clauses, applied to the value directly since there is no `content:` wrapper to reach
+    through.
+
+    ⚠ ANYTHING ELSE -- a bare `True`/`False` from an event-kind claim, an `epistemic.Seen` struct,
+    any value with neither an addressee key nor a plain number -- carries nothing either branch
+    can act on and is deposited VERBATIM. MEASURED: the one told-channel candidate the live
+    89-world corpus reaches at `Partial` (`ARC-13`, seed 0, a `finding.none` claim carrying `True`)
+    is exactly this shape, so the honest default for the corpus AS IT STANDS TODAY is unchanged --
+    a finding about what the corpus currently exercises, not a defect in the branch.
+
+    ⚠ THE SELECTION IS DETERMINISTIC AND SPENDS NO DRAW (§A.10.4). `sel` reuses the SAME hash the
+    deposit's own claim id mints from (`H(w.world_seed, w.tick, pid, f"told:{e.id}")`, below and
+    at the `tc = Claim(...)` construction) rather than calling `w.draw()` or `draw_factory` --
+    both would spend a per-tick ordinal or a fresh RNG stream, shifting every unrelated draw in
+    the season, which §A.10.4 forbids in terms: *"the lossy copy must not perturb the stream."*
+    Per HEARER, not per telling, because `pid` is in the mix -- two hearers of one telling lose
+    different things (§A.10.4's own point: a rumour fans into disagreement, not into one shared
+    distortion).
+
+    `told_hash`/`stem` are the caller's own precomputed values, when it has them -- BATCH-CLOSE
+    FINDING (methodology-close Phase 2, EFFICIENCY): `witness()`'s call site already derives this
+    same hash (to mint the Claim id, `f"told:{e.id}"` unchanged) and this same stem (its
+    `LEDGER_DERIVED_STEMS` guard, one statement above the call) before ever reaching here, so
+    recomputing either a second time was two extra ops -- one a blake2b digest, not a builtin
+    `hash()` -- on every hearer x telling deposit at `Partial`. Both default to `None` and are
+    derived exactly as before when omitted, so a caller with no precomputed value (the direct-call
+    test in `test_season_shape.py`) is unaffected."""
+    if e.degree != "Partial":
+        return held.value
+    if told_hash is None:
+        told_hash = H(w.world_seed, w.tick, pid, f"told:{e.id}")
+    sel = int(told_hash, 16)
+    if stem is None:
+        stem = str(held.predicate).partition(":")[0]
+    if stem == RECORD_CONTENT.get("predicate") and isinstance(held.value, tuple):
+        addressee = RECORD_CONTENT.get("addressee")
+        mapping = dict(held.value)
+        to_ids = mapping.get(addressee)
+        # §A.10.1: exactly one dropped, never the last, never an id that is not there, never
+        # THIS hearer's own id if they are named in `to` -- "a rumour can never relieve you of a
+        # duty, only mislead you about whose company you are in."
+        if isinstance(to_ids, tuple) and len(to_ids) > 1:
+            candidates = [i for i, tid in enumerate(to_ids) if tid != pid]
+            if candidates:
+                drop = candidates[sel % len(candidates)]
+                new_to = tuple(tid for i, tid in enumerate(to_ids) if i != drop)
+                return tuple((k, new_to if k == addressee else v) for k, v in held.value)
+        return held.value  # one addressee, or none at all -- §A.10.1's floor; nothing droppable
+    if isinstance(held.value, (int, float)) and not isinstance(held.value, bool):
+        before = held.value
+        band = w.fixtures.get("told_drift_band")
+        max_delta = math.ceil(band * abs(before))
+        if before == 0 or max_delta < 1:
+            return held.value   # no sign to preserve at 0, or the band drifts nothing (control)
+        magnitude = 1 + sel % max_delta
+        after = before + magnitude if (sel // max_delta) % 2 == 0 else before - magnitude
+        # §A.10.2: bounded AND signed -- `after` never crosses zero and never flips sign. A draw
+        # that would do either is clamped back to the same side rather than discarded, so the
+        # selection still spends exactly one hash and never re-draws.
+        if before > 0 and after <= 0:
+            after = before + magnitude
+        elif before < 0 and after >= 0:
+            after = before - magnitude
+        return after
+    return held.value  # nothing either mechanism can act on -- deposited verbatim, honestly
+
+
 # -- WITNESS -- barrier 4 -- THE JOIN (S28) -----------------------------
 def witness(self, token: Token, events: list[Event]) -> int:
     w = self.w
@@ -120,8 +242,10 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # `total` is the specified behaviour and the sweep's control; the presence index this
     # barrier has always built was UNUSED until this line.
     mode = w.fixtures.get("fan_out_mode")
+    # Plan position `15d`: the third term is THE CHANNEL that admitted `pid` -- the strongest, by
+    # `WITNESS_CHANNELS`' declared precedence -- and no longer the mode, which is `mode` above.
     fan: list[tuple[str, Event, str]] = [
-        (pid, e, mode) for e in events for pid in observers_for(w, e, mode, everyone)]
+        (pid, e, ch) for e in events for pid, ch in observers_for(w, e, mode, everyone)]
     TRACE.decision(f"fan-out over {len(events)} events -> {len(fan)} deposits", "S28/S61",
                    chose=f"mode={mode} over {len(everyone)} persons "
                          f"({'#353 S61 as specified, and H-33 control' if mode == 'total' else 'H-33 arm; `all_five` is the ruled default since 2026-09-07, R7'})",
@@ -181,7 +305,20 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # 25 cases share one building, so one telling repeated a 200-entry copy-and-scan 25 times.
     # A plain local dict fixes it. ⚠ NOT `w.cache()` -- `cache_at_barrier` is `Forbidden` inside
     # `_in_parallel_map` (`state/world.py:474-476`), which is this whole region.
-    told_by_event: dict = {}
+    # ⚠⚠ AND IT IS FILLED HERE, BEFORE ANY DEPOSIT, NOT LAZILY AT THE FIRST HEARER (plan position
+    # `15d`, found building `19_PLAN.md` step 4 (c)'s falsifier). Filled lazily it read the teller's
+    # ledger PART-WAY THROUGH THIS BARRIER'S DEPOSITS, so the answer depended on whether the teller
+    # sorted before the first hearer in `w.persons`. When it did, the teller had already received
+    # this very telling's event-kind claim, `(subject, "news.told", True)` at `when = tick` --
+    # NEWER than anything they held before -- and `latest_about` returned THAT: the telling
+    # transmitted the fact of itself, which every hearer had just been given, and the exact-triple
+    # guard dropped it. MEASURED on `tiny_world`, teller `p_low` sorted first, holding the subject
+    # at confidence 37: no hearer was told anything; at 100 the held claim won only a `(when,
+    # confidence)` tie on append order. The teller tells what they held WHEN THEY CHOSE TO TELL,
+    # which is the ledger before WITNESS writes to it (RESOLVE writes no ledger).
+    told_by_event: dict = {
+        e.id: _told_content(w, self.act_of[e.id]) for e in events
+        if e.kind == "news.told" and self.act_of.get(e.id) is not None}
     # `R8.1` -- WHAT EACH WITNESS SAW, RESOLVED HERE AND NOT IN THE LOOP BELOW, BECAUSE THE LOOP IS
     # A PARALLEL MAP. `seen_of` asks every live channel which of them admits the witness, and
     # `co_located` reads the barrier's presence index -- which `cache_at_barrier` refuses inside
@@ -190,20 +327,91 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # deposited -- *something happened here and I know nothing about it* is `R8.5`'s document
     # holder exactly.
     seen_by: dict = {}
-    for pid, e, _m in fan:
+    for pid, e, _ch in fan:
         subj = seen_subject(w, e, pid, mode)
         seen_by[(pid, e.id)] = (None if subj is None
                                 else (subj, seen_of(w, e, self.act_of.get(e.id), pid, mode)))
+    # THE DEPOSIT RULE'S TRIGGER (plan position `15`, r2 `02` §A.9): *a held document is a held
+    # belief.* A person who COMES TO HOLD a Record this season -- the Record is named in an Event's
+    # `changes[]` and its live `hold` opened at this tick -- learns what it says. Resolved per EVENT
+    # and before the parallel map, for `seen_by`'s reason: the holder depends on the Event and the
+    # world, never on which witness is being served, and `hold_force` reads `w.tenures`.
+    # ⚠ `hold_force` IS THE ONE OWNER OF *who holds this*, AND IT RAISES ON TWO. `holonic §15`'s
+    # `hold` is 1 PER OBJECT and nothing yet enforces it for Records (r2 `05`'s ⊕R14, position
+    # `16`'s release-before-mint); a document with two holders would make *whose belief is this*
+    # undecidable, and refusing loudly here is better than depositing into both.
+    # ⚠ A `None` CONTENT IS NOT DEPOSITED -- the observation block's precedent below (*a deposit the
+    # instrument cannot stand behind is not deposited*) and its cost argument: a claim that says
+    # nothing still takes a `ledger_cap` slot the eviction takes from somebody else. Every `text`
+    # Record carries `None`, so this rule deposits nothing for the Records the loop minted before
+    # it existed -- which is also why it moves no hash on a world that mints only those.
+    # ⚠ AND THE RECORD MAY BE NAMED THROUGH ITS `hold` (plan position `16`). `give`'s receipts name
+    # the two custody EDGES, not the Record -- `_eff_confer`'s rule on what a receipt may assert --
+    # so each change passes through `_hold_tenure_ends` first, the one owner of *a `hold` receipt
+    # is about its holder and what it holds* that `claim_subjects` and `seen_subject` already read.
+    # That is r2 `02` §A.9's own trigger, *a `hold`-on-Record appearing in `changes[]`*. A Record
+    # named directly (`record.created`) passes through unchanged, and a `release` of a Record's
+    # `hold` finds no live holder and deposits nothing -- so only a handover newly reaches here.
+    content_stem = RECORD_CONTENT.get("predicate")
+    newly_held: dict = {}
+    # ⚠⚠ `hold_force(w, rec.id)` ANSWERS THE RECORD'S FINAL HOLDER FOR THE WHOLE BARRIER, NOT WHO
+    # THIS EVENT'S OWN CHANGE INSTALLED (BATCH-CLOSE, methodology-close Phase 1, LOGIC lens). If
+    # the same Record changes hold TWICE within one `witness()` call's `events` (e.g. two chained
+    # `give`s in one round, A->B then B->C), both events' entries here resolve to the SAME final
+    # holder (C) -- so B, who genuinely held the Record however briefly and is the one who received
+    # it at their own event, never gets listed as a holder anywhere and mints no `content:<kind>`
+    # claim for it; the later dedup (below) then suppresses even the eventual C-side deposit if C
+    # also witnessed the first event. UNREACHABLE ON THE CURRENT TREE: `give` is the only verb this
+    # loop's `_hold_tenure_ends` scan reaches (`oblige` opens no `hold`, so it never enters
+    # `newly_held` at all), and `give` is chooser-unreachable (untyped, `operands_for` never derives
+    # it) -- no hand-built test exercises two gives of one Record in one round either. A real fix
+    # keys this off the CHANGE's own before/after Tenure diff (`_hold_tenure_ends` already walks
+    # it) rather than a fresh `hold_force` read; not taken here, since nothing on the tree reaches
+    # this branch to verify a fix against.
+    for e in events:
+        for c in e.changes:
+            for named in (_hold_tenure_ends(w, c.subject) if c.subject else ()):
+                rec = w.records.get(named)
+                if rec is None or rec.subject_matter is None:
+                    continue
+                h = hold_force(w, rec.id)
+                if h is not None and h.since == w.tick:
+                    newly_held.setdefault(e.id, {})[rec.id] = (h.subject, rec)
     w._in_parallel_map = True
     for pid, e, channel in fan:
         p = w.persons.get(pid)
         if p is None:
             continue
+        # PLAN POSITION `15d` (proceedings `19_PLAN.md` step 4 (b)). THE SOURCE IS THE ADMITTING
+        # CHANNEL'S, read off `rosters.yaml: witness_channels.claim_source` -- presence gives
+        # `firsthand`, a knot `firsthand_via_knot`, a document, a remit or the public record
+        # `told_by`. `channel` is the ONE `observers_for` credited this person to, the strongest by
+        # the roster's precedence, so a person in the room who also holds the changed thing is
+        # never downgraded to hearsay (step 4's *breaks if wrong*).
+        # ⚠ IT REPLACES A SECOND DERIVATION THAT DISAGREED WITH THE FIRST (§8). This line read
+        # `any(t.kind == "knot" and t.live and pid in (t.subject, t.object) for t in w.tenures)` --
+        # *is this person in ANY knot* -- while `_ch_witness_key`, the channel that admits by
+        # knot, asks *are they knotted to THIS Event's anchor*. So a person knotted to anybody at
+        # all took the knot source for every Event they saw, and the channel's own answer was
+        # discarded one call earlier. MEASURED before the change, headless 3 seasons + the realm's
+        # first season + the 143-case corpus at seed 0: the scan was False for every admitted
+        # witness, so deleting it moves nothing there. What DOES move is the other direction, and
+        # it is the channel's own definition: an anchor with no place, admitted only by
+        # `witness_key`'s self clause, now takes the knot source (`rosters.yaml:
+        # witness_channels`' note; probe `P21` is the one case that reaches it).
+        # ⚠ AND THE TELLING'S SPECIAL CASE IS NOT HERE, DELIBERATELY. `19_PLAN.md` step 4: *"for a
+        # telling event specifically, even co-located hearers get told_by -- they heard it told,
+        # they did not see the thing."* The THING told is the told channel's claim below, which is
+        # `told_by` for every hearer whatever channel admitted them. The event-kind claim this
+        # source is for is `(subject, "news.told", True)` -- THAT a telling happened -- and a
+        # co-located witness did see that; the same step's artifact is *"a witness who saw the
+        # speech directly holds it firsthand"*. Downgrading it would be the downgrade the
+        # precedence exists to prevent.
+        src = CHANNEL_CLAIM_SOURCE[channel]
         # S28: A KNOT DEPOSIT REUSES THE EVENT ID. Rev 1 wrote the rule and switched it off
-        # with `if False`. This is the rule, on.
-        via_knot = any(t.kind == "knot" and t.live and pid in (t.subject, t.object)
-                       for t in w.tenures)
-        src = "firsthand_via_knot" if via_knot else "firsthand"
+        # with `if False`. This is the rule, on -- keyed on the knot SOURCE, i.e. on `witness_key`
+        # being the strongest channel, as `rosters.yaml: witness_channel_predicates` defines it.
+        via_knot = src == "firsthand_via_knot"
         # `H-79`: WHAT A DEPOSIT IS ABOUT. #353 §20 types `Claim.subject` and never says what
         # it is for a WITNESS deposit; the instrument used `e.subject`, the ACTOR, which made
         # §F1's Q2 clause "a claim whose subject is SOMETHING THEY HOLD" unreachable and left
@@ -281,7 +489,18 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # wear, a calendar crossing) `e.subject` held the record it concerned, never a person id,
         # so `pid == e.subject` was already always False there -- `actor_of` returning `None`
         # preserves that by construction rather than by an id-namespace coincidence.
-        if obs_mode != "none" and (obs_mode == "total" or pid == actor_of(w, e)):
+        # ⚠ PLAN POSITION `19d`: AN EVENT NO PERSON ACTED HAS NO ACTOR TO KEEP ITS READS PRIVATE TO,
+        # SO ITS WITNESSES RECEIVE THEM. `H-122`'s `actor` arm deposits *an act's* reads to the
+        # actor alone because the fold reads FROM THE ACTOR'S POSITION: `from` is their own rung,
+        # so the value is theirs. MATTER's larder pass is now the one actorless writer of
+        # `observed` (`loop/matter.py`, `19d`). What it records is a named rung's shortfall,
+        # relative to no holder, and it is what anyone standing at the drained larder or holding it
+        # saw. Before `19d`, no actorless Event carried an observation (MATTER's and CALENDAR's
+        # emitted `()`), so this clause changed no deposit on any world that existed. The
+        # `e.observed` test comes first only to skip `actor_of` for the common empty case. `none`
+        # is still the control and deposits nothing.
+        if (obs_mode != "none" and e.observed
+                and (obs_mode == "total" or (who := actor_of(w, e)) is None or pid == who)):
             seen_obs = seen_obs_by_pid.setdefault(pid, set())
             # `e.observed`, NOT `getattr(e, "observed", ())`. The field is on `Event` now, so
             # a default here would be a guard for a case that cannot arise -- and it would
@@ -338,6 +557,33 @@ def witness(self, token: Token, events: list[Event]) -> int:
                     emits="claim.deposited", subject=sc.id, causes=[e.id])
             TRACE.claim(pid, e.id, src)
             deposits += 1
+        # THE FOURTH DEPOSIT: THE CONTENT OF A DOCUMENT THIS WITNESS HAS COME TO HOLD (plan position
+        # `15`). `(record, "content:<kind>", <subject_matter, frozen>)` -- `content_value` above:
+        # the belief is what the document said when it reached this hand, and nothing done to the
+        # Record later reaches back into a ledger. `src` like the deposits above -- the admitting
+        # channel's source, `firsthand` for every new holder the tree reaches (measured at
+        # position `15d`: every content claim the realm holds after one season and after three),
+        # and it
+        # carries NO attribution: it says *this document says X*, never *the Duke wrote X* (r2 `02`
+        # §A.9 -- the separation is what makes a forgery playable). The exact-triple guard is the
+        # told channel's, for its reason: one belief is stored once.
+        for holder, rec in (newly_held.get(e.id) or {}).values():
+            if holder != pid:
+                continue
+            pred = f"{content_stem}:{rec.kind}"
+            said = content_value(rec.subject_matter)
+            if any(c.subject == rec.id and c.predicate == pred and c.value == said
+                   for c in p.ledger):
+                continue
+            dc = Claim(H(w.world_seed, w.tick, pid, f"content:{e.id}:{rec.id}"),
+                       pid, rec.id, pred, said, w.tick, src, conf,
+                       "own", self.round)   # `U2`: see the first deposit
+            w.write("claim_ledger", token,
+                    lambda p=p, c=dc: p.ledger.append(c),
+                    record_kind="Person", fieldname="claim_ledger", driver="Event",
+                    emits="claim.deposited", subject=dc.id, causes=[e.id])
+            TRACE.claim(pid, e.id, src)
+            deposits += 1
         # THE TOLD CHANNEL -- `claim_sources`' `told_by`, WHICH NOTHING WROTE.
         #
         # ⚠ WHAT WAS TOLD, NOT MERELY THAT A TELLING HAPPENED. The event-kind deposit above
@@ -379,9 +625,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
             # read -- a per-(hearer, telling) dict lookup left from the draft that scanned the
             # teller's ledger inline, before `_told_content` became its one owner. Removed rather
             # than kept: it read as though the teller were still consulted at this point.
-            if e.id not in told_by_event:
-                told_by_event[e.id] = _told_content(w, _act)
-            _held = told_by_event[e.id]
+            _held = told_by_event[e.id]   # resolved before the fan, above -- position `15d`
             # ⚠ `act_refs`, NOT A SECOND READ OF THE PAYLOAD. The first writing of this block
             # spelled `(_act.payload or {}).get("subject")` inline -- a copy of `epistemic`'s
             # own reader (`act_refs`, already imported at the top of this file and already
@@ -390,44 +634,79 @@ def witness(self, token: Token, events: list[Event]) -> int:
             # (`probes.py` builds string payloads), which is §8 exactly. Caught by an
             # adversarial pass, not by a test, because no `tell` reaches that branch today --
             # latent, and latent is still two owners.
+            _held_stem = str(_held.predicate).partition(":")[0] if _held is not None else None
             if (_held is not None
-                    and str(_held.predicate).partition(":")[0] not in LEDGER_DERIVED_STEMS
-                    # ⚠⚠ **A TELLING THAT TELLS SOMEBODY WHAT THEY ALREADY SAW DEPOSITS
-                    # NOTHING, AND WITHOUT THIS LINE THE CHANNEL IS ALMOST ENTIRELY THAT.**
-                    # MEASURED over the 89 corpus worlds before this guard: 180 `told_by`
-                    # claims, of which **175 were a triple the hearer ALREADY HELD
-                    # FIRSTHAND** -- one belief stored twice, which is the defect the
-                    # observation block forbids in those words one screen up, and it
-                    # consumes a `ledger_cap` slot the eviction then takes from somebody
-                    # else. The cause is not the mechanism: `corpus_run.build_at` seats all
-                    # three persons in ONE rung, so under `all_five` every observer already
-                    # witnessed everything the teller witnessed and there is no asymmetry
-                    # left to transmit. The honest figure with this guard is **5**.
-                    # ⚠ EXACT TRIPLE, NOT `(subject, predicate)`. A hearer who holds a
-                    # DIFFERENT value for the same cell is being contradicted, and that is
-                    # the epistemic layer working -- `agreement` pairs precisely those. Only
-                    # a claim a reader could not tell apart is suppressed.
-                    and not any(c.subject == _held.subject and c.predicate == _held.predicate
-                                and c.value == _held.value for c in p.ledger)):
-                # ⚠ NO SECOND DEDUP SET HERE, AND THE REASON IS THE ONE THAT RETIRED THE TELLER
-                # EXCLUSION TWO SCREENS UP. A `seen_told_by_pid` stood here, mirroring
-                # `seen_obs_by_pid`. But `World.write` applies synchronously (`world.py:408`),
-                # so a deposit made earlier in this barrier is ALREADY in `p.ledger` and the
-                # exact-triple guard above catches it. The set only added cover for a
-                # DIFFERENT-VALUED retelling of one `(subject, predicate)` inside one barrier --
-                # and unlike `seen_obs_by_pid`, which earned its place with a measured 27
-                # differing-value collisions, no such case was ever measured here (the channel
-                # deposits 8 claims across the whole 89-world corpus). Two guards where one
-                # observes the failure is the defect §0.1 pt 2 names.
-                tc = Claim(H(w.world_seed, w.tick, pid, f"told:{e.id}"),
-                           pid, _held.subject, _held.predicate, _held.value, w.tick,
-                           "told_by", _held.confidence, "own", self.round)
-                w.write("claim_ledger", token,
-                        lambda p=p, c=tc: p.ledger.append(c),
-                        record_kind="Person", fieldname="claim_ledger", driver="Event",
-                        emits="claim.deposited", subject=tc.id, causes=[e.id])
-                TRACE.claim(pid, e.id, "told_by")
-                deposits += 1
+                    and _held_stem not in LEDGER_DERIVED_STEMS):
+                # PLAN POSITION `15b` (r2 `02` §A.10, `ED-IN-0222`). WHAT LANDS IN THE HEARER'S
+                # LEDGER IS `_told_value`'s RETURN, NOT `_held.value` DIRECTLY -- verbatim at
+                # every band but `Partial`, lossy by exactly one mechanism there. Computed here,
+                # per (event, hearer), because the selection is keyed on `pid` (§A.10.4); `_held`
+                # itself stays the teller's own, untouched, for the dedup guard below to compare
+                # PREDICATE and SUBJECT against (those two never drift, §A.10.3) while comparing
+                # VALUE against what is actually about to be deposited.
+                # `_told_hash`/`_held_stem` are handed down rather than recomputed inside
+                # `_told_value` -- the same hash mints the Claim id below and the same stem was
+                # already derived for the `LEDGER_DERIVED_STEMS` guard above (BATCH-CLOSE, Phase 2
+                # EFFICIENCY finding; see `_told_value`'s own docstring).
+                # ⚠ COMPUTED ONLY AT `Partial`, NOT UNCONDITIONALLY -- CORRECTED (BATCH-CLOSE,
+                # methodology-close Phase 3 terminal critique, F5): the first writing of this line
+                # computed the hash for every degree, before the dedup guard below -- but
+                # `_told_value` never touches it outside `Partial` (its own first line: `if
+                # e.degree != "Partial": return held.value`), and the dedup guard drops most
+                # tellings regardless of degree (measured: 175 of 180 corpus-wide). So the
+                # unconditional version PAID a blake2b digest on every non-Partial telling this
+                # channel reaches, a cost neither the pre-fix code nor `_told_value` itself ever
+                # incurred there -- the opposite of the efficiency this fix claimed. Deferred to the
+                # Claim-id site below for any degree that is not `Partial`, matching what the
+                # pre-fix code actually did.
+                _told_hash = (H(w.world_seed, w.tick, pid, f"told:{e.id}")
+                              if e.degree == "Partial" else None)
+                _told_val = _told_value(w, pid, e, _held, _told_hash, _held_stem)
+                # ⚠⚠ **A TELLING THAT TELLS SOMEBODY WHAT THEY ALREADY SAW DEPOSITS
+                # NOTHING, AND WITHOUT THIS LINE THE CHANNEL IS ALMOST ENTIRELY THAT.**
+                # MEASURED over the 89 corpus worlds before this guard: 180 `told_by`
+                # claims, of which **175 were a triple the hearer ALREADY HELD
+                # FIRSTHAND** -- one belief stored twice, which is the defect the
+                # observation block forbids in those words one screen up, and it
+                # consumes a `ledger_cap` slot the eviction then takes from somebody
+                # else. The cause is not the mechanism: `corpus_run.build_at` seats all
+                # three persons in ONE rung, so under `all_five` every observer already
+                # witnessed everything the teller witnessed and there is no asymmetry
+                # left to transmit. The honest figure with this guard is **5**.
+                # ⚠ EXACT TRIPLE, NOT `(subject, predicate)`. A hearer who holds a
+                # DIFFERENT value for the same cell is being contradicted, and that is
+                # the epistemic layer working -- `agreement` pairs precisely those. Only
+                # a claim a reader could not tell apart is suppressed -- and at `Partial`
+                # "a claim a reader could not tell apart" means the LOSSY value, since that
+                # is what this deposit is about to assert.
+                if not any(c.subject == _held.subject and c.predicate == _held.predicate
+                           and c.value == _told_val for c in p.ledger):
+                    # ⚠ NO SECOND DEDUP SET HERE, AND THE REASON IS THE ONE THAT RETIRED THE TELLER
+                    # EXCLUSION TWO SCREENS UP. A `seen_told_by_pid` stood here, mirroring
+                    # `seen_obs_by_pid`. But `World.write` applies synchronously (`world.py:408`),
+                    # so a deposit made earlier in this barrier is ALREADY in `p.ledger` and the
+                    # exact-triple guard above catches it. The set only added cover for a
+                    # DIFFERENT-VALUED retelling of one `(subject, predicate)` inside one barrier --
+                    # and unlike `seen_obs_by_pid`, which earned its place with a measured 27
+                    # differing-value collisions, no such case was ever measured here (the channel
+                    # deposits 8 claims across the whole 89-world corpus). Two guards where one
+                    # observes the failure is the defect §0.1 pt 2 names.
+                    # BATCH-CLOSE FINDING (methodology-close Phase 1, FIDELITY TO PLAN lens):
+                    # `RULINGS.yaml` CAT-3 -- store the teller, "one argument, not a lookup" --
+                    # was ruled and CLOSED before this position and was missed on a search that
+                    # did not reach `proposals/2026-09-17-governance-and-behaviour/`, this
+                    # channel's own content-owner directory. `_act.actor` is already in scope
+                    # (bound above, this same guard), so this is exactly the one-argument edit
+                    # the ruling names -- `Claim.teller`, `state/carriers.py` -- not a lookup.
+                    tc = Claim(_told_hash or H(w.world_seed, w.tick, pid, f"told:{e.id}"),
+                               pid, _held.subject, _held.predicate, _told_val, w.tick,
+                               "told_by", _held.confidence, "own", self.round, _act.actor)
+                    w.write("claim_ledger", token,
+                            lambda p=p, c=tc: p.ledger.append(c),
+                            record_kind="Person", fieldname="claim_ledger", driver="Event",
+                            emits="claim.deposited", subject=tc.id, causes=[e.id])
+                    TRACE.claim(pid, e.id, "told_by")
+                    deposits += 1
         # ⚠ `while`, NOT `if`. THE CAP WAS NOT A CAP. One deposit can mint SEVERAL claims --
         # `claim_subjects` returns one per `StateChange` under the `per_change` rule -- and a
         # single `if` pops exactly one, so the ledger settled at 203 against `L = 200`. A cap

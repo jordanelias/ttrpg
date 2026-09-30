@@ -536,7 +536,7 @@ kind in { hold, contain, commit, oblige, succeed, tie, knot }
 | kind | subject → object | cardinality | notes |
 |---|---|---|---|
 | `hold` | Person → Office \| Rung \| Record \| Proposition | **1 per object** | office-holding, tenancy, custody |
-| `contain` | Rung → Rung | **1 parent** | **the containment ladder.** Never destroyed by a bare `revoke` |
+| `contain` | Rung → Rung | **1 parent** | **the containment ladder.** Never destroyed by a bare `revoke`. ⚠ *For a person it is where they ARE; where they LIVE is an eighth kind, `reside` (Person → Rung, 1 per person), added at plan position `19c` (2026-09-30), not #353's: `move` re-homes `contain` and leaves `reside`, `migrate` re-homes both. §8's "an `address` ... is a `contain` Tenure" predates that split. Amended in this cell, not as a new row, so no later line number moves* |
 | `commit` | Person → Proposition | many | **this is faction membership** |
 | `oblige` | Person → Person \| Office | many | Duty |
 | `succeed` | Rung → Person | 1 | the hearth's transmission pointer |

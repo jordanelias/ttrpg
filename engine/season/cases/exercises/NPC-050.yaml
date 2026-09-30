@@ -1,0 +1,8 @@
+# NPC-050 -- `scale:` re-authoring, plan position `20-ii` (U9/R-04, `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md:1459-1474`). Read against the case's own `one_line`/`who_acts` (`engine/season/cases/chain/`), never matched by keyword (`harness/corpus_run.py::rescales`'s own warning: 23 of 47 match no institution word).
+case: NPC-050
+scale:
+  was: faction
+  is: duchy
+  why: '`one_line` and `who_acts` both name Baralta a duchess whose ''total personal command of her own
+    duchy'' is the case''s own subject -- unlike the Crown/Church-wide cases above, this case''s institutional
+    reach is explicitly bounded to her own duchy, not the realm she is pressing a claim against.'

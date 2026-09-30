@@ -1,4 +1,4 @@
-"""`loop/matter.py` -- MATTER -- barrier 2. `04 §A.2`: owns the three motions and the maturation of declared terms; emits per matrix row; token MATTER.
+"""`loop/matter.py` -- MATTER -- barrier 2. `04 §A.2`: owns the three motions and the maturation of declared terms; emits per matrix row; token MATTER. (A Record's act-declared stages, and -- since plan position `17b` -- a Tenure's declared `term`.)
 
 ⚠ **THE BODY IS THE DRIVER'S OWN, BOUND BACK ONTO THE CLASS -- NOT A DELEGATING STUB.**
 `loop/driver.py` ends with `SeasonDriver.matter = matter`, so `SeasonDriver.matter` IS this
@@ -22,6 +22,7 @@ from __future__ import annotations
 from typing import Optional
 from ..data.fixtures import SITE_YIELD
 from ..data.matrix import Step
+from ..data.requires import SHORTFALL_PREDICATE, Observation
 from ..queries import world_q
 from ..state.carriers import Event
 from ..state.gate import Token
@@ -120,7 +121,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                    chose="serial: the actorless event channel; then parallel over Sites",
                    alternatives=["shard the event channel per rung (breaks causes[]: one cause is one id)"],
                    not_implemented=["the death cascade (S31.1 exception 2)",
-                                    "bodies, larders, yield, travel (S25's other rows)"])
+                                    "bodies, larders, yield (S25's other rows)"])
     for e in (actorless or []):
         w.log.append(e); emitted.append(e)
         TRACE.event(e.id, e.kind, e.causes)
@@ -181,6 +182,44 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                     record_kind="Record", fieldname="matured", driver="Event",
                     emits="term.matured", subject=rid, causes=[prior])
 
+    # -- A TENURE'S DECLARED TERM MATURES (`T-n`, plan position `17b`) ---------------------
+    # `04 §A.2` gives this barrier *"the maturation of declared terms"* and `04 F.3` names the
+    # carrier and the writer: *"`Tenure.term`; MATTER matures it; the causation rule generalises to
+    # two causes"*. So every LIVE edge whose `term.matures_at` has come is closed here, one gate write
+    # each, with `causes = [term.declared_by]` -- `04 §B.8`: *"a `matures_at` MATTER matures with
+    # `causes[] = term.declared_by`"*; AX-5: *"a matured term cites the act that wound it"*. That act
+    # is the `oblige` that opened the edge, or the last `transfer` that paid its upkeep, so a lapse is
+    # a story with an author, walkable back to the hand that last wound the clock.
+    #
+    # ⚠ THROUGH CALENDAR WAS REJECTED BY LAYER 1 BY NAME, AND IT WAS THE OBVIOUS SIBLING. `Date.due_at`
+    # vs `w.tick` is structurally the same comparison, but `04 §B.8`'s synthesis call: *"Rejected:
+    # routing term expiry through CALENDAR, which makes a term un-endable when nobody acts -- the
+    # exact ratchet `T-n` exists to forbid."* A term is matter's clock (AX-5), not the calendar's.
+    #
+    # ⚠ THE OPPOSITE POLARITY FROM THE RECORD BRANCH ABOVE, AND DELIBERATELY. A half-made copy STOPS
+    # when its copyist is gone, because PRODUCTION needs a maker. A term of service LAPSES whether or
+    # not anyone is left to pay it, because a lapse needs nobody -- that is its whole point: an
+    # interregnum that leaves nobody seated to pay dissolves the household, with nobody acting.
+    #
+    # ⚠ THE GATE, NOT THIS LOOP, DECIDES THAT IT IS LAWFUL. `matured_term` is S15.3's pre-check
+    # generalised to its second cause (`World.write`); F3 then observes the write and admits it only
+    # as `T-n` -- actorless, a pure closure, of an edge whose own term (read from BEFORE the write)
+    # has `matures_at <= w.tick` (`state/gate.py::tenure_write_basis`). `<=` and not `==`: a term
+    # that should have matured at a barrier this world skipped (a hand-driven fold, a builder that
+    # starts mid-campaign) still lapses at the next one rather than living forever.
+    # ⚠ ORDER: SORTED BY EDGE ID (subject, then object, breaking ties), so the emission order -- and
+    # with it every emission id's draw ordinal -- is a property of the world, not of store order (R4).
+    # Nothing matures in any corpus run today: no computed act forms an `oblige`, the only kind
+    # opened with a term (`17a`), so this branch moves no artifact until one does.
+    for t in sorted((t for t in w.tenures if t.live and t.term is not None
+                     and t.term.matures_at <= w.tick),
+                    key=lambda t: (t.id, t.subject, t.object)):
+        w.write("until", token,
+                lambda t=t: setattr(t, "until", w.tick),
+                record_kind="Tenure", fieldname="until", driver="Event",
+                emits="tenure.closed", subject=t.id, causes=[t.term.declared_by],
+                matured_term=t.id)
+
     # -- CLAIM CONFIDENCE DECAY (`W4` / `H-40`) --------------------------
     # THE THIRD LICENSED CLOCK (#353 `:864`), and until now the only one of the three with no
     # implementation at all — Part D had no `Claim` row, so Part D was not total for a clock
@@ -232,9 +271,8 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # substantive difference — the reverse order would let a rung eat what it had not yet
     # produced, and no rung could ever run short. `test_w8_...order...` asserts it.
     #
-    # ⚠ BODIES AND TRAVEL ARE STILL NOT BUILT. Naming them here would suggest otherwise; the
-    # `not_implemented` list in this barrier's decision row is where they are recorded.
-    weights = w.fixtures.get("subsistence_weight")
+    # ⚠ BODIES AND TRAVEL WERE NOT BUILT WHEN THIS WAS WRITTEN; BOTH ARE NOW (item 3b below, and
+    # the travel pass after the yield loop, plan position `19c`), each in #353's order.
     factor = w.fixtures.get("season_factor")
     scale_ = w.fixtures.get("condition_scale")
 
@@ -251,9 +289,19 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     #
     # ⚠ `p.weight`, NOT `len(eaters)`, AND THE OLD LOOP DROPPED IT. `Person.weight` is the cohort
     # multiplier — *"A COHORT IS A PERSON AT weight > 1"* (`state/carriers.py`) — so counting
-    # heads makes a cohort of two hundred eat like one man. Every person in the shipped corpus is
-    # at weight 1, which is exactly why this was invisible and why it is fixed while it costs
+    # heads makes a cohort of two hundred eat like one man. Every person in the shipped corpus was
+    # at weight 1, which is exactly why this was invisible and why it was fixed while it cost
     # nothing to fix.
+    #
+    # ⚠⚠ AND SINCE PLAN POSITION `24f` ONLY A COHORT EATS (`ED-IN-0255`: subsistence is *"a
+    # territorial issue"*, carried by *"NPC synecdoches"*, and *"lords and guild members"* do not
+    # worry about it). The exemption is `world_q.subsistence_draw`'s, the one owner, so nothing
+    # below changes: a `weight == 1` person is simply absent from `record`, so he is never in
+    # `draws`, never in `short_by_person`, and item 3b below never falls his body for dearth. The
+    # eaters are `cohorts.yaml`'s authored rows, one per populated rung, seated at world-gen by
+    # `harness/populated.py::build_realm`. `tests/test_territorial_subsistence.py` holds the
+    # falsifier on the built realm: under a non-zero `body_step`, an office-holder under a
+    # settlement in dearth keeps his body while that settlement's cohort draws and its body falls.
     #
     # ⚠ THE PRE-PASS EXISTS TO KEEP THE EMISSION ORDER, not because the arithmetic needs it. The
     # draw could be hoisted into its own pass over persons, and that would reorder every
@@ -269,38 +317,81 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # `H-38` closed with *"`Site.condition` is the model"*, and this spends that closure rather
     # than minting a `band_floors.person` second scheme.
     floors_body = (w.fixtures.get("band_floors") or {}).get("body", {})
+    # ⚠ PLAN POSITION `19d`: THE ARITHMETIC ABOVE NOW LIVES IN ONE OWNER, `world_q.subsistence_draw`,
+    # and this pass derives its writes from the record it returns. The inline loop that stood here
+    # (per housed eater, sorted; per weighted kind, sorted; `nearest_store` over the running `left`
+    # view; `take = min(want, held)`) moved there VERBATIM, because `demanded`/`delivered` need the
+    # same arithmetic. A second copy would let MATTER feed a person the Queries call hungry. The
+    # derivation below reproduces `draws` and `short_by_person` exactly, in the same insertion
+    # order. That order reaches `r.stores.update(...)`'s key order, and with it the content hash.
+    record = world_q.subsistence_draw(w)
     draws: dict = {}          # source rung -> {kind: units it gives up}
     short_by_person: dict = {}
-    left: dict = {}           # (rung, kind) -> units still unspent this season
-    if weights:
-        homes = world_q.home_of(w)
-        for pid in sorted(homes):
-            person = w.persons[pid]
-            # `H-11`'s rule, unchanged: the loop is over the WEIGHTS registry, so a kind with no
-            # weight RAISES rather than silently drawing nothing.
-            for k, wt in sorted(weights.items()):
-                want = wt * person.weight
-                if want <= 0:
-                    continue
-                src = world_q.nearest_store(w, homes[pid], k, available=left)
-                if src is None:
-                    short_by_person.setdefault(pid, {})[k] = want
-                    continue
-                held = left.get((src, k))
-                if held is None:
-                    held = (w.rungs[src].stores or {}).get(k, 0)
-                take = min(want, held)
-                left[(src, k)] = held - take
+    drained: dict = {}        # source rung -> {kinds it RAN OUT OF with a mouth still unfed}
+    for pid, (_home, row) in record.items():
+        for k, (want, take, src) in row.items():
+            if src is not None:
                 draws.setdefault(src, {})[k] = draws.setdefault(src, {}).get(k, 0) + take
-                if take < want:
-                    short_by_person.setdefault(pid, {})[k] = want - take
+            if take < want:
+                short_by_person.setdefault(pid, {})[k] = want - take
+                if src is not None:
+                    drained.setdefault(src, set()).add(k)
+    # -- THE SHORTFALL RIDES ON THE DRAINED LARDER'S OWN WRITE (plan position `19d`) -------------
+    #
+    # A larder that runs dry while a mouth is still unfed is the one moment the gap between
+    # `demanded` and `delivered` becomes a fact at a PLACE. This records it there as an
+    # `Observation` on the `stores.changed` Event that the same write already emits:
+    # `(rung, "shortfall:<kind>", demanded - delivered)`. WITNESS deposits it into whoever witnesses
+    # that write: anyone standing at the rung (`co_located`) and anyone holding it
+    # (`document_key`). `decision/options.py::_from_shortfall_claim` then reads `kind` and `amount`
+    # off the claim, so a `transfer` formed from the question the claim raises carries both, and its
+    # `to` is the drained rung itself (the question's referent).
+    #
+    # ⚠ NO NEW EVENT, NO NEW KIND, NO NEW WRITE, AND EACH IS REFUSED FOR A REASON. A shortfall is not
+    # a state change (L3: an aggregate is never a field, so there is nothing to write), and a
+    # hand-built `subsistence.short` Event would need an anchor that `anchor_of` can reach. `_crossings`
+    # anchors on the write that crossed; a rung with no write has no receipt to name. The larder
+    # write DOES exist at exactly this moment. A drained source was drawn (`take >= 1`: `nearest_store`
+    # only returns a rung holding `> 0`), so the gate emits `stores.changed` there, and
+    # `Event.observed` is the field for *what was read to reach this Event* (`W-B`). Only its
+    # writer is new, here at MATTER.
+    #
+    # ⚠ L5 HOLDS: THE OBSERVATION DECIDES NOTHING. Nobody is starved into an act here. A witness holds
+    # a claim, the claim may raise a `claim_landed` question, and any transfer is that person's own
+    # choice (S36.1: *"every arrow is a person's act"*).
+    #
+    # ⚠ WHAT THIS DOES NOT REPORT, and it is registered, not hidden (`H-160`):
+    #   * A LARDER THAT WAS NEVER STOCKED. An eater whose walk finds nothing (`source None`) drains
+    #     no rung, so no write carries the gap. The emission is the CROSSING into dearth, not the
+    #     state: once a place has run dry and been reported, its next empty season is silent, like a
+    #     band that is crossed once.
+    #   * A GOVERNOR WHO NEITHER STANDS AT THE RUNG NOR HOLDS IT. Purview is a term of `reach`
+    #     (Q2's filter), not a witness channel, so a claim never deposited cannot be admitted.
+    # The value is the SUBTREE's gap (`demanded(w, S) - delivered(w, S)`), not only the part owed by
+    # eaters whose walk ended at `S`. It counts people under `S` fed short by a larder below `S`,
+    # and so NESTS: a hearth larder and its settlement's can both report one hungry household. That
+    # is the Query's own meaning, and it is stated here rather than hidden.
+    #
+    # ⚠ MEASURED ON THE SHIPPED WORLDS (2026-09-29): none drains a larder with a mouth unfed. The
+    # populated realm holds nothing before its first yield (every eater's `source` is `None`) and is
+    # in surplus after it. `tiny_world` never runs its hearth dry mid-take. The corpus's 178 built
+    # worlds hold stock (234 `transfer.made` among them) and record 0 shortfalls. So every
+    # committed artifact is byte-identical, and the mechanism fires only where the world is
+    # actually scarce (`harness/scarce.py`).
+    short_seen: dict = {}     # drained rung -> (Observation, ...), sorted by kind
+    for src in sorted(drained):
+        need, got = world_q.demanded(w, src, record), world_q.delivered(w, src, record)
+        short_seen[src] = tuple(
+            Observation(src, f"{SHORTFALL_PREDICATE}:{k}", need[k] - got.get(k, 0))
+            for k in sorted(drained[src]) if need.get(k, 0) > got.get(k, 0))
     if short_by_person:
         # ⚠ A SHORTFALL EMITS NOTHING AND DECIDES NOTHING, on L5's rule: a threshold crossing
         # *"MAY NEVER PRODUCE AN OUTCOME"*. Inventing starvation here would be the outcome L5
         # forbids, and it would be a social consequence written at MATTER, which is L4. It is
         # recorded so a run can be read. ⚠ IT IS NOW KEYED ON THE PERSON RATHER THAN THE RUNG,
         # which is the shape item 3b needs — the shortfall is what falls a BODY, and a body
-        # belongs to a person. 3b is not built here and this line does not pretend it is.
+        # belongs to a person. Since `24f` that person is always a cohort: the territorial
+        # population's body, never a lord's.
         sample = dict(sorted(short_by_person.items())[:5])
         TRACE.note(
             f"{len(short_by_person)} eater(s) could not meet subsistence; "
@@ -371,11 +462,15 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
             after = {k: have.get(k, 0) - amt for k, amt in draw.items()}
             if any(after[k] != have.get(k, 0) for k in after):
                 prior = w.last_emission_of("stores.changed", rid)
+                # `observed=`: the shortfall this draw left at `rid` if it ran dry here (`19d`,
+                # above). Empty for every larder that met its mouths, which is every one the
+                # shipped worlds draw.
                 w.write("stores", token,
                         lambda r=r, after=after: r.stores.update(after),
                         record_kind="Rung", fieldname="stores", driver="Event",
                         emits="stores.changed", subject=rid,
-                        causes=[prior] if prior else [ROOT])
+                        causes=[prior] if prior else [ROOT],
+                        observed=short_seen.get(rid, ()))
         # `yield` — #353 §25's *"only here"* row. The base is the SITE's, scaled by its
         # condition and then by `season_factor`, so a worn place produces less without a
         # second wear concept (`H-93`, and `rosters.yaml: site_yield` for why).
@@ -409,6 +504,51 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                 record_kind="Rung", fieldname="stores", driver="Event",
                 emits="stores.changed", subject=rid,
                 causes=[prior_s] if prior_s else [ROOT])
+
+    # -- TRAVEL: A LEG ENDS HERE (plan position `19c`, the ride-along) --------------------------
+    #
+    # ⚠⚠ THE MATTER HALF OF `(Person, travel_leg)`'s `steps: [MAT, RES]`, AND ITS ABSENCE WAS A
+    # LIVE DEFECT, NOT A MISSING FEATURE. `_eff_move` appends every destination to
+    # `Person.travel_leg` at RESOLVE and nothing ever emptied it (the only other writer was a probe),
+    # while `decision/budget.py` subtracts `len(p.travel_leg) * budget_leg_penalty` from EVERY
+    # season's budget. So a person who had moved N times in their life was N scenes short in every
+    # season after -- MEASURED before this pass on `build_realm(0)`: 14 legs held after two seasons,
+    # 14 moves executed, and none ever returned. `ARCHITECTURE_V2.md` §D4 names the field *"the
+    # movement in progress"* and gives arrival to the `contain` edge, which `_eff_move` already
+    # re-homes at RESOLVE; what was never written is the end of the movement. #353 §25 names
+    # TRAVEL as one of MATTER's motions, in this order: *"Events resolve FIRST, then bodies,
+    # larders, yield, travel, wear"* -- so it sits after the larder/yield loop above and before
+    # the wear loop below, which is where it is.
+    #
+    # WHAT THE PENALTY NOW MEANS. A `move` in season t adds a leg at RESOLVE; the rounds after it in
+    # season t read the leg (`deliberate.py`'s queue key carries `travel_leg`, so the smaller budget
+    # re-opens the traveller's triage), and season t+1's MATTER ends it. The distance penalty is a
+    # cost of THE SEASON YOU TRAVEL IN, and nothing after it.
+    #
+    # ⚠ ONE WRITE PER TRAVELLER, AND IT EMITS, BECAUSE `H-12` IS RULED: *"MATTER emits an Event per
+    # write so crossings have an antecedent"*, and `World.write` refuses a MATTER write on a row that
+    # declares `emits:` without naming one. `travel.moved` would report a move that did not happen,
+    # so the row declares a second kind, `travel.ended` (`write_matrix.yaml`). It is witnessed like
+    # every MATTER emission -- the traveller and whoever stands where they arrived learn that the
+    # journey is over. Its cause is the move that laid the last leg, so the walk is
+    # `travel.ended -> travel.moved -> the act`; a leg no act laid (a probe's hand-set list) roots
+    # at `[ROOT]`, as a licensed clock's genuine first emission does.
+    #
+    # REJECTED, each for a reason: ending the leg at the traveller's NEXT act (it would never end for
+    # a person who then does nothing, which is the defect with a delay); a per-leg tick so `budget`
+    # counts only this season's legs (the list would still grow without bound, and `budget` is
+    # person-side and reads no clock); a guard over `travel_leg` (`CLAUDE.md` §0.1 pt 5 -- a one-off
+    # defect, fixed at its one missing writer; the plan says *"No guard"*).
+    for pid in sorted(w.persons):
+        traveller = w.persons[pid]
+        if not traveller.travel_leg:
+            continue
+        prior_leg = w.last_emission_of("travel.moved", pid)
+        w.write("travel_leg", token,
+                lambda traveller=traveller: setattr(traveller, "travel_leg", []),
+                record_kind="Person", fieldname="travel_leg", driver="Event",
+                emits="travel.ended", subject=pid,
+                causes=[prior_leg] if prior_leg else [ROOT])
 
     # S25: NO SOCIAL QUANTITY MOVES HERE. L4 at its sharpest.
     w._in_parallel_map = True

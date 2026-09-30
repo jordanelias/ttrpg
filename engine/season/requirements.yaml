@@ -94,13 +94,31 @@ scales:
   - scale:    "mass battles / strategy warfare"
     subsystem: ["systems/mass_battle (33 py)"]
     retention: RETAINED
-    in_loop:   "seam built, not yet reached by a chosen act"
+    in_loop:   "seam built; reached via a constructed `Question` (`test_march.py`) AND, measured,
+      via natural computed play in `build_realm(0)`/`populated.run` (`harness/aperture.py`); not
+      yet reached naturally in `corpus_run`'s separate 143-case NPC/ARC corpus"
     note: >-
       The seam exists (`ecacb57`, PR #436): `march` declares `contests: a field` and resolves
       through `seam/wrappers/mass_battle.py` → the `mass_battle.resolve_field` composition role.
-      No chosen act reaches it yet — `march` is in `test_season_shape.py`'s never-attempted set
-      because `operands_for` has no `march` arm (`hole_register.yaml` H-151's `cite:`). A battle
-      from a chooser-formed decision is plan position `28-ii`.
+      `test_march.py::test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle`
+      (plan position `28-ii`, M6) demonstrates a real chosen act reaching it, through the real
+      chooser, off a constructed `Question` naming a settlement referent.
+      ⚠ CORRECTED, the Phase 3 terminal critique's reconciliation, 2026-09-30: this note used to
+      say march "still sits in `test_season_shape.py`'s never-attempted set for the NATURAL
+      corpus" and that "no `questions_for` source in the natural corpus ever supplies march a
+      workable referent" -- measured FALSE for `build_realm(0)`/`populated.run`:
+      `python -m engine.season.harness.aperture 1 0`, run twice reproducibly, shows march
+      forming, being offered, being attempted and executing there via the real, unrestricted
+      chooser, with zero constructed `Question` and zero hand-built `Act` (`hole_register.yaml`
+      H-175). `march` DOES still sit in `test_season_shape.py`'s never-attempted set, but that
+      set is drawn from `corpus_run`'s separate, narrower, individually-authored 143-case NPC/ARC
+      corpus, not from the natural corpus generally -- a fresh `corpus_run` this same session
+      re-confirms march is still absent there. `decision/options.py::opening_set`'s clause 3
+      applies no referent-kind filter and `operands_for` already carries `march`'s operands
+      correctly (neither was ever the gap). WHY `corpus_run`'s 143 cases specifically never
+      supply march a workable referent, while the populated realm does, is UNMEASURED
+      (`hole_register.yaml` H-175's `cite:`). `H-151`'s OWN `cite:` field, not H-175's, is where
+      the earlier retraction of a stale "missing `operands_for` arm" citation actually lives.
   - scale:    "personal combat / grid-based map combat with units"
     subsystem: ["systems/combat/combat_engine_v1 (29 py)"]
     retention: "RETAINED, NOT DONE (Jordan, 2026-09-05: \"combat engine isn't done\")"
@@ -165,7 +183,9 @@ rows:
       DECISION, SO THE FIGURE THIS ROW IS ABOUT IS 1,104 IN FIVE VERBS.** `restore` is not in
       `resolvable_verbs()` (it writes `Site.condition` with no `EFFECTS` entry) and `choose.py`
       applies the `verbs=` filter AFTER `opening_set` returns, so clause 4 drops a Candidate that
-      was never going to be offered. Measured too: `examine` and `restore` fire on the IDENTICAL
+      was never going to be offered. ⚠ TRUE ON 2026-09-10 AND NO LONGER: plan position `24e`
+      (2026-09-29) gave `restore` its effect, so it IS resolvable and its clause-4 drops can now
+      move a decision; the 1,104 above was not re-measured for it. Measured too: `examine` and `restore` fire on the IDENTICAL
       EIGHT SUBJECTS — same cell shape, so one belief counted under two verbs. The better statement
       of the change is the PREDICATE count: clause 4 went from ONE reachable predicate
       (`contain.path`) to FIVE (`+ exists:Site` · `exists:Record` · `exists:Person` ·
@@ -199,6 +219,39 @@ rows:
       `blocks:` entry `W-F` (cross-person transmission), so there is no ruling to ask for
       (`CLAUDE.md` §0, gate 5); and pinning an R3 count in a test would pin a number the build is
       supposed to move, which is §7's uncontrolled path. What this row owed was the measurement.
+      ⚠⚠ **U10, 2026-09-30: U6'S INSTRUMENT RE-RUN, AND IT SURFACED A NEW BREAK RATHER THAN A
+      NUMBER.** The corpus grew 89 -> 143 live worlds under position `20-ii` (R-04's rescale), so
+      `wd_acceptance.CASES` is now 143, not 89 — `wd_chunk.py`'s acceptance-text slices
+      (`0/23/46/69/89`) cover only the FIRST 89 of the current 143-entry list; `wd_collect.py`'s own
+      completeness assertion (`covers == list(range(len(CASES)))`) caught this on the first attempt
+      with the stale ranges. Re-sliced to `0/36/72/108/143` and the full 36-cell sweep re-run
+      (measured wall-clock, all three deposit-mode arms x three fixture points): **`wd_collect.py`
+      now fails a DIFFERENT, live assertion at the FIRST fixture point (`default`) — `probed` (the
+      deliberation count) differs by `observation_deposit_mode`: `{'none': 21717, 'actor': 21954,
+      'total': 21897}`.** The tool's own comment states why this must never happen: *"the
+      deliberation count does not depend on the deposit mode (`pack_scenes` is called for every
+      person with a question, whatever their candidate set)"*. It now does — reproduced twice,
+      against two tree states either side of an unrelated concurrent commit, byte-identical both
+      times. The likely mechanism is this row's OWN subject: a deposit under `actor`/`total` can
+      raise a NEW question in a LATER round (Q2 — R-03/U2's channel) that `none` never raises, so
+      the three arms are no longer the same experiment at corpus scale once enough of the season
+      loop deposits and re-questions. Because the assertion fires on `default`, the script never
+      reaches `narrow` or `2x3` — there is **no fresh reconvergence rate at any fixture point,
+      including `2x3`**, and `wd_acceptance.json`/`WD_LOG.txt` were not rewritten this run.
+      **Reported as a falsifier of the instrument's own control, not netted against the R3 figures
+      below.** `runs/wd_chunk_*.json` (all 36, re-sized to the 143-corpus) are the artifact this
+      position commits; no `wd_acceptance.json` update rides with them, honestly, because none
+      could be produced.
+      ⚠ **R3, SEPARATELY, FROM THE HALF OF `corpus_run` THAT DID COMPLETE** (unaffected by the
+      `wd_collect` break above, since it is a different script): measured 2026-09-30 against this
+      tree — `check R3: 46 of 46 pass` (NPC) and `check R3: 96 of 97 pass` (ARC), planted control
+      still fires (`R3 False -> True`, "the detector works"). Both denominators are now the FULL
+      corpus (46+97=143, since R-04's rescale made the census 0 unrepresentable) rather than the
+      89-case live set the row's own `22/30 NPC and 34/59 ARC` figures were read against — so the
+      pass-rate comparison is fair (73%->100% NPC, 58%->99% ARC) even though the raw counts are not
+      directly subtractable. **This is presence of the channel, not the 100%-reconvergence question
+      the row's own falsifier asks**, and the reconvergence question could not be asked this run
+      (paragraph above) — so the status stays `not_met` rather than read up from this alone.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [W-F, H-111, H-116]
 
@@ -215,6 +268,17 @@ rows:
       reachable producer and now has six, and the pinned slice went 0/16 -> 14/18. The
       corpus-scale rate is not re-run, so this row's `~4%` stands as the last corpus-scale
       figure and its status is unchanged.
+      ⚠⚠ **U10, 2026-09-30: THE CORPUS-SCALE RATE WAS ATTEMPTED AND THE INSTRUMENT BROKE BEFORE
+      PRODUCING ONE.** This row's `measure:` is `wd_acceptance.py`'s fork-and-follow, the same
+      family R-01 re-ran in full over the grown 143-case corpus (`wd_chunk.py` re-sliced
+      `0/36/72/108/143`, all 36 cells run). **See R-01 for the full account and the exact numbers**
+      (`/simplify`, BATCH-CLOSE Phase 2 — not re-quoted here) — `wd_collect.py` fails its own
+      `probed`-must-not-depend-on-`observation_deposit_mode` assertion at the first fixture point,
+      so no reconvergence figure was produced at ANY fixture point and none is claimed here. The
+      `~4%` figure this row already
+      carries is therefore still the last corpus-scale number on file, now provably stale (it
+      predates the corpus growing 89->143) but not replaceable this session. Status stays
+      `not_met`, honestly, on the instrument that owed the number rather than on a guess.
     measure: "python proposals/2026-09-04-degree-sweep/wd_acceptance.py  # fork-and-follow, both arms"
     blocks: [W-F, H-111]
 
@@ -292,11 +356,47 @@ rows:
 
   - id: R-04
     statement: "strategic and management actions must be possible, ie decisions at differing scales"
-    status: not_met
+    status: partial
     measured: >-
       54 of 143 cases are UNREPRESENTABLE — 44 at faction scale, 10 at world scale. The loop
       runs at person, settlement and realm only. The strategic layer has no expression in this
       model; `engine/mc_v18.py` runs the faction scale and the two are not joined.
+      ⚠ PLAN POSITION `20-iii` (2026-09-30) GIVES A PERSON A READ OF FACTION SCALE AND DOES NOT MOVE
+      THIS ROW: `survey` commissions a `faction_sheet` Record -- `queries/faction_q.py::resolve` frozen
+      at the moment of writing -- which its holder reads free (proposal 14's *"scale bridge"*). A
+      person can now SEE a faction; he still cannot act AT faction scale, and nothing he decides reads
+      the sheet (`H-169` limit 5). MEASURED: the corpus status census is unchanged (54
+      UNREPRESENTABLE), because those cases' SCALE is faction or world, which a person-scale document
+      does not make representable.
+      ⚠⚠ **FLIPPED TO `partial`, PLAN POSITION `20-ii` (U9/R-04, THE RE-SCALE), 2026-09-30 —
+      LANDED AFTER `20-iii` ABOVE, AND IT DOES MOVE THIS ROW.** `eaf654c4`'s 54
+      `cases/exercises/*.yaml` overlays (44 `faction` -> mostly `realm`, four explicitly `duchy`;
+      10 `world` -> `realm`, `H-95`'s ruling) closed the census. MEASURED, U10, this instrument, run
+      twice against two tree states (before and after an unrelated concurrent commit,
+      byte-identical both times): `python -m engine.season.harness.corpus_run` prints **NO**
+      `unrepresentable scales:` line at all — the `Counter` this row's `measure:` reads is empty.
+      `DISTINCT WORLDS RUN 143 (scales ['duchy', 'person', 'realm', 'settlement'], ...)` — all 143
+      of 143 cases now run, at four rung kinds, zero excluded. This is U9's own headline acceptance
+      ("unrepresentable scales: {}") MET.
+      ⚠ **AND THE ROW STAYS `partial`, NOT `met`, FOR TWO REASONS STATED RATHER THAN LEFT
+      IMPLIED.** (1) `levy` — the one verb U9's own acceptance text named explicitly ("a `levy`
+      executes with `Act.via` set") as proof a re-scaled world produces a genuine seat-based act,
+      not a relabelled person-scale one — is in the ALWAYS-REFUSED set this same fresh run prints
+      (`VERBS ONLY REFUSED: 8 — ['build', 'commit', 'dispatch', 'found', 'levy', 'migrate',
+      'survey', 'work']`); `H-163` already registers why, and CORRECTED here (BATCH-CLOSE Phase-1
+      antagonist finding) — it is NOT that no corpus person holds the grant. `levy` forms wherever
+      a seat grants `remit:issue` (two of 89 corpus worlds, NPC-008 and NPC-033) and is refused
+      there every time on a DIFFERENT conjunct — `authority`/purview: no corpus seat those
+      overlays mint has a rung to give it purview (`H-163` limit 1). So `levy` SPECIFICALLY has
+      not yet exercised the seat/`via` mechanism the rescale was meant to make reachable through a
+      completed decision — narrower than "no MEASURED decision has," since `issue`, a different
+      remit act gated the same way, already executes in the corpus (`ever`,
+      `test_season_shape.py`); the census cleared before `levy`'s own purview gap did.
+      (2) The deeper gap this row opened with is
+      UNCHANGED: `engine/mc_v18.py` still runs the faction scale and the two are still not joined;
+      no `Faction`-as-actor or Domain-Action mechanism exists in `engine/season/`. A duchy/realm
+      case now runs through the SAME ordinary person-scale verb table as before, at a higher rung
+      — which clears the census, and is not yet the strategic layer the statement names.
     measure: "python -m engine.season.harness.corpus_run  # 'unrepresentable scales:' line"
     blocks: [W10, W13]
 
@@ -407,7 +507,26 @@ rows:
       days earlier and closed it at test 3 — *"NOT A SEAM. The loop IS the mechanism"*, attaching
       RESOLVE → WITNESS, out = *"Claims graded by degree; Failure emits `finding.none` and deposits
       nothing"*, **work item 4.5**. What is missing is a degree PRODUCER, which is work.
-    measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE) -- 38 today; it was '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
+      ⚠⚠ **44 of 44 AS OF U10, 2026-09-30 — THE TABLE GREW 38 -> 44 SINCE ED-IN-0261, AND THE
+      BREAKDOWN MOVED WITH IT.** Measured fresh, this instrument, twice against two tree states
+      (before and after an unrelated concurrent commit, byte-identical both times):
+      `WHERE THE 44 GO: 10 have no predicate/effect · 10 foldable but never even attempted
+      (['confer', 'convene', 'destroy_record', 'determine', 'establish', 'give', 'march', 'oblige',
+      'open_case', 'revoke']) · 8 attempted and always refused · 16 executed`.
+      `VERBS THAT EXECUTED : 16 of 44` (`create_record, examine, fight, interview, issue, move,
+      petition, reconstruct, release, research, restore, speak, surveil, tell, transfer, utter`);
+      `VERBS ONLY REFUSED : 8` (`build, commit, dispatch, found, levy, migrate, survey, work`) —
+      matching the Phase-4 plan's independent claim that the always-refused set is eight, not nine,
+      since `20-ii` returned `release` to the executed set. **This row is still `not_met`**: 16 of
+      44 executing (36%) is proportionally close to the 13-of-38 (34%) reading it replaces — the
+      table grew faster than it was built out, not the reverse. ⚠ THE SIX NEW ROWS ARE NOT
+      RE-DERIVED HERE, PER U10'S OWN SCOPE (bookkeeping against the fresh instrument, not verb
+      archaeology) — the always-refused eight still omit `repudiate`, `tie / knot`, `forge`,
+      `carry`, `succeed`, `exchange`, `comply`, `evade / defy` and `construe`
+      (U7's own group 1/3 list, `workplans/2026-09-09-r-execution-plan.md:1497-1502`), verified by
+      `grep` to have no `@effect_for(...)` registration anywhere in `loop/effects_*.py` — U7 is
+      still open and none of its verbs were built as part of this position.
+    measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE) -- 44 today; it was '38' as of ED-IN-0261, '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
     blocks: [W10-core, H-65, H-94]
 
   - id: R-06
@@ -449,6 +568,15 @@ rows:
       distinct axis directions 13 -> 80 of 86 and did not recover the executed sets. Whether the
       matrix should be re-centred is `ED-IN-0214`, and it is Jordan's: re-calibrating overwrites
       52 cells that document argues individually.
+      ⚠⚠ **U10, 2026-09-30, FRESH OFF THIS ROW'S OWN `measure:` COMMAND** (run twice against two
+      tree states either side of an unrelated concurrent commit, byte-identical both times):
+      `RANKING DISCRIMINATION   15..21 of 31 candidates carry a nonzero conviction score; the rest
+      TIE and the tie is broken BY THE DRAW (U4/H-96), not by the verb's name`. The denominator
+      (31, not 28) moved with the verb table growing 38->44 (R-05) and is not a re-measurement of
+      `U3`'s controlled 28-candidate experiment above — it is `corpus_run`'s own single-actor probe
+      over the current, larger `opening_set`. **Neither reason the row stays `partial` has moved**:
+      `ambitions(p)` still does not exist anywhere under `engine/season/queries/` (checked by
+      `grep`), and the correlated-convictions finding is unaffected by the verb table's size.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' line"
     blocks: [W27, H-62]
 
@@ -512,6 +640,13 @@ rows:
       ⚠ THE CITATION ABOVE IS STALE and is kept as written with the correction attached:
       `decision.py` became the DIRECTORY `decision/` at Arc 1 (`ED-IN-0206`), so the sort lives at
       `decision/choose.py::make_chooser`.
+      ⚠⚠ **U10, 2026-09-30, FRESH OFF THIS ROW'S OWN `measure:` COMMAND** (run twice against two
+      tree states either side of an unrelated concurrent commit, byte-identical both times) — see
+      R-06 for the quoted instrument line (`/simplify`, BATCH-CLOSE Phase 2 — not re-quoted here;
+      both rows share it). **Neither half of why this row stays `partial` has moved**: the DRAW
+      still breaks ties (built, `U4`), and inclination still does not (the alignment table is
+      still sparse) — nothing in U7-U10's own work touched `choose.py`, `choice_temperature` or the
+      alignment table.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' + tie ordering"
     blocks: [W26, H-62]
     needs_jordan: false

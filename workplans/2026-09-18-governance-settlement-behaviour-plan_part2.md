@@ -1340,8 +1340,8 @@ execution** — `corpus_run` and `register --requirements` score the corpus, and
 corpus only; say so in the result. (2) The *was* figures are **2026-09-17 values** — re-run, never
 re-cite.
 **WHAT IS ALREADY ESTABLISHED, so it is not re-diagnosed at the gate:** why `issue` never executes
-(part 1 row 19 — two of `resolvable_verbs()`'s gates). The never-attempted set is pinned at `{confer,
-convene, revoke, destroy_record}` (`test_season_shape.py:6996`).
+(part 1 row 19 — two of `resolvable_verbs()`'s gates). ~~The never-attempted set is pinned at `{confer,
+convene, revoke, destroy_record}` (`test_season_shape.py:6996`).~~ ⚠ **CORRECTED 2026-09-29: that is the CORPUS pin, now eight verbs at `:7715-7716`; the POPULATED realm's is `{destroy_record, give, oblige}`. EXECUTED — the record is `★ EXECUTED` at the foot of this file, kept there so no `_part2:<line>` citation elsewhere moves.**
 **THEN** re-take `CAT-6`'s evidence block and `STR-4`'s conclusion against the new numbers.
 **FALSIFIER.** A single flat *"N of 38 unformable"* reported — that is the category error `13b`
 exposed.
@@ -1757,3 +1757,46 @@ the tree by position 2's pattern. **Not `04`-governed**; Lens B does not run.
 differently?"* The applications corpus is reference either way; only `coherence.py` is mechanism.
 **OBSERVABLE.** A coherence distance with two remedies executes in a threadwork sim, or the directory
 is at a `FORK:` ref. **TIER.** `opus`/`opus` if built.
+
+---
+
+**★ EXECUTED 2026-09-29.** Gap (1) is closed by building it: `harness/aperture.py`
+(`python -m engine.season.harness.aperture [seasons] [seed]`) runs `build_realm` and the 13-seat spine
+one season each and reports a per-holder, per-verb funnel — eligible (`person_side_eligible`) → formed
+(`opening_set` at a real deliberation) → offered (∩ `resolvable_verbs()`) → attempted → executed /
+refused (`corpus_run.attribute`, extracted as the one owner). **CONTROL:** each arm ends in the same
+`content_hash()` and act count as `populated.run` on a same-seed second world (realm 432 = 432,
+spine 47 = 47), so these ARE `harness.populated 1`'s numbers; `tests/test_aperture.py` pins that and
+the counterfactual's honesty, never the figures. Seed 0; seed 1 replicates every shape below.
+- **Resolvable: 25 of 40 rows.** Not: carry, comply, construe, determine, evade / defy, exchange,
+  forge, issue, levy, open_case, repudiate, restore, succeed, thread_read, tie / knot.
+- **Unformable person-side, per holder.** Row-level, for every person in both worlds: `destroy_record`
+  only (`hold:<record>` and `presence` both decline). Seat-withheld beyond it: the 16 `remit_default`
+  seats none (39 of 40); `p_npc_008` (grant `issue`) 8; `p_npc_033` (`dispatch`, `issue`) 6;
+  `p_npc_038` (`determine`, `dispatch`, `issue`) 4; the 27 unseated all 10 seat-gated rows (29 of 40).
+  Spine: 39 of 40 for all 13 holders, identical at depths 0-6 — `person_side_eligible` reads no rung
+  and every spine grant is `remit_default`. 16 of the realm's 19 seats have no rung.
+- **Seat-gated funnel, acts attempted / executed / refused** (seed 1 in brackets): confer 44/0/44
+  [50/0/50] · convene 5/1/4 [2/1/1] · dispatch 9/3/6 [7/3/4] · establish 18/0/18 [9/0/9] · march 3/3/3,
+  every act both [2/2/2] · revoke 10/0/10 [5/0/5]. determine, issue, levy, open_case are formed by
+  17/19/19/17 holders and never offered. Every computed confer/establish/revoke act carries `subject`
+  alone and no subject is an office (`H-80`/`H-94`); their refusal Events carry no conjunct.
+- **Claims by source** (`populated.run`'s own figure): firsthand 3898 · told_by 318 · inferred 0 ·
+  firsthand_via_knot 0 [3770 · 363 · 0 · 0]. `oblige`, `inferred`'s producer since `17a`, forms for 0
+  persons. **Questions by source**, delivered at barrier 2 over every round: claim_landed 3741 to 46
+  persons (19 seated) · need 403 to 46 (19). Spine: claim_landed 119 to 8 of 13 holders, need 0.
+- **STR-4's arm, at all 180 real deliberations, the rule the only difference:** first 1.00 referents /
+  29.84 candidates · one_per_source 1.72 / 50.77 · all 5.89 / 178.37 (max 736). Candidates per
+  referent 29.6-30.3 under every rule; **37 distinct verbs formed under every rule** (22 foldable), none
+  added or lost by a rule. Never formed: `destroy_record`, `give`, `oblige`.
+- **CAT-6 — the ruling is supported; its evidence block is the pre-`13b` world.** *"The 8-to-12 move
+  CANNOT AFFECT ANY RUN"* and arm 1's *"every governance ambition is unformable"* no longer describe
+  the tree: every seated holder is eligible for exactly its grant's rows, no unseated person for any,
+  and seat-gated acts are attempted and some execute. The grant is read off the live `hold`'s
+  `granted_acts`, so `(Tenure, payload)` stayed through `18a` as ruled. The OTHERS half is not what
+  this instrument measures, and in the populated season no computed `confer` executes to feed it.
+- **STR-4 — the answer stands; the gate clause does not.** *"Adding question sources cannot fix
+  variety"* holds (37 under every rule, both seeds). *"VARIETY is bounded by the gate"* / *"10 of 38
+  unformable"* is not the current state: the formed set is 37 of 40. What bounds executed variety is
+  downstream of the gate: 15 of the 37 formed verbs are unresolvable, and confer, establish, revoke,
+  commit, work, transfer, release and examine refuse every attempt in the season, at both seeds.

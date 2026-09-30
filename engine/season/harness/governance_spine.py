@@ -156,6 +156,9 @@ def build(seed: int = 0) -> World:
                                 faction=SPINE_FACTION)
         w.add_tenure(Tenure(f"lt_hold_{key}", pid, oid, "hold", 0))
         w.add_tenure(Tenure(f"lt_in_{key}", pid, rid, "contain", 0))
+        # Plan position `19c`: the holder LIVES at his seat's rung, too -- `populated.build_realm`'s
+        # rule, so the two chains start with residence and presence agreeing (`_eff_migrate`).
+        w.add_tenure(Tenure(f"lt_home_{key}", pid, rid, world_q.RESIDE_KIND, 0))
         if under is not None:
             w.add_tenure(Tenure(f"lt_up_{key}", rid, under, "contain", 0))
         # ⚠ A DWELLING PER HEARTH, BY `populated.build_realm`'s RULE (`ED-SE-0055`, plan position

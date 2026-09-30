@@ -3,20 +3,27 @@
   * `world_q`   -- the thirteen World-FIRST functions, plus `WorldReader`.
   * `person_q`  -- the asker-first family: `entrenchment`, plus `LedgerReader`.
   * `cache`     -- the barrier indexes, single-owned.
-  * `faction_q` -- `resolve(w, prop) -> Faction`, §B.6.1's one constructor for the five-field
-    governance VIEW, and §C.5.1's roster contract calls it by that dotted name. See
-    `faction_q.py`'s own docstring for the ambiguity this is: §A.2:132's enumeration names three
-    modules and `04` is NOT edited to add a fourth (`layer-conformance` B4: "never resolve it by
-    editing `04` ... a spec edited to match its implementation checks nothing"), even though
-    §B.6.1/§C.5.1 -- both also ratified, both untouched -- already presuppose this module exists
-    by that path. Named at the site rather than fixed at the source, per B4's third disposition.
+  * `faction_q` -- `resolve, holdings, purview, superiors, subordinates, at_war, head`. §B.6.1's
+    one constructor for the five-field governance VIEW plus the five Queries plan position
+    `20-ii` (U9/R-04) completed, and §C.5.1's roster contract calls `resolve` by that dotted name.
+    See `faction_q.py`'s own docstring for the history of the ambiguity this WAS: from
+    2026-09-03 to `20-ii`, §A.2:132's enumeration named three modules while §B.6.1/§C.5.1/§B.10-12
+    -- all also ratified, all untouched -- already presupposed this module existed by its own
+    dotted path (`layer-conformance` B4's third disposition: an internal spec ambiguity, not a
+    spec/code one, so the repair was never "edit `04` to match code" -- `CLAUDE.md` §0.05: "a spec
+    edited to match its implementation checks nothing"). **`20-ii` is what makes the module
+    complete rather than partial, and `04 §A.2:132` is edited in the SAME commit, per the
+    contradiction's own resolution** ("edit `04 §A.2:132` at `20-ii`, when the fourth module is
+    complete -- not before"). It also names `SHEET_KIND`, the `record_kinds` member a `survey`
+    freezes one `Faction` into (plan position `20-iii`), and `WAR_MOOD`, the `Proposition.mood`
+    value `at_war` reads -- and refuses at import if `SHEET_KIND`'s roster row stops being
+    `Faction`'s fields. Still no function here writes.
 
 `04_CODE_ARCHITECTURE.md` §A.2: *"queries/ ownerless functions: world_q (World first) · person_q
-(asker first) · cache (barrier-built)"* -- unedited, and now stale on this one point rather than
-authoritative for it -- and the table below it gives every function here the token column `—`:
-**no function in this package takes a write token, so none of them can write.** **All three of
-the enumerated modules exist as of unit L3 (ED-IN-0206)**, and the package is no longer a superset
-of the roster.
+(asker first) · cache (barrier-built) · faction_q (§B.6.1's VIEW, §B.10-12's `resolve`/`at_war`)"*
+-- FOUR members as of `20-ii`, and the table below it gives every function here the token column
+`—`: **no function in this package takes a write token, so none of them can write.** **All four
+of the enumerated modules exist**, and the package is no longer a superset of the roster.
 
 ⚠ **THIS IS THE SAME AMBIGUITY `world_q.py` AND THIS FILE ALREADY RESOLVED ONCE, THE OTHER WAY --
 NAMED, NOT SILENTLY CONTRADICTED.** `world_q.py`'s own docstring argues against a `polity_q.py`

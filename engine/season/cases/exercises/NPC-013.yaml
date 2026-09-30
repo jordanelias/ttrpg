@@ -1,0 +1,17 @@
+# NPC-013 -- `scale:` re-authoring, plan position `20-ii` (U9/R-04, `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md:1459-1474`). Read against the case's own `one_line`/`who_acts` (`engine/season/cases/chain/`), never matched by keyword (`harness/corpus_run.py::rescales`'s own warning: 23 of 47 match no institution word).
+case: NPC-013
+scale:
+  was: faction
+  is: realm
+  why: 'following the reading NPC-008/NPC-033/NPC-038 already established for this corpus (a faction-wide
+    or Crown/Church-level institution re-scales to `realm`, since `rung_kinds` has no `faction` member
+    and the institution''s own reach is realm-wide): `one_line` names Aldric Tormann ''The Fourth Cardinal
+    (Prudence)'' whose tithe policy ''enriches the Church every season'' -- a Church-wide office, the
+    same institution NPC-038''s Cardinal Justice was already re-scaled realm for.'
+  office:
+    post: Cardinal of Prudence
+    body: Cardinal of Prudence
+    remit: []
+    why: '`one_line` names the post directly: ''The Fourth Cardinal (Prudence)''; `body` is authored as
+      `Cardinal of Prudence` (`rosters.yaml: office_bodies`, which derives the Church of Solmund faction
+      from it, the same derivation NPC-038 already uses for its own Cardinal).'

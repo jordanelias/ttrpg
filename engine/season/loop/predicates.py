@@ -1,5 +1,6 @@
-"""`season.loop.predicates` — the six `requires:` cells the grammar does not type (five until
-`establish` joined them at plan position `13f`, 2026-09-25; the count below is the older one).
+"""`season.loop.predicates` — the eight `requires:` cells the grammar does not type (five until
+`establish` joined them at plan position `13f`, 2026-09-25, `give` at position `16` and `oblige`
+at `17a`, both 2026-09-29; the count below is the older one).
 
 EXTRACTED, step 5 of the decomposition (a PURE MOVE but for two call sites, named below). The
 registry and its decorator travel with the functions they register, which is the rule step 3
@@ -25,7 +26,7 @@ from __future__ import annotations
 
 from typing import Optional
 
-from ..data.rosters import RELEASABLE_KINDS, RUNG_KINDS
+from ..data.rosters import BINDS_BASES, RELEASABLE_KINDS, RUNG_KINDS
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..queries import world_q
 from ..state.carriers import Office, subject_of
@@ -339,6 +340,96 @@ def _req_release(w: "World", a: "Act") -> bool:
                for t in w.tenures)
 
 
+@requires_predicate("give")
+def _req_give(w: "World", a: "Act") -> bool:
+    """Plan position 16 (`H-84`): *"the actor holds the subject, and the receiver is present where
+    the actor is"* (r2 `02` §A.7's cell). The subject is the Record; the receiver is the `to`
+    operand. `release`'s and `revoke`'s route -- prose `requires:` plus this predicate -- because
+    the second conjunct has no stem (the row's `requires_typed_note:` says why).
+
+    FOUR CLAUSES, IN THE ORDER A WORLD FACT CAN REFUSE THEM, EACH COMPOSED ON ITS OWNER:
+      1. the subject is a Record (`w.records`) -- `give` hands on a DOCUMENT; the `handover` basis
+         at the gate is general over every non-seat `hold`, and this row narrows the verb;
+      2. the actor is its holder -- `world_q.hold_force`, the one owner of *who holds this*, which
+         RAISES on two live holders rather than picking one (`holonic §15`'s 1 per object);
+      3. the receiver is a person other than the actor -- ED-IN-0210 ruling 1, a two-party act
+         needs its second party, and a give to oneself would close and reopen the same custody;
+      4. the receiver is where the actor is -- `world_q.place_of` for both, the one owner of *the
+         rung a thing is at* (`_ch_co_located` reads the same function), compared for equality.
+    ⚠ A MISSING `to` REFUSES, ON `_req_confer`'s PRECEDENT (a missing `office`). No PERSON reaches
+    this with one: the row is untyped, so `operands_for` carries nothing, and the row's
+    `counterparty: to` makes `opening_set` form no Candidate whose receiver it cannot name. So a
+    `give` executes from an act that names `to` -- a hand-built one today, a person's once `15c`
+    derives `to` from a held writ."""
+    rid = subject_of(a)
+    if not rid or rid not in w.records:
+        return False
+    holder = world_q.hold_force(w, rid)
+    if holder is None or holder.subject != a.actor:
+        return False
+    to = a.payload.get("to") if isinstance(a.payload, dict) else None
+    if not to or to == a.actor or to not in w.persons:
+        return False
+    here = world_q.place_of(w, a.actor)
+    return here is not None and world_q.place_of(w, to) == here
+
+
+@requires_predicate("oblige")
+def _req_oblige(w: "World", a: "Act") -> bool:
+    """Plan position `17a` (r2 item 9; `03_SEATS_AND_CONTENT.md` §A.9; `05` §A.1.5 RULED (b)): *the
+    subject is a seat whose `binds` admits the joiner, the actor does not hold it, and no live
+    `oblige` from the actor to it*. The seat rides `subject`, as `commit`'s Proposition does and as
+    `release` -- the closer every `oblige` ends through -- reads it back.
+
+    ⚠ `_eff_oblige` WAS WRITTEN AND REVERTED ONCE, AND THIS IS WHY IT HAS A PRECONDITION (`ED-IN-0211`,
+    recorded at `_req_release` above): it opened a Tenure to `einhir_texts`, a bare string naming no
+    entity, because an OPENER takes an id and asserts a relation into existence. `03` §A.9: *"the
+    re-build must take the id from the payload and refuse a non-office: that is `_req_oblige`'s
+    job."* So clause 1 is the reversion's own lesson.
+
+    FOUR CLAUSES, EACH A REFUSAL (`duty.refused`) AND NONE A RAISE:
+      1. the subject is a seat -- `w.offices`. A person, a rung, a Record or a bare string refuses.
+         (`holonic §15` also allows `oblige : Person -> Person`; no position builds that half, and
+         `establishment_of` asks only about seats, so admitting it here would open edges nothing
+         reads.)
+      2. the seat's `binds` is a rostered basis (`BINDS_BASES`) -- `ARCH F.17`'s own resolution,
+         *"`oblige`'s `requires` reads the seat's `binds`"*, taken as r2 `05` RULED (b) takes it and
+         over `03` §A.9's refusal of it. `has_conferral_basis`'s shape one field along: the
+         constructor refuses an off-roster value at build, and this asks membership at the act. ⚠
+         ONE BASIS IS RULED (`members_by_admission`: the joiner's own act admits him), so every
+         seat constructed today passes -- conceded in the roster's own note, and a second basis
+         arrives with its rule HERE, not as a value this line would read as the first.
+      3. the actor does not hold the seat -- the occupant is not his own staff. `establishment_of`
+         returns those who serve and `hold_force` the one who sits (§22); `03` §A.14's schema
+         refuses a seat's `obligees:` naming its `holder` for the same reason. Asked as `_req_confer` asks it, by a
+         scan for the actor's own live `hold`, and NOT through `world_q.hold_force`, which RAISES on
+         two live holders: a precondition that raised would kill the season where `duty.refused`
+         should emit, and whether a seat has one holder is not this verb's question.
+      4. no live `oblige` from the actor to this seat -- one edge per pair. `oblige` is MANY per
+         person (`holonic §15`; probe `P40` holds two), never two to the same seat, which would make
+         `establishment_of` list one person twice.
+    ⚠ NOT BUILT, AND SAID SO: `03` §A.9's reach clause (*"its `rung` reaches the actor's containing
+    rung"*). `05` RULED (b) closes `ARCH F.17` by `binds` *"rather than by a substitute rule"*, and the
+    reach clause was part of `03`'s substitute. A person may oblige to a seat from anywhere; what he
+    LEARNS through it is place-bound (`epistemic._ch_post_remit`: at the seat or nothing).
+
+    ⚠ NO COMPUTED ACT REACHES THIS TODAY, and that is the row's `counterparty: subject`, not this
+    predicate: on the UNTYPED row no operand is carried, so `opening_set` forms no `oblige`
+    Candidate at all -- `give`'s precedent (plan position 16) for a second party the chooser cannot
+    yet name -- and no Question's referent is ever a seat in any case (plan position `15` measured
+    it for `petition`). An `oblige` executes from an act that names its seat."""
+    seat = subject_of(a)
+    off = w.offices.get(seat) if seat else None
+    if off is None:
+        return False                       # 1. an opener takes a SEAT's id (ED-IN-0211)
+    if off.binds not in BINDS_BASES:
+        return False                       # 2. ARCH F.17: the seat's `binds` admits the joiner
+    mine = [t for t in w.tenures if t.subject == a.actor and t.object == seat and t.live]
+    if any(t.kind == "hold" for t in mine):
+        return False                       # 3. the occupant is not his own seat's obligee
+    return not any(t.kind == "oblige" for t in mine)   # 4. one edge per (person, seat)
+
+
 @requires_predicate("revoke")
 def _req_revoke(w: "World", a: "Act") -> bool:
     """Part E: *"the office's **revocation basis**, and a live `hold` exists"*.
@@ -456,4 +547,13 @@ def _req_convene(w: "World", a: "Act") -> bool:
 # ⚠ THE SIXTH IS `establish` (`13f`, 2026-09-25), `remit:`-eligible like the first four. Its
 # operands -- post, rung, remit, body/faction, conferral -- are not in `requires_operands`, and its
 # clauses ask the `Office` constructor and `World.class_of`, neither of which is a grammar form.
+# ⚠ THE SEVENTH IS `give` (position `16`, 2026-09-29), an `own` row like `release` and for the
+# same kind of reason: its first conjunct types (`succeed`'s `held_by`) and its second -- *the
+# receiver is present where the actor is* -- has no stem, because `Relation` pairs its operand with
+# the ACTOR and `present_at` asks where the ACTOR is. A typed cell AND a predicate on one row is
+# what `test_wa_one_owner_...` forbids, so the whole cell is the predicate's. ⚠ IF A PERSON-TO-
+# PERSON CO-LOCATION STEM IS EVER RULED, THIS CELL IS THE ONE WAITING FOR IT (r2 `02` §A.7).
+# ⚠ THE EIGHTH IS `oblige` (position `17a`, 2026-09-29), an `own` row. Its clauses read
+# `Office.binds` (no stem reads a seat's own field), the seat's occupant, and a NEGATION -- no live
+# `oblige` already -- and the grammar has no `not`, the same wall `release`'s disjunction hits.
 # ---------------------------------------------------------------------------

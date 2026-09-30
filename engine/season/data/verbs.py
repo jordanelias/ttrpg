@@ -57,9 +57,9 @@ from dataclasses import dataclass, field, fields
 from typing import Optional
 
 from . import files
-from ..gaps import Forbidden, Unspecified
+from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .matrix import MATRIX, Step
-from .requires import TypedRequires, build_typed_requires
+from .requires import REQUIRES_OPERANDS, TypedRequires, build_typed_requires
 from .rosters import (
     PURSUIT_AXES, PURSUITS, RELEASABLE_KINDS, RUNG_KINDS, STRATA, TENURE_KINDS, load_yaml,
     require_member, roster, roster_map,
@@ -196,6 +196,48 @@ class VerbRow:
     # cannot arrive without one; an absent column would read as `false` for every verb, which is
     # the UNKNOWN/False collapse `operands_for` refuses one level down.
     beneficiary: str = ""
+    # ⚠ THE NINTH COLUMN, ADDED AT PLAN POSITION `15` -- THE OTHER PARTY, NAMED BY THE OPERAND
+    # THAT CARRIES THEM. `ED-IN-0210` ruling 1: *a real interaction has a COUNTERPARTY, an OBSTACLE
+    # and a DEGREE*; ruling 2: `petition` is *the first in the set where a counterparty is
+    # structurally required*. `decision/options.py::opening_set` reads it and forms no Candidate
+    # whose counterparty is the person themselves -- the contested-verb rule beside it (`contests:`
+    # makes `subject` the second claimant), generalised to a row that names its counterparty
+    # directly. `""` is the declared absence; the loader requires a named operand to be one the
+    # row's typed cell BINDS, so the Candidate always carries the thing compared -- or, on an
+    # UNTYPED row (plan position 16, `give`), a `requires_operands` member no Candidate can carry,
+    # which makes `opening_set` form none: a second party the grammar cannot yet name.
+    counterparty: str = ""
+    # ⚠ THE TENTH COLUMN'S SECOND SHAPE, ADDED AT PLAN POSITION `19` -- `04 §B.13` INVARIANT 4'S
+    # PER-CONJUNCT HALF (F7): *"every failable clause has a refusal kind -- not only a verb with a
+    # `requires`, but each CONJUNCT of it, and any eligibility alternative that can decline."* §C.4's
+    # fold spells the reader: `emit(row.refusal_for(ELIGIBILITY))` and
+    # `emit(row.refusal_for(failed_conjunct))`. A row may declare `emits_on_refusal:` as a MAPPING
+    # from a FAILABLE CLAUSE to its kinds, and this holds it; `emits_on_refusal` above holds the
+    # UNION, so every reader that asks *is this Event one of the row's refusals* (`corpus_run`,
+    # `loop/driver.py`, `loop/deliberate.py`) is unchanged. `writes`/`writes_by_degree` is the
+    # precedent, one column over. Empty = a flat row, whose every refusal emits the flat tuple exactly
+    # as before `19` -- so no row that did not opt in moves by a byte.
+    refusals_by_clause: dict = field(default_factory=dict)
+
+    def refusal_for(self, clause: Optional[str]) -> tuple:
+        """`04 §C.4`'s `row.refusal_for(clause)`: the kinds a refusal AT `clause` emits.
+
+        A FLAT row answers its flat tuple for every clause, which is every row's behaviour before
+        plan position `19`. A KEYED row answers the clause's own kinds -- and a clause it does not
+        key RAISES, because the loader has already required a key for every clause that can fail
+        (`ELIGIBILITY_CLAUSE` if an alternative can decline, each named conjunct, `WRITE_CLAUSE` if
+        the row writes). Reaching this with an unkeyed clause is therefore a FOLD defect -- a new
+        refusal point nobody declared -- and emitting the union instead would publish kinds for
+        conjuncts that did not fail, which is `ID-9` inside the scarcity channel."""
+        if not self.refusals_by_clause:
+            return self.emits_on_refusal
+        if clause not in self.refusals_by_clause:
+            raise InstrumentDefect(
+                f"{self.verb!r} keys its refusals on {sorted(self.refusals_by_clause)} and was "
+                f"refused at {clause!r}, which it does not key. The loader requires a kind for every "
+                f"failable clause, so a clause arriving here unkeyed is a refusal point the fold "
+                f"added without declaring it (04 §B.13 #4, F7)")
+        return self.refusals_by_clause[clause]
 
     def eligibility_kinds(self) -> tuple:
         return tuple(a.split(":")[0].strip() for a in self.eligibility)
@@ -271,10 +313,21 @@ class VerbRow:
         return tuple(self.writes_by_degree[degree])
 
 # Loader invariant 10's verb-row key set, DERIVED from `VerbRow` rather than listed: every field a
-# YAML column fills (the two `*_by_degree` maps are built from `writes:`/`emits:`, not read), plus
-# `domain` (read for `release`, invariant 6) and `source` (every row's provenance column).
-_VERB_ROW_KEYS = (frozenset(f.name for f in fields(VerbRow) if not f.name.endswith("_by_degree"))
+# YAML column fills (the two `*_by_degree` maps are built from `writes:`/`emits:`, and `19`'s
+# `refusals_by_clause` from `emits_on_refusal:`, not read), plus `domain` (read for `release`,
+# invariant 6) and `source` (every row's provenance column).
+_VERB_ROW_KEYS = (frozenset(f.name for f in fields(VerbRow)
+                            if not f.name.endswith(("_by_degree", "_by_clause")))
                   | {"domain", "source"})
+
+# THE TWO FAILABLE CLAUSES THE FOLD OWNS, BESIDE A ROW'S OWN NAMED CONJUNCTS (plan position `19`) --
+# the keys a keyed `emits_on_refusal:` uses for them. `ELIGIBILITY_CLAUSE` is `04 §C.4`'s own
+# `refusal_for(ELIGIBILITY)`: no alternative of the row admitted the actor. `WRITE_CLAUSE` is F9's:
+# the precondition held and the write moved nothing (`NoOpReceipt`, `state/gate.py`) -- an effect
+# that DECLINED, which is a refusal the row must name like any other. Defined here, beside the loader
+# that requires them, and imported by the fold (`loop/resolve.py`) that emits them.
+ELIGIBILITY_CLAUSE = "eligibility"
+WRITE_CLAUSE = "write"
 
 
 def _derive_openers_from_effects() -> dict:
@@ -287,39 +340,83 @@ def _derive_openers_from_effects() -> dict:
     `Tenure(...)` construction itself, inside the function `@effect_for` registers for that verb:
     every site today names `kind` as a STRING LITERAL -- `Tenure(id, subject, object, kind, ...)`,
     positional, or a `kind=` keyword -- so an AST walk over `effects.py`'s own source (read as
-    TEXT, via `files.EFFECTS_PY`, never imported -- no `data` -> `loop` import edge) reads the
-    identical fact the hand-written roster used to transcribe, with no second copy to fall behind.
+    TEXT, never imported -- no `data` -> `loop` import edge) reads the identical fact the
+    hand-written roster used to transcribe, with no second copy to fall behind.
 
     Returns EVERY tenure kind, including the ones no effect opens today -- an empty list, the same
     "declared means present" contract the hand-written roster kept -- because a kind with a
     `writes: Tenure.since` cell and no opener (`commit`, `oblige`, `succeed`, `tie`, `knot`) is a
     real, disclosed hole, not an absent declaration. MEASURED against the mapping it replaced: the
-    two agree exactly (`hold: [confer, create_record]`, `contain: [move]`, the other five empty)."""
+    two agree exactly (`hold: [confer, create_record]`, `contain: [move]`, the other five empty).
+
+    ⚠ THE WALK FOLLOWS A REGISTERED EFFECT INTO THE MODULE'S OWN HELPERS (plan position `15`).
+    `create_record`, `issue` and `petition` share ONE mint, `_mint_document`, and the `hold` it
+    opens is constructed there rather than in any decorated body -- so a walk confined to the
+    decorated function would have DROPPED `create_record` from `hold`'s openers the day the mint
+    was shared, a derived fact going quietly wrong in the direction nobody reads. A call to a
+    function defined at the top of the SAME FILE is walked as if inlined (transitively, each helper
+    once); anything imported -- including a cross-file helper in a SIBLING `effects_*.py` -- is not
+    this file's and is not walked. MEASURED after the change: `hold: [confer, create_record, issue,
+    petition]`, every other kind unchanged.
+
+    ⚠⚠ SEVEN FILES, NOT ONE, SINCE THE PHASE-4 PER-SUBSYSTEM SPLIT (2026-09-30). `effects.py` itself
+    is now a thin aggregator -- no `@effect_for`, no `Tenure(...)` -- and every decorated function
+    moved into one of its `effects_*.py` siblings (`files.effects_modules()`, discovered by name
+    rather than hand-listed, `loop_modules`'s own lesson one split down). Each sibling is walked on
+    its OWN parse tree, so `helpers` is per-file too: a decorated function's cross-file calls (to
+    `effects_shared.py`'s `_operand`, `_decline_ascent`, `_new_oblige_term`, `_shift`,
+    `_exercised_office`, `_oblige_term`) are not followed, because none of them construct a Tenure
+    -- checked by hand against every shared helper's body, not assumed. Had one, a split confined to
+    one file at a time would MISS it the same way a walk confined to `EFFECTS_PY` alone now misses
+    everything; the day a shared helper is given a `Tenure(...)` call, this docstring's claim goes
+    false and this function must walk `effects_shared.py` from every sibling that reaches it, not
+    only from its own file."""
     openers: dict = {k: set() for k in TENURE_KINDS}
-    tree = ast.parse(files.EFFECTS_PY.read_text(encoding="utf-8"))
-    for node in ast.walk(tree):
-        if not isinstance(node, ast.FunctionDef):
-            continue
-        verb = None
-        for dec in node.decorator_list:
-            if (isinstance(dec, ast.Call) and isinstance(dec.func, ast.Name)
-                    and dec.func.id == "effect_for" and dec.args
-                    and isinstance(dec.args[0], ast.Constant)):
-                verb = dec.args[0].value
-        if verb is None:
-            continue
-        for call in ast.walk(node):
-            if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Name)
-                    and call.func.id == "Tenure"):
+
+    for path in files.effects_modules():
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        helpers = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+
+        def _reached(fn, helpers=helpers) -> list:
+            """`fn` and every module-level helper IN THIS SAME FILE it calls, transitively, each
+            once. `helpers` is bound as a default argument so each closure keeps ITS OWN file's
+            map rather than the loop variable's final value (the late-binding trap `/simplify`
+            exists to catch)."""
+            out, todo, seen = [], [fn], set()
+            while todo:
+                f = todo.pop()
+                if f.name in seen:
+                    continue
+                seen.add(f.name)
+                out.append(f)
+                todo.extend(helpers[c.func.id] for c in ast.walk(f)
+                            if isinstance(c, ast.Call) and isinstance(c.func, ast.Name)
+                            and c.func.id in helpers)
+            return out
+
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.FunctionDef):
                 continue
-            kind = None
-            if len(call.args) > 3 and isinstance(call.args[3], ast.Constant):
-                kind = call.args[3].value
-            else:
-                kind = next((kw.value.value for kw in call.keywords
-                            if kw.arg == "kind" and isinstance(kw.value, ast.Constant)), None)
-            if kind is not None:
-                openers.setdefault(kind, set()).add(verb)
+            verb = None
+            for dec in node.decorator_list:
+                if (isinstance(dec, ast.Call) and isinstance(dec.func, ast.Name)
+                        and dec.func.id == "effect_for" and dec.args
+                        and isinstance(dec.args[0], ast.Constant)):
+                    verb = dec.args[0].value
+            if verb is None:
+                continue
+            for call in (c for f in _reached(node) for c in ast.walk(f)):
+                if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Name)
+                        and call.func.id == "Tenure"):
+                    continue
+                kind = None
+                if len(call.args) > 3 and isinstance(call.args[3], ast.Constant):
+                    kind = call.args[3].value
+                else:
+                    kind = next((kw.value.value for kw in call.keywords
+                                if kw.arg == "kind" and isinstance(kw.value, ast.Constant)), None)
+                if kind is not None:
+                    openers.setdefault(kind, set()).add(verb)
     return {k: sorted(v) for k, v in openers.items()}
 
 
@@ -374,15 +471,45 @@ def _load_verb_table() -> dict:
             flat_emits = tuple(dict.fromkeys(e for v in emits_by_degree.values() for e in v))
         else:
             flat_emits = tuple(raw_emits)
+        # ⚠ `emits_on_refusal:` TAKES TWO SHAPES TOO (plan position `19`, invariant 4's per-conjunct
+        # half). A mapping is keyed by FAILABLE CLAUSE; a sequence is the flat form. The union is the
+        # flat column either way, so every reader of *is this a refusal* sees the same kinds.
+        raw_refusals = r["emits_on_refusal"]
+        by_clause: dict = {}
+        if isinstance(raw_refusals, dict):
+            by_clause = {str(k): tuple(v or ()) for k, v in raw_refusals.items()}
+            flat_refusals = tuple(dict.fromkeys(k for v in by_clause.values() for k in v))
+        else:
+            flat_refusals = tuple(raw_refusals)
         row = VerbRow(name, r["stratum"], tuple(r["eligibility"]), r["requires"],
                       flat, flat_emits,
-                      tuple(r["emits_on_refusal"]), r["grade"],
+                      flat_refusals, r["grade"],
                       str(r.get("scale") or "person").strip(),
                       str(r.get("contests") or "").strip(),
                       by_degree, emits_by_degree,
                       build_typed_requires(name, r.get("requires_typed")),
                       str(r.get("requires_typed_note") or "").strip(),
-                      str(r.get("beneficiary") or "").strip())
+                      str(r.get("beneficiary") or "").strip(),
+                      str(r.get("counterparty") or "").strip(),
+                      refusals_by_clause=by_clause)
+        # THE COUNTERPARTY IS AN OPERAND THE ACT CARRIES, OR IT IS NOTHING. `opening_set` compares
+        # it with the person; a name the typed cell does not BIND is absent from every Candidate,
+        # so the comparison would pass silently and the rule would be a column nothing enforced.
+        # ⚠ AN UNTYPED ROW MAY NAME ONE (plan position 16, `give`), AND IT MEANS SOMETHING ELSE
+        # THERE: no cell binds it, so no Candidate carries it, and `opening_set` forms none -- the
+        # row declares a second party the grammar cannot yet name, and a person does not mint an
+        # act with that hole (`operands_for`'s rule, reached through the one column that says the
+        # hole is there). The name must still be a `requires_operands` member, so a typo is refused
+        # rather than silently making a verb unformable. A TYPED row keeps the stricter rule: a
+        # counterparty its own cell does not bind is a typo, not a declaration.
+        if row.counterparty and (
+                row.counterparty not in REQUIRES_OPERANDS if row.requires_typed is None
+                else row.counterparty not in row.requires_typed.operands()):
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} names counterparty {row.counterparty!r}, which its "
+                "`requires_typed:` cell does not bind (or, on an untyped row, which is no "
+                "`requires_operands` member). A counterparty is compared with the person forming "
+                "the Candidate, and only a bound operand is always carried.")
         # A row that declares `requires_typed: none` must SAY WHY. The three admissible reasons
         # are a well-formedness constraint on the Act (§F.24a: `issue`, `open_case` -- *"they
         # belong in the `Act` schema and are refused at construction"*), a `per act` cell, and an
@@ -540,10 +667,12 @@ def _load_verb_table() -> dict:
         # REFUSAL KIND. A clause can fail if the row has a `requires` cell, or if any eligibility
         # alternative is other than `own` (which cannot decline). Such a row with an empty
         # `emits_on_refusal` would refuse by emitting a kind nobody declared.
-        # ⚠ THE PER-CONJUNCT HALF OF F7 IS NOT ENFORCED HERE. `emits_on_refusal` is one flat
-        # tuple per row, so a multi-conjunct `requires_typed` cell (`restore`, `examine` and
-        # `surveil` carry an `AllOf` of two today) cannot say which conjunct a kind refuses for
-        # without a keyed schema; that schema does not exist.
+        # ⚠ THE PER-CONJUNCT HALF OF F7 IS ENFORCED BELOW SINCE PLAN POSITION `19`, FOR A KEYED ROW.
+        # It said *"NOT ENFORCED HERE ... that schema does not exist"* until `19` built the schema
+        # for its first consumers (`levy`, `open_case`, `determine`, `issue`). A FLAT row is still
+        # checked at row grain only (the block directly below): `restore`, `examine` and `surveil`
+        # carry an `AllOf` of two and one flat kind, which is lawful -- a flat row DECLARES that all
+        # its conjuncts refuse alike -- and moving them is not `19`'s.
         _failable = (row.requires.strip() not in NO_PRECONDITION
                      or any(k != "own" for k in row.eligibility_kinds()))
         if _failable and not row.emits_on_refusal:
@@ -552,6 +681,53 @@ def _load_verb_table() -> dict:
                 f"eligibility other than `own`: {list(row.eligibility)}) and an empty "
                 "`emits_on_refusal:`. 04 §B.13 #4 (F7) -- every failable clause has a refusal "
                 "kind; a refusal with no declared kind is a fabricated emission.")
+        # LOADER INVARIANT 4, PER-CONJUNCT HALF (plan position `19`; `04:465-468`, F7): A KEYED ROW
+        # KEYS EXACTLY ITS FAILABLE CLAUSES. The clause set is DERIVED from the row, never listed:
+        #   * `ELIGIBILITY_CLAUSE`  iff an eligibility alternative can decline (anything but `own`);
+        #   * every NAMED top-level conjunct of its typed cell (`conjunct:`, `data/requires.py`) --
+        #     and a keyed row with a precondition must be TYPED and name EVERY conjunct, because a
+        #     predicate's conjuncts (`REQUIRES_PREDICATES`) live in `loop/`, which this loader may not
+        #     import, so a keyed predicate row is a set of keys nothing here can check;
+        #   * `WRITE_CLAUSE`         iff the row writes (an effect can decline, F9's `NoOpReceipt`).
+        # MISSING is a failable clause with no kind -- the fold would reach `refusal_for` and raise;
+        # EXTRA is a kind for a clause that cannot fail, read by nothing (`ID-13`). A name on a FLAT
+        # row is refused for the same reason: nothing keys it. A CONTESTED row may not key its
+        # refusals yet: the seam's party gap (`loop/resolve.py::_party_gap_refusal`) is a refusal
+        # point this schema has no clause for, and it would emit the union. ONE refusal names every
+        # defect found, so a table edit that breaks three things is told all three.
+        _names = row.requires_typed.conjuncts() if row.requires_typed is not None else ()
+        if by_clause or _names:
+            _expected, _defects = set(_names), []
+            if any(k != "own" for k in row.eligibility_kinds()):
+                _expected.add(ELIGIBILITY_CLAUSE)
+            if row.writes:
+                _expected.add(WRITE_CLAUSE)
+            if not by_clause:
+                _defects.append(f"names conjuncts {list(_names)} and keys no refusal to them")
+            if row.requires.strip() not in NO_PRECONDITION and (
+                    row.requires_typed is None or not row.requires_typed.names
+                    or None in row.requires_typed.names):
+                _defects.append("keys its refusals, so its precondition must be a typed cell with "
+                                "EVERY top-level conjunct named")
+            if row.contests:
+                _defects.append("declares `contests:`, whose party-gap refusal no clause names")
+            if set(_names) & {ELIGIBILITY_CLAUSE, WRITE_CLAUSE}:
+                _defects.append(f"names a conjunct after a fold clause "
+                                f"({sorted(set(_names) & {ELIGIBILITY_CLAUSE, WRITE_CLAUSE})})")
+            _missing = sorted(_expected - set(by_clause)) if by_clause else []
+            _extra = sorted(set(by_clause) - _expected)
+            _empty = sorted(k for k, v in by_clause.items() if not v)
+            if _missing:
+                _defects.append(f"keys no refusal for the failable clause(s) {_missing}")
+            if _extra:
+                _defects.append(f"keys refusals for {_extra}, which is no failable clause of it")
+            if _empty:
+                _defects.append(f"keys an EMPTY refusal for {_empty}")
+            if _defects:
+                raise SystemExit(
+                    f"verb_table.yaml: {name!r} " + "; ".join(_defects) + ". 04 §B.13 #4 (F7), "
+                    "the per-conjunct half -- every failable clause has a refusal kind, and a key "
+                    f"is a failable clause. Its failable clauses: {sorted(_expected)}.")
         out[name] = row
     # -----------------------------------------------------------------------
     # LOADER INVARIANT 6 (`04_CODE_ARCHITECTURE.md` PART D row 15, MECHANICAL at load):
@@ -591,10 +767,13 @@ def _load_verb_table() -> dict:
     # ⚠ `RELEASABLE_KINDS` AND NOT A SECOND `frozenset(TENURE_KINDS) - {"contain"}`. The
     # derivation lives once, in `data/rosters.py` beside the roster it reads; this is the
     # comparison against the verb table's DECLARED column, which is the whole point of the column.
+    # The excluded kinds are READ OFF the derivation rather than spelled, so the message cannot go
+    # stale when the exclusion grows (`contain`, and `reside` since plan position `19c`).
     if _release_domain != RELEASABLE_KINDS:
         raise SystemExit(
             f"verb_table.yaml: `release` declares domain {sorted(_release_domain)}, and "
-            f"`tenure_kinds \\ {{contain}}` is {sorted(RELEASABLE_KINDS)}. Loader invariant 6 "
+            f"`tenure_kinds \\ {sorted(frozenset(TENURE_KINDS) - RELEASABLE_KINDS)}` is "
+            f"{sorted(RELEASABLE_KINDS)}. Loader invariant 6 "
             "(04 PART D row 15) requires them equal: a kind in the roster and not in this "
             "domain is an edge that can be opened and never closed, and a kind here and "
             "not in the roster is a closer for a relation that does not exist.")
@@ -647,9 +826,10 @@ def tenure_kinds_without_an_opener() -> list:
     (`_derive_openers_from_effects()`, an AST walk over `loop/effects.py`) is empty -- relations no
     act can open today. Reported, not refused: an unopenable kind may be correct for now, and
     which of them are holes is a judgement `rosters.yaml`'s `tenure_kinds` row comment records
-    (`commit`/`oblige`/`succeed`/`tie`/`knot`, unchanged since `OPENERS-DERIVE` replaced the
-    hand-written mapping with this function -- the same holes, MEASURED the same way, computed now
-    instead of read off the roster)."""
+    (`commit`/`oblige`/`succeed`/`tie`/`knot` when `OPENERS-DERIVE` replaced the hand-written
+    mapping with this function; `succeed`/`tie`/`knot` since `commit` gained its opener at plan
+    position `7a` and `oblige` at `17a` -- computed, not read off the roster, so neither needed an
+    edit here to leave the list)."""
     return sorted(k for k, vs in _OPENERS_FROM_EFFECTS.items() if not vs)
 
 VERB_TABLE: dict = {}          # filled after STRATA loads, at the bottom of the roster block

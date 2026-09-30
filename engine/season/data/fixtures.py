@@ -108,19 +108,7 @@ def _load_matter_tables() -> tuple:
     floors = table("band_floors")
     weights = roster_map("subsistence_weight", "weights")
     for name, got in (("wear_per_season", set(rates)), ("band_floors", set(floors))):
-        if got - kinds:
-            raise Forbidden(
-                f"{name} names site kind(s) no roster carries: {sorted(got - kinds)}",
-                "rosters.yaml",
-                needs="add the kind to `site_kinds`, or drop the row",
-                law="S42.2.1 -- an unregistered kind must RAISE, and a table keyed past its own "
-                    "roster is that same silent answer arriving through the data file")
-        if kinds - got:
-            raise Ungraded(
-                f"{name} has no row for site kind(s): {sorted(kinds - got)}", "rosters.yaml",
-                needs=f"a {name} row per site kind",
-                law="S42.2.1 -- 'a wear table that returns 20 for an unregistered site kind does "
-                    "not fail -- it answers, plausibly and wrongly, forever'")
+        _check_keyed_on_site_kinds(name, got, kinds)
     yields = table("site_yield")
     if set(yields) - kinds:
         raise Forbidden(
@@ -151,7 +139,41 @@ def _load_matter_tables() -> tuple:
             law="#353 §10.4 -- MatterKind is a REGISTRY. Open means addable, not unchecked")
     return rates, floors, weights, yields
 
+
+def _check_keyed_on_site_kinds(name: str, got: set, kinds: set) -> None:
+    """THE BOTH-DIRECTION KEY CHECK every per-site-kind mapping gets: a row for a kind no roster
+    carries is FORBIDDEN, and a site kind with no row is UNGRADED. One owner since plan position
+    `19c` gave it a third caller (`capacity_floor`), extracted unchanged from `_load_matter_tables`'s
+    loop so the three mappings cannot come to disagree about what "keyed on `site_kinds`" means (§8)."""
+    if got - kinds:
+        raise Forbidden(
+            f"{name} names site kind(s) no roster carries: {sorted(got - kinds)}",
+            "rosters.yaml",
+            needs="add the kind to `site_kinds`, or drop the row",
+            law="S42.2.1 -- an unregistered kind must RAISE, and a table keyed past its own "
+                "roster is that same silent answer arriving through the data file")
+    if kinds - got:
+        raise Ungraded(
+            f"{name} has no row for site kind(s): {sorted(kinds - got)}", "rosters.yaml",
+            needs=f"a {name} row per site kind",
+            law="S42.2.1 -- 'a wear table that returns 20 for an unregistered site kind does "
+                "not fail -- it answers, plausibly and wrongly, forever'")
+
+
+def _load_capacity_floor() -> dict:
+    """`24d-ii`'s FLOOR (landed with its caller, plan position `19c`): `rosters.yaml:
+    capacity_floor.floors`, `{site kind: the lower bound on world_q.capacity}`, checked in both
+    directions against `site_kinds` exactly as `wear_per_season` and `band_floors` are. The row says
+    why its cells hold the floor and nothing else, and `H-167` grades and sweeps the number. A
+    SEPARATE loader rather than a fifth value of `_load_matter_tables`: that function's four-tuple
+    is unpacked by callers outside this module, and the floor is not a matter-economy table."""
+    floors = roster_map("capacity_floor", "floors")
+    _check_keyed_on_site_kinds("capacity_floor", set(floors), set(roster("site_kinds")))
+    return floors
+
+
 WEAR_RATES, BAND_FLOORS, SUBSISTENCE_WEIGHTS, SITE_YIELD = _load_matter_tables()
+CAPACITY_FLOORS = _load_capacity_floor()
 
 DEFAULT_FIXTURES = Fixtures(
     # S48: condition is an int on an EXPORTED scale. S22 assigns the scale to `params`, and the
@@ -253,8 +275,9 @@ DEFAULT_FIXTURES = Fixtures(
     # claim->question link, while `all_five` removes 91% of the deposits and leaves that link
     # exactly where `total` had it. So the arm chosen is the one that buys the epistemic gap
     # without paying for it upstream. (`all_five` names five channels and is currently a
-    # measurement of THREE -- `chronicle` matches nobody and `post_remit` needs an office whose
-    # remit covers the emitting verb; `test_w6_every_named_channel_has_a_predicate…` asserts
+    # measurement of THREE -- `chronicle` matches nobody and `post_remit` needs an obligee at the
+    # seat an act was exercised through (since `17a`; before it, an office whose remit covers the
+    # emitting verb); `test_w6_every_named_channel_has_a_predicate…` asserts
     # exactly which two are inert.)
     #
     # ⛔⛔ AND IT IS NOT FREE -- **THE COST IS LARGER THAN THE REASON, AND THIS COMMENT FIRST SAID
@@ -366,6 +389,9 @@ DEFAULT_FIXTURES = Fixtures(
     # fixed the other three and left these hardcoded in probe bodies, unswept.
     # roster-exempt: Fixtures keys, as `wear_per_season` above. These are H-08 and are swept.
     band_floors=BAND_FLOORS,          # `W8` -- `rosters.yaml: tables.band_floors`, `H-08`
+    # `24d-ii`, landed with its caller at plan position `19c`: the lower bound on
+    # `world_q.capacity`, per site kind, read off `rosters.yaml: capacity_floor` (`H-167`, swept).
+    capacity_floor=CAPACITY_FLOORS,
     # ⚠ `W8` / `H-26`. #353 §22.3 names *"`season_factor`'s distribution"* as a value with NO
     # OWNER, and §25 says `yield` is *"blocked on"* it -- so the SHAPE ruled is a DISTRIBUTION and
     # what is injected here is a degenerate one. The sweep is on its value, which is the only axis
@@ -583,4 +609,66 @@ DEFAULT_FIXTURES = Fixtures(
     # branch in this position's whole set. `False` is the control (no extraction effect), matching
     # `H-128`'s neutral-start convention; nothing reads it today for the same reason as above.
     displayed_anger_extracts_concessions=False,   # `H-154`, swept False (control, SHIPPED) / True
+    # `H-155` (plan position `15b`, r2 `02_THE_WRIT_AND_THE_WORD.md` §A.10.2, `ED-IN-0222`). HOW
+    # FAR A RUMOUR MAY DRIFT A BARE NUMBER at `Partial`. r2's own words give the fixture its
+    # licence on `default_transfer_amount`'s precedent (`:432-436` above): "direction ruled,
+    # magnitude open, is exactly a fixture." `0` is the CONTROL -- `_told_value`'s drift branch
+    # reads `math.ceil(band * abs(before))` and a `0` band makes that `0`, so no draw can ever
+    # clear the `max_delta < 1` floor and the branch is a verbatim no-op, reproducing the
+    # pre-15b told channel exactly for a numeric claim. Shipped at `0.5`, not the control: unlike
+    # `body_step` (H-125), this magnitude scales PROPORTIONALLY to whatever the claim already
+    # carries rather than adding an absolute quantity into an economy the corpus may not stock, so
+    # the "famine with no larder" hazard that forced `body_step` to the control does not apply
+    # here, and the mechanism's own falsifier (§A.10's OBSERVABLE) asks for a telling that is
+    # actually lossy at `Partial`, not one parked inert pending a later ruling.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-155 -- the drift band; r2 states the direction and leaves the magnitude, and the sweep brackets no-drift / shipped / aggressive]
+    told_drift_band=0.5,               # `H-155`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
+    # `H-159` (plan position `17b`, `04 §B.8`'s `term?`; `T-n`, `architecture/meta/01_AXIOMS.md`:
+    # *"the opening act declares the terms"*). HOW MANY SEASONS AN `oblige` RUNS BEFORE IT MATURES
+    # UNPAID -- the term `_eff_oblige` declares on the edge it opens (`matures_at = tick + this`),
+    # and the length each paying act winds it on by (`_eff_transfer`'s renewal: `matures_at + this`,
+    # from where the term STOOD, so a payment made early buys the next term rather than being lost).
+    # `H-80`'s shape exactly, and `record_stage_term` above is its precedent: the ACT declares the
+    # term, a computed act carries no operands to declare one with, so this is the instrument's
+    # declared stand-in. Injection sites: `loop/effects.py::_eff_oblige` and `_eff_transfer`.
+    # ⚠ `None` IS THE CONTROL AND IT IS THE PRE-`17b` TREE EXACTLY: no `oblige` carries a term,
+    # nothing matures at MATTER, no payment renews anything, and an establishment persists until
+    # released -- `F.18`'s own *"assumed"* column. `1` is the shortest term the loop can express, and
+    # it is harsh in a way worth knowing: RESOLVE runs AFTER MATTER within a tick, so the only window
+    # to pay is the rest of the season in which the oblige was taken. `4` is SHIPPED: a holder has
+    # three further seasons to pay in. NOT MEASURED, AND IT CANNOT BE YET -- no computed act forms an
+    # `oblige` (its row is untyped; plan position `17a`'s own docstring), so no corpus run mints a
+    # term and the shipped value moves no artifact; the falsifiers set it explicitly.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-159 -- the term an oblige is declared for; T-n rules THAT the opening act declares it and no document gives the length, so it is injected and swept None / 1 / 4]
+    oblige_term=4,                     # `H-159`, swept None (control) / 1 / 4 (SHIPPED)
+    # `H-158` (plan position `17b`, `04 §B.7` `Seat := ( …, upkeep, … )`, `F.18`). WHAT A SEAT PAYS
+    # EACH PERSON OBLIGED TO IT, PER TERM, WHEN THE SEAT DECLARES NO `upkeep` OF ITS OWN -- which is
+    # every seat any builder makes today. Read at ONE place, `queries/world_q.py::upkeep_of`, which
+    # `_eff_transfer` asks when a seated holder pays out of the seat's own rung. `default_transfer_
+    # amount`'s precedent (`H-94`, above) for both the shape and the arms: *"direction ruled,
+    # magnitude open, is exactly a fixture."* `0` is the CONTROL of the MAGNITUDE -- keeping an
+    # establishment costs nothing, so any payment at all renews every obligee at the home it
+    # reaches; it is not the pre-`17b` tree (that is `oblige_term = None`), because the TERM still
+    # matures unless somebody pays. `1` is SHIPPED: `default_transfer_amount`'s own unit, so the
+    # default computed transfer, were one ever to pay, covers exactly one obligee. `3` makes an
+    # establishment three times as dear.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-158 -- the per-obligee upkeep; ARCH §B.7 declares the field and F.18 its mechanism, and no document gives the amount, so it is injected and swept 0 / 1 / 3]
+    default_upkeep=1,                  # `H-158`, swept 0 (control) / 1 (SHIPPED) / 3
+    # `H-161` (plan position `19`, `determine`; `21_RECONCILIATION.md:575`'s observable, *"below
+    # quorum, `determine.refused`"*). HOW MANY PERSONS MUST SIT ON A BENCH FOR IT TO DETERMINE A
+    # MATTER -- the RIGHT side of `determine`'s quorum conjunct (`bench.size >= quorum`, read by
+    # `WorldReader`'s `quorum` stem, the only injection site). QUORUM IN ITS ORDINARY SENSE, the
+    # members a body needs to transact business, and NOT the proceedings design's vote threshold (C-7:
+    # live `commit`s to the disposition >= the quorum), which needs a disposition Proposition the
+    # members commit to and the two grammar entries A.1 declared -- the SC lane's PHASE 2 step 15,
+    # not `19`'s. `arrangements.yaml` owns a real `quorum:` key, required only on `disposal:
+    # declared` rows, and no docketed matter maps to its arrangement yet (`judging_set`'s
+    # docstring), so this is the stand-in for that key, `record_stage_term`'s shape.
+    # `1` is SHIPPED and it is the LOOSEST value, not an argued one: the one seeded arrangement whose
+    # disposal is a Tenure (`arbitration`) has ONE decider, so a bench of one must be able to sit --
+    # `speech_kinds`' *"the loosest floor rather than an authored restriction"* (`arrangements.yaml`).
+    # At `1` the conjunct cannot refuse an actor the bench conjunct admitted (he is himself a member),
+    # which is stated, not hidden: it is observable at `2` and `3`, where a lone judge is refused.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-161 -- the bench quorum; the observable rules THAT a determination below quorum refuses, and no document gives the number for a bench-disposal arrangement, so it is injected and swept 1 / 2 / 3]
+    bench_quorum=1,                    # `H-161`, swept 1 (SHIPPED, loosest) / 2 / 3
 )

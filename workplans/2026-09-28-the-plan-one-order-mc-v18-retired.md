@@ -183,75 +183,94 @@ four rows of that table found stale in this pass are corrected here, not there: 
 
 | # | handle | lane | `STATE` | `GATE` | placed at |
 |---|---|---|---|---|---|
-| 1 | **CLOSE-PASS** | IN | OPEN · partial | — | Phase 1 · 1 |
+| 1 | **CLOSE-PASS** | IN | **DONE** (`ec1a9d0`, §8.3) -- row corrected, terminal whole-of-Phase-2 critique, 2026-09-30: this row read OPEN while §3.1 item 1 has read DONE since Phase 1 closed | — | Phase 1 · 1 |
 | 2-i ✦ | **RET-SC (stub)** | IN/SC | **DONE** (stub retired pre-adoption at `0d881e8`; falsifier planted this session) | — | Phase 1 · 3 |
 | 2-ii ✦ | **RET-SC (kernel)** | IN/SC | BLOCKED | `28-iii`, `29b`, `22` | Phase 4 · k |
 | 3–7 | G1a · G1b · G2 · G3 · G4 | IN | **DONE** | — | §2.2 |
-| 7a | **COMMIT-EFFECT** | IN | OPEN | `15`, `15c`, `15b` | Phase 2 |
+| 7a | **COMMIT-EFFECT** | IN | **DONE** | `15`, `15c`, `15b` | Phase 2 |
 | 8 | **H-98 (b)** | IN/PC | OPEN | `FIGHT-RENAME` (serial edge, §3.5); 7 ✓ | Phase 3 |
 | 9 | **PC-SURRENDER** | PC | **JORDAN** | §5.1 item 7 | Phase 3 |
 | 10 | **U5 / R-07** | IN | OPEN | 7 ✓ | Phase 3 (head) |
 | 11 | **U6** | IN | OPEN | `10` | Phase 3 |
-| 11a | **REACH** | IN | OPEN | S4 ✓ (closed, old `_part2:750`) · 4 ✓ | Phase 2 (head) |
-| 11b | **CALENDAR-EMIT** | IN | OPEN | `11a` | Phase 2 |
+| 11a | **REACH** | IN | **DONE** | S4 ✓ (closed, old `_part2:750`) · 4 ✓ | Phase 2 (head) |
+| 11b | **CALENDAR-EMIT** | IN | **DONE** | `11a` | Phase 2 |
 | 12 | **H-62-rest** | IN | BLOCKED | the cells commit (`12b`/`12c`) | Phase 3 |
 | 12b | **AFFILIATIONS** | IN | **JORDAN** | §5.1 items 1, 3 | Phase 3 (cells commit) |
 | 12c | **THE FIFTEEN** | IN | **JORDAN** | §5.1 items 1, 2 | Phase 3 (cells commit) |
 | 12d | **THE RENAME** | IN | OPEN · partial | its substrate half rides the cells commit | Phase 3 (cells commit) |
 | 12e ✦ | **H12 / H13, held** | IN | BLOCKED | H12: a post-H6 re-measure (not Jordan, §5.2); H13: §5.1 item 5 | Phase 3 |
-| 13 | **W28-cast** | IN | OPEN | — | Phase 1 · 8 |
+| 13 | **W28-cast** | IN | **DONE**, narrowed scope -- 5 of 46 NPC cases (§8.7) -- row corrected, terminal whole-of-Phase-2 critique, 2026-09-30 | — | Phase 1 · 8 |
 | 13b · 13e · 13f | | IN | **DONE** | — | §2.2 |
 | 13d-i | **OFFICES AS DATA** | IN | **DONE, all five items (item 5 at §8.9, narrowed scope)** | — | Phase 1 · 8a |
 | 13d-ii | **PURVIEW** | IN | **DONE (by 6)** | — | §2.2 |
 | 14 | **U7-own** | IN | BLOCKED | `12`, `13` | Phase 3 |
-| 15 | **Record-kind fold** | IN | OPEN | `11a` | Phase 2 |
+| 15 | **Record-kind fold** | IN | **DONE** | `11a` | Phase 2 |
 | 15a | ≡ `16` | IN | — | — | merged 2026-09-25 |
-| 15b | **LOSSY TELL** | IN | BLOCKED | `15` | Phase 2 |
-| 15c | **CONTENT OPERANDS** | IN | BLOCKED | `15`, `16` | Phase 2 |
-| 15d ✦ | **`told_by` (a)/(b)** | IN/SC | BLOCKED | `15b` | Phase 2 |
-| 16 | **H-84 · GIVE** | IN | OPEN | `15` | Phase 2 |
+| 15b | **LOSSY TELL** | IN | **DONE** | `15` | Phase 2 |
+| 15c | **CONTENT OPERANDS** | IN | **DONE** | `15`, `16` | Phase 2 |
+| 15d ✦ | **`told_by` (a)/(b)** | IN/SC | **DONE** | `15b` | Phase 2 |
+| 16 | **H-84 · GIVE** | IN | **DONE** | `15` | Phase 2 |
 | 17 | **U8 / R-06b** | IN | OPEN | `13` | Phase 3 |
-| 17a | **OBLIGEES** | IN | OPEN | `7a`, 13e ✓ | Phase 2 |
-| 17b ✦ | **TERM · UPKEEP** | IN/SE | BLOCKED | `17a` | Phase 2 |
-| 18 | **PROC-A** | SC | OPEN | — | Phase 1 · 9 |
-| 18a | **FIELD DELETIONS — eleven** | IN | OPEN | `17a`, `13d-i` (incl. item 5), 13d-ii ✓, `18` | Phase 2 |
-| ★ | **APERTURE RE-MEASUREMENT** | IN | OPEN | `18a` | Phase 2 |
-| 19 | **U7-remit** | IN | OPEN | `★`, 6 ✓, `15`/`15c`, `18` | Phase 2 |
+| 17a | **OBLIGEES** | IN | **DONE** | `7a`, 13e ✓ | Phase 2 |
+| 17b ✦ | **TERM · UPKEEP** | IN/SE | **DONE** | `17a` | Phase 2 |
+| 18 | **PROC-A** | SC | **DONE, narrowed scope (§8.11); code-verified at ★'s execution** | — | Phase 1 · 9 |
+| 18a | **FIELD DELETIONS — five** (not eleven -- re-derived at execution) | IN | **DONE** | `17a`, `13d-i` (incl. item 5), 13d-ii ✓, `18` | Phase 2 |
+| ★ | **APERTURE RE-MEASUREMENT** | IN | **DONE** | `18a` | Phase 2 |
+| 19 | **U7-remit** | IN | **DONE** | `★`, 6 ✓, `15`/`15c`, `18` | Phase 2 |
 | 19b | **U7-disp** | IN | OPEN | **JORDAN** (`ED-IN-0210`, §5.1 item 6) + `15`/`15c` | Phase 2 |
-| 19c | **MIGRATE** (+ `24d-ii`) | IN/SE | OPEN | 24d-i ✓ | Phase 2 |
-| 19d ✦ | **DEMAND · DELIVERY** | SE/IN | BLOCKED | `15c` | Phase 2 |
+| 19c | **MIGRATE** (+ `24d-ii`) | IN/SE | **DONE** | 24d-i ✓ | Phase 2 |
+| 19d ✦ | **DEMAND · DELIVERY** | SE/IN | **DONE** | `15c` | Phase 2 |
 | 20-i ✦ | **faction scale, first cut** | IN | **DONE** | — | §2.2 (`ecacb57`) |
-| 20-ii ✦ | **U9 / R-04 — faction queries** | IN | BLOCKED | `★` | Phase 4 · a |
-| 20-iii ✦ | **the information cluster** | IN/FI | BLOCKED | `15` (20-i ✓) | Phase 2 |
+| 20-ii ✦ | **U9 / R-04 — faction queries** | IN | **DONE** | `★` ✓ | Phase 4 · a |
+| 20-iii ✦ | **the information cluster** | IN/FI | **DONE** | `15` (20-i ✓) | Phase 2 |
 | 20-iv ✦ | **d.1 + terrain on the season path** | MB/IN | BLOCKED | `20-ii`, `28-iii` | Phase 4 · e |
 | 21 | **U10** | IN | BLOCKED | `20-ii` | Phase 4 · b |
-| 22 | **PROC-B** | SC | BLOCKED | `18`, `★` | Phase 4 · l |
+| 22 | **PROC-B** | SC | **OPEN** (unblocked -- both `18` and `★` are DONE; row corrected, terminal whole-of-Phase-2 critique, 2026-09-30) | `18` ✓, `★` ✓ | Phase 4 · l |
 | 22a ✦ | **proceedings PHASE 3** | SC | BLOCKED | `22`, `15d` | Phase 4 · m |
 | 22b ✦ | **proceedings PHASE 4** | SC | BLOCKED | `22` (+ `17b` for `term`) | Phase 4 · m |
 | 23 | **PART-E-0/2** | IN | OPEN | `22` | Phase 4 · m |
 | 24 | **SE-BUILD** | SE | OPEN · partial | re-scoped across `24d`–`24h` | — |
-| 24d-ii | **CAPACITY** | SE | BLOCKED | 24d-i ✓; lands inside `19c` | Phase 2 |
-| 24e | **WORKS · FOUNDING** | SE/IN | BLOCKED | `15`, `15c`, 24d-i ✓ | Phase 2 |
-| 24f | **SUBSISTENCE IS TERRITORIAL** | SE | OPEN — **ungated: its gate, 5 = G2, is DONE** | design before code | design Phase 1 · 10; build Phase 2 (tail) |
+| 24d-ii | **CAPACITY** | SE | **DONE** (landed inside `19c`, row 221; this row was a board defect -- CLAUDE.md §0.2 -- found by the terminal Phase-2-close critique, 2026-09-30) | 24d-i ✓; lands inside `19c` | Phase 2 |
+| 24e | **WORKS · FOUNDING** | SE/IN | **DONE** | `15`, `15c`, 24d-i ✓ | Phase 2 |
+| 24f | **SUBSISTENCE IS TERRITORIAL** | SE | **DONE** (build; design was already done) | design before code | design Phase 1 · 10; build Phase 2 (tail) |
 | 24g ✦ | **bodies clock + P3 individuation** | SE | BLOCKED | `24d-ii`, `24f`'s cohort producer, `ED-IN-0247` (**JORDAN**, §5.1 item 8) | Phase 4 · n |
 | 24h ✦ | **S5 — revolt (P5), forswearing (P6)** | SE/IN | BLOCKED | `20-ii`; P7 **JORDAN** (§5.1 item 11) | Phase 4 · o |
 | 25 | **MB-GOLDEN** | MB | **DONE** (§8.10) | — (`ED-MB-0016` is `needs_jordan: false`) | Phase 1 · 11 |
 | 26 | **GO-VERSION** | GO | **JORDAN** | §5.1 item 9 | Phase 4 · p |
 | 27 | **WR-SCOPE** | WR | OPEN | — (`ED-WR-0010` ruled IN SCOPE) | Phase 3 (parallel) |
-| 28-0 ✦ | **ORPHAN-DELETE** | IN | OPEN | — | Phase 1 · 2 |
+| 28-0 ✦ | **ORPHAN-DELETE** | IN | **DONE**, narrowed scope (§8.4) -- row corrected, terminal whole-of-Phase-2 critique, 2026-09-30 | — ; precedent `ED-IN-0232` | Phase 1 · 2 |
 | 28-i ✦ | **M5 — tools** | IN | **DONE** (§8.5) | — | Phase 1 · 4 |
-| 28-ii ✦ | **M6 — successor goldens** | IN | BLOCKED | `28-i` | Phase 4 · c |
+| 28-ii ✦ | **M6 — successor goldens** | IN | **OPEN** (unblocked -- `28-i` is DONE; row corrected, terminal whole-of-Phase-2 critique, 2026-09-30) | `28-i` ✓ | Phase 4 · c |
 | 28-iii ✦ | **SPINE-DELETE** | IN | BLOCKED | `28-ii` | Phase 4 · d |
 | 29a–29f ✦ | **Step B, per tree** | IN | BLOCKED | per tree (§3.4 f–j) | Phase 4 · f–j |
 | — | **FIGHT-RENAME** | IN | **DONE** (§8.6) | — | Phase 1 · 5 |
-| — | **OPENERS-DERIVE** | IN | OPEN | — | Phase 1 · 6 |
-| — | **GATE-REMOVE-PERSON** | IN | OPEN | — | Phase 1 · 7 |
+| — | **OPENERS-DERIVE** | IN | **DONE** (§8.8) -- row corrected, terminal whole-of-Phase-2 critique, 2026-09-30 | — | Phase 1 · 6 |
+| — | **GATE-REMOVE-PERSON** | IN | **DONE** (§8.8) -- row corrected, terminal whole-of-Phase-2 critique, 2026-09-30 | — | Phase 1 · 7 |
 
 ⚠ **ONE PLACEMENT IS THE AUTHOR'S, NOT FABLE'S, AND IS MARKED SO.** Fable's state list carries
 `13d-i` item (5) as OPEN, and `18a`'s gate names `13d-i` whole (r2 item 14 depends on item 10 whole,
 `05:1254`). But no phase table in the Fable pass lists item (5). It has no gate, which is Phase 1's
 definition, so it is placed there as `8a` beside `13`. If a later pass places it elsewhere, the one
 constraint is that it lands before `18a`.
+
+⚠ **PHASE 2'S `DONE` ROWS DO NOT CITE EVIDENCE IN-CELL THE WAY PHASE 1'S DO (§2.2'S `ED-...`
+CITATIONS), FOUND BY THE TERMINAL WHOLE-OF-PHASE-2 CRITIQUE, 2026-09-30.** Rather than add a citation
+to all fifteen cells, the evidence is pointed to once, here: every Phase-2 position's build commit,
+covering tests and verification is in `registers/handoffs/HANDOFF_IN.md`'s two Phase-2 sub-batch rows
+and in the four BATCH-CLOSE commit messages each names (agonist/antagonist, `/code-review`,
+`/simplify`, `layer-conformance`, terminal critique — eight commits total across both sub-batches).
+**`DONE` here means §0.2's bar (the behaviour executes and something ran it — a dedicated test file
+per position), not that the behaviour occurs SPONTANEOUSLY in a shipped, populated or corpus world.**
+Several Phase-2 mechanisms verifiably execute only from hand-built acts today, each already REGISTERED
+as a `hole_register.yaml` WIRING row rather than left as an unstated gap: the whole `oblige` subgraph
+(`17a`, `17b`'s term/renewal, `19`'s determination — `H-163`, `H-165` limit 3, `H-173`, `H-174`),
+`migrate` (`H-168`), and `found`/`build`/`survey`/`commit`/`levy` forming and refusing without
+executing in most worlds (`H-156` and its cross-citations). This is the established shape this
+document uses elsewhere for "verified correct, not yet reached by a computed act" (`H-163`'s own four
+limits predate this note) — not a reason to grade any of these rows `DONE·INERT`, which this document
+has never applied to a landed position (`24d-i`'s own row above rejected it explicitly) and whose bar
+(§0.2: "does not yet affect the game") a mechanism with dozens of passing, dedicated tests does not
+meet.
 
 ---
 
@@ -593,14 +612,14 @@ added here is written once, to the G4 contract: build the object locally and ret
 | 2 | **`11b`** CALENDAR-EMIT | CALENDAR `emits="date.fired"`, `subject=venue` | Observable on the corpus's planted `d_forced` dates (`harness/corpus_run.py:320-325`), so no ad-hoc plant is needed. Old `_part2` 11b |
 | 3 | **`15`** Record-kind fold | Petition/Dispensation become kinds of `Record`; `record_kinds` + its refusal; `issue`/`petition` bodies; the deposit rule; then `petition` + `carry`. **≡ build-order item 5** | The largest item: `16`, `15c`, `15b`, `7a`, `19b` and `24e` hang off it. G4 is DONE, so its effects are written once. `record_kinds` is also where narrative #10's casus belli becomes a Record (then `20-ii`/H-151). Old `_part2` 15 |
 | 4 | **`16`** ≡ `15a` GIVE (H-84) | one verb that moves a Record to another person — and proceedings PHASE 1 step 1's record-moving route | r2 dependency 5 → 6. Narrative #11 (the writ) follows it — *"there is no player"* (v7 §8.5). Old `_part2` 15/16 |
-| 5 | **`15c`** CONTENT OPERANDS | content-claim operands; Q2's third clause; the invariant statement | r2 dependency 5, 6 → 7. **It widens `requires_operands`**, which `19`, `19b`, `24e`'s `found` and a computed `establish` all need before a computed act can form. Old `_part2` 15c |
+| 5 | **`15c`** CONTENT OPERANDS | content-claim operands; Q2's third clause; the invariant statement | r2 dependency 5, 6 → 7. ⚠ CORRECTED (terminal whole-of-Phase-2 critique, 2026-09-30): as BUILT, `15c` explicitly declined to widen `requires_operands` -- r2's own ruling, *"I do not coin a ninth operand"* (`decision/options.py:630-635`, `tests/test_content_operands.py:29`). It supplies the READER (`_from_content_claim`) a later position's OWN new typed cell can call; `19`'s `found` (`24e`) still has no computed path (`H-165` limits 2-3) and `determine` (`19`) still cannot form usefully (`H-163` limit 2) -- neither position widened the roster either. Old `_part2` 15c |
 | 6 | **`15b`** LOSSY TELL | `tell` at `Partial` deposits a lossy copy, and the teller's identity | r2 dependency 5 → 8. Narrative #12 (telling renews belief) is this item. Old `_part2` 15b |
 | 7 | **`15d`** ✦ `told_by` (a)/(b) | proceedings PHASE 1 step 4 parts (a) and (b): the (person, channel) precedence walk, and the document/remit → `told_by` source map | WITNESS-side, on the same file as `15b` (`loop/witness.py`), so it comes right after. Part (c) is built (`witness.py:369-371`), but `witness.py:182` still returns only `firsthand`/`firsthand_via_knot`. **R-07 rests on it, and no position carried it.** `22a` waits on it |
 | 8 | **`7a`** COMMIT-EFFECT | `@effect_for("commit")` — mint the Tenure the `commit` row already declares | Its aperture opens only now: BO-10 names build-order items 5 / 7 / 8, which are `15` / `15c` / `15b`. Built earlier, its first run re-measures `commitment.made 0 / refused 42`. Old `_part2` 7a |
 | 9 | **`17a`** OBLIGEES | obligees co-located mint `inferred` · `oblige` body · `establishment_of` rewritten with a caller · `Office.establishment` deleted | After `7a`; after `13e` ✓ (same function, `§3.9` edge 4). Old `_part2` 17a |
 | 10 | **`17b`** ✦ TERM · UPKEEP | `Tenure.term`, the T-n basis at the gate, **`Office.upkeep`'s reader**, and payment by `transfer` renewing `oblige` terms | Gate `17a`: `_eff_oblige` is what mints the term-bearing Tenure. The full reasoning is contradiction 1, below |
 | 11 | **`19d`** ✦ DEMAND · DELIVERY | the retirement plan's ADJACENT G3: `demanded` / `delivered`, plus the scarce test world | Gate `15c` (its operands). Beside `24f`, whose territorial quantity it feeds |
-| 12 | **`18a`** FIELD DELETIONS | **eleven** fields; `conferral_path` re-pointed at `ancestry`; only the `judging_set` **stub** | Gates `17a`, `13d-i` whole (incl. item 5), 13d-ii ✓ and `18` (which built the real `judging_set`, `§3.9` edge 5). **Not `Tenure.payload`**, which is live (`§3.9` edge 11). **Not `Office.upkeep`** — contradiction 1. Old `_part2` 18a |
+| 12 | **`18a`** FIELD DELETIONS | **five** fields (`Office.dates`; `Rung.stake`/`transmission`/`judging_set_rule`; `Site.drawers`) — re-derived at execution, not eleven: see §2.3's state-index row; `conferral_path` re-pointed at `ancestry`; only the `judging_set` **stub** | Gates `17a`, `13d-i` whole (incl. item 5), 13d-ii ✓ and `18` (which built the real `judging_set`, `§3.9` edge 5). **Not `Tenure.payload`**, which is live (`§3.9` edge 11). **Not `Office.upkeep`** — contradiction 1. **Not `Office.scope_rung`** — kept live, `judging_set` reads it. Old `_part2` 18a |
 | 13 | **`★`** APERTURE RE-MEASUREMENT | **build the populated-realm formability instrument as its first step**; then re-take, per holder: verbs resolvable, verbs unformable person-side, claims by source, questions by source; then re-take `CAT-6`'s evidence block and `STR-4`'s conclusion | Fires once, after `18a`. **Nothing below may be scored before it passes.** The instrument does not exist (old §6's GAP), and it is this gate's first step, not a separate position. Old `_part2` ★ |
 | 14 | **`19`** U7-remit | `levy`'s typed cell · `open_case` · `determine` over `judging_set` · `issue` via `15` — predicates, effects and operands | After `★`, 6 ✓, `15`/`15c` and `18`. **Layer-1 ride-along: invariant 4's per-conjunct half**, a keyed `emits_on_refusal` schema. Three live verbs have two conjuncts and `19` adds more, so the schema — `23`'s invariant work — is brought forward to its first consumer. Old `_part2` 19 |
 | 15 | **`19b`** U7-disp | build the three response verbs — `comply`, `evade \| defy`, `construe` | **JORDAN**: `ED-IN-0210`'s fork (§5.1 item 6). Also waits on `15`/`15c`: the operand is a dispensation, which is a `Record` kind only after the fold. It stays conditional on the ruling, as the old §7 item 5 held. Old `_part2` 19b |
@@ -703,9 +722,28 @@ gate: a retire-set tree may go only when the loop expresses its scale.** That ga
 tree** (`29a`–`29f`), never as one wave. Jordan's 2026-09-28 instruction is consistent with it:
 superseding the CALLS means the loop subsumes the SCALES.
 
+**What retiring `mc_v18` buys, and what it does not.** Deleting the spine is an E gain -- ONE engine,
+ONE vocabulary, no second codepath answering the same questions twice -- verified directly rather
+than assumed: every importer of `engine.mc_v18` is a test file (`engine/tests/test_combat_bridge_seam.py`,
+`test_f7_smoke_oracle.py`, `test_mc_v18_regression.py`, per `tests/valoria/test_mc_v18_is_deprecated.py`'s
+own `ALLOWED_IMPORTERS`), and no game code imports it. **It is NOT itself an S gain.** `mc_v18` has no
+faction ladder to compare the season loop against -- `_faction_actions_callback` takes ONE weighted
+draw per faction and stops, no propagation -- so there is no sibling calculation for the retirement to
+bring into methodological line with. Whatever S this batch buys comes specifically from `20-ii` (just
+landed, the faction-scale ladder itself), `20-iv` (terrain/garrison on the season path) and `28-ii`'s
+second half (a battle from a real, chooser-formed decision) -- not from the deletion. **And the
+retirement has a real, named cost.** Deleting `mc_v18` removes the last campaign-scale regression
+oracle: `28-ii`'s named same-seed hash pin is a regression TRIPWIRE, not a balance instrument, and
+`tools/balance_oracle.py` -- the campaign-level instrument `CLAUDE.md` §7 names -- was retired with no
+live successor (`CLAUDE.md` §7; `28-i`/M5's `FORK:` row). This is not free, and this section does not
+present it as free.
+
+⚠ STATE HERE IS NOT THE OWNER -- §2.3 IS. This column is reference only and may be stale; read §2.3
+for the current state.
+
 | # | handle | what runs | `STATE` | `GATE` |
 |---|---|---|---|---|
-| a | **`20-ii`** faction queries (U9 / R-04) | `faction_q.{holdings,purview,superiors,subordinates,at_war}`; `head` via `Tenure.degree` (F.4's first reader); `scale_of_rung`; the 44 faction-scale re-scales and the 10 world cases; **edit `04 §A.2:132`** to name the fourth `queries/` module | BLOCKED | `★` |
+| a | **`20-ii`** faction queries (U9 / R-04) | `faction_q.{holdings,purview,superiors,subordinates,at_war}`; `head` via `Tenure.degree` (F.4's first reader); `scale_of_rung`; the 44 faction-scale re-scales and the 10 world cases; **edit `04 §A.2:132`** to name the fourth `queries/` module | **DONE** | `★` ✓ |
 | b | **`21`** U10 | the second measurement; `measured:` from instrument output only | BLOCKED | `20-ii` |
 | c | **`28-ii`** (M6) — successor goldens | (1) a **named** same-seed hash pin on `build_realm(0)` × N; (2) a battle executing from a real, chooser-formed decision | BLOCKED | `28-i`. `15c` helps the operand arm, but the per-verb cell does not need it |
 | d | **`28-iii`** SPINE-DELETE | delete `engine/mc_v18.py` and the engine spine (list below) | BLOCKED | `28-ii` — nothing else. Every engine-spine module already has its season replacement (`_part2` §1.1) |
@@ -745,9 +783,16 @@ vector a field of its own (`04:292`), and a seat *"adds no verb and no modifier"
   `test_season_shape.py:6996`'s never-attempted set. This succeeds `test_f7_smoke_oracle.py`'s
   `battles_mean`. That file's `VICTORY_THRESHOLD` dead-param tripwire dies with `DEFAULT_PARAMS`, and
   its Hafenmark-lockout claim closes under test 2.
+  ⚠ **STALE, superseded by `28-ii`'s actual build (`workplans/2026-09-30-phase-4-post-ners-
+  revision.md` §3 `c · 28-ii`): no `operands_for` march arm was ever added or needed, and
+  `march` is now measured forming/attempting/executing naturally in `build_realm(0)` via
+  `harness/aperture.py` (`hole_register.yaml` H-175) — this prediction's diagnosis and its cited
+  fix were both wrong. Left here rather than rewritten, per this document's own §0 correction
+  discipline; read the current state at the row named above, not here.**
 - **`test_combat_bridge_seam.py` needs NO successor.** Its remaining `mc_v18` test asserts a flag-ON
   no-op on the OLD loop, and the flag dies with the file. Its shape tests are already carried by
-  `seam/wrappers/combat.py:203-208`, `test_degree_ladder_single_owner.py` and
+  `seam/wrappers/combat.py:195-201` (moved from `:203-208`, caught and fixed at BATCH-CLOSE Phase
+  2's layer-conformance ATTACK stage), `test_degree_ladder_single_owner.py` and
   `test_season_providers_are_registered.py`.
 - **The retirement plan's own §6 gate binds here.** The successor artifacts must have RUN in the same
   PRs: a named same-seed hash pin, a two-arm balance comparison on the season harness (`28-i`), and a
@@ -1016,6 +1061,50 @@ record is.
     - Fable did not open them. **The lane owner runs the five-step test before they reach Jordan** —
       the old §5's discipline.
     - *Blocks:* no position in this sequence.
+14. **H-156 · the always-refused verb crowding the corpus's scene budget** — is the crowding a cost
+    to accept, a call to grade some of the crowding verbs (giving the chooser a real reason to
+    prefer or reject one before it forms), or a call to widen their preconditions so fewer form
+    only to be refused? Option (a), as `H-156` states it, would answer its own four of the eight
+    verbs the terminal whole-of-Phase-2 critique measured in the corpus's always-refused set
+    (2026-09-30, count corrected for `20-ii`'s landing): `commit`, `found`, `build`, `survey`.
+    `migrate` (`H-168`) and `levy` (`H-163` limit 1) are the same shape, cross-cited from `H-156`
+    but not folded into its own option (a). `release` is a seventh case, but a different one: it is
+    zeroed BY the other verbs' crowding rather than introduced by this chain, and moves in and out
+    of the always-refused set as later positions (`24f`, `20-ii`) uncrowd it again.
+    - *Why it is his:* two defensible designs (accept the cost / grade the verbs / widen the
+      preconditions) lead to materially different play, and no design document rules between them.
+    - *Blocks:* nothing directly; shapes how many future verbs repeat this pattern before it is
+      answered once.
+    - *Ledger:* `engine/season/hole_register.yaml` H-156 (kind: RULING).
+15. **H-173 · should a determination-opened `oblige` (a sentence) answer to every `oblige` reader as
+    a service edge does, or should renewal, the witness channel, the one-edge rule and the
+    term-length fixture each read it differently from a service?** Four consequences if left as one
+    carrier: the seat's own upkeep pass can renew a sentence (for whichever convicts it reaches, not
+    all of them); the convict joins the bench's establishment and becomes an informant on its later
+    business; a bench's own servant cannot be sentenced by it; and the sentence-length fixture
+    (`H-159`) was chosen and reasoned about as a service term only. The opening act's verb is already
+    recoverable without a new carrier field (`w.acts[term.declared_by].verb` before any renewal, or
+    always via the log's `tenure.opened` Event through `causing_act`), so the live question is
+    whether a reader SHOULD distinguish a sentence from a service, not whether it CAN.
+    - *Why it is his:* a live design choice with materially different readings for how disposal is
+      felt in play, escalated rather than answered by architecture alone (found reading `19`'s and
+      `17a`'s code together, which neither position's own close was scoped to do).
+    - *Blocks:* nothing today -- `determine` executes in no shipped world (`H-163`) -- but
+      shapes whichever future position first makes it reachable.
+    - *Ledger:* `engine/season/hole_register.yaml` H-173 (kind: RULING).
+16. **H-174 · should a bench's jurisdiction follow where a person IS PRESENT (`home_of`, the shipped
+    reading) or where he LIVES (`residence_of`, `19c`'s own split)?** `state/gate.py::may_determine`'s
+    bench-ground test predates `19c`'s presence/residence split and was never revisited once it
+    landed. (This row also carried a second reader, `loop/effects.py::_renewals`' upkeep target --
+    that half is now ANSWERED, not open: `home_of` is the architecture's own standing definition of
+    *where a person is*, so a payment reaching the obligee it finds is the existing answer, and it no
+    longer escalates.)
+    - *Why it is his:* a bench's authority over a traveller who is merely present, versus one who
+      lives there, is a live design call with materially different readings for how jurisdiction is
+      felt in play.
+    - *Blocks:* nothing today -- `may_determine` is not yet reached by a `move` crossing two benches'
+      grounds in the same run -- but decides whose bench binds a traveller once that traffic exists.
+    - *Ledger:* `engine/season/hole_register.yaml` H-174 (kind: RULING).
 
 ### 5.2 · DEMOTED — answered, with the closing citation close-pass writes. Do NOT let these ride back into §5.1
 

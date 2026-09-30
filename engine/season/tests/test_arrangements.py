@@ -197,8 +197,15 @@ def test_c1_is_a_report_not_a_refusal_and_is_honest_about_todays_state():
     empty") -- and a `Record`-disposing row is not in scope for a TENURE-kind opener check at all.
 
     FALSIFIER: this test goes red the day `determine` gains an effect that opens `oblige`, which
-    is exactly the signal PHASE 2 step 11 landed and this position's own C-1 gap can be re-graded."""
+    is exactly the signal PHASE 2 step 11 landed and this position's own C-1 gap can be re-graded.
+
+    ⚠ AND IT WENT RED, AS DESIGNED, AT PLAN POSITION `19` (U7-remit): `loop/effects.py::_eff_determine`
+    opens the disposal `oblige`, the derived opener map reads `determine` beside `oblige`'s own opener,
+    and `arbitration` leaves the report. Re-pinned to the empty report; the `Record`-disposing rows
+    are still not asked. Whether C-1 should now become a LOAD REFUSAL -- the module docstring's reason
+    for reporting (*"`determine` opens nothing today"*) no longer holds -- is left to this module's
+    owner: `19` did not move the check, only made it pass."""
     reported = A.arrangements_without_a_disposal_opener()
-    assert reported == ["arbitration"], reported
+    assert reported == [], reported
     assert "parliamentary_debate" not in reported and "council_of_state" not in reported, (
         "a `Record`-disposing row is not asked of the tenure-kind opener map")

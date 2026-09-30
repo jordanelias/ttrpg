@@ -34,6 +34,7 @@ from ..data.pursuits import pursuit as _pursuit
 from ..data.verbs import VERB_TABLE
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
+from ..queries.world_q import RESIDE_KIND
 from ..state.attribution import anchor_of
 from ..state.carriers import Person, Proposition, Rung, Site, Tenure
 from ..state.ids import H, draw_factory
@@ -72,6 +73,10 @@ def build_world(seed: int = 0, fixtures: "S.Fixtures" = None) -> World:
     w.add_tenure(Tenure("t_bailiff_in", BAILIFF, "hearth_ostvik", "contain", since=0))
     w.add_tenure(Tenure("t_warden_in", WARDEN, "ostvik", "contain", since=0))
     w.add_tenure(Tenure("t_hearth_in", "hearth_ostvik", "ostvik", "contain", since=0))
+    # Plan position `19c`: each of the three LIVES where he stands at build -- the `reside` edge a
+    # `move` leaves behind (`populated.build_realm`'s rule, and `loop/effects.py::_eff_migrate`).
+    for pid, home in ((CARIN, "hearth_ostvik"), (BAILIFF, "hearth_ostvik"), (WARDEN, "ostvik")):
+        w.add_tenure(Tenure(f"t_{pid}_home", pid, home, RESIDE_KIND, since=0))
 
     # ⚠ HER MOTIVE IS A `commit` TO AN OUGHT PROPOSITION, WHICH IS Q4 -- the source `PLAN.md` `W5`
     # added and V2 §F1 omitted. Without it "an NPC with a standing ambition and a quiet season

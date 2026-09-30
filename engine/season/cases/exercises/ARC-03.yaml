@@ -1,0 +1,8 @@
+# ARC-03 -- `scale:` re-authoring, plan position `20-ii` (U9/R-04, `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md:1459-1474`). Read against the case's own `one_line`/`who_acts` (`engine/season/cases/chain/`), never matched by keyword (`harness/corpus_run.py::rescales`'s own warning: 23 of 47 match no institution word).
+case: ARC-03
+scale:
+  was: faction
+  is: duchy
+  why: '`who_acts` names ''Duchess Baralta'' directly as the leader holding the reserved resource -- the
+    same duchess NPC-050 already scales to `duchy` for her own domain, and this arc''s stakes (the closing
+    window on her reserve) are hers alone, not the wider Crown''s.'

@@ -46,20 +46,129 @@ from ..state.carriers import (
 
 
 # ---------------------------------------------------------------------------
-# ITEM 1 -- `@effect_for("commit")` is WRITTEN AND HELD, NOT SHIPPED. There is no test here.
-#
-# The effect ran, `resolvable_verbs()` went 18 -> 19, and four falsifiers passed -- and one
-# populated season then measured `commitment.made: 0 / commitment.refused: 42`, because no
-# question source in `questions_for` offers a Proposition as a referent and `commit`'s typed cell
-# is `existence(of: subject, kind: Proposition)`. Landing it breached a CONTROL BOUND (not a
-# golden) in `test_wd_a_fork_changes_a_later_decision_...`, whose own message names the breach:
-# *"some FOURTH channel reaches `opening_set`, and every other figure in `W-D` is confounded."*
-#
-# The measurement, the reasoning and the re-scheduling (item 1 moves to PHASE 2, after item 7,
-# with `commitment.made > 0` as its artifact) are in
-# `proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md` §7.2. A test asserting a
-# behaviour this branch does not ship would be the half-wiring this file exists to refuse.
+# ITEM 1 (plan position `7a`) -- `@effect_for("commit")`, SHIPPED at G4 after BO-10's gate
+# (`15`/`15c`/`15b`). Falsifier LB-1, in two halves: the mechanism, isolated on a hand-built world
+# where a Proposition referent genuinely exists; and BO-9/BO-10's own re-measurement on the
+# populated corpus, reported HONESTLY rather than repaired.
 # ---------------------------------------------------------------------------
+
+
+def test_lb1_commit_opens_a_tenure_and_q4_then_sees_it():
+    """**LB-1, half one — THE MECHANISM.** `commit`'s row (`verb_table.yaml`) is `own`-eligible,
+    `beneficiary: actor`, typed `existence(of: subject, kind: Proposition)`,
+    `writes: ["Tenure.since"]`, `emits: ["commitment.made"]`. Given a genuine Proposition referent
+    (which BO-9/BO-10 found no live question source supplies, below), the effect must open a live
+    `commit` Tenure -- subject the actor, object the Proposition -- AND a downstream reader must
+    then see it: Q4 (`queries/world_q.py::questions_for`) raises a standing "need" question from
+    every live `commit` to an OUGHT. A test observing only the write is the half-wiring this file
+    exists to refuse."""
+    w = P.tiny_world()
+    w.propositions["prop_want"] = Proposition("prop_want", "OUGHT", "p_mid", "wants a raise",
+                                              None, 0)
+    d = SeasonDriver(w)
+    out = d.resolve(mint_token(w, WriteClass.ACTS),
+                    [Act(id="c_lb1", actor="p_mid", verb="commit",
+                         payload={"subject": "prop_want"})],
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert [e.kind for e in out] == ["commitment.made"], (
+        f"commit on a live Proposition did not report a clean success: {[e.kind for e in out]}")
+    nt = next((t for t in w.tenures if t.kind == "commit" and t.object == "prop_want"), None)
+    assert nt is not None and nt.subject == "p_mid" and nt.live, (
+        "no live `commit` Tenure opened naming the actor as subject and the Proposition as object")
+
+    w.tick = 1
+    qs = world_q.questions_for(w, w.persons["p_mid"])
+    assert any(q.source == "need" and q.about == "prop_want" for q in qs), (
+        f"Q4 did not raise a standing question from the new `commit` Tenure: "
+        f"{[(q.source, q.about) for q in qs]}")
+
+
+def test_lb1_commit_refuses_a_proposition_that_does_not_exist():
+    """**LB-1, the refusal path.** The row's own `refusal_note`: *the Proposition does not exist
+    (§14 -- immutable, must be uttered first)*. This is the typed precondition's, asked before the
+    effect ever runs (`loop/resolve.py::_admits`) -- so a `commit` naming an id that names no
+    Proposition never reaches `_eff_commit` at all and opens nothing."""
+    w = P.tiny_world()
+    d = SeasonDriver(w)
+    out = d.resolve(mint_token(w, WriteClass.ACTS),
+                    [Act(id="c_lb1r", actor="p_mid", verb="commit",
+                         payload={"subject": "prop_nonexistent"})],
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert [e.kind for e in out] == ["commitment.refused"], (
+        f"commit on a nonexistent Proposition did not refuse cleanly: {[e.kind for e in out]}")
+    assert not any(t.kind == "commit" for t in w.tenures), (
+        "a refused `commit` still opened a Tenure")
+
+
+def test_lb1_removing_the_effects_body_mints_no_tenure(monkeypatch):
+    """**LB-1's own control, isolating the effect as the producer.** With `EFFECTS["commit"]`
+    replaced by a stub returning `NO_CHANGE` -- "the effect with its body removed" -- the IDENTICAL
+    act that opens a Tenure in the mechanism test above must not. Without this, the Tenure seen
+    there could in principle come from `add_tenure` being reached some other way; this confirms it
+    comes from `_eff_commit` and nothing else."""
+    from ..loop.effects import EFFECTS
+    from ..state.gate import NO_CHANGE
+    w = P.tiny_world()
+    w.propositions["prop_want"] = Proposition("prop_want", "OUGHT", "p_mid", "wants a raise",
+                                              None, 0)
+    monkeypatch.setitem(EFFECTS, "commit", lambda w, a, res=None: NO_CHANGE)
+    d = SeasonDriver(w)
+    out = d.resolve(mint_token(w, WriteClass.ACTS),
+                    [Act(id="c_lb1c", actor="p_mid", verb="commit",
+                         payload={"subject": "prop_want"})],
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert [e.kind for e in out] == ["commitment.refused"], (
+        f"a no-op effect body did not read as the fold's own no-op refusal: {[e.kind for e in out]}")
+    assert not any(t.kind == "commit" for t in w.tenures), (
+        "a stubbed-out effect still minted a Tenure -- something else is opening it")
+
+
+def test_lb1_bo10_gate_still_open_after_15_15c_15b_report_not_repair():
+    """**LB-1, half two — BO-9/BO-10's OWN RE-MEASUREMENT, HONEST RATHER THAN REPAIRED.**
+    `01_THE_BUILD_ORDER.md` §7.2 measured `commitment.made: 0 / commitment.refused: 42` on one
+    populated season before this effect shipped, diagnosed as structural: no source in
+    `questions_for` offers a Proposition as a REFERENT (`decision/options.py::_REFERENT_OPERANDS`
+    binds `commit`'s `subject` to the question's referent, and every live referent today is a
+    person id), and BO-10 named items 5/7/8 (`15`/`15c`/`15b`) as what would open that channel.
+
+    ⚠ THEY ARE ALL DONE, AND THE GATE IS STILL SHUT. `15c`'s operand-widening
+    (`decision/options.py::_derive_operand`) answers `to`/`kind`/`amount` from a held writ's
+    content; `15b`/`15`'s content-claim/deposit machinery widens which `claim_landed` questions
+    REACH a person (`world_q.questions_for`'s clause 3, `named(c)`). Neither touches `subject`,
+    which stays a bare `_REFERENT_OPERANDS` bind to the question's own referent. So `commit`'s
+    typed cell (`existence(of: subject, kind: Proposition)`) still asks about a person id and
+    still refuses, every time, on this corpus. **This test asserts that gap is still open, on
+    purpose** — the falsifier this position's brief named explicitly refuses to invent a repair
+    (widening Q4 was tried and refused in §7.2, with its own measurement: 1 made / 57 refused,
+    because a standing question cannot be the producer of the commitment that raises it). The one
+    thing that DID move is `resolvable_verbs()`, which is asserted moving the other way."""
+    from collections import Counter
+    from ..decision import make_chooser
+    from ..state.ids import H, draw_factory
+    w = build_realm(0)
+    d = SeasonDriver(w)
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    chooser = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                           draw=draw_factory(w.world_seed, lambda: w.tick))
+    d.season(chooser, question=None, subsistence=P.SUBSIST,
+             contest_max_depth=w.fixtures.get("contest_max_depth"))
+    kinds = Counter(e.kind for e in w.log)
+
+    assert "commit" in resolvable_verbs(), (
+        "`commit` dropped back out of `resolvable_verbs()` -- the effect registration regressed")
+    commit_acts = [a for a in d.resolved if a.verb == "commit"]
+    assert commit_acts, "no `commit` act formed at all on this corpus -- the gate moved further"
+    referents_seen = {(a.payload or {}).get("subject") for a in commit_acts}
+    assert referents_seen and not (referents_seen & set(w.propositions)), (
+        f"a `commit` act named a real Proposition as its subject -- BO-9/BO-10's diagnosis no "
+        f"longer holds and this position's own claim should be revisited: {referents_seen}")
+    assert kinds.get("commitment.made", 0) == 0, (
+        f"commitment.made is {kinds.get('commitment.made', 0)}, not 0 -- BO-10's gate has closed "
+        "since this test was written; update this test AND this position's own report rather "
+        "than re-pinning the number silently")
+    assert kinds.get("commitment.refused", 0) > 0, (
+        "no `commit` refusals at all -- the verb stopped being attempted, which is a different "
+        "regression from the one this test documents")
 
 
 # ---------------------------------------------------------------------------
@@ -273,7 +382,32 @@ def _matter_once(w, *, keep_yield=False):
 
 
 def _eaters_at(w, rung_id):
-    return [pid for pid, home in world_q.home_of(w).items() if home == rung_id]
+    """The EATERS standing at `rung_id` -- since plan position `24f`, its COHORTS only: a person at
+    `weight == 1` is exempt from the larder draw (`world_q.subsistence_draw`, `ED-IN-0255`)."""
+    return [pid for pid, home in world_q.home_of(w).items()
+            if home == rung_id and w.persons[pid].is_cohort]
+
+
+# The cohort planted at `S` by `_cohort_tiny_world`: `tiny_world` seats only its duke there.
+S_COHORT = "c_people_of_s"
+
+
+def _cohort_tiny_world():
+    """`tiny_world`, RE-PLANTED FOR `24f`. Every LB-3 test below was written when every housed person
+    ate, and `tiny_world` holds nobody at `weight > 1`, so under `24f` it has no eater at all
+    (`H-171`). The ladder, the running view, the body write and the death cascade are unchanged, so
+    the tests keep their subjects and move their eaters onto cohorts, the carrier the ruling names:
+      * the three hearth residents at `Hh` become the smallest cohort (weight 2) -- the hearth's
+        people, which is what three anonymous `p_low`/`p_mid`/`p_other` stood for;
+      * one cohort is planted at `S` (`P.plant_cohort`), since its only resident is the duke, whom
+        `24f` exempts.
+    `p_high` (the duke) and `p_king` stay individuals and are the exemption's control here."""
+    w = P.tiny_world()
+    for pid, home in world_q.home_of(w).items():
+        if home == "Hh":
+            w.persons[pid].weight = 2
+    P.plant_cohort(w, S_COHORT, "S")
+    return w
 
 
 def _heads(w, eaters):
@@ -307,7 +441,7 @@ def test_lb3a_a_hearth_with_no_larder_eats_from_its_settlement():
     them at the 37 settlement rungs and none at the 211 hearths**, 46 persons in 26 hearths, and
     **0 rungs with both eaters and stores** — so the per-rung draw counted zero eaters wherever
     there was anything to eat, and the subsistence step was inert on the world that ships."""
-    w = P.tiny_world()
+    w = _cohort_tiny_world()
     w.rungs["Hh"].stores = {}                      # the hearth's own larder is bare
     eaters = _eaters_at(w, "Hh") + _eaters_at(w, "S")
     assert _eaters_at(w, "Hh"), "nobody lives in the hearth; this test would pass vacuously"
@@ -336,7 +470,7 @@ def test_lb3a_control_a_hearth_with_its_own_larder_eats_locally_and_unchanged():
     feeds its own people exactly as the per-rung loop did. **If this arm moves, the walk is not a
     generalisation** — it is a new rule wearing one's clothes, and every reading of the populated
     world would then be confounded by a second change nobody asked for."""
-    w = P.tiny_world()
+    w = _cohort_tiny_world()
     at_hh, at_s = _eaters_at(w, "Hh"), _eaters_at(w, "S")
     assert at_hh and at_s, "the fixture needs eaters at both rungs for the control to mean anything"
     # Each rung stocked to exactly ITS OWN eaters' need. If the walk reached past a stocked hearth,
@@ -364,15 +498,20 @@ def test_lb3a_the_root_larder_at_zero_feeds_nobody_and_raises_nothing():
     `nearest_store` returns `None` at the root and the caller records a shortfall. Raising here
     would make an empty larder an instrument defect, and a season that dies on a bare world is a
     season nobody can run the starving case in."""
-    w = P.tiny_world()
+    w = _cohort_tiny_world()
     for rid in ("R", "D", "S", "Hh"):
         w.rungs[rid].stores = {}
 
     evs = _matter_once(w)                      # must not raise
 
     assert w._subsistence_shortfall, "nobody is short on a world with no food anywhere"
-    assert set(w._subsistence_shortfall) == set(world_q.home_of(w)), (
-        "some eater is neither fed nor recorded short — the loop skipped them silently")
+    # Since `24f` the eaters are the cohorts; the duke and the king, individuals, are neither fed
+    # nor short -- they are not in the draw at all (`ED-IN-0255`).
+    cohorts = {pid for pid in world_q.home_of(w) if w.persons[pid].is_cohort}
+    assert set(w._subsistence_shortfall) == cohorts, (
+        "some eater is neither fed nor recorded short — the loop skipped them silently — or an "
+        "individual was counted short, which `24f` exempts")
+    assert not {"p_high", "p_king"} & set(w._subsistence_shortfall)
     assert not [e for e in evs if e.kind == "stores.changed"], (
         f"a store changed on a world that holds nothing: {[anchor_of(w, e) for e in evs]}")
 
@@ -383,8 +522,9 @@ def test_lb3a_a_cohort_eats_by_its_weight_and_not_by_its_head_count():
     `state/carriers.py`: *"A COHORT IS A PERSON AT weight > 1"*. The per-rung draw was
     `wt * len(eaters)`, so two hundred people eat like one man. Every person in the shipped corpus
     is at weight 1 — which is exactly why this was invisible, and why a test has to plant the
-    cohort rather than wait for the corpus to grow one."""
-    w = P.tiny_world()
+    cohort rather than wait for the corpus to grow one. (Since `24f` the realm's cohorts are
+    `cohorts.yaml`'s; this test's cohort is still planted, one weight above its neighbours.)"""
+    w = _cohort_tiny_world()
     w.rungs["Hh"].stores = {}
     eaters = _eaters_at(w, "Hh") + _eaters_at(w, "S")
     cohort = _eaters_at(w, "Hh")[0]
@@ -408,7 +548,7 @@ def test_lb3a_two_eaters_cannot_spend_the_same_unit():
     show every eater the FULL larder — the defect `loop/effects.py`'s own header names for
     `transfer` (*"`transfer` twice from a one-unit larder succeeds twice"*). With one grain
     between three eaters, exactly one grain may leave the larder and the rest must be short."""
-    w = P.tiny_world()
+    w = _cohort_tiny_world()
     w.rungs["Hh"].stores = {"grain": 1}
     for rid in ("R", "D", "S"):
         w.rungs[rid].stores = {}
@@ -442,8 +582,9 @@ def _starving_world(body_step=10):
     the control arm because all 86 buildable corpus worlds hold zero stores, so any nonzero
     default starves 258 people in worlds that model a scene rather than an economy. The MECHANISM
     is exercised here at a live arm — which is what keeps it a built behaviour rather than a
-    branch nothing reaches (§0.2) — and `test_lb3b_the_zero_arm_...` pins the shipped one."""
-    w = P.tiny_world()
+    branch nothing reaches (§0.2) — and `test_lb3b_the_zero_arm_...` pins the shipped one.
+    ⚠ ON `_cohort_tiny_world` SINCE `24f`: only a cohort eats, so only a cohort can starve."""
+    w = _cohort_tiny_world()
     for rid in ("R", "D", "S", "Hh"):
         w.rungs[rid].stores = {}
     w.sites.clear()
@@ -486,6 +627,10 @@ def test_lb3b_a_short_larder_falls_a_body_a_band_and_narrows_the_season():
         f"the band was crossed and the budget did not move ({start_budget} -> "
         f"{decision_budget(w, who)}). The MATTER write landed somewhere `decision.budget` does "
         "not read — which is the read/write asymmetry this test exists for")
+    # `24f`, AT THIS WORLD'S SCALE: the duke starved beside the hearth's people for as many seasons
+    # and his body never moved (`ED-IN-0255`). The realm-scale falsifier is
+    # `tests/test_territorial_subsistence.py`.
+    assert w.persons["p_high"].body == start_body, "the duke worried about subsistence"
 
 
 def test_lb3b_control_a_stocked_world_moves_no_body_and_no_budget():
@@ -495,7 +640,7 @@ def test_lb3b_control_a_stocked_world_moves_no_body_and_no_budget():
     `CLAUDE.md` §0.1 pt 4: a number without a control is not a measurement. Without this arm, a
     body write that fired unconditionally — on the fed as well as the starving — would pass every
     assertion in the test above."""
-    w = P.tiny_world()
+    w = _cohort_tiny_world()
     at = {rid: _eaters_at(w, rid) for rid in ("R", "D", "S", "Hh")}
     for rid, eaters in at.items():
         w.rungs[rid].stores = dict(_need(w, eaters)) if eaters else {}
@@ -640,6 +785,18 @@ _LEVY_ROW = (
     '    beneficiary: "actor"\n'
 )
 
+# ⚠ PLAN POSITION `19` TYPED `levy` (`transfer`'s form-2 cell plus a `basis` conjunct), and a typed
+# cell's `needs:` ADMITS `to` -- so `beneficiary: to` on `levy` became CARRIABLE and stopped being the
+# dead reference `test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load` plants.
+# That test needs an UNTYPED row, and `forge` is one (`requires: —`, no cell). The two tests above keep
+# `levy`: a missing or off-roster beneficiary is refused whatever the row's cell.
+_FORGE_ROW = (
+    '  - verb:        "forge"\n'
+    '    stratum:     "uncontested_material"\n'
+    '    eligibility: ["own"]\n'
+    '    beneficiary: "actor"\n'
+)
+
 
 def test_lb6d_every_verb_declares_a_rostered_beneficiary():
     """**LB-6d.** `CAT-2`: *"DECLARE IT -- and declare it as a STATIC COLUMN ON `verb_table.yaml`
@@ -649,9 +806,14 @@ def test_lb6d_every_verb_declares_a_rostered_beneficiary():
 
     # Same control as `test_season_shape.py`'s own `len(_load_verb_table()) == 39`: it is here so
     # that a table which SHRANK cannot let this census pass while examining a handful of rows.
-    # ⚠ 38 -> 39, `march` (M4, `ED-IN-0279` clause (a)), 2026-09-28.
+    # ⚠ 38 -> 39, `march` (M4, `ED-IN-0279` clause (a)), 2026-09-28; 39 -> 40, `give` (plan
+    # position 16, `H-84`), 2026-09-29 -- `beneficiary: none`, so `kinds["none"]` grows by one;
+    # 40 -> 42, `found` and `build` (plan position `24e`), 2026-09-29 -- both `beneficiary: none`;
+    # 42 -> 43, `migrate` (plan position `19c`), 2026-09-30 -- `beneficiary: actor`, `move`'s;
+    # 43 -> 44, `survey` (plan position `20-iii`), 2026-09-30 -- `beneficiary: actor`, the
+    # investigation acts' (the sheet and its content land in the surveyor's hand and ledger).
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops this census passing over a loader that returned a subset]
-    assert len(VERB_TABLE) == 39, "the verb count moved; this row's census is stale"
+    assert len(VERB_TABLE) == 44, "the verb count moved; this row's census is stale"
     undeclared = [v for v, r in VERB_TABLE.items() if not r.beneficiary]
     assert not undeclared, f"verbs with no `beneficiary:`: {undeclared}"
     off_roster = [(v, r.beneficiary) for v, r in VERB_TABLE.items()
@@ -707,7 +869,7 @@ def test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load():
     formed, silently, forever."""
     src = _verb_table_text()
     unbindable = src.replace(
-        _LEVY_ROW, _LEVY_ROW.replace('beneficiary: "actor"', 'beneficiary: "to"'), 1)
+        _FORGE_ROW, _FORGE_ROW.replace('beneficiary: "actor"', 'beneficiary: "to"'), 1)
     assert unbindable != src, "the substitution did not apply -- this test is asserting nothing"
     with pytest.raises(SystemExit, match="neither binds nor admits"):
         _load_with(unbindable)
@@ -1061,7 +1223,8 @@ def test_13f_a_planted_establish_founds_the_office_and_grants_a_hold_opened_befo
     off = w.offices["off_reeve"]
     assert (off.post, off.rung, off.remit_acts, off.faction, off.conferral) == (
         "Reeve", "S", ["issue", "dispatch"], "Crown", "appointed"), off
-    assert off.establishment == [], "the effect wrote `establishment`, which is `17a`'s to delete"
+    assert not hasattr(off, "establishment") and world_q.establishment_of(w, off.id) == [], (
+        "`17a` deleted `Office.establishment`; a founding obliges nobody, so the Query is empty")
     assert t.granted_acts == ("issue", "dispatch"), (
         f"the early holder's grant is {t.granted_acts} -- the act did not re-stamp it")
     assert person_side_eligible(mid, VERB_TABLE["dispatch"]), (
@@ -1350,7 +1513,8 @@ def test_13f_the_restamp_skips_a_non_hold_tenure_and_a_dead_hold_on_the_same_off
 # =================================================================================================
 # PLAN POSITION `13e` -- ONE READING OF THE REMIT.
 # `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md`, position `13e`. Routes
-# `loop/resolve.py`'s `_eligible` and `epistemic.py`'s `_ch_post_remit` off the live
+# `loop/resolve.py`'s `_eligible` and `epistemic.py`'s `_ch_post_remit` (a remit reader until `17a`
+# re-based it onto obligees) off the live
 # `w.offices[...].remit_acts` and onto the Tenure's own `t.granted_acts` -- the same store
 # `decision/options.py` already read, closing the THREE-readings-over-two-stores gap
 # `epistemic.py`'s `_ch_post_remit` docstring tracked. FALSIFIER, both arms in one world: a `hold`
@@ -1419,39 +1583,14 @@ def test_13e_hand_created_office_refuses_act_established_office_admits():
     assert person_side_eligible(w.persons["p_low"], dispatch)
 
 
-def test_13e_the_witness_channel_also_reads_the_snapshot_not_the_live_office():
-    """`epistemic._ch_post_remit`'s HALF of this position's fix has no behavioural test elsewhere:
-    `test_a_binding_decision_lights_the_two_witness_channels_that_needed_one`
-    (`test_season_shape.py`) exercises `post_remit` on `off_duke`, whose remit already carries
-    `confer` at seating -- it passes identically whether the channel reads `t.granted_acts` or the
-    live office, because the two never disagree there. This test builds the disagreement: a holder
-    whose OFFICE gains `confer` only AFTER seating (live-only, never in the snapshot), witnessing a
-    REAL `confer` Event performed by someone else. Pre-`13e`, `_ch_post_remit` read `w.offices.get
-    (t.object).remit_acts` live and would have wrongly admitted this holder as a remit-covering
-    witness; post-`13e` it reads `t.granted_acts`, which the live-only grant never reached."""
-    w, d = _establish_world()
-    w.add_tenure(Tenure("t_hand", "p_mid", "off_hand", "hold", 0))
-    [t_hand] = [t for t in w.tenures if t.id == "t_hand"]
-    assert "off_hand" not in w.offices, "fixture: not seated yet"
-    w.offices["off_hand"] = Office("off_hand", "Reeve", "S", ["issue", "dispatch", "confer"],
-                                    conferral="appointed", faction="Crown")
-    assert t_hand.granted_acts == (), (
-        "a hand-created office re-granted a sitting holder -- fixture is not the snapshot case")
-
-    w.offices["off_dicastery"].conferral = "appointed"      # rostered since `13d-i`
-    w.offices["off_dicastery"].rung = "S"                    # G3: ground inside the duke's purview
-    out = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="g_conf", actor="p_high", verb="confer",
-                          payload={"office": "off_dicastery", "to": "p_low"}, via="off_duke")],
-                    contest_max_depth=w.fixtures.get("contest_max_depth"))
-    e = next((x for x in out if x.kind == "tenure.opened"), None)
-    assert e is not None, f"fixture: confer did not open a Tenure: {[x.kind for x in out]}"
-
-    assert CHANNEL_PREDICATES["post_remit"](w, e, "p_high"), (
-        "control: the duke's own snapshot genuinely carries `confer` -- the channel should admit")
-    assert not CHANNEL_PREDICATES["post_remit"](w, e, "p_mid"), (
-        "`post_remit` admitted a witness whose OFFICE carries `confer` only live, never in their "
-        "own Tenure's snapshot -- it is still reading `w.offices[...].remit_acts` instead of "
-        "`t.granted_acts`")
+# ⚠ `test_13e_the_witness_channel_also_reads_the_snapshot_not_the_live_office` STOOD HERE AND IS
+# DELETED WITH ITS SUBJECT (plan position `17a`). It pinned `epistemic._ch_post_remit`'s half of
+# `13e`: a remit-holding witness admitted off `t.granted_acts`, never the live office. `17a` retired
+# that predicate outright -- r2 item 9 re-bases the channel onto the OBLIGEES of the seat an act was
+# exercised through, which reads no remit at all -- so there is no longer a remit reading at that
+# site to hold to the snapshot. `13e`'s resolver half is still pinned above, and its AST clause below
+# still guards every `Office.remit_acts` read. The obligee channel's own falsifiers are in
+# `tests/test_obligees.py`.
 
 
 def _remit_acts_attribute_reads_outside_allowlist() -> list:

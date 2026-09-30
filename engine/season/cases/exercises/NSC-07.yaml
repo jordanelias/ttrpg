@@ -1,0 +1,11 @@
+# NSC-07 -- `scale:` re-authoring, plan position `20-ii` (U9/R-04, `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md:1459-1474`). Read against the case's own `one_line`/`who_acts` (`engine/season/cases/chain/`), never matched by keyword (`harness/corpus_run.py::rescales`'s own warning: 23 of 47 match no institution word).
+case: NSC-07
+scale:
+  was: world
+  is: realm
+  why: 'W28''s ruling (`architecture/PLAN.md:1613-1617`, recorded on `H-95`): `rung_kinds` has no `world`
+    member, and a `world`-scale case is instantiated as `realm` -- the corpus''s own reading of a world-spanning
+    story is one whose reach is realm-wide, never narrower. the degrading location is gated by ''a global
+    resource threshold'', and no faction or territory narrower than that global reading appears in `who_acts`
+    -- the expedition and its capability floors are personal-scale mechanics riding on top of a world-level
+    condition, so realm is the case''s own ceiling.'

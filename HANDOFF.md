@@ -22,6 +22,7 @@ Everything this file said before it became an index is verbatim in
 | does the milestone run | `python tools/m1_acceptance.py --summary` |
 | the season loop against the nine requirements | `python -m engine.season.harness.register --requirements` |
 | holes, verb coverage, unrepresentable cases | `python -m engine.season.harness.corpus_run` |
+| the verb aperture per holder, per source, on the populated realm (not the corpus) | `python -m engine.season.harness.aperture [seasons] [seed]` |
 | measured holes before you re-derive one | `engine/season/hole_register.yaml` |
 | rows awaiting Jordan | `grep -c '"needs_jordan": true' registers/editorial_ledger*.jsonl` counts ROWS; an id's last row decides whether it is still open |
 | what landed recently | `git log --oneline -20` and the ledgers' last fortnight of rows |

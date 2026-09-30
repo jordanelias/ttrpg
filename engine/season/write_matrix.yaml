@@ -52,6 +52,13 @@
 #   NINE after #358 rev.2's two schema changes land: `Person.beliefs` is DELETED (§D.1.1 -- a
 #   belief is a `commit` to an OUGHT, not a field) and `Tenure.payload` is REPLACED by `term?`
 #   (§B.8). Both figures are true of their own basis; a session citing either must say which.
+#   ⚠ AMENDED 2026-09-29 (plan position `17b`): THE SECOND HALF OF THAT SENTENCE DID NOT HAPPEN AND
+#   WILL NOT. `term` landed as its OWN field beside `payload` (`state/carriers.py::Term`, and the
+#   `(Tenure, term)` row below), because `payload` gained a writer and readers after this note was
+#   written -- `H-71`'s remit grant (`World._grant_remit`, `Tenure.granted_acts`) and the gate's
+#   `conferral` re-grant clause -- and the plan's own §3.2 row 12 says *"Not `Tenure.payload`, which
+#   is live."* `04 §B.8`'s *"Replaces payload?"* was a question, and this is its answer. The 2026-09-03
+#   text is kept as the record of what was expected, not as an instruction.
 #
 #   Date.fired is now fixed in place (below) -- it was a data error, not a hole.
 #
@@ -115,19 +122,12 @@ rows:
     social:  "false"
     by:      "DR-3 · §24 has no actor"
     emits:   "`date.fired`"
-  - kind:    "Dispensation"
-    field:   "exists"
-    steps:   [RES]
-    class:   "ACTS"
-    social:  "true"
-    by:      "W2/H-43 -- as `(Petition, exists)`"
-    emits:   "`dispensation.issued`"
   - kind:    "DocketItem"
     field:   "matter"
     steps:   [CAL, RES]
     class:   "CALENDAR/ACTS"
     social:  "false"
-    by:      "DR-3 · §24 *\"dockets form\"*, no actor"
+    by:      "DR-3 · §24 *\"dockets form\"*, no actor. ⚠ PLAN POSITION `19`: the RES cell has its first two producers -- `open_case` puts a matter ON the docket (`{date: None, matter: <subject>}`) and `determine` takes it OFF (the item's `matter` written back to `None`), both through their own effects (`loop/effects.py`). CALENDAR still forms the actorless empty slot."
     emits:   "`docket.formed`"
   - kind:    "Office"
     field:   "exists"
@@ -136,13 +136,6 @@ rows:
     social:  "true"
     by:      "W2/H-41 -- establishing an office"
     emits:   "`office.established`"
-  - kind:    "Office"
-    field:   "establishment"
-    steps:   [RES]
-    class:   "ACTS"
-    social:  "true"
-    by:      "DR-2. ⚠ RETIRED BY W2 for having no producing verb, RETURNED BY W3 WITH `establish`, which is the discipline the retirement rule encodes: a row exists because a producer produces it. Its SIZE per office kind is H-34 and stays `assumption`"
-    emits:   "`establishment.changed`"
   - kind:    "Office"
     # ⚠ RENAMED `remit` -> `remit_acts` 2026-09-25 (plan position `13f`, the key reconciled at its
     # owner, `CLAUDE.md` §0.05 cl.3). V2 wrote `(Office, remit)` and `Office` has no `remit` field --
@@ -233,8 +226,8 @@ rows:
     steps:   [MAT, RES]
     class:   "MATTER/ACTS"
     social:  "false"
-    by:      "DR-1, D10 — see §D4"
-    emits:   "`travel.moved`"
+    by:      "DR-1, D10 — see §D4. ⚠ THE `MAT` STEP GAINED ITS WRITER AT PLAN POSITION `19c` (2026-09-30): `loop/matter.py`'s travel pass ends every leg at the next MATTER, so `decision/budget.py`'s distance penalty is a cost of the season travelled in and not, as it was, of every season after. `travel.ended` is that write's emission (`H-12`: MATTER emits per write, and `travel.moved` would report a move that did not happen)"
+    emits:   "`travel.moved` · `travel.ended`"
   - kind:    "Person"
     field:   "weight"
     steps:   [CEN]
@@ -242,13 +235,6 @@ rows:
     social:  "false"
     by:      "W2/H-49. ⚠ PROVENANCE CORRECTED by the adversarial pass: this said \"a §54 fold-in\" and #353 §54's adjudicated items :1893-1908 do NOT include `weight`. The FIELD is real -- `Person :=` at :324 carries it -- and that is the ground the row stands on. H-11's subsistence default reads it ('scaled by weight'), so every season touches it"
     emits:   "`weight.changed`"
-  - kind:    "Petition"
-    field:   "exists"
-    steps:   [RES]
-    class:   "ACTS"
-    social:  "true"
-    by:      "W2/H-43 -- Part E says a Petition is 'created, not written', which puts creation BESIDE the gate. #353 :1061-1064: 'Either the gate applies the write, or direct assignment is made impossible.' An object created beside the gate is the unmarked-cell defect in a new hat"
-    emits:   "`petition.filed`"
   - kind:    "Proposition"
     field:   "*"
     steps:   []
@@ -268,8 +254,8 @@ rows:
     steps:   [RES]
     class:   "ACTS"
     social:  "true"
-    by:      "D7 — `create` by an act (§13)"
-    emits:   "`record.created` · `record.destroyed`"
+    by:      "D7 — `create` by an act (§13). ⚠ PLAN POSITION `15` FOLDED TWO ROWS INTO THIS ONE: `(Petition, exists)` and `(Dispensation, exists)` (W2/H-43, both `[RES]`, ACTS, `social: true` -- identical to this row) are deleted, because a petition and a dispensation are KINDS of `Record` (`04_CODE_ARCHITECTURE.md` §B.5, `rosters.yaml: record_kinds`). H-43's point survives the fold unchanged: creation goes THROUGH the gate, on this row. Their two kinds are carried here so the fold drops nothing either row declared"
+    emits:   "`record.created` · `record.destroyed` · `petition.filed` · `dispensation.issued` · `faction.surveyed`"
   - kind:    "Record"
     field:   "forgery_quality"
     steps:   [RES]
@@ -318,9 +304,8 @@ rows:
     steps:   [RES]
     class:   "ACTS"
     social:  "true"
-    by:      "W2/H-41 -- founding a hearth. Part D's existence rows covered only `Person` and `Record`"
+    by:      "W2/H-41 -- founding a hearth. Part D's existence rows covered only `Person` and `Record`. ⚠ PRODUCED SINCE PLAN POSITION `24e`: `found` (`verb_table.yaml`, `loop/effects.py::_eff_found`) mints a Rung of a works' plan kind and its `contain` edge, admitted at the gate under `founding`; the `unproduced:` cell is deleted in the same commit, as loader invariant 2 requires"
     emits:   "`rung.founded`"
-    unproduced: "H-41: founding a hearth -- Part D's existence rows had no producer for Rung"
   - kind:    "Rung"
     field:   "stores"
     steps:   [MAT, RES]
@@ -347,9 +332,8 @@ rows:
     steps:   [RES]
     class:   "ACTS"
     social:  "true"
-    by:      "W2/H-41 -- building a site"
+    by:      "W2/H-41 -- building a site. ⚠ PRODUCED SINCE PLAN POSITION `24e`: `build` (`verb_table.yaml`, `loop/effects.py::_eff_build`) mints a Site of a works' plan kind at the rung it names, at condition 0; the `unproduced:` cell is deleted in the same commit, as loader invariant 2 requires"
     emits:   "`site.built`"
-    unproduced: "H-41: building a site -- no founding verb writes Site.exists (HANDOFF item 2d)"
   - kind:    "Tenure"
     field:   "degree"
     steps:   [RES]
@@ -357,6 +341,7 @@ rows:
     social:  "true"
     by:      "DR-2"
     emits:   "`tenure.graded`"
+    unproduced: "H-162: plan position `19` took `Tenure.degree` off `determine`, its only declared writer, which never wrote it -- an UNCONTESTED determination grades nothing (`loop/resolve.py::_fold`: an uncontested act carries no degree). The graded disposal is the CONTESTED determination (`04_VERBS.md` §B.2's degree-keyed row, proceedings PHASE 2 steps 13-15)"
   - kind:    "Tenure"
     field:   "payload"
     steps:   [RES]
@@ -372,11 +357,18 @@ rows:
     by:      "DR-2 — `confer`, `commit`, `oblige`, `tie`"
     emits:   "`tenure.opened`"
   - kind:    "Tenure"
+    field:   "term"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "PLAN POSITION `17b` (TERM · UPKEEP), `04_CODE_ARCHITECTURE.md` §B.8's `term? (matures_at, declared_by, …)` and F.3 (*'`Tenure.term`; MATTER matures it'*). Written ONLY BY AN ACT, which is why it is RES and `social: true`: `oblige` declares it on the edge it opens (T-n, *'the opening act declares the terms'*), and a `transfer` paying a seat's `upkeep` renews it (F.18, *'the repair is a verb'*). MATTER never writes this cell -- a term is MATURED by closing its edge, which is `(Tenure, until)`'s MAT cell below, never by moving the term."
+    emits:   "`term.renewed`"
+  - kind:    "Tenure"
     field:   "until"
     steps:   [MAT, RES]
     class:   "MATTER/ACTS"
     social:  "false"
-    by:      "stated in chain — §15.3, the one declared seam, bounded by causation"
+    by:      "stated in chain — §15.3, the one declared seam, bounded by causation. ⚠ AMENDED 2026-09-29 (plan position `17b`): the causation rule now admits the SECOND cause `04 §B.8`'s synthesis call licenses -- *'an actorless row may write `until` only where its cause is the existence change it also caused, OR the maturation of a term declared by the act that opened this Tenure'* -- so MATTER's MAT cell is reached by a death's cascade AND by a matured `Tenure.term` (`loop/matter.py`, gate basis `T-n`). One seam, two causes, both citing an author; `World.write`'s S15.3 pre-check takes `matured_term=` beside `caused_person_exists=`."
     emits:   "`tenure.closed`"
 
 # ---------------------------------------------------------------------------
@@ -393,8 +385,22 @@ rows:
 retired:
   - "Person.capability"
   - "Person.marks"
-  - "Rung.stake"
-  - "Site.drawers"
+  - name: "Rung.stake"
+    reason: >-
+      ROW RETIRED BY W2 (no verb produces its `emits:` kind), AND ITS CARRIER FIELD DELETED
+      2026-09-29 (plan position `18a`, r2 item 14): `04 §B.3` -- *"DELETED: stake (retired, no
+      producer)"*. Zero readers and zero writers; `Rung._DECLARED` and `Rung.__init__` dropped it
+      together, so `Rung(..., stake=...)` is now refused as an undeclared field.
+    needs: >-
+      nothing -- what `stake` was for (the office's purse, F.18) is `Office.upkeep` paid out of the
+      seat's own rung's `stores` by `transfer` (plan position `17b`); do not re-add this field
+  - name: "Site.drawers"
+    reason: >-
+      ROW RETIRED BY W2 (no verb produces `drawers.changed`), AND ITS CARRIER FIELD DELETED
+      2026-09-29 (plan position `18a`, r2 item 14). `01_AXIOMS.md` §D.3: *"retired as a dead row
+      with `Rung.stake`"*. Zero readers and zero writers in the tree.
+    needs: >-
+      nothing -- the field is gone by design; do not re-add it or route writes here
   - name: "Person.beliefs"
     reason: >-
       DELETED 2026-09-25 WITH ITS CARRIER FIELD, AND NOT FOR W2's REASON (no producing verb). #358
@@ -405,3 +411,15 @@ retired:
     needs: >-
       nothing -- a `commit` to an OUGHT is the mechanism now (§D.1.1); do not re-add this field or
       route belief-writes here
+  - name: "Office.establishment"
+    reason: >-
+      DELETED 2026-09-29 (plan position `17a`, r2 item 9) WITH ITS CARRIER FIELD AND `establish`'s
+      `writes:` ENTRY -- r2 `05:214-221`, three edits, not one. `ARCH §B.7` call 2: *"`establishment`
+      is a Query over `oblige`, not a field. A set of persons on a seat is two homes for one fact."*
+      The field was `[]` on every office in every world (`establish` declared it and never wrote
+      it), and `queries/world_q.py::establishment_of` now answers over live `oblige` Tenures. The
+      row's own `by:` cell carried H-34's *establishment size per office kind*, which `ARCH §B.7`
+      rejected by name as *"a number nobody can source"*: the size is however many have obliged.
+    needs: >-
+      nothing -- a person joins a seat by `oblige` and leaves by `release`, each writing their own
+      `Tenure`; do not re-add this field or route membership writes here

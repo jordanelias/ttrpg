@@ -7,8 +7,8 @@ rebind surface needs the MODULE by name. "Option set" is the tree's own existing
 this returns, so the filename is idiomatic rather than coined (`CLAUDE.md` §4).
 
 `opening_set` and its operand machinery (`operands_for`, `_derive_operand`, `_REFERENT_OPERANDS`,
-`containing_rung_of`, `store_kind_of`), the eligibility predicate, and the two agreement/standing
-readers.
+`containing_rung_of`, `store_kind_of`, `_from_content_claim`, `_from_shortfall_claim`), the
+eligibility predicate, and the two agreement/standing readers.
 
 ⚠ `entrenchment` SITS HERE PROVISIONALLY AND L3 RE-ADJUDICATES IT. Three functions in the old
 `decision.py` self-declared as person-side Queries via `TRACE.query(..., "person")`: `budget`,
@@ -25,7 +25,10 @@ from __future__ import annotations
 
 from typing import Optional
 from ..data.pursuits import to_axes
-from ..data.rosters import PERSON_PREDICATES, PURSUIT_AXES, require_member
+from ..data.requires import (
+    SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS, WRIT_SOURCED_OPERANDS,
+)
+from ..data.rosters import PERSON_PREDICATES, PURSUIT_AXES, RECORD_CONTENT, require_member
 from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL, ELIGIBILITY_KINDS, VERB_TABLE
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
@@ -102,6 +105,9 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             TRACE.note(f"{p.id} refuses {verb!r}: its `{axis}` alignment exceeds their own "
                        f"projected weight {tolerance:+.3f} (ED-IN-0261)", "H-146")
             continue
+        # `19`: the seat this row's act would exercise -- `exercised_seat`, the same untraced walk
+        # `pack_scenes` names `Act.via` by -- for the belief test's `basis` conjunct below.
+        seat = exercised_seat(p, row)
         for subject in q.referents:
             # ⚠⚠ A CONTEST NEEDS TWO CLAIMANTS, AND A PERSON IS NOT THEIR OWN ADVERSARY.
             # `move`'s `contain_path` cell keeps the same shape of rule -- *"a node is not a path
@@ -130,7 +136,29 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             ops = operands_for(p, row, q, subject, fx)
             if ops is None:
                 continue
-            if belief_contradicts(p, row, subject, ops):
+            # ⚠ AND A TWO-SIDED ACT NEEDS A SECOND SIDE (plan position `15`, `ED-IN-0210` ruling
+            # 2). The rule above, one column over: a row naming its `counterparty:` operand forms
+            # no Candidate whose counterparty is the person -- a petition to oneself is the
+            # Tenure(X,X) fiat ruling 1 names. Declined HERE, not refused in the fold, for the
+            # reason the contest rule gives: no read the fold makes can say *that is you*, so a
+            # refusal teaches nothing -- MEASURED, it fed itself (the refusal's claim about the
+            # petitioner raised the next question about them). Reads the row's column, never a
+            # verb name, and the loader guarantees the operand is carried.
+            # ⚠ AND A SECOND SIDE NOBODY CAN NAME IS NO SECOND SIDE (plan position 16). On a TYPED
+            # row the loader guarantees the counterparty is carried, so `None` cannot arise there.
+            # On an UNTYPED row (`give`) nothing is carried, and forming the Candidate would mint
+            # an act with no receiver -- refused by the fold every time, for the instrument's
+            # reason. MEASURED before this clause, the `give` row without it: 3 such acts in
+            # `headless.run(3, 0)` and 41 in `populated.run(2, 0)`, every one `give.refused`, and
+            # `release` dropped out of the corpus's executed set because they took its scenes --
+            # position `15`'s *constant scene tax with nothing behind it*, the shape the petition
+            # row's seat reading was refused for.
+            if row.counterparty and ops.get(row.counterparty) in (None, p.id):
+                continue
+            # `19`: THE SEAT THE ACT WILL BE EXERCISED THROUGH rides into the belief test as it rides
+            # onto `Act.via` (`pack_scenes`), so a `basis` conjunct is asked of the same seat both
+            # sides. `seat` is `exercised_seat`, read once per row above.
+            if belief_contradicts(p, row, subject, ops, seat):
                 continue
             out.append(Candidate(verb, subject, why=q.source, operands=ops))
     return out
@@ -439,6 +467,18 @@ def containing_rung_of(p: Person) -> Optional[str]:
     return next((t.object for t in p.tenures if t.kind == "contain" and t.live), None)
 
 
+def _claim_by_id(p: Person, claim_id) -> Optional["Claim"]:
+    """THE ONE CLAIM IN `p`'S OWN LEDGER WITH THIS ID, or `None`. `store_kind_of` and
+    `_from_content_claim` (both below) each look a claim up by `q.about` before reading its
+    predicate -- this is that lookup, factored once so it is not two loops over `p.ledger` written
+    the same way. §20's constraint (a person's own ledger, never the world) lives at the call
+    site, not here: this takes the ledger it is handed."""
+    for c in p.ledger:
+        if c.id == claim_id:
+            return c
+    return None
+
+
 def store_kind_of(p: Person, q: "Question") -> Optional[str]:
     """The matter kind THE QUESTION IS ABOUT, from the person's own ledger. `None` if it says none.
 
@@ -453,14 +493,113 @@ def store_kind_of(p: Person, q: "Question") -> Optional[str]:
     resolver read wearing a person's signature."""
     if q is None or not q.about:
         return None
-    for c in p.ledger:
-        if c.id != q.about:
-            continue
-        # `stores` is `transfer`'s own `scalar:`, and `f"{scalar}:{key}"` is how `Observation`
-        # derives the predicate -- so this reads the namespace the cell writes rather than a
-        # second vocabulary. A claim about anything else names no matter kind.
-        stem, sep, arg = str(c.predicate).partition(":")
-        return arg if sep and arg and stem == "stores" else None
+    c = _claim_by_id(p, q.about)
+    if c is None:
+        return None
+    # `stores` is `transfer`'s own `scalar:`, and `f"{scalar}:{key}"` is how `Observation`
+    # derives the predicate -- so this reads the namespace the cell writes rather than a
+    # second vocabulary. A claim about anything else names no matter kind.
+    stem, sep, arg = str(c.predicate).partition(":")
+    return arg if sep and arg and stem == "stores" else None
+
+
+def _from_content_claim(p: Person, q: "Question", name: str):
+    """AN OPERAND READ OFF A HELD (or merely witnessed) WRIT -- position `15c`, r2
+    `02_THE_WRIT_AND_THE_WORD.md` §A.13: *"the operands are the WRIT's, not the fixtures'."*
+    Modelled on `store_kind_of`, one paragraph above: both read a claim by `q.about`, never by
+    the referent, because a document's content is what the PERSON HOLDING IT believes, and
+    `AX-2` puts a belief nowhere else (§20) -- `subject`/the referent is a different fact and
+    stays on its own branch below.
+
+    `None` when `q.about` names no claim in `p`'s own ledger, the claim's predicate does not
+    start `content:`, or its value has no key `name`. ⚠ THAT LAST CASE IS THE LIVE ONE FOR TWO
+    OF THE THREE CALLERS. `record_kinds`'s two schemas actually built (`15`) are
+    `dispensation: [terms, to, at]` and `petition: [terms, to, from]` -- so a call for `to`
+    resolves (both kinds address someone), and a call for `kind`/`amount` declines EVERY TIME
+    today, because neither schema carries either key; the caller's existing fixture/referent
+    fallback runs exactly as it does for a person naming no writ at all. That is a fact about
+    today's two live schemas, not a limit of this function -- a later kind that does carry
+    `kind`/`amount` needs no change here.
+
+    ⚠ A SINGLETON LIST COLLAPSES TO ITS ONE ID; ANY OTHER COUNT DECLINES. `to`'s writ-side type
+    is `[PersonId|OfficeId]` (r2 §A.3) -- a LIST, because a document may address several people
+    -- but every operand this vocabulary has ever carried is a SCALAR (`_derive_operand`'s own
+    `to`/`subject`/`site` branches, `_eff_transfer`'s single `w.rungs.get(...)`). FOUND BY
+    RUNNING THE POPULATED CORPUS, not reasoned in advance (`CLAUDE.md` §0.1 pt 3): the first
+    writing of this function returned the raw tuple, and 173 `petition`/`transfer` Candidates
+    formed carrying it verbatim -- each one UNABLE TO EVER RESOLVE, because `w.persons`/
+    `w.rungs` key on strings and a tuple matches nothing there, EVEN WHEN the sole named
+    addressee genuinely exists. That is the instrument inventing a NEW way to refuse an act for
+    a reason that is not there (§42.2's polarity), on top of the ones the design already has.
+    Naming WHICH of several addressees a scalar operand means is a choice nobody has ruled --
+    `ID-13`'s `floor` precedent -- so more than one, or none, declines exactly as an unreadable
+    floor does; exactly one is not a choice at all, so it is not held back."""
+    if q is None or not q.about:
+        return None
+    c = _claim_by_id(p, q.about)
+    if c is None:
+        return None
+    stem, sep, _ = str(c.predicate).partition(":")
+    if not sep or stem != RECORD_CONTENT.get("predicate") or c.value is None:
+        return None
+    v = dict(c.value).get(name)
+    if isinstance(v, tuple):
+        return v[0] if len(v) == 1 else None
+    return v
+
+
+def _from_shortfall_claim(p: Person, q: "Question", name: str):
+    """AN OPERAND READ OFF A HELD SHORTFALL CLAIM. Plan position `19d`, the retirement plan's G3:
+    *"wiring the existing `transfer` verb's operands from a shortfall claim"*. The claim is
+    `(rung, "shortfall:<kind>", units)`. MATTER records it on the write of a larder its draw ran
+    dry with a mouth unfed, as `demanded - delivered` over the rung's subtree
+    (`queries/world_q.py`), and WITNESS deposits it into those who saw that write. So a person
+    asked about it knows WHICH matter the place lacks and HOW MUCH. This reads the two:
+      * `kind`   -- the predicate's argument (`store_kind_of`'s own move, one stem over);
+      * `amount` -- the claim's value, when it is a positive whole number of units.
+    Both are read by `q.about` from `p`'s OWN ledger, never by the referent, on
+    `_from_content_claim`'s precedent (§20, `AX-2`).
+
+    ⚠ `to` IS NOT READ HERE. For a `claim_landed` question the referent IS the claim's subject, so
+    the referent rule already binds `to` to the drained rung (`rosters.yaml:
+    shortfall_sourced_operands`' note). ⚠ `from` IS NOT READ HERE EITHER. The giver gives from where
+    they stand (`containing_rung_of`), for r2 §A.13's reason: a claim about somewhere else must not
+    reach into a larder the actor is not standing in.
+
+    ⚠ `None` IS SILENT BY DESIGN. It means no claim by `q.about` in `p`'s own ledger, a predicate
+    that is not `shortfall:<kind>`, or an amount that is not a positive whole number, and the caller
+    falls through to `store_kind_of`/the fixtures exactly as before. A drifted retelling (`15b`'s
+    `_told_value`) stays positive by construction: it preserves sign and never crosses zero. So a
+    rumour can misstate how short a place is, and it can never turn the shortfall into a surplus.
+
+    REJECTED SHAPES, each for a reason:
+      * A `content:` WRIT CARRYING `kind`/`amount` (`15c`'s reader, a new record kind). The writ is
+        a document someone ISSUES. Here nobody asks: the larder ran dry and a witness saw it.
+        Minting a document for a fact nobody authored is the automatic promotion S36.1 forbids
+        (probe `F19`'s law).
+      * THE `stores:<kind>` OBSERVATION `store_kind_of` already reads. That is a store LEVEL. A
+        level is not a lack: a larder at 30 is plenty for three mouths and a famine for thirty, and
+        a person cannot know the mouths (`demanded` is a world read).
+      * THE PER-PERSON SHORTFALL, as witnessed through item 3b's `body.changed`.
+        (`World._subsistence_shortfall` is census-only and is no claim at all.) That claim is about
+        a PERSON, so its referent is no rung and a transfer to it refuses (`_eff_transfer`: no
+        rung, no transfer). It carries no kind or amount either (`value` is `True`). It is also the
+        per-person scale `ED-IN-0255` ruled away from: *"i don't think having lords and guild
+        members etc worry about subsistence is worthwhile"*, *"it's a territorial issue"*."""
+    if q is None or not q.about:
+        return None
+    c = _claim_by_id(p, q.about)
+    if c is None:
+        return None
+    stem, sep, kind = str(c.predicate).partition(":")
+    if not sep or not kind or stem != SHORTFALL_PREDICATE:
+        return None
+    if name == "kind":
+        return kind
+    if name == "amount":
+        v = c.value
+        ok = isinstance(v, int) and not isinstance(v, bool) and v > 0
+        return v if ok else None
     return None
 
 
@@ -479,6 +618,31 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     VALUE FOR IS A FIXTURE. That is why `subject`, `to` and `site` all bind the referent and are
     not one name -- the cells name them differently because they mean different things TO THE
     VERB, and the person answers all three the same way, with the thing they were asked about.
+
+    ⚠ POSITION `15c` ADDS A FOURTH READING, CHECKED FIRST FOR THREE OF THE EIGHT NAMES: AN OPERAND
+    THE PERSON'S OWN HELD WRIT ANSWERS BINDS THE WRIT, not the referent and not the fixture.
+    `to`/`kind`/`amount` -- the three of `transfer`'s own operands not already `from` (r2 §A.13:
+    *"the executor's act is `transfer`, whose operands -- `from`, `to`, `kind`, `amount` -- are
+    all in the closed eight"*) -- ask `_from_content_claim` first. `from` is DELIBERATELY EXCLUDED
+    from this check: r2's own ruling keeps *where you are* off the writ (*"a writ that could name
+    `from` would let a Duke's document reach into a larder the executor is not standing in"*), so
+    it stays on `containing_rung_of` alone, below. `at` -- the writ's OWN place of discharge -- is
+    also excluded here, and DELIBERATELY: `at` is not (and r2 rules it must not become, *"I do not
+    coin a ninth operand"*) a member of `requires_operands`, so no typed cell can ever ask
+    `operands_for` for it and `_derive_operand` is never called with `name == "at"` at all -- a
+    branch here would be dead code no test could reach (`ID-13`). `13f`/`19`/`19b`/`found` are
+    where a NEW verb cell earns `at` a roster place, if one ever needs to bind it directly; this
+    position supplies the READER those positions build on, not the roster edit.
+
+    ⚠ POSITION `19d` ADDS A FIFTH SOURCE, FOR TWO NAMES: `kind` and `amount` are read off a held
+    SHORTFALL claim (`_from_shortfall_claim`), ahead of `store_kind_of` and the fixtures. `to` is
+    not among them, because a shortfall claim's subject already IS the question's referent.
+
+    ⚠ S5 (round-1 `01_THE_BUILD_ORDER.md`, row S5): this widening adds no fifth carrier.
+    `beneficiary_kinds` (`rosters.yaml`) stays four members (`actor, subject, to, none`) --
+    CAT-2 closed the beneficiary as a STATIC verb-table column resolving to a carrier the
+    Candidate already holds, never a new operand name, so `benefits_me(c)` inherits nothing new
+    to read from this branch.
 
     ⚠ THE REFERENT IS WORLD-SOURCED, AND THAT IS §F1'S OWN SHAPE RATHER THAN A WIDENING OF IT.
     Raised by the `W-C` adversarial pass and closed here rather than escalated, because it is
@@ -516,6 +680,29 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     alternative, `min` over every kind's floors, is a number nobody chose."""
     if name == "actor":
         return p.id
+    # THE WRIT ANSWERS FIRST, for the names `rosters.yaml: writ_sourced_operands` declares (see
+    # this function's own docstring for why `from`/`at` are not among them). A person naming no
+    # writ at all, or one whose kind has no such key, falls straight through to the referent/
+    # fixture below -- `_from_content_claim` returning `None` is silent by design, not a special
+    # case of this one. BATCH-CLOSE FINDING (methodology-close Phase 1, CODE ARCHITECTURE lens):
+    # this was a literal `("to", "kind", "amount")` tuple, caught by
+    # `test_jordan_no_definition_is_hardcoded_in_a_body` -- moved to the roster rather than
+    # exempted, since it names a real design fact (which operand names a writ may answer) with a
+    # cited source, not a mechanism.
+    if name in WRIT_SOURCED_OPERANDS:
+        v = _from_content_claim(p, q, name)
+        if v is not None:
+            return v
+    # AND A HELD SHORTFALL CLAIM ANSWERS NEXT (plan position `19d`), for the names
+    # `rosters.yaml: shortfall_sourced_operands` declares (`kind`, `amount`). A question has one
+    # `about`, and a claim is either a writ's or a shortfall's, never both, so the two readers
+    # never compete for one operand and their order does not matter. Both come before
+    # `store_kind_of` and the fixtures: a claim that NAMES the matter and the quantity outranks
+    # a default that names neither.
+    if name in SHORTFALL_SOURCED_OPERANDS:
+        v = _from_shortfall_claim(p, q, name)
+        if v is not None:
+            return v
     # What the act is ABOUT -- three cell-side names for the one thing the person was asked about.
     if name == "subject":
         return subject

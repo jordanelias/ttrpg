@@ -1,0 +1,17 @@
+# NPC-034 -- `scale:` re-authoring, plan position `20-ii` (U9/R-04, `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md:1459-1474`). Read against the case's own `one_line`/`who_acts` (`engine/season/cases/chain/`), never matched by keyword (`harness/corpus_run.py::rescales`'s own warning: 23 of 47 match no institution word).
+case: NPC-034
+scale:
+  was: faction
+  is: realm
+  why: 'following the reading NPC-008/NPC-033/NPC-038 already established for this corpus (a faction-wide
+    or Crown/Church-level institution re-scales to `realm`, since `rung_kinds` has no `faction` member
+    and the institution''s own reach is realm-wide): `one_line` seats Gustav Linder ''in the Crown''s
+    Inner Circle'' as ''the sole legal conduit for Church heresy jurisdiction on Crown soil'' -- a Crown-level
+    council seat, realm scale exactly as NPC-008''s Ministry Clerk and NPC-033''s Spymaster were read.'
+  office:
+    post: Archbishop's Representative
+    body: Inner Circle
+    remit: []
+    why: '`one_line`: ''The Archbishop''s Representative seated in the Crown''s Inner Circle''; `body:
+      Inner Circle` derives the Crown faction (`rosters.yaml: office_bodies`) rather than re-authoring
+      it.'

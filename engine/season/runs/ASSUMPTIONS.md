@@ -37,6 +37,7 @@ exercised by this run.**
 | `obstacle_default` | `2` | no — a harness fixture |
 | `obstacle_refusal_multiple` | `2` | yes — §27.4 |
 | `band_floors` | `{'harbour': {'bulk_shipping': 800, 'fishing': 100}, 'seam': {'deep_mining': 700, 'surface_gleaning': 50}, 'body': {'full_operations': 800, 'limited': 500, 'withdrawal_only': 100}, 'dwelling': {}, 'garrison': {}}` | no — a harness fixture |
+| `capacity_floor` | `{'harbour': 0, 'seam': 0, 'body': 0, 'dwelling': 1, 'garrison': 0}` | no — a harness fixture |
 | `season_factor` | `1.0` | no — a harness fixture |
 | `subsistence_weight` | `{'grain': 2, 'salt': 1}` | no — a harness fixture |
 | `question_aggregation_rule` | `first` | no — a harness fixture |
@@ -62,3 +63,7 @@ exercised by this run.**
 | `speech_kind_terminal_fault` | `removal` | no — a harness fixture |
 | `denial_detail_outperforms` | `equal` | no — a harness fixture |
 | `displayed_anger_extracts_concessions` | `False` | no — a harness fixture |
+| `told_drift_band` | `0.5` | no — a harness fixture |
+| `oblige_term` | `4` | no — a harness fixture |
+| `default_upkeep` | `1` | no — a harness fixture |
+| `bench_quorum` | `1` | no — a harness fixture |

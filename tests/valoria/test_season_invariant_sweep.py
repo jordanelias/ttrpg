@@ -108,12 +108,25 @@ def test_the_entity_set_covers_every_world_collection_a_tenure_can_name():
     `hold` on a deed read as a dangling reference and the sweep reported 176 violations, 136 of
     them invented. A collection added to `World` later and not added to `_entities` would do it
     again, silently, to whatever names the new carrier.
+
+    ⚠ THE COLLECTION LIST IS `World._STATE_COLLECTIONS`, NOT A HAND COPY OF IT (plan position `15`).
+    It was a nine-name literal that had to be edited in step with `World.__init__` -- the very drift
+    this test exists to catch, reproduced inside the test. `_STATE_COLLECTIONS` is pinned to the
+    World's actual attributes by `test_h118_content_hash_folds_every_game_state_collection`, so
+    reading it here pins `_entities` to the same thing without a second list.
     """
+    from engine.season.state.world import World
     w = _world()
-    named = {"persons", "rungs", "offices", "sites", "records",
-             "propositions", "dates", "petitions", "dispensations"}
-    for coll in named:
+    for coll in World._STATE_COLLECTIONS:
         assert hasattr(w, coll), f"World has no {coll!r} — _entities names a collection that is gone"
+        # every id the collection holds is an entity -- the over-firing direction, per collection
+        assert set(getattr(w, coll)) <= I._entities(w), (
+            f"`_entities` omits ids from {coll!r}; a Tenure naming one would read as dangling")
+    # ⚠ THE SHARPENED FALSIFIER FOR POSITION `15`'s FOLD: the two stores are GONE, not merely
+    # empty. An empty dict would still be a second home a later writer could fill, and a `hold` on a
+    # dispensation would then have two places to point. Petitions and dispensations are `Record`s.
+    assert not hasattr(w, "petitions") and not hasattr(w, "dispensations"), (
+        "World still carries `petitions`/`dispensations` -- the Record-kind fold is undone")
     # Everything a live Tenure actually names in a real run must be inside the set.
     ents = I._entities(w)
     for t in I._all_tenures(w):

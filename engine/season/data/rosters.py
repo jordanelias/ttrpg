@@ -401,19 +401,71 @@ TENURE_KINDS = roster("tenure_kinds")
 # declared-there/derived-here argument is satisfied by ONE derivation, not two. Today the
 # exclusion is a single member so drift would be cheap; the moment it is not, two code sites would
 # have to move together and only one of them is guarded. Found by the `release` adversarial pass.
-RELEASABLE_KINDS = frozenset(TENURE_KINDS) - {"contain"}
+# ⚠ TWO MEMBERS SINCE PLAN POSITION `19c`, FOR `contain`'s OWN REASON: `reside` (where a person
+# lives) ends by a relocation too -- `_eff_migrate` closes the old edge as it opens the new -- and a
+# releasable residence would let a person leave a home for nowhere. Still ONE derivation (this
+# line): `verb_table.yaml`'s declared `release` domain is unchanged, because the six kinds it lists
+# are exactly what remains, and loader invariant 6 compares the two.
+RELEASABLE_KINDS = frozenset(TENURE_KINDS) - {"contain", "reside"}
 # `holonic §15`'s DOMAIN and CODOMAIN for the `hold` row, read by `World._refuse_bad_hold`.
 # Rostered rather than inlined at the guard (Jordan, 2026-09-02 -- *definitions are not
 # hardcoded*), so widening `hold` to a new carrier is a data edit and an absent roster
 # REFUSES instead of defaulting to a silent pass.
 HOLD_OBJECT_KINDS = roster("hold_object_kinds")
 HOLD_SUBJECT_KINDS = roster("hold_subject_kinds")
+# Plan position `15` -- `ARCH §B.5`'s fold: `Petition` and `Dispensation` are KINDS of `Record`, and
+# each kind declares the EXACT key set of its `subject_matter` (r2 `05`'s ⊕L35, refused in
+# `Record.__post_init__`). `RECORD_KINDS` is the member set; `RECORD_KIND_KEYS` is the mapping,
+# read through `roster_map` so an absent row refuses rather than answering `{}`; `RECORD_CONTENT`
+# is how a mint reads the keys off an act and what the deposit rule names the claim.
+RECORD_KINDS = roster("record_kinds")
+RECORD_KIND_KEYS = {k: tuple(v or ()) for k, v in roster_map("record_kinds", "values").items()}
+RECORD_CONTENT = roster_map("record_kinds", "content")
+# ⚠ ONE STEM READS BOTH VOCABULARIES, SO THEY MAY NOT SHARE A WORD. `exists:<kind>`
+# (`queries/world_q.py::WorldReader.read`) answers a `tenure_kinds` member as a live EDGE and a
+# `record_kinds` member as a Record OF THAT KIND; a word in both rosters would be answered by
+# whichever branch is tested first and the other reading would be silently unreachable. Refused
+# at load, where the two rosters first meet, rather than at the first act that asks.
+if RECORD_KINDS & TENURE_KINDS:
+    raise Unspecified(
+        f"`record_kinds` and `tenure_kinds` share {sorted(RECORD_KINDS & TENURE_KINDS)}",
+        "rosters.yaml -- record_kinds",
+        needs="rename one; each word the `exists:` stem reads must mean one thing",
+        law="`queries/world_q.py::WorldReader.read`'s `exists` branch reads both rosters; a "
+            "shared word is two questions spelled one way")
 # `U1`: verb -> the capability key its contested roll draws dice from. A MAPPING inside a roster
 # row, read through `roster_map` so an absent roster refuses rather than defaulting to `{}` -- the
 # polarity that function exists to hold. A verb with no row falls through to `pool_default` inside
 # the wrapper, which is the `assumption` grade's own reading (`08 §3`) and not a refusal.
 VERB_CAPABILITY = roster_map("verb_capability", "values")
 RUNG_KINDS = roster("rung_kinds", ordered=True)
+
+
+def _check_scale_of_rung(mapping: dict, kinds) -> None:
+    """`SCALE_OF_RUNG`'s domain must be EXACTLY `RUNG_KINDS` -- a function and not an inline `if`,
+    so the test can plant a drifted mapping and watch it refuse (`CLAUDE.md` §0.1 pt 3: a load
+    check with no falsifier cannot be told from one that never runs)."""
+    if set(mapping) != set(kinds):
+        raise Unspecified(
+            f"`scale_of_rung` covers {sorted(mapping)}, and `rung_kinds` is {sorted(kinds)}",
+            "rosters.yaml -- scale_of_rung",
+            needs="give every rostered rung kind a scale, and give every scale a rostered rung "
+                  "kind",
+            law="`04 §B.13` ID-12 -- a declared row that reaches no code, or a key the domain "
+                "does not have, is the defect the loader's cross-validation exists to catch")
+
+
+# Plan position `20-ii` (U9/R-04). A rung_kind -> one of canon's five scales (`rosters.yaml:
+# scale_of_rung`'s own note states, BEFORE this mapping, which of the two problems it solves and
+# which it does not -- read that note before touching either roster row). Bound beside
+# `RUNG_KINDS`, its domain, for the identical reason `SITE_KINDS` is bound beside it above.
+SCALE_OF_RUNG = roster_map("scale_of_rung", "scale")
+_check_scale_of_rung(SCALE_OF_RUNG, RUNG_KINDS)
+# Plan position `24e`: the kinds `build` may make -- a works' `plan` is a Site only if it is one of
+# these (`loop/effects.py::_eff_build`). Bound beside `RUNG_KINDS`, `found`'s twin roster, rather
+# than read by a bare `roster(...)` at the one call site. `data/fixtures.py` reads the same row for
+# its both-direction table checks, so a kind here always has a wear and a band-floor row.
+SITE_KINDS = roster("site_kinds")
 REMIT_ACTS = roster("remit_acts")
 # `data/arrangements.py`'s four content rosters -- plan position `18` (PROC-A). Bound here beside
 # their nearest kin (`RUNG_KINDS`/`REMIT_ACTS`, both read by the same loader) rather than left to a
@@ -429,6 +481,10 @@ LADDER_RUNGS = roster("ladder_rungs", ordered=True)
 # pass, 2026-09-27 -- this said `loop/predicates.py`).
 CONFERRAL_BASES = roster("conferral_bases")
 REVOCATION_BASES = roster("revocation_bases")
+# Plan position `17a` (r2 `05` RULED (b), `ARCH F.17`): HOW A SEAT TAKES ON THOSE WHO SERVE IT, the
+# third basis beside the two above and bound the same way. `Office.__post_init__` refuses a value
+# off it; `loop/predicates.py::_req_oblige` admits an `oblige` only to a seat whose `binds` is on it.
+BINDS_BASES = roster("binds_bases")
 # ⚠ A TESTING FIXTURE, NOT CANON — see the roster's own note. Jordan, 2026-09-18: "for testing
 # purposes for now, just build out a generic remit". It fills an EMPTY remit and never overwrites
 # a grounded one.
@@ -463,6 +519,23 @@ def remit_or_default(declared) -> list[str]:
 
 WITNESS_CHANNELS = roster("witness_channels", ordered=True)
 CLAIM_SOURCES = roster("claim_sources")
+# Plan position `15d` (proceedings `19_PLAN.md` step 4 (b)): the source a deposit carries is set by
+# the ONE channel `epistemic.observers_for` credits the witness to -- `WITNESS_CHANNELS`' order is
+# that precedence. Cross-validated here, where both rosters it is keyed on are bound, and at import:
+# a channel with no source would deposit under a source nothing declared (or `KeyError` mid-barrier,
+# inside WITNESS's parallel map), and a source outside `claim_sources` is a fifth way of coming to
+# hold a claim that the roster -- *"every value here is a way ONE person came to hold ONE claim"* --
+# does not have.
+CHANNEL_CLAIM_SOURCE = roster_map("witness_channels", "claim_source")
+if (set(CHANNEL_CLAIM_SOURCE) != set(WITNESS_CHANNELS)
+        or not set(CHANNEL_CLAIM_SOURCE.values()) <= set(CLAIM_SOURCES)):
+    raise Unspecified(
+        f"`witness_channels.claim_source` is {CHANNEL_CLAIM_SOURCE!r}; it must key exactly the "
+        f"channels {list(WITNESS_CHANNELS)} and name only {sorted(CLAIM_SOURCES)}",
+        "rosters.yaml",
+        needs="give every channel exactly one source from `claim_sources`",
+        law="19_PLAN.md step 4 (b) -- the claim's source is set FROM A CHANNEL->SOURCE MAP, so "
+            "the map is total over the channels and closed over the sources")
 STRATA = roster("strata", ordered=True)
 # ⚠⚠ **READ FROM THE LEAF, NOT FROM `rosters.yaml`, AND THIS IS THE ONE ROSTER THAT WORKS THAT
 # WAY.** Every other name here comes from `rosters.yaml` because Jordan ruled definitions must not

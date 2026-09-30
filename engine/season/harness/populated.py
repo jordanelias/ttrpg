@@ -68,8 +68,8 @@ import sys
 from collections import Counter, defaultdict
 
 from ..data import cast, files
-from ..queries.world_q import home_of as home_of_q
-from ..gaps import Unspecified
+from ..queries.world_q import RESIDE_KIND, capacity, home_of as home_of_q
+from ..gaps import Forbidden, Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.rosters import (BODY_FACTION, FACTIONS, OFFICES_BY_HOLDER, ROLE_TEMPLATE_OF,
                             faction_prop_id, load_yaml, remit_or_default, title_domain)
@@ -241,6 +241,128 @@ def concerns_of(case: dict, by_name: dict) -> tuple:
             if _mentions(inst, entry):
                 return None, inst
     return None, None
+
+
+# -- THE POPULATION SYNECDOCHES (plan position `24f`, `ED-IN-0255`) -----------------------------
+#
+# The row's own field names -- the schema `cohorts.yaml` is checked against, `Rung._DECLARED`'s
+# shape -- not the game's vocabulary.
+COHORT_FIELDS = frozenset({"rung", "weight"})
+# The id a cohort's `Person` (and its `person` rung) is minted under: this prefix and the rung it
+# lives in. One cohort per rung, so the rung id is the whole of what distinguishes two of them.
+COHORT_PREFIX = "cohort_"
+
+
+def cohort_rows(text: str | None = None) -> list:
+    """THE AUTHORED ROWS OF `cohorts.yaml`, schema-checked: `[{rung, weight}, ...]` in file order.
+    Plan position `24f`. `text` is the file's contents, for a caller that plants rows; `None`
+    reads the file through `data/files.py`'s one anchor and `load_yaml`'s duplicate-key refusal.
+
+    Everything a row can get wrong WITHOUT a world is refused here; what needs the built world
+    (the rung exists, the weight fits its capacity) is `seat_cohorts`'s. Each refusal names the row.
+      * NO ROWS AT ALL. The larder draw feeds only cohorts (`world_q.subsistence_draw`), so a realm
+        seeded from an empty file would run its whole subsistence pass over nobody and report a
+        quiet world. That silent emptying is the failure the plan's attack on `24f` names, so the
+        loader refuses it rather than a test catching it later.
+      * A FIELD THE FILE DOES NOT DECLARE (`COHORT_FIELDS`). A `case:`, `want:` or `concerns:` would
+        be `npcs.yaml`'s schema arriving here, the invented character this file exists not to be.
+      * A WEIGHT THAT IS NOT AN INT `> 1`. S9: a person at weight 1 is an individual, and this file
+        mints no individuals. `bool` is refused too, because YAML's `yes` would otherwise pass as 1.
+      * THE SAME RUNG TWICE. One cohort per populated rung is the design (item 10's *"one authored
+        `weight > 1` `Person` row per populated rung"*); a second row would quietly double the
+        mouths under one roof, and the minted ids would collide."""
+    if text is None:
+        text = files.COHORTS_YAML.read_text(encoding="utf-8")
+    rows = (load_yaml(text) or {}).get("cohorts") or []
+    if not rows:
+        raise Unspecified(
+            "`cohorts.yaml` declares no cohort", "engine/season/cohorts.yaml",
+            needs="one `{rung, weight}` row per populated rung",
+            law="plan position `24f` -- only a cohort eats (`ED-IN-0255`), so a world with none "
+                "has no eater and its subsistence pass runs over nobody")
+    seen: set = set()
+    for n, row in enumerate(rows):
+        extra = set(row) - COHORT_FIELDS if isinstance(row, dict) else None
+        if extra is None or extra or not COHORT_FIELDS <= set(row):
+            raise Unspecified(
+                f"`cohorts.yaml` row {n} is {row!r}", "engine/season/cohorts.yaml",
+                needs=f"exactly the fields {sorted(COHORT_FIELDS)}",
+                law="plan position `24f` -- a cohort traces to no case, so it carries none of "
+                    "`npcs.yaml`'s fields and nothing undeclared")
+        wt = row["weight"]
+        if isinstance(wt, bool) or not isinstance(wt, int) or wt <= 1:
+            raise Forbidden(
+                f"`cohorts.yaml` row {n} ({row['rung']!r}) has weight {wt!r}", "S9",
+                law="S9 -- A COHORT IS A PERSON AT weight > 1; a weight-1 row would mint a named "
+                    "individual, which this file never does")
+        if row["rung"] in seen:
+            raise Unspecified(
+                f"`cohorts.yaml` names {row['rung']!r} twice", "engine/season/cohorts.yaml",
+                needs="one row per populated rung",
+                law="plan position `24f` -- one synecdoche per rung; a second row doubles its "
+                    "mouths and collides on the minted id")
+        seen.add(row["rung"])
+    return rows
+
+
+def seat_cohorts(w: World, rows: list, names: dict | None = None) -> list:
+    """SEAT THE AUTHORED COHORTS IN A BUILT WORLD, and return their person ids in row order. Plan
+    position `24f`: the producer the design step named (`workplans/2026-09-28-the-plan-one-order-
+    mc-v18-retired.md` §3.1 item 10), read at world-gen beside the case-derived cast.
+
+    Each row becomes what every builder mints for a person, and nothing else: a `Person` at the
+    row's weight, its `person` rung, a `contain` edge (where it IS) and a `reside` edge (where it
+    LIVES, `19c`'s rule) to the row's rung. No `commit`, so it is no faction's member; no `hold`,
+    so it holds nothing; no pursuits, so it ranks by the uniform arm a person with no authored
+    convictions gets -- inventing convictions for a population would be authoring a creed nobody
+    wrote. It is a Person in full, though (S9.1, ONE CLASS; probe `P21`: *"a crowd must be able to
+    act"*), so it witnesses, holds claims and deliberates like anyone. Nothing here stops that, and
+    doing so would be special-casing an entity (`CLAUDE.md` §10's scripting drift).
+
+    ⚠ THE CEILING, CHECKED AND NEVER USED AS A SOURCE (`ED-SE-0051`, `ED-WR-0011`). A row whose
+    weight passes `capacity(w, rung)` REFUSES: the synecdoche would stand for more people than the
+    place's dwellings house. It is the COHORT's weight that is checked, not the rung's `population`
+    with it. The case-derived cast already overfills two settlements on the realm as built
+    (measured at `24f`: `set_s_001` houses 10 named residents against 9 dwellings, `set_s_036` 8
+    against 6), and that is `npcs.yaml`'s placement, not this file's; refusing a cohort for it
+    would leave the court's own town with no people. The check reads the Query at build, once, so
+    it sees exactly the dwellings `build_realm` minted.
+      * AN UNKNOWN RUNG REFUSES. A row naming a place the builder did not build would otherwise
+        seat nobody and look like a quiet town.
+      * A CLASH WITH AN EXISTING PERSON ID REFUSES, rather than overwriting a cast member.
+
+    `names` maps a rung to the place's canon name, so the cohort reads *"the people of
+    Valorsplatz"*; a rung it does not name is named by its id. Display only: nothing resolves on a
+    `Person.name`."""
+    names = names or {}
+    out: list = []
+    for row in rows:
+        rung, wt = row["rung"], row["weight"]
+        if rung not in w.rungs:
+            raise Unspecified(
+                f"`cohorts.yaml` seats a cohort at {rung!r}, which this world did not build",
+                "engine/season/cohorts.yaml",
+                needs="a rung id `build_realm` builds (a settlement is `set_` + its geography id)",
+                law="plan position `24f` -- a cohort at a missing place seats nobody silently")
+        room = capacity(w, rung)
+        if wt > room:
+            raise Forbidden(
+                f"`cohorts.yaml` gives {rung!r} a cohort of weight {wt}; its capacity is {room}",
+                "ED-SE-0051",
+                law="RR-2 -- capacity bounds POPULATION; an authored cohort may not stand for more "
+                    "people than the rung's dwellings house (checked, never derived)")
+        pid = f"{COHORT_PREFIX}{rung}"
+        if pid in w.persons or pid in w.rungs:
+            raise Unspecified(
+                f"cohort id {pid!r} is already taken in this world", "engine/season/cohorts.yaml",
+                needs="a rung whose cohort id no cast member or rung already uses",
+                law="plan position `24f` -- a cohort is seated beside the cast, never over it")
+        w.persons[pid] = Person(pid, f"the people of {names.get(rung, rung)}", weight=wt)
+        w.rungs[pid] = Rung(pid, "person")
+        w.add_tenure(Tenure(f"t_{pid}_in", pid, rung, "contain", 0))
+        w.add_tenure(Tenure(f"t_{pid}_home", pid, rung, RESIDE_KIND, 0))
+        out.append(pid)
+    return out
 
 
 def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True) -> World:
@@ -462,6 +584,10 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         w.persons[pid] = Person(pid, str(case.get("name") or cid))
         w.rungs[pid] = Rung(pid, "person")
         w.add_tenure(Tenure(f"t_{pid}_in", pid, home, "contain", 0))
+        # Plan position `19c`: and they LIVE there -- the `reside` edge a `move` leaves behind and
+        # only a `migrate` re-homes (`loop/effects.py::_eff_migrate`). Every builder mints it beside
+        # the first `contain`, so `world_q.residence_of` reads one edge and never falls back.
+        w.add_tenure(Tenure(f"t_{pid}_home", pid, home, RESIDE_KIND, 0))
         # ⚠⚠ AUTHORED, NOT DRAWN — AND THE DRAW REMAINS AS THE NAMED FALLBACK IT ALWAYS WAS.
         # `references/npc_registry.yaml` carries a weighted conviction vector for all 46 of these
         # people, cited to canon, using only the canonical thirteen. Nothing that executes had ever
@@ -936,6 +1062,25 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     # filler one (`neighbour`) before correcting a row -- and by its `--check` round-trip. The
     # loop never reads it; the exporter is why it is not a field nothing reads.
     w._tie_of = tie_of
+
+    # -- THE POPULATION: ONE AUTHORED COHORT PER POPULATED RUNG (plan position `24f`) ------------
+    #
+    # ⭐ `ED-IN-0255` (Jordan, 2026-09-18): subsistence is *"a territorial issue"*, carried by *"NPC
+    # synecdoches that just represent the overall population affected"*, and *"lords and guild
+    # members"* do not worry about it. So the larder draw feeds only cohorts
+    # (`world_q.subsistence_draw`), and THIS is where the realm gets its cohorts: `cohorts.yaml`,
+    # authored rows read once here (`ED-WR-0011` option A -- no clock and no formula mints one).
+    #
+    # ⚠ LAST, AFTER THE WHOLE CASE-DERIVED CAST, AND THAT ORDER IS WHAT KEEPS IT A SECOND SEED
+    # RATHER THAN AN EDIT TO THE FIRST. The module docstring's *"the cast comes from the case"*
+    # governs everything above unchanged: every tie, membership, holding and office has been
+    # decided before a cohort exists, so none of them can land on one (the `roof`/`neighbour`
+    # tiers pool over `contain` edges, and would otherwise tie an NPC's want to a crowd), and
+    # `tools/export_npc_roster.py`'s derivation is untouched.
+    # ⚠ AND AFTER THE DWELLINGS, because the ceiling reads `capacity`, which counts them.
+    names = {f"set_{_slug(sid)}": str(s.get("name") or sid)
+             for sid, s in geo["settlements"].items()}
+    seat_cohorts(w, cohort_rows(), names)
     return w
 
 
@@ -956,7 +1101,11 @@ def census(w: World) -> dict:
         for k, v in (r.stores or {}).items():
             stores_by_kind[r.kind] += v
     short = getattr(w, "_subsistence_shortfall", {})
+    # `24f`: the cohorts are persons (S9.1), so `persons` counts them; these two rows separate them
+    # from the cast, read off the world (`Person.is_cohort`) rather than off `cohorts.yaml`.
+    cohorts = [p for p in w.persons.values() if p.is_cohort]
     return {"rungs": dict(kinds), "persons": len(w.persons), "sites": len(w.sites),
+            "cohorts": len(cohorts), "cohort_weight": sum(p.weight for p in cohorts),
             "ties": getattr(w, "_tie_census", {}), "propositions": len(w.propositions),
             "distinct_buildings_inhabited": len(set(where.values())),
             "largest_building": max(Counter(where.values()).values()) if where else 0,
@@ -1062,7 +1211,8 @@ def main(argv=None) -> int:
     c = census(w)
     print("THE POPULATED WORLD — one world, the canonical map, the corpus's own cast")
     print(f"  rungs by kind        {c['rungs']}")
-    print(f"  persons              {c['persons']}   (one per season loop)")
+    print(f"  persons              {c['persons']}   ({c['persons'] - c['cohorts']} one per season "
+          f"loop; {c['cohorts']} cohort(s) of total weight {c['cohort_weight']}, `cohorts.yaml`)")
     print(f"  buildings inhabited  {c['distinct_buildings_inhabited']}"
           f"   (largest holds {c['largest_building']})")
     print(f"  sites                {c['sites']}")

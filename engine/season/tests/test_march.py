@@ -17,18 +17,45 @@ the control that stops it passing vacuously:
      checked directly rather than inferred from the verb row's empty `writes:` cells.
   5. THE THREE `field_casualty_model` ARMS DIFFER, and `none`'s control isolates the write from
      the band exactly as `wound_harm_model`'s own `none` arm does.
+  6. A CHOOSER-FORMED DECISION, NOT A HAND-BUILT `Act` -- plan position `28-ii` (M6, successor
+     goldens). Every test above mints its `Act` by hand (`_march_act`);
+     `test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle` does not. It
+     first confirms, off `decision.options.opening_set` directly, that a real (constructed)
+     `Question` naming a settlement referent already forms a march `Candidate` under clause 3's
+     pre-existing `q.referents` reading -- no arm, no widening, nothing march-specific, and no
+     kind filter (clause 3 applies none; ANY Rung-kind referent would do the same, settlement is
+     simply the referent this test uses) -- then builds the `Act` through the real
+     `decision.choose.make_chooser`/`pack_scenes` machinery (the same functions
+     `SeasonDriver.season()` calls), so `act.via` is READ OFF the chooser's own derivation rather
+     than hand-set, and folds it through the same RESOLVE -> ENCOUNTER pipeline as every other
+     test in this file -- proving a real settlement target reaches a real field battle end to end
+     through the real chooser, not merely that a hand-authored payload can.
+
+     ⚠ THIS TEST'S OWN CHOOSER IS RESTRICTED (`verbs=frozenset({"march"})`), SO IT DOES NOT
+     RANK MARCH AGAINST ANY COMPETING CANDIDATE -- a Phase 3 terminal critique's finding,
+     2026-09-30. `python -m engine.season.harness.aperture 1 0`, run against `build_realm(0)`
+     through the real, UNRESTRICTED chooser (`verbs=resolvable_verbs()`, `populated.run`'s own
+     call), is the STRONGER demonstration: march forms, is offered, is attempted and executes
+     there too, competing against every other verb's real candidates, with zero constructed
+     `Question` and zero hand-built `Act` anywhere in the run (`hole_register.yaml` H-175). Both
+     stand together; this test still proves the chooser-vs-constructed-`Act` distinction
+     end-to-end at the unit level, and aperture proves the same mechanism holds under the real,
+     unrestricted chooser in natural play.
 """
 
 import random
 
 from engine.season.data.matrix import Step, WriteClass
+from engine.season.decision.choose import make_chooser
+from engine.season.decision.options import opening_set
 from engine.season.harness.populated import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.loop.effects import EFFECTS
 from engine.season.queries import world_q
 from engine.season.seam.contest import Resolution
-from engine.season.state.carriers import Act
+from engine.season.state.carriers import Act, Question, Sensation, View
 from engine.season.state.gate import NO_CHANGE
+from engine.season.state.ids import H, draw_factory
 
 
 def _march_act(actor: str, target: str, via: str, act_id: str = "m1") -> Act:
@@ -291,3 +318,94 @@ def test_the_none_casualty_model_writes_stance_only():
             ("fac_church_of_solmund", -1.0, grudge_w),
             ("fac_crown", -1.0, morale_w),
         }, f"{pid} gained {after_new}, not exactly the grudge/morale pair, under the `none` model"
+
+
+def test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle():
+    """PLAN POSITION `28-ii` (M6, SUCCESSOR GOLDENS) -- THE GATE THIS SESSION WAS BUILT TO CLOSE:
+    *"a battle executing from a real, chooser-formed decision"* (the retirement plan's own §6,
+    `CLAUDE.md` §0.1 pt 3 row 4 -- a claim that a mechanism works must show the run, not the code
+    path). Every other test in this file hand-authors its `Act`, including its `payload` and its
+    `via`. This one does neither -- CORRECTED per the BATCH-CLOSE Phase-1 antagonist: the first
+    writing of this test built `payload` off a real `Candidate` but then hand-set
+    `Act(..., via="off_npc_033")`, which is exactly the hand-built-`Act` shape the retirement
+    plan's gate sought to rule OUT, not demonstrate. `via` is now read off the real chooser's own
+    derivation and asserted as a computed fact.
+
+    `p_npc_033` (Crown, `off_npc_033`, `remit:dispatch`) is asked a real `Question` whose referent
+    is `set_s_036` (Church of Solmund) -- the SAME cross-faction pair `test_a_lost_field_...`
+    above hand-builds, chosen here so the falsifier is comparable rather than novel. Clause 3's
+    PRE-EXISTING `q.referents` reading -- no march-specific arm, nothing added -- is what carries
+    that referent into a real `Candidate`; nothing here supplies `subject` by hand.
+    """
+    w = build_realm(0)
+    p = w.persons["p_npc_033"]
+    q = Question("q:28ii_chooser_march", "need", ("set_s_036",))
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
+
+    cands = opening_set(p, v, q, w.fixtures)
+    march_cands = {c.subject: c for c in cands if c.verb == "march"}
+    # FALSIFIER: the referent-named settlement forms a march Candidate under clause 3's own
+    # `q.referents` reading, unaided -- clause 3 applies no kind filter, so any Rung-kind referent
+    # would do the same. What this assertion rules OUT is a missing `operands_for` arm for march,
+    # which this Question (constructed, not corpus-drawn) was never short of.
+    # ⚠ CORRECTED, Phase 3 terminal critique, 2026-09-30: this comment used to say WHY the
+    # natural corpus's `questions_for` sources never hand a person a workable referent was
+    # UNMEASURED, full stop -- measured FALSE for `build_realm(0)`/`populated.run`:
+    # `python -m engine.season.harness.aperture 1 0` shows march naturally forming, being
+    # offered, being attempted and executing there, unaided, via the real unrestricted chooser
+    # (see the module docstring's new note above and `hole_register.yaml` H-175). What remains
+    # unmeasured is narrower and different: WHY `corpus_run`'s separate 143-case NPC/ARC corpus
+    # specifically never supplies march a workable referent, confirmed still absent there by a
+    # fresh `corpus_run` run this same session.
+    assert "set_s_036" in march_cands, (
+        f"the referent-named settlement never became a march Candidate subject; got "
+        f"{sorted(march_cands)}")
+    c = march_cands["set_s_036"]
+    assert c.operands == {"subject": "set_s_036", "to": "set_s_036"}, c.operands
+
+    # THE REAL CHOOSER, THROUGH `make_chooser`/`pack_scenes` -- NOT A HAND-BUILT `Act`. Restricting
+    # the chooser's own `verbs=` to `{"march"}` leaves exactly one ranked Candidate (this
+    # Question's one referent), so the sampler's own `len(ranked) < 2` short-circuit
+    # (`choose.py::_sample_order`) makes the pick deterministic without a seeded tie-break --
+    # confirmed by the scene/act-count assertion below rather than assumed.
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    chooser = make_chooser(w.fixtures, mint, verbs=frozenset({"march"}),
+                           draw=draw_factory(w.world_seed, lambda: w.tick))
+    scenes = chooser(p, v, Sensation(0), lambda: 1)
+    assert len(scenes) == 1 and len(scenes[0].acts) == 1, (
+        f"expected exactly one scene holding exactly one march act, got {scenes}")
+    act = scenes[0].acts[0]
+    assert act.verb == "march" and act.payload == {"subject": "set_s_036", "to": "set_s_036"}, (
+        act.verb, act.payload)
+    # `via` IS READ OFF THE CHOOSER'S OWN DERIVATION, NOT HAND-SET (the antagonist's finding).
+    # `pack_scenes` names it through `exercised_seat`, the SAME walk `person_side_eligible`
+    # admitted march through -- the first live `hold` Tenure of `p_npc_033`'s that grants
+    # `dispatch` (march's own `remit:dispatch` eligibility cell, `verb_table.yaml`), which this
+    # fixture seats at `off_npc_033`.
+    assert act.via == "off_npc_033", (
+        f"expected march to exercise the dispatch-granting seat, got {act.via!r}")
+
+    # `/simplify`, BATCH-CLOSE Phase 2: NO before/after casualty loop here (dropped). This
+    # chooser-formed act is NOT byte-identical to what `_march_act("p_npc_033", "set_s_036",
+    # "off_npc_033")` would build -- the payload carries an extra `to` key (`{"subject", "to"}`
+    # vs. `{"subject"}`) and the id is chooser-minted, not the literal `"m1"` -- but it reaches
+    # the SAME two-settlement (`set_s_014`/`set_s_036`) mismatch and the same `field.lost`
+    # outcome kind that `test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only`
+    # (above) exercises on its own, differently-swept fixture (that test sets
+    # `field_grudge_weight` to `3`; this one uses the default), so re-deriving the full body-drop
+    # assertions here would repeat, not add, falsifying power. The one thing THIS test proves that
+    # the sibling test cannot is that a chooser-formed act reaches a real fight at all.
+    attackers = world_q.mustered(w, "set_s_014", "fac_crown")
+    defenders = world_q.mustered(w, "set_s_036", "fac_church_of_solmund")
+    assert len(attackers) == 2 and len(defenders) == 6, (
+        f"the fixture no longer gives a 2-v-6 mismatch here ({attackers}, {defenders}); "
+        "pick an origin/target pair that still does")
+
+    events = _fold_one(w, act, contest_max_depth=2)
+    kinds = [(e.kind, e.degree) for e in events]
+    assert ("march.declared", "Declared") in kinds
+    # THE FALSIFIER: a REAL field battle, not merely a formed-and-declared attempt. `Lost` is the
+    # ATTACKER's own outcome (`seam/ladder.py::field_degree`) at this fixture's 2-v-6 mismatch.
+    assert ("field.lost", "Lost") in kinds, (
+        f"expected a real field battle (`field.lost`), got {kinds} -- the chooser-formed act "
+        "never reached a fight")

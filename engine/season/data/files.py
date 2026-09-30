@@ -119,6 +119,11 @@ OFFICES_YAML = PACKAGE_DIR / "offices.yaml"
 # data edit"), read through `data/arrangements.py`, the ONE loader. Anchored here for the same
 # reason every sibling registry above is: one path owner, never a local `__file__`.
 ARRANGEMENTS_YAML = PACKAGE_DIR / "arrangements.yaml"
+# `cohorts.yaml` -- plan position `24f` (SUBSISTENCE IS TERRITORIAL, `ED-IN-0255`): the AUTHORED
+# population synecdoches, one `weight > 1` `Person` per populated rung, read once at world-gen by
+# `harness/populated.py::build_realm` beside the case-derived cast. Anchored here for the same
+# reason every sibling registry above is: one path owner, never a local `__file__`.
+COHORTS_YAML = PACKAGE_DIR / "cohorts.yaml"
 
 # The degree sweep's two arm modules (plus their shared `sweep_core`), imported by source in two
 # tests. Moved out of `proposals/2026-09-04-degree-sweep` to `engine/reference/degree-sweep/` so
@@ -164,9 +169,13 @@ LOOP_DIR = PACKAGE_DIR / "loop"
 # used to read `SHAPE_PY` for `SeasonDriver` code read this instead -- `shape.py` was deleted at
 # step 10, so a scan pointed there fails to open a file rather than passing by finding nothing.
 DRIVER_PY = LOOP_DIR / "driver.py"
-# `data/verbs.py::_derive_openers_from_effects` reads this by AST -- never imports it, so there is
-# no `data` -> `loop` import edge, only a file-level read of `loop`'s own text (`OPENERS-DERIVE`,
-# 2026-09-29). The same idiom `loop_source`/`loop_modules` already use one section down.
+# THE AGGREGATOR, NOT THE WHOLE WALK -- since the Phase-4 per-subsystem split (2026-09-30),
+# `effects.py` itself holds no `@effect_for`-decorated function and no `Tenure(...)` call; those
+# moved into its `effects_*.py` siblings. `data/verbs.py::_derive_openers_from_effects` reads
+# `effects_modules()` below, not this constant alone -- kept because it still names the one file a
+# caller means by "the effects module" (`test_governance_build.py`'s `inspect.getsource` case and
+# similar). Never imported by either reader, so there is no `data` -> `loop` import edge, only a
+# file-level read of `loop`'s own text (`OPENERS-DERIVE`, 2026-09-29).
 EFFECTS_PY = LOOP_DIR / "effects.py"
 
 
@@ -192,6 +201,25 @@ def loop_source() -> str:
     """Every `loop/` module's text, concatenated in path order -- for the guards that grep the
     season loop for a literal rather than walking it."""
     return "\n".join(p.read_text(encoding="utf-8") for p in loop_modules())
+
+
+def effects_modules() -> tuple:
+    """EVERY `.py` under `loop/` NAMED `effects*`, DISCOVERED -- the Phase-4 per-subsystem split of
+    `effects.py` (2026-09-30) into the aggregator (`EFFECTS_PY`) plus seven flat siblings
+    (`effects_shared.py`, `effects_governance.py`, `effects_economy.py`, `effects_migration.py`,
+    `effects_founding.py`, `effects_information.py`, `effects_combat.py`), no package and no
+    `__init__.py` barrel -- EIGHT files today, matched by name rather than hand-listed.
+    `data/verbs.py::_derive_openers_from_effects` is the one reader: every `@effect_for(...)`-
+    decorated function and every `Tenure(...)` construction site it walks now lives in one of the
+    seven siblings, none in the aggregator itself (which only imports them), so a walk confined to
+    `EFFECTS_PY` alone finds nothing -- `loop_modules`'s own lesson (`compute the corpus, never
+    list it`) applies a second time, one split down, rather than hand-listing eight names that go
+    stale the day a ninth lands.
+
+    A caller that scans this for a property must also pin a FLOOR or a SUPERSET, `loop_modules`'s
+    own warning (`CLAUDE.md` §0.1 pt 2) -- eight today, checked at `_derive_openers_from_effects`'s
+    own call site rather than here, since this function has no opinion on what a caller expects."""
+    return tuple(p for p in loop_modules() if p.name.startswith("effects"))
 
 # ---------------------------------------------------------------------------
 # AX-2's ISLAND, AND THE ONLY DIRECTORY IN THIS PACKAGE WHOSE SHAPE IS AN ENFORCEMENT MECHANISM

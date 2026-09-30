@@ -197,7 +197,7 @@ either** — they are listed individually below and should be discounted accordi
 **what:** a per-container clock
 
 **needs:** nothing -- the parallelism it would buy is ALREADY AVAILABLE: DELIBERATE is a pure map at Godot 4.0
-**law:** S40.3 -- a per-container clock is A NESTING FORM WITHOUT A CAP ARGUMENT: it has no `depth`, no `max_depth`, and no caller to supply one. It voids (1) the frozen world, (2) the canonical act order, (3) the non-decreasing season index. Rung's declared fields are ['dates', 'envelope', 'id', 'judging_set_rule', 'kind', 'records', 'sites', 'stake', 'stores', 'transmission', 'yield'] -- there is no tick, by construction. THE CLOCK BUYS NOTHING AND COSTS THREE INVARIANTS
+**law:** S40.3 -- a per-container clock is A NESTING FORM WITHOUT A CAP ARGUMENT: it has no `depth`, no `max_depth`, and no caller to supply one. It voids (1) the frozen world, (2) the canonical act order, (3) the non-decreasing season index. Rung's declared fields are ['dates', 'envelope', 'id', 'kind', 'records', 'sites', 'stores', 'yield'] -- there is no tick, by construction. THE CLOCK BUYS NOTHING AND COSTS THREE INVARIANTS
 
 ### `A18` — a module declares what it may receive and emit  ·  **UNSPECIFIED**  ·  `S41`  ·  by `no-signature`
 **what:** the contract descent
@@ -352,7 +352,7 @@ either** — they are listed individually below and should be discounted accordi
 ### `F2` — a memberless faction's holdings become contestable  ·  **FORBIDDEN**  ·  `F3`  ·  by `probe-model`
 **what:** a (Tenure, until) write by p_high exercising no seat wrote Tenures it has no basis for: th_dead (hold owned by p_low on S, changed)
 
-**needs:** T-m (the actor owns the edge), T-o (via present, the actor seated in it, the seat's revocation basis reaching it), conferral (via's purview over a seat that declares a conferral basis), or cascade (the edge names something this same write removed). T-n is unbuilt: Tenure carries no term
+**needs:** T-m (the actor owns the edge), T-o (via present, the actor seated in it, the seat's revocation basis reaching it), conferral (via's purview over a seat that declares a conferral basis), cascade (the edge names something this same write removed), handover (a `hold` on something that is not a seat, opened in the same write that ended the actor's own live `hold` on it -- one opening per ending), T-n (an actorless closure of an edge whose own declared term has matured), renewal (a live `oblige` edge's term pushed later, by its seat's own seated holder exercising it), determination (an `oblige` opened on the judging seat exercised, for a person its bench's ground holds), or founding (a `contain` opened for a thing this same write brought into existence, its only parent)
 **law:** 04 §C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner writes only under a declared basis. Per-verb eligibility enforced this by CONVENTION until G3; a revocation with no seat in Act.via is refused here, so 'a superior may revoke' cannot degrade into 'anyone with a remit string'
 
 ### `F21` — a member's individual position is recorded in a body's collective output  ·  **UNSPECIFIED**  ·  `S61`  ·  by `construction`
@@ -404,10 +404,10 @@ either** — they are listed individually below and should be discounted accordi
 **law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
 
 ### `P25` — a storm ends a tenure  ·  **FORBIDDEN**  ·  `S15.3`  ·  by `construction`
-**what:** an actorless row wrote Tenure.until with no (Person, exists) change of its own
+**what:** an actorless row wrote Tenure.until with no (Person, exists) change of its own and no matured term
 
-**needs:** the same row must cause the death it ends a tenure through
-**law:** S15.3 -- a plague that kills the praefect ends his tenure THROUGH THE DEATH; A STORM CANNOT TOUCH IT. A second such seam means the column is the wrong mechanism
+**needs:** the same row must cause the death it ends a tenure through, or name the Tenure whose declared term matured (T-n)
+**law:** S15.3 -- a plague that kills the praefect ends his tenure THROUGH THE DEATH; A STORM CANNOT TOUCH IT. 04 §B.8 generalises the causation rule to a second cause, a term an act declared, and to no third
 
 ### `P26` — accumulated harm changes what a person may do  ·  **UNSPECIFIED**  ·  `S22.4`  ·  by `probe-model`
 **what:** the closed `axis` registry L3 clause 1 requires (asked for 'harm_borne')

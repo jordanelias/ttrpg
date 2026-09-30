@@ -31,10 +31,39 @@ from typing import Any, Optional
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import MATRIX
 from ..data.rosters import (
-    BODY_FUNCTION, CONFERRAL_BASES, QUESTION_SOURCES, REMIT_ACTS, REVOCATION_BASES, RUNG_KINDS,
-    office_faction, require_member, title_domain,
+    BINDS_BASES, BODY_FUNCTION, CONFERRAL_BASES, QUESTION_SOURCES, RECORD_KIND_KEYS, RECORD_KINDS,
+    REMIT_ACTS, REVOCATION_BASES, RUNG_KINDS, office_faction, require_member, title_domain,
 )
 from ..gaps import Forbidden, Unowned, Unspecified
+
+
+@dataclass(frozen=True)
+class Term:
+    """`04 §B.8`'s `term?` -- A DECLARED END ON A TENURE, and the field `T-n` has always needed.
+    Plan position `17b` (`workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` §3.2 row 10 and
+    its "Contradiction 1" box; `04` §F's `F.3` row: *"`Tenure.term`; MATTER matures it"*).
+
+    `matures_at` is the tick at whose MATTER barrier the term matures -- `loop/matter.py`'s tenure-
+    term branch closes the edge there, through the gate's `T-n` basis, with `causes[] =
+    [declared_by]` (`04 §B.8`: *"a `matures_at` MATTER matures with `causes[] = term.declared_by`"*;
+    AX-5: *"a matured term cites the act that wound it"*). `declared_by` is that act's id -- the
+    opening act, or the act that last RENEWED the term (`_eff_transfer`'s payment of `upkeep`), so a
+    lapse always cites whoever last wound the clock, which is the act that makes it a story rather
+    than a timer.
+
+    ⚠ FROZEN, AND A RENEWAL REPLACES IT WHOLE. A term is a value, not a place: an act that winds it
+    again writes a new `Term`, so `World._tenure_snapshot` can compare it by value with no copy, and
+    no effect can advance a clock in place where the tenure diff cannot see it.
+
+    ⚠ `closer` IS NOT CARRIED, AND THAT IS `ID-13`, NOT AN OMISSION. `04 §B.8` spells `term?
+    (matures_at, declared_by, closer)` and then says of `closer` itself: *"`Seat.revocation` is
+    authoritative and `term.closer` names a basis, not a second authority"*. Ending a hold early is
+    already `T-o`, the seat's revocation basis through `Act.via`, and nothing at `17b` reads a
+    per-term closer -- a field declared for a reader that does not exist is the defect the deleted
+    `Tenure.conferrer` (below) was. The day a term needs a closer the seat's own basis cannot
+    express, it is added with that reader."""
+    matures_at: int
+    declared_by: str
 
 
 @dataclass
@@ -58,6 +87,17 @@ class Tenure:
     # would be a second home for a fact the act already holds — `ID-2`.
     degree: Optional[str] = None
     payload: Any = None
+    # `04 §B.8`'s `term?` -- plan position `17b`; `Term`'s own docstring says what it is and who
+    # writes it. ⚠ ADDED BESIDE `payload`, NOT IN ITS PLACE, WHATEVER `04 §B.8`'s *"Replaces
+    # payload?"* AND `write_matrix.yaml`'s 2026-09-03 note ASKED. Both were written while `payload`
+    # had no writer; it has had one since `H-71` (`World._grant_remit`, the remit grant a seat confers
+    # on its holder), a reader in `granted_acts` below, and the gate's `conferral` re-grant clause
+    # (`moved == {"payload"}`). A grant and a declared end are two facts, so they are two fields --
+    # the plan's own §3.2 row 12 says the same: *"Not `Tenure.payload`, which is live."*
+    # ⚠ `repr(Tenure)` FOLDS INTO `World.content_hash` AND CARRIES EVERY FIELD NAME, so this line
+    # alone moves the digest of every world holding a Tenure -- a declared, structural hash move,
+    # the `Office.establishment` deletion's shape in reverse, not a behaviour change.
+    term: Optional[Term] = None
 
     @property
     def live(self) -> bool:
@@ -242,6 +282,15 @@ class Claim:
     confidence: int
     visibility: str
     round: int = 0
+    # ⚠ BATCH-CLOSE FINDING (methodology-close Phase 1, FIDELITY TO PLAN lens, position `15b`).
+    # `RULINGS.yaml` CAT-3 (`proposals/2026-09-17-governance-and-behaviour/`), CLOSED: *"a claim's
+    # value is modified by the hearer's BELIEF about their relation to the teller (lord > peer >
+    # enemy)... STORE THE TELLER... The edit is one argument, not a lookup."* The `round` docstring
+    # above bounds workplan item U2 specifically ("the only carrier field U2 ADDS") and is not a
+    # freeze on this dataclass as a whole -- CAT-3's own text corrects the mis-read that blocked
+    # this the first time. `None` for every claim with no teller (firsthand, seen, inferred,
+    # content-deposit) -- only the told channel's own deposit sets it (`loop/witness.py`).
+    teller: Optional[str] = None
 
 
 
@@ -528,6 +577,16 @@ class Person:
         if self.weight < 1:
             raise Forbidden("Person.weight < 1", "S9", law="S9 -- weight >= 1, default 1")
 
+    @property
+    def is_cohort(self) -> bool:
+        """S9's own sentence as a predicate: *"A COHORT IS A PERSON AT weight > 1"*. One owner for
+        the test, because plan position `24f` (`ED-IN-0255`) made it decide something: the larder
+        draw feeds cohorts and exempts the individual (`queries/world_q.py::subsistence_draw`).
+        A PROPERTY, NOT A FIELD: it is read off `weight` every time, so it can never disagree with
+        the field it is about, and it is not state (`matrix_rows_without_a_field` reads fields,
+        and no write-matrix row names it)."""
+        return self.weight > 1
+
 
 @dataclass
 class Site:
@@ -536,13 +595,24 @@ class Site:
     rung: str
     kind: str
     condition: int
-    drawers: list[str] = field(default_factory=list)
+    # ⚠ `drawers: list[str]` WAS HERE AND IS DELETED (plan position `18a`, r2 item 14). Its matrix
+    # row was retired at W2 (no verb produced `drawers.changed`); `01_AXIOMS.md` §D.3 names it
+    # *"retired as a dead row with `Rung.stake`"*, and it had zero readers and zero writers. The
+    # `retired:` entry in `write_matrix.yaml` now says the carrier went too. `repr(Site)` folds into
+    # `World.content_hash`, so this is a declared hash move, not a behaviour change.
 
 
 @dataclass
 class Record:
     """S13 -- a LIVE CARRIER. S30.1: it has NO Partition row, so every Record write is an
-    unmarked cell -- which this instrument reports rather than papering over."""
+    unmarked cell -- which this instrument reports rather than papering over.
+
+    ⚠ PETITIONS AND DISPENSATIONS ARE KINDS OF THIS CLASS, NOT CLASSES OF THEIR OWN (plan position
+    `15`; `04_CODE_ARCHITECTURE.md` §B.5's synthesis call, PART A row 11). `World` carried them as
+    two plain dicts beside `records`, which no production code read -- so `forge`, `destroy_record`,
+    `hold` and `carry` could not reach them, and a `hold` on a dispensation had nothing to point at.
+    `kind` is now a `record_kinds` member and `subject_matter` is that kind's EXACT key set; both
+    are refused at construction (`__post_init__`, below)."""
     id: str
     rung: str
     kind: str
@@ -564,6 +634,51 @@ class Record:
     # act-declared, never MATTER-advanced"* — a MATTER-step Event claiming a change to the one
     # field the matrix forbids MATTER to touch.
     matured: bool = False
+
+    def __post_init__(self) -> None:
+        """⊕L35 (r2 `05_LEDGER_AND_BUILD.md:671`): A RECORD WHOSE `subject_matter` KEYS ARE NOT ITS
+        KIND'S IS REFUSED, AND SO IS A KIND THE ROSTER DOES NOT LIST.
+
+        ⚠ THE REFUSAL SHAPE IS `Rung`'s, COPIED RATHER THAN RE-INVENTED. `Rung.__init__` refuses an
+        unrostered kind and `Rung.__setattr__` refuses an undeclared field, each as `Forbidden`
+        naming the field, the section, what is needed and the law inline. The same two refusals
+        here, on the same terms: `kind` is a member of `record_kinds` or nothing, and the content's
+        keys are the kind's declared keys or nothing.
+
+        ⚠ `__post_init__` AND NOT `__setattr__`, AND THE DIFFERENCE IS DELIBERATE. `Rung` is a plain
+        class guarding a whitelist on every write; `Record` is a dataclass every mint constructs by
+        keyword, and its `subject_matter` has NO `write_matrix.yaml` row -- it is written once,
+        inside `(Record, exists)`'s gate, and never again by anything (r2 `02` §A.4: *verbatim or
+        not at all*). So construction is the only write there is to refuse, and `Office`'s
+        roster checks sit at the same place for the same reason.
+
+        ⚠ BOTH DIRECTIONS, because a missing key and an extra key are the same defect from two
+        sides: a missing one is an operand no reader can bind, an extra one is a second vocabulary.
+        `None` has no keys, which is why every `text` Record minted before this check stays lawful
+        and nothing already in a world is re-read by it."""
+        want = RECORD_KIND_KEYS.get(self.kind)
+        if want is None:
+            raise Forbidden(
+                f"Record.kind {self.kind!r} -- not a member of `record_kinds`", "ARCH §B.5",
+                needs=f"one of {sorted(RECORD_KINDS)}, or a new row in rosters.yaml: record_kinds",
+                law="ARCH §B.5 -- Petition and Dispensation are KINDS of Record, and a kind is a "
+                    "roster member: a free string would mint a document no key list describes")
+        sm = self.subject_matter
+        if sm is not None and not isinstance(sm, dict):
+            raise Forbidden(
+                f"Record {self.id!r} carries subject_matter of type {type(sm).__name__}",
+                "⊕L35", needs=f"a mapping over exactly {list(want)}, or None for a kind with none",
+                law="r2 02 §A.5 -- `subject_matter: Any` is a schema hole unless its keys are the "
+                    "kind's; a value with no keys cannot be checked against them")
+        have = set(sm or ())
+        if have != set(want):
+            raise Forbidden(
+                f"Record {self.id!r} of kind {self.kind!r} carries subject_matter keys "
+                f"{sorted(have)}", "⊕L35",
+                needs=f"exactly {list(want)} -- missing {sorted(set(want) - have)}, "
+                      f"extra {sorted(have - set(want))}",
+                law="r2 05 ⊕L35 -- a document's content is its kind's keys and no others. A missing "
+                    "key is an operand no reader can bind; an extra key is a second vocabulary")
 
 
 def subject_of(a: "Act") -> str:
@@ -646,9 +761,30 @@ class Office:
     binds: str = "members_by_admission"
     conferral: Optional[str] = None
     revocation: Optional[str] = None
-    establishment: list[str] = field(default_factory=list)
-    dates: list[str] = field(default_factory=list)
-    upkeep: Any = None
+    # ⚠ `establishment: list[str]` WAS HERE AND IS DELETED (plan position `17a`, r2 item 9). `ARCH
+    # §B.7` call 2: *"`establishment` is a Query over `oblige`, not a field. A set of persons on a
+    # seat is two homes for one fact."* It was `[]` on every office in every world -- `establish`
+    # declared it and never wrote it -- and `queries/world_q.py::establishment_of` now answers the
+    # same question over live `oblige` Tenures. Its matrix row went with it (`write_matrix.yaml`
+    # `retired:`), and so did `establish`'s `writes:` entry. ⚠ `repr(Office)` folds into
+    # `World.content_hash` and carries every field NAME, so this deletion alone moves the digest of
+    # every world holding an office -- a declared, controlled hash move, not a behaviour change.
+    # ⚠ `dates: list[str]` WAS HERE AND IS DELETED (plan position `18a`, r2 item 14, `05` §A.1.1(e)
+    # row 21). Zero readers and zero writers anywhere in the tree -- every `.dates` in the package
+    # is `World.dates`, the calendar's dict, never this -- and no matrix row. `04 §B.7`'s `Seat :=`
+    # spells `dates[]`; Jordan's `RR-B` ruling (limb `B-1`, 2026-09-17,
+    # `proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml`) AMENDS that line for `dates[]`,
+    # and `04:314` carries the amendment inline. Same declared hash move as `establishment`'s.
+    # `04 §B.7`'s RATIFIED `Seat := ( …, upkeep, dates[], exists )` -- WHAT THE SEAT PAYS EACH
+    # PERSON OBLIGED TO IT, PER TERM, out of its own rung's stores (`holonic_ARCHITECTURE.md:428`:
+    # *"what the post pays its establishment out of the office's stake"*). Plan position `17b` typed
+    # it (it was `Any`, declared and unread, and r2 `05:1659` refused deleting it on `F.18`'s own
+    # resolution, *"the repair is a verb"*) and gave it its reader: `queries/world_q.py::upkeep_of`,
+    # which `_eff_transfer` asks when a seated holder pays an obligee. `None` -- every seat any
+    # builder makes today -- is not "free": it defers to the fixture `default_upkeep` (`H-158`),
+    # read at that one owner, so no caller substitutes a number of its own. Units of whatever matter
+    # the paying `transfer` carries; see `upkeep_of` for the limit that states.
+    upkeep: Optional[int] = None
     # ⚠ `H-99`, AND THESE FIELDS EXIST BECAUSE THE FIRST VERSION VALIDATED THEM AND THREW THEM
     # AWAY. `corpus_run._check_office` called `office_faction(...)` at overlay load and DISCARDED
     # the return; `Office` had no faction and no body, so nothing downstream could read either.
@@ -705,6 +841,29 @@ class Office:
                 "rosters.yaml -- revocation_bases",
                 law="ED-IN-0256 (3) -- who may strip a seat is a CLOSED set of rules; an "
                     "off-roster basis would admit no revocation, silently, forever")
+        # HOW THE SEAT TAKES ON THOSE WHO SERVE IT -- r2 `05` RULED (b), `ARCH F.17`, plan position
+        # `17a`. The two clauses above, one field along. Never `None`: the field has a default, so
+        # every seat declares one, and an off-roster value would make a seat nobody can join while
+        # `_req_oblige` looked like a working precondition.
+        require_member(
+            self.binds, BINDS_BASES,
+            f"office {self.id!r} declares the binds basis {self.binds!r}",
+            "rosters.yaml -- binds_bases",
+            law="ARCH F.17 -- how a person joins a seat is a CLOSED set; an off-roster basis "
+                "would admit no `oblige`, silently, forever")
+        # WHAT THE SEAT PAYS EACH OBLIGEE -- plan position `17b`. `None` defers to the fixture (see
+        # the field); a declared value must be a whole, non-negative amount, because `upkeep_of`'s
+        # reader divides a payment by it and a negative or fractional upkeep would renew a number
+        # of terms nobody could state. `bool` is refused by name: `True` is an `int` to Python and
+        # an upkeep of one unit to nobody.
+        if self.upkeep is not None and (isinstance(self.upkeep, bool)
+                                        or not isinstance(self.upkeep, int) or self.upkeep < 0):
+            raise Forbidden(
+                f"office {self.id!r} declares the upkeep {self.upkeep!r}", "ARCH §B.7",
+                needs="a whole, non-negative amount per obligee per term, or None for the "
+                      "fixture `default_upkeep`",
+                law="ARCH §B.7 `Seat := ( …, upkeep, … )` / F.18 -- upkeep is what the seat pays "
+                    "each person obliged to it; `_eff_transfer` counts how many a payment covers")
         # A TITLE IS NOT AN OFFICE -- the refusal and its reasoning live in the function
         # (`refuse_a_title_in_a_body`'s own docstring has the fuller history; `offices.yaml`'s
         # loader, position `8a`, now exists too, and calls `title_domain` the same way).
@@ -721,6 +880,8 @@ class Office:
         # written, by the plan's own "Contradiction 1" resolution as the reason position `18a` may
         # safely delete this field -- `18a` MAY NOT delete `scope_rung` as things stand; doing so
         # would silently reopen `H-32`. r2 `03` §A.8's deletion call needs re-deciding against this.
+        # `18a` (2026-09-29) re-derived it and KEPT the field: `judging_set` still reads it, and
+        # Jordan's `RR-B` ruling (limb `B-1`) KEEPS `scope?` in the ratified `Seat :=` besides.
         dom = title_domain(self.post)
         if dom is not None and self.scope_rung is None and self.rung is not None:
             self.scope_rung = self.rung
@@ -735,6 +896,24 @@ class Rung:
     WHITELIST over S10's declared field set -- a concept check rather than a term check.
     Any attribute not in S10's record raises, whatever it is called."""
 
+    # ⚠ `stake`, `transmission` AND `judging_set_rule` ARE DELETED (plan position `18a`, r2 item
+    # 14), each by name in `04 §B.3`: *"DELETED: stake (retired, no producer) · judging_set_rule ·
+    # transmission"*. None had a reader or a writer. The judging set is a Query over seats
+    # (`04:176`), `queries/world_q.py::judging_set`, built at position `18`; transmission is
+    # `succeed`, owned by the holder (`04:177`). Each whitelist entry went WITH its `__init__`
+    # line (r2 `05`'s ⊕ L40 coupling): the `object.__setattr__` calls bypass the whitelist, so a
+    # half-deletion would have kept writing a field `__setattr__` then refuses. A caller passing
+    # any of the three now meets the undeclared-fields refusal in `__init__`.
+    #
+    # ⚠ `sites`, `records` AND `dates` STAY, THOUGH r2's LIST DELETES THEM. `04 §B.3`'s RATIFIED
+    # `Rung := ( id, kind, matter(stores, sites[], records[]), dates[], envelope, exists )` declares
+    # all three (and `01_AXIOMS.md` §D.2 has a Rung OWN "its Sites, its Records ... dates"). Jordan's
+    # `RR-B` ruling amended `04` limb by limb and none of its eight limbs is this line, so deleting
+    # them would overwrite ratified text no ruling amends -- the ground on which `Office.upkeep` was
+    # kept (the one-order plan's contradiction 1, *"Layer 1 has the field"*). Zero readers each
+    # (`loop/matter.py` calls `sites` a back-reference nothing maintains): ID-13's defect, stated
+    # here rather than resolved by overwriting the ratified line.
+    #
     # roster-exempt: MECHANISM. These are the FIELD NAMES of this dataclass, checked so an
     # undeclared attribute raises. They are the code's own shape, not the game's vocabulary.
     # ⚠ `yield` IS PART D's FIELD NAME AND IT IS A PYTHON KEYWORD, so it is reached with
@@ -743,8 +922,7 @@ class Rung:
     # (§8) — the key is the same string Part D uses, and Part D says `yield`. `W8` added it: the
     # row existed in the matrix from the start and named a field the class did not have, which
     # `matrix_rows_without_a_field` now reports because it reads `_DECLARED` (see that function).
-    _DECLARED = {"id", "kind", "stores", "sites", "records", "dates", "stake",
-                 "envelope", "transmission", "judging_set_rule", "yield"}
+    _DECLARED = {"id", "kind", "stores", "sites", "records", "dates", "envelope", "yield"}
 
     def __init__(self, id: str, kind: str, **kw: Any):
         if kind not in RUNG_KINDS:
@@ -754,12 +932,8 @@ class Rung:
         # `yield` is #353 §25's *"only here"* row: what this rung PRODUCED this season, per
         # matter kind. Empty for a rung that produces nothing, which is most of them.
         for f_, d in (("stores", dict), ("sites", list), ("records", list),
-                      ("dates", list), ("stake", list), ("envelope", list), ("yield", dict)):
+                      ("dates", list), ("envelope", list), ("yield", dict)):
             object.__setattr__(self, f_, kw.pop(f_, None) or d())
-        object.__setattr__(self, "transmission", kw.pop("transmission", None))
-        # S10.2 caveat: `judging_set_rule` is UNSPECIFIED (S61). It is carried as a field so the
-        # record matches S10, and reading it raises -- see Query.judging_set.
-        object.__setattr__(self, "judging_set_rule", kw.pop("judging_set_rule", None))
         if kw:
             raise Forbidden(f"Rung given undeclared fields {sorted(kw)}", "S10.1",
                             law="S10.1 -- a Rung owns NO social aggregate: no norms, no densities, no reputation, no unrest, no legitimacy. EVERY ONE IS A QUERY")
@@ -783,9 +957,10 @@ def matrix_rows_without_a_field() -> dict:
     Part D is the SPECIFICATION and this file is one implementation of it, so a row naming a field
     the instrument has not built yet is a TODO for the instrument, not a defect in Part D.
 
-    Kinds the instrument models as DICTS rather than classes — `Date`, `DocketItem`, `Petition`,
-    `Dispensation`, `ConveningCondition` — cannot be checked at all and are reported separately,
-    so the number is never mistaken for a clean bill.
+    Kinds the instrument models as DICTS rather than classes — `Date`, `DocketItem`,
+    `ConveningCondition` — cannot be checked at all and are reported separately, so the number is
+    never mistaken for a clean bill. (`Petition` and `Dispensation` were two more until plan
+    position `15` folded both into `Record` kinds and deleted their matrix rows.)
 
     ⚠ `Rung` WAS IN THAT SECOND BUCKET AND DOES NOT BELONG THERE. The test was `is_dataclass`, and
     `Rung` is a plain class with an explicit `_DECLARED` field set — the whitelist S10 gives it, so

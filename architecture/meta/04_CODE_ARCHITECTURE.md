@@ -129,7 +129,16 @@ axioms say what the owned-state sets are.**
 ```
 state/       the owned stores · the gate · the log · the ledgers · the id mint
 data/        every closed set, table, fixture, the write matrix, the verb table — and the ONE loader
-queries/     ownerless functions: world_q (World first) · person_q (asker first) · cache (barrier-built)
+queries/     ownerless functions: world_q (World first) · person_q (asker first) · cache
+             (barrier-built) · faction_q (§B.6.1's VIEW, §B.10-12's `resolve`/`at_war`)
+             ⚠ EDITED AT PLAN POSITION `20-ii` (2026-09-30), NOT BEFORE. This line named three
+             members from 2026-09-03 to `20-ii` while §B.6.1/§B.10-12/§C.5.1 already named
+             `faction_q.resolve`/`at_war` by their own dotted paths -- `layer-conformance` B4's
+             third disposition, an internal ambiguity between this spec's own clauses, repaired
+             by completing the fourth module rather than by editing this line to match code that
+             was still partial (`CLAUDE.md` §0.05: "a spec edited to match its implementation
+             checks nothing"). `faction_q.py`'s own docstring and `queries/__init__.py` record the
+             history; this line is now current rather than stale.
 decision/    AX-2's island: questions · opening_set · choose · budget.   NO World in scope.
 loop/        driver + seven steps.  The driver is the ONLY constructor of write tokens.
              ⚠ M4 (`ED-IN-0279` clause (a), 2026-09-28) added ENCOUNTER between RESOLVE and
@@ -223,7 +232,7 @@ Person := ( id, weight, capability, body, exists, travel_leg
 -- renamed/dropped 2026-09-24, ED-IN-0261 item 1: `convictions` -> `pursuits` (season-side name
    only, values unchanged); `marks[]` dropped (retired write_matrix.yaml field, zero readers)
 NOT ON IT:  beliefs (a commit to an OUGHT) · ties_index (Nobody's) · any aggregate · anything about another person
-LOCATION:   the person-kind Rung sharing its n; its contain edge is where they are
+LOCATION:   the person-kind Rung sharing its n; its contain edge is where they are -- and its live `reside` edge (Person -> Rung, one) is where they LIVE: `move` re-homes `contain` and leaves it, only `migrate` re-homes it (plan position `19c`, 2026-09-30; `loop/effects.py::_eff_migrate` carries the split)
 ```
 
 | invariant | grade (Py / GD) | construction |
@@ -311,7 +320,7 @@ one IS the edges.**
 Seat := ( id, post, body?, scope? (null = a cluster), remit(acts[], binds)
         , conferral  -- which ACT fills it: confer by <seat> | determine by <judging seats> | succeed
         , revocation -- which seat may revoke, and the CONJUNCTS
-        , upkeep, dates[], exists )
+        , upkeep, dates[], exists )   -- ⚠ AMENDED: `dates[]` DELETED at plan position `18a` (Jordan, `RR-B` limb `B-1`, 2026-09-17: `dates[]` "amend[s] as the design proposes"; 0 readers). `upkeep` KEPT with a reader (`17b`); `scope?` KEPT (`B-1`) -- `state/carriers.py::Office`
 NEVER:   who holds it · who serves it · a modifier of any kind
 ```
 
@@ -340,7 +349,7 @@ NEVER:   who holds it · who serves it · a modifier of any kind
 
 ```
 Tenure := ( id, kind, subject (THE OWNER), object, since, until?
-          , term? (matures_at, declared_by : ActId, closer)   -- T-n. Replaces payload?
+          , term? (matures_at, declared_by : ActId, closer)   -- T-n. Replaces payload? ⚠ No: built at plan position `17b` BESIDE the live `payload`, without `closer` (ID-13) -- `state/carriers.py::Term`
           , degree? )
 tie · knot   DIRECTED     succeed : Person -> Person     hold.subject : Person only
 NEVER: deletion.  LIVE: tenures.live(...) is the default iterator; tenures.ended(...) is separate and named
@@ -352,6 +361,14 @@ NEVER: deletion.  LIVE: tenures.live(...) is the default iterator; tenures.ended
 | **a declared term** (T-n) | the Tenure's own `term`: a `closer` basis exercised by an act, or a `matures_at` MATTER matures with `causes[] = term.declared_by`. ⚠ **The basis resolves against the Seat** — `Seat.revocation` is authoritative and `term.closer` names a basis, not a second authority (Stage 1 `§E.1.2` asks that this be said at both sites) | RESOLVE, or MATTER |
 | **a revocation on the seat** (T-o) ⚠ **ADDED — and the count needs saying, because two readings of *three* were in circulation.** This table's three were `T-m`, `T-n` and the cascade; Stage 1 `§E.1.2`'s three are the **declared** ways — `T-m`, `T-n`, `T-o` — with the cascade filed separately as an existence change. **The type section was one short of Stage 1's set and the heading hid it** | the **Seat's** `revocation` basis, exercised through `Act.via`, refused the instant the occupant is not seated. **`PART D` row 10a already gates it; the type section never named it** | RESOLVE |
 | **subject or object ceases to exist** | `destroy` sets `until` on every Tenure naming the id **and nothing else** | MATTER (death) or RESOLVE (kill) |
+
+⚠ **AMENDED: FOUR PATHS HERE, NINE AT §C.2 -- THIS TABLE IS NOT RE-EXTENDED TO MATCH.** `conferral`,
+`handover` (`ED-IN-0277`), `renewal` (`17b`), `determination` (`19`) and `founding` (`24e`) each admit
+a write this table's four do not cover, and `T-m`'s own row above is narrower than the code: it may
+NOT rewind an existing edge's `term` (BATCH-CLOSE, methodology-close Phase 1, 2026-09-30 -- see
+`state/gate.py::tenure_write_basis`'s own T-m clause). **§C.2's pseudocode is the current, complete
+enumeration of every basis and what each may write; per `CLAUDE.md` §0.05 this table is reference and
+is not rewritten to chase it.**
 
 > **Synthesis call, and it resolves a real tension.** #353 says death's `until` is *the only Tenure
 > write in the MATTER class* and that *a second such seam means the column is the wrong mechanism.*
@@ -366,7 +383,7 @@ NEVER: deletion.  LIVE: tenures.live(...) is the default iterator; tenures.ended
 | invariant | grade | construction |
 |---|---|---|
 | one home, one writer | STRUCTURAL | one store keyed by subject; the object side is a barrier cache |
-| **what an act can open, an act can close** (ID-14) | MECHANICAL at load | the loader asserts `release`'s kind domain equals `tenure_kinds \ {contain}` ⚠ *(this cell and `D-15` both said **equals `tenure_kinds`** after invariant 6 was corrected for F4 — `contain`'s subject can never act, so the unqualified form is unsatisfiable. Corrected 2026-09-03)* |
+| **what an act can open, an act can close** (ID-14) | MECHANICAL at load | the loader asserts `release`'s kind domain equals `tenure_kinds \ {contain}` ⚠ *(this cell and `D-15` both said **equals `tenure_kinds`** after invariant 6 was corrected for F4 — `contain`'s subject can never act, so the unqualified form is unsatisfiable. Corrected 2026-09-03)* ⚠ *AMENDED at plan position `19c` (2026-09-30): `tenure_kinds \ {contain, reside}`. `reside` (where a person lives) is closed by the act that opens its successor — `migrate` — so ID-14 holds through that verb, and a `release` of it would leave a person living nowhere; `data/rosters.py::RELEASABLE_KINDS` is the one derivation* |
 | no ratchet over ended edges | MECHANICAL | `ended()` is separate; a scan forbids an int-returning `world_q` function from calling it |
 | **a symmetric relation with one owner** | STRUCTURAL | `tie`/`knot` are directed; no symmetric kind exists. *I have cut you off and you do not know it* is free |
 | **a relation whose subject cannot act** | STRUCTURAL (typed) | the subject type admits `RungId` for `contain` only |
@@ -465,9 +482,11 @@ that would have hit it:**
 4. **every failable clause has a refusal kind** — ⚠ **WIDENED (F7)**: not only a verb with a
 `requires`, but each **conjunct** of it, and any eligibility alternative that can decline. The first
 wording covered `requires` alone and was satisfied by luck, because every verb with no `requires` is
-`own`, which cannot fail ·
+`own`, which cannot fail. ⚠ *(plan position `19`, 2026-09-29: the per-conjunct half is enforced for a
+row that KEYS its `emits_on_refusal:` by clause -- eligibility, each named conjunct, the write --
+`data/verbs.py`; a flat row still declares one kind for all its clauses)* ·
 5. **`act_only` ⇒ steps ⊆ {RES}; `MAT` ⇒ `world_or_act`** — the fourth-clock refusal, at load ·
-6. ⚠ **CORRECTED (F4): `release`'s kind domain == `tenure_kinds \ {contain}`**, and **every kind's
+6. ⚠ **CORRECTED (F4): `release`'s kind domain == `tenure_kinds \ {contain}`** *(`\ {contain, reside}` since plan position `19c` — §B.8's ID-14 row)*, and **every kind's
 OPENER set is declared too** (`ID-14`'s added half) ·
 7. the Event-kind roster is **derived** from every emission column, and the log accepts no other kind ·
 8. alignment keys ⊆ axes × verbs, and not all zero · 9. contest prizes ⊆ the subsystem roster ·
@@ -537,11 +556,53 @@ gate.write(token, kind, field, id, change, actor?, via?) -> Receipt
   row.writer == act_only => token.class == ACTS  or raise
 
   -- ⚠ F3 · AX-4 CLAUSE 2, ENFORCED HERE FOR THE FIRST TIME
+  -- ⚠ TWO MORE BASES, ADDED AFTER THIS ENUMERATION WAS WRITTEN, NEVER UNTIL NOW RECONCILED HERE
+  -- (BATCH-CLOSE, methodology-close Phase 2 layer-conformance pass, 2026-09-29 -- found by a
+  -- producer/critic relay: the critic's citation-trace showed the workplan's own justification
+  -- for these two bases pointed at an UNRATIFIED proposal document sharing the "04" filename
+  -- prefix by coincidence, `proposals/2026-09-05-proceedings-subsystem/04_VERBS.md`, never at
+  -- THIS file -- so the code was correct and independently verified, and this enumeration was
+  -- simply stale, exactly the gap M4's own inline citation two rows below closes for a different
+  -- clause). `conferral` (`ED-IN-0277`, 2026-09-26, plan position 6): a seat-authorized OPENING
+  -- or re-grant of a `hold` on that seat, via `Act.via`'s purview walk -- `may_fill`,
+  -- `state/gate.py`. `handover` (`ED-IN-0277`'s own row, "give (position 16) is decided -- a
+  -- sixth, causation-bound basis -- and settled, not built"; BUILT at plan position 16): an
+  -- OPENING of a `hold` on an object that is NOT a seat, whose object the SAME write closed under
+  -- T-m -- the authority is the giver's own edge, ended in the same act, never a seat's basis.
+  -- ⚠ `17b` (TERM · UPKEEP, plan §3.2 row 10, 2026-09-29): T-n BUILT (actorless, closing only) + `renewal` ADDED.
+  -- ⚠ `19` (U7-remit, plan `_part2` "19 — INSTRUCTION", 2026-09-29): `determination` ADDED -- the
+  -- "conferral-basis opener" that entry said it could not add itself, re-derived: `determine` opens an
+  -- `oblige` ON via, not a `hold` on another seat, by a bench's ground, not purview -- `conferral` refuses
+  -- all three, so not a wider reading. `may_determine`, `state/gate.py`.
+  -- ⚠ `24e` (WORKS & FOUNDING, plan `_part2` "24e", 2026-09-29): `founding` ADDED -- `found` opens
+  -- `contain : <new Rung> -> <its parent>`, an edge whose subject is a Rung and so nobody's (S15.1):
+  -- T-m cannot reach it, and every other basis reads a seat, an `oblige` or a `hold`. The licence is
+  -- the BIRTH, observed by the store (`born`, `gone`'s mirror), never claimed; the mirror of the
+  -- cascade. One parent, checked on the store the write leaves. `tenure_write_basis`, `state/gate.py`.
+  -- ⚠ T-M ITSELF NARROWED TWICE, NEVER RECONCILED HERE UNTIL NOW (found by the second sub-batch's
+  -- layer-conformance pass, 2026-09-30, reading this line against `state/gate.py`'s own docstring):
+  -- the bare `actor == subject(id)` below is NOT what the gate tests. (1) 2026-09-26, antagonist
+  -- pass on G3: T-m never admits OPENING or RE-GRANTING a seat-`hold`, even the actor's own --
+  -- purview is asked of the seat, never the actor. (2) BATCH-CLOSE, methodology-close Phase 1,
+  -- 2026-09-30: T-m never admits a REWRITE of an existing edge's `term` either -- that is
+  -- `renewal`'s to admit, on a seat's authority, never the owner's own. Both are narrowings of what
+  -- `actor == subject(id)` alone would admit, not new bases; `tenure_write_basis`, `state/gate.py`,
+  -- is the current, complete test.
   kind is Tenure => one of:
       actor == subject(id)                                   -- T-m, the owner's discretion
-      cause is this Tenure's declared `term` maturation       -- T-n
+      cause is this Tenure's declared `term` maturation       -- T-n: no actor, a pure closure, term due (`17b`)
       via is a Seat whose `revocation` basis reaches it       -- T-o, and `via` MUST be present
+      via is a Seat whose `conferral` basis reaches it,
+        opening or re-granting a `hold` ON that seat          -- conferral (`ED-IN-0277`)
+      opening a non-seat `hold` whose object the SAME write
+        closed under T-m, not yet handed on                   -- handover (`ED-IN-0277`, built at 16)
+      via IS the Seat, actor seated, a live `oblige` on it:
+        its `term` pushed later, nothing else moved           -- renewal: upkeep paid (`17b`, F.18)
+      via IS a judging Seat, actor seated, OPENING an `oblige`
+        on it for another person its bench's ground holds     -- determination: a bench binds (`19`)
       cause is an existence change this same act caused       -- destroy's cascade
+      opening a `contain` for a thing this same act brought
+        into existence, its only parent                       -- founding: a place founded (`24e`, F.20)
     otherwise                                                 raise NotYours
 
   before = get(); store._set(); after = get()                             -- THE GATE APPLIES THE WRITE
@@ -956,7 +1017,7 @@ the assumption is the failure mode.**
 | 8 | a stored aggregate | no field slot; a Query is a function; a cache is driver-local | STRUCTURAL at the type; CONVENTION at a schema edit |
 | 9 | **an Event with an actor, target or subject** | the fields do not exist; `changes[]` is plural | STRUCTURAL |
 | 10 | two homes for one relation | one store keyed by subject; the object side is a cache | STRUCTURAL |
-| **10a** | ⚠ **NEW (F3) · a write by a non-owner** | the gate checks `actor == subject(id)` on every Tenure write, and admits three declared exceptions only — `T-n`'s matured term, `T-o`'s seat revocation **with `Act.via` present**, and a destroy cascade citing the existence change that caused it | MECHANICAL at the gate — **and it was CONVENTION before, enforced by per-verb eligibility alone** |
+| **10a** | ⚠ **NEW (F3) · a write by a non-owner** | the gate checks `actor == subject(id)` on every Tenure write. ⚠ **AMENDED: "three declared exceptions only" is now NINE — `conferral`, `handover` (`ED-IN-0277`), `renewal` (`17b`), `determination` (`19`) and `founding` (`24e`) joined `T-n`'s matured term, `T-o`'s seat revocation **with `Act.via` present**, and a destroy cascade. §C.2's pseudocode is the current, complete enumeration; this cell is not rewritten to match it, per `CLAUDE.md` §0.05 -- see §C.2 for what each of the nine may write** | MECHANICAL at the gate — **and it was CONVENTION before, enforced by per-verb eligibility alone** |
 | 11 | a seat that knows its holder | no field | STRUCTURAL |
 | 12 | **a relation with two owners** | directed `tie`/`knot`; no symmetric kind exists | STRUCTURAL |
 | 13 | a relation whose subject cannot act | `subject` admits `RungId` for `contain` only | STRUCTURAL (typed) |
@@ -1098,7 +1159,7 @@ number filled to make a reference resolve.**
 | **F.17** | how a person joins an establishment | `oblige`'s `requires` reads the seat's `binds` | if admission is a seat's own act, the closed remit roster **needs a sixth member — a ruling, not a row** |
 | **F.18** | **upkeep's source** — *"out of the office's stake"*, and `stake` was retired | unpaid; establishment persists until released | **no economic pressure on any office**, and *"finite, contested"* has no mechanism. A MATTER payment would be a fourth clock, so the repair is a verb |
 | **F.19** | the envelope, individuation, and `weight` | individuation decrements a band and mints at weight 1 | without the construal spread, **a cohort at weight 200 chooses as one mind** |
-| **F.20** | ⚠ **FOUNDING VERBS** — no stage names a verb that founds a hearth or builds a site | the rows are dropped until a verb is ruled | **the world only decays — nothing is ever founded or built.** This is what blocks build step 2 |
+| **F.20** | ⚠ **FOUNDING VERBS** — no stage names a verb that founds a hearth or builds a site | the rows are dropped until a verb is ruled | **the world only decays — nothing is ever founded or built.** This is what blocks build step 2. ⚠ **ANSWERED IN CODE at plan position `24e` (2026-09-29):** `found` and `build` (`verb_table.yaml`, `loop/effects.py`) produce `(Rung, exists)` and `(Site, exists)` from a `works` Record (r2 `04_MATTER_AND_WORKS.md` §A.6), `restore` raises a fabric, and the gate admits a founded Rung's `contain` edge under `founding` (§C.2). The verbs are the plan's, graded `assumption`, not ruled here |
 | **F.20a** | ⚠ **NEW (F5) · NO VERB WRITES ANY `Person` INTERIOR FIELD.** `§B.2` carries `convictions`, `stance[]`, `scar[axis]`, `axis_count[axis]` and names a reader for each; **it names no writer for any of them.** The four are `RES`-stepped matrix rows with no producing verb | that a consequence table would supply them | **every interior consequence is inert.** A person's convictions cannot move, so `choose` scores against a constant, `standing` has nothing to diverge from, and the epistemic layer has no moral layer to disagree with. ⚠ **This is the gap the degree-keyed column (`§C.4`, `F6`) is the shape of the answer to** — an interior write is a *consequence of an outcome*, which is exactly what the sixth column declares |
 | **F.20b** | ⚠ **NEW (F13) · THE FOLD MINTS EVENT KINDS NO COLUMN DECLARES.** The live implementation emits `act.ineligible`, `act.refused` and `contest.resolved` as **body literals**, as a fallback where a row declares no refusal kind | that invariant 7's derived roster covers every kind | **invariant 7 refuses all three at `append`**, so the loop as built cannot run under the loader as specified. Either the three become declared columns — an eligibility-refusal kind per verb (`F7`, invariant 4 widened) and a `contest.resolved` emission column — **or the derived roster is not derived.** A definition living as a literal in a body is what `ID-12` refuses |
 | **F.21** | the rank of a cluster seat (`scope = null`) | no rank; the loader forbids a `higher_rank` conjunct on one | church seats become revocable by purview alone — **which they also lack** |

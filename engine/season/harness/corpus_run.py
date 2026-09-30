@@ -55,7 +55,7 @@ from ..data.verbs import VERB_TABLE
 from ..decision import align, make_chooser
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, Unspecified
 from ..loop.driver import SeasonDriver, resolvable_verbs
-from ..queries.world_q import questions_for
+from ..queries.world_q import RESIDE_KIND, questions_for
 from ..state.carriers import Act, Event, Office, Person, Proposition, Rung, Site, Tenure
 from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
@@ -277,6 +277,8 @@ def build_at(case: dict, seed: int = 0) -> World:
         # -- rather than in a person-shaped container, which is what the ladder actually says.
         if chain:
             w.add_tenure(Tenure(f"t_{pid}_in", pid, ids[chain[0]], "contain", 0))
+            # Plan position `19c`: and they live there (`populated.build_realm`'s rule).
+            w.add_tenure(Tenure(f"t_{pid}_home", pid, ids[chain[0]], RESIDE_KIND, 0))
         w.persons[pid].pursuits = seed_pursuits(seed, str(case.get("id")), pid)
     # ⚠ `W28-cast`: THE CAST'S AUTHORED `capability`, WRITTEN ONCE, AT WORLD-GEN, AND NOWHERE ELSE.
     # `04_CODE_ARCHITECTURE.md` F.6 (`:1087`): *"capability's season writer ... world-gen writes it
@@ -472,6 +474,45 @@ def _span_status(case: dict) -> str:
     return "CLAMPED" if n > MAX_SEASONS else "OK"
 
 
+def attribute(w: World, d, n: int) -> list:
+    """`[(act, made, refused)]` for every act the fold resolved over `n` seasons — EXECUTION,
+    ATTRIBUTED TO THE ACT, not to any verb that shares an emission kind. `made` is the tuple of the
+    act's row's `emits:` kinds whose Event is in the log, `refused` the same over its
+    `emits_on_refusal:` kinds — so each is truthy exactly when the act executed / was refused, and
+    says WHICH refusal when there are several. The two are not exclusive: a contesting verb can
+    publish both (measured on `tell` and `march` in the populated realm).
+
+    ⚠ THE KIND ALONE IS NOT AN ATTRIBUTION, AND READING IT AS ONE PUT A FALSE POSITIVE IN THE
+    PUBLISHED SET. `forge` and `create_record` BOTH emit `record.created` (and `confer` and
+    `revoke` both emit `tenure.closed`), so a scan over `{e.kind for e in w.log}` credited
+    `forge` with every record `create_record` made — while `forge` has no predicate and no
+    effect and cannot execute at all. Caught by cross-checking the executed set against the
+    predicate/effect tables: a verb the fold cannot execute appeared among the verbs that did.
+
+    The fold derives every emission's id as `H(seed, tick, actor, f"{kind}:{act.id}")`
+    (`shape.py`, `_fold.ev`), so attribution is EXACT and reuses the design's own id scheme
+    rather than adding a second rule for the same question (§8). The act id is unique, so a
+    match at any tick is a genuine match for that act.
+
+    ⚠ ONE OWNER, TWO CALLERS. This body sat inline in `run_case` and returned only verb SETS; the
+    aperture re-measurement (`harness/aperture.py`, plan position `★`) needs the same answer PER
+    ACT, so it can say which PERSON executed what. Extracted rather than re-derived there, so the
+    corpus's "executed" and the populated realm's "executed" are one rule and cannot drift into
+    two ladders for one quantity (`CLAUDE.md` §0.06 S)."""
+    ids = {e.id for e in w.log}
+    out = []
+    for a in getattr(d, "resolved", []):
+        row = VERB_TABLE.get(a.verb)
+        if row is None:
+            continue
+        made, refused = (
+            tuple(k for k in (kinds or ())
+                  if any(H(w.world_seed, t, a.actor, f"{k}:{a.id}") in ids for t in range(n + 1)))
+            for kinds in (row.emits, row.emits_on_refusal))
+        out.append((a, made, refused))
+    return out
+
+
 def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     case = apply_rescale(case)
     scale, cid = str(case.get("scale")), case["id"]
@@ -502,33 +543,9 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     except (ShapeGap, Unspecified, Forbidden, NoProducer) as e:
         return dict(id=cid, scale=scale, status="DESIGN-GAP", executed=[], refused=[],
                     seasons=n, why=f"{type(e).__name__}: {e}", checks={"R1": False})
-    # EXECUTION, ATTRIBUTED TO THE ACT — not to any verb that shares an emission kind.
-    #
-    # ⚠ THE KIND ALONE IS NOT AN ATTRIBUTION, AND READING IT AS ONE PUT A FALSE POSITIVE IN THE
-    # PUBLISHED SET. `forge` and `create_record` BOTH emit `record.created` (and `confer` and
-    # `revoke` both emit `tenure.closed`), so a scan over `{e.kind for e in w.log}` credited
-    # `forge` with every record `create_record` made — while `forge` has no predicate and no
-    # effect and cannot execute at all. Caught by cross-checking the executed set against the
-    # predicate/effect tables: a verb the fold cannot execute appeared among the verbs that did.
-    #
-    # The fold derives every emission's id as `H(seed, tick, actor, f"{kind}:{act.id}")`
-    # (`shape.py`, `_fold.ev`), so attribution is EXACT and reuses the design's own id scheme
-    # rather than adding a second rule for the same question (§8). The act id is unique, so a
-    # match at any tick is a genuine match for that act.
-    ids = {e.id for e in w.log}
-    ok_v, no_v = set(), set()
-    for a in getattr(d, "resolved", []):
-        row = VERB_TABLE.get(a.verb)
-        if row is None:
-            continue
-        for t in range(n + 1):
-            for k in (row.emits or ()):
-                if H(w.world_seed, t, a.actor, f"{k}:{a.id}") in ids:
-                    ok_v.add(a.verb)
-            for k in (row.emits_on_refusal or ()):
-                if H(w.world_seed, t, a.actor, f"{k}:{a.id}") in ids:
-                    no_v.add(a.verb)
-    ok, no = sorted(ok_v), sorted(no_v)
+    outcomes = attribute(w, d, n)
+    ok = sorted({a.verb for a, made, _ in outcomes if made})
+    no = sorted({a.verb for a, _, refused in outcomes if refused})
     # ---- `W18`: §6.1's R1/R3/R4/R5 and §6.2's A1, computed. R2/A2/A3 are NOT-COMPUTABLE.
     before = dict(DEFAULT_FIXTURES.reads)
     w2 = build_at(case, seed)

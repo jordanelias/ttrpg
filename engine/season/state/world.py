@@ -134,13 +134,33 @@ for _n in _TenureView._MUTATORS:
 
 
 def _written_fields(t: Tenure, copy: bool) -> tuple:
-    """The seven fields a write can change on a Tenure, in `Tenure`'s constructor order after `id`
+    """The eight fields a write can change on a Tenure, in `Tenure`'s constructor order after `id`
     -- so `Tenure(t.id, *fields)` rebuilds it. `copy=True` deep-copies the payload (see
-    `World._tenure_snapshot`); comparison needs no copy, because `==` on a dict is by value."""
+    `World._tenure_snapshot`); comparison needs no copy, because `==` on a dict is by value.
+
+    ⚠ `term` IS THE EIGHTH, ADDED AT PLAN POSITION `17b`, AND OMITTING IT HERE WOULD HAVE BEEN THE
+    WHOLE FEATURE'S BYPASS: a renewal writes nothing but `term`, so a snapshot blind to it reports
+    no change, F3 judges nothing, and F9 refuses the renewal as a no-op -- or, through a closure,
+    admits an unjudged clock-wind on another person's edge. `Term` is frozen, so it needs no copy:
+    a renewal replaces the object, and the snapshot still holds the old one."""
     p = t.payload
     if copy and p is not None:
         p = _copymod.deepcopy(p)
-    return (t.subject, t.object, t.kind, t.since, t.until, t.degree, p)
+    return (t.subject, t.object, t.kind, t.since, t.until, t.degree, p, t.term)
+
+
+def rung_kind_ascends(child_kind: str, parent_kind: str) -> bool:
+    """THE §10 LADDER RULE, ONCE, ON KINDS: may a rung of `child_kind` be contained in one of
+    `parent_kind`? Strictly above on `rung_kinds` (an ORDERED roster, `person` first) -- strict
+    ascent, not adjacency, so a hearth under a settlement is lawful and a duchy under a hearth is not.
+
+    Factored out of `World.contain_ascends` at plan position `24e`, which reads it unchanged,
+    because `found` must ask the rule of a Rung that does not exist yet -- `contain_ascends` answers
+    `True` for an id it cannot resolve (its own docstring: *"Non-rungs pass"*), so asking it before
+    the new Rung is stored would admit anything and let `add_tenure` raise inside RESOLVE. One owner,
+    three readers: `add_tenure` raises on it, `_eff_move` and `_eff_found` decline on it."""
+    order = list(RUNG_KINDS)
+    return order.index(parent_kind) > order.index(child_kind)
 
 
 def _entity_digest(obj: Any) -> str:
@@ -155,7 +175,7 @@ def _entity_digest(obj: Any) -> str:
     if hasattr(obj, "__dataclass_fields__"):
         return repr(obj)
     if isinstance(obj, dict):
-        # `dates`, `petitions`, `dispensations` and `docket` hold PLAIN DICTS, not entities.
+        # `dates` and `docket` hold PLAIN DICTS, not entities.
         # `sorted` on the items makes the digest independent of insertion order (R4).
         return repr(sorted((str(k), repr(v)) for k, v in obj.items()))
     if hasattr(obj, "__dict__"):
@@ -187,9 +207,12 @@ class World:
         self.log = EventLog(self.gate, lambda: self.acts.ids())
         self.dates: dict[str, dict] = {}
         self.docket: list[dict] = []
-
-        self.petitions: dict[str, dict] = {}
-        self.dispensations: dict[str, dict] = {}
+        # ⚠ `petitions` AND `dispensations` WERE TWO PLAIN DICTS HERE AND ARE DELETED (plan position
+        # `15`, `04_CODE_ARCHITECTURE.md` §B.5): both are KINDS OF `Record` now, stored in
+        # `self.records` and named by `rosters.yaml: record_kinds`. No production world ever wrote
+        # either -- only `harness/probes.py` planted them -- so the content hash is unmoved by the
+        # deletion itself (an empty mapping folds nothing). A second home for a document is how a
+        # `hold` on a dispensation came to have nothing to point at.
         self.manifest: dict[str, str] = {}      # S43 -- role -> provider, resolved AT BOOT
         self.step: Optional[Step] = None
         self.frozen = False
@@ -259,8 +282,7 @@ class World:
         sub, obj = self.rungs.get(subject), self.rungs.get(object_)
         if sub is None or obj is None:
             return True
-        order = list(RUNG_KINDS)
-        return order.index(obj.kind) > order.index(sub.kind)
+        return rung_kind_ascends(sub.kind, obj.kind)
 
     def add_tenure(self, t: Tenure) -> Tenure:
         """The ONE writer. Routes to `t.subject`'s own list, or to `_unowned` when the subject is
@@ -287,7 +309,8 @@ class World:
             raise Unowned(
                 f"tenure {t.id!r} has kind {t.kind!r}, which is not on the roster",
                 "S15", needs=f"a kind from rosters.yaml: tenure_kinds {sorted(TENURE_KINDS)}",
-                law="#353 §15 -- the seven Tenure kinds are a CLOSED set. An unrostered kind is "
+                law="#353 §15 -- the Tenure kinds (its seven, and `reside` since plan position "
+                    "`19c`) are a CLOSED set. An unrostered kind is "
                     "not an error at write time and a silent never-match at read time")
         if t.kind == "hold":
             self._refuse_bad_hold(t)
@@ -357,7 +380,7 @@ class World:
     # the snapshot itself and produces no diff at all. Every shipped effect defers its mutation
     # into `Change.apply`, which this observation does cover; nothing enforces that they must.
     def _tenure_snapshot(self) -> list:
-        """`(tenure, its seven written fields)` for every Tenure in the store, owner-first.
+        """`(tenure, its eight written fields)` for every Tenure in the store, owner-first.
 
         The payload is DEEP-copied: `_grant_remit(force=True)` re-stamps `payload["remit_acts"]`
         IN PLACE, so a reference would compare equal to itself after the write and the re-stamp
@@ -403,7 +426,7 @@ class World:
                 for lst in ((owner.tenures,) if owner is not None else ()) + (self._unowned,):
                     lst[:] = [x for x in lst if x is not t]
             else:
-                (t.subject, t.object, t.kind, t.since, t.until, t.degree, t.payload) = \
+                (t.subject, t.object, t.kind, t.since, t.until, t.degree, t.payload, t.term) = \
                     _written_fields(was, copy=False)
 
     # -- G4: WHAT A SUBJECT READS, BEFORE AND AFTER A WRITE ------------------------------------
@@ -772,7 +795,9 @@ class World:
               subject: Optional[str] = None,
               actor: Optional[str] = None,
               via: Optional[str] = None,
-              change: Optional[Change] = None) -> Any:
+              change: Optional[Change] = None,
+              matured_term: Optional[str] = None,
+              observed: tuple = ()) -> Any:
         """`G4`. A WRITE IS HANDED EITHER A CLOSURE (`apply`) OR A `Change` (`change`), NEVER BOTH.
 
         A `Change` is the fold's: the subjects an effect writes, named before it runs, and the
@@ -837,7 +862,14 @@ class World:
         Emission lives HERE rather than at each call site because §8's invariant is that every rule
         lives once: keyed on `(record_kind, fieldname)`, which is the same key the write class and
         the social partition are already read from, so a new MATTER write inherits its emission by
-        existing rather than by remembering."""
+        existing rather than by remembering.
+
+        `observed=` (plan position `19d`) is WHAT THE WRITER READ TO REACH THIS WRITE: a tuple of
+        `data/requires.py::Observation`, put on the Event this call emits, which is `Event.observed`'s
+        own meaning (`W-B`). The fold fills that field from a Verdict. The one writer here is MATTER's
+        larder pass, which records the shortfall a drained larder left (`loop/matter.py`, `19d`).
+        ⚠ IT RIDES ONLY ON AN EMISSION: observations passed with no `emits=` are refused rather than
+        dropped, since a read no Event carries reaches no witness and would be lost silently."""
         # G2. NO TOKEN, NO WRITE -- and nothing else is consulted first, so the refusal is
         # attributable. `isinstance` rather than duck-typing: a bare `WriteClass` has a `.value`
         # and would otherwise pass straight through to the class check, which is the pre-G2 call
@@ -867,6 +899,13 @@ class World:
                 f"change. An effect returns a `state/gate.py::Change` -- the subjects it writes and "
                 f"the write -- so the gate can read them before and after (G4); an effect still "
                 f"mutating and returning ids is on the retired contract")
+        # `19d`. Checked after the token and the closure-or-Change checks, so those refusals stay
+        # the first ones a malformed call meets (G2's attributability).
+        if observed and emits is None:
+            raise InstrumentDefect(
+                f"World.write({thing!r}, ...) was handed {len(observed)} observation(s) and no "
+                f"`emits=`. An Observation reaches a witness only on the Event this write emits "
+                f"(`Event.observed`), so with no emission it would vanish without a trace")
         wclass = token.write_class
         step = self.step
         sname = step.value if step else "-"
@@ -925,14 +964,25 @@ class World:
                     "licensed clock, and §25.1 says the three are exhaustive")
 
         # S15.3 -- THE SEAM IS BOUNDED BY A CAUSATION RULE, NOT BY THE COLUMN. An actorless row
-        # may write Tenure.until ONLY on a (Person, exists) change THE SAME ROW ALSO CAUSED.
+        # may write Tenure.until ONLY on a (Person, exists) change THE SAME ROW ALSO CAUSED -- OR,
+        # SINCE PLAN POSITION `17b`, ON THE MATURATION OF A TERM DECLARED BY AN ACT. That second
+        # cause is not a second seam: `04 §B.8`'s synthesis call rules it ONE seam with the rule
+        # generalised, *"an actorless row may write `until` only where its cause is the existence
+        # change it also caused, OR the maturation of a term declared by the act that opened this
+        # Tenure. Both are causation-bound; both cite an author."* `matured_term` is the caller's
+        # word for the second cause exactly as `caused_person_exists` is for the first; neither is
+        # trusted alone -- F3 below observes the change and admits it only as `T-n` (a pure closure
+        # of an edge whose own `term.matures_at` has come) or `cascade`, so a caller naming a term
+        # that has not matured is refused there, with the store put back.
         if (record_kind, fieldname) == ("Tenure", "until") and driver != "Act":
-            if caused_person_exists is None:
+            if caused_person_exists is None and matured_term is None:
                 TRACE.write(thing, wclass.value, sname, False)
                 raise Forbidden(
-                    "an actorless row wrote Tenure.until with no (Person, exists) change of its own",
-                    "S15.3", needs="the same row must cause the death it ends a tenure through",
-                    law="S15.3 -- a plague that kills the praefect ends his tenure THROUGH THE DEATH; A STORM CANNOT TOUCH IT. A second such seam means the column is the wrong mechanism")
+                    "an actorless row wrote Tenure.until with no (Person, exists) change of its own "
+                    "and no matured term",
+                    "S15.3", needs="the same row must cause the death it ends a tenure through, "
+                                   "or name the Tenure whose declared term matured (T-n)",
+                    law="S15.3 -- a plague that kills the praefect ends his tenure THROUGH THE DEATH; A STORM CANNOT TOUCH IT. 04 §B.8 generalises the causation rule to a second cause, a term an act declared, and to no third")
         # S30.2: "AND THE GATE MUST APPLY THE WRITE." A gate that validates, logs and returns
         # true while the mutation happens beside it is worse than no gate.
         # -- W4: THE EMISSION, GATED ON THE SAME ROW AS THE WRITE ------------------------
@@ -999,7 +1049,12 @@ class World:
                 if changes:
                     gone = frozenset().union(*(was_ids - set(store) for was_ids, (_, store)
                                                in zip(existed, self._entity_stores())))
-                    refused = refuse_unauthored(self, changes, actor, via, gone)
+                    # `24e`: AND `born`, THE MIRROR -- every id this same write ADDED, observed the
+                    # same way, for the `founding` basis (a newborn Rung's `contain` edge). The
+                    # caller claims neither set; the store's before-and-after is the evidence.
+                    born = frozenset().union(*(set(store) - was_ids for was_ids, (_, store)
+                                               in zip(existed, self._entity_stores())))
+                    refused = refuse_unauthored(self, changes, actor, via, gone, born)
                     if refused:
                         # THE REFUSAL IS ONLY HONEST IF THE EDGE IS AS IT WAS: the store goes back
                         # first, the trace records a refused write, and the mint window SHUTS -- a
@@ -1088,7 +1143,8 @@ class World:
                     # emergent-narrative claim", and a default root populates it with nothing. A
                     # caller with no antecedent must say so by passing `[ROOT]` itself.
                     causes=list(causes if causes is not None else []),
-                    emitted_at=self.tick)
+                    emitted_at=self.tick,
+                    observed=tuple(observed))
                 # ⚠ NO EMPTY-`causes[]` CHECK HERE. `Event.__post_init__` already refuses one at
                 # S19.4, and re-implementing it would be `CLAUDE.md` §8's violation one constructor
                 # apart — the first version of this block did exactly that and shipped two messages
@@ -1162,7 +1218,14 @@ class World:
         sweep arm and needs its own decision, not a side effect of this position's field deletion.
         Every OTHER caller of this method (the six kinds above) is unaffected: each names a kind
         with exactly one emitter, MATTER's own auto-emission block, so tier 2 still returns `subj`
-        by construction for all of them."""
+        by construction for all of them. ⚠ "SIX", NOT SEVEN, AND "MATTER'S OWN" NO LONGER COVERS
+        EVERY ONE -- STALE, NOT WRONG (BATCH-CLOSE, methodology-close Phase 3 terminal critique,
+        F12, 2026-09-29): plan position `11b` added a seventh caller, CALENDAR's own `date.fired`
+        chain (`loop/calendar.py:46`), with a single emitter of its OWN (CALENDAR's explicit
+        `emits=`, not MATTER's auto-emission block), and the same tier-2-by-construction argument
+        holds for it -- one emitter, one match, `subj` returned by construction -- just not for
+        the reason this sentence states. Not corrected further here: the count is cosmetic and
+        the property this paragraph defends is unaffected."""
         for e in reversed(self.log):
             if e.kind == kind and anchor_of(self, e) == subject:
                 return e.id
@@ -1192,6 +1255,9 @@ class World:
     # exactly those (`_eff_create_record`, `_eff_destroy_record`, `_eff_utter`). So the same
     # blindness H-118 measured on `persons` was live on the collections the corpus actually
     # moves, behind a docstring saying otherwise.
+    # ⚠ `petitions` and `dispensations` LEFT THIS TUPLE WITH THEIR DICTS (plan position `15`) --
+    # both are Record kinds, folded here under `records`. MEASURED rather than assumed inert: no
+    # production builder populated either, so every world's hash is what it was.
     # roster-exempt: MECHANISM, on the same ground as `_STEP_CLASS` above. These are `World`'s
     # OWN PYTHON ATTRIBUTE NAMES -- what the object calls its own fields -- not the game's
     # vocabulary. `rosters.yaml` holds what the WORLD contains; this holds where THIS CLASS puts
@@ -1199,7 +1265,7 @@ class World:
     # the tuple is a hash ORDER and not a definition. Moving it to data would invite someone to
     # edit how the hash works while believing they were editing the game.
     _STATE_COLLECTIONS = ("persons", "rungs", "offices", "sites", "records", "propositions",
-                          "dates", "petitions", "dispensations")
+                          "dates")
     # roster-exempt: MECHANISM, as `_STATE_COLLECTIONS` directly above -- the one state field that
     # is a LIST rather than a mapping, split out because its order is semantic (S31's queue) and
     # it is therefore folded positionally rather than sorted.
