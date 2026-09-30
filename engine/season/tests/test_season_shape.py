@@ -7348,24 +7348,22 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # refused across the full `live` set now, up from 0), and nothing already in `ever` leaves.
     # MEASURED by a one-off script over this same `live` set, seed 0, against a clean worktree at
     # `882e86e` (BATCH-CLOSE Phase 2, immediately before this position).
-    # ⚠ PLAN POSITION `28-ii` (M6, SUCCESSOR GOLDENS), 2026-09-30 -- CORRECTED PER THE BATCH-CLOSE
-    # PHASE-1 ANTAGONIST: NO ARM WAS ADDED HERE, AND `ever`/`by_sig`/`varying` DO NOT MOVE, because
-    # nothing in `decision/options.py::opening_set` changed. Clause 3's PRE-EXISTING `q.referents`
-    # reading already forms a march `Candidate` whenever a Question offers a settlement referent;
-    # what was true all along, and is measured rather than assumed, is that no `questions_for`
-    # SOURCE in the natural corpus ever offers one (measured over every person in `build_realm(0)`
-    # at tick 0: 0 of 81 referents are settlement-kind), so `march` stays in the never-attempted
-    # set below for the same reason it always did -- no computed act reaches it here, only a
-    # hand-built or chooser-driven one given a CONSTRUCTED Question
-    # (`test_march.py`'s own `test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle`
-    # demonstrates the chooser-driven case). A FIRST WRITING OF THIS POSITION DID ADD A
-    # march-specific referent-widening arm (`subject` ranging over `q.referents` PLUS
-    # `containing_rung_of(p)`) on the false premise that clause 3 read literally could never form
-    # a march Candidate at all; the arm's own justification was self-contradicting (this file's own
-    # `never-attempted-set` note, below, already said a constructed Question DOES form one under
-    # clause 3 alone), so the arm was reverted rather than kept. `ever`, `refused_only`, `by_sig`
-    # (115) and `varying` are unchanged by the revert, because the arm never moved them in the
-    # first place -- confirmed by re-running this file after the revert, not merely inferred.
+    # ⚠ PLAN POSITION `28-ii` (M6, SUCCESSOR GOLDENS), 2026-09-30 -- `ever`/`by_sig`/`varying` DO
+    # NOT MOVE, because nothing in `decision/options.py::opening_set` changed: clause 3's
+    # PRE-EXISTING `q.referents` reading (no referent-kind filter) already forms a march
+    # `Candidate` whenever a Question offers a Rung-kind referent -- `test_march.py`'s own
+    # `test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle` demonstrates
+    # this against a CONSTRUCTED Question. `march` stays in the never-attempted set below because
+    # no computed act reaches it here, only a hand-built or chooser-driven one given a
+    # constructed Question. WHY no `questions_for` SOURCE in the
+    # natural corpus ever supplies march a workable referent is UNMEASURED
+    # (`hole_register.yaml` H-175, corrected by the layer-conformance ATTACK stage, BATCH-CLOSE
+    # Phase 2: an earlier measurement, "0 of 81 referents are settlement-kind", answered the
+    # wrong question -- formation never filtered on referent kind, so settlement-kind
+    # specifically was never the gate). A referent-widening arm was once added here and then
+    # reverted within this same branch; that add/revert history is in this session's commit
+    # messages, not repeated here -- `ever`, `refused_only`, `by_sig` (115) and `varying` were
+    # never moved by it either way.
     assert ever == {"create_record", "examine", "interview", "fight", "issue", "move", "petition",
                     "reconstruct", "release", "research", "restore", "speak", "surveil", "tell",
                     "transfer", "utter"}, (
@@ -8064,11 +8062,18 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # from a hand-built Act until `15c` widens the operand vocabulary.
     # ⚠ FIVE -> SIX: `march` JOINED THIS SET, M4 (`ED-IN-0279` clause (a)). Its eligibility is
     # `remit:dispatch`, and `dispatch` IS granted in NPC-033 -- so the eligibility branch alone
-    # does not exclude it, unlike the four governance verbs above. It sits here for the same
-    # reason `establish` does: `operands_for` has no march-specific arm, so `operands_for`
-    # returns `{}` for it in every corpus world, and `_req_march`'s typed requirement (an
-    # existing Rung `subject`) then refuses the empty operand set. It executes only from a
-    # hand-built `Act` (`test_march.py`), not from anything the corpus forms on its own.
+    # does not exclude it, unlike the four governance verbs above. ⚠ STALE AS OF PLAN POSITION
+    # `28-ii` (M6), 2026-09-30, KEPT FOR THE RECORD RATHER THAN DELETED -- see the note at this
+    # set's closing assertion, below, for the current reason `march` sits here: `march`'s M4
+    # typed requirement means `operands_for` returns a NON-EMPTY `{"subject", "to"}` for it in
+    # every corpus world where it is eligible (`test_march.py` asserts this exactly), so the
+    # "no march-specific arm, refused for want of an operand" story immediately below is no
+    # longer why it sits here.
+    # [STALE, KEPT FOR THE RECORD] It sits here for the same reason `establish` does:
+    # `operands_for` has no march-specific arm, so `operands_for` returns `{}` for it in every
+    # corpus world, and `_req_march`'s typed requirement (an existing Rung `subject`) then
+    # refuses the empty operand set. It executes only from a hand-built `Act` (`test_march.py`),
+    # not from anything the corpus forms on its own.
     # ⚠⚠ SIX -> EIGHT: `give` (POSITION `16`) AND `oblige` (POSITION `17a`) JOIN, NEITHER INTO
     # `ever` NOR `refused_only`. Both rows are untyped and deliberately so (`give`'s and
     # `oblige`'s own `counterparty_note`s in `verb_table.yaml`), so `decision/options.py::
@@ -8087,35 +8092,38 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # granted in ONE corpus world, NPC-038 -- and neither is attempted in any corpus world:
     # measured by the one-off script named at the `ever` note above (no live case lists either in
     # `executed` or `refused`). `issue` went to `ever` and `levy` to `refused_only` instead.
-    # ⚠⚠ `march` STAYS, PLAN POSITION `28-ii` (M6, SUCCESSOR GOLDENS), 2026-09-30 -- CORRECTED PER
-    # THE BATCH-CLOSE PHASE-1 ANTAGONIST. No arm was added, and the reason immediately above
-    # ("`operands_for` has no march-specific arm") stays exactly true, unchanged -- `march` never
-    # needed one and does not have one. What this position actually verified, confirmed directly
-    # against `decision/options.py::opening_set` rather than assumed: clause 3's PRE-EXISTING
-    # `q.referents` reading ALREADY forms a real march Candidate whenever a Question offers a
-    # settlement referent. `march` stays in this set because no `questions_for` SOURCE in this
-    # natural corpus ever offers one (the `ever` note's own measurement: 0 of 81 referents are
-    # settlement-kind at tick 0) -- the same reason it was here before this position, not a new
-    # one. `H-151`'s `cite:` field (`hole_register.yaml`) is corrected in the same commit: the
-    # same-faction scenario it describes was never categorically unreachable from `operands_for`
-    # -- a constructed Question naming a same-faction-held settlement referent reaches it through
-    # clause 3 alone, exactly as `test_march.py`'s own
-    # `test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle` demonstrates
-    # for the CROSS-faction case -- and it stays unfixed on purpose: what is missing is a
-    # `questions_for` SOURCE that offers a settlement referent at all (`H-80`-adjacent), out of
-    # this position's scope.
+    # ⚠⚠ `march` STAYS, PLAN POSITION `28-ii` (M6, SUCCESSOR GOLDENS), 2026-09-30. THE REASON
+    # DIRECTLY ABOVE ("`operands_for` has no march-specific arm ... returns `{}`") IS STALE, NOT
+    # CURRENT -- it is marked so there rather than treated as still true: `march`'s M4 typed
+    # requirement (`requires_typed: kind: Rung`) means `operands_for` returns a NON-EMPTY
+    # `{"subject", "to"}` for it today (`test_march.py` asserts this exactly), so the
+    # `{}`/refused-for-want-of-an-operand story no longer describes why `march` sits here. What
+    # actually keeps it here, confirmed directly against `decision/options.py::opening_set`
+    # rather than assumed: clause 3's PRE-EXISTING `q.referents` reading (no kind filter) already
+    # forms a real march Candidate whenever a Question offers ANY Rung-kind referent --
+    # `test_march.py`'s own `test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle`
+    # proves this against a constructed Question. `march` stays in the never-attempted set
+    # because no computed act reaches it here; WHY no `questions_for` SOURCE in this natural
+    # corpus ever supplies march a workable referent is UNMEASURED
+    # (`hole_register.yaml` H-175 -- an earlier measurement, "0 of 81 referents are
+    # settlement-kind", answered the wrong question, since formation was never gated on referent
+    # kind, and is retracted there, not replaced with a different assumed cause). `H-151`'s
+    # `cite:` field is corrected to match: the same-faction scenario it describes was never
+    # categorically unreachable -- a constructed Question naming a same-faction-held Rung
+    # referent reaches it through clause 3 alone, exactly as `test_march.py`'s own chooser-formed
+    # test demonstrates for the cross-faction case.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "give", "oblige",
                                               "open_case", "determine"}, (
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
-        "Candidate under clause 3's own pre-existing `q.referents` reading if any `questions_for` "
-        "source offered a settlement referent, but none does; `give` and `oblige` are untyped "
+        "Candidate under clause 3's own pre-existing `q.referents` reading given ANY Rung-kind "
+        "referent (no kind filter applies) -- WHY no `questions_for` source ever supplies one in "
+        "this corpus is unmeasured (`hole_register.yaml` H-175); `give` and `oblige` are untyped "
         "rows whose Candidate never forms in this corpus at all. `H-71` is CLOSED, so the "
-        "governance five's reason is the corpus's offices, march's is that no source ever offers "
-        "it a settlement referent, and give/oblige's is that neither row's one operand ever has "
-        "a referent to bind here")
+        "governance five's reason is the corpus's offices, march's is the unmeasured H-175 gap, "
+        "and give/oblige's is that neither row's one operand ever has a referent to bind here")
 
 
 

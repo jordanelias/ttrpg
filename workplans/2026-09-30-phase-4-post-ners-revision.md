@@ -191,22 +191,28 @@ independently by both producers and by the orchestrator) — DONE, one disclosed
   position added a march-specific referent-widening arm whose own justification was
   self-contradicting, and it has been reverted). Re-verified directly rather than assumed:
   `operands_for` already produced a non-empty operand dict for `march` (this half of the original
-  diagnosis was correct); clause 3's PRE-EXISTING `q.referents` reading — no new code — already
-  forms a real `Candidate` whenever a Question names a settlement referent. The actual, still-real
-  blocker is unchanged: no `questions_for` SOURCE in the natural corpus ever offers one (measured:
-  0 of 81 referents in `build_realm(0)`), which is `H-80`-adjacent and correctly out of this
-  position's scope. `test_march.py::test_a_real_chooser_forms_and_folds_a_march...` runs a real
+  diagnosis was correct); clause 3's PRE-EXISTING `q.referents` reading — no new code, no
+  referent-kind filter — already forms a real `Candidate` whenever a Question names ANY
+  Rung-kind referent, not only a settlement one. ⚠ **CORRECTED AGAIN, the layer-conformance
+  ATTACK stage, BATCH-CLOSE Phase 2**: this bullet previously named "no `questions_for` SOURCE
+  ever offers a settlement referent (measured: 0 of 81 referents in `build_realm(0)`)" as the
+  actual, still-real blocker — that measured the wrong variable, since Candidate formation is not
+  gated on referent kind. **The real reason `march` stays in the never-attempted set is
+  UNMEASURED** (`hole_register.yaml` H-175); the retraction is not replaced with a different
+  assumed cause. `test_march.py::test_a_real_chooser_forms_and_folds_a_march...` runs a real
   chooser (`make_chooser`/`pack_scenes`, not a hand-built `Act`) through the genuine
-  RESOLVE→ENCOUNTER pipeline to a real `field.lost` with casualties, with `Act.via` read off the
-  chooser's own derivation rather than hand-set. 10 passed.
+  RESOLVE→ENCOUNTER pipeline to a real `field.lost` (kind check only — the casualty-body
+  assertions were dropped from this test in the same `/simplify` pass noted above), with
+  `Act.via` read off the chooser's own derivation rather than hand-set. 10 passed.
 - **`H-151`'s `cite:` corrected** to match: the "unreachable from the corpus either way" claim
   never held on close examination — a constructed `Question` reaches it through clause 3's
   pre-existing reading alone, no arm involved; the row's own scenario (same-faction march) is
-  still not exercised by the NATURAL corpus, for the disclosed reason below (no source offers a
-  settlement referent), not for the reason the old citation gave.
+  still not exercised by the NATURAL corpus, for the same UNMEASURED reason H-175 now names, not
+  for the reason the old citation gave.
 - **`test_combat_bridge_seam.py` confirmed to need no successor**, its three covering tests re-run
-  (6 passed) — one citation drift caught and worth a future note: `seam/wrappers/combat.py:203-208`
-  has moved to `:195-201`.
+  (6 passed) — one citation drift caught and fixed directly rather than parked:
+  `seam/wrappers/combat.py:203-208` had moved to `:195-201`; the stale citation in
+  `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md:788` is corrected to match.
 - **`test_f7_smoke_oracle.py`/`test_mc_v18_regression.py` deliberately left untouched**: read in full
   rather than trusting the plan's prediction that `VICTORY_THRESHOLD`/Hafenmark "die"/"close" here —
   they don't; both files are `28-iii`'s (SPINE-DELETE) own `FORK:` set, not this position's.
@@ -215,8 +221,9 @@ independently by both producers and by the orchestrator) — DONE, one disclosed
 organic Questions) never offers a settlement referent to anyone, so a real field battle reachable
 from zero test-authored input is not demonstrated — only the chooser-formed one against a
 constructed Question described above (BUILT bullet 2; genuinely chooser-formed as of the antagonist
-correction, not corpus-organic). This is `H-80`-adjacent (a `questions_for` source gap) and was
-correctly left out of this position's scope. Read against the retirement plan's own gate wording
+correction, not corpus-organic). WHY the natural corpus never offers one is UNMEASURED
+(`hole_register.yaml` H-175, `H-80`-adjacent but distinct) and was correctly left out of this
+position's scope. Read against the retirement plan's own gate wording
 (`PROPOSAL.md:104`: *"a battle executing from a real chooser-formed decision"*) **this now
 satisfies the gate as written** — the chooser, not the test, forms the decision. `28-iii` is
 accordingly unblocked.

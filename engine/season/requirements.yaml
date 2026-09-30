@@ -94,13 +94,19 @@ scales:
   - scale:    "mass battles / strategy warfare"
     subsystem: ["systems/mass_battle (33 py)"]
     retention: RETAINED
-    in_loop:   "seam built, not yet reached by a chosen act"
+    in_loop:   "seam built; reached only via a constructed `Question`, not yet a natural one"
     note: >-
       The seam exists (`ecacb57`, PR #436): `march` declares `contests: a field` and resolves
       through `seam/wrappers/mass_battle.py` → the `mass_battle.resolve_field` composition role.
-      No chosen act reaches it yet — `march` is in `test_season_shape.py`'s never-attempted set
-      because `operands_for` has no `march` arm (`hole_register.yaml` H-151's `cite:`). A battle
-      from a chooser-formed decision is plan position `28-ii`.
+      `test_march.py::test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle`
+      (plan position `28-ii`, M6) demonstrates a real chosen act reaching it, through the real
+      chooser, off a constructed `Question` naming a settlement referent. `march` still sits in
+      `test_season_shape.py`'s never-attempted set for the
+      NATURAL corpus, though: `decision/options.py::opening_set`'s clause 3 applies no
+      referent-kind filter and `operands_for` already carries `march`'s operands correctly
+      (neither is the gap), but WHY no `questions_for` source in the natural corpus ever
+      supplies march a workable referent is UNMEASURED (`hole_register.yaml` H-175's `cite:`,
+      correcting H-151's prior, retracted citation of a missing `operands_for` arm).
   - scale:    "personal combat / grid-based map combat with units"
     subsystem: ["systems/combat/combat_engine_v1 (29 py)"]
     retention: "RETAINED, NOT DONE (Jordan, 2026-09-05: \"combat engine isn't done\")"

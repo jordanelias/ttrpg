@@ -785,7 +785,8 @@ vector a field of its own (`04:292`), and a seat *"adds no verb and no modifier"
   its Hafenmark-lockout claim closes under test 2.
 - **`test_combat_bridge_seam.py` needs NO successor.** Its remaining `mc_v18` test asserts a flag-ON
   no-op on the OLD loop, and the flag dies with the file. Its shape tests are already carried by
-  `seam/wrappers/combat.py:203-208`, `test_degree_ladder_single_owner.py` and
+  `seam/wrappers/combat.py:195-201` (moved from `:203-208`, caught and fixed at BATCH-CLOSE Phase
+  2's layer-conformance ATTACK stage), `test_degree_ladder_single_owner.py` and
   `test_season_providers_are_registered.py`.
 - **The retirement plan's own §6 gate binds here.** The successor artifacts must have RUN in the same
   PRs: a named same-seed hash pin, a two-arm balance comparison on the season harness (`28-i`), and a

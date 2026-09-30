@@ -18,12 +18,14 @@ the control that stops it passing vacuously:
   5. THE THREE `field_casualty_model` ARMS DIFFER, and `none`'s control isolates the write from
      the band exactly as `wound_harm_model`'s own `none` arm does.
   6. A CHOOSER-FORMED DECISION, NOT A HAND-BUILT `Act` -- plan position `28-ii` (M6, successor
-     goldens). Every test above mints its `Act` by hand (`_march_act`); `test_a_real_chooser_
-     forms_and_folds_a_march_that_reaches_a_real_field_battle` does not. It first confirms, off
-     `decision.options.opening_set` directly, that a real (constructed) `Question` naming a
-     settlement referent already forms a march `Candidate` under clause 3's pre-existing
-     `q.referents` reading -- no arm, no widening, nothing march-specific -- then builds the `Act`
-     through the real `decision.choose.make_chooser`/`pack_scenes` machinery (the same functions
+     goldens). Every test above mints its `Act` by hand (`_march_act`);
+     `test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle` does not. It
+     first confirms, off `decision.options.opening_set` directly, that a real (constructed)
+     `Question` naming a settlement referent already forms a march `Candidate` under clause 3's
+     pre-existing `q.referents` reading -- no arm, no widening, nothing march-specific, and no
+     kind filter (clause 3 applies none; ANY Rung-kind referent would do the same, settlement is
+     simply the referent this test uses) -- then builds the `Act` through the real
+     `decision.choose.make_chooser`/`pack_scenes` machinery (the same functions
      `SeasonDriver.season()` calls), so `act.via` is READ OFF the chooser's own derivation rather
      than hand-set, and folds it through the same RESOLVE -> ENCOUNTER pipeline as every other
      test in this file -- proving a real settlement target reaches a real field battle end to end
@@ -332,10 +334,11 @@ def test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle
     cands = opening_set(p, v, q, w.fixtures)
     march_cands = {c.subject: c for c in cands if c.verb == "march"}
     # FALSIFIER: the referent-named settlement forms a march Candidate under clause 3's own
-    # `q.referents` reading, unaided. The corpus's never-attempted-verb-set finding was always
-    # about no `questions_for` SOURCE ever offering a settlement referent at tick 0 -- never about
-    # a missing `operands_for` arm for march, which this Question (constructed, not corpus-drawn)
-    # was never short of.
+    # `q.referents` reading, unaided -- clause 3 applies no kind filter, so any Rung-kind referent
+    # would do the same. WHY the natural corpus's `questions_for` sources never hand a person a
+    # workable referent is UNMEASURED (`hole_register.yaml` H-175); what this assertion rules OUT
+    # is a missing `operands_for` arm for march, which this Question (constructed, not
+    # corpus-drawn) was never short of.
     assert "set_s_036" in march_cands, (
         f"the referent-named settlement never became a march Candidate subject; got "
         f"{sorted(march_cands)}")
@@ -364,13 +367,15 @@ def test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle
     assert act.via == "off_npc_033", (
         f"expected march to exercise the dispatch-granting seat, got {act.via!r}")
 
-    # `/simplify`, BATCH-CLOSE Phase 2: NO before/after casualty loop here (dropped). The
-    # preceding `act.payload`/`act.via` equality checks already prove this chooser-formed act is
-    # byte-identical to what `_march_act("p_npc_033","set_s_036","off_npc_033")` would build, so
-    # the RESOLVE->ENCOUNTER casualty math is the exact code path
-    # `test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only` (above) already
-    # exercises bit-for-bit on the same fixture -- re-deriving the full body-drop assertions here
-    # adds no falsifying power this test doesn't already have. The one thing THIS test proves that
+    # `/simplify`, BATCH-CLOSE Phase 2: NO before/after casualty loop here (dropped). This
+    # chooser-formed act is NOT byte-identical to what `_march_act("p_npc_033", "set_s_036",
+    # "off_npc_033")` would build -- the payload carries an extra `to` key (`{"subject", "to"}`
+    # vs. `{"subject"}`) and the id is chooser-minted, not the literal `"m1"` -- but it reaches
+    # the SAME two-settlement (`set_s_014`/`set_s_036`) mismatch and the same `field.lost`
+    # outcome kind that `test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only`
+    # (above) exercises on its own, differently-swept fixture (that test sets
+    # `field_grudge_weight` to `3`; this one uses the default), so re-deriving the full body-drop
+    # assertions here would repeat, not add, falsifying power. The one thing THIS test proves that
     # the sibling test cannot is that a chooser-formed act reaches a real fight at all.
     attackers = world_q.mustered(w, "set_s_014", "fac_crown")
     defenders = world_q.mustered(w, "set_s_036", "fac_church_of_solmund")

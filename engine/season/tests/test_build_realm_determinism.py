@@ -58,22 +58,29 @@ _SEED = 0
 
 @pytest.fixture(scope="module")
 def seed0_hash():
-    """The determinism test below already proves `build_realm(_SEED)` + one season is reproducible
-    across two INDEPENDENT from-scratch builds -- that is the property under test there and must
-    stay two real builds. The sensitivity test only needs *some* already-verified-reproducible
-    seed-0 hash to diff a seed-1 run against; a third from-scratch (build_realm(0) + run) cycle to
-    get it was pure duplication (`/simplify`, BATCH-CLOSE Phase 2 -- ~12s, ~25% of this file's
-    cost, measured), fixed here the same way `test_aperture.py`'s own module-scoped `realm` fixture
-    (`test_aperture.py:32-34`) already avoids the identical duplication for its own three tests."""
+    """THE SECOND of the two independent `build_realm(_SEED)` + one-season builds the
+    determinism test below compares -- shared with the sensitivity test's seed-0 side, so
+    neither test owns a private extra build of the identical seed-0 world, the same sharing
+    `test_aperture.py`'s own module-scoped `realm` fixture (`test_aperture.py:32-34`) uses across
+    its three tests. ⚠ CORRECTED, layer-conformance ATTACK stage, BATCH-CLOSE Phase 2: an earlier
+    writing of this fixture had exactly ONE consumer (the sensitivity test alone), which could not
+    reduce the total build+run count over not having a fixture at all -- the determinism test
+    below built its own second world (`w2`) from scratch regardless. It now supplies that build
+    too, so the two independent builds the determinism test's own docstring requires are `w1`
+    (built fresh there) and this fixture's `w` (built fresh here) -- still two distinct,
+    independently-run worlds, just with the second one's hash shared rather than recomputed."""
     w = build_realm(_SEED)
     run(seasons=_SEASONS, seed=_SEED, w=w)
     return w.content_hash()
 
 
-def test_build_realm_seed_0_is_deterministic_across_n_seasons():
+def test_build_realm_seed_0_is_deterministic_across_n_seasons(seed0_hash):
     """Same seed, `_SEASONS` seasons, run TWICE independently through the real driver -- the
     successor to `test_mc_v18_regression.py::test_mc_v18_batch_is_deterministic`, over
-    `engine/season` (the head) rather than the superseded `engine/mc_v18` campaign driver."""
+    `engine/season` (the head) rather than the superseded `engine/mc_v18` campaign driver. `w1` is
+    built fresh HERE; the second independent build is `seed0_hash`'s (the module-scoped fixture
+    above), not a third private build of the same seed -- see that fixture's own docstring for
+    why sharing it does not weaken the two-independent-builds property this test is named for."""
     w1 = build_realm(_SEED)
     # ⚠ CAPTURED BEFORE `run()`, AND CHECKED BELOW (BATCH-CLOSE Phase-1 antagonist finding,
     # CLAUDE.md §0.1 pt 2 -- "assert it asserted"): without this, `len(h1) == 32` holds even for a
@@ -81,12 +88,10 @@ def test_build_realm_seed_0_is_deterministic_across_n_seasons():
     # nothing" apart from "the season never ran at all".
     pre = w1.content_hash()
     run(seasons=_SEASONS, seed=_SEED, w=w1)
-    w2 = build_realm(_SEED)
-    run(seasons=_SEASONS, seed=_SEED, w=w2)
-    h1, h2 = w1.content_hash(), w2.content_hash()
-    assert h1 == h2, (
+    h1 = w1.content_hash()
+    assert h1 == seed0_hash, (
         f"two independent {_SEASONS}-season runs of `build_realm({_SEED})` diverged: "
-        f"{h1!r} != {h2!r} -- the season loop is not reproducible under a fixed seed")
+        f"{h1!r} != {seed0_hash!r} -- the season loop is not reproducible under a fixed seed")
     # Falsifier for a vacuous pass (CLAUDE.md §0.1 pt 2): a constant/empty hash would satisfy
     # equality trivially without the run having done anything.
     assert h1 and len(h1) == 32, f"content_hash() returned {h1!r}, not a real 32-hex digest"
