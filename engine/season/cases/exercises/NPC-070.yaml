@@ -1,0 +1,16 @@
+# NPC-070 -- `scale:` re-authoring, plan position `20-ii` (U9/R-04, `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md:1459-1474`). Read against the case's own `one_line`/`who_acts` (`engine/season/cases/chain/`), never matched by keyword (`harness/corpus_run.py::rescales`'s own warning: 23 of 47 match no institution word).
+case: NPC-070
+scale:
+  was: faction
+  is: realm
+  why: 'following the reading NPC-008/NPC-033/NPC-038 already established for this corpus (a faction-wide
+    or Crown/Church-level institution re-scales to `realm`, since `rung_kinds` has no `faction` member
+    and the institution''s own reach is realm-wide): `one_line` names Ehrenwall ''The commander of the
+    crown''s only standing army'' -- a single, Crown-wide command with no narrower territory named.'
+  office:
+    post: commander of the standing army
+    faction: Crown
+    remit: []
+    why: '`one_line`: ''The commander of the crown''s only standing army''. No canonical Crown BODY in
+      `rosters.yaml: office_bodies` names a military organ, so `faction` is authored directly, per that
+      roster''s own note for a case with no canonical body (the Restoration Movement precedent).'

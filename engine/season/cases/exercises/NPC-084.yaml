@@ -1,0 +1,17 @@
+# NPC-084 -- `scale:` re-authoring, plan position `20-ii` (U9/R-04, `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md:1459-1474`). Read against the case's own `one_line`/`who_acts` (`engine/season/cases/chain/`), never matched by keyword (`harness/corpus_run.py::rescales`'s own warning: 23 of 47 match no institution word).
+case: NPC-084
+scale:
+  was: faction
+  is: realm
+  why: 'following the reading NPC-008/NPC-033/NPC-038 already established for this corpus (a faction-wide
+    or Crown/Church-level institution re-scales to `realm`, since `rung_kinds` has no `faction` member
+    and the institution''s own reach is realm-wide): Kessler is ''a guild leader in named internal opposition
+    to another named guild leader'' before ''the wider guild leadership council'' -- the Guilds'' own
+    faction-wide leadership, the same institution NPC-007''s economic representative already reads as
+    realm scale.'
+  office:
+    post: guild leader
+    body: Guild
+    remit: []
+    why: '`one_line`: ''A guild leader ...''; `who_acts` names ''the wider guild leadership council'',
+      the same Guild body NPC-007''s case derives its faction from.'

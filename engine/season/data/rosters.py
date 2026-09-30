@@ -439,6 +439,28 @@ if RECORD_KINDS & TENURE_KINDS:
 # the wrapper, which is the `assumption` grade's own reading (`08 §3`) and not a refusal.
 VERB_CAPABILITY = roster_map("verb_capability", "values")
 RUNG_KINDS = roster("rung_kinds", ordered=True)
+
+
+def _check_scale_of_rung(mapping: dict, kinds) -> None:
+    """`SCALE_OF_RUNG`'s domain must be EXACTLY `RUNG_KINDS` -- a function and not an inline `if`,
+    so the test can plant a drifted mapping and watch it refuse (`CLAUDE.md` §0.1 pt 3: a load
+    check with no falsifier cannot be told from one that never runs)."""
+    if set(mapping) != set(kinds):
+        raise Unspecified(
+            f"`scale_of_rung` covers {sorted(mapping)}, and `rung_kinds` is {sorted(kinds)}",
+            "rosters.yaml -- scale_of_rung",
+            needs="give every rostered rung kind a scale, and give every scale a rostered rung "
+                  "kind",
+            law="`04 §B.13` ID-12 -- a declared row that reaches no code, or a key the domain "
+                "does not have, is the defect the loader's cross-validation exists to catch")
+
+
+# Plan position `20-ii` (U9/R-04). A rung_kind -> one of canon's five scales (`rosters.yaml:
+# scale_of_rung`'s own note states, BEFORE this mapping, which of the two problems it solves and
+# which it does not -- read that note before touching either roster row). Bound beside
+# `RUNG_KINDS`, its domain, for the identical reason `SITE_KINDS` is bound beside it above.
+SCALE_OF_RUNG = roster_map("scale_of_rung", "scale")
+_check_scale_of_rung(SCALE_OF_RUNG, RUNG_KINDS)
 # Plan position `24e`: the kinds `build` may make -- a works' `plan` is a Site only if it is one of
 # these (`loop/effects.py::_eff_build`). Bound beside `RUNG_KINDS`, `found`'s twin roster, rather
 # than read by a bare `roster(...)` at the one call site. `data/fixtures.py` reads the same row for

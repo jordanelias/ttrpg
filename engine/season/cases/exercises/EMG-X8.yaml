@@ -1,0 +1,12 @@
+# EMG-X8 -- `scale:` re-authoring, plan position `20-ii` (U9/R-04, `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md:1459-1474`). Read against the case's own `one_line`/`who_acts` (`engine/season/cases/chain/`), never matched by keyword (`harness/corpus_run.py::rescales`'s own warning: 23 of 47 match no institution word).
+case: EMG-X8
+scale:
+  was: world
+  is: realm
+  why: 'W28''s ruling (`architecture/PLAN.md:1613-1617`, recorded on `H-95`): `rung_kinds` has no `world`
+    member, and a `world`-scale case is instantiated as `realm` -- the corpus''s own reading of a world-spanning
+    story is one whose reach is realm-wide, never narrower. this is the clearest instance of the ruling''s
+    own reading: `who_acts` names ''multiple factions with differing knowledge and goals'' by name (a
+    successor-claimant, a political movement, a religious institution, ''the highest political authority'')
+    racing over one shared condition -- several realm-scale factions is exactly the ''≥2 realm rungs''
+    shape W28 proposes for `world`.'

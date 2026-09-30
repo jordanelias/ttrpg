@@ -1,0 +1,11 @@
+# ARC-META-COLLISION -- `scale:` re-authoring, plan position `20-ii` (U9/R-04, `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md:1459-1474`). Read against the case's own `one_line`/`who_acts` (`engine/season/cases/chain/`), never matched by keyword (`harness/corpus_run.py::rescales`'s own warning: 23 of 47 match no institution word).
+case: ARC-META-COLLISION
+scale:
+  was: world
+  is: realm
+  why: 'This is not an in-fiction case: `who_acts` reads ''N/A -- this is a corpus/indexing defect, not
+    an in-fiction actor'', recording that two source files (`arcs_16_19.md`, `arcs_10_18.md`) reuse the
+    same arc numbers for different stories. There is no political or geographic scale to derive from a
+    data-quality artifact, so this re-scale does not claim one -- `realm` is recorded only so `corpus_run`
+    stops reporting a bookkeeping row as UNREPRESENTABLE; it is the harmless default every unbounded case
+    in this file receives, not a reading of content that does not exist.'

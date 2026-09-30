@@ -238,6 +238,59 @@ rosters:
     open: true
     values: [person, hearth, community, settlement, territory, province, duchy, realm]
 
+  scale_of_rung:
+    source: >-
+      Plan position `20-ii` (U9/R-04). `.designs/systems/_architecture/reference/
+      scale_transitions_v30.md` §2's Scope column (ARCHIVED-NOT-CANON, quarantined -- read for
+      VOCABULARY ONLY, per `CLAUDE.md` §1/§0.05; cited for the mapping's derivation, never as the
+      reason it is correct). Canon's `Scope` cell per scale, verbatim: Object -- "one item, one
+      wound"; Personal -- "one person"; Relational -- "small group, social agreement";
+      Territorial -- "a duchy, a district"; Structural -- "a kingdom, an institution".
+    open: false
+    note: >-
+      ⚠ **STATED BEFORE WRITING IT, PER THE PLAN'S OWN INSTRUCTION: THIS SOLVES ONE OF TWO
+      PROBLEMS, AND NOT THE OTHER.** `workplans/2026-09-09-r-execution-plan.md:1622-1633`
+      (unretracted by the later plan) drew the line: problem (1) is a VOCABULARY MAPPING -- the
+      eight `rung_kinds` admit neither `faction` nor `world`, and canon's five scales are a
+      DIFFERENT vocabulary again, so something must translate between the two ladders wherever a
+      caller needs canon's scale-band language (Thread mechanics' Base Ob / Min Thread
+      Sensitivity / Coherence auto-cost, `scale_transitions_v30.md` §2's own columns -- NOT read
+      here, since `04:5` rules the `Base Ob` column thread-only and never an obstacle source,
+      Jordan 2026-09-05). Problem (2) is REPRESENTABILITY -- making a `faction`- or `world`-scale
+      corpus CASE buildable at all, which `rung_kinds` itself must answer (it is the roster
+      `corpus_run.run_case` checks membership against) and which THIS roster does **not** touch:
+      a `scale_of_rung` mapping from the eight rungs onto five canon scales does not, by itself,
+      make a faction or world case representable, because neither `faction` nor `world` is a
+      `rung_kinds` member for this mapping to receive as a KEY. Problem (2) is answered
+      separately, by `harness/corpus_run.py::rescales` and the 54 `cases/exercises/*.yaml`
+      overlays this same position lands (`H-95`).
+      ⚠ **THE MAPPING ITSELF, DERIVED FROM THE SCOPE CELLS ABOVE, NOT INVENTED.** `person` is
+      canon's own example of `Personal` ("one person") -- an exact match, no judgment call.
+      `hearth`/`community` are sub-settlement social units, matching `Relational`'s "small group,
+      social agreement" -- neither is a geographic-political unit the way `settlement` and
+      everything above it is. `Territorial`'s own example is *"a duchy, a district"* -- `duchy`
+      appears in the example by name, and `settlement`/`territory`/`province` are every rung
+      strictly between `community` and `duchy` on the SAME containment ladder, none of them
+      bigger than a duchy, so all four take `Territorial`. `Structural`'s example is *"a kingdom,
+      an institution"* -- `realm` is the one rung above `duchy`, canon's "kingdom" by name.
+      ⚠ **`Object` RECEIVES NO RUNG, AND THAT IS AN HONEST GAP, NOT AN OMISSION.** Canon's `Object`
+      scale is "one item, one wound" -- sub-personal, a Thread-mechanic reading of damage to a
+      thing or a wound on a body, which has no analogue on the CONTAINMENT ladder at all (nothing
+      in `rung_kinds` sits below `person`). Mapping any rung onto `Object` to fill the cell would
+      be exactly the fabrication `CLAUDE.md` §0.05 forbids -- "generate none automatically rather
+      than fabricate" (`faction_q.py::head`'s own precedent). `SCALE_OF_RUNG` is therefore a
+      TOTAL map on `rung_kinds` (every rung has exactly one scale) and a PARTIAL map onto canon's
+      five scales (`Object` is reachable by nothing here).
+    scale:
+      person:     Personal
+      hearth:     Relational
+      community:  Relational
+      settlement: Territorial
+      territory:  Territorial
+      province:   Territorial
+      duchy:      Territorial
+      realm:      Structural
+
   remit_acts:
     source: "#353 §11 — the CLOSED five remit acts, plus `convene`"
     open: true

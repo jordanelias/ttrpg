@@ -7337,8 +7337,19 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # executes in two worlds again (`ARC-10`, `ARC-25`; 2 executed / 60 refused), and nothing
     # leaves. The status census, the live count and `redeposits` are identical. MEASURED by a
     # one-off script over this same `live` set, seed 0, against a clean worktree at `ae8e08a`.
+    # ⚠⚠ 15 -> 16, PLAN POSITION `20-ii` (U9/R-04, FACTION QUERIES), 2026-09-30, AND THE CAUSE IS
+    # THE LIVE COUNT MOVING, NOT A VERB CHANGE. `live` goes 89 -> 143: `cases/exercises/*.yaml`
+    # gains 54 new `scale:` overlays (44 `faction` re-scaled per-case with a `why:`, `duchy` for
+    # the four explicitly duchy-bound NPCs/ARCs and `realm` for the rest; 10 `world` re-scaled
+    # `realm` under `architecture/PLAN.md:1613-1617`'s `H-95` ruling), so `run_case` no longer
+    # returns UNREPRESENTABLE for any of them -- `corpus_run`'s own printed census loses its
+    # `unrepresentable scales:` line entirely (`{}`), which is this position's OBSERVABLE.
+    # `release` gains ONE new execution, in ONE of the 54 new worlds (`ARC-32`; 1 executed / 86
+    # refused across the full `live` set now, up from 0), and nothing already in `ever` leaves.
+    # MEASURED by a one-off script over this same `live` set, seed 0, against a clean worktree at
+    # `882e86e` (BATCH-CLOSE Phase 2, immediately before this position).
     assert ever == {"create_record", "examine", "interview", "fight", "issue", "move", "petition",
-                    "reconstruct", "research", "restore", "speak", "surveil", "tell",
+                    "reconstruct", "release", "research", "restore", "speak", "surveil", "tell",
                     "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
@@ -7404,8 +7415,11 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # under a faction, so every attempt is its effect's decline), and `release` and `restore` JOIN
     # with it -- still attempted, crowded out of the executions they had (see `ever`, above).
     # ⚠⚠ TEN -> NINE, PLAN POSITION `24f`, 2026-09-30: `restore` LEAVES, back into `ever` (above).
+    # ⚠⚠ NINE -> EIGHT, PLAN POSITION `20-ii`, 2026-09-30: `release` LEAVES, back into `ever`
+    # (above) -- the same 54-new-live-world cause, not a change to `release` itself: `ARC-32`, one
+    # of the newly-representable worlds, is where it executes.
     assert refused_only == {"build", "commit", "dispatch", "found", "levy", "migrate", "work",
-                            "survey", "release"}, (
+                            "survey"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -7785,7 +7799,17 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # world -- so variety rose while universality fell, the unremarkable direction. The status
     # census is identical (63 RUNS-UNDECLARED · 54 UNREPRESENTABLE · 25 SPAN-UNAUTHORED · 1
     # RUNS-ALONE-UNDECLARED).
-    assert len(by_sig) == 77, (
+    # ⚠⚠ **77 -> 115, PLAN POSITION `20-ii` (U9/R-04, FACTION QUERIES), 2026-09-30, AND THE UNIT IS
+    # THE SAME ONE THE `ever`/`refused_only` NOTES ABOVE ALREADY NAME: `live` GOES 89 -> 143.** 54
+    # cases that used to return UNREPRESENTABLE now build a real world and each contributes its
+    # own executed-verb signature, so this is population growth rather than a ranking or verb
+    # change -- nothing in `resolvable_verbs()`, `decision/choose.py` or any effect moved. The
+    # universal and varying sets (asserted below) are the same-breath check this note's own
+    # predecessors demand, and both move for the identical reason. MEASURED by a one-off script
+    # over the same 143-case corpus, seed 0, against a clean worktree at `882e86e` (BATCH-CLOSE
+    # Phase 2, immediately before this position): 77 signatures over 89 live worlds there, 115
+    # over 143 here.
+    assert len(by_sig) == 115, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -7888,7 +7912,15 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # The re-ranking the `by_sig` note above measures (the `build_at` worlds' larder draw gone)
     # costs `utter` its scene in one world; it moves to `varying`, asserted below.
     # [GROUNDED: measured 2026-09-30 at plan position `24f` against a clean worktree at `ae8e08a` -- universal `{create_record, utter}` -> `{create_record}`; `utter` 89 -> 88 of 89]
-    assert universal == {"create_record"}, sorted(universal)
+    # ⚠⚠ **`create_record` LEAVES THE UNIVERSAL SET, EMPTY FOR THE FIRST TIME SINCE `U2`, PLAN
+    # POSITION `20-ii`, 2026-09-30.** The cause is the SAME 89 -> 143 population growth the
+    # `by_sig` note above measures, not a change to `create_record` or to `wants_of`: some of the
+    # 54 newly-representable worlds do not execute it (their own ranking wins a different scene),
+    # so the intersection over all 143 live worlds is empty. `create_record` MOVES TO `varying`
+    # rather than out of `ever` -- it still executes in most worlds, just not all 143 -- which is
+    # the same-breath check the `by_sig` message demands. MEASURED by a one-off script over the
+    # same 143-case corpus, seed 0, against `882e86e`: universal `{create_record}` -> `{}`.
+    assert universal == set(), sorted(universal)
     # `dispatch` LEAVES THE VARYING SET ENTIRELY UNDER `R8.1` -- NOT INTO UNIVERSAL, OUT OF `ever`
     # ALTOGETHER. It no longer executes in any live world (NPC-033 included); it is still
     # ATTEMPTED and refused there, so it moves to `refused_only` rather than to the never-attempted
@@ -7929,9 +7961,15 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # executes in NO world and leaves `ever` altogether (the `ever`/`by_sig` notes above).
     # ⚠⚠ `restore` AND `utter` JOIN, PLAN POSITION `24f`, 2026-09-30: `restore` executes in two
     # worlds again and `utter` in 88 of 89 (the `ever`/`universal` notes above).
-    assert varying == {"examine", "fight", "interview", "issue", "move", "petition", "reconstruct",
-                       "research", "restore", "speak", "surveil", "tell", "transfer",
-                       "utter"}, (
+    # ⚠⚠ `create_record` AND `release` JOIN, PLAN POSITION `20-ii`, 2026-09-30 -- BOTH FOR REASONS
+    # ALREADY NAMED ABOVE, NEITHER A NEW ONE. `create_record` arrives having LEFT `universal`
+    # (asserted immediately above), not having left `ever`; `release` arrives having ENTERED
+    # `ever` for the first time (the `ever` note earlier in this function: it executes in exactly
+    # one of the 54 newly-representable worlds, `ARC-32`). Both are read off the same corpus run
+    # in the same breath as `universal` and `by_sig`.
+    assert varying == {"create_record", "examine", "fight", "interview", "issue", "move",
+                       "petition", "reconstruct", "release", "research", "restore", "speak",
+                       "surveil", "tell", "transfer", "utter"}, (
         sorted(varying))
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
     # BROKE BROKE FOR A REASON THIS TEST WANTS. A one-season case still never reaches `tell` —
@@ -8234,11 +8272,31 @@ def test_h99_the_office_carries_its_three_canon_axes_and_a_misseating_refuses():
             f"{f} has a role template; §4's player-eligible column does not list it, so one was "
             "invented — the fabrication the precedence ruling exists to stop")
 
-    # 6 — EVERY LOADED OVERLAY RESOLVES, and the loader refuses a mis-seated one.
+    # 6 — EVERY LOADED OVERLAY THAT DECLARES AN OFFICE RESOLVES, and the loader refuses a
+    #     mis-seated one. ⚠⚠ NARROWED AT PLAN POSITION `20-ii`, 2026-09-30: `office:` is OPTIONAL
+    #     on a `scale:` re-authoring (`corpus_run.build_at`'s own comment: *"a case without an
+    #     `office:` block is unchanged"*), and 48 of the 54 overlays this position adds declare no
+    #     office at all -- most of the 44 faction/10 world cases name an institution's REACH, not
+    #     a single seat, and inventing one would be exactly the speculative apparatus `rescales()`'s
+    #     own `_exercise_docs` comment warns against ("no classifier ... every re-scale is authored
+    #     against the case's own text"). Before this narrowing every one of the (then three)
+    #     overlays happened to declare an office, so `sc.get("office") or {}` defaulting to `{}`
+    #     and being checked anyway was silently correct; it is not correct in general, because
+    #     `office_faction(None, None)` refuses BY DESIGN (H-99: an office belongs to something) --
+    #     which is right for a genuinely absent office block being asked as if it named one, and
+    #     wrong for this test to ask at all. Filtered to the 9 overlays (of 57) that declare one --
+    #     the original 3 plus 6 more this position adds (`NPC-007/013/021/034/070/084`).
     from ..harness import corpus_run as C
+    checked_offices = 0
     for cid, sc in C.RESCALES.items():
-        off = sc.get("office") or {}
+        off = sc.get("office")
+        if off is None:
+            continue
         assert office_faction(off.get("body"), off.get("faction")) in FACTIONS, cid
+        checked_offices += 1
+    assert checked_offices == 9, (
+        f"{checked_offices} overlays declare an office; expected 9 -- either an overlay's own "
+        "office block moved, or the corpus/rung_kinds changed underneath the count")
     with pytest.raises(SystemExit):
         C._check_office("mutant.yaml", {"post": "X", "why": "y",
                                         "body": "Cardinal of Justice", "faction": "Crown"})
@@ -9090,8 +9148,16 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # `move` 64 -> 57, `petition` 80 -> 75, `transfer` 117 -> 115; `migrate` refused 167 -> 140,
     # `survey` 87 -> 104). MEASURED by a one-off script over this same pass, seed 0, against a
     # clean worktree at `ae8e08a`.
+    # ⚠⚠ `release` REJOINS, PLAN POSITION `20-ii` (U9/R-04, FACTION QUERIES), 2026-09-30, AND THE
+    # CAUSE IS THE 89 -> 143 LIVE-WORLD GROWTH THIS SAME NOTE'S SIBLING NAMES AT THE `by_sig`
+    # ASSERTION IN `test_the_corpus_runs_and_the_ranking_cannot_discriminate`, NOT A CHANGE TO
+    # `release`. 54 `cases/exercises/*.yaml` overlays re-scale every remaining `faction`/`world`
+    # case to a real rung kind, so `corpus_run` no longer returns UNREPRESENTABLE for any of them;
+    # `release` executes in exactly ONE of the 54 new worlds (`ARC-32`), unchanged everywhere else.
+    # MEASURED by a one-off script over this same pass, seed 0, against a clean worktree at
+    # `882e86e` (BATCH-CLOSE Phase 2, immediately before this position).
     assert set(executed) == {"create_record", "examine", "interview", "fight", "issue", "move",
-                             "petition", "reconstruct", "research", "restore", "speak",
+                             "petition", "reconstruct", "release", "research", "restore", "speak",
                              "surveil", "tell", "transfer", "utter"}, (
         f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
         "ED-FI-0009's, 10 -> 11 is `release`'s, 11 -> 12 is `H-71`'s, 12 -> 13 is the admission "
@@ -9101,7 +9167,8 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
         "`19`'s (`issue`, see above), 14 -> 15 is position `24e`'s (`restore`, see above), "
         "15 -> 16 is its second half's (`release` back, see above), 16 -> 14 is position "
         "`20-iii`'s (`release` and `restore` crowded out by `survey`'s refusals, see above), "
-        "14 -> 15 is `24f`'s (`restore` back once the corpus stopped eating, see above), and "
+        "14 -> 15 is `24f`'s (`restore` back once the corpus stopped eating, see above), 15 -> 16 "
+        "is `20-ii`'s (`release` back in one of 54 newly-representable worlds, see above), and "
         "any further movement is a fresh one")
     # ⚠ `dispatch` JOINED `work` UNDER `R8.1` FOR A DIFFERENT REASON, stated above the executed-set
     # assertion: its precondition needs a PERSON referent, and the question that used to supply
@@ -9142,8 +9209,11 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # JOIN with it: still formed and attempted, crowded out of every execution they had (see the
     # executed-set note above). `H-156`, a fourth instance.
     # ⚠⚠ PLAN POSITION `24f`, 2026-09-30: `restore` LEAVES, executing again (the executed-set note).
+    # ⚠⚠ `release` LEAVES, PLAN POSITION `20-ii`, 2026-09-30 -- the same 89 -> 143 live-world cause
+    # the executed-set note above names, not a change to `release`: it executes once, in `ARC-32`,
+    # one of the 54 newly-representable worlds.
     assert set(refused) - set(executed) == {"work", "dispatch", "commit", "levy", "found",
-                                            "build", "migrate", "survey", "release"}, (
+                                            "build", "migrate", "survey"}, (
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
         "condition never clears the floor in this corpus; `dispatch` because its one executing "
@@ -9152,9 +9222,8 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
         "Proposition -- do not widen Q4 to close this here); `levy` because no corpus seat has a "
         "rung, so none has purview anywhere (position `19`); `found`/`build` because no referent "
         "is a works, since no computed act declares one (position `24e`, `H-165`); `survey` "
-        "because no corpus person coheres under a faction, and `release` because `survey`'s "
-        "refusals took the margin it executed at (position `20-iii`, `H-156`); `restore` left "
-        "this set again at `24f`")
+        "because no corpus person coheres under a faction; `restore` left this set again at `24f` "
+        "and `release` at `20-ii` (see above)")
     # ⚠ AND THE HONEST READING OF "IT EXECUTES", MEASURED RATHER THAN ASSUMED — and the first
     # writing of this arm ASSUMED, from one sampled case, that every corpus transfer was a
     # SELF-transfer, and was wrong. Measured over the whole corpus: 650 of 723 have `from == to`
