@@ -230,7 +230,7 @@ four rows of that table found stale in this pass are corrected here, not there: 
 | 22b ✦ | **proceedings PHASE 4** | SC | BLOCKED | `22` (+ `17b` for `term`) | Phase 4 · m |
 | 23 | **PART-E-0/2** | IN | OPEN | `22` | Phase 4 · m |
 | 24 | **SE-BUILD** | SE | OPEN · partial | re-scoped across `24d`–`24h` | — |
-| 24d-ii | **CAPACITY** | SE | BLOCKED | 24d-i ✓; lands inside `19c` | Phase 2 |
+| 24d-ii | **CAPACITY** | SE | **DONE** (landed inside `19c`, row 221; this row was a board defect -- CLAUDE.md §0.2 -- found by the terminal Phase-2-close critique, 2026-09-30) | 24d-i ✓; lands inside `19c` | Phase 2 |
 | 24e | **WORKS · FOUNDING** | SE/IN | **DONE** | `15`, `15c`, 24d-i ✓ | Phase 2 |
 | 24f | **SUBSISTENCE IS TERRITORIAL** | SE | **DONE** (build; design was already done) | design before code | design Phase 1 · 10; build Phase 2 (tail) |
 | 24g ✦ | **bodies clock + P3 individuation** | SE | BLOCKED | `24d-ii`, `24f`'s cohort producer, `ED-IN-0247` (**JORDAN**, §5.1 item 8) | Phase 4 · n |

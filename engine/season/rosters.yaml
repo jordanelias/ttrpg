@@ -1186,7 +1186,10 @@ rosters:
       ⚠ `restore` EXISTS SINCE PLAN POSITION `24e` (2026-09-29), SO THIS NOTE'S STATED REASON HAS
       LAPSED AND THE RATE IS STILL `0`: choosing one is a pacing decision (where every fabric sits
       at rest), `24e`'s instruction does not make it, and it is registered rather than taken --
-      `H-165` (the reason `restore` never executes on the populated realm) and `H-07` (the rate).
+      `H-165` and `H-07` (the rate). ⚠ CORRECTED (`24f`, 2026-09-30): `restore` now executes on the
+      populated realm's SETTLEMENT fabrics (harbour, seam -- rate 10, a cohort stands beside them),
+      so `H-165`'s limit is the DWELLING/GARRISON rate specifically -- the two rows this note is
+      actually about, both still `0`, and still never below full for that reason alone.
     rates:
       harbour:  10
       seam:     10

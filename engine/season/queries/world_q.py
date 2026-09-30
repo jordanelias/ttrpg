@@ -378,7 +378,9 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
 # ⚠ `home_of(w)` WAS HERE; IT MOVED DOWN TO `state/containment.py` AT PLAN POSITION `19`, body and
 # `TRACE` line unchanged, and is re-exported by this module's import block (`world_q.home_of is
 # containment.home_of`). The write gate's `determination` basis asks where the PARTY a determination
-# binds lives, and `state/` may not import `queries/`: `parent_of`/`descendants`' G3 route.
+# binds IS PRESENT (`home_of` reads `contain`, presence, since `19c`'s split -- residence is
+# `residence_of`'s `reside` edge, and this basis was never revisited to say which it means), and
+# `state/` may not import `queries/`: `parent_of`/`descendants`' G3 route.
 
 
 def place_of(w: World, x: Optional[str]) -> Optional[str]:

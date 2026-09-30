@@ -1900,10 +1900,16 @@ def _renewals(w: "World", a: "Act", src: str, dst: str, amount) -> list:
       3. matter actually MOVED: another rung, a positive amount. A transfer from a rung to itself
          cancels to nothing (G4 already refuses it as a no-op), and without this clause a seat whose
          obligee lives at the seat's own rung could renew a term by paying itself;
-      4. the receiving rung is an obligee's HOME (`home_of`, the one owner of *where a person
-         lives*) -- the larder upkeep fills.
-    Then it renews, of that seat's live `oblige` edges carrying a term whose subject lives at the
-    receiving rung, as many as the amount covers at `upkeep_of(seat)` apiece (`0`: all of them),
+      4. the receiving rung is where an obligee IS PRESENT (`home_of`, the one owner of *where a
+         person is* -- NOT `residence_of`; ⚠ found by the terminal Phase-2-close critique,
+         2026-09-30: this clause was written and reasoned about as "home" meaning residence, before
+         `19c` split presence from residence, and was never revisited. Its own stated reason ("the
+         larder upkeep fills") is ALSO stale since `24f`: individuals no longer draw from a larder
+         at all (`ED-IN-0255`), so upkeep paid to wherever an obligee stands fills nothing today --
+         unruled whether this clause should read `home_of` or `residence_of` (`hole_register.yaml`
+         H-174), and whether it should still cite the larder as its reason once it does).
+    Then it renews, of that seat's live `oblige` edges carrying a term whose subject is present at
+    the receiving rung, as many as the amount covers at `upkeep_of(seat)` apiece (`0`: all of them),
     SOONEST-MATURING FIRST, ties by edge id -- the man about to lapse is paid first, and the order
     is a rule, not an accident of the store. Each new term runs `oblige_term` seasons ON FROM WHERE
     THE OLD ONE STOOD (so paying early buys the next term; it is not lost), and is `declared_by`

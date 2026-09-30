@@ -197,12 +197,15 @@ HANDOVER = "handover"
 # what it admits (`CLAUDE.md` §4's idempotence test). See `may_determine`.
 DETERMINATION = "determination"
 # THE NINTH BASIS (plan position `24e`, `found`): an OPENING of a `contain` edge whose SUBJECT the
-# SAME write brought into existence -- a newly founded Rung placed in its parent. Named, like
-# `conferral` and `determination`, for the act it licenses (found is to founding as confer is to
-# conferral) and in the ordinary word for bringing a place into being. CAUSATION-BOUND, the mirror of
-# `cascade`: a Tenure lives and dies THROUGH its object (`holonic §15.3`), so what closes an edge
-# through a death may also open one through a birth -- and nothing else. See the block in
-# `tenure_write_basis`.
+# SAME write brought into existence -- `found`'s only exerciser today is a newly founded Rung placed
+# in its parent, but the TEST ITSELF is not Rung-typed (`born` spans every store, `world.py`'s
+# existence diff; ⚠ NOTED, terminal Phase-2-close critique, 2026-09-30 -- a future producer minting
+# some OTHER newborn kind with a `contain` edge would be admitted the same way, and no ruling has
+# considered that case). Named, like `conferral` and `determination`, for the act it licenses (found
+# is to founding as confer is to conferral) and in the ordinary word for bringing a place into being.
+# CAUSATION-BOUND, the mirror of `cascade`: a Tenure lives and dies THROUGH its object
+# (`holonic §15.3`), so what closes an edge through a death may also open one through a birth -- and
+# nothing else. See the block in `tenure_write_basis`.
 FOUNDING = "founding"
 
 # THE REMIT ACT THAT MAKES A SEAT A JUDGING SEAT -- `H-32`'s swept default, and the `bench_basis` of
@@ -444,9 +447,14 @@ def may_determine(w: "World", actor: Optional[str], via: Optional[str], party: O
          `_req_oblige` clause 1's lesson from `ED-IN-0211`), and a judge does not bind himself --
          the occupant is not his own seat's obligee (`_req_oblige` clause 3's rule, one step over).
       3. the bench's ground holds the party: `sits_over(w, via, <party's home>)`, the SAME test
-         `judging_set` lists a bench by, asked of where the person bound actually lives (`home_of`,
+         `judging_set` lists a bench by, asked of where the person bound IS PRESENT (`home_of`,
          the one owner of *where a person is*, moved to `state/` for this) -- `04:330`'s *"purview is
-         asked of the seat, never the actor"*, with the bench's ground as the seat's reach.
+         asked of the seat, never the actor"*, with the bench's ground as the seat's reach. ⚠ PRESENCE,
+         NOT RESIDENCE, SINCE `19c`'S SPLIT (found by the terminal Phase-2-close critique,
+         2026-09-30): `home_of` reads `contain`, and `19c` gave residence its own edge
+         (`residence_of`'s `reside`) without this clause being revisited. A party STANDING in a
+         bench's ground binds him, whether or not he LIVES there -- unruled which this determination
+         basis is meant to ask (`hole_register.yaml` H-174).
 
     ⚠ WHY A NEW BASIS AND NOT A WIDER READING OF `conferral` -- the question plan position `19`
     carried in from its own entry (*"a conferral-basis opener"*), re-derived rather than taken on
@@ -468,8 +476,12 @@ def may_determine(w: "World", actor: Optional[str], via: Optional[str], party: O
 
     ⚠ `oblige` ONLY, AND NOT `hold`, `commit` OR A `Record`. `arrangements.yaml`'s one seeded
     `disposes:` that is a Tenure kind is `arbitration`'s `oblige`; the two others dispose a `Record`,
-    which is minted under `T-m` and needs no basis. A disposal of another kind arrives with its row
-    and widens THIS predicate, not the gate's chain."""
+    which is minted under `T-m` and needs no basis. ⚠ CORRECTED (found by the terminal Phase-2-close
+    critique, 2026-09-30): the `oblige` test is NOT this predicate's -- `may_determine` takes no
+    `kind` at all. It is `tenure_write_basis`'s own DETERMINATION clause that hard-codes
+    `t.kind == "oblige"` before ever calling this function, and that clause would also need a `hold`
+    routed past the seat branch above it in the chain (`T-o`/`conferral` claim every `hold`
+    already). A disposal of another kind is the gate's CHAIN to widen, not this predicate's."""
     t = seat_hold(w, actor, via)
     if t is None or BENCH_BASIS not in t.granted_acts:
         return False
@@ -497,9 +509,11 @@ def _moved(t: Tenure, was: Optional[Tenure]) -> Optional[set]:
 
 def _closes(t: Tenure, was: Optional[Tenure], moved: Optional[set] = None) -> bool:
     """A PURE CLOSURE: an edge that was live before the write, has `until` set after it, and had
-    nothing else moved. The one change `cascade` and `T-o` may make -- and, since position 16, the
-    change on the giver's side that licenses a `handover` on the receiver's. One test for all
-    three, so what counts as *ended in this write* cannot differ between them.
+    nothing else moved. The one change `cascade`, `T-o` and `T-n` (`17b`, ⚠ ADDED to this count,
+    terminal Phase-2-close critique, 2026-09-30 -- `T-n`'s own clause reads `closed` exactly as
+    `cascade` and `T-o` do) may make -- and, since position 16, the change on the giver's side that
+    licenses a `handover` on the receiver's. One test for all four, so what counts as *ended in
+    this write* cannot differ between them.
 
     `moved` is the caller's own `_moved(t, was)`, when it already has one -- `tenure_write_basis`
     computes it the line above its own `_closes` call (BATCH-CLOSE, methodology-close Phase 2,
@@ -616,7 +630,10 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
 
     ⚠ `handover` -- `give` (PLAN POSITION 16 ≡ `15a`) -- SETTLED BY G3's PRE-FLIGHT (`ED-IN-0277`),
     BUILT AT POSITION 16. The giver's close is `T-m`. The RECEIVER'S open matches none of the other
-    five (nor `17b`'s `renewal`, which admits no opening): it is not the receiver's act, no seat is exercised (`give` is `own`-eligible, `via` is
+    bases -- five at the time this was written, eight now (⚠ COUNT CORRECTED, terminal Phase-2-close
+    critique, 2026-09-30): `renewal` (`17b`) and `determination` (`19`) admit no opening of a `hold`
+    at all (an `oblige` only), and `founding` (`24e`) admits only a `contain` for a newborn `Rung` --
+    it is not the receiver's act, no seat is exercised (`give` is `own`-eligible, `via` is
     `None`), and nothing ceased to exist. So it has its own basis, CAUSATION-BOUND like the cascade
     rather than authority-bound like T-o: *a `hold` opened on an object that is NOT a seat, of the
     same kind and object as an edge the actor OWNED, was live before, and closed under `T-m` in this

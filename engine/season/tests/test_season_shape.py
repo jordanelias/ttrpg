@@ -12869,7 +12869,16 @@ def test_u2_a_deposit_in_one_round_changes_a_later_rounds_candidate_set_in_the_s
     in round 3 would sort a round-3 deposit as OLDER than their own deliberation and never see it.
     `questions_for(w, p, since=(tick, round))` is what reads the pair; `witness` is what stamps it.
     U2's falsifier (a): if the plant changes nothing, the channel is not intra-season and R-03 is
-    not met however the loop is shaped."""
+    not met however the loop is shaped.
+
+    ⚠ THIS CLAIM IS NO LONGER DEMONSTRATED BY ANY ASSERTION BELOW, 2026-09-30 (`hole_register.yaml`
+    H-172, found by the terminal Phase-2-close critique): the `late`-vs-`unstamped` comparison that
+    used to isolate the stamp's effect (see the block before the `same_as_control` assertion) now
+    measures the two arms as IDENTICAL, so deleting `Claim.round` and defaulting every claim to 0
+    would NOT be caught by this test as it stands. R-03's general claim -- a deposit in one round
+    changes a later round's candidate set -- still holds and is still checked, twice, below; the
+    narrower claim that the STAMP specifically is what does it is the one this paragraph can no
+    longer back on this instrument."""
     control = _u2_bailiff_sets(plant=False)
     planted = _u2_bailiff_sets(plant=True)
     # ⚠ THE OBSERVABLE IS SHARPER THAN THE PLAN'S *"the set differs"*, AND MEASURING IT IS WHAT
@@ -12956,6 +12965,11 @@ def test_u2_a_deposit_in_one_round_changes_a_later_rounds_candidate_set_in_the_s
     # more, so the observable is that a round-2 plant's delta against `control` is EMPTY at rounds
     # 1-2 and non-empty from round 3 on -- exactly the ordering `Claim.round` exists to produce.
     # [GROUNDED: measured 2026-09-27 on this tree with `seen` (`R8.1`) live -- the round-2 plant's delta against the unplanted baseline is empty at rounds 1-2 and removes {examine, research, restore, transfer} at rounds 3-4]
+    # ⚠ SUPERSEDED 2026-09-30 (H-172, terminal critique F3): the removed set at rounds 3-4 is now
+    # `{transfer}` ALONE -- `examine`/`research`/`restore` no longer form as candidates here at all
+    # (bisected to `11a`, pre-dating this session). The EMPTY-at-1-2/non-empty-from-3 SHAPE this
+    # assertion checks is unaffected and still holds; only the tag's own removed-set number is
+    # stale. See the `same_as_control` assertion below for the current measurement.
     assert not any(late_delta_lost.get(r) or late_delta_gained.get(r) for r in (1, 2)), (
         f"a claim landing at the end of ROUND 2 already shows a delta against the ambient baseline "
         f"at round 1 or 2: lost {late_delta_lost}, gained {late_delta_gained}. It is reaching "
@@ -12983,6 +12997,10 @@ def test_u2_a_deposit_in_one_round_changes_a_later_rounds_candidate_set_in_the_s
     # identical ledger content at round 3 and therefore the identical delta, which is exactly what
     # is NOT measured.**
     # [GROUNDED: measured 2026-09-27 on this tree with `seen` (`R8.1`) live -- unstamped delta at rounds 3-4 is -{transfer} +{}, a strict subset of `late`'s -{examine, research, restore, transfer} +{}; `Claim.round`'s presence is what distinguishes the two rather than a "reaches nobody" absence]
+    # ⚠ SUPERSEDED 2026-09-30 (H-172, terminal critique F3): `late`'s removed set is no longer
+    # `{examine, research, restore, transfer}` -- it is `{transfer}`, identical to `unstamped`'s, so
+    # this is no longer a strict-subset relation and `Claim.round`'s presence no longer distinguishes
+    # the two on this instrument. See the `same_as_control` assertion below.
     unstamped = _u2_bailiff_sets(plant=True, at_round=2, stamp=False)
     un_delta_lost, un_delta_gained = _delta(unstamped)
     assert not any(un_delta_lost.get(r) or un_delta_gained.get(r) for r in (1, 2)), (
