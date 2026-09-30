@@ -232,7 +232,7 @@ four rows of that table found stale in this pass are corrected here, not there: 
 | 24 | **SE-BUILD** | SE | OPEN · partial | re-scoped across `24d`–`24h` | — |
 | 24d-ii | **CAPACITY** | SE | BLOCKED | 24d-i ✓; lands inside `19c` | Phase 2 |
 | 24e | **WORKS · FOUNDING** | SE/IN | **DONE** | `15`, `15c`, 24d-i ✓ | Phase 2 |
-| 24f | **SUBSISTENCE IS TERRITORIAL** | SE | OPEN — **ungated: its gate, 5 = G2, is DONE** | design before code | design Phase 1 · 10; build Phase 2 (tail) |
+| 24f | **SUBSISTENCE IS TERRITORIAL** | SE | **DONE** (build; design was already done) | design before code | design Phase 1 · 10; build Phase 2 (tail) |
 | 24g ✦ | **bodies clock + P3 individuation** | SE | BLOCKED | `24d-ii`, `24f`'s cohort producer, `ED-IN-0247` (**JORDAN**, §5.1 item 8) | Phase 4 · n |
 | 24h ✦ | **S5 — revolt (P5), forswearing (P6)** | SE/IN | BLOCKED | `20-ii`; P7 **JORDAN** (§5.1 item 11) | Phase 4 · o |
 | 25 | **MB-GOLDEN** | MB | **DONE** (§8.10) | — (`ED-MB-0016` is `needs_jordan: false`) | Phase 1 · 11 |
