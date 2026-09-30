@@ -364,27 +364,25 @@ def test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle
     assert act.via == "off_npc_033", (
         f"expected march to exercise the dispatch-granting seat, got {act.via!r}")
 
+    # `/simplify`, BATCH-CLOSE Phase 2: NO before/after casualty loop here (dropped). The
+    # preceding `act.payload`/`act.via` equality checks already prove this chooser-formed act is
+    # byte-identical to what `_march_act("p_npc_033","set_s_036","off_npc_033")` would build, so
+    # the RESOLVE->ENCOUNTER casualty math is the exact code path
+    # `test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only` (above) already
+    # exercises bit-for-bit on the same fixture -- re-deriving the full body-drop assertions here
+    # adds no falsifying power this test doesn't already have. The one thing THIS test proves that
+    # the sibling test cannot is that a chooser-formed act reaches a real fight at all.
     attackers = world_q.mustered(w, "set_s_014", "fac_crown")
     defenders = world_q.mustered(w, "set_s_036", "fac_church_of_solmund")
     assert len(attackers) == 2 and len(defenders) == 6, (
         f"the fixture no longer gives a 2-v-6 mismatch here ({attackers}, {defenders}); "
         "pick an origin/target pair that still does")
-    before_a = {pid: w.persons[pid].body for pid in attackers}
-    before_d = {pid: w.persons[pid].body for pid in defenders}
 
     events = _fold_one(w, act, contest_max_depth=2)
     kinds = [(e.kind, e.degree) for e in events]
     assert ("march.declared", "Declared") in kinds
     # THE FALSIFIER: a REAL field battle, not merely a formed-and-declared attempt. `Lost` is the
-    # ATTACKER's own outcome (`seam/ladder.py::field_degree`) at this fixture's 2-v-6 mismatch,
-    # matching `test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only` above.
+    # ATTACKER's own outcome (`seam/ladder.py::field_degree`) at this fixture's 2-v-6 mismatch.
     assert ("field.lost", "Lost") in kinds, (
         f"expected a real field battle (`field.lost`), got {kinds} -- the chooser-formed act "
         "never reached a fight")
-
-    for pid in attackers:
-        assert w.persons[pid].body < before_a[pid], (
-            f"{pid} (the losing side, chooser-formed) took no casualties")
-    for pid in defenders:
-        assert w.persons[pid].body == before_d[pid], (
-            f"{pid} (the WINNING side) was written")

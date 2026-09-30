@@ -47,11 +47,27 @@ only the log, so ONE season already exercises the property this pin exists to gu
 """
 from __future__ import annotations
 
+import pytest
+
 from ..harness.populated import build_realm, run
 
 
 _SEASONS = 1
 _SEED = 0
+
+
+@pytest.fixture(scope="module")
+def seed0_hash():
+    """The determinism test below already proves `build_realm(_SEED)` + one season is reproducible
+    across two INDEPENDENT from-scratch builds -- that is the property under test there and must
+    stay two real builds. The sensitivity test only needs *some* already-verified-reproducible
+    seed-0 hash to diff a seed-1 run against; a third from-scratch (build_realm(0) + run) cycle to
+    get it was pure duplication (`/simplify`, BATCH-CLOSE Phase 2 -- ~12s, ~25% of this file's
+    cost, measured), fixed here the same way `test_aperture.py`'s own module-scoped `realm` fixture
+    (`test_aperture.py:32-34`) already avoids the identical duplication for its own three tests."""
+    w = build_realm(_SEED)
+    run(seasons=_SEASONS, seed=_SEED, w=w)
+    return w.content_hash()
 
 
 def test_build_realm_seed_0_is_deterministic_across_n_seasons():
@@ -79,16 +95,16 @@ def test_build_realm_seed_0_is_deterministic_across_n_seasons():
         f"({pre!r}) -- this pin would pass identically whether the season ran at all")
 
 
-def test_build_realm_hash_is_sensitive_to_what_the_season_did():
+def test_build_realm_hash_is_sensitive_to_what_the_season_did(seed0_hash):
     """Companion falsifier to the pin above, on `test_m1_acceptance_probe.py`'s own precedent
     (`test_a_different_seed_can_diverge_from_the_probe_seed`): two DIFFERENT seeds must not
     collide, or `content_hash()` would not actually be keyed on campaign content and the
-    determinism pin above would be trivially satisfiable by a constant."""
-    w1 = build_realm(_SEED)
-    run(seasons=_SEASONS, seed=_SEED, w=w1)
+    determinism pin above would be trivially satisfiable by a constant. The seed-0 side reuses
+    `seed0_hash` (already proven reproducible by the test above) rather than a third from-scratch
+    build+run of the same seed."""
     w2 = build_realm(_SEED + 1)
     run(seasons=_SEASONS, seed=_SEED + 1, w=w2)
-    assert w1.content_hash() != w2.content_hash(), (
+    assert seed0_hash != w2.content_hash(), (
         "seed 0 and seed 1 produced the identical content_hash() over "
         f"{_SEASONS} seasons -- either both runs are no-ops or the hash is not sensitive to "
         "what the season actually did")

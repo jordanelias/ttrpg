@@ -3688,6 +3688,54 @@ rows:
     cite:      "MEASURED 2026-09-30 during the terminal Phase 3 critique of BATCH-CLOSE Phase 2's second sub-batch close, reading `state/gate.py`, `loop/effects.py`, `queries/world_q.py` and `state/containment.py::home_of` together against `19c`'s own stated consumer list. CLAUDE.md §0's ladder run separately for each item: (1) jurisdiction -- not superseded; not irrelevant (live code, gated only by traffic); `19c`'s own docstring gives the consumer list it checked and this reader is absent from it, so not answered by that design document; no precedent distinguishes jurisdiction-by-presence from jurisdiction-by-residence; a live design choice with two defensible readings that would materially change play (whose bench binds a traveller), so escalated rather than answered by architecture alone. (2) upkeep target -- answered by CLAUDE.md §0's test 5 (what makes sense for the architecture): `home_of`'s own docstring, in both `state/gate.py:462` and `loop/effects_economy.py:257`, already calls it 'the one owner' of where a person is, so a payment renewing the obligee it reaches is the architecture's existing answer, not a second open question -- demoted out of escalation on this same pass."
     source:    "BATCH-CLOSE Phase 2 close, second sub-batch, terminal Phase 3 critique, 2026-09-30"
 
+  - id:        H-175
+    tier:      1
+    hole:      "NO `questions_for` SOURCE EVER OFFERS A SETTLEMENT-KIND REFERENT. `decision/
+      options.py::opening_set`'s clause 3 (`subject ∈ referents(q)`) is generic and already forms
+      a real `march` Candidate the moment a `Question` names one -- `engine/season/tests/
+      test_march.py`'s chooser-formed test proves this against a CONSTRUCTED `Question`. But
+      `queries/world_q.py::questions_for`'s only two sources (`claim_landed`, `need`) never emit a
+      settlement referent in the natural corpus: measured over every person in `build_realm(0)` at
+      tick 0, 0 of 81 referents are settlement-kind. So `march` (and any future verb whose only
+      referent kind is a rung above person-scale) can never form a Candidate from a computed
+      Question, and stays in the never-attempted set for this reason alone -- not for any defect in
+      `opening_set` or `operands_for`, both of which already work."
+    kind:      "PRODUCER"
+    owner:     "no owner exists yet -- the candidate site is `queries/world_q.py::questions_for`,
+      which would need either a third source or a generalization of one of the existing two to
+      admit a settlement-kind referent"
+    grade:     "assumption"
+    default:   "NONE SHIPPED. Deciding what should make an NPC treat a settlement as a referent
+      worth acting on (a hostile-presence claim, a standing casus belli, a border dispute) is a
+      live design choice with materially different game outcomes, not a mechanical derivation --
+      this row does not invent one, on the same discipline `H-150` follows for garrison strength."
+    site:      "engine/season/queries/world_q.py -- `questions_for` (two sources, neither emits a
+      settlement-kind referent); engine/season/decision/options.py -- `opening_set` clause 3 (the
+      generic reader, confirmed working, not the site of this hole)"
+    sweep:     []
+    unblocks:  "`march` executing from a computed act in the natural corpus (currently only
+      reachable via a constructed `Question`, as `test_march.py` demonstrates); any future verb
+      whose only referent kind sits above person-scale; `H-151`'s same-faction-march scenario
+      becoming corpus-reachable rather than only reachable by a constructed `Question` or a
+      hand-built `Act`."
+    cite:      "FOUND at plan position `28-ii` (M6, successor goldens), 2026-09-30, then SHARPENED
+      by the BATCH-CLOSE Phase-1 antagonist reconciliation of that position's own build: the first
+      writing of `28-ii` misdiagnosed this as an `opening_set`/`operands_for` gap and added a
+      march-specific referent-widening arm to patch it there; the antagonist found the arm's own
+      justification self-contradicted the diff's own measured evidence (a Candidate DOES form
+      under the pre-existing, generic `q.referents` reading once a Question offers a settlement
+      referent), reverted the arm, and relocated the diagnosis to this row's actual site --
+      `questions_for`'s source set, one layer upstream of where the first fix landed. Related:
+      `H-80` (the general per-verb `operands_for`-arm gap this row is adjacent to but distinct
+      from -- that row is about missing OPERAND derivation; this one is about missing REFERENT
+      supply, a different clause). FALSIFIER, TO BE WRITTEN: add a `questions_for` source (or
+      widen an existing one) that offers a settlement referent under some ruled condition, re-run
+      `corpus_run`, and show `march` (or another settlement-scale verb) forms a Candidate from a
+      computed act for the first time."
+    source:    "BATCH-CLOSE Phase 2, position 28-ii's Phase-1 antagonist reconciliation, 2026-09-30
+      -- `/simplify`'s ALTITUDE lens recommended minting this row rather than leaving the gap as a
+      footnote on H-151 (a RULING-kind row scoped to a different question, same-faction combat)"
+
 
 discharges:
   D1:   "row:H-01"

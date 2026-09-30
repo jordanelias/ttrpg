@@ -253,10 +253,11 @@ rows:
       ⚠⚠ **U10, 2026-09-30: THE CORPUS-SCALE RATE WAS ATTEMPTED AND THE INSTRUMENT BROKE BEFORE
       PRODUCING ONE.** This row's `measure:` is `wd_acceptance.py`'s fork-and-follow, the same
       family R-01 re-ran in full over the grown 143-case corpus (`wd_chunk.py` re-sliced
-      `0/36/72/108/143`, all 36 cells run). **See R-01 for the full account** — `wd_collect.py`
-      fails its own `probed`-must-not-depend-on-`observation_deposit_mode` assertion at the first
-      fixture point (`{'none': 21717, 'actor': 21954, 'total': 21897}`), so no reconvergence figure
-      was produced at ANY fixture point and none is claimed here. The `~4%` figure this row already
+      `0/36/72/108/143`, all 36 cells run). **See R-01 for the full account and the exact numbers**
+      (`/simplify`, BATCH-CLOSE Phase 2 — not re-quoted here) — `wd_collect.py` fails its own
+      `probed`-must-not-depend-on-`observation_deposit_mode` assertion at the first fixture point,
+      so no reconvergence figure was produced at ANY fixture point and none is claimed here. The
+      `~4%` figure this row already
       carries is therefore still the last corpus-scale number on file, now provably stale (it
       predates the corpus growing 89->143) but not replaceable this session. Status stays
       `not_met`, honestly, on the instrument that owed the number rather than on a guess.
@@ -622,13 +623,12 @@ rows:
       `decision.py` became the DIRECTORY `decision/` at Arc 1 (`ED-IN-0206`), so the sort lives at
       `decision/choose.py::make_chooser`.
       ⚠⚠ **U10, 2026-09-30, FRESH OFF THIS ROW'S OWN `measure:` COMMAND** (run twice against two
-      tree states either side of an unrelated concurrent commit, byte-identical both times):
-      `RANKING DISCRIMINATION   15..21 of 31 candidates carry a nonzero conviction score; the rest
-      TIE and the tie is broken BY THE DRAW (U4/H-96), not by the verb's name` — same reading R-06
-      cites, since both rows share this instrument line. **Neither half of why this row stays
-      `partial` has moved**: the DRAW still breaks ties (built, `U4`), and inclination still does
-      not (the alignment table is still sparse) — nothing in U7-U10's own work touched
-      `choose.py`, `choice_temperature` or the alignment table.
+      tree states either side of an unrelated concurrent commit, byte-identical both times) — see
+      R-06 for the quoted instrument line (`/simplify`, BATCH-CLOSE Phase 2 — not re-quoted here;
+      both rows share it). **Neither half of why this row stays `partial` has moved**: the DRAW
+      still breaks ties (built, `U4`), and inclination still does not (the alignment table is
+      still sparse) — nothing in U7-U10's own work touched `choose.py`, `choice_temperature` or the
+      alignment table.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' + tie ordering"
     blocks: [W26, H-62]
     needs_jordan: false

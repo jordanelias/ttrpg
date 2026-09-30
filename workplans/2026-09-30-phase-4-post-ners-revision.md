@@ -171,11 +171,12 @@ this board is what feeds `tools/m1_acceptance.py`'s DOC-DERIVED **row 3 of 4**
 DOC-DERIVED), not "row 4" as an earlier commit message on this branch (`013a5b1b`) described it.
 
 **c · `28-ii` (M6).** No change to what it builds. **Effect-file target: `engine/season/loop/
-effects_combat.py`** — `march` lives there now (with `fight`), not in a monolithic `effects.py`; the
-`operands_for` arm this position adds is a `data/verbs.py`/`rosters.yaml` change, and the typed-cell
-precedent it follows (`kill / wound`'s per-verb workaround) is `_eff_kill`, also in `effects_combat.py`.
-**Accounting correction (§1.4): cite eight always-refused verbs, not nine, and do not assume `release`
-is still crowded out of the scene budget** — `20-ii` already returned it to the executed set.
+effects_combat.py`** — `march` lives there now (with `fight`). ⚠ **STRUCK (`/simplify`, BATCH-CLOSE
+Phase 2): this subsection originally predicted an `operands_for` arm landing in `data/verbs.py`/
+`rosters.yaml`. No arm was needed** — see the BUILT bullet below; the prediction was wrong on both
+the diagnosis and the file. **Accounting correction (§1.4): cite eight always-refused verbs, not
+nine, and do not assume `release` is still crowded out of the scene budget** — `20-ii` already
+returned it to the executed set.
 
 ⚠ **BUILT 2026-09-30, landed in commit `013a5b1b` (mislabeled — see the correction in commit
 `03de9d47`'s message; the content is `28-ii`'s, verified byte-identical against the working tree
@@ -211,18 +212,14 @@ independently by both producers and by the orchestrator) — DONE, one disclosed
   they don't; both files are `28-iii`'s (SPINE-DELETE) own `FORK:` set, not this position's.
 
 ⚠ **THE DISCLOSED GAP, NOT CLOSED BY THIS POSITION**: the natural corpus (`build_realm(0)`'s own
-organic Questions) never offers a settlement referent to anyone, so a real field battle reachable from
-zero test-authored input is not demonstrated — only a chooser-formed one against a constructed
-Question, which is now genuinely chooser-formed (`make_chooser`/`pack_scenes`, not a hand-built
-`Act` — CORRECTED per the BATCH-CLOSE Phase-1 antagonist: the first writing of this test built its
-`payload` off a real `Candidate` but then hand-set `Act.via`, exactly the hand-built-`Act` shape
-the gate exists to rule out; `via` is now read off the chooser's own derivation) but not
-corpus-organic. This is `H-80`-adjacent (a `questions_for` source gap) and was correctly left out
-of this position's scope. **Read against the retirement plan's own gate wording** (`PROPOSAL.md:104`:
-*"a battle executing from a real chooser-formed decision"* — the word "hand-built" does not appear
-in that document at all; CORRECTED, the earlier claim of an explicit contrast there was invented
-and is removed) **this now satisfies the gate as written** — the chooser, not the test, forms the
-decision. `28-iii` is accordingly unblocked.
+organic Questions) never offers a settlement referent to anyone, so a real field battle reachable
+from zero test-authored input is not demonstrated — only the chooser-formed one against a
+constructed Question described above (BUILT bullet 2; genuinely chooser-formed as of the antagonist
+correction, not corpus-organic). This is `H-80`-adjacent (a `questions_for` source gap) and was
+correctly left out of this position's scope. Read against the retirement plan's own gate wording
+(`PROPOSAL.md:104`: *"a battle executing from a real chooser-formed decision"*) **this now
+satisfies the gate as written** — the chooser, not the test, forms the decision. `28-iii` is
+accordingly unblocked.
 
 **d · `28-iii` (SPINE-DELETE).** No change. No `loop/effects_*.py` file is touched (it deletes
 `engine/mc_v18.py` and `engine/cross_scale/`, neither of which the split touched).
