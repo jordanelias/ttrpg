@@ -222,7 +222,7 @@ four rows of that table found stale in this pass are corrected here, not there: 
 | 19d ✦ | **DEMAND · DELIVERY** | SE/IN | **DONE** | `15c` | Phase 2 |
 | 20-i ✦ | **faction scale, first cut** | IN | **DONE** | — | §2.2 (`ecacb57`) |
 | 20-ii ✦ | **U9 / R-04 — faction queries** | IN | BLOCKED | `★` | Phase 4 · a |
-| 20-iii ✦ | **the information cluster** | IN/FI | OPEN — its gate, `15`, is DONE | `15` (20-i ✓) | Phase 2 |
+| 20-iii ✦ | **the information cluster** | IN/FI | **DONE** | `15` (20-i ✓) | Phase 2 |
 | 20-iv ✦ | **d.1 + terrain on the season path** | MB/IN | BLOCKED | `20-ii`, `28-iii` | Phase 4 · e |
 | 21 | **U10** | IN | BLOCKED | `20-ii` | Phase 4 · b |
 | 22 | **PROC-B** | SC | BLOCKED | `18`, `★` | Phase 4 · l |
