@@ -773,9 +773,11 @@ def test_lb6d_every_verb_declares_a_rostered_beneficiary():
     # ⚠ 38 -> 39, `march` (M4, `ED-IN-0279` clause (a)), 2026-09-28; 39 -> 40, `give` (plan
     # position 16, `H-84`), 2026-09-29 -- `beneficiary: none`, so `kinds["none"]` grows by one;
     # 40 -> 42, `found` and `build` (plan position `24e`), 2026-09-29 -- both `beneficiary: none`;
-    # 42 -> 43, `migrate` (plan position `19c`), 2026-09-30 -- `beneficiary: actor`, `move`'s.
+    # 42 -> 43, `migrate` (plan position `19c`), 2026-09-30 -- `beneficiary: actor`, `move`'s;
+    # 43 -> 44, `survey` (plan position `20-iii`), 2026-09-30 -- `beneficiary: actor`, the
+    # investigation acts' (the sheet and its content land in the surveyor's hand and ledger).
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops this census passing over a loader that returned a subset]
-    assert len(VERB_TABLE) == 43, "the verb count moved; this row's census is stale"
+    assert len(VERB_TABLE) == 44, "the verb count moved; this row's census is stale"
     undeclared = [v for v, r in VERB_TABLE.items() if not r.beneficiary]
     assert not undeclared, f"verbs with no `beneficiary:`: {undeclared}"
     off_roster = [(v, r.beneficiary) for v, r in VERB_TABLE.items()

@@ -818,6 +818,37 @@ verbs:
     grade:       "assumption"
     writes_note: "a `succeed` Tenure -- the kind is in `rosters.yaml`"
     source:      "W3 -- heir designation. #353 `:371`, `:542` name `succeed` as a Tenure kind and `transmission` as the mechanism, and Part E carries no verb that CREATES one. Without it F13's contested-succession cases have no producer."
+  # ===========================================================================================
+  # PLAN POSITION `20-iii` -- THE INFORMATION CLUSTER (narrative #14 §F, `D1-a`). A person cannot
+  # read a faction: a `View` holds his own claims, and `AX-2` puts world truth nowhere inside a
+  # decision. Proposal 14 (`proposals/2026-09-12-emergent-narrative-primitives-v2/01_THE_TEN.md`)
+  # makes the faction-scale picture DIEGETIC instead -- a document somebody had to make, dated by
+  # when it was made, which can be wrong, burned or handed on -- and puts the price on MAKING it:
+  # *"Free to read, costly to obtain, stale by construction."* `survey` is the act that pays.
+  # ⚠ NAMED `survey`, THE ORDINARY WORD FOR *examine something whole and record what is there*, and
+  # proposal 14's own verb (*"somebody had to survey the valley"*). NOT `surveil` -- covert
+  # watching, one of the six investigation acts, the FI lane's (`ED-FI-0009`) -- and not `compile`,
+  # which a reader of this repository meets first as the build step.
+  # ===========================================================================================
+  - verb:        "survey"
+    stratum:     "uncontested_material"
+    eligibility: ["own"]
+    beneficiary: "actor"
+    beneficiary_note: "the sheet is minted into the SURVEYOR's hand, and its content lands in HIS ledger at WITNESS (the content deposit, `rosters.yaml: record_kinds.content`) -- the investigation acts' shape: a finding is the actor's."
+    requires:    "the actor has heard of what he surveys, and it coheres under one faction"
+    requires_typed:
+      form:      own_ledger
+      of:        subject
+    requires_typed_note: "PLAN POSITION `20-iii`. ONE CONJUNCT TYPES AND ONE CANNOT. `own_ledger` of `subject` -- `reconstruct`'s and `tell`'s cell: a claim on the subject in the actor's OWN ledger, the one ledger the fold may read (`04 §B.2`, F8's carve-out). It is the epistemic half of commissioning -- nobody surveys a faction he has never heard of -- and it is what carries `subject` onto a computed act (an UNTYPED row carries nothing: `decision/options.py::operands_for`). *It coheres under one faction* has no stem in `data/requires.py: REQUIRES_STEMS`, so it is `loop/effects.py::_eff_survey`'s decline, through `world_q.faction_holding` -- the one owner of *which faction does this cohere under*, answering for a faction's own Proposition and for a person. ⚠ `existence` of `subject`, kind `Proposition` (`commit`'s cell) WAS REJECTED: no computed act's referent is a Proposition, so it would be formed on every referent and refused on every one (`H-156`'s scene tax); the effect's docstring gives the measurement."
+    writes:      ["Record.exists"]
+    writes_note: "`issue`'s and `petition`'s column: one `(Record, exists)` write through `_mint_document`, the one mint, with the surveyor's `hold` riding on the Record's receipt (admitted as `T-m`, `create_record`'s). The content is `faction_q.resolve`'s view AT THE MOMENT OF WRITING (`asdict`, fresh lists), keyed as `rosters.yaml: record_kinds.faction_sheet`, which `faction_q.py` checks against `Faction`'s fields at import. No `write_matrix.yaml` row is added; `faction.surveyed` joins `(Record, exists)`'s `emits:` in the same commit."
+    emits:       ["faction.surveyed"]
+    emits_note: "A KIND OF ITS OWN, NOT `record.created`: a survey is a private act (`own`, `uncontested_material`), and neither broadcast channel reads it -- `_ch_chronicle` reads the kinds `binding_decision` rows emit and `_ch_post_remit` those of `remit:`-eligible rows (`give`'s `emits_note` gives the reason in full). Witnesses learn THAT a survey was made of the subject, by the channels that admit them; only the holder learns what it says."
+    emits_on_refusal: ["survey.refused"]
+    refusal_note: "FLAT: one kind for every failable clause (`data/verbs.py`, invariant 4). Refusal conditions: the surveyor holds no claim on the subject (the cell); the subject coheres under no single faction -- a person committed to none or to two, a rung, a site, a document, an unrostered Proposition (the effect's decline, the `write` clause)."
+    grade:       "assumption"
+    grade_note:  "an argued addition, graded as `found`, `build` and `forge` are: the matrix row `(Record, exists)` is the tree's; the verb, its cell and its reading of WHICH faction are plan position `20-iii`'s, on proposal 14's reconciliation. The operand reading is `faction_holding`'s, not a new rule."
+    source:      "plan `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` position `20-iii` (*'narrative #14 §F (D1-a) and the chain half of #7 (intelligence before action)'*); `proposals/2026-09-27-mc-v18-retirement-plan/PROPOSAL.md` D1-a; `proposals/2026-09-12-emergent-narrative-primitives-v2/01_THE_TEN.md` §F, proposal 14 (Jordan's) and 14.1 (Jordan's extension, NOT built -- `H-169`)"
   - verb:        "tell"
     stratum:     "social"
     eligibility: ["own"]

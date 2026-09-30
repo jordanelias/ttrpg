@@ -299,6 +299,13 @@ rows:
       54 of 143 cases are UNREPRESENTABLE — 44 at faction scale, 10 at world scale. The loop
       runs at person, settlement and realm only. The strategic layer has no expression in this
       model; `engine/mc_v18.py` runs the faction scale and the two are not joined.
+      ⚠ PLAN POSITION `20-iii` (2026-09-30) GIVES A PERSON A READ OF FACTION SCALE AND DOES NOT MOVE
+      THIS ROW: `survey` commissions a `faction_sheet` Record -- `queries/faction_q.py::resolve` frozen
+      at the moment of writing -- which its holder reads free (proposal 14's *"scale bridge"*). A
+      person can now SEE a faction; he still cannot act AT faction scale, and nothing he decides reads
+      the sheet (`H-169` limit 5). MEASURED: the corpus status census is unchanged (54
+      UNREPRESENTABLE), because those cases' SCALE is faction or world, which a person-scale document
+      does not make representable.
     measure: "python -m engine.season.harness.corpus_run  # 'unrepresentable scales:' line"
     blocks: [W10, W13]
 

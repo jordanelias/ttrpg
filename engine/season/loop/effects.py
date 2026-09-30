@@ -48,6 +48,7 @@ all twelve, and both exist to keep every hash that is not `work`'s where it was:
 
 from __future__ import annotations
 
+from dataclasses import asdict
 from typing import Optional
 
 from ..data.requires import REQUIRES_OPERANDS
@@ -59,9 +60,11 @@ from ..data.rosters import (
 
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from ..loop.predicates import office_described_by
+from ..queries import faction_q
 from ..queries.world_q import (
-    RESIDE_KIND, ancestry, capacity, ceiling, docketed, hold_force, holder_faction_of, home_of,
-    population, residence_of, share, upkeep_of, works_for, works_target,
+    RESIDE_KIND, ancestry, capacity, ceiling, docketed, faction_holding, hold_force,
+    holder_faction_of, home_of, place_of, population, residence_of, share, upkeep_of, works_for,
+    works_target,
 )
 from ..state.carriers import Proposition, Record, Rung, Site, Tenure, Term
 from ..state.gate import NO_CHANGE, Change, Subject, may_renew
@@ -1114,6 +1117,73 @@ def _eff_petition(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
     if a.actor in content[RECORD_CONTENT.get("addressee")]:
         return NO_CHANGE
     return _mint_document(w, a, "petition", content, _operand(a, "from"))
+
+
+@effect_for("survey")
+def _eff_survey(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """PLAN POSITION `20-iii` -- THE INFORMATION CLUSTER (narrative #14 §F; `D1-a` of
+    `proposals/2026-09-27-mc-v18-retirement-plan/PROPOSAL.md`: *"A Record whose `subject_matter` is a
+    frozen `faction_q.resolve(...)` snapshot, commissioned by an act, read free by holders, forgeable
+    and destructible"*). A SURVEY IS COMMISSIONED: a `Record` of kind `faction_q.SHEET_KIND` whose
+    content is `faction_q.resolve`'s five-field view of one faction, RESOLVED AT THE MOMENT OF WRITING,
+    minted through `_mint_document` -- the one mint -- with the surveyor's `hold`. Proposal 14
+    (`proposals/2026-09-12-emergent-narrative-primitives-v2/01_THE_TEN.md`): *"a faction sheet is
+    those Queries, resolved at the moment of writing and frozen into a `Record`"*; and the attack it
+    survived, which is why an act is spent here and nowhere else: *"The cost belongs to COMMISSIONING
+    ... Free to read, costly to obtain, stale by construction."*
+
+    WHICH FACTION -- `world_q.faction_holding(w, subject)`, THE ONE OWNER OF *which faction does this
+    cohere under*. It answers for a faction's own Proposition (itself, if the roster carries it) and
+    for a person (the one faction he is committed to; `None` for none or for two, where canon states
+    no precedence). So the literal reading -- survey the Crown -- and the reachable one -- survey the
+    faction of the man you were asked about -- are ONE read, and no referent-to-faction rule is
+    written here. REJECTED, each with its reason:
+      * THE SUBJECT IS THE FACTION AND NOTHING ELSE (`commit`'s cell, `existence` of `subject`, kind
+        `Proposition`). No computed act's referent is ever a Proposition -- `questions_for`'s clause
+        1 admits a claim only if its subject is in the asker's `reach`, and `place_of` of a
+        Proposition is `None` (BO-9/BO-10's gap; `commit` MEASURED refused 33 of 33 in one realm
+        season, `python -m engine.season.harness.aperture`) -- so a survey would be formed on every
+        referent and refused on every one: a fourth instance of `H-156`'s scene tax, and a
+        mechanism that runs in no shipped world.
+      * `holder_faction_of` FOR A RUNG (*who holds this valley*): a second derivation beside the
+        first, for a document the position does not name. A rung referent declines.
+      * `create_record` DECLARING `kind: faction_sheet` (`works`' route at `24e`). Three reasons,
+        any one sufficient. (a) A sheet's content is RESOLVED, and `create_record` stores what the
+        act carries VERBATIM (r2 `02` §A.4, *verbatim or not at all*): a sheet whose maker supplies
+        its content is a forgery by construction, and teaching `create_record` to resolve for one
+        kind is a kind-keyed branch changing what a generic verb means. (b) A COMPUTED
+        `create_record` carries nothing -- the row is untyped, so `operands_for` returns `{}` -- and
+        could never say WHICH faction; it mints `text`, as it does 46 times a realm season. (c)
+        `issue`'s and `petition`'s precedent: one mint, the kind supplied by the verb that knows it
+        (r2 `02` §A.6's *one function, several registrations*).
+
+    WHAT IT WRITES -- `asdict(faction_q.resolve(...))`: a fresh mapping of fresh lists, so nothing
+    done to the world afterwards reaches the document (and `loop/witness.py::content_value` freezes it
+    again, as tuples, for a holder's ledger). The keys are `Faction`'s fields, which `faction_q.py`
+    checks against `rosters.yaml: record_kinds` at import. No date is written into it: the
+    document-side date proposal 14 asks for (*"dated"*) has no key -- `at` is a PLACE in every kind
+    that has it -- and is `H-169`'s; a holder's belief carries its own `when`.
+    WHERE IT IS DRAWN UP -- where the surveyor stands, `world_q.place_of(actor)`, the one owner of
+    *the rung a thing is at* (`give`'s reading of the same person). ⚠ NOT `create_record`'s default,
+    the actor's own id, which r2 `02` §A.4 records as a defect; that default is kept only for an actor
+    standing nowhere, where there is no rung to name.
+
+    DECLINES (`NO_CHANGE` -> `survey.refused`, the `write` clause): the subject coheres under no single
+    faction -- a person committed to none or to two, a rung, a site, a document, an unrostered
+    Proposition. The cell has already asked that the surveyor has heard of the subject (`own_ledger`).
+
+    ⚠ WHAT THIS DOES NOT BUILD, each registered (`H-169`): proposal 14.1's bound -- *what the sheet
+    can contain is bounded by who you have* (the seats you have filled) -- so every survey is
+    complete and exact, and anyone may commission one; `forge` has no effect body, so no act makes a
+    false sheet; `destroy_record` declines for every actor (`H-75`), so no act burns one.
+
+    G3 -- THE `hold` IS THE SURVEYOR'S OWN, `T-m`, exactly `create_record`'s. G4 -- WHAT IT NAMES: THE
+    RECORD, whole, earning `faction.surveyed`; a new id always moves (absent -> present)."""
+    prop = faction_holding(w, _operand(a, "subject"))
+    if prop is None:
+        return NO_CHANGE
+    sheet = asdict(faction_q.resolve(w, prop))
+    return _mint_document(w, a, faction_q.SHEET_KIND, sheet, place_of(w, a.actor) or a.actor)
 
 
 @effect_for("give")

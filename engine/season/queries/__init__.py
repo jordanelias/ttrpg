@@ -10,6 +10,9 @@
     editing `04` ... a spec edited to match its implementation checks nothing"), even though
     §B.6.1/§C.5.1 -- both also ratified, both untouched -- already presuppose this module exists
     by that path. Named at the site rather than fixed at the source, per B4's third disposition.
+    It also names `SHEET_KIND`, the `record_kinds` member a `survey` freezes one `Faction` into
+    (plan position `20-iii`), and refuses at import if that kind's keys stop being `Faction`'s
+    fields -- still no function here writes.
 
 `04_CODE_ARCHITECTURE.md` §A.2: *"queries/ ownerless functions: world_q (World first) · person_q
 (asker first) · cache (barrier-built)"* -- unedited, and now stale on this one point rather than
