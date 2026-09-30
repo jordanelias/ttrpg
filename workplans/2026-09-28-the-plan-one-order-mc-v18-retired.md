@@ -221,7 +221,7 @@ four rows of that table found stale in this pass are corrected here, not there: 
 | 19c | **MIGRATE** (+ `24d-ii`) | IN/SE | **DONE** | 24d-i ✓ | Phase 2 |
 | 19d ✦ | **DEMAND · DELIVERY** | SE/IN | **DONE** | `15c` | Phase 2 |
 | 20-i ✦ | **faction scale, first cut** | IN | **DONE** | — | §2.2 (`ecacb57`) |
-| 20-ii ✦ | **U9 / R-04 — faction queries** | IN | **OPEN** (unblocked -- `★` is DONE; row corrected, terminal whole-of-Phase-2 critique, 2026-09-30) | `★` ✓ | Phase 4 · a |
+| 20-ii ✦ | **U9 / R-04 — faction queries** | IN | **DONE** | `★` ✓ | Phase 4 · a |
 | 20-iii ✦ | **the information cluster** | IN/FI | **DONE** | `15` (20-i ✓) | Phase 2 |
 | 20-iv ✦ | **d.1 + terrain on the season path** | MB/IN | BLOCKED | `20-ii`, `28-iii` | Phase 4 · e |
 | 21 | **U10** | IN | BLOCKED | `20-ii` | Phase 4 · b |
@@ -724,7 +724,7 @@ superseding the CALLS means the loop subsumes the SCALES.
 
 | # | handle | what runs | `STATE` | `GATE` |
 |---|---|---|---|---|
-| a | **`20-ii`** faction queries (U9 / R-04) | `faction_q.{holdings,purview,superiors,subordinates,at_war}`; `head` via `Tenure.degree` (F.4's first reader); `scale_of_rung`; the 44 faction-scale re-scales and the 10 world cases; **edit `04 §A.2:132`** to name the fourth `queries/` module | BLOCKED | `★` |
+| a | **`20-ii`** faction queries (U9 / R-04) | `faction_q.{holdings,purview,superiors,subordinates,at_war}`; `head` via `Tenure.degree` (F.4's first reader); `scale_of_rung`; the 44 faction-scale re-scales and the 10 world cases; **edit `04 §A.2:132`** to name the fourth `queries/` module | **DONE** | `★` ✓ |
 | b | **`21`** U10 | the second measurement; `measured:` from instrument output only | BLOCKED | `20-ii` |
 | c | **`28-ii`** (M6) — successor goldens | (1) a **named** same-seed hash pin on `build_realm(0)` × N; (2) a battle executing from a real, chooser-formed decision | BLOCKED | `28-i`. `15c` helps the operand arm, but the per-verb cell does not need it |
 | d | **`28-iii`** SPINE-DELETE | delete `engine/mc_v18.py` and the engine spine (list below) | BLOCKED | `28-ii` — nothing else. Every engine-spine module already has its season replacement (`_part2` §1.1) |
