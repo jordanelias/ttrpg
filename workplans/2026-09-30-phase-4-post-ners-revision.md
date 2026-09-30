@@ -139,7 +139,7 @@ for these rows only; its non-Phase-4 rows are unchanged and not restated)
 | i | **`29c`** settlements | SE | BLOCKED | `29b`, `29d`, `24e` ✓, `24d-ii` ✓ | — |
 | j | **`29f`**/`29e`** fieldwork/characters | IN | BLOCKED | `14`, `27` | — |
 | k | **`2-ii`** RET-SC kernel | IN/SC | BLOCKED | `28-iii`, `29b`, `22` | — |
-| l | **`22`** PROC-B | SC | **OPEN** (unblocked) | `18` ✓, `★` ✓ | — |
+| l | **`22`** PROC-B | SC | **OPEN, PARTIAL** — steps 6,7,9,10 done (at `18`/`19`), step 8 built, steps 11 (partial)–16 open (the contest-resolution core) | `18` ✓, `★` ✓ | `a1282b02` |
 | m | **`22a`→`23`→`22b`** | SC/IN | OPEN/BLOCKED | `22` (+`15d`,`17b`) | — |
 | n | **`24g`** bodies clock + P3 | SE | BLOCKED | `24d-ii` ✓, `24f`'s cohort producer ✓, **JORDAN** (§5.1 item 8, unchanged) | — |
 | o | **`24h`** S5 revolt/forswearing | SE/IN | BLOCKED | `20-ii` ✓; P7 **JORDAN** (§5.1 item 11, unchanged) | — |
@@ -193,6 +193,50 @@ effect at all, per the live `corpus_run` re-verified this session). **If `22`'s 
 `effects_information.py`**, not a monolithic `effects.py` — read `_eff_open_case`/`_eff_determine`
 there, alongside the shared oblige-term helpers (`_new_oblige_term`, `_oblige_term`) they call from
 `effects_shared.py`.
+
+⚠ **BUILD ATTEMPTED 2026-09-30, commit `a1282b02` — PARTIAL, NOT CLOSEABLE THIS ROUND.** Of PHASE 2's
+sixteen steps (`21_RECONCILIATION.md:565-580`): **steps 6, 7, 9, 10 were already DONE**, shipped by
+positions `18` (PROC-A) and `19` (U7-remit) under different handles, confirmed against the live code
+rather than assumed. **Step 8 was BUILT** (documentation-only — `release`'s row already covered a
+disposal `oblige` correctly; it was missing the citation of D-5's ruling for why that is the only
+route, now added). **Step 7 carries a disclosed, pre-existing caveat**: `judging_set`'s `matter`
+parameter is accepted but not yet load-bearing (`world_q.py:326-341`'s own docstring), since nothing
+yet maps a docketed matter to a governing arrangement row.
+
+**Steps 11 (partially), 12, 13, 14, 15, 16 are OPEN, and together constitute the proceedings
+subsystem's actual contest-resolution core — a new provider module, an obstacle model, and
+degree-keyed effects for `speak`/`determine` — not a routine addition.** Specifics, each verified
+against the working tree:
+- **Step 11**: C-1's mechanism (the disposal `oblige`, docket clearing, the write-gate clause) is
+  fully built and tested at position `19`. **C-7's vote-quorum conjunct is not** — the `cardinality`
+  requirement form has zero Python implementation (`data/requires.py:765-770` raises `SystemExit` on
+  any cell that tries it; only `confer`/`revoke` use the sibling `basis` form). Building it needs a
+  second referent (which Proposition is "the disposition" a bench member's `commit` targets) that no
+  existing operand or Query derives, and `commit` itself never executes in computed play today
+  (`H-156`) — a naive fix would make `determine` refuse unconditionally, regressing two currently-
+  passing tests. Registered already at `H-161`; no new row added.
+- **Step 12**: `speak`'s row is still the pre-existing stub (`verb_table.yaml:793`, `requires: "—"`,
+  no typed cell); no `_eff_speak` exists anywhere in `loop/effects_*.py` (confirmed by grep, this
+  document's own §1.4/§3 already noted this independently). The full target spec exists at
+  `04_VERBS.md:59-80` but is coupled to step 13's manifest row (a `"contests: a matter"` prize needs a
+  registered subsystem to resolve to, which does not exist until step 15's provider).
+- **Step 13**: the two prize repoints (`rosters.yaml:1084-1106`) are already correctly marked
+  `interim: true`, waiting on this step; the `rung=` fix (C-8) is real but has no reader to verify it
+  against yet (nothing dispatches on `Scene.place`, which does not exist as a field — `place_of(w,
+  event)` is the actual current owner of that fact, a citation correction to C-8 itself).
+- **Step 14**: no obstacle-composition code exists anywhere in `engine/season/`. PHASE 0 already found
+  `M-7` (the deprivation-floor candidate) FAILS when run — the redesign this step specifies (the
+  ceiling candidate, injected and swept via `sigma_leverage`) is unbuilt, not merely untested.
+- **Step 15**: no nested-run provider module exists; `chronicle` (to be deleted here) is still live
+  (`rosters.yaml:399`, `epistemic.py:516`).
+- **Step 16 (THE BAR)**: not attempted, and could not have passed — nothing exists yet for two seeded
+  proceedings to run through.
+
+**This is not a scope failure of the dispatch; it is the position's real size**, undiscovered until
+built against rather than assumed from the plan's own one-line summary. `22`'s own gate for `2-ii`
+(§2 above) is not met until this closes. Whoever resumes this position should treat steps 12–16 as
+their own build, sized and possibly batched the way this document's §BATCHING guidance would size any
+phase this large — not folded back into a single dispatch.
 
 **m · `22a`→`23`→`22b`.** No change to the disposition. **`23`'s loader-invariant work should be aware**
 that `data/verbs.py::_derive_openers_from_effects` no longer walks a single file — it walks
