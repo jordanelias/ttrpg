@@ -1,42 +1,41 @@
 """
-systems/threadwork/sim/rendering.py — Rendering Stability world-track and strain mechanics (P-07 — Calamity = rendered-side)
+systems/threadwork/sim/rendering.py — STRUCK at plan position 27 (WR-SCOPE remainder). No entry point.
 
-Canon source: systems/threadwork/reference/threadwork_v30.md Part 5
-Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
+This module held two `stubwire.stub_resolve` armature stubs (Pass 2l, OI-17): `apply_rs_strain` and
+`check_calamity_threshold`. Position 27 had to WIRE each to a carrier the season architecture retains,
+or STRIKE it with its reason. Both are struck, for the reasons below, and neither was wired into the
+overview Mending Stability track (position 27's own constraint: that module survives only until
+`29a`-ms and is not a target).
 
-Dependencies:
-  - sim/autoload/game_state
-  - sim/peninsular/rs_track
+`apply_rs_strain(delta, source, world) -> RSState` — STRUCK: no carrier, at either reading.
+  - As written, it moved the world-level Rendering Stability track (its declared dependency was
+    `sim/peninsular/rs_track`, later `systems/overview/sim/rs_track.py`) — an overview clock plan
+    position `29a` deleted (PR #450). The season has no analogue BY ARCHITECTURE:
+    `engine/season/loop/census.py` is demand-driven and *"NO CLOCK GENERATES ANYTHING"*, and
+    `ED-WR-0011`'s ruled option A rules out season-tick generation.
+  - Read as canon's reality-strain (`canon/philosophy/07_drift.md` §7.5 — the load a failed
+    configuration can no longer bear lands on "its vicinity"), it would need a PLACE-side strain
+    carrier. `engine/season/write_matrix.yaml` has none: its place-side rows (`Rung` stores, yield,
+    envelope, dates, exists; `Site` condition, exists) carry matter, schedule and existence. The
+    nearest, `(Site, condition)`, is a built works' material condition worn by the MATTER clock
+    (`condition.worn`, DR-1), not the fabric of a vicinity. And the split of an operation's load
+    between Coherence and the substrate is itself unruled (§7.5: "Posit, not derived ... Flagged
+    2026-09-09; not resolved").
+  - The one carrier the architecture does provide, `(Person, coherence)` (RES, `social: false`,
+    written only by a seam Event — `engine/season/state/world.py`'s guard), is the PRACTITIONER's own
+    configuration, and strain is by definition what does NOT land there (§7.5). It is also a matrix
+    row with no carrier field — `engine/season/state/carriers.py`'s `Person` declares no `coherence`
+    — and its `unproduced:` cell (H-47 / H-62) says no verb writes it. Wiring strain there would
+    invert the function's meaning and add a writer the verb table does not license.
 
-Entry points:
-  - apply_rs_strain(delta: int, source: str, world: GameState) -> RSState
-  - check_calamity_threshold(world: GameState) -> CalamityState
+`check_calamity_threshold(world) -> CalamityState` — STRUCK: its subject is already owned.
+  - As written, it read the Rendering/Mending Stability bands down to the Rupture — the same deleted
+    world tracks.
+  - The per-being threshold canon does keep (§7.1 point of no return, §7.4's terminal band, P-15) is
+    reported by `systems/threadwork/sim/coherence.py`'s `check_coherence_failure_transition`, off
+    `CoherenceState.crossed`. A second surface answering that question would be a second owner of one
+    rule (CLAUDE.md §8), so this one is not built as an alias.
 
+The file is kept, holding only this record, because `registers/mechanics_index.yaml`'s
+`rendering_stability` entry names it as `sim_module`.
 """
-from __future__ import annotations
-
-from engine.substrate import stubwire
-
-# [PROVISIONAL — Pass 2l armature stub; implementation pending against canonical source]
-#
-# OI-17 (ED-IN-0091 plan §2.2/§3 Wave 1): converted from an unconditional
-# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,
-# plan §2.1) — a typed no-op instead of a crash, visible to structure_audit's `stub_wired`
-# attribute and review_core's `stubs.count` ratchet by construction (greppable import, no second
-# registry). `io_contract` below cites this module's own docstring "Entry points" declaration.
-
-
-def apply_rs_strain(delta: int, source: str, world: GameState):
-    return stubwire.stub_resolve(
-        'systems.threadwork.sim.rendering',
-        'apply_rs_strain(delta: int, source: str, world: GameState) -> RSState',
-        reason='Pass 2l armature stub, implementation pending against canonical source '
-               '(systems/threadwork/reference/threadwork_v30.md Part 5); OI-17, ED-IN-0091 plan §2.2')
-
-
-def check_calamity_threshold(world: GameState):
-    return stubwire.stub_resolve(
-        'systems.threadwork.sim.rendering',
-        'check_calamity_threshold(world: GameState) -> CalamityState',
-        reason='Pass 2l armature stub, implementation pending against canonical source '
-               '(systems/threadwork/reference/threadwork_v30.md Part 5); OI-17, ED-IN-0091 plan §2.2')

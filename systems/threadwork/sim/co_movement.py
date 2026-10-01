@@ -12,13 +12,20 @@ implemented here (will land with Mending sim integration). Deck is global
  .comovement_deck field. Module owns deck shuffle state; world parameter
  reserved for future schema migration.]
 
+⚠ `apply_comovement_effects` WAS STRUCK at plan position 27. Its one effect was writing the card's
+`ms_delta` into the world Mending Stability clock through the overview MS-track module — an overview
+clock with no season analogue by architecture (`engine/season/loop/census.py`: "NO CLOCK GENERATES
+ANYTHING"; `29a` deleted its siblings in PR #450 and that module goes at `29a`-ms). Its side effects
+were never built (it returned `notes` text). A drawn card still REPORTS its `ms_delta`, as
+`OperationResult.mending_stability_delta` and `OpposingResult.ms_delta` do; no world state is
+written from any of the three.
+
 Dependencies:
   - systems/threadwork/sim/operations (target of Co-Movement firing)
   - sim/autoload/dice_engine (rng)
 
 Entry points:
   - draw_comovement_card(op_type, depth, world) -> CoMovementCard
-  - apply_comovement_effects(card, op_result, world) -> dict
 """
 from __future__ import annotations
 
@@ -125,31 +132,6 @@ def draw_comovement_card(op_type: str, depth: str = "Object", world=None,
         card_id=card_id, name=name, actualized=False,
         ms_delta=unact_ms, notes=unact_notes,
     )
-
-
-def apply_comovement_effects(card: CoMovementCard, op_result, world) -> dict:
-    """Apply the card's MS delta + side effects.
-
-    op_result: the OperationResult from systems/threadwork/sim/operations (for chaining
-               MS effects). Not currently mutated; included for future
-               territory-specific side-effect routing.
-
-    Returns dict with applied effects.
-    """
-    ms_before = world.clocks.get('MS', 80.0)
-    # [2026-05-20 migration] route through ms_track.apply_ms_delta — single
-    # canonical surface for MS arithmetic per PP-255. Was: inline clamp.
-    from systems.overview.sim.ms_track import apply_ms_delta
-    new_ms = apply_ms_delta(card.ms_delta, source=f"co_movement {card.card_id}", world=world)
-    return {
-        'card_id': card.card_id,
-        'card_name': card.name,
-        'ms_before': ms_before,
-        'ms_after': new_ms,
-        'ms_delta': card.ms_delta,
-        'actualized': card.actualized,
-        'notes': card.notes,
-    }
 
 
 def reset_deck(world=None):
