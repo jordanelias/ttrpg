@@ -636,7 +636,8 @@ modules:
       # state: block splits across several files with no single owner: MS is
       # systems/overview/sim/ms_track.py (this module's own state: comment already names it as
       # "the canonical MS-arithmetic surface", cross-checked with mechanics_index.yaml's `ms_track`
-      # entry), IP is systems/overview/sim/ip_track.py (mechanics_index `ip_track`). Turmoil has
+      # entry), IP WAS systems/overview/sim/ip_track.py (deleted 2026-10-01, plan position 29a: two stubs, no
+      # production caller; the mechanics_index `ip_track` row is left standing). Turmoil has
       # NO tracker file anywhere (verified: grep for a Turmoil writer finds none) — this is the
       # open §5 row 7 fork (Turmoil writer unruled), not papered over by pointing at a directory.
       # A directory join is honest disclosure of the split, not a claim that every file in it

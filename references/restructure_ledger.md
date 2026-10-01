@@ -2667,3 +2667,16 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 | `engine/tests/test_pipeline_reach.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — reach probe over the deleted spine; successors ran at `28-ii`) |
 | `engine/tests/test_world_population.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — world-population probe over the deleted spine and `serialize_world`/`restore_world`; successors ran at `28-ii`) |
 | `tests/valoria/test_engine_clock_phases.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — the phase-order test of the deleted `engine_clock`; the driver's own tests are its successor) |
+
+<!-- 2026-10-01, plan position `29a` (master workplan v8, `_part3`): the overview world-track modules with no outside
+     importer retired. FORK ref is the parent of the deleting commit, `56512a9c`; every row below was checked with
+     `git cat-file -e 56512a9c:<path>` before it was written. One exact-file row each (never a directory prefix).
+     `ci_track.py` is NOT here: `systems/factions/sim/excommunication.py:166` still imports it lazily, so it leaves
+     with `29b`; `ms_track.py` stays until `27` (`threadwork/sim/{co_movement,opposing}.py` import it). -->
+
+| Old path | New path | Status |
+|---|---|---|
+| `systems/overview/sim/accounting.py` | `FORK:56512a9c` | FORKED (2026-10-01, plan position `29a` — the 13-step end-of-season cascade; no season replacement by port, the season counterparts are MATTER + CENSUS in `engine/season/`; its `accounting` composition role went at `28-iii`) |
+| `systems/overview/sim/ip_track.py` | `FORK:56512a9c` | FORKED (2026-10-01, plan position `29a` — the Imperial Pressure world-track, two stub entry points with no production caller; no season analogue, by architecture: `engine/season/loop/census.py` generates nothing from a clock) |
+| `systems/overview/sim/rs_track.py` | `FORK:56512a9c` | FORKED (2026-10-01, plan position `29a` — the RS world-track, one stub entry point (`apply_rs_delta`); no season analogue, by architecture; its `rs_track_delta` role went at `28-iii`) |
+| `engine/tests/test_accounting_accord_drift_probe.py` | `FORK:56512a9c` | FORKED (2026-10-01, plan position `29a` — the report-only province-Accord drift probe over the deleted `accounting.run_accounting`; its subject is gone) |

@@ -44,7 +44,8 @@ or orphaned, deleted with a `FORK:` row.
 | `engine/cross_scale/handoff_rules.py` | **(c)**; the eight `scale_transitions_v30.md §3` handoff rules are R-04's content (*"the loop implements none of them"*) | `28-iii` |
 | `engine/cross_scale/zoom_in_out.py` | **(c)**; the Hybrid-mode zoom is R-03/R-04's content; ENCOUNTER is the first in-season zoom | `28-iii` |
 | `systems/overview/sim/season.py` | **(a)** `loop/driver.py`; goes with its `season_driver` row | `28-iii` |
-| `systems/overview/sim/{accounting,ci_track,ip_track,rs_track}.py` | **(c)**; MATTER + CENSUS replace accounting's work; the clocks have no season analogue by architecture | `29a` |
+| `systems/overview/sim/{accounting,ip_track,rs_track}.py` | **(c)**; MATTER + CENSUS replace accounting's work; the clocks have no season analogue by architecture | `29a` |
+| `systems/overview/sim/ci_track.py` | **(c)**; same; `excommunication.py:166` imports it lazily, so it leaves with that file | `29b` |
 | `systems/overview/sim/ms_track.py` | **(c)**, after `27` frees threadwork of it | `29a`-ms |
 
 **D.2 The 25 composition roles** (`references/module_contracts.yaml`).

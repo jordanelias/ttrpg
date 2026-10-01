@@ -227,19 +227,25 @@ provider-returns-a-Margin rule; `ID-13` over the deleted registry rows. **Lens A
 engine, one vocabulary), **not an S gain**, and it removes the last campaign-scale regression oracle;
 `28-ii`'s hash pin is a tripwire, not a balance instrument, and `CLAUDE.md` §7 records the gap as open.
 
-### `29a` · overview, minus `ms_track` · IN · gate `28-iii` · `sonnet` · `[cleanup]`
+### `29a` · overview, minus `ms_track` and `ci_track` · IN · gate `28-iii` · `sonnet` · `[cleanup]`
 
-`systems/overview/sim/{accounting,ci_track,ip_track,rs_track}.py`, the `accounting` role row if
-`28-iii` left it, `engine/tests/test_accounting_accord_drift_probe.py` → `FORK:`. **`ms_track.py`
-STAYS** until `27` (E2). The Accord / CI / MS / PT / insurgency clocks have no season analogue, by
+`systems/overview/sim/{accounting,ip_track,rs_track}.py`,
+`engine/tests/test_accounting_accord_drift_probe.py` → `FORK:`. **`ms_track.py`
+STAYS** until `27` (E2). **`ci_track.py` moves to `29b`:** `systems/factions/sim/excommunication.py:166`
+imports `apply_ci_delta` lazily (reached from `faction_action.py:338-341`, exercised by no test), so
+deleting it here would leave a latent `ImportError` in live code. The Accord / CI / MS / PT / insurgency
+clocks have no season analogue, by
 architecture (`loop/census.py`: *"NO CLOCK GENERATES ANYTHING"*; ED-WR-0011 option A).
 **FALSIFIER:** `python -c "import systems.threadwork.sim.co_movement"` still succeeds and
 `apply_ms_delta` resolves; `grep -rn "systems.overview" engine systems tools tests` returns only
-`ms_track` sites. **Runs:** `pytest engine/tests -q`; `export_composition --check`. **Hash:** none.
+`ms_track` and `ci_track` sites; `ci_track`'s sole importer is `excommunication.py:166`.
+**Runs:** `pytest engine/tests -q`; `export_composition --check`. **Hash:** none.
 
 ### `29b` · factions + `game_state.py` + the descriptor faction block · IN · gate `29a` · `sonnet` build, `opus` verify · `[cleanup]`
 
-- **Modules:** `systems/factions/sim/*` (all remaining), `engine/autoload/game_state.py` (+
+- **Modules:** `systems/factions/sim/*` (all remaining), `systems/overview/sim/ci_track.py` (its last
+  importer, `excommunication.py:166`, dies in the same commit; re-derive `sim_params.json` and
+  `value_pointer_links.json` with their exporters, never by hand), `engine/autoload/game_state.py` (+
   `MULTS`/`ACCORD_MAP`/`PT_MAP`). Anything still imported from it that is substrate
   (`canonical_pt`/`accord`, `ALL_PLAYABLE_15`/`STARTING_*`) moves to `engine/substrate/`
   (`canon_buckets`, `world_initial_state`) if it is not already there — check the call sites first.
@@ -262,7 +268,7 @@ architecture (`loop/census.py`: *"NO CLOCK GENERATES ANYTHING"*; ED-WR-0011 opti
 **Runs:** `pytest engine/tests tests/valoria/test_engine_does_not_import_systems.py tests/valoria/test_descriptors_runtime.py tests/valoria/test_world_initial_state.py -q`;
 `python tools/export_descriptors.py --check`; `export_composition --check`.
 **FALSIFIER:** `python -c "import engine.autoload.game_state"` raises `ImportError`;
-`BASELINE_TOTAL = 0` holds; `test_season_providers_are_registered.py` still finds `mass_battle`; the
+`BASELINE_TOTAL = 0` holds; no importer of `systems.overview.sim.ci_track` remains; `test_season_providers_are_registered.py` still finds `mass_battle`; the
 batch control hash holds. **Hash:** none.
 
 ### `20-iv` · d.1 + terrain/garrison on the season path · MB/IN · gate `29b` (E6) · `opus` (a design candidate to attack) · `[simulation]`
