@@ -54,7 +54,7 @@ dissolves the H-79 failure that reverted plan position `10`, and honours AX-3.
 | `Claim.chain` | `chain: tuple = ()`, origin first, replacing the `teller` field; `teller` becomes a property, `chain[-1]` or `None`; hops = `len(chain)` | `state/carriers.py` |
 | told deposit | `chain = said.chain + (act.actor,)`; `visibility` stays `"own"`; confidence raw | `loop/witness.py` |
 | `LedgerReader` | `(claims, weigh=None)`; `_best` groups matches by `value`; `support(v) = 1 − ∏ over distinct origins (1 − weigh(c))`, origin `chain[0]` (the holder, if firsthand); key `(support, when, confidence)`. At `weigh ≡ 1` it collapses to today's | `queries/person_q.py` |
-| `teller_weight(p, fx)` | the `weigh` closure: firsthand 1.0, else `clamp01(told_weight ** hops · relation · record)`; `relation = 1 + rank_gain·rank + regard_gain·clamp(regard/STANCE_MAX, −1, 1)`, `STANCE_MAX = STANCE_VALENCE_SCALE ** 2`; `rank ∈ {−1, 0, +1}` from the hearer's own `office` claims; `record ≡ 1` until T6 | `decision/options.py` (`person_q` never imports `decision/`) |
+| `teller_weight(p, fx)` | the `weigh` closure: firsthand 1.0, else `clamp01(told_weight ** hops · relation · record)`; `relation = 1 + rank_gain·rank + regard_gain·clamp(regard/STANCE_MAX, −1, 1)`, `STANCE_MAX = STANCE_VALENCE_SCALE ** 2`; `rank ∈ {−1, 0, +1}` from the hearer's own `office` claims; `record` per T6 (`record(p, x, fx)`, no pair ⇒ 1.0) | `decision/options.py` (`person_q` never imports `decision/`) |
 | `regard(p, x, fx)` | `stance_toward + regard_gain·judged + lambda_teller·told_valence`; only the stored half exists until G1; `judged` has no relation factor, so regard never calls weigh | `queries/person_q.py` |
 | `with` stem | two persons share `place_of`; UNKNOWN if either has none, and always UNKNOWN person-side | `data/requires.py`, `queries/world_q.py` |
 | `tell` row | `requires_typed: {all: [{form: own_ledger, of: subject, conjunct: holds}, {form: relation, of: to, relation: with, conjunct: hearer}]}`, `counterparty: to`, `emits_on_refusal` keyed `holds`/`hearer` → `news.untold` (precedent: `issue`) | `verb_table.yaml` |
@@ -250,6 +250,19 @@ PROBE FLIPS 0, `told_redeposits` 0, H-40 sweeps green.
 p's firsthand claims on the same `(subject, predicate)`, on `agreement`'s loop shape; zero pairs give
 1.0 (deliberately unlike `standing_of`). Wire into `teller_weight`; fixture `record_gain`, control 0.
 Subject: `[design] a teller's record weighs their hearsay (E5)`.
+
+**As built (the T6 commit):** `record(p, x, fx)` in `decision/options.py`, `fx` the third argument for the
+gain (as `standing_of`'s). Pairing is ONE owner: `agreement`'s loop was factored into `_pair(told, own, key,
+admit)`; `agreement` calls it keyed by predicate on `PERSON_PREDICATES`, `record` keyed by `(subject,
+predicate)` with no roster. `teller_weight` memoises `record` per teller beside `relation`; the `ABSENT: H-179
+stake` marker is kept. Fixture `record_gain` (control 0, shipped 0.5 [ASSUMPTION], sweep [0, 0.5, 1.0]),
+hole row `H-182`. ⚠ **The "at most 0.75" bound of T3a's As-built holds only while `rank` reads 0 AND `record`
+is neutral:** a teller with a good record reaches `told_weight x relation x record` above 1 before the clamp,
+ties a firsthand claim on support and wins on `when`; `H-176`, `H-177`, `H-178`, the fixtures comment and the
+`teller_weight` docstring now say so. The T3 tests hold `record_gain` at 0 (`_t3_fx`), because they plant a
+told claim against a firsthand one on a cell, which is a pair that lowers the teller's record at 0.5.
+Measured: `build_realm(0)` holds 3 told claims after 1 season, 0 after 3, with no pair; realm hash `72af02fb…`
+and `corpus_run 0` md5 `f45a7e22…` are the same before, at shipped `record_gain` 0.5 and at the control 0.
 
 ---
 

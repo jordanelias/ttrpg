@@ -340,8 +340,13 @@ def test_t1_said_is_not_a_binding_operand():
 # ---------------------------------------------------------------------------------------------
 
 def _t3_fx(told_weight, regard_gain, rank_gain=None):
+    """The T3 tests isolate `told_weight`, `regard_gain` and `rank_gain`, so `record_gain` is held at
+    its CONTROL 0 here: several plant a told claim against a firsthand claim on one cell, which is
+    a `record` pair (`T6`) and would lower that teller's weight at the shipped 0.5. `record` has its
+    own falsifiers, `test_t6_*`."""
     from ..data.fixtures import DEFAULT_FIXTURES
-    fx = DEFAULT_FIXTURES.sweep("told_weight", told_weight).sweep("regard_gain", regard_gain)
+    fx = (DEFAULT_FIXTURES.sweep("told_weight", told_weight).sweep("regard_gain", regard_gain)
+          .sweep("record_gain", 0.0))
     return fx if rank_gain is None else fx.sweep("rank_gain", rank_gain)
 
 
@@ -357,6 +362,9 @@ def test_t3_a_firsthand_claim_holds_against_a_newer_told_claim_of_equal_confiden
     the pre-`T3a` comparator, and the CONTROL `told_weight` 1.0 -- the newer told value wins and
     `transfer` is KNOWN-FALSE; at the SHIPPED `told_weight` 0.5 the firsthand value's support is
     1.0 against the told one's 0.5, so what the hearer saw holds and nothing is contradicted.
+    `record_gain` is held at its control 0 (`_t3_fx`): the told claim contradicts the firsthand
+    one on the same cell, which is a `record` pair, and at the shipped 0.5 `x`'s weight would read
+    0.25 here (`test_t6_*` observe that).
 
     MUTATION (run 2026-10-01, `T3a`): `LedgerReader._best` forced onto its `weigh is None` branch
     -- the shipped arm reads the told value and this goes RED on its first assertion. Restored,
@@ -402,11 +410,14 @@ def test_t3_unplanted_members_with_opposite_loyalty_reach_different_verdicts():
 
     ⚠ `told_weight` IS HELD AT 1.0 HERE (its control value; this is not a control arm, since
     `regard_gain` is the variable), AND THAT IS FORCED, NOT CHOSEN. At the shipped
-    0.5, and while `rank` reads 0 (`H-180`), a one-hop claim weighs at most 0.5 x 1.5 = 0.75
-    against a firsthand claim's 1.0, so NO regard
-    can make hearsay beat what the hearer saw (`H-178`'s default says so); regard then decides
+    0.5, a one-hop claim weighs at most 0.5 x 1.5 = 0.75 against a firsthand claim's 1.0 -- but
+    ONLY WHILE `rank` reads 0 (`H-180`) AND `record` is neutral (`H-182`: no pair, or
+    `record_gain` 0; a teller with a good record can reach 1.0). Here the told claim contradicts
+    the firsthand one, a pair that would LOWER the leader's record at the shipped `record_gain`,
+    so `record_gain` is held at its control 0 as well (`_t3_fx`) and no regard can make
+    hearsay beat what the hearer saw (`H-178`'s default says so); regard then decides
     only between told claims. Against a firsthand claim the regard term is observable only where
-    `told_weight * relation` can reach 1.0. The firsthand and told claims are planted (identically
+    `told_weight * relation * record` can reach 1.0. The firsthand and told claims are planted (identically
     in both); the loyalty -- the variable under test -- is not.
 
     MUTATION (run 2026-10-01, `T3a`): `LedgerReader._best` forced onto its `weigh is None` branch
@@ -542,8 +553,10 @@ def test_t3_opening_set_hands_clause_4_the_teller_weight(monkeypatch):
     assert seen, "opening_set never reached clause 4 -- the spy observed nothing"
     probe = Claim("c_probe", "h", "S", "stores:grain", 0, 0, "told_by", 100, "own", chain=("x",))
     assert all(callable(wt) for wt in seen), "a clause-4 call ran with weigh=None"
-    assert {wt(probe) for wt in seen} == {0.5}, (
-        "the weigh opening_set passed does not grade a told claim at the shipped told_weight")
+    # 0.25 = shipped `told_weight` 0.5 x `record` 0.5: `c_told` (by `x`) contradicts `c_seen` on one
+    # cell, a pair (`T6`), and the closure `opening_set` hands over is the whole shipped one.
+    assert {wt(probe) for wt in seen} == {0.25}, (
+        "the weigh opening_set passed does not grade a told claim at the shipped told_weight and record")
 
 
 # ---------------------------------------------------------------------------------------------
@@ -1054,3 +1067,161 @@ def test_t5_a_firsthand_holder_still_skips():
         assert told("p_high") == [], f"a {source} holder was told the same triple by another origin"
         assert len(told("p_other")) == 1, "the positive control: a hearer who holds nothing is told"
 
+
+
+# ---------------------------------------------------------------------------------------------
+# T6 (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282; `H-182`): A TELLER'S RECORD.
+# `record(p, x, fx)` pairs `p`'s claims told by `x` with `p`'s OWN firsthand claim on the same
+# `(subject, predicate)` cell; `weigh` multiplies it in once per teller.
+# ---------------------------------------------------------------------------------------------
+
+def _t6_claims(p, firsthand, told):
+    """`firsthand`: `(subject, value)` rows; `told`: `(id, subject, value, teller)` rows -- all on
+    predicate `stores:grain`, planted into `p`'s ledger."""
+    p.ledger[:] = (
+        [Claim(f"c_own_{s}", p.id, s, "stores:grain", v, 1, "firsthand", 100, "own")
+         for s, v in firsthand]
+        + [Claim(cid, p.id, s, "stores:grain", v, 2, "told_by", 100, "own", chain=(t,))
+           for cid, s, v, t in told])
+
+
+def _t6_pre_record_weight(fx, hops, relation):
+    """What `teller_weight` computed before `T6`, written out here independently of `record`."""
+    return min(1.0, fx.get("told_weight") ** hops * relation)
+
+
+def test_t6_an_unknown_teller_weighs_exactly_told_weight():
+    """NO PAIR IS NEUTRAL, EXACTLY. `x` has told `p` two things -- one on a cell `p` holds nothing
+    firsthand about, one on a cell `p` holds a firsthand claim about under a DIFFERENT predicate --
+    so `x` has no pair; `y` has one. At the shipped gains `record(p, x)` is exactly 1.0 and `x`'s
+    claim weighs `told_weight ** 1 * relation` bit-for-bit (0.5 x 1.5 = 0.75, `p` regards `x` at
+    +STANCE_MAX); `y`, who has a pair, does not -- so the neutrality is observed against a teller
+    for whom `record` moves, not against a `record` that is constant.
+
+    MUTATION (run 2026-10-01, `T6`): zero pairs returned as `1.0 - record_gain` (`standing_of`'s
+    polarity -- the maximum gap) -- `x` weighs 0.375 and this goes RED on the `record == 1.0`
+    assertion. Restored, GREEN."""
+    from ..data.fixtures import DEFAULT_FIXTURES as fx
+    from ..decision.options import STANCE_MAX, record, teller_weight
+
+    p = P.tiny_world().persons["p_low"]
+    p.stance = [("x", 5, 5)]
+    _t6_claims(p, [("Hh", 5)], [("c_x1", "S", 3, "x"), ("c_x2", "R", 4, "x"), ("c_y", "Hh", 0, "y")])
+    p.ledger.append(Claim("c_x_other", p.id, "Hh", "stores:wood", 9, 2, "told_by", 100, "own",
+                          chain=("x",)))
+    assert fx.get("record_gain") == 0.5, "the shipped record_gain moved: restate this test's numbers"
+    weigh = teller_weight(p, fx)
+    checked = 0
+    assert record(p, "x", fx) == 1.0 and record(p, "x", fx) is not None
+    expected = _t6_pre_record_weight(fx, 1, 1.0 + fx.get("regard_gain") * (STANCE_MAX / STANCE_MAX))
+    assert expected == 0.75
+    for c in p.ledger:
+        if c.chain == ("x",):
+            assert weigh(c) == expected, (c.id, weigh(c), expected)
+            checked += 1
+    assert checked == 3, checked
+    assert record(p, "y", fx) == 0.5, record(p, "y", fx)
+    assert weigh(next(c for c in p.ledger if c.id == "c_y")) < expected
+
+
+def test_t6_a_teller_contradicted_twice_weighs_less_than_one_confirmed_twice():
+    """THE RECORD MOVES THE WEIGHT, IN THE RIGHT DIRECTION. `p` holds two firsthand cells (`Hh`, `S`).
+    `good` told `p` the same two values, `bad` told `p` two different ones, `mixed` one of each; each
+    also told `p` the same value on a third cell (`R`) with no firsthand mate, so the claim weighed
+    differs only by its teller. At the shipped gains `good` weighs 0.5 x 1.5 = 0.75, `bad`
+    0.5 x 0.5 = 0.25 and `mixed` (balance 0) exactly 0.5. Each teller really holds the pairs the
+    arithmetic needs (`_pair`'s counts are asserted), so a `record` that read nothing would fail.
+
+    MUTATION (run 2026-10-01, `T6`): `agree` and `dis` swapped in `record`'s balance -- `good`
+    weighs 0.25 and `bad` 0.75, and this goes RED on the first weight assertion. Restored, GREEN."""
+    from ..data.fixtures import DEFAULT_FIXTURES as fx
+    from ..decision.options import _pair, record, teller_weight
+
+    p = P.tiny_world().persons["p_low"]
+    own_rows = [("Hh", 5), ("S", 6)]
+    told_rows = [("c_g1", "Hh", 5, "good"), ("c_g2", "S", 6, "good"), ("c_g3", "R", 7, "good"),
+                 ("c_b1", "Hh", 0, "bad"), ("c_b2", "S", 0, "bad"), ("c_b3", "R", 7, "bad"),
+                 ("c_m1", "Hh", 5, "mixed"), ("c_m2", "S", 0, "mixed"), ("c_m3", "R", 7, "mixed")]
+    _t6_claims(p, own_rows, told_rows)
+    key = lambda c: (c.subject, c.predicate)
+    own = [c for c in p.ledger if not c.chain]
+    counts = {t: _pair([c for c in p.ledger if c.teller == t], own, key)
+              for t in ("good", "bad", "mixed")}
+    assert counts == {"good": (2, 0), "bad": (0, 2), "mixed": (1, 1)}, counts
+    weigh = teller_weight(p, fx)
+    w = {t: weigh(next(c for c in p.ledger if c.id == f"c_{t[0]}3")) for t in counts}
+    assert w["good"] > w["bad"], w
+    assert w == {"good": 0.75, "bad": 0.25, "mixed": 0.5}, w
+    assert record(p, "good", fx) == 1.5 and record(p, "bad", fx) == 0.5
+    # and the gain scales it: at 1.0 a teller always contradicted weighs nothing
+    full = teller_weight(p, fx.sweep("record_gain", 1.0))
+    assert full(next(c for c in p.ledger if c.id == "c_b3")) == 0.0
+
+
+def test_t6_record_gain_zero_is_the_control():
+    """AT `record_gain` 0 EVERY WEIGHT IS ITS PRE-`T6` VALUE, ON A LEDGER THAT HAS PAIRS. The ledger is
+    the previous test's (`good` agrees twice, `bad` contradicts twice, `mixed` once each) plus a
+    two-hop claim; the pairs are asserted to exist, so the control is not vacuous (a ledger with no
+    pair reads the same at any gain). At the shipped 0.5 the same claims differ from the control,
+    so the arms are told apart from both sides.
+
+    MUTATION (run 2026-10-01, `T6`): the balance applied without its gain
+    (`1 + (agree - dis)/(agree + dis)`) -- `good` weighs 1.0 at the control instead of 0.5 and this
+    goes RED. Restored, GREEN."""
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..decision.options import _pair, teller_weight
+
+    p = P.tiny_world().persons["p_low"]
+    _t6_claims(p, [("Hh", 5), ("S", 6)],
+               [("c_g", "Hh", 5, "good"), ("c_b", "Hh", 0, "bad"), ("c_g2", "S", 6, "good"),
+                ("c_b2", "S", 0, "bad"), ("c_g3", "R", 7, "good"), ("c_b3", "R", 7, "bad")])
+    p.ledger.append(Claim("c_two", p.id, "R", "stores:grain", 7, 2, "told_by", 100, "own",
+                          chain=("o", "good")))
+    key = lambda c: (c.subject, c.predicate)
+    own = [c for c in p.ledger if not c.chain]
+    pairs = sum(sum(_pair([c for c in p.ledger if c.teller == t], own, key)) for t in ("good", "bad"))
+    assert pairs == 4, f"the control ledger has {pairs} pairs, not 4: it would be vacuous"
+    shipped_fx = DEFAULT_FIXTURES
+    control_fx = shipped_fx.sweep("record_gain", 0.0)
+    shipped, control = teller_weight(p, shipped_fx), teller_weight(p, control_fx)
+    differ = checked = 0
+    for c in p.ledger:
+        if not c.chain:
+            assert control(c) == shipped(c) == 1.0
+            continue
+        # relation is 1.0 (no stance rows), so the pre-T6 weight is `told_weight ** hops`
+        assert control(c) == _t6_pre_record_weight(control_fx, c.hops, 1.0), (c.id, control(c))
+        checked += 1
+        differ += shipped(c) != control(c)
+    assert checked == 7 and differ >= 4, (checked, differ)
+
+
+def test_t6_record_reads_the_hearers_own_ledger_only():
+    """ANOTHER PERSON'S LEDGER CHANGES NOTHING. `p_mid` holds the firsthand claim and `x`'s
+    contradicting told claim on a cell; `p_low` holds only a told claim from `x` on it. `p_low`'s
+    record for `x` is neutral (1.0) while the pair sits in `p_mid`'s ledger, `p_mid`'s own is 0.5, and
+    once the same firsthand claim is in `p_low`'s ledger `p_low`'s moves to 0.5 -- so the neutrality
+    was the ledger, not a `record` that never pairs. A told claim by a different teller `y` on that
+    cell does not move `x`'s record either.
+
+    MUTATION (run 2026-10-01, `T6`): `told` filtered on nothing (every teller's claims pair) --
+    `y`'s agreeing claim lifts `x`'s record from 0.5 to 1.0 and this goes RED on the last assertion.
+    Restored, GREEN. (`record` takes `p` and `fx` only, so a read of another person's ledger is
+    not expressible in its signature; that half is observed, not mutated.)"""
+    from ..data.fixtures import DEFAULT_FIXTURES as fx
+    from ..decision.options import record
+
+    w = P.tiny_world()
+    low, mid = w.persons["p_low"], w.persons["p_mid"]
+    own_claim = lambda pid: Claim(f"c_own_{pid}", pid, "Hh", "stores:grain", 5, 1, "firsthand", 100, "own")
+    told_x = lambda pid: Claim(f"c_x_{pid}", pid, "Hh", "stores:grain", 0, 2, "told_by", 100, "own",
+                               chain=("x",))
+    low.ledger[:] = [told_x(low.id)]
+    mid.ledger[:] = [own_claim(mid.id), told_x(mid.id)]
+    assert record(mid, "x", fx) == 0.5, "the pair in p_mid's own ledger does not register"
+    assert record(low, "x", fx) == 1.0, "a claim in another person's ledger moved p_low's record"
+    low.ledger.append(own_claim(low.id))
+    assert record(low, "x", fx) == 0.5, "a pair in p_low's own ledger does not register"
+    low.ledger.append(Claim("c_y_low", low.id, "Hh", "stores:grain", 5, 2, "told_by", 100, "own",
+                            chain=("y",)))
+    assert record(low, "x", fx) == 0.5, "another teller's agreeing claim moved x's record"

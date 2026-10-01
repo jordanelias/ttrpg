@@ -3817,12 +3817,15 @@ rows:
       is the control (swept alone, `1.0` still leaves the gains shipped and a hostile teller
       weighs 0.5): every claim then weighs 1.0, every value's support is exactly 1.0 and
       `LedgerReader` orders by (when, confidence) as it did before `T3a` -- byte-identical realm
-      hash and `corpus_run 0`. At `0.5`, while `rank` reads 0 (`H-180`), one hop of hearsay never
+      hash and `corpus_run 0`. At `0.5`, while `rank` reads 0 (`H-180`) AND the teller's
+      `record` is neutral (`H-182`: no pair, or `record_gain` 0), one hop of hearsay never
       outranks the hearer's own firsthand claim on a different value merely by being newer (the
       firsthand value's support is 1.0; the told one's is at most 0.5 x 1.5 = 0.75), which is
-      `test_t3_a_firsthand_claim_holds_against_a_newer_told_claim_of_equal_confidence`. Once
-      `rank` can read +1, a teller who outranks the hearer, at full regard, reaches 1.0, ties on
-      support and wins on `when` (`H-177`). `0.25` is the sceptic's arm"
+      `test_t3_a_firsthand_claim_holds_against_a_newer_told_claim_of_equal_confidence` (it holds
+      `record_gain` at 0, its own pair being the told claim against the firsthand one). The bound
+      is NOT unconditional: a teller with a good record (`record` up to 1 + `record_gain`, `H-182`)
+      reaches 1.0 and ties on support, and once `rank` can read +1, a teller who outranks the
+      hearer, at full regard, does too -- either wins on `when` (`H-177`). `0.25` is the sceptic's arm"
     site:      "Fixtures told_weight, read by `decision/options.py::teller_weight` on the first
       claim in a ledger that names a teller, as `told_weight ** hops` with hops = `len(Claim.chain)`
       (`T3b`); consumed by `queries/person_q.py::
@@ -3856,8 +3859,9 @@ rows:
     default:   "0.5 -- SHIPPED, AND DORMANT: `rank` reads 0 for every pair today (`H-180`), so
       every arm of this sweep is byte-identical until an `office` claim has a writer. `0` is the
       control. `0.5` lets a teller who outranks the hearer reach full weight from `told_weight`
-      0.5 only at full regard (stance at STANCE_MAX), where it ties a firsthand claim on support
-      and wins on `when`"
+      0.5 at full regard (stance at STANCE_MAX) with a NEUTRAL `record` (`H-182`; a good record
+      supplies the same factor without rank), where it ties a firsthand claim on support and
+      wins on `when`"
     site:      "Fixtures rank_gain, read by `decision/options.py::teller_weight` (with
       told_weight and regard_gain, on the first claim naming a teller), multiplying `rank(p,
       teller)`"
@@ -3880,11 +3884,12 @@ rows:
     grade:     "assumption"
     default:   "0.5 -- SHIPPED [ASSUMPTION]. `0` is the control (relation 1.0 whatever the
       stance). At `0.5` a fully hostile teller's claim weighs half what a neutral one's does and a
-      fully trusted one's half again as much, clamped to 1.0. ⚠ AT THE SHIPPED told_weight 0.5
-      AND WHILE `rank` READS 0 (`H-180`) THIS NEVER LETS A ONE-HOP CLAIM BEAT THE HEARER'S OWN
-      FIRSTHAND CLAIM (at most 0.75 against 1.0); it decides between told claims, and against a
-      firsthand claim only on the `told_weight` 1.0 arm with `regard_gain` live (not the control),
-      where `test_t3_unplanted_members_with_opposite_loyalty_reach_different_verdicts` observes
+      fully trusted one's half again as much, clamped to 1.0. ⚠ AT THE SHIPPED told_weight 0.5,
+      WHILE `rank` READS 0 (`H-180`) AND WHILE THE TELLER'S `record` IS NEUTRAL (`H-182`: no
+      pair, or `record_gain` 0), THIS NEVER LETS A ONE-HOP CLAIM BEAT THE HEARER'S OWN FIRSTHAND
+      CLAIM (at most 0.75 against 1.0; a good `record` lifts that bound, `H-182`); it decides
+      between told claims, and against a firsthand claim only on the `told_weight` 1.0 arm with
+      `regard_gain` live (not the control) and `record_gain` 0, where `test_t3_unplanted_members_with_opposite_loyalty_reach_different_verdicts` observes
       it"
     site:      "Fixtures regard_gain, read by `decision/options.py::teller_weight` (with
       told_weight and rank_gain, on the first claim naming a teller), multiplying the clamped
@@ -3971,6 +3976,43 @@ rows:
       architecture keeps the effect with its verb (`14`), so nothing is built and no marker is
       placed."
     source:    "telling workplan `T4` (`workplans/2026-10-01-telling-workplan.md` §5, ED-IN-0282), 2026-10-01"
+
+
+  - id:        H-182
+    tier:      1
+    hole:      "HOW FAR A TELLER'S RECORD MOVES THE WEIGHT OF THEIR HEARSAY. A hearer who has checked
+      what a teller told them against what the hearer holds firsthand has a record of that teller;
+      nothing says how much a confirmed or contradicted record is worth against `told_weight` and
+      `relation`. `record_gain` scales `(agree - dis) / (agree + dis)` inside
+      `record = 1 + record_gain * that`; no pair is exactly 1.0 (neutral)."
+    kind:      "NUMBER"
+    owner:     "decision/options.py -- `record`, read by `teller_weight` once per teller"
+    grade:     "assumption"
+    default:   "0.5 -- SHIPPED [ASSUMPTION]. `0` is the control (`record` 1.0 whatever the
+      ledger holds: every weight is its pre-`T6` value, and that is asserted on a ledger that
+      HAS pairs, so the control is not vacuous). At `0.5` a teller always confirmed weighs half
+      again as much as a stranger and one always contradicted half as much, clamped to 1.0 with
+      the rest of the product -- so a one-hop claim at the shipped `told_weight` is no longer
+      bounded by 0.75 (`H-176`, `H-178`) once its teller has a good record. MEASURED at `T6`:
+      `build_realm(0)` holds 3 told claims after 1 season and 0 after 3, none with a pair
+      (0 teller-hearers with a pair), and the realm hash and `corpus_run 0` md5 are identical at
+      `record_gain` 0.5 and 0, so the shipped arm moves neither artifact; the falsifiers plant
+      their pairs"
+    site:      "Fixtures record_gain, read by `decision/options.py::record` (called from
+      `teller_weight`, once per teller, on the first claim naming that teller), whose pairing
+      step `_pair` is `agreement`'s; consumed by `queries/person_q.py::LedgerReader._support`
+      inside `epistemic.belief_contradicts`"
+    sweep:     [0.0, 0.5, 1.0]
+    unblocks:  "deception: a teller caught in a lie is credited less on the next cell (gated
+      `G7`), and intent reconciliation (`T7`), which will pair a teller's claims by the same
+      step"
+    cite:      "LADDER RUN at `T6`, 2026-10-01 (`CLAUDE.md` section 0): not superseded -- `H-176`
+      grades a told claim by hops and `H-178` by regard, neither by whether the teller has been
+      right; not irrelevant -- `teller_weight` carried a literal `record = 1.0` for this factor
+      and told claims with a teller are deposited; no design document gives the gain (the telling
+      workplan is intent only); precedent is `H-155`'s injected, swept magnitude, and `H-176`..
+      `H-178` for the shape. Registered live so the term has its control at 0."
+    source:    "telling workplan `T6` (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282), 2026-10-01"
 
 
 discharges:
