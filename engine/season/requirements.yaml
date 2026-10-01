@@ -602,28 +602,39 @@ rows:
       over the current, larger `opening_set`. **Neither reason the row stays `partial` has moved**:
       `ambitions(p)` still does not exist anywhere under `engine/season/queries/` (checked by
       `grep`), and the correlated-convictions finding is unaffected by the verb table's size.
-      ⚠⚠ **THE POPULATED REALM, FOUR SEASONS, MEASURED 2026-09-30 -- AN AMBITION THERE ENDS ONLY BY
-      BEING LAID DOWN, AND IN A YEAR NONE WAS; THE DESIGN GIVES IT NO OTHER END.** The run is R-01's
-      realm paragraph's (`build_realm(0)`, tree `c8cc408`, hash
-      `f99746ef1e57a796f7bdbb738f0c52b0`), not this row's `measure:`. Each of the 46 authored NPCs is
-      built with a live `commit` to an OUGHT about the person it is tied to
-      (`harness/populated.py`, the tie's one write), so the realm carries 46 distinct ambitions
-      where the corpus carries one shared OUGHT (`W27`'s subject). **At the end of season 3 all 46
-      of those `commit` Tenures are still live.** That is not a missing satisfaction reader. An
-      OUGHT is an uttered Belief, immutable (`architecture/holonic_ARCHITECTURE.md` §14), and Q4 is
-      *a STANDING question, regenerated every season until the commitment ends*
-      (`architecture/ARCHITECTURE_V2.md:479-480`): the architecture gives the commitment an END --
-      `release`, and `repudiate`, by which a belief *becomes abandonable*
-      (`architecture/meta/01_AXIOMS.md`) -- and gives the OUGHT no condition under which it comes
-      TRUE (`grep -rn OUGHT architecture/` finds none), so there is nothing for a reader to
-      evaluate; `CLAUDE.md` §0's ladder closes the question at test 3. What the realm does show is
-      that the one built ender is rarely reached: `release` is attempted 130 times and refused 124
-      (95%, against R-05's 96.3% on the corpus's rung cases, and for R-05's reason -- an untyped
-      cell §F1 clause 4 can never fire on), and `repudiate` has a row and no effect (R-05's U10
-      paragraph). **Neither reason this row stays `partial` moves**: `ambitions(p)` is still absent,
-      and the correlated-convictions finding is a property of `CONVICTION_PROJECTION` that no run
-      moves. WHAT WOULD OVERTURN THIS PARAGRAPH: a design ruling that an OUGHT can be satisfied, or
-      a re-run whose act totals or content hash differ.
+      ⚠⚠ **THE POPULATED REALM, FOUR SEASONS, MEASURED 2026-09-30 -- AN AMBITION THERE ENDS BY
+      BEING LAID DOWN OR WITH ITS HOLDER, NEVER BY COMING TRUE.** The run is R-01's realm
+      paragraph's (`build_realm(0)`, tree `c8cc408`, hash `f99746ef1e57a796f7bdbb738f0c52b0`), not
+      this row's `measure:`. Each of the 46 authored NPCs is built with a live `commit` to an OUGHT
+      about the person it is tied to (`harness/populated.py`, the tie's one write), so the realm
+      carries 46 distinct ambitions where the corpus carries one shared OUGHT (`W27`'s subject).
+      **At the end of the run 44 of those 46 Tenures are still live, and none of the 44 was laid
+      down.** The other two belonged to the two men who died this run (`p_npc_087`, `p_npc_040`,
+      R-07's own realm paragraph below): `World.remove_person` closes every Tenure the dying
+      person holds (`state/world.py`, `t.until = self.tick` for `t.subject == who`), so those two
+      ambitions ended WITH THEIR HOLDER, not by satisfaction and not by `release`.
+      ⚠ CORRECTED 2026-10-01: the first reading of this run claimed all 46 were still live. The
+      script counting closures read `w.tenures`, which is a view over CURRENTLY LIVING persons
+      only (`state/world.py`, `Person.tenures`) -- a dead man's own closed Tenures are invisible to
+      it, not open, because the person record itself is gone. §0.1 pt 2's own warning, met: the
+      instrument could not observe the failure it was built to rule out. That is not a missing
+      satisfaction reader. An OUGHT is an uttered Belief, immutable
+      (`architecture/holonic_ARCHITECTURE.md` §14), and Q4 is *a STANDING question, regenerated
+      every season until the commitment ends* (`architecture/ARCHITECTURE_V2.md:479-480`): the
+      architecture gives the commitment an END -- `release`; `repudiate`, by which a belief
+      *becomes abandonable* (`architecture/meta/01_AXIOMS.md`); and the holder's death
+      (`architecture/holonic_ARCHITECTURE.md` §15.3) -- and gives the OUGHT no condition under
+      which it comes TRUE (`grep -rn OUGHT architecture/` finds none), so there is nothing for a
+      reader to evaluate; `CLAUDE.md` §0's ladder closes the question at test 3. What the realm
+      does show is that the one built VOLUNTARY ender is rarely reached: `release` is attempted
+      130 times and refused 124 (95%, against R-05's 96.3% on the corpus's rung cases, and for
+      R-05's reason -- an untyped cell §F1 clause 4 can never fire on), and `repudiate` has a row
+      and no effect (R-05's U10 paragraph). **Neither reason this row stays `partial` moves**:
+      `ambitions(p)` is still absent, and the correlated-convictions finding is a property of
+      `PURSUIT_PROJECTION` (`data/verbs.py`; measured under its pre-rename name
+      `CONVICTION_PROJECTION`, ED-IN-0261 item 1) that no run moves. WHAT WOULD OVERTURN THIS
+      PARAGRAPH: a design ruling that an OUGHT can be satisfied, or a re-run whose act totals or
+      content hash differ.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' line"
     blocks: [W27, H-62]
 
@@ -650,18 +661,25 @@ rows:
       `test_r7_two_persons_hold_different_things_and_at_total_they_cannot`, whose control is the
       `total` arm inside the same test.
       ⚠⚠ **THE POPULATED REALM, FOUR SEASONS, MEASURED 2026-09-30 -- A DEATH IS WITNESSED AND CAN
-      MOVE A LATER DECISION; WHAT IT CANNOT MOVE IS AN ATTITUDE, BECAUSE NONE IS STORED.** The run
-      is R-01's realm paragraph's, not this row's `measure:`. Two persons die, both in `fight`
-      (five fights: Felled 2 · Wounded 1 · Untouched 2). The season-2 death (`p_npc_087`) deposits
-      4 claims and occasions no act; the season-3 death (`p_npc_040`) deposits 22 and occasions two
-      acts, both by one witness in the same season -- a `create_record` and a `reconstruct` about
-      the dead man. So a death does reach a later decision, once in this run: the ledger carrying
-      it as MEMORY is this row's first paragraph working. What has no field to move is the
-      FEELING, ATTITUDE or RELATIONSHIP half (`stance` is written by nothing; `W-F`). Two deaths
-      and two occasioned acts are a count, not a rate, and are not offered as one; both carry
-      R-01's realm paragraph's two instrument bounds. The status stays `partial`. WHAT WOULD
-      OVERTURN THIS PARAGRAPH: a re-run whose act totals or content hash differ, or a writer for
-      `stance` landing (`W-F`).
+      MOVE A LATER DECISION; WHAT IT DOES NOT MOVE IS AN ATTITUDE, BECAUSE NOTHING THIS RUN
+      REACHED WRITES ONE.** The run is R-01's realm paragraph's, not this row's `measure:`. Two
+      persons die, both in `fight` (five fights: Felled 2 · Wounded 1 · Untouched 2). The season-2
+      death (`p_npc_087`) deposits 4 claims and occasions no act; the season-3 death (`p_npc_040`)
+      deposits 22 and occasions two acts, both by one witness in the same season -- a
+      `create_record` and a `reconstruct` about the dead man. So a death does reach a later
+      decision, once in this run: the ledger carrying it as MEMORY is this row's first paragraph
+      working. ⚠ CORRECTED 2026-10-01: this paragraph first read "`stance` is written by nothing."
+      It has two writers -- `harness/populated.py` seeds a faction-loyalty row at build for every
+      committed member, and `loop/effects_combat.py::_eff_march` (M4) writes a row on a field
+      battle's losing side -- neither reached by a death or a witnessed claim, and the second
+      reached by NOTHING in this run specifically: all 11 `march` attempts refused at ENCOUNTER
+      (`aperture 4 0`'s `march` line, Declared 11 / no field fought). So the FEELING, ATTITUDE or
+      RELATIONSHIP half is not fieldless; it is unreached by this run's own events, which is this
+      row's own distinction between the plumbing and the world (the 2026-09-07 paragraph above).
+      Two deaths and two occasioned acts are a count, not a rate, and are not offered as one; both
+      carry R-01's realm paragraph's two instrument bounds. The status stays `partial`. WHAT WOULD
+      OVERTURN THIS PARAGRAPH: a re-run whose act totals or content hash differ, or a `stance`
+      writer a death or a witnessed claim can reach (`W-F`).
     measure: "python -m pytest engine/season/tests -k 'choose_receives_no_world or a_view or r7_two_persons'"
     blocks: [W-F, W27]
 
