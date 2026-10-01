@@ -42,8 +42,12 @@ from engine.season.trace_log import TRACE
 # `H-10`'s declared sweep x `H-76`'s declared sweep. Neither list is invented here.
 SCENE_BUDGETS = [2, 5, 9]                    # `H-10`
 INTERACTIONS = [1, 3, None]                  # `H-76`; `None` is the row's `unbounded` arm
-MODE = "actor"                               # the shipped default; the partition is mode-invariant
-                                             # (`probed`/`no_live_window` are equal across arms)
+MODE = "actor"                               # the shipped default. ⚠ RE-BASED 2026-09-30
+                                             # (WD-REBASE): the census below is taken AT THIS ARM
+                                             # ONLY and describes `actor` alone -- since U2/R-03 a
+                                             # round-to-round deposit makes `probed`/
+                                             # `no_live_window` differ by `observation_deposit_mode`,
+                                             # so this is no longer a mode-invariant partition
 
 
 def census(cases) -> list:

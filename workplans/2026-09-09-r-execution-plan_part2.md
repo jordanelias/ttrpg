@@ -1005,6 +1005,8 @@ SUBSECTION'S OWN TABLE TWO ROWS LATER. Corrected, with §4's grade named at each
   Drawn `──S──` here. What is **hard** into U9 is `Act.via` (G3) and U8's cast.
 - **U8's edge was missing.** §4 `:479` grades `W28 → R-06b` **hard**, and U9's own preconditions
   require U8's NPC-lane cast, so it is drawn.
+- **`U5 ──H──▶ U6` released 2026-09-30** (§4's R-07 note). The graph above still draws it; the table
+  below governs.
 
 **This subsection does not re-grade anything.** Where it and §4 disagree, **§4 wins and this graph is
 the defect** — that is what *"read with §4, which owns the reasons"* means, and the first draft failed
@@ -1019,7 +1021,7 @@ its own instruction.
 | **U2** · R-03 scene tick | ✅ **UNBLOCKED** — L5 merged; `loop/` now holds the six steps | reshape `season()` into rounds against `loop/driver.py` + the six, not the old single body |
 | **U4** · R-08 sampling | ✅ **L1 merged** (`decision/` is a directory: `budget`·`choose`·`options`·`questions`); still needs U3 | the sampler lands in `decision/choose.py`, which now satisfies `04:1046` by construction |
 | **U5** · R-07 stance | **U1 half (b) merged** | its precondition is a non-empty `DEGREES RESOLVED:` line |
-| **U6** · R-01/R-02 first measurement | **U1, U2, U4, U5 merged** | measuring before a producer exists measures the theorem (§4) |
+| **U6** · R-01/R-02 first measurement | **U1, U2, U4 merged** (U5 released 2026-09-30 — §4's R-07 note) | measuring before a producer exists measures the theorem (§4); without U5 it no longer does — R-03 and the claim channel already break it |
 | **U7 gp 3** · the Dispensation four | the `dispensation` operand row + F.15's nine terms exist as data | §8's worked instance — a prose→code translation, not wiring |
 | **U8** · R-06b ambitions + cast | **W28's `cast:` blocks authored, NPC lane first** | `PLAN.md:1587-1589` |
 | **U9** · R-04 strategic scale | ⛔ **STILL BLOCKED — the arc's ONLY structural blocker.** `G3` (`Act.via`) + U7 gp 1-2 + U8's NPC lane. **Arc 2 is unbuilt**: `state/` has no `gate.py`, no `Receipt`, no token | `H-108`; §4 grades it hard |

@@ -510,6 +510,13 @@ no known parent package`.
   decisions. Reconvergence: 100%."* Outcome is a deterministic function of the world, so a fork's
   consequences are identical. **Measuring R-01/R-02 before a producer exists measures the theorem.**
   Both are measurements; no unit builds them (post-adoption plan §3).
+  ⚠ **R-07's half RELEASED FOR U6, 2026-09-30.** The edge's reason is the line above — measuring
+  before a producer exists measures the theorem (the 100% of `README.md:13-19`). Without R-07 that
+  theorem already fails: position `21`'s committed 143-case chunks sum to genuine forks diverging in
+  every deposit arm at `2x3` (`none` 509/2223, `actor` 1260/2195, `total` 1342/2172), through R-03
+  and the claim channel (`H-102`). U5 was attempted and reverted on `H-79`
+  (`registers/handoffs/HANDOFF_IN.md:17`). U6 is taken without it and declares so; U10 re-takes it if
+  U5 lands. R-09, R-03 and R-08 are unchanged.
 - **R-03 → R-02 — HARD, intra-season half.** R-03's statement, verbatim: *"seasons must tick
   scene-by-scene, so what occurs after one scene can impact the next scene."* Today `questions_for`'s
   Q2 sets `landed = w.tick - 1` and tests `c.when == landed` (`shape.py:1202-1205`), so a decision
@@ -1432,10 +1439,13 @@ is a real weakness and is declared rather than papered over: the nearest thing t
 **Rows.** Flip **only on the number.** No unit builds R-01 or R-02 (post-adoption plan §3:
 *"R-01 and R-02 are measurements"*).
 
-**Preconditions.** U1, U2, U4 and U5 all merged.
+**Preconditions.** U1, U2 and U4 merged. U5 is **not** a precondition since 2026-09-30 (§4, the
+R-07 note). The collector is the one re-based at `1e5e1d4`.
 
-**Instrument.** `wd_chunk.py <mode> <slots> <a> <b>` ×4 per arm — slices `0 23`, `23 46`, `46 69`,
-`69 89` — then `wd_collect.py`. `arm9_forking.fork_case` is imported **UNMODIFIED**
+**Instrument.** `wd_chunk.py <mode> <slots> <a> <b>` ×4 per arm — slices `0 36`, `36 72`, `72 108`,
+`108 143` (the corpus is 143 since `20-ii`; `engine/season/requirements.yaml:222-229` records the
+old slices failing the completeness assertion — derive the bounds from `len(wd_acceptance.CASES)`
+if it moves again) — then `wd_collect.py`. `arm9_forking.fork_case` is imported **UNMODIFIED**
 (`wd_acceptance.py:3-7`: *"⚠ THIS FILE BUILDS NO PROBE… a re-implemented probe measuring a different
 thing is the confound that would waste the item"*). Plus `corpus_run`'s R3 line and its
 `planted_control` (`corpus_run.py:431-453`, printed at `:535-537`).
@@ -1448,7 +1458,7 @@ run and all three reported, which `wd_acceptance.py:52` already requires.
 ```
 cd proposals/2026-09-04-degree-sweep
 for m in none actor total; do for s in default narrow 2x3; do \
-  for r in "0 23" "23 46" "46 69" "69 89"; do python wd_chunk.py $m $s $r; done; done; done
+  for r in "0 36" "36 72" "72 108" "108 143"; do python wd_chunk.py $m $s $r; done; done; done
 python wd_collect.py
 cd - && python -m engine.season.harness.corpus_run
 ```

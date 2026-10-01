@@ -647,7 +647,9 @@ count, not only the outcome.
 cells commit's verb split (part 1 `§3.9` edge 10).
 
 ### 10 · U5 / R-07 — `Person.stance` written
-**not earlier** degree (U1, landed) + contract (G4) · **not later** U6 needs it.
+**not earlier** degree (U1, landed) + contract (G4) · **not later** U6 needs it. **CORRECTED
+2026-09-30:** U6 (position `11`) no longer waits on this position —
+`2026-09-28-the-plan-one-order-mc-v18-retired.md` §3.3 row 2.
 
 **INSTRUCTION.** Content owner is the r-execution-plan. `verb_table.yaml`: the degree-keyed `writes:`
 for `tell`/`speak` gain `Person.stance` and `emits:` gains `stance.moved`; `loop/effects.py` gains the
@@ -687,8 +689,9 @@ rows; and a `Failure` band that writes a stance move must fail at load.
 `references/names_index.yaml`.
 
 ### 11 · U6 — the first R-01/R-02 measurement
-**not earlier** U1, U2, U4, U5 in, and Arc 2's hash moves behind it · **not later** the verb set must be
-stable when the number is taken.
+**not earlier** U1, U2, U4 in (**U5 dropped 2026-09-30**: the number is taken over the claim channel
+without the stance channel and says so — the 2026-09-28 plan §3.3 row 2), and Arc 2's hash moves
+behind it · **not later** the verb set must be stable when the number is taken.
 
 **INSTRUCTION.** Run the sweep verbatim from the r-execution-plan; acceptance point is the `2x3` cell.
 **No code changes.** ED-IN-0210 adds a precondition: every opener in the executing set has its closer

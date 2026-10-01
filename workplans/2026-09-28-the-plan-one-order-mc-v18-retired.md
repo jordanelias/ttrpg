@@ -190,8 +190,8 @@ four rows of that table found stale in this pass are corrected here, not there: 
 | 7a | **COMMIT-EFFECT** | IN | **DONE** | `15`, `15c`, `15b` | Phase 2 |
 | 8 | **H-98 (b)** | IN/PC | OPEN | `FIGHT-RENAME` (serial edge, §3.5); 7 ✓ | Phase 3 |
 | 9 | **PC-SURRENDER** | PC | **JORDAN** | §5.1 item 7 | Phase 3 |
-| 10 | **U5 / R-07** | IN | OPEN | 7 ✓ | Phase 3 (head) |
-| 11 | **U6** | IN | OPEN | `10` | Phase 3 |
+| 10 | **U5 / R-07** | IN | OPEN | 7 ✓ | Phase 3 — off the chain (nothing waits on it since 2026-09-30; §3.3 row 1) |
+| 11 | **U6** | IN | OPEN | 7 ✓ · the `wd_collect.py` re-base (`1e5e1d4`) — **not** `10` (decoupled 2026-09-30, §3.3 row 2) | Phase 3 (head) |
 | 11a | **REACH** | IN | **DONE** | S4 ✓ (closed, old `_part2:750`) · 4 ✓ | Phase 2 (head) |
 | 11b | **CALENDAR-EMIT** | IN | **DONE** | `11a` | Phase 2 |
 | 12 | **H-62-rest** | IN | BLOCKED | the cells commit (`12b`/`12c`) | Phase 3 |
@@ -674,14 +674,14 @@ added here is written once, to the G4 contract: build the object locally and ret
 This is the old plan's phase δ, carried, with the decision-layer plan's H-steps folded onto the
 positions they belong to. `21` (U10) has moved to Phase 4, because its gate is `20-ii`.
 
-**The chain:** `10` (+ AX-7 wiring) → `11` → `8` → `9` → **the cells commit** (`12b`/`12c`/`12d` +
+**The chain:** `11` → `8` → `9` → **the cells commit** (`12b`/`12c`/`12d` +
 H6/H8) → H7, H3, H9 → `12` remainder → `14` → `17` → H10 → H11 → **`12e`** → `ED-FI-0009` → `27`
-(parallel).
+(parallel). `10` (+ AX-7 wiring) stands OFF the chain: nothing on it waits for `10` (decoupled 2026-09-30, row 2).
 
 | # | position | what runs | `GATE` | why here |
 |---|---|---|---|---|
-| 1 | **`10`** U5 / R-07 | `stance_delta`; `Person.stance` written; `stance.moved`; `tell` only; a `names_index` entry for `stance`. **+ the AX-7 wiring** — `agreement` / `standing_of` / `belief_contradicts` into the Claim producers (`ED-IN-0244`/`0245` `RR-P`; `loop/witness.py:191,271,361`) | 7 ✓ | After G4, so its effect is written once. The AX-7 wiring's proposed home is here, because this is where the Claim producers are next opened. **Verify RR-P's text first:** `Person.beliefs` is deleted, so `belief_contradicts` may be moot (§9). The field is NOT unwritten — `harness/populated.py` writes `stance` rows at build — so a falsifier must look for a row that moved. Old `_part2` 10 |
-| 2 | **`11`** U6 | the first R-01/R-02 measurement. **Pre-flight:** name the R3 owner and denominator (old position `21`'s instruction on `requirements.yaml`'s mutually inconsistent R3 figures, brought forward to the first measurement). **+ the `test_n3` re-pin** | `10` | Prior 100 % at `2x3`. `test_n3` is `HANDOFF_IN.md`'s reverted build-order item 4 (`budget()` should count `t.granted_acts`): the re-pin is declared per `CLAUDE.md` §7 **unless** U6 shows the floor is an R-01/R-02 property (§0 test 5; §5.2). Old `_part2` 11 |
+| 1 | **`10`** U5 / R-07 | `stance_delta`; `Person.stance` written; `stance.moved`; `tell` only; a `names_index` entry for `stance`. **+ the AX-7 wiring** — `agreement` / `standing_of` / `belief_contradicts` into the Claim producers (`ED-IN-0244`/`0245` `RR-P`; `loop/witness.py:191,271,361`) | 7 ✓ | **Off the chain since 2026-09-30** — row 2 no longer waits on it: attempted and reverted 2026-09-29 on `H-79` (`registers/handoffs/HANDOFF_IN.md:17`), and inert at the shipped `first`, where every candidate in one deliberation shares one subject. After G4, so its effect is written once. The AX-7 wiring's proposed home is here, because this is where the Claim producers are next opened. **Verify RR-P's text first:** `Person.beliefs` is deleted, so `belief_contradicts` may be moot (§9). The field is NOT unwritten — `harness/populated.py` writes `stance` rows at build — so a falsifier must look for a row that moved. Old `_part2` 10 |
+| 2 | **`11`** U6 | the first R-01/R-02 measurement. **Pre-flight:** name the R3 owner and denominator (old position `21`'s instruction on `requirements.yaml`'s mutually inconsistent R3 figures, brought forward to the first measurement). **+ the `test_n3` re-pin** | 7 ✓ · the `wd_collect.py` re-base (`1e5e1d4`) | Prior 100 % at `2x3`. `test_n3` is `HANDOFF_IN.md`'s reverted build-order item 4 (`budget()` should count `t.granted_acts`): the re-pin is declared per `CLAUDE.md` §7 **unless** U6 shows the floor is an R-01/R-02 property (§0 test 5; §5.2). **Taken without `10`** (2026-09-30): the number is R-01/R-02 over the claim channel (`H-102`), and the output must say so; `21` (U10) re-takes it if `10` ever lands. Old `_part2` 11 |
 | 3 | **`8`** H-98 (b) | the wound-count band edge at `seam/ladder.py:133-135` → data. (a) has no subject today | `FIGHT-RENAME` | After the rename, so it edits the `fight` row once. Never interleaved with the cells commit (`§3.9` edge 10). Old `_part2` 8 |
 | 4 | **`9`** PC-SURRENDER | promote §11.4 Yield/Disengage into `combat_engine_v1/` — **or strike it** | **JORDAN** (§5.1 item 7) | If struck, position `9` leaves the order and nothing else moves. Old `_part2` 9 |
 | 5 | **the cells commit** = `12b` / `12c` / `12d` + H6 + H8 | Jordan's cells land; the `(Person, conviction)` carrier + the confliction Query (with a reader); the substrate rename (`descriptor_registry.yaml`'s `conviction_roster`); **the verb split — adds `kill`, `wound`, `challenge` and `accept` beside `fight`**; `role_template_pursuits` validation; the `npe.py` / `conviction.py` audit | **JORDAN** — C1 + C2 (§5.1 items 1, 2) | ONE R6-atomic landing: `_load_projection` / `_load_alignment` raise at module scope, so every table must exist before first import. **If Step B's `29d`/`29e` land first, the `npe.py`/`conviction.py` audit item drops** (both modules are gone). See contradiction 2, below. Old `_part2` 12b–12d |
