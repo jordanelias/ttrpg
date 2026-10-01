@@ -5453,9 +5453,13 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     assert extra, (
         f"NONE of {len(minted)} minted acts carries an operand beyond `subject` — `H-94` has "
         "re-opened and `transfer` is back to being refused for want of a `kind` it cannot carry")
+    # `said` (T1, ED-IN-0282) is the told triple a telling CARRIES, chosen at CHOOSE; it is not a
+    # `requires` operand -- `binding_of` drops it (`test_t1_said_is_not_a_binding_operand`) -- so
+    # naming it here does not coin an operand, which is what this closure refuses.
     carried = {k for a in minted for k in (a.payload or {})}
-    assert carried <= set(REQUIRES_OPERANDS) | {"subject"}, (
-        f"a minted act carries {sorted(carried - set(REQUIRES_OPERANDS) - {'subject'})}, which "
+    assert carried <= set(REQUIRES_OPERANDS) | {"subject", "said"}, (
+        f"a minted act carries "
+        f"{sorted(carried - set(REQUIRES_OPERANDS) - {'subject', 'said'})}, which "
         "is outside the closed operand vocabulary — coining an operand is filling `H-94` by "
         "keyword argument, which is what the roster exists to refuse")
     # AND `changes` IS STILL EMPTY, which is the OTHER half and is `H-63`, not this item: Part E's
