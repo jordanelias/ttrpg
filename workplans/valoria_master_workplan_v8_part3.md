@@ -12,8 +12,8 @@
 
 | batch | items, in serial order (`{…}` = a parallel lane in its own worktree) | R-rows moved | golden / hash moves (declare each) | close |
 |---|---|---|---|---|
-| **0** | `B0-CI` landed for `tests/valoria` (PR #450); the remainder is `B0-CI-b` | — (CI green on `main`) | `B0-CI-b`: declared at the step if `build_realm`'s hash moves | `/code-review` only; no terminal critique (a seat/commit data fix whose own test is the falsifier) |
-| **1** | **LANDED (PR #450); records in `_part6` §H.** Its tail, `29d-ii` and `20-v`, is in the state index | — | — | — |
+| **0** | **LANDED** — `B0-CI` for `tests/valoria` (PR #450), `B0-CI-b` (PR #451); what remains is `unit-tests` reading green on `main` once #451 merges | — (CI green on `main`) | `B0-CI-b`: moved, declared (`_part6` §H.1) | `/code-review` only; no terminal critique (a seat/commit data fix whose own test is the falsifier) |
+| **1** | **LANDED (PR #450); records in `_part6` §H.** Its tail, `29d-ii` and `20-v`, landed in PR #451 (`_part6` §H.1) | — | — | — |
 | **2** | **open — the telling workplan's Batch 2 closed and merged (PR #449, `fd321c81`; main §0.6)**. IN: `11-fix` → `11` (baseline) → `8` → `ED-FI-0009` → `14` (+ `R05-THREAD`) → `17` → `13`-rest → `13d-iii` → `11` (re-take) → `21`-rest; `{WR: 27}`; `{MB/PC: LADDER-MBPC}` (`_part5` §J, "not on the queue") | R-01, R-02 (measured), R-04, R-05, R-06 (reason 1), R-07, R-09 | `8`: none (assert equal); `ED-FI-0009`, `14`, `17`, `13`-rest: corpus/realm pins move (declared per step); `13d-iii`: `build_realm` census + hash (declared) | full `methodology-close`; terminal critique **proportionate** — `14` is a judgment node and `11` is a number nobody else reproduces |
 | **3** | SC: `22` steps 11–16 → `22a` → `23` → `22b`; IN: `29f` → `29e` → `29a`-ms → `2-ii`; `{SE: 24h P5}`; `24h` P6 after `22`'s `verb_table.yaml` edits | R-05 (`speak`, `determine`), R-09 (a fourth graded chain), M2 (THE BAR) | `22`: corpus + realm hash move (declared); `2-ii`: none (byte-identity control) | full `methodology-close`; terminal critique **proportionate** — `22` is the largest new mechanism in the plan |
 | **4** | one sub-batch per Jordan ruling, as each lands: cells commit (J-1) → H7 → H3 → H9 → `12` → H10 (C3) → H11 (C4) → `12e`; `19b` (J-2); J-3's verbs; `9` (J-7); `24g` (J-6); `24h` P7 (J-10); `26` (J-9) | R-05, R-06, R-08; R-04 (J-3) | cells commit: headless + corpus hash move, `resolvable_verbs()` count moves (declared) | cells commit: full pipeline, terminal critique **proportionate**; `24g`, `26`, `24h` P7: `/code-review` + `/simplify` only — one value or one record each |
@@ -138,28 +138,11 @@ here (a departure, recorded in the receipt).
 
 ---
 
-## B0. BATCH 0 — main's CI is red (what remains)
+## B0. BATCH 0 — LANDED (PR #450, PR #451)
 
-`B0-CI` landed for `tests/valoria` in PR #450 (record: `_part6` §H.1). CI's `unit-tests` job still cannot
-read green: the step after it fails one test that predates this plan. A red `main` hides every later
-regression, so it is the first fix left (`CLAUDE.md` §0: *"If something broken blocks the milestone, fix
-it minimally, without adding a guard."*).
-
-**`B0-CI-b` · IN · gate — · sonnet · `[fix]`.**
-`engine/season/tests/test_season_shape.py::test_the_populated_world_has_a_governance_ladder_and_scarce_seats`
-reads `build_realm(seed=0)` and finds 22 faction leaders for 24 occupied offices, because two `Crown`
-offices — `off_npc_034` and `off_npc_070` — are held by NPCs committed to other factions: `p_npc_034` to
-`fac_church_of_solmund`, `p_npc_070` to `fac_löwenritter`. It was red at `5c5d8ec6`; `main`'s CI never
-showed it, because the step before it (`pytest tests/valoria`) failed first.
-
-**It is content, not code.** The fix is a data edit to seat or commit data under `engine/season/` — the two
-offices' holders or the two holders' commitments; which is taken at the build, with seating's owners in
-view (`13d-iii`, `17` and `13`-rest own seating, so the edit pre-empts none of their choices). **The test
-is not relaxed**, and no guard is added. If the fix touches `offices.yaml` or `cases/exercises/*.yaml`, it
-joins those rows of the file census (O.3). **FALSIFIER:** the named test passes unrelaxed and
-`pytest engine/season/tests` reads fully green; `gh run list --branch main` then shows `unit-tests` green on
-the next push. **What runs:** that test file (§0.4 rule 2). **Hash:** declared at the step if
-`build_realm`'s hash moves. **R:** none.
+`B0-CI` landed for `tests/valoria` in PR #450 and `B0-CI-b` in PR #451; records are `_part6` §H.1. What
+remains is observational: `unit-tests` should read green on `main` once #451 merges (`gh run list --branch main`).
+A red `main` hides every later regression, so read it before the next batch merges.
 
 ---
 
@@ -167,7 +150,7 @@ the next push. **What runs:** that test file (§0.4 rule 2). **Hash:** declared 
 
 Records are `_part6` §H.1, one line per position, each with its evidence; the batch's dispositions
 (which season-native code replaced which deleted file) are `_part6` §D, rows marked DONE. Two follow-ups
-Batch 1 found are in the state index: `29d-ii` and `20-v`.
+Batch 1 found, `29d-ii` and `20-v`, landed in PR #451.
 
 **The control Batch 1 used is the pattern for any later deletion batch:** record `build_realm(0)`'s
 one-season `World.content_hash()` before the first deletion and reproduce it exactly after every deletion

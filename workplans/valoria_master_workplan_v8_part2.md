@@ -159,7 +159,7 @@ against this roster (the file says so); this is the strategic half of "decisions
 | character creation / development / chronicling | **no** | `Person` carries the fields; nothing creates or develops a person | `13`-rest + `17` (a cast per case); `24g` P3 individuation | **no spec in code for creation or development** → J-11 |
 | grand strategy politics | partial | `faction_q` reads; seat acts `via` offices at realm/duchy rungs | `13d-iii`; J-3 (`28-iii`, `29b` landed) | the `office` operand (J-3) |
 | social contests / debates | partial | `tell` graded through σ-leverage; proceedings (`speak`, `determine`) not yet graded | `22` → `22a` → `23` → `22b`; `2-ii` | none beyond `22`'s steps |
-| mass battles / strategy warfare | seam built | `march` → `seam/wrappers/mass_battle.py`; realm: 11 declared, 11 refused at ENCOUNTER, 0 fought | `20-iv` landed (PR #450); `20-v`; H-175 measurement (pre-flight P-6) | why ENCOUNTER refuses is read (P-5): H-149's target-kind check refuses all 11 |
+| mass battles / strategy warfare | seam built | `march` → `seam/wrappers/mass_battle.py`; realm: 11 declared, 11 refused at ENCOUNTER, 0 fought | `20-iv` landed (PR #450); `20-v` landed (PR #451); H-175 measurement (pre-flight P-6) | why ENCOUNTER refuses is read (P-5): H-149's target-kind check refuses all 11 |
 | personal combat / grid-based map combat with units | duel only | `fight` → `combat_seam` | `8`, `9` (J-7) | **grid-based unit combat does not exist anywhere in the tree** (`requirements.yaml` says so) → J-11 |
 | settlement management / city building / domain actions | partial | `found`/`build`/`work`/`restore` (24e), cohorts (24f), `migrate` (19c) — realm: only `restore` executes (19) | `24h`, J-4 (H-156), H-165 limit 2 | a person-side works channel (H-165 limit 2) — `_part4` §`14` ride-along decision |
 | investigations / detective / interactive fiction | partial | six inquiry rows; degrees Failure/none only | `ED-FI-0009` | none (ruled: the loop is the mechanism) |
@@ -171,7 +171,7 @@ against this roster (the file says so); this is the strategic half of "decisions
 | `13d-iii` | every seat gets a rung anchor → `levy`/`issue`/`open_case` pass `authority`; `determine`'s bench resolves | 2 |
 | `28-iii` (+ `29b`) — landed (PR #450) | `mc_v18` and its faction scale are gone; "not joined" stopped being true by deletion | 1 |
 | `20-iv` — landed (PR #450) | a garrisoned defender changes a field's outcome (a constructed test); the realm still fights no field — ENCOUNTER's refusal is H-149's target-kind check (P-5), not a garrison/defender gap | 1 |
-| `20-v` | H-150's walls bonus becomes a swept Fixtures value (`field_walls_dr`), so its `assumption` grade carries a sweep | 1-tail |
+| `20-v` — landed (PR #451) | H-150's walls bonus is a swept Fixtures value (`field_walls_dr`, sweep 3 / 0 / 1), so its `assumption` grade carries a sweep; no `arms.py` arm sweeps it, and one run through the realm would be a fake control (H-149) | 1-tail |
 | `22` | `determine` reaches a decision in the realm (THE BAR) | 3 |
 | J-3 | `confer`/`establish`/`revoke` become formable from computed play, or are withheld | 4 |
 
