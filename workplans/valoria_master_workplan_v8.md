@@ -302,7 +302,7 @@ found (`B0-CI-b`, `29d-ii`, `20-v`) landed in PR #451.
 | `27` | WR-SCOPE remainder | WR | PARTIAL | — | — | 2 | PR #442 (`c6f4252`): `systems/threadwork/sim/coherence.py` reshaped to the elastic/plastic model (`ED-WR-0010`) + `operations.py`'s P-25 scale term, covered by `tests/valoria/test_coherence_elastic_plastic.py` (25 passed, re-run by the orchestrator 2026-10-01) [TEST]; remainder: `rendering.py` stubs, `ED-WR-0003`, mending cost, the R-14 term |
 | `29a`-ms | `ms_track.py` | IN | BLOCKED | `27` | — | 3 | `threadwork/sim/co_movement.py` imports it lazily |
 | `29e` / `29f` | characters / fieldwork `knots.py` | IN | BLOCKED | `14`, `27` | — | 3 | `threadwork/sim/opposing.py` imports `sustain_knot` |
-| `ED-FI-0009` | investigation degree producer | FI | **JORDAN** | J-22 | R-05, R-09 | 2 | [STOP CONDITION HIT 2026-10-01, nothing built: see its last ledger row] the six inquiries resolve Failure/none only today [RAN corpus degree histogram]; a degree needs a `contests:`-equivalent route that widens ratified invariant 12 |
+| `ED-FI-0009` | investigation degree producer | FI | **JORDAN** | J-22 | R-05, R-09 | 2 | [STOP CONDITION HIT 2026-10-01, nothing built: see its last ledger row] the six inquiries resolve Failure/none only today [RAN corpus degree histogram]; step 3 already closed "graded by degree" (2026-09-06); open: how a degree routes without `contests:` (a loader check `ED-FI-0009` added, not ratified Layer 1 text) and `finding.none`'s deposit (`H-111`) — J-22 |
 | cells commit | H6 + H8 with `12b`/`12c`/`12d` | IN | JORDAN | J-1 | R-05, R-06, R-08 | 4 | then H7 → H3 → H9 → `12` → H10 → H11 → `12e` |
 
 **Hole-register rows that gate a position but that no position owned until now** (each is placed at a

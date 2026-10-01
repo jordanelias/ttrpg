@@ -14450,7 +14450,7 @@ def test_the_generic_ladder_is_seven_deep_and_splits_once():
     whether it crosses to a sibling chain or stops. Uniform binary fan-out (127 seats) answers a
     different question — how propagation DEGRADES with width — and against `R-01`/`R-02`'s
     measured ~4% later-decision divergence it would mostly add places for nothing to happen.
-    [STALE: the ~4% figure was retracted at plan position `11` (2026-10-01): the 143-case corpus reads 56.97% later-decision divergence at `2x3` (`R-02`), so the premise below no longer holds as written]
+    [STALE: the premise above, `R-01`/`R-02`'s ~4% later-decision divergence, was retracted at plan position `11` (2026-10-01). The ~4% was the `2x1` (`narrow`) cell on 89 worlds (`engine/season/data/fixtures.py:286-306`: 62 of 1,467 forks, the pre-flip `total` arm); on the 143-case corpus the shipped `actor` arm reads 30.59% diverged at `2x1` (`proposals/2026-09-04-degree-sweep/runs/WD_LOG.txt:40`, 3578/5155 reconverged) and 56.97% at `2x3`, `R-02`'s acceptance point (1247/2189). It no longer holds as written]
 
     ⚠ THIS TEST ASSERTS SHAPE ONLY. It makes no claim that anything propagates; that is what the
     spine exists to MEASURE, and the measurement is a later unit. Saying so here stops a green

@@ -11,8 +11,10 @@ overview Mending Stability track (position 27's own constraint: that module surv
   - As written, it moved the world-level Rendering Stability track (its declared dependency was
     `sim/peninsular/rs_track`, later `systems/overview/sim/rs_track.py`) — an overview clock plan
     position `29a` deleted (PR #450). The season has no analogue BY ARCHITECTURE:
-    `engine/season/loop/census.py` is demand-driven and *"NO CLOCK GENERATES ANYTHING"*, and
-    `ED-WR-0011`'s ruled option A rules out season-tick generation.
+    `engine/season/loop/census.py:37` says *"NO CLOCK GENERATES ANYTHING"*, and
+    `engine/season/write_matrix.yaml:183` quotes the architecture's *"the three licensed clocks are
+    exhaustive -- matter, bodies, and the confidence of a memory"*; no rendering or mending clock is
+    among them.
   - Read as canon's reality-strain (`canon/philosophy/07_drift.md` §7.5 — the load a failed
     configuration can no longer bear lands on "its vicinity"), it would need a PLACE-side strain
     carrier. `engine/season/write_matrix.yaml` has none: its place-side rows (`Rung` stores, yield,
@@ -28,13 +30,11 @@ overview Mending Stability track (position 27's own constraint: that module surv
     — and its `unproduced:` cell (H-47 / H-62) says no verb writes it. Wiring strain there would
     invert the function's meaning and add a writer the verb table does not license.
 
-`check_calamity_threshold(world) -> CalamityState` — STRUCK: its subject is already owned.
+`check_calamity_threshold(world) -> CalamityState` — STRUCK: no carrier.
   - As written, it read the Rendering/Mending Stability bands down to the Rupture — the same deleted
-    world tracks.
-  - The per-being threshold canon does keep (§7.1 point of no return, §7.4's terminal band, P-15) is
-    reported by `systems/threadwork/sim/coherence.py`'s `check_coherence_failure_transition`, off
-    `CoherenceState.crossed`. A second surface answering that question would be a second owner of one
-    rule (CLAUDE.md §8), so this one is not built as an alias.
+    world tracks, and the same absence of a season analogue (`engine/season/loop/census.py:37`; the
+    write matrix, above). The per-being crossing in `systems/threadwork/sim/coherence.py` is a
+    different quantity, not this stub's subject.
 
 The file is kept, holding only this record, because `registers/mechanics_index.yaml`'s
 `rendering_stability` entry names it as `sim_module`.

@@ -442,8 +442,8 @@ mechanics:
     sim_module: systems/threadwork/sim/opposing.py
     test_status: not_implemented
     dependencies:
-      mechanics: [knots]
-    notes: "PP-632 - Knot Strain interaction with opposing operations."
+      mechanics: [coherence_track]
+    notes: "PP-632 - Knot Strain interaction with opposing operations, now REPORTED per side (knot_ob_penalty) and written to no Knot store: plan position 27 cut the knots import, so the module depends on operations.py and coherence.py only."
 
   coherence_track:
     scale: thread

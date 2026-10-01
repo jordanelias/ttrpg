@@ -337,7 +337,7 @@ modules:
       godot: python-oracle
       port_rank: 2
       parity: key-log
-      note: 13 operations built, zero live callers; rendering is a stub.
+      note: 13 operations built, zero live callers; rendering is STRUCK (no entry point; plan position 27).
 
   - module: fieldwork_knots
     aliases: ["Knots"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)

@@ -174,8 +174,8 @@ def test_the_shipped_edges_reproduce_the_old_literal_on_real_fights():
 # --- 2. THE EDGE AT `wounds > max_wounds` ------------------------------------------------------------
 
 @needs_engine
-def test_an_edge_at_wounds_above_max_wounds_grades_every_standing_fought_subject_untouched():
-    """THE INSTRUCTION'S FALSIFIER (ii). On the scene `test_we_the_band_is_read_off_the_subject_and_
+def test_an_edge_at_max_wounds_grades_the_standing_subject_below_the_cap_untouched():
+    """THE INSTRUCTION'S FALSIFIER (ii), AT THE `max_wounds` ARM. On the scene `test_we_the_band_is_read_off_the_subject_and_
     not_off_the_loser` names (`we0`: `p_low` is felled, `p_mid` stands with wounds), the shipped edge
     reads `p_mid` `Wounded`; at `wounds > max_wounds` it reads `Untouched`. The `Felled` edge is the
     engine's own verdict and is NOT swept, so `p_low` stays `Felled` -- the claim is about every
@@ -183,7 +183,10 @@ def test_an_edge_at_wounds_above_max_wounds_grades_every_standing_fought_subject
 
     The precondition that makes the edge empty on this scene is asserted rather than assumed:
     `WoundTracker.wounds` is capped at `max_wounds + 1`, so `wounds > max_wounds` is NOT 'never' --
-    it holds for a standing subject who reached the cap -- and `p_mid` has not."""
+    it holds for a standing subject who reached the cap -- and `p_mid` has not. THIS TEST IS THEREFORE NOT
+    THE UNIVERSAL CLAIM: the universal one (every STANDING fought subject, over the 24 real ones) is
+    `test_an_unreachable_arm_grades_every_standing_fought_subject_untouched`, and the cap case is
+    `test_a_standing_subject_at_the_wound_cap_still_reads_wounded_at_max_wounds`."""
     raw = _scene("we0")
     fx = DEFAULT_FIXTURES.sweep("combat_wounded_above", "max_wounds")
     standing = 0
@@ -199,6 +202,48 @@ def test_an_edge_at_wounds_above_max_wounds_grades_every_standing_fought_subject
         standing += 1
     assert standing >= 1, "no standing fought subject was graded -- the assertions above were vacuous"
     assert len(raw["wound_state"]) == 2
+
+
+@needs_engine
+def test_a_standing_subject_at_the_wound_cap_still_reads_wounded_at_max_wounds():
+    """`WoundTracker.wounds` is capped at `max_wounds + 1`, and felling needs `health_full` worth of
+    damage, so a STANDING subject can hold `wounds > max_wounds`. At the `max_wounds` arm that subject
+    still reads `Wounded` -- the arm is not an empty band, which is why the universal falsifier uses an
+    arm above the cap. A hand-built state, so the claim does not depend on which scenes the corpus
+    happens to fight."""
+    for mw in (1, 2, 3):
+        st = dict(available=True, felled=False, wounds=mw + 1, max_wounds=mw,
+                  health_remaining=100, health_full=200)
+        raw = dict(wound_state={"x": st})
+        assert combat_degree(raw, "x", "max_wounds") == WOUNDED, st
+        assert combat_degree(raw, "x", mw + 1) == UNTOUCHED, st
+        below = dict(st, wounds=mw)
+        assert combat_degree(dict(wound_state={"x": below}), "x", "max_wounds") == UNTOUCHED, below
+
+
+@needs_engine
+def test_an_unreachable_arm_grades_every_standing_fought_subject_untouched():
+    """THE INSTRUCTION'S FALSIFIER (ii), UNIVERSAL. `wounds` never exceeds `MAXWOUNDS_CAP + 1 = 4`, so an
+    edge at `wounds > 4` is unreachable: every STANDING fought subject, over all twelve real scenes (24
+    subjects), grades `Untouched`; a felled subject stays `Felled` (the Felled edge is the engine's
+    verdict and is not swept). `fought` and `standing` are asserted so the loop cannot pass vacuously,
+    and the precondition (no subject above 4 wounds) is asserted, not assumed."""
+    fx = DEFAULT_FIXTURES.sweep("combat_wounded_above", 4)
+    fought = standing = felled = 0
+    for n in range(12):
+        raw = _scene(f"we{n}")
+        for subject, st in raw["wound_state"].items():
+            fought += 1
+            assert st["wounds"] <= 4, f"the precondition: wounds never exceeds the cap + 1: {st}"
+            if st["felled"]:
+                assert degree_of(raw, subject, fx) == FELLED, st
+                felled += 1
+                continue
+            assert degree_of(raw, subject, fx) == UNTOUCHED, st
+            assert combat_degree(raw, subject, 4) == UNTOUCHED, st
+            standing += 1
+    assert fought == 24
+    assert standing >= 1 and felled >= 1, (standing, felled)
 
 
 @needs_engine

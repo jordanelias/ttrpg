@@ -301,10 +301,12 @@ rows:
       ⚠⚠ **PLAN POSITION `11` (U6, run (i): the baseline after `11-fix`), 2026-10-01: THE
       RECONVERGENCE RATE EXISTS AGAIN AND THIS ROW'S SECOND CLAUSE HOLDS. ITS FIRST CLAUSE DOES NOT,
       SO THE STATUS STAYS `not_met`.** Tree: HEAD `c2ee345a` (`11-fix`) plus the 36
-      `runs/wd_chunk_*.json` cells, `runs/wd_acceptance.json` and `runs/WD_LOG.txt` this position
-      commits, produced by the acceptance command of `workplans/valoria_master_workplan_v8_part4.md`
-      §`11` verbatim, every step exit 0. Taken after the telling workplan's T6 closed (`fd321c81`),
-      so the plan's E15 timing holds. **CLAUSE 2 (`wd_collect.py`) HOLDS.** At the acceptance point
+      `proposals/2026-09-04-degree-sweep/runs/wd_chunk_*.json` cells and `wd_acceptance.json`, which
+      `b53f9b81` committed and `53cf0ddb` UNTRACKED as regenerable run output (the 36-cell sweep, about
+      75 minutes on 4 cores, then `wd_collect.py`; local copies stay), and `runs/WD_LOG.txt`, which
+      stays tracked and IS THE COMMITTED RECORD. Produced by the acceptance command of
+      `workplans/valoria_master_workplan_v8_part4.md` §`11` verbatim, every step exit 0. Taken after the
+      telling workplan's T6 closed (`fd321c81`), so the plan's E15 timing holds. **CLAUSE 2 (`wd_collect.py`) HOLDS.** At the acceptance point
       `2x3`, reconvergence reads `none` 1710/2217 = 77.13% · default `actor` 942/2189 = **43.03%** ·
       `total` 832/2163 = 38.47% (unasserted). At `2x1` (`narrow`) it reads 88.39% / 69.41% / 69.51%,
       and at the shipped `5x3` 65.32% / 55.18% / 50.09%. That last cell now has genuine forks (2,886 /
@@ -318,13 +320,19 @@ rows:
       tree before this position. `met` needs n of n on both lanes, and `corpus_run` does not print
       which ARC case fails. **THE INSTRUMENT DEFECTS BEHIND THE 2026-09-30 BREAK WERE REPAIRED BEFORE
       THIS RUN** (`85afbf53`, `c2ee345a`). The cross-arm `probed` equality became a per-arm report,
-      and P-4 found the count stable per arm. The plants and the forensics spy were made to forward
+      and P-4 found the count stable per arm (a scratch run, not committed: one cell run twice and the two
+      JSON files compared without `seconds`). The plants and the forensics spy were made to forward
       `belief_contradicts`'s real signature, and forensics went from 0/24 usable representatives to
       24/24. The comparator plant now perturbs a decision inside the window. ⚠ **AT THE SHIPPED ARM
-      THE RATE DOES NOT SPEAK TO THIS ROW'S CROSS-PERSON SENSE.** The `2x1` forensics find every
-      carrying clause-4 drop SELF-REFERENTIAL (106 at `actor`, 208 at `total`) and no carrier false
-      when recorded. At `actor`, every sampled carrier is the holder's OWN deposit, zero of them
-      cross-person; `total`, which deposits to every witness, shows 127 cross-person carriers. So
+      THE RATE DOES NOT SPEAK TO THIS ROW'S CROSS-PERSON SENSE.** The `2x1` forensics (`WD_LOG.txt` W-D.4) ran on 24
+      representatives only: the first-listed divergence of each of the first 24 distinct signatures (of 645
+      at `actor`, 815 at `total`), all in NPC-088/087/086. Every carrying clause-4 drop they saw is
+      SELF-REFERENTIAL, and no carrier was false when recorded: 106 drop-INSTANCES at `actor` and 208 at
+      `total`, across those 24. They are not 106 and 208 findings: the same deposit recurs (the 106 at
+      `actor` trace to 28 distinct depositing Events). At `actor`, every carrier is the holder's OWN
+      deposit, zero of them cross-person, and that is true BY CONSTRUCTION: `actor` deposits an act's reads
+      to the actor alone (`loop/witness.py:441-452`), so it could not have shown a cross-person carrier.
+      `total`, which deposits to every witness, shows 127 cross-person carriers. So
       the deposit channel at the default arm moves a later decision without moving a claim between
       persons, and that between-persons move is R3's subject and `W-F`'s remedy. Whether a fork
       reaches that holder through the world first is not separated here. The figures this row
@@ -359,8 +367,17 @@ rows:
       predates the corpus growing 89->143) but not replaceable this session. Status stays
       `not_met`, honestly, on the instrument that owed the number rather than on a guess.
       ⚠⚠ **PLAN POSITION `11` (U6, run (i): the baseline after `11-fix`), 2026-10-01: MEASURED,
-      AND THE STATUS MOVES TO `met` ON THE PRINTED NUMBER.** The run, the tree and every printed
-      figure are in R-01's paragraph of the same date and are not re-quoted. The reading this rests
+      AND THE STATUS MOVES TO `met` ON THE PRINTED NUMBER.** THE RUN: the acceptance command of
+      `workplans/valoria_master_workplan_v8_part4.md` §`11` -- the 36 `wd_chunk.py <mode> <cell> <start>
+      <end>` cells over slices 0/36/72/108/143, then `python proposals/2026-09-04-degree-sweep/wd_collect.py`,
+      which is this row's `measure:` -- on HEAD `c2ee345a` (`11-fix`), 2026-10-01, seed 0, four seasons, all
+      143 case slots, every step exit 0. The cells were committed at `b53f9b81` and UNTRACKED at `53cf0ddb`
+      as regenerable run output (about 75 minutes on 4 cores; local copies stay). **R-02'S `met` RESTS ONLY ON
+      THE COMMITTED `proposals/2026-09-04-degree-sweep/runs/WD_LOG.txt` READING**: `actor` 942/2189 = 43.03% at
+      `2x3`, `none >= actor: True` printed, and the 143-case completeness assertion (`wd_collect.py:145,151`)
+      holding for every arm. Nothing in THE ATTACK below is needed for it; each figure there is labelled
+      WD_LOG (committed), CELLS (derived from the regenerable cells, which are not committed) or SCRATCH (a
+      run whose script and output are not committed). R-01 carries the rest of the printed figures. The reading this rests
       on: at `2x3`, the acceptance point, the default arm `actor` reconverges **942/2189 = 43.03%,
       below 96%**. `none >= actor: True` is printed, and the 143-case completeness assertion holds
       for every arm. **THE DECLARED PRIOR FAILED.** `2x3` had read 100.00% with zero divergences on
@@ -372,38 +389,57 @@ rows:
       three strictly-later-tick deliberations, so a decision reached a later one. A reading at or
       above 96% would have meant the flips were absorbed and the loop ran on rails, as the prior
       read. **THE ATTACK.** Each check below could have refuted the number, and none did. (a)
-      `stream_only` cannot sit inside the divergence. It is defined as event stream changed AND
-      reconverged (`wd_acceptance.py:202-203`), and it is 909 of the 942 reconverged at `actor`.
-      Every one of the 1,247 DIVERGED forks changed a later-tick fingerprint. Draws are keyed
-      `(world_seed, tick, pid, purpose)` (`engine/season/state/ids.py::draw_factory`), so a fork
+      `stream_only` cannot sit inside the divergence. It is defined as
+      event stream changed AND reconverged (`wd_acceptance.py:207-208`), and it is 909 of the 942
+      reconverged at `actor` [WD_LOG W-D.2b]. Every one of the 1,247 DIVERGED forks changed a later-tick
+      fingerprint [WD_LOG: decisions changed within the lookahead {0: 942, 1: 958, 2: 136, 3: 153}]. Draws
+      are keyed `(world_seed, tick, pid, purpose)` (`engine/season/state/ids.py::draw_factory`), so a fork
       cannot move another person's draw by consuming a shared stream. (b) The arms differ only in
       `observation_deposit_mode` (`wd_acceptance.fixtures_for`). Paired by case, the deposit channel
-      raises the divergence rate in 139 of 143 cases and lowers it in 2. Over the 94 cases whose
-      probed and genuine counts are identical across arms, `none` diverges 21.80% and `actor`
-      54.92%. (c) Index-shift bound: `fork_case` compares decision `j` with decision `j`
-      (`arm9_forking.py:228-232`), so an added or lost deliberation would misalign the rest of the
-      window. Even counting EVERY divergence whose last window slot changed as that artifact, `actor`
-      is at most 64.60% reconverged (775 robust divergences) and `none` at most 89.45%. (d) The
-      fingerprint is the RANKED verb list, not the take. A deterministic every-8th sample of 150
-      committed `actor` divergences was re-run through the unmodified `A9._run`, and it reproduced
-      `changed_idx` 150/150. Of the 150, 115 changed a later in-budget TAKEN verb set, 20 were
-      misaligned and 15 changed only the out-of-budget ranking, so about three quarters of the
-      divergence is a later act chosen differently. At `none`, a sample of 100 read 70 / 28 / 2. (e)
-      Determinism: P-4 ran one cell twice and it was byte-identical apart from `seconds`. **THE
+      raises the divergence rate in 139 of 143 cases, lowers it in 2 and ties in 2 [CELLS]. Over the 94
+      cases whose probed and genuine counts are identical across arms, `none` diverges 21.80% and `actor`
+      54.92% [CELLS]. (c) Index-shift bound: `fork_case` compares decision `j` with decision `j`
+      (`engine/reference/degree-sweep/arm9_forking.py:228-232`), so an added or lost deliberation would
+      misalign the rest of the window. Even counting EVERY divergence whose last window slot changed as
+      that artifact, `actor` is at most 64.60% reconverged (775 robust divergences) and `none` at most
+      89.45% [CELLS]. (d) The fingerprint is the RANKED verb list, not the take. [SCRATCH, NOT COMMITTED:] A
+      deterministic every-8th sample of 150 `actor` divergences was re-run through the unmodified
+      `A9._run`, and it reproduced `changed_idx` 150/150. Of the 150, 115 changed a later in-budget TAKEN
+      verb set, 20 were misaligned and 15 changed only the out-of-budget ranking, so about three quarters
+      of the divergence is a later act chosen differently. At `none`, a sample of 100 read 70 / 28 / 2.
+      Recipe: take every 8th entry of the `actor` `2x3` `divergences` that `wd_collect.py` writes to
+      `wd_acceptance.json`, re-run each through `engine/reference/degree-sweep/arm9_forking.py::_run`
+      (seed 0, four seasons, `fork_at=at`, `take=take`, `fork_slot=in_budget`, the cell's
+      `wd_acceptance.fixtures_for`) and compare the changed index; the three-way classification was the
+      reader's and is not committed. (e) Determinism [SCRATCH, NOT COMMITTED]: P-4 ran one cell twice and
+      it was byte-identical apart from `seconds`. Recipe: run one `wd_chunk.py` cell twice and diff the two
+      JSON files with `seconds` removed. **THE
       CONTROLS, AT THEIR REAL STANDING.** `none >= default` is the only control this instrument
       yields (plan §`11`). `none` is now a channel-open arm, not a null one: 22.87% of its genuine
       forks diverge through channels this run does not isolate. Those are the rounds loop, U4's
       sampler, Q4's person referent, `11a`'s Q2 widening, and the content-hashed claim-id tiebreak in
       `questions_for`'s sort that the collector's `⚠ THE CARRIER` names. The comparator plant is
-      detected (105/105 at `2x1`, 46/46 at `2x3`). The four widened-clause-4 plants clear the
+      detected (105/105 at `2x1`, 46/46 at `2x3`) [WD_LOG W-D.3, with the unplanted baselines 11 of 105 and
+      12 of 46]. Two further figures sit in `wd_acceptance.py`'s comments and are SCRATCH, NOT COMMITTED: that
+      a plant whose predicate nothing deposits reads the unplanted baseline exactly (105/11 at `2x1`,
+      46/12 at `2x3`), and that the final tick holds 4-6 deliberations (why the first comparator plant, which
+      rewrote the last decision, touched nothing the window reads). Recipe for both: the control sample
+      NPC-088/087/086 at the `none` arm, the plants of `wd_acceptance.py`, counting `fires` and the decisions
+      per tick. The four widened-clause-4 plants clear the
       collector's count rule on 1 of 4 at `2x1` and 0 of 4 at `2x3`, and 2 of 4 at each cell by
       rate. A firing plant shrinks its own genuine denominator, so the count rule is the wrong
       comparison. Either way the plants are NOT clean evidence that the instrument sees a planted
       widening. **WHAT THE NUMBER DOES NOT SHOW.** It does not show that a meaningful consequence
-      carries the change. The `2x1` forensics, which were not run at `2x3`, find every carrying
-      clause-4 drop SELF-REFERENTIAL: operand equals subject, so a candidate of the wrong type is
-      pruned by its holder's own claim, true when recorded. Of the 106 carriers at `actor`, 82 were
-      deposited by a `*.refused` Event and 24 by `finding.none`. That is refusal-as-news, `H-111`,
+      carries the change. The `2x1` forensics (`WD_LOG.txt` W-D.4), which were
+      not run at `2x3`, ran on 24 representatives only: the first-listed divergence of each of the first 24
+      distinct signatures (of 645 at `actor`, 815 at `total`), all in NPC-088/087/086. Every carrying
+      clause-4 drop they saw is SELF-REFERENTIAL: operand equals subject, so a candidate of the wrong type
+      is pruned by its holder's own claim, true when recorded. The 106 carriers at `actor` (208 at `total`)
+      are drop-INSTANCES across those 24, not 106 findings: 82 were deposited by a `*.refused` Event and 24
+      by `finding.none`, from 28 distinct depositing Events, so the same deposit recurs. 'Zero cross-person
+      at `actor`' is true BY CONSTRUCTION: `actor` deposits an act's reads to the actor alone
+      (`loop/witness.py:441-452`), so it could not have shown one; all 127 cross-person carriers sit at
+      `total`. That is refusal-as-news, `H-111`,
       which nobody has ruled. It does not show that subject-level changes count at all: the
       fingerprint is verbs only (W-D.5), and that is unmeasured on the 143 basis. It does not show
       round-to-round change inside a season, because the window scores strictly later ticks only.

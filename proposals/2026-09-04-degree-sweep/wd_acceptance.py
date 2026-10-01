@@ -437,7 +437,9 @@ def positive_control(cases, slots: str = "narrow", mode: str = "none") -> dict:
     plant fires (`fires` = calls where the plant's own clause turned False to True: 275 to 18,176
     per cell-plant), and a plant whose predicate nothing deposits has `fires == 0` and reads the
     unplanted baseline's `genuine`/`diverged` EXACTLY (105/11 at 2 x 1, 46/12 at 2 x 3) -- the
-    control can fail.
+    control can fail. [The baselines themselves are committed in `runs/WD_LOG.txt`, W-D.3
+    `[BASELINE]`; that a null plant reads them exactly, and the `fires` range, are a SCRATCH RUN,
+    not committed.]
 
     ⚠ WHAT THE REPAIR DOES NOT BUY: a plant that fires also changes the DENOMINATOR (a person who
     declines more verbs has fewer alternatives outside the budget, so `genuine` falls: 105 -> 48 at
@@ -493,10 +495,11 @@ def comparator_control(cases, slots: str = "narrow", mode: str = "none") -> dict
     final tick holds `LOOKAHEAD` or fewer deliberations. MEASURED at the control sample
     (NPC-088/087/086), both qualifying cells: the final tick holds 4-6 deliberations, and of the
     forks with a full window, 0 contain the last decision -- 105 streams perturbed, DIVERGED 11 =
-    the unplanted baseline's 11, the plant touched nothing the scorer reads. NOT the
+    the unplanted baseline's 11, the plant touched nothing the scorer reads. [SCRATCH RUN, NOT
+    COMMITTED: the 4-6 and the 0-of-forks count; the unplanted 11 of 105 is `runs/WD_LOG.txt`'s.] NOT the
     `belief_contradicts` signature defect (this control never calls it). The plant now rewrites
     the FIRST strictly-later-tick decision after `fork_at`, which is `live_window[0]` by
-    construction: DELIBERATE is a parallel map over a frozen world (`arm9_forking.py:105-109`), so
+    construction: DELIBERATE is a parallel map over a frozen world (`engine/reference/degree-sweep/arm9_forking.py:94-99`), so
     the fork leaves its own tick's deliberation count unchanged and the first later-tick index in
     the fork's stream is the first later-tick index in the baseline's. Expected reading on a
     working comparator: every genuine fork DIVERGED (`detected_all_genuine`)."""

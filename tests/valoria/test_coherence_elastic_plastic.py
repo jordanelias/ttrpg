@@ -272,8 +272,9 @@ def test_binding_ops_keep_their_flat_cost():
 
 
 # ─── Position 27 remainder: Mending's restorative feedback (C-1; 06_operations.md §6.8) ──────────
-# The plan's falsifier: `attempt_mending` calls `recover()` and its term is > 0. ED-871's zero STRESS
-# is kept beside it (`coherence_delta == 0`), so the two rulings are asserted together.
+# Read as: `attempt_mending` calls `recover()` and the restorative term > 0 (`coherence_delta` stays 0,
+# ED-871) — the plan's wording is "cost > 0", and a literal cost contradicts ED-871's zero STRESS, so
+# the term is what is asserted. The two rulings are asserted together.
 
 DEGREES = ("Overwhelming", "Success", "Partial", "Failure")
 

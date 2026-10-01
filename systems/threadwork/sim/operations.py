@@ -31,7 +31,8 @@ Entry points:
   - attempt_past_pulling(actor, target_moment, world) -> OperationResult
   - attempt_locking(actor, target, world) -> OperationResult
   - attempt_dissolution(actor, target, world) -> OperationResult
-  - attempt_mending(actor, target, world, *, environment_in_equilibrium) -> OperationResult
+  - attempt_mending(actor, target, world, *, environment_in_equilibrium=False) -> OperationResult
+    (keyword-only; defaults to False, so a caller that states no environment gets no restorative term)
 """
 from __future__ import annotations
 
