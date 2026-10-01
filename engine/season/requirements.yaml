@@ -64,7 +64,7 @@ ed: "ED-IN-0204"
 
 scales:
   - scale:    "character creation / development / chronicling"
-    subsystem: ["systems/characters (5 py, 13 md)", "systems/npcs (0 py, 19 md)"]
+    subsystem: ["systems/characters (sim/conviction.py only)", "systems/npcs (no tracked file)"]
     retention: retire-set
     in_loop:   false
     note: >-
@@ -73,26 +73,38 @@ scales:
       EMPTY on every person in the corpus (only `probes.py::_zero_capability` touches it, to zero
       it), which is why R-09's roll will vary by seed and not yet by person. W27 is the cast.
   - scale:    "grand strategy politics"
-    subsystem: ["systems/factions (18 py)", "systems/settlements (8 py)", "systems/world (6 py)"]
+    subsystem: ["systems/factions (deleted)", "systems/settlements (geography YAML, svg, package marker)", "systems/world (adjacency_map.jsx only)"]
     retention: retire-set
     in_loop:   false
     note: >-
-      This is R-04's headline: 44 of 143 cases are UNREPRESENTABLE at faction scale and 10 at world
-      scale. `engine/mc_v18.py` runs this scale today and the season loop does not; the two are not
-      joined. Layer 1 PART D rows 1/8/14 forbid porting `game_state.Faction` as-is.
+      R-04's opening headline, the pre-`20-ii` reading: 44 of 143 cases UNREPRESENTABLE at faction
+      scale and 10 at world scale. `20-ii` closed that census on 2026-09-30 (R-04's `measured:`
+      carries the run). ⚠ REWRITTEN 2026-10-01: this note used to say "`engine/mc_v18.py` runs this
+      scale today and the season loop does not; the two are not joined." That cannot be said any
+      more. THIS SCALE HAS NO CODE OF ITS OWN: the driver (`engine/mc_v18.py`, plan position
+      `28-iii`), `systems/factions/` and `game_state.Faction`, the stat-vector dataclass (both
+      `29b`), are deleted (their `FORK:5c5d8ec6` rows). A faction is a resolved VIEW
+      (`engine/season/queries/faction_q.py::Faction`: built at a barrier, never a field of `World`,
+      never `Act.actor`), and a faction's act is a person's act `via` a seat (`Act.via`,
+      `engine/season/state/carriers.py`). Intent, for vocabulary only: Layer 1 PART D rows 1/8/14,
+      which rule out a faction that acts, a stored aggregate and a banner holding territory.
   - scale:    "social contests / debates"
-    subsystem: ["systems/social_contest (21 py)"]
+    subsystem: ["systems/social_contest (the kernel, under sim/contest/)"]
     retention: RETAINED
     in_loop:   "seam unbuilt"
     note: >-
-      The kernel exists and already rolls through the substrate (`resolver.py` calls
-      `degree_from_net`; `parliamentary_vote.py` calls `roll_pool`). The loop does NOT reach it.
+      The kernel exists and already rolls through the substrate (`resolver.py` imports
+      `degree_from_net` from `engine/autoload/dice_engine.py` and wraps `roll_net` from
+      `engine/autoload/sigma_leverage.py`). The loop does NOT reach it. ⚠ REWRITTEN 2026-10-01: this
+      sentence used to add "`parliamentary_vote.py` calls `roll_pool`"; that module and
+      `parliamentary_stay.py` were deleted at `29b` (their `FORK:5c5d8ec6` rows), and nothing under
+      `systems/social_contest` calls `roll_pool` now.
       3 of 39 verbs declare `contests:` — `kill / wound` (the body, the combat seam), `march` (a
       field, the mass-battle seam, `ecacb57`) and `tell` (a standing, resolved on the season side
       by `seam/wrappers/sigma.py`, not by this kernel). The kernel retires at plan position `2-ii`
-      (`workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md`).
+      (`workplans/valoria_master_workplan_v8.md`).
   - scale:    "mass battles / strategy warfare"
-    subsystem: ["systems/mass_battle (33 py)"]
+    subsystem: ["systems/mass_battle"]
     retention: RETAINED
     in_loop:   "seam built; reached via a constructed `Question` (`test_march.py`) AND, measured,
       via natural computed play in `build_realm(0)`/`populated.run` (`harness/aperture.py`); not
@@ -120,7 +132,7 @@ scales:
       (`hole_register.yaml` H-175's `cite:`). `H-151`'s OWN `cite:` field, not H-175's, is where
       the earlier retraction of a stale "missing `operands_for` arm" citation actually lives.
   - scale:    "personal combat / grid-based map combat with units"
-    subsystem: ["systems/combat/combat_engine_v1 (29 py)"]
+    subsystem: ["systems/combat/combat_engine_v1"]
     retention: "RETAINED, NOT DONE (Jordan, 2026-09-05: \"combat engine isn't done\")"
     in_loop:   "duel only, via combat_seam.py"
     note: >-
@@ -133,7 +145,7 @@ scales:
       tactical grid). This is unbuilt design, not an unwired seam, and it has no work item in the
       execution plan.
   - scale:    "settlement management / city building / domain actions"
-    subsystem: ["systems/settlements (8 py, 12+ md)", "systems/overview (8 py)"]
+    subsystem: ["systems/settlements (geography YAML, svg, package marker)", "systems/overview (sim/ms_track.py only)"]
     retention: retire-set
     in_loop:   false
     note: >-
@@ -146,7 +158,7 @@ scales:
       no domain action.
 
   - scale:    "investigations / detective / interactive fiction"
-    subsystem: ["systems/fieldwork (5 py, 19 md)"]
+    subsystem: ["systems/fieldwork (sim/knots.py only)"]
     retention: retire-set
     in_loop:   false
     note: >-
@@ -155,9 +167,16 @@ scales:
       2026-09-10 AND IS NOW TRUE: one row spelled `"the six investigation acts"` stood for six,
       and ED-FI-0009 split it into `examine` · `interview` · `research` · `surveil` ·
       `thread_read` · `reconstruct`. The second clause is unchanged and is a RULING, not an
-      omission — see `rosters.yaml:505-508`. Two composition roles
+      omission — see `rosters.yaml`'s `THE SEAMS` comment block (*"INVESTIGATION MUST NOT BE MADE A
+      CONTEST TO BECOME GRADEABLE"*; this note cited it by line, `:505-508`, and the lines moved).
+      ⚠ REWRITTEN 2026-10-01: this note used to say two composition roles
       (`scene_resolver.fieldwork`, `scene_resolver.investigation`) target this subsystem, which is
-      why it is in the R04-pending ceiling.
+      why it is in the R04-pending ceiling. Both roles went at plan position `28-0`, with the two
+      stubs they were the only callers of (`systems/fieldwork/sim/{fieldwork,investigation}.py`);
+      the one composition role left is `mass_battle.resolve_field` (`references/module_contracts.yaml`'s
+      `composition_roles:` block). `fieldwork` stays in `R04_PENDING_SUBSYSTEMS`
+      (`tests/valoria/test_engine_does_not_import_systems.py`) with no role to hold it there:
+      `R04_PENDING_ROLES` is empty.
 
 rows:
 
@@ -383,9 +402,19 @@ rows:
     statement: "strategic and management actions must be possible, ie decisions at differing scales"
     status: partial
     measured: >-
+      ⚠ THIS PARAGRAPH IS THE OPENING READING, LAST RE-MEASURED AT `20-iii` (2026-09-30), BEFORE
+      `20-ii` LANDED: its 54-case census is closed by the `20-ii` paragraph below, and the corpus
+      now runs at a fourth rung kind (`duchy`). RE-RUN 2026-10-01 on tree `46de563b`, after the
+      `28-iii`/`29*` deletions: `corpus_run` still prints no `unrepresentable scales:` line, and
+      reads `DISTINCT WORLDS RUN 143 (scales ['duchy', 'person', 'realm', 'settlement'], ...)`.
       54 of 143 cases are UNREPRESENTABLE — 44 at faction scale, 10 at world scale. The loop
       runs at person, settlement and realm only. The strategic layer has no expression in this
-      model; `engine/mc_v18.py` runs the faction scale and the two are not joined.
+      model. ⚠ REWRITTEN 2026-10-01: this sentence used to end "`engine/mc_v18.py` runs the faction
+      scale and the two are not joined", which can no longer be said. The driver was deleted at plan
+      position `28-iii`, and `systems/factions/` with `game_state.Faction` at `29b` (their
+      `FORK:5c5d8ec6` rows). The faction scale has no code of its own: a faction is a resolved VIEW
+      (`engine/season/queries/faction_q.py::Faction`), never `Act.actor`, and a faction's act is a
+      person's act `via` a seat.
       ⚠ PLAN POSITION `20-iii` (2026-09-30) GIVES A PERSON A READ OF FACTION SCALE AND DOES NOT MOVE
       THIS ROW: `survey` commissions a `faction_sheet` Record -- `queries/faction_q.py::resolve` frozen
       at the moment of writing -- which its holder reads free (proposal 14's *"scale bridge"*). A
@@ -418,8 +447,14 @@ rows:
       remit act gated the same way, already executes in the corpus (`ever`,
       `test_season_shape.py`); the census cleared before `levy`'s own purview gap did.
       (2) The deeper gap this row opened with is
-      UNCHANGED: `engine/mc_v18.py` still runs the faction scale and the two are still not joined;
-      no `Faction`-as-actor or Domain-Action mechanism exists in `engine/season/`. A duchy/realm
+      UNCHANGED IN KIND AND RESTATED 2026-10-01, BECAUSE ITS FIRST HALF CAN NO LONGER BE MADE: this
+      reason used to read "`engine/mc_v18.py` still runs the faction scale and the two are still not
+      joined". That driver was deleted at `28-iii` (with `systems/factions/` and `game_state.Faction`
+      at `29b`; `FORK:5c5d8ec6`), so there is no second system left to be joined to: the faction
+      scale has no code of its own, a faction is a resolved VIEW (`queries/faction_q.py::Faction`,
+      never `Act.actor`), and its acts are persons' acts `via` seats. What this reason still says is
+      the other half, unchanged: no Domain-Action mechanism exists in `engine/season/`, and no
+      `Faction`-as-actor either (by design, not by omission: a faction never acts). A duchy/realm
       case now runs through the SAME ordinary person-scale verb table as before, at a higher rung
       — which clears the census, and is not yet the strategic layer the statement names.
     measure: "python -m engine.season.harness.corpus_run  # 'unrepresentable scales:' line"
