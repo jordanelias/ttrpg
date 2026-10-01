@@ -185,7 +185,8 @@ def test_field_walls_dr_sweep_zero_is_the_open_field_and_three_and_one_differ():
         magnitude is what moves the result, rather than the sweep being three spellings of one run.
       * `3` EQUALS THE UNSET DEFAULT on every seed: the default is `None`, A.9's number read from
         `terrain.py`, and this is what shows the sentinel resolves to 3 (it would break the day the
-        owner's literal and the register's sweep, `3 = A.9`, disagreed).
+        owner's literal moved off the 3 this test spells; H-150's `sweep: [3, 0, 1]` is a separate
+        record, which this test does not read).
 
     Seeds 0..15, measured: the three arms differ on seeds 0, 2, 4, 10 (a one-off figure, not
     asserted -- the other twelve end identically at this scale, which `>= 1` tolerates and `checked`

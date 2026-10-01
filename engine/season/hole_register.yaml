@@ -3190,7 +3190,7 @@ rows:
       `fortification_of` is 1.0 on every settlement and every realm defender gets dr 1 -> 4 (the WALLS check runs
       before the polygon lookup, so UPHILL, FOREST and NARROW_PASS cannot occur on this path). The knob now
       reaches that constant (`w.fixtures = w.fixtures.sweep('field_walls_dr', n)`, the idiom `harness/arms.py`
-      uses for `field_casualty_model`; no arm there sweeps it yet), but it is one number for every defender --
+      uses for `field_casualty_model`; no arm there sweeps it yet, and a realm-level arm would be a fake control today -- the realm fights no field, H-149, so both arms come out identical by construction, CLAUDE.md §7), but it is one number for every defender --
       nothing varies it per settlement, and condition still gates presence only. This row's R2 violation (an
       `assumption` with no sweep) pre-dated `20-iv` (it was in `register --check`'s list at 5c5d8ec6) and is
       closed by the `sweep:` below; the build is pinned by

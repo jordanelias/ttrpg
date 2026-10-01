@@ -1657,7 +1657,7 @@ def test_w15_the_run_cases_entrypoint_writes_nothing():
     `pytest engine/season/tests -n auto`. It reddens only if somebody runs `engine/season/tests
     tests/valoria engine/tests` in ONE invocation, which is not a thing the repo asks for.* Both
     halves are false, and for the same reason: BOTH SIBLINGS LIVE IN `engine/season/tests`, so the
-    workflow's own line (`.github/workflows/valoria-ci.yml:351`,
+    workflow's own line (`.github/workflows/valoria-ci.yml:347`,
     `python -m pytest engine/season/tests -q -n auto`) puts them in ONE pool. Separate JOBS never
     separated them. MEASURED 2026-09-20: red on CI for PR #423 (run 35485183042), and
     `pytest engine/season/tests -q -n auto -k w15` reproduces it 3/3 on that branch and 2/2 on a
