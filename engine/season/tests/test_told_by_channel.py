@@ -815,6 +815,121 @@ def test_t4_a_telling_to_an_absent_hearer_is_refused_and_a_present_one_hears():
 
 
 # ---------------------------------------------------------------------------------------------
+# T4b (ED-IN-0282): AN OPPORTUNITY INCLUDES ITS COUNTERPARTY. The once-per-season filter keyed
+# `(verb, subject)`, so once topic C was told to B it was dropped for D too, though a person tells
+# several hearers (and so for `petition`, `give`, `issue`). `data/verbs.py::opportunity_key` is the
+# ONE key; `loop/driver.py` writes it after the fold and `_drop_what_was_already_done` reads it.
+# ---------------------------------------------------------------------------------------------
+
+def _t4b_scene_of(act):
+    from ..state.carriers import Scene
+    return Scene(id=f"sc_{act.id}", actor=act.actor, acts=[act])
+
+
+def _t4b_kept(taken, acts):
+    """The acts `_drop_what_was_already_done` keeps, one scene per act, in order."""
+    from ..loop.deliberate import _drop_what_was_already_done
+    scenes = _drop_what_was_already_done([_t4b_scene_of(a) for a in acts], taken)
+    return [a.id for sc in scenes for a in sc.acts]
+
+
+def test_t4b_a_second_hearer_is_a_distinct_opportunity():
+    """THE DRIVER ROUND, END TO END. `p_low` holds a claim on `Hh` and, with `p_mid` and `p_other`
+    both standing with them, tells it to `p_mid` in round 0 (realised: the writer in
+    `SeasonDriver.season` records the key). In a later round the chooser offers a repeat to
+    `p_mid` and a telling to `p_other`: the filter DROPS the repeat and KEEPS the second hearer.
+
+    MUTATION (run 2026-10-01, `T4b`): `opportunity_key` reverted to `(verb, subject)` -- the telling
+    to `p_other` is dropped with the repeat and the `kept` assertion goes RED. Restored, GREEN."""
+    from ..data.fixtures import DEFAULT_FIXTURES
+    w = P.tiny_world(DEFAULT_FIXTURES.sweep("scene_budget", 5))   # five rounds, so a later one exists
+    teller, subject = "p_low", "Hh"
+    w.persons[teller].ledger.append(
+        Claim("c_held", teller, subject, "stores:grain", 8, 0, "firsthand", 37, "own"))
+    said = said_of(w.persons[teller].ledger, subject, w.fixtures)
+    d = SeasonDriver(w)
+    n, state = [0], {"pair": None}
+
+    def tell(to):
+        n[0] += 1
+        return Act(id=f"a_t4b_{n[0]}", actor=teller, verb="tell",
+                   payload={"subject": subject, "to": to, "said": said})
+
+    def tells():
+        return [a.payload["to"] for a in w.acts if a.verb == "tell" and a.actor == teller]
+
+    def choose(p, verbs, sn, ask_budget):
+        if p.id != teller:
+            return []
+        if not d._realised.get(teller):
+            return [tell("p_mid")]          # until one is REALISED (a refused attempt is retried)
+        if state["pair"] is None:           # the telling to `p_mid` is behind us: offer it AGAIN,
+            state["pair"] = len(tells())    # and a telling to `p_other`
+            return [tell("p_mid"), tell("p_other")]
+        return []
+
+    d.season(choose, None, P.SUBSIST, contest_max_depth=w.fixtures.get("contest_max_depth"))
+    realised = d._realised.get(teller) or set()
+    from ..data.verbs import opportunity_key
+    assert opportunity_key("tell", subject, {"subject": subject, "to": "p_mid"}) in realised, (
+        f"no telling to `p_mid` was realised ({realised}); the test has nothing to filter by")
+    assert state["pair"] is not None, "the pair was never offered: no later round reached the filter"
+    after = tells()[state["pair"]:]
+    assert after == ["p_other"], (
+        f"after the telling to `p_mid` was realised the filter let through {after}: expected the "
+        "repeat to `p_mid` dropped and the telling to `p_other` (a distinct opportunity) released")
+
+
+def test_t4b_the_reader_keeps_a_distinct_counterparty_and_drops_the_same_one():
+    """`tell` and `petition` both name `counterparty: to`. With a telling/petition on `Hh` to `p_mid`
+    REALISED, a second to `p_other` is a distinct opportunity and survives; a repeat to `p_mid` is the
+    same one and is dropped. `checked` guards the loop against asserting nothing.
+
+    MUTATION (run 2026-10-01, `T4b`): `opportunity_key` reverted to the 2-tuple -- both rows' second
+    counterparty is dropped and this goes RED. Restored, GREEN."""
+    from ..data.verbs import VERB_TABLE, opportunity_key
+    checked = 0
+    for verb in ("tell", "petition"):
+        assert VERB_TABLE[verb].counterparty == "to", verb
+        def act(label, to, verb=verb):
+            return Act(id=f"a_{verb}_{label}", actor="p_low", verb=verb,
+                       payload={"subject": "Hh", "to": to})
+        done = act("done", "p_mid")
+        taken = {opportunity_key(done.verb, "Hh", done.payload)}
+        got = _t4b_kept(taken, [act("again", "p_mid"), act("other", "p_other")])
+        assert got == [f"a_{verb}_other"], f"{verb}: kept {got}"
+        checked += 1
+    assert checked == 2
+
+
+def test_t4b_a_row_with_no_counterparty_keys_exactly_as_before():
+    """`fight`, `move` and `transfer` name no counterparty column, so their key is `(verb, subject)`
+    whatever else the payload carries (a `to` here is a decoy, not a counterparty); two acts on one
+    subject are ONE opportunity. An act with no subject has none: `None`, never recorded, never
+    dropped. `give` is untyped, so no Candidate carries its `to`; absent from the payload it is the
+    2-tuple too.
+
+    MUTATION (run 2026-10-01, `T4b`): the key made to read `to` for every row -- the decoy arms split
+    and the first assertion goes RED."""
+    from ..data.verbs import VERB_TABLE, opportunity_key
+    checked = 0
+    for verb in ("fight", "move", "transfer"):
+        assert not VERB_TABLE[verb].counterparty, verb
+        a = Act(id=f"a_{verb}_1", actor="p_low", verb=verb, payload={"subject": "Hh", "to": "p_mid"})
+        b = Act(id=f"a_{verb}_2", actor="p_low", verb=verb, payload={"subject": "Hh", "to": "p_other"})
+        key = opportunity_key(verb, "Hh", a.payload)
+        assert key == (verb, "Hh") == opportunity_key(verb, "Hh", b.payload), key
+        assert _t4b_kept({key}, [a, b]) == [], f"{verb}: the same opportunity survived"
+        checked += 1
+    assert checked == 3
+    assert opportunity_key("tell", "", {"to": "p_mid"}) is None
+    assert opportunity_key("give", "rec", {"subject": "rec"}) == ("give", "rec")
+    # a counterparty that IS the subject adds nothing (`determine`, `oblige`): keyed as before
+    assert VERB_TABLE["oblige"].counterparty == "subject"
+    assert opportunity_key("oblige", "p_mid", {"subject": "p_mid"}) == ("oblige", "p_mid")
+
+
+# ---------------------------------------------------------------------------------------------
 # T5 (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282): THE TOLD DEDUP IS BY ORIGIN. A told
 # deposit is skipped only if the hearer holds the triple with an EMPTY chain (firsthand, seen,
 # inferred) or with the SAME `chain[0]`. A held copy from a DIFFERENT origin does not skip: that

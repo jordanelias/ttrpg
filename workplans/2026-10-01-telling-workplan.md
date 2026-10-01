@@ -218,6 +218,17 @@ chain 0 → 3; corpus `test_n3` loop: `attempt_cases` 20 → 20, `told_cases` 9 
 reaching RESOLVE have their `to` present in both instruments. Control: on one world, the 249,555 non-`tell` Candidates
 are identical to `4bd5cee`'s.
 
+**As built (T4b: opportunity key includes the counterparty; Jordan named the defect):** the once-per-season filter keyed
+`(verb, subject)`, so once topic C was told to B it was dropped for D for the rest of the season, and the same held for every
+row naming a `counterparty:` (`tell`, `petition`, `issue`; `give` is untyped, so it carries none). One owner,
+`data/verbs.py::opportunity_key` (beside `act_key`), now keys `(verb, subject, <the counterparty operand>)` and is called by
+the writer (`loop/driver.py`) and the reader (`_drop_what_was_already_done`); a counterparty equal to the subject
+(`determine`, `oblige`) adds nothing, and an act with no subject keys `None` (never recorded, never filtered). Three falsifiers in
+`test_told_by_channel.py`, each red on the 2-tuple. Measured: realm `build_realm(0)` ×1 unchanged (hash `72af02fb…`, 6 `tell`
+acts, 3 told); realm ×3 `tell` acts 22 → 29, `news.told` 7 → 7, `news.untold` 15 → 22, content hash moved; corpus
+`DISTINCT EXECUTED SETS` 111 → 114 (`corpus_run 0` md5 `125fd053…` → `f45a7e22…`); aperture realm `tell` row identical
+(attempted 4, executed 4, refused 1); `delta HEAD` PROBE FLIPS 0; no pin moved.
+
 ### T5 · dedup by origin, and T6 · a teller's record
 
 **T5.** The told dedup skips a deposit only if the hearer holds the triple with `chain == ()` or the

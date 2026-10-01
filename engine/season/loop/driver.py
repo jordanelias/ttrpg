@@ -44,7 +44,7 @@ from ..data.rosters import OBSERVATION_DEPOSIT_MODES, STRATA, WITNESS_CHANNELS
 from ..data.requires import (
     LEDGER_DERIVED_STEMS, UNKNOWN, Verdict, binding_from_act, binding_of, evaluate,
 )
-from ..data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow
+from ..data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow, opportunity_key
 from ..gaps import (
     Collision, Forbidden, InstrumentDefect, NoProducer, Ungraded, Unowned, Unspecified,
 )
@@ -298,10 +298,11 @@ class SeasonDriver:
         # construction, so the driver releases their next chosen scene rather than re-deriving it.
         self._inputs: dict = {}
         # ⚠ WHAT `_drop_what_was_already_done` READS, AND IT IS THE REALISED SET RATHER THAN THE
-        # ATTEMPTED ONE — which is the whole of a defect this unit's adversarial pass found. A pair
-        # enters here only after the fold has run and only when the act's Event was not one of its
-        # row's `emits_on_refusal` kinds. Recording the ATTEMPT instead barred a refused act from
-        # ever being retried, including in a later round whose world had made its precondition
+        # ATTEMPTED ONE — which is the whole of a defect this unit's adversarial pass found. An
+        # opportunity KEY (`data/verbs.py::opportunity_key`: `(verb, subject)`, plus the row's
+        # counterparty, `T4b`) enters here only after the fold has run and only when the act's
+        # Event was not one of its row's `emits_on_refusal` kinds. Recording the ATTEMPT instead
+        # barred a refused act from ever being retried, including in a later round whose world had made its precondition
         # true — the exact channel R-03 exists to open, closed by the filter meant to protect the
         # season's variety.
         # ⚠⚠ **THERE WAS A SECOND SET, `_attempted`, AND IT WAS WRITTEN EVERY ROUND AND READ BY
@@ -451,9 +452,9 @@ class SeasonDriver:
                     _acted.add(a.id)
             for a in acts:
                 if a.id in _acted and a.id not in _refused_acts:
-                    _subj = subject_of(a)
-                    if _subj:
-                        self._realised.setdefault(a.actor, set()).add((a.verb, _subj))
+                    _key = opportunity_key(a.verb, subject_of(a), a.payload)
+                    if _key is not None:        # an act that names nothing is never recorded
+                        self._realised.setdefault(a.actor, set()).add(_key)
             for e in events:
                 w.log.append(e)              # S19.5 -- ONE LOG, NOT TWO
                 TRACE.event(e.id, e.kind, e.causes)

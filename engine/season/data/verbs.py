@@ -853,6 +853,33 @@ def act_key(verb: str, subject, operands) -> str:
     return key
 
 
+def opportunity_key(verb: str, subject, operands) -> Optional[tuple]:
+    """WHAT MAKES TWO ACTS ONE OPPORTUNITY, FOR THE ONCE-PER-SEASON FILTER: `(verb, subject)`, plus
+    the counterparty where the row names one -- `(verb, subject, <the operand its `counterparty:`
+    column names>)`. `None` for an act that names no subject: it has no opportunity to be the same as,
+    so it is never recorded and never filtered (`loop/deliberate.py::_drop_what_was_already_done`).
+
+    ⚠ TELLING WORKPLAN `T4b`, A DEFECT JORDAN NAMED. `T4` made one `tell` Candidate per known present
+    hearer, but the filter keyed `(verb, subject)`, so once a topic was told to B it could never be
+    told to D that season -- and a person can obviously tell several hearers. The same flaw sat in
+    every row that names a `counterparty:` (`petition`, `give`, `issue`): two petitions on one
+    subject to two different persons are two opportunities. Read off the ROW'S COLUMN, never a verb
+    name, and where the counterparty IS the subject (`determine`, `oblige`) it adds nothing and is
+    left out, so those keys are byte-identical to before.
+
+    ONE OWNER, BOTH SITES: `loop/driver.py` (writes a realised act) and `loop/deliberate.py`
+    (reads it) both call this, so the key cannot be spelled two ways (`CLAUDE.md` §8). It sits beside
+    `act_key`, which reads the same operands for the act's id, and needs no `World` or carrier."""
+    if not subject:
+        return None
+    row = VERB_TABLE.get(verb)
+    ops = operands if isinstance(operands, dict) else {}
+    other = ops.get(row.counterparty) if row is not None and row.counterparty else None
+    if other is None or other == subject:
+        return (verb, subject)
+    return (verb, subject, other)
+
+
 def _check_sparse_table(name: str, cells: dict, rows: "set|tuple", row_what: str,
                         cols: "set|tuple", col_what: str, row_law: str, col_law: str) -> dict:
     """THE THREE CHECKS A ROSTER-KEYED SPARSE TABLE NEEDS, IN ONE PLACE.

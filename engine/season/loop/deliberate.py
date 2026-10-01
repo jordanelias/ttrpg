@@ -55,7 +55,7 @@ from typing import Any, Callable
 from .. import decision
 from ..data.matrix import Step
 from ..data.requires import REQUIRES_STEMS
-from ..data.verbs import act_key
+from ..data.verbs import act_key, opportunity_key
 from ..decision import aggregate_questions
 from ..gaps import Forbidden, Ungraded
 from ..state.carriers import Act, Person
@@ -325,8 +325,8 @@ def _drop_what_was_already_done(scenes: list, taken: set) -> list:
     has not ALREADY DONE. Their ranking is untouched, their triage is their own, and every
     candidate they have not yet spent a scene on survives — including the ones this season's
     events have just made attractive, which is the whole of what the tick buys. What it refuses is
-    a second scene spent on an identical `(verb, subject)`, which the pre-tick loop could not
-    express at all.
+    a second scene spent on an identical opportunity (`opportunity_key`), which the pre-tick loop
+    could not express at all.
 
     ⚠⚠ **`taken` IS WHAT WAS *REALISED*, NOT WHAT WAS *ATTEMPTED*, AND THE FIRST WRITING GOT THAT
     BACKWARDS IN THE ONE DIRECTION THAT MATTERS.** It recorded the pair at RELEASE, before RESOLVE,
@@ -345,6 +345,14 @@ def _drop_what_was_already_done(scenes: list, taken: set) -> list:
     ⚠ AND THE KEY IS `(verb, subject)`, NOT `verb`. A person may write two records about two
     different things in one season; what they may not do is write the same record twice.
 
+    ⚠⚠ **AND, WHERE THE ROW NAMES A COUNTERPARTY, THE KEY INCLUDES IT: `(verb, subject, counterparty)`
+    (`data/verbs.py::opportunity_key`, telling workplan `T4b`).** `T4` made one `tell` per known
+    present hearer, and the two-part key then dropped a telling of topic C to D for the rest of the
+    season because C had been told to B -- though a person can tell several hearers, and a telling
+    to a different hearer is a DISTINCT opportunity, which is all this filter promises to spare.
+    The same held for `petition`, `give` and `issue`. A row that names no counterparty keys exactly
+    as before. The writer in `loop/driver.py` calls the same function.
+
     ⚠⚠ **AN ACT THAT NAMES NOTHING IS NEVER FILTERED, AND THE PROBES ARE WHY.** A subject-less act
     has no opportunity to be the same as — `(verb, "")` is an absence, not an identity, and two
     acts sharing it share only the absence. `probes.py::Act_` builds acts whose discriminator is in
@@ -358,8 +366,11 @@ def _drop_what_was_already_done(scenes: list, taken: set) -> list:
         return scenes
     out = []
     for sc in scenes:
-        keep = [a for a in sc.acts
-                if not _subject_of(a) or (a.verb, _subject_of(a)) not in taken]
+        keep = []
+        for a in sc.acts:
+            key = opportunity_key(a.verb, _subject_of(a), a.payload)
+            if key is None or key not in taken:
+                keep.append(a)
         if keep:
             sc.acts = keep
             sc.extended = len(keep) > 1
