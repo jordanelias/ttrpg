@@ -48,6 +48,43 @@ def entrenchment(p: Person, seasons_held: int, scale: int, span: int) -> int:
     return min(scale, (seasons_held * scale) // span)
 
 
+def ambitions(p: Person, propositions) -> list:
+    """WHAT THIS PERSON IS COMMITTED TO AS AN OUGHT: the Proposition ids on `p`'s own LIVE `commit`
+    edges whose Proposition is mood OUGHT, in the order the edges were opened, each once. Plan
+    position `17`; `R-06`'s *"a READ over it (no `ambitions(p)` query anywhere in the package)"*.
+    A belief is a `commit` to an OUGHT, not a field (`04` PART D row 44), so this READS the edge
+    and keeps nothing: it is computed when asked and never stored.
+
+    ⚠ IT TAKES THE PERSON'S OWN TENURES AND A `propositions` MAPPING, NEVER A `World` -- the AX-2
+    test (`test_w5_sense_is_still_the_only_world_taking_non_decision_function`) refuses any
+    function whose first parameter is a `Person` and another is a `World`. THE MAPPING IS NOT A
+    SECOND WAY IN: a `commit` edge's object is only an id, and the same edge kind also binds a
+    person to a faction, a treaty and a WAR, so the edge cannot say whether it is an ambition;
+    the Proposition's MOOD can, and a Proposition is an identity-bearing, immutable UTTERANCE
+    (S14), not hidden world truth. This reads only the keys `p`'s own edges name and never
+    enumerates the mapping, so a caller hands in `w.propositions` and the function sees one
+    utterance per edge the person already holds. Two sentences of this, said plainly: nothing
+    here names a `World`, a store handle or another person, which is what AX-2's guard checks;
+    and the plan's one-parameter spelling `ambitions(p)` is NOT met, because the mood has to come
+    from somewhere and a `Person` does not carry it. Whether `04`'s *"`PersonInterior` snapshot
+    only"* is read strictly enough to forbid a second, read-only argument is not settled here.
+
+    ⚠ ONE OWNER OF *"a live `commit` to an OUGHT"*. `world_q.questions_for`'s Q4 source reads
+    this rather than restating it, so the ambition mechanism `R-06` names exists once. A
+    proposition id that is not in `propositions` is NOT an ambition (absent is the refusal, not a
+    default); an ended edge (`until` set) is not one either; two live edges to one Proposition
+    are one ambition. No TRACE row is written: `TRACE.query` rows are folded into the committed
+    `runs/TRACE.txt` per call, and Q4 calls this once per person per deliberation."""
+    out: list = []
+    for t in p.tenures:
+        if t.kind != "commit" or not t.live or t.object in out:
+            continue
+        prop = propositions.get(t.object)
+        if prop is not None and str(prop.mood).upper() == "OUGHT":
+            out.append(t.object)
+    return out
+
+
 def stance_toward(p: Person, referent: str) -> float:
     """§F2's second term, from `p`'s OWN stance rows. #353 `:333`: `(referent, valence -5..+5,
     weight 0..5)`. Valence times weight, summed over the rows naming this referent -- weight is

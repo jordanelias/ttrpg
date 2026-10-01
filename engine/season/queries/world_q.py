@@ -54,6 +54,7 @@ from ..state.gate import BENCH_BASIS, may_determine, purview_reaches, sits_over
 from ..state.ids import ROOT
 from ..state.world import World
 from ..trace_log import TRACE
+from .person_q import ambitions   # `17`: Q4 reads the one owner of "a live commit to an OUGHT"
 
 
 # ===========================================================================
@@ -1355,12 +1356,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # Q4 -- `need`. A live `commit` Tenure whose object is an OUGHT Proposition is a STANDING
     # question: it recurs every season until the commitment ends, which is what makes an NPC with
     # an ambition act in a quiet season.
-    for t in p.tenures:
-        if t.kind == "commit" and t.live:
-            prop = w.propositions.get(t.object)
-            if prop is not None and str(prop.mood).upper() == "OUGHT":
-                out.append(Question(f"q:need:{t.object}", "need",
-                                    (prop.subject,), t.object))
+    # `17`: the live-`commit`-to-an-OUGHT rule is `person_q.ambitions`' alone (R-06's READ), so this
+    # asks it rather than restating it; one Question per ambition, in edge order, as before.
+    for pid in ambitions(p, w.propositions):
+        out.append(Question(f"q:need:{pid}", "need", (w.propositions[pid].subject,), pid))
 
     # ⚠ TWO ORDERINGS LIVE IN THIS ONE LINE AND ONLY THE FIRST IS DECLARED ANYWHERE.
     # `order[q.source]` is `rosters.yaml: question_sources`, whose own note says ORDER IS SEMANTIC

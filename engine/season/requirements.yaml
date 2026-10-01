@@ -792,6 +792,20 @@ rows:
       `CONVICTION_PROJECTION`, ED-IN-0261 item 1) that no run moves. WHAT WOULD OVERTURN THIS
       PARAGRAPH: a design ruling that an OUGHT can be satisfied, or a re-run whose act totals or
       content hash differ.
+      ⚠⚠ **PLAN POSITION `17`, 2026-10-01 -- THE SENTENCES ABOVE THAT SAY `ambitions(p)` IS ABSENT
+      ARE NOW FALSE, AND THE CAST HALF IS PARTLY BUILT.**
+      `queries/person_q.py::ambitions(p, propositions)` reads a person's own live `commit` edges to
+      OUGHT Propositions (`world_q.questions_for`'s Q4 now asks it; same questions, same order). It
+      takes a `propositions` mapping as its second parameter -- the plan's one-parameter spelling
+      cannot name an edge's mood, and a `World` is refused by AX-2's executed guard. `corpus_run.
+      build_at` seats a case's `cast:` entries as `p_a`, `p_b`, ... (named for `who`, each entry's
+      own `capability`; an entry with `role: WAITS-ON-PLAYER` is reported and not seated; the three
+      anonymous seats are the floor). **NOT BUILT, STOPPED RATHER THAN INVENTED:** the `cast:`
+      schema is `{who, role, capability}` and carries no key for an office per entry, for `one_line`
+      parsed to an OUGHT, or for `knowledge` parsed to Claims -- so each person's OUGHT is still
+      the rotation over the seated people with the case's `wants_of`, and no `cast:` yet exists
+      with more than one entry. The corpus's `corpus_run` stdout is byte-identical before and after
+      (143 cases, 120 distinct executed sets), so no figure above moves. Stays `partial`.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' line"
     blocks: [W27, H-62]
 

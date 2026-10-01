@@ -42,6 +42,7 @@ polarity rule sends zero evidence to the verdict AGAINST the thing measured, and
 onto `settlement` would manufacture a pass for the largest single block of the corpus.
 """
 from __future__ import annotations
+import string
 import sys
 from collections import Counter
 
@@ -185,6 +186,24 @@ def apply_rescale(case: dict) -> dict:
     return c
 
 
+# `17`: THE ONE `role` VALUE THE READER BRANCHES ON. `PLAN.md` §W28: *"~44 of 97 ARC cases name a
+# player, a PC or the party in `who_acts`, and those become `WAITS-ON-PLAYER` rather than a
+# failure"* -- an entry the engine does not supply and does not seat. Every other `role` is free
+# text the author writes and nothing reads, so this is a TERM, not a closed set: a typo of it
+# (`waits on player`) seats a person, which is why the comparison folds case and why an author
+# reads `seating`'s output before trusting a cast.
+WAITS_ON_PLAYER = "WAITS-ON-PLAYER"
+
+# The three people every world has when a case's `cast:` names fewer. `build_at` seated exactly
+# these before `17`, and a cast that names one protagonist has not said the world holds ONE person
+# -- so the floor stays anonymous until an author names more (`seat_ids`).
+ANONYMOUS_SEATS = ("p_a", "p_b", "p_c")
+
+
+def _waits_on_player(entry: dict) -> bool:
+    return str(entry.get("role") or "").strip().upper() == WAITS_ON_PLAYER
+
+
 def cast_overlay() -> dict:
     """`W28-cast`. The corpus's per-case `cast:` authoring, `{case_id: [entry, ...]}` — an OVERLAY,
     read the SAME way `rescales()` reads `scale:`/`office:` and for the identical reason: 27 of the
@@ -198,11 +217,20 @@ def cast_overlay() -> dict:
     ⚠ EACH ENTRY IS `{who, role, capability}`. `who` names a cast member — for every entry authored
     so far, the case's own PROTAGONIST, i.e. its `name:` field, never retyped independently (a
     second copy of a fact the case already owns is the hazard `CLAUDE.md` §0.05 cl.3 names). `role`
-    is `"protagonist"` on every entry authored so far; resolving the REST of a case's `who_acts`
-    prose into further roles, offices and `WAITS-ON-PLAYER` non-actors is position `17`'s
-    (`ambitions(p) and build_at from the cast`), not this position's. `capability` is present only
-    where the case's OWN text grounds a number — absent is the honest reading (§42.2's polarity
-    rule), never a placeholder zero standing in for one.
+    is free text with ONE term the code branches on, `WAITS_ON_PLAYER`: an entry carrying it names
+    a player the engine does not supply and is NOT seated as an actor (`seating`). `capability` is
+    present only where the case's OWN text grounds a number — absent is the honest reading
+    (§42.2's polarity rule), never a placeholder zero standing in for one.
+
+    ⚠ WHAT THIS SCHEMA DOES NOT CARRY, AND `build_at` THEREFORE DOES NOT READ (plan position `17`,
+    stopped there rather than inventing a field): an `office:` per entry (the rest of `who_acts`
+    resolved to a seat at a rung), an OUGHT per entry (`one_line` parsed to a subject and a
+    predicate), and `knowledge` parsed to initial Claims. Each needs a structured key an author
+    writes and a reader refuses on; none exists, and token-matching the prose for any of them is
+    the W10 router's failure. Until they do, a cast seats PEOPLE and nothing else.
+
+    ⚠ A MALFORMED ENTRY REFUSES AT LOAD (a world is never built from it): not a mapping, no `who`,
+    or more seated entries than `string.ascii_lowercase` can name (`seat_ids`).
 
     ⚠ COUNT THIS WITH THIS FUNCTION, NEVER WITH A GREP OVER THE CASE FILES. The historical GAP this
     position's own plan entry names in terms: an antagonist once re-derived a corpus count by
@@ -212,14 +240,39 @@ def cast_overlay() -> dict:
     `grep -c 'who:' cases/**/*.yaml` is not, and will over- or under-count the moment a comment or
     an unrelated `who:`-shaped string appears in a file this function does not read as one."""
     out: dict = {}
-    for _f, doc in _exercise_docs():
+    for f, doc in _exercise_docs():
         entries = doc.get("cast")
         if doc.get("case") and isinstance(entries, list):
+            for e in entries:
+                if not isinstance(e, dict) or not str(e.get("who") or "").strip():
+                    raise SystemExit(f"{f.name}: a `cast:` entry with no `who:` -- {e!r}")
+            if len([e for e in entries if not _waits_on_player(e)]) > len(string.ascii_lowercase):
+                raise SystemExit(f"{f.name}: more seated `cast:` entries than the "
+                                 f"{len(string.ascii_lowercase)} seat ids `seat_ids` can name")
             out[doc["case"]] = entries
     return out
 
 
 CAST = cast_overlay()
+
+
+def seating(case: dict) -> tuple:
+    """`(seated, waiting)` -- THE ONE RESOLVER OF A CASE'S `cast:` (plan position `17`), `build_at`'s
+    and `run_case`'s alike. `seated` is the entries that become people, in authored order; `waiting`
+    is the entries carrying `WAITS_ON_PLAYER`, which are reported and never seated. A case with no
+    overlay is `([], [])`, which `build_at` reads as *the anonymous floor and nothing else*."""
+    entries = CAST.get(str(case.get("id"))) or []
+    return ([e for e in entries if not _waits_on_player(e)],
+            [e for e in entries if _waits_on_player(e)])
+
+
+def seat_ids(n: int) -> tuple:
+    """The person ids for `n` seated cast entries: `p_a`, `p_b`, `p_c` first (the ids every probe,
+    docket and `main()`'s own `p_a` read already key on), then `p_d`... in alphabet order. Never
+    fewer than the anonymous floor. `cast_overlay` refuses a cast that would need more than the
+    alphabet has."""
+    return ANONYMOUS_SEATS + tuple(f"p_{c}" for c in
+                                   string.ascii_lowercase[len(ANONYMOUS_SEATS):n])
 
 
 def seasons_for(case: dict) -> int:
@@ -230,9 +283,15 @@ def seasons_for(case: dict) -> int:
 
 
 def build_at(case: dict, seed: int = 0) -> World:
-    """A world for THIS case: the containment chain down to its `scale`, three people who are
-    themselves `person` rungs, a site per producing kind, a motive, and — where the corpus says the
-    ending is forced by a threshold — a Date coming due, which is `questions_for`'s Q1.
+    """A world for THIS case: the containment chain down to its `scale`, people who are themselves
+    `person` rungs, a site per producing kind, a motive, and — where the corpus says the ending is
+    forced by a threshold — a Date coming due, which is `questions_for`'s Q1.
+
+    ⚠ WHO THE PEOPLE ARE (plan position `17`). A case with no `cast:` overlay seats the three
+    anonymous people it always did (`ANONYMOUS_SEATS`). A case WITH one seats its entries -- the
+    ones not `WAITS_ON_PLAYER`, which `seating` splits off and nobody seats -- as `p_a`, `p_b`, ...
+    in authored order, each named for its `who` and carrying its own `capability`, and pads with
+    anonymous people only up to the floor of three. An 11-entry cast seats eleven.
 
     ⚠ THE CONVICTIONS ARE SEEDED FROM THE CASE ID, over the THIRTEEN CONVICTIONS -- not over
     `conviction_axes`, which this said until 2026-09-16 and which `U3` superseded when the set
@@ -263,8 +322,11 @@ def build_at(case: dict, seed: int = 0) -> World:
         if SITE_YIELD[kind]:
             w.sites[f"s_{kind}"] = Site(f"s_{kind}", ids[chain[0]], kind,
                                           condition=w.fixtures.get("condition_scale"))
-    for n, pid in enumerate(("p_a", "p_b", "p_c")):
-        w.persons[pid] = Person(pid, pid)
+    seated, _waiting = seating(case)
+    pids = seat_ids(len(seated))
+    for n, pid in enumerate(pids):
+        entry = seated[n] if n < len(seated) else None
+        w.persons[pid] = Person(pid, str(entry["who"]) if entry else pid)
         # ⚠ A PERSON IS THE BOTTOM RUNG OF THE LADDER, and `tiny_world` models it that way. Without
         # this, `move` is refused everywhere. ⚠ THE STATED REASON IS NOW STALE AND THE FIXTURE
         # IS NOT: `_req_move` was retired by `W-A` and the typed cell short-circuits on an
@@ -285,18 +347,15 @@ def build_at(case: dict, seed: int = 0) -> World:
     # once; nothing else does."* Until this, the one writer in the tree ZEROED the dict --
     # `probes.py::p11`'s own comment: *"`capability` at zero ... for EVERY corpus person"* -- which
     # is why R-09's roll varies by SEED and FIXTURE and never by PERSON (`hole_register.yaml`
-    # H-126/H-127). `p_a` is the person this function already privileges as the case's own actor --
-    # the docket two blocks down names ONE matter, and it is `cast[0]`'s, i.e. `p_a`'s -- so a
-    # case's authored `cast:` overlay writes its PRIMARY entry's `capability` onto `p_a` and
-    # nothing else. A case with no overlay, or an overlay with no `capability`, leaves `p_a`
-    # exactly as before: `Person`'s own empty-dict default, never a fabricated non-zero fill.
-    # Resolving who `p_b`/`p_c` ARE, seating more than three, and reading the rest of `who_acts`
-    # is `17`'s (`ambitions(p) and build_at from the cast`), not this function's.
-    cast_entries = CAST.get(str(case.get("id"))) or []
-    if cast_entries:
-        cap = cast_entries[0].get("capability")
+    # H-126/H-127). Each seated entry writes ITS OWN `capability` onto ITS OWN person (position `17`
+    # widened this from "the primary entry's onto `p_a`", which is the same rule when the cast has
+    # one entry). A case with no overlay, an anonymous seat, or an entry with no `capability`
+    # leaves the person exactly as before: `Person`'s own empty-dict default, never a fabricated
+    # non-zero fill.
+    for n, entry in enumerate(seated):
+        cap = entry.get("capability")
         if isinstance(cap, dict) and cap:
-            w.persons["p_a"].capability = dict(cap)
+            w.persons[pids[n]].capability = dict(cap)
     # ⚠ `W28`: THE CASE MAY SEAT ITS OWN ACTOR ON AN OFFICE. A re-scaled case carries
     # `office: {post, remit, why}` — `post` names the office the prose names, `remit` the acts it
     # carries, and `why` records the DERIVATION, because that is what makes this authoring rather
@@ -370,8 +429,14 @@ def build_at(case: dict, seed: int = 0) -> World:
     # replacement"*. Nothing currently schedules this loop's removal. Removing it means porting
     # `populated`'s per-case cast INTO `build_at` -- item 2 of `workplans/2026-09-13-work-order.md` -- and
     # until somebody does that, this default is load-bearing on every number the grader reports.
+    #
+    # ⚠ `17`: THE ROTATION NOW RUNS OVER EVERY SEATED PERSON (`pids`), a cast's eleven as readily as
+    # the floor's three, AND IT IS STILL THE DEFAULT, NOT AN AUTHORED OUGHT. `one_line` -> the OUGHT
+    # needs a structured key on a `cast:` entry (a subject and a predicate an author wrote); the
+    # schema has none, so the case's own `wants_of` and the next person in the rotation stand in for
+    # every entry. Reading `one_line` for them would be the token-match this file refuses.
     want = wants_of(case)
-    cast = ("p_a", "p_b", "p_c")
+    cast = pids                   # every person this function seated, in `seat_ids` order
     for i, pid in enumerate(cast):
         about = cast[(i + 1) % len(cast)]
         prop = Proposition(f"prop_{pid}", "OUGHT", about, want, True, 0)
@@ -623,10 +688,14 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     # belief stored twice — it tells them nothing and takes a `ledger_cap` slot from a claim that
     # would have. The first cut of the told channel deposited 180 and **175 were this**; the
     # corpus is where that is visible, because `build_world(0)` produces none.
+    # `17`: the cast entries that name a player and so were NOT seated, by `who` -- the PLAN's
+    # *"reported `WAITS-ON-PLAYER` naming the entry that caused it"*. Read through `seating`, the
+    # same resolver `build_at` seats from, so the two cannot disagree about who was left out.
     return dict(id=cid, scale=scale, status=status, executed=ok, refused=no, seasons=n,
                 why="", checks=checks, degrees=dict(degrees),
                 claim_sources=dict(sources), persons=len(w.persons),
-                told_holders=told_holders, told_redeposits=told_redeposits)
+                told_holders=told_holders, told_redeposits=told_redeposits,
+                waits_on_player=[str(e["who"]) for e in seating(case)[1]])
 
 
 def planted_control(seed: int = 0) -> tuple:
@@ -730,6 +799,12 @@ def main(seed: int = 0) -> int:
         _holders += r.get("told_holders") or 0
     print(f"  CLAIMS BY SOURCE         {dict(sorted(_src.items()))} — of the four "
           f"`claim_sources`; {_holders} of {_persons} person-instances hold a `told_by`")
+    # `17`: printed ONLY WHERE A CAST NAMES A PLAYER, so a corpus with none prints exactly what it
+    # printed before this line existed.
+    _waits = {r["id"]: r["waits_on_player"] for r in live if r.get("waits_on_player")}
+    if _waits:
+        print(f"  WAITS-ON-PLAYER          {len(_waits)} cases name a player the engine does not "
+              f"supply: {_waits}")
     ever = sorted({v for r in live for v in r["executed"]})
     tried = sorted({v for r in live for v in r["refused"]})
     foldable = set(resolvable_verbs())
