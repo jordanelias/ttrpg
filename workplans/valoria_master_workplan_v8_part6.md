@@ -146,7 +146,7 @@ target.
   `descriptors` (minus the faction-stat roster), `stubwire`, `names` — ⚠ `canon_buckets` and
   `world_initial_state` now have no production importer (`29d-ii`).
 - `systems/{overview, factions, world, characters, fieldwork}/` are gone with `FORK:` rows;
-  `systems/settlements/` is reduced to `valoria_geography_v30.yaml`; `systems/social_contest/` is gone and
+  `systems/settlements/` is reduced to `valoria_geography_v30.yaml`, its svg and a package marker; `systems/social_contest/` is gone and
   its prize rows point at the proceedings provider; `systems/threadwork/`, `systems/mass_battle/`,
   `systems/combat/` are retained (`massbattle.py`'s old entry deleted; d.1 on `resolve_field`).
   **Partly landed:** `systems/factions/sim/`, `systems/world/sim/`, `systems/settlements/sim/` and

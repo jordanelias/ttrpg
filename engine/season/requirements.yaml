@@ -68,7 +68,7 @@ scales:
     retention: retire-set
     in_loop:   false
     note: >-
-      `Person` carries `convictions`, `beliefs`, `ledger`, `stance`, `capability` — but NOTHING
+      `Person` carries `pursuits`, `ledger`, `stance`, `capability` — but NOTHING
       creates or develops a person: no generation, no progression, no chronicle. ⚠ `capability` is
       EMPTY on every person in the corpus (only `probes.py::_zero_capability` touches it, to zero
       it), which is why R-09's roll will vary by seed and not yet by person. W27 is the cast.
@@ -154,8 +154,9 @@ scales:
       `settlements_currency_v1.md`, `march_layer_v30.md`, `governance_play_redesign_v1.md`,
       `scale_hierarchy_v1.md`. `references/module_contracts.yaml` declares `domain_actions` and
       `settlement_economy` — BOTH with `doc: null`, two of the nine contracts §6 counts as
-      unimplementable. The loop has `Site`, `stores` and `condition` but no economy, no build and
-      no domain action.
+      unimplementable. The loop has `Site`, `stores` and `condition`; `found`, `build`, `restore` and
+      `work` are declared in `verb_table.yaml` but refuse everywhere in the realm (`H-165` limit 2: no
+      computed act declares a works); no domain-action mechanism exists.
 
   - scale:    "investigations / detective / interactive fiction"
     subsystem: ["systems/fieldwork (sim/knots.py only)"]
@@ -404,7 +405,7 @@ rows:
     measured: >-
       ⚠ THIS PARAGRAPH IS THE OPENING READING, LAST RE-MEASURED AT `20-iii` (2026-09-30), BEFORE
       `20-ii` LANDED: its 54-case census is closed by the `20-ii` paragraph below, and the corpus
-      now runs at a fourth rung kind (`duchy`). RE-RUN 2026-10-01 on tree `46de563b`, after the
+      now runs at a fourth rung kind (`duchy`). RE-RUN 2026-10-01, after the
       `28-iii`/`29*` deletions: `corpus_run` still prints no `unrepresentable scales:` line, and
       reads `DISTINCT WORLDS RUN 143 (scales ['duchy', 'person', 'realm', 'settlement'], ...)`.
       54 of 143 cases are UNREPRESENTABLE — 44 at faction scale, 10 at world scale. The loop
