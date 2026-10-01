@@ -976,7 +976,7 @@ def rank(p: Person, teller: str) -> int:
     member is a vocabulary word with no producer; MEASURED, `build_realm(0)` one season: zero
     `office` claims in any ledger), nor is an `office` claim's value typed as a title or a seat.
     Comparing values nobody writes, in a shape nobody declared, would be inventing the ruling."""
-    # ABSENT: H-180 rank ordering  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
+    # ABSENT: H-181 rank ordering  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
     return 0
 
 
@@ -1005,7 +1005,7 @@ def record(p: Person, teller: str, fx: "Fixtures") -> float:
     always `True`, so any pair of them agrees for free. The firsthand claim paired against is the
     one `LedgerReader` reads as the belief AMONG FIRSTHAND CLAIMS (`_pair`). A claim stores no time of
     observation, so a told claim that has itself since replaced that belief is still scored against
-    the older firsthand one (recorded at `H-182`).
+    the older firsthand one (recorded at `H-183`).
 
     ⚠ ZERO PAIRS IS NEUTRAL, 1.0 -- DELIBERATELY NOT `standing_of`'s POLARITY. `standing_of` maps
     zero pairs to the MAXIMUM gap because there the thing measured is a flattering reading, and
@@ -1054,7 +1054,7 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
     stays below 2. At NEUTRAL regard a good record ALONE gives 0.5 x 1 x 1.5 = 0.75 (< 1); 1.0 needs
     `relation` x `record` >= 2, i.e. at the best record (1.5) `relation` >= 4/3 -- regard >= 2/3 of
     `STANCE_MAX` at the shipped `regard_gain`. A regarded teller whose earlier hearsay was confirmed
-    can therefore tie a firsthand claim on support and win on `when`; `rank` reads 0 (`H-180`) so it
+    can therefore tie a firsthand claim on support and win on `when`; `rank` reads 0 (`H-181`) so it
     adds nothing yet. `record` is not independent of what it weighs: see `record`'s last warning.
     ⚠ `relation` AND `record` EACH DEPEND ON THE TELLER ALONE AND ON `p`'s LEDGER, WHICH DOES NOT
     CHANGE INSIDE ONE `opening_set`, so each is computed ONCE PER TELLER."""
@@ -1075,7 +1075,7 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
                 1.0
                 + rank_gain * rank(p, teller)
                 + regard_gain * _clamp(regard(p, teller) / STANCE_MAX, -1.0, 1.0))
-        # ABSENT: H-179 stake  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
+        # ABSENT: H-180 stake  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
         rec = record_of.get(teller)
         if rec is None:
             rec = record_of[teller] = record(p, teller, fx)

@@ -53,7 +53,6 @@ OUT = os.path.join(REPO, 'engine', 'engine_params', 'game_constants.json')
 # EVERY pair here was confirmed by reading both call sites. Never add one by name similarity.
 MAPPING = {
     'TN_STANDARD':                   'engine.autoload.TN_STANDARD',
-    'OB_FLOOR':                      'factions.OB_FLOOR',
     'WEAPON_TN_BASE':                'combat.WEAPON_TN_BASE',
     'COMBAT_POOL_MINIMUM':           'combat.COMBAT_POOL_MIN',
     # COHERENCE_START / _MAX / _MIN / _FRACTURED_THRESHOLD LEFT THIS TABLE at position 27 (WR-SCOPE,
@@ -65,8 +64,18 @@ MAPPING = {
     'KNOT_FORMATION_TN':             'fieldwork.KNOT_FORMATION_TN',
     'KNOT_FORMATION_OB':             'fieldwork.KNOT_FORMATION_OB',
     'SEASONS_PER_YEAR':              'overview.SEASONS_PER_YEAR',
-    'CI_START':                      'overview.CI_STARTING',
-    'VICTORY_SUSTAIN_SEASONS':       'engine.autoload.SUSTAIN_SEASONS',
+    # OB_FLOOR (`factions.OB_FLOOR`) and CI_START (`overview.CI_STARTING`) LEFT THIS TABLE at plan position `29b`
+    # (2026-10-01). Their Python owners were `systems/factions/sim/faction_action.py` and
+    # `systems/overview/sim/ci_track.py`, both deleted with the faction layer and the CI clock (no season
+    # analogue). Same treatment as VICTORY_SUSTAIN_SEASONS below: an owner that retired leaves the table rather
+    # than being re-pointed by name, and the parity reader (`valoria-game/tools/check_constants_parity.py`,
+    # not visible from here) simply has no oracle value for either constant.
+    # VICTORY_SUSTAIN_SEASONS LEFT THIS TABLE at plan position `28-iii` (SPINE-DELETE, 2026-10-01). Its
+    # Python owner, `engine.autoload.SUSTAIN_SEASONS`, lived in `engine/autoload/victory.py`, which was
+    # deleted (the oracle models no ending today -- `H-176` in engine/season/hole_register.yaml). Same
+    # treatment the four COHERENCE_* pairs got above: an owner that retired leaves the table rather than
+    # being re-pointed by name. The port's own constant is untouched by this repo; the parity reader
+    # (`valoria-game/tools/check_constants_parity.py`) simply has no oracle value to compare it to.
 }
 
 # Pairs that LOOK like matches and are NOT. Recorded so the next session does not re-derive them
@@ -82,15 +91,6 @@ COLLISIONS = {
                   "universal dice-pool floor applied by RollContext.effective_pool() (RollContext.gd:26). "
                   "Not a divergence.",
     },
-    'ACCORD_MIN': {
-        'python_name': 'engine.autoload.ACCORD_MIN',
-        'python_value': 2.0,
-        'gd_value': 0,
-        'reason': "Different quantities sharing a name. victory.py:28 ACCORD_MIN is a VICTORY THRESHOLD "
-                  "(held territories must have accord >= 2.0, :71). Constants.gd:144-145 ACCORD_MIN/MAX "
-                  "is the CLAMP RANGE for the accord tracker (SettingState.gd:34,82). Not a divergence — "
-                  "but see DIVERGENCES['accord_range'], which is.",
-    },
     'MOMENTUM_MAX': {
         'python_name': 'engine.autoload.M_MAX',
         'python_value': 1.5,
@@ -98,13 +98,9 @@ COLLISIONS = {
         'reason': "M_MAX is the kernel's tanh multiplier ceiling (sigma_leverage), not a Momentum cap. "
                   "Momentum 0-4 has no scalar owner in engine/ today. Not a divergence.",
     },
-    'OB_CAP': {
-        'python_name': 'settlements.SEIZURE_OB_CAP',
-        'python_value': -4,
-        'gd_value': 20,
-        'reason': "SEIZURE_OB_CAP bounds a mass-seizure Ob MODIFIER (negative); the game's OB_CAP is the "
-                  "absolute Ob ceiling. Not a divergence.",
-    },
+    # OB_CAP (vs `settlements.SEIZURE_OB_CAP`, -4) LEFT THIS TABLE at plan position `29c` (2026-10-01): the
+    # look-alike was `systems/settlements/sim/infrastructure.py`'s mass-seizure Ob modifier bound, deleted with
+    # that tree, so there is no Python constant of that name left to mistake for the port's OB_CAP.
 }
 
 # Real disagreements between the oracle and the port. These are NOT closed by copying a number —
@@ -112,17 +108,18 @@ COLLISIONS = {
 # on them; the list can only shrink.
 DIVERGENCES = {
     'accord_range': {
-        'engine': "accord is a CONTINUOUS float clamped to [0.5, 7.0] "
-                  "(engine/autoload/game_state.py:160 adjust_accord), bucketed to a 0-4 canonical index "
-                  "by ACCORD_MAP (:61, five entries 0..4) and canonical_accord "
-                  "(engine/substrate/canon_buckets.py).",
+        'engine': "NO accord state. The Accord clock has no season analogue (ED-WR-0011 option A); "
+                  "`game_state.py` (its continuous 0.5-7.0 float and ACCORD_MAP) and `victory.py` were "
+                  "deleted at plan positions 28-iii and 29b. Only `canonical_accord` "
+                  "(engine/substrate/canon_buckets.py) survives, and has no production reader since "
+                  "systems/world/sim/npe.py was deleted at plan position 29d.",
         'port':   "accord is an INTEGER clamped to [0, 3] (Constants.gd:144-145, cited to "
                   "peninsular_strain_v30 §2), registered and clamped as a tracker "
                   "(SettingState.gd:34,82).",
-        'why_it_matters': "Two different state models for the same field: 0-4 continuous-bucketed vs 0-3 "
-                          "integer. Every accord-driven outcome differs. No gate in either repo observed "
-                          "this before 2026-08-20.",
-        'needs': 'ruling — which model is canonical',
+        'why_it_matters': "The port still carries an accord tracker the oracle no longer models, so "
+                          "there is no oracle value to match and none to correct it against.",
+        'needs': 'port alignment (CLAUDE.md §6: a port never corrects its oracle) — the oracle holds '
+                 'no accord model to port from',
     },
     'coherence_bands': {
         'engine': "Coherence is a DISTANCE from the human equilibrium (0 = on it), held as TWO "

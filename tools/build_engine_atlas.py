@@ -218,7 +218,7 @@ def contracts_for(subsystem, contracts, emap, skel):
 
     A single join is not enough and a name-guess is wrong. Measured on the current tree, a
     code-path join alone attributes only 9 of 27 contracts, because several declare code outside
-    their own folder (`faction_state`'s `sim_module` is `engine/autoload/game_state.py`) or
+    their own folder (`faction_state`'s `sim_module` was `engine/autoload/game_state.py` until `29b`) or
     deliberately declare none at all (`mass_battle`'s row is MB-lane-owned).
 
     So two sources are unioned and each attribution records WHY it was made:

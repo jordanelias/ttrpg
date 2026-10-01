@@ -276,15 +276,17 @@ def test_token_classes_sourced_from_names_index_byte_identical():
     assert names.canonical('world.guilds') == 'Guilds'   # world.guilds added + mirrored
 
     # mechanics: namespaced ids (mech.*) so a generic "Stability" is collision-safe from the
-    # faction stat fac.stability. Sourced via token_class 'mech' with scale 'mechanic'.
+    # faction stat fac.stability (retired at plan position `29b`; the namespace stays). Sourced via
+    # token_class 'mech' with scale 'mechanic'.
     MECH = {'Disposition': [r'\bDisposition\b'], 'Standing': [r'\bStanding\b'],
             'Stability': [r'\bStability\b'], 'Mandate': [r'\bMandate\b'], 'Tensions': [r'\bTensions\b']}
     assert set(va.CLASSES.get('mech', [])) == set(MECH)
     for disp, pats in MECH.items():
         tok = va.SEED_TOKENS.get(disp)
         assert tok is not None and tok['scale'] == 'mechanic' and tok['patterns'] == pats, disp
-    # the collision-safe id exists in the register, distinct from the faction stat
-    assert names.canonical('mech.stability') == 'Stability' and names.canonical('fac.stability') == 'Stability'
+    # the collision-safe id exists in the register (`fac.stability`, the faction stat it was distinct
+    # from, was retired at `29b`)
+    assert names.canonical('mech.stability') == 'Stability'
     assert 'mech' in va._INDEX_TOKEN_CLASSES
 
     # clocks (abbreviations): namespaced clock.* (token_class 'clock'); the 2 full-name clock

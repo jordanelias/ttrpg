@@ -335,7 +335,7 @@ def test_t1_said_is_not_a_binding_operand():
 
 
 # ---------------------------------------------------------------------------------------------
-# T3a (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282; `H-157`, `H-176`..`H-180`): HEARSAY
+# T3a (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282; `H-157`, `H-177`..`H-181`): HEARSAY
 # WEIGHED WHEN READ. Until `T3b` a told claim was one hop and its origin its teller; since `T3b`
 # hops are `len(Claim.chain)` and the origin is `chain[0]`. A claim with no chain weighs 1.0 and
 # its origin is its holder.
@@ -413,11 +413,11 @@ def test_t3_unplanted_members_with_opposite_loyalty_reach_different_verdicts():
     ⚠ `told_weight` IS HELD AT 1.0 HERE (its control value; this is not a control arm, since
     `regard_gain` is the variable), AND THAT IS FORCED, NOT CHOSEN. At the shipped
     0.5, a one-hop claim weighs at most 0.5 x 1.5 = 0.75 against a firsthand claim's 1.0 -- but
-    ONLY WHILE `rank` reads 0 (`H-180`) AND `record` is neutral (`H-182`: no pair, or
+    ONLY WHILE `rank` reads 0 (`H-181`) AND `record` is neutral (`H-183`: no pair, or
     `record_gain` 0; a teller with a good record can reach 1.0). Here the told claim contradicts
     the firsthand one, a pair that would LOWER the leader's record at the shipped `record_gain`,
     so `record_gain` is held at its control 0 as well (`_t3_fx`) and no regard can make
-    hearsay beat what the hearer saw (`H-178`'s default says so); regard then decides
+    hearsay beat what the hearer saw (`H-179`'s default says so); regard then decides
     only between told claims. Against a firsthand claim the regard term is observable only where
     `told_weight * relation * record` can reach 1.0. The firsthand and told claims are planted (identically
     in both); the loyalty -- the variable under test -- is not.
@@ -726,7 +726,7 @@ def test_t3_regard_decides_between_two_told_claims_at_the_shipped_weights():
     a DIFFERENT value, equal `when` and `confidence`: at the shipped gains (0.5) `f` weighs
     0.5 x 1.5 = 0.75 and `h` 0.5 x 0.5 = 0.25, so `f`'s value wins WHICHEVER IS LISTED FIRST; at
     the CONTROL (told_weight 1.0, both gains 0) they tie and the first-listed decides. This is the
-    observation `H-178` claims and `test_t3_unplanted_members_...` cannot make, because that one
+    observation `H-179` claims and `test_t3_unplanted_members_...` cannot make, because that one
     holds `told_weight` at 1.0 to reach a firsthand claim."""
     from ..decision.options import STANCE_MAX, teller_weight
     from ..queries.person_q import LedgerReader, regard
@@ -1241,7 +1241,7 @@ def test_t5_a_firsthand_holder_still_skips():
 
 
 # ---------------------------------------------------------------------------------------------
-# T6 (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282; `H-182`): A TELLER'S RECORD.
+# T6 (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282; `H-183`): A TELLER'S RECORD.
 # `record(p, x, fx)` pairs `p`'s claims told by `x` with `p`'s OWN firsthand claim on the same
 # `(subject, predicate)` cell; `weigh` multiplies it in once per teller.
 # ---------------------------------------------------------------------------------------------

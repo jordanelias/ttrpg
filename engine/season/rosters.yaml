@@ -792,7 +792,7 @@ rosters:
       ⚠ `tools/balance_oracle.py` DOES NOT APPLY TO THIS QUESTION AND MUST NOT BE RUN FOR IT.
       That tool patches `mc_v18`/`dice_engine` and compares `mc_v18.run_campaign` arms; `march`
       and `field_casualty_model` live entirely in `engine/season/`, which `mc_v18` cannot reach
-      (`CLAUDE.md` §0.2 -- `mc_v18` is deprecated in place, imported by nothing in game code).
+      (`CLAUDE.md` §0.2 -- `mc_v18` was deprecated in place, then deleted at plan position `28-iii`).
       Patching it would leave both of `balance_oracle.py`'s arms identical by construction --
       exactly the "campaign-unreachable change" `CLAUDE.md` §7 names as **a fake control**, not a
       measurement. If this arm is ever re-examined, the instrument is a `field_casualty_model`

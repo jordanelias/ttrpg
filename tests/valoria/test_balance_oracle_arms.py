@@ -19,9 +19,11 @@ it is NOT season-reachable (`engine/season/seam/ladder.py`'s `degree_of` never c
 `engine.autoload.dice_engine.degree_from_net` directly), and porting it even as inert historical
 code would add a NEW nested `engine -> systems` import `test_engine_does_not_import_systems.py`'s
 `NESTED_BASELINE = 0` ratchet forbids. Its code survives at this commit's `FORK:` row in
-`references/restructure_ledger.md` for `tools/balance_oracle.py`. The three OTHER retired pairs
-(`_ARMS_POOL`, `_ARMS_FLOOR`, `_ARMS_BOUNDS`) import nothing from `systems/` and are ported
-unchanged, same status as before: historical record, importable, not wired into `ARMS`.
+`references/restructure_ledger.md` for `tools/balance_oracle.py`. The OTHER retired pair,
+`_ARMS_POOL`, imports nothing from `systems/` and is ported unchanged, same status as before:
+historical record, importable, not wired into `ARMS`. (`_ARMS_FLOOR` and `_ARMS_BOUNDS` were ported
+with it and DELETED at plan position `29b`, 2026-10-01: they patched `Faction.adjust` and
+`descriptors.faction_bounds`, both deleted with the faction layer.)
 
 The live pair is now `field_casualty_model` — `total` (the pre-M4 control, "losing costs
 everything") vs `scaled_by_degree` (the ruled default, `Person.body` scaled by the engine's own
@@ -129,12 +131,12 @@ def test_two_proportion_z_is_degenerate_safe():
 
 
 def test_the_retired_pair_definitions_still_import():
-    """The three retired comparisons are kept as the record of what the old behaviour WAS — same
-    status `tools/balance_oracle.py` gave them. Constructing them is enough to prove the symbols
-    resolve. `_contest_ladder_arm` (`private_ladder`/`owner_ladder`) is NOT among them; see
+    """The retired comparison is kept as the record of what the old behaviour WAS — same
+    status `tools/balance_oracle.py` gave it. Constructing it is enough to prove the symbols
+    resolve. (Three pairs stood here until `29b` deleted `_ARMS_FLOOR` and `_ARMS_BOUNDS`.) `_contest_ladder_arm` (`private_ladder`/`owner_ladder`) is NOT among them; see
     `arms.py`'s own module docstring for why it has no surviving code in this tree at all (its
     record is the `FORK:` row for `tools/balance_oracle.py`, not a fourth retired dict here)."""
-    for attr in ('_ARMS_POOL', '_ARMS_FLOOR', '_ARMS_BOUNDS'):
+    for attr in ('_ARMS_POOL',):
         retired = getattr(oracle, attr)
         assert len(retired) == 2, f"{attr} should keep both arms of its pair"
         for setup in retired.values():

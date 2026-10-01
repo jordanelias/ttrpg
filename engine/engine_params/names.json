@@ -3,7 +3,7 @@
   "schema_version": 1,
   "source": "references/names_index.yaml",
   "registry_version": 3,
-  "count": 123,
+  "count": 117,
   "canonical": {
     "agg.body": "Body",
     "agg.mind": "Mind",
@@ -32,12 +32,6 @@
     "conv.order": "Order",
     "conv.precedent": "Precedent",
     "conv.reason": "Reason",
-    "fac.influence": "Influence",
-    "fac.intel": "Intel",
-    "fac.legitimacy": "Legitimacy",
-    "fac.military": "Military",
-    "fac.stability": "Stability",
-    "fac.wealth": "Wealth",
     "mass.command": "Command",
     "mass.discipline": "Discipline",
     "mass.power": "Power",
@@ -250,17 +244,9 @@
     ]
   },
   "ambiguous": {
-    "Legitimacy": [
-      "fac.legitimacy",
-      "set.legitimacy"
-    ],
     "Order": [
       "conv.order",
       "set.order"
-    ],
-    "Stability": [
-      "fac.stability",
-      "mech.stability"
     ]
   }
 }

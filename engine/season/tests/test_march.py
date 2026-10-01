@@ -409,3 +409,23 @@ def test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle
     assert ("field.lost", "Lost") in kinds, (
         f"expected a real field battle (`field.lost`), got {kinds} -- the chooser-formed act "
         "never reached a fight")
+
+
+def test_a_real_fold_reads_the_targets_fortification_on_the_battle_path(monkeypatch):
+    """PLAN POSITION `20-iv` -- `H-150` closes only if `fortification_of` is READ ON THE BATTLE
+    PATH, so this asserts the call, at runtime, through the real driver's RESOLVE -> ENCOUNTER
+    fold rather than by grepping a declaration (CLAUDE.md §0.1 pt 3 row 2). The count wraps the
+    real function, so the fight itself is unchanged; it is called with the march's own target, and
+    the field is fought (`field.lost`), not short-circuited. Before `20-iv` the count was 0."""
+    calls = []
+    real = world_q.fortification_of
+
+    def counting(w_, rung_id):
+        calls.append(rung_id)
+        return real(w_, rung_id)
+
+    monkeypatch.setattr(world_q, "fortification_of", counting)
+    w = build_realm(0)
+    events = _fold_one(w, _march_act("p_npc_033", "set_s_036", "off_npc_033"), contest_max_depth=2)
+    assert ("field.lost", "Lost") in [(e.kind, e.degree) for e in events], "no field was fought"
+    assert calls == ["set_s_036"], f"fortification_of was called {calls!r} on the battle path"

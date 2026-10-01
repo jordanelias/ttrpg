@@ -108,7 +108,7 @@ lane_ids:
   updated: "2026-07-29"
   cutover_ed: "ED-IN-0001"   # the entry that created this namespace; first-ever lane-tagged ED
   lanes:
-    MB: { name: "Mass battle",         next_free: 78 }   # ED-MB-0076/0077 allocated 2026-09-29 (workplan position 11: MB hand pass + 25 MB-GOLDEN executed; ED-MB-0075 option (2) built). ED-MB-0065..0074: synthesis ruling + Tier-1 build slate + Tier-2 (A3/A7/A8/C4) executed, A7 corrected post-review. Per-ED detail: registers/editorial_ledger_mb.jsonl. Narrative: id_reservations_history.md#mb
+    MB: { name: "Mass battle",         next_free: 79 }   # ED-MB-0078 allocated 2026-10-01 (plan position 20-iv: d.1's season morale source, one open choice). ED-MB-0076/0077 allocated 2026-09-29 (workplan position 11: MB hand pass + 25 MB-GOLDEN executed; ED-MB-0075 option (2) built). ED-MB-0065..0074: synthesis ruling + Tier-1 build slate + Tier-2 (A3/A7/A8/C4) executed, A7 corrected post-review. Per-ED detail: registers/editorial_ledger_mb.jsonl. Narrative: id_reservations_history.md#mb
     # Older MB history (moved to its own comment lines 2026-07-13 so a fresh OPEN citation on the
     # primary line above no longer inherits a "ratified"/"resolved" basis-keyword hit from these —
     # tools/validate_ed_citations.py's OPEN_AS_BASIS check is line-scoped; mirrors the PC lane's

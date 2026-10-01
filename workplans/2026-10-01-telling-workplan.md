@@ -155,8 +155,8 @@ leader, one planted told claim from the leader against a firsthand claim both ho
 assertion. Subject: `[design] hearsay weighed at read on Claim.teller (H-157)`.
 
 **As built (`4244d94`):** `belief_contradicts(…, weigh=None)` takes the closure, not `fx` (an import cycle:
-`decision.options` imports `epistemic`); `regard(p, x)` takes no `fx` until G1. `rank` reads 0 (absent row H-180:
-an ordering exists in `offices.yaml` but nothing deposits an `office` claim), so `rank_gain` (H-177) is dormant.
+`decision.options` imports `epistemic`); `regard(p, x)` takes no `fx` until G1. `rank` reads 0 (absent row H-181:
+an ordering exists in `offices.yaml` but nothing deposits an `office` claim), so `rank_gain` (H-178) is dormant.
 The second falsifier holds `told_weight` at 1.0, because at the shipped 0.5, while `rank` reads 0, a one-hop
 claim reaches at most 0.5 × 1.5 = 0.75 < 1.0, so no regard can make hearsay beat a firsthand claim; regard
 decides only between told claims, which `test_t3_regard_decides_between_two_told_claims_at_the_shipped_weights`
@@ -192,7 +192,7 @@ Re-measure M0a after. **Out of scope:** sigma's `REFUSED` raising uncaught for `
 measured (scratch `t0/`, md5 of `m0_results.json` 4e8fd3fa…): M0d is 12% on the realm, 100% on the corpus (one rung
 by construction) and 78.2% pooled, so name the deciding instrument before re-pinning `test_n3` (the realm is the
 shipped game; the corpus is a construction artifact); M0b is 49.3% pooled at `declared`, which meets G1's
-trigger; M0h is 14 contest Events naming a person other than the actor, which meets `stake`'s trigger (H-179).
+trigger; M0h is 14 contest Events naming a person other than the actor, which meets `stake`'s trigger (H-180).
 No told triple is deposited in either instrument (M0f), so the effects of T1-T3b appear only after T4.
 `survey` and `reconstruct` also carry `said`, unread (their typed cell is `own_ledger` too), and
 `opening_set` pays a `said_of` copy for each of their formed Candidates: when the `tell` cell gains
@@ -202,7 +202,7 @@ a hearer of `news.told` holds the event-kind claim `(subject, news.told, True)` 
 tick, the event-kind one at `confidence_default` and first on a tie, so `said_of` picks it (empty chain) and the
 next hearer's chain is `(teller,)`; the T3b retelling test sweeps `confidence_default` to 50 to reach two hops.
 T5's falsifier needs a content retelling, so T5 decides whether `said_of` excludes event-kind predicates, as it
-excludes `seen`. Read H-176's cite.
+excludes `seen`. Read H-177's cite.
 
 **As built (the T4 commit):** the row, the `with` stem, `known_persons`, the roster and
 `operand_bags` as §3 says, plus four things §3 did not name. (1) `act_key` (`data/verbs.py`) puts a known-person operand
@@ -274,19 +274,19 @@ Subject: `[design] a teller's record weighs their hearsay (E5)`.
 **As built (the T6 commit):** `record(p, x, fx)` in `decision/options.py`, `fx` the third argument for the
 gain (as `standing_of`'s). Pairing is ONE owner: `agreement`'s loop was factored into `_pair(told, own, key,
 admit)`; `agreement` calls it keyed by predicate on `PERSON_PREDICATES`, `record` keyed by `(subject,
-predicate)` with no roster. `teller_weight` memoises `record` per teller beside `relation`; the `ABSENT: H-179
+predicate)` with no roster. `teller_weight` memoises `record` per teller beside `relation`; the `ABSENT: H-180
 stake` marker is kept. Fixture `record_gain` (control 0, shipped 0.5 [ASSUMPTION], sweep [0, 0.5, 1.0]),
-hole row `H-182`. ⚠ **The "at most 0.75" bound of T3a's As-built holds only while `rank` reads 0 AND `record`
+hole row `H-183`. ⚠ **The "at most 0.75" bound of T3a's As-built holds only while `rank` reads 0 AND `record`
 is neutral:** at neutral regard a good record alone gives `told_weight x relation x record` = 0.5 x 1 x 1.5 = 0.75 (< 1);
 1.0 needs `relation x record` >= 2, i.e. `relation` >= 4/3 (regard >= 2/3 of `STANCE_MAX`), and then it ties a firsthand
-claim on support and wins on `when`; `H-176`, `H-177`, `H-178`, the fixtures comment and the `teller_weight` docstring
+claim on support and wins on `when`; `H-177`, `H-178`, `H-179`, the fixtures comment and the `teller_weight` docstring
 say so. The T3 tests hold `record_gain` at 0 (`_t3_fx`), because they plant a told claim against a firsthand one on a
 cell, which is a pair that lowers the teller's record at 0.5 -- except `test_told_by_channel.py`'s clause-4 weigh check
-(`:556-559`), which asserts 0.25 at the shipped gain on purpose. `H-176`'s control definition names `record_gain` as the
+(`:556-559`), which asserts 0.25 at the shipped gain on purpose. `H-177`'s control definition names `record_gain` as the
 third gain that must be 0. The plan's falsifier "an unknown teller reads exactly `told_weight`" is asserted as 0.75
 (`told_weight x relation`, at full regard), not `told_weight`. Measured: `build_realm(0)` holds 3 told claims after 1
 season, 0 after 3, with no pair; realm hash `72af02fb…` and `corpus_run 0` md5 `f45a7e22…` are the same before, at
-shipped `record_gain` 0.5 and at the control 0 -- a NULL (no pair exists in either arm, as `H-182` admits), not a control.
+shipped `record_gain` 0.5 and at the control 0 -- a NULL (no pair exists in either arm, as `H-183` admits), not a control.
 **Fixed at the batch close:** the pairing step picks the claim `LedgerReader` calls the belief (not the last listed), and
 only cell predicates pair (`seen` and event-kind claims do not).
 
@@ -336,7 +336,7 @@ reaching WITNESS, plan position `22`).
    every pin moved, with direction and mechanism; the stage-walk; a re-check of each `absent` row whose
    trigger this position's measurement touches; `ED-IN-0282`.
 5. **IDs:** read `references/id_reservations.yaml` IN `next_free` (282 at `85afbf5`, checked
-   2026-10-01), bump and co-commit in the **first** commit that cites it. H-176 onward comes from the
+   2026-10-01), bump and co-commit in the **first** commit that cites it. H-177 onward comes from the
    tail of `engine/season/hole_register.yaml` at each landing, never pre-assigned. New numbers are
    fixtures tagged `[JUSTIFIED: H-NNN]`, control first, each with an `assumption` row (`site`, `sweep`,
    `default`, `unblocks`, a `cite` holding the ladder result).

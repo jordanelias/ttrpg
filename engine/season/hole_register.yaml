@@ -3094,7 +3094,12 @@ rows:
       `loop/effects.py::_eff_march`. Same row's second half, the stance-weight pair
       `DEFAULT_FIXTURES.field_morale_weight` / `DEFAULT_FIXTURES.field_grudge_weight` (swept 0/1/3,
       `_eff_march`'s morale-hit/grudge write), deferred to this row rather than a separate one --
-      one `(referent, valence, weight)` write, two weights, the same magnitude-not-ruled question."
+      one `(referent, valence, weight)` write, two weights, the same magnitude-not-ruled question.
+      ⚠ SINCE PLAN POSITION `20-iv` THE MORALE WEIGHT HAS A READER: the losers' next field starts at
+      morale `5 - field_morale_weight` (`massbattle._morale_start`, one stance unit = one morale
+      point, fed by `seam/wrappers/mass_battle.py::_side_stance`), so this sweep now also sweeps the
+      next fight's morale-start, and its `0` point is that reader's control for a CROSS-faction field only (in a
+      same-faction march, `H-151`, the grudge row names the same faction and also moves morale-start)."
     sweep:     ["scaled_by_degree (the default)", "total (THE CONTROL: every loser's body to 0 --
       re-running \"losing a field costs everything\" deliberately, `wound_harm_model`'s own first
       control re-applied)", "none (the SECOND control: the body is not written at all, isolating
@@ -3103,7 +3108,7 @@ rows:
     cite:      "M4 build step 7-8 (`ED-IN-0279` clause (a)). ⚠ `tools/balance_oracle.py` DOES NOT
       APPLY TO THIS QUESTION -- it patches `mc_v18`/`dice_engine` and compares
       `mc_v18.run_campaign` arms; `march` lives entirely in `engine/season/`, which `mc_v18` cannot
-      reach (`mc_v18` is deprecated in place, `CLAUDE.md` §0.2 -- no game code imports it).
+      reach (`mc_v18` was deprecated in place, `CLAUDE.md` §0.2, and deleted at plan position `28-iii`).
       Patching it would leave both arms identical by construction, exactly the
       \"campaign-unreachable change\" `CLAUDE.md` §7 names as a fake control, not a measurement.
       The default is settled by the engine-reads-the-magnitude precedent above, not by a balance
@@ -3140,7 +3145,15 @@ rows:
     cite:      "M4 build step 1 (`ED-IN-0279` clause (a)). The roster is closed for a reason bound
       elsewhere: `contain_ascends` (`state/world.py`) forbids a sideways move to a foreign
       settlement, so no second target kind is invented here -- adding one later is a data edit the
-      moment a second kind is ruled, not a design choice made in this row."
+      moment a second kind is ruled, not a design choice made in this row. ⚠ MEASURED AT PLAN
+      POSITION `20-iv`'s PRE-FLIGHT (P-5, 2026-10-01), ONE `populated.run(4, 0)` WITH `sides_of`
+      INSTRUMENTED AT ENCOUNTER: THIS CHECK IS WHY THE REALM FIGHTS NO FIELD. The realm declares 11
+      marches and ENCOUNTER refuses all 11 here -- 9 target a `hearth` (in every case the actor's
+      own building), 2 a `person`-kind rung -- each with a mustered army and a holder faction behind
+      the target, so neither a missing defender nor `_survives` is the cause. (Two more
+      `march.refused` fire at RESOLVE, `requires_typed`'s `exists:Rung` read on a Site and a Record.)
+      The referents come from the chooser (`H-175`); the restriction is ruled; widening either is
+      not this row's."
     source:    "M4 of the mc_v18-retirement plan (`ED-IN-0279`), Jordan's ruling on the march
       target (M4 planning round 2)"
 
@@ -3154,15 +3167,32 @@ rows:
       and `rng` -- neither a fortification channel. A settlement with a garrison at full condition
       fights identically to one with none, or with no garrison Site at all."
     kind:      "PRODUCER"
-    owner:     "no owner exists yet -- the candidate site is `seam/wrappers/mass_battle.py::resolve()`,
-      which would need either a new provider parameter or a pre-battle margin adjustment `contest()`
-      applies before the provider runs"
+    owner:     "`seam/wrappers/mass_battle.py::resolve()` reads `world_q.fortification_of`;
+      `terrain.WALLS_DEFENDER_DR` is applied in `massbattle._run_and_grade`"
     grade:     "assumption"
-    default:   "NONE SHIPPED. `fortification_of`'s return is computed and discarded; this row does
-      not invent a formula for what it should do, on the same discipline `H-148` follows -- a
-      magnitude nobody ruled is not guessed into the fold silently."
-    site:      "engine/season/queries/world_q.py -- `fortification_of` (built, M4 build step 4);
-      no reader exists"
+    default:   "SHIPPED AT PLAN POSITION `20-iv`; THE NUMBER IS A.9's, ITS UNIT IS AN ASSUMPTION. Any
+      positive `fortification_of` at the march target makes the field A.9's `WALLS` row
+      (`terrain.py::terrain_row_for_territory`'s existing fortification-dominates rule), and its one
+      number, defender +3 DR (`terrain.WALLS_DEFENDER_DR`), lands on the engine's own `Unit.dr` in
+      `massbattle._run_and_grade`. Binary, as A.9's row is: condition gates presence, it does not
+      scale the bonus. Its other clauses (no flanking; Slow cannot advance) are not applied.
+      ⚠ THE UNIT IS ASSUMED: A.9's +3 is applied 1:1 to `Unit.dr`, which melee subtracts from
+      `DAMAGE_BY_DEGREE[deg](power)` and volley from net successes -- neither is canon's \"net hits
+      + weapon modifier - DR\". At the season's fixed power 4 and base dr 1, walls take a Success
+      exchange from 3 to 0 and an Overwhelming one from 4 to 1. `WALLS_DEFENDER_DR = 0` removes the
+      only live difference between a walled and an open field (the control); the constant is a
+      module literal and not yet a Fixtures knob, so no sweep is declared here. ⚠ IN THE REALM IT IS A CONSTANT, NOT
+      A MECHANIC: `build_realm` garrisons every settlement at full condition and garrison wear is 0, so
+      `fortification_of` is 1.0 on every settlement and every realm defender gets dr 1 -> 4 (the WALLS check runs
+      before the polygon lookup, so UPHILL, FOREST and NARROW_PASS cannot occur on this path). An injectable
+      `field_walls_dr` Fixtures value with a three-point sweep (3 = A.9, 0 = the control, 1) is the next step; it
+      is a design addition (a new Fixtures field, a seam parameter, tests) and was not built at `20-iv`. This
+      row's R2 violation (an `assumption` with no sweep) pre-dates `20-iv`: it was in `register --check`'s list
+      at 5c5d8ec6."
+    site:      "engine/season/seam/wrappers/mass_battle.py -- `resolve()` reads
+      `world_q.fortification_of` and `_territory_of` at the target and passes both to
+      `massbattle.resolve_field(territory=, fort_level=)`; until `20-iv`, `world_q.py --
+      fortification_of` (built, M4 build step 4) had no reader"
     sweep:     []
     unblocks:  "garrison Sites (step 11) affecting a fight's OUTCOME. ⚠ CORRECTED (M4 review pass,
       `valoria-critic`): the first writing of this field said seeding one \"changes `w.sites`,
@@ -3186,7 +3216,23 @@ rows:
       WRITTEN: seed a garrison Site at full condition on a march target, run the SAME seed through
       `_fold_one` twice (garrisoned / ungarrisoned), and show the fight's own `attacker_size_pct`
       is identical across both runs -- which is the defect this row names, made observable rather than
-      asserted."
+      asserted. ⚠⚠ REACHABILITY CLOSED BY PLAN POSITION `20-iv` (2026-10-01); THE MAGNITUDE STAYS AN
+      ASSUMPTION (graded back from `measured` at the Batch 1a close: the two tests below observe that
+      the garrison is READ and that it moves the result, not that +3 is the right size for the
+      engine's `dr`). `hole:`, `kind:` and `source:` LEFT AS TRANSCRIBED. CLAUDE.md §0's ladder for
+      *what a garrison does*: step 3 gives the effect and its number (A.9's Walls row); step 4
+      (`H-148`'s precedent, a magnitude no ruling states) makes the translation into `Unit.dr`
+      an assumption. FALSIFIERS, both
+      run against the pre-`20-iv` tree (red) and after (green):
+      `test_mass_battle_provider.py::test_a_garrisoned_defender_resolves_differently_from_an_ungarrisoned_one`
+      (8 seeds, all 8 FOUGHT; it asserts `differs >= 1` and that the defenders' survivors are never
+      lower. ONE-OFF FIGURE from the commit run, not asserted: the garrison changed 3 of the 8) and `test_march.py::test_a_real_fold_reads_the_targets_fortification_on_the_battle_path`
+      (the real RESOLVE -> ENCOUNTER fold calls `fortification_of` once, with the target). ⚠ WHAT
+      MOVES IS THE ENGINE'S RESULT, NOT THE SEASON'S WRITE AT REALM WEIGHTS: the fixture's 2-man
+      attacker loses with or without walls, so the garrison raises the defenders' survivor fraction
+      (0.0564 -> 0.06 at seed 0, a one-off figure; the scale gap also hides the SIZE of the effect), which `_eff_march` reads only on a `Won` band this scale does not
+      reach (`_MIN_TROOPS`' scale gap). And the realm fights no field at all yet: every march it
+      declares targets a non-settlement and is refused at `H-149`'s check (that row's `cite:`)."
     source:    "M4 of the mc_v18-retirement plan (`ED-IN-0279`), found by the orchestrator (Claude
       Sonnet 5) auditing its own build rather than ruled or reported by Jordan"
 
@@ -3478,7 +3524,7 @@ rows:
     tier:      1
     kind:      "WIRING"
     hole:      "[THE READER IS BUILT, T3a; the field is now `Claim.chain`, T3b: the text below describes the tree before them] `Claim.teller` (ADDED AT BATCH-CLOSE, methodology-close Phase 1, FIDELITY TO PLAN lens, closing `RULINGS.yaml` CAT-3) HAS EXACTLY ONE WRITER AND NO PRODUCTION READER -- A CARRIER ADDED AHEAD OF ANY CONSUMER, THE SHAPE `ID-13` RETIRED `Tenure.conferrer` FOR. The told-deposit site (`loop/witness.py:678-680`) is the only place any `Claim` is constructed with a non-`None` `teller`; every other `Claim(...)` call site in the tree (five production sites total, `witness.py:431,519,540,567`) passes `None` or omits the argument. Nothing reads `Claim.teller` outside `tests/test_told_by_channel.py`'s own falsifiers -- no query, no fold clause, no epistemic weighting keys off it yet. UNLIKE `H-135`'s'S SIBLING CLASS (a gap unreachable because nothing produces the state), this is the OPPOSITE shape: the state IS produced, on every `told_by` deposit, and simply goes unread"
-    owner:     "engine/season/state/carriers.py -- `Claim.chain` (`Claim.teller` is its derived property, T3b); engine/season/loop/witness.py -- the one write site; THE READER IS BUILT (telling workplan `T3a`, ED-IN-0282, 2026-10-01): `decision/options.py::teller_weight` reads `Claim.chain` (teller = chain[-1], hops = len(chain), `T3b`) and grades the claim by the hearer's relation to the teller (`H-176`..`H-178`), and `epistemic.belief_contradicts` ranks a person's own claims by that weight through `queries/person_q.py::LedgerReader`. The `hole:` text above describes the tree before `T3a`. ⚠ AND SINCE `T4` THE FIELD IS WRITTEN IN SHIPPED PLAY: a telling names its hearer, so `build_realm(0)` deposits 3 told claims with a non-empty chain in its first season, where T0 measured none (M0f); the corpus deposits none, its tellers' hearers already holding each triple firsthand"
+    owner:     "engine/season/state/carriers.py -- `Claim.chain` (`Claim.teller` is its derived property, T3b); engine/season/loop/witness.py -- the one write site; THE READER IS BUILT (telling workplan `T3a`, ED-IN-0282, 2026-10-01): `decision/options.py::teller_weight` reads `Claim.chain` (teller = chain[-1], hops = len(chain), `T3b`) and grades the claim by the hearer's relation to the teller (`H-177`..`H-179`), and `epistemic.belief_contradicts` ranks a person's own claims by that weight through `queries/person_q.py::LedgerReader`. The `hole:` text above describes the tree before `T3a`. ⚠ AND SINCE `T4` THE FIELD IS WRITTEN IN SHIPPED PLAY: a telling names its hearer, so `build_realm(0)` deposits 3 told claims with a non-empty chain in its first season, where T0 measured none (M0f); the corpus deposits none, its tellers' hearers already holding each triple firsthand"
     grade:     "measured"
     default:   "none"
     site:      ""
@@ -3817,6 +3863,19 @@ rows:
 
   - id:        H-176
     tier:      1
+    kind:      "ABSENT_RULE"
+    hole:      "GD-1: NO SEASON-SIDE ENDING / VICTORY CONDITION. `ENDINGS_CLASSIFIED.yaml` + `forced_by_threshold` are the ending vocabulary; `20-ii`'s observable '>=1 faction-scale ARC ends' is its precondition. The only code that ever implemented GD-1 -- `engine/autoload/victory.py`, a reader of the old prototype's clocks -- was deleted at plan position `28-iii`, and nothing in `engine/season/` replaces it."
+    owner:     "none -- no module owns an ending. `loop/driver.py::SeasonDriver.season` has no ending step; `ENDINGS_CLASSIFIED.yaml` is a classification of the authored arcs' `ends_when` prose (its own header: an agent classification, not an execution), read by `harness/corpus_run.py` for a measurement, not by the loop"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "any statement that a played realm ENDS, as opposed to running out of seasons; its precondition is `20-ii`'s observable '>=1 faction-scale ARC ends'"
+    cite:      "ABSENCE PROBE, RUN 2026-10-01 at plan position `28-iii` (an absence is the cheapest claim to make, so the thing that would show presence was run): `git grep -niE 'victory|GD-1' -- engine/season ':!engine/season/cases' ':!engine/season/runs' ':!engine/season/hole_register.yaml'` returned NO hits before this row was written -- the loop, its registries, its harnesses and its tests name neither. The only occurrences under `engine/season/` are authored case prose and a run log, one of which (`cases/chain/ARC3.yaml:42`) says the campaign's ending 'is defined not by a single victory condition'. NOT SUPERSEDED (no later ruling decided it) and NOT IRRELEVANT (GD-1 is a live canon constraint, `canon/04_game_design_constraints.md`; only its code died). Registered, not built, and not a question for Jordan."
+    source:    "plan position `28-iii` (SPINE-DELETE), master workplan v8 `_part3` item 11; `_part6` §D.1 disposition (c) for `engine/autoload/victory.py`"
+
+  - id:        H-177
+    tier:      1
     hole:      "HOW MUCH A HEARER DISCOUNTS ONE HOP OF HEARSAY. `RULINGS.yaml` CAT-3 rules that a
       told claim is graded WHEN READ, by the hearer's belief about their relation to the teller,
       and gives no magnitude for the discount a told claim carries before any relation is read."
@@ -3828,17 +3887,17 @@ rows:
       is the control (swept alone, `1.0` still leaves the gains shipped and a hostile teller
       weighs 0.5): every claim then weighs 1.0, every value's support is exactly 1.0 and
       `LedgerReader` orders by (when, confidence) as it did before `T3a` -- byte-identical realm
-      hash and `corpus_run 0`. At `0.5`, while `rank` reads 0 (`H-180`) AND the teller's
-      `record` is neutral (`H-182`: no pair, or `record_gain` 0), one hop of hearsay never
+      hash and `corpus_run 0`. At `0.5`, while `rank` reads 0 (`H-181`) AND the teller's
+      `record` is neutral (`H-183`: no pair, or `record_gain` 0), one hop of hearsay never
       outranks the hearer's own firsthand claim on a different value merely by being newer (the
       firsthand value's support is 1.0; the told one's is at most 0.5 x 1.5 = 0.75), which is
       `test_t3_a_firsthand_claim_holds_against_a_newer_told_claim_of_equal_confidence` (it holds
       `record_gain` at 0, its own pair being the told claim against the firsthand one). The bound
       is NOT unconditional: at NEUTRAL regard a good record alone (`record` up to 1 + `record_gain`,
-      `H-182`) gives 0.5 x 1 x 1.5 = 0.75, still below 1; 1.0 needs `relation` x `record` >= 2,
+      `H-183`) gives 0.5 x 1 x 1.5 = 0.75, still below 1; 1.0 needs `relation` x `record` >= 2,
       i.e. at the best record `relation` >= 4/3 (regard >= 2/3 of STANCE_MAX at the shipped
       `regard_gain`), and once `rank` can read +1 a teller who outranks the hearer, at full regard,
-      reaches it with no record at all -- either wins on `when` (`H-177`). `0.25` is the sceptic's arm"
+      reaches it with no record at all -- either wins on `when` (`H-178`). `0.25` is the sceptic's arm"
     site:      "Fixtures told_weight, read by `decision/options.py::teller_weight` on the first
       claim in a ledger that names a teller, as `told_weight ** hops` with hops = `len(Claim.chain)`
       (`T3b`); consumed by `queries/person_q.py::
@@ -3861,7 +3920,7 @@ rows:
       this reason. T5 RULED (Jordan, 2026-10-01 in session) NOT TO EXCLUDE THEM: the event-kind claim `(subject, news.told, True)` is tellable content (THAT a telling happened), so `said_of` is unchanged and one Candidate per held claim about the subject is the fix, a later position's (`T7`). After a teller's first successful telling of C, their newest claim on C is their own `news.told`, so later tellings pass the event kind on. Under `both` with hearing by presence, every hearer already holds it, so only the chain is lost. The design call is T7's (one Candidate per held claim)."
     source:    "telling workplan `T3a` (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282), 2026-10-01"
 
-  - id:        H-177
+  - id:        H-178
     tier:      1
     hole:      "HOW FAR RANK MOVES THE WEIGHT OF A TELLER'S CLAIM. CAT-3 orders the relation
       (lord over peer over enemy) and gives no magnitude; `rank_gain` scales `rank(p, teller)`, which
@@ -3869,24 +3928,24 @@ rows:
     kind:      "NUMBER"
     owner:     "decision/options.py -- `teller_weight`'s `relation` product"
     grade:     "assumption"
-    default:   "0.5 -- SHIPPED, AND DORMANT: `rank` reads 0 for every pair today (`H-180`), so
+    default:   "0.5 -- SHIPPED, AND DORMANT: `rank` reads 0 for every pair today (`H-181`), so
       every arm of this sweep is byte-identical until an `office` claim has a writer. `0` is the
       control. `0.5` lets a teller who outranks the hearer reach full weight from `told_weight`
-      0.5 at full regard (stance at STANCE_MAX) with a NEUTRAL `record` (`H-182`; a good record
+      0.5 at full regard (stance at STANCE_MAX) with a NEUTRAL `record` (`H-183`; a good record
       supplies the same factor without rank), where it ties a firsthand claim on support and
       wins on `when`"
     site:      "Fixtures rank_gain, read by `decision/options.py::teller_weight` (with
       told_weight and regard_gain, on the first claim naming a teller), multiplying `rank(p,
       teller)`"
     sweep:     [0, 0.5, 1.0]
-    unblocks:  "the lord-over-peer half of CAT-3's ordering, once `H-180` gives `rank` a value"
+    unblocks:  "the lord-over-peer half of CAT-3's ordering, once `H-181` gives `rank` a value"
     cite:      "LADDER RUN at `T3a`, 2026-10-01: CAT-3 in `RULINGS.yaml` closed 'store the
       teller', graded when read; the telling workplan's flowchart audit, stages 6-7, intent only; no document
       gives the gain; precedent `H-155`. Registered live rather than deferred so the term exists
       in the one formula that will read it, with its control at 0."
     source:    "telling workplan `T3a` (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282), 2026-10-01"
 
-  - id:        H-178
+  - id:        H-179
     tier:      1
     hole:      "HOW FAR A HEARER'S REGARD FOR THE TELLER MOVES THE WEIGHT OF WHAT THEY TOLD.
       CAT-3 orders peer over enemy and gives no magnitude; `regard_gain` scales the hearer's
@@ -3898,9 +3957,9 @@ rows:
     default:   "0.5 -- SHIPPED [ASSUMPTION]. `0` is the control (relation 1.0 whatever the
       stance). At `0.5` a fully hostile teller's claim weighs half what a neutral one's does and a
       fully trusted one's half again as much, clamped to 1.0. ⚠ AT THE SHIPPED told_weight 0.5,
-      WHILE `rank` READS 0 (`H-180`) AND WHILE THE TELLER'S `record` IS NEUTRAL (`H-182`: no
+      WHILE `rank` READS 0 (`H-181`) AND WHILE THE TELLER'S `record` IS NEUTRAL (`H-183`: no
       pair, or `record_gain` 0), THIS NEVER LETS A ONE-HOP CLAIM BEAT THE HEARER'S OWN FIRSTHAND
-      CLAIM (at most 0.75 against 1.0; a good `record` lifts that bound, `H-182`); it decides
+      CLAIM (at most 0.75 against 1.0; a good `record` lifts that bound, `H-183`); it decides
       between told claims, and against a firsthand claim only on the `told_weight` 1.0 arm with
       `regard_gain` live (not the control) and `record_gain` 0, where `test_t3_unplanted_members_with_opposite_loyalty_reach_different_verdicts` observes
       it"
@@ -3917,14 +3976,14 @@ rows:
       rows, every one naming one of 6 faction leaders, with opposite signs inside one faction."
     source:    "telling workplan `T3a` (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282), 2026-10-01"
 
-  - id:        H-179
+  - id:        H-180
     tier:      1
     hole:      "STAKE -- WHETHER THE TELLER HAS A RIVALRY WITH THE SUBJECT, read from the
       HEARER'S OWN claims of contested acts between the two, is not a factor in `relation`. A
       teller who is the subject's rival is credited exactly as one who is not."
     kind:      "WIRING"
     owner:     "decision/options.py -- `teller_weight`'s `relation` product, at the field-less
-      `ABSENT: H-179 stake` marker"
+      `ABSENT: H-180 stake` marker"
     grade:     "absent"
     default:   "none"
     site:      ""
@@ -3939,15 +3998,15 @@ rows:
       right, so nothing is built and building it is not scheduled by the telling workplan."
     source:    "telling workplan `T3a` (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282), 2026-10-01"
 
-  - id:        H-180
+  - id:        H-181
     tier:      1
     hole:      "RANK ORDERING -- A HEARER CANNOT RANK A TELLER FROM THE HEARER'S OWN CLAIMS, so
-      `decision/options.py::rank` reads 0 for every pair and `rank_gain` (`H-177`) is dormant. The
+      `decision/options.py::rank` reads 0 for every pair and `rank_gain` (`H-178`) is dormant. The
       ordering exists in data (`offices.yaml` titles map each title to a rung kind; rank is the
       ordinal in `rung_kinds`), but no writer deposits an `office` claim, and an `office` claim's
       value is typed neither as a title nor as a seat."
     kind:      "PRODUCER"
-    owner:     "decision/options.py -- `rank`, at the field-less `ABSENT: H-180 rank ordering`
+    owner:     "decision/options.py -- `rank`, at the field-less `ABSENT: H-181 rank ordering`
       marker; the producer of `office` claims is unowned"
     grade:     "absent"
     default:   "none"
@@ -3964,7 +4023,7 @@ rows:
       predicate `office` in any ledger."
     source:    "telling workplan `T3a` (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282), 2026-10-01"
 
-  - id:        H-181
+  - id:        H-182
     tier:      1
     hole:      "TIES -- A TELLING DOES NOT KNIT TELLER AND HEARER. Since `T4` a telling names its
       hearer (`to`, a person the teller knows) and is contested against them, so two people who
@@ -3991,7 +4050,7 @@ rows:
     source:    "telling workplan `T4` (`workplans/2026-10-01-telling-workplan.md` §5, ED-IN-0282), 2026-10-01"
 
 
-  - id:        H-182
+  - id:        H-183
     tier:      1
     hole:      "HOW FAR A TELLER'S RECORD MOVES THE WEIGHT OF THEIR HEARSAY. A hearer who has checked
       what a teller told them against what the hearer holds firsthand has a record of that teller;
@@ -4006,7 +4065,7 @@ rows:
       HAS pairs, so the control is not vacuous). At `0.5` a teller always confirmed weighs half
       again as much as a stranger and one always contradicted half as much, clamped to 1.0 with
       the rest of the product -- so a one-hop claim at the shipped `told_weight` is no longer
-      bounded by 0.75 (`H-176`, `H-178`) once its teller has a good record AND is regarded
+      bounded by 0.75 (`H-177`, `H-179`) once its teller has a good record AND is regarded
       (`relation` x `record` >= 2 reaches 1.0; a good record alone is 0.75). MEASURED at `T6`:
       `build_realm(0)` holds 3 told claims after 1 season and 0 after 3, none with a pair
       (0 teller-hearers with a pair), and the realm hash and `corpus_run 0` md5 are identical at
@@ -4020,12 +4079,12 @@ rows:
     unblocks:  "deception: a teller caught in a lie is credited less on the next cell (gated
       `G7`), and intent reconciliation (`T7`), which will pair a teller's claims by the same
       step"
-    cite:      "LADDER RUN at `T6`, 2026-10-01 (`CLAUDE.md` section 0): not superseded -- `H-176`
-      grades a told claim by hops and `H-178` by regard, neither by whether the teller has been
+    cite:      "LADDER RUN at `T6`, 2026-10-01 (`CLAUDE.md` section 0): not superseded -- `H-177`
+      grades a told claim by hops and `H-179` by regard, neither by whether the teller has been
       right; not irrelevant -- `teller_weight` carried a literal `record = 1.0` for this factor
       and told claims with a teller are deposited; no design document gives the gain (the telling
-      workplan is intent only); precedent is `H-155`'s injected, swept magnitude, and `H-176`..
-      `H-178` for the shape. Registered live so the term has its control at 0. Agreeing pairs
+      workplan is intent only); precedent is `H-155`'s injected, swept magnitude, and `H-177`..
+      `H-179` for the shape. Registered live so the term has its control at 0. Agreeing pairs
       form only when the hearer was told before they saw (the told-deposit guard in `witness.py`, `_held`/`_origin`), so `record` leans
       downward. A told claim about a cell that has since changed scores as disagreement, because no
       claim stores when it was observed. Partial drift scores as disagreement, by design.

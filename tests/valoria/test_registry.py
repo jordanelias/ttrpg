@@ -21,6 +21,10 @@ fac.influence resolves by name AND by bare key, and all-section structural keys 
 What collisions() still reports is "legitimacy" -> {fac.legitimacy, set.legitimacy} — two real
 quantities at two scales, recorded rather than merged, and pinned below so a green suite cannot
 quietly certify it as resolved.
+
+[29b, 2026-10-01] The `fac.*` descriptor rows were retired with `game_state.Faction`, so the paragraphs above
+about "Influence" and "legitimacy" are the HISTORY of a closed collision, not a live pin: the retired test is
+noted where it stood below.
 """
 import os
 import sys
@@ -159,44 +163,11 @@ def test_resolve_structural_territory_stat_alias_via_descriptor():
     assert result['section'] == 'territory_stats'
 
 
-def test_the_influence_string_collision_is_CLOSED_and_resolves_to_the_faction_stat():
-    """ED-IN-0057's KNOWN LIMITATION, closed 2026-09-16. This test asserted the defect; it now
-    asserts the fix, and the rename is deliberate so the old name cannot be grepped as still-open.
-
-    WHAT IT WAS. The string "Influence" was BOTH an alias of `attr.social.charisma` AND the
-    canonical name of the faction stat `fac.influence`. The attribute won the string because it was
-    checked first, so `resolve('Influence')` returned the ATTRIBUTE and the faction stat was
-    reachable only by its bare key. The old test recorded that as *"the pointer-collision the WS1
-    data fold-in must resolve"*.
-
-    HOW IT CLOSED. `Influence` was removed from Charisma's alias list in BOTH registries that
-    carried it (`names_index.yaml` and `descriptor_registry.yaml:58`). MEASURED before removing:
-    every bare `Influence` in the corpus is the roll stat -- `conviction_track_v30.md`'s
-    *"Influence vs Ob 2"* and *"Church Influence vs Ob"* -- none means Charisma, and no code read
-    the alias list. So the alias was shadowing a live canonical name and buying nothing.
-    `tools/export_names.py` now REFUSES this shape at authoring time (an alias that is also another
-    row's canonical), which is what stops it coming back."""
-    result = registry.resolve('Influence')
-    assert result['key'] == 'fac.influence', (
-        "the bare string now resolves to the faction stat that owns it; if this reads "
-        "attr.social.charisma again, the alias was restored in one of the two registries")
-    assert result['section'] == 'faction_stats'
-    assert result['disagreement'] == []
-
-    # The key path still works, and always did (ED-IN-0058's partial fix).
-    bykey = registry.resolve('fac.influence')
-    assert bykey['kind'] == 'descriptor' and bykey['key'] == 'fac.influence'
-
-    # The collision is gone from the work-list.
-    col = registry.collisions()
-    assert 'influence' not in col, f"influence is still reported as colliding: {col.get('influence')}"
-
-    # ⚠ `legitimacy` REMAINS, AND IT IS NOT A REGRESSION -- it collided before this change too.
-    # The old test's parenthetical ("and, today, only this one") was already false when written:
-    # it only ever asserted `col.get('influence')`, so the second entry was never checked.
-    # `fac.legitimacy` (a faction-scale base stat) and `set.legitimacy` (settlement L/PS) are two
-    # real quantities at two scales, the same shape as Order and Stability -- recorded, not merged.
-    assert col.get('legitimacy') == ['fac.legitimacy', 'set.legitimacy']
+# `test_the_influence_string_collision_is_CLOSED_and_resolves_to_the_faction_stat` was retired at plan position
+# `29b` (2026-10-01); its source is in git at `5c5d8ec6`. Its subject was `fac.influence`, which was retired with
+# `game_state.Faction` (`ID-13`), so `resolve('Influence')` no longer reaches a faction stat and the
+# `legitimacy -> {fac.legitimacy, set.legitimacy}` collision it pinned no longer exists. `Influence` is
+# not restored as an alias of Charisma: which attribute owns the word is a design call, not this change's.
 
 
 def test_collisions_is_the_foldin_worklist():
@@ -258,8 +229,9 @@ def test_resolves_matches_resolve_is_not_none():
 def test_all_known_is_a_set_and_a_superset_of_every_pinned_term():
     known = registry.all_known()
     assert isinstance(known, set)
+    # 'Influence' and 'Wealth' left this list at plan position `29b`: only `fac.*` rows named them.
     for term in ('Strength', 'Dexterity', 'attr.body.strength', 'Solmund',
-                 'Thread Sensitivity', 'Fort', 'Influence', 'Wealth'):
+                 'Thread Sensitivity', 'Fort'):
         assert term in known, f'{term!r} resolves() but is missing from all_known()'
     assert 'totally_not_a_real_term_xyz' not in known
 

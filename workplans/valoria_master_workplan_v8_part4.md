@@ -207,7 +207,7 @@ Landed (PR #442): `coherence.py` elastic/plastic (`ED-WR-0010`), `operations.py`
 and the revelation procedures); the mending cost (`attempt_mending` calls `recover()` and costs > 0).
 **⚠ One constraint the WR handoff does not state:** the stubs' named targets (substrate tension →
 incursions → Accord; MS) are overview clocks that **have no season analogue by architecture**
-(`loop/census.py`: *"NO CLOCK GENERATES ANYTHING"*; ED-WR-0011 option A) and that `29a` deletes. Wire a stub
+(`loop/census.py`: *"NO CLOCK GENERATES ANYTHING"*; ED-WR-0011 option A) and that `29a` deleted (PR #450; `ms_track` stays until `29a`-ms). Wire a stub
 only to a retained or season-native carrier (the season's `(Person, coherence)` row — RES, `social:
 false`, written through a seam Event — is the one the architecture provides); a stub with no such target
 is struck with its reason, never wired into `ms_track`. And `27` must leave
@@ -286,7 +286,7 @@ a shipped world — `_part5` §L says when they escalate.
 ### `24h` P5 · S5 revolt as a Query · SE/IN · gate — · `{parallel worktree}` · `opus` · `[design]`
 
 The revolt **Query** in `queries/world_q.py` or `queries/faction_q.py` — a read, never a write — the
-season successor of `systems/world/sim/insurgency_pipeline.py` (deleted at `29d`). **FALSIFIER:** the
+season successor of `systems/world/sim/insurgency_pipeline.py` (deleted at `29d`, PR #450). **FALSIFIER:** the
 Query writes nothing (AX-2; the Query family by module); a seeded realm where its preconditions hold
 returns ≥ 1, one where they do not returns 0. **R:** R-06/R-07 texture (the world generating drama with
 nobody watching — NERS R).
@@ -300,18 +300,18 @@ declares and nothing else; no proper-noun branch. **R:** R-05 texture.
 
 - **`29f`:** `systems/fieldwork/sim/knots.py` (ED-912's ±5 gauge maps to `Tenure.degree`, F.4 —
   recorded on `14`, not invented); `engine/tests/test_knots_ed912.py` → `FORK:`.
-- **`29e`:** `systems/characters/sim/conviction.py` (← `knots.py`), with `beliefs.py` if `28-0`'s follow-up
-  did not take it. `test_conviction_roster_single_owner.py`'s `systems.characters` site re-pointed.
+- **`29e`:** `systems/characters/sim/conviction.py` (← `knots.py`); `beliefs.py` already went at `28-0`'s
+  follow-up (PR #450). `test_conviction_roster_single_owner.py`'s `systems.characters` site re-pointed.
 - **`29a`-ms:** `systems/overview/sim/ms_track.py`.
 **FALSIFIER:** `opposing.py` no longer imports `sustain_knot`; nothing imports `apply_ms_delta`;
 `grep -rn "systems.overview\|systems.fieldwork\|systems.characters"` returns only fork-ledger rows.
 **Hash:** none.
 
-### `2-ii` · RET-SC: the kernel, the veto, the `parliamentary_*` modules · IN/SC · gate `22`, `29b`, `28-iii` (E4) · `sonnet` producer, `opus` critic on the veto only, `haiku` for the inbound-site census · `[cleanup]`
+### `2-ii` · RET-SC: the kernel and the veto · IN/SC · gate `22` (E4) · `sonnet` producer, `opus` critic on the veto only, `haiku` for the inbound-site census · `[cleanup]`
 
 **INSTRUCTION (carried from the retired position 2, corrected for what has since landed).**
-`systems/social_contest/sim/contest/` (16 files) and `parliamentary_{vote,stay}.py` if `29b` left them;
-`engine/tests/test_contest_kernel.py` → `FORK:`. **Re-derive the deletion set from `git ls-files`, never a
+`systems/social_contest/sim/contest/` (16 files); `parliamentary_{vote,stay}.py` already went at `29b`
+(PR #450). `engine/tests/test_contest_kernel.py` → `FORK:`. **Re-derive the deletion set from `git ls-files`, never a
 `find` count.** The veto (`degree_extension.py`) is relocated as a forwarded `extension=` at
 `seam/ladder.py`'s degree site — a veto that can only demote, never a re-banding (`04`: `seam/wrappers/*`
 own nothing and return a Margin). **Keep the logical name** — the prize rows key on it. Repoint every

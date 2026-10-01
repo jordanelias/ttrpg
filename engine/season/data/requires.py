@@ -734,7 +734,7 @@ WORLD_ONLY_STEMS = frozenset({"with"})
 # ⚠ NOT COMPLETE AS "EVERY SLOT THAT HOLDS ONE VALUE": `content:<kind>` and `shortfall:<kind>` claims
 # are one value per `(subject, predicate)` too, and are outside `REQUIRES_STEMS`, so `record` never pairs
 # them. Nothing is told about them today; a lie about a document's content could not lower the liar's
-# record until G7 widens this (recorded at `H-182`).
+# record until G7 widens this (recorded at `H-183`).
 CELL_STEMS = REQUIRES_STEMS - WORLD_ONLY_STEMS
 
 

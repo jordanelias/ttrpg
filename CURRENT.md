@@ -12,7 +12,7 @@ stamp: `python tools/currency_consistency_check.py` (it exits 0 either way — r
 Old paths resolve through `references/restructure_ledger.md` via `python tools/pathres.py`. A
 ledger id's LAST row is its current state. History of this file: `git log -p CURRENT.md`.
 
-_Last reconciled: 2026-10-01 (`references/restructure_ledger.md`'s edits only append `FORK:` rows for the retired plans and repoint three unreachable refs; the plan row now names `valoria_master_workplan_v8.md`; no other row's pointer changed; the telling workplan's positions (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282) land under the already-current season-loop head, not a new one)._
+_Last reconciled: 2026-10-01 (`references/restructure_ledger.md`'s edits only append `FORK:` rows for the retired plans and repoint three unreachable refs; the plan row now names `valoria_master_workplan_v8.md`; the Campaign-driver row now says RETIRED, `FORK:5c5d8ec6`; no other row's pointer changed; the telling workplan's positions (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282) land under the already-current season-loop head, not a new one)._
 
 Design prose is quarantined in `.designs/` (ED-IN-0231). A row that names such a document gives its
 **bare filename only**, deliberately: it is reference, not a head, and not to be opened as authority.
@@ -21,7 +21,7 @@ Design prose is quarantined in `.designs/` (ED-IN-0231). A row that names such a
 |---|---|---|
 | **THE SEASON LOOP (game code)** | `engine/season/` — RATIFIED, ED-IN-0204 | `python -m engine.season.harness.register --requirements`; runtime registries `engine/season/data/`; Layer-1 conformance ED-IN-0206; lane `registers/handoffs/HANDOFF_IN.md` |
 | **THE CODE ARCHITECTURE (Layer 1)** | `architecture/` — RATIFIED, ED-IN-0204 | `skills/layer-conformance/SKILL.md` (Lens B checks `engine/season/` against `architecture/meta/04_CODE_ARCHITECTURE.md`) |
-| **The plan** | `workplans/valoria_master_workplan_v8.md` (+ `_part2`…`_part6`) — PROPOSED, adoption on merge; the one active plan (`CLAUDE.md` §2) for every lane whose items it carries, less the scoped workplan it carves out by name (its §0.6). Every earlier plan is RETIRED (`FORK:0671283`; the two absorbed `PROPOSAL.md` plans `FORK:f6d7af27`) | its `_part3` §P pre-flight, then Batch 0; Jordan items its `_part5` §J; THE NINE: `python -m engine.season.harness.register --requirements` |
+| **The plan** | `workplans/valoria_master_workplan_v8.md` (+ `_part2`…`_part6`) — PROPOSED, adoption on merge; the one active plan (`CLAUDE.md` §2) for every lane whose items it carries, less the scoped workplan it carves out by name (its §0.6). Every earlier plan is RETIRED (`FORK:0671283`; the two absorbed `PROPOSAL.md` plans `FORK:06712837`) | its state index (start at `B0-CI-b`), `_part3` §P pre-flight and §B0; Jordan items its `_part5` §J; THE NINE: `python -m engine.season.harness.register --requirements` |
 | **Character model / decision layer** | `proposals/2026-09-20-pursuit-basis-worksheet.yaml` — ruled, ED-IN-0261 | ED-IN-0261; conviction split ED-IN-0251 |
 | **Personal combat** | `systems/combat/combat_engine_v1/`; typed export `engine/engine_params/combat_engine_v1.json` (round-trip checked in CI) | `registers/handoffs/HANDOFF_PC.md`; design reference `combat_reference_v1.md`, lineage `combat_currency_v1.md` |
 | **Mass battle** | `mass_battle_v30.md` + `mass_battle_integration_v30.md` | `registers/handoffs/HANDOFF_MB.md` |
@@ -42,7 +42,7 @@ Design prose is quarantined in `.designs/` (ED-IN-0231). A row that names such a
 | **Board game** | EVACUATED to `engine/engine_params/params_tables.yaml` (fork ref `c451bcb`) | — |
 | **Godot conversion** | `godot/godot_conversion_strategy_v1.md` — PROPOSED | ED-GO-0001; Gate-0 waits on ED-1051; `registers/handoffs/HANDOFF_GO.md` |
 | **Decision policy** | `decision_policy_v1.md` — DRAFT FOR RULING | ED-IN-0113 |
-| **Campaign driver** | ⛔ `engine/mc_v18.py` SUPERSEDED by `engine/season/` — do not build here | ED-IN-0226, ED-IN-0227; importer roster `tests/valoria/test_mc_v18_is_deprecated.py` |
+| **Campaign driver** | ⛔ RETIRED — `FORK:5c5d8ec6` (`engine/mc_v18.py`, deleted at plan position `28-iii`); the head is `engine/season/` | ED-IN-0226, ED-IN-0227; exact rows in `references/restructure_ledger.md` |
 | **Key substrate** | ⛔ RETIRED — `FORK:c6e82105` | ED-IN-0232; exact rows in `references/restructure_ledger.md` |
 | **Repository state armature** | ⛔ RETIRED — `FORK:1e4c6f4` | ED-IN-0194 |
 | **Status dashboard** | ⛔ RETIRED — `FORK:1e4c6f4` | milestone signal is `python tools/m1_acceptance.py --summary` |

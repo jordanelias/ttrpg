@@ -180,7 +180,7 @@ def test_the_two_counts_cannot_be_gamed_against_each_other():
     makes them a ratchet rather than a scoreboard — that the SAME line, at column 0 and indented,
     is seen by exactly one pattern each, so a move between them is visible as a change in both.
     """
-    line = 'from systems.factions.sim import treaty\n'
+    line = 'from systems.mass_battle.sim import massbattle\n'
     assert TOP_LEVEL_SYSTEMS_IMPORT.search(line)
     assert not NESTED_SYSTEMS_IMPORT.search(line)
     assert not TOP_LEVEL_SYSTEMS_IMPORT.search('    ' + line)
@@ -190,10 +190,10 @@ def test_the_two_counts_cannot_be_gamed_against_each_other():
 def test_this_check_can_observe_its_own_failure(tmp_path):
     """An assertion that cannot observe the failure it excludes is an absent assertion (§0.1 pt 2)."""
     probe = tmp_path / 'probe.py'
-    probe.write_text('from systems.factions.sim import treaty\n')
+    probe.write_text('from systems.mass_battle.sim import massbattle\n')
     assert TOP_LEVEL_SYSTEMS_IMPORT.search(probe.read_text())
     nested = tmp_path / 'nested.py'
-    nested.write_text('def f():\n    from systems.factions.sim import treaty\n')
+    nested.write_text('def f():\n    from systems.mass_battle.sim import massbattle\n')
     assert not TOP_LEVEL_SYSTEMS_IMPORT.search(nested.read_text()), \
         'the pattern must not fire on a function-local import — that is a different problem'
 
@@ -506,7 +506,7 @@ def test_the_import_probe_can_observe_both_kinds_of_leak():
       2. the `sys.path` + BARE NAME shape `combat_bridge` uses, where the loaded module is called
          `wrapper`, not `systems.combat.…`. The old name-prefix probe reported this one as clean.
     """
-    dotted = _modules_loaded_from_systems('import systems.factions.sim.faction_action\n')
+    dotted = _modules_loaded_from_systems('import systems.mass_battle.sim.massbattle\n')
     assert dotted, 'the probe reports NOTHING for a plain dotted import — it is broken'
 
     bare = _modules_loaded_from_systems(
@@ -535,72 +535,10 @@ def test_the_composition_resolver_refuses_an_undeclared_role():
     assert 'do not' in str(exc.value).lower(), 'the error must tell the reader not to work around it'
 
 
-def test_every_role_game_state_requires_is_declared():
-    """The check the INTERPRETER used to do for free, restored after the indirection removed it.
-
-    Before S5a, `engine/autoload/game_state.py`'s eleven seams were function-local imports. A typo
-    in one was a hard `ImportError` the moment that branch ran, and a moved class was caught at
-    import. Routing them through `composition.require('snapshot_state.knots')` turns both into a
-    STRING, and a mistyped string is a `KeyError` raised only when that branch executes — i.e. only
-    when a save file happens to carry that registry non-empty. Nine of the ten `restore_world`
-    branches have no test that reaches them (only `settlements` round-trips, in
-    `engine/tests/test_world_population.py`), so a typo would ship green.
-
-    This is not a new rung: it re-asserts, mechanically, the property the static imports asserted.
-    Subject is `engine/`'s save/restore path and the registry the Godot port's serialization is
-    generated against — load-bearing on the game (§0.1 pt 5), not on this repo's process.
-    """
-    from engine.substrate import composition
-
-    gs = (REPO / 'engine' / 'autoload' / 'game_state.py').read_text(encoding='utf-8')
-    required = set(re.findall(r"composition\.require\(\s*['\"]([^'\"]+)['\"]\s*\)", gs))
-    assert len(required) == 11, (
-        f'game_state.py requires {len(required)} distinct roles, expected 11 — the eleven seams '
-        f'S5a moved. If a seam was legitimately added or removed, update this count deliberately.'
-    )
-    undeclared = sorted(required - set(composition.ROLES))
-    assert not undeclared, (
-        'game_state.py requires composition role(s) that references/module_contracts.yaml does '
-        'not declare: ' + ', '.join(undeclared) + '. This raises KeyError at runtime, in the '
-        'branch that needs it — which for a snapshot registry means only when a save file carries '
-        'it non-empty. Declare the row and re-run tools/export_composition.py.'
-    )
-
-
-def test_every_snapshot_state_role_resolves_to_something_restore_world_can_call():
-    """`restore_world` calls `.from_dict(...)` on every class it resolves. A row pointing at a
-    callable WITHOUT that method exports cleanly — the exporter only checks callability — and then
-    raises `AttributeError` in the same unreachable branch. Assert the contract the caller relies
-    on, not merely that the target exists."""
-    from engine.substrate import composition
-
-    snapshot_roles = sorted(r for r in composition.ROLES if r.startswith('snapshot_state.'))
-    assert len(snapshot_roles) == 10, (
-        f'{len(snapshot_roles)} snapshot_state roles, expected 10 — one per registry '
-        f'`restore_world` rehydrates.'
-    )
-    for role in snapshot_roles:
-        cls = composition.require(role)
-        assert hasattr(cls, 'from_dict'), (
-            f'{role} -> {composition.ROLES[role]["target"]} has no from_dict(), but '
-            f'restore_world calls it. The row is wrong, or the class lost the method.'
-        )
-
-
-def test_no_snapshot_state_role_is_declared_and_unused():
-    """A declared row nobody requires is the ED-IN-0149 defect — an abstraction with no caller.
-    Pairs with the two above so the registry and the engine cannot drift apart in either
-    direction: an undeclared requirement fails there, an unrequired declaration fails here."""
-    from engine.substrate import composition
-
-    gs = (REPO / 'engine' / 'autoload' / 'game_state.py').read_text(encoding='utf-8')
-    required = set(re.findall(r"composition\.require\(\s*['\"]([^'\"]+)['\"]\s*\)", gs))
-    declared = {r for r in composition.ROLES if r.startswith('snapshot_state.') or r == 'world_gen_settlements'}
-    orphans = sorted(declared - required)
-    assert not orphans, (
-        'composition role(s) declared for game_state.py that it never requires: '
-        + ', '.join(orphans) + '. Delete the row, or wire it.'
-    )
+# `test_every_role_game_state_requires_is_declared` and `test_no_game_state_role_is_declared_and_unused` were
+# retired at plan position `29b` (2026-10-01); their source is in git at `5c5d8ec6` (the second was then named `test_no_snapshot_state_role_is_declared_and_unused`). Both read `engine/autoload/game_state.py`
+# for its `composition.require(...)` calls, and that file and its one role (`world_gen_settlements`) are gone.
+# `test_every_declared_composition_role_resolves` below still proves every remaining row resolves.
 
 
 def test_a_value_role_still_fails_on_an_attribute_that_does_not_exist():
@@ -640,37 +578,21 @@ def test_a_value_role_still_fails_on_an_attribute_that_does_not_exist():
     assert callable(mod._resolve('systems.social_contest.sim.contest:build_contest', 'callable'))
 
 
-def test_only_the_two_contest_side_labels_are_value_roles():
-    """`kind: value` exists for a named, argued reason. If a third one appears, that is either a
-    genuine new case worth stating in the plan, or the widening spreading by imitation — which is
-    exactly how the callable guard would be lost without anyone deciding to lose it."""
-    from engine.substrate import composition
-
-    value_roles = sorted(r for r, row in composition.ROLES.items() if row.get('kind') == 'value')
-    assert value_roles == ['contest_side.a', 'contest_side.b'], (
-        f'value-kind composition roles are now {value_roles}. Adding one is a deliberate act: say '
-        f'in the plan why no callable role and no authored surface can carry it, then update this '
-        f'list. Both earlier constant seams were solved WITHOUT a value role.'
-    )
-
-
 def test_every_declared_composition_role_resolves():
     """Import-by-string is only safe because every target is proven to resolve. Prove it here too,
     so the guarantee does not live solely in a tool a session might not run."""
     from engine.substrate import composition
-    assert composition.ROLES, 'no composition roles declared - mc_v18 has nothing to resolve'
+    assert composition.ROLES, 'no composition roles declared - nothing resolves through composition'
+    checked = 0
     for role, row in composition.ROLES.items():
         resolved = composition.require(role)
         if row.get('kind') == 'value':
             # A constant. It must RESOLVE (require() raises if the row or attribute is wrong);
             # asserting callability here would assert the opposite of what the row declares.
-            # `test_only_the_two_contest_side_labels_are_value_roles` is what stops this branch
-            # from quietly becoming the majority.
             continue
         assert callable(resolved), f'role {role} did not resolve to a callable'
-    assert sum(1 for r in composition.ROLES.values() if r.get('kind') != 'value') >= 20, (
-        'the callable branch above checked almost nothing - most roles should be callables'
-    )
+        checked += 1
+    assert checked >= 1, 'the callable branch above checked nothing - no role resolved to a callable'
 
 
 # ---------------------------------------------------------------------------------------------
@@ -687,15 +609,10 @@ R04_PENDING_SUBSYSTEMS = {
     'settlements', 'threadwork', 'ui', 'victory', 'world',
 }
 
-R04_PENDING_ROLES = {
-    'faction_action', 'season_driver', 'accounting', 'territory_transfer_candidate',
-    'territory_transfer_proposal', 'world_gen_settlements', 'snapshot_state.practitioners',
-    'snapshot_state.insurgencies', 'snapshot_state.npcs', 'snapshot_state.treaties',
-    'snapshot_state.convictions', 'snapshot_state.beliefs', 'snapshot_state.knots',
-    'snapshot_state.territory_infrastructure', 'snapshot_state.threadcut_beings',
-    'snapshot_state.settlements', 'scene_resolver.fieldwork', 'scene_resolver.investigation',
-    'rs_track_delta',
-}
+# Every composition role now targets a retained subsystem, so this set is empty: a role that targets a
+# retiring subsystem would FAIL here rather than ride a stale entry (`scene_resolver.fieldwork` and
+# `.investigation` were here and exist in no registry).
+R04_PENDING_ROLES = set()
 
 
 def test_r04_pending_composition_roles_can_only_shrink():

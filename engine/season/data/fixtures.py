@@ -623,36 +623,36 @@ DEFAULT_FIXTURES = Fixtures(
     # actually lossy at `Partial`, not one parked inert pending a later ruling.
     # [JUSTIFIED: engine/season/hole_register.yaml H-155 -- the drift band; r2 states the direction and leaves the magnitude, and the sweep brackets no-drift / shipped / aggressive]
     told_drift_band=0.5,               # `H-155`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
-    # `H-176`..`H-178` (telling workplan `T3a`, `ED-IN-0282`; `RULINGS.yaml` CAT-3, closed: store
+    # `H-177`..`H-179` (telling workplan `T3a`, `ED-IN-0282`; `RULINGS.yaml` CAT-3, closed: store
     # the teller, grade the claim WHEN READ by the hearer's relation to them). HOW MUCH A HEARER
     # CREDITS A CLAIM SOMEONE TOLD THEM, read by `decision/options.py::teller_weight` -- the `weigh`
     # `LedgerReader` ranks a person's own claims by in `belief_contradicts`. A told claim weighs
     # `clamp01(told_weight ** hops * relation * record)`, `relation = 1 + rank_gain*rank +
-    # regard_gain*clamp(regard/STANCE_MAX, -1, 1)`, `record` = `H-182`'s factor below. CONTROL
+    # regard_gain*clamp(regard/STANCE_MAX, -1, 1)`, `record` = `H-183`'s factor below. CONTROL
     # FIRST: at `told_weight` 1.0 and every gain 0 every claim weighs exactly 1.0 and the reader
     # orders as it did before `T3a` -- the realm hash and `corpus_run 0` are byte-identical there.
-    # SHIPPED: `told_weight` 0.5, so, while `rank` reads 0 (`H-180`) AND `record` is neutral (the
+    # SHIPPED: `told_weight` 0.5, so, while `rank` reads 0 (`H-181`) AND `record` is neutral (the
     # teller has no checkable record, or `record_gain` is 0), one hop of hearsay reaches at most
     # 0.5 x 1.5 = 0.75 and never outranks the hearer's own firsthand claim by being newer. At
     # NEUTRAL regard a good record ALONE gives 0.5 x 1 x 1.5 = 0.75 (< 1); 1.0 needs `relation` x
     # `record` >= 2, i.e. `relation` >= 4/3 (regard >= 2/3 of STANCE_MAX) at the best record. Gains 0.5
     # [ASSUMPTION], which at the extremes moves a told claim's weight by half either way. Read
     # only on a claim that names a teller.
-    # [JUSTIFIED: engine/season/hole_register.yaml H-176 -- the hearsay discount; CAT-3 rules THAT a told claim is graded when read and gives no magnitude, so it is injected and swept 1.0 / 0.5 / 0.25]
-    told_weight=0.5,                   # `H-176`, swept 1.0 (control, WITH the three gains 0) / 0.5 (SHIPPED) / 0.25
-    # [JUSTIFIED: engine/season/hole_register.yaml H-177 -- rank's gain on a teller's weight; CAT-3 orders lord > peer, no magnitude; DORMANT while `rank` reads 0 (H-180)]
-    rank_gain=0.5,                     # `H-177`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
-    # [JUSTIFIED: engine/season/hole_register.yaml H-178 -- regard's gain on a teller's weight; CAT-3 orders peer > enemy, no magnitude, so it is injected and swept 0 / 0.5 / 1.0]
-    regard_gain=0.5,                   # `H-178`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
-    # `H-182` (telling workplan `T6`, `ED-IN-0282`). HOW FAR A TELLER'S RECORD MOVES THE WEIGHT OF
+    # [JUSTIFIED: engine/season/hole_register.yaml H-177 -- the hearsay discount; CAT-3 rules THAT a told claim is graded when read and gives no magnitude, so it is injected and swept 1.0 / 0.5 / 0.25]
+    told_weight=0.5,                   # `H-177`, swept 1.0 (control, WITH the three gains 0) / 0.5 (SHIPPED) / 0.25
+    # [JUSTIFIED: engine/season/hole_register.yaml H-178 -- rank's gain on a teller's weight; CAT-3 orders lord > peer, no magnitude; DORMANT while `rank` reads 0 (H-181)]
+    rank_gain=0.5,                     # `H-178`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
+    # [JUSTIFIED: engine/season/hole_register.yaml H-179 -- regard's gain on a teller's weight; CAT-3 orders peer > enemy, no magnitude, so it is injected and swept 0 / 0.5 / 1.0]
+    regard_gain=0.5,                   # `H-179`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
+    # `H-183` (telling workplan `T6`, `ED-IN-0282`). HOW FAR A TELLER'S RECORD MOVES THE WEIGHT OF
     # THEIR HEARSAY: `record = 1 + record_gain * (agree - dis) / (agree + dis)` over the hearer's
     # claims that teller passed on, each paired with the hearer's OWN firsthand claim on the same
     # `(subject, predicate)` (`decision/options.py::record`); no pair is exactly 1.0, neutral.
     # `0` is the CONTROL: `record` is 1.0 whatever the ledger holds, so every weight is its pre-`T6`
     # value. Shipped `0.5` [ASSUMPTION]: a teller who was always right weighs half again as much as
     # a stranger, one who was always wrong half as much.
-    # [JUSTIFIED: engine/season/hole_register.yaml H-182 -- record's gain on a teller's weight; no document gives the gain, so it is injected and swept 0 / 0.5 / 1.0]
-    record_gain=0.5,                   # `H-182`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
+    # [JUSTIFIED: engine/season/hole_register.yaml H-183 -- record's gain on a teller's weight; no document gives the gain, so it is injected and swept 0 / 0.5 / 1.0]
+    record_gain=0.5,                   # `H-183`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
     # `H-159` (plan position `17b`, `04 §B.8`'s `term?`; `T-n`, `architecture/meta/01_AXIOMS.md`:
     # *"the opening act declares the terms"*). HOW MANY SEASONS AN `oblige` RUNS BEFORE IT MATURES
     # UNPAID -- the term `_eff_oblige` declares on the edge it opens (`matures_at = tick + this`),

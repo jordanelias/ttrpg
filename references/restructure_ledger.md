@@ -2639,5 +2639,133 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 
 | Old path | New path | Status |
 |---|---|---|
-| `proposals/2026-09-26-decision-layer-execution-plan/PROPOSAL.md` | `FORK:0671283` | FORKED (2026-10-01, absorbed into `workplans/valoria_master_workplan_v8.md`) |
-| `proposals/2026-09-27-mc-v18-retirement-plan/PROPOSAL.md` | `FORK:0671283` | FORKED (2026-10-01, absorbed into `workplans/valoria_master_workplan_v8.md`) |
+| `proposals/2026-09-26-decision-layer-execution-plan/PROPOSAL.md` | `FORK:06712837` | FORKED (2026-10-01, absorbed into `workplans/valoria_master_workplan_v8.md`) |
+| `proposals/2026-09-27-mc-v18-retirement-plan/PROPOSAL.md` | `FORK:06712837` | FORKED (2026-10-01, absorbed into `workplans/valoria_master_workplan_v8.md`) |
+
+<!-- 2026-10-01, plan position `28-iii` SPINE-DELETE (master workplan v8, `_part6` §D): the mc_v18 spine and its
+     importers retired. FORK ref is the parent of the deleting commit, `5c5d8ec6`; every row below was checked with
+     `git cat-file -e 5c5d8ec6:<path>` before it was written. One exact-file row each (never a directory prefix). -->
+
+| Old path | New path | Status |
+|---|---|---|
+| `engine/mc_v18.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — the superseded campaign driver; successor `engine/season/loop/driver.py::SeasonDriver.season`. OI-05/OI-07 died with it) |
+| `tests/valoria/test_mc_v18_is_deprecated.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — the importer ratchet, deleted after `ALLOWED_IMPORTERS == set()` ran green; its subject is gone) |
+| `engine/autoload/engine_clock.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — successor `engine/season/loop/driver.py`) |
+| `engine/autoload/season_manager.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — successor `engine/season/loop/calendar.py` + `Date`) |
+| `engine/autoload/scene_slate.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — successor `engine/season/loop/deliberate.py` + `pack_scenes`) |
+| `engine/autoload/victory.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — no season replacement; the GD-1 requirement survives as an `ABSENT_RULE` hole in `engine/season/hole_register.yaml`) |
+| `engine/autoload/npc_ai.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — no replacement by port; the season counterpart is `engine/season/decision/`) |
+| `engine/cross_scale/__init__.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — the package, whole; see its four modules) |
+| `engine/cross_scale/scene_dispatch.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — successor `engine/season/seam/contest.py` + `manifest/` + the prize rows) |
+| `engine/cross_scale/combat_bridge.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — successor `engine/season/seam/wrappers/combat.py` -> `engine/substrate/pc_engine.py`) |
+| `engine/cross_scale/handoff_rules.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — no replacement; the eight handoff rules are R-04's content in `engine/season/requirements.yaml`) |
+| `engine/cross_scale/zoom_in_out.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — no replacement; the Hybrid-mode zoom is R-03/R-04's content) |
+| `systems/overview/sim/season.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — successor `engine/season/loop/driver.py`; went with its `season_driver` composition role) |
+| `engine/tests/test_combat_bridge_seam.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — the combat-bridge seam test; needs no successor (`_part6` §D.4)) |
+| `engine/tests/test_f7_smoke_oracle.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — a seeded `mc_v18` campaign golden; the successor goldens ran at `28-ii`) |
+| `engine/tests/test_mc_v18_regression.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — a seeded `mc_v18` campaign golden; the successor goldens ran at `28-ii`) |
+| `engine/tests/test_pipeline_reach.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — reach probe over the deleted spine; successors ran at `28-ii`) |
+| `engine/tests/test_world_population.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — world-population probe over the deleted spine and `serialize_world`/`restore_world`; successors ran at `28-ii`) |
+| `tests/valoria/test_engine_clock_phases.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — the phase-order test of the deleted `engine_clock`; the driver's own tests are its successor) |
+
+<!-- 2026-10-01, plan position `29a` (master workplan v8, `_part3`): the overview world-track modules with no outside
+     importer retired. FORK ref is `5c5d8ec6`, the `main` commit under this branch (a branch commit SHA does not survive a squash merge,
+     so the ref must already be an ancestor of `main`); every row below was checked with
+     `git cat-file -e 5c5d8ec6:<path>` before it was written. One exact-file row each (never a directory prefix).
+     `ci_track.py` is NOT here: `systems/factions/sim/excommunication.py:166` still imports it lazily, so it leaves
+     with `29b`; `ms_track.py` stays until `27` (`threadwork/sim/{co_movement,opposing}.py` import it). -->
+
+| Old path | New path | Status |
+|---|---|---|
+| `systems/overview/sim/accounting.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29a` — the 13-step end-of-season cascade; no season replacement by port, the season counterparts are MATTER + CENSUS in `engine/season/`; its `accounting` composition role went at `28-iii`) |
+| `systems/overview/sim/ip_track.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29a` — the Imperial Pressure world-track, two stub entry points with no production caller; no season analogue, by architecture: `engine/season/loop/census.py` generates nothing from a clock) |
+| `systems/overview/sim/rs_track.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29a` — the RS world-track, one stub entry point (`apply_rs_delta`); no season analogue, by architecture; its `rs_track_delta` role went at `28-iii`) |
+| `engine/tests/test_accounting_accord_drift_probe.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29a` — the report-only province-Accord drift probe over the deleted `accounting.run_accounting`; its subject is gone) |
+
+<!-- 2026-10-01, plan position `29b` (master workplan v8, `_part3`): the faction layer, `game_state.py` and their
+     roles retired. FORK ref is `5c5d8ec6`, the `main` commit under this branch (a branch commit SHA does not survive a squash merge,
+     so the ref must already be an ancestor of `main`); every row below was checked with
+     `git cat-file -e 5c5d8ec6:<path>` before it was written. One exact-file row each (never a directory prefix).
+     The SYMBOL-LEVEL rows at the end follow the `systems/mass_battle/sim/hierarchy/units.py` shape: the FILE STAYS
+     LIVE and the row exists so the deleted symbol's source has a followable ref. THERE ARE TWO, AND ONLY TWO, ON
+     PURPOSE: `tests/valoria/test_pathres.py::test_the_two_resolvers_AGREE_on_the_fork_shape` counts every FORK row
+     whose path still exists on disk as a divergence between the two resolvers and tolerates five in all; this
+     ledger already carried one (`units.py`). Every other deleted test function and registry block is recorded in
+     the note beside the gap and in git at `5c5d8ec6`. -->
+
+| Old path | New path | Status |
+|---|---|---|
+| `systems/factions/__init__.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — package marker of the retired FA-lane tree; the season expresses a faction as person acts `via` seats and carries no stat vector of its own) |
+| `systems/factions/sim/__init__.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — package marker of `systems.factions.sim`; its re-export list named only modules deleted in the same commit) |
+| `systems/factions/sim/absolution.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — Church Absolution faction-unique action; its only production importer was `faction_action.py`, deleted with it) |
+| `systems/factions/sim/charter_liberties.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — Hafenmark Charter of Liberties — an armature stub, implementation pending, with no importer) |
+| `systems/factions/sim/council_solmund.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — Council of Solmund, the rare 1/arc gathering; its only production importer was `faction_action.py`) |
+| `systems/factions/sim/crown_initiative.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — Crown Initiative (three modes); its only production importer was `faction_action.py`) |
+| `systems/factions/sim/excommunication.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — Church Excommunication action. It was the only importer of `systems/overview/sim/ci_track.py` (a lazy import of `apply_ci_delta`, line 166), which is why `29a` left `ci_track.py` standing and why `ci_track.py` leaves with it here) |
+| `systems/factions/sim/faction_action.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — faction action selection + resolution, the campaign driver's `faction_action` role until `28-iii`; its `_try_conquest` was the sole caller of `massbattle.resolve_mass_battle`. No season port of its action menu: the season's faction is person acts `via` seats) |
+| `systems/factions/sim/hafenmark_equipment.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — Hafenmark Wagenburg + Bombards tactic cards; no importer) |
+| `systems/factions/sim/home_sanctuary.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — Church T9 Home Sanctuary, the protected build-up period at game start; no importer) |
+| `systems/factions/sim/infrastructure_reclamation.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — Church Infrastructure-Backed Reclamation (invasion bonus); no importer) |
+| `systems/factions/sim/mass_seizure.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — Church Mass Seizure (PP-411), a writer of `Territory.accord`; no production importer. `Territory` died with `game_state.py` and the Accord clock has no season analogue (ED-WR-0011 option A)) |
+| `systems/factions/sim/parliamentary_action.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — Parliamentary Sanction (Censure tier) proposal mechanism, a caller of the `parliamentary_vote` composition role; its production importer was `faction_action.py`) |
+| `systems/factions/sim/parliamentary_transfer.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — Universal CB-required territorial transfer (§§1-4); production-orphaned — nothing drove it after the `territory_transfer_*` roles went at `28-iii`, and `engine/season/` has no replacement (its `transfer` verb is an unrelated store-to-store rung move)) |
+| `systems/factions/sim/treaty.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — Crown Treaties + Treaty Expiration (90-95%/arc lapse). It had no importer once `28-iii` deleted its `snapshot_state.treaties` role) |
+| `systems/factions/sim/tribunal.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — asymmetric proceedings + the Excommunication Tribunal; its only production importer was `excommunication.py`) |
+| `systems/factions/sim/varfell_mandate_action.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — Varfell Mandate-gain action (placeholder-named in `registers/placeholder_names.yaml`); no importer) |
+| `systems/factions/sim/varfell_territorial_acquisition.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — Varfell territorial-acquisition mechanic (placeholder-named in `registers/placeholder_names.yaml`); no importer) |
+| `systems/overview/sim/ci_track.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — Church Influence (CI) world-track, `apply_ci_delta`; its last importer was `systems/factions/sim/excommunication.py:166`, deleted in the same commit (`29a` found the blocker and moved this file here). No season analogue, by architecture: `engine/season/loop/census.py` generates nothing from a clock) |
+| `systems/social_contest/sim/parliamentary_vote.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — Parliamentary Vote (faction scale): the target of the `parliamentary_vote`, `parliamentary_motion` and `parliamentary_vote_declaration` composition roles, all deleted here. It imported `game_state.MULTS`, so it could not outlive that file, and `2-ii` retires the rest of this tree anyway) |
+| `systems/social_contest/sim/parliamentary_stay.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — Parliamentary Stay procedure (§10.1, ED-631): its one import was `parliamentary_vote` and nothing called it; deleted with that module rather than left unimportable for `2-ii`) |
+| `engine/autoload/game_state.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — the global mutable-state hub: `Faction` (the pre-LPS-1 L/Sta/W/I/Mil stat vector and its `adjust`), `Territory`, `World`, `create_world`, `MULTS`, `ACCORD_MAP`, `PT_MAP`, `canonical_pt`. `serialize_world`/`restore_world` left at `28-iii`. The season's `World` is `engine/season/state/world.py` and its realm is `harness/populated.build_realm`. The substrate-grade values it re-exported (`ALL_PLAYABLE`, `STARTING_*`, `canonical_accord`) were already owned by `engine/substrate/{world_initial_state,canon_buckets}.py`, and `canonical_pt` had no retained importer) |
+| `engine/tests/test_parliamentary_action.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — Parliamentary Sanction mechanism oracle; its subject (`systems/factions/sim/parliamentary_action.py`) and its `game_state.create_world` fixture are deleted) |
+| `tests/valoria/test_faction_write_sweep.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — one faction write mechanism and a guard that fails on a second (`ED-FA-0038`); its subject, `Faction.adjust`, is deleted) |
+| `tests/valoria/test_faction_stat_bounds.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — the faction-stat clamp bounds read from the descriptor registry (`ED-IN-0029`'s floors); `Faction.adjust`, `descriptors.faction_bounds` and the `fac.*` block are all deleted) |
+| `tests/valoria/test_mass_seizure_accord_write.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — a seizure writes `Territory.accord` on the continuous scale (`ED-FA-0037`); `mass_seizure.py` and `Territory` are deleted) |
+| `tests/valoria/test_faction_obstacle_conventions.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — obstacle-convention pins over `crown_initiative`, `tribunal`, `parliamentary_transfer` and `council_solmund`, all deleted) |
+| `systems/mass_battle/sim/massbattle.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — SYMBOL-LEVEL ONLY: `resolve_mass_battle`, `_faction_to_unit` and `_morale_start_from_stability` DELETED — the strategic Military Conquest adapter, whose only caller was `faction_action._try_conquest` and whose duck-typed input was `game_state.Faction`. THE FILE ITSELF IS LIVE: `resolve_field`, `_weighted_unit` and `_run_and_grade` are the season path, and `_GarrisonStub`, `_round_half_up` and the `_STA_MORALE_*` bounds are left standing for `20-iv`, which decided the season path's morale source: `_GarrisonStub` was deleted and the bounds renamed `_MORALE_FLOOR`/`_MORALE_CEIL`) |
+| `engine/season/harness/arms.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29b` — SYMBOL-LEVEL ONLY: `_pre_ruling_bounds_arm`, `_floor_arm`, `_ARMS_BOUNDS` and `_ARMS_FLOOR` DELETED — the two retired comparisons that patched `descriptors.faction_bounds` and `game_state.Faction.adjust`. Both subjects are deleted, their own note said they ran against `engine.mc_v18`'s Faction model (deleted at `28-iii`), and nothing wired them into `ARMS`; the only thing that ran them was `tests/valoria/test_balance_oracle_arms.py::test_the_retired_pair_definitions_still_import`, whose loop now covers `_ARMS_POOL` alone. THE FILE IS LIVE: `ARMS` (the `field_casualty_model` pair), `_pool_arm`/`_ARMS_POOL` and `two_proportion_z` are untouched) |
+
+<!-- 2026-10-01, plan position `29d` (master workplan v8, `_part3`): the world sim tree retired. FORK ref is `5c5d8ec6`,
+     the `main` commit under this branch (a branch commit SHA does not survive a squash merge, so the ref must already
+     be an ancestor of `main`); every row below was checked with `git cat-file -e 5c5d8ec6:<path>` before it was
+     written. One exact-file row each (never a directory prefix), and no symbol-level row: every file below is gone. -->
+
+| Old path | New path | Status |
+|---|---|---|
+| `systems/world/__init__.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29d` — package marker of the retired WR-lane sim tree; the directory keeps `adjacency_map.jsx`, a presentation schematic that is not Python) |
+| `systems/world/sim/__init__.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29d` — package marker of `systems.world.sim`; its docstring listed only the four modules deleted in the same commit) |
+| `systems/world/sim/npe.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29d` — NPC Population Engine: `generate_npc`, `simulate_npc_actions`; the last production reader of `engine/substrate/world_initial_state.py`'s `STARTING_STATS` and of `canon_buckets.canonical_accord`. Its only production importer was `systems/overview/sim/accounting.py`, deleted at `29a`, and no `engine/season/` module reads it. The season's people are built by `engine/season/data/cast.py` + `harness/populated.py`) |
+| `systems/world/sim/insurgency_pipeline.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29d` — Revolt → Insurgency → Faction emergence pipeline (GD-3), `check_insurgency_triggers`/`check_insurgency_promotion`; it lazily imported `systems/settlements/sim/adjacency.py` (the E1 edge, which is why this position precedes `29c`). Successor design: a Query (`24h` P5), which reads rather than imports) |
+| `systems/world/sim/miraculous_event.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29d` — Miraculous event resolution: a `stubwire.stub_resolve` armature stub (`trigger_miraculous_event`), no importer; its `module_contracts.yaml` row stays with `sim_module: none`) |
+| `systems/world/sim/restoration_movement.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29d` — Restoration Movement PT decay + emergence: two `stubwire.stub_resolve` armature stubs (`process_rm_pt_decay`, `check_rm_emergence_trigger`), no importer. The Restoration Movement as a FACTION is a proper noun in `references/names_index.yaml` and is untouched) |
+
+<!-- 2026-10-01, plan position `29c` (master workplan v8, `_part3`): the settlements sim tree retired. FORK ref is
+     `5c5d8ec6`, the `main` commit under this branch (a branch commit SHA does not survive a squash merge, so the ref
+     must already be an ancestor of `main`); every row below was checked with `git cat-file -e 5c5d8ec6:<path>` before
+     it was written. One exact-file row each (never a directory prefix), and no symbol-level row: every file below is
+     gone. NOT retired, and read by code: `systems/settlements/valoria_geography_v30.yaml` (`terrain.py` and
+     `harness/populated.py`) and `valoria_map_v30.svg`; `systems/settlements/__init__.py` stays as the package marker. -->
+
+| Old path | New path | Status |
+|---|---|---|
+| `systems/settlements/sim/__init__.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29c` — package marker of `systems.settlements.sim`; its docstring listed `settlement`, `infrastructure`, `adjacency` and `temperaments`, deleted in the same commit) |
+| `systems/settlements/sim/adjacency.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29c` — `ADJACENCY`, the territory-adjacency literal keyed by `T1`..`T17`; NO SUCCESSOR, by design: the season has no province graph (`move` re-homes by `contain`; H-149 restricts `march` targets) and none is invented. Its one importer was `systems/world/sim/insurgency_pipeline.py` (lazy), deleted at `29d` — the E1 edge. The adjacency edges authored in `systems/settlements/valoria_geography_v30.yaml` are data and stay) |
+| `systems/settlements/sim/infrastructure.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29c` — church infrastructure (Chapel/Church/Cathedral, Templar Station, Inquisitor Base, Church Governor) and `SEIZURE_OB_CAP`: no importer outside this tree. The `ED-SE-0052` readers of `fort_level` resolve to `Site.condition` and `queries/world_q.py::fortification_of`, the one read on the battle path (`seam/wrappers/mass_battle.py`); `set.facility_tier` and `terr.fort_level` stay as descriptor keys in `references/descriptor_registry.yaml`) |
+| `systems/settlements/sim/ledger.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29c` — `LedgerTag` and `ledger_{add,has,get,sweep}`, the per-settlement Precedent/Grudge/Debt/Reputation/Leverage tags; its only importer was `registry.py`, in this tree, and no `engine/season/` module reads it) |
+| `systems/settlements/sim/registry.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29c` — the `Settlement` registry and `populate_from_geography`; it lost its only composition role (`world_gen_settlements`) at `29b`. The season's settlements are minted by `engine/season/harness/populated.py` from the same geography YAML, which stays) |
+| `systems/settlements/sim/settlement.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29c` — `compute_settlement_state` / `aggregate_to_province` and the §1.3 derived-value tables; no importer outside this tree. Its `module_contracts.yaml` row (`settlement_layer`) stays with `sim_module: none`) |
+| `systems/settlements/sim/temperaments.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29c` — per-territory Public Temperament, `temperament_modifiers` / `apply_strain_shock` and the drift store; no season reader, the plan's disposition table (`_part6`) names `stance` as its successor, which reads rather than imports) |
+| `tests/valoria/test_settlement_temperament_drift.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29c` — its only subject was `temperaments.py`'s drift-store read/write symmetry (`ED-SE-0050`, landed), and that module is deleted; the test imported nothing else) |
+
+<!-- 2026-10-01, plan position `28-0 follow-up` (master workplan v8, `_part3`): the last two members of the retired
+     `_OI17_FULL_MODULE_ENTRYPOINTS` set that were not another position's. FORK ref is `5c5d8ec6`, the `main` commit
+     under this branch (a branch commit SHA does not survive a squash merge, so the ref must already be an ancestor of
+     `main`); both rows were checked with `git cat-file -e 5c5d8ec6:<path>` before they were written. One exact-file row
+     each, no symbol-level row. NOT retired, and read by code: `systems/characters/sim/conviction.py` (`knots.py` and
+     `engine/tests/test_knots_ed912.py` import it; position `29e` owns it), and `systems/characters/sim/__init__.py`,
+     which stays as the package marker. -->
+
+| Old path | New path | Status |
+|---|---|---|
+| `systems/characters/sim/beliefs.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-0 follow-up` — the `Belief` store and `revise_belief` / `social_success` / `get_active_beliefs`, orphaned by design since `Person.beliefs` was deleted (2026-09-25; `engine/season/state/carriers.py`) and its `snapshot_state.beliefs` composition role went at `28-iii`. No importer, no composition role, no string naming it outside the registries edited here. It called `conviction.mark_belief_revision_pending`, which now has no caller) |
+| `systems/characters/sim/companion.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-0 follow-up` — `run_companion_scene`, a single `stubwire.stub_resolve` armature stub (Pass 2l, OI-17), no importer; the last live entry of the old `_OI17_FULL_MODULE_ENTRYPOINTS` list that was not `systems/threadwork/sim/rendering.py` (position `27`'s). `engine/substrate/stubwire.py` stays: `social_contest` and `rendering.py` still call it) |
