@@ -547,7 +547,7 @@ DEFAULT_FIXTURES = Fixtures(
     field_casualty_model="scaled_by_degree",  # `H-148`, swept scaled_by_degree / total / none
     # `H-148`, second half: HOW MUCH `Person.stance` A LOST FIELD MOVES against the winning
     # faction (the grudge) and against the loser's own creed (the morale hit) -- one weight for
-    # each, on the ruled shape `(referent, valence, weight)` `decision/choose.py::stance_toward`
+    # each, on the ruled shape `(referent, valence, weight)` `queries/person_q.py::stance_toward`
     # already sums. #353 states neither the referent's valence sign nor its magnitude; declared,
     # defaulted and swept rather than chosen in a body. Injection site and register row: as
     # `field_casualty_model` above, deferred to the same reader.
@@ -630,12 +630,13 @@ DEFAULT_FIXTURES = Fixtures(
     # `clamp01(told_weight ** hops * relation)`, `relation = 1 + rank_gain*rank +
     # regard_gain*clamp(regard/STANCE_MAX, -1, 1)`. CONTROL FIRST: at `told_weight` 1.0 and both
     # gains 0 every claim weighs exactly 1.0 and the reader orders as it did before `T3a` -- the
-    # realm hash and `corpus_run 0` are byte-identical there. SHIPPED: `told_weight` 0.5, so one
-    # hop of hearsay never outranks the hearer's own firsthand claim by being newer; gains 0.5
+    # realm hash and `corpus_run 0` are byte-identical there. SHIPPED: `told_weight` 0.5, so, while
+    # `rank` reads 0 (`H-180`), one hop of hearsay never outranks the hearer's own firsthand claim
+    # by being newer; gains 0.5
     # [ASSUMPTION], which at the extremes moves a told claim's weight by half either way. Read
     # only on a claim that names a teller.
     # [JUSTIFIED: engine/season/hole_register.yaml H-176 -- the hearsay discount; CAT-3 rules THAT a told claim is graded when read and gives no magnitude, so it is injected and swept 1.0 / 0.5 / 0.25]
-    told_weight=0.5,                   # `H-176`, swept 1.0 (control) / 0.5 (SHIPPED) / 0.25
+    told_weight=0.5,                   # `H-176`, swept 1.0 (control, WITH both gains 0) / 0.5 (SHIPPED) / 0.25
     # [JUSTIFIED: engine/season/hole_register.yaml H-177 -- rank's gain on a teller's weight; CAT-3 orders lord > peer, no magnitude; DORMANT while `rank` reads 0 (H-180)]
     rank_gain=0.5,                     # `H-177`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
     # [JUSTIFIED: engine/season/hole_register.yaml H-178 -- regard's gain on a teller's weight; CAT-3 orders peer > enemy, no magnitude, so it is injected and swept 0 / 0.5 / 1.0]

@@ -775,7 +775,7 @@ rows:
     owner:     "the design (a static table); Person holds the convictions it multiplies"
     grade:     "assumption"
     default:   "the sparse table in `rosters.yaml: tables.alignment`, 27 cells over 4 axes, sparse default 0.0"
-    site:      "rosters.yaml tables.alignment, read by decision.align()"
+    site:      "rosters.yaml tables.alignment, read by `data.verbs.align()`"
     sweep:     ["declared", "uniform", "sign_only"]
     unblocks:  "every NPC decision"
     cite:      "`PLAN.md` `W5`: the table is \"registered as its own `assumption` row\" and \"the table is a row before it is a formula\". THE WEIGHTS ARE INVENTED AND THIS ROW IS WHAT MAKES THAT LAWFUL — §G is declare · default · sweep and all three are discharged. ⚠ IT MUST NOT BE A ZERO MATRIX (PLAN §W5: \"a zero matrix makes convictions inert, which is the dead-carrier defect #353 `:739-744` names, and it would pass every test while meaning nothing\"); `_load_alignment` raises if every listed cell is zero, mutation-verified. MEASURED: the sweep moves 1 of 4 verdicts, and it moves it AT THE CONTROL ONLY — `P31` passes at `declared` AND at `sign_only` and fails at `uniform`, so its result rests on the DIRECTIONS and not on the invented magnitudes. Reproducible with `python -m pytest test_tracer_is_honest.py -k alignment_table_is_swept -s`. ⚠ `uniform` had to be fixed once: it first set only the LISTED cells to 1.0, leaving unlisted pairs at 0.0, so it was not uniform and `P31` survived the control."
@@ -968,7 +968,7 @@ rows:
     owner:     "`decision/options.py` `opening_set` (`refusal_tolerance` / `refuses`)"
     grade:     "ruled"
     default:   "None -- THE CONTROL ARM, SHIPPED, and NOT because no matching axis is available today. ⚠ CORRECTED 2026-09-27 (`layer-conformance` attack, independently confirmed): a first writing of this row and of `fixtures.py`'s comment both claimed the gate 'cannot fire on the old content even by accident' -- FALSE. `references/descriptor_registry.yaml:286` already carries `instrumental` with the identical `deontological/instrumental` sign convention this row hardcodes, so `refusal_axis=\"instrumental\"` WOULD arm the gate against the CURRENT 13-pursuit tables. It ships unset because arming it now is an unruled design choice (orchestrator/Jordan's to make), not because the roster lacks a usable name. It is set to the ruled axis's new roster name in the commit that lands the 15-pursuit basis (`H6`) only if that choice is 'wait'"
-    site:      "Fixtures refusal_axis, read by `engine/season/decision/options.py`'s `opening_set` once per call; `refusal_tolerance` checks the name against `PURSUIT_AXES` and reads the person's weight through `decision.choose.project`, and `refuses` reads the verb's cell through `decision.choose.align` -- so the `H-66` alignment sweep reaches the gate exactly as it reaches the score"
+    site:      "Fixtures refusal_axis, read by `engine/season/decision/options.py`'s `opening_set` once per call; `refusal_tolerance` checks the name against `PURSUIT_AXES` and reads the person's weight through `decision.options.project`, and `refuses` reads the verb's cell through `data.verbs.align` -- so the `H-66` alignment sweep reaches the gate exactly as it reaches the score"
     sweep:     []
     unblocks:  "`ED-IN-0261`'s deontological refusal -- the one person-side refusal `score` cannot express, because at `choice_temperature` 0.1 a good enough outcome outranks any finite penalty"
     cite:      "`ED-IN-0261` (`registers/editorial_ledger_in_archive.jsonl`), Jordan: *it's a refusal to take certain actions. It gates actions insofar as the weighting is a threshold for certain actions.* NO MAGNITUDE IS INJECTED: the threshold is the person's projected weight and the verb's value is its `alignment` cell, both already single-owned. ⚠ THE READING THIS ROW TAKES, stated so it can be attacked: (a) the NEG pole refuses, so a verb is refused when its cell sits further toward the POS pole than the person's weight (`align(verb, axis) > weight`); (b) only a verb the axis ENGAGES (a non-zero cell, `_scar`'s reading of *engages*) can be refused -- the sparse default is not one of the ruling's *certain actions*. Under (a) a person with a negative weight refuses every positively-aligned verb and also any NEGATIVE cell less negative than their own weight -- AND a person whose PROJECTED WEIGHT IS EXACTLY 0 (the value `to_axes` returns for anyone whose pursuits do not project onto this axis at all) refuses every verb with ANY positive cell, which is easy to miss since 'weight 0' reads as 'indifferent' rather than 'refuses everything positive.' Neither case is measured on a real corpus; both are consequences of (a), not separately ruled. ⚠ CONVENTION-GRADE GAP, flagged by the same attack: WHICH POLE REFUSES is read nowhere from data -- `refuses` hardcodes `>` for the NEG pole. No code failure is possible today because the axis is unset by default, but if `H6` lands the axis with the poles reversed from this row's assumption, the gate inverts silently. `H6` should read the refusing pole from roster data rather than inherit this hardcode. REPRODUCE: `python -m pytest engine/season/tests/test_governance_build.py -q -k h2`; the AX-2 falsifier for this code is `test_decision_package_never_names_world_anywhere_under_it` in `test_season_shape.py` (reproduce with `-k decision_package_never_names_world`), NOT `test_choose_receives_no_world`, which inspects `SeasonDriver.deliberate`'s call string and cannot see `options.py` at all -- corrected here after `PROPOSAL.md` cited the wrong one. (Bare `file.py:NNN` line citations are deliberately avoided in this field -- G11's own citation validator misreads any `:NNN` substring as a line reference into #353 regardless of the filename it follows.)"
@@ -3467,7 +3467,7 @@ rows:
     tier:      1
     kind:      "WIRING"
     hole:      "`Claim.teller` (ADDED AT BATCH-CLOSE, methodology-close Phase 1, FIDELITY TO PLAN lens, closing `RULINGS.yaml` CAT-3) HAS EXACTLY ONE WRITER AND NO PRODUCTION READER -- A CARRIER ADDED AHEAD OF ANY CONSUMER, THE SHAPE `ID-13` RETIRED `Tenure.conferrer` FOR. The told-deposit site (`loop/witness.py:678-680`) is the only place any `Claim` is constructed with a non-`None` `teller`; every other `Claim(...)` call site in the tree (five production sites total, `witness.py:431,519,540,567`) passes `None` or omits the argument. Nothing reads `Claim.teller` outside `tests/test_told_by_channel.py`'s own falsifiers -- no query, no fold clause, no epistemic weighting keys off it yet. UNLIKE `H-135`'s'S SIBLING CLASS (a gap unreachable because nothing produces the state), this is the OPPOSITE shape: the state IS produced, on every `told_by` deposit, and simply goes unread"
-    owner:     "engine/season/state/carriers.py -- `Claim.teller`; engine/season/loop/witness.py -- the one write site; THE READER IS BUILT (telling workplan `T3a`, ED-IN-0282, 2026-10-01): `decision/options.py::teller_weight` reads `Claim.teller` and grades the claim by the hearer's relation to the teller (`H-176`..`H-178`), and `epistemic.belief_contradicts` ranks a person's own claims by that weight through `queries/person_q.py::LedgerReader`. The `hole:` text above describes the tree before `T3a`"
+    owner:     "engine/season/state/carriers.py -- `Claim.teller`; engine/season/loop/witness.py -- the one write site; THE READER IS BUILT (telling workplan `T3a`, ED-IN-0282, 2026-10-01): `decision/options.py::teller_weight` reads `Claim.chain` (teller = chain[-1], hops = len(chain), `T3b`) and grades the claim by the hearer's relation to the teller (`H-176`..`H-178`), and `epistemic.belief_contradicts` ranks a person's own claims by that weight through `queries/person_q.py::LedgerReader`. The `hole:` text above describes the tree before `T3a`"
     grade:     "measured"
     default:   "none"
     site:      ""
@@ -3813,23 +3813,26 @@ rows:
     owner:     "decision/options.py -- `teller_weight`, the `weigh` closure `LedgerReader` ranks
       a person's own claims by (telling workplan `T3a`)"
     grade:     "assumption"
-    default:   "0.5 -- SHIPPED, not the control. `1.0` is the control: every claim weighs 1.0,
-      every value's support is exactly 1.0 and `LedgerReader` orders by (when, confidence) as it
-      did before `T3a` -- byte-identical realm hash and `corpus_run 0`. At `0.5` one hop of
-      hearsay can never outrank the hearer's own firsthand claim on a different value merely by
-      being newer (the firsthand value's support is 1.0; the told one's is at most 0.75 with both
-      gains at 0.5), which is `test_t3_a_firsthand_claim_holds_against_a_newer_told_claim_of_
-      equal_confidence`. `0.25` is the sceptic's arm"
+    default:   "0.5 -- SHIPPED, not the control. `1.0` WITH `rank_gain` AND `regard_gain` BOTH 0
+      is the control (swept alone, `1.0` still leaves the gains shipped and a hostile teller
+      weighs 0.5): every claim then weighs 1.0, every value's support is exactly 1.0 and
+      `LedgerReader` orders by (when, confidence) as it did before `T3a` -- byte-identical realm
+      hash and `corpus_run 0`. At `0.5`, while `rank` reads 0 (`H-180`), one hop of hearsay never
+      outranks the hearer's own firsthand claim on a different value merely by being newer (the
+      firsthand value's support is 1.0; the told one's is at most 0.5 x 1.5 = 0.75), which is
+      `test_t3_a_firsthand_claim_holds_against_a_newer_told_claim_of_equal_confidence`. Once
+      `rank` can read +1, a teller who outranks the hearer, at full regard, reaches 1.0, ties on
+      support and wins on `when` (`H-177`). `0.25` is the sceptic's arm"
     site:      "Fixtures told_weight, read by `decision/options.py::teller_weight` on the first
-      claim in a ledger that names a teller, as `told_weight ** hops` with hops = 1 on today's
-      `Claim.teller` (`T3b` reads hops off `Claim.chain`); consumed by `queries/person_q.py::
+      claim in a ledger that names a teller, as `told_weight ** hops` with hops = `len(Claim.chain)`
+      (`T3b`); consumed by `queries/person_q.py::
       LedgerReader._support` inside `epistemic.belief_contradicts`, the only weighed reader"
     sweep:     [1.0, 0.5, 0.25]
     unblocks:  "hearsay that is weaker than seeing (CAT-3's half that needs no relation), and the
       noisy-OR over origins `T5` builds on (two independent tellers outrank one)"
     cite:      "LADDER RUN at `T3a`, 2026-10-01 (`CLAUDE.md` section 0): not superseded --
       `RULINGS.yaml` CAT-3 is CLOSED with 'store the teller', graded when read, and its reader is
-      exactly what `H-157` recorded as missing; not irrelevant -- `Claim.teller` is written by the
+      exactly what `H-157` recorded as missing; not irrelevant -- `Claim.chain` is written by the
       told deposit; no design document gives the magnitude (the PDF A Tells B About C, stage 6,
       is intent only); precedent is `H-155`'s injected, swept magnitude. MEASURED at `T0`
       (telling workplan): no told triple with a teller is deposited in `corpus_run` or
@@ -3847,7 +3850,8 @@ rows:
     default:   "0.5 -- SHIPPED, AND DORMANT: `rank` reads 0 for every pair today (`H-180`), so
       every arm of this sweep is byte-identical until an `office` claim has a writer. `0` is the
       control. `0.5` lets a teller who outranks the hearer reach full weight from `told_weight`
-      0.5 only together with a positive regard"
+      0.5 only at full regard (stance at STANCE_MAX), where it ties a firsthand claim on support
+      and wins on `when`"
     site:      "Fixtures rank_gain, read by `decision/options.py::teller_weight` (with
       told_weight and regard_gain, on the first claim naming a teller), multiplying `rank(p,
       teller)`"
@@ -3871,10 +3875,11 @@ rows:
     default:   "0.5 -- SHIPPED [ASSUMPTION]. `0` is the control (relation 1.0 whatever the
       stance). At `0.5` a fully hostile teller's claim weighs half what a neutral one's does and a
       fully trusted one's half again as much, clamped to 1.0. ⚠ AT THE SHIPPED told_weight 0.5
-      THIS NEVER LETS A ONE-HOP CLAIM BEAT THE HEARER'S OWN FIRSTHAND CLAIM (at most 0.75 against
-      1.0); it decides between told claims, and against a firsthand claim only on the control
-      told_weight 1.0 arm, where `test_t3_unplanted_members_with_opposite_loyalty_reach_
-      different_verdicts` observes it"
+      AND WHILE `rank` READS 0 (`H-180`) THIS NEVER LETS A ONE-HOP CLAIM BEAT THE HEARER'S OWN
+      FIRSTHAND CLAIM (at most 0.75 against 1.0); it decides between told claims, and against a
+      firsthand claim only on the `told_weight` 1.0 arm with `regard_gain` live (not the control),
+      where `test_t3_unplanted_members_with_opposite_loyalty_reach_different_verdicts` observes
+      it"
     site:      "Fixtures regard_gain, read by `decision/options.py::teller_weight` (with
       told_weight and rank_gain, on the first claim naming a teller), multiplying the clamped
       regard of `p` for the teller"

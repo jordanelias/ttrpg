@@ -111,6 +111,11 @@ reads the payload; delete `told_by_event`. Hand-built `tell` acts in tests gain 
 that every soak-row reader tolerates a non-scalar operand. Changes nothing about who hears.
 Subject: `[fix] told triple rides the Act; WITNESS stops reading the teller`.
 
+**As built (`23bb90b`):** no decline on `said is None`. Measured: declining drops 3 of 31 corpus candidates
+and moves the realm hash, because persons form `own_ledger` candidates on referents they hold nothing about
+and the fold used to refuse them. It is deferred to T4 (below). `said_of`'s `fx` is unread until G3, and
+`Said` carries no `circle` until G6 (a field lands with its reader).
+
 ### T2 · the pure moves
 
 Open first: `options.py` (`align`, the recorded deferred move); `data/verbs.py` (imports,
@@ -144,6 +149,14 @@ leader, one planted told claim from the leader against a firsthand claim both ho
 `regard_gain` 0.5, agree at control. If the H-40 sweep reddens, re-argue H-40's row, never the
 assertion. Subject: `[design] hearsay weighed at read on Claim.teller (H-157)`.
 
+**As built (`4244d94`):** `belief_contradicts(…, weigh=None)` takes the closure, not `fx` (an import cycle:
+`decision.options` imports `epistemic`); `regard(p, x)` takes no `fx` until G1. `rank` reads 0 (absent row H-180:
+an ordering exists in `offices.yaml` but nothing deposits an `office` claim), so `rank_gain` (H-177) is dormant.
+The second falsifier holds `told_weight` at 1.0, because at the shipped 0.5, while `rank` reads 0, a one-hop
+claim reaches at most 0.5 × 1.5 = 0.75 < 1.0, so no regard can make hearsay beat a firsthand claim; regard
+decides only between told claims, which `test_t3_regard_decides_between_two_told_claims_at_the_shipped_weights`
+observes. `told_weight` 1.0 is a control only with both gains 0.
+
 **T3b.** **Before any edit**, scratch `t3_dump.py` on the pre-edit tree (corpus ×3 seasons per NPC-rung
 case, realm ×1): per person, the sorted `(subject, predicate, value, when, source, confidence, teller)`
 tuples and, per held `(subject, predicate)`, what `LedgerReader.read` returns → `t3_pre.json`, md5
@@ -169,6 +182,13 @@ self-subject skip only when `not row.counterparty` (Decision 3). **Asymmetry:** 
 `test_n3`'s floors at half the measured count, stating the mechanism (fewer formed, each addressed),
 unless M0d < 20% (refused, §6); if M0d ≥ 20% and `attempt_cases` falls below its floor, stop: defect.
 Re-measure M0a after. **Out of scope:** sigma's `REFUSED` raising uncaught for `tell` may surface. Subject: `[design] tell names its hearer: to, presence, opponent (ED-IN-0282)`.
+
+**From Batch 1:** decide T1's deferred decline on `said is None` here (it changes who forms a `tell`). T0
+measured (scratch `t0/`, md5 of `m0_results.json` 4e8fd3fa…): M0d is 12% on the realm, 100% on the corpus (one rung
+by construction) and 78.2% pooled, so name the deciding instrument before re-pinning `test_n3` (the realm is the
+shipped game; the corpus is a construction artifact); M0b is 49.3% pooled at `declared`, which meets G1's
+trigger; M0h is 14 contest Events naming a person other than the actor, which meets `stake`'s trigger (H-179).
+No told triple is deposited in either instrument (M0f), so the effects of T1-T3b appear only after T4.
 
 ### T5 · dedup by origin, and T6 · a teller's record
 

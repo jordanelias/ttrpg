@@ -693,7 +693,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         # ⭐ Jordan, 2026-09-13: *"The faction one is factored by loyalty."* The `commit` edge says
         # a person belongs; it cannot say how much they mean it, and a faction whose members all
         # pull equally hard is not a political game. So the creed's referent — the leader — gets a
-        # STANCE ROW weighted by `cast.loyalty`, and `decision/choose.py::stance_toward` is what
+        # STANCE ROW weighted by `cast.loyalty`, and `queries/person_q.py::stance_toward` is what
         # reads it: `valence * weight` summed over the rows naming a candidate's subject, added to
         # every candidate the creed's own Q4 question generates.
         #

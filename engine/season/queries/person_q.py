@@ -30,8 +30,8 @@ module makes that checkable, and **nothing checked it until this unit** --
 
 `decision/` MAY import this module (`04 §C.3`: *"`decision/` imports `person_q` and `data/`"*), and
 does: `choose` and `options` read `stance_toward` and `said_of` from here. The AX-2 by-path scan
-(`test_decision_package_never_names_world_anywhere_under_it`) forbids `queries.world_q` and
-`queries.cache` from `decision/` and admits `queries.person_q`; this module's own scan
+(`test_decision_package_never_names_world_anywhere_under_it`) is an allow-list: it forbids
+`queries` from `decision/` and admits `queries.person_q` only; this module's own scan
 (`test_person_q_cannot_reach_the_world_side`) still forbids `decision`, so the edge runs one way.
 """
 
@@ -114,8 +114,10 @@ class LedgerReader:
     def _support(self, matches) -> list:
         """`support(v) = 1 - PROD over distinct origins (1 - weigh(c))`, one entry per match, in
         match order. Grouped by `(predicate, value)` -- `read`'s matches share one predicate, so
-        for `read` that is grouping by value; `latest_about` spans predicates and two predicates
-        are two assertions. An origin is `c.chain[0]` for a told claim and the holder for
+        for `read` that is grouping by value. Under a `weigh`, `latest_about` therefore ranks
+        ACROSS predicates by support, so a firsthand claim on any predicate outranks hearsay on
+        another; no caller weighs `latest_about` today, and the position that weighs `said_of`
+        (G3) decides it. An origin is `c.chain[0]` for a told claim and the holder for
         anything else; one origin counts once per value, at its highest
         weight, so a teller repeating himself adds nothing. Grouped by `==`, not by hash: a
         claim's `value` need not be hashable.
@@ -208,11 +210,11 @@ def said_of(claims, subject, fx) -> "Said | None":
     a sighting still travels when a sighting is all the teller has.
 
     ⚠ THE COMPARATOR IS `LedgerReader`'s, BOTH TIMES. *Most recent, then most confident* lives once
-    (`_best`); only the pool differs. `fx` is unread at T1 and is in the signature because the
-    weighing positions (`workplans/2026-10-01-telling-workplan.md` T3a) need it and a signature
-    that changes under every caller is the churn this avoids."""
+    (`_best`); only the pool differs. `fx` is unread; the workplan's §3 shape names it and G3 (slant)
+    is its first reader (`workplans/2026-10-01-telling-workplan.md`), and a signature that changes
+    under every caller is the churn this avoids."""
     own = [c for c in (claims or []) if c.predicate != SEEN_PREDICATE]
     c = LedgerReader(own).latest_about(subject) or LedgerReader(claims).latest_about(subject)
     if c is None:
         return None
-    return Said(c.subject, c.predicate, c.value, c.confidence, c.chain, None)
+    return Said(c.subject, c.predicate, c.value, c.confidence, c.chain)

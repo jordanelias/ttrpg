@@ -23,14 +23,15 @@ address with it, and the last one left a reader in `options.py` and the table he
 `ALIGNMENT` binding and its only reader share this module, so the rebind that moves one moves
 the other: the `H-66` sweep and the `H-146` tests rebind `data.verbs.ALIGNMENT`, and nothing
 else binds the name. Every reader (`choose`'s score, `refuses`, `_scar`, `corpus_run`) calls
-`align`; none imports `ALIGNMENT` itself -- a copy imported by name would be a stale snapshot.
+`align`; tests that import `ALIGNMENT` do so function-locally and read it live -- a copy imported
+by name at module scope would be a stale snapshot.
 
 ⚠ `VERB_TABLE` IS ASSIGNED TWICE, VERBATIM, AND ONLY THE SECOND ASSIGNMENT EVER RUNS. The
 forward declaration below (`VERB_TABLE: dict = {}`) carries a comment from a PRIOR layout of
 `shape.py`, from before steps 1-2 extracted the write matrix and roster readers: at that time
 real loading code sat physically between the forward declaration and the fill. It does not any
 more -- the two lines are adjacent -- and nothing at IMPORT TIME reads `VERB_TABLE` in the gap:
-checked directly, `_load_alignment`'s own read of it (`verbs = set(VERB_TABLE)`) is inside a
+checked directly, `_load_alignment`'s own read of it (`admitted = set(VERB_TABLE) | ...`) is inside a
 function BODY, defined a few lines after the real fill but not CALLED (`ALIGNMENT =
 _load_alignment()`) until further still -- by which point the real fill has long since run.
 Preserved unchanged because this is a PURE MOVE and the forward declaration is otherwise

@@ -386,8 +386,10 @@ def test_t3_unplanted_members_with_opposite_loyalty_reach_different_verdicts():
     full and believes him (`transfer` known-false); the one who dislikes him credits him below 1.0
     and keeps what they saw. At the control `regard_gain` 0 they agree.
 
-    ⚠ `told_weight` IS HELD AT ITS CONTROL 1.0 HERE, AND THAT IS FORCED, NOT CHOSEN. At the shipped
-    0.5 a one-hop claim weighs at most 0.5 x 1.5 = 0.75 against a firsthand claim's 1.0, so NO regard
+    ⚠ `told_weight` IS HELD AT 1.0 HERE (its control value; this is not a control arm, since
+    `regard_gain` is the variable), AND THAT IS FORCED, NOT CHOSEN. At the shipped
+    0.5, and while `rank` reads 0 (`H-180`), a one-hop claim weighs at most 0.5 x 1.5 = 0.75
+    against a firsthand claim's 1.0, so NO regard
     can make hearsay beat what the hearer saw (`H-178`'s default says so); regard then decides
     only between told claims. Against a firsthand claim the regard term is observable only where
     `told_weight * relation` can reach 1.0. The firsthand and told claims are planted (identically
@@ -625,3 +627,82 @@ def test_t3b_a_witnessed_retelling_extends_the_chain_by_the_teller():
     assert c.chain[0] == "p_low", "the origin is the first element of the chain"
     row = _claim_row(c)
     assert (row["chain"], row["teller"]) == (["p_low", "p_mid"], "p_mid"), row
+
+
+# ---------------------------------------------------------------------------------------------
+# BATCH 1 CLOSE (antagonist rulings L2, F3): the support arithmetic and the regard term, observed
+# at weights BELOW 1. Before these, every weighed test put one origin in each value group, and the
+# only regard test held `told_weight` at 1.0, so origin choice, the per-origin `max`, the product
+# over origins, and regard at the shipped weight were observed by nothing.
+
+def _t3_cell_claims(p, rows):
+    """`rows`: (id, value, chain) -> told claims on one cell, equal `when` and `confidence`."""
+    return [Claim(cid, p.id, "Hh", "stores:grain", value, 2, "told_by", 100, "own", chain=chain)
+            for cid, value, chain in rows]
+
+
+def test_t3_support_two_origins_beat_one_and_one_origin_counts_once():
+    """TWO INDEPENDENT ORIGINS OUTWEIGH ONE; ONE ORIGIN TWICE IS STILL ONE. At `told_weight` 0.5
+    (gains 0, `rank` reads 0): value 5 told by `x` and by `y` (two origins, each weighs 0.5) has
+    support 1 - 0.5 x 0.5 = 0.75 against value 0 told by `z` alone at 0.5, and value 5 told by `o`
+    and retold through `o` -> `y` (ONE origin, weights 0.5 and 0.25) has support 0.5 -- the
+    per-origin MAX, not the product over claims -- and ties value 0, which the first-listed wins.
+
+    MUTATIONS this must notice (each reasoned against `_support`): origin = holder always (the two
+    origins collapse, support 0.5, the first-listed value 0 wins), the product replaced by `max`
+    (0.5, same), a product over claims instead of origins (0.625, value 5 wins the same-origin
+    case), `max` replaced by overwrite or `min` (0.25 against the asserted 0.5), origin = the
+    last teller instead of the first (the same-origin case reads two origins and 0.625)."""
+    from ..decision.options import teller_weight
+    from ..queries.person_q import LedgerReader
+
+    p = P.tiny_world().persons["p_low"]
+    weigh = teller_weight(p, _t3_fx(0.5, 0.0, 0.0))
+    checked = 0
+
+    two = _t3_cell_claims(p, [("c_z", 0, ("z",)), ("c_x", 5, ("x",)), ("c_y", 5, ("y",))])
+    r = LedgerReader(two, weigh)
+    assert r._support(two) == [0.5, 0.75, 0.75], r._support(two)
+    assert r.read("Hh", "stores:grain") == 5, "two independent origins did not outweigh one"
+    checked += 1
+
+    same = _t3_cell_claims(p, [("c_z", 0, ("z",)), ("c_o1", 5, ("o",)), ("c_o2", 5, ("o", "y"))])
+    r = LedgerReader(same, weigh)
+    assert r._support(same) == [0.5, 0.5, 0.5], r._support(same)
+    assert r.read("Hh", "stores:grain") == 0, (
+        "one origin told twice out-supported a single other origin: it was counted per claim")
+    checked += 1
+    assert checked == 2
+
+
+def test_t3_regard_decides_between_two_told_claims_at_the_shipped_weights():
+    """REGARD, OBSERVED AT THE SHIPPED `told_weight` 0.5. The hearer's stance rows toward `f` and `h`
+    are `(f, +5, 5)` and `(h, -5, 5)`, i.e. regard +25 / -25 = +-STANCE_MAX. `f` and `h` each tell
+    a DIFFERENT value, equal `when` and `confidence`: at the shipped gains (0.5) `f` weighs
+    0.5 x 1.5 = 0.75 and `h` 0.5 x 0.5 = 0.25, so `f`'s value wins WHICHEVER IS LISTED FIRST; at
+    the CONTROL (told_weight 1.0, both gains 0) they tie and the first-listed decides. This is the
+    observation `H-178` claims and `test_t3_unplanted_members_...` cannot make, because that one
+    holds `told_weight` at 1.0 to reach a firsthand claim."""
+    from ..decision.options import STANCE_MAX, teller_weight
+    from ..queries.person_q import LedgerReader, regard
+
+    p = P.tiny_world().persons["p_low"]
+    p.stance = [("f", 5, 5), ("h", -5, 5)]
+    assert regard(p, "f") == STANCE_MAX and regard(p, "h") == -STANCE_MAX
+    checked = 0
+    for order in (("f", "h"), ("h", "f")):
+        val = {"f": 5, "h": 0}
+        claims = _t3_cell_claims(p, [(f"c_{t}", val[t], (t,)) for t in order])
+        shipped = teller_weight(p, _t3_fx(0.5, 0.5, 0.5))
+        assert {c.chain[0]: shipped(c) for c in claims} == {"f": 0.75, "h": 0.25}
+        assert LedgerReader(claims, shipped).read("Hh", "stores:grain") == 5, (
+            f"regard did not decide between two told claims at the shipped weights ({order})")
+        checked += 1
+    first_5 = _t3_cell_claims(p, [("c_f", 5, ("f",)), ("c_h", 0, ("h",))])
+    first_0 = list(reversed(first_5))
+    control = teller_weight(p, _t3_fx(1.0, 0.0, 0.0))
+    assert LedgerReader(first_5, control).read("Hh", "stores:grain") == 5
+    assert LedgerReader(first_0, control).read("Hh", "stores:grain") == 0, (
+        "at the control the two told claims did not tie: regard is leaking into the control arm")
+    checked += 1
+    assert checked == 3

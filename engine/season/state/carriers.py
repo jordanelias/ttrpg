@@ -317,15 +317,13 @@ class Said(NamedTuple):
     A NamedTuple, not a Claim: it has no id, holder, `when` or source, because it is not a belief
     anyone holds -- it is a thing said. `chain` is the chain of the claim the teller picked
     (`said_of` copies `Claim.chain`; `()` for a claim the teller holds firsthand), and the told
-    deposit extends it by the teller. `circle` is `None` until the gated position that fills it
-    (`workplans/2026-10-01-telling-workplan.md`, G-tail); a field no reader reads is declared here
-    only because the workplan's one shape names it."""
+    deposit extends it by the teller. Who may hear it (a confidence's circle) is gated position
+    G6 of `workplans/2026-10-01-telling-workplan.md` and lands with its reader, never before."""
     subject: str
     predicate: str
     value: Any
     confidence: int
     chain: tuple = ()
-    circle: Optional[tuple] = None
 
 
 

@@ -62,7 +62,7 @@ def _told_content(act):
     `decision/options.py::opening_set` copies `queries/person_q.py::said_of(own ledger, subject)`
     onto `Act.payload["said"]` -- so WITNESS never opens the teller's ledger. It used to: this
     function took the teller's LIVE ledger at the barrier, which is a ledger read by someone who is
-    not its holder (`04_CODE_ARCHITECTURE.md` §B.2:230's STRUCTURAL row, `F8` carve-out: *"the ACTOR'S
+    not its holder (`04_CODE_ARCHITECTURE.md` §B.2:245's STRUCTURAL row, `F8` carve-out: *"the ACTOR'S
     OWN ledger ... and no other"*). Moving the read to the Act closes that, and it also fixes WHEN:
     what a hearer receives is what the teller held when they chose to tell, not whatever landed in
     the teller's ledger between CHOOSE and WITNESS (`test_t1_what_hearers_receive_is_decided_at_
@@ -83,8 +83,8 @@ def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = 
     but `Partial`, where the copy may be lossy by exactly one of two mechanisms and never both.
 
     ⚠ THIS READS `held`; IT NEVER WRITES IT AND NEVER TOUCHES THE TELLER'S LEDGER. The caller
-    deposits the RETURN VALUE into the HEARER's own ledger; `held` (the teller's own Claim, read
-    by `_told_content`) is not mutated anywhere in this module, which is `RR-P`'s test satisfied
+    deposits the RETURN VALUE into the HEARER's own ledger; `held` (the `Said` the act carries,
+    read by `_told_content`) is not mutated anywhere in this module, which is `RR-P`'s test satisfied
     as an assertion (r2 `02` §A.10.3's table row, verbatim: *"the teller's own ledger --
     `_told_content` READS it and the branch writes the HEARER's ... the draw decided what the
     listener took away, never what the teller meant"*).
@@ -551,8 +551,9 @@ def witness(self, token: Token, events: list[Event]) -> int:
         #
         # ⚠ THE TELLER NEEDS NO SEPARATE EXCLUSION AND HAD ONE, WHICH IS ONE RULE WITH TWO
         # OWNERS. `pid != _act.actor` stood here; the redundancy guard below SUBSUMES it, because
-        # `_held` is by construction a claim the teller holds, so a teller can never pass "does
-        # the hearer already hold this". Mutation-testing found it: removing the exclusion alone
+        # `_held` is the claim the teller held at CHOOSE (the `Said` the act carries), so a teller
+        # who still holds it can never pass "does the hearer already hold this" (at `Partial` the
+        # dedup compares the lossy copy, so the `pid != _act.actor` condition is load-bearing). Mutation-testing found it: removing the exclusion alone
         # reddened nothing, which is §0.1 pt 2 saying the second guard could not observe a failure
         # the first did not already exclude. The condition is kept as the CHEAP one — it skips the
         # ledger scan for the common case — and is no longer stated as an independent rule.

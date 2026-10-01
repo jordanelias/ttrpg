@@ -2945,12 +2945,14 @@ def test_decision_package_never_names_world_anywhere_under_it():
         "was flattened -- which is the ED-IN-0206 violation this scan exists to prevent -- or the "
         "discovery broke, and in both cases the checks below are vacuous.")
 
-    # `queries.person_q` is ADMITTED (04 §C.3: `decision/` imports `person_q` and `data/`);
-    # `queries.world_q` and `queries.cache` are the World-first side and stay forbidden. The
-    # person_q side of the edge is `test_person_q_cannot_reach_the_world_side`, which forbids
-    # `decision` from `person_q`.
-    FORBIDDEN = ("state.world", "queries.world_q", "queries.cache", "loop", "seam", "combat_seam",
-                 "shape")
+    # AN ALLOW-LIST, not a deny-list (04 §C.3: `decision/` imports `person_q` and `data/`, and
+    # nothing else under `queries/`): `queries` as a whole stays forbidden and `queries.person_q`
+    # is the one admitted exception. A deny-list of `queries.world_q`/`queries.cache` admitted
+    # `queries.faction_q` (which imports `World`) and any future `queries/*_q.py`. The person_q
+    # side of the edge is `test_person_q_cannot_reach_the_world_side`, which forbids `decision`
+    # from `person_q`.
+    FORBIDDEN = ("state.world", "queries", "loop", "seam", "combat_seam", "shape")
+    ADMITTED = ("queries.person_q",)
     PKG = "engine.season"
 
     def _absolute(path, node):
@@ -2962,8 +2964,13 @@ def test_decision_package_never_names_world_anywhere_under_it():
         base = own[:len(own) - (node.level - 1)] or (PKG,)
         return ".".join(base) + (("." + node.module) if node.module else "")
 
+    def _tail(dotted):
+        return dotted[len(PKG) + 1:] if dotted.startswith(PKG + ".") else dotted
+
     def _is_forbidden(dotted):
-        tail = dotted[len(PKG) + 1:] if dotted.startswith(PKG + ".") else dotted
+        tail = _tail(dotted)
+        if any(tail == a or tail.startswith(a + ".") for a in ADMITTED):
+            return False
         return any(tail == f or tail.startswith(f + ".") for f in FORBIDDEN)
 
     bad_imports, world_takers, bad_names, inspected, world_prose = [], [], [], 0, 0
@@ -2978,7 +2985,9 @@ def test_decision_package_never_names_world_anywhere_under_it():
                         bad_imports.append((path.name, node.lineno, alias.name))
             elif isinstance(node, ast_.ImportFrom):
                 dotted = _absolute(path, node)
-                if _is_forbidden(dotted):
+                # `from ..queries import X` names the package, not a module: the imported NAMES
+                # are judged below as `queries.X`, so the bare package itself is not flagged.
+                if _is_forbidden(dotted) and _tail(dotted) != "queries":
                     bad_imports.append((path.name, node.lineno, dotted))
                 for alias in node.names:
                     if dotted and _is_forbidden(f"{dotted}.{alias.name}"):
@@ -5557,7 +5566,7 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     # and the proof clause was owed a fresh measurement. It fired; the measurement is in the
     # docstring; and the assertion now pins the closure rather than the hole, because a test that
     # only ever says "still broken" cannot observe the day it stops being.
-    extra = [a for a in minted if set((a.payload or {})) - {"subject"}]
+    extra = [a for a in minted if set((a.payload or {})) - {"subject", "said"}]
     assert extra, (
         f"NONE of {len(minted)} minted acts carries an operand beyond `subject` — `H-94` has "
         "re-opened and `transfer` is back to being refused for want of a `kind` it cannot carry")

@@ -320,7 +320,7 @@ def loyalty(r: dict, faction: Optional[str]) -> Optional[int]:
     return round(LOYALTY_INDIFFERENT * (cosine + 1))
 
 
-# #353 `:333` types a stance row `(referent, valence -5..+5, weight 0..5)`, and `decision/choose.py
+# #353 `:333` types a stance row `(referent, valence -5..+5, weight 0..5)`, and `queries/person_q.py
 # ::stance_toward` sums `valence * weight` over the rows naming a candidate's subject. Five is that
 # type's own bound, read off the row rather than chosen here.
 STANCE_VALENCE_SCALE = 5   # [JUSTIFIED: #353 `:333` types the row `(referent, valence -5..+5, weight 0..5)` — the type's own bound, not a tuning; ED-IN-0229]

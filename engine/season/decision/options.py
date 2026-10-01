@@ -925,7 +925,7 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
     def weigh(c: Claim) -> float:
         if not c.chain:
             return 1.0
-        teller = c.chain[-1]
+        teller = c.teller
         if not gains:
             gains.extend((fx.get("told_weight"), fx.get("rank_gain"), fx.get("regard_gain")))
         told_weight, rank_gain, regard_gain = gains
@@ -934,6 +934,6 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
                     + regard_gain * _clamp(regard(p, teller) / STANCE_MAX, -1.0, 1.0))
         # ABSENT: H-179 stake
         record = 1.0   # a teller's record (agreement with p's own claims) is `T6`; 1.0 until then
-        return _clamp(told_weight ** len(c.chain) * relation * record, 0.0, 1.0)
+        return _clamp(told_weight ** c.hops * relation * record, 0.0, 1.0)
 
     return weigh

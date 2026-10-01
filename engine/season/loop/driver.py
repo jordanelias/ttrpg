@@ -59,8 +59,6 @@ from ..epistemic import CHANNEL_PREDICATES, act_refs, claim_subjects, observers_
 from ..queries import cache, world_q
 from ..queries.person_q import entrenchment
 from ..queries.person_q import LedgerReader
-from ..queries.person_q import stance_toward
-from ..data.verbs import align
 from ..queries.world_q import WorldReader
 from ..queries.world_q import occasioned_by
 from ..queries.world_q import questions_for
