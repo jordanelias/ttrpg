@@ -287,8 +287,9 @@ def report(res: dict) -> list:
                        f"{sorted(set(verbs) - e)}")
         # -- per verb ---------------------------------------------------------------------
         out.append("\n  PER VERB — persons eligible (seated/unseated) · persons formed · persons "
-                   "offered · ACTS attempted · executed · refused · both (a contesting verb can "
-                   "publish a made AND a refusal Event) · neither")
+                   "offered · ACTS attempted · executed · refused · both (both columns matched: "
+                   "two Events for `march`, ONE graded-loss Event for `tell` — see "
+                   "`corpus_run.attribute`) · neither")
         seated = set(m["seats"])
         for v in verbs:
             el_s = sum(1 for p in seated if v in m["eligible"][p])

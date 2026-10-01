@@ -12,7 +12,7 @@ stamp: `python tools/currency_consistency_check.py` (it exits 0 either way — r
 Old paths resolve through `references/restructure_ledger.md` via `python tools/pathres.py`. A
 ledger id's LAST row is its current state. History of this file: `git log -p CURRENT.md`.
 
-_Last reconciled: 2026-10-01 (currency drift on `engine/season/` and `engine/season/data/` re-checked against their rows above; no row's POINTER changed. The telling workplan's positions (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282) land under the already-current season-loop head, not a new one)._
+_Last reconciled: 2026-10-01 (`references/restructure_ledger.md`'s edits only append `FORK:` rows for the retired plans and repoint three unreachable refs; the plan row now names `valoria_master_workplan_v8.md`; no other row's pointer changed; the telling workplan's positions (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282) land under the already-current season-loop head, not a new one)._
 
 Design prose is quarantined in `.designs/` (ED-IN-0231). A row that names such a document gives its
 **bare filename only**, deliberately: it is reference, not a head, and not to be opened as authority.
@@ -21,7 +21,7 @@ Design prose is quarantined in `.designs/` (ED-IN-0231). A row that names such a
 |---|---|---|
 | **THE SEASON LOOP (game code)** | `engine/season/` — RATIFIED, ED-IN-0204 | `python -m engine.season.harness.register --requirements`; runtime registries `engine/season/data/`; Layer-1 conformance ED-IN-0206; lane `registers/handoffs/HANDOFF_IN.md` |
 | **THE CODE ARCHITECTURE (Layer 1)** | `architecture/` — RATIFIED, ED-IN-0204 | `skills/layer-conformance/SKILL.md` (Lens B checks `engine/season/` against `architecture/meta/04_CODE_ARCHITECTURE.md`) |
-| **The plan** | `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` (+ `_part2`) — the single plan, ED-IN-0281; supersedes `workplans/2026-09-18-governance-settlement-behaviour-plan.md` (ED-IN-0253) as the order, whose `_part2` stays the per-position content owner. **Phase 4 (its §2.3 Phase-4 rows, §3.4 whole, §5.1 items 14–16) is superseded by `workplans/2026-09-30-phase-4-post-ners-revision.md`** | its §3.1; Jordan items its §5.1; unit detail `workplans/2026-09-13-work-order.md`; master workplan `workplans/valoria_master_workplan_v7.md` (ED-IN-0216) |
+| **The plan** | `workplans/valoria_master_workplan_v8.md` (+ `_part2`…`_part6`) — PROPOSED, adoption on merge; the one active plan (`CLAUDE.md` §2) for every lane whose items it carries, less the scoped workplan it carves out by name (its §0.6). Every earlier plan is RETIRED (`FORK:0671283`; the two absorbed `PROPOSAL.md` plans `FORK:f6d7af27`) | its `_part3` §P pre-flight, then Batch 0; Jordan items its `_part5` §J; THE NINE: `python -m engine.season.harness.register --requirements` |
 | **Character model / decision layer** | `proposals/2026-09-20-pursuit-basis-worksheet.yaml` — ruled, ED-IN-0261 | ED-IN-0261; conviction split ED-IN-0251 |
 | **Personal combat** | `systems/combat/combat_engine_v1/`; typed export `engine/engine_params/combat_engine_v1.json` (round-trip checked in CI) | `registers/handoffs/HANDOFF_PC.md`; design reference `combat_reference_v1.md`, lineage `combat_currency_v1.md` |
 | **Mass battle** | `mass_battle_v30.md` + `mass_battle_integration_v30.md` | `registers/handoffs/HANDOFF_MB.md` |

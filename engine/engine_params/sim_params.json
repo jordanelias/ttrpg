@@ -3,16 +3,16 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 179,
-    "total": 419,
-    "uncited": 240,
+    "total": 422,
+    "uncited": 243,
     "of_which_assumption_grade": 11
   },
-  "count": 419,
+  "count": 422,
   "by_module": {
     "engine.autoload": 14,
     "engine.cross_scale": 9,
     "engine": 1,
-    "engine.season": 8,
+    "engine.season": 11,
     "characters": 7,
     "combat": 12,
     "factions": 65,
@@ -385,12 +385,51 @@
       "citation_grade": null
     },
     {
+      "key": "engine.season.COHORT_WEIGHT",
+      "name": "COHORT_WEIGHT",
+      "value": 10,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/harness/scarce.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.GRANARY_STOCK",
+      "name": "GRANARY_STOCK",
+      "value": {
+        "grain": 60,
+        "salt": 30
+      },
+      "kind": "table",
+      "module": "engine.season",
+      "file": "engine/season/harness/scarce.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.HUNGRY_STOCK",
+      "name": "HUNGRY_STOCK",
+      "value": {
+        "grain": 5,
+        "salt": 2
+      },
+      "kind": "table",
+      "module": "engine.season",
+      "file": "engine/season/harness/scarce.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
       "key": "engine.season._SCAR_DP",
       "name": "_SCAR_DP",
       "value": 6,
       "kind": "scalar",
       "module": "engine.season",
-      "file": "engine/season/loop/effects.py",
+      "file": "engine/season/loop/effects_combat.py",
       "note": "ED-IN-0249 / H-128 -- the scar accumulator's precision, order-independence only",
       "citation": "ED-IN-0249",
       "citation_grade": "source"
