@@ -273,16 +273,15 @@ This is the one claim here a session **cannot satisfy by writing**.
 - `python tools/m1_acceptance.py --summary` is the instrument; its rows are falsifiable and it refuses to
   guess. ⚠ **It is not uniformly execution-bound:** some rows genuinely execute the engine (a seeded
   1-season probe of **`engine/season/`, the HEAD**, and a same-seed `World.content_hash()` comparison),
-  but **the row aggregating "all junctures execute" counts `state:` strings in
-  `workplans/workplan_v6_progress.yaml`, a hand-edited board** that a few one-word edits green. It
-  declares itself DOC-DERIVED — **bookkeeping, not evidence.**
+  but **the row counting THE NINE met reads `status:` strings in `engine/season/requirements.yaml`**
+  (validated by `register --requirements`, still not execution). It declares itself DOC-DERIVED.
 - ⚠ **`mc_v18` is DEPRECATED IN PLACE (ED-IN-0227).** No game code imports it; deletion was
   REFUSED on cost, because tests in CI's blocking `sim-regression` job do (`CLAUDE_RATIONALE.md` §0.2).
   The mechanism is a shrink-only ratchet: `tests/valoria/test_mc_v18_is_deprecated.py`'s
   `ALLOWED_IMPORTERS` is the live list, and it fails on a NEW importer and on a stale roster line. **Nothing new is built there.**
 - "Authoring the design doc" is **not** the deliverable for a juncture that has running code: verify the
   code against the sim and record the contract; the doc may follow verified behaviour.
-- **A juncture done in code and open on the board is a BOARD defect, not a work item.**
+- **A position done in code and open in its plan is a PLAN defect, not a work item.**
 
 ### 0.3 No SessionStart banner (RULED — a closed, measured experiment)
 
@@ -381,6 +380,13 @@ for a second such tree.
   merge**, not as a later step nobody triggers. **The exception must be loud:** anything needing separate
   sign-off is called out in the PR body as *held back*. Never bundle a hard design call into a routine PR
   and rely on an unprompted follow-up.
+- **ONE ACTIVE PLAN PER LANE (RULED 2026-10-01: *"Retire ALL plans … We are allowed to have one active
+  plan per lane."*).** A plan lives under `workplans/` and names its lane; `CURRENT.md` names it.
+  **Adopting a plan RETIRES what it supersedes in the same commit** — delete + exact-file `FORK:` row
+  (§1), carrying forward any content the new plan still needs. "Superseded but kept on disk" is not a
+  state: it is how 21 plans piled up. A shallow clone that cannot write the `FORK:` row runs
+  `git fetch --unshallow` first; it does not defer. Finished positions leave the plan; the commit is
+  their record. Nothing enforces this — a reader's discipline, like §0.4 (§0.1 pt 5).
 
 ---
 
@@ -430,7 +436,7 @@ says where an old path went. Only what those cannot tell you:
   is RATIFIED** (`git ls-files proposals | wc -l`; `git grep -l '^## Status:.*RATIFIED' -- proposals`). This
   is the shape `.audit/` was retired for. Before starting a new directory here, answer what it changes in
   `engine/season/`.
-- **`godot/`** — see §6. **`workplans/`** — master workplan plus the hand-edited board (§0.2).
+- **`godot/`** — see §6. **`workplans/`** — at most one active plan per lane (§2).
 
 **Trees that were dissolved — do not recreate any of them:** `designs/`, `sim/`, `arcs/`,
 `engine/params/`, `references/values_master.yaml`. ⚠ **`.designs/` is NOT a resurrection of `designs/`**

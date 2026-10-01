@@ -103,7 +103,7 @@ M1_SWEEP_SEASONS = 4
 M1_POP_SEEDS = 2
 M1_POP_SEASONS = 1
 
-BOARD = os.path.join('workplans', 'workplan_v6_progress.yaml')
+REQUIREMENTS = os.path.join('engine', 'season', 'requirements.yaml')
 CONTRACTS = os.path.join('references', 'module_contracts.yaml')
 
 # Fixed probe seed for rows 1-2 (S2). FIXED, not time-derived: CLAUDE.md §0.1 point 4 — "a
@@ -292,48 +292,39 @@ def row_determinism():
 
 
 
-def row_m1_junctures():
-    """All seven M1 junctures execute. Measurable today from the progress board."""
-    path = _repo(BOARD)
+def row_nine_requirements():
+    """THE NINE met. Re-pointed 2026-10-01 from the retired `workplans/workplan_v6_progress.yaml`
+    board (every plan under `workplans/` was retired that day, `FORK:0671283`), to the nine rows
+    master workplan v7 §1 named M1's companion instrument.
+
+    ⚠ STILL DOC-DERIVED, AND SAYS SO. It counts `status:` strings in `requirements.yaml`. That is
+    stronger than the board it replaces -- `register --requirements` refuses a `met`/`partial` row
+    with no `measured:` and resolves every `measure:` command statically -- but nothing here
+    executes the game. Rows 1, 2 and 4 do; this one must not read like them.
+    """
+    path = _repo(REQUIREMENTS)
     try:
-        data = ci_common.load_yaml(path)
-        junctures = data['milestones']['M1']['junctures']
+        rows = ci_common.load_yaml(path)['rows']
     except Exception as exc:
-        return _blocked('m1_junctures', 'All seven M1 junctures execute',
-                        'a readable workplan progress board', f'{type(exc).__name__}')
-
-    done = sum(1 for j in junctures if j.get('state') == 'done')
-    total = len(junctures)
+        return _blocked('nine_requirements', 'The nine requirements met',
+                        'a readable engine/season/requirements.yaml', f'{type(exc).__name__}')
     states = {}
-    for j in junctures:
-        states[j.get('state', '?')] = states.get(j.get('state', '?'), 0) + 1
-
-    # ⚠ THIS ROW IS DOC-DERIVED, AND SAYS SO. Labelled 2026-08-19 after two independent read-only
-    # audits found the same hole: CLAUDE.md §0.2 names this tool THE instrument of "done means it
-    # runs" and asserts a juncture may not be marked done on a document — but this row counts
-    # `state: done` strings in a hand-edited YAML board. Seven one-word edits green it, and the
-    # ratchet in review_core would bank that as real improvement.
-    #
-    # NOT SILENTLY FIXED, because the honest fix is not available yet: closing it requires a
-    # per-juncture EXECUTION artifact to check `state: done` against, and no such artifact exists
-    # for any of the seven. Inventing a schema here would be scripting drift. So the row keeps
-    # measuring what it can measure and DECLARES its own weakness in the output, where a reader
-    # deciding whether to trust the verdict will actually see it. Rows 1-2 are execution-derived
-    # (real seeded mc_v18 probe runs); this one is not, and the two must not read alike.
+    for r in rows:
+        states[r.get('status', '?')] = states.get(r.get('status', '?'), 0) + 1
+    met = states.get('met', 0)
     return {
-        'row': 'm1_junctures',
-        'label': 'All M1 junctures execute',
+        'row': 'nine_requirements',
+        'label': 'The nine requirements met',
         'state': 'measured',
         'derived_from': 'document',
-        'value': done,
-        'total': total,
-        'passes': done == total,
+        'value': met,
+        'total': len(rows),
+        'passes': met == len(rows),
         'unblocked_by': None,
         'detail': (' · '.join(f'{k}: {v}' for k, v in sorted(states.items()))
-                   + '  ⚠ DOC-DERIVED: counts `state: done` in workplan_v6_progress.yaml, not'
-                     ' execution. Editing the board greens this row — unlike rows 1-2.'),
+                   + '  ⚠ DOC-DERIVED: counts `status:` in engine/season/requirements.yaml, each'
+                     ' validated by `register --requirements`; not execution.'),
     }
-
 
 def row_invariant_violations():
     """N seeds, zero invariant violations — over a season run. **MEASURED since 2026-09-14.**
@@ -418,7 +409,7 @@ def row_invariant_violations():
 ROWS = [
     row_stub_invocations,
     row_determinism,
-    row_m1_junctures,
+    row_nine_requirements,
     row_invariant_violations,
 ]
 
@@ -445,7 +436,7 @@ def collect():
         'blocked': len(blocked),
         'failed': len(failed),
         'note': ('Rows 1, 2 and 4 are measured from real headless seasons. Row 3 is DOC-DERIVED '
-                 'and says so in its own detail. The old row 3 (key_log_closure) was RETIRED with '
+                 '(the nine requirements) and says so in its own detail. The old row 3 (key_log_closure) was RETIRED with '
                  'the Key substrate on 2026-09-16 (ED-IN-0232) rather than left to report a '
                  'vacuous 0 over an emptied registry. This gate reports what it measured and '
                  'never guesses the rest.'),

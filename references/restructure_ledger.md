@@ -2597,3 +2597,39 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 | `tools/build_execution_map.py` | `FORK:6f740d9` | FORKED (2026-09-29, plan position `28-i` M5 — same commit and same reason as `trace_execution_phases.py` immediately above, its only feeder) |
 | `tests/valoria/test_execution_map.py` | `FORK:6f740d9` | FORKED (2026-09-29, plan position `28-i` M5 — the guard for the retired execution-map cluster above; its subject is gone, so the guard goes with it, same commit. `references/execution_map.json` and `references/EXECUTION_MAP.md`, the cluster's two generated outputs, get NO row here — both are `.gitignore`d and were never committed (confirmed with `git ls-files`), so a `FORK:` row for either would be unfollowable by `git cat-file -e` and would trip `tests/valoria/test_forked_status.py`'s `UNRESOLVABLE_CEILING` in the direction that reads as a regression. `tests/valoria/test_flow_skeletons.py`'s `RETIRED_GENERATED` set covers both instead — the same mechanism already used for `references/key_graph.json` and its two siblings, and the builder's row immediately above is the stronger provenance: re-run it and the files come back) |
 | `systems/mass_battle/sim/hierarchy/units.py` | `FORK:d53d396` | FORKED (2026-09-29, plan position `11` MB lane / MB hand pass — SYMBOL-LEVEL ONLY: `Subunit.resolve_internal_collisions` (the v13 discipline-gated formation-hold method, lines 2400-2478 at this ref) DELETED — the disposition named against this identifier in `ED-MB-0057`'s superseding row (2026-09-15) reads DELETE, and `proposals/2026-09-25-squad-engagement-synthesis.md` Part B agrees ("the concept's cells never move alone anyway: delete it with that identifier's dispositions") — its co-location case is instead handled by `ED-MB-0059`'s same-side field exclusion, `resolve_toi_and_commit`'s same-side pass. The FILE ITSELF IS LIVE AND UNCHANGED OTHERWISE — this row exists only so the deleted method's source has a followable ref, matching this ledger's own rule (`git cat-file -e <ref>:<path>` — the ref named is the PARENT of the deleting commit, not the commit itself). Zero call sites confirmed before deletion (`grep -rn resolve_internal_collisions` outside comments/census/narrative-prose); `orchestration.py`'s own stale "implemented but not invoked" comment corrected in the same commit) |
+
+## 2026-10-01 — every plan under `workplans/` retired (Jordan: *"Retire ALL plans."*)
+
+<!-- One live plan per lane from here on (CLAUDE.md §0, plans rule). Every file below existed at its ref,
+     checked with `git cat-file -e <ref>:<path>` before the row was written. The five pre-move spellings
+     get their own exact rows at a commit where THAT spelling lived, so a single-hop reader
+     (`broken_dependency_checker`) never lands on a deleted target; later row wins (pathres D1). -->
+
+| Old path | New path | Status |
+|---|---|---|
+| `workplans/2026-09-05-post-adoption-execution-plan.md` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `workplans/2026-09-06-season-loop-execution-plan.md` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `workplans/2026-09-06-shape-decomposition-plan.md` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `workplans/2026-09-09-layer1-conformance-plan.md` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `workplans/2026-09-09-layer1-conformance-plan_part2.md` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `workplans/2026-09-09-r-execution-plan.md` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `workplans/2026-09-09-r-execution-plan_part2.md` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `workplans/2026-09-09-shape-decomposition-plan-v2.md` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `workplans/2026-09-10-unblocking-strategy.md` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `workplans/2026-09-11-arc-sequence-spine.md` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `workplans/2026-09-13-work-order.md` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `workplans/2026-09-18-governance-settlement-behaviour-plan.md` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `workplans/2026-09-28-the-plan-one-order-mc-v18-retired_part2.md` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `workplans/2026-09-30-phase-4-post-ners-revision.md` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `workplans/README.md` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `workplans/return_to_game_queue.yaml` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `workplans/valoria_master_workplan_v6.md` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `workplans/valoria_master_workplan_v7.md` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `workplans/workplan_v6_progress.yaml` | `FORK:0671283` | FORKED (2026-10-01, all plans retired) |
+| `designs/workplans/README.md` | `FORK:0e6bb2bd` | FORKED (2026-10-01, pre-move spelling of a plan retired the same day) |
+| `designs/workplans/valoria_master_workplan_v6.md` | `FORK:0e6bb2bd` | FORKED (2026-10-01, pre-move spelling of a plan retired the same day) |
+| `designs/workplans/workplan_v6_progress.yaml` | `FORK:0e6bb2bd` | FORKED (2026-10-01, pre-move spelling of a plan retired the same day) |
+| `workplans/2026-09-11-reconciled-program.md` | `FORK:7a97cb6e` | FORKED (2026-10-01, pre-move spelling of a plan retired the same day) |
+| `workplans/2026-09-11-reconciled-program_part2.md` | `FORK:7a97cb6e` | FORKED (2026-10-01, pre-move spelling of a plan retired the same day) |
