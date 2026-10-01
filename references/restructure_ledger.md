@@ -2756,3 +2756,16 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 | `systems/settlements/sim/settlement.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29c` — `compute_settlement_state` / `aggregate_to_province` and the §1.3 derived-value tables; no importer outside this tree. Its `module_contracts.yaml` row (`settlement_layer`) stays with `sim_module: none`) |
 | `systems/settlements/sim/temperaments.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29c` — per-territory Public Temperament, `temperament_modifiers` / `apply_strain_shock` and the drift store; no season reader, the plan's disposition table (`_part6`) names `stance` as its successor, which reads rather than imports) |
 | `tests/valoria/test_settlement_temperament_drift.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `29c` — its only subject was `temperaments.py`'s drift-store read/write symmetry (`ED-SE-0050`, landed), and that module is deleted; the test imported nothing else) |
+
+<!-- 2026-10-01, plan position `28-0 follow-up` (master workplan v8, `_part3`): the last two members of the retired
+     `_OI17_FULL_MODULE_ENTRYPOINTS` set that were not another position's. FORK ref is `5c5d8ec6`, the `main` commit
+     under this branch (a branch commit SHA does not survive a squash merge, so the ref must already be an ancestor of
+     `main`); both rows were checked with `git cat-file -e 5c5d8ec6:<path>` before they were written. One exact-file row
+     each, no symbol-level row. NOT retired, and read by code: `systems/characters/sim/conviction.py` (`knots.py` and
+     `engine/tests/test_knots_ed912.py` import it; position `29e` owns it), and `systems/characters/sim/__init__.py`,
+     which stays as the package marker. -->
+
+| Old path | New path | Status |
+|---|---|---|
+| `systems/characters/sim/beliefs.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-0 follow-up` — the `Belief` store and `revise_belief` / `social_success` / `get_active_beliefs`, orphaned by design since `Person.beliefs` was deleted (2026-09-25; `engine/season/state/carriers.py`) and its `snapshot_state.beliefs` composition role went at `28-iii`. No importer, no composition role, no string naming it outside the registries edited here. It called `conviction.mark_belief_revision_pending`, which now has no caller) |
+| `systems/characters/sim/companion.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-0 follow-up` — `run_companion_scene`, a single `stubwire.stub_resolve` armature stub (Pass 2l, OI-17), no importer; the last live entry of the old `_OI17_FULL_MODULE_ENTRYPOINTS` list that was not `systems/threadwork/sim/rendering.py` (position `27`'s). `engine/substrate/stubwire.py` stays: `social_contest` and `rendering.py` still call it) |

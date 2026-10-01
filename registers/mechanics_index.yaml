@@ -330,7 +330,7 @@ mechanics:
     scale: personal
     faction: universal
     canon_sources: ["godot/scene_tree_architecture.md#CompanionScene"]
-    sim_module: systems/characters/sim/companion.py
+    sim_module: null    # was systems/characters/sim/companion.py, a stubwire armature stub with no importer; deleted at plan position 28-0 follow-up
     test_status: not_implemented
     notes: "Companion scene resolution. Pass 2l armature stub. Canon source is Godot scene architecture, not a design doc."
 
@@ -341,7 +341,7 @@ mechanics:
       - "systems/fieldwork/fieldwork_v30.md#section-5-5"
       - "systems/social_contest/social_contest_v30.md#section-9-5"
       - "systems/articulation/articulation_layer_v30.md#section-3-5"
-    sim_module: systems/characters/sim/beliefs.py
+    sim_module: null    # was systems/characters/sim/beliefs.py, orphaned since Person.beliefs was deleted; deleted at plan position 28-0 follow-up
     test_status: not_implemented
     notes: "Cross-doc system. Unified canon doc target similar to knots; deferred to future synthesis pass."
 

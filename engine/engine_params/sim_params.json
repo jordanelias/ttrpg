@@ -3,15 +3,15 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 110,
-    "total": 267,
-    "uncited": 157,
+    "total": 265,
+    "uncited": 155,
     "of_which_assumption_grade": 3
   },
-  "count": 267,
+  "count": 265,
   "by_module": {
     "engine.autoload": 6,
     "engine.season": 11,
-    "characters": 7,
+    "characters": 5,
     "combat": 12,
     "fieldwork": 15,
     "mass_battle": 148,
@@ -209,28 +209,6 @@
       "kind": "scalar",
       "module": "engine.season",
       "file": "engine/season/state/gate.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "characters.BELIEF_MOMENTUM_PER_CONTEST_CAP",
-      "name": "BELIEF_MOMENTUM_PER_CONTEST_CAP",
-      "value": 1,
-      "kind": "scalar",
-      "module": "characters",
-      "file": "systems/characters/sim/beliefs.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "characters.MOMENTUM_CAP",
-      "name": "MOMENTUM_CAP",
-      "value": 4,
-      "kind": "scalar",
-      "module": "characters",
-      "file": "systems/characters/sim/beliefs.py",
       "note": "",
       "citation": null,
       "citation_grade": null
