@@ -197,6 +197,12 @@ No told triple is deposited in either instrument (M0f), so the effects of T1-T3b
 `survey` and `reconstruct` also carry `said`, unread (their typed cell is `own_ledger` too), and
 `opening_set` pays a `said_of` copy for each of their formed Candidates: when the `tell` cell gains
 conjunct names here, gate `said` on that data-declared marker instead of on the clause alone.
+A chain longer than one hop cannot form through the shipped path (terminal critique at the Batch 1 close):
+a hearer of `news.told` holds the event-kind claim `(subject, news.told, True)` and the told claim at the same
+tick, the event-kind one at `confidence_default` and first on a tie, so `said_of` picks it (empty chain) and the
+next hearer's chain is `(teller,)`; the T3b retelling test sweeps `confidence_default` to 50 to reach two hops.
+T5's falsifier needs a content retelling, so T5 decides whether `said_of` excludes event-kind predicates, as it
+excludes `seen`. Read H-176's cite.
 
 ### T5 · dedup by origin, and T6 · a teller's record
 

@@ -549,14 +549,11 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # divergence `04 §A.2` gives this step the ledger for. `tell` keeps `writes: []`,
         # correctly: a telling changes no cell in the world, it changes what people hold.
         #
-        # ⚠ THE TELLER NEEDS NO SEPARATE EXCLUSION AND HAD ONE, WHICH IS ONE RULE WITH TWO
-        # OWNERS. `pid != _act.actor` stood here; the redundancy guard below SUBSUMES it, because
-        # `_held` is the claim the teller held at CHOOSE (the `Said` the act carries), so a teller
-        # who still holds it can never pass "does the hearer already hold this" (at `Partial` the
-        # dedup compares the lossy copy, so the `pid != _act.actor` condition is load-bearing). Mutation-testing found it: removing the exclusion alone
-        # reddened nothing, which is §0.1 pt 2 saying the second guard could not observe a failure
-        # the first did not already exclude. The condition is kept as the CHEAP one — it skips the
-        # ledger scan for the common case — and is no longer stated as an independent rule.
+        # ⚠ THE TELLER'S EXCLUSION (`pid != _act.actor`) IS LOAD-BEARING SINCE `T1`. Before it,
+        # the redundancy guard below subsumed it (the telling read the teller's LIVE ledger, so a
+        # teller could never pass "does the hearer already hold this"). `_held` is now the `Said`
+        # fixed at CHOOSE, and at `Partial` the dedup compares the lossy copy, so the teller can pass
+        # the guard and must be excluded here; it also skips the ledger scan for the common case.
         #
         # ⚠ CONFIDENCE IS THE TELLER'S OWN, NOT A DEGRADED ONE, AND THAT IS A DEFERRAL RATHER
         # THAN A CHOICE. Nothing in the chain states how much a hearing costs a belief, and

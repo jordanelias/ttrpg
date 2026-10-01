@@ -973,7 +973,12 @@ def align_kind(kind: str, axis: str) -> float:
     the alignment of the one verb that emits the kind (`KIND_VERB`), else 0.
 
     ⚠ NOTHING CALLS THIS YET. It is the regard function's primitive (the telling workplan's G1),
-    placed beside `align` so the verb-keyed and kind-keyed readers share one table and one rebind."""
+    placed beside `align` so the verb-keyed and kind-keyed readers share one table and one rebind.
+
+    ⚠ ITS FIRST CALLER MUST HANDLE THE `uniform` ARM. `alignment_at("uniform")` builds cells for
+    `VERB_TABLE` verbs only, so under it a `deed:` cell is dropped and a kind several rows emit (no
+    `KIND_VERB` entry) reads 0.0 while `align(v, axis)` reads 1.0 for every verb: the H-66 control
+    arm is not uniform for kinds until the caller (G1) closes that gap."""
     cell = ALIGNMENT.get(axis, {}).get(DEED_PREFIX + kind)
     if cell is not None:
         return float(cell)
