@@ -553,6 +553,16 @@ DEFAULT_FIXTURES = Fixtures(
     # `field_casualty_model` above, deferred to the same reader.
     field_morale_weight=1,   # `H-148`, swept 0 / 1 / 3
     field_grudge_weight=1,   # `H-148`, swept 0 / 1 / 3
+    # `H-150` (plan position `20-v`). THE DEFENDER DR A WALLED FIELD ADDS -- A.9's one Walls number,
+    # applied 1:1 to the engine's own `Unit.dr` (an ASSUMPTION about the unit, which is why it is
+    # swept). `None` IS THE DEFAULT AND IT MEANS A.9's NUMBER, NOT "NO WALLS": `engine/` cannot name
+    # `systems/`, so the 3 stays authored once, at `terrain.WALLS_DEFENDER_DR`, and the engine reads it
+    # when this is `None` -- a literal 3 here would be a second copy that drifts the day A.9 is
+    # re-ruled. An int overrides it for the season: `3` spells A.9's number out (it reproduces `None`
+    # exactly, which `test_mass_battle_provider.py` asserts), `0` is the CONTROL (the only live
+    # difference between a walled and an open field removed), `1` the middle arm. Injection site: this
+    # line, read by `seam/wrappers/mass_battle.py::resolve()` and handed to `resolve_field(walls_dr=)`.
+    field_walls_dr=None,     # `H-150`, swept 3 (A.9, = the default) / 0 (control) / 1
     # `H-128` / §54 item 21. HOW DEEP A MORAL WOUND THE OUTCOME CUTS, per unit of the verb's own
     # alignment with an axis. Part D carries `(Person, scar[axis])` at `[RES] ACTS` and names NO
     # magnitude; no in-chain document supplies one either, so it is declared, defaulted and swept

@@ -219,9 +219,13 @@ def _weighted_unit(name, weight, morale_start=_MORALE_START_BASE):
                 subunits=[sub])
 
 
-def _run_and_grade(unit_a, unit_b, terrain, rng):
+def _run_and_grade(unit_a, unit_b, terrain, rng, walls_dr=None):
     """`run_battle` plus the survivor-ratio classification -- extracted from `resolve_mass_battle`
     (deleted at `29b`; `resolve_field` is now its only caller).
+
+    `walls_dr` (plan position `20-v`, `H-150`): the defender DR the WALLS row adds. `None` -- the
+    default -- is A.9's own number, `terrain.WALLS_DEFENDER_DR`, read here and never copied; an int
+    overrides it for the one call (the season's `field_walls_dr` fixture, swept 3 / 0 / 1).
 
     ⚠ CAVEATS THAT LIVED IN THE DELETED FUNCTION'S DOCSTRING AND STILL BIND THIS PATH.
     DETERMINISM: `rng` is scoped over the battle by `rngsource.using`; the canon engine drew from the
@@ -250,7 +254,7 @@ def _run_and_grade(unit_a, unit_b, terrain, rng):
         if unit_b.speed == 'Fast':
             unit_b.speed = 'Standard'
     elif terrain == WALLS:
-        unit_b.dr += WALLS_DEFENDER_DR
+        unit_b.dr += WALLS_DEFENDER_DR if walls_dr is None else walls_dr
 
     with rngsource.using(rng):
         # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6), the canon engine's own default]
@@ -278,7 +282,7 @@ def _run_and_grade(unit_a, unit_b, terrain, rng):
 
 
 def resolve_field(w, side_a, side_b, *, territory=None, fort_level=0.0, stance_a=0.0, stance_b=0.0,
-                  rng=None):
+                  walls_dr=None, rng=None):
     """THE SEASON-FACING ENTRY POINT — `04 §C.5.1`'s roster contract, reconciled with this module's
     OWN requirement for a `Unit` to hand `run_battle`.
 
@@ -312,6 +316,9 @@ def resolve_field(w, side_a, side_b, *, territory=None, fort_level=0.0, stance_a
       `stance_a`, `stance_b` -- each side's weight-mean stance toward its own faction, which
           `_morale_start` turns into a morale-start. `0.0` (the default) is the base: the pre-`20-iv`
           flat 5.
+      `walls_dr` -- plan position `20-v` (`H-150`): the defender DR a WALLS field adds, handed to
+          `_run_and_grade` unchanged. `None` (the default) is A.9's number, `terrain.WALLS_DEFENDER_DR`;
+          an int overrides it. Inert on a field `terrain_row_for_territory` does not call WALLS.
     The old `terrain=` keyword, which the one caller always passed as `None`, is gone: the row is
     derived here from the two facts that decide it, so no caller can hand in a row that disagrees.
 
@@ -320,4 +327,5 @@ def resolve_field(w, side_a, side_b, *, territory=None, fort_level=0.0, stance_a
     weight_b = sum(w.persons[pid].weight for pid in side_b if pid in w.persons)
     unit_a = _weighted_unit("side_a", weight_a, _morale_start(stance_a))
     unit_b = _weighted_unit("side_b", weight_b, _morale_start(stance_b))
-    return _run_and_grade(unit_a, unit_b, terrain_row_for_territory(territory, fort_level), rng)
+    return _run_and_grade(unit_a, unit_b, terrain_row_for_territory(territory, fort_level), rng,
+                          walls_dr=walls_dr)

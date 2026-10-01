@@ -223,6 +223,29 @@ def test_walls_raise_the_defenders_dr_and_only_the_defenders_dr():
     assert (a.dr, b.dr) == (a0, b0), "OPEN_FLAT must not touch DR (control)"
 
 
+def test_walls_dr_override_replaces_a9s_number_only_on_a_walls_field():
+    """Plan position `20-v` (`H-150`): `walls_dr` is what the season's `field_walls_dr` fixture hands
+    in. An int REPLACES `WALLS_DEFENDER_DR` on the defender (0 = the control, 1, and A.9's own number
+    spelled out must equal the `None` default), and on a field that is not WALLS it is inert -- the
+    control that stops the parameter reading as a general DR knob."""
+    from systems.mass_battle.sim.massbattle import _run_and_grade
+    from systems.mass_battle.sim.terrain import WALLS_DEFENDER_DR
+
+    seen = {}
+    for label, walls_dr in (('none', None), ('a9', WALLS_DEFENDER_DR), ('zero', 0), ('one', 1)):
+        a, b = _units()
+        a0, b0 = a.dr, b.dr
+        _run_and_grade(a, b, WALLS, None, walls_dr=walls_dr)
+        seen[label] = b.dr - b0
+        assert a.dr == a0, f"{label}: the attacker must never take the walls bonus"
+    assert seen == {'none': WALLS_DEFENDER_DR, 'a9': WALLS_DEFENDER_DR, 'zero': 0, 'one': 1}, seen
+
+    a, b = _units()
+    a0, b0 = a.dr, b.dr
+    _run_and_grade(a, b, OPEN_FLAT, None, walls_dr=1)
+    assert (a.dr, b.dr) == (a0, b0), "walls_dr must be inert off a WALLS field (control)"
+
+
 def test_open_flat_does_not_touch_speed():
     """Control: the same Fast side, OPEN_FLAT terrain, must stay Fast (no modifier is A.9's own
     definition of the open-flat row)."""

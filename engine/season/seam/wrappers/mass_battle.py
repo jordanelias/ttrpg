@@ -37,10 +37,12 @@ hands them on as plain values -- it decides none of what they do:
     the target's ancestry, turned back into its geography row by `data/rosters.territory_id_of`
     (the one owner of that id relation, which `harness/populated.py` mints through);
   * its FORTIFICATION, `world_q.fortification_of` at the target;
-  * each side's MORALE source, `_side_stance` below.
+  * each side's MORALE source, `_side_stance` below;
+and, since plan position `20-v`, one injected value: the `field_walls_dr` fixture (`H-150`).
 What a fortification DOES is `massbattle.resolve_field`'s and `terrain.py`'s: any positive value
 makes the field A.9's `WALLS` row, whose one number (defender +3 DR) the engine applies to `Unit.dr`
-1:1 (an ASSUMPTION about the unit, `H-150`). The number is canon's, not invented here, which is why this
+1:1 (an ASSUMPTION about the unit, `H-150`). The number is canon's, not invented here -- `None` in the
+fixture leaves it where `terrain.py` authors it, and an int sweeps it -- which is why this
 module may carry the read without deciding anything -- `seam/wrappers/combat.py` derives a party the same way and calls the
 engine without deciding who picked the fight.
 
@@ -171,11 +173,14 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         return dict(status="ENGINE-UNAVAILABLE", why=f"{type(e).__name__}: {e}", module="mass_battle")
     # PLAN POSITION `20-iv`: the place and the two sides' morale, read here and decided there
     # (`H-150` -- `fortification_of`'s caller on the battle path).
+    # PLAN POSITION `20-v`: the walls' DR is the `field_walls_dr` fixture (`H-150`), `None` = A.9's
+    # own number, which `massbattle` reads from `terrain.py` -- this wrapper decides none of it.
     result = engine_resolve_field(w, claimants, other,
                                   territory=_territory_of(w, rung),
                                   fort_level=world_q.fortification_of(w, rung),
                                   stance_a=_side_stance(w, claimants),
-                                  stance_b=_side_stance(w, other), rng=rng)
+                                  stance_b=_side_stance(w, other),
+                                  walls_dr=w.fixtures.get("field_walls_dr"), rng=rng)
     return dict(status="RESOLVED", module="mass_battle", resolver="dice_pool",
                 # ⚠ LIFTED TO TOP LEVEL, NOT LEFT NESTED UNDER `result` (M4). `degree_of`
                 # (`seam/ladder.py`) reads a provider's return directly -- `wound_state` and

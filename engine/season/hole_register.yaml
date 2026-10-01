@@ -3179,21 +3179,29 @@ rows:
       ⚠ THE UNIT IS ASSUMED: A.9's +3 is applied 1:1 to `Unit.dr`, which melee subtracts from
       `DAMAGE_BY_DEGREE[deg](power)` and volley from net successes -- neither is canon's \"net hits
       + weapon modifier - DR\". At the season's fixed power 4 and base dr 1, walls take a Success
-      exchange from 3 to 0 and an Overwhelming one from 4 to 1. `WALLS_DEFENDER_DR = 0` removes the
-      only live difference between a walled and an open field (the control); the constant is a
-      module literal and not yet a Fixtures knob, so no sweep is declared here. ⚠ IN THE REALM IT IS A CONSTANT, NOT
-      A MECHANIC: `build_realm` garrisons every settlement at full condition and garrison wear is 0, so
+      exchange from 3 to 0 and an Overwhelming one from 4 to 1. `field_walls_dr = 0` removes the
+      only live difference between a walled and an open field (the control). SWEPT AT PLAN POSITION `20-v`:
+      the DR is the injectable `field_walls_dr` Fixtures value (`data/fixtures.py`), which
+      `seam/wrappers/mass_battle.py::resolve()` hands to `massbattle.resolve_field(walls_dr=)`. `None`, the
+      shipped default, IS A.9's number, read from `terrain.WALLS_DEFENDER_DR` where it is authored once
+      (`engine/` cannot name `systems/`, and a 3 typed into the fixture would be a second copy); an int
+      overrides it. Sweep 3 (= A.9 = the default) / 0 (the control) / 1. ⚠ IN THE REALM IT IS A CONSTANT AT
+      THE DEFAULT, NOT A MECHANIC: `build_realm` garrisons every settlement at full condition and garrison wear is 0, so
       `fortification_of` is 1.0 on every settlement and every realm defender gets dr 1 -> 4 (the WALLS check runs
-      before the polygon lookup, so UPHILL, FOREST and NARROW_PASS cannot occur on this path). An injectable
-      `field_walls_dr` Fixtures value with a three-point sweep (3 = A.9, 0 = the control, 1) is the next step; it
-      is a design addition (a new Fixtures field, a seam parameter, tests) and was not built at `20-iv`. This
-      row's R2 violation (an `assumption` with no sweep) pre-dates `20-iv`: it was in `register --check`'s list
-      at 5c5d8ec6."
+      before the polygon lookup, so UPHILL, FOREST and NARROW_PASS cannot occur on this path). The knob now
+      reaches that constant (`w.fixtures = w.fixtures.sweep('field_walls_dr', n)`, the idiom `harness/arms.py`
+      uses for `field_casualty_model`; no arm there sweeps it yet), but it is one number for every defender --
+      nothing varies it per settlement, and condition still gates presence only. This row's R2 violation (an
+      `assumption` with no sweep) pre-dated `20-iv` (it was in `register --check`'s list at 5c5d8ec6) and is
+      closed by the `sweep:` below; the build is pinned by
+      `test_mass_battle_provider.py::test_field_walls_dr_sweep_zero_is_the_open_field_and_three_and_one_differ`."
     site:      "engine/season/seam/wrappers/mass_battle.py -- `resolve()` reads
       `world_q.fortification_of` and `_territory_of` at the target and passes both to
       `massbattle.resolve_field(territory=, fort_level=)`; until `20-iv`, `world_q.py --
-      fortification_of` (built, M4 build step 4) had no reader"
-    sweep:     []
+      fortification_of` (built, M4 build step 4) had no reader. Fixtures field_walls_dr
+      (`data/fixtures.py`, plan position `20-v`), read by the same `resolve()` and passed as
+      `resolve_field(walls_dr=)`"
+    sweep:     [3, 0, 1]   # field_walls_dr: 3 = A.9 (= the shipped default, `None`) / 0 = the control / 1
     unblocks:  "garrison Sites (step 11) affecting a fight's OUTCOME. ⚠ CORRECTED (M4 review pass,
       `valoria-critic`): the first writing of this field said seeding one \"changes `w.sites`,
       `world_q.density`'s composition, and nothing else\" -- FALSE on both counts. `density`
