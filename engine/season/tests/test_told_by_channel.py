@@ -201,6 +201,9 @@ def test_15d_a_telling_is_hearsay_for_what_was_said_and_firsthand_for_that_it_wa
     assert told[0].teller == teller, (
         f"the told claim's teller is {told[0].teller!r}, not {teller!r} -- CAT-3's 'store the "
         "teller' is the one thing this deposit is FOR")
+    assert told[0].chain == (teller,) and told[0].hops == 1, (
+        f"the told claim's chain is {told[0].chain!r}: a first telling of a claim the teller holds "
+        f"firsthand is a chain of exactly the teller (`T3b`)")
     spoke = [c for c in mine if c.predicate == "news.told"]
     assert spoke and {c.source for c in spoke} == {"firsthand"}, (
         f"the co-located hearer holds THAT the telling happened as {[c.source for c in spoke]} -- "
@@ -317,8 +320,9 @@ def test_t1_said_is_not_a_binding_operand():
 
 # ---------------------------------------------------------------------------------------------
 # T3a (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282; `H-157`, `H-176`..`H-180`): HEARSAY
-# WEIGHED WHEN READ, on today's `Claim.teller`. A told claim is one hop and its origin is its
-# teller; anything else weighs 1.0 and its origin is its holder.
+# WEIGHED WHEN READ. Until `T3b` a told claim was one hop and its origin its teller; since `T3b`
+# hops are `len(Claim.chain)` and the origin is `chain[0]`. A claim with no chain weighs 1.0 and
+# its origin is its holder.
 # ---------------------------------------------------------------------------------------------
 
 def _t3_fx(told_weight, regard_gain, rank_gain=None):
@@ -352,7 +356,7 @@ def test_t3_a_firsthand_claim_holds_against_a_newer_told_claim_of_equal_confiden
     p = w.persons["p_low"]
     assert not p.stance or all(r[0] != "x" for r in p.stance), "the hearer regards `x` already"
     seen = Claim("c_seen", p.id, "Hh", "stores:grain", 5, 1, "firsthand", 100, "own")
-    told = Claim("c_told", p.id, "Hh", "stores:grain", 0, 2, "told_by", 100, "own", teller="x")
+    told = Claim("c_told", p.id, "Hh", "stores:grain", 0, 2, "told_by", 100, "own", chain=("x",))
     p.ledger[:] = [seen, told]
     row, ops = VERB_TABLE["transfer"], _t3_transfer_ops("Hh")
 
@@ -423,7 +427,7 @@ def test_t3_unplanted_members_with_opposite_loyalty_reach_different_verdicts():
             p.ledger.append(Claim(f"c_t3_seen_{pid}", pid, rung, "stores:grain", 5, 1,
                                   "firsthand", 100, "own"))
             p.ledger.append(Claim(f"c_t3_told_{pid}", pid, rung, "stores:grain", 0, 2,
-                                  "told_by", 100, "own", teller=leader))
+                                  "told_by", 100, "own", chain=(leader,)))
             verdict[pid] = tuple(
                 belief_contradicts(p, row, rung, ops, None, weigh=teller_weight(p, fx))
                 for fx in (_t3_fx(1.0, 0.5), _t3_fx(1.0, 0.0)))
@@ -465,7 +469,7 @@ def test_t3_weigh_none_and_weigh_one_order_a_ledger_as_today():
             claims.append(Claim(f"c{trial}_{i}", "h", rng.choice("AB"), rng.choice(("p", "q")),
                                 rng.choice((0, 1, 2)), rng.randint(0, 2),
                                 "told_by" if told else "firsthand", rng.choice((50, 100)), "own",
-                                teller=rng.choice(("x", "y")) if told else None))
+                                chain=(rng.choice(("x", "y")),) if told else ()))
         for subject in "AB":
             for predicate in ("p", "q"):
                 m = lambda c, s=subject, pr=predicate: c.subject == s and c.predicate == pr
@@ -504,7 +508,120 @@ def test_t3_opening_set_hands_clause_4_the_teller_weight(monkeypatch):
     monkeypatch.setattr(O, "belief_contradicts", spy)
     HL.run(seasons=1, seed=0)
     assert seen, "opening_set never reached clause 4 -- the spy observed nothing"
-    probe = Claim("c_probe", "h", "S", "stores:grain", 0, 0, "told_by", 100, "own", teller="x")
+    probe = Claim("c_probe", "h", "S", "stores:grain", 0, 0, "told_by", 100, "own", chain=("x",))
     assert all(callable(wt) for wt in seen), "a clause-4 call ran with weigh=None"
     assert {wt(probe) for wt in seen} == {0.5}, (
         "the weigh opening_set passed does not grade a told claim at the shipped told_weight")
+
+
+# ---------------------------------------------------------------------------------------------
+# T3b (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282): `Claim.chain` REPLACES `Claim.teller`.
+# Hops, origin and the weighed reader all read the chain; `teller` is `chain[-1]`, derived.
+# ---------------------------------------------------------------------------------------------
+
+def test_t3b_a_two_hop_claim_weighs_less_than_a_one_hop_claim():
+    """HOPS ARE READ FROM THE CHAIN, BOTH ARMS. The hearer holds two told claims about one cell with
+    DIFFERENT values and EQUAL `when` and `confidence`: a one-hop claim (told by `x`, chain length 1)
+    and a two-hop one (told by `z`, then retold by `y`: chain length 2). At the SHIPPED `told_weight` 0.5
+    the one-hop value weighs 0.5 and the two-hop 0.25, so the one-hop value wins WHICHEVER IS FIRST
+    in the ledger; at the CONTROL `told_weight` 1.0 both weigh 1.0, they tie, and today's rule --
+    the first found wins a tie -- decides, so the ledger's order picks. The two-hop claim is listed
+    first in one order precisely so that a reader that counts every told claim as ONE hop would
+    tie at the shipped value too and hand it the win.
+
+    MUTATION (run 2026-10-01, `T3b`): `teller_weight`'s exponent forced to `1` (hops read as 1
+    always) -- both claims weigh 0.5, so this goes RED on the weight assertion; with that line
+    removed the shipped arm ties and the first-listed two-hop value (5) wins the `read`, RED
+    again. Restored, GREEN."""
+    from ..decision.options import teller_weight
+    from ..queries.person_q import LedgerReader
+
+    w = P.tiny_world()
+    p = w.persons["p_low"]
+    assert all(r[0] not in ("x", "y", "z") for r in p.stance), "the hearer regards a teller already"
+    one = Claim("c_one", p.id, "Hh", "stores:grain", 0, 2, "told_by", 100, "own", chain=("x",))
+    two = Claim("c_two", p.id, "Hh", "stores:grain", 5, 2, "told_by", 100, "own", chain=("z", "y"))
+    assert (one.hops, two.hops, one.teller, two.teller) == (1, 2, "x", "y")
+
+    checked = 0
+    shipped = teller_weight(p, _t3_fx(0.5, 0.5, 0.5))
+    assert (shipped(one), shipped(two)) == (0.5, 0.25), (shipped(one), shipped(two))
+    control = teller_weight(p, _t3_fx(1.0, 0.0, 0.0))
+    assert (control(one), control(two)) == (1.0, 1.0)
+    for order in ((two, one), (one, two)):
+        p.ledger[:] = list(order)
+        assert LedgerReader(p.ledger, shipped).read("Hh", "stores:grain") == one.value, (
+            f"at the shipped told_weight the two-hop value won with the ledger as "
+            f"{[c.id for c in order]} -- hops are not read off the chain")
+        assert LedgerReader(p.ledger, shipped).latest_about("Hh") is one
+        checked += 1
+        first = order[0]
+        assert LedgerReader(p.ledger, control).read("Hh", "stores:grain") == first.value, (
+            "at the control told_weight the two claims tie and the first found must win, as before")
+        assert LedgerReader(p.ledger, control).latest_about("Hh") is first
+        assert LedgerReader(p.ledger).latest_about("Hh") is first
+        checked += 1
+    assert checked >= 1
+
+
+def test_t3b_a_witnessed_retelling_extends_the_chain_by_the_teller():
+    """THE DEPOSIT, ON A REAL RETELLING. `p_low` holds a claim firsthand and tells it at `Hh`; `p_mid`
+    hears it (chain `(p_low,)`), walks to `S`, and tells it on; `p_high` hears THAT. Each deposit's
+    chain is the teller's chain plus the teller -- `(p_low,)` then `(p_low, p_mid)` -- and `teller`
+    is the last of it, `p_mid`, not the origin. Both tellings go through the real WITNESS barrier
+    and `said_of`, the one owner of what a teller says.
+
+    ⚠ `confidence_default` is swept to 50 so that `p_mid`'s told claim (the teller's own 100) is
+    strictly the best claim he holds about `Hh`: the ambient `news.told` claim every hearer also
+    deposits is at the default, and at 100 it would tie the told claim and `said_of` would carry
+    THAT -- a retelling of THAT a telling happened, not of what was told."""
+    from ..harness.soak import _claim_row
+
+    fx = _t3_fx(0.5, 0.5, 0.5).sweep("confidence_default", 50)
+    w = P.tiny_world(fx)
+    assert w.fixtures.get("confidence_default") != 100
+
+    def move(pid, rung):
+        edge = next(t for t in w.tenures if t.subject == pid and t.kind == "contain" and t.live)
+        edge.object = rung
+
+    def tell(teller, label):
+        said = said_of(w.persons[teller].ledger, "Hh", w.fixtures)
+        assert said is not None, f"{teller} has nothing to say about Hh"
+        act = Act(id=f"a_tell_{label}", actor=teller, verb="tell",
+                  payload={"subject": "Hh", "said": said})
+        w.acts.append(act)
+        ev = Event(H(w.world_seed, w.tick, teller, f"ev:news.told:{act.id}"), "news.told",
+                   [], [act.id], w.tick, "Success", ())
+        w.log.append(ev)
+        d.act_of[ev.id] = act
+        d.witness(mint_token(w, WriteClass.INTERIOR), [ev])
+        return said
+
+    def told(pid):
+        return [c for c in w.persons[pid].ledger
+                if c.source == "told_by" and c.subject == "Hh" and c.predicate == "stores:grain"]
+
+    d = SeasonDriver(w)
+    move("p_other", "S")        # `Hh` now holds `p_low` and `p_mid` only; `S` holds `p_high`, `p_other`
+    w.persons["p_low"].ledger.append(
+        Claim("c_held", "p_low", "Hh", "stores:grain", 8, 0, "firsthand", 100, "own"))
+    first = tell("p_low", "hop1")
+    assert first.chain == (), "a claim the teller holds firsthand carries an empty chain"
+    mid = told("p_mid")
+    assert len(mid) == 1 and mid[0].chain == ("p_low",), [c.chain for c in mid]
+
+    w.tick += 1                  # a later barrier: the presence index is built once per barrier
+    move("p_mid", "S")
+    second = tell("p_mid", "hop2")
+    assert second.chain == ("p_low",), (
+        f"`said_of` handed the second telling the chain {second.chain!r}, not the one claim it picked")
+
+    high = told("p_high")
+    checked = len(high)
+    assert checked == 1, f"p_high holds {len(high)} told claims -- the second hop never deposited"
+    c = high[0]
+    assert (c.chain, c.teller, c.hops) == (("p_low", "p_mid"), "p_mid", 2), (c.chain, c.teller, c.hops)
+    assert c.chain[0] == "p_low", "the origin is the first element of the chain"
+    row = _claim_row(c)
+    assert (row["chain"], row["teller"]) == (["p_low", "p_mid"], "p_mid"), row

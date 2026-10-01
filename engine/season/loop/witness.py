@@ -646,10 +646,16 @@ def witness(self, token: Token, events: list[Event]) -> int:
                     # did not reach `proposals/2026-09-17-governance-and-behaviour/`, this
                     # channel's own content-owner directory. `_act.actor` is already in scope
                     # (bound above, this same guard), so this is exactly the one-argument edit
-                    # the ruling names -- `Claim.teller`, `state/carriers.py` -- not a lookup.
+                    # the ruling names -- not a lookup. `T3b` (`ED-IN-0282`): the argument is the
+                    # CHAIN, `Claim.chain`, `state/carriers.py` -- the teller's own chain, which
+                    # `said_of` copied onto the Act at CHOOSE, then the teller; `Claim.teller` is
+                    # its last element, derived. A KEYWORD, never a positional: `chain` sits where
+                    # the removed `teller` field did, so a stray string in that slot would be
+                    # read as a chain of one-character hops.
                     tc = Claim(_told_hash or H(w.world_seed, w.tick, pid, f"told:{e.id}"),
                                pid, _held.subject, _held.predicate, _told_val, w.tick,
-                               "told_by", _held.confidence, "own", self.round, _act.actor)
+                               "told_by", _held.confidence, "own", self.round,
+                               chain=tuple(_held.chain) + (_act.actor,))
                     w.write("claim_ledger", token,
                             lambda p=p, c=tc: p.ledger.append(c),
                             record_kind="Person", fieldname="claim_ledger", driver="Event",

@@ -197,7 +197,8 @@ def _tenure_row(t) -> tuple:
 def _claim_row(c) -> dict:
     return {"id": c.id, "holder": c.holder, "subject": c.subject, "predicate": c.predicate,
             "value": c.value, "when": c.when, "source": c.source, "confidence": c.confidence,
-            "visibility": c.visibility, "round": c.round, "teller": c.teller}
+            "visibility": c.visibility, "round": c.round, "teller": c.teller,
+            "chain": list(c.chain)}
 
 
 def _person_row(p) -> dict:

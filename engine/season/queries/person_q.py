@@ -115,8 +115,8 @@ class LedgerReader:
         """`support(v) = 1 - PROD over distinct origins (1 - weigh(c))`, one entry per match, in
         match order. Grouped by `(predicate, value)` -- `read`'s matches share one predicate, so
         for `read` that is grouping by value; `latest_about` spans predicates and two predicates
-        are two assertions. An origin is `c.teller` for a told claim (one hop, on today's field)
-        and the holder for anything else; one origin counts once per value, at its highest
+        are two assertions. An origin is `c.chain[0]` for a told claim and the holder for
+        anything else; one origin counts once per value, at its highest
         weight, so a teller repeating himself adds nothing. Grouped by `==`, not by hash: a
         claim's `value` need not be hashable.
 
@@ -134,7 +134,7 @@ class LedgerReader:
             else:
                 groups.append([key, {}])
                 i = len(groups) - 1
-            origin = c.teller if c.teller is not None else c.holder
+            origin = c.chain[0] if c.chain else c.holder
             wt = self._weigh(c)
             g = groups[i][1]
             g[origin] = max(g.get(origin, 0.0), wt)
@@ -215,4 +215,4 @@ def said_of(claims, subject, fx) -> "Said | None":
     c = LedgerReader(own).latest_about(subject) or LedgerReader(claims).latest_about(subject)
     if c is None:
         return None
-    return Said(c.subject, c.predicate, c.value, c.confidence, (), None)
+    return Said(c.subject, c.predicate, c.value, c.confidence, c.chain, None)

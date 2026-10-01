@@ -903,15 +903,17 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
     """THE `weigh` CLOSURE `LedgerReader` RANKS `p`'S CLAIMS BY (telling workplan `T3a`,
     `ED-IN-0282`; the reader `H-157` recorded as missing for `Claim.teller`).
 
-        weigh(c) = 1.0                                       if c.teller is None
+        weigh(c) = 1.0                                       if c.chain is empty
                  = clamp01(told_weight ** hops * relation * record)   otherwise
+        hops     = len(c.chain)         teller = c.chain[-1]           (origin = c.chain[0])
         relation = 1 + rank_gain * rank(p, teller)
                      + regard_gain * clamp(regard(p, teller) / STANCE_MAX, -1, 1)
 
     `RULINGS.yaml` CAT-3, closed: store the teller and grade the claim WHEN READ, by the hearer's
     belief about their relation to the teller -- so a revised regard re-grades every claim that
-    teller ever passed on, and nothing is frozen at deposit. `hops` is `1`: on today's field a told
-    claim is one hop (`T3b` reads hops off `Claim.chain`). A claim with no teller -- firsthand,
+    teller ever passed on, and nothing is frozen at deposit. `hops` is read off `Claim.chain` (`T3b`):
+    a retelling is a longer chain, so it weighs `told_weight` less again, and the `relation` is the
+    hearer's to the one who told THEM, the last hop. A claim with an empty chain -- firsthand,
     seen, inferred, or a `told_by` deposit through a channel with no speaking actor -- weighs 1.0.
 
     ⚠ THE FIXTURES ARE READ ON THE FIRST TOLD CLAIM, NOT AT BUILD. A ledger with no teller in it
@@ -921,9 +923,9 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
     gains: list = []
 
     def weigh(c: Claim) -> float:
-        teller = c.teller
-        if teller is None:
+        if not c.chain:
             return 1.0
+        teller = c.chain[-1]
         if not gains:
             gains.extend((fx.get("told_weight"), fx.get("rank_gain"), fx.get("regard_gain")))
         told_weight, rank_gain, regard_gain = gains
@@ -932,6 +934,6 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
                     + regard_gain * _clamp(regard(p, teller) / STANCE_MAX, -1.0, 1.0))
         # ABSENT: H-179 stake
         record = 1.0   # a teller's record (agreement with p's own claims) is `T6`; 1.0 until then
-        return _clamp(told_weight ** 1 * relation * record, 0.0, 1.0)
+        return _clamp(told_weight ** len(c.chain) * relation * record, 0.0, 1.0)
 
     return weigh
