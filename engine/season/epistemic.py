@@ -69,7 +69,7 @@ from .state.world import World
 
 
 def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
-                       via: "str | None" = None) -> bool:
+                       via: "str | None" = None, weigh=None) -> bool:
     """§F1 clause 4 -- is `requires(verb)` KNOWN-FALSE from `p`'s OWN claims?
 
     ⚠ THE ASYMMETRY IS THE WHOLE POINT AND MUST NOT BE SOFTENED TO "requires holds". This returns
@@ -111,10 +111,16 @@ def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
     on `Act.via` -- and `binding_of` carries it exactly as `binding_from_act` does for the fold, so a
     `basis` conjunct (§F.24a form 7, `data/requires.py::Basis`) asks the person's ledger about THE
     SAME seat the fold will ask the world about. Omitted (`None`), the conjunct is UNKNOWN, which
-    contradicts nothing -- the pre-`19` answer for every caller that passes none."""
+    contradicts nothing -- the pre-`19` answer for every caller that passes none.
+
+    ⚠ TELLING WORKPLAN `T3a` (`ED-IN-0282`): `weigh` GRADES HEARSAY AS IT IS READ. `opening_set`
+    passes `decision/options.py::teller_weight(p, fx)`, so a newer claim a teller passed on no
+    longer beats the person's own firsthand claim merely by being newer. The CLOSURE is passed in,
+    not built here, because `decision.options` imports this module and a deferred import back
+    would hide that cycle rather than remove it. Omitted (`None`), the reader orders as before."""
     if (row.requires or "").strip() in NO_PRECONDITION:
         return False
-    return evaluate(row.requires_typed, LedgerReader(p.ledger),
+    return evaluate(row.requires_typed, LedgerReader(p.ledger, weigh),
                     binding_of(p.id, operands, via)).value is False
 
 

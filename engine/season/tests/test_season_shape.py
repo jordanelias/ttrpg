@@ -10747,8 +10747,8 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     def drops(fx):
         hits = []
         original = decision.options.belief_contradicts
-        def counted(p_, row, subject, operands, seat=None):
-            out = original(p_, row, subject, operands, seat)
+        def counted(p_, row, subject, operands, seat=None, weigh=None):
+            out = original(p_, row, subject, operands, seat, weigh=weigh)
             if out:
                 hits.append((row.verb, subject))
             return out
@@ -10776,8 +10776,8 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     def hl_drops(fx):
         hits = []
         original = decision.options.belief_contradicts
-        def counted(p_, row, subject, operands, seat=None):
-            out = original(p_, row, subject, operands, seat)
+        def counted(p_, row, subject, operands, seat=None, weigh=None):
+            out = original(p_, row, subject, operands, seat, weigh=weigh)
             if out:
                 hits.append((row.verb, subject))
             return out

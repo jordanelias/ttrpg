@@ -60,6 +60,15 @@ def stance_toward(p: Person, referent: str) -> float:
     return total
 
 
+def regard(p: Person, referent: str) -> float:
+    """HOW `p` REGARDS `referent`, computed when read and never written (telling workplan §1's
+    spine). Today it is the STORED HALF ONLY -- `stance_toward`, the person's own stance rows.
+    The judged-deeds and told-valence halves are the gated position `G1`, not built; nothing here
+    stands in for them. A second name for one sum is deliberate: `decision/options.py::
+    teller_weight` asks for REGARD, and when `G1` widens what regard is, the reader does not move."""
+    return stance_toward(p, referent)
+
+
 # ---------------------------------------------------------------------------
 # `LedgerReader` -- MOVED HERE FROM `queries/readers.py` AT UNIT L3 (ED-IN-0206). It asks ONE
 # PERSON'S OWN CLAIMS and nothing else: it takes neither a `World` nor even a `Person`, only the
@@ -88,13 +97,60 @@ class LedgerReader:
     THE MOST RECENT, THEN THE MOST CONFIDENT. A ledger may hold two claims about one
     `(subject, predicate)` -- that is what a ledger IS -- and answering with the first found would
     make the verdict depend on append order. No matching claim is UNKNOWN, never False: §F1's
-    asymmetry is that absence of a belief is not a belief in the negative."""
+    asymmetry is that absence of a belief is not a belief in the negative.
 
-    def __init__(self, claims):
+    ⚠ `weigh` (telling workplan `T3a`, `ED-IN-0282`, `H-157`): HEARSAY IS GRADED WHEN READ, NEVER
+    AT DEPOSIT. `weigh(c) -> [0, 1]` is how far this holder credits one claim; the caller builds it
+    (`decision/options.py::teller_weight`) because this module may not import `decision/`. With
+    a `weigh`, the comparator ranks a claim by `(support, when, confidence)`, where `support` is
+    the noisy-OR over the DISTINCT ORIGINS asserting the same value (below). `None` is today's
+    comparator, unchanged, and every caller but `epistemic.belief_contradicts` passes `None`.
+    `confidence` is read RAW either way: weighing never rewrites a claim."""
+
+    def __init__(self, claims, weigh=None):
         self._claims = list(claims or [])
+        self._weigh = weigh
+
+    def _support(self, matches) -> list:
+        """`support(v) = 1 - PROD over distinct origins (1 - weigh(c))`, one entry per match, in
+        match order. Grouped by `(predicate, value)` -- `read`'s matches share one predicate, so
+        for `read` that is grouping by value; `latest_about` spans predicates and two predicates
+        are two assertions. An origin is `c.teller` for a told claim (one hop, on today's field)
+        and the holder for anything else; one origin counts once per value, at its highest
+        weight, so a teller repeating himself adds nothing. Grouped by `==`, not by hash: a
+        claim's `value` need not be hashable.
+
+        ⚠ AT `weigh == 1` FOR EVERY CLAIM, EVERY GROUP'S SUPPORT IS EXACTLY `1.0` (`1 - 0.0`), so
+        the key collapses to `(when, confidence)` -- today's order, by arithmetic rather than by a
+        branch. `test_t3_weigh_none_and_weigh_one_order_a_ledger_as_today` checks it over
+        randomised ledgers."""
+        groups: list = []       # [key, {origin: weight}]
+        idx: list = []
+        for c in matches:
+            key = (c.predicate, c.value)
+            for i, g in enumerate(groups):
+                if g[0] == key:
+                    break
+            else:
+                groups.append([key, {}])
+                i = len(groups) - 1
+            origin = c.teller if c.teller is not None else c.holder
+            wt = self._weigh(c)
+            g = groups[i][1]
+            g[origin] = max(g.get(origin, 0.0), wt)
+            idx.append(i)
+        support = []
+        for _key, origins in groups:
+            miss = 1.0
+            for wt in origins.values():
+                miss *= 1.0 - wt
+            support.append(1.0 - miss)
+        return [support[i] for i in idx]
 
     def _best(self, match):
-        """THE COMPARATOR, ONCE. *Most recent, then most confident*, over whatever `match` admits.
+        """THE COMPARATOR, ONCE. *Most recent, then most confident*, over whatever `match` admits
+        -- and, under a `weigh`, *best supported* first (`_support`). Strict `>`, so the first
+        found wins a tie, in both forms.
 
         ⚠ IT EXISTS BECAUSE THE DOCSTRING BELOW CLAIMED IT ALREADY DID. `latest_about` was added
         asserting it *"reuses `read`'s comparator rather than restating it"* while carrying its own
@@ -102,11 +158,19 @@ class LedgerReader:
         the anti-pattern `ci_common.load_yaml`'s own docstring records against itself
         (*"a single-owner comment asserting a property the tree lacks is worse than no comment"*).
         Extracting it makes the sentence true."""
-        best = None
-        for c in self._claims:
-            if match(c) and (best is None
-                             or (c.when, c.confidence) > (best.when, best.confidence)):
-                best = c
+        if self._weigh is None:
+            best = None
+            for c in self._claims:
+                if match(c) and (best is None
+                                 or (c.when, c.confidence) > (best.when, best.confidence)):
+                    best = c
+            return best
+        matches = [c for c in self._claims if match(c)]
+        best, best_key = None, None
+        for c, s in zip(matches, self._support(matches)):
+            key = (s, c.when, c.confidence)
+            if best is None or key > best_key:
+                best, best_key = c, key
         return best
 
     def read(self, subject, predicate: str):

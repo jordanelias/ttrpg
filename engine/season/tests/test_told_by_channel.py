@@ -313,3 +313,198 @@ def test_t1_said_is_not_a_binding_operand():
     assert "said" not in REQUIRES_OPERANDS
     out = binding_of("p", {"subject": "Hh", "said": Said("Hh", "stores:grain", 8, 37)})
     assert "said" not in out and out["subject"] == "Hh" and out["actor"] == "p", out
+
+
+# ---------------------------------------------------------------------------------------------
+# T3a (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282; `H-157`, `H-176`..`H-180`): HEARSAY
+# WEIGHED WHEN READ, on today's `Claim.teller`. A told claim is one hop and its origin is its
+# teller; anything else weighs 1.0 and its origin is its holder.
+# ---------------------------------------------------------------------------------------------
+
+def _t3_fx(told_weight, regard_gain, rank_gain=None):
+    from ..data.fixtures import DEFAULT_FIXTURES
+    fx = DEFAULT_FIXTURES.sweep("told_weight", told_weight).sweep("regard_gain", regard_gain)
+    return fx if rank_gain is None else fx.sweep("rank_gain", rank_gain)
+
+
+def _t3_transfer_ops(rung):
+    """`transfer`'s typed cell is `stores(from, kind) >= amount`: a claim `(rung, stores:grain, 5)`
+    leaves it holding, `(rung, stores:grain, 0)` contradicts it."""
+    return {"from": rung, "to": rung, "kind": "grain", "amount": 1}
+
+
+def test_t3_a_firsthand_claim_holds_against_a_newer_told_claim_of_equal_confidence():
+    """THE HEARSAY DISCOUNT, BOTH ARMS. The hearer saw `Hh` stocked (when 1, confidence 100); a
+    teller `x` then told them it is empty (when 2, confidence 100). Under `(when, confidence)` --
+    the pre-`T3a` comparator, and the CONTROL `told_weight` 1.0 -- the newer told value wins and
+    `transfer` is KNOWN-FALSE; at the SHIPPED `told_weight` 0.5 the firsthand value's support is
+    1.0 against the told one's 0.5, so what the hearer saw holds and nothing is contradicted.
+
+    MUTATION (run 2026-10-01, `T3a`): `LedgerReader._best` forced onto its `weigh is None` branch
+    -- the shipped arm reads the told value and this goes RED on its first assertion. Restored,
+    GREEN."""
+    from ..data.verbs import VERB_TABLE
+    from ..decision.options import teller_weight
+    from ..epistemic import belief_contradicts
+    from ..queries.person_q import LedgerReader
+
+    w = P.tiny_world()
+    p = w.persons["p_low"]
+    assert not p.stance or all(r[0] != "x" for r in p.stance), "the hearer regards `x` already"
+    seen = Claim("c_seen", p.id, "Hh", "stores:grain", 5, 1, "firsthand", 100, "own")
+    told = Claim("c_told", p.id, "Hh", "stores:grain", 0, 2, "told_by", 100, "own", teller="x")
+    p.ledger[:] = [seen, told]
+    row, ops = VERB_TABLE["transfer"], _t3_transfer_ops("Hh")
+
+    checked = 0
+    shipped = teller_weight(p, _t3_fx(0.5, 0.5, 0.5))
+    assert shipped(told) == 0.5 and shipped(seen) == 1.0, (shipped(told), shipped(seen))
+    assert LedgerReader(p.ledger, shipped).read("Hh", "stores:grain") == 5, (
+        "at the shipped told_weight a newer one-hop claim outranked what the hearer saw")
+    assert not belief_contradicts(p, row, "Hh", ops, None, weigh=shipped)
+    checked += 1
+
+    control = teller_weight(p, _t3_fx(1.0, 0.0, 0.0))
+    assert control(told) == 1.0
+    assert LedgerReader(p.ledger, control).read("Hh", "stores:grain") == 0, (
+        "at the control told_weight the newer claim must win, as before T3a")
+    assert LedgerReader(p.ledger).read("Hh", "stores:grain") == 0
+    assert belief_contradicts(p, row, "Hh", ops, None, weigh=control)
+    checked += 1
+    assert checked >= 1
+
+
+def test_t3_unplanted_members_with_opposite_loyalty_reach_different_verdicts():
+    """REGARD, READ FROM LOYALTY NOBODY PLANTED. In `build_realm(0)` two members of one faction
+    whose stance rows toward its leader carry OPPOSITE signs (`populated`'s loyalty, through
+    `cast.stance_from_loyalty`) each hold the same firsthand claim; the leader then tells both the
+    contradicting value, newer. At `regard_gain` 0.5 the one who likes the leader credits him in
+    full and believes him (`transfer` known-false); the one who dislikes him credits him below 1.0
+    and keeps what they saw. At the control `regard_gain` 0 they agree.
+
+    ⚠ `told_weight` IS HELD AT ITS CONTROL 1.0 HERE, AND THAT IS FORCED, NOT CHOSEN. At the shipped
+    0.5 a one-hop claim weighs at most 0.5 x 1.5 = 0.75 against a firsthand claim's 1.0, so NO regard
+    can make hearsay beat what the hearer saw (`H-178`'s default says so); regard then decides
+    only between told claims. Against a firsthand claim the regard term is observable only where
+    `told_weight * relation` can reach 1.0. The firsthand and told claims are planted (identically
+    in both); the loyalty -- the variable under test -- is not.
+
+    MUTATION (run 2026-10-01, `T3a`): `LedgerReader._best` forced onto its `weigh is None` branch
+    -- both members believe the leader at 0.5 and this goes RED on the `differ` assertion.
+    Restored, GREEN."""
+    from collections import defaultdict
+    from ..data.verbs import VERB_TABLE
+    from ..decision.options import teller_weight
+    from ..epistemic import belief_contradicts
+    from ..queries.person_q import stance_toward
+
+    w = populated.build_realm(0)
+    toward = defaultdict(dict)
+    for pid, p in w.persons.items():
+        for r in p.stance:
+            if len(r) >= 3 and r[0] in w.persons and r[0] != pid:
+                toward[r[0]][pid] = stance_toward(p, r[0])
+    pairs = []
+    for leader, members in sorted(toward.items()):
+        pos = sorted(m for m, s in members.items() if s > 0)
+        neg = sorted(m for m, s in members.items() if s < 0)
+        if pos and neg:
+            pairs.append((leader, pos[0], neg[0]))
+    assert pairs, ("no faction in build_realm(0) has members of opposite loyalty toward its "
+                   "leader -- the unplanted premise is gone")
+    row = VERB_TABLE["transfer"]
+    checked = 0
+    for leader, fond, hostile in pairs:
+        rung = "r_t3"
+        ops = _t3_transfer_ops(rung)
+        verdict = {}
+        for pid in (fond, hostile):
+            p = w.persons[pid]
+            p.ledger.append(Claim(f"c_t3_seen_{pid}", pid, rung, "stores:grain", 5, 1,
+                                  "firsthand", 100, "own"))
+            p.ledger.append(Claim(f"c_t3_told_{pid}", pid, rung, "stores:grain", 0, 2,
+                                  "told_by", 100, "own", teller=leader))
+            verdict[pid] = tuple(
+                belief_contradicts(p, row, rung, ops, None, weigh=teller_weight(p, fx))
+                for fx in (_t3_fx(1.0, 0.5), _t3_fx(1.0, 0.0)))
+        assert verdict[fond][0] != verdict[hostile][0], (
+            f"{fond} (stance {toward[leader][fond]:+}) and {hostile} "
+            f"(stance {toward[leader][hostile]:+}) reached the same verdict on {leader}'s word at "
+            f"regard_gain 0.5: {verdict}")
+        assert verdict[fond][0] is True and verdict[hostile][0] is False, verdict
+        assert verdict[fond][1] == verdict[hostile][1] is True, (
+            f"at the control regard_gain 0 the two must agree, and believe the newer claim: {verdict}")
+        checked += 1
+    assert checked >= 1
+
+
+def test_t3_weigh_none_and_weigh_one_order_a_ledger_as_today():
+    """THE COLLAPSE, OVER RANDOMISED LEDGERS. `weigh=None` and a `weigh` returning 1.0 for every
+    claim must pick EXACTLY the claim the pre-`T3a` comparator picked -- `(when, confidence)`,
+    strict `>`, first found wins a tie -- for `read` and `latest_about`. `when` and `confidence`
+    are drawn from small ranges so ties are common: a tie is where a broken first-found rule shows.
+
+    MUTATION (run 2026-10-01, `T3a`): the weighted branch's `key > best_key` written `>=` -- the
+    last tied claim wins and this goes RED. Restored, GREEN."""
+    import random
+    from ..queries.person_q import LedgerReader
+
+    def today(claims, match):
+        best = None
+        for c in claims:
+            if match(c) and (best is None or (c.when, c.confidence) > (best.when, best.confidence)):
+                best = c
+        return best
+
+    rng = random.Random(20261001)
+    checked = ties = 0
+    for trial in range(400):
+        claims = []
+        for i in range(rng.randint(1, 9)):
+            told = rng.random() < 0.5
+            claims.append(Claim(f"c{trial}_{i}", "h", rng.choice("AB"), rng.choice(("p", "q")),
+                                rng.choice((0, 1, 2)), rng.randint(0, 2),
+                                "told_by" if told else "firsthand", rng.choice((50, 100)), "own",
+                                teller=rng.choice(("x", "y")) if told else None))
+        for subject in "AB":
+            for predicate in ("p", "q"):
+                m = lambda c, s=subject, pr=predicate: c.subject == s and c.predicate == pr
+                want = today(claims, m)
+                matches = [c for c in claims if m(c)]
+                if want is not None and sum((c.when, c.confidence) == (want.when, want.confidence)
+                                            for c in matches) > 1:
+                    ties += 1
+                for weigh in (None, lambda c: 1.0):
+                    r = LedgerReader(claims, weigh)
+                    assert r._best(m) is want, (trial, subject, predicate, weigh)
+                    got = r.read(subject, predicate)
+                    assert (got is want.value) if want is not None else got is not None
+                    checked += 1
+            want = today(claims, lambda c, s=subject: c.subject == s)
+            for weigh in (None, lambda c: 1.0):
+                assert LedgerReader(claims, weigh).latest_about(subject) is want
+                checked += 1
+    assert checked >= 1000 and ties >= 50, (checked, ties)
+
+
+def test_t3_opening_set_hands_clause_4_the_teller_weight(monkeypatch):
+    """THE WIRING: `opening_set` passes `teller_weight(p, fx)` to `belief_contradicts` on every
+    call, so clause 4 is the weighed reader in play and not only in a test. Spied through the
+    module attribute every rebind already uses (`decision.options.belief_contradicts`)."""
+    from ..decision import options as O
+    from ..harness import headless as HL
+
+    seen = []
+    real = O.belief_contradicts
+
+    def spy(p, row, subject, operands, via=None, weigh=None):
+        seen.append(weigh)
+        return real(p, row, subject, operands, via, weigh=weigh)
+
+    monkeypatch.setattr(O, "belief_contradicts", spy)
+    HL.run(seasons=1, seed=0)
+    assert seen, "opening_set never reached clause 4 -- the spy observed nothing"
+    probe = Claim("c_probe", "h", "S", "stores:grain", 0, 0, "told_by", 100, "own", teller="x")
+    assert all(callable(wt) for wt in seen), "a clause-4 call ran with weigh=None"
+    assert {wt(probe) for wt in seen} == {0.5}, (
+        "the weigh opening_set passed does not grade a told claim at the shipped told_weight")

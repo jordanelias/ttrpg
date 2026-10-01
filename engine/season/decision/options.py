@@ -23,7 +23,8 @@ string. Enforced BY PATH over this directory (`04:1046`).
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Callable, Optional
+from ..data.cast import STANCE_VALENCE_SCALE
 from ..data.pursuits import to_axes
 from ..data.requires import (
     SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS, WRIT_SOURCED_OPERANDS,
@@ -34,7 +35,7 @@ from ..data.rosters import PERSON_PREDICATES, PURSUIT_AXES, RECORD_CONTENT, requ
 from ..data.verbs import ELIGIBILITY_KINDS, VERB_TABLE, align
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
-from ..queries.person_q import said_of
+from ..queries.person_q import regard, said_of
 from ..state.carriers import Candidate, Claim, Person, Question, View
 from ..trace_log import TRACE
 
@@ -101,6 +102,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     out: list[Candidate] = []
     axis = fx.get("refusal_axis")
     tolerance = refusal_tolerance(p, axis)
+    weigh = teller_weight(p, fx)      # `T3a`: clause 4's reader grades hearsay by its teller
     for verb, row in sorted(VERB_TABLE.items()):
         if not person_side_eligible(p, row):
             continue
@@ -184,7 +186,8 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             # `19`: THE SEAT THE ACT WILL BE EXERCISED THROUGH rides into the belief test as it rides
             # onto `Act.via` (`pack_scenes`), so a `basis` conjunct is asked of the same seat both
             # sides. `seat` is `exercised_seat`, read once per row above.
-            if belief_contradicts(p, row, subject, ops, seat):
+            # `T3a`: and the person reads their own ledger WEIGHING hearsay by its teller.
+            if belief_contradicts(p, row, subject, ops, seat, weigh=weigh):
                 continue
             out.append(Candidate(verb, subject, why=q.source, operands=ops))
     return out
@@ -871,3 +874,64 @@ def standing_of(p: Person, fx: "Fixtures") -> int:
     own = [c for c in p.ledger if c.subject == p.id and c.source == "firsthand"]
     _agree, dis, paired = agreement(told, own)
     return scale if paired == 0 else (dis * scale) // paired
+
+
+# The widest stored regard one referent can carry from one stance row: `valence * weight`, each
+# bounded by the row type's own scale (`data/cast.py`), so it is DERIVED, never a literal here.
+STANCE_MAX = STANCE_VALENCE_SCALE ** 2
+
+
+def _clamp(x: float, lo: float, hi: float) -> float:
+    return lo if x < lo else hi if x > hi else x
+
+
+def rank(p: Person, teller: str) -> int:
+    """`+1` if `p`'s own claims say `teller` outranks `p`, `-1` if outranked, `0` if they say
+    neither. ALWAYS `0` TODAY, AND THAT IS A MEASURED ABSENCE, NOT A STUB'S GUESS.
+
+    The ordering itself exists -- `offices.yaml: titles` maps each title to a rung kind, and
+    *"rank is the ordinal in `rung_kinds`"* -- but a hearer can only rank a teller off claims
+    the HEARER holds, and no writer in the tree deposits an `office` claim (the `person_predicates`
+    member is a vocabulary word with no producer; MEASURED, `build_realm(0)` one season: zero
+    `office` claims in any ledger), nor is an `office` claim's value typed as a title or a seat.
+    Comparing values nobody writes, in a shape nobody declared, would be inventing the ruling."""
+    # ABSENT: H-180 rank ordering
+    return 0
+
+
+def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
+    """THE `weigh` CLOSURE `LedgerReader` RANKS `p`'S CLAIMS BY (telling workplan `T3a`,
+    `ED-IN-0282`; the reader `H-157` recorded as missing for `Claim.teller`).
+
+        weigh(c) = 1.0                                       if c.teller is None
+                 = clamp01(told_weight ** hops * relation * record)   otherwise
+        relation = 1 + rank_gain * rank(p, teller)
+                     + regard_gain * clamp(regard(p, teller) / STANCE_MAX, -1, 1)
+
+    `RULINGS.yaml` CAT-3, closed: store the teller and grade the claim WHEN READ, by the hearer's
+    belief about their relation to the teller -- so a revised regard re-grades every claim that
+    teller ever passed on, and nothing is frozen at deposit. `hops` is `1`: on today's field a told
+    claim is one hop (`T3b` reads hops off `Claim.chain`). A claim with no teller -- firsthand,
+    seen, inferred, or a `told_by` deposit through a channel with no speaking actor -- weighs 1.0.
+
+    ⚠ THE FIXTURES ARE READ ON THE FIRST TOLD CLAIM, NOT AT BUILD. A ledger with no teller in it
+    reads none of them, so a world with no telling reads exactly what it read before `T3a`.
+    ⚠ AT THE CONTROL VALUES (`told_weight` 1.0, both gains 0) EVERY CLAIM WEIGHS EXACTLY 1.0 and
+    `LedgerReader` orders as it did before `T3a`."""
+    gains: list = []
+
+    def weigh(c: Claim) -> float:
+        teller = c.teller
+        if teller is None:
+            return 1.0
+        if not gains:
+            gains.extend((fx.get("told_weight"), fx.get("rank_gain"), fx.get("regard_gain")))
+        told_weight, rank_gain, regard_gain = gains
+        relation = (1.0
+                    + rank_gain * rank(p, teller)
+                    + regard_gain * _clamp(regard(p, teller) / STANCE_MAX, -1.0, 1.0))
+        # ABSENT: H-179 stake
+        record = 1.0   # a teller's record (agreement with p's own claims) is `T6`; 1.0 until then
+        return _clamp(told_weight ** 1 * relation * record, 0.0, 1.0)
+
+    return weigh

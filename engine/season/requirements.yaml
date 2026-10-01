@@ -589,8 +589,12 @@ rows:
       IMPERFECT KNOWLEDGE IS STRUCTURAL AND HOLDS — `choose` receives no World (enforced by
       test), a `View` is capped at k and raises on any world collection, and `LedgerReader`
       answers from the person's own ledger. `beliefs` and `ledger` carry memory. FEELINGS,
-      ATTITUDES and RELATIONSHIPS have no field; `stance` is the nearest and nothing writes it
-      — W-F, the item that would, is not started.
+      ATTITUDES and RELATIONSHIPS have no field; `stance` is the nearest. ⚠ CORRECTED 2026-10-01
+      (telling workplan `T3a`, `ED-IN-0282`): this row said nothing writes `stance`, and two
+      writers exist — `march`'s grudge and morale rows (`loop/effects_combat.py::_eff_march`) and
+      faction loyalty at build (`harness/populated.py`, `cast.stance_from_loyalty`). Its first
+      READER beyond `choose`'s score is `decision/options.py::teller_weight`, which grades a told
+      claim by the hearer's stored regard for the teller. W-F is not started.
       ⚠ AND UNTIL 2026-09-07 THAT SENTENCE WAS TRUE OF THE PLUMBING AND FALSE OF THE WORLD, which
       is worth stating because the row read as stronger than it was. Every clause above is about
       the ACCESS PATH — who may read what, through which object. The CONTENT was identical for

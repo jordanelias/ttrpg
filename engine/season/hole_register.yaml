@@ -3467,7 +3467,7 @@ rows:
     tier:      1
     kind:      "WIRING"
     hole:      "`Claim.teller` (ADDED AT BATCH-CLOSE, methodology-close Phase 1, FIDELITY TO PLAN lens, closing `RULINGS.yaml` CAT-3) HAS EXACTLY ONE WRITER AND NO PRODUCTION READER -- A CARRIER ADDED AHEAD OF ANY CONSUMER, THE SHAPE `ID-13` RETIRED `Tenure.conferrer` FOR. The told-deposit site (`loop/witness.py:678-680`) is the only place any `Claim` is constructed with a non-`None` `teller`; every other `Claim(...)` call site in the tree (five production sites total, `witness.py:431,519,540,567`) passes `None` or omits the argument. Nothing reads `Claim.teller` outside `tests/test_told_by_channel.py`'s own falsifiers -- no query, no fold clause, no epistemic weighting keys off it yet. UNLIKE `H-135`'s'S SIBLING CLASS (a gap unreachable because nothing produces the state), this is the OPPOSITE shape: the state IS produced, on every `told_by` deposit, and simply goes unread"
-    owner:     "engine/season/state/carriers.py -- `Claim.teller`; engine/season/loop/witness.py -- the one write site; the READER is unowned by any position to date"
+    owner:     "engine/season/state/carriers.py -- `Claim.teller`; engine/season/loop/witness.py -- the one write site; THE READER IS BUILT (telling workplan `T3a`, ED-IN-0282, 2026-10-01): `decision/options.py::teller_weight` reads `Claim.teller` and grades the claim by the hearer's relation to the teller (`H-176`..`H-178`), and `epistemic.belief_contradicts` ranks a person's own claims by that weight through `queries/person_q.py::LedgerReader`. The `hole:` text above describes the tree before `T3a`"
     grade:     "measured"
     default:   "none"
     site:      ""
@@ -3803,6 +3803,137 @@ rows:
       rounds of fixes to this row each replaced the stated CAUSE while never running the one
       instrument that measures the ABSENCE itself -- this pass ran it, and the result narrows the
       row's scope rather than replacing its cause again."
+
+  - id:        H-176
+    tier:      1
+    hole:      "HOW MUCH A HEARER DISCOUNTS ONE HOP OF HEARSAY. `RULINGS.yaml` CAT-3 rules that a
+      told claim is graded WHEN READ, by the hearer's belief about their relation to the teller,
+      and gives no magnitude for the discount a told claim carries before any relation is read."
+    kind:      "NUMBER"
+    owner:     "decision/options.py -- `teller_weight`, the `weigh` closure `LedgerReader` ranks
+      a person's own claims by (telling workplan `T3a`)"
+    grade:     "assumption"
+    default:   "0.5 -- SHIPPED, not the control. `1.0` is the control: every claim weighs 1.0,
+      every value's support is exactly 1.0 and `LedgerReader` orders by (when, confidence) as it
+      did before `T3a` -- byte-identical realm hash and `corpus_run 0`. At `0.5` one hop of
+      hearsay can never outrank the hearer's own firsthand claim on a different value merely by
+      being newer (the firsthand value's support is 1.0; the told one's is at most 0.75 with both
+      gains at 0.5), which is `test_t3_a_firsthand_claim_holds_against_a_newer_told_claim_of_
+      equal_confidence`. `0.25` is the sceptic's arm"
+    site:      "Fixtures told_weight, read by `decision/options.py::teller_weight` on the first
+      claim in a ledger that names a teller, as `told_weight ** hops` with hops = 1 on today's
+      `Claim.teller` (`T3b` reads hops off `Claim.chain`); consumed by `queries/person_q.py::
+      LedgerReader._support` inside `epistemic.belief_contradicts`, the only weighed reader"
+    sweep:     [1.0, 0.5, 0.25]
+    unblocks:  "hearsay that is weaker than seeing (CAT-3's half that needs no relation), and the
+      noisy-OR over origins `T5` builds on (two independent tellers outrank one)"
+    cite:      "LADDER RUN at `T3a`, 2026-10-01 (`CLAUDE.md` section 0): not superseded --
+      `RULINGS.yaml` CAT-3 is CLOSED with 'store the teller', graded when read, and its reader is
+      exactly what `H-157` recorded as missing; not irrelevant -- `Claim.teller` is written by the
+      told deposit; no design document gives the magnitude (the PDF A Tells B About C, stage 6,
+      is intent only); precedent is `H-155`'s injected, swept magnitude. MEASURED at `T0`
+      (telling workplan): no told triple with a teller is deposited in `corpus_run` or
+      `build_realm(0)` today, so the shipped arm moves neither artifact; the falsifier sets it."
+    source:    "telling workplan `T3a` (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282), 2026-10-01"
+
+  - id:        H-177
+    tier:      1
+    hole:      "HOW FAR RANK MOVES THE WEIGHT OF A TELLER'S CLAIM. CAT-3 orders the relation
+      (lord over peer over enemy) and gives no magnitude; `rank_gain` scales `rank(p, teller)`, which
+      is +1, 0 or -1 inside `relation`."
+    kind:      "NUMBER"
+    owner:     "decision/options.py -- `teller_weight`'s `relation` product"
+    grade:     "assumption"
+    default:   "0.5 -- SHIPPED, AND DORMANT: `rank` reads 0 for every pair today (`H-180`), so
+      every arm of this sweep is byte-identical until an `office` claim has a writer. `0` is the
+      control. `0.5` lets a teller who outranks the hearer reach full weight from `told_weight`
+      0.5 only together with a positive regard"
+    site:      "Fixtures rank_gain, read by `decision/options.py::teller_weight` (with
+      told_weight and regard_gain, on the first claim naming a teller), multiplying `rank(p,
+      teller)`"
+    sweep:     [0, 0.5, 1.0]
+    unblocks:  "the lord-over-peer half of CAT-3's ordering, once `H-180` gives `rank` a value"
+    cite:      "LADDER RUN at `T3a`, 2026-10-01: CAT-3 in `RULINGS.yaml` closed 'store the
+      teller', graded when read; the PDF A Tells B About C, stages 6-7, intent only; no document
+      gives the gain; precedent `H-155`. Registered live rather than deferred so the term exists
+      in the one formula that will read it, with its control at 0."
+    source:    "telling workplan `T3a` (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282), 2026-10-01"
+
+  - id:        H-178
+    tier:      1
+    hole:      "HOW FAR A HEARER'S REGARD FOR THE TELLER MOVES THE WEIGHT OF WHAT THEY TOLD.
+      CAT-3 orders peer over enemy and gives no magnitude; `regard_gain` scales the hearer's
+      stored regard (`queries/person_q.py::regard`, today `stance_toward`) normalised by
+      STANCE_MAX = STANCE_VALENCE_SCALE squared and clamped to -1..1."
+    kind:      "NUMBER"
+    owner:     "decision/options.py -- `teller_weight`'s `relation` product"
+    grade:     "assumption"
+    default:   "0.5 -- SHIPPED [ASSUMPTION]. `0` is the control (relation 1.0 whatever the
+      stance). At `0.5` a fully hostile teller's claim weighs half what a neutral one's does and a
+      fully trusted one's half again as much, clamped to 1.0. ⚠ AT THE SHIPPED told_weight 0.5
+      THIS NEVER LETS A ONE-HOP CLAIM BEAT THE HEARER'S OWN FIRSTHAND CLAIM (at most 0.75 against
+      1.0); it decides between told claims, and against a firsthand claim only on the control
+      told_weight 1.0 arm, where `test_t3_unplanted_members_with_opposite_loyalty_reach_
+      different_verdicts` observes it"
+    site:      "Fixtures regard_gain, read by `decision/options.py::teller_weight` (with
+      told_weight and rank_gain, on the first claim naming a teller), multiplying the clamped
+      regard of `p` for the teller"
+    sweep:     [0, 0.5, 1.0]
+    unblocks:  "the peer-over-enemy half of CAT-3: a hostile teller's word counts for less, read
+      from populated loyalty and from `march`'s grudge rows; `G1` (judged regard) widens what it
+      reads without moving this reader"
+    cite:      "LADDER RUN at `T3a`, 2026-10-01: CAT-3 in `RULINGS.yaml` closed 'store the
+      teller', graded when read; the PDF A Tells B About C, stage 7, intent only; no document gives
+      the gain; precedent `H-155`. MEASURED at `T0`: `build_realm(0)` holds 32 person-keyed stance
+      rows, every one naming one of 6 faction leaders, with opposite signs inside one faction."
+    source:    "telling workplan `T3a` (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282), 2026-10-01"
+
+  - id:        H-179
+    tier:      1
+    hole:      "STAKE -- WHETHER THE TELLER HAS A RIVALRY WITH THE SUBJECT, read from the
+      HEARER'S OWN claims of contested acts between the two, is not a factor in `relation`. A
+      teller who is the subject's rival is credited exactly as one who is not."
+    kind:      "WIRING"
+    owner:     "decision/options.py -- `teller_weight`'s `relation` product, at the field-less
+      `ABSENT: H-179 stake` marker"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a rival's report discounted as interested -- the PDF's stake-in-the-telling, and
+      CAT-3's enemy clause applied to the subject rather than to the hearer. Trigger: a contest
+      Event's claim naming both parties (teller and subject) lands in a hearer's ledger"
+    cite:      "LADDER RUN at `T3a`, 2026-10-01: not superseded; not irrelevant -- MEASURED at
+      `T0` (M0h), contest Events whose claims name a person other than the actor exist, 14 of 116;
+      no design document gives the shape of the factor or which contested acts count; no precedent
+      in the tree reads rivalry off a ledger; the architecture does not make one option clearly
+      right, so nothing is built and building it is not scheduled by the telling workplan."
+    source:    "telling workplan `T3a` (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282), 2026-10-01"
+
+  - id:        H-180
+    tier:      1
+    hole:      "RANK ORDERING -- A HEARER CANNOT RANK A TELLER FROM THE HEARER'S OWN CLAIMS, so
+      `decision/options.py::rank` reads 0 for every pair and `rank_gain` (`H-177`) is dormant. The
+      ordering exists in data (`offices.yaml` titles map each title to a rung kind; rank is the
+      ordinal in `rung_kinds`), but no writer deposits an `office` claim, and an `office` claim's
+      value is typed neither as a title nor as a seat."
+    kind:      "PRODUCER"
+    owner:     "decision/options.py -- `rank`, at the field-less `ABSENT: H-180 rank ordering`
+      marker; the producer of `office` claims is unowned"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "CAT-3's lord-over-peer clause. Trigger: any claim with predicate `office` in a
+      ledger of a shipped world, with a value resolvable to a rung kind; then rank is the sign of
+      the teller's ordinal minus the hearer's"
+    cite:      "LADDER RUN at `T3a`, 2026-10-01: not superseded; not irrelevant -- CAT-3 names
+      the relation; no design document types an `office` claim's value; precedent: the only `office`
+      claims in the tree are hand-built in tests with free strings; the architecture rules out
+      reading the world's seats here (`decision/` is AX-2's island and a hearer ranks a teller off
+      what the hearer holds). MEASURED at `T3a`: `build_realm(0)`, one season, zero claims with
+      predicate `office` in any ledger."
+    source:    "telling workplan `T3a` (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282), 2026-10-01"
 
 
 discharges:

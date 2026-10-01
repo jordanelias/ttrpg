@@ -623,6 +623,23 @@ DEFAULT_FIXTURES = Fixtures(
     # actually lossy at `Partial`, not one parked inert pending a later ruling.
     # [JUSTIFIED: engine/season/hole_register.yaml H-155 -- the drift band; r2 states the direction and leaves the magnitude, and the sweep brackets no-drift / shipped / aggressive]
     told_drift_band=0.5,               # `H-155`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
+    # `H-176`..`H-178` (telling workplan `T3a`, `ED-IN-0282`; `RULINGS.yaml` CAT-3, closed: store
+    # the teller, grade the claim WHEN READ by the hearer's relation to them). HOW MUCH A HEARER
+    # CREDITS A CLAIM SOMEONE TOLD THEM, read by `decision/options.py::teller_weight` -- the `weigh`
+    # `LedgerReader` ranks a person's own claims by in `belief_contradicts`. A told claim weighs
+    # `clamp01(told_weight ** hops * relation)`, `relation = 1 + rank_gain*rank +
+    # regard_gain*clamp(regard/STANCE_MAX, -1, 1)`. CONTROL FIRST: at `told_weight` 1.0 and both
+    # gains 0 every claim weighs exactly 1.0 and the reader orders as it did before `T3a` -- the
+    # realm hash and `corpus_run 0` are byte-identical there. SHIPPED: `told_weight` 0.5, so one
+    # hop of hearsay never outranks the hearer's own firsthand claim by being newer; gains 0.5
+    # [ASSUMPTION], which at the extremes moves a told claim's weight by half either way. Read
+    # only on a claim that names a teller.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-176 -- the hearsay discount; CAT-3 rules THAT a told claim is graded when read and gives no magnitude, so it is injected and swept 1.0 / 0.5 / 0.25]
+    told_weight=0.5,                   # `H-176`, swept 1.0 (control) / 0.5 (SHIPPED) / 0.25
+    # [JUSTIFIED: engine/season/hole_register.yaml H-177 -- rank's gain on a teller's weight; CAT-3 orders lord > peer, no magnitude; DORMANT while `rank` reads 0 (H-180)]
+    rank_gain=0.5,                     # `H-177`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
+    # [JUSTIFIED: engine/season/hole_register.yaml H-178 -- regard's gain on a teller's weight; CAT-3 orders peer > enemy, no magnitude, so it is injected and swept 0 / 0.5 / 1.0]
+    regard_gain=0.5,                   # `H-178`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
     # `H-159` (plan position `17b`, `04 §B.8`'s `term?`; `T-n`, `architecture/meta/01_AXIOMS.md`:
     # *"the opening act declares the terms"*). HOW MANY SEASONS AN `oblige` RUNS BEFORE IT MATURES
     # UNPAID -- the term `_eff_oblige` declares on the edge it opens (`matures_at = tick + this`),
