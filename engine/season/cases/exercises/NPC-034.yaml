@@ -10,8 +10,14 @@ scale:
     council seat, realm scale exactly as NPC-008''s Ministry Clerk and NPC-033''s Spymaster were read.'
   office:
     post: Archbishop's Representative
-    body: Inner Circle
+    faction: Church of Solmund
     remit: []
-    why: '`one_line`: ''The Archbishop''s Representative seated in the Crown''s Inner Circle''; `body:
-      Inner Circle` derives the Crown faction (`rosters.yaml: office_bodies`) rather than re-authoring
-      it.'
+    why: '`one_line`: ''The Archbishop''s Representative seated in the Crown''s Inner Circle'' -- but the
+      seat belongs to the faction its holder COMMITS to, and the registry commits NPC-034 to the
+      Church (`faction: Church (dual-loyalty: Crown Inner Circle agent for Himlensendt)`), so a
+      `body: Inner Circle` (which derives the Crown) made `leaders()` lose him: an office whose holder
+      never committed to its faction is staff. `offices.yaml: off_archbishops_rep` already carries
+      `faction: Church of Solmund`, `body: null` for this seat -- the live derivation wins over the
+      draft''s `faction: Crown` (r2 `03` §A.13.2 note **) -- so `faction` is authored directly, per
+      `office_faction`''s no-organ case, and the Crown Inner Circle sits in the dual loyalty rather
+      than the office.'

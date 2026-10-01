@@ -9,8 +9,13 @@ scale:
     crown''s only standing army'' -- a single, Crown-wide command with no narrower territory named.'
   office:
     post: commander of the standing army
-    faction: Crown
+    faction: Löwenritter
     remit: []
-    why: '`one_line`: ''The commander of the crown''s only standing army''. No canonical Crown BODY in
-      `rosters.yaml: office_bodies` names a military organ, so `faction` is authored directly, per that
-      roster''s own note for a case with no canonical body (the Restoration Movement precedent).'
+    why: '`one_line`: ''The commander of the crown''s only standing army''. The seat belongs to the
+      faction its holder COMMITS to, and the registry commits NPC-070 (`Grandmaster`) to Löwenritter, so
+      `faction: Crown` made `leaders()` lose her: an office whose holder never committed to its faction
+      is staff. `rosters.yaml: faction_leaders` names her Löwenritter''s leader, and `offices.yaml:
+      off_grand_master` seats NPC-070 in the Löwenritter body `Lions'' Table`. Her army serves the Crown
+      without being the Crown''s faction. `faction` is authored directly, per `office_faction`''s
+      no-organ case, rather than naming `Lions'' Table` as the body, which would be a second opinion on
+      a body this overlay''s `post` does not claim.'
