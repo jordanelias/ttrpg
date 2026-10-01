@@ -63,14 +63,14 @@ def main() -> int:
                  f"{sum(1 for l,_ in CASES if l=='ARC')} ARC, `apply_rescale` APPLIED — THE "
                  f"{len(CASES)} BASIS.")
     log("SEED", f"{SEED}; seasons {SEASONS} — `runs/arm9.json`'s own published configuration")
-    log("CONTEST", "confound 2, CHECKED NOT ASSUMED: `A9._run` does not pass `contest_max_depth`, "
-                   "and does not need to. The only contesting verb is "
-                   f"{sorted(v for v,r in S.VERB_TABLE.items() if getattr(r,'contests',''))}; "
-                   f"`resolvable_verbs()` — the verb set `A9._run` hands `make_chooser` — "
-                   f"excludes it (intersection "
+    log("CONTEST", "confound 2, CHECKED NOT ASSUMED: `A9._run` passes the fixture's own "
+                   "`contest_max_depth` (`arm9_forking.py:147`), unmodified here. The contesting "
+                   f"verbs are {sorted(v for v,r in S.VERB_TABLE.items() if getattr(r,'contests',''))}; "
+                   f"their intersection with `resolvable_verbs()` — the verb set `A9._run` hands "
+                   f"`make_chooser` — is "
                    f"{sorted(set(v for v,r in S.VERB_TABLE.items() if getattr(r,'contests','')) & set(S.resolvable_verbs()))}"
-                   "), so `resolve()`'s `Forbidden` branch is unreachable and the probe is left "
-                   "unedited. `n_cases_failed` below is the empirical check.")
+                   ", so a contest CAN resolve inside a measured run and this argument does not "
+                   "exclude one. `n_cases_failed` below is the empirical check, and the only one.")
 
     log.rule("W-D.0 — WHICH CELLS OF THE DECLARED SWEEP CROSS CAN THE QUESTION BE ASKED AT?")
     log("⚠ CORRECTION", "THE FIRST WRITING OF THIS ITEM SAID `exactly ONE cell gives L <= 3` AND "

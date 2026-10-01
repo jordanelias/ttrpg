@@ -85,7 +85,7 @@ from ..gaps import Unspecified
 # between the reading and the table is loud at the first act that folds.
 # ⚠ AND SO IS WHERE THE BANDS FALL: `rosters.yaml: combat_band_edges` (plan position `8`), over the
 # quantities `wound_quantities` lists, with the `Wounded` threshold the one swept fixture
-# (`Fixtures.combat_wounded_above`, `H-98`).
+# (`Fixtures.combat_wounded_above`, `H-184`).
 # ⚠ A FOURTH BAND (decisive vs narrow) HAS NO SOURCE IN THE DATA and is NOT invented -- that is
 # the whole of what survives in `H-98` after the 2026-09-03 ruling.
 

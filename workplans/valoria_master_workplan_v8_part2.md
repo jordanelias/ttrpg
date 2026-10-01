@@ -21,8 +21,8 @@ hash EQUAL [RAN by the orchestrator, same tree].
 
 | row | status | the gap, in one line | closes with | Jordan-gated? |
 |---|---|---|---|---|
-| R-01 | not_met | the channel is present (R3 46/46 · 96/97) but no corpus reconvergence rate exists since the corpus grew | `11-fix` → `11`; then the telling workplan's T4–T5 (§0.6), `14`, `17` move it | no — measurement first |
-| R-02 | not_met | same instrument as R-01; its own `measure:` is U6's | `11-fix` → `11` | no |
+| R-01 | not_met | the channel is present (R3 46/46 · 96/97) but no corpus reconvergence rate exists since the corpus grew | `11` re-take (first measurement landed 2026-10-01); then the telling workplan's T4–T5 (§0.6), `14`, `17` move it | no — measurement first |
+| R-02 | met | reconvergence at `2x3` over 143 cases is none 77.13 % · actor 43.03 % · total 38.47 %, below the 96 % bar (2026-10-01, `proposals/2026-09-04-degree-sweep/runs/WD_LOG.txt`) | keep it met; the `11` re-take re-checks it | no |
 | R-03 | met | keep it met; its `measured:` ends 2026-09-11 | `21`-rest refresh | no |
 | R-04 | partial | seats without rungs (H-163 limit 1); governance verbs refused for want of an `office` operand (H-94); `mc_v18`, which ran a faction scale the loop did not join, is deleted (`28-iii`, PR #450); two scales have no spec | `13d-iii`, J-3, J-11 | partly (J-3 office operand; J-11 scale specs) |
 | R-05 | not_met | 16 of 44 rows execute; 10 have no predicate/effect | `14`, `R05-THREAD`, `13d-iii`, `22`, `ED-FI-0009`; J-1, J-2, J-3, J-4 | partly |
@@ -59,14 +59,14 @@ H-163). No committed instrument prints those edge figures.
 
 | position | what it changes for R-01 | batch |
 |---|---|---|
-| `11-fix` → `11` | produces the number the row's status rests on | 2 |
+| `11` (re-take) | re-produces the number the rows' status rests on, across the Batch 2 builds | 2 |
 | the telling workplan's T4–T5 (§0.6) | `tell` names its hearer, contests against them and dedups by origin, so a telling is a cross-person edge to a known person; the regard `score` reads arrives with G1/G2 | carved out |
 | `14` | counterparty verbs (`give`, `oblige`, `exchange`) are cross-person edges by construction; today `give`/`oblige` form 0 in the realm | 2 |
 | `13d-iii` | the 10 isolated officeholders' governance acts start executing (H-163) | 2 |
 | `17` + `13`-rest | distinct OUGHTs per case → distinct Q4 questions → more distinct first acts to propagate | 2 |
 | J-4 (H-156) | always-refused candidates take 34% of realm scene slots; a ruling returns them to verbs that execute | 4 |
 
-**No position owned until now:** the instrument repair (`11-fix`). **H-116** (the consequence→decision
+**No position owned until now:** none — the instrument repair (`11-fix`) landed 2026-10-01. **H-116** (the consequence→decision
 edge is severed by a type mismatch — `belief_contradicts` narrows only on `PERSON_PREDICATES`) and
 **H-111** (a refusal propagates as news, unruled) are in the row's `blocks:`; neither is in any
 position. H-116 is `measured`; whether widening `PERSON_PREDICATES` is a fix or a design call is not
@@ -82,32 +82,30 @@ real design choice (should a failed attempt be news?) — not escalated, because
 depends on it; it stays a registered hole.
 
 **`met` =** `corpus_run` prints `check R3: n of n pass` on both lanes with the planted control
-`False -> True`, **and** `wd_collect.py` (after `11-fix`) prints reconvergence **< 96 % at `2x3`** with
+`False -> True`, **and** `wd_collect.py` (repaired at `11-fix`) prints reconvergence **< 96 % at `2x3`** with
 the `none ≥ default` control printed and the completeness assertion covering all 143 cases. Both in one
 `measured:` paragraph, same tree.
 
 ---
 
-## R-02 — "decisions affect subsequent decisions"  · `not_met`
+## R-02 — "decisions affect subsequent decisions"  · `met`
 
-**Measured.** No corpus-scale figure since 89 → 143 (the same break as R-01). The row's `~4%` is the
-last number on file and "provably stale". The pinned NPC-088 2-slot slice moved 0/16 → 14/18 forks
-diverging after ED-FI-0009 (2026-09-10) — a slice, not the corpus.
+**Measured (2026-10-01, `11-fix` + `11`).** At `2x3` over 143 cases a decision's deposit changes a later decision: reconvergence is
+none 77.13 % · actor 43.03 % · total 38.47 %, against a 96 % bar, with the `none ≥ actor` control printed and every arm covering all 143 cases
+(`runs/WD_LOG.txt`, tracked). `requirements.yaml`'s dated paragraphs label each figure as committed log, derived cells (untracked) or scratch,
+and its comparator and plant controls are described there. The `11` re-take re-checks it across the Batch 2 builds.
 
-**What moves it.** Exactly what moves R-01's behavioural half: `11-fix` → `11` measures it; the telling workplan's
+**What moves it.** Exactly what moves R-01's behavioural half: the `11` re-take measures it; the telling workplan's
 T3a–T5 (§0.6), `14`, `17`, `13d-iii` change what it measures. The channel a decision reaches a later decision through
 is a ledger claim read by §F1 clause 4 (`belief_contradicts`), which reached five predicates after
 ED-FI-0009; H-116's type mismatch is the registered limit on it.
 
-**No position owned until now:** `11-fix`. ⚠ **A record edit owed:** R-02's `measure:` comment cites
-`workplans/2026-09-09-r-execution-plan.md:1445-1451`, a retired file. The command itself is right; the
-comment must name this plan's `_part4` §`11` instead (`register --requirements` must still exit 0).
-Listed in `_part6` §H.3.
+**No position owned until now:** none. (`11-fix` landed; R-02's `measure:` comment was re-pointed off the retired plan.)
 
 **Design question the tree does not answer.** Whether the `probed` divergence across deposit modes is
 a defect in the instrument or a property of the loop. The row's own diagnosis (a deposit under
 `actor`/`total` raises a new Q2 question in a later round that `none` never raises — R-03's channel
-working) points to **property**, and `11-fix` takes that reading: report `probed` per arm, compute the
+working) points to **property**, and `11-fix` took that reading: report `probed` per arm, compute the
 rate per arm, stop asserting equality. **Attack at `11-fix`:** if `probed` differs between two runs of
 the SAME arm, it is a determinism defect, not a property — then stop, register, and do not compute a
 rate.

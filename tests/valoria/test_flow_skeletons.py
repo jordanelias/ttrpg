@@ -332,6 +332,15 @@ RETIREMENT_SHIFTED = frozenset({
     # RETIRED_SYMBOLS below; every OTHER symbolled anchor into the file is still checked by symbol.
     # What is lost, stated: a bare line into `massbattle.py` is now advisory.
     'systems/mass_battle/sim/massbattle.py',
+    # Plan position `27` (2026-10-01) wired mending and struck the two rendering stubs and the
+    # `ms_track`/`knots` seam from these four LIVE files (opposing 259 -> 237 lines, co_movement
+    # 152 -> 141, rendering 42 -> 41, operations re-numbered by the new `recover` call), so archived
+    # line anchors into them moved or went out of range. A bare line is now advisory; a symbolled
+    # anchor is still checked by symbol, and the symbols the strike deleted join RETIRED_SYMBOLS.
+    'systems/threadwork/sim/operations.py',
+    'systems/threadwork/sim/opposing.py',
+    'systems/threadwork/sim/co_movement.py',
+    'systems/threadwork/sim/rendering.py',
     'engine/substrate/__init__.py',
     'references/module_contracts.yaml',
     'tools/build_execution_map.py',
@@ -381,6 +390,18 @@ RETIRED_SYMBOLS = frozenset({
     # the three tokens survive only as prose about their own deletion (that file's header note and
     # docstrings), so by the `echo_scheduler` rule they are retired, not missing by accident.
     'resolve_mass_battle', '_faction_to_unit', '_morale_start_from_stability',
+})
+
+# CALL SITES, not symbols, that plan position `27` (2026-10-01) struck. `apply_ms_delta` and
+# `sustain_knot` are still defined and live in `systems/overview/sim/ms_track.py` and
+# `systems/fieldwork/sim/knots.py`, so a global `RETIRED_SYMBOLS` entry would disarm every anchor
+# into those two files. What 27 removed is the threadwork seam that CALLED them, so the retirement
+# is keyed on the (file, symbol) pair: an archived anchor naming the symbol at the old call site is
+# correct about a tree that no longer exists, and the same symbol anywhere else is still checked.
+RETIRED_CALL_SITES = frozenset({
+    ('systems/threadwork/sim/opposing.py', 'apply_ms_delta'),
+    ('systems/threadwork/sim/opposing.py', 'sustain_knot'),
+    ('systems/threadwork/sim/co_movement.py', 'apply_ms_delta'),
 })
 
 # Generated artifacts the retirement took with their builders (ED-IN-0232). These get no `FORK:`
@@ -462,7 +483,7 @@ def _anchor_failures(relpath):
             if not symbol:
                 continue
             leaf = symbol.rsplit('.', 1)[-1]
-            if leaf in RETIRED_SYMBOLS:
+            if leaf in RETIRED_SYMBOLS or (filepath, leaf) in RETIRED_CALL_SITES:
                 continue
             checked += 1
             if leaf not in _read(target):

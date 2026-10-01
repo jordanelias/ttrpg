@@ -5,7 +5,7 @@ W-D — THE ACCEPTANCE RUN: did `W-B` change the forking result?
 [INSTRUMENT ] `arm9_forking.fork_case`, imported UNMODIFIED. `wd_acceptance.sweep_arm` loops it over (deposit mode x fixture point); `wd_chunk.py` splits the corpus into four slices per arm because two full-corpus processes were killed at ~18 minutes with no traceback; this file concatenates them.
 [BASIS      ] 143 cases = 46 NPC + 97 ARC, `apply_rescale` APPLIED — THE 143 BASIS.
 [SEED       ] 0; seasons 4 — `runs/arm9.json`'s own published configuration
-[CONTEST    ] confound 2, CHECKED NOT ASSUMED: `A9._run` does not pass `contest_max_depth`, and does not need to. The only contesting verb is ['fight', 'march', 'tell']; `resolvable_verbs()` — the verb set `A9._run` hands `make_chooser` — excludes it (intersection ['fight', 'march', 'tell']), so `resolve()`'s `Forbidden` branch is unreachable and the probe is left unedited. `n_cases_failed` below is the empirical check.
+[CONTEST    ] confound 2, CHECKED NOT ASSUMED: `A9._run` passes the fixture's own `contest_max_depth` (`arm9_forking.py:147`), unmodified here. The contesting verbs are ['fight', 'march', 'tell']; their intersection with `resolvable_verbs()` — the verb set `A9._run` hands `make_chooser` — is ['fight', 'march', 'tell'], so a contest CAN resolve inside a measured run and this argument does not exclude one. `n_cases_failed` below is the empirical check, and the only one.
 
 ==============================================================================
 W-D.0 — WHICH CELLS OF THE DECLARED SWEEP CROSS CAN THE QUESTION BE ASKED AT?

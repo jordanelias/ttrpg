@@ -193,7 +193,7 @@ verdict `NOT MET`, 1 row failing.**
 |---|---|---|---|
 | 1 | stub invocations on the M1 path == 0 | **PASS** — 0 `stub_resolve` calls, 1-season headless run of `engine/season`, seed 20260819 | executes |
 | 2 | same seed → same `World.content_hash()` | **PASS** — `d58470198e22…` twice | executes |
-| 3 | the nine requirements met | **FAIL 1/9** — met 1 · partial 5 · not_met 3 | ⚠ DOC-DERIVED: counts `status:` strings, each validated by `register --requirements`; not execution |
+| 3 | the nine requirements met | **FAIL 2/9** — met 2 · partial 5 · not_met 2 | ⚠ DOC-DERIVED: counts `status:` strings, each validated by `register --requirements`; not execution |
 | 4 | N seeds, zero invariant violations | **PASS** — 24 headless seeds × 4 seasons + 2 populated × 1, 8 invariants, 0 violations over 50,073 events | executes |
 
 v7's M1 blocker (rows 1's OI-05/OI-07 stubs in `mc_v18`) is history: row 1 was re-pointed to
@@ -204,8 +204,8 @@ re-wire it to anything that a status edit could green faster.
 
 ### M1's companion — THE NINE
 
-**Instrument:** `python -m engine.season.harness.register --requirements`. **[RAN 2026-10-01] met 1
-(R-03) · partial 5 (R-04 R-06 R-07 R-08 R-09) · not_met 3 (R-01 R-02 R-05).** `_part2` has one section
+**Instrument:** `python -m engine.season.harness.register --requirements`. **[RAN 2026-10-01] met 2
+(R-02 R-03) · partial 5 (R-04 R-06 R-07 R-08 R-09) · not_met 2 (R-01 R-05).** `_part2` has one section
 per row: statement, measured reading, what moves it, what no position yet owns, and `met` as an
 instrument outcome.
 
@@ -241,8 +241,8 @@ season calendar, not the deleted module; `CLAUDE.md` is Layer 0 and this plan do
 ```sh
 git rev-parse --short HEAD; cat .git/shallow 2>/dev/null || echo "full clone"   # a shallow clone unshallows first (CLAUDE.md §2)
 python tools/session_provision.py
-python -m engine.season.harness.register --requirements        # expect met 1 · partial 5 · not_met 3
-python tools/m1_acceptance.py --summary                         # expect NOT MET, row 3 FAIL 1/9
+python -m engine.season.harness.register --requirements        # expect met 2 · partial 5 · not_met 2
+python tools/m1_acceptance.py --summary                         # expect NOT MET, row 3 FAIL 2/9
 gh run list --branch main --limit 3                             # `unit-tests` should read green once PR #451 (carrying B0-CI-b) merges
 ```
 
@@ -276,11 +276,9 @@ found (`B0-CI-b`, `29d-ii`, `20-v`) landed in PR #451.
 |---|---|---|---|---|---|---|---|
 | `B0-CI` | main's CI red | IN | **PARTIAL** | — | — | 0 | [RAN] PR #450's CI: the step `pytest tests/valoria -n auto` passes — the seven red tests are fixed (ledger `FORK:` refs re-pointed to commits that are ancestors of `main`; `sim_params.json` and `value_pointer_links.json` re-derived by their exporters; `tools/build_engine_atlas.py`'s stated inputs). **CI as a whole is NOT green:** the next step, `pytest engine/season/tests`, fails one test that predates this plan (red at `5c5d8ec6` on `main`, never reached there because the earlier step failed) — that test is `B0-CI-b`. `B0-CI-b` landed in PR #451 (`77f5175a`); what remains of this row is that `unit-tests` reads green on `main` once that merges |
 | `2-ii` | RET-SC: kernel + veto | IN/SC | BLOCKED | `22` | — | 3 | [SETTLED: `systems/social_contest/sim/contest/` exists, 16 files] — the kernel is still on disk; `parliamentary_{vote,stay}.py` went at `29b` |
-| `8` | H-98(b) band edge → data | IN/PC | OPEN | — | R-09 | 2 | edge in `seam/ladder.py`; serial with the cells commit |
 | `9` | PC-SURRENDER build-or-strike | PC | JORDAN | J-7 | — | 4 | `HANDOFF_PC.md` [CODE] |
 | `10` | U5 / R-07 | IN | **CARVED OUT** (§0.6) | the telling workplan's own gates | R-07, R-01 | — | PR #442 (`c6f4252`) reverted the `tell`→stance write on H-79 and landed its side findings (H-62's producer gap closed by `march`'s M4 write; the `names_index.yaml` `stance` entry). Re-scoped by the telling workplan's first commit (`60c70bbf`) to T0→G8: `tell` writes no stance; regard is computed at read. This plan's earlier `fight`-write rewrite is withdrawn (§0.6) |
-| `11-fix` | U6 instrument repair | IN | OPEN | — | R-01, R-02 | 2 | `wd_collect.py`'s `probed`-invariant fails at `default` (`requirements.yaml` R-01 U10 paragraph) [CODE] |
-| `11` | U6 — first corpus R-01/R-02 reconvergence rate | IN | BLOCKED | `11-fix` | R-01, R-02 | 2 | no number since the corpus grew 89 → 143; baseline after telling T6 (landed, PR #449), never across it (E15) |
+| `11` | U6 — R-01/R-02 reconvergence rate: RE-TAKE | IN | OPEN | `13`-rest and `17b` built (the re-take is meant to measure across them) | R-01, R-02 | 2 | FIRST MEASUREMENT LANDED 2026-10-01 (`11-fix` + `11`, PR #451): at `2 x 3` reconvergence is none 77.13% · actor 43.03% · total 38.47% over 143 cases (`proposals/2026-09-04-degree-sweep/runs/WD_LOG.txt`, tracked; the cells are untracked and rebuilt by `wd_chunk.py` + `wd_collect.py`), below the 96% bar, so R-02 is `met` and R-01 stays `not_met` (`requirements.yaml`); the re-take is the same instrument after the Batch 2 builds change what it measures [RAN] |
 | `12` | H-62-rest scar rebuild | IN | BLOCKED | cells commit | R-06, R-08 | 4 | |
 | `12b`/`12c`/`12d` | affiliations · THE FIFTEEN · THE RENAME (substrate half) | IN | JORDAN | J-1 | R-05, R-06, R-08 | 4 | `ED-IN-0261` 2026-09-28 row `needs_jordan: true` [CODE]; `12d` season side done (`ED-IN-0268`) |
 | `12e` | H12 / H13 | IN | BLOCKED | H6 re-measure; G-Q6 (J-5) | R-06 | 4 | |
@@ -299,9 +297,9 @@ found (`B0-CI-b`, `29d-ii`, `20-v`) landed in PR #451.
 | `24h` P6 | forswearing (`repudiate` costs) | SE/IN | BLOCKED | `14` | R-05 | 3 | |
 | `24h` P7 | dispensation-as-document | SE/IN | JORDAN | J-10 | — | 4 | |
 | `26` | GO-VERSION | GO | JORDAN | J-9 | M3 | 4 | nothing may assert a version |
-| `27` | WR-SCOPE remainder | WR | PARTIAL | — | — | 2 | PR #442 (`c6f4252`): `systems/threadwork/sim/coherence.py` reshaped to the elastic/plastic model (`ED-WR-0010`) + `operations.py`'s P-25 scale term, covered by `tests/valoria/test_coherence_elastic_plastic.py` (25 passed, re-run by the orchestrator 2026-10-01) [TEST]; remainder: `rendering.py` stubs, `ED-WR-0003`, mending cost, the R-14 term |
-| `29a`-ms | `ms_track.py` | IN | BLOCKED | `27` | — | 3 | `threadwork/sim/co_movement.py` imports it lazily |
-| `29e` / `29f` | characters / fieldwork `knots.py` | IN | BLOCKED | `14`, `27` | — | 3 | `threadwork/sim/opposing.py` imports `sustain_knot` |
+| `27` | WR-SCOPE remainder | WR | PARTIAL | — | — | 2 | BUILT 2026-10-01 (PR #451): both `rendering.py` stubs struck with their reasons at the site; `ED-WR-0003` closed at ladder step 2; `attempt_mending` calls `recover()` (only tests call it; `environment_in_equilibrium` defaults to False); `threadwork/sim/{co_movement,opposing}.py` no longer import `ms_track` or `knots` [TEST]. Remainder, each outside this position's scope: the `R-14` practitioner-resilience term (arithmetic unruled), Mending aimed at the mender's own configuration (`coherence.mend_resting_point` has no non-test caller), and `collective.py`/`opposing.py`'s Mending feedback (`HANDOFF_WR.md`) |
+| `29a`-ms | `ms_track.py` | IN | OPEN | — | — | 3 | `27` ✓: no `*.py` imports `ms_track` from `threadwork` any more, so deleting `systems/overview/sim/ms_track.py` is the whole position |
+| `29e` / `29f` | characters / fieldwork `knots.py` | IN | BLOCKED | `14` (`27` ✓) | — | 3 | `27` ✓: `threadwork/sim/opposing.py` no longer imports `sustain_knot` |
 | `ED-FI-0009` | investigation degree producer | FI | **JORDAN** | J-22 | R-05, R-09 | 2 | [STOP CONDITION HIT 2026-10-01, nothing built: see its last ledger row] the six inquiries resolve Failure/none only today [RAN corpus degree histogram]; step 3 already closed "graded by degree" (2026-09-06); open: how a degree routes without `contests:` (a loader check `ED-FI-0009` added, not ratified Layer 1 text) and `finding.none`'s deposit (`H-111`) — J-22 |
 | cells commit | H6 + H8 with `12b`/`12c`/`12d` | IN | JORDAN | J-1 | R-05, R-06, R-08 | 4 | then H7 → H3 → H9 → `12` → H10 → H11 → `12e` |
 

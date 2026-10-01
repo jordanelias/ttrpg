@@ -19,29 +19,12 @@ predicate/effect; `write_matrix.yaml` `Person` rows; `rosters.yaml` `requires_op
 stance write — the stored half of regard); `harness/corpus_run.py::build_at`; `harness/populated.py`'s
 seat builder; `engine/season/offices.yaml` header; `proposals/2026-09-04-degree-sweep/wd_collect.py`.
 
-### `11-fix` · U6's instrument repair · IN · gate — · `sonnet` build, `opus` read · `[simulation]`
+### `11` · U6 — R-01/R-02 corpus measurement: THE RE-TAKE · IN · gate `13`-rest and `17b` built · `sonnet` runs, `opus` reads the number · `[simulation]`
 
-**The break** (R-01's `measured:`, 2026-09-30): over the 143-case corpus, `wd_collect.py` fails its
-own assertion that `probed` (the deliberation count) does not depend on `observation_deposit_mode` —
-`{'none': 21717, 'actor': 21954, 'total': 21897}` — at the first fixture point, so no reconvergence rate
-is computed at any point. The tool's comment says why it assumed equality (*"`pack_scenes` is called for
-every person with a question, whatever their candidate set"*); since U2 a deposit under `actor`/`total`
-can raise a new Q2 question in a later round that `none` never raises.
-**INSTRUCTION.** First run pre-flight P-4 (the same cell twice). **If `probed` differs between two runs
-of the same arm, stop** — it is a determinism defect; register it and do not touch the assertion. If it
-is stable per arm: replace the cross-arm equality with a per-arm report (`probed` printed for each arm),
-compute the reconvergence rate per arm over that arm's own deliberations, keep the completeness assertion
-(`covers == list(range(len(CASES)))`), derive slice bounds from `len(wd_acceptance.CASES)`, and keep
-`arm9_forking.fork_case` imported **unmodified** (`wd_acceptance.py`: a re-implemented probe measuring a
-different thing is the confound). **No engine code.**
-**FALSIFIER:** the 36-cell sweep completes; `wd_acceptance.json` and `WD_LOG.txt` are rewritten — check
-with `md5sum` before and after (`CLAUDE.md` §0.1 pt 3 row 4: a collector that exits 0 and writes nothing
-is the failure); the `none ≥ default` control is printed. **Hash:** n/a. **R:** none by itself.
-
-### `11` · U6 — the first corpus R-01/R-02 measurement · IN · gate `11-fix` · `sonnet` runs, `opus` reads the number · `[simulation]`
-
-**Run twice in Batch 2:** (i) the baseline, on HEAD right after `11-fix`; (ii) the re-take after
-`13d-iii`, declaring both trees. The pair is the control for what Batch 2's builds did to propagation.
+**First measurement LANDED 2026-10-01 (PR #451; `11-fix` + `11`).** At `2x3`, over 143 cases, reconvergence reads none 77.13 % · actor 43.03 % · total 38.47 %
+(`proposals/2026-09-04-degree-sweep/runs/WD_LOG.txt`, tracked; the 36 cells are untracked and rebuilt by the commands below): below the 96 % bar, so R-02 is `met` and R-01 stays `not_met`
+(`engine/season/requirements.yaml`, whose dated paragraphs label each figure committed / derived / scratch). **This item is the RE-TAKE:** the same commands after
+`13d-iii`, `17b` and `13`-rest, declaring both trees; the pair is the control for what those builds did to propagation.
 **Acceptance — verbatim** (carried from U6; slices re-derived for 143):
 
 ```
@@ -61,31 +44,15 @@ consequence about a non-person cannot narrow a later candidate set). Do not re-p
 `none ≥ default` arm is the only control this instrument yields; say so. `fan_out_mode` is R-07's
 fixture, not this one's. **Not here any more:** `test_n3`'s floors and the reverted build-order item 4 (`budget()` counting
 `granted_acts`) belong to the telling workplan's T4, which re-pins the floors and closes that question
-(main §0.6); re-land item 4 only after T4, against T4's floors. **Timing:** the baseline is taken before
-telling T3a lands or after its T6 closes, never across them (E15). **R:** R-01, R-02 — on the printed number only. **Records:** both rows' `measured:` paragraphs
+(main §0.6); re-land item 4 only after T4, against T4's floors. **R:** R-01, R-02 — on the printed number only. **Records:** both rows' `measured:` paragraphs
 cite the run and its tree; R-02's `measure:` comment re-pointed off the retired plan (`_part6` §H.3).
-
-### `8` · H-98(b): the wound-count band edge becomes data · IN/PC · gate — · `sonnet` build, `opus` critic · `[patch]`
-
-**What is already built and must not be rebuilt:** `seam/wrappers/combat.py` returns `wound_state` per
-party (`felled`, `wounds`, `max_wounds`, `health_remaining`, `health_full`), and `seam/ladder.py` grades
-it (`combat_degree`). A fourth band is **forbidden** (`ladder.py`: *"A FOURTH BAND … HAS NO SOURCE IN THE
-DATA and is NOT invented"*). Half (a) — the general branch's producer — has no further subject (`tell`
-supplies it via `seam/wrappers/sigma.py`).
-**INSTRUCTION (b).** The edge is a literal (`if st["felled"]: FELLED` / `WOUNDED if st["wounds"] > 0
-else UNTOUCHED`). Move it to data: a `combat_band_edges` row keyed on `combat_degree_bands`, with a
-declared sweep (Jordan 2026-09-02: *"definitions are not hardcoded"*), read by `combat_degree`. Grade
-H-98 by the half closed. **FALSIFIER:** an edge on a quantity the tracker does not return refuses at
-load; an edge set to `wounds > max_wounds` yields `UNTOUCHED` for every fought subject, with `≥ 1`
-fought subject asserted. **Hash:** none expected — assert equal. **R:** R-09 (band provenance). **E5:**
-never interleaved with the cells commit or `9`.
 
 ### `ED-FI-0009` · a degree producer for the six inquiries · FI · gate `8` (E7); reads better after `13`-rest · `sonnet` build, `opus` critic · `[design]`
 
 **What the tree rules:** investigation is not a seam (`rosters.yaml`'s ruling forbids giving the
 inquiries a prize); the loop IS the mechanism — RESOLVE → WITNESS, *"Claims graded by degree; Failure
 emits `finding.none` and deposits nothing"* (closed at ladder step 3 on 2026-09-06, work item 4.5).
-What is missing is a degree producer. `ED-FI-0009` is `open`, `needs_jordan: false`; its earlier carve's
+What is missing is a degree producer. `ED-FI-0009` is `open`, `needs_jordan: true` (J-22, 2026-10-01: its stop condition hit, see its last ledger row); its earlier carve's
 obstacle column, attribute gate and depth derivation were overturned by a critic and are **not** to be
 re-introduced.
 **INSTRUCTION.** Compose on the single owners: the actor's pool from `sigma.py::_pool_of` (capability via
@@ -199,22 +166,13 @@ per-verb lines — since `corpus_run` prints nothing for it any more), R-02's `m
 **FALSIFIER:** every edited `measured:` line is reproducible from its row's `measure:` command (the
 register refuses an empty one, not a wrong one — the critic must). `register --requirements` exits 0.
 
-### `27` · WR-SCOPE remainder · WR · gate — · `{parallel worktree}` · `opus`/`opus` · `[design]`
+### `27` · WR-SCOPE remainder · WR · gate — · `opus`/`opus` · `[design]`
 
-Landed (PR #442): `coherence.py` elastic/plastic (`ED-WR-0010`), `operations.py`'s P-25 scale term,
-`tests/valoria/test_coherence_elastic_plastic.py`. **Remainder:** the `rendering.py` stubs
-(`apply_rs_strain`, `check_calamity_threshold`); `ED-WR-0003` (the "overheard" conditional-observer rule
-and the revelation procedures); the mending cost (`attempt_mending` calls `recover()` and costs > 0).
-**⚠ One constraint the WR handoff does not state:** the stubs' named targets (substrate tension →
-incursions → Accord; MS) are overview clocks that **have no season analogue by architecture**
-(`loop/census.py`: *"NO CLOCK GENERATES ANYTHING"*; ED-WR-0011 option A) and that `29a` deleted (PR #450; `ms_track` stays until `29a`-ms). Wire a stub
-only to a retained or season-native carrier (the season's `(Person, coherence)` row — RES, `social:
-false`, written through a seam Event — is the one the architecture provides); a stub with no such target
-is struck with its reason, never wired into `ms_track`. And `27` must leave
-`threadwork/sim/{co_movement,opposing}.py` free of `ms_track` and `knots` imports, or `29a`-ms and `29f`
-cannot proceed (E2). **FALSIFIER:** the mending test (`recover()` called, cost > 0); each wired stub
-executes in a threadwork sim; `ED-WR-0003`'s rule has a test; `grep -n "ms_track\|sustain_knot"
-systems/threadwork/sim/` returns nothing. **R:** none (unblocks `29a`-ms, `29f`).
+**BUILT 2026-10-01 (PR #451):** both `rendering.py` stubs struck with their reasons at the site (the season has no clock to wire them to: `loop/census.py`, ED-WR-0011 option A); `ED-WR-0003` closed at ladder step 2
+(an `ED-WR-0003` superseding row); `attempt_mending` calls `recover()` and costs > 0 (only tests call it; `environment_in_equilibrium` defaults to False);
+`threadwork/sim/{co_movement,opposing}.py` import neither `ms_track` nor `knots`, which unblocks `29a`-ms and `29f`. **Remainder, each outside this position's scope** (`HANDOFF_WR.md`):
+the `R-14` practitioner-resilience term (arithmetic unruled); Mending aimed at the mender's own configuration (`coherence.mend_resting_point` has no non-test caller); and
+`collective.py`'s and `opposing.py`'s Mending feedback. **R:** none.
 
 **Batch 2 close:** agonist/antagonist → `/code-review` → `/simplify` → `layer-conformance` (Lens B on
 `14`'s fold) → terminal Opus critique → `/close` (full suite once). The forward

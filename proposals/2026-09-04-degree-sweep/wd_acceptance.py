@@ -7,7 +7,7 @@ different thing is the confound that would waste the item, so `fork_case` -- whi
 strictly-later-tick window, the NO-LIVE-WINDOW exclusion and the INERT-BY-CONSTRUCTION split -- is
 called, never copied.
 
-⚠ SUPERSEDED STATEMENTS BELOW (plan position `11`, 2026-10-01; the 143-case corpus, `runs/wd_acceptance.json`): the control
+⚠ SUPERSEDED STATEMENTS BELOW (plan position `11`, 2026-10-01; the 143-case corpus; the figures are the tracked `runs/WD_LOG.txt`'s, and `runs/wd_acceptance.json` is untracked and rebuilt by `wd_collect.py`): the control
 arm `none` is not at 100% (it is a channel-open arm: 77.13% at `2 x 3`), and the shipped `default` cell now yields genuine
 forks (2,886 / 2,811 / 2,659 for none / actor / total; the 89-case "2 of 9 askable" count is history). The acceptance
 reading is `actor` at `2 x 3`: 43.03% reconverged.
@@ -133,7 +133,7 @@ FIXTURE_CELLS = {
 
 def fixtures_for(mode: str, slots: str) -> "S.Fixtures":
     """⚠ `narrow` IS `2x1` UNDER ITS OLD NAME AND IS KEPT SPELLED THAT WAY ON PURPOSE. The
-    committed `H-122` reproduce line, the shipped `runs/wd_chunk_narrow_*.json` artifacts and two
+    committed `H-122` reproduce line, the `runs/wd_chunk_narrow_*.json` chunk files (untracked, rebuilt by `wd_chunk.py`) and two
     test docstrings all name it; renaming it would orphan them for no gain (`CLAUDE.md` §4's
     no-retrofit posture). New cells are named by the cell — `2x3` reads cold as what it is."""
     fx = S.DEFAULT_FIXTURES
@@ -547,14 +547,15 @@ def main(argv) -> int:
                  f"(THE 89 BASIS). The 86 basis is the raw `scale:` filter and is NOT used here.",
         "confound 4: `runnable()` skipping `apply_rescale` gives 86 where the corpus runs 89")
     log("SEED", f"{SEED}; seasons {SEASONS} — `runs/arm9.json`'s own published configuration")
-    log("CONTEST", "`contest_max_depth` is NOT passed by `A9._run` and does NOT need to be "
-                   "(confound 2, checked not assumed): the only contesting verb is "
-                   f"{sorted(v for v,r in S.VERB_TABLE.items() if getattr(r,'contests',''))} and "
-                   f"`resolvable_verbs()` — the verb set `A9._run` hands `make_chooser` — "
-                   f"excludes it, so `resolve()`'s `Forbidden` branch is unreachable. "
-                   f"intersection = "
-                   f"{sorted(set(v for v,r in S.VERB_TABLE.items() if getattr(r,'contests','')) & set(S.resolvable_verbs()))}",
-        "the probe is therefore left unedited; `n_cases_failed` below is the empirical check")
+    log("CONTEST", "`A9._run` passes the fixture's own `contest_max_depth` (`arm9_forking.py:147`), "
+                   "unmodified here (confound 2, checked not assumed). The contesting verbs are "
+                   f"{sorted(v for v,r in S.VERB_TABLE.items() if getattr(r,'contests',''))}; their "
+                   f"intersection with `resolvable_verbs()` — the verb set `A9._run` hands "
+                   f"`make_chooser` — is "
+                   f"{sorted(set(v for v,r in S.VERB_TABLE.items() if getattr(r,'contests','')) & set(S.resolvable_verbs()))}"
+                   ", so a contest CAN resolve inside a measured run and this argument does not "
+                   "exclude one.",
+        "`n_cases_failed` below is the empirical check, and the only one")
 
     # ---- 1. the published result, re-derived at the SHIPPED FIXTURE POINT -------------------
     log.rule("W-D.1 — THE SHIPPED FIXTURE POINT (15 slots): the question is UNASKABLE here")
