@@ -12,15 +12,7 @@ stamp: `python tools/currency_consistency_check.py` (it exits 0 either way — r
 Old paths resolve through `references/restructure_ledger.md` via `python tools/pathres.py`. A
 ledger id's LAST row is its current state. History of this file: `git log -p CURRENT.md`.
 
-_Last reconciled: 2026-09-29 (currency drift on `engine/mc_v18.py`, `engine/season/`,
-`engine/season/data/`, `references/canonical_sources.yaml`, `references/restructure_ledger.md`,
-`systems/social_contest/sim/contest/` and `systems/threadwork/sim/` re-checked against their rows
-above; no row's POINTER changed. `canonical_sources.yaml`'s own edit was a SHA re-pin
-(`references/module_contracts.yaml`'s freshness hash, after plan position `2` removed its two
-now-orphaned `domain_echo` rows); `restructure_ledger.md`'s own edit only appended `FORK:` rows for
-files retired at plan positions `2` (`28-0` ORPHAN-DELETE) and `3` (`2-i` RET-SC stub); the
-mc_v18-retirement M0-M3 build, position 10's stance-producer fix and position 27's Coherence reshape
-(`ED-WR-0010`'s already-cited row) all land under already-current heads, not new ones)._
+_Last reconciled: 2026-10-01 (currency drift on `engine/season/` and `engine/season/data/` re-checked against their rows above; no row's POINTER changed. The telling workplan's positions (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282) land under the already-current season-loop head, not a new one)._
 
 Design prose is quarantined in `.designs/` (ED-IN-0231). A row that names such a document gives its
 **bare filename only**, deliberately: it is reference, not a head, and not to be opened as authority.
