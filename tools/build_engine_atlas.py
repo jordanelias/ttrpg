@@ -55,8 +55,6 @@ OUT_MD = os.path.join(ROOT, 'references', 'ENGINE_ATLAS.md')
 OUT_JSON = os.path.join(ROOT, 'references', 'engine_atlas.json')
 
 CONTRACTS = os.path.join(ROOT, 'references', 'module_contracts.yaml')
-EXEC_MAP = os.path.join(ROOT, 'references', 'execution_map.json')
-EXEC_TRACE = os.path.join(ROOT, 'references', 'execution_trace.json')
 # ED-IN-0231: the spec prose is quarantined under .designs/ (the archive mirrors the tree).
 # A builder reading it by explicit path is the sanctioned shape (CLAUDE.md §0.05); what the
 # quarantine stops is an AGENT SWEEP picking it up, not code opening a file it names.
@@ -131,14 +129,10 @@ def load_inputs():
     absent = []
     contracts = ci_common.load_yaml(CONTRACTS)
 
-    def opt(path, fallback):
-        if os.path.exists(path):
-            return _json(path)
-        absent.append(os.path.relpath(path, ROOT))
-        return fallback
-
-    emap = opt(EXEC_MAP, {'modules': {}})
-    trace = opt(EXEC_TRACE, {'by_subsystem_path': {}})
+    # Both inputs were RETIRED 2026-09-29 (plan position 28-i, `FORK:c9daad6`) with the execution-map
+    # cluster that built them, so they are permanently absent: report them as such, never read them.
+    absent += ['references/execution_map.json', 'references/execution_trace.json']
+    emap, trace = {'modules': {}}, {'by_subsystem_path': {}}
     return contracts, emap, trace, absent
 
 
