@@ -162,17 +162,20 @@ def test_an_added_subsystem_surfaces_as_drift(tmp_path):
         'this test put its probe in the REAL tree — that is the -n auto race it exists to avoid'
 
 
-def test_missing_input_is_reported_not_silently_absorbed(monkeypatch):
+def test_missing_input_is_reported_not_silently_absorbed():
     """An absent input must be stated, because its absence looks exactly like a finding.
 
     Without the execution trace every subsystem renders as "not in trace", which a reader would
     read as "nothing runs" rather than "the file was not there".
+
+    Both trace inputs were RETIRED 2026-09-29 (plan position 28-i, `FORK:c9daad6`), so they are now
+    permanently absent and the builder must state exactly that.
     """
     mod = _builder()
-    monkeypatch.setattr(mod, 'EXEC_TRACE', os.path.join(ROOT, 'references', '__no_such_file.json'))
     _, drift, _ = mod.build_rows()
-    assert any('__no_such_file' in p for p in drift['absent_inputs']), \
-        'a missing input file was absorbed silently instead of being reported'
+    for retired in ('references/execution_map.json', 'references/execution_trace.json'):
+        assert retired in drift['absent_inputs'], \
+            f'{retired} is retired, but the atlas absorbed its absence silently instead of reporting it'
 
 
 def test_json_and_markdown_agree_on_the_roster(generated_layer):

@@ -15,8 +15,7 @@ Everything this file said before it became an index is verbatim in
 
 | you want | open or run |
 |---|---|
-| **the ordered work — start here** | `workplans/2026-09-18-governance-settlement-behaviour-plan.md` §3.1 |
-| per-unit detail: `file:line`, arms, falsifiers | `workplans/2026-09-13-work-order.md` |
+| **the ordered work — start here** | the lane's one active plan, named in `CURRENT.md`'s "The plan" row (every earlier plan is retired, `FORK:0671283`) |
 | your lane's open items | `registers/handoffs/HANDOFF_<LANE>.md` (`MB PC FI SC FA WR IN GO SE`) |
 | which head is canonical | `CURRENT.md` |
 | does the milestone run | `python tools/m1_acceptance.py --summary` |
