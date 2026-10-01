@@ -144,8 +144,8 @@ fixed in that commit or dropped.
 Jordan, 2026-10-01, verbatim: *"Pull in recently committed 2026-10-01-telling-workplan.md for context and
 ensure your master plan carves out around this document accordingly."* That workplan is **RATIFIED by
 Jordan** (2026-10-01, ordered built under `methodology-execute`; its own ledger row, allocated on its
-branch). It is the IN lane's one named carve-out from this plan (`CLAUDE.md` §2). **Until it merges it
-lives on branch `ccr-1a171fc9-p2fyir`: `git show 60c70bbf:workplans/2026-10-01-telling-workplan.md`.**
+branch). It is the IN lane's one named carve-out from this plan (`CLAUDE.md` §2). **Merged (PR #449,
+`fd321c81`): T0–T6 are built and closed; T7 and the gated tail `G1`–`G8` are not (`HANDOFF_IN.md`).**
 
 **What it owns — this plan schedules none of it, restates none of it, and edits none of its sites:**
 
@@ -173,13 +173,12 @@ lives on branch `ccr-1a171fc9-p2fyir`: `git show 60c70bbf:workplans/2026-10-01-t
 - **Shared files** (`_part3` O.3): no v8 position edits a file a telling position has open; commits are
   never interleaved. **Order:** this plan's Batch 1 (`28-iii`, `29*`, `20-iv`) ran beside the telling
   positions and has landed (PR #450) — its one shared file was `queries/world_q.py` (`20-iv` against T4's
-  `with` stem), never interleaved; this plan's Batch 2 IN chain starts **after that workplan's Batch 2
-  (T4–T6) closes**, except `11-fix`, `27` and `LADDER-MBPC`, which share none of its files.
+  `with` stem), never interleaved; that workplan's Batch 2 (T4–T6) closed and merged
+  (PR #449, `fd321c81`), so this plan's Batch 2 IN chain is open. T7 and the gated tail are the telling
+  lane's and unbuilt: build none of them here, and edit no file a telling position has open (`_part3` O.3).
 
-**Merge order with PR #448.** The telling branch's first commit edits two rows of the retired
-`2026-09-28-…md` (positions `10` and `14`); PR #448 deletes that file. Whichever merges second keeps the
-deletion; this section and the `10`/`14` rows below carry both edits. That branch allocates the IN
-ledger row; this plan allocates nothing, and any later IN id starts at the `next_free` after both land.
+**Merge order — settled.** PR #448 (this plan) and PR #449 (the telling workplan) have both merged; #449
+allocated `ED-IN-0282`. Any later IN id starts at `references/id_reservations.yaml`'s `next_free`.
 
 ---
 
@@ -247,11 +246,12 @@ python tools/m1_acceptance.py --summary                         # expect NOT MET
 gh run list --branch main --limit 3                             # 'failure' until B0-CI-b lands: the tests/valoria step is green since PR #450, the engine/season/tests step has one red test
 ```
 
-**Batch 1 landed (PR #450)**; its records are `_part6` §H.1. The next buildable positions are the Batch 2
-exemptions `11-fix`, `27` and `LADDER-MBPC` (they share none of the telling workplan's files, §0.6),
-`B0-CI-b` (`_part3` §B0) in parallel, and the Batch 1 tail `29d-ii` and `20-v` (§3); the rest of Batch 2
-starts after the telling workplan's Batch 2 closes. The pre-flight rows still open are P-4 and P-6
-(`_part3` §P). Each batch runs through `methodology-execute` (`CLAUDE.md` §9).
+**Batch 1 landed (PR #450)**; its records are `_part6` §H.1. **The telling workplan's T0–T6 landed (PR
+#449, `fd321c81`), so Batch 2's whole IN chain is open** (§0.6). The next buildable positions are `B0-CI-b`
+(`_part3` §B0), the Batch 1 tail `29d-ii` and `20-v` (§3), then Batch 2 in `_part3` O.1's order, with
+`{27}` and `{LADDER-MBPC}` as parallel lanes. `11`'s baseline is taken after T6 (E15), i.e. on the tree
+from `fd321c81`. The pre-flight rows still open are P-4 and P-6 (`_part3` §P). Each batch runs through
+`methodology-execute` (`CLAUDE.md` §9).
 
 ---
 
@@ -281,13 +281,13 @@ found (`B0-CI-b`, `29d-ii`, `20-v`).
 | `9` | PC-SURRENDER build-or-strike | PC | JORDAN | J-7 | — | 4 | `HANDOFF_PC.md` [CODE] |
 | `10` | U5 / R-07 | IN | **CARVED OUT** (§0.6) | the telling workplan's own gates | R-07, R-01 | — | PR #442 (`c6f4252`) reverted the `tell`→stance write on H-79 and landed its side findings (H-62's producer gap closed by `march`'s M4 write; the `names_index.yaml` `stance` entry). Re-scoped by the telling workplan's first commit (`60c70bbf`) to T0→G8: `tell` writes no stance; regard is computed at read. This plan's earlier `fight`-write rewrite is withdrawn (§0.6) |
 | `11-fix` | U6 instrument repair | IN | OPEN | — | R-01, R-02 | 2 | `wd_collect.py`'s `probed`-invariant fails at `default` (`requirements.yaml` R-01 U10 paragraph) [CODE] |
-| `11` | U6 — first corpus R-01/R-02 reconvergence rate | IN | BLOCKED | `11-fix` | R-01, R-02 | 2 | no number since the corpus grew 89 → 143; baseline before telling T3a or after its T6, never across (E15) |
+| `11` | U6 — first corpus R-01/R-02 reconvergence rate | IN | BLOCKED | `11-fix` | R-01, R-02 | 2 | no number since the corpus grew 89 → 143; baseline after telling T6 (landed, PR #449), never across it (E15) |
 | `12` | H-62-rest scar rebuild | IN | BLOCKED | cells commit | R-06, R-08 | 4 | |
 | `12b`/`12c`/`12d` | affiliations · THE FIFTEEN · THE RENAME (substrate half) | IN | JORDAN | J-1 | R-05, R-06, R-08 | 4 | `ED-IN-0261` 2026-09-28 row `needs_jordan: true` [CODE]; `12d` season side done (`ED-IN-0268`) |
 | `12e` | H12 / H13 | IN | BLOCKED | H6 re-measure; G-Q6 (J-5) | R-06 | 4 | |
 | `13`-rest | W28-cast: 41 NPC + 97 ARC overlays | IN | PARTIAL | — | R-09, R-06 | 2 | 5 of 46 NPC overlays, 1 `capability` value (2026-09-28 plan §8.7) [PLAN]; `requirements.yaml` R-09 still says capability is empty everywhere — stale |
 | `13d-iii` | rung ANCHORS for seats + `[NEW]` seats + remit overlay | IN | OPEN | `17` (shared `populated.py`); remit half J-8 | R-04 | 2 | H-163 limit 1 [CODE]; realm `levy.unauthorized` 19 of 20 [RAN aperture] |
-| `14` | U7-own: own-verbs in antonym pairs, `tie / knot`, CANDIDATE-WHY | IN | OPEN | telling T4 (E14); E8 | R-05 | 2 | none of `carry comply construe destroy_record evade/defy exchange forge give oblige repudiate succeed thread_read tie/knot` executes in the realm [RAN aperture] |
+| `14` | U7-own: own-verbs in antonym pairs, `tie / knot`, CANDIDATE-WHY | IN | OPEN | telling T4 ✓ (PR #449); E8 | R-05 | 2 | none of `carry comply construe destroy_record evade/defy exchange forge give oblige repudiate succeed thread_read tie/knot` executes in the realm [RAN aperture] |
 | `R05-THREAD` | `thread_read`'s operand (H-85) | IN | OPEN | rides `14` | R-05 | 2 | answered at ladder step 4 (A-7); no position owned it |
 | `17` | U8 `ambitions(p)` + cast seating | IN | OPEN | `14` (shared `rosters.yaml`) | R-06, R-09 | 2 | [SETTLED: `def ambitions` absent in `engine/season`] |
 | `19b` | U7-disp: `comply` · `evade / defy` · `construe` | IN | JORDAN | J-2 (`ED-IN-0210`) | R-05 | 4 | |
