@@ -11,8 +11,8 @@ cooks it into `engine/engine_params/world_initial_state.json` behind a blocking 
 its single runtime reader. Same shape as `descriptors.py`, `composition.py` and `keys.py`.
 
 IT IS A LEAF. stdlib only — no `engine.*`, no `systems.*`. `game_state.py` imported it at module
-load, so anything it imported would have become a dependency of the entire engine; since `29b` its one
-retained reader is `systems/world/sim/npe.py` (`STARTING_STATS`), which leaves at `29d`.
+load, so anything it imported would have become a dependency of the entire engine; after `29b` its one
+reader was `systems/world/sim/npe.py` (`STARTING_STATS`), deleted at `29d`: only tests import it now.
 
 ⚠ NOT EVERYTHING IN `create_world` WAS HERE (it is deleted with `game_state.py`, `29b`).
 `Territory.fort_level` was DERIVED from `garrison` (1 if garrisoned, else 0) and stayed in the engine

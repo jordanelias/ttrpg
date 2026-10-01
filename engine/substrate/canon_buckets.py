@@ -27,9 +27,9 @@ this here breaks the npe→game_state edge outright rather than merely deferring
 [29b, 2026-10-01] `game_state.py` is DELETED (plan position `29b`), and with it the re-export and its
 sibling `canonical_pt`, which was never moved here: its only two importers, `systems/overview/sim/ci_track.py`
 and `systems/factions/sim/mass_seizure.py`, were deleted in the same commit, so there was nothing to move it
-for. The one retained reader of `canonical_accord` is `systems/world/sim/npe.py`, which leaves at `29d`;
-that deletion leaves this module with no reader. (This block is padded to the line count of the text it
-replaced so archived flow-skeleton anchors into this file's code lines stay in range.)
+for. The one retained reader of `canonical_accord`, `systems/world/sim/npe.py`, was deleted at `29d`
+(2026-10-01), so this module now has no production reader. (This block is padded to the line count of the
+text it replaced so archived flow-skeleton anchors into this file's code lines stay in range.)
 
 
 

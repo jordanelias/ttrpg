@@ -65,10 +65,10 @@ def build():
     # `Church` passes while remaining an alias of `Church of Solmund`.
     #
     # ⚠ IT VALIDATES, IT DOES NOT RENAME. Rewriting `Church` to the canonical spelling here would
-    # change a STRING in a table `systems/world/sim/npe.py` still reads, and this
-    # cluster is internally consistent: `systems/world/sim/npe.py:287` compares a drawn faction
-    # against a territory's owner, both spelled from this table. The register reaches this file as
-    # a refusal, which is the part that was missing -- not as a rename, which buys nothing.
+    # change a STRING in a table whose owner column and faction rows are spelled from each other, and
+    # this cluster is internally consistent (`systems/world/sim/npe.py:287`, deleted at `29d`, compared
+    # a drawn faction against a territory's owner, both spelled from this table). The register reaches
+    # this file as a refusal, which is the part that was missing -- not as a rename, which buys nothing.
     names_path = os.path.join(REPO, 'engine', 'engine_params', 'names.json')
     if os.path.exists(names_path):
         with open(names_path, encoding='utf-8') as _nf:
@@ -79,7 +79,7 @@ def build():
             _fail(f'faction(s) {unknown} are declared here but are not a canonical name or a '
                   f'declared alias in references/names_index.yaml. Add the row (or the alias) '
                   f'there and re-run tools/export_names.py; do not invent a faction in this table, '
-                  f'which `systems/world/sim/npe.py` reads.')
+                  f'whose keys every owner column is checked against.')
 
     owners_seen = set()
     for tid, row in sorted(territories.items()):
@@ -107,8 +107,8 @@ def build():
     if list(stats) != ['Crown', 'Church', 'Hafenmark', 'Varfell']:
         _fail(f'faction order is {list(stats)}, expected [Crown, Church, Hafenmark, Varfell]. '
               f'The authored order is kept on purpose: create_world (deleted at plan position 29b) '
-              f'iterated this table to build world.factions, and its one remaining reader '
-              f'(systems/world/sim/npe.py, retired at 29d) has not been shown order-insensitive. '
+              f'iterated this table to build world.factions, and its last production reader '
+              f'(systems/world/sim/npe.py, deleted at 29d) was never shown order-insensitive. '
               f'If you reorder it deliberately, update this check in the same commit.')
 
     landless = sorted(set(stats) - owners_seen)
@@ -138,8 +138,8 @@ def build():
         # `faction_starting_stats` to build `world.factions`, so this dict's order set the order of
         # every `world.factions.items()` loop and the RNG draw sequence of a seeded campaign. The
         # first draft of this exporter sorted factions alphabetically and moved the campaign goldens
-        # (Church 0.0 -> 50.0) without touching a value; those goldens went at `28-iii`. The one
-        # retained reader (`systems/world/sim/npe.py`, retired at `29d`) has not been shown
+        # (Church 0.0 -> 50.0) without touching a value; those goldens went at `28-iii`. The last
+        # production reader (`systems/world/sim/npe.py`, deleted at `29d`) was never shown
         # order-insensitive, so the order stays. The COLUMNS are sorted because nothing iterates them.
         'territories': {t: dict(sorted(r.items())) for t, r in territories.items()},
         'faction_starting_stats': {f: dict(sorted(r.items())) for f, r in stats.items()},

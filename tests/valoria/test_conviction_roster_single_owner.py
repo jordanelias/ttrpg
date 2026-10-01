@@ -48,11 +48,13 @@ def _py_files():
 def test_the_roster_comes_from_the_registry_not_a_literal():
     from engine.substrate import descriptors
     assert len(descriptors.CONVICTIONS) == 13
-    # Every consumer is the SAME object, not a copy that can drift.
+    # Every consumer is the SAME object, not a copy that can drift. `systems/world/sim/npe.py` was the
+    # second consumer until plan position `29d` deleted it; the season's own binding replaces it, so the
+    # assertion now observes the consumer the game actually runs.
     from systems.characters.sim import conviction
-    from systems.world.sim import npe
+    from engine.season.data import rosters
     assert conviction.CONVICTIONS is descriptors.CONVICTIONS
-    assert npe.CONVICTIONS is descriptors.CONVICTIONS
+    assert rosters.PURSUITS is descriptors.CONVICTIONS
 
 
 def test_no_second_conviction_roster_in_code():

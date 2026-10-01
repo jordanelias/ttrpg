@@ -918,8 +918,9 @@ modules:
   - module: miraculous_event
     registry_system: "miraculous_event"   # Key Type Registry vocabulary
     doc: .designs/systems/world/reference/miraculous_event_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    sim_module: systems/world/sim/miraculous_event.py   # OI-54 (ED-IN-0097, W4): matches
-      # mechanics_index.yaml's `miraculous_event` entry verbatim.
+    sim_module: none   # RETIRED AT PLAN POSITION `29d` (2026-10-01). It was `systems/world/sim/miraculous_event.py`
+      # (OI-54): one `stubwire.stub_resolve` armature stub, no importer, deleted with its tree. The row is kept, not
+      # deleted: removing a contract row is its own change, and `doc:` above still resolves.
     scales: [personal, settlement, peninsula]   # [verification P6: was [personal, scene]; matches registry default_scale_signature]
     resolver: state_reader   # [ASSUMPTION] gated emitter: fires on high-Ob Mending near T15
     state: []
@@ -931,11 +932,11 @@ modules:
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
     wiring:
-      build: stub
+      build: design
       godot: no-oracle
       port_rank: 8
       parity: key-log
-      note: trigger raises.
+      note: its code (a stubwire no-op, formerly "trigger raises") was deleted at `29d`, so build is reset to the vocabulary's zero-code state (was stub); `port_rank` is the pre-deletion audit verdict and is not re-derived here.
 
   - module: scenario_authoring
     registry_system: "scenario_authoring"   # Key Type Registry vocabulary

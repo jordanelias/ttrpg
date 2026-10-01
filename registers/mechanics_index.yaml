@@ -853,7 +853,7 @@ mechanics:
     gd_applicable: [GD-1]
     notes: "GD-1 sole victory condition. all 15 territories sustained 2 consecutive seasons with Accord >= 2 and Political Stability <= 6."
 
-  # ─── WORLD (systems/world/sim/) ──────────────────────────────────────────────────
+  # ─── WORLD (systems/world/sim/ — code deleted at plan position 29d; the rows are design intent) ──────
 
   restoration_movement:
     scale: world
@@ -862,7 +862,7 @@ mechanics:
       - "audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-2"
       - "systems/characters/conviction_track_v30.md#section-5"
     canon_authoring_target: "systems/world/restoration_movement_v30.md (NOT YET AUTHORED — Pass 2d pending; lane WR. Home derived from its own sim_module systems/world/sim/restoration_movement.py per RULED §2a; scale is world/emergent, which is why it lands in systems/world/ and not with the faction rows.)"
-    sim_module: systems/world/sim/restoration_movement.py
+    sim_module: null    # was systems/world/sim/restoration_movement.py (two stubwire stubs); deleted at plan position 29d
     test_status: validated_n1000_v12c
     gd_applicable: [GD-3]
     dependencies:
@@ -873,7 +873,7 @@ mechanics:
     scale: world
     faction: universal
     canon_sources: ["systems/world/miraculous_event_v30.md"]
-    sim_module: systems/world/sim/miraculous_event.py
+    sim_module: null    # was systems/world/sim/miraculous_event.py (a stubwire stub); deleted at plan position 29d
     test_status: not_implemented
 
   scenario_authoring:
@@ -889,7 +889,7 @@ mechanics:
     faction: emergent
     canon_sources: ["canon/02_canon_constraints.md#section-b-gd-3"]
     canon_authoring_target: "systems/world/insurgency_pipeline_v30.md (Pass 2i canonized 2026-05-17)"
-    sim_module: systems/world/sim/insurgency_pipeline.py
+    sim_module: null    # was systems/world/sim/insurgency_pipeline.py; deleted at plan position 29d
     test_status: not_implemented
     gd_applicable: [GD-3]
     notes: "GD-3 enforcement boundary. State machine: disorganized -> emergent -> extra-parliamentary | parliamentary. Promoted-RM with PT<3 emergence is extra-parliamentary."
@@ -898,7 +898,7 @@ mechanics:
     scale: world
     faction: universal
     canon_sources: ["systems/fieldwork/investigation_systems_v30.md"]
-    sim_module: systems/world/sim/npe.py
+    sim_module: null    # was systems/world/sim/npe.py; deleted at plan position 29d
     test_status: not_implemented
     notes: "NPC Population Engine."
 
