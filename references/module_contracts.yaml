@@ -561,7 +561,7 @@ modules:
         import resolve_mass_battle`, so the ~30-45 battles/campaign run on the SMALL tree. CONSEQUENCE: every
         MB-lane result -- Track F, the flag bisects, the geometry spec S1-S4, the 9 red CI tests -- is measured
         on a tree the campaign never executes. FORK IMPACT: plan of record section 5 says carry systems/*/sim
-        and LEAVE tests/, which would carry the stale engine and abandon canon. Section 5 corrected.'
+        and LEAVE tests/, which would carry the stale engine and abandon canon. Section 5 corrected. [SUPERSEDED 2026-10-01: `faction_action.py` and `resolve_mass_battle` were deleted at plan position `29b`; the only live caller of `massbattle.py` is now `seam/wrappers/mass_battle.py` through `resolve_field`.]'
 
   - module: domain_actions
     aliases: ["Domain Echo"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
