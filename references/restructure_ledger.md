@@ -2633,3 +2633,11 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 | `designs/workplans/workplan_v6_progress.yaml` | `FORK:0e6bb2bd` | FORKED (2026-10-01, pre-move spelling of a plan retired the same day) |
 | `workplans/2026-09-11-reconciled-program.md` | `FORK:7a97cb6e` | FORKED (2026-10-01, pre-move spelling of a plan retired the same day) |
 | `workplans/2026-09-11-reconciled-program_part2.md` | `FORK:7a97cb6e` | FORKED (2026-10-01, pre-move spelling of a plan retired the same day) |
+
+<!-- 2026-10-01, v8 adoption commit: the two plan PROPOSALs v8 absorbed are retired under the one-active-plan rule
+     (CLAUDE.md §2). Their sibling drafts (candidate_*.md) are content for Jordan, not plans, and stay. -->
+
+| Old path | New path | Status |
+|---|---|---|
+| `proposals/2026-09-26-decision-layer-execution-plan/PROPOSAL.md` | `FORK:f6d7af27` | FORKED (2026-10-01, absorbed into `workplans/valoria_master_workplan_v8.md`) |
+| `proposals/2026-09-27-mc-v18-retirement-plan/PROPOSAL.md` | `FORK:f6d7af27` | FORKED (2026-10-01, absorbed into `workplans/valoria_master_workplan_v8.md`) |

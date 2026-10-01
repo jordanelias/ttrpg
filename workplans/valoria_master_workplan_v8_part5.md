@@ -1,0 +1,192 @@
+# Valoria — Master Workplan v8, part 5: Batch 4 (opens per ruling) · the Jordan queue · what the ladder already answered
+
+## Status: PROPOSED 2026-10-01 — directed by Jordan; adoption on merge (ED-1094). ⚠ HELD BACK, LOUDLY: every item in §J is OPEN and is Jordan's to answer individually. A merge of this plan answers none of them, and no position gated on one becomes buildable because this file merged.
+## Reads after `workplans/valoria_master_workplan_v8_part4.md`.
+## Grade under `CLAUDE.md` §0.2: `paper`.
+
+---
+
+## B4. BATCH 4 — JORDAN-GATED; ONE SUB-BATCH PER RULING, AS EACH LANDS
+
+**Reading list:** `proposals/2026-09-26-decision-layer-execution-plan/PROPOSAL.md` §3.3–§3.5 (the H-item
+deliverables, carried below so that file can be deleted once they land — its own header asks for that);
+`proposals/2026-09-20-pursuit-basis-worksheet.yaml`; the DRAFT candidates `candidate_pursuit_cells.md`
+and `candidate_affiliation_content.md` in the decision-layer proposal (they ratify nothing);
+`engine/season/hole_register.yaml` H-146; `ED-IN-0261`'s 2026-09-28 row.
+
+### The cells commit — `12b` · `12c` · `12d` + H6 + H8 · IN · gate J-1 · `opus`/`opus` · one R6-atomic commit · `[design]`
+
+**Atomic because** `data/verbs.py`'s `_load_projection`/`_load_alignment` bind at module scope and refuse
+an unrostered key or an all-zero matrix — a partial landing is an `ImportError`. **In one commit:**
+`references/descriptor_registry.yaml` (`conviction_roster` → `pursuit_roster`, 15; `axis_roster`, 7;
+each with `count`) behind `tools/export_descriptors.py --check`; `engine/substrate/descriptors.py` and
+`data/pursuits.py` names; `rosters.yaml` `pursuit_projection` (15 × 7), `alignment` (every verb × 7),
+`role_template_pursuits` **plus an explicit validation step** (its read path does not raise on an
+unknown name); `references/npc_registry.yaml` values; `references/names_index.yaml`; **the verb split** —
+`FIGHT-RENAME` already landed `fight`, so the split adds `kill`, `wound`, `challenge` → `accept` (`accept`
+carries `contests: "the body"`), with `loop/effects_combat.py` registrations; `12b`'s schema half — a
+`(Person, conviction)` carrier, its `write_matrix.yaml` row, a `queries/person_q.py` confliction Query
+derived and never stored, **with a caller** (if nothing reads confliction yet — build-order 6f, `score`
+dotting against the basis — the Query waits for 6f, `ID-13`); `refusal_axis` set only if the ruling says
+arm H-146, reading the refusing pole from roster data. Audit the direct readers of
+`descriptors.CONVICTIONS` that survive Batch 1 (most die at `29d`/`29e`). Re-pin
+`test_conviction_roster_single_owner.py` and `test_conviction_spread_solver.py` (declared, §7).
+**FALSIFIER:** Jordan's faith pair (the devout-Solmund builder and the Einhir dismantler, both high
+`faith` — his own worked example in the worksheet) sits outside the 60° bar (`cos ≤ 0.5`) —
+`python -m engine.season.harness.conviction_spread` prints `within_60deg`; the loaders raise on a
+partial landing; **`resolvable_verbs()`'s new count is derived from `loop/driver.py`'s definition at the
+build, never asserted in advance**; the headless hash moves (declared); the three-arm corpus readout
+`ED-IN-0261` used is re-run. **E5:** never interleaved with `8`, `9`, `10`. **R:** R-05 (+4 rows),
+R-06 reason 2, R-08.
+
+**Then, in order (each its own step):**
+- **H7** — the faith-pair test as a standing test; if red, the placement is wrong and the fix goes back to
+  J-1, not to the code.
+- **H3 = `12`'s scar rebuild** — `Person.scar` becomes `{element: count}`; `_scar` and `scar_step` retire;
+  at RESOLVE the act calls `observers_for(w, e, mode, everyone)` and increments one count per observer
+  per violated pursuit. The violation predicate (`Σ_axis projection·align < 0`, a sign test) is a
+  candidate reading recorded for review, not a ruling; whether the actor counts as an observer is a swept
+  arm. Retire the `(Person, axis_count)` row or give it the field — **never both**. **FALSIFIER:** counts
+  differ between `fan_out_mode` `presence_only` and `all_five`; a scar on a person who did not observe the
+  act → fail; a conviction write reachable from a `Failure` band or from WITNESS's token → fail.
+  ⚠ `(Person, pursuits)` movement has **no specified trigger anywhere** (H-62) — describe it; do not build
+  around it.
+- **H9** — crisis reader, threshold 2 only: the weight shift as a `Fixtures` arm, control `0`, swept.
+  **FALSIFIER:** fork divergence at the `total` arm rises above the ED-IN-0261 baseline while the control
+  arm is unmoved.
+- **H10** (gate J-5's C3) — `affiliation_roster` with exporter validation; `Person.conviction: dict`; the
+  `incompatible` half-matrix with a loader refusing an unrostered pair; `confliction(p)` derived.
+  **FALSIFIER:** two incompatible affiliations at full intensity load, and `confliction` is non-zero.
+- **H11** (gate H3, H10, J-5's C4) — H3's mechanism over the affiliation table.
+- **`12e`** — H12 (`Person.precedence`) **held on a post-H6 re-measure, not on Jordan** (A-1: the
+  precedence band measured a no-op); H13 (crisis threshold 3 on J-5's G-Q6; threshold 1 has **no
+  mechanism** anywhere — it stays open, no precedent is forced onto it).
+- **6f** — `score` dotting against the new basis (the confliction Query's caller) and 6d's
+  `beneficiary:` column, `DONE·UNWIRED` until something produces `orient`. Sequence after H3; no
+  separate gate beyond J-1.
+
+### `19b` · U7-disp: `comply` · `evade / defy` · `construe` · IN · gate J-2 · `sonnet`/`opus`
+
+Rows exist, `eligibility: own`, untyped, no predicate; `construe` is `grade: absent`. After `15`/`15c`
+(DONE) the cell is `form: own_ledger, of: subject` over a `content:dispensation` claim — `tell`'s form.
+Compliance is `writes: []` per the term's own row, so `_eff_comply` may be emission-only and the fold's
+write-nothing refusal does not reach it. **Under arm (A)** the three key on the actor's ledger claim and
+answer both an `issue`d dispensation and a `dispatch`ed order; **under (B)** `dispatch` gets its own
+obey/disobey pair. **COMPLIANCE:** the fold may ask the actor's own ledger through the `PersonInterior`
+snapshot the act carries, and no other (`04`'s carve-out). **FALSIFIER:** `comply` evaluable for a
+person whose ledger holds no claim of the terms → fail. **R:** R-05 (+3, or +4 with V-1).
+
+### J-3's verbs — `confer` · `establish` · `revoke` reachable from computed play · IN · gate J-3
+
+Built per the option ruled: (i) an `office` operand bound from a question referent of kind Office (needs
+a question source about seats — none exists; it would be built here); (ii) read off a held writ/commission
+Record (`15c`'s `_from_content_claim` precedent, no new operand name); (iii) withheld from formation.
+**FALSIFIER (i)/(ii):** `aperture 4 0` shows each executing ≥ 1 with `Act.via`; a `confer` onto an
+already-held office does not deposit a claim about the outgoing holder's Tenure (the re-seating leak
+H-71's record names). **R:** R-04, R-05.
+
+### `9` · PC-SURRENDER · PC · gate J-7
+
+If built: Yield (declared in Phase 1; accepted ends the combat, refused leaves the yielder unresisting)
+maps onto the seam as a `Margin`/`wound_state` with the loser's outcome — **no fourth band, no fourth
+resolver**; say whether a yield maps onto `Untouched`/`Wounded` with the surrender on the result, or the
+band roster gains a value, and why. Disengage already exists as emergent behaviour in
+`combat_engine_v1/wrapper.py`. Constants go to `config.py`, cited. A PC id-block release precedes any
+filing (the PC block is exhausted — administrative). **FALSIFIER:** a planted yield ends the exchange
+with zero further rolls (assert the bout count); a yield accepted while the yielder's objective is still
+contested in the zone is refused. **E5.** If struck: one ledger row and `ED-PC-0056`'s carry-forward
+closed.
+
+### `24g` · the bodies clock + P3 individuation · SE · gate J-6
+
+The live arm of `body_step` (shipped at the control arm `0`; `H-125` swept 0 / 10 / 67). The carrier is
+settled (`24f`: cohorts eat, `Person.weight`). P3: CENSUS individuates on a demand kind — a `dispatch` to
+a non-existent clerk emits `person.demanded`, and next season a Person exists whose `person.individuated`
+cites it. P1's other half — a PERSON-keyed crossing cannot fire the `presence` branch because
+`world_q` derives `at` from `w.sites.get(who)`; the repair is `at = parent_of(w, who)` when `who` names a
+person. **FALSIFIER:** `Person.weight` or the envelope written by anything but CENSUS/MATTER → fail; a
+stored aggregate where a Query is required → fail. **`/code-review` + `/simplify` only** (one number,
+with its control arm).
+
+### `24h` P7 · dispensation-as-document · SE/IN · gate J-10
+
+Only if Jordan overturns the written refusal in `verb_table.yaml`'s `comply` typed cell.
+
+### `26` · GO-VERSION · GO · gate J-9
+
+Record the ruled version where code reads it; then ED-1050's deferred module re-export (*"a port never
+corrects its oracle in place"*). **Nothing in this repository asserts a version before then.**
+**FALSIFIER:** any `.gd` value differing from its `.py` oracle.
+
+---
+
+## J. THE JORDAN QUEUE — survives all five ladder steps; ranked by what each unblocks
+
+Each item went through `CLAUDE.md` §0's ladder (superseded · irrelevant · answered by a design document ·
+answered by precedent · answered by what makes sense for the architecture) and survived: two defensible
+options lead to materially different games, or the answer would overwrite ratified canon, or it is a
+number or content nobody can derive. **Rank = what it unblocks**, most first.
+
+| # | question | options | consequence | unblocks |
+|---|---|---|---|---|
+| **J-1** | **C1 + C2** — the 105 projection cells (15 pursuits × 7 axes) and the alignment re-cell over every verb (incl. `kill`, `wound`, `fight`, `challenge`, `accept`), **including the faith-pair placement**; and the per-character / role-template migration to the fifteen (four orphans: `Utility`, `Equity`, `Identity`, `Precedent`). Ledger: `ED-IN-0261` (2026-09-28 row, `needs_jordan: true`) | approve/vet the DRAFT `candidate_pursuit_cells.md` (it **fails** the faith pair at the registry's `.60` clergy weight and passes only at `.45`), or supply your own | the cells commit, H3–H11, `12`, `12e`, 6f, H-146 arming, the verb split | **R-05 (+4 rows), R-06 reason 2, R-08** — the only path to R-08 at all |
+| **J-3** | **The `office` operand (H-94)** — the realm attempts `confer` 213, `establish` 74, `revoke` 45 times in four seasons and refuses every one, because no computed act names an office and `office` is not one of the closed eight `requires_operands`. Does the vocabulary gain a seat/office operand, and from what source? | (i) a new `office` operand from a question referent of kind Office (needs a question source about seats); (ii) read it off a held writ/commission Record (`15c`'s precedent; no new name); (iii) withhold the three from formation and keep them hand-built only | (i)/(ii): realm governance verbs become reachable — the R-04 strategic layer; (iii): 332 fewer refusals and no realm governance | **R-04, R-05 (3 rows)**; shapes `22`'s `determine` referent (H-163 limit 2 shares the shape) |
+| **J-2** | **`ED-IN-0210`** — is `comply` one verb or two? With **V-1** (held back from #445): split `evade / defy` into two rows on the `ED-FI-0009` precedent? | (A) one `comply` keyed on the actor's ledger claim answers both an `issue`d dispensation and a `dispatch`ed order (evidence leans A); (B) `dispatch` gets its own obey/disobey pair; V-1 yes/no | A: one row, one falsifier; B: two more rows; V-1: a witness's claim distinguishes evasion from defiance | **R-05 (+3 or +4)** via `19b` |
+| **J-4** | **H-156** — verbs that are always refused still form and win scene slots (`commit`, `found`, `build`, `survey`; same shape `migrate`, `levy`; and `confer`/`establish`/`revoke` in the realm) — 34% of realm acts. ⚠ The realm figure is sized under `remit_default`, a testing fixture | (a) decline person-side until each verb's own gap closes (the `give`/`petition` precedent); (b) accept the cost as shipped; (c) widen preconditions or grade the verbs so the chooser has a reason | (a) restores `release`'s share and empties the realm of failing attempts; (b) R-01/R-02 measure with the tax in; (c) new typed cells per verb | shapes **R-05**'s counts and **R-01**'s scene share; `22` step 11 (`commit` never executes) |
+| **J-13** | **`capability`'s scale and source (H-126/H-127, `assumption`)** — R-09's roll varies by person only where a person has a `capability`; the one authored value (`NPC-088`'s `3`) was a named judgment call. Where do per-person magnitudes come from? | (i) the authored attribute `stats:` in `references/npc_registry.yaml`, through `verb_capability`'s key mapping; (ii) a rank scale you rule; (iii) leave `pool_default` everywhere a case does not name a vocation | (i)/(ii): R-09 varies by person across the corpus; (iii): R-09 varies by person in a handful of cases | **R-09**; `13`-rest's quality; `ED-FI-0009` |
+| **J-12** | **Does being told something move the hearer's stance?** `tell` cannot write `Person.stance` at RESOLVE without breaking `claim_subjects` (H-79), and its hearer exists only at WITNESS, where `write_matrix.yaml`'s `(Person, stance)` row (`class: ACTS`) and `04` ("WITNESS never touches a conviction") forbid an interior write | (a) yes — `(Person, stance)` gains a WITNESS step under INTERIOR, overturning the ratified class; (b) yes — redesign H-79's attribution so a telling's claim stays about what was told when the actor's own state changes; (c) no — stance moves only by the outcomes of acts (`march`, `fight` via `10`) | (a)/(b): conversation shapes attitudes; (c): only conflict does | R-07 via `tell`; `10` proceeds on `fight` without it |
+| **J-11** | **Two of your six scales have no mechanism spec anywhere in code**: grid-based map combat with units (no grid, hex or tile module exists; only quarantined UI documents mention a grid) and character creation / development (nothing creates or develops a person). Are they in scope for the season loop, a separate mode, or later? | in the loop (then a spec is owed); a separate tactical/creation mode outside the season loop; deferred past M1 | decides whether R-04 can ever be `met` on its scale roster | **R-04** conjunct (3); R-05's second clause |
+| **J-5** | **C3** the affiliation roster, the ten `incompatible:` cells and intensity; **C4** verb × affiliation engagement; **G-Q6** crisis threshold 3's terminal branch (restabilize, fold or destroyed; per case or fixed) | content; content; per case or fixed | — | H10, H11, H13 (R-06 texture) |
+| **J-6** | **`ED-IN-0247` — the `body_step` value** (carrier settled at `24f`) | `0` (control) / `10` / `67` (the H-125 sweep), or another | a realm where dearth kills vs one where it never does | `24g`'s live arm |
+| **J-7** | **Position `9`** — build §11.4 Yield/Disengage, or strike it (`ED-PC-0056`) | build (yield as a Margin, no fourth band) / strike | what a duel can end in | `9` |
+| **J-8** | **`dispatch` as a remit act** — `offices.yaml`'s remit column (r2 `03`) excludes it; the tree carries it and the realm executes it 2 of 27; `ED-IN-0256` is silent; `remit_default` is "for testing purposes for now" (you, 2026-09-18) | keep it in the per-post remit / delete it per r2 `02` | which seats can `dispatch`; sizes J-4's tax under a real remit | `13d-iii`'s remit half → R-04 |
+| **J-9** | **The Godot version**; and **D2**, the tenth attribute (count ruled ten, `ED-IN-0193`) | — | — | `26` → M3 |
+| **J-10** | **S5-P7** — overturn the written refusal of dispensation-as-document (`verb_table.yaml`'s `comply` cell) | overturn / keep | overwrites ratified canon either way it is asked | `24h` P7 |
+| **J-16** | **H-173** — should a determination-opened `oblige` (a sentence) read differently from a service `oblige` to renewal, the witness channel, the one-edge rule and the term fixture? | one carrier read the same everywhere / a per-reader distinction (the opening act's verb is already recoverable) | how disposal is felt in play | nothing until `22` makes `determine` execute in a shipped world — **ask then** |
+| **J-17** | **H-174** — does a bench's jurisdiction follow where a person IS (`home_of`) or where he LIVES (`residence_of`)? (The upkeep-target half is answered, A-2.) | presence / residence | whose bench binds a traveller | nothing until a `move` crosses two benches' grounds — **ask then** |
+| **J-14** | **Narrative #6** — complication as the modal outcome (re-bands the one degree ladder, `degree_from_net`) | — | moves every scale; overwrites a ratified shape | nothing |
+| **J-15** | **Held back from #445:** `05 §4.1` (do unwatched fights resolve in one act or span scenes?) and `05 §4.2` (does duel mode open any closed moment? recommended no) | — | — | nothing in this order |
+
+**Not on the queue, and why:**
+- **The MB/PC lane rows** the 2026-09-28 roster listed (`ED-MB-0039` (A)/(B) geometry; `ED-MB-0041`'s depth
+  cap, graded cavalry refusal, Command σ-ceiling, yield split; `ED-MB-0045`'s CEV naming and 2:1 targets;
+  `ED-PC-0016`; `ED-PC-0047`/`0049`–`0055`) have **not been through the ladder**. That pass is lane work,
+  not Jordan's: `LADDER-MBPC` (MB/PC lanes, a Haiku extract + a Sonnet ladder pass + an Opus check, in
+  Batch 2 as a parallel lane — it edits only `registers/editorial_ledger_{mb,pc}.jsonl`). What survives
+  joins this queue with its rank.
+- **The naming confirmation** Fable proposed (is the new document THE PLAN or the master) is withdrawn:
+  Jordan's retire-all ruling removed the reason they were two documents.
+
+---
+
+## A. ANSWERED BY THE LADDER — closed; do not let any ride back onto §J
+
+Each row names the ladder step and the closing citation. Each ratifies only as *which step answers it,
+and which candidate gets attacked* — the answer is decided at its position with the code in front of it,
+and an attack that lands sends the question back through the ladder, not to Jordan by default.
+
+| # | question | step | answer / where decided |
+|---|---|---|---|
+| A-1 | the 2026-09-28 plan's §5.2 thirteen demotions | 1–5 | each with its step (content-hash tiebreak → H-54/H-122, step 4; MB golden → `ED-MB-0016`, step 1; held H5 → step 1; H-111 → one probe, step 5; `ED-MB-0075` → option (2), built; `mass_battle` `state: []` → `04 §C.5.1`, step 3; G-Q5 → post-H6 re-measure, step 5; M-7 / `upkeep` / `kill / wound` → contradictions 3 / 1 / 4; `titles` → `04 §B.7/§E.1`, step 3; d.1 → members' `commit` degree, attacked at `20-iv`, step 5; `test_n3` floors → declared re-pin unless `11` shows a property, step 5; D-6/D-7 → swept fixtures at `18`; deleting the retire set → `requirements.yaml`'s own gate, not a question; GD-1 → a registered gap) |
+| A-2 | H-174 item 2 — the upkeep payment's target | 5 | `home_of` is the architecture's own definition of where a person is |
+| A-3 | `24f`'s cohort producer | 3 | `engine/season/cohorts.yaml` — built (ED-WR-0011, `npcs.yaml` header, ED-SE-0051) |
+| A-4 | R-04 reason 2's "no Faction-as-actor" | 3 | `04_CODE_ARCHITECTURE.md`: `Faction` is a resolved view with **no verbs**, never `Act.actor`; faction acts are person acts `via` seats |
+| A-5 | H-163 limit 1 (rungless seats) | 3 | r2 `03`'s four anchor forms → build item `13d-iii` |
+| A-6 | `29d`'s gate on `10` | 5 | the retire gate is "the loop expresses the scale"; `npe.py` has no season reader → re-gated on `29b`; if the verify node disagrees, `29d` waits |
+| A-7 | `thread_read`'s operand (H-85) | 4 | the row's own default, a two-valued `knowledge_kinds` roster (H-128's swept-fixture shape) — `14` ride-along (`R05-THREAD`) |
+| A-8 | the "double `@effect_for('oblige')`" in `effects_governance.py` | — | false alarm: the second is docstring text |
+| A-9 | `return_to_game_queue.yaml` | 1 | superseded by its own header (2026-08-19); retired at `ebb43bf0` |
+| A-10 | GD-1, the victory requirement | 5 | register an `ABSENT_RULE` hole at `28-iii` (S-6: not yet registered) |
+| A-11 | `ms_track` / `knots` deletions | 4 | wait on `27` (the retired plan's §1.3 disposition) |
+| A-12 | **position `10`'s write target** — ⚠ **REPLACES Fable's A-12** (a WITNESS-side write on the hearer), which contradicts `write_matrix.yaml`'s `(Person, stance)` class and `04`'s AX-3 split | 4 | write on a resolved `fight`'s subject at RESOLVE, on `_eff_march`'s M4 precedent; `tell`'s case is J-12 |
+| A-13 | `destroy_record` unformable for everyone | 4 | needs a record-holding question referent — `give`'s shape, at `14` |
+| A-14 | v7's ruling R-7 — does the Churn Engine workstream survive `ED-IN-0204`? | 2 | its head lived under the dissolved `designs/` tree; nothing builds on it |
+| A-15 | `21` item 3 — reconcile the M1 progress board | 2 | the board was retired at `ebb43bf0`; m1 row 3 now reads THE NINE |
+| A-16 | `14`'s antonym rows `waive`, `deposed`, `fray / loosen` | 3 | `04 §A.3` row 14: the closing half is ONE `release` verb, generic over kind; `revoke` takes away. No new closer rows |
+| A-17 | what "built out" means for R-05 | 4 | executes in computed play — U7's own acceptance (*"≥ 1 world — in the corpus, not merely in a hand-built `Act`"*) |
+| A-18 | must R-01's `met` include a realm reading? | 5 | no — a row is measured where its `measure:` says; the realm is context |
+| A-19 | is U6's `probed` divergence a defect or a property? | 5 | a property (a deposit raises a later-round question — R-03's channel), **conditional on P-4**: same-arm divergence makes it a determinism defect |
+| A-20 | where `27`'s `rendering.py` stubs write | 5 | not into the overview clocks (no season analogue, ED-WR-0011 option A); a retained or season-native carrier, or struck |
+| A-21 | `ED-FI-0009`'s obstacle source | 4 | `sigma.py::_obstacle_of`'s existing non-person default; one roll owner (S27.2) — stop if that needs a `contests:` shape |
+| A-22 | who seats `p_b`/`p_c` from the `cast:` — `13` or `17`? | 1 | `13`'s execution record (2026-09-28 plan §8.7) assigned the remainder to `17` |
+| A-23 | Fable's proposal to run FI `ED-FI-0009` as a parallel lane | 5 | serial — it shares `verb_table.yaml` and `effects_information.py` with `14` (`_part3` O.3) |

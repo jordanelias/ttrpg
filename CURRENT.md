@@ -12,15 +12,7 @@ stamp: `python tools/currency_consistency_check.py` (it exits 0 either way — r
 Old paths resolve through `references/restructure_ledger.md` via `python tools/pathres.py`. A
 ledger id's LAST row is its current state. History of this file: `git log -p CURRENT.md`.
 
-_Last reconciled: 2026-09-29 (currency drift on `engine/mc_v18.py`, `engine/season/`,
-`engine/season/data/`, `references/canonical_sources.yaml`, `references/restructure_ledger.md`,
-`systems/social_contest/sim/contest/` and `systems/threadwork/sim/` re-checked against their rows
-above; no row's POINTER changed. `canonical_sources.yaml`'s own edit was a SHA re-pin
-(`references/module_contracts.yaml`'s freshness hash, after plan position `2` removed its two
-now-orphaned `domain_echo` rows); `restructure_ledger.md`'s own edit only appended `FORK:` rows for
-files retired at plan positions `2` (`28-0` ORPHAN-DELETE) and `3` (`2-i` RET-SC stub); the
-mc_v18-retirement M0-M3 build, position 10's stance-producer fix and position 27's Coherence reshape
-(`ED-WR-0010`'s already-cited row) all land under already-current heads, not new ones)._
+_Last reconciled: 2026-10-01 (`references/restructure_ledger.md`'s edits only append `FORK:` rows for the retired plans and repoint three unreachable refs; the plan row now names `valoria_master_workplan_v8.md`; no other row's pointer changed)._
 
 Design prose is quarantined in `.designs/` (ED-IN-0231). A row that names such a document gives its
 **bare filename only**, deliberately: it is reference, not a head, and not to be opened as authority.
@@ -29,7 +21,7 @@ Design prose is quarantined in `.designs/` (ED-IN-0231). A row that names such a
 |---|---|---|
 | **THE SEASON LOOP (game code)** | `engine/season/` — RATIFIED, ED-IN-0204 | `python -m engine.season.harness.register --requirements`; runtime registries `engine/season/data/`; Layer-1 conformance ED-IN-0206; lane `registers/handoffs/HANDOFF_IN.md` |
 | **THE CODE ARCHITECTURE (Layer 1)** | `architecture/` — RATIFIED, ED-IN-0204 | `skills/layer-conformance/SKILL.md` (Lens B checks `engine/season/` against `architecture/meta/04_CODE_ARCHITECTURE.md`) |
-| **The plan** | ⛔ every plan under `workplans/` RETIRED 2026-10-01 — `FORK:0671283` (exact rows in `references/restructure_ledger.md`); one active plan per lane from here (`CLAUDE.md` §2). The IN-lane successor is being drafted and is not yet adopted | THE NINE: `python -m engine.season.harness.register --requirements`; milestone: `python tools/m1_acceptance.py --summary` |
+| **The plan** | `workplans/valoria_master_workplan_v8.md` (+ `_part2`…`_part6`) — PROPOSED, adoption on merge; the one active plan (`CLAUDE.md` §2) for every lane whose items it carries. Every earlier plan is RETIRED (`FORK:0671283`; the two absorbed `PROPOSAL.md` plans `FORK:f6d7af27`) | its `_part3` §P pre-flight, then Batch 0; Jordan items its `_part5` §J; THE NINE: `python -m engine.season.harness.register --requirements` |
 | **Character model / decision layer** | `proposals/2026-09-20-pursuit-basis-worksheet.yaml` — ruled, ED-IN-0261 | ED-IN-0261; conviction split ED-IN-0251 |
 | **Personal combat** | `systems/combat/combat_engine_v1/`; typed export `engine/engine_params/combat_engine_v1.json` (round-trip checked in CI) | `registers/handoffs/HANDOFF_PC.md`; design reference `combat_reference_v1.md`, lineage `combat_currency_v1.md` |
 | **Mass battle** | `mass_battle_v30.md` + `mass_battle_integration_v30.md` | `registers/handoffs/HANDOFF_MB.md` |
