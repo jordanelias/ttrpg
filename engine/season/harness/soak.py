@@ -2,8 +2,10 @@
 
 A SOAK run drives the unmodified season loop for many consecutive seasons on ONE World and ONE
 SeasonDriver, and records what only duration exposes: an uncaught exception, memory or wall-clock
-growth, and churn that degenerates. It decides nothing, grades nothing, pins nothing and is wired
-into no gate (`harness/aperture.py`'s own disclaimer, repeated here because it applies verbatim).
+growth, and churn that degenerates. It grades nothing, pins nothing and is wired into no gate
+(`harness/aperture.py`'s own disclaimer, `:48`, repeated here because it applies unchanged). It
+decides nothing either -- true of this harness too, but that clause is added here, not quoted from
+aperture.py, which does not carry it.
 
 Entry point: `python -m engine.season.harness.soak --seed S --arm ARM --batches B
 --seasons-per-batch N --season-wall-ceiling SECONDS --out DIR`. Every argument is required and
@@ -54,7 +56,9 @@ import traceback
 from collections import Counter, defaultdict
 from pathlib import Path
 
-# The same five lines `harness/populated.py` already imports for this exact composition.
+# Four of these five mirror lines `harness/populated.py` already imports for this exact
+# composition; the fifth (`build_realm`/`census`) is imported FROM `populated.py` itself, which
+# obviously does not import from itself.
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..state.ids import H, draw_factory
@@ -292,8 +296,12 @@ def _run_world(args: argparse.Namespace, head: str, world_dir: Path, argv: list)
     stopped = False
 
     for b in range(args.batches):
-        if stopped:
-            break
+        # ⚠ NO `if stopped: break` HERE (methodology-close Phase 1, 2026-09-30): `stopped` can only
+        # become True inside the inner season loop below, and every site that sets it also
+        # unconditionally `break`s the outer loop right there (see the unconditional `if stopped:
+        # break` after the inner loop) -- so control can never return to the top of this loop with
+        # `stopped` already True. A check here was dead code; removed rather than kept for
+        # symmetry.
         for s in range(args.seasons_per_batch):
             n_log0 = len(w.log)
             n_res0 = len(d.resolved)

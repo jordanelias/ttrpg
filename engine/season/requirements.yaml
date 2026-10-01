@@ -279,7 +279,7 @@ rows:
       carries is therefore still the last corpus-scale number on file, now provably stale (it
       predates the corpus growing 89->143) but not replaceable this session. Status stays
       `not_met`, honestly, on the instrument that owed the number rather than on a guess.
-    measure: "python proposals/2026-09-04-degree-sweep/wd_collect.py  # after wd_chunk.py x4 per arm per cell over the 143-case corpus (slices 0 36/36 72/72 108/108 143) -- U6's command; workplans/2026-09-09-r-execution-plan.md:1449-1452 still cites the superseded 89-case slices as of this row's own edit (WD-REBASE, 2026-09-30) -- use the slices stated here, not that citation, until it is corrected"
+    measure: "python proposals/2026-09-04-degree-sweep/wd_collect.py  # after wd_chunk.py x4 per arm per cell over the 143-case corpus (slices 0 36/36 72/72 108/108 143) -- U6's command, workplans/2026-09-09-r-execution-plan.md:1445-1451"
     blocks: [W-F, H-111]
 
   - id: R-03

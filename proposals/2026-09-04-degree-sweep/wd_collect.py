@@ -191,11 +191,24 @@ def main() -> int:
         # comment; none isolated here). So "diverged == 0 at none" is no longer the control;
         # U6's own control is, verbatim from its content owner: "`observation_deposit_mode=none`
         # arm ≥ the default arm — that is the only control this instrument produces"
-        # (`workplans/2026-09-09-r-execution-plan.md:1462-1463`).
+        # (`workplans/2026-09-09-r-execution-plan.md:1472-1473`).
         # The default arm is `actor` (`engine/season/data/fixtures.py:448`).
         assert n["genuine"] > 0, (
             f"{slots}: the control arm `none` has an EMPTY denominator ({n['genuine']} genuine); "
             "there is nothing for the control to be true of")
+        # ⚠ `a`/`t` GUARDED TOO, NOT JUST `n` (methodology-close Phase 1, 2026-09-30). `collect()`
+        # returns `reconvergence_rate=None` whenever `genuine == 0`; without this, an empty
+        # `actor`/`total` denominator would raise `TypeError` at the `>=` below or at the CONTROL
+        # log's unconditional `*100` formatting, instead of the named `AssertionError` this block
+        # is built to produce (§0.1 pt 2). Not live against the committed 143-case chunks --
+        # `actor` genuine is nonzero at every cell today -- closing a gap the plan's own A.3
+        # inherited (it guarded only `n`).
+        assert a["genuine"] > 0, (
+            f"{slots}: the default arm `actor` has an EMPTY denominator ({a['genuine']} genuine); "
+            "`none >= actor` is undefined over an empty denominator")
+        assert t["genuine"] > 0, (
+            f"{slots}: `total` has an EMPTY denominator ({t['genuine']} genuine); the CONTROL log "
+            "line below formats its rate unconditionally")
         assert n["reconvergence_rate"] >= a["reconvergence_rate"], (
             f"{slots}: control `none` reconvergence {n['reconvergence_rate']} is BELOW the "
             f"default `actor` arm's {a['reconvergence_rate']}. U6's own control: "
@@ -238,20 +251,27 @@ def main() -> int:
         # WHERE forbids. Plan position `19` added a `via` parameter to `belief_contradicts`
         # (`engine/season/epistemic.py:71-72`), and `opening_set` calls it with five positional
         # arguments (`engine/season/decision/options.py:161`: `belief_contradicts(p, row, subject,
-        # ops, seat)`). `positive_control`'s plant (`wd_acceptance.py:413`) is
+        # ops, seat)`). `positive_control`'s plant (`wd_acceptance.py:422`) is
         # `def bc(p, row, subject, operands, _p=pred)` -- the fifth positional argument binds
         # `_p = seat`, clobbering the intended predicate, so the plant's extra clause
         # (`c.predicate == _p`) tests against a seat id and never matches a real predicate. The
-        # plant is therefore INERT: it reduces to calling `_REAL_BC` unmodified, so all four
-        # plants read the same as the unplanted baseline below by construction, not by a genuine
-        # saturation effect. VERIFIED by reading `epistemic.py:71-72`, `decision/options.py:161`
-        # and `wd_acceptance.py:413` directly. `detected_over_base` at this cell is NOT currently
+        # plant is therefore INERT on its own added clause -- but NOT identical to the unplanted
+        # baseline BY CONSTRUCTION (methodology-close Phase 1 antagonist, 2026-09-30): `_REAL_BC`
+        # is called here with exactly the FOUR positional arguments `(p, row, subject, operands)`,
+        # so its own `via` parameter defaults to `None`, while the real, correctly-called path
+        # passes `via=seat` (`decision/options.py:161`) -- and `via` changes `belief_contradicts`'
+        # verdict (`engine/season/tests/test_u7_remit.py:494-495`). So the plant reading the same
+        # as the baseline on this 3-case sample is EMPIRICAL, not a logical guarantee this file can
+        # stand behind. VERIFIED by reading `epistemic.py:71-72`, `decision/options.py:161` and
+        # `wd_acceptance.py:422` directly. `detected_over_base` at this cell is NOT currently
         # evidence the harness's positive control can see a plant.
         log("⚠ PLANT INERT", f"[{label}] `wd_acceptance.py`'s positive-control plant mis-binds "
                              "its own predicate to the 5th positional argument `opening_set` now "
                              "passes (`seat`, plan position 19); the plant tests nothing real and "
-                             "every `detected_over_base` below is a false negative, not a "
-                             "measurement. Pre-existing; outside this unit's edit surface.")
+                             "every `positive_control` plant's `detected_over_base` below is a "
+                             "false negative, not a measurement -- the COMPARATOR control's own "
+                             "null (if any, see ⚠ COMPARATOR NULL below) is NOT this cause. "
+                             "Pre-existing; outside this unit's edit surface.")
         TRACE.rows.clear()
         pc = positive_control(sample, slots=slots)
         out[f"positive_control_{slots}"] = pc
@@ -276,6 +296,27 @@ def main() -> int:
                           f"genuine {cc['genuine']}, DIVERGED {cc['diverged']} -> "
                           f"detected_over_base {cc['detected_over_base']} (legacy detected "
                           f"{cc['detected']})")
+        if not cc["detected_over_base"]:
+            # ⚠⚠ FOUND BY THE METHODOLOGY-CLOSE PHASE 1 ANTAGONIST (2026-09-30), NOT FIXED HERE --
+            # a SEPARATE null from ⚠ PLANT INERT above, not its consequence. `comparator_control`
+            # never calls `belief_contradicts` -- its plant only splices a token into the LAST
+            # ranked decision (`wd_acceptance.py:455-458`), so the 5-positional-argument mismatch
+            # cannot be the cause of a null here. UNVERIFIED BY EXECUTION, offered as the
+            # plausible mechanism rather than a diagnosis this file can stand behind: the probe's
+            # strictly-later-tick lookahead window only ever includes the run's LAST decision when
+            # the final tick has `LOOKAHEAD` (3) or fewer decisions still to come
+            # (`engine/reference/degree-sweep/arm9_forking.py:52,:201`), which a multi-round season
+            # makes rare -- so the rounds loop may be blinding this control too, independently of
+            # the positive control's own defect.
+            log("⚠ COMPARATOR NULL", f"[{label}] the comparator control did not detect over "
+                                      "baseline here. This is NOT the `belief_contradicts` "
+                                      "signature mismatch (see ⚠ PLANT INERT above) -- that "
+                                      "defect cannot reach this control. Cause undiagnosed; a "
+                                      "plausible mechanism is the rounds loop leaving the run's "
+                                      "final decision outside the probe's strictly-later-tick "
+                                      "lookahead window (`arm9_forking.py:52,:201`) under a "
+                                      "multi-round season. `detected_over_base` here is NOT "
+                                      "currently evidence this control can see a change.")
     # kept under their historical keys so a reader of the committed artifact still finds them
     out["positive_control"] = out["positive_control_narrow"]
     out["comparator_control"] = out["comparator_control_narrow"]
