@@ -3098,7 +3098,8 @@ rows:
       ⚠ SINCE PLAN POSITION `20-iv` THE MORALE WEIGHT HAS A READER: the losers' next field starts at
       morale `5 - field_morale_weight` (`massbattle._morale_start`, one stance unit = one morale
       point, fed by `seam/wrappers/mass_battle.py::_side_stance`), so this sweep now also sweeps the
-      next fight's morale-start, and its `0` point is that reader's control."
+      next fight's morale-start, and its `0` point is that reader's control for a CROSS-faction field only (in a
+      same-faction march, `H-151`, the grudge row names the same faction and also moves morale-start)."
     sweep:     ["scaled_by_degree (the default)", "total (THE CONTROL: every loser's body to 0 --
       re-running \"losing a field costs everything\" deliberately, `wound_harm_model`'s own first
       control re-applied)", "none (the SECOND control: the body is not written at all, isolating
@@ -3180,7 +3181,14 @@ rows:
       + weapon modifier - DR\". At the season's fixed power 4 and base dr 1, walls take a Success
       exchange from 3 to 0 and an Overwhelming one from 4 to 1. `WALLS_DEFENDER_DR = 0` removes the
       only live difference between a walled and an open field (the control); the constant is a
-      module literal and not yet a Fixtures knob, so no sweep is declared here."
+      module literal and not yet a Fixtures knob, so no sweep is declared here. ⚠ IN THE REALM IT IS A CONSTANT, NOT
+      A MECHANIC: `build_realm` garrisons every settlement at full condition and garrison wear is 0, so
+      `fortification_of` is 1.0 on every settlement and every realm defender gets dr 1 -> 4 (the WALLS check runs
+      before the polygon lookup, so UPHILL, FOREST and NARROW_PASS cannot occur on this path). An injectable
+      `field_walls_dr` Fixtures value with a three-point sweep (3 = A.9, 0 = the control, 1) is the next step; it
+      is a design addition (a new Fixtures field, a seam parameter, tests) and was not built at `20-iv`. This
+      row's R2 violation (an `assumption` with no sweep) pre-dates `20-iv`: it was in `register --check`'s list
+      at 5c5d8ec6."
     site:      "engine/season/seam/wrappers/mass_battle.py -- `resolve()` reads
       `world_q.fortification_of` and `_territory_of` at the target and passes both to
       `massbattle.resolve_field(territory=, fort_level=)`; until `20-iv`, `world_q.py --

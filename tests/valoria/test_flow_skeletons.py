@@ -314,7 +314,7 @@ LINE_UNSTABLE_TARGETS = frozenset({'references/canonical_sources.yaml'})
 #
 # ⚠ THESE DO NOT JOIN `LINE_UNSTABLE_TARGETS`, AND THE REASON IS A MEASUREMENT, NOT A PREFERENCE.
 # That set demands a symbol in place of the line, which worked for `canonical_sources.yaml` because
-# every anchor into it carried one. Measured across `.designs/` for the files below: **281 of the
+# every anchor into it carried one. Measured across `.designs/` on 2026-09-16 (ED-IN-0232), for the files then listed (several since deleted): **281 of the
 # 587 anchors are BARE LINE NUMBERS** — 132 into `mc_v18.py` alone. Adding these files to that set
 # would fail all 281 with "cite a symbol", in documents that are ARCHIVED and frozen and therefore
 # cannot be corrected. An unsatisfiable requirement is not a stricter gate; it is a red one.
@@ -326,10 +326,6 @@ LINE_UNSTABLE_TARGETS = frozenset({'references/canonical_sources.yaml'})
 # them are now unchecked. What is kept: the file must still resolve (live, archived, or FORKED),
 # and 306 symbol claims are still asserted.
 RETIREMENT_SHIFTED = frozenset({
-    'engine/mc_v18.py',
-    'engine/autoload/engine_clock.py',
-    'engine/cross_scale/scene_dispatch.py',
-    'engine/cross_scale/zoom_in_out.py',
     # Plan position `29b` (2026-10-01) deleted `resolve_mass_battle`, `_faction_to_unit` and
     # `_morale_start_from_stability` from this LIVE file (old lines 120-201, 236-256, 376-445), so every
     # archived line anchor below the first cut moved or went out of range. The three symbols join
@@ -337,16 +333,8 @@ RETIREMENT_SHIFTED = frozenset({
     # What is lost, stated: a bare line into `massbattle.py` is now advisory.
     'systems/mass_battle/sim/massbattle.py',
     'engine/substrate/__init__.py',
-    'systems/factions/sim/faction_action.py',
-    'systems/factions/sim/parliamentary_transfer.py',
     'references/module_contracts.yaml',
     'tools/build_execution_map.py',
-    # 39 archived anchors cite this file by line; ED-IN-0232 cut 15 Key-delivery test functions
-    # out of it, so every line below the first cut moved.
-    'engine/tests/test_pipeline_reach.py',
-    # Both carry golden re-pins whose recorded-old-values blocks added lines above every anchor.
-    'engine/tests/test_f7_smoke_oracle.py',
-    'engine/tests/test_mc_v18_regression.py',
     # ED-IN-0263 (2026-09-22): rewritten as a pointer index, so every row moved. Archived anchors
     # into it are frozen; a bare line is advisory, a symbol (`npc_behavior_v30`) is still checked.
     'CURRENT.md',

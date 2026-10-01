@@ -908,7 +908,7 @@ mechanics:
     scale: cross_scale
     faction: universal
     canon_sources: ["systems/_architecture/scale_transitions_v30.md#section-5"]
-    sim_module: engine/cross_scale/domain_echo.py
+    sim_module: null
     test_status: not_implemented
     notes: "Scene -> Faction propagation. ED-300 autonomous resolution."
 
@@ -931,7 +931,7 @@ mechanics:
     scale: cross_scale
     faction: universal
     canon_sources: ["systems/articulation/articulation_layer_v30.md"]
-    sim_module: engine/cross_scale/articulation.py
+    sim_module: null
     test_status: not_implemented
     pp: PP-688
     notes: "Tier 1 Protagonist UI Lens / Tier 2 Trigger Ruleset / Tier 3 Chronicle Generator."

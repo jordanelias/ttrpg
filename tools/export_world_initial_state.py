@@ -65,7 +65,7 @@ def build():
     # `Church` passes while remaining an alias of `Church of Solmund`.
     #
     # ⚠ IT VALIDATES, IT DOES NOT RENAME. Rewriting `Church` to the canonical spelling here would
-    # move campaign goldens across the blocking sim-regression job to change a STRING, and this
+    # change a STRING in a table `systems/world/sim/npe.py` still reads, and this
     # cluster is internally consistent: `systems/world/sim/npe.py:287` compares a drawn faction
     # against a territory's owner, both spelled from this table. The register reaches this file as
     # a refusal, which is the part that was missing -- not as a rename, which buys nothing.
@@ -79,7 +79,7 @@ def build():
             _fail(f'faction(s) {unknown} are declared here but are not a canonical name or a '
                   f'declared alias in references/names_index.yaml. Add the row (or the alias) '
                   f'there and re-run tools/export_names.py; do not invent a faction in this table, '
-                  f'which is read into world.factions at world build.')
+                  f'which `systems/world/sim/npe.py` reads.')
 
     owners_seen = set()
     for tid, row in sorted(territories.items()):
