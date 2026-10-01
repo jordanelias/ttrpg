@@ -40,7 +40,7 @@ from ..data import verbs as _verbs
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import Step, WriteClass
 from ..data.requires import UNKNOWN, binding_from_act, evaluate
-from ..data.verbs import ELIGIBILITY_CLAUSE, VERB_TABLE, WRITE_CLAUSE
+from ..data.verbs import COUNTERPARTY_CLAUSE, ELIGIBILITY_CLAUSE, VERB_TABLE, WRITE_CLAUSE
 from ..epistemic import belief_contradicts
 from ..harness import probes as P
 from ..loop import resolve as _resolve
@@ -133,6 +133,10 @@ def test_19_the_four_are_resolvable_typed_and_key_every_failable_clause():
                    for c in getattr(row.requires_typed.requirement, "clauses",
                                     (row.requires_typed.requirement,))), f"{verb} reads no seat"
         expected = {ELIGIBILITY_CLAUSE, WRITE_CLAUSE} | set(row.requires_typed.conjuncts())
+        # PLAN POSITION `14`: a row naming a second party keys the fold's `counterparty` clause too
+        # (`determine`'s party, `issue`'s executor).
+        if row.counterparty:
+            expected.add(COUNTERPARTY_CLAUSE)
         assert set(row.refusals_by_clause) == expected, (verb, sorted(row.refusals_by_clause))
         assert set(row.emits_on_refusal) == {k for v in row.refusals_by_clause.values() for k in v}
 
@@ -422,8 +426,9 @@ def test_19_determination_admits_an_opening_only():
     assert G.tenure_write_basis(w, fresh, None, DUKE, SEAT, frozenset()) == DETERMINATION
     # A JUDGE DOES NOT BIND HIMSELF -- `may_determine` refuses it, and an `oblige` a man opens on his
     # own behalf is his own act (`T-m`), whatever seat he names: never `determination`. That the
-    # occupant does not serve his own seat is `_req_oblige`'s and `_eff_determine`'s refusal, not the
-    # gate's (the gate admits any owner's opening of his own non-seat edge).
+    # occupant does not serve his own seat is `_req_oblige`'s refusal and, for `determine`, the fold's
+    # `counterparty` clause (plan position `14`; it was `_eff_determine`'s), not the gate's (the gate
+    # admits any owner's opening of his own non-seat edge).
     own = Tenure("t_own", DUKE, SEAT, "oblige", since=w.tick)
     assert not G.may_determine(w, DUKE, SEAT, DUKE)
     assert G.tenure_write_basis(w, own, None, DUKE, SEAT, frozenset()) == G.T_M

@@ -21,11 +21,13 @@ What each block proves, and the control that stops it passing vacuously:
      nothing; one release hands on ONE edge; a seat cannot be handed over; and a closure that is
      not the actor's own licenses nothing.
   5. THE PRECONDITION. A non-co-located `give` is refused (control: the co-located one executes);
-     so is a give to oneself, of something not held, and one naming no receiver.
-  6. NO PERSON FORMS A GIFT WITH NO RECEIVER. The row is untyped, so no Candidate can carry `to`,
-     and its `counterparty: to` makes `opening_set` form none. Control: with the column cleared the
-     receiver-less Candidates form -- the scene tax measured before the column (3 in `headless`,
-     41 in `populated`, all refused). The loader still refuses a counterparty that is no operand.
+     so is a give to oneself (the FOLD's `counterparty` clause since plan position `14`), of
+     something not held, and one naming no receiver.
+  6. NO PERSON FORMS A GIFT WITH NO RECEIVER -- AND SINCE PLAN POSITION `14` A PERSON FORMS ONE PER
+     RECEIVER HE KNOWS. The row is typed (`with`, `T4`'s stem), so `operand_bags` fans `to` over
+     `known_persons`; a giver who knows nobody forms none, and none is addressed to the giver
+     (control: with the column cleared and the giver planted among the known, one is). The loader
+     still refuses a counterparty that is no operand.
 """
 import dataclasses
 
@@ -94,8 +96,11 @@ def test_give_is_a_resolvable_verb_that_opens_hold_and_refuses_as_itself():
     assert row.eligibility == ("own", "hold:<record>"), row.eligibility
     assert row.writes == ("Tenure.until", "Tenure.since"), row.writes
     assert row.emits == ("record.given",) and row.emits_on_refusal == ("give.refused",)
-    assert row.requires_typed is None and "give" in REQUIRES_PREDICATES, (
-        "`give` must take `release`'s route: an untyped cell read by a registered predicate")
+    # PLAN POSITION `14`: TYPED, ON `T4`'s `with` STEM, AND `_req_give` RETIRED -- one owner.
+    assert row.requires_typed is not None and "give" not in REQUIRES_PREDICATES, (
+        "`give` must carry a typed cell and no predicate (`test_wa_one_owner_...`)")
+    assert row.requires_typed.known_person_operands() == ("to",), (
+        "the cell must bind `to` beside `subject`, or no Candidate can name a receiver")
     assert "give" in resolvable_verbs()
     assert "give" in _OPENERS_FROM_EFFECTS["hold"], _OPENERS_FROM_EFFECTS["hold"]
     # NOT A KIND ANY BROADCAST CHANNEL READS: `chronicle` keys on `binding_decision` rows and
@@ -354,16 +359,41 @@ def _give_candidates(w, pid, referents):
             if c.verb == "give"]
 
 
-def test_no_person_forms_a_give_it_cannot_name_a_receiver_for(monkeypatch):
+def test_no_person_forms_a_give_it_cannot_name_a_receiver_for():
+    """PLAN POSITION `14`: the row is typed now, so a receiver is NAMED -- from the persons the giver
+    knows (`operand_bags`, `T4`'s primitive) -- and a giver who knows nobody still forms none."""
     w, _d, rid = _at_resolve()
     referents = (rid, RECEIVER, "Hh")
     assert VERB_TABLE["give"].counterparty == "to"
     assert not _give_candidates(w, GIVER, referents), "a receiver-less `give` was formed"
-    # CONTROL: clear the column and the Candidates form -- each naming no receiver, which is the
-    # act the fold refuses every time. So the column, not some other filter, is what declined them.
+
+
+def test_a_giver_forms_one_give_per_person_known_and_none_to_himself(monkeypatch):
+    """PLAN POSITION `14` -- THE OBSERVABLE: `give` FORMABLE IN COMPUTED PLAY. One Candidate per
+    referent per person the giver knows, `to` always a known person and never the giver, the
+    Record riding `subject`. CONTROL: clear the row's `counterparty:` and the self-addressed bag the
+    column declines comes back (the giver knows himself through a planted claim), so the column --
+    not `known_persons`' own self-discard alone -- is asserted to hold."""
+    from engine.season.state.carriers import Claim
+    w, _d, rid = _at_resolve()
+    p = w.persons[GIVER]
+    p.ledger.append(Claim("c_k1", GIVER, RECEIVER, "exists:Person", 1, 0, "firsthand", 100, "own"))
+    p.ledger.append(Claim("c_k2", GIVER, FAR, "exists:Person", 1, 0, "firsthand", 100, "own"))
+    got = _give_candidates(w, GIVER, (rid,))
+    assert sorted(c.operands.get("to") for c in got) == sorted([RECEIVER, FAR]), got
+    assert all(c.operands.get("subject") == rid for c in got), got
+    checked = sum(1 for c in got if c.operands["to"] != GIVER)
+    assert checked >= 2, "the receivers were never checked"
+    # the fan reads `to` from `known_persons`, which already drops the actor; so plant the giver as
+    # a referent of his own knowing AND clear the column, to show the column is a second guard.
     monkeypatch.setitem(VERB_TABLE, "give", dataclasses.replace(VERB_TABLE["give"], counterparty=""))
-    got = _give_candidates(w, GIVER, referents)
-    assert got and all("to" not in c.operands for c in got), got
+    from engine.season.decision import options as _opts
+    monkeypatch.setattr(_opts, "known_persons", lambda claims, actor, topic: (actor, RECEIVER))
+    got = _give_candidates(w, GIVER, (rid,))
+    assert GIVER in {c.operands.get("to") for c in got}, got
+    monkeypatch.setitem(VERB_TABLE, "give", dataclasses.replace(VERB_TABLE["give"], counterparty="to"))
+    got = _give_candidates(w, GIVER, (rid,))
+    assert GIVER not in {c.operands.get("to") for c in got} and got, got
 
 
 def test_the_loader_refuses_an_untyped_rows_counterparty_that_is_no_operand(monkeypatch):

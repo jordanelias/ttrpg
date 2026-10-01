@@ -1618,7 +1618,8 @@ rosters:
       SOMEBODY THEY KNOW rather than with the question's referent. A subset of `requires_operands`,
       refused at import otherwise (`data/requires.py`). `decision/options.py::operand_bags` forms one
       operand bag per known person, and only for a row whose typed cell binds `subject` SEPARATELY
-      from the name -- `tell`, whose topic is `subject` and whose hearer is `to`. A row binding `to`
+      from the name -- `tell`, whose topic is `subject` and whose hearer is `to`, and since plan
+      position `14` `give`, whose Record is `subject` and whose receiver is `to`. A row binding `to`
       without `subject` (`petition`, `issue`) keeps the referent rule: what it is addressed to IS what
       it is about there, `H-94`'s single referent.
       ⚠ `claim` IS WHERE A PERSON BECOMES KNOWN, and `queries/person_q.py::known_persons` reads it:

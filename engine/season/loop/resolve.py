@@ -25,7 +25,8 @@ from ..data.rosters import STRATA
 from typing import Optional
 from ..data.matrix import Step, matrix_row
 from ..data.requires import UNKNOWN, Verdict, binding_from_act, evaluate
-from ..data.verbs import ELIGIBILITY_CLAUSE, NO_PRECONDITION, VERB_TABLE, WRITE_CLAUSE, VerbRow
+from ..data.verbs import (COUNTERPARTY_CLAUSE, ELIGIBILITY_CLAUSE, NO_PRECONDITION, VERB_TABLE,
+                          WRITE_CLAUSE, VerbRow)
 from ..gaps import Forbidden, Unspecified
 from ..loop.effects import EFFECTS
 from ..loop.predicates import REQUIRES_PREDICATES
@@ -272,6 +273,21 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
             # `verdict.failed` is the conjunct that decided it (`data/requires.py::evaluate`); a
             # predicate row and an unnamed cell carry `None`, which only a flat row reaches.
             return (False, row.refusal_for(verdict.failed) or ("act.refused",), verdict)
+    # ⚠ PLAN POSITION `14` (U7-own): THE SECOND PARTY, ASKED HERE AND NOWHERE ELSE. `ED-IN-0210`
+    # ruling 1 -- *a real interaction has a COUNTERPARTY*; a row naming its `counterparty:` operand
+    # is refused when the act names nobody there, or names the actor (the `Tenure(X, X)` fiat). The
+    # operand is read through `binding_from_act`, the one reader of an act's payload. ASKED AFTER
+    # `requires`, so every refusal a row already keys to a conjunct keeps its attribution, and only
+    # an act that passed its whole precondition reaches this. `opening_set` declines the same case
+    # person-side, so no computed act is ever refused here; it replaces the per-effect copy
+    # `_eff_petition` carried (a petition addressed to its petitioner).
+    if row.counterparty:
+        other = binding_from_act(a).get(row.counterparty)
+        if other is None or other == a.actor:
+            TRACE.decision(f"{a.verb} by {a.actor}: no second party on `{row.counterparty}`",
+                           "ED-IN-0210", chose="emit the refusal",
+                           alternatives=["admit a self-relation (a fiat)"])
+            return (False, row.refusal_for(COUNTERPARTY_CLAUSE) or ("act.refused",), verdict)
     return (True, (), verdict)
 
 

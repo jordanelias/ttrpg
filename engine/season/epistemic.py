@@ -746,8 +746,9 @@ def _term_who(w: "World", e: "Event", act) -> Optional[str]:
 
 def _term_why(w: "World", e: "Event", act) -> Optional[str]:
     """ALWAYS `None`, AND THAT IS A SCOPE DECISION, NOT AN IMPOSSIBILITY. `R8.4` says the engine
-    *"forgets the motive before the act executes"*, and that overstates it: `Candidate.why` is
-    dropped at `pack_scenes`, but the question that occasioned an act survives one hop away --
+    *"forgets the motive before the act executes"*, and that overstates it: the Candidate carries no
+    motive (its `why` was read by nothing and plan position `14` removed it), but the question that
+    occasioned an act survives one hop away --
     `Act.scene` names the Scene, the driver's `scenes[...]` holds it, and `Scene.occasion.source`
     is the question source (the same lookup `loop/resolve.py`'s `_occasion_ids` makes). It is not
     on the Act, and these readers take `(w, e, act)` with no driver, so recovering it means

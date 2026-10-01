@@ -447,10 +447,15 @@ class Candidate:
     ⚠ AND THE FIELD IS NEVER PARTIAL. A form whose operands cannot all be bound forms NO
     Candidate (`operands_for` returns `None`), because an act minted with a hole is refused by the
     fold for a reason that is about the INSTRUMENT, and once `W-B` deposits observations that
-    refusal becomes a FALSE BELIEF held by everyone who witnessed it."""
+    refusal becomes a FALSE BELIEF held by everyone who witnessed it.
+
+    ⚠ S17's THIRD FIELD, `why`, IS GONE (plan position `14`, CANDIDATE-WHY). `opening_set` wrote the
+    question's source into it and nothing ever read it: `pack_scenes` dropped it, and the question
+    that occasioned an act is recovered from `Scene.occasion` instead (`epistemic._term_why`'s
+    docstring). `04` licenses a reader or a removal, never a hole row; with no reader in sight, it
+    is removed -- a field nothing reads is the dead carrier `ID-13` refuses."""
     verb: str
     subject: Optional[str] = None
-    why: str = ""
     operands: dict = field(default_factory=dict)
 
 
