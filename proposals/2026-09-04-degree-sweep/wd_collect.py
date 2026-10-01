@@ -278,7 +278,8 @@ def main() -> int:
                           f"ranked list): {cc['perturbations_applied']} fork streams perturbed, "
                           f"genuine {cc['genuine']}, DIVERGED {cc['diverged']} -> "
                           f"detected_over_base {cc['detected_over_base']} (legacy detected "
-                          f"{cc['detected']})")
+                          f"{cc['detected']}; every genuine fork DIVERGED, the reading a working "
+                          f"comparator owes: {cc['detected_all_genuine']})")
         if not cc["detected_over_base"]:
             # ⚠ DIAGNOSED BY EXECUTION 2026-10-01 (it was a null at both cells on 2026-09-30, and
             # the first writing of this branch called its cause undiagnosed): the old plant rewrote

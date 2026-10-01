@@ -767,7 +767,7 @@ rosters:
       ⚠ ONLY THE `Wounded` EDGE'S `above` IS A SWEPT FIXTURE -- `Fixtures.combat_wounded_above`,
       `None` meaning THIS ROW'S value (so `0` is authored once, here). The arms are on `H-98`:
       `0` (SHIPPED: any wound), `1` (the first wound is not enough), and `max_wounds` (the count
-      has reached the engine's own cap). `wounds` is capped by the tracker at `max_wounds + 1`, so
+      must EXCEED the engine's own cap: a subject sitting exactly AT `max_wounds` reads Untouched). `wounds` is capped by the tracker at `max_wounds + 1`, so
       `wounds > max_wounds` holds only for a subject who reached the cap and is still standing --
       NOT for nobody; it is the arm at which the `Wounded` band shrinks to that one case.
       ⚠ THIS IS NOT THE FOURTH BAND. A decisive-vs-narrow split has no source in the data and is not
