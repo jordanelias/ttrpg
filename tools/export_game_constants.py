@@ -98,13 +98,9 @@ COLLISIONS = {
         'reason': "M_MAX is the kernel's tanh multiplier ceiling (sigma_leverage), not a Momentum cap. "
                   "Momentum 0-4 has no scalar owner in engine/ today. Not a divergence.",
     },
-    'OB_CAP': {
-        'python_name': 'settlements.SEIZURE_OB_CAP',
-        'python_value': -4,
-        'gd_value': 20,
-        'reason': "SEIZURE_OB_CAP bounds a mass-seizure Ob MODIFIER (negative); the game's OB_CAP is the "
-                  "absolute Ob ceiling. Not a divergence.",
-    },
+    # OB_CAP (vs `settlements.SEIZURE_OB_CAP`, -4) LEFT THIS TABLE at plan position `29c` (2026-10-01): the
+    # look-alike was `systems/settlements/sim/infrastructure.py`'s mass-seizure Ob modifier bound, deleted with
+    # that tree, so there is no Python constant of that name left to mistake for the port's OB_CAP.
 }
 
 # Real disagreements between the oracle and the port. These are NOT closed by copying a number —

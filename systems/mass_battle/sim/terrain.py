@@ -11,10 +11,11 @@ not point at its `.designs/` path.]
 ⚠ CORRECTION TO CANON'S OWN TEXT, already flagged in
 proposals/2026-09-25-squad-engagement-synthesis.md (A7): the data lives at
 `systems/settlements/valoria_geography_v30.yaml`, key `terrain:` (typed polygons) — NOT
-`designs/territory/...::terrain_polygons`, stale in both path and key. `systems/settlements/sim/
-registry.py`'s `_GEOGRAPHY_YAML` is the existing, single-owner loader for this same file (settlement
-population); this module reads the same file's `provinces:` and `terrain:` keys directly rather than
-routing through that settlement-shaped API, since neither key it needs is exposed there.
+`designs/territory/...::terrain_polygons`, stale in both path and key. This module reads the file's
+`provinces:` and `terrain:` keys directly through its own `_GEOGRAPHY_YAML`; it shares that loader with
+no other module since plan position `29c` deleted `systems/settlements/sim/registry.py` (the settlement
+population loader, which had a second `_GEOGRAPHY_YAML` for the same file). `engine/season/harness/
+populated.py` reads the same file by its own path (`GEOGRAPHY`).
 **Fortification is NOT read from this file** — see `terrain_row_for_territory`'s own docstring for why.
 
 SIMPLIFICATION, disclosed rather than hidden: "dominant polygon by area weight" would need true

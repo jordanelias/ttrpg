@@ -95,7 +95,7 @@ composition_roles:
   #   vote's verb content is `levy`/`open_case`/`determine`/`issue` + `march`.
   #   `world_gen_settlements` -- read by `game_state.create_world`; the season's world is built by
   #   `engine/season/harness/populated.build_realm`. `systems/settlements/sim/registry.populate_from_geography`
-  #   keeps its function and loses its only role until `29c` deletes the tree.
+  #   lost its only role there and was deleted with the rest of that tree at `29c` (2026-10-01).
   # The deleted files are retrievable through their `references/restructure_ledger.md` rows.
   #
   # Exactly one role remains. ID-13 applies to the next row added: a role no caller requires is not declared.
@@ -669,13 +669,12 @@ modules:
   - module: settlement_layer
     registry_system: "settlement_layer"   # Key Type Registry vocabulary
     doc: .designs/systems/settlements/reference/settlement_layer_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    sim_module: systems/settlements/sim/settlement.py   # OI-54 (ED-IN-0097, W4): matches
-      # mechanics_index.yaml's `settlement_state` entry verbatim; content verified directly
-      # (Prosperity/Order/derived Local-Economy computation, §1.3). Legitimacy/Popular Support
-      # (this contract's §1.8 LPS-2e state row) are a SEPARATE file,
-      # systems/settlements/sim/registry.py's `Settlement.legitimacy`/`.popular_support` fields
-      # (verified directly, marked PRE-LPS-1/PORT-BLOCKING there) — disclosed split, not folded
-      # silently into settlement.py.
+    sim_module: none   # RETIRED AT PLAN POSITION `29c` (2026-10-01). It was `systems/settlements/sim/settlement.py`
+      # (OI-54: the §1.3 Prosperity/Order/Local-Economy computation), with the Legitimacy/Popular Support
+      # fields in the sibling `registry.py`; the whole `systems/settlements/sim/` tree is deleted (each file has
+      # an exact row in `references/restructure_ledger.md`, ref 5c5d8ec6). The season's settlement is a `Rung`
+      # with `Site`s (`Site.condition`, `world_q.fortification_of`). The row is kept, not deleted: removing a
+      # contract row is its own change, and `doc:` above still resolves.
     scales: [settlement, territory]
     resolver: deterministic_accounting
     state:
@@ -742,10 +741,10 @@ modules:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
     wiring:
       build: design
-      godot: python-oracle
+      godot: no-oracle
       port_rank: 3
       parity: key-log
-      note: territory/ substrate built but unwired; Mandate aggregation (7T/(T+6)) unbuilt.
+      note: its code (the `systems/settlements/sim/` tree, formerly "territory/ substrate built but unwired") was deleted at `29c`, so godot is reset to the vocabulary's zero-code state (was python-oracle) and build stays `design`; the Mandate aggregation (7T/(T+6)) was never built; `port_rank` is the pre-deletion audit verdict and is not re-derived here.
 
   - module: settlement_economy
     registry_system: "settlement_economy"   # Key Type Registry vocabulary

@@ -755,13 +755,13 @@ mechanics:
     gd_applicable: [GD-2]
     notes: "GD-2 mandatory trigger: Accord <= 3 ungarrisoned territory."
 
-  # ─── TERRITORY (systems/settlements/sim/) ──────────────────────────────────────────
+  # ─── TERRITORY (systems/settlements/sim/ — code deleted at plan position 29c; the rows are design intent) ──
 
   settlement_state:
     scale: territory
     faction: universal
     canon_sources: ["systems/settlements/settlement_layer_v30.md"]
-    sim_module: systems/settlements/sim/settlement.py
+    sim_module: null    # was systems/settlements/sim/settlement.py; deleted at plan position 29c
     test_status: not_implemented
     notes: "Order / Prosperity / Population stats. Tier 2 gap per gap_analysis.md."
 
@@ -771,7 +771,7 @@ mechanics:
     canon_sources:
       - "systems/settlements/settlement_layer_v30.md"
       - "tests/sim/v17-integration/gap_analysis.md"
-    sim_module: systems/settlements/sim/infrastructure.py
+    sim_module: null    # was systems/settlements/sim/infrastructure.py; deleted at plan position 29c (its readers are Site.condition / world_q.fortification_of)
     test_status: not_implemented
     notes: "Religious Buildings + Templar Stations + Inquisitor Bases + Forts. Canon-declared, implementation pending."
 
@@ -781,14 +781,14 @@ mechanics:
     canon_sources:
       - "systems/settlements/settlement_adjacency_v30.md"
       - "systems/settlements/valoria_geography_v30.yaml"
-    sim_module: systems/settlements/sim/adjacency.py
+    sim_module: null    # was systems/settlements/sim/adjacency.py; deleted at plan position 29c, no successor (the season has no province graph)
     test_status: not_implemented
 
   territory_temperaments:
     scale: territory
     faction: universal
     canon_sources: ["systems/settlements/territory_temperaments_v30.md"]
-    sim_module: systems/settlements/sim/temperaments.py
+    sim_module: null    # was systems/settlements/sim/temperaments.py; deleted at plan position 29c
     test_status: not_implemented
     notes: "5-temperament typology."
 

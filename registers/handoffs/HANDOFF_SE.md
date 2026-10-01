@@ -23,6 +23,6 @@
 |---|---|
 | Do not re-propose `band_floors.person` as new — `band_floors["body"]` already exists and is live-read | `ED-SE-0052` |
 | Do not re-propose hearth larders or any delivery move across a `contain` edge — matter moves only by `transfer` | `ED-SE-0053` |
-| Do not re-propose cutting `fort_level` / `facility_tier` — both have live engine readers behind a blocking round-trip `--check` | `ED-SE-0052` |
+| Do not cut `fort_level` / `facility_tier` as a side effect of another position: both stay declared in `references/descriptor_registry.yaml` behind the blocking `export_descriptors.py --check`, so a cut is an `ID-13` change of its own. The two live readers `ED-SE-0052` named are retired (`engine/autoload/game_state.py` at `29b`, `systems/settlements/sim/registry.py` at `29c`); the season reads fortification as `Site.condition` through `world_q.fortification_of` | `ED-SE-0052` |
 | Do not cite line numbers into a dated handoff section as stable — cite by heading text; a rewrite moves the body | prior repair recorded in `HANDOFF_SE_history.md` |
 | Do not point at `systems/**` paths for SE design docs — `systems/` holds no `.md`; use `CURRENT.md`'s Settlement row (bare filename) | `ED-IN-0231`, CLAUDE.md §1 |

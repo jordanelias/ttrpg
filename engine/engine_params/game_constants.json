@@ -30,12 +30,6 @@
       "python_value": 1.5,
       "gd_value": 4,
       "reason": "M_MAX is the kernel's tanh multiplier ceiling (sigma_leverage), not a Momentum cap. Momentum 0-4 has no scalar owner in engine/ today. Not a divergence."
-    },
-    "OB_CAP": {
-      "python_name": "settlements.SEIZURE_OB_CAP",
-      "python_value": -4,
-      "gd_value": 20,
-      "reason": "SEIZURE_OB_CAP bounds a mass-seizure Ob MODIFIER (negative); the game's OB_CAP is the absolute Ob ceiling. Not a divergence."
     }
   },
   "divergences": {
