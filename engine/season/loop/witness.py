@@ -626,8 +626,19 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 # a claim a reader could not tell apart is suppressed -- and at `Partial`
                 # "a claim a reader could not tell apart" means the LOSSY value, since that
                 # is what this deposit is about to assert.
+                # ⚠⚠ `T5` (`ED-IN-0282`): THE GUARD SKIPS ONLY A CLAIM THE HEARER HOLDS ON THE SAME
+                # ORIGIN. A held copy with an EMPTY chain (firsthand, seen, inferred -- anything not
+                # told) always skips: that is the 175-of-180 fix above and it is unchanged. A held
+                # TOLD copy skips only when its `chain[0]` is the incoming claim's, because one
+                # origin heard by two routes is one witness (`LedgerReader._support` counts an
+                # origin once per value anyway, so a second copy would only cost a `ledger_cap`
+                # slot). A told copy from a DIFFERENT origin does not skip: the second claim is how
+                # two independent tellers come to outweigh one. The incoming chain is
+                # `_held.chain + (_act.actor,)`, so its origin is `_held.chain[0]`, else the teller.
+                _origin = _held.chain[0] if _held.chain else _act.actor
                 if not any(c.subject == _held.subject and c.predicate == _held.predicate
-                           and c.value == _told_val for c in p.ledger):
+                           and c.value == _told_val
+                           and (not c.chain or c.chain[0] == _origin) for c in p.ledger):
                     # ⚠ NO SECOND DEDUP SET HERE, AND THE REASON IS THE ONE THAT RETIRED THE TELLER
                     # EXCLUSION TWO SCREENS UP. A `seen_told_by_pid` stood here, mirroring
                     # `seen_obs_by_pid`. But `World.write` applies synchronously (`world.py:408`),

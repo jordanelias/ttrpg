@@ -224,6 +224,17 @@ are identical to `4bd5cee`'s.
 same `chain[0]`. Ledgers inflate (the eviction hazard), so re-run the H-40 sweep in this commit.
 Subject: `[design] told deposits dedup by origin; support is noisy-OR over origins`.
 
+**As built (the T5 commit):** the guard (`loop/witness.py`) skips only a held copy with `chain == ()` or the same
+`chain[0]`; three falsifiers in `test_told_by_channel.py`. `said_of` is UNCHANGED, by ruling: the event-kind claim
+`(subject, news.told, True)` is real tellable content, not noise. Measured at the shipped `confidence_default`: in the
+realm and the corpus no told claim exceeds one hop (realm, 1 season: 3 chained claims, all length 1; 3 seasons: none;
+corpus: 0 told claims), and `said_of` picks an empty-chain claim at all 378 / 1,480 / 16,810 calls (realm 1 season /
+realm 3 seasons / corpus); where a teller holds both the event-kind claim and a told content claim at one
+`(when, confidence)` (3 / 43 teller-calls) a newer claim wins. In `tiny_world` the tie goes to the event-kind claim
+(chain `()`). So a content retelling cannot reach two hops at the shipped default; a fix is a design call, such as one
+Candidate per held claim about the subject. Controls unmoved: realm hash `72af02fb…`, `corpus_run 0` md5 `125fd053…`,
+PROBE FLIPS 0, `told_redeposits` 0, H-40 sweeps green.
+
 **T6.** `record(p, x) = 1 + record_gain·(agree − dis)/(agree + dis)`, pairing p's claims told by x with
 p's firsthand claims on the same `(subject, predicate)`, on `agreement`'s loop shape; zero pairs give
 1.0 (deliberately unlike `standing_of`). Wire into `teller_weight`; fixture `record_gain`, control 0.

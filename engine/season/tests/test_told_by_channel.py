@@ -32,7 +32,7 @@ from ..harness import probes as P
 from ..loop import witness as WITNESS_MODULE
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries.person_q import said_of
-from ..state.carriers import Act, Claim, Event, Tenure
+from ..state.carriers import Act, Claim, Event, Said, Tenure
 from ..state.ids import H
 
 ACTOR = "p_other"
@@ -812,3 +812,130 @@ def test_t4_a_telling_to_an_absent_hearer_is_refused_and_a_present_one_hears():
         checked += 1
     assert checked == 2
     assert not any(c.chain for c in w.persons["p_king"].ledger), "the absent hearer was told anyway"
+
+
+# ---------------------------------------------------------------------------------------------
+# T5 (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282): THE TOLD DEDUP IS BY ORIGIN. A told
+# deposit is skipped only if the hearer holds the triple with an EMPTY chain (firsthand, seen,
+# inferred) or with the SAME `chain[0]`. A held copy from a DIFFERENT origin does not skip: that
+# second claim is what `LedgerReader._support`'s noisy-OR counts.
+# ---------------------------------------------------------------------------------------------
+
+_T5_SUBJECT, _T5_PRED = "Hh", "stores:grain"
+
+
+def _t5_world(fx=None):
+    """`tiny_world` plus a `tell` helper that drives one telling through the REAL WITNESS barrier
+    with a hand-built `Said` (so the guard is observed alone, not `said_of`'s pick). Returns
+    `(w, tell, told)`: `told(pid)` is the hearer's told claims on the cell; `tell(teller, chain,
+    value)` advances the tick (the presence index is built once per barrier) and tells whoever
+    stands with the teller."""
+    w = P.tiny_world() if fx is None else P.tiny_world(fx)
+    d = SeasonDriver(w)
+    n = [0]
+
+    def move(pid, rung):
+        edge = next(t for t in w.tenures if t.subject == pid and t.kind == "contain" and t.live)
+        edge.object = rung
+
+    def tell(teller, chain, value, conf=100):
+        n[0] += 1
+        w.tick += 1
+        said = Said(_T5_SUBJECT, _T5_PRED, value, conf, tuple(chain))
+        act = Act(id=f"a_t5_{n[0]}", actor=teller, verb="tell",
+                  payload={"subject": _T5_SUBJECT, "said": said})
+        w.acts.append(act)
+        ev = Event(H(w.world_seed, w.tick, teller, f"ev:news.told:{act.id}"), "news.told",
+                   [], [act.id], w.tick, "Success", ())
+        w.log.append(ev)
+        d.act_of[ev.id] = act
+        d.witness(mint_token(w, WriteClass.INTERIOR), [ev])
+
+    def told(pid):
+        return [c for c in w.persons[pid].ledger
+                if c.source == "told_by" and c.subject == _T5_SUBJECT and c.predicate == _T5_PRED]
+
+    for pid in ("p_mid", "p_other", "p_low"):
+        move(pid, "S")          # everybody but the King stands with `p_high`
+    return w, tell, told
+
+
+def test_t5_one_origin_through_two_tellers_deposits_once():
+    """ONE ORIGIN HEARD BY TWO ROUTES IS ONE WITNESS. `p_low` is the origin; `p_mid` and then
+    `p_other` each retell `p_low`'s claim to `p_high` (chains `(p_low, p_mid)` and `(p_low,
+    p_other)`, one origin). The second is skipped: `p_high` holds exactly the first. The positive
+    control is the FIRST telling, which does deposit, and `test_t5_two_origins_...` below, where a
+    telling from a different origin does too.
+
+    MUTATION (run 2026-10-01, `T5`): the guard's origin clause removed so any held TOLD copy of the
+    triple fails to skip (`(not c.chain)` alone) -- `p_high` then holds two and this goes RED on the
+    count. Restored, GREEN."""
+    w, tell, told = _t5_world()
+    assert told("p_high") == []
+    tell("p_mid", ("p_low",), 8)
+    first = told("p_high")
+    assert len(first) == 1 and first[0].chain == ("p_low", "p_mid"), [c.chain for c in first]
+    tell("p_other", ("p_low",), 8)
+    got = told("p_high")
+    assert [c.chain for c in got] == [("p_low", "p_mid")], (
+        f"`p_high` holds {[c.chain for c in got]} -- one origin was deposited twice")
+    checked = len(told("p_mid")) + len(told("p_other"))
+    assert checked >= 1, "no other hearer was told either: the telling never reached WITNESS"
+
+
+def test_t5_two_origins_deposit_twice_and_outrank_one():
+    """TWO INDEPENDENT ORIGINS ARE TWO CLAIMS, AND THEY OUTRANK ONE. `p_mid` and `p_other` each tell
+    `p_high` the SAME triple (value 5) firsthand -- chains `(p_mid,)` and `(p_other,)`, origins A and
+    B -- and then `p_low`, the latest teller by a tick, tells a DIFFERENT value (0), one origin. The
+    old guard skipped B (the triple was held, told); now both land. Read at the SHIPPED `told_weight`
+    0.5 (no stance toward any of them, `rank` 0) each one-hop claim weighs 0.5, so value 5 has support
+    1 - 0.5 x 0.5 = 0.75 against 0.5 for value 0, and 5 wins although 0 is newer; with ONE copy of 5
+    the two tie on support and the newer 0 would win.
+
+    MUTATION (run 2026-10-01, `T5`): the old guard restored (skip on any held copy of the triple) --
+    B is dropped, value 5 reads support 0.5 and this goes RED on the count of claims and on the read.
+    Restored, GREEN."""
+    from ..decision.options import teller_weight
+    from ..queries.person_q import LedgerReader
+
+    w, tell, told = _t5_world()
+    p = w.persons["p_high"]
+    assert all(r[0] not in ("p_mid", "p_other", "p_low") for r in p.stance)
+    tell("p_mid", (), 5)
+    tell("p_other", (), 5)
+    tell("p_low", (), 0)
+    five = [c for c in told("p_high") if c.value == 5]
+    assert sorted(c.chain for c in five) == [("p_mid",), ("p_other",)], [c.chain for c in five]
+    weigh = teller_weight(p, _t3_fx(0.5, 0.5, 0.5))
+    reader = LedgerReader(p.ledger, weigh)
+    cell = [c for c in p.ledger if c.subject == _T5_SUBJECT and c.predicate == _T5_PRED
+            and c.source == "told_by"]
+    support = dict(zip((c.chain[0] for c in cell), reader._support(cell)))
+    assert support == {"p_mid": 0.75, "p_other": 0.75, "p_low": 0.5}, support
+    assert reader.read(_T5_SUBJECT, _T5_PRED) == 5, (
+        "two independent origins did not outrank one newer single-origin claim")
+    # the control: the same ledger with ONE copy of 5 gives the newer value
+    one = [c for c in cell if c.chain != ("p_other",)]
+    assert LedgerReader(one, weigh).read(_T5_SUBJECT, _T5_PRED) == 0
+
+
+def test_t5_a_firsthand_holder_still_skips():
+    """THE 175-OF-180 FIX STANDS. A hearer holding the triple with an EMPTY chain -- firsthand, and
+    `inferred` -- receives no told copy, even from an origin they have never heard; `p_other`, who
+    holds nothing, hears the same telling and gets one (the positive control: the telling did reach
+    WITNESS). The corpus-wide `told_redeposits == 0` assertion
+    (`test_season_shape.py`, beside `by_sig`) is the same property at scale.
+
+    MUTATION (run 2026-10-01, `T5`): the empty-chain clause removed (`c.chain[0] == _origin`
+    alone) -- both holders are told and this goes RED on the first assertion. Restored, GREEN."""
+    for source in ("firsthand", "inferred"):
+        w, tell, told = _t5_world()
+        held = Claim("c_held", "p_high", _T5_SUBJECT, _T5_PRED, 8, 0, source, 100, "own")
+        assert held.chain == ()
+        w.persons["p_high"].ledger.append(held)
+        tell("p_mid", (), 8)
+        assert told("p_high") == [], f"a {source} holder was told what they already hold"
+        tell("p_low", ("p_mid",), 8)
+        assert told("p_high") == [], f"a {source} holder was told the same triple by another origin"
+        assert len(told("p_other")) == 1, "the positive control: a hearer who holds nothing is told"
+

@@ -3842,7 +3842,7 @@ rows:
       claim at the same tick, the former at `confidence_default` (100) and so first on a tie, and
       `said_of` picks it (empty chain), so the next hearer's chain is `(teller,)`, never
       `(origin, teller)`; `test_t3b_a_witnessed_retelling_...` sweeps `confidence_default` to 50 for
-      this reason. Excluding event-kind predicates from the pick (as `seen` is) is T5's call."
+      this reason. T5 DECIDED NOT TO EXCLUDE THEM: the event-kind claim `(subject, news.told, True)` is tellable content (THAT a telling happened), so `said_of` is unchanged and one Candidate per held claim about the subject is the fix, a later position's."
     source:    "telling workplan `T3a` (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282), 2026-10-01"
 
   - id:        H-177
