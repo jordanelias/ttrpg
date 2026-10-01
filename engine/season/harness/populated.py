@@ -72,7 +72,8 @@ from ..queries.world_q import RESIDE_KIND, capacity, home_of as home_of_q
 from ..gaps import Forbidden, Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.rosters import (BODY_FACTION, FACTIONS, OFFICES_BY_HOLDER, ROLE_TEMPLATE_OF,
-                            faction_prop_id, load_yaml, remit_or_default, title_domain)
+                            faction_prop_id, load_yaml, remit_or_default, territory_rung_id,
+                            title_domain)
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..state.carriers import Office, Person, Proposition, Rung, Site, Tenure
@@ -440,7 +441,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         duchy_of[fac_name] = did
 
     for tid, terr in geo["provinces"].items():          # geography's stale key; the rows are territories
-        rid = f"terr_{tid}"
+        rid = territory_rung_id(tid)                    # one owner: data/rosters.py
         w.rungs[rid] = Rung(rid, "territory")
         holder = str(terr.get("faction") or "")
         # ⚠ A FOREIGN TERRITORY GETS NO PARENT, AND THAT IS THE POINT RATHER THAN A GAP. Schoenland
@@ -459,7 +460,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     for sid, s in geo["settlements"].items():
         rid = f"set_{_slug(sid)}"
         w.rungs[rid] = Rung(rid, "settlement")
-        w.add_tenure(Tenure(f"t_{rid}_in", rid, f"terr_{s['territory']}", "contain", 0))
+        w.add_tenure(Tenure(f"t_{rid}_in", rid, territory_rung_id(s["territory"]), "contain", 0))
 
     # -- the authored layers: quarters, then buildings -------------------------
     # ⚠ A SETTLEMENT WITH NO VENUE ROW WOULD SILENTLY HOLD NOBODY, so an unknown type RAISES
@@ -521,12 +522,11 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     # own scope -- there is no second garrison-bearing rung kind to seed against, and `condition
     # scale` matches every other Site's starting value, so a fresh realm starts every settlement
     # equally (un)fortified rather than asserting a fortification level nobody has ruled.
-    # ⚠ NOTHING CONSULTS THIS YET (`H-150`, `hole_register.yaml`). `seam/wrappers/mass_battle.py`
-    # passes `terrain=None` unconditionally and has no other parameter to carry a fortification
-    # bonus through, so seeding this Site changes `w.sites`, `world_q.density`'s composition, and
-    # nothing else -- no fight's outcome moves. Wiring it is separate, unruled work: HOW MUCH a
-    # fortification level should shift a field battle is an invented magnitude, `H-148`'s own
-    # shape, and H-150 is where that stays tracked rather than guessed here.
+    # ⚠ READ ON THE BATTLE PATH SINCE PLAN POSITION `20-iv` (`H-150`, `hole_register.yaml`).
+    # `seam/wrappers/mass_battle.py` reads `world_q.fortification_of` at the march target and hands
+    # it, with the target's territory, to `terrain.py::terrain_row_for_territory`: a garrison at
+    # any positive condition makes the field `WALLS`, A.9's defender DR bonus. A garrison worn to
+    # condition 0 is no wall. (This comment said "nothing consults this yet" until then.)
     # ⚠ `governance_spine.build`, `corpus_run.build_at`, `probes.tiny_world` and
     # `headless.build_world` do NOT seed a garrison -- the dwelling precedent immediately above is
     # `build_realm`-and-`governance_spine` together; H-150's own docstring and `fortification_of`'s
@@ -812,9 +812,9 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         lead_cid = cast.faction_leader(held_by)
         lead_pid = f"p_{_slug(lead_cid)}" if lead_cid else None
         if lead_pid is None or lead_pid not in w.persons:
-            unheld_for_want_of_a_head.append((f"terr_{tid}", held_by))
+            unheld_for_want_of_a_head.append((territory_rung_id(tid), held_by))
             continue
-        w.add_tenure(Tenure(f"t_hold_terr_{tid}", lead_pid, f"terr_{tid}", "hold", 0))
+        w.add_tenure(Tenure(f"t_hold_terr_{tid}", lead_pid, territory_rung_id(tid), "hold", 0))
     # Reported by `census`, never read by the loop — the same treatment `_tie_census` gets.
     w._unheld_for_want_of_a_head = unheld_for_want_of_a_head
 

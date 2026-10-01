@@ -36,8 +36,16 @@ not to a simultaneous change in how armies are built.
 only caller (`faction_action._try_conquest`). What is left is the season-facing path: `resolve_field`,
 `_weighted_unit`, `_run_and_grade`. The paragraphs above and below that name the deleted three are the
 history of the 2026-08-24 port and the d.1 change, kept as written; the code is in git at the parent of
-the deleting commit. `_GarrisonStub`, `_round_half_up` and the `_STA_MORALE_*` bounds are left standing
+the deleting commit. `_GarrisonStub`, `_round_half_up` and the `_STA_MORALE_*` bounds were left standing
 for `20-iv`, which decides what the season path's morale source is.]
+
+[UPDATED 2026-10-01, plan position `20-iv`]: `resolve_field` now takes its morale-start from season state
+-- each side's mean stance toward its own faction, the carrier `_eff_march` writes a lost field's
+"decrease in morale" onto (`_morale_start`'s docstring) -- and its terrain from the target's territory
+and garrison (`terrain_row_for_territory`, with A.9's Walls DR applied in `_run_and_grade`).
+`_round_half_up` and the morale bounds (renamed `_MORALE_FLOOR`/`_MORALE_CEIL`, no longer Stability's)
+have that reader. `_GarrisonStub` had none once `resolve_mass_battle` went, and is deleted (ID-13); it is
+in git at `79d690ce`.
 
 [UPDATED 2026-09-26, d.1 / ED-MB-0068]: morale is no longer part of the flat, carried-over default
 this header describes — it is now derived from `faction.Sta` (`_morale_start_from_stability`).
@@ -54,7 +62,8 @@ from systems.mass_battle.sim import rngsource
 from systems.mass_battle.sim.config import CELL_CAP
 from systems.mass_battle.sim.hierarchy.units import Subunit, Unit
 from systems.mass_battle.sim.orchestration import run_battle
-from systems.mass_battle.sim.terrain import FOREST_BROKEN
+from systems.mass_battle.sim.terrain import (FOREST_BROKEN, WALLS, WALLS_DEFENDER_DR,
+                                             terrain_row_for_territory)
 
 #: Size-ratio -> degree thresholds. CARRIED OVER VERBATIM from the pre-port adapter so that the
 #: golden movement this commit causes is attributable to the engine swap and nothing else. These are
@@ -70,59 +79,64 @@ OVERWHELMING_DEFENDER_MAX = 0.25   # [canonical: inherited from the pre-port ada
 PARTIAL_ATTACKER_MIN = 0.50        # [canonical: inherited from the pre-port adapter — see note above]
 
 
-class _GarrisonStub:
-    """Minimal faction-shaped stub for an uncontrolled territory's garrison.
+#: [d.1, ED-MB-0068; re-sourced at plan position `20-iv`] Canon's Morale ladder, the range a
+#: morale-start must land in: `mass_battle_v30.md:230-231` states it directly ("Morale (1-7)").
+#: These were `_STA_MORALE_FLOOR`/`_CEIL` while `Faction.Sta` (0..7) was the source; the source is
+#: gone (`29b`) and the ladder is not, so the names lose the `STA`. The floor is 1, not 0: rout
+#: fires at morale <= 0, so a side cannot START already routed -- the same reading the d.1
+#: derivation took, and still this implementation's own, Jordan-vetoable.
+_MORALE_FLOOR = 1  # [JUSTIFIED: mass_battle_v30.md:230-231 states canon's Morale range directly ("Morale (1-7)") — this is the direct citation, not an inference from the separate in-battle erosion floor at :254]
+_MORALE_CEIL = 7  # [JUSTIFIED: Morale's canon ceiling, mass_battle_v30.md:230-231, "Morale (1-7)"]
 
-    [GAP: defenderless-territory garrison strength lacks canonical spec; Mil=1.5 roughly matches the
-     pre-mass-battle v17 Ob 2 vs Ob 4 single-roll spread. Carried over unchanged.]
-    """
-
-    #: [d.1, ED-MB-0068] No strategic Faction backs an uncontrolled territory, so there is no
-    #: Stability to derive a morale-start from. Held at the PRE-d.1 flat default so an
-    #: uncontrolled garrison's starting morale is UNCHANGED by this commit — any golden movement
-    #: this commit causes is then attributable to real factions' Stability alone, not to a
-    #: simultaneous change in the garrison stub.
-    Sta = 5.0  # [canonical: inherited default — pre-d.1 flat morale-start, unchanged; see GAP above]
-
-    def __init__(self, name, Mil):
-        self.name = name
-        self.Mil = Mil
-        self.Sta = 5.0  # [canonical: inherited default — pre-d.1 flat morale-start, unchanged; see GAP above]
-
-
-#: [d.1, ED-MB-0068] `Faction.Sta` floors at 0 / ceilings at 7 (registry-declared — the
-#: descriptors module's per-stat bounds function, keyed 'Sta', confirmed by
-#: test_faction_stat_bounds.py; deliberately not spelled as a literal call above, since
-#: `massbattle.py` never actually calls that function itself — only `adjust` may, per
-#: tests/valoria/test_faction_write_sweep.py's single-caller check — and writing the name
-#: immediately followed by an open paren here would read as a second call site to that
-#: check's own text search). MORALE IS A
-#: DIFFERENT, NARROWER LADDER, NOT the same range: `mass_battle_v30.md:230-231` states canon's own
-#: Morale range directly ("Morale (1-7)"), so `_STA_MORALE_FLOOR` is 1, not 0 — a Sta=0 faction
-#: still has to land somewhere inside Morale's 1-7, not fall outside it.
-_STA_MORALE_FLOOR = 1  # [JUSTIFIED: mass_battle_v30.md:230-231 states canon's Morale range directly ("Morale (1-7)") — this is the direct citation, not an inference from the separate in-battle erosion floor at :254]
-_STA_MORALE_CEIL = 7  # [JUSTIFIED: mirrors Faction.Sta's own registry ceiling (test_faction_stat_bounds.py) and matches Morale's canon ceiling (mass_battle_v30.md:230-231, "Morale (1-7)")]
-# Floor=1 (not 0) is THIS IMPLEMENTATION'S OWN choice, Jordan-vetoable — see the derivation's own
-# docstring below for the full basis, including why it is ALSO consistent with :254's separate
-# in-battle erosion floor and with rout firing at morale<=0.
+#: The morale-start of a side whose members' stance toward their own faction is zero -- no field
+#: lost, nothing written. It is the flat value every strategic and season unit started at before
+#: d.1 (`_faction_to_unit`'s and then `_weighted_unit`'s literal `morale=5`), so a world where
+#: nobody has lost a field fights exactly as it did before `20-iv`: that is the control arm, and it
+#: is the shipped world (`build_realm` seeds no stance row on a faction id; `_morale_start`).
+_MORALE_START_BASE = 5  # [canonical: inherited default — the pre-port adapter's flat morale-start, carried by _faction_to_unit until d.1 and by _weighted_unit since; see GAP above]
 
 
 def _round_half_up(x):
-    """Round-half-AWAY-FROM-ZERO, not Python's builtin `round()` (round-half-to-even / banker's
-    rounding). `Faction.Sta` floors at 0 (registry-declared), so this only ever sees non-negative
-    input — 'away from zero' and 'half up' coincide here, no negative branch needed.
+    """Round half UP (toward +inf), not Python's builtin `round()` (round-half-to-even / banker's
+    rounding). Its input is `_MORALE_START_BASE` plus a side's mean stance, which can be negative;
+    every value below 0.5 then clamps to `_MORALE_FLOOR` in `_morale_start`, so how a NEGATIVE half
+    rounds never reaches a result, and half-up and half-away-from-zero agree on every input that does.
 
-    WHY THIS EXISTS, NOT bare `round()`: Sta moves in increments of `1 / MULTS['Sta']` = 0.1
-    (`Faction.adjust`, engine/autoload/game_state.py), and a plain Stability-Failure penalty is
-    exactly -5 granular, i.e. -0.5 Sta (`faction_action.py:490`, Govern Failure) — so Sta lands on
-    an exact .5 boundary in ordinary play, not only in theory. Python's `round()` at those
-    boundaries is asymmetric in a way that has nothing to do with game state: `round(4.5) == 4`
-    but `round(3.5) == 4` too, so a faction moving Sta 5.0 -> 4.5 (one Govern failure) loses a
-    point of morale_start (5 -> 4) while a faction moving Sta 4.0 -> 3.5 (the same failure, same
-    magnitude) does NOT (4 -> 4 either way) — an undisclosed, purely arithmetic asymmetry with no
-    mechanical basis. `_round_half_up` treats every .5 boundary the same way instead.
-    """
+    WHY THIS EXISTS, NOT bare `round()`: a side's mean stance lands on an exact .5 in ordinary play --
+    half the side lost a field at `field_morale_weight` 1 and half did not -- and `round()` at those
+    boundaries is asymmetric in a way that has nothing to do with game state: `round(4.5) == 4` but
+    `round(3.5) == 4` too, so one loss across half a side would cost a point of morale at one level
+    and nothing at the next. `_round_half_up` treats every .5 boundary the same way. (The reason was
+    first written for `Faction.Sta`'s 0.1 steps, d.1; the arithmetic is the same.)"""
     return math.floor(x + 0.5)
+
+
+def _morale_start(stance):
+    """A side's starting morale from its members' mean stance toward their own faction -- plan
+    position `20-iv`, d.1 (`ED-MB-0067`: *faction state sets the morale baseline*) carried onto the
+    season path after `29b` deleted the `Faction.Sta` it read.
+
+    THE SOURCE, AND WHY IT IS THIS ONE. The season has no faction stat vector, by architecture
+    (`04`'s NEVER list: *"it never makes a faction stat vector a field of its own"*), so faction state
+    is what members hold toward the faction. Jordan's M4 ruling on a lost field (`ED-IN-0279` clause
+    (b): *"casualties only, decrease in morale, and a grudge token"*) is already built as a stance row
+    on each loser, `(own faction, -1.0, field_morale_weight)` (`loop/effects_combat.py::_eff_march`):
+    that row IS the season's morale, and until this function it had a writer and no reader on the
+    battle path (CLAUDE.md §0.1 pt 1). The provider sums it through `decision.stance_toward`, the one
+    reader of a stance row, and hands each side's weight-mean here.
+
+    THE MAPPING, AND THE ONE THING IT ASSUMES. One stance unit toward one's own faction is one point
+    of morale, added to `_MORALE_START_BASE` and clamped to canon's ladder. That identity is the
+    assumption; it adds no knob, because the magnitude is already `field_morale_weight`'s (`H-148`,
+    swept 0/1/3): while `_eff_march` is the only writer of a stance row on a faction id (measured at
+    `build_realm(0)`: its 32 seeded rows all name a person), a scale factor here would only multiply
+    that weight. At weight 0 a lost field writes a zero row and this returns the base -- the control.
+
+    NOT TAKEN: the build-time loyalty rows (`data/cast.py::stance_from_loyalty`). They name the
+    faction's LEADER, a person, not the faction, so reading them would merge two referents the
+    morale writer keeps apart; whether ideology should also stiffen an army is a separate question
+    this function does not answer."""
+    return max(_MORALE_FLOOR, min(_MORALE_CEIL, _round_half_up(_MORALE_START_BASE + float(stance))))
 
 
 #: [canonical: mass_battle_integration_v30.md §4.10 sub-step 3 — the strategic entry point. ⚠ THE
@@ -146,7 +160,7 @@ _MVP_SUBUNIT_SHAPE = dict(
 )
 
 #: SAME SHARING, FOR THE UNIT SIDE. `power`/`morale`/`morale_start` are NOT here: they are set by
-#: `_weighted_unit` itself (morale flat, because no season-side Stability exists to derive it from).
+#: `_weighted_unit` itself (morale from `_morale_start`, since plan position `20-iv`).
 _MVP_UNIT_COMMAND = dict(
     command=4,                       # [canonical: inherited default — see GAP above]
     discipline=5,                    # [canonical: inherited default — see GAP above]
@@ -178,7 +192,7 @@ _MIN_TROOPS = 1.0  # floor only -- `Unit.total_troops() == 0` divides by zero de
                    # that crash, not a claim about what a minimal army is.
 
 
-def _weighted_unit(name, weight):
+def _weighted_unit(name, weight, morale_start=_MORALE_START_BASE):
     """One `Unit`, one `Subunit`, sized by `troops=` (the Jordan-directed continuous-scale field,
     `hierarchy/units.py`: "when `troops` is set the footprint is generated from (troops,
     concentration) ... `tier` becomes vestigial") rather than by `tier`'s fixed lookup table.
@@ -187,13 +201,14 @@ def _weighted_unit(name, weight):
     tier even in continuous mode; it is inert here (troops overrides it). `concentration` is set
     to `config.CELL_CAP` -- pack as densely as the engine allows before it would open a second
     cell, the smallest-footprint reading available and not a claim about real troop density.
+    `morale_start` is `_morale_start`'s value for this side (the base when omitted); `morale` starts
+    equal to it, and the Subunit sets neither, so its `eff_morale` falls through to the Unit's.
     Every other Subunit/Unit field is the non-canonical inherited default of the pre-port adapter
     (`_faction_to_unit`, deleted at `29b`), carried via `_MVP_SUBUNIT_SHAPE`/`_MVP_UNIT_COMMAND`."""
     sub = Subunit(**_MVP_SUBUNIT_SHAPE, troops=max(float(weight), _MIN_TROOPS),
                   concentration=float(CELL_CAP))
     return Unit(name=name, faction=name, power=_SEASON_FORCE_POWER, **_MVP_UNIT_COMMAND,
-                # [canonical: same flat morale-start _GarrisonStub already uses for a Sta-less object]
-                morale=5, morale_start=5,
+                morale=morale_start, morale_start=morale_start,
                 subunits=[sub])
 
 
@@ -204,13 +219,19 @@ def _run_and_grade(unit_a, unit_b, terrain, rng):
     ⚠ CAVEATS THAT LIVED IN THE DELETED FUNCTION'S DOCSTRING AND STILL BIND THIS PATH.
     DETERMINISM: `rng` is scoped over the battle by `rngsource.using`; the canon engine drew from the
     global `random` module at seven sites, so without that holder a seeded run is unpinnable.
-    TERRAIN: only FOREST_BROKEN's speed half is attempted below, and it is INERT -- `run_battle` never
-    reads `.speed` (only `orchestration.pursuit_damage` and `run_multi_unit_battle` do, and neither is
-    reachable from here). UPHILL, WALLS, NARROW_PASS and RIVER_CROSSING are identified by
-    `terrain_row_for_territory` and not applied: canon's A.9 table gives UPHILL and WALLS a number
-    each, and what is deferred is translating that dice-pool-era number into this engine's
-    sigma/degree model. DEGREE: the bands below are the bespoke survivor-ratio thresholds carried over
-    from the pre-port adapter, not `dice_engine.degree_from_net`.
+    TERRAIN: two rows are applied, each in part. FOREST_BROKEN's speed half is INERT -- `run_battle`
+    never reads `.speed` (only `orchestration.pursuit_damage` and `run_multi_unit_battle` do, and
+    neither is reachable from here). WALLS (plan position `20-iv`, the garrisoned march target) adds
+    `terrain.WALLS_DEFENDER_DR` to the DEFENDER's (`unit_b`'s) `dr`, read live at every melee and rout
+    hit (`eff_dr` falls through to the Unit; `h_per_size`, the one field derived from `dr` at
+    construction, has no reader), so mutating it here is the same in-place shape the speed half uses.
+    WALLS' other clauses, "no flanking; Slow cannot advance", are NOT applied: this engine's one-subunit
+    season units have no flank or advance order to forbid. UPHILL, NARROW_PASS and RIVER_CROSSING are
+    identified by `terrain_row_for_territory` and not applied: UPHILL's number is a dice count
+    (+1D/-1D), which this engine reaches only through `config.SIGMA_PER_D`, a calibrated-debt
+    conversion -- the step WALLS' DR did not need, and terrain work `20-iv` (a garrison position) did
+    not take. DEGREE: the bands below are the bespoke survivor-ratio thresholds carried over from the
+    pre-port adapter, not `dice_engine.degree_from_net`.
 
     Takes `rng` directly rather than a `world`-shaped object -- this is the only thing either
     caller ever reads off `world`, so narrowing the parameter to what is actually used means
@@ -221,6 +242,8 @@ def _run_and_grade(unit_a, unit_b, terrain, rng):
             unit_a.speed = 'Standard'
         if unit_b.speed == 'Fast':
             unit_b.speed = 'Standard'
+    elif terrain == WALLS:
+        unit_b.dr += WALLS_DEFENDER_DR
 
     with rngsource.using(rng):
         # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6), the canon engine's own default]
@@ -247,7 +270,8 @@ def _run_and_grade(unit_a, unit_b, terrain, rng):
     }
 
 
-def resolve_field(w, side_a, side_b, *, terrain=None, rng=None):
+def resolve_field(w, side_a, side_b, *, territory=None, fort_level=0.0, stance_a=0.0, stance_b=0.0,
+                  rng=None):
     """THE SEASON-FACING ENTRY POINT — `04 §C.5.1`'s roster contract, reconciled with this module's
     OWN requirement for a `Unit` to hand `run_battle`.
 
@@ -271,9 +295,22 @@ def resolve_field(w, side_a, side_b, *, terrain=None, rng=None):
     either -- a real corpus side's weight sum is nowhere near this engine's calibrated battle size,
     and this function does not invent the missing conversion.
 
+    THE SEASON INPUTS (plan position `20-iv`), each a plain value the provider read off the world --
+    this module imports nothing from `engine/` and reads no carrier but `Person.weight`:
+      `territory`, `fort_level` -- the geography territory id of the place fought over and its
+          fortification (`world_q.fortification_of`, `[0.0, 1.0]`), turned into ONE A.9 row by
+          `terrain_row_for_territory` and applied in `_run_and_grade`. `side_b` is the DEFENDER, so
+          walls stiffen it. `None` territory is the lookup's own no-modifier fallback, whatever the
+          fortification, because that function asks "is this a known territory" first.
+      `stance_a`, `stance_b` -- each side's weight-mean stance toward its own faction, which
+          `_morale_start` turns into a morale-start. `0.0` (the default) is the base: the pre-`20-iv`
+          flat 5.
+    The old `terrain=` keyword, which the one caller always passed as `None`, is gone: the row is
+    derived here from the two facts that decide it, so no caller can hand in a row that disagrees.
+
     Returns exactly what `_run_and_grade` returns."""
     weight_a = sum(w.persons[pid].weight for pid in side_a if pid in w.persons)
     weight_b = sum(w.persons[pid].weight for pid in side_b if pid in w.persons)
-    unit_a = _weighted_unit("side_a", weight_a)
-    unit_b = _weighted_unit("side_b", weight_b)
-    return _run_and_grade(unit_a, unit_b, terrain, rng)
+    unit_a = _weighted_unit("side_a", weight_a, _morale_start(stance_a))
+    unit_b = _weighted_unit("side_b", weight_b, _morale_start(stance_b))
+    return _run_and_grade(unit_a, unit_b, terrain_row_for_territory(territory, fort_level), rng)

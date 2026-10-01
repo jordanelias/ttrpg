@@ -1004,13 +1004,10 @@ def fortification_of(w: World, rung_id: str) -> float:
     ⚠ MULTIPLE GARRISONS AVERAGE RATHER THAN SUM: one per settlement is what step 11 ships, and an
     average keeps the return in `[0.0, 1.0]` regardless, which summing would not.
 
-    ⚠⚠ **NOTHING CALLS THIS FUNCTION.** `seam/wrappers/mass_battle.py::resolve()` passes
-    `terrain=None` unconditionally and has no other parameter to carry a fortification bonus
-    through -- `systems/mass_battle/sim/massbattle.py::resolve_field`'s only knobs are `terrain`
-    and `rng`. Seeding a garrison Site (step 11) changes no fight's outcome until something reads
-    this return AND the provider is given somewhere to put it. `H-150` (`hole_register.yaml`) is
-    this gap's row: HOW MUCH a fortification level should shift a field battle is an invented
-    magnitude no ruling states, on `H-148`'s own shape."""
+    ⚠ ITS CALLER IS THE BATTLE PATH (plan position `20-iv`, `H-150`; until then nothing called
+    this). `seam/wrappers/mass_battle.py::resolve()` reads it at the march target and passes it to
+    `massbattle.resolve_field` as `fort_level`, where any positive value makes the field A.9's
+    WALLS row (`terrain.py::terrain_row_for_territory`). This Query decides none of that."""
     TRACE.query("fortification_of", "resolver")
     here = _subtree(w, rung_id)
     garrisons = [s for s in w.sites.values() if s.kind == "garrison" and s.rung in here]

@@ -359,6 +359,33 @@ def faction_prop_id(name: str) -> str:
     return "fac_" + "".join(c if c.isalnum() else "_" for c in str(name).lower()).strip("_")
 
 
+# The prefix of a territory RUNG id, and nothing else. Named so the relation below has one spelling.
+_TERRITORY_RUNG_PREFIX = "terr_"  # [JUSTIFIED: an id SPELLING, not a game value -- the territory-rung half of the faction-id relation's shape above]
+
+
+def territory_rung_id(tid: str) -> str:
+    """`'T9'` -> `'terr_T9'`. THE ONE OWNER OF THE TERRITORY-RUNG-ID RELATION, `faction_prop_id`'s
+    shape one row down: `harness/populated.py` mints a `territory` Rung per geography row
+    (`systems/settlements/valoria_geography_v30.yaml: provinces`, whose rows are territories) and
+    the battle path (`seam/wrappers/mass_battle.py`, plan position `20-iv`) has to get from that
+    Rung back to the geography row `terrain.py::terrain_row_for_territory` is keyed on. Before
+    `20-iv` the builder spelled the id inline at four sites and nothing read it back, so the
+    relation had no owner because it had no second reader; it has one now, and two spellings of
+    one relation is how `leaders()` went silently empty (the docstring above)."""
+    return _TERRITORY_RUNG_PREFIX + str(tid)
+
+
+def territory_id_of(rung_id: "str | None") -> "str | None":
+    """The inverse of `territory_rung_id`: `'terr_T9'` -> `'T9'`, and `None` for a rung id this
+    relation did not mint. Whether the answer is a real geography row is NOT asked here -- that is
+    `terrain_row_for_territory`'s own question, and it answers an unknown territory with its
+    no-modifier fallback rather than a refusal (`harness/scarce.py`'s `terr_march` is the case:
+    a territory rung no geography row backs)."""
+    if not rung_id or not str(rung_id).startswith(_TERRITORY_RUNG_PREFIX):
+        return None
+    return str(rung_id)[len(_TERRITORY_RUNG_PREFIX):] or None
+
+
 def require_member(value, roster, what: str, where: str, law: str, needs: str = "") -> None:
     """THE ROSTER-MEMBERSHIP REFUSAL, IN ONE PLACE. Ten call sites had it check-for-check.
 
