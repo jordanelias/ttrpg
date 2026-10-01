@@ -316,10 +316,13 @@ def loyalty(r: dict, faction: Optional[str]) -> Optional[int]:
     return round(LOYALTY_INDIFFERENT * (cosine + 1))
 
 
-# #353 `:333` types a stance row `(referent, valence -5..+5, weight 0..5)`, and `decision/choose.py
+# #353 `:333` types a stance row `(referent, valence -5..+5, weight 0..5)`, and `queries/person_q.py
 # ::stance_toward` sums `valence * weight` over the rows naming a candidate's subject. Five is that
 # type's own bound, read off the row rather than chosen here.
 STANCE_VALENCE_SCALE = 5   # [JUSTIFIED: #353 `:333` types the row `(referent, valence -5..+5, weight 0..5)` — the type's own bound, not a tuning; ED-IN-0229]
+# The largest `valence * weight` one stance row can contribute (the weight's bound is the valence's):
+# a bound derived from the row type, held beside the type's own constant. `regard` is normalised by it.
+STANCE_MAX = STANCE_VALENCE_SCALE ** 2
 
 
 def stance_from_loyalty(value: Optional[int]) -> Optional[tuple]:

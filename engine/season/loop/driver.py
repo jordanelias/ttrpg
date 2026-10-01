@@ -44,7 +44,7 @@ from ..data.rosters import OBSERVATION_DEPOSIT_MODES, STRATA, WITNESS_CHANNELS
 from ..data.requires import (
     LEDGER_DERIVED_STEMS, UNKNOWN, Verdict, binding_from_act, binding_of, evaluate,
 )
-from ..data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow
+from ..data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow, opportunity_key
 from ..gaps import (
     Collision, Forbidden, InstrumentDefect, NoProducer, Ungraded, Unowned, Unspecified,
 )
@@ -66,9 +66,9 @@ from ..loop.effects import EFFECTS, effect_for
 from ..loop.predicates import REQUIRES_PREDICATES, requires_predicate
 from .. import decision
 from ..decision import (
-    aggregate_questions, agreement, align, assemble, body_band_penalty, budget,
+    aggregate_questions, agreement, assemble, body_band_penalty, budget,
     containing_rung_of, make_chooser, opening_set, operands_for, pack_scenes,
-    person_side_eligible, stance_toward, standing_of, store_kind_of, urgency, view_ids,
+    person_side_eligible, standing_of, store_kind_of, urgency, view_ids,
 )
 from ..seam import (
     ContestError, Resolution, combat_degree, contest, contest_subsystem, degree_of,
@@ -298,10 +298,12 @@ class SeasonDriver:
         # construction, so the driver releases their next chosen scene rather than re-deriving it.
         self._inputs: dict = {}
         # ⚠ WHAT `_drop_what_was_already_done` READS, AND IT IS THE REALISED SET RATHER THAN THE
-        # ATTEMPTED ONE — which is the whole of a defect this unit's adversarial pass found. A pair
-        # enters here only after the fold has run and only when the act's Event was not one of its
-        # row's `emits_on_refusal` kinds. Recording the ATTEMPT instead barred a refused act from
-        # ever being retried, including in a later round whose world had made its precondition
+        # ATTEMPTED ONE — which is the whole of a defect this unit's adversarial pass found. An
+        # opportunity KEY (`data/verbs.py::opportunity_key`: `(verb, subject)`, plus the row's
+        # counterparty, `T4b` -- the general rule; `tell` is the row it changes anything for today)
+        # enters here only after the fold has run and only when the act's
+        # Event was not one of its row's `emits_on_refusal` kinds. Recording the ATTEMPT instead
+        # barred a refused act from ever being retried, including in a later round whose world had made its precondition
         # true — the exact channel R-03 exists to open, closed by the filter meant to protect the
         # season's variety.
         # ⚠⚠ **THERE WAS A SECOND SET, `_attempted`, AND IT WAS WRITTEN EVERY ROUND AND READ BY
@@ -451,9 +453,9 @@ class SeasonDriver:
                     _acted.add(a.id)
             for a in acts:
                 if a.id in _acted and a.id not in _refused_acts:
-                    _subj = subject_of(a)
-                    if _subj:
-                        self._realised.setdefault(a.actor, set()).add((a.verb, _subj))
+                    _key = opportunity_key(a.verb, subject_of(a), a.payload)
+                    if _key is not None:        # an act that names nothing is never recorded
+                        self._realised.setdefault(a.actor, set()).add(_key)
             for e in events:
                 w.log.append(e)              # S19.5 -- ONE LOG, NOT TWO
                 TRACE.event(e.id, e.kind, e.causes)

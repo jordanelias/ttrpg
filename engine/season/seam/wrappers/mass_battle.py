@@ -72,7 +72,7 @@ from typing import Any, Optional
 # import cycle `manifest/providers.py` exists to break.
 from ...manifest.providers import provider
 from ...data.rosters import territory_id_of
-from ...decision import stance_toward
+from ...queries.person_q import stance_toward
 from ...queries import world_q
 
 
@@ -95,7 +95,7 @@ def _side_stance(w: Any, pids: list) -> float:
     (`massbattle._morale_start`'s docstring says why it is this one).
 
     Each member's faction is `world_q.faction_holding`, the one owner of *which faction a person
-    coheres under*, and the stance is `decision.stance_toward`, the one reader of a stance row
+    coheres under*, and the stance is `queries.person_q.stance_toward`, the one reader of a stance row
     (valence x weight, summed over the rows naming that referent). A member committed to no faction
     or to two reads `None` there and contributes zero -- `faction_holding`'s own *"NONE AND MANY BOTH
     RETURN None, AND NEITHER IS A DEFAULT"*. Weighted by `Person.weight` because `resolve_field` sizes

@@ -64,6 +64,10 @@ exercised by this run.**
 | `denial_detail_outperforms` | `equal` | no — a harness fixture |
 | `displayed_anger_extracts_concessions` | `False` | no — a harness fixture |
 | `told_drift_band` | `0.5` | no — a harness fixture |
+| `told_weight` | `0.5` | no — a harness fixture |
+| `rank_gain` | `0.5` | no — a harness fixture |
+| `regard_gain` | `0.5` | no — a harness fixture |
+| `record_gain` | `0.5` | no — a harness fixture |
 | `oblige_term` | `4` | no — a harness fixture |
 | `default_upkeep` | `1` | no — a harness fixture |
 | `bench_quorum` | `1` | no — a harness fixture |

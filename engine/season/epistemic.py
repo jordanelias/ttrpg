@@ -56,7 +56,7 @@ from typing import Optional
 
 from .data.requires import binding_of, evaluate
 from .data.rosters import (
-    CLAIM_SUBJECT_RULES, FAN_OUT_MODES, OBSERVATION_DEPOSIT, OBSERVATION_TERMS, TERMS_SUPPLIED_BY,
+    CLAIM_SUBJECT_RULES, FAN_OUT_MODES, OBSERVATION_TERMS, SEEN_PREDICATE, TERMS_SUPPLIED_BY,
     WITNESS_CHANNELS, require_member)
 from .data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow
 from .gaps import Unspecified
@@ -69,7 +69,7 @@ from .state.world import World
 
 
 def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
-                       via: "str | None" = None) -> bool:
+                       via: "str | None" = None, weigh=None) -> bool:
     """§F1 clause 4 -- is `requires(verb)` KNOWN-FALSE from `p`'s OWN claims?
 
     ⚠ THE ASYMMETRY IS THE WHOLE POINT AND MUST NOT BE SOFTENED TO "requires holds". This returns
@@ -111,10 +111,16 @@ def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
     on `Act.via` -- and `binding_of` carries it exactly as `binding_from_act` does for the fold, so a
     `basis` conjunct (§F.24a form 7, `data/requires.py::Basis`) asks the person's ledger about THE
     SAME seat the fold will ask the world about. Omitted (`None`), the conjunct is UNKNOWN, which
-    contradicts nothing -- the pre-`19` answer for every caller that passes none."""
+    contradicts nothing -- the pre-`19` answer for every caller that passes none.
+
+    ⚠ TELLING WORKPLAN `T3a` (`ED-IN-0282`): `weigh` GRADES HEARSAY AS IT IS READ. `opening_set`
+    passes `decision/options.py::teller_weight(p, fx)`, so a newer claim a teller passed on no
+    longer beats the person's own firsthand claim merely by being newer. The CLOSURE is passed in,
+    not built here, because `decision.options` imports this module and a deferred import back
+    would hide that cycle rather than remove it. Omitted (`None`), the reader orders as before."""
     if (row.requires or "").strip() in NO_PRECONDITION:
         return False
-    return evaluate(row.requires_typed, LedgerReader(p.ledger),
+    return evaluate(row.requires_typed, LedgerReader(p.ledger, weigh),
                     binding_of(p.id, operands, via)).value is False
 
 
@@ -675,13 +681,8 @@ def observers_for(w: "World", e: "Event", mode: str, everyone: list) -> list:
 # the struct (`LedgerReader`'s newest-wins) rather than layer beneath it.
 # ---------------------------------------------------------------------------
 
-SEEN_PREDICATE = OBSERVATION_DEPOSIT.get("predicate")
-if not isinstance(SEEN_PREDICATE, str) or not SEEN_PREDICATE:
-    raise Unspecified(
-        "`observation_terms.deposit.predicate` is absent or not a name", "R8",
-        needs="name the predicate the `seen` claim is deposited under",
-        law="Jordan 2026-09-02 -- a definition is data. A deposit with no declared predicate "
-            "would have to spell one in a body")
+# `SEEN_PREDICATE` -- bound in `data/rosters.py` (imported above), so `queries/person_q.py` can read
+# it without importing this module; re-exported here for every existing `epistemic.SEEN_PREDICATE`.
 
 
 @dataclass(frozen=True)

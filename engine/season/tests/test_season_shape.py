@@ -39,12 +39,13 @@ from ..data.requires import (
 from ..data.rosters import (
     BODY_FACTION, BODY_FUNCTION, CLAIM_SOURCES, CLAIM_SUBJECT_RULES, COMBAT_BANDS, PURSUIT_AXES, PURSUITS, FACTIONS, FELLED, QUESTION_SOURCES, REMIT_ACTS, ROLE_TEMPLATE_OF, ROSTERS_YAML, RUNG_KINDS, SCENE_PACKING_RULES, STRATA, TENURE_KINDS, TITLE_DOMAINS, UNTOUCHED, VIEW_BUILDER_RULES, WITNESS_CHANNELS, WOUNDED, _ROSTERS, load_yaml, office_faction, roster, roster_map, title_domain,
 )
+from ..data import verbs as data_verbs
 from ..data.verbs import (
-    ALIGNMENT_SWEEP, PURSUIT_PROJECTION, NO_PRECONDITION, VERB_TABLE, VERB_TABLE_YAML, alignment_at, rows_without_a_producer, tenure_kinds_without_an_opener,
+    ALIGNMENT_SWEEP, PURSUIT_PROJECTION, NO_PRECONDITION, VERB_TABLE, VERB_TABLE_YAML, align, alignment_at, rows_without_a_producer, tenure_kinds_without_an_opener,
 )
 from .. import decision
 from ..decision import (
-    align, containing_rung_of, make_chooser, opening_set, operands_for, pack_scenes,
+    containing_rung_of, make_chooser, opening_set, operands_for, pack_scenes,
     person_side_eligible, store_kind_of, urgency, view_ids,
 )
 from ..epistemic import (
@@ -56,7 +57,7 @@ from ..loop.deliberate import sense
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..loop.predicates import REQUIRES_PREDICATES, in_holdings
 from ..queries import world_q
-from ..queries.person_q import LedgerReader
+from ..queries.person_q import LedgerReader, said_of
 from ..queries.world_q import WorldReader
 from ..queries.world_q import occasioned_by, questions_for
 from ..seam import combat_degree, contest, degree_ladder, degree_of, ladder_error
@@ -2900,8 +2901,10 @@ def test_decision_package_never_names_world_anywhere_under_it():
     matching cannot pass by finding nothing.
 
     THREE CHECKS, MATCHING WHAT AX-2 ACTUALLY FORBIDS. Each runs over every scanned file:
-      (a) no import resolves to `state.world`, `queries` (either `world_q` or `readers`), `loop`,
-          `seam`, `combat_seam` or `shape`. ⚠ RESOLVED TO AN ABSOLUTE MODULE NAME FIRST, from the
+      (a) no import resolves to `state.world`, `queries` (EXCEPT `queries.person_q`, the one
+          module 04 §C.3 admits), `loop`, `seam`, `combat_seam` or `shape`; the `state.carriers`
+          TYPES (`Person`, `View`, `Question`) are admitted, because §A.2 :166 grants the
+          `PersonInterior`/`View`/`Question` reads and those types live under `state/`. ⚠ RESOLVED TO AN ABSOLUTE MODULE NAME FIRST, from the
           scanned file's own package and the import's `level`, because `decision/` sits one
           directory deeper than the old flat module: `from ..data.verbs import X` carries
           `module="data.verbs"` at level 2 and a tail-match against the forbidden list would be
@@ -2944,7 +2947,15 @@ def test_decision_package_never_names_world_anywhere_under_it():
         "was flattened -- which is the ED-IN-0206 violation this scan exists to prevent -- or the "
         "discovery broke, and in both cases the checks below are vacuous.")
 
+    # AN ALLOW-LIST FOR `queries`, not a deny-list (04 §C.3: `decision/` imports `person_q` and
+    # `data/`, and nothing else under `queries/`; `state.carriers` types are admitted -- only
+    # `state.world`, the store, is forbidden -- by the reasoning at the person_q scan below): `queries` as a whole stays forbidden and `queries.person_q`
+    # is the one admitted exception. A deny-list of `queries.world_q`/`queries.cache` admitted
+    # `queries.faction_q` (which imports `World`) and any future `queries/*_q.py`. The person_q
+    # side of the edge is `test_person_q_cannot_reach_the_world_side`, which forbids `decision`
+    # from `person_q`.
     FORBIDDEN = ("state.world", "queries", "loop", "seam", "combat_seam", "shape")
+    ADMITTED = ("queries.person_q",)
     PKG = "engine.season"
 
     def _absolute(path, node):
@@ -2956,8 +2967,13 @@ def test_decision_package_never_names_world_anywhere_under_it():
         base = own[:len(own) - (node.level - 1)] or (PKG,)
         return ".".join(base) + (("." + node.module) if node.module else "")
 
+    def _tail(dotted):
+        return dotted[len(PKG) + 1:] if dotted.startswith(PKG + ".") else dotted
+
     def _is_forbidden(dotted):
-        tail = dotted[len(PKG) + 1:] if dotted.startswith(PKG + ".") else dotted
+        tail = _tail(dotted)
+        if any(tail == a or tail.startswith(a + ".") for a in ADMITTED):
+            return False
         return any(tail == f or tail.startswith(f + ".") for f in FORBIDDEN)
 
     bad_imports, world_takers, bad_names, inspected, world_prose = [], [], [], 0, 0
@@ -2972,7 +2988,9 @@ def test_decision_package_never_names_world_anywhere_under_it():
                         bad_imports.append((path.name, node.lineno, alias.name))
             elif isinstance(node, ast_.ImportFrom):
                 dotted = _absolute(path, node)
-                if _is_forbidden(dotted):
+                # `from ..queries import X` names the package, not a module: the imported NAMES
+                # are judged below as `queries.X`, so the bare package itself is not flagged.
+                if _is_forbidden(dotted) and _tail(dotted) != "queries":
                     bad_imports.append((path.name, node.lineno, dotted))
                 for alias in node.names:
                     if dotted and _is_forbidden(f"{dotted}.{alias.name}"):
@@ -3182,7 +3200,13 @@ def test_person_q_cannot_reach_the_world_side():
     # what it reads, which is the opposite of §A.2's *"may read a `PersonInterior` snapshot only"*.
     # `queries.world_q` covers `WorldReader`, which moved there at L3 with the rest of the
     # World-first family; there is no `queries.readers` to forbid any more.
-    FORBIDDEN = ("state.world", "queries.world_q", "loop", "seam", "decision")
+    # AN ALLOW-LIST (batch-1 close, layer-conformance): `queries/person_q` may reach `data/`, the
+    # `state.carriers` types and the trace sink, and nothing else inside the package. The deny-list
+    # this replaces ("state.world", "queries.world_q", "loop", "seam", "decision") let through
+    # `queries.faction_q` (imports `World`), `queries.cache` (imports `world_q`), `epistemic`
+    # (imports `World`) and any new `queries/*.py` -- the same flaw the AX-2 scan over `decision/`
+    # was rewritten to avoid, and that scan relies on this one for the other half of the edge.
+    ALLOWED = ("data", "state.carriers", "trace_log")
     PKG = "engine.season"
 
     def _absolute(node):
@@ -3192,18 +3216,25 @@ def test_person_q_cannot_reach_the_world_side():
         base = own[:len(own) - (node.level - 1)] or (PKG,)
         return ".".join(base) + (("." + node.module) if node.module else "")
 
-    def _forbidden(dotted):
-        tail = dotted[len(PKG) + 1:] if dotted.startswith(PKG + ".") else dotted
-        return any(tail == f or tail.startswith(f + ".") for f in FORBIDDEN)
+    def _internal(dotted):
+        return dotted.startswith(PKG + ".")
 
-    bad, functions = [], 0
+    def _forbidden(dotted):
+        if not _internal(dotted):
+            return False        # stdlib / third party, or the bare package (its NAMES are judged)
+        tail = dotted[len(PKG) + 1:]
+        return not any(tail == a or tail.startswith(a + ".") for a in ALLOWED)
+
+    bad, functions, resolved = [], 0, 0
     for node in ast_.walk(tree):
         if isinstance(node, ast_.Import):
             for alias in node.names:
+                resolved += _internal(alias.name)
                 if _forbidden(alias.name):
                     bad.append((node.lineno, alias.name))
         elif isinstance(node, ast_.ImportFrom):
             dotted = _absolute(node)
+            resolved += _internal(dotted)
             if _forbidden(dotted):
                 bad.append((node.lineno, dotted))
             for alias in node.names:
@@ -3215,6 +3246,10 @@ def test_person_q_cannot_reach_the_world_side():
     assert functions >= 1, (
         "queries/person_q.py defines no function; the scan below has nothing to be about and "
         "passes vacuously (§0.1 pt 2)")
+    assert resolved >= 3, (
+        f"the scan resolved only {resolved} in-package imports of queries/person_q.py (it imports "
+        "data.requires, data.rosters, state.carriers and trace_log): a broken `_absolute` would "
+        "pass an allow-list silently, so the floor is part of the check")
     assert not bad, (
         "queries/person_q.py reaches the resolver side, which is exactly what §A.3 row 2 splits "
         f"the two families BY MODULE to prevent (T-f): {bad}")
@@ -3231,10 +3266,9 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
     asks for in the unflattering direction too."""
     affected = ["P31", "P36", "P11", "P12"]
     table = {}
-    # `decision.options`, where `align` is DEFINED (moved from `choose` to close the
-    # `choose <-> options` import cycle); a rebind anywhere else is the fabricated null this
-    # test's `uniform` arm exists to catch.
-    saved = decision.options.ALIGNMENT
+    # `data.verbs`, where `align` and `ALIGNMENT` are both DEFINED (T2: the one binding); a rebind
+    # anywhere else is the fabricated null this test's `uniform` arm exists to catch.
+    saved = data_verbs.ALIGNMENT
 
     def fresh(pid):
         # ⚠ `run_probe` MEMOISES IN `_VERDICTS`, so calling it in a loop returns the FIRST run's
@@ -3246,10 +3280,10 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
 
     try:
         for point in ALIGNMENT_SWEEP:
-            decision.options.ALIGNMENT = alignment_at(point)
+            data_verbs.ALIGNMENT = alignment_at(point)
             table[point] = {pid: fresh(pid) for pid in affected}
     finally:
-        decision.options.ALIGNMENT = saved
+        data_verbs.ALIGNMENT = saved
         for pid in affected:
             fresh(pid)                           # restore the committed verdicts
 
@@ -3291,9 +3325,9 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
     p = w.persons["p_mid"]
     q = Question("q:sgn", "need", ("rec_writ",))
     v = View(p.id, [], w.fixtures.get("view_k"), q)
-    saved2 = decision.options.ALIGNMENT
+    saved2 = data_verbs.ALIGNMENT
     try:
-        decision.options.ALIGNMENT = alignment_at("sign_only")
+        data_verbs.ALIGNMENT = alignment_at("sign_only")
         ch = make_chooser(w.fixtures, lambda a, b, c: "x",
                          draw=draw_factory(w.world_seed, lambda: w.tick))
         # ⚠⚠ **`U3`: THE SCORE IS READ THROUGH THE PROJECTION, BECAUSE `Precedent` IS A CONVICTION
@@ -3328,9 +3362,112 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
                 "tiebreak. Check `pursuit_projection[Precedent]` before `alignment`: a "
                 "conviction that projects to the zero vector cannot score any verb.")
     finally:
-        decision.options.ALIGNMENT = saved2
+        data_verbs.ALIGNMENT = saved2
         for pid in affected:
             fresh(pid)
+
+
+def test_t2_one_rebind_moves_score_and_gate(monkeypatch):
+    """T2's falsifier (telling workplan). `ALIGNMENT` has ONE binding, `data.verbs.ALIGNMENT`, and
+    `align` -- `choose`'s score and the `H-146` gate's `refuses` both call it -- reads it there.
+    So ONE rebind of that name must move BOTH readers.
+
+    Two synthetic tables over the same two verbs with the cells swapped, on the axis the person
+    weighs at -0.4 (the refusing pole). Under A `v0` sits past the weight (+0.3: refused, score
+    -0.12) and `v1` does not (-0.6); under B it is the other way round (`v0` -0.6: tolerated, score
+    +0.24). The score is read through `_sample_order`, the one place `make_chooser` hands it on; the
+    gate through `opening_set`'s formed set. A second `ALIGNMENT` in `decision/options.py` would
+    leave `refuses` reading the stale copy, the gate half of this test would see A's verdict under
+    B, and it would fail -- the §0.1 pt 1 read/write asymmetry this move exists to remove."""
+    from ..decision import choose as _choose
+    from ..decision import options as _options
+
+    w = P.tiny_world()
+    p = w.persons["p_mid"]
+    q = Question("q:t2", "need", ("rec_writ",))
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
+    formed = sorted({c.verb for c in _options.opening_set(p, v, q, w.fixtures)})
+    assert len(formed) >= 2, f"only {formed} form here; the test needs two verbs"
+    v0, v1 = formed[0], formed[1]
+    axis = sorted(PURSUIT_AXES)[-1]
+    monkeypatch.setattr(data_verbs, "PURSUIT_PROJECTION", {"t2_synthetic": {axis: -0.4}})
+    monkeypatch.setattr(p, "pursuits", {"t2_synthetic": 1.0})
+    fx0 = w.fixtures.sweep("choice_temperature", 0)
+    fx_gate = fx0.sweep("refusal_axis", axis)
+
+    def scores():
+        seen = {}
+        inner = _choose._sample_order
+
+        def spy(ranked, score, person, fx_, draw):
+            seen.update({(c.verb, c.subject): score(c) for c in ranked})
+            return inner(ranked, score, person, fx_, draw)
+        monkeypatch.setattr(_choose, "_sample_order", spy)
+        try:
+            make_chooser(fx0, lambda a, b, c: f"{a}:{b}:{c}")(p, v, Sensation(0), lambda: 1)
+        finally:
+            monkeypatch.setattr(_choose, "_sample_order", inner)
+        return {k: s for k, s in seen.items() if k[0] == v0}
+
+    def reading(table):
+        monkeypatch.setattr(data_verbs, "ALIGNMENT", table)
+        gate = {c.verb for c in _options.opening_set(p, v, q, fx_gate)}
+        return scores(), gate
+
+    score_a, gate_a = reading({axis: {v0: 0.3, v1: -0.6}})
+    score_b, gate_b = reading({axis: {v0: -0.6, v1: 0.3}})
+
+    checked = 0
+    assert score_a and score_b, f"{v0!r} was never scored, so the score half observed nothing"
+    for k in score_a:
+        assert score_a[k] != score_b[k], (
+            f"rebinding `data.verbs.ALIGNMENT` did not move `choose`'s score for {k}: "
+            f"{score_a[k]} vs {score_b[k]}")
+        checked += 1
+    assert v0 not in gate_a and v0 in gate_b, (
+        f"rebinding `data.verbs.ALIGNMENT` did not move the H-146 gate: {v0!r} in A={v0 in gate_a}, "
+        f"in B={v0 in gate_b} -- `refuses` is reading a different binding than `choose`")
+    checked += 1
+    assert v1 in gate_a and v1 not in gate_b
+    checked += 1
+    assert checked >= 1
+
+
+def test_t2_align_kind_reads_the_one_emitter_and_a_deed_key_needs_an_emitted_kind(monkeypatch):
+    """`align_kind(kind, axis)` = an authored `deed:<kind>` cell, else `align` of the ONE verb that
+    emits the kind, else 0. Nothing calls it yet (the regard function's primitive); this is its
+    contract, on a throwaway table -- no `deed:` cell is authored in `rosters.yaml`."""
+    from ..data.verbs import DEED_PREFIX, EMITTED_KINDS, KIND_VERB, _load_alignment, align_kind
+
+    # The rule recomputed from the table independently of `_derive_kind_verb`.
+    emitters = {}
+    for verb, row in VERB_TABLE.items():
+        for kind in set(row.emits) | set(row.emits_on_refusal):
+            emitters.setdefault(kind, set()).add(verb)
+    assert set(EMITTED_KINDS) == set(emitters) and EMITTED_KINDS
+    assert KIND_VERB == {k: next(iter(vs)) for k, vs in emitters.items() if len(vs) == 1}
+    shared = sorted(k for k, vs in emitters.items() if len(vs) > 1)
+    assert not any(k in KIND_VERB for k in shared), "a kind several rows emit maps to a verb"
+
+    checked = 0
+    for kind, verb in sorted(KIND_VERB.items()):
+        for axis in PURSUIT_AXES:
+            assert align_kind(kind, axis) == align(verb, axis), (kind, verb, axis)
+            checked += bool(align(verb, axis))
+    assert checked >= 1, "no single-emitter kind has a non-zero cell, so equality proved nothing"
+    for kind in shared:
+        assert align_kind(kind, sorted(PURSUIT_AXES)[0]) == 0.0
+    assert align_kind("t2_no_such_kind", sorted(PURSUIT_AXES)[0]) == 0.0
+
+    kind, verb = next((k, vb) for k, vb in sorted(KIND_VERB.items())
+                      if any(align(vb, ax) for ax in sorted(PURSUIT_AXES)))
+    axis = next(ax for ax in sorted(PURSUIT_AXES) if align(verb, ax))
+    table = _load_alignment({axis: {verb: 1.0, DEED_PREFIX + kind: -2.5}})
+    monkeypatch.setattr(data_verbs, "ALIGNMENT", table)
+    assert align_kind(kind, axis) == -2.5 and align(verb, axis) == 1.0, (
+        "an authored `deed:` cell must override the emitting verb's cell for the kind only")
+    with pytest.raises(Forbidden):
+        _load_alignment({axis: {verb: 1.0, DEED_PREFIX + "t2_no_such_kind": 1.0}})
 
 
 def test_w5_a_tenure_added_before_its_subject_still_reaches_its_owner():
@@ -3842,10 +3979,20 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
     # untouched; what moved is how many investigation rounds land within the published two seasons.
     # [GROUNDED: measured 2026-09-30 -- `d_pub` reads 10 both at `b63e1b3` (post-`11a`, pre-session)
     # and on the current merged tree; this session's Phase 2 positions did not move it further]
-    assert d_pub == 10, (
-        f"the published two-season run reaches {d_pub}, not the 10 that `scene_budget` rounds of "
+    # ⚠⚠ **10 -> 7, TELLING WORKPLAN `T4` (2026-10-01, `ED-IN-0282`), BY THE ACT MIX AND NOT A
+    # CLOCK.** Read off the printed chain on both trees: at `4bd5cee` it is four
+    # `record.created`/`finding.made` round-trips before the terminal deposit; here two, then
+    # `claim.deposited <- claim.decayed`. Carin and Bailiff now spend scenes on a `tell` (toward each
+    # other, the one person each knows) and two `survey`s where they spent them on `interview`,
+    # `research` and `create_record` (acts over the two seasons: `create_record` 15 -> 13, `research`
+    # 13 -> 11, `interview` 1 -> 0), so fewer investigate-and-record rounds land inside the published
+    # two seasons. `redeposits` is still 1 (asserted above) and the depth clause (>= 4) still holds.
+    # [GROUNDED: measured 2026-10-01 by printing the published chain on this tree and on a `git worktree` at `4bd5cee` -- depth 7 here, 10 there]
+    assert d_pub == 7, (
+        f"the published two-season run reaches {d_pub}, not the 7 that `scene_budget` rounds of "
         "deposit-and-decay produce over two seasons with `11a`'s repeated investigate-and-record "
-        "chaining. With `redeposits == 1` still holding, a different number means the ROUND COUNT "
+        "chaining (10 before T4's tellings took two of its scenes). With `redeposits == 1` still "
+        "holding, a different number means the ROUND COUNT "
         "changed, a clock started chaining, or `reach` stopped admitting this second-person claim; "
         "below 3, `W4`'s decay chaining has regressed")
     late_root = [e for e in w.log if e.causes == ["ROOT"] and e.emitted_at > 0]
@@ -5449,13 +5596,17 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     # and the proof clause was owed a fresh measurement. It fired; the measurement is in the
     # docstring; and the assertion now pins the closure rather than the hole, because a test that
     # only ever says "still broken" cannot observe the day it stops being.
-    extra = [a for a in minted if set((a.payload or {})) - {"subject"}]
+    extra = [a for a in minted if set((a.payload or {})) - {"subject", "said"}]
     assert extra, (
         f"NONE of {len(minted)} minted acts carries an operand beyond `subject` — `H-94` has "
         "re-opened and `transfer` is back to being refused for want of a `kind` it cannot carry")
+    # `said` (T1, ED-IN-0282) is the told triple a telling CARRIES, chosen at CHOOSE; it is not a
+    # `requires` operand -- `binding_of` drops it (`test_t1_said_is_not_a_binding_operand`) -- so
+    # naming it here does not coin an operand, which is what this closure refuses.
     carried = {k for a in minted for k in (a.payload or {})}
-    assert carried <= set(REQUIRES_OPERANDS) | {"subject"}, (
-        f"a minted act carries {sorted(carried - set(REQUIRES_OPERANDS) - {'subject'})}, which "
+    assert carried <= set(REQUIRES_OPERANDS) | {"subject", "said"}, (
+        f"a minted act carries "
+        f"{sorted(carried - set(REQUIRES_OPERANDS) - {'subject', 'said'})}, which "
         "is outside the closed operand vocabulary — coining an operand is filling `H-94` by "
         "keyword argument, which is what the roster exists to refuse")
     # AND `changes` IS STILL EMPTY, which is the OTHER half and is `H-63`, not this item: Part E's
@@ -7839,7 +7990,34 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠ STILL 115 AT PLAN POSITION `28-ii` (M6), 2026-09-30 -- NO CODE CHANGED (the `ever` note
     # above; no arm was ever needed or kept), so nothing here could move: `march` executes in no
     # world at seed 0 against the SAME `live` set, so no signature gains or loses it.
-    assert len(by_sig) == 115, (
+    # ⚠⚠ **115 -> 111, TELLING WORKPLAN `T4` (`tell` names its hearer), 2026-10-01, MEASURED
+    # AGAINST A CLEAN `git worktree` AT `4bd5cee` (115 there, same 143 live worlds, seed 0).** THE
+    # UNIT AND THE DIRECTION: variety FELL by four, and `live` did not move. A `tell` now forms once
+    # per person the teller knows and is contested against that hearer, so its slate and its
+    # success rate changed (`tell` 86 -> 88 worlds) and the scenes re-ranked at the margin of the
+    # varying verbs: `fight` 25 -> 30, `transfer` 87 -> 89, `research` 98 -> 100, `petition`
+    # 75 -> 76, `speak` 90 -> 91, `examine` 12 -> 9, `restore` 5 -> 2, `move` 53 -> 52, `surveil`
+    # 67 -> 66 worlds. THE SAME-BREATH CHECK: the universal set is unchanged (empty), as is the
+    # status census (102 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED · 1 RUNS-ALONE-UNDECLARED) and
+    # `told_redeposits` (0).
+    # ⚠⚠ **111 -> 114, TELLING WORKPLAN `T4b` (an opportunity includes its counterparty),
+    # 2026-10-01.** The T4b producer measured 111 -> 114 on `corpus_run`'s `DISTINCT EXECUTED
+    # SETS` (the same `tuple(r["executed"])` over the same `live` set) and the pin was left at 111;
+    # BATCH-CLOSE 2 caught it by running this test (red at 111). THE UNIT: a teller now forms and
+    # executes one `tell` per hearer per season rather than one per topic, so more worlds execute
+    # `tell` more than once and the sets split. `live` did not move.
+    # ⚠⚠ **114 -> 117, BATCH-2 CLOSE `F1` (WITNESS no longer deposits a `with` read), 2026-10-01,
+    # MEASURED AGAINST A CLEAN `git worktree` AT `67ec05c` (114 there, same 143 live worlds, seed 0).**
+    # THE UNIT AND THE DIRECTION: variety ROSE by three, `live` did not move, `told_redeposits` stays
+    # 0 and the status census is identical (102 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED · 1
+    # RUNS-ALONE-UNDECLARED). The teller's ledger no longer holds a claim on the hearer, so Q2 no longer
+    # raises a question about them and the scenes re-ranked at the margin. Per-verb world counts,
+    # before -> after: `utter` 142 -> 143, `fight` 30 -> 28, `examine` 9 -> 10, `restore` 2 -> 4,
+    # `release` 1 -> 2, `move` 52 -> 53, `petition` 76 -> 75, `reconstruct` 140 -> 139,
+    # `research` 100 -> 99, `speak` 88 -> 87, `surveil` 66 -> 65, `transfer` 89 -> 88; `tell` unmoved.
+    # AND THE SAME-BREATH CHECK THIS MESSAGE DEMANDS: THE UNIVERSAL SET MOVED -- `utter` regains
+    # all 143 worlds, so variety rose while a verb became universal, the `U1` shape (asserted below).
+    assert len(by_sig) == 117, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -7950,7 +8128,15 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # rather than out of `ever` -- it still executes in most worlds, just not all 143 -- which is
     # the same-breath check the `by_sig` message demands. MEASURED by a one-off script over the
     # same 143-case corpus, seed 0, against `882e86e`: universal `{create_record}` -> `{}`.
-    assert universal == set(), sorted(universal)
+    # ⚠⚠ **{} -> {`utter`}, BATCH-2 CLOSE `F1` (2026-10-01, `ED-IN-0282`), UNIT: VERBS IN THE UNIVERSAL
+    # SET, DIRECTION: UP BY ONE -- THE `by_sig` NOTE'S SAME-BREATH CHECK, AND THE `U1` SHAPE.** With
+    # WITNESS no longer depositing a `with` read the scenes re-ranked and `utter` wins one in the
+    # one live world (of 143) it had missed, so 143 of 143 now. Variety rose (114 -> 117) while a verb
+    # became universal again. MEASURED against a clean `git worktree` at `67ec05c` (`utter` 142 of 143
+    # there) with a one-off script over `corpus_run.run_case`, not read off this test's failure. As the
+    # note above says, a universal set of size one is a sampling outcome and not a design invariant.
+    # [GROUNDED: measured 2026-10-01, both arms at seed 0 over the same 143 live corpus worlds, control from a worktree at `67ec05c` -- universal {} -> {utter}, `utter` 142 -> 143 worlds]
+    assert universal == {"utter"}, sorted(universal)
     # `dispatch` LEAVES THE VARYING SET ENTIRELY UNDER `R8.1` -- NOT INTO UNIVERSAL, OUT OF `ever`
     # ALTOGETHER. It no longer executes in any live world (NPC-033 included); it is still
     # ATTEMPTED and refused there, so it moves to `refused_only` rather than to the never-attempted
@@ -8000,9 +8186,12 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠ `march` DOES NOT JOIN, PLAN POSITION `28-ii` (M6), 2026-09-30 -- see the `ever` note above
     # for why, and for the direct, real-chooser demonstration this position ships instead of a
     # corpus-membership move.
+    # ⚠ `utter` LEAVES `varying` FOR `universal`, BATCH-2 CLOSE `F1` -- the same one world as the
+    # universal pin above; the other fifteen are unmoved (membership; their world counts are in the
+    # `by_sig` note).
     assert varying == {"create_record", "examine", "fight", "interview", "issue", "move",
                        "petition", "reconstruct", "release", "research", "restore", "speak",
-                       "surveil", "tell", "transfer", "utter"}, (
+                       "surveil", "tell", "transfer"}, (
         sorted(varying))
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
     # BROKE BROKE FOR A REASON THIS TEST WANTS. A one-season case still never reaches `tell` —
@@ -8506,9 +8695,18 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     # collapse from 26 to 15 and sent a reader to look at a transport that never moved.
     # [JUSTIFIED: a COLLAPSE FLOOR over a lane count, not a game value -- 26 of the 27 NPC rung cases produce a telling and this sits six below it, which is headroom for the sampled order to move the act mix and none for the transport failing]
     # [JUSTIFIED: a COLLAPSE FLOOR over a lane count, not a game value -- SUPERSEDES the line above under `U1`: it counts telling ATTEMPTS (`news.told` or `news.untold`) rather than successes, because grading `tell` split the two. Still 26 of 27, still six below]
-    assert attempt_cases >= 20, (
+    # ⚠⚠ **20 OF 27 AFTER `T4`/`T4b`, AND THE OLD FLOOR OF 20 HAD ZERO HEADROOM.** Re-measured
+    # 2026-10-01 on the tree that carries `T4b`/`T5`/`T6` (this test, seed 0, 3 seasons): `attempt_cases`
+    # is **20** and `told_cases` 16 (`checked` 28) -- `T4` took it from 26 to exactly 20, so a floor
+    # of 20 would have gone red on the loss of ONE case, i.e. it had become a pin on the composition
+    # of the lane, which the paragraph above refuses. The floor is re-set to **15**, five below the
+    # measurement, the same ~3/4 proportion the original 20-of-26 floor had. (20 was measured before the
+    # batch-2 `F1` fix, which moved the corpus; the figure was not re-taken after it -- the floor holds
+    # at the post-`F1` tree by the full-suite run that closed the batch, nothing finer.)
+    # [JUSTIFIED: a COLLAPSE FLOOR over a lane count, not a game value -- SUPERSEDES the two lines above after `T4`: 20 of the 27 NPC rung cases produce a telling attempt (measured 2026-10-01, seed 0, 3 seasons) and this sits five below it, the same ~3/4 proportion the original floor had -- headroom for the sampled order to move the act mix, none for the transport failing]
+    assert attempt_cases >= 15, (
         f"only {attempt_cases} of the 27 NPC rung cases produced a telling at all — 26 did on "
-        "2026-09-11, before and after `U1`. This counts `news.told` AND `news.untold`, so a "
+        "2026-09-11, before and after `U1`, and 20 after `T4`. This counts `news.told` AND `news.untold`, so a "
         "failing roll cannot trip it: below the floor the act mix has stopped producing tellings "
         "or the transport is gone, and the transport is what to look at first")
     # ⚠ **AND THE SUCCESS COUNT GETS ITS OWN FLOOR, BECAUSE THE LOOP BODY ABOVE ONLY RUNS ON
@@ -8532,7 +8730,7 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     # [GROUNDED: measured 2026-09-29 on this tree, 27 NPC rung cases at seed 0, 3 seasons -- 7 cases produce a `news.told`, 24 produce an attempt; 8 `news.told` Events against 47 `news.untold`, a 15% success rate, `pool_default`/`obstacle_default` unchanged]
     assert told_cases >= 4, (
         f"only {told_cases} of the 27 NPC rung cases produced a SUCCESSFUL telling — 7 did on "
-        "2026-09-29 under position `11a`, down from 15 pre-`11a`. The referent checks above run only "
+        "2026-09-29 under position `11a` (down from 15 pre-`11a`), 16 after `T4`. The referent checks above run only "
         "on `news.told`, so this is "
         "what keeps them from asserting nothing. A fall here is the σ roll getting harder, not "
         "the transport breaking: look at `H-126` (`pool_default`) and `H-127` (`obstacle_default`) "
@@ -8701,6 +8899,10 @@ def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_fo
     p0 = w0.persons["p_low"]
     subj = "a_subject_nobody_has_a_claim_about"
     q0 = Question("q:wa_empty", "need", (subj,))
+    # `T4`: `tell`'s `to` is a person the teller KNOWS (`operand_bags`), so the person deriving the
+    # operands knows one. The verdicts below are read off `empty`, a reader over NO claims, so the
+    # arm still observes an empty ledger.
+    p0.ledger.append(Claim("c_wa_knows", p0.id, "p_mid", "exists:Person", 1, 0, "firsthand", 100, "own"))
     forms, checked = set(), 0
     for verb, row in sorted(VERB_TABLE.items()):
         if row.requires_typed is None:
@@ -8735,8 +8937,17 @@ def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_fo
     q = Question("q:wa_asym", "need", ("Hh",))
     cands = decision.opening_set(p, View(p.id, [], w.fixtures.get("view_k"), q), q, w.fixtures)
     offered = {c.verb for c in cands}
+    # ⚠ TELLING WORKPLAN `T4`: A ROW THAT NEEDS SOMETHING SAID OR SOMEBODY KNOWN IS OUT OF THIS
+    # ARM, AND NOT BY CLAUSE 4. `tell` forms one Candidate per person the teller KNOWS and declines
+    # when there is nothing to SAY -- both read off the cell (`known_person_operands`, a NAMED
+    # `own_ledger` conjunct), and a person with no claims has neither. That is an act with a hole
+    # (`operands_for`'s `None`), not a belief filtering an option; `test_t4_one_candidate_per_known_hearer`
+    # observes it forming once both exist. Derived from the data, never a verb name.
+    needs_held = {v for v, r in VERB_TABLE.items() if r.requires_typed is not None
+                  and (r.requires_typed.known_person_operands()
+                       or r.requires_typed.named_own_ledger_operands())}
     typed_own = {v for v, r in VERB_TABLE.items()
-                 if r.requires_typed is not None and person_side_eligible(p, r)}
+                 if r.requires_typed is not None and person_side_eligible(p, r)} - needs_held
     assert typed_own <= offered, (
         f"{sorted(typed_own - offered)} were filtered out of the option set by a person who holds "
         "NO claims at all. Clause 4 is KNOWN-FALSE, not 'unproven'")
@@ -9569,6 +9780,13 @@ def test_wc_the_fold_binds_what_the_person_bound():
     GREEN."""
     w = P.tiny_world()
     p = w.persons["p_low"]
+    # ⚠ TELLING WORKPLAN `T4`: `tell` forms only for a teller with something to say about the
+    # referent AND somebody known to say it to (`operand_bags`). One `seen` claim supplies both --
+    # `p_low` saw `p_mid` at `Hh` -- and no requirement reads `seen`, so no other verb's clause 4
+    # can move. It also puts `to` in the walk: the binding equality now covers the hearer.
+    from ..epistemic import Seen
+    p.ledger.append(Claim("c_wc_seen", p.id, "Hh", SEEN_PREDICATE, Seen(who="p_mid"), 0,
+                          "firsthand", 100, "own"))
     q = Question("q:wc_agree", "need", ("S", "Hh"))
     v = View(p.id, [], w.fixtures.get("view_k"), q)
     # ⚠ THE WALK IS OVER TYPED VERBS AND THE SCOPE IS DECLARED RATHER THAN HIDDEN. An UNTYPED
@@ -10162,7 +10380,12 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # declines only a KNOWN-FALSE belief, and holding no claim on `S` is no belief that one is
     # absent. The drop is still exactly `transfer`.
     # [GROUNDED: measured 2026-09-30 at plan position `20-iii` against a clean worktree at `19dac7e` -- (30, 29) there, (31, 30) here, `survey` the one added Candidate, the drop `['transfer']` in both]
-    assert (len(before), len(after)) == (31, 30), (
+    # ⚠ 31 -> 30, telling workplan `T4` (2026-10-01, `ED-IN-0282`): the other direction. `tell` now
+    # names its hearer (`to`, one Candidate per person the teller KNOWS) and declines with nothing to
+    # say, and `p_low` here holds no claim on `S` and knows nobody, so the one `tell` Candidate it
+    # formed on `S` is gone. The drop is still exactly `transfer`.
+    # [GROUNDED: measured 2026-10-01 at telling workplan `T4` against a `git worktree` at `4bd5cee` -- (31, 30) there, (30, 29) here, `tell` the one missing Candidate, the drop `['transfer']` in both]
+    assert (len(before), len(after)) == (30, 29), (
         f"the absolute counts moved to {(len(before), len(after))}. They are the denominator the "
         "delta above is read against, and the delta alone does not reproduce them — re-derive "
         "`H-122`'s reading rather than adjusting this line")
@@ -10358,30 +10581,54 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # than 23 was, the same healthy direction this block has tracked at every prior move.
     # [GROUNDED: measured 2026-09-30 -- 17 items at `b63e1b3` (post-`11a`, pre-session), 24 on the
     # current merged tree; re-derived by running the helper directly rather than composed by hand]
-    assert actor_end == [("rec:b2657ce0b577e64d", "exists:Record", 1),
+    # ⚠⚠ **24 -> 20, TELLING WORKPLAN `T4` (2026-10-01, `ED-IN-0282`), ACT MIX AGAIN.** `tell` now
+    # forms only toward a person the teller knows and only with something to say, so this world's
+    # act sequence moved (measured, `actor` arm, 3 seasons: one `tell` executes here where none did,
+    # `interview`/`found` drop out, `survey` x3 enters), which moves which Events reach WITNESS. ONE
+    # ENTRY IS T4's OWN READ: `("p_carin", "with:p_bailiff", True)` -- the `hearer` conjunct's
+    # `with` observation, deposited to the teller under `actor` like every read of an act's fold;
+    # the person side never reads it back (`WORLD_ONLY_STEMS`). The `ever`/`end` gap is HEAD's own
+    # shape too (31/24 at `4bd5cee`, 25/20 here).
+    # [GROUNDED: measured 2026-10-01 on this tree and on a `git worktree` at `4bd5cee` by running the helper directly -- 24 entries there, 20 here, act mix above]
+    # ⚠⚠ **20 -> 24, BATCH-2 CLOSE `F1` (2026-10-01, `ED-IN-0282`), UNIT: ENTRIES, DIRECTION: UP.**
+    # WITNESS no longer deposits the fold's `with` read (`loop/witness.py` skips `WORLD_ONLY_STEMS`),
+    # so `("p_carin", "with:p_bailiff", True)` -- the entry the `T4` note above names as T4's OWN READ --
+    # is GONE, and the teller no longer holds a claim on the hearer that Q2 reads back as a question
+    # about them, so the act mix moved again (measured: 6 `with:` claims at realm x1 and 19 at x3 in
+    # the final ledgers before, 0 after; 4 Q2 questions at realm x1's end were raised from them).
+    # Counter subtraction against the 20-entry list: FOUR OUT -- `("p_carin", "with:p_bailiff", True)`,
+    # one `("p_carin", "exists:Record", 0)`, `rec:a84cdce9a0a0de0c`'s record and
+    # `("scriptorium", "exists:Proposition", 0)` -- and EIGHT IN, from four record ids new to the list
+    # (`rec:6986534b122765b3` x3, `rec:e19b686bdf3c6edb` x2, `rec:ad362f95ad720530` x2,
+    # `rec:3ca933f965b9a9ee` x1). Only the first of the four out is the removed deposit; the rest is
+    # the act mix it moved.
+    # HEALTHY DIRECTION: 24 held, none evicted (`actor_arm` is also checked), 24 being what `4bd5cee`
+    # held (`ever`/`end` 31/24 there).
+    # [GROUNDED: measured 2026-10-01 by running the helper directly on this tree -- 24 entries, from 20 on `67ec05c`; Counter subtraction not eyeballed]
+    assert actor_end == [("rec:cae0bdd4c4f8d475", "exists:Record", 1),
                          ("rec:b2657ce0b577e64d", "exists:Record", 1),
-                         ("p_bailiff", "exists:Record", 0),
-                         ("p_bailiff", "exists:Site", 0),
-                         ("p_bailiff", "exists:Person", 1),
-                         ("hearth_ostvik", "exists:Rung", 1),
-                         ("rec:1baa7d5fb2bcb896", "exists:Person", 0),
-                         ("rec:1baa7d5fb2bcb896", "exists:Record", 1),
-                         ("p_bailiff", "exists:Proposition", 0),
-                         ("rec:615ede30e2bf2e5c", "exists:Record", 1),
-                         ("rec:615ede30e2bf2e5c", "exists:Proposition", 0),
-                         ("hearth_ostvik", "exists:Record", 0),
+                         ("rec:b2657ce0b577e64d", "exists:Record", 1),
+                         ("scriptorium", "exists:Record", 0),
                          ("p_carin", "exists:Record", 0),
+                         ("p_carin", "exists:Site", 0),
+                         ("p_carin", "exists:works", 0),
+                         ("rec:6986534b122765b3", "exists:works", 0),
+                         ("rec:6986534b122765b3", "exists:Record", 1),
+                         ("rec:6986534b122765b3", "exists:Proposition", 0),
+                         ("rec:e19b686bdf3c6edb", "exists:Record", 1),
+                         ("rec:e19b686bdf3c6edb", "exists:Person", 0),
+                         ("rec:3ca933f965b9a9ee", "exists:Record", 1),
+                         ("rec:69697bd5ffd2e93f", "exists:Record", 1),
                          ("hearth_ostvik", "exists:Record", 0),
                          ("hearth_ostvik", "exists:Site", 0),
                          ("p_bailiff", "exists:Record", 0),
                          ("p_bailiff", "exists:works", 0),
-                         ("p_bailiff", "exists:Person", 1),
-                         ("p_carin", "exists:Record", 0),
                          ("hearth_ostvik", "exists:Person", 0),
-                         ("rec:5943ea06c255f73e", "exists:Record", 1),
-                         ("rec:5943ea06c255f73e", "exists:Person", 0),
-                         ("rec:1baa7d5fb2bcb896", "exists:Record", 1),
-                         ("p_carin", "exists:works", 0)], (
+                         ("p_bailiff", "exists:Site", 0),
+                         ("rec:c081dace11260f22", "exists:Record", 1),
+                         ("rec:c081dace11260f22", "exists:Person", 0),
+                         ("rec:ad362f95ad720530", "exists:Record", 1),
+                         ("rec:ad362f95ad720530", "exists:Person", 0)], (
         f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
         "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
         "default moved back toward `total`, or a new deposit channel opened — and every `H-40` / "
@@ -10635,8 +10882,8 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     def drops(fx):
         hits = []
         original = decision.options.belief_contradicts
-        def counted(p_, row, subject, operands, seat=None):
-            out = original(p_, row, subject, operands, seat)
+        def counted(p_, row, subject, operands, seat=None, weigh=None):
+            out = original(p_, row, subject, operands, seat, weigh=weigh)
             if out:
                 hits.append((row.verb, subject))
             return out
@@ -10664,8 +10911,8 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     def hl_drops(fx):
         hits = []
         original = decision.options.belief_contradicts
-        def counted(p_, row, subject, operands, seat=None):
-            out = original(p_, row, subject, operands, seat)
+        def counted(p_, row, subject, operands, seat=None, weigh=None):
+            out = original(p_, row, subject, operands, seat, weigh=weigh)
             if out:
                 hits.append((row.verb, subject))
             return out
@@ -10812,7 +11059,15 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # pre-session), all 5 pinned verbs present and passing at `c6f4252` (`11a`'s parent), and
     # `{build, commit, examine, fight, found, interview, petition, research, restore}` on the
     # current merged tree]
-    assert {v for v, _ in hl_live} == {"build", "commit", "examine", "fight", "found",
+    # ⚠ NINE -> EIGHT, TELLING WORKPLAN `T4` (2026-10-01, `ED-IN-0282`): `commit` leaves, MEASURED,
+    # and by the act mix rather than its cell. T4 changes no row's candidate formation but `tell`'s
+    # (control: on one identical world, the 249,555 non-`tell` Candidates `opening_set` forms are
+    # byte-identical between this tree and a `git worktree` at `4bd5cee`), so `commit`'s
+    # `existence` cell reads exactly as before; what moved is this fixture's act sequence (`commit`
+    # 3 -> 2 acts in the `actor` arm, one `tell` executing where none did), so the belief that
+    # dropped `commit`'s Candidate is no longer deposited before it would be read.
+    # [GROUNDED: measured 2026-10-01 on this tree -- drops on {build, examine, fight, found, interview, petition, research, restore}; the nine above at `4bd5cee`]
+    assert {v for v, _ in hl_live} == {"build", "examine", "fight", "found",
                                        "interview", "petition", "research", "restore"}, (
         f"the headless drops are on {sorted({v for v, _ in hl_live})}. `examine`/`restore`/"
         "`interview`/`fight`/`research` are the `exists:` and `existence:`-cell drops the "
@@ -10820,10 +11075,11 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
         "CANNOT EXECUTE and drops anyway, on a belief a failed `examine` deposited — cross-VERB "
         "propagation through a shared grammar cell, which is what §F1 clause 4 is for. `commit`/"
         "`found`/`build` join because each is a new choosable VERB_TABLE row reading the same "
-        "grammar cells; `petition` joins because the crowded ranking's composition shifted again. "
+        "grammar cells (`commit` left again at T4, by the act mix); `petition` joins because the "
+        "crowded ranking's composition shifted again. "
         "`transfer` reappearing here would mean its own seeding act (`transfer.refused` on "
         "`hearth_ostvik`) is reachable again in this fixture's ranking — a gain, not a failure, and "
-        "worth re-measuring and re-pinning; any OTHER verb missing from the nine above is a new "
+        "worth re-measuring and re-pinning; any OTHER verb missing from the eight above is a new "
         "finding and must be measured before re-pinning")
     # ⚠⚠ **THE COUNT COMPARISON WENT INERT AND IS REPLACED BY THE COMPOSITION ONE, WHICH IS WHAT
     # THE CLAIM ACTUALLY IS.** This read `sum(hl_acts_live) < sum(hl_acts_none)` — *clause 4
@@ -10970,8 +11226,24 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # [GROUNDED: measured 2026-09-30 -- 13 executable clause-4 drops on `build_world(0)`, up from 6;
     # `restore` newly executable (`24e`) accounts for 2 of the 7 new pairs, `commit`/`found`/`build`/
     # `petition` for the rest]
-    assert len(dropped) == 13, (
-        f"{len(dropped)} executable clause-4 drops, not 13. The drops are the channel itself; if "
+    # ⚠ 13 -> 15, TELLING WORKPLAN `T4` (2026-10-01, `ED-IN-0282`), THE CHANNEL FIRING WIDER, BY THE
+    # SAME ACT-MIX SHIFT AS THE SET ASSERTION ABOVE (`commit` left that set; T4 changes no row's
+    # Candidate formation but `tell`'s). MEASURED, deduped from `hl_live` filtered to `takeable`:
+    # `{('build','p_bailiff'), ('build','p_carin'), ('examine','hearth_ostvik'),
+    # ('examine','p_carin'), ('fight','hearth_ostvik'), ('found','p_bailiff'), ('found','p_carin'),
+    # ('interview','hearth_ostvik'), ('petition','hearth_ostvik'), ('research','hearth_ostvik'),
+    # ('research','p_bailiff'), ('research','p_carin'), ('research','scriptorium'),
+    # ('restore','hearth_ostvik'), ('restore','p_carin')}`, 15 pairs.
+    # [GROUNDED: measured 2026-10-01 on this tree -- 15 executable clause-4 drops on `build_world(0)`, from 13 at `4bd5cee`]
+    # ⚠ 15 -> 14, BATCH-2 CLOSE `F1` (2026-10-01, `ED-IN-0282`), UNIT: (verb, subject) PAIRS, DIRECTION:
+    # DOWN BY ONE. WITNESS no longer deposits the fold's `with` read, so the act mix moved again (the
+    # set assertion above moved with it). Set difference against the 15 pairs above: OUT
+    # `('build','p_carin')`, `('found','p_carin')`, `('research','scriptorium')`; IN
+    # `('build','rec:6986534b122765b3')`, `('found','rec:6986534b122765b3')`. The clause still fires,
+    # which is what the floor is for; the fall is which `(verb, subject)` pairs the act mix reaches.
+    # [GROUNDED: measured 2026-10-01 on this tree -- 14 executable clause-4 drops on `build_world(0)`, from 15 on `67ec05c`; the pairs read off the test's own printed `shipped` list]
+    assert len(dropped) == 14, (
+        f"{len(dropped)} executable clause-4 drops, not 14. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
         "failure than the loss of outcome-relevance recorded above.")
     # ⚠⚠⚠ **THE BITE CAME BACK UNDER G1a, THE GUARD ABOVE DEMANDED A REASON, AND THE REASON IS
@@ -11120,8 +11392,19 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # petition, research, restore, surveil}, 63 of them (commit 33, research 8, surveil 6, examine 5,
     # restore 5, fight 2, interview 2, petition 2); `move` still absent from the drop set AND from
     # every Event kind in the world's log]
-    assert {v for v, _ in live} == {"commit", "examine", "interview", "fight", "petition",
-                                    "research", "restore", "surveil"}, (
+    # ⚠ {8 verbs} -> {10 verbs}, BATCH-2 CLOSE `F1` (2026-10-01, `ED-IN-0282`), UNIT: VERBS IN THE DROP
+    # SET, DIRECTION: UP BY TWO. `build` and `found` JOIN on ARC-01, where neither had appeared (see
+    # the `2026-09-30` note above: they formed on `build_world(0)` and not here). WITNESS no longer
+    # deposits a `with` read, so ARC-01's multi-season act mix moved by the same compounding the
+    # `FIGHT-RENAME` note names, and `build`/`found` win slots on `r_realm`. MEASURED by running the
+    # test's own `drops` on this tree and on a `git worktree` at `67ec05c`: 61 drops there (commit 29,
+    # research 9, examine 4, restore 4, fight 4, interview 4, petition 4, surveil 3) and 70 here
+    # (commit 29, research 9, surveil 8, fight 4, interview 4, petition 4, examine 3, restore 3,
+    # build 3, found 3). The two verbs the message warns about are checked: `tell` is absent, and
+    # `surveil` was present before this change too.
+    # [GROUNDED: measured 2026-10-01 -- ARC-01 shipped drops on {build, commit, examine, fight, found, interview, petition, research, restore, surveil}, 70 of them, from 61 on `67ec05c`]
+    assert {v for v, _ in live} == {"build", "commit", "examine", "fight", "found", "interview",
+                                    "petition", "research", "restore", "surveil"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
         "`LEDGER_DERIVED_STEMS` excludes. `surveil` RETURNING means `tell`'s degree has stopped "
@@ -13486,13 +13769,16 @@ def _tell_and_witness(w, teller: str, subject: str, held: Claim, degree: str):
     one. Returns `(driver, event)`. `w.acts.append` is required for `state/attribution.py`'s
     `actor_of`/`anchor_of` (tier 1) to resolve the teller from `causes=[act.id]` -- `d.act_of` alone
     is this driver's OWN memo and is not what the co-located/witness_key channel predicates read."""
+    # T1: the teller's claim is planted FIRST so `said_of` (the one owner of what a teller says,
+    # which `opening_set` calls at CHOOSE) can read it onto the Act's payload.
+    w.persons[teller].ledger.append(held)
     act = Act(id=f"a_tell_{teller}_{subject}_{degree}", actor=teller, verb="tell",
-              payload={"subject": subject})
+              payload={"subject": subject,
+                       "said": said_of(w.persons[teller].ledger, subject, w.fixtures)})
     w.acts.append(act)
     ev = Event(H(w.world_seed, w.tick, teller, f"ev:news.told:{act.id}"), "news.told",
                [], [act.id], w.tick, degree, ())
     w.log.append(ev)
-    w.persons[teller].ledger.append(held)
     d = SeasonDriver(w)
     d.act_of[ev.id] = act
     d.witness(mint_token(w, WriteClass.INTERIOR), [ev])
@@ -14307,3 +14593,106 @@ def test_w28_cast_capability_is_authored_world_gen_not_a_zeroed_default():
     known = {c["id"] for c in R.load_cases("NPC")} | {c["id"] for c in R.load_cases("ARC")}
     orphans = sorted(cid for cid in C.CAST if cid not in known)
     assert not orphans, f"a `cast:` overlay names a case in neither lane: {orphans}"
+
+
+# ---------------------------------------------------------------------------------------------
+# T4 (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282): A TELLING NAMES ITS HEARER. `to`
+# comes from the persons the teller KNOWS (`known_persons`), one Candidate per person; no other row
+# changes how it binds `to` or whom it contests.
+# ---------------------------------------------------------------------------------------------
+
+def _t4_person(knows=(), holds=("Hh",)):
+    """`tiny_world`'s `p_low`, holding a claim on each of `holds` and an `exists:Person` reading of
+    each of `knows` -- the `existence` deposit's shape, one of `known_persons`' three sources."""
+    w = P.tiny_world()
+    p = w.persons["p_low"]
+    for i, s in enumerate(holds):
+        p.ledger.append(Claim(f"c_h{i}", p.id, s, "stores:grain", 8, 0, "firsthand", 37, "own"))
+    for i, k in enumerate(knows):
+        p.ledger.append(Claim(f"c_k{i}", p.id, k, "exists:Person", 1, 0, "firsthand", 100, "own"))
+    return w, p
+
+
+def _t4_offered(w, p, referents, verb=None):
+    q = Question("q:t4", "need", tuple(referents))
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
+    return [c for c in decision.opening_set(p, v, q, w.fixtures) if verb is None or c.verb == verb]
+
+
+def test_t4_one_candidate_per_known_hearer():
+    """A person who knows two persons forms TWO `tell` Candidates for one referent -- one addressed
+    to each, both about the referent, both carrying what they would say -- and `to` is never the
+    teller. Knowing nobody forms none (a telling to nobody is an act with a hole). `p_high` stands in
+    another rung and is still a Candidate: whether a hearer is PRESENT is the fold's question
+    (`hearer`), never the chooser's.
+
+    Against the pre-T4 row (`own_ledger` alone, no `to`) one Candidate forms whoever is known, with
+    no `to` -- the `len == 2` and the `to` set both go red."""
+    w, p = _t4_person(knows=("p_mid", "p_high"))
+    tells = _t4_offered(w, p, ("Hh",), "tell")
+    assert len(tells) == 2, [(c.subject, c.operands.get("to")) for c in tells]
+    assert {c.operands["to"] for c in tells} == {"p_mid", "p_high"}
+    assert all(c.subject == "Hh" and c.operands["to"] != p.id for c in tells)
+    assert all(c.operands.get("said") is not None for c in tells), "a formed telling carries nothing to say"
+    w, p = _t4_person(knows=())
+    assert _t4_offered(w, p, ("Hh",), "tell") == [], "a telling formed with nobody known to tell it to"
+    # The TOPIC is never the hearer: asked about `p_mid`, a teller who knows only `p_mid` has nobody
+    # to tell, and one who also knows `p_high` tells `p_high`.
+    w, p = _t4_person(knows=("p_mid",), holds=("p_mid",))
+    assert _t4_offered(w, p, ("p_mid",), "tell") == []
+    w, p = _t4_person(knows=("p_mid", "p_high"), holds=("p_mid",))
+    assert [c.operands["to"] for c in _t4_offered(w, p, ("p_mid",), "tell")] == ["p_high"]
+
+
+def test_t4_nothing_to_say_forms_no_telling_and_survey_is_untouched():
+    """T1's deferred decline, taken at T4: a teller holding NOTHING about the referent forms no
+    `tell` (the `holds` conjunct is NAMED, so `opening_set` carries `said` and declines on `None`).
+    `survey` shares the `own_ledger` form UNNAMED: it still forms on a referent its holder holds
+    nothing about (clause 4 is known-false, never 'unproven'), and carries no `said`."""
+    w, p = _t4_person(knows=("p_mid",), holds=())
+    assert _t4_offered(w, p, ("Hh",), "tell") == []
+    surveys = _t4_offered(w, p, ("Hh",), "survey")
+    assert surveys and all("said" not in c.operands for c in surveys), (
+        [(c.subject, sorted(c.operands)) for c in surveys])
+
+
+def test_t4_a_person_may_tell_about_themselves_and_still_not_fight_themselves():
+    """DECISION 3. The contested-verb self-subject skip binds only a row naming NO counterparty: a
+    `tell`'s opponent is its `to`, so its `subject` is a topic and a person may tell somebody about
+    themselves. `fight` names none -- its opponent IS its subject -- and still declines the person
+    as their own subject. CONTROL: `fight` forms on another person, so its absence on `p_low` is the
+    skip and not the verb being unformable."""
+    w, p = _t4_person(knows=("p_mid",), holds=("p_low",))
+    tells = _t4_offered(w, p, ("p_low",), "tell")
+    assert [(c.subject, c.operands["to"]) for c in tells] == [("p_low", "p_mid")], (
+        [(c.subject, c.operands.get("to")) for c in tells])
+    assert _t4_offered(w, p, ("p_low",), "fight") == [], "a person formed a fight against themselves"
+    assert [c.subject for c in _t4_offered(w, p, ("p_mid",), "fight")] == ["p_mid"], (
+        "the control: `fight` does not form on another person either, so the skip is unobserved")
+
+
+def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
+    """DECISION 4's CONTROL. The known-person fan applies only to a row whose cell binds `subject`
+    SEPARATELY from `to` -- `tell` alone. `petition` and `issue` bind `to` without `subject`, so `to`
+    is still what they are about (the referent rule, `_derive_operand`): one bag, whatever the person
+    knows, its `to` the pre-T4 derivation. Their opponent is unchanged too: neither contests, and the
+    two contested rows besides `tell` name no counterparty, so RESOLVE's target stays `subject`.
+    The full candidate set was also compared against HEAD in a `git worktree` (recorded in the T4
+    commit body)."""
+    from ..decision.options import _derive_operand, operand_bags
+    fanned = {v for v, r in VERB_TABLE.items()
+              if r.requires_typed is not None and r.requires_typed.known_person_operands()}
+    assert fanned == {"tell"}, sorted(fanned)
+    w, p = _t4_person(knows=("p_mid", "p_high", "p_king"))
+    q = Question("q:t4c", "need", ("p_mid",))
+    checked = 0
+    for verb in ("petition", "issue"):
+        row = VERB_TABLE[verb]
+        bags = operand_bags(p, row, q, "p_mid", w.fixtures)
+        assert len(bags) == 1, (verb, bags)
+        assert bags[0]["to"] == _derive_operand(p, "to", q, "p_mid", w.fixtures) == "p_mid", (verb, bags)
+        assert operands_for(p, row, q, "p_mid", w.fixtures) == bags[0]
+        assert row.counterparty == "to" and not row.contests, verb
+        checked += 1
+    assert checked == 2
+    assert {v for v, r in VERB_TABLE.items() if r.contests and r.counterparty} == {"tell"}

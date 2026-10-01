@@ -1562,6 +1562,29 @@ rosters:
       predicate: shortfall
     values: [kind, amount]
 
+  known_person_operands:
+    source: >-
+      telling workplan `T4` (`workplans/2026-10-01-telling-workplan.md` §3 and §4, `ED-IN-0282`):
+      *"`known_persons`: ids from truthy `exists:Person` claims, `Seen.who`, told `chain[-1]`; minus
+      self and referent"*, and one Candidate per known person.
+    note: >-
+      ⚠ THE SIBLINGS' SHAPE FOR A THIRD KIND OF ANSWER: the operand names a person answers with
+      SOMEBODY THEY KNOW rather than with the question's referent. A subset of `requires_operands`,
+      refused at import otherwise (`data/requires.py`). `decision/options.py::operand_bags` forms one
+      operand bag per known person, and only for a row whose typed cell binds `subject` SEPARATELY
+      from the name -- `tell`, whose topic is `subject` and whose hearer is `to`. A row binding `to`
+      without `subject` (`petition`, `issue`) keeps the referent rule: what it is addressed to IS what
+      it is about there, `H-94`'s single referent.
+      ⚠ `claim` IS WHERE A PERSON BECOMES KNOWN, and `queries/person_q.py::known_persons` reads it:
+      `predicate` -- a truthy existence reading of a person (deposited by the `existence` form's
+      fold); `seen_term` -- the `seen` claim's term naming who was seen doing something. The third
+      source, the teller of a told claim (`Claim.chain[-1]`), is structural and needs no row here.
+      Nothing else makes a person known: no roster of acquaintances, no world read.
+    claim:
+      predicate: "exists:Person"
+      seen_term: who
+    values: [to]
+
   beneficiary_kinds:
     source: >-
       `CAT-2`, closed at step 5 (`proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml`).

@@ -39,7 +39,7 @@ from dataclasses import dataclass
 from typing import Any, Optional
 
 from ..gaps import Unspecified
-from .rosters import RECORD_CONTENT, roster, roster_map
+from .rosters import OBSERVATION_TERMS, RECORD_CONTENT, roster, roster_map
 
 REQUIRES_FORMS = roster("requires_forms")
 REQUIRES_OPERANDS = roster("requires_operands")
@@ -75,6 +75,14 @@ SHORTFALL_SOURCED_OPERANDS = roster("shortfall_sourced_operands")
 _check_writ_sourced_subset(frozenset(SHORTFALL_SOURCED_OPERANDS), frozenset(REQUIRES_OPERANDS),
                            "shortfall_sourced_operands")
 SHORTFALL_PREDICATE = roster_map("shortfall_sourced_operands", "claim").get("predicate")
+# Telling workplan `T4` (`ED-IN-0282`). The operand names a person answers with SOMEBODY THEY KNOW,
+# one Candidate per known person (`decision/options.py::operand_bags`), and the claim shapes that
+# make a person known (`queries/person_q.py::known_persons`). The subset rule is the siblings' rule,
+# and the claim shape is checked below `REQUIRES_STEMS`, which it needs.
+KNOWN_PERSON_OPERANDS = roster("known_person_operands")
+_check_writ_sourced_subset(frozenset(KNOWN_PERSON_OPERANDS), frozenset(REQUIRES_OPERANDS),
+                           "known_person_operands")
+KNOWN_PERSON_CLAIM = roster_map("known_person_operands", "claim")
 
 class _Unknown:
     """THE THIRD TRUTH VALUE, AND IT IS NOT `False`.
@@ -200,6 +208,12 @@ class Requirement:
 
     def operands(self) -> tuple:
         """Every operand name this clause reads. Checked at load against the form's `needs:`."""
+        return ()
+
+    def own_ledger_operands(self) -> tuple:
+        """The operands a clause of form `own_ledger` reads, and `()` for every other form. Walks the
+        TYPED FORM, so a caller asking *does this row read its actor's own ledger* never keys on a
+        verb name (`decision/options.py::opening_set` is the reader)."""
         return ()
 
     def entity_operands(self) -> tuple:
@@ -371,6 +385,8 @@ class OwnLedger(Requirement):
     def entity_operands(self) -> tuple:
         return (self.of,)
 
+    def own_ledger_operands(self) -> tuple:
+        return (self.of,)
 
     def stems(self) -> tuple:
         return ("claim.held",)
@@ -469,6 +485,9 @@ class AllOf(Requirement):
     def entity_operands(self) -> tuple:
         return tuple(dict.fromkeys(o for c in self.clauses for o in c.entity_operands()))
 
+    def own_ledger_operands(self) -> tuple:
+        return tuple(dict.fromkeys(o for c in self.clauses for o in c.own_ledger_operands()))
+
     def needs(self) -> frozenset:
         return frozenset().union(*(c.needs() for c in self.clauses)) if self.clauses else frozenset()
 
@@ -521,6 +540,30 @@ class TypedRequires:
         """The named top-level conjuncts, in order, `None`s dropped."""
         return tuple(n for n in self.names if n is not None)
 
+    def known_person_operands(self) -> tuple:
+        """The `known_person_operands` members this cell BINDS, where it binds `subject` too, so the
+        topic and the person addressed are different operands (telling workplan `T4`). Empty for a
+        cell binding `to` without `subject` (`petition`, `issue`): there `to` is what the act is
+        about, the referent. `decision/options.py::operand_bags` fans these over known persons;
+        `data/verbs.py::act_key` puts them in the act's id, since one topic now forms several acts."""
+        bound = self.operands()
+        if "subject" not in bound:
+            return ()
+        return tuple(n for n in KNOWN_PERSON_OPERANDS if n in bound and n != "subject")
+
+    def named_own_ledger_operands(self) -> tuple:
+        """The operands of the `own_ledger` clauses that carry a `conjunct:` NAME, in order.
+
+        Telling workplan `T4`: a NAMED own-ledger conjunct is a row declaring that *holding
+        something about the operand* is a clause of its own, keyed to its own refusal (`tell`'s
+        `holds`). `decision/options.py::opening_set` reads it to carry what the actor would SAY and
+        to decline a Candidate with nothing to say. An unnamed one (`survey`, `reconstruct`) only
+        asks whether a claim is held and carries nothing. Read off the data, never a verb name."""
+        req = self.requirement
+        clauses = req.clauses if isinstance(req, AllOf) else (req,)
+        return tuple(dict.fromkeys(o for n, c in zip(self.names, clauses) if n is not None
+                                   for o in c.own_ledger_operands()))
+
     def decide(self, reader, binding, observed) -> tuple:
         """`(value, failed)` -- the verdict and the NAME of the conjunct that decided a non-True one
         (`None` if True or unnamed). A top-level `AllOf` reports its deciding clause by position,
@@ -540,6 +583,9 @@ class TypedRequires:
 
     def entity_operands(self) -> tuple:
         return self.requirement.entity_operands()
+
+    def own_ledger_operands(self) -> tuple:
+        return self.requirement.own_ledger_operands()
 
     def needs(self) -> frozenset:
         return self.requirement.needs()
@@ -598,7 +644,8 @@ def binding_of(actor: str, operands: dict, via: Optional[str] = None) -> dict:
     already holds (`ID-2`).
 
     Operands outside `requires_operands` are dropped: a payload is also where `record`, `stages`,
-    `venue` and `harm` ride, and the grammar's vocabulary is closed.
+    `venue`, `harm` and `said` (a telling's `Said`, set at CHOOSE by `opening_set` and read by WITNESS)
+    ride, and the grammar's vocabulary is closed -- `said` is a non-scalar the grammar never reads.
 
     ⚠ `via=` (plan position `19`) -- THE SEAT THE ACT EXERCISES, STRUCTURAL ON BOTH SIDES FOR THE
     REASON `actor` IS: `Act.via` for the fold (`binding_from_act`), `exercised_seat(p, row)` for the
@@ -646,18 +693,77 @@ def binding_from_act(a) -> dict:
 # for `present_at`, LOADED CLEAN, evaluated UNKNOWN in every world, and the fold refused the verb
 # everywhere -- reported as `H-94`'s honest operand famine. A typo and a design gap were
 # indistinguishable, which is the silent-wrong-answer shape this file refuses everywhere else.
-# roster-exempt: MECHANISM. These are the grammar's own predicate stems -- what a REQUIREMENT MAY
-# ASK -- not the game's vocabulary; `rosters.yaml` says what the world contains.
 # ⚠ PLAN POSITION `19` ADDED FOUR, EACH A QUESTION A REMIT VERB'S CELL ASKS AND NONE A NEW FORM:
 # `purview` and `bench` are `Basis`'s (§F.24a form 7) two seat rules -- ruling (4)'s purview and the
 # `determination` basis's bench, each the write gate's own predicate read early; `bench.size` and
 # `quorum` are `determine`'s quorum conjunct, a `scalar_threshold` (form 2) of the bench's size
 # against a SECOND READ, `work`'s `floor` shape, so no operand is added to `cardinality` (the
 # widening `21_RECONCILIATION.md` A.1 struck). `WorldReader.read` answers all four.
+# ⚠ TELLING WORKPLAN `T4` ADDED `with` (`ED-IN-0282`): `relation` (form 5) asked of TWO PERSONS --
+# *are `of` and the actor in the same place* -- the person-to-person co-location stem `give`'s
+# `requires_typed_note` records as the cell waiting for it. `WorldReader.read` answers it through
+# `world_q.place_of`; the person side never does (`WORLD_ONLY_STEMS`, below).
+# roster-exempt: MECHANISM. These are the grammar's own predicate stems -- what a REQUIREMENT MAY
+# ASK -- not the game's vocabulary; `rosters.yaml` says what the world contains.
 REQUIRES_STEMS = frozenset({
     "exists", "stores", "condition", "floor", "contain.path", "held_by", "present_at",
-    "claim.held", "rank", "purview", "bench", "bench.size", "quorum",
+    "claim.held", "rank", "purview", "bench", "bench.size", "quorum", "with",
 })
+
+# THE STEMS THE PERSON-SIDE READER NEVER ANSWERS: `queries/person_q.py::LedgerReader.read` returns
+# UNKNOWN for them whatever the ledger holds, so §F1 clause 4 never declines on them. `with` asks
+# where another person is NOW, which a ledger cannot hold current: the fold reads it
+# (`Observation(to, "with:<actor>", ...)` rides `Event.observed`) but WITNESS does NOT deposit it
+# (`loop/witness.py` skips `WORLD_ONLY_STEMS` beside `LEDGER_DERIVED_STEMS`, `ED-IN-0282` batch-2
+# close `F1`). Depositing it would make a stale belief decide presence if anything read it back
+# -- and something else would: `claim.held` accepts any claim on the subject, Q2 raises a question
+# on the hearer for a claim landing about them, and `said_of` can hand it on as the content of a
+# telling. Presence is the world's to decide (the telling workplan's T-e; hearing is by presence,
+# `epistemic.py`'s `co_located` channel). UNKNOWN is never a contradiction, so the person forms
+# the Candidate and the fold refuses an absent hearer.
+# MECHANISM, as `REQUIRES_STEMS` is -- which of the grammar's own predicates a ledger may answer,
+# not vocabulary the world contains.
+WORLD_ONLY_STEMS = frozenset({"with"})
+
+# THE STEMS A LEDGER CLAIM IS A *CELL* OF -- one `(subject, predicate)` slot that holds one value at a
+# time and can be re-asserted, so two claims on it agree or disagree (`decision/options.py::record`).
+# Derived, not a second roster: what a requirement may ask, less what only the world answers. NOT a
+# cell: `seen` (each sighting is a distinct `Seen` value, so two witnesses passing on the same
+# sighting would differ) and the event-kind predicates (`news.told` ... -- the value is always
+# `True`, so any pair would "agree"). Neither is in `REQUIRES_STEMS`.
+# ⚠ NOT COMPLETE AS "EVERY SLOT THAT HOLDS ONE VALUE": `content:<kind>` and `shortfall:<kind>` claims
+# are one value per `(subject, predicate)` too, and are outside `REQUIRES_STEMS`, so `record` never pairs
+# them. Nothing is told about them today; a lie about a document's content could not lower the liar's
+# record until G7 widens this (recorded at `H-183`).
+CELL_STEMS = REQUIRES_STEMS - WORLD_ONLY_STEMS
+
+
+def _check_known_person_claim(claim, requires_stems: frozenset, observation_terms) -> None:
+    """Telling workplan `T4`. `known_person_operands.claim` names the two claim shapes that make a
+    person KNOWN: `predicate` -- an existence reading the grammar deposits (`<stem>:<kind>`, the
+    stem a `REQUIRES_STEMS` member), held truthy; `seen_term` -- the `seen` claim's term naming who
+    was seen (an `observation_terms` member). A told claim's teller is the third source and needs
+    no data: it is `Claim.chain[-1]`. Refused at import on a stem no reader deposits, a predicate
+    with no kind, or a term the `seen` struct does not carry -- each would make `known_persons`
+    silently empty (`_check_shortfall_stem`'s precedent, one roster up)."""
+    claim = claim or {}
+    stem, sep, kind = str(claim.get("predicate") or "").partition(":")
+    if not sep or not kind or stem not in requires_stems:
+        raise Unspecified(
+            f"rosters.yaml: known_person_operands.claim.predicate is {claim.get('predicate')!r}",
+            "rosters.yaml -- known_person_operands",
+            needs="`<stem>:<kind>`, the stem one the `requires` grammar deposits",
+            law="a person is known from a reading somebody could have deposited; a stem no reader "
+                "answers is a source that never fills")
+    if claim.get("seen_term") not in tuple(observation_terms):
+        raise Unspecified(
+            f"rosters.yaml: known_person_operands.claim.seen_term is {claim.get('seen_term')!r}",
+            "rosters.yaml -- known_person_operands",
+            needs=f"one of observation_terms {list(observation_terms)}",
+            law="the `seen` struct IS the roster; a term it does not carry reads nothing")
+
+
+_check_known_person_claim(KNOWN_PERSON_CLAIM, REQUIRES_STEMS, OBSERVATION_TERMS)
 
 # THE STEMS WHOSE VALUE IS COMPUTED **FROM THE HOLDER'S OWN LEDGER** -- and which therefore MAY
 # NOT BE DEPOSITED INTO IT. `WorldReader.read`'s `claim.held` branch answers

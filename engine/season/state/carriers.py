@@ -26,7 +26,7 @@ these nine classes and this module imports nothing back, so the two files togeth
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any, NamedTuple, Optional
 
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import MATRIX
@@ -282,16 +282,50 @@ class Claim:
     confidence: int
     visibility: str
     round: int = 0
-    # ⚠ BATCH-CLOSE FINDING (methodology-close Phase 1, FIDELITY TO PLAN lens, position `15b`).
-    # `RULINGS.yaml` CAT-3 (`proposals/2026-09-17-governance-and-behaviour/`), CLOSED: *"a claim's
-    # value is modified by the hearer's BELIEF about their relation to the teller (lord > peer >
-    # enemy)... STORE THE TELLER... The edit is one argument, not a lookup."* The `round` docstring
-    # above bounds workplan item U2 specifically ("the only carrier field U2 ADDS") and is not a
-    # freeze on this dataclass as a whole -- CAT-3's own text corrects the mis-read that blocked
-    # this the first time. `None` for every claim with no teller (firsthand, seen, inferred,
-    # content-deposit) -- only the told channel's own deposit sets it (`loop/witness.py`).
-    teller: Optional[str] = None
+    # ⚠ `chain` -- WHO PASSED THIS CLAIM ON, ORIGIN FIRST, AS IT WAS PRESENTED (telling workplan `T3b`,
+    # `ED-IN-0282`; closes `RULINGS.yaml` CAT-3, *"STORE THE TELLER... The edit is one argument, not a
+    # lookup"*). `()` for every claim nobody told (firsthand, seen, inferred, content-deposit, and a
+    # `told_by` deposit through a channel with no speaking actor); the told channel's deposit
+    # (`loop/witness.py`) sets `said.chain + (act.actor,)`, so a retelling of a told claim is a longer
+    # chain and the origin is `chain[0]`. What it is FOR is READ TIME: `decision/options.py::
+    # teller_weight` weighs a claim by `told_weight ** hops` and the hearer's relation to the TELLER,
+    # and `queries/person_q.py::LedgerReader` counts support over distinct ORIGINS. Nothing is
+    # frozen at deposit: the chain records WHO told, and the grade is the reader's, so a revised
+    # regard re-grades every claim a teller ever passed on. `chain` replaces the `teller` field
+    # this class carried until `T3b`; `teller` and `hops` are now derived (below). KEYWORD-ONLY:
+    # it took the old positional slot of `teller`, and a stray string passed there would read as a
+    # chain of one-character hops.
+    chain: tuple = field(default=(), kw_only=True)
 
+    @property
+    def teller(self) -> Optional[str]:
+        """The LAST hop: the one who told THIS holder (`chain[-1]`), or `None` if nobody did. A
+        derived reading, not a field -- a second stored teller beside `chain` would be two owners
+        of one fact. Read-only; construct with `chain=`."""
+        return self.chain[-1] if self.chain else None
+
+    @property
+    def hops(self) -> int:
+        """How many tellings stand between the origin and this holder: `len(chain)`, `0` firsthand."""
+        return len(self.chain)
+
+
+class Said(NamedTuple):
+    """WHAT A TELLING PASSES ON, fixed at CHOOSE: the teller's own claim about the act's subject,
+    copied out of their ledger by `queries/person_q.py::said_of` and carried on
+    `Act.payload["said"]`, so WITNESS reads what the telling carried and never the teller's live
+    ledger (the `F8` carve-out: a ledger is asked by its own holder, person-side).
+
+    A NamedTuple, not a Claim: it has no id, holder, `when` or source, because it is not a belief
+    anyone holds -- it is a thing said. `chain` is the chain of the claim the teller picked
+    (`said_of` copies `Claim.chain`; `()` for a claim the teller holds firsthand), and the told
+    deposit extends it by the teller. Who may hear it (a confidence's circle) is gated position
+    G6 of `workplans/2026-10-01-telling-workplan.md` and lands with its reader, never before."""
+    subject: str
+    predicate: str
+    value: Any
+    confidence: int
+    chain: tuple = ()
 
 
 

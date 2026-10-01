@@ -17,33 +17,21 @@ hand-written `effect` lambda, and A LAMBDA PER ACT IS A SECOND RESOLVER."*
 module's docstring for the ordering constraint this creates and how it is satisfied structurally
 by THIS module's own import of `requires`, below, rather than by file position.
 
-⚠ CORRECTED, step 7 of the decomposition: this paragraph used to say `align()` ITSELF DOES NOT
-MOVE, present tense, true when written (step 3) and false now. `align()` moved to
-`season.decision` at step 7, together with the rest of `decision/`'s person-side surface, and
-THIS module is still the table it reads -- `decision.py` imports `ALIGNMENT`/
-`ALIGNMENT_DEFAULT_CELL` from here, the same names `shape.py` re-exports back from `decision.py`
-so `S.ALIGNMENT` keeps resolving. THE SWEEP STILL WORKS, BUT THE NAMESPACE THAT MAKES IT WORK
-MOVED WITH THE READER: `test_season_shape.py`'s
-`test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_printed` now rebinds
-`decision.ALIGNMENT` (not `S.ALIGNMENT`, which would be a no-op on it since step 7), and
-`align()` -- defined in `decision.py` now -- reads the global `ALIGNMENT` of the module it is
-DEFINED IN, which is `decision.py`'s own, populated by the `from .data.verbs import ALIGNMENT`
-in THAT file. The rule this paragraph exists to state is unchanged even though the address moved:
-the rebind and the read still share a namespace, because that namespace is wherever `align` is
-DEFINED, not wherever it happens to have been defined last (§4's "write the rule, not the
-address" — the exact correction `shape.py`'s own S23/S30 breadcrumb records making twice already).
-⚠ THE ORIGINAL SENTENCE ALSO NAMED THE WRONG TEST FILE (`test_tracer_is_honest.py`, under
-`proposals/2026-08-31-shape-tracer/`, which does not mention `ALIGNMENT` at all) -- a
-pre-existing inaccuracy this correction does not repeat, found while fixing the move claim rather
-than by a separate pass, and left as a `not this step's declared scope` note rather than chased
-further: nothing else in this docstring depended on it.
+⚠ `align()` AND `align_kind()` LIVE HERE, BESIDE THE TABLE THEY READ (telling workplan T2). `align`
+was in `shape.py`, then `decision.py`, then `decision/options.py`; each move carried the rebind
+address with it, and the last one left a reader in `options.py` and the table here. Now the
+`ALIGNMENT` binding and its only reader share this module, so the rebind that moves one moves
+the other: the `H-66` sweep and the `H-146` tests rebind `data.verbs.ALIGNMENT`, and nothing
+else binds the name. Every reader (`choose`'s score, `refuses`, `_scar`, `corpus_run`) calls
+`align`; tests that import `ALIGNMENT` do so function-locally and read it live -- a copy imported
+by name at module scope would be a stale snapshot.
 
 ⚠ `VERB_TABLE` IS ASSIGNED TWICE, VERBATIM, AND ONLY THE SECOND ASSIGNMENT EVER RUNS. The
 forward declaration below (`VERB_TABLE: dict = {}`) carries a comment from a PRIOR layout of
 `shape.py`, from before steps 1-2 extracted the write matrix and roster readers: at that time
 real loading code sat physically between the forward declaration and the fill. It does not any
 more -- the two lines are adjacent -- and nothing at IMPORT TIME reads `VERB_TABLE` in the gap:
-checked directly, `_load_alignment`'s own read of it (`verbs = set(VERB_TABLE)`) is inside a
+checked directly, `_load_alignment`'s own read of it (`admitted = set(VERB_TABLE) | ...`) is inside a
 function BODY, defined a few lines after the real fill but not CALLED (`ALIGNMENT =
 _load_alignment()`) until further still -- by which point the real fill has long since run.
 Preserved unchanged because this is a PURE MOVE and the forward declaration is otherwise
@@ -691,9 +679,9 @@ def _load_verb_table() -> dict:
         #   * `WRITE_CLAUSE`         iff the row writes (an effect can decline, F9's `NoOpReceipt`).
         # MISSING is a failable clause with no kind -- the fold would reach `refusal_for` and raise;
         # EXTRA is a kind for a clause that cannot fail, read by nothing (`ID-13`). A name on a FLAT
-        # row is refused for the same reason: nothing keys it. A CONTESTED row may not key its
-        # refusals yet: the seam's party gap (`loop/resolve.py::_party_gap_refusal`) is a refusal
-        # point this schema has no clause for, and it would emit the union. ONE refusal names every
+        # row is refused for the same reason: nothing keys it. A CONTESTED row may key its refusals
+        # only to ONE kind: the seam's party gap (`loop/resolve.py::_party_gap_refusal`) is a refusal
+        # point this schema has no clause for, and it emits the union. ONE refusal names every
         # defect found, so a table edit that breaks three things is told all three.
         _names = row.requires_typed.conjuncts() if row.requires_typed is not None else ()
         if by_clause or _names:
@@ -709,8 +697,14 @@ def _load_verb_table() -> dict:
                     or None in row.requires_typed.names):
                 _defects.append("keys its refusals, so its precondition must be a typed cell with "
                                 "EVERY top-level conjunct named")
-            if row.contests:
-                _defects.append("declares `contests:`, whose party-gap refusal no clause names")
+            # ⚠ NARROWED AT TELLING WORKPLAN `T4`: the party-gap refusal emits the UNION, which is
+            # `ID-9` only if the union holds more than one kind -- a kind published for a conjunct
+            # that did not fail. A contested row whose every key emits ONE kind (`tell`:
+            # `news.untold` for `holds` and `hearer`) emits exactly that kind at the party gap too.
+            if row.contests and len(row.emits_on_refusal) > 1:
+                _defects.append("declares `contests:`, whose party-gap refusal no clause names, "
+                                "and keys more than one refusal kind, so that refusal would emit "
+                                "kinds for conjuncts that did not fail")
             if set(_names) & {ELIGIBILITY_CLAUSE, WRITE_CLAUSE}:
                 _defects.append(f"names a conjunct after a fold clause "
                                 f"({sorted(set(_names) & {ELIGIBILITY_CLAUSE, WRITE_CLAUSE})})")
@@ -836,6 +830,57 @@ VERB_TABLE: dict = {}          # filled after STRATA loads, at the bottom of the
 
 VERB_TABLE = _load_verb_table()
 
+
+def act_key(verb: str, subject, operands) -> str:
+    """WHAT AN ACT'S ID IS OF, AFTER ITS VERB: `H(seed, tick, actor, f"act:{verb}:{act_key}")`.
+    The subject, and -- for a row whose cell binds a known-person operand beside `subject`
+    (`TypedRequires.known_person_operands`, `tell`'s `to`) -- that operand too, as `subject>to`.
+
+    ⚠ TELLING WORKPLAN `T4`, AND IT IS MEASURED NECESSITY: one topic now forms one `tell` per person
+    the teller knows, so two acts in one deliberation shared `(actor, verb, subject)` and therefore
+    one id, and `state/acts.py` refused the second (`act id ... is already in the store`) on the
+    first realm season. Every other row answers its subject alone, so its ids are byte-identical
+    to before. ONE OWNER for both minting sites: `decision/choose.py::pack_scenes` and
+    `loop/deliberate.py::_qualify_by_round` (`04 PART D row 35`: purpose uniqueness is a
+    convention, and this is where it is kept)."""
+    key = "" if subject is None else str(subject)
+    row = VERB_TABLE.get(verb)
+    ops = operands if isinstance(operands, dict) else {}
+    if row is not None and row.requires_typed is not None:
+        for n in row.requires_typed.known_person_operands():
+            if ops.get(n) is not None:
+                key += f">{ops[n]}"
+    return key
+
+
+def opportunity_key(verb: str, subject, operands) -> Optional[tuple]:
+    """WHAT MAKES TWO ACTS ONE OPPORTUNITY, FOR THE ONCE-PER-SEASON FILTER: `(verb, subject)`, plus
+    the counterparty where the row names one -- `(verb, subject, <the operand its `counterparty:`
+    column names>)`. `None` for an act that names no subject: it has no opportunity to be the same as,
+    so it is never recorded and never filtered (`loop/deliberate.py::_drop_what_was_already_done`).
+
+    ⚠ TELLING WORKPLAN `T4b`, A DEFECT JORDAN NAMED. `T4` made one `tell` Candidate per known present
+    hearer, but the filter keyed `(verb, subject)`, so once a topic was told to B it could never be
+    told to D that season -- and a person can obviously tell several hearers. The key is the GENERAL
+    rule for a row that names a `counterparty:`, read off the ROW'S COLUMN and never a verb name; `tell`
+    is the row where it changes anything TODAY. `petition` and `issue` always have `to` == `subject`
+    (a computed Candidate's one referent), so their key is unchanged, and `give` forms no Candidate
+    (`decision/options.py::opening_set` needs `to`). Where the counterparty IS the subject (`determine`,
+    `oblige`) it adds nothing and is left out, so those keys are byte-identical to before.
+
+    ONE OWNER, BOTH SITES: `loop/driver.py` (writes a realised act) and `loop/deliberate.py`
+    (reads it) both call this, so the key cannot be spelled two ways (`CLAUDE.md` §8). It sits beside
+    `act_key`, which reads the same operands for the act's id, and needs no `World` or carrier."""
+    if not subject:
+        return None
+    row = VERB_TABLE.get(verb)
+    ops = operands if isinstance(operands, dict) else {}
+    other = ops.get(row.counterparty) if row is not None and row.counterparty else None
+    if other is None or other == subject:
+        return (verb, subject)
+    return (verb, subject, other)
+
+
 def _check_sparse_table(name: str, cells: dict, rows: "set|tuple", row_what: str,
                         cols: "set|tuple", col_what: str, row_law: str, col_law: str) -> dict:
     """THE THREE CHECKS A ROSTER-KEYED SPARSE TABLE NEEDS, IN ONE PLACE.
@@ -915,22 +960,51 @@ PURSUIT_PROJECTION = _load_projection()
 PROJECTION_DEFAULT_CELL = float(table_meta("pursuit_projection").get("default_cell", 0.0))
 
 
-def _load_alignment() -> dict:
+def _derive_kind_verb() -> tuple:
+    """`(KIND_VERB, EMITTED_KINDS)`, derived from every row's `emits:` and `emits_on_refusal:`.
+
+    `EMITTED_KINDS` is every event kind some verb row can emit, success or refusal. `KIND_VERB`
+    maps a kind to its verb ONLY where exactly one row emits it: a kind several rows emit names no
+    single verb, so it maps to nothing rather than to whichever row happened to sort first. Both
+    are read off the table once at load -- no kind or verb is listed here."""
+    emitters: dict = {}
+    for verb, row in VERB_TABLE.items():
+        for kind in set(row.emits) | set(row.emits_on_refusal):
+            emitters.setdefault(kind, set()).add(verb)
+    kind_verb = {k: next(iter(vs)) for k, vs in emitters.items() if len(vs) == 1}
+    return kind_verb, frozenset(emitters)
+
+
+KIND_VERB, EMITTED_KINDS = _derive_kind_verb()
+
+# An authored alignment cell for an EVENT KIND rather than a verb is keyed `deed:<kind>` in the same
+# axis row. Admitted only where `<kind>` is in `EMITTED_KINDS` (`_load_alignment`): a deed key for a
+# kind no verb emits is a weight on an event nobody can see. None is authored today.
+DEED_PREFIX = "deed:"
+
+
+def _load_alignment(cells: Optional[dict] = None) -> dict:
     """§F2's `alignment(c.verb, axis)`, from `rosters.yaml`, with THREE load-time checks.
 
     Each check exists because the corresponding failure would be SILENT. A cell naming a verb the
     table no longer carries is dead weight nothing reports; an axis outside the roster makes
     `conviction[axis]` unreachable; and an all-zero matrix -- PLAN §W5's named guardrail -- "would
     pass every test while meaning nothing", which is the dead-carrier defect #353 `:739-744`
-    describes. All three raise HERE rather than producing a plausible score later."""
-    cells = table("alignment")
-    verbs = set(VERB_TABLE)
+    describes. All three raise HERE rather than producing a plausible score later.
+
+    A `deed:<kind>` key is admitted beside the verbs, for kinds in `EMITTED_KINDS` only (the same
+    first check, one column wider). `cells` defaults to the roster table; a caller may pass another
+    to exercise the loader without touching the shipped one."""
+    if cells is None:
+        cells = table("alignment")
+    admitted = set(VERB_TABLE) | {DEED_PREFIX + k for k in EMITTED_KINDS}
     return _check_sparse_table(
-        "alignment", cells, PURSUIT_AXES, "axis", verbs, "verb",
+        "alignment", cells, PURSUIT_AXES, "axis", admitted, "verb or `deed:<kind>`",
         row_law=("§F2 -- `conviction[axis] * alignment(verb, axis)` sums over the ROSTER. A cell on "
                  "an unrostered axis is never read and never reported"),
         col_law=("§E2 -- the verb table is the roster of verbs. A cell keyed on a verb that does "
-                 "not exist is a weight on an option nobody can ever form"))
+                 "not exist is a weight on an option nobody can ever form; a `deed:` key for a "
+                 "kind no verb emits is a weight on an event nobody can see"))
 
 ALIGNMENT = _load_alignment()
 
@@ -938,6 +1012,38 @@ ALIGNMENT = _load_alignment()
 # built from the declared table rather than from the previous point (see `alignment_at`).
 ALIGNMENT_DECLARED = {ax: dict(row) for ax, row in ALIGNMENT.items()}
 ALIGNMENT_DEFAULT_CELL = float(table_meta("alignment").get("default_cell", 0.0))
+
+
+def align(verb: str, axis: str) -> float:
+    """§F2's `alignment(c.verb, axis)`. Sparse: an unlisted pair reads the table's own declared
+    `default_cell`, never a literal here.
+
+    ⚠ IT READS THIS MODULE'S `ALIGNMENT`, THE ONE BINDING. `alignment_at()`'s sweep rebinds
+    `data.verbs.ALIGNMENT`, and `choose`'s score, the `H-146` refusal gate and `_scar` all call
+    this function, so one rebind moves every reader. A second binding anywhere (a `from .verbs
+    import ALIGNMENT` in a reader module) would be a stale snapshot the rebind never reaches."""
+    return float(ALIGNMENT.get(axis, {}).get(verb, ALIGNMENT_DEFAULT_CELL))
+
+
+def align_kind(kind: str, axis: str) -> float:
+    """The alignment of an EVENT KIND on an axis: an authored `deed:<kind>` cell if one exists, else
+    the alignment of the one verb that emits the kind (`KIND_VERB`), else 0.
+
+    ⚠ NOTHING CALLS THIS YET. It is the regard function's primitive (the telling workplan's G1),
+    placed beside `align` so the verb-keyed and kind-keyed readers share one table and one rebind.
+
+    ⚠ ITS FIRST CALLER MUST HANDLE THE `uniform` ARM. `alignment_at("uniform")` builds cells for
+    `VERB_TABLE` verbs only, so under it a `deed:` cell is dropped and a kind several rows emit (no
+    `KIND_VERB` entry) reads 0.0 while `align(v, axis)` reads 1.0 for every verb: the H-66 control
+    arm is not uniform for kinds until the caller (G1) closes that gap."""
+    cell = ALIGNMENT.get(axis, {}).get(DEED_PREFIX + kind)
+    if cell is not None:
+        return float(cell)
+    verb = KIND_VERB.get(kind)
+    if verb is None:
+        return 0.0
+    return align(verb, axis)
+
 
 def rows_without_a_producer() -> dict:
     """Every `social: true` row that no verb writes — §7.2's rule for W2, as a REPORT.

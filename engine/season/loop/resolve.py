@@ -505,10 +505,17 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
                 "and it will be cited later as though it were measured")
     # THE TARGET, AND WHICH SHAPE OF SIDES THE PRIZE NEEDS (M4). `sides_of` is the one place
     # that decides, dispatched on the PRIZE's own manifest module -- NEVER on `a.verb`, and
-    # NEVER on what `_target` happens to look like: a candidate's subject binding to a Rung id
-    # is not unique to `march` (`tell` can name a place), so a shape-based dispatch on `_target`
-    # is unsafe -- see `sides_of`'s own docstring for the corpus case that found this.
-    _target = (a.payload or {}).get("subject") if isinstance(a.payload, dict) else None
+    # NEVER on what `_target` happens to look like: `_target` is `payload[row.counterparty or
+    # "subject"]` (below), and a candidate's `subject` binding to a Rung id is not unique to `march`
+    # (`tell`'s TOPIC can name a place, though its `_target` is now the hearer `to`), so a
+    # shape-based dispatch on `_target` is unsafe -- see `sides_of`'s own docstring for the corpus
+    # case that found this.
+    # ⚠ THE OPPONENT IS THE ROW'S `counterparty:` OPERAND WHEN IT NAMES ONE, ELSE `subject`
+    # (telling workplan `T4`, `ED-IN-0282`): `tell` contests against its HEARER (`to`), not its
+    # topic. `fight` and `march` name no counterparty and read `subject` exactly as before.
+    _row = VERB_TABLE.get(a.verb)
+    _target = ((a.payload or {}).get((_row.counterparty if _row is not None else "") or "subject")
+               if isinstance(a.payload, dict) else None)
     _parties, _subject, _rung = sides_of(w, a, _target, contests[0])
     # ⚠ A PARTY-GAP IS A REFUSAL HERE, NOT A RAISE (M4). `seam/contest.py`'s S39.1 -- *"claimant[]
     # is PERSONS, ALWAYS"* -- refuses an EMPTY list exactly as it would a wrong-shaped one

@@ -74,16 +74,16 @@ def _scar(w: "World", p, verb: str) -> None:
         # as a 0.0 cell would still put a key on the field, and `_entity_digest` reprs every
         # field -- which is the difference between an arm that is inert and one that looks it.
         return None
-    # ⚠⚠ `decision.align`, NOT A LOCAL `ALIGNMENT` READ, AND THE LOCAL READ WAS A REAL DEFECT
+    # ⚠⚠ `data.verbs.align`, NOT A LOCAL `ALIGNMENT` READ, AND THE LOCAL READ WAS A REAL DEFECT
     # RATHER THAN A STYLE SLIP. This computed the cell inline off THIS module's own `ALIGNMENT`
-    # binding. `align()` reads the binding in `decision/options.py`, which is the one the `H-66`
-    # alignment sweep REBINDS (`decision.options.ALIGNMENT = alignment_at(point)`) -- so the
+    # binding. `align()` reads the binding in `data/verbs.py`, which is the one the `H-66`
+    # alignment sweep REBINDS (`data.verbs.ALIGNMENT = alignment_at(point)`) -- so the
     # sweep moved `choose`'s scoring and could not move the scar at all. MEASURED before the
     # fix: under the `uniform` arm `align('kill / wound','sacred')` read 1.0 while `_scar`
     # still wrote 3.0 off the unrebound 0.3. The docstring above promises exactly what the inline read broke: no
     # second table free to disagree with the one `choose` scores against. One owner, §8, and the
     # sweep now reaches both readers.
-    from ..decision import align
+    from ..data.verbs import align
     # ⚠ SIGNED, AND THE `abs()` THAT STOOD HERE COLLAPSED A DISTINCTION THE READER NEEDS.
     # 17 of the 52 populated `ALIGNMENT` cells are NEGATIVE, so a verb that VIOLATES an axis and
     # one that UPHOLDS it cut an identical wound under `abs()`. It is invisible today only

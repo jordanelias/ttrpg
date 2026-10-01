@@ -125,7 +125,7 @@ def _morale_start(stance):
     (b): *"casualties only, decrease in morale, and a grudge token"*) is already built as a stance row
     on each loser, `(own faction, -1.0, field_morale_weight)` (`loop/effects_combat.py::_eff_march`):
     that row IS the season's morale, and until this function it had a writer and no reader on the
-    battle path (CLAUDE.md §0.1 pt 1). The provider sums it through `decision.stance_toward`, the one
+    battle path (CLAUDE.md §0.1 pt 1). The provider sums it through `queries.person_q.stance_toward`, the one
     reader of a stance row, and hands each side's weight-mean here.
 
     THE MAPPING, AND THE ONE THING IT ASSUMES. One stance unit toward one's own faction is one point

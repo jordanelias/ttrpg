@@ -12,7 +12,7 @@ stamp: `python tools/currency_consistency_check.py` (it exits 0 either way — r
 Old paths resolve through `references/restructure_ledger.md` via `python tools/pathres.py`. A
 ledger id's LAST row is its current state. History of this file: `git log -p CURRENT.md`.
 
-_Last reconciled: 2026-10-01 (`references/restructure_ledger.md`'s edits only append `FORK:` rows for the retired plans and repoint three unreachable refs; the plan row now names `valoria_master_workplan_v8.md`; the Campaign-driver row now says RETIRED, `FORK:5c5d8ec6`; no other row's pointer changed)._
+_Last reconciled: 2026-10-01 (`references/restructure_ledger.md`'s edits only append `FORK:` rows for the retired plans and repoint three unreachable refs; the plan row now names `valoria_master_workplan_v8.md`; the Campaign-driver row now says RETIRED, `FORK:5c5d8ec6`; no other row's pointer changed; the telling workplan's positions (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282) land under the already-current season-loop head, not a new one)._
 
 Design prose is quarantined in `.designs/` (ED-IN-0231). A row that names such a document gives its
 **bare filename only**, deliberately: it is reference, not a head, and not to be opened as authority.

@@ -854,11 +854,19 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "subject"
-    requires:    "the teller holds a claim on the subject"
+    requires:    "the teller holds a claim on the subject, and the person told is with the teller"
     requires_typed:
-      form:      own_ledger
-      of:        subject
-    requires_typed_note: "§E3 `:417` — *the teller holds a claim on the subject*. §F.24a form 6's first named cell, and the one the `F8` carve-out was written for. This is `_req_tell` verbatim: `any(c.subject == subj for c in teller.ledger)`, with the ledger reached through a reader that can name no other person's. ⚠ `R8.1` WIDENS THIS CELL'S OWN SUBJECT, MEASURED RATHER THAN ASSUMED: `any(c.subject == subj ...)` is UNTYPED on predicate, so a `seen` claim satisfies it exactly as a `condition.worn` or `stores:grain` claim does. Corpus measurement (both arms at seed 0, `seen` live vs `seen_subject` forced to `None`): `tell` reaches 60 -> 81 of 89 live worlds WITH `seen`, and `told_holders` (transmissions that survive the dedup guard) falls 8 -> 5 over the same run. One mechanism, two directions: `seen` gives the teller more subjects to hold a claim on, so `tell` is eligible more often; the same ambient claim reaches the RECIPIENT too, so more of what gets told is already held firsthand and the dedup guard drops it. Confirmed by controlled measurement 2026-09-27 (`HANDOFF_IN.md`'s R8.1 row); not a defect in either mechanism, reported as a consequence of `R8.1`'s design rather than fixed here."
+      all:
+        - form:      own_ledger
+          of:        subject
+          conjunct:  holds
+        - form:      relation
+          of:        to
+          relation:  with
+          conjunct:  hearer
+    counterparty: to
+    counterparty_note: "TELLING WORKPLAN `T4` (`ED-IN-0282`): THE HEARER IS THE SECOND SIDE, AND THE TOPIC IS NOT. `subject` stays what the telling is ABOUT and `to` is whom it is told to; the contest's opponent is `to` (`loop/resolve.py::_contest` reads `row.counterparty or \"subject\"`), so `sigma` throws the teller's pool against the HEARER's standing and not against a rung or a person merely talked about. `to` comes from `decision/options.py::operand_bags` -- one Candidate per person the teller KNOWS (`queries/person_q.py::known_persons`, `rosters.yaml: known_person_operands`) -- and never from the question's referent. `opening_set` forms none whose `to` is the teller (`petition`'s rule); a telling ABOUT oneself to somebody else IS formed, because a row naming its counterparty is not caught by the contested-verb self-subject skip (Decision 3). ⚠ NO `addressed` CHANNEL: an emitter names no recipient (§19.3, T-e). The addressee hears by PRESENCE, through `co_located`, like every bystander -- the `hearer` conjunct only refuses a telling to someone who is not there."
+    requires_typed_note: "TELLING WORKPLAN `T4` (`ED-IN-0282`): TWO NAMED CONJUNCTS. `holds` -- the cell below, unchanged in what it asks. `hearer` -- `relation` (form 5) on the new `with` stem (`data/requires.py: REQUIRES_STEMS`): the person told and the teller share a place (`world_q.place_of`); UNKNOWN if either is no person or has no place, and ALWAYS UNKNOWN person-side (`WORLD_ONLY_STEMS`), so the teller forms the Candidate on whom they know and the fold refuses an absent hearer with `news.untold` keyed `hearer`. `holds` being NAMED is also what `opening_set` reads to carry `said` and to decline a Candidate with nothing to say (`TypedRequires.named_own_ledger_operands`); `survey` and `reconstruct` share the form unnamed and carry nothing. ⚠ THE CELL'S FIRST CONJUNCT, AS IT WAS: §E3 `:417` — *the teller holds a claim on the subject*. §F.24a form 6's first named cell, and the one the `F8` carve-out was written for. This is `_req_tell` verbatim: `any(c.subject == subj for c in teller.ledger)`, with the ledger reached through a reader that can name no other person's. ⚠ `R8.1` WIDENS THIS CELL'S OWN SUBJECT, MEASURED RATHER THAN ASSUMED: `any(c.subject == subj ...)` is UNTYPED on predicate, so a `seen` claim satisfies it exactly as a `condition.worn` or `stores:grain` claim does. Corpus measurement (both arms at seed 0, `seen` live vs `seen_subject` forced to `None`): `tell` reaches 60 -> 81 of 89 live worlds WITH `seen`, and `told_holders` (transmissions that survive the dedup guard) falls 8 -> 5 over the same run. One mechanism, two directions: `seen` gives the teller more subjects to hold a claim on, so `tell` is eligible more often; the same ambient claim reaches the RECIPIENT too, so more of what gets told is already held firsthand and the dedup guard drops it. Confirmed by controlled measurement 2026-09-27 (`HANDOFF_IN.md`'s R8.1 row); not a defect in either mechanism, reported as a consequence of `R8.1`'s design rather than fixed here."
     contests:    "a standing"
     writes:
       Overwhelming: []
@@ -886,20 +894,23 @@ verbs:
       between a refusal, where the precondition failed and no contest occurred, and a loss, where
       the contest occurred and went against you. A telling deposits at WITNESS, not here, which is
       what this row's own `writes_note` has always said.
-      ⚠ POSITION 10 (U5/R-07) ATTEMPTED A `Person.stance` WRITE HERE AND REVERTED IT, BUILT AND
-      RUN RATHER THAN LEFT UNTRIED. `H-62` wants a producer; every candidate write target fails
-      structurally against `epistemic.py::claim_subjects` (`H-79`), whose fallback to "the claim
-      is about what was told" fires ONLY when `e.changes` is empty -- see that function's own
-      extensive comment on why an Event that wrote nothing is exactly where a telling lands. Any
-      real write here (on the actor: MEASURED to make `claim_subjects` report the claim as about
-      the TELLER, breaking `R3`'s propagation and the guard
-      `test_n3_..._a_telling_is_about_what_was_told` exists to hold; on the verb's own `subject`
-      operand: MEASURED to be a Rung, never a Person, on the live corpus, so `Person.stance`
-      cannot be written there at all) either corrupts the epistemic layer or cannot fire. Resolving
-      it means either changing `H-79`'s attribution rule (a separate, adversarially-hardened
-      mechanism with its own measured history) or naming a different write target than either
-      candidate -- both are design calls, not a session judgment. `H-62`'s producer gap for
-      `(Person, stance)` is already closed by `march` (M4); this row's own gap stays open.
+      ⚠ POSITION 10 (U5/R-07) ATTEMPTED A `Person.stance` WRITE HERE AND REVERTED IT, AND TELLING
+      WORKPLAN `T4` (`ED-IN-0282`) SUPERSEDES THE QUESTION RATHER THAN REOPENING IT. Two of the
+      paragraph's premises no longer hold. (1) THE OPPONENT IS `to`, NOT `subject`: the contest is
+      thrown against the HEARER (`counterparty: to`, read by `loop/resolve.py::_contest`), so the
+      `subject` operand is the TOPIC and was never the party a standing is won from. (2) WHAT A
+      TELLING LEAVES IS A CHAIN, NOT A WRITE: the hearer's told claim carries `chain = said.chain +
+      (teller,)` (`T3b`), and how far a hearer credits the teller is read off that chain when the
+      claim is weighed (`T3a`'s `teller_weight`), never stored as a stance. So `writes:` stays `[]`
+      at every band, `claim_subjects`' (`H-79`) empty-changes fallback still lands the claim on what
+      was told, and `test_n3_..._a_telling_is_about_what_was_told` still holds; `H-62`'s producer gap
+      for `(Person, stance)` stays closed by `march` (M4), and the judged half of regard is the gated
+      `G1`. The old "MEASURED to be a Rung, never a Person" is REPLACED by T0's measurement (scratch
+      `t0/m0_summary.md`, M0a): 24.5% of the corpus's and 21.4% of the realm's `tell` Candidates
+      name a person as their topic, and 2 executed tellings in each instrument did.
+      ⚠ AND A TELLING WITH NOTHING TO SAY IS NOT FORMED (T1's deferred decline, taken at T4):
+      `opening_set` declines a `tell` Candidate whose `said_of` is `None`, because the `holds`
+      conjunct is NAMED; `survey`/`reconstruct` share the form unnamed and are not declined.
       ⚠⚠ AND `speak` DID NOT GET ONE, WHICH `U1`'s PLAN EXPECTED IT TO. That plan names `tell` AND
       `speak`, on the ground that both carry `requires_typed`, form `own_ledger`. Measured against
       this table: `speak`'s `requires` is an em-dash and it carries NO typed cell. An untyped verb
@@ -908,10 +919,12 @@ verbs:
       `resolvable_verbs()` refuses it for that reason rather than by name. Typing `speak`'s
       precondition would be INVENTING one, because §E3 gives it none. So R-05's count moves 1 -> 2
       rather than 1 -> 3, and the third is owed to whoever rules a precondition for `speak`.
-    emits_on_refusal: ["news.untold"]
+    emits_on_refusal:
+      holds:  ["news.untold"]
+      hearer: ["news.untold"]
     grade:       "ruled"
     writes_note: "— (deposits at WITNESS, not here)"
-    refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: the teller holds no claim on the subject"
+    refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: the teller holds no claim on the subject. ⚠ KEYED AT `T4` (`issue`'s precedent, `data/verbs.py` invariant 4's per-conjunct half): `holds` -- nothing held about the subject; `hearer` -- the person told is not with the teller. ONE KIND FOR BOTH, so the seam's party-gap refusal, which emits the row's union, still emits exactly the kind each conjunct does; that single-kind union is what the loader requires of a CONTESTED keyed row."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   # ===========================================================================================
   # THE SIX INVESTIGATION ACTS, AS SIX ROWS. Jordan, 2026-09-10: *"'the six investigation acts'
