@@ -534,6 +534,17 @@ DEFAULT_FIXTURES = Fixtures(
     # gate saw it; `corpus_run`'s R5 passed throughout because it matches on the fixture
     # KEY in a `site:`, never on the id a comment cites.
     wound_harm_model="scene_fraction",  # `H-123`, swept scene_fraction / total / none
+    # `H-98` (plan position `8`). WHERE THE `Wounded` BAND STARTS: the threshold `wounds` must be
+    # strictly above for a standing subject to read `Wounded` rather than `Untouched`. The edge is
+    # `rosters.yaml: combat_band_edges` and `None` MEANS ITS VALUE (`0`, any wound), so the number is
+    # authored once -- `field_walls_dr`'s precedent, and for its reason: a literal `0` here would be a
+    # second copy that drifts the day the roster is edited. An int, or the NAME of a
+    # `wound_quantities` member, overrides it. Injection site: this line, read by
+    # `seam/ladder.py::degree_of` -> `combat_degree`, handed the world's fixtures by `loop/resolve.py`.
+    # Only this edge is swept; the `Felled` edge is the engine's own verdict and re-deciding it would
+    # re-decide who went down (Jordan 2026-09-04: *the combat engine determines the result there*).
+    # [JUSTIFIED: engine/season/hole_register.yaml H-98 -- where the Wounded band starts; the ruling reads the band off the scene and the engine does not separate a decisive win from a narrow one beyond wound count, so the threshold is injected and swept 0 (= None, SHIPPED) / 1 / max_wounds]
+    combat_wounded_above=None,         # `H-98`, swept 0 (= None, SHIPPED) / 1 / max_wounds
     # M4 (`ED-IN-0279` clause (a)). `H-148`'s question asked of mass_battle's own result instead
     # of a scene's `WoundTracker` -- HOW MUCH `Person.body` A LOST FIELD COSTS. `total`/`none` are
     # the same two controls `wound_harm_model` ships above, for the same reason. Injection site:

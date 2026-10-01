@@ -22,7 +22,9 @@ import sys
 
 from typing import Any, Optional
 from ..data import files
-from ..data.rosters import FELLED, LOST, UNOPPOSED, UNTOUCHED, WON, WOUNDED
+from ..data.rosters import (
+    COMBAT_BANDS, COMBAT_EDGES, LOST, UNOPPOSED, WON, WOUND_QUANTITIES, WOUNDED,
+    check_edge_above)
 from ..gaps import Unspecified
 
 
@@ -78,6 +80,9 @@ from ..gaps import Unspecified
 # 2026-09-02: definitions are not hardcoded). `verb_table.yaml` keys `writes:`/`emits:` on the
 # same three strings, and `writes_at`'s own refusal prints BOTH SETS when they disagree, so drift
 # between the reading and the table is loud at the first act that folds.
+# ⚠ AND SO IS WHERE THE BANDS FALL: `rosters.yaml: combat_band_edges` (plan position `8`), over the
+# quantities `wound_quantities` lists, with the `Wounded` threshold the one swept fixture
+# (`Fixtures.combat_wounded_above`, `H-98`).
 # ⚠ A FOURTH BAND (decisive vs narrow) HAS NO SOURCE IN THE DATA and is NOT invented -- that is
 # the whole of what survives in `H-98` after the 2026-09-03 ruling.
 
@@ -113,14 +118,23 @@ def ladder_error() -> str:
     return _LADDER_ERROR
 
 
-def combat_degree(result: dict, subject: Optional[str]) -> str:
+def combat_degree(result: dict, subject: Optional[str], wounded_above=None) -> str:
     """The band, READ off the scene the engine just fought (Jordan, 2026-09-03). Invents nothing:
     every quantity below is a field of the engine's own `WoundTracker`, on the Combatants
     `combat_seam` constructed and still holds after `wrapper.fight` collapsed them to an int.
 
     `felled` and `result == 0` are the SAME event from the engine's side -- `wrapper.fight` sets a
     non-zero result only on a felling -- so the three bands are: the subject went down; the
-    subject is standing and bled; the subject is standing and untouched."""
+    subject is standing and bled; the subject is standing and untouched.
+
+    ⚠ WHERE THE BANDS FALL IS DATA, NOT TWO LITERALS (`H-98`, plan position `8`; Jordan 2026-09-02:
+    definitions are not hardcoded). `rosters.yaml: combat_band_edges` carries one `{quantity, above}`
+    per band but the last; the bands are walked in `combat_degree_bands`' order (SEVERITY, worst
+    first), the first whose quantity is strictly above its threshold is the answer, and the last
+    band is what is left. The shipped edges reproduce `if felled: Felled; elif wounds > 0: Wounded;
+    else: Untouched` exactly. `wounded_above` is `Fixtures.combat_wounded_above` -- the ONE swept
+    edge, on the `Wounded` band; `None` is the roster's own value. The `Felled` edge is the engine's
+    verdict accepted, never swept (`combat_band_edges`' note)."""
     states = result.get("wound_state") or {}
     st = states.get(subject)
     if not subject or st is None or not st.get("available"):
@@ -130,9 +144,25 @@ def combat_degree(result: dict, subject: Optional[str]) -> str:
             needs="a `wound_state` entry for the person the act writes on",
             law="Jordan 2026-09-03 -- the degree is READ OFF THE SCENE. A subject the scene never "
                 "fought has no band, and picking one would be the mapping that ruling removed")
-    if st["felled"]:
-        return FELLED
-    return WOUNDED if st["wounds"] > 0 else UNTOUCHED
+    if wounded_above is not None:
+        # An injected threshold is held to the grammar the authored one is, so a bad arm REFUSES
+        # rather than reading off a name the tracker never returned (§42.2.1 polarity).
+        check_edge_above(wounded_above, WOUND_QUANTITIES, "Fixtures.combat_wounded_above",
+                         "H-98")
+    for band, quantity, above in COMBAT_EDGES:
+        if band == WOUNDED and wounded_above is not None:
+            above = wounded_above
+        for q in (quantity, above):
+            if isinstance(q, str) and q not in st:
+                raise Unspecified(
+                    f"the scene's wound state for {subject!r} carries no {q!r} "
+                    f"(it has {sorted(st)})", "S39.4/H-98",
+                    needs=f"`wound_state` to lift {q!r}, which `combat_band_edges` reads",
+                    law="Jordan 2026-09-03 -- the degree is READ OFF THE SCENE; an edge over a "
+                        "quantity the scene does not carry has nothing to read")
+        if int(st[quantity]) > (int(st[above]) if isinstance(above, str) else above):
+            return band
+    return COMBAT_BANDS[-1]
 
 
 def field_degree(result: dict) -> str:
@@ -159,8 +189,12 @@ def field_degree(result: dict) -> str:
     return WON if result.get("attacker_wins") else LOST
 
 
-def degree_of(result: Any, subject: Optional[str] = None) -> str:
+def degree_of(result: Any, subject: Optional[str] = None, fixtures: Any = None) -> str:
     """THE ONE PLACE A SUBSYSTEM'S RESULT BECOMES THE TOKEN `writes_at` / `emits_at` KEY ON.
+
+    `fixtures` is the world's `Fixtures`, read ONLY on the scene branch for `combat_wounded_above`
+    (`H-98`) -- so a mass-battle or margin result never touches a combat fixture, and a caller with
+    no world (a unit test grading a hand-built result) gets the roster's own edges.
 
     ⚠ IT DECIDES NOTHING. Each branch hands the question to whoever already owns it -- the scene
     for combat, `field_degree` for a mass battle, `degree_from_net` for a margin -- and a result
@@ -178,7 +212,9 @@ def degree_of(result: Any, subject: Optional[str] = None) -> str:
             "S39.4", needs="a subsystem result",
             law="S39.4 -- the degree is the SUBSYSTEM's, read off what it returned")
     if "wound_state" in result:
-        return combat_degree(result, subject)
+        return combat_degree(
+            result, subject,
+            None if fixtures is None else fixtures.get("combat_wounded_above"))
     # M4 (`ED-IN-0279` clause (a)). `attacker_wins` is `mass_battle`'s own top-level marker,
     # present on every RESOLVED result including the `unopposed` bypass -- neither a `wound_state`
     # nor a `net`/`ob` pair, so it needed a third branch rather than fitting either existing one.

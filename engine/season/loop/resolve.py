@@ -584,7 +584,7 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
         return []
     if not isinstance(r, dict):
         return r
-    produced = self._fold(w, token, a, Resolution(degree_of(r, _target), r))
+    produced = self._fold(w, token, a, Resolution(degree_of(r, _target, w.fixtures), r))
     TRACE.decision(
         f"contest for {contests[0]!r} resolved", "S39/H-98",
         chose=f"read the degree off the scene and fold at it "

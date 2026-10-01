@@ -635,6 +635,94 @@ TERMS_SUPPLIED_BY = roster_map("observation_terms", "supplied_by")
 # Jordan's 2026-09-03 ruling, and `degree_of`'s margin branch calls the tree's owner for those.
 COMBAT_BANDS = roster("combat_degree_bands", ordered=True)
 FELLED, WOUNDED, UNTOUCHED = COMBAT_BANDS
+# `H-98` (plan position `8`). THE QUANTITIES THE SEAM LIFTS OFF THE ENGINE'S `WoundTracker`, and the
+# EDGES between the bands above, over those quantities. Both are rosters.yaml rows; the loader
+# below refuses an edge that is not about a lifted quantity AT IMPORT, here, where every roster's
+# absence is guaranteed to fire (`TITLE_DOMAINS`' lesson, above).
+WOUND_QUANTITIES = roster("wound_quantities", ordered=True)
+
+
+def check_edge_above(above, quantities, what: str, where: str) -> None:
+    """THE ONE GRAMMAR OF AN EDGE'S THRESHOLD: a non-negative count, or the NAME of a quantity.
+
+    Read by `load_combat_band_edges` for the authored edges and by `seam/ladder.py::combat_degree`
+    for the swept `Fixtures.combat_wounded_above`, so the data and the injected value cannot come to
+    disagree about what a threshold may be (§8). `bool` is an `int` in Python and `above: true` is
+    a typo for a count, so it is refused by name rather than read as 1."""
+    if isinstance(above, bool) or not (
+            (isinstance(above, int) and above >= 0) or above in quantities):
+        raise Unspecified(
+            f"{what}: `above` is {above!r}", where,
+            needs=f"a count >= 0, or one of the lifted quantities {list(quantities)}",
+            law="H-98 -- an edge is a quantity compared with a count or with another quantity the "
+                "tracker returns; anything else is a third kind of thing nobody ruled on")
+
+
+def load_combat_band_edges(row, bands, quantities) -> tuple:
+    """`combat_band_edges`, VALIDATED, as `((band, quantity, above), ...)` in the bands' own order.
+
+    ⚠ ONE EDGE PER BAND EXCEPT THE LAST, AND THE LAST IS THE RESIDUAL -- what is left once every
+    earlier edge failed (`combat_degree_bands`' order is SEVERITY, worst first, so the first edge
+    that holds is the band). Every refusal is a way the old two literals could not drift and a
+    data row can: an edge on a quantity the tracker does not return (the instruction's own
+    falsifier), an edge on a band the roster does not carry, a band with no edge, an edge on the
+    residual, a `keyed_on` that does not name the roster `bands` came from, an unreadable
+    threshold. ID-12 -- at load, not at the first act that would have hit it. Pure over its
+    arguments so a test can hand it a bad row and watch it refuse."""
+    where = "rosters.yaml: combat_band_edges"
+    if not isinstance(row, dict):
+        raise Unspecified(
+            "roster 'combat_band_edges' is not in rosters.yaml", "rosters.yaml",
+            needs="add the row to the data file; do not inline the edge in a body",
+            law="Jordan 2026-09-02 -- definitions are not hardcoded. An absent row REFUSES; "
+                "falling back to the old literal would be the second copy this row replaced")
+    keyed = row.get("keyed_on")
+    if not isinstance(keyed, str) or tuple(roster(keyed, ordered=True)) != tuple(bands):
+        raise Forbidden(
+            f"combat_band_edges.keyed_on is {keyed!r}, which is not the roster the bands came from",
+            where, needs="`keyed_on: combat_degree_bands`",
+            law="H-98 -- the edges are keyed on the bands; keyed on anything else they would "
+                "grade a scene into tokens `verb_table.yaml` does not write on")
+    edges = row.get("edges")
+    if not isinstance(edges, dict) or not edges:
+        raise Unspecified(
+            "combat_band_edges has no `edges:` mapping, or it is empty", where,
+            needs="one `{quantity, above}` per band but the last",
+            law="rosters.yaml's header -- an empty mapping makes every lookup silently answer "
+                "the residual band, i.e. everyone Untouched")
+    stray = [b for b in edges if b not in bands]
+    if stray:
+        raise Forbidden(
+            f"combat_band_edges names band(s) combat_degree_bands does not carry: {stray}", where,
+            needs=f"keys from {list(bands)}",
+            law="H-98 -- an edge keyed past its own roster grades into a band nobody declared")
+    if bands[-1] in edges:
+        raise Forbidden(
+            f"combat_band_edges carries an edge on {bands[-1]!r}, the residual band", where,
+            needs="delete it -- the last band is what is left when every earlier edge failed",
+            law="H-98 -- an edge on the residual would have to be tested after nothing")
+    out = []
+    for band in bands[:-1]:
+        e = edges.get(band)
+        if not isinstance(e, dict) or set(e) != {"quantity", "above"}:
+            raise Unspecified(
+                f"combat_band_edges has no well-formed edge for {band!r}: {e!r}", where,
+                needs="`{quantity: <wound_quantities member>, above: <count or member>}`",
+                law="H-98 -- a band with no edge is unreachable, and an unreachable band is a "
+                    "definition that was never graded")
+        if e["quantity"] not in quantities:
+            raise Forbidden(
+                f"combat_band_edges[{band}] is an edge on {e['quantity']!r}, which the tracker "
+                f"does not return", where, needs=f"a quantity from {list(quantities)}",
+                law="H-98 -- an edge reads the engine's own WoundTracker fields; one the seam "
+                    "does not lift would be read off nothing")
+        check_edge_above(e["above"], quantities, f"combat_band_edges[{band}]", where)
+        out.append((band, e["quantity"], e["above"]))
+    return tuple(out)
+
+
+COMBAT_EDGES = load_combat_band_edges(
+    _ROSTERS.get("combat_band_edges"), COMBAT_BANDS, WOUND_QUANTITIES)
 WOUND_HARM_MODELS = roster("wound_harm_models")
 # M4 (`ED-IN-0279` clause (a)). `field_degree_bands`' own note: ordered and unpacked the same way,
 # `Declared` first because ENCOUNTER's declaration fold writes it at RESOLVE, before anything has
