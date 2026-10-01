@@ -8000,7 +8000,13 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # 67 -> 66 worlds. THE SAME-BREATH CHECK: the universal set is unchanged (empty), as is the
     # status census (102 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED · 1 RUNS-ALONE-UNDECLARED) and
     # `told_redeposits` (0).
-    assert len(by_sig) == 111, (
+    # ⚠⚠ **111 -> 114, TELLING WORKPLAN `T4b` (an opportunity includes its counterparty),
+    # 2026-10-01.** The T4b producer measured 111 -> 114 on `corpus_run`'s `DISTINCT EXECUTED
+    # SETS` (the same `tuple(r["executed"])` over the same `live` set) and the pin was left at 111;
+    # BATCH-CLOSE 2 caught it by running this test (red at 111). THE UNIT: a teller now forms and
+    # executes one `tell` per hearer per season rather than one per topic, so more worlds execute
+    # `tell` more than once and the sets split. `live` did not move.
+    assert len(by_sig) == 114, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
