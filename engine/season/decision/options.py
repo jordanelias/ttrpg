@@ -886,7 +886,7 @@ def rank(p: Person, teller: str) -> int:
     member is a vocabulary word with no producer; MEASURED, `build_realm(0)` one season: zero
     `office` claims in any ledger), nor is an `office` claim's value typed as a title or a seat.
     Comparing values nobody writes, in a shape nobody declared, would be inventing the ruling."""
-    # ABSENT: H-180 rank ordering
+    # ABSENT: H-180 rank ordering  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
     return 0
 
 
@@ -927,7 +927,7 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
                 1.0
                 + rank_gain * rank(p, teller)
                 + regard_gain * _clamp(regard(p, teller) / STANCE_MAX, -1.0, 1.0))
-        # ABSENT: H-179 stake
+        # ABSENT: H-179 stake  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
         record = 1.0   # a teller's record (agreement with p's own claims) is `T6`; 1.0 until then
         return _clamp(told_weight ** c.hops * relation * record, 0.0, 1.0)
 

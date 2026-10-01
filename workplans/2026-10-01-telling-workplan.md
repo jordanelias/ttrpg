@@ -129,6 +129,11 @@ importers; `FORBIDDEN` becomes `("state.world", "queries.world_q", "queries.cach
 Mid-session: `pytest engine/season/tests/test_season_shape.py -q -k "alignment or h146 or ax2 or person_q"`.
 Subject: `[cleanup] align to data/, stance_toward to person_q, widen AX-2 scan`.
 
+**As built (`1acf629`, corrected at the Batch 1 close `02151c7`):** the AX-2 scan became an ALLOW-LIST (`queries`
+forbidden, `queries.person_q` admitted), not the deny-list tuple prescribed above, because the prescribed one admitted
+`queries.faction_q` (which imports `World`); `test_person_q_cannot_reach_the_world_side` became an allow-list too, with
+a floor on the in-package imports it resolves. `runs/results.json` was re-derived (probe P28's function count).
+
 ### T3a and T3b · the reader, then the chain — split, and why
 
 The dossier fused these under H-157, but **that rule forbids a carrier before its reader, not a reader

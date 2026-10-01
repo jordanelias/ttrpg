@@ -2901,8 +2901,10 @@ def test_decision_package_never_names_world_anywhere_under_it():
     matching cannot pass by finding nothing.
 
     THREE CHECKS, MATCHING WHAT AX-2 ACTUALLY FORBIDS. Each runs over every scanned file:
-      (a) no import resolves to `state.world`, `queries` (either `world_q` or `readers`), `loop`,
-          `seam`, `combat_seam` or `shape`. ⚠ RESOLVED TO AN ABSOLUTE MODULE NAME FIRST, from the
+      (a) no import resolves to `state.world`, `queries` (EXCEPT `queries.person_q`, the one
+          module 04 §C.3 admits), `loop`, `seam`, `combat_seam` or `shape`; the `state.carriers`
+          TYPES (`Person`, `View`, `Question`) are admitted, because §A.2 :166 grants the
+          `PersonInterior`/`View`/`Question` reads and those types live under `state/`. ⚠ RESOLVED TO AN ABSOLUTE MODULE NAME FIRST, from the
           scanned file's own package and the import's `level`, because `decision/` sits one
           directory deeper than the old flat module: `from ..data.verbs import X` carries
           `module="data.verbs"` at level 2 and a tail-match against the forbidden list would be
@@ -2945,8 +2947,9 @@ def test_decision_package_never_names_world_anywhere_under_it():
         "was flattened -- which is the ED-IN-0206 violation this scan exists to prevent -- or the "
         "discovery broke, and in both cases the checks below are vacuous.")
 
-    # AN ALLOW-LIST, not a deny-list (04 §C.3: `decision/` imports `person_q` and `data/`, and
-    # nothing else under `queries/`): `queries` as a whole stays forbidden and `queries.person_q`
+    # AN ALLOW-LIST FOR `queries`, not a deny-list (04 §C.3: `decision/` imports `person_q` and
+    # `data/`, and nothing else under `queries/`; `state.carriers` types are admitted -- only
+    # `state.world`, the store, is forbidden -- by the reasoning at the person_q scan below): `queries` as a whole stays forbidden and `queries.person_q`
     # is the one admitted exception. A deny-list of `queries.world_q`/`queries.cache` admitted
     # `queries.faction_q` (which imports `World`) and any future `queries/*_q.py`. The person_q
     # side of the edge is `test_person_q_cannot_reach_the_world_side`, which forbids `decision`
@@ -3197,7 +3200,13 @@ def test_person_q_cannot_reach_the_world_side():
     # what it reads, which is the opposite of §A.2's *"may read a `PersonInterior` snapshot only"*.
     # `queries.world_q` covers `WorldReader`, which moved there at L3 with the rest of the
     # World-first family; there is no `queries.readers` to forbid any more.
-    FORBIDDEN = ("state.world", "queries.world_q", "loop", "seam", "decision")
+    # AN ALLOW-LIST (batch-1 close, layer-conformance): `queries/person_q` may reach `data/`, the
+    # `state.carriers` types and the trace sink, and nothing else inside the package. The deny-list
+    # this replaces ("state.world", "queries.world_q", "loop", "seam", "decision") let through
+    # `queries.faction_q` (imports `World`), `queries.cache` (imports `world_q`), `epistemic`
+    # (imports `World`) and any new `queries/*.py` -- the same flaw the AX-2 scan over `decision/`
+    # was rewritten to avoid, and that scan relies on this one for the other half of the edge.
+    ALLOWED = ("data", "state.carriers", "trace_log")
     PKG = "engine.season"
 
     def _absolute(node):
@@ -3207,18 +3216,25 @@ def test_person_q_cannot_reach_the_world_side():
         base = own[:len(own) - (node.level - 1)] or (PKG,)
         return ".".join(base) + (("." + node.module) if node.module else "")
 
-    def _forbidden(dotted):
-        tail = dotted[len(PKG) + 1:] if dotted.startswith(PKG + ".") else dotted
-        return any(tail == f or tail.startswith(f + ".") for f in FORBIDDEN)
+    def _internal(dotted):
+        return dotted.startswith(PKG + ".")
 
-    bad, functions = [], 0
+    def _forbidden(dotted):
+        if not _internal(dotted):
+            return False        # stdlib / third party, or the bare package (its NAMES are judged)
+        tail = dotted[len(PKG) + 1:]
+        return not any(tail == a or tail.startswith(a + ".") for a in ALLOWED)
+
+    bad, functions, resolved = [], 0, 0
     for node in ast_.walk(tree):
         if isinstance(node, ast_.Import):
             for alias in node.names:
+                resolved += _internal(alias.name)
                 if _forbidden(alias.name):
                     bad.append((node.lineno, alias.name))
         elif isinstance(node, ast_.ImportFrom):
             dotted = _absolute(node)
+            resolved += _internal(dotted)
             if _forbidden(dotted):
                 bad.append((node.lineno, dotted))
             for alias in node.names:
@@ -3230,6 +3246,10 @@ def test_person_q_cannot_reach_the_world_side():
     assert functions >= 1, (
         "queries/person_q.py defines no function; the scan below has nothing to be about and "
         "passes vacuously (§0.1 pt 2)")
+    assert resolved >= 3, (
+        f"the scan resolved only {resolved} in-package imports of queries/person_q.py (it imports "
+        "data.requires, data.rosters, state.carriers and trace_log): a broken `_absolute` would "
+        "pass an allow-list silently, so the floor is part of the check")
     assert not bad, (
         "queries/person_q.py reaches the resolver side, which is exactly what §A.3 row 2 splits "
         f"the two families BY MODULE to prevent (T-f): {bad}")

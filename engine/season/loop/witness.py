@@ -639,7 +639,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
                     # DIFFERENT-VALUED retelling of one `(subject, predicate)` inside one barrier --
                     # and unlike `seen_obs_by_pid`, which earned its place with a measured 27
                     # differing-value collisions, no such case was ever measured here (the channel
-                    # deposits 8 claims across the whole 89-world corpus). Two guards where one
+                    # deposited 8 claims across the whole 89-world corpus when this was measured;
+                    # T0, 2026-10-01, counted none deposited in `corpus_run` or the realm). Two guards where one
                     # observes the failure is the defect §0.1 pt 2 names.
                     # BATCH-CLOSE FINDING (methodology-close Phase 1, FIDELITY TO PLAN lens):
                     # `RULINGS.yaml` CAT-3 -- store the teller, "one argument, not a lookup" --
