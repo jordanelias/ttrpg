@@ -8,9 +8,11 @@ scene with. What each test proves, and the control that stops it passing vacuous
   1. THE LOADER REFUSES, AT LOAD, an edge on a quantity the tracker does not return -- exercised on
      the real YAML through the documented patch point (`rosters.ROSTERS_YAML`, re-calling the
      loader), with the unmutated row as the control that the loader accepts what ships.
-  2. AN EDGE AT `wounds > max_wounds` GRADES EVERY STANDING FOUGHT SUBJECT `Untouched`, on a real
-     fight, with the SAME scene at the shipped edge reading `Wounded` for a subject (so the edge,
-     not the scene, is what moved) and `>= 1` fought subject asserted.
+  2. AN UNREACHABLE EDGE (`wounds > 4`, since `wounds` never exceeds `MAXWOUNDS_CAP + 1`) GRADES EVERY
+     STANDING FOUGHT SUBJECT `Untouched`, on real fights; the `max_wounds` arm moves only a subject
+     BELOW the cap (a subject at the cap, `wounds = max_wounds + 1`, still reads `Wounded`). The same
+     scene at the shipped edge reads `Wounded` for a subject (so the edge, not the scene, is what
+     moved), and `>= 1` fought subject is asserted.
   3. THE SHIPPED EDGES REPRODUCE THE OLD LITERAL EXACTLY, over a grid of hand-built states and over
      real fights -- the old two-line function is the oracle, copied here.
   4. THE SWEPT FIXTURE REACHES THE FOLD (a driver fold at an arm writes at that arm's band), a bad
@@ -20,6 +22,7 @@ scene with. What each test proves, and the control that stops it passing vacuous
 from __future__ import annotations
 
 import copy
+import functools
 import itertools
 from unittest import mock
 
@@ -62,7 +65,10 @@ def _old_literal(st: dict) -> str:
     return WOUNDED if st["wounds"] > 0 else UNTOUCHED
 
 
+@functools.lru_cache(maxsize=None)
 def _scene(cause: str) -> dict:
+    """A fought scene, cached: the fight is deterministic and no test mutates the result (the same twelve
+    scenes are graded by four tests)."""
     w = P.tiny_world()
     w.step = Step.RESOLVE
     return contest(w, "R", "the body", ["p_low", "p_mid"], 0, 2, [cause])
@@ -81,7 +87,7 @@ def test_the_shipped_edges_load_and_reproduce_the_three_bands():
 
 
 def test_an_edge_on_a_quantity_the_tracker_does_not_return_refuses_at_load(tmp_path):
-    """THE INSTRUCTION'S FALSIFIER (i). Written to a real YAML file and read through the loader's own
+    """PLAN POSITION 8'S FALSIFIER (i). Written to a real YAML file and read through the loader's own
     documented patch point (`rosters.ROSTERS_YAML`, then re-call `_load_rosters`) -- not a dict the
     test built and handed straight to the checker -- so the refusal is observed on the path the
     import-time binding takes."""
@@ -175,7 +181,7 @@ def test_the_shipped_edges_reproduce_the_old_literal_on_real_fights():
 
 @needs_engine
 def test_an_edge_at_max_wounds_grades_the_standing_subject_below_the_cap_untouched():
-    """THE INSTRUCTION'S FALSIFIER (ii), AT THE `max_wounds` ARM. On the scene `test_we_the_band_is_read_off_the_subject_and_
+    """PLAN POSITION 8'S FALSIFIER (ii), AT THE `max_wounds` ARM. On the scene `test_we_the_band_is_read_off_the_subject_and_
     not_off_the_loser` names (`we0`: `p_low` is felled, `p_mid` stands with wounds), the shipped edge
     reads `p_mid` `Wounded`; at `wounds > max_wounds` it reads `Untouched`. The `Felled` edge is the
     engine's own verdict and is NOT swept, so `p_low` stays `Felled` -- the claim is about every
@@ -223,7 +229,7 @@ def test_a_standing_subject_at_the_wound_cap_still_reads_wounded_at_max_wounds()
 
 @needs_engine
 def test_an_unreachable_arm_grades_every_standing_fought_subject_untouched():
-    """THE INSTRUCTION'S FALSIFIER (ii), UNIVERSAL. `wounds` never exceeds `MAXWOUNDS_CAP + 1 = 4`, so an
+    """PLAN POSITION 8'S FALSIFIER (ii), UNIVERSAL. `wounds` never exceeds `MAXWOUNDS_CAP + 1 = 4`, so an
     edge at `wounds > 4` is unreachable: every STANDING fought subject, over all twelve real scenes (24
     subjects), grades `Untouched`; a felled subject stays `Felled` (the Felled edge is the engine's
     verdict and is not swept). `fought` and `standing` are asserted so the loop cannot pass vacuously,

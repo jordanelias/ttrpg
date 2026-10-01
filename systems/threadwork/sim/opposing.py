@@ -30,7 +30,7 @@ Entry points:
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from engine.autoload import dice_engine
 from engine.autoload.dice_engine import roll_pool
@@ -73,7 +73,6 @@ class OpposingResult:
     ms_delta: int
     a_consequences: dict
     b_consequences: dict
-    notes: list[str] = field(default_factory=list)
 
 
 def opposing_engagement_modifier(opponent_tps: int) -> int:

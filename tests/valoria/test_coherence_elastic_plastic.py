@@ -304,8 +304,7 @@ def _mend_at(w, scale, degree, monkeypatch, *, env, pre_stress=coh.ELASTIC_RANGE
 
 @pytest.mark.parametrize("scale", list(ops.MENDING_OB))
 @pytest.mark.parametrize("degree", DEGREES)
-def test_mending_calls_recover_and_its_term_is_positive(scale, degree, monkeypatch):
-    w = _World()
+def test_mending_calls_recover_and_its_term_is_positive(scale, degree, monkeypatch, w):
     calls = _spy_recover(monkeypatch)
     r = _mend_at(w, scale, degree, monkeypatch, env=True)
     s = coh.get_state("prac", world=w)
@@ -324,10 +323,9 @@ def test_mending_calls_recover_and_its_term_is_positive(scale, degree, monkeypat
     assert s.resting_point == coh.RESTING_POINT_START
 
 
-def test_mending_feedback_is_gated_by_the_menders_environment(monkeypatch):
+def test_mending_feedback_is_gated_by_the_menders_environment(monkeypatch, w):
     """E-1's condition, owned by `recover`: Mending in disharmony still CALLS it (the gate stays
     one owner's) and returns nothing. Unstated is not established — the default is False."""
-    w = _World()
     calls = _spy_recover(monkeypatch)
     monkeypatch.setattr(ops, "_compute_degree", lambda net, ob: "Success")
     _stress("prac", 4, w)
@@ -341,10 +339,9 @@ def test_mending_feedback_is_gated_by_the_menders_environment(monkeypatch):
     assert len(s.log) == log_before, "a gated Mending feedback logged an event that moved nothing"
 
 
-def test_mending_feedback_never_reaches_the_resting_point(monkeypatch):
+def test_mending_feedback_never_reaches_the_resting_point(monkeypatch, w):
     """C-1's feedback to a mender drawn along by ANOTHER's configuration is elastic only: a
     permanent set stays however many Mendings follow (moving it is `mend_resting_point`'s)."""
-    w = _World()
     monkeypatch.setattr(ops, "_compute_degree", lambda net, ob: "Overwhelming")
     _stress("prac", coh.ELASTIC_RANGE + 2, w)
     for _ in range(coh.ELASTIC_RANGE + 2):
@@ -354,8 +351,7 @@ def test_mending_feedback_never_reaches_the_resting_point(monkeypatch):
     assert (s.resting_point, s.elastic_displacement) == (2, 0)
 
 
-def test_an_unpriced_scale_falls_back_to_relational_for_ob_and_term_alike(monkeypatch):
-    w = _World()
+def test_an_unpriced_scale_falls_back_to_relational_for_ob_and_term_alike(monkeypatch, w):
     calls = _spy_recover(monkeypatch)
     r = _mend_at(w, "Object", "Success", monkeypatch, env=True)
     assert r.ob == ops.MENDING_OB["Relational"]

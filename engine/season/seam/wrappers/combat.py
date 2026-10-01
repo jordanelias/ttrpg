@@ -77,6 +77,8 @@ from ...gaps import Unspecified
 from ...manifest.providers import provider
 from ...state.ids import H
 
+_MISSING = object()   # `getattr`'s default for a tracker field the engine does not carry (None is a value)
+
 _LOADED: Optional[tuple] = None
 _LOAD_ERROR: str = ""
 
@@ -190,15 +192,15 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         # REFUSES by name; skipping it would hand `combat_degree` a dict that lacks it.
         out = dict(available=True)
         for q in WOUND_QUANTITIES:
-            if not hasattr(wt, q):
+            v = getattr(wt, q, _MISSING)
+            if v is _MISSING:
                 raise Unspecified(
                     f"`wound_quantities` lists {q!r} and the engine's WoundTracker has no such "
                     f"field", "S39.4/H-98", needs=f"a `WoundTracker.{q}`, or delete it from "
                     "rosters.yaml: wound_quantities and from every edge that reads it",
                     law="Jordan 2026-09-03 -- the degree is READ OFF THE SCENE; a quantity the "
                         "scene does not carry cannot be lifted")
-            v = getattr(wt, q)
-            out[q] = bool(v) if isinstance(v, bool) else int(v)
+            out[q] = v if isinstance(v, bool) else int(v)
         return out
     _wounds = {a_id: _state(A), b_id: _state(B)}
 
