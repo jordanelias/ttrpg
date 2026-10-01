@@ -1075,7 +1075,9 @@ record is.
     folded into its own option (a) either: the corpus never attempts them, while the populated realm
     attempts them 332 times in four seasons of `build_realm(0)` (`confer` alone, 213, outnumbers
     `commit`'s 154) and refuses every one at its predicate's first clause, because no computed act's
-    payload names an `office` and none of the closed eight `requires_operands` is one.
+    payload names an `office` and none of the closed eight `requires_operands` is one. ⚠ The 332 is
+    sized under `rosters.yaml: remit_default`, a testing fixture (not canon) that hands every seated
+    office every remit act -- a per-post remit, the fixture's own stated replacement, would shrink it.
     - *Why it is his:* two defensible designs (accept the cost / grade the verbs / widen the
       preconditions) lead to materially different play, and no design document rules between them.
     - *Blocks:* nothing directly; shapes how many future verbs repeat this pattern before it is

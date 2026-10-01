@@ -647,8 +647,13 @@ rows:
       IMPERFECT KNOWLEDGE IS STRUCTURAL AND HOLDS — `choose` receives no World (enforced by
       test), a `View` is capped at k and raises on any world collection, and `LedgerReader`
       answers from the person's own ledger. `beliefs` and `ledger` carry memory. FEELINGS,
-      ATTITUDES and RELATIONSHIPS have no field; `stance` is the nearest and nothing writes it
-      — W-F, the item that would, is not started.
+      ATTITUDES and RELATIONSHIPS have `stance` as their nearest field.
+      ⚠ STALE AS OF 2026-10-01, KEPT AND MARKED RATHER THAN SILENTLY DROPPED: this sentence used
+      to end here with "and nothing writes it — W-F, the item that would, is not started." See the
+      realm paragraph below: `stance` has two production writers (`harness/populated.py`'s
+      build-time faction-loyalty seed, `loop/effects_combat.py::_eff_march`'s M4 write), neither
+      reached by a death or a witnessed claim, which is W-F's still-open gap and the reason the
+      row stays `partial` — narrower than "nothing writes it," not the same claim.
       ⚠ AND UNTIL 2026-09-07 THAT SENTENCE WAS TRUE OF THE PLUMBING AND FALSE OF THE WORLD, which
       is worth stating because the row read as stronger than it was. Every clause above is about
       the ACCESS PATH — who may read what, through which object. The CONTENT was identical for
