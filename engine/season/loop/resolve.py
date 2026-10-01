@@ -508,7 +508,12 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     # NEVER on what `_target` happens to look like: a candidate's subject binding to a Rung id
     # is not unique to `march` (`tell` can name a place), so a shape-based dispatch on `_target`
     # is unsafe -- see `sides_of`'s own docstring for the corpus case that found this.
-    _target = (a.payload or {}).get("subject") if isinstance(a.payload, dict) else None
+    # ⚠ THE OPPONENT IS THE ROW'S `counterparty:` OPERAND WHEN IT NAMES ONE, ELSE `subject`
+    # (telling workplan `T4`, `ED-IN-0282`): `tell` contests against its HEARER (`to`), not its
+    # topic. `fight` and `march` name no counterparty and read `subject` exactly as before.
+    _row = VERB_TABLE.get(a.verb)
+    _target = ((a.payload or {}).get((_row.counterparty if _row is not None else "") or "subject")
+               if isinstance(a.payload, dict) else None)
     _parties, _subject, _rung = sides_of(w, a, _target, contests[0])
     # ⚠ A PARTY-GAP IS A REFUSAL HERE, NOT A RAISE (M4). `seam/contest.py`'s S39.1 -- *"claimant[]
     # is PERSONS, ALWAYS"* -- refuses an EMPTY list exactly as it would a wrong-shaped one

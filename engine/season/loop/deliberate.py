@@ -55,6 +55,7 @@ from typing import Any, Callable
 from .. import decision
 from ..data.matrix import Step
 from ..data.requires import REQUIRES_STEMS
+from ..data.verbs import act_key
 from ..decision import aggregate_questions
 from ..gaps import Forbidden, Ungraded
 from ..state.carriers import Act, Person
@@ -407,7 +408,7 @@ def _qualify_by_round(scenes: list, w: World, r: int) -> None:
     for n, sc in enumerate(scenes):
         for a in sc.acts:
             a.id = H(w.world_seed, w.tick, a.actor,
-                     f"act:{a.verb}:{_subject_of(a)}:r{r}")
+                     f"act:{a.verb}:{act_key(a.verb, _subject_of(a), a.payload)}:r{r}")
         # ⚠ THE SCENE IS RE-DERIVED FROM `(actor, index, round)`, WHICH IS `pack_scenes`'s OWN
         # PURPOSE SHAPE PLUS THE ROUND — not `f"scene:{sc.id}:r{r}"`, which was what the first
         # writing did and which the paragraph above calls out as the thing it rejected. `sc.id` is

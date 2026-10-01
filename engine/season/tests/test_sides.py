@@ -129,3 +129,49 @@ def test_no_target_falls_through_to_the_non_mass_battle_default():
     assert claimants == ["p_npc_008"]
     assert subject is None
     assert rung == "R"
+
+
+def test_t4_a_tell_contests_against_its_hearer_not_its_topic(monkeypatch):
+    """TELLING WORKPLAN `T4` (`ED-IN-0282`): `tell` names its opponent on `counterparty: to`, and
+    `loop/resolve.py::_contest` must hand `sides_of` THAT as the target -- not the topic on
+    `subject`. `sides_of` takes `target` as an argument, so calling it directly could never fail;
+    this drives the real RESOLVE path on an admitted telling (`probes.tiny_world`: `p_low` and
+    `p_mid` both stand in `Hh`; `p_low` holds a claim on `Hh`) and observes what RESOLVE passes, by a
+    spy that records the call and stops the seam there (the roll is not this test's subject).
+
+    Against the pre-T4 `_target = payload.get("subject")` the spy sees `Hh` -- the place the news is
+    about -- and the claimants come out `["p_low", "Hh"]`, a rung in a PERSONS-ALWAYS list."""
+    from engine.season.data.matrix import Step, WriteClass
+    from engine.season.harness import probes as P
+    from engine.season.loop import resolve as R
+    from engine.season.loop.driver import SeasonDriver, mint_token
+    from engine.season.queries.person_q import said_of
+    from engine.season.state.carriers import Claim
+
+    class _Stop(Exception):
+        pass
+
+    seen = []
+
+    def spy(w, a, target, prize):
+        seen.append((a.id, target, prize, sides_of(w, a, target, prize)))
+        raise _Stop
+
+    monkeypatch.setattr(R, "sides_of", spy)
+    w = P.tiny_world()
+    w.persons["p_low"].ledger.append(
+        Claim("c_held", "p_low", "Hh", "stores:grain", 8, 0, "firsthand", 37, "own"))
+    act = Act(id="a_t4_sides", actor="p_low", verb="tell",
+              payload={"subject": "Hh", "to": "p_mid",
+                       "said": said_of(w.persons["p_low"].ledger, "Hh", w.fixtures)})
+    w.step = Step.RESOLVE
+    try:
+        SeasonDriver(w).resolve(mint_token(w, WriteClass.ACTS), [act],
+                                contest_max_depth=w.fixtures.get("contest_max_depth"))
+    except _Stop:
+        pass
+    assert len(seen) == 1, f"RESOLVE reached `sides_of` {len(seen)} times -- the telling was refused or never contested"
+    _id, target, prize, (claimants, subject, _rung) = seen[0]
+    assert prize == "a standing", prize
+    assert target == "p_mid", f"RESOLVE contested the telling against {target!r}, not its hearer"
+    assert claimants == ["p_low", "p_mid"] and subject == "p_mid", (claimants, subject)

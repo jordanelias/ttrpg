@@ -1588,6 +1588,18 @@ class WorldReader:
             s = w.sites.get(subject)
             place = s.rung if s is not None else (subject if subject in w.rungs else None)
             return UNKNOWN if place is None else (arg in presence(w, place))
+        if stem == "with":
+            # Telling workplan `T4`: TWO PERSONS IN ONE PLACE -- `subject` (the cell's `of:`, a
+            # telling's hearer) and `arg` (the actor). Through `place_of`, the one owner of where a
+            # thing is, whose person-before-rung order is the trap `epistemic._ch_co_located`'s
+            # docstring records (a person's same-id `person`-kind Rung answers *nobody is here*). The
+            # hearing channel reads the same `place_of`, so a hearer this admits is one WITNESS can
+            # reach. UNKNOWN for a side that is no person or has no place: absence refuses, never a
+            # guessed place (`ID-5`). The person side never answers this (`WORLD_ONLY_STEMS`).
+            if subject not in w.persons or arg not in w.persons:
+                return UNKNOWN
+            here, there = place_of(w, subject), place_of(w, arg)
+            return UNKNOWN if here is None or there is None else here == there
         if stem == "claim.held":
             p = w.persons.get(self._actor)
             return UNKNOWN if p is None else any(c.subject == subject for c in p.ledger)

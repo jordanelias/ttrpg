@@ -679,9 +679,9 @@ def _load_verb_table() -> dict:
         #   * `WRITE_CLAUSE`         iff the row writes (an effect can decline, F9's `NoOpReceipt`).
         # MISSING is a failable clause with no kind -- the fold would reach `refusal_for` and raise;
         # EXTRA is a kind for a clause that cannot fail, read by nothing (`ID-13`). A name on a FLAT
-        # row is refused for the same reason: nothing keys it. A CONTESTED row may not key its
-        # refusals yet: the seam's party gap (`loop/resolve.py::_party_gap_refusal`) is a refusal
-        # point this schema has no clause for, and it would emit the union. ONE refusal names every
+        # row is refused for the same reason: nothing keys it. A CONTESTED row may key its refusals
+        # only to ONE kind: the seam's party gap (`loop/resolve.py::_party_gap_refusal`) is a refusal
+        # point this schema has no clause for, and it emits the union. ONE refusal names every
         # defect found, so a table edit that breaks three things is told all three.
         _names = row.requires_typed.conjuncts() if row.requires_typed is not None else ()
         if by_clause or _names:
@@ -697,8 +697,14 @@ def _load_verb_table() -> dict:
                     or None in row.requires_typed.names):
                 _defects.append("keys its refusals, so its precondition must be a typed cell with "
                                 "EVERY top-level conjunct named")
-            if row.contests:
-                _defects.append("declares `contests:`, whose party-gap refusal no clause names")
+            # ⚠ NARROWED AT TELLING WORKPLAN `T4`: the party-gap refusal emits the UNION, which is
+            # `ID-9` only if the union holds more than one kind -- a kind published for a conjunct
+            # that did not fail. A contested row whose every key emits ONE kind (`tell`:
+            # `news.untold` for `holds` and `hearer`) emits exactly that kind at the party gap too.
+            if row.contests and len(row.emits_on_refusal) > 1:
+                _defects.append("declares `contests:`, whose party-gap refusal no clause names, "
+                                "and keys more than one refusal kind, so that refusal would emit "
+                                "kinds for conjuncts that did not fail")
             if set(_names) & {ELIGIBILITY_CLAUSE, WRITE_CLAUSE}:
                 _defects.append(f"names a conjunct after a fold clause "
                                 f"({sorted(set(_names) & {ELIGIBILITY_CLAUSE, WRITE_CLAUSE})})")
@@ -823,6 +829,29 @@ def tenure_kinds_without_an_opener() -> list:
 VERB_TABLE: dict = {}          # filled after STRATA loads, at the bottom of the roster block
 
 VERB_TABLE = _load_verb_table()
+
+
+def act_key(verb: str, subject, operands) -> str:
+    """WHAT AN ACT'S ID IS OF, AFTER ITS VERB: `H(seed, tick, actor, f"act:{verb}:{act_key}")`.
+    The subject, and -- for a row whose cell binds a known-person operand beside `subject`
+    (`TypedRequires.known_person_operands`, `tell`'s `to`) -- that operand too, as `subject>to`.
+
+    ⚠ TELLING WORKPLAN `T4`, AND IT IS MEASURED NECESSITY: one topic now forms one `tell` per person
+    the teller knows, so two acts in one deliberation shared `(actor, verb, subject)` and therefore
+    one id, and `state/acts.py` refused the second (`act id ... is already in the store`) on the
+    first realm season. Every other row answers its subject alone, so its ids are byte-identical
+    to before. ONE OWNER for both minting sites: `decision/choose.py::pack_scenes` and
+    `loop/deliberate.py::_qualify_by_round` (`04 PART D row 35`: purpose uniqueness is a
+    convention, and this is where it is kept)."""
+    key = "" if subject is None else str(subject)
+    row = VERB_TABLE.get(verb)
+    ops = operands if isinstance(operands, dict) else {}
+    if row is not None and row.requires_typed is not None:
+        for n in row.requires_typed.known_person_operands():
+            if ops.get(n) is not None:
+                key += f">{ops[n]}"
+    return key
+
 
 def _check_sparse_table(name: str, cells: dict, rows: "set|tuple", row_what: str,
                         cols: "set|tuple", col_what: str, row_law: str, col_law: str) -> dict:

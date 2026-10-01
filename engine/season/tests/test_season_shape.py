@@ -3979,10 +3979,20 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
     # untouched; what moved is how many investigation rounds land within the published two seasons.
     # [GROUNDED: measured 2026-09-30 -- `d_pub` reads 10 both at `b63e1b3` (post-`11a`, pre-session)
     # and on the current merged tree; this session's Phase 2 positions did not move it further]
-    assert d_pub == 10, (
-        f"the published two-season run reaches {d_pub}, not the 10 that `scene_budget` rounds of "
+    # ⚠⚠ **10 -> 7, TELLING WORKPLAN `T4` (2026-10-01, `ED-IN-0282`), BY THE ACT MIX AND NOT A
+    # CLOCK.** Read off the printed chain on both trees: at `4bd5cee` it is four
+    # `record.created`/`finding.made` round-trips before the terminal deposit; here two, then
+    # `claim.deposited <- claim.decayed`. Carin and Bailiff now spend scenes on a `tell` (toward each
+    # other, the one person each knows) and two `survey`s where they spent them on `interview`,
+    # `research` and `create_record` (acts over the two seasons: `create_record` 15 -> 13, `research`
+    # 13 -> 11, `interview` 1 -> 0), so fewer investigate-and-record rounds land inside the published
+    # two seasons. `redeposits` is still 1 (asserted above) and the depth clause (>= 4) still holds.
+    # [GROUNDED: measured 2026-10-01 by printing the published chain on this tree and on a `git worktree` at `4bd5cee` -- depth 7 here, 10 there]
+    assert d_pub == 7, (
+        f"the published two-season run reaches {d_pub}, not the 7 that `scene_budget` rounds of "
         "deposit-and-decay produce over two seasons with `11a`'s repeated investigate-and-record "
-        "chaining. With `redeposits == 1` still holding, a different number means the ROUND COUNT "
+        "chaining (10 before T4's tellings took two of its scenes). With `redeposits == 1` still "
+        "holding, a different number means the ROUND COUNT "
         "changed, a clock started chaining, or `reach` stopped admitting this second-person claim; "
         "below 3, `W4`'s decay chaining has regressed")
     late_root = [e for e in w.log if e.causes == ["ROOT"] and e.emitted_at > 0]
@@ -7980,7 +7990,17 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠ STILL 115 AT PLAN POSITION `28-ii` (M6), 2026-09-30 -- NO CODE CHANGED (the `ever` note
     # above; no arm was ever needed or kept), so nothing here could move: `march` executes in no
     # world at seed 0 against the SAME `live` set, so no signature gains or loses it.
-    assert len(by_sig) == 115, (
+    # ⚠⚠ **115 -> 111, TELLING WORKPLAN `T4` (`tell` names its hearer), 2026-10-01, MEASURED
+    # AGAINST A CLEAN `git worktree` AT `4bd5cee` (115 there, same 143 live worlds, seed 0).** THE
+    # UNIT AND THE DIRECTION: variety FELL by four, and `live` did not move. A `tell` now forms once
+    # per person the teller knows and is contested against that hearer, so its slate and its
+    # success rate changed (`tell` 86 -> 88 worlds) and the scenes re-ranked at the margin of the
+    # varying verbs: `fight` 25 -> 30, `transfer` 87 -> 89, `research` 98 -> 100, `petition`
+    # 75 -> 76, `speak` 90 -> 91, `examine` 12 -> 9, `restore` 5 -> 2, `move` 53 -> 52, `surveil`
+    # 67 -> 66 worlds. THE SAME-BREATH CHECK: the universal set is unchanged (empty), as is the
+    # status census (102 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED · 1 RUNS-ALONE-UNDECLARED) and
+    # `told_redeposits` (0).
+    assert len(by_sig) == 111, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -8842,6 +8862,10 @@ def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_fo
     p0 = w0.persons["p_low"]
     subj = "a_subject_nobody_has_a_claim_about"
     q0 = Question("q:wa_empty", "need", (subj,))
+    # `T4`: `tell`'s `to` is a person the teller KNOWS (`operand_bags`), so the person deriving the
+    # operands knows one. The verdicts below are read off `empty`, a reader over NO claims, so the
+    # arm still observes an empty ledger.
+    p0.ledger.append(Claim("c_wa_knows", p0.id, "p_mid", "exists:Person", 1, 0, "firsthand", 100, "own"))
     forms, checked = set(), 0
     for verb, row in sorted(VERB_TABLE.items()):
         if row.requires_typed is None:
@@ -8876,8 +8900,17 @@ def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_fo
     q = Question("q:wa_asym", "need", ("Hh",))
     cands = decision.opening_set(p, View(p.id, [], w.fixtures.get("view_k"), q), q, w.fixtures)
     offered = {c.verb for c in cands}
+    # ⚠ TELLING WORKPLAN `T4`: A ROW THAT NEEDS SOMETHING SAID OR SOMEBODY KNOWN IS OUT OF THIS
+    # ARM, AND NOT BY CLAUSE 4. `tell` forms one Candidate per person the teller KNOWS and declines
+    # when there is nothing to SAY -- both read off the cell (`known_person_operands`, a NAMED
+    # `own_ledger` conjunct), and a person with no claims has neither. That is an act with a hole
+    # (`operands_for`'s `None`), not a belief filtering an option; `test_t4_one_candidate_per_known_hearer`
+    # observes it forming once both exist. Derived from the data, never a verb name.
+    needs_held = {v for v, r in VERB_TABLE.items() if r.requires_typed is not None
+                  and (r.requires_typed.known_person_operands()
+                       or r.requires_typed.named_own_ledger_operands())}
     typed_own = {v for v, r in VERB_TABLE.items()
-                 if r.requires_typed is not None and person_side_eligible(p, r)}
+                 if r.requires_typed is not None and person_side_eligible(p, r)} - needs_held
     assert typed_own <= offered, (
         f"{sorted(typed_own - offered)} were filtered out of the option set by a person who holds "
         "NO claims at all. Clause 4 is KNOWN-FALSE, not 'unproven'")
@@ -9710,6 +9743,13 @@ def test_wc_the_fold_binds_what_the_person_bound():
     GREEN."""
     w = P.tiny_world()
     p = w.persons["p_low"]
+    # ⚠ TELLING WORKPLAN `T4`: `tell` forms only for a teller with something to say about the
+    # referent AND somebody known to say it to (`operand_bags`). One `seen` claim supplies both --
+    # `p_low` saw `p_mid` at `Hh` -- and no requirement reads `seen`, so no other verb's clause 4
+    # can move. It also puts `to` in the walk: the binding equality now covers the hearer.
+    from ..epistemic import Seen
+    p.ledger.append(Claim("c_wc_seen", p.id, "Hh", SEEN_PREDICATE, Seen(who="p_mid"), 0,
+                          "firsthand", 100, "own"))
     q = Question("q:wc_agree", "need", ("S", "Hh"))
     v = View(p.id, [], w.fixtures.get("view_k"), q)
     # ⚠ THE WALK IS OVER TYPED VERBS AND THE SCOPE IS DECLARED RATHER THAN HIDDEN. An UNTYPED
@@ -10303,7 +10343,12 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # declines only a KNOWN-FALSE belief, and holding no claim on `S` is no belief that one is
     # absent. The drop is still exactly `transfer`.
     # [GROUNDED: measured 2026-09-30 at plan position `20-iii` against a clean worktree at `19dac7e` -- (30, 29) there, (31, 30) here, `survey` the one added Candidate, the drop `['transfer']` in both]
-    assert (len(before), len(after)) == (31, 30), (
+    # ⚠ 31 -> 30, telling workplan `T4` (2026-10-01, `ED-IN-0282`): the other direction. `tell` now
+    # names its hearer (`to`, one Candidate per person the teller KNOWS) and declines with nothing to
+    # say, and `p_low` here holds no claim on `S` and knows nobody, so the one `tell` Candidate it
+    # formed on `S` is gone. The drop is still exactly `transfer`.
+    # [GROUNDED: measured 2026-10-01 at telling workplan `T4` against a `git worktree` at `4bd5cee` -- (31, 30) there, (30, 29) here, `tell` the one missing Candidate, the drop `['transfer']` in both]
+    assert (len(before), len(after)) == (30, 29), (
         f"the absolute counts moved to {(len(before), len(after))}. They are the denominator the "
         "delta above is read against, and the delta alone does not reproduce them — re-derive "
         "`H-122`'s reading rather than adjusting this line")
@@ -10499,30 +10544,35 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # than 23 was, the same healthy direction this block has tracked at every prior move.
     # [GROUNDED: measured 2026-09-30 -- 17 items at `b63e1b3` (post-`11a`, pre-session), 24 on the
     # current merged tree; re-derived by running the helper directly rather than composed by hand]
-    assert actor_end == [("rec:b2657ce0b577e64d", "exists:Record", 1),
+    # ⚠⚠ **24 -> 20, TELLING WORKPLAN `T4` (2026-10-01, `ED-IN-0282`), ACT MIX AGAIN.** `tell` now
+    # forms only toward a person the teller knows and only with something to say, so this world's
+    # act sequence moved (measured, `actor` arm, 3 seasons: one `tell` executes here where none did,
+    # `interview`/`found` drop out, `survey` x3 enters), which moves which Events reach WITNESS. ONE
+    # ENTRY IS T4's OWN READ: `("p_carin", "with:p_bailiff", True)` -- the `hearer` conjunct's
+    # `with` observation, deposited to the teller under `actor` like every read of an act's fold;
+    # the person side never reads it back (`WORLD_ONLY_STEMS`). The `ever`/`end` gap is HEAD's own
+    # shape too (31/24 at `4bd5cee`, 25/20 here).
+    # [GROUNDED: measured 2026-10-01 on this tree and on a `git worktree` at `4bd5cee` by running the helper directly -- 24 entries there, 20 here, act mix above]
+    assert actor_end == [("rec:cae0bdd4c4f8d475", "exists:Record", 1),
                          ("rec:b2657ce0b577e64d", "exists:Record", 1),
-                         ("p_bailiff", "exists:Record", 0),
-                         ("p_bailiff", "exists:Site", 0),
-                         ("p_bailiff", "exists:Person", 1),
-                         ("hearth_ostvik", "exists:Rung", 1),
-                         ("rec:1baa7d5fb2bcb896", "exists:Person", 0),
-                         ("rec:1baa7d5fb2bcb896", "exists:Record", 1),
-                         ("p_bailiff", "exists:Proposition", 0),
-                         ("rec:615ede30e2bf2e5c", "exists:Record", 1),
-                         ("rec:615ede30e2bf2e5c", "exists:Proposition", 0),
-                         ("hearth_ostvik", "exists:Record", 0),
+                         ("rec:b2657ce0b577e64d", "exists:Record", 1),
+                         ("scriptorium", "exists:Record", 0),
                          ("p_carin", "exists:Record", 0),
+                         ("p_carin", "exists:Site", 0),
+                         ("p_carin", "exists:works", 0),
+                         ("scriptorium", "exists:Proposition", 0),
+                         ("rec:a84cdce9a0a0de0c", "exists:Record", 1),
+                         ("rec:69697bd5ffd2e93f", "exists:Record", 1),
                          ("hearth_ostvik", "exists:Record", 0),
                          ("hearth_ostvik", "exists:Site", 0),
                          ("p_bailiff", "exists:Record", 0),
                          ("p_bailiff", "exists:works", 0),
-                         ("p_bailiff", "exists:Person", 1),
-                         ("p_carin", "exists:Record", 0),
+                         ("p_carin", "with:p_bailiff", True),
                          ("hearth_ostvik", "exists:Person", 0),
-                         ("rec:5943ea06c255f73e", "exists:Record", 1),
-                         ("rec:5943ea06c255f73e", "exists:Person", 0),
-                         ("rec:1baa7d5fb2bcb896", "exists:Record", 1),
-                         ("p_carin", "exists:works", 0)], (
+                         ("p_bailiff", "exists:Site", 0),
+                         ("rec:c081dace11260f22", "exists:Record", 1),
+                         ("rec:c081dace11260f22", "exists:Person", 0),
+                         ("p_carin", "exists:Record", 0)], (
         f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
         "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
         "default moved back toward `total`, or a new deposit channel opened — and every `H-40` / "
@@ -10953,7 +11003,15 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # pre-session), all 5 pinned verbs present and passing at `c6f4252` (`11a`'s parent), and
     # `{build, commit, examine, fight, found, interview, petition, research, restore}` on the
     # current merged tree]
-    assert {v for v, _ in hl_live} == {"build", "commit", "examine", "fight", "found",
+    # ⚠ NINE -> EIGHT, TELLING WORKPLAN `T4` (2026-10-01, `ED-IN-0282`): `commit` leaves, MEASURED,
+    # and by the act mix rather than its cell. T4 changes no row's candidate formation but `tell`'s
+    # (control: on one identical world, the 249,555 non-`tell` Candidates `opening_set` forms are
+    # byte-identical between this tree and a `git worktree` at `4bd5cee`), so `commit`'s
+    # `existence` cell reads exactly as before; what moved is this fixture's act sequence (`commit`
+    # 3 -> 2 acts in the `actor` arm, one `tell` executing where none did), so the belief that
+    # dropped `commit`'s Candidate is no longer deposited before it would be read.
+    # [GROUNDED: measured 2026-10-01 on this tree -- drops on {build, examine, fight, found, interview, petition, research, restore}; the nine above at `4bd5cee`]
+    assert {v for v, _ in hl_live} == {"build", "examine", "fight", "found",
                                        "interview", "petition", "research", "restore"}, (
         f"the headless drops are on {sorted({v for v, _ in hl_live})}. `examine`/`restore`/"
         "`interview`/`fight`/`research` are the `exists:` and `existence:`-cell drops the "
@@ -10961,10 +11019,11 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
         "CANNOT EXECUTE and drops anyway, on a belief a failed `examine` deposited — cross-VERB "
         "propagation through a shared grammar cell, which is what §F1 clause 4 is for. `commit`/"
         "`found`/`build` join because each is a new choosable VERB_TABLE row reading the same "
-        "grammar cells; `petition` joins because the crowded ranking's composition shifted again. "
+        "grammar cells (`commit` left again at T4, by the act mix); `petition` joins because the "
+        "crowded ranking's composition shifted again. "
         "`transfer` reappearing here would mean its own seeding act (`transfer.refused` on "
         "`hearth_ostvik`) is reachable again in this fixture's ranking — a gain, not a failure, and "
-        "worth re-measuring and re-pinning; any OTHER verb missing from the nine above is a new "
+        "worth re-measuring and re-pinning; any OTHER verb missing from the eight above is a new "
         "finding and must be measured before re-pinning")
     # ⚠⚠ **THE COUNT COMPARISON WENT INERT AND IS REPLACED BY THE COMPOSITION ONE, WHICH IS WHAT
     # THE CLAIM ACTUALLY IS.** This read `sum(hl_acts_live) < sum(hl_acts_none)` — *clause 4
@@ -11111,8 +11170,17 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # [GROUNDED: measured 2026-09-30 -- 13 executable clause-4 drops on `build_world(0)`, up from 6;
     # `restore` newly executable (`24e`) accounts for 2 of the 7 new pairs, `commit`/`found`/`build`/
     # `petition` for the rest]
-    assert len(dropped) == 13, (
-        f"{len(dropped)} executable clause-4 drops, not 13. The drops are the channel itself; if "
+    # ⚠ 13 -> 15, TELLING WORKPLAN `T4` (2026-10-01, `ED-IN-0282`), THE CHANNEL FIRING WIDER, BY THE
+    # SAME ACT-MIX SHIFT AS THE SET ASSERTION ABOVE (`commit` left that set; T4 changes no row's
+    # Candidate formation but `tell`'s). MEASURED, deduped from `hl_live` filtered to `takeable`:
+    # `{('build','p_bailiff'), ('build','p_carin'), ('examine','hearth_ostvik'),
+    # ('examine','p_carin'), ('fight','hearth_ostvik'), ('found','p_bailiff'), ('found','p_carin'),
+    # ('interview','hearth_ostvik'), ('petition','hearth_ostvik'), ('research','hearth_ostvik'),
+    # ('research','p_bailiff'), ('research','p_carin'), ('research','scriptorium'),
+    # ('restore','hearth_ostvik'), ('restore','p_carin')}`, 15 pairs.
+    # [GROUNDED: measured 2026-10-01 on this tree -- 15 executable clause-4 drops on `build_world(0)`, from 13 at `4bd5cee`]
+    assert len(dropped) == 15, (
+        f"{len(dropped)} executable clause-4 drops, not 15. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
         "failure than the loss of outcome-relevance recorded above.")
     # ⚠⚠⚠ **THE BITE CAME BACK UNDER G1a, THE GUARD ABOVE DEMANDED A REASON, AND THE REASON IS
@@ -14451,3 +14519,106 @@ def test_w28_cast_capability_is_authored_world_gen_not_a_zeroed_default():
     known = {c["id"] for c in R.load_cases("NPC")} | {c["id"] for c in R.load_cases("ARC")}
     orphans = sorted(cid for cid in C.CAST if cid not in known)
     assert not orphans, f"a `cast:` overlay names a case in neither lane: {orphans}"
+
+
+# ---------------------------------------------------------------------------------------------
+# T4 (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282): A TELLING NAMES ITS HEARER. `to`
+# comes from the persons the teller KNOWS (`known_persons`), one Candidate per person; no other row
+# changes how it binds `to` or whom it contests.
+# ---------------------------------------------------------------------------------------------
+
+def _t4_person(knows=(), holds=("Hh",)):
+    """`tiny_world`'s `p_low`, holding a claim on each of `holds` and an `exists:Person` reading of
+    each of `knows` -- the `existence` deposit's shape, one of `known_persons`' three sources."""
+    w = P.tiny_world()
+    p = w.persons["p_low"]
+    for i, s in enumerate(holds):
+        p.ledger.append(Claim(f"c_h{i}", p.id, s, "stores:grain", 8, 0, "firsthand", 37, "own"))
+    for i, k in enumerate(knows):
+        p.ledger.append(Claim(f"c_k{i}", p.id, k, "exists:Person", 1, 0, "firsthand", 100, "own"))
+    return w, p
+
+
+def _t4_offered(w, p, referents, verb=None):
+    q = Question("q:t4", "need", tuple(referents))
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
+    return [c for c in decision.opening_set(p, v, q, w.fixtures) if verb is None or c.verb == verb]
+
+
+def test_t4_one_candidate_per_known_hearer():
+    """A person who knows two persons forms TWO `tell` Candidates for one referent -- one addressed
+    to each, both about the referent, both carrying what they would say -- and `to` is never the
+    teller. Knowing nobody forms none (a telling to nobody is an act with a hole). `p_high` stands in
+    another rung and is still a Candidate: whether a hearer is PRESENT is the fold's question
+    (`hearer`), never the chooser's.
+
+    Against the pre-T4 row (`own_ledger` alone, no `to`) one Candidate forms whoever is known, with
+    no `to` -- the `len == 2` and the `to` set both go red."""
+    w, p = _t4_person(knows=("p_mid", "p_high"))
+    tells = _t4_offered(w, p, ("Hh",), "tell")
+    assert len(tells) == 2, [(c.subject, c.operands.get("to")) for c in tells]
+    assert {c.operands["to"] for c in tells} == {"p_mid", "p_high"}
+    assert all(c.subject == "Hh" and c.operands["to"] != p.id for c in tells)
+    assert all(c.operands.get("said") is not None for c in tells), "a formed telling carries nothing to say"
+    w, p = _t4_person(knows=())
+    assert _t4_offered(w, p, ("Hh",), "tell") == [], "a telling formed with nobody known to tell it to"
+    # The TOPIC is never the hearer: asked about `p_mid`, a teller who knows only `p_mid` has nobody
+    # to tell, and one who also knows `p_high` tells `p_high`.
+    w, p = _t4_person(knows=("p_mid",), holds=("p_mid",))
+    assert _t4_offered(w, p, ("p_mid",), "tell") == []
+    w, p = _t4_person(knows=("p_mid", "p_high"), holds=("p_mid",))
+    assert [c.operands["to"] for c in _t4_offered(w, p, ("p_mid",), "tell")] == ["p_high"]
+
+
+def test_t4_nothing_to_say_forms_no_telling_and_survey_is_untouched():
+    """T1's deferred decline, taken at T4: a teller holding NOTHING about the referent forms no
+    `tell` (the `holds` conjunct is NAMED, so `opening_set` carries `said` and declines on `None`).
+    `survey` shares the `own_ledger` form UNNAMED: it still forms on a referent its holder holds
+    nothing about (clause 4 is known-false, never 'unproven'), and carries no `said`."""
+    w, p = _t4_person(knows=("p_mid",), holds=())
+    assert _t4_offered(w, p, ("Hh",), "tell") == []
+    surveys = _t4_offered(w, p, ("Hh",), "survey")
+    assert surveys and all("said" not in c.operands for c in surveys), (
+        [(c.subject, sorted(c.operands)) for c in surveys])
+
+
+def test_t4_a_person_may_tell_about_themselves_and_still_not_fight_themselves():
+    """DECISION 3. The contested-verb self-subject skip binds only a row naming NO counterparty: a
+    `tell`'s opponent is its `to`, so its `subject` is a topic and a person may tell somebody about
+    themselves. `fight` names none -- its opponent IS its subject -- and still declines the person
+    as their own subject. CONTROL: `fight` forms on another person, so its absence on `p_low` is the
+    skip and not the verb being unformable."""
+    w, p = _t4_person(knows=("p_mid",), holds=("p_low",))
+    tells = _t4_offered(w, p, ("p_low",), "tell")
+    assert [(c.subject, c.operands["to"]) for c in tells] == [("p_low", "p_mid")], (
+        [(c.subject, c.operands.get("to")) for c in tells])
+    assert _t4_offered(w, p, ("p_low",), "fight") == [], "a person formed a fight against themselves"
+    assert [c.subject for c in _t4_offered(w, p, ("p_mid",), "fight")] == ["p_mid"], (
+        "the control: `fight` does not form on another person either, so the skip is unobserved")
+
+
+def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
+    """DECISION 4's CONTROL. The known-person fan applies only to a row whose cell binds `subject`
+    SEPARATELY from `to` -- `tell` alone. `petition` and `issue` bind `to` without `subject`, so `to`
+    is still what they are about (the referent rule, `_derive_operand`): one bag, whatever the person
+    knows, its `to` the pre-T4 derivation. Their opponent is unchanged too: neither contests, and the
+    two contested rows besides `tell` name no counterparty, so RESOLVE's target stays `subject`.
+    The full candidate set was also compared against HEAD in a `git worktree` (recorded in the T4
+    commit body)."""
+    from ..decision.options import _derive_operand, operand_bags
+    fanned = {v for v, r in VERB_TABLE.items()
+              if r.requires_typed is not None and r.requires_typed.known_person_operands()}
+    assert fanned == {"tell"}, sorted(fanned)
+    w, p = _t4_person(knows=("p_mid", "p_high", "p_king"))
+    q = Question("q:t4c", "need", ("p_mid",))
+    checked = 0
+    for verb in ("petition", "issue"):
+        row = VERB_TABLE[verb]
+        bags = operand_bags(p, row, q, "p_mid", w.fixtures)
+        assert len(bags) == 1, (verb, bags)
+        assert bags[0]["to"] == _derive_operand(p, "to", q, "p_mid", w.fixtures) == "p_mid", (verb, bags)
+        assert operands_for(p, row, q, "p_mid", w.fixtures) == bags[0]
+        assert row.counterparty == "to" and not row.contests, verb
+        checked += 1
+    assert checked == 2
+    assert {v for v, r in VERB_TABLE.items() if r.contests and r.counterparty} == {"tell"}

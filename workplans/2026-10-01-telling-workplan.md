@@ -204,6 +204,20 @@ next hearer's chain is `(teller,)`; the T3b retelling test sweeps `confidence_de
 T5's falsifier needs a content retelling, so T5 decides whether `said_of` excludes event-kind predicates, as it
 excludes `seen`. Read H-176's cite.
 
+**As built (uncommitted at writing; the T4 commit):** the row, the `with` stem, `known_persons`, the roster and
+`operand_bags` as §3 says, plus four things §3 did not name. (1) `act_key` (`data/verbs.py`) puts a known-person operand
+in the act id (`subject>to`), because two `tell`s on one topic minted one id and `state/acts.py` refused the second on
+the first realm season; every other row's ids are byte-identical. (2) `WORLD_ONLY_STEMS`: `LedgerReader` answers `with`
+UNKNOWN by rule, since the fold's `with` read is deposited to the teller under `H-122`'s `actor` arm. (3) The loader's
+"a contested row may not key its refusals" became "only to one kind" (`tell` keys `news.untold` twice). (4) The decline:
+a NAMED `own_ledger` conjunct carries `said` and declines on `None`; `survey`/`reconstruct` stop carrying `said` and
+form exactly as before. Decided instrument for M0d: the realm. Measured, realm `build_realm(0)` ×1: tellers 83 → 28 (only
+a person who knows somebody tells), `tell` Candidates 266 → 378, attempted 25 → 4, `news.told` 9 → 3, told claims with a
+chain 0 → 3; corpus `test_n3` loop: `attempt_cases` 20 → 20, `told_cases` 9 → 16 (no re-pin; §6). Re-run M0 (scratch
+`t4/m0_telling_t4.py`, `m0_results.json` md5 `803755dd…`): M0a realm person-subject executed 2 of 3; M0d 100% of tellings
+reaching RESOLVE have their `to` present in both instruments. Control: on one world, the 249,555 non-`tell` Candidates
+are identical to `4bd5cee`'s.
+
 ### T5 · dedup by origin, and T6 · a teller's record
 
 **T5.** The told dedup skips a deposit only if the hearer holds the triple with `chain == ()` or the

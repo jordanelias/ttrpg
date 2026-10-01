@@ -35,7 +35,7 @@ from ..data.rosters import PERSON_PREDICATES, PURSUIT_AXES, RECORD_CONTENT, requ
 from ..data.verbs import ELIGIBILITY_KINDS, VERB_TABLE, align
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
-from ..queries.person_q import regard, said_of
+from ..queries.person_q import known_persons, regard, said_of
 from ..state.carriers import Candidate, Claim, Person, Question, View
 from ..trace_log import TRACE
 
@@ -115,7 +115,9 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # `19`: the seat this row's act would exercise -- `exercised_seat`, the same untraced walk
         # `pack_scenes` names `Act.via` by -- for the belief test's `basis` conjunct below.
         seat = exercised_seat(p, row)
-        ledger_of = row.requires_typed.own_ledger_operands() if row.requires_typed else ()
+        # `T4`: only a NAMED own-ledger conjunct carries `said` (`tell`'s `holds`); `survey` and
+        # `reconstruct` share the form unnamed and carry nothing (telling workplan, "From Batch 1").
+        ledger_of = row.requires_typed.named_own_ledger_operands() if row.requires_typed else ()
         for subject in q.referents:
             # ⚠⚠ A CONTEST NEEDS TWO CLAIMANTS, AND A PERSON IS NOT THEIR OWN ADVERSARY.
             # `move`'s `contain_path` cell keeps the same shape of rule -- *"a node is not a path
@@ -135,57 +137,63 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             # the granary full SHOULD form the Candidate and learn otherwise -- and being alone
             # in a room is not a belief anyone can be wrong about. There is no world-read here
             # and no `World`: `p.id` against a referent the person already holds.
-            if row.contests and subject == p.id:
+            # ⚠ ONLY WHERE THE ROW NAMES NO COUNTERPARTY (telling workplan `T4`, Decision 3). A row
+            # that names its second side on its own operand contests against THAT (`tell`'s `to`),
+            # so its `subject` is a topic and a person may tell somebody about themselves; the
+            # counterparty rule below still declines the person as their own second side.
+            if row.contests and not row.counterparty and subject == p.id:
                 continue
             # ⚠ OPERANDS BEFORE THE BELIEF TEST, AND THE ORDER IS THE POINT. Clause 4 asks
             # whether the requirement is known-false ABOUT THIS BINDING, so the binding has to
             # exist first -- asking it of an unbound cell is what made the person read a
             # different granary from the fold.
-            ops = operands_for(p, row, q, subject, fx)
-            if ops is None:
-                continue
-            # ⚠ AND A TWO-SIDED ACT NEEDS A SECOND SIDE (plan position `15`, `ED-IN-0210` ruling
-            # 2). The rule above, one column over: a row naming its `counterparty:` operand forms
-            # no Candidate whose counterparty is the person -- a petition to oneself is the
-            # Tenure(X,X) fiat ruling 1 names. Declined HERE, not refused in the fold, for the
-            # reason the contest rule gives: no read the fold makes can say *that is you*, so a
-            # refusal teaches nothing -- MEASURED, it fed itself (the refusal's claim about the
-            # petitioner raised the next question about them). Reads the row's column, never a
-            # verb name, and the loader guarantees the operand is carried.
-            # ⚠ AND A SECOND SIDE NOBODY CAN NAME IS NO SECOND SIDE (plan position 16). On a TYPED
-            # row the loader guarantees the counterparty is carried, so `None` cannot arise there.
-            # On an UNTYPED row (`give`) nothing is carried, and forming the Candidate would mint
-            # an act with no receiver -- refused by the fold every time, for the instrument's
-            # reason. MEASURED before this clause, the `give` row without it: 3 such acts in
-            # `headless.run(3, 0)` and 41 in `populated.run(2, 0)`, every one `give.refused`, and
-            # `release` dropped out of the corpus's executed set because they took its scenes --
-            # position `15`'s *constant scene tax with nothing behind it*, the shape the petition
-            # row's seat reading was refused for.
-            if row.counterparty and ops.get(row.counterparty) in (None, p.id):
-                continue
-            # `19`: THE SEAT THE ACT WILL BE EXERCISED THROUGH rides into the belief test as it rides
-            # onto `Act.via` (`pack_scenes`), so a `basis` conjunct is asked of the same seat both
-            # sides. `seat` is `exercised_seat`, read once per row above.
-            # `T3a`: and the person reads their own ledger WEIGHING hearsay by its teller.
-            if belief_contradicts(p, row, subject, ops, seat, weigh=weigh):
-                continue
-            # WHAT THE TELLER WILL SAY IS DECIDED HERE, AT CHOOSE, AND RIDES THE ACT (`T1`,
-            # `workplans/2026-10-01-telling-workplan.md`): a row whose typed cell holds an
-            # `own_ledger` clause (found by walking the form, never by a verb name) passes on what
-            # the actor HOLDS about the clause's entity, copied out of their own ledger now, so
-            # WITNESS reads the Act and never the teller's live ledger. Placed after every decline
-            # so the copy is paid only for a Candidate that is formed; `said` is not a
-            # `requires_operands` member, so `binding_of` drops it from both readers' bindings.
-            # NOTHING HELD IS NOT DECLINED HERE, though the workplan's T1 said it should be:
-            # measured 2026-10-01, declining drops 3 of 31 corpus candidates and moves the realm
-            # hash (persons form `own_ledger` rows on referents they hold nothing about, and the
-            # fold used to refuse them). With no `said`, WITNESS passes nothing on, as before.
-            # Declining is a one-line edit and T4's call.
-            if ledger_of:
-                said = said_of(p.ledger, ops.get(ledger_of[0]), fx)
-                if said is not None:
-                    ops["said"] = said
-            out.append(Candidate(verb, subject, why=q.source, operands=ops))
+            # `T4`: ONE CANDIDATE PER BAG -- one bag for every row but one whose `to` is a KNOWN
+            # PERSON (`operand_bags`), which forms one per person the teller knows.
+            for ops in operand_bags(p, row, q, subject, fx):
+                # ⚠ AND A TWO-SIDED ACT NEEDS A SECOND SIDE (plan position `15`, `ED-IN-0210` ruling
+                # 2). The rule above, one column over: a row naming its `counterparty:` operand forms
+                # no Candidate whose counterparty is the person -- a petition to oneself is the
+                # Tenure(X,X) fiat ruling 1 names. Declined HERE, not refused in the fold, for the
+                # reason the contest rule gives: no read the fold makes can say *that is you*, so a
+                # refusal teaches nothing -- MEASURED, it fed itself (the refusal's claim about the
+                # petitioner raised the next question about them). Reads the row's column, never a
+                # verb name, and the loader guarantees the operand is carried.
+                # ⚠ AND A SECOND SIDE NOBODY CAN NAME IS NO SECOND SIDE (plan position 16). On a TYPED
+                # row the loader guarantees the counterparty is carried, so `None` cannot arise there.
+                # On an UNTYPED row (`give`) nothing is carried, and forming the Candidate would mint
+                # an act with no receiver -- refused by the fold every time, for the instrument's
+                # reason. MEASURED before this clause, the `give` row without it: 3 such acts in
+                # `headless.run(3, 0)` and 41 in `populated.run(2, 0)`, every one `give.refused`, and
+                # `release` dropped out of the corpus's executed set because they took its scenes --
+                # position `15`'s *constant scene tax with nothing behind it*, the shape the petition
+                # row's seat reading was refused for.
+                if row.counterparty and ops.get(row.counterparty) in (None, p.id):
+                    continue
+                # `19`: THE SEAT THE ACT WILL BE EXERCISED THROUGH rides into the belief test as it rides
+                # onto `Act.via` (`pack_scenes`), so a `basis` conjunct is asked of the same seat both
+                # sides. `seat` is `exercised_seat`, read once per row above.
+                # `T3a`: and the person reads their own ledger WEIGHING hearsay by its teller.
+                if belief_contradicts(p, row, subject, ops, seat, weigh=weigh):
+                    continue
+                # WHAT THE TELLER WILL SAY IS DECIDED HERE, AT CHOOSE, AND RIDES THE ACT (`T1`,
+                # `workplans/2026-10-01-telling-workplan.md`): a row whose typed cell holds a NAMED
+                # `own_ledger` conjunct (`T4`; found by walking the form, never by a verb name)
+                # passes on what the actor HOLDS about the clause's entity, copied out of their own
+                # ledger now, so WITNESS reads the Act and never the teller's live ledger. Placed
+                # after every decline so the copy is paid only for a Candidate that is formed;
+                # `said` is not a `requires_operands` member, so `binding_of` drops it from both
+                # readers' bindings.
+                # ⚠ AND NOTHING TO SAY IS DECLINED (T1's deferral, decided at `T4`): a telling that
+                # carries nothing passes nothing on, and the fold used to refuse it on `holds`
+                # anyway -- a scene spent on a refusal the person could have known. Measured at T1:
+                # 3 of 31 corpus candidates. Only the named conjunct declines; `survey` and
+                # `reconstruct` carry no `said` and are untouched.
+                if ledger_of:
+                    said = said_of(p.ledger, ops.get(ledger_of[0]), fx)
+                    if said is None:
+                        continue
+                    ops = {**ops, "said": said}
+                out.append(Candidate(verb, subject, why=q.source, operands=ops))
     return out
 
 
@@ -789,7 +797,51 @@ def operands_for(p: Person, row: "VerbRow", q: "Question", subject,
     `test_w5_sense_is_still_the_only_world_taking_non_decision_function` examines every function
     whose FIRST parameter is annotated `Person`, which is why `p` is first here and not `row`:
     `binding_from`'s docstring recorded that the same guard could not see IT, because its first
-    parameter was a `TypedRequires`. A signature is where that gets fixed, not a sentence."""
+    parameter was a `TypedRequires`. A signature is where that gets fixed, not a sentence.
+
+    ⚠ TELLING WORKPLAN `T4`: THE FIRST OF `operand_bags`, for the callers that ask for one bag. A
+    row whose `to` is a known person has one bag per person known; this answers the first, or
+    `None` for none."""
+    bags = operand_bags(p, row, q, subject, fx)
+    return bags[0] if bags else None
+
+
+def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
+                 fx: "Fixtures") -> list[dict]:
+    """EVERY OPERAND BAG `p` CAN FORM FOR `row` ON `subject` -- `[]` when none (telling workplan
+    `T4`, `ED-IN-0282`). One bag for every row whose operands all come from `_derive_operand`
+    (`operands_for`'s rule, unchanged); for a row whose cell binds a known-person operand beside
+    `subject` (`TypedRequires.known_person_operands`: `tell`'s `to`, and no other row -- `petition`
+    and `issue` bind `to` without `subject`, so `to` is what they are about and keeps the referent
+    rule in `_derive_operand`), one bag PER PERSON `p` KNOWS (`queries/person_q.py::known_persons`, from `p`'s own claims,
+    never the actor and never the topic), in that function's sorted order. Nobody known is no bag:
+    a telling to nobody is an act with a hole (`operands_for`'s `None`), traced and not formed.
+
+    ⚠ PERSON-SIDE AND WORLD-FREE, like `operands_for` -- `p` first for the AST guard's reason
+    recorded there. WHETHER the person told is present is the fold's `hearer` conjunct; a known
+    person who is elsewhere still gets a Candidate, and the refusal is how the teller learns it."""
+    fan = row.requires_typed.known_person_operands() if row.requires_typed is not None else ()
+    if not fan:
+        ops = _operands(p, row, q, subject, fx, {})
+        return [] if ops is None else [ops]
+    people = known_persons(p.ledger, p.id, subject)
+    if not people:
+        TRACE.note(f"{row.verb!r} needs {list(fan)} from a person {p.id} knows, and they know "
+                   f"nobody but {subject!r}; NO Candidate is formed (T4)", "§F1/H-94")
+        return []
+    out = []
+    for who in people:
+        ops = _operands(p, row, q, subject, fx, {n: who for n in fan})
+        if ops is not None:
+            out.append(ops)
+    return out
+
+
+def _operands(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixtures",
+              given: dict) -> Optional[dict]:
+    """`operands_for`'s body: the cell's own operands plus `subject`/`to` where the form admits
+    them, each from `given` if it names it (`operand_bags`' known person) else `_derive_operand`;
+    `None` for a bound operand nobody can supply. The rules are `operands_for`'s docstring's."""
     req = row.requires_typed
     if req is None:
         return {}
@@ -801,7 +853,7 @@ def operands_for(p: Person, row: "VerbRow", q: "Question", subject,
         # `actor` is structural on both sides and is never carried; see `binding_of`.
         if name == "actor":
             continue
-        v = _derive_operand(p, name, q, subject, fx)
+        v = given[name] if name in given else _derive_operand(p, name, q, subject, fx)
         if v is None:
             if name not in bound:
                 # An operand the CELL does not read cannot make the act malformed -- it is simply

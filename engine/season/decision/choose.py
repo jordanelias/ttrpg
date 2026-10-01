@@ -36,7 +36,7 @@ from ..data.rosters import PURSUIT_AXES, SCENE_PACKING_RULES, require_member
 # `PURSUIT_PROJECTION` / `PROJECTION_DEFAULT_CELL` were imported here until 2026-09-16 and
 # are not any more: the loop that read the 13x4 moved into `data/pursuits.to_axes`, its
 # single owner. Keeping the imports declared a dependency this module no longer has.
-from ..data.verbs import VERB_TABLE, align
+from ..data.verbs import VERB_TABLE, act_key, align
 from ..gaps import Unspecified
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
 # imports `person_q` and `data/`); `make_chooser`'s score calls it.
@@ -428,7 +428,8 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
                      # the same walk), so a remit act names the seat whose remit it is and an
                      # `own` act names none. The fold's eligibility, `_req_revoke`/`_req_confer`
                      # and the write gate ask THIS seat and no other (`04:332`).
-                     [Act(mint(p.id, c.verb, c.subject or ""), p.id, c.verb,
+                     # `T4`: the id is of `act_key` -- the subject, plus `tell`'s hearer (`data/verbs.py`).
+                     [Act(mint(p.id, c.verb, act_key(c.verb, c.subject, c.operands)), p.id, c.verb,
                           payload=_payload_of(c),
                           via=exercised_seat(p, VERB_TABLE.get(c.verb))) for c in chunk],
                      # `H-77`: a scene carrying more than one interaction is the EXTENDED one.

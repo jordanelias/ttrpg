@@ -223,21 +223,32 @@ def test_15d_falsifier_the_realm_holds_hearsay_no_telling_minted(monkeypatch):
 
     ⚠ THE CONTROL IS IN THE TEST (§0.1 pt 4). The same season with every channel's source
     collapsed to `firsthand` -- the map neutralised, nothing else touched -- holds no `told_by`
-    at all, so the hearsay is the map's and not the told channel's (which mints none in this
-    world at seed 0, measured)."""
+    at all, so the hearsay is the map's and not the told channel's.
+
+    ⚠ TELLING WORKPLAN `T4`: THE TOLD CHANNEL MINTS IN THIS WORLD NOW, AND ITS DEPOSITS ARE NOT THE
+    MAP'S. This read *"which mints none in this world at seed 0, measured"* until a telling named a
+    hearer; at `T4` three told claims land in the realm's first season, and a told claim is
+    `told_by` whatever the map says (the told branch sets its source itself). So each arm counts the
+    map's `told_by` (no `chain`) apart from the told channel's (a `chain`), the control asserts the
+    map's is zero, and the told channel's is asserted UNMOVED by neutralising the map."""
     def told_by_count() -> tuple:
         w = populated.build_realm(0)
         out = populated.run(1, 0, w=w)
-        return out["claim_sources"].get("told_by", 0), sum(out["claim_sources"].values())
+        told_by = [c for p in w.persons.values() for c in p.ledger if c.source == "told_by"]
+        channel = sum(1 for c in told_by if c.chain)
+        return len(told_by) - channel, channel, sum(out["claim_sources"].values())
 
-    live, total = told_by_count()
+    live, live_channel, total = told_by_count()
     assert live > 0, f"every one of {total} deposits is still firsthand -- no hearsay was minted"
     monkeypatch.setattr(WITNESS_MODULE, "CHANNEL_CLAIM_SOURCE",
                         {c: "firsthand" for c in CHANNEL_CLAIM_SOURCE})
-    control, control_total = told_by_count()
+    control, control_channel, control_total = told_by_count()
     assert control == 0 and control_total == total, (
-        f"with the map neutralised the season still holds {control} told_by claims (of "
+        f"with the map neutralised the season still holds {control} map-sourced told_by claims (of "
         f"{control_total}, against {total}) -- the hearsay above is not the channel map's")
+    assert control_channel == live_channel, (
+        f"neutralising the map moved the told channel's deposits {live_channel} -> "
+        f"{control_channel}: the told branch's source is not the map's to set")
 
 
 def test_t1_what_hearers_receive_is_decided_at_choose_not_at_witness():
@@ -265,6 +276,9 @@ def test_t1_what_hearers_receive_is_decided_at_choose_not_at_witness():
     teller, hearer, subject = "p_low", "p_mid", "Hh"
     tp = w.persons[teller]
     tp.ledger.append(Claim("c_held", teller, subject, "stores:grain", 8, 0, "firsthand", 37, "own"))
+    # `T4`: a telling is told TO somebody the teller knows (`known_persons`), so the teller learns
+    # the hearer exists -- the `existence` reading's shape -- or no `tell` is formed at all.
+    tp.ledger.append(Claim("c_knows", teller, hearer, "exists:Person", 1, 0, "firsthand", 100, "own"))
 
     # (1) CHOOSE -- through the real chooser, so `opening_set` is what sets `said`.
     w.step = Step.DELIBERATE
@@ -722,3 +736,79 @@ def test_t3_regard_decides_between_two_told_claims_at_the_shipped_weights():
         "at the control the two told claims did not tie: regard is leaking into the control arm")
     checked += 1
     assert checked == 3
+
+
+# ---------------------------------------------------------------------------------------------
+# T4 (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282): A TELLING NAMES ITS HEARER. `to` is
+# a person the teller knows; the fold refuses a hearer who is not with the teller (`hearer`, the
+# `with` stem); a present one hears by presence, and so does everybody else standing there -- no
+# `addressed` channel (T-e).
+# ---------------------------------------------------------------------------------------------
+
+def test_t4_a_telling_to_an_absent_hearer_is_refused_and_a_present_one_hears():
+    """`p_low` (in `Hh`) holds a claim on `Hh` and tells it twice.
+
+    ABSENT -- to `p_king`, who stands in `R`: the fold refuses BEFORE any contest, on the `hearer`
+    conjunct, with `news.untold`; the Event carries no degree (a refusal, not a lost contest, so a
+    Failure roll cannot impersonate it), and nobody is told anything.
+    PRESENT -- to `p_mid`, who stands in `Hh`: admitted, and folded at `Success` (the band the seam
+    would hand back on a win -- the roll is not this test's subject); at WITNESS the addressee AND
+    `p_other`, a bystander nobody addressed, both hold the told claim, chain `(p_low,)`.
+
+    MUTATIONS, run once at T4 (recorded in the commit): drop the `hearer` conjunct from the row
+    and the absent arm is admitted (the `failed` assertion goes red); make `co_located` admit
+    nobody and neither hearer is told (the present arm goes red)."""
+    from ..data.matrix import Step
+    from ..data.requires import binding_from_act, evaluate
+    from ..data.verbs import VERB_TABLE
+    from ..queries.world_q import WorldReader
+    from ..seam import Resolution
+
+    w = P.tiny_world()
+    teller, subject = "p_low", "Hh"
+    w.persons[teller].ledger.append(
+        Claim("c_held", teller, subject, "stores:grain", 8, 0, "firsthand", 37, "own"))
+    row = VERB_TABLE["tell"]
+    said = said_of(w.persons[teller].ledger, subject, w.fixtures)
+    d = SeasonDriver(w)
+    w.step = Step.RESOLVE
+
+    def act(label, to):
+        return Act(id=f"a_t4_{label}", actor=teller, verb="tell",
+                   payload={"subject": subject, "to": to, "said": said})
+
+    # ABSENT.
+    gone = act("absent", "p_king")
+    verdict = evaluate(row.requires_typed, WorldReader(w, teller), binding_from_act(gone))
+    assert verdict.value is False and verdict.failed == "hearer", (
+        f"a telling to someone in another rung read {verdict.value!r} on {verdict.failed!r}, "
+        "not False on `hearer`")
+    ok, kinds, _ = d._admits(w, gone, row)
+    assert not ok and list(kinds) == ["news.untold"], (ok, kinds)
+    out = d.resolve(mint_token(w, WriteClass.ACTS), [gone],
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert [e.kind for e in out] == ["news.untold"] and all(e.degree is None for e in out), (
+        f"the absent telling emitted {[(e.kind, e.degree) for e in out]} -- it reached the contest")
+
+    # PRESENT.
+    here = act("present", "p_mid")
+    ok, _, verdict = d._admits(w, here, row)
+    assert ok and verdict.value is True, f"a telling to someone in the teller's rung was refused: {verdict}"
+    w.acts.append(here)
+    told_ev = d._fold(w, mint_token(w, WriteClass.ACTS), here, Resolution("Success", {}))
+    assert [e.kind for e in told_ev] == ["news.told"], [e.kind for e in told_ev]
+    w.log.extend(told_ev)
+    for e in told_ev:       # what `resolve()` records for every Event it emits
+        d.act_of[e.id] = here
+    w.step = Step.WITNESS
+    d.witness(mint_token(w, WriteClass.INTERIOR), told_ev)
+    checked = 0
+    for pid in ("p_mid", "p_other"):
+        got = [c for c in w.persons[pid].ledger
+               if (c.subject, c.predicate, c.value) == (subject, "stores:grain", 8) and c.chain]
+        assert len(got) == 1 and got[0].chain == (teller,), (
+            f"{pid} holds {[(c.value, c.chain) for c in got]} -- a present "
+            f"{'addressee' if pid == 'p_mid' else 'bystander'} was not told")
+        checked += 1
+    assert checked == 2
+    assert not any(c.chain for c in w.persons["p_king"].ledger), "the absent hearer was told anyway"

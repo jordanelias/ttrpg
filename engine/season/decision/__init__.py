@@ -95,7 +95,7 @@ unchanged and still governs: *owns nothing, returns `Scene[]`, may read `PersonI
 from .budget import body_band_penalty, budget
 from .choose import make_chooser, pack_scenes, urgency
 from .options import (
-    agreement, containing_rung_of, operands_for, opening_set, project,
+    agreement, containing_rung_of, operand_bags, operands_for, opening_set, project,
     person_side_eligible, standing_of, store_kind_of,
 )
 from .questions import aggregate_questions, assemble, view_ids

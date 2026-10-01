@@ -37,7 +37,7 @@ does: `choose` and `options` read `stance_toward` and `said_of` from here. The A
 
 from __future__ import annotations
 
-from ..data.requires import UNKNOWN
+from ..data.requires import KNOWN_PERSON_CLAIM, UNKNOWN, WORLD_ONLY_STEMS
 from ..data.rosters import SEEN_PREDICATE
 from ..state.carriers import Person, Said
 from ..trace_log import TRACE
@@ -176,6 +176,10 @@ class LedgerReader:
         return best
 
     def read(self, subject, predicate: str):
+        # `T4`: where another person is NOW is the world's to answer, never a ledger's
+        # (`data/requires.py: WORLD_ONLY_STEMS`) -- UNKNOWN, so clause 4 never declines on it.
+        if str(predicate).partition(":")[0] in WORLD_ONLY_STEMS:
+            return UNKNOWN
         best = self._best(lambda c: c.subject == subject and c.predicate == predicate)
         return UNKNOWN if best is None else best.value
 
@@ -219,3 +223,41 @@ def said_of(claims, subject, fx) -> "Said | None":
     if c is None:
         return None
     return Said(c.subject, c.predicate, c.value, c.confidence, c.chain)
+
+
+def known_persons(claims, actor, topic) -> tuple:
+    """THE PERSONS THIS HOLDER KNOWS OF, from their OWN claims only -- sorted ids, never `actor`
+    and never `topic` (telling workplan `T4`, `ED-IN-0282`). Three sources, and no other:
+
+      * a truthy existence reading of a person -- `rosters.yaml: known_person_operands.claim.
+        predicate`, deposited where a fold asked whether somebody exists;
+      * who was SEEN doing something -- the `seen` claim's `seen_term` (`Seen.who`);
+      * who TOLD them something -- a told claim's last teller, `chain[-1]`.
+
+    A person is never known from the world: no presence read, no roster of acquaintances (`AX-2`).
+    WHETHER the person is present to hear is the fold's question (`tell`'s `hearer` conjunct, the
+    `with` stem), so a known person who has walked away is still named and the telling is refused
+    -- the person learns it as everyone learns a refusal. `topic` is excluded because a telling
+    names its topic on `subject` and its hearer on `to`, and the two are different people by
+    construction; the actor because a person does not tell themselves (`opening_set`'s
+    counterparty rule declines it too).
+
+    ⚠ `exists:Person` DEPOSITS ARE RARE AND `Seen.who` CARRIES THE LOAD: measured at T0 (scratch
+    `t0/m0_summary.md`, M0d), every realm hit came from `seen`. The told source is empty until a
+    told claim lands, which T4 itself is what makes possible."""
+    predicate = KNOWN_PERSON_CLAIM.get("predicate")
+    term = KNOWN_PERSON_CLAIM.get("seen_term")
+    out = set()
+    for c in claims or ():
+        if c.predicate == predicate and c.value:
+            out.add(c.subject)
+        elif c.predicate == SEEN_PREDICATE:
+            who = getattr(c.value, term, None)
+            if who:
+                out.add(who)
+        if c.chain:
+            out.add(c.chain[-1])
+    out.discard(actor)
+    out.discard(topic)
+    out.discard(None)
+    return tuple(sorted(out))

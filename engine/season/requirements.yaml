@@ -682,6 +682,16 @@ rows:
       `news.told` against 75 `news.untold`** -- a 21% success rate, and 26 of 27 cases produce a
       telling. The outcome moves with the seed: `build_world(0)` reads Failure 53 / Partial 16 /
       Success 2 and seed 7 reads 59 / 11 / 5.
+      ⚠ **RE-MEASURED AT TELLING WORKPLAN `T4` (`ED-IN-0282`, 2026-10-01); THE FIGURES ABOVE ARE
+      SUPERSEDED.** A telling now contests against its HEARER (`to`), not its topic. Over the same
+      27 NPC rung cases at seed 0, 3 seasons: **24 `news.told` (Success 7, Partial 17) against 30
+      `news.untold`**, 20 of 27 cases attempting a telling and 16 succeeding; the same command on a
+      `git worktree` at `4bd5cee` reads 9 against 33, 20 and 9 (so the figures above were already
+      stale before T4). The odds did NOT move: the opponent is a person on every graded telling
+      now (54 of 54, against 2 of 42 before), and 52 of the 54 obstacles are still
+      `obstacle_default` because corpus hearers carry no capability (2 read `score/2` = 1.5); what
+      moved is which tellings happen and the draws they take. `headless --seasons 2` grades one
+      telling at seed 0 (Success) and none at seed 7.
       **WHY `partial` AND NOT `met`, STATED RATHER THAN LEFT TO BE FOUND.** R-09 asks that chains
       be probabilistic; what is probabilistic today is the ROLL, not the CHAIN, and it varies by
       SEED and FIXTURE rather than by PERSON. `Person.capability` is empty on every corpus person
