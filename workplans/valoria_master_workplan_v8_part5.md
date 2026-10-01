@@ -29,7 +29,7 @@ carries `contests: "the body"`), with `loop/effects_combat.py` registrations; `1
 derived and never stored, **with a caller** (if nothing reads confliction yet — build-order 6f, `score`
 dotting against the basis — the Query waits for 6f, `ID-13`); `refusal_axis` set only if the ruling says
 arm H-146, reading the refusing pole from roster data. Audit the direct readers of
-`descriptors.CONVICTIONS` that survive Batch 1 (most die at `29d`/`29e`). Re-pin
+`descriptors.CONVICTIONS` that survive Batch 1 (`npe.py`'s died at `29d`; `conviction.py`'s dies at `29e`). Re-pin
 `test_conviction_roster_single_owner.py` and `test_conviction_spread_solver.py` (declared, §7).
 **FALSIFIER:** Jordan's faith pair (the devout-Solmund builder and the Einhir dismantler, both high
 `faith` — his own worked example in the worksheet) sits outside the 60° bar (`cos ≤ 0.5`) —
@@ -166,16 +166,16 @@ and an attack that lands sends the question back through the ladder, not to Jord
 
 | # | question | step | answer / where decided |
 |---|---|---|---|
-| A-1 | the 2026-09-28 plan's §5.2 thirteen demotions | 1–5 | each with its step (content-hash tiebreak → H-54/H-122, step 4; MB golden → `ED-MB-0016`, step 1; held H5 → step 1; H-111 → one probe, step 5; `ED-MB-0075` → option (2), built; `mass_battle` `state: []` → `04 §C.5.1`, step 3; G-Q5 → post-H6 re-measure, step 5; M-7 / `upkeep` / `kill / wound` → contradictions 3 / 1 / 4; `titles` → `04 §B.7/§E.1`, step 3; d.1 → members' `commit` degree, attacked at `20-iv`, step 5; `test_n3` floors → declared re-pin unless `11` shows a property, step 5; D-6/D-7 → swept fixtures at `18`; deleting the retire set → `requirements.yaml`'s own gate, not a question; GD-1 → a registered gap) |
+| A-1 | the 2026-09-28 plan's §5.2 thirteen demotions | 1–5 | each with its step (content-hash tiebreak → H-54/H-122, step 4; MB golden → `ED-MB-0016`, step 1; held H5 → step 1; H-111 → one probe, step 5; `ED-MB-0075` → option (2), built; `mass_battle` `state: []` → `04 §C.5.1`, step 3; G-Q5 → post-H6 re-measure, step 5; M-7 / `upkeep` / `kill / wound` → contradictions 3 / 1 / 4; `titles` → `04 §B.7/§E.1`, step 3; d.1 → members' `commit` degree, attacked at `20-iv` and dropped (nothing writes a commit Tenure's `degree`, H-162; the morale source landed from stance instead, PR #450), step 5; `test_n3` floors → declared re-pin unless `11` shows a property, step 5; D-6/D-7 → swept fixtures at `18`; deleting the retire set → `requirements.yaml`'s own gate, not a question; GD-1 → a registered gap) |
 | A-2 | H-174 item 2 — the upkeep payment's target | 5 | `home_of` is the architecture's own definition of where a person is |
 | A-3 | `24f`'s cohort producer | 3 | `engine/season/cohorts.yaml` — built (ED-WR-0011, `npcs.yaml` header, ED-SE-0051) |
 | A-4 | R-04 reason 2's "no Faction-as-actor" | 3 | `04_CODE_ARCHITECTURE.md`: `Faction` is a resolved view with **no verbs**, never `Act.actor`; faction acts are person acts `via` seats |
 | A-5 | H-163 limit 1 (rungless seats) | 3 | r2 `03`'s four anchor forms → build item `13d-iii` |
-| A-6 | `29d`'s gate on `10` | 5 | the retire gate is "the loop expresses the scale"; `npe.py` has no season reader → re-gated on `29b`; if the verify node disagrees, `29d` waits |
+| A-6 | `29d`'s gate on `10` | 5 | the retire gate is "the loop expresses the scale"; `npe.py` has no season reader → re-gated on `29b`; the premise was verified and `29d` landed on it (PR #450) |
 | A-7 | `thread_read`'s operand (H-85) | 4 | the row's own default, a two-valued `knowledge_kinds` roster (H-128's swept-fixture shape) — `14` ride-along (`R05-THREAD`) |
 | A-8 | the "double `@effect_for('oblige')`" in `effects_governance.py` | — | false alarm: the second is docstring text |
 | A-9 | `return_to_game_queue.yaml` | 1 | superseded by its own header (2026-08-19); retired at `ebb43bf0` |
-| A-10 | GD-1, the victory requirement | 5 | register an `ABSENT_RULE` hole at `28-iii` (S-6: not yet registered) |
+| A-10 | GD-1, the victory requirement | 5 | registered as an `ABSENT_RULE` hole, `H-176`, at `28-iii` (PR #450) |
 | A-11 | `ms_track` / `knots` deletions | 4 | wait on `27` (the retired plan's §1.3 disposition) |
 | A-12 | **former J-12** (does being told something move the hearer's stance?) **and position `10`'s write target** | 1 | superseded by the telling workplan, RATIFIED 2026-10-01 (main §0.6): `tell` writes no stance; told valence enters regard at read (G1); a judged deed counts there too, so this plan's stored `fight`-write rewrite of `10` is withdrawn |
 | A-13 | `destroy_record` unformable for everyone | 4 | needs a record-holding question referent — `give`'s shape, at `14` |
