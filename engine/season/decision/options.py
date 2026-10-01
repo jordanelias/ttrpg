@@ -32,6 +32,7 @@ from ..data.rosters import PERSON_PREDICATES, PURSUIT_AXES, RECORD_CONTENT, requ
 from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL, ELIGIBILITY_KINDS, VERB_TABLE
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
+from ..queries.person_q import said_of
 from ..state.carriers import Candidate, Claim, Person, Question, View
 from ..trace_log import TRACE
 
@@ -136,6 +137,29 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             ops = operands_for(p, row, q, subject, fx)
             if ops is None:
                 continue
+            # ⚠ WHAT THE TELLER WILL SAY IS DECIDED HERE, AT CHOOSE, AND RIDES THE ACT (`T1`,
+            # `workplans/2026-10-01-telling-workplan.md`). A row whose typed cell holds an
+            # `own_ledger` clause -- found by walking the form, never by a verb name -- passes on
+            # what the actor HOLDS about the clause's entity, so the claim is copied out of the
+            # actor's own ledger NOW and `Act.payload["said"]` carries it to WITNESS, which then
+            # reads the Act and never the teller's live ledger. `said` is not a `requires_operands`
+            # member, so `binding_of` drops it from both readers' bindings. One own-ledger clause
+            # per row is all the tree has; the first wins.
+            # ⚠ NOTHING HELD IS NOT DECLINED HERE, AND THE WORKPLAN'S T1 SAID IT SHOULD BE. MEASURED
+            # 2026-10-01 (`corpus_run 0`, `build_realm(0)` 1 season): declining on `None` drops 3 of
+            # 31 corpus candidates (a person forms an `own_ledger` row on a referent they hold no
+            # claim on -- `LedgerReader` answers `claim.held` UNKNOWN, which contradicts nothing --
+            # and the fold used to refuse it), flips `dispatch` from attempted-and-refused to never
+            # attempted, and moves the realm hash. That is a behaviour change, not the pure move T1
+            # is gated as (hash EQUAL); with no decline both controls are byte-identical. A teller
+            # with nothing to say carries no `said`, and WITNESS then passes nothing on, exactly as
+            # the old `_told_content` returned `None` for them. Declining is the one-line edit
+            # (`continue` where `ops["said"]` is not set) and a design call for whoever owns T4.
+            ledger_of = row.requires_typed.own_ledger_operands() if row.requires_typed else ()
+            if ledger_of:
+                said = said_of(p.ledger, ops.get(ledger_of[0]), fx)
+                if said is not None:
+                    ops["said"] = said
             # ⚠ AND A TWO-SIDED ACT NEEDS A SECOND SIDE (plan position `15`, `ED-IN-0210` ruling
             # 2). The rule above, one column over: a row naming its `counterparty:` operand forms
             # no Candidate whose counterparty is the person -- a petition to oneself is the

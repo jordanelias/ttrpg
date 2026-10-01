@@ -31,6 +31,7 @@ from ..harness import populated
 from ..harness import probes as P
 from ..loop import witness as WITNESS_MODULE
 from ..loop.driver import SeasonDriver, mint_token
+from ..queries.person_q import said_of
 from ..state.carriers import Act, Claim, Event, Tenure
 from ..state.ids import H
 
@@ -174,7 +175,10 @@ def test_15d_a_telling_is_hearsay_for_what_was_said_and_firsthand_for_that_it_wa
     assert w.fixtures.get("confidence_default") != held_conf
     held = Claim("c_held", teller, "Hh", "stores:grain", 8, 0, "firsthand", held_conf, "own")
     w.persons[teller].ledger.append(held)
-    act = Act(id="a_tell_15d", actor=teller, verb="tell", payload={"subject": "Hh"})
+    # T1: WHAT A TELLING PASSES ON RIDES THE ACT (set at CHOOSE by `opening_set`; a hand-built act
+    # sets it through the same owner, `said_of`).
+    act = Act(id="a_tell_15d", actor=teller, verb="tell",
+              payload={"subject": "Hh", "said": said_of(w.persons[teller].ledger, "Hh", w.fixtures)})
     w.acts.append(act)
     ev = Event(H(w.world_seed, w.tick, teller, f"ev:news.told:{act.id}"), "news.told",
                [], [act.id], w.tick, "Success", ())
@@ -231,3 +235,81 @@ def test_15d_falsifier_the_realm_holds_hearsay_no_telling_minted(monkeypatch):
     assert control == 0 and control_total == total, (
         f"with the map neutralised the season still holds {control} told_by claims (of "
         f"{control_total}, against {total}) -- the hearsay above is not the channel map's")
+
+
+def test_t1_what_hearers_receive_is_decided_at_choose_not_at_witness():
+    """T1 (`workplans/2026-10-01-telling-workplan.md`). WHAT A TELLING PASSES ON IS FIXED WHEN IT IS
+    CHOSEN. `opening_set` copies the teller's claim onto `Act.payload["said"]` through `said_of`;
+    WITNESS reads that and never the teller's live ledger, so a claim landing in the teller's
+    ledger BETWEEN the two cannot reach a hearer.
+
+    THE FALSIFIER, IN ORDER: (1) the teller holds `(Hh, stores:grain, 8)` at confidence 37 and forms
+    a `tell` through the real chooser; (2) a NEWER claim about `Hh` (value 99, confidence 100) is
+    appended to the teller's ledger; (3) WITNESS runs. The hearer must hold the CHOSEN triple, and
+    not the newer one. Against the pre-T1 `_told_content` -- which read the teller's live ledger at
+    the barrier -- the hearer is handed the newer claim and this fails (observed once, by running
+    this body with the old pick patched in; recorded in the T1 commit).
+
+    ⚠ IT CHECKS THAT IT CHECKED (§0.1 pt 2). The assertion that the newer claim IS the teller's
+    live pick (`LedgerReader`'s own comparator) is what makes the final inequality observable: a
+    newer claim the live read would not have preferred could not distinguish the two behaviours."""
+    from ..data.matrix import Step
+    from ..decision import assemble
+    from ..queries.person_q import LedgerReader
+    from ..state.carriers import Question, Sensation
+
+    w = P.tiny_world()
+    teller, hearer, subject = "p_low", "p_mid", "Hh"
+    tp = w.persons[teller]
+    tp.ledger.append(Claim("c_held", teller, subject, "stores:grain", 8, 0, "firsthand", 37, "own"))
+
+    # (1) CHOOSE -- through the real chooser, so `opening_set` is what sets `said`.
+    w.step = Step.DELIBERATE
+    q = Question("q:t1", "need", (subject,), "prop")
+    scenes = P.chooser(w, only=teller, verbs=frozenset({"tell"}))(
+        tp, assemble(tp, q, w.fixtures.get("view_k")), Sensation(0), lambda: 5)
+    tells = [a for s in scenes for a in s.acts if a.verb == "tell"]
+    assert tells, "the chooser formed no `tell` for a teller holding a claim -- the fixture changed"
+    act = tells[0]
+    said = act.payload.get("said")
+    assert said is not None and (said.subject, said.predicate, said.value, said.confidence) == (
+        subject, "stores:grain", 8, 37), f"`said` on the Act is {said!r}, not the held claim"
+
+    # (2) a NEWER claim about the subject lands in the teller's ledger AFTER CHOOSE.
+    newer = Claim("c_newer", teller, subject, "stores:grain", 99, w.tick + 1, "firsthand", 100, "own")
+    tp.ledger.append(newer)
+    assert LedgerReader(tp.ledger).latest_about(subject) is newer, (
+        "the newer claim is not the teller's live pick, so reading the live ledger would not have "
+        "handed it to the hearer and this test could not tell the two behaviours apart")
+
+    # (3) WITNESS.
+    w.step = Step.WITNESS
+    w.acts.append(act)
+    ev = Event(H(w.world_seed, w.tick, teller, f"ev:news.told:{act.id}"), "news.told",
+               [], [act.id], w.tick, "Success", ())
+    w.log.append(ev)
+    d = SeasonDriver(w)
+    d.act_of[ev.id] = act
+    d.witness(mint_token(w, WriteClass.INTERIOR), [ev])
+
+    told = [c for c in w.persons[hearer].ledger
+            if c.source == "told_by" and c.subject == subject]
+    checked = len(told)
+    assert checked >= 1, "the hearer was told nothing -- the arm under test never ran"
+    for c in told:
+        assert (c.predicate, c.value, c.confidence) == (said.predicate, said.value, said.confidence), (
+            f"the hearer holds {(c.predicate, c.value, c.confidence)!r}, not what the telling "
+            f"carried {(said.predicate, said.value, said.confidence)!r}")
+        assert c.value != newer.value, (
+            "the hearer received the claim that landed in the teller's ledger AFTER the telling was "
+            "chosen -- WITNESS is reading the teller's live ledger again")
+
+
+def test_t1_said_is_not_a_binding_operand():
+    """`said` rides the payload and is dropped by `binding_of` like `harm` and `stages`: the grammar's
+    vocabulary is closed on `requires_operands`, and a non-scalar must not reach either reader."""
+    from ..data.requires import REQUIRES_OPERANDS, binding_of
+    from ..state.carriers import Said
+    assert "said" not in REQUIRES_OPERANDS
+    out = binding_of("p", {"subject": "Hh", "said": Said("Hh", "stores:grain", 8, 37)})
+    assert "said" not in out and out["subject"] == "Hh" and out["actor"] == "p", out

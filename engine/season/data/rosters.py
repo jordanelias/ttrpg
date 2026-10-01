@@ -586,6 +586,17 @@ FAN_OUT_MODES = roster("fan_out_modes")
 # import in `epistemic.py`, beside the channel predicates it is keyed on.
 OBSERVATION_TERMS = roster("observation_terms", ordered=True)
 OBSERVATION_DEPOSIT = roster_map("observation_terms", "deposit")
+# THE ONE NAME THE `seen` CLAIM IS DEPOSITED UNDER. It lives here and not in `epistemic.py` (where
+# it was bound) because `queries/person_q.py::said_of` must read it and `epistemic` imports
+# `person_q`: a name two modules need, below both, so the import edge runs one way. `epistemic`
+# imports it back, so `epistemic.SEEN_PREDICATE` still resolves for every existing importer.
+SEEN_PREDICATE = OBSERVATION_DEPOSIT.get("predicate")
+if not isinstance(SEEN_PREDICATE, str) or not SEEN_PREDICATE:
+    raise Unspecified(
+        "`observation_terms.deposit.predicate` is absent or not a name", "R8",
+        needs="name the predicate the `seen` claim is deposited under",
+        law="Jordan 2026-09-02 -- a definition is data. A deposit with no declared predicate "
+            "would have to spell one in a body")
 TERMS_SUPPLIED_BY = roster_map("observation_terms", "supplied_by")
 # `W-E`. THE THREE BANDS PERSONAL COMBAT CAN DISTINGUISH, and HOW MUCH BODY A WOUND COSTS. Bound
 # here with every other roster rather than beside their reader in the S39 block below, because

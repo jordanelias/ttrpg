@@ -56,7 +56,7 @@ from typing import Optional
 
 from .data.requires import binding_of, evaluate
 from .data.rosters import (
-    CLAIM_SUBJECT_RULES, FAN_OUT_MODES, OBSERVATION_DEPOSIT, OBSERVATION_TERMS, TERMS_SUPPLIED_BY,
+    CLAIM_SUBJECT_RULES, FAN_OUT_MODES, OBSERVATION_TERMS, SEEN_PREDICATE, TERMS_SUPPLIED_BY,
     WITNESS_CHANNELS, require_member)
 from .data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow
 from .gaps import Unspecified
@@ -675,13 +675,8 @@ def observers_for(w: "World", e: "Event", mode: str, everyone: list) -> list:
 # the struct (`LedgerReader`'s newest-wins) rather than layer beneath it.
 # ---------------------------------------------------------------------------
 
-SEEN_PREDICATE = OBSERVATION_DEPOSIT.get("predicate")
-if not isinstance(SEEN_PREDICATE, str) or not SEEN_PREDICATE:
-    raise Unspecified(
-        "`observation_terms.deposit.predicate` is absent or not a name", "R8",
-        needs="name the predicate the `seen` claim is deposited under",
-        law="Jordan 2026-09-02 -- a definition is data. A deposit with no declared predicate "
-            "would have to spell one in a body")
+# `SEEN_PREDICATE` -- bound in `data/rosters.py` (imported above), so `queries/person_q.py` can read
+# it without importing this module; re-exported here for every existing `epistemic.SEEN_PREDICATE`.
 
 
 @dataclass(frozen=True)

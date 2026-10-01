@@ -28,7 +28,6 @@ from ..data.rosters import (
 from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, claim_subjects,
                          observers_for, seen_of, seen_subject)
 from ..queries import cache
-from ..queries.person_q import LedgerReader
 from ..queries.world_q import hold_force
 from ..state.attribution import actor_of
 from ..state.carriers import Claim, Event
@@ -56,56 +55,26 @@ def content_value(subject_matter):
     return subject_matter
 
 
-def _told_content(w, act):
-    """WHAT A TELLING PASSES ON: the teller's own claim about the act's subject, or `None`.
+def _told_content(act):
+    """WHAT A TELLING PASSES ON: the `Said` the act carries, or `None`.
 
-    A FUNCTION OF THE EVENT ALONE, which is the whole reason it is not inlined in the fan loop:
-    the teller and the told-about subject come off the Act, so re-deriving them per HEARER
-    repeats a full `LedgerReader` ledger copy and linear scan for every observer of one telling.
-    `witness` memoises the result per `e.id`.
+    ⚠ IT READS THE ACT AND NOTHING ELSE. What a person will say is decided at CHOOSE --
+    `decision/options.py::opening_set` copies `queries/person_q.py::said_of(own ledger, subject)`
+    onto `Act.payload["said"]` -- so WITNESS never opens the teller's ledger. It used to: this
+    function took the teller's LIVE ledger at the barrier, which is a ledger read by someone who is
+    not its holder (`04_CODE_ARCHITECTURE.md` §B.2:230's STRUCTURAL row, `F8` carve-out: *"the ACTOR'S
+    OWN ledger ... and no other"*). Moving the read to the Act closes that, and it also fixes WHEN:
+    what a hearer receives is what the teller held when they chose to tell, not whatever landed in
+    the teller's ledger between CHOOSE and WITNESS (`test_t1_what_hearers_receive_is_decided_at_
+    choose_not_at_witness`).
 
-    ⚠ `act_refs`, NOT A SECOND READ OF THE PAYLOAD. `epistemic` owns "what is this act about"
-    and its reader carries a bare-string branch this file must not re-derive (§8).
+    ⚠ `None` FOR A HAND-BUILT `tell` THAT CARRIES NO `said` -- a telling with nothing on it passes
+    nothing on, which is the polarity this channel already has for an empty-handed teller.
 
-    ⚠ `latest_about`, NOT A COMPARATOR WRITTEN HERE. `LedgerReader` owns *the most recent, then
-    the most confident*, and `tell`'s `requires` cell names no predicate to read by.
-
-    ⚠⚠ **THIS READS A LEDGER THAT IS NOT THE DEPOSITING PERSON'S, AND `04_CODE_ARCHITECTURE.md`
-    §B.2:230 SAYS THAT DOES NOT EXIST.** The row is *"the ledger is never read by ANOTHER person |
-    **STRUCTURAL by signature**"*, and its `F8` carve-out is exact: *"the fold may ask the ACTOR'S
-    OWN ledger, through the `PersonInterior` snapshot the act carries, and no other. A Query taking
-    a ledger and an asker who is not its holder still does not exist."* It does now -- this
-    function, called in the WITNESS fan for a HEARER, over the TELLER's live ledger. Measured: it
-    is the only such site in the tree; the other production construction (`epistemic.py:99`) passes
-    the actor's own claims.
-
-    NOT A GAP IN THE ROW, AND NOT DEFENSIBLE AS SHIPPED -- it is a known non-conformance carried
-    deliberately, named here because a `04`-STRUCTURAL row must not go on asserting a property the
-    code has stopped having. **The conformant shape is that the told triple RIDES ON THE ACT**, so
-    WITNESS reads what the telling carried instead of fetching it: either the resolve-side
-    `Observation` channel (`Event.observed`, `W-B`) carrying the claim's own predicate and value
-    rather than today's bare `("claim.held", True)`, or the actor's `PersonInterior` supplying it
-    at option-build time. Both are grammar work in `data/requires.py` or `decision/options.py`, and
-    the second decides at CHOOSE time what a person will say -- a game decision, not a cleanup. So
-    it is not taken in the commit that found it, and this note is the record rather than a ledger
-    row: `CLAUDE.md` §0's five-step test answers it at step 3 (the design document says which shape
-    is right), which makes it work, not an escalation."""
-    teller = w.persons.get(act.actor)
-    refs = act_refs(act)
-    subj = refs[0] if refs else None
-    if teller is None or subj is None:
-        return None
-    # ⚠ `R8.1`: A `seen` CLAIM IS PASSED ON ONLY WHEN IT IS ALL THE TELLER HOLDS ABOUT THE SUBJECT.
-    # The `seen` deposit lands in every co-located witness -- the teller included -- with an
-    # identical value, so without this the teller's NEWEST claim about a rung was almost always a
-    # `seen` the hearer already held, the exact-triple guard below suppressed it, and the told
-    # channel carried nothing: MEASURED at the `R8.1` commit, `build_world(0)`, four seasons, 0
-    # `told_by` claims. `seen` is ruled BESIDE the existing deposits, not in place of what a telling
-    # carries. Same comparator both times (`LedgerReader`'s one rule); only the pool differs, and
-    # a rumour of a sighting still travels when a sighting is all the teller has.
-    own = [c for c in teller.ledger if c.predicate != SEEN_PREDICATE]
-    return (LedgerReader(own).latest_about(subj)
-            or LedgerReader(teller.ledger).latest_about(subj))
+    ⚠ `act.payload` IS NOT ALWAYS A DICT (`probes.py` builds bare-string payloads), hence the shape
+    test. `act_refs` still owns *what is this act about* (§8); this reads the one other key."""
+    pay = getattr(act, "payload", None)
+    return pay.get("said") if isinstance(pay, dict) else None
 
 
 def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = None) -> object:
@@ -295,30 +264,10 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # RESOLVE order -- is kept, which is the answer `LedgerReader`'s strict `>` already gave.
     # This fix removes the TIE, not the answer.
     seen_obs_by_pid: dict = {}
-    # ⚠ WHAT A TELLING CONTAINED, RESOLVED ONCE PER EVENT RATHER THAN ONCE PER HEARER.
-    # `_act`, the teller, the told-about subject and the claim being passed on depend ONLY on
-    # the Event -- never on `pid` -- but the fan loop below is per `(person, event)`, so the
-    # first cut re-derived all four for every observer of the same telling, and
-    # `LedgerReader.__init__` COPIES the teller's whole ledger (`list(claims)`) before
-    # `latest_about` linear-scans it, up to `ledger_cap` = 200. In a three-person corpus world
-    # that is a 2x repeat and invisible. In `harness/populated`'s world it is not: the Church's
-    # 25 cases share one building, so one telling repeated a 200-entry copy-and-scan 25 times.
-    # A plain local dict fixes it. ⚠ NOT `w.cache()` -- `cache_at_barrier` is `Forbidden` inside
-    # `_in_parallel_map` (`state/world.py:474-476`), which is this whole region.
-    # ⚠⚠ AND IT IS FILLED HERE, BEFORE ANY DEPOSIT, NOT LAZILY AT THE FIRST HEARER (plan position
-    # `15d`, found building `19_PLAN.md` step 4 (c)'s falsifier). Filled lazily it read the teller's
-    # ledger PART-WAY THROUGH THIS BARRIER'S DEPOSITS, so the answer depended on whether the teller
-    # sorted before the first hearer in `w.persons`. When it did, the teller had already received
-    # this very telling's event-kind claim, `(subject, "news.told", True)` at `when = tick` --
-    # NEWER than anything they held before -- and `latest_about` returned THAT: the telling
-    # transmitted the fact of itself, which every hearer had just been given, and the exact-triple
-    # guard dropped it. MEASURED on `tiny_world`, teller `p_low` sorted first, holding the subject
-    # at confidence 37: no hearer was told anything; at 100 the held claim won only a `(when,
-    # confidence)` tie on append order. The teller tells what they held WHEN THEY CHOSE TO TELL,
-    # which is the ledger before WITNESS writes to it (RESOLVE writes no ledger).
-    told_by_event: dict = {
-        e.id: _told_content(w, self.act_of[e.id]) for e in events
-        if e.kind == "news.told" and self.act_of.get(e.id) is not None}
+    # WHAT A TELLING CONTAINED is `Act.payload["said"]`, fixed at CHOOSE (`_told_content`): nothing is
+    # resolved per event here any more, and the teller's ledger is not read at this barrier -- so
+    # the old order-dependence on whether the teller sorted before the first hearer (plan position
+    # `15d`) cannot arise, and no per-event memo is needed.
     # `R8.1` -- WHAT EACH WITNESS SAW, RESOLVED HERE AND NOT IN THE LOOP BELOW, BECAUSE THE LOOP IS
     # A PARALLEL MAP. `seen_of` asks every live channel which of them admits the witness, and
     # `co_located` reads the barrier's presence index -- which `cache_at_barrier` refuses inside
@@ -625,7 +574,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
             # read -- a per-(hearer, telling) dict lookup left from the draft that scanned the
             # teller's ledger inline, before `_told_content` became its one owner. Removed rather
             # than kept: it read as though the teller were still consulted at this point.
-            _held = told_by_event[e.id]   # resolved before the fan, above -- position `15d`
+            _held = _told_content(_act)   # the `Said` the act carries -- fixed at CHOOSE
             # ⚠ `act_refs`, NOT A SECOND READ OF THE PAYLOAD. The first writing of this block
             # spelled `(_act.payload or {}).get("subject")` inline -- a copy of `epistemic`'s
             # own reader (`act_refs`, already imported at the top of this file and already

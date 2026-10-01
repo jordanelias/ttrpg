@@ -56,7 +56,7 @@ from ..loop.deliberate import sense
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..loop.predicates import REQUIRES_PREDICATES, in_holdings
 from ..queries import world_q
-from ..queries.person_q import LedgerReader
+from ..queries.person_q import LedgerReader, said_of
 from ..queries.world_q import WorldReader
 from ..queries.world_q import occasioned_by, questions_for
 from ..seam import combat_degree, contest, degree_ladder, degree_of, ladder_error
@@ -13486,13 +13486,16 @@ def _tell_and_witness(w, teller: str, subject: str, held: Claim, degree: str):
     one. Returns `(driver, event)`. `w.acts.append` is required for `state/attribution.py`'s
     `actor_of`/`anchor_of` (tier 1) to resolve the teller from `causes=[act.id]` -- `d.act_of` alone
     is this driver's OWN memo and is not what the co-located/witness_key channel predicates read."""
+    # T1: the teller's claim is planted FIRST so `said_of` (the one owner of what a teller says,
+    # which `opening_set` calls at CHOOSE) can read it onto the Act's payload.
+    w.persons[teller].ledger.append(held)
     act = Act(id=f"a_tell_{teller}_{subject}_{degree}", actor=teller, verb="tell",
-              payload={"subject": subject})
+              payload={"subject": subject,
+                       "said": said_of(w.persons[teller].ledger, subject, w.fixtures)})
     w.acts.append(act)
     ev = Event(H(w.world_seed, w.tick, teller, f"ev:news.told:{act.id}"), "news.told",
                [], [act.id], w.tick, degree, ())
     w.log.append(ev)
-    w.persons[teller].ledger.append(held)
     d = SeasonDriver(w)
     d.act_of[ev.id] = act
     d.witness(mint_token(w, WriteClass.INTERIOR), [ev])

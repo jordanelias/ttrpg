@@ -26,7 +26,7 @@ these nine classes and this module imports nothing back, so the two files togeth
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any, NamedTuple, Optional
 
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import MATRIX
@@ -292,6 +292,23 @@ class Claim:
     # content-deposit) -- only the told channel's own deposit sets it (`loop/witness.py`).
     teller: Optional[str] = None
 
+
+class Said(NamedTuple):
+    """WHAT A TELLING PASSES ON, fixed at CHOOSE: the teller's own claim about the act's subject,
+    copied out of their ledger by `queries/person_q.py::said_of` and carried on
+    `Act.payload["said"]`, so WITNESS reads what the telling carried and never the teller's live
+    ledger (the `F8` carve-out: a ledger is asked by its own holder, person-side).
+
+    A NamedTuple, not a Claim: it has no id, holder, `when` or source, because it is not a belief
+    anyone holds -- it is a thing said. `chain` is `()` and `circle` is `None` until the positions
+    that fill them (`workplans/2026-10-01-telling-workplan.md`, T3b and G-tail); a field no reader
+    reads is declared here only because the workplan's one shape names it."""
+    subject: str
+    predicate: str
+    value: Any
+    confidence: int
+    chain: tuple = ()
+    circle: Optional[tuple] = None
 
 
 

@@ -202,6 +202,12 @@ class Requirement:
         """Every operand name this clause reads. Checked at load against the form's `needs:`."""
         return ()
 
+    def own_ledger_operands(self) -> tuple:
+        """The operands a clause of form `own_ledger` reads, and `()` for every other form. Walks the
+        TYPED FORM, so a caller asking *does this row read its actor's own ledger* never keys on a
+        verb name (`decision/options.py::opening_set` is the reader)."""
+        return ()
+
     def entity_operands(self) -> tuple:
         """The operand naming THE THING THE REQUIREMENT IS ABOUT -- what a Candidate's `subject`
         can bind, and nothing else. A Candidate is `(verb, subject, why)` and carries exactly one
@@ -371,6 +377,8 @@ class OwnLedger(Requirement):
     def entity_operands(self) -> tuple:
         return (self.of,)
 
+    def own_ledger_operands(self) -> tuple:
+        return (self.of,)
 
     def stems(self) -> tuple:
         return ("claim.held",)
@@ -469,6 +477,9 @@ class AllOf(Requirement):
     def entity_operands(self) -> tuple:
         return tuple(dict.fromkeys(o for c in self.clauses for o in c.entity_operands()))
 
+    def own_ledger_operands(self) -> tuple:
+        return tuple(dict.fromkeys(o for c in self.clauses for o in c.own_ledger_operands()))
+
     def needs(self) -> frozenset:
         return frozenset().union(*(c.needs() for c in self.clauses)) if self.clauses else frozenset()
 
@@ -541,6 +552,9 @@ class TypedRequires:
     def entity_operands(self) -> tuple:
         return self.requirement.entity_operands()
 
+    def own_ledger_operands(self) -> tuple:
+        return self.requirement.own_ledger_operands()
+
     def needs(self) -> frozenset:
         return self.requirement.needs()
 
@@ -598,7 +612,8 @@ def binding_of(actor: str, operands: dict, via: Optional[str] = None) -> dict:
     already holds (`ID-2`).
 
     Operands outside `requires_operands` are dropped: a payload is also where `record`, `stages`,
-    `venue` and `harm` ride, and the grammar's vocabulary is closed.
+    `venue`, `harm` and `said` (a telling's `Said`, set at CHOOSE by `opening_set` and read by WITNESS)
+    ride, and the grammar's vocabulary is closed -- `said` is a non-scalar the grammar never reads.
 
     ⚠ `via=` (plan position `19`) -- THE SEAT THE ACT EXERCISES, STRUCTURAL ON BOTH SIDES FOR THE
     REASON `actor` IS: `Act.via` for the fold (`binding_from_act`), `exercised_seat(p, row)` for the

@@ -37,7 +37,8 @@ that way deliberately -- a guard is widened when a unit needs it, not in advance
 from __future__ import annotations
 
 from ..data.requires import UNKNOWN
-from ..state.carriers import Person
+from ..data.rosters import SEEN_PREDICATE
+from ..state.carriers import Person, Said
 from ..trace_log import TRACE
 
 
@@ -114,3 +115,27 @@ class LedgerReader:
         free to drift, and drifting silently, because both orderings agree until the day two
         claims tie on `when`."""
         return self._best(lambda c: c.subject == subject)
+
+
+def said_of(claims, subject, fx) -> "Said | None":
+    """WHAT THIS PERSON WOULD SAY ABOUT `subject`, as the `Said` a telling carries -- or `None` for
+    nothing to say. Asked of the TELLER'S OWN claims at CHOOSE (`decision/options.py::opening_set`),
+    never at WITNESS: what a telling passes on is decided when it is chosen, and rides the Act.
+
+    ⚠ A `seen` CLAIM IS PASSED ON ONLY WHEN IT IS ALL THE TELLER HOLDS ABOUT THE SUBJECT (`R8.1`,
+    moved here from `loop/witness.py::_told_content` unchanged). The `seen` deposit lands in every
+    co-located witness -- the teller included -- with an identical value, so without this the
+    teller's NEWEST claim about a rung was almost always a `seen` the hearer already held, the
+    exact-triple guard at the told deposit suppressed it, and the told channel carried nothing:
+    MEASURED at the `R8.1` commit, `build_world(0)`, four seasons, 0 `told_by` claims. A rumour of
+    a sighting still travels when a sighting is all the teller has.
+
+    ⚠ THE COMPARATOR IS `LedgerReader`'s, BOTH TIMES. *Most recent, then most confident* lives once
+    (`_best`); only the pool differs. `fx` is unread at T1 and is in the signature because the
+    weighing positions (`workplans/2026-10-01-telling-workplan.md` T3a) need it and a signature
+    that changes under every caller is the churn this avoids."""
+    own = [c for c in (claims or []) if c.predicate != SEEN_PREDICATE]
+    c = LedgerReader(own).latest_about(subject) or LedgerReader(claims).latest_about(subject)
+    if c is None:
+        return None
+    return Said(c.subject, c.predicate, c.value, c.confidence, (), None)
