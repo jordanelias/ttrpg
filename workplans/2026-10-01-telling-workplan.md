@@ -1,6 +1,6 @@
 # THE TELLING WORKPLAN — A tells B about C, as positions T0–T6 and a gated tail
 
-## Status: **PROPOSED workplan, 2026-10-01.** Content owner for `T0`–`T6` and the gated tail (§5); changes no existing position number. Plan positions `10` and `14` point here once the steering edit lands (§9).
+## Status: **RATIFIED workplan, 2026-10-01, BY JORDAN's instruction** (*"Ratify 2026-10-01-telling-workplan.md. Use /methodology-execute on this workplan"*). Ratification accepts §10's three recommendations; the gated tail `G1`–`G8` is ratified as a plan, not scheduled (§5); ledger row `ED-IN-0282`. Content owner for `T0`–`T6` and the gated tail (§5); changes no existing position number. Plan positions `10` and `14` point here (§9).
 ## Owner: infrastructure / cross-cutting (IN lane)
 ## Produced by: a Fable → Opus relay (`CLAUDE.md` §10): a read-only Fable 5.1 planner re-opened every cited site on HEAD `85afbf5` and issued the [CORRECTION]s obeyed here; Opus wrote the dossier and this condensation. Two NERS gates ran, the second under Jordan's 2026-10-01 ruling (not restricted to existing code; design for the ideal). His rule was to restructure around the PDF's seven stages only if a top-down and a bottom-up pass both judged it better; **both critics returned PARTIAL, so that restructure is not adopted.** The dossier is not in the repo; every position stands without it.
 ## Grade under CLAUDE.md §0.2: `paper` — a plan, not an execution artifact. Nothing here is built or run.

@@ -537,6 +537,12 @@ Moved here from the `IN:` lane row 2026-09-29, because the row's narrative reach
 against the 600 cap — `test_narrative_does_not_creep_back_into_the_state_file` caught it. The lane
 row keeps a one-line summary and this pointer, as every prior instance of this same pattern does.
 
+### 2026-10-01 — ED-IN-0282 allocated
+
+**`ED-IN-0282`** (ruled by Jordan): the telling workplan, adopted and ordered built
+(`workplans/2026-10-01-telling-workplan.md`). Allocated in the steering `[editorial]` commit, which
+lands before the first build position cites it. `next_free` 282 → 283.
+
 ## IN — the 2026-07-14 duplicate-key repair (ED-IN-0064, finding OBS-IN-1)
 
 <a id="dup-key"></a>
