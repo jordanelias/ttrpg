@@ -478,9 +478,14 @@ def attribute(w: World, d, n: int) -> list:
     """`[(act, made, refused)]` for every act the fold resolved over `n` seasons — EXECUTION,
     ATTRIBUTED TO THE ACT, not to any verb that shares an emission kind. `made` is the tuple of the
     act's row's `emits:` kinds whose Event is in the log, `refused` the same over its
-    `emits_on_refusal:` kinds — so each is truthy exactly when the act executed / was refused, and
-    says WHICH refusal when there are several. The two are not exclusive: a contesting verb can
-    publish both (measured on `tell` and `march` in the populated realm).
+    `emits_on_refusal:` kinds — so each is truthy when an Event of that column's kinds is in the
+    log, and `refused` says WHICH refusal when there are several. The two are not exclusive, for two
+    DIFFERENT reasons (measured in the populated realm, 2026-09-30): a `march` can publish TWO
+    Events, `march.declared` at RESOLVE and `march.refused` at ENCOUNTER; a LOST `tell` publishes
+    ONE, `news.untold` at degree `Failure`, whose kind is in both the row's degree-keyed `emits:` and
+    its `emits_on_refusal:` (deliberately — `verb_table.yaml`'s `tell` note), so both columns match
+    the same Event. A graded loss is not a refusal (`04 §C.4`); `Event.degree` is what tells them
+    apart, and this function does not read it — a caller that needs the difference reads it there.
 
     ⚠ THE KIND ALONE IS NOT AN ATTRIBUTION, AND READING IT AS ONE PUT A FALSE POSITIVE IN THE
     PUBLISHED SET. `forge` and `create_record` BOTH emit `record.created` (and `confer` and
