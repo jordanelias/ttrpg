@@ -49,11 +49,14 @@ def test_the_roster_comes_from_the_registry_not_a_literal():
     from engine.substrate import descriptors
     assert len(descriptors.CONVICTIONS) == 13
     # Every consumer is the SAME object, not a copy that can drift. `systems/world/sim/npe.py` was the
-    # second consumer until plan position `29d` deleted it. `engine/season/data/rosters.py` binds
-    # `PURSUITS` by import, so an identity check on it is true by construction; the season's side is
-    # observed by `test_no_second_conviction_roster_in_code` below, which fails on a literal roster.
+    # second consumer until plan position `29d` deleted it; the season's own binding replaces it, so the
+    # assertion observes the consumer the game actually runs. Both bindings are imports, so each fails
+    # only if that import is replaced by a copy; a copy derived from the roster (`CONVICTIONS + (...)`)
+    # is a literal the AST test below does not count.
     from systems.characters.sim import conviction
+    from engine.season.data import rosters
     assert conviction.CONVICTIONS is descriptors.CONVICTIONS
+    assert rosters.PURSUITS is descriptors.CONVICTIONS
 
 
 def test_no_second_conviction_roster_in_code():

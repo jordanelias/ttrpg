@@ -99,7 +99,7 @@ scales:
       sentence used to add "`parliamentary_vote.py` calls `roll_pool`"; that module and
       `parliamentary_stay.py` were deleted at `29b` (their `FORK:5c5d8ec6` rows), and nothing under
       `systems/social_contest` calls `roll_pool` now.
-      3 of 39 verbs declare `contests:` — `kill / wound` (the body, the combat seam), `march` (a
+      3 of 44 verb rows declare `contests:` — `fight` (the body, the combat seam), `march` (a
       field, the mass-battle seam, `ecacb57`) and `tell` (a standing, resolved on the season side
       by `seam/wrappers/sigma.py`, not by this kernel). The kernel retires at plan position `2-ii`
       (`workplans/valoria_master_workplan_v8.md`).
@@ -155,8 +155,9 @@ scales:
       `scale_hierarchy_v1.md`. `references/module_contracts.yaml` declares `domain_actions` and
       `settlement_economy` — BOTH with `doc: null`, two of the nine contracts §6 counts as
       unimplementable. The loop has `Site`, `stores` and `condition`; `found`, `build`, `restore` and
-      `work` are declared in `verb_table.yaml` but refuse everywhere in the realm (`H-165` limit 2: no
-      computed act declares a works); no domain-action mechanism exists.
+      `work` are declared in `verb_table.yaml`; in the realm only `restore` executes (cohorts mending
+      their own settlement's fabric since `24f`), while `found`, `build` and `work` are formed and
+      refused because no computed act declares a works (`H-165`); no domain-action mechanism exists.
 
   - scale:    "investigations / detective / interactive fiction"
     subsystem: ["systems/fieldwork (sim/knots.py only)"]

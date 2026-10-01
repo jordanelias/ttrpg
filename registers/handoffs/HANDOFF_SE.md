@@ -14,7 +14,7 @@
 | Governance-loop redesign staging, overarching tracking row | `ED-SE-0001` | stage `governance_play_redesign_v1.md` toward ratified canon per-stage |
 | Promote-ready P2/P3 items unlanded: CHN-6, HRE-3, HRE-4, VEN-SE-2, IT-1, HAB-1 | `ED-SE-0018`, `ED-SE-0019`, `ED-SE-0020`, `ED-SE-0022`, `ED-SE-0024` (open); see `designs/architecture/ners_vsg_reconciliation_v1.md` Phase 2/3 for per-item disposition | author per the reconciliation doc's refined dispositions |
 | Card-deck specs for 2026-07-09 batch triggers (Cell Revolt, clerk-corruption Intrigue, Ordenanza-sanction, Patron's-Rivals-Move) | `governance_play_redesign_v1.md` §2.2/§2.3 (bare filename; see `CURRENT.md` Settlement row) | author standalone card specs |
-| Sim implementation of SE-1..SE-6/SE-10 sections (drafted in prose, no sim code beyond SE-5's dormant proxy) | `ED-SE-0007`..`ED-SE-0012`, `ED-SE-0016` | sequence per docket: SE-5/SE-6 → SE-2/SE-3 → SE-4 riding `ED-SE-0001` |
+| Sim implementation of SE-1..SE-6/SE-10 sections (drafted in prose, no sim code — SE-5's dormant proxy went with `29b`) | `ED-SE-0007`..`ED-SE-0012`, `ED-SE-0016` | sequence per docket: SE-5/SE-6 → SE-2/SE-3 → SE-4 riding `ED-SE-0001` |
 | Remaining `needs_jordan` forks from the 2026-07-09/07-08 dockets | `grep -h needs_jordan.*true registers/editorial_ledger_se.jsonl` | Jordan rules each |
 | MW-11 / MW-5 falsifiers currently RED (crossing predicate downward-only; `withdrawal_only`/death same-season collision) | `ED-SE-0053` | resolve if/when the proposal is authored into canon |
 
