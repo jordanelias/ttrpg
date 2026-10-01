@@ -1,7 +1,7 @@
 # Valoria — Master Workplan v8: the one plan — the remainder of Phases 1–4, and how each of THE NINE gets built
 
 ## Status: PROPOSED 2026-10-01 — directed by Jordan; adoption on merge (ED-1094)
-## Lane: IN (cross-cutting). It is the ONE active plan (`CLAUDE.md` §2) for every lane whose items it carries — IN, SC, SE, MB, PC, FI, WR, GO. FA carries no open position: its handoff rows close when `29b` deletes the code they describe.
+## Lane: IN (cross-cutting). It is the ONE active plan (`CLAUDE.md` §2) for every lane whose items it carries — IN, SC, SE, MB, PC, FI, WR, GO. FA carries no open position: its handoff rows close when `29b` deletes the code they describe. **Carved out of it by name: `workplans/2026-10-01-telling-workplan.md` (§0.6), which owns everything about A telling B about C.**
 ## Reads in order: this file (head, milestones, state index) → `_part2` (THE NINE, one section per row) → `_part3` (orchestration, pre-flight, Batches 0–1) → `_part4` (Batches 2–3) → `_part5` (Batch 4, the Jordan queue, the answered list) → `_part6` (standing content carried from the retired plans, and history).
 ## Grade under `CLAUDE.md` §0.2: `paper` throughout. A plan, not an execution artifact. Where a row says DONE it repeats cited evidence; the evidence is the thing cited, never this file.
 
@@ -138,6 +138,48 @@ fixed in that commit or dropped.
   build anything in `engine/mc_v18.py`; `git add` a file another lane is editing (use
   `isolation: worktree`); re-fetch from the GitHub API; write a count into `CURRENT.md`/`HANDOFF.md`.
 
+### 0.6 CARVED OUT — `workplans/2026-10-01-telling-workplan.md`
+
+Jordan, 2026-10-01, verbatim: *"Pull in recently committed 2026-10-01-telling-workplan.md for context and
+ensure your master plan carves out around this document accordingly."* That workplan is **RATIFIED by
+Jordan** (2026-10-01, ordered built under `methodology-execute`; its own ledger row, allocated on its
+branch). It is the IN lane's one named carve-out from this plan (`CLAUDE.md` §2). **Until it merges it
+lives on branch `ccr-1a171fc9-p2fyir`: `git show 60c70bbf:workplans/2026-10-01-telling-workplan.md`.**
+
+**What it owns — this plan schedules none of it, restates none of it, and edits none of its sites:**
+
+| it owns | concretely |
+|---|---|
+| **A tells B about C, whole:** `T0`–`T6` and the gated tail `G1`–`G8` | no v8 position builds any of it |
+| **position `10` (U5 / R-07)** | re-scoped there by its own first commit. Its spine: *a telling writes one thing, a claim in each hearer's ledger carrying its chain; belief, regard, hostility and C's reply are computed from ledgers when read; none is written* (AX-3). ⚠ **This plan's earlier rewrite of `10` — a stored stance write on a resolved `fight` — is WITHDRAWN.** G1's `regard = stored stance + judged deeds + told valence` already counts a deed at read; a stored deed write would be a second route to one fact (an S defect, §0.06) |
+| **"does being told something move the hearer's stance?"** | answered there: `tell` writes no stance; told valence enters regard at read (G1). Former J-12 is closed (`_part5` A-12) |
+| `Said`, `said_of`, `Claim.chain` (replacing `teller`), the told deposit, dedup by origin, a teller's `record` | `state/carriers.py`, `queries/person_q.py`, `loop/witness.py` |
+| the weighed reader: `LedgerReader(…, weigh)`, `teller_weight`, `belief_contradicts(…, fx)` | `queries/person_q.py`, `decision/options.py` |
+| `tell`'s hearer: the `tell` row (`to`, the `with` stem, keyed refusals), `known_persons`, `operand_bags`, the contest target read off `row.counterparty` | `verb_table.yaml`'s `tell` row, `data/requires.py`, `queries/world_q.py`, `decision/options.py`, `loop/resolve.py` |
+| **`test_n3`'s floors and the reverted build-order item 4** | T4 re-pins the floors and closes that question; `11` no longer carries it |
+| its own record edits | `requirements.yaml`'s stale "nothing writes it" stance line; the `tell` row's `contests_note`; `hole_register.yaml` H-157, H-79, H-62 |
+
+**What stays here, and where it meets the carve-out:**
+- **`14`** keeps the `tie / knot` effect, the prerequisite of that workplan's ties `absent` row. Its
+  distinct-operand fix builds **on T4's `operand_bags` and counterparty target**, never a second
+  mechanism for the same binding: `14` is gated on T4 (`_part3` E14).
+- **`11`** measures R-01/R-02 over the claim channel, which T3a (the weighed reader) and T3b–T5 move.
+  Take the baseline **before T3a lands or after T6 closes, never across them**, and the re-take after
+  both this plan's Batch 2 and that workplan's Batch 2 (E15).
+- **The AX-7 wiring** (`agreement`/`standing_of`/`belief_contradicts` into the Claim producers) stays
+  registered and unbuilt: it touches the producers and reader that workplan rebuilds. Reopen it only after
+  T6 (E16).
+- **Shared files** (`_part3` O.3): no v8 position edits a file a telling position has open; commits are
+  never interleaved. **Order:** this plan's Batch 1 (`28-iii`, `29*`, `20-iv`) may run beside the telling
+  positions — its one shared file is `queries/world_q.py` (`20-iv` against T4's `with` stem), never
+  interleaved; this plan's Batch 2 IN chain starts **after that workplan's Batch 2
+  (T4–T6) closes**, except `11-fix`, `27` and `LADDER-MBPC`, which share none of its files.
+
+**Merge order with PR #448.** The telling branch's first commit edits two rows of the retired
+`2026-09-28-…md` (positions `10` and `14`); PR #448 deletes that file. Whichever merges second keeps the
+deletion; this section and the `10`/`14` rows below carry both edits. That branch allocates the IN
+ledger row; this plan allocates nothing, and any later IN id starts at the `next_free` after both land.
+
 ---
 
 ## 1. THE MILESTONES — what "done" is measured by (v7 §1, re-read on HEAD `ebb43bf0`)
@@ -219,7 +261,7 @@ present/run · **[PLAN]** read from a plan only (unverified) · **[SETTLED]** a 
 dedicated test executes every position), but most Phase-2 verbs execute from hand-built acts only — in
 the realm, `commit found build levy migrate confer establish revoke determine work` are attempted and
 never execute (`aperture 4 0`). **Phase 3: `27` PARTIAL (PR #442); `10`'s `tell`→stance write REVERTED
-with its side findings landed (PR #442); everything else open or Jordan-gated.** Phase 4: `20-i`,
+with its side findings landed (PR #442), and position `10` itself now belongs to the telling workplan (§0.6); everything else open or Jordan-gated.** Phase 4: `20-i`,
 `20-ii`, `20-iii`, `28-0` (narrowed), `28-i`, `28-ii` done; `28-iii` open; `29a`–`29f`, `20-iv`, `2-ii`
 blocked behind it.
 
@@ -229,15 +271,15 @@ blocked behind it.
 | `2-ii` | RET-SC: kernel + veto + `parliamentary_*` | IN/SC | BLOCKED | `22`, `28-iii`, `29b` | — | 3 | [SETTLED: `systems/social_contest/sim/contest/` exists, 16 files] — the kernel is still on disk |
 | `8` | H-98(b) band edge → data | IN/PC | OPEN | — | R-09 | 2 | edge in `seam/ladder.py`; serial with the cells commit |
 | `9` | PC-SURRENDER build-or-strike | PC | JORDAN | J-7 | — | 4 | `HANDOFF_PC.md` [CODE] |
-| `10` | U5 / R-07 stance write | IN | REVERTED (the `tell`→stance write only) | `ED-FI-0009` (E8); E5 | R-07, R-01 | 2 | PR #442 (`c6f4252`) landed the side findings — H-62's `(Person, stance)` producer gap recorded closed by `march`'s M4 write, and the `names_index.yaml` `stance` entry — and reverted the `tell` write itself on H-79 [CODE `HANDOFF_IN.md`]; **re-scoped** to a RESOLVE-time write on a resolved `fight`'s subject, on `_eff_march`'s M4 precedent (A-12, `_part4` §`10`); Fable's WITNESS-side candidate is rejected — it contradicts `write_matrix.yaml`'s `(Person, stance)` row (`class: ACTS`, steps RES/ENC) [SETTLED: read]; whether a *telling* moves stance is J-12; [SETTLED: `def stance_delta` absent] |
+| `10` | U5 / R-07 | IN | **CARVED OUT** (§0.6) | the telling workplan's own gates | R-07, R-01 | — | PR #442 (`c6f4252`) reverted the `tell`→stance write on H-79 and landed its side findings (H-62's producer gap closed by `march`'s M4 write; the `names_index.yaml` `stance` entry). Re-scoped by the telling workplan's first commit (`60c70bbf`) to T0→G8: `tell` writes no stance; regard is computed at read. This plan's earlier `fight`-write rewrite is withdrawn (§0.6) |
 | `11-fix` | U6 instrument repair | IN | OPEN | — | R-01, R-02 | 2 | `wd_collect.py`'s `probed`-invariant fails at `default` (`requirements.yaml` R-01 U10 paragraph) [CODE] |
-| `11` | U6 — first corpus R-01/R-02 reconvergence rate | IN | BLOCKED | `11-fix` | R-01, R-02 | 2 | no number since the corpus grew 89 → 143 |
+| `11` | U6 — first corpus R-01/R-02 reconvergence rate | IN | BLOCKED | `11-fix` | R-01, R-02 | 2 | no number since the corpus grew 89 → 143; baseline before telling T3a or after its T6, never across (E15) |
 | `12` | H-62-rest scar rebuild | IN | BLOCKED | cells commit | R-06, R-08 | 4 | |
 | `12b`/`12c`/`12d` | affiliations · THE FIFTEEN · THE RENAME (substrate half) | IN | JORDAN | J-1 | R-05, R-06, R-08 | 4 | `ED-IN-0261` 2026-09-28 row `needs_jordan: true` [CODE]; `12d` season side done (`ED-IN-0268`) |
 | `12e` | H12 / H13 | IN | BLOCKED | H6 re-measure; G-Q6 (J-5) | R-06 | 4 | |
 | `13`-rest | W28-cast: 41 NPC + 97 ARC overlays | IN | PARTIAL | — | R-09, R-06 | 2 | 5 of 46 NPC overlays, 1 `capability` value (2026-09-28 plan §8.7) [PLAN]; `requirements.yaml` R-09 still says capability is empty everywhere — stale |
 | `13d-iii` | rung ANCHORS for seats + `[NEW]` seats + remit overlay | IN | OPEN | `17` (shared `populated.py`); remit half J-8 | R-04 | 2 | H-163 limit 1 [CODE]; realm `levy.unauthorized` 19 of 20 [RAN aperture] |
-| `14` | U7-own: own-verbs in antonym pairs, `tie / knot`, CANDIDATE-WHY | IN | OPEN | `10` (shared rows) | R-05 | 2 | none of `carry comply construe destroy_record evade/defy exchange forge give oblige repudiate succeed thread_read tie/knot` executes in the realm [RAN aperture] |
+| `14` | U7-own: own-verbs in antonym pairs, `tie / knot`, CANDIDATE-WHY | IN | OPEN | telling T4 (E14); E8 | R-05 | 2 | none of `carry comply construe destroy_record evade/defy exchange forge give oblige repudiate succeed thread_read tie/knot` executes in the realm [RAN aperture] |
 | `R05-THREAD` | `thread_read`'s operand (H-85) | IN | OPEN | rides `14` | R-05 | 2 | answered at ladder step 4 (A-7); no position owned it |
 | `17` | U8 `ambitions(p)` + cast seating | IN | OPEN | `14` (shared `rosters.yaml`) | R-06, R-09 | 2 | [SETTLED: `def ambitions` absent in `engine/season`] |
 | `19b` | U7-disp: `comply` · `evade / defy` · `construe` | IN | JORDAN | J-2 (`ED-IN-0210`) | R-05 | 4 | |

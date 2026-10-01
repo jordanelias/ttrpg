@@ -107,7 +107,7 @@ or orphaned, deleted with a `FORK:` row.
 |---|---|
 | `28-iii` | `04 §A.2`'s module table, §C.5's routes, the provider-returns-a-Margin rule; `ID-13` over the deleted registry rows. **Lens A** matters most here: the `FORK:` rows and registry edits |
 | each `29x` | `ID-13`'s consequences: the descriptor faction block, the re-pointed fixtures |
-| `10` | the write class (ACTS at RESOLVE), the no-ledger-reference signature |
+| `10` | carved out (main §0.6); the telling workplan names its own Lens A/B subjects (A on T3a, B on T2) |
 | `14` | the counterparty check in the fold; invariant 4 per conjunct |
 | `22` | the provider returns a Margin, never a winner; the obstacle has one owner |
 | `23` | the invariants |
@@ -166,15 +166,15 @@ it is the one active plan for the lanes it names**. Explicitly NOT ratified:
 2. **The §A answers ratify only as which ladder step answers each question and which candidate gets
    attacked** — never as the answer, which is decided at its position with the code in front of it. An
    attack that lands sends the question back through the ladder, not to Jordan by default.
-3. **Content placements an ORDER document makes, each revertible alone:** `10` re-scoped to `fight`
-   (A-12); `14`'s "no new closer rows" (A-16); the new handles `11-fix`, `13d-iii`, `R05-THREAD`,
+3. **Content placements an ORDER document makes, each revertible alone:** `14`'s "no new closer rows" (A-16); the new handles `11-fix`, `13d-iii`, `R05-THREAD`,
    `LADDER-MBPC`; the decision-layer H-item deliverables carried into `_part5` B4; position 2's veto
    relocation carried into `2-ii`. If a content owner or a critic disputes one, that position reverts and
    nothing else in the order moves.
 4. **No `## Status:` line on an absorbed proposal moves here.** Whether
    `proposals/2026-09-26-decision-layer-execution-plan/PROPOSAL.md` (a queue by its own declaration) and
-   `proposals/2026-09-27-mc-v18-retirement-plan/PROPOSAL.md` are retired under the one-active-plan rule,
-   now that this plan carries their remaining content, is the adoption commit's decision.
+   `proposals/2026-09-27-mc-v18-retirement-plan/PROPOSAL.md` are retired under the one-active-plan rule
+   was the adoption commit's decision: both RETIRED at `5d401061` (`FORK:f6d7af27`); their sibling
+   `candidate_*.md` drafts stay.
 5. **No ledger id is allocated by this plan.** The adoption record and any `next_free` bump are the
    adoption commit's.
 
@@ -273,7 +273,7 @@ tests/valoria/test_ledger_hygiene.py tests/valoria/test_forked_status.py -q`;
 | `…_part2.md` | §1 → §D; §2 → §L; §3's live mappings → the batch specs (H-items, `24g`/`24h`, `20-iv`, `22a`/`22b`, `15d`/`17b` DONE) |
 | `2026-09-30-phase-4-post-ners-revision.md` | §1.4 (eight always-refused) → `_part2` R-05; §1.5 (the retirement's cost) → `28-iii`; §2 → main §3; §3 (effect-file targets, `22`'s step-by-step state, `28-ii`'s evidence) → the batch specs; §4 → `_part5` J-4/J-16/J-17 |
 | `2026-09-18-governance-settlement-behaviour-plan.md` + `_part2` | §3.0 cadence → main §0.4 (now its only home); §3.9 → `_part3` O.2/O.3; `_part2` §8 per-position text → the batch specs for `8`, `9`, `10`, `11`, `12`, `12b`–`12d`, `13`, `14`, `17`, `19b`, `21`, `22`, `23`, `24g`, `26`, `27`, `2-ii` |
-| `2026-09-09-r-execution-plan.md` + `_part2` | U5 → `10` (re-scoped); U6's acceptance block → `11` (verbatim, slices re-derived); U7 → `14` (its group arithmetic superseded by `_part2` R-05's measured table); U8 → `17`; U10 → `21`-rest. U1–U4, U9: DONE |
+| `2026-09-09-r-execution-plan.md` + `_part2` | U5 → the telling workplan (position `10` re-scoped there, main §0.6); U6's acceptance block → `11` (verbatim, slices re-derived); U7 → `14` (its group arithmetic superseded by `_part2` R-05's measured table); U8 → `17`; U10 → `21`-rest. U1–U4, U9: DONE |
 | `2026-09-13-work-order.md` | units 13, 14, 19b → those positions; 13b, 15, 19, 20 DONE |
 | `valoria_master_workplan_v7.md` | §0 owns-table → main §0.1; §1 M1/M2/M3 → main §1 with current readings; §3's who-can-answer sort → `_part5` §J's ranking; §4 lane sections → the lane handoffs (v7's text was stale on every lane); §5's binding rules → `CLAUDE.md` (pointer); ruling R-7 → A-14 |
 | `2026-09-06-season-loop-execution-plan.md` | work item 4.5 (investigation: the loop is the mechanism) → `ED-FI-0009` |

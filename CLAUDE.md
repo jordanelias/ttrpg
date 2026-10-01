@@ -382,6 +382,8 @@ for a second such tree.
   and rely on an unprompted follow-up.
 - **ONE ACTIVE PLAN PER LANE (RULED 2026-10-01: *"Retire ALL plans … We are allowed to have one active
   plan per lane."*).** A plan lives under `workplans/` and names its lane; `CURRENT.md` names it.
+  A lane's plan may **carve out** a scoped workplan **by name** (RULED 2026-10-01, the telling workplan):
+  the carve-out owns its items alone; the plan names it, schedules none of them; no item sits in both.
   **Adopting a plan RETIRES what it supersedes in the same commit** — delete + exact-file `FORK:` row
   (§1), carrying forward any content the new plan still needs. "Superseded but kept on disk" is not a
   state: it is how 21 plans piled up. A shallow clone that cannot write the `FORK:` row runs

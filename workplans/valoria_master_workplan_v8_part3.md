@@ -14,7 +14,7 @@
 |---|---|---|---|---|
 | **0** | `B0-CI` | — (CI green on `main`) | none | `/code-review` only; no terminal critique (generated artifacts re-derived by their own tools, one ledger ref corrected) |
 | **1** | `28-iii` → `29a` → `29b` → `20-iv` → `29d` → `29c` → `28-0` follow-up | R-04 (reason 2, by deletion); R-07 if `20-iv` gets fields fought | **none** for the deletions — `build_realm(0)`'s season `content_hash` must not move (the control); `20-iv` declares a realm hash move only if a field is fought | full `methodology-close`; terminal Opus critique **proportionate** — `28-iii` deletes the last campaign-scale regression oracle, and `20-iv` carries a design candidate |
-| **2** | IN: `11-fix` → `11` (baseline) → `8` → `ED-FI-0009` → `10` → `14` (+ `R05-THREAD`) → `17` → `13`-rest → `13d-iii` → `11` (re-take) → `21`-rest; `{WR: 27}`; `{MB/PC: LADDER-MBPC}` (`_part5` §J, "not on the queue") | R-01, R-02 (measured), R-04, R-05, R-06 (reason 1), R-07, R-09 | `8`: none (assert equal); `ED-FI-0009`, `10`, `14`, `17`, `13`-rest: corpus/realm pins move (declared per step); `13d-iii`: `build_realm` census + hash (declared) | full `methodology-close`; terminal critique **proportionate** — `10` and `14` are judgment nodes and `11` is a number nobody else reproduces |
+| **2** | **after the telling workplan's Batch 2 closes (main §0.6)**, except `11-fix`, `27`, `LADDER-MBPC`. IN: `11-fix` → `11` (baseline) → `8` → `ED-FI-0009` → `14` (+ `R05-THREAD`) → `17` → `13`-rest → `13d-iii` → `11` (re-take) → `21`-rest; `{WR: 27}`; `{MB/PC: LADDER-MBPC}` (`_part5` §J, "not on the queue") | R-01, R-02 (measured), R-04, R-05, R-06 (reason 1), R-07, R-09 | `8`: none (assert equal); `ED-FI-0009`, `14`, `17`, `13`-rest: corpus/realm pins move (declared per step); `13d-iii`: `build_realm` census + hash (declared) | full `methodology-close`; terminal critique **proportionate** — `14` is a judgment node and `11` is a number nobody else reproduces |
 | **3** | SC: `22` steps 11–16 → `22a` → `23` → `22b`; IN: `29f` → `29e` → `29a`-ms → `2-ii`; `{SE: 24h P5}`; `24h` P6 after `22`'s `verb_table.yaml` edits | R-05 (`speak`, `determine`), R-09 (a fourth graded chain), M2 (THE BAR) | `22`: corpus + realm hash move (declared); `2-ii`: none (byte-identity control) | full `methodology-close`; terminal critique **proportionate** — `22` is the largest new mechanism in the plan |
 | **4** | one sub-batch per Jordan ruling, as each lands: cells commit (J-1) → H7 → H3 → H9 → `12` → H10 (C3) → H11 (C4) → `12e`; `19b` (J-2); J-3's verbs; `9` (J-7); `24g` (J-6); `24h` P7 (J-10); `26` (J-9) | R-05, R-06, R-08; R-04 (J-3) | cells commit: headless + corpus hash move, `resolvable_verbs()` count moves (declared) | cells commit: full pipeline, terminal critique **proportionate**; `24g`, `26`, `24h` P7: `/code-review` + `/simplify` only — one value or one record each |
 
@@ -39,34 +39,38 @@ the merge; it never removes it.
 | E2 | `27` → `29a`-ms; `27` → `29f` | `threadwork/sim/{co_movement,opposing}.py` import `ms_track.apply_ms_delta` and `knots.sustain_knot` | 09-28 §3.5.2 |
 | E3 | `14` → `29f` → `29e` | the `tie / knot` effect first; then `conviction.py` ← `knots.py` | 09-28 §3.5.3 |
 | E4 | `29b` → `2-ii`; `22` → `2-ii` | the `parliamentary_*` modules; the prize-row repoint | 09-28 §3.5.4 |
-| E5 | the cells commit ↔ `8`, `9`, `10` | same `fight` row and combat wrapper (`10` now writes on `fight`, `_part4` §`10`). Either order; never interleaved | 09-18 §3.9.10, widened here |
+| E5 | the cells commit ↔ `8`, `9` | same `fight` row and combat wrapper. Either order; never interleaved | 09-18 §3.9.10 |
 | E6 | `29b` → `20-iv` | `29b` deletes `massbattle.py::{resolve_mass_battle,_faction_to_unit,_morale_start_from_stability}`; `20-iv` carries d.1 to `resolve_field` and re-pins `test_mass_battle_d1_morale_baseline.py`, which constructs a `game_state.Faction` — land `20-iv` **immediately** after `29b` or that test is red between commits | new (Fable risk) |
 | E7 | `8` → `ED-FI-0009` | both edit `seam/ladder.py` | new |
-| E8 | `8` → `ED-FI-0009` → `10` → `14` → `17` → `13d-iii` | shared `rosters.yaml`, `verb_table.yaml`, `engine/season/tests/test_season_shape.py` pins | new |
+| E8 | `8` → `ED-FI-0009` → `14` → `17` → `13d-iii` | shared `rosters.yaml`, `verb_table.yaml`, `engine/season/tests/test_season_shape.py` pins | new |
 | E9 | `14` → `24h` P6 | the `repudiate` row and its effect | new |
 | E10 | `11-fix` → `11` → `21`-rest | the instrument, then the number, then the records quoting it | new |
 | E11 | `13d-iii` → `22` steps 11–12 | `determine`'s bench is a purview read; rungless seats make it empty | new |
 | E12 | `28-iii` → `28-0` follow-up | the twelve OI-17 targets `engine/tests/test_pipeline_reach.py` names by string die with that file | 09-28 §8.4 |
+| E14 | telling T4 → `14` | `14`'s distinct-operand fix builds on T4's `operand_bags` / counterparty target; both edit `decision/options.py` and `verb_table.yaml` | carve-out (main §0.6) |
+| E15 | `11` baseline ∉ (telling T3a … T6); `11` re-take after both Batch 2s | T3a–T5 move the claim channel `11` measures; a baseline taken across them has no control | carve-out |
+| E16 | telling T6 → the AX-7 wiring (reopen only then) | same Claim producers and reader | carve-out |
 | E13 | every position → its own forward sweep's `requirements.yaml` / `hole_register.yaml` edits | the shared record files; never edited from two worktrees at once | §0.4 |
 
 ### O.3 File census — open positions × shared files
 
 | file | edited by | consequence |
 |---|---|---|
-| `engine/season/verb_table.yaml` | `10` (`fight`), `14`, `R05-THREAD`, `ED-FI-0009`, `22` (`speak`, `determine`), `24h` P6, `19b`, cells commit | serial in the IN/SC chains (E8, E9) |
-| `engine/season/rosters.yaml` | `8`, `10`, `14`, `13d-iii` (`titles` block deleted), `22` (prize rows, `chronicle`), cells commit | serial (E8) |
+| `engine/season/verb_table.yaml` | telling T4 (`tell` row), `14`, `R05-THREAD`, `ED-FI-0009`, `22` (`speak`, `determine`), `24h` P6, `19b`, cells commit | serial in the IN/SC chains (E8, E9) |
+| `engine/season/rosters.yaml` | telling T4 (`known_person_operands`), `8`, `14`, `13d-iii` (`titles` block deleted), `22` (prize rows, `chronicle`), cells commit | serial (E8) |
 | `engine/season/seam/ladder.py` | `8`, `ED-FI-0009`, `2-ii` (veto `extension=`) | E7; `2-ii` is Batch 3 |
-| `engine/season/loop/effects_combat.py` | `10`, `20-iv` (only if an effect change is needed), cells commit | E5 |
+| `engine/season/loop/effects_combat.py` | `20-iv` (only if an effect change is needed), cells commit | E5 |
 | `engine/season/loop/effects_information.py` | `14`, `ED-FI-0009`, `22` | serial |
 | `engine/season/loop/effects_governance.py` | `14` | — |
-| `engine/season/decision/options.py` | `14` | — |
-| `engine/season/queries/person_q.py` | `17`, cells commit | Batch 2 vs 4 |
-| `engine/season/queries/world_q.py` | `20-iv`, `24h` P5 | Batch 1 vs 3 |
+| `engine/season/decision/options.py` | telling T1, T3a, T4; then `14` | E14 |
+| `engine/season/queries/person_q.py` | telling T1, T2, T3a, T6, G1; then `17`, cells commit | carve-out first; Batch 2 vs 4 |
+| `engine/season/queries/world_q.py` | `20-iv`, telling T4 (`with`), `24h` P5 | Batch 1 vs the carve-out vs 3; never interleaved |
 | `engine/season/harness/populated.py` | `13d-iii` | — |
 | `engine/season/harness/corpus_run.py` | `17` | — |
 | `engine/season/cases/exercises/*.yaml` | `13`-rest | parallel authoring; merges after `17` |
 | `engine/season/offices.yaml` | `13d-iii` | — |
-| `engine/season/tests/test_season_shape.py` | `8`, `10`, `14`, `17`, `13`-rest, `22` | every pin re-taken serially |
+| `engine/season/tests/test_season_shape.py` | telling T2, T4; then `8`, `14`, `17`, `13`-rest, `22` | every pin re-taken serially |
+| `loop/witness.py`, `state/carriers.py`, `data/verbs.py`, `data/requires.py`, `loop/resolve.py`, `engine/season/tests/test_told_by_channel.py` | the telling workplan only | no v8 position edits them while a telling position is open |
 | `engine/season/requirements.yaml`, `engine/season/hole_register.yaml` | every forward sweep; `11`, `21`-rest | E13 |
 | `references/module_contracts.yaml` | `28-iii`, `29a`, `29b` | E1 |
 | `references/restructure_ledger.md` | `28-iii`, `29a`–`29f`, `2-ii`, `28-0` follow-up | serial; appended rows conflict at the file end |
@@ -115,10 +119,10 @@ here (a departure, recorded in the receipt).
 | S-4 | `gh run list --branch main --limit 3` + `gh run view 36803379833 --log-failed` | `unit-tests` FAILS on `main` (7 tests) — the `B0-CI` row |
 | S-5 | `ls systems/social_contest/sim/contest` | present, 16 files — `2-ii` still has its subject |
 | S-6 | `grep -n "GD-1\|victory" engine/season/hole_register.yaml` | nothing — GD-1 is not registered; `28-iii` registers it |
-| S-7 | `grep -rn "def ambitions\|def stance_delta" engine/season` | nothing — `17` and `10` are unbuilt |
+| S-7 | `grep -rn "def ambitions\|def stance_delta" engine/season` | nothing — `17` is unbuilt; `stance_delta` is built nowhere, by design (the telling workplan computes regard at read, main §0.6) |
 | S-8 | invariant 4's per-conjunct `emits_on_refusal` schema | **built at `19`**: `data/verbs.py` reads a clause-keyed mapping into `refusals_by_clause`; `engine/season/tests/test_u7_remit.py` asserts it. `23`'s "invariant 4 widened" reduces to whatever row still uses the flat form where a conjunct is failable — re-check there |
 | S-9 | `references/module_contracts.yaml` `composition_roles` | **25 keys** (Fable read 26): 1 survivor (`mass_battle.resolve_field`), 7 spine role rows, 10 `snapshot_state.*`, `world_gen_settlements`, 3 `parliamentary_*`, 3 orphans (`rs_track_delta`, `territory_transfer_candidate/proposal`) |
-| S-10 | `write_matrix.yaml` `(Person, stance)` | `steps: [RES, ENC]`, `class: ACTS`, `social: "true"` — the fact that re-scopes `10` (`_part4`) |
+| S-10 | `write_matrix.yaml` `(Person, stance)` | `steps: [RES, ENC]`, `class: ACTS`, `social: "true"` — the row the telling workplan's spine honours: `tell` writes no stance (main §0.6) |
 
 **Still open — run these first, record outputs in Batch 1's first receipt:**
 
@@ -292,7 +296,7 @@ has a caller on the battle path. **Hash:** declared if any realm field is fought
 `tests/valoria/test_conviction_roster_single_owner.py`'s `systems.world` site re-pointed (MOD 4 closes).
 **Re-gated off `10`** (answered at ladder step 5, A-6): `requirements.yaml`'s retire gate is "the loop
 expresses the scale", and `npe.py` has no season reader; `insurgency_pipeline.py`'s successor design is
-`24h` P5 (a Query), which reads, not imports. **If the verify node disagrees, `29d` waits for `10`** and
+`24h` P5 (a Query), which reads, not imports. **If the verify node disagrees, `29d` waits for the telling workplan's G1** (position `10`'s successor, main §0.6) and
 nothing else moves. **FALSIFIER:** no importer of `systems.world` remains (`grep -rn "systems.world"`);
 `test_conviction_roster_single_owner.py` green. **Hash:** none.
 

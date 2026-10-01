@@ -21,13 +21,13 @@ hash EQUAL [RAN by the orchestrator, same tree].
 
 | row | status | the gap, in one line | closes with | Jordan-gated? |
 |---|---|---|---|---|
-| R-01 | not_met | the channel is present (R3 46/46 · 96/97) but no corpus reconvergence rate exists since the corpus grew | `11-fix` → `11`; then `10`, `14`, `17` move it | no — measurement first |
+| R-01 | not_met | the channel is present (R3 46/46 · 96/97) but no corpus reconvergence rate exists since the corpus grew | `11-fix` → `11`; then the telling workplan's T4–T5 (§0.6), `14`, `17` move it | no — measurement first |
 | R-02 | not_met | same instrument as R-01; its own `measure:` is U6's | `11-fix` → `11` | no |
 | R-03 | met | keep it met; its `measured:` ends 2026-09-11 | `21`-rest refresh | no |
 | R-04 | partial | seats without rungs (H-163 limit 1); governance verbs refused for want of an `office` operand (H-94); `mc_v18` still runs a faction scale the loop does not join; two scales have no spec | `13d-iii`, `28-iii`, J-3, J-11 | partly (J-3 office operand; J-11 scale specs) |
 | R-05 | not_met | 16 of 44 rows execute; 10 have no predicate/effect | `14`, `R05-THREAD`, `13d-iii`, `22`, `ED-FI-0009`, `20-iv`; J-1, J-2, J-3, J-4 | partly |
 | R-06 | partial | no `ambitions(p)` read; the cast is one shared OUGHT in the corpus; convictions are correlated | `17`, `13`-rest; J-1 (cells) | reason 2 yes (J-1) |
-| R-07 | partial | no `stance` writer that a witnessed event reaches | `10` (re-scoped to `fight`), `20-iv`, `24g` | no for `fight`; the `tell` path is J-12 |
+| R-07 | partial | no `stance` writer that a witnessed event reaches | the telling workplan (T3a; G1, regard at read — §0.6), `20-iv`, `24g` | no — the telling path is ratified; G1 waits on its own M0b trigger |
 | R-08 | partial | inclination does not break ties (alignment table sparse) | the cells commit (J-1), then H3/H9 | yes (J-1) |
 | R-09 | partial | the roll varies by seed, not by person (`capability` near-empty; `lev` 0); inquiries ungraded | `13`-rest, `17`, `8`, `ED-FI-0009`, `22` | corpus-wide `capability` needs J-13 |
 
@@ -60,7 +60,7 @@ H-163). No committed instrument prints those edge figures.
 | position | what it changes for R-01 | batch |
 |---|---|---|
 | `11-fix` → `11` | produces the number the row's status rests on | 2 |
-| `10` (re-scoped, `_part4`) | the row's `blocks:` names `W-F` — an outcome moving `Person.stance`, a channel the ranking reads (`stance_toward` in `score`) | 2 |
+| the telling workplan's T4–T5 (§0.6) | `tell` names its hearer, contests against them and dedups by origin, so a telling is a cross-person edge to a known person; the regard `score` reads arrives with G1/G2 | carved out |
 | `14` | counterparty verbs (`give`, `oblige`, `exchange`) are cross-person edges by construction; today `give`/`oblige` form 0 in the realm | 2 |
 | `13d-iii` | the 10 isolated officeholders' governance acts start executing (H-163) | 2 |
 | `17` + `13`-rest | distinct OUGHTs per case → distinct Q4 questions → more distinct first acts to propagate | 2 |
@@ -94,8 +94,8 @@ the `none ≥ default` control printed and the completeness assertion covering a
 last number on file and "provably stale". The pinned NPC-088 2-slot slice moved 0/16 → 14/18 forks
 diverging after ED-FI-0009 (2026-09-10) — a slice, not the corpus.
 
-**What moves it.** Exactly what moves R-01's behavioural half: `11-fix` → `11` measures it; `10`,
-`14`, `17`, `13d-iii` change what it measures. The channel a decision reaches a later decision through
+**What moves it.** Exactly what moves R-01's behavioural half: `11-fix` → `11` measures it; the telling workplan's
+T3a–T5 (§0.6), `14`, `17`, `13d-iii` change what it measures. The channel a decision reaches a later decision through
 is a ledger claim read by §F1 clause 4 (`belief_contradicts`), which reached five predicates after
 ED-FI-0009; H-116's type mismatch is the registered limit on it.
 
@@ -288,24 +288,21 @@ losing-side write, reached by nothing in the realm run because no field was foug
 
 | position | what it changes | batch |
 |---|---|---|
-| `10` (re-scoped — `_part4` §`10`) | a stance writer a witnessed outcome reaches | 2 |
+| the telling workplan (§0.6) | **regard computed at read** — `stored stance + judged deeds + told valence` (G1), the teller's relation in the weighed reader (T3a) and a teller's `record` (T6). No stance write by `tell` | carved out |
 | `20-iv` | fields get fought → `_eff_march`'s existing M4 stance write is reached in the realm | 1 |
 | `24g` (J-6) | the bodies clock: deaths with a cause, P3 individuation at CENSUS | 4 |
 
-**⚠ A departure from Fable's reconciliation, made here and argued in `_part4` §`10`.** Fable answered
-`10`'s write target at ladder step 5 with a WITNESS-side write onto the hearer's interior. That
-contradicts `engine/season/write_matrix.yaml`'s `(Person, stance)` row — `steps: [RES, ENC]`,
-`class: ACTS`, `social: "true"` (only an act may write it) — and AX-3's split as position `10`'s own
-compliance clause states it (*ledger INTERIOR at WITNESS, conviction state ACTS at RESOLVE*). It is not
-answerable at step 5; it would overwrite a ratified write class. `_part4` §`10` builds the candidate that
-respects the row — a RESOLVE-time write on a resolved `fight`'s subject, on `_eff_march`'s M4 precedent
-(ladder step 4) — and whether a *telling* should move the hearer's stance at all is J-12.
+**⚠ Withdrawn, with the reason.** This plan first re-scoped `10` to a stored stance write on a resolved
+`fight`'s subject. The ratified telling workplan computes regard at read and counts a judged deed there
+(G1), so a stored deed write would be a second route to the same fact — an S defect (§0.06). The stored
+half of regard keeps exactly its two writers: the build-time loyalty seed and `march`'s M4 write.
 
-**`met` =** the row's `measure:` passes, **and** after two seasons of `populated.build_realm(0)` ≥ 1
-`stance.moved` Event exists whose `causes` names an act other than `march` (asserted `>= 1`, so a world
-with nothing built fails), **and** two persons reached by the same outcome at different degrees hold
-different stance rows. The second and third conjuncts are position `10`'s falsifier; the row flips on
-its own `measured:` paragraph quoting them.
+**`met` =** the row's `measure:` passes, **and** after two seasons of `populated.build_realm(0)`, two
+hearers who hold different claims about one C — or the same claim from tellers they regard differently —
+read different `regard(p, C)` (asserted `>= 1` such pair, so a world where nothing was told fails),
+**and** `_eff_march`'s stance write is reached by a fought field (`20-iv`). The instrument for the first
+conjunct is the telling workplan's G1 falsifier; the row flips on its own `measured:` paragraph quoting
+both.
 
 ---
 
@@ -321,8 +318,8 @@ J-1, not a question about R-08 itself.
 **What moves it.** Only the cells commit (J-1): `alignment` re-celled over 43 verbs × 7 axes makes most
 candidates carry a nonzero score, so the person's inclination — not the draw — orders them. Then H3
 (scar) and H9 per `_part5` §B4. **Nothing buildable in Batches 1–3 moves R-08**, and this plan does not
-pretend otherwise. (`10`'s stance writer feeds `score`'s `stance` term, which helps break ties toward a
-person's history; it is a contributor, not the row's named gap.)
+pretend otherwise. (The telling workplan's weighed reader (T3a, T6) makes what a person believes depend on whom they
+trust, and G1/G2 put regard into `score`; contributors, not the row's named gap.)
 
 **`met` =** `corpus_run`'s RANKING line shows, for each sampled person, that every tie among offered
 candidates is between candidates with equal *nonzero* score (the draw breaks only true indifference),

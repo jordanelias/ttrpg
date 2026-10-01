@@ -16,7 +16,7 @@ predicate/effect; `write_matrix.yaml` `Person` rows; `rosters.yaml` `requires_op
 `combat_degree_bands`, `verb_capability`, `field_*_weight`; `decision/options.py` (`opening_set`,
 `operands_for`, `_derive_operand`); `seam/ladder.py` (`combat_degree`, the general branch);
 `seam/wrappers/sigma.py` (`_pool_of`, `_obstacle_of`); `loop/effects_combat.py::_eff_march` (the M4
-stance write — the precedent `10` follows); `harness/corpus_run.py::build_at`; `harness/populated.py`'s
+stance write — the stored half of regard); `harness/corpus_run.py::build_at`; `harness/populated.py`'s
 seat builder; `engine/season/offices.yaml` header; `proposals/2026-09-04-degree-sweep/wd_collect.py`.
 
 ### `11-fix` · U6's instrument repair · IN · gate — · `sonnet` build, `opus` read · `[simulation]`
@@ -59,11 +59,10 @@ and never below the bar. **OBSERVABLE:** reconvergence **< 96 % at `2x3`**, cell
 closed — **H-116 first** (`belief_contradicts` narrows only on `PERSON_PREDICATES`, so a deposited
 consequence about a non-person cannot narrow a later candidate set). Do not re-pin. **Control:** the
 `none ≥ default` arm is the only control this instrument yields; say so. `fan_out_mode` is R-07's
-fixture, not this one's. **Ride-along (carried from the 2026-09-28 plan §5.2):** `HANDOFF_IN.md`'s
-reverted build-order item 4 (`budget()` counting `granted_acts`) trips `test_n3`'s floors; after the
-number, re-land it with a **declared re-pin** per `CLAUDE.md` §7 unless the number shows the floor is an
-R-01/R-02 property — answered at ladder step 5, not Jordan's (the handoff row saying "Jordan's call" is
-stale). **R:** R-01, R-02 — on the printed number only. **Records:** both rows' `measured:` paragraphs
+fixture, not this one's. **Not here any more:** `test_n3`'s floors and the reverted build-order item 4 (`budget()` counting
+`granted_acts`) belong to the telling workplan's T4, which re-pins the floors and closes that question
+(main §0.6); re-land item 4 only after T4, against T4's floors. **Timing:** the baseline is taken before
+telling T3a lands or after its T6 closes, never across them (E15). **R:** R-01, R-02 — on the printed number only. **Records:** both rows' `measured:` paragraphs
 cite the run and its tree; R-02's `measure:` comment re-pointed off the retired plan (`_part6` §H.3).
 
 ### `8` · H-98(b): the wound-count band edge becomes data · IN/PC · gate — · `sonnet` build, `opus` critic · `[patch]`
@@ -100,45 +99,15 @@ target: `loop/effects_information.py` (the inquiries' effects) — `Failure` dep
 deposits no claim (asserted on a seeded case); the one-roll-owner test stays green. **Hash:** corpus pins
 move (declared). **R:** R-05 (graded, not only executed), R-09 (a third graded chain).
 
-### `10` · U5 / R-07 — a stance writer that an outcome reaches · IN · gate `ED-FI-0009` (E8), E5 · `opus`/`opus` · `[design]`
+### `10` · U5 / R-07 — CARVED OUT to the telling workplan (main §0.6)
 
-**What happened.** The `tell`→`Person.stance` write was built and **reverted** (2026-09-29, PR #442):
-every target fails `epistemic.py::claim_subjects` (H-79). Writing on the actor makes the deposited claim
-about the teller (`test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told`
-reddens); `tell`'s `subject` operand is a Rung, never a Person (19/19 observed). The same PR landed the
-side findings: H-62's `(Person, stance)` producer gap recorded as closed by `march`'s M4 write, and the
-`names_index.yaml` `stance` entry.
+Nothing here. Position `10` belongs to `workplans/2026-10-01-telling-workplan.md` (RATIFIED 2026-10-01),
+which re-scoped it to `T0`→`G8`: `tell` writes no stance, and regard is computed at read. This plan's
+earlier rewrite of `10` (a stored stance write on a resolved `fight`) is **withdrawn** — G1 counts a
+judged deed at read, so a stored deed write would be a second route to one fact. The AX-7 wiring that
+rode along stays registered and unbuilt until the telling workplan's T6 closes (`_part3` E16).
 
-**⚠ THE RE-SCOPE, AND WHY FABLE'S CANDIDATE IS NOT TAKEN.** Fable's reconciliation proposed writing
-stance on the HEARER's interior at WITNESS. Rejected here: `write_matrix.yaml`'s `(Person, stance)` row is
-`steps: [RES, ENC]`, `class: ACTS`, `social: "true"`; WITNESS writes under the INTERIOR token, which the
-gate refuses on an ACTS row; and position `10`'s own compliance clause (`04` AX-3) assigns the ledger to
-INTERIOR-at-WITNESS and conviction state to ACTS-at-RESOLVE (`04`: *"WITNESS never touches a
-conviction"*). Building it means changing a ratified write class — that is J-12, not a step-5 answer.
-
-**INSTRUCTION — the candidate that respects the row (ladder step 4, precedent `_eff_march` M4).** Write
-`(Person, stance)` at RESOLVE, under ACTS, on the **subject** of a resolved `fight` — the opponent, a
-Person by `fight`'s typed precondition — with referent = the actor, on the `Wounded`/`Untouched` bands
-(a `Felled` subject is removed). Follow M4's shape exactly: fixed valence `-1.0`; weight from a swept
-fixture on `field_grudge_weight`'s precedent (H-148: `0`/`1`/`3`) — reuse it or add one sibling row with
-the same default, decided at the build; **invent no new magnitude**. Rows per referent, never a summed
-field (D-8). The writer's signature takes no ledger reference (`04` PART D row 18). Effect target:
-`loop/effects_combat.py` (`fight`'s effect). `fight`'s `changes[]` already name the subject (its body), so
-H-79's subject rule is unaffected — **verify that by running the `n3` guard, do not assume it.**
-`tell` gets no stance write until J-12 is answered.
-**Ride-alongs:** set H-46's grade (still `absent` after U3); read the AX-7 wiring row in `HANDOFF_IN.md`
-(`agreement`/`standing_of`/`belief_contradicts` into the Claim producers) — its divergence formula is
-unspecified, so it is **not** built here; record that it stays registered.
-**FALSIFIER:** after two seasons of `populated.build_realm(0)`, `≥ 1` `stance.moved` whose `causes` names
-a `fight` act (asserted, so a world with nothing built fails); two subjects fought to different bands hold
-different stance rows; at the `none` weight arm no stance row is written and every other output is
-byte-identical (**this verb has a real byte-identity control**, unlike `tell`, because `fight` writes the
-body anyway); `test_n3_…_a_telling_is_about_what_was_told` and `test_wb_clause_four_…` stay green.
-**If the attack lands** (the guard reddens, or the M4 precedent is judged not to extend to a duel), revert
-and add the fight case to J-12 rather than widening. **Hash:** realm moves on the declared arm (declared);
-unchanged on `none`. **R:** R-07; R-01/R-08 indirectly (`stance_toward` feeds `score`).
-
-### `14` · U7-own — the unbuilt rows · IN · gate `10` (E8) · `sonnet` build, `opus` critic · `[design]`
+### `14` · U7-own — the unbuilt rows · IN · gate telling T4 (E14), E8 · `sonnet` build, `opus` critic · `[design]`
 
 **INSTRUCTION, corrected.** The retired text said "land the verbs in antonym pairs: `commit`+`repudiate`,
 `oblige`+`waive`, `succeed`+`deposed`, `tie / knot`+`fray / loosen`, then `forge`, `restore`, `exchange`,
@@ -153,9 +122,12 @@ builds: **`repudiate`** (the second voluntary ender of an ambition — R-06), **
 (`succeed`, `tie / knot`), `loop/effects_information.py` (`repudiate`, `forge`, `exchange`), `carry` by
 what it writes.
 **Precondition inside the unit:** `decision/options.py` binds one referent to every operand slot, so no
-computed act names two distinct parties — fix it (a distinct operand per slot) and put the counterparty
-check **in the fold**, not per effect. This is what makes `give` and `oblige` formable in computed play
-(today 0 formed in the realm).
+computed act names two distinct parties. **The telling workplan's T4 builds the first half of the fix**
+(`operand_bags`, `known_persons`, the contest target read off `row.counterparty`); `14` extends it to
+`give`/`oblige`/`exchange` **on those primitives** — a distinct operand per slot where T4's bags do not
+already supply one — and puts the counterparty check **in the fold**, not per effect. Never a second
+binding mechanism. This is what makes `give` and `oblige` formable in computed play (today 0 formed in
+the realm).
 **Three decisions this position takes, each by the ladder, each recorded in its commit:**
 - **`R05-THREAD` — `thread_read`'s operand (H-85).** Step 4: the row's own default — a two-valued
   `knowledge_kinds` roster, the H-128 swept-fixture shape (A-7). If the critic finds the default
@@ -245,7 +217,7 @@ executes in a threadwork sim; `ED-WR-0003`'s rule has a test; `grep -n "ms_track
 systems/threadwork/sim/` returns nothing. **R:** none (unblocks `29a`-ms, `29f`).
 
 **Batch 2 close:** agonist/antagonist → `/code-review` → `/simplify` → `layer-conformance` (Lens B on
-`10`'s write class and `14`'s fold) → terminal Opus critique → `/close` (full suite once). The forward
+`14`'s fold) → terminal Opus critique → `/close` (full suite once). The forward
 sweep's check 1 **must** re-run `register --requirements`, `corpus_run`, `aperture 4 0` and compare
 against `_part2`'s readings; every row that moved gets a `measured:` paragraph in the same close.
 
