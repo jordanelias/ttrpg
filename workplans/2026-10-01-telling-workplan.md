@@ -235,6 +235,17 @@ acts, 3 told); realm ×3 `tell` acts 22 → 29, `news.told` 7 → 7, `news.untol
 `DISTINCT EXECUTED SETS` 111 → 114 (`corpus_run 0` md5 `125fd053…` → `f45a7e22…`; the pin re-set at the close); aperture realm `tell` row identical
 (attempted 4, executed 4, refused 1); `delta HEAD` PROBE FLIPS 0; no pin moved.
 
+**As built (F1 of the batch-2 close: a `with` read is observed, never deposited):** the T4 note above says the fold's `with` read
+is "deposited to the teller under `actor`"; it was, and that was the defect. `loop/witness.py` now skips the LEDGER APPEND for a
+`WORLD_ONLY_STEMS` observation beside the `LEDGER_DERIVED_STEMS` skip; `Event.observed` still carries it and the `hearer` refusal is
+still the WorldReader's. Undeclared readers had been reading the deposit: `claim.held`, Q2 `claim_landed` (4 questions about hearers
+at realm x1's end, from 6 `with:` claims) and `said_of`. `with` stays in `REQUIRES_STEMS`. Falsifier
+`test_told_by_channel.py::test_t4_a_with_read_is_observed_and_never_deposited_into_the_tellers_ledger` (mutation-checked). Moved by
+construction: realm x1 hash `72af02fb…` -> `496cb9bd…` (tuple dump: the ONLY difference is the 6 `with:` claims removed); realm x3
+`1d4a1c75…` -> `f7ad6808…` (19 `with:` claims -> 0, and the act mix diverges: `news.told` 7 -> 8, `news.untold` 22 -> 28); `corpus_run 0` md5
+`f45a7e22…` -> `bbcb418a…`, `DISTINCT EXECUTED SETS` 114 -> 117; `delta HEAD` PROBE FLIPS 0. Pins re-set (each noted in place in
+`test_season_shape.py`): `actor_end` 20 -> 24, clause-4 drops 15 -> 14, ARC-01 drop verbs 8 -> 10, `by_sig` 114 -> 117, universal `{}` -> `{utter}`.
+
 ### T5 · dedup by origin, and T6 · a teller's record
 
 **T5.** The told dedup skips a deposit only if the hearer holds the triple with `chain == ()` or the

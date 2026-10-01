@@ -20,7 +20,7 @@ import math
 
 from ..data.matrix import Step
 from ..state.gate import Token
-from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN
+from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN, WORLD_ONLY_STEMS
 from ..data.rosters import (
     CHANNEL_CLAIM_SOURCE, OBSERVATION_DEPOSIT_MODES, RECORD_CONTENT, WITNESS_CHANNELS,
     require_member,
@@ -468,6 +468,19 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 # the same prohibition as the UNKNOWN guard above, one predicate over: a
                 # deposit the instrument cannot stand behind is not deposited.
                 if str(o.predicate).partition(":")[0] in LEDGER_DERIVED_STEMS:
+                    continue
+                # ⚠ AND A READ ONLY THE WORLD ANSWERS IS OBSERVED, NEVER DEPOSITED (`ED-IN-0282`,
+                # telling workplan `T4`, batch-2 close `F1`). `WORLD_ONLY_STEMS` is `with` -- where
+                # another person is NOW. The person side never reads it back (`LedgerReader`'s early
+                # UNKNOWN), but a claim in a ledger is read by everyone who does not ask by stem:
+                # `claim.held` accepts any claim on the subject (`world_q`), Q2 raises a question on
+                # the hearer for a claim landing about them and `opening_set` forms a `tell` from it,
+                # and `said_of` picks the newest non-`seen` claim on a subject whatever its
+                # predicate, so a stale `with:` claim could be the content a teller passes on. The
+                # same "it fed itself" shape as the `LEDGER_DERIVED_STEMS` guard above, one stem over.
+                # Only the LEDGER APPEND is skipped: `Event.observed` still carries the read (the
+                # hash-bearing Event is unchanged) and the T4 refusal is the WorldReader's.
+                if str(o.predicate).partition(":")[0] in WORLD_ONLY_STEMS:
                     continue
                 key = (o.subject, o.predicate)
                 if key in seen_obs:

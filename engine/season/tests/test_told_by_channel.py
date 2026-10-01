@@ -829,11 +829,88 @@ def test_t4_a_telling_to_an_absent_hearer_is_refused_and_a_present_one_hears():
     assert not any(c.chain for c in w.persons["p_king"].ledger), "the absent hearer was told anyway"
 
 
+def test_t4_a_with_read_is_observed_and_never_deposited_into_the_tellers_ledger():
+    """BATCH-2 CLOSE `F1` (`ED-IN-0282`). The `hearer` conjunct's read of `with` rides the Event as
+    `Observation(to, "with:<teller>", True|False)`; WITNESS must NOT append it to the teller's ledger
+    (`loop/witness.py` skips `WORLD_ONLY_STEMS` beside `LEDGER_DERIVED_STEMS`). The person side never
+    reads `with` back, but undeclared readers do: `claim.held` (any claim on the subject), Q2
+    `claim_landed` (a question on the HEARER, from which `opening_set` forms a `tell`), and `said_of`
+    (the newest non-`seen` claim on the subject, any predicate).
+
+    Four cases -- a refused telling to an ABSENT hearer and a successful one to a PRESENT hearer, each
+    under the shipped `claim_subject_rule` and under `actor` -- and in each: no `with:` claim in the
+    teller's ledger, `Event.observed` STILL carries the observation (the hash-bearing Event is
+    unchanged: only the ledger append is skipped), the absent refusal is still `degree is None` (the
+    T4 refusal is the WorldReader's), and Q2 raises no `claim_landed` question from a `with:` claim.
+    `checked` pins that all four cases ran.
+
+    MUTATION (run 2026-10-01): the `WORLD_ONLY_STEMS` skip deleted from `loop/witness.py` -- a `with:`
+    claim lands in the teller's ledger in all four cases and the first assertion of each goes RED
+    (the Q2 assertion, which reads the ledger id back, goes red with it). Restored, GREEN."""
+    from ..data.matrix import Step
+    from ..data.requires import WORLD_ONLY_STEMS
+    from ..data.verbs import VERB_TABLE
+    from ..queries.world_q import questions_for
+    from ..seam import Resolution
+
+    row = VERB_TABLE["tell"]
+    teller, subject = "p_low", "Hh"
+    checked = 0
+    for rule in (P.DEFAULT_FIXTURES.get("claim_subject_rule"), "actor"):
+        for to, present in (("p_king", False), ("p_mid", True)):
+            w = P.tiny_world(P.DEFAULT_FIXTURES.sweep("claim_subject_rule", rule))
+            w.persons[teller].ledger.append(
+                Claim("c_held", teller, subject, "stores:grain", 8, 0, "firsthand", 37, "own"))
+            said = said_of(w.persons[teller].ledger, subject, w.fixtures)
+            d = SeasonDriver(w)
+            w.step = Step.RESOLVE
+            a = Act(id=f"a_f1_{to}", actor=teller, verb="tell",
+                    payload={"subject": subject, "to": to, "said": said})
+            where = f"rule={rule!r} to={to!r}"
+            if present:
+                w.acts.append(a)
+                out = d._fold(w, mint_token(w, WriteClass.ACTS), a, Resolution("Success", {}))
+                assert [e.kind for e in out] == ["news.told"], (where, [e.kind for e in out])
+                for e in out:
+                    d.act_of[e.id] = a
+            else:
+                out = d.resolve(mint_token(w, WriteClass.ACTS), [a],
+                                contest_max_depth=w.fixtures.get("contest_max_depth"))
+                assert [e.kind for e in out] == ["news.untold"], (where, [e.kind for e in out])
+                assert all(e.degree is None for e in out), (
+                    where, "the T4 refusal reached the contest: it is the WorldReader's, not the ledger's")
+            w.log.extend(out)
+            # The observation IS on the Event, with the read's own value -- the hash is unchanged.
+            obs = [o for e in out for o in e.observed
+                   if str(o.predicate).partition(":")[0] in WORLD_ONLY_STEMS]
+            assert [(o.subject, o.predicate, o.value) for o in obs] == [(to, f"with:{teller}", present)], (
+                where, "Event.observed no longer carries the `with` read", obs)
+            w.step = Step.WITNESS
+            d.witness(mint_token(w, WriteClass.INTERIOR), out)
+            held = [c for c in w.persons[teller].ledger
+                    if str(c.predicate).partition(":")[0] in WORLD_ONLY_STEMS]
+            assert not held, (where, "a `with` read was deposited into the teller's ledger",
+                              [(c.subject, c.predicate, c.value) for c in held])
+            # Q2: nothing the telling left in the teller's ledger raises a question from a `with` claim.
+            qs = [q for q in questions_for(w, w.persons[teller], since=(-1, 0))
+                  if q.source == "claim_landed"]
+            by_id = {c.id: c for c in w.persons[teller].ledger}
+            assert not [q for q in qs if str(by_id[q.about].predicate).startswith("with:")], (
+                where, "Q2 raised `claim_landed` from a `with` claim")
+            # Measured with the skip removed: ONE `claim_landed` question about the hearer, in each
+            # of the four cases; nothing else in this world is about them, so the count is 0 here.
+            assert not [q for q in qs if q.referents == (to,)], (
+                where, "Q2 raised a question about the hearer from a prior telling's `with` read")
+            checked += 1
+    assert checked == 4
+
+
 def test_t4_a_planted_false_with_claim_in_the_tellers_ledger_does_not_decline_the_telling():
     """THE PERSON SIDE NEVER ANSWERS `with` (`data/requires.py: WORLD_ONLY_STEMS`;
-    `LedgerReader.read`'s early UNKNOWN). The fold deposits `Observation(to, "with:<actor>", ...)`
-    into the TELLER's ledger when it reads the `hearer` conjunct, so a teller who once read that
-    `p_mid` was NOT with them holds `(p_mid, "with:p_low", False)`. If the person-side reader
+    `LedgerReader.read`'s early UNKNOWN). WITNESS no longer deposits the fold's `with` read (batch-2
+    close `F1`), so this is the reader's OWN guard, kept as defence in depth: a `with:` claim that
+    reached a ledger some other way -- planted here as `(p_mid, "with:p_low", False)` -- must still
+    not decide presence. If the person-side reader
     answered it, clause 4 (`belief_contradicts`) would read the `hearer` conjunct False from that
     stale claim and the telling would never be formed for a hearer who has since arrived -- a ledger
     deciding presence, which is the world's to decide.

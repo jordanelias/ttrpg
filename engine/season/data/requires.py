@@ -712,12 +712,15 @@ REQUIRES_STEMS = frozenset({
 
 # THE STEMS THE PERSON-SIDE READER NEVER ANSWERS: `queries/person_q.py::LedgerReader.read` returns
 # UNKNOWN for them whatever the ledger holds, so §F1 clause 4 never declines on them. `with` asks
-# where another person is NOW, which a ledger cannot hold current: the actor's own fold deposits
-# what it read (`Observation(to, "with:<actor>", ...)`, `H-122`'s `actor` arm), and reading that
-# back a season later would decline a telling to someone who has since arrived -- a stale
-# belief deciding presence, which the telling workplan's T-e rules is the world's to decide
-# (hearing is by presence, `epistemic.py`'s `co_located` channel). UNKNOWN is never a
-# contradiction, so the person forms the Candidate and the fold refuses an absent hearer.
+# where another person is NOW, which a ledger cannot hold current: the fold reads it
+# (`Observation(to, "with:<actor>", ...)` rides `Event.observed`) but WITNESS does NOT deposit it
+# (`loop/witness.py` skips `WORLD_ONLY_STEMS` beside `LEDGER_DERIVED_STEMS`, `ED-IN-0282` batch-2
+# close `F1`). Depositing it would make a stale belief decide presence if anything read it back
+# -- and something else would: `claim.held` accepts any claim on the subject, Q2 raises a question
+# on the hearer for a claim landing about them, and `said_of` can hand it on as the content of a
+# telling. Presence is the world's to decide (the telling workplan's T-e; hearing is by presence,
+# `epistemic.py`'s `co_located` channel). UNKNOWN is never a contradiction, so the person forms
+# the Candidate and the fold refuses an absent hearer.
 # MECHANISM, as `REQUIRES_STEMS` is -- which of the grammar's own predicates a ledger may answer,
 # not vocabulary the world contains.
 WORLD_ONLY_STEMS = frozenset({"with"})

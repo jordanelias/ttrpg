@@ -692,6 +692,12 @@ rows:
       `obstacle_default` because corpus hearers carry no capability (2 read `score/2` = 1.5); what
       moved is which tellings happen and the draws they take. `headless --seasons 2` grades one
       telling at seed 0 (Success) and none at seed 7.
+      ⚠ **RE-MEASURED AT THE BATCH-2 CLOSE `F1` (2026-10-01): WITNESS NO LONGER DEPOSITS A `with`
+      READ.** The same 27 cases, seed 0, 3 seasons, one script on this tree and on a `git worktree`
+      at `67ec05c`: **24 `news.told` (Success 6, Partial 18) against 29 `news.untold`**, 20 of 27
+      cases attempting and 15 succeeding; `67ec05c` reads 28 (Success 8, Partial 20) against 34, 20
+      and 16 -- so the T4 figures just above were already stale there. The obstacle breakdown
+      (54 of 54 person opponents, 52 `obstacle_default`) was NOT re-measured.
       **WHY `partial` AND NOT `met`, STATED RATHER THAN LEFT TO BE FOUND.** R-09 asks that chains
       be probabilistic; what is probabilistic today is the ROLL, not the CHAIN, and it varies by
       SEED and FIXTURE rather than by PERSON. `Person.capability` is empty on every corpus person

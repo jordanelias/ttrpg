@@ -8006,7 +8006,18 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # BATCH-CLOSE 2 caught it by running this test (red at 111). THE UNIT: a teller now forms and
     # executes one `tell` per hearer per season rather than one per topic, so more worlds execute
     # `tell` more than once and the sets split. `live` did not move.
-    assert len(by_sig) == 114, (
+    # ⚠⚠ **114 -> 117, BATCH-2 CLOSE `F1` (WITNESS no longer deposits a `with` read), 2026-10-01,
+    # MEASURED AGAINST A CLEAN `git worktree` AT `67ec05c` (114 there, same 143 live worlds, seed 0).**
+    # THE UNIT AND THE DIRECTION: variety ROSE by three, `live` did not move, `told_redeposits` stays
+    # 0 and the status census is identical (102 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED · 1
+    # RUNS-ALONE-UNDECLARED). The teller's ledger no longer holds a claim on the hearer, so Q2 no longer
+    # raises a question about them and the scenes re-ranked at the margin. Per-verb world counts,
+    # before -> after: `utter` 142 -> 143, `fight` 30 -> 28, `examine` 9 -> 10, `restore` 2 -> 4,
+    # `release` 1 -> 2, `move` 52 -> 53, `petition` 76 -> 75, `reconstruct` 140 -> 139,
+    # `research` 100 -> 99, `speak` 88 -> 87, `surveil` 66 -> 65, `transfer` 89 -> 88; `tell` unmoved.
+    # AND THE SAME-BREATH CHECK THIS MESSAGE DEMANDS: THE UNIVERSAL SET MOVED -- `utter` regains
+    # all 143 worlds, so variety rose while a verb became universal, the `U1` shape (asserted below).
+    assert len(by_sig) == 117, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -8117,7 +8128,15 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # rather than out of `ever` -- it still executes in most worlds, just not all 143 -- which is
     # the same-breath check the `by_sig` message demands. MEASURED by a one-off script over the
     # same 143-case corpus, seed 0, against `882e86e`: universal `{create_record}` -> `{}`.
-    assert universal == set(), sorted(universal)
+    # ⚠⚠ **{} -> {`utter`}, BATCH-2 CLOSE `F1` (2026-10-01, `ED-IN-0282`), UNIT: VERBS IN THE UNIVERSAL
+    # SET, DIRECTION: UP BY ONE -- THE `by_sig` NOTE'S SAME-BREATH CHECK, AND THE `U1` SHAPE.** With
+    # WITNESS no longer depositing a `with` read the scenes re-ranked and `utter` wins one in the
+    # one live world (of 143) it had missed, so 143 of 143 now. Variety rose (114 -> 117) while a verb
+    # became universal again. MEASURED against a clean `git worktree` at `67ec05c` (`utter` 142 of 143
+    # there) with a one-off script over `corpus_run.run_case`, not read off this test's failure. As the
+    # note above says, a universal set of size one is a sampling outcome and not a design invariant.
+    # [GROUNDED: measured 2026-10-01, both arms at seed 0 over the same 143 live corpus worlds, control from a worktree at `67ec05c` -- universal {} -> {utter}, `utter` 142 -> 143 worlds]
+    assert universal == {"utter"}, sorted(universal)
     # `dispatch` LEAVES THE VARYING SET ENTIRELY UNDER `R8.1` -- NOT INTO UNIVERSAL, OUT OF `ever`
     # ALTOGETHER. It no longer executes in any live world (NPC-033 included); it is still
     # ATTEMPTED and refused there, so it moves to `refused_only` rather than to the never-attempted
@@ -8167,9 +8186,12 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠ `march` DOES NOT JOIN, PLAN POSITION `28-ii` (M6), 2026-09-30 -- see the `ever` note above
     # for why, and for the direct, real-chooser demonstration this position ships instead of a
     # corpus-membership move.
+    # ⚠ `utter` LEAVES `varying` FOR `universal`, BATCH-2 CLOSE `F1` -- the same one world as the
+    # universal pin above; the other fifteen are unmoved (membership; their world counts are in the
+    # `by_sig` note).
     assert varying == {"create_record", "examine", "fight", "interview", "issue", "move",
                        "petition", "reconstruct", "release", "research", "restore", "speak",
-                       "surveil", "tell", "transfer", "utter"}, (
+                       "surveil", "tell", "transfer"}, (
         sorted(varying))
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
     # BROKE BROKE FOR A REASON THIS TEST WANTS. A one-season case still never reaches `tell` —
@@ -10566,6 +10588,21 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # the person side never reads it back (`WORLD_ONLY_STEMS`). The `ever`/`end` gap is HEAD's own
     # shape too (31/24 at `4bd5cee`, 25/20 here).
     # [GROUNDED: measured 2026-10-01 on this tree and on a `git worktree` at `4bd5cee` by running the helper directly -- 24 entries there, 20 here, act mix above]
+    # ⚠⚠ **20 -> 24, BATCH-2 CLOSE `F1` (2026-10-01, `ED-IN-0282`), UNIT: ENTRIES, DIRECTION: UP.**
+    # WITNESS no longer deposits the fold's `with` read (`loop/witness.py` skips `WORLD_ONLY_STEMS`),
+    # so `("p_carin", "with:p_bailiff", True)` -- the entry the `T4` note above names as T4's OWN READ --
+    # is GONE, and the teller no longer holds a claim on the hearer that Q2 reads back as a question
+    # about them, so the act mix moved again (measured: 6 `with:` claims at realm x1 and 19 at x3 in
+    # the final ledgers before, 0 after; 4 Q2 questions at realm x1's end were raised from them).
+    # Counter subtraction against the 20-entry list: FOUR OUT -- `("p_carin", "with:p_bailiff", True)`,
+    # one `("p_carin", "exists:Record", 0)`, `rec:a84cdce9a0a0de0c`'s record and
+    # `("scriptorium", "exists:Proposition", 0)` -- and EIGHT IN, from four record ids new to the list
+    # (`rec:6986534b122765b3` x3, `rec:e19b686bdf3c6edb` x2, `rec:ad362f95ad720530` x2,
+    # `rec:3ca933f965b9a9ee` x1). Only the first of the four out is the removed deposit; the rest is
+    # the act mix it moved.
+    # HEALTHY DIRECTION: 24 held, none evicted (`actor_arm` is also checked), 24 being what `4bd5cee`
+    # held (`ever`/`end` 31/24 there).
+    # [GROUNDED: measured 2026-10-01 by running the helper directly on this tree -- 24 entries, from 20 on `67ec05c`; Counter subtraction not eyeballed]
     assert actor_end == [("rec:cae0bdd4c4f8d475", "exists:Record", 1),
                          ("rec:b2657ce0b577e64d", "exists:Record", 1),
                          ("rec:b2657ce0b577e64d", "exists:Record", 1),
@@ -10573,19 +10610,23 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
                          ("p_carin", "exists:Record", 0),
                          ("p_carin", "exists:Site", 0),
                          ("p_carin", "exists:works", 0),
-                         ("scriptorium", "exists:Proposition", 0),
-                         ("rec:a84cdce9a0a0de0c", "exists:Record", 1),
+                         ("rec:6986534b122765b3", "exists:works", 0),
+                         ("rec:6986534b122765b3", "exists:Record", 1),
+                         ("rec:6986534b122765b3", "exists:Proposition", 0),
+                         ("rec:e19b686bdf3c6edb", "exists:Record", 1),
+                         ("rec:e19b686bdf3c6edb", "exists:Person", 0),
+                         ("rec:3ca933f965b9a9ee", "exists:Record", 1),
                          ("rec:69697bd5ffd2e93f", "exists:Record", 1),
                          ("hearth_ostvik", "exists:Record", 0),
                          ("hearth_ostvik", "exists:Site", 0),
                          ("p_bailiff", "exists:Record", 0),
                          ("p_bailiff", "exists:works", 0),
-                         ("p_carin", "with:p_bailiff", True),
                          ("hearth_ostvik", "exists:Person", 0),
                          ("p_bailiff", "exists:Site", 0),
                          ("rec:c081dace11260f22", "exists:Record", 1),
                          ("rec:c081dace11260f22", "exists:Person", 0),
-                         ("p_carin", "exists:Record", 0)], (
+                         ("rec:ad362f95ad720530", "exists:Record", 1),
+                         ("rec:ad362f95ad720530", "exists:Person", 0)], (
         f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
         "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
         "default moved back toward `total`, or a new deposit channel opened — and every `H-40` / "
@@ -11192,8 +11233,15 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # ('research','p_bailiff'), ('research','p_carin'), ('research','scriptorium'),
     # ('restore','hearth_ostvik'), ('restore','p_carin')}`, 15 pairs.
     # [GROUNDED: measured 2026-10-01 on this tree -- 15 executable clause-4 drops on `build_world(0)`, from 13 at `4bd5cee`]
-    assert len(dropped) == 15, (
-        f"{len(dropped)} executable clause-4 drops, not 15. The drops are the channel itself; if "
+    # ⚠ 15 -> 14, BATCH-2 CLOSE `F1` (2026-10-01, `ED-IN-0282`), UNIT: (verb, subject) PAIRS, DIRECTION:
+    # DOWN BY ONE. WITNESS no longer deposits the fold's `with` read, so the act mix moved again (the
+    # set assertion above moved with it). Set difference against the 15 pairs above: OUT
+    # `('build','p_carin')`, `('found','p_carin')`, `('research','scriptorium')`; IN
+    # `('build','rec:6986534b122765b3')`, `('found','rec:6986534b122765b3')`. The clause still fires,
+    # which is what the floor is for; the fall is which `(verb, subject)` pairs the act mix reaches.
+    # [GROUNDED: measured 2026-10-01 on this tree -- 14 executable clause-4 drops on `build_world(0)`, from 15 on `67ec05c`; the pairs read off the test's own printed `shipped` list]
+    assert len(dropped) == 14, (
+        f"{len(dropped)} executable clause-4 drops, not 14. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
         "failure than the loss of outcome-relevance recorded above.")
     # ⚠⚠⚠ **THE BITE CAME BACK UNDER G1a, THE GUARD ABOVE DEMANDED A REASON, AND THE REASON IS
@@ -11342,8 +11390,19 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # petition, research, restore, surveil}, 63 of them (commit 33, research 8, surveil 6, examine 5,
     # restore 5, fight 2, interview 2, petition 2); `move` still absent from the drop set AND from
     # every Event kind in the world's log]
-    assert {v for v, _ in live} == {"commit", "examine", "interview", "fight", "petition",
-                                    "research", "restore", "surveil"}, (
+    # ⚠ {8 verbs} -> {10 verbs}, BATCH-2 CLOSE `F1` (2026-10-01, `ED-IN-0282`), UNIT: VERBS IN THE DROP
+    # SET, DIRECTION: UP BY TWO. `build` and `found` JOIN on ARC-01, where neither had appeared (see
+    # the `2026-09-30` note above: they formed on `build_world(0)` and not here). WITNESS no longer
+    # deposits a `with` read, so ARC-01's multi-season act mix moved by the same compounding the
+    # `FIGHT-RENAME` note names, and `build`/`found` win slots on `r_realm`. MEASURED by running the
+    # test's own `drops` on this tree and on a `git worktree` at `67ec05c`: 61 drops there (commit 29,
+    # research 9, examine 4, restore 4, fight 4, interview 4, petition 4, surveil 3) and 70 here
+    # (commit 29, research 9, surveil 8, fight 4, interview 4, petition 4, examine 3, restore 3,
+    # build 3, found 3). The two verbs the message warns about are checked: `tell` is absent, and
+    # `surveil` was present before this change too.
+    # [GROUNDED: measured 2026-10-01 -- ARC-01 shipped drops on {build, commit, examine, fight, found, interview, petition, research, restore, surveil}, 70 of them, from 61 on `67ec05c`]
+    assert {v for v, _ in live} == {"build", "commit", "examine", "fight", "found", "interview",
+                                    "petition", "research", "restore", "surveil"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
         "`LEDGER_DERIVED_STEMS` excludes. `surveil` RETURNING means `tell`'s degree has stopped "
