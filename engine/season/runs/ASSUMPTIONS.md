@@ -58,6 +58,7 @@ exercised by this run.**
 | `field_casualty_model` | `scaled_by_degree` | no — a harness fixture |
 | `field_morale_weight` | `1` | no — a harness fixture |
 | `field_grudge_weight` | `1` | no — a harness fixture |
+| `field_walls_dr` | `None` | no — a harness fixture |
 | `scar_step` | `0` | no — a harness fixture |
 | `refusal_axis` | `None` | no — a harness fixture |
 | `speech_kind_terminal_fault` | `removal` | no — a harness fixture |
