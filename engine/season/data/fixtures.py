@@ -633,12 +633,13 @@ DEFAULT_FIXTURES = Fixtures(
     # orders as it did before `T3a` -- the realm hash and `corpus_run 0` are byte-identical there.
     # SHIPPED: `told_weight` 0.5, so, while `rank` reads 0 (`H-180`) AND `record` is neutral (the
     # teller has no checkable record, or `record_gain` is 0), one hop of hearsay reaches at most
-    # 0.5 x 1.5 = 0.75 and never outranks the hearer's own firsthand claim by being newer; a teller
-    # with a good record can reach 1.0 and tie it (`record` up to 1 + `record_gain`). Gains 0.5
+    # 0.5 x 1.5 = 0.75 and never outranks the hearer's own firsthand claim by being newer. At
+    # NEUTRAL regard a good record ALONE gives 0.5 x 1 x 1.5 = 0.75 (< 1); 1.0 needs `relation` x
+    # `record` >= 2, i.e. `relation` >= 4/3 (regard >= 2/3 of STANCE_MAX) at the best record. Gains 0.5
     # [ASSUMPTION], which at the extremes moves a told claim's weight by half either way. Read
     # only on a claim that names a teller.
     # [JUSTIFIED: engine/season/hole_register.yaml H-176 -- the hearsay discount; CAT-3 rules THAT a told claim is graded when read and gives no magnitude, so it is injected and swept 1.0 / 0.5 / 0.25]
-    told_weight=0.5,                   # `H-176`, swept 1.0 (control, WITH both gains 0) / 0.5 (SHIPPED) / 0.25
+    told_weight=0.5,                   # `H-176`, swept 1.0 (control, WITH the three gains 0) / 0.5 (SHIPPED) / 0.25
     # [JUSTIFIED: engine/season/hole_register.yaml H-177 -- rank's gain on a teller's weight; CAT-3 orders lord > peer, no magnitude; DORMANT while `rank` reads 0 (H-180)]
     rank_gain=0.5,                     # `H-177`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
     # [JUSTIFIED: engine/season/hole_register.yaml H-178 -- regard's gain on a teller's weight; CAT-3 orders peer > enemy, no magnitude, so it is injected and swept 0 / 0.5 / 1.0]

@@ -300,7 +300,8 @@ class SeasonDriver:
         # ⚠ WHAT `_drop_what_was_already_done` READS, AND IT IS THE REALISED SET RATHER THAN THE
         # ATTEMPTED ONE — which is the whole of a defect this unit's adversarial pass found. An
         # opportunity KEY (`data/verbs.py::opportunity_key`: `(verb, subject)`, plus the row's
-        # counterparty, `T4b`) enters here only after the fold has run and only when the act's
+        # counterparty, `T4b` -- the general rule; `tell` is the row it changes anything for today)
+        # enters here only after the fold has run and only when the act's
         # Event was not one of its row's `emits_on_refusal` kinds. Recording the ATTEMPT instead
         # barred a refused act from ever being retried, including in a later round whose world had made its precondition
         # true — the exact channel R-03 exists to open, closed by the filter meant to protect the

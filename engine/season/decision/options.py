@@ -27,7 +27,7 @@ from typing import Any, Callable, Optional
 from ..data.cast import STANCE_MAX
 from ..data.pursuits import to_axes
 from ..data.requires import (
-    SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS, WRIT_SOURCED_OPERANDS,
+    CELL_STEMS, SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS, WRIT_SOURCED_OPERANDS,
 )
 from ..data.rosters import PERSON_PREDICATES, PURSUIT_AXES, RECORD_CONTENT, require_member
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
@@ -35,7 +35,7 @@ from ..data.rosters import PERSON_PREDICATES, PURSUIT_AXES, RECORD_CONTENT, requ
 from ..data.verbs import ELIGIBILITY_KINDS, VERB_TABLE, align
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
-from ..queries.person_q import known_persons, regard, said_of
+from ..queries.person_q import LedgerReader, known_persons, regard, said_of
 from ..state.carriers import Candidate, Claim, Person, Question, View
 from ..trace_log import TRACE
 
@@ -897,18 +897,33 @@ def agreement(told: list[Claim], own: list[Claim]) -> tuple:
 
 def _pair(told: list[Claim], own: list[Claim], key: Callable[[Claim], Any],
           admit=None) -> tuple:
-    """THE ONE PAIRING STEP: each `told` claim against `own`'s claim at the same `key`, `(agree, dis)`.
+    """THE ONE PAIRING STEP: each `told` claim against `own`'s belief at the same `key`, `(agree, dis)`.
 
     `agreement` pairs by predicate on the `person_predicates` roster (`admit`); `record` pairs by
-    `(subject, predicate)` over every cell (`admit=None`). Both call this, so how a told claim is
-    matched to what the hearer holds, and what counts as agreeing (`==`, whole-value), lives once.
-    A later `own` claim at a key replaces an earlier one, as it always did."""
-    own_by = {key(c): c for c in own if admit is None or key(c) in admit}
+    `(subject, predicate)` over the cell predicates (`admit=None`, filtered by `record`). Both call
+    this, so how a told claim is matched to what the hearer holds, and what counts as agreeing
+    (`==`, whole-value), lives once.
+
+    ⚠ THE MATE IS THE CLAIM `LedgerReader` CALLS THE BELIEF, NOT THE LAST ONE LISTED. Where `own`
+    holds several claims at one `key`, the one paired against is `LedgerReader._best`'s -- most
+    recent, then most confident -- because list order is the EVICTION sort (`state/ledgers.py`:
+    `confidence x (when + 1)`), not an order of belief, and a second ladder here would score a
+    truthful told claim against a belief the person no longer holds. (This replaced a dict
+    comprehension in which the last-listed claim at a key silently won.) A tie goes to the first
+    listed, as `_best` has it."""
+    by_key: dict = {}
+    for c in own:
+        if admit is None or key(c) in admit:
+            by_key.setdefault(key(c), []).append(c)
+    belief: dict = {}                   # key -> the claim `LedgerReader` would answer from
     agree = dis = 0
     for c in told:
-        mate = own_by.get(key(c))
-        if mate is None:
+        k = key(c)
+        if k not in by_key:
             continue                    # nothing of your own to compare it against
+        if k not in belief:
+            belief[k] = LedgerReader(by_key[k])._best(lambda _c: True)
+        mate = belief[k]
         (agree, dis) = (agree + 1, dis) if c.value == mate.value else (agree, dis + 1)
     return agree, dis
 
@@ -955,6 +970,11 @@ def rank(p: Person, teller: str) -> int:
     return 0
 
 
+def _is_cell(c: Claim) -> bool:
+    """Is `c` a claim on a CELL -- a slot that holds one value (`data/requires.py: CELL_STEMS`)?"""
+    return str(c.predicate).partition(":")[0] in CELL_STEMS
+
+
 def record(p: Person, teller: str, fx: "Fixtures") -> float:
     """A TELLER'S RECORD WITH `p`: how often what `teller` told `p` matched what `p` holds firsthand
     (telling workplan `T6`, `ED-IN-0282`; E5).
@@ -965,9 +985,16 @@ def record(p: Person, teller: str, fx: "Fixtures") -> float:
     A PAIR is one claim of `p`'s own ledger whose `Claim.teller` is `teller`, against `p`'s own
     firsthand claim (empty chain, source `firsthand`) on the SAME `(subject, predicate)` cell: it
     agrees if the values are `==`, else it disagrees. The pairing step is `_pair`, the one
-    `agreement` uses; only the key (a cell, not a predicate) and the roster (none) differ. It reads
+    `agreement` uses; only the key (a cell, not a predicate) and the roster differ. It reads
     `p.ledger` and nothing else, so another person's claims cannot move it (`p` never reads a
     ledger it does not hold).
+
+    ⚠ ONLY CELL PREDICATES PAIR (`_is_cell`, `data/requires.py: CELL_STEMS`), BOTH SIDES. A `seen`
+    claim is not a cell -- each sighting is a distinct `Seen` value, so a told sighting would
+    "disagree" with the very sighting it reports -- and an event-kind claim (`news.told` ...) is
+    always `True`, so any pair of them agrees for free. The firsthand claim paired against is the
+    one `LedgerReader` reads as the belief (`_pair`), so a told claim is never scored against a
+    belief the person has since replaced.
 
     ⚠ ZERO PAIRS IS NEUTRAL, 1.0 -- DELIBERATELY NOT `standing_of`'s POLARITY. `standing_of` maps
     zero pairs to the MAXIMUM gap because there the thing measured is a flattering reading, and
@@ -981,8 +1008,8 @@ def record(p: Person, teller: str, fx: "Fixtures") -> float:
     credited on the next cell -- and it is also why `record_gain` 0 (the control) is the only arm on
     which a told claim's weight is independent of the firsthand claims it contradicts."""
     gain = fx.get("record_gain")
-    told = [c for c in p.ledger if c.teller == teller]
-    own = [c for c in p.ledger if not c.chain and c.source == "firsthand"]
+    told = [c for c in p.ledger if c.teller == teller and _is_cell(c)]
+    own = [c for c in p.ledger if not c.chain and c.source == "firsthand" and _is_cell(c)]
     agree, dis = _pair(told, own, lambda c: (c.subject, c.predicate))
     if agree + dis == 0:
         return 1.0
@@ -1011,12 +1038,13 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
     reads none of them, so a world with no telling reads exactly what it read before `T3a`.
     ⚠ AT THE CONTROL VALUES (`told_weight` 1.0, `rank_gain`, `regard_gain` and `record_gain` all
     0) EVERY CLAIM WEIGHS EXACTLY 1.0 and `LedgerReader` orders as it did before `T3a`.
-    ⚠ THE ONE-HOP BOUND. `told_weight` x `relation` x `record` is clamped at 1.0, so a one-hop
-    claim at the shipped 0.5 stays strictly below a firsthand claim's 1.0 (at most 0.5 x 1.5 =
-    0.75) ONLY WHILE `rank` reads 0 (`H-180`) AND `record` is neutral (no pair, or `record_gain` 0).
-    A teller whose earlier hearsay was confirmed (`record` up to `1 + record_gain`) can reach 1.0,
-    tie a firsthand claim on support, and win on `when` -- `record` is not independent of what
-    it weighs: see `record`'s last warning.
+    ⚠ THE ONE-HOP BOUND. `told_weight` x `relation` x `record` is clamped at 1.0, and a one-hop claim
+    at the shipped 0.5 stays strictly below a firsthand claim's 1.0 only while `relation` x `record`
+    stays below 2. At NEUTRAL regard a good record ALONE gives 0.5 x 1 x 1.5 = 0.75 (< 1); 1.0 needs
+    `relation` x `record` >= 2, i.e. at the best record (1.5) `relation` >= 4/3 -- regard >= 2/3 of
+    `STANCE_MAX` at the shipped `regard_gain`. A regarded teller whose earlier hearsay was confirmed
+    can therefore tie a firsthand claim on support and win on `when`; `rank` reads 0 (`H-180`) so it
+    adds nothing yet. `record` is not independent of what it weighs: see `record`'s last warning.
     ⚠ `relation` AND `record` EACH DEPEND ON THE TELLER ALONE AND ON `p`'s LEDGER, WHICH DOES NOT
     CHANGE INSIDE ONE `opening_set`, so each is computed ONCE PER TELLER."""
     gains: list = []

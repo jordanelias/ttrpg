@@ -631,8 +631,12 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 # told) always skips: that is the 175-of-180 fix above and it is unchanged. A held
                 # TOLD copy skips only when its `chain[0]` is the incoming claim's, because one
                 # origin heard by two routes is one witness (`LedgerReader._support` counts an
-                # origin once per value anyway, so a second copy would only cost a `ledger_cap`
-                # slot). A told copy from a DIFFERENT origin does not skip: the second claim is how
+                # origin once per value anyway, so a second copy of an EQUAL or LONGER chain would
+                # only cost a `ledger_cap` slot). ⚠ NOT TRUE OF A SHORTER ONE: a direct copy `(O,)`
+                # arriving after a held two-hop copy `(O, X)` of the same origin is skipped here,
+                # though `_support` takes the per-origin MAX weight and the direct copy weighs more.
+                # Dormant at the shipped defaults, where no two-hop copy forms. A told copy from a
+                # DIFFERENT origin does not skip: the second claim is how
                 # two independent tellers come to outweigh one. The incoming chain is
                 # `_held.chain + (_act.actor,)`, so its origin is `_held.chain[0]`, else the teller.
                 _origin = _held.chain[0] if _held.chain else _act.actor

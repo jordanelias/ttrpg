@@ -861,11 +861,12 @@ def opportunity_key(verb: str, subject, operands) -> Optional[tuple]:
 
     ⚠ TELLING WORKPLAN `T4b`, A DEFECT JORDAN NAMED. `T4` made one `tell` Candidate per known present
     hearer, but the filter keyed `(verb, subject)`, so once a topic was told to B it could never be
-    told to D that season -- and a person can obviously tell several hearers. The same flaw sat in
-    every row that names a `counterparty:` (`petition`, `give`, `issue`): two petitions on one
-    subject to two different persons are two opportunities. Read off the ROW'S COLUMN, never a verb
-    name, and where the counterparty IS the subject (`determine`, `oblige`) it adds nothing and is
-    left out, so those keys are byte-identical to before.
+    told to D that season -- and a person can obviously tell several hearers. The key is the GENERAL
+    rule for a row that names a `counterparty:`, read off the ROW'S COLUMN and never a verb name; `tell`
+    is the row where it changes anything TODAY. `petition` and `issue` always have `to` == `subject`
+    (a computed Candidate's one referent), so their key is unchanged, and `give` forms no Candidate
+    (`decision/options.py::opening_set` needs `to`). Where the counterparty IS the subject (`determine`,
+    `oblige`) it adds nothing and is left out, so those keys are byte-identical to before.
 
     ONE OWNER, BOTH SITES: `loop/driver.py` (writes a realised act) and `loop/deliberate.py`
     (reads it) both call this, so the key cannot be spelled two ways (`CLAUDE.md` §8). It sits beside

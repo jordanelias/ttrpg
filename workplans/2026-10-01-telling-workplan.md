@@ -160,7 +160,7 @@ an ordering exists in `offices.yaml` but nothing deposits an `office` claim), so
 The second falsifier holds `told_weight` at 1.0, because at the shipped 0.5, while `rank` reads 0, a one-hop
 claim reaches at most 0.5 × 1.5 = 0.75 < 1.0, so no regard can make hearsay beat a firsthand claim; regard
 decides only between told claims, which `test_t3_regard_decides_between_two_told_claims_at_the_shipped_weights`
-observes. `told_weight` 1.0 is a control only with both gains 0.
+observes. `told_weight` 1.0 is a control only with `rank_gain`, `regard_gain` and (since T6) `record_gain` all 0.
 
 **T3b.** **Before any edit**, scratch `t3_dump.py` on the pre-edit tree (corpus ×3 seasons per NPC-rung
 case, realm ×1): per person, the sorted `(subject, predicate, value, when, source, confidence, teller)`
@@ -204,7 +204,7 @@ next hearer's chain is `(teller,)`; the T3b retelling test sweeps `confidence_de
 T5's falsifier needs a content retelling, so T5 decides whether `said_of` excludes event-kind predicates, as it
 excludes `seen`. Read H-176's cite.
 
-**As built (uncommitted at writing; the T4 commit):** the row, the `with` stem, `known_persons`, the roster and
+**As built (the T4 commit):** the row, the `with` stem, `known_persons`, the roster and
 `operand_bags` as §3 says, plus four things §3 did not name. (1) `act_key` (`data/verbs.py`) puts a known-person operand
 in the act id (`subject>to`), because two `tell`s on one topic minted one id and `state/acts.py` refused the second on
 the first realm season; every other row's ids are byte-identical. (2) `WORLD_ONLY_STEMS`: `LedgerReader` answers `with`
@@ -214,19 +214,25 @@ a NAMED `own_ledger` conjunct carries `said` and declines on `None`; `survey`/`r
 form exactly as before. Decided instrument for M0d: the realm. Measured, realm `build_realm(0)` ×1: tellers 83 → 28 (only
 a person who knows somebody tells), `tell` Candidates 266 → 378, attempted 25 → 4, `news.told` 9 → 3, told claims with a
 chain 0 → 3; corpus `test_n3` loop: `attempt_cases` 20 → 20, `told_cases` 9 → 16 (no re-pin; §6). Re-run M0 (scratch
-`t4/m0_telling_t4.py`, `m0_results.json` md5 `803755dd…`): M0a realm person-subject executed 2 of 3; M0d 100% of tellings
-reaching RESOLVE have their `to` present in both instruments. Control: on one world, the 249,555 non-`tell` Candidates
+`t4/m0_telling_t4.py`, `m0_results.json` md5 `803755dd…`): M0a realm person-subject executed 2 of 3. ⚠ The M0d figure first recorded here
+(100% of tellings reaching RESOLVE have their `to` present) is TAUTOLOGICAL: the `hearer` conjunct refuses an absent hearer
+before RESOLVE. The discriminating figure, the share of `news.untold` that are `hearer` refusals, is unrecorded. Control: on one world, the 249,555 non-`tell` Candidates
 are identical to `4bd5cee`'s.
 
 **As built (T4b: opportunity key includes the counterparty; Jordan named the defect):** the once-per-season filter keyed
-`(verb, subject)`, so once topic C was told to B it was dropped for D for the rest of the season, and the same held for every
-row naming a `counterparty:` (`tell`, `petition`, `issue`; `give` is untyped, so it carries none). One owner,
+`(verb, subject)`, so once topic C was told to B it was dropped for D for the rest of the season. The key is the general rule
+for any row naming a `counterparty:`; `tell` is the row where it changes anything today (`petition` and `issue` always have
+`to` == `subject`, so their key is unchanged; `give` names `to` in `verb_table.yaml` but forms no Candidate, `options.py:363`). One owner,
 `data/verbs.py::opportunity_key` (beside `act_key`), now keys `(verb, subject, <the counterparty operand>)` and is called by
 the writer (`loop/driver.py`) and the reader (`_drop_what_was_already_done`); a counterparty equal to the subject
-(`determine`, `oblige`) adds nothing, and an act with no subject keys `None` (never recorded, never filtered). Three falsifiers in
-`test_told_by_channel.py`, each red on the 2-tuple. Measured: realm `build_realm(0)` ×1 unchanged (hash `72af02fb…`, 6 `tell`
+(`determine`, `oblige`) adds nothing, and an act with no subject keys `None` (never recorded, never filtered). Two falsifiers and a control in
+`test_told_by_channel.py`: the two (`..._a_second_hearer_is_a_distinct_opportunity`, `..._the_reader_keeps_a_distinct_counterparty_...`)
+are red on the 2-tuple; `test_t4b_a_row_with_no_counterparty_keys_exactly_as_before` is a CONTROL (every assertion holds on the
+2-tuple; it is red only on the opposite mutation, the key reading `to` for every row). The ranking has no hearer term
+(`choose.py:326-329`); a refusal at `hearer` is retried, which is what moved realm ×3 untold 15 → 22. `act_key` and
+`opportunity_key` read different columns; they agree only while `petition` and `issue` have `to == subject`. Measured: realm `build_realm(0)` ×1 unchanged (hash `72af02fb…`, 6 `tell`
 acts, 3 told); realm ×3 `tell` acts 22 → 29, `news.told` 7 → 7, `news.untold` 15 → 22, content hash moved; corpus
-`DISTINCT EXECUTED SETS` 111 → 114 (`corpus_run 0` md5 `125fd053…` → `f45a7e22…`); aperture realm `tell` row identical
+`DISTINCT EXECUTED SETS` 111 → 114 (`corpus_run 0` md5 `125fd053…` → `f45a7e22…`; the pin re-set at the close); aperture realm `tell` row identical
 (attempted 4, executed 4, refused 1); `delta HEAD` PROBE FLIPS 0; no pin moved.
 
 ### T5 · dedup by origin, and T6 · a teller's record
@@ -236,15 +242,18 @@ same `chain[0]`. Ledgers inflate (the eviction hazard), so re-run the H-40 sweep
 Subject: `[design] told deposits dedup by origin; support is noisy-OR over origins`.
 
 **As built (the T5 commit):** the guard (`loop/witness.py`) skips only a held copy with `chain == ()` or the same
-`chain[0]`; three falsifiers in `test_told_by_channel.py`. `said_of` is UNCHANGED, by ruling: the event-kind claim
-`(subject, news.told, True)` is real tellable content, not noise. Measured at the shipped `confidence_default`: in the
-realm and the corpus no told claim exceeds one hop (realm, 1 season: 3 chained claims, all length 1; 3 seasons: none;
-corpus: 0 told claims), and `said_of` picks an empty-chain claim at all 378 / 1,480 / 16,810 calls (realm 1 season /
-realm 3 seasons / corpus); where a teller holds both the event-kind claim and a told content claim at one
-`(when, confidence)` (3 / 43 teller-calls) a newer claim wins. In `tiny_world` the tie goes to the event-kind claim
-(chain `()`). So a content retelling cannot reach two hops at the shipped default; a fix is a design call, such as one
-Candidate per held claim about the subject. Controls unmoved: realm hash `72af02fb…`, `corpus_run 0` md5 `125fd053…`,
-PROBE FLIPS 0, `told_redeposits` 0, H-40 sweeps green.
+`chain[0]`; three falsifiers in `test_told_by_channel.py`. `said_of` is UNCHANGED, by ruling (Jordan, 2026-10-01 in session): the
+event-kind claim `(subject, news.told, True)` is real tellable content, not noise. Measured at the shipped
+`confidence_default`: in the realm and the corpus no told claim exceeds one hop (realm, 1 season: 3 chained claims, all
+length 1; 3 seasons: none; corpus: 0 told claims), and `said_of` picks an empty-chain claim at all 378 / 1,480 / 16,810
+calls (realm 1 season / realm 3 seasons / corpus). In 3 of 43 teller-calls a teller held both the event-kind claim and a
+told content claim, so told content COULD have been picked; it was picked in none of them. In `tiny_world` the tie at one
+`(when, confidence)` goes to the event-kind claim (chain `()`). So no two-hop content retelling was observed at the
+shipped default; a fix is a design call, such as one Candidate per held claim about the subject (T7). After a teller's first
+successful telling of C, their newest claim on C is their own `news.told`, so later tellings pass the event kind on. Under
+`both` with hearing by presence, every hearer already holds it, so only the chain is lost. The design call is T7's (one
+Candidate per held claim). Controls unmoved: realm hash `72af02fb…`, `corpus_run 0` md5 `f45a7e22…`, PROBE FLIPS 0,
+`told_redeposits` 0 (vacuous: the corpus holds 0 told claims), H-40 sweeps green.
 
 **T6.** `record(p, x) = 1 + record_gain·(agree − dis)/(agree + dis)`, pairing p's claims told by x with
 p's firsthand claims on the same `(subject, predicate)`, on `agreement`'s loop shape; zero pairs give
@@ -257,12 +266,18 @@ admit)`; `agreement` calls it keyed by predicate on `PERSON_PREDICATES`, `record
 predicate)` with no roster. `teller_weight` memoises `record` per teller beside `relation`; the `ABSENT: H-179
 stake` marker is kept. Fixture `record_gain` (control 0, shipped 0.5 [ASSUMPTION], sweep [0, 0.5, 1.0]),
 hole row `H-182`. ⚠ **The "at most 0.75" bound of T3a's As-built holds only while `rank` reads 0 AND `record`
-is neutral:** a teller with a good record reaches `told_weight x relation x record` above 1 before the clamp,
-ties a firsthand claim on support and wins on `when`; `H-176`, `H-177`, `H-178`, the fixtures comment and the
-`teller_weight` docstring now say so. The T3 tests hold `record_gain` at 0 (`_t3_fx`), because they plant a
-told claim against a firsthand one on a cell, which is a pair that lowers the teller's record at 0.5.
-Measured: `build_realm(0)` holds 3 told claims after 1 season, 0 after 3, with no pair; realm hash `72af02fb…`
-and `corpus_run 0` md5 `f45a7e22…` are the same before, at shipped `record_gain` 0.5 and at the control 0.
+is neutral:** at neutral regard a good record alone gives `told_weight x relation x record` = 0.5 x 1 x 1.5 = 0.75 (< 1);
+1.0 needs `relation x record` >= 2, i.e. `relation` >= 4/3 (regard >= 2/3 of `STANCE_MAX`), and then it ties a firsthand
+claim on support and wins on `when`; `H-176`, `H-177`, `H-178`, the fixtures comment and the `teller_weight` docstring
+say so. The T3 tests hold `record_gain` at 0 (`_t3_fx`), because they plant a told claim against a firsthand one on a
+cell, which is a pair that lowers the teller's record at 0.5 -- except `test_told_by_channel.py`'s clause-4 weigh check
+(`:556-559`), which asserts 0.25 at the shipped gain on purpose. `H-176`'s control definition names `record_gain` as the
+third gain that must be 0. The plan's falsifier "an unknown teller reads exactly `told_weight`" is asserted as 0.75
+(`told_weight x relation`, at full regard), not `told_weight`. Measured: `build_realm(0)` holds 3 told claims after 1
+season, 0 after 3, with no pair; realm hash `72af02fb…` and `corpus_run 0` md5 `f45a7e22…` are the same before, at
+shipped `record_gain` 0.5 and at the control 0 -- a NULL (no pair exists in either arm, as `H-182` admits), not a control.
+**Fixed at the batch close:** the pairing step picks the claim `LedgerReader` calls the belief (not the last listed), and
+only cell predicates pair (`seen` and event-kind claims do not).
 
 ---
 
@@ -292,9 +307,10 @@ reaching WITNESS, plan position `22`).
 ## 6. M0 branches
 
 - **Lands regardless:** T1, T2, T3a, T3b, T5, T6, G2 (stored half: loyalty and grudge rows are real), G8.
-- **M0a ≈ 0:** G3–G7 wait; re-measure after T4 (it produces person subjects). Still zero: record on H-62; invent nothing.
+- **M0a ≈ 0:** G3–G7 wait; re-measure after T4 (it produces person subjects). Still zero: record on H-62; invent nothing. **Re-measured after T4: M0a > 0 (realm person-subject executed 2 of 3), so the G3–G7 trigger is met; the §7.4 re-check of the `absent` rows is owed at T7.**
 - **M0b ≈ 0:** at `declared` only, G1 ships at control, or `deed:` cells are authored under H-66 in its commit (wait if plan `12c` is imminent); at both arms, G1 does not land.
 - **M0d ≈ 0:** T4 lands, its `test_n3` re-pin is refused, and G8 moves ahead of T5 as the main channel.
+- **G8 branch, taken as a judgment, not a rule:** realm M0d 12% < 20%, which licensed G8 ahead of T5; T5 landed first, and G8 stays gated.
 
 ## 7. Execution protocol
 

@@ -8673,9 +8673,16 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     # collapse from 26 to 15 and sent a reader to look at a transport that never moved.
     # [JUSTIFIED: a COLLAPSE FLOOR over a lane count, not a game value -- 26 of the 27 NPC rung cases produce a telling and this sits six below it, which is headroom for the sampled order to move the act mix and none for the transport failing]
     # [JUSTIFIED: a COLLAPSE FLOOR over a lane count, not a game value -- SUPERSEDES the line above under `U1`: it counts telling ATTEMPTS (`news.told` or `news.untold`) rather than successes, because grading `tell` split the two. Still 26 of 27, still six below]
-    assert attempt_cases >= 20, (
+    # ⚠⚠ **20 OF 27 AFTER `T4`/`T4b`, AND THE OLD FLOOR OF 20 HAD ZERO HEADROOM.** Re-measured
+    # 2026-10-01 on the tree that carries `T4b`/`T5`/`T6` (this test, seed 0, 3 seasons): `attempt_cases`
+    # is **20** and `told_cases` 16 (`checked` 28) -- `T4` took it from 26 to exactly 20, so a floor
+    # of 20 would have gone red on the loss of ONE case, i.e. it had become a pin on the composition
+    # of the lane, which the paragraph above refuses. The floor is re-set to **15**, five below the
+    # measurement, the same ~3/4 proportion the original 20-of-26 floor had.
+    # [JUSTIFIED: a COLLAPSE FLOOR over a lane count, not a game value -- SUPERSEDES the two lines above after `T4`: 20 of the 27 NPC rung cases produce a telling attempt (measured 2026-10-01, seed 0, 3 seasons) and this sits five below it, the same ~3/4 proportion the original floor had -- headroom for the sampled order to move the act mix, none for the transport failing]
+    assert attempt_cases >= 15, (
         f"only {attempt_cases} of the 27 NPC rung cases produced a telling at all — 26 did on "
-        "2026-09-11, before and after `U1`. This counts `news.told` AND `news.untold`, so a "
+        "2026-09-11, before and after `U1`, and 20 after `T4`. This counts `news.told` AND `news.untold`, so a "
         "failing roll cannot trip it: below the floor the act mix has stopped producing tellings "
         "or the transport is gone, and the transport is what to look at first")
     # ⚠ **AND THE SUCCESS COUNT GETS ITS OWN FLOOR, BECAUSE THE LOOP BODY ABOVE ONLY RUNS ON

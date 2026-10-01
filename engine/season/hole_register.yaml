@@ -3813,7 +3813,7 @@ rows:
     owner:     "decision/options.py -- `teller_weight`, the `weigh` closure `LedgerReader` ranks
       a person's own claims by (telling workplan `T3a`)"
     grade:     "assumption"
-    default:   "0.5 -- SHIPPED, not the control. `1.0` WITH `rank_gain` AND `regard_gain` BOTH 0
+    default:   "0.5 -- SHIPPED, not the control. `1.0` WITH `rank_gain`, `regard_gain` AND `record_gain` ALL 0
       is the control (swept alone, `1.0` still leaves the gains shipped and a hostile teller
       weighs 0.5): every claim then weighs 1.0, every value's support is exactly 1.0 and
       `LedgerReader` orders by (when, confidence) as it did before `T3a` -- byte-identical realm
@@ -3823,9 +3823,11 @@ rows:
       firsthand value's support is 1.0; the told one's is at most 0.5 x 1.5 = 0.75), which is
       `test_t3_a_firsthand_claim_holds_against_a_newer_told_claim_of_equal_confidence` (it holds
       `record_gain` at 0, its own pair being the told claim against the firsthand one). The bound
-      is NOT unconditional: a teller with a good record (`record` up to 1 + `record_gain`, `H-182`)
-      reaches 1.0 and ties on support, and once `rank` can read +1, a teller who outranks the
-      hearer, at full regard, does too -- either wins on `when` (`H-177`). `0.25` is the sceptic's arm"
+      is NOT unconditional: at NEUTRAL regard a good record alone (`record` up to 1 + `record_gain`,
+      `H-182`) gives 0.5 x 1 x 1.5 = 0.75, still below 1; 1.0 needs `relation` x `record` >= 2,
+      i.e. at the best record `relation` >= 4/3 (regard >= 2/3 of STANCE_MAX at the shipped
+      `regard_gain`), and once `rank` can read +1 a teller who outranks the hearer, at full regard,
+      reaches it with no record at all -- either wins on `when` (`H-177`). `0.25` is the sceptic's arm"
     site:      "Fixtures told_weight, read by `decision/options.py::teller_weight` on the first
       claim in a ledger that names a teller, as `told_weight ** hops` with hops = `len(Claim.chain)`
       (`T3b`); consumed by `queries/person_q.py::
@@ -3845,7 +3847,7 @@ rows:
       claim at the same tick, the former at `confidence_default` (100) and so first on a tie, and
       `said_of` picks it (empty chain), so the next hearer's chain is `(teller,)`, never
       `(origin, teller)`; `test_t3b_a_witnessed_retelling_...` sweeps `confidence_default` to 50 for
-      this reason. T5 DECIDED NOT TO EXCLUDE THEM: the event-kind claim `(subject, news.told, True)` is tellable content (THAT a telling happened), so `said_of` is unchanged and one Candidate per held claim about the subject is the fix, a later position's."
+      this reason. T5 RULED (Jordan, 2026-10-01 in session) NOT TO EXCLUDE THEM: the event-kind claim `(subject, news.told, True)` is tellable content (THAT a telling happened), so `said_of` is unchanged and one Candidate per held claim about the subject is the fix, a later position's (`T7`). After a teller's first successful telling of C, their newest claim on C is their own `news.told`, so later tellings pass the event kind on. Under `both` with hearing by presence, every hearer already holds it, so only the chain is lost. The design call is T7's (one Candidate per held claim)."
     source:    "telling workplan `T3a` (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282), 2026-10-01"
 
   - id:        H-177
@@ -3957,7 +3959,7 @@ rows:
       hearer (`to`, a person the teller knows) and is contested against them, so two people who
       tell each other things are exactly the pair a `tie / knot` would join -- and nothing joins
       them: `tie / knot` has no effect, so it is formed and never offered (`aperture 1 0`, `tie /
-      knot` row: formed 83, offered 0, executed 0 in the realm at `T4`). Who knows whom is read
+      knot` row: formed for 83 persons, offered 0, executed 0 in the realm at `T4`). Who knows whom is read
       afresh from each ledger (`known_persons`) and never stored as a relation."
     kind:      "WIRING"
     owner:     "loop/effects.py -- the `tie / knot` effect, which plan position `14` builds
@@ -3971,7 +3973,7 @@ rows:
       `tie / knot` executed > 0; prerequisite plan position `14`'s `_eff_tie`"
     cite:      "LADDER RUN at `T4`, 2026-10-01: not superseded -- plan position `14` owns the effect
       and is not built; not irrelevant -- `T4` makes the teller-hearer pair real, and the realm
-      forms 83 `tie / knot` Candidates a season; no design document says a telling writes a tie,
+      forms `tie / knot` for 83 persons (`aperture`'s persons-formed column, not a Candidate count); no design document says a telling writes a tie,
       and the telling workplan's §5 G-tail records ties as gated on `14`, not built here; the
       architecture keeps the effect with its verb (`14`), so nothing is built and no marker is
       placed."
@@ -3993,11 +3995,12 @@ rows:
       HAS pairs, so the control is not vacuous). At `0.5` a teller always confirmed weighs half
       again as much as a stranger and one always contradicted half as much, clamped to 1.0 with
       the rest of the product -- so a one-hop claim at the shipped `told_weight` is no longer
-      bounded by 0.75 (`H-176`, `H-178`) once its teller has a good record. MEASURED at `T6`:
+      bounded by 0.75 (`H-176`, `H-178`) once its teller has a good record AND is regarded
+      (`relation` x `record` >= 2 reaches 1.0; a good record alone is 0.75). MEASURED at `T6`:
       `build_realm(0)` holds 3 told claims after 1 season and 0 after 3, none with a pair
       (0 teller-hearers with a pair), and the realm hash and `corpus_run 0` md5 are identical at
-      `record_gain` 0.5 and 0, so the shipped arm moves neither artifact; the falsifiers plant
-      their pairs"
+      `record_gain` 0.5 and 0, so the shipped arm moves neither artifact -- a NULL (no pair exists in
+      either arm), not a control; the falsifiers plant their pairs"
     site:      "Fixtures record_gain, read by `decision/options.py::record` (called from
       `teller_weight`, once per teller, on the first claim naming that teller), whose pairing
       step `_pair` is `agreement`'s; consumed by `queries/person_q.py::LedgerReader._support`
@@ -4011,7 +4014,10 @@ rows:
       right; not irrelevant -- `teller_weight` carried a literal `record = 1.0` for this factor
       and told claims with a teller are deposited; no design document gives the gain (the telling
       workplan is intent only); precedent is `H-155`'s injected, swept magnitude, and `H-176`..
-      `H-178` for the shape. Registered live so the term has its control at 0."
+      `H-178` for the shape. Registered live so the term has its control at 0. Agreeing pairs
+      form only when the hearer was told before they saw (`witness.py:639-641`), so `record` leans
+      downward. A told claim about a cell that has since changed scores as disagreement, because no
+      claim stores when it was observed. Partial drift scores as disagreement, by design."
     source:    "telling workplan `T6` (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282), 2026-10-01"
 
 

@@ -240,6 +240,8 @@ def test_15d_falsifier_the_realm_holds_hearsay_no_telling_minted(monkeypatch):
 
     live, live_channel, total = told_by_count()
     assert live > 0, f"every one of {total} deposits is still firsthand -- no hearsay was minted"
+    # `control_channel == live_channel` below passes at 0 == 0 and would then observe nothing (§0.1 pt 2)
+    assert live_channel > 0, "the told channel minted nothing in the realm: the control below is vacuous"
     monkeypatch.setattr(WITNESS_MODULE, "CHANNEL_CLAIM_SOURCE",
                         {c: "firsthand" for c in CHANNEL_CLAIM_SOURCE})
     control, control_channel, control_total = told_by_count()
@@ -827,10 +829,90 @@ def test_t4_a_telling_to_an_absent_hearer_is_refused_and_a_present_one_hears():
     assert not any(c.chain for c in w.persons["p_king"].ledger), "the absent hearer was told anyway"
 
 
+def test_t4_a_planted_false_with_claim_in_the_tellers_ledger_does_not_decline_the_telling():
+    """THE PERSON SIDE NEVER ANSWERS `with` (`data/requires.py: WORLD_ONLY_STEMS`;
+    `LedgerReader.read`'s early UNKNOWN). The fold deposits `Observation(to, "with:<actor>", ...)`
+    into the TELLER's ledger when it reads the `hearer` conjunct, so a teller who once read that
+    `p_mid` was NOT with them holds `(p_mid, "with:p_low", False)`. If the person-side reader
+    answered it, clause 4 (`belief_contradicts`) would read the `hearer` conjunct False from that
+    stale claim and the telling would never be formed for a hearer who has since arrived -- a ledger
+    deciding presence, which is the world's to decide.
+
+    Planted, then observed three ways: the reader says UNKNOWN, `belief_contradicts` is False, and
+    the real chooser still forms a `tell` to `p_mid`. A control run without the planted claim forms
+    the same `tell`, so the assertion that one IS formed is not vacuous.
+
+    MUTATION (run 2026-10-01): the `WORLD_ONLY_STEMS` branch deleted from `LedgerReader.read` --
+    the reader answers False, `belief_contradicts` is True and this goes RED on the first
+    assertion. Restored, GREEN."""
+    from ..data.matrix import Step
+    from ..data.requires import UNKNOWN
+    from ..data.verbs import VERB_TABLE
+    from ..decision import assemble
+    from ..epistemic import belief_contradicts
+    from ..queries.person_q import LedgerReader
+    from ..state.carriers import Question, Sensation
+
+    def tells_to_hearer(plant: bool) -> list:
+        w = P.tiny_world()
+        teller, hearer, subject = "p_low", "p_mid", "Hh"
+        tp = w.persons[teller]
+        tp.ledger.append(Claim("c_held", teller, subject, "stores:grain", 8, 0, "firsthand", 37, "own"))
+        tp.ledger.append(Claim("c_knows", teller, hearer, "exists:Person", 1, 0, "firsthand", 100, "own"))
+        if plant:
+            tp.ledger.append(Claim("c_with", teller, hearer, f"with:{teller}", False, 0, "firsthand",
+                                   100, "own"))
+            assert LedgerReader(tp.ledger).read(hearer, f"with:{teller}") is UNKNOWN, (
+                "the person-side reader answered a `with` claim from the ledger")
+            assert not belief_contradicts(
+                tp, VERB_TABLE["tell"], subject, {"subject": subject, "to": hearer}), (
+                "clause 4 read the `hearer` conjunct False from a planted `with` claim")
+        w.step = Step.DELIBERATE
+        q = Question("q:t4with", "need", (subject,), "prop")
+        scenes = P.chooser(w, only=teller, verbs=frozenset({"tell"}))(
+            tp, assemble(tp, q, w.fixtures.get("view_k")), Sensation(0), lambda: 5)
+        return [a.payload.get("to") for s in scenes for a in s.acts if a.verb == "tell"]
+
+    assert tells_to_hearer(False) == ["p_mid"], "the control forms no `tell` to the hearer: fixture moved"
+    assert tells_to_hearer(True) == ["p_mid"], (
+        "a planted `with:<actor>` False claim declined the telling: the person side answered it")
+
+
+def test_t4_the_known_person_claim_roster_refuses_a_planted_collision():
+    """`_check_known_person_claim` is the load-time cross-check of `rosters.yaml:
+    known_person_operands.claim` against `REQUIRES_STEMS` and `observation_terms`; it never fires on
+    the shipped data, so nothing observed that it could (the shape `test_demand_delivery.py`'s
+    `_check_shortfall_stem` and `test_content_operands.py`'s `_check_writ_sourced_subset` calls
+    follow). Each planted collision must raise `Unspecified`, and the shipped claim must pass.
+
+    MUTATION (run 2026-10-01): the `stem not in requires_stems` clause deleted -- the stem
+    collision stops raising and this goes RED. Restored, GREEN."""
+    from ..data.requires import (
+        KNOWN_PERSON_CLAIM, OBSERVATION_TERMS, REQUIRES_STEMS, _check_known_person_claim)
+    from ..gaps import Unspecified
+    import pytest
+
+    term = KNOWN_PERSON_CLAIM["seen_term"]
+    stem = KNOWN_PERSON_CLAIM["predicate"].partition(":")[0]
+    checked = 0
+    for bad in ({"predicate": f"nostem:Person", "seen_term": term},        # a stem no reader answers
+                {"predicate": stem, "seen_term": term},                    # no `:<kind>`
+                {"predicate": f"{stem}:", "seen_term": term},              # an empty kind
+                {"predicate": KNOWN_PERSON_CLAIM["predicate"], "seen_term": "nonterm"},
+                {}):
+        with pytest.raises(Unspecified):
+            _check_known_person_claim(bad, REQUIRES_STEMS, OBSERVATION_TERMS)
+        checked += 1
+    assert checked == 5
+    _check_known_person_claim(KNOWN_PERSON_CLAIM, REQUIRES_STEMS, OBSERVATION_TERMS)   # shipped passes
+
+
 # ---------------------------------------------------------------------------------------------
 # T4b (ED-IN-0282): AN OPPORTUNITY INCLUDES ITS COUNTERPARTY. The once-per-season filter keyed
 # `(verb, subject)`, so once topic C was told to B it was dropped for D too, though a person tells
-# several hearers (and so for `petition`, `give`, `issue`). `data/verbs.py::opportunity_key` is the
+# several hearers. The key is the general rule for a row naming a counterparty; `tell` is the row where
+# it changes anything today (`petition`/`issue` have `to` == `subject`; `give` forms no Candidate).
+# `data/verbs.py::opportunity_key` is the
 # ONE key; `loop/driver.py` writes it after the fold and `_drop_what_was_already_done` reads it.
 # ---------------------------------------------------------------------------------------------
 
@@ -1007,8 +1089,13 @@ def test_t5_one_origin_through_two_tellers_deposits_once():
     got = told("p_high")
     assert [c.chain for c in got] == [("p_low", "p_mid")], (
         f"`p_high` holds {[c.chain for c in got]} -- one origin was deposited twice")
-    checked = len(told("p_mid")) + len(told("p_other"))
-    assert checked >= 1, "no other hearer was told either: the telling never reached WITNESS"
+    # The second telling's other hearer, `p_mid`, holds nothing of it from the first (they were its
+    # teller), so it is the ONE copy that shows the second telling reached WITNESS and deposited for
+    # somebody; the first telling alone cannot satisfy it.
+    heard = told("p_mid")
+    assert [c.chain for c in heard] == [("p_low", "p_other")], (
+        f"`p_mid` holds {[c.chain for c in heard]}: the second telling never reached WITNESS, so "
+        "`p_high` holding one copy proves nothing about it")
 
 
 def test_t5_two_origins_deposit_twice_and_outrank_one():
@@ -1054,8 +1141,11 @@ def test_t5_a_firsthand_holder_still_skips():
     WITNESS). The corpus-wide `told_redeposits == 0` assertion
     (`test_season_shape.py`, beside `by_sig`) is the same property at scale.
 
-    MUTATION (run 2026-10-01, `T5`): the empty-chain clause removed (`c.chain[0] == _origin`
-    alone) -- both holders are told and this goes RED on the first assertion. Restored, GREEN."""
+    MUTATIONS (run 2026-10-01, `T5`, both on `witness.py`'s guard): the empty-chain clause removed as
+    `c.chain[0] == _origin` ALONE does not fail an assertion -- the held claim's chain is empty, so
+    the guard raises `IndexError` and the test ERRORS. The clause removed with the index guarded
+    (`c.chain and c.chain[0] == _origin`) -- the firsthand holder is told and this goes RED on the
+    first assertion. Restored, GREEN."""
     for source in ("firsthand", "inferred"):
         w, tell, told = _t5_world()
         held = Claim("c_held", "p_high", _T5_SUBJECT, _T5_PRED, 8, 0, source, 100, "own")
@@ -1063,10 +1153,14 @@ def test_t5_a_firsthand_holder_still_skips():
         w.persons["p_high"].ledger.append(held)
         tell("p_mid", (), 8)
         assert told("p_high") == [], f"a {source} holder was told what they already hold"
-        tell("p_low", ("p_mid",), 8)
-        assert told("p_high") == [], f"a {source} holder was told the same triple by another origin"
         assert len(told("p_other")) == 1, "the positive control: a hearer who holds nothing is told"
-
+        # a genuinely DIFFERENT origin from the first telling's `p_mid`: `p_low` passes on what
+        # `p_king` said, so the incoming chain is `(p_king, p_low)`
+        tell("p_low", ("p_king",), 8)
+        assert told("p_high") == [], f"a {source} holder was told the same triple by another origin"
+        assert [c.chain for c in told("p_other")] == [("p_mid",), ("p_king", "p_low")], (
+            "the positive control: the second telling reached WITNESS and a hearer who holds only "
+            "another origin's copy is told it")
 
 
 # ---------------------------------------------------------------------------------------------
@@ -1225,3 +1319,65 @@ def test_t6_record_reads_the_hearers_own_ledger_only():
     low.ledger.append(Claim("c_y_low", low.id, "Hh", "stores:grain", 5, 2, "told_by", 100, "own",
                             chain=("y",)))
     assert record(low, "x", fx) == 0.5, "another teller's agreeing claim moved x's record"
+
+
+def test_t6_the_mate_is_the_belief_ledger_reader_reads_not_the_last_listed_claim():
+    """A LEDGER IN EVICTION ORDER IS NOT IN BELIEF ORDER. `p` holds two firsthand claims on one
+    cell: an OLDER, higher-confidence one (value 5, `when` 1, confidence 100) and a NEWER, lower-
+    confidence one (value 6, `when` 5, confidence 20). `ledgers.eviction_key` ranks them 200 and 120,
+    so in eviction order the newer is listed FIRST and the older LAST -- while `LedgerReader` reads
+    the NEWER as the belief (most recent). `x` told `p` value 6. Against the belief (6) that
+    AGREES, and `record` is `1 + record_gain`; against the last-listed claim (5) it disagrees and
+    would read `1 - record_gain`. Both orders are asserted to hold, so the ledger really is in the
+    order that separates the two pickers.
+
+    MUTATION (run 2026-10-01, `T6`): `_pair` reverted to `{key(c): c for c in own}` (the last listed
+    wins) -- `record` reads 0.5 and this goes RED on the final assertion. Restored, GREEN."""
+    from ..data.fixtures import DEFAULT_FIXTURES as fx
+    from ..decision.options import record
+    from ..queries.person_q import LedgerReader
+    from ..state.ledgers import eviction_key
+
+    p = P.tiny_world().persons["p_low"]
+    older = Claim("c_old", p.id, "Hh", "stores:grain", 5, 1, "firsthand", 100, "own")
+    newer = Claim("c_new", p.id, "Hh", "stores:grain", 6, 5, "firsthand", 20, "own")
+    told = Claim("c_told", p.id, "Hh", "stores:grain", 6, 6, "told_by", 100, "own", chain=("x",))
+    p.ledger[:] = [newer, older, told]
+    assert sorted(p.ledger[:2], key=lambda c: eviction_key(c.confidence, c.when)) == [newer, older], (
+        "the fixture is not in eviction order: it cannot tell the two pickers apart")
+    assert LedgerReader(p.ledger).read("Hh", "stores:grain") == 6, "the belief is not the newer claim"
+    assert [c for c in p.ledger if not c.chain][-1] is older, "the last-listed firsthand claim moved"
+    assert record(p, "x", fx) == 1.5, (
+        f"`record` read {record(p, 'x', fx)}: the told claim was paired against a claim other than "
+        "the one `LedgerReader` calls the belief")
+
+
+def test_t6_a_seen_pair_and_an_event_kind_pair_are_not_scored():
+    """ONLY CELLS PAIR. A `seen` claim carries a different `Seen` value per sighting, so a teller
+    passing a sighting on would score as CONTRADICTING the very sighting; an event-kind claim
+    (`news.told`) is always `True`, so a pair of them would AGREE for free. Neither is a cell, so
+    both read exactly 1.0 (no pair). The controls run on the same ledger shape with a cell
+    predicate: a disagreeing pair reads 0.5 and an agreeing pair 1.5, so a `record` that read
+    nothing, or one that paired everything, is told apart from this one.
+
+    MUTATION (run 2026-10-01, `T6`): the `_is_cell` filter removed from `record` -- the `seen` pair
+    reads 0.5 and the event-kind pair 1.5, and this goes RED on the first assertion. Restored,
+    GREEN."""
+    from ..data.fixtures import DEFAULT_FIXTURES as fx
+    from ..decision.options import record
+    from ..epistemic import Seen
+
+    def rec(predicate, own_value, told_value, source="firsthand"):
+        p = P.tiny_world().persons["p_low"]
+        p.ledger[:] = [
+            Claim("c_own", p.id, "Hh", predicate, own_value, 1, source, 100, "own"),
+            Claim("c_told", p.id, "Hh", predicate, told_value, 2, "told_by", 100, "own", chain=("x",))]
+        return record(p, "x", fx)
+
+    a = Seen(stratum="social", marks=("tall",), who="p_x")
+    b = Seen(stratum="social", marks=("short",), who="p_x")
+    assert a != b
+    assert rec(SEEN_PREDICATE, a, b) == 1.0, "a `seen` pair was scored"
+    assert rec("news.told", True, True) == 1.0, "an event-kind pair was scored"
+    assert rec("stores:grain", 5, 0) == 0.5, "the control: a disagreeing cell pair does not register"
+    assert rec("stores:grain", 5, 5) == 1.5, "the control: an agreeing cell pair does not register"

@@ -722,6 +722,14 @@ REQUIRES_STEMS = frozenset({
 # not vocabulary the world contains.
 WORLD_ONLY_STEMS = frozenset({"with"})
 
+# THE STEMS A LEDGER CLAIM IS A *CELL* OF -- one `(subject, predicate)` slot that holds one value at a
+# time and can be re-asserted, so two claims on it agree or disagree (`decision/options.py::record`).
+# Derived, not a second roster: what a requirement may ask, less what only the world answers. NOT a
+# cell: `seen` (each sighting is a distinct `Seen` value, so two witnesses passing on the same
+# sighting would differ) and the event-kind predicates (`news.told` ... -- the value is always
+# `True`, so any pair would "agree"). Neither is in `REQUIRES_STEMS`.
+CELL_STEMS = REQUIRES_STEMS - WORLD_ONLY_STEMS
+
 
 def _check_known_person_claim(claim, requires_stems: frozenset, observation_terms) -> None:
     """Telling workplan `T4`. `known_person_operands.claim` names the two claim shapes that make a
