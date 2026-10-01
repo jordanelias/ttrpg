@@ -39,7 +39,6 @@ separately below, matching that job's own internal grouping.
 | `export_descriptors.py --check` | `validators` | blocking | `engine_params/descriptors.json` matches `references/descriptor_registry.yaml` — a RUNTIME input: `engine/substrate/descriptors.py` reads it at import |
 | `export_composition.py --check` | `validators` | blocking | `engine_params/composition.json` matches `module_contracts.yaml`'s `composition_roles`; IMPORTS every declared target at export time |
 | `export_key_types.py --check` | `validators` | blocking | `engine_params/key_types.json` matches the Key Type Registry |
-| `export_world_initial_state.py --check` | `validators` | blocking | `engine_params/world_initial_state.json` matches `references/world_initial_state.yaml` — the campaign's opening position, read at import by `engine/substrate/world_initial_state.py` |
 | `ci_module_shape_check.py` | `module-shape-check` | report-only | Holonic container hygiene: no `tests/` reach-ins or imports in engine/sim runtime code |
 | `ci_sim_fabrication_check.py` | `sim-fabrication-check` | blocking | Every numeric literal in `sim/*.py` is ledger-cited or canonical-source-commented |
 | `ci_supersession_check.py` | `supersession-check` | report-only (warn-only by design) | Flags changesets touching a path in a supersession-register `files_to_recheck` list |  **[RETIRED 2026-08-21 — culling waves 1-3, ED-IN-0194; at `FORK:1e4c6f4`]**

@@ -11,8 +11,8 @@ two apparent reads in `engine/substrate/descriptors.py` are a COMMENT and a DOCS
 ruled the name is `Church of Solmund`, and `engine/tests/test_f7_smoke_oracle.py` pinned goldens on
 the same stale string.
 
-This is the sixth instance of the pattern `tools/export_world_initial_state.py` states in its own
-docstring: ONE AUTHORED SURFACE, ONE EXPORTER, ONE ARTIFACT, ONE LEAF. The authored surface is
+This is an instance of the pattern ONE AUTHORED SURFACE, ONE EXPORTER, ONE ARTIFACT, ONE LEAF
+(`export_descriptors.py` and `export_composition.py` are two others). The authored surface is
 `references/names_index.yaml`; this cooks it into `engine/engine_params/names.json` behind a
 blocking `--check`; `engine/substrate/names.py` is the single runtime reader, and being a substrate
 leaf it is importable from `engine/` AND from `systems/` without either naming the other.
@@ -148,8 +148,7 @@ def build():
         'source': 'references/names_index.yaml',
         'registry_version': data.get('version'),
         'count': len(canonical),
-        # Sorted because nothing iterates these for order -- unlike `world_initial_state`'s
-        # faction table, whose order sets an RNG draw and must NOT be sorted. Checked, not assumed.
+        # Sorted because nothing iterates these for order. Checked, not assumed.
         'canonical': dict(sorted(canonical.items())),
         'aliases': dict(sorted(aliases.items())),
         'legacy': dict(sorted(legacy.items())),

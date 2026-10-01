@@ -110,9 +110,10 @@ DIVERGENCES = {
     'accord_range': {
         'engine': "NO accord state. The Accord clock has no season analogue (ED-WR-0011 option A); "
                   "`game_state.py` (its continuous 0.5-7.0 float and ACCORD_MAP) and `victory.py` were "
-                  "deleted at plan positions 28-iii and 29b. Only `canonical_accord` "
-                  "(engine/substrate/canon_buckets.py) survives, and has no production reader since "
-                  "systems/world/sim/npe.py was deleted at plan position 29d.",
+                  "deleted at plan positions 28-iii and 29b. The last accord helper, "
+                  "`canonical_accord` (engine/substrate/canon_buckets.py), had no production reader "
+                  "once systems/world/sim/npe.py was deleted at plan position 29d, and was deleted "
+                  "itself at 29d-ii: the engine holds no accord code at all.",
         'port':   "accord is an INTEGER clamped to [0, 3] (Constants.gd:144-145, cited to "
                   "peninsular_strain_v30 §2), registered and clamped as a tracker "
                   "(SettingState.gd:34,82).",

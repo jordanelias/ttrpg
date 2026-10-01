@@ -142,11 +142,6 @@ jobs:
           # engine/substrate/composition.py resolves through. Blocking, and it IMPORTS every target
           # at export time, so a broken row reds CI instead of failing a run hours later.
           v python3 tools/export_composition.py --check
-          # references/world_initial_state.yaml -> the campaign's opening position, read at import
-          # by engine/substrate/world_initial_state.py. Blocking: the leaf is the only owner of
-          # these tables (game_state.py, which re-exported them, was deleted at plan position
-          # `29b`), so a stale artifact is a world with the wrong owners.
-          v python3 tools/export_world_initial_state.py --check
           # engine/season/cases/NPC*.yaml -> engine/season/npcs.yaml, the authored cast
           # harness/populated.py reads. Blocking, and WIRED 2026-09-16: --check existed and was
           # run by NO CI job, no local hook and no test, which is ci_common.py's own

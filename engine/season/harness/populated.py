@@ -407,10 +407,11 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     # A TERRITORY IS THE FIXED UNIT HOLDING MULTIPLE SETTLEMENTS, which is exactly what each of
     # geography's 17 rows is (`settlements: [S-001, ...]`). Its `provinces:` key and `# PROVINCES
     # (17)` banner are the label the ruling superseded — and the `T` PREFIX ON EVERY ID WAS RIGHT ALL
-    # ALONG. `references/world_initial_state.yaml` calls the same rows *"the 16 territory ids"*, so
-    # the two canon files disagreed on the noun and the ruling settles it. §6 of that document lists
-    # the propagation as *"tracked, not yet executed … nothing below needs further Jordan input, it
-    # needs authoring"*, which is why the stale label survived to here.
+    # ALONG. `references/world_initial_state.yaml` (retired at plan position `29d-ii`; open it with
+    # `git show fd321c81:references/world_initial_state.yaml`, `:41`) calls the same rows *"the 16
+    # territory ids"*, so the two canon files disagreed on the noun and the ruling settles it. §6 of
+    # that document lists the propagation as *"tracked, not yet executed … nothing below needs
+    # further Jordan input, it needs authoring"*, which is why the stale label survived to here.
     #
     # ⚠⚠ **AND A PROVINCE IS NOT A CONTAINER AT ALL.** §2: *"Provinces are only formed if the same
     # faction holds the constituent territories … a province is an emergent aggregation that exists
@@ -450,8 +451,9 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         # so a `contain` edge into `r_valoria` would assert it is part of the realm. It is a root
         # rung instead, which keeps it out of `descendants(realm)` and therefore out of the
         # realm's `sovereign_fraction`, where counting it would be a canon error wearing a number.
-        # `references/world_initial_state.yaml` makes the same cut from the other side: it carries
-        # 16 territories and deliberately omits T16, Schoenland's.
+        # `references/world_initial_state.yaml` (retired at `29d-ii`; `git show
+        # fd321c81:references/world_initial_state.yaml`, `:44`) made the same cut from the other side:
+        # it carried 16 territories and deliberately omitted T16, Schoenland's.
         if holder == "Schoenland":
             continue
         # The Church holds one territory and is not a duchy; an unheld territory has no duchy
