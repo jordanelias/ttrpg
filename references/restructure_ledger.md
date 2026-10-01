@@ -2639,5 +2639,5 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 
 | Old path | New path | Status |
 |---|---|---|
-| `proposals/2026-09-26-decision-layer-execution-plan/PROPOSAL.md` | `FORK:f6d7af27` | FORKED (2026-10-01, absorbed into `workplans/valoria_master_workplan_v8.md`) |
-| `proposals/2026-09-27-mc-v18-retirement-plan/PROPOSAL.md` | `FORK:f6d7af27` | FORKED (2026-10-01, absorbed into `workplans/valoria_master_workplan_v8.md`) |
+| `proposals/2026-09-26-decision-layer-execution-plan/PROPOSAL.md` | `FORK:06712837` | FORKED (2026-10-01, absorbed into `workplans/valoria_master_workplan_v8.md`) |
+| `proposals/2026-09-27-mc-v18-retirement-plan/PROPOSAL.md` | `FORK:06712837` | FORKED (2026-10-01, absorbed into `workplans/valoria_master_workplan_v8.md`) |
