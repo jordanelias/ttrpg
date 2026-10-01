@@ -1071,6 +1071,11 @@ record is.
     but not folded into its own option (a). `release` is a seventh case, but a different one: it is
     zeroed BY the other verbs' crowding rather than introduced by this chain, and moves in and out
     of the always-refused set as later positions (`24f`, `20-ii`) uncrowd it again.
+    `confer`, `establish` and `revoke` are three more, cross-cited from `H-156` 2026-10-01 and not
+    folded into its own option (a) either: the corpus never attempts them, while the populated realm
+    attempts them 332 times in four seasons of `build_realm(0)` (`confer` alone, 213, outnumbers
+    `commit`'s 154) and refuses every one at its predicate's first clause, because no computed act's
+    payload names an `office` and none of the closed eight `requires_operands` is one.
     - *Why it is his:* two defensible designs (accept the cost / grade the verbs / widen the
       preconditions) lead to materially different play, and no design document rules between them.
     - *Blocks:* nothing directly; shapes how many future verbs repeat this pattern before it is
