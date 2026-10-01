@@ -376,14 +376,16 @@ def territory_rung_id(tid: str) -> str:
 
 
 def territory_id_of(rung_id: "str | None") -> "str | None":
-    """The inverse of `territory_rung_id`: `'terr_T9'` -> `'T9'`, and `None` for a rung id this
-    relation did not mint. Whether the answer is a real geography row is NOT asked here -- that is
+    """The inverse of `territory_rung_id`: `'terr_T9'` -> `'T9'`, and `None` for an id that does not
+    carry the prefix. It reads the SPELLING, so it cannot tell a minted id from a hand-spelled one
+    (`harness/scarce.py`'s `terr_march` is the case: `territory_id_of` answers `'march'`, a territory
+    no geography row backs). Whether the answer is a real geography row is NOT asked here -- that is
     `terrain_row_for_territory`'s own question, and it answers an unknown territory with its
-    no-modifier fallback rather than a refusal (`harness/scarce.py`'s `terr_march` is the case:
-    a territory rung no geography row backs)."""
-    if not rung_id or not str(rung_id).startswith(_TERRITORY_RUNG_PREFIX):
+    no-modifier fallback rather than a refusal."""
+    s = str(rung_id or "")
+    if not s.startswith(_TERRITORY_RUNG_PREFIX):
         return None
-    return str(rung_id)[len(_TERRITORY_RUNG_PREFIX):] or None
+    return s.removeprefix(_TERRITORY_RUNG_PREFIX) or None
 
 
 def require_member(value, roster, what: str, where: str, law: str, needs: str = "") -> None:

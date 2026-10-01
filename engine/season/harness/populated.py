@@ -814,7 +814,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         if lead_pid is None or lead_pid not in w.persons:
             unheld_for_want_of_a_head.append((territory_rung_id(tid), held_by))
             continue
-        w.add_tenure(Tenure(f"t_hold_terr_{tid}", lead_pid, territory_rung_id(tid), "hold", 0))
+        w.add_tenure(Tenure(f"t_hold_{territory_rung_id(tid)}", lead_pid, territory_rung_id(tid), "hold", 0))
     # Reported by `census`, never read by the loop — the same treatment `_tie_census` gets.
     w._unheld_for_want_of_a_head = unheld_for_want_of_a_head
 

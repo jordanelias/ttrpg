@@ -1,4 +1,4 @@
-"""Strategic-layer adapter: faction-scale Military Conquest -> the canon mass-battle engine.
+"""Season-facing adapter: `resolve_field` -> the canon mass-battle engine (it was the strategic-layer faction adapter).
 
 WHAT THIS FILE IS NOW, AND WHAT IT WAS. Until 2026-08-24 this module WAS the mass-battle engine —
 1,905 lines of resolution, geometry, morale and rout code that the campaign ran. Jordan ruled that
@@ -36,8 +36,8 @@ not to a simultaneous change in how armies are built.
 only caller (`faction_action._try_conquest`). What is left is the season-facing path: `resolve_field`,
 `_weighted_unit`, `_run_and_grade`. The paragraphs above and below that name the deleted three are the
 history of the 2026-08-24 port and the d.1 change, kept as written; the code is in git at `5c5d8ec6`.
- `_GarrisonStub`, `_round_half_up` and the `_STA_MORALE_*` bounds were left standing
-for `20-iv`, which decides what the season path's morale source is.]
+`_GarrisonStub` and the `_STA_MORALE_*` names are gone, and `_round_half_up` now serves the morale
+source built at `20-iv` (the next block).]
 
 [UPDATED 2026-10-01, plan position `20-iv`]: `resolve_field` now takes its morale-start from season state
 -- each side's mean stance toward its own faction, the carrier `_eff_march` writes a lost field's
@@ -46,6 +46,9 @@ and garrison (`terrain_row_for_territory`, with A.9's Walls DR applied in `_run_
 `_round_half_up` and the morale bounds (renamed `_MORALE_FLOOR`/`_MORALE_CEIL`, no longer Stability's)
 have that reader. `_GarrisonStub` had none once `resolve_mass_battle` went, and is deleted (ID-13); it is
 in git at `5c5d8ec6`.
+
+[SUPERSEDED 2026-10-01 by the `20-iv` block above: nothing reads `faction.Sta` any more, and
+`_morale_start_from_stability` and `_GarrisonStub` are deleted. The block below is history.]
 
 [UPDATED 2026-09-26, d.1 / ED-MB-0068]: morale is no longer part of the flat, carried-over default
 this header describes — it is now derived from `faction.Sta` (`_morale_start_from_stability`).

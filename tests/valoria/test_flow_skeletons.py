@@ -308,8 +308,9 @@ _CENSUS_SIDECARS = frozenset(
 # editing frozen documents to chase a line count.
 LINE_UNSTABLE_TARGETS = frozenset({'references/canonical_sources.yaml'})
 
-# Files the Key-substrate retirement gutted (ED-IN-0232, 2026-09-16). Their line numbers moved by
-# tens to hundreds of lines and EVERY archived anchor into them went out of range at once.
+# Files a retirement gutted (the Key substrate, ED-IN-0232, 2026-09-16; then plan positions `29b`'s
+# `massbattle.py` cuts). Their line numbers moved by tens to hundreds of lines and EVERY archived
+# anchor into them went out of range at once.
 #
 # ⚠ THESE DO NOT JOIN `LINE_UNSTABLE_TARGETS`, AND THE REASON IS A MEASUREMENT, NOT A PREFERENCE.
 # That set demands a symbol in place of the line, which worked for `canonical_sources.yaml` because
@@ -329,11 +330,6 @@ RETIREMENT_SHIFTED = frozenset({
     'engine/autoload/engine_clock.py',
     'engine/cross_scale/scene_dispatch.py',
     'engine/cross_scale/zoom_in_out.py',
-    # Plan position `28-iii` (2026-10-01) deleted `serialize_world` and `restore_world` (old lines
-    # 355-513), so archived anchors at :355 and :425 are out of range. Their two symbols join
-    # RETIRED_SYMBOLS below; every OTHER symbolled anchor into this file is still checked by symbol,
-    # which is the half that stays true. What is lost, stated: a bare line into this file is now advisory.
-    'engine/autoload/game_state.py',
     # Plan position `29b` (2026-10-01) deleted `resolve_mass_battle`, `_faction_to_unit` and
     # `_morale_start_from_stability` from this LIVE file (old lines 120-201, 236-256, 376-445), so every
     # archived line anchor below the first cut moved or went out of range. The three symbols join
@@ -392,12 +388,6 @@ RETIRED_SYMBOLS = frozenset({
     # `UNREACHABLE` was a marker word inside `_emit_public_governance_transfer`'s docstring, cited
     # by the factions skeleton. It went with the function.
     'UNREACHABLE',
-    # `engine/autoload/game_state.py`'s save/restore pair, deleted at plan position `28-iii`
-    # (2026-10-01). ⚠ UNLIKE THE ENTRIES ABOVE these two tokens still OCCUR in the tree, but only as
-    # prose about their own deletion (game_state.py's docstring, a comment in `canon_buckets.py` and two
-    # in `systems/settlements/sim/registry.py`) -- the `echo_scheduler` shape, and by that entry's own
-    # rule a symbol whose last occurrences are prose about its deletion is retired.
-    'serialize_world', 'restore_world',
     # `systems/mass_battle/sim/massbattle.py`'s strategic adapter, deleted at plan position `29b`
     # (2026-10-01) with `game_state.Faction`, the duck-typed input it read. Same shape as the pair above:
     # the three tokens survive only as prose about their own deletion (that file's header note and
@@ -490,7 +480,7 @@ def _anchor_failures(relpath):
             if leaf not in _read(target):
                 failures.append(
                     f"{where}: symbol {leaf!r} does not occur anywhere in {filepath}. The line is "
-                    f"advisory for a file the Key retirement re-numbered (ED-IN-0232); the symbol "
+                    f"advisory for a file a retirement re-numbered (ED-IN-0232, 29b); the symbol "
                     f"is not, and this one is absent.")
             continue
 
