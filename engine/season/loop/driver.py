@@ -59,6 +59,8 @@ from ..epistemic import CHANNEL_PREDICATES, act_refs, claim_subjects, observers_
 from ..queries import cache, world_q
 from ..queries.person_q import entrenchment
 from ..queries.person_q import LedgerReader
+from ..queries.person_q import stance_toward
+from ..data.verbs import align
 from ..queries.world_q import WorldReader
 from ..queries.world_q import occasioned_by
 from ..queries.world_q import questions_for
@@ -66,9 +68,9 @@ from ..loop.effects import EFFECTS, effect_for
 from ..loop.predicates import REQUIRES_PREDICATES, requires_predicate
 from .. import decision
 from ..decision import (
-    aggregate_questions, agreement, align, assemble, body_band_penalty, budget,
+    aggregate_questions, agreement, assemble, body_band_penalty, budget,
     containing_rung_of, make_chooser, opening_set, operands_for, pack_scenes,
-    person_side_eligible, stance_toward, standing_of, store_kind_of, urgency, view_ids,
+    person_side_eligible, standing_of, store_kind_of, urgency, view_ids,
 )
 from ..seam import (
     ContestError, Resolution, combat_degree, contest, contest_subsystem, degree_of,

@@ -9,7 +9,7 @@ budget.   NO World in scope."*
 
     questions.py   assemble · aggregate_questions · view_ids
     options.py     THE `opening_set` MEMBER -- opening_set and its operand machinery,
-                   person_side_eligible, agreement, standing_of, and `align` / `project`
+                   person_side_eligible, agreement, standing_of, and `project`
                    (which the `H-146` refusal gate calls; defined here so `options` never
                    imports `choose`)
 
@@ -18,7 +18,8 @@ budget.   NO World in scope."*
 person-first in signature and self-declares as a person Query at its own first statement. `budget`,
 `opening_set` and `assemble` stay: `04:133` names them here, so moving them would break conformance
 rather than restore it.
-    choose.py      make_chooser · stance_toward · urgency · pack_scenes (re-exports align, project)
+    choose.py      make_chooser · urgency · pack_scenes
+                   (`align` is `data.verbs.align`, `stance_toward` is `queries.person_q.stance_toward`)
     budget.py      budget · body_band_penalty
 
 ⚠ **`options.py`, NOT `opening_set.py`.** A module named for the function it exports makes
@@ -26,12 +27,13 @@ rather than restore it.
 surface below needs the MODULE by name. *Option set* is the tree's own phrase for what the function
 returns, so the name is idiomatic rather than coined (`CLAUDE.md` §4).
 
-⚠ **TWO NAMES ARE NOT RE-EXPORTED HERE, AND THAT IS THE WHOLE OF THE REBIND CONTRACT.** `ALIGNMENT`
-and `belief_contradicts` are read BY BARE NAME inside a body -- `align` reads the first,
-`opening_set` the second -- and a bare name resolves in its own module's globals. So a test or a
-sweep arm that wants to substitute one must name the module the reader lives in:
+⚠ **`belief_contradicts` IS NOT RE-EXPORTED HERE, AND `ALIGNMENT` IS NOT BOUND IN THIS PACKAGE AT
+ALL -- THAT IS THE WHOLE OF THE REBIND CONTRACT.** Each is read BY BARE NAME inside a body -- `align`
+(in `data/verbs.py`) reads the first, `opening_set` the second -- and a bare name resolves in its own
+module's globals. So a test or a sweep arm that wants to substitute one must name the module the
+reader lives in:
 
-    decision.options.ALIGNMENT             (align reads it -- choose's score and the H-146 gate)
+    data.verbs.ALIGNMENT                   (align reads it -- choose's score and the H-146 gate)
     decision.choose.pack_scenes            (make_chooser calls it)
     decision.options.belief_contradicts    (opening_set reads it)
 
@@ -91,9 +93,9 @@ unchanged and still governs: *owns nothing, returns `Scene[]`, may read `PersonI
 # `belief_contradicts` are deliberately ABSENT -- see the module docstring.
 # ---------------------------------------------------------------------------
 from .budget import body_band_penalty, budget
-from .choose import make_chooser, pack_scenes, stance_toward, urgency
+from .choose import make_chooser, pack_scenes, urgency
 from .options import (
-    agreement, align, containing_rung_of, operands_for, opening_set, project,
+    agreement, containing_rung_of, operands_for, opening_set, project,
     person_side_eligible, standing_of, store_kind_of,
 )
 from .questions import aggregate_questions, assemble, view_ids

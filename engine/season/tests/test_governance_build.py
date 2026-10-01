@@ -2282,7 +2282,7 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
 #
 # Falsifier (`proposals/2026-09-26-decision-layer-execution-plan/PROPOSAL.md` §3.2): a synthetic
 # projection/alignment injected through the rebinds the readers actually resolve --
-# `decision.options.ALIGNMENT` (the `H-66` sweep's own, `alignment_at`) and
+# `data.verbs.ALIGNMENT` (the `H-66` sweep's own, `alignment_at`) and
 # `data.verbs.PURSUIT_PROJECTION` (read bare by `data.pursuits.to_axes`) -- must stop the refused
 # Candidate forming and leave every survivor's score untouched.
 # =================================================================================================
@@ -2312,14 +2312,13 @@ def _h2_base(min_verbs=3):
 def _h2_inject(p, axis, weight, cells):
     """Rebind the projection and the alignment to synthetic tables; return a restore callable."""
     from ..data import verbs as _verbs
-    from ..decision import options as _options
-    saved = (_verbs.PURSUIT_PROJECTION, _options.ALIGNMENT, dict(p.pursuits))
+    saved = (_verbs.PURSUIT_PROJECTION, _verbs.ALIGNMENT, dict(p.pursuits))
     _verbs.PURSUIT_PROJECTION = {"h2_synthetic": {axis: weight}}
-    _options.ALIGNMENT = {axis: dict(cells)}
+    _verbs.ALIGNMENT = {axis: dict(cells)}
     p.pursuits = {"h2_synthetic": 1.0}
 
     def restore():
-        _verbs.PURSUIT_PROJECTION, _options.ALIGNMENT, p.pursuits = saved
+        _verbs.PURSUIT_PROJECTION, _verbs.ALIGNMENT, p.pursuits = saved
     return restore
 
 

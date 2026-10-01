@@ -39,12 +39,13 @@ from ..data.requires import (
 from ..data.rosters import (
     BODY_FACTION, BODY_FUNCTION, CLAIM_SOURCES, CLAIM_SUBJECT_RULES, COMBAT_BANDS, PURSUIT_AXES, PURSUITS, FACTIONS, FELLED, QUESTION_SOURCES, REMIT_ACTS, ROLE_TEMPLATE_OF, ROSTERS_YAML, RUNG_KINDS, SCENE_PACKING_RULES, STRATA, TENURE_KINDS, TITLE_DOMAINS, UNTOUCHED, VIEW_BUILDER_RULES, WITNESS_CHANNELS, WOUNDED, _ROSTERS, load_yaml, office_faction, roster, roster_map, title_domain,
 )
+from ..data import verbs as data_verbs
 from ..data.verbs import (
-    ALIGNMENT_SWEEP, PURSUIT_PROJECTION, NO_PRECONDITION, VERB_TABLE, VERB_TABLE_YAML, alignment_at, rows_without_a_producer, tenure_kinds_without_an_opener,
+    ALIGNMENT_SWEEP, PURSUIT_PROJECTION, NO_PRECONDITION, VERB_TABLE, VERB_TABLE_YAML, align, alignment_at, rows_without_a_producer, tenure_kinds_without_an_opener,
 )
 from .. import decision
 from ..decision import (
-    align, containing_rung_of, make_chooser, opening_set, operands_for, pack_scenes,
+    containing_rung_of, make_chooser, opening_set, operands_for, pack_scenes,
     person_side_eligible, store_kind_of, urgency, view_ids,
 )
 from ..epistemic import (
@@ -2944,7 +2945,12 @@ def test_decision_package_never_names_world_anywhere_under_it():
         "was flattened -- which is the ED-IN-0206 violation this scan exists to prevent -- or the "
         "discovery broke, and in both cases the checks below are vacuous.")
 
-    FORBIDDEN = ("state.world", "queries", "loop", "seam", "combat_seam", "shape")
+    # `queries.person_q` is ADMITTED (04 §C.3: `decision/` imports `person_q` and `data/`);
+    # `queries.world_q` and `queries.cache` are the World-first side and stay forbidden. The
+    # person_q side of the edge is `test_person_q_cannot_reach_the_world_side`, which forbids
+    # `decision` from `person_q`.
+    FORBIDDEN = ("state.world", "queries.world_q", "queries.cache", "loop", "seam", "combat_seam",
+                 "shape")
     PKG = "engine.season"
 
     def _absolute(path, node):
@@ -3231,10 +3237,9 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
     asks for in the unflattering direction too."""
     affected = ["P31", "P36", "P11", "P12"]
     table = {}
-    # `decision.options`, where `align` is DEFINED (moved from `choose` to close the
-    # `choose <-> options` import cycle); a rebind anywhere else is the fabricated null this
-    # test's `uniform` arm exists to catch.
-    saved = decision.options.ALIGNMENT
+    # `data.verbs`, where `align` and `ALIGNMENT` are both DEFINED (T2: the one binding); a rebind
+    # anywhere else is the fabricated null this test's `uniform` arm exists to catch.
+    saved = data_verbs.ALIGNMENT
 
     def fresh(pid):
         # ⚠ `run_probe` MEMOISES IN `_VERDICTS`, so calling it in a loop returns the FIRST run's
@@ -3246,10 +3251,10 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
 
     try:
         for point in ALIGNMENT_SWEEP:
-            decision.options.ALIGNMENT = alignment_at(point)
+            data_verbs.ALIGNMENT = alignment_at(point)
             table[point] = {pid: fresh(pid) for pid in affected}
     finally:
-        decision.options.ALIGNMENT = saved
+        data_verbs.ALIGNMENT = saved
         for pid in affected:
             fresh(pid)                           # restore the committed verdicts
 
@@ -3291,9 +3296,9 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
     p = w.persons["p_mid"]
     q = Question("q:sgn", "need", ("rec_writ",))
     v = View(p.id, [], w.fixtures.get("view_k"), q)
-    saved2 = decision.options.ALIGNMENT
+    saved2 = data_verbs.ALIGNMENT
     try:
-        decision.options.ALIGNMENT = alignment_at("sign_only")
+        data_verbs.ALIGNMENT = alignment_at("sign_only")
         ch = make_chooser(w.fixtures, lambda a, b, c: "x",
                          draw=draw_factory(w.world_seed, lambda: w.tick))
         # ⚠⚠ **`U3`: THE SCORE IS READ THROUGH THE PROJECTION, BECAUSE `Precedent` IS A CONVICTION
@@ -3328,9 +3333,112 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
                 "tiebreak. Check `pursuit_projection[Precedent]` before `alignment`: a "
                 "conviction that projects to the zero vector cannot score any verb.")
     finally:
-        decision.options.ALIGNMENT = saved2
+        data_verbs.ALIGNMENT = saved2
         for pid in affected:
             fresh(pid)
+
+
+def test_t2_one_rebind_moves_score_and_gate(monkeypatch):
+    """T2's falsifier (telling workplan). `ALIGNMENT` has ONE binding, `data.verbs.ALIGNMENT`, and
+    `align` -- `choose`'s score and the `H-146` gate's `refuses` both call it -- reads it there.
+    So ONE rebind of that name must move BOTH readers.
+
+    Two synthetic tables over the same two verbs with the cells swapped, on the axis the person
+    weighs at -0.4 (the refusing pole). Under A `v0` sits past the weight (+0.3: refused, score
+    -0.12) and `v1` does not (-0.6); under B it is the other way round (`v0` -0.6: tolerated, score
+    +0.24). The score is read through `_sample_order`, the one place `make_chooser` hands it on; the
+    gate through `opening_set`'s formed set. A second `ALIGNMENT` in `decision/options.py` would
+    leave `refuses` reading the stale copy, the gate half of this test would see A's verdict under
+    B, and it would fail -- the §0.1 pt 1 read/write asymmetry this move exists to remove."""
+    from ..decision import choose as _choose
+    from ..decision import options as _options
+
+    w = P.tiny_world()
+    p = w.persons["p_mid"]
+    q = Question("q:t2", "need", ("rec_writ",))
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
+    formed = sorted({c.verb for c in _options.opening_set(p, v, q, w.fixtures)})
+    assert len(formed) >= 2, f"only {formed} form here; the test needs two verbs"
+    v0, v1 = formed[0], formed[1]
+    axis = sorted(PURSUIT_AXES)[-1]
+    monkeypatch.setattr(data_verbs, "PURSUIT_PROJECTION", {"t2_synthetic": {axis: -0.4}})
+    monkeypatch.setattr(p, "pursuits", {"t2_synthetic": 1.0})
+    fx0 = w.fixtures.sweep("choice_temperature", 0)
+    fx_gate = fx0.sweep("refusal_axis", axis)
+
+    def scores():
+        seen = {}
+        inner = _choose._sample_order
+
+        def spy(ranked, score, person, fx_, draw):
+            seen.update({(c.verb, c.subject): score(c) for c in ranked})
+            return inner(ranked, score, person, fx_, draw)
+        monkeypatch.setattr(_choose, "_sample_order", spy)
+        try:
+            make_chooser(fx0, lambda a, b, c: f"{a}:{b}:{c}")(p, v, Sensation(0), lambda: 1)
+        finally:
+            monkeypatch.setattr(_choose, "_sample_order", inner)
+        return {k: s for k, s in seen.items() if k[0] == v0}
+
+    def reading(table):
+        monkeypatch.setattr(data_verbs, "ALIGNMENT", table)
+        gate = {c.verb for c in _options.opening_set(p, v, q, fx_gate)}
+        return scores(), gate
+
+    score_a, gate_a = reading({axis: {v0: 0.3, v1: -0.6}})
+    score_b, gate_b = reading({axis: {v0: -0.6, v1: 0.3}})
+
+    checked = 0
+    assert score_a and score_b, f"{v0!r} was never scored, so the score half observed nothing"
+    for k in score_a:
+        assert score_a[k] != score_b[k], (
+            f"rebinding `data.verbs.ALIGNMENT` did not move `choose`'s score for {k}: "
+            f"{score_a[k]} vs {score_b[k]}")
+        checked += 1
+    assert v0 not in gate_a and v0 in gate_b, (
+        f"rebinding `data.verbs.ALIGNMENT` did not move the H-146 gate: {v0!r} in A={v0 in gate_a}, "
+        f"in B={v0 in gate_b} -- `refuses` is reading a different binding than `choose`")
+    checked += 1
+    assert v1 in gate_a and v1 not in gate_b
+    checked += 1
+    assert checked >= 1
+
+
+def test_t2_align_kind_reads_the_one_emitter_and_a_deed_key_needs_an_emitted_kind(monkeypatch):
+    """`align_kind(kind, axis)` = an authored `deed:<kind>` cell, else `align` of the ONE verb that
+    emits the kind, else 0. Nothing calls it yet (the regard function's primitive); this is its
+    contract, on a throwaway table -- no `deed:` cell is authored in `rosters.yaml`."""
+    from ..data.verbs import DEED_PREFIX, EMITTED_KINDS, KIND_VERB, _load_alignment, align_kind
+
+    # The rule recomputed from the table independently of `_derive_kind_verb`.
+    emitters = {}
+    for verb, row in VERB_TABLE.items():
+        for kind in set(row.emits) | set(row.emits_on_refusal):
+            emitters.setdefault(kind, set()).add(verb)
+    assert set(EMITTED_KINDS) == set(emitters) and EMITTED_KINDS
+    assert KIND_VERB == {k: next(iter(vs)) for k, vs in emitters.items() if len(vs) == 1}
+    shared = sorted(k for k, vs in emitters.items() if len(vs) > 1)
+    assert not any(k in KIND_VERB for k in shared), "a kind several rows emit maps to a verb"
+
+    checked = 0
+    for kind, verb in sorted(KIND_VERB.items()):
+        for axis in PURSUIT_AXES:
+            assert align_kind(kind, axis) == align(verb, axis), (kind, verb, axis)
+            checked += bool(align(verb, axis))
+    assert checked >= 1, "no single-emitter kind has a non-zero cell, so equality proved nothing"
+    for kind in shared:
+        assert align_kind(kind, sorted(PURSUIT_AXES)[0]) == 0.0
+    assert align_kind("t2_no_such_kind", sorted(PURSUIT_AXES)[0]) == 0.0
+
+    kind, verb = next((k, vb) for k, vb in sorted(KIND_VERB.items())
+                      if any(align(vb, ax) for ax in sorted(PURSUIT_AXES)))
+    axis = next(ax for ax in sorted(PURSUIT_AXES) if align(verb, ax))
+    table = _load_alignment({axis: {verb: 1.0, DEED_PREFIX + kind: -2.5}})
+    monkeypatch.setattr(data_verbs, "ALIGNMENT", table)
+    assert align_kind(kind, axis) == -2.5 and align(verb, axis) == 1.0, (
+        "an authored `deed:` cell must override the emitting verb's cell for the kind only")
+    with pytest.raises(Forbidden):
+        _load_alignment({axis: {verb: 1.0, DEED_PREFIX + "t2_no_such_kind": 1.0}})
 
 
 def test_w5_a_tenure_added_before_its_subject_still_reaches_its_owner():

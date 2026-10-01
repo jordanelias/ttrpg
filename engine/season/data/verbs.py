@@ -17,26 +17,13 @@ hand-written `effect` lambda, and A LAMBDA PER ACT IS A SECOND RESOLVER."*
 module's docstring for the ordering constraint this creates and how it is satisfied structurally
 by THIS module's own import of `requires`, below, rather than by file position.
 
-⚠ CORRECTED, step 7 of the decomposition: this paragraph used to say `align()` ITSELF DOES NOT
-MOVE, present tense, true when written (step 3) and false now. `align()` moved to
-`season.decision` at step 7, together with the rest of `decision/`'s person-side surface, and
-THIS module is still the table it reads -- `decision.py` imports `ALIGNMENT`/
-`ALIGNMENT_DEFAULT_CELL` from here, the same names `shape.py` re-exports back from `decision.py`
-so `S.ALIGNMENT` keeps resolving. THE SWEEP STILL WORKS, BUT THE NAMESPACE THAT MAKES IT WORK
-MOVED WITH THE READER: `test_season_shape.py`'s
-`test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_printed` now rebinds
-`decision.ALIGNMENT` (not `S.ALIGNMENT`, which would be a no-op on it since step 7), and
-`align()` -- defined in `decision.py` now -- reads the global `ALIGNMENT` of the module it is
-DEFINED IN, which is `decision.py`'s own, populated by the `from .data.verbs import ALIGNMENT`
-in THAT file. The rule this paragraph exists to state is unchanged even though the address moved:
-the rebind and the read still share a namespace, because that namespace is wherever `align` is
-DEFINED, not wherever it happens to have been defined last (§4's "write the rule, not the
-address" — the exact correction `shape.py`'s own S23/S30 breadcrumb records making twice already).
-⚠ THE ORIGINAL SENTENCE ALSO NAMED THE WRONG TEST FILE (`test_tracer_is_honest.py`, under
-`proposals/2026-08-31-shape-tracer/`, which does not mention `ALIGNMENT` at all) -- a
-pre-existing inaccuracy this correction does not repeat, found while fixing the move claim rather
-than by a separate pass, and left as a `not this step's declared scope` note rather than chased
-further: nothing else in this docstring depended on it.
+⚠ `align()` AND `align_kind()` LIVE HERE, BESIDE THE TABLE THEY READ (telling workplan T2). `align`
+was in `shape.py`, then `decision.py`, then `decision/options.py`; each move carried the rebind
+address with it, and the last one left a reader in `options.py` and the table here. Now the
+`ALIGNMENT` binding and its only reader share this module, so the rebind that moves one moves
+the other: the `H-66` sweep and the `H-146` tests rebind `data.verbs.ALIGNMENT`, and nothing
+else binds the name. Every reader (`choose`'s score, `refuses`, `_scar`, `corpus_run`) calls
+`align`; none imports `ALIGNMENT` itself -- a copy imported by name would be a stale snapshot.
 
 ⚠ `VERB_TABLE` IS ASSIGNED TWICE, VERBATIM, AND ONLY THE SECOND ASSIGNMENT EVER RUNS. The
 forward declaration below (`VERB_TABLE: dict = {}`) carries a comment from a PRIOR layout of
@@ -915,22 +902,51 @@ PURSUIT_PROJECTION = _load_projection()
 PROJECTION_DEFAULT_CELL = float(table_meta("pursuit_projection").get("default_cell", 0.0))
 
 
-def _load_alignment() -> dict:
+def _derive_kind_verb() -> tuple:
+    """`(KIND_VERB, EMITTED_KINDS)`, derived from every row's `emits:` and `emits_on_refusal:`.
+
+    `EMITTED_KINDS` is every event kind some verb row can emit, success or refusal. `KIND_VERB`
+    maps a kind to its verb ONLY where exactly one row emits it: a kind several rows emit names no
+    single verb, so it maps to nothing rather than to whichever row happened to sort first. Both
+    are read off the table once at load -- no kind or verb is listed here."""
+    emitters: dict = {}
+    for verb, row in VERB_TABLE.items():
+        for kind in set(row.emits) | set(row.emits_on_refusal):
+            emitters.setdefault(kind, set()).add(verb)
+    kind_verb = {k: next(iter(vs)) for k, vs in emitters.items() if len(vs) == 1}
+    return kind_verb, frozenset(emitters)
+
+
+KIND_VERB, EMITTED_KINDS = _derive_kind_verb()
+
+# An authored alignment cell for an EVENT KIND rather than a verb is keyed `deed:<kind>` in the same
+# axis row. Admitted only where `<kind>` is in `EMITTED_KINDS` (`_load_alignment`): a deed key for a
+# kind no verb emits is a weight on an event nobody can see. None is authored today.
+DEED_PREFIX = "deed:"
+
+
+def _load_alignment(cells: Optional[dict] = None) -> dict:
     """§F2's `alignment(c.verb, axis)`, from `rosters.yaml`, with THREE load-time checks.
 
     Each check exists because the corresponding failure would be SILENT. A cell naming a verb the
     table no longer carries is dead weight nothing reports; an axis outside the roster makes
     `conviction[axis]` unreachable; and an all-zero matrix -- PLAN §W5's named guardrail -- "would
     pass every test while meaning nothing", which is the dead-carrier defect #353 `:739-744`
-    describes. All three raise HERE rather than producing a plausible score later."""
-    cells = table("alignment")
-    verbs = set(VERB_TABLE)
+    describes. All three raise HERE rather than producing a plausible score later.
+
+    A `deed:<kind>` key is admitted beside the verbs, for kinds in `EMITTED_KINDS` only (the same
+    first check, one column wider). `cells` defaults to the roster table; a caller may pass another
+    to exercise the loader without touching the shipped one."""
+    if cells is None:
+        cells = table("alignment")
+    admitted = set(VERB_TABLE) | {DEED_PREFIX + k for k in EMITTED_KINDS}
     return _check_sparse_table(
-        "alignment", cells, PURSUIT_AXES, "axis", verbs, "verb",
+        "alignment", cells, PURSUIT_AXES, "axis", admitted, "verb or `deed:<kind>`",
         row_law=("§F2 -- `conviction[axis] * alignment(verb, axis)` sums over the ROSTER. A cell on "
                  "an unrostered axis is never read and never reported"),
         col_law=("§E2 -- the verb table is the roster of verbs. A cell keyed on a verb that does "
-                 "not exist is a weight on an option nobody can ever form"))
+                 "not exist is a weight on an option nobody can ever form; a `deed:` key for a "
+                 "kind no verb emits is a weight on an event nobody can see"))
 
 ALIGNMENT = _load_alignment()
 
@@ -938,6 +954,33 @@ ALIGNMENT = _load_alignment()
 # built from the declared table rather than from the previous point (see `alignment_at`).
 ALIGNMENT_DECLARED = {ax: dict(row) for ax, row in ALIGNMENT.items()}
 ALIGNMENT_DEFAULT_CELL = float(table_meta("alignment").get("default_cell", 0.0))
+
+
+def align(verb: str, axis: str) -> float:
+    """§F2's `alignment(c.verb, axis)`. Sparse: an unlisted pair reads the table's own declared
+    `default_cell`, never a literal here.
+
+    ⚠ IT READS THIS MODULE'S `ALIGNMENT`, THE ONE BINDING. `alignment_at()`'s sweep rebinds
+    `data.verbs.ALIGNMENT`, and `choose`'s score, the `H-146` refusal gate and `_scar` all call
+    this function, so one rebind moves every reader. A second binding anywhere (a `from .verbs
+    import ALIGNMENT` in a reader module) would be a stale snapshot the rebind never reaches."""
+    return float(ALIGNMENT.get(axis, {}).get(verb, ALIGNMENT_DEFAULT_CELL))
+
+
+def align_kind(kind: str, axis: str) -> float:
+    """The alignment of an EVENT KIND on an axis: an authored `deed:<kind>` cell if one exists, else
+    the alignment of the one verb that emits the kind (`KIND_VERB`), else 0.
+
+    ⚠ NOTHING CALLS THIS YET. It is the regard function's primitive (the telling workplan's G1),
+    placed beside `align` so the verb-keyed and kind-keyed readers share one table and one rebind."""
+    cell = ALIGNMENT.get(axis, {}).get(DEED_PREFIX + kind)
+    if cell is not None:
+        return float(cell)
+    verb = KIND_VERB.get(kind)
+    if verb is None:
+        return 0.0
+    return align(verb, axis)
+
 
 def rows_without_a_producer() -> dict:
     """Every `social: true` row that no verb writes — §7.2's rule for W2, as a REPORT.

@@ -29,9 +29,10 @@ module makes that checkable, and **nothing checked it until this unit** --
 `test_person_q_cannot_reach_the_world_side` is the scan.
 
 `decision/` MAY import this module (`04 §C.3`: *"`decision/` imports `person_q` and `data/`"*), and
-today does not: `entrenchment` had no caller inside `decision/`. The AX-2 by-path scan therefore
-still forbids `queries` wholesale from `decision/`, which is narrower than §C.3 allows and is left
-that way deliberately -- a guard is widened when a unit needs it, not in advance.
+does: `choose` and `options` read `stance_toward` and `said_of` from here. The AX-2 by-path scan
+(`test_decision_package_never_names_world_anywhere_under_it`) forbids `queries.world_q` and
+`queries.cache` from `decision/` and admits `queries.person_q`; this module's own scan
+(`test_person_q_cannot_reach_the_world_side`) still forbids `decision`, so the edge runs one way.
 """
 
 from __future__ import annotations
@@ -45,6 +46,18 @@ from ..trace_log import TRACE
 def entrenchment(p: Person, seasons_held: int, scale: int, span: int) -> int:
     TRACE.query("entrenchment", "person")
     return min(scale, (seasons_held * scale) // span)
+
+
+def stance_toward(p: Person, referent: str) -> float:
+    """§F2's second term, from `p`'s OWN stance rows. #353 `:333`: `(referent, valence -5..+5,
+    weight 0..5)`. Valence times weight, summed over the rows naming this referent -- weight is
+    what `:333` supplies it for, and dropping it would make a 5-weight conviction and a 0-weight
+    one count alike."""
+    total = 0.0
+    for row in p.stance:
+        if len(row) >= 3 and row[0] == referent:
+            total += float(row[1]) * float(row[2])
+    return total
 
 
 # ---------------------------------------------------------------------------

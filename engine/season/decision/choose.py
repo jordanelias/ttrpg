@@ -1,28 +1,28 @@
 """`decision/` -- the `choose` member of `04_CODE_ARCHITECTURE.md` §A.2:133.
 
-`make_chooser` and everything it resolves by BARE NAME: `stance_toward`, `urgency`, and
-`pack_scenes` (with `_payload_of`). `align` and `project` are imported from `options.py` and
-re-exported here, so `from .choose import align, project` still resolves.
+`make_chooser` and everything it resolves by BARE NAME: `urgency` and `pack_scenes` (with
+`_payload_of`). `align` (from `data/verbs.py`), `stance_toward` (from `queries/person_q.py`) and
+`project` (from `options.py`) are imported here, so `from .choose import align, project` still
+resolves.
 
-⚠ **THE BARE-NAME CLUSTER IS WHY THESE ARE ONE FILE, AND IT IS NOT A STYLE CHOICE.** Three
-names in the old `decision.py` are read bare inside a body and rebound from OUTSIDE as module
-attributes -- `ALIGNMENT` (by `align`), `pack_scenes` (by `make_chooser`) and `belief_contradicts`
-(by `opening_set`). A bare name resolves in ITS OWN module's globals, so a rebind reaches it only
-if it targets the module the reader lives in: `PS.pack_scenes = spy` in the degree-sweep arms
-reaches `make_chooser` only because both live here, and a rebind aimed at the wrong namespace
-reports every branch identical -- a fabricated null, which `CLAUDE.md` §0.1 pt 4 calls the worse
-of the two directions. The rebind sites name `decision.choose` and `decision.options` directly for
-this reason; see `__init__.py`.
+⚠ **THE BARE-NAME CLUSTER IS WHY THESE ARE ONE FILE, AND IT IS NOT A STYLE CHOICE.** Two names
+in the old `decision.py` are read bare inside a body and rebound from OUTSIDE as module
+attributes -- `pack_scenes` (by `make_chooser`) and `belief_contradicts` (by `opening_set`). A
+bare name resolves in ITS OWN module's globals, so a rebind reaches it only if it targets the
+module the reader lives in: `PS.pack_scenes = spy` in the degree-sweep arms reaches
+`make_chooser` only because both live here, and a rebind aimed at the wrong namespace reports
+every branch identical -- a fabricated null, which `CLAUDE.md` §0.1 pt 4 calls the worse of the
+two directions. The rebind sites name `decision.choose` and `decision.options` directly for this
+reason; see `__init__.py`.
 
-⚠ **`align` (AND WITH IT THE `ALIGNMENT` REBIND) LIVES IN `options.py` NOW.** `opening_set`'s
-`H-146` refusal gate calls `align` and `project`, and reaching them here from `options.py` made
-`choose <-> options` an import cycle that executed at runtime. The same rule decides the new
-address: the rebind is `decision.options.ALIGNMENT`, because that is where the reader is defined.
-This module no longer binds `ALIGNMENT`, so a stale `decision.choose.ALIGNMENT` read fails loudly.
+⚠ **`ALIGNMENT` IS NOT BOUND HERE OR IN `options.py`: ITS ONE BINDING IS `data.verbs.ALIGNMENT`**,
+where `align` is defined (telling workplan T2). The `H-66` sweep rebinds it there and `choose`'s
+score and `options.refuses` both reach it through `align`. A stale `decision.choose.ALIGNMENT` or
+`decision.options.ALIGNMENT` read fails loudly rather than rebinding a copy nothing reads.
 
-⚠ **`ALIGNMENT` AND `belief_contradicts` ARE NOT RE-EXPORTED FROM `__init__.py`** -- step 8's
-`_LADDER` lesson: a rebound value re-exported is a stale snapshot, and a reader who rebinds the
-package attribute would silently miss the reader.
+⚠ **`belief_contradicts` IS NOT RE-EXPORTED FROM `__init__.py`** -- step 8's `_LADDER` lesson: a
+rebound value re-exported is a stale snapshot, and a reader who rebinds the package attribute
+would silently miss the reader.
 
 AX-2 binds every file under `decision/`: no `World`, as an import, a name, an attribute or a
 string. Enforced BY PATH over this directory (`04:1046`).
@@ -36,13 +36,16 @@ from ..data.rosters import PURSUIT_AXES, SCENE_PACKING_RULES, require_member
 # `PURSUIT_PROJECTION` / `PROJECTION_DEFAULT_CELL` were imported here until 2026-09-16 and
 # are not any more: the loop that read the 13x4 moved into `data/pursuits.to_axes`, its
 # single owner. Keeping the imports declared a dependency this module no longer has.
-from ..data.verbs import VERB_TABLE
+from ..data.verbs import VERB_TABLE, align
 from ..gaps import Unspecified
+# `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
+# imports `person_q` and `data/`); `make_chooser`'s score calls it.
+from ..queries.person_q import stance_toward
 from ..state.carriers import Act, Candidate, Person, Question, Scene, Sensation, View
-# `align` and `project` are DEFINED in `options.py` (see this module's docstring) and imported
-# here because `make_chooser`'s score calls both; `options` never imports this module.
+# `project` is DEFINED in `options.py` (see this module's docstring) and imported here because
+# `make_chooser`'s score calls it; `options` never imports this module.
 # `exercised_seat` is `options.py`'s own G3 helper (`via=exercised_seat(...)`, below).
-from .options import align, exercised_seat, opening_set, project
+from .options import exercised_seat, opening_set, project
 
 
 def beneficiary_of(p: Person, c: Candidate) -> Optional[str]:
@@ -105,18 +108,6 @@ def benefits_me(p: Person, c: Candidate) -> float:
     ⚠ IT IS A FLOAT AND NOT A BOOL BECAUSE IT IS A SCORE TERM. `beneficiary_of` carries the
     identity for anything that needs to know WHO; this answers only *is it me*."""
     return 1.0 if beneficiary_of(p, c) == p.id else 0.0
-
-
-def stance_toward(p: Person, referent: str) -> float:
-    """§F2's second term, from `p`'s OWN stance rows. #353 `:333`: `(referent, valence -5..+5,
-    weight 0..5)`. Valence times weight, summed over the rows naming this referent -- weight is
-    what `:333` supplies it for, and dropping it would make a 5-weight conviction and a 0-weight
-    one count alike."""
-    total = 0.0
-    for row in p.stance:
-        if len(row) >= 3 and row[0] == referent:
-            total += float(row[1]) * float(row[2])
-    return total
 
 
 def urgency(subsistence: int, fx: "Fixtures") -> float:

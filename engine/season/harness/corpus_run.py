@@ -51,8 +51,8 @@ from ..data.matrix import Step
 # `CONVICTIONS` dropped 2026-09-16: `seed_pursuits` moved to `run_cases.py`, which is its
 # single owner, and nothing here reads the roster any more.
 from ..data.rosters import PURSUIT_AXES, RUNG_KINDS, load_yaml
-from ..data.verbs import VERB_TABLE
-from ..decision import align, make_chooser
+from ..data.verbs import VERB_TABLE, align
+from ..decision import make_chooser
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, Unspecified
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries.world_q import RESIDE_KIND, questions_for

@@ -29,7 +29,9 @@ from ..data.requires import (
     SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS, WRIT_SOURCED_OPERANDS,
 )
 from ..data.rosters import PERSON_PREDICATES, PURSUIT_AXES, RECORD_CONTENT, require_member
-from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL, ELIGIBILITY_KINDS, VERB_TABLE
+# `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
+# `H-66` sweep rebinds, and `align` reads it there.
+from ..data.verbs import ELIGIBILITY_KINDS, VERB_TABLE, align
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
 from ..queries.person_q import said_of
@@ -188,35 +190,18 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     return out
 
 
-# ⚠ `align` AND `project` LIVE HERE, NOT IN `choose.py`, AND THE REASON IS AN IMPORT CYCLE THAT
-# EXECUTED. `ED-IN-0261`'s refusal gate (`H-146`) made `opening_set` call both, and they were
-# reached by `from .choose import ...` inside function bodies while `choose.py` imports this
-# module at top level: `choose <-> options`, a real runtime cycle that
+# ⚠ `project` LIVES HERE, NOT IN `choose.py`, AND THE REASON IS AN IMPORT CYCLE THAT EXECUTED.
+# `ED-IN-0261`'s refusal gate (`H-146`) made `opening_set` call it, and it was reached by
+# `from .choose import ...` inside a function body while `choose.py` imports this module at top
+# level: `choose <-> options`, a real runtime cycle that
 # `tests/valoria/test_import_cycle_game_state_npe.py` counted, because a deferred import hides a
-# cycle from an instrument without removing it. Both are defined ONCE, here, and `choose.py`
-# imports them back -- the edge now runs one way only.
+# cycle from an instrument without removing it. It is defined ONCE, here, and `choose.py` imports
+# it back -- the edge now runs one way only.
 #
-# ⚠⚠ THE `ALIGNMENT` REBIND TARGET MOVED WITH THE READER, and that is the bare-name rule
-# `choose.py`'s docstring states, not an exception to it. `align` reads `ALIGNMENT` bare, so the
-# rebind that reaches it is `decision.options.ALIGNMENT`. One rebind now reaches BOTH readers --
-# `choose`'s score and this gate -- which is the property the `H-66` sweep and the `H-146` tests
-# need. `choose.py` no longer binds the name at all, so a stale `decision.choose.ALIGNMENT` read
-# raises `AttributeError` rather than rebinding a copy nothing reads.
-#
-# ⚠ RECORDED, NOT ACTED ON: a `/simplify` altitude pass argues these belong one layer deeper --
-# `align` beside `ALIGNMENT` in `data/verbs.py` (which already narrates `align()` by name in its
-# own comments), `project` folded into `data/pursuits.to_axes`, its own docstring's stated single
-# owner. That would remove the `decision/` coupling at its root instead of relocating it to
-# whichever file the cycle happened to make reachable. Not done here: `align`/`project` are also
-# read from `loop/effects.py` and `harness/corpus_run.py`, so the move's real blast radius is
-# wider than this commit's, and a placement preference is not the same class of defect as the
-# cycle that forced this one. Worth doing as its own unit, not folded into H-146.
-
-
-def align(verb: str, axis: str) -> float:
-    """§F2's `alignment(c.verb, axis)`. Sparse: an unlisted pair reads the table's own declared
-    `default_cell`, never a literal here."""
-    return float(ALIGNMENT.get(axis, {}).get(verb, ALIGNMENT_DEFAULT_CELL))
+# `align` is NOT here any more: it moved to `data/verbs.py` beside `ALIGNMENT` (telling workplan T2),
+# so the `H-66` rebind is `data.verbs.ALIGNMENT` and reaches `choose`'s score and this module's
+# `refuses` gate through the one function. `project` is still recorded for the same move into
+# `data/pursuits.to_axes`, its own docstring's stated single owner; not done here.
 
 
 def project(p: Person) -> dict:
@@ -285,8 +270,8 @@ def refuses(verb: str, axis: str, tolerance: float) -> bool:
     cell, including the sparse default, is not one of the *"certain actions"* the ruling gates;
     `_scar` reads engagement the same way.
 
-    Reads THIS module's `align`, the one `choose`'s score reads too, so a rebind of
-    `decision.options.ALIGNMENT` moves the gate and the ranking together."""
+    Reads `data.verbs.align`, the one `choose`'s score reads too, so a rebind of
+    `data.verbs.ALIGNMENT` moves the gate and the ranking together."""
     a = align(verb, axis)
     return bool(a) and a > tolerance
 
