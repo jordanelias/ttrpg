@@ -825,7 +825,11 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
 
     ⚠ PERSON-SIDE AND WORLD-FREE, like `operands_for` -- `p` first for the AST guard's reason
     recorded there. WHETHER the person told is present is the fold's `hearer` conjunct; a known
-    person who is elsewhere still gets a Candidate, and the refusal is how the teller learns it."""
+    person who is elsewhere still gets a Candidate. THE TELLER DOES NOT LEARN IT FROM THE REFUSAL: the
+    `with` read is observed, never deposited (batch-2 close `F1`), and `news.untold` is one kind for
+    both conjuncts, so a refused telling to an absent hearer is retried whenever the teller
+    re-deliberates -- a scene tax with nothing behind it (cf. `give`, below). Recorded, with the
+    measurement owed, at the telling workplan's T4b *As built* line."""
     fan = row.requires_typed.known_person_operands() if row.requires_typed is not None else ()
     if not fan:
         ops = _operands(p, row, q, subject, fx, {})
@@ -999,8 +1003,9 @@ def record(p: Person, teller: str, fx: "Fixtures") -> float:
     claim is not a cell -- each sighting is a distinct `Seen` value, so a told sighting would
     "disagree" with the very sighting it reports -- and an event-kind claim (`news.told` ...) is
     always `True`, so any pair of them agrees for free. The firsthand claim paired against is the
-    one `LedgerReader` reads as the belief (`_pair`), so a told claim is never scored against a
-    belief the person has since replaced.
+    one `LedgerReader` reads as the belief AMONG FIRSTHAND CLAIMS (`_pair`). A claim stores no time of
+    observation, so a told claim that has itself since replaced that belief is still scored against
+    the older firsthand one (recorded at `H-182`).
 
     ⚠ ZERO PAIRS IS NEUTRAL, 1.0 -- DELIBERATELY NOT `standing_of`'s POLARITY. `standing_of` maps
     zero pairs to the MAXIMUM gap because there the thing measured is a flattering reading, and

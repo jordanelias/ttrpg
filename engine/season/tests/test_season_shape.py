@@ -8700,7 +8700,9 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     # is **20** and `told_cases` 16 (`checked` 28) -- `T4` took it from 26 to exactly 20, so a floor
     # of 20 would have gone red on the loss of ONE case, i.e. it had become a pin on the composition
     # of the lane, which the paragraph above refuses. The floor is re-set to **15**, five below the
-    # measurement, the same ~3/4 proportion the original 20-of-26 floor had.
+    # measurement, the same ~3/4 proportion the original 20-of-26 floor had. (20 was measured before the
+    # batch-2 `F1` fix, which moved the corpus; the figure was not re-taken after it -- the floor holds
+    # at the post-`F1` tree by the full-suite run that closed the batch, nothing finer.)
     # [JUSTIFIED: a COLLAPSE FLOOR over a lane count, not a game value -- SUPERSEDES the two lines above after `T4`: 20 of the 27 NPC rung cases produce a telling attempt (measured 2026-10-01, seed 0, 3 seasons) and this sits five below it, the same ~3/4 proportion the original floor had -- headroom for the sampled order to move the act mix, none for the transport failing]
     assert attempt_cases >= 15, (
         f"only {attempt_cases} of the 27 NPC rung cases produced a telling at all — 26 did on "
@@ -8728,7 +8730,7 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     # [GROUNDED: measured 2026-09-29 on this tree, 27 NPC rung cases at seed 0, 3 seasons -- 7 cases produce a `news.told`, 24 produce an attempt; 8 `news.told` Events against 47 `news.untold`, a 15% success rate, `pool_default`/`obstacle_default` unchanged]
     assert told_cases >= 4, (
         f"only {told_cases} of the 27 NPC rung cases produced a SUCCESSFUL telling — 7 did on "
-        "2026-09-29 under position `11a`, down from 15 pre-`11a`. The referent checks above run only "
+        "2026-09-29 under position `11a` (down from 15 pre-`11a`), 16 after `T4`. The referent checks above run only "
         "on `news.told`, so this is "
         "what keeps them from asserting nothing. A fall here is the σ roll getting harder, not "
         "the transport breaking: look at `H-126` (`pool_default`) and `H-127` (`obstacle_default`) "

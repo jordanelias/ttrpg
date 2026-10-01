@@ -731,6 +731,10 @@ WORLD_ONLY_STEMS = frozenset({"with"})
 # cell: `seen` (each sighting is a distinct `Seen` value, so two witnesses passing on the same
 # sighting would differ) and the event-kind predicates (`news.told` ... -- the value is always
 # `True`, so any pair would "agree"). Neither is in `REQUIRES_STEMS`.
+# ⚠ NOT COMPLETE AS "EVERY SLOT THAT HOLDS ONE VALUE": `content:<kind>` and `shortfall:<kind>` claims
+# are one value per `(subject, predicate)` too, and are outside `REQUIRES_STEMS`, so `record` never pairs
+# them. Nothing is told about them today; a lie about a document's content could not lower the liar's
+# record until G7 widens this (recorded at `H-182`).
 CELL_STEMS = REQUIRES_STEMS - WORLD_ONLY_STEMS
 
 

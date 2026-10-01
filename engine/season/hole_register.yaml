@@ -4015,9 +4015,12 @@ rows:
       and told claims with a teller are deposited; no design document gives the gain (the telling
       workplan is intent only); precedent is `H-155`'s injected, swept magnitude, and `H-176`..
       `H-178` for the shape. Registered live so the term has its control at 0. Agreeing pairs
-      form only when the hearer was told before they saw (`witness.py:639-641`), so `record` leans
+      form only when the hearer was told before they saw (the told-deposit guard in `witness.py`, `_held`/`_origin`), so `record` leans
       downward. A told claim about a cell that has since changed scores as disagreement, because no
-      claim stores when it was observed. Partial drift scores as disagreement, by design."
+      claim stores when it was observed. Partial drift scores as disagreement, by design.
+      `content:<kind>` and `shortfall:<kind>` claims are one-value cells outside `CELL_STEMS`, so they
+      never pair; G7 (deception) widens this or a lie about a document's content cannot lower the
+      liar's record."
     source:    "telling workplan `T6` (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282), 2026-10-01"
 
 
