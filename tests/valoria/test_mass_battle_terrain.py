@@ -11,9 +11,9 @@ Two things this file does NOT claim: (1) "dominant polygon by area weight" (ED-7
 this implementation point-tests each province's `anchor` against terrain polygons rather than
 computing true intersection area; disclosed in `terrain.py`'s own docstring, not re-litigated here.
 (2) full A.9 mechanical coverage — only FOREST_BROKEN's speed half ("Cavalry -> Standard") is wired
-into `resolve_mass_battle`; UPHILL/WALLS/NARROW_PASS/RIVER_CROSSING are identified by the lookup but
-not yet mechanically applied (see `massbattle.py:resolve_mass_battle`'s own docstring for why each
-one is deferred, not silently dropped).
+into `massbattle.py::_run_and_grade`; UPHILL/WALLS/NARROW_PASS/RIVER_CROSSING are identified by the lookup but
+not yet mechanically applied (see `_run_and_grade`'s own docstring for why each is deferred, not
+silently dropped).
 
 [CORRECTED, adversarial review 2026-09-27] `terrain_row_for_territory` no longer reads fortification
 from the geography YAML — it takes the live `fort_level` as a caller-supplied argument (see its own
@@ -161,98 +161,54 @@ def test_open_ground_resolves_unmodified(monkeypatch):
 
 
 # ─── the ONE mechanical effect wired so far: forest -> cavalry Standard speed ─
+# RE-POINTED at plan position `29b` (2026-10-01). These three tests drove `resolve_mass_battle` with
+# faction-shaped stubs and patched `_faction_to_unit`; both were deleted with `game_state.Faction` and
+# `systems/factions/`. The behaviour they pinned lives on in `_run_and_grade`, the function `resolve_field`
+# (the season's entry point) and the deleted adapter both called, so they now drive that directly with
+# units built by `_weighted_unit`.
 
-def test_resolve_mass_battle_accepts_every_row_without_crashing():
-    """resolve_mass_battle's `terrain` parameter went from always-None (a [GAP], silently discarded)
+def _units():
+    from systems.mass_battle.sim.massbattle import _weighted_unit
+    return _weighted_unit('side_a', 10), _weighted_unit('side_b', 10)
+
+
+def test_run_and_grade_accepts_every_row_without_crashing():
+    """`_run_and_grade`'s `terrain` parameter went from always-None (a [GAP], silently discarded)
     to a real value -- every row this lookup can produce must be a safe, non-crashing input, even the
     ones with no mechanical effect wired yet."""
-    from systems.mass_battle.sim.massbattle import resolve_mass_battle
-
-    class _F:
-        def __init__(self, name, Mil=4, Sta=4.0):
-            self.name, self.Mil, self.Sta = name, Mil, Sta
-
-    class _World:
-        rng = None
+    from systems.mass_battle.sim.massbattle import _run_and_grade
 
     for row in (NARROW_PASS, UPHILL, FOREST_BROKEN, WALLS, OPEN_FLAT, 'river_crossing', None):
-        r = resolve_mass_battle(_F('A'), _F('B'), row, _World())
+        a, b = _units()
+        r = _run_and_grade(a, b, row, None)
         assert 'attacker_wins' in r
 
 
 def test_forest_broken_forces_a_fast_side_to_standard_speed():
     """A.9: 'Forest / broken: Cavalry -> Standard' -- the one branch this pass wires inside
-    `resolve_mass_battle`. [CORRECTED, adversarial review 2026-09-27] This proves the FIELD WRITE
+    `_run_and_grade`. [CORRECTED, adversarial review 2026-09-27] This proves the FIELD WRITE
     happens through the real function, not just in isolation -- it does NOT prove the write has any
     downstream effect. It does not: `run_battle` (what this function actually calls) never reads
-    `.speed` at all, so this branch is inert on its own terms, independent of `_faction_to_unit` never
-    producing a Fast unit. See `resolve_mass_battle`'s own docstring for the full disclosure."""
-    from systems.mass_battle.sim.massbattle import resolve_mass_battle, _faction_to_unit
-    import systems.mass_battle.sim.massbattle as MB
+    `.speed` at all, so this branch is inert on its own terms. See `_run_and_grade`'s own docstring."""
+    from systems.mass_battle.sim.massbattle import _run_and_grade
 
-    class _F:
-        def __init__(self, name, Mil=4, Sta=4.0):
-            self.name, self.Mil, self.Sta = name, Mil, Sta
-
-    class _World:
-        rng = None
-
-    # Confirm the pre-condition this test depends on: _faction_to_unit's own armies are never
-    # Fast by construction (the mechanism is otherwise vacuous, as resolve_mass_battle's own
-    # docstring discloses) -- so patch a Fast side in after construction to actually exercise it.
-    baseline = _faction_to_unit(_F('A'))
-    assert baseline.speed != 'Fast', \
-        "if this ever changes, the FOREST_BROKEN branch stops being vacuous at the campaign seam " \
-        "and this test's own patching below becomes unnecessary -- not a failure, but worth noticing"
-
-    captured = {}
-    orig = MB._faction_to_unit
-
-    def _patched(faction):
-        u = orig(faction)
-        if faction.name == 'Cav':
-            u.speed = 'Fast'
-        captured[faction.name] = u
-        return u
-
-    import systems.mass_battle.sim.massbattle
-    old = systems.mass_battle.sim.massbattle._faction_to_unit
-    systems.mass_battle.sim.massbattle._faction_to_unit = _patched
-    try:
-        resolve_mass_battle(_F('Cav'), _F('Foot'), FOREST_BROKEN, _World())
-        assert captured['Cav'].speed == 'Standard', \
-            "a Fast side must be forced to Standard when terrain is forest_broken"
-    finally:
-        systems.mass_battle.sim.massbattle._faction_to_unit = old
+    a, b = _units()
+    # The pre-condition this test depends on: `_weighted_unit`'s armies are never Fast by
+    # construction, so a Fast side is patched in after construction to actually exercise the branch.
+    assert a.speed != 'Fast', \
+        "if this ever changes, the FOREST_BROKEN branch stops being vacuous on the season path " \
+        "and the patching below becomes unnecessary -- not a failure, but worth noticing"
+    a.speed = 'Fast'
+    _run_and_grade(a, b, FOREST_BROKEN, None)
+    assert a.speed == 'Standard', "a Fast side must be forced to Standard when terrain is forest_broken"
 
 
 def test_open_flat_does_not_touch_speed():
     """Control: the same Fast side, OPEN_FLAT terrain, must stay Fast (no modifier is A.9's own
     definition of the open-flat row)."""
-    from systems.mass_battle.sim.massbattle import resolve_mass_battle
-    import systems.mass_battle.sim.massbattle as MB
+    from systems.mass_battle.sim.massbattle import _run_and_grade
 
-    class _F:
-        def __init__(self, name, Mil=4, Sta=4.0):
-            self.name, self.Mil, self.Sta = name, Mil, Sta
-
-    class _World:
-        rng = None
-
-    captured = {}
-    orig = MB._faction_to_unit
-
-    def _patched(faction):
-        u = orig(faction)
-        if faction.name == 'Cav':
-            u.speed = 'Fast'
-        captured[faction.name] = u
-        return u
-
-    old = MB._faction_to_unit
-    MB._faction_to_unit = _patched
-    try:
-        resolve_mass_battle(_F('Cav'), _F('Foot'), OPEN_FLAT, _World())
-        assert captured['Cav'].speed == 'Fast', "OPEN_FLAT must not touch speed (control)"
-    finally:
-        MB._faction_to_unit = old
+    a, b = _units()
+    a.speed = 'Fast'
+    _run_and_grade(a, b, OPEN_FLAT, None)
+    assert a.speed == 'Fast', "OPEN_FLAT must not touch speed (control)"

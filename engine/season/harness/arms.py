@@ -31,7 +31,7 @@ for a question outside its own subsystem's wiring.
 ⚠ A SECOND, STRUCTURAL REASON IT DOES NOT COME ALONG. `_contest_ladder_arm`'s patch imports
 `systems.social_contest.sim.contest.degree_extension`/`resolver` — a `systems.*` import. Carrying
 that function into a file under `engine/` (even as inert, retired, "importable but not wired in"
-code, as the other three retired pairs are kept below) would add a NEW nested `engine -> systems`
+code, as the other retired pair is kept below) would add a NEW nested `engine -> systems`
 import that `tests/valoria/test_engine_does_not_import_systems.py`'s `NESTED_BASELINE = 0` ratchet
 does not permit without a deliberate, separately-justified bump to that ceiling — outside this
 position's declared file scope. Both findings point the same way, so the mechanic is retired in
@@ -196,10 +196,15 @@ def two_proportion_z(a_count: int, a_n: int, b_count: int, b_n: int) -> float:
 
 
 # ---------------------------------------------------------------------------------------------
-# RETIRED ARMS — historical record only, same status as `tools/balance_oracle.py` gave them:
+# RETIRED ARM — historical record only, same status as `tools/balance_oracle.py` gave it:
 # "kept as historical records, importable/constructible but not wired into ARMS." Ported
-# VERBATIM (unchanged logic) because none imports `systems.*` and each still constructs and
-# undoes cleanly against the live tree (verified 2026-09-29). `_contest_ladder_arm` does NOT
+# VERBATIM (unchanged logic) because it imports no `systems.*` and still constructs and
+# undoes cleanly against the live tree (verified 2026-09-29). THE OTHER TWO PAIRS THAT WERE PORTED WITH
+# IT, `_ARMS_BOUNDS` (`_pre_ruling_bounds_arm`) AND `_ARMS_FLOOR` (`_floor_arm`), WERE DELETED AT PLAN
+# POSITION `29b` (2026-10-01): they patched `descriptors.faction_bounds` and `game_state.Faction.adjust`,
+# both deleted with the faction layer, and their own note said they ran against `engine.mc_v18`'s Faction
+# model, deleted at `28-iii`. Their source is at the `FORK:` ref in `references/restructure_ledger.md`.
+# `_contest_ladder_arm` does NOT
 # appear here — see the module docstring for why it is retired to the `FORK:` ref instead of
 # carried forward inert.
 # ---------------------------------------------------------------------------------------------
@@ -215,74 +220,6 @@ def _pool_arm(round_pool: bool):
     SL.roll_net_continuous = patched
     return lambda: setattr(SL, 'roll_net_continuous', original)
 
-
-def _pre_ruling_bounds_arm(pre: bool):
-    """Patch `faction_bounds` back to its PRE-2026-08-23 answers, or leave the ruled ones. Undo.
-
-    Two Jordan rulings landed that day and both change this clamp, so the arms compare the pair
-    rather than one at a time — separating them would need a third arm and would compare against a
-    state that never shipped:
-      * "Influence can be 0"  — Influence floored at 1 before (ED-IN-0029/OPT-AV-14).
-      * "Legitimacy is a base" — `L` was undeclared before, so it fell back to 0.5/7.0.
-
-    It patches the BOUNDS LOOKUP rather than the registry data, so both arms read one cooked
-    artifact and the only difference is the answer `adjust` gets.
-    """
-    from engine.autoload import game_state as gs
-    from engine.substrate import descriptors as d
-
-    original = d.faction_bounds
-    # [JUSTIFIED: verbatim historical record of the PRE-2026-08-23 Influence bound (ED-IN-0029/OPT-AV-14), ported unchanged from `tools/balance_oracle.py` — not a new value]
-    _PRE = {'I': (1, 7), 'L': None}
-
-    def patched(field):
-        if field in _PRE:
-            return _PRE[field]
-        return original(field)
-
-    if pre:
-        d.faction_bounds = patched
-        gs.descriptors.faction_bounds = patched
-    return lambda: (setattr(d, 'faction_bounds', original),
-                    setattr(gs.descriptors, 'faction_bounds', original))
-
-
-def _floor_arm(blanket: bool):
-    """Patch `Faction.adjust` to the pre-S5d blanket 0.5/7.0 bounds, or leave the registry-declared
-    per-stat bounds in place (ED-IN-0029). Returns undo.
-
-    The `blanket` arm reproduces the OLD behaviour by forcing the fallback bounds for every stat,
-    which is exactly what the method did before `descriptors.faction_bounds()` was wired. It patches
-    the METHOD rather than the descriptor data so both arms read the same registry — the point of
-    running them in one process is that the mechanic is the only difference.
-    """
-    from engine.autoload import game_state as gs
-
-    original = gs.Faction.adjust
-
-    def patched(self, stat, granular_delta, floor=None, ceiling=None):
-        return original(self, stat, granular_delta,
-                        floor=gs.Faction.UNDECLARED_FLOOR if floor is None else floor,
-                        ceiling=gs.Faction.UNDECLARED_CEILING if ceiling is None else ceiling)
-
-    if blanket:
-        gs.Faction.adjust = patched
-    return lambda: setattr(gs.Faction, 'adjust', original)
-
-
-#: Retired comparison (ED-IN-0029 / the 2026-08-23 Influence + Legitimacy rulings). Restore into
-#: ARMS to re-run it (against `engine.mc_v18`'s Faction model, at whatever ref still runs it).
-_ARMS_BOUNDS = {
-    'pre_ruling': lambda: _pre_ruling_bounds_arm(True),
-    'ruled':      lambda: _pre_ruling_bounds_arm(False),
-}
-
-#: Retired comparison from plan S5d, kept as the record of what `adjust` did before the registry
-#: owned its bounds.
-_ARMS_FLOOR = {
-    'blanket_0.5': lambda: _floor_arm(True),
-    'per_stat':    lambda: _floor_arm(False),
-}
 
 #: Retired comparison, kept because `_pool_arm` is the record of what `roll_net_continuous` did
 #: before M1 juncture 1 half A.

@@ -180,7 +180,7 @@ def test_the_two_counts_cannot_be_gamed_against_each_other():
     makes them a ratchet rather than a scoreboard — that the SAME line, at column 0 and indented,
     is seen by exactly one pattern each, so a move between them is visible as a change in both.
     """
-    line = 'from systems.factions.sim import treaty\n'
+    line = 'from systems.mass_battle.sim import massbattle\n'
     assert TOP_LEVEL_SYSTEMS_IMPORT.search(line)
     assert not NESTED_SYSTEMS_IMPORT.search(line)
     assert not TOP_LEVEL_SYSTEMS_IMPORT.search('    ' + line)
@@ -190,10 +190,10 @@ def test_the_two_counts_cannot_be_gamed_against_each_other():
 def test_this_check_can_observe_its_own_failure(tmp_path):
     """An assertion that cannot observe the failure it excludes is an absent assertion (§0.1 pt 2)."""
     probe = tmp_path / 'probe.py'
-    probe.write_text('from systems.factions.sim import treaty\n')
+    probe.write_text('from systems.mass_battle.sim import massbattle\n')
     assert TOP_LEVEL_SYSTEMS_IMPORT.search(probe.read_text())
     nested = tmp_path / 'nested.py'
-    nested.write_text('def f():\n    from systems.factions.sim import treaty\n')
+    nested.write_text('def f():\n    from systems.mass_battle.sim import massbattle\n')
     assert not TOP_LEVEL_SYSTEMS_IMPORT.search(nested.read_text()), \
         'the pattern must not fire on a function-local import — that is a different problem'
 
@@ -506,7 +506,7 @@ def test_the_import_probe_can_observe_both_kinds_of_leak():
       2. the `sys.path` + BARE NAME shape `combat_bridge` uses, where the loaded module is called
          `wrapper`, not `systems.combat.…`. The old name-prefix probe reported this one as clean.
     """
-    dotted = _modules_loaded_from_systems('import systems.factions.sim.faction_action\n')
+    dotted = _modules_loaded_from_systems('import systems.mass_battle.sim.massbattle\n')
     assert dotted, 'the probe reports NOTHING for a plain dotted import — it is broken'
 
     bare = _modules_loaded_from_systems(
@@ -535,53 +535,10 @@ def test_the_composition_resolver_refuses_an_undeclared_role():
     assert 'do not' in str(exc.value).lower(), 'the error must tell the reader not to work around it'
 
 
-def test_every_role_game_state_requires_is_declared():
-    """The check the INTERPRETER used to do for free, restored after the indirection removed it.
-
-    Before S5a, `engine/autoload/game_state.py`'s eleven seams were function-local imports. A typo
-    in one was a hard `ImportError` the moment that branch ran, and a moved class was caught at
-    import. Routing one through `composition.require('world_gen_settlements')` turns both into a
-    STRING, and a mistyped string is a `KeyError` raised only when that branch executes.
-
-    Ten of the eleven were the `snapshot_state.*` deserializers `restore_world` called; they retired
-    with `restore_world` at plan position `28-iii`, leaving `create_world`'s one. The count below is
-    that one — updated deliberately, as its own message asks.
-
-    This is not a new rung: it re-asserts, mechanically, the property the static imports asserted.
-    Subject is `engine/`'s world-creation path — load-bearing on the game (§0.1 pt 5), not on this
-    repo's process.
-    """
-    from engine.substrate import composition
-
-    gs = (REPO / 'engine' / 'autoload' / 'game_state.py').read_text(encoding='utf-8')
-    required = set(re.findall(r"composition\.require\(\s*['\"]([^'\"]+)['\"]\s*\)", gs))
-    assert len(required) == 1, (
-        f'game_state.py requires {len(required)} distinct roles, expected 1 — `world_gen_settlements`, '
-        f'the one seam left of the eleven S5a moved. If a seam was legitimately added or removed, '
-        f'update this count deliberately.'
-    )
-    undeclared = sorted(required - set(composition.ROLES))
-    assert not undeclared, (
-        'game_state.py requires composition role(s) that references/module_contracts.yaml does '
-        'not declare: ' + ', '.join(undeclared) + '. This raises KeyError at runtime, in the '
-        'branch that needs it. Declare the row and re-run tools/export_composition.py.'
-    )
-
-
-def test_no_game_state_role_is_declared_and_unused():
-    """A declared row nobody requires is the ED-IN-0149 defect — an abstraction with no caller.
-    Pairs with the one above so the registry and the engine cannot drift apart in either
-    direction: an undeclared requirement fails there, an unrequired declaration fails here."""
-    from engine.substrate import composition
-
-    gs = (REPO / 'engine' / 'autoload' / 'game_state.py').read_text(encoding='utf-8')
-    required = set(re.findall(r"composition\.require\(\s*['\"]([^'\"]+)['\"]\s*\)", gs))
-    declared = {r for r in composition.ROLES if r == 'world_gen_settlements'}
-    orphans = sorted(declared - required)
-    assert not orphans, (
-        'composition role(s) declared for game_state.py that it never requires: '
-        + ', '.join(orphans) + '. Delete the row, or wire it.'
-    )
+# `test_every_role_game_state_requires_is_declared` and `test_no_game_state_role_is_declared_and_unused` were
+# retired at plan position `29b` (2026-10-01); their source is in git at `57362093`. Both read `engine/autoload/game_state.py`
+# for its `composition.require(...)` calls, and that file and its one role (`world_gen_settlements`) are gone.
+# `test_every_declared_composition_role_resolves` below still proves every remaining row resolves.
 
 
 def test_a_value_role_still_fails_on_an_attribute_that_does_not_exist():
@@ -652,11 +609,11 @@ R04_PENDING_SUBSYSTEMS = {
     'settlements', 'threadwork', 'ui', 'victory', 'world',
 }
 
-# Roles deleted at plan position `28-iii` (SPINE-DELETE) are dropped from this set in the same
-# commit, so the ceiling is as tight as the registry: re-adding one would now FAIL, where a stale
-# entry here would have let it back in unremarked.
+# Roles deleted at plan position `28-iii` (SPINE-DELETE) and `29b` (`world_gen_settlements`) are dropped
+# from this set in the same commit, so the ceiling is as tight as the registry: re-adding one would now
+# FAIL, where a stale entry here would have let it back in unremarked.
 R04_PENDING_ROLES = {
-    'world_gen_settlements', 'scene_resolver.fieldwork', 'scene_resolver.investigation',
+    'scene_resolver.fieldwork', 'scene_resolver.investigation',
 }
 
 

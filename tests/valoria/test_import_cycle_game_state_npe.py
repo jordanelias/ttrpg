@@ -1,4 +1,8 @@
 """
+NOTE (plan position `29b`, 2026-10-01): `engine/autoload/game_state.py` is deleted, and with it the
+`game_state <-> npe` cycle this file was named for; that test (`test_game_state_npe_cycle_is_gone`) is
+retired (its source is in git at `57362093`). What remains is the cycle CENSUS below, which still reads the whole tree.
+
 OI-52a cycle-gone regression (ED-IN-0097,
 audit/2026-07-29-code-shape-open-items/01_orchestration_plan_v1.md §3 Wave 4 item 2).
 
@@ -42,15 +46,6 @@ def _real_cycles():
     assert not parse_errors, f"structure_audit failed to parse: {parse_errors}"
     scc = sa.tarjan_scc(g_code)
     return sa._cycles(scc, g_code)
-
-
-def test_game_state_npe_cycle_is_gone():
-    cycles = _real_cycles()
-    for cyc in cycles:
-        members = set(cyc)
-        assert not ({'engine.autoload.game_state', 'systems.world.sim.npe'} <= members), (
-            f"game_state <-> npe cycle still present: {cyc}"
-        )
 
 
 def test_exactly_three_cycles_remain_and_they_are_the_expected_families():

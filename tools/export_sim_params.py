@@ -37,7 +37,7 @@ OUT = ROOT / "engine" / "engine_params" / "sim_params.json"
 
 # The sim reference surfaces (the computational truth). Combat keeps its own dedicated export.
 SCAN_DIRS = [
-    "systems/factions/sim", "systems/social_contest/sim", "systems/mass_battle/sim",
+    "systems/social_contest/sim", "systems/mass_battle/sim",
     "systems/threadwork/sim", "systems/world/sim", "systems/settlements/sim",
     "systems/fieldwork/sim", "systems/combat/sim", "systems/characters/sim", "systems/overview/sim", "engine",
 ]

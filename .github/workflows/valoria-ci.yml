@@ -143,8 +143,9 @@ jobs:
           # at export time, so a broken row reds CI instead of failing a run hours later.
           v python3 tools/export_composition.py --check
           # references/world_initial_state.yaml -> the campaign's opening position, read at import
-          # by engine/substrate/world_initial_state.py. Blocking: game_state.py no longer carries
-          # these tables, so a stale artifact is a world with the wrong owners.
+          # by engine/substrate/world_initial_state.py. Blocking: the leaf is the only owner of
+          # these tables (game_state.py, which re-exported them, was deleted at plan position
+          # `29b`), so a stale artifact is a world with the wrong owners.
           v python3 tools/export_world_initial_state.py --check
           # engine/season/cases/NPC*.yaml -> engine/season/npcs.yaml, the authored cast
           # harness/populated.py reads. Blocking, and WIRED 2026-09-16: --check existed and was
@@ -395,10 +396,10 @@ jobs:
       # RE-SCOPED 2026-10-01 (plan position `28-iii`): the five campaign-scale files this job was
       # built around -- the `mc_v18` goldens, the cross-scale reach and population probes, the
       # combat-bridge seam -- were deleted with the driver. What remains in `engine/tests` is the
-      # sigma-leverage parity golden, the contest kernel, the knots and thread-mending ED probes,
-      # `parliamentary_action` and the accounting accord-drift probe; four leave with their trees
-      # (`2-ii`, `29a`, `29b`, `29f`), the thread-mending probe stays (`27`), and the sigma-leverage
-      # parity moves out when this job folds.
+      # sigma-leverage parity golden, the contest kernel, and the knots and thread-mending ED probes.
+      # `parliamentary_action` left with its tree at `29b` and the accounting accord-drift probe at
+      # `29a`; two more leave with theirs (`2-ii`, `29f`), the thread-mending probe stays (`27`), and
+      # the sigma-leverage parity moves out when this job folds.
       # SERIAL still: `-n auto` would need pytest-xdist in the install step above, for a job that
       # no longer needs the speed.
       - run: python -m pytest engine/tests -q

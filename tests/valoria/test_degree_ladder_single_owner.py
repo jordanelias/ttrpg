@@ -108,13 +108,6 @@ def _threadwork_operations():
     return lambda net, ob: band(m._compute_degree(net, ob))
 
 
-def _faction_action():
-    # Ob is pre-subtracted at this module's call sites, so the same subtraction is applied to
-    # bring it onto the shared (net, ob) domain.
-    m = importlib.import_module('systems.factions.sim.faction_action')
-    return lambda net, ob: band(m._degree(net - ob))
-
-
 def _massbattle_canon():
     """The mass-battle ladder. THERE IS NOW ONE OF THEM, WHICH IS THE POINT.
 
@@ -156,7 +149,6 @@ def _dice_model_skill():
 LADDERS = {
     'engine/autoload/dice_engine.py (OWNER)': _owner,
     'systems/threadwork/sim/operations.py': _threadwork_operations,
-    'systems/factions/sim/faction_action.py': _faction_action,
     'systems/mass_battle/sim/resolution.py': _massbattle_canon,
     'skills/valoria-dice-model/valoria_dice.py': _dice_model_skill,
     # MIGRATED 2026-08-27 (ED-SC-0031) out of HELD. The ninth ladder — the one the 2026-08-12
@@ -412,8 +404,10 @@ DECLARED_ADAPTERS = {
     'engine/cross_scale/scene_dispatch.py': (
         'Assigns an echo band from a dispatch outcome, never from net vs ob.'),
     'systems/mass_battle/sim/massbattle.py': (
-        'resolve_mass_battle maps ROUT STATE and surviving-size fractions to a band for '
-        'faction_action. Its one real net/ob ladder, compute_degree, IS routed through the owner.'),
+        '`_run_and_grade` maps ROUT STATE and surviving-size fractions to a band for '
+        '`resolve_field`. (`resolve_mass_battle`, its strategic twin, and the `faction_action` ladder '
+        'that `LADDERS` once enrolled were deleted at plan position `29b`.) Its one real net/ob ladder, '
+        'compute_degree, IS routed through the owner.'),
     'systems/combat/sim/combat.py': (
         'Fixed bands on non-roll actions (Full Guard is always Success). Its _degree IS routed.'),
 

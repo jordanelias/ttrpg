@@ -334,6 +334,12 @@ RETIREMENT_SHIFTED = frozenset({
     # RETIRED_SYMBOLS below; every OTHER symbolled anchor into this file is still checked by symbol,
     # which is the half that stays true. What is lost, stated: a bare line into this file is now advisory.
     'engine/autoload/game_state.py',
+    # Plan position `29b` (2026-10-01) deleted `resolve_mass_battle`, `_faction_to_unit` and
+    # `_morale_start_from_stability` from this LIVE file (old lines 120-201, 236-256, 376-445), so every
+    # archived line anchor below the first cut moved or went out of range. The three symbols join
+    # RETIRED_SYMBOLS below; every OTHER symbolled anchor into the file is still checked by symbol.
+    # What is lost, stated: a bare line into `massbattle.py` is now advisory.
+    'systems/mass_battle/sim/massbattle.py',
     'engine/substrate/__init__.py',
     'systems/factions/sim/faction_action.py',
     'systems/factions/sim/parliamentary_transfer.py',
@@ -392,6 +398,11 @@ RETIRED_SYMBOLS = frozenset({
     # in `systems/settlements/sim/registry.py`) -- the `echo_scheduler` shape, and by that entry's own
     # rule a symbol whose last occurrences are prose about its deletion is retired.
     'serialize_world', 'restore_world',
+    # `systems/mass_battle/sim/massbattle.py`'s strategic adapter, deleted at plan position `29b`
+    # (2026-10-01) with `game_state.Faction`, the duck-typed input it read. Same shape as the pair above:
+    # the three tokens survive only as prose about their own deletion (that file's header note and
+    # docstrings), so by the `echo_scheduler` rule they are retired, not missing by accident.
+    'resolve_mass_battle', '_faction_to_unit', '_morale_start_from_stability',
 })
 
 # Generated artifacts the retirement took with their builders (ED-IN-0232). These get no `FORK:`

@@ -53,7 +53,6 @@ OUT = os.path.join(REPO, 'engine', 'engine_params', 'game_constants.json')
 # EVERY pair here was confirmed by reading both call sites. Never add one by name similarity.
 MAPPING = {
     'TN_STANDARD':                   'engine.autoload.TN_STANDARD',
-    'OB_FLOOR':                      'factions.OB_FLOOR',
     'WEAPON_TN_BASE':                'combat.WEAPON_TN_BASE',
     'COMBAT_POOL_MINIMUM':           'combat.COMBAT_POOL_MIN',
     # COHERENCE_START / _MAX / _MIN / _FRACTURED_THRESHOLD LEFT THIS TABLE at position 27 (WR-SCOPE,
@@ -65,7 +64,12 @@ MAPPING = {
     'KNOT_FORMATION_TN':             'fieldwork.KNOT_FORMATION_TN',
     'KNOT_FORMATION_OB':             'fieldwork.KNOT_FORMATION_OB',
     'SEASONS_PER_YEAR':              'overview.SEASONS_PER_YEAR',
-    'CI_START':                      'overview.CI_STARTING',
+    # OB_FLOOR (`factions.OB_FLOOR`) and CI_START (`overview.CI_STARTING`) LEFT THIS TABLE at plan position `29b`
+    # (2026-10-01). Their Python owners were `systems/factions/sim/faction_action.py` and
+    # `systems/overview/sim/ci_track.py`, both deleted with the faction layer and the CI clock (no season
+    # analogue). Same treatment as VICTORY_SUSTAIN_SEASONS below: an owner that retired leaves the table rather
+    # than being re-pointed by name, and the parity reader (`valoria-game/tools/check_constants_parity.py`,
+    # not visible from here) simply has no oracle value for either constant.
     # VICTORY_SUSTAIN_SEASONS LEFT THIS TABLE at plan position `28-iii` (SPINE-DELETE, 2026-10-01). Its
     # Python owner, `engine.autoload.SUSTAIN_SEASONS`, lived in `engine/autoload/victory.py`, which was
     # deleted (the oracle models no ending today -- `H-176` in engine/season/hole_register.yaml). Same

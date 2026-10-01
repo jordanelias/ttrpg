@@ -33,7 +33,7 @@ THE REMAINING ONE -- check (3) in the body, and the numbering is worth saying ou
 the four refused are (1), (2), (4) and (5) -- IS RECORDED, NOT REFUSED, and the asymmetry is the
 honest part. Two entries claiming one
 display string is real here and not a typo: `Order` is a Conviction AND a settlement stat,
-`Stability` is a faction stat AND a mechanic. Refusing would force a merge that deletes a real
+(`Stability` was a faction stat AND a mechanic until `29b`.) Refusing would force a merge that deletes a real
 quantity, so they go into an `ambiguous` block and `engine/substrate/names.py` raises on resolving
 one -- `descriptors.json`'s `unimplemented` precedent, which records a gap where an instrument
 reads it instead of in a docstring nothing opens.
@@ -89,7 +89,7 @@ def build():
                   f'be the owner of anything; delete it or name it.')
         canon = str(canon)
         # (3) two entries claiming the same canonical -- RECORDED, NOT FAILED, and the distinction
-        # matters. `Stability` is `fac.stability` (a 0-7 faction stat) AND `mech.stability` (a
+        # matters. `Stability` WAS `fac.stability` (a 0-7 faction stat, retired at `29b`) AND `mech.stability` (a
         # mechanic); they are two real quantities that share a display string, so "merge the rows"
         # would delete one. The file's own header offers `context:` for a colliding display, but
         # scopes it to PROSE matching (the §3.5 gate `vector_audit` reads) -- it does not tell a

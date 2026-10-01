@@ -87,36 +87,18 @@ composition_roles:
   # rung move). That file leaves with its tree at `29b`, which is where the mechanic's fate is decided.
   #
 
-  # ── The parliamentary seam (added 2026-08-22, plan S5a) ───────────────────────────────────────
-  # `engine/cross_scale/parliamentary_bridge.py` held the last three top-level `systems` imports in
-  # `engine/`, and the SAME seam was owned laterally as well. CORRECTED 2026-08-22 after an
-  # adversarial pass: the first version of this note said "owned twice" and converted two callers.
-  # It was owned THREE times across subsystem boundaries — `parliamentary_transfer.py` §4 and
-  # `parliamentary_action.py` §5.4 both imported the provider by name — and all three now resolve
-  # these roles. `systems/social_contest/sim/parliamentary_stay.py` also imports it and is left
-  # alone deliberately: that is social_contest importing its own sibling, which is not a
-  # cross-subsystem seam and needs no registry indirection.
-  parliamentary_vote:
-    target: "systems.social_contest.sim.parliamentary_vote:run_parliamentary_vote"
-    needed_by: "systems/factions/sim/parliamentary_transfer.py §4 (the vote-wrapped transfer resolution) and systems/factions/sim/parliamentary_action.py §5.4 (the Censure motion). A THIRD caller, engine/cross_scale/parliamentary_bridge.py (the two-pole season vote), retired with the Key substrate 2026-09-16 (ED-IN-0232) — the vote mechanism itself is untouched and the two remaining callers still require this role."
-    note: "social_contest_v30 §10. Applies the Total-Victory Mandate penalty itself; callers read the VoteResult, they do not re-derive its bands."
-  parliamentary_motion:
-    target: "systems.social_contest.sim.parliamentary_vote:Motion"
-    needed_by: "the same three callers — the §10 motion record they construct before voting"
-  parliamentary_vote_declaration:
-    target: "systems.social_contest.sim.parliamentary_vote:VoteDeclaration"
-    needed_by: "the same three callers — one per faction taking a side under §10 step 2"
-
-  # ── World creation: the one function-local seam left inside engine/autoload/game_state.py ─────────
-  # (S5a, 2026-08-22.) This was one of ELEVEN function-local imports, which is why they were invisible to
-  # the first ratchet and why `CLAUDE.md` §3 could claim "autoload is a leaf" while `game_state.py` named
-  # seven subsystems. A deferred import hides a cycle from the interpreter; it does not remove one. The
-  # other ten were the `snapshot_state.*` deserializers for `restore_world`, retired at `28-iii` with it.
-  # `world_gen` runs at world creation.
-  world_gen_settlements:
-    target: "systems.settlements.sim.registry:populate_from_geography"
-    needed_by: "engine/autoload/game_state.py create_world — OI-07, populates world.settlements from the canonical geography YAML"
-    note: "Deterministic, no RNG draw, so it cannot move an RNG-derived campaign golden."
+  # ── RETIRED AT PLAN POSITION `29b` (2026-10-01): four rows, with the tree that was their only reader ──
+  #   `parliamentary_vote`, `parliamentary_motion`, `parliamentary_vote_declaration` -- read by
+  #   `systems/factions/sim/{parliamentary_transfer,parliamentary_action}.py`; their targets in
+  #   `systems/social_contest/sim/parliamentary_vote.py` (and its sibling `parliamentary_stay.py`, which imported
+  #   `game_state`) went with the readers. Faction acts are person acts `via` seats in the season loop; the
+  #   vote's verb content is `levy`/`open_case`/`determine`/`issue` + `march`.
+  #   `world_gen_settlements` -- read by `game_state.create_world`; the season's world is built by
+  #   `engine/season/harness/populated.build_realm`. `systems/settlements/sim/registry.populate_from_geography`
+  #   keeps its function and loses its only role until `29c` deletes the tree.
+  # The deleted files are retrievable through their `references/restructure_ledger.md` rows.
+  #
+  # Exactly one role remains. ID-13 applies to the next row added: a role no caller requires is not declared.
 
   mass_battle.resolve_field:
     target: "systems.mass_battle.sim.massbattle:resolve_field"
@@ -128,14 +110,11 @@ modules:
     aliases: ["Faction Layer"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "faction_layer"   # Key Type Registry vocabulary
     doc: .designs/systems/factions/reference/faction_behavior_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    sim_module: engine/autoload/game_state.py   # OI-54 (ED-IN-0097, W4): the `Faction` dataclass
-      # (L/Sta/W/I/Mil "faction stats 1-7", `.adjust()` mutator) is the real code home for this
-      # contract's state: block. NOT mechanics_index-precedented under this name (mechanics_index
-      # has no `faction_state`-keyed entry) — verified directly by grep. Residual, logged not
-      # papered per §0.1 #5: the RESOLVER half (cascade_resolution/mission_shift accounting logic
-      # the contract describes) has no dedicated implementation anywhere in the tree — grep for
-      # both Key-type strings across systems/+engine/ returns only engine/cross_scale/articulation.py
-      # (a consumer constant, not resolver logic). State joins; behavior does not yet exist.
+    sim_module: none   # was `engine/autoload/game_state.py` (the `Faction` dataclass, OI-54): deleted at plan
+      # position `29b` (2026-10-01) with `systems/factions/`. No season counterpart holds a faction stat vector, by
+      # architecture (`architecture/meta/04_CODE_ARCHITECTURE.md`: a seat adds no verb and no modifier), so this
+      # contract's `state:` block now describes no code. The row is kept, not deleted: it is a registry row other
+      # contracts' `with:` joins name, and removing it is its own change.
     scales: [provincial]
     resolver: deterministic_accounting   # [ASSUMPTION] accounting-cadence procedures; d_sigma for contested resolution per ED-874
     state:
@@ -286,13 +265,9 @@ modules:
 
   - module: territorial_piety
     doc: .designs/systems/characters/reference/conviction_track_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    sim_module: systems/overview/sim/ci_track.py   # OI-54 (ED-IN-0097, W4): matches
-      # mechanics_index.yaml's `ci_track` entry — implements the CI (Church Influence) half of
-      # this module's state: block (PP-412 5-step seasonal calc; content verified). The CV
-      # (per-territory Piety) half is NOT in this file: it lives as `Territory.pt` +
-      # `.adjust_pt()` in engine/autoload/game_state.py (verified directly) — a genuine
-      # two-file split with no single owner, disclosed here rather than picking one file and
-      # hiding the other (§0.1 #4/#5). Territorial, not personal — see piety_track above.
+    sim_module: none   # was `systems/overview/sim/ci_track.py` (the CI half) and `Territory.pt` in
+      # `engine/autoload/game_state.py` (the CV half): both deleted at plan position `29b` (2026-10-01). The Accord / CI /
+      # IP / RS clocks have no season analogue (`engine/season/loop/census.py`: no clock generates anything).
     scales: [territory, provincial]
     resolver: deterministic_accounting   # [ASSUMPTION] CV movement rules §1.2 + seasonal TC calculation §3
     state:
@@ -328,7 +303,7 @@ modules:
       godot: python-oracle
       port_rank: 2
       parity: key-log
-      note: CI generation live via ci_track; CANONICAL doc with ZERO Key integration.
+      note: CI generation WAS live via ci_track (deleted at plan position `29b`, 2026-10-01); CANONICAL doc with ZERO Key integration.
 
   - module: threadwork
     registry_system: "threadwork"   # Key Type Registry vocabulary

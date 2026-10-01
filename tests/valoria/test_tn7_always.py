@@ -146,9 +146,15 @@ def test_the_tn_constant_sweep_actually_found_constants():
 
     Without this, a regex that silently stopped matching would make the test above pass
     over a tree full of violations. The roster measured at ED-MB-0066 is 11.
+
+    RE-MEASURED at plan position `29b` (2026-10-01): 10 -> 4. Six constants lived in files that were
+    deleted -- five in `systems/factions/sim/` (`_TN` x3, `PARL_TRANSFER_TN`, `TRIBUNAL_TN`) and
+    `BG_VOTE_TN` in `systems/social_contest/sim/parliamentary_vote.py`. The four left are
+    `sigma_leverage.TN_STANDARD`, `combat.WEAPON_TN_BASE`, `knots.KNOT_FORMATION_TN` and
+    `operations.TN_STANDARD`; `knots.py` leaves at `29f`, which re-pins this again.
     """
     found = _tn_constants()
-    assert len(found) >= 8, (
+    assert len(found) >= 4, (
         f"the TN-constant sweep found only {len(found)} constants — the pattern has probably "
         "stopped matching, and the test above is now vacuous"
     )

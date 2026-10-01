@@ -31,6 +31,14 @@ not to a simultaneous change in how armies are built.
 
 [GAP: faction -> unit construction lacks canonical spec — carried over from the pre-port adapter.]
 
+[DELETED 2026-10-01, plan position `29b`: `resolve_mass_battle`, `_faction_to_unit` and
+`_morale_start_from_stability` went with `game_state.Faction` and `systems/factions/`, which held their
+only caller (`faction_action._try_conquest`). What is left is the season-facing path: `resolve_field`,
+`_weighted_unit`, `_run_and_grade`. The paragraphs above and below that name the deleted three are the
+history of the 2026-08-24 port and the d.1 change, kept as written; the code is in git at the parent of
+the deleting commit. `_GarrisonStub`, `_round_half_up` and the `_STA_MORALE_*` bounds are left standing
+for `20-iv`, which decides what the season path's morale source is.]
+
 [UPDATED 2026-09-26, d.1 / ED-MB-0068]: morale is no longer part of the flat, carried-over default
 this header describes — it is now derived from `faction.Sta` (`_morale_start_from_stability`).
 This is the ONE field this docstring's "carried over UNCHANGED" claim no longer covers; every other
@@ -117,101 +125,16 @@ def _round_half_up(x):
     return math.floor(x + 0.5)
 
 
-def _morale_start_from_stability(faction):
-    """d.1 — a faction's starting morale is derived from its strategic Stability (ED-MB-0067).
-
-    THIS SUPERSEDES THE UNTAGGED MORALE-STARTING-FORMULA SENTENCE AT `mass_battle_v30.md:230-231`
-    ("Starting = general's Command + unit quality modifier (cap 7)") — NOT PP-711. PP-711 is a
-    DIFFERENT rule: the battle-boundary morale RESET (`orchestration.py:reset_morale_between_battles`,
-    citing "§PP-711 (Morale resets between battles)" in its own docstring). PP-711 is unaffected by
-    this change — reinforced, even, since that function now resets a unit's morale to a real
-    Stability-derived value instead of a flat hardcoded stub, WHEN IT RUNS. The starting-formula
-    sentence itself carries no PP number of its own; `mass_battle_v30.md:660` (the RESET section)
-    merely references it for context, which is how the wrong "supersedes PP-711" framing first arose
-    — corrected in `registers/editorial_ledger_mb.jsonl`'s ED-MB-0067, third correction row; do not
-    re-cite PP-711 here. No code ever implemented the starting-formula sentence — `_faction_to_unit`
-    hardcoded morale=5/morale_start=5 with an honest [canonical: inherited default — see GAP above]
-    comment — so this is a NEW derivation, not an edit to prior logic.
-
-    [CORRECTION 2026-09-26, ED-MB-0069] The above previously claimed `reset_morale_between_battles`
-    is "called at every campaign battle boundary" — a second citation error in this same docstring,
-    found by an adversarial pass on unrelated work and confirmed by grep: no call site exists
-    anywhere in `engine/` or this file; only test code (`test_persubunit_stress.py`,
-    `tests/valoria/test_mass_battle_signals.py`) invokes it directly. `engine/mc_v18.py`'s campaign
-    loop never references it, `morale`, or this file's own `_faction_to_unit` by that claim.
-
-    [RESOLVED 2026-09-27, ED-MB-0070] The prior row left open whether PP-711 is enforced some other
-    way or simply unenforced. Half right, half wrong — corrected by an adversarial review (Opus,
-    2026-09-27) that opened `orchestration.py` directly rather than trusting this docstring's own
-    prior claim, the same discipline that caught the PP-711/starting-formula conflation above.
-    `resolve_mass_battle` (below) calls `_faction_to_unit` fresh for BOTH sides on every invocation,
-    and `_try_conquest` (`systems/factions/sim/faction_action.py:393-400`) calls `resolve_mass_battle`
-    fresh for every Military Conquest — no `Unit` this function returns is cached or persisted on
-    `faction`/`world` between calls (grep-confirmed: no `lru_cache`/memoization wraps either
-    function). Every campaign battle therefore starts from a brand-new `Unit` whose MORALE is derived
-    from the faction's Stability AT THAT MOMENT — for morale alone, a stronger property than "reset
-    between battles", since there is no stale morale ever available to reset.
-
-    WRONG PART, NOW CORRECTED: `reset_morale_between_battles` does NOT "stay live in `run_battle`'s
-    own internal multi-turn loop" — it has NO production call site anywhere in this package.
-    `run_multi_turn_battle` calls `reset_positions`, `run_battle` and `between_turn_recovery` between
-    turns, never this function; its own docstring says so directly ("NOT within a single battle:
-    between_turn_recovery handles the within-battle turn boundary"). Every caller is a test writing to
-    a hand-built `Unit` directly (`tests/valoria/test_mass_battle_signals.py`,
-    `test_persubunit_stress.py`, `tests/valoria/test_charger_latch.py`,
-    `tests/valoria/test_morale_write_sweep.py`, `tests/valoria/test_octagon_damage.py`) — it is dead
-    in production, full stop, not merely unreached at this one seam.
-
-    SCOPE, STATED PRECISELY: fresh construction closes the gap for PP-711 (morale) ONLY. The same
-    function's docstring also carries PP-712 ("Discipline persists between battles") — fresh
-    construction does NOT satisfy that: `_faction_to_unit` hardcodes `discipline=5,
-    discipline_start=5` every call, so Discipline does not carry over either, which is the SAME
-    pre-existing `[GAP: faction -> unit construction lacks canonical spec]` this file already
-    declares above, not a new one. This paragraph is about PP-711 alone.
-
-    Would become load-bearing at the strategic seam the moment a `Unit` persists across more than
-    one battle here. `engine/season/seam/contest.py` now HAS a provider for `"a field"`
-    (`ED-IN-0279`, M3, `engine/season/seam/wrappers/mass_battle.py`) — but that provider calls
-    `resolve_field`, not `resolve_mass_battle`/`_faction_to_unit` (season Persons carry no `.Sta`
-    to derive from; `_weighted_unit` builds morale flat, not via this function), and constructs a
-    fresh `Unit` on every call exactly as `_try_conquest`'s strategic path already does. So this
-    paragraph's premise — no `Unit` persists across battles — still holds on BOTH paths; still not
-    a currently-open item.
-
-    [ASSUMPTION: rounded to the nearest int (half-up, see `_round_half_up`) and floored at 1 rather
-    than 0 — basis: `mass_battle_v30.md:230-231` states canon's own Morale range directly ("Morale
-    (1-7)"), which is NARROWER than `Faction.Sta`'s registry-declared 0-7 (test_faction_stat_bounds.py)
-    — Sta and Morale are NOT the same ladder, so Sta=0 must still clamp into Morale's 1-7 range.
-    Floor=1 is separately consistent with `:254`'s in-battle erosion floor ("Morale floor = 1"
-    while the general is present) and with rout firing at morale<=0 (confirmed by grep against
-    core/state.py:189 `atom.eff_morale <= 0` and hierarchy/units.py:2454-2455's aggregate-morale
-    rout derivation), so a Stability-0 faction must not field a unit that starts pre-routed.
-    Rounding an otherwise-continuous stat to an integer STARTING value is also consistent with
-    ED-1024 (`registers/editorial_ledger.jsonl:197` — Morale is continuous IN PLAY, but its own
-    text states "B.2 starting values are integers"). The concept synthesis's own Stability -> s0
-    mapping (proposals/2026-09-25-squad-engagement-synthesis.md) is itself an open placeholder at
-    the faction scale; this floor-and-round choice is THIS IMPLEMENTATION'S OWN, not something
-    already ruled to this precision. Jordan-vetoable.]
-    """
-    # [known risk, low priority: silently gives 5.0 — the garrison default — to ANY object lacking
-    #  .Sta, not only a real _GarrisonStub. Accepted rather than fixed: Sta is an established field
-    #  name on every real Faction (engine/autoload/game_state.py) and no other caller is known to
-    #  construct a Faction-shaped object without it.]
-    sta = getattr(faction, 'Sta', _GarrisonStub.Sta)
-    return max(_STA_MORALE_FLOOR, min(_STA_MORALE_CEIL, _round_half_up(sta)))
-
-
 #: [canonical: mass_battle_integration_v30.md §4.10 sub-step 3 — the strategic entry point. ⚠ THE
 #:  VALUES BELOW ARE NOT CANON AND THIS COMMENT DOES NOT CLAIM THEY ARE. They are the pre-port
 #:  adapter's minimum-viable defaults, carried over FIELD-FOR-FIELD so the engine swap is a
 #:  single-variable experiment, and the [GAP] on both this module's construction paths is the
 #:  honest status: no canonical spec exists for army -> Unit construction of ANY kind. The
 #:  fabrication gate is right to ask; the answer is "inherited, with a recorded gap", not
-#:  "derived".] SHARED BY `_faction_to_unit` AND `_weighted_unit` (§8: one owner for the MVP
-#: shape, so the two construction paths cannot silently drift apart on a field neither has a
-#: reason to vary). `concentration` is deliberately NOT here -- it is continuous-mode-only
-#: (`_weighted_unit` sets it; `_faction_to_unit`'s tier-sized Subunit does not), a real
-#: difference between the two modes rather than something that drifted.
+#:  "derived".] SHARED, until `29b` deleted `_faction_to_unit`, BY THAT FUNCTION AND `_weighted_unit` (§8:
+#: one owner for the MVP shape); `_weighted_unit` is now the only user. `concentration` is deliberately
+#: NOT here -- it is continuous-mode-only (`_weighted_unit` sets it; the deleted tier-sized Subunit
+#: did not).
 _MVP_SUBUNIT_SHAPE = dict(
     shape='Line',
     troop_type='infantry',
@@ -222,38 +145,13 @@ _MVP_SUBUNIT_SHAPE = dict(
     unit_type='melee',
 )
 
-#: SAME SHARING, FOR THE UNIT SIDE. `power`/`morale`/`morale_start` are NOT here: `power`'s
-#: SOURCE is the very thing the two construction paths differ on, and morale is derived
-#: (`_faction_to_unit`) vs. flat (`_weighted_unit`) for the same reason (no season-side Stability
-#: to derive from).
+#: SAME SHARING, FOR THE UNIT SIDE. `power`/`morale`/`morale_start` are NOT here: they are set by
+#: `_weighted_unit` itself (morale flat, because no season-side Stability exists to derive it from).
 _MVP_UNIT_COMMAND = dict(
     command=4,                       # [canonical: inherited default — see GAP above]
     discipline=5,                    # [canonical: inherited default — see GAP above]
     discipline_start=5,              # [canonical: inherited default — see GAP above]
 )
-
-
-def _faction_to_unit(faction):
-    """Build a canon-engine Unit from a strategic-layer faction.
-
-    Field-for-field identical to the pre-port construction, WITH ONE EXCEPTION (d.1, ED-MB-0068):
-    morale/morale_start are now derived from `faction.Sta` rather than hardcoded — see
-    `_morale_start_from_stability`. Every other field is untouched, so the swap this docstring
-    otherwise describes (a single-variable experiment on the RESOLUTION model) still holds for
-    everything but morale.
-    """
-    power = max(1, int(round(faction.Mil)))
-    sub = Subunit(**_MVP_SUBUNIT_SHAPE)
-    m0 = _morale_start_from_stability(faction)
-    return Unit(
-        name=f'{faction.name}_force',
-        faction=faction.name,
-        power=power,
-        **_MVP_UNIT_COMMAND,
-        morale=m0,                       # [d.1, ED-MB-0068: derived from faction.Sta — see above]
-        morale_start=m0,                 # [d.1, ED-MB-0068: derived from faction.Sta — see above]
-        subunits=[sub],
-    )
 
 
 #: A season `Person` carries no troop-density signal at all -- `power` is a Unit-level QUALITY
@@ -289,9 +187,8 @@ def _weighted_unit(name, weight):
     tier even in continuous mode; it is inert here (troops overrides it). `concentration` is set
     to `config.CELL_CAP` -- pack as densely as the engine allows before it would open a second
     cell, the smallest-footprint reading available and not a claim about real troop density.
-    Every other Subunit/Unit field is the SAME non-canonical inherited default `_faction_to_unit`
-    uses, shared via `_MVP_SUBUNIT_SHAPE`/`_MVP_UNIT_COMMAND` -- this function changes WHICH
-    NUMBER SIZES THE FORCE, not what else is carried over unchanged."""
+    Every other Subunit/Unit field is the non-canonical inherited default of the pre-port adapter
+    (`_faction_to_unit`, deleted at `29b`), carried via `_MVP_SUBUNIT_SHAPE`/`_MVP_UNIT_COMMAND`."""
     sub = Subunit(**_MVP_SUBUNIT_SHAPE, troops=max(float(weight), _MIN_TROOPS),
                   concentration=float(CELL_CAP))
     return Unit(name=name, faction=name, power=_SEASON_FORCE_POWER, **_MVP_UNIT_COMMAND,
@@ -302,9 +199,18 @@ def _weighted_unit(name, weight):
 
 def _run_and_grade(unit_a, unit_b, terrain, rng):
     """`run_battle` plus the survivor-ratio classification -- extracted from `resolve_mass_battle`
-    so `resolve_field` shares it rather than re-deriving it (§8: the rule lives once). Identical to
-    what `resolve_mass_battle` always did with its own two Units; see that function's docstring for
-    the terrain/RNG/degree-band caveats, which are unchanged and apply here too.
+    (deleted at `29b`; `resolve_field` is now its only caller).
+
+    ⚠ CAVEATS THAT LIVED IN THE DELETED FUNCTION'S DOCSTRING AND STILL BIND THIS PATH.
+    DETERMINISM: `rng` is scoped over the battle by `rngsource.using`; the canon engine drew from the
+    global `random` module at seven sites, so without that holder a seeded run is unpinnable.
+    TERRAIN: only FOREST_BROKEN's speed half is attempted below, and it is INERT -- `run_battle` never
+    reads `.speed` (only `orchestration.pursuit_damage` and `run_multi_unit_battle` do, and neither is
+    reachable from here). UPHILL, WALLS, NARROW_PASS and RIVER_CROSSING are identified by
+    `terrain_row_for_territory` and not applied: canon's A.9 table gives UPHILL and WALLS a number
+    each, and what is deferred is translating that dice-pool-era number into this engine's
+    sigma/degree model. DEGREE: the bands below are the bespoke survivor-ratio thresholds carried over
+    from the pre-port adapter, not `dice_engine.degree_from_net`.
 
     Takes `rng` directly rather than a `world`-shaped object -- this is the only thing either
     caller ever reads off `world`, so narrowing the parameter to what is actually used means
@@ -349,7 +255,7 @@ def resolve_field(w, side_a, side_b, *, terrain=None, rng=None):
     `side_a`/`side_b` are `PersonId[]`, weighed by `w.persons[pid].weight` (`state/carriers.py`:
     "A COHORT IS A PERSON AT weight > 1"); no `Unit`/`Faction`-shaped object crosses this boundary.
     Internally, `run_battle` still needs a `Unit` -- that requirement does not go away because the
-    caller's contract changed -- but `_faction_to_unit` is NOT reused here: that function reads
+    caller's contract changed -- and `_faction_to_unit` (deleted at `29b`) was not reused here: it read
     `faction.Mil` into `Unit.power`, a QUALITY stat, and headcount is a SIZE fact, not a quality
     one (see `_weighted_unit`, and `_SEASON_FORCE_POWER`'s note on the mistake this corrects).
     "No unit class, at any scale" is honoured at the SEAM this function's signature draws; it does
@@ -371,75 +277,3 @@ def resolve_field(w, side_a, side_b, *, terrain=None, rng=None):
     unit_a = _weighted_unit("side_a", weight_a)
     unit_b = _weighted_unit("side_b", weight_b)
     return _run_and_grade(unit_a, unit_b, terrain, rng)
-
-
-def resolve_mass_battle(faction_a, faction_b, terrain, world):
-    """Strategic entry point for Military Conquest resolution.
-
-    Per `mass_battle_integration_v30.md §4.10 sub-step 3` and `canon/02_canon_constraints.md` §B
-    GD-1: produces faction stat / territorial-control deltas only — no mass_battle_outcome ->
-    game_victory trigger.
-
-    Returns {'attacker_wins', 'degree', 'attacker_size_pct', 'defender_size_pct'}.
-
-    ⚠ DETERMINISM. `world.rng` is scoped over the battle via `rngsource.using`. The canon engine drew
-    from the GLOBAL `random` module at seven sites; the engine it replaced threaded an explicit `rng`
-    end to end, after a 2026-05-20 fix whose own note records that pre-fix "run_batch results varied
-    between runs at the same seed". Porting without restoring that property would not have moved the
-    seeded goldens — it would have made them UNPINNABLE. See `rngsource.py` for why the property is
-    restored with a holder rather than a threaded parameter.
-
-    terrain: [A7, ED-MB-0067 Part A / ED-MB-0074] One of `terrain.py`'s six A.9 row constants (its
-    caller, `faction_action._try_conquest`, derives it from the engagement province via
-    `terrain.terrain_row_for_territory` — no separate coordinate plumbing needed, the province tid
-    IS the geography query key). Was accepted and silently discarded since this adapter's creation
-    (a `[GAP]` comment at the one call site said so plainly).
-
-    [CORRECTED, adversarial review 2026-09-27] The FOREST_BROKEN branch below writes `unit.speed`, but
-    THIS FUNCTION CALLS `run_battle`, and `run_battle` never reads `.speed` at all — only
-    `orchestration.pursuit_damage` and `orchestration.run_multi_unit_battle` do (neither reachable from
-    here). The write is not "mechanically applied and merely campaign-unreachable pending a Fast-speed
-    side"; it is inert on ITS OWN TERMS, independent of `_faction_to_unit` never producing a Fast unit —
-    even a hand-built Fast-speed pair run through THIS function would see no effect. Kept rather than
-    removed because it is harmless (dead-writes a field this call path never reads) and is the correct
-    first half of A.9's "Cavalry -> Standard" rule for whichever future seam DOES reach `.speed`'s real
-    readers — but it is not evidence of anything working today, and the ledger/handoff text saying so
-    was wrong. NOT yet applied, disclosed rather than silently ignored: UPHILL (a damage/defense
-    magnitude — ED-MB-0018's own precedent, "the octagon is NOT a pool penalty, it's a MULTIPLIER",
-    says how but not how much — A.9's own table does give one, "+3 DR"-adjacent numbers for the other
-    rows, but translating them is a separate pass since it moves goldens), WALLS (a DR bonus, same
-    reason), NARROW_PASS ("1 engagement per side" — vacuous at THIS seam anyway, since `run_battle`
-    below is already a single 1v1 pair; would only bind once army-scale multi-Unit plans exist, per
-    Part A's own 'Sequenced' table; ALSO not currently reachable from any real, unfortified territory —
-    see `terrain_row_for_territory`'s own docstring for the geometric reason, not a fortification one),
-    and RIVER_CROSSING (not yet reachable from `terrain_row_for_territory` at all — see its own module
-    docstring). OPEN_FLAT is A.9's own "no modifiers" row and needs no branch.
-
-    [CORRECTED, adversarial review 2026-09-27] UPHILL/WALLS above are not missing a number from canon —
-    A.9's table already gives one each ("+1D Def / -1D Off", "+3 DR"). What is deferred is TRANSLATING
-    that dice-pool-era number into this engine's sigma/degree model, the way ED-MB-0018 translated the
-    octagon's facing bonus from a pool modifier into a damage multiplier — a real design step, not a
-    blank to fill in, and one that moves goldens once done. That translation work is deferred, not the
-    number itself.
-    """
-    # [A7, ED-MB-0067 Part A / ED-MB-0074] A.9: "Forest / broken: Cavalry -> Standard; flanking
-    # impossible." Only the speed half is attempted here (flanking-impossible would need the
-    # envelopment pipeline, out of scope for this pass — see this function's own docstring).
-    # [CORRECTED, adversarial review 2026-09-27] This write is inert, full stop — not merely
-    # campaign-unreachable. `run_battle` below never reads `.speed` (only `pursuit_damage` and
-    # `run_multi_unit_battle` do, neither called from this function), so even a hand-built Fast-speed
-    # unit run through THIS path would see no effect. Doubly inert today because `_faction_to_unit`
-    # never sets `speed` either (its own [GAP] comment covers that half) — but fixing only that half
-    # would not make this branch do anything. See this function's own docstring for the full disclosure.
-    #
-    # ⚠ THE BODY BELOW MOVED INTO `_run_and_grade`, EXTRACTED SO `resolve_field` (M3) SHARES IT
-    # RATHER THAN RE-DERIVING IT (§8). Byte-identical: same two calls, same order, same operands.
-    unit_a = _faction_to_unit(faction_a)
-    if faction_b is None:
-        # Defenderless-territory garrison strength has no canonical spec; Mil=1.5 approximates the
-        # pre-mass-battle v17 Ob 2 vs Ob 4 single-roll spread. Carried over from the pre-port adapter.
-        # [canonical: inherited default — recorded [GAP], not canon; see the module header]
-        unit_b = _faction_to_unit(_GarrisonStub(name='Uncontrolled', Mil=1.5))
-    else:
-        unit_b = _faction_to_unit(faction_b)
-    return _run_and_grade(unit_a, unit_b, terrain, getattr(world, 'rng', None))

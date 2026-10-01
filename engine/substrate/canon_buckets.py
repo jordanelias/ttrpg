@@ -21,19 +21,19 @@ internal dependents (see `engine/substrate/stubwire.py`; `keys.py`, the other wo
 line used to cite, retired under ED-IN-0232), so adding
 this here breaks the npe→game_state edge outright rather than merely deferring it.
 
-`game_state.py` re-exports `canonical_accord` from here (`from engine.substrate.canon_buckets
-import canonical_accord`) so every existing top-level importer of
-`engine.autoload.game_state.canonical_accord` (`systems/overview/sim/accounting.py`,
-`engine/tests/test_accounting_accord_drift_probe.py`) keeps working unchanged — this is a pure
-relocation, not a behavior or call-site rewrite for those callers.
+`game_state.py` re-exported `canonical_accord` from here so every existing importer of
+`engine.autoload.game_state.canonical_accord` kept working unchanged — a pure relocation.
 
-`canonical_pt` (game_state.py's sibling bucket helper, same shape, same file) is NOT moved here.
-Nothing on this cycle's boundary imports it — `systems/overview/sim/ci_track.py` and
-`systems/factions/sim/mass_seizure.py` both import it from `game_state` already at top level,
-so it was never part of the cycle — and moving it is therefore out of this item's scope.
-Logged, not chased, per CLAUDE.md §0.1 point 5: `canonical_pt` and `canonical_accord` now live
-in different files despite being a matched pair, which is a minor shape-hygiene residue a future
-pass may want to finish by moving `canonical_pt` here too.
+[29b, 2026-10-01] `game_state.py` is DELETED (plan position `29b`), and with it the re-export and its
+sibling `canonical_pt`, which was never moved here: its only two importers, `systems/overview/sim/ci_track.py`
+and `systems/factions/sim/mass_seizure.py`, were deleted in the same commit, so there was nothing to move it
+for. The one retained reader of `canonical_accord` is `systems/world/sim/npe.py`, which leaves at `29d`;
+that deletion leaves this module with no reader. (This block is padded to the line count of the text it
+replaced so archived flow-skeleton anchors into this file's code lines stay in range.)
+
+
+
+
 """
 from __future__ import annotations
 
