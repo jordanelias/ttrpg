@@ -155,7 +155,7 @@ entries:
   # `fac.influence`, `fac.wealth`, `fac.military`, `fac.intel`, `fac.stability` and `fac.legitimacy` mirrored
   # `descriptor_registry.yaml`'s `faction_stats` block, which left with `game_state.Faction` (`ID-13`), and
   # `tools/ci_names_consistency.py` refuses a mirror row with no registry entry. They are in git at
-  # `57362093:references/names_index.yaml`. `Legitimacy` is now `set.legitimacy` alone.
+  # `5c5d8ec6:references/names_index.yaml`. `Legitimacy` is now `set.legitimacy` alone.
 
   # ── SETTLEMENT STATS (mirror: descriptor_registry.yaml settlement_stats) ──────
   set.legitimacy:      {canonical: Legitimacy,      aliases: [], legacy: [], category: settlement_stat, enforce: warn}

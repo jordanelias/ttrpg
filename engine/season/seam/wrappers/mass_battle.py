@@ -39,9 +39,9 @@ hands them on as plain values -- it decides none of what they do:
   * its FORTIFICATION, `world_q.fortification_of` at the target;
   * each side's MORALE source, `_side_stance` below.
 What a fortification DOES is `massbattle.resolve_field`'s and `terrain.py`'s: any positive value
-makes the field A.9's `WALLS` row, whose one number (defender +3 DR) the engine applies in its own
-unit. So the magnitude is canon's, not invented here, which is why this module may carry the read
-without deciding anything -- `seam/wrappers/combat.py` derives a party the same way and calls the
+makes the field A.9's `WALLS` row, whose one number (defender +3 DR) the engine applies to `Unit.dr`
+1:1 (an ASSUMPTION about the unit, `H-150`). The number is canon's, not invented here, which is why this
+module may carry the read without deciding anything -- `seam/wrappers/combat.py` derives a party the same way and calls the
 engine without deciding who picked the fight.
 
 ⚠ **`degree_of` (`seam/ladder.py`) NOW GRADES THIS RESULT, THROUGH A THIRD BRANCH RATHER THAN BY

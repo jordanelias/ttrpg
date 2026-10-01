@@ -137,7 +137,7 @@ def terrain_row_for_territory(tid, fort_level=0):
     since-deleted `Territory` derived 0 from `garrison: false`). Reading it would silently fork a
     single-owned fact (CLAUDE.md §0.05 clause 3). The 2026-09-27 caller this paragraph first named,
     `faction_action._try_conquest`, and the `game_state.Territory` it read were deleted at plan
-    position `29b` (`79d690ce`).
+    position `29b`.
 
     [ED-780] FORTIFICATION DOMINATES: a fielded `fort_level > 0` resolves as WALLS regardless of the
     surrounding terrain polygon — a walled city's defining battle character is its walls, not whatever
@@ -189,8 +189,8 @@ def terrain_row_for_territory(tid, fort_level=0):
 
 #: A.9's Walls row, the one number it gives: the DEFENDER's damage reduction rises by this much. It
 #: lands on the engine's own `Unit.dr`, the quantity melee already subtracts from damage
-#: (`orchestration.py`: `DAMAGE_BY_DEGREE[deg](power) - eff_dr`), so this is A.9's figure in the unit
-#: it was written in, not a translation. The row's other two clauses ("no flanking; Slow cannot
+#: (`orchestration.py`: `DAMAGE_BY_DEGREE[deg](power) - eff_dr`). Applying A.9's +3 1:1 to that unit
+#: is an ASSUMPTION (`H-150`), not a measurement. The row's other two clauses ("no flanking; Slow cannot
 #: advance") are NOT applied -- `massbattle.py::_run_and_grade`'s docstring says why. Kept below the
 #: lookup, not beside the row constants, so the lookup's line stays where the mass-battle flow
 #: skeleton's line anchor cites it (`tests/valoria/test_flow_skeletons.py`). Applied since `20-iv`.

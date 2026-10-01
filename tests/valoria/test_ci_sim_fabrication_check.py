@@ -220,7 +220,7 @@ def test_a_hex_looking_english_word_is_not_a_ref():
 
 
 # `test_every_real_fork_tag_in_the_tree_is_visible_and_carries_a_ref` was retired at plan position `29b`
-# (2026-10-01); its source is in git at `57362093`. It read the `[FORK: ...]` tags off three files --
+# (2026-10-01); its source is in git at `5c5d8ec6`, where it read four files (`season_manager.py` went at 28-iii); at 29b it read three --
 # `engine/autoload/game_state.py`, `systems/factions/sim/absolution.py` and
 # `systems/factions/sim/faction_action.py` -- which were the only files under `engine/` or `systems/`
 # that carried one, and all three were deleted. Measured after: no tracked `.py` outside this file, its

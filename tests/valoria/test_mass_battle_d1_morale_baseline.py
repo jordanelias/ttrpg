@@ -2,10 +2,10 @@
 
 WHY THIS EXISTS. Jordan ruled (`ED-MB-0067`, second row) that faction state sets the morale baseline
 when a battle is built from the strategic layer. `ED-MB-0068` built it on `game_state.Faction.Sta`
-through `massbattle._faction_to_unit`; plan position `29b` (`79d690ce`) deleted both, and this file
+through `massbattle._faction_to_unit`; plan position `29b` deleted both, and this file
 was red at collection until `20-iv` re-pinned it here, against `massbattle.resolve_field` -- the one
-entry point left. Its first nine tests constructed a `Faction` and are in git at the parent of that
-commit.
+entry point left. Its first nine tests constructed a `Faction` and are in git at `5c5d8ec6`.
+
 
 THE SOURCE NOW (`massbattle._morale_start`'s docstring has the argument): each side's weight-mean
 stance toward its members' own faction, the row `_eff_march` writes a lost field's "decrease in

@@ -164,7 +164,7 @@ def test_resolve_structural_territory_stat_alias_via_descriptor():
 
 
 # `test_the_influence_string_collision_is_CLOSED_and_resolves_to_the_faction_stat` was retired at plan position
-# `29b` (2026-10-01); its source is in git at `57362093`. Its subject was `fac.influence`, which was retired with
+# `29b` (2026-10-01); its source is in git at `5c5d8ec6`. Its subject was `fac.influence`, which was retired with
 # `game_state.Faction` (`ID-13`), so `resolve('Influence')` no longer reaches a faction stat and the
 # `legitimacy -> {fac.legitimacy, set.legitimacy}` collision it pinned no longer exists. `Influence` is
 # not restored as an alias of Charisma: which attribute owns the word is a design call, not this change's.

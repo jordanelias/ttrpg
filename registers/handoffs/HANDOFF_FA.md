@@ -5,7 +5,7 @@
 ## Open
 | item | where it lives | next step |
 |---|---|---|
-| ~~score/2 obstacle-Ob derivation: three sites disagree~~ **CLOSED 2026-10-01, not Jordan's** — plan position `29b` deleted all three sites (`parliamentary_transfer.py`, `tribunal.py`, `crown_initiative.py`) and `test_faction_obstacle_conventions.py` with `systems/factions/`; the season's own obstacle derivation is `engine/season/seam/wrappers/sigma.py` | `references/restructure_ledger.md` FORK rows, ref `57362093` | nothing to rule |
+| ~~score/2 obstacle-Ob derivation: three sites disagree~~ **CLOSED 2026-10-01, not Jordan's** — plan position `29b` deleted all three sites (`parliamentary_transfer.py`, `tribunal.py`, `crown_initiative.py`) and `test_faction_obstacle_conventions.py` with `systems/factions/`; the season's own obstacle derivation is `engine/season/seam/wrappers/sigma.py` | `references/restructure_ledger.md` FORK rows, ref `5c5d8ec6` | nothing to rule |
 | Author the `domain_actions` / strategic-turn home doc | ED-FA-0002 | author the home doc unifying card-hand + faction actions + resolver + `da.*` tagging |
 | BG victory-params re-export | ED-FA-0003 | re-derive `params/bg/victory.md` from `victory_v30.md`, fix `params/board_game.md` index |
 | Fiscal Stance Treasury coupling (design drafted, sim not wired) | ED-FA-0008 | wire the stance choice + yield formula into the territory registry |
@@ -16,6 +16,6 @@
 ## Standing orders — do not re-raise, do not do
 | order | source |
 |---|---|
-| ~~Do not wire `score/2` by editing the three disagreeing sites into agreement~~ **RETIRED 2026-10-01 (`29b`)** — the three sites are deleted; narrative at `HANDOFF_FA_history.md` § "SUSPENDED — the `score/2` obstacle derivation" | `references/restructure_ledger.md` FORK rows, ref `57362093` |
+| ~~Do not wire `score/2` by editing the three disagreeing sites into agreement~~ **RETIRED 2026-10-01 (`29b`)** — the three sites are deleted; narrative at `HANDOFF_FA_history.md` § "SUSPENDED — the `score/2` obstacle derivation" | `references/restructure_ledger.md` FORK rows, ref `5c5d8ec6` |
 | Do not author faction-roster content assuming the old territory-nesting model — local/provincial/national tiers are independent, people-based | ED-IN-0047 (B12) |
-| ~~Faction stat writes go through `engine.autoload.game_state.Faction.adjust` only — no second write path~~ **RETIRED 2026-10-01 (`29b`)** — `Faction`, `adjust` and the sweep test are deleted; the season's faction carries no stat vector | ED-FA-0038, `references/restructure_ledger.md` FORK rows, ref `57362093` |
+| ~~Faction stat writes go through `engine.autoload.game_state.Faction.adjust` only — no second write path~~ **RETIRED 2026-10-01 (`29b`)** — `Faction`, `adjust` and the sweep test are deleted; the season's faction carries no stat vector | ED-FA-0038, `references/restructure_ledger.md` FORK rows, ref `5c5d8ec6` |

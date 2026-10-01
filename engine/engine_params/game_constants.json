@@ -25,12 +25,6 @@
       "gd_value": 1,
       "reason": "Different quantities sharing a word. combat_engine_v1/core.py:47 POOL_FLOOR is the COMBAT POOL minimum, used as max(POOL_FLOOR, history + BASE_POOL) at :52 \u2014 the game calls that COMBAT_POOL_MINIMUM and it AGREES at 5. The game's POOL_FLOOR is the universal dice-pool floor applied by RollContext.effective_pool() (RollContext.gd:26). Not a divergence."
     },
-    "ACCORD_MIN": {
-      "python_name": "engine.autoload.ACCORD_MIN",
-      "python_value": 2.0,
-      "gd_value": 0,
-      "reason": "Different quantities sharing a name. victory.py:28 ACCORD_MIN is a VICTORY THRESHOLD (held territories must have accord >= 2.0, :71). Constants.gd:144-145 ACCORD_MIN/MAX is the CLAMP RANGE for the accord tracker (SettingState.gd:34,82). Not a divergence \u2014 but see DIVERGENCES['accord_range'], which is."
-    },
     "MOMENTUM_MAX": {
       "python_name": "engine.autoload.M_MAX",
       "python_value": 1.5,
@@ -46,10 +40,10 @@
   },
   "divergences": {
     "accord_range": {
-      "engine": "accord is a CONTINUOUS float clamped to [0.5, 7.0] (engine/autoload/game_state.py:160 adjust_accord), bucketed to a 0-4 canonical index by ACCORD_MAP (:61, five entries 0..4) and canonical_accord (engine/substrate/canon_buckets.py).",
+      "engine": "NO accord state. The Accord clock has no season analogue (ED-WR-0011 option A); `game_state.py` (its continuous 0.5-7.0 float and ACCORD_MAP) and `victory.py` were deleted at plan positions 28-iii and 29b. Only `canonical_accord` (engine/substrate/canon_buckets.py) survives, read by systems/world/sim/npe.py until plan position 29d.",
       "port": "accord is an INTEGER clamped to [0, 3] (Constants.gd:144-145, cited to peninsular_strain_v30 \u00a72), registered and clamped as a tracker (SettingState.gd:34,82).",
-      "why_it_matters": "Two different state models for the same field: 0-4 continuous-bucketed vs 0-3 integer. Every accord-driven outcome differs. No gate in either repo observed this before 2026-08-20.",
-      "needs": "ruling \u2014 which model is canonical"
+      "why_it_matters": "The port still carries an accord tracker the oracle no longer models, so there is no oracle value to match and none to correct it against.",
+      "needs": "port alignment (CLAUDE.md \u00a76: a port never corrects its oracle) \u2014 the oracle holds no accord model to port from"
     },
     "coherence_bands": {
       "engine": "Coherence is a DISTANCE from the human equilibrium (0 = on it), held as TWO quantities: a resting point that moves out only by permanent set, and elastic displacement that recovers (canon/philosophy/07_drift.md \u00a77.1). Four displacement bands read PRESENT displacement \u2014 Stable, Dissonant >= DISPLACEMENT_DISSONANT_LOW, Fragmented >= DISPLACEMENT_FRAGMENTED_LOW, Fractured >= DISPLACEMENT_FRACTURED_LOW \u2014 and the terminal 'Coherence failure' reads the RESTING point leaving the human band (> HUMAN_BAND_LIMIT). No Severed band; nothing depletes (systems/threadwork/sim/coherence.py, CoherenceState.band).",

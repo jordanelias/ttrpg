@@ -173,7 +173,7 @@ def test_a_reordered_faction_table_is_rejected_at_export_time(tmp_path):
 
     with pytest.raises(SystemExit) as exc:
         mod.build()
-    assert 'MOVES THE GOLDENS' in str(exc.value)
+    assert 'faction order is' in str(exc.value)
 
 
 @pytest.mark.parametrize('old,new,expected', [

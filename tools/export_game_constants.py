@@ -91,15 +91,6 @@ COLLISIONS = {
                   "universal dice-pool floor applied by RollContext.effective_pool() (RollContext.gd:26). "
                   "Not a divergence.",
     },
-    'ACCORD_MIN': {
-        'python_name': 'engine.autoload.ACCORD_MIN',
-        'python_value': 2.0,
-        'gd_value': 0,
-        'reason': "Different quantities sharing a name. victory.py:28 ACCORD_MIN is a VICTORY THRESHOLD "
-                  "(held territories must have accord >= 2.0, :71). Constants.gd:144-145 ACCORD_MIN/MAX "
-                  "is the CLAMP RANGE for the accord tracker (SettingState.gd:34,82). Not a divergence — "
-                  "but see DIVERGENCES['accord_range'], which is.",
-    },
     'MOMENTUM_MAX': {
         'python_name': 'engine.autoload.M_MAX',
         'python_value': 1.5,
@@ -121,17 +112,18 @@ COLLISIONS = {
 # on them; the list can only shrink.
 DIVERGENCES = {
     'accord_range': {
-        'engine': "accord is a CONTINUOUS float clamped to [0.5, 7.0] "
-                  "(engine/autoload/game_state.py:160 adjust_accord), bucketed to a 0-4 canonical index "
-                  "by ACCORD_MAP (:61, five entries 0..4) and canonical_accord "
-                  "(engine/substrate/canon_buckets.py).",
+        'engine': "NO accord state. The Accord clock has no season analogue (ED-WR-0011 option A); "
+                  "`game_state.py` (its continuous 0.5-7.0 float and ACCORD_MAP) and `victory.py` were "
+                  "deleted at plan positions 28-iii and 29b. Only `canonical_accord` "
+                  "(engine/substrate/canon_buckets.py) survives, read by systems/world/sim/npe.py until "
+                  "plan position 29d.",
         'port':   "accord is an INTEGER clamped to [0, 3] (Constants.gd:144-145, cited to "
                   "peninsular_strain_v30 §2), registered and clamped as a tracker "
                   "(SettingState.gd:34,82).",
-        'why_it_matters': "Two different state models for the same field: 0-4 continuous-bucketed vs 0-3 "
-                          "integer. Every accord-driven outcome differs. No gate in either repo observed "
-                          "this before 2026-08-20.",
-        'needs': 'ruling — which model is canonical',
+        'why_it_matters': "The port still carries an accord tracker the oracle no longer models, so "
+                          "there is no oracle value to match and none to correct it against.",
+        'needs': 'port alignment (CLAUDE.md §6: a port never corrects its oracle) — the oracle holds '
+                 'no accord model to port from',
     },
     'coherence_bands': {
         'engine': "Coherence is a DISTANCE from the human equilibrium (0 = on it), held as TWO "

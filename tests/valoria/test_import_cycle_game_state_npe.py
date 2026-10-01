@@ -1,7 +1,7 @@
 """
 NOTE (plan position `29b`, 2026-10-01): `engine/autoload/game_state.py` is deleted, and with it the
 `game_state <-> npe` cycle this file was named for; that test (`test_game_state_npe_cycle_is_gone`) is
-retired (its source is in git at `57362093`). What remains is the cycle CENSUS below, which still reads the whole tree.
+retired (its source is in git at `5c5d8ec6`). What remains is the cycle CENSUS below, which still reads the whole tree.
 
 OI-52a cycle-gone regression (ED-IN-0097,
 audit/2026-07-29-code-shape-open-items/01_orchestration_plan_v1.md §3 Wave 4 item 2).

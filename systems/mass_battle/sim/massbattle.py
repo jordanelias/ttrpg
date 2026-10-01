@@ -35,8 +35,8 @@ not to a simultaneous change in how armies are built.
 `_morale_start_from_stability` went with `game_state.Faction` and `systems/factions/`, which held their
 only caller (`faction_action._try_conquest`). What is left is the season-facing path: `resolve_field`,
 `_weighted_unit`, `_run_and_grade`. The paragraphs above and below that name the deleted three are the
-history of the 2026-08-24 port and the d.1 change, kept as written; the code is in git at the parent of
-the deleting commit. `_GarrisonStub`, `_round_half_up` and the `_STA_MORALE_*` bounds were left standing
+history of the 2026-08-24 port and the d.1 change, kept as written; the code is in git at `5c5d8ec6`.
+ `_GarrisonStub`, `_round_half_up` and the `_STA_MORALE_*` bounds were left standing
 for `20-iv`, which decides what the season path's morale source is.]
 
 [UPDATED 2026-10-01, plan position `20-iv`]: `resolve_field` now takes its morale-start from season state
@@ -45,7 +45,7 @@ for `20-iv`, which decides what the season path's morale source is.]
 and garrison (`terrain_row_for_territory`, with A.9's Walls DR applied in `_run_and_grade`).
 `_round_half_up` and the morale bounds (renamed `_MORALE_FLOOR`/`_MORALE_CEIL`, no longer Stability's)
 have that reader. `_GarrisonStub` had none once `resolve_mass_battle` went, and is deleted (ID-13); it is
-in git at `79d690ce`.
+in git at `5c5d8ec6`.
 
 [UPDATED 2026-09-26, d.1 / ED-MB-0068]: morale is no longer part of the flat, carried-over default
 this header describes — it is now derived from `faction.Sta` (`_morale_start_from_stability`).
@@ -117,7 +117,7 @@ def _morale_start(stance):
     season path after `29b` deleted the `Faction.Sta` it read.
 
     THE SOURCE, AND WHY IT IS THIS ONE. The season has no faction stat vector, by architecture
-    (`04`'s NEVER list: *"it never makes a faction stat vector a field of its own"*), so faction state
+    (`04_CODE_ARCHITECTURE.md`, the faction view's list: *"NEVER: a member of `World` · a field of its own · ..."*), so faction state
     is what members hold toward the faction. Jordan's M4 ruling on a lost field (`ED-IN-0279` clause
     (b): *"casualties only, decrease in morale, and a grudge token"*) is already built as a stance row
     on each loser, `(own faction, -1.0, field_morale_weight)` (`loop/effects_combat.py::_eff_march`):
@@ -131,6 +131,10 @@ def _morale_start(stance):
     swept 0/1/3): while `_eff_march` is the only writer of a stance row on a faction id (measured at
     `build_realm(0)`: its 32 seeded rows all name a person), a scale factor here would only multiply
     that weight. At weight 0 a lost field writes a zero row and this returns the base -- the control.
+    ONE EXCEPTION (`H-151`): in a SAME-FACTION march winner and loser are one faction, so each loser also
+    carries the grudge row `(faction, -1.0, field_grudge_weight)` and `stance_toward` sums both: the next
+    morale-start is `5 - (morale_w + grudge_w)` (3 at the defaults 1/1), and at weight 0 the grudge still
+    moves it. The control above holds for a cross-faction field only.
 
     NOT TAKEN: the build-time loyalty rows (`data/cast.py::stance_from_loyalty`). They name the
     faction's LEADER, a person, not the faction, so reading them would merge two referents the
@@ -229,8 +233,8 @@ def _run_and_grade(unit_a, unit_b, terrain, rng):
     season units have no flank or advance order to forbid. UPHILL, NARROW_PASS and RIVER_CROSSING are
     identified by `terrain_row_for_territory` and not applied: UPHILL's number is a dice count
     (+1D/-1D), which this engine reaches only through `config.SIGMA_PER_D`, a calibrated-debt
-    conversion -- the step WALLS' DR did not need, and terrain work `20-iv` (a garrison position) did
-    not take. DEGREE: the bands below are the bespoke survivor-ratio thresholds carried over from the
+    conversion -- a step WALLS' DR skipped (its +3 is applied 1:1 to `Unit.dr`, an assumption: `H-150`),
+    and terrain work `20-iv` (a garrison position) did not take. DEGREE: the bands below are the bespoke survivor-ratio thresholds carried over from the
     pre-port adapter, not `dice_engine.degree_from_net`.
 
     Takes `rng` directly rather than a `world`-shaped object -- this is the only thing either

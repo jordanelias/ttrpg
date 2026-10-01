@@ -399,10 +399,6 @@ DECLARED_ADAPTERS = {
         "test above pins it as exactly the owner's four bands folded to three."),
 
     # — PRODUCE bands from something that is not a dice margin. Not ladders; nothing to route. —
-    'engine/cross_scale/echo_transport.py': (
-        'Derives a band from a scene RESULT (winner/no-winner), never from net vs ob.'),
-    'engine/cross_scale/scene_dispatch.py': (
-        'Assigns an echo band from a dispatch outcome, never from net vs ob.'),
     'systems/mass_battle/sim/massbattle.py': (
         '`_run_and_grade` maps ROUT STATE and surviving-size fractions to a band for '
         '`resolve_field`. (`resolve_mass_battle`, its strategic twin, and the `faction_action` ladder '

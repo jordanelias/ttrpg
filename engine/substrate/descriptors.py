@@ -21,7 +21,7 @@ THE FACTION BLOCK WAS RETIRED AT PLAN POSITION `29b` (2026-10-01). This module u
 `assert_faction_roster_is_covered()` (the import-time check in `game_state.py`). Their only reader,
 `engine/autoload/game_state.py::Faction`, is deleted, and the six `fac.*` rows left the registry with
 it (`ID-13`: a declared field that reaches no reader is not declared). The rulings that shaped them are
-in git at `57362093:references/descriptor_registry.yaml`.
+in git at `5c5d8ec6:references/descriptor_registry.yaml`.
 """
 from __future__ import annotations
 

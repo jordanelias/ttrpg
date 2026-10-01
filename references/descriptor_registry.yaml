@@ -100,7 +100,7 @@ territory_stats:
 # `via` seats and carries no stat vector of its own. `architecture/meta/01_AXIOMS.md` `ID-13`: a declared field
 # that reaches no reader is not declared. The block, with the two 2026-08-23 rulings that shaped it ("Legitimacy
 # is a base"; "Influence can be 0", all six floored at 0) and the Mandate-is-derived note, is in git at
-# `57362093:references/descriptor_registry.yaml`. `set.legitimacy` (settlement_stats below) is unaffected.
+# `5c5d8ec6:references/descriptor_registry.yaml`. `set.legitimacy` (settlement_stats below) is unaffected.
 # ============================================================================
 
 # ============================================================================

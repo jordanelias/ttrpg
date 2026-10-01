@@ -536,7 +536,7 @@ def test_the_composition_resolver_refuses_an_undeclared_role():
 
 
 # `test_every_role_game_state_requires_is_declared` and `test_no_game_state_role_is_declared_and_unused` were
-# retired at plan position `29b` (2026-10-01); their source is in git at `57362093`. Both read `engine/autoload/game_state.py`
+# retired at plan position `29b` (2026-10-01); their source is in git at `5c5d8ec6` (the second was then named `test_no_snapshot_state_role_is_declared_and_unused`). Both read `engine/autoload/game_state.py`
 # for its `composition.require(...)` calls, and that file and its one role (`world_gen_settlements`) are gone.
 # `test_every_declared_composition_role_resolves` below still proves every remaining row resolves.
 
@@ -609,12 +609,10 @@ R04_PENDING_SUBSYSTEMS = {
     'settlements', 'threadwork', 'ui', 'victory', 'world',
 }
 
-# Roles deleted at plan position `28-iii` (SPINE-DELETE) and `29b` (`world_gen_settlements`) are dropped
-# from this set in the same commit, so the ceiling is as tight as the registry: re-adding one would now
-# FAIL, where a stale entry here would have let it back in unremarked.
-R04_PENDING_ROLES = {
-    'scene_resolver.fieldwork', 'scene_resolver.investigation',
-}
+# Every composition role now targets a retained subsystem, so this set is empty: a role that targets a
+# retiring subsystem would FAIL here rather than ride a stale entry (`scene_resolver.fieldwork` and
+# `.investigation` were here and exist in no registry).
+R04_PENDING_ROLES = set()
 
 
 def test_r04_pending_composition_roles_can_only_shrink():

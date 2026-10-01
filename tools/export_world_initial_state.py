@@ -106,10 +106,10 @@ def build():
 
     if list(stats) != ['Crown', 'Church', 'Hafenmark', 'Varfell']:
         _fail(f'faction order is {list(stats)}, expected [Crown, Church, Hafenmark, Varfell]. '
-              f'This is not cosmetic: create_world iterates this table to build world.factions, so '
-              f'its order sets the order of every world.factions loop and therefore the RNG draw '
-              f'sequence of a seeded campaign. Reordering it MOVES THE GOLDENS. If that is the '
-              f'intent, re-record them in the same commit and update this check.')
+              f'The authored order is kept on purpose: create_world (deleted at plan position 29b) '
+              f'iterated this table to build world.factions, and its one remaining reader '
+              f'(systems/world/sim/npe.py, retired at 29d) has not been shown order-insensitive. '
+              f'If you reorder it deliberately, update this check in the same commit.')
 
     landless = sorted(set(stats) - owners_seen)
     if landless:
@@ -134,14 +134,13 @@ def build():
         ),
         'schema_version': data.get('schema_version', 1),
         'source': 'references/world_initial_state.yaml',
-        # ⚠ AUTHORED ORDER IS PRESERVED, AND IT IS LOAD-BEARING. `create_world` iterates
-        # `faction_starting_stats` to build `world.factions`, so this dict's order becomes that
-        # dict's order, which becomes the order every `world.factions.items()` loop sees, which
-        # decides the sequence of RNG draws in a seeded campaign. The first draft of this exporter
-        # sorted factions alphabetically — an unremarkable "for determinism" habit — and moved the
-        # campaign goldens (Church 0.0 -> 50.0) without touching a single value. Sorting here is
-        # not tidying; it is a balance change. Do not reintroduce it. The COLUMNS are sorted
-        # because nothing iterates them.
+        # ⚠ AUTHORED ORDER IS PRESERVED. `create_world` (deleted at plan position `29b`) iterated
+        # `faction_starting_stats` to build `world.factions`, so this dict's order set the order of
+        # every `world.factions.items()` loop and the RNG draw sequence of a seeded campaign. The
+        # first draft of this exporter sorted factions alphabetically and moved the campaign goldens
+        # (Church 0.0 -> 50.0) without touching a value; those goldens went at `28-iii`. The one
+        # retained reader (`systems/world/sim/npe.py`, retired at `29d`) has not been shown
+        # order-insensitive, so the order stays. The COLUMNS are sorted because nothing iterates them.
         'territories': {t: dict(sorted(r.items())) for t, r in territories.items()},
         'faction_starting_stats': {f: dict(sorted(r.items())) for f, r in stats.items()},
     }

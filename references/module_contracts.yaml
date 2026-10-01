@@ -91,7 +91,7 @@ composition_roles:
   #   `parliamentary_vote`, `parliamentary_motion`, `parliamentary_vote_declaration` -- read by
   #   `systems/factions/sim/{parliamentary_transfer,parliamentary_action}.py`; their targets in
   #   `systems/social_contest/sim/parliamentary_vote.py` (and its sibling `parliamentary_stay.py`, which imported
-  #   `game_state`) went with the readers. Faction acts are person acts `via` seats in the season loop; the
+  #   only `parliamentary_vote`) went with the readers. Faction acts are person acts `via` seats in the season loop; the
   #   vote's verb content is `levy`/`open_case`/`determine`/`issue` + `march`.
   #   `world_gen_settlements` -- read by `game_state.create_world`; the season's world is built by
   #   `engine/season/harness/populated.build_realm`. `systems/settlements/sim/registry.populate_from_geography`
@@ -112,7 +112,7 @@ modules:
     doc: .designs/systems/factions/reference/faction_behavior_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
     sim_module: none   # was `engine/autoload/game_state.py` (the `Faction` dataclass, OI-54): deleted at plan
       # position `29b` (2026-10-01) with `systems/factions/`. No season counterpart holds a faction stat vector, by
-      # architecture (`architecture/meta/04_CODE_ARCHITECTURE.md`: a seat adds no verb and no modifier), so this
+      # architecture (`architecture/meta/04_CODE_ARCHITECTURE.md`: `faction_q.resolve` builds a view that is NEVER a field of its own), so this
       # contract's `state:` block now describes no code. The row is kept, not deleted: it is a registry row other
       # contracts' `with:` joins name, and removing it is its own change.
     scales: [provincial]
@@ -137,10 +137,10 @@ modules:
       - "settlement_layer_v30 §1.8 LPS-2e [READ: 2026-06-10]"
     wiring:
       build: deferred
-      godot: python-oracle
+      godot: no-oracle
       port_rank: 2
       parity: key-log
-      note: the in-13 hub; action code (conquest/muster/govern/uniques) is live, resolver [ASSUMPTION].
+      note: the in-13 hub; its action code (conquest/muster/govern/uniques) was deleted at plan position `29b`, so there is nothing to port from; resolver [ASSUMPTION].
 
   - module: npc_behavior
     aliases: ["NPC Behaviour"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
@@ -300,7 +300,7 @@ modules:
       - "clock_registry_v30 Shared Clocks table [READ: 2026-06-10]"
     wiring:
       build: deferred
-      godot: python-oracle
+      godot: no-oracle
       port_rank: 2
       parity: key-log
       note: CI generation WAS live via ci_track (deleted at plan position `29b`, 2026-10-01); CANONICAL doc with ZERO Key integration.
@@ -622,7 +622,7 @@ modules:
     state:
       - {name: "Turmoil", bucket: clock, writable: true}   # clock_registry: 0-10, peninsular_strain_v30 §4
       - {name: "IP (Institutional Pressure)", bucket: clock, writable: true}   # clock_registry: 0-100 [PROVISIONAL ED-793 start value]
-      - {name: "MS (Mending Stability)", bucket: clock, writable: true}   # OI-32a ownership declaration (2026-07-29, W3 item 3): mechanically-determinable GAP-F1 owner. Floor 0 (Rupture) / ceiling 100; baseline decay -1/in-game-year at Year-End Accounting, PP-255 (params/core.md §MS Baseline Decay). Live tick: systems/overview/sim/ms_track.py (apply_ms_baseline_decay / apply_ms_delta, the canonical MS-arithmetic surface), imported by systems/overview/sim/accounting.py at :43 and called (Year-End-cadence-gated) at :117. CORRECTED 2026-07-29 (W3 item 8): the prior version of this comment claimed "accounting.py L36-39 also inlines the same PP-255 decay pending a migration" — that claim is FALSE against the current tree (re-verified directly: accounting.py has no inline decay logic anywhere; :36-39 is drift-probe docstring prose, not code, and the sole decay call fully delegates to ms_track.apply_ms_baseline_decay). The claim was carried over from ms_track.py's own docstring (a stale note predating accounting.py's migration to the delegated call — not corrected there, out of this file's scope; logged per CLAUDE.md §0.1 point 5). No env.ms_delta emit added here — a new emit would itself be a new dangling emit; see gap_notes GAP-F1 residual.
+      - {name: "MS (Mending Stability)", bucket: clock, writable: true}   # OI-32a ownership declaration (2026-07-29, W3 item 3): mechanically-determinable GAP-F1 owner. Floor 0 (Rupture) / ceiling 100; baseline decay -1/in-game-year at Year-End Accounting, PP-255 (params/core.md §MS Baseline Decay). Live tick: systems/overview/sim/ms_track.py (apply_ms_baseline_decay / apply_ms_delta, the canonical MS-arithmetic surface), (its former caller, systems/overview/sim/accounting.py, was deleted at plan position `29a`). CORRECTED 2026-07-29 (W3 item 8): the prior version of this comment claimed "accounting.py L36-39 also inlines the same PP-255 decay pending a migration" — that claim is FALSE against the current tree (re-verified directly: accounting.py has no inline decay logic anywhere; :36-39 is drift-probe docstring prose, not code, and the sole decay call fully delegates to ms_track.apply_ms_baseline_decay). The claim was carried over from ms_track.py's own docstring (a stale note predating accounting.py's migration to the delegated call — not corrected there, out of this file's scope; logged per CLAUDE.md §0.1 point 5). No env.ms_delta emit added here — a new emit would itself be a new dangling emit; see gap_notes GAP-F1 residual.
     transitions: []
     loops: []
     gates:
@@ -662,7 +662,7 @@ modules:
       parity: key-log
       note: 'owns Turmoil + IP; env.* emitters + occupation ladder unbuilt. [CORRECTED 2026-08-10, ED-IN-0152:
         this note previously claimed IP is not even a clocks key -- false on both readings. engine/autoload/game_state.py:244
-        seeds IP: 20.0 inside the clocks mapping, and clock_registry_v30.md:18 lists Institutional Pressure
+        (deleted at plan position `29b`; in git at `5c5d8ec6`) seeded IP: 20.0 inside the clocks mapping, and clock_registry_v30.md:18 lists Institutional Pressure
         (IP), start 20. What IS true is that no module writes IP after world-gen -- ip_track.py''s two entry
         points are stubs with no production caller.]'
 
@@ -866,7 +866,7 @@ modules:
       - {name: "season counter", bucket: clock, writable: true}   # [ASSUMPTION]
     transitions: []
     loops: []
-    accounting_phase: [season_tick, accounting_boundary]
+    accounting_phase: [season_tick]
     gap_notes:
       - "registry-derived; home doc unlocated [GAP] — campaign_architecture_v30 examined and is NOT it (victory-revision consolidation, no clock-spine sections)"
       - "2026-07-02: systems/_architecture/reference/propagation_spec_v1.md (ED-1093, CANONICAL per ED-1094 merge-ratifies-by-default) supplies the candidate home doc. ED-1051, open — awaiting Jordan: doc: null stays unflipped until then (a separate editorial item this doc's ratification does not by itself close)."
@@ -1132,7 +1132,7 @@ wiring_as_of: "2026-07-29"
 
 wiring_vocabularies:
   build_states: [live, gated, deferred, unwired, stub, design]
-  #   live      — executes every season in the mc_v18 loop
+  #   live      — executes every season in the season loop (`engine/season/loop/driver.py`)
   #   gated     — runs only under a condition (flag / eligibility / trigger)
   #   deferred  — reached but resolves nothing today
   #   unwired   — real, tested code the loop never calls

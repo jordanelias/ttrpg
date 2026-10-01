@@ -521,7 +521,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     # `condition` field, `world_q.fortification_of`'s reader. One per settlement is the ruling's
     # own scope -- there is no second garrison-bearing rung kind to seed against, and `condition
     # scale` matches every other Site's starting value, so a fresh realm starts every settlement
-    # equally (un)fortified rather than asserting a fortification level nobody has ruled.
+    # equally fortified: since `20-iv` every settlement march target here is a `WALLS` field.
     # ⚠ READ ON THE BATTLE PATH SINCE PLAN POSITION `20-iv` (`H-150`, `hole_register.yaml`).
     # `seam/wrappers/mass_battle.py` reads `world_q.fortification_of` at the march target and hands
     # it, with the target's territory, to `terrain.py::terrain_row_for_territory`: a garrison at

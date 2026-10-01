@@ -3166,16 +3166,21 @@ rows:
       and `rng` -- neither a fortification channel. A settlement with a garrison at full condition
       fights identically to one with none, or with no garrison Site at all."
     kind:      "PRODUCER"
-    owner:     "no owner exists yet -- the candidate site is `seam/wrappers/mass_battle.py::resolve()`,
-      which would need either a new provider parameter or a pre-battle margin adjustment `contest()`
-      applies before the provider runs"
-    grade:     "measured"
-    default:   "SHIPPED AT PLAN POSITION `20-iv`, AND THE MAGNITUDE IS A.9's, NOT THIS ROW's. Any
+    owner:     "`seam/wrappers/mass_battle.py::resolve()` reads `world_q.fortification_of`;
+      `terrain.WALLS_DEFENDER_DR` is applied in `massbattle._run_and_grade`"
+    grade:     "assumption"
+    default:   "SHIPPED AT PLAN POSITION `20-iv`; THE NUMBER IS A.9's, ITS UNIT IS AN ASSUMPTION. Any
       positive `fortification_of` at the march target makes the field A.9's `WALLS` row
       (`terrain.py::terrain_row_for_territory`'s existing fortification-dominates rule), and its one
       number, defender +3 DR (`terrain.WALLS_DEFENDER_DR`), lands on the engine's own `Unit.dr` in
       `massbattle._run_and_grade`. Binary, as A.9's row is: condition gates presence, it does not
-      scale the bonus. Its other clauses (no flanking; Slow cannot advance) are not applied."
+      scale the bonus. Its other clauses (no flanking; Slow cannot advance) are not applied.
+      ⚠ THE UNIT IS ASSUMED: A.9's +3 is applied 1:1 to `Unit.dr`, which melee subtracts from
+      `DAMAGE_BY_DEGREE[deg](power)` and volley from net successes -- neither is canon's \"net hits
+      + weapon modifier - DR\". At the season's fixed power 4 and base dr 1, walls take a Success
+      exchange from 3 to 0 and an Overwhelming one from 4 to 1. `WALLS_DEFENDER_DR = 0` removes the
+      only live difference between a walled and an open field (the control); the constant is a
+      module literal and not yet a Fixtures knob, so no sweep is declared here."
     site:      "engine/season/seam/wrappers/mass_battle.py -- `resolve()` reads
       `world_q.fortification_of` and `_territory_of` at the target and passes both to
       `massbattle.resolve_field(territory=, fort_level=)`; until `20-iv`, `world_q.py --
@@ -3203,18 +3208,21 @@ rows:
       WRITTEN: seed a garrison Site at full condition on a march target, run the SAME seed through
       `_fold_one` twice (garrisoned / ungarrisoned), and show the fight's own `attacker_size_pct`
       is identical across both runs -- which is the defect this row names, made observable rather than
-      asserted. ⚠⚠ CLOSED BY PLAN POSITION `20-iv` (2026-10-01), `measured` ON `H-109`'s PRECEDENT;
-      `hole:`, `kind:`, `owner:`, `unblocks:` and `source:` LEFT AS TRANSCRIBED. CLAUDE.md §0's
-      ladder for *what a garrison does*: step 3, a design document -- A.9's Walls row states the
-      effect and its number in the engine's own DR unit, so nothing was invented. FALSIFIERS, both
+      asserted. ⚠⚠ REACHABILITY CLOSED BY PLAN POSITION `20-iv` (2026-10-01); THE MAGNITUDE STAYS AN
+      ASSUMPTION (graded back from `measured` at the Batch 1a close: the two tests below observe that
+      the garrison is READ and that it moves the result, not that +3 is the right size for the
+      engine's `dr`). `hole:`, `kind:` and `source:` LEFT AS TRANSCRIBED. CLAUDE.md §0's ladder for
+      *what a garrison does*: step 3 gives the effect and its number (A.9's Walls row); step 4
+      (`H-148`'s precedent, a magnitude no ruling states) makes the translation into `Unit.dr`
+      an assumption. FALSIFIERS, both
       run against the pre-`20-iv` tree (red) and after (green):
       `test_mass_battle_provider.py::test_a_garrisoned_defender_resolves_differently_from_an_ungarrisoned_one`
-      (8 seeds, all 8 FOUGHT, the garrison changes 3 results and never lowers the defenders'
-      survivors) and `test_march.py::test_a_real_fold_reads_the_targets_fortification_on_the_battle_path`
+      (8 seeds, all 8 FOUGHT; it asserts `differs >= 1` and that the defenders' survivors are never
+      lower. ONE-OFF FIGURE from the commit run, not asserted: the garrison changed 3 of the 8) and `test_march.py::test_a_real_fold_reads_the_targets_fortification_on_the_battle_path`
       (the real RESOLVE -> ENCOUNTER fold calls `fortification_of` once, with the target). ⚠ WHAT
       MOVES IS THE ENGINE'S RESULT, NOT THE SEASON'S WRITE AT REALM WEIGHTS: the fixture's 2-man
       attacker loses with or without walls, so the garrison raises the defenders' survivor fraction
-      (0.0564 -> 0.06 at seed 0), which `_eff_march` reads only on a `Won` band this scale does not
+      (0.0564 -> 0.06 at seed 0, a one-off figure; the scale gap also hides the SIZE of the effect), which `_eff_march` reads only on a `Won` band this scale does not
       reach (`_MIN_TROOPS`' scale gap). And the realm fights no field at all yet: every march it
       declares targets a non-settlement and is refused at `H-149`'s check (that row's `cite:`)."
     source:    "M4 of the mc_v18-retirement plan (`ED-IN-0279`), found by the orchestrator (Claude

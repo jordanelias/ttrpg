@@ -5,7 +5,7 @@ CLAUDE.md §0.1 pt 3: a result claim carries the test that would have shown it w
 claim this file used to prove ("add a faction stat to `references/descriptor_registry.yaml` without a field in
 the executable model and the engine stops importing") went with its subject at plan position `29b`: the
 `Faction` dataclass, `game_state.py`'s import-time call and `descriptors.assert_faction_roster_is_covered`
-are deleted, and so is the faction block (`ID-13`). Its six tests are retired; their source is in git at `57362093`.
+are deleted, and so is the faction block (`ID-13`). Its six tests are retired; their source is in git at `5c5d8ec6`.
 """
 from __future__ import annotations
 

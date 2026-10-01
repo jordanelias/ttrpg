@@ -10,10 +10,10 @@ canon's own citation, `designs/territory/...::terrain_polygons`, is stale in bot
 Two things this file does NOT claim: (1) "dominant polygon by area weight" (ED-780's own wording) —
 this implementation point-tests each province's `anchor` against terrain polygons rather than
 computing true intersection area; disclosed in `terrain.py`'s own docstring, not re-litigated here.
-(2) full A.9 mechanical coverage — only FOREST_BROKEN's speed half ("Cavalry -> Standard") is wired
-into `massbattle.py::_run_and_grade`; UPHILL/WALLS/NARROW_PASS/RIVER_CROSSING are identified by the lookup but
-not yet mechanically applied (see `_run_and_grade`'s own docstring for why each is deferred, not
-silently dropped).
+(2) full A.9 mechanical coverage — only FOREST_BROKEN's speed half ("Cavalry -> Standard") and WALLS'
+defender DR (plan position `20-iv`) are wired into `massbattle.py::_run_and_grade`; UPHILL/NARROW_PASS/
+RIVER_CROSSING are identified by the lookup but not yet mechanically applied (see `_run_and_grade`'s own
+docstring for why each is deferred, not silently dropped).
 
 [CORRECTED, adversarial review 2026-09-27] `terrain_row_for_territory` no longer reads fortification
 from the geography YAML — it takes the live `fort_level` as a caller-supplied argument (see its own
@@ -160,7 +160,7 @@ def test_open_ground_resolves_unmodified(monkeypatch):
     assert terrain_row_for_territory('T-synthetic-plains', fort_level=0) == OPEN_FLAT
 
 
-# ─── the ONE mechanical effect wired so far: forest -> cavalry Standard speed ─
+# ─── the mechanical effects wired so far: forest -> cavalry Standard speed; walls -> defender DR ─
 # RE-POINTED at plan position `29b` (2026-10-01). These three tests drove `resolve_mass_battle` with
 # faction-shaped stubs and patched `_faction_to_unit`; both were deleted with `game_state.Faction` and
 # `systems/factions/`. The behaviour they pinned lives on in `_run_and_grade`, the function `resolve_field`
@@ -201,6 +201,26 @@ def test_forest_broken_forces_a_fast_side_to_standard_speed():
     a.speed = 'Fast'
     _run_and_grade(a, b, FOREST_BROKEN, None)
     assert a.speed == 'Standard', "a Fast side must be forced to Standard when terrain is forest_broken"
+
+
+def test_walls_raise_the_defenders_dr_and_only_the_defenders_dr():
+    """A.9: 'Walls / fortifications | Defender +3 DR' (plan position `20-iv`). Pins WHICH unit takes the
+    bonus and that it lands once: the defender is `unit_b` (`march` is the only verb contesting a field,
+    and its target side is `other`). The control is the same pair on OPEN_FLAT, whose DR must not move.
+    The stochastic 8-seed test in `test_mass_battle_provider.py` cannot tell the sides apart."""
+    from systems.mass_battle.sim.massbattle import _run_and_grade
+    from systems.mass_battle.sim.terrain import WALLS_DEFENDER_DR
+
+    a, b = _units()
+    a0, b0 = a.dr, b.dr
+    _run_and_grade(a, b, WALLS, None)
+    assert b.dr == b0 + WALLS_DEFENDER_DR, "the defender (unit_b) must take A.9's walls bonus, once"
+    assert a.dr == a0, "the attacker (unit_a) must not take the walls bonus"
+
+    a, b = _units()
+    a0, b0 = a.dr, b.dr
+    _run_and_grade(a, b, OPEN_FLAT, None)
+    assert (a.dr, b.dr) == (a0, b0), "OPEN_FLAT must not touch DR (control)"
 
 
 def test_open_flat_does_not_touch_speed():
