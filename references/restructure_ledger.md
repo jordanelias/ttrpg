@@ -2641,3 +2641,29 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 |---|---|---|
 | `proposals/2026-09-26-decision-layer-execution-plan/PROPOSAL.md` | `FORK:06712837` | FORKED (2026-10-01, absorbed into `workplans/valoria_master_workplan_v8.md`) |
 | `proposals/2026-09-27-mc-v18-retirement-plan/PROPOSAL.md` | `FORK:06712837` | FORKED (2026-10-01, absorbed into `workplans/valoria_master_workplan_v8.md`) |
+
+<!-- 2026-10-01, plan position `28-iii` SPINE-DELETE (master workplan v8, `_part6` §D): the mc_v18 spine and its
+     importers retired. FORK ref is the parent of the deleting commit, `5c5d8ec6`; every row below was checked with
+     `git cat-file -e 5c5d8ec6:<path>` before it was written. One exact-file row each (never a directory prefix). -->
+
+| Old path | New path | Status |
+|---|---|---|
+| `engine/mc_v18.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — the superseded campaign driver; successor `engine/season/loop/driver.py::SeasonDriver.season`. OI-05/OI-07 died with it) |
+| `tests/valoria/test_mc_v18_is_deprecated.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — the importer ratchet, deleted after `ALLOWED_IMPORTERS == set()` ran green; its subject is gone) |
+| `engine/autoload/engine_clock.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — successor `engine/season/loop/driver.py`) |
+| `engine/autoload/season_manager.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — successor `engine/season/loop/calendar.py` + `Date`) |
+| `engine/autoload/scene_slate.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — successor `engine/season/loop/deliberate.py` + `pack_scenes`) |
+| `engine/autoload/victory.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — no season replacement; the GD-1 requirement survives as an `ABSENT_RULE` hole in `engine/season/hole_register.yaml`) |
+| `engine/autoload/npc_ai.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — no replacement by port; the season counterpart is `engine/season/decision/`) |
+| `engine/cross_scale/__init__.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — the package, whole; see its four modules) |
+| `engine/cross_scale/scene_dispatch.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — successor `engine/season/seam/contest.py` + `manifest/` + the prize rows) |
+| `engine/cross_scale/combat_bridge.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — successor `engine/season/seam/wrappers/combat.py` -> `engine/substrate/pc_engine.py`) |
+| `engine/cross_scale/handoff_rules.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — no replacement; the eight handoff rules are R-04's content in `engine/season/requirements.yaml`) |
+| `engine/cross_scale/zoom_in_out.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — no replacement; the Hybrid-mode zoom is R-03/R-04's content) |
+| `systems/overview/sim/season.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — successor `engine/season/loop/driver.py`; went with its `season_driver` composition role) |
+| `engine/tests/test_combat_bridge_seam.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — the combat-bridge seam test; needs no successor (`_part6` §D.4)) |
+| `engine/tests/test_f7_smoke_oracle.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — a seeded `mc_v18` campaign golden; the successor goldens ran at `28-ii`) |
+| `engine/tests/test_mc_v18_regression.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — a seeded `mc_v18` campaign golden; the successor goldens ran at `28-ii`) |
+| `engine/tests/test_pipeline_reach.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — reach probe over the deleted spine; successors ran at `28-ii`) |
+| `engine/tests/test_world_population.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — world-population probe over the deleted spine and `serialize_world`/`restore_world`; successors ran at `28-ii`) |
+| `tests/valoria/test_engine_clock_phases.py` | `FORK:5c5d8ec6` | FORKED (2026-10-01, plan position `28-iii` SPINE-DELETE — the phase-order test of the deleted `engine_clock`; the driver's own tests are its successor) |

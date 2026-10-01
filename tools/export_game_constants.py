@@ -66,7 +66,12 @@ MAPPING = {
     'KNOT_FORMATION_OB':             'fieldwork.KNOT_FORMATION_OB',
     'SEASONS_PER_YEAR':              'overview.SEASONS_PER_YEAR',
     'CI_START':                      'overview.CI_STARTING',
-    'VICTORY_SUSTAIN_SEASONS':       'engine.autoload.SUSTAIN_SEASONS',
+    # VICTORY_SUSTAIN_SEASONS LEFT THIS TABLE at plan position `28-iii` (SPINE-DELETE, 2026-10-01). Its
+    # Python owner, `engine.autoload.SUSTAIN_SEASONS`, lived in `engine/autoload/victory.py`, which was
+    # deleted (the oracle models no ending today -- `H-176` in engine/season/hole_register.yaml). Same
+    # treatment the four COHERENCE_* pairs got above: an owner that retired leaves the table rather than
+    # being re-pointed by name. The port's own constant is untouched by this repo; the parity reader
+    # (`valoria-game/tools/check_constants_parity.py`) simply has no oracle value to compare it to.
 }
 
 # Pairs that LOOK like matches and are NOT. Recorded so the next session does not re-derive them

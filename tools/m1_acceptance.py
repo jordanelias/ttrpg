@@ -9,9 +9,9 @@ rule is vacuous where the oracle does not cover the behaviour). Left as a phrase
 This file makes it five falsifiable rows.
 
 WHAT CHANGED (S2, workplans/return_to_game_queue.yaml, ED-IN-0112). The "headless season run
-that does not exist" this file used to name as the blocker for rows 1-2 DOES exist —
-engine.mc_v18.run_campaign already runs 50-season campaigns in ~2.5s with a deterministic
-KeyLog hash. Rows 1 and 2 were blocked only because nothing pointed this oracle at it; they
+that does not exist" this file used to name as the blocker for rows 1-2 DID exist —
+engine.mc_v18.run_campaign (since deleted, 28-iii) ran 50-season campaigns in ~2.5s with a
+deterministic KeyLog hash. Rows 1 and 2 were blocked only because nothing pointed this oracle at it; they
 are now MEASURED from a real headless 1-season probe run (`_run_probe_season` below). Row 5 is
 MEASURED since 2026-09-14: engine/season/harness/invariants.py sweeps eight run-time
 invariants over 24 headless seeds x 4 seasons. Its narrower forerunner,
@@ -61,7 +61,7 @@ import ci_common  # noqa: E402
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = ci_common.REPO   # ONE OWNER (plan G7, ED-IN-0159 §8.3)
 
-# ⚠⚠ **ROWS 1-2 PROBED `engine/mc_v18.py` UNTIL 2026-09-13, AND THAT IS A SUPERSEDED TREE.**
+# ⚠⚠ **ROWS 1-2 PROBED `engine/mc_v18.py` UNTIL 2026-09-13, AND THAT WAS A SUPERSEDED TREE** (deleted 28-iii).
 # Jordan ruled 2026-09-07 that **`engine/season/` IS THE HEAD** (`HANDOFF_IN.md`: *"#371 EXISTS.
 # `engine/season/` IS THE HEAD. THE DECOMPOSITION WAS DONE ON THE PROTOTYPE"*), and `ED-IN-0204`
 # adopted the season loop in full. This file went on measuring the prototype for six days, which
@@ -195,14 +195,12 @@ def row_stub_invocations():
     — the proxy was never the problem; the tree was.
 
     ⚠ WHAT THIS ROW NO LONGER COUNTS, said plainly so nobody reads the flip as progress:
-    `engine/mc_v18.py`'s two deferrals (OI-05 `generate_npc`, OI-07 `form_knot`) are still there
-    and still unresolved. They are simply not on the head's path, so they no longer block a
-    milestone measured over the head. OI-05 was RULED by Jordan on 2026-09-13 (`ED-WR-0011` — the
-    cast is the authored 46) and the head already implements it; OI-07 remains structural and open
-    against `mc_v18`, whose own retirement is a separate piece of work that is NOT done —
-    sized by `tests/valoria/test_mc_v18_is_deprecated.py::ALLOWED_IMPORTERS`, the AST scan that owns
-    the importer set, never by a number restated here (the `71` that stood in this line was a grep
-    of mentions read as a dependency count; `ED-IN-0227` is the correction).
+    `engine/mc_v18.py`'s two deferrals (OI-05 `generate_npc`, OI-07 `form_knot`) were never on
+    the head's path, so they never blocked a milestone measured over the head. OI-05 was RULED by
+    Jordan on 2026-09-13 (`ED-WR-0011` — the cast is the authored 46) and the head already
+    implements it. Both deferrals DIED WITH THE FILE at plan position `28-iii`, which deleted
+    `engine/mc_v18.py` (its ledger row, ref `5c5d8ec6`) — they were resolved by deletion, not
+    built.
     """
     if _headless is None:
         return _blocked(

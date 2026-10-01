@@ -85,12 +85,6 @@ def _resolve(target, kind):
     return fn
 
 
-#: The directory the `adapters:` tags name. The retired manifest declared this as a `registries:`
-#: map entry alongside `key:` and `quantity:` rows that its own validator never read; only the
-#: adapter path was ever consumed, so it is a constant here rather than authored indirection.
-ADAPTER_DIR = os.path.join(REPO, 'engine', 'cross_scale')
-
-
 def validate_wiring(contracts):
     """Return a list of failures in the `wiring:` facts (empty == green).
 
@@ -107,14 +101,14 @@ def validate_wiring(contracts):
     three assertions, not one: named, uniquely named, and carrying wiring. Structural is a claim
     about a data shape, and a list is not the shape that earns it for free.
 
-    The other three (adapter resolution, adapter coverage, vocabulary) are ported verbatim below.
+    The adapter rules (resolution, coverage) that were ported verbatim from it retired at plan
+    position `28-iii` (2026-10-01) with `engine/cross_scale/` and the `adapters:` block; vocabulary
+    is the one that remains below.
 
     FALSIFIER: `tests/valoria/test_wiring_validation.py`. It replaces the falsifier S5c deleted
     with `wiring_map_check.py`, and it is not optional bookkeeping — for one commit these rules
     lived in a tool with no test at all while the checks registry claimed they were verified.
 
-    The adapter rules do NOT become structural, because adapter tags name FILES on disk rather than
-    rows in this registry, so they are ported as-is.
     """
     fails = []
     vocab = contracts.get('wiring_vocabularies') or {}
@@ -156,24 +150,7 @@ def validate_wiring(contracts):
             continue
         entries.append((f'module:{name}', w))
 
-    # 2) every adapter tag resolves to engine/cross_scale/<name>.py, and coverage is total
-    declared = contracts.get('adapters') or {}
-    try:
-        on_disk = {f[:-3] for f in os.listdir(ADAPTER_DIR)
-                   if f.endswith('.py') and not f.startswith('__')}
-    except OSError as exc:
-        return fails + [f'cannot read {os.path.relpath(ADAPTER_DIR, REPO)}: {exc}']
-    for name in sorted(set(declared) - on_disk):
-        fails.append(f'adapter:{name} does not resolve in engine/cross_scale/ — renamed or moved?')
-    # Coverage counts tags that RESOLVE, not tags that exist: a renamed row keeps len(declared)
-    # at 8 and would otherwise print "8/8" on the same run that reports the rename as a failure.
-    resolving = len(set(declared) & on_disk)
-    for name in sorted(on_disk - set(declared)):
-        fails.append(f'adapter coverage {resolving}/{len(on_disk)} — engine/cross_scale/{name}.py '
-                     f'is undeclared. Every cross-scale seam is a conversion unit; add its row.')
-    entries += [(f'adapter:{n}', e) for n, e in declared.items()]
-
-    # 3) valid vocabulary on every entry
+    # 2) valid vocabulary on every entry
     for tag, e in entries:
         if e.get('build') not in builds:
             fails.append(f'{tag} bad build state {e.get("build")!r} — not in wiring_vocabularies.build_states')
@@ -189,8 +166,8 @@ def build():
     roles = contracts.get('composition_roles') or {}
     if not roles:
         raise SystemExit('references/module_contracts.yaml declares no composition_roles. If the '
-                         'block was removed, engine/mc_v18.py has nothing to resolve — restore it '
-                         'rather than deleting this exporter.')
+                         'block was removed, nothing resolves through engine/substrate/composition.py '
+                         '— restore it rather than deleting this exporter.')
     out = {}
     for role in sorted(roles):
         row = roles[role]
@@ -234,8 +211,7 @@ def main(argv):
                   f'Run: python3 tools/export_composition.py')
             return 1
         print(f'[composition] OK — {len(json.loads(text)["roles"])} role(s), every target resolved; '
-              f'wiring valid for {len(contracts.get("modules") or [])} module(s) + '
-              f'{len(contracts.get("adapters") or {})} adapter(s).')
+              f'wiring valid for {len(contracts.get("modules") or [])} module(s).')
         return 0
     with open(OUT, 'w') as fh:
         fh.write(text)

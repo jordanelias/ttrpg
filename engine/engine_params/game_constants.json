@@ -10,7 +10,6 @@
     "OB_FLOOR": 1,
     "SEASONS_PER_YEAR": 4,
     "TN_STANDARD": 7,
-    "VICTORY_SUSTAIN_SEASONS": 2,
     "WEAPON_TN_BASE": 7
   },
   "owners": {
@@ -21,7 +20,6 @@
     "OB_FLOOR": "factions.OB_FLOOR",
     "SEASONS_PER_YEAR": "overview.SEASONS_PER_YEAR",
     "TN_STANDARD": "engine.autoload.TN_STANDARD",
-    "VICTORY_SUSTAIN_SEASONS": "engine.autoload.SUSTAIN_SEASONS",
     "WEAPON_TN_BASE": "combat.WEAPON_TN_BASE"
   },
   "collisions": {

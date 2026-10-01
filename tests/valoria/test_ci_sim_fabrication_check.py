@@ -233,7 +233,7 @@ def test_every_real_fork_tag_in_the_tree_is_visible_and_carries_a_ref():
     import pathlib
     root = pathlib.Path(__file__).resolve().parents[2]
     tagged = []
-    for rel in ('engine/autoload/game_state.py', 'engine/autoload/season_manager.py',
+    for rel in ('engine/autoload/game_state.py',
                 'systems/factions/sim/absolution.py', 'systems/factions/sim/faction_action.py'):
         text = (root / rel).read_text(encoding='utf-8')
         for m in ci_sim_fabrication_check._FORK_TAG_PATTERN.finditer(text):
@@ -242,6 +242,8 @@ def test_every_real_fork_tag_in_the_tree_is_visible_and_carries_a_ref():
                 f'{rel}: FORK tag names no ref -- {m.group(1)[:70]}'
     # The count guard is what stops this passing on an empty sweep (CLAUDE.md 0.1 point 2): if the
     # tags are ever unbracketed again, `tagged` empties and the assertion below fails loudly.
-    assert len(tagged) >= 9, f'expected >=9 FORK tags across those four files, found {len(tagged)}'
-    assert sum(1 for rel, _ in tagged if rel != 'systems/factions/sim/faction_action.py') >= 3, \
-        'the DOCSTRING tags (game_state, season_manager, absolution) are not being seen'
+    # 9 -> 8 and 3 -> 2 at plan position `28-iii` (2026-10-01): `engine/autoload/season_manager.py`, one
+    # file and one docstring tag, was deleted. Re-pinned to the re-measured counts rather than relaxed.
+    assert len(tagged) >= 8, f'expected >=8 FORK tags across those three files, found {len(tagged)}'
+    assert sum(1 for rel, _ in tagged if rel != 'systems/factions/sim/faction_action.py') >= 2, \
+        'the DOCSTRING tags (game_state, absolution) are not being seen'

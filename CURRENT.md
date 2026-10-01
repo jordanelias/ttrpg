@@ -42,7 +42,7 @@ Design prose is quarantined in `.designs/` (ED-IN-0231). A row that names such a
 | **Board game** | EVACUATED to `engine/engine_params/params_tables.yaml` (fork ref `c451bcb`) | — |
 | **Godot conversion** | `godot/godot_conversion_strategy_v1.md` — PROPOSED | ED-GO-0001; Gate-0 waits on ED-1051; `registers/handoffs/HANDOFF_GO.md` |
 | **Decision policy** | `decision_policy_v1.md` — DRAFT FOR RULING | ED-IN-0113 |
-| **Campaign driver** | ⛔ `engine/mc_v18.py` SUPERSEDED by `engine/season/` — do not build here | ED-IN-0226, ED-IN-0227; importer roster `tests/valoria/test_mc_v18_is_deprecated.py` |
+| **Campaign driver** | ⛔ RETIRED — `FORK:5c5d8ec6` (`engine/mc_v18.py`, deleted at plan position `28-iii`); the head is `engine/season/` | ED-IN-0226, ED-IN-0227; exact rows in `references/restructure_ledger.md` |
 | **Key substrate** | ⛔ RETIRED — `FORK:c6e82105` | ED-IN-0232; exact rows in `references/restructure_ledger.md` |
 | **Repository state armature** | ⛔ RETIRED — `FORK:1e4c6f4` | ED-IN-0194 |
 | **Status dashboard** | ⛔ RETIRED — `FORK:1e4c6f4` | milestone signal is `python tools/m1_acceptance.py --summary` |

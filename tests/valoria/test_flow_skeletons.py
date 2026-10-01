@@ -329,6 +329,11 @@ RETIREMENT_SHIFTED = frozenset({
     'engine/autoload/engine_clock.py',
     'engine/cross_scale/scene_dispatch.py',
     'engine/cross_scale/zoom_in_out.py',
+    # Plan position `28-iii` (2026-10-01) deleted `serialize_world` and `restore_world` (old lines
+    # 355-513), so archived anchors at :355 and :425 are out of range. Their two symbols join
+    # RETIRED_SYMBOLS below; every OTHER symbolled anchor into this file is still checked by symbol,
+    # which is the half that stays true. What is lost, stated: a bare line into this file is now advisory.
+    'engine/autoload/game_state.py',
     'engine/substrate/__init__.py',
     'systems/factions/sim/faction_action.py',
     'systems/factions/sim/parliamentary_transfer.py',
@@ -381,6 +386,12 @@ RETIRED_SYMBOLS = frozenset({
     # `UNREACHABLE` was a marker word inside `_emit_public_governance_transfer`'s docstring, cited
     # by the factions skeleton. It went with the function.
     'UNREACHABLE',
+    # `engine/autoload/game_state.py`'s save/restore pair, deleted at plan position `28-iii`
+    # (2026-10-01). ⚠ UNLIKE THE ENTRIES ABOVE these two tokens still OCCUR in the tree, but only as
+    # prose about their own deletion (game_state.py's docstring, a comment in `canon_buckets.py` and two
+    # in `systems/settlements/sim/registry.py`) -- the `echo_scheduler` shape, and by that entry's own
+    # rule a symbol whose last occurrences are prose about its deletion is retired.
+    'serialize_world', 'restore_world',
 })
 
 # Generated artifacts the retirement took with their builders (ED-IN-0232). These get no `FORK:`

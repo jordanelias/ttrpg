@@ -3103,7 +3103,7 @@ rows:
     cite:      "M4 build step 7-8 (`ED-IN-0279` clause (a)). ⚠ `tools/balance_oracle.py` DOES NOT
       APPLY TO THIS QUESTION -- it patches `mc_v18`/`dice_engine` and compares
       `mc_v18.run_campaign` arms; `march` lives entirely in `engine/season/`, which `mc_v18` cannot
-      reach (`mc_v18` is deprecated in place, `CLAUDE.md` §0.2 -- no game code imports it).
+      reach (`mc_v18` was deprecated in place, `CLAUDE.md` §0.2, and deleted at plan position `28-iii`).
       Patching it would leave both arms identical by construction, exactly the
       \"campaign-unreachable change\" `CLAUDE.md` §7 names as a fake control, not a measurement.
       The default is settled by the engine-reads-the-magnitude precedent above, not by a balance
@@ -3814,6 +3814,19 @@ rows:
       rounds of fixes to this row each replaced the stated CAUSE while never running the one
       instrument that measures the ABSENCE itself -- this pass ran it, and the result narrows the
       row's scope rather than replacing its cause again."
+
+  - id:        H-176
+    tier:      1
+    kind:      "ABSENT_RULE"
+    hole:      "GD-1: NO SEASON-SIDE ENDING / VICTORY CONDITION. `ENDINGS_CLASSIFIED.yaml` + `forced_by_threshold` are the ending vocabulary; `20-ii`'s observable '>=1 faction-scale ARC ends' is its precondition. The only code that ever implemented GD-1 -- `engine/autoload/victory.py`, a reader of the old prototype's clocks -- was deleted at plan position `28-iii`, and nothing in `engine/season/` replaces it."
+    owner:     "none -- no module owns an ending. `loop/driver.py::SeasonDriver.season` has no ending step; `ENDINGS_CLASSIFIED.yaml` is a classification of the authored arcs' `ends_when` prose (its own header: an agent classification, not an execution), read by `harness/corpus_run.py` for a measurement, not by the loop"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "any statement that a played realm ENDS, as opposed to running out of seasons; its precondition is `20-ii`'s observable '>=1 faction-scale ARC ends'"
+    cite:      "ABSENCE PROBE, RUN 2026-10-01 at plan position `28-iii` (an absence is the cheapest claim to make, so the thing that would show presence was run): `git grep -niE 'victory|GD-1' -- engine/season ':!engine/season/cases' ':!engine/season/runs' ':!engine/season/hole_register.yaml'` returned NO hits before this row was written -- the loop, its registries, its harnesses and its tests name neither. The only occurrences under `engine/season/` are authored case prose and a run log, one of which (`cases/chain/ARC3.yaml:42`) says the campaign's ending 'is defined not by a single victory condition'. NOT SUPERSEDED (no later ruling decided it) and NOT IRRELEVANT (GD-1 is a live canon constraint, `canon/04_game_design_constraints.md`; only its code died). Registered, not built, and not a question for Jordan."
+    source:    "plan position `28-iii` (SPINE-DELETE), master workplan v8 `_part3` item 11; `_part6` §D.1 disposition (c) for `engine/autoload/victory.py`"
 
 
 discharges:
