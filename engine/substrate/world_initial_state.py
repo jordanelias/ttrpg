@@ -2,19 +2,20 @@
 
 Status: [live, 2026-08-22]
 
-WHY. `engine/autoload/game_state.py` carried the campaign's opening position as six Python
-literals inherited from `mc_v17.py` with no authored source. Who holds T4 at season 0 is world
+WHY. `engine/autoload/game_state.py` (deleted at plan position `29b`, 2026-10-01) carried the campaign's
+opening position as six Python literals inherited from `mc_v17.py` with no authored source. Who holds T4 at season 0 is world
 data, and editing it should be editing a table, not editing the executable model.
 
 `references/world_initial_state.yaml` is the authored source; `tools/export_world_initial_state.py`
 cooks it into `engine/engine_params/world_initial_state.json` behind a blocking `--check`; this is
 its single runtime reader. Same shape as `descriptors.py`, `composition.py` and `keys.py`.
 
-IT IS A LEAF. stdlib only — no `engine.*`, no `systems.*`. `game_state.py` imports it at module
-load, so anything it imported would become a dependency of the entire engine.
+IT IS A LEAF. stdlib only — no `engine.*`, no `systems.*`. `game_state.py` imported it at module
+load, so anything it imported would have become a dependency of the entire engine; after `29b` its one
+reader was `systems/world/sim/npe.py` (`STARTING_STATS`), deleted at `29d`: only tests import it now.
 
-⚠ NOT EVERYTHING IN `create_world` IS HERE, and the first version of this docstring implied it was.
-`Territory.fort_level` is DERIVED from `garrison` (1 if garrisoned, else 0) and stays in the engine
+⚠ NOT EVERYTHING IN `create_world` WAS HERE (it is deleted with `game_state.py`, `29b`).
+`Territory.fort_level` was DERIVED from `garrison` (1 if garrisoned, else 0) and stayed in the engine
 on purpose: it is a rule, not data, and authoring it would give one number two owners. Everything
 that IS data — owner, accord, pt, garrison, playable, prosperity, templar, and the faction opening
 stats — is authored.
@@ -45,7 +46,7 @@ STARTING_OWNER = {t: r['owner'] for t, r in TERRITORIES.items()}
 STARTING_ACCORD = {t: r['accord'] for t, r in TERRITORIES.items()}
 STARTING_PT = {t: r['pt'] for t, r in TERRITORIES.items()}
 
-#: Only the garrisoned territories, matching the original literal's shape: `game_state` reads it
+#: Only the garrisoned territories, matching the original literal's shape: `game_state` read it
 #: with `.get(tid)`, so absence means "no garrison" and a False value never appears.
 STARTING_GARRISON = {t: True for t, r in TERRITORIES.items() if r['garrison']}
 

@@ -11,10 +11,11 @@ not point at its `.designs/` path.]
 ⚠ CORRECTION TO CANON'S OWN TEXT, already flagged in
 proposals/2026-09-25-squad-engagement-synthesis.md (A7): the data lives at
 `systems/settlements/valoria_geography_v30.yaml`, key `terrain:` (typed polygons) — NOT
-`designs/territory/...::terrain_polygons`, stale in both path and key. `systems/settlements/sim/
-registry.py`'s `_GEOGRAPHY_YAML` is the existing, single-owner loader for this same file (settlement
-population); this module reads the same file's `provinces:` and `terrain:` keys directly rather than
-routing through that settlement-shaped API, since neither key it needs is exposed there.
+`designs/territory/...::terrain_polygons`, stale in both path and key. This module reads the file's
+`provinces:` and `terrain:` keys directly through its own `_GEOGRAPHY_YAML`; it shares that loader with
+no other module since plan position `29c` deleted `systems/settlements/sim/registry.py` (the settlement
+population loader, which had a second `_GEOGRAPHY_YAML` for the same file). `engine/season/harness/
+populated.py` reads the same file by its own path (`GEOGRAPHY`).
 **Fortification is NOT read from this file** — see `terrain_row_for_territory`'s own docstring for why.
 
 SIMPLIFICATION, disclosed rather than hidden: "dominant polygon by area weight" would need true
@@ -124,19 +125,20 @@ def _polygon_area(polygon):
 def terrain_row_for_territory(tid, fort_level=0):
     """The A.9 row (one of this module's six constants) for a battle fought over province `tid`.
 
-    `fort_level`: the LIVE value from `world.territories[tid].fort_level` — pass it, do not omit it,
-    for any campaign-reachable call. [CORRECTED, adversarial review 2026-09-27] This function does NOT
-    read the geography YAML's own `provinces.<tid>.fort_level` key for this check, though that key
-    exists in the file and an earlier version of this function read it. `engine/autoload/
-    game_state.py`'s `Territory` dataclass derives `fort_level` from `garrison` at world-build time and
-    says so directly: "fort_level stays DERIVED from garrison rather than authored: it is a rule, not
-    data, and authoring it would give one number two owners" (`game_state.py:322-323`). The geography
-    YAML's copy is that second owner — authored, static, and already disagreeing with the live value
-    for real territories (e.g. T2: YAML `fort_level: 1`, live `fort_level: 0` since `garrison: false`
-    in `references/world_initial_state.yaml`). Reading the YAML copy here silently forked a
-    single-owned fact (CLAUDE.md §0.05 clause 3) and was latent only because nothing yet applies a
-    WALLS effect — it would have surfaced the moment one did. The caller (`faction_action._try_conquest`)
-    already holds the live `Territory` in scope; passing its `fort_level` costs nothing.
+    `fort_level`: the LIVE fortification of the place fought over — pass it, do not omit it, for any
+    season-reachable call. Since plan position `20-iv` the one production caller is
+    `massbattle.resolve_field`,
+    fed by `engine/season/seam/wrappers/mass_battle.py` with `queries/world_q.py::fortification_of`
+    at the march target (a garrison Site's `condition`, Jordan's ruling on what garrison strength IS),
+    a float in `[0.0, 1.0]`; only `> 0` is read here. [CORRECTED, adversarial review 2026-09-27] This
+    function does NOT read the geography YAML's own `provinces.<tid>.fort_level` key for this check,
+    though that key exists in the file and an earlier version of this function read it: the YAML's
+    copy is authored and static, a second owner of a fact the world holds live, and it already
+    disagreed with the live value for real territories (T2: YAML `fort_level: 1`, while the
+    since-deleted `Territory` derived 0 from `garrison: false`). Reading it would silently fork a
+    single-owned fact (CLAUDE.md §0.05 clause 3). The 2026-09-27 caller this paragraph first named,
+    `faction_action._try_conquest`, and the `game_state.Territory` it read were deleted at plan
+    position `29b`.
 
     [ED-780] FORTIFICATION DOMINATES: a fielded `fort_level > 0` resolves as WALLS regardless of the
     surrounding terrain polygon — a walled city's defining battle character is its walls, not whatever
@@ -184,3 +186,13 @@ def terrain_row_for_territory(tid, fort_level=0):
     if best_type is None:
         return OPEN_FLAT
     return _TYPE_TO_ROW.get(best_type, OPEN_FLAT)
+
+
+#: A.9's Walls row, the one number it gives: the DEFENDER's damage reduction rises by this much. It
+#: lands on the engine's own `Unit.dr`, the quantity melee already subtracts from damage
+#: (`orchestration.py`: `DAMAGE_BY_DEGREE[deg](power) - eff_dr`). Applying A.9's +3 1:1 to that unit
+#: is an ASSUMPTION (`H-150`), not a measurement. The row's other two clauses ("no flanking; Slow cannot
+#: advance") are NOT applied -- `massbattle.py::_run_and_grade`'s docstring says why. Kept below the
+#: lookup, not beside the row constants, so the lookup's line stays where the mass-battle flow
+#: skeleton's line anchor cites it (`tests/valoria/test_flow_skeletons.py`). Applied since `20-iv`.
+WALLS_DEFENDER_DR = 3  # [canonical: mass_battle_v30.md §A.9 ENVIRONMENTAL MODIFIERS — "Walls / fortifications | Defender +3 DR"]

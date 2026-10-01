@@ -138,13 +138,14 @@ jobs:
           # references/descriptor_registry.yaml -> the cooked artifact engine/substrate/descriptors.py
           # reads AT RUNTIME. Blocking: if this drifts, the engine imports a stale roster.
           v python3 tools/export_descriptors.py --check
-          # references/module_contracts.yaml composition_roles -> the role map engine/mc_v18.py
-          # resolves through. Blocking, and it IMPORTS every target at export time, so a broken row
-          # reds CI instead of failing a campaign run hours later.
+          # references/module_contracts.yaml composition_roles -> the role map
+          # engine/substrate/composition.py resolves through. Blocking, and it IMPORTS every target
+          # at export time, so a broken row reds CI instead of failing a run hours later.
           v python3 tools/export_composition.py --check
           # references/world_initial_state.yaml -> the campaign's opening position, read at import
-          # by engine/substrate/world_initial_state.py. Blocking: game_state.py no longer carries
-          # these tables, so a stale artifact is a world with the wrong owners.
+          # by engine/substrate/world_initial_state.py. Blocking: the leaf is the only owner of
+          # these tables (game_state.py, which re-exported them, was deleted at plan position
+          # `29b`), so a stale artifact is a world with the wrong owners.
           v python3 tools/export_world_initial_state.py --check
           # engine/season/cases/NPC*.yaml -> engine/season/npcs.yaml, the authored cast
           # harness/populated.py reads. Blocking, and WIRED 2026-09-16: --check existed and was
@@ -374,8 +375,8 @@ jobs:
     # Textbook §0.1 point 5 pattern defect — correct when written, broken because something else
     # changed. The `~20s` in the step comment below was true when this cap was set; the
     # mass-battle port and the seeded campaign goldens grew the suite by two orders of magnitude
-    # and nothing re-derived the cap. 20 minutes is ~3x the measured runtime, still bounded, and
-    # under the 25 this workflow already allows lanchester-signature.
+    # and nothing re-derived the cap. 20 minutes was ~3x the runtime measured with those goldens in this
+    # job (since deleted, `28-iii`; not re-measured), still bounded, and under the 25 lanchester-signature has.
     timeout-minutes: 20
     permissions:
       contents: read
@@ -390,10 +391,17 @@ jobs:
       # against (ED-1053). Before this, the reference had zero tests and never ran in
       # CI, so a degenerate-balance regression could land unflagged. Relocated from
       # sim/tests/ to engine/tests/ in the sim/ hollow-out (ED-IN-0071 P4 cont.).
-      # RUNTIME: ~6m15s (measured 2026-08-25, four runs, 375-383s). The "~20s" that stood here
-      # was the pre-mass-battle-port figure and is what made a 5-minute cap look generous.
-      # Kept SERIAL deliberately: this suite pins seeded campaign goldens and key-log content
-      # hashes, so `-n auto` is not a free speedup here the way it is for tests/valoria.
+      # RUNTIME: ~6m15s with the campaign goldens (measured 2026-08-25, four runs, 375-383s); NOT
+      # re-measured since `28-iii` deleted them. The "~20s" that stood before was the pre-port figure.
+      # RE-SCOPED 2026-10-01 (plan position `28-iii`): the five campaign-scale files this job was
+      # built around -- the `mc_v18` goldens, the cross-scale reach and population probes, the
+      # combat-bridge seam -- were deleted with the driver. What remains in `engine/tests` is the
+      # sigma-leverage parity golden, the contest kernel, and the knots and thread-mending ED probes.
+      # `parliamentary_action` left with its tree at `29b` and the accounting accord-drift probe at
+      # `29a`; two more leave with theirs (`2-ii`, `29f`), the thread-mending probe stays (`27`), and
+      # the sigma-leverage parity moves out when this job folds.
+      # SERIAL still: `-n auto` would need pytest-xdist in the install step above, for a job that
+      # no longer needs the speed.
       - run: python -m pytest engine/tests -q
 
   field-goldens:

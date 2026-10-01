@@ -27,20 +27,22 @@ branch, which is what "generalizing without changing their behaviour" meant.
 and effects, RULED AND BUILT (M4, `ED-IN-0279` clause (b), 2026-09-28)** -- an empty defending side
 is `Unopposed` (the branch at line ~99 below), never an auto-win manufactured here.
 
-⚠⚠ **WHAT A GARRISON IS, RULED, IS NOT THE SAME AS WHAT IT DOES TO THIS FIGHT, WHICH IS STILL
-OPEN, AND THIS MODULE IS WHERE THAT GAP LIVES.** Jordan's ruling (planning round 2) fixed garrison
-STRENGTH as a Site's `condition` field, and `queries/world_q.py::fortification_of` reads it -- but
-nothing calls that function. `resolve()` below calls `engine_resolve_field(w, claimants, other,
-terrain=None, rng=rng)` with `terrain` HARDCODED to `None`, so a heavily garrisoned settlement
-fights identically to an undefended one. `fortification_of`'s own docstring already discloses "one
-per settlement, but nothing enforces that it must" for step 11's seeding; what it does NOT
-disclose is that seeding one changes no outcome yet, because nothing reads its return. HOW MUCH a
-given fortification level should shift a field battle's margin is an invented magnitude no ruling
-states -- `H-148`'s own shape, not answered here. `H-150` (`hole_register.yaml`) is this gap's row;
-this module's job stays narrower and does not close it: given a claimant side and a named opposing
-faction, resolve the field battle and return what the engine says, exactly as
-`seam/wrappers/combat.py` derives a party and calls the engine without deciding who picked the
-fight.
+⚠⚠ **WHAT A GARRISON DOES TO THIS FIGHT IS NOW READ, AND THE READ IS ALL THIS MODULE ADDS (plan
+position `20-iv`, `H-150`).** Jordan's ruling (planning round 2) fixed garrison STRENGTH as a Site's
+`condition` field, and `queries/world_q.py::fortification_of` reads it. Until `20-iv` nothing called
+that function: this module passed `terrain=None` unconditionally, so a garrisoned settlement fought
+exactly like an undefended one. `resolve()` now reads three facts about the fight off the world and
+hands them on as plain values -- it decides none of what they do:
+  * the TERRITORY the target sits in, `_territory_of` below: the nearest `territory`-kind rung up
+    the target's ancestry, turned back into its geography row by `data/rosters.territory_id_of`
+    (the one owner of that id relation, which `harness/populated.py` mints through);
+  * its FORTIFICATION, `world_q.fortification_of` at the target;
+  * each side's MORALE source, `_side_stance` below.
+What a fortification DOES is `massbattle.resolve_field`'s and `terrain.py`'s: any positive value
+makes the field A.9's `WALLS` row, whose one number (defender +3 DR) the engine applies to `Unit.dr`
+1:1 (an ASSUMPTION about the unit, `H-150`). The number is canon's, not invented here, which is why this
+module may carry the read without deciding anything -- `seam/wrappers/combat.py` derives a party the same way and calls the
+engine without deciding who picked the fight.
 
 ⚠ **`degree_of` (`seam/ladder.py`) NOW GRADES THIS RESULT, THROUGH A THIRD BRANCH RATHER THAN BY
 MANUFACTURING A MARGIN (M4, `ED-IN-0279` clause (a)).** It does NOT grade `massbattle.py`'s own
@@ -69,7 +71,45 @@ from typing import Any, Optional
 # re-exports from `registry.py`, which imports `seam/wrappers/*` to register them) would close the
 # import cycle `manifest/providers.py` exists to break.
 from ...manifest.providers import provider
+from ...data.rosters import territory_id_of
+from ...decision import stance_toward
 from ...queries import world_q
+
+
+def _territory_of(w: Any, rung: str) -> Optional[str]:
+    """The geography territory id of the territory `rung` sits in, or `None`.
+
+    The nearest `territory`-kind rung at or above `rung` (`world_q.ancestry`, the walk
+    `holder_faction_of` and `loop/sides.py`'s origin both use), read back to its geography row by
+    `territory_id_of`. `None` -- no territory above, or one no geography row minted (a corpus
+    fixture's) -- is `terrain_row_for_territory`'s no-modifier case, not a refusal."""
+    for cur in world_q.ancestry(w, rung):
+        r = w.rungs.get(cur)
+        if r is not None and r.kind == "territory":
+            return territory_id_of(cur)
+    return None
+
+
+def _side_stance(w: Any, pids: list) -> float:
+    """A side's weight-mean stance toward each member's OWN faction -- the season's morale carrier
+    (`massbattle._morale_start`'s docstring says why it is this one).
+
+    Each member's faction is `world_q.faction_holding`, the one owner of *which faction a person
+    coheres under*, and the stance is `decision.stance_toward`, the one reader of a stance row
+    (valence x weight, summed over the rows naming that referent). A member committed to no faction
+    or to two reads `None` there and contributes zero -- `faction_holding`'s own *"NONE AND MANY BOTH
+    RETURN None, AND NEITHER IS A DEFAULT"*. Weighted by `Person.weight` because `resolve_field` sizes
+    the side by the same weights: a cohort of ten carries ten men's morale. An empty side reads 0."""
+    total = 0
+    acc = 0.0
+    for pid in pids:
+        p = w.persons.get(pid)
+        if p is None:
+            continue
+        fac = world_q.faction_holding(w, pid)
+        acc += p.weight * (stance_toward(p, fac) if fac is not None else 0.0)
+        total += p.weight
+    return acc / total if total else 0.0
 
 
 def _resolver():
@@ -129,7 +169,13 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         engine_resolve_field = _resolver()
     except Exception as e:
         return dict(status="ENGINE-UNAVAILABLE", why=f"{type(e).__name__}: {e}", module="mass_battle")
-    result = engine_resolve_field(w, claimants, other, terrain=None, rng=rng)
+    # PLAN POSITION `20-iv`: the place and the two sides' morale, read here and decided there
+    # (`H-150` -- `fortification_of`'s caller on the battle path).
+    result = engine_resolve_field(w, claimants, other,
+                                  territory=_territory_of(w, rung),
+                                  fort_level=world_q.fortification_of(w, rung),
+                                  stance_a=_side_stance(w, claimants),
+                                  stance_b=_side_stance(w, other), rng=rng)
     return dict(status="RESOLVED", module="mass_battle", resolver="dice_pool",
                 # ⚠ LIFTED TO TOP LEVEL, NOT LEFT NESTED UNDER `result` (M4). `degree_of`
                 # (`seam/ladder.py`) reads a provider's return directly -- `wound_state` and

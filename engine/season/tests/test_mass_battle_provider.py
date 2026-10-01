@@ -22,7 +22,16 @@
      defending side is the mustered subset, not the full membership `faction_q.resolve` alone
      would give.
 
-Block 5 (`resolve_field` sums `Person.weight` per side into army SIZE, not quality) lives in
+  5. A GARRISONED DEFENDER FIGHTS DIFFERENTLY FROM AN UNGARRISONED ONE (plan position `20-iv`,
+     `H-150`'s falsifier): the same army, target and seeds, with and without the target's garrison
+     Site, every field FOUGHT (not `Unopposed`) and at least one resolving differently. Before
+     `20-iv` this provider passed `terrain=None` and never read `fortification_of`, so every pair
+     was identical. ⚠ WHAT MOVES IS THE ENGINE'S RESULT, NOT THE BAND: at this fixture's weights the
+     2-man attacker loses either way, so the garrison raises the DEFENDERS' survivor fraction, which
+     the season writes only on a `Won` band this scale does not reach (`test_march.py`'s
+     `test_a_won_field...` docstring measured that).
+
+Block 6 (`resolve_field` sums `Person.weight` per side into army SIZE, not quality) lives in
 `tests/valoria/test_mass_battle_resolve_field.py`, not here: it needs `from systems.mass_battle...`
 at module scope to reach `massbattle` directly for monkeypatching, and
 `tests/valoria/test_engine_does_not_import_systems.py`'s `NESTED_BASELINE`/`BASELINE_TOTAL` ratchet
@@ -125,3 +134,37 @@ def test_a_real_faction_that_musters_nobody_at_the_rung_is_unopposed():
     assert r["attacker_wins"] is True and r["unopposed"] is True
     assert field_degree(r) == "Unopposed"
     assert r["parties"]["subject_members"] == []
+
+
+def test_a_garrisoned_defender_resolves_differently_from_an_ungarrisoned_one():
+    """PLAN POSITION `20-iv` -- `H-150`'s falsifier. `set_s_036` (Church of Solmund, territory T9)
+    carries the one garrison Site `build_realm` seeds per settlement; the bare world deletes it, so
+    `fortification_of` reads 1.0 against 0.0. Eight seeds, both worlds, the same 2-man Crown army.
+    Every one is a FOUGHT field (asserted, so this cannot pass on `Unopposed` short-circuits), and
+    the garrison changes at least one result and never leaves the defenders with fewer survivors.
+    Pre-`20-iv`, `differs` was 0: the provider never read the garrison."""
+    from engine.season.seam.wrappers.mass_battle import resolve as provider_resolve
+    target = "set_s_036"
+    garrisoned, bare = build_realm(0), build_realm(0)
+    for sid in [sid for sid, s in bare.sites.items() if s.kind == "garrison" and s.rung == target]:
+        del bare.sites[sid]
+    assert world_q.fortification_of(garrisoned, target) > 0.0, "the fixture no longer garrisons the target"
+    assert world_q.fortification_of(bare, target) == 0.0, "deleting the garrison left a fortification"
+    attackers = world_q.mustered(garrisoned, "set_s_014", "fac_crown")
+    assert attackers and attackers == world_q.mustered(bare, "set_s_014", "fac_crown")
+    fought = differs = 0
+    for seed in range(8):
+        walled = provider_resolve(garrisoned, attackers, ["c"], "a field",
+                                  subject="fac_church_of_solmund", rung=target,
+                                  rng=random.Random(seed))
+        open_ = provider_resolve(bare, attackers, ["c"], "a field",
+                                 subject="fac_church_of_solmund", rung=target,
+                                 rng=random.Random(seed))
+        for r in (walled, open_):
+            assert r["status"] == "RESOLVED" and r["unopposed"] is False, f"seed {seed}: not fought: {r}"
+        fought += 1
+        differs += walled["result"] != open_["result"]
+        assert walled["result"]["defender_size_pct"] >= open_["result"]["defender_size_pct"], (
+            f"seed {seed}: the walls left the defenders FEWER survivors: {walled} vs {open_}")
+    assert fought >= 8, f"only {fought} fields were fought"
+    assert differs >= 1, "a garrisoned target fought identically to a bare one on every seed (H-150)"

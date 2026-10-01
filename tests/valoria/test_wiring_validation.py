@@ -16,7 +16,7 @@ not net-new apparatus — it restores a falsifier the same step removed, and the
 still down by one.
 
 HERMETIC, and for the same reason the deleted file was: every case runs `validate_wiring` over
-synthetic in-memory structures, never the live registry. A legitimate adapter rename should red
+synthetic in-memory structures, never the live registry. A legitimate module rename should red
 the BLOCKING `export_composition --check` CI gate, not this suite. These pin the gate's LOGIC so
 it cannot silently stop gating.
 
@@ -31,14 +31,9 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'tools'))
 import export_composition as ec  # noqa: E402
 
-REAL_ADAPTERS = sorted(
-    f[:-3] for f in os.listdir(os.path.join(ec.REPO, 'engine', 'cross_scale'))
-    if f.endswith('.py') and not f.startswith('__')
-)
-
 
 def _contracts(**over):
-    """A tiny, internally-consistent registry: 2 modules + every real adapter, full coverage."""
+    """A tiny, internally-consistent registry: 2 modules."""
     doc = {
         'wiring_vocabularies': {
             'build_states': ['live', 'gated', 'deferred', 'unwired', 'stub', 'design'],
@@ -48,7 +43,6 @@ def _contracts(**over):
             {'module': 'alpha', 'wiring': {'build': 'live', 'godot': 'gd-ported', 'port_rank': 0}},
             {'module': 'beta', 'wiring': {'build': 'design', 'godot': 'no-oracle', 'port_rank': 8}},
         ],
-        'adapters': {n: {'build': 'gated', 'godot': 'python-oracle'} for n in REAL_ADAPTERS},
     }
     doc.update(over)
     return doc
@@ -81,33 +75,10 @@ def test_a_duplicated_module_name_is_caught():
     assert any('declared twice' in f for f in ec.validate_wiring(c)), ec.validate_wiring(c)
 
 
-def test_an_adapter_tag_that_names_no_file_is_caught():
-    c = _contracts()
-    c['adapters']['not_a_real_adapter'] = {'build': 'gated', 'godot': 'python-oracle'}
-    assert any('not_a_real_adapter' in f and 'does not resolve' in f
-               for f in ec.validate_wiring(c)), ec.validate_wiring(c)
-
-
-def test_an_undeclared_adapter_on_disk_is_caught():
-    """Coverage runs the other way too: a new cross_scale seam must be declared."""
-    c = _contracts()
-    c['adapters'].pop(REAL_ADAPTERS[0])
-    fails = ec.validate_wiring(c)
-    assert any('coverage' in f and REAL_ADAPTERS[0] in f for f in fails), fails
-
-
-def test_coverage_counts_tags_that_RESOLVE_not_tags_that_exist():
-    """A rename keeps the declared count at 8 and must not print '8/8' while failing."""
-    c = _contracts()
-    c['adapters']['renamed_seam'] = c['adapters'].pop(REAL_ADAPTERS[0])
-    cov = [f for f in ec.validate_wiring(c) if 'coverage' in f]
-    assert cov and f'{len(REAL_ADAPTERS) - 1}/{len(REAL_ADAPTERS)}' in cov[0], cov
-
-
-def test_a_bad_build_or_godot_value_is_caught_on_modules_and_adapters():
+def test_a_bad_build_or_godot_value_is_caught_on_modules():
     c = _contracts()
     c['modules'][0]['wiring']['build'] = 'mostly-live'
-    c['adapters'][REAL_ADAPTERS[0]]['godot'] = 'half-ported'
+    c['modules'][1]['wiring']['godot'] = 'half-ported'
     fails = ec.validate_wiring(c)
     assert any('bad build state' in f for f in fails), fails
     assert any('bad godot state' in f for f in fails), fails

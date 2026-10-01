@@ -1,11 +1,12 @@
 """The campaign's opening position: that it is AUTHORED, that it is VALIDATED, and that moving it
-out of `engine/autoload/game_state.py` changed none of it (plan S5b, 2026-08-22).
+out of `engine/autoload/game_state.py` changed none of it (plan S5b, 2026-08-22; `game_state.py` itself was
+deleted at plan position `29b`, and the three tests that read it went with it).
 
 SUBJECT, under `CLAUDE.md` §0.1 pt 5: `references/world_initial_state.yaml` is a runtime input —
-`engine/substrate/world_initial_state.py` reads its cooked artifact AT IMPORT, and `game_state.py`
-imports that leaf at module load. Delete the artifact and the engine does not start. This is the
-game, and the same distinction that kept `engine/engine_params/*.json` tracked through culling
-wave 5 while the rest of the generated layer was untracked.
+`engine/substrate/world_initial_state.py` reads its cooked artifact AT IMPORT. Delete the artifact and
+every reader of the leaf fails to import. This is the game, and the same distinction that kept
+`engine/engine_params/*.json` tracked through culling wave 5 while the rest of the generated layer
+was untracked.
 
 TWO CLAIMS, AND THEY FAIL DIFFERENTLY ON PURPOSE:
 
@@ -77,101 +78,6 @@ def test_the_opening_position_is_exactly_what_the_goldens_were_recorded_under():
     assert {t for t, v in w.STARTING_TEMPLAR.items() if v} == {'T9'}
 
 
-def test_game_state_still_exposes_the_names_the_corpus_cites():
-    """The literals moved; the vocabulary did not. `STARTING_OWNER` and friends are cited by name
-    across flow skeletons, design docs and tests, so `game_state` re-exports them. If a rename is
-    ever wanted, it is its own change with its own citation sweep."""
-    from engine.autoload import game_state as gs
-    from engine.substrate import world_initial_state as w
-
-    assert gs.STARTING_OWNER is w.STARTING_OWNER
-    assert gs.STARTING_ACCORD is w.STARTING_ACCORD
-    assert gs.STARTING_PT is w.STARTING_PT
-    assert gs.STARTING_GARRISON is w.STARTING_GARRISON
-    assert gs.STARTING_STATS is w.STARTING_STATS
-    assert gs.ALL_PLAYABLE_15 is w.ALL_PLAYABLE
-
-
-def test_the_engine_no_longer_carries_the_opening_position_as_literals():
-    """The point of the step, asserted rather than assumed. A future session restoring one of these
-    tables into `game_state.py` — as a 'quick fix', or by resolving a merge the lazy way — puts the
-    world back in the engine and gives the authored file a silent second owner.
-
-    ⚠ REWRITTEN 2026-08-22 after an adversarial pass. The first version searched for
-    whitespace-exact needles like `"'Crown':     {"` (five spaces), so a restoration with different
-    alignment, double quotes, or a line wrap passed it — it could observe the defect in exactly one
-    spelling. It now PARSES the module and asks whether any of the six names is bound to a literal
-    container, which no reformatting evades.
-    """
-    import ast
-
-    src = (REPO / 'engine' / 'autoload' / 'game_state.py').read_text(encoding='utf-8')
-    tree = ast.parse(src)
-    authored = {'STARTING_OWNER', 'STARTING_ACCORD', 'STARTING_PT', 'STARTING_GARRISON',
-                'STARTING_STATS', 'ALL_PLAYABLE_15'}
-    offenders, checked = [], 0
-    for node in ast.walk(tree):
-        if not isinstance(node, ast.Assign):
-            continue
-        for tgt in node.targets:
-            if not isinstance(tgt, ast.Name) or tgt.id not in authored:
-                continue
-            checked += 1
-            if isinstance(node.value, (ast.Dict, ast.Set, ast.List, ast.Tuple)) or (
-                    isinstance(node.value, ast.Call)
-                    and isinstance(node.value.func, ast.Name)
-                    and node.value.func.id in ('frozenset', 'set', 'dict')):
-                offenders.append(f'{tgt.id} (line {node.lineno})')
-    assert checked == len(authored), (
-        f'only {checked} of the {len(authored)} authored names are bound in game_state.py — a '
-        f'rename would make this test silently stop checking'
-    )
-    assert not offenders, (
-        'the opening position is a literal in game_state.py again: ' + ', '.join(offenders) + '. '
-        'It is authored in references/world_initial_state.yaml — edit that, and re-run '
-        'tools/export_world_initial_state.py.'
-    )
-
-
-def test_mults_is_still_a_literal_and_its_reason_is_current():
-    """The ONE table S5b deliberately did not move, pinned so the reason survives the session that
-    wrote it — and REWRITTEN 2026-08-23, because the original reason expired.
-
-    It was held because authoring `L` as a faction-stat row in `descriptor_registry.yaml` would
-    have answered Q1, the open ruling on whether Legitimacy is a base descriptor. Jordan ruled it
-    IS, so that objection is discharged and the note now names the two smaller reasons that
-    survive: MULTS spans faction AND territory stats (a faction-only move would split one dict
-    across two registry blocks), and three of its numbers have no provenance the anti-fabrication
-    gate would accept into an authored surface.
-
-    This test's job is unchanged: an unexplained holdout gets either moved or kept forever. What it
-    now asserts is that the explanation is the CURRENT one, not the expired one."""
-    src = (REPO / 'engine' / 'autoload' / 'game_state.py').read_text(encoding='utf-8')
-    assert "MULTS = {'L': 20" in src, 'MULTS moved — good; delete this test and say where it went'
-    assert 'Q1 NO LONGER BLOCKS IT' in src, (
-        'the MULTS note no longer records that Q1 is discharged. It was ruled on 2026-08-23; a note '
-        'still citing it as the blocker sends the next session to a closed question.'
-    )
-    assert 'territory_stats' in src and 'provenance' in src, (
-        'the MULTS note lost the two reasons that actually survive. Without them the next session '
-        'reads an unexplained holdout.'
-    )
-
-    # ⚠ THE NOTE HAS A TWIN, AND THIS TEST USED TO GUARD ONLY ONE OF THEM. The same rationale is
-    # written into references/world_initial_state.yaml, and when Q1 was ruled the Python half was
-    # corrected while the YAML half kept asserting Q1 was OPEN — an authored surface stating a
-    # closed question as live, guarded by a test that never opened it. Two owners of one note, one
-    # of them checked, is how the unchecked one rots.
-    yaml_src = (REPO / 'references' / 'world_initial_state.yaml').read_text(encoding='utf-8')
-    assert 'EXPIRED ON 2026-08-23' in yaml_src, (
-        'references/world_initial_state.yaml still states the pre-ruling reason for holding MULTS. '
-        'Q1 was ruled; correct the note there as well as in game_state.py.'
-    )
-    assert 'until Q1 is ruled' not in yaml_src, (
-        'the authored surface still says MULTS waits on Q1. That question is closed.'
-    )
-
-
 # ── 2. Every export-time validation can observe its own failure ───────────────────────────────
 
 def _authored(tmp_path):
@@ -239,24 +145,20 @@ def test_a_faction_with_no_territory_is_rejected(tmp_path):
 def test_faction_order_is_preserved_because_it_drives_the_rng():
     """THE TRAP THIS STEP FELL INTO, PINNED SO THE NEXT SESSION DOES NOT.
 
-    `create_world` iterates `faction_starting_stats` to build `world.factions`, so this table's
-    order becomes that dict's order, becomes the order of every `world.factions.items()` loop, and
-    becomes the RNG draw sequence of a seeded campaign. The first draft of the exporter sorted
-    factions alphabetically — the most unremarkable "for determinism" habit there is — and moved
-    the campaign goldens (Church win-share 0.0 -> 50.0) without altering one value.
+    The authored `faction_starting_stats` order is the order of every loop that iterates the leaf's
+    `STARTING_STATS`. It used to become `game_state.create_world`'s `world.factions` order, and so the
+    RNG draw sequence of a seeded campaign: the first draft of the exporter sorted factions
+    alphabetically — the most unremarkable "for determinism" habit there is — and moved the campaign
+    goldens (Church win-share 0.0 -> 50.0) without altering one value.
 
-    Two assertions, because they fail for different reasons: the exporter must REJECT a reordering
-    (so it cannot happen silently), and the order the engine actually ends up with must be the
-    authored one (so the rejection is guarding the right thing).
+    `create_world` and `game_state.py` were deleted at plan position `29b`, and the campaign goldens
+    went at `28-iii`, so the second assertion this test carried (the order the engine ended up with)
+    went with them. What survives is the authored order itself, which the exporter's own rejection
+    test below still guards; any reader that iterates `STARTING_STATS` still sees this sequence.
     """
     from engine.substrate import world_initial_state as w
-    from engine.autoload import game_state as gs
 
     assert list(w.STARTING_STATS) == ['Crown', 'Church', 'Hafenmark', 'Varfell']
-    assert list(gs.create_world(seed=42).factions) == ['Crown', 'Church', 'Hafenmark', 'Varfell'], (
-        'world.factions is no longer in authored order. Every seeded golden in engine/tests is '
-        'recorded against this sequence.'
-    )
 
 
 def test_a_reordered_faction_table_is_rejected_at_export_time(tmp_path):
@@ -271,7 +173,7 @@ def test_a_reordered_faction_table_is_rejected_at_export_time(tmp_path):
 
     with pytest.raises(SystemExit) as exc:
         mod.build()
-    assert 'MOVES THE GOLDENS' in str(exc.value)
+    assert 'faction order is' in str(exc.value)
 
 
 @pytest.mark.parametrize('old,new,expected', [

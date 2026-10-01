@@ -24,10 +24,10 @@ hash EQUAL [RAN by the orchestrator, same tree].
 | R-01 | not_met | the channel is present (R3 46/46 · 96/97) but no corpus reconvergence rate exists since the corpus grew | `11-fix` → `11`; then the telling workplan's T4–T5 (§0.6), `14`, `17` move it | no — measurement first |
 | R-02 | not_met | same instrument as R-01; its own `measure:` is U6's | `11-fix` → `11` | no |
 | R-03 | met | keep it met; its `measured:` ends 2026-09-11 | `21`-rest refresh | no |
-| R-04 | partial | seats without rungs (H-163 limit 1); governance verbs refused for want of an `office` operand (H-94); `mc_v18` still runs a faction scale the loop does not join; two scales have no spec | `13d-iii`, `28-iii`, J-3, J-11 | partly (J-3 office operand; J-11 scale specs) |
-| R-05 | not_met | 16 of 44 rows execute; 10 have no predicate/effect | `14`, `R05-THREAD`, `13d-iii`, `22`, `ED-FI-0009`, `20-iv`; J-1, J-2, J-3, J-4 | partly |
+| R-04 | partial | seats without rungs (H-163 limit 1); governance verbs refused for want of an `office` operand (H-94); `mc_v18`, which ran a faction scale the loop did not join, is deleted (`28-iii`, PR #450); two scales have no spec | `13d-iii`, J-3, J-11 | partly (J-3 office operand; J-11 scale specs) |
+| R-05 | not_met | 16 of 44 rows execute; 10 have no predicate/effect | `14`, `R05-THREAD`, `13d-iii`, `22`, `ED-FI-0009`; J-1, J-2, J-3, J-4 | partly |
 | R-06 | partial | no `ambitions(p)` read; the cast is one shared OUGHT in the corpus; convictions are correlated | `17`, `13`-rest; J-1 (cells) | reason 2 yes (J-1) |
-| R-07 | partial | no `stance` writer that a witnessed event reaches | the telling workplan (T3a; G1, regard at read — §0.6), `20-iv`, `24g` | no — the telling path is ratified; G1 waits on its own M0b trigger |
+| R-07 | partial | no `stance` writer that a witnessed event reaches | the telling workplan (T3a; G1, regard at read — §0.6), `24g`; `20-iv` landed (PR #450) but the realm still fights no field | no — the telling path is ratified; G1 waits on its own M0b trigger |
 | R-08 | partial | inclination does not break ties (alignment table sparse) | the cells commit (J-1), then H3/H9 | yes (J-1) |
 | R-09 | partial | the roll varies by seed, not by person (`capability` near-empty; `lev` 0); inquiries ungraded | `13`-rest, `17`, `8`, `ED-FI-0009`, `22` | corpus-wide `capability` needs J-13 |
 
@@ -144,12 +144,12 @@ stated reasons, which its `measure:` command cannot see:
    `levy.unauthorized` 19 — H-163 limit 1, *16 of `build_realm`'s 19 seats carry no rung*, so the
    holder's purview is empty. `open_case` 2/45, `issue` 1/10, `determine` 0/45. `confer` 0/213,
    `establish` 0/74, `revoke` 0/45 — a different cause: no computed act names an office (H-94).
-2. **The faction scale.** `engine/mc_v18.py` runs one and the loop does not join it. ⚠ **Half of this
+2. **The faction scale.** `engine/mc_v18.py` ran one and the loop did not join it. ⚠ **Half of this
    reason is answered by Layer 1, not by building:** `04_CODE_ARCHITECTURE.md` (RATIFIED) gives
    `Faction` a resolved view (`faction_q.resolve`) with **"no verbs"** and *"NEVER … `Act.actor` · a
    `contest` claimant"* — a faction acts as its members acting through seats (`Act.via`). So
    "no `Faction`-as-actor" is the architecture, not a gap (`_part5` §A, A-4). The other half — `mc_v18`
-   still running a parallel faction scale — dies at `28-iii`.
+   running a parallel faction scale — ended when `28-iii` deleted it (PR #450).
 
 **The six scales Jordan ruled (`requirements.yaml` `scales:`), read against the tree.** R-04 is measured
 against this roster (the file says so); this is the strategic half of "decisions at differing scales".
@@ -157,9 +157,9 @@ against this roster (the file says so); this is the strategic half of "decisions
 | scale | in the loop today | what expresses it in `engine/season` | position | design gap |
 |---|---|---|---|---|
 | character creation / development / chronicling | **no** | `Person` carries the fields; nothing creates or develops a person | `13`-rest + `17` (a cast per case); `24g` P3 individuation | **no spec in code for creation or development** → J-11 |
-| grand strategy politics | partial | `faction_q` reads; seat acts `via` offices at realm/duchy rungs | `13d-iii`, `28-iii`, `29b`; J-3 | the `office` operand (J-3) |
+| grand strategy politics | partial | `faction_q` reads; seat acts `via` offices at realm/duchy rungs | `13d-iii`; J-3 (`28-iii`, `29b` landed) | the `office` operand (J-3) |
 | social contests / debates | partial | `tell` graded through σ-leverage; proceedings (`speak`, `determine`) not yet graded | `22` → `22a` → `23` → `22b`; `2-ii` | none beyond `22`'s steps |
-| mass battles / strategy warfare | seam built | `march` → `seam/wrappers/mass_battle.py`; realm: 11 declared, 11 refused at ENCOUNTER, 0 fought | `20-iv`; H-175 measurement | why ENCOUNTER refuses (pre-flight P-6) |
+| mass battles / strategy warfare | seam built | `march` → `seam/wrappers/mass_battle.py`; realm: 11 declared, 11 refused at ENCOUNTER, 0 fought | `20-iv` landed (PR #450); `20-v`; H-175 measurement (pre-flight P-6) | why ENCOUNTER refuses is read (P-5): H-149's target-kind check refuses all 11 |
 | personal combat / grid-based map combat with units | duel only | `fight` → `combat_seam` | `8`, `9` (J-7) | **grid-based unit combat does not exist anywhere in the tree** (`requirements.yaml` says so) → J-11 |
 | settlement management / city building / domain actions | partial | `found`/`build`/`work`/`restore` (24e), cohorts (24f), `migrate` (19c) — realm: only `restore` executes (19) | `24h`, J-4 (H-156), H-165 limit 2 | a person-side works channel (H-165 limit 2) — `_part4` §`14` ride-along decision |
 | investigations / detective / interactive fiction | partial | six inquiry rows; degrees Failure/none only | `ED-FI-0009` | none (ruled: the loop is the mechanism) |
@@ -169,8 +169,9 @@ against this roster (the file says so); this is the strategic half of "decisions
 | position | what it changes | batch |
 |---|---|---|
 | `13d-iii` | every seat gets a rung anchor → `levy`/`issue`/`open_case` pass `authority`; `determine`'s bench resolves | 2 |
-| `28-iii` (+ `29b`) | `mc_v18` and its faction scale are gone; "not joined" stops being true by deletion | 1 |
-| `20-iv` | a garrisoned defender changes a field's outcome; if ENCOUNTER's refusal is a garrison/defender gap, marches start being fought | 1 |
+| `28-iii` (+ `29b`) — landed (PR #450) | `mc_v18` and its faction scale are gone; "not joined" stopped being true by deletion | 1 |
+| `20-iv` — landed (PR #450) | a garrisoned defender changes a field's outcome (a constructed test); the realm still fights no field — ENCOUNTER's refusal is H-149's target-kind check (P-5), not a garrison/defender gap | 1 |
+| `20-v` | H-150's walls bonus becomes a swept Fixtures value (`field_walls_dr`), so its `assumption` grade carries a sweep | 1-tail |
 | `22` | `determine` reaches a decision in the realm (THE BAR) | 3 |
 | J-3 | `confer`/`establish`/`revoke` become formable from computed play, or are withheld | 4 |
 
@@ -186,7 +187,7 @@ build for either scale.
 
 **`met` =** (1) `python -m engine.season.harness.aperture 4 0` shows every seat-gated remit verb
 (`levy`, `issue`, `open_case`, `determine`, `convene`, `dispatch`, and — after J-3 — `confer`,
-`establish`, `revoke`) executing ≥ 1 with `Act.via` set; (2) `engine/mc_v18.py` absent and
+`establish`, `revoke`) executing ≥ 1 with `Act.via` set; (2) `engine/mc_v18.py` absent (true since PR #450) and
 `test_faction_q.py` green; (3) every `scales:` row in `requirements.yaml` reads `in_loop` with an
 execution artifact named. ⚠ **Record edit owed** (`21`-rest, after `13d-iii`): R-04's `measure:` must
 name the instrument that reads reasons (1)–(2) — `aperture 4 0`'s per-verb lines — since
@@ -212,7 +213,7 @@ the different scales") is answered by Jordan's `scales:` roster (R-04's table ab
 | `confer`, `establish`, `revoke` | foldable, never attempted | 0 of 213 / 74 / 45 | no computed act names an office (H-94) | J-3 |
 | `determine` | foldable, never attempted | 0 of 45 | referent coincidence + quorum (H-163 limits 2–4, H-161) | `13d-iii` (bench), `22` steps 11–12 |
 | `open_case`, `convene` | foldable, never attempted | 2/45 · 5/14 | rungless seats; few corpus seats | `13d-iii`, `17` (cast seats offices) |
-| `march` | foldable, never attempted | declared 11, refused at ENCOUNTER 11 | corpus: no referent (H-175); realm: ENCOUNTER refusal (cause unread) | P-6 → `20-iv` |
+| `march` | foldable, never attempted | declared 11, refused at ENCOUNTER 11 | corpus: no referent (H-175); realm: ENCOUNTER refusal — read at P-5: H-149's target-kind check refuses all 11 | P-6 (`20-iv` landed without changing H-149's check) |
 | `levy` | always refused | 0/20 (`unauthorized` 19) | H-163 limit 1 | `13d-iii` |
 | `dispatch`, `survey` | always refused (corpus) | 2/27 · 5/123 | rare; seats (dispatch) / referent (survey) | `13d-iii`, `17`; J-8 decides `dispatch`'s remit |
 | `commit` | always refused | 0/154 | its own operand gap; crowds `release` (H-156) | J-4 |
@@ -289,7 +290,7 @@ losing-side write, reached by nothing in the realm run because no field was foug
 | position | what it changes | batch |
 |---|---|---|
 | the telling workplan (§0.6) | **regard computed at read** — `stored stance + judged deeds + told valence` (G1), the teller's relation in the weighed reader (T3a) and a teller's `record` (T6). No stance write by `tell` | carved out |
-| `20-iv` | fields get fought → `_eff_march`'s existing M4 stance write is reached in the realm | 1 |
+| `20-iv` — landed (PR #450) | the morale source and the walls are on the battle path, but the realm still fights no field (H-149's target-kind check refuses all 11 marches), so `_eff_march`'s existing M4 stance write is still unreached in the realm | 1 |
 | `24g` (J-6) | the bodies clock: deaths with a cause, P3 individuation at CENSUS | 4 |
 
 **⚠ Withdrawn, with the reason.** This plan first re-scoped `10` to a stored stance write on a resolved
@@ -300,7 +301,7 @@ half of regard keeps exactly its two writers: the build-time loyalty seed and `m
 **`met` =** the row's `measure:` passes, **and** after two seasons of `populated.build_realm(0)`, two
 hearers who hold different claims about one C — or the same claim from tellers they regard differently —
 read different `regard(p, C)` (asserted `>= 1` such pair, so a world where nothing was told fails),
-**and** `_eff_march`'s stance write is reached by a fought field (`20-iv`). The instrument for the first
+**and** `_eff_march`'s stance write is reached by a fought field (`20-iv` landed; the realm still fights none — H-149's target-kind check refuses all 11 marches). The instrument for the first
 conjunct is the telling workplan's G1 falsifier; the row flips on its own `measured:` paragraph quoting
 both.
 

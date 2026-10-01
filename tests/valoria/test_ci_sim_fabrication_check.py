@@ -219,29 +219,10 @@ def test_a_hex_looking_english_word_is_not_a_ref():
         assert not ci_sim_fabrication_check._FORK_REF_PATTERN.search(word), word
 
 
-def test_every_real_fork_tag_in_the_tree_is_visible_and_carries_a_ref():
-    """Reads the ACTUAL tags on disk, not a hand-written example.
-
-    ⚠ THIS TEST USED TO ASSERT AGAINST AN INVENTED STRING, and that made it worthless in the exact
-    way it was written to prevent. Four of ED-IN-0188's FORK tags live in module DOCSTRINGS, and at
-    the time they were written as bare `FORK: ...` with no brackets -- so `_FORK_TAG_PATTERN`
-    (which requires `[FORK: ...]`) could not see any of them, while this test passed against a
-    bracketed example no real site used. An adversarial pass caught it. The four sites are now
-    bracketed so they are genuinely checkable, and this test reads them off disk so the two can
-    never drift apart again.
-    """
-    import pathlib
-    root = pathlib.Path(__file__).resolve().parents[2]
-    tagged = []
-    for rel in ('engine/autoload/game_state.py', 'engine/autoload/season_manager.py',
-                'systems/factions/sim/absolution.py', 'systems/factions/sim/faction_action.py'):
-        text = (root / rel).read_text(encoding='utf-8')
-        for m in ci_sim_fabrication_check._FORK_TAG_PATTERN.finditer(text):
-            tagged.append((rel, m.group(1)))
-            assert ci_sim_fabrication_check._FORK_REF_PATTERN.search(m.group(1)), \
-                f'{rel}: FORK tag names no ref -- {m.group(1)[:70]}'
-    # The count guard is what stops this passing on an empty sweep (CLAUDE.md 0.1 point 2): if the
-    # tags are ever unbracketed again, `tagged` empties and the assertion below fails loudly.
-    assert len(tagged) >= 9, f'expected >=9 FORK tags across those four files, found {len(tagged)}'
-    assert sum(1 for rel, _ in tagged if rel != 'systems/factions/sim/faction_action.py') >= 3, \
-        'the DOCSTRING tags (game_state, season_manager, absolution) are not being seen'
+# `test_every_real_fork_tag_in_the_tree_is_visible_and_carries_a_ref` was retired at plan position `29b`
+# (2026-10-01); its source is in git at `5c5d8ec6`, where it read four files (`season_manager.py` went at 28-iii); at 29b it read three --
+# `engine/autoload/game_state.py`, `systems/factions/sim/absolution.py` and
+# `systems/factions/sim/faction_action.py` -- which were the only files under `engine/` or `systems/`
+# that carried one, and all three were deleted. Measured after: no tracked `.py` outside this file, its
+# sibling `test_pp_frozen_check.py` and `tools/ci_sim_fabrication_check.py` itself contains a bracketed
+# tag, so a re-pointed test would have swept nothing. The pattern's own behaviour is pinned above.

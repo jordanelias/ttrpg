@@ -28,15 +28,16 @@ from engine.substrate import names as N  # noqa: E402
 # ---------------------------------------------------------------------------
 
 def test_an_ambiguous_display_string_raises_instead_of_picking_one():
-    """Three strings are claimed by two entries each. Resolving one would return whichever row the
-    exporter met first, which is an answer with no basis -- so it refuses and names the claimants.
+    """A string claimed by two entries. Resolving one would return whichever row the exporter met
+    first, which is an answer with no basis -- so it refuses and names the claimants.
 
-    ⚠ `Legitimacy` IS IN THIS LIST BECAUSE IT WAS MISSING. Jordan ruled on 2026-08-23 that it is a
-    base faction stat; `descriptor_registry.yaml` gained `fac.legitimacy` and `names_index.yaml` did
-    not, and `ci_names_consistency.py` only checks index -> registry. With no row, the collision was
-    invisible and the leaf RESOLVED `Legitimacy` to the settlement stat. Found by an antagonist
-    pass, fixed at the owner."""
-    assert set(N.AMBIGUOUS) == {"Order", "Stability", "Legitimacy"}, (
+    THREE STRINGS BECAME ONE at plan position `29b` (2026-10-01). `Stability` and `Legitimacy` were
+    each claimed by a faction stat (`fac.stability`, `fac.legitimacy`) and a second row; the
+    `fac.*` rows were retired with `game_state.Faction` (`ID-13`), leaving `Order` (a conviction and
+    a settlement stat). `Legitimacy` had once been MISSING from this list -- `descriptor_registry.yaml`
+    gained `fac.legitimacy` and `names_index.yaml` did not, so the leaf RESOLVED it to the settlement
+    stat -- found by an antagonist pass; the loop below is what proves the refusal still fires."""
+    assert set(N.AMBIGUOUS) == {"Order"}, (
         f"the ambiguous set changed: {sorted(N.AMBIGUOUS)}. A new entry means two rows started "
         "claiming one display string; a missing one means a row was removed or merged")
     for name, claimants in N.AMBIGUOUS.items():
@@ -69,7 +70,7 @@ def test_an_alias_and_a_key_and_a_canonical_all_resolve():
     """The three shapes that SHOULD resolve, so the refusals above are not passing vacuously."""
     assert N.canonical_for("Church") == "Church of Solmund"          # alias
     assert N.canonical_for("Church of Solmund") == "Church of Solmund"  # already canonical
-    assert N.canonical_for("fac.influence") == "Influence"           # key
+    assert N.canonical_for("set.legitimacy") == "Legitimacy"         # key
     assert N.canonical_for("RM") == "Restoration Movement"           # alias added 2026-09-16
 
 
@@ -121,8 +122,8 @@ def test_the_exporter_refuses_an_alias_that_resolves_to_two_canonicals(tmp_path)
     """The coin-flip case: one string, two answers, and whichever table you reach first wins."""
     def doctor(s):
         return s.replace(
-            '  fac.wealth:     {canonical: Wealth,    aliases: []',
-            '  fac.wealth:     {canonical: Wealth,    aliases: ["Church"]')
+            '  set.prosperity:      {canonical: Prosperity,      aliases: []',
+            '  set.prosperity:      {canonical: Prosperity,      aliases: ["Church"]')
     r = _run_exporter_on(tmp_path, doctor)
     assert r.returncode != 0, f"exporter accepted a two-canonical alias: {r.stdout}"
     assert "resolves to BOTH" in (r.stdout + r.stderr)
@@ -131,11 +132,12 @@ def test_the_exporter_refuses_an_alias_that_resolves_to_two_canonicals(tmp_path)
 def test_the_exporter_refuses_an_alias_that_shadows_a_canonical(tmp_path):
     """The `Influence` shape (ED-IN-0057), which is why this refusal exists: `Influence` was an
     alias of Charisma AND the canonical name of `fac.influence`, and the attribute won because it
-    was checked first. Restoring that alias must now red the gate."""
+    was checked first. `fac.influence` was retired at plan position `29b`, so the planted alias is
+    now `Prosperity`, a live canonical (`set.prosperity`): the SHAPE is what must red the gate."""
     def doctor(s):
         return s.replace(
             "  attr.social.charisma:  {canonical: Charisma,   aliases: [Presence]",
-            "  attr.social.charisma:  {canonical: Charisma,   aliases: [Presence, Influence]")
+            "  attr.social.charisma:  {canonical: Charisma,   aliases: [Presence, Prosperity]")
     r = _run_exporter_on(tmp_path, doctor)
     assert r.returncode != 0, f"exporter accepted a canonical-shadowing alias: {r.stdout}"
     assert "canonical name of" in (r.stdout + r.stderr)
@@ -144,8 +146,8 @@ def test_the_exporter_refuses_an_alias_that_shadows_a_canonical(tmp_path):
 def test_the_exporter_refuses_a_legacy_tag_that_is_also_a_live_alias(tmp_path):
     def doctor(s):
         return s.replace(
-            '  fac.wealth:     {canonical: Wealth,    aliases: [], legacy: []',
-            '  fac.wealth:     {canonical: Wealth,    aliases: ["Coin"], legacy: ["Coin"]')
+            '  set.prosperity:      {canonical: Prosperity,      aliases: [], legacy: []',
+            '  set.prosperity:      {canonical: Prosperity,      aliases: ["Coin"], legacy: ["Coin"]')
     r = _run_exporter_on(tmp_path, doctor)
     assert r.returncode != 0, f"exporter accepted a legacy-and-alias tag: {r.stdout}"
     assert "BOTH legacy and alias" in (r.stdout + r.stderr)
@@ -156,8 +158,8 @@ def test_the_exporter_refuses_a_legacy_tag_that_shadows_a_canonical(tmp_path):
     tests LEGACY before CANONICAL, so this would refuse a perfectly live name as deprecated."""
     def doctor(s):
         return s.replace(
-            '  fac.wealth:     {canonical: Wealth,    aliases: [], legacy: []',
-            '  fac.wealth:     {canonical: Wealth,    aliases: [], legacy: ["Military"]')
+            '  set.prosperity:      {canonical: Prosperity,      aliases: [], legacy: []',
+            '  set.prosperity:      {canonical: Prosperity,      aliases: [], legacy: ["Defense"]')
     r = _run_exporter_on(tmp_path, doctor)
     assert r.returncode != 0, f"exporter accepted a canonical-shadowing legacy tag: {r.stdout}"
     assert "canonical name" in (r.stdout + r.stderr)
