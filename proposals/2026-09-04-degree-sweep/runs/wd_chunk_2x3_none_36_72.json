@@ -1,29 +1,29 @@
 {
  "mode": "none",
  "slots": "2x3",
- "seconds": 134.1,
+ "seconds": 122.1,
  "n_cases_attempted": 36,
  "n_cases_ok": 36,
  "n_cases_failed": 0,
  "failures": [],
  "fork_rows_failed": 0,
- "probed": 2142,
- "no_live_window": 543,
+ "probed": 2136,
+ "no_live_window": 540,
  "inert": 1045,
- "genuine": 554,
- "reconverged": 420,
- "diverged": 134,
- "reconvergence_rate": 0.7581227436823105,
- "window_slots_checked": 1662,
+ "genuine": 551,
+ "reconverged": 418,
+ "diverged": 133,
+ "reconvergence_rate": 0.7586206896551724,
+ "window_slots_checked": 1653,
  "window_slots_same_tick": 0,
- "acts_differ": 549,
- "hash_differ": 549,
- "stream_only": 415,
+ "acts_differ": 545,
+ "hash_differ": 546,
+ "stream_only": 413,
  "changed_distribution": {
-  "0": 420,
-  "3": 40,
+  "0": 418,
+  "3": 41,
   "1": 84,
-  "2": 10
+  "2": 8
  },
  "divergences": [
   {
@@ -255,28 +255,6 @@
    ]
   },
   {
-   "case": "NPC-080",
-   "lane": "NPC",
-   "at": 5,
-   "take": 3,
-   "tick": 0,
-   "person": "p_c",
-   "from_verb": "research",
-   "to_verb": "tell",
-   "in_budget": 1,
-   "changed_at": [
-    2
-   ],
-   "live_window": [
-    6,
-    7,
-    8
-   ],
-   "changed_idx": [
-    7
-   ]
-  },
-  {
    "case": "NPC-081",
    "lane": "NPC",
    "at": 0,
@@ -401,8 +379,8 @@
    "take": 3,
    "tick": 2,
    "person": "p_c",
-   "from_verb": "create_record",
-   "to_verb": "examine",
+   "from_verb": "tell",
+   "to_verb": "create_record",
    "in_budget": 3,
    "changed_at": [
     1,
@@ -410,14 +388,14 @@
     3
    ],
    "live_window": [
+    15,
     16,
-    17,
-    18
+    17
    ],
    "changed_idx": [
+    15,
     16,
-    17,
-    18
+    17
    ]
   },
   {
@@ -1288,6 +1266,7 @@
    "in_budget": 3,
    "changed_at": [
     1,
+    2,
     3
    ],
    "live_window": [
@@ -1297,6 +1276,7 @@
    ],
    "changed_idx": [
     4,
+    5,
     6
    ]
   },
@@ -1394,30 +1374,6 @@
     11,
     12,
     13
-   ]
-  },
-  {
-   "case": "ARC-11",
-   "lane": "ARC",
-   "at": 16,
-   "take": 3,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "commit",
-   "to_verb": "tell",
-   "in_budget": 3,
-   "changed_at": [
-    1,
-    2
-   ],
-   "live_window": [
-    17,
-    18,
-    19
-   ],
-   "changed_idx": [
-    17,
-    18
    ]
   },
   {
@@ -2138,6 +2094,28 @@
    ],
    "changed_idx": [
     11
+   ]
+  },
+  {
+   "case": "ARC-18",
+   "lane": "ARC",
+   "at": 12,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "examine",
+   "to_verb": "transfer",
+   "in_budget": 3,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    15,
+    16,
+    17
+   ],
+   "changed_idx": [
+    15
    ]
   },
   {
@@ -3210,9 +3188,9 @@
    "n_real_forks": 9,
    "n_no_live_window": 18,
    "n_inert": 45,
-   "n_reconverged": 5,
-   "n_diverged": 4,
-   "mean_changed": 0.4444444444444444,
+   "n_reconverged": 6,
+   "n_diverged": 3,
+   "mean_changed": 0.3333333333333333,
    "baseline_decisions": 24,
    "lane": "NPC"
   },
@@ -3235,15 +3213,15 @@
    "case": "NPC-082",
    "scale": "realm",
    "ok": true,
-   "n_decisions": 22,
-   "n_forks": 66,
-   "n_real_forks": 21,
-   "n_no_live_window": 18,
+   "n_decisions": 20,
+   "n_forks": 60,
+   "n_real_forks": 18,
+   "n_no_live_window": 15,
    "n_inert": 27,
-   "n_reconverged": 18,
+   "n_reconverged": 15,
    "n_diverged": 3,
-   "mean_changed": 0.23809523809523808,
-   "baseline_decisions": 22,
+   "mean_changed": 0.2777777777777778,
+   "baseline_decisions": 20,
    "lane": "NPC"
   },
   {
@@ -3452,7 +3430,7 @@
    "n_inert": 22,
    "n_reconverged": 10,
    "n_diverged": 4,
-   "mean_changed": 0.35714285714285715,
+   "mean_changed": 0.42857142857142855,
    "baseline_decisions": 16,
    "lane": "ARC"
   },
@@ -3465,9 +3443,9 @@
    "n_real_forks": 12,
    "n_no_live_window": 18,
    "n_inert": 39,
-   "n_reconverged": 9,
-   "n_diverged": 3,
-   "mean_changed": 0.6666666666666666,
+   "n_reconverged": 10,
+   "n_diverged": 2,
+   "mean_changed": 0.5,
    "baseline_decisions": 23,
    "lane": "ARC"
   },
@@ -3570,9 +3548,9 @@
    "n_real_forks": 21,
    "n_no_live_window": 12,
    "n_inert": 24,
-   "n_reconverged": 18,
-   "n_diverged": 3,
-   "mean_changed": 0.23809523809523808,
+   "n_reconverged": 17,
+   "n_diverged": 4,
+   "mean_changed": 0.2857142857142857,
    "baseline_decisions": 19,
    "lane": "ARC"
   },

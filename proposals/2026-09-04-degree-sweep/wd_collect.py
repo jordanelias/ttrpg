@@ -191,7 +191,7 @@ def main() -> int:
         # comment; none isolated here). So "diverged == 0 at none" is no longer the control;
         # U6's own control is, verbatim from its content owner: "`observation_deposit_mode=none`
         # arm ≥ the default arm — that is the only control this instrument produces"
-        # (`workplans/2026-09-09-r-execution-plan.md:1472-1473`).
+        # (the retired `workplans/2026-09-09-r-execution-plan.md:1472-1473`; read it with `git show 0671283:workplans/2026-09-09-r-execution-plan.md`).
         # The default arm is `actor` (`engine/season/data/fixtures.py:448`).
         assert n["genuine"] > 0, (
             f"{slots}: the control arm `none` has an EMPTY denominator ({n['genuine']} genuine); "

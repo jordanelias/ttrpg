@@ -7,6 +7,11 @@ different thing is the confound that would waste the item, so `fork_case` -- whi
 strictly-later-tick window, the NO-LIVE-WINDOW exclusion and the INERT-BY-CONSTRUCTION split -- is
 called, never copied.
 
+⚠ SUPERSEDED STATEMENTS BELOW (plan position `11`, 2026-10-01; the 143-case corpus, `runs/wd_acceptance.json`): the control
+arm `none` is not at 100% (it is a channel-open arm: 77.13% at `2 x 3`), and the shipped `default` cell now yields genuine
+forks (2,886 / 2,811 / 2,659 for none / actor / total; the 89-case "2 of 9 askable" count is history). The acceptance
+reading is `actor` at `2 x 3`: 43.03% reconverged.
+
 WHAT `W-D` ASKS. The forking exercise flipped every mechanical decision in the ARC/NPC corpus and
 followed three decisions on: 100% reconvergence. Its diagnosis (arm 9c/9d) was that
 `Query.opening_set` never consults world state, so the ONLY channel from what happened to what is
@@ -118,7 +123,7 @@ C.build_at = _build_spy
 
 FIXTURE_CELLS = {
     # key        (scene_budget, interactions_per_scene)  slots  what it is
-    "default":   ((5, 3),  15, "`DEFAULT_FIXTURES` — the shipped point. 0 genuine forks."),
+    "default":   ((5, 3),  15, "`DEFAULT_FIXTURES` — the shipped point. 0 genuine forks on the 89-case corpus; 2,886 / 2,811 / 2,659 (none / actor / total) on the 143-case corpus at plan position `11`."),
     "narrow":    ((2, 1),   2, "`H-10` arm 2 x `H-76` arm 1. TWO declared-arm changes."),
     "2x3":       ((2, 3),   6, "`H-10` arm 2, `interactions_per_scene` LEFT AT ITS DEFAULT — ONE "
                                "declared-arm change, so it is the SMALLER intervention of the two "

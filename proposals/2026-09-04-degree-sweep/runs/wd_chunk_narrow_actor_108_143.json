@@ -1,7 +1,7 @@
 {
  "mode": "actor",
  "slots": "narrow",
- "seconds": 154.7,
+ "seconds": 141.2,
  "n_cases_attempted": 35,
  "n_cases_ok": 35,
  "n_cases_failed": 0,
@@ -11,18 +11,18 @@
  "no_live_window": 618,
  "inert": 539,
  "genuine": 1342,
- "reconverged": 908,
- "diverged": 434,
- "reconvergence_rate": 0.676602086438152,
+ "reconverged": 910,
+ "diverged": 432,
+ "reconvergence_rate": 0.6780923994038748,
  "window_slots_checked": 4026,
  "window_slots_same_tick": 0,
- "acts_differ": 675,
+ "acts_differ": 672,
  "hash_differ": 675,
- "stream_only": 241,
+ "stream_only": 243,
  "changed_distribution": {
-  "0": 908,
-  "1": 366,
-  "2": 64,
+  "0": 910,
+  "1": 370,
+  "2": 58,
   "3": 4
  },
  "divergences": [
@@ -623,6 +623,28 @@
   {
    "case": "EMG-C4",
    "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "EMG-C4",
+   "lane": "ARC",
    "at": 5,
    "take": 3,
    "tick": 0,
@@ -888,33 +910,11 @@
    "case": "EMG-C4",
    "lane": "ARC",
    "at": 17,
-   "take": 2,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "tell",
-   "to_verb": "examine",
-   "in_budget": 1,
-   "changed_at": [
-    3
-   ],
-   "live_window": [
-    18,
-    19,
-    20
-   ],
-   "changed_idx": [
-    20
-   ]
-  },
-  {
-   "case": "EMG-C4",
-   "lane": "ARC",
-   "at": 17,
    "take": 3,
    "tick": 2,
    "person": "p_c",
    "from_verb": "tell",
-   "to_verb": "petition",
+   "to_verb": "examine",
    "in_budget": 1,
    "changed_at": [
     3
@@ -1890,7 +1890,29 @@
    "case": "EMG-X7",
    "lane": "ARC",
    "at": 5,
-   "take": 2,
+   "take": 1,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "surveil",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    7
+   ]
+  },
+  {
+   "case": "EMG-X7",
+   "lane": "ARC",
+   "at": 5,
+   "take": 3,
    "tick": 0,
    "person": "p_c",
    "from_verb": "surveil",
@@ -2512,11 +2534,11 @@
    "case": "NSC-02",
    "lane": "ARC",
    "at": 11,
-   "take": 2,
+   "take": 1,
    "tick": 1,
    "person": "p_c",
    "from_verb": "tell",
-   "to_verb": "work",
+   "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
     2
@@ -2538,7 +2560,7 @@
    "tick": 1,
    "person": "p_c",
    "from_verb": "tell",
-   "to_verb": "move",
+   "to_verb": "work",
    "in_budget": 1,
    "changed_at": [
     2
@@ -2556,14 +2578,13 @@
    "case": "NSC-02",
    "lane": "ARC",
    "at": 17,
-   "take": 1,
+   "take": 2,
    "tick": 2,
    "person": "p_c",
    "from_verb": "tell",
    "to_verb": "examine",
    "in_budget": 1,
    "changed_at": [
-    1,
     3
    ],
    "live_window": [
@@ -2572,54 +2593,7 @@
     20
    ],
    "changed_idx": [
-    18,
     20
-   ]
-  },
-  {
-   "case": "NSC-02",
-   "lane": "ARC",
-   "at": 17,
-   "take": 2,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "tell",
-   "to_verb": "transfer",
-   "in_budget": 1,
-   "changed_at": [
-    1
-   ],
-   "live_window": [
-    18,
-    19,
-    20
-   ],
-   "changed_idx": [
-    18
-   ]
-  },
-  {
-   "case": "NSC-02",
-   "lane": "ARC",
-   "at": 17,
-   "take": 3,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "tell",
-   "to_verb": "move",
-   "in_budget": 1,
-   "changed_at": [
-    1,
-    2
-   ],
-   "live_window": [
-    18,
-    19,
-    20
-   ],
-   "changed_idx": [
-    18,
-    19
    ]
   },
   {
@@ -3343,6 +3317,28 @@
   {
    "case": "NSC-05",
    "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "NSC-05",
+   "lane": "ARC",
    "at": 5,
    "take": 1,
    "tick": 0,
@@ -4047,7 +4043,6 @@
    "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
-    2,
     3
    ],
    "live_window": [
@@ -4056,7 +4051,6 @@
     20
    ],
    "changed_idx": [
-    19,
     20
    ]
   },
@@ -5269,7 +5263,6 @@
    "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
-    2,
     3
    ],
    "live_window": [
@@ -5278,7 +5271,6 @@
     8
    ],
    "changed_idx": [
-    7,
     8
    ]
   },
@@ -5390,28 +5382,6 @@
    ],
    "changed_idx": [
     14
-   ]
-  },
-  {
-   "case": "SCN-01",
-   "lane": "ARC",
-   "at": 11,
-   "take": 3,
-   "tick": 1,
-   "person": "p_c",
-   "from_verb": "utter",
-   "to_verb": "tell",
-   "in_budget": 1,
-   "changed_at": [
-    2
-   ],
-   "live_window": [
-    12,
-    13,
-    14
-   ],
-   "changed_idx": [
-    13
    ]
   },
   {
@@ -6380,33 +6350,11 @@
    "case": "SCN-05",
    "lane": "ARC",
    "at": 15,
-   "take": 2,
-   "tick": 2,
-   "person": "p_a",
-   "from_verb": "tell",
-   "to_verb": "surveil",
-   "in_budget": 1,
-   "changed_at": [
-    1
-   ],
-   "live_window": [
-    18,
-    19,
-    20
-   ],
-   "changed_idx": [
-    18
-   ]
-  },
-  {
-   "case": "SCN-05",
-   "lane": "ARC",
-   "at": 15,
    "take": 3,
    "tick": 2,
    "person": "p_a",
    "from_verb": "tell",
-   "to_verb": "restore",
+   "to_verb": "surveil",
    "in_budget": 1,
    "changed_at": [
     1
@@ -6710,7 +6658,7 @@
    "case": "SCN-06",
    "lane": "ARC",
    "at": 17,
-   "take": 1,
+   "take": 2,
    "tick": 2,
    "person": "p_c",
    "from_verb": "tell",
@@ -6726,30 +6674,6 @@
    ],
    "changed_idx": [
     20
-   ]
-  },
-  {
-   "case": "SCN-06",
-   "lane": "ARC",
-   "at": 17,
-   "take": 3,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "tell",
-   "to_verb": "move",
-   "in_budget": 1,
-   "changed_at": [
-    1,
-    2
-   ],
-   "live_window": [
-    18,
-    19,
-    20
-   ],
-   "changed_idx": [
-    18,
-    19
    ]
   },
   {
@@ -6778,7 +6702,7 @@
    "case": "SCN-07",
    "lane": "ARC",
    "at": 5,
-   "take": 2,
+   "take": 3,
    "tick": 0,
    "person": "p_c",
    "from_verb": "surveil",
@@ -7515,7 +7439,6 @@
    "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
-    2,
     3
    ],
    "live_window": [
@@ -7524,7 +7447,6 @@
     8
    ],
    "changed_idx": [
-    7,
     8
    ]
   },
@@ -7536,7 +7458,7 @@
    "tick": 0,
    "person": "p_c",
    "from_verb": "research",
-   "to_verb": "utter",
+   "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
     2,
@@ -7604,7 +7526,7 @@
    "tick": 2,
    "person": "p_a",
    "from_verb": "transfer",
-   "to_verb": "research",
+   "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
     2
@@ -7626,7 +7548,7 @@
    "tick": 2,
    "person": "p_a",
    "from_verb": "transfer",
-   "to_verb": "create_record",
+   "to_verb": "research",
    "in_budget": 1,
    "changed_at": [
     2
@@ -8787,6 +8709,28 @@
   {
    "case": "SCN-LOOP-A",
    "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "transfer",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "SCN-LOOP-A",
+   "lane": "ARC",
    "at": 5,
    "take": 1,
    "tick": 0,
@@ -9192,7 +9136,7 @@
    "tick": 2,
    "person": "p_c",
    "from_verb": "transfer",
-   "to_verb": "found",
+   "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
     3
@@ -9214,10 +9158,10 @@
    "tick": 2,
    "person": "p_c",
    "from_verb": "transfer",
-   "to_verb": "research",
+   "to_verb": "found",
    "in_budget": 1,
    "changed_at": [
-    2
+    3
    ],
    "live_window": [
     18,
@@ -9225,7 +9169,7 @@
     20
    ],
    "changed_idx": [
-    19
+    20
    ]
   },
   {
@@ -9276,7 +9220,7 @@
    "case": "SCN-LOOP-C",
    "lane": "ARC",
    "at": 5,
-   "take": 2,
+   "take": 3,
    "tick": 0,
    "person": "p_c",
    "from_verb": "surveil",
@@ -9704,7 +9648,7 @@
    "tick": 2,
    "person": "p_c",
    "from_verb": "transfer",
-   "to_verb": "found",
+   "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
     3
@@ -9804,9 +9748,9 @@
    "n_real_forks": 30,
    "n_no_live_window": 18,
    "n_inert": 24,
-   "n_reconverged": 23,
-   "n_diverged": 7,
-   "mean_changed": 0.3333333333333333,
+   "n_reconverged": 22,
+   "n_diverged": 8,
+   "mean_changed": 0.36666666666666664,
    "baseline_decisions": 24,
    "lane": "ARC"
   },
@@ -9849,9 +9793,9 @@
    "n_real_forks": 33,
    "n_no_live_window": 18,
    "n_inert": 21,
-   "n_reconverged": 23,
-   "n_diverged": 10,
-   "mean_changed": 0.42424242424242425,
+   "n_reconverged": 25,
+   "n_diverged": 8,
+   "mean_changed": 0.30303030303030304,
    "baseline_decisions": 24,
    "lane": "ARC"
   },
@@ -9894,9 +9838,9 @@
    "n_real_forks": 40,
    "n_no_live_window": 18,
    "n_inert": 14,
-   "n_reconverged": 29,
-   "n_diverged": 11,
-   "mean_changed": 0.375,
+   "n_reconverged": 28,
+   "n_diverged": 12,
+   "mean_changed": 0.4,
    "baseline_decisions": 24,
    "lane": "ARC"
   },
@@ -9911,7 +9855,7 @@
    "n_inert": 9,
    "n_reconverged": 23,
    "n_diverged": 22,
-   "mean_changed": 0.5777777777777777,
+   "mean_changed": 0.5555555555555556,
    "baseline_decisions": 24,
    "lane": "ARC"
   },
@@ -9969,9 +9913,9 @@
    "n_real_forks": 45,
    "n_no_live_window": 18,
    "n_inert": 9,
-   "n_reconverged": 27,
-   "n_diverged": 18,
-   "mean_changed": 0.4888888888888889,
+   "n_reconverged": 28,
+   "n_diverged": 17,
+   "mean_changed": 0.4444444444444444,
    "baseline_decisions": 24,
    "lane": "ARC"
   },
@@ -10029,9 +9973,9 @@
    "n_real_forks": 30,
    "n_no_live_window": 18,
    "n_inert": 24,
-   "n_reconverged": 22,
-   "n_diverged": 8,
-   "mean_changed": 0.36666666666666664,
+   "n_reconverged": 23,
+   "n_diverged": 7,
+   "mean_changed": 0.3333333333333333,
    "baseline_decisions": 24,
    "lane": "ARC"
   },
@@ -10044,9 +9988,9 @@
    "n_real_forks": 45,
    "n_no_live_window": 18,
    "n_inert": 9,
-   "n_reconverged": 30,
-   "n_diverged": 15,
-   "mean_changed": 0.35555555555555557,
+   "n_reconverged": 31,
+   "n_diverged": 14,
+   "mean_changed": 0.3111111111111111,
    "baseline_decisions": 24,
    "lane": "ARC"
   },
@@ -10106,7 +10050,7 @@
    "n_inert": 18,
    "n_reconverged": 23,
    "n_diverged": 10,
-   "mean_changed": 0.3939393939393939,
+   "mean_changed": 0.36363636363636365,
    "baseline_decisions": 23,
    "lane": "ARC"
   },
@@ -10194,9 +10138,9 @@
    "n_real_forks": 39,
    "n_no_live_window": 18,
    "n_inert": 15,
-   "n_reconverged": 28,
-   "n_diverged": 11,
-   "mean_changed": 0.3076923076923077,
+   "n_reconverged": 27,
+   "n_diverged": 12,
+   "mean_changed": 0.3333333333333333,
    "baseline_decisions": 24,
    "lane": "ARC"
   },

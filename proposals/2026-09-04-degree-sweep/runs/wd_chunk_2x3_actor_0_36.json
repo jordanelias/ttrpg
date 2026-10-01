@@ -1,7 +1,7 @@
 {
  "mode": "actor",
  "slots": "2x3",
- "seconds": 194.1,
+ "seconds": 143.4,
  "n_cases_attempted": 36,
  "n_cases_ok": 36,
  "n_cases_failed": 0,
@@ -16,14 +16,14 @@
  "reconvergence_rate": 0.4492753623188406,
  "window_slots_checked": 1656,
  "window_slots_same_tick": 0,
- "acts_differ": 542,
+ "acts_differ": 541,
  "hash_differ": 542,
  "stream_only": 238,
  "changed_distribution": {
   "0": 248,
-  "1": 236,
+  "1": 238,
   "3": 32,
-  "2": 36
+  "2": 34
  },
  "divergences": [
   {
@@ -901,6 +901,28 @@
    ]
   },
   {
+   "case": "NPC-005",
+   "lane": "NPC",
+   "at": 11,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "reconstruct",
+   "to_verb": "research",
+   "in_budget": 3,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    13,
+    14,
+    15
+   ],
+   "changed_idx": [
+    13
+   ]
+  },
+  {
    "case": "NPC-010",
    "lane": "NPC",
    "at": 1,
@@ -1290,7 +1312,7 @@
    "tick": 0,
    "person": "p_c",
    "from_verb": "research",
-   "to_verb": "petition",
+   "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
     3
@@ -1312,7 +1334,7 @@
    "tick": 0,
    "person": "p_c",
    "from_verb": "research",
-   "to_verb": "create_record",
+   "to_verb": "petition",
    "in_budget": 1,
    "changed_at": [
     3
@@ -2135,6 +2157,7 @@
    "to_verb": "tell",
    "in_budget": 3,
    "changed_at": [
+    2,
     3
    ],
    "live_window": [
@@ -2143,6 +2166,7 @@
     17
    ],
    "changed_idx": [
+    16,
     17
    ]
   },
@@ -3555,8 +3579,8 @@
    "take": 3,
    "tick": 2,
    "person": "p_c",
-   "from_verb": "examine",
-   "to_verb": "petition",
+   "from_verb": "transfer",
+   "to_verb": "examine",
    "in_budget": 3,
    "changed_at": [
     1
@@ -4491,28 +4515,6 @@
   {
    "case": "NPC-032",
    "lane": "NPC",
-   "at": 11,
-   "take": 3,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "tell",
-   "to_verb": "examine",
-   "in_budget": 3,
-   "changed_at": [
-    1
-   ],
-   "live_window": [
-    14,
-    15,
-    16
-   ],
-   "changed_idx": [
-    14
-   ]
-  },
-  {
-   "case": "NPC-032",
-   "lane": "NPC",
    "at": 12,
    "take": 1,
    "tick": 2,
@@ -5163,7 +5165,6 @@
    "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
-    2,
     3
    ],
    "live_window": [
@@ -5172,7 +5173,6 @@
     8
    ],
    "changed_idx": [
-    7,
     8
    ]
   },
@@ -5184,7 +5184,7 @@
    "tick": 0,
    "person": "p_c",
    "from_verb": "research",
-   "to_verb": "found",
+   "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
     2,
@@ -5208,7 +5208,7 @@
    "tick": 0,
    "person": "p_c",
    "from_verb": "research",
-   "to_verb": "fight",
+   "to_verb": "found",
    "in_budget": 1,
    "changed_at": [
     2,
@@ -6165,7 +6165,6 @@
    "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
-    2,
     3
    ],
    "live_window": [
@@ -6174,7 +6173,6 @@
     8
    ],
    "changed_idx": [
-    7,
     8
    ]
   },
@@ -6186,7 +6184,7 @@
    "tick": 0,
    "person": "p_c",
    "from_verb": "research",
-   "to_verb": "petition",
+   "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
     2,
@@ -6833,7 +6831,6 @@
    "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
-    2,
     3
    ],
    "live_window": [
@@ -6842,7 +6839,6 @@
     8
    ],
    "changed_idx": [
-    7,
     8
    ]
   },
@@ -6985,9 +6981,9 @@
    "n_real_forks": 12,
    "n_no_live_window": 15,
    "n_inert": 27,
-   "n_reconverged": 7,
-   "n_diverged": 5,
-   "mean_changed": 0.4166666666666667,
+   "n_reconverged": 6,
+   "n_diverged": 6,
+   "mean_changed": 0.5,
    "baseline_decisions": 18,
    "lane": "NPC"
   },
@@ -7062,7 +7058,7 @@
    "n_inert": 23,
    "n_reconverged": 7,
    "n_diverged": 15,
-   "mean_changed": 0.9090909090909091,
+   "mean_changed": 0.9545454545454546,
    "baseline_decisions": 20,
    "lane": "NPC"
   },
@@ -7270,9 +7266,9 @@
    "n_real_forks": 21,
    "n_no_live_window": 15,
    "n_inert": 21,
-   "n_reconverged": 8,
-   "n_diverged": 13,
-   "mean_changed": 0.7619047619047619,
+   "n_reconverged": 9,
+   "n_diverged": 12,
+   "mean_changed": 0.7142857142857143,
    "baseline_decisions": 19,
    "lane": "NPC"
   },
@@ -7332,7 +7328,7 @@
    "n_inert": 29,
    "n_reconverged": 13,
    "n_diverged": 12,
-   "mean_changed": 0.84,
+   "mean_changed": 0.8,
    "baseline_decisions": 24,
    "lane": "NPC"
   },
@@ -7407,7 +7403,7 @@
    "n_inert": 29,
    "n_reconverged": 13,
    "n_diverged": 12,
-   "mean_changed": 0.64,
+   "mean_changed": 0.6,
    "baseline_decisions": 24,
    "lane": "NPC"
   },
@@ -7452,7 +7448,7 @@
    "n_inert": 37,
    "n_reconverged": 10,
    "n_diverged": 7,
-   "mean_changed": 0.6470588235294118,
+   "mean_changed": 0.5882352941176471,
    "baseline_decisions": 24,
    "lane": "NPC"
   }

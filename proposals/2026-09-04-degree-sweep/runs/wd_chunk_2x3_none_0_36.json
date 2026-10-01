@@ -1,28 +1,28 @@
 {
  "mode": "none",
  "slots": "2x3",
- "seconds": 141.3,
+ "seconds": 133.4,
  "n_cases_attempted": 36,
  "n_cases_ok": 36,
  "n_cases_failed": 0,
  "failures": [],
  "fork_rows_failed": 0,
- "probed": 2226,
- "no_live_window": 558,
+ "probed": 2229,
+ "no_live_window": 561,
  "inert": 1119,
  "genuine": 549,
- "reconverged": 437,
- "diverged": 112,
- "reconvergence_rate": 0.7959927140255009,
+ "reconverged": 439,
+ "diverged": 110,
+ "reconvergence_rate": 0.7996357012750456,
  "window_slots_checked": 1647,
  "window_slots_same_tick": 0,
  "acts_differ": 543,
  "hash_differ": 543,
- "stream_only": 431,
+ "stream_only": 433,
  "changed_distribution": {
-  "0": 437,
-  "1": 74,
-  "3": 31,
+  "0": 439,
+  "1": 73,
+  "3": 30,
   "2": 7
  },
  "divergences": [
@@ -889,12 +889,10 @@
    "take": 3,
    "tick": 2,
    "person": "p_c",
-   "from_verb": "surveil",
-   "to_verb": "create_record",
+   "from_verb": "examine",
+   "to_verb": "surveil",
    "in_budget": 3,
    "changed_at": [
-    1,
-    2,
     3
    ],
    "live_window": [
@@ -903,8 +901,6 @@
     17
    ],
    "changed_idx": [
-    15,
-    16,
     17
    ]
   },
@@ -1086,6 +1082,28 @@
    ],
    "changed_idx": [
     7
+   ]
+  },
+  {
+   "case": "NPC-007",
+   "lane": "NPC",
+   "at": 12,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "examine",
+   "to_verb": "transfer",
+   "in_budget": 3,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    15,
+    16,
+    17
+   ],
+   "changed_idx": [
+    15
    ]
   },
   {
@@ -1831,6 +1849,28 @@
    ]
   },
   {
+   "case": "NPC-001",
+   "lane": "NPC",
+   "at": 13,
+   "take": 2,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    15,
+    16,
+    17
+   ],
+   "changed_idx": [
+    15
+   ]
+  },
+  {
    "case": "NPC-006",
    "lane": "NPC",
    "at": 0,
@@ -1912,7 +1952,7 @@
    "case": "NPC-006",
    "lane": "NPC",
    "at": 5,
-   "take": 1,
+   "take": 2,
    "tick": 0,
    "person": "p_c",
    "from_verb": "research",
@@ -1934,33 +1974,11 @@
    "case": "NPC-006",
    "lane": "NPC",
    "at": 5,
-   "take": 2,
-   "tick": 0,
-   "person": "p_c",
-   "from_verb": "research",
-   "to_verb": "found",
-   "in_budget": 1,
-   "changed_at": [
-    2
-   ],
-   "live_window": [
-    6,
-    7,
-    8
-   ],
-   "changed_idx": [
-    7
-   ]
-  },
-  {
-   "case": "NPC-006",
-   "lane": "NPC",
-   "at": 5,
    "take": 3,
    "tick": 0,
    "person": "p_c",
    "from_verb": "research",
-   "to_verb": "fight",
+   "to_verb": "found",
    "in_budget": 1,
    "changed_at": [
     2
@@ -1983,28 +2001,6 @@
    "person": "p_b",
    "from_verb": "commit",
    "to_verb": "surveil",
-   "in_budget": 1,
-   "changed_at": [
-    3
-   ],
-   "live_window": [
-    12,
-    13,
-    14
-   ],
-   "changed_idx": [
-    14
-   ]
-  },
-  {
-   "case": "NPC-006",
-   "lane": "NPC",
-   "at": 11,
-   "take": 3,
-   "tick": 1,
-   "person": "p_c",
-   "from_verb": "petition",
-   "to_verb": "create_record",
    "in_budget": 1,
    "changed_at": [
     3
@@ -2330,33 +2326,11 @@
    "case": "NPC-037",
    "lane": "NPC",
    "at": 5,
-   "take": 2,
-   "tick": 0,
-   "person": "p_c",
-   "from_verb": "research",
-   "to_verb": "tell",
-   "in_budget": 1,
-   "changed_at": [
-    2
-   ],
-   "live_window": [
-    6,
-    7,
-    8
-   ],
-   "changed_idx": [
-    7
-   ]
-  },
-  {
-   "case": "NPC-037",
-   "lane": "NPC",
-   "at": 5,
    "take": 3,
    "tick": 0,
    "person": "p_c",
    "from_verb": "research",
-   "to_verb": "petition",
+   "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
     2
@@ -2587,28 +2561,6 @@
   {
    "case": "NPC-041",
    "lane": "NPC",
-   "at": 5,
-   "take": 3,
-   "tick": 0,
-   "person": "p_c",
-   "from_verb": "research",
-   "to_verb": "tell",
-   "in_budget": 1,
-   "changed_at": [
-    2
-   ],
-   "live_window": [
-    6,
-    7,
-    8
-   ],
-   "changed_idx": [
-    7
-   ]
-  },
-  {
-   "case": "NPC-041",
-   "lane": "NPC",
    "at": 11,
    "take": 3,
    "tick": 1,
@@ -2799,15 +2751,15 @@
    "case": "NPC-008",
    "scale": "realm",
    "ok": true,
-   "n_decisions": 20,
-   "n_forks": 60,
+   "n_decisions": 21,
+   "n_forks": 63,
    "n_real_forks": 11,
-   "n_no_live_window": 15,
+   "n_no_live_window": 18,
    "n_inert": 34,
    "n_reconverged": 10,
    "n_diverged": 1,
-   "mean_changed": 0.2727272727272727,
-   "baseline_decisions": 20,
+   "mean_changed": 0.09090909090909091,
+   "baseline_decisions": 21,
    "lane": "NPC"
   },
   {
@@ -2849,9 +2801,9 @@
    "n_real_forks": 9,
    "n_no_live_window": 15,
    "n_inert": 36,
-   "n_reconverged": 7,
-   "n_diverged": 2,
-   "mean_changed": 0.2222222222222222,
+   "n_reconverged": 6,
+   "n_diverged": 3,
+   "mean_changed": 0.3333333333333333,
    "baseline_decisions": 20,
    "lane": "NPC"
   },
@@ -3029,9 +2981,9 @@
    "n_real_forks": 17,
    "n_no_live_window": 15,
    "n_inert": 28,
-   "n_reconverged": 14,
-   "n_diverged": 3,
-   "mean_changed": 0.23529411764705882,
+   "n_reconverged": 13,
+   "n_diverged": 4,
+   "mean_changed": 0.29411764705882354,
    "baseline_decisions": 20,
    "lane": "NPC"
   },
@@ -3044,9 +2996,9 @@
    "n_real_forks": 25,
    "n_no_live_window": 18,
    "n_inert": 29,
-   "n_reconverged": 17,
-   "n_diverged": 8,
-   "mean_changed": 0.56,
+   "n_reconverged": 19,
+   "n_diverged": 6,
+   "mean_changed": 0.48,
    "baseline_decisions": 24,
    "lane": "NPC"
   },
@@ -3119,9 +3071,9 @@
    "n_real_forks": 25,
    "n_no_live_window": 18,
    "n_inert": 29,
-   "n_reconverged": 22,
-   "n_diverged": 3,
-   "mean_changed": 0.12,
+   "n_reconverged": 23,
+   "n_diverged": 2,
+   "mean_changed": 0.08,
    "baseline_decisions": 24,
    "lane": "NPC"
   },
@@ -3164,9 +3116,9 @@
    "n_real_forks": 17,
    "n_no_live_window": 18,
    "n_inert": 37,
-   "n_reconverged": 13,
-   "n_diverged": 4,
-   "mean_changed": 0.23529411764705882,
+   "n_reconverged": 14,
+   "n_diverged": 3,
+   "mean_changed": 0.17647058823529413,
    "baseline_decisions": 24,
    "lane": "NPC"
   }

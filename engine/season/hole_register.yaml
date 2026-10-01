@@ -2848,7 +2848,7 @@ rows:
       `arm9_forking.py`, and both sweeps pre-date `W-D` independently. What it IS: the item banked
       a favourable result at one of two qualifying cells without running the other, which is the
       asymmetry §0.1 point 4 exists to surface, and the honest reading of `W-B`'s reach is that it
-      moves a decision at 2 slots and does not at 6.
+      moves a decision at 2 slots and does not at 6. ⚠ SUPERSEDED at plan position `11` (2026-10-01): on the 143-case corpus `actor` at 2 x 3 reconverges 43.03%, so `W-B` does move a decision at 6 slots; the 89-case figures in this row are history (`requirements.yaml` `R-02`).
       **RECONVERGENCE, verb-only fingerprint: `none` 1504/1504 = 100.00% (0 DIVERGED) · `actor`
       1405/1467 = 95.77% (62) · `total` 1285/1467 = 87.59% (182).** The denominators differ because
       a clause-4 drop shrinks the packer's own take `L` and reclassifies a fork as

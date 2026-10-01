@@ -1,29 +1,29 @@
 {
  "mode": "actor",
  "slots": "2x3",
- "seconds": 162.7,
+ "seconds": 119.8,
  "n_cases_attempted": 35,
  "n_cases_ok": 35,
  "n_cases_failed": 0,
  "failures": [],
  "fork_rows_failed": 0,
- "probed": 2040,
+ "probed": 2037,
  "no_live_window": 519,
  "inert": 992,
- "genuine": 529,
- "reconverged": 222,
- "diverged": 307,
- "reconvergence_rate": 0.41965973534971646,
- "window_slots_checked": 1587,
+ "genuine": 526,
+ "reconverged": 223,
+ "diverged": 303,
+ "reconvergence_rate": 0.42395437262357416,
+ "window_slots_checked": 1578,
  "window_slots_same_tick": 0,
- "acts_differ": 520,
- "hash_differ": 520,
- "stream_only": 213,
+ "acts_differ": 516,
+ "hash_differ": 517,
+ "stream_only": 214,
  "changed_distribution": {
-  "0": 222,
+  "0": 223,
   "3": 45,
-  "1": 222,
-  "2": 40
+  "1": 219,
+  "2": 39
  },
  "divergences": [
   {
@@ -215,6 +215,28 @@
    ]
   },
   {
+   "case": "EMG-C3",
+   "lane": "ARC",
+   "at": 9,
+   "take": 3,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "fight",
+   "to_verb": "migrate",
+   "in_budget": 3,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12
+   ]
+  },
+  {
    "case": "EMG-C4",
    "lane": "ARC",
    "at": 0,
@@ -363,8 +385,8 @@
    "take": 3,
    "tick": 2,
    "person": "p_c",
-   "from_verb": "examine",
-   "to_verb": "petition",
+   "from_verb": "transfer",
+   "to_verb": "examine",
    "in_budget": 3,
    "changed_at": [
     1,
@@ -2827,6 +2849,28 @@
    ]
   },
   {
+   "case": "NSC-08",
+   "lane": "ARC",
+   "at": 8,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "examine",
+   "to_verb": "transfer",
+   "in_budget": 3,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    11
+   ]
+  },
+  {
    "case": "NSC-09",
    "lane": "ARC",
    "at": 0,
@@ -3495,52 +3539,6 @@
     17
    ],
    "changed_idx": [
-    16
-   ]
-  },
-  {
-   "case": "SCN-02",
-   "lane": "ARC",
-   "at": 13,
-   "take": 2,
-   "tick": 2,
-   "person": "p_b",
-   "from_verb": "release",
-   "to_verb": "tell",
-   "in_budget": 1,
-   "changed_at": [
-    1
-   ],
-   "live_window": [
-    15,
-    16,
-    17
-   ],
-   "changed_idx": [
-    15
-   ]
-  },
-  {
-   "case": "SCN-02",
-   "lane": "ARC",
-   "at": 13,
-   "take": 3,
-   "tick": 2,
-   "person": "p_b",
-   "from_verb": "release",
-   "to_verb": "found",
-   "in_budget": 1,
-   "changed_at": [
-    1,
-    2
-   ],
-   "live_window": [
-    15,
-    16,
-    17
-   ],
-   "changed_idx": [
-    15,
     16
    ]
   },
@@ -4300,6 +4298,28 @@
    ],
    "changed_idx": [
     7
+   ]
+  },
+  {
+   "case": "SCN-06",
+   "lane": "ARC",
+   "at": 9,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "examine",
+   "to_verb": "transfer",
+   "in_budget": 3,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    11,
+    12,
+    13
+   ],
+   "changed_idx": [
+    13
    ]
   },
   {
@@ -6231,8 +6251,8 @@
    "take": 3,
    "tick": 2,
    "person": "p_c",
-   "from_verb": "create_record",
-   "to_verb": "petition",
+   "from_verb": "examine",
+   "to_verb": "create_record",
    "in_budget": 3,
    "changed_at": [
     1,
@@ -6240,80 +6260,14 @@
     3
    ],
    "live_window": [
+    12,
     13,
-    14,
-    15
+    14
    ],
    "changed_idx": [
+    12,
     13,
-    14,
-    15
-   ]
-  },
-  {
-   "case": "SCN-LOOP-A",
-   "lane": "ARC",
-   "at": 12,
-   "take": 1,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "commit",
-   "to_verb": "examine",
-   "in_budget": 1,
-   "changed_at": [
-    3
-   ],
-   "live_window": [
-    13,
-    14,
-    15
-   ],
-   "changed_idx": [
-    15
-   ]
-  },
-  {
-   "case": "SCN-LOOP-A",
-   "lane": "ARC",
-   "at": 12,
-   "take": 2,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "commit",
-   "to_verb": "create_record",
-   "in_budget": 1,
-   "changed_at": [
-    3
-   ],
-   "live_window": [
-    13,
-    14,
-    15
-   ],
-   "changed_idx": [
-    15
-   ]
-  },
-  {
-   "case": "SCN-LOOP-A",
-   "lane": "ARC",
-   "at": 12,
-   "take": 3,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "commit",
-   "to_verb": "move",
-   "in_budget": 1,
-   "changed_at": [
-    3
-   ],
-   "live_window": [
-    13,
-    14,
-    15
-   ],
-   "changed_idx": [
-    15
+    14
    ]
   },
   {
@@ -6574,7 +6528,7 @@
    "case": "SCN-LOOP-B",
    "lane": "ARC",
    "at": 13,
-   "take": 2,
+   "take": 3,
    "tick": 2,
    "person": "p_c",
    "from_verb": "transfer",
@@ -6590,28 +6544,6 @@
    ],
    "changed_idx": [
     14
-   ]
-  },
-  {
-   "case": "SCN-LOOP-B",
-   "lane": "ARC",
-   "at": 13,
-   "take": 3,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "transfer",
-   "to_verb": "examine",
-   "in_budget": 1,
-   "changed_at": [
-    3
-   ],
-   "live_window": [
-    14,
-    15,
-    16
-   ],
-   "changed_idx": [
-    16
    ]
   },
   {
@@ -7017,28 +6949,6 @@
    "changed_idx": [
     12
    ]
-  },
-  {
-   "case": "SCN-LOOP-D",
-   "lane": "ARC",
-   "at": 12,
-   "take": 3,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "tell",
-   "to_verb": "found",
-   "in_budget": 3,
-   "changed_at": [
-    3
-   ],
-   "live_window": [
-    15,
-    16,
-    17
-   ],
-   "changed_idx": [
-    17
-   ]
   }
  ],
  "rows": [
@@ -7066,9 +6976,9 @@
    "n_real_forks": 11,
    "n_no_live_window": 12,
    "n_inert": 25,
-   "n_reconverged": 7,
-   "n_diverged": 4,
-   "mean_changed": 0.7272727272727273,
+   "n_reconverged": 6,
+   "n_diverged": 5,
+   "mean_changed": 0.8181818181818182,
    "baseline_decisions": 16,
    "lane": "ARC"
   },
@@ -7261,9 +7171,9 @@
    "n_real_forks": 9,
    "n_no_live_window": 12,
    "n_inert": 18,
-   "n_reconverged": 5,
-   "n_diverged": 4,
-   "mean_changed": 1.1111111111111112,
+   "n_reconverged": 4,
+   "n_diverged": 5,
+   "mean_changed": 1.2222222222222223,
    "baseline_decisions": 13,
    "lane": "ARC"
   },
@@ -7306,9 +7216,9 @@
    "n_real_forks": 18,
    "n_no_live_window": 15,
    "n_inert": 27,
-   "n_reconverged": 6,
-   "n_diverged": 12,
-   "mean_changed": 1.1666666666666667,
+   "n_reconverged": 8,
+   "n_diverged": 10,
+   "mean_changed": 1.0,
    "baseline_decisions": 20,
    "lane": "ARC"
   },
@@ -7366,9 +7276,9 @@
    "n_real_forks": 14,
    "n_no_live_window": 12,
    "n_inert": 19,
-   "n_reconverged": 6,
-   "n_diverged": 8,
-   "mean_changed": 0.8571428571428571,
+   "n_reconverged": 5,
+   "n_diverged": 9,
+   "mean_changed": 0.9285714285714286,
    "baseline_decisions": 15,
    "lane": "ARC"
   },
@@ -7511,15 +7421,15 @@
    "case": "SCN-LOOP-A",
    "scale": "realm",
    "ok": true,
-   "n_decisions": 17,
-   "n_forks": 51,
-   "n_real_forks": 14,
+   "n_decisions": 16,
+   "n_forks": 48,
+   "n_real_forks": 11,
    "n_no_live_window": 12,
    "n_inert": 25,
    "n_reconverged": 1,
-   "n_diverged": 13,
-   "mean_changed": 1.5714285714285714,
-   "baseline_decisions": 17,
+   "n_diverged": 10,
+   "mean_changed": 1.7272727272727273,
+   "baseline_decisions": 16,
    "lane": "ARC"
   },
   {
@@ -7531,9 +7441,9 @@
    "n_real_forks": 16,
    "n_no_live_window": 15,
    "n_inert": 26,
-   "n_reconverged": 3,
-   "n_diverged": 13,
-   "mean_changed": 1.1875,
+   "n_reconverged": 4,
+   "n_diverged": 12,
+   "mean_changed": 1.125,
    "baseline_decisions": 19,
    "lane": "ARC"
   },
@@ -7561,9 +7471,9 @@
    "n_real_forks": 12,
    "n_no_live_window": 15,
    "n_inert": 33,
-   "n_reconverged": 3,
-   "n_diverged": 9,
-   "mean_changed": 1.0833333333333333,
+   "n_reconverged": 4,
+   "n_diverged": 8,
+   "mean_changed": 1.0,
    "baseline_decisions": 20,
    "lane": "ARC"
   }

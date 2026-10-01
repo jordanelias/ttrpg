@@ -1,7 +1,7 @@
 {
  "mode": "actor",
  "slots": "2x3",
- "seconds": 175.4,
+ "seconds": 134.6,
  "n_cases_attempted": 36,
  "n_cases_ok": 36,
  "n_cases_failed": 0,
@@ -11,19 +11,19 @@
  "no_live_window": 540,
  "inert": 1048,
  "genuine": 548,
- "reconverged": 226,
- "diverged": 322,
- "reconvergence_rate": 0.4124087591240876,
+ "reconverged": 227,
+ "diverged": 321,
+ "reconvergence_rate": 0.4142335766423358,
  "window_slots_checked": 1644,
  "window_slots_same_tick": 0,
  "acts_differ": 539,
  "hash_differ": 540,
- "stream_only": 218,
+ "stream_only": 219,
  "changed_distribution": {
-  "0": 226,
-  "3": 39,
-  "1": 252,
-  "2": 31
+  "0": 227,
+  "3": 38,
+  "1": 253,
+  "2": 30
  },
  "divergences": [
   {
@@ -577,7 +577,6 @@
    "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
-    2,
     3
    ],
    "live_window": [
@@ -586,7 +585,6 @@
     8
    ],
    "changed_idx": [
-    7,
     8
    ]
   },
@@ -3156,28 +3154,6 @@
    ],
    "changed_idx": [
     9
-   ]
-  },
-  {
-   "case": "ARC-08",
-   "lane": "ARC",
-   "at": 11,
-   "take": 3,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "tell",
-   "to_verb": "examine",
-   "in_budget": 3,
-   "changed_at": [
-    3
-   ],
-   "live_window": [
-    14,
-    15,
-    16
-   ],
-   "changed_idx": [
-    16
    ]
   },
   {
@@ -6003,8 +5979,8 @@
    "take": 3,
    "tick": 2,
    "person": "p_c",
-   "from_verb": "examine",
-   "to_verb": "petition",
+   "from_verb": "transfer",
+   "to_verb": "examine",
    "in_budget": 3,
    "changed_at": [
     3
@@ -7241,13 +7217,11 @@
    "take": 3,
    "tick": 2,
    "person": "p_c",
-   "from_verb": "examine",
-   "to_verb": "create_record",
+   "from_verb": "tell",
+   "to_verb": "examine",
    "in_budget": 3,
    "changed_at": [
-    1,
-    2,
-    3
+    1
    ],
    "live_window": [
     15,
@@ -7255,9 +7229,7 @@
     17
    ],
    "changed_idx": [
-    15,
-    16,
-    17
+    15
    ]
   },
   {
@@ -7267,8 +7239,8 @@
    "take": 3,
    "tick": 2,
    "person": "p_a",
-   "from_verb": "research",
-   "to_verb": "petition",
+   "from_verb": "create_record",
+   "to_verb": "restore",
    "in_budget": 3,
    "changed_at": [
     1
@@ -7386,7 +7358,7 @@
    "n_inert": 45,
    "n_reconverged": 2,
    "n_diverged": 7,
-   "mean_changed": 1.1111111111111112,
+   "mean_changed": 1.0,
    "baseline_decisions": 24,
    "lane": "NPC"
   },
@@ -7594,9 +7566,9 @@
    "n_real_forks": 21,
    "n_no_live_window": 12,
    "n_inert": 21,
-   "n_reconverged": 14,
-   "n_diverged": 7,
-   "mean_changed": 0.47619047619047616,
+   "n_reconverged": 15,
+   "n_diverged": 6,
+   "mean_changed": 0.42857142857142855,
    "baseline_decisions": 18,
    "lane": "ARC"
   },
@@ -7866,7 +7838,7 @@
    "n_inert": 24,
    "n_reconverged": 4,
    "n_diverged": 17,
-   "mean_changed": 1.0952380952380953,
+   "mean_changed": 1.0,
    "baseline_decisions": 20,
    "lane": "ARC"
   }

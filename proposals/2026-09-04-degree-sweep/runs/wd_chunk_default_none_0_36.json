@@ -1,29 +1,29 @@
 {
  "mode": "none",
  "slots": "default",
- "seconds": 647.7,
+ "seconds": 483.9,
  "n_cases_attempted": 36,
  "n_cases_ok": 36,
  "n_cases_failed": 0,
  "failures": [],
  "fork_rows_failed": 0,
- "probed": 5460,
- "no_live_window": 1398,
- "inert": 3376,
- "genuine": 686,
- "reconverged": 469,
- "diverged": 217,
- "reconvergence_rate": 0.6836734693877551,
- "window_slots_checked": 2058,
+ "probed": 5469,
+ "no_live_window": 1389,
+ "inert": 3370,
+ "genuine": 710,
+ "reconverged": 482,
+ "diverged": 228,
+ "reconvergence_rate": 0.6788732394366197,
+ "window_slots_checked": 2130,
  "window_slots_same_tick": 0,
- "acts_differ": 662,
- "hash_differ": 663,
- "stream_only": 446,
+ "acts_differ": 682,
+ "hash_differ": 684,
+ "stream_only": 456,
  "changed_distribution": {
-  "0": 469,
-  "3": 164,
+  "0": 482,
+  "3": 178,
   "1": 45,
-  "2": 8
+  "2": 5
  },
  "divergences": [
   {
@@ -162,6 +162,32 @@
    "from_verb": "create_record",
    "to_verb": "research",
    "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    11,
+    12,
+    13
+   ],
+   "changed_idx": [
+    11,
+    12,
+    13
+   ]
+  },
+  {
+   "case": "NPC-086",
+   "lane": "NPC",
+   "at": 8,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "tell",
+   "in_budget": 1,
    "changed_at": [
     1,
     2,
@@ -787,32 +813,6 @@
   {
    "case": "NPC-012",
    "lane": "NPC",
-   "at": 8,
-   "take": 3,
-   "tick": 0,
-   "person": "p_c",
-   "from_verb": "petition",
-   "to_verb": "create_record",
-   "in_budget": 3,
-   "changed_at": [
-    1,
-    2,
-    3
-   ],
-   "live_window": [
-    11,
-    12,
-    13
-   ],
-   "changed_idx": [
-    11,
-    12,
-    13
-   ]
-  },
-  {
-   "case": "NPC-012",
-   "lane": "NPC",
    "at": 9,
    "take": 3,
    "tick": 0,
@@ -839,75 +839,45 @@
   {
    "case": "NPC-012",
    "lane": "NPC",
-   "at": 30,
+   "at": 17,
    "take": 1,
-   "tick": 2,
+   "tick": 1,
    "person": "p_a",
-   "from_verb": "commit",
-   "to_verb": "utter",
+   "from_verb": "utter",
+   "to_verb": "commit",
    "in_budget": 1,
-   "changed_at": [
-    1,
-    2,
-    3
-   ],
-   "live_window": [
-    37,
-    38,
-    39
-   ],
-   "changed_idx": [
-    37,
-    38,
-    39
-   ]
-  },
-  {
-   "case": "NPC-012",
-   "lane": "NPC",
-   "at": 30,
-   "take": 2,
-   "tick": 2,
-   "person": "p_a",
-   "from_verb": "commit",
-   "to_verb": "fight",
-   "in_budget": 1,
-   "changed_at": [
-    1,
-    2,
-    3
-   ],
-   "live_window": [
-    37,
-    38,
-    39
-   ],
-   "changed_idx": [
-    37,
-    38,
-    39
-   ]
-  },
-  {
-   "case": "NPC-012",
-   "lane": "NPC",
-   "at": 36,
-   "take": 3,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "transfer",
-   "to_verb": "research",
-   "in_budget": 3,
    "changed_at": [
     2
    ],
    "live_window": [
-    37,
-    38,
-    39
+    24,
+    25,
+    26
    ],
    "changed_idx": [
-    38
+    25
+   ]
+  },
+  {
+   "case": "NPC-012",
+   "lane": "NPC",
+   "at": 17,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "survey",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    24,
+    25,
+    26
+   ],
+   "changed_idx": [
+    25
    ]
   },
   {
@@ -1011,28 +981,6 @@
    "changed_idx": [
     24,
     25,
-    26
-   ]
-  },
-  {
-   "case": "NPC-002",
-   "lane": "NPC",
-   "at": 18,
-   "take": 3,
-   "tick": 1,
-   "person": "p_b",
-   "from_verb": "surveil",
-   "to_verb": "tell",
-   "in_budget": 3,
-   "changed_at": [
-    3
-   ],
-   "live_window": [
-    24,
-    25,
-    26
-   ],
-   "changed_idx": [
     26
    ]
   },
@@ -1828,7 +1776,59 @@
    "case": "NPC-008",
    "lane": "NPC",
    "at": 34,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    41,
+    42,
+    43
+   ],
+   "changed_idx": [
+    41,
+    42,
+    43
+   ]
+  },
+  {
+   "case": "NPC-008",
+   "lane": "NPC",
+   "at": 34,
    "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    41,
+    42,
+    43
+   ],
+   "changed_idx": [
+    41,
+    42,
+    43
+   ]
+  },
+  {
+   "case": "NPC-008",
+   "lane": "NPC",
+   "at": 34,
+   "take": 3,
    "tick": 2,
    "person": "p_c",
    "from_verb": "tell",
@@ -1840,25 +1840,25 @@
     3
    ],
    "live_window": [
-    39,
-    40,
-    41
+    41,
+    42,
+    43
    ],
    "changed_idx": [
-    39,
-    40,
-    41
+    41,
+    42,
+    43
    ]
   },
   {
    "case": "NPC-008",
    "lane": "NPC",
-   "at": 34,
-   "take": 3,
+   "at": 37,
+   "take": 1,
    "tick": 2,
    "person": "p_c",
    "from_verb": "tell",
-   "to_verb": "create_record",
+   "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
     1,
@@ -1866,14 +1866,66 @@
     3
    ],
    "live_window": [
-    39,
-    40,
-    41
+    41,
+    42,
+    43
    ],
    "changed_idx": [
-    39,
-    40,
-    41
+    41,
+    42,
+    43
+   ]
+  },
+  {
+   "case": "NPC-008",
+   "lane": "NPC",
+   "at": 37,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    41,
+    42,
+    43
+   ],
+   "changed_idx": [
+    41,
+    42,
+    43
+   ]
+  },
+  {
+   "case": "NPC-008",
+   "lane": "NPC",
+   "at": 37,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    41,
+    42,
+    43
+   ],
+   "changed_idx": [
+    41,
+    42,
+    43
    ]
   },
   {
@@ -2597,78 +2649,6 @@
    ]
   },
   {
-   "case": "NPC-021",
-   "lane": "NPC",
-   "at": 28,
-   "take": 1,
-   "tick": 2,
-   "person": "p_b",
-   "from_verb": "transfer",
-   "to_verb": "petition",
-   "in_budget": 1,
-   "changed_at": [
-    1,
-    3
-   ],
-   "live_window": [
-    32,
-    33,
-    34
-   ],
-   "changed_idx": [
-    32,
-    34
-   ]
-  },
-  {
-   "case": "NPC-021",
-   "lane": "NPC",
-   "at": 28,
-   "take": 2,
-   "tick": 2,
-   "person": "p_b",
-   "from_verb": "transfer",
-   "to_verb": "move",
-   "in_budget": 1,
-   "changed_at": [
-    1,
-    3
-   ],
-   "live_window": [
-    32,
-    33,
-    34
-   ],
-   "changed_idx": [
-    32,
-    34
-   ]
-  },
-  {
-   "case": "NPC-021",
-   "lane": "NPC",
-   "at": 28,
-   "take": 3,
-   "tick": 2,
-   "person": "p_b",
-   "from_verb": "transfer",
-   "to_verb": "work",
-   "in_budget": 1,
-   "changed_at": [
-    1,
-    3
-   ],
-   "live_window": [
-    32,
-    33,
-    34
-   ],
-   "changed_idx": [
-    32,
-    34
-   ]
-  },
-  {
    "case": "NPC-050",
    "lane": "NPC",
    "at": 10,
@@ -2931,8 +2911,8 @@
    "take": 2,
    "tick": 1,
    "person": "p_a",
-   "from_verb": "transfer",
-   "to_verb": "reconstruct",
+   "from_verb": "utter",
+   "to_verb": "commit",
    "in_budget": 1,
    "changed_at": [
     1,
@@ -2940,14 +2920,14 @@
     3
    ],
    "live_window": [
-    21,
-    22,
-    23
+    24,
+    25,
+    26
    ],
    "changed_idx": [
-    21,
-    22,
-    23
+    24,
+    25,
+    26
    ]
   },
   {
@@ -2957,8 +2937,8 @@
    "take": 3,
    "tick": 1,
    "person": "p_a",
-   "from_verb": "transfer",
-   "to_verb": "work",
+   "from_verb": "utter",
+   "to_verb": "transfer",
    "in_budget": 1,
    "changed_at": [
     1,
@@ -2966,46 +2946,168 @@
     3
    ],
    "live_window": [
-    21,
-    22,
-    23
+    24,
+    25,
+    26
    ],
    "changed_idx": [
-    21,
-    22,
-    23
+    24,
+    25,
+    26
    ]
   },
   {
    "case": "NPC-003",
    "lane": "NPC",
-   "at": 18,
-   "take": 3,
+   "at": 20,
+   "take": 2,
    "tick": 1,
-   "person": "p_b",
-   "from_verb": "interview",
-   "to_verb": "examine",
-   "in_budget": 3,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "commit",
+   "in_budget": 1,
    "changed_at": [
     1,
     2,
     3
    ],
    "live_window": [
-    21,
-    22,
-    23
+    24,
+    25,
+    26
    ],
    "changed_idx": [
-    21,
-    22,
-    23
+    24,
+    25,
+    26
    ]
   },
   {
    "case": "NPC-003",
    "lane": "NPC",
-   "at": 28,
+   "at": 20,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "transfer",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    24,
+    25,
+    26
+   ],
+   "changed_idx": [
+    24,
+    25,
+    26
+   ]
+  },
+  {
+   "case": "NPC-003",
+   "lane": "NPC",
+   "at": 21,
+   "take": 2,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "reconstruct",
+   "to_verb": "interview",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    24,
+    25,
+    26
+   ],
+   "changed_idx": [
+    24,
+    25,
+    26
+   ]
+  },
+  {
+   "case": "NPC-003",
+   "lane": "NPC",
+   "at": 21,
+   "take": 3,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "reconstruct",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    24,
+    25,
+    26
+   ],
+   "changed_idx": [
+    24,
+    25,
+    26
+   ]
+  },
+  {
+   "case": "NPC-003",
+   "lane": "NPC",
+   "at": 22,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "release",
+   "to_verb": "work",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    24,
+    25,
+    26
+   ],
+   "changed_idx": [
+    26
+   ]
+  },
+  {
+   "case": "NPC-003",
+   "lane": "NPC",
+   "at": 23,
+   "take": 2,
+   "tick": 1,
+   "person": "p_b",
+   "from_verb": "release",
+   "to_verb": "surveil",
+   "in_budget": 1,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    24,
+    25,
+    26
+   ],
+   "changed_idx": [
+    25
+   ]
+  },
+  {
+   "case": "NPC-003",
+   "lane": "NPC",
+   "at": 31,
    "take": 1,
    "tick": 2,
    "person": "p_b",
@@ -3018,14 +3120,170 @@
     3
    ],
    "live_window": [
-    30,
-    31,
-    32
+    35,
+    36,
+    37
    ],
    "changed_idx": [
-    30,
-    31,
-    32
+    35,
+    36,
+    37
+   ]
+  },
+  {
+   "case": "NPC-003",
+   "lane": "NPC",
+   "at": 32,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    35,
+    36,
+    37
+   ],
+   "changed_idx": [
+    35,
+    36,
+    37
+   ]
+  },
+  {
+   "case": "NPC-003",
+   "lane": "NPC",
+   "at": 32,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    35,
+    36,
+    37
+   ],
+   "changed_idx": [
+    35,
+    36,
+    37
+   ]
+  },
+  {
+   "case": "NPC-003",
+   "lane": "NPC",
+   "at": 32,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    35,
+    36,
+    37
+   ],
+   "changed_idx": [
+    35,
+    36,
+    37
+   ]
+  },
+  {
+   "case": "NPC-003",
+   "lane": "NPC",
+   "at": 33,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    35,
+    36,
+    37
+   ],
+   "changed_idx": [
+    35,
+    36,
+    37
+   ]
+  },
+  {
+   "case": "NPC-003",
+   "lane": "NPC",
+   "at": 33,
+   "take": 2,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "examine",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    35,
+    36,
+    37
+   ],
+   "changed_idx": [
+    35,
+    36,
+    37
+   ]
+  },
+  {
+   "case": "NPC-003",
+   "lane": "NPC",
+   "at": 33,
+   "take": 3,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "utter",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    35,
+    36,
+    37
+   ],
+   "changed_idx": [
+    35,
+    36,
+    37
    ]
   },
   {
@@ -3869,11 +4127,11 @@
   {
    "case": "NPC-006",
    "lane": "NPC",
-   "at": 20,
+   "at": 18,
    "take": 3,
    "tick": 1,
-   "person": "p_a",
-   "from_verb": "research",
+   "person": "p_b",
+   "from_verb": "surveil",
    "to_verb": "create_record",
    "in_budget": 3,
    "changed_at": [
@@ -3882,14 +4140,66 @@
     3
    ],
    "live_window": [
+    23,
     24,
-    25,
-    26
+    25
    ],
    "changed_idx": [
+    23,
     24,
-    25,
-    26
+    25
+   ]
+  },
+  {
+   "case": "NPC-006",
+   "lane": "NPC",
+   "at": 19,
+   "take": 3,
+   "tick": 1,
+   "person": "p_c",
+   "from_verb": "tell",
+   "to_verb": "create_record",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    23,
+    24,
+    25
+   ],
+   "changed_idx": [
+    23,
+    24,
+    25
+   ]
+  },
+  {
+   "case": "NPC-006",
+   "lane": "NPC",
+   "at": 20,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "create_record",
+   "to_verb": "reconstruct",
+   "in_budget": 3,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    23,
+    24,
+    25
+   ],
+   "changed_idx": [
+    23,
+    24,
+    25
    ]
   },
   {
@@ -3908,14 +4218,14 @@
     3
    ],
    "live_window": [
+    23,
     24,
-    25,
-    26
+    25
    ],
    "changed_idx": [
+    23,
     24,
-    25,
-    26
+    25
    ]
   },
   {
@@ -3934,14 +4244,14 @@
     3
    ],
    "live_window": [
+    23,
     24,
-    25,
-    26
+    25
    ],
    "changed_idx": [
+    23,
     24,
-    25,
-    26
+    25
    ]
   },
   {
@@ -3960,57 +4270,13 @@
     3
    ],
    "live_window": [
+    23,
     24,
-    25,
-    26
-   ],
-   "changed_idx": [
-    24,
-    25,
-    26
-   ]
-  },
-  {
-   "case": "NPC-006",
-   "lane": "NPC",
-   "at": 22,
-   "take": 3,
-   "tick": 1,
-   "person": "p_c",
-   "from_verb": "create_record",
-   "to_verb": "release",
-   "in_budget": 3,
-   "changed_at": [
-    2
-   ],
-   "live_window": [
-    24,
-    25,
-    26
-   ],
-   "changed_idx": [
     25
-   ]
-  },
-  {
-   "case": "NPC-006",
-   "lane": "NPC",
-   "at": 23,
-   "take": 3,
-   "tick": 1,
-   "person": "p_c",
-   "from_verb": "create_record",
-   "to_verb": "release",
-   "in_budget": 3,
-   "changed_at": [
-    2
-   ],
-   "live_window": [
-    24,
-    25,
-    26
    ],
    "changed_idx": [
+    23,
+    24,
     25
    ]
   },
@@ -5037,6 +5303,32 @@
   {
    "case": "NPC-037",
    "lane": "NPC",
+   "at": 10,
+   "take": 2,
+   "tick": 0,
+   "person": "p_c",
+   "from_verb": "research",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    1,
+    2,
+    3
+   ],
+   "live_window": [
+    12,
+    13,
+    14
+   ],
+   "changed_idx": [
+    12,
+    13,
+    14
+   ]
+  },
+  {
+   "case": "NPC-037",
+   "lane": "NPC",
    "at": 19,
    "take": 3,
    "tick": 1,
@@ -5513,9 +5805,9 @@
    "n_real_forks": 16,
    "n_no_live_window": 33,
    "n_inert": 83,
-   "n_reconverged": 14,
-   "n_diverged": 2,
-   "mean_changed": 0.375,
+   "n_reconverged": 13,
+   "n_diverged": 3,
+   "mean_changed": 0.5625,
    "baseline_decisions": 44,
    "lane": "NPC"
   },
@@ -5570,12 +5862,12 @@
    "ok": true,
    "n_decisions": 50,
    "n_forks": 150,
-   "n_real_forks": 17,
+   "n_real_forks": 19,
    "n_no_live_window": 39,
-   "n_inert": 94,
-   "n_reconverged": 12,
-   "n_diverged": 5,
-   "mean_changed": 0.7647058823529411,
+   "n_inert": 92,
+   "n_reconverged": 16,
+   "n_diverged": 3,
+   "mean_changed": 0.2631578947368421,
    "baseline_decisions": 50,
    "lane": "NPC"
   },
@@ -5588,9 +5880,9 @@
    "n_real_forks": 28,
    "n_no_live_window": 36,
    "n_inert": 83,
-   "n_reconverged": 16,
-   "n_diverged": 12,
-   "mean_changed": 1.2142857142857142,
+   "n_reconverged": 17,
+   "n_diverged": 11,
+   "mean_changed": 1.1785714285714286,
    "baseline_decisions": 49,
    "lane": "NPC"
   },
@@ -5643,30 +5935,30 @@
    "case": "NPC-008",
    "scale": "realm",
    "ok": true,
-   "n_decisions": 53,
-   "n_forks": 159,
-   "n_real_forks": 19,
+   "n_decisions": 55,
+   "n_forks": 165,
+   "n_real_forks": 25,
    "n_no_live_window": 42,
    "n_inert": 98,
-   "n_reconverged": 9,
-   "n_diverged": 10,
-   "mean_changed": 0.9473684210526315,
-   "baseline_decisions": 53,
+   "n_reconverged": 11,
+   "n_diverged": 14,
+   "mean_changed": 1.2,
+   "baseline_decisions": 55,
    "lane": "NPC"
   },
   {
    "case": "NPC-038",
    "scale": "realm",
    "ok": true,
-   "n_decisions": 53,
-   "n_forks": 159,
+   "n_decisions": 52,
+   "n_forks": 156,
    "n_real_forks": 10,
-   "n_no_live_window": 42,
+   "n_no_live_window": 39,
    "n_inert": 107,
    "n_reconverged": 3,
    "n_diverged": 7,
    "mean_changed": 1.6,
-   "baseline_decisions": 53,
+   "baseline_decisions": 52,
    "lane": "NPC"
   },
   {
@@ -5733,15 +6025,15 @@
    "case": "NPC-020",
    "scale": "realm",
    "ok": true,
-   "n_decisions": 49,
-   "n_forks": 147,
+   "n_decisions": 46,
+   "n_forks": 138,
    "n_real_forks": 20,
-   "n_no_live_window": 42,
+   "n_no_live_window": 33,
    "n_inert": 85,
    "n_reconverged": 13,
    "n_diverged": 7,
    "mean_changed": 0.45,
-   "baseline_decisions": 49,
+   "baseline_decisions": 46,
    "lane": "NPC"
   },
   {
@@ -5753,9 +6045,9 @@
    "n_real_forks": 16,
    "n_no_live_window": 27,
    "n_inert": 80,
-   "n_reconverged": 10,
-   "n_diverged": 6,
-   "mean_changed": 0.6875,
+   "n_reconverged": 13,
+   "n_diverged": 3,
+   "mean_changed": 0.3125,
    "baseline_decisions": 41,
    "lane": "NPC"
   },
@@ -5793,30 +6085,30 @@
    "case": "NPC-070",
    "scale": "realm",
    "ok": true,
-   "n_decisions": 49,
-   "n_forks": 147,
+   "n_decisions": 51,
+   "n_forks": 153,
    "n_real_forks": 11,
-   "n_no_live_window": 39,
+   "n_no_live_window": 45,
    "n_inert": 97,
    "n_reconverged": 10,
    "n_diverged": 1,
    "mean_changed": 0.2727272727272727,
-   "baseline_decisions": 49,
+   "baseline_decisions": 51,
    "lane": "NPC"
   },
   {
    "case": "NPC-003",
    "scale": "realm",
    "ok": true,
-   "n_decisions": 38,
-   "n_forks": 114,
-   "n_real_forks": 34,
-   "n_no_live_window": 24,
+   "n_decisions": 42,
+   "n_forks": 126,
+   "n_real_forks": 49,
+   "n_no_live_window": 21,
    "n_inert": 56,
-   "n_reconverged": 26,
-   "n_diverged": 8,
-   "mean_changed": 0.7058823529411765,
-   "baseline_decisions": 38,
+   "n_reconverged": 30,
+   "n_diverged": 19,
+   "mean_changed": 1.0816326530612246,
+   "baseline_decisions": 42,
    "lane": "NPC"
   },
   {
@@ -5883,15 +6175,15 @@
    "case": "NPC-006",
    "scale": "person",
    "ok": true,
-   "n_decisions": 50,
-   "n_forks": 150,
-   "n_real_forks": 16,
+   "n_decisions": 49,
+   "n_forks": 147,
+   "n_real_forks": 17,
    "n_no_live_window": 42,
-   "n_inert": 92,
-   "n_reconverged": 9,
+   "n_inert": 88,
+   "n_reconverged": 10,
    "n_diverged": 7,
-   "mean_changed": 1.0625,
-   "baseline_decisions": 50,
+   "mean_changed": 1.2352941176470589,
+   "baseline_decisions": 49,
    "lane": "NPC"
   },
   {
@@ -5963,9 +6255,9 @@
    "n_real_forks": 14,
    "n_no_live_window": 42,
    "n_inert": 103,
-   "n_reconverged": 10,
-   "n_diverged": 4,
-   "mean_changed": 0.8571428571428571,
+   "n_reconverged": 9,
+   "n_diverged": 5,
+   "mean_changed": 1.0714285714285714,
    "baseline_decisions": 53,
    "lane": "NPC"
   },

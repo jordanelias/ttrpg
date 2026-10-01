@@ -1,7 +1,7 @@
 {
  "mode": "total",
  "slots": "narrow",
- "seconds": 178.6,
+ "seconds": 145.7,
  "n_cases_attempted": 36,
  "n_cases_ok": 36,
  "n_cases_failed": 0,
@@ -11,19 +11,19 @@
  "no_live_window": 636,
  "inert": 632,
  "genuine": 1306,
- "reconverged": 906,
- "diverged": 400,
- "reconvergence_rate": 0.6937212863705973,
+ "reconverged": 911,
+ "diverged": 395,
+ "reconvergence_rate": 0.6975497702909648,
  "window_slots_checked": 3918,
  "window_slots_same_tick": 0,
- "acts_differ": 619,
- "hash_differ": 619,
- "stream_only": 219,
+ "acts_differ": 621,
+ "hash_differ": 623,
+ "stream_only": 228,
  "changed_distribution": {
-  "0": 906,
-  "1": 225,
-  "2": 122,
-  "3": 53
+  "0": 911,
+  "1": 230,
+  "2": 120,
+  "3": 45
  },
  "divergences": [
   {
@@ -125,7 +125,7 @@
    "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
-    1,
+    2,
     3
    ],
    "live_window": [
@@ -134,7 +134,7 @@
     8
    ],
    "changed_idx": [
-    6,
+    7,
     8
    ]
   },
@@ -707,7 +707,7 @@
    "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
-    1,
+    2,
     3
    ],
    "live_window": [
@@ -716,7 +716,7 @@
     8
    ],
    "changed_idx": [
-    6,
+    7,
     8
    ]
   },
@@ -1142,7 +1142,7 @@
    "tick": 2,
    "person": "p_c",
    "from_verb": "utter",
-   "to_verb": "create_record",
+   "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
     3
@@ -1164,11 +1164,9 @@
    "tick": 2,
    "person": "p_c",
    "from_verb": "utter",
-   "to_verb": "examine",
+   "to_verb": "create_record",
    "in_budget": 1,
    "changed_at": [
-    1,
-    2,
     3
    ],
    "live_window": [
@@ -1177,8 +1175,6 @@
     20
    ],
    "changed_idx": [
-    18,
-    19,
     20
    ]
   },
@@ -2141,52 +2137,6 @@
    ]
   },
   {
-   "case": "NPC-090",
-   "lane": "NPC",
-   "at": 17,
-   "take": 2,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "transfer",
-   "to_verb": "tell",
-   "in_budget": 1,
-   "changed_at": [
-    2
-   ],
-   "live_window": [
-    18,
-    19,
-    20
-   ],
-   "changed_idx": [
-    19
-   ]
-  },
-  {
-   "case": "NPC-090",
-   "lane": "NPC",
-   "at": 17,
-   "take": 3,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "transfer",
-   "to_verb": "examine",
-   "in_budget": 1,
-   "changed_at": [
-    1,
-    3
-   ],
-   "live_window": [
-    18,
-    19,
-    20
-   ],
-   "changed_idx": [
-    18,
-    20
-   ]
-  },
-  {
    "case": "ARC-01",
    "lane": "ARC",
    "at": 3,
@@ -2421,8 +2371,6 @@
    "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
-    1,
-    2,
     3
    ],
    "live_window": [
@@ -2431,8 +2379,6 @@
     20
    ],
    "changed_idx": [
-    18,
-    19,
     20
    ]
   },
@@ -4436,8 +4382,7 @@
    "in_budget": 1,
    "changed_at": [
     1,
-    2,
-    3
+    2
    ],
    "live_window": [
     18,
@@ -4446,8 +4391,7 @@
    ],
    "changed_idx": [
     18,
-    19,
-    20
+    19
    ]
   },
   {
@@ -4475,15 +4419,14 @@
   {
    "case": "ARC-07",
    "lane": "ARC",
-   "at": 17,
-   "take": 2,
+   "at": 15,
+   "take": 3,
    "tick": 2,
-   "person": "p_c",
-   "from_verb": "tell",
-   "to_verb": "utter",
+   "person": "p_a",
+   "from_verb": "utter",
+   "to_verb": "surveil",
    "in_budget": 1,
    "changed_at": [
-    2,
     3
    ],
    "live_window": [
@@ -4492,7 +4435,28 @@
     20
    ],
    "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-07",
+   "lane": "ARC",
+   "at": 17,
+   "take": 1,
+   "tick": 2,
+   "person": "p_c",
+   "from_verb": "surveil",
+   "to_verb": "build",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
     19,
+    20
+   ],
+   "changed_idx": [
     20
    ]
   },
@@ -5275,6 +5239,28 @@
   {
    "case": "ARC-10",
    "lane": "ARC",
+   "at": 3,
+   "take": 3,
+   "tick": 0,
+   "person": "p_a",
+   "from_verb": "release",
+   "to_verb": "tell",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    6,
+    7,
+    8
+   ],
+   "changed_idx": [
+    8
+   ]
+  },
+  {
+   "case": "ARC-10",
+   "lane": "ARC",
    "at": 5,
    "take": 1,
    "tick": 0,
@@ -5406,8 +5392,7 @@
    "in_budget": 1,
    "changed_at": [
     1,
-    2,
-    3
+    2
    ],
    "live_window": [
     18,
@@ -5416,8 +5401,75 @@
    ],
    "changed_idx": [
     18,
+    19
+   ]
+  },
+  {
+   "case": "ARC-10",
+   "lane": "ARC",
+   "at": 15,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "surveil",
+   "to_verb": "release",
+   "in_budget": 1,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
     19,
     20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-10",
+   "lane": "ARC",
+   "at": 16,
+   "take": 2,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "reconstruct",
+   "to_verb": "create_record",
+   "in_budget": 2,
+   "changed_at": [
+    3
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    20
+   ]
+  },
+  {
+   "case": "ARC-10",
+   "lane": "ARC",
+   "at": 16,
+   "take": 3,
+   "tick": 2,
+   "person": "p_b",
+   "from_verb": "reconstruct",
+   "to_verb": "research",
+   "in_budget": 2,
+   "changed_at": [
+    1,
+    2
+   ],
+   "live_window": [
+    18,
+    19,
+    20
+   ],
+   "changed_idx": [
+    18,
+    19
    ]
   },
   {
@@ -5427,11 +5479,10 @@
    "take": 1,
    "tick": 2,
    "person": "p_c",
-   "from_verb": "tell",
-   "to_verb": "utter",
+   "from_verb": "fight",
+   "to_verb": "surveil",
    "in_budget": 1,
    "changed_at": [
-    2,
     3
    ],
    "live_window": [
@@ -5440,7 +5491,6 @@
     20
    ],
    "changed_idx": [
-    19,
     20
    ]
   },
@@ -5451,34 +5501,10 @@
    "take": 2,
    "tick": 2,
    "person": "p_c",
-   "from_verb": "tell",
-   "to_verb": "surveil",
+   "from_verb": "fight",
+   "to_verb": "commit",
    "in_budget": 1,
    "changed_at": [
-    2
-   ],
-   "live_window": [
-    18,
-    19,
-    20
-   ],
-   "changed_idx": [
-    19
-   ]
-  },
-  {
-   "case": "ARC-10",
-   "lane": "ARC",
-   "at": 17,
-   "take": 3,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "tell",
-   "to_verb": "fight",
-   "in_budget": 1,
-   "changed_at": [
-    1,
-    2,
     3
    ],
    "live_window": [
@@ -5487,8 +5513,6 @@
     20
    ],
    "changed_idx": [
-    18,
-    19,
     20
    ]
   },
@@ -6071,72 +6095,6 @@
    ]
   },
   {
-   "case": "ARC-13",
-   "lane": "ARC",
-   "at": 17,
-   "take": 1,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "tell",
-   "to_verb": "transfer",
-   "in_budget": 1,
-   "changed_at": [
-    2
-   ],
-   "live_window": [
-    18,
-    19,
-    20
-   ],
-   "changed_idx": [
-    19
-   ]
-  },
-  {
-   "case": "ARC-13",
-   "lane": "ARC",
-   "at": 17,
-   "take": 2,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "tell",
-   "to_verb": "release",
-   "in_budget": 1,
-   "changed_at": [
-    2
-   ],
-   "live_window": [
-    18,
-    19,
-    20
-   ],
-   "changed_idx": [
-    19
-   ]
-  },
-  {
-   "case": "ARC-13",
-   "lane": "ARC",
-   "at": 17,
-   "take": 3,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "tell",
-   "to_verb": "surveil",
-   "in_budget": 1,
-   "changed_at": [
-    2
-   ],
-   "live_window": [
-    18,
-    19,
-    20
-   ],
-   "changed_idx": [
-    19
-   ]
-  },
-  {
    "case": "ARC-14",
    "lane": "ARC",
    "at": 3,
@@ -6373,7 +6331,6 @@
    "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
-    2,
     3
    ],
    "live_window": [
@@ -6382,7 +6339,6 @@
     20
    ],
    "changed_idx": [
-    19,
     20
    ]
   },
@@ -6394,10 +6350,9 @@
    "tick": 2,
    "person": "p_c",
    "from_verb": "utter",
-   "to_verb": "examine",
+   "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
-    1,
     3
    ],
    "live_window": [
@@ -6406,7 +6361,6 @@
     20
    ],
    "changed_idx": [
-    18,
     20
    ]
   },
@@ -7499,7 +7453,6 @@
    "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
-    2,
     3
    ],
    "live_window": [
@@ -7508,7 +7461,6 @@
     20
    ],
    "changed_idx": [
-    19,
     20
    ]
   },
@@ -7520,10 +7472,10 @@
    "tick": 2,
    "person": "p_c",
    "from_verb": "utter",
-   "to_verb": "examine",
+   "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
-    1,
+    2,
     3
    ],
    "live_window": [
@@ -7532,7 +7484,7 @@
     20
    ],
    "changed_idx": [
-    18,
+    19,
     20
    ]
   },
@@ -7724,7 +7676,6 @@
    "in_budget": 1,
    "changed_at": [
     1,
-    2,
     3
    ],
    "live_window": [
@@ -7734,7 +7685,6 @@
    ],
    "changed_idx": [
     18,
-    19,
     20
    ]
   },
@@ -7764,14 +7714,13 @@
    "case": "ARC-R17",
    "lane": "ARC",
    "at": 17,
-   "take": 1,
+   "take": 2,
    "tick": 2,
    "person": "p_c",
    "from_verb": "tell",
    "to_verb": "transfer",
    "in_budget": 1,
    "changed_at": [
-    2,
     3
    ],
    "live_window": [
@@ -7780,33 +7729,6 @@
     20
    ],
    "changed_idx": [
-    19,
-    20
-   ]
-  },
-  {
-   "case": "ARC-R17",
-   "lane": "ARC",
-   "at": 17,
-   "take": 2,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "tell",
-   "to_verb": "examine",
-   "in_budget": 1,
-   "changed_at": [
-    1,
-    2,
-    3
-   ],
-   "live_window": [
-    18,
-    19,
-    20
-   ],
-   "changed_idx": [
-    18,
-    19,
     20
    ]
   },
@@ -7818,11 +7740,10 @@
    "tick": 2,
    "person": "p_c",
    "from_verb": "tell",
-   "to_verb": "petition",
+   "to_verb": "examine",
    "in_budget": 1,
    "changed_at": [
     1,
-    2,
     3
    ],
    "live_window": [
@@ -7832,7 +7753,6 @@
    ],
    "changed_idx": [
     18,
-    19,
     20
    ]
   },
@@ -8224,7 +8144,7 @@
    "tick": 0,
    "person": "p_a",
    "from_verb": "fight",
-   "to_verb": "build",
+   "to_verb": "tell",
    "in_budget": 1,
    "changed_at": [
     1
@@ -8246,7 +8166,7 @@
    "tick": 0,
    "person": "p_a",
    "from_verb": "fight",
-   "to_verb": "release",
+   "to_verb": "build",
    "in_budget": 1,
    "changed_at": [
     1
@@ -8583,28 +8503,6 @@
   {
    "case": "ARC-21",
    "lane": "ARC",
-   "at": 9,
-   "take": 3,
-   "tick": 1,
-   "person": "p_a",
-   "from_verb": "utter",
-   "to_verb": "tell",
-   "in_budget": 1,
-   "changed_at": [
-    2
-   ],
-   "live_window": [
-    12,
-    13,
-    14
-   ],
-   "changed_idx": [
-    13
-   ]
-  },
-  {
-   "case": "ARC-21",
-   "lane": "ARC",
    "at": 11,
    "take": 1,
    "tick": 1,
@@ -8898,29 +8796,7 @@
    "case": "ARC-22",
    "lane": "ARC",
    "at": 17,
-   "take": 1,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "transfer",
-   "to_verb": "tell",
-   "in_budget": 1,
-   "changed_at": [
-    2
-   ],
-   "live_window": [
-    18,
-    19,
-    20
-   ],
-   "changed_idx": [
-    19
-   ]
-  },
-  {
-   "case": "ARC-22",
-   "lane": "ARC",
-   "at": 17,
-   "take": 2,
+   "take": 3,
    "tick": 2,
    "person": "p_c",
    "from_verb": "transfer",
@@ -8938,28 +8814,6 @@
    "changed_idx": [
     18,
     20
-   ]
-  },
-  {
-   "case": "ARC-22",
-   "lane": "ARC",
-   "at": 17,
-   "take": 3,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "transfer",
-   "to_verb": "move",
-   "in_budget": 1,
-   "changed_at": [
-    1
-   ],
-   "live_window": [
-    18,
-    19,
-    20
-   ],
-   "changed_idx": [
-    18
    ]
   },
   {
@@ -9370,7 +9224,7 @@
    "n_inert": 18,
    "n_reconverged": 23,
    "n_diverged": 13,
-   "mean_changed": 0.6388888888888888,
+   "mean_changed": 0.5833333333333334,
    "baseline_decisions": 24,
    "lane": "NPC"
   },
@@ -9428,9 +9282,9 @@
    "n_real_forks": 45,
    "n_no_live_window": 15,
    "n_inert": 9,
-   "n_reconverged": 22,
-   "n_diverged": 23,
-   "mean_changed": 0.7333333333333333,
+   "n_reconverged": 24,
+   "n_diverged": 21,
+   "mean_changed": 0.6666666666666666,
    "baseline_decisions": 23,
    "lane": "NPC"
   },
@@ -9445,7 +9299,7 @@
    "n_inert": 15,
    "n_reconverged": 28,
    "n_diverged": 11,
-   "mean_changed": 0.38461538461538464,
+   "mean_changed": 0.3333333333333333,
    "baseline_decisions": 24,
    "lane": "ARC"
   },
@@ -9533,9 +9387,9 @@
    "n_real_forks": 38,
    "n_no_live_window": 18,
    "n_inert": 16,
-   "n_reconverged": 23,
-   "n_diverged": 15,
-   "mean_changed": 0.5789473684210527,
+   "n_reconverged": 22,
+   "n_diverged": 16,
+   "mean_changed": 0.5526315789473685,
    "baseline_decisions": 24,
    "lane": "ARC"
   },
@@ -9578,8 +9432,8 @@
    "n_real_forks": 40,
    "n_no_live_window": 18,
    "n_inert": 14,
-   "n_reconverged": 30,
-   "n_diverged": 10,
+   "n_reconverged": 27,
+   "n_diverged": 13,
    "mean_changed": 0.55,
    "baseline_decisions": 24,
    "lane": "ARC"
@@ -9623,9 +9477,9 @@
    "n_real_forks": 40,
    "n_no_live_window": 18,
    "n_inert": 14,
-   "n_reconverged": 30,
-   "n_diverged": 10,
-   "mean_changed": 0.425,
+   "n_reconverged": 33,
+   "n_diverged": 7,
+   "mean_changed": 0.35,
    "baseline_decisions": 24,
    "lane": "ARC"
   },
@@ -9640,7 +9494,7 @@
    "n_inert": 14,
    "n_reconverged": 28,
    "n_diverged": 12,
-   "mean_changed": 0.425,
+   "mean_changed": 0.375,
    "baseline_decisions": 24,
    "lane": "ARC"
   },
@@ -9715,7 +9569,7 @@
    "n_inert": 9,
    "n_reconverged": 26,
    "n_diverged": 19,
-   "mean_changed": 0.6666666666666666,
+   "mean_changed": 0.6444444444444445,
    "baseline_decisions": 24,
    "lane": "ARC"
   },
@@ -9728,9 +9582,9 @@
    "n_real_forks": 37,
    "n_no_live_window": 18,
    "n_inert": 17,
-   "n_reconverged": 24,
-   "n_diverged": 13,
-   "mean_changed": 0.5405405405405406,
+   "n_reconverged": 25,
+   "n_diverged": 12,
+   "mean_changed": 0.3783783783783784,
    "baseline_decisions": 24,
    "lane": "ARC"
   },
@@ -9788,9 +9642,9 @@
    "n_real_forks": 34,
    "n_no_live_window": 18,
    "n_inert": 20,
-   "n_reconverged": 24,
-   "n_diverged": 10,
-   "mean_changed": 0.4411764705882353,
+   "n_reconverged": 25,
+   "n_diverged": 9,
+   "mean_changed": 0.4117647058823529,
    "baseline_decisions": 24,
    "lane": "ARC"
   },
@@ -9803,9 +9657,9 @@
    "n_real_forks": 45,
    "n_no_live_window": 15,
    "n_inert": 9,
-   "n_reconverged": 35,
-   "n_diverged": 10,
-   "mean_changed": 0.4888888888888889,
+   "n_reconverged": 37,
+   "n_diverged": 8,
+   "mean_changed": 0.4444444444444444,
    "baseline_decisions": 23,
    "lane": "ARC"
   },

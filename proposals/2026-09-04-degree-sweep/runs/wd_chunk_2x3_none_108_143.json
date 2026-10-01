@@ -1,7 +1,7 @@
 {
  "mode": "none",
  "slots": "2x3",
- "seconds": 122.5,
+ "seconds": 118.6,
  "n_cases_attempted": 35,
  "n_cases_ok": 35,
  "n_cases_failed": 0,
@@ -185,8 +185,8 @@
    "take": 3,
    "tick": 2,
    "person": "p_c",
-   "from_verb": "examine",
-   "to_verb": "petition",
+   "from_verb": "transfer",
+   "to_verb": "examine",
    "in_budget": 3,
    "changed_at": [
     1
@@ -670,6 +670,28 @@
     4,
     5,
     6
+   ]
+  },
+  {
+   "case": "NSC-03",
+   "lane": "ARC",
+   "at": 4,
+   "take": 3,
+   "tick": 1,
+   "person": "p_a",
+   "from_verb": "work",
+   "to_verb": "tell",
+   "in_budget": 3,
+   "changed_at": [
+    2
+   ],
+   "live_window": [
+    8,
+    9,
+    10
+   ],
+   "changed_idx": [
+    9
    ]
   },
   {
@@ -2889,28 +2911,6 @@
    ]
   },
   {
-   "case": "SCN-LOOP-B",
-   "lane": "ARC",
-   "at": 13,
-   "take": 3,
-   "tick": 2,
-   "person": "p_c",
-   "from_verb": "transfer",
-   "to_verb": "tell",
-   "in_budget": 1,
-   "changed_at": [
-    1
-   ],
-   "live_window": [
-    14,
-    15,
-    16
-   ],
-   "changed_idx": [
-    14
-   ]
-  },
-  {
    "case": "SCN-LOOP-C",
    "lane": "ARC",
    "at": 0,
@@ -3258,9 +3258,9 @@
    "n_real_forks": 14,
    "n_no_live_window": 12,
    "n_inert": 22,
-   "n_reconverged": 10,
-   "n_diverged": 4,
-   "mean_changed": 0.42857142857142855,
+   "n_reconverged": 9,
+   "n_diverged": 5,
+   "mean_changed": 0.5,
    "baseline_decisions": 16,
    "lane": "ARC"
   },
@@ -3603,9 +3603,9 @@
    "n_real_forks": 16,
    "n_no_live_window": 12,
    "n_inert": 26,
-   "n_reconverged": 9,
-   "n_diverged": 7,
-   "mean_changed": 0.5,
+   "n_reconverged": 10,
+   "n_diverged": 6,
+   "mean_changed": 0.4375,
    "baseline_decisions": 18,
    "lane": "ARC"
   },
