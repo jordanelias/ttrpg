@@ -303,7 +303,6 @@ found (`B0-CI-b`, `29d-ii`, `20-v`) landed in PR #451.
 | `29a`-ms | `ms_track.py` | IN | BLOCKED | `27` | — | 3 | `threadwork/sim/co_movement.py` imports it lazily |
 | `29e` / `29f` | characters / fieldwork `knots.py` | IN | BLOCKED | `14`, `27` | — | 3 | `threadwork/sim/opposing.py` imports `sustain_knot` |
 | `ED-FI-0009` | investigation degree producer | FI | OPEN | `8` (shared `seam/ladder.py`) | R-05, R-09 | 2 | the six inquiries resolve Failure/none only today [RAN corpus degree histogram] |
-| `LADDER-MBPC` | the MB/PC lanes' flagged `needs_jordan` rows, through the five-step ladder | MB/PC | OPEN | — | — | 2 (parallel) | `ED-MB-0039/0041/0045`, `ED-PC-0016/0047/0049`–`0055` never opened (2026-09-28 plan §9); survivors join `_part5` §J |
 | cells commit | H6 + H8 with `12b`/`12c`/`12d` | IN | JORDAN | J-1 | R-05, R-06, R-08 | 4 | then H7 → H3 → H9 → `12` → H10 → H11 → `12e` |
 
 **Hole-register rows that gate a position but that no position owned until now** (each is placed at a
