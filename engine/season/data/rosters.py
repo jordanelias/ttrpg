@@ -582,8 +582,8 @@ OBSERVATION_DEPOSIT_MODES = roster("observation_deposit_modes")
 FAN_OUT_MODES = roster("fan_out_modes")
 # `R8.1`. THE `seen` CLAIM -- its four terms (ordered: they are the struct's fields), the one
 # predicate it is deposited under, and which terms each witness channel shows. Bound at import for
-# `TITLE_DOMAINS`' reason; cross-validated against `WITNESS_CHANNELS` and `epistemic.Seen` at
-# import in `epistemic.py`, beside the channel predicates it is keyed on.
+# `TITLE_DOMAINS`' reason; the terms are cross-validated against `WITNESS_CHANNELS` and
+# `epistemic.Seen` at import in `epistemic.py`, beside the channel predicates they are keyed on.
 OBSERVATION_TERMS = roster("observation_terms", ordered=True)
 OBSERVATION_DEPOSIT = roster_map("observation_terms", "deposit")
 # THE ONE NAME THE `seen` CLAIM IS DEPOSITED UNDER. It lives here and not in `epistemic.py` (where

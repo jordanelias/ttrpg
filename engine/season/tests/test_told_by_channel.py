@@ -494,21 +494,37 @@ def test_t3_weigh_none_and_weigh_one_order_a_ledger_as_today():
 
 
 def test_t3_opening_set_hands_clause_4_the_teller_weight(monkeypatch):
-    """THE WIRING: `opening_set` passes `teller_weight(p, fx)` to `belief_contradicts` on every
-    call, so clause 4 is the weighed reader in play and not only in a test. Spied through the
+    """THE WIRING: `opening_set` passes `teller_weight(p, fx)` to `belief_contradicts` whenever the
+    person's ledger holds a told claim, so clause 4 is the weighed reader in play and not only in
+    a test; a ledger with no told claim takes the plain reader (`weigh=None`), which orders it
+    identically (`test_t3_weigh_none_and_weigh_one_order_a_ledger_as_today`). Spied through the
     module attribute every rebind already uses (`decision.options.belief_contradicts`)."""
     from ..decision import options as O
-    from ..harness import headless as HL
+    from ..state.carriers import Question, View
 
+    w = P.tiny_world()
+    p = w.persons["p_low"]
+    q = Question("q_wire", "claim_landed", ("Hh",), "")
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
     seen = []
     real = O.belief_contradicts
 
-    def spy(p, row, subject, operands, via=None, weigh=None):
+    def spy(pp, row, subject, operands, via=None, weigh=None):
         seen.append(weigh)
-        return real(p, row, subject, operands, via, weigh=weigh)
+        return real(pp, row, subject, operands, via, weigh=weigh)
 
     monkeypatch.setattr(O, "belief_contradicts", spy)
-    HL.run(seasons=1, seed=0)
+
+    p.ledger[:] = [Claim("c_seen", p.id, "Hh", "stores:grain", 5, 1, "firsthand", 100, "own")]
+    O.opening_set(p, v, q, w.fixtures)
+    assert seen, "opening_set never reached clause 4 -- the spy observed nothing"
+    assert all(wt is None for wt in seen), "a ledger with no told claim was given a weigh"
+
+    seen.clear()
+    p.ledger[:] = [Claim("c_seen", p.id, "Hh", "stores:grain", 5, 1, "firsthand", 100, "own"),
+                   Claim("c_told", p.id, "Hh", "stores:grain", 0, 2, "told_by", 100, "own",
+                         chain=("x",))]
+    O.opening_set(p, v, q, w.fixtures)
     assert seen, "opening_set never reached clause 4 -- the spy observed nothing"
     probe = Claim("c_probe", "h", "S", "stores:grain", 0, 0, "told_by", 100, "own", chain=("x",))
     assert all(callable(wt) for wt in seen), "a clause-4 call ran with weigh=None"

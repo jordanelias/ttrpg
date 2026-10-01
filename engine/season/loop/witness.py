@@ -656,7 +656,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                     tc = Claim(_told_hash or H(w.world_seed, w.tick, pid, f"told:{e.id}"),
                                pid, _held.subject, _held.predicate, _told_val, w.tick,
                                "told_by", _held.confidence, "own", self.round,
-                               chain=tuple(_held.chain) + (_act.actor,))
+                               chain=_held.chain + (_act.actor,))
                     w.write("claim_ledger", token,
                             lambda p=p, c=tc: p.ledger.append(c),
                             record_kind="Person", fieldname="claim_ledger", driver="Event",

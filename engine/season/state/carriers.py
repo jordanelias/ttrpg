@@ -292,8 +292,10 @@ class Claim:
     # and `queries/person_q.py::LedgerReader` counts support over distinct ORIGINS. Nothing is
     # frozen at deposit: the chain records WHO told, and the grade is the reader's, so a revised
     # regard re-grades every claim a teller ever passed on. `chain` replaces the `teller` field
-    # this class carried until `T3b`; `teller` and `hops` are now derived (below).
-    chain: tuple = ()
+    # this class carried until `T3b`; `teller` and `hops` are now derived (below). KEYWORD-ONLY:
+    # it took the old positional slot of `teller`, and a stray string passed there would read as a
+    # chain of one-character hops.
+    chain: tuple = field(default=(), kw_only=True)
 
     @property
     def teller(self) -> Optional[str]:

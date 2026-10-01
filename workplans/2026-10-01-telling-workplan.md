@@ -189,6 +189,9 @@ by construction) and 78.2% pooled, so name the deciding instrument before re-pin
 shipped game; the corpus is a construction artifact); M0b is 49.3% pooled at `declared`, which meets G1's
 trigger; M0h is 14 contest Events naming a person other than the actor, which meets `stake`'s trigger (H-179).
 No told triple is deposited in either instrument (M0f), so the effects of T1-T3b appear only after T4.
+`survey` and `reconstruct` also carry `said`, unread (their typed cell is `own_ledger` too), and
+`opening_set` pays a `said_of` copy for each of their formed Candidates: when the `tell` cell gains
+conjunct names here, gate `said` on that data-declared marker instead of on the clause alone.
 
 ### T5 · dedup by origin, and T6 · a teller's record
 

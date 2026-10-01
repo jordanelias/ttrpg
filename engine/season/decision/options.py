@@ -24,7 +24,7 @@ string. Enforced BY PATH over this directory (`04:1046`).
 from __future__ import annotations
 
 from typing import Callable, Optional
-from ..data.cast import STANCE_VALENCE_SCALE
+from ..data.cast import STANCE_MAX
 from ..data.pursuits import to_axes
 from ..data.requires import (
     SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS, WRIT_SOURCED_OPERANDS,
@@ -102,7 +102,9 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     out: list[Candidate] = []
     axis = fx.get("refusal_axis")
     tolerance = refusal_tolerance(p, axis)
-    weigh = teller_weight(p, fx)      # `T3a`: clause 4's reader grades hearsay by its teller
+    # `T3a`: clause 4's reader grades hearsay by its teller. A ledger holding no told claim weighs
+    # 1.0 everywhere, which is the unweighted order exactly (tested), so it takes the plain reader.
+    weigh = teller_weight(p, fx) if any(c.chain for c in p.ledger) else None
     for verb, row in sorted(VERB_TABLE.items()):
         if not person_side_eligible(p, row):
             continue
@@ -113,6 +115,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # `19`: the seat this row's act would exercise -- `exercised_seat`, the same untraced walk
         # `pack_scenes` names `Act.via` by -- for the belief test's `basis` conjunct below.
         seat = exercised_seat(p, row)
+        ledger_of = row.requires_typed.own_ledger_operands() if row.requires_typed else ()
         for subject in q.referents:
             # ⚠⚠ A CONTEST NEEDS TWO CLAIMANTS, AND A PERSON IS NOT THEIR OWN ADVERSARY.
             # `move`'s `contain_path` cell keeps the same shape of rule -- *"a node is not a path
@@ -166,28 +169,18 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             # `T3a`: and the person reads their own ledger WEIGHING hearsay by its teller.
             if belief_contradicts(p, row, subject, ops, seat, weigh=weigh):
                 continue
-            # Placed AFTER every decline above (counterparty, belief) so the ledger copy `said_of`
-            # makes is paid only for a Candidate that is actually formed; `binding_of` drops `said`,
-            # so `belief_contradicts` reads the same binding either side of this block.
-            # ⚠ WHAT THE TELLER WILL SAY IS DECIDED HERE, AT CHOOSE, AND RIDES THE ACT (`T1`,
-            # `workplans/2026-10-01-telling-workplan.md`). A row whose typed cell holds an
-            # `own_ledger` clause -- found by walking the form, never by a verb name -- passes on
-            # what the actor HOLDS about the clause's entity, so the claim is copied out of the
-            # actor's own ledger NOW and `Act.payload["said"]` carries it to WITNESS, which then
-            # reads the Act and never the teller's live ledger. `said` is not a `requires_operands`
-            # member, so `binding_of` drops it from both readers' bindings. One own-ledger clause
-            # per row is all the tree has; the first wins.
-            # ⚠ NOTHING HELD IS NOT DECLINED HERE, AND THE WORKPLAN'S T1 SAID IT SHOULD BE. MEASURED
-            # 2026-10-01 (`corpus_run 0`, `build_realm(0)` 1 season): declining on `None` drops 3 of
-            # 31 corpus candidates (a person forms an `own_ledger` row on a referent they hold no
-            # claim on -- `LedgerReader` answers `claim.held` UNKNOWN, which contradicts nothing --
-            # and the fold used to refuse it), flips `dispatch` from attempted-and-refused to never
-            # attempted, and moves the realm hash. That is a behaviour change, not the pure move T1
-            # is gated as (hash EQUAL); with no decline both controls are byte-identical. A teller
-            # with nothing to say carries no `said`, and WITNESS then passes nothing on, exactly as
-            # the old `_told_content` returned `None` for them. Declining is the one-line edit
-            # (`continue` where `ops["said"]` is not set) and a design call for whoever owns T4.
-            ledger_of = row.requires_typed.own_ledger_operands() if row.requires_typed else ()
+            # WHAT THE TELLER WILL SAY IS DECIDED HERE, AT CHOOSE, AND RIDES THE ACT (`T1`,
+            # `workplans/2026-10-01-telling-workplan.md`): a row whose typed cell holds an
+            # `own_ledger` clause (found by walking the form, never by a verb name) passes on what
+            # the actor HOLDS about the clause's entity, copied out of their own ledger now, so
+            # WITNESS reads the Act and never the teller's live ledger. Placed after every decline
+            # so the copy is paid only for a Candidate that is formed; `said` is not a
+            # `requires_operands` member, so `binding_of` drops it from both readers' bindings.
+            # NOTHING HELD IS NOT DECLINED HERE, though the workplan's T1 said it should be:
+            # measured 2026-10-01, declining drops 3 of 31 corpus candidates and moves the realm
+            # hash (persons form `own_ledger` rows on referents they hold nothing about, and the
+            # fold used to refuse them). With no `said`, WITNESS passes nothing on, as before.
+            # Declining is a one-line edit and T4's call.
             if ledger_of:
                 said = said_of(p.ledger, ops.get(ledger_of[0]), fx)
                 if said is not None:
@@ -879,11 +872,6 @@ def standing_of(p: Person, fx: "Fixtures") -> int:
     return scale if paired == 0 else (dis * scale) // paired
 
 
-# The widest stored regard one referent can carry from one stance row: `valence * weight`, each
-# bounded by the row type's own scale (`data/cast.py`), so it is DERIVED, never a literal here.
-STANCE_MAX = STANCE_VALENCE_SCALE ** 2
-
-
 def _clamp(x: float, lo: float, hi: float) -> float:
     return lo if x < lo else hi if x > hi else x
 
@@ -924,6 +912,7 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
     ⚠ AT THE CONTROL VALUES (`told_weight` 1.0, both gains 0) EVERY CLAIM WEIGHS EXACTLY 1.0 and
     `LedgerReader` orders as it did before `T3a`."""
     gains: list = []
+    relation_of: dict = {}      # `relation` depends on the teller alone: one stance scan per teller
 
     def weigh(c: Claim) -> float:
         if not c.chain:
@@ -932,9 +921,12 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
         if not gains:
             gains.extend((fx.get("told_weight"), fx.get("rank_gain"), fx.get("regard_gain")))
         told_weight, rank_gain, regard_gain = gains
-        relation = (1.0
-                    + rank_gain * rank(p, teller)
-                    + regard_gain * _clamp(regard(p, teller) / STANCE_MAX, -1.0, 1.0))
+        relation = relation_of.get(teller)
+        if relation is None:
+            relation = relation_of[teller] = (
+                1.0
+                + rank_gain * rank(p, teller)
+                + regard_gain * _clamp(regard(p, teller) / STANCE_MAX, -1.0, 1.0))
         # ABSENT: H-179 stake
         record = 1.0   # a teller's record (agreement with p's own claims) is `T6`; 1.0 until then
         return _clamp(told_weight ** c.hops * relation * record, 0.0, 1.0)

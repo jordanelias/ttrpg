@@ -213,8 +213,9 @@ def said_of(claims, subject, fx) -> "Said | None":
     (`_best`); only the pool differs. `fx` is unread; the workplan's §3 shape names it and G3 (slant)
     is its first reader (`workplans/2026-10-01-telling-workplan.md`), and a signature that changes
     under every caller is the churn this avoids."""
-    own = [c for c in (claims or []) if c.predicate != SEEN_PREDICATE]
-    c = LedgerReader(own).latest_about(subject) or LedgerReader(claims).latest_about(subject)
+    reader = LedgerReader(claims)
+    c = (reader._best(lambda c: c.subject == subject and c.predicate != SEEN_PREDICATE)
+         or reader.latest_about(subject))
     if c is None:
         return None
     return Said(c.subject, c.predicate, c.value, c.confidence, c.chain)
