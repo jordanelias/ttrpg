@@ -199,6 +199,13 @@ class LedgerReader:
         claims tie on `when`."""
         return self._best(lambda c: c.subject == subject)
 
+    def belief_among(self):
+        """THE ONE CLAIM THIS READER WOULD ANSWER FROM, over every claim it holds -- `_best`'s
+        comparator with no subject or predicate filter. For a caller that has already narrowed the
+        ledger to one cell (`decision/options._pair`) and wants `read`'s ordering without reaching
+        into a private name."""
+        return self._best(lambda _c: True)
+
 
 def said_of(claims, subject, fx) -> "Said | None":
     """WHAT THIS PERSON WOULD SAY ABOUT `subject`, as the `Said` a telling carries -- or `None` for

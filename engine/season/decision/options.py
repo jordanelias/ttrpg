@@ -118,6 +118,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # `T4`: only a NAMED own-ledger conjunct carries `said` (`tell`'s `holds`); `survey` and
         # `reconstruct` share the form unnamed and carry nothing (telling workplan, "From Batch 1").
         ledger_of = row.requires_typed.named_own_ledger_operands() if row.requires_typed else ()
+        said_of_entity: dict = {}           # entity -> `said_of` (this row's own-ledger read, per entity)
         for subject in q.referents:
             # ⚠⚠ A CONTEST NEEDS TWO CLAIMANTS, AND A PERSON IS NOT THEIR OWN ADVERSARY.
             # `move`'s `contain_path` cell keeps the same shape of rule -- *"a node is not a path
@@ -189,7 +190,12 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 # 3 of 31 corpus candidates. Only the named conjunct declines; `survey` and
                 # `reconstruct` carry no `said` and are untouched.
                 if ledger_of:
-                    said = said_of(p.ledger, ops.get(ledger_of[0]), fx)
+                    # `said` depends on the entity alone, never on the hearer, so a subject's
+                    # one telling is read once however many hearers it fans to.
+                    entity = ops.get(ledger_of[0])
+                    if entity not in said_of_entity:
+                        said_of_entity[entity] = said_of(p.ledger, entity, fx)
+                    said = said_of_entity[entity]
                     if said is None:
                         continue
                     ops = {**ops, "said": said}
@@ -922,7 +928,7 @@ def _pair(told: list[Claim], own: list[Claim], key: Callable[[Claim], Any],
         if k not in by_key:
             continue                    # nothing of your own to compare it against
         if k not in belief:
-            belief[k] = LedgerReader(by_key[k])._best(lambda _c: True)
+            belief[k] = LedgerReader(by_key[k]).belief_among()
         mate = belief[k]
         (agree, dis) = (agree + 1, dis) if c.value == mate.value else (agree, dis + 1)
     return agree, dis
