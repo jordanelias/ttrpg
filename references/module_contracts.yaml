@@ -261,11 +261,11 @@ modules:
       - "conviction_track_v1.md header + §1-§4 index [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
     wiring:
-      build: deferred
-      godot: python-oracle
+      build: design
+      godot: no-oracle
       port_rank: 3
       parity: key-log
-      note: conviction.py (Scar accumulation) is retired (plan position `29e`); the season's scar write is `_scar` (`H-128`).
+      note: conviction.py (Scar accumulation) is retired (plan position `29e`); the season's scar write is `_scar` (`H-128`). Wiring reset to the vocabulary's zero-code state (was build deferred, godot python-oracle); `port_rank` is the pre-deletion audit verdict and is not re-derived here.
 
   - module: territorial_piety
     doc: .designs/systems/characters/reference/conviction_track_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
@@ -392,11 +392,11 @@ modules:
       - "key_substrate_v30 §8.4, §8.7 [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
     wiring:
-      build: stub
+      build: design
       godot: no-oracle
       port_rank: 8
       parity: key-log
-      note: fieldwork/investigation raise; the scene runner is a stub, and `knots.py` is retired (plan position `29f`).
+      note: fieldwork/investigation raise; the scene runner is a stub, and `knots.py` is retired (plan position `29f`). Wiring reset to the vocabulary's zero-code state (was build stub); `port_rank` is the pre-deletion audit verdict and is not re-derived here.
 
   - module: scene_slate
     registry_system: "scene_slate"   # Key Type Registry vocabulary
@@ -659,7 +659,7 @@ modules:
       - "systems/overview/sim/ms_track.py, systems/overview/sim/accounting.py [READ: 2026-07-29]"
       - "engine/params/core.md §MS Baseline Decay (PP-255) [READ: 2026-07-29]"
     wiring:
-      build: deferred
+      build: design
       godot: no-oracle
       port_rank: 8
       parity: key-log
@@ -667,7 +667,7 @@ modules:
         this note previously claimed IP is not even a clocks key -- false on both readings. engine/autoload/game_state.py:244
         (deleted at plan position `29b`; in git at `5c5d8ec6`) seeded IP: 20.0 inside the clocks mapping, and clock_registry_v30.md:18 lists Institutional Pressure
         (IP), start 20. What IS true is that no module writes IP after world-gen -- ip_track.py''s two entry
-        points are stubs with no production caller.]'
+        points are stubs with no production caller.] Wiring reset to the vocabulary''s zero-code state (was build deferred); `port_rank` is the pre-deletion audit verdict and is not re-derived here.'
 
   - module: settlement_layer
     registry_system: "settlement_layer"   # Key Type Registry vocabulary

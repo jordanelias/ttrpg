@@ -1297,8 +1297,10 @@ def census(w: World) -> dict:
             "stores_by_rung_kind": dict(sorted(stores_by_kind.items())),
             "eaters_short": len(short),
             "unheld_for_want_of_a_head": len(getattr(w, "_unheld_for_want_of_a_head", [])),
-            # `24h` P5: the revolt Query's only consumer (r2 `05` §A.1.5 RULED (d): a Query lands with
-            # a caller or not at all). A report, not a rule: it feeds no decision and moves no hash.
+            # `24h` P5: the revolt Query's only caller (r2 `05` §A.1.5 RULED (d),
+            # `establishment_of`'s precedent). A report, not a rule: it feeds no decision and moves no hash.
+            # Summed over REALM rungs: `terr_T16` is a root rung outside the realm (see `build_realm`), so
+            # it is not counted.
             "uncontrolled_territories": sum(len(uncontrolled(w, r.id))
                                             for r in w.rungs.values() if r.kind == "realm")}
 

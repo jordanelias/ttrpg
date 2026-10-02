@@ -161,7 +161,7 @@ a shipped world — `_part5` §L says when they escalate.
   scheduled here.)
 - **`22b`** — proceedings PHASE 4 (steps 23–27; step 22 = `Tenure.term`, DONE at `17b`).
 
-### `24h` P5 · S5 revolt as a Query · SE/IN · gate — · `{parallel worktree}` · `opus` · `[design]`
+### `24h` P5 · S5 revolt as a Query · SE/IN · gate — · `{parallel worktree}` · `opus` · `[design]` · **DONE 2026-10-02 (Batch 3a): the first condition only, `uncontrolled` in `queries/world_q.py`; `H-186` registers the rest**
 
 The revolt **Query** in `queries/world_q.py` or `queries/faction_q.py` — a read, never a write — the
 season successor of `systems/world/sim/insurgency_pipeline.py` (deleted at `29d`, PR #450). **FALSIFIER:** the
@@ -174,16 +174,16 @@ nobody watching — NERS R).
 `repudiate`'s costs (the forswearing half of S5). **FALSIFIER:** a forsworn commitment costs what the row
 declares and nothing else; no proper-noun branch. **R:** R-05 texture.
 
-### `29f` → `29e` → `29a`-ms · fieldwork `knots`, characters, `ms_track` · IN · gate `14`, `27` (E2, E3) · `sonnet` · `[cleanup]`
+### `29f` → `29e` → `29a`-ms · fieldwork `knots`, characters, `ms_track` · IN · gate `14`, `27` (E2, E3) · `sonnet` · `[cleanup]` · **DONE 2026-10-02 (Batch 3a)**
 
 - **`29f`:** `systems/fieldwork/sim/knots.py` (ED-912's ±5 gauge maps to `Tenure.degree`, F.4 — the
   plan said `14` records it, **`14` did not** (it declined `tie / knot`; `H-182` says no position owns `_eff_tie`), so
-  `29f` writes the mapping into `H-182`'s cite, not invented, and then deletes); `engine/tests/test_knots_ed912.py` → `FORK:`.
+  `29f` writes the mapping into `H-182`'s cite, not invented, and then deletes — **the mapping's source was UNLOCATED; `H-182`'s cite records the gauge as the code defined it and says so, not a mapping**); `engine/tests/test_knots_ed912.py` → `FORK:`.
 - **`29e`:** `systems/characters/sim/conviction.py` (← `knots.py`); `beliefs.py` already went at `28-0`'s
   follow-up (PR #450). `test_conviction_roster_single_owner.py`'s `systems.characters` site re-pointed.
 - **`29a`-ms:** `systems/overview/sim/ms_track.py`.
 **FALSIFIER:** `opposing.py` no longer imports `sustain_knot`; nothing imports `apply_ms_delta`;
-`grep -rn "systems.overview\|systems.fieldwork\|systems.characters"` returns only fork-ledger rows.
+`grep -rn "systems.overview\|systems.fieldwork\|systems.characters"` returns only fork-ledger rows. (Not satisfiable as written: about 110 non-importer lines remain in code, registries and tests — design-doc path citations the quarantine keeps resolvable, dated retirement history, and one prefix classifier in `tools/evacuation_plan.py`; an import walk ran instead: 0 importers, `72623b61`.)
 **Hash:** none.
 
 ### `2-ii` · RET-SC: the kernel and the veto · IN/SC · gate `22` (E4) · `sonnet` producer, `opus` critic on the veto only, `haiku` for the inbound-site census · `[cleanup]`

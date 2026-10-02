@@ -2826,8 +2826,7 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
      `apply_conviction_scar`, `check_conviction_threshold`, `mark_belief_revision_pending`, `get_state`,
      `reset_all`: the per-Conviction 1 / 2 / 3+ thresholds, the one-Scar-per-season Thread-witnessing cap and the
      Truth scaling) and re-bound `CONVICTIONS` from `engine/substrate/descriptors.py`. Its only production caller,
-     `systems/fieldwork/sim/knots.py`, went at position `29f`, and `beliefs.py` / `companion.py` (its
-     string-reference partners) at the `28-0 follow-up`; the only importer left was one site in
+     `systems/fieldwork/sim/knots.py`, went at position `29f`, and `beliefs.py` (its string-reference partner) and `companion.py` (an unrelated stub) at the `28-0 follow-up`; the only importer left was one site in
      `tests/valoria/test_conviction_roster_single_owner.py`, re-pointed in this commit (the assertion
      `conviction.CONVICTIONS is descriptors.CONVICTIONS` is gone with its subject; `rosters.PURSUITS is
      descriptors.CONVICTIONS`, the AST test that no second roster literal exists under `engine/` or `systems/`, and the

@@ -268,10 +268,9 @@ dedicated test executes every position), but most Phase-2 verbs execute from han
 the realm, `commit found build levy migrate confer establish revoke determine work` are attempted and
 never execute (`aperture 4 0`). **Phase 3: `27` PARTIAL (PR #442); `10`'s `tell`→stance write REVERTED
 with its side findings landed (PR #442), and position `10` itself now belongs to the telling workplan (§0.6); everything else open or Jordan-gated.** Phase 4: `20-i`–`20-iv`,
-`28-0` (and its follow-up), `28-i`–`28-iii`, `29a` (all but `ms_track`), `29b`, `29c` and `29d` are done —
-Batch 1 landed (PR #450; records in `_part6` §H.1). What is open of Phase 4: `29a`-ms, `29e`/`29f` and
-`2-ii`, each gated on `27`, `14` or `22` and on nothing Batch 1 held. The three follow-ups Batch 1
-found (`B0-CI-b`, `29d-ii`, `20-v`) landed in PR #451.
+`28-0` (and its follow-up), `28-i`–`28-iii`, `29a`–`29d`, and (Batch 3a) `29a`-ms, `29e` and `29f` are
+done — records in `_part6` §H.1. What is open of Phase 4: `2-ii`, gated on `22`. The three follow-ups
+Batch 1 found (`B0-CI-b`, `29d-ii`, `20-v`) landed in PR #451.
 
 | position | handle | lane | STATE | GATE | R | batch | evidence / note |
 |---|---|---|---|---|---|---|---|
@@ -288,13 +287,10 @@ found (`B0-CI-b`, `29d-ii`, `20-v`) landed in PR #451.
 | `22a` → `23` → `22b` | proceedings PHASE 3 · PART-E-0/2 · PHASE 4 | SC/IN | BLOCKED | `22` | R-05 | 3 | |
 | `24` | SE-BUILD umbrella | SE | PARTIAL | — | — | — | re-scoped into `24d`–`24h`; tracked by those rows only |
 | `24g` | bodies clock + P3 individuation | SE | JORDAN | J-6 (`ED-IN-0247`) | R-07 (texture) | 4 | |
-| `24h` P5 | S5 revolt Query | SE/IN | OPEN | — (`20-ii` ✓) | R-06/R-07 texture | 3 | the 2026-09-28/09-30 rows read BLOCKED whole; only P7 is |
 | `24h` P6 | forswearing (`repudiate` costs) | SE/IN | BLOCKED | `repudiate`'s formability (`14` declined it: no question referent is ever a Proposition) | R-05 | 3 | `14`'s `decline_note` on the verb row |
 | `24h` P7 | dispensation-as-document | SE/IN | JORDAN | J-10 | — | 4 | |
 | `26` | GO-VERSION | GO | JORDAN | J-9 | M3 | 4 | nothing may assert a version |
 | `27` | WR-SCOPE remainder | WR | PARTIAL | — | — | 2 | BUILT 2026-10-01 (PR #451): both `rendering.py` stubs struck with their reasons at the site; `ED-WR-0003` closed at ladder step 2; `attempt_mending` calls `recover()` (only tests call it; `environment_in_equilibrium` defaults to False); `threadwork/sim/{co_movement,opposing}.py` no longer import `ms_track` or `knots` [TEST]. Remainder, each outside this position's scope: the `R-14` practitioner-resilience term (arithmetic unruled), Mending aimed at the mender's own configuration (`coherence.mend_resting_point` has no non-test caller), and `collective.py`/`opposing.py`'s Mending feedback (`HANDOFF_WR.md`) |
-| `29a`-ms | `ms_track.py` | IN | OPEN | — | — | 3 | `27` ✓: no `*.py` imports `ms_track` from `threadwork` any more, so deleting `systems/overview/sim/ms_track.py` is the whole position |
-| `29e` / `29f` | characters / fieldwork `knots.py` | IN | OPEN | — (`27` ✓; `14` did not build `tie / knot`) | — | 3 | `threadwork/sim/opposing.py` no longer imports `sustain_knot`. ⚠ `29f`'s plan text says ED-912's ±5 gauge 'maps to `Tenure.degree` (F.4), recorded on `14`': `14` recorded nothing (grep of `engine/season`: no such mapping), and `H-182` says no position owns `_eff_tie`; `29f` records the mapping (in `H-182`'s cite) before it deletes `knots.py` |
 | `ED-FI-0009` | investigation degree producer | FI | **JORDAN** | J-22 | R-05, R-09 | 2 | [STOP CONDITION HIT 2026-10-01, nothing built: see its last ledger row] the six inquiries resolve Failure/none only today [RAN corpus degree histogram]; step 3 already closed "graded by degree" (2026-09-06); open: how a degree routes without `contests:` (a loader check `ED-FI-0009` added, not ratified Layer 1 text) and `finding.none`'s deposit (`H-111`) — J-22 |
 | cells commit | H6 + H8 with `12b`/`12c`/`12d` | IN | JORDAN | J-1 | R-05, R-06, R-08 | 4 | then H7 → H3 → H9 → `12` → H10 → H11 → `12e` |
 

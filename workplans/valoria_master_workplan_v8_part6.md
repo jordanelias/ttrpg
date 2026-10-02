@@ -48,7 +48,7 @@ is the record; a row not marked DONE is still on disk.
 | `systems/overview/sim/season.py` | **(a)** `loop/driver.py`; goes with its `season_driver` row | `28-iii` — DONE |
 | `systems/overview/sim/{accounting,ip_track,rs_track}.py` | **(c)**; MATTER + CENSUS replace accounting's work; the clocks have no season analogue by architecture | `29a` — DONE |
 | `systems/overview/sim/ci_track.py` | **(c)**; same; `excommunication.py:166` imports it lazily, so it leaves with that file | `29b` — DONE |
-| `systems/overview/sim/ms_track.py` | **(c)**, after `27` frees threadwork of it | `29a`-ms |
+| `systems/overview/sim/ms_track.py` | **(c)**, after `27` frees threadwork of it | `29a`-ms — DONE |
 
 **D.2 The 25 composition roles** (`references/module_contracts.yaml`; one survives).
 
@@ -69,8 +69,8 @@ is the record; a row not marked DONE is still on disk.
 | `systems/factions/sim/` | grand strategy politics | `20-ii` ✓ | `resolve_mass_battle`/`_faction_to_unit`/`_morale_start_from_stability` die with `game_state.Faction`; d.1 moves to `resolve_field` at `20-iv` | `29b` — DONE |
 | `systems/settlements/sim/` | settlement management | `24e` ✓ + `24d-ii` ✓ | `registry` → `build_realm` (which reads `territory` and `type` only: `settlements.*.stats` and `.controller`, the latter a copy of the province's `faction`, have had no reader since `29c`); `infrastructure` → `Site.condition`/`fortification_of`; `temperaments` → stance; `adjacency` **(c)** — no province graph, invent none; **the geography YAML stays** | `29c` — DONE |
 | `systems/world/sim/` | grand strategy / settlement | `20-ii` ✓ | `npe` → `decision/` + stance; `insurgency_pipeline` → `24h` P5 | `29d` — DONE |
-| `systems/characters/sim/` | character creation/development | the cells commit + `12` (+ `14` for `conviction` ← `knots`) | `beliefs` **(c)** by design; `conviction` → `Person.pursuits` / scar counts | `29e` (`beliefs` and `companion` DONE at the `28-0` follow-up) |
-| `systems/fieldwork/sim/knots.py` | investigations | `14` (`tie / knot`) + `27` | the `knot` Tenure kind and `firsthand_via_knot` exist; ED-912's gauge → `Tenure.degree` | `29f` |
+| `systems/characters/sim/` | character creation/development | the cells commit + `12` (+ `14` for `conviction` ← `knots`) | `beliefs` **(c)** by design; `conviction` → `Person.pursuits` / scar counts | `29e` — DONE (Batch 3a), ahead of its season expression (cells commit and `12` not landed; no caller after `29f`; the Scar-count rebuild stays `12`'s) |
+| `systems/fieldwork/sim/knots.py` | investigations | `14` (`tie / knot`) + `27` | the `knot` Tenure kind and `firsthand_via_knot` exist; ED-912's gauge recorded in `H-182`, its `Tenure.degree` mapping UNLOCATED | `29f` — DONE (Batch 3a), ahead of `14`'s declined `tie / knot` |
 | `systems/threadwork/sim/` | — | RETAINED (`ED-WR-0010`) | not in Step B; only its snapshot roles delete | — |
 | `systems/social_contest/sim/` | social contests | `22` | the whole tree goes by `2-ii`; prize rows keep the logical name | `2-ii` |
 | `systems/mass_battle/`, `systems/combat/` | retained | — | untouched except `massbattle.py`'s old entry | — |
@@ -85,8 +85,8 @@ is the record; a row not marked DONE is still on disk.
 | `tests/valoria/test_descriptors_runtime.py`, `test_world_initial_state.py` | lose one test each | `29b` — DONE |
 | `tests/valoria/test_mass_battle_d1_morale_baseline.py` | **re-pin** against `resolve_field` | `20-iv` — DONE |
 | `tests/valoria/test_settlement_temperament_drift.py` | `FORK:` | `29c` — DONE |
-| `tests/valoria/test_conviction_roster_single_owner.py` | re-point | `29d` — DONE (`systems.world` site); `29e` (`systems.characters` site) |
-| `engine/tests/test_knots_ed912.py` | `FORK:` | `29f` |
+| `tests/valoria/test_conviction_roster_single_owner.py` | re-point | `29d` — DONE (`systems.world` site); `29e` — DONE (`systems.characters` site) |
+| `engine/tests/test_knots_ed912.py` | `FORK:` | `29f` — DONE |
 | `engine/tests/test_contest_kernel.py` | `FORK:` | `2-ii` |
 | `engine/tests/test_thread_mending_ed871.py` | stays (`27`) | — |
 | `engine/tests/test_sigma_leverage_parity.py` | substrate — stays; moves out of `engine/tests` when `sim-regression` folds | `2-ii` |
@@ -101,14 +101,14 @@ is the record; a row not marked DONE is still on disk.
 | F.20b — three body-literal Event kinds (invariant 7): *"the loop as built cannot run under the loader as specified"* | survives | `23` |
 | invariant 2 — producerless matrix rows | step 3: each row is some position's content | enforceable at `23` once producers exist |
 | MOD 1 — three routes into `systems/` | closes by sequence: `28-iii` landed (one composition role remains, `mass_battle.resolve_field`); after `2-ii` there are exactly two routes (the combat PATH seam; that one role) | Lens B at `2-ii` |
-| MOD 4 — `npe`/`conviction` read `CONVICTIONS` | `29d` landed (`npe`); closes at `29e` (`conviction`); shrinks the cells commit's audit | — |
+| MOD 4 — `npe`/`conviction` read `CONVICTIONS` | `29d` landed (`npe`); closes at `29e` (`conviction`); shrinks the cells commit's audit | `29d` (`npe`) and `29e` (`conviction`) landed: closed |
 | H-137 — the `write()` calling convention | step 4: CONVENTION grade, enforced by `/code-review` on each effect | every effect in Batches 2–4 |
 
 ## S. WHERE `/layer-conformance` HAS NEW SUBJECT MATTER — its output must be READ, not passed
 
 | position | Lens B's subject |
 |---|---|
-| `29a`-ms, `29e`, `29f` | `ID-13`'s consequences: the deleted module's last importers and the re-pointed fixtures. **Lens A:** the `FORK:` rows and registry edits |
+| `29a`-ms, `29e`, `29f` — DONE (Batch 3a) | `ID-13`'s consequences: the deleted module's last importers and the re-pointed fixtures. **Lens A:** the `FORK:` rows and registry edits |
 | `10` | carved out (main §0.6); the telling workplan names its own Lens A/B subjects (A on T3a, B on T2) |
 | `14` | the counterparty check in the fold; invariant 4 per conjunct |
 | `22` | the provider returns a Margin, never a winner; the obstacle has one owner |
@@ -149,9 +149,9 @@ target.
   `systems/settlements/` is reduced to `valoria_geography_v30.yaml`, its svg and a package marker; `systems/social_contest/` is gone and
   its prize rows point at the proceedings provider; `systems/threadwork/`, `systems/mass_battle/`,
   `systems/combat/` are retained (`massbattle.py`'s old entry deleted; d.1 on `resolve_field`).
-  **Partly landed:** `systems/factions/sim/`, `systems/world/sim/`, `systems/settlements/sim/` and
-  `massbattle.py`'s old entry are gone; `overview` keeps `ms_track` (`29a`-ms), `characters` keeps
-  `conviction.py` (`29e`), `fieldwork` is `29f`'s, `social_contest` is `2-ii`'s.
+  **Partly landed:** `systems/factions/sim/`, `systems/world/sim/`, `systems/settlements/sim/`,
+  `systems/overview/`, `systems/characters/`, `systems/fieldwork/` and `massbattle.py`'s old entry are
+  gone; `social_contest` is `2-ii`'s.
 - **[LANDED]** Zero production imports of any spine module (the `ast` walk returns the empty set);
   `test_engine_does_not_import_systems.py` green at `BASELINE_TOTAL = 0`,
   `PATH_SEAM_ALLOWED = {'substrate/pc_engine.py'}`, fixtures re-pointed.
@@ -266,6 +266,11 @@ it is the one active plan for the lanes it names**. Explicitly NOT ratified:
 | Batch C close | `methodology-close` on `99a1cf8d..HEAD`: three Sonnet agonists (`14`, `13d-iii`, `17`+`17-cast`), an Opus antagonist over their reports, four fix lanes, `/code-review`, `/simplify` (one reviewer), `/layer-conformance` (one Opus reader, both lenses), one terminal Opus critique; full suites once on the integrated head `0d58757a`: `engine/season/tests` 831 passed, `tests/valoria` 1786 passed · 23 skipped · 14 xfailed, 0 failed (`engine/tests` not run: byte-identical to season changes by construction; the last commit `724c28c8` (capability validation and texts) came after that run and was covered by its own test files and the three hashes, not by a second full run); forward sweep: `register --requirements` met 2 · partial 5 · not_met 2, `corpus_run` md5 `6a65a264` (DISTINCT EXECUTED SETS 117 → 120, verbs executed 16 → 17 of 44, R3 46 of 46 and 96 of 97), `aperture 4 0` 2939 acts with control hash EQUAL, `report` then `delta 99a1cf8d` 0 probe flips (121 probes, 86 gaps) | PR #451 `23bea9da`, `7e7cb23a`, `03bb91ba`, `0d58757a`, `724c28c8`: found and fixed — the `succeed`/`tie / knot` stop rested on superseded holonic §15; `ambitions` took a store argument against 04 §A.2 :164 (moved to `world_q`); silent no-op loaders (cast `case:`, non-list `cast:`, duplicate case and office ids, `capability`); the told-by seed re-pin's cause (now measured: `13d-iii` lowered chained told claims in 3 of 10 seeds, raised 1, seed 5 identical); the pilot metric's ceiling (0, not +5). Not fixed, recorded: the minted seats' `dispatch` and bench-ground defaults differ by build route from the loop-built seats (`H-134`, `H-32`; any single rule is a J-8 grant or moves the realm); `knot`'s undirected read (`29f`); the loader forces a dead refusal key on `determine`; `give` is refused in about 98% of its attempts yet leaves the always-refused set on one execution |
 | `21`-rest | R-01's opening R3 sentence, R-03's and R-09's `measured:` blocks (dated 2026-10-02 paragraphs from their own `measure:` commands), R-09's 'capability empty on every corpus person' (13 cases carry a cast, 30 entries, one `capability`: NPC-088's Carin Vedel `{copying: 3}`, 1 of 430 built persons) and `rosters.yaml: verb_capability`'s note, R-04's `measure:` (now `aperture 4 0`'s per-verb lines); item 3 closed at ladder step 2 | PR #451 `444a00e1`+: two figures re-run by the orchestrator (NPC-088 headless hash `293067ea`, the capability count); recorded, not fixed: R-09's `-k 'we_only_a_verb or u1_'` selects one test (`u1_` matches nothing), R-04's quoted always-refused count is now 7, retired-plan citations remain in R-05's older paragraphs, `corpus_run` still does not print which ARC case fails R3 |
 | Batch B close | `methodology-close` on `269ab8c7..fcf357cb`: agonists, an Opus antagonist, `/code-review`, `/simplify`, `layer-conformance`, one terminal Opus critique at max effort; full suites once: `engine/season/tests` 747 passed, `engine/tests` 913 passed, `tests/valoria` 1781 passed and 5 failed (four flow-skeleton anchors into the shortened threadwork files, fixed here; `test_no_module_actually_loads_id_reservations`, which fails only while a second worktree nests under `.claude/worktrees/` and passes on a clean checkout); forward sweep: `register` R-02 `met`, `corpus_run` and `aperture 4 0` identical to the `fd321c81` baseline | PR #451 `a0a65cbc`, `fcf357cb`, then the close commit: critique reconciled (T1 `H-184`; T2/T3 this table and `HANDOFF_IN`; B1 J-22/`ED-FI-0009` cites; B2 the CONTEST text; B3, B4, B6, B7). Skipped with reasons: T4 (`rendering.py` keeps its docstring because it is the only site for the strike reasons, and `registers/mechanics_index.yaml` (`rendering_stability`'s `sim_module`) and `tests/valoria/test_flow_skeletons.py` (`RETIREMENT_SHIFTED`) both name the file; retiring it is delete plus a `FORK:` row plus those two edits, left to the WR lane), B5 (`PR #451` is the branch's PR, and `27` is on it) |
+| `29f` | `systems/fieldwork/` (`knots.py`, two package markers) and `engine/tests/test_knots_ed912.py`; the ED-912 gauge recorded in `H-182`'s cite as the code defined it, its `Tenure.degree` mapping UNLOCATED (the only attestation was one clause of a retired plan saying `14` would record it); `KNOT_FORMATION_TN/OB` left `game_constants.json`; `test_tn7_always`'s floor re-pinned 4 → 3 | `21c7133f`; four exact `FORK:59004d86` rows; import lines naming `systems.fieldwork`/`systems.characters`/`systems.overview` in tracked `.py` before the batch: 5, in 3 files (the deleted module's own lazy import, its test ×3, the roster test ×1), 0 after; tracked `*.py` 574 → 565 over the batch; `build_realm(0)` hashes unchanged (blind by construction: nothing under `engine/season` imported the module; the import walk is the control) |
+| `24h` P5 | `queries/world_q.py::uncontrolled(w, rung_id)`, GD-3's first condition (a territory no faction holds); one caller, `populated.census`'s realm-scoped `uncontrolled_territories` row (a report); the oracle's contiguity, two-season streak, promotion and emerged-faction conditions have no season carrier and are `H-186` | `b360c22f`; `engine/season/tests/test_revolt_query.py` 7 passed; `build_realm(0)` reports `terr_T15`; hashes unchanged; `register --check` R2 15, G6 13; DONE-test, not DONE-realm (§0.2) |
+| `29e` | `systems/characters/` (`conviction.py`, two package markers); the roster-single-owner test lost its `systems.characters` site; the evacuation-plan control re-pointed at `engine/season/loop/driver.py`; deleted ahead of its season expression | `1b68d590`; three exact `FORK:59004d86` rows; 0 importers after (the roster test was the last); one coverage drop, named in the ledger comment; hashes unchanged, blind by construction |
+| `29a`-ms | `systems/overview/` (`ms_track.py`, two package markers); `SEASONS_PER_YEAR` left `game_constants.json` (its only owner; the season loop defines no year) and the descriptor `nc.MS` lost its value links; three threadwork docstrings corrected | `72623b61`, `2a57549f`; three exact `FORK:59004d86` rows; 0 importers before and after; hashes unchanged |
+| Batch 3a close | [ORCH: close row] | [ORCH: close row] |
 
 ### H.2 Spent serial edges (both ends finished)
 
@@ -277,6 +282,7 @@ not delete `Tenure.payload`). From the 2026-09-28 plan §3.5: 5 (FIGHT-RENAME �
 From this plan's `_part3` O.2, spent when Batch 1 landed (PR #450): E1 (`28-iii` → `29a` → `29b` → `29d` →
 `29c`, import direction), E6 (`29b` → `20-iv`, `massbattle.py`'s old entry and the d.1 re-pin), E12
 (`28-iii` → `28-0` follow-up, the OI-17 targets), and E4's `29b` → `2-ii` half (`22` → `2-ii` stays live).
+Spent at Batch 3a: E2 (`27` → `29a`-ms, `27` → `29f`); E3 (`14` → `29f` → `29e`; `14` declined `tie / knot`, so E3's first clause was waived at v8 §3, not satisfied).
 
 ### H.3 Edits OUTSIDE this plan that its adoption needs — listed, NOT made here
 

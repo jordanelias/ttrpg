@@ -20,16 +20,18 @@ What each test proves, and the control that stops it passing vacuously:
      holds uncontrolled. Faction is read off the holder's live edges, when asked.
   4. THE ANCESTRY LIMB. A faction-held rung above an unheld territory governs it: the nearest
      held title decides, which is `holder_faction_of`'s own walk.
-  5. IT WRITES NOTHING (AX-2's Query family by module; `04 §A.2`: `world_q` owns nothing and
-     takes no token). Over the realm, every territory and the root territory outside the realm:
+  5. IT WRITES NOTHING (`04 §A.2`: `world_q` owns nothing and takes no token; AX-4's one write
+     path). Over the realm, every territory and the root territory outside the realm:
      the content hash and the log length are unchanged, the write gate stays closed, and the
      calls succeed with `World.write` replaced by a function that fails the test.
   6. ARM 5 CAN SEE A WRITE. A store write planted inside the read path (in `holder_faction_of`,
-     which `uncontrolled` resolves by module name) moves the content hash. Without this, arm 5
-     could be a hash that never moves for any reason.
-  7. THE CENSUS ROW IS THE QUERY'S CALLER (r2 `05` §A.1.5 RULED (d): a Query lands with a caller
-     or not at all). `populated.census(w)["uncontrolled_territories"]` equals the Query's answer
-     over the realm, and a world with every territory held reads 0 in the same row, so the row
+     which `uncontrolled` resolves by module name) moves the content hash; a draw bump planted there
+     leaves the hash alone and moves `_unhashed`. Without this, arm 5 could be a hash that never
+     moves for any reason, or blind to state the hash does not fold.
+  7. THE CENSUS ROW IS THE QUERY'S CALLER (r2 `05` §A.1.5 RULED (d), `establishment_of`'s
+     precedent: a Query with no consumer is a false N-line). `populated.census(w)["uncontrolled_territories"]` equals the Query's answer
+     over the realm, and the same world with every territory UNDER THE REALM held reads 0 in the same row
+     (`terr_T16` is outside it), so the row
      moves with the Query and is not a constant.
 """
 from engine.season.data.rosters import FACTION_BY_PROP
@@ -154,6 +156,16 @@ def _every_call(w) -> list:
     return [_realm(w), *_territories(w)]
 
 
+def _unhashed(w) -> tuple:
+    """World state `content_hash` does NOT fold (it folds the state collections, the docket, the
+    tenures and the log): the draw ordinal that mints later Event ids, the tick, the act store, the
+    barrier cache, the staged deltas and the write-emission list. `uncontrolled` says it is recomputed
+    on every call, so none of these may move across one. Without this the writes-nothing arm was blind
+    to a `w.new_draw()` in the body, which would have passed every other assertion here."""
+    return (w.tick, w.draw, len(w.acts), frozenset(w._barrier_cache),
+            {k: list(v) for k, v in w._staged.items()}, len(w._emitted_by_write))
+
+
 def test_the_query_writes_nothing_and_never_needs_the_write_gate(monkeypatch):
     w = build_realm(0)
     calls = _every_call(w)
@@ -161,6 +173,7 @@ def test_the_query_writes_nothing_and_never_needs_the_write_gate(monkeypatch):
     hash_before = w.content_hash()
     log_before = sum(1 for _ in w.log)
     writes_before = len(w.writes)
+    unhashed_before = _unhashed(w)
 
     def refuse(*a, **k):
         raise AssertionError("`uncontrolled` called `World.write`; a Query takes no token")
@@ -177,6 +190,7 @@ def test_the_query_writes_nothing_and_never_needs_the_write_gate(monkeypatch):
     assert w.content_hash() == hash_before
     assert sum(1 for _ in w.log) == log_before
     assert len(w.writes) == writes_before
+    assert _unhashed(w) == unhashed_before, "the Query moved World state that content_hash does not fold"
 
 
 def test_the_writes_nothing_arm_sees_a_write_planted_in_the_read_path(monkeypatch):
@@ -197,6 +211,25 @@ def test_the_writes_nothing_arm_sees_a_write_planted_in_the_read_path(monkeypatc
     assert fired, "the plant never ran: `uncontrolled` does not read through `holder_faction_of`"
     assert got == expected
     assert w.content_hash() != hash_before, "a planted store write left the content hash unmoved"
+
+    # THE SECOND PLANT: a write the content hash cannot see. `new_draw` bumps `w.draw`, which mints later
+    # Event ids (world.py `new_draw`), and `content_hash` does not fold it; the control is that the hash
+    # stays put while `_unhashed` moves, so arm 5's extra snapshot is what catches this class.
+    w2 = build_realm(0)
+    realm2 = _realm(w2)
+    hash2, unhashed2 = w2.content_hash(), _unhashed(w2)
+    fired2 = []
+
+    def drawing(w_, rung_id):
+        fired2.append(rung_id)
+        w_.new_draw()
+        return real(w_, rung_id)
+
+    monkeypatch.setattr(world_q, "holder_faction_of", drawing)
+    world_q.uncontrolled(w2, realm2)
+    assert fired2, "the draw plant never ran"
+    assert w2.content_hash() == hash2, "fixture: the content hash was expected to be blind to a draw bump"
+    assert _unhashed(w2) != unhashed2, "a planted draw bump left the unhashed snapshot unmoved"
 
 
 def test_the_census_reports_the_revolt_query_and_moves_with_it():

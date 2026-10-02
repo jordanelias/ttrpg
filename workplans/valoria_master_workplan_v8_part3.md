@@ -15,7 +15,7 @@
 | **0** | **LANDED** — `B0-CI` for `tests/valoria` (PR #450), `B0-CI-b` (PR #451); `B0-CI-c` split `season-tests` out of `unit-tests` after run 36967763315 cancelled at the shared 16-minute cap; its first complete run (PR #452, run 37026782154) took 11m11s against the 20-minute cap and `All Gates Green` passed on the PR; what remains is `All Gates Green` reading green on `main` itself | — (CI green on `main`) | `B0-CI-b`: moved, declared (`_part6` §H.1) | `/code-review` only; no terminal critique (a seat/commit data fix whose own test is the falsifier) |
 | **1** | **LANDED (PR #450); records in `_part6` §H.** Its tail, `29d-ii` and `20-v`, landed in PR #451 (`_part6` §H.1) | — | — | — |
 | **2** | **open — the telling workplan's Batch 2 closed and merged (PR #449, `fd321c81`; main §0.6)**. **Batch B landed in PR #451** (`11-fix` → `11` baseline, `8`, `27`, `LADDER-MBPC`, `ED-FI-0009`'s stop; `_part6` §H.1); Batch C landed `14` (+ `R05-THREAD`, declined), `13d-iii`, `17` and `17-cast` (`13`-rest stops at its pilot); the `11` re-take and `21`-rest have landed, so Batch 2's IN chain is finished (`13`-rest stops at its pilot) | R-01, R-02 (measured), R-04, R-05, R-06 (reason 1), R-07, R-09 | `8`: none (assert equal); `ED-FI-0009`, `14`, `17`, `13`-rest: corpus/realm pins move (declared per step); `13d-iii`: `build_realm` census + hash (declared) | full `methodology-close`; terminal critique **proportionate** — `14` is a judgment node and `11` is a number nobody else reproduces |
-| **3** | SC: `22` steps 11–16 → `22a` → `23` → `22b`; IN: `29f` → `29e` → `29a`-ms → `2-ii`; `{SE: 24h P5}`; `24h` P6 after `22`'s `verb_table.yaml` edits | R-05 (`speak`, `determine`), R-09 (a fourth graded chain), M2 (THE BAR) | `22`: corpus + realm hash move (declared); `2-ii`: none (byte-identity control) | full `methodology-close`; terminal critique **proportionate** — `22` is the largest new mechanism in the plan |
+| **3** | SC: `22` steps 11–16 → `22a` → `23` → `22b`; IN: `29f` → `29e` → `29a`-ms (**LANDED, Batch 3a**; `_part6` §H.1) → `2-ii`; `{SE: 24h P5}` (**LANDED, Batch 3a** — first condition only; `H-186` registers the rest); `24h` P6 after `22`'s `verb_table.yaml` edits | R-05 (`speak`, `determine`), R-09 (a fourth graded chain), M2 (THE BAR) | `22`: corpus + realm hash move (declared); `2-ii`: none (byte-identity control) | full `methodology-close`; terminal critique **proportionate** — `22` is the largest new mechanism in the plan |
 | **4** | one sub-batch per Jordan ruling, as each lands: cells commit (J-1) → H7 → H3 → H9 → `12` → H10 (C3) → H11 (C4) → `12e`; `19b` (J-2); J-3's verbs; `9` (J-7); `24g` (J-6); `24h` P7 (J-10); `26` (J-9) | R-05, R-06, R-08; R-04 (J-3) | cells commit: headless + corpus hash move, `resolvable_verbs()` count moves (declared) | cells commit: full pipeline, terminal critique **proportionate**; `24g`, `26`, `24h` P7: `/code-review` + `/simplify` only — one value or one record each |
 
 **Why this order.** Batch 1 ran first because it was gate-free and purely subtractive: every later batch
@@ -34,8 +34,6 @@ the merge; it never removes it.
 
 | # | edge | why | origin |
 |---|---|---|---|
-| E2 | `27` → `29a`-ms; `27` → `29f` | `threadwork/sim/{co_movement,opposing}.py` import `ms_track.apply_ms_delta` and `knots.sustain_knot` | 09-28 §3.5.2 |
-| E3 | `14` → `29f` → `29e` | the `tie / knot` effect first; then `conviction.py` ← `knots.py` | 09-28 §3.5.3 |
 | E4 | `22` → `2-ii` | the prize-row repoint | 09-28 §3.5.4 |
 | E5 | the cells commit ↔ `8`, `9` | same `fight` row and combat wrapper. Either order; never interleaved | 09-18 §3.9.10 |
 | E7 | `8` → `ED-FI-0009` | both edit `seam/ladder.py` | new |
@@ -60,7 +58,7 @@ the merge; it never removes it.
 | `engine/season/loop/effects_governance.py` | `14` | — |
 | `engine/season/decision/options.py` | telling T1, T3a, T4; then `14` | E14 |
 | `engine/season/queries/person_q.py` | telling T1, T2, T3a, T6, G1; then `17`, cells commit | carve-out first; Batch 2 vs 4 |
-| `engine/season/queries/world_q.py` | telling T4 (`with`), `24h` P5 | the carve-out vs Batch 3; never interleaved |
+| `engine/season/queries/world_q.py` | telling T4 (`with`) | the telling carve-out only; `24h` P5 (Batch 3a) is landed, so no open position edits it |
 | `engine/season/harness/populated.py` | `13d-iii` | — |
 | `engine/season/harness/corpus_run.py` | `17` | — |
 | `engine/season/cases/exercises/*.yaml` | `13`-rest | parallel authoring; merges after `17` |
@@ -68,15 +66,14 @@ the merge; it never removes it.
 | `engine/season/tests/test_season_shape.py` | telling T2, T4; then `8`, `14`, `17`, `13`-rest, `22` | every pin re-taken serially |
 | `loop/witness.py`, `state/carriers.py`, `data/verbs.py`, `data/requires.py`, `loop/resolve.py`, `engine/season/tests/test_told_by_channel.py` | the telling workplan only | no v8 position edits them while a telling position is open |
 | `engine/season/requirements.yaml`, `engine/season/hole_register.yaml` | every forward sweep; `11`, `21`-rest | E13 |
-| `references/restructure_ledger.md` | `29a`-ms, `29e`, `29f`, `2-ii` | serial; appended rows conflict at the file end |
+| `references/restructure_ledger.md` | `2-ii` | serial; appended rows conflict at the file end |
 | `.github/workflows/valoria-ci.yml` | `2-ii` (the job folds) | — |
 | `tests/valoria/test_engine_does_not_import_systems.py` | `2-ii` | E4 |
-| `systems/threadwork/sim/*` | `27`, `29a`-ms (import site), `29f` (import site) | E2 |
 
 **Parallel lanes this census permits:** Batch 2 `{WR: 27}` (only `systems/threadwork/` and
 `tests/valoria/test_coherence_elastic_plastic.py`) and `{MB/PC: LADDER-MBPC}` (only
 `registers/editorial_ledger_{mb,pc}.jsonl`); Batch 3 `{SE: 24h P5}` (`queries/world_q.py` or
-`faction_q.py`, read-only Query). Nothing else runs in parallel. Fable proposed FI `ED-FI-0009` as a
+`faction_q.py`, read-only Query; landed, Batch 3a). Nothing else runs in parallel. Fable proposed FI `ED-FI-0009` as a
 parallel lane; it shares `verb_table.yaml` and `effects_information.py` with `14`, so it is serial
 here (a departure, recorded in the receipt).
 

@@ -1203,23 +1203,27 @@ def uncontrolled(w: World, rung_id: str) -> list[str]:
     of *which faction holds this rung*, whose own docstring already calls that `None`
     `Uncontrolled`. Composing on it rather than re-deriving it means this Query and the march path
     (`loop/sides.py` and `loop/effects_combat.py` name a target's defending faction with the same
-    function) cannot disagree about who holds a place. Three readings come with it, stated rather
-    than chosen here:
+    function) cannot disagree about who holds a place (`faction_q.resolve(...).holdings` is a second reading
+    with no ancestry walk: a two-faction holder's land is in both factions' holdings and uncontrolled
+    here). Three readings come with it, stated rather than chosen here:
       * no live `hold` on the territory or on any rung above it -> uncontrolled (`build_realm`'s
-        geography value `Uncontrolled` writes no edge);
+        geography value `Uncontrolled` writes no edge; nor does faction land with no authored head,
+        and a holder's death closes his `hold` through `remove_person`, so a succession gap reads the
+        same);
       * a holder committed to NO rostered faction, or to MORE THAN ONE -> uncontrolled, because
         `faction_holding` returns `None` for both. The second is outside the oracle's domain (its
         `owner` was one faction or none) and is read as `provinces_of` reads it: the land coheres
         under no faction. A faction Proposition not on the roster counts as none (`FACTION_BY_PROP`);
       * an unheld territory beneath a faction-held rung -> NOT uncontrolled: `holder_faction_of`
-        walks `ancestry`, so the nearest held title governs.
+        walks `ancestry`, so the nearest held title governs (also outside the oracle's domain: it had no cascade).
 
     ⚠ IT IS SMALLER THAN THE ORACLE ON PURPOSE. Three of the oracle's conditions have no season
     stand-in, and inventing one would put a rule in a Query:
       * CONTIGUITY. The oracle grouped uncontrolled territories by `ADJACENCY`
         (`systems/settlements/sim/adjacency.py`, deleted at `29c`, its ledger row: *"NO SUCCESSOR,
         by design"*) and fired on a connected group of two or more. The season carries no
-        adjacency: no tenure kind, no field, no table. `rung_id` SCOPES the answer, as
+        adjacency: no tenure kind, no field, and no loader for the geography YAML's authored
+        `adjacency:` block (`valoria_geography_v30.yaml`), which the same `29c` row keeps as data. `rung_id` SCOPES the answer, as
         `provinces_of` and `density` take theirs; it is not contiguity, and two uncontrolled
         territories under one duchy need not touch. A caller wanting GD-3's "2+" compares
         `len(...)` itself, against a number it owns.
@@ -1231,9 +1235,8 @@ def uncontrolled(w: World, rung_id: str) -> list[str]:
         vectors. `04 §B.3` puts no social aggregate on a Rung, so nothing stands in; and promotion
         wrote too (`rec.promoted = True`).
 
-    ⚠ ITS ONE CALLER IS A REPORT: `harness/populated.py::census` counts it over each realm, so a
-    run prints it. That satisfies r2 `05` §A.1.5 RULED (d) (*a Query lands with a caller, or not at
-    all*, as `establishment_of` below records) and no more: nothing in the loop or the chooser asks
+    ⚠ ITS ONE CALLER IS A REPORT: `harness/populated.py::census` counts it over each realm, so every `populated.run()` returns it and
+    `harness/soak.py` writes it into `WORLD.json`'s `census_before` (`populated.main` does not print it). That meets the letter of r2 `05` §A.1.5 RULED (d), as `establishment_of` below records (*a Query with no consumer is a false N-line*), and no more: nothing in the loop or the chooser asks
     this, so the content hash cannot move by it, and under `CLAUDE.md` §0.2 it is a tested read
     that a harness reports, not behaviour the realm acts on. `provinces_of` and `sovereign_fraction`
     beside it have no caller at all. `engine/season/tests/test_revolt_query.py` is its falsifier,
