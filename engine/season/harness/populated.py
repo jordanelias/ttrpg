@@ -68,7 +68,7 @@ import sys
 from collections import Counter, defaultdict
 
 from ..data import cast, files
-from ..queries.world_q import RESIDE_KIND, capacity, home_of as home_of_q
+from ..queries.world_q import RESIDE_KIND, capacity, home_of as home_of_q, uncontrolled
 from ..gaps import Forbidden, Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.rosters import (BODY_FACTION, FACTIONS, OFFICES_BY_HOLDER, OFFICES_SEATS,
@@ -1296,7 +1296,11 @@ def census(w: World) -> dict:
             "largest_building": max(Counter(where.values()).values()) if where else 0,
             "stores_by_rung_kind": dict(sorted(stores_by_kind.items())),
             "eaters_short": len(short),
-            "unheld_for_want_of_a_head": len(getattr(w, "_unheld_for_want_of_a_head", []))}
+            "unheld_for_want_of_a_head": len(getattr(w, "_unheld_for_want_of_a_head", [])),
+            # `24h` P5: the revolt Query's only consumer (r2 `05` §A.1.5 RULED (d): a Query lands with
+            # a caller or not at all). A report, not a rule: it feeds no decision and moves no hash.
+            "uncontrolled_territories": sum(len(uncontrolled(w, r.id))
+                                            for r in w.rungs.values() if r.kind == "realm")}
 
 
 def run(seasons: int = 1, seed: int = 0, cap: int | None = None, w: World | None = None) -> dict:
