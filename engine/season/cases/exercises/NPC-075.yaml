@@ -9,6 +9,24 @@ case: NPC-075
 name: Orm
 source: 'the case''s own `season_requires` + #353 and the hole register, cited per row'
 authored_after_first_run: true
+# `W28-cast`, position `17b` PILOT. Read off this case's own sentences (quoted), written by an
+# author, matched by no code. No `office:` on either seat: `one_line` says "answering to no
+# faction" and the Wardens are no body in `rosters.yaml: office_bodies`, so there is no canonical
+# faction to seat either of them in -- absent is the refusal, not a default faction. No
+# `capability`: repairing breaches is not a `verb_capability` key (`copying` only).
+cast:
+- who: Orm
+  role: protagonist
+  # one_line: "The second-ranking Warden"; who_acts[1]: "the Warden-Chief (his senior)"; need 4:
+  # "a senior to answer to, peers to lose".
+  ought:
+    about: the Warden-Chief
+    predicate: is the senior Orm answers to
+- who: the Warden-Chief
+  role: his senior
+- who: the player
+  role: WAITS-ON-PLAYER
+  # who_acts[3]: "the player, if and when access to the outpost is earned".
 rows:
 - need_sha: 836e8de1391e
   hardness: core

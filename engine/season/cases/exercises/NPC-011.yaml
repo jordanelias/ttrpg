@@ -1,0 +1,28 @@
+# NPC-011 — `cast:` overlay only (`W28-cast`, position `17b` PILOT). See `NPC-039.yaml` for why a
+# `cast:` block lives in this overlay rather than in `cases/NPC4.yaml` (this case's own file).
+# Read off THIS case's own sentences (quoted), written by an author, matched by no code.
+#
+# No `office:` on any seat: he is "An Altonian prince" and the authority above him is "the Altonian
+# imperial authority", and Altonia is no canonical faction (`rosters.yaml: factions`), so
+# `office_faction` would refuse any seat authored for them -- absent is the refusal, not a default
+# faction. No `capability`: nothing in the case is a `verb_capability` key (`copying` only).
+case: NPC-011
+cast:
+- who: Alexios Laskaris
+  role: protagonist
+  # `knowledge[1]`: "whether Elske or the Crown court are aware his protective priority is
+  # conditioned on her loyalty specifically"; one_line: "whose entire priority flips on a
+  # threshold read of a different named character's tracked loyalty".
+  ought:
+    about: Elske
+    predicate: keeps the loyalty his protective priority is conditioned on
+- who: Elske
+  role: the character whose tracked loyalty drives his flip
+  # who_acts[1]: "Elske, whose tracked loyalty state drives his flip (her own agency is a separate case)".
+- who: the Altonian imperial authority
+  role: nominal superior whose directives he delays or dilutes
+  # who_acts[2]: "the Altonian imperial authority above him"; need 4: "receive directives from a
+  # nominal imperial superior and be able to deliberately delay, dilute, or fail to execute them".
+- who: the player
+  role: WAITS-ON-PLAYER
+  # who_acts[4] is "the player".

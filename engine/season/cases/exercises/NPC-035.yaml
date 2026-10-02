@@ -1,0 +1,36 @@
+# NPC-035 — `cast:` overlay only (`W28-cast`, position `17b` PILOT). See `NPC-039.yaml` for why a
+# `cast:` block lives in this overlay rather than in `cases/NPC4.yaml` (this case's own file).
+# Every office and ought is read off THIS case's own sentences (quoted), written by an author,
+# matched by no code.
+#
+# No `capability`: a guard captain's post names no vocation `rosters.yaml: verb_capability`
+# covers (`copying` is its only key). Absent is the honest reading, not a placeholder zero.
+case: NPC-035
+cast:
+- who: Theodor Kreutz
+  role: protagonist
+  # one_line: "A Royal Guard Captain personally loyal to the monarch rather than the Crown as an
+  # institution".
+  office:
+    post: Royal Guard Captain
+    faction: Crown
+    remit: []
+    why: >-
+      `one_line` names the post ("A Royal Guard Captain") and `who_acts[1]` the monarch he guards,
+      whose realm is the Crown. NO `body`: canon's five Crown bodies (Imperial Court, Court
+      Parliament, Ministries, Rectorates, Praefectures) name no guard organ, so `faction` is
+      authored directly -- the arm `H-99` provides for an organ canon has not written -- rather
+      than choosing the nearest body and silently moving the post. The case names no act the post
+      carries, so no remit is authored.
+  # one_line: "personally loyal to the monarch rather than the Crown as an institution"; need 1:
+  # "his loyalty specifically bound to one named individual".
+  ought:
+    about: Almud
+    predicate: is the monarch he is personally bound to
+- who: Almud
+  role: the monarch he is personally bound to
+  # who_acts[1]: "Almud, the monarch he is personally bound to". A monarch is a TITLE on the
+  # governance ladder, not an organ's office, so no `office:` is authored here.
+- who: the player
+  role: WAITS-ON-PLAYER
+  # who_acts[3] is "the player".

@@ -1,0 +1,47 @@
+# NPC-083 — `cast:` overlay only (`W28-cast`, position `17b` PILOT). A `cast:` block lives in this
+# overlay rather than in `cases/chain/NPC2.yaml` (a predecessor proposal's committed evidence this
+# repo reads and does not own; see `NPC-004.yaml`). Read off THIS case's own sentences (quoted),
+# written by an author, matched by no code. This case is SETTLEMENT-scale (`scale: settlement`, no
+# re-scale), so its offices sit at a settlement rung, unlike the realm-scale cases.
+#
+# No `capability`: a governor's budget of administrative actions is not a `verb_capability` key
+# (`copying` only). No seat for "the settlement's Local Actors" or "rival subnational factions":
+# each is a group the case does not name a person of.
+case: NPC-083
+cast:
+- who: Hedda Kronvald
+  role: protagonist
+  # one_line: "Governor of Ehrenfeld"; who_acts[1]: "the Provincial/Crown authority issuing the
+  # Directive" -- her controlling authority is the Crown's.
+  office:
+    post: Governor of Ehrenfeld
+    faction: Crown
+    remit: []
+    why: >-
+      `one_line` names the post ("Governor of Ehrenfeld") and `who_acts[1]` the authority above it
+      ("the Provincial/Crown authority issuing the Directive"), which is the Crown's. NO `body`:
+      canon's Crown bodies name no provincial-governance organ, so `faction` is authored directly
+      (`H-99`'s arm for an organ canon has not written). The case lists her actions as "a menu of
+      distinct administrative actions" without naming one from the remit roster, so none is
+      authored.
+  # `temporal.needs_deadline`: "a Directive response is owed every season"; one_line: "a mandatory
+  # faction Directive above her".
+  ought:
+    about: the Provincial authority
+    predicate: is owed a response to its Directive every season
+- who: the Provincial authority
+  role: issues the mandatory Directive
+  # who_acts[1], verbatim: "the Provincial/Crown authority issuing the Directive".
+  office:
+    post: Provincial authority
+    faction: Crown
+    remit: [issue]
+    why: >-
+      `who_acts[1]` calls it "the Provincial/Crown authority ISSUING the Directive", and `issue`
+      is the remit roster's own word for that act (`rosters.yaml: remit_acts`) -- read, not
+      matched: the only act the case gives this authority is the Directive. Crown, by the same
+      phrase's "Crown".
+- who: a retained clerk or deputy
+  role: delegate she may hand administrative work to
+  # who_acts[4]: "a retained clerk/deputy she may delegate to". No office: the case names no
+  # institution the post belongs to.

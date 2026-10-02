@@ -33,3 +33,50 @@ scale:
       or removes anyone, and those are the governance canon's title/office verbs, which Jordan
       ruled turn on holdings and purview. Canon does not add them either — §3.5's Excommunication
       is a Church power over STANDING, not over an office's tenure.
+# `W28-cast`, position `17b` PILOT. Read off this case's own sentences (quoted), written by an
+# author, matched by no code. Arnlod's OWN office is the case-level `scale.office` above (held by
+# the first seat, `p_a`), so his entry carries none -- a second would seat him twice. No
+# `capability`: authorizing an apparatus is not a `verb_capability` key (`copying` only).
+cast:
+- who: Arnlod Olafsson
+  role: protagonist
+  # need 1: "a single named superior whose sponsorship, approval, or authorization is a formal
+  # precondition for that branch's members to act above a defined severity or target-importance
+  # threshold" -- the branch's members are who_acts[2], "Sæmund Haelgrund and the rest of the
+  # Inquisitor ladder (subordinates)".
+  ought:
+    about: Sæmund Haelgrund
+    predicate: acts above the severity threshold only by his authorization
+- who: Arne Himlensendt
+  role: nominal superior
+  # who_acts[1]: "Confessor Arne Himlensendt (nominal superior)". Same seat NPC-021 authors.
+  office:
+    post: Confessor
+    body: Holy See
+    remit: []
+    why: >-
+      `who_acts[1]` names the post ("Confessor") and the man; `body: Holy See` is the Church's top
+      organ, above the four Cardinal arms -- the reading `NPC-021.yaml` already makes for this same
+      Confessor. `remit: []` as there: nothing in THIS case says what act the Confessor's seat
+      carries, only that he is the nominal superior.
+- who: Sæmund Haelgrund
+  role: subordinate on the Inquisitor ladder
+  # who_acts[2]: "Sæmund Haelgrund and the rest of the Inquisitor ladder (subordinates)".
+  office:
+    post: Inquisitor
+    faction: Church of Solmund
+    remit: []
+    why: >-
+      `who_acts[2]` names the ladder ("the Inquisitor ladder") the case seats him on, and
+      `one_line` makes the Church the apparatus ("the Church's institutional head of the
+      Inquisition"). NO `body`, deliberately: the Inquisitor ladder is not one of canon's
+      `office_bodies` (the Cardinal of Justice body is the Cardinal's own organ, and seating a
+      subordinate in it would call him its head), so `faction` is authored directly -- the arm
+      `H-99` provides for an organ canon has not written. No remit act is named for the ladder.
+- who: a rival faction's agent
+  role: pursues exposure of his broker connection
+  # who_acts[3]: "a rival faction's agent pursuing exposure of his broker connection". The faction
+  # is not named, so no office: `office_faction` would refuse a guess.
+  ought:
+    about: Arnlod Olafsson
+    predicate: has his broker connection exposed

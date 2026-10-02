@@ -810,6 +810,33 @@ rows:
       the rotation over the seated people with the case's `wants_of`, and no `cast:` yet exists
       with more than one entry. The corpus's `corpus_run` stdout is byte-identical before and after
       (143 cases, 120 distinct executed sets), so no figure above moves. Stays `partial`.
+      ⚠⚠ **PLAN POSITION `17b` + THE `13`-REST PILOT, 2026-10-02 -- THE PARAGRAPH ABOVE'S "NOT BUILT"
+      IS PARTLY SUPERSEDED.** A `cast:` entry now carries two author-written structured keys:
+      `office: {post, why, body | faction, remit?}` (checked by the case-level `_check_office`, seated
+      by `corpus_run._seat_office`) and `ought: {about, predicate}` (one OUGHT Proposition for that
+      entry, `about` the exact `who` of ANOTHER seated entry; same id and `commit` edge as the rotation
+      default, so `ambitions` and Q4 find it unchanged). `knows:` is REFUSED BY NAME at load and not
+      built: a seeded Claim is a `Claim` construction in `build_at`, a sixth site beside
+      `loop/witness.py`'s five, which AX-7 limits -- a Layer-1 question. Eight NPC cases carry the keys
+      (NPC-002, -011, -035, -038, -072, -075, -083, -086), each read off the case's own sentences
+      and cited beside the entry; none carries a `capability` (no case names a vocation
+      `verb_capability` covers -- `copying` is its only key -- with a sourced magnitude).
+      **MEASURED, seed 0, the 46 NPC cases, three arms on one tree:** (A) no overlays 41 distinct
+      executed sets, mean verbs 7.04, 13 verbs ever; (B) the real corpus with the pilot 41, 7.15, 13;
+      (C) position `17`'s identical 11-seat fixture on every case 26, 10.65, 16 (that control,
+      reproduced). **THE PLAN'S OBSERVABLE -- distinct executed sets rises over the pre-cast arm -- IS
+      NOT MET: 41 -> 41, and 8 -> 8 over the eight pilot cases**; the other 38 are byte-identical (all
+      143 world hashes compared, exactly the eight moved). What moved: mean verbs 6.62 -> 7.25 over the
+      eight, from two cases (NPC-038 7 -> 10, NPC-083 7 -> 9); the other six executed sets are identical
+      to the pre-cast. WHY, ATTRIBUTED BY DROPPING EACH KEY IN TURN: seven of the eight authored
+      oughts name the cast's NEXT entry, which is the rotation default's own referent, and
+      `Proposition.predicate` is read by no live path, so an ought that coincides with the rotation
+      moves nothing; the one that differs (NPC-038's protagonist) adds {interview, speak, transfer}
+      over the same four people without it. An office with `remit: []` seats a person and moved no
+      executed set (NPC-072's, alone in its cast, did change what that world attempts and has refused:
+      +examine, found, migrate); NPC-083's two offices moved {interview, issue, speak} in and `fight` out, and its
+      one `remit: [issue]` seat is the only seat there that grants `issue`. `corpus_run` stdout md5 d714ba5c -> 6a65a264 (declared; the
+      `DISTINCT EXECUTED SETS 120` and `17 of 44` lines did not move). Stays `partial`.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' line"
     blocks: [W27, H-62]
 

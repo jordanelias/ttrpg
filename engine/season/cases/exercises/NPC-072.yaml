@@ -1,0 +1,29 @@
+# NPC-072 — `cast:` overlay only (`W28-cast`, position `17b` PILOT). See `NPC-039.yaml` for why a
+# `cast:` block lives in this overlay rather than in `cases/NPC4.yaml` (this case's own file).
+# Read off THIS case's own sentences (quoted), written by an author, matched by no code.
+#
+# THE ONE-PERSON PILOT: an `office:` and no `ought:`, no second named person. It is here so the
+# office field can be seen without the extra seats moving the same numbers. No `ought:` because the
+# only other who_acts entries are "the Hafenmark Inner Council, as the body he sits on" (the body
+# his own office is a seat of) and the player; neither is a person an OUGHT could be about. No
+# `capability`: `need 3`'s "command authority" is not a `verb_capability` key (`copying` only).
+case: NPC-072
+cast:
+- who: Olaf Geirson
+  role: protagonist
+  # one_line: "Hafenmark's sole-represented Inner Council military commander"; who_acts[1]: "the
+  # Hafenmark Inner Council, as the body he sits on".
+  office:
+    post: military commander
+    body: Inner Council
+    remit: []
+    why: >-
+      `one_line` is "Hafenmark's sole-represented Inner Council military commander": the post is
+      "military commander" and the organ is canon's `Inner Council`, whose faction is Hafenmark
+      (`rosters.yaml: office_bodies`), so `faction` derives. `need 3` asks for "command authority
+      that materially affects that faction's military capability", but names no act from the remit
+      roster for it, and `NPC-070.yaml` makes the same call for the Crown's army commander
+      (`remit: []`), so none is authored here.
+- who: the player
+  role: WAITS-ON-PLAYER
+  # who_acts[2] is "the player".

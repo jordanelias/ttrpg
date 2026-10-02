@@ -1,0 +1,238 @@
+"""Plan position `17b` -- a `cast:` entry's `office:` and `ought:`, and the refusal of `knows:`.
+
+What each test proves, and the failure it can observe:
+
+  (a) `office:` is SEATED: a cast entry's block builds an `Office` through `corpus_run._seat_office`
+      (the one constructor of an overlay's office) and the person holds it; a case-level
+      `scale: office:` goes through the same function and is unchanged. A MUTATION (the seater made
+      a no-op) turns the assertion false, so the test can see an `office:` that reads nothing.
+  (b) `ought:` is SEATED: `{about, predicate}` becomes THAT entry's OUGHT Proposition on the same
+      id and the same `commit` edge the rotation default uses, so `person_q.ambitions` finds it with
+      no new reader; entries without one keep the rotation default byte for byte. A MUTATION (the
+      referent resolver pointed at the wrong seat) moves the subject, so the test sees an OUGHT
+      about the wrong person. Q4 fires for more propositions on a 4-seat cast than on the floor's 3.
+  (c) A MALFORMED entry refuses AT LOAD with a named error -- each shape alone, with a positive
+      control (a good cast loads), so a loader that refused everything cannot pass.
+  (d) `knows:` is REFUSED BY NAME: no builder here constructs a `Claim` (AX-7 limits the sites),
+      so a parsed-and-ignored field would tell an author a belief was seated.
+  (e) The REAL overlays: every authored `office:` is held and every authored `ought:` lands as a live
+      ambition about the person it names, with `checked >= 1` so the loop cannot pass by being empty.
+"""
+import pytest
+import yaml
+
+from engine.season.harness import corpus_run as C
+from engine.season.harness import run_cases as RC
+from engine.season.queries import person_q, world_q
+from engine.season.data.rosters import RUNG_KINDS
+
+OFFICE = {"post": "surveyor", "body": "Guild", "remit": [],
+          "why": "the case names the post and the institution"}
+
+
+def _host_case() -> dict:
+    """A representable NPC case with no overlay, other than `NPC-020` (the no-overlay control)."""
+    for c in RC.load_cases("NPC"):
+        c = C.apply_rescale(c)
+        if (str(c.get("scale")) in set(RUNG_KINDS) and c["id"] not in C.CAST
+                and c["id"] != "NPC-020"):
+            return c
+    raise AssertionError("no representable overlay-free NPC case")
+
+
+def _cast(*extra: dict) -> list:
+    """Four seated people, `who` = A..D, the extras merged into the entry of the same index."""
+    es = [{"who": n, "role": "protagonist" if n == "A" else "ally"} for n in "ABCD"]
+    for i, e in enumerate(extra):
+        es[i].update(e)
+    return es
+
+
+def _build(monkeypatch, entries):
+    case = _host_case()
+    monkeypatch.setitem(C.CAST, case["id"], entries)
+    return case, C.build_at(case, 0)
+
+
+# ---------------------------------------------------------------------------
+# (a) `office:`
+# ---------------------------------------------------------------------------
+
+def _held(w) -> dict:
+    return {t.subject: w.offices[t.object] for t in w.tenures
+            if t.kind == "hold" and t.object in w.offices}
+
+
+def test_a_cast_entrys_office_is_held_by_that_person_and_by_no_other(monkeypatch):
+    case, w = _build(monkeypatch, _cast({}, {"office": OFFICE}))
+    held = _held(w)
+    assert list(held) == ["p_b"], held
+    o = held["p_b"]
+    assert (o.post, o.body, o.faction, o.remit_acts) == ("surveyor", "Guild", "Guilds", [])
+    assert o.id == f"off_{case['id']}_p_b"
+    # CONTROL: the same cast with no `office:` seats none.
+    _, w0 = _build(monkeypatch, _cast())
+    assert w0.offices == {} and _held(w0) == {}
+
+
+def test_a_mutation_making_office_read_nothing_is_seen(monkeypatch):
+    _, honest = _build(monkeypatch, _cast({}, {"office": OFFICE}))
+    monkeypatch.setattr(C, "_seat_office", lambda *a, **k: None)
+    _, mutated = _build(monkeypatch, _cast({}, {"office": OFFICE}))
+    assert _held(honest) and not _held(mutated)
+
+
+def test_the_case_level_office_still_goes_through_the_same_seater(monkeypatch):
+    case = dict(_host_case(), office=dict(OFFICE, post="chair"))
+    monkeypatch.setitem(C.CAST, case["id"], _cast({}, {"office": OFFICE}))
+    w = C.build_at(case, 0)
+    assert {pid: o.post for pid, o in _held(w).items()} == {"p_a": "chair", "p_b": "surveyor"}
+    assert sorted(w.offices) == [f"off_{case['id']}", f"off_{case['id']}_p_b"]
+
+
+# ---------------------------------------------------------------------------
+# (b) `ought:`
+# ---------------------------------------------------------------------------
+
+def _ambition(w, pid):
+    ids = person_q.ambitions(w.persons[pid], w.propositions)
+    assert len(ids) == 1, ids
+    return w.propositions[ids[0]]
+
+
+def test_an_authored_ought_replaces_the_rotation_default_for_that_entry_only(monkeypatch):
+    case = _host_case()
+    # A's default would be about B (the next seat); the author says D, so the two cannot be confused.
+    _, w = _build(monkeypatch, _cast({"ought": {"about": "D", "predicate": "keeps faith"}}))
+    mine = _ambition(w, "p_a")
+    assert (mine.id, mine.mood, mine.subject, mine.predicate) == \
+        ("prop_p_a", "OUGHT", "p_d", "keeps faith")
+    # The edge is the rotation's own: one live `commit`, id and kind unchanged.
+    assert [t.object for t in w.persons["p_a"].tenures if t.kind == "commit"] == ["prop_p_a"]
+    # Every OTHER seat is the rotation default, with the case's own `wants_of`.
+    for i, pid in enumerate(["p_b", "p_c", "p_d"], start=1):
+        p = _ambition(w, pid)
+        assert p.subject == ["p_c", "p_d", "p_a"][i - 1] and p.predicate == RC.wants_of(case), pid
+
+
+def test_no_ought_anywhere_is_the_rotation_for_every_seat(monkeypatch):
+    case, w = _build(monkeypatch, _cast())
+    subjects = [_ambition(w, pid).subject for pid in ("p_a", "p_b", "p_c", "p_d")]
+    assert subjects == ["p_b", "p_c", "p_d", "p_a"]
+    assert {_ambition(w, pid).predicate for pid in w.persons} == {RC.wants_of(case)}
+
+
+def test_a_mutation_pointing_the_referent_at_the_wrong_seat_is_seen(monkeypatch):
+    ought = {"ought": {"about": "D", "predicate": "keeps faith"}}
+    _, honest = _build(monkeypatch, _cast(ought))
+    monkeypatch.setattr(C, "_referent", lambda seated, entry: 1)
+    _, mutated = _build(monkeypatch, _cast(ought))
+    assert _ambition(honest, "p_a").subject == "p_d" != _ambition(mutated, "p_a").subject
+
+
+def test_q4_fires_for_more_propositions_on_a_four_seat_cast_than_on_the_floor(monkeypatch):
+    def need(w):
+        return {q.about for p in w.persons.values() for q in world_q.questions_for(w, p)
+                if q.source == "need"}
+    case = _host_case()
+    pre = need(C.build_at(case, 0))
+    _, w = _build(monkeypatch, _cast({"ought": {"about": "D", "predicate": "keeps faith"}}))
+    post = need(w)
+    assert pre == {"prop_p_a", "prop_p_b", "prop_p_c"}
+    assert post == {"prop_p_a", "prop_p_b", "prop_p_c", "prop_p_d"} and len(post) > len(pre)
+    # and the Question's referent is the AUTHORED person (`p_d`), not the rotation's (`p_b`).
+    qs = [q for q in world_q.questions_for(w, w.persons["p_a"]) if q.source == "need"]
+    assert [(q.about, q.referents) for q in qs] == [("prop_p_a", ("p_d",))]
+
+
+# ---------------------------------------------------------------------------
+# (c) a malformed entry refuses at load; (d) `knows:` is refused by name
+# ---------------------------------------------------------------------------
+
+def _load(tmp_path, monkeypatch, entries):
+    monkeypatch.setattr(C.files, "EXERCISES_DIR", tmp_path)
+    (tmp_path / "X-1.yaml").write_text(yaml.safe_dump({"case": "X-1", "cast": entries}),
+                                       encoding="utf-8")
+    return C.cast_overlay()
+
+
+def test_a_good_cast_with_office_and_ought_loads(tmp_path, monkeypatch):
+    es = _cast({"ought": {"about": "B", "predicate": "p"}}, {"office": OFFICE})
+    es.append({"who": "the player", "role": "WAITS-ON-PLAYER"})
+    assert _load(tmp_path, monkeypatch, es) == {"X-1": es}
+
+
+REFUSALS = {
+    "an unknown key": ({"colour": "red"}, "keys nothing reads"),
+    "knows:": ({"knows": [{"subject": "x", "predicate": "y", "value": 1}]}, "knows"),
+    "an ought that is not a mapping": ({"ought": "B"}, "`ought:` is exactly"),
+    "an ought with an extra key": ({"ought": {"about": "B", "predicate": "p", "why": "z"}},
+                                   "`ought:` is exactly"),
+    "an ought with no predicate": ({"ought": {"about": "B"}}, "`ought:` is exactly"),
+    "an ought with an empty about": ({"ought": {"about": " ", "predicate": "p"}},
+                                     "`ought:` is exactly"),
+    "an ought about oneself": ({"ought": {"about": "A", "predicate": "p"}}, "names 0 other"),
+    "an ought about nobody in the cast": ({"ought": {"about": "Zed", "predicate": "p"}},
+                                          "names 0 other"),
+    "an ought about a player": ({"ought": {"about": "the player", "predicate": "p"}},
+                                "names 0 other"),
+    "an office with no why": ({"office": {"post": "p", "faction": "Crown"}}, "no `why:`"),
+    "an office with no post": ({"office": {"why": "w", "faction": "Crown"}}, "no `post:`"),
+    "an office naming neither body nor faction": ({"office": {"post": "p", "why": "w"}},
+                                                  "neither a `body` nor a `faction`"),
+    "an office whose faction contradicts its body": (
+        {"office": {"post": "p", "why": "w", "body": "Cardinal of Justice", "faction": "Crown"}},
+        "belongs to"),
+    "an office remit act off the roster": (
+        {"office": {"post": "p", "why": "w", "faction": "Crown", "remit": ["smite"]}},
+        "remit acts not on the roster"),
+}
+
+
+@pytest.mark.parametrize("label", sorted(REFUSALS))
+def test_each_malformed_entry_refuses_at_load_with_a_named_error(tmp_path, monkeypatch, label):
+    bad, needle = REFUSALS[label]
+    es = _cast(bad)
+    with pytest.raises(SystemExit) as red:
+        _load(tmp_path, monkeypatch, es)
+    assert needle in str(red.value), (label, str(red.value))
+
+
+def test_two_people_with_one_name_make_an_ought_about_it_refuse(tmp_path, monkeypatch):
+    es = _cast({"ought": {"about": "C", "predicate": "p"}})
+    es[3]["who"] = "C"
+    with pytest.raises(SystemExit) as red:
+        _load(tmp_path, monkeypatch, es)
+    assert "names 2 other" in str(red.value)
+
+
+def test_a_waiting_entry_cannot_carry_what_nothing_will_read(tmp_path, monkeypatch):
+    for field, val in (("office", OFFICE), ("ought", {"about": "A", "predicate": "p"})):
+        es = _cast() + [{"who": "the player", "role": "WAITS-ON-PLAYER", field: val}]
+        with pytest.raises(SystemExit) as red:
+            _load(tmp_path, monkeypatch, es)
+        assert "WAITS-ON-PLAYER" in str(red.value), field
+
+
+# ---------------------------------------------------------------------------
+# (e) the real overlays
+# ---------------------------------------------------------------------------
+
+def test_every_authored_office_is_held_and_every_authored_ought_is_a_live_ambition():
+    cases = {c["id"]: C.apply_rescale(c) for c in RC.load_cases("NPC")}
+    offices = oughts = 0
+    for cid, entries in C.CAST.items():
+        seated, _ = C.seating(cases[cid])
+        w = C.build_at(cases[cid], 0)
+        for n, e in enumerate(seated):
+            pid = C.seat_ids(len(seated))[n]
+            if e.get("office"):
+                offices += 1
+                assert _held(w)[pid].post == e["office"]["post"], (cid, pid)
+            if e.get("ought"):
+                oughts += 1
+                prop = _ambition(w, pid)
+                other = C.seat_ids(len(seated))[C._referent(seated, e)]
+                assert (prop.subject, prop.predicate) == (other, e["ought"]["predicate"]), (cid, pid)
+                assert w.persons[other].name == e["ought"]["about"], (cid, pid)
+    assert offices >= 1 and oughts >= 1, (offices, oughts)

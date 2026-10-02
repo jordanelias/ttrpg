@@ -214,23 +214,38 @@ def cast_overlay() -> dict:
     per-case files `rescales()` already reads `scale:`/`office:` from, rather than inventing a
     second directory or a second per-case file convention.
 
-    ⚠ EACH ENTRY IS `{who, role, capability}`. `who` names a cast member — for every entry authored
-    so far, the case's own PROTAGONIST, i.e. its `name:` field, never retyped independently (a
-    second copy of a fact the case already owns is the hazard `CLAUDE.md` §0.05 cl.3 names). `role`
+    ⚠ EACH ENTRY IS `{who, role, capability?, office?, ought?}` (`CAST_KEYS`, the closed set).
+    `who` names a cast member — the case's own PROTAGONIST is its `name:` field, never retyped
+    independently (a second copy of a fact the case already owns is the hazard `CLAUDE.md` §0.05
+    cl.3 names); another entry is a person the case's own `who_acts`/`one_line` names. `role`
     is free text with ONE term the code branches on, `WAITS_ON_PLAYER`: an entry carrying it names
     a player the engine does not supply and is NOT seated as an actor (`seating`). `capability` is
     present only where the case's OWN text grounds a number — absent is the honest reading
     (§42.2's polarity rule), never a placeholder zero standing in for one.
 
-    ⚠ WHAT THIS SCHEMA DOES NOT CARRY, AND `build_at` THEREFORE DOES NOT READ (plan position `17`,
-    stopped there rather than inventing a field): an `office:` per entry (the rest of `who_acts`
-    resolved to a seat at a rung), an OUGHT per entry (`one_line` parsed to a subject and a
-    predicate), and `knowledge` parsed to initial Claims. Each needs a structured key an author
-    writes and a reader refuses on; none exists, and token-matching the prose for any of them is
-    the W10 router's failure. Until they do, a cast seats PEOPLE and nothing else.
+    ⚠ `office:` AND `ought:` ARE AUTHOR-WRITTEN STRUCTURED FIELDS (position `17b`), EACH ROUTED
+    THROUGH AN OWNER THAT ALREADY EXISTS, NEITHER READ OFF PROSE (the W10 router's failure):
+      * `office: {post, why, body | faction, remit?}` is the SAME block a `scale:` overlay's
+        `office:` carries and is checked by the SAME `_check_office`; `build_at` seats it through
+        `_seat_office`, the one constructor of an overlay's office. Its `why:` is the derivation,
+        which is what makes it authoring rather than invention.
+      * `ought: {about, predicate}` is ONE OUGHT Proposition for that entry. `about` is the exact
+        `who` of ANOTHER SEATED entry (a person, so Q4's referent is a person), `predicate` the
+        author's words. It replaces, for that entry only, the rotation default `build_at` writes
+        for every seat — same Proposition id, same `commit` edge — so `person_q.ambitions(p,
+        propositions)` finds it with no new reader.
+    ⚠ `knows:` IS REFUSED BY NAME, NOT SEATED. An initial Claim is a `Claim(...)` construction and
+    no world builder here has one: the only sites are `loop/witness.py`'s five event-driven deposits
+    and `probes.py`'s hand-built fixtures. Adding a sixth in `build_at` is a Layer-1 question
+    (`AX-7` limits the sites, and a seeded belief is a deposit nobody witnessed), which this
+    position stopped on rather than answering. A field that parses and then reads nothing would be
+    the silent no-op that makes an author believe a belief was seated.
 
-    ⚠ A MALFORMED ENTRY REFUSES AT LOAD (a world is never built from it): not a mapping, no `who`,
-    or more seated entries than `string.ascii_lowercase` can name (`seat_ids`).
+    ⚠ A MALFORMED ENTRY REFUSES AT LOAD (a world is never built from it), by `_check_cast`: not a
+    mapping, no `who`, a key outside `CAST_KEYS`, a bad `office:` (`_check_office`'s own errors), an
+    `ought:` that is not exactly `{about, predicate}` or whose `about` names no OTHER seated entry
+    (or names two), a WAITS-ON-PLAYER entry carrying `office:`/`ought:` (never seated, so the field
+    would read nothing), or more seated entries than `string.ascii_lowercase` can name (`seat_ids`).
 
     ⚠ COUNT THIS WITH THIS FUNCTION, NEVER WITH A GREP OVER THE CASE FILES. The historical GAP this
     position's own plan entry names in terms: an antagonist once re-derived a corpus count by
@@ -243,14 +258,74 @@ def cast_overlay() -> dict:
     for f, doc in _exercise_docs():
         entries = doc.get("cast")
         if doc.get("case") and isinstance(entries, list):
-            for e in entries:
-                if not isinstance(e, dict) or not str(e.get("who") or "").strip():
-                    raise SystemExit(f"{f.name}: a `cast:` entry with no `who:` -- {e!r}")
-            if len([e for e in entries if not _waits_on_player(e)]) > len(string.ascii_lowercase):
-                raise SystemExit(f"{f.name}: more seated `cast:` entries than the "
-                                 f"{len(string.ascii_lowercase)} seat ids `seat_ids` can name")
+            _check_cast(f.name, entries)
             out[doc["case"]] = entries
     return out
+
+
+# `17b`: THE KEYS A `cast:` ENTRY MAY CARRY. Closed on purpose: an entry key nothing reads is an
+# author's belief that something was seated, so an unknown key refuses (`_check_cast`).
+CAST_KEYS = ("who", "role", "capability", "office", "ought")
+OUGHT_KEYS = ("about", "predicate")
+
+
+def _referent(seated: list, entry: dict) -> int:
+    """The index in `seated` of the OTHER entry `entry["ought"]["about"]` names -- by exact `who`,
+    never by token. `seated`, not the whole cast: a WAITS-ON-PLAYER entry is nobody the engine
+    seats, so an OUGHT about one would be about nobody. Raises `LookupError` unless exactly one
+    OTHER seated entry carries that name (`e is not entry` is what makes an OUGHT about oneself
+    refuse, as the rotation default has always guaranteed -- `build_at`'s own comment).
+
+    [ASSUMPTION: an `ought:` names ANOTHER PERSON by the exact `who` the author typed, never a
+    rung, a faction or oneself -- basis: Q4's referent is `(prop.subject,)`, and a PERSON subject is
+    the half `build_at`'s 2026-09-13 measurement found load-bearing (443 -> 638 acts, 168 naming
+    another person); a rung subject is the old control, and no id exists for an authored person
+    until it is seated, so the name is the only key]"""
+    who = str(entry["ought"]["about"]).strip()
+    hits = [n for n, e in enumerate(seated) if e is not entry and str(e["who"]).strip() == who]
+    if len(hits) != 1:
+        raise LookupError(f"names {len(hits)} other seated entries ({who!r})")
+    return hits[0]
+
+
+def _check_cast(where: str, entries: list) -> None:
+    """A case's `cast:` list, validated AT LOAD, so a malformed entry never reaches a world.
+    `office:` goes through `_check_office` -- the validator IS the constructor's own rules (that
+    function's comment), not a second copy -- and `ought:` through `_referent`, the resolver
+    `build_at` seats from, so load and build cannot disagree about whom an OUGHT is about."""
+    for e in entries:
+        if not isinstance(e, dict) or not str(e.get("who") or "").strip():
+            raise SystemExit(f"{where}: a `cast:` entry with no `who:` -- {e!r}")
+    seated = [e for e in entries if not _waits_on_player(e)]
+    if len(seated) > len(string.ascii_lowercase):
+        raise SystemExit(f"{where}: more seated `cast:` entries than the "
+                         f"{len(string.ascii_lowercase)} seat ids `seat_ids` can name")
+    for e in entries:
+        who = str(e["who"]).strip()
+        if "knows" in e:
+            raise SystemExit(f"{where}: cast entry {who!r} carries `knows:`, which no builder seats "
+                             "-- an initial Claim is a new `Claim` construction site (AX-7), a "
+                             "Layer-1 question position `17b` stopped on")
+        extra = sorted(set(e) - set(CAST_KEYS))
+        if extra:
+            raise SystemExit(f"{where}: cast entry {who!r} has keys nothing reads: {extra} "
+                             f"(the closed set is {list(CAST_KEYS)})")
+        if _waits_on_player(e) and (e.get("office") or e.get("ought")):
+            raise SystemExit(f"{where}: cast entry {who!r} is WAITS-ON-PLAYER, so it is never "
+                             "seated, and an `office:`/`ought:` on it would read nothing")
+        _check_office(f"{where}, cast entry {who!r}", e.get("office"))
+        ought = e.get("ought")
+        if ought is None:
+            continue
+        if (not isinstance(ought, dict) or set(ought) != set(OUGHT_KEYS)
+                or not all(str(ought[k] or "").strip() for k in OUGHT_KEYS)):
+            raise SystemExit(f"{where}: cast entry {who!r}: an `ought:` is exactly "
+                             f"{{{', '.join(OUGHT_KEYS)}}}, both non-empty -- {ought!r}")
+        try:
+            _referent(seated, e)
+        except LookupError as err:
+            raise SystemExit(f"{where}: cast entry {who!r}: `ought.about` {err}; it must be the "
+                             "exact `who` of exactly one OTHER seated entry") from None
 
 
 CAST = cast_overlay()
@@ -273,6 +348,25 @@ def seat_ids(n: int) -> tuple:
     alphabet has."""
     return ANONYMOUS_SEATS + tuple(f"p_{c}" for c in
                                    string.ascii_lowercase[len(ANONYMOUS_SEATS):n])
+
+
+def _seat_office(w: World, oid: str, pid: str, scope: str, off: dict) -> None:
+    """ONE CONSTRUCTOR OF AN OVERLAY'S OFFICE: `off` is the `{post, remit, body | faction, why}`
+    block `_check_office` validated, `pid` the person who holds it at `scope` (the deepest
+    non-person rung). Both callers -- the case-level `office:` held by `p_a`, and a cast entry's
+    own (`17b`) -- build it here, so the two cannot drift.
+
+    ⚠ NO SILENT FILTER. Rev 1 wrote `[a for a in ... if a in S.REMIT_ACTS]`, dropping an
+    unrecognised remit act on the floor -- a quiet default sitting underneath
+    `Office.__post_init__`'s loud one, which could then never fire. Pass them through and let the
+    constructor refuse.
+
+    [ASSUMPTION: a cast entry's office sits at `scope`, the deepest non-person rung -- the same
+    scope the case-level office has, because the overlay carries no per-entry rung key -- basis:
+    `build_at`'s case-level `office:` seating, which this function now serves]"""
+    w.offices[oid] = Office(oid, str(off["post"]), scope, list(off.get("remit") or []),
+                            body=off.get("body"), faction=off.get("faction"))
+    w.add_tenure(Tenure(f"t_{oid}", pid, oid, "hold", 0))
 
 
 def seasons_for(case: dict) -> int:
@@ -368,16 +462,14 @@ def build_at(case: dict, seed: int = 0) -> World:
     # not say, the case stays unrepresentable and that is the honest answer (§42.2).
     off = case.get("office")
     if isinstance(off, dict) and off.get("post"):
-        oid = f"off_{case.get('id', 'x')}"
-        w.offices[oid] = Office(oid, str(off["post"]), ids[chain[0]],
-                                  # ⚠ NO SILENT FILTER. Rev 1 wrote
-                                  # `[a for a in ... if a in S.REMIT_ACTS]`, dropping an
-                                  # unrecognised remit act on the floor -- a quiet default sitting
-                                  # underneath `Office.__post_init__`'s loud one, which could then
-                                  # never fire. Pass them through and let the constructor refuse.
-                                  list(off.get("remit") or []),
-                                  body=off.get("body"), faction=off.get("faction"))
-        w.add_tenure(Tenure(f"t_{oid}", "p_a", oid, "hold", 0))
+        _seat_office(w, f"off_{case.get('id', 'x')}", "p_a", ids[chain[0]], off)
+    # `17b`: AND EACH CAST ENTRY MAY SEAT ITS OWN. The same block, the same constructor
+    # (`_seat_office`), held by THAT entry's person rather than `p_a`; the id carries the person so
+    # it cannot collide with the case-level office above. An entry with no `office:` seats nothing.
+    for n, entry in enumerate(seated):
+        if isinstance(entry.get("office"), dict):
+            _seat_office(w, f"off_{case.get('id', 'x')}_{pids[n]}", pids[n], ids[chain[0]],
+                         entry["office"])
     # ⚠⚠ **THE OUGHT NAMES A PERSON, AND THE WANT IS THE CASE'S OWN.** Until 2026-09-13 this was
     # ONE Proposition for all three people -- `Proposition("prop_x", "OUGHT", ids[chain[0]],
     # "a standing ambition", ...)` -- whose subject was a **rung** and whose predicate was a single
@@ -431,15 +523,21 @@ def build_at(case: dict, seed: int = 0) -> World:
     # until somebody does that, this default is load-bearing on every number the grader reports.
     #
     # ⚠ `17`: THE ROTATION NOW RUNS OVER EVERY SEATED PERSON (`pids`), a cast's eleven as readily as
-    # the floor's three, AND IT IS STILL THE DEFAULT, NOT AN AUTHORED OUGHT. `one_line` -> the OUGHT
-    # needs a structured key on a `cast:` entry (a subject and a predicate an author wrote); the
-    # schema has none, so the case's own `wants_of` and the next person in the rotation stand in for
-    # every entry. Reading `one_line` for them would be the token-match this file refuses.
+    # the floor's three, AND IT IS THE DEFAULT, NOT AN AUTHORED OUGHT: the case's own `wants_of` and
+    # the next person in the rotation stand in for every entry that wrote none.
+    # ⚠ `17b`: AN ENTRY'S `ought: {about, predicate}` REPLACES THE DEFAULT FOR THAT ENTRY ONLY -- the
+    # same Proposition id (`prop_<pid>`), the same `commit` edge below, so `ambitions` and Q4 find
+    # it with no new reader. `about` resolves through `_referent`, the resolver `_check_cast`
+    # validated with. Reading `one_line` for either half would be the token-match this file refuses.
     want = wants_of(case)
     cast = pids                   # every person this function seated, in `seat_ids` order
     for i, pid in enumerate(cast):
-        about = cast[(i + 1) % len(cast)]
-        prop = Proposition(f"prop_{pid}", "OUGHT", about, want, True, 0)
+        entry = seated[i] if i < len(seated) else None
+        if entry is not None and entry.get("ought"):
+            about, predicate = pids[_referent(seated, entry)], str(entry["ought"]["predicate"])
+        else:
+            about, predicate = cast[(i + 1) % len(cast)], want
+        prop = Proposition(f"prop_{pid}", "OUGHT", about, predicate, True, 0)
         w.propositions[prop.id] = prop
         w.add_tenure(Tenure(f"t_{pid}_commits", pid, prop.id, "commit", 0))
     # The docket names ONE matter, so it names the first person's. `prop_x` is gone -- and an

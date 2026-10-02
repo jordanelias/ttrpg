@@ -8,6 +8,25 @@ case: NPC-002
 name: Maret Uln
 source: 'the case''s own `season_requires` + #353 and the hole register, cited per row'
 authored_after_first_run: true
+# `W28-cast`, position `17b` PILOT. Read off this case's own sentences (quoted), written by an
+# author, matched by no code. No `office:`: the case says "her faction" and "her patron" and names
+# neither a faction nor a body, and `office_faction` refuses a seat with no canonical faction
+# (§42.2's polarity rule) -- so the absence is the honest reading, not an omission. No
+# `capability`: "practitioner and intelligence operative" names a vocation, not one a
+# `verb_capability` key covers (`copying` only), and no magnitude has a source.
+cast:
+- who: Maret Uln
+  role: protagonist
+  # one_line: "...who is the sole named successor if her patron falls"; who_acts[1]: "her patron
+  # (whose fall triggers her succession mode)".
+  ought:
+    about: her patron
+    predicate: is succeeded by her if he falls
+- who: her patron
+  role: patron, whose fall triggers her succession mode
+- who: the player
+  role: WAITS-ON-PLAYER
+  # who_acts[3] is "the player".
 rows:
 - need_sha: 1d792bf5f784
   hardness: core

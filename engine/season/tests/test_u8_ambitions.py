@@ -22,9 +22,9 @@ What each test proves, and the failure it can observe:
   (e) Q4 (`world_q.questions_for`) fires for more than one proposition: one per person across a
       cast, and more than one per PERSON when a person holds two ambitions.
 
-NOT TESTED, BECAUSE NOT BUILT (plan position `17` stopped there -- see `corpus_run.cast_overlay`):
-an `office:` per cast entry, `one_line` -> the OUGHT, `knowledge` -> initial Claims. The schema
-carries `{who, role, capability}` and none of the three has a structured key to read.
+NOT BUILT HERE (plan position `17` stopped on three keys): `office:` and `ought:` were built at `17b`
+and are tested in `test_u8b_cast_fields.py`; `knowledge` -> initial Claims is REFUSED by name at load
+(a new `Claim`-construction site, AX-7), tested there too.
 """
 import ast
 
