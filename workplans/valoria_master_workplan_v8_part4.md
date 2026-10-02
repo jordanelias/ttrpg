@@ -19,12 +19,12 @@ predicate/effect; `write_matrix.yaml` `Person` rows; `rosters.yaml` `requires_op
 stance write — the stored half of regard); `harness/corpus_run.py::build_at`; `harness/populated.py`'s
 seat builder; `engine/season/offices.yaml` header; `proposals/2026-09-04-degree-sweep/wd_collect.py`.
 
-### `11` · U6 — R-01/R-02 corpus measurement: THE RE-TAKE · IN · gate `13`-rest and `17b` built · `sonnet` runs, `opus` reads the number · `[simulation]`
+### `11` · U6 — R-01/R-02 corpus measurement: THE RE-TAKE · IN · gate `13`-rest at its pilot, `17-cast` built · `sonnet` runs, `opus` reads the number · `[simulation]`
 
 **First measurement LANDED 2026-10-01 (PR #451; `11-fix` + `11`).** At `2x3`, over 143 cases, reconvergence reads none 77.13 % · actor 43.03 % · total 38.47 %
 (`proposals/2026-09-04-degree-sweep/runs/WD_LOG.txt`, tracked; the 36 cells are untracked and rebuilt by the commands below): below the 96 % bar, so R-02 is `met` and R-01 stays `not_met`
 (`engine/season/requirements.yaml`, whose dated paragraphs label each figure committed / derived / scratch). **This item is the RE-TAKE:** the same commands after
-`13d-iii`, `17b` and `13`-rest, declaring both trees; the pair is the control for what those builds did to propagation.
+`13d-iii` and `17-cast`, declaring both trees; the pair is the control for what those builds did to propagation.
 **Acceptance — verbatim** (carried from U6; slices re-derived for 143):
 
 ```
@@ -74,9 +74,9 @@ earlier rewrite of `10` (a stored stance write on a resolved `fight`) is **withd
 judged deed at read, so a stored deed write would be a second route to one fact. The AX-7 wiring that
 rode along stays registered and unbuilt until the telling workplan's T6 closes (`_part3` E16).
 
-### `13`-rest · W28-cast: the remaining overlays · IN · **STOPPED at the pilot, J-23 (`H-185`)** · `sonnet` author, `opus` critic · `[design]`
+### `13`-rest · W28-cast: the remaining overlays · IN · **STOPPED at its pilot (the user's rule)** · `sonnet` author, `opus` critic · `[design]`
 
-**Pilot run 2026-10-02 (`17b`):** eight differentiated NPC overlays; DISTINCT EXECUTED SETS 41 with none, 41 with the pilot, 26 with a uniform fixture cast; the observable is not met, so nothing scales. `knows:` is refused at load (a sixth `Claim`-construction site is AX-7's to forbid, closed at ladder step 3). The text below is the original instruction, kept for when J-23 is answered.
+**Pilot run 2026-10-02 (`17-cast`):** eight differentiated NPC overlays; DISTINCT EXECUTED SETS 41 with none, 41 with the pilot, 26 with a uniform fixture cast (seed 0, an instrument that was not committed). The observable is not met, so nothing scales (the user's rule, 2026-10-01); it is a weak reading, because 41 of 46 cases were already distinct and the gain was capped at +5. `knows:` is refused at load: seeding an initial belief needs a sixth `Claim`-construction site or pre-history Events through the existing witness sites (`01_AXIOMS.md` AX-7), neither built, and nothing in the plan's observables needs it. An ought's `predicate` is a declared non-causal label (`H-185`). The text below is the original instruction, kept for the day the user scales it.
 
 
 41 NPC + 97 ARC `cast:` overlays in `engine/season/cases/exercises/*.yaml` (never `cases/chain/*.yaml` in
