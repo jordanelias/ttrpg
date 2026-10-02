@@ -167,7 +167,7 @@ scales:
       refused because no computed act declares a works (`H-165`); no domain-action mechanism exists.
       ⚠ `systems/overview/` WENT AT PLAN POSITION `29a`-ms (2026-10-02): its last module, `sim/ms_track.py`
       (the Mending Stability world-track, no importer since `27`), is retired with a `FORK:` row; the season
-      carries no MS clock (`loop/census.py`: no clock generates anything).
+      carries no MS clock (holonic §25.1: the three licensed clocks are exhaustive; `04` PART D row 17).
 
   - scale:    "investigations / detective / interactive fiction"
     subsystem: ["systems/fieldwork (deleted)"]

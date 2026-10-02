@@ -2862,7 +2862,7 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
      its other caller, went at `29a`, and nothing was left to call either function (an AST walk over every tracked
      `*.py` found no import of `systems.overview` before this commit's deletion, and none after). WHAT THE SEASON
      KEEPS is not this module: the season has no MS clock and no analogue by architecture
-     (`engine/season/loop/census.py`: "NO CLOCK GENERATES ANYTHING"). Threadwork still REPORTS the number
+     (`architecture/holonic_ARCHITECTURE.md` §25.1: the three licensed clocks are exhaustive; `04` PART D row 17 refuses a fourth). Threadwork still REPORTS the number
      (`OpposingResult.ms_delta`, `OperationResult.mending_stability_delta`) and writes it nowhere. Nothing was built
      in its place here. COVERAGE DROPPED, once: none that ran. `ms_track` had no test of its own; the only tests that
      named it are `tests/valoria/test_flow_skeletons.py`'s two `RETIRED_CALL_SITES` pairs, which key on the OLD

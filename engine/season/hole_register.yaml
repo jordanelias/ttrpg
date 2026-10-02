@@ -4088,7 +4088,7 @@ rows:
       `TEMPERED_STRAIN = -5` (Close only) absorbs the next rupture trigger ONCE and resets strain to 0
       (`check_knot_rupture`); a break REPORTED Disposition `max(-5, -3)` and 4 Composure in `apply_knot_loss`'s returned dict (it wrote neither) and WROTE one `Honor` Conviction Scar through `apply_conviction_scar` when a Close knot broke from POSITIVE strain; a rupture REPORTED Disposition -3 and WROTE `RUPTURE_COHERENCE_LOSS = -1` through `apply_coherence_delta`, which the code itself flags `[UNVERIFIED
       post-ED-912]`. Formation rolled `Spirit * 2 + History (Relationships)` at TN 7, Ob 2 and chose
-      the tier by degree (Overwhelming = Close, Success = Distant, otherwise no knot). THE MAPPING OF
+      the tier by degree (Overwhelming = Close, Success = Distant, otherwise no knot). That pool omits the `+ 3` of the ratified Knot Pool, `(Spirit x 2) + History(Relevant) + 3` (ED-FI-0005; `tests/valoria/test_knot_pool_formula.py` pins the ratified formula in the design documents), so the deleted code was not that formula's oracle. THE MAPPING OF
       THE GAUGE TO `Tenure.degree` -- ITS SOURCE IS UNLOCATED, AND IT IS NOT INVENTED HERE. Its only
       attestation is one clause of the retired plan, at fork ref `0671283`, file
       `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md`, line `:878`: *ED-912's ±5 gauge has

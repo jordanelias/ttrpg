@@ -188,7 +188,7 @@ def test_contract_guard_can_fail():
     # the other reads identically from the outside.
     # RE-POINTED AT PLAN POSITION `29e` (2026-10-02): this planted `systems/characters/sim/conviction.py`,
     # the `piety_track` row's `sim_module:`, and that module was retired (FORK:59004d86) with the row set
-    # to `none`, which would have emptied this half of the guard's universe while the test went on
+    # to `none`, after which the plant would have matched no `sim_module:` row while the test went on
     # asking about a path nothing contracts. `engine/season/loop/driver.py` is the `engine_clock` row's
     # `sim_module:`, a live file in the game code. Mutation-verified: setting that row to `none`
     # reddens this assertion.

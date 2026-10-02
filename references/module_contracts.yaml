@@ -271,7 +271,7 @@ modules:
     doc: .designs/systems/characters/reference/conviction_track_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
     sim_module: none   # was `systems/overview/sim/ci_track.py` (the CI half) and `Territory.pt` in
       # `engine/autoload/game_state.py` (the CV half): both deleted at plan position `29b` (2026-10-01). The Accord / CI /
-      # IP / RS clocks have no season analogue (`engine/season/loop/census.py`: no clock generates anything).
+      # IP / RS clocks have no season analogue (`architecture/holonic_ARCHITECTURE.md` §25.1: the three licensed clocks are exhaustive; `04` PART D row 17 refuses a fourth).
     scales: [territory, provincial]
     resolver: deterministic_accounting   # [ASSUMPTION] CV movement rules §1.2 + seasonal TC calculation §3
     state:
@@ -384,7 +384,7 @@ modules:
     accounting_phase: [settlement_accounting]
     gap_notes:
       - "registry attributes scene.gift emission to fieldwork (gift-giving as fieldwork social action) — cross-check vs scene_slate emitting same type"
-      - "knots_v30 §6.1/§6.2/§11 carried the pre-ED-912 tier-capacity model + −4 betrayal-rupture value after TIER-DRIFT-001/COMPOSURE-DRIFT-001 were RESOLVED by Jordan (ED-912, 2026-06-28); propagation gap closed 2026-07-07 (ED-FI-0003) — §11 now records the resolution instead of forward-flagging it. Residual: §6.2 Coherence-loss rule [UNVERIFIED post-ED-912]; systems/fieldwork/sim/knots.py rebuild = Stratum B (C-TW-12)"
+      - "knots_v30 §6.1/§6.2/§11 carried the pre-ED-912 tier-capacity model + −4 betrayal-rupture value after TIER-DRIFT-001/COMPOSURE-DRIFT-001 were RESOLVED by Jordan (ED-912, 2026-06-28); propagation gap closed 2026-07-07 (ED-FI-0003) — §11 now records the resolution instead of forward-flagging it. Residual: §6.2 Coherence-loss rule [UNVERIFIED post-ED-912]; the knots rebuild (`systems/fieldwork/sim/knots.py`, retired at plan position `29f`, ref 59004d86) = Stratum B (C-TW-12)"
     status: extracted
     sources:
       - "knots_v30 full [READ: 2026-06-10]"
@@ -618,7 +618,7 @@ modules:
       # `references/restructure_ledger.md`, ref 59004d86); its siblings went earlier (`accounting.py`, `ip_track.py`
       # and `rs_track.py` at `29a`, `ci_track.py` at `29b`, `season.py` at `28-iii`). Turmoil never had a tracker
       # file (the open §5 row 7 fork, Turmoil writer unruled). The season carries none of these clocks
-      # (`engine/season/loop/census.py`: no clock generates anything). The row is kept, not deleted: removing a
+      # (`architecture/holonic_ARCHITECTURE.md` §25.1: the three licensed clocks are exhaustive; `04` PART D row 17 refuses a fourth). The row is kept, not deleted: removing a
       # contract row is its own change, and `doc:` above still resolves.
     scales: [peninsula]
     resolver: deterministic_accounting   # [ASSUMPTION]

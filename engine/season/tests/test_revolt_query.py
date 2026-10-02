@@ -160,7 +160,8 @@ def _unhashed(w) -> tuple:
     """World state `content_hash` does NOT fold (it folds the state collections, the docket, the
     tenures and the log): the draw ordinal that mints later Event ids, the tick, the act store, the
     barrier cache, the staged deltas and the write-emission list. `uncontrolled` says it is recomputed
-    on every call, so none of these may move across one. Without this the writes-nothing arm was blind
+    on every call, so none of these may move across one. The list is written by hand (the attributes a read could
+    plausibly bump), so it narrows the blind spot and does not close it. Without this the writes-nothing arm was blind
     to a `w.new_draw()` in the body, which would have passed every other assertion here."""
     return (w.tick, w.draw, len(w.acts), frozenset(w._barrier_cache),
             {k: list(v) for k, v in w._staged.items()}, len(w._emitted_by_write))

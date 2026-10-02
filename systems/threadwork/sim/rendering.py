@@ -11,7 +11,7 @@ overview Mending Stability track (position 27's own constraint: that module was 
   - As written, it moved the world-level Rendering Stability track (its declared dependency was
     `sim/peninsular/rs_track`, later `systems/overview/sim/rs_track.py`) — an overview clock plan
     position `29a` deleted (PR #450). The season has no analogue BY ARCHITECTURE:
-    `engine/season/loop/census.py:37` says *"NO CLOCK GENERATES ANYTHING"*, and
+    `04` PART D row 17 refuses *a fourth clock*, and
     `engine/season/write_matrix.yaml:183` quotes the architecture's *"the three licensed clocks are
     exhaustive -- matter, bodies, and the confidence of a memory"*; no rendering or mending clock is
     among them.
