@@ -7,7 +7,7 @@ What each test proves, and the failure it can observe:
       `scale: office:` goes through the same function and is unchanged. A MUTATION (the seater made
       a no-op) turns the assertion false, so the test can see an `office:` that reads nothing.
   (b) `ought:` is SEATED: `{about, predicate}` becomes THAT entry's OUGHT Proposition on the same
-      id and the same `commit` edge the rotation default uses, so `person_q.ambitions` finds it with
+      id and the same `commit` edge the rotation default uses, so `world_q.ambitions` finds it with
       no new reader; entries without one keep the rotation default byte for byte. A MUTATION (the
       referent resolver pointed at the wrong seat) moves the subject, so the test sees an OUGHT
       about the wrong person. Q4 fires for more propositions on a 4-seat cast than on the floor's 3.
@@ -23,7 +23,7 @@ import yaml
 
 from engine.season.harness import corpus_run as C
 from engine.season.harness import run_cases as RC
-from engine.season.queries import person_q, world_q
+from engine.season.queries import world_q
 from engine.season.data.rosters import TITLE_DOMAINS
 from engine.season.gaps import Forbidden
 from engine.season.tests.test_u8_ambitions import _host_case, _need_props
@@ -152,7 +152,7 @@ def test_a_titled_post_must_stand_at_the_rung_kind_its_title_governs(monkeypatch
 # ---------------------------------------------------------------------------
 
 def _ambition(w, pid):
-    ids = person_q.ambitions(w.persons[pid], w.propositions)
+    ids = world_q.ambitions(w, w.persons[pid])
     assert len(ids) == 1, ids
     return w.propositions[ids[0]]
 
@@ -337,6 +337,37 @@ def test_the_case_refusals_have_their_positive_controls(tmp_path, monkeypatch):
                     "D-1": {"note": "neither key"}})
     got = C.cast_overlay()
     assert sorted(got) == ["X-1", "X-2"] and got["X-2"][0]["role"] == "lead", sorted(got)
+
+
+def test_two_scale_files_naming_one_case_refuse_at_load_instead_of_the_last_one_winning(
+        tmp_path, monkeypatch):
+    """`rescales()` used to `out[doc["case"]] = sc` unconditionally, so a second `scale:` file for
+    one case silently replaced the first -- the defect `cast_overlay` already refuses for a `cast:`.
+    The POSITIVE CONTROL is the same directory with the second file naming another case (it
+    loads, both entries present), and a `cast:` file may still share a case with a `scale:` file."""
+    scale = {"is": "hearth", "why": "the case's own text names a household"}
+    _write_files(tmp_path, monkeypatch,
+                 **{"A-1": {"case": "X-1", "scale": scale},
+                    "B-1": {"case": "X-2", "scale": scale},
+                    "C-1": {"case": "X-1", "cast": _cast()}})
+    assert sorted(C.rescales()) == ["X-1", "X-2"]          # control: nothing refused here
+    _write_files(tmp_path, monkeypatch, **{"B-1": {"case": "X-1", "scale": scale}})
+    with pytest.raises(SystemExit) as red:
+        C.rescales()
+    assert "B-1.yaml" in str(red.value) and "already the case of A-1.yaml" in str(red.value), \
+        str(red.value)
+
+
+def test_the_real_scale_overlays_all_still_load():
+    """The checked-in `scale:` overlays load with the duplicate refusal in place, and an
+    independent read of the same directory counts the same cases (a loader that dropped
+    everything, or refused nothing because it saw nothing, cannot pass)."""
+    real = C.rescales()
+    independent = sorted(
+        doc["case"] for f in sorted(C.files.EXERCISES_DIR.glob("*.yaml"))
+        for doc in [yaml.safe_load(f.read_text(encoding="utf-8")) or {}]
+        if doc.get("case") and isinstance(doc.get("scale"), dict))
+    assert sorted(real) == independent and len(real) >= 1, (len(real), len(independent))
 
 
 def test_the_real_overlays_all_still_load_and_a_good_file_is_not_refused(tmp_path, monkeypatch):

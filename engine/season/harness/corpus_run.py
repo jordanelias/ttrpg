@@ -107,6 +107,7 @@ def rescales() -> dict:
     do, so a keyword rule would cover half the corpus and silently mis-scale the rest — the ROUTER
     `W10` deleted, returning as a corpus tool. Measured before deciding not to build one."""
     out: dict = {}
+    files_of: dict = {}                   # case id -> the file that authored its re-scale
     for f, doc in _exercise_docs():
         sc = doc.get("scale")
         if doc.get("case") and isinstance(sc, dict):
@@ -114,6 +115,13 @@ def rescales() -> dict:
                 raise SystemExit(f"{f.name}: a `scale:` re-authoring with no `why:` — the "
                                  "derivation is what distinguishes this from an invention")
             _check_office(f.name, sc.get("office"))
+            # REFUSED, NOT OVERWRITTEN: two files naming one `case:` let the LAST silently replace
+            # the first -- the refusal `cast_overlay` makes for a `cast:`, in the same words.
+            if doc["case"] in files_of:
+                raise SystemExit(f"{f.name}: `case: {doc['case']}` is already the case of "
+                                 f"{files_of[doc['case']]}'s `scale:` -- the later file would "
+                                 "silently replace the earlier one")
+            files_of[doc["case"]] = f.name
             out[doc["case"]] = sc
     return out
 
@@ -240,8 +248,8 @@ def cast_overlay() -> dict:
       * `ought: {about, predicate}` is ONE OUGHT Proposition for that entry. `about` is the exact
         `who` of ANOTHER SEATED entry (a person, so Q4's referent is a person), `predicate` the
         author's words. It replaces, for that entry only, the rotation default `build_at` writes
-        for every seat — same Proposition id, same `commit` edge — so `person_q.ambitions(p,
-        propositions)` finds it with no new reader.
+        for every seat — same Proposition id, same `commit` edge — so `world_q.ambitions(w, p)`
+        finds it with no new reader.
     ⚠ `knows:` IS REFUSED BY NAME, NOT SEATED. An initial Claim is a `Claim(...)` construction and
     no world builder here has one: the only sites are `loop/witness.py`'s five event-driven deposits
     and `probes.py`'s hand-built fixtures. Adding a sixth in `build_at` is a Layer-1 question

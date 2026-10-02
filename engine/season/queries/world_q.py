@@ -54,7 +54,6 @@ from ..state.gate import BENCH_BASIS, may_determine, purview_reaches, sits_over
 from ..state.ids import ROOT
 from ..state.world import World
 from ..trace_log import TRACE
-from .person_q import ambitions   # `17`: Q4 reads the one owner of "a live commit to an OUGHT"
 
 
 # ===========================================================================
@@ -349,10 +348,13 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
     THE EQUIVALENCE. `off.scope_rung is None` does NOT only happen in the office-cluster case
     (`off.rung is None`) -- `carriers.py::Office.__post_init__` auto-sets `scope_rung` ONLY for a
     TITLED post (`title_domain(self.post)` non-`None`); a seated, RANKED, non-titled office
-    (`off.rung` set, no title) gets no `scope_rung` unless one is authored for it by hand in
-    `offices.yaml`, and this function excludes such a seat from EVERY bench, silently, the same way
-    it excludes a true cluster seat -- a different content fact than the one this docstring claimed,
-    not the same one restated. `state/gate.py::purview_reaches` asks the same containment question of
+    (`off.rung` set, no title) gets no `scope_rung` from the constructor. `offices.yaml` has no
+    scope key to supply one: a seat's `scope_rung` is set by whoever BUILDS it -- the realm
+    (`populated.build_realm`) sets `scope_rung = rung` for every authored row, and
+    `corpus_run._seat_office` leaves an untitled seat at the titled-only default
+    (`state/carriers.py`, `Office.__post_init__`). This function excludes a seat left at `None` from
+    EVERY bench, silently, the same way it excludes a true cluster seat -- a different content fact
+    than the one this docstring claimed, not the same one restated. `state/gate.py::purview_reaches` asks the same containment question of
     `off.rung` (always set for a seated office) and would not exclude it. This function reads
     `scope_rung` rather than `rung`/`purview_reaches` by `H-32`'s own ruled default
     (`hole_register.yaml`, H-32), which is precedent this correction does not reopen -- it corrects
@@ -1264,6 +1266,44 @@ def upkeep_of(w: World, office_id: str) -> int:
 # code called it and no committed run artifact traced it.
 
 
+def ambitions(w: World, p: Person) -> list:
+    """WHAT THIS PERSON IS COMMITTED TO AS AN OUGHT: the Proposition ids on `p`'s own LIVE `commit`
+    edges whose Proposition (looked up in `w.propositions`) is mood OUGHT, in the order the edges
+    were opened, each once. Plan position `17`; `R-06`'s *"a READ over it"*. A belief is a `commit`
+    to an OUGHT, not a field (`04` PART D row 44), so this READS the edge and keeps nothing: it is
+    computed when asked and never stored.
+
+    ⚠ IT LIVES HERE, NOT IN `person_q`, BECAUSE IT READS A STORE. A `commit` edge's object is only
+    an id, and the same edge kind also binds a person to a faction, a treaty and a WAR, so the edge
+    cannot say whether it is an ambition; the Proposition's MOOD can, and the Proposition is in
+    `w.propositions`. `04` §A.2 admits a `PersonInterior` snapshot only (no store handle) to
+    `person_q`, and admits any store, via `World`, to this module; the function was first written
+    in `person_q` taking `w.propositions` as a second argument, which no row of that table allows.
+    It reads only the keys `p`'s own edges name and never enumerates the store.
+
+    ⚠ FACTION MEMBERSHIP IS NOT A HOLDS THAT THE MOOD FILTERS OUT, FOR SIX OF THE NINE FACTIONS.
+    `populated.build_realm` mints each creed as an OUGHT Proposition (Jordan, 2026-09-13, *"Faction
+    creed as an ought: sure"*, subject the faction's authored leader) and membership is a `commit`
+    to it, so `ambitions` DOES return a member's `fac_*` creed (MEASURED, `build_realm(0)`, Batch C
+    close: 35 of 83 persons' `ambitions` include one). Only the three factions with no leader or
+    template in canon (`Guilds`, `Schoenland`, `faction x`) keep HOLDS and are filtered by mood.
+
+    ⚠ ONE OWNER OF *"a live `commit` to an OUGHT"*. `questions_for`'s Q4 source reads this rather
+    than restating it, so the ambition mechanism `R-06` names exists once. A proposition id that is
+    not in `w.propositions` is NOT an ambition (absent is the refusal, not a default); an ended edge
+    (`until` set) is not one either; two live edges to one Proposition are one ambition. No TRACE
+    row is written: `TRACE.query` rows are folded into the committed `runs/TRACE.txt` per call, and
+    Q4 calls this once per person per deliberation."""
+    out: list = []
+    for t in p.tenures:
+        if t.kind != "commit" or not t.live or t.object in out:
+            continue
+        prop = w.propositions.get(t.object)
+        if prop is not None and str(prop.mood).upper() == "OUGHT":
+            out.append(t.object)
+    return out
+
+
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
     """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier.
 
@@ -1356,9 +1396,9 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # Q4 -- `need`. A live `commit` Tenure whose object is an OUGHT Proposition is a STANDING
     # question: it recurs every season until the commitment ends, which is what makes an NPC with
     # an ambition act in a quiet season.
-    # `17`: the live-`commit`-to-an-OUGHT rule is `person_q.ambitions`' alone (R-06's READ), so this
+    # `17`: the live-`commit`-to-an-OUGHT rule is `ambitions`' alone (above; R-06's READ), so this
     # asks it rather than restating it; one Question per ambition, in edge order, as before.
-    for pid in ambitions(p, w.propositions):
+    for pid in ambitions(w, p):
         out.append(Question(f"q:need:{pid}", "need", (w.propositions[pid].subject,), pid))
 
     # ⚠ TWO ORDERINGS LIVE IN THIS ONE LINE AND ONLY THE FIRST IS DECLARED ANYWHERE.

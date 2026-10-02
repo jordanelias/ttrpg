@@ -833,11 +833,13 @@ rows:
       content hash differ.
       ⚠⚠ **PLAN POSITION `17`, 2026-10-01 -- THE SENTENCES ABOVE THAT SAY `ambitions(p)` IS ABSENT
       ARE NOW FALSE, AND THE CAST HALF IS PARTLY BUILT.**
-      `queries/person_q.py::ambitions(p, propositions)` reads a person's own live `commit` edges to
+      `queries/world_q.py::ambitions(w, p)` reads a person's own live `commit` edges to
       OUGHT Propositions (`world_q.questions_for`'s Q4 now asks it; same questions, same order, EXCEPT
       that two live edges to one Proposition are now ONE question -- the dedup, a path no builder reaches today). It
-      takes a `propositions` mapping as its second parameter -- the plan's one-parameter spelling
-      cannot name an edge's mood, and a `World` is refused by AX-2's executed guard. `corpus_run.
+      takes the `World` because the mood lives on the Proposition in `w.propositions` -- the plan's one-parameter
+      spelling cannot name an edge's mood. (It was first written in `person_q` with the store as a second
+      argument and MOVED to `world_q` at the Batch C close: `04` §A.2 admits a `PersonInterior` snapshot
+      only to `person_q`, and any store, via `World`, to `world_q`.) `corpus_run.
       build_at` seats a case's `cast:` entries as `p_a`, `p_b`, ... (named for `who`, each entry's
       own `capability`; an entry with `role: WAITS-ON-PLAYER` is reported and not seated; the three
       anonymous seats are the floor). **NOT BUILT, STOPPED RATHER THAN INVENTED:** the `cast:`

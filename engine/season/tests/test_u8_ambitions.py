@@ -1,27 +1,31 @@
-"""Plan position `17` (U8) -- `person_q.ambitions(p, propositions)` and `corpus_run.build_at`'s cast.
+"""Plan position `17` (U8) -- `world_q.ambitions(w, p)` and `corpus_run.build_at`'s cast.
 
 What each test proves, and the failure it can observe:
 
-  (a) `ambitions` reads LIVE `commit` edges to OUGHT Propositions off a person's OWN tenures, and
-      ignores every other shape an edge can take: an ended edge, a non-`commit` edge, a `commit`
-      to a non-OUGHT Proposition (the distractor here is a bare HOLDS; real faction membership is
-      NOT one for six of the nine factions -- `populated.py` mints those creeds as OUGHT, and only
-      `Guilds`, `Schoenland` and `faction x` keep HOLDS), a `commit` to an id no Proposition has. Each
-      distractor is tried ALONE (a person holding only it has no ambition) so a loop that happened
-      to pass on the sum cannot hide one, and the positive control asserts the answer is non-empty.
-  (b) AX-2: the `sense`-is-the-only-World-taker guard SEES `ambitions` (it is in the guard's own
-      `found` list) and turns RED when `ambitions` is given a `World` parameter. The mutation is
-      applied to a COPY of `person_q.py` in a tmp dir and the guard is re-pointed at it, so the
-      run-and-restore is automatic and the tree is never edited.
-  (c) With a `cast:` the people come from it: `p_b`/`p_c` are named for the cast, an 11-entry cast
+  (a) `ambitions` reads LIVE `commit` edges to OUGHT Propositions off a person's OWN tenures
+      (the mood is looked up in `w.propositions`), and ignores every other shape an edge can
+      take: an ended edge, a non-`commit` edge, a `commit` to a non-OUGHT Proposition (the
+      distractor here is a bare HOLDS; real faction membership is NOT one for six of the nine
+      factions -- `populated.py` mints those creeds as OUGHT, and only `Guilds`, `Schoenland` and
+      `faction x` keep HOLDS), a `commit` to an id no Proposition has. Each distractor is tried
+      ALONE (a person holding only it has no ambition) so a loop that happened to pass on the sum
+      cannot hide one, and the positive control asserts the answer is non-empty. A faction CREED
+      (an OUGHT `commit`) IS returned.
+  (b) With a `cast:` the people come from it: `p_b`/`p_c` are named for the cast, an 11-entry cast
       seats eleven and RUNS, a `WAITS-ON-PLAYER` entry is not seated and is reported, each entry's
       `capability` lands on its own seat only.
-  (d) CONTROL: with `cast:` absent `build_at` seats the three anonymous people and every tally is
+  (c) CONTROL: with `cast:` absent `build_at` seats the three anonymous people and every tally is
       unchanged -- compared to an arm with the overlay table emptied, and (for a one-entry cast) to
       the same world with the one seated name put back, so seating can be seen to move NOTHING
       but the name. NPC-020 carries no overlay.
-  (e) Q4 (`world_q.questions_for`) fires for more than one proposition: one per person across a
+  (d) Q4 (`world_q.questions_for`) fires for more than one proposition: one per person across a
       cast, and more than one per PERSON when a person holds two ambitions.
+
+`ambitions` took `w.propositions` as a second argument while it lived in `person_q`, which `04`
+§A.2 admits a `PersonInterior` snapshot only; it moved to `world_q` (which may read any store, via
+`World`), and the test that watched the AX-2 guard go red on it was deleted with the move: with
+`ambitions` out of `person_q` the guard has nothing of it to see, and a test that calls one guard
+to see whether it fires is a guard whose subject is another guard.
 
 NOT BUILT HERE (plan position `17` stopped on three keys): `office:` and `ought:` were built at `17-cast`
 and are tested in `test_u8_cast_fields.py`; `knowledge` -> initial Claims is REFUSED by name at load
@@ -32,8 +36,9 @@ import pytest
 from engine.season.data.rosters import RUNG_KINDS
 from engine.season.harness import corpus_run as C
 from engine.season.harness import run_cases as RC
-from engine.season.queries import person_q, world_q
+from engine.season.queries import world_q
 from engine.season.state.carriers import Person, Proposition, Tenure
+from engine.season.state.world import World
 
 
 # ---------------------------------------------------------------------------
@@ -44,6 +49,13 @@ def _person_with(*edges) -> Person:
     p = Person("p_x", "x")
     p.tenures.extend(edges)
     return p
+
+
+def _ambitions_of(p: Person, props=None) -> list:
+    """`world_q.ambitions` over a bare `World` whose proposition store is `props` (default PROPS)."""
+    w = World(0)
+    w.propositions.update(PROPS if props is None else props)
+    return world_q.ambitions(w, p)
 
 
 PROPS = {
@@ -66,12 +78,12 @@ DISTRACTORS = {
 
 def test_ambitions_is_the_live_commit_to_an_ought_and_nothing_else():
     ours = [Tenure("a1", "p_x", "o1", "commit", 0), Tenure("a2", "p_x", "o2", "commit", 1)]
-    got = person_q.ambitions(_person_with(*ours), PROPS)
+    got = _ambitions_of(_person_with(*ours))
     assert got == ["o1", "o2"], got            # edge order, and non-empty: a vacuous loop cannot pass
     assert len(got) >= 1
 
     for label, edge in DISTRACTORS.items():
-        assert person_q.ambitions(_person_with(edge), PROPS) == [], label
+        assert _ambitions_of(_person_with(edge)) == [], label
 
     # The sum: the distractors may not displace the real edges nor add to them.
     mixed = [DISTRACTORS["ended commit to an OUGHT"], ours[0],
@@ -80,43 +92,34 @@ def test_ambitions_is_the_live_commit_to_an_ought_and_nothing_else():
              DISTRACTORS["a hold (not a commit) on an OUGHT"]]
     p = _person_with(*mixed)
     assert len(p.tenures) == 6                  # the person really holds all six edges
-    assert person_q.ambitions(p, PROPS) == ["o1", "o2"]
+    assert _ambitions_of(p) == ["o1", "o2"]
 
 
 def test_ambitions_counts_one_proposition_once_and_ends_with_the_edge():
     twice = [Tenure("a1", "p_x", "o1", "commit", 0), Tenure("a2", "p_x", "o1", "commit", 2)]
-    assert person_q.ambitions(_person_with(*twice), PROPS) == ["o1"]
+    assert _ambitions_of(_person_with(*twice)) == ["o1"]
     # An ambition ENDS with its edge: the same person, the edge closed in place.
     p = _person_with(Tenure("a1", "p_x", "o1", "commit", 0))
-    assert person_q.ambitions(p, PROPS) == ["o1"]
+    assert _ambitions_of(p) == ["o1"]
     p.tenures[0].until = 4
-    assert person_q.ambitions(p, PROPS) == []
+    assert _ambitions_of(p) == []
+
+
+def test_ambitions_returns_a_faction_creed_and_reads_the_world_it_is_given():
+    """A faction creed is an OUGHT `commit` (`populated.build_realm` mints it so), so it IS an
+    ambition. And the answer is the WORLD's: the same person in a world whose store lacks the
+    Proposition has no ambition (absent is the refusal), and the mood is read off the store."""
+    creed = Proposition("fac_Crown", "OUGHT", "p_leader", "the Crown's creed", True, 0)
+    edge = Tenure("m1", "p_x", "fac_Crown", "commit", 0)
+    p = _person_with(edge)
+    assert _ambitions_of(p, {"fac_Crown": creed}) == ["fac_Crown"]
+    assert _ambitions_of(p, {}) == []
+    held = Proposition("fac_Crown", "HOLDS", "Crown", "a creedless faction", True, 0)
+    assert _ambitions_of(p, {"fac_Crown": held}) == []
 
 
 # ---------------------------------------------------------------------------
-# (b) AX-2
-# ---------------------------------------------------------------------------
-
-def test_ax2_guard_sees_ambitions_and_goes_red_when_it_is_given_a_world(tmp_path, monkeypatch):
-    from engine.season.tests import test_season_shape as TS
-    guard = TS.test_w5_sense_is_still_the_only_world_taking_non_decision_function
-    guard()                                    # CONTROL: green on the tree as it stands
-    real = TS._model_modules()
-    (path,) = [m for m in real if m.name == "person_q.py"]
-    src = path.read_text(encoding="utf-8")
-    sig = "def ambitions(p: Person, propositions) -> list:"
-    assert src.count(sig) == 1, "the signature this mutation targets moved; re-point it"
-    mutated = tmp_path / "person_q.py"
-    mutated.write_text(src.replace(sig, 'def ambitions(p: Person, propositions, w: "World") '
-                                        '-> list:'), encoding="utf-8")
-    monkeypatch.setattr(TS, "_model_modules", lambda: [mutated if m == path else m for m in real])
-    with pytest.raises(AssertionError) as red:
-        guard()
-    assert "ambitions" in str(red.value), str(red.value)
-
-
-# ---------------------------------------------------------------------------
-# (c) the cast seats the people
+# (b) the cast seats the people
 # ---------------------------------------------------------------------------
 
 NO_OVERLAY = "NPC-020"      # carries no `cast:` overlay (`test_w28_cast...` asserts the same)
@@ -211,7 +214,7 @@ def test_a_malformed_cast_entry_refuses_at_load_and_a_good_one_loads(tmp_path, m
 
 
 # ---------------------------------------------------------------------------
-# (d) the control: no cast -> exactly what `build_at` always built
+# (c) the control: no cast -> exactly what `build_at` always built
 # ---------------------------------------------------------------------------
 
 def _tally(w) -> dict:
@@ -252,7 +255,7 @@ def test_a_one_entry_cast_moves_nothing_but_the_seated_name(monkeypatch):
 
 
 # ---------------------------------------------------------------------------
-# (e) Q4 fires for more than one proposition
+# (d) Q4 fires for more than one proposition
 # ---------------------------------------------------------------------------
 
 def _need_props(w) -> set:
@@ -274,7 +277,7 @@ def test_q4_fires_once_per_ambition_for_one_person_and_through_ambitions():
     w = C.build_at(_case(NO_OVERLAY), 0)
     me = w.persons["p_a"]
     before = [q for q in world_q.questions_for(w, me) if q.source == "need"]
-    assert [q.about for q in before] == person_q.ambitions(me, w.propositions) == ["prop_p_a"]
+    assert [q.about for q in before] == world_q.ambitions(w, me) == ["prop_p_a"]
     # A SECOND ambition, a commit to a HOLDS Proposition (not an ambition: the three creedless
     # factions' shape -- the other six creeds ARE ambitions) and an ended one.
     w.propositions["o2"] = Proposition("o2", "OUGHT", "p_c", "a second cause", True, 0)
@@ -284,4 +287,4 @@ def test_q4_fires_once_per_ambition_for_one_person_and_through_ambitions():
     w.add_tenure(Tenure("t_dead", "p_a", "prop_p_b", "commit", 0, until=1))
     needs = [q for q in world_q.questions_for(w, me) if q.source == "need"]
     assert sorted(q.about for q in needs) == ["o2", "prop_p_a"], [q.about for q in needs]
-    assert sorted(person_q.ambitions(me, w.propositions)) == ["o2", "prop_p_a"]
+    assert sorted(world_q.ambitions(w, me)) == ["o2", "prop_p_a"]
