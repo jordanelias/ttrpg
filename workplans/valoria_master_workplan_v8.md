@@ -282,11 +282,8 @@ found (`B0-CI-b`, `29d-ii`, `20-v`) landed in PR #451.
 | `12` | H-62-rest scar rebuild | IN | BLOCKED | cells commit | R-06, R-08 | 4 | |
 | `12b`/`12c`/`12d` | affiliations · THE FIFTEEN · THE RENAME (substrate half) | IN | JORDAN | J-1 | R-05, R-06, R-08 | 4 | `ED-IN-0261` 2026-09-28 row `needs_jordan: true` [CODE]; `12d` season side done (`ED-IN-0268`) |
 | `12e` | H12 / H13 | IN | BLOCKED | H6 re-measure; G-Q6 (J-5) | R-06 | 4 | |
-| `13`-rest | W28-cast: 41 NPC + 97 ARC overlays | IN | PARTIAL | — | R-09, R-06 | 2 | 5 of 46 NPC overlays, 1 `capability` value (2026-09-28 plan §8.7) [PLAN]; `requirements.yaml` R-09 still says capability is empty everywhere — stale |
-| `13d-iii` | rung ANCHORS for seats + `[NEW]` seats + remit overlay | IN | OPEN | `17` (shared `populated.py`); remit half J-8 | R-04 | 2 | H-163 limit 1 [CODE]; realm `levy.unauthorized` 19 of 20 [RAN aperture] |
-| `14` | U7-own: own-verbs in antonym pairs, `tie / knot`, CANDIDATE-WHY | IN | OPEN | telling T4 ✓ (PR #449); E8 | R-05 | 2 | none of `carry comply construe destroy_record evade/defy exchange forge give oblige repudiate succeed thread_read tie/knot` executes in the realm [RAN aperture] |
-| `R05-THREAD` | `thread_read`'s operand (H-85) | IN | OPEN | rides `14` | R-05 | 2 | answered at ladder step 4 (A-7); no position owned it |
-| `17` | U8 `ambitions(p)` + cast seating | IN | OPEN | `14` (shared `rosters.yaml`) | R-06, R-09 | 2 | [SETTLED: `def ambitions` absent in `engine/season`] |
+| `13`-rest | W28-cast: 41 NPC + 97 ARC overlays | IN | PARTIAL | `17b`'s pilot rises DISTINCT EXECUTED SETS (the user's rule, 2026-10-01) | R-09, R-06 | 2 | 5 of 46 NPC overlays, 1 `capability` value (2026-09-28 plan §8.7) [PLAN]; a uniform fixture cast FELL the distinct sets 41 → 26 [RAN at `17`]; `requirements.yaml` R-09 still says capability is empty everywhere — stale |
+| `17` | U8 `ambitions(p)` + cast seating | IN | PARTIAL | — | R-06, R-09 | 2 | BUILT: `person_q.ambitions(p, propositions)` and `build_at` seating from `cast:`; STOPPED on three of the five `build_at` items (the schema the plan assumed does not exist: no `office`, `ought`, `knows`); `17b` is the pilot that builds them |
 | `19b` | U7-disp: `comply` · `evade / defy` · `construe` | IN | JORDAN | J-2 (`ED-IN-0210`) | R-05 | 4 | |
 | `21`-rest | U10 bookkeeping: R-03/R-09 `measured:` refresh | IN | PARTIAL | after `11` | — | 2 | item 3 (reconcile the progress board) **closed, ladder step 2**: the board was retired at `ebb43bf0` and m1 row 3 now reads THE NINE |
 | `22` | PROC-B steps 11(rest)–16 | SC | PARTIAL | — | R-05, R-09; M2 | 3 | steps 6/7/9/10 done, 8 built, 11 partial (`cardinality` form unimplemented) [PLAN 2026-09-30 §3 l] |
@@ -294,12 +291,12 @@ found (`B0-CI-b`, `29d-ii`, `20-v`) landed in PR #451.
 | `24` | SE-BUILD umbrella | SE | PARTIAL | — | — | — | re-scoped into `24d`–`24h`; tracked by those rows only |
 | `24g` | bodies clock + P3 individuation | SE | JORDAN | J-6 (`ED-IN-0247`) | R-07 (texture) | 4 | |
 | `24h` P5 | S5 revolt Query | SE/IN | OPEN | — (`20-ii` ✓) | R-06/R-07 texture | 3 | the 2026-09-28/09-30 rows read BLOCKED whole; only P7 is |
-| `24h` P6 | forswearing (`repudiate` costs) | SE/IN | BLOCKED | `14` | R-05 | 3 | |
+| `24h` P6 | forswearing (`repudiate` costs) | SE/IN | BLOCKED | `repudiate`'s formability (`14` declined it: no question referent is ever a Proposition) | R-05 | 3 | `14`'s `decline_note` on the verb row |
 | `24h` P7 | dispensation-as-document | SE/IN | JORDAN | J-10 | — | 4 | |
 | `26` | GO-VERSION | GO | JORDAN | J-9 | M3 | 4 | nothing may assert a version |
 | `27` | WR-SCOPE remainder | WR | PARTIAL | — | — | 2 | BUILT 2026-10-01 (PR #451): both `rendering.py` stubs struck with their reasons at the site; `ED-WR-0003` closed at ladder step 2; `attempt_mending` calls `recover()` (only tests call it; `environment_in_equilibrium` defaults to False); `threadwork/sim/{co_movement,opposing}.py` no longer import `ms_track` or `knots` [TEST]. Remainder, each outside this position's scope: the `R-14` practitioner-resilience term (arithmetic unruled), Mending aimed at the mender's own configuration (`coherence.mend_resting_point` has no non-test caller), and `collective.py`/`opposing.py`'s Mending feedback (`HANDOFF_WR.md`) |
 | `29a`-ms | `ms_track.py` | IN | OPEN | — | — | 3 | `27` ✓: no `*.py` imports `ms_track` from `threadwork` any more, so deleting `systems/overview/sim/ms_track.py` is the whole position |
-| `29e` / `29f` | characters / fieldwork `knots.py` | IN | BLOCKED | `14` (`27` ✓) | — | 3 | `27` ✓: `threadwork/sim/opposing.py` no longer imports `sustain_knot` |
+| `29e` / `29f` | characters / fieldwork `knots.py` | IN | OPEN | — (`14` ✓, `27` ✓) | — | 3 | `threadwork/sim/opposing.py` no longer imports `sustain_knot`; `14` stopped on `tie / knot` as `29f`'s |
 | `ED-FI-0009` | investigation degree producer | FI | **JORDAN** | J-22 | R-05, R-09 | 2 | [STOP CONDITION HIT 2026-10-01, nothing built: see its last ledger row] the six inquiries resolve Failure/none only today [RAN corpus degree histogram]; step 3 already closed "graded by degree" (2026-09-06); open: how a degree routes without `contests:` (a loader check `ED-FI-0009` added, not ratified Layer 1 text) and `finding.none`'s deposit (`H-111`) — J-22 |
 | cells commit | H6 + H8 with `12b`/`12c`/`12d` | IN | JORDAN | J-1 | R-05, R-06, R-08 | 4 | then H7 → H3 → H9 → `12` → H10 → H11 → `12e` |
 

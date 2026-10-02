@@ -74,48 +74,6 @@ earlier rewrite of `10` (a stored stance write on a resolved `fight`) is **withd
 judged deed at read, so a stored deed write would be a second route to one fact. The AX-7 wiring that
 rode along stays registered and unbuilt until the telling workplan's T6 closes (`_part3` E16).
 
-### `14` · U7-own — the unbuilt rows · IN · gate telling T4 (E14), E8 · `sonnet` build, `opus` critic · `[design]`
-
-**INSTRUCTION, corrected.** The retired text said "land the verbs in antonym pairs: `commit`+`repudiate`,
-`oblige`+`waive`, `succeed`+`deposed`, `tie / knot`+`fray / loosen`, then `forge`, `restore`, `exchange`,
-`destroy_record`." Two corrections, both answered at ladder step 3: (1) **the closing half already exists
-as ONE verb** — `release`, eligibility `own`, generic over `tenure_kinds \ {contain}` (`04 §A.3` row 14:
-*four closing verbs missing → one `release` verb*), and `revoke` takes away. **Do not add `waive`,
-`deposed` or `fray / loosen` rows**; if a closer is needed that `release`/`revoke` cannot express, say
-which and stop. (2) `restore` executes (24e); `commit` and `oblige` have effects (7a, 17a). So `14`
-builds: **`repudiate`** (the second voluntary ender of an ambition — R-06), **`succeed`**, **`tie / knot`**,
-**`forge`**, **`exchange`**, **`carry`** — predicate (`requires_typed` in one of the closed forms;
-`loop/predicates.py` only where no form fits) and effect each, effect targets: `loop/effects_governance.py`
-(`succeed`, `tie / knot`), `loop/effects_information.py` (`repudiate`, `forge`, `exchange`), `carry` by
-what it writes.
-**Precondition inside the unit:** `decision/options.py` binds one referent to every operand slot, so no
-computed act names two distinct parties. **The telling workplan's T4 builds the first half of the fix**
-(`operand_bags`, `known_persons`, the contest target read off `row.counterparty`); `14` extends it to
-`give`/`oblige`/`exchange` **on those primitives** — a distinct operand per slot where T4's bags do not
-already supply one — and puts the counterparty check **in the fold**, not per effect. Never a second
-binding mechanism. This is what makes `give` and `oblige` formable in computed play (today 0 formed in
-the realm).
-**Three decisions this position takes, each by the ladder, each recorded in its commit:**
-- **`R05-THREAD` — `thread_read`'s operand (H-85).** Step 4: the row's own default — a two-valued
-  `knowledge_kinds` roster, the H-128 swept-fixture shape (A-7). If the critic finds the default
-  invents a taxonomy, decline and record `thread_read` as waiting on `27`/`29f`.
-- **`destroy_record`'s formability (A-13).** `eligibility: hold:<record>` + presence is unformable for
-  everyone; it needs a record-holding question referent — `give`'s shape (step 4).
-- **H-165 limit 2 — a person-side works channel.** `found`/`build`/`work` refuse everywhere because no
-  computed act declares a works (`create_record` is untyped, so it always mints `text`). Step 4
-  candidate: the `15c` content-operand precedent. If it does not fit, leave the three verbs to J-4.
-**Ride-along CANDIDATE-WHY:** `Candidate.why` is written once and read nowhere; give it a reader or
-remove it — default remove (`04` licenses either, never a hole row).
-**COMPLIANCE:** loader invariant 4 — every failable conjunct has a refusal kind (S-8: the clause-keyed
-schema exists; use it). **OBSERVABLE:** state the prediction before the commit — landing a reversible pair
-moves W-D divergence **up**. **FALSIFIER:** a `Tenure(X, X)` self-loop accepted, or an `oblige` whose
-object is a bare string naming no entity (the F7/F8 recurrence that reverted this work once); every new
-row that cannot bind its counterparty must DECLINE person-side (`give`/`petition` precedent) so the
-always-refused set does not grow — assert the set; any effect branching on a proper noun or a rung-kind
-member is scripting drift (`04` PART D 27a/28). **Control:** `report && delta HEAD` per verb — no probe
-flips outside the verb. **Hash:** corpus pins move, recorded per verb, never batched. **R:** R-05 (up to
-six rows + `give`/`oblige`/`destroy_record` formable), R-06 (`repudiate`), R-01 (counterparty edges).
-
 ### `17` · U8 — `ambitions(p)` and the cast seated · IN · gate `14` (E8) · `sonnet`/`opus` · `[design]`
 
 **INSTRUCTION.** `queries/person_q.py::ambitions(p) -> list[PropositionId]` — a person-side READ over live
@@ -141,20 +99,6 @@ that judgment 138 times** — where no source exists, leave `pool_default` and r
 **FALSIFIER:** a `one_line` token-matched from the case prose; a `capability` with no named source.
 **Critic:** checks the `WAITS-ON-PLAYER` split and every authored number. **Hash:** corpus pins move
 (declared). **R:** R-06, R-09 (only as far as sourced `capability` reaches).
-
-### `13d-iii` · rung anchors for seats, the `[NEW]` seats, the remit overlay · IN · gate `17` (E8); remit half J-8 · `sonnet` build, `opus` critic · `[design]`
-
-**The cap it lifts (H-163 limit 1):** 16 of `build_realm`'s 19 seats carry no rung, so a holder's purview
-is empty and `levy`/`issue`/`open_case` refuse on `authority` (realm: `levy.unauthorized` 19 of 20).
-**INSTRUCTION.** A rung-ANCHOR resolver in `harness/populated.py` over r2 `03`'s four anchor forms
-(A-5: answered at ladder step 3); give every live seat its `scope_rung`; mint the `[NEW]` seats
-`offices.yaml` marks; delete `rosters.yaml: titles` now that `offices.yaml` owns it (8a's follow-up).
-The `remit` overlay for the 19 live seats waits on J-8 for `dispatch` only — land the rest.
-**FALSIFIER:** in `aperture 4 0`, `levy.unauthorized` falls and `≥ 1` `levy` or `issue` executes with
-`Act.via` set (U9's own acceptance text); every `[NEW]` seat's anchor resolves to a live rung; a computed
-`transfer` carries `via` where a seat paid it (H-158 — read, and register if not). **Hash:** `build_realm`
-census + hash move (declared); every `[GROUNDED: …]` realm figure in `hole_register.yaml` (H-156, H-163,
-H-165) goes stale — the forward sweep re-cites them, never silently. **R:** R-04 (reason 1), R-05.
 
 ### `21`-rest · U10's bookkeeping tail · IN · gate `11` (re-take) · `haiku`/`sonnet` · `[editorial]`
 
