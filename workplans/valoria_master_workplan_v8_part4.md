@@ -86,16 +86,6 @@ that judgment 138 times** — where no source exists, leave `pool_default` and r
 **Critic:** checks the `WAITS-ON-PLAYER` split and every authored number. **Hash:** corpus pins move
 (declared). **R:** R-06, R-09 (only as far as sourced `capability` reaches).
 
-### `21`-rest · U10's bookkeeping tail · IN · gate `11` (re-take) · `haiku`/`sonnet` · `[editorial]`
-
-Refresh, from one fresh run of each row's own `measure:`: R-01's opening R3 sentence (now 46/46 · 96/97
-over 143), R-03's and R-09's `measured:` blocks (dated 2026-09-11), R-09's stale "capability empty on
-every corpus person", R-04's `measure:` (to the instrument that reads its stated reasons — `aperture 4 0`'s
-per-verb lines — since `corpus_run` prints nothing for it any more), R-02's `measure:` comment. **Item 3
-(reconcile the progress board) is closed, ladder step 2** — the board was retired at `ebb43bf0`.
-**FALSIFIER:** every edited `measured:` line is reproducible from its row's `measure:` command (the
-register refuses an empty one, not a wrong one — the critic must). `register --requirements` exits 0.
-
 ### `27` · WR-SCOPE remainder · WR · gate — · `opus`/`opus` · `[design]`
 
 **BUILT 2026-10-01 (PR #451):** both `rendering.py` stubs struck with their reasons at the site (the season has no clock to wire them to: `loop/census.py`, ED-WR-0011 option A); `ED-WR-0003` closed at ladder step 2
