@@ -1301,7 +1301,7 @@ def census(w: World) -> dict:
             # `establishment_of`'s precedent). A report, not a rule: it feeds no decision and moves no hash.
             # Summed over REALM rungs: `terr_T16` is a root rung outside the realm (see `build_realm`), so
             # it is not counted.
-            "uncontrolled_territories": sum(len(uncontrolled(w, r.id))
+            "uncontrolled_in_realm": sum(len(uncontrolled(w, r.id))
                                             for r in w.rungs.values() if r.kind == "realm")}
 
 

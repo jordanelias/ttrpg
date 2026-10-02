@@ -29,7 +29,7 @@ What each test proves, and the control that stops it passing vacuously:
      leaves the hash alone and moves `_unhashed`. Without this, arm 5 could be a hash that never
      moves for any reason, or blind to state the hash does not fold.
   7. THE CENSUS ROW IS THE QUERY'S CALLER (r2 `05` §A.1.5 RULED (d), `establishment_of`'s
-     precedent: a Query with no consumer is a false N-line). `populated.census(w)["uncontrolled_territories"]` equals the Query's answer
+     precedent: a Query with no consumer is a false N-line). `populated.census(w)["uncontrolled_in_realm"]` equals the Query's answer
      over the realm, and the same world with every territory UNDER THE REALM held reads 0 in the same row
      (`terr_T16` is outside it), so the row
      moves with the Query and is not a constant.
@@ -239,11 +239,11 @@ def test_the_census_reports_the_revolt_query_and_moves_with_it():
     realm = _realm(w)
     expected = len(world_q.uncontrolled(w, realm))
     assert expected >= 1, "fixture: build_realm(0) has no uncontrolled territory to report"
-    assert census(w)["uncontrolled_territories"] == expected
+    assert census(w)["uncontrolled_in_realm"] == expected
 
     # the control: hold every uncontrolled territory (a single-faction holder), as arm 2 does
     holder = _faction_holder(w)
     for i, tid in enumerate(world_q.uncontrolled(w, realm)):
         w.add_tenure(Tenure(f"t_test_census_hold_{i}", holder, tid, "hold", 0))
     assert world_q.uncontrolled(w, realm) == []
-    assert census(w)["uncontrolled_territories"] == 0
+    assert census(w)["uncontrolled_in_realm"] == 0
