@@ -732,6 +732,21 @@ rows:
       (U7's own group 1/3 list, `workplans/2026-09-09-r-execution-plan.md:1497-1502`), verified by
       `grep` to have no `@effect_for(...)` registration anywhere in `loop/effects_*.py` — U7 is
       still open and none of its verbs were built as part of this position.
+      ⚠⚠ **17 of 44 AS OF PLAN POSITIONS `14` AND `17-cast`, 2026-10-02 -- THE ROW STAYS `not_met`.** Measured on tree `23bea9da`
+      (the close's later commits move no `corpus_run` output): `WHERE THE 44 GO: 10 have no predicate/effect · 10 foldable but
+      never even attempted (['confer', 'convene', 'destroy_record', 'determine', 'dispatch', 'establish', 'march', 'oblige',
+      'open_case', 'revoke']) · 7 attempted and always refused · 17 executed`; `VERBS ONLY REFUSED : 7` (`build, commit, found,
+      levy, migrate, survey, work`). Against the 2026-09-30 reading above: `give` joined the executed set (position `14` typed
+      it and fans its counterparty over the persons the giver knows; it executes in one corpus world and is refused in 63, so
+      it leaves the always-refused set on one execution, not on a changed share: `H-84`), and `dispatch` moved from
+      always-refused to never-attempted (the `17-cast` pilot's fourth seat in NPC-038; stable across seven hash seeds, the
+      mechanism not traced). **POSITION `14` BUILT NO OTHER ROW**: `repudiate`, `succeed`, `tie / knot`, `forge`, `exchange`,
+      `carry` and `thread_read` were declined or stopped, each with a `decline_note` on its verb row; `succeed` and `tie /
+      knot` rest on ID-13 (nothing reads the edge), NOT on holonic §15 (`04 §A.3` rows 8-9 make them directed edges the holder
+      owns and `release` ends, `H-182`). In the populated realm, four seasons, seed 0 (`aperture 4 0`, control hash EQUAL):
+      2939 acts, up from 2781 before `14` and 2836 before `13d-iii`; `levy.unauthorized` fell from 18 of 19 attempts to 4 of
+      23 and `issue` executed 6 of 30 times with `Act.via` set (`13d-iii`, `H-163` limit 1 lifted). 17 of 44 executing (39%) is
+      a rise of one verb on 16 of 44.
     measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE) -- 44 today; it was '38' as of ED-IN-0261, '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
     blocks: [W10-core, H-65, H-94]
 
