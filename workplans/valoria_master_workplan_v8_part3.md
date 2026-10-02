@@ -12,7 +12,7 @@
 
 | batch | items, in serial order (`{…}` = a parallel lane in its own worktree) | R-rows moved | golden / hash moves (declare each) | close |
 |---|---|---|---|---|
-| **0** | **LANDED** — `B0-CI` for `tests/valoria` (PR #450), `B0-CI-b` (PR #451); `B0-CI-c` split `season-tests` out of `unit-tests` after run 36967763315 cancelled at the shared 16-minute cap; what remains is the first complete `season-tests` run (it replaces the placeholder cap's sentence) and `All Gates Green` reading green on `main` | — (CI green on `main`) | `B0-CI-b`: moved, declared (`_part6` §H.1) | `/code-review` only; no terminal critique (a seat/commit data fix whose own test is the falsifier) |
+| **0** | **LANDED** — `B0-CI` for `tests/valoria` (PR #450), `B0-CI-b` (PR #451); `B0-CI-c` split `season-tests` out of `unit-tests` after run 36967763315 cancelled at the shared 16-minute cap; its first complete run (PR #452, run 37026782154) took 11m11s against the 20-minute cap and `All Gates Green` passed on the PR; what remains is `All Gates Green` reading green on `main` itself | — (CI green on `main`) | `B0-CI-b`: moved, declared (`_part6` §H.1) | `/code-review` only; no terminal critique (a seat/commit data fix whose own test is the falsifier) |
 | **1** | **LANDED (PR #450); records in `_part6` §H.** Its tail, `29d-ii` and `20-v`, landed in PR #451 (`_part6` §H.1) | — | — | — |
 | **2** | **open — the telling workplan's Batch 2 closed and merged (PR #449, `fd321c81`; main §0.6)**. **Batch B landed in PR #451** (`11-fix` → `11` baseline, `8`, `27`, `LADDER-MBPC`, `ED-FI-0009`'s stop; `_part6` §H.1); Batch C landed `14` (+ `R05-THREAD`, declined), `13d-iii`, `17` and `17-cast` (`13`-rest stops at its pilot); the `11` re-take and `21`-rest have landed, so Batch 2's IN chain is finished (`13`-rest stops at its pilot) | R-01, R-02 (measured), R-04, R-05, R-06 (reason 1), R-07, R-09 | `8`: none (assert equal); `ED-FI-0009`, `14`, `17`, `13`-rest: corpus/realm pins move (declared per step); `13d-iii`: `build_realm` census + hash (declared) | full `methodology-close`; terminal critique **proportionate** — `14` is a judgment node and `11` is a number nobody else reproduces |
 | **3** | SC: `22` steps 11–16 → `22a` → `23` → `22b`; IN: `29f` → `29e` → `29a`-ms → `2-ii`; `{SE: 24h P5}`; `24h` P6 after `22`'s `verb_table.yaml` edits | R-05 (`speak`, `determine`), R-09 (a fourth graded chain), M2 (THE BAR) | `22`: corpus + realm hash move (declared); `2-ii`: none (byte-identity control) | full `methodology-close`; terminal critique **proportionate** — `22` is the largest new mechanism in the plan |
@@ -143,9 +143,10 @@ here (a departure, recorded in the receipt).
 `B0-CI` landed for `tests/valoria` in PR #450 and `B0-CI-b` in PR #451; records are `_part6` §H.1. #451 merged
 and `main` was still red: run 36967763315 (`59004d86`) was `cancelled` at `unit-tests`' 16-minute cap, 6m49s into the
 `engine/season/tests` step after `tests/valoria` had taken about 9m10s. `B0-CI-c` split that step and `register
---requirements` into a `season-tests` job with its own cap. What remains is observational: the first complete
-`season-tests` run's duration replaces the placeholder in the workflow, and `All Gates Green` reads green on `main`
-(`gh run list --branch main`). A red `main` hides every later regression, so read it before the next batch merges.
+--requirements` into a `season-tests` job with its own 20-minute cap. Its first complete run, on PR #452 (run
+37026782154, 2026-10-02), took 11m11s beside `unit-tests`' 9m14s, and `All Gates Green` passed. What remains is
+observational: `All Gates Green` reading green on `main` itself once #452 merges (`gh run list --branch main`). A red
+`main` hides every later regression, so read it before the next batch merges.
 
 ---
 
