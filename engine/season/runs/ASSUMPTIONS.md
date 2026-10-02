@@ -55,9 +55,11 @@ exercised by this run.**
 | `default_transfer_amount` | `1` | no — a harness fixture |
 | `body_step` | `0` | no — a harness fixture |
 | `wound_harm_model` | `scene_fraction` | no — a harness fixture |
+| `combat_wounded_above` | `None` | no — a harness fixture |
 | `field_casualty_model` | `scaled_by_degree` | no — a harness fixture |
 | `field_morale_weight` | `1` | no — a harness fixture |
 | `field_grudge_weight` | `1` | no — a harness fixture |
+| `field_walls_dr` | `None` | no — a harness fixture |
 | `scar_step` | `0` | no — a harness fixture |
 | `refusal_axis` | `None` | no — a harness fixture |
 | `speech_kind_terminal_fault` | `removal` | no — a harness fixture |

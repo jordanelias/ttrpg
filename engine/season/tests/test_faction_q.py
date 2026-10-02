@@ -150,7 +150,7 @@ def test_superiors_of_a_person_with_no_oblige_is_empty():
 def test_head_control_no_live_commit_carries_a_degree_in_a_real_world():
     """(a) THE CONTROL. Scans `w.tenures` directly rather than trusting `head`'s own return --
     `commit`'s row declares `contests: ""` (falsy), so no fold branch this tree ships ever writes
-    `Tenure.degree` on one, and the world-builder's opener (`harness/populated.py:690`) mints every
+    `Tenure.degree` on one, and the world-builder's opener (`harness/populated.py:692`) mints every
     membership edge with the dataclass default. If this ever finds a graded live commit, `head`'s
     own docstring is wrong about why it is vacuous, which this test would catch first."""
     w = build_realm(0)

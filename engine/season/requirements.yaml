@@ -70,8 +70,11 @@ scales:
     note: >-
       `Person` carries `pursuits`, `ledger`, `stance`, `capability` — but NOTHING
       creates or develops a person: no generation, no progression, no chronicle. ⚠ `capability` is
-      EMPTY on every person in the corpus (only `probes.py::_zero_capability` touches it, to zero
-      it), which is why R-09's roll will vary by seed and not yet by person. W27 is the cast.
+      EMPTY on 429 of the 430 persons the 143 corpus cases build, and holds `{copying: 3}` on one
+      (NPC-088's `p_a`) -- MEASURED 2026-10-02 with `corpus_run.cast_overlay()` and `build_at`; R-09's
+      `measured:` carries the run. Its one corpus writer is `build_at` seating a cast entry's own
+      authored `capability` (`corpus_run.py:537-540`), which is why R-09's roll varies by seed and
+      not by person in 142 of the 143 cases. W27 is the cast.
   - scale:    "grand strategy politics"
     subsystem: ["systems/factions (deleted)", "systems/settlements (geography YAML, svg, package marker)", "systems/world (adjacency_map.jsx only)"]
     retention: retire-set
@@ -186,8 +189,10 @@ rows:
     statement: "decisions must propagate"
     status: not_met
     measured: >-
-      R3 (cross-person propagation) passes **22/30 NPC and 34/59 ARC** on the cases that are
-      representable, and the planted-edge control fires — so the DETECTOR works. But the
+      R3 (cross-person propagation) passes **46/46 NPC and 96/97 ARC** over the full 143-case
+      corpus (`corpus_run`'s `check R3` rows, a fresh run 2026-10-02, tree `444a00e1`; this sentence
+      read 22/30 and 34/59, over the 89-case live set, until then), and the planted-edge control
+      fires — so the DETECTOR works. But the
       forking exercise measured 2,403 forks with 100% reconvergence, and after W-A/W-B the
       later-decision divergence is only ~4%. Propagation is structurally present and
       behaviourally near-absent.
@@ -220,7 +225,7 @@ rows:
       `not_met` on the instrument that set it, not on the slice that moved.
       ⚠ **AND THE OPENING R3 FIGURES MOVED TOO — THEY READ 30/30 NPC AND 54/59 ARC UNTIL
       ED-FI-0009. THE FALL IS A MEASURED BEHAVIOURAL CHANGE, NOT A STALE LINE (measured
-      2026-09-10, and it is why the two numbers at the top of this row now read 22/30 and
+      2026-09-10, and it is why the two numbers at the top of this row then read 22/30 and
       34/59).** The same command on both sides of that commit —
       `python -m engine.season.harness.corpus_run`, at `b154ce8` (before) and `5a35084` (after)
       — moves **28 cases from R3 true to R3 false and none the other way**, 8 NPC and 20 ARC.
@@ -283,7 +288,11 @@ rows:
       3: 137 · 4: 47 · 5: 7 · 6: 4 · 7: 4, longest chain 7 act-events across 5 actors. **And it is
       unevenly held**: 19 of 46 NPCs sit in no edge all year, 10 officeholders among them (the Duke
       included); none is idle, but they act through verbs that never execute in the realm (H-156's
-      cross-citation) or on themselves, and 21 of 24 offices carry no rung (H-163 limit 1). The 37
+      cross-citation) or on themselves, and 21 of 24 offices carry no rung (H-163 limit 1) [RE-CITED
+      2026-10-01, plan position `13d-iii`: 1 of 30 -- `off_npc_084` alone; `python -c "from
+      engine.season.harness.populated import build_realm as b; w = b(0); print(sum(o.rung is None
+      for o in w.offices.values()), len(w.offices))"` prints `1 30`; the other figures in this
+      paragraph are tree `c8cc408`'s and are not re-measured here]. The 37
       cohorts resolve 1,015 acts and appear in 2 of 188 edges. **Re-measured, not new** -- every
       cause named is already registered (W-F, H-156, H-163, H-171); nothing escalated, no guard
       minted.
@@ -298,12 +307,73 @@ rows:
       isolated set; recipe: `populated.build_realm(0, cap=None)`, four `SeasonDriver.season` calls
       with the `aperture` measured arm's own chooser call, indexed by `corpus_run.attribute`'s
       act-id rule.
+      ⚠⚠ **PLAN POSITION `11` (U6, run (i): the baseline after `11-fix`), 2026-10-01: THE
+      RECONVERGENCE RATE EXISTS AGAIN AND THIS ROW'S SECOND CLAUSE HOLDS. ITS FIRST CLAUSE DOES NOT,
+      SO THE STATUS STAYS `not_met`.** Tree: HEAD `c2ee345a` (`11-fix`) plus the 36
+      `proposals/2026-09-04-degree-sweep/runs/wd_chunk_*.json` cells and `wd_acceptance.json`, which
+      `b53f9b81` committed and `53cf0ddb` UNTRACKED as regenerable run output (the 36-cell sweep, about
+      75 minutes on 4 cores, then `wd_collect.py`; local copies stay), and `runs/WD_LOG.txt`, which
+      stays tracked and IS THE COMMITTED RECORD. Produced by the acceptance command of
+      `workplans/valoria_master_workplan_v8_part4.md` §`11` verbatim, every step exit 0. Taken after the
+      telling workplan's T6 closed (`fd321c81`), so the plan's E15 timing holds. **CLAUSE 2 (`wd_collect.py`) HOLDS.** At the acceptance point
+      `2x3`, reconvergence reads `none` 1710/2217 = 77.13% · default `actor` 942/2189 = **43.03%** ·
+      `total` 832/2163 = 38.47% (unasserted). At `2x1` (`narrow`) it reads 88.39% / 69.41% / 69.51%,
+      and at the shipped `5x3` 65.32% / 55.18% / 50.09%. That last cell now has genuine forks (2,886 /
+      2,811 / 2,659), where the 89-case sweep found it had none. `none >= actor: True` is printed at
+      both qualifying cells. Per-arm `probed` is printed and not asserted equal: `2x3` {none 8631,
+      actor 8646, total 8697}, `2x1` {10218, 10212, 10188}. Every arm at every cell covers all 143
+      case slots exactly once (`wd_collect.py:145,151`), with 143/143 cases ok, 0 fork rows failed
+      and 0 same-tick window slots. **CLAUSE 1 (`corpus_run`) FAILS ON THE ARC LANE.** It was run once
+      on the same tree: `check R3: 46 of 46 pass` (NPC) and **`check R3: 96 of 97 pass` (ARC)**, with
+      the planted control at `R3 False -> True`. That output is byte-identical to the reading at the
+      tree before this position. `met` needs n of n on both lanes, and `corpus_run` does not print
+      which ARC case fails. **THE INSTRUMENT DEFECTS BEHIND THE 2026-09-30 BREAK WERE REPAIRED BEFORE
+      THIS RUN** (`85afbf53`, `c2ee345a`). The cross-arm `probed` equality became a per-arm report,
+      and P-4 found the count stable per arm (a scratch run, not committed: one cell run twice and the two
+      JSON files compared without `seconds`). The plants and the forensics spy were made to forward
+      `belief_contradicts`'s real signature, and forensics went from 0/24 usable representatives to
+      24/24. The comparator plant now perturbs a decision inside the window. ⚠ **AT THE SHIPPED ARM
+      THE RATE DOES NOT SPEAK TO THIS ROW'S CROSS-PERSON SENSE.** The `2x1` forensics (`WD_LOG.txt` W-D.4) ran on 24
+      representatives only: the first-listed divergence of each of the first 24 distinct signatures (of 645
+      at `actor`, 815 at `total`), all in NPC-088/087/086. Every carrying clause-4 drop they saw is
+      SELF-REFERENTIAL, and no carrier was false when recorded: 106 drop-INSTANCES at `actor` and 208 at
+      `total`, across those 24. They are not 106 and 208 findings: the same deposit recurs (the 106 at
+      `actor` trace to 28 distinct depositing Events). At `actor`, every carrier is the holder's OWN
+      deposit, zero of them cross-person, and that is true BY CONSTRUCTION: `actor` deposits an act's reads
+      to the actor alone (`loop/witness.py:441-452`), so it could not have shown a cross-person carrier.
+      `total`, which deposits to every witness, shows 127 cross-person carriers. So
+      the deposit channel at the default arm moves a later decision without moving a claim between
+      persons, and that between-persons move is R3's subject and `W-F`'s remedy. Whether a fork
+      reaches that holder through the world first is not separated here. The figures this row
+      carries above (the `~4%`, "2,403 forks with 100% reconvergence", "behaviourally near-absent")
+      are SUPERSEDED by this reading and stay as dated history. The attack on the number is
+      recorded once, at R-02.
+      ⚠⚠ **PLAN POSITION `11` (U6, run (ii): THE RE-TAKE), 2026-10-02: CLAUSE 2 STILL HOLDS AND CLAUSE 1 STILL FAILS ON THE
+      ARC LANE, SO THE STATUS STAYS `not_met`.** Tree `8b03e518` (positions `14`, `13d-iii`, `17-cast` landed since run
+      (i)). `corpus_run` prints `check R3: 46 of 46 pass` (NPC) and `check R3: 96 of 97 pass` (ARC), the planted control still
+      `False -> True`: byte-identical to run (i) on that line, and it still does not print which ARC case fails. `wd_collect.py`
+      reads 77.22% / 42.59% / 38.58% at `2x3` (R-02 carries the figures and the label of each). Nothing about this row's two
+      clauses moved across Batch 2's builds.
+      ⚠⚠ **PLAN POSITION `21`-REST (U10's BOOKKEEPING TAIL), 2026-10-02: THE OPENING R3 SENTENCE
+      REFRESHED FROM ONE FRESH RUN OF THIS ROW'S OWN `measure:`.** Tree `444a00e1`, clean worktree.
+      THIS RUN: `python -m engine.season.harness.corpus_run`, exit 0, about 2.5 minutes. It printed
+      `check R3: 46 of 46 pass` (NPC), `check R3: 96 of 97 pass` (ARC), `CONTROL — planted
+      cross-person edge: R3 False -> True  (the detector works)` and `DISTINCT WORLDS RUN 143`. Those
+      are the figures runs (i) and (ii) above state (COMMITTED, those paragraphs), and the whole
+      stdout is identical, line for line, to the orchestrator's earlier run of the same command
+      (`diff` of the two files, DERIVED: no difference). **WHAT THIS DOES NOT SHOW:** which ARC case
+      fails (`corpus_run` prints a count, not an id); the reconvergence rate (R-02's, `wd_collect.py`,
+      not re-run: about 75 minutes); or anything about between-person propagation beyond the PRESENCE
+      of a cross-person edge, which is all R3 asks. **THE RISE FROM THE OLD OPENING FIGURES IS PARTLY
+      A DENOMINATOR CHANGE** (89 live cases then, all 143 now, as the 2026-09-30 paragraph says), not
+      a re-measured gain. No contradiction with this row's status: `not_met` on clause 1 (96/97),
+      unchanged.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [W-F, H-111, H-116]
 
   - id: R-02
     statement: "decisions affect subsequent decisions"
-    status: not_met
+    status: met
     measured: >-
       The loop was CLOSED by a theorem, not a bug — `decision.opening_set` never consults world
       state, so the only channel a decision has into a later decision is a ledger claim, and
@@ -325,7 +395,108 @@ rows:
       carries is therefore still the last corpus-scale number on file, now provably stale (it
       predates the corpus growing 89->143) but not replaceable this session. Status stays
       `not_met`, honestly, on the instrument that owed the number rather than on a guess.
-    measure: "python proposals/2026-09-04-degree-sweep/wd_collect.py  # after wd_chunk.py x4 per arm per cell over the 143-case corpus (slices 0 36/36 72/72 108/108 143) -- U6's command, workplans/2026-09-09-r-execution-plan.md:1445-1451"
+      ⚠⚠ **PLAN POSITION `11` (U6, run (i): the baseline after `11-fix`), 2026-10-01: MEASURED,
+      AND THE STATUS MOVES TO `met` ON THE PRINTED NUMBER.** THE RUN: the acceptance command of
+      `workplans/valoria_master_workplan_v8_part4.md` §`11` -- the 36 `wd_chunk.py <mode> <cell> <start>
+      <end>` cells over slices 0/36/72/108/143, then `python proposals/2026-09-04-degree-sweep/wd_collect.py`,
+      which is this row's `measure:` -- on HEAD `c2ee345a` (`11-fix`), 2026-10-01, seed 0, four seasons, all
+      143 case slots, every step exit 0. The cells were committed at `b53f9b81` and UNTRACKED at `53cf0ddb`
+      as regenerable run output (about 75 minutes on 4 cores; local copies stay). **R-02'S `met` RESTS ONLY ON
+      THE COMMITTED `proposals/2026-09-04-degree-sweep/runs/WD_LOG.txt` READING**: `actor` 942/2189 = 43.03% at
+      `2x3`, `none >= actor: True` printed, and the 143-case completeness assertion (`wd_collect.py:145,151`)
+      holding for every arm. Nothing in THE ATTACK below is needed for it; each figure there is labelled
+      WD_LOG (committed), CELLS (derived from the regenerable cells, which are not committed) or SCRATCH (a
+      run whose script and output are not committed). R-01 carries the rest of the printed figures. The reading this rests
+      on: at `2x3`, the acceptance point, the default arm `actor` reconverges **942/2189 = 43.03%,
+      below 96%**. `none >= actor: True` is printed, and the 143-case completeness assertion holds
+      for every arm. **THE DECLARED PRIOR FAILED.** `2x3` had read 100.00% with zero divergences on
+      the 89-case basis. The collector's own `⚠ CONSEQUENCE` line retracts the diagnosis that 100%
+      rested on: `opening_set` reads no World, but its `q` does (`questions_for(w, p)`, clause 3
+      `subject in referents(q)`), so a ledger claim was never the only channel. This row's opening
+      "CLOSED by a theorem" sentence and its `~4%` are SUPERSEDED and stay as dated history.
+      **POLARITY.** A reading below 96% means at least 4% of genuine flips change one of the next
+      three strictly-later-tick deliberations, so a decision reached a later one. A reading at or
+      above 96% would have meant the flips were absorbed and the loop ran on rails, as the prior
+      read. **THE ATTACK.** Each check below could have refuted the number, and none did. (a)
+      `stream_only` cannot sit inside the divergence. It is defined as
+      event stream changed AND reconverged (`wd_acceptance.py:207-208`), and it is 909 of the 942
+      reconverged at `actor` [WD_LOG W-D.2b]. Every one of the 1,247 DIVERGED forks changed a later-tick
+      fingerprint [WD_LOG: decisions changed within the lookahead {0: 942, 1: 958, 2: 136, 3: 153}]. Draws
+      are keyed `(world_seed, tick, pid, purpose)` (`engine/season/state/ids.py::draw_factory`), so a fork
+      cannot move another person's draw by consuming a shared stream. (b) The arms differ only in
+      `observation_deposit_mode` (`wd_acceptance.fixtures_for`). Paired by case, the deposit channel
+      raises the divergence rate in 139 of 143 cases, lowers it in 2 and ties in 2 [CELLS]. Over the 94
+      cases whose probed and genuine counts are identical across arms, `none` diverges 21.80% and `actor`
+      54.92% [CELLS]. (c) Index-shift bound: `fork_case` compares decision `j` with decision `j`
+      (`engine/reference/degree-sweep/arm9_forking.py:228-232`), so an added or lost deliberation would
+      misalign the rest of the window. Even counting EVERY divergence whose last window slot changed as
+      that artifact, `actor` is at most 64.60% reconverged (775 robust divergences) and `none` at most
+      89.45% [CELLS]. (d) The fingerprint is the RANKED verb list, not the take. [SCRATCH, NOT COMMITTED:] A
+      deterministic every-8th sample of 150 `actor` divergences was re-run through the unmodified
+      `A9._run`, and it reproduced `changed_idx` 150/150. Of the 150, 115 changed a later in-budget TAKEN
+      verb set, 20 were misaligned and 15 changed only the out-of-budget ranking, so about three quarters
+      of the divergence is a later act chosen differently. At `none`, a sample of 100 read 70 / 28 / 2.
+      Recipe: take every 8th entry of the `actor` `2x3` `divergences` that `wd_collect.py` writes to
+      `wd_acceptance.json`, re-run each through `engine/reference/degree-sweep/arm9_forking.py::_run`
+      (seed 0, four seasons, `fork_at=at`, `take=take`, `fork_slot=in_budget`, the cell's
+      `wd_acceptance.fixtures_for`) and compare the changed index; the three-way classification was the
+      reader's and is not committed. (e) Determinism [SCRATCH, NOT COMMITTED]: P-4 ran one cell twice and
+      it was byte-identical apart from `seconds`. Recipe: run one `wd_chunk.py` cell twice and diff the two
+      JSON files with `seconds` removed. **THE
+      CONTROLS, AT THEIR REAL STANDING.** `none >= default` is the only control this instrument
+      yields (plan §`11`). `none` is now a channel-open arm, not a null one: 22.87% of its genuine
+      forks diverge through channels this run does not isolate. Those are the rounds loop, U4's
+      sampler, Q4's person referent, `11a`'s Q2 widening, and the content-hashed claim-id tiebreak in
+      `questions_for`'s sort that the collector's `⚠ THE CARRIER` names. The comparator plant is
+      detected (105/105 at `2x1`, 46/46 at `2x3`) [WD_LOG W-D.3, with the unplanted baselines 11 of 105 and
+      12 of 46]. Two further figures sit in `wd_acceptance.py`'s comments and are SCRATCH, NOT COMMITTED: that
+      a plant whose predicate nothing deposits reads the unplanted baseline exactly (105/11 at `2x1`,
+      46/12 at `2x3`), and that the final tick holds 4-6 deliberations (why the first comparator plant, which
+      rewrote the last decision, touched nothing the window reads). Recipe for both: the control sample
+      NPC-088/087/086 at the `none` arm, the plants of `wd_acceptance.py`, counting `fires` and the decisions
+      per tick. The four widened-clause-4 plants clear the
+      collector's count rule on 1 of 4 at `2x1` and 0 of 4 at `2x3`, and 2 of 4 at each cell by
+      rate. A firing plant shrinks its own genuine denominator, so the count rule is the wrong
+      comparison. Either way the plants are NOT clean evidence that the instrument sees a planted
+      widening. **WHAT THE NUMBER DOES NOT SHOW.** It does not show that a meaningful consequence
+      carries the change. The `2x1` forensics (`WD_LOG.txt` W-D.4), which were
+      not run at `2x3`, ran on 24 representatives only: the first-listed divergence of each of the first 24
+      distinct signatures (of 645 at `actor`, 815 at `total`), all in NPC-088/087/086. Every carrying
+      clause-4 drop they saw is SELF-REFERENTIAL: operand equals subject, so a candidate of the wrong type
+      is pruned by its holder's own claim, true when recorded. The 106 carriers at `actor` (208 at `total`)
+      are drop-INSTANCES across those 24, not 106 findings: 82 were deposited by a `*.refused` Event and 24
+      by `finding.none`, from 28 distinct depositing Events, so the same deposit recurs. 'Zero cross-person
+      at `actor`' is true BY CONSTRUCTION: `actor` deposits an act's reads to the actor alone
+      (`loop/witness.py:441-452`), so it could not have shown one; all 127 cross-person carriers sit at
+      `total`. That is refusal-as-news, `H-111`,
+      which nobody has ruled. It does not show that subject-level changes count at all: the
+      fingerprint is verbs only (W-D.5), and that is unmeasured on the 143 basis. It does not show
+      round-to-round change inside a season, because the window scores strictly later ticks only.
+      Both of the last two bias toward RECONVERGENCE, which is against this reading. Run (ii), the
+      re-take after Batch 2's builds, is the paragraph below.
+      ⚠⚠ **PLAN POSITION `11` (U6, run (ii): THE RE-TAKE ACROSS BATCH 2'S BUILDS), 2026-10-02: THE NUMBER DID NOT MOVE, AND THE STATUS STAYS `met`.**
+      THE RUN: the same acceptance command (36 `wd_chunk.py` cells, then `wd_collect.py`, exit 0), seed 0, four seasons, all
+      143 case slots, on tree `8b03e518`: positions `14` (a counterparty fold clause; `give` typed and formable), `13d-iii`
+      (29 of 30 seats with a rung) and `17-cast` (eight cast overlays) landed since run (i) at `c2ee345a`; the close's
+      later commits move no output (`build_realm(0)`, the one-season populated run and `corpus_run`'s stdout are
+      identical before and after them). One cell, `total default 36 72`, wrote nothing on its first run although its
+      worker logged exit 0, and was re-run; `wd_collect.py`'s completeness assertion then held for every arm. **THE
+      READING** [WD_LOG, committed, regenerated at this tree]: at `2x3`, `none` 1688/2186 = 77.22% · `actor` 920/2160 =
+      **42.59%** · `total` 823/2133 = 38.58% (run (i): 77.13% / 43.03% / 38.47%); at `2x1`: 88.35% / 69.23% / 69.64%
+      (88.39% / 69.41% / 69.51%). No arm moved by half a point; `none >= actor: True` is printed at both cells. So the
+      builds changed WHICH acts occur (`corpus_run`: DISTINCT EXECUTED SETS 117 -> 120, verbs that executed 16 -> 17 of
+      44 as `give` joined) without changing how often a fork reaches a later decision. The bar is 96%; the reading is
+      43%. **WHAT IS NOT KNOWN (corrected at the Batch C close):** this instrument is SEEDED (seed 0), so it
+      has no run-to-run noise to be unverified; what is missing is a SEED OR PERTURBATION SPREAD. No seed
+      other than 0 and no perturbation was run, so "under half a point" is a difference between two seed-0
+      runs of changed code, not an interval over seeds. **POSITION `14`'S PRE-REGISTERED PREDICTION**
+      (commit `0a20384f`: *"divergence goes up, since give is the first act in computed play that moves a
+      Record between persons"*, stated before any re-take) IS SCORED BY THIS RE-TAKE AS: `actor`
+      reconvergence -0.44 point (43.03 -> 42.59, the predicted direction), `none` +0.09 (77.13 -> 77.22)
+      and `total` +0.11 (38.47 -> 38.58), the last two AGAINST it, all within half a point -- so THE
+      PREDICTION IS NOT SUPPORTED AT THIS RESOLUTION (and the re-take also carries `13d-iii` and
+      `17-cast`, not `14` alone). The status stays `met`: the bar is 96% and no arm is near it.
+    measure: "python proposals/2026-09-04-degree-sweep/wd_collect.py  # after wd_chunk.py x4 per arm per cell over the 143-case corpus (slices 0 36/36 72/72 108/108 143) -- U6's command, workplans/valoria_master_workplan_v8_part4.md §`11`"
     blocks: [W-F, H-111]
 
   - id: R-03
@@ -397,6 +568,24 @@ rows:
       own packing used to strand: a person whose queue empties with budget left is asked again,
       where the one-pass loop simply lost the remainder. Roughly 6% more deposits in the headless
       world. Neither is what R-03 asked for and both are consequences of it.
+      ⚠⚠ **PLAN POSITION `21`-REST (U10's BOOKKEEPING TAIL), 2026-10-02: THIS ROW'S `measure:`
+      RE-RUN, FRESH.** Tree `444a00e1`, clean worktree. THIS RUN (both exit 0):
+      `python -m engine.season.harness.headless --case NPC-088 --seasons 2 --seed 0` printed
+      `season 0: rounds=5 acts=23 events=24 deposits=123`, `season 1: rounds=5 acts=22 events=153
+      deposits=142`, `verbs the fold can execute: 34 of 44` and `CONTENT HASH:
+      293067ea0b02f3219043de3a6947c740`; and `python -m pytest engine/season/tests -q -k test_u2_`
+      printed `5 passed, 834 deselected`, the five including the acceptance above
+      (`test_u2_a_deposit_in_one_round_changes_a_later_rounds_candidate_set_in_the_same_season`) and
+      the control arm (`test_u2_the_one_round_arm_reproduces_the_pre_tick_loop`). So the round loop
+      still runs five rounds a season on a real corpus case and the tests that made this row `met` still
+      pass. **WHAT THIS RUN DOES NOT SHOW:** (a) the `50 -> 84 of 143` R3 and `14 -> 38` executed-set
+      figures above are COMMITTED history from `U2`'s own commit against a control worktree; no control
+      arm was run here, and the same corpus now reads R3 142 of 143 (46 + 96, R-01, DERIVED from this
+      session's `corpus_run`), a different tree with no control, so the two are neither compared nor in
+      conflict; (b) the headless verb-mix (10 verbs to 6) and the roughly 6% more deposits are not
+      printed by this command and were not re-read; (c) the `p_bailiff` 0 against `p_carin` 45
+      question counts are `build_world(0)` figures this command does not run. No contradiction found
+      with this row's `met`.
     measure: "python -m engine.season.harness.headless --case NPC-088 --seasons 2 --seed 0  # and `pytest engine/season/tests -q -k test_u2_`, which is what §0.2 accepts"
     blocks: [W17]
 
@@ -459,7 +648,35 @@ rows:
       `Faction`-as-actor either (by design, not by omission: a faction never acts). A duchy/realm
       case now runs through the SAME ordinary person-scale verb table as before, at a higher rung
       — which clears the census, and is not yet the strategic layer the statement names.
-    measure: "python -m engine.season.harness.corpus_run  # 'unrepresentable scales:' line"
+      ⚠⚠ **PLAN POSITION `21`-REST (U10's BOOKKEEPING TAIL), 2026-10-02: THE `measure:` MOVED TO THE
+      INSTRUMENT THAT READS THE STATED REASONS, AND TWO READINGS, WITH THE TREE OF EACH.**
+      **(a) `corpus_run`, FRESH, tree `444a00e1`** (exit 0; THIS RUN): still no `unrepresentable
+      scales:` line, still `DISTINCT WORLDS RUN 143 (scales ['duchy', 'person', 'realm',
+      'settlement'], ...)`, so the census this row opened with stays empty. `levy` is still in
+      `VERBS ONLY REFUSED`, which now reads **7** (`build`, `commit`, `found`, `levy`, `migrate`,
+      `survey`, `work`) where the paragraph above quotes 8: `dispatch` left the set and is in `10
+      foldable but never even attempted`, a CHANGED FIGURE, not a changed reason (reason (1) below
+      rests on `levy`, which holds). **(b) `python -m engine.season.harness.aperture 4 0`, FROM THAT
+      RUN -- the orchestrator's run, NOT re-run here (about 25 minutes), output written 2026-10-02
+      03:18 UTC and labelled by the orchestrator `tree 23bea9da`; HEAD is 10 commits later, 19
+      `engine/` files among them (`populated.py`, `offices.yaml` and `verb_table.yaml` included), so
+      these are that tree's figures and not `444a00e1`'s.** Its control line reads `populated.run
+      acts 2939 vs measured 2939; content_hash EQUAL` (the instrument watched four seasons without
+      moving them). REALM, seed 0, 4 seasons, 83 persons at build, 29 seated: **`levy` elig 16/0,
+      formed 16, offered 16, att 23, ex 0, refused as `levy.refused` 19 + `levy.unauthorized` 4**;
+      SPINE (13 seated persons): `levy` att 17, ex 0, refused 14 + 3. So reason (1) HOLDS under the
+      new instrument: no seat-based `levy` executes in either world. The other seat-gated rows at
+      REALM, att/ex: `confer` 70/0 · `convene` 12/2 · `determine` 20/1 · `dispatch` 86/16 ·
+      `establish` 19/0 · `issue` 30/6 · `open_case` 28/7 · `revoke` 15/0 · `march` 16/16 (its `both`
+      column is a two-Event convention, so not a split); the management-flavoured rows `build` 65/0 ·
+      `found` 70/0 · `work` 183/0 · `migrate` 137/0 · `survey` 165/10. **WHAT NEITHER SHOWS:** the
+      CONJUNCT a `levy` refusal fails on (the aperture prints the refusal KIND, so `H-163`'s
+      purview reading is not re-observed); whether an executing seat-gated act is a strategic action
+      in the statement's sense (they run through the same person-scale verb table); or reason (2),
+      the absence of a Domain-Action mechanism, which no instrument counts. The two readings are
+      different worlds (143 corpus cases against one populated realm and one spine) and are not
+      summed. Status stays `partial`.
+    measure: "python -m engine.season.harness.aperture 4 0  # the per-verb lines: `levy` and the seat-gated rows (about 25 minutes); `corpus_run` prints no 'unrepresentable scales:' line any more, the census is empty"
     blocks: [W10, W13]
 
   - id: R-05
@@ -588,6 +805,23 @@ rows:
       (U7's own group 1/3 list, `workplans/2026-09-09-r-execution-plan.md:1497-1502`), verified by
       `grep` to have no `@effect_for(...)` registration anywhere in `loop/effects_*.py` — U7 is
       still open and none of its verbs were built as part of this position.
+      ⚠⚠ **17 of 44 AS OF PLAN POSITIONS `14` AND `17-cast`, 2026-10-02 -- THE ROW STAYS `not_met`.** Measured on tree `23bea9da`
+      (the close's later commits move no `corpus_run` output): `WHERE THE 44 GO: 10 have no predicate/effect · 10 foldable but
+      never even attempted (['confer', 'convene', 'destroy_record', 'determine', 'dispatch', 'establish', 'march', 'oblige',
+      'open_case', 'revoke']) · 7 attempted and always refused · 17 executed`; `VERBS ONLY REFUSED : 7` (`build, commit, found,
+      levy, migrate, survey, work`). Against the 2026-09-30 reading above: `give` joined the executed set (position `14` typed
+      it and fans its counterparty over the persons the giver knows; it executes in one corpus world and is refused in 63, so
+      it leaves the always-refused set on one execution, not on a changed share: `H-84`), and `dispatch` moved from
+      always-refused to never-attempted (the `17-cast` pilot's fourth seat in NPC-038; stable across seven hash seeds, the
+      mechanism not traced). **POSITION `14` BUILT NO OTHER ROW**: `repudiate`, `succeed`, `tie / knot`, `forge`, `exchange`,
+      `carry` and `thread_read` were declined or stopped, each with a `decline_note` on its verb row; `succeed` and `tie`
+      rest on ID-13 (nothing reads the edge) and on an operand their rows do not bind, NOT on holonic §15 (`04 §A.3` rows 8-9
+      make them directed edges the holder owns and `release` ends, `H-182`). `knot` is NOT an ID-13 case -- it has a reader
+      (`epistemic.py::_ch_witness_key`, undirected) -- so `tie / knot` stops on the missing partner operand and on `knot`
+      belonging to `29f`'s knots work. In the populated realm, four seasons, seed 0 (`aperture 4 0`, control hash EQUAL):
+      2939 acts, up from 2781 before `14` and 2836 before `13d-iii`; `levy.unauthorized` fell from 18 of 19 attempts to 4 of
+      23 and `issue` executed 6 of 30 times with `Act.via` set (`13d-iii`, `H-163` limit 1 lifted). 17 of 44 executing (39%) is
+      a rise of one verb on 16 of 44.
     measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE) -- 44 today; it was '38' as of ED-IN-0261, '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
     blocks: [W10-core, H-65, H-94]
 
@@ -672,6 +906,69 @@ rows:
       `CONVICTION_PROJECTION`, ED-IN-0261 item 1) that no run moves. WHAT WOULD OVERTURN THIS
       PARAGRAPH: a design ruling that an OUGHT can be satisfied, or a re-run whose act totals or
       content hash differ.
+      ⚠⚠ **PLAN POSITION `17`, 2026-10-01 -- THE SENTENCES ABOVE THAT SAY `ambitions(p)` IS ABSENT
+      ARE NOW FALSE, AND THE CAST HALF IS PARTLY BUILT.**
+      `queries/world_q.py::ambitions(w, p)` reads a person's own live `commit` edges to
+      OUGHT Propositions (`world_q.questions_for`'s Q4 now asks it; same questions, same order, EXCEPT
+      that two live edges to one Proposition are now ONE question -- the dedup, a path no builder reaches today). It
+      takes the `World` because the mood lives on the Proposition in `w.propositions` -- the plan's one-parameter
+      spelling cannot name an edge's mood. (It was first written in `person_q` with the store as a second
+      argument and MOVED to `world_q` at the Batch C close: `04` §A.2 admits a `PersonInterior` snapshot
+      only to `person_q`, and any store, via `World`, to `world_q`.) `corpus_run.
+      build_at` seats a case's `cast:` entries as `p_a`, `p_b`, ... (named for `who`, each entry's
+      own `capability`; an entry with `role: WAITS-ON-PLAYER` is reported and not seated; the three
+      anonymous seats are the floor). **NOT BUILT, STOPPED RATHER THAN INVENTED:** the `cast:`
+      schema is `{who, role, capability}` and carries no key for an office per entry, for `one_line`
+      parsed to an OUGHT, or for `knowledge` parsed to Claims -- so each person's OUGHT is still
+      the rotation over the seated people with the case's `wants_of`, and no `cast:` yet exists
+      with more than one entry. The corpus's `corpus_run` stdout is byte-identical before and after
+      (143 cases, 120 distinct executed sets), so no figure above moves. Stays `partial`.
+      ⚠⚠ **PLAN POSITION `17-cast` + THE `13`-REST PILOT, 2026-10-02 -- THE PARAGRAPH ABOVE'S "NOT BUILT"
+      IS PARTLY SUPERSEDED.** A `cast:` entry now carries two author-written structured keys:
+      `office: {post, why, body | faction, remit?}` (checked by the case-level `_check_office`, seated
+      by `corpus_run._seat_office`) and `ought: {about, predicate}` (one OUGHT Proposition for that
+      entry, `about` the exact `who` of ANOTHER seated entry; same id and `commit` edge as the rotation
+      default, so `ambitions` and Q4 find it unchanged). `knows:` is REFUSED BY NAME at load and not
+      built: a seeded Claim is a `Claim` construction in `build_at`, a sixth site beside
+      `loop/witness.py`'s five, which AX-7 limits -- a Layer-1 question. Eight NPC cases carry the keys
+      (NPC-002, -011, -035, -038, -072, -075, -083, -086), each read off the case's own sentences
+      and cited beside the entry; none carries a `capability` (no case names a vocation
+      `verb_capability` covers -- `copying` is its only key -- with a sourced magnitude).
+      **MEASURED, seed 0, the 46 NPC cases, three arms on one tree:** (A) no overlays 41 distinct
+      executed sets, mean verbs 7.04, 13 verbs ever; (B) the real corpus with the pilot 41, 7.15, 13;
+      (C) position `17`'s identical 11-seat fixture on every case 26, 10.65, 16 (that control,
+      reproduced). **THE PLAN'S OBSERVABLE -- distinct executed sets rises over the pre-cast arm -- IS
+      NOT MET: 41 -> 41, and 8 -> 8 over the eight pilot cases** (it COULD NOT have risen from these eight: in
+      arm A none of them shared an executed set with any other case, so the ceiling on a rise from them was
+      0 -- `H-185`); the other 38 are byte-identical TO THE PRE-PILOT HEAD (all
+      143 world hashes compared, exactly the eight moved) -- NOT to arm A, from which the five cases overlaid
+      before the pilot (NPC-004, -005, -039, -080, -088) differ in `Person.name`, the cast's `who`. What moved: mean verbs 6.62 -> 7.25 over the
+      eight, from two cases (NPC-038 7 -> 10, NPC-083 7 -> 9); the other six executed sets are identical
+      to the pre-cast. WHY, ATTRIBUTED BY DROPPING EACH KEY IN TURN: seven of the eight authored
+      oughts name the cast's NEXT entry, which is the rotation default's own referent (an artifact of the
+      order the entries were authored in, not evidence about oughts: `H-185`), and
+      `Proposition.predicate` is read by no live path, so an ought that coincides with the rotation
+      moves nothing; the one that differs (NPC-038's protagonist) adds {interview, speak, transfer}
+      over the same four people without it. An office with `remit: []` seats a person and moved no
+      executed set (NPC-072's, alone in its cast, did change what that world attempts and has refused:
+      +examine, found, migrate). ⚠ TWO CASES MOVED AN EXECUTED SET, AND THEY ARE NOT THE SAME KIND OF
+      EVIDENCE (attributed at fix lane 4 of the Batch C close, seed 0, by dropping each key kind in
+      turn): NPC-083 (7 -> 9: {interview, issue, speak} in, `fight` out) moved on its `office:` keys
+      ALONE -- drop them and its set equals the no-overlay one, drop its `ought:` keys and it is
+      unchanged -- and the move rests on its SECOND office, the Provincial authority's (dropping that
+      one office takes {interview, issue} out and returns `fight`; dropping the Governor's own
+      changes nothing; the one `remit: [issue]` seat is the only seat there that grants `issue`).
+      THAT IS AN INSTITUTION SEATED AS A PERSON holding `issue` at the settlement rung, under `_seat_office`'s own [ASSUMPTION] (an entry's
+      office sits at the case's deepest non-person rung), and it sits against `NPC-083.yaml`'s own
+      header, which declines to seat the settlement's Local Actors and rival subnational factions as
+      groups. NPC-038 (7 -> 10: `fight`, `speak`, `transfer` in) moved on its `ought:` keys, NOT its
+      offices (drop its `office:` keys and the set is unchanged; drop its `ought:` keys and {interview,
+      speak, transfer} leave): it depends on its protagonist's ought naming Sæmund Haelgrund where the
+      rotation default would name the next entry (Arne Himlensendt), and on the cast being four seated
+      people rather than three anonymous ones. So NPC-038 is NOT evidence that an `office:` moves acts;
+      NPC-083, the only case that is, depends on the institution-as-person seat above.
+      `corpus_run` stdout md5 d714ba5c -> 6a65a264 (declared; the
+      `DISTINCT EXECUTED SETS 120` and `17 of 44` lines did not move). Stays `partial`.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' line"
     blocks: [W27, H-62]
 
@@ -819,12 +1116,15 @@ rows:
       (54 of 54 person opponents, 52 `obstacle_default`) was NOT re-measured.
       **WHY `partial` AND NOT `met`, STATED RATHER THAN LEFT TO BE FOUND.** R-09 asks that chains
       be probabilistic; what is probabilistic today is the ROLL, not the CHAIN, and it varies by
-      SEED and FIXTURE rather than by PERSON. `Person.capability` is empty on every corpus person
-      -- one writer, and it zeroes it -- so `_pool_of` returns `pool_default` for everybody and
+      SEED and FIXTURE rather than by PERSON. `Person.capability` is empty on 429 of the 430
+      persons the 143 corpus cases build (MEASURED 2026-10-02 with `corpus_run.cast_overlay()` and
+      `build_at`; the last paragraph of this row carries the run) and holds `{copying: 3}` on one,
+      NPC-088's `p_a`. Its one corpus writer is `build_at`'s seating of a cast entry's own authored
+      `capability` (`corpus_run.py:537-540`), so `_pool_of` returns `pool_default` for those 429 and
       `_obstacle_of` returns `obstacle_default` for every non-person subject. `lev` is 0.0 with no
       producer, stated as zero because a fabricated leverage would be a number nobody chose. It
-      varies by person the day capability is written, which is character development and out of
-      this arc (`W27`'s cast, 0 of 143 cases).
+      varies by person only where capability is written, which is character development and out of
+      this arc (`W27`'s cast: 13 of 143 cases carry a `cast:` overlay, one carries a `capability`).
       ⚠ **AND THE ROW IT REPLACES WAS TRUE WHEN WRITTEN.** It read *"THERE IS NO ROLL ANYWHERE IN
       THE LOOP"*, resting on a scan that asserted NO module produces a margin. That scan is now a
       SET EQUALITY on exactly one owner rather than an emptiness claim -- `S27.2` names a second
@@ -836,5 +1136,34 @@ rows:
       back from `{}` to `{reconstruct}`, which is between-world variety `U2` had bought. Distinct
       executed sets rose 38 -> 40 and R3 cross-person propagation was UNMOVED at 84 of 143 -- so
       `U1` changed what people do, not whether what one does reaches another.
+      ⚠⚠ **PLAN POSITION `21`-REST (U10's BOOKKEEPING TAIL), 2026-10-02: THIS ROW'S `measure:`
+      RE-RUN, FRESH, AND ITS `-k` SELECTS ONE TEST.** Tree `444a00e1`, clean worktree. THIS RUN (all
+      exit 0): **(a)** `python -m pytest engine/season/tests -k 'we_only_a_verb or u1_'` printed `1
+      passed, 838 deselected`. The one test is `test_we_only_a_verb_that_declares_contests_can_be_graded_today`;
+      **`u1_` matches no test name in the tree** (`--collect-only` lists that test alone, and `grep 'def
+      test_u1_'` over `engine/season/tests` finds none), so the command exercises one test and not the
+      `U1` acceptance this row narrates. **(b)** `python -m engine.season.harness.headless --seasons 2
+      --seed 0` printed the same lines and the same `CONTENT HASH: 293067ea0b02f3219043de3a6947c740`
+      as R-03's run, because `NPC-088` is `headless`'s default case. With `--log` added: `news.told` 1
+      and `news.untold` 0 at seed 0; 0 and 0 at seed 7 (hash `8186371ca113d72c4907be5cf36fb652`).
+      That agrees with the T4 paragraph's count, "one telling at seed 0 and none at seed 7"; the log's
+      kind line carries no degree, so its "(Success)" was not re-read. **(c) THE CAPABILITY COUNT**,
+      by `corpus_run.cast_overlay()` and `build_at(apply_rescale(case), 0)` over all 143 cases (a
+      scratch script, not committed): 13 cases carry a `cast:` overlay with 30 entries, 6 of them
+      `WAITS_ON_PLAYER` and never seated, and exactly ONE entry has a `capability` key -- NPC-088's
+      Carin Vedel, `{copying: 3}`. The built worlds hold 430 persons at build (`corpus_run`'s own 418
+      is `len(w.persons)` at the END of a run, `corpus_run.py:898`) and one carries a non-empty
+      `Person.capability`, NPC-088's `p_a`. `tell` and `speak` are the two verbs that draw on `copying`
+      (`rosters.yaml: verb_capability`). **THE ROW'S OWN SENTENCE "`Person.capability` is empty on every
+      corpus person -- one writer, and it zeroes it" (2026-09-11) IS CONTRADICTED BY THE TREE** and is
+      rewritten above to 429 of 430; `probes.py:579` still zeroes it, on `tiny_world`'s probe fixture
+      and not on a corpus person, and `rosters.yaml: verb_capability`'s `note:` still carries the old
+      sentence (outside this file). **WHAT THIS RUN DOES NOT SHOW:** the telling counts of the T4 and
+      `F1` paragraphs (27 NPC cases, 3 seasons: 24 told against 29 untold) come from a one-off script
+      this `measure:` does not run, and were not re-measured; the obstacle breakdown (52 of 54
+      `obstacle_default`) predates `17-cast`, which seats NPC-088's `copying: 3`, and was not re-read,
+      so "corpus hearers carry no capability" in the T4 paragraph is true of its own date and not of
+      this tree. Status stays `partial`: the roll still varies by seed and fixture, and by person in
+      one case of 143.
     measure: "python -m pytest engine/season/tests -k 'we_only_a_verb or u1_' ; python -m engine.season.harness.headless --seasons 2 --seed 0"
     blocks: [W23, H-98]

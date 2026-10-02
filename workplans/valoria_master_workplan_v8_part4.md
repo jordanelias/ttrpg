@@ -19,29 +19,9 @@ predicate/effect; `write_matrix.yaml` `Person` rows; `rosters.yaml` `requires_op
 stance write — the stored half of regard); `harness/corpus_run.py::build_at`; `harness/populated.py`'s
 seat builder; `engine/season/offices.yaml` header; `proposals/2026-09-04-degree-sweep/wd_collect.py`.
 
-### `11-fix` · U6's instrument repair · IN · gate — · `sonnet` build, `opus` read · `[simulation]`
+### `11` · U6 — R-01/R-02 corpus measurement · IN · **DONE 2026-10-02: first measurement 2026-10-01, re-take 2026-10-02** · the acceptance command is kept here because `requirements.yaml` cites it
 
-**The break** (R-01's `measured:`, 2026-09-30): over the 143-case corpus, `wd_collect.py` fails its
-own assertion that `probed` (the deliberation count) does not depend on `observation_deposit_mode` —
-`{'none': 21717, 'actor': 21954, 'total': 21897}` — at the first fixture point, so no reconvergence rate
-is computed at any point. The tool's comment says why it assumed equality (*"`pack_scenes` is called for
-every person with a question, whatever their candidate set"*); since U2 a deposit under `actor`/`total`
-can raise a new Q2 question in a later round that `none` never raises.
-**INSTRUCTION.** First run pre-flight P-4 (the same cell twice). **If `probed` differs between two runs
-of the same arm, stop** — it is a determinism defect; register it and do not touch the assertion. If it
-is stable per arm: replace the cross-arm equality with a per-arm report (`probed` printed for each arm),
-compute the reconvergence rate per arm over that arm's own deliberations, keep the completeness assertion
-(`covers == list(range(len(CASES)))`), derive slice bounds from `len(wd_acceptance.CASES)`, and keep
-`arm9_forking.fork_case` imported **unmodified** (`wd_acceptance.py`: a re-implemented probe measuring a
-different thing is the confound). **No engine code.**
-**FALSIFIER:** the 36-cell sweep completes; `wd_acceptance.json` and `WD_LOG.txt` are rewritten — check
-with `md5sum` before and after (`CLAUDE.md` §0.1 pt 3 row 4: a collector that exits 0 and writes nothing
-is the failure); the `none ≥ default` control is printed. **Hash:** n/a. **R:** none by itself.
-
-### `11` · U6 — the first corpus R-01/R-02 measurement · IN · gate `11-fix` · `sonnet` runs, `opus` reads the number · `[simulation]`
-
-**Run twice in Batch 2:** (i) the baseline, on HEAD right after `11-fix`; (ii) the re-take after
-`13d-iii`, declaring both trees. The pair is the control for what Batch 2's builds did to propagation.
+**Both runs landed (PR #451).** At `2x3`, over 143 cases, reconvergence reads none 77.13 % · actor 43.03 % · total 38.47 % (baseline, `c2ee345a`) and none 77.22 % · actor 42.59 % · total 38.58 % (re-take, `8b03e518`, across `14`, `13d-iii` and `17-cast`): no arm moved by half a point, against a 96 % bar, so R-02 is `met` and R-01 stays `not_met` (`engine/season/requirements.yaml`, whose dated paragraphs label each figure; `proposals/2026-09-04-degree-sweep/runs/WD_LOG.txt` is the committed record, the 36 cells are untracked and rebuilt by the commands below). The instrument's run-to-run noise is not measured. Re-run it only when a build changes what a fork can reach.
 **Acceptance — verbatim** (carried from U6; slices re-derived for 143):
 
 ```
@@ -61,31 +41,15 @@ consequence about a non-person cannot narrow a later candidate set). Do not re-p
 `none ≥ default` arm is the only control this instrument yields; say so. `fan_out_mode` is R-07's
 fixture, not this one's. **Not here any more:** `test_n3`'s floors and the reverted build-order item 4 (`budget()` counting
 `granted_acts`) belong to the telling workplan's T4, which re-pins the floors and closes that question
-(main §0.6); re-land item 4 only after T4, against T4's floors. **Timing:** the baseline is taken before
-telling T3a lands or after its T6 closes, never across them (E15). **R:** R-01, R-02 — on the printed number only. **Records:** both rows' `measured:` paragraphs
+(main §0.6); re-land item 4 only after T4, against T4's floors. **R:** R-01, R-02 — on the printed number only. **Records:** both rows' `measured:` paragraphs
 cite the run and its tree; R-02's `measure:` comment re-pointed off the retired plan (`_part6` §H.3).
-
-### `8` · H-98(b): the wound-count band edge becomes data · IN/PC · gate — · `sonnet` build, `opus` critic · `[patch]`
-
-**What is already built and must not be rebuilt:** `seam/wrappers/combat.py` returns `wound_state` per
-party (`felled`, `wounds`, `max_wounds`, `health_remaining`, `health_full`), and `seam/ladder.py` grades
-it (`combat_degree`). A fourth band is **forbidden** (`ladder.py`: *"A FOURTH BAND … HAS NO SOURCE IN THE
-DATA and is NOT invented"*). Half (a) — the general branch's producer — has no further subject (`tell`
-supplies it via `seam/wrappers/sigma.py`).
-**INSTRUCTION (b).** The edge is a literal (`if st["felled"]: FELLED` / `WOUNDED if st["wounds"] > 0
-else UNTOUCHED`). Move it to data: a `combat_band_edges` row keyed on `combat_degree_bands`, with a
-declared sweep (Jordan 2026-09-02: *"definitions are not hardcoded"*), read by `combat_degree`. Grade
-H-98 by the half closed. **FALSIFIER:** an edge on a quantity the tracker does not return refuses at
-load; an edge set to `wounds > max_wounds` yields `UNTOUCHED` for every fought subject, with `≥ 1`
-fought subject asserted. **Hash:** none expected — assert equal. **R:** R-09 (band provenance). **E5:**
-never interleaved with the cells commit or `9`.
 
 ### `ED-FI-0009` · a degree producer for the six inquiries · FI · gate `8` (E7); reads better after `13`-rest · `sonnet` build, `opus` critic · `[design]`
 
 **What the tree rules:** investigation is not a seam (`rosters.yaml`'s ruling forbids giving the
 inquiries a prize); the loop IS the mechanism — RESOLVE → WITNESS, *"Claims graded by degree; Failure
 emits `finding.none` and deposits nothing"* (closed at ladder step 3 on 2026-09-06, work item 4.5).
-What is missing is a degree producer. `ED-FI-0009` is `open`, `needs_jordan: false`; its earlier carve's
+What is missing is a degree producer. `ED-FI-0009` is `open`, `needs_jordan: true` (J-22, 2026-10-01: its stop condition hit, see its last ledger row); its earlier carve's
 obstacle column, attribute gate and depth derivation were overturned by a critic and are **not** to be
 re-introduced.
 **INSTRUCTION.** Compose on the single owners: the actor's pool from `sigma.py::_pool_of` (capability via
@@ -107,63 +71,10 @@ earlier rewrite of `10` (a stored stance write on a resolved `fight`) is **withd
 judged deed at read, so a stored deed write would be a second route to one fact. The AX-7 wiring that
 rode along stays registered and unbuilt until the telling workplan's T6 closes (`_part3` E16).
 
-### `14` · U7-own — the unbuilt rows · IN · gate telling T4 (E14), E8 · `sonnet` build, `opus` critic · `[design]`
+### `13`-rest · W28-cast: the remaining overlays · IN · **STOPPED at its pilot (the user's rule)** · `sonnet` author, `opus` critic · `[design]`
 
-**INSTRUCTION, corrected.** The retired text said "land the verbs in antonym pairs: `commit`+`repudiate`,
-`oblige`+`waive`, `succeed`+`deposed`, `tie / knot`+`fray / loosen`, then `forge`, `restore`, `exchange`,
-`destroy_record`." Two corrections, both answered at ladder step 3: (1) **the closing half already exists
-as ONE verb** — `release`, eligibility `own`, generic over `tenure_kinds \ {contain}` (`04 §A.3` row 14:
-*four closing verbs missing → one `release` verb*), and `revoke` takes away. **Do not add `waive`,
-`deposed` or `fray / loosen` rows**; if a closer is needed that `release`/`revoke` cannot express, say
-which and stop. (2) `restore` executes (24e); `commit` and `oblige` have effects (7a, 17a). So `14`
-builds: **`repudiate`** (the second voluntary ender of an ambition — R-06), **`succeed`**, **`tie / knot`**,
-**`forge`**, **`exchange`**, **`carry`** — predicate (`requires_typed` in one of the closed forms;
-`loop/predicates.py` only where no form fits) and effect each, effect targets: `loop/effects_governance.py`
-(`succeed`, `tie / knot`), `loop/effects_information.py` (`repudiate`, `forge`, `exchange`), `carry` by
-what it writes.
-**Precondition inside the unit:** `decision/options.py` binds one referent to every operand slot, so no
-computed act names two distinct parties. **The telling workplan's T4 builds the first half of the fix**
-(`operand_bags`, `known_persons`, the contest target read off `row.counterparty`); `14` extends it to
-`give`/`oblige`/`exchange` **on those primitives** — a distinct operand per slot where T4's bags do not
-already supply one — and puts the counterparty check **in the fold**, not per effect. Never a second
-binding mechanism. This is what makes `give` and `oblige` formable in computed play (today 0 formed in
-the realm).
-**Three decisions this position takes, each by the ladder, each recorded in its commit:**
-- **`R05-THREAD` — `thread_read`'s operand (H-85).** Step 4: the row's own default — a two-valued
-  `knowledge_kinds` roster, the H-128 swept-fixture shape (A-7). If the critic finds the default
-  invents a taxonomy, decline and record `thread_read` as waiting on `27`/`29f`.
-- **`destroy_record`'s formability (A-13).** `eligibility: hold:<record>` + presence is unformable for
-  everyone; it needs a record-holding question referent — `give`'s shape (step 4).
-- **H-165 limit 2 — a person-side works channel.** `found`/`build`/`work` refuse everywhere because no
-  computed act declares a works (`create_record` is untyped, so it always mints `text`). Step 4
-  candidate: the `15c` content-operand precedent. If it does not fit, leave the three verbs to J-4.
-**Ride-along CANDIDATE-WHY:** `Candidate.why` is written once and read nowhere; give it a reader or
-remove it — default remove (`04` licenses either, never a hole row).
-**COMPLIANCE:** loader invariant 4 — every failable conjunct has a refusal kind (S-8: the clause-keyed
-schema exists; use it). **OBSERVABLE:** state the prediction before the commit — landing a reversible pair
-moves W-D divergence **up**. **FALSIFIER:** a `Tenure(X, X)` self-loop accepted, or an `oblige` whose
-object is a bare string naming no entity (the F7/F8 recurrence that reverted this work once); every new
-row that cannot bind its counterparty must DECLINE person-side (`give`/`petition` precedent) so the
-always-refused set does not grow — assert the set; any effect branching on a proper noun or a rung-kind
-member is scripting drift (`04` PART D 27a/28). **Control:** `report && delta HEAD` per verb — no probe
-flips outside the verb. **Hash:** corpus pins move, recorded per verb, never batched. **R:** R-05 (up to
-six rows + `give`/`oblige`/`destroy_record` formable), R-06 (`repudiate`), R-01 (counterparty edges).
+**Pilot run 2026-10-02 (`17-cast`):** eight differentiated NPC overlays; DISTINCT EXECUTED SETS 41 with none, 41 with the pilot, 26 with a uniform fixture cast (seed 0, an instrument that was not committed). ⚠ **The metric could not have shown this pilot working**: all eight cases were singletons in the no-overlay arm, so the ceiling on a rise from them was 0 (not +5). What moved: 2 of 8 cases (NPC-038 on its `ought:` keys, NPC-083 on its `office:` keys, whose second office seats an institution as a person), mean verbs 6.62 → 7.25. `knows:` is refused at load: seeding an initial belief needs a sixth `Claim`-construction site or pre-history Events through the existing witness sites (`01_AXIOMS.md` AX-7), neither built, and nothing in the plan's observables needs it. An ought's `predicate` is a declared non-causal label (`H-185`). **Whether to scale is the user's, on a better observable** (per-case set change against the no-overlay arm, Q4 referents). The text below is the original instruction.
 
-### `17` · U8 — `ambitions(p)` and the cast seated · IN · gate `14` (E8) · `sonnet`/`opus` · `[design]`
-
-**INSTRUCTION.** `queries/person_q.py::ambitions(p) -> list[PropositionId]` — a person-side READ over live
-`commit` edges to OUGHT Propositions (the mechanism R-06 already names). `04`'s row for `queries/person_q`:
-writes nothing; may read *"a `PersonInterior` snapshot only"*. Then the remainder `13` left to this
-position (2026-09-28 plan §8.7): in `harness/corpus_run.py::build_at`, seat `p_b`/`p_c` from the `cast:`,
-resolve the rest of `who_acts` into offices and `WAITS-ON-PLAYER`, `one_line` → the OUGHT Proposition,
-`knowledge` → initial Claims. `one_line` is **parsed into a `cast:` block by an author, never
-token-matched** (the W10 router lesson). **FALSIFIER:** `ambitions` taking a `World` reddens the
-`sense`-is-the-only-World-taker AX-2 test; `NPC-020` (no overlay) builds byte-identically (control: with
-`cast:` absent, `build_at` still seats three and the tallies are unchanged). **OBSERVABLE:**
-`DISTINCT EXECUTED SETS` rises over the pre-cast arm; Q4 fires for more than one proposition; an 11-actor
-case runs. **Hash:** corpus moves for every case gaining a cast (declared). **R:** R-06 reason 1, R-09.
-
-### `13`-rest · W28-cast: the remaining overlays · IN · gate — (merges after `17`) · `sonnet` author, `opus` critic · `[design]`
 
 41 NPC + 97 ARC `cast:` overlays in `engine/season/cases/exercises/*.yaml` (never `cases/chain/*.yaml` in
 place). Schema: `who_acts`, `one_line`, `knowledge`; entries naming a player become `WAITS-ON-PLAYER`. NPC
@@ -175,46 +86,13 @@ that judgment 138 times** — where no source exists, leave `pool_default` and r
 **Critic:** checks the `WAITS-ON-PLAYER` split and every authored number. **Hash:** corpus pins move
 (declared). **R:** R-06, R-09 (only as far as sourced `capability` reaches).
 
-### `13d-iii` · rung anchors for seats, the `[NEW]` seats, the remit overlay · IN · gate `17` (E8); remit half J-8 · `sonnet` build, `opus` critic · `[design]`
+### `27` · WR-SCOPE remainder · WR · gate — · `opus`/`opus` · `[design]`
 
-**The cap it lifts (H-163 limit 1):** 16 of `build_realm`'s 19 seats carry no rung, so a holder's purview
-is empty and `levy`/`issue`/`open_case` refuse on `authority` (realm: `levy.unauthorized` 19 of 20).
-**INSTRUCTION.** A rung-ANCHOR resolver in `harness/populated.py` over r2 `03`'s four anchor forms
-(A-5: answered at ladder step 3); give every live seat its `scope_rung`; mint the `[NEW]` seats
-`offices.yaml` marks; delete `rosters.yaml: titles` now that `offices.yaml` owns it (8a's follow-up).
-The `remit` overlay for the 19 live seats waits on J-8 for `dispatch` only — land the rest.
-**FALSIFIER:** in `aperture 4 0`, `levy.unauthorized` falls and `≥ 1` `levy` or `issue` executes with
-`Act.via` set (U9's own acceptance text); every `[NEW]` seat's anchor resolves to a live rung; a computed
-`transfer` carries `via` where a seat paid it (H-158 — read, and register if not). **Hash:** `build_realm`
-census + hash move (declared); every `[GROUNDED: …]` realm figure in `hole_register.yaml` (H-156, H-163,
-H-165) goes stale — the forward sweep re-cites them, never silently. **R:** R-04 (reason 1), R-05.
-
-### `21`-rest · U10's bookkeeping tail · IN · gate `11` (re-take) · `haiku`/`sonnet` · `[editorial]`
-
-Refresh, from one fresh run of each row's own `measure:`: R-01's opening R3 sentence (now 46/46 · 96/97
-over 143), R-03's and R-09's `measured:` blocks (dated 2026-09-11), R-09's stale "capability empty on
-every corpus person", R-04's `measure:` (to the instrument that reads its stated reasons — `aperture 4 0`'s
-per-verb lines — since `corpus_run` prints nothing for it any more), R-02's `measure:` comment. **Item 3
-(reconcile the progress board) is closed, ladder step 2** — the board was retired at `ebb43bf0`.
-**FALSIFIER:** every edited `measured:` line is reproducible from its row's `measure:` command (the
-register refuses an empty one, not a wrong one — the critic must). `register --requirements` exits 0.
-
-### `27` · WR-SCOPE remainder · WR · gate — · `{parallel worktree}` · `opus`/`opus` · `[design]`
-
-Landed (PR #442): `coherence.py` elastic/plastic (`ED-WR-0010`), `operations.py`'s P-25 scale term,
-`tests/valoria/test_coherence_elastic_plastic.py`. **Remainder:** the `rendering.py` stubs
-(`apply_rs_strain`, `check_calamity_threshold`); `ED-WR-0003` (the "overheard" conditional-observer rule
-and the revelation procedures); the mending cost (`attempt_mending` calls `recover()` and costs > 0).
-**⚠ One constraint the WR handoff does not state:** the stubs' named targets (substrate tension →
-incursions → Accord; MS) are overview clocks that **have no season analogue by architecture**
-(`loop/census.py`: *"NO CLOCK GENERATES ANYTHING"*; ED-WR-0011 option A) and that `29a` deleted (PR #450; `ms_track` stays until `29a`-ms). Wire a stub
-only to a retained or season-native carrier (the season's `(Person, coherence)` row — RES, `social:
-false`, written through a seam Event — is the one the architecture provides); a stub with no such target
-is struck with its reason, never wired into `ms_track`. And `27` must leave
-`threadwork/sim/{co_movement,opposing}.py` free of `ms_track` and `knots` imports, or `29a`-ms and `29f`
-cannot proceed (E2). **FALSIFIER:** the mending test (`recover()` called, cost > 0); each wired stub
-executes in a threadwork sim; `ED-WR-0003`'s rule has a test; `grep -n "ms_track\|sustain_knot"
-systems/threadwork/sim/` returns nothing. **R:** none (unblocks `29a`-ms, `29f`).
+**BUILT 2026-10-01 (PR #451):** both `rendering.py` stubs struck with their reasons at the site (the season has no clock to wire them to: `loop/census.py`, ED-WR-0011 option A); `ED-WR-0003` closed at ladder step 2
+(an `ED-WR-0003` superseding row); `attempt_mending` calls `recover()` and costs > 0 (only tests call it; `environment_in_equilibrium` defaults to False);
+`threadwork/sim/{co_movement,opposing}.py` import neither `ms_track` nor `knots`, which unblocks `29a`-ms and `29f`. **Remainder, each outside this position's scope** (`HANDOFF_WR.md`):
+the `R-14` practitioner-resilience term (arithmetic unruled); Mending aimed at the mender's own configuration (`coherence.mend_resting_point` has no non-test caller); and
+`collective.py`'s and `opposing.py`'s Mending feedback. **R:** none.
 
 **Batch 2 close:** agonist/antagonist → `/code-review` → `/simplify` → `layer-conformance` (Lens B on
 `14`'s fold) → terminal Opus critique → `/close` (full suite once). The forward
@@ -298,8 +176,9 @@ declares and nothing else; no proper-noun branch. **R:** R-05 texture.
 
 ### `29f` → `29e` → `29a`-ms · fieldwork `knots`, characters, `ms_track` · IN · gate `14`, `27` (E2, E3) · `sonnet` · `[cleanup]`
 
-- **`29f`:** `systems/fieldwork/sim/knots.py` (ED-912's ±5 gauge maps to `Tenure.degree`, F.4 —
-  recorded on `14`, not invented); `engine/tests/test_knots_ed912.py` → `FORK:`.
+- **`29f`:** `systems/fieldwork/sim/knots.py` (ED-912's ±5 gauge maps to `Tenure.degree`, F.4 — the
+  plan said `14` records it, **`14` did not** (it declined `tie / knot`; `H-182` says no position owns `_eff_tie`), so
+  `29f` writes the mapping into `H-182`'s cite, not invented, and then deletes); `engine/tests/test_knots_ed912.py` → `FORK:`.
 - **`29e`:** `systems/characters/sim/conviction.py` (← `knots.py`); `beliefs.py` already went at `28-0`'s
   follow-up (PR #450). `test_conviction_roster_single_owner.py`'s `systems.characters` site re-pointed.
 - **`29a`-ms:** `systems/overview/sim/ms_track.py`.

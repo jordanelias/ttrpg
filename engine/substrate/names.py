@@ -11,11 +11,10 @@ ruling could land in `references/` and never arrive: `systems/world/sim/npe.py` 
 NPCs affiliated to `'Church'` after Jordan ruled the name is `Church of Solmund`.
 
 `tools/export_names.py` cooks the index into `engine/engine_params/names.json` behind a blocking
-`--check`; this is its single runtime reader. Same shape as `descriptors.py`, `composition.py`
-and `world_initial_state.py`.
+`--check`; this is its single runtime reader. Same shape as `descriptors.py` and `composition.py`.
 
 IT IS A LEAF. This MODULE imports stdlib only -- `json`, `os` -- exactly as
-`world_initial_state.py` does, verified by AST rather than asserted. That is what lets BOTH trees
+`descriptors.py` does, verified by AST rather than asserted. That is what lets BOTH trees
 read it without either naming the other: a name propagates in one direction, from the authored
 index outward, and a subsystem wanting the canonical spelling asks instead of spelling it.
 

@@ -68,12 +68,16 @@ from __future__ import annotations
 import random
 from typing import Any, Optional
 
+from ...data.rosters import WOUND_QUANTITIES
 from ...decision import body_band_penalty
+from ...gaps import Unspecified
 # ⚠ THE LEAF, NOT THE PACKAGE. `...manifest` re-exports from `registry.py`, which imports
 # THIS module to register it — importing the package here closes that loop and the cycle
 # guard counts it. `manifest/providers.py` imports nothing and is safe to reach from here.
 from ...manifest.providers import provider
 from ...state.ids import H
+
+_MISSING = object()   # `getattr`'s default for a tracker field the engine does not carry (None is a value)
 
 _LOADED: Optional[tuple] = None
 _LOAD_ERROR: str = ""
@@ -182,9 +186,22 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         wt = getattr(c, "wt", None)
         if wt is None:                      # ID-5 polarity: absence REFUSES, it does not default
             return dict(available=False)
-        return dict(available=True, felled=bool(wt.felled), wounds=int(wt.wounds),
-                    max_wounds=int(wt.max_wounds),
-                    health_remaining=int(wt.health_remaining), health_full=int(wt.health_full))
+        # ⚠ THE FIELD LIST IS `rosters.yaml: wound_quantities`, NOT A LITERAL HERE (`H-98`, plan
+        # position `8`) -- the same list `combat_band_edges` is validated against at load, so an
+        # edge cannot name a quantity this does not lift. A member the tracker does not carry
+        # REFUSES by name; skipping it would hand `combat_degree` a dict that lacks it.
+        out = dict(available=True)
+        for q in WOUND_QUANTITIES:
+            v = getattr(wt, q, _MISSING)
+            if v is _MISSING:
+                raise Unspecified(
+                    f"`wound_quantities` lists {q!r} and the engine's WoundTracker has no such "
+                    f"field", "S39.4/H-98", needs=f"a `WoundTracker.{q}`, or delete it from "
+                    "rosters.yaml: wound_quantities and from every edge that reads it",
+                    law="Jordan 2026-09-03 -- the degree is READ OFF THE SCENE; a quantity the "
+                        "scene does not carry cannot be lifted")
+            out[q] = v if isinstance(v, bool) else int(v)
+        return out
     _wounds = {a_id: _state(A), b_id: _state(B)}
 
     return dict(status="RESOLVED", module="personal_combat", resolver="d_sigma",

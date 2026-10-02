@@ -192,8 +192,10 @@ class VerbRow:
     # makes `subject` the second claimant), generalised to a row that names its counterparty
     # directly. `""` is the declared absence; the loader requires a named operand to be one the
     # row's typed cell BINDS, so the Candidate always carries the thing compared -- or, on an
-    # UNTYPED row (plan position 16, `give`), a `requires_operands` member no Candidate can carry,
-    # which makes `opening_set` form none: a second party the grammar cannot yet name.
+    # UNTYPED row (`oblige`; `give` until plan position `14` typed it), a `requires_operands` member
+    # no Candidate can carry, which makes `opening_set` form none: a second party the grammar
+    # cannot yet name. Plan position `14` asks the same column again IN THE FOLD
+    # (`loop/resolve.py::_admits`, `COUNTERPARTY_CLAUSE`), for the hand-built act no person forms.
     counterparty: str = ""
     # ⚠ THE TENTH COLUMN'S SECOND SHAPE, ADDED AT PLAN POSITION `19` -- `04 §B.13` INVARIANT 4'S
     # PER-CONJUNCT HALF (F7): *"every failable clause has a refusal kind -- not only a verb with a
@@ -214,7 +216,8 @@ class VerbRow:
         plan position `19`. A KEYED row answers the clause's own kinds -- and a clause it does not
         key RAISES, because the loader has already required a key for every clause that can fail
         (`ELIGIBILITY_CLAUSE` if an alternative can decline, each named conjunct, `WRITE_CLAUSE` if
-        the row writes). Reaching this with an unkeyed clause is therefore a FOLD defect -- a new
+        the row writes, `COUNTERPARTY_CLAUSE` if it names a second party). Reaching this with an
+        unkeyed clause is therefore a FOLD defect -- a new
         refusal point nobody declared -- and emitting the union instead would publish kinds for
         conjuncts that did not fail, which is `ID-9` inside the scarcity channel."""
         if not self.refusals_by_clause:
@@ -316,6 +319,13 @@ _VERB_ROW_KEYS = (frozenset(f.name for f in fields(VerbRow)
 # that requires them, and imported by the fold (`loop/resolve.py`) that emits them.
 ELIGIBILITY_CLAUSE = "eligibility"
 WRITE_CLAUSE = "write"
+# THE THIRD, PLAN POSITION `14` (U7-own): `ED-IN-0210` ruling 1's SECOND PARTY, ASKED ONCE, IN THE
+# FOLD. A row naming a `counterparty:` operand is refused here when the act names nobody there or
+# names the actor -- the `Tenure(X, X)` self-loop ruling 1 calls a fiat. `opening_set` already declines the
+# same case person-side, so no computed act reaches it; this is the clause a HAND-BUILT act meets,
+# and it replaces the per-effect copies (`_eff_petition`'s self-address decline) with one owner.
+# Derived like the other two: a keyed row keys it iff it names a counterparty.
+COUNTERPARTY_CLAUSE = "counterparty"
 
 
 def _derive_openers_from_effects() -> dict:
@@ -483,7 +493,7 @@ def _load_verb_table() -> dict:
         # THE COUNTERPARTY IS AN OPERAND THE ACT CARRIES, OR IT IS NOTHING. `opening_set` compares
         # it with the person; a name the typed cell does not BIND is absent from every Candidate,
         # so the comparison would pass silently and the rule would be a column nothing enforced.
-        # ⚠ AN UNTYPED ROW MAY NAME ONE (plan position 16, `give`), AND IT MEANS SOMETHING ELSE
+        # ⚠ AN UNTYPED ROW MAY NAME ONE (`oblige`; `give` until `14`), AND IT MEANS SOMETHING ELSE
         # THERE: no cell binds it, so no Candidate carries it, and `opening_set` forms none -- the
         # row declares a second party the grammar cannot yet name, and a person does not mint an
         # act with that hole (`operands_for`'s rule, reached through the one column that says the
@@ -676,7 +686,8 @@ def _load_verb_table() -> dict:
         #     and a keyed row with a precondition must be TYPED and name EVERY conjunct, because a
         #     predicate's conjuncts (`REQUIRES_PREDICATES`) live in `loop/`, which this loader may not
         #     import, so a keyed predicate row is a set of keys nothing here can check;
-        #   * `WRITE_CLAUSE`         iff the row writes (an effect can decline, F9's `NoOpReceipt`).
+        #   * `WRITE_CLAUSE`         iff the row writes (an effect can decline, F9's `NoOpReceipt`);
+        #   * `COUNTERPARTY_CLAUSE`  iff the row names a `counterparty:` (plan position `14`).
         # MISSING is a failable clause with no kind -- the fold would reach `refusal_for` and raise;
         # EXTRA is a kind for a clause that cannot fail, read by nothing (`ID-13`). A name on a FLAT
         # row is refused for the same reason: nothing keys it. A CONTESTED row may key its refusals
@@ -690,6 +701,8 @@ def _load_verb_table() -> dict:
                 _expected.add(ELIGIBILITY_CLAUSE)
             if row.writes:
                 _expected.add(WRITE_CLAUSE)
+            if row.counterparty:
+                _expected.add(COUNTERPARTY_CLAUSE)
             if not by_clause:
                 _defects.append(f"names conjuncts {list(_names)} and keys no refusal to them")
             if row.requires.strip() not in NO_PRECONDITION and (
@@ -705,9 +718,9 @@ def _load_verb_table() -> dict:
                 _defects.append("declares `contests:`, whose party-gap refusal no clause names, "
                                 "and keys more than one refusal kind, so that refusal would emit "
                                 "kinds for conjuncts that did not fail")
-            if set(_names) & {ELIGIBILITY_CLAUSE, WRITE_CLAUSE}:
-                _defects.append(f"names a conjunct after a fold clause "
-                                f"({sorted(set(_names) & {ELIGIBILITY_CLAUSE, WRITE_CLAUSE})})")
+            _after_fold = set(_names) & {ELIGIBILITY_CLAUSE, WRITE_CLAUSE, COUNTERPARTY_CLAUSE}
+            if _after_fold:
+                _defects.append(f"names a conjunct after a fold clause ({sorted(_after_fold)})")
             _missing = sorted(_expected - set(by_clause)) if by_clause else []
             _extra = sorted(set(by_clause) - _expected)
             _empty = sorted(k for k, v in by_clause.items() if not v)
@@ -834,13 +847,14 @@ VERB_TABLE = _load_verb_table()
 def act_key(verb: str, subject, operands) -> str:
     """WHAT AN ACT'S ID IS OF, AFTER ITS VERB: `H(seed, tick, actor, f"act:{verb}:{act_key}")`.
     The subject, and -- for a row whose cell binds a known-person operand beside `subject`
-    (`TypedRequires.known_person_operands`, `tell`'s `to`) -- that operand too, as `subject>to`.
+    (`TypedRequires.known_person_operands`: `tell`'s `to`, and since plan position `14` `give`'s) --
+    that operand too, as `subject>to`.
 
     ⚠ TELLING WORKPLAN `T4`, AND IT IS MEASURED NECESSITY: one topic now forms one `tell` per person
     the teller knows, so two acts in one deliberation shared `(actor, verb, subject)` and therefore
     one id, and `state/acts.py` refused the second (`act id ... is already in the store`) on the
-    first realm season. Every other row answers its subject alone, so its ids are byte-identical
-    to before. ONE OWNER for both minting sites: `decision/choose.py::pack_scenes` and
+    first realm season. Every row that binds no such operand answers its subject alone, so its ids
+    are byte-identical to before. ONE OWNER for both minting sites: `decision/choose.py::pack_scenes` and
     `loop/deliberate.py::_qualify_by_round` (`04 PART D row 35`: purpose uniqueness is a
     convention, and this is where it is kept)."""
     key = "" if subject is None else str(subject)
@@ -863,10 +877,12 @@ def opportunity_key(verb: str, subject, operands) -> Optional[tuple]:
     hearer, but the filter keyed `(verb, subject)`, so once a topic was told to B it could never be
     told to D that season -- and a person can obviously tell several hearers. The key is the GENERAL
     rule for a row that names a `counterparty:`, read off the ROW'S COLUMN and never a verb name; `tell`
-    is the row where it changes anything TODAY. `petition` and `issue` always have `to` == `subject`
-    (a computed Candidate's one referent), so their key is unchanged, and `give` forms no Candidate
-    (`decision/options.py::opening_set` needs `to`). Where the counterparty IS the subject (`determine`,
-    `oblige`) it adds nothing and is left out, so those keys are byte-identical to before.
+    and, since plan position `14`, `give` are the rows where it changes anything TODAY (`give` is typed
+    and formable, its subject the Record and its counterparty `to` the receiver, one Candidate per
+    person the giver knows: `decision/options.py::operand_bags`). `petition` and `issue` always have
+    `to` == `subject` (a computed Candidate's one referent), so their key is unchanged. Where the
+    counterparty IS the subject (`determine`, `oblige`) it adds nothing and is left out, so those
+    keys are byte-identical to before.
 
     ONE OWNER, BOTH SITES: `loop/driver.py` (writes a realised act) and `loop/deliberate.py`
     (reads it) both call this, so the key cannot be spelled two ways (`CLAUDE.md` §8). It sits beside

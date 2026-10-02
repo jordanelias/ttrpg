@@ -54,3 +54,7 @@ references/ENGINE_ATLAS.md
 references/CONTRACT_INDEX.md
 references/KEY_INDEX.md
 references/definitions/definitions.yaml
+# The measurement sweep's raw cells and the collector's 4 MB JSON are regenerable run output (the recipe is
+# in engine/season/requirements.yaml R-02); runs/WD_LOG.txt is the committed record. Local copies stay.
+proposals/2026-09-04-degree-sweep/runs/wd_chunk_*.json
+proposals/2026-09-04-degree-sweep/runs/wd_acceptance.json

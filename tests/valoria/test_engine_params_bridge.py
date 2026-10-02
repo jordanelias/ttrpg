@@ -24,8 +24,8 @@ SUBJECT, under `CLAUDE.md` §0.1 pt 5: `engine/engine_params/` is the bridge the
 generated against and the set of files `engine/` reads AT IMPORT — delete one and the engine does
 not start. That is the game, not this repository's process. It scans `tools/` because that is where
 the writers live, but its subject is the runtime input, which is the same carve-out
-`test_descriptors_runtime.py` and `test_world_initial_state.py` ride (plan §3a: an exporter is a
-build step of L0, because its output is a runtime input).
+`test_descriptors_runtime.py` rides (plan §3a: an exporter is a build step of L0, because its
+output is a runtime input).
 
 It replaces the retired `single_owner_check.py` for this one surface, and deliberately not for the
 tree at large — that generality is what made the old checker apparatus about apparatus.
@@ -62,7 +62,10 @@ NO_WRITER = {'params_tables.yaml'}
 ENGINE_READERS = {
     'composition.json': {'engine/substrate/composition.py'},
     'descriptors.json': {'engine/substrate/descriptors.py'},
-    'world_initial_state.json': {'engine/substrate/world_initial_state.py'},
+    # ⚠ `world_initial_state.json` STOOD HERE and is GONE (plan position `29d-ii`, 2026-10-01): its one
+    # reader, `engine/substrate/world_initial_state.py`, lost its last production importer when
+    # `systems/world/sim/npe.py` retired at `29d`, so the leaf, its exporter, its source and the
+    # artifact retired together (`FORK:fd321c81`). Banked in this commit, as this set asks.
     # ⚠ `key_types.json` STOOD HERE and is GONE (2026-09-16, ED-IN-0232). It was the one entry that
     # was not a leaf — `echo_transport` built the path itself and handed it to `TypeRegistry.load`,
     # so the Key vocabulary had one reader and no `engine/substrate/` owner. The recorded fix was a
@@ -72,13 +75,14 @@ ENGINE_READERS = {
 }
 
 #: {authored surface -> tools that PARSE it}. SHRINK-ONLY, toward the exporter alone.
-#: `world_initial_state.yaml` already conforms and is the worked example of the target state.
+#: `world_initial_state.yaml`, which had exactly one parser and was the worked example of the target
+#: state, retired at plan position `29d-ii` (`FORK:fd321c81`) with the leaf that read its artifact, so
+#: no surface in this table is at the target today.
 #: `module_contracts.yaml` is the furthest away — a multi-purpose registry whose `modules:` block
 #: predates `composition_roles:` and feeds the generated indexes. As of 2026-08-24 it finally HAS an
 #: exporter (`tools/export_module_contracts.py`), so its ten other parsers are a migration backlog
 #: with a destination rather than an unavoidable census. See the note on its entry below.
 AUTHORED_PARSERS = {
-    'world_initial_state.yaml': {'tools/export_world_initial_state.py'},
     'descriptor_registry.yaml': {'tools/export_descriptors.py',
                                  'tools/ci_names_consistency.py',
                                  'tools/definitions_store.py',
@@ -214,7 +218,6 @@ def test_the_writer_scan_is_not_vacuous():
     assert len(arts) >= 8, f'only {len(arts)} artifacts found — the walk is broken'
     writers = _writers()
     assert writers.get('composition.json') == {'tools/export_composition.py'}, writers.get('composition.json')
-    assert writers.get('world_initial_state.json') == {'tools/export_world_initial_state.py'}
 
 
 def test_no_new_engine_reader_of_a_cooked_artifact():
@@ -236,8 +239,8 @@ def test_no_new_engine_reader_of_a_cooked_artifact():
 
 def test_no_new_parser_of_an_authored_surface():
     """RATCHET, shrink-only. Every tool that parses an authored surface directly is a second reader
-    of a file the exporter is supposed to own. `world_initial_state.yaml` has exactly one and is
-    the worked example; `module_contracts.yaml` has TEN IN `tools/`.
+    of a file the exporter is supposed to own. `module_contracts.yaml` has TEN IN `tools/`
+    (`world_initial_state.yaml`, which had exactly one and was the worked example, retired at `29d-ii`).
 
     ⚠ THAT SCOPE QUALIFIER IS LOAD-BEARING AND WAS MISSING. This test only ever walks `tools/`,
     so every number it reports is a tools/-scoped number, and an unqualified "ten" reads as the

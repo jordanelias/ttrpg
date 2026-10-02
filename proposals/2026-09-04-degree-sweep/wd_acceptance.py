@@ -7,6 +7,11 @@ different thing is the confound that would waste the item, so `fork_case` -- whi
 strictly-later-tick window, the NO-LIVE-WINDOW exclusion and the INERT-BY-CONSTRUCTION split -- is
 called, never copied.
 
+⚠ SUPERSEDED STATEMENTS BELOW (plan position `11`, 2026-10-01; the 143-case corpus; the figures are the tracked `runs/WD_LOG.txt`'s, and `runs/wd_acceptance.json` is untracked and rebuilt by `wd_collect.py`): the control
+arm `none` is not at 100% (it is a channel-open arm: 77.13% at `2 x 3`), and the shipped `default` cell now yields genuine
+forks (2,886 / 2,811 / 2,659 for none / actor / total; the 89-case "2 of 9 askable" count is history). The acceptance
+reading is `actor` at `2 x 3`: 43.03% reconverged.
+
 WHAT `W-D` ASKS. The forking exercise flipped every mechanical decision in the ARC/NPC corpus and
 followed three decisions on: 100% reconvergence. Its diagnosis (arm 9c/9d) was that
 `Query.opening_set` never consults world state, so the ONLY channel from what happened to what is
@@ -118,7 +123,7 @@ C.build_at = _build_spy
 
 FIXTURE_CELLS = {
     # key        (scene_budget, interactions_per_scene)  slots  what it is
-    "default":   ((5, 3),  15, "`DEFAULT_FIXTURES` — the shipped point. 0 genuine forks."),
+    "default":   ((5, 3),  15, "`DEFAULT_FIXTURES` — the shipped point. 0 genuine forks on the 89-case corpus; 2,886 / 2,811 / 2,659 (none / actor / total) on the 143-case corpus at plan position `11`."),
     "narrow":    ((2, 1),   2, "`H-10` arm 2 x `H-76` arm 1. TWO declared-arm changes."),
     "2x3":       ((2, 3),   6, "`H-10` arm 2, `interactions_per_scene` LEFT AT ITS DEFAULT — ONE "
                                "declared-arm change, so it is the SMALLER intervention of the two "
@@ -128,7 +133,7 @@ FIXTURE_CELLS = {
 
 def fixtures_for(mode: str, slots: str) -> "S.Fixtures":
     """⚠ `narrow` IS `2x1` UNDER ITS OLD NAME AND IS KEPT SPELLED THAT WAY ON PURPOSE. The
-    committed `H-122` reproduce line, the shipped `runs/wd_chunk_narrow_*.json` artifacts and two
+    committed `H-122` reproduce line, the `runs/wd_chunk_narrow_*.json` chunk files (untracked, rebuilt by `wd_chunk.py`) and two
     test docstrings all name it; renaming it would orphan them for no gain (`CLAUDE.md` §4's
     no-retrofit posture). New cells are named by the cell — `2x3` reads cold as what it is."""
     fx = S.DEFAULT_FIXTURES
@@ -233,11 +238,23 @@ def _instrumented(fn):
     drops: list = []
     deps: list = []
 
-    def bc(p, row, subject, operands):
-        res = _REAL_BC(p, row, subject, operands)
+    # ⚠ THE SIGNATURE IS FORWARDED, NOT RESTATED. `belief_contradicts` is now
+    # `(p, row, subject, operands, via=None, weigh=None)` (plan position `19` added `via`, telling
+    # workplan `T3a` added `weigh`) and `opening_set` calls it `(p, row, subject, ops, seat,
+    # weigh=weigh)` (`engine/season/decision/options.py:177`). The 4-positional `bc` this replaced
+    # raised `TypeError` on EVERY call, and `A9._run` swallows a `BaseException` into `ok=False`, so
+    # every forensic replay at `actor`/`total` came back `base_ok = fork_ok = False` and was
+    # skipped (24 of 24 in the 2026-10-01 sweep). `*args, **kw` follows whatever signature the
+    # engine grows next; `via`/`weigh` are read back out of it so the spy's own re-evaluation asks
+    # the SAME question the real call did (a `basis` conjunct reads `via`; a weighed ledger can
+    # name a different winning claim).
+    def bc(p, row, subject, operands, *args, **kw):
+        res = _REAL_BC(p, row, subject, operands, *args, **kw)
         if res:
-            v = S.evaluate(row.requires_typed, S.LedgerReader(p.ledger),
-                           S.binding_of(p.id, operands))
+            via = args[0] if args else kw.get("via")
+            weigh = args[1] if len(args) > 1 else kw.get("weigh")
+            v = S.evaluate(row.requires_typed, S.LedgerReader(p.ledger, weigh),
+                           S.binding_of(p.id, operands, via))
             obs = [(o.subject, o.predicate, o.value) for o in v.observed]
             carrier = None
             for (osub, opred, oval) in obs:
@@ -409,20 +426,45 @@ def positive_control(cases, slots: str = "narrow", mode: str = "none") -> dict:
     function returns is kept under its historical name but is vacuous whenever that baseline
     itself diverges.
 
-    ⚠⚠ AND, SEPARATELY, THE PLANT BELOW IS CURRENTLY INERT (found by the same pass): plan
-    position `19` added a `via` parameter to `belief_contradicts`
-    (`engine/season/epistemic.py:71-72`), and `opening_set` calls it with five positional
-    arguments (`engine/season/decision/options.py:161`). The `bc(p, row, subject, operands,
-    _p=pred)` closure below binds its fifth positional argument -- `seat`, not a second
-    predicate -- onto `_p`, clobbering the intended plant. Not fixed here (this file's code is
-    outside the WD-REBASE unit's edit surface); stated so the next reader does not re-derive it."""
+    ⚠⚠ THE PLANT WAS INERT FOR A STRUCTURAL REASON, AND IS REPAIRED (2026-10-01). Plan position
+    `19` added `via` to `belief_contradicts` (`engine/season/epistemic.py:71-72`) and telling
+    workplan `T3a` added `weigh`; `opening_set` calls it `(p, row, subject, ops, seat,
+    weigh=weigh)` (`engine/season/decision/options.py:177`). The old `bc(p, row, subject, operands,
+    _p=pred)` bound `seat` onto `_p`, so the plant compared claim predicates to a seat id, never
+    matched, and ALSO called `_REAL_BC` without `via`/`weigh` (a different baseline from the
+    unplanted arm). The closure now forwards `*args, **kw` to the real function and keeps `_p`
+    keyword-only. MEASURED by execution at the control sample (NPC-088/087/086, `none`): every real
+    plant fires (`fires` = calls where the plant's own clause turned False to True: 275 to 18,176
+    per cell-plant), and a plant whose predicate nothing deposits has `fires == 0` and reads the
+    unplanted baseline's `genuine`/`diverged` EXACTLY (105/11 at 2 x 1, 46/12 at 2 x 3) -- the
+    control can fail. [The baselines themselves are committed in `runs/WD_LOG.txt`, W-D.3
+    `[BASELINE]`; that a null plant reads them exactly, and the `fires` range, are a SCRATCH RUN,
+    not committed.]
+
+    ⚠ WHAT THE REPAIR DOES NOT BUY: a plant that fires also changes the DENOMINATOR (a person who
+    declines more verbs has fewer alternatives outside the budget, so `genuine` falls: 105 -> 48 at
+    2 x 1 under `stores.changed`), so `diverged` as a RAW COUNT against the unplanted baseline's
+    (`wd_collect.py`'s `detected_over_base`) reads True on 1 of 4 plants at 2 x 1 and 0 of 4 at
+    2 x 3. That is a property of the count comparison over a 3-case sample, not residual inertness;
+    which comparison a plant should clear (count, rate, or matched forks) is not decided here."""
     fx = fixtures_for(mode, slots)
     out = []
     for pred in PLANT_PREDICATES:
-        def bc(p, row, subject, operands, _p=pred):
-            if _REAL_BC(p, row, subject, operands):
+        # ⚠ `*args, **kw` FORWARDED, `_p` KEYWORD-ONLY. The prior `bc(p, row, subject, operands,
+        # _p=pred)` bound `opening_set`'s fifth positional argument (`seat`) onto `_p`, so the
+        # plant compared claim predicates to a seat and never fired. `_p` after the star can be
+        # reached only by keyword, and nothing in the engine passes it.
+        # `fires` counts the calls where the plant's OWN clause turned the real answer False into
+        # True -- the observation that the plant is bound to the argument it was written for. A
+        # plant with `fires == 0` is inert whatever its `detected` reads.
+        fires = [0]
+
+        def bc(p, row, subject, operands, *args, _p=pred, **kw):
+            if _REAL_BC(p, row, subject, operands, *args, **kw):
                 return True
-            return any(c.subject == subject and c.predicate == _p for c in p.ledger)
+            hit = any(c.subject == subject and c.predicate == _p for c in p.ledger)
+            fires[0] += hit
+            return hit
         PS_OPTIONS.belief_contradicts = bc
         try:
             rows = [A9.fork_case(c, SEED, SEASONS, fixtures=fx) for _, c in cases]
@@ -434,7 +476,7 @@ def positive_control(cases, slots: str = "narrow", mode: str = "none") -> dict:
         div = [f for f in real if not f["reconverged"]]
         out.append(dict(predicate=pred, n_cases=len(good), genuine=len(real),
                         diverged=len(div), reconverged=len(real) - len(div),
-                        detected=(len(div) > 0)))
+                        detected=(len(div) > 0), fires=fires[0]))
     return dict(mode=mode, slots=slots, why=PLANT_WHY,
                 cases=[c["id"] for _, c in cases], plants=out,
                 detected_all=all(o["detected"] for o in out),
@@ -444,7 +486,23 @@ def positive_control(cases, slots: str = "narrow", mode: str = "none") -> dict:
 def comparator_control(cases, slots: str = "narrow", mode: str = "none") -> dict:
     """A SECOND, cruder positive control on the COMPARATOR alone: perturb the fork's own decision
     stream directly and confirm the window reports DIVERGED. This separates 'the scorer cannot
-    see a change' from 'the channel does not carry one'."""
+    see a change' from 'the channel does not carry one'.
+
+    ⚠ WHICH DECISION IS PERTURBED IS THE WHOLE CONTROL, AND THE FIRST WRITING PICKED ONE THE
+    WINDOW CAN NEVER CONTAIN (diagnosed by execution, 2026-10-01). It rewrote the run's LAST
+    decision (`len(d) - 1`). `A9.fork_case` scores only the first `LOOKAHEAD` (3) decisions at a
+    STRICTLY LATER tick than the fork's own, so the last decision is inside a window only when the
+    final tick holds `LOOKAHEAD` or fewer deliberations. MEASURED at the control sample
+    (NPC-088/087/086), both qualifying cells: the final tick holds 4-6 deliberations, and of the
+    forks with a full window, 0 contain the last decision -- 105 streams perturbed, DIVERGED 11 =
+    the unplanted baseline's 11, the plant touched nothing the scorer reads. [SCRATCH RUN, NOT
+    COMMITTED: the 4-6 and the 0-of-forks count; the unplanted 11 of 105 is `runs/WD_LOG.txt`'s.] NOT the
+    `belief_contradicts` signature defect (this control never calls it). The plant now rewrites
+    the FIRST strictly-later-tick decision after `fork_at`, which is `live_window[0]` by
+    construction: DELIBERATE is a parallel map over a frozen world (`engine/reference/degree-sweep/arm9_forking.py:94-99`), so
+    the fork leaves its own tick's deliberation count unchanged and the first later-tick index in
+    the fork's stream is the first later-tick index in the baseline's. Expected reading on a
+    working comparator: every genuine fork DIVERGED (`detected_all_genuine`)."""
     fx = fixtures_for(mode, slots)
     real_run = A9._run
     state = {"n": 0}
@@ -454,10 +512,12 @@ def comparator_control(cases, slots: str = "narrow", mode: str = "none") -> dict
         if fork_at >= 0 and out["ok"] and len(out["decisions"]) > fork_at + 1:
             # rewrite ONE later decision's ranked list -- a change the window must see
             d = list(out["decisions"])
-            j = len(d) - 1
-            d[j] = (d[j][0], ["__PLANTED__"] + list(d[j][1]), d[j][2])
-            out = dict(out); out["decisions"] = d
-            state["n"] += 1
+            tick_i = d[fork_at][2]
+            j = next((k for k in range(fork_at + 1, len(d)) if d[k][2] > tick_i), None)
+            if j is not None:
+                d[j] = (d[j][0], ["__PLANTED__"] + list(d[j][1]), d[j][2])
+                out = dict(out); out["decisions"] = d
+                state["n"] += 1
         return out
 
     A9._run = run
@@ -470,7 +530,7 @@ def comparator_control(cases, slots: str = "narrow", mode: str = "none") -> dict
             if f.get("status") in ("DIVERGED", "RECONVERGED")]
     div = [f for f in real if not f["reconverged"]]
     return dict(perturbations_applied=state["n"], genuine=len(real), diverged=len(div),
-                detected=(len(div) > 0))
+                detected=(len(div) > 0), detected_all_genuine=(len(real) > 0 and len(div) == len(real)))
 
 
 def main(argv) -> int:
@@ -487,14 +547,15 @@ def main(argv) -> int:
                  f"(THE 89 BASIS). The 86 basis is the raw `scale:` filter and is NOT used here.",
         "confound 4: `runnable()` skipping `apply_rescale` gives 86 where the corpus runs 89")
     log("SEED", f"{SEED}; seasons {SEASONS} — `runs/arm9.json`'s own published configuration")
-    log("CONTEST", "`contest_max_depth` is NOT passed by `A9._run` and does NOT need to be "
-                   "(confound 2, checked not assumed): the only contesting verb is "
-                   f"{sorted(v for v,r in S.VERB_TABLE.items() if getattr(r,'contests',''))} and "
-                   f"`resolvable_verbs()` — the verb set `A9._run` hands `make_chooser` — "
-                   f"excludes it, so `resolve()`'s `Forbidden` branch is unreachable. "
-                   f"intersection = "
-                   f"{sorted(set(v for v,r in S.VERB_TABLE.items() if getattr(r,'contests','')) & set(S.resolvable_verbs()))}",
-        "the probe is therefore left unedited; `n_cases_failed` below is the empirical check")
+    log("CONTEST", "`A9._run` passes the fixture's own `contest_max_depth` (`arm9_forking.py:147`), "
+                   "unmodified here (confound 2, checked not assumed). The contesting verbs are "
+                   f"{sorted(v for v,r in S.VERB_TABLE.items() if getattr(r,'contests',''))}; their "
+                   f"intersection with `resolvable_verbs()` — the verb set `A9._run` hands "
+                   f"`make_chooser` — is "
+                   f"{sorted(set(v for v,r in S.VERB_TABLE.items() if getattr(r,'contests','')) & set(S.resolvable_verbs()))}"
+                   ", so a contest CAN resolve inside a measured run and this argument does not "
+                   "exclude one.",
+        "`n_cases_failed` below is the empirical check, and the only one")
 
     # ---- 1. the published result, re-derived at the SHIPPED FIXTURE POINT -------------------
     log.rule("W-D.1 — THE SHIPPED FIXTURE POINT (15 slots): the question is UNASKABLE here")

@@ -435,8 +435,9 @@ class Question:
 class Candidate:
     """S17 -- `opening_set` RETURNS Candidate[], NOT Act[].
 
-    ⚠ `operands` IS THE STRUCTURAL HALF OF `H-94`, AND IT IS NOT A FOURTH FIELD BOLTED ON. S17
-    types the Candidate `(verb, subject, why)`, and `H-94` measured what that costs: `transfer`'s
+    ⚠ `operands` IS THE STRUCTURAL HALF OF `H-94`, AND IT IS NOT A FIELD BOLTED ON. S17 TYPED the
+    Candidate `(verb, subject, why)` (`why` is since removed, below, so the fields are now `(verb,
+    subject, operands)`), and `H-94` measured what that cost: `transfer`'s
     `stores(hearth(giver), kind) >= amount` has no `kind` and no `amount` that any part of the
     deliberation-to-resolution pipeline can carry, so the verb was attempted and refused in every
     world in the corpus. The row asked WHERE OPERANDS LIVE. They live here, on the Candidate,
@@ -447,10 +448,15 @@ class Candidate:
     ⚠ AND THE FIELD IS NEVER PARTIAL. A form whose operands cannot all be bound forms NO
     Candidate (`operands_for` returns `None`), because an act minted with a hole is refused by the
     fold for a reason that is about the INSTRUMENT, and once `W-B` deposits observations that
-    refusal becomes a FALSE BELIEF held by everyone who witnessed it."""
+    refusal becomes a FALSE BELIEF held by everyone who witnessed it.
+
+    ⚠ S17's THIRD FIELD, `why`, IS GONE (plan position `14`, CANDIDATE-WHY). `opening_set` wrote the
+    question's source into it and nothing ever read it: `pack_scenes` dropped it, and the question
+    that occasioned an act is recovered from `Scene.occasion` instead (`epistemic._term_why`'s
+    docstring). `04` licenses a reader or a removal, never a hole row; with no reader in sight, it
+    is removed -- a field nothing reads is the dead carrier `ID-13` refuses."""
     verb: str
     subject: Optional[str] = None
-    why: str = ""
     operands: dict = field(default_factory=dict)
 
 

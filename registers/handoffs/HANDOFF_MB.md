@@ -5,10 +5,8 @@
 ## Open
 | item | where it lives | next step |
 |---|---|---|
-| Envelopment fork: combined-arms reframe vs gated seal-failure gradient | `ED-MB-0039` | Jordan rules (A) vs (B) |
-| Remaining Tier-3 design calls (depth cap, envelopment-as-morale-collapse, graded cavalry refusal, Command sigma-ceiling, yield split) | `ED-MB-0041` | Jordan rules per item |
+| Remaining Tier-3 calls: the depth support stack (J-18) and the cavalry charge recoil (J-19) survived the ladder; `ED-MB-0039` closed (superseded); `ED-MB-0045`'s decision is taken and its build is owed (the CEV -> friction rename, one band for the 2:1 quantity, the triplex label) | `ED-MB-0041`, `ED-MB-0045` (last rows, `registers/editorial_ledger_mb_archive.jsonl`); `workplans/valoria_master_workplan_v8_part5.md` §J | Jordan rules J-18 and J-19; `ED-MB-0045`'s build is lane work |
 | ~~`mass_battle` contract's `state: []` — empty, blocks port ripple/formula/pointer audits~~ **CLOSED 2026-09-28, not Jordan's** — `[]` is correct: `architecture/meta/04_CODE_ARCHITECTURE.md` §C.5.1 says a provider returns a Margin and owns no world state | `references/module_contracts.yaml` (the `mass_battle` row); `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` §5.2 | nothing to rule |
-| CEV naming (rename to Clausewitz/Beyerchen friction?), dual 2:1 validation targets, emergence verdict | `ED-MB-0045` | Jordan rules each sub-item |
 | ~~`config.py` comment contradicts the shipped default~~ **CLOSED 2026-09-29** — `ED-MB-0076`: MB_FRICTION_CEV plus its two same-shaped siblings (MB_CLOSE_RANKS, MB_CELL_DAMAGE) corrected; comment-only, no golden moved | `systems/mass_battle/sim/config.py:315-317,352,353` | nothing to rule |
 | ~~R3 gauge scenario never engages (both sides `stance:'hold'`)~~ **CLOSED 2026-09-29** — `ED-MB-0076`: `ED-MB-0044`'s named fix applied (`stance='balanced'`+`instructions=('kite',)`); falsifier verified before/after | `tests/sim/gauge_mb.py` | nothing to rule |
 | Dead-primitive dispositions PARTIALLY executed — `_octagon_dmg_mod`/`_SHAPE_BUILD` and `provenance.py` still unexecuted; `resolve_internal_collisions` DELETED `ED-MB-0076` (2026-09-29, `references/restructure_ledger.md` FORK row) | `ED-MB-0057` | execute or re-adjudicate the two remaining dispositions |

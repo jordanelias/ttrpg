@@ -50,7 +50,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     nothing to compute a set FROM. `questions_for()` is that producer, so the roster's excuse
     is gone and with it the roster.
 
-        { Candidate(verb, subject, why, operands) :
+        { Candidate(verb, subject, operands) :                   -- §F1's `why`: gone, `14`
             verb    in the verb table                            -- clause 1
           , eligibility(verb, p) holds                           -- clause 2
           , subject in referents(q)                              -- clause 3
@@ -161,9 +161,10 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 # verb name, and the loader guarantees the operand is carried.
                 # ⚠ AND A SECOND SIDE NOBODY CAN NAME IS NO SECOND SIDE (plan position 16). On a TYPED
                 # row the loader guarantees the counterparty is carried, so `None` cannot arise there.
-                # On an UNTYPED row (`give`) nothing is carried, and forming the Candidate would mint
-                # an act with no receiver -- refused by the fold every time, for the instrument's
-                # reason. MEASURED before this clause, the `give` row without it: 3 such acts in
+                # On an UNTYPED row (`oblige`; `give` until plan position `14` typed it) nothing is
+                # carried, and forming the Candidate would mint an act with no second party --
+                # refused by the fold every time, for the instrument's reason. MEASURED before this
+                # clause, the `give` row without it: 3 such acts in
                 # `headless.run(3, 0)` and 41 in `populated.run(2, 0)`, every one `give.refused`, and
                 # `release` dropped out of the corpus's executed set because they took its scenes --
                 # position `15`'s *constant scene tax with nothing behind it*, the shape the petition
@@ -199,7 +200,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                     if said is None:
                         continue
                     ops = {**ops, "said": said}
-                out.append(Candidate(verb, subject, why=q.source, operands=ops))
+                out.append(Candidate(verb, subject, operands=ops))
     return out
 
 
@@ -344,7 +345,18 @@ def exercised_seat(p: Person, row: "Optional[VerbRow]") -> Optional[str]:
     fixed rule, not a choice, and a LIMIT stated rather than hidden: a person holding two seats that
     both grant `confer` always exercises the first, even where only the second has purview over
     the target. Choosing by purview would need the containment tree, which is not the person's
-    state. No world builder seats anyone twice today; the day one does, this is where the choice
+    state. ⚠ PURVIEW IS `confer`'S TEST AND NOT EVERY ACT'S: `revoke` asks the PARENT RUNG
+    (`state/gate.py::seated_on_the_rung_above` -- `via`'s rung is the one directly above the
+    target seat's, same faction), and asks no purview. ONE WORLD BUILDER SEATS SOMEONE TWICE TODAY
+    (`H-134`): `build_realm` gives NPC-020 `off_npc_020` (the realm, built by the per-case loop) and
+    the minted `off_duke_valorsmark`, both granting issue/confer/revoke/convene, and the loop's hold
+    precedes the minted one in his tenure order, so all his computed acts go via the King seat and
+    the Duke seat is never exercised. For `confer` that costs nothing while the realm seat's purview
+    reaches. For `revoke` it is the WRONG SEAT outright: the six Crown seats at T1 marked
+    `rung_above_same_faction` (`offices.yaml`) can be stripped only through `off_duke_valorsmark`,
+    and `_granting_hold` below always picks `off_npc_020`. The refusal that follows is silent and is
+    masked only because a computed `revoke` carries no `office` operand, so `_req_revoke`
+    (`loop/predicates.py`) refuses before the seat is ever asked. Where that choice ever matters, it
     becomes a candidate per seat. Traces nothing: the admission it mirrors already traced. A verb
     on no row (`row is None` -- a hand-ranked candidate naming an invented verb) exercises nothing;
     the fold refuses the verb itself, and inventing a seat for it here would be a second answer."""
@@ -817,9 +829,9 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
     """EVERY OPERAND BAG `p` CAN FORM FOR `row` ON `subject` -- `[]` when none (telling workplan
     `T4`, `ED-IN-0282`). One bag for every row whose operands all come from `_derive_operand`
     (`operands_for`'s rule, unchanged); for a row whose cell binds a known-person operand beside
-    `subject` (`TypedRequires.known_person_operands`: `tell`'s `to`, and no other row -- `petition`
-    and `issue` bind `to` without `subject`, so `to` is what they are about and keeps the referent
-    rule in `_derive_operand`), one bag PER PERSON `p` KNOWS (`queries/person_q.py::known_persons`, from `p`'s own claims,
+    `subject` (`TypedRequires.known_person_operands`: `tell`'s `to`, and since plan position `14`
+    `give`'s -- `petition` and `issue` bind `to` without `subject`, so `to` is what they are about
+    and keeps the referent rule in `_derive_operand`), one bag PER PERSON `p` KNOWS (`queries/person_q.py::known_persons`, from `p`'s own claims,
     never the actor and never the topic), in that function's sorted order. Nobody known is no bag:
     a telling to nobody is an act with a hole (`operands_for`'s `None`), traced and not formed.
 
@@ -828,8 +840,9 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
     person who is elsewhere still gets a Candidate. THE TELLER DOES NOT LEARN IT FROM THE REFUSAL: the
     `with` read is observed, never deposited (batch-2 close `F1`), and `news.untold` is one kind for
     both conjuncts, so a refused telling to an absent hearer is retried whenever the teller
-    re-deliberates -- a scene tax with nothing behind it (cf. `give`, below). Recorded, with the
-    measurement owed, at the telling workplan's T4b *As built* line."""
+    re-deliberates -- a scene tax with nothing behind it. Recorded, with the measurement owed, at
+    the telling workplan's T4b *As built* line. `give` (plan position `14`) shares the shape: its
+    receiver is a known person and its `with` conjunct the fold's."""
     fan = row.requires_typed.known_person_operands() if row.requires_typed is not None else ()
     if not fan:
         ops = _operands(p, row, q, subject, fx, {})

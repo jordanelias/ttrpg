@@ -98,7 +98,7 @@ def _content_of(a: "Act", kind: str) -> Optional[dict]:
 
 def _addressed(content):
     """`content` with its addressee key (`record_kinds.content.addressee`) as an id LIST. The one
-    owner of that shape: the mint stores it, and `_eff_petition` reads it before minting."""
+    owner of that shape: the mint stores it."""
     addr = RECORD_CONTENT.get("addressee")
     if not isinstance(content, dict) or content.get(addr) is None:
         return content
@@ -264,10 +264,14 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     matter leaves it. That is what makes a second determination of one matter in one fold REFUSE
     (the docket conjunct reads 0), §27.1's scarcity on a docket as `levy`'s is on a larder.
 
-    TWO DECLINES (`NO_CHANGE` -> `determine.refused` on the `write` clause), both NEGATIONS the
-    grammar cannot spell: the party already owes this seat a live `oblige` (one edge per person and
-    seat -- `_req_oblige` clause 4's rule; a second would list him twice in `establishment_of`), and
-    the party is the actor (a judge does not bind himself; `may_determine` refuses it too).
+    ONE DECLINE (`NO_CHANGE` -> `determine.refused` on the `write` clause), a NEGATION the grammar
+    cannot spell: the party already owes this seat a live `oblige` (one edge per person and seat --
+    `_req_oblige` clause 4's rule; a second would list him twice in `establishment_of`). The second
+    this body carried -- the party is the actor, a judge binding himself -- was already DEAD: the
+    `bench` conjunct's `may_determine` refuses it first (`determine.unauthorized`), and an act
+    naming no subject dies at `party`, so the fold's `counterparty` clause (`loop/resolve.py::
+    _admits`, plan position `14`, on this row's `counterparty: subject`) is asked of neither and
+    cannot fire for this row.
 
     G3 -- THE EDGE IS SOMEBODY ELSE'S, AND ITS BASIS IS `determination` (`state/gate.py::
     may_determine`, the EIGHTH): a judging seat the actor sits in, whose bench's ground holds the
@@ -278,7 +282,7 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
 
     G4 -- WHAT IT NAMES: THE EDGE, which always moves (absent -> present)."""
     party, seat = _operand(a, "subject"), a.via
-    if (seat is None or party == a.actor
+    if (seat is None
             or any(t.kind == "oblige" and t.subject == party and t.object == seat and t.live
                    for t in w.tenures)):
         return NO_CHANGE
@@ -303,18 +307,16 @@ def _eff_petition(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
 
     ⚠ TWO-SIDED (`ED-IN-0210` ruling 2 -- *withdraw (petitioner) or deny (receiver)*): the row's
     typed cell makes both sides EXIST, `opening_set` never forms a Candidate addressed to its own
-    petitioner (the row's `counterparty:`), and this body refuses the same case for a HAND-BUILT act,
-    which no person-side rule stands in front of. The grammar has no negation, so it is decided
-    here, and the fold emits `petition.refused` through the gate's no-op channel (`NO_CHANGE`) --
-    how every effect in this file declines. ⚠ WHAT THIS DOES NOT BUILD: the two closers. Ruling 2's
+    petitioner (the row's `counterparty:`), and the FOLD refuses the same case for a HAND-BUILT act
+    (`loop/resolve.py::_admits`'s counterparty clause, plan position `14`) before this body runs.
+    This body carried that decline itself until `14` moved it into the fold, where every row naming
+    a second party shares it. ⚠ WHAT THIS DOES NOT BUILD: the two closers. Ruling 2's
     WITHDRAW and DENY both close `(Record, exists)`, whose one closer is `destroy_record` -- which
-    declines on both its eligibility alternatives today (`H-75`), and which the receiver can only
-    reach once `give` (position `16`) puts the petition in his hand. The fold makes both sides
-    NAMEABLE on the document; neither side can yet end it."""
-    content = _addressed(_content_of(a, "petition"))
-    if a.actor in content[RECORD_CONTENT.get("addressee")]:
-        return NO_CHANGE
-    return _mint_document(w, a, "petition", content, _operand(a, "from"))
+    declines on both its eligibility alternatives today (`H-75`; plan position `14` built its
+    formable shape and HELD it on measurement, the row's `decline_note`), and which the receiver
+    can only reach once `give` (position `16`) puts the petition in his hand. The fold makes both
+    sides NAMEABLE on the document; neither side can yet end it."""
+    return _mint_document(w, a, "petition", _content_of(a, "petition"), _operand(a, "from"))
 
 
 @effect_for("survey")
@@ -401,8 +403,9 @@ def _eff_give(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     `_eff_confer` closes every hold on its object because a conferral displaces the incumbent;
     a gift displaces nobody but the giver, and closing another person's edge here would be
     refused by the gate anyway. Anything else declines (`NO_CHANGE` -> `give.refused`). Whether the
-    receiver may be given it at all (a person, not the giver, standing here) is `_req_give`'s, asked
-    first; it is not asked twice.
+    receiver may be given it at all is asked first and not twice: a person standing here is the
+    row's typed cell (`with`, plan position `14`, which retired `_req_give`), and not the giver is
+    the fold's `counterparty` clause.
 
     G4 -- WHAT IT NAMES: the two edges, OPENED FIRST as `_eff_confer` names them. Both are `edge`
     subjects the tenure diff judges, and both earn the row's one kind, `record.given`. The receipts

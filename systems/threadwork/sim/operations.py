@@ -20,7 +20,8 @@ Implements 7 operation entry points + the Three-Axis Ob lookup (Depth + Breadth
 
 Dependencies:
   - sim/autoload/dice_engine
-  - systems/threadwork/sim/coherence (apply_coherence_delta)
+  - systems/threadwork/sim/coherence (apply_coherence_delta; recover + get_state for Mending's
+    restorative feedback)
   - sim/cross_scale/handoff_rules (TS-banded coherence cost for mass-battle context)
 
 Entry points:
@@ -30,7 +31,8 @@ Entry points:
   - attempt_past_pulling(actor, target_moment, world) -> OperationResult
   - attempt_locking(actor, target, world) -> OperationResult
   - attempt_dissolution(actor, target, world) -> OperationResult
-  - attempt_mending(actor, target, world) -> OperationResult
+  - attempt_mending(actor, target, world, *, environment_in_equilibrium=False) -> OperationResult
+    (keyword-only; defaults to False, so a caller that states no environment gets no restorative term)
 """
 from __future__ import annotations
 
@@ -39,7 +41,7 @@ from typing import Optional, Any
 
 from engine.autoload import dice_engine
 from engine.autoload.dice_engine import roll_pool
-from systems.threadwork.sim.coherence import apply_coherence_delta
+from systems.threadwork.sim.coherence import apply_coherence_delta, get_state, recover
 
 
 # §TN — TN IS 7. ALWAYS.
@@ -173,8 +175,14 @@ class OperationResult:
     pool: int
     tn: int
     ob: int
-    coherence_delta: int       # Applied to actor's coherence track
-    mending_stability_delta: int = 0  # MS impact (clamped externally by ms_track)
+    coherence_delta: int       # the STRESS applied to the actor's Coherence (<= 0; coherence.py)
+    # MS impact. REPORTED, written nowhere: the world MS clock it once fed has no season analogue
+    # (plan position `29a`; struck at position 27 in co_movement.py and opposing.py alike).
+    mending_stability_delta: int = 0
+    # The elastic displacement a restorative working actually RETURNED to the mender (>= 0): what
+    # `coherence.recover` moved, not what was offered to it. Only Mending sets it; see
+    # `attempt_mending`.
+    coherence_restored: int = 0
     notes: list[str] = field(default_factory=list)
 
 
@@ -357,7 +365,8 @@ def attempt_dissolution(actor, target: dict, world=None, rng=None) -> OperationR
                               coherence_delta=coh, world=world, rng=rng)
 
 
-def attempt_mending(actor, target: dict, world=None, rng=None) -> OperationResult:
+def attempt_mending(actor, target: dict, world=None, rng=None, *,
+                    environment_in_equilibrium: bool = False) -> OperationResult:
     """§2.4 Mending — Repairing the Substrate.
 
     Mending uses MENDING_OB (different scale than Depth Ob). Per ED-871
@@ -366,13 +375,50 @@ def attempt_mending(actor, target: dict, world=None, rng=None) -> OperationResul
     determines Coherence risk. (Was -1, the pre-ED-871 value; the doc side was
     propagated to threadwork_v30 §3.2 + params/threadwork.md on 2026-07-07, and
     the sim is closed here.)
+
+    THE RESTORATIVE FEEDBACK (plan position 27). C-1 (RULINGS.md Batch 9, 2026-09-08): restorative
+    operations "do not merely cost nothing; they move the practitioner toward their own
+    equilibrium" — and `canon/philosophy/06_operations.md` §6.8 "The restorative direction": Mending
+    another "reliably moves the mender's present displacement — you recover faster for having done
+    it". So a Mending that TOOK (any degree but Failure) hands the mender a restorative term, through
+    `coherence.recover`'s `mending` parameter — E-1's "mending accelerates", which is that term's
+    whole meaning. It is not re-implemented here: `recover` is the one owner of elastic return, of
+    E-1's environment gate, and of "never past the resting point". ED-871's zero STRESS is untouched
+    (`coherence_delta` stays 0); the feedback is a separate, opposite-signed event.
+      - THE MAGNITUDE is the working's own type x scale term read backwards: the stress the same-
+        scale manipulation would cost (`COHERENCE_COST_BY_SCALE`, negated). §6.8 grounds the
+        direction ("the operational channel read backwards ... one channel, one imbrication,
+        opposite relations to the equilibrium"); the REUSE of the §3.2 table as its size is this
+        position's choice, as `opposing.py`'s and the P-25 term's reuse of it is theirs. A scale
+        MENDING_OB does not price falls back to Relational for both the Ob and the term, so the two
+        cannot disagree about which scale was worked.
+      - FAILURE RETURNS NOTHING: the feedback is being joined to "a configuration that is being
+        returned to the attractor" (§6.8), and a failed Mending returns nothing to it.
+      - `environment_in_equilibrium` is E-1's CONDITION ("so long as you are in an environment where
+        things are in equilibrium"), a fact about where the MENDER stands that only the caller can
+        know. It defaults to False because the condition is a positive fact: unstated is not
+        established, and a default of True would hand recovery to a mender standing in a Locked
+        Zone — Mending's ordinary workplace. `recover` is still called, so the gate stays its.
+    ⚠ NOT ROUTED HERE: Mending aimed at the mender's OWN configuration, which is what moves a resting
+    point (`coherence.mend_resting_point`; §6.8's aim distinction, itself flagged derived). The
+    target dict names no whose-configuration field to route on, and adding one is a design call.
     """
     scale = target.get('scale', 'Relational')
-    ob = MENDING_OB.get(scale, MENDING_OB['Relational'])
+    priced = scale if scale in MENDING_OB else 'Relational'
+    ob = MENDING_OB[priced]
     # ED-871: Mending Coherence cost = 0 (restorative-operation exception).
     coh = 0
     result = _resolve_operation("Mending", actor, ob, TN_STANDARD,
                                 coherence_delta=coh, world=world, rng=rng)
+    if result.degree != "Failure":
+        restorative = -COHERENCE_COST_BY_SCALE[priced]
+        prior = get_state(result.actor, world=world)
+        elastic_before = prior.elastic_displacement if prior is not None else 0
+        state = recover(result.actor, seasons=0,
+                        environment_in_equilibrium=environment_in_equilibrium,
+                        source=f"Mending {result.degree} at {priced}: restorative feedback",
+                        mending=restorative, world=world)
+        result.coherence_restored = elastic_before - state.elastic_displacement
     # Mending never produces Scars per conviction §3 Mending exception;
     # caller responsible for skipping Scar attribution
     return result

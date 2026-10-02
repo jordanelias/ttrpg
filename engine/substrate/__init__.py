@@ -3,7 +3,7 @@
 Status: [live] — the package holds the single-owner leaves `engine/` resolves through:
 `descriptors` (the axis and conviction rosters, cooked from `references/descriptor_registry.yaml`),
 `names` (cooked from `references/names_index.yaml`), `composition` (the role -> module registry),
-`canon_buckets`, `stubwire` and `world_initial_state`.
+`stubwire` and `pc_engine`.
 
 ⚠ THIS FILE USED TO BE NOTHING BUT A KEY RE-EXPORT, AND THAT IS WHY IT NOW HOLDS NO CODE.
 Until 2026-09-16 it imported thirteen names from `engine/substrate/keys.py` and re-exported them,

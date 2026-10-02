@@ -11,8 +11,8 @@ Implements:
 §2.6 Opposing Engagement Modifier: each practitioner's Ob increased by
 floor(opponent TPS / 2), minimum +1.
 
-§2.6 Knot Strain: when a Knot partner participates in opposing ops, both
-sides accrue strain on the Knot per the canon table.
+§2.6 Knot Strain: REPORTED per side as `knot_ob_penalty` in the consequences, written to no Knot
+store, and the MS delta likewise is reported and written nowhere (both struck at position 27).
 
 [ASSUMPTION: op_a and op_b are pre-resolved OperationResults — basis:
  caller is expected to have already invoked operations.attempt_* with the
@@ -21,8 +21,8 @@ sides accrue strain on the Knot per the canon table.
  dict with .actor + .op_type + .target, or an OperationResult-like obj.]
 
 Dependencies:
-  - systems/threadwork/sim/operations
-  - sim/personal/knots (for Knot strain accumulation via late-import)
+  - systems/threadwork/sim/operations, systems/threadwork/sim/coherence — and nothing outside
+    threadwork: the late imports of the MS clock and the fieldwork Knot store are gone (see below).
 
 Entry points:
   - resolve_opposing_operations(actor_a, actor_b, op_type, target, world) -> OpposingResult
@@ -30,8 +30,7 @@ Entry points:
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Optional
+from dataclasses import dataclass
 
 from engine.autoload import dice_engine
 from engine.autoload.dice_engine import roll_pool
@@ -74,7 +73,6 @@ class OpposingResult:
     ms_delta: int
     a_consequences: dict
     b_consequences: dict
-    notes: list[str] = field(default_factory=list)
 
 
 def opposing_engagement_modifier(opponent_tps: int) -> int:
@@ -101,17 +99,22 @@ def _degree_label(net: int | float, ob: int | float) -> str:
 
 
 def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
-                                world=None, rng=None,
-                                a_knot_id: Optional[str] = None,
-                                b_knot_id: Optional[str] = None) -> OpposingResult:
+                                world=None, rng=None) -> OpposingResult:
     """§2.6 Resolve contested operation between two practitioners.
 
     actor_a / actor_b: practitioner objects (with .spirit, .ts, .history,
                      .actor_id).
     op_type: 'Weaving' / 'Pulling' / 'Locking' / 'Dissolution' / 'POP' / 'Mending'.
     target: dict with 'scale' and optional 'breadth'/'distance'/'recency'.
-    a_knot_id / b_knot_id: optional Knot ids — if present, both parties
-                            accrue strain to that Knot per §2.6.
+
+    ⚠ TWO WRITES STRUCK AT PLAN POSITION 27, so that `29a`-ms and `29f` can delete their targets.
+    `ms_delta` was written into the world Mending Stability clock through the overview MS-track
+    module — an overview clock with no season analogue by architecture (`engine/season/loop/
+    census.py`: "NO CLOCK GENERATES ANYTHING"; `29a` deleted its siblings in PR #450 and that module
+    goes at `29a`-ms). And the `a_knot_id`/`b_knot_id` parameters fed Knot strain into the
+    `fieldwork` Knot store — the store `29f` retires, whose bond is `Tenure.degree` in the season.
+    Neither is re-wired: both values stay REPORTED (`ms_delta`; each side's `knot_ob_penalty`). The
+    only state this function writes is each side's Coherence.
     """
     actor_a_id = getattr(actor_a, 'actor_id', getattr(actor_a, 'name', 'A'))
     actor_b_id = getattr(actor_b, 'actor_id', getattr(actor_b, 'name', 'B'))
@@ -225,35 +228,10 @@ def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
         apply_coherence_delta(actor_b_id, b_cons['coherence_delta'],
                               f"Opposing {op_type} A:{a_deg}/B:{b_deg}", world=world)
 
-    # Apply MS delta
-    if world is not None and 'MS' in world.clocks and ms_delta != 0:
-        # [2026-05-20 migration] route through ms_track.apply_ms_delta — single
-        # canonical surface for MS arithmetic per PP-255. Was: inline clamp.
-        from systems.overview.sim.ms_track import apply_ms_delta
-        apply_ms_delta(ms_delta, source=f"opposing {op_type}", world=world)
-
-    # Apply Knot strain if Knots specified
-    notes = []
-    if a_knot_id or b_knot_id:
-        try:
-            from systems.fieldwork.sim.knots import sustain_knot
-            # FR + winner Dissolved: loser takes +1 Wound (handled by caller)
-            knot_strain_delta = KNOT_STRAIN_FR_LOSER if is_fr else KNOT_STRAIN_STANDARD_LOSER
-            if a_knot_id:
-                sustain_knot(a_knot_id, strain_delta=knot_strain_delta,
-                             source=f"opposing {op_type}", world=world)
-            if b_knot_id and b_knot_id != a_knot_id:
-                sustain_knot(b_knot_id, strain_delta=knot_strain_delta,
-                             source=f"opposing {op_type}", world=world)
-            notes.append(f"Knot strain +{knot_strain_delta} applied")
-        except (ImportError, AttributeError):
-            pass
-
     return OpposingResult(
         actor_a=actor_a_id, actor_b=actor_b_id, op_type=op_type,
         a_net=a_roll, b_net=b_roll,
         a_degree=a_deg, b_degree=b_deg,
         outcome=outcome, ms_delta=ms_delta,
         a_consequences=a_cons, b_consequences=b_cons,
-        notes=notes,
     )

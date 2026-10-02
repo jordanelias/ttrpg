@@ -30,6 +30,9 @@
      2-man attacker loses either way, so the garrison raises the DEFENDERS' survivor fraction, which
      the season writes only on a `Won` band this scale does not reach (`test_march.py`'s
      `test_a_won_field...` docstring measured that).
+  5b. THE WALLS' DR IS AN INJECTABLE FIXTURE (plan position `20-v`, `H-150`): `field_walls_dr` swept
+     3 / 0 / 1 on block 5's fixture -- 0 reproduces the open field exactly (the control), 3 and 1
+     differ from it and from each other, and 3 equals the unset default.
 
 Block 6 (`resolve_field` sums `Person.weight` per side into army SIZE, not quality) lives in
 `tests/valoria/test_mass_battle_resolve_field.py`, not here: it needs `from systems.mass_battle...`
@@ -168,3 +171,61 @@ def test_a_garrisoned_defender_resolves_differently_from_an_ungarrisoned_one():
             f"seed {seed}: the walls left the defenders FEWER survivors: {walled} vs {open_}")
     assert fought >= 8, f"only {fought} fields were fought"
     assert differs >= 1, "a garrisoned target fought identically to a bare one on every seed (H-150)"
+
+
+def test_field_walls_dr_sweep_zero_is_the_open_field_and_three_and_one_differ():
+    """PLAN POSITION `20-v` -- `H-150`'s three-point sweep of the `field_walls_dr` fixture, on the
+    `20-iv` fixture (`set_s_036`, the 2-man Crown army, garrisoned vs the garrison deleted).
+
+      * `0` IS THE CONTROL: with no DR bonus the garrisoned field resolves IDENTICALLY to the bare
+        one on every seed -- DR is the only live difference between a walled and an open field, and the
+        sweep removes it exactly (`==`, not `approx`).
+      * `3` (A.9) AND `1` DIFFER from that control and from each other, and the defenders' survivors
+        rise monotonically 0 -> 1 -> 3 on every seed -- so the fixture reaches the engine and its
+        magnitude is what moves the result, rather than the sweep being three spellings of one run.
+      * `3` EQUALS THE UNSET DEFAULT on every seed: the default is `None`, A.9's number read from
+        `terrain.py`, and this is what shows the sentinel resolves to 3 (it would break the day the
+        owner's literal moved off the 3 this test spells; H-150's `sweep: [3, 0, 1]` is a separate
+        record, which this test does not read).
+
+    Seeds 0..15, measured: the three arms differ on seeds 0, 2, 4, 10 (a one-off figure, not
+    asserted -- the other twelve end identically at this scale, which `>= 1` tolerates and `checked`
+    keeps honest). Pre-`20-v` `field_walls_dr` did not exist and the arm could not be set."""
+    from engine.season.seam.wrappers.mass_battle import resolve as provider_resolve
+    target = "set_s_036"
+    default, bare = build_realm(0), build_realm(0)
+    for sid in [sid for sid, s in bare.sites.items() if s.kind == "garrison" and s.rung == target]:
+        del bare.sites[sid]
+    assert world_q.fortification_of(default, target) > 0.0, "the fixture no longer garrisons the target"
+    assert world_q.fortification_of(bare, target) == 0.0, "deleting the garrison left a fortification"
+    assert default.fixtures.get("field_walls_dr") is None, "the shipped default moved off A.9's own number"
+    arms = {}
+    for dr in (3, 0, 1):
+        arms[dr] = build_realm(0)
+        arms[dr].fixtures = arms[dr].fixtures.sweep("field_walls_dr", dr)
+        assert arms[dr].fixtures.get("field_walls_dr") == dr
+    attackers = world_q.mustered(default, "set_s_014", "fac_crown")
+    assert attackers and attackers == world_q.mustered(bare, "set_s_014", "fac_crown")
+
+    def fight(w, seed):
+        r = provider_resolve(w, attackers, ["c"], "a field", subject="fac_church_of_solmund",
+                             rung=target, rng=random.Random(seed))
+        assert r["status"] == "RESOLVED" and r["unopposed"] is False, f"seed {seed}: not fought: {r}"
+        return r["result"]
+
+    checked = zero_differs_from_3 = zero_differs_from_1 = three_differs_from_1 = 0
+    for seed in range(16):
+        open_, dflt = fight(bare, seed), fight(default, seed)
+        r3, r0, r1 = fight(arms[3], seed), fight(arms[0], seed), fight(arms[1], seed)
+        assert r0 == open_, f"seed {seed}: walls at DR 0 still differ from the open field: {r0} vs {open_}"
+        assert r3 == dflt, f"seed {seed}: DR 3 is not the unset default: {r3} vs {dflt}"
+        assert (r0["defender_size_pct"] <= r1["defender_size_pct"] <= r3["defender_size_pct"]), (
+            f"seed {seed}: defender survivors are not monotone in the DR: {r0} {r1} {r3}")
+        checked += 1
+        zero_differs_from_3 += r3 != r0
+        zero_differs_from_1 += r1 != r0
+        three_differs_from_1 += r3 != r1
+    assert checked == 16
+    assert zero_differs_from_3 >= 1, "DR 3 resolved identically to the control on every seed"
+    assert zero_differs_from_1 >= 1, "DR 1 resolved identically to the control on every seed"
+    assert three_differs_from_1 >= 1, "DR 3 and DR 1 resolved identically on every seed"

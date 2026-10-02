@@ -5,7 +5,7 @@
 ## Open
 | item | where it lives | next step |
 |---|---|---|
-| investigation degree producer (work item 4.5) | `registers/editorial_ledger_fi.jsonl` (`ED-FI-0009`) | Build the RESOLVE → WITNESS degree producer; its own blockers are no attribute values on any corpus person and no Depth carrier |
+| investigation degree producer (work item 4.5) | `registers/editorial_ledger_fi.jsonl` (`ED-FI-0009`) | Jordan rules J-22 (`workplans/valoria_master_workplan_v8_part5.md`); nothing to build until then |
 | counter-espionage detection/response loop | `registers/editorial_ledger_fi.jsonl` (`ED-FI-0002`) | Design the loop with fieldwork as host (Exposure is the symmetric mechanic) |
 | ED-914 residual — PP-719 record-or-strike; dead `fieldwork_design_v1` parent-path refs | `registers/editorial_ledger.jsonl` (`ED-914`) | Record or strike PP-719 in the patch register; fix the dead parent-path references |
 

@@ -33,7 +33,7 @@ it is the strength of a `commit`, every faction's leadership Query has no input 
 leaderless."* `04 §F.34`: *"if `Tenure.degree` gets a reader the head resolves with it."* `20-ii`'s
 own instruction is *"`head` via `Tenure.degree` (F.4's first reader)"*, and `20-iv`'s row names the
 SAME input as its own morale candidate, attacked at that build. **The attack landed here, and is
-recorded rather than routed around:** `harness/populated.py:690` -- the world-builder's ONE `commit`
+recorded rather than routed around:** `harness/populated.py:692` -- the world-builder's ONE `commit`
 opener -- mints every membership edge as `Tenure(id, pid, fid, "commit", 0)`, four positional args,
 no fifth; `degree` is therefore the dataclass default, `None`, on every `commit` Tenure any builder
 in this tree mints. `commit`'s own `verb_table.yaml` row declares `contests: ""` (empty, falsy), and
@@ -123,7 +123,7 @@ def head(w: World, prop: str) -> "str | None":
     `verb_table.yaml` row declares `contests: ""` (empty -- `VERB_TABLE["commit"].contests` is
     falsy), and `04 PART D` row 30a types `writes` as Degree-keyed only for a verb that declares
     `contests:`, so an uncontested `commit` never reaches a fold branch that could write one. The
-    world-builder's one `commit` opener (`harness/populated.py:690`) mints every membership edge
+    world-builder's one `commit` opener (`harness/populated.py:692`) mints every membership edge
     with the dataclass default -- so no live `commit` Tenure this tree can build ever carries a
     non-`None` `degree`. This is the `20-iv`/MB-lane attack `workplans/2026-09-28-the-plan-one-
     order-mc-v18-retired.md:808-811` asks `20-ii` to run at the build; it landed here and is a
@@ -207,7 +207,7 @@ def subordinates(w: World, seat: str) -> list:
 
 # `20-ii`'s instruction names `at_war` last; the `mood` a war Proposition carries. `Proposition.mood`
 # is a plain string with no roster of allowed values (`OUGHT`/`HOLDS` are the two the tree already
-# mints, `harness/populated.py:656,659`); `WAR` is a third, idiomatic value of the SAME field, never
+# mints, `harness/populated.py:658,661`); `WAR` is a third, idiomatic value of the SAME field, never
 # a new one -- `_eff_utter` already writes whatever `payload["mood"]` names, so this needs no new
 # verb and no matrix row. Declared once, beside the one function that reads it, the way `SHEET_KIND`
 # is declared beside `resolve`.
@@ -221,7 +221,7 @@ def at_war(w: World, a: str, b: str) -> bool:
     boolean between two factions to set, because there is no faction record to hold one."*
 
     A `WAR_MOOD` Proposition names its two parties directly, the same shape a creed's `OUGHT`
-    Proposition names its leader (`subject`) and faction (`value`, `harness/populated.py:659`):
+    Proposition names its leader (`subject`) and faction (`value`, `harness/populated.py:661`):
     `subject` and `value` are the two factions, UNORDERED (a war has no "first" side), so this
     compares `{p.subject, p.value}` as a set against `{a, b}` rather than picking a slot for
     either. `at_war` asks whether that Proposition still has ANY live `commit` -- `F.32`: *"a

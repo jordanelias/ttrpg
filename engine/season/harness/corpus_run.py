@@ -42,6 +42,7 @@ polarity rule sends zero evidence to the verdict AGAINST the thing measured, and
 onto `settlement` would manufacture a pass for the largest single block of the corpus.
 """
 from __future__ import annotations
+import string
 import sys
 from collections import Counter
 
@@ -50,7 +51,8 @@ from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.matrix import Step
 # `CONVICTIONS` dropped 2026-09-16: `seed_pursuits` moved to `run_cases.py`, which is its
 # single owner, and nothing here reads the roster any more.
-from ..data.rosters import PURSUIT_AXES, RUNG_KINDS, load_yaml
+from ..data.rosters import (PURSUIT_AXES, RUNG_KINDS, VERB_CAPABILITY, load_yaml,
+                            refuse_a_titled_post_off_its_rung)
 from ..data.verbs import VERB_TABLE, align
 from ..decision import make_chooser
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, Unspecified
@@ -106,6 +108,7 @@ def rescales() -> dict:
     do, so a keyword rule would cover half the corpus and silently mis-scale the rest — the ROUTER
     `W10` deleted, returning as a corpus tool. Measured before deciding not to build one."""
     out: dict = {}
+    files_of: dict = {}                   # case id -> the file that authored its re-scale
     for f, doc in _exercise_docs():
         sc = doc.get("scale")
         if doc.get("case") and isinstance(sc, dict):
@@ -113,6 +116,13 @@ def rescales() -> dict:
                 raise SystemExit(f"{f.name}: a `scale:` re-authoring with no `why:` — the "
                                  "derivation is what distinguishes this from an invention")
             _check_office(f.name, sc.get("office"))
+            # REFUSED, NOT OVERWRITTEN: two files naming one `case:` let the LAST silently replace
+            # the first -- the refusal `cast_overlay` makes for a `cast:`, in the same words.
+            if doc["case"] in files_of:
+                raise SystemExit(f"{f.name}: `case: {doc['case']}` is already the case of "
+                                 f"{files_of[doc['case']]}'s `scale:` -- the later file would "
+                                 "silently replace the earlier one")
+            files_of[doc["case"]] = f.name
             out[doc["case"]] = sc
     return out
 
@@ -185,6 +195,32 @@ def apply_rescale(case: dict) -> dict:
     return c
 
 
+# `17`: THE ONE `role` VALUE THE READER BRANCHES ON. `PLAN.md` §W28: *"~44 of 97 ARC cases name a
+# player, a PC or the party in `who_acts`, and those become `WAITS-ON-PLAYER` rather than a
+# failure"* -- an entry the engine does not supply and does not seat. Every other `role` is free
+# text the author writes and nothing reads, so this is a TERM, not a closed set: a typo of it
+# (`waits on player`) seats a person, which is why the comparison folds case and why an author
+# reads `seating`'s output before trusting a cast.
+WAITS_ON_PLAYER = "WAITS-ON-PLAYER"
+
+# The three people every world has when a case's `cast:` names fewer. `build_at` seated exactly
+# these before `17`, and a cast that names one protagonist has not said the world holds ONE person
+# -- so the floor stays anonymous until an author names more (`seat_ids`).
+ANONYMOUS_SEATS = ("p_a", "p_b", "p_c")
+
+
+def _waits_on_player(entry: dict) -> bool:
+    return str(entry.get("role") or "").strip().upper() == WAITS_ON_PLAYER
+
+
+def _partition_cast(entries: list) -> tuple:
+    """`(seated, waiting)` over one `cast:` list: the ONE place that says which entries become people.
+    `seating` reads a case's overlay through it and `_check_cast` validates a file's list through it,
+    so load and build cannot disagree about who is seated."""
+    return ([e for e in entries if not _waits_on_player(e)],
+            [e for e in entries if _waits_on_player(e)])
+
+
 def cast_overlay() -> dict:
     """`W28-cast`. The corpus's per-case `cast:` authoring, `{case_id: [entry, ...]}` — an OVERLAY,
     read the SAME way `rescales()` reads `scale:`/`office:` and for the identical reason: 27 of the
@@ -195,14 +231,42 @@ def cast_overlay() -> dict:
     per-case files `rescales()` already reads `scale:`/`office:` from, rather than inventing a
     second directory or a second per-case file convention.
 
-    ⚠ EACH ENTRY IS `{who, role, capability}`. `who` names a cast member — for every entry authored
-    so far, the case's own PROTAGONIST, i.e. its `name:` field, never retyped independently (a
-    second copy of a fact the case already owns is the hazard `CLAUDE.md` §0.05 cl.3 names). `role`
-    is `"protagonist"` on every entry authored so far; resolving the REST of a case's `who_acts`
-    prose into further roles, offices and `WAITS-ON-PLAYER` non-actors is position `17`'s
-    (`ambitions(p) and build_at from the cast`), not this position's. `capability` is present only
-    where the case's OWN text grounds a number — absent is the honest reading (§42.2's polarity
-    rule), never a placeholder zero standing in for one.
+    ⚠ EACH ENTRY IS `{who, role, capability?, office?, ought?}` (`CAST_KEYS`, the closed set).
+    `who` names a cast member — the case's own PROTAGONIST is its `name:` field, never retyped
+    independently (a second copy of a fact the case already owns is the hazard `CLAUDE.md` §0.05
+    cl.3 names); another entry is a person the case's own `who_acts`/`one_line` names. `role`
+    is free text with ONE term the code branches on, `WAITS_ON_PLAYER`: an entry carrying it names
+    a player the engine does not supply and is NOT seated as an actor (`seating`). `capability` is
+    present only where the case's OWN text grounds a number — absent is the honest reading
+    (§42.2's polarity rule), never a placeholder zero standing in for one.
+
+    ⚠ `office:` AND `ought:` ARE AUTHOR-WRITTEN STRUCTURED FIELDS (position `17-cast`), EACH ROUTED
+    THROUGH AN OWNER THAT ALREADY EXISTS, NEITHER READ OFF PROSE (the W10 router's failure):
+      * `office: {post, why, body | faction, remit?}` is the SAME block a `scale:` overlay's
+        `office:` carries and is checked by the SAME `_check_office`; `build_at` seats it through
+        `_seat_office`, the one constructor of an overlay's office. Its `why:` is the derivation,
+        which is what makes it authoring rather than invention.
+      * `ought: {about, predicate}` is ONE OUGHT Proposition for that entry. `about` is the exact
+        `who` of ANOTHER SEATED entry (a person, so Q4's referent is a person), `predicate` the
+        author's words. It replaces, for that entry only, the rotation default `build_at` writes
+        for every seat — same Proposition id, same `commit` edge — so `world_q.ambitions(w, p)`
+        finds it with no new reader.
+    ⚠ `knows:` IS REFUSED BY NAME, NOT SEATED. An initial Claim is a `Claim(...)` construction and
+    no world builder here has one: the only sites are `loop/witness.py`'s five event-driven deposits
+    and `probes.py`'s hand-built fixtures. Adding a sixth in `build_at` is a Layer-1 question
+    (`AX-7` limits the sites, and a seeded belief is a deposit nobody witnessed), which this
+    position stopped on rather than answering. A field that parses and then reads nothing would be
+    the silent no-op that makes an author believe a belief was seated.
+
+    ⚠ A MALFORMED ENTRY REFUSES AT LOAD (a world is never built from it), by `_check_cast`: not a
+    mapping, no `who`, a key outside `CAST_KEYS`, a bad `office:` (`_check_office`'s own errors), an
+    `ought:` that is not exactly `{about, predicate}` or whose `about` names no OTHER seated entry
+    (or names two), a `capability:` that is not a mapping, names a key `VERB_CAPABILITY` has no verb
+    drawing on, or carries a magnitude that is not a whole number, a WAITS-ON-PLAYER entry carrying
+    an `office:`/`ought:` or the KEY `capability:` at all, even empty (never seated, so the field
+    would read nothing), or more seated entries than `string.ascii_lowercase` can name (`seat_ids`).
+    A FILE refuses at load too: a `cast:` with no non-empty string `case:` (blank, missing or
+    misspelled), and a `case:` that another file's `cast:` already claimed.
 
     ⚠ COUNT THIS WITH THIS FUNCTION, NEVER WITH A GREP OVER THE CASE FILES. The historical GAP this
     position's own plan entry names in terms: an antagonist once re-derived a corpus count by
@@ -212,14 +276,184 @@ def cast_overlay() -> dict:
     `grep -c 'who:' cases/**/*.yaml` is not, and will over- or under-count the moment a comment or
     an unrelated `who:`-shaped string appears in a file this function does not read as one."""
     out: dict = {}
-    for _f, doc in _exercise_docs():
-        entries = doc.get("cast")
-        if doc.get("case") and isinstance(entries, list):
-            out[doc["case"]] = entries
+    files_of: dict = {}                   # case id -> the file that authored its cast
+    for f, doc in _exercise_docs():
+        if "cast" not in doc:
+            continue
+        # REFUSED, NOT SKIPPED (the two ways an overlay used to vanish): a file carrying `cast:`
+        # whose `case:` is blank, missing or misspelled was dropped without a sound, so the case it
+        # was written for seated the three anonymous people; and two files naming one `case:` let
+        # the LAST silently replace the first. `rescales()` keeps its own `case:` filter -- its
+        # files are `scale:` files, and a file with no `cast:` has no cast to lose.
+        case = doc.get("case")
+        if not isinstance(case, str) or not case.strip():
+            raise SystemExit(f"{f.name}: carries a `cast:` but no non-empty string `case:` "
+                             f"(found {case!r}) -- the cast would be dropped without a sound")
+        if case in files_of:
+            raise SystemExit(f"{f.name}: `case: {case}` is already the case of "
+                             f"{files_of[case]}'s `cast:` -- the later file would silently "
+                             "replace the earlier one")
+        files_of[case] = f.name
+        entries = doc["cast"]
+        # REFUSED, NOT SKIPPED: a `cast:` that is a mapping (or a block missing its `- `, or empty)
+        # used to fall through the `isinstance(list)` filter and be dropped without a sound, so the
+        # case seated the three anonymous people its author had written a cast to replace.
+        if not isinstance(entries, list):
+            raise SystemExit(f"{f.name}: `cast:` is a {type(entries).__name__}, not a list of "
+                             "entries -- a mapping, or a block missing its `- `, would be dropped "
+                             "without a sound")
+        _check_cast(f.name, entries)
+        out[case] = entries
     return out
 
 
+# `17-cast`: THE KEYS A `cast:` ENTRY MAY CARRY. Closed on purpose: an entry key nothing reads is an
+# author's belief that something was seated, so an unknown key refuses (`_check_cast`).
+CAST_KEYS = ("who", "role", "capability", "office", "ought")
+OUGHT_KEYS = ("about", "predicate")
+
+
+def _referent(seated: list, entry: dict) -> int:
+    """The index in `seated` of the OTHER entry `entry["ought"]["about"]` names -- by exact `who`,
+    never by token. `seated`, not the whole cast: a WAITS-ON-PLAYER entry is nobody the engine
+    seats, so an OUGHT about one would be about nobody. Raises `LookupError` unless exactly one
+    OTHER seated entry carries that name (`e is not entry` is what makes an OUGHT about oneself
+    refuse, as the rotation default has always guaranteed -- `build_at`'s own comment).
+
+    [ASSUMPTION: an `ought:` names ANOTHER PERSON by the exact `who` the author typed, never a
+    rung, a faction or oneself -- basis: Q4's referent is `(prop.subject,)`, and a PERSON subject is
+    the half `build_at`'s 2026-09-13 measurement found load-bearing (443 -> 638 acts, 168 naming
+    another person); a rung subject is the old control, and no id exists for an authored person
+    until it is seated, so the name is the only key]"""
+    who = str(entry["ought"]["about"]).strip()
+    hits = [n for n, e in enumerate(seated) if e is not entry and str(e["who"]).strip() == who]
+    if len(hits) != 1:
+        raise LookupError(f"names {len(hits)} other seated entries ({who!r})")
+    return hits[0]
+
+
+def _check_capability(where: str, who: str, e: dict) -> None:
+    """A SEATED entry's `capability:`, validated AT LOAD. `build_at` copies it onto the person, and
+    its one reader, `seam/wrappers/sigma.py::_capability`, asks `Person.capability[VERB_CAPABILITY[
+    verb]]` and nothing else -- `int()`-ed into a dice pool, halved into an opposed obstacle. So a
+    key no verb maps to is NEVER READ, and a magnitude that is not a whole number is truncated
+    (`2.5` -> 2) or raises at the first roll; both used to land silently, because `build_at` only
+    tests `isinstance(cap, dict) and cap`. `VERB_CAPABILITY` is the owner of which keys exist -- the
+    capability NAMES are its VALUES (`rosters.yaml: verb_capability`; its keys are verbs) -- so this
+    asks it and keeps no list of its own. `{}` is the person's own default and is allowed: it seats
+    nothing and does not claim to. (A WAITS-ON-PLAYER entry is refused for carrying the KEY at all,
+    by `_check_cast`, before this runs.)"""
+    if "capability" not in e:
+        return
+    cap = e["capability"]
+    if not isinstance(cap, dict):
+        raise SystemExit(f"{where}: cast entry {who!r}: `capability:` is a {type(cap).__name__}, "
+                         f"not a mapping of capability key -> whole number -- {cap!r}")
+    known = set(VERB_CAPABILITY.values())
+    unread = sorted(str(k) for k in cap if k not in known)
+    if unread:
+        raise SystemExit(f"{where}: cast entry {who!r}: `capability:` keys no verb draws on: "
+                         f"{unread} (`rosters.yaml: verb_capability` names {sorted(known)}) -- "
+                         "nothing would ever read them")
+    # `bool` is an `int` in Python and `True` would be read as a pool of 1: refused by name
+    bad = {k: v for k, v in cap.items() if isinstance(v, bool) or not isinstance(v, int)}
+    if bad:
+        raise SystemExit(f"{where}: cast entry {who!r}: `capability:` magnitudes must be whole "
+                         f"numbers (the pool is `int()`-ed, so a fraction would be truncated "
+                         f"silently): {bad!r}")
+
+
+def _check_cast(where: str, entries: list) -> None:
+    """A case's `cast:` list, validated AT LOAD, so a malformed entry never reaches a world.
+    `office:` goes through `_check_office` -- the validator IS the constructor's own rules (that
+    function's comment), not a second copy -- and `ought:` through `_referent`, the resolver
+    `build_at` seats from, so load and build cannot disagree about whom an OUGHT is about.
+    `capability:` goes through `_check_capability`, which asks `VERB_CAPABILITY` what a key may be.
+    An `ought.predicate` is a LABEL: nothing reads it (`H-185`), and it is validated only as
+    non-empty text."""
+    for e in entries:
+        if not isinstance(e, dict) or not str(e.get("who") or "").strip():
+            raise SystemExit(f"{where}: a `cast:` entry with no `who:` -- {e!r}")
+    seated, _waiting = _partition_cast(entries)
+    if len(seated) > len(string.ascii_lowercase):
+        raise SystemExit(f"{where}: more seated `cast:` entries than the "
+                         f"{len(string.ascii_lowercase)} seat ids `seat_ids` can name")
+    for e in entries:
+        who = str(e["who"]).strip()
+        if "knows" in e:
+            raise SystemExit(f"{where}: cast entry {who!r} carries `knows:`, which no builder seats "
+                             "-- an initial Claim is a new `Claim` construction site (AX-7), a "
+                             "Layer-1 question position `17-cast` stopped on")
+        extra = sorted(set(e) - set(CAST_KEYS))
+        if extra:
+            raise SystemExit(f"{where}: cast entry {who!r} has keys nothing reads: {extra} "
+                             f"(the closed set is {list(CAST_KEYS)})")
+        # `capability` by KEY PRESENCE, not truthiness: an empty one (`{}`) on an entry nobody seats
+        # is still an author believing something was seated, and `{}` passed the old test
+        if _waits_on_player(e) and (e.get("office") or e.get("ought") or "capability" in e):
+            raise SystemExit(f"{where}: cast entry {who!r} is WAITS-ON-PLAYER, so it is never "
+                             "seated, and an `office:`/`ought:`/`capability:` on it would read "
+                             "nothing")
+        _check_capability(where, who, e)
+        _check_office(f"{where}, cast entry {who!r}", e.get("office"))
+        ought = e.get("ought")
+        if ought is None:
+            continue
+        if (not isinstance(ought, dict) or set(ought) != set(OUGHT_KEYS)
+                or not all(str(ought[k] or "").strip() for k in OUGHT_KEYS)):
+            raise SystemExit(f"{where}: cast entry {who!r}: an `ought:` is exactly "
+                             f"{{{', '.join(OUGHT_KEYS)}}}, both non-empty -- {ought!r}")
+        try:
+            _referent(seated, e)
+        except LookupError as err:
+            raise SystemExit(f"{where}: cast entry {who!r}: `ought.about` {err}; it must be the "
+                             "exact `who` of exactly one OTHER seated entry") from None
+
+
 CAST = cast_overlay()
+
+
+def seating(case: dict) -> tuple:
+    """`(seated, waiting)` -- THE ONE RESOLVER OF A CASE'S `cast:` (plan position `17`), `build_at`'s
+    and `run_case`'s alike. `seated` is the entries that become people, in authored order; `waiting`
+    is the entries carrying `WAITS_ON_PLAYER`, which are reported and never seated. A case with no
+    overlay is `([], [])`, which `build_at` reads as *the anonymous floor and nothing else*."""
+    return _partition_cast(CAST.get(str(case.get("id"))) or [])
+
+
+def seat_ids(n: int) -> tuple:
+    """The person ids for `n` seated cast entries: `p_a`, `p_b`, `p_c` first (the ids every probe,
+    docket and `main()`'s own `p_a` read already key on), then `p_d`... in alphabet order. Never
+    fewer than the anonymous floor. `cast_overlay` refuses a cast that would need more than the
+    alphabet has."""
+    return ANONYMOUS_SEATS + tuple(f"p_{c}" for c in
+                                   string.ascii_lowercase[len(ANONYMOUS_SEATS):n])
+
+
+def _seat_office(w: World, oid: str, pid: str, scope: str, off: dict) -> None:
+    """ONE CONSTRUCTOR OF AN OVERLAY'S OFFICE: `off` is the `{post, remit, body | faction, why}`
+    block `_check_office` validated, `pid` the person who holds it at `scope` (the deepest
+    non-person rung). Both callers -- the case-level `office:` held by `p_a`, and a cast entry's
+    own (`17-cast`) -- build it here, so the two cannot drift.
+
+    ⚠ NO SILENT FILTER. Rev 1 wrote `[a for a in ... if a in S.REMIT_ACTS]`, dropping an
+    unrecognised remit act on the floor -- a quiet default sitting underneath
+    `Office.__post_init__`'s loud one, which could then never fire. Pass them through and let the
+    constructor refuse.
+
+    [ASSUMPTION: a cast entry's office sits at `scope`, the deepest non-person rung -- the same
+    scope the case-level office has, because the overlay carries no per-entry rung key -- basis:
+    `build_at`'s case-level `office:` seating, which this function now serves]
+
+    ⚠ A TITLED POST MUST STAND AT THE RUNG KIND ITS TITLE GOVERNS, and only here is that kind known:
+    `_check_office` validates the block at LOAD, before any world, and the rung is the case's own
+    scale. The rule is `rosters.refuse_a_titled_post_off_its_rung`, the one `populated.seat_anchor`
+    applies to an `offices.yaml` row; without it `{post: Duke, faction: Crown}` seated a Duke at a
+    hearth. A post that is not a title (an organ, a Dicastery) stands at any rung, as before."""
+    refuse_a_titled_post_off_its_rung(oid, off["post"], w.rungs[scope].kind, scope)
+    w.offices[oid] = Office(oid, str(off["post"]), scope, list(off.get("remit") or []),
+                            body=off.get("body"), faction=off.get("faction"))
+    w.add_tenure(Tenure(f"t_{oid}", pid, oid, "hold", 0))
 
 
 def seasons_for(case: dict) -> int:
@@ -230,9 +464,15 @@ def seasons_for(case: dict) -> int:
 
 
 def build_at(case: dict, seed: int = 0) -> World:
-    """A world for THIS case: the containment chain down to its `scale`, three people who are
-    themselves `person` rungs, a site per producing kind, a motive, and — where the corpus says the
-    ending is forced by a threshold — a Date coming due, which is `questions_for`'s Q1.
+    """A world for THIS case: the containment chain down to its `scale`, people who are themselves
+    `person` rungs, a site per producing kind, a motive, and — where the corpus says the ending is
+    forced by a threshold — a Date coming due, which is `questions_for`'s Q1.
+
+    ⚠ WHO THE PEOPLE ARE (plan position `17`). A case with no `cast:` overlay seats the three
+    anonymous people it always did (`ANONYMOUS_SEATS`). A case WITH one seats its entries -- the
+    ones not `WAITS_ON_PLAYER`, which `seating` splits off and nobody seats -- as `p_a`, `p_b`, ...
+    in authored order, each named for its `who` and carrying its own `capability`, and pads with
+    anonymous people only up to the floor of three. An 11-entry cast seats eleven.
 
     ⚠ THE CONVICTIONS ARE SEEDED FROM THE CASE ID, over the THIRTEEN CONVICTIONS -- not over
     `conviction_axes`, which this said until 2026-09-16 and which `U3` superseded when the set
@@ -263,8 +503,12 @@ def build_at(case: dict, seed: int = 0) -> World:
         if SITE_YIELD[kind]:
             w.sites[f"s_{kind}"] = Site(f"s_{kind}", ids[chain[0]], kind,
                                           condition=w.fixtures.get("condition_scale"))
-    for n, pid in enumerate(("p_a", "p_b", "p_c")):
-        w.persons[pid] = Person(pid, pid)
+    seated, _waiting = seating(case)
+    pids = seat_ids(len(seated))
+    by_pid = dict(zip(pids, seated))      # the entry each seated person stands for; the floor has none
+    for pid in pids:
+        entry = by_pid.get(pid)
+        w.persons[pid] = Person(pid, str(entry["who"]) if entry else pid)
         # ⚠ A PERSON IS THE BOTTOM RUNG OF THE LADDER, and `tiny_world` models it that way. Without
         # this, `move` is refused everywhere. ⚠ THE STATED REASON IS NOW STALE AND THE FIXTURE
         # IS NOT: `_req_move` was retired by `W-A` and the typed cell short-circuits on an
@@ -285,18 +529,15 @@ def build_at(case: dict, seed: int = 0) -> World:
     # once; nothing else does."* Until this, the one writer in the tree ZEROED the dict --
     # `probes.py::p11`'s own comment: *"`capability` at zero ... for EVERY corpus person"* -- which
     # is why R-09's roll varies by SEED and FIXTURE and never by PERSON (`hole_register.yaml`
-    # H-126/H-127). `p_a` is the person this function already privileges as the case's own actor --
-    # the docket two blocks down names ONE matter, and it is `cast[0]`'s, i.e. `p_a`'s -- so a
-    # case's authored `cast:` overlay writes its PRIMARY entry's `capability` onto `p_a` and
-    # nothing else. A case with no overlay, or an overlay with no `capability`, leaves `p_a`
-    # exactly as before: `Person`'s own empty-dict default, never a fabricated non-zero fill.
-    # Resolving who `p_b`/`p_c` ARE, seating more than three, and reading the rest of `who_acts`
-    # is `17`'s (`ambitions(p) and build_at from the cast`), not this function's.
-    cast_entries = CAST.get(str(case.get("id"))) or []
-    if cast_entries:
-        cap = cast_entries[0].get("capability")
+    # H-126/H-127). Each seated entry writes ITS OWN `capability` onto ITS OWN person (position `17`
+    # widened this from "the primary entry's onto `p_a`", which is the same rule when the cast has
+    # one entry). A case with no overlay, an anonymous seat, or an entry with no `capability`
+    # leaves the person exactly as before: `Person`'s own empty-dict default, never a fabricated
+    # non-zero fill.
+    for pid, entry in by_pid.items():
+        cap = entry.get("capability")
         if isinstance(cap, dict) and cap:
-            w.persons["p_a"].capability = dict(cap)
+            w.persons[pid].capability = dict(cap)
     # ⚠ `W28`: THE CASE MAY SEAT ITS OWN ACTOR ON AN OFFICE. A re-scaled case carries
     # `office: {post, remit, why}` — `post` names the office the prose names, `remit` the acts it
     # carries, and `why` records the DERIVATION, because that is what makes this authoring rather
@@ -308,17 +549,32 @@ def build_at(case: dict, seed: int = 0) -> World:
     # re-scale is authored against the case's own text and carries its `why:`; where the text does
     # not say, the case stays unrepresentable and that is the honest answer (§42.2).
     off = case.get("office")
-    if isinstance(off, dict) and off.get("post"):
-        oid = f"off_{case.get('id', 'x')}"
-        w.offices[oid] = Office(oid, str(off["post"]), ids[chain[0]],
-                                  # ⚠ NO SILENT FILTER. Rev 1 wrote
-                                  # `[a for a in ... if a in S.REMIT_ACTS]`, dropping an
-                                  # unrecognised remit act on the floor -- a quiet default sitting
-                                  # underneath `Office.__post_init__`'s loud one, which could then
-                                  # never fire. Pass them through and let the constructor refuse.
-                                  list(off.get("remit") or []),
-                                  body=off.get("body"), faction=off.get("faction"))
-        w.add_tenure(Tenure(f"t_{oid}", "p_a", oid, "hold", 0))
+    case_level = isinstance(off, dict) and bool(off.get("post"))
+    if case_level:
+        _seat_office(w, f"off_{case.get('id', 'x')}", "p_a", ids[chain[0]], off)
+    # `17-cast`: AND EACH CAST ENTRY MAY SEAT ITS OWN. The same block, the same constructor
+    # (`_seat_office`), held by THAT entry's person rather than `p_a`; the id carries the person so
+    # it cannot collide with the case-level office above. An entry with no `office:` seats nothing.
+    #
+    # ⚠ THE CASE-LEVEL OFFICE IS `p_a`'S, SO THE FIRST SEATED ENTRY (`p_a`) MAY NOT CARRY ONE TOO:
+    # it would seat `p_a` twice and `decision/options.py::exercised_seat` takes the first seat, so
+    # the second would be inert while looking authored. REFUSED, not skipped -- the author put the
+    # entry's own office there to be held (`NPC-038.yaml` leaves it off its first entry for this
+    # reason, in a comment nothing read).
+    for pid, entry in by_pid.items():
+        entry_office = entry.get("office")
+        if not isinstance(entry_office, dict):
+            continue
+        if case_level and pid == "p_a":
+            raise Forbidden(
+                f"case {case.get('id')!r}: the cast entry {entry['who']!r} is seated as `p_a`, "
+                "who already holds the case-level `scale: office:`, and carries an `office:` of "
+                "its own", "harness/corpus_run.py -- overlay offices",
+                needs="the entry's office on a different entry, or the case-level office dropped "
+                      "(one seat per person here: the second is never the one exercised)",
+                law="`exercised_seat` takes the first seat a person holds, so a second office on "
+                    "the same person is inert")
+        _seat_office(w, f"off_{case.get('id', 'x')}_{pid}", pid, ids[chain[0]], entry_office)
     # ⚠⚠ **THE OUGHT NAMES A PERSON, AND THE WANT IS THE CASE'S OWN.** Until 2026-09-13 this was
     # ONE Proposition for all three people -- `Proposition("prop_x", "OUGHT", ids[chain[0]],
     # "a standing ambition", ...)` -- whose subject was a **rung** and whose predicate was a single
@@ -370,20 +626,31 @@ def build_at(case: dict, seed: int = 0) -> World:
     # replacement"*. Nothing currently schedules this loop's removal. Removing it means porting
     # `populated`'s per-case cast INTO `build_at` -- item 2 of `workplans/2026-09-13-work-order.md` -- and
     # until somebody does that, this default is load-bearing on every number the grader reports.
+    #
+    # ⚠ `17`: THE ROTATION NOW RUNS OVER EVERY SEATED PERSON (`pids`), a cast's eleven as readily as
+    # the floor's three, AND IT IS THE DEFAULT, NOT AN AUTHORED OUGHT: the case's own `wants_of` and
+    # the next person in the rotation stand in for every entry that wrote none.
+    # ⚠ `17-cast`: AN ENTRY'S `ought: {about, predicate}` REPLACES THE DEFAULT FOR THAT ENTRY ONLY -- the
+    # same Proposition id (`prop_<pid>`), the same `commit` edge below, so `ambitions` and Q4 find
+    # it with no new reader. `about` resolves through `_referent`, the resolver `_check_cast`
+    # validated with. Reading `one_line` for either half would be the token-match this file refuses.
     want = wants_of(case)
-    cast = ("p_a", "p_b", "p_c")
-    for i, pid in enumerate(cast):
-        about = cast[(i + 1) % len(cast)]
-        prop = Proposition(f"prop_{pid}", "OUGHT", about, want, True, 0)
+    for i, pid in enumerate(pids):
+        entry = by_pid.get(pid)
+        if entry is not None and entry.get("ought"):
+            about, predicate = pids[_referent(seated, entry)], str(entry["ought"]["predicate"])
+        else:
+            about, predicate = pids[(i + 1) % len(pids)], want
+        prop = Proposition(f"prop_{pid}", "OUGHT", about, predicate, True, 0)
         w.propositions[prop.id] = prop
         w.add_tenure(Tenure(f"t_{pid}_commits", pid, prop.id, "commit", 0))
     # The docket names ONE matter, so it names the first person's. `prop_x` is gone -- and an
     # adversarial pass confirmed NOTHING outside this function ever read that id, so the rename
     # breaks no surface.
     # Derived, not re-typed: `"prop_p_a"` was a hand-written copy of the `f"prop_{pid}"` rule
-    # three lines above, so the id format had to stay in sync by eye and a change to `cast`'s
+    # three lines above, so the id format had to stay in sync by eye and a change to `pids`'
     # order or contents would have silently pointed this at the wrong person.
-    prop = w.propositions[f"prop_{cast[0]}"]
+    prop = w.propositions[f"prop_{pids[0]}"]
     if (ENDINGS.get(str(case.get("id"))) or {}).get("forced_by_threshold"):
         # Q1: a Date coming due, with a DocketItem naming a matter. The corpus says this case's
         # ending is forced by a threshold; a world with no deadline cannot represent that at all.
@@ -623,10 +890,14 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     # belief stored twice — it tells them nothing and takes a `ledger_cap` slot from a claim that
     # would have. The first cut of the told channel deposited 180 and **175 were this**; the
     # corpus is where that is visible, because `build_world(0)` produces none.
+    # `17`: the cast entries that name a player and so were NOT seated, by `who` -- the PLAN's
+    # *"reported `WAITS-ON-PLAYER` naming the entry that caused it"*. Read through `seating`, the
+    # same resolver `build_at` seats from, so the two cannot disagree about who was left out.
     return dict(id=cid, scale=scale, status=status, executed=ok, refused=no, seasons=n,
                 why="", checks=checks, degrees=dict(degrees),
                 claim_sources=dict(sources), persons=len(w.persons),
-                told_holders=told_holders, told_redeposits=told_redeposits)
+                told_holders=told_holders, told_redeposits=told_redeposits,
+                waits_on_player=[str(e["who"]) for e in seating(case)[1]])
 
 
 def planted_control(seed: int = 0) -> tuple:
@@ -730,6 +1001,12 @@ def main(seed: int = 0) -> int:
         _holders += r.get("told_holders") or 0
     print(f"  CLAIMS BY SOURCE         {dict(sorted(_src.items()))} — of the four "
           f"`claim_sources`; {_holders} of {_persons} person-instances hold a `told_by`")
+    # `17`: printed ONLY WHERE A CAST NAMES A PLAYER, so a corpus with none prints exactly what it
+    # printed before this line existed.
+    _waits = {r["id"]: r["waits_on_player"] for r in live if r.get("waits_on_player")}
+    if _waits:
+        print(f"  WAITS-ON-PLAYER          {len(_waits)} cases name a player the engine does not "
+              f"supply: {_waits}")
     ever = sorted({v for r in live for v in r["executed"]})
     tried = sorted({v for r in live for v in r["refused"]})
     foldable = set(resolvable_verbs())

@@ -63,14 +63,14 @@ def main() -> int:
                  f"{sum(1 for l,_ in CASES if l=='ARC')} ARC, `apply_rescale` APPLIED — THE "
                  f"{len(CASES)} BASIS.")
     log("SEED", f"{SEED}; seasons {SEASONS} — `runs/arm9.json`'s own published configuration")
-    log("CONTEST", "confound 2, CHECKED NOT ASSUMED: `A9._run` does not pass `contest_max_depth`, "
-                   "and does not need to. The only contesting verb is "
-                   f"{sorted(v for v,r in S.VERB_TABLE.items() if getattr(r,'contests',''))}; "
-                   f"`resolvable_verbs()` — the verb set `A9._run` hands `make_chooser` — "
-                   f"excludes it (intersection "
+    log("CONTEST", "confound 2, CHECKED NOT ASSUMED: `A9._run` passes the fixture's own "
+                   "`contest_max_depth` (`arm9_forking.py:147`), unmodified here. The contesting "
+                   f"verbs are {sorted(v for v,r in S.VERB_TABLE.items() if getattr(r,'contests',''))}; "
+                   f"their intersection with `resolvable_verbs()` — the verb set `A9._run` hands "
+                   f"`make_chooser` — is "
                    f"{sorted(set(v for v,r in S.VERB_TABLE.items() if getattr(r,'contests','')) & set(S.resolvable_verbs()))}"
-                   "), so `resolve()`'s `Forbidden` branch is unreachable and the probe is left "
-                   "unedited. `n_cases_failed` below is the empirical check.")
+                   ", so a contest CAN resolve inside a measured run and this argument does not "
+                   "exclude one. `n_cases_failed` below is the empirical check, and the only one.")
 
     log.rule("W-D.0 — WHICH CELLS OF THE DECLARED SWEEP CROSS CAN THE QUESTION BE ASKED AT?")
     log("⚠ CORRECTION", "THE FIRST WRITING OF THIS ITEM SAID `exactly ONE cell gives L <= 3` AND "
@@ -191,7 +191,7 @@ def main() -> int:
         # comment; none isolated here). So "diverged == 0 at none" is no longer the control;
         # U6's own control is, verbatim from its content owner: "`observation_deposit_mode=none`
         # arm ≥ the default arm — that is the only control this instrument produces"
-        # (`workplans/2026-09-09-r-execution-plan.md:1472-1473`).
+        # (the retired `workplans/2026-09-09-r-execution-plan.md:1472-1473`; read it with `git show 0671283:workplans/2026-09-09-r-execution-plan.md`).
         # The default arm is `actor` (`engine/season/data/fixtures.py:448`).
         assert n["genuine"] > 0, (
             f"{slots}: the control arm `none` has an EMPTY denominator ({n['genuine']} genuine); "
@@ -246,32 +246,6 @@ def main() -> int:
                        f"(reconverged {base['reconverged']}) — the bar a plant must clear",
             vacuous_note)
 
-        # ⚠⚠ KNOWN PRE-EXISTING DEFECT, FOUND BY THE WD-REBASE ADVERSARIAL PASS (2026-09-30),
-        # NOT FIXED HERE -- fixing it means editing `wd_acceptance.py`'s CODE, which this unit's
-        # WHERE forbids. Plan position `19` added a `via` parameter to `belief_contradicts`
-        # (`engine/season/epistemic.py:71-72`), and `opening_set` calls it with five positional
-        # arguments (`engine/season/decision/options.py:161`: `belief_contradicts(p, row, subject,
-        # ops, seat)`). `positive_control`'s plant (`wd_acceptance.py:422`) is
-        # `def bc(p, row, subject, operands, _p=pred)` -- the fifth positional argument binds
-        # `_p = seat`, clobbering the intended predicate, so the plant's extra clause
-        # (`c.predicate == _p`) tests against a seat id and never matches a real predicate. The
-        # plant is therefore INERT on its own added clause -- but NOT identical to the unplanted
-        # baseline BY CONSTRUCTION (methodology-close Phase 1 antagonist, 2026-09-30): `_REAL_BC`
-        # is called here with exactly the FOUR positional arguments `(p, row, subject, operands)`,
-        # so its own `via` parameter defaults to `None`, while the real, correctly-called path
-        # passes `via=seat` (`decision/options.py:161`) -- and `via` changes `belief_contradicts`'
-        # verdict (`engine/season/tests/test_u7_remit.py:494-495`). So the plant reading the same
-        # as the baseline on this 3-case sample is EMPIRICAL, not a logical guarantee this file can
-        # stand behind. VERIFIED by reading `epistemic.py:71-72`, `decision/options.py:161` and
-        # `wd_acceptance.py:422` directly. `detected_over_base` at this cell is NOT currently
-        # evidence the harness's positive control can see a plant.
-        log("⚠ PLANT INERT", f"[{label}] `wd_acceptance.py`'s positive-control plant mis-binds "
-                             "its own predicate to the 5th positional argument `opening_set` now "
-                             "passes (`seat`, plan position 19); the plant tests nothing real and "
-                             "every `positive_control` plant's `detected_over_base` below is a "
-                             "false negative, not a measurement -- the COMPARATOR control's own "
-                             "null (if any, see ⚠ COMPARATOR NULL below) is NOT this cause. "
-                             "Pre-existing; outside this unit's edit surface.")
         TRACE.rows.clear()
         pc = positive_control(sample, slots=slots)
         out[f"positive_control_{slots}"] = pc
@@ -281,12 +255,21 @@ def main() -> int:
                         f"{pc['cases']} — detected OVER THE BASELINE on ALL "
                         f"{len(pc['plants'])} plants: "
                         f"{all(o['detected_over_base'] for o in pc['plants'])} "
-                        f"(legacy `detected_all` {pc['detected_all']}; SEE ⚠ PLANT INERT ABOVE -- "
-                        "this plant does not currently test anything)", PLANT_WHY)
+                        f"(legacy `detected_all` {pc['detected_all']}; `fires` below is how often "
+                        "each plant's own clause changed a verdict -- 0 would mean the plant is "
+                        "inert, whatever `detected_over_base` reads)", PLANT_WHY)
         for o in pc["plants"]:
-            log("  PLANT", f"predicate {o['predicate']:16} genuine {o['genuine']:3}  DIVERGED "
-                           f"{o['diverged']:3}  detected_over_base {o['detected_over_base']}  "
-                           f"(legacy detected {o['detected']})")
+            log("  PLANT", f"predicate {o['predicate']:16} fires {o['fires']:6} genuine "
+                           f"{o['genuine']:3}  DIVERGED {o['diverged']:3}  detected_over_base "
+                           f"{o['detected_over_base']}  (legacy detected {o['detected']})")
+        if any(o["fires"] == 0 for o in pc["plants"]):
+            # ⚠ A PLANT THAT NEVER FIRES TESTS NOTHING (the original `act.refused` failure, and
+            # the 2026-09-30 `via`/`weigh` signature mis-bind that left every plant at 0). Reported
+            # here as a MEASURED per-plant condition, not a standing assertion.
+            log("⚠ PLANT INERT", f"[{label}] at least one plant's own clause never changed a "
+                                 f"verdict: {[o['predicate'] for o in pc['plants'] if o['fires'] == 0]}"
+                                 " -- its `detected_over_base` is a false negative, not a "
+                                 "measurement.")
         TRACE.rows.clear()
         cc = comparator_control(sample, slots=slots)
         cc["detected_over_base"] = cc["diverged"] > base["diverged"]
@@ -295,28 +278,21 @@ def main() -> int:
                           f"ranked list): {cc['perturbations_applied']} fork streams perturbed, "
                           f"genuine {cc['genuine']}, DIVERGED {cc['diverged']} -> "
                           f"detected_over_base {cc['detected_over_base']} (legacy detected "
-                          f"{cc['detected']})")
+                          f"{cc['detected']}; every genuine fork DIVERGED, the reading a working "
+                          f"comparator owes: {cc['detected_all_genuine']})")
         if not cc["detected_over_base"]:
-            # ⚠⚠ FOUND BY THE METHODOLOGY-CLOSE PHASE 1 ANTAGONIST (2026-09-30), NOT FIXED HERE --
-            # a SEPARATE null from ⚠ PLANT INERT above, not its consequence. `comparator_control`
-            # never calls `belief_contradicts` -- its plant only splices a token into the LAST
-            # ranked decision (`wd_acceptance.py:455-458`), so the 5-positional-argument mismatch
-            # cannot be the cause of a null here. UNVERIFIED BY EXECUTION, offered as the
-            # plausible mechanism rather than a diagnosis this file can stand behind: the probe's
-            # strictly-later-tick lookahead window only ever includes the run's LAST decision when
-            # the final tick has `LOOKAHEAD` (3) or fewer decisions still to come
-            # (`engine/reference/degree-sweep/arm9_forking.py:52,:201`), which a multi-round season
-            # makes rare -- so the rounds loop may be blinding this control too, independently of
-            # the positive control's own defect.
+            # ⚠ DIAGNOSED BY EXECUTION 2026-10-01 (it was a null at both cells on 2026-09-30, and
+            # the first writing of this branch called its cause undiagnosed): the old plant rewrote
+            # the run's LAST decision, which `A9.fork_case`'s strictly-later-tick window cannot
+            # contain while the final tick holds more than `LOOKAHEAD` (3) deliberations (4-6 at the
+            # control sample; 0 forks held it). `wd_acceptance.comparator_control` now rewrites the
+            # first later-tick decision, `live_window[0]`. Reaching this branch AGAIN therefore
+            # means the comparator itself did not register a perturbation inside its own window.
             log("⚠ COMPARATOR NULL", f"[{label}] the comparator control did not detect over "
-                                      "baseline here. This is NOT the `belief_contradicts` "
-                                      "signature mismatch (see ⚠ PLANT INERT above) -- that "
-                                      "defect cannot reach this control. Cause undiagnosed; a "
-                                      "plausible mechanism is the rounds loop leaving the run's "
-                                      "final decision outside the probe's strictly-later-tick "
-                                      "lookahead window (`arm9_forking.py:52,:201`) under a "
-                                      "multi-round season. `detected_over_base` here is NOT "
-                                      "currently evidence this control can see a change.")
+                                      "baseline: a perturbation of `live_window[0]` in every "
+                                      "genuine fork's own decision stream did not raise DIVERGED "
+                                      "above the unplanted baseline. `detected_over_base` here is "
+                                      "NOT evidence this control can see a change.")
     # kept under their historical keys so a reader of the committed artifact still finds them
     out["positive_control"] = out["positive_control_narrow"]
     out["comparator_control"] = out["comparator_control_narrow"]
@@ -375,19 +351,17 @@ def main() -> int:
                                    f"{x.get('world_now')!r})")
         out["forensics"][mode] = det
         if broken:
-            # ⚠⚠ KNOWN PRE-EXISTING DEFECT, SAME CAUSE AS ⚠ PLANT INERT ABOVE, NOT FIXED HERE
-            # (outside this unit's edit surface -- `wd_acceptance.py`'s code). `_instrumented`'s
-            # spy `def bc(p, row, subject, operands)` (`wd_acceptance.py:236`) takes FOUR
-            # positional arguments; `opening_set` now calls `belief_contradicts` with FIVE
-            # (`decision/options.py:161`), so every call raises `TypeError`. `A9._run`'s own
-            # `except BaseException` (`arm9_forking.py:148-149`) swallows it into `ok=False` with
-            # no traceback surfaced -- which is why "EXECUTED" below would have been a false
-            # claim: `base_ok`/`fork_ok` are False on every representative, not just some.
+            # `A9._run`'s own `except BaseException` (`arm9_forking.py:148-149`) swallows ANY raise
+            # into `ok=False` with no traceback surfaced, so `base_ok`/`fork_ok` False means the
+            # spy run raised, not that it found nothing. Until 2026-10-01 that was ALWAYS the spy's
+            # 4-positional `belief_contradicts` closure meeting `opening_set`'s five-plus-`weigh=`
+            # call (`TypeError`; 24 of 24 representatives at both modes); `wd_acceptance._instrumented`
+            # now forwards the signature. A nonzero count here is a NEW failure -- read the swallowed
+            # exception by calling `A9._run` on that case directly.
             log("⚠ FORENSICS BROKEN", f"  mode={mode}: {broken} of {len(det)} representatives "
-                                      "came back `base_ok`/`fork_ok` False (a TypeError inside "
-                                      "`belief_contradicts`, swallowed by `A9._run`) and were "
-                                      "SKIPPED, not counted as zero-drop evidence. Pre-existing; "
-                                      "outside this unit's edit surface.")
+                                      "came back `base_ok`/`fork_ok` False (an exception inside "
+                                      "the spy run, swallowed by `A9._run`) and were SKIPPED, not "
+                                      "counted as zero-drop evidence.")
         log("SAMPLED", f"  forensics attempted on {len(det)} representatives of {len(divs)} "
                        f"divergences ({len(seen)} distinct signatures; {len(det) - broken} "
                        f"usable, {broken} broken -- see ⚠ FORENSICS BROKEN above if nonzero); "
@@ -409,7 +383,7 @@ def main() -> int:
     log.rule("W-D.5 — IS THE DECISION FINGERPRINT WIDE ENOUGH? (it is not, and this is the "
              "largest finding in the item)")
     log("READ", "`arm9_forking.recorder` records a deliberation as `(person, [verb, ...], tick)` "
-                "— VERBS ONLY. `Query.opening_set` returns `Candidate(verb, subject, why, "
+                "— VERBS ONLY. `Query.opening_set` returns `Candidate(verb, subject, "
                 "operands)`, so two candidate lists with the SAME VERBS about DIFFERENT SUBJECTS "
                 "compare EQUAL and the fork is scored RECONVERGED.")
     def collect_subj(slots: str, mode: str) -> dict:

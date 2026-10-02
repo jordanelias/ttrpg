@@ -209,9 +209,17 @@ def test_scan_is_not_vacuous():
     # export_module_contracts 2, contract_runtime_conformance 1 = 17. 67 - 17 = 50, which is
     # exactly what the walk now finds, across 27 files. The matcher is intact; the corpus shrank.
     # 45 keeps five constants of headroom below today's 50, so a genuinely broken walk still reds.
-    assert len(consts) >= 45, (
+    #
+    # FLOOR 45 -> 43 (2026-10-01, plan position `29d-ii`). Attributed to ONE named retirement and
+    # measured before the floor moved: `tools/export_world_initial_state.py` declared exactly two
+    # module-level path constants (`SRC`, `OUT`). The walk found 45 at `HEAD` (shapes: literal 45,
+    # constructed 43) and finds 43 now (literal 43, constructed 41) — a drop of exactly those two,
+    # in both shapes, with `_literal_path()` untouched. The floor moves by exactly the attributed
+    # two, to what the walk finds now (it stood at what the walk found at `HEAD`), so nothing beyond
+    # the named retirement is absorbed.
+    assert len(consts) >= 43, (
         f'only {len(consts)} module-level path constant(s) found across tools/**/*.py (50 at '
-        f'ED-IN-0232) — the AST walk has stopped matching, so the cases below are largely vacuous. '
+        f'ED-IN-0232, 45 before 29d-ii) — the AST walk has stopped matching, so the cases below are largely vacuous. '
         f'Fix _literal_path(); lower this floor only after attributing the drop to named '
         f'retirements, as ED-IN-0232 did.')
     # 'glob' DROPPED FROM THE REAL-TREE FLOORS 2026-08-21 (culling wave 3, ED-IN-0194). All five

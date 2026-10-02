@@ -1,6 +1,7 @@
-"""`season.loop.predicates` — the eight `requires:` cells the grammar does not type (five until
+"""`season.loop.predicates` — the seven `requires:` cells the grammar does not type (five until
 `establish` joined them at plan position `13f`, 2026-09-25, `give` at position `16` and `oblige`
-at `17a`, both 2026-09-29; the count below is the older one).
+at `17a`, both 2026-09-29; `give` left again at `14`, its cell typed on `T4`'s `with` stem; the
+count below is the older one).
 
 EXTRACTED, step 5 of the decomposition (a PURE MOVE but for two call sites, named below). The
 registry and its decorator travel with the functions they register, which is the rule step 3
@@ -28,7 +29,6 @@ from typing import Optional
 
 from ..data.rosters import BINDS_BASES, RELEASABLE_KINDS, RUNG_KINDS
 from ..gaps import Forbidden, Unowned, Unspecified
-from ..queries import world_q
 from ..state.carriers import Office, subject_of
 # G3: THE SEAT-AUTHORITY RULES LIVE WITH THE GATE THAT ENFORCES THEM. `seated_on_the_rung_above`,
 # `REVOCATION_RULES` and `has_conferral_basis` were defined here; the write gate's F3 clause now
@@ -340,38 +340,11 @@ def _req_release(w: "World", a: "Act") -> bool:
                for t in w.tenures)
 
 
-@requires_predicate("give")
-def _req_give(w: "World", a: "Act") -> bool:
-    """Plan position 16 (`H-84`): *"the actor holds the subject, and the receiver is present where
-    the actor is"* (r2 `02` §A.7's cell). The subject is the Record; the receiver is the `to`
-    operand. `release`'s and `revoke`'s route -- prose `requires:` plus this predicate -- because
-    the second conjunct has no stem (the row's `requires_typed_note:` says why).
-
-    FOUR CLAUSES, IN THE ORDER A WORLD FACT CAN REFUSE THEM, EACH COMPOSED ON ITS OWNER:
-      1. the subject is a Record (`w.records`) -- `give` hands on a DOCUMENT; the `handover` basis
-         at the gate is general over every non-seat `hold`, and this row narrows the verb;
-      2. the actor is its holder -- `world_q.hold_force`, the one owner of *who holds this*, which
-         RAISES on two live holders rather than picking one (`holonic §15`'s 1 per object);
-      3. the receiver is a person other than the actor -- ED-IN-0210 ruling 1, a two-party act
-         needs its second party, and a give to oneself would close and reopen the same custody;
-      4. the receiver is where the actor is -- `world_q.place_of` for both, the one owner of *the
-         rung a thing is at* (`_ch_co_located` reads the same function), compared for equality.
-    ⚠ A MISSING `to` REFUSES, ON `_req_confer`'s PRECEDENT (a missing `office`). No PERSON reaches
-    this with one: the row is untyped, so `operands_for` carries nothing, and the row's
-    `counterparty: to` makes `opening_set` form no Candidate whose receiver it cannot name. So a
-    `give` executes from an act that names `to` -- a hand-built one today, a person's once `15c`
-    derives `to` from a held writ."""
-    rid = subject_of(a)
-    if not rid or rid not in w.records:
-        return False
-    holder = world_q.hold_force(w, rid)
-    if holder is None or holder.subject != a.actor:
-        return False
-    to = a.payload.get("to") if isinstance(a.payload, dict) else None
-    if not to or to == a.actor or to not in w.persons:
-        return False
-    here = world_q.place_of(w, a.actor)
-    return here is not None and world_q.place_of(w, to) == here
+# ⚠ `_req_give` (plan position 16) WAS HERE AND PLAN POSITION `14` RETIRED IT: `give`'s cell is
+# typed now (`verb_table.yaml`), on the `with` stem the telling workplan's `T4` built for the
+# co-location conjunct this predicate existed to carry, and its *a person other than the actor*
+# clause is the fold's `counterparty` clause (`loop/resolve.py::_admits`). A verb carries a typed
+# cell or a predicate, never both (`test_wa_one_owner_...`).
 
 
 @requires_predicate("oblige")

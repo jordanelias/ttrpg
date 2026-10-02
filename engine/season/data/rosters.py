@@ -161,6 +161,18 @@ def _load_offices() -> dict:
             needs="give `seats:` at least one row",
             law="`04_CODE_ARCHITECTURE.md` §B.13 ID-12 -- a declared-but-empty section is the "
                 "defect this file's own loader refuses, applied to its own top level")
+    # A ROW ID IS UNIQUE, CHECKED HERE AND NOWHERE ELSE. `populated.build_realm` keys the seats it
+    # matched by row id (`authored[row["id"]]`) and skips a row already in that dict, so a second row
+    # under one id was collapsed without a sound -- and the minted-id guard runs after that skip.
+    ids = [row.get("id") for row in doc["seats"] if isinstance(row, dict)]
+    repeated = sorted({i for i in ids if i is not None and ids.count(i) > 1}, key=str)
+    if repeated:
+        raise Unspecified(
+            f"offices.yaml `seats:` carries more than one row under the id(s) {repeated}",
+            "offices.yaml -- seats",
+            needs="one row per `id`",
+            law="`offices.yaml: meta: rule` -- one seat = one row; a repeated id is collapsed "
+                "by the seat index without a sound")
     return doc
 
 
@@ -525,7 +537,10 @@ def remit_or_default(declared) -> list[str]:
 
     ⚠ IT FILLS AN EMPTY REMIT AND NEVER OVERWRITES A DECLARED ONE. The three grounded overlays
     (NPC-008/033/038) keep exactly what their case text supports; `remit_default` reaches only the
-    seats that carry `[]`, which was 16 of the populated realm's 19 when this landed.
+    seats that carry `[]`, which was 16 of the populated realm's 19 when this landed. ⚠ SINCE
+    `13d-iii` (2026-10-01) IT REACHES ONE REALM SEAT: every seat with an `offices.yaml` row takes
+    the row's remit through `authored_remit` (below), so only the seat no row authors
+    (`off_npc_084`), the spine and the fixtures still fall through to this default.
 
     ⚠⚠ THE DEFAULT IS NOT CANON — see `rosters.yaml: remit_default`'s own note for why a
     transparently-wrong placeholder is the safe shape and what replaces it (per-POST remits, which
@@ -544,6 +559,45 @@ def remit_or_default(declared) -> list[str]:
     # but R4 byte-identical replay is not, and a determinism break that only shows across processes
     # is exactly the kind a same-process self-comparison cannot see. Found by `/code-review`.
     return declared if declared else sorted(REMIT_DEFAULT)
+
+
+# `offices.yaml: meta: remit_unruled` -- the remit acts whose standing as an act is an OPEN RULING
+# (J-8: `dispatch`), so the overlay of an authored `remit_acts` leaves them exactly where they were.
+# Read once at import and checked against `REMIT_ACTS` HERE, for the reason every roster above is
+# bound at import: an unrecognised name would match no seat's remit and be dropped without a sound.
+OFFICES_REMIT_UNRULED = frozenset(((_OFFICES_DOC.get("meta") or {}).get("remit_unruled")) or ())
+if not OFFICES_REMIT_UNRULED <= REMIT_ACTS:
+    raise Unspecified(
+        f"offices.yaml `meta: remit_unruled` names {sorted(OFFICES_REMIT_UNRULED - REMIT_ACTS)}, "
+        "which are not remit acts", "offices.yaml",
+        needs="a member of `rosters.yaml: remit_acts`",
+        law="a remit act off the closed roster matches no seat's remit -- the one that is named "
+            "unruled would be silently granted to nobody, which is a ruling, not a typo")
+
+
+def authored_remit(row: dict, held=()) -> list[str]:
+    """A seat's remit from its authored `offices.yaml` row -- the ONE owner of the overlay rule
+    (plan position `13d-iii`), beside `remit_or_default`, which it supersedes wherever a row exists.
+
+    ⚠ THE ROW'S `remit_acts` IS THE REMIT, `[]` INCLUDED, EXCEPT FOR WHAT `held` BRINGS. A declared
+    empty list is NOT passed to `remit_or_default` (which would fill it with every act): the row
+    was authored from canon and the default is a testing fixture (`rosters.yaml: remit_default`).
+    But it does NOT grant nothing on a loop-built seat -- see `held`.
+
+    ⚠ `held` IS WHAT THE SEAT HAD BEFORE THE OVERLAY, and only the acts in `OFFICES_REMIT_UNRULED`
+    survive from it -- `dispatch` today, an open ruling (J-8). THIS GRANTS IT, it does not stay
+    neutral: a loop-built seat was seated with `remit_default` (every act) unless its case's own
+    overlay declares a remit, so its `held` carries `dispatch` and it keeps it. MEASURED,
+    `build_realm(0)`, 2026-10-02: 22 of the 29 authored seats hold it -- 22 of the 23 loop-built
+    (seven whose row is `remit_acts: []`, where it is the whole remit, and fifteen that carry it
+    beside the acts their row names; the one loop-built seat without it is `off_parliamentary_clerk`,
+    whose overlay declares `remit: [issue]`) and 0 of the 6 minted -- and `march`, eligible on
+    `remit:dispatch`, is eligible to every holder. A seat the loop did not build (a MINTED row)
+    passes nothing and so does NOT gain it: two identical rows diverge by build route. Stripping
+    `dispatch` (J-8) is a GRANT decision for Jordan, not a code fix. `sorted`, for
+    `remit_or_default`'s reason: a set's order is per-process and the grant folds into
+    `World.content_hash`."""
+    return sorted(set(row["remit_acts"]) | (set(held) & OFFICES_REMIT_UNRULED))
 
 
 WITNESS_CHANNELS = roster("witness_channels", ordered=True)
@@ -635,6 +689,94 @@ TERMS_SUPPLIED_BY = roster_map("observation_terms", "supplied_by")
 # Jordan's 2026-09-03 ruling, and `degree_of`'s margin branch calls the tree's owner for those.
 COMBAT_BANDS = roster("combat_degree_bands", ordered=True)
 FELLED, WOUNDED, UNTOUCHED = COMBAT_BANDS
+# `H-98` (plan position `8`). THE QUANTITIES THE SEAM LIFTS OFF THE ENGINE'S `WoundTracker`, and the
+# EDGES between the bands above, over those quantities. Both are rosters.yaml rows; the loader
+# below refuses an edge that is not about a lifted quantity AT IMPORT, here, where every roster's
+# absence is guaranteed to fire (`TITLE_DOMAINS`' lesson, above).
+WOUND_QUANTITIES = roster("wound_quantities", ordered=True)
+
+
+def check_edge_above(above, quantities, what: str, where: str) -> None:
+    """THE ONE GRAMMAR OF AN EDGE'S THRESHOLD: a non-negative count, or the NAME of a quantity.
+
+    Read by `load_combat_band_edges` for the authored edges and by `seam/ladder.py::combat_degree`
+    for the swept `Fixtures.combat_wounded_above`, so the data and the injected value cannot come to
+    disagree about what a threshold may be (§8). `bool` is an `int` in Python and `above: true` is
+    a typo for a count, so it is refused by name rather than read as 1."""
+    if isinstance(above, bool) or not (
+            (isinstance(above, int) and above >= 0) or above in quantities):
+        raise Unspecified(
+            f"{what}: `above` is {above!r}", where,
+            needs=f"a count >= 0, or one of the lifted quantities {list(quantities)}",
+            law="H-98 -- an edge is a quantity compared with a count or with another quantity the "
+                "tracker returns; anything else is a third kind of thing nobody ruled on")
+
+
+def load_combat_band_edges(row, bands, quantities) -> tuple:
+    """`combat_band_edges`, VALIDATED, as `((band, quantity, above), ...)` in the bands' own order.
+
+    ⚠ ONE EDGE PER BAND EXCEPT THE LAST, AND THE LAST IS THE RESIDUAL -- what is left once every
+    earlier edge failed (`combat_degree_bands`' order is SEVERITY, worst first, so the first edge
+    that holds is the band). Every refusal is a way the old two literals could not drift and a
+    data row can: an edge on a quantity the tracker does not return (the instruction's own
+    falsifier), an edge on a band the roster does not carry, a band with no edge, an edge on the
+    residual, a `keyed_on` that does not name the roster `bands` came from, an unreadable
+    threshold. ID-12 -- at load, not at the first act that would have hit it. Pure over its
+    arguments so a test can hand it a bad row and watch it refuse."""
+    where = "rosters.yaml: combat_band_edges"
+    if not isinstance(row, dict):
+        raise Unspecified(
+            "roster 'combat_band_edges' is not in rosters.yaml", "rosters.yaml",
+            needs="add the row to the data file; do not inline the edge in a body",
+            law="Jordan 2026-09-02 -- definitions are not hardcoded. An absent row REFUSES; "
+                "falling back to the old literal would be the second copy this row replaced")
+    keyed = row.get("keyed_on")
+    if not isinstance(keyed, str) or tuple(roster(keyed, ordered=True)) != tuple(bands):
+        raise Forbidden(
+            f"combat_band_edges.keyed_on is {keyed!r}, which is not the roster the bands came from",
+            where, needs="`keyed_on: combat_degree_bands`",
+            law="H-98 -- the edges are keyed on the bands; keyed on anything else they would "
+                "grade a scene into tokens `verb_table.yaml` does not write on")
+    edges = row.get("edges")
+    if not isinstance(edges, dict) or not edges:
+        raise Unspecified(
+            "combat_band_edges has no `edges:` mapping, or it is empty", where,
+            needs="one `{quantity, above}` per band but the last",
+            law="rosters.yaml's header -- an empty mapping makes every lookup silently answer "
+                "the residual band, i.e. everyone Untouched")
+    stray = [b for b in edges if b not in bands]
+    if stray:
+        raise Forbidden(
+            f"combat_band_edges names band(s) combat_degree_bands does not carry: {stray}", where,
+            needs=f"keys from {list(bands)}",
+            law="H-98 -- an edge keyed past its own roster grades into a band nobody declared")
+    if bands[-1] in edges:
+        raise Forbidden(
+            f"combat_band_edges carries an edge on {bands[-1]!r}, the residual band", where,
+            needs="delete it -- the last band is what is left when every earlier edge failed",
+            law="H-98 -- an edge on the residual would have to be tested after nothing")
+    out = []
+    for band in bands[:-1]:
+        e = edges.get(band)
+        if not isinstance(e, dict) or set(e) != {"quantity", "above"}:
+            raise Unspecified(
+                f"combat_band_edges has no well-formed edge for {band!r}: {e!r}", where,
+                needs="`{quantity: <wound_quantities member>, above: <count or member>}`",
+                law="H-98 -- a band with no edge is unreachable, and an unreachable band is a "
+                    "definition that was never graded")
+        if e["quantity"] not in quantities:
+            raise Forbidden(
+                f"combat_band_edges[{band}] is an edge on {e['quantity']!r}, which the tracker "
+                f"does not return", where, needs=f"a quantity from {list(quantities)}",
+                law="H-98 -- an edge reads the engine's own WoundTracker fields; one the seam "
+                    "does not lift would be read off nothing")
+        check_edge_above(e["above"], quantities, f"combat_band_edges[{band}]", where)
+        out.append((band, e["quantity"], e["above"]))
+    return tuple(out)
+
+
+COMBAT_EDGES = load_combat_band_edges(
+    _ROSTERS.get("combat_band_edges"), COMBAT_BANDS, WOUND_QUANTITIES)
 WOUND_HARM_MODELS = roster("wound_harm_models")
 # M4 (`ED-IN-0279` clause (a)). `field_degree_bands`' own note: ordered and unpacked the same way,
 # `Declared` first because ENCOUNTER's declaration fold writes it at RESOLVE, before anything has
@@ -747,3 +889,22 @@ def title_domain(post: Optional[str]) -> Optional[str]:
     """The rung kind a title governs, from `offices.yaml: titles: domains:`. `None` for a post
     that is not a title -- a Dicastery is an office, not a rank."""
     return TITLE_DOMAINS.get(str(post or ""))
+
+
+def refuse_a_titled_post_off_its_rung(who: str, post, kind: str, rung_id: str) -> None:
+    """THE ONE RULE THAT A TITLED POST STANDS AT THE RUNG KIND ITS TITLE GOVERNS (r2 `03` §A.8,
+    re-homed from `Office.__post_init__`), beside `title_domain`, its one input. Raises `Forbidden`
+    for a post that IS a title and stands at a rung of any other `kind`; a post that is not a title
+    (a Dicastery, an organ) stands anywhere. `who` names the seat in the refusal, `rung_id` the
+    rung it was given. Two seaters call it so neither keeps a copy: `harness/populated.py::
+    seat_anchor` (an `offices.yaml` row) and `harness/corpus_run.py::_seat_office` (a corpus
+    overlay's `office:`) -- without it a cast entry `{post: Duke}` seated a Duke at a hearth, whose
+    purview is then the hearth's, which is canon inverted by a data-entry slip."""
+    dom = title_domain(post)
+    if dom is not None and kind != dom:
+        raise Forbidden(
+            f"{who} names the TITLE {post!r} and stands at a {kind!r} rung ({rung_id!r}); the "
+            f"title governs a {dom!r}", "offices.yaml -- titles vs rung",
+            needs="a rung of the kind the title governs",
+            law="r2 03 §A.8 -- a titled post sits at the rung its title governs, never a rung "
+                "above or below it")

@@ -71,9 +71,10 @@ from ..data import cast, files
 from ..queries.world_q import RESIDE_KIND, capacity, home_of as home_of_q
 from ..gaps import Forbidden, Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
-from ..data.rosters import (BODY_FACTION, FACTIONS, OFFICES_BY_HOLDER, ROLE_TEMPLATE_OF,
-                            faction_prop_id, load_yaml, remit_or_default, territory_rung_id,
-                            title_domain)
+from ..data.rosters import (BODY_FACTION, FACTIONS, OFFICES_BY_HOLDER, OFFICES_SEATS,
+                            ROLE_TEMPLATE_OF, authored_remit, faction_prop_id, load_yaml,
+                            refuse_a_titled_post_off_its_rung, remit_or_default,
+                            territory_rung_id, title_domain)
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..state.carriers import Office, Person, Proposition, Rung, Site, Tenure
@@ -105,6 +106,82 @@ def _load(rel):
 def _slug(text: str) -> str:
     """An id fragment. Lowercase, alphanumerics and underscores only."""
     return "".join(c if c.isalnum() else "_" for c in str(text).lower()).strip("_")
+
+
+# ---------------------------------------------------------------------------
+# THE RUNG ANCHOR (plan position `13d-iii`; r2 `03` §A.14, A-5 answered at ladder step 3).
+# `offices.yaml` never spells a rung id, so a `build_realm` rename cannot rot the file (`CLAUDE.md`
+# §5's hand-transcription hazard, one layer earlier). A seat's `rung:` is a FORM -- a one-entry
+# mapping `{<rung kind>: <key>}` -- and there is ONE resolver over all of them. The forms in use are
+#     {realm: true} · {duchy: "<faction>"} · {territory: "<code>"} · {settlement: "<code>"}
+# and the resolver does not know that: it asks the INDEX `build_realm` fills as it mints each rung
+# (`_index_anchor`, at the four mint sites, where the key is already in hand) for exactly one rung of
+# exactly that kind. It names no rung kind and no seat, so a fifth form is a line at one more mint
+# site and a row, never a branch here -- and it is why a rung kind with no minted rung (`province`,
+# which `build_realm` deliberately never builds: a province is a QUERY) refuses instead of
+# resolving to something near it.
+# ---------------------------------------------------------------------------
+
+def _index_anchor(w: World, anchors: dict, key, rid: str) -> None:
+    """Record that `rid` is the rung the anchor `{<its kind>: key}` names. A second rung under one
+    anchor is REFUSED, not shadowed: the anchor would then resolve to whichever was minted last,
+    which is `r2 03` §A.14's "resolves to more than one" failure arriving without a sound."""
+    kind = w.rungs[rid].kind
+    if (kind, key) in anchors:
+        raise Forbidden(
+            f"the anchor {{{kind}: {key!r}}} names two rungs: {anchors[(kind, key)]!r} and {rid!r}",
+            "harness/populated.py -- rung anchors",
+            needs="one rung per anchor; a form's key must tell its rungs apart",
+            law="r2 03 §A.14 -- an anchor that resolves to more than one rung is refused")
+    anchors[(kind, key)] = rid
+
+
+def resolve_anchor(w: World, anchors: dict, form, whose: str = "") -> str:
+    """The rung id an `offices.yaml` `rung:` FORM names -- ONE resolver over every form.
+
+    `form` is `{<kind>: <key>}`: exactly one entry, `kind` a rung kind that `build_realm` minted
+    and `key` what tells that kind's rungs apart. Refuses (`Unspecified`) a form that is not a
+    one-entry mapping, and one that resolves to NO rung -- the unknown key, the kind the realm has
+    none of, or a key of the wrong type (`{realm: "x"}` is not `{realm: true}`). It never guesses
+    and never falls back to a nearby rung: a seat with the wrong ground reaches the wrong rungs
+    quietly, which is worse than a seat that does not build."""
+    if not isinstance(form, dict) or len(form) != 1:
+        raise Unspecified(
+            f"{whose or 'a seat'} declares the rung anchor {form!r}", "offices.yaml -- rung",
+            needs="a one-entry mapping `{<rung kind>: <key>}`",
+            law="r2 03 §A.14 -- four anchor forms, never a rung id")
+    (kind, key), = form.items()
+    # THE KEY'S TYPE IS PART OF THE ANCHOR. `True == 1` and the two hash alike, so `{realm: 1}` would
+    # find `{realm: true}`'s rung through the dict below; and an unhashable key (`{duchy: [..]}`)
+    # would raise `TypeError` out of `anchors.get` instead of the refusal this function owes. Every
+    # form is `{<text kind>: <text key>}`, or `true` for the one realm: refuse the rest, by name.
+    if not isinstance(kind, str) or not isinstance(key, (str, bool)):
+        raise Unspecified(
+            f"{whose or 'a seat'} declares the rung anchor {form!r}, whose "
+            f"{'kind' if not isinstance(kind, str) else 'key'} has the wrong type",
+            "offices.yaml -- rung",
+            needs="a text kind and a text key (`true` for the realm)",
+            law="r2 03 §A.14 -- `True == 1` and an unhashable key would otherwise resolve to the "
+                "wrong rung or raise `TypeError`, not refuse")
+    rid = anchors.get((kind, key))
+    if rid is None or rid not in w.rungs or w.rungs[rid].kind != kind:
+        raise Unspecified(
+            f"{whose or 'a seat'} declares the rung anchor {{{kind}: {key!r}}}, which names no "
+            f"{kind} rung in this realm", "offices.yaml -- rung",
+            needs="an anchor `build_realm` indexed as it minted the rung",
+            law="r2 03 §A.14 -- the anchor resolves to exactly one rung or the seat is refused")
+    return rid
+
+
+def seat_anchor(w: World, anchors: dict, row: dict) -> str:
+    """The rung an authored seat ROW stands at: its anchor, resolved, plus the one content rule
+    r2 `03` §A.8 re-homed from the constructor -- a TITLED post stands at the rung kind its title
+    governs, or a Duke seated at the realm has realm-wide purview (`Office.__post_init__`'s own
+    comment; `title_domain` is the ladder's one owner). The rule itself is
+    `rosters.refuse_a_titled_post_off_its_rung`, which `corpus_run._seat_office` calls too."""
+    rid = resolve_anchor(w, anchors, row["rung"], f"{row['id']} ({row['post']!r})")
+    refuse_a_titled_post_off_its_rung(row["id"], row["post"], w.rungs[rid].kind, rid)
+    return rid
 
 
 # ---------------------------------------------------------------------------
@@ -396,6 +473,11 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     # -- the canonical layers -------------------------------------------------
     realm = "r_valoria"
     w.rungs[realm] = Rung(realm, "realm")
+    # THE ANCHOR INDEX (`resolve_anchor`'s one input), filled at each mint site below -- the only
+    # places the key that tells a kind's rungs apart is in hand: the realm is the one (`true`), a
+    # duchy is its faction's, a territory and a settlement are their geography codes.
+    anchors: dict = {}
+    _index_anchor(w, anchors, True, realm)
 
     # ⚠⚠ **THE TIER THESE 17 ROWS BELONG TO IS `territory`, NOT `province`, AND THAT IS A RATIFIED
     # RULING THIS MODULE WAS ON THE WRONG SIDE OF.** `systems/settlements/reference/scale_hierarchy_v1.md`
@@ -407,10 +489,11 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     # A TERRITORY IS THE FIXED UNIT HOLDING MULTIPLE SETTLEMENTS, which is exactly what each of
     # geography's 17 rows is (`settlements: [S-001, ...]`). Its `provinces:` key and `# PROVINCES
     # (17)` banner are the label the ruling superseded — and the `T` PREFIX ON EVERY ID WAS RIGHT ALL
-    # ALONG. `references/world_initial_state.yaml` calls the same rows *"the 16 territory ids"*, so
-    # the two canon files disagreed on the noun and the ruling settles it. §6 of that document lists
-    # the propagation as *"tracked, not yet executed … nothing below needs further Jordan input, it
-    # needs authoring"*, which is why the stale label survived to here.
+    # ALONG. `references/world_initial_state.yaml` (retired at plan position `29d-ii`; open it with
+    # `git show fd321c81:references/world_initial_state.yaml`, `:41`) calls the same rows *"the 16
+    # territory ids"*, so the two canon files disagreed on the noun and the ruling settles it. §6 of
+    # that document lists the propagation as *"tracked, not yet executed … nothing below needs
+    # further Jordan input, it needs authoring"*, which is why the stale label survived to here.
     #
     # ⚠⚠ **AND A PROVINCE IS NOT A CONTAINER AT ALL.** §2: *"Provinces are only formed if the same
     # faction holds the constituent territories … a province is an emergent aggregation that exists
@@ -439,10 +522,12 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         w.rungs[did] = Rung(did, "duchy")
         w.add_tenure(Tenure(f"t_{did}_in", did, realm, "contain", 0))
         duchy_of[fac_name] = did
+        _index_anchor(w, anchors, fac_name, did)
 
     for tid, terr in geo["provinces"].items():          # geography's stale key; the rows are territories
         rid = territory_rung_id(tid)                    # one owner: data/rosters.py
         w.rungs[rid] = Rung(rid, "territory")
+        _index_anchor(w, anchors, tid, rid)
         holder = str(terr.get("faction") or "")
         # ⚠ A FOREIGN TERRITORY GETS NO PARENT, AND THAT IS THE POINT RATHER THAN A GAP. Schoenland
         # is on the faction roster and is FOREIGN — `rosters.yaml` records it as not
@@ -450,8 +535,9 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         # so a `contain` edge into `r_valoria` would assert it is part of the realm. It is a root
         # rung instead, which keeps it out of `descendants(realm)` and therefore out of the
         # realm's `sovereign_fraction`, where counting it would be a canon error wearing a number.
-        # `references/world_initial_state.yaml` makes the same cut from the other side: it carries
-        # 16 territories and deliberately omits T16, Schoenland's.
+        # `references/world_initial_state.yaml` (retired at `29d-ii`; `git show
+        # fd321c81:references/world_initial_state.yaml`, `:44`) made the same cut from the other side:
+        # it carried 16 territories and deliberately omitted T16, Schoenland's.
         if holder == "Schoenland":
             continue
         # The Church holds one territory and is not a duchy; an unheld territory has no duchy
@@ -460,6 +546,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     for sid, s in geo["settlements"].items():
         rid = f"set_{_slug(sid)}"
         w.rungs[rid] = Rung(rid, "settlement")
+        _index_anchor(w, anchors, sid, rid)
         w.add_tenure(Tenure(f"t_{rid}_in", rid, territory_rung_id(s["territory"]), "contain", 0))
 
     # -- the authored layers: quarters, then buildings -------------------------
@@ -863,9 +950,12 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     # transparently wrong (every office gets every act), which is what stops it reading as design.
     # This paragraph stays because it states the standard the default is an exception to, and the
     # per-POST remits that replace it must meet it.
-    from .corpus_run import rescales          # deferred — `data/__init__` records what eager costs
-    overlays = rescales()
+    from .corpus_run import RESCALES as overlays   # deferred — `data/__init__` records what eager costs
     seated, no_post, occupations, proposed = 0, [], [], []
+    # `offices.yaml` row id -> the Office id that stands for it (matched below, or minted after the
+    # loop), and the loop-built offices no row matches. Both reported by `_office_census`.
+    authored: dict = {}
+    unauthored: list = []
     for case in cases:
         cid = str(case.get("id"))
         pid = f"p_{_slug(cid)}"
@@ -906,7 +996,6 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         if not post:
             no_post.append(cid)
             continue
-        rung = realm if governs == "realm" else duchy_of.get(fac_name) if governs == "duchy" else None
         # ⚠ THE SUB-ORGANIZATION BECOMES THE `body` WHERE IT NAMES ONE, AND THE GAIN IS THE
         # CONSTRUCTOR'S CROSS-CHECK, NOT THE FIELD. With a body, `office_faction` DERIVES the
         # faction and refuses a body/faction mismatch; with `body=None` the faction is taken on the
@@ -916,19 +1005,14 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         # nothing and keep `body=None`, which is honest — each names two allegiances and canon has
         # no organ for either shape.
         body = over.get("body") if over else (_sub if _sub in BODY_FACTION else None)
-        # ⚠ `offices.yaml`'S CONFERRAL/REVOCATION OVERLAY (plan position `8a`, `13d-i` item 5).
-        # `ED-IN-0256` rulings (2)/(3) name HOW a seat is filled and WHO may strip it; nothing in
-        # this loop declared either before this fold, so every office built here carried the
-        # dataclass default (`None`, `None`) regardless of what canon says of the seat. 19 of
-        # `offices.yaml`'s 29 authored seats already construct through this exact loop (verified:
-        # every `holder` case id below resolves to a live office in `build_realm(0)` today) --
-        # this overlays THOSE 19 with their authored basis. It does NOT touch `remit_acts`:
-        # `offices.yaml`'s remit column assumes the `dispatch` verb already deleted (r2 `03`'s own
-        # precondition), which has not happened in this tree, and narrowing 19 seats' authority by
-        # a verb ED-IN-0256 never addressed is outside this fold's scope (see `offices.yaml`'s own
-        # header). It does NOT mint the 10 `[NEW]` rows (nine unseated cases plus the King's second
-        # seat) -- that needs a rung-ANCHOR resolver this position does not build; named follow-up
-        # in `HANDOFF_IN.md`.
+        # ⚠ `offices.yaml`'S OVERLAY (plan position `8a`, `13d-i` item 5, then `13d-iii`). The seat
+        # this loop builds is MATCHED to its authored row by `holder` case id, and the row's
+        # `rung` (resolved -- `resolve_anchor`), `remit_acts`, `conferral` and `revocation` are laid
+        # on it; the loop's own `post`, `body` and `faction` stand (a post normalisation is a
+        # separate unit -- `rosters.yaml: remit_default`'s note). Before `13d-iii` this overlaid
+        # the two bases only: 21 of the 24 seats it builds carried NO rung (`H-163` limit 1, a
+        # titled holder's `governs` was the one rule that gave one), so a holder's purview was
+        # empty and `levy`/`issue`/`open_case` refused on `authority`.
         # A case may name MORE than one row (NPC-020 holds two): match on `post` first, the one
         # field both this loop and `offices.yaml` author independently. `offices.yaml`'s `post` is
         # a NORMALISED spelling for three rows (`03` §A.15 rows 5, 14, 17 -- a live registry post
@@ -941,8 +1025,28 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         else:
             _off_row = next((cand for cand in _off_candidates if cand.get("post") == post), None)
         oid = f"off_{_slug(cid)}"
+        if _off_row is not None:
+            rung = seat_anchor(w, anchors, _off_row)
+            # `held` is what this seat would have had without the overlay: the acts `offices.yaml:
+            # meta: remit_unruled` names survive it (`authored_remit`), the rest is the row's.
+            remit = authored_remit(_off_row, remit_or_default(over.get("remit")))
+            authored[_off_row["id"]] = oid
+        elif governs is not None:
+            # A TITLED holder with no authored row would be seated rungless, silently -- the one
+            # derivation that used to give it a rung is gone with the second mechanism it was.
+            raise Unspecified(
+                f"{cid} holds the title {title!r} and `offices.yaml` has no row for the seat",
+                "offices.yaml -- seats",
+                needs="a row naming this holder, so the seat has an anchor",
+                law="a titled seat sits at the rung its title governs (r2 03 §A.8); no row, no rung")
+        else:
+            # THE DECLARED EXCEPTION: a seat the registry derives and no row authors (NPC-084's
+            # `guild leader`, measured). It has no anchor to resolve and invents none.
+            rung, remit = None, remit_or_default(over.get("remit"))
+            unauthored.append(oid)
         w.offices[oid] = Office(
-            oid, post, rung, remit_or_default(over.get("remit")),
+            oid, post, rung, remit,
+            scope_rung=rung,
             body=body,
             faction=(over.get("faction") if over else None) or (None if body else fac_name),
             conferral=(_off_row or {}).get("conferral"),
@@ -958,8 +1062,89 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         # work; hiding the distinction would let a proposal read as canon a session later.
         if str(r.get("status")) != "canonical":
             proposed.append(cid)
+    # -- THE AUTHORED SEATS NO LOOP-BUILT SEAT STANDS FOR: MINTED FROM THE ROW ALONE ---------------
+    # (`13d-iii`.) The loop seats a person from the registry; it never saw these holders as seated
+    # (measured: six of `offices.yaml`'s 29 rows -- the King's second seat and five people the
+    # registry gives no seat). The row IS the seat -- id, post, body/faction, rung, remit, bases --
+    # and its holder takes it with a `hold`. A row's holder must be a person the cast built (a seat
+    # nobody can sit in would be a ghost in `leaders`), and a minted seat grants exactly its
+    # authored remit: it held nothing before, so nothing is "kept" (`authored_remit`).
+    minted: list = []
+    for row in OFFICES_SEATS:
+        if row["id"] in authored:
+            continue
+        pid = f"p_{_slug(row['holder'])}"
+        if pid not in w.persons and cap is not None:
+            continue                  # a deliberately partial cast: the per-case loop skips its absent too
+        if pid not in w.persons:
+            raise Unspecified(
+                f"{row['id']} names the holder {row['holder']!r}, who is not in the cast this "
+                f"realm built", "offices.yaml -- seats",
+                needs="a holder from the built cast (a `cap` that drops the cast drops the seat)",
+                law="r2 03 §A.14 -- the holder is a case id in the cast")
+        # a person the cast built may still have no registry row (the per-case loop above skips
+        # `r is None` for the same reason), and the seat's `proposed` status is read off that row
+        holder_row = cast.row(row["holder"])
+        if holder_row is None:
+            raise Unspecified(
+                f"{row['id']} names the holder {row['holder']!r}, who is in the cast this realm "
+                f"built but has no `npc_registry.yaml` row", "offices.yaml -- seats",
+                needs="a holder with a registry row, so the seat's canonical/proposed status is known",
+                law="r2 03 §A.14 -- the holder is a case id in the cast; the registry row is what "
+                    "says whether the seat is canon or proposed")
+        rung = seat_anchor(w, anchors, row)
+        if row["id"] in w.offices:
+            # a MINTED seat is one no loop-built seat stands for, so its id must be fresh: the
+            # assignment below would otherwise REPLACE the seat already standing under it, and its
+            # holder's `hold` would then name a different office than the one he sat in
+            raise Forbidden(
+                f"the minted seat {row['id']!r} names an id a seat already stands under "
+                f"({w.offices[row['id']].post!r})", "offices.yaml -- seats",
+                needs="a seat id no other seat in the realm carries",
+                law="one seat per id -- a minted row that reuses an id overwrites the seat it "
+                    "names without a sound")
+        w.offices[row["id"]] = Office(
+            row["id"], row["post"], rung, authored_remit(row), scope_rung=rung,
+            body=row.get("body"), faction=row.get("faction"),
+            conferral=row.get("conferral"), revocation=row.get("revocation"))
+        w.add_tenure(Tenure(f"t_{row['id']}_hold", pid, row["id"], "hold", 0))
+        authored[row["id"]] = row["id"]
+        minted.append(row["id"])
+        seated += 1
+        if str(holder_row.get("status")) != "canonical":
+            proposed.append(row["holder"])
+    # -- A SEAT'S OBLIGEES SERVE IT (`obligees:`; `04 §B.7` call 2: a council is one seat and many
+    # holders, through `oblige`). Opened with no term: `term?` is lawful null, and a seat seeded at
+    # world-gen has no opening act to declare one (`_eff_oblige` is the act that does).
+    for row in OFFICES_SEATS:
+        seat = authored.get(row["id"])
+        if seat is None:
+            continue                  # a `cap` dropped this seat's holder, so the seat does not exist
+        holder_pid = f"p_{_slug(row['holder'])}"
+        for ob in row.get("obligees") or ():
+            opid = f"p_{_slug(ob)}"
+            if opid == holder_pid:
+                # checked BEFORE the `cap` skip below: a seat's holder does not serve his own seat,
+                # whether or not a partial cast kept him (`_req_oblige` clause 3's rule)
+                raise Forbidden(
+                    f"{row['id']} lists its own holder {row['holder']!r} among its obligees",
+                    "offices.yaml -- seats",
+                    needs="obligees other than the seat's holder",
+                    law="`_req_oblige` clause 3 -- the occupant is not his own seat's obligee")
+            if opid not in w.persons and cap is not None:
+                continue
+            if opid not in w.persons:
+                raise Unspecified(
+                    f"{row['id']} names the obligee {ob!r}, who is not in the cast this realm "
+                    f"built", "offices.yaml -- seats",
+                    needs="an obligee from the built cast", law="r2 03 §A.14 -- `obligees` are case ids")
+            w.add_tenure(Tenure(f"t_{seat}_oblige_{_slug(ob)}", opid, seat, "oblige", 0))
+    # The index `resolve_anchor` read, kept on the world so a test can resolve a form no row uses
+    # (`{settlement: ...}`) and so a mutated resolver is observable. The loop never reads it.
+    w._anchors = anchors
     w._office_census = {"seated": seated, "no_post": no_post,
-                        "occupations": occupations, "proposed_seats": proposed}
+                        "occupations": occupations, "proposed_seats": proposed,
+                        "authored": authored, "minted": minted, "unauthored": unauthored}
 
     # -- WHAT EACH PERSON WANTS, AND WHO IT CONCERNS ----------------------------
     #

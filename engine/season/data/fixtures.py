@@ -534,6 +534,17 @@ DEFAULT_FIXTURES = Fixtures(
     # gate saw it; `corpus_run`'s R5 passed throughout because it matches on the fixture
     # KEY in a `site:`, never on the id a comment cites.
     wound_harm_model="scene_fraction",  # `H-123`, swept scene_fraction / total / none
+    # `H-184` (plan position `8`; split out of `H-98`). WHERE THE `Wounded` BAND STARTS: the threshold `wounds` must be
+    # strictly above for a standing subject to read `Wounded` rather than `Untouched`. The edge is
+    # `rosters.yaml: combat_band_edges` and `None` MEANS ITS VALUE (`0`, any wound), so the number is
+    # authored once -- `field_walls_dr`'s precedent, and for its reason: a literal `0` here would be a
+    # second copy that drifts the day the roster is edited. An int, or the NAME of a
+    # `wound_quantities` member, overrides it. Injection site: this line, read by
+    # `seam/ladder.py::degree_of` -> `combat_degree`, handed the world's fixtures by `loop/resolve.py`.
+    # Only this edge is swept; the `Felled` edge is the engine's own verdict and re-deciding it would
+    # re-decide who went down (Jordan 2026-09-04: *the combat engine determines the result there*).
+    # [JUSTIFIED: engine/season/hole_register.yaml H-184 -- where the Wounded band starts; the ruling reads the band off the scene and the engine does not separate a decisive win from a narrow one beyond wound count, so the threshold is injected and swept 0 (= None, SHIPPED) / 1 / max_wounds]
+    combat_wounded_above=None,         # `H-184`, swept 0 (= None, SHIPPED) / 1 / max_wounds
     # M4 (`ED-IN-0279` clause (a)). `H-148`'s question asked of mass_battle's own result instead
     # of a scene's `WoundTracker` -- HOW MUCH `Person.body` A LOST FIELD COSTS. `total`/`none` are
     # the same two controls `wound_harm_model` ships above, for the same reason. Injection site:
@@ -553,6 +564,16 @@ DEFAULT_FIXTURES = Fixtures(
     # `field_casualty_model` above, deferred to the same reader.
     field_morale_weight=1,   # `H-148`, swept 0 / 1 / 3
     field_grudge_weight=1,   # `H-148`, swept 0 / 1 / 3
+    # `H-150` (plan position `20-v`). THE DEFENDER DR A WALLED FIELD ADDS -- A.9's one Walls number,
+    # applied 1:1 to the engine's own `Unit.dr` (an ASSUMPTION about the unit, which is why it is
+    # swept). `None` IS THE DEFAULT AND IT MEANS A.9's NUMBER, NOT "NO WALLS": `engine/` cannot name
+    # `systems/`, so the 3 stays authored once, at `terrain.WALLS_DEFENDER_DR`, and the engine reads it
+    # when this is `None` -- a literal 3 here would be a second copy that drifts the day A.9 is
+    # re-ruled. An int overrides it for the season: `3` spells A.9's number out (it reproduces `None`
+    # exactly, which `test_mass_battle_provider.py` asserts), `0` is the CONTROL (the only live
+    # difference between a walled and an open field removed), `1` the middle arm. Injection site: this
+    # line, read by `seam/wrappers/mass_battle.py::resolve()` and handed to `resolve_field(walls_dr=)`.
+    field_walls_dr=None,     # `H-150`, swept 3 (A.9, = the default) / 0 (control) / 1
     # `H-128` / §54 item 21. HOW DEEP A MORAL WOUND THE OUTCOME CUTS, per unit of the verb's own
     # alignment with an axis. Part D carries `(Person, scar[axis])` at `[RES] ACTS` and names NO
     # magnitude; no in-chain document supplies one either, so it is declared, defaulted and swept

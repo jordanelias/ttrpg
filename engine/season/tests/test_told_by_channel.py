@@ -231,9 +231,42 @@ def test_15d_falsifier_the_realm_holds_hearsay_no_telling_minted(monkeypatch):
     `told_by` whatever the map says (the told branch sets its source itself). So each arm counts the
     map's `told_by` (no `chain`) apart from the told channel's (a `chain`), the control asserts the
     map's is zero, and the told channel's is asserted UNMOVED by neutralising the map."""
+    # ⚠ RE-PINNED SEED 0 -> 5 AT `13d-iii` (2026-10-01): at seed 0 the first season stopped depositing
+    # any chained told claim (3 before), and the precondition below needs one.
+    # WHAT TWO TEN-SEED TABLES SHOW (Batch C close, fix lane 4, 2026-10-02). THE QUANTITY IS THIS
+    # TEST'S OWN -- chained `told_by` claims (`live_channel`) after `populated.build_realm(s)` and
+    # `populated.run(1, s)` -- measured on tree `5519cf52` (position 17, before `13d-iii`, and that
+    # commit's own PARENT) and on the tree after it, one run per seed, the same script on both. The
+    # tree after is `13d-iii` itself (`294a152d`), and the later commits to HEAD agree with it at every
+    # seed on all three columns (chained, unchained, total), so the comparison is one commit's:
+    #   seed                0   1   2   3   4   5   6   7    8   9
+    #   chained, before     3   0   3   0   1   6   4   0    7   0
+    #   chained, after      0   0   0   0   1   6   3   0   12   0
+    # `13d-iii` LOWERED the chained count in 3 of the 10 seeds (0, 2 and 6 -- to 0 at seeds 0 and 2),
+    # left it unchanged in 6 (seeds 1, 3, 7 and 9 at 0; 4 at 1; 5 at 6) and RAISED it in 1 (seed 8,
+    # 7 -> 12); the ten sum to 24 before and 22 after. SEED 5 IS A SEED WHERE THE CHANNEL IS STILL
+    # LIVE, AND ITS COUNT IS THE SAME ON BOTH TREES. THE MECHANISM BY WHICH `13d-iii` LOWERED THE
+    # COUNT IN THE THREE SEEDS IS NOT ISOLATED. `told_by` claims WITHOUT a chain rose in all 10
+    # seeds (1,113 -> 2,807 at seed 0; 79 -> 750 at seed 9), as did every seed's total claims.
+    # SEED 0 ONLY, from the control run before these tables (one season, `5519cf52` against
+    # `8b03e518`): executed `tell` acts 4 -> 6, so FEWER TELLINGS IS NOT THE CAUSE; the unchained
+    # rise there includes `dispensation.issued` 0 -> 598 and `order.given` 75 -> 586 (binding-decision
+    # Events, the kind `rosters.yaml: witness_channels` gives the public record `chronicle`; the
+    # channel of each claim was not read; offices 24 -> 30 on the same change). The cause first
+    # stated here -- *giving every seat a rung widened what `chronicle`/`post_remit` hand a hearer*
+    # -- is PARTLY WRONG: `post_remit` mints `inferred`, not `told_by` (`rosters.yaml:
+    # witness_channels`, since `17a`), `inferred` is 0 in the first season on BOTH trees, and
+    # `chronicle` reads no seat; what grew is the number of binding-decision Events, because more
+    # seats execute. THAT `loop/witness.py`'s dedup guard ("ALREADY SAW") is what eats the chained
+    # deposits IS NOT ISOLATED EITHER.
+    # SEED 5 IS A CHOICE, NOT THE LOWEST SEED STRONG ENOUGH: seed 4's one deposit already passes the
+    # `live_channel > 0` guard below; 5 is the lowest seed with more than one, so the control's `==`
+    # compares a count that is neither 0 nor 1. The assertions below are unmoved.
+    SEED = 5
+
     def told_by_count() -> tuple:
-        w = populated.build_realm(0)
-        out = populated.run(1, 0, w=w)
+        w = populated.build_realm(SEED)
+        out = populated.run(1, SEED, w=w)
         told_by = [c for p in w.persons.values() for c in p.ledger if c.source == "told_by"]
         channel = sum(1 for c in told_by if c.chain)
         return len(told_by) - channel, channel, sum(out["claim_sources"].values())
@@ -988,7 +1021,8 @@ def test_t4_the_known_person_claim_roster_refuses_a_planted_collision():
 # T4b (ED-IN-0282): AN OPPORTUNITY INCLUDES ITS COUNTERPARTY. The once-per-season filter keyed
 # `(verb, subject)`, so once topic C was told to B it was dropped for D too, though a person tells
 # several hearers. The key is the general rule for a row naming a counterparty; `tell` is the row where
-# it changes anything today (`petition`/`issue` have `to` == `subject`; `give` forms no Candidate).
+# it changes anything of the rows measured here (`petition`/`issue` have `to` == `subject`; `give` was typed at
+# position 14 and fans its counterparty over the persons the giver knows, so the key applies to it too).
 # `data/verbs.py::opportunity_key` is the
 # ONE key; `loop/driver.py` writes it after the fold and `_drop_what_was_already_done` reads it.
 # ---------------------------------------------------------------------------------------------

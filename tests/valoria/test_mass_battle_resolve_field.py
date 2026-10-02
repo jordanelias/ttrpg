@@ -26,7 +26,7 @@ from engine.season.queries import faction_q
 def test_resolve_field_sums_weight_per_side_into_troops_not_power(monkeypatch):
     captured = {}
 
-    def fake_run_and_grade(unit_a, unit_b, terrain, world):
+    def fake_run_and_grade(unit_a, unit_b, terrain, world, walls_dr=None):
         captured["troops_a"] = unit_a.subunits[0].troops
         captured["troops_b"] = unit_b.subunits[0].troops
         captured["power_a"] = unit_a.power

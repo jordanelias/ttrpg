@@ -118,6 +118,7 @@ verbs:
     emits:       ["petition.carried"]
     emits_on_refusal: ["carry.refused"]
     grade:       "ruled"
+    decline_note: "PLAN POSITION `14` (U7-own) DECLINED THE EFFECT. Its one write, `(DocketItem, matter)`, is an append to `World.docket`, a SEQUENCE, and `state/gate.py::Subject` names only an entity, an edge or a staged cell -- `_eff_open_case`'s own docstring: *THE DOCKET APPEND IS NOT A NAMED SUBJECT AND CANNOT BE ONE*; it rides the case file's receipt. `carry` mints nothing to ride on, so under G4 every carry would name nothing that moved and refuse as `NoOpReceipt`: an always-refused verb. Building it needs a fourth `Subject` shape at the gate, and which matter a carried petition puts before the room (the petition, or its `terms`) is unread by the tree (`H-63`)."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "commit"
     stratum:     "social"
@@ -195,6 +196,7 @@ verbs:
     emits_on_refusal: ["destroy.refused"]
     grade:       "ruled"
     grade_note:  "V2 §E3 put `D7` in the grade column -- a Part B defect id, not one of §G4's four grades. W2 landed Part D's five `Record` rows, which IS D7's discharge, so the verb is `ruled` on that table."
+    decline_note: "PLAN POSITION `14` (U7-own) TOOK `A-13` AT LADDER STEP 4 AND HELD IT ON MEASUREMENT. `give`'s shape -- eligibility `own | hold:<record> | presence` (`own` first), the holding as a typed cell (`existence` of `subject` kind `Record`, `relation` of `subject` `held_by`), and `_eff_destroy_record` reading the bound `subject` instead of a `record` key no Candidate carries -- makes the row FORMABLE, and it EXECUTES: the 143-world corpus burns in 3 worlds (refused in 77), `populated.build_realm(0)` 1 in its first season (21 refused). It is held because the same measurement trips this position's falsifier and a test it may not edit: formed on every referent and mostly refused, it CROWDS `release` out of its 2 corpus worlds -- the always-refused set grows 8 -> 9, `H-156`'s shape (the pin then; the live pin is SEVEN, `test_season_shape.py:~7623`, so the same crowding would read 7 -> 8). ⚠ CORRECTED AT THE BATCH C CLOSE, TWO OF THIS NOTE'S REASONS DO NOT HOLD AT HEAD. (1) The second reason given here -- the realm's first season minting no chained told claim (`news.told` 3 -> 2, `news.untold` 3 -> 5), so `test_told_by_channel.py::test_15d_...`'s control goes vacuous -- is WITHDRAWN: after `13d-iii` seed 0 deposits no chained told claim, and that control runs SEED=5 (`tests/test_told_by_channel.py:~234-243`). (2) THE FIGURES ABOVE ARE NOT REPRODUCIBLE: the commit that took this decision said the formable variant was saved as a patch outside the tree for a ruling, and NO SUCH PATCH IS KEPT, so the crowding measurement (the corpus burns, `release` crowded out) is a record of a run at that tree and NOT RE-MEASURED AT HEAD; `destroy_record` forms for nobody in the realm today (`aperture 1 0`: eligible 0/0, formed 0). The unformable state is §E3's own cell, unchanged: both alternatives are placeholders (`H-75`)."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "determine"
     scale:   "settlement"
@@ -237,7 +239,8 @@ verbs:
       bench:       ["determine.unauthorized"]
       quorum:      ["determine.refused"]
       write:       ["determine.refused"]
-    refusal_note: "PLAN POSITION `19`: KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half, F7; `data/verbs.py` checks the keys are exactly this row's failable clauses). Two kinds, split by WHO said no. `determine.unauthorized` -- the SEAT: none exercised grants `determine`, or the one exercised does not sit in judgment over the party. `determine.refused` -- the WORLD: the matter is no person, is on no docket, the bench is below quorum, or the effect found nothing to open (the party already owes this seat an `oblige`). ⚠ `determine.unseated`, the proceedings design's second kind (`04_VERBS.md` §B.2), is NOT taken: read cold it names an Event in which somebody was UNSEATED -- `revoke`'s outcome -- which is the opposite of a refusal; `unauthorized` is the ordinary word for *not permitted by any authority the act carries* (`CLAUDE.md` §4). The design's struck `determine.unheard` (P-23) stays struck."
+      counterparty: ["determine.refused"]
+    refusal_note: "PLAN POSITION `19`: KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half, F7; `data/verbs.py` checks the keys are exactly this row's failable clauses). Two kinds, split by WHO said no. `determine.unauthorized` -- the SEAT: none exercised grants `determine`, or the one exercised does not sit in judgment over the party. `determine.refused` -- the WORLD: the matter is no person, is on no docket, the bench is below quorum, or the effect found nothing to open (the party already owes this seat an `oblige`). ⚠ `determine.unseated`, the proceedings design's second kind (`04_VERBS.md` §B.2), is NOT taken: read cold it names an Event in which somebody was UNSEATED -- `revoke`'s outcome -- which is the opposite of a refusal; `unauthorized` is the ordinary word for *not permitted by any authority the act carries* (`CLAUDE.md` §4). The design's struck `determine.unheard` (P-23) stays struck. ⚠ PLAN POSITION `14`: THE ROW NAMES `counterparty: subject`, AND THAT CLAUSE (`loop/resolve.py::_admits`, asked only AFTER the precondition passes) CAN NEVER FIRE FOR THIS ROW. Both of its cases are refused earlier, by the precondition: a self-determination is refused by the `bench` conjunct (`may_determine`, `state/gate.py` conjunct 2, *a judge does not bind himself*) as `determine.unauthorized`, and an act naming no subject dies at `party` (`determine.refused`) first. The `counterparty:` key under `emits_on_refusal` (`determine.refused`) is in `data/verbs.py`'s expected set BY DERIVATION from the row's `counterparty:` column (`data/verbs.py:704-705`), so the loader refuses a keyed row without it and does not call it an ID-13 EXTRA: THE LOADER CANNOT JUDGE REACHABILITY, only that a key names a clause the row derives. The key is read at `loop/resolve.py:290` and is dead for `determine` only because the `bench` conjunct (`may_determine`, `state/gate.py`, conjunct 2) runs first, which is a fact about this row's precondition and about nothing the loader checks; the `_eff_determine` self-check this clause replaced was already dead for the same reason (`loop/effects_information.py:270-272`)."
     grade:       "assumption"
     grade_note:  "PLAN POSITION `19`: was `absent` on `D11` (`judging_set` raised unconditionally). `18` built it (`H-32`, graded `assumption`), and the quorum is a swept fixture (`H-161`), so the row is `assumption`, not `ruled`."
     source:      "ARCHITECTURE_V2.md §E3, transcribed; precondition, disposal, keyed refusals and writes at plan position `19` (`workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` `19 — INSTRUCTION`; `21_RECONCILIATION.md:575`)"
@@ -298,6 +301,7 @@ verbs:
     emits_on_refusal: ["exchange.refused"]
     grade:       "assumption"
     writes_note: "`(Rung, stores)` x2, one per side -- as `transfer`"
+    decline_note: "PLAN POSITION `14` (U7-own) DECLINED IT, FOR THIS ROW'S OWN REASON (`requires_typed_note`): the second side's matter kind and quantity have no names in the closed `requires_operands`, and `T4`'s `operand_bags` supplies a known PERSON for `to`, not what he gives back. Typing one side is the `_req_confer` defect; coining the names is filling `H-94` by keyword argument -- a second binding mechanism this position may not build."
     source:      "W3 -- #353 `:1899` names it and Part E omits it. Modelled on `transfer`, whose scarcity property (§27.1) it must share: the second party on an emptied larder gets a DIFFERENT Event, not a raise."
   - verb:        "forge"
     stratum:     "uncontested_material"
@@ -308,6 +312,7 @@ verbs:
     emits:       ["record.created"]
     emits_on_refusal: []
     grade:       "assumption"
+    decline_note: "PLAN POSITION `14` (U7-own) DECLINED THE EFFECT. The row is untyped, so a computed `forge` carries no record kind and no content (and the operand vocabulary's `kind` is a MATTER kind) -- it would mint a contentless `text` forgery on every referent and EXECUTE, a behaviour nothing chose. `forgery_quality`'s value is unruled and nothing reads it (r2 `02` §A.15, RULED there: the missing step is a CONSUMER), and this row's `emits: record.created` disagrees with the matrix row's `record.forged`. Registered at `H-169` (2)."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   # ===========================================================================================
   # PLAN POSITION `24e` -- WORKS & FOUNDING. `ARCH` F.20 (`04_CODE_ARCHITECTURE.md`): *"the world
@@ -376,13 +381,23 @@ verbs:
   - verb:        "give"
     stratum:     "social"
     eligibility: ["own", "hold:<record>"]
-    beneficiary: "none"
-    beneficiary_note: "the RECEIVER is who a gift is for, and the receiver is the `to` operand -- which this row cannot carry, because it is untyped (`requires_typed: none`, below) and the loader refuses `beneficiary: to` on a row whose cell binds no `to`. `exchange`'s shape: the other party is exactly what the row cannot hold. `subject` is the Record, and a beneficiary that is not a person is the `none` member."
+    beneficiary: "to"
+    beneficiary_note: "THE RECEIVER, who a gift is for -- the `to` operand, which this row's typed cell BINDS since plan position `14` (it read `none` while the row was untyped and could carry no `to`, the loader refusing `beneficiary: to` on a cell that binds none). `subject` is the Record."
     requires:    "the actor holds the subject, and the receiver is present where the actor is"
-    requires_typed: none
-    requires_typed_note: "⚠ `none` FOR THE GRAMMAR'S REASON, ON `release`'s AND `revoke`'s ROUTE (r2 `02` §A.7, RULED there): a prose `requires:` read by the registered predicate `loop/predicates.py::_req_give`. The FIRST conjunct types -- `{form: relation, of: subject, relation: held_by}`, `succeed`'s live cell. The SECOND cannot: `Relation.check` pairs its `of:` operand with the ACTOR, and `present_at` asks whether the ACTOR is at a site or rung, so no stem in `data/requires.py: REQUIRES_STEMS` asks *are these two persons in the same place*. Typing the first conjunct alone is the dropped-conjunct over-admission `_req_confer` was corrected for, and a typed cell beside a predicate is two owners of one cell (`test_wa_one_owner_...`). ⚠ IF A PERSON-TO-PERSON CO-LOCATION STEM IS EVER RULED, THIS IS THE CELL WAITING FOR IT. ⚠ THE CONSEQUENCE, STATED: `operands_for` carries nothing for an untyped row, so no Candidate a person forms can name the receiver -- which is why the row declares `counterparty: to` (below). A `give` EXECUTES from an act that names `to`; a person forms one when plan position `15c` derives `to` from a held writ."
+    requires_typed:
+      all:
+        - form:      existence
+          of:        subject
+          kind:      Record
+        - form:      relation
+          of:        subject
+          relation:  held_by
+        - form:      relation
+          of:        to
+          relation:  with
+    requires_typed_note: "PLAN POSITION `14` (U7-own) TYPED THIS CELL AND RETIRED `loop/predicates.py::_req_give`, WHICH IS WHAT MAKES A GIFT FORMABLE. It was `none` FOR THE GRAMMAR'S REASON: the co-location conjunct had no stem (*'IF A PERSON-TO-PERSON CO-LOCATION STEM IS EVER RULED, THIS IS THE CELL WAITING FOR IT'*), and the telling workplan's `T4` built exactly that stem, `with` (`data/requires.py: REQUIRES_STEMS`, `relation` of `to` -- `tell`'s `hearer`). THREE CONJUNCTS, `_req_give`'s four clauses less the one the fold now owns, each on an existing form and stem: `existence` of `subject`, `kind: Record` (clause 1, `give` hands on a DOCUMENT -- the `handover` basis is general over every non-seat `hold`, and this row narrows the verb); `relation` of `subject`, `held_by` (clause 2, the actor holds it -- `succeed`'s and `found`'s cell; `hold_force`'s raise on two live holders is not asked here because the gate's `handover` makes two unreachable); `relation` of `to`, `with` (clause 4, the receiver stands where the actor does -- UNKNOWN for a receiver who is no person, so `_req_give`'s *a person* rides here too). Clause 3, *a person other than the actor*, is `ED-IN-0210` ruling 1's second party and is the FOLD's (`loop/resolve.py::_admits`, the `counterparty` clause, `14`), not this cell's: the grammar has no negation. ⚠ THE CONSEQUENCE: the cell binds `to` BESIDE `subject`, so `TypedRequires.known_person_operands` names `to` and `decision/options.py::operand_bags` forms one Candidate per person the giver KNOWS (`known_persons`, `tell`'s primitive) -- the topic is the referent (the Record) and the receiver is somebody known, never the referent. `with` is WORLD-ONLY, so a giver forms the Candidate on whom he knows and the fold refuses an absent receiver."
     counterparty: to
-    counterparty_note: "THE RECEIVER, and on this UNTYPED row the declaration does the other half of its job: no cell binds `to`, so no Candidate carries it, and `decision/options.py::opening_set` forms NONE (`ops.get(counterparty)` is absent) rather than minting a gift with no receiver for the fold to refuse. MEASURED without it: 3 person-formed `give`s in `headless.run(3, 0)` and 41 in `populated.run(2, 0)`, every one `give.refused`, and `release` fell out of the corpus's executed set -- the constant scene tax the `petition` row's seat reading was refused for. The loader admits an unbound counterparty only on an untyped row and only if it is a `requires_operands` member (`data/verbs.py`). When `15c` carries `to`, the same column declines a gift to oneself, as it does a petition."
+    counterparty_note: "THE RECEIVER. Since plan position `14` the typed cell binds `to`, so every Candidate carries it (from `operand_bags`' known persons) and `opening_set` declines only a gift to oneself, as it does a petition; the FOLD refuses the same case for a hand-built act (`_admits`' `counterparty` clause). BEFORE `14` the row was UNTYPED and this column made `opening_set` form NONE -- MEASURED then: 3 person-formed `give`s in `headless.run(3, 0)` and 41 in `populated.run(2, 0)`, every one `give.refused` for want of a receiver, which is the scene tax the column existed to stop."
     writes:      ["Tenure.until", "Tenure.since"]
     writes_note: "ONE PER SIDE, `confer`'s pair: the giver's `hold` closes (`Tenure.until`) and the receiver's opens (`Tenure.since`), in ONE effect (`loop/effects.py::_eff_give`), so the fold never sees two live holders. The gate admits the close as `T-m` and the open as `handover` (`state/gate.py`), and the second requires the first IN THE SAME WRITE -- release-before-mint is the gate's condition, not the effect's habit (r2 `05` row 6, ⊕ R14). No `write_matrix.yaml` row is added: both pairs exist."
     emits:       ["record.given"]
@@ -419,7 +434,8 @@ verbs:
       executors:   ["issue.refused"]
       authority:   ["issue.unauthorized"]
       write:       ["issue.refused"]
-    refusal_note: "PLAN POSITION `19`: KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half). `issue.unauthorized` -- the SEAT: none exercised grants `issue`, or its purview does not reach the executor. `issue.refused` -- the WORLD: the addressee is no person, or the mint moved nothing. `unauthorized` is `determine`'s word for the same refusal, and its note says why it is not `unseated`."
+      counterparty: ["issue.refused"]
+    refusal_note: "PLAN POSITION `19`: KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half). `issue.unauthorized` -- the SEAT: none exercised grants `issue`, or its purview does not reach the executor. `issue.refused` -- the WORLD: the addressee is no person, or the mint moved nothing. `unauthorized` is `determine`'s word for the same refusal, and its note says why it is not `unseated`. ⚠ PLAN POSITION `14`: `counterparty` -- the writ names no executor or names its issuer -- is the fold's own clause (`loop/resolve.py::_admits`), keyed `issue.refused`."
     grade:       "ruled"
     writes_note: "— (a Dispensation is not a state write — §37.3)  ||  ⚠ W3, ON THE W2 AUDIT: as `petition`. Part E's '(a Dispensation is not a state write)' is the bypass §1.4 hole 4 names, not a licence for one.  ||  ⚠ PLAN POSITION `15`: `Dispensation.exists` -> `Record.exists`. A dispensation is a `Record` of kind `dispensation` (`04_CODE_ARCHITECTURE.md` §B.5, `rosters.yaml: record_kinds`), minted with the issuer's `hold` by `loop/effects.py::_eff_issue`; `(Dispensation, exists)` is deleted from the matrix in the same commit, which the loader requires (an entry naming no row is refused at load)."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
@@ -657,6 +673,7 @@ verbs:
     emits_on_refusal: ["duty.refused"]
     grade:       "ruled"
     refusal_note: "PLAN POSITION `17a`: added with the precondition. §E2 -- 'failure emits, never raises'; W3's rule, *a verb with a `requires` and no refusal channel* produces no Event, no witness and no arc. Refusal condition: the subject is no seat, or the seat's `binds` is off `binds_bases`, or the actor holds the seat, or he is already obliged to it."
+    decline_note: "PLAN POSITION `14` (U7-own) DID NOT MAKE THIS FORMABLE, AND MEASURED WHY. `populated.build_realm(0)`, one season, `questions_for` over every claim the season landed: of 4,451 question referents none is a seat (2,300 rungs, 805 persons, 633 Records, 585 Sites, 81 `need` persons, 47 ids of no collection) and no ledger holds a single claim about an office -- so a typed `existence` of `subject` kind `Office` would form on every referent and refuse on every one, growing the always-refused set. `T4`'s bags supply known PERSONS, not seats, and a known-seat source is a second binding mechanism. The fold's `counterparty` clause covers it for the hand-built act."
     source:      "ARCHITECTURE_V2.md §E3, transcribed; body, precondition and refusal from r2 item 9 / `03` §A.9 at plan position `17a`"
   - verb:        "open_case"
     stratum:     "social"
@@ -704,7 +721,7 @@ verbs:
     emits:       ["petition.filed"]
     emits_on_refusal: ["petition.refused"]
     grade:       "ruled"
-    refusal_note: "PLAN POSITION `15`: added with the typed cell. §E2 -- 'failure emits, never raises'. Refusal condition: the addressee is not an existing person or the place of origin is no rung, or -- for a hand-built act only, since a computed one is never formed -- the petition is addressed to the petitioner (`_eff_petition` declines it: no counterparty)."
+    refusal_note: "PLAN POSITION `15`: added with the typed cell. §E2 -- 'failure emits, never raises'. Refusal condition: the addressee is not an existing person or the place of origin is no rung, or -- for a hand-built act only, since a computed one is never formed -- the petition is addressed to the petitioner (the FOLD's `counterparty` clause, `loop/resolve.py::_admits`, plan position `14`; `_eff_petition` no longer declines it and the keyed row emits this verb's one kind)."
     writes_note: "— (a Petition is created, not written)  ||  ⚠ W3, ON THE W2 AUDIT: Part E says a Petition is 'created, not written', and PLAN §1.4 hole 4 says THAT IS THE DEFECT — #353 :1061-1064, 'Either the gate applies the write, or direct assignment is made impossible.' With `writes: []` the creation row W2 added was INERT and creation still bypassed the gate.  ||  ⚠ PLAN POSITION `15`: `Petition.exists` -> `Record.exists`. A petition is a `Record` of kind `petition` (`04_CODE_ARCHITECTURE.md` §B.5, `rosters.yaml: record_kinds`), minted with the petitioner's `hold` by `loop/effects.py::_eff_petition`, so `forge`, `destroy_record`, `hold` and `carry` reach it with no new row. `(Petition, exists)` is deleted from the matrix in the same commit."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "construe"
@@ -753,6 +770,7 @@ verbs:
     emits_on_refusal: ["repudiation.refused"]
     grade:       "ruled"
     refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: no live `commit` exists to end"
+    decline_note: "PLAN POSITION `14` (U7-own) DECLINED THE EFFECT, ON THE ALWAYS-REFUSED FALSIFIER. The cell's subject must be a Proposition carrying a live `commit`, and no question's referent is ever a Proposition -- `commit`, whose cell is `existence` of `subject` kind `Proposition`, is attempted and refused every time it is attempted -- 48 of 48 in a one-season realm at seed 0 (`aperture 1 0`, re-measured at the Batch C close), 175 attempts and no execution in four seasons and 802 of 802 in the corpus (`H-156`), and `need` questions refer to what an ambition is ABOUT, never to the ambition. An effect would make the row resolvable, formed on every referent and refused on every one: a ninth always-refused verb. Naming the Proposition needs a second operand source (the `need` question's `about`), which `14` may not build. `release` already ends a `commit` (`T-m`, its domain)."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "restore"
     stratum:     "uncontested_material"
@@ -818,6 +836,7 @@ verbs:
     emits_on_refusal: ["succession.refused"]
     grade:       "assumption"
     writes_note: "a `succeed` Tenure -- the kind is in `rosters.yaml`"
+    decline_note: "PLAN POSITION `14` (U7-own) STOPPED ON IT, AND THE GROUND IS `ID-13` -- A CARRIER NOBODY READS -- TOGETHER WITH THE HEIR OPERAND THE ROW DOES NOT BIND (both are given below). ⚠ AN EARLIER READING OF THIS NOTE WAS FALSE AND IS CORRECTED HERE: it rested on `holonic §15` (a `succeed` edge is `Rung -> Person`, a Tenure its subject's), so *no gate basis admits the holder's write* and `release` *cannot end one*. `architecture/meta/04_CODE_ARCHITECTURE.md` §A.3 row 8 (`:190`) overrides §15 -- `succeed : Person -> Person`, owned by the holder -- so `state/gate.py`'s `T-m` (`:707-710`) admits the owner opening one, and `release`'s `domain:` includes `succeed` (that row), so the holder can also end it. WHAT STOPS IT: (1) its one reader, transmission at death (#353 `:542`), is unbuilt (`state/carriers.py:938-941` deleted the `transmission` field for want of a reader), so an executed `succeed` would write an edge nothing reads; a MATTER death transmission reading the live `succeed` edge is the reader that would make it live. (2) the row binds no operand for the HEIR: the typed cell names the actor and a `subject` he holds, and the edge's other end has no operand in this row. The decline stands."
     source:      "W3 -- heir designation. #353 `:371`, `:542` name `succeed` as a Tenure kind and `transmission` as the mechanism, and Part E carries no verb that CREATES one. Without it F13's contested-succession cases have no producer."
   # ===========================================================================================
   # PLAN POSITION `20-iii` -- THE INFORMATION CLUSTER (narrative #14 §F, `D1-a`). A person cannot
@@ -922,9 +941,10 @@ verbs:
     emits_on_refusal:
       holds:  ["news.untold"]
       hearer: ["news.untold"]
+      counterparty: ["news.untold"]
     grade:       "ruled"
     writes_note: "— (deposits at WITNESS, not here)"
-    refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: the teller holds no claim on the subject. ⚠ KEYED AT `T4` (`issue`'s precedent, `data/verbs.py` invariant 4's per-conjunct half): `holds` -- nothing held about the subject; `hearer` -- the person told is not with the teller. ONE KIND FOR BOTH, so the seam's party-gap refusal, which emits the row's union, still emits exactly the kind each conjunct does; that single-kind union is what the loader requires of a CONTESTED keyed row."
+    refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: the teller holds no claim on the subject. ⚠ KEYED AT `T4` (`issue`'s precedent, `data/verbs.py` invariant 4's per-conjunct half): `holds` -- nothing held about the subject; `hearer` -- the person told is not with the teller. ONE KIND FOR BOTH, so the seam's party-gap refusal, which emits the row's union, still emits exactly the kind each conjunct does; that single-kind union is what the loader requires of a CONTESTED keyed row. ⚠ PLAN POSITION `14`: `counterparty` -- a telling to nobody, or to the teller -- is the fold's own clause (`loop/resolve.py::_admits`), keyed to the row's one kind."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   # ===========================================================================================
   # THE SIX INVESTIGATION ACTS, AS SIX ROWS. Jordan, 2026-09-10: *"'the six investigation acts'
@@ -1080,6 +1100,7 @@ verbs:
     emits:       ["finding.made"]
     emits_on_refusal: ["finding.none"]
     grade:       "assumption"
+    decline_note: "PLAN POSITION `14` (R05-THREAD) TOOK `H-85`'s DEFAULT AT LADDER STEP 4 AND DECLINED: the default supplies the KINDS (`knowledge_kinds`) and not the GATE, and this precondition IS the gate (TS >= 30 on the actor, no carrier, no stem, no per-person value). Waits on threadwork, plan positions `27`/`29f`; recorded on `H-85`."
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:297 (§4.2), :321 (§4.3), §4.5 :341-347. ⚠ P-01 CO-MOVEMENT AND THE COHERENCE COST (§4.5 :344-346) ARE NOT EXPRESSED HERE and are not silently dropped: they are threadwork effects with no carrier in this loop, carried on ED-FI-0009 with the Exposure gap"
   - verb:        "reconstruct"
     stratum:     "uncontested_material"
@@ -1101,11 +1122,12 @@ verbs:
     eligibility: ["own"]
     beneficiary: "actor"
     requires:    "—"
-    requires_note: "stored once, on the lower id (§15.1)"
+    requires_note: "⚠ SUPERSEDED TRANSCRIPTION: *stored once, on the lower id (§15.1)* is `holonic §15.1`'s reading, which `architecture/meta/04_CODE_ARCHITECTURE.md` §A.3 row 9 (`:191`) overrides -- `tie`/`knot` are TWO DIRECTED EDGES, one owned by each party, and strain is a Query."
     writes:      ["Tenure.since"]
     emits:       ["bond.formed"]
     emits_on_refusal: []
     grade:       "ruled"
+    decline_note: "PLAN POSITION `14` (U7-own) STOPPED ON IT (`H-182`). ⚠ THE GROUND IS NOT `ID-13` FOR BOTH KINDS (CORRECTED AT THE BATCH C CLOSE): `ID-13`, A CARRIER NOBODY READS, HOLDS FOR `tie` ONLY, because `knot` HAS A READER (below). WHAT STOPS `tie / knot` IS THE PARTNER OPERAND THE ROW DOES NOT BIND (BOTH KINDS) AND, FOR `knot`, THAT IT BELONGS TO `29f`'S KNOTS WORK; `tie`'s own ground is `ID-13` AND that operand. ⚠ AN EARLIER READING OF THIS NOTE WAS FALSE AND IS CORRECTED HERE: it rested on `holonic §15.1` (a tie stored ONCE on the lower id), so a tie by the higher-id party *writes an edge he does not own* and `release` *cannot end it from his side*. 04 §A.3 row 9 (`:191`) overrides it -- two directed edges -- so each party owns his own, `state/gate.py`'s `T-m` (`:707-710`) admits the owner opening it, and `release`'s `domain:` includes `tie` and `knot`, so nobody writes an edge he does not own and the owner can end it. WHAT STOPS IT, PER KIND: `tie` has NO production reader -- the only code naming the kind is `release`'s domain and `harness/probes.py` -- so an executed `tie` would write an edge nothing reads; the reader that would make it live is `decision/options.py::teller_weight`'s `relation` term (`~:1032-1079`, the hearer's relation to the teller), which today reads `rank` and `regard` and no tie. `knot` HAS a reader, `epistemic.py::_ch_witness_key`, and it reads the edge UNDIRECTED (either endpoint, either role), against 04 `:388` (*`tie`/`knot` are directed*) -- recorded as an observation for the `29f` lane, which owns the `firsthand_via_knot` channel, and not decided here. BOTH kinds also lack the operand: the row's cells bind the actor and no partner, so a computed act names nobody to bond with. The row still names two kinds for one opener. The decline stands."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "transfer"
     stratum:     "uncontested_material"

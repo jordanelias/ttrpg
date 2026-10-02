@@ -14,7 +14,10 @@ test that runs the arithmetic and would fail under the rival reading:
 
 The magnitudes in coherence.py are invented (its own header says so); what is NOT invented is the
 set of orderings §7.1 fixes, and `test_canon_orderings_hold` pins those so a re-tune cannot break
-them. The ED-WR-0008 Mending Stability scale term rides the same position and is tested at the end.
+them. The ED-WR-0008 Mending Stability scale term rides the same position and is tested at the end,
+followed by the position's remainder: Mending's restorative feedback to the mender (C-1, §6.8), which
+a Mending that stayed inert — the state until position 27's remainder — fails
+`test_mending_calls_recover_and_its_term_is_positive`.
 """
 import os
 import random
@@ -266,3 +269,112 @@ def test_relational_tier_reproduces_the_retired_degree_table():
 def test_binding_ops_keep_their_flat_cost():
     seen = _ms_by_degree(ops.attempt_locking, "Structural", seeds=60)
     assert set().union(*seen.values()) == {-1}
+
+
+# ─── Position 27 remainder: Mending's restorative feedback (C-1; 06_operations.md §6.8) ──────────
+# Read as: `attempt_mending` calls `recover()` and the restorative term > 0 (`coherence_delta` stays 0,
+# ED-871) — the plan's wording is "cost > 0", and a literal cost contradicts ED-871's zero STRESS, so
+# the term is what is asserted. The two rulings are asserted together.
+
+DEGREES = ("Overwhelming", "Success", "Partial", "Failure")
+
+
+def _spy_recover(monkeypatch):
+    """Wrap the REAL `recover` that `operations` calls, recording each call's keywords. Wrapped,
+    not replaced: the state assertions below then observe the owner's own arithmetic."""
+    calls = []
+    real = ops.recover
+
+    def spy(*args, **kwargs):
+        calls.append(kwargs)
+        return real(*args, **kwargs)
+    monkeypatch.setattr(ops, "recover", spy)
+    return calls
+
+
+def _mend_at(w, scale, degree, monkeypatch, *, env, pre_stress=coh.ELASTIC_RANGE):
+    """One Mending by "prac", stretched by `pre_stress` first, with the degree FORCED — the rolled
+    path is exercised separately below; this pins the per-degree contract at every scale."""
+    monkeypatch.setattr(ops, "_compute_degree", lambda net, ob: degree)
+    if pre_stress:
+        _stress("prac", pre_stress, w)
+    return ops.attempt_mending(_Practitioner(), {"scale": scale}, world=w, rng=random.Random(0),
+                               environment_in_equilibrium=env)
+
+
+@pytest.mark.parametrize("scale", list(ops.MENDING_OB))
+@pytest.mark.parametrize("degree", DEGREES)
+def test_mending_calls_recover_and_its_term_is_positive(scale, degree, monkeypatch, w):
+    calls = _spy_recover(monkeypatch)
+    r = _mend_at(w, scale, degree, monkeypatch, env=True)
+    s = coh.get_state("prac", world=w)
+    assert r.coherence_delta == 0, "ED-871: Mending's STRESS is 0 at every degree"
+    if degree == "Failure":
+        assert calls == [] and r.coherence_restored == 0, (
+            f"a FAILED Mending returned {r.coherence_restored} — it returned nothing to the "
+            "attractor, so nothing is drawn along with it (§6.8)")
+        assert s.elastic_displacement == coh.ELASTIC_RANGE
+        return
+    term = -ops.COHERENCE_COST_BY_SCALE[scale]
+    assert len(calls) == 1, f"recover() called {len(calls)} times by a Mending that took"
+    assert calls[0]["mending"] == term > 0, (scale, degree, calls[0])
+    assert calls[0]["seasons"] == 0, "Mending is an event, not time: it must not pass seasons"
+    assert r.coherence_restored == term == coh.ELASTIC_RANGE - s.elastic_displacement
+    assert s.resting_point == coh.RESTING_POINT_START
+
+
+def test_mending_feedback_is_gated_by_the_menders_environment(monkeypatch, w):
+    """E-1's condition, owned by `recover`: Mending in disharmony still CALLS it (the gate stays
+    one owner's) and returns nothing. Unstated is not established — the default is False."""
+    calls = _spy_recover(monkeypatch)
+    monkeypatch.setattr(ops, "_compute_degree", lambda net, ob: "Success")
+    _stress("prac", 4, w)
+    log_before = len(coh.get_state("prac", world=w).log)
+    r = ops.attempt_mending(_Practitioner(), {"scale": "Structural"}, world=w,
+                            rng=random.Random(0))             # environment not stated
+    assert len(calls) == 1 and calls[0]["environment_in_equilibrium"] is False
+    assert calls[0]["mending"] > 0
+    s = coh.get_state("prac", world=w)
+    assert r.coherence_restored == 0 and s.elastic_displacement == 4
+    assert len(s.log) == log_before, "a gated Mending feedback logged an event that moved nothing"
+
+
+def test_mending_feedback_never_reaches_the_resting_point(monkeypatch, w):
+    """C-1's feedback to a mender drawn along by ANOTHER's configuration is elastic only: a
+    permanent set stays however many Mendings follow (moving it is `mend_resting_point`'s)."""
+    monkeypatch.setattr(ops, "_compute_degree", lambda net, ob: "Overwhelming")
+    _stress("prac", coh.ELASTIC_RANGE + 2, w)
+    for _ in range(coh.ELASTIC_RANGE + 2):
+        ops.attempt_mending(_Practitioner(), {"scale": "Foundational"}, world=w,
+                            rng=random.Random(0), environment_in_equilibrium=True)
+    s = coh.get_state("prac", world=w)
+    assert (s.resting_point, s.elastic_displacement) == (2, 0)
+
+
+def test_an_unpriced_scale_falls_back_to_relational_for_ob_and_term_alike(monkeypatch, w):
+    calls = _spy_recover(monkeypatch)
+    r = _mend_at(w, "Object", "Success", monkeypatch, env=True)
+    assert r.ob == ops.MENDING_OB["Relational"]
+    assert calls[0]["mending"] == -ops.COHERENCE_COST_BY_SCALE["Relational"]
+
+
+def test_rolled_mending_executes_both_branches(monkeypatch):
+    """The unforced path: real dice, so `_compute_degree` and `_resolve_operation` are the
+    production ones. Asserts it asserted (CLAUDE.md §0.1 pt 2): both a Mending that took and one
+    that failed must occur, or the per-branch checks observed nothing."""
+    calls = _spy_recover(monkeypatch)
+    took = failed = 0
+    for seed in range(300):
+        w = _World()
+        _stress("prac", coh.ELASTIC_RANGE, w)
+        n = len(calls)
+        r = ops.attempt_mending(_Practitioner(), {"scale": "Relational"}, world=w,
+                                rng=random.Random(seed), environment_in_equilibrium=True)
+        assert r.coherence_delta == 0
+        if r.degree == "Failure":
+            failed += 1
+            assert len(calls) == n and r.coherence_restored == 0
+        else:
+            took += 1
+            assert len(calls) == n + 1 and r.coherence_restored == 1
+    assert took >= 1 and failed >= 1, f"took={took} failed={failed}: a branch never executed"

@@ -62,8 +62,9 @@ empties the stack, so a practitioner who recuperates between workings never yiel
     state, and no caller applies it yet. ⚠ C-3's "cost is relative magnitude / no toughness term"
     was RETRACTED (RULINGS.md Batch 13) and is not modelled.
   - What follows the crossing (P-15's TS-gated branching, §7.5 reality-strain): this module reports
-    the crossing and keeps the arithmetic running; routing post-crossing load into the substrate is
-    `systems/threadwork/sim/rendering.py`'s, whose stubs are out of this position's scope.
+    the crossing and keeps the arithmetic running. Routing post-crossing load into the substrate has
+    NO carrier: `systems/threadwork/sim/rendering.py`'s `apply_rs_strain` was STRUCK at position 27,
+    and its docstring says why.
 
 [ASSUMPTION: practitioner registry stored at module level when no world is passed — basis: legacy
  callers and tests that build no World. When a world is supplied, state lives on
@@ -347,6 +348,8 @@ def recover(actor: str, *, seasons, environment_in_equilibrium: bool, source: st
                                   returns nothing.
       mending                     ACCELERATES: extra units of return from one's own or another's
                                   mending — "accelerates the return without being required for it".
+                                  `operations.attempt_mending` supplies it for the MENDER (C-1's
+                                  restorative feedback, position 27).
 
     ⚠ DERIVED, NOT RULED: `mending` is gated by the environment too. E-1 says mending accelerates
     "this" — the return that has the condition — and §7.1's reason for the condition ("nothing to

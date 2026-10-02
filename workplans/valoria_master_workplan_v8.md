@@ -144,8 +144,8 @@ fixed in that commit or dropped.
 Jordan, 2026-10-01, verbatim: *"Pull in recently committed 2026-10-01-telling-workplan.md for context and
 ensure your master plan carves out around this document accordingly."* That workplan is **RATIFIED by
 Jordan** (2026-10-01, ordered built under `methodology-execute`; its own ledger row, allocated on its
-branch). It is the IN lane's one named carve-out from this plan (`CLAUDE.md` §2). **Until it merges it
-lives on branch `ccr-1a171fc9-p2fyir`: `git show 60c70bbf:workplans/2026-10-01-telling-workplan.md`.**
+branch). It is the IN lane's one named carve-out from this plan (`CLAUDE.md` §2). **Merged (PR #449,
+`fd321c81`): T0–T6 are built and closed; T7 and the gated tail `G1`–`G8` are not (`HANDOFF_IN.md`).**
 
 **What it owns — this plan schedules none of it, restates none of it, and edits none of its sites:**
 
@@ -173,13 +173,12 @@ lives on branch `ccr-1a171fc9-p2fyir`: `git show 60c70bbf:workplans/2026-10-01-t
 - **Shared files** (`_part3` O.3): no v8 position edits a file a telling position has open; commits are
   never interleaved. **Order:** this plan's Batch 1 (`28-iii`, `29*`, `20-iv`) ran beside the telling
   positions and has landed (PR #450) — its one shared file was `queries/world_q.py` (`20-iv` against T4's
-  `with` stem), never interleaved; this plan's Batch 2 IN chain starts **after that workplan's Batch 2
-  (T4–T6) closes**, except `11-fix`, `27` and `LADDER-MBPC`, which share none of its files.
+  `with` stem), never interleaved; that workplan's Batch 2 (T4–T6) closed and merged
+  (PR #449, `fd321c81`), so this plan's Batch 2 IN chain is open. T7 and the gated tail are the telling
+  lane's and unbuilt: build none of them here, and edit no file a telling position has open (`_part3` O.3).
 
-**Merge order with PR #448.** The telling branch's first commit edits two rows of the retired
-`2026-09-28-…md` (positions `10` and `14`); PR #448 deletes that file. Whichever merges second keeps the
-deletion; this section and the `10`/`14` rows below carry both edits. That branch allocates the IN
-ledger row; this plan allocates nothing, and any later IN id starts at the `next_free` after both land.
+**Merge order — settled.** PR #448 (this plan) and PR #449 (the telling workplan) have both merged; #449
+allocated `ED-IN-0282`. Any later IN id starts at `references/id_reservations.yaml`'s `next_free`.
 
 ---
 
@@ -194,7 +193,7 @@ verdict `NOT MET`, 1 row failing.**
 |---|---|---|---|
 | 1 | stub invocations on the M1 path == 0 | **PASS** — 0 `stub_resolve` calls, 1-season headless run of `engine/season`, seed 20260819 | executes |
 | 2 | same seed → same `World.content_hash()` | **PASS** — `d58470198e22…` twice | executes |
-| 3 | the nine requirements met | **FAIL 1/9** — met 1 · partial 5 · not_met 3 | ⚠ DOC-DERIVED: counts `status:` strings, each validated by `register --requirements`; not execution |
+| 3 | the nine requirements met | **FAIL 2/9** — met 2 · partial 5 · not_met 2 | ⚠ DOC-DERIVED: counts `status:` strings, each validated by `register --requirements`; not execution |
 | 4 | N seeds, zero invariant violations | **PASS** — 24 headless seeds × 4 seasons + 2 populated × 1, 8 invariants, 0 violations over 50,073 events | executes |
 
 v7's M1 blocker (rows 1's OI-05/OI-07 stubs in `mc_v18`) is history: row 1 was re-pointed to
@@ -205,8 +204,8 @@ re-wire it to anything that a status edit could green faster.
 
 ### M1's companion — THE NINE
 
-**Instrument:** `python -m engine.season.harness.register --requirements`. **[RAN 2026-10-01] met 1
-(R-03) · partial 5 (R-04 R-06 R-07 R-08 R-09) · not_met 3 (R-01 R-02 R-05).** `_part2` has one section
+**Instrument:** `python -m engine.season.harness.register --requirements`. **[RAN 2026-10-01] met 2
+(R-02 R-03) · partial 5 (R-04 R-06 R-07 R-08 R-09) · not_met 2 (R-01 R-05).** `_part2` has one section
 per row: statement, measured reading, what moves it, what no position yet owns, and `met` as an
 instrument outcome.
 
@@ -242,16 +241,17 @@ season calendar, not the deleted module; `CLAUDE.md` is Layer 0 and this plan do
 ```sh
 git rev-parse --short HEAD; cat .git/shallow 2>/dev/null || echo "full clone"   # a shallow clone unshallows first (CLAUDE.md §2)
 python tools/session_provision.py
-python -m engine.season.harness.register --requirements        # expect met 1 · partial 5 · not_met 3
-python tools/m1_acceptance.py --summary                         # expect NOT MET, row 3 FAIL 1/9
-gh run list --branch main --limit 3                             # 'failure' until B0-CI-b lands: the tests/valoria step is green since PR #450, the engine/season/tests step has one red test
+python -m engine.season.harness.register --requirements        # expect met 2 · partial 5 · not_met 2
+python tools/m1_acceptance.py --summary                         # expect NOT MET, row 3 FAIL 2/9
+gh run list --branch main --limit 3                             # `unit-tests` should read green once PR #451 (carrying B0-CI-b) merges
 ```
 
-**Batch 1 landed (PR #450)**; its records are `_part6` §H.1. The next buildable positions are the Batch 2
-exemptions `11-fix`, `27` and `LADDER-MBPC` (they share none of the telling workplan's files, §0.6),
-`B0-CI-b` (`_part3` §B0) in parallel, and the Batch 1 tail `29d-ii` and `20-v` (§3); the rest of Batch 2
-starts after the telling workplan's Batch 2 closes. The pre-flight rows still open are P-4 and P-6
-(`_part3` §P). Each batch runs through `methodology-execute` (`CLAUDE.md` §9).
+**Batch 1 landed (PR #450)**; its records are `_part6` §H.1. **The telling workplan's T0–T6 landed (PR
+#449, `fd321c81`), so Batch 2's whole IN chain is open** (§0.6). Batch A (`B0-CI-b`, `20-v`, `29d-ii`) landed in PR #451
+(`_part6` §H.1); the next buildable positions are Batch 2 in `_part3` O.1's order, with
+`{27}` and `{LADDER-MBPC}` as parallel lanes. `11`'s baseline is taken after T6 (E15), i.e. on the tree
+from `fd321c81`. The pre-flight rows still open are P-4 and P-6 (`_part3` §P). Each batch runs through
+`methodology-execute` (`CLAUDE.md` §9).
 
 ---
 
@@ -269,51 +269,37 @@ never execute (`aperture 4 0`). **Phase 3: `27` PARTIAL (PR #442); `10`'s `tell`
 with its side findings landed (PR #442), and position `10` itself now belongs to the telling workplan (§0.6); everything else open or Jordan-gated.** Phase 4: `20-i`–`20-iv`,
 `28-0` (and its follow-up), `28-i`–`28-iii`, `29a` (all but `ms_track`), `29b`, `29c` and `29d` are done —
 Batch 1 landed (PR #450; records in `_part6` §H.1). What is open of Phase 4: `29a`-ms, `29e`/`29f` and
-`2-ii`, each gated on `27`, `14` or `22` and on nothing Batch 1 held, plus the three follow-ups Batch 1
-found (`B0-CI-b`, `29d-ii`, `20-v`).
+`2-ii`, each gated on `27`, `14` or `22` and on nothing Batch 1 held. The three follow-ups Batch 1
+found (`B0-CI-b`, `29d-ii`, `20-v`) landed in PR #451.
 
 | position | handle | lane | STATE | GATE | R | batch | evidence / note |
 |---|---|---|---|---|---|---|---|
-| `B0-CI` | main's CI red | IN | **PARTIAL** | — | — | 0 | [RAN] PR #450's CI: the step `pytest tests/valoria -n auto` passes — the seven red tests are fixed (ledger `FORK:` refs re-pointed to commits that are ancestors of `main`; `sim_params.json` and `value_pointer_links.json` re-derived by their exporters; `tools/build_engine_atlas.py`'s stated inputs). **CI as a whole is NOT green:** the next step, `pytest engine/season/tests`, fails one test that predates this plan (red at `5c5d8ec6` on `main`, never reached there because the earlier step failed) — that test is `B0-CI-b`. What remains of this row is that `unit-tests` reads green on `main` once `B0-CI-b` lands |
-| `B0-CI-b` | the governance-ladder test is red | IN | OPEN | — | — | 0 | [RAN] `engine/season/tests/test_season_shape.py::test_the_populated_world_has_a_governance_ladder_and_scarce_seats` finds 22 faction leaders for 24 occupied offices: two `Crown` offices (`off_npc_034`, `off_npc_070`) are held by NPCs committed to other factions (`p_npc_034` to `fac_church_of_solmund`, `p_npc_070` to `fac_löwenritter`). It is seat/commit data, not code; **do not relax the test**; `13d-iii`, `17` and `13`-rest own seating. Spec at `_part3` §B0 |
+| `B0-CI` | main's CI red | IN | **PARTIAL** | — | — | 0 | [RAN] PR #450's CI: the step `pytest tests/valoria -n auto` passes — the seven red tests are fixed (ledger `FORK:` refs re-pointed to commits that are ancestors of `main`; `sim_params.json` and `value_pointer_links.json` re-derived by their exporters; `tools/build_engine_atlas.py`'s stated inputs). **CI as a whole is NOT green:** the next step, `pytest engine/season/tests`, fails one test that predates this plan (red at `5c5d8ec6` on `main`, never reached there because the earlier step failed) — that test is `B0-CI-b`. `B0-CI-b` landed in PR #451 (`77f5175a`); what remains of this row is that `unit-tests` reads green on `main` once that merges |
 | `2-ii` | RET-SC: kernel + veto | IN/SC | BLOCKED | `22` | — | 3 | [SETTLED: `systems/social_contest/sim/contest/` exists, 16 files] — the kernel is still on disk; `parliamentary_{vote,stay}.py` went at `29b` |
-| `8` | H-98(b) band edge → data | IN/PC | OPEN | — | R-09 | 2 | edge in `seam/ladder.py`; serial with the cells commit |
 | `9` | PC-SURRENDER build-or-strike | PC | JORDAN | J-7 | — | 4 | `HANDOFF_PC.md` [CODE] |
 | `10` | U5 / R-07 | IN | **CARVED OUT** (§0.6) | the telling workplan's own gates | R-07, R-01 | — | PR #442 (`c6f4252`) reverted the `tell`→stance write on H-79 and landed its side findings (H-62's producer gap closed by `march`'s M4 write; the `names_index.yaml` `stance` entry). Re-scoped by the telling workplan's first commit (`60c70bbf`) to T0→G8: `tell` writes no stance; regard is computed at read. This plan's earlier `fight`-write rewrite is withdrawn (§0.6) |
-| `11-fix` | U6 instrument repair | IN | OPEN | — | R-01, R-02 | 2 | `wd_collect.py`'s `probed`-invariant fails at `default` (`requirements.yaml` R-01 U10 paragraph) [CODE] |
-| `11` | U6 — first corpus R-01/R-02 reconvergence rate | IN | BLOCKED | `11-fix` | R-01, R-02 | 2 | no number since the corpus grew 89 → 143; baseline before telling T3a or after its T6, never across (E15) |
 | `12` | H-62-rest scar rebuild | IN | BLOCKED | cells commit | R-06, R-08 | 4 | |
 | `12b`/`12c`/`12d` | affiliations · THE FIFTEEN · THE RENAME (substrate half) | IN | JORDAN | J-1 | R-05, R-06, R-08 | 4 | `ED-IN-0261` 2026-09-28 row `needs_jordan: true` [CODE]; `12d` season side done (`ED-IN-0268`) |
 | `12e` | H12 / H13 | IN | BLOCKED | H6 re-measure; G-Q6 (J-5) | R-06 | 4 | |
-| `13`-rest | W28-cast: 41 NPC + 97 ARC overlays | IN | PARTIAL | — | R-09, R-06 | 2 | 5 of 46 NPC overlays, 1 `capability` value (2026-09-28 plan §8.7) [PLAN]; `requirements.yaml` R-09 still says capability is empty everywhere — stale |
-| `13d-iii` | rung ANCHORS for seats + `[NEW]` seats + remit overlay | IN | OPEN | `17` (shared `populated.py`); remit half J-8 | R-04 | 2 | H-163 limit 1 [CODE]; realm `levy.unauthorized` 19 of 20 [RAN aperture] |
-| `14` | U7-own: own-verbs in antonym pairs, `tie / knot`, CANDIDATE-WHY | IN | OPEN | telling T4 (E14); E8 | R-05 | 2 | none of `carry comply construe destroy_record evade/defy exchange forge give oblige repudiate succeed thread_read tie/knot` executes in the realm [RAN aperture] |
-| `R05-THREAD` | `thread_read`'s operand (H-85) | IN | OPEN | rides `14` | R-05 | 2 | answered at ladder step 4 (A-7); no position owned it |
-| `17` | U8 `ambitions(p)` + cast seating | IN | OPEN | `14` (shared `rosters.yaml`) | R-06, R-09 | 2 | [SETTLED: `def ambitions` absent in `engine/season`] |
+| `13`-rest | W28-cast: 41 NPC + 97 ARC overlays | IN | **STOPPED** | the user's rule (2026-10-01): scale only if DISTINCT EXECUTED SETS rise — which the pilot COULD NOT SHOW | R-09, R-06 | 2 | `17-cast`'s pilot (eight overlays): DISTINCT EXECUTED SETS 41 → 41, uniform-cast control 26 [RAN 2026-10-02, seed 0]. ⚠ THE METRIC WAS BLIND FOR THIS PILOT: all eight cases were singletons in the no-overlay arm (the groups that share a set are {005,034} {007,052} {013,037} {041,050,080}, no pilot case among them), so the ceiling on a rise from them was 0. Per-case: 2 of 8 changed (NPC-038 on its `ought:` keys, NPC-083 on its `office:` keys, its second office an institution seated as a person), mean verbs 6.62 → 7.25. An ought's `predicate` is a declared non-causal label (`H-185`). 13 NPC overlays now, no new `capability`; `requirements.yaml` R-09 still says capability is empty everywhere — stale. **The user decides whether to scale on a better observable (per-case set change against the no-overlay arm; Q4 referents).** |
 | `19b` | U7-disp: `comply` · `evade / defy` · `construe` | IN | JORDAN | J-2 (`ED-IN-0210`) | R-05 | 4 | |
-| `20-v` | walls' DR as an injectable Fixtures value | MB/IN | OPEN | — | R-04 (texture), R-07 | 1-tail | make `WALLS_DEFENDER_DR` an injectable Fixtures value `field_walls_dr` (3 = A.9, 0 = the control, 1) so `H-150`'s `assumption` carries a three-point sweep and `harness/arms.py` can reach it; today it is a module literal and `build_realm` garrisons every settlement at full condition with wear 0, so walls are a constant +3 DR on every realm defender (`hole_register.yaml` H-150) |
-| `21`-rest | U10 bookkeeping: R-03/R-09 `measured:` refresh | IN | PARTIAL | after `11` | — | 2 | item 3 (reconcile the progress board) **closed, ladder step 2**: the board was retired at `ebb43bf0` and m1 row 3 now reads THE NINE |
 | `22` | PROC-B steps 11(rest)–16 | SC | PARTIAL | — | R-05, R-09; M2 | 3 | steps 6/7/9/10 done, 8 built, 11 partial (`cardinality` form unimplemented) [PLAN 2026-09-30 §3 l] |
 | `22a` → `23` → `22b` | proceedings PHASE 3 · PART-E-0/2 · PHASE 4 | SC/IN | BLOCKED | `22` | R-05 | 3 | |
 | `24` | SE-BUILD umbrella | SE | PARTIAL | — | — | — | re-scoped into `24d`–`24h`; tracked by those rows only |
 | `24g` | bodies clock + P3 individuation | SE | JORDAN | J-6 (`ED-IN-0247`) | R-07 (texture) | 4 | |
 | `24h` P5 | S5 revolt Query | SE/IN | OPEN | — (`20-ii` ✓) | R-06/R-07 texture | 3 | the 2026-09-28/09-30 rows read BLOCKED whole; only P7 is |
-| `24h` P6 | forswearing (`repudiate` costs) | SE/IN | BLOCKED | `14` | R-05 | 3 | |
+| `24h` P6 | forswearing (`repudiate` costs) | SE/IN | BLOCKED | `repudiate`'s formability (`14` declined it: no question referent is ever a Proposition) | R-05 | 3 | `14`'s `decline_note` on the verb row |
 | `24h` P7 | dispensation-as-document | SE/IN | JORDAN | J-10 | — | 4 | |
 | `26` | GO-VERSION | GO | JORDAN | J-9 | M3 | 4 | nothing may assert a version |
-| `27` | WR-SCOPE remainder | WR | PARTIAL | — | — | 2 | PR #442 (`c6f4252`): `systems/threadwork/sim/coherence.py` reshaped to the elastic/plastic model (`ED-WR-0010`) + `operations.py`'s P-25 scale term, covered by `tests/valoria/test_coherence_elastic_plastic.py` (25 passed, re-run by the orchestrator 2026-10-01) [TEST]; remainder: `rendering.py` stubs, `ED-WR-0003`, mending cost, the R-14 term |
-| `29a`-ms | `ms_track.py` | IN | BLOCKED | `27` | — | 3 | `threadwork/sim/co_movement.py` imports it lazily |
-| `29d-ii` | the chain behind `world_initial_state` | IN | OPEN | — | — | 1-tail | `engine/substrate/{world_initial_state,canon_buckets}.py` have lost their only reader (`npe.py`: `canon_buckets.py` is now imported by nothing, `world_initial_state.py` only by its own test), so the chain behind them — `references/world_initial_state.yaml`, `tools/export_world_initial_state.py` and its blocking `--check`, `engine/engine_params/world_initial_state.json`, `tests/valoria/test_world_initial_state.py` — guards an artifact the game does not read (`architecture/meta/01_AXIOMS.md` ID-13). **First check whether the Godot port in `jordanelias/valoria-game` reads the json** (not visible from this repo) |
-| `29e` / `29f` | characters / fieldwork `knots.py` | IN | BLOCKED | `14`, `27` | — | 3 | `threadwork/sim/opposing.py` imports `sustain_knot` |
-| `ED-FI-0009` | investigation degree producer | FI | OPEN | `8` (shared `seam/ladder.py`) | R-05, R-09 | 2 | the six inquiries resolve Failure/none only today [RAN corpus degree histogram] |
-| `LADDER-MBPC` | the MB/PC lanes' flagged `needs_jordan` rows, through the five-step ladder | MB/PC | OPEN | — | — | 2 (parallel) | `ED-MB-0039/0041/0045`, `ED-PC-0016/0047/0049`–`0055` never opened (2026-09-28 plan §9); survivors join `_part5` §J |
+| `27` | WR-SCOPE remainder | WR | PARTIAL | — | — | 2 | BUILT 2026-10-01 (PR #451): both `rendering.py` stubs struck with their reasons at the site; `ED-WR-0003` closed at ladder step 2; `attempt_mending` calls `recover()` (only tests call it; `environment_in_equilibrium` defaults to False); `threadwork/sim/{co_movement,opposing}.py` no longer import `ms_track` or `knots` [TEST]. Remainder, each outside this position's scope: the `R-14` practitioner-resilience term (arithmetic unruled), Mending aimed at the mender's own configuration (`coherence.mend_resting_point` has no non-test caller), and `collective.py`/`opposing.py`'s Mending feedback (`HANDOFF_WR.md`) |
+| `29a`-ms | `ms_track.py` | IN | OPEN | — | — | 3 | `27` ✓: no `*.py` imports `ms_track` from `threadwork` any more, so deleting `systems/overview/sim/ms_track.py` is the whole position |
+| `29e` / `29f` | characters / fieldwork `knots.py` | IN | OPEN | — (`27` ✓; `14` did not build `tie / knot`) | — | 3 | `threadwork/sim/opposing.py` no longer imports `sustain_knot`. ⚠ `29f`'s plan text says ED-912's ±5 gauge 'maps to `Tenure.degree` (F.4), recorded on `14`': `14` recorded nothing (grep of `engine/season`: no such mapping), and `H-182` says no position owns `_eff_tie`; `29f` records the mapping (in `H-182`'s cite) before it deletes `knots.py` |
+| `ED-FI-0009` | investigation degree producer | FI | **JORDAN** | J-22 | R-05, R-09 | 2 | [STOP CONDITION HIT 2026-10-01, nothing built: see its last ledger row] the six inquiries resolve Failure/none only today [RAN corpus degree histogram]; step 3 already closed "graded by degree" (2026-09-06); open: how a degree routes without `contests:` (a loader check `ED-FI-0009` added, not ratified Layer 1 text) and `finding.none`'s deposit (`H-111`) — J-22 |
 | cells commit | H6 + H8 with `12b`/`12c`/`12d` | IN | JORDAN | J-1 | R-05, R-06, R-08 | 4 | then H7 → H3 → H9 → `12` → H10 → H11 → `12e` |
 
 **Hole-register rows that gate a position but that no position owned until now** (each is placed at a
 batch; `_part3`/`_part4` give the step): **H-163** limit 1 → `13d-iii` · **H-94** (`office` operand) →
 J-3 · **H-156** (always-refused verbs crowd the scene budget) → J-4 · **H-165** limit 2 (no person-side
 works channel) → a `14` ride-along decision, `_part4` · **H-158** (`via` on a computed `transfer`) →
-`13d-iii`'s falsifier reads it · **H-161** (`cardinality`) → `22` step 11 · **H-150** (the walls' +3 `dr`
-is applied and graded `assumption`; its magnitude is open, its reachability is not) → `20-v` ·
-**H-175** (why `corpus_run`'s 143 cases never give `march` a referent) → a measurement step in
+`13d-iii`'s falsifier reads it · **H-161** (`cardinality`) → `22` step 11 · **H-175** (why `corpus_run`'s 143 cases never give `march` a referent) → a measurement step in
 `_part2` §R-04 · **GD-1** (victory has no rule) → registered as hole `H-176`; no position builds it.

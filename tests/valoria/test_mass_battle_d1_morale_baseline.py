@@ -48,7 +48,7 @@ def _captured_units(monkeypatch, **kwargs):
     Unit rather than inferred from a battle outcome at a scale that routs on contact."""
     captured = {}
 
-    def fake(unit_a, unit_b, terrain, rng):
+    def fake(unit_a, unit_b, terrain, rng, walls_dr=None):
         captured["a"], captured["b"] = unit_a, unit_b
         return {"attacker_wins": True, "degree": "Success",
                 "attacker_size_pct": 1.0, "defender_size_pct": 0.0}
@@ -166,7 +166,7 @@ def test_a_lost_field_lowers_the_next_fields_morale_start_end_to_end(monkeypatch
 
     captured = {}
 
-    def fake(unit_a, unit_b, terrain, rng):
+    def fake(unit_a, unit_b, terrain, rng, walls_dr=None):
         captured["a"], captured["b"] = unit_a.morale_start, unit_b.morale_start
         return {"attacker_wins": False, "degree": "Failure",
                 "attacker_size_pct": 1.0, "defender_size_pct": 1.0}
