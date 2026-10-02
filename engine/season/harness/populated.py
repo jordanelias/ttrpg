@@ -150,6 +150,18 @@ def resolve_anchor(w: World, anchors: dict, form, whose: str = "") -> str:
             needs="a one-entry mapping `{<rung kind>: <key>}`",
             law="r2 03 §A.14 -- four anchor forms, never a rung id")
     (kind, key), = form.items()
+    # THE KEY'S TYPE IS PART OF THE ANCHOR. `True == 1` and the two hash alike, so `{realm: 1}` would
+    # find `{realm: true}`'s rung through the dict below; and an unhashable key (`{duchy: [..]}`)
+    # would raise `TypeError` out of `anchors.get` instead of the refusal this function owes. Every
+    # form is `{<text kind>: <text key>}`, or `true` for the one realm: refuse the rest, by name.
+    if not isinstance(kind, str) or not isinstance(key, (str, bool)):
+        raise Unspecified(
+            f"{whose or 'a seat'} declares the rung anchor {form!r}, whose "
+            f"{'kind' if not isinstance(kind, str) else 'key'} has the wrong type",
+            "offices.yaml -- rung",
+            needs="a text kind and a text key (`true` for the realm)",
+            law="r2 03 §A.14 -- `True == 1` and an unhashable key would otherwise resolve to the "
+                "wrong rung or raise `TypeError`, not refuse")
     rid = anchors.get((kind, key))
     if rid is None or rid not in w.rungs or w.rungs[rid].kind != kind:
         raise Unspecified(
@@ -1077,6 +1089,16 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
                 needs="a holder from the built cast (a `cap` that drops the cast drops the seat)",
                 law="r2 03 §A.14 -- the holder is a case id in the cast")
         rung = seat_anchor(w, anchors, row)
+        if row["id"] in w.offices:
+            # a MINTED seat is one no loop-built seat stands for, so its id must be fresh: the
+            # assignment below would otherwise REPLACE the seat already standing under it, and its
+            # holder's `hold` would then name a different office than the one he sat in
+            raise Forbidden(
+                f"the minted seat {row['id']!r} names an id a seat already stands under "
+                f"({w.offices[row['id']].post!r})", "offices.yaml -- seats",
+                needs="a seat id no other seat in the realm carries",
+                law="one seat per id -- a minted row that reuses an id overwrites the seat it "
+                    "names without a sound")
         w.offices[row["id"]] = Office(
             row["id"], row["post"], rung, authored_remit(row), scope_rung=rung,
             body=row.get("body"), faction=row.get("faction"),
@@ -1095,6 +1117,14 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
             continue                  # a `cap` dropped this seat's holder, so the seat does not exist
         for ob in row.get("obligees") or ():
             opid = f"p_{_slug(ob)}"
+            if opid == f"p_{_slug(row['holder'])}":
+                # checked BEFORE the `cap` skip below: a seat's holder does not serve his own seat,
+                # whether or not a partial cast kept him (`_req_oblige` clause 3's rule)
+                raise Forbidden(
+                    f"{row['id']} lists its own holder {row['holder']!r} among its obligees",
+                    "offices.yaml -- seats",
+                    needs="obligees other than the seat's holder",
+                    law="`_req_oblige` clause 3 -- the occupant is not his own seat's obligee")
             if opid not in w.persons and cap is not None:
                 continue
             if opid not in w.persons:

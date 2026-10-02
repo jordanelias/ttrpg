@@ -4,10 +4,11 @@ What each test proves, and the failure it can observe:
 
   (a) `ambitions` reads LIVE `commit` edges to OUGHT Propositions off a person's OWN tenures, and
       ignores every other shape an edge can take: an ended edge, a non-`commit` edge, a `commit`
-      to a non-OUGHT Proposition (faction membership is one -- `populated.py` mints it as HOLDS),
-      a `commit` to an id no Proposition has. Each distractor is tried ALONE (a person holding only
-      it has no ambition) so a loop that happened to pass on the sum cannot hide one, and the
-      positive control asserts the answer is non-empty.
+      to a non-OUGHT Proposition (the distractor here is a bare HOLDS; real faction membership is
+      NOT one for six of the nine factions -- `populated.py` mints those creeds as OUGHT, and only
+      `Guilds`, `Schoenland` and `faction x` keep HOLDS), a `commit` to an id no Proposition has. Each
+      distractor is tried ALONE (a person holding only it has no ambition) so a loop that happened
+      to pass on the sum cannot hide one, and the positive control asserts the answer is non-empty.
   (b) AX-2: the `sense`-is-the-only-World-taker guard SEES `ambitions` (it is in the guard's own
       `found` list) and turns RED when `ambitions` is given a `World` parameter. The mutation is
       applied to a COPY of `person_q.py` in a tmp dir and the guard is re-pointed at it, so the
@@ -22,8 +23,8 @@ What each test proves, and the failure it can observe:
   (e) Q4 (`world_q.questions_for`) fires for more than one proposition: one per person across a
       cast, and more than one per PERSON when a person holds two ambitions.
 
-NOT BUILT HERE (plan position `17` stopped on three keys): `office:` and `ought:` were built at `17b`
-and are tested in `test_u8b_cast_fields.py`; `knowledge` -> initial Claims is REFUSED by name at load
+NOT BUILT HERE (plan position `17` stopped on three keys): `office:` and `ought:` were built at `17-cast`
+and are tested in `test_u8_cast_fields.py`; `knowledge` -> initial Claims is REFUSED by name at load
 (a new `Claim`-construction site, AX-7), tested there too.
 """
 import ast
@@ -57,7 +58,10 @@ PROPS = {
 DISTRACTORS = {
     "ended commit to an OUGHT": Tenure("d1", "p_x", "o1", "commit", 0, until=3),
     "a hold (not a commit) on an OUGHT": Tenure("d2", "p_x", "o1", "hold", 0),
-    "commit to a HOLDS (faction membership)": Tenure("d3", "p_x", "fac", "commit", 0),
+    # a HOLDS Proposition: `populated.py` mints this shape for only three factions (Guilds,
+    # Schoenland, faction x); the other six creeds are OUGHT commits that `ambitions` DOES return
+    # (Jordan, 2026-09-13).
+    "commit to a HOLDS (a faction with no creed)": Tenure("d3", "p_x", "fac", "commit", 0),
     "commit to an id no Proposition has": Tenure("d4", "p_x", "nowhere", "commit", 0),
 }
 
@@ -73,7 +77,7 @@ def test_ambitions_is_the_live_commit_to_an_ought_and_nothing_else():
 
     # The sum: the distractors may not displace the real edges nor add to them.
     mixed = [DISTRACTORS["ended commit to an OUGHT"], ours[0],
-             DISTRACTORS["commit to a HOLDS (faction membership)"], ours[1],
+             DISTRACTORS["commit to a HOLDS (a faction with no creed)"], ours[1],
              DISTRACTORS["commit to an id no Proposition has"],
              DISTRACTORS["a hold (not a commit) on an OUGHT"]]
     p = _person_with(*mixed)
@@ -273,7 +277,8 @@ def test_q4_fires_once_per_ambition_for_one_person_and_through_ambitions():
     me = w.persons["p_a"]
     before = [q for q in world_q.questions_for(w, me) if q.source == "need"]
     assert [q.about for q in before] == person_q.ambitions(me, w.propositions) == ["prop_p_a"]
-    # A SECOND ambition, a faction-membership commit (not an ambition) and an ended one.
+    # A SECOND ambition, a commit to a HOLDS Proposition (not an ambition: the three creedless
+    # factions' shape -- the other six creeds ARE ambitions) and an ended one.
     w.propositions["o2"] = Proposition("o2", "OUGHT", "p_c", "a second cause", True, 0)
     w.propositions["fac"] = Proposition("fac", "HOLDS", "Crown", "is a faction", True, 0)
     w.add_tenure(Tenure("t_o2", "p_a", "o2", "commit", 0))

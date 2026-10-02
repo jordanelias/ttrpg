@@ -435,8 +435,9 @@ class Question:
 class Candidate:
     """S17 -- `opening_set` RETURNS Candidate[], NOT Act[].
 
-    ⚠ `operands` IS THE STRUCTURAL HALF OF `H-94`, AND IT IS NOT A FOURTH FIELD BOLTED ON. S17
-    types the Candidate `(verb, subject, why)`, and `H-94` measured what that costs: `transfer`'s
+    ⚠ `operands` IS THE STRUCTURAL HALF OF `H-94`, AND IT IS NOT A FIELD BOLTED ON. S17 TYPED the
+    Candidate `(verb, subject, why)` (`why` is since removed, below, so the fields are now `(verb,
+    subject, operands)`), and `H-94` measured what that cost: `transfer`'s
     `stores(hearth(giver), kind) >= amount` has no `kind` and no `amount` that any part of the
     deliberation-to-resolution pipeline can carry, so the verb was attempted and refused in every
     world in the corpus. The row asked WHERE OPERANDS LIVE. They live here, on the Candidate,

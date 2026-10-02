@@ -233,13 +233,22 @@ def test_15d_falsifier_the_realm_holds_hearsay_no_telling_minted(monkeypatch):
     map's is zero, and the told channel's is asserted UNMOVED by neutralising the map."""
     # ⚠ RE-PINNED SEED 0 -> 5 AT `13d-iii` (2026-10-01), BECAUSE THE PRECONDITION BELOW IS A SEED'S
     # TRAJECTORY AND NOT A PROPERTY OF THE MECHANISM. At seed 0 the first season now deposits NO
-    # told claim (3 before): giving every seat a rung widened what the map's `chronicle`/`post_remit`
-    # channels hand a hearer (`told_by` without a chain 1,113 -> 2,807), so more of what a telling
-    # carries is already held and the dedup guard (`loop/witness.py`, "ALREADY SAW") deposits
-    # nothing. Measured by `told_by` with a `chain` over one season, new tree: seeds 0-3 and 7, 9 ->
-    # 0; seed 4 -> 1, 5 -> 6, 6 -> 3, 8 -> 12. 5 is the lowest seed whose channel is strong
-    # enough for the control's `==` to observe anything. NOT a claim about seed 5; the assertions
-    # below are unmoved.
+    # chained told claim (3 before). WHAT A CONTROL SHOWS (Batch C close, 2026-10-02; one season at
+    # seed 0, tree `5519cf52` -- position 17, before `13d-iii` -- against `8b03e518`): executed `tell`
+    # acts 4 -> 6, so FEWER TELLINGS IS NOT THE CAUSE; `told_by` claims WITHOUT a chain 1,113 ->
+    # 2,807, of which `dispensation.issued` 0 -> 598 and `order.given` 75 -> 586 (binding-decision
+    # Events, the kind `rosters.yaml: witness_channels` gives to the public record `chronicle`; the
+    # channel of each claim was not read here; offices 24 -> 30 on the same change). The cause first stated here -- *giving every seat a rung widened what
+    # `chronicle`/`post_remit` hand a hearer* -- is PARTLY WRONG: `post_remit` mints `inferred`, not
+    # `told_by` (`rosters.yaml: witness_channels`, since `17a`), `inferred` is 0 in the first season
+    # on BOTH trees, and `chronicle` reads no seat -- what grew is the number of binding-decision
+    # Events, because more seats execute. THAT `loop/witness.py`'s dedup guard ("ALREADY SAW") is what eats the chained deposits
+    # IS NOT ISOLATED. Chained `told_by` claims over one season, from the earlier measurement
+    # (seeds 0, 4 and 5 re-run at the close and agreeing): seeds 0-3, 7 and 9 -> 0; 4 -> 1, 5 -> 6,
+    # 6 -> 3, 8 -> 12. SEED 5 IS A CHOICE, NOT THE LOWEST SEED STRONG ENOUGH: seed 4's one deposit
+    # already passes the `live_channel > 0` guard below; 5 is the lowest seed with more than one, so
+    # the control's `==` compares a count that is neither 0 nor 1. NOT a claim about seed 5; the
+    # assertions below are unmoved.
     SEED = 5
 
     def told_by_count() -> tuple:

@@ -23,6 +23,8 @@ scale:
     post: "Cardinal Justice"
     body: "Cardinal of Justice"
     remit: [issue, determine, dispatch]
+    # This re-authors a seat `offices.yaml` owns (`off_cardinal_justice`, remit [issue, determine,
+    # convene]); the two remits differ (`dispatch` here, `convene` there) (`CLAUDE.md` §0.05 cl.3).
     why: >-
       ⚠ `body` IS AUTHORED AND `faction` DERIVES — canon binds `Cardinal of Justice` to the Church
       of Solmund, so naming both would be storing a derivable fact twice and letting them disagree.
@@ -33,7 +35,7 @@ scale:
       or removes anyone, and those are the governance canon's title/office verbs, which Jordan
       ruled turn on holdings and purview. Canon does not add them either — §3.5's Excommunication
       is a Church power over STANDING, not over an office's tenure.
-# `W28-cast`, position `17b` PILOT. Read off this case's own sentences (quoted), written by an
+# `W28-cast`, position `17-cast` PILOT. Read off this case's own sentences (quoted), written by an
 # author, matched by no code. Arnlod's OWN office is the case-level `scale.office` above (held by
 # the first seat, `p_a`), so his entry carries none -- a second would seat him twice. No
 # `capability`: authorizing an apparatus is not a `verb_capability` key (`copying` only).

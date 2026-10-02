@@ -8,7 +8,7 @@ case: NPC-002
 name: Maret Uln
 source: 'the case''s own `season_requires` + #353 and the hole register, cited per row'
 authored_after_first_run: true
-# `W28-cast`, position `17b` PILOT. Read off this case's own sentences (quoted), written by an
+# `W28-cast`, position `17-cast` PILOT. Read off this case's own sentences (quoted), written by an
 # author, matched by no code. No `office:`: the case says "her faction" and "her patron" and names
 # neither a faction nor a body, and `office_faction` refuses a seat with no canonical faction
 # (§42.2's polarity rule) -- so the absence is the honest reading, not an omission. No

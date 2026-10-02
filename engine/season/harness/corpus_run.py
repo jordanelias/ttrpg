@@ -223,7 +223,7 @@ def cast_overlay() -> dict:
     present only where the case's OWN text grounds a number — absent is the honest reading
     (§42.2's polarity rule), never a placeholder zero standing in for one.
 
-    ⚠ `office:` AND `ought:` ARE AUTHOR-WRITTEN STRUCTURED FIELDS (position `17b`), EACH ROUTED
+    ⚠ `office:` AND `ought:` ARE AUTHOR-WRITTEN STRUCTURED FIELDS (position `17-cast`), EACH ROUTED
     THROUGH AN OWNER THAT ALREADY EXISTS, NEITHER READ OFF PROSE (the W10 router's failure):
       * `office: {post, why, body | faction, remit?}` is the SAME block a `scale:` overlay's
         `office:` carries and is checked by the SAME `_check_office`; `build_at` seats it through
@@ -256,14 +256,22 @@ def cast_overlay() -> dict:
     an unrelated `who:`-shaped string appears in a file this function does not read as one."""
     out: dict = {}
     for f, doc in _exercise_docs():
-        entries = doc.get("cast")
-        if doc.get("case") and isinstance(entries, list):
-            _check_cast(f.name, entries)
-            out[doc["case"]] = entries
+        if not doc.get("case") or "cast" not in doc:
+            continue
+        entries = doc["cast"]
+        # REFUSED, NOT SKIPPED: a `cast:` that is a mapping (or a block missing its `- `, or empty)
+        # used to fall through the `isinstance(list)` filter and be dropped without a sound, so the
+        # case seated the three anonymous people its author had written a cast to replace.
+        if not isinstance(entries, list):
+            raise SystemExit(f"{f.name}: `cast:` is a {type(entries).__name__}, not a list of "
+                             "entries -- a mapping, or a block missing its `- `, would be dropped "
+                             "without a sound")
+        _check_cast(f.name, entries)
+        out[doc["case"]] = entries
     return out
 
 
-# `17b`: THE KEYS A `cast:` ENTRY MAY CARRY. Closed on purpose: an entry key nothing reads is an
+# `17-cast`: THE KEYS A `cast:` ENTRY MAY CARRY. Closed on purpose: an entry key nothing reads is an
 # author's belief that something was seated, so an unknown key refuses (`_check_cast`).
 CAST_KEYS = ("who", "role", "capability", "office", "ought")
 OUGHT_KEYS = ("about", "predicate")
@@ -292,7 +300,9 @@ def _check_cast(where: str, entries: list) -> None:
     """A case's `cast:` list, validated AT LOAD, so a malformed entry never reaches a world.
     `office:` goes through `_check_office` -- the validator IS the constructor's own rules (that
     function's comment), not a second copy -- and `ought:` through `_referent`, the resolver
-    `build_at` seats from, so load and build cannot disagree about whom an OUGHT is about."""
+    `build_at` seats from, so load and build cannot disagree about whom an OUGHT is about.
+    An `ought.predicate` is a LABEL: nothing reads it (`H-185`), and it is validated only as
+    non-empty text."""
     for e in entries:
         if not isinstance(e, dict) or not str(e.get("who") or "").strip():
             raise SystemExit(f"{where}: a `cast:` entry with no `who:` -- {e!r}")
@@ -305,14 +315,15 @@ def _check_cast(where: str, entries: list) -> None:
         if "knows" in e:
             raise SystemExit(f"{where}: cast entry {who!r} carries `knows:`, which no builder seats "
                              "-- an initial Claim is a new `Claim` construction site (AX-7), a "
-                             "Layer-1 question position `17b` stopped on")
+                             "Layer-1 question position `17-cast` stopped on")
         extra = sorted(set(e) - set(CAST_KEYS))
         if extra:
             raise SystemExit(f"{where}: cast entry {who!r} has keys nothing reads: {extra} "
                              f"(the closed set is {list(CAST_KEYS)})")
-        if _waits_on_player(e) and (e.get("office") or e.get("ought")):
+        if _waits_on_player(e) and (e.get("office") or e.get("ought") or e.get("capability")):
             raise SystemExit(f"{where}: cast entry {who!r} is WAITS-ON-PLAYER, so it is never "
-                             "seated, and an `office:`/`ought:` on it would read nothing")
+                             "seated, and an `office:`/`ought:`/`capability:` on it would read "
+                             "nothing")
         _check_office(f"{where}, cast entry {who!r}", e.get("office"))
         ought = e.get("ought")
         if ought is None:
@@ -354,7 +365,7 @@ def _seat_office(w: World, oid: str, pid: str, scope: str, off: dict) -> None:
     """ONE CONSTRUCTOR OF AN OVERLAY'S OFFICE: `off` is the `{post, remit, body | faction, why}`
     block `_check_office` validated, `pid` the person who holds it at `scope` (the deepest
     non-person rung). Both callers -- the case-level `office:` held by `p_a`, and a cast entry's
-    own (`17b`) -- build it here, so the two cannot drift.
+    own (`17-cast`) -- build it here, so the two cannot drift.
 
     ⚠ NO SILENT FILTER. Rev 1 wrote `[a for a in ... if a in S.REMIT_ACTS]`, dropping an
     unrecognised remit act on the floor -- a quiet default sitting underneath
@@ -463,7 +474,7 @@ def build_at(case: dict, seed: int = 0) -> World:
     off = case.get("office")
     if isinstance(off, dict) and off.get("post"):
         _seat_office(w, f"off_{case.get('id', 'x')}", "p_a", ids[chain[0]], off)
-    # `17b`: AND EACH CAST ENTRY MAY SEAT ITS OWN. The same block, the same constructor
+    # `17-cast`: AND EACH CAST ENTRY MAY SEAT ITS OWN. The same block, the same constructor
     # (`_seat_office`), held by THAT entry's person rather than `p_a`; the id carries the person so
     # it cannot collide with the case-level office above. An entry with no `office:` seats nothing.
     for n, entry in enumerate(seated):
@@ -525,7 +536,7 @@ def build_at(case: dict, seed: int = 0) -> World:
     # ⚠ `17`: THE ROTATION NOW RUNS OVER EVERY SEATED PERSON (`pids`), a cast's eleven as readily as
     # the floor's three, AND IT IS THE DEFAULT, NOT AN AUTHORED OUGHT: the case's own `wants_of` and
     # the next person in the rotation stand in for every entry that wrote none.
-    # ⚠ `17b`: AN ENTRY'S `ought: {about, predicate}` REPLACES THE DEFAULT FOR THAT ENTRY ONLY -- the
+    # ⚠ `17-cast`: AN ENTRY'S `ought: {about, predicate}` REPLACES THE DEFAULT FOR THAT ENTRY ONLY -- the
     # same Proposition id (`prop_<pid>`), the same `commit` edge below, so `ambitions` and Q4 find
     # it with no new reader. `about` resolves through `_referent`, the resolver `_check_cast`
     # validated with. Reading `one_line` for either half would be the token-match this file refuses.

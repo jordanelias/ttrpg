@@ -1,4 +1,4 @@
-# NPC-083 — `cast:` overlay only (`W28-cast`, position `17b` PILOT). A `cast:` block lives in this
+# NPC-083 — `cast:` overlay only (`W28-cast`, position `17-cast` PILOT). A `cast:` block lives in this
 # overlay rather than in `cases/chain/NPC2.yaml` (a predecessor proposal's committed evidence this
 # repo reads and does not own; see `NPC-004.yaml`). Read off THIS case's own sentences (quoted),
 # written by an author, matched by no code. This case is SETTLEMENT-scale (`scale: settlement`, no

@@ -6099,7 +6099,7 @@ def test_the_generic_remit_seats_every_office_and_unblocks_the_nine():
     w = PP.build_realm(0)
     offices = list(w.offices.values())
     # [GROUNDED: measured 2026-09-18 on `build_realm(0)` -- the populated realm seats 19 offices, of which 3 carried a remit before `remit_default` and 19 after; the seat registry is `harness/populated.py`'s own, not a constant chosen here]
-    # [RE-CITED 2026-10-01, `13d-iii`, `python -c "from engine.season.harness.populated import build_realm as b; w=b(0); print(len(w.offices), w._office_census['unauthored'])"` -- 30 offices; `remit_default` now fills ONE of them (`off_npc_084`, the seat no `offices.yaml` row authors) and the other 29 carry their row's `remit_acts`, so this assertion no longer observes the default's reach -- `test_13d_iii_the_remit_overlay_replaces_the_default_and_leaves_only_the_unruled_act` does]
+    # [RE-CITED 2026-10-01, `13d-iii`, `python -c "from engine.season.harness.populated import build_realm as b; w=b(0); print(len(w.offices), w._office_census['unauthored'])"` -- 30 offices; `remit_default` now fills ONE of them (`off_npc_084`, the seat no `offices.yaml` row authors) and the other 29 carry their row's `remit_acts` plus whatever `remit_unruled` lets a loop-built seat keep, so this assertion no longer observes the default's reach -- `test_13d_iii_the_remit_overlay_replaces_the_default_and_leaves_only_the_unruled_act` does. ⚠ `assert not ungranted` BELOW PASSES ONLY THROUGH THAT LEAK, NOT BECAUSE A DECLARED `[]` GRANTS ANYTHING: all seven `remit_acts: []` rows are loop-built, `held` is the testing default, and each of those seats holds [dispatch] (so `march` is eligible to it too); the same `[]` on a MINTED row would hold nothing. Stripping `dispatch` (J-8) is a GRANT decision for Jordan, not a code fix, and would turn this assertion red on those seven seats]
     assert len(offices) >= 19, f"the realm seats {len(offices)} offices; the fixture has moved"
     ungranted = [o.id for o in offices if not o.remit_acts]
     assert not ungranted, f"offices with no remit after the default: {ungranted}"
@@ -7608,7 +7608,7 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # position's own falsifier. `give`, newly formable, EXECUTES (the `ever` note above), every row
     # `14` declined stays out of `resolvable_verbs()` (`test_u7_own.py`), and `destroy_record`'s
     # formability was held because, measured, it pushed `release` in here (8 -> 9).
-    # ⚠⚠ EIGHT -> SEVEN, PLAN POSITION `17b` + THE `13`-REST PILOT, 2026-10-02: `dispatch` LEAVES, INTO
+    # ⚠⚠ EIGHT -> SEVEN, PLAN POSITION `17-cast` + THE `13`-REST PILOT, 2026-10-02: `dispatch` LEAVES, INTO
     # THE NEVER-ATTEMPTED SET (asserted at its own note below). MEASURED THROUGH `run_case` AT SEED 0
     # OVER THE 46 NPC CASES, `dispatch` was attempted and refused in exactly ONE world, NPC-038 (the
     # only `dispatch`-granting seat the overlays mint beside NPC-033's), and no corpus person forms it
@@ -8363,7 +8363,7 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠⚠ PLAN POSITION `14` (U7-own), 2026-10-01: `give` LEAVES -- formable now, and it executes (the
     # `ever` note above). `oblige` stays: still untyped, its second party (a seat) is carried by
     # nothing, and no referent here is a seat. `destroy_record` stays: `A-13` held (its row).
-    # ⚠⚠ NINE -> TEN, PLAN POSITION `17b` + THE `13`-REST PILOT, 2026-10-02: `dispatch` JOINS, from the
+    # ⚠⚠ NINE -> TEN, PLAN POSITION `17-cast` + THE `13`-REST PILOT, 2026-10-02: `dispatch` JOINS, from the
     # always-refused set (see `refused_only`'s note above for the measurement and the unit -- the
     # fourth seat NPC-038's pilot cast adds, not an authored `office:`/`ought:`). It is formed in no
     # live world now, executed in none. Confirmed against the same `live` rows `corpus_run` prints
@@ -9550,7 +9550,7 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # one of the 54 newly-representable worlds.
     # ⚠⚠ PLAN POSITION `14` (U7-own), 2026-10-01: UNCHANGED, the position's falsifier -- `give`
     # executes, and `destroy_record`'s formability was held because it pushed `release` in here.
-    # ⚠⚠ `dispatch` LEAVES, PLAN POSITION `17b` + THE `13`-REST PILOT, 2026-10-02 (the same cause and
+    # ⚠⚠ `dispatch` LEAVES, PLAN POSITION `17-cast` + THE `13`-REST PILOT, 2026-10-02 (the same cause and
     # measurement as `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s `refused_only`
     # note): NPC-038's pilot cast seats a fourth person, and `dispatch` -- attempted and refused in
     # that one world before -- is attempted nowhere. It is not executed either.
@@ -9558,7 +9558,7 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
                                             "build", "migrate", "survey"}, (
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
-        "condition never clears the floor in this corpus; `dispatch` LEFT at `17b` (see above; it "
+        "condition never clears the floor in this corpus; `dispatch` LEFT at `17-cast` (see above; it "
         "had been refused only because its one executing "
         "question lost the hash-ordered race to a `seen` claim about a rung (`R8.1`)); `commit` "
         "because BO-9/BO-10's referent-binding gap is still open (`subject` never binds to a "

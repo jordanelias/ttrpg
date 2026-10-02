@@ -426,9 +426,11 @@ def test_19_determination_admits_an_opening_only():
     assert G.tenure_write_basis(w, fresh, None, DUKE, SEAT, frozenset()) == DETERMINATION
     # A JUDGE DOES NOT BIND HIMSELF -- `may_determine` refuses it, and an `oblige` a man opens on his
     # own behalf is his own act (`T-m`), whatever seat he names: never `determination`. That the
-    # occupant does not serve his own seat is `_req_oblige`'s refusal and, for `determine`, the fold's
-    # `counterparty` clause (plan position `14`; it was `_eff_determine`'s), not the gate's (the gate
-    # admits any owner's opening of his own non-seat edge).
+    # occupant does not serve his own seat is `_req_oblige`'s refusal and, for `determine`, the
+    # `bench` conjunct's (`may_determine`, `determine.unauthorized`) -- the fold's `counterparty`
+    # clause names the same case but is never reached on that row, and `_eff_determine`'s own
+    # self-check was already dead -- not the gate's (the gate admits any owner's opening of his own
+    # non-seat edge).
     own = Tenure("t_own", DUKE, SEAT, "oblige", since=w.tick)
     assert not G.may_determine(w, DUKE, SEAT, DUKE)
     assert G.tenure_write_basis(w, own, None, DUKE, SEAT, frozenset()) == G.T_M

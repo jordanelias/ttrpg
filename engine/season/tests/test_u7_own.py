@@ -20,7 +20,8 @@ What each block proves, and the control that stops it passing vacuously:
   5. `destroy_record` STAYS UNFORMABLE (`A-13` taken and HELD on measurement -- the row's
      `decline_note`): the holder of a Record forms no `destroy_record` on it, both eligibility
      alternatives being placeholders (`H-75`). Goes red the day the held decision lands, which is the
-     day to re-measure `release`'s corpus worlds and the realm's first-season told channel.
+     day to re-measure `release`'s corpus worlds against the live always-refused pin (the told-channel
+     reason the note once gave is withdrawn at HEAD, and the variant it measured is not kept).
   6. `give` IS FORMABLE: one Candidate per known receiver (`test_give.py` owns the fan's detail).
   7. CANDIDATE-WHY: `Candidate` carries no `why` -- it was written once and read nowhere.
 """
@@ -154,8 +155,8 @@ def test_14_destroy_record_is_formed_by_nobody_while_a_13_is_held():
     rid = _petition_held_by(w, "p_low")
     assert hold_force(w, rid).subject == "p_low", "fixture: the holder must exist for this to mean anything"
     assert not _formed(w, "p_low", "destroy_record", (rid, "Hh", "p_mid")), (
-        "`destroy_record` formed -- `A-13` landed; re-measure `release`'s corpus worlds and the "
-        "realm's first-season told channel before re-pinning (the row's `decline_note`)")
+        "`destroy_record` formed -- `A-13` landed; re-measure `release`'s corpus worlds against the "
+        "live always-refused pin before re-pinning (the row's `decline_note`)")
     # CONTROL: the same holder forms OTHER verbs on the same referents, so the empty set above is the
     # row's eligibility and not an empty opening set
     assert _formed(w, "p_low", "give", (rid,)) or _formed(w, "p_low", "research", (rid,)), (

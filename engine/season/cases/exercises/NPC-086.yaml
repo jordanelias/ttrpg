@@ -9,7 +9,7 @@ case: NPC-086
 name: Joren Bergvall
 source: 'the case''s own `season_requires` + #353 and the hole register, cited per row'
 authored_after_first_run: true
-# `W28-cast`, position `17b` PILOT. Every office and ought below is read off THIS case's own
+# `W28-cast`, position `17-cast` PILOT. Every office and ought below is read off THIS case's own
 # sentences (quoted) and written by an author; nothing here was matched by code. No `capability`:
 # his case names a surveyor's field data, not a vocation `rosters.yaml: verb_capability` covers
 # (`copying` is its only key), so a number would be invented -- recorded, not filled.

@@ -68,6 +68,16 @@ def ambitions(p: Person, propositions) -> list:
     and the plan's one-parameter spelling `ambitions(p)` is NOT met, because the mood has to come
     from somewhere and a `Person` does not carry it. Whether `04`'s *"`PersonInterior` snapshot
     only"* is read strictly enough to forbid a second, read-only argument is not settled here.
+    (`propositions` is the LIVE store, `w.propositions`, handed in whole: `04` §A.2's `person_q`
+    row, `:164`, reads *a `PersonInterior` snapshot only*, and `:241` says that snapshot carries
+    *no store handle* -- a Layer-1 observation for `layer-conformance`, not decided here.)
+
+    ⚠ FACTION MEMBERSHIP IS NOT A HOLDS THAT THE MOOD FILTERS OUT, FOR SIX OF THE NINE FACTIONS.
+    `populated.build_realm` mints each creed as an OUGHT Proposition (Jordan, 2026-09-13, *"Faction
+    creed as an ought: sure"*, subject the faction's authored leader) and membership is a `commit`
+    to it, so `ambitions` DOES return a member's `fac_*` creed (MEASURED, `build_realm(0)`, Batch C
+    close: 35 of 83 persons' `ambitions` include one). Only the three factions with no leader or
+    template in canon (`Guilds`, `Schoenland`, `faction x`) keep HOLDS and are filtered by mood.
 
     ⚠ ONE OWNER OF *"a live `commit` to an OUGHT"*. `world_q.questions_for`'s Q4 source reads
     this rather than restating it, so the ambition mechanism `R-06` names exists once. A

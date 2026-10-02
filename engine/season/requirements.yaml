@@ -799,7 +799,8 @@ rows:
       ⚠⚠ **PLAN POSITION `17`, 2026-10-01 -- THE SENTENCES ABOVE THAT SAY `ambitions(p)` IS ABSENT
       ARE NOW FALSE, AND THE CAST HALF IS PARTLY BUILT.**
       `queries/person_q.py::ambitions(p, propositions)` reads a person's own live `commit` edges to
-      OUGHT Propositions (`world_q.questions_for`'s Q4 now asks it; same questions, same order). It
+      OUGHT Propositions (`world_q.questions_for`'s Q4 now asks it; same questions, same order, EXCEPT
+      that two live edges to one Proposition are now ONE question -- the dedup, a path no builder reaches today). It
       takes a `propositions` mapping as its second parameter -- the plan's one-parameter spelling
       cannot name an edge's mood, and a `World` is refused by AX-2's executed guard. `corpus_run.
       build_at` seats a case's `cast:` entries as `p_a`, `p_b`, ... (named for `who`, each entry's
@@ -810,7 +811,7 @@ rows:
       the rotation over the seated people with the case's `wants_of`, and no `cast:` yet exists
       with more than one entry. The corpus's `corpus_run` stdout is byte-identical before and after
       (143 cases, 120 distinct executed sets), so no figure above moves. Stays `partial`.
-      ⚠⚠ **PLAN POSITION `17b` + THE `13`-REST PILOT, 2026-10-02 -- THE PARAGRAPH ABOVE'S "NOT BUILT"
+      ⚠⚠ **PLAN POSITION `17-cast` + THE `13`-REST PILOT, 2026-10-02 -- THE PARAGRAPH ABOVE'S "NOT BUILT"
       IS PARTLY SUPERSEDED.** A `cast:` entry now carries two author-written structured keys:
       `office: {post, why, body | faction, remit?}` (checked by the case-level `_check_office`, seated
       by `corpus_run._seat_office`) and `ought: {about, predicate}` (one OUGHT Proposition for that
@@ -825,8 +826,9 @@ rows:
       executed sets, mean verbs 7.04, 13 verbs ever; (B) the real corpus with the pilot 41, 7.15, 13;
       (C) position `17`'s identical 11-seat fixture on every case 26, 10.65, 16 (that control,
       reproduced). **THE PLAN'S OBSERVABLE -- distinct executed sets rises over the pre-cast arm -- IS
-      NOT MET: 41 -> 41, and 8 -> 8 over the eight pilot cases**; the other 38 are byte-identical (all
-      143 world hashes compared, exactly the eight moved). What moved: mean verbs 6.62 -> 7.25 over the
+      NOT MET: 41 -> 41, and 8 -> 8 over the eight pilot cases**; the other 38 are byte-identical TO THE PRE-PILOT HEAD (all
+      143 world hashes compared, exactly the eight moved) -- NOT to arm A, from which the five cases overlaid
+      before the pilot (NPC-004, -005, -039, -080, -088) differ in `Person.name`, the cast's `who`. What moved: mean verbs 6.62 -> 7.25 over the
       eight, from two cases (NPC-038 7 -> 10, NPC-083 7 -> 9); the other six executed sets are identical
       to the pre-cast. WHY, ATTRIBUTED BY DROPPING EACH KEY IN TURN: seven of the eight authored
       oughts name the cast's NEXT entry, which is the rotation default's own referent, and

@@ -1,4 +1,4 @@
-"""Plan position `17b` -- a `cast:` entry's `office:` and `ought:`, and the refusal of `knows:`.
+"""Plan position `17-cast` -- a `cast:` entry's `office:` and `ought:`, and the refusal of `knows:`.
 
 What each test proves, and the failure it can observe:
 
@@ -207,11 +207,48 @@ def test_two_people_with_one_name_make_an_ought_about_it_refuse(tmp_path, monkey
 
 
 def test_a_waiting_entry_cannot_carry_what_nothing_will_read(tmp_path, monkeypatch):
-    for field, val in (("office", OFFICE), ("ought", {"about": "A", "predicate": "p"})):
+    # `capability` joined at the Batch C close: a WAITS-ON-PLAYER entry is never seated, so the
+    # field would read nothing, exactly as `office:`/`ought:` would
+    refused = 0
+    for field, val in (("office", OFFICE), ("ought", {"about": "A", "predicate": "p"}),
+                       ("capability", {"copying": 3})):
         es = _cast() + [{"who": "the player", "role": "WAITS-ON-PLAYER", field: val}]
         with pytest.raises(SystemExit) as red:
             _load(tmp_path, monkeypatch, es)
         assert "WAITS-ON-PLAYER" in str(red.value), field
+        refused += 1
+    assert refused == 3
+    # POSITIVE CONTROL: the same `capability` on a SEATED entry loads, and so does a waiting entry
+    # that carries nothing -- so the refusal above is the WAITS clause and not a blanket one
+    seated = _cast()
+    seated[0] = dict(seated[0], capability={"copying": 3})
+    es = seated + [{"who": "the player", "role": "WAITS-ON-PLAYER"}]
+    assert _load(tmp_path, monkeypatch, es) == {"X-1": es}
+
+
+@pytest.mark.parametrize("shape", [{"who": "A", "role": "protagonist"}, None, "A"],
+                         ids=["a mapping", "an empty key", "a string"])
+def test_a_cast_that_is_not_a_list_refuses_at_load_instead_of_being_dropped(
+        tmp_path, monkeypatch, shape):
+    """A mapping (or a block missing its `- `, or an empty `cast:`) used to fall through the
+    `isinstance(list)` filter and be DROPPED, so the case seated the three anonymous people it had
+    a cast written to replace. It names the file and the type now."""
+    with pytest.raises(SystemExit) as red:
+        _load(tmp_path, monkeypatch, shape)
+    assert "X-1.yaml" in str(red.value) and "not a list" in str(red.value), str(red.value)
+
+
+def test_the_real_overlays_all_still_load_and_a_good_file_is_not_refused(tmp_path, monkeypatch):
+    """POSITIVE CONTROLS for the two refusals above: the checked-in overlays load unchanged, and an
+    independent read of the same directory finds the same cases (so a loader that refused or dropped
+    everything cannot pass), and a valid list-shaped file loads."""
+    real = C.cast_overlay()
+    independent = sorted(
+        doc["case"] for f in sorted(C.files.EXERCISES_DIR.glob("*.yaml"))
+        for doc in [yaml.safe_load(f.read_text(encoding="utf-8")) or {}]
+        if doc.get("case") and isinstance(doc.get("cast"), list))
+    assert sorted(real) == independent and len(real) >= 13, (sorted(real), independent)
+    assert _load(tmp_path, monkeypatch, _cast()) == {"X-1": _cast()}
 
 
 # ---------------------------------------------------------------------------

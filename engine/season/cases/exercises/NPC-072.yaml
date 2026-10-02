@@ -1,4 +1,4 @@
-# NPC-072 — `cast:` overlay only (`W28-cast`, position `17b` PILOT). See `NPC-039.yaml` for why a
+# NPC-072 — `cast:` overlay only (`W28-cast`, position `17-cast` PILOT). See `NPC-039.yaml` for why a
 # `cast:` block lives in this overlay rather than in `cases/NPC4.yaml` (this case's own file).
 # Read off THIS case's own sentences (quoted), written by an author, matched by no code.
 #
@@ -17,6 +17,8 @@ cast:
     post: military commander
     body: Inner Council
     remit: []
+    # This re-authors a seat `offices.yaml` owns (`off_military_commander_hm`, remit [convene]); the
+    # two remits differ ([] here) (`CLAUDE.md` §0.05 cl.3).
     why: >-
       `one_line` is "Hafenmark's sole-represented Inner Council military commander": the post is
       "military commander" and the organ is canon's `Inner Council`, whose faction is Hafenmark

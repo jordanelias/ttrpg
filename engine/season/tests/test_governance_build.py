@@ -2054,7 +2054,8 @@ def test_8a_a_season_still_executes_end_to_end_with_the_overlay_wired():
 # live rung of its own kind, checked against an INDEPENDENT derivation of each rung; the resolver
 # refuses what names no single rung and a broken form turns the build red; no seat but the one
 # declared exception is rungless; a season executes a `levy`/`issue` through a seat (`Act.via`
-# set) where the same seed refused 21 of 22 levies on `authority` before.
+# set) where the same seed refused 18 of 19 four-season levies on `authority` before (`aperture 4 0`,
+# the parent tree `5519cf52`, as `H-163` limit 1 and the `13d-iii` commit record it).
 # =================================================================================================
 
 @pytest.fixture(scope="module")
@@ -2132,6 +2133,82 @@ def test_13d_iii_the_settlement_form_resolves_and_the_resolver_refuses_what_name
             resolve_anchor(w, w._anchors, bad, "a probe")
         refused += 1
     assert refused == 9
+
+
+def test_13d_iii_a_key_of_the_wrong_type_is_refused_not_resolved_or_raised(_realm13):
+    """`True == 1` and the two hash alike, so `{realm: 1}` used to resolve to `{realm: true}`'s rung,
+    and an unhashable key (`{duchy: ["Crown"]}`) raised `TypeError` out of the dict lookup instead of
+    the `Unspecified` every other malformed form raises. POSITIVE CONTROL: `{realm: true}` still
+    resolves, to the one realm rung, so a resolver that refused every bool cannot pass."""
+    from ..harness.populated import resolve_anchor
+
+    w = _realm13
+    realm_rung = next(r for r, x in w.rungs.items() if x.kind == "realm")
+    assert resolve_anchor(w, w._anchors, {"realm": True}) == realm_rung
+    refused = 0
+    for bad in ({"realm": 1}, {"duchy": ["Crown"]}, {"territory": 9}, {"realm": {"x": 1}}, {1: "x"}):
+        with pytest.raises(Unspecified):
+            resolve_anchor(w, w._anchors, bad, "a probe")
+        refused += 1
+    assert refused == 5
+
+
+def test_13d_iii_a_stale_index_entry_is_refused_not_trusted(_realm13):
+    """The staleness clause, `rid not in w.rungs or w.rungs[rid].kind != kind`: an index entry that
+    names a rung the world does not have, or one of ANOTHER kind, is refused rather than resolved.
+    Both arms are reached by corrupting a COPY of the index, and each arm is asserted separately so
+    a mutation deleting either disjunct turns one of them red; the uncorrupted copy is the control."""
+    from ..harness.populated import resolve_anchor
+
+    w = _realm13
+    realm_rung = next(r for r, x in w.rungs.items() if x.kind == "realm")
+    duchy_rung = next(r for r, x in w.rungs.items() if x.kind == "duchy")
+    assert resolve_anchor(w, dict(w._anchors), {"realm": True}) == realm_rung
+    ghost = dict(w._anchors)
+    ghost[("realm", True)] = "r_no_such_rung"
+    assert "r_no_such_rung" not in w.rungs
+    with pytest.raises(Unspecified):
+        resolve_anchor(w, ghost, {"realm": True}, "a probe")
+    wrong_kind = dict(w._anchors)
+    wrong_kind[("realm", True)] = duchy_rung
+    with pytest.raises(Unspecified):
+        resolve_anchor(w, wrong_kind, {"realm": True}, "a probe")
+
+
+def test_13d_iii_a_minted_row_may_not_reuse_a_standing_seat_id(_realm13, monkeypatch):
+    """A MINTED seat is one no loop-built seat stands for, so its id must be fresh. A row carrying
+    the id of a seat the loop already built used to REPLACE that seat without a sound. The probe
+    renames the first minted row to the id of the loop-built `off_npc_031` (the seat NPC-031's
+    `off_heir` row overlays); the realm must refuse, naming the id. The build with the real rows
+    is the control (`_realm13`, and every other test here, build it)."""
+    from ..harness import populated
+
+    real = populated.OFFICES_SEATS
+    minted_id = _realm13._office_census["minted"][0]
+    rows = [dict(r, id="off_npc_031") if r["id"] == minted_id else r for r in real]
+    assert sum(r["id"] == "off_npc_031" for r in rows) == 1
+    monkeypatch.setattr(populated, "OFFICES_SEATS", rows)
+    with pytest.raises(Forbidden) as red:
+        build_realm(seed=0)
+    assert "off_npc_031" in str(red.value) and "minted" in str(red.value), str(red.value)
+
+
+def test_13d_iii_a_seat_may_not_list_its_own_holder_among_its_obligees(monkeypatch):
+    """`_req_oblige` clause 3's rule at world-gen: the occupant is not his own seat's obligee. The
+    one row that authors obligees is given its own holder as one; the realm must refuse, naming the
+    seat. (The real file's obligee is another person -- `_realm13` builds it.)"""
+    from ..harness import populated
+
+    real = populated.OFFICES_SEATS
+    withs = [r for r in real if r.get("obligees")]
+    assert len(withs) == 1, [r["id"] for r in withs]
+    row = withs[0]
+    assert row["holder"] not in row["obligees"], "the real row already lists its holder"
+    rows = [dict(r, obligees=list(r["obligees"]) + [r["holder"]]) if r is row else r for r in real]
+    monkeypatch.setattr(populated, "OFFICES_SEATS", rows)
+    with pytest.raises(Forbidden) as red:
+        build_realm(seed=0)
+    assert row["id"] in str(red.value) and "own holder" in str(red.value), str(red.value)
 
 
 def test_13d_iii_one_anchor_naming_two_rungs_is_refused_not_shadowed(_realm13):
@@ -2278,7 +2355,8 @@ def _season13():
 def test_13d_iii_a_season_executes_an_issue_or_levy_through_a_seat_with_a_rung(_season13):
     """U9's own acceptance text, on the shipped realm at seed 0: a `levy` or `issue` EXECUTES with
     `Act.via` set, naming a seat whose rung gave it the purview. Before this position the same seed
-    refused 21 of 22 four-season levies on `authority` and executed none. The seat check is the
+    refused 18 of 19 four-season levies on `authority` (`aperture 4 0` on the parent tree
+    `5519cf52`; `H-163` limit 1) and executed none. The seat check is the
     point: an act whose `via` names a rungless seat would have refused, so this also shows `via`
     and the rung are one fact. (`levy` itself still mostly refuses as `levy.refused` -- the `stores`/
     `write` conjuncts, `H-163` limit 3 -- which is not this position's to lift.)"""

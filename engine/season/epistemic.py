@@ -485,18 +485,24 @@ def _ch_post_remit(w: "World", e, pid) -> bool:
     old hash exactly, the field-deletion repr aside); the other 47 -- every one a `march.declared`,
     heard by `remit:dispatch` holders nowhere near the march -- reach nobody now. Claims `told_by`
     400 -> 318 over the season as the later rounds re-form (events 5,471 -> 5,378), `inferred` 0 ->
-    0, because nobody in the realm obliges; `post_remit` credits nobody there.
+    0, because nobody in the realm obliged AT `17a`; `post_remit` credited nobody there (⚠ `13d-iii`
+    since seeds one `oblige`, and `inferred` is still 0 -- see *WHO CAN REACH IT TODAY* below).
     `13e`'s snapshot consolidation is unaffected where it still reads -- `loop/resolve.py`'s
     `_eligible` and `decision/options.py` -- and this site is simply no longer one of them.
 
     ⚠ WHO CAN REACH IT TODAY: nobody the chooser drives. `oblige`'s row is untyped and declares
     `counterparty: subject`, so `opening_set` forms no `oblige` Candidate (plan position 16's
-    precedent -- and no Question's referent is ever a seat anyway), and no world builder seeds an
-    `oblige` Tenure: `offices.yaml`'s one authored obligee sits on a `[NEW]` seat nothing mints yet.
-    So `inferred` is 0 in the realm and the corpus, by content rather than by mechanism -- MEASURED
-    at `17a`: the corpus's 178 built worlds hold 90,988 claims, every one `firsthand`, identical
-    before and after. The channel is exercised by acts that name their seat
-    (`tests/test_obligees.py`, through the real fold and WITNESS).
+    precedent -- and no Question's referent is ever a seat anyway), and AT `17a` no world builder
+    seeded an `oblige` Tenure: `offices.yaml`'s one authored obligee sat on a `[NEW]` seat nothing
+    minted yet. ⚠ SUPERSEDED AT `13d-iii` (2026-10-01): `build_realm` now mints
+    `off_restoration_leader` and opens its authored obligee, NPC-041, as a term-less `oblige`
+    Tenure -- the realm's one. `inferred` IS NEVERTHELESS STILL 0 THERE: MEASURED at the Batch C
+    close, `populated.run(n, 0)` -- no `inferred` claim in any ledger after 1 season (firsthand
+    5,216, told_by 2,807) or after 4 (firsthand 11,574, told_by 4,708). WHY it stays 0 with an
+    obligee present is NOT isolated here, so the realm's 0 is no longer *for want of an `oblige`*.
+    The corpus figure is `17a`'s and not re-measured: the corpus's 178 built worlds hold 90,988
+    claims, every one `firsthand`, identical before and after. The channel is exercised by acts
+    that name their seat (`tests/test_obligees.py`, through the real fold and WITNESS).
 
     ⚠ NOT CACHED AT THE BARRIER, THOUGH `establishment_of` RE-SCANS `w.tenures` ON EVERY CALL --
     TRIED AND REVERTED (methodology-close Phase 2, EFFICIENCY finding). r2 `05` §A.1.5 RULED (d) is

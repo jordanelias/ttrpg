@@ -73,12 +73,22 @@
 #     `Office.rung` (purview, `04:330`'s `via.scope`) AND its `Office.scope_rung` (a bench's ground,
 #     `H-32`). No row authors a `settlement` anchor today; the resolver does not care which form a
 #     row uses, only that it names exactly one live rung of the kind it says.
-#   * `remit_acts` REPLACES what the loop would have granted (a declared `[]` grants nothing and is
-#     NOT filled from `rosters.yaml: remit_default`), EXCEPT for the acts named in `meta:
-#     remit_unruled`, which a seat keeps if it held it before the overlay. `dispatch` is that act:
-#     J-8 (whether `dispatch` is a remit act at all) is Jordan's, so this file neither grants nor
-#     strips it -- delete the `remit_unruled` line to strip it from every seat in one edit, or add
-#     it to the rows that should carry it.
+#   * `remit_acts` REPLACES what the loop would have granted (a declared `[]` is NOT filled from
+#     `rosters.yaml: remit_default`), EXCEPT for the acts named in `meta: remit_unruled`, which a
+#     LOOP-BUILT seat keeps if it held it before the overlay. `dispatch` is that act.
+#     ⚠ SO A DECLARED `[]` DOES NOT GRANT NOTHING, AND `dispatch` IS GRANTED, NOT LEFT ALONE. The
+#     loop seats with `remit_default` (every remit act, `dispatch` included), and all seven
+#     `remit_acts: []` rows (`off_heir`, `off_princess`, `off_guard_captain`,
+#     `off_archbishops_rep`, `off_legal_advisor_hm`, `off_commune_rep_hm`, `off_guild_comptroller`)
+#     are LOOP-BUILT, so `held` is that testing default and each of the seven seats holds
+#     [dispatch] -- which makes `march` (eligibility `remit:dispatch`) eligible to each holder as
+#     well. The same `[]` on a MINTED row holds nothing, because a minted seat has no `held`:
+#     identical rows diverge by BUILD ROUTE (measured, `build_realm(0)`, 2026-10-02). J-8 (whether
+#     `dispatch` is a remit act at all) is Jordan's, and stripping it -- delete the `remit_unruled`
+#     line, which strips it from every seat in one edit, or add it to the rows that should carry
+#     it -- is a GRANT decision, not a code fix; the strip would leave the seven seats with no
+#     remit, which `test_season_shape.py`'s remit-default test (`assert not ungranted`) would
+#     then report.
 #   * MEASURED, `build_realm(0)`, 2026-10-01: the per-case loop seats 24, not r2 `03`'s 19. Four
 #     `[NEW]`-marked holders (NPC-007, NPC-013, NPC-021, NPC-070) are already seated by it under a
 #     registry-derived post, so those four are OVERLAID, not minted; six rows are MINTED

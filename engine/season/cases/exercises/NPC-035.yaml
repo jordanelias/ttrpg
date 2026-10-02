@@ -1,4 +1,4 @@
-# NPC-035 — `cast:` overlay only (`W28-cast`, position `17b` PILOT). See `NPC-039.yaml` for why a
+# NPC-035 — `cast:` overlay only (`W28-cast`, position `17-cast` PILOT). See `NPC-039.yaml` for why a
 # `cast:` block lives in this overlay rather than in `cases/NPC4.yaml` (this case's own file).
 # Every office and ought is read off THIS case's own sentences (quoted), written by an author,
 # matched by no code.

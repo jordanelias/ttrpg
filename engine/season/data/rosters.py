@@ -567,15 +567,20 @@ def authored_remit(row: dict, held=()) -> list[str]:
     """A seat's remit from its authored `offices.yaml` row -- the ONE owner of the overlay rule
     (plan position `13d-iii`), beside `remit_or_default`, which it supersedes wherever a row exists.
 
-    ⚠ THE ROW'S `remit_acts` IS THE REMIT, `[]` INCLUDED. A declared empty list grants nothing, and
-    is NOT passed to `remit_or_default` (which would fill it with every act): the row was authored
-    from canon and the default is a testing fixture (`rosters.yaml: remit_default`).
+    ⚠ THE ROW'S `remit_acts` IS THE REMIT, `[]` INCLUDED, EXCEPT FOR WHAT `held` BRINGS. A declared
+    empty list is NOT passed to `remit_or_default` (which would fill it with every act): the row
+    was authored from canon and the default is a testing fixture (`rosters.yaml: remit_default`).
+    But it does NOT grant nothing on a loop-built seat -- see `held`.
 
     ⚠ `held` IS WHAT THE SEAT HAD BEFORE THE OVERLAY, and only the acts in `OFFICES_REMIT_UNRULED`
-    survive from it -- `dispatch` today, an open ruling (J-8) this fold does not decide in either
-    direction. A seat the loop did not build (a MINTED row) passes nothing, and so does not gain
-    it. `sorted`, for `remit_or_default`'s reason: a set's order is per-process and the grant folds
-    into `World.content_hash`."""
+    survive from it -- `dispatch` today, an open ruling (J-8). THIS GRANTS IT, it does not stay
+    neutral: a loop-built seat was seated with `remit_default` (every act), so its `held` carries
+    `dispatch` and it keeps it -- all seven `remit_acts: []` rows are loop-built, so each of those
+    seats holds [dispatch] (and `march`, eligible on `remit:dispatch`, is eligible to it). A seat
+    the loop did not build (a MINTED row) passes nothing and so does NOT gain it: two identical
+    rows diverge by build route. Stripping `dispatch` (J-8) is a GRANT decision for Jordan, not a
+    code fix. `sorted`, for `remit_or_default`'s reason: a set's order is per-process and the
+    grant folds into `World.content_hash`."""
     return sorted(set(row["remit_acts"]) | (set(held) & OFFICES_REMIT_UNRULED))
 
 

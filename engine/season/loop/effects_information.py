@@ -267,9 +267,11 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     ONE DECLINE (`NO_CHANGE` -> `determine.refused` on the `write` clause), a NEGATION the grammar
     cannot spell: the party already owes this seat a live `oblige` (one edge per person and seat --
     `_req_oblige` clause 4's rule; a second would list him twice in `establishment_of`). The second
-    this body carried -- the party is the actor, a judge binding himself -- is the FOLD's since plan
-    position `14` (`loop/resolve.py::_admits`, the `counterparty` clause on this row's `counterparty:
-    subject`), and the `bench` conjunct's `may_determine` refuses it before that.
+    this body carried -- the party is the actor, a judge binding himself -- was already DEAD: the
+    `bench` conjunct's `may_determine` refuses it first (`determine.unauthorized`), and an act
+    naming no subject dies at `party`, so the fold's `counterparty` clause (`loop/resolve.py::
+    _admits`, plan position `14`, on this row's `counterparty: subject`) is asked of neither and
+    cannot fire for this row.
 
     G3 -- THE EDGE IS SOMEBODY ELSE'S, AND ITS BASIS IS `determination` (`state/gate.py::
     may_determine`, the EIGHTH): a judging seat the actor sits in, whose bench's ground holds the
