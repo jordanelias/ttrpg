@@ -5,9 +5,7 @@ it protects is game code, and the defect it caught was not hypothetical: three i
 shipped simultaneously — nine names in `systems/characters/sim/conviction.py`, eight in
 `systems/world/sim/npe.py`, thirteen registered in `references/descriptor_registry.yaml` — and the
 disagreement silently disabled ED-912 §6.1's Close-Knot-break Conviction Scar for as long as both
-modules existed. (Both modules are retired now, `npe.py` at plan position `29d` and `conviction.py`
-at `29e`; the guard stays because the failure it describes is a property of any second copy, not of
-those two files.) That is the signature §0.1 pt 5 describes: each roster was correct when written and
+modules existed. That is the signature §0.1 pt 5 describes: each roster was correct when written and
 stopped being correct because the other changed.
 
 So: one owner (`references/descriptor_registry.yaml:conviction_roster`), one exporter
@@ -51,13 +49,13 @@ def test_the_roster_comes_from_the_registry_not_a_literal():
     from engine.substrate import descriptors
     assert len(descriptors.CONVICTIONS) == 13
     # Every consumer is the SAME object, not a copy that can drift. `systems/world/sim/npe.py` was the
-    # second consumer until plan position `29d` deleted it, and `systems/characters/sim/conviction.py`
-    # the third until plan position `29e` (2026-10-02) retired it (its `CONVICTIONS` was this very
-    # object, re-bound). The season's own binding replaces both, so the assertion observes the consumer
-    # the game actually runs. The binding is an import, so it fails only if that import is replaced by
-    # a copy; a copy derived from the roster (`CONVICTIONS + (...)`) is a literal the AST test below
-    # does not count.
+    # second consumer until plan position `29d` deleted it; the season's own binding replaces it, so the
+    # assertion observes the consumer the game actually runs. Both bindings are imports, so each fails
+    # only if that import is replaced by a copy; a copy derived from the roster (`CONVICTIONS + (...)`)
+    # is a literal the AST test below does not count.
+    from systems.characters.sim import conviction
     from engine.season.data import rosters
+    assert conviction.CONVICTIONS is descriptors.CONVICTIONS
     assert rosters.PURSUITS is descriptors.CONVICTIONS
 
 

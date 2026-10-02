@@ -61,17 +61,9 @@ MAPPING = {
     # no Python constant is the same quantity as any of the four. Pairing them to the new constants
     # by name would be exactly the matching this file forbids; the disagreement is recorded in
     # DIVERGENCES['coherence_bands'] instead, where it is a model difference and not a value copy.
-    # KNOT_FORMATION_TN and KNOT_FORMATION_OB (`fieldwork.KNOT_FORMATION_*`) LEFT THIS TABLE at plan position
-    # `29f` (2026-10-02). Their Python owner, `systems/fieldwork/sim/knots.py`, was retired with its tree (the
-    # season carries no knot-formation roll). Same treatment as the pairs below: an owner that retired leaves the
-    # table rather than being re-pointed by name, and the parity reader
-    # (`valoria-game/tools/check_constants_parity.py`, not visible from here) simply has no oracle value for
-    # either constant.
-    # SEASONS_PER_YEAR (`overview.SEASONS_PER_YEAR`) LEFT THIS TABLE at plan position `29a`-ms (2026-10-02). Its
-    # Python owner, `systems/overview/sim/ms_track.py` (the only overview module that defined it; the season loop
-    # defines no year), was retired with its tree. Same treatment as the pairs above: an owner that retired leaves
-    # the table rather than being re-pointed by name, and the parity reader
-    # (`valoria-game/tools/check_constants_parity.py`, not visible from here) simply has no oracle value for it.
+    'KNOT_FORMATION_TN':             'fieldwork.KNOT_FORMATION_TN',
+    'KNOT_FORMATION_OB':             'fieldwork.KNOT_FORMATION_OB',
+    'SEASONS_PER_YEAR':              'overview.SEASONS_PER_YEAR',
     # OB_FLOOR (`factions.OB_FLOOR`) and CI_START (`overview.CI_STARTING`) LEFT THIS TABLE at plan position `29b`
     # (2026-10-01). Their Python owners were `systems/factions/sim/faction_action.py` and
     # `systems/overview/sim/ci_track.py`, both deleted with the faction layer and the CI clock (no season

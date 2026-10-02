@@ -90,7 +90,7 @@ that judgment 138 times** — where no source exists, leave `pool_default` and r
 
 **BUILT 2026-10-01 (PR #451):** both `rendering.py` stubs struck with their reasons at the site (the season has no clock to wire them to: `loop/census.py`, ED-WR-0011 option A); `ED-WR-0003` closed at ladder step 2
 (an `ED-WR-0003` superseding row); `attempt_mending` calls `recover()` and costs > 0 (only tests call it; `environment_in_equilibrium` defaults to False);
-`threadwork/sim/{co_movement,opposing}.py` import neither `ms_track` nor `knots`, which unblocks `29a`-ms and `29f`. **Remainder, each outside this position's scope** (`HANDOFF_WR.md`):
+`threadwork/sim/{co_movement,opposing}.py` import neither `ms_track` nor `knots`, which unblocked `29a`-ms and `29f` (both since CANCELLED, A-24: the modules stay, unplugged). **Remainder, each outside this position's scope** (`HANDOFF_WR.md`):
 the `R-14` practitioner-resilience term (arithmetic unruled); Mending aimed at the mender's own configuration (`coherence.mend_resting_point` has no non-test caller); and
 `collective.py`'s and `opposing.py`'s Mending feedback. **R:** none.
 
@@ -166,7 +166,7 @@ a shipped world — `_part5` §L says when they escalate.
 `repudiate`'s costs (the forswearing half of S5). **FALSIFIER:** a forsworn commitment costs what the row
 declares and nothing else; no proper-noun branch. **R:** R-05 texture.
 
-### `2-ii` · RET-SC: the kernel and the veto · IN/SC · gate `22` (E4) · `sonnet` producer, `opus` critic on the veto only, `haiku` for the inbound-site census · `[cleanup]`
+### `2-ii` · RET-SC: the kernel and the veto · IN/SC · gate `22` (E4) · `sonnet` producer, `opus` critic on the veto only, `haiku` for the inbound-site census · `[cleanup]` · **HELD 2026-10-02 (A-24): it deletes `systems/social_contest/sim/contest/`, the home of social contests; do not build until Jordan answers**
 
 **INSTRUCTION (carried from the retired position 2, corrected for what has since landed).**
 `systems/social_contest/sim/contest/` (16 files); `parliamentary_{vote,stay}.py` already went at `29b`

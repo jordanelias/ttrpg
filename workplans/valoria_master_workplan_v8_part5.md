@@ -29,7 +29,7 @@ carries `contests: "the body"`), with `loop/effects_combat.py` registrations; `1
 derived and never stored, **with a caller** (if nothing reads confliction yet — build-order 6f, `score`
 dotting against the basis — the Query waits for 6f, `ID-13`); `refusal_axis` set only if the ruling says
 arm H-146, reading the refusing pole from roster data. Audit the direct readers of
-`descriptors.CONVICTIONS` that survive Batch 1 (`npe.py`'s died at `29d`; `conviction.py`'s dies at `29e`). Re-pin
+`descriptors.CONVICTIONS` that survive Batch 1 (`npe.py`'s died at `29d`; `conviction.py` STAYS — `29e` cancelled, A-24). Re-pin
 `test_conviction_roster_single_owner.py` and `test_conviction_spread_solver.py` (declared, §7).
 **FALSIFIER:** Jordan's faith pair (the devout-Solmund builder and the Einhir dismantler, both high
 `faith` — his own worked example in the worksheet) sits outside the 60° bar (`cos ≤ 0.5`) —
@@ -177,7 +177,7 @@ and an attack that lands sends the question back through the ladder, not to Jord
 
 | # | question | step | answer / where decided |
 |---|---|---|---|
-| A-1 | the 2026-09-28 plan's §5.2 thirteen demotions | 1–5 | each with its step (content-hash tiebreak → H-54/H-122, step 4; MB golden → `ED-MB-0016`, step 1; held H5 → step 1; H-111 → one probe, step 5; `ED-MB-0075` → option (2), built; `mass_battle` `state: []` → `04 §C.5.1`, step 3; G-Q5 → post-H6 re-measure, step 5; M-7 / `upkeep` / `kill / wound` → contradictions 3 / 1 / 4; `titles` → `04 §B.7/§E.1`, step 3; d.1 → members' `commit` degree, attacked at `20-iv` and dropped (nothing writes a commit Tenure's `degree`, H-162; the morale source landed from stance instead, PR #450), step 5; `test_n3` floors → declared re-pin unless `11` shows a property, step 5; D-6/D-7 → swept fixtures at `18`; deleting the retire set → `requirements.yaml`'s own gate, not a question; GD-1 → a registered gap) |
+| A-1 | the 2026-09-28 plan's §5.2 thirteen demotions | 1–5 | each with its step (content-hash tiebreak → H-54/H-122, step 4; MB golden → `ED-MB-0016`, step 1; held H5 → step 1; H-111 → one probe, step 5; `ED-MB-0075` → option (2), built; `mass_battle` `state: []` → `04 §C.5.1`, step 3; G-Q5 → post-H6 re-measure, step 5; M-7 / `upkeep` / `kill / wound` → contradictions 3 / 1 / 4; `titles` → `04 §B.7/§E.1`, step 3; d.1 → members' `commit` degree, attacked at `20-iv` and dropped (nothing writes a commit Tenure's `degree`, H-162; the morale source landed from stance instead, PR #450), step 5; `test_n3` floors → declared re-pin unless `11` shows a property, step 5; D-6/D-7 → swept fixtures at `18`; deleting the retire set → `requirements.yaml`'s own gate, not a question — SUPERSEDED 2026-10-02 (A-24); GD-1 → a registered gap) |
 | A-2 | H-174 item 2 — the upkeep payment's target | 5 | `home_of` is the architecture's own definition of where a person is |
 | A-3 | `24f`'s cohort producer | 3 | `engine/season/cohorts.yaml` — built (ED-WR-0011, `npcs.yaml` header, ED-SE-0051) |
 | A-4 | R-04 reason 2's "no Faction-as-actor" | 3 | `04_CODE_ARCHITECTURE.md`: `Faction` is a resolved view with **no verbs**, never `Act.actor`; faction acts are person acts `via` seats |
@@ -187,7 +187,7 @@ and an attack that lands sends the question back through the ladder, not to Jord
 | A-8 | the "double `@effect_for('oblige')`" in `effects_governance.py` | — | false alarm: the second is docstring text |
 | A-9 | `return_to_game_queue.yaml` | 1 | superseded by its own header (2026-08-19); retired at `ebb43bf0` |
 | A-10 | GD-1, the victory requirement | 5 | registered as an `ABSENT_RULE` hole, `H-176`, at `28-iii` (PR #450) |
-| A-11 | `ms_track` / `knots` deletions | 4 | wait on `27` (the retired plan's §1.3 disposition) |
+| A-11 | `ms_track` / `knots` deletions | 4 | wait on `27` (the retired plan's §1.3 disposition) — SUPERSEDED 2026-10-02 (A-24): the modules stay |
 | A-12 | **former J-12** (does being told something move the hearer's stance?) **and position `10`'s write target** | 1 | superseded by the telling workplan, RATIFIED 2026-10-01 (main §0.6): `tell` writes no stance; told valence enters regard at read (G1); a judged deed counts there too, so this plan's stored `fight`-write rewrite of `10` is withdrawn |
 | A-13 | `destroy_record` unformable for everyone | 4 | needs a record-holding question referent — `give`'s shape, at `14` |
 | A-14 | v7's ruling R-7 — does the Churn Engine workstream survive `ED-IN-0204`? | 2 | its head lived under the dissolved `designs/` tree; nothing builds on it |
@@ -200,3 +200,4 @@ and an attack that lands sends the question back through the ladder, not to Jord
 | A-21 | `ED-FI-0009`'s obstacle source | 4 | `sigma.py::_obstacle_of`'s existing non-person default; one roll owner (S27.2) — stop if that needs a `contests:` shape |
 | A-22 | who seats `p_b`/`p_c` from the `cast:` — `13` or `17`? | 1 | `13`'s execution record (2026-09-28 plan §8.7) assigned the remainder to `17` |
 | A-23 | Fable's proposal to run FI `ED-FI-0009` as a parallel lane | 5 | serial — it shares `verb_table.yaml` and `effects_information.py` with `14` (`_part3` O.3) |
+| A-24 | do the `retire-set` `systems/` trees go — `characters`, `fieldwork`, `overview`, and the merged `29b`–`29d` deletions of `factions`, `world`, `settlements/sim` | ruled by Jordan 2026-10-02 (`ED-IN-0283`) | NO. The `systems/` folders are the homes of their systems. `29e`, `29f` and `29a`-ms (built `21c7133f`, `1b68d590`, `72623b61`) were reversed on this branch and cancelled. OPEN, put to Jordan and not decided here: whether the PR #450 deletions return; `2-ii` (held); threadwork re-plugging into `ms_track`/`knots`; CLAUDE.md §3 and CURRENT.md's season-loop row, which still describe the retire-set |

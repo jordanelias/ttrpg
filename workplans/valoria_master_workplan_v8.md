@@ -268,14 +268,17 @@ dedicated test executes every position), but most Phase-2 verbs execute from han
 the realm, `commit found build levy migrate confer establish revoke determine work` are attempted and
 never execute (`aperture 4 0`). **Phase 3: `27` PARTIAL (PR #442); `10`'s `tell`→stance write REVERTED
 with its side findings landed (PR #442), and position `10` itself now belongs to the telling workplan (§0.6); everything else open or Jordan-gated.** Phase 4: `20-i`–`20-iv`,
-`28-0` (and its follow-up), `28-i`–`28-iii`, `29a`–`29d`, and (Batch 3a) `29a`-ms, `29e` and `29f` are
-done — records in `_part6` §H.1. What is open of Phase 4: `2-ii`, gated on `22`. The three follow-ups
+`28-0` (and its follow-up), `28-i`–`28-iii` and `29a`–`29d` are done (PR #450, records in `_part6`
+§H.1), except that Jordan's 2026-10-02 ruling (`ED-IN-0283`, `_part5` A-24) keeps the `systems/` folders
+as the homes of their systems: `29a`-ms, `29e` and `29f` were built in Batch 3a and CANCELLED, their
+deletions reversed, and the merged deletions under `29a`–`29d` are put to Jordan. What is open of Phase
+4: `2-ii` (HELD, A-24), gated on `22`. The three follow-ups
 Batch 1 found (`B0-CI-b`, `29d-ii`, `20-v`) landed in PR #451.
 
 | position | handle | lane | STATE | GATE | R | batch | evidence / note |
 |---|---|---|---|---|---|---|---|
 | `B0-CI` | main's CI red | IN | **PARTIAL** | — | — | 0 | [RAN] PR #450's CI: the step `pytest tests/valoria -n auto` passes — the seven red tests are fixed (ledger `FORK:` refs re-pointed to commits that are ancestors of `main`; `sim_params.json` and `value_pointer_links.json` re-derived by their exporters; `tools/build_engine_atlas.py`'s stated inputs). **CI as a whole is NOT green:** the next step, `pytest engine/season/tests`, fails one test that predates this plan (red at `5c5d8ec6` on `main`, never reached there because the earlier step failed) — that test is `B0-CI-b`. `B0-CI-b` landed in PR #451 (`77f5175a`). **That did not turn `main` green:** on `main` @`59004d86` (run 36967763315) the `tests/valoria` step passed in about 9m10s and the `engine/season/tests` step was `cancelled` 6m49s in when `unit-tests`' 16-minute cap hit, so `register --requirements` was skipped and `All Gates Green` failed with no test failing. `B0-CI-c` (2026-10-02) moved `engine/season/tests` and `register --requirements` into their own job, `season-tests` (20-minute cap, set before any completed run existed). **First complete run, PR #452 @`866b3136` (run 37026782154, 2026-10-02):** `season-tests` 11m11s, `unit-tests` 9m14s, `All Gates Green` success; the workflow's comment carries the reading and its caveat (one hosted observation). What remains of this row is `All Gates Green` reading green on `main` itself, once #452 merges |
-| `2-ii` | RET-SC: kernel + veto | IN/SC | BLOCKED | `22` | — | 3 | [SETTLED: `systems/social_contest/sim/contest/` exists, 16 files] — the kernel is still on disk; `parliamentary_{vote,stay}.py` went at `29b` |
+| `2-ii` | RET-SC: kernel + veto | IN/SC | **HELD** | `22` | — | 3 | [SETTLED: `systems/social_contest/sim/contest/` exists, 16 files] — the kernel is still on disk; `parliamentary_{vote,stay}.py` went at `29b`. HELD 2026-10-02 (A-24): it deletes the social-contest kernel |
 | `9` | PC-SURRENDER build-or-strike | PC | JORDAN | J-7 | — | 4 | `HANDOFF_PC.md` [CODE] |
 | `10` | U5 / R-07 | IN | **CARVED OUT** (§0.6) | the telling workplan's own gates | R-07, R-01 | — | PR #442 (`c6f4252`) reverted the `tell`→stance write on H-79 and landed its side findings (H-62's producer gap closed by `march`'s M4 write; the `names_index.yaml` `stance` entry). Re-scoped by the telling workplan's first commit (`60c70bbf`) to T0→G8: `tell` writes no stance; regard is computed at read. This plan's earlier `fight`-write rewrite is withdrawn (§0.6) |
 | `12` | H-62-rest scar rebuild | IN | BLOCKED | cells commit | R-06, R-08 | 4 | |

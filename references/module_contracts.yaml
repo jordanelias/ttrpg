@@ -227,15 +227,11 @@ modules:
     aliases: ["Conviction Track"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "conviction_track"   # Key Type Registry vocabulary
     doc: .designs/systems/characters/reference/conviction_track_v1.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    sim_module: none   # RETIRED AT PLAN POSITION `29e` (2026-10-02). It was `systems/characters/sim/conviction.py`
-      # (OI-54: `apply_conviction_scar` and the per-Conviction Scar thresholds, §2 of this module's own doc);
-      # `systems/characters/` is deleted (each file has an exact row in `references/restructure_ledger.md`, ref
-      # 59004d86), and its last caller, `knots.py`, went at position `29f`. The season's scar write is
-      # `engine/season/loop/effects_combat.py`'s `_scar` (`engine/season/hole_register.yaml` `H-128`); the
-      # Scar-count store, thresholds and crisis have no carrier, and rebuilding them onto `Person.pursuits` is
-      # position `12`'s. This is the PERSONAL piety_track, not territorial_piety below (3-way name collision
-      # noted in gap_notes). The row is kept, not deleted: removing a contract row is its own change, and `doc:`
-      # above still resolves.
+    sim_module: systems/characters/sim/conviction.py   # OI-54 (ED-IN-0097, W4): matches
+      # mechanics_index.yaml's `certainty_track`/`conviction_scar` entries (same file); content
+      # verified directly (apply_conviction_scar, per-Conviction Scar thresholds — §2 of this
+      # module's own doc). This is the PERSONAL piety_track, not territorial_piety below (3-way
+      # name collision noted in gap_notes) — do not conflate the two sim_module: values.
     scales: [personal]
     resolver: deterministic_accounting   # [ASSUMPTION] scar accumulation thresholds (conviction_track_v1 §2)
     state:
@@ -261,17 +257,17 @@ modules:
       - "conviction_track_v1.md header + §1-§4 index [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
     wiring:
-      build: design
-      godot: no-oracle
+      build: deferred
+      godot: python-oracle
       port_rank: 3
       parity: key-log
-      note: conviction.py (Scar accumulation) is retired (plan position `29e`); the season's scar write is `_scar` (`H-128`). Wiring reset to the vocabulary's zero-code state (was build deferred, godot python-oracle); `port_rank` is the pre-deletion audit verdict and is not re-derived here.
+      note: conviction.py Scar accumulation real; reached only via the unwired knot chain.
 
   - module: territorial_piety
     doc: .designs/systems/characters/reference/conviction_track_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
     sim_module: none   # was `systems/overview/sim/ci_track.py` (the CI half) and `Territory.pt` in
       # `engine/autoload/game_state.py` (the CV half): both deleted at plan position `29b` (2026-10-01). The Accord / CI /
-      # IP / RS clocks have no season analogue (`architecture/holonic_ARCHITECTURE.md` §25.1: the three licensed clocks are exhaustive; `04` PART D row 17 refuses a fourth).
+      # IP / RS clocks have no season analogue (`engine/season/loop/census.py`: no clock generates anything).
     scales: [territory, provincial]
     resolver: deterministic_accounting   # [ASSUMPTION] CV movement rules §1.2 + seasonal TC calculation §3
     state:
@@ -347,14 +343,13 @@ modules:
     aliases: ["Knots"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "fieldwork"   # Key Type Registry vocabulary
     doc: .designs/systems/fieldwork/reference/knots_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    sim_module: none   # RETIRED AT PLAN POSITION `29f` (2026-10-02). It was `systems/fieldwork/sim/knots.py`
-      # (OI-54: formation, the ED-912 -5..+5 bond-strain gauge, rupture and loss); `systems/fieldwork/` is
-      # deleted (each file has an exact row in `references/restructure_ledger.md`, ref 59004d86), and its last
-      # caller, `opposing.py`'s `sustain_knot`, went at position `27`. The season carries a `knot` Tenure kind
-      # and no gauge; the gauge's definition, and the unlocated source of its `Tenure.degree` mapping, are
-      # recorded in `engine/season/hole_register.yaml` `H-182`'s `cite`. The Evidence/Disposition Track rows
-      # below were never in `knots.py`. The row is kept, not deleted: removing a contract row is its own
-      # change, and `doc:` above still resolves.
+    sim_module: systems/fieldwork/sim/knots.py   # OI-54 (ED-IN-0097, W4): matches
+      # mechanics_index.yaml's `knots` entry directly (module alias is literally "Knots"); this
+      # module's gap_notes already flag it as needing a rebuild (C-TW-12) — real code, imperfect
+      # fidelity, still a genuine G_code join. The Evidence/Disposition Track rows of this
+      # contract's state: are implemented in the SIBLING systems/fieldwork/sim/fieldwork.py
+      # (mechanics_index `disposition_track`/`evidence_track`), not in knots.py — disclosed, not
+      # papered over; knots.py is picked as primary because the module/alias name matches it.
     scales: [personal, scene]
     resolver: dice_pool   # Fieldwork Pool (fieldwork_v30 §2); knot formation procedure (knots_v30 §3.2)
     state:
@@ -384,7 +379,7 @@ modules:
     accounting_phase: [settlement_accounting]
     gap_notes:
       - "registry attributes scene.gift emission to fieldwork (gift-giving as fieldwork social action) — cross-check vs scene_slate emitting same type"
-      - "knots_v30 §6.1/§6.2/§11 carried the pre-ED-912 tier-capacity model + −4 betrayal-rupture value after TIER-DRIFT-001/COMPOSURE-DRIFT-001 were RESOLVED by Jordan (ED-912, 2026-06-28); propagation gap closed 2026-07-07 (ED-FI-0003) — §11 now records the resolution instead of forward-flagging it. Residual: §6.2 Coherence-loss rule [UNVERIFIED post-ED-912]; the knots rebuild (`systems/fieldwork/sim/knots.py`, retired at plan position `29f`, ref 59004d86) = Stratum B (C-TW-12)"
+      - "knots_v30 §6.1/§6.2/§11 carried the pre-ED-912 tier-capacity model + −4 betrayal-rupture value after TIER-DRIFT-001/COMPOSURE-DRIFT-001 were RESOLVED by Jordan (ED-912, 2026-06-28); propagation gap closed 2026-07-07 (ED-FI-0003) — §11 now records the resolution instead of forward-flagging it. Residual: §6.2 Coherence-loss rule [UNVERIFIED post-ED-912]; systems/fieldwork/sim/knots.py rebuild = Stratum B (C-TW-12)"
     status: extracted
     sources:
       - "knots_v30 full [READ: 2026-06-10]"
@@ -392,11 +387,11 @@ modules:
       - "key_substrate_v30 §8.4, §8.7 [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
     wiring:
-      build: design
+      build: stub
       godot: no-oracle
       port_rank: 8
       parity: key-log
-      note: fieldwork/investigation raise; the scene runner is a stub, and `knots.py` is retired (plan position `29f`). Wiring reset to the vocabulary's zero-code state (was build stub); `port_rank` is the pre-deletion audit verdict and is not re-derived here.
+      note: fieldwork/investigation raise; knots built but the scene runner is a stub.
 
   - module: scene_slate
     registry_system: "scene_slate"   # Key Type Registry vocabulary
@@ -612,20 +607,22 @@ modules:
   - module: peninsular_strain
     registry_system: "peninsular_strain"   # Key Type Registry vocabulary
     doc: .designs/systems/overview/reference/peninsular_strain_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    sim_module: none   # RETIRED AT PLAN POSITION `29a`-ms (2026-10-02). It was the DIRECTORY `systems/overview/sim/`
-      # (OI-54, ED-IN-0097, W4: the state: block below split across several files with no single owner). The last
-      # file in it, `ms_track.py` (MS), is deleted with the tree (each file has an exact row in
-      # `references/restructure_ledger.md`, ref 59004d86); its siblings went earlier (`accounting.py`, `ip_track.py`
-      # and `rs_track.py` at `29a`, `ci_track.py` at `29b`, `season.py` at `28-iii`). Turmoil never had a tracker
-      # file (the open §5 row 7 fork, Turmoil writer unruled). The season carries none of these clocks
-      # (`architecture/holonic_ARCHITECTURE.md` §25.1: the three licensed clocks are exhaustive; `04` PART D row 17 refuses a fourth). The row is kept, not deleted: removing a
-      # contract row is its own change, and `doc:` above still resolves.
+    sim_module: systems/overview/sim/   # OI-54 (ED-IN-0097, W4): DIRECTORY — this module's
+      # state: block splits across several files with no single owner: MS is
+      # systems/overview/sim/ms_track.py (this module's own state: comment already names it as
+      # "the canonical MS-arithmetic surface", cross-checked with mechanics_index.yaml's `ms_track`
+      # entry), IP WAS systems/overview/sim/ip_track.py (deleted 2026-10-01, plan position 29a: two stubs, no
+      # production caller; the mechanics_index `ip_track` row is left standing). Turmoil has
+      # NO tracker file anywhere (verified: grep for a Turmoil writer finds none) — this is the
+      # open §5 row 7 fork (Turmoil writer unruled), not papered over by pointing at a directory.
+      # A directory join is honest disclosure of the split, not a claim that every file in it
+      # implements this contract.
     scales: [peninsula]
     resolver: deterministic_accounting   # [ASSUMPTION]
     state:
       - {name: "Turmoil", bucket: clock, writable: true}   # clock_registry: 0-10, peninsular_strain_v30 §4
       - {name: "IP (Institutional Pressure)", bucket: clock, writable: true}   # clock_registry: 0-100 [PROVISIONAL ED-793 start value]
-      - {name: "MS (Mending Stability)", bucket: clock, writable: true}   # OI-32a ownership declaration (2026-07-29, W3 item 3): mechanically-determinable GAP-F1 owner. Floor 0 (Rupture) / ceiling 100; baseline decay -1/in-game-year at Year-End Accounting, PP-255 (params/core.md §MS Baseline Decay). Former tick (RETIRED AT PLAN POSITION `29a`-ms, 2026-10-02): systems/overview/sim/ms_track.py (apply_ms_baseline_decay / apply_ms_delta, the canonical MS-arithmetic surface; fork ref 59004d86), (its former caller, systems/overview/sim/accounting.py, was deleted at plan position `29a`). CORRECTED 2026-07-29 (W3 item 8): the prior version of this comment claimed "accounting.py L36-39 also inlines the same PP-255 decay pending a migration" — that claim is FALSE against the current tree (re-verified directly: accounting.py has no inline decay logic anywhere; :36-39 is drift-probe docstring prose, not code, and the sole decay call fully delegates to ms_track.apply_ms_baseline_decay). The claim was carried over from ms_track.py's own docstring (a stale note predating accounting.py's migration to the delegated call — not corrected there, out of this file's scope; logged per CLAUDE.md §0.1 point 5). No env.ms_delta emit added here — a new emit would itself be a new dangling emit; see gap_notes GAP-F1 residual.
+      - {name: "MS (Mending Stability)", bucket: clock, writable: true}   # OI-32a ownership declaration (2026-07-29, W3 item 3): mechanically-determinable GAP-F1 owner. Floor 0 (Rupture) / ceiling 100; baseline decay -1/in-game-year at Year-End Accounting, PP-255 (params/core.md §MS Baseline Decay). Live tick: systems/overview/sim/ms_track.py (apply_ms_baseline_decay / apply_ms_delta, the canonical MS-arithmetic surface), (its former caller, systems/overview/sim/accounting.py, was deleted at plan position `29a`). CORRECTED 2026-07-29 (W3 item 8): the prior version of this comment claimed "accounting.py L36-39 also inlines the same PP-255 decay pending a migration" — that claim is FALSE against the current tree (re-verified directly: accounting.py has no inline decay logic anywhere; :36-39 is drift-probe docstring prose, not code, and the sole decay call fully delegates to ms_track.apply_ms_baseline_decay). The claim was carried over from ms_track.py's own docstring (a stale note predating accounting.py's migration to the delegated call — not corrected there, out of this file's scope; logged per CLAUDE.md §0.1 point 5). No env.ms_delta emit added here — a new emit would itself be a new dangling emit; see gap_notes GAP-F1 residual.
     transitions: []
     loops: []
     gates:
@@ -659,7 +656,7 @@ modules:
       - "systems/overview/sim/ms_track.py, systems/overview/sim/accounting.py [READ: 2026-07-29]"
       - "engine/params/core.md §MS Baseline Decay (PP-255) [READ: 2026-07-29]"
     wiring:
-      build: design
+      build: deferred
       godot: no-oracle
       port_rank: 8
       parity: key-log
@@ -667,7 +664,7 @@ modules:
         this note previously claimed IP is not even a clocks key -- false on both readings. engine/autoload/game_state.py:244
         (deleted at plan position `29b`; in git at `5c5d8ec6`) seeded IP: 20.0 inside the clocks mapping, and clock_registry_v30.md:18 lists Institutional Pressure
         (IP), start 20. What IS true is that no module writes IP after world-gen -- ip_track.py''s two entry
-        points are stubs with no production caller.] Wiring reset to the vocabulary''s zero-code state (was build deferred); `port_rank` is the pre-deletion audit verdict and is not re-derived here.'
+        points are stubs with no production caller.]'
 
   - module: settlement_layer
     registry_system: "settlement_layer"   # Key Type Registry vocabulary
