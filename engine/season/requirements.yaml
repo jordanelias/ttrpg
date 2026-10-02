@@ -64,7 +64,7 @@ ed: "ED-IN-0204"
 
 scales:
   - scale:    "character creation / development / chronicling"
-    subsystem: ["systems/characters (sim/conviction.py only)", "systems/npcs (no tracked file)"]
+    subsystem: ["systems/characters (deleted)", "systems/npcs (no tracked file)"]
     retention: retire-set
     in_loop:   false
     note: >-
@@ -74,7 +74,11 @@ scales:
       (NPC-088's `p_a`) -- MEASURED 2026-10-02 with `corpus_run.cast_overlay()` and `build_at`; R-09's
       `measured:` carries the run. Its one corpus writer is `build_at` seating a cast entry's own
       authored `capability` (`corpus_run.py:537-540`), which is why R-09's roll varies by seed and
-      not by person in 142 of the 143 cases. W27 is the cast.
+      not by person in 142 of the 143 cases. W27 is the cast. ⚠ THE TREE ITSELF WENT AT PLAN POSITION
+      `29e` (2026-10-02): its last module, `conviction.py` (the Conviction Scar store: counts, the 1 / 2 / 3+
+      thresholds, the crisis and the season cap, no caller since `29f`), is retired with a `FORK:` row and
+      `systems/characters/` no longer exists. The season's scar write is `_scar` (`H-128`); the Scar-count
+      rebuild onto `Person.pursuits` is position `12`'s.
   - scale:    "grand strategy politics"
     subsystem: ["systems/factions (deleted)", "systems/settlements (geography YAML, svg, package marker)", "systems/world (adjacency_map.jsx only)"]
     retention: retire-set

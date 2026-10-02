@@ -186,7 +186,13 @@ def test_contract_guard_can_fail():
     # The other half of the guard must still fire too, or "the control passes" would only mean
     # "the archive clause works" — a guard that protects one thing and silently stopped protecting
     # the other reads identically from the outside.
-    planted_sim = ep.contract_guard({'systems/characters/sim/conviction.py'})
+    # RE-POINTED AT PLAN POSITION `29e` (2026-10-02): this planted `systems/characters/sim/conviction.py`,
+    # the `piety_track` row's `sim_module:`, and that module was retired (FORK:59004d86) with the row set
+    # to `none`, which would have emptied this half of the guard's universe while the test went on
+    # asking about a path nothing contracts. `engine/season/loop/driver.py` is the `engine_clock` row's
+    # `sim_module:`, a live file in the game code. Mutation-verified: setting that row to `none`
+    # reddens this assertion.
+    planted_sim = ep.contract_guard({'engine/season/loop/driver.py'})
     assert planted_sim, 'the contract guard no longer objects to evacuating a contracted sim module'
 
 

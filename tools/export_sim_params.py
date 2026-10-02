@@ -39,7 +39,7 @@ OUT = ROOT / "engine" / "engine_params" / "sim_params.json"
 SCAN_DIRS = [
     "systems/social_contest/sim", "systems/mass_battle/sim",
     "systems/threadwork/sim",
-    "systems/combat/sim", "systems/characters/sim", "systems/overview/sim", "engine",
+    "systems/combat/sim", "systems/overview/sim", "engine",
 ]
 
 

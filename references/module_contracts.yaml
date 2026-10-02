@@ -227,11 +227,15 @@ modules:
     aliases: ["Conviction Track"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "conviction_track"   # Key Type Registry vocabulary
     doc: .designs/systems/characters/reference/conviction_track_v1.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    sim_module: systems/characters/sim/conviction.py   # OI-54 (ED-IN-0097, W4): matches
-      # mechanics_index.yaml's `certainty_track`/`conviction_scar` entries (same file); content
-      # verified directly (apply_conviction_scar, per-Conviction Scar thresholds — §2 of this
-      # module's own doc). This is the PERSONAL piety_track, not territorial_piety below (3-way
-      # name collision noted in gap_notes) — do not conflate the two sim_module: values.
+    sim_module: none   # RETIRED AT PLAN POSITION `29e` (2026-10-02). It was `systems/characters/sim/conviction.py`
+      # (OI-54: `apply_conviction_scar` and the per-Conviction Scar thresholds, §2 of this module's own doc);
+      # `systems/characters/` is deleted (each file has an exact row in `references/restructure_ledger.md`, ref
+      # 59004d86), and its last caller, `knots.py`, went at position `29f`. The season's scar write is
+      # `engine/season/loop/effects_combat.py`'s `_scar` (`engine/season/hole_register.yaml` `H-128`); the
+      # Scar-count store, thresholds and crisis have no carrier, and rebuilding them onto `Person.pursuits` is
+      # position `12`'s. This is the PERSONAL piety_track, not territorial_piety below (3-way name collision
+      # noted in gap_notes). The row is kept, not deleted: removing a contract row is its own change, and `doc:`
+      # above still resolves.
     scales: [personal]
     resolver: deterministic_accounting   # [ASSUMPTION] scar accumulation thresholds (conviction_track_v1 §2)
     state:
@@ -261,7 +265,7 @@ modules:
       godot: python-oracle
       port_rank: 3
       parity: key-log
-      note: conviction.py Scar accumulation real; reached only via the unwired knot chain.
+      note: conviction.py (Scar accumulation) is retired (plan position `29e`); the season's scar write is `_scar` (`H-128`).
 
   - module: territorial_piety
     doc: .designs/systems/characters/reference/conviction_track_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.

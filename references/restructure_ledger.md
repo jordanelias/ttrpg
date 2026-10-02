@@ -2820,3 +2820,36 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 | `engine/tests/test_knots_ed912.py` | `FORK:59004d86` | FORKED (2026-10-02, plan position `29f` — the ED-912 regression for `knots.py` (tier range, +5 break, Tempered absorb, Disposition −3, the Honor Scar landing in `conviction`'s store). It imported nothing else but `conviction` (for the Scar-lands and unknown-name-raises cases); its subject is retired) |
 | `systems/fieldwork/__init__.py` | `FORK:59004d86` | FORKED (2026-10-02, plan position `29f` — package marker of the retired FI-lane sim tree; the design documents it described are quarantined under `.designs/systems/fieldwork/`) |
 | `systems/fieldwork/sim/__init__.py` | `FORK:59004d86` | FORKED (2026-10-02, plan position `29f` — package marker of `systems.fieldwork.sim`; its docstring named only `knots.py` as live) |
+
+<!-- 2026-10-02, plan position `29e` (master workplan v8, `_part4` B3): `systems/characters/`, whole. Its only
+     module, `sim/conviction.py`, held the Conviction Scar store (`ScarRecord`, `ConvictionState`,
+     `apply_conviction_scar`, `check_conviction_threshold`, `mark_belief_revision_pending`, `get_state`,
+     `reset_all`: the per-Conviction 1 / 2 / 3+ thresholds, the one-Scar-per-season Thread-witnessing cap and the
+     Truth scaling) and re-bound `CONVICTIONS` from `engine/substrate/descriptors.py`. Its only production caller,
+     `systems/fieldwork/sim/knots.py`, went at position `29f`, and `beliefs.py` / `companion.py` (its
+     string-reference partners) at the `28-0 follow-up`; the only importer left was one site in
+     `tests/valoria/test_conviction_roster_single_owner.py`, re-pointed in this commit (the assertion
+     `conviction.CONVICTIONS is descriptors.CONVICTIONS` is gone with its subject; `rosters.PURSUITS is
+     descriptors.CONVICTIONS`, the AST test that no second roster literal exists under `engine/` or `systems/`, and the
+     no-alias test remain). WHAT THE SEASON KEEPS of the mechanic is not this module: the moral-layer write is
+     `(Person, scar[axis])`, `engine/season/loop/effects_combat.py`'s `_scar` (`H-128`, shipped at its control arm
+     `scar_step = 0`). The Scar COUNT per Conviction, the thresholds, the crisis and the season cap have no season
+     carrier: that rebuild is position `12` / `H3` (Batch 4, Jordan-gated) onto `Person.pursuits` / scar counts, and
+     nothing was built of it here. COVERAGE DROPPED, once: `apply_conviction_scar` raising on an unknown Conviction
+     name was tested only by the deleted `engine/tests/test_knots_ed912.py` (already forked at `29f`); the raise
+     itself is `descriptors.resolve_conviction`'s, which `test_conviction_roster_single_owner.py` still exercises.
+     FORK ref is `59004d86`, the `main` commit under this branch (a branch commit SHA does not survive a squash merge,
+     so the ref must already be an ancestor of `main`); every row was checked with `git cat-file -e
+     59004d86:<path>` (exit 0) before it was written. One exact-file row each. Consequences edited in the same
+     commit: `systems/characters/sim` left `tools/export_sim_params.py`'s `SCAN_DIRS`, and
+     `engine/engine_params/sim_params.json` and `value_pointer_links.json` (`tools/link_values_pointers.py --build`)
+     were re-derived, never hand-edited; `references/module_contracts.yaml`'s `piety_track` row and
+     `registers/mechanics_index.yaml`'s two `sim_module:` lines went to `none` / `null`;
+     `canonical_sources.yaml`'s pin on `module_contracts.yaml` was re-synced. `systems/characters/` no longer
+     exists; its design documents are quarantined under `.designs/systems/characters/reference/`. -->
+
+| Old path | New path | Status |
+|---|---|---|
+| `systems/characters/sim/conviction.py` | `FORK:59004d86` | FORKED (2026-10-02, plan position `29e` — the Conviction Scar store: `apply_conviction_scar`, `check_conviction_threshold`, the per-Conviction 1 / 2 / 3+ thresholds, the Thread-witnessing season cap and the Truth scaling, plus the `CONVICTIONS` re-binding. Its last production caller, `knots.py`, went at `29f`; its store was read by nothing in the season. The season's scar write is `_scar` (`H-128`); the Scar-count rebuild is `12` / `H3`'s, not built here) |
+| `systems/characters/sim/__init__.py` | `FORK:59004d86` | FORKED (2026-10-02, plan position `29e` — package marker of `systems.characters.sim`; its docstring named only `conviction` as live, after `beliefs` and `companion` went at the `28-0 follow-up`) |
+| `systems/characters/__init__.py` | `FORK:59004d86` | FORKED (2026-10-02, plan position `29e` — package marker of the retired characters sim tree; the design documents it described are quarantined under `.designs/systems/characters/`) |

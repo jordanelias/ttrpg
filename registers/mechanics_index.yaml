@@ -164,7 +164,7 @@ mechanics:
     scale: primitive
     faction: universal
     canon_sources: ["engine/params/core.md#Truth Track"]
-    sim_module: systems/characters/sim/conviction.py
+    sim_module: null    # was systems/characters/sim/conviction.py (the Truth scaling of a Scar), retired at plan position 29e (2026-10-02), FORK:59004d86
     test_status: not_implemented
     notes: "PP-551 redesigned."
 
@@ -322,7 +322,7 @@ mechanics:
     scale: personal
     faction: universal
     canon_sources: ["systems/characters/conviction_track_v30.md#section-1"]
-    sim_module: systems/characters/sim/conviction.py
+    sim_module: null    # was systems/characters/sim/conviction.py (the Scar store and thresholds), retired at plan position 29e (2026-10-02), FORK:59004d86; the season's scar write is _scar (engine/season/hole_register.yaml H-128), the Scar-count rebuild is position 12's
     test_status: not_implemented
     notes: "Sections 1-3 and 5 of conviction_track_v30 remain canonical post-GD-1. Sections 4.2, 4.3, 6, 7 SUPERSEDED-BY GD-1."
 
