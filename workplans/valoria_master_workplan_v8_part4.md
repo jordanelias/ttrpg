@@ -74,21 +74,10 @@ earlier rewrite of `10` (a stored stance write on a resolved `fight`) is **withd
 judged deed at read, so a stored deed write would be a second route to one fact. The AX-7 wiring that
 rode along stays registered and unbuilt until the telling workplan's T6 closes (`_part3` E16).
 
-### `17` · U8 — `ambitions(p)` and the cast seated · IN · gate `14` (E8) · `sonnet`/`opus` · `[design]`
+### `13`-rest · W28-cast: the remaining overlays · IN · **STOPPED at the pilot, J-23 (`H-185`)** · `sonnet` author, `opus` critic · `[design]`
 
-**INSTRUCTION.** `queries/person_q.py::ambitions(p) -> list[PropositionId]` — a person-side READ over live
-`commit` edges to OUGHT Propositions (the mechanism R-06 already names). `04`'s row for `queries/person_q`:
-writes nothing; may read *"a `PersonInterior` snapshot only"*. Then the remainder `13` left to this
-position (2026-09-28 plan §8.7): in `harness/corpus_run.py::build_at`, seat `p_b`/`p_c` from the `cast:`,
-resolve the rest of `who_acts` into offices and `WAITS-ON-PLAYER`, `one_line` → the OUGHT Proposition,
-`knowledge` → initial Claims. `one_line` is **parsed into a `cast:` block by an author, never
-token-matched** (the W10 router lesson). **FALSIFIER:** `ambitions` taking a `World` reddens the
-`sense`-is-the-only-World-taker AX-2 test; `NPC-020` (no overlay) builds byte-identically (control: with
-`cast:` absent, `build_at` still seats three and the tallies are unchanged). **OBSERVABLE:**
-`DISTINCT EXECUTED SETS` rises over the pre-cast arm; Q4 fires for more than one proposition; an 11-actor
-case runs. **Hash:** corpus moves for every case gaining a cast (declared). **R:** R-06 reason 1, R-09.
+**Pilot run 2026-10-02 (`17b`):** eight differentiated NPC overlays; DISTINCT EXECUTED SETS 41 with none, 41 with the pilot, 26 with a uniform fixture cast; the observable is not met, so nothing scales. `knows:` is refused at load (a sixth `Claim`-construction site is AX-7's to forbid, closed at ladder step 3). The text below is the original instruction, kept for when J-23 is answered.
 
-### `13`-rest · W28-cast: the remaining overlays · IN · gate — (merges after `17`) · `sonnet` author, `opus` critic · `[design]`
 
 41 NPC + 97 ARC `cast:` overlays in `engine/season/cases/exercises/*.yaml` (never `cases/chain/*.yaml` in
 place). Schema: `who_acts`, `one_line`, `knowledge`; entries naming a player become `WAITS-ON-PLAYER`. NPC
