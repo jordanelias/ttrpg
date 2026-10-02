@@ -161,6 +161,18 @@ def _load_offices() -> dict:
             needs="give `seats:` at least one row",
             law="`04_CODE_ARCHITECTURE.md` §B.13 ID-12 -- a declared-but-empty section is the "
                 "defect this file's own loader refuses, applied to its own top level")
+    # A ROW ID IS UNIQUE, CHECKED HERE AND NOWHERE ELSE. `populated.build_realm` keys the seats it
+    # matched by row id (`authored[row["id"]]`) and skips a row already in that dict, so a second row
+    # under one id was collapsed without a sound -- and the minted-id guard runs after that skip.
+    ids = [row.get("id") for row in doc["seats"] if isinstance(row, dict)]
+    repeated = sorted({i for i in ids if i is not None and ids.count(i) > 1}, key=str)
+    if repeated:
+        raise Unspecified(
+            f"offices.yaml `seats:` carries more than one row under the id(s) {repeated}",
+            "offices.yaml -- seats",
+            needs="one row per `id`",
+            law="`offices.yaml: meta: rule` -- one seat = one row; a repeated id is collapsed "
+                "by the seat index without a sound")
     return doc
 
 
@@ -574,13 +586,17 @@ def authored_remit(row: dict, held=()) -> list[str]:
 
     ⚠ `held` IS WHAT THE SEAT HAD BEFORE THE OVERLAY, and only the acts in `OFFICES_REMIT_UNRULED`
     survive from it -- `dispatch` today, an open ruling (J-8). THIS GRANTS IT, it does not stay
-    neutral: a loop-built seat was seated with `remit_default` (every act), so its `held` carries
-    `dispatch` and it keeps it -- all seven `remit_acts: []` rows are loop-built, so each of those
-    seats holds [dispatch] (and `march`, eligible on `remit:dispatch`, is eligible to it). A seat
-    the loop did not build (a MINTED row) passes nothing and so does NOT gain it: two identical
-    rows diverge by build route. Stripping `dispatch` (J-8) is a GRANT decision for Jordan, not a
-    code fix. `sorted`, for `remit_or_default`'s reason: a set's order is per-process and the
-    grant folds into `World.content_hash`."""
+    neutral: a loop-built seat was seated with `remit_default` (every act) unless its case's own
+    overlay declares a remit, so its `held` carries `dispatch` and it keeps it. MEASURED,
+    `build_realm(0)`, 2026-10-02: 22 of the 29 authored seats hold it -- 22 of the 23 loop-built
+    (seven whose row is `remit_acts: []`, where it is the whole remit, and fifteen that carry it
+    beside the acts their row names; the one loop-built seat without it is `off_parliamentary_clerk`,
+    whose overlay declares `remit: [issue]`) and 0 of the 6 minted -- and `march`, eligible on
+    `remit:dispatch`, is eligible to every holder. A seat the loop did not build (a MINTED row)
+    passes nothing and so does NOT gain it: two identical rows diverge by build route. Stripping
+    `dispatch` (J-8) is a GRANT decision for Jordan, not a code fix. `sorted`, for
+    `remit_or_default`'s reason: a set's order is per-process and the grant folds into
+    `World.content_hash`."""
     return sorted(set(row["remit_acts"]) | (set(held) & OFFICES_REMIT_UNRULED))
 
 
@@ -873,3 +889,22 @@ def title_domain(post: Optional[str]) -> Optional[str]:
     """The rung kind a title governs, from `offices.yaml: titles: domains:`. `None` for a post
     that is not a title -- a Dicastery is an office, not a rank."""
     return TITLE_DOMAINS.get(str(post or ""))
+
+
+def refuse_a_titled_post_off_its_rung(who: str, post, kind: str, rung_id: str) -> None:
+    """THE ONE RULE THAT A TITLED POST STANDS AT THE RUNG KIND ITS TITLE GOVERNS (r2 `03` §A.8,
+    re-homed from `Office.__post_init__`), beside `title_domain`, its one input. Raises `Forbidden`
+    for a post that IS a title and stands at a rung of any other `kind`; a post that is not a title
+    (a Dicastery, an organ) stands anywhere. `who` names the seat in the refusal, `rung_id` the
+    rung it was given. Two seaters call it so neither keeps a copy: `harness/populated.py::
+    seat_anchor` (an `offices.yaml` row) and `harness/corpus_run.py::_seat_office` (a corpus
+    overlay's `office:`) -- without it a cast entry `{post: Duke}` seated a Duke at a hearth, whose
+    purview is then the hearth's, which is canon inverted by a data-entry slip."""
+    dom = title_domain(post)
+    if dom is not None and kind != dom:
+        raise Forbidden(
+            f"{who} names the TITLE {post!r} and stands at a {kind!r} rung ({rung_id!r}); the "
+            f"title governs a {dom!r}", "offices.yaml -- titles vs rung",
+            needs="a rung of the kind the title governs",
+            law="r2 03 §A.8 -- a titled post sits at the rung its title governs, never a rung "
+                "above or below it")

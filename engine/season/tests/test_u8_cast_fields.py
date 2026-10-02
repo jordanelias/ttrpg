@@ -24,7 +24,8 @@ import yaml
 from engine.season.harness import corpus_run as C
 from engine.season.harness import run_cases as RC
 from engine.season.queries import person_q, world_q
-from engine.season.data.rosters import RUNG_KINDS
+from engine.season.data.rosters import RUNG_KINDS, TITLE_DOMAINS
+from engine.season.gaps import Forbidden
 
 OFFICE = {"post": "surveyor", "body": "Guild", "remit": [],
           "why": "the case names the post and the institution"}
@@ -88,6 +89,71 @@ def test_the_case_level_office_still_goes_through_the_same_seater(monkeypatch):
     w = C.build_at(case, 0)
     assert {pid: o.post for pid, o in _held(w).items()} == {"p_a": "chair", "p_b": "surveyor"}
     assert sorted(w.offices) == [f"off_{case['id']}", f"off_{case['id']}_p_b"]
+
+
+def test_the_first_cast_entry_may_not_carry_an_office_beside_a_case_level_one(monkeypatch):
+    """The case-level `scale: office:` is held by `p_a`, who is the first SEATED entry, so an
+    `office:` on that entry seats `p_a` twice -- and `exercised_seat` takes the first, so the second
+    is inert while looking authored. Only a comment in `NPC-038.yaml` guarded it. The hand-built
+    case below carries both; it must refuse, naming the case and the seat. CONTROLS, so a builder
+    that refused every office-bearing cast cannot pass: the same entry with no case-level office
+    seats it; and the case-level office with the entry's office on a LATER entry seats both."""
+    host = _host_case()
+    case = dict(host, office=dict(OFFICE, post="chair"))
+    monkeypatch.setitem(C.CAST, host["id"], _cast({"office": OFFICE}))
+    with pytest.raises(Forbidden) as red:
+        C.build_at(case, 0)
+    assert host["id"] in str(red.value) and "`p_a`" in str(red.value), str(red.value)
+
+    assert {p: o.post for p, o in _held(C.build_at(host, 0)).items()} == {"p_a": "surveyor"}
+    monkeypatch.setitem(C.CAST, host["id"], _cast({}, {"office": OFFICE}))
+    assert {p: o.post for p, o in _held(C.build_at(case, 0)).items()} == {
+        "p_a": "chair", "p_b": "surveyor"}
+
+
+def _titled(post: str) -> dict:
+    return {"post": post, "faction": "Crown", "why": "the case names the post"}
+
+
+def test_a_titled_post_must_stand_at_the_rung_kind_its_title_governs(monkeypatch):
+    """`populated.seat_anchor` refused a Duke at a hearth; the corpus builder of the same offices did
+    not, so `office: {post: Duke, faction: Crown}` seated one. Both now ask
+    `rosters.refuse_a_titled_post_off_its_rung`. Observed on BOTH callers (a cast entry's `office:`
+    and a case-level one), over EVERY title the ladder has (counted, so a loop that never ran
+    cannot pass), against the controls: the title that governs the rung it stands at seats, and a
+    post that is no title (an organ) seats at any rung. ONE host case throughout: `_build` picks a
+    fresh no-overlay case on every call once an earlier one is in `C.CAST`, and the rung kind an
+    overlay's office stands at is the case's own scale."""
+    host = _host_case()
+
+    def cast_build(post):
+        monkeypatch.setitem(C.CAST, host["id"], _cast({}, {"office": _titled(post)}))
+        return C.build_at(host, 0)
+
+    def case_build(post):
+        monkeypatch.delitem(C.CAST, host["id"], raising=False)
+        return C.build_at(dict(host, office=_titled(post)), 0)
+
+    probe = C.build_at(dict(host, office=OFFICE), 0)         # a non-title: stands wherever it is put
+    (office,) = probe.offices.values()
+    kind = probe.rungs[office.rung].kind                     # the rung kind an overlay's office gets
+    wrong = sorted(t for t, d in TITLE_DOMAINS.items() if d != kind)
+    right = sorted(t for t, d in TITLE_DOMAINS.items() if d == kind)
+    assert len(wrong) >= 5 and len(right) >= 1, (kind, wrong, right)
+
+    refused = 0
+    for post in wrong:
+        for build in (cast_build, case_build):
+            with pytest.raises(Forbidden) as red:
+                build(post)
+            assert post in str(red.value), str(red.value)
+            assert f"title governs a {TITLE_DOMAINS[post]!r}" in str(red.value), str(red.value)
+        refused += 1
+    assert refused == len(wrong)
+
+    for post in right + ["Dicastery"]:               # CONTROLS: the governed kind, and a non-title
+        assert _held(cast_build(post))["p_b"].post == post, post
+        assert _held(case_build(post))["p_a"].post == post, post
 
 
 # ---------------------------------------------------------------------------
@@ -236,6 +302,53 @@ def test_a_cast_that_is_not_a_list_refuses_at_load_instead_of_being_dropped(
     with pytest.raises(SystemExit) as red:
         _load(tmp_path, monkeypatch, shape)
     assert "X-1.yaml" in str(red.value) and "not a list" in str(red.value), str(red.value)
+
+
+def _write_files(tmp_path, monkeypatch, **docs):
+    """`{file stem: doc}` written into a throwaway exercises directory the loader is pointed at."""
+    monkeypatch.setattr(C.files, "EXERCISES_DIR", tmp_path)
+    for stem, doc in docs.items():
+        (tmp_path / f"{stem}.yaml").write_text(yaml.safe_dump(doc), encoding="utf-8")
+
+
+@pytest.mark.parametrize("doc", [
+    {"case": None, "cast": _cast()}, {"case": "", "cast": _cast()}, {"case": "  ", "cast": _cast()},
+    {"case": 7, "cast": _cast()}, {"case": ["X-1"], "cast": _cast()}, {"cast": _cast()},
+    {"cse": "X-1", "cast": _cast()}],
+    ids=["null", "empty", "blank", "an int", "a list", "no case key", "a misspelled key"])
+def test_a_cast_file_with_no_usable_case_refuses_at_load_instead_of_being_dropped(
+        tmp_path, monkeypatch, doc):
+    """`cast_overlay` used to read `if not doc.get("case") or "cast" not in doc: continue`, so a
+    file whose `case:` was blank, missing or misspelled vanished and its case seated the three
+    anonymous people its author had written a cast to replace."""
+    _write_files(tmp_path, monkeypatch, **{"X-1": doc})
+    with pytest.raises(SystemExit) as red:
+        C.cast_overlay()
+    assert "X-1.yaml" in str(red.value) and "no non-empty string `case:`" in str(red.value), \
+        str(red.value)
+
+
+def test_two_files_naming_one_case_refuse_at_load_instead_of_the_last_one_winning(
+        tmp_path, monkeypatch):
+    _write_files(tmp_path, monkeypatch, **{"A-1": {"case": "X-1", "cast": _cast()},
+                                           "B-1": {"case": "X-1", "cast": _cast()}})
+    with pytest.raises(SystemExit) as red:
+        C.cast_overlay()
+    assert "B-1.yaml" in str(red.value) and "already the case of A-1.yaml" in str(red.value), \
+        str(red.value)
+
+
+def test_the_case_refusals_have_their_positive_controls(tmp_path, monkeypatch):
+    """Two files with two cases both load (so a loader that refused every multi-file directory
+    cannot pass), and a file with no `cast:` is not a cast file whatever its `case:` -- the
+    `scale:` overlays share the directory, and one may name a case a cast file also names."""
+    _write_files(tmp_path, monkeypatch,
+                 **{"A-1": {"case": "X-1", "cast": _cast()},
+                    "B-1": {"case": "X-2", "cast": _cast({"role": "lead"})},
+                    "C-1": {"case": "X-1", "scale": {"is": "hearth", "why": "w"}},
+                    "D-1": {"note": "neither key"}})
+    got = C.cast_overlay()
+    assert sorted(got) == ["X-1", "X-2"] and got["X-2"][0]["role"] == "lead", sorted(got)
 
 
 def test_the_real_overlays_all_still_load_and_a_good_file_is_not_refused(tmp_path, monkeypatch):

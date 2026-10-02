@@ -51,7 +51,7 @@ from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.matrix import Step
 # `CONVICTIONS` dropped 2026-09-16: `seed_pursuits` moved to `run_cases.py`, which is its
 # single owner, and nothing here reads the roster any more.
-from ..data.rosters import PURSUIT_AXES, RUNG_KINDS, load_yaml
+from ..data.rosters import PURSUIT_AXES, RUNG_KINDS, load_yaml, refuse_a_titled_post_off_its_rung
 from ..data.verbs import VERB_TABLE, align
 from ..decision import make_chooser
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, Unspecified
@@ -246,6 +246,8 @@ def cast_overlay() -> dict:
     `ought:` that is not exactly `{about, predicate}` or whose `about` names no OTHER seated entry
     (or names two), a WAITS-ON-PLAYER entry carrying `office:`/`ought:` (never seated, so the field
     would read nothing), or more seated entries than `string.ascii_lowercase` can name (`seat_ids`).
+    A FILE refuses at load too: a `cast:` with no non-empty string `case:` (blank, missing or
+    misspelled), and a `case:` that another file's `cast:` already claimed.
 
     ⚠ COUNT THIS WITH THIS FUNCTION, NEVER WITH A GREP OVER THE CASE FILES. The historical GAP this
     position's own plan entry names in terms: an antagonist once re-derived a corpus count by
@@ -255,9 +257,24 @@ def cast_overlay() -> dict:
     `grep -c 'who:' cases/**/*.yaml` is not, and will over- or under-count the moment a comment or
     an unrelated `who:`-shaped string appears in a file this function does not read as one."""
     out: dict = {}
+    files_of: dict = {}                   # case id -> the file that authored its cast
     for f, doc in _exercise_docs():
-        if not doc.get("case") or "cast" not in doc:
+        if "cast" not in doc:
             continue
+        # REFUSED, NOT SKIPPED (the two ways an overlay used to vanish): a file carrying `cast:`
+        # whose `case:` is blank, missing or misspelled was dropped without a sound, so the case it
+        # was written for seated the three anonymous people; and two files naming one `case:` let
+        # the LAST silently replace the first. `rescales()` keeps its own `case:` filter -- its
+        # files are `scale:` files, and a file with no `cast:` has no cast to lose.
+        case = doc.get("case")
+        if not isinstance(case, str) or not case.strip():
+            raise SystemExit(f"{f.name}: carries a `cast:` but no non-empty string `case:` "
+                             f"(found {case!r}) -- the cast would be dropped without a sound")
+        if case in files_of:
+            raise SystemExit(f"{f.name}: `case: {case}` is already the case of "
+                             f"{files_of[case]}'s `cast:` -- the later file would silently "
+                             "replace the earlier one")
+        files_of[case] = f.name
         entries = doc["cast"]
         # REFUSED, NOT SKIPPED: a `cast:` that is a mapping (or a block missing its `- `, or empty)
         # used to fall through the `isinstance(list)` filter and be dropped without a sound, so the
@@ -267,7 +284,7 @@ def cast_overlay() -> dict:
                              "entries -- a mapping, or a block missing its `- `, would be dropped "
                              "without a sound")
         _check_cast(f.name, entries)
-        out[doc["case"]] = entries
+        out[case] = entries
     return out
 
 
@@ -374,7 +391,14 @@ def _seat_office(w: World, oid: str, pid: str, scope: str, off: dict) -> None:
 
     [ASSUMPTION: a cast entry's office sits at `scope`, the deepest non-person rung -- the same
     scope the case-level office has, because the overlay carries no per-entry rung key -- basis:
-    `build_at`'s case-level `office:` seating, which this function now serves]"""
+    `build_at`'s case-level `office:` seating, which this function now serves]
+
+    ⚠ A TITLED POST MUST STAND AT THE RUNG KIND ITS TITLE GOVERNS, and only here is that kind known:
+    `_check_office` validates the block at LOAD, before any world, and the rung is the case's own
+    scale. The rule is `rosters.refuse_a_titled_post_off_its_rung`, the one `populated.seat_anchor`
+    applies to an `offices.yaml` row; without it `{post: Duke, faction: Crown}` seated a Duke at a
+    hearth. A post that is not a title (an organ, a Dicastery) stands at any rung, as before."""
+    refuse_a_titled_post_off_its_rung(oid, off["post"], w.rungs[scope].kind, scope)
     w.offices[oid] = Office(oid, str(off["post"]), scope, list(off.get("remit") or []),
                             body=off.get("body"), faction=off.get("faction"))
     w.add_tenure(Tenure(f"t_{oid}", pid, oid, "hold", 0))
@@ -472,12 +496,28 @@ def build_at(case: dict, seed: int = 0) -> World:
     # re-scale is authored against the case's own text and carries its `why:`; where the text does
     # not say, the case stays unrepresentable and that is the honest answer (§42.2).
     off = case.get("office")
-    if isinstance(off, dict) and off.get("post"):
+    case_level = isinstance(off, dict) and bool(off.get("post"))
+    if case_level:
         _seat_office(w, f"off_{case.get('id', 'x')}", "p_a", ids[chain[0]], off)
     # `17-cast`: AND EACH CAST ENTRY MAY SEAT ITS OWN. The same block, the same constructor
     # (`_seat_office`), held by THAT entry's person rather than `p_a`; the id carries the person so
     # it cannot collide with the case-level office above. An entry with no `office:` seats nothing.
+    #
+    # ⚠ THE CASE-LEVEL OFFICE IS `p_a`'S, SO THE FIRST SEATED ENTRY (`p_a`) MAY NOT CARRY ONE TOO:
+    # it would seat `p_a` twice and `decision/options.py::exercised_seat` takes the first seat, so
+    # the second would be inert while looking authored. REFUSED, not skipped -- the author put the
+    # entry's own office there to be held (`NPC-038.yaml` leaves it off its first entry for this
+    # reason, in a comment nothing read).
     for n, entry in enumerate(seated):
+        if case_level and pids[n] == "p_a" and isinstance(entry.get("office"), dict):
+            raise Forbidden(
+                f"case {case.get('id')!r}: the cast entry {entry['who']!r} is seated as `p_a`, "
+                "who already holds the case-level `scale: office:`, and carries an `office:` of "
+                "its own", "harness/corpus_run.py -- overlay offices",
+                needs="the entry's office on a different entry, or the case-level office dropped "
+                      "(one seat per person here: the second is never the one exercised)",
+                law="`exercised_seat` takes the first seat a person holds, so a second office on "
+                    "the same person is inert")
         if isinstance(entry.get("office"), dict):
             _seat_office(w, f"off_{case.get('id', 'x')}_{pids[n]}", pids[n], ids[chain[0]],
                          entry["office"])

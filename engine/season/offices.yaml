@@ -76,19 +76,23 @@
 #   * `remit_acts` REPLACES what the loop would have granted (a declared `[]` is NOT filled from
 #     `rosters.yaml: remit_default`), EXCEPT for the acts named in `meta: remit_unruled`, which a
 #     LOOP-BUILT seat keeps if it held it before the overlay. `dispatch` is that act.
-#     ⚠ SO A DECLARED `[]` DOES NOT GRANT NOTHING, AND `dispatch` IS GRANTED, NOT LEFT ALONE. The
-#     loop seats with `remit_default` (every remit act, `dispatch` included), and all seven
-#     `remit_acts: []` rows (`off_heir`, `off_princess`, `off_guard_captain`,
-#     `off_archbishops_rep`, `off_legal_advisor_hm`, `off_commune_rep_hm`, `off_guild_comptroller`)
-#     are LOOP-BUILT, so `held` is that testing default and each of the seven seats holds
-#     [dispatch] -- which makes `march` (eligibility `remit:dispatch`) eligible to each holder as
-#     well. The same `[]` on a MINTED row holds nothing, because a minted seat has no `held`:
-#     identical rows diverge by BUILD ROUTE (measured, `build_realm(0)`, 2026-10-02). J-8 (whether
-#     `dispatch` is a remit act at all) is Jordan's, and stripping it -- delete the `remit_unruled`
-#     line, which strips it from every seat in one edit, or add it to the rows that should carry
-#     it -- is a GRANT decision, not a code fix; the strip would leave the seven seats with no
-#     remit, which `test_season_shape.py`'s remit-default test (`assert not ungranted`) would
-#     then report.
+#     ⚠ SO `dispatch` IS GRANTED, NOT LEFT ALONE, AND NOT ONLY WHERE A ROW IS `[]`. The loop seats
+#     with `remit_default` (every remit act, `dispatch` included) unless the case's own overlay
+#     declares a remit, so a loop-built seat's `held` names `dispatch` and the overlay keeps it.
+#     MEASURED, `build_realm(0)`, 2026-10-02: `dispatch` is held by 22 of the 29 authored seats --
+#     22 of the 23 LOOP-BUILT and 0 of the 6 MINTED. Of the 22, seven are the rows whose
+#     `remit_acts` is `[]` (`off_heir`, `off_princess`, `off_guard_captain`, `off_archbishops_rep`,
+#     `off_legal_advisor_hm`, `off_commune_rep_hm`, `off_guild_comptroller`), where `dispatch` is
+#     the seat's WHOLE remit; the other fifteen carry it alongside the acts their row names. The
+#     one loop-built seat without it is `off_parliamentary_clerk`: NPC-008's overlay declares
+#     `remit: [issue]`, so its `held` is that rather than the default. The seat no row authors,
+#     `off_npc_084`, holds it too (23 of 30 offices). `march` (eligibility `remit:dispatch`) is
+#     eligible to every one of those holders. A MINTED row holds only what it names, because a
+#     minted seat has no `held`: identical rows diverge by BUILD ROUTE. J-8 (whether `dispatch` is
+#     a remit act at all) is Jordan's, and stripping it -- delete the `remit_unruled` line, which
+#     strips it from all 22 in one edit, or name it in the rows that should carry it -- is a GRANT
+#     decision, not a code fix; the strip would leave the seven `[]`-row seats with no remit,
+#     which `test_season_shape.py`'s remit-default test (`assert not ungranted`) would then report.
 #   * MEASURED, `build_realm(0)`, 2026-10-01: the per-case loop seats 24, not r2 `03`'s 19. Four
 #     `[NEW]`-marked holders (NPC-007, NPC-013, NPC-021, NPC-070) are already seated by it under a
 #     registry-derived post, so those four are OVERLAID, not minted; six rows are MINTED

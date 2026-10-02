@@ -73,7 +73,8 @@ from ..gaps import Forbidden, Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.rosters import (BODY_FACTION, FACTIONS, OFFICES_BY_HOLDER, OFFICES_SEATS,
                             ROLE_TEMPLATE_OF, authored_remit, faction_prop_id, load_yaml,
-                            remit_or_default, territory_rung_id, title_domain)
+                            refuse_a_titled_post_off_its_rung, remit_or_default,
+                            territory_rung_id, title_domain)
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..state.carriers import Office, Person, Proposition, Rung, Site, Tenure
@@ -176,16 +177,10 @@ def seat_anchor(w: World, anchors: dict, row: dict) -> str:
     """The rung an authored seat ROW stands at: its anchor, resolved, plus the one content rule
     r2 `03` §A.8 re-homed from the constructor -- a TITLED post stands at the rung kind its title
     governs, or a Duke seated at the realm has realm-wide purview (`Office.__post_init__`'s own
-    comment; `title_domain` is the ladder's one owner)."""
+    comment; `title_domain` is the ladder's one owner). The rule itself is
+    `rosters.refuse_a_titled_post_off_its_rung`, which `corpus_run._seat_office` calls too."""
     rid = resolve_anchor(w, anchors, row["rung"], f"{row['id']} ({row['post']!r})")
-    dom = title_domain(row["post"])
-    if dom is not None and w.rungs[rid].kind != dom:
-        raise Forbidden(
-            f"{row['id']} names the TITLE {row['post']!r} and stands at a {w.rungs[rid].kind!r} "
-            f"rung ({rid!r}); the title governs a {dom!r}", "offices.yaml -- titles vs rung",
-            needs="a rung of the kind the title governs",
-            law="r2 03 §A.8 -- a titled post sits at the rung its title governs, never a rung "
-                "above or below it")
+    refuse_a_titled_post_off_its_rung(row["id"], row["post"], w.rungs[rid].kind, rid)
     return rid
 
 
@@ -1088,6 +1083,16 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
                 f"realm built", "offices.yaml -- seats",
                 needs="a holder from the built cast (a `cap` that drops the cast drops the seat)",
                 law="r2 03 §A.14 -- the holder is a case id in the cast")
+        # a person the cast built may still have no registry row (the per-case loop above skips
+        # `r is None` for the same reason), and the seat's `proposed` status is read off that row
+        holder_row = cast.row(row["holder"])
+        if holder_row is None:
+            raise Unspecified(
+                f"{row['id']} names the holder {row['holder']!r}, who is in the cast this realm "
+                f"built but has no `npc_registry.yaml` row", "offices.yaml -- seats",
+                needs="a holder with a registry row, so the seat's canonical/proposed status is known",
+                law="r2 03 §A.14 -- the holder is a case id in the cast; the registry row is what "
+                    "says whether the seat is canon or proposed")
         rung = seat_anchor(w, anchors, row)
         if row["id"] in w.offices:
             # a MINTED seat is one no loop-built seat stands for, so its id must be fresh: the
@@ -1107,7 +1112,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         authored[row["id"]] = row["id"]
         minted.append(row["id"])
         seated += 1
-        if str(cast.row(row["holder"]).get("status")) != "canonical":
+        if str(holder_row.get("status")) != "canonical":
             proposed.append(row["holder"])
     # -- A SEAT'S OBLIGEES SERVE IT (`obligees:`; `04 §B.7` call 2: a council is one seat and many
     # holders, through `oblige`). Opened with no term: `term?` is lawful null, and a seat seeded at

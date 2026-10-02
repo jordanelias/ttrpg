@@ -848,13 +848,14 @@ VERB_TABLE = _load_verb_table()
 def act_key(verb: str, subject, operands) -> str:
     """WHAT AN ACT'S ID IS OF, AFTER ITS VERB: `H(seed, tick, actor, f"act:{verb}:{act_key}")`.
     The subject, and -- for a row whose cell binds a known-person operand beside `subject`
-    (`TypedRequires.known_person_operands`, `tell`'s `to`) -- that operand too, as `subject>to`.
+    (`TypedRequires.known_person_operands`: `tell`'s `to`, and since plan position `14` `give`'s) --
+    that operand too, as `subject>to`.
 
     ⚠ TELLING WORKPLAN `T4`, AND IT IS MEASURED NECESSITY: one topic now forms one `tell` per person
     the teller knows, so two acts in one deliberation shared `(actor, verb, subject)` and therefore
     one id, and `state/acts.py` refused the second (`act id ... is already in the store`) on the
-    first realm season. Every other row answers its subject alone, so its ids are byte-identical
-    to before. ONE OWNER for both minting sites: `decision/choose.py::pack_scenes` and
+    first realm season. Every row that binds no such operand answers its subject alone, so its ids
+    are byte-identical to before. ONE OWNER for both minting sites: `decision/choose.py::pack_scenes` and
     `loop/deliberate.py::_qualify_by_round` (`04 PART D row 35`: purpose uniqueness is a
     convention, and this is where it is kept)."""
     key = "" if subject is None else str(subject)
@@ -877,10 +878,12 @@ def opportunity_key(verb: str, subject, operands) -> Optional[tuple]:
     hearer, but the filter keyed `(verb, subject)`, so once a topic was told to B it could never be
     told to D that season -- and a person can obviously tell several hearers. The key is the GENERAL
     rule for a row that names a `counterparty:`, read off the ROW'S COLUMN and never a verb name; `tell`
-    is the row where it changes anything TODAY. `petition` and `issue` always have `to` == `subject`
-    (a computed Candidate's one referent), so their key is unchanged, and `give` forms no Candidate
-    (`decision/options.py::opening_set` needs `to`). Where the counterparty IS the subject (`determine`,
-    `oblige`) it adds nothing and is left out, so those keys are byte-identical to before.
+    and, since plan position `14`, `give` are the rows where it changes anything TODAY (`give` is typed
+    and formable, its subject the Record and its counterparty `to` the receiver, one Candidate per
+    person the giver knows: `decision/options.py::operand_bags`). `petition` and `issue` always have
+    `to` == `subject` (a computed Candidate's one referent), so their key is unchanged. Where the
+    counterparty IS the subject (`determine`, `oblige`) it adds nothing and is left out, so those
+    keys are byte-identical to before.
 
     ONE OWNER, BOTH SITES: `loop/driver.py` (writes a realised act) and `loop/deliberate.py`
     (reads it) both call this, so the key cannot be spelled two ways (`CLAUDE.md` §8). It sits beside
