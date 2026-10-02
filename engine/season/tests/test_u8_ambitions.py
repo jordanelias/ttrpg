@@ -27,8 +27,6 @@ NOT BUILT HERE (plan position `17` stopped on three keys): `office:` and `ought:
 and are tested in `test_u8_cast_fields.py`; `knowledge` -> initial Claims is REFUSED by name at load
 (a new `Claim`-construction site, AX-7), tested there too.
 """
-import ast
-
 import pytest
 
 from engine.season.data.rosters import RUNG_KINDS

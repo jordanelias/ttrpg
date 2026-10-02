@@ -204,6 +204,14 @@ def _waits_on_player(entry: dict) -> bool:
     return str(entry.get("role") or "").strip().upper() == WAITS_ON_PLAYER
 
 
+def _partition_cast(entries: list) -> tuple:
+    """`(seated, waiting)` over one `cast:` list: the ONE place that says which entries become people.
+    `seating` reads a case's overlay through it and `_check_cast` validates a file's list through it,
+    so load and build cannot disagree about who is seated."""
+    return ([e for e in entries if not _waits_on_player(e)],
+            [e for e in entries if _waits_on_player(e)])
+
+
 def cast_overlay() -> dict:
     """`W28-cast`. The corpus's per-case `cast:` authoring, `{case_id: [entry, ...]}` — an OVERLAY,
     read the SAME way `rescales()` reads `scale:`/`office:` and for the identical reason: 27 of the
@@ -323,7 +331,7 @@ def _check_cast(where: str, entries: list) -> None:
     for e in entries:
         if not isinstance(e, dict) or not str(e.get("who") or "").strip():
             raise SystemExit(f"{where}: a `cast:` entry with no `who:` -- {e!r}")
-    seated = [e for e in entries if not _waits_on_player(e)]
+    seated, _waiting = _partition_cast(entries)
     if len(seated) > len(string.ascii_lowercase):
         raise SystemExit(f"{where}: more seated `cast:` entries than the "
                          f"{len(string.ascii_lowercase)} seat ids `seat_ids` can name")
@@ -364,9 +372,7 @@ def seating(case: dict) -> tuple:
     and `run_case`'s alike. `seated` is the entries that become people, in authored order; `waiting`
     is the entries carrying `WAITS_ON_PLAYER`, which are reported and never seated. A case with no
     overlay is `([], [])`, which `build_at` reads as *the anonymous floor and nothing else*."""
-    entries = CAST.get(str(case.get("id"))) or []
-    return ([e for e in entries if not _waits_on_player(e)],
-            [e for e in entries if _waits_on_player(e)])
+    return _partition_cast(CAST.get(str(case.get("id"))) or [])
 
 
 def seat_ids(n: int) -> tuple:
@@ -453,8 +459,9 @@ def build_at(case: dict, seed: int = 0) -> World:
                                           condition=w.fixtures.get("condition_scale"))
     seated, _waiting = seating(case)
     pids = seat_ids(len(seated))
-    for n, pid in enumerate(pids):
-        entry = seated[n] if n < len(seated) else None
+    by_pid = dict(zip(pids, seated))      # the entry each seated person stands for; the floor has none
+    for pid in pids:
+        entry = by_pid.get(pid)
         w.persons[pid] = Person(pid, str(entry["who"]) if entry else pid)
         # ⚠ A PERSON IS THE BOTTOM RUNG OF THE LADDER, and `tiny_world` models it that way. Without
         # this, `move` is refused everywhere. ⚠ THE STATED REASON IS NOW STALE AND THE FIXTURE
@@ -481,10 +488,10 @@ def build_at(case: dict, seed: int = 0) -> World:
     # one entry). A case with no overlay, an anonymous seat, or an entry with no `capability`
     # leaves the person exactly as before: `Person`'s own empty-dict default, never a fabricated
     # non-zero fill.
-    for n, entry in enumerate(seated):
+    for pid, entry in by_pid.items():
         cap = entry.get("capability")
         if isinstance(cap, dict) and cap:
-            w.persons[pids[n]].capability = dict(cap)
+            w.persons[pid].capability = dict(cap)
     # ⚠ `W28`: THE CASE MAY SEAT ITS OWN ACTOR ON AN OFFICE. A re-scaled case carries
     # `office: {post, remit, why}` — `post` names the office the prose names, `remit` the acts it
     # carries, and `why` records the DERIVATION, because that is what makes this authoring rather
@@ -508,8 +515,11 @@ def build_at(case: dict, seed: int = 0) -> World:
     # the second would be inert while looking authored. REFUSED, not skipped -- the author put the
     # entry's own office there to be held (`NPC-038.yaml` leaves it off its first entry for this
     # reason, in a comment nothing read).
-    for n, entry in enumerate(seated):
-        if case_level and pids[n] == "p_a" and isinstance(entry.get("office"), dict):
+    for pid, entry in by_pid.items():
+        entry_office = entry.get("office")
+        if not isinstance(entry_office, dict):
+            continue
+        if case_level and pid == "p_a":
             raise Forbidden(
                 f"case {case.get('id')!r}: the cast entry {entry['who']!r} is seated as `p_a`, "
                 "who already holds the case-level `scale: office:`, and carries an `office:` of "
@@ -518,9 +528,7 @@ def build_at(case: dict, seed: int = 0) -> World:
                       "(one seat per person here: the second is never the one exercised)",
                 law="`exercised_seat` takes the first seat a person holds, so a second office on "
                     "the same person is inert")
-        if isinstance(entry.get("office"), dict):
-            _seat_office(w, f"off_{case.get('id', 'x')}_{pids[n]}", pids[n], ids[chain[0]],
-                         entry["office"])
+        _seat_office(w, f"off_{case.get('id', 'x')}_{pid}", pid, ids[chain[0]], entry_office)
     # ⚠⚠ **THE OUGHT NAMES A PERSON, AND THE WANT IS THE CASE'S OWN.** Until 2026-09-13 this was
     # ONE Proposition for all three people -- `Proposition("prop_x", "OUGHT", ids[chain[0]],
     # "a standing ambition", ...)` -- whose subject was a **rung** and whose predicate was a single
@@ -581,13 +589,12 @@ def build_at(case: dict, seed: int = 0) -> World:
     # it with no new reader. `about` resolves through `_referent`, the resolver `_check_cast`
     # validated with. Reading `one_line` for either half would be the token-match this file refuses.
     want = wants_of(case)
-    cast = pids                   # every person this function seated, in `seat_ids` order
-    for i, pid in enumerate(cast):
-        entry = seated[i] if i < len(seated) else None
+    for i, pid in enumerate(pids):
+        entry = by_pid.get(pid)
         if entry is not None and entry.get("ought"):
             about, predicate = pids[_referent(seated, entry)], str(entry["ought"]["predicate"])
         else:
-            about, predicate = cast[(i + 1) % len(cast)], want
+            about, predicate = pids[(i + 1) % len(pids)], want
         prop = Proposition(f"prop_{pid}", "OUGHT", about, predicate, True, 0)
         w.propositions[prop.id] = prop
         w.add_tenure(Tenure(f"t_{pid}_commits", pid, prop.id, "commit", 0))
@@ -595,9 +602,9 @@ def build_at(case: dict, seed: int = 0) -> World:
     # adversarial pass confirmed NOTHING outside this function ever read that id, so the rename
     # breaks no surface.
     # Derived, not re-typed: `"prop_p_a"` was a hand-written copy of the `f"prop_{pid}"` rule
-    # three lines above, so the id format had to stay in sync by eye and a change to `cast`'s
+    # three lines above, so the id format had to stay in sync by eye and a change to `pids`'
     # order or contents would have silently pointed this at the wrong person.
-    prop = w.propositions[f"prop_{cast[0]}"]
+    prop = w.propositions[f"prop_{pids[0]}"]
     if (ENDINGS.get(str(case.get("id"))) or {}).get("forced_by_threshold"):
         # Q1: a Date coming due, with a DocketItem naming a matter. The corpus says this case's
         # ending is forced by a threshold; a world with no deadline cannot represent that at all.

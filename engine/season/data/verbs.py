@@ -718,10 +718,9 @@ def _load_verb_table() -> dict:
                 _defects.append("declares `contests:`, whose party-gap refusal no clause names, "
                                 "and keys more than one refusal kind, so that refusal would emit "
                                 "kinds for conjuncts that did not fail")
-            _fold_clauses = {ELIGIBILITY_CLAUSE, WRITE_CLAUSE, COUNTERPARTY_CLAUSE}
-            if set(_names) & _fold_clauses:
-                _defects.append(f"names a conjunct after a fold clause "
-                                f"({sorted(set(_names) & _fold_clauses)})")
+            _after_fold = set(_names) & {ELIGIBILITY_CLAUSE, WRITE_CLAUSE, COUNTERPARTY_CLAUSE}
+            if _after_fold:
+                _defects.append(f"names a conjunct after a fold clause ({sorted(_after_fold)})")
             _missing = sorted(_expected - set(by_clause)) if by_clause else []
             _extra = sorted(set(by_clause) - _expected)
             _empty = sorted(k for k, v in by_clause.items() if not v)

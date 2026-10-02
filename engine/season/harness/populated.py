@@ -950,8 +950,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     # transparently wrong (every office gets every act), which is what stops it reading as design.
     # This paragraph stays because it states the standard the default is an exception to, and the
     # per-POST remits that replace it must meet it.
-    from .corpus_run import rescales          # deferred — `data/__init__` records what eager costs
-    overlays = rescales()
+    from .corpus_run import RESCALES as overlays   # deferred — `data/__init__` records what eager costs
     seated, no_post, occupations, proposed = 0, [], [], []
     # `offices.yaml` row id -> the Office id that stands for it (matched below, or minted after the
     # loop), and the loop-built offices no row matches. Both reported by `_office_census`.
@@ -1118,11 +1117,13 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     # holders, through `oblige`). Opened with no term: `term?` is lawful null, and a seat seeded at
     # world-gen has no opening act to declare one (`_eff_oblige` is the act that does).
     for row in OFFICES_SEATS:
-        if row["id"] not in authored:
+        seat = authored.get(row["id"])
+        if seat is None:
             continue                  # a `cap` dropped this seat's holder, so the seat does not exist
+        holder_pid = f"p_{_slug(row['holder'])}"
         for ob in row.get("obligees") or ():
             opid = f"p_{_slug(ob)}"
-            if opid == f"p_{_slug(row['holder'])}":
+            if opid == holder_pid:
                 # checked BEFORE the `cap` skip below: a seat's holder does not serve his own seat,
                 # whether or not a partial cast kept him (`_req_oblige` clause 3's rule)
                 raise Forbidden(
@@ -1137,8 +1138,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
                     f"{row['id']} names the obligee {ob!r}, who is not in the cast this realm "
                     f"built", "offices.yaml -- seats",
                     needs="an obligee from the built cast", law="r2 03 §A.14 -- `obligees` are case ids")
-            w.add_tenure(Tenure(f"t_{authored[row['id']]}_oblige_{_slug(ob)}", opid,
-                                authored[row["id"]], "oblige", 0))
+            w.add_tenure(Tenure(f"t_{seat}_oblige_{_slug(ob)}", opid, seat, "oblige", 0))
     # The index `resolve_anchor` read, kept on the world so a test can resolve a form no row uses
     # (`{settlement: ...}`) and so a mutated resolver is observable. The loop never reads it.
     w._anchors = anchors

@@ -24,21 +24,12 @@ import yaml
 from engine.season.harness import corpus_run as C
 from engine.season.harness import run_cases as RC
 from engine.season.queries import person_q, world_q
-from engine.season.data.rosters import RUNG_KINDS, TITLE_DOMAINS
+from engine.season.data.rosters import TITLE_DOMAINS
 from engine.season.gaps import Forbidden
+from engine.season.tests.test_u8_ambitions import _host_case, _need_props
 
 OFFICE = {"post": "surveyor", "body": "Guild", "remit": [],
           "why": "the case names the post and the institution"}
-
-
-def _host_case() -> dict:
-    """A representable NPC case with no overlay, other than `NPC-020` (the no-overlay control)."""
-    for c in RC.load_cases("NPC"):
-        c = C.apply_rescale(c)
-        if (str(c.get("scale")) in set(RUNG_KINDS) and c["id"] not in C.CAST
-                and c["id"] != "NPC-020"):
-            return c
-    raise AssertionError("no representable overlay-free NPC case")
 
 
 def _cast(*extra: dict) -> list:
@@ -197,13 +188,10 @@ def test_a_mutation_pointing_the_referent_at_the_wrong_seat_is_seen(monkeypatch)
 
 
 def test_q4_fires_for_more_propositions_on_a_four_seat_cast_than_on_the_floor(monkeypatch):
-    def need(w):
-        return {q.about for p in w.persons.values() for q in world_q.questions_for(w, p)
-                if q.source == "need"}
     case = _host_case()
-    pre = need(C.build_at(case, 0))
+    pre = _need_props(C.build_at(case, 0))
     _, w = _build(monkeypatch, _cast({"ought": {"about": "D", "predicate": "keeps faith"}}))
-    post = need(w)
+    post = _need_props(w)
     assert pre == {"prop_p_a", "prop_p_b", "prop_p_c"}
     assert post == {"prop_p_a", "prop_p_b", "prop_p_c", "prop_p_d"} and len(post) > len(pre)
     # and the Question's referent is the AUTHORED person (`p_d`), not the rotation's (`p_b`).
