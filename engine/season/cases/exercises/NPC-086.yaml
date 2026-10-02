@@ -13,6 +13,8 @@ authored_after_first_run: true
 # sentences (quoted) and written by an author; nothing here was matched by code. No `capability`:
 # his case names a surveyor's field data, not a vocation `rosters.yaml: verb_capability` covers
 # (`copying` is its only key), so a number would be invented -- recorded, not filled.
+# ⚠ `Guild leadership` BELOW IS A BODY SEATED AS A PERSON, under the same `_seat_office` [ASSUMPTION]
+# as NPC-083's Provincial authority; here it moved no executed set.
 cast:
 - who: Joren Bergvall
   role: protagonist

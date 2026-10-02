@@ -51,7 +51,8 @@ from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.matrix import Step
 # `CONVICTIONS` dropped 2026-09-16: `seed_pursuits` moved to `run_cases.py`, which is its
 # single owner, and nothing here reads the roster any more.
-from ..data.rosters import PURSUIT_AXES, RUNG_KINDS, load_yaml, refuse_a_titled_post_off_its_rung
+from ..data.rosters import (PURSUIT_AXES, RUNG_KINDS, VERB_CAPABILITY, load_yaml,
+                            refuse_a_titled_post_off_its_rung)
 from ..data.verbs import VERB_TABLE, align
 from ..decision import make_chooser
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, Unspecified
@@ -260,7 +261,9 @@ def cast_overlay() -> dict:
     ⚠ A MALFORMED ENTRY REFUSES AT LOAD (a world is never built from it), by `_check_cast`: not a
     mapping, no `who`, a key outside `CAST_KEYS`, a bad `office:` (`_check_office`'s own errors), an
     `ought:` that is not exactly `{about, predicate}` or whose `about` names no OTHER seated entry
-    (or names two), a WAITS-ON-PLAYER entry carrying `office:`/`ought:` (never seated, so the field
+    (or names two), a `capability:` that is not a mapping, names a key `VERB_CAPABILITY` has no verb
+    drawing on, or carries a magnitude that is not a whole number, a WAITS-ON-PLAYER entry carrying
+    an `office:`/`ought:` or the KEY `capability:` at all, even empty (never seated, so the field
     would read nothing), or more seated entries than `string.ascii_lowercase` can name (`seat_ids`).
     A FILE refuses at load too: a `cast:` with no non-empty string `case:` (blank, missing or
     misspelled), and a `case:` that another file's `cast:` already claimed.
@@ -329,11 +332,43 @@ def _referent(seated: list, entry: dict) -> int:
     return hits[0]
 
 
+def _check_capability(where: str, who: str, e: dict) -> None:
+    """A SEATED entry's `capability:`, validated AT LOAD. `build_at` copies it onto the person, and
+    its one reader, `seam/wrappers/sigma.py::_capability`, asks `Person.capability[VERB_CAPABILITY[
+    verb]]` and nothing else -- `int()`-ed into a dice pool, halved into an opposed obstacle. So a
+    key no verb maps to is NEVER READ, and a magnitude that is not a whole number is truncated
+    (`2.5` -> 2) or raises at the first roll; both used to land silently, because `build_at` only
+    tests `isinstance(cap, dict) and cap`. `VERB_CAPABILITY` is the owner of which keys exist -- the
+    capability NAMES are its VALUES (`rosters.yaml: verb_capability`; its keys are verbs) -- so this
+    asks it and keeps no list of its own. `{}` is the person's own default and is allowed: it seats
+    nothing and does not claim to. (A WAITS-ON-PLAYER entry is refused for carrying the KEY at all,
+    by `_check_cast`, before this runs.)"""
+    if "capability" not in e:
+        return
+    cap = e["capability"]
+    if not isinstance(cap, dict):
+        raise SystemExit(f"{where}: cast entry {who!r}: `capability:` is a {type(cap).__name__}, "
+                         f"not a mapping of capability key -> whole number -- {cap!r}")
+    known = set(VERB_CAPABILITY.values())
+    unread = sorted(str(k) for k in cap if k not in known)
+    if unread:
+        raise SystemExit(f"{where}: cast entry {who!r}: `capability:` keys no verb draws on: "
+                         f"{unread} (`rosters.yaml: verb_capability` names {sorted(known)}) -- "
+                         "nothing would ever read them")
+    # `bool` is an `int` in Python and `True` would be read as a pool of 1: refused by name
+    bad = {k: v for k, v in cap.items() if isinstance(v, bool) or not isinstance(v, int)}
+    if bad:
+        raise SystemExit(f"{where}: cast entry {who!r}: `capability:` magnitudes must be whole "
+                         f"numbers (the pool is `int()`-ed, so a fraction would be truncated "
+                         f"silently): {bad!r}")
+
+
 def _check_cast(where: str, entries: list) -> None:
     """A case's `cast:` list, validated AT LOAD, so a malformed entry never reaches a world.
     `office:` goes through `_check_office` -- the validator IS the constructor's own rules (that
     function's comment), not a second copy -- and `ought:` through `_referent`, the resolver
     `build_at` seats from, so load and build cannot disagree about whom an OUGHT is about.
+    `capability:` goes through `_check_capability`, which asks `VERB_CAPABILITY` what a key may be.
     An `ought.predicate` is a LABEL: nothing reads it (`H-185`), and it is validated only as
     non-empty text."""
     for e in entries:
@@ -353,10 +388,13 @@ def _check_cast(where: str, entries: list) -> None:
         if extra:
             raise SystemExit(f"{where}: cast entry {who!r} has keys nothing reads: {extra} "
                              f"(the closed set is {list(CAST_KEYS)})")
-        if _waits_on_player(e) and (e.get("office") or e.get("ought") or e.get("capability")):
+        # `capability` by KEY PRESENCE, not truthiness: an empty one (`{}`) on an entry nobody seats
+        # is still an author believing something was seated, and `{}` passed the old test
+        if _waits_on_player(e) and (e.get("office") or e.get("ought") or "capability" in e):
             raise SystemExit(f"{where}: cast entry {who!r} is WAITS-ON-PLAYER, so it is never "
                              "seated, and an `office:`/`ought:`/`capability:` on it would read "
                              "nothing")
+        _check_capability(where, who, e)
         _check_office(f"{where}, cast entry {who!r}", e.get("office"))
         ought = e.get("ought")
         if ought is None:

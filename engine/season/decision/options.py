@@ -345,12 +345,19 @@ def exercised_seat(p: Person, row: "Optional[VerbRow]") -> Optional[str]:
     fixed rule, not a choice, and a LIMIT stated rather than hidden: a person holding two seats that
     both grant `confer` always exercises the first, even where only the second has purview over
     the target. Choosing by purview would need the containment tree, which is not the person's
-    state. ONE WORLD BUILDER SEATS SOMEONE TWICE TODAY (`H-134`): `build_realm` gives NPC-020
-    `off_npc_020` (the realm, built by the per-case loop) and the minted `off_duke_valorsmark`,
-    both granting issue/confer/revoke/convene, and the loop's hold precedes the minted one in his
-    tenure order, so his computed acts -- a `revoke` of a duchy-parented seat included -- go via the
-    King seat and the Duke seat is inert while the realm seat's purview reaches. Where that choice
-    ever matters, it becomes a candidate per seat. Traces nothing: the admission it mirrors already traced. A verb
+    state. ⚠ PURVIEW IS `confer`'S TEST AND NOT EVERY ACT'S: `revoke` asks the PARENT RUNG
+    (`state/gate.py::seated_on_the_rung_above` -- `via`'s rung is the one directly above the
+    target seat's, same faction), and asks no purview. ONE WORLD BUILDER SEATS SOMEONE TWICE TODAY
+    (`H-134`): `build_realm` gives NPC-020 `off_npc_020` (the realm, built by the per-case loop) and
+    the minted `off_duke_valorsmark`, both granting issue/confer/revoke/convene, and the loop's hold
+    precedes the minted one in his tenure order, so all his computed acts go via the King seat and
+    the Duke seat is never exercised. For `confer` that costs nothing while the realm seat's purview
+    reaches. For `revoke` it is the WRONG SEAT outright: the six Crown seats at T1 marked
+    `rung_above_same_faction` (`offices.yaml`) can be stripped only through `off_duke_valorsmark`,
+    and `_granting_hold` below always picks `off_npc_020`. The refusal that follows is silent and is
+    masked only because a computed `revoke` carries no `office` operand, so `_req_revoke`
+    (`loop/predicates.py`) refuses before the seat is ever asked. Where that choice ever matters, it
+    becomes a candidate per seat. Traces nothing: the admission it mirrors already traced. A verb
     on no row (`row is None` -- a hand-ranked candidate naming an invented verb) exercises nothing;
     the fold refuses the verb itself, and inventing a seat for it here would be a second answer."""
     if row is None:

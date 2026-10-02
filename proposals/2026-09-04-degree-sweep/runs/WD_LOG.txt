@@ -987,7 +987,7 @@ W-D.4 — PER-FORK FORENSICS on every divergence, AT THE 2 x 1 CELL
 ==============================================================================
 W-D.5 — IS THE DECISION FINGERPRINT WIDE ENOUGH? (it is not, and this is the largest finding in the item)
 ==============================================================================
-[READ       ] `arm9_forking.recorder` records a deliberation as `(person, [verb, ...], tick)` — VERBS ONLY. `Query.opening_set` returns `Candidate(verb, subject, why, operands)`, so two candidate lists with the SAME VERBS about DIFFERENT SUBJECTS compare EQUAL and the fork is scored RECONVERGED.
+[READ       ] `arm9_forking.recorder` records a deliberation as `(person, [verb, ...], tick)` — VERBS ONLY. `Query.opening_set` returns `Candidate(verb, subject, operands)`, so two candidate lists with the SAME VERBS about DIFFERENT SUBJECTS compare EQUAL and the fork is scored RECONVERGED.
 [MEASURE    ] [2 x 1 = 2 slots] NOT RUN — the `wd_subj_*` chunks on disk cover 89 of 143 case slots (a stale basis); unmeasured here, which is not the same as measured at 100%.
 [MEASURE    ] [2 x 3 = 6 slots] NOT RUN — the `wd_subj_*` chunks on disk cover 89 of 143 case slots (a stale basis); unmeasured here, which is not the same as measured at 100%.
 [⚠ CONSEQUENCE] THE CONTROL IS NOT 100% AT THIS RESOLUTION, AND THAT RETRACTS THE DIAGNOSIS THE PUBLISHED 100% RESTED ON — not the arithmetic.

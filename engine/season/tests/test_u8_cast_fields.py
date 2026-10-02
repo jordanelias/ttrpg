@@ -240,6 +240,18 @@ REFUSALS = {
     "an office remit act off the roster": (
         {"office": {"post": "p", "why": "w", "faction": "Crown", "remit": ["smite"]}},
         "remit acts not on the roster"),
+    # `capability:` (fix lane 4 of the Batch C close): `build_at` only tested `isinstance(cap, dict)
+    # and cap`, so each of these used to be dropped or left unread without a sound
+    "a capability that is not a mapping": ({"capability": 3}, "`capability:` is a int"),
+    "a capability that is a list": ({"capability": ["copying"]}, "`capability:` is a list"),
+    "a capability left empty of its value": ({"capability": None}, "`capability:` is a NoneType"),
+    "a capability key no verb draws on": ({"capability": {"copyng": 3}}, "keys no verb draws on"),
+    "a capability magnitude that is text": ({"capability": {"copying": "three"}},
+                                            "magnitudes must be whole numbers"),
+    "a capability magnitude that is a boolean": ({"capability": {"copying": True}},
+                                                 "magnitudes must be whole numbers"),
+    "a capability magnitude that is fractional": ({"capability": {"copying": 2.5}},
+                                                  "magnitudes must be whole numbers"),
 }
 
 
@@ -252,6 +264,27 @@ def test_each_malformed_entry_refuses_at_load_with_a_named_error(tmp_path, monke
     assert needle in str(red.value), (label, str(red.value))
 
 
+def test_a_real_capability_loads_and_is_seated_so_the_refusals_above_are_not_blanket(
+        tmp_path, monkeypatch):
+    """POSITIVE CONTROLS for the `capability:` refusals. A key `VERB_CAPABILITY` has a verb drawing on,
+    with a whole-number magnitude, LOADS and is SEATED on its own person (and `{}`, the person's own
+    default, loads and seats nothing); and the one `capability` already authored in the corpus
+    (NPC-088's) is still in the real overlay unchanged -- so a validator that refused every
+    `capability` cannot pass, and neither can one that dropped the checked-in value.
+
+    The key asked for is READ OFF THE ROSTER, never typed: if the roster's capability names ever
+    change, the control follows and the refusal's own owner is what is being exercised."""
+    key = sorted(set(C.VERB_CAPABILITY.values()))[0]
+    es = _cast({"capability": {key: 4}}, {"capability": {}})
+    assert _load(tmp_path, monkeypatch, es) == {"X-1": es}
+    _, w = _build(monkeypatch, es)
+    assert w.persons["p_a"].capability == {key: 4} and w.persons["p_b"].capability == {}, \
+        {pid: p.capability for pid, p in w.persons.items()}
+    carin = C.CAST["NPC-088"][0]
+    assert carin["who"] == "Carin Vedel" and carin["capability"] == {"copying": 3}, carin
+    assert "copying" in set(C.VERB_CAPABILITY.values()), "NPC-088's key is no longer one a verb draws on"
+
+
 def test_two_people_with_one_name_make_an_ought_about_it_refuse(tmp_path, monkeypatch):
     es = _cast({"ought": {"about": "C", "predicate": "p"}})
     es[3]["who"] = "C"
@@ -262,16 +295,19 @@ def test_two_people_with_one_name_make_an_ought_about_it_refuse(tmp_path, monkey
 
 def test_a_waiting_entry_cannot_carry_what_nothing_will_read(tmp_path, monkeypatch):
     # `capability` joined at the Batch C close: a WAITS-ON-PLAYER entry is never seated, so the
-    # field would read nothing, exactly as `office:`/`ought:` would
+    # field would read nothing, exactly as `office:`/`ought:` would. BY KEY, NOT TRUTHINESS (fix lane
+    # 4): an EMPTY `capability: {}` -- or a bare `capability:` -- on a waiting entry passed the old
+    # `e.get("capability")` test and is refused now
+    cases = (("office", OFFICE), ("ought", {"about": "A", "predicate": "p"}),
+             ("capability", {"copying": 3}), ("capability", {}), ("capability", None))
     refused = 0
-    for field, val in (("office", OFFICE), ("ought", {"about": "A", "predicate": "p"}),
-                       ("capability", {"copying": 3})):
+    for field, val in cases:
         es = _cast() + [{"who": "the player", "role": "WAITS-ON-PLAYER", field: val}]
         with pytest.raises(SystemExit) as red:
             _load(tmp_path, monkeypatch, es)
-        assert "WAITS-ON-PLAYER" in str(red.value), field
+        assert "WAITS-ON-PLAYER" in str(red.value), (field, val)
         refused += 1
-    assert refused == 3
+    assert refused == len(cases) == 5
     # POSITIVE CONTROL: the same `capability` on a SEATED entry loads, and so does a waiting entry
     # that carries nothing -- so the refusal above is the WAITS clause and not a blanket one
     seated = _cast()

@@ -6,6 +6,8 @@
 # imperial authority", and Altonia is no canonical faction (`rosters.yaml: factions`), so
 # `office_faction` would refuse any seat authored for them -- absent is the refusal, not a default
 # faction. No `capability`: nothing in the case is a `verb_capability` key (`copying` only).
+# ⚠ `the Altonian imperial authority` BELOW IS AN INSTITUTION SEATED AS A PERSON (an entry with no
+# office, so `_seat_office`'s [ASSUMPTION] is not reached); it moved no executed set here.
 case: NPC-011
 cast:
 - who: Alexios Laskaris

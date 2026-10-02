@@ -467,8 +467,16 @@ rows:
       (88.39% / 69.41% / 69.51%). No arm moved by half a point; `none >= actor: True` is printed at both cells. So the
       builds changed WHICH acts occur (`corpus_run`: DISTINCT EXECUTED SETS 117 -> 120, verbs that executed 16 -> 17 of
       44 as `give` joined) without changing how often a fork reaches a later decision. The bar is 96%; the reading is
-      43%. [UNVERIFIED: the run-to-run noise of this instrument: no cell was repeated, so "under half a point" is a
-      difference between two runs of changed code, not an interval.]
+      43%. **WHAT IS NOT KNOWN (corrected at the Batch C close):** this instrument is SEEDED (seed 0), so it
+      has no run-to-run noise to be unverified; what is missing is a SEED OR PERTURBATION SPREAD. No seed
+      other than 0 and no perturbation was run, so "under half a point" is a difference between two seed-0
+      runs of changed code, not an interval over seeds. **POSITION `14`'S PRE-REGISTERED PREDICTION**
+      (commit `0a20384f`: *"divergence goes up, since give is the first act in computed play that moves a
+      Record between persons"*, stated before any re-take) IS SCORED BY THIS RE-TAKE AS: `actor`
+      reconvergence -0.44 point (43.03 -> 42.59, the predicted direction), `none` +0.09 (77.13 -> 77.22)
+      and `total` +0.11 (38.47 -> 38.58), the last two AGAINST it, all within half a point -- so THE
+      PREDICTION IS NOT SUPPORTED AT THIS RESOLUTION (and the re-take also carries `13d-iii` and
+      `17-cast`, not `14` alone). The status stays `met`: the bar is 96% and no arm is near it.
     measure: "python proposals/2026-09-04-degree-sweep/wd_collect.py  # after wd_chunk.py x4 per arm per cell over the 143-case corpus (slices 0 36/36 72/72 108/108 143) -- U6's command, workplans/valoria_master_workplan_v8_part4.md §`11`"
     blocks: [W-F, H-111]
 
@@ -741,9 +749,11 @@ rows:
       it leaves the always-refused set on one execution, not on a changed share: `H-84`), and `dispatch` moved from
       always-refused to never-attempted (the `17-cast` pilot's fourth seat in NPC-038; stable across seven hash seeds, the
       mechanism not traced). **POSITION `14` BUILT NO OTHER ROW**: `repudiate`, `succeed`, `tie / knot`, `forge`, `exchange`,
-      `carry` and `thread_read` were declined or stopped, each with a `decline_note` on its verb row; `succeed` and `tie /
-      knot` rest on ID-13 (nothing reads the edge), NOT on holonic §15 (`04 §A.3` rows 8-9 make them directed edges the holder
-      owns and `release` ends, `H-182`). In the populated realm, four seasons, seed 0 (`aperture 4 0`, control hash EQUAL):
+      `carry` and `thread_read` were declined or stopped, each with a `decline_note` on its verb row; `succeed` and `tie`
+      rest on ID-13 (nothing reads the edge) and on an operand their rows do not bind, NOT on holonic §15 (`04 §A.3` rows 8-9
+      make them directed edges the holder owns and `release` ends, `H-182`). `knot` is NOT an ID-13 case -- it has a reader
+      (`epistemic.py::_ch_witness_key`, undirected) -- so `tie / knot` stops on the missing partner operand and on `knot`
+      belonging to `29f`'s knots work. In the populated realm, four seasons, seed 0 (`aperture 4 0`, control hash EQUAL):
       2939 acts, up from 2781 before `14` and 2836 before `13d-iii`; `levy.unauthorized` fell from 18 of 19 attempts to 4 of
       23 and `issue` executed 6 of 30 times with `Act.via` set (`13d-iii`, `H-163` limit 1 lifted). 17 of 44 executing (39%) is
       a rise of one verb on 16 of 44.
@@ -863,18 +873,36 @@ rows:
       executed sets, mean verbs 7.04, 13 verbs ever; (B) the real corpus with the pilot 41, 7.15, 13;
       (C) position `17`'s identical 11-seat fixture on every case 26, 10.65, 16 (that control,
       reproduced). **THE PLAN'S OBSERVABLE -- distinct executed sets rises over the pre-cast arm -- IS
-      NOT MET: 41 -> 41, and 8 -> 8 over the eight pilot cases**; the other 38 are byte-identical TO THE PRE-PILOT HEAD (all
+      NOT MET: 41 -> 41, and 8 -> 8 over the eight pilot cases** (it COULD NOT have risen from these eight: in
+      arm A none of them shared an executed set with any other case, so the ceiling on a rise from them was
+      0 -- `H-185`); the other 38 are byte-identical TO THE PRE-PILOT HEAD (all
       143 world hashes compared, exactly the eight moved) -- NOT to arm A, from which the five cases overlaid
       before the pilot (NPC-004, -005, -039, -080, -088) differ in `Person.name`, the cast's `who`. What moved: mean verbs 6.62 -> 7.25 over the
       eight, from two cases (NPC-038 7 -> 10, NPC-083 7 -> 9); the other six executed sets are identical
       to the pre-cast. WHY, ATTRIBUTED BY DROPPING EACH KEY IN TURN: seven of the eight authored
-      oughts name the cast's NEXT entry, which is the rotation default's own referent, and
+      oughts name the cast's NEXT entry, which is the rotation default's own referent (an artifact of the
+      order the entries were authored in, not evidence about oughts: `H-185`), and
       `Proposition.predicate` is read by no live path, so an ought that coincides with the rotation
       moves nothing; the one that differs (NPC-038's protagonist) adds {interview, speak, transfer}
       over the same four people without it. An office with `remit: []` seats a person and moved no
       executed set (NPC-072's, alone in its cast, did change what that world attempts and has refused:
-      +examine, found, migrate); NPC-083's two offices moved {interview, issue, speak} in and `fight` out, and its
-      one `remit: [issue]` seat is the only seat there that grants `issue`. `corpus_run` stdout md5 d714ba5c -> 6a65a264 (declared; the
+      +examine, found, migrate). ⚠ TWO CASES MOVED AN EXECUTED SET, AND THEY ARE NOT THE SAME KIND OF
+      EVIDENCE (attributed at fix lane 4 of the Batch C close, seed 0, by dropping each key kind in
+      turn): NPC-083 (7 -> 9: {interview, issue, speak} in, `fight` out) moved on its `office:` keys
+      ALONE -- drop them and its set equals the no-overlay one, drop its `ought:` keys and it is
+      unchanged -- and the move rests on its SECOND office, the Provincial authority's (dropping that
+      one office takes {interview, issue} out and returns `fight`; dropping the Governor's own
+      changes nothing; the one `remit: [issue]` seat is the only seat there that grants `issue`).
+      THAT IS AN INSTITUTION SEATED AS A PERSON holding `issue` at the settlement rung, under `_seat_office`'s own [ASSUMPTION] (an entry's
+      office sits at the case's deepest non-person rung), and it sits against `NPC-083.yaml`'s own
+      header, which declines to seat the settlement's Local Actors and rival subnational factions as
+      groups. NPC-038 (7 -> 10: `fight`, `speak`, `transfer` in) moved on its `ought:` keys, NOT its
+      offices (drop its `office:` keys and the set is unchanged; drop its `ought:` keys and {interview,
+      speak, transfer} leave): it depends on its protagonist's ought naming Sæmund Haelgrund where the
+      rotation default would name the next entry (Arne Himlensendt), and on the cast being four seated
+      people rather than three anonymous ones. So NPC-038 is NOT evidence that an `office:` moves acts;
+      NPC-083, the only case that is, depends on the institution-as-person seat above.
+      `corpus_run` stdout md5 d714ba5c -> 6a65a264 (declared; the
       `DISTINCT EXECUTED SETS 120` and `17 of 44` lines did not move). Stays `partial`.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' line"
     blocks: [W27, H-62]

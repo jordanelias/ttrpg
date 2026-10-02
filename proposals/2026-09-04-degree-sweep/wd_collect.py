@@ -383,7 +383,7 @@ def main() -> int:
     log.rule("W-D.5 — IS THE DECISION FINGERPRINT WIDE ENOUGH? (it is not, and this is the "
              "largest finding in the item)")
     log("READ", "`arm9_forking.recorder` records a deliberation as `(person, [verb, ...], tick)` "
-                "— VERBS ONLY. `Query.opening_set` returns `Candidate(verb, subject, why, "
+                "— VERBS ONLY. `Query.opening_set` returns `Candidate(verb, subject, "
                 "operands)`, so two candidate lists with the SAME VERBS about DIFFERENT SUBJECTS "
                 "compare EQUAL and the fork is scored RECONVERGED.")
     def collect_subj(slots: str, mode: str) -> dict:

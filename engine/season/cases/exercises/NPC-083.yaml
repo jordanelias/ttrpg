@@ -7,6 +7,10 @@
 # No `capability`: a governor's budget of administrative actions is not a `verb_capability` key
 # (`copying` only). No seat for "the settlement's Local Actors" or "rival subnational factions":
 # each is a group the case does not name a person of.
+# ⚠ BUT `the Provincial authority` BELOW IS AN INSTITUTION SEATED AS A PERSON, holding `issue` at the
+# settlement rung under `corpus_run._seat_office`'s own [ASSUMPTION] (an entry's office sits at the
+# deepest non-person rung). It is what moves this case's executed set (dropping its office restores
+# `fight` and takes {interview, issue} out), so the no-groups rule above is NOT applied to it.
 case: NPC-083
 cast:
 - who: Hedda Kronvald
