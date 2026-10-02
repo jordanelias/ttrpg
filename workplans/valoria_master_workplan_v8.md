@@ -244,7 +244,7 @@ git rev-parse --short HEAD; cat .git/shallow 2>/dev/null || echo "full clone"   
 python tools/session_provision.py
 python -m engine.season.harness.register --requirements        # expect met 2 · partial 5 · not_met 2
 python tools/m1_acceptance.py --summary                         # expect NOT MET, row 3 FAIL 2/9
-gh run list --branch main --limit 3                             # `main` @59004d86 read CANCELLED at `unit-tests`' 16-min cap (run 36967763315); `B0-CI-c` splits `season-tests` out of it — read the next run's `All Gates Green`
+gh run list --branch main --limit 3                             # read `All Gates Green`; why it was red and what `B0-CI-c` did: §3's `B0-CI` row
 ```
 
 **Batch 1 landed (PR #450)**; its records are `_part6` §H.1. **The telling workplan's T0–T6 landed (PR
