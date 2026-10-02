@@ -79,8 +79,9 @@ measurement (OPEN). `11a`/`11b` are DONE. This plan uses position numbers only, 
 numbers.
 
 **Added by this plan:** `13d-iii` (rung anchors for seats — the R-04 cap no position owned), `11-fix`
-(U6's instrument repair), `B0-CI` (main's red CI) and `B0-CI-b` (the one `engine/season/tests` failure it
-left red), `R05-THREAD` (the `thread_read` operand decision), `LADDER-MBPC` (the MB/PC lanes' ladder pass
+(U6's instrument repair), `B0-CI` (main's red CI), `B0-CI-b` (the one `engine/season/tests` failure it
+left red) and `B0-CI-c` (the `unit-tests` job's 16-minute cap, which the two suites sharing it exceeded),
+`R05-THREAD` (the `thread_read` operand decision), `LADDER-MBPC` (the MB/PC lanes' ladder pass
 over their flagged rows), and — found by Batch 1 — `29d-ii` and `20-v`.
 Each is defined at its batch; the last three in their state-index rows (§3).
 
@@ -243,7 +244,7 @@ git rev-parse --short HEAD; cat .git/shallow 2>/dev/null || echo "full clone"   
 python tools/session_provision.py
 python -m engine.season.harness.register --requirements        # expect met 2 · partial 5 · not_met 2
 python tools/m1_acceptance.py --summary                         # expect NOT MET, row 3 FAIL 2/9
-gh run list --branch main --limit 3                             # `unit-tests` should read green once PR #451 (carrying B0-CI-b) merges
+gh run list --branch main --limit 3                             # `main` @59004d86 read CANCELLED at `unit-tests`' 16-min cap (run 36967763315); `B0-CI-c` splits `season-tests` out of it — read the next run's `All Gates Green`
 ```
 
 **Batch 1 landed (PR #450)**; its records are `_part6` §H.1. **The telling workplan's T0–T6 landed (PR
@@ -274,7 +275,7 @@ found (`B0-CI-b`, `29d-ii`, `20-v`) landed in PR #451.
 
 | position | handle | lane | STATE | GATE | R | batch | evidence / note |
 |---|---|---|---|---|---|---|---|
-| `B0-CI` | main's CI red | IN | **PARTIAL** | — | — | 0 | [RAN] PR #450's CI: the step `pytest tests/valoria -n auto` passes — the seven red tests are fixed (ledger `FORK:` refs re-pointed to commits that are ancestors of `main`; `sim_params.json` and `value_pointer_links.json` re-derived by their exporters; `tools/build_engine_atlas.py`'s stated inputs). **CI as a whole is NOT green:** the next step, `pytest engine/season/tests`, fails one test that predates this plan (red at `5c5d8ec6` on `main`, never reached there because the earlier step failed) — that test is `B0-CI-b`. `B0-CI-b` landed in PR #451 (`77f5175a`); what remains of this row is that `unit-tests` reads green on `main` once that merges |
+| `B0-CI` | main's CI red | IN | **PARTIAL** | — | — | 0 | [RAN] PR #450's CI: the step `pytest tests/valoria -n auto` passes — the seven red tests are fixed (ledger `FORK:` refs re-pointed to commits that are ancestors of `main`; `sim_params.json` and `value_pointer_links.json` re-derived by their exporters; `tools/build_engine_atlas.py`'s stated inputs). **CI as a whole is NOT green:** the next step, `pytest engine/season/tests`, fails one test that predates this plan (red at `5c5d8ec6` on `main`, never reached there because the earlier step failed) — that test is `B0-CI-b`. `B0-CI-b` landed in PR #451 (`77f5175a`). **That did not turn `main` green:** on `main` @`59004d86` (run 36967763315) the `tests/valoria` step passed in about 9m10s and the `engine/season/tests` step was `cancelled` 6m49s in when `unit-tests`' 16-minute cap hit, so `register --requirements` was skipped and `All Gates Green` failed with no test failing. `B0-CI-c` (2026-10-02) moved `engine/season/tests` and `register --requirements` into their own job, `season-tests` (20-minute cap, a placeholder: the season suite's duration has never been observed to complete). What remains of this row is the first complete `season-tests` run on a hosted runner: its duration replaces the placeholder sentence in the workflow and `All Gates Green` reads green on `main` |
 | `2-ii` | RET-SC: kernel + veto | IN/SC | BLOCKED | `22` | — | 3 | [SETTLED: `systems/social_contest/sim/contest/` exists, 16 files] — the kernel is still on disk; `parliamentary_{vote,stay}.py` went at `29b` |
 | `9` | PC-SURRENDER build-or-strike | PC | JORDAN | J-7 | — | 4 | `HANDOFF_PC.md` [CODE] |
 | `10` | U5 / R-07 | IN | **CARVED OUT** (§0.6) | the telling workplan's own gates | R-07, R-01 | — | PR #442 (`c6f4252`) reverted the `tell`→stance write on H-79 and landed its side findings (H-62's producer gap closed by `march`'s M4 write; the `names_index.yaml` `stance` entry). Re-scoped by the telling workplan's first commit (`60c70bbf`) to T0→G8: `tell` writes no stance; regard is computed at read. This plan's earlier `fight`-write rewrite is withdrawn (§0.6) |

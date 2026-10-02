@@ -15,7 +15,8 @@ never a side effect of a speed change. This file is the falsifier for that claim
 RED STATE, verified at authoring time: adding `addopts = -m "not slow"` to `pytest.ini` turns
 `test_pytest_ini_declares_no_addopts` red; adding `-m "not slow"` to the workflow's pytest
 invocation turns `test_ci_invocation_is_unfiltered` red. Neither is hypothetical — both are the
-literal one-line edit that would cause the failure.
+literal one-line edit that would cause the failure. That second test inspects the `tests/valoria`
+invocation (`unit-tests`) and, since 2026-10-02, the `engine/season/tests` one (`season-tests`).
 """
 import configparser
 import os
@@ -72,11 +73,20 @@ def test_ci_invocation_is_unfiltered():
     """CI's pytest command must carry no -m selector."""
     with open(WORKFLOW, encoding="utf-8") as fh:
         lines = fh.read().split("\n")
+    # `engine/season/tests` ADDED 2026-10-02, when its invocation moved from `unit-tests` to the
+    # `season-tests` job. This selector matched "tests/valoria" alone, so a `-m` filter on the season
+    # gate (`python -m pytest engine/season/tests -q -n auto -m "not slow"`) was never inspected --
+    # the same coverage cut this test exists to catch, on the one suite it did not name.
     invocations = [
         ln for ln in lines
-        if "pytest" in ln and "tests/valoria" in ln and not ln.lstrip().startswith("#")
+        if "pytest" in ln and ("tests/valoria" in ln or "engine/season/tests" in ln)
+        and not ln.lstrip().startswith("#")
     ]
     assert invocations, "no live pytest invocation found in valoria-ci.yml — did the job move?"
+    # Assert that both selectors matched something (§0.1 pt 2): the season half is the widening, and
+    # a selector that silently matches nothing would pass this test having inspected nothing.
+    assert any("tests/valoria" in ln for ln in invocations), "tests/valoria invocation not found"
+    assert any("engine/season/tests" in ln for ln in invocations), "engine/season/tests invocation not found"
     for ln in invocations:
         # Only a -m AFTER the `pytest` token is a marker filter. The `-m` in `python -m pytest` is
         # the interpreter's module flag; matching it would fire on every CORRECT invocation, which
