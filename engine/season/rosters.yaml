@@ -1051,9 +1051,11 @@ rosters:
       to `pool_default`, which is the `assumption` grade's own polarity: `absent` refuses, and this
       is not one. The table is therefore OPEN in the sense that matters -- adding a contested verb
       does not require adding a row before the seam will run it.
-      ⚠ AND IT IS INERT ON EVERY CORPUS PERSON TODAY, WHICH IS SAID HERE SO NOBODY READS THE ROWS AS
-      DOING WORK: `Person.capability` has exactly one writer and it ZEROES the dict, so every
-      derivation lands on `pool_default` and the roll varies by SEED and FIXTURE rather than by
+      ⚠ AND IT IS NEARLY INERT ON THE CORPUS TODAY, WHICH IS SAID HERE SO NOBODY READS THE ROWS AS
+      DOING WORK: the only writer of `Person.capability` is a `cast:` overlay's `capability:`
+      (`harness/corpus_run.py`, `build_at`), and one entry carries one (NPC-088's Carin Vedel,
+      `{copying: 3}`; counted 2026-10-02 with `cast_overlay()`: 1 of 430 built persons), so every
+      other derivation lands on `pool_default` and the roll varies by SEED and FIXTURE rather than by
       PERSON. That is why R-09 reads `partial` after `U1` and not `met`.
     sweep: [declared, uniform, absent]
     keys: [verb_table]
