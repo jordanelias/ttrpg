@@ -19,12 +19,9 @@ predicate/effect; `write_matrix.yaml` `Person` rows; `rosters.yaml` `requires_op
 stance write — the stored half of regard); `harness/corpus_run.py::build_at`; `harness/populated.py`'s
 seat builder; `engine/season/offices.yaml` header; `proposals/2026-09-04-degree-sweep/wd_collect.py`.
 
-### `11` · U6 — R-01/R-02 corpus measurement: THE RE-TAKE · IN · gate `13`-rest at its pilot, `17-cast` built · `sonnet` runs, `opus` reads the number · `[simulation]`
+### `11` · U6 — R-01/R-02 corpus measurement · IN · **DONE 2026-10-02: first measurement 2026-10-01, re-take 2026-10-02** · the acceptance command is kept here because `requirements.yaml` cites it
 
-**First measurement LANDED 2026-10-01 (PR #451; `11-fix` + `11`).** At `2x3`, over 143 cases, reconvergence reads none 77.13 % · actor 43.03 % · total 38.47 %
-(`proposals/2026-09-04-degree-sweep/runs/WD_LOG.txt`, tracked; the 36 cells are untracked and rebuilt by the commands below): below the 96 % bar, so R-02 is `met` and R-01 stays `not_met`
-(`engine/season/requirements.yaml`, whose dated paragraphs label each figure committed / derived / scratch). **This item is the RE-TAKE:** the same commands after
-`13d-iii` and `17-cast`, declaring both trees; the pair is the control for what those builds did to propagation.
+**Both runs landed (PR #451).** At `2x3`, over 143 cases, reconvergence reads none 77.13 % · actor 43.03 % · total 38.47 % (baseline, `c2ee345a`) and none 77.22 % · actor 42.59 % · total 38.58 % (re-take, `8b03e518`, across `14`, `13d-iii` and `17-cast`): no arm moved by half a point, against a 96 % bar, so R-02 is `met` and R-01 stays `not_met` (`engine/season/requirements.yaml`, whose dated paragraphs label each figure; `proposals/2026-09-04-degree-sweep/runs/WD_LOG.txt` is the committed record, the 36 cells are untracked and rebuilt by the commands below). The instrument's run-to-run noise is not measured. Re-run it only when a build changes what a fork can reach.
 **Acceptance — verbatim** (carried from U6; slices re-derived for 143):
 
 ```

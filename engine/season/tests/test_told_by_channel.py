@@ -1008,7 +1008,8 @@ def test_t4_the_known_person_claim_roster_refuses_a_planted_collision():
 # T4b (ED-IN-0282): AN OPPORTUNITY INCLUDES ITS COUNTERPARTY. The once-per-season filter keyed
 # `(verb, subject)`, so once topic C was told to B it was dropped for D too, though a person tells
 # several hearers. The key is the general rule for a row naming a counterparty; `tell` is the row where
-# it changes anything today (`petition`/`issue` have `to` == `subject`; `give` forms no Candidate).
+# it changes anything of the rows measured here (`petition`/`issue` have `to` == `subject`; `give` was typed at
+# position 14 and fans its counterparty over the persons the giver knows, so the key applies to it too).
 # `data/verbs.py::opportunity_key` is the
 # ONE key; `loop/driver.py` writes it after the fold and `_drop_what_was_already_done` reads it.
 # ---------------------------------------------------------------------------------------------
