@@ -15,7 +15,7 @@ implemented here (will land with Mending sim integration). Deck is global
 ⚠ `apply_comovement_effects` WAS STRUCK at plan position 27. Its one effect was writing the card's
 `ms_delta` into the world Mending Stability clock through the overview MS-track module — an overview
 clock with no season analogue by architecture (`engine/season/loop/census.py`: "NO CLOCK GENERATES
-ANYTHING"; `29a` deleted its siblings in PR #450 and that module goes at `29a`-ms). Its side effects
+ANYTHING"; `29a` deleted its siblings in PR #450 and that module went at `29a`-ms). Its side effects
 were never built (it returned `notes` text). A drawn card still REPORTS its `ms_delta`, as
 `OperationResult.mending_stability_delta` and `OpposingResult.ms_delta` do; no world state is
 written from any of the three.

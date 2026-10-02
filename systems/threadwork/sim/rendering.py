@@ -4,8 +4,8 @@ systems/threadwork/sim/rendering.py — STRUCK at plan position 27 (WR-SCOPE rem
 This module held two `stubwire.stub_resolve` armature stubs (Pass 2l, OI-17): `apply_rs_strain` and
 `check_calamity_threshold`. Position 27 had to WIRE each to a carrier the season architecture retains,
 or STRIKE it with its reason. Both are struck, for the reasons below, and neither was wired into the
-overview Mending Stability track (position 27's own constraint: that module survives only until
-`29a`-ms and is not a target).
+overview Mending Stability track (position 27's own constraint: that module was due to go at
+`29a`-ms and was not a target; it went there, 2026-10-02).
 
 `apply_rs_strain(delta, source, world) -> RSState` — STRUCK: no carrier, at either reading.
   - As written, it moved the world-level Rendering Stability track (its declared dependency was
