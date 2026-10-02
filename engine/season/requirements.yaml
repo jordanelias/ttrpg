@@ -343,6 +343,12 @@ rows:
       carries above (the `~4%`, "2,403 forks with 100% reconvergence", "behaviourally near-absent")
       are SUPERSEDED by this reading and stay as dated history. The attack on the number is
       recorded once, at R-02.
+      ⚠⚠ **PLAN POSITION `11` (U6, run (ii): THE RE-TAKE), 2026-10-02: CLAUSE 2 STILL HOLDS AND CLAUSE 1 STILL FAILS ON THE
+      ARC LANE, SO THE STATUS STAYS `not_met`.** Tree `8b03e518` (positions `14`, `13d-iii`, `17-cast` landed since run
+      (i)). `corpus_run` prints `check R3: 46 of 46 pass` (NPC) and `check R3: 96 of 97 pass` (ARC), the planted control still
+      `False -> True`: byte-identical to run (i) on that line, and it still does not print which ARC case fails. `wd_collect.py`
+      reads 77.22% / 42.59% / 38.58% at `2x3` (R-02 carries the figures and the label of each). Nothing about this row's two
+      clauses moved across Batch 2's builds.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [W-F, H-111, H-116]
 
@@ -448,7 +454,21 @@ rows:
       fingerprint is verbs only (W-D.5), and that is unmeasured on the 143 basis. It does not show
       round-to-round change inside a season, because the window scores strictly later ticks only.
       Both of the last two bias toward RECONVERGENCE, which is against this reading. Run (ii), the
-      re-take after `13d-iii`, is the plan's control on what Batch 2 does to this number.
+      re-take after Batch 2's builds, is the paragraph below.
+      ⚠⚠ **PLAN POSITION `11` (U6, run (ii): THE RE-TAKE ACROSS BATCH 2'S BUILDS), 2026-10-02: THE NUMBER DID NOT MOVE, AND THE STATUS STAYS `met`.**
+      THE RUN: the same acceptance command (36 `wd_chunk.py` cells, then `wd_collect.py`, exit 0), seed 0, four seasons, all
+      143 case slots, on tree `8b03e518`: positions `14` (a counterparty fold clause; `give` typed and formable), `13d-iii`
+      (29 of 30 seats with a rung) and `17-cast` (eight cast overlays) landed since run (i) at `c2ee345a`; the close's
+      later commits move no output (`build_realm(0)`, the one-season populated run and `corpus_run`'s stdout are
+      identical before and after them). One cell, `total default 36 72`, wrote nothing on its first run although its
+      worker logged exit 0, and was re-run; `wd_collect.py`'s completeness assertion then held for every arm. **THE
+      READING** [WD_LOG, committed, regenerated at this tree]: at `2x3`, `none` 1688/2186 = 77.22% · `actor` 920/2160 =
+      **42.59%** · `total` 823/2133 = 38.58% (run (i): 77.13% / 43.03% / 38.47%); at `2x1`: 88.35% / 69.23% / 69.64%
+      (88.39% / 69.41% / 69.51%). No arm moved by half a point; `none >= actor: True` is printed at both cells. So the
+      builds changed WHICH acts occur (`corpus_run`: DISTINCT EXECUTED SETS 117 -> 120, verbs that executed 16 -> 17 of
+      44 as `give` joined) without changing how often a fork reaches a later decision. The bar is 96%; the reading is
+      43%. [UNVERIFIED: the run-to-run noise of this instrument: no cell was repeated, so "under half a point" is a
+      difference between two runs of changed code, not an interval.]
     measure: "python proposals/2026-09-04-degree-sweep/wd_collect.py  # after wd_chunk.py x4 per arm per cell over the 143-case corpus (slices 0 36/36 72/72 108/108 143) -- U6's command, workplans/valoria_master_workplan_v8_part4.md §`11`"
     blocks: [W-F, H-111]
 
