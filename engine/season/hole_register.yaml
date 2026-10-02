@@ -4050,8 +4050,9 @@ rows:
     default:   "none"
     site:      ""
     sweep:     []
-    unblocks:  "a telling that leaves a lasting relation between teller and hearer, and the knots
-      fieldwork (`29f`) waits on. Trigger: `python -m engine.season.harness.aperture 1 0` shows
+    unblocks:  "a telling that leaves a lasting relation between teller and hearer (the knots
+      fieldwork `29f` once waited on this and retired the module instead, 2026-10-02; see `cite`).
+      Trigger: `python -m engine.season.harness.aperture 1 0` shows
       `tie / knot` executed > 0; prerequisite `_eff_tie`, which no plan position owns and which
       needs a reader first (`ID-13`)"
     cite:      "LADDER RUN at `T4`, 2026-10-01: not superseded -- plan position `14` owns the effect
@@ -4076,7 +4077,36 @@ rows:
       in either role -- against 04 `:388` (*`tie`/`knot` are directed*): an observation for the
       `29f` lane, not decided here. THE GROUND FOR BOTH KINDS IS THAT no cell of the row binds
       the partner, so a computed act names nobody to bond with; for `knot` that, and its place in
-      `29f`'s knots work, is the whole of it. The row also names two kinds for one opener."
+      `29f`'s knots work, is the whole of it. The row also names two kinds for one opener.
+      ⚠ THE ED-912 GAUGE RECORD (plan position `29f`, 2026-10-02, written BEFORE
+      `systems/fieldwork/sim/knots.py` was retired; the module is at fork ref `59004d86`, read it with
+      `git show 59004d86:systems/fieldwork/sim/knots.py`). `29f` built NO effect and NO reader: its work
+      was this record and the retirement. WHAT THE GAUGE COMPUTES, quoted from that code: ONE signed
+      integer `Knot.strain` per knot (not one per endpoint), clamped by `sustain_knot` to a per-tier
+      range, `TIER_RANGE = {Distant: (-2, 5), Close: (-5, 5)}`, started at `TIER_START = {Distant: 0,
+      Close: -2}`; the knot BREAKS (goes inactive) at `strain >= RUPTURE_STRAIN = 5`, both tiers;
+      `TEMPERED_STRAIN = -5` (Close only) absorbs the next rupture trigger ONCE and resets strain to 0
+      (`check_knot_rupture`); a break sets Disposition to `max(-5, -3)` and costs 4 Composure, plus one
+      `Honor` Conviction Scar when a Close knot broke from POSITIVE strain; a rupture sets Disposition
+      -3 and carries `RUPTURE_COHERENCE_LOSS = -1`, which the code itself flags `[UNVERIFIED
+      post-ED-912]`. Formation rolled `Spirit * 2 + History (Relationships)` at TN 7, Ob 2 and chose
+      the tier by degree (Overwhelming = Close, Success = Distant, otherwise no knot). THE MAPPING OF
+      THE GAUGE TO `Tenure.degree` -- ITS SOURCE IS UNLOCATED, AND IT IS NOT INVENTED HERE. Its only
+      attestation is one clause of the retired plan, at fork ref `0671283`, file
+      `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md`, line `:878`: *ED-912's ±5 gauge has
+      no carrier, so it maps to `Tenure.degree`; that is recorded on `14`, not invented.* `14` recorded
+      nothing (a grep of `engine/season` finds no such mapping) and the clause carries no derivation. THREE LOCATED FACTS
+      BEAR ON IT, recorded and not resolved: (1) `architecture/meta/04_CODE_ARCHITECTURE.md` `§F.4`
+      (`:1146`) lists *what `Tenure.degree` IS* as a gap, with *the strength of a `commit`* as its only
+      candidate, so no ratified meaning exists for a gauge to map onto; (2) the live field is
+      `Optional[str]` (`state/carriers.py:88`), carrying whichever band the grading verb uses and read
+      only by `queries/faction_q.py::head` on `commit` Tenures, so a signed integer does not fit its
+      type; (3) `04 §A.3` row 9 (`:191`) and `01_AXIOMS.md` `§E.1.3` make `tie`/`knot` two directed
+      edges and STRAIN A QUERY stored nowhere (the interaction of two owners' values, `T-a`), which
+      cuts against storing the gauge on either edge. Whoever builds `tie / knot` decides the carrier.
+      ONE OBSERVATION FROM `verb_table.yaml`'s `tie / knot` decline_note, HANDED TO `29f` AND NOT
+      DECIDED BY IT: `epistemic.py::_ch_witness_key` reads the `knot` edge UNDIRECTED, against 04
+      `:388`; `29f` changed neither the channel nor `epistemic.py`."
     source:    "telling workplan `T4` (`workplans/2026-10-01-telling-workplan.md` §5, ED-IN-0282), 2026-10-01"
 
 

@@ -3,17 +3,16 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 110,
-    "total": 265,
-    "uncited": 155,
+    "total": 250,
+    "uncited": 140,
     "of_which_assumption_grade": 3
   },
-  "count": 265,
+  "count": 250,
   "by_module": {
     "engine.autoload": 6,
     "engine.season": 11,
     "characters": 5,
     "combat": 12,
-    "fieldwork": 15,
     "mass_battle": 148,
     "overview": 5,
     "social_contest": 31,
@@ -434,179 +433,6 @@
       "module": "combat",
       "file": "systems/combat/sim/combat.py",
       "note": "\"Wounds: -1D per wound (cumulative)\"",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "fieldwork.BREAK_COMPOSURE_DAMAGE",
-      "name": "BREAK_COMPOSURE_DAMAGE",
-      "value": 4,
-      "kind": "scalar",
-      "module": "fieldwork",
-      "file": "systems/fieldwork/sim/knots.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "fieldwork.BREAK_DISPOSITION",
-      "name": "BREAK_DISPOSITION",
-      "value": -3,
-      "kind": "scalar",
-      "module": "fieldwork",
-      "file": "systems/fieldwork/sim/knots.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "fieldwork.COHERENCE_BAND_STRAIN_PACING",
-      "name": "COHERENCE_BAND_STRAIN_PACING",
-      "value": {
-        "Stable": 0,
-        "Dissonant": 3,
-        "Fragmented": 2,
-        "Fractured": 1,
-        "Severed": 1
-      },
-      "kind": "table",
-      "module": "fieldwork",
-      "file": "systems/fieldwork/sim/knots.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "fieldwork.DISPOSITION_FLOOR",
-      "name": "DISPOSITION_FLOOR",
-      "value": -5,
-      "kind": "scalar",
-      "module": "fieldwork",
-      "file": "systems/fieldwork/sim/knots.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "fieldwork.KNOT_BONDS_MIN",
-      "name": "KNOT_BONDS_MIN",
-      "value": 5,
-      "kind": "scalar",
-      "module": "fieldwork",
-      "file": "systems/fieldwork/sim/knots.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "fieldwork.KNOT_DISPOSITION_MIN",
-      "name": "KNOT_DISPOSITION_MIN",
-      "value": 5,
-      "kind": "scalar",
-      "module": "fieldwork",
-      "file": "systems/fieldwork/sim/knots.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "fieldwork.KNOT_FORMATION_OB",
-      "name": "KNOT_FORMATION_OB",
-      "value": 2,
-      "kind": "scalar",
-      "module": "fieldwork",
-      "file": "systems/fieldwork/sim/knots.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "fieldwork.KNOT_FORMATION_TN",
-      "name": "KNOT_FORMATION_TN",
-      "value": 7,
-      "kind": "scalar",
-      "module": "fieldwork",
-      "file": "systems/fieldwork/sim/knots.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "fieldwork.KNOT_TS_MIN_PARTY",
-      "name": "KNOT_TS_MIN_PARTY",
-      "value": 30,
-      "kind": "scalar",
-      "module": "fieldwork",
-      "file": "systems/fieldwork/sim/knots.py",
-      "note": "Either PC or NPC has TS ≥ 30",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "fieldwork.RUPTURE_COHERENCE_LOSS",
-      "name": "RUPTURE_COHERENCE_LOSS",
-      "value": -1,
-      "kind": "scalar",
-      "module": "fieldwork",
-      "file": "systems/fieldwork/sim/knots.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "fieldwork.RUPTURE_DISPOSITION_CITATION",
-      "name": "RUPTURE_DISPOSITION_CITATION",
-      "value": -3,
-      "kind": "scalar",
-      "module": "fieldwork",
-      "file": "systems/fieldwork/sim/knots.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "fieldwork.RUPTURE_STRAIN",
-      "name": "RUPTURE_STRAIN",
-      "value": 5,
-      "kind": "scalar",
-      "module": "fieldwork",
-      "file": "systems/fieldwork/sim/knots.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "fieldwork.RUPTURE_WOUND_DISSOLUTION",
-      "name": "RUPTURE_WOUND_DISSOLUTION",
-      "value": 1,
-      "kind": "scalar",
-      "module": "fieldwork",
-      "file": "systems/fieldwork/sim/knots.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "fieldwork.TEMPERED_STRAIN",
-      "name": "TEMPERED_STRAIN",
-      "value": -5,
-      "kind": "scalar",
-      "module": "fieldwork",
-      "file": "systems/fieldwork/sim/knots.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "fieldwork._knot_id_counter",
-      "name": "_knot_id_counter",
-      "value": [
-        0
-      ],
-      "kind": "vector",
-      "module": "fieldwork",
-      "file": "systems/fieldwork/sim/knots.py",
-      "note": "",
       "citation": null,
       "citation_grade": null
     },

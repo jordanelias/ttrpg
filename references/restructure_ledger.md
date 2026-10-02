@@ -2795,3 +2795,28 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 | `tools/export_world_initial_state.py` | `FORK:fd321c81` | FORKED (2026-10-01, plan position `29d-ii` — the exporter and its blocking `--check` (CI `validators` job, `tools/valoria_local.py`). It was the single writer of `world_initial_state.json`; with the artifact unread, the gate defended nothing the game loads) |
 | `engine/engine_params/world_initial_state.json` | `FORK:fd321c81` | FORKED (2026-10-01, plan position `29d-ii` — the cooked artifact, read only by `engine/substrate/world_initial_state.py`. `tests/valoria/test_engine_params_bridge.py`'s `ENGINE_READERS` row for it is removed in the same commit) |
 | `tests/valoria/test_world_initial_state.py` | `FORK:fd321c81` | FORKED (2026-10-01, plan position `29d-ii` — its subject was the chain above: the authored-source validation, the exporter's refusals and the artifact's pin against the seeded goldens' recorded values; it imported nothing else, and every module it exercised is retired) |
+
+<!-- 2026-10-02, plan position `29f` (master workplan v8, `_part4` B3): `systems/fieldwork/`, whole. Its only Python
+     module, `knots.py`, ran the ED-912 bond-strain gauge for nobody: `systems/threadwork/sim/opposing.py` stopped
+     importing `sustain_knot` at position `27`, and the only remaining importer was its own test
+     (`engine/tests/test_knots_ed912.py`), which went with it. The season carries a `knot` Tenure kind and the
+     `firsthand_via_knot` channel but no gauge; where ED-912's gauge was meant to map is recorded, with its source
+     UNLOCATED and not invented, in `engine/season/hole_register.yaml` `H-182`'s `cite`. FORK ref is `59004d86`, the
+     `main` commit under this branch (a branch commit SHA does not survive a squash merge, so the ref must already be
+     an ancestor of `main`); every row was checked with `git cat-file -e 59004d86:<path>` (exit 0) before it was
+     written. One exact-file row each. Consequences edited in the same commit: `systems/fieldwork/sim` left
+     `tools/export_sim_params.py`'s `SCAN_DIRS`, and `engine/engine_params/sim_params.json`,
+     `value_pointer_links.json` (`tools/link_values_pointers.py --build`) and `game_constants.json`
+     (`tools/export_game_constants.py`, whose `MAPPING` lost `KNOT_FORMATION_TN` / `KNOT_FORMATION_OB`, so the
+     port's parity reader has no oracle value for either) were re-derived, never hand-edited;
+     `references/module_contracts.yaml`'s `fieldwork_knots` row and `registers/mechanics_index.yaml`'s
+     `sim_module:` lines went to `none` / `null`, and `canonical_sources.yaml`'s pin on `module_contracts.yaml`
+     was re-synced. NOT retired, and read by code:
+     `systems/characters/sim/conviction.py` (position `29e` owns it; its caller `knots.py` is gone). -->
+
+| Old path | New path | Status |
+|---|---|---|
+| `systems/fieldwork/sim/knots.py` | `FORK:59004d86` | FORKED (2026-10-02, plan position `29f` — `form_knot`, `sustain_knot`, `check_knot_rupture`, `apply_knot_loss` and the ED-912 bidirectional −5..+5 bond-strain gauge (Distant −2..+5 start 0; Close −5..+5 start −2; break at +5; −5 Tempered). Its last production caller, `opposing.py`'s `sustain_knot`, went at position `27`; its module-level knot store was read by nothing in the season. The gauge's definition is quoted in `H-182`'s `cite`) |
+| `engine/tests/test_knots_ed912.py` | `FORK:59004d86` | FORKED (2026-10-02, plan position `29f` — the ED-912 regression for `knots.py` (tier range, +5 break, Tempered absorb, Disposition −3, the Honor Scar landing in `conviction`'s store). It imported nothing else but `conviction` (for the Scar-lands and unknown-name-raises cases); its subject is retired) |
+| `systems/fieldwork/__init__.py` | `FORK:59004d86` | FORKED (2026-10-02, plan position `29f` — package marker of the retired FI-lane sim tree; the design documents it described are quarantined under `.designs/systems/fieldwork/`) |
+| `systems/fieldwork/sim/__init__.py` | `FORK:59004d86` | FORKED (2026-10-02, plan position `29f` — package marker of `systems.fieldwork.sim`; its docstring named only `knots.py` as live) |

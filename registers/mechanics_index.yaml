@@ -287,7 +287,7 @@ mechanics:
       - "systems/fieldwork/fieldwork_v30.md"
       - "systems/_architecture/complete_systems_reference.md#part-5"
     params: "engine/params/fieldwork.md"
-    sim_module: systems/fieldwork/sim/fieldwork.py
+    sim_module: null    # was systems/fieldwork/sim/fieldwork.py, a stubwire armature stub deleted at plan position 28-0 (FORK:c9daad6); systems/fieldwork/ is gone since 29f
     test_status: not_implemented
     dependencies:
       mechanics: [die_rule_d10, investigation_npe, disposition_track, evidence_track]
@@ -297,7 +297,7 @@ mechanics:
     scale: personal
     faction: universal
     canon_sources: ["systems/fieldwork/investigation_systems_v30.md"]
-    sim_module: systems/fieldwork/sim/investigation.py
+    sim_module: null    # was systems/fieldwork/sim/investigation.py, a stubwire armature stub deleted at plan position 28-0 (FORK:c9daad6)
     test_status: not_implemented
     dependencies:
       mechanics: [fieldwork, npe]
@@ -307,7 +307,7 @@ mechanics:
     scale: personal
     faction: universal
     canon_sources: ["systems/fieldwork/fieldwork_v30.md#section-5"]
-    sim_module: systems/fieldwork/sim/fieldwork.py
+    sim_module: null    # was systems/fieldwork/sim/fieldwork.py, deleted at plan position 28-0 (FORK:c9daad6)
     test_status: not_implemented
     notes: "Cap by Bonds attribute (same formula as Knot Max per derived_stats §10.1)."
 
@@ -315,7 +315,7 @@ mechanics:
     scale: personal
     faction: universal
     canon_sources: ["systems/fieldwork/fieldwork_v30.md"]
-    sim_module: systems/fieldwork/sim/fieldwork.py
+    sim_module: null    # was systems/fieldwork/sim/fieldwork.py, deleted at plan position 28-0 (FORK:c9daad6)
     test_status: not_implemented
 
   conviction_scar:
@@ -359,7 +359,7 @@ mechanics:
       - "systems/articulation/articulation_layer_v30.md#section-6"
       - "systems/_architecture/derived_stats_v30.md#section-10-1"
     unified_canon_target: "systems/fieldwork/knots_v30.md (Pass 2g canonized 2026-05-17)"
-    sim_module: systems/fieldwork/sim/knots.py
+    sim_module: null    # was systems/fieldwork/sim/knots.py (the ED-912 gauge, form/sustain/rupture/loss); retired at plan position 29f (2026-10-02), FORK:59004d86. The gauge's definition and the unlocated source of its Tenure.degree mapping are in engine/season/hole_register.yaml H-182's cite
     pp: ED-912   # was PP-632 (struck); tier/gauge/rupture model reframed 2026-06-28 (ED-912/ED-841), propagated here 2026-07-07 (ED-FI-0003)
     test_status: not_implemented
     dependencies:

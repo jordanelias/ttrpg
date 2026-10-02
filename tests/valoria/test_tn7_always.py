@@ -151,10 +151,14 @@ def test_the_tn_constant_sweep_actually_found_constants():
     deleted -- five in `systems/factions/sim/` (`_TN` x3, `PARL_TRANSFER_TN`, `TRIBUNAL_TN`) and
     `BG_VOTE_TN` in `systems/social_contest/sim/parliamentary_vote.py`. The four left are
     `sigma_leverage.TN_STANDARD`, `combat.WEAPON_TN_BASE`, `knots.KNOT_FORMATION_TN` and
-    `operations.TN_STANDARD`; `knots.py` leaves at `29f`, which re-pins this again.
+    `operations.TN_STANDARD`.
+
+    RE-MEASURED at plan position `29f` (2026-10-02): 4 -> 3. `knots.KNOT_FORMATION_TN` lived in
+    `systems/fieldwork/sim/knots.py`, retired with its tree. The three left are
+    `sigma_leverage.TN_STANDARD`, `combat.WEAPON_TN_BASE` and `operations.TN_STANDARD`.
     """
     found = _tn_constants()
-    assert len(found) >= 4, (
+    assert len(found) >= 3, (
         f"the TN-constant sweep found only {len(found)} constants — the pattern has probably "
         "stopped matching, and the test above is now vacuous"
     )

@@ -163,7 +163,7 @@ scales:
       refused because no computed act declares a works (`H-165`); no domain-action mechanism exists.
 
   - scale:    "investigations / detective / interactive fiction"
-    subsystem: ["systems/fieldwork (sim/knots.py only)"]
+    subsystem: ["systems/fieldwork (deleted)"]
     retention: retire-set
     in_loop:   false
     note: >-
@@ -181,7 +181,10 @@ scales:
       the one composition role left is `mass_battle.resolve_field` (`references/module_contracts.yaml`'s
       `composition_roles:` block). `fieldwork` stays in `R04_PENDING_SUBSYSTEMS`
       (`tests/valoria/test_engine_does_not_import_systems.py`) with no role to hold it there:
-      `R04_PENDING_ROLES` is empty.
+      `R04_PENDING_ROLES` is empty. ⚠ THE TREE ITSELF WENT AT PLAN POSITION `29f` (2026-10-02): its
+      last module, `knots.py` (the ED-912 bond-strain gauge, no caller since `27`), is retired with a
+      `FORK:` row and `systems/fieldwork/` no longer exists; where the gauge was meant to map is
+      recorded in `hole_register.yaml` `H-182`'s `cite`.
 
 rows:
 

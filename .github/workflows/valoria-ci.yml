@@ -437,10 +437,11 @@ jobs:
       # RE-SCOPED 2026-10-01 (plan position `28-iii`): the five campaign-scale files this job was
       # built around -- the `mc_v18` goldens, the cross-scale reach and population probes, the
       # combat-bridge seam -- were deleted with the driver. What remains in `engine/tests` is the
-      # sigma-leverage parity golden, the contest kernel, and the knots and thread-mending ED probes.
-      # `parliamentary_action` left with its tree at `29b` and the accounting accord-drift probe at
-      # `29a`; two more leave with theirs (`2-ii`, `29f`), the thread-mending probe stays (`27`), and
-      # the sigma-leverage parity moves out when this job folds.
+      # sigma-leverage parity golden, the contest kernel, and the thread-mending ED probe.
+      # `parliamentary_action` left with its tree at `29b`, the accounting accord-drift probe at
+      # `29a` and the knots ED probe at `29f` (2026-10-02); one more leaves with its own (`2-ii`),
+      # the thread-mending probe stays (`27`), and the sigma-leverage parity moves out when this job
+      # folds.
       # SERIAL still: `-n auto` would need pytest-xdist in the install step above, for a job that
       # no longer needs the speed.
       - run: python -m pytest engine/tests -q

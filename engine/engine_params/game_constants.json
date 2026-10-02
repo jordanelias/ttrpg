@@ -4,16 +4,12 @@
   "contract": "MAPPING pairs are hand-confirmed against BOTH call sites and are the only pairs the parity checker may fail on. COLLISIONS are name look-alikes that are NOT the same quantity \u2014 never promote one into MAPPING without reading both call sites. DIVERGENCES are real model disagreements that need a ruling, not a value copy; the checker reports them and the list can only shrink.",
   "constants": {
     "COMBAT_POOL_MINIMUM": 5,
-    "KNOT_FORMATION_OB": 2,
-    "KNOT_FORMATION_TN": 7,
     "SEASONS_PER_YEAR": 4,
     "TN_STANDARD": 7,
     "WEAPON_TN_BASE": 7
   },
   "owners": {
     "COMBAT_POOL_MINIMUM": "combat.COMBAT_POOL_MIN",
-    "KNOT_FORMATION_OB": "fieldwork.KNOT_FORMATION_OB",
-    "KNOT_FORMATION_TN": "fieldwork.KNOT_FORMATION_TN",
     "SEASONS_PER_YEAR": "overview.SEASONS_PER_YEAR",
     "TN_STANDARD": "engine.autoload.TN_STANDARD",
     "WEAPON_TN_BASE": "combat.WEAPON_TN_BASE"

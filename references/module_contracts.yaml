@@ -343,13 +343,14 @@ modules:
     aliases: ["Knots"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "fieldwork"   # Key Type Registry vocabulary
     doc: .designs/systems/fieldwork/reference/knots_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    sim_module: systems/fieldwork/sim/knots.py   # OI-54 (ED-IN-0097, W4): matches
-      # mechanics_index.yaml's `knots` entry directly (module alias is literally "Knots"); this
-      # module's gap_notes already flag it as needing a rebuild (C-TW-12) — real code, imperfect
-      # fidelity, still a genuine G_code join. The Evidence/Disposition Track rows of this
-      # contract's state: are implemented in the SIBLING systems/fieldwork/sim/fieldwork.py
-      # (mechanics_index `disposition_track`/`evidence_track`), not in knots.py — disclosed, not
-      # papered over; knots.py is picked as primary because the module/alias name matches it.
+    sim_module: none   # RETIRED AT PLAN POSITION `29f` (2026-10-02). It was `systems/fieldwork/sim/knots.py`
+      # (OI-54: formation, the ED-912 -5..+5 bond-strain gauge, rupture and loss); `systems/fieldwork/` is
+      # deleted (each file has an exact row in `references/restructure_ledger.md`, ref 59004d86), and its last
+      # caller, `opposing.py`'s `sustain_knot`, went at position `27`. The season carries a `knot` Tenure kind
+      # and no gauge; the gauge's definition, and the unlocated source of its `Tenure.degree` mapping, are
+      # recorded in `engine/season/hole_register.yaml` `H-182`'s `cite`. The Evidence/Disposition Track rows
+      # below were never in `knots.py`. The row is kept, not deleted: removing a contract row is its own
+      # change, and `doc:` above still resolves.
     scales: [personal, scene]
     resolver: dice_pool   # Fieldwork Pool (fieldwork_v30 §2); knot formation procedure (knots_v30 §3.2)
     state:
@@ -391,7 +392,7 @@ modules:
       godot: no-oracle
       port_rank: 8
       parity: key-log
-      note: fieldwork/investigation raise; knots built but the scene runner is a stub.
+      note: fieldwork/investigation raise; the scene runner is a stub, and `knots.py` is retired (plan position `29f`).
 
   - module: scene_slate
     registry_system: "scene_slate"   # Key Type Registry vocabulary
