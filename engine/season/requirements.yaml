@@ -70,8 +70,11 @@ scales:
     note: >-
       `Person` carries `pursuits`, `ledger`, `stance`, `capability` — but NOTHING
       creates or develops a person: no generation, no progression, no chronicle. ⚠ `capability` is
-      EMPTY on every person in the corpus (only `probes.py::_zero_capability` touches it, to zero
-      it), which is why R-09's roll will vary by seed and not yet by person. W27 is the cast.
+      EMPTY on 429 of the 430 persons the 143 corpus cases build, and holds `{copying: 3}` on one
+      (NPC-088's `p_a`) -- MEASURED 2026-10-02 with `corpus_run.cast_overlay()` and `build_at`; R-09's
+      `measured:` carries the run. Its one corpus writer is `build_at` seating a cast entry's own
+      authored `capability` (`corpus_run.py:537-540`), which is why R-09's roll varies by seed and
+      not by person in 142 of the 143 cases. W27 is the cast.
   - scale:    "grand strategy politics"
     subsystem: ["systems/factions (deleted)", "systems/settlements (geography YAML, svg, package marker)", "systems/world (adjacency_map.jsx only)"]
     retention: retire-set
@@ -186,8 +189,10 @@ rows:
     statement: "decisions must propagate"
     status: not_met
     measured: >-
-      R3 (cross-person propagation) passes **22/30 NPC and 34/59 ARC** on the cases that are
-      representable, and the planted-edge control fires — so the DETECTOR works. But the
+      R3 (cross-person propagation) passes **46/46 NPC and 96/97 ARC** over the full 143-case
+      corpus (`corpus_run`'s `check R3` rows, a fresh run 2026-10-02, tree `444a00e1`; this sentence
+      read 22/30 and 34/59, over the 89-case live set, until then), and the planted-edge control
+      fires — so the DETECTOR works. But the
       forking exercise measured 2,403 forks with 100% reconvergence, and after W-A/W-B the
       later-decision divergence is only ~4%. Propagation is structurally present and
       behaviourally near-absent.
@@ -220,7 +225,7 @@ rows:
       `not_met` on the instrument that set it, not on the slice that moved.
       ⚠ **AND THE OPENING R3 FIGURES MOVED TOO — THEY READ 30/30 NPC AND 54/59 ARC UNTIL
       ED-FI-0009. THE FALL IS A MEASURED BEHAVIOURAL CHANGE, NOT A STALE LINE (measured
-      2026-09-10, and it is why the two numbers at the top of this row now read 22/30 and
+      2026-09-10, and it is why the two numbers at the top of this row then read 22/30 and
       34/59).** The same command on both sides of that commit —
       `python -m engine.season.harness.corpus_run`, at `b154ce8` (before) and `5a35084` (after)
       — moves **28 cases from R3 true to R3 false and none the other way**, 8 NPC and 20 ARC.
@@ -349,6 +354,20 @@ rows:
       `False -> True`: byte-identical to run (i) on that line, and it still does not print which ARC case fails. `wd_collect.py`
       reads 77.22% / 42.59% / 38.58% at `2x3` (R-02 carries the figures and the label of each). Nothing about this row's two
       clauses moved across Batch 2's builds.
+      ⚠⚠ **PLAN POSITION `21`-REST (U10's BOOKKEEPING TAIL), 2026-10-02: THE OPENING R3 SENTENCE
+      REFRESHED FROM ONE FRESH RUN OF THIS ROW'S OWN `measure:`.** Tree `444a00e1`, clean worktree.
+      THIS RUN: `python -m engine.season.harness.corpus_run`, exit 0, about 2.5 minutes. It printed
+      `check R3: 46 of 46 pass` (NPC), `check R3: 96 of 97 pass` (ARC), `CONTROL — planted
+      cross-person edge: R3 False -> True  (the detector works)` and `DISTINCT WORLDS RUN 143`. Those
+      are the figures runs (i) and (ii) above state (COMMITTED, those paragraphs), and the whole
+      stdout is identical, line for line, to the orchestrator's earlier run of the same command
+      (`diff` of the two files, DERIVED: no difference). **WHAT THIS DOES NOT SHOW:** which ARC case
+      fails (`corpus_run` prints a count, not an id); the reconvergence rate (R-02's, `wd_collect.py`,
+      not re-run: about 75 minutes); or anything about between-person propagation beyond the PRESENCE
+      of a cross-person edge, which is all R3 asks. **THE RISE FROM THE OLD OPENING FIGURES IS PARTLY
+      A DENOMINATOR CHANGE** (89 live cases then, all 143 now, as the 2026-09-30 paragraph says), not
+      a re-measured gain. No contradiction with this row's status: `not_met` on clause 1 (96/97),
+      unchanged.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [W-F, H-111, H-116]
 
@@ -549,6 +568,24 @@ rows:
       own packing used to strand: a person whose queue empties with budget left is asked again,
       where the one-pass loop simply lost the remainder. Roughly 6% more deposits in the headless
       world. Neither is what R-03 asked for and both are consequences of it.
+      ⚠⚠ **PLAN POSITION `21`-REST (U10's BOOKKEEPING TAIL), 2026-10-02: THIS ROW'S `measure:`
+      RE-RUN, FRESH.** Tree `444a00e1`, clean worktree. THIS RUN (both exit 0):
+      `python -m engine.season.harness.headless --case NPC-088 --seasons 2 --seed 0` printed
+      `season 0: rounds=5 acts=23 events=24 deposits=123`, `season 1: rounds=5 acts=22 events=153
+      deposits=142`, `verbs the fold can execute: 34 of 44` and `CONTENT HASH:
+      293067ea0b02f3219043de3a6947c740`; and `python -m pytest engine/season/tests -q -k test_u2_`
+      printed `5 passed, 834 deselected`, the five including the acceptance above
+      (`test_u2_a_deposit_in_one_round_changes_a_later_rounds_candidate_set_in_the_same_season`) and
+      the control arm (`test_u2_the_one_round_arm_reproduces_the_pre_tick_loop`). So the round loop
+      still runs five rounds a season on a real corpus case and the tests that made this row `met` still
+      pass. **WHAT THIS RUN DOES NOT SHOW:** (a) the `50 -> 84 of 143` R3 and `14 -> 38` executed-set
+      figures above are COMMITTED history from `U2`'s own commit against a control worktree; no control
+      arm was run here, and the same corpus now reads R3 142 of 143 (46 + 96, R-01, DERIVED from this
+      session's `corpus_run`), a different tree with no control, so the two are neither compared nor in
+      conflict; (b) the headless verb-mix (10 verbs to 6) and the roughly 6% more deposits are not
+      printed by this command and were not re-read; (c) the `p_bailiff` 0 against `p_carin` 45
+      question counts are `build_world(0)` figures this command does not run. No contradiction found
+      with this row's `met`.
     measure: "python -m engine.season.harness.headless --case NPC-088 --seasons 2 --seed 0  # and `pytest engine/season/tests -q -k test_u2_`, which is what §0.2 accepts"
     blocks: [W17]
 
@@ -611,7 +648,35 @@ rows:
       `Faction`-as-actor either (by design, not by omission: a faction never acts). A duchy/realm
       case now runs through the SAME ordinary person-scale verb table as before, at a higher rung
       — which clears the census, and is not yet the strategic layer the statement names.
-    measure: "python -m engine.season.harness.corpus_run  # 'unrepresentable scales:' line"
+      ⚠⚠ **PLAN POSITION `21`-REST (U10's BOOKKEEPING TAIL), 2026-10-02: THE `measure:` MOVED TO THE
+      INSTRUMENT THAT READS THE STATED REASONS, AND TWO READINGS, WITH THE TREE OF EACH.**
+      **(a) `corpus_run`, FRESH, tree `444a00e1`** (exit 0; THIS RUN): still no `unrepresentable
+      scales:` line, still `DISTINCT WORLDS RUN 143 (scales ['duchy', 'person', 'realm',
+      'settlement'], ...)`, so the census this row opened with stays empty. `levy` is still in
+      `VERBS ONLY REFUSED`, which now reads **7** (`build`, `commit`, `found`, `levy`, `migrate`,
+      `survey`, `work`) where the paragraph above quotes 8: `dispatch` left the set and is in `10
+      foldable but never even attempted`, a CHANGED FIGURE, not a changed reason (reason (1) below
+      rests on `levy`, which holds). **(b) `python -m engine.season.harness.aperture 4 0`, FROM THAT
+      RUN -- the orchestrator's run, NOT re-run here (about 25 minutes), output written 2026-10-02
+      03:18 UTC and labelled by the orchestrator `tree 23bea9da`; HEAD is 10 commits later, 19
+      `engine/` files among them (`populated.py`, `offices.yaml` and `verb_table.yaml` included), so
+      these are that tree's figures and not `444a00e1`'s.** Its control line reads `populated.run
+      acts 2939 vs measured 2939; content_hash EQUAL` (the instrument watched four seasons without
+      moving them). REALM, seed 0, 4 seasons, 83 persons at build, 29 seated: **`levy` elig 16/0,
+      formed 16, offered 16, att 23, ex 0, refused as `levy.refused` 19 + `levy.unauthorized` 4**;
+      SPINE (13 seated persons): `levy` att 17, ex 0, refused 14 + 3. So reason (1) HOLDS under the
+      new instrument: no seat-based `levy` executes in either world. The other seat-gated rows at
+      REALM, att/ex: `confer` 70/0 · `convene` 12/2 · `determine` 20/1 · `dispatch` 86/16 ·
+      `establish` 19/0 · `issue` 30/6 · `open_case` 28/7 · `revoke` 15/0 · `march` 16/16 (its `both`
+      column is a two-Event convention, so not a split); the management-flavoured rows `build` 65/0 ·
+      `found` 70/0 · `work` 183/0 · `migrate` 137/0 · `survey` 165/10. **WHAT NEITHER SHOWS:** the
+      CONJUNCT a `levy` refusal fails on (the aperture prints the refusal KIND, so `H-163`'s
+      purview reading is not re-observed); whether an executing seat-gated act is a strategic action
+      in the statement's sense (they run through the same person-scale verb table); or reason (2),
+      the absence of a Domain-Action mechanism, which no instrument counts. The two readings are
+      different worlds (143 corpus cases against one populated realm and one spine) and are not
+      summed. Status stays `partial`.
+    measure: "python -m engine.season.harness.aperture 4 0  # the per-verb lines: `levy` and the seat-gated rows (about 25 minutes); `corpus_run` prints no 'unrepresentable scales:' line any more, the census is empty"
     blocks: [W10, W13]
 
   - id: R-05
@@ -1051,12 +1116,15 @@ rows:
       (54 of 54 person opponents, 52 `obstacle_default`) was NOT re-measured.
       **WHY `partial` AND NOT `met`, STATED RATHER THAN LEFT TO BE FOUND.** R-09 asks that chains
       be probabilistic; what is probabilistic today is the ROLL, not the CHAIN, and it varies by
-      SEED and FIXTURE rather than by PERSON. `Person.capability` is empty on every corpus person
-      -- one writer, and it zeroes it -- so `_pool_of` returns `pool_default` for everybody and
+      SEED and FIXTURE rather than by PERSON. `Person.capability` is empty on 429 of the 430
+      persons the 143 corpus cases build (MEASURED 2026-10-02 with `corpus_run.cast_overlay()` and
+      `build_at`; the last paragraph of this row carries the run) and holds `{copying: 3}` on one,
+      NPC-088's `p_a`. Its one corpus writer is `build_at`'s seating of a cast entry's own authored
+      `capability` (`corpus_run.py:537-540`), so `_pool_of` returns `pool_default` for those 429 and
       `_obstacle_of` returns `obstacle_default` for every non-person subject. `lev` is 0.0 with no
       producer, stated as zero because a fabricated leverage would be a number nobody chose. It
-      varies by person the day capability is written, which is character development and out of
-      this arc (`W27`'s cast, 0 of 143 cases).
+      varies by person only where capability is written, which is character development and out of
+      this arc (`W27`'s cast: 13 of 143 cases carry a `cast:` overlay, one carries a `capability`).
       ⚠ **AND THE ROW IT REPLACES WAS TRUE WHEN WRITTEN.** It read *"THERE IS NO ROLL ANYWHERE IN
       THE LOOP"*, resting on a scan that asserted NO module produces a margin. That scan is now a
       SET EQUALITY on exactly one owner rather than an emptiness claim -- `S27.2` names a second
@@ -1068,5 +1136,34 @@ rows:
       back from `{}` to `{reconstruct}`, which is between-world variety `U2` had bought. Distinct
       executed sets rose 38 -> 40 and R3 cross-person propagation was UNMOVED at 84 of 143 -- so
       `U1` changed what people do, not whether what one does reaches another.
+      ⚠⚠ **PLAN POSITION `21`-REST (U10's BOOKKEEPING TAIL), 2026-10-02: THIS ROW'S `measure:`
+      RE-RUN, FRESH, AND ITS `-k` SELECTS ONE TEST.** Tree `444a00e1`, clean worktree. THIS RUN (all
+      exit 0): **(a)** `python -m pytest engine/season/tests -k 'we_only_a_verb or u1_'` printed `1
+      passed, 838 deselected`. The one test is `test_we_only_a_verb_that_declares_contests_can_be_graded_today`;
+      **`u1_` matches no test name in the tree** (`--collect-only` lists that test alone, and `grep 'def
+      test_u1_'` over `engine/season/tests` finds none), so the command exercises one test and not the
+      `U1` acceptance this row narrates. **(b)** `python -m engine.season.harness.headless --seasons 2
+      --seed 0` printed the same lines and the same `CONTENT HASH: 293067ea0b02f3219043de3a6947c740`
+      as R-03's run, because `NPC-088` is `headless`'s default case. With `--log` added: `news.told` 1
+      and `news.untold` 0 at seed 0; 0 and 0 at seed 7 (hash `8186371ca113d72c4907be5cf36fb652`).
+      That agrees with the T4 paragraph's count, "one telling at seed 0 and none at seed 7"; the log's
+      kind line carries no degree, so its "(Success)" was not re-read. **(c) THE CAPABILITY COUNT**,
+      by `corpus_run.cast_overlay()` and `build_at(apply_rescale(case), 0)` over all 143 cases (a
+      scratch script, not committed): 13 cases carry a `cast:` overlay with 30 entries, 6 of them
+      `WAITS_ON_PLAYER` and never seated, and exactly ONE entry has a `capability` key -- NPC-088's
+      Carin Vedel, `{copying: 3}`. The built worlds hold 430 persons at build (`corpus_run`'s own 418
+      is `len(w.persons)` at the END of a run, `corpus_run.py:898`) and one carries a non-empty
+      `Person.capability`, NPC-088's `p_a`. `tell` and `speak` are the two verbs that draw on `copying`
+      (`rosters.yaml: verb_capability`). **THE ROW'S OWN SENTENCE "`Person.capability` is empty on every
+      corpus person -- one writer, and it zeroes it" (2026-09-11) IS CONTRADICTED BY THE TREE** and is
+      rewritten above to 429 of 430; `probes.py:579` still zeroes it, on `tiny_world`'s probe fixture
+      and not on a corpus person, and `rosters.yaml: verb_capability`'s `note:` still carries the old
+      sentence (outside this file). **WHAT THIS RUN DOES NOT SHOW:** the telling counts of the T4 and
+      `F1` paragraphs (27 NPC cases, 3 seasons: 24 told against 29 untold) come from a one-off script
+      this `measure:` does not run, and were not re-measured; the obstacle breakdown (52 of 54
+      `obstacle_default`) predates `17-cast`, which seats NPC-088's `copying: 3`, and was not re-read,
+      so "corpus hearers carry no capability" in the T4 paragraph is true of its own date and not of
+      this tree. Status stays `partial`: the roll still varies by seed and fixture, and by person in
+      one case of 143.
     measure: "python -m pytest engine/season/tests -k 'we_only_a_verb or u1_' ; python -m engine.season.harness.headless --seasons 2 --seed 0"
     blocks: [W23, H-98]
