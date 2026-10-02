@@ -392,15 +392,14 @@ RETIRED_SYMBOLS = frozenset({
     'resolve_mass_battle', '_faction_to_unit', '_morale_start_from_stability',
 })
 
-# CALL SITES, not symbols, that plan position `27` (2026-10-01) struck. `apply_ms_delta` is still
-# defined and live in `systems/overview/sim/ms_track.py` (until `29a`-ms), so a global
-# `RETIRED_SYMBOLS` entry would disarm every anchor into that file. `sustain_knot` was defined in
-# `systems/fieldwork/sim/knots.py`, which plan position `29f` (2026-10-02) retired with its tree: an
-# anchor into that file now resolves through its `FORK:` row (see `_is_retired`), and the pair below
-# is what still covers the anchors at the OLD CALL SITE in `opposing.py`. What 27 removed is the
-# threadwork seam that CALLED them, so the retirement is keyed on the (file, symbol) pair: an archived
-# anchor naming the symbol at the old call site is correct about a tree that no longer exists, and
-# the same symbol anywhere else is still checked.
+# CALL SITES, not symbols, that plan position `27` (2026-10-01) struck. `apply_ms_delta` was defined
+# in `systems/overview/sim/ms_track.py`, which plan position `29a`-ms (2026-10-02) retired with its
+# tree, and `sustain_knot` in `systems/fieldwork/sim/knots.py`, which `29f` retired the same day: an
+# anchor into either file now resolves through its `FORK:` row (see `_is_retired`), and the pairs
+# below are what still cover the anchors at the OLD CALL SITES in `opposing.py` and `co_movement.py`.
+# What 27 removed is the threadwork seam that CALLED them, so the retirement is keyed on the (file,
+# symbol) pair: an archived anchor naming the symbol at the old call site is correct about a tree
+# that no longer exists, and the same symbol anywhere else is still checked.
 RETIRED_CALL_SITES = frozenset({
     ('systems/threadwork/sim/opposing.py', 'apply_ms_delta'),
     ('systems/threadwork/sim/opposing.py', 'sustain_knot'),

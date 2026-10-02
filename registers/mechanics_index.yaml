@@ -137,7 +137,7 @@ mechanics:
     scale: primitive
     faction: universal
     canon_sources: ["engine/params/core.md#MS Baseline Decay"]
-    sim_module: systems/overview/sim/ms_track.py
+    sim_module: null    # was systems/overview/sim/ms_track.py (apply_ms_baseline_decay / apply_ms_delta, the MS world-track); retired at plan position 29a-ms (2026-10-02), FORK:59004d86. The season has no MS clock
     test_status: not_implemented
     notes: "PP-255. MS world-track per-arc decay."
 
@@ -830,7 +830,7 @@ mechanics:
     scale: peninsular
     faction: universal
     canon_sources: ["engine/params/core.md#MS Baseline Decay"]
-    sim_module: systems/overview/sim/ms_track.py
+    sim_module: null    # was systems/overview/sim/ms_track.py (apply_ms_baseline_decay / apply_ms_delta, the MS world-track); retired at plan position 29a-ms (2026-10-02), FORK:59004d86. The season has no MS clock
     test_status: not_implemented
     notes: "Mending Stability world-track. PP-255 baseline decay."
 

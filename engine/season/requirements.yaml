@@ -152,7 +152,7 @@ scales:
       tactical grid). This is unbuilt design, not an unwired seam, and it has no work item in the
       execution plan.
   - scale:    "settlement management / city building / domain actions"
-    subsystem: ["systems/settlements (geography YAML, svg, package marker)", "systems/overview (sim/ms_track.py only)"]
+    subsystem: ["systems/settlements (geography YAML, svg, package marker)", "systems/overview (deleted)"]
     retention: retire-set
     in_loop:   false
     note: >-
@@ -165,6 +165,9 @@ scales:
       `work` are declared in `verb_table.yaml`; in the realm only `restore` executes (cohorts mending
       their own settlement's fabric since `24f`), while `found`, `build` and `work` are formed and
       refused because no computed act declares a works (`H-165`); no domain-action mechanism exists.
+      ⚠ `systems/overview/` WENT AT PLAN POSITION `29a`-ms (2026-10-02): its last module, `sim/ms_track.py`
+      (the Mending Stability world-track, no importer since `27`), is retired with a `FORK:` row; the season
+      carries no MS clock (`loop/census.py`: no clock generates anything).
 
   - scale:    "investigations / detective / interactive fiction"
     subsystem: ["systems/fieldwork (deleted)"]

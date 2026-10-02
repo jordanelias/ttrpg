@@ -3,17 +3,16 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 109,
-    "total": 245,
-    "uncited": 136,
+    "total": 240,
+    "uncited": 131,
     "of_which_assumption_grade": 3
   },
-  "count": 245,
+  "count": 240,
   "by_module": {
     "engine.autoload": 6,
     "engine.season": 11,
     "combat": 12,
     "mass_battle": 148,
-    "overview": 5,
     "social_contest": 31,
     "threadwork": 32
   },
@@ -2122,61 +2121,6 @@
       "kind": "table",
       "module": "mass_battle",
       "file": "systems/mass_battle/sim/workbench/trace.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "overview.MS_BASELINE_DECAY_PER_YEAR",
-      "name": "MS_BASELINE_DECAY_PER_YEAR",
-      "value": -1,
-      "kind": "scalar",
-      "module": "overview",
-      "file": "systems/overview/sim/ms_track.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "overview.MS_CEILING",
-      "name": "MS_CEILING",
-      "value": 100,
-      "kind": "scalar",
-      "module": "overview",
-      "file": "systems/overview/sim/ms_track.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "overview.MS_FLOOR",
-      "name": "MS_FLOOR",
-      "value": 0,
-      "kind": "scalar",
-      "module": "overview",
-      "file": "systems/overview/sim/ms_track.py",
-      "note": "Rupture",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "overview.MS_START",
-      "name": "MS_START",
-      "value": 60,
-      "kind": "scalar",
-      "module": "overview",
-      "file": "systems/overview/sim/ms_track.py",
-      "note": "videogame canonical (Jordan 2026-06-06); the prior 60/72 mode-split was deprecated framing",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "overview.SEASONS_PER_YEAR",
-      "name": "SEASONS_PER_YEAR",
-      "value": 4,
-      "kind": "scalar",
-      "module": "overview",
-      "file": "systems/overview/sim/ms_track.py",
       "note": "",
       "citation": null,
       "citation_grade": null

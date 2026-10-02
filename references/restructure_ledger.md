@@ -2853,3 +2853,34 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 | `systems/characters/sim/conviction.py` | `FORK:59004d86` | FORKED (2026-10-02, plan position `29e` — the Conviction Scar store: `apply_conviction_scar`, `check_conviction_threshold`, the per-Conviction 1 / 2 / 3+ thresholds, the Thread-witnessing season cap and the Truth scaling, plus the `CONVICTIONS` re-binding. Its last production caller, `knots.py`, went at `29f`; its store was read by nothing in the season. The season's scar write is `_scar` (`H-128`); the Scar-count rebuild is `12` / `H3`'s, not built here) |
 | `systems/characters/sim/__init__.py` | `FORK:59004d86` | FORKED (2026-10-02, plan position `29e` — package marker of `systems.characters.sim`; its docstring named only `conviction` as live, after `beliefs` and `companion` went at the `28-0 follow-up`) |
 | `systems/characters/__init__.py` | `FORK:59004d86` | FORKED (2026-10-02, plan position `29e` — package marker of the retired characters sim tree; the design documents it described are quarantined under `.designs/systems/characters/`) |
+
+<!-- 2026-10-02, plan position `29a`-ms (master workplan v8, `_part4` B3): `systems/overview/`, whole, the last
+     of the `29f` -> `29e` -> `29a`-ms chain. Its one remaining module, `sim/ms_track.py`, was the Mending
+     Stability (MS) world-track: the constants `MS_FLOOR` 0, `MS_CEILING` 100, `MS_START` 60,
+     `MS_BASELINE_DECAY_PER_YEAR` -1 and `SEASONS_PER_YEAR` 4, plus `apply_ms_baseline_decay` and
+     `apply_ms_delta`, which clamped and wrote `world.clocks['MS']`. Its last importers,
+     `systems/threadwork/sim/{co_movement,opposing}.py`, stopped importing it at position `27`; `accounting.py`,
+     its other caller, went at `29a`, and nothing was left to call either function (an AST walk over every tracked
+     `*.py` found no import of `systems.overview` before this commit's deletion, and none after). WHAT THE SEASON
+     KEEPS is not this module: the season has no MS clock and no analogue by architecture
+     (`engine/season/loop/census.py`: "NO CLOCK GENERATES ANYTHING"). Threadwork still REPORTS the number
+     (`OpposingResult.ms_delta`, `OperationResult.mending_stability_delta`) and writes it nowhere. Nothing was built
+     in its place here. COVERAGE DROPPED, once: none that ran. `ms_track` had no test of its own; the only tests that
+     named it are `tests/valoria/test_flow_skeletons.py`'s two `RETIRED_CALL_SITES` pairs, which key on the OLD
+     CALL SITE and stay. FORK ref is `59004d86`, the `main` commit under this branch (a branch commit SHA does not
+     survive a squash merge, so the ref must already be an ancestor of `main`); every row was checked with
+     `git cat-file -e 59004d86:<path>` (exit 0) before it was written. One exact-file row each. Consequences edited
+     in the same commit: `systems/overview/sim` left `tools/export_sim_params.py`'s `SCAN_DIRS`;
+     `engine/engine_params/sim_params.json`, `value_pointer_links.json` (`tools/link_values_pointers.py --build`)
+     and `game_constants.json` (`tools/export_game_constants.py`, whose `MAPPING` lost `SEASONS_PER_YEAR`, whose
+     owner was `ms_track.py`, so the port's parity reader has no oracle value for it) were re-derived, never
+     hand-edited; `references/module_contracts.yaml`'s `peninsular_strain` `sim_module:` and
+     `registers/mechanics_index.yaml`'s two `sim_module:` lines went to `none` / `null`; and
+     `canonical_sources.yaml`'s pin on `module_contracts.yaml` was re-synced. `systems/overview/` no longer exists;
+     its design documents are quarantined under `.designs/systems/overview/`. -->
+
+| Old path | New path | Status |
+|---|---|---|
+| `systems/overview/sim/ms_track.py` | `FORK:59004d86` | FORKED (2026-10-02, plan position `29a`-ms — the Mending Stability world-track: `apply_ms_baseline_decay` (-1 per in-game year, the PP-255 Year-End decay), `apply_ms_delta` (a signed, clamped write to `world.clocks['MS']`), and `MS_FLOOR` / `MS_CEILING` / `MS_START` / `MS_BASELINE_DECAY_PER_YEAR` / `SEASONS_PER_YEAR`. Its last importers, `opposing.py` and `co_movement.py`, stopped at `27`; the season has no MS clock, and threadwork reports `ms_delta` without writing it) |
+| `systems/overview/sim/__init__.py` | `FORK:59004d86` | FORKED (2026-10-02, plan position `29a`-ms — package marker of `systems.overview.sim`; its docstring named only `ms_track` as live, after `accounting`, `rs_track`, `ip_track` (`29a`), `ci_track` (`29b`) and `season` (`28-iii`) had gone) |
+| `systems/overview/__init__.py` | `FORK:59004d86` | FORKED (2026-10-02, plan position `29a`-ms — package marker of the retired overview sim tree; the design documents it described (`clock_registry_v30`, `peninsular_strain_v30`) are quarantined under `.designs/systems/overview/`) |

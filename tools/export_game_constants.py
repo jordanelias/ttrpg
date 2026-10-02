@@ -67,7 +67,11 @@ MAPPING = {
     # table rather than being re-pointed by name, and the parity reader
     # (`valoria-game/tools/check_constants_parity.py`, not visible from here) simply has no oracle value for
     # either constant.
-    'SEASONS_PER_YEAR':              'overview.SEASONS_PER_YEAR',
+    # SEASONS_PER_YEAR (`overview.SEASONS_PER_YEAR`) LEFT THIS TABLE at plan position `29a`-ms (2026-10-02). Its
+    # Python owner, `systems/overview/sim/ms_track.py` (the only overview module that defined it; the season loop
+    # defines no year), was retired with its tree. Same treatment as the pairs above: an owner that retired leaves
+    # the table rather than being re-pointed by name, and the parity reader
+    # (`valoria-game/tools/check_constants_parity.py`, not visible from here) simply has no oracle value for it.
     # OB_FLOOR (`factions.OB_FLOOR`) and CI_START (`overview.CI_STARTING`) LEFT THIS TABLE at plan position `29b`
     # (2026-10-01). Their Python owners were `systems/factions/sim/faction_action.py` and
     # `systems/overview/sim/ci_track.py`, both deleted with the faction layer and the CI clock (no season

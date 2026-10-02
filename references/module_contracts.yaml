@@ -612,22 +612,20 @@ modules:
   - module: peninsular_strain
     registry_system: "peninsular_strain"   # Key Type Registry vocabulary
     doc: .designs/systems/overview/reference/peninsular_strain_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    sim_module: systems/overview/sim/   # OI-54 (ED-IN-0097, W4): DIRECTORY — this module's
-      # state: block splits across several files with no single owner: MS is
-      # systems/overview/sim/ms_track.py (this module's own state: comment already names it as
-      # "the canonical MS-arithmetic surface", cross-checked with mechanics_index.yaml's `ms_track`
-      # entry), IP WAS systems/overview/sim/ip_track.py (deleted 2026-10-01, plan position 29a: two stubs, no
-      # production caller; the mechanics_index `ip_track` row is left standing). Turmoil has
-      # NO tracker file anywhere (verified: grep for a Turmoil writer finds none) — this is the
-      # open §5 row 7 fork (Turmoil writer unruled), not papered over by pointing at a directory.
-      # A directory join is honest disclosure of the split, not a claim that every file in it
-      # implements this contract.
+    sim_module: none   # RETIRED AT PLAN POSITION `29a`-ms (2026-10-02). It was the DIRECTORY `systems/overview/sim/`
+      # (OI-54, ED-IN-0097, W4: the state: block below split across several files with no single owner). The last
+      # file in it, `ms_track.py` (MS), is deleted with the tree (each file has an exact row in
+      # `references/restructure_ledger.md`, ref 59004d86); its siblings went earlier (`accounting.py`, `ip_track.py`
+      # and `rs_track.py` at `29a`, `ci_track.py` at `29b`, `season.py` at `28-iii`). Turmoil never had a tracker
+      # file (the open §5 row 7 fork, Turmoil writer unruled). The season carries none of these clocks
+      # (`engine/season/loop/census.py`: no clock generates anything). The row is kept, not deleted: removing a
+      # contract row is its own change, and `doc:` above still resolves.
     scales: [peninsula]
     resolver: deterministic_accounting   # [ASSUMPTION]
     state:
       - {name: "Turmoil", bucket: clock, writable: true}   # clock_registry: 0-10, peninsular_strain_v30 §4
       - {name: "IP (Institutional Pressure)", bucket: clock, writable: true}   # clock_registry: 0-100 [PROVISIONAL ED-793 start value]
-      - {name: "MS (Mending Stability)", bucket: clock, writable: true}   # OI-32a ownership declaration (2026-07-29, W3 item 3): mechanically-determinable GAP-F1 owner. Floor 0 (Rupture) / ceiling 100; baseline decay -1/in-game-year at Year-End Accounting, PP-255 (params/core.md §MS Baseline Decay). Live tick: systems/overview/sim/ms_track.py (apply_ms_baseline_decay / apply_ms_delta, the canonical MS-arithmetic surface), (its former caller, systems/overview/sim/accounting.py, was deleted at plan position `29a`). CORRECTED 2026-07-29 (W3 item 8): the prior version of this comment claimed "accounting.py L36-39 also inlines the same PP-255 decay pending a migration" — that claim is FALSE against the current tree (re-verified directly: accounting.py has no inline decay logic anywhere; :36-39 is drift-probe docstring prose, not code, and the sole decay call fully delegates to ms_track.apply_ms_baseline_decay). The claim was carried over from ms_track.py's own docstring (a stale note predating accounting.py's migration to the delegated call — not corrected there, out of this file's scope; logged per CLAUDE.md §0.1 point 5). No env.ms_delta emit added here — a new emit would itself be a new dangling emit; see gap_notes GAP-F1 residual.
+      - {name: "MS (Mending Stability)", bucket: clock, writable: true}   # OI-32a ownership declaration (2026-07-29, W3 item 3): mechanically-determinable GAP-F1 owner. Floor 0 (Rupture) / ceiling 100; baseline decay -1/in-game-year at Year-End Accounting, PP-255 (params/core.md §MS Baseline Decay). Former tick (RETIRED AT PLAN POSITION `29a`-ms, 2026-10-02): systems/overview/sim/ms_track.py (apply_ms_baseline_decay / apply_ms_delta, the canonical MS-arithmetic surface; fork ref 59004d86), (its former caller, systems/overview/sim/accounting.py, was deleted at plan position `29a`). CORRECTED 2026-07-29 (W3 item 8): the prior version of this comment claimed "accounting.py L36-39 also inlines the same PP-255 decay pending a migration" — that claim is FALSE against the current tree (re-verified directly: accounting.py has no inline decay logic anywhere; :36-39 is drift-probe docstring prose, not code, and the sole decay call fully delegates to ms_track.apply_ms_baseline_decay). The claim was carried over from ms_track.py's own docstring (a stale note predating accounting.py's migration to the delegated call — not corrected there, out of this file's scope; logged per CLAUDE.md §0.1 point 5). No env.ms_delta emit added here — a new emit would itself be a new dangling emit; see gap_notes GAP-F1 residual.
     transitions: []
     loops: []
     gates:
