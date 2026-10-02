@@ -73,7 +73,7 @@ rode along stays registered and unbuilt until the telling workplan's T6 closes (
 
 ### `13`-rest · W28-cast: the remaining overlays · IN · **STOPPED at its pilot (the user's rule)** · `sonnet` author, `opus` critic · `[design]`
 
-**Pilot run 2026-10-02 (`17-cast`):** eight differentiated NPC overlays; DISTINCT EXECUTED SETS 41 with none, 41 with the pilot, 26 with a uniform fixture cast (seed 0, an instrument that was not committed). The observable is not met, so nothing scales (the user's rule, 2026-10-01); it is a weak reading, because 41 of 46 cases were already distinct and the gain was capped at +5. `knows:` is refused at load: seeding an initial belief needs a sixth `Claim`-construction site or pre-history Events through the existing witness sites (`01_AXIOMS.md` AX-7), neither built, and nothing in the plan's observables needs it. An ought's `predicate` is a declared non-causal label (`H-185`). The text below is the original instruction, kept for the day the user scales it.
+**Pilot run 2026-10-02 (`17-cast`):** eight differentiated NPC overlays; DISTINCT EXECUTED SETS 41 with none, 41 with the pilot, 26 with a uniform fixture cast (seed 0, an instrument that was not committed). ⚠ **The metric could not have shown this pilot working**: all eight cases were singletons in the no-overlay arm, so the ceiling on a rise from them was 0 (not +5). What moved: 2 of 8 cases (NPC-038 on its `ought:` keys, NPC-083 on its `office:` keys, whose second office seats an institution as a person), mean verbs 6.62 → 7.25. `knows:` is refused at load: seeding an initial belief needs a sixth `Claim`-construction site or pre-history Events through the existing witness sites (`01_AXIOMS.md` AX-7), neither built, and nothing in the plan's observables needs it. An ought's `predicate` is a declared non-causal label (`H-185`). **Whether to scale is the user's, on a better observable** (per-case set change against the no-overlay arm, Q4 referents). The text below is the original instruction.
 
 
 41 NPC + 97 ARC `cast:` overlays in `engine/season/cases/exercises/*.yaml` (never `cases/chain/*.yaml` in
@@ -186,8 +186,9 @@ declares and nothing else; no proper-noun branch. **R:** R-05 texture.
 
 ### `29f` → `29e` → `29a`-ms · fieldwork `knots`, characters, `ms_track` · IN · gate `14`, `27` (E2, E3) · `sonnet` · `[cleanup]`
 
-- **`29f`:** `systems/fieldwork/sim/knots.py` (ED-912's ±5 gauge maps to `Tenure.degree`, F.4 —
-  recorded on `14`, not invented); `engine/tests/test_knots_ed912.py` → `FORK:`.
+- **`29f`:** `systems/fieldwork/sim/knots.py` (ED-912's ±5 gauge maps to `Tenure.degree`, F.4 — the
+  plan said `14` records it, **`14` did not** (it declined `tie / knot`; `H-182` says no position owns `_eff_tie`), so
+  `29f` writes the mapping into `H-182`'s cite, not invented, and then deletes); `engine/tests/test_knots_ed912.py` → `FORK:`.
 - **`29e`:** `systems/characters/sim/conviction.py` (← `knots.py`); `beliefs.py` already went at `28-0`'s
   follow-up (PR #450). `test_conviction_roster_single_owner.py`'s `systems.characters` site re-pointed.
 - **`29a`-ms:** `systems/overview/sim/ms_track.py`.
