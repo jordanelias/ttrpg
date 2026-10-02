@@ -38,6 +38,7 @@ the narrative of what happened goes in the commit message and the PR body.
 | start without reading the ledgers' recent rows | work has been redone that a ruling two days earlier had already answered — `registers/editorial_ledger*.jsonl` |
 | run the full suite after each edit | `CLAUDE.md` §0.4 |
 | cache a count in any file read at session start | run the instrument instead |
+| write a tracked data file from a test and restore it in a `finally` | under `pytest -n` another worker that builds a realm inside the window reads the doctored file: `b12f1e4a` (the NPC-roster test; it showed up as a claim count 30 short in an unrelated test). Point the loader at a `tmp_path` copy. Only `engine/season/tests` was searched for this; `tests/valoria` was not |
 | debug `tests/valoria/test_forked_status.py` on a shallow clone | `cat .git/shallow` — its `FORK:` rows name commits the clone cannot reach |
 
 ## Rulings — do not re-raise
