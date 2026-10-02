@@ -231,9 +231,20 @@ def test_15d_falsifier_the_realm_holds_hearsay_no_telling_minted(monkeypatch):
     `told_by` whatever the map says (the told branch sets its source itself). So each arm counts the
     map's `told_by` (no `chain`) apart from the told channel's (a `chain`), the control asserts the
     map's is zero, and the told channel's is asserted UNMOVED by neutralising the map."""
+    # ⚠ RE-PINNED SEED 0 -> 5 AT `13d-iii` (2026-10-01), BECAUSE THE PRECONDITION BELOW IS A SEED'S
+    # TRAJECTORY AND NOT A PROPERTY OF THE MECHANISM. At seed 0 the first season now deposits NO
+    # told claim (3 before): giving every seat a rung widened what the map's `chronicle`/`post_remit`
+    # channels hand a hearer (`told_by` without a chain 1,113 -> 2,807), so more of what a telling
+    # carries is already held and the dedup guard (`loop/witness.py`, "ALREADY SAW") deposits
+    # nothing. Measured by `told_by` with a `chain` over one season, new tree: seeds 0-3 and 7, 9 ->
+    # 0; seed 4 -> 1, 5 -> 6, 6 -> 3, 8 -> 12. 5 is the lowest seed whose channel is strong
+    # enough for the control's `==` to observe anything. NOT a claim about seed 5; the assertions
+    # below are unmoved.
+    SEED = 5
+
     def told_by_count() -> tuple:
-        w = populated.build_realm(0)
-        out = populated.run(1, 0, w=w)
+        w = populated.build_realm(SEED)
+        out = populated.run(1, SEED, w=w)
         told_by = [c for p in w.persons.values() for c in p.ledger if c.source == "told_by"]
         channel = sum(1 for c in told_by if c.chain)
         return len(told_by) - channel, channel, sum(out["claim_sources"].values())

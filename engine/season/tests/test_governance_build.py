@@ -1978,8 +1978,8 @@ def test_8a_every_authored_seat_constructs_against_the_live_rosters():
     `revocation_bases`, the same construction-time proof r2 `03` §A.13 ran against
     `offices_draft.yaml` (which found 15 of 25 draft rows COULD NOT construct). `rung` is passed as
     a placeholder string: this test is about `body`/`faction`/`remit_acts`/`conferral`/`revocation`
-    membership, not about anchor resolution, which this position does not build (see the file's own
-    header)."""
+    membership, not about anchor resolution (the `13d-iii` section below resolves every anchor
+    against a built realm)."""
     from ..data import files
     from ..data.rosters import load_yaml
 
@@ -2002,34 +2002,36 @@ def test_8a_every_authored_seat_constructs_against_the_live_rosters():
     assert rvk == Counter({"rung_above_same_faction": 22, None: 7}), rvk
 
 
-def test_8a_the_nineteen_live_seats_carry_a_real_basis_after_the_overlay():
-    """`harness/populated.py`'s per-case loop already seats 19 of `offices.yaml`'s 29 holders as
-    `Office`s (verified by construction, not assumed -- `offices.yaml`'s own header names all 19).
-    Before this position every one carried `conferral=None, revocation=None`, the dataclass
-    default, regardless of what `ED-IN-0256` says of the seat. This asserts the overlay actually
-    ran: the 19 match `offices.yaml`'s authored basis, and the four hereditary/no-revoker seats
-    (King, Queen, Heir, Princess) correctly keep `None` -- a passing test that could not tell
-    'overlaid with None' from 'never overlaid' would not observe the failure it excludes
-    (`CLAUDE.md` §0.1 pt 2), so this checks a NON-None seat on each axis too."""
+def test_8a_every_authored_seat_carries_its_authored_basis_after_the_overlay():
+    """`harness/populated.py` lays `offices.yaml`'s `conferral`/`revocation` on every authored seat,
+    matched to the one its per-case loop built or minted from the row (`13d-iii`). Before `8a` every
+    seat carried `conferral=None, revocation=None`, the dataclass default, regardless of what
+    `ED-IN-0256` says of it. This asserts the overlay actually ran: each seat matches its row, the
+    four hereditary/no-revoker seats (King, Queen, Heir, Princess) correctly keep `None`, and --
+    a passing test that could not tell 'overlaid with None' from 'never overlaid' would not
+    observe the failure it excludes (`CLAUDE.md` §0.1 pt 2) -- a NON-None seat on each axis is
+    checked too. (Was nineteen seats and skipped the `[NEW]` rows; four of those are seated by the
+    loop and six are minted, so the census names the Office each row stands for.)"""
     from ..data import files
     from ..data.rosters import load_yaml
-    from ..harness.populated import _slug
 
     doc = load_yaml(files.OFFICES_YAML.read_text(encoding="utf-8"))
     w = build_realm(seed=0)
+    stands_for = w._office_census["authored"]
+    checked = 0
     checked_a_real_conferral = checked_a_real_revocation = False
     for s in doc["seats"]:
-        if s["note"].startswith("[NEW]"):
-            continue   # not minted this session -- see the file's own header
-        oid = f"off_{_slug(s['holder'])}"
+        oid = stands_for.get(s["id"])
         off = w.offices.get(oid)
-        assert off is not None, f"{s['holder']} ({s['post']!r}) is marked [LIVE] but built no office"
+        assert off is not None, f"{s['holder']} ({s['post']!r}) built no office"
         assert off.conferral == s["conferral"], (
             f"{oid} ({off.post!r}): conferral={off.conferral!r}, offices.yaml says {s['conferral']!r}")
         assert off.revocation == s["revocation"], (
             f"{oid} ({off.post!r}): revocation={off.revocation!r}, offices.yaml says {s['revocation']!r}")
+        checked += 1
         checked_a_real_conferral = checked_a_real_conferral or off.conferral is not None
         checked_a_real_revocation = checked_a_real_revocation or off.revocation is not None
+    assert checked == len(doc["seats"]) == 29, checked
     assert checked_a_real_conferral and checked_a_real_revocation, (
         "every seat checked had a None basis -- this test cannot tell the overlay ran")
 
@@ -2041,6 +2043,257 @@ def test_8a_a_season_still_executes_end_to_end_with_the_overlay_wired():
     from ..harness import populated
     out = populated.run(seasons=1, seed=0)
     assert out.get("acts", 0) > 0, "a populated season formed no acts with the overlay wired"
+
+
+# =================================================================================================
+# PLAN POSITION `13d-iii` -- RUNG ANCHORS FOR SEATS, THE `[NEW]` SEATS, THE REMIT OVERLAY (H-163
+# limit 1). `harness/populated.py::resolve_anchor` is ONE resolver over r2 `03`'s four anchor forms;
+# `build_realm` gives every authored seat its resolved rung (`Office.rung` AND `scope_rung`), mints
+# the six rows no loop-built seat stands for, and overlays `remit_acts` (`dispatch` left where it
+# is -- J-8, `offices.yaml: meta: remit_unruled`). FALSIFIERS: every row's anchor resolves to one
+# live rung of its own kind, checked against an INDEPENDENT derivation of each rung; the resolver
+# refuses what names no single rung and a broken form turns the build red; no seat but the one
+# declared exception is rungless; a season executes a `levy`/`issue` through a seat (`Act.via`
+# set) where the same seed refused 21 of 22 levies on `authority` before.
+# =================================================================================================
+
+@pytest.fixture(scope="module")
+def _realm13():
+    return build_realm(seed=0)
+
+
+def _seat_rows():
+    from ..data.rosters import OFFICES_SEATS
+    return OFFICES_SEATS
+
+
+def _geography():
+    from ..harness import populated
+    return populated._load(populated.GEOGRAPHY)
+
+
+def test_13d_iii_every_authored_anchor_resolves_to_one_live_rung_of_its_own_kind(_realm13):
+    """THE INDEPENDENT CHECK. The resolver reads an index `build_realm` fills as it mints; this asks
+    each rung of the world it should have been. A realm is the one; a duchy is the parent of the
+    territories its FACTION holds (`contain`, read off the geography -- not off `duchy_of`, which
+    is what filled the index); a territory is `territory_rung_id`, the id relation's one owner. A
+    row that resolved to a rung of another kind, or to a neighbour, fails here. The `[NEW]` rows are
+    counted separately because the position's falsifier names them."""
+    from ..data.rosters import territory_rung_id
+    from ..state.containment import parent_of
+
+    w = _realm13
+    geo = _geography()
+    stands_for = w._office_census["authored"]
+    by_kind, new_resolved = Counter(), 0
+    for row in _seat_rows():
+        (kind, key), = row["rung"].items()
+        off = w.offices[stands_for[row["id"]]]
+        assert off.rung in w.rungs, f"{row['id']}: {off.rung!r} is not a rung of this world"
+        assert w.rungs[off.rung].kind == kind, (
+            f"{row['id']} anchors a {kind}, resolved to a {w.rungs[off.rung].kind}: {off.rung!r}")
+        if kind == "realm":
+            expect = {r for r, x in w.rungs.items() if x.kind == "realm"}
+        elif kind == "duchy":
+            expect = {parent_of(w, territory_rung_id(tid)) for tid, terr in geo["provinces"].items()
+                      if terr.get("faction") == key}
+        else:
+            expect = {territory_rung_id(key)}
+        assert expect == {off.rung}, (
+            f"{row['id']} {row['rung']}: the world's own structure says {sorted(expect)}, the seat "
+            f"stands at {off.rung!r}")
+        by_kind[kind] += 1
+        new_resolved += row["note"].startswith("[NEW]")
+    assert sum(by_kind.values()) == len(_seat_rows()) == 29, by_kind
+    assert set(by_kind) == {"realm", "duchy", "territory"}, (
+        f"{by_kind}: a form no row uses is not observed here -- the settlement form has its own test")
+    assert new_resolved == 10, f"{new_resolved} `[NEW]`-marked rows resolved; r2 `03` marks ten"
+
+
+def test_13d_iii_the_settlement_form_resolves_and_the_resolver_refuses_what_names_no_single_rung(_realm13):
+    """The fourth form no row authors, and EVERY refusal the resolver owes. `{settlement: <code>}`
+    must land on the settlement rung inside the territory the geography says holds it; each bad
+    form must raise `Unspecified` (counted -- a loop of `pytest.raises` that never ran is silent)."""
+    from ..data.rosters import territory_rung_id
+    from ..harness.populated import resolve_anchor
+    from ..state.containment import parent_of
+
+    w, geo = _realm13, _geography()
+    code, srow = next(iter(geo["settlements"].items()))
+    rid = resolve_anchor(w, w._anchors, {"settlement": code})
+    assert w.rungs[rid].kind == "settlement"
+    assert parent_of(w, rid) == territory_rung_id(srow["territory"]), (
+        f"{{settlement: {code!r}}} resolved to {rid!r}, which is not inside the territory the "
+        "geography gives that settlement")
+    refused = 0
+    for bad in ({}, {"realm": True, "duchy": "Crown"}, "realm", None, {"realm": "r_valoria"},
+                {"duchy": "Nobody"}, {"province": "P1"}, {"territory": "T99"}, {"settlement": True}):
+        with pytest.raises(Unspecified):
+            resolve_anchor(w, w._anchors, bad, "a probe")
+        refused += 1
+    assert refused == 9
+
+
+def test_13d_iii_one_anchor_naming_two_rungs_is_refused_not_shadowed(_realm13):
+    from ..harness.populated import _index_anchor
+
+    w = _realm13
+    anchors = dict(w._anchors)
+    with pytest.raises(Forbidden):
+        _index_anchor(w, anchors, True, "r_valoria")   # the realm's anchor, a second time
+
+
+def test_13d_iii_a_titled_seat_must_stand_at_the_rung_kind_its_title_governs(_realm13):
+    from ..harness.populated import seat_anchor
+
+    w = _realm13
+    duke_at_the_realm = {"id": "off_probe", "post": "Duke", "rung": {"realm": True}}
+    with pytest.raises(Forbidden):
+        seat_anchor(w, w._anchors, duke_at_the_realm)
+    ok = seat_anchor(w, w._anchors, {**duke_at_the_realm, "rung": {"duchy": "Varfell"}})
+    assert w.rungs[ok].kind == title_domain("Duke")
+
+
+@pytest.mark.parametrize("kind", ["realm", "duchy", "territory"])
+def test_13d_iii_a_resolver_broken_for_one_form_turns_the_realm_build_red(monkeypatch, kind):
+    """MUTATION (`CLAUDE.md` §0.1 pt 2): the index forgets every rung of ONE kind -- the resolver
+    for that form is broken -- and the realm must refuse to build, naming the kind. Run per form so
+    the resolver cannot be kind-blind, and so a form that passes unbroken is shown to be the one
+    doing the work. (The settlement form, which no row uses, is the test above's.)"""
+    from ..harness import populated
+
+    real = populated._index_anchor
+
+    def broken(w, anchors, key, rid):
+        if w.rungs[rid].kind == kind:
+            return None
+        return real(w, anchors, key, rid)
+
+    monkeypatch.setattr(populated, "_index_anchor", broken)
+    with pytest.raises(Unspecified) as e:
+        build_realm(seed=0)
+    assert f"{{{kind}:" in str(e.value), str(e.value)
+
+
+def test_13d_iii_every_seat_the_realm_builds_has_a_rung_but_the_one_declared_exception(_realm13):
+    """`H-163` limit 1 was *16 of 19 seats carry no rung*; measured at this position's start, 21 of
+    the 24 the loop builds. Now every seat stands at its row's rung, `scope_rung` the same one (a
+    bench's ground, `H-32`), save the seat the registry derives and no row authors: NPC-084's
+    `guild leader`, which has no anchor and is given none."""
+    w = _realm13
+    cen = w._office_census
+    assert cen["unauthored"] == ["off_npc_084"], cen["unauthored"]
+    assert len(w.offices) == cen["seated"] == 30
+    anchored = 0
+    for oid, off in w.offices.items():
+        if oid in cen["unauthored"]:
+            assert off.rung is None and off.scope_rung is None, oid
+            continue
+        assert off.rung is not None and off.scope_rung == off.rung, (
+            f"{oid} ({off.post!r}): rung {off.rung!r}, scope {off.scope_rung!r}")
+        anchored += 1
+    assert anchored == 29 == len(cen["authored"]), anchored
+
+
+def test_13d_iii_the_six_rows_no_loop_seat_stands_for_are_minted_from_the_row_alone(_realm13):
+    """The `[NEW]` seats: the King's second seat and five people the registry gives no seat. Each
+    carries the row's own id, post, body, faction, bases and remit, and its holder sits in it under
+    a live `hold` granting exactly that remit. (Four more `[NEW]`-marked holders -- NPC-007, 013,
+    021, 070 -- are seated by the loop already, so they are overlaid and are NOT in this list.)"""
+    w = _realm13
+    rows = {r["id"]: r for r in _seat_rows()}
+    minted = w._office_census["minted"]
+    assert set(minted) == {"off_duke_valorsmark", "off_lord_steward", "off_cardinal_fortitude",
+                           "off_cardinal_temperance", "off_senior_inquisitor",
+                           "off_restoration_leader"}, minted
+    checked = 0
+    for rid in minted:
+        row, off = rows[rid], w.offices[rid]
+        assert (off.post, off.body, off.conferral, off.revocation) == (
+            row["post"], row.get("body"), row["conferral"], row["revocation"]), rid
+        assert off.remit_acts == sorted(row["remit_acts"]), (
+            f"{rid}: a minted seat holds nothing before the overlay, so nothing is kept: {off.remit_acts}")
+        holds = [t for t in w.tenures if t.kind == "hold" and t.object == rid and t.live]
+        assert [t.subject for t in holds] == [f"p_{row['holder'].lower().replace('-', '_')}"], rid
+        assert holds[0].granted_acts == tuple(off.remit_acts), rid
+        checked += 1
+    assert checked == 6
+
+
+def test_13d_iii_an_authored_obligee_serves_the_seat_with_no_term(_realm13):
+    """`offices.yaml`'s one non-empty `obligees` (`off_restoration_leader` -> NPC-041) is an `oblige`
+    Tenure, so `establishment_of` -- the Query that replaced the `establishment` field -- answers
+    it. No term: a seed has no opening act to declare one (`04 §B.8`'s `term?`, lawful null)."""
+    w = _realm13
+    withs = [r for r in _seat_rows() if r.get("obligees")]
+    assert [r["id"] for r in withs] == ["off_restoration_leader"], withs
+    assert world_q.establishment_of(w, "off_restoration_leader") == ["p_npc_041"]
+    t = next(t for t in w.tenures if t.kind == "oblige" and t.object == "off_restoration_leader")
+    assert t.term is None and t.live
+
+
+def test_13d_iii_the_remit_overlay_replaces_the_default_and_leaves_only_the_unruled_act(_realm13):
+    """The row's `remit_acts` IS a seat's remit, `[]` included: an authored empty list is NOT filled
+    by `rosters.yaml: remit_default` (a testing fixture). The one thing a seat keeps beyond its row
+    is an act `offices.yaml: meta: remit_unruled` names (`dispatch`, J-8) -- and only if it held it
+    before. The unauthored seat is the control: with no row, the default still fills."""
+    from ..data.rosters import OFFICES_REMIT_UNRULED, REMIT_DEFAULT
+
+    w = _realm13
+    assert OFFICES_REMIT_UNRULED, "the unruled set is empty: the overlay below would strip J-8's act"
+    cen = w._office_census
+    empty_rows = checked = 0
+    for row in _seat_rows():
+        off = w.offices[cen["authored"][row["id"]]]
+        have, authored = set(off.remit_acts), set(row["remit_acts"])
+        assert authored <= have, f"{row['id']}: authored {sorted(authored)} not all granted {sorted(have)}"
+        assert have - authored <= OFFICES_REMIT_UNRULED, (
+            f"{row['id']} holds {sorted(have - authored)} beyond its row: the testing default leaked "
+            "past the overlay")
+        if not authored:
+            empty_rows += 1
+        checked += 1
+    assert checked == 29 and empty_rows >= 1, (checked, empty_rows)
+    assert set(w.offices["off_npc_084"].remit_acts) == set(REMIT_DEFAULT), (
+        "the seat no row authors lost the testing default -- the fill path the overlay replaces "
+        "only where a row exists")
+
+
+@pytest.fixture(scope="module")
+def _season13():
+    from ..decision import make_chooser
+    from ..harness.corpus_run import attribute
+    from ..state.ids import H, draw_factory
+
+    w = build_realm(seed=0)
+    d = SeasonDriver(w)
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                      draw=draw_factory(w.world_seed, lambda: w.tick))
+    d.season(ch, question=None, subsistence=P.SUBSIST,
+             contest_max_depth=w.fixtures.get("contest_max_depth"))
+    return w, attribute(w, d, 1)
+
+
+def test_13d_iii_a_season_executes_an_issue_or_levy_through_a_seat_with_a_rung(_season13):
+    """U9's own acceptance text, on the shipped realm at seed 0: a `levy` or `issue` EXECUTES with
+    `Act.via` set, naming a seat whose rung gave it the purview. Before this position the same seed
+    refused 21 of 22 four-season levies on `authority` and executed none. The seat check is the
+    point: an act whose `via` names a rungless seat would have refused, so this also shows `via`
+    and the rung are one fact. (`levy` itself still mostly refuses as `levy.refused` -- the `stores`/
+    `write` conjuncts, `H-163` limit 3 -- which is not this position's to lift.)"""
+    w, att = _season13
+    executed = [a for a, made, _ in att if a.verb in ("levy", "issue") and made]
+    assert executed, "no levy or issue executed in a season: the cap `13d-iii` lifts is still on"
+    for a in executed:
+        assert a.via in w.offices, f"{a.verb} by {a.actor} executed with via={a.via!r}"
+        assert w.offices[a.via].rung is not None, (a.verb, a.via)
+    levies = [(a, refused) for a, _, refused in att if a.verb == "levy"]
+    assert levies, "no levy was attempted -- the share below would be vacuous"
+    unauthorized = sum("levy.unauthorized" in refused for _, refused in levies)
+    assert unauthorized < len(levies), (
+        f"{unauthorized} of {len(levies)} levies refused on `authority`: every seat that levies is "
+        "still outside its purview")
 
 
 # =================================================================================================

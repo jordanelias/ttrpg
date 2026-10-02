@@ -283,7 +283,11 @@ rows:
       3: 137 · 4: 47 · 5: 7 · 6: 4 · 7: 4, longest chain 7 act-events across 5 actors. **And it is
       unevenly held**: 19 of 46 NPCs sit in no edge all year, 10 officeholders among them (the Duke
       included); none is idle, but they act through verbs that never execute in the realm (H-156's
-      cross-citation) or on themselves, and 21 of 24 offices carry no rung (H-163 limit 1). The 37
+      cross-citation) or on themselves, and 21 of 24 offices carry no rung (H-163 limit 1) [RE-CITED
+      2026-10-01, plan position `13d-iii`: 1 of 30 -- `off_npc_084` alone; `python -c "from
+      engine.season.harness.populated import build_realm as b; w = b(0); print(sum(o.rung is None
+      for o in w.offices.values()), len(w.offices))"` prints `1 30`; the other figures in this
+      paragraph are tree `c8cc408`'s and are not re-measured here]. The 37
       cohorts resolve 1,015 acts and appear in 2 of 188 edges. **Re-measured, not new** -- every
       cause named is already registered (W-F, H-156, H-163, H-171); nothing escalated, no guard
       minted.

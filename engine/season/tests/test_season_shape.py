@@ -6099,6 +6099,7 @@ def test_the_generic_remit_seats_every_office_and_unblocks_the_nine():
     w = PP.build_realm(0)
     offices = list(w.offices.values())
     # [GROUNDED: measured 2026-09-18 on `build_realm(0)` -- the populated realm seats 19 offices, of which 3 carried a remit before `remit_default` and 19 after; the seat registry is `harness/populated.py`'s own, not a constant chosen here]
+    # [RE-CITED 2026-10-01, `13d-iii`, `python -c "from engine.season.harness.populated import build_realm as b; w=b(0); print(len(w.offices), w._office_census['unauthored'])"` -- 30 offices; `remit_default` now fills ONE of them (`off_npc_084`, the seat no `offices.yaml` row authors) and the other 29 carry their row's `remit_acts`, so this assertion no longer observes the default's reach -- `test_13d_iii_the_remit_overlay_replaces_the_default_and_leaves_only_the_unruled_act` does]
     assert len(offices) >= 19, f"the realm seats {len(offices)} offices; the fixture has moved"
     ungranted = [o.id for o in offices if not o.remit_acts]
     assert not ungranted, f"offices with no remit after the default: {ungranted}"
@@ -14289,12 +14290,21 @@ def test_the_populated_world_has_a_governance_ladder_and_scarce_seats():
     # so the leaders across all factions must number exactly the occupied offices.
     occupied = {oid for oid in (t.object for t in w.tenures if t.kind == "hold" and t.live)
                 if oid in w.offices}
+    # ⚠ HOLDERS, NOT OFFICES, SINCE `13d-iii` (2026-10-01): `build_realm` now seats NPC-020 twice (the
+    # King and the Duke of Valorsmark, both Crown), and `leaders` is a set of PERSONS, so thirty
+    # offices have twenty-nine leaders. The invariant is unchanged -- every occupied office has a
+    # holder who committed to its faction -- and is counted over the people who hold one. A seat per
+    # person was never the rule; it was true of every world until one person held two.
+    holders = {t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object in occupied}
     found = sum(len(set(leaders(w, fid))) for fid in factions)
-    assert found == len(occupied), (
-        f"{found} leaders across {len(factions)} factions, but {len(occupied)} offices are "
-        "occupied. Every occupied office has a holder who committed to its faction, so these are "
-        "the same number -- a shortfall means `leaders()` is failing to translate the faction "
-        "identifier, which returns [] and looks like a faction that simply holds no seats")
+    assert len(holders) < len(occupied), (
+        "no person holds two seats: this count could not tell holders from offices, and the "
+        "comment above would be describing a world that is not this one")
+    assert found == len(holders), (
+        f"{found} leaders across {len(factions)} factions, but {len(holders)} people hold the "
+        f"{len(occupied)} occupied offices. Every holder committed to the faction of the seat, so "
+        "these are the same number -- a shortfall means `leaders()` is failing to translate the "
+        "faction identifier, which returns [] and looks like a faction that simply holds no seats")
     assert found > 0, "no faction has a leader in a world with occupied offices"
 
     # A TITLED SEAT SITS AT THE RUNG ITS TITLE GOVERNS, and the walk up from it is what

@@ -68,10 +68,16 @@ def test_aperture_no_act_enters_the_fold_unoffered(realm):
 
 
 def test_aperture_seats_agrees_with_the_builders_own_census():
+    """SEATS, not persons: `build_realm` seats NPC-020 twice since `13d-iii` (the King and the Duke
+    of Valorsmark), so the per-holder table has fewer keys than the census has seats -- the SUM of
+    its lists is what must equal `seated`."""
     w = populated.build_realm(0)
-    assert len(A.seats(w)) == w._office_census["seated"], (
-        f"`aperture.seats` finds {len(A.seats(w))} seated persons and `build_realm` seated "
-        f"{w._office_census['seated']}. The per-holder table is keyed on the first")
+    table = A.seats(w)
+    seats = sum(len(offs) for offs in table.values())
+    assert seats == w._office_census["seated"], (
+        f"`aperture.seats` finds {seats} seats over {len(table)} persons and `build_realm` seated "
+        f"{w._office_census['seated']}")
+    assert len(table) < seats, "no person holds two seats: the sum and the key count are not told apart"
 
 
 def test_aperture_the_spine_gives_the_per_holder_table_its_population():
