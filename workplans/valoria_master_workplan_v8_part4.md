@@ -110,15 +110,15 @@ admission; `data/requires.py`'s `cardinality` form (raises today); `seam/ladder.
 `engine/season/arrangements.yaml` header; H-161, H-163, H-173, H-174; `loop/effects_information.py`
 (`_eff_open_case`, `_eff_determine`) and `loop/effects_shared.py` (`_new_oblige_term`, `_oblige_term`).
 
-### `22` · PROC-B, steps 11–16 — the contest-resolution core · SC · gate `13d-iii` (E11, landed) and `S0` → `S1a` (E17, `_part5` §S) · `opus`/`opus` (arrangements transcription `sonnet`) · `[design]`
+### `22` · PROC-B, steps 11–16 — the contest-resolution core · SC · gate `13d-iii` (E11, landed) and `30` → `31a` (E17, `_part5` §SM) · `opus`/`opus` (arrangements transcription `sonnet`) · `[design]`
 
 **WHERE (A-25, 2026-10-03).** The proceedings provider is a module's, not the loop's: it lives in
-`systems/social_contest/sim/` beside the sigma provider that `S1a` moves there, is registered by that module's
-`register(host)` (`S0`'s registrar), is reached by the prize rows' string and never imported by the host, and
+`systems/social_contest/sim/` beside the sigma provider that `31a` moves there, is registered by that module's
+`register(host)` (`30`'s registrar), is reached by the prize rows' string and never imported by the host, and
 may not construct a `Token` or call another module. The host-side edits below are unchanged
 (`verb_table.yaml`, `rosters.yaml`, `loop/effects_information.py`, `epistemic.py`, `data/requires.py`), and
-rows `22` adds to `verb_table.yaml` carry `system: social_contest`. This position therefore waits for `S0` and
-`S1a`; it does not wait for `S1b`–`S1e` or `S2`. `22` used to plan `engine/season/seam/wrappers/proceedings.py`;
+rows `22` adds to `verb_table.yaml` carry `system: social_contest`. This position therefore waits for `30` and
+`31a`; it does not wait for `31b`–`31e` or `32`. `22` used to plan `engine/season/seam/wrappers/proceedings.py`;
 that path is withdrawn.
 
 **State (2026-09-30, `a1282b02`):** steps 6/7/9/10 DONE at `18`/`19`; step 8 built (a citation); step 7
@@ -141,13 +141,13 @@ degree-keyed effects, not a routine addition.
   value injected and swept (`sigma_leverage`), never a pool floor — a ceiling caps how hard a matter can
   get; a floor raises everyone's competence, a statement about people. M-7 fails at the 1D floor
   (`p_success` 0.0006 at Ob 3). The seam's own obstacle site (`_obstacle_of`, in
-  `systems/social_contest/sim/` after `S1a`) is deleted (ED-SC-0033 cl. 3, one owner).
+  `systems/social_contest/sim/` after `31a`) is deleted (ED-SC-0033 cl. 3, one owner).
   `ED-SC-0038` is RULED; its per-matter / single-margin pick is this step's build decision.
 - **Step 15:** the provider — a file in `systems/social_contest/sim/` (A-25; named on the adjudication's
   pattern, `provider.py`/`effects_*.py`, by the builder), registered by that module's `register(host)` and
   resolved **by string at boot**, returning **a Margin, never a winner** (`04` provider rule); a misspelled
   manifest row fails at boot naming the row, and so does a deleted `social_contest.register` composition row
-  (`S0`'s refusal).
+  (`30`'s refusal).
 - **Step 16 — THE BAR (M2's first gate):** two seeded proceedings run end to end with zero authored acts,
   twice, byte-identical including the hash, and `causes[]` walks from the determination back to the date
   that raised it.
@@ -194,7 +194,7 @@ inbound site: `module_contracts.yaml`, `canonical_sources.yaml`, `descriptor_reg
 CI job folds into `unit-tests` here; `test_sigma_leverage_parity.py` (substrate) moves out of
 `engine/tests`.
 **OBSERVABLE:** `rg -n social_contest engine/ tools/ tests/ references/ skills/` returns only logical-name
-rows (from `S0`/`S1a` (A-25) those include the `system:` tags, the roster entry and the
+rows (from `30`/`31a` (A-25) those include the `system:` tags, the roster entry and the
 `social_contest.register` composition row; `systems/social_contest/sim/` itself stays as the module's home
 and this position deletes `contest/` only); content hash stationary; `PROBE FLIPS 0`. **FALSIFIER:** plant a `tell` contest the old extension
 demoted, at a pool where it would otherwise read its top band — red before the move, green after; and

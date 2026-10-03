@@ -1,4 +1,4 @@
-"""`loop/resolve.py` -- RESOLVE -- barrier 3, the only writing step for acts. `04 §A.2`: owns every ACTS row, through the gate, and the ordered fold; token ACTS.
+"""`loop/resolve.py` -- RESOLVE -- barrier 3, the only writing step for acts, and THE RESOLVER (`04` T-k: one resolver, one ladder — the fold lives here, once). `04 §A.2`: owns every ACTS row, through the gate, and the ordered fold; token ACTS.
 
 ⚠ **THE BODY IS THE DRIVER'S OWN, BOUND BACK ONTO THE CLASS -- NOT A DELEGATING STUB.**
 `loop/driver.py` ends with `SeasonDriver.resolve = resolve`, so `SeasonDriver.resolve` IS this

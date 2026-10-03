@@ -50,6 +50,24 @@ cost is paid only by callers that actually want the heavy thing.
 This is NOT a fourth library. §1.1 measured `ci_common` at 11/118 and `obs_core`
 at 9/118 adoption: the abstractions already exist and are correct. The work here
 is adoption, not authorship.
+
+────────────────────────────────────────────────────────────────────────────────
+VOCABULARY — five words this repo's files and directories use (wording fixed
+2026-10-03, ED-IN-0284 pass; no file was renamed to fit it)
+────────────────────────────────────────────────────────────────────────────────
+  register   the general word: a file of rows about one kind of thing, each row with an id.
+  registry   a register that code reads at load to look a key up (descriptor_registry.yaml,
+             npc_registry.yaml, ci_checks_registry.yaml, engine/season/manifest/registry.py,
+             engine/season/hole_register.yaml).
+  ledger     an append-only register of dated rows that are flipped, never rewritten
+             (editorial_ledger_*.jsonl, restructure_ledger.md's FORK: rows,
+             patch_register_active.yaml, supersession_register.yaml).
+  roster     a closed set of allowed values a loader validates against; no ids, no status
+             (engine/season/rosters.yaml; the nine-lane roster below, LANE_CODES).
+  reference  a DIRECTORY name only: references/ holds what tools look up (registries, rosters,
+             the ledger pathres reads); registers/ holds what sessions write (ledgers, handoffs,
+             the frozen archive/); a file that fits neither stays where it is. This is NOT
+             CLAUDE.md §0.05's "reference" (non-binding prose), a different sense that file names.
 """
 import ast
 import glob

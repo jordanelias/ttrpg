@@ -29,7 +29,7 @@ module-load-time cycle.
 
 Dependencies:
   - systems/threadwork/sim/coherence (apply_coherence_delta on rupture)
-  - sim/personal/conviction (apply_conviction_scar on high-strain break)
+  - systems.characters.sim.conviction (apply_conviction_scar; a late import at the call site, :349)
 
 Entry points:
   - form_knot(actor_a, actor_b, world, rng) -> Knot | None

@@ -1,7 +1,6 @@
-"""engine/ — Valoria executable-model primary (ED-IN-0071 P3).
-
-Python package holding the engine CORE (substrate, autoload; the season loop is engine/season/)
-moved from sim/ (Phase A), beside the typed engine_params/ export and the prose
-params/ tables (data dirs, not subpackages). Per-subsystem sims live under
-sim/ (-> systems/<subsystem>/sim/ in P4) and depend UPWARD on this core.
+"""engine/ — Valoria's executable model, THE ENGINE: the season loop (engine/season/, the HOST every
+system under systems/ registers into, ED-IN-0284) and the substrate it is built on (substrate/,
+autoload/, engine_params/). A system's code lives at systems/<name>/sim/ and depends UPWARD on this
+package; engine/ names no system by import (two declared path seams aside, PATH_SEAM_ALLOWED) — a
+system is reached by composition row at driver construction. (Package created under ED-IN-0071 P3.)
 """
