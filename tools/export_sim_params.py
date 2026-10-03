@@ -41,7 +41,7 @@ def _scan_dirs() -> list[str]:
     """The sim reference surfaces (the computational truth), repo-relative. Combat keeps its own
     dedicated export.
 
-    DERIVED, NOT LISTED (plan position `35`, A-25). This was a hand list of `engine` and seven
+    DERIVED, NOT LISTED (A-25). This was a hand list of `engine` and seven
     `systems/<sub>/sim` directories, so a module landing under `modules/<name>/` would have fallen
     out of the export and left the file's `--check` green over a smaller artifact. The owner is
     `ci_common.sim_reference_roots()` (engine, then every `MODULE_CODE_ROOTS` row's matches); on

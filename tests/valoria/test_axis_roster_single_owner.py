@@ -52,7 +52,7 @@ def _canonical():
 
 
 def _py_files():
-    # Every code root from the one owner (plan position `35`, A-25), so a second axis roster typed
+    # Every code root from the one owner (`ci_common`, A-25), so a second axis roster typed
     # into a module under `modules/<name>/` is seen like one under `systems/`.
     for tree in ('engine', *ci_common.MODULE_CODE_DIRS):
         for dirpath, dirnames, filenames in os.walk(os.path.join(_ROOT, tree)):
@@ -114,13 +114,11 @@ def test_no_second_axis_roster_in_code():
     """
     canon = _canonical()
     offenders = []
-    checked = 0
     walked = set()
     for path in _py_files():
         rel = os.path.relpath(path, _ROOT)
         if rel == _OWNER:
             continue
-        checked += 1
         walked.add(rel)
         try:
             tree = ast.parse(open(path, encoding='utf-8').read())
@@ -138,10 +136,10 @@ def test_no_second_axis_roster_in_code():
             hits = names & canon
             if len(hits) >= 2:
                 offenders.append(f'{rel}:{node.lineno} -> {sorted(hits)}')
-    # The floors (CLAUDE.md §0.1 pt 2). The roots are derived (position `35`), so a count cannot tell a
+    # The floors (CLAUDE.md §0.1 pt 2). The roots are derived (`ci_common`), so a count cannot tell a
     # dropped root from a smaller tree: `engine/` alone clears any count that today's total does. The
     # observer of a dropped non-engine root is a named file under it, one this tree already depends on.
-    assert checked >= 100, f'only {checked} files scanned — the walk is broken, not clean'
+    assert len(walked) >= 100, f'only {len(walked)} files scanned — the walk is broken, not clean'
     assert _NON_ENGINE_WITNESS in walked, (
         f'{_NON_ENGINE_WITNESS} was not walked — the derived roots dropped the tree it lives under')
     assert not offenders, (

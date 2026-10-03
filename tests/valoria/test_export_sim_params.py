@@ -15,6 +15,7 @@ HERE = os.path.dirname(__file__)
 TOOLS = os.path.join(HERE, '..', '..', 'tools')
 ROOT = os.path.join(HERE, '..', '..')
 sys.path.insert(0, TOOLS)
+import ci_common  # noqa: E402
 import export_sim_params as esp  # noqa: E402
 
 
@@ -69,7 +70,7 @@ def test_key_alone_is_known_to_collide_and_is_not_used_as_an_index():
 
 
 def test_the_scan_list_is_derived_and_cannot_silently_shrink():
-    """Plan position `35` (A-25). The scan list was a hand list of `engine` and seven
+    """A-25. The scan list was a hand list of `engine` and seven
     `systems/<sub>/sim` directories; it is now `ci_common.sim_reference_roots()`, which also reads
     `modules/<name>/`. The floor is the hand list's own size, so a derivation that sees nothing — or
     that stops seeing a root after a module moves between `systems/` and `modules/` — fails here
@@ -80,11 +81,10 @@ def test_the_scan_list_is_derived_and_cannot_silently_shrink():
 
 
 def test_the_sim_reference_roots_owner_reads_modules_and_skips_pycache(tmp_path):
-    """Plan position `35` (A-25), the owner's own falsifier: `modules/` does not exist in the repo, so
+    """A-25, the owner's own falsifier: `modules/` does not exist in the repo, so
     a temporary tree plants one. `modules/<name>/` must join the roots after `systems/*/sim`;
     `modules/__pycache__` and a plain file under `modules/` must not. Without the `('modules', '*')`
     row this fails, which the live-tree test above cannot show."""
-    import ci_common
     for d in ('engine', 'systems/s/sim', 'modules/m', 'modules/__pycache__'):
         (tmp_path / d).mkdir(parents=True)
     (tmp_path / 'modules' / 'note.txt').write_text('x')

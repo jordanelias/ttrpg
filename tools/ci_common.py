@@ -80,20 +80,13 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 _REPO = REPO
 
 
-# ── one owner: the top-level directories MODULE CODE may live under (plan position `35`, A-25) ──
-# WRITTEN ONCE, here. Each row is `(top-level directory, glob under it naming one unit's running
-# code)`. `systems/<name>/sim/` is the oracle's home since `sim/` was retired (see
-# `sim_reference_roots`); `modules/<name>/` is a module's whole directory, because a module is
-# reachable running code and nothing else (A-25: no data, no prose). `modules/` need not exist yet:
-# every consumer below skips a root that is absent, and picks a module up the day its directory does.
-#
-# `MODULE_CODE_DIRS` means "every non-`engine/` tree holding game Python": what `engine/` must never
-# import and what the sweeps must read. The `systems` row stays after the moves in positions `31a`-`31c`:
-# legacy, workbench and unplugged Python remains there (A-25), and `engine/` still must not import it.
-#
-# WHO DERIVES FROM THIS: `rg -n 'MODULE_CODE_(DIRS|ROOTS)|sim_reference_(roots|prefixes)' tools tests
-# skills engine`. A scan that spells `systems` for the purpose "read module code" is the defect this
-# block removes: it goes silently blind the day code lands under `modules/`.
+# ── one owner: the top-level directories game Python may live under, besides `engine/` (A-25) ──
+# Each row is `(top-level directory, glob under it naming the sim-reference directories)`:
+# `systems/<name>/sim/` and `modules/<name>/` (a module's whole directory). `modules/` may be absent;
+# a consumer skips an absent root and picks the directory up the day it exists. The `systems` row stays
+# after positions `31a`-`31c` move code out: legacy and unplugged Python remains there, and `engine/`
+# still must not import it. `MODULE_CODE_DIRS` is the directory-name view of the rows.
+# Consumers: `rg -n 'MODULE_CODE_(DIRS|ROOTS)|sim_reference_(roots|prefixes)' tools tests skills engine`.
 MODULE_CODE_ROOTS = (
     ('systems', os.path.join('*', 'sim')),
     ('modules', '*'),
@@ -108,7 +101,7 @@ MODULE_CODE_DIRS = tuple(name for name, _ in MODULE_CODE_ROOTS)
 def sim_reference_roots(repo_root=None):
     """Every directory the 1:1 Python sim reference now lives under. ONE OWNER (ED-IN-0087).
 
-    Position `35` (A-25): the second and later `MODULE_CODE_ROOTS` rows are read the same way the
+    A-25: the second and later `MODULE_CODE_ROOTS` rows are read the same way the
     first is, so `modules/<name>/` joins the sim reference the day it exists. `engine/` first, then
     each row's matches in row order, each row sorted.
 

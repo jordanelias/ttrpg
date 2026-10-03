@@ -459,23 +459,23 @@ _BAND_RE = r"""['"](?:overwhelming|success|partial|failure)['"]|Degree\.(?:OVERW
 # commonest line in the tree) matches on the second `=` and every migrated file reads as a ladder.
 _PRODUCES_BAND = re.compile(r'(?:return\s+|(?<![=!<>+])=\s*)(?:' + _BAND_RE + r')', re.IGNORECASE)
 
-# The code roots come from the one owner (plan position `35`, A-25): a hand-rolled ladder in a module
+# The code roots come from the one owner (`ci_common`, A-25): a hand-rolled ladder in a module
 # under `modules/<name>/` is the same defect as one under `systems/`, and a root typed here would
-# have left that tree outside the sweep on the day code first landed there. `scanned >= 100` below
-# catches an empty walk only: `tests/` alone clears it, so it does not observe a dropped root.
+# have left that tree outside the sweep on the day code first landed there.
 SCAN_ROOTS = ['engine', *ci_common.MODULE_CODE_DIRS, 'skills', 'tools', 'tests']
 
 
 def test_no_new_hand_rolled_ladder():
     """A new `if net ...: return 'Success'` outside the registry fails until it is routed."""
     allowed = set(LADDER_OWNERS) | set(DECLARED_ADAPTERS) | set(HELD)
-    offenders, scanned = [], 0
+    offenders, scanned, roots_seen = [], 0, set()
     for root in SCAN_ROOTS:
         for path in (REPO / root).rglob('*.py'):
             rel = path.relative_to(REPO).as_posix()
             if 'deprecated/' in rel or '__pycache__' in rel:
                 continue
             scanned += 1
+            roots_seen.add(rel.split('/', 1)[0])
             if rel in allowed:
                 continue
             text = path.read_text(encoding='utf-8', errors='replace')
@@ -485,6 +485,9 @@ def test_no_new_hand_rolled_ladder():
                 offenders.append(rel)
 
     assert scanned >= 100, f'sweep scanned only {scanned} files — the walk is broken, not clean'
+    # `tests/` alone clears the count, so the count cannot see a dropped code root; `systems/` holds game
+    # Python as long as any legacy sim remains (A-25), and it is read only through the derived roots.
+    assert 'systems' in roots_seen, f'no file under systems/ was scanned (roots seen: {sorted(roots_seen)})'
     assert not offenders, (
         'new hand-rolled degree ladder(s) found. Route them through '
         'engine.dice_engine.dice_engine.degree_from_net, or add them to DECLARED_ADAPTERS with a '
