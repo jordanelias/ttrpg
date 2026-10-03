@@ -721,7 +721,7 @@ rosters:
       at the first act that folds: `VerbRow.writes_at` refuses an unlisted degree and PRINTS BOTH
       SETS.
       ⚠ THESE ARE NOT THE LADDER'S FOUR BANDS AND MUST NOT BE CONFUSED WITH THEM. `S39.4` reads
-      four bands off a MARGIN and its single owner is `engine/autoload/dice_engine.py::
+      four bands off a MARGIN and its single owner is `engine/dice_engine/dice_engine.py::
       degree_from_net`, which `shape.degree_of` IMPORTS AND CALLS. Combat is EXEMPT from that
       ladder by the ruling above: its bands are a READ of the engine's own `WoundTracker` — the
       subject went down, the subject bled, the subject was untouched — and every one of the three

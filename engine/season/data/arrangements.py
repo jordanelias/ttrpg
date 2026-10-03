@@ -50,7 +50,7 @@ from .rosters import (
 
 ARRANGEMENTS_YAML = files.ARRANGEMENTS_YAML
 
-# THE DEGREE LADDER, NOT RE-DERIVED. `engine/autoload/dice_engine.py::DEGREE_LABEL` is the single
+# THE DEGREE LADDER, NOT RE-DERIVED. `engine/dice_engine/dice_engine.py::DEGREE_LABEL` is the single
 # owner (Jordan ruling, 2026-08-14: "THE degree ladder... for every scale of the game"), imported
 # rather than copied into a `rosters.yaml` roster of its own -- a fresh `degree_bands` roster with
 # these same four values collided with a PRE-EXISTING, unrelated literal in
@@ -58,7 +58,7 @@ ARRANGEMENTS_YAML = files.ARRANGEMENTS_YAML
 # `test_jordan_no_definition_is_hardcoded_in_a_body` correctly read as two owners of one fact the
 # moment a second one was written down. Importing the enum's own labels is the one-owner fix rather
 # than a second declaration this loader would then have to keep in step with dice_engine.py by hand.
-from engine.autoload.dice_engine import DEGREE_LABEL as _DEGREE_LABEL   # noqa: E402
+from engine.dice_engine.dice_engine import DEGREE_LABEL as _DEGREE_LABEL   # noqa: E402
 DEGREE_BANDS = frozenset(_DEGREE_LABEL.values())
 
 # ---------------------------------------------------------------------------

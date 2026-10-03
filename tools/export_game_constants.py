@@ -52,7 +52,7 @@ OUT = os.path.join(REPO, 'engine', 'engine_params', 'game_constants.json')
 # GD constant name -> fully qualified owner key in sim_params.json / combat_engine_v1.json.
 # EVERY pair here was confirmed by reading both call sites. Never add one by name similarity.
 MAPPING = {
-    'TN_STANDARD':                   'engine.autoload.TN_STANDARD',
+    'TN_STANDARD':                   'engine.dice_engine.TN_STANDARD',
     'WEAPON_TN_BASE':                'combat.WEAPON_TN_BASE',
     'COMBAT_POOL_MINIMUM':           'combat.COMBAT_POOL_MIN',
     # COHERENCE_START / _MAX / _MIN / _FRACTURED_THRESHOLD LEFT THIS TABLE at position 27 (WR-SCOPE,
@@ -92,7 +92,7 @@ COLLISIONS = {
                   "Not a divergence.",
     },
     'MOMENTUM_MAX': {
-        'python_name': 'engine.autoload.M_MAX',
+        'python_name': 'engine.dice_engine.M_MAX',
         'python_value': 1.5,
         'gd_value': 4,
         'reason': "M_MAX is the kernel's tanh multiplier ceiling (sigma_leverage), not a Momentum cap. "

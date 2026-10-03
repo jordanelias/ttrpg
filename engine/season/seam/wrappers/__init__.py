@@ -3,7 +3,7 @@ the §A.2 table's row for them is the shortest in the document: they own **"noth
 read the projection, and they emit a `Margin`.
 
 Three wrappers: `combat.py`, the IN-side of the personal-combat call `seam/contest.py` dispatches
-to; `sigma.py`, the interim social provider `ED-SC-0037` rules (`engine/autoload/sigma_leverage.py`);
+to; `sigma.py`, the interim social provider `ED-SC-0037` rules (`engine/dice_engine/sigma_leverage.py`);
 and `mass_battle.py`, wired M3 of the `mc_v18`-retirement plan (`ED-IN-0279`) -- `rosters.yaml`'s
 "a field" row now has a `provider:`, closing the gap this docstring used to describe.
 ⚠⚠ **THIS PACKAGE IMPORTS ITS OWN WRAPPERS, AND THAT IS WHAT REGISTERS THEM.

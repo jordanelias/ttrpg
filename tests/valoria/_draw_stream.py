@@ -62,7 +62,7 @@ _ENGINE_DIR = os.path.join(
     'systems', 'combat', 'combat_engine_v1')
 _DICE_ENGINE = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-    'engine', 'autoload', 'dice_engine.py')
+    'engine', 'dice_engine', 'dice_engine.py')
 
 
 # ---------------------------------------------------------------------------

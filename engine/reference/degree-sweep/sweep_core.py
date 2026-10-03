@@ -12,7 +12,7 @@ question -- and never a statement about which degree is correct, which is `H-98`
 
 TWO LADDERS, AND THE GAP BETWEEN THEM IS THE FINDING
 ----------------------------------------------------
-LADDER C -- the CANONICAL four, `engine/autoload/dice_engine.py::degree_from_net`, single owner
+LADDER C -- the CANONICAL four, `engine/dice_engine/dice_engine.py::degree_from_net`, single owner
   for every scale of the game by Jordan's 2026-08-14 ruling, read off the MARGIN:
       margin >= 3  Overwhelming | >= 1 Success | 0 <= m < 1 Partial | < 0 Failure
 LADDER D -- the DECLARED three, `verb_table.yaml`'s `kill / wound` row, the only degree-keyed
@@ -119,7 +119,7 @@ from engine.season.decision import options as PS_OPTIONS  # noqa: E402
 
 # `CLAUDE.md` §0.1 pt 5 / G1: declared with its reason, never a bare literal in a body.
 LADDER_C = ("Overwhelming", "Success", "Partial", "Failure")
-LADDER_C_WHY = ("engine/autoload/dice_engine.py::degree_from_net -- THE ladder, single owner for "
+LADDER_C_WHY = ("engine/dice_engine/dice_engine.py::degree_from_net -- THE ladder, single owner for "
                 "every scale (Jordan ruling 2026-08-14), read off the margin `net - ob`")
 LADDER_D = ("Felled", "Wounded", "Untouched")
 LADDER_D_WHY = ("engine/season/verb_table.yaml, the `kill / wound` "

@@ -27,8 +27,8 @@ from __future__ import annotations
 
 import pytest
 
-from engine.autoload import dice_engine as DE
-from engine.autoload.dice_engine import BandExtension, Degree, degree_from_net
+from engine.dice_engine import dice_engine as DE
+from engine.dice_engine.dice_engine import BandExtension, Degree, degree_from_net
 
 
 # The four bands over a domain wide enough to include every boundary the ladder has.

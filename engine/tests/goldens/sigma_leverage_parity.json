@@ -1,7 +1,7 @@
 {
  "schema": 1,
  "generator": "tools/gen_sigma_parity_goldens.py",
- "subject": "engine/autoload/sigma_leverage.py",
+ "subject": "engine/dice_engine/sigma_leverage.py",
  "oracles": {
   "m1": "tests/sim/v32-combat-balance/m1_dice_sigma_core.py",
   "groundup": "engine/reference/contest-groundup/engine.py"

@@ -42,8 +42,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional, Any
 
-from engine.autoload import dice_engine
-from engine.autoload.dice_engine import roll_pool
+from engine.dice_engine import dice_engine
+from engine.dice_engine.dice_engine import roll_pool
 
 
 # §3.1 prerequisites

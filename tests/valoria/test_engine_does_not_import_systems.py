@@ -433,7 +433,7 @@ def test_the_one_declared_path_seam_is_still_the_only_one():
         #     stayed green while a second undeclared seam existed. Matching on TYPOGRAPHY rather
         #     than on the concept is the defect this file exists to prevent one level down.
         # (2) Widening the quoting alone then reported `season/shape.py`, which is NOT a seam: it
-        #     inserts the REPO ROOT to import `engine.autoload.dice_engine` by dotted path, and
+        #     inserts the REPO ROOT to import `engine.dice_engine.dice_engine` by dotted path, and
         #     `systems` appears elsewhere in it as a directory probe for a diagnostic string.
         #     Co-occurrence ANYWHERE IN THE FILE was never the right question. An over-refusal is
         #     a defect of equal weight to a miss: it would push a later author to delete a

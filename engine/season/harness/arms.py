@@ -17,7 +17,7 @@ the SUBSYSTEM's own copy of the ladder. Verified against the live tree (2026-09-
 `engine/season/seam/ladder.py`'s `degree_of()` (the ONLY place a subsystem result becomes a band
 the season loop writes on) has three branches — `combat_degree` for a `wound_state` result,
 `field_degree` for a mass-battle result, and for a `net`/`ob` margin it calls
-`degree_ladder()` (`:88-108`), which imports `engine.autoload.dice_engine.degree_from_net`
+`degree_ladder()` (`:88-108`), which imports `engine.dice_engine.dice_engine.degree_from_net`
 BY DOTTED PATH, directly — never `systems.social_contest.sim.contest.resolver`. The season
 loop's own "a standing" contest (the `tell` verb, `seam/wrappers/sigma.py`) is graded through
 that engine-owned ladder, not the subsystem's. So patching the subsystem's copy from inside
@@ -114,7 +114,7 @@ from . import populated
 # Absolute imports reachable without a `sys.path` hack: this module is a real package member
 # (`engine.season.harness.arms`), unlike the standalone script it replaces, which had to insert
 # the repo root by hand to be runnable as `python3 tools/balance_oracle.py`.
-from engine.autoload import dice_engine, sigma_leverage as SL  # noqa: F401 (kept for _pool_arm)
+from engine.dice_engine import dice_engine, sigma_leverage as SL  # noqa: F401 (kept for _pool_arm)
 
 # [JUSTIFIED: the conventional two-sided 5% critical z-value, unchanged from `tools/balance_oracle.py`'s identical constant — a standard statistical threshold, not a fitted game magnitude]
 Z_THRESHOLD = 1.96          # two-sided 5%

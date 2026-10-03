@@ -1,5 +1,5 @@
 """
-engine/autoload/dice_engine.py — d10 dice pool, TN values, degree of success, continuous engine
+engine/dice_engine/dice_engine.py — d10 dice pool, TN values, degree of success, continuous engine
 (The header read `sim/autoload/...` until 2026-08-27; that tree was retired 2026-07-21. Its twin
 in sigma_leverage.py was fixed the same day and this one was missed — §0.1 pt 5's sweep-the-pattern.)
 

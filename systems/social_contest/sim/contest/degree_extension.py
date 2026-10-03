@@ -7,7 +7,7 @@ wrapper needs to inject the engine in such a manner that it can be modified clea
 
 ED-SC-0031 did the first half — the contest's bands became `dice_engine.degree_from_net`'s. It
 did NOT do the second: the pool-aware de-saturation survived as a hard-coded post-filter inside
-`engine/autoload/sigma_leverage.py`, which meant (a) the ENGINE carried a rule that belongs to
+`engine/dice_engine/sigma_leverage.py`, which meant (a) the ENGINE carried a rule that belongs to
 one subsystem, and (b) there was no seam, so the discipline holding it to "demote only" was a
 comment rather than a contract. Both halves are fixed here and in `dice_engine.BandExtension`:
 
@@ -37,10 +37,10 @@ from __future__ import annotations
 
 import math
 
-from engine.autoload.dice_engine import BandExtension
-from engine.autoload.sigma_leverage import MU_PER_DIE, SD_PER_DIE
+from engine.dice_engine.dice_engine import BandExtension
+from engine.dice_engine.sigma_leverage import MU_PER_DIE, SD_PER_DIE
 
-# De-saturation bar coefficient. MOVED here from engine/autoload/sigma_leverage.py 2026-08-27
+# De-saturation bar coefficient. MOVED here from engine/dice_engine/sigma_leverage.py 2026-08-27
 # (ED-SC-0032) — it is a contest constant and its own citation says so.
 # [canonical: audit/2026-06-03-contest-groundup/engine.py §degree]
 OVERWHELM_SIGMA = 0.85
@@ -95,7 +95,7 @@ def owner_overwhelming_margin() -> float:
     `degree_from_net` for the smallest quarter-step margin it bands Overwhelming means a future
     change to the ladder moves every caller with it.
     """
-    from engine.autoload.dice_engine import Degree, degree_from_net
+    from engine.dice_engine.dice_engine import Degree, degree_from_net
 
     return next(m / 4 for m in range(0, 41)
                 if degree_from_net(m / 4, 0.0) is Degree.OVERWHELMING)
@@ -121,7 +121,7 @@ def crossover_pool(ob: float) -> int | None:
 def degree(net: float, ob: float, pool: float | None = None) -> int:
     """The contest's ordinal degree: the OWNER's ladder with this extension injected.
 
-    MOVED here from `engine/autoload/sigma_leverage.py` 2026-08-27 (ED-SC-0032). The function is
+    MOVED here from `engine/dice_engine/sigma_leverage.py` 2026-08-27 (ED-SC-0032). The function is
     unchanged in behaviour and changed in ADDRESS, which is the whole point — the engine no
     longer carries a contest-specific rule, and this one goes through the declared seam rather
     than post-filtering the engine's answer behind its back.
@@ -133,7 +133,7 @@ def degree(net: float, ob: float, pool: float | None = None) -> int:
 
     `pool=None` means the extension abstains and the owner's ladder stands unmodified.
     """
-    from engine.autoload.dice_engine import DEGREE_ORDINAL, degree_from_net
+    from engine.dice_engine.dice_engine import DEGREE_ORDINAL, degree_from_net
 
     return DEGREE_ORDINAL[degree_from_net(
         net, ob, extension=CONTEST_DEGREE_EXTENSION, pool=pool)]

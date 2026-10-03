@@ -18,7 +18,7 @@ because `dice_engine.roll_pool` never read its `tn` argument:
 
     systems/combat/sim/combat.py        WEAPON_TN_MOD, shifting TN across 5-8
     systems/threadwork/sim/operations.py TN_BINDING=8, TN_POP=8, TN_POP_BINDING=9
-    engine/autoload/sigma_leverage.py    a "Controlled 6 / Standard 7 / Desperate 8" scale
+    engine/dice_engine/sigma_leverage.py    a "Controlled 6 / Standard 7 / Desperate 8" scale
 
 Those constants READ AS BUGS: named, plausible, and provably doing nothing. The natural
 "fix" a future session would reach for is to make `dice_engine` honour `tn` — and that one
@@ -44,8 +44,8 @@ import re
 
 import pytest
 
-from engine.autoload import dice_engine as de
-from engine.autoload import sigma_leverage as sl
+from engine.dice_engine import dice_engine as de
+from engine.dice_engine import sigma_leverage as sl
 from systems.mass_battle.sim import resolution as mb
 
 

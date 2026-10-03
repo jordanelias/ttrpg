@@ -15,14 +15,14 @@ from .contract import A, B, other, Move, ContestView, FaultState, Adjudicator, P
 from .primitives import (Stasis, Appeal, Standing, Reserve, Pool, SelfGating, Leverage, Room,
                         Resonance, Readiness, DefeatCatalogue, EvidenceItem, Dossier,
                         RhetoricalWeights, FaceScale)
-# Stage 1b: rewired to the ONE canonical σ-kernel (engine.autoload.sigma_leverage), replacing the
+# Stage 1b: rewired to the ONE canonical σ-kernel (engine.dice_engine.sigma_leverage), replacing the
 # groundup local engine.py (the "third σ-kernel" hazard). effective_ob/degree/net_boost are
 # byte-identical at TN7 (parity-tested). roll_net is wrapped below to preserve the kernel's
 # GLOBAL-random stream (sigma_leverage.roll_net(rng=random) draws from the module-level RNG the
 # 151 seeded tests rely on; passing rng=None would use a fresh Random and desync the seed).
-from engine.autoload import sigma_leverage as _sigma
-from engine.autoload.dice_engine import DEGREE_ORDINAL, degree_from_net
-from engine.autoload.sigma_leverage import effective_ob, net_boost
+from engine.dice_engine import sigma_leverage as _sigma
+from engine.dice_engine.dice_engine import DEGREE_ORDINAL, degree_from_net
+from engine.dice_engine.sigma_leverage import effective_ob, net_boost
 from .degree_extension import CONTEST_DEGREE_EXTENSION as _DEFAULT_DEGREE_EXTENSION
 
 def roll_net(pool):
@@ -266,7 +266,7 @@ class Bout:
         # harness) behaves as the contest does; pass `degree_extension=None` for the owner's
         # unmodified ladder, or another BandExtension to substitute a policy. Substituting is
         # what "modified cleanly" means, and before this it was not possible at all: the rule
-        # was a hard-coded post-filter inside engine/autoload/sigma_leverage.py.
+        # was a hard-coded post-filter inside engine/dice_engine/sigma_leverage.py.
         self.degree_extension = degree_extension
 
     def _view(self, side, i):
