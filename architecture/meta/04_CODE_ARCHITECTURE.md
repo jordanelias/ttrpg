@@ -1,6 +1,6 @@
 # META-ARCHITECTURE — STAGE 4 · CODE SHAPE, TYPES, SEAMS, IMPOSSIBILITIES
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules registered into it under `systems/<name>/sim/`. ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone.**
 ## Produced by a **read-only** Fable 5.1 synthesis holding Stages 1–3 in context. Concrete shapes taken
 ## from, amended against, or rejected from the chain (#353 `ARCHITECTURE.md`, `ARCHITECTURE_V2.md`,
 ## the three YAML files). **Nothing under `canon/`, `systems/`, `research/` or `engine/` was read.**
@@ -144,12 +144,12 @@ loop/        driver + seven steps.  The driver is the ONLY constructor of write 
              ⚠ M4 (`ED-IN-0279` clause (a), 2026-09-28) added ENCOUNTER between RESOLVE and
              WITNESS -- it shares barrier 3 (no new `TRACE.barrier()` call, so "four barriers"
              stays true) and `WriteClass.ACTS` with RESOLVE. See its own row below and §C.1.
-seam/        contest() · ladder · the contest providers: one per deferred subsystem, registered by the module
-             under `systems/<name>/sim/` that owns it (`seam/wrappers/` until the relocation lands)
-             ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284). This line read "one wrapper per deferred
-             subsystem" and housed the wrappers inside the game code. Every system under `systems/` is now a
-             module that plugs into the loop and registers what it supplies (§42's `owns:`); the dispatcher
-             and the ladder stay here. The no-token, no-write discipline of the row below is unchanged.
+seam/        contest() · ladder · the contest provider ADAPTERS, one per deferred subsystem: each builds a
+             typed input from a projection, calls the module entry its composition row names, and returns the
+             typed output (`seam/wrappers/` holds the adapters; the module halves live in `modules/<name>/`)
+             ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285). This line read "one
+             wrapper per deferred subsystem". A module writes nothing and holds no token; the loop interprets
+             its output. The no-token, no-write discipline of the row below is unchanged.
 manifest/    role -> provider rows, resolved at boot
 port/        the Godot shell; nothing under it is simulation
 tests/       falsifiers, including the two licensed guards
@@ -179,7 +179,7 @@ tests/       falsifiers, including the two licensed guards
 | `loop/census` | `(Person, exists)` on individuation, `weight`, `envelope` | post-eviction ledgers once; the log for demand kinds | `person.individuated` | MATTER |
 | `seam/contest` | **nothing.** Dispatches; enforces `max_depth`; returns Events + degree, or a typed refusal | a read-only projection | the contest's Events, **into the same log** | **none** |
 | `seam/ladder` | nothing. `degree(margin, veto?) -> Degree` | the exported band edges | — | — |
-| the contest providers (`seam/wrappers/*` today; registered by `systems/<name>/sim/` once relocated) | **nothing, ever** | the projection | a `Margin` | **none** |
+| the contest provider adapters (`seam/wrappers/*`; the module halves in `modules/<name>/`) | **nothing, ever** | the projection | a `Margin` | **none** |
 
 ## §A.3 · Fifteen differences from the chain, each with its forcing clause
 
