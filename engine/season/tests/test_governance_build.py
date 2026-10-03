@@ -746,7 +746,8 @@ def _load_with(table_text: str):
 
     ⚠⚠ THIS USED TO WRITE THE TRACKED `engine/season/verb_table.yaml` AND RESTORE IT IN A
     `finally`, AND THAT WAS UNSAFE IN THE ONE CONFIGURATION CI ACTUALLY RUNS.
-    `.github/workflows/valoria-ci.yml:347` runs `pytest engine/season/tests -q -n auto`, and
+    `valoria-ci.yml`'s `season-tests` job (`unit-tests` until 2026-10-02) runs
+    `pytest engine/season/tests -q -n auto`, and
     xdist's default `--dist load` spreads one file's tests across workers. Two failures follow
     from writing the real path:
       * ANOTHER worker reading the table mid-arm (`test_season_shape.py` reads it directly in

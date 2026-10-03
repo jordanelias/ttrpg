@@ -17,9 +17,9 @@ checked against its constructor before being written, and every one is mutation-
 for completeness.
 
 ⚠ **WHY NOT `hypothesis`, WHICH ROW 5 NAMES.** It is not a dependency anywhere in this tree and
-CI's `unit-tests` job installs only `pyyaml pytest numpy pytest-xdist`
+CI's `unit-tests` and `season-tests` jobs install only `pyyaml pytest numpy pytest-xdist`
 (`.github/workflows/valoria-ci.yml`), so a new third-party import in a blocking-gate test file
-would collect-error the whole job. `tests/valoria/test_dice_engine_properties.py` hit this first
+would collect-error the whole job that runs it. `tests/valoria/test_dice_engine_properties.py` hit this first
 and set the precedent: the property-testing METHOD (many seeds, one invariant, reproducible)
 without the dependency. Row 5's `unblocked_by` string names the library because that is how the
 technique is usually spelled; what it is actually asking for is the sweep.

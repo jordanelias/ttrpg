@@ -24,8 +24,9 @@ ASSUMPTION below).
  it touches an implemented module. Until migration: both code paths
  produce identical output (MS_FLOOR=0, MS_CEILING=100, delta=-1/year).]
 
-Dependencies:
-  - sim/autoload/game_state
+Dependencies: none live — the game_state module these signatures were written against was deleted at
+`29b` (`FORK:5c5d8ec6`); they are string annotations and no caller passes a season `World` (which carries
+no `clocks`). `33` decides the carrier.
 
 Entry points:
   - apply_ms_baseline_decay(world: GameState) -> int

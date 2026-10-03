@@ -338,8 +338,9 @@ def row_invariant_violations():
     exactness claim — §0.1 pt 2's *"not a weak test but an absent one"*.
 
     ⚠⚠ **THIS ROW'S `unblocked_by` USED TO NAME HYPOTHESIS AND THAT WAS NEVER SATISFIABLE HERE.**
-    CI's `unit-tests` job installs `pyyaml pytest numpy pytest-xdist` and nothing else, so a new
-    third-party import in a blocking-gate test file collect-errors the whole job.
+    CI's `unit-tests` and `season-tests` jobs install `pyyaml pytest numpy pytest-xdist` and nothing
+    else, so a new third-party import in a blocking-gate test file collect-errors the whole job
+    that runs it.
     `tests/valoria/test_dice_engine_properties.py` hit this first and set the precedent: the
     property-testing METHOD — many seeds, one invariant, reproducible — without the dependency.
     The library was how the technique got spelled, never the requirement.

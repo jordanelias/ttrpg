@@ -1,6 +1,6 @@
 # THE SEASON LOOP — A HOLONIC ARCHITECTURE, AND THE GUIDE TO BUILDING IT IN GODOT
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone.**
 ## Under `CLAUDE.md` §0.05 this document is **REFERENCE, never mechanism.** Under §0.2 **nothing in it
 ## runs.** Part X says what would make each claim done and which steps cannot be satisfied by writing.
 
@@ -1719,7 +1719,10 @@ res://
       calendar.gd  matter.gd  deliberate.gd  resolve.gd  witness.gd  census.gd
     seam/
       contest_resolver.gd    # the base the deferred subsystems extend (§39)
-      <subsystem>_wrapper.gd # §44.2 — entry point + extension injector, one per deferred subsystem
+      <subsystem>_wrapper.gd # §44.2 — the loop-side adapter: builds the typed input, calls the module entry, returns the typed output
+    modules/
+      <name>/                # one per module, reached by composition row AT BOOT (§43): typed input and output
+                             # records and the entry the wrapper calls; no Node, no state between calls
     manifest/
       roles.gd               # role -> provider, resolved AT BOOT (§43)
     params/params.gd         # class_name Params — the typed holder, loaded ONCE by the driver
@@ -1731,8 +1734,9 @@ res://
   tests/
 ```
 
-⚠ **`manifest/` and `seam/<subsystem>_wrapper.gd` are additions to the chain's stated layout**, marked
-here as departures rather than smuggled in. Both are §43's and §44.2's homes.
+⚠ **`manifest/`, `seam/<subsystem>_wrapper.gd` and `modules/<name>/` are additions to the chain's stated layout**,
+marked here as departures rather than smuggled in. They are §43's and §44.2's homes. (AMENDED 2026-10-03,
+ED-IN-0284, corrected by ED-IN-0285: `modules/<name>/` is new; the wrapper line is as ratified.)
 
 ### §45.1 Declare `World` first
 

@@ -107,12 +107,10 @@ def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
     op_type: 'Weaving' / 'Pulling' / 'Locking' / 'Dissolution' / 'POP' / 'Mending'.
     target: dict with 'scale' and optional 'breadth'/'distance'/'recency'.
 
-    ⚠ TWO WRITES STRUCK AT PLAN POSITION 27, so that `29a`-ms and `29f` can delete their targets.
+    ⚠ TWO WRITES STRUCK AT PLAN POSITION 27, (position 27 unplugged threadwork from both targets; both modules stay, Jordan 2026-10-02).
     `ms_delta` was written into the world Mending Stability clock through the overview MS-track
     module — an overview clock with no season analogue by architecture (`engine/season/loop/
-    census.py`: "NO CLOCK GENERATES ANYTHING"; `29a` deleted its siblings in PR #450 and that module
-    goes at `29a`-ms). And the `a_knot_id`/`b_knot_id` parameters fed Knot strain into the
-    `fieldwork` Knot store — the store `29f` retires, whose bond is `Tenure.degree` in the season.
+    census.py`: "NO CLOCK GENERATES ANYTHING"; `29a` deleted its siblings in PR #450 and that module stays, unplugged). And the `a_knot_id`/`b_knot_id` parameters fed Knot strain into the `fieldwork` Knot store (`systems/fieldwork/sim/knots.py`, which stays, unplugged). No source in the repo says where its gauge maps in the season (`H-182`'s cite).
     Neither is re-wired: both values stay REPORTED (`ms_delta`; each side's `knot_ob_penalty`). The
     only state this function writes is each side's Coherence.
     """

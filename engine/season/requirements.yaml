@@ -62,10 +62,15 @@ ed: "ED-IN-0204"
 # matters: the spec the adopted system must satisfy lives in a tree the ruling marked superseded.
 # Superseded means the LOOP must express it. It never meant the requirement goes away.
 
+# ⚠ RETENTION CORRECTED 2026-10-02 (Jordan, ED-IN-0283), verbatim: "we have to keep those systems folders as they are the home for those
+# systems"; of this roster's retire-set labels: "all of this is wrong". Every scale below is RETAINED. The notes that follow
+# describe the retirement as it was planned and are history; deletions already merged under the old label are an open question
+# put to Jordan (ED-IN-0283).
+
 scales:
   - scale:    "character creation / development / chronicling"
     subsystem: ["systems/characters (sim/conviction.py only)", "systems/npcs (no tracked file)"]
-    retention: retire-set
+    retention: "RETAINED (Jordan, 2026-10-02, ED-IN-0283 -- the systems/ folders are the homes of their systems)"
     in_loop:   false
     note: >-
       `Person` carries `pursuits`, `ledger`, `stance`, `capability` — but NOTHING
@@ -77,7 +82,7 @@ scales:
       not by person in 142 of the 143 cases. W27 is the cast.
   - scale:    "grand strategy politics"
     subsystem: ["systems/factions (deleted)", "systems/settlements (geography YAML, svg, package marker)", "systems/world (adjacency_map.jsx only)"]
-    retention: retire-set
+    retention: "RETAINED (Jordan, 2026-10-02, ED-IN-0283 -- the systems/ folders are the homes of their systems)"
     in_loop:   false
     note: >-
       R-04's opening headline, the pre-`20-ii` reading: 44 of 143 cases UNREPRESENTABLE at faction
@@ -149,7 +154,7 @@ scales:
       execution plan.
   - scale:    "settlement management / city building / domain actions"
     subsystem: ["systems/settlements (geography YAML, svg, package marker)", "systems/overview (sim/ms_track.py only)"]
-    retention: retire-set
+    retention: "RETAINED (Jordan, 2026-10-02, ED-IN-0283 -- the systems/ folders are the homes of their systems)"
     in_loop:   false
     note: >-
       ADDED 2026-09-05 on Jordan's correction — the first draft of this roster missed it. The design
@@ -164,7 +169,7 @@ scales:
 
   - scale:    "investigations / detective / interactive fiction"
     subsystem: ["systems/fieldwork (sim/knots.py only)"]
-    retention: retire-set
+    retention: "RETAINED (Jordan, 2026-10-02, ED-IN-0283 -- the systems/ folders are the homes of their systems)"
     in_loop:   false
     note: >-
       Six investigation acts exist in `verb_table.yaml` and NONE declares `contests:` — so

@@ -1657,8 +1657,9 @@ def test_w15_the_run_cases_entrypoint_writes_nothing():
     `pytest engine/season/tests -n auto`. It reddens only if somebody runs `engine/season/tests
     tests/valoria engine/tests` in ONE invocation, which is not a thing the repo asks for.* Both
     halves are false, and for the same reason: BOTH SIBLINGS LIVE IN `engine/season/tests`, so the
-    workflow's own line (`.github/workflows/valoria-ci.yml:347`,
-    `python -m pytest engine/season/tests -q -n auto`) puts them in ONE pool. Separate JOBS never
+    workflow's own line (the `python -m pytest engine/season/tests -q -n auto` step of
+    `valoria-ci.yml`, in `unit-tests` until 2026-10-02 and in `season-tests` since) puts them in
+    ONE pool. Separate JOBS never
     separated them. MEASURED 2026-09-20: red on CI for PR #423 (run 35485183042), and
     `pytest engine/season/tests -q -n auto -k w15` reproduces it 3/3 on that branch and 2/2 on a
     clean `origin/main` worktree -- so it is the base's, not any one branch's. A full-suite run
@@ -14422,7 +14423,7 @@ def test_the_populated_world_has_a_governance_ladder_and_scarce_seats():
     assert undetermined > 0, "nothing is undetermined, so the unheld province was given an owner"
 
 
-def test_the_npc_roster_is_read_and_not_merely_shipped():
+def test_the_npc_roster_is_read_and_not_merely_shipped(monkeypatch, tmp_path):
     """`engine/season/npcs.yaml` is the AUTHORITY for where an NPC lives and what they want, and
     this asserts the loop actually opens it.
 
@@ -14469,17 +14470,24 @@ def test_the_npc_roster_is_read_and_not_merely_shipped():
     import copy
     doctored = copy.deepcopy(data)
     doctored["npcs"][0]["home"] = planted
-    original = roster_path.read_text(encoding="utf-8")
-    try:
-        roster_path.write_text(_yaml.safe_dump(doctored, sort_keys=False, allow_unicode=True),
-                               encoding="utf-8")
-        w1 = POP.build_realm(0)
-        assert _home_of(w1, pid) == planted, (
-            f"{victim} was seated at {_home_of(w1, pid)!r} after the roster said {planted!r}. "
-            "`build_realm` is re-deriving rather than reading — the roster is then a file nobody "
-            "opens, and correcting one NPC by hand would silently do nothing")
-    finally:
-        roster_path.write_text(original, encoding="utf-8")
+    # ⚠ THE DOCTORED ROSTER IS A TEMPORARY COPY THE REALM IS POINTED AT, NEVER A WRITE TO THE REAL FILE
+    # (2026-10-02). This test used to rewrite `engine/season/npcs.yaml` and restore it in a `finally`,
+    # and under `pytest -n` any other worker that built a realm inside that window read the doctored
+    # roster: one NPC seated in the wrong hearth, and `test_15d_falsifier_the_realm_holds_hearsay_no_
+    # telling_minted` read 5,080 claims against 5,110 in its first arm. MEASURED: that test failed on
+    # one `-n 4` schedule (twice) and passed in every serial replay, including gw3's exact 301-test
+    # sequence. `populated._load` joins its argument to `files.REPO_ROOT`, and a pathlib join with an
+    # absolute path is that path, so patching `POP.ROSTER` redirects the read. The assertion below is
+    # the control: if the redirect did not reach `build_realm`, the NPC would stay at its real home.
+    doctored_path = tmp_path / "npcs.yaml"
+    doctored_path.write_text(_yaml.safe_dump(doctored, sort_keys=False, allow_unicode=True),
+                             encoding="utf-8")
+    monkeypatch.setattr(POP, "ROSTER", str(doctored_path))
+    w1 = POP.build_realm(0)
+    assert _home_of(w1, pid) == planted, (
+        f"{victim} was seated at {_home_of(w1, pid)!r} after the roster said {planted!r}. "
+        "`build_realm` is re-deriving rather than reading — the roster is then a file nobody "
+        "opens, and correcting one NPC by hand would silently do nothing")
 
 
 def _home_of(w, pid):

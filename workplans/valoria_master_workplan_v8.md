@@ -2,7 +2,7 @@
 
 ## Status: PROPOSED 2026-10-01 — directed by Jordan; adoption on merge (ED-1094)
 ## Lane: IN (cross-cutting). It is the ONE active plan (`CLAUDE.md` §2) for every lane whose items it carries — IN, SC, SE, MB, PC, FI, WR, GO. FA carries no open plan position: `29b` (landed, PR #450) deleted the code its handoff rows describe, and `HANDOFF_FA.md`'s remaining rows are authoring items this plan does not schedule. **Carved out of it by name: `workplans/2026-10-01-telling-workplan.md` (§0.6), which owns everything about A telling B about C.**
-## Reads in order: this file (head, milestones, state index) → `_part2` (THE NINE, one section per row) → `_part3` (orchestration, pre-flight, the Batch 0 remainder; Batch 1 landed) → `_part4` (Batches 2–3) → `_part5` (Batch 4, the Jordan queue, the answered list) → `_part6` (standing content carried from the retired plans, and history).
+## Reads in order: this file (head, milestones, state index) → `_part2` (THE NINE, one section per row) → `_part3` (orchestration, pre-flight, the Batch 0 remainder; Batch 1 landed) → `_part4` (Batches 2–3) → `_part5` (Batch 4, modules and the dice engine `30`–`36` in §SM, the Jordan queue, the answered list) → `_part6` (standing content carried from the retired plans, and history).
 ## Grade under `CLAUDE.md` §0.2: `paper` throughout. A plan, not an execution artifact. Where a row says DONE it repeats cited evidence; the evidence is the thing cited, never this file.
 
 **Why this exists, in Jordan's words (2026-10-01, verbatim).** *"Retire ALL plans. We will work on one
@@ -79,10 +79,13 @@ measurement (OPEN). `11a`/`11b` are DONE. This plan uses position numbers only, 
 numbers.
 
 **Added by this plan:** `13d-iii` (rung anchors for seats — the R-04 cap no position owned), `11-fix`
-(U6's instrument repair), `B0-CI` (main's red CI) and `B0-CI-b` (the one `engine/season/tests` failure it
-left red), `R05-THREAD` (the `thread_read` operand decision), `LADDER-MBPC` (the MB/PC lanes' ladder pass
+(U6's instrument repair), `B0-CI` (main's red CI), `B0-CI-b` (the one `engine/season/tests` failure it
+left red) and `B0-CI-c` (the `unit-tests` job's 16-minute cap, which the two suites sharing it exceeded),
+`R05-THREAD` (the `thread_read` operand decision), `LADDER-MBPC` (the MB/PC lanes' ladder pass
 over their flagged rows), and — found by Batch 1 — `29d-ii` and `20-v`.
-Each is defined at its batch; the last three in their state-index rows (§3).
+Each is defined at its batch; the last three in their state-index rows (§3). **Added 2026-10-03
+(`ED-IN-0284`, `ED-IN-0285`, `_part5` A-25):** `30`, `31a`–`31c`, `33`–`36` (modules and the dice engine; drafted 2026-10-03 as `S0`–`S3`, renumbered
+before anything built them; `31d`, `31e` and `32` retired unbuilt, never reused), defined in `_part5` §SM — not the pre-flight rows `S-1`…`S-10` (`_part3` §P).
 
 ### 0.4 THE PER-STEP CADENCE — RULED by Jordan, 2026-09-18 (carried in full: this plan is now its only home)
 
@@ -241,17 +244,19 @@ season calendar, not the deleted module; `CLAUDE.md` is Layer 0 and this plan do
 ```sh
 git rev-parse --short HEAD; cat .git/shallow 2>/dev/null || echo "full clone"   # a shallow clone unshallows first (CLAUDE.md §2)
 python tools/session_provision.py
-python -m engine.season.harness.register --requirements        # expect met 2 · partial 5 · not_met 2
-python tools/m1_acceptance.py --summary                         # expect NOT MET, row 3 FAIL 2/9
-gh run list --branch main --limit 3                             # `unit-tests` should read green once PR #451 (carrying B0-CI-b) merges
+python -m engine.season.harness.register --requirements        # read the output; the command holds the counts, not this file
+python tools/m1_acceptance.py --summary                         # read the output; the command holds the verdict and the row-3 fraction
+gh run list --branch main --limit 3                             # read `All Gates Green`; why it was red and what `B0-CI-c` did: §3's `B0-CI` row
 ```
 
 **Batch 1 landed (PR #450)**; its records are `_part6` §H.1. **The telling workplan's T0–T6 landed (PR
 #449, `fd321c81`), so Batch 2's whole IN chain is open** (§0.6). Batch A (`B0-CI-b`, `20-v`, `29d-ii`) landed in PR #451
-(`_part6` §H.1); the next buildable positions are Batch 2 in `_part3` O.1's order, with
+(`_part6` §H.1); the next buildable positions are Batch 2 in `_part3` O.1's order and `34` (the dice engine, first in `_part5` §SM's order, E17), with
 `{27}` and `{LADDER-MBPC}` as parallel lanes. `11`'s baseline is taken after T6 (E15), i.e. on the tree
 from `fd321c81`. The pre-flight rows still open are P-4 and P-6 (`_part3` §P). Each batch runs through
-`methodology-execute` (`CLAUDE.md` §9).
+`methodology-execute` (`CLAUDE.md` §9). **Modules (`ED-IN-0285`, `_part5` A-25):** `34` is buildable (gate
+none); the order is `_part5` §SM's, and `22` waits on `30` and `31a` (`_part3` E17); read `_part5` §SM before
+dispatching any of them.
 
 ---
 
@@ -267,15 +272,26 @@ dedicated test executes every position), but most Phase-2 verbs execute from han
 the realm, `commit found build levy migrate confer establish revoke determine work` are attempted and
 never execute (`aperture 4 0`). **Phase 3: `27` PARTIAL (PR #442); `10`'s `tell`→stance write REVERTED
 with its side findings landed (PR #442), and position `10` itself now belongs to the telling workplan (§0.6); everything else open or Jordan-gated.** Phase 4: `20-i`–`20-iv`,
-`28-0` (and its follow-up), `28-i`–`28-iii`, `29a` (all but `ms_track`), `29b`, `29c` and `29d` are done —
-Batch 1 landed (PR #450; records in `_part6` §H.1). What is open of Phase 4: `29a`-ms, `29e`/`29f` and
-`2-ii`, each gated on `27`, `14` or `22` and on nothing Batch 1 held. The three follow-ups Batch 1
-found (`B0-CI-b`, `29d-ii`, `20-v`) landed in PR #451.
+`28-0` (and its follow-up), `28-i`–`28-iii` and `29a`–`29d` are done (PR #450, records in `_part6`
+§H.1), except that Jordan's 2026-10-02 ruling (`ED-IN-0283`, `_part5` A-24) keeps the `systems/` folders
+as the homes of their systems: `29a`-ms, `29e` and `29f` were built in Batch 3a and CANCELLED, their
+deletions reversed, and the merged deletions under `29a`–`29d` are put to Jordan. What is open of Phase
+4: `2-ii` (HELD, A-24), gated on `22`, and `30`–`36` (`ED-IN-0284`, `ED-IN-0285`; `_part5` §SM, A-25), of which
+`30` and `31a` gate `22`. The three follow-ups
+Batch 1 found (`B0-CI-b`, `29d-ii`, `20-v`) landed in PR #451.
 
 | position | handle | lane | STATE | GATE | R | batch | evidence / note |
 |---|---|---|---|---|---|---|---|
-| `B0-CI` | main's CI red | IN | **PARTIAL** | — | — | 0 | [RAN] PR #450's CI: the step `pytest tests/valoria -n auto` passes — the seven red tests are fixed (ledger `FORK:` refs re-pointed to commits that are ancestors of `main`; `sim_params.json` and `value_pointer_links.json` re-derived by their exporters; `tools/build_engine_atlas.py`'s stated inputs). **CI as a whole is NOT green:** the next step, `pytest engine/season/tests`, fails one test that predates this plan (red at `5c5d8ec6` on `main`, never reached there because the earlier step failed) — that test is `B0-CI-b`. `B0-CI-b` landed in PR #451 (`77f5175a`); what remains of this row is that `unit-tests` reads green on `main` once that merges |
-| `2-ii` | RET-SC: kernel + veto | IN/SC | BLOCKED | `22` | — | 3 | [SETTLED: `systems/social_contest/sim/contest/` exists, 16 files] — the kernel is still on disk; `parliamentary_{vote,stay}.py` went at `29b` |
+| `B0-CI` | main's CI red | IN | **PARTIAL** | — | — | 0 | [RAN] PR #450's CI: the step `pytest tests/valoria -n auto` passes — the seven red tests are fixed (ledger `FORK:` refs re-pointed to commits that are ancestors of `main`; `sim_params.json` and `value_pointer_links.json` re-derived by their exporters; `tools/build_engine_atlas.py`'s stated inputs). **CI as a whole is NOT green:** the next step, `pytest engine/season/tests`, fails one test that predates this plan (red at `5c5d8ec6` on `main`, never reached there because the earlier step failed) — that test is `B0-CI-b`. `B0-CI-b` landed in PR #451 (`77f5175a`). **That did not turn `main` green:** on `main` @`59004d86` (run 36967763315) the `tests/valoria` step passed in about 9m10s and the `engine/season/tests` step was `cancelled` 6m49s in when `unit-tests`' 16-minute cap hit, so `register --requirements` was skipped and `All Gates Green` failed with no test failing. `B0-CI-c` (2026-10-02) moved `engine/season/tests` and `register --requirements` into their own job, `season-tests` (20-minute cap, set before any completed run existed). **First complete run, PR #452 @`866b3136` (run 37026782154, 2026-10-02):** `season-tests` 11m11s, `unit-tests` 9m14s, `All Gates Green` success; the workflow's comment carries the reading and its caveat (one hosted observation). What remains of this row is `All Gates Green` reading green on `main` itself, once #452 merges |
+| `34` | the dice engine: `engine/autoload/` → `engine/dice_engine/` | IN | **OPEN** | — | — | SM | `_part5` §SM; first in its order |
+| `35` | scan roots: every path-keyed scan of `systems/` also reads `modules/` | IN | BLOCKED | `34`'s falsifiers | — | SM | `_part5` §SM |
+| `30` | the registrar, the `modules:` roster, the refusals (no file moves) | IN | BLOCKED | `35`'s falsifiers | — | SM | `_part5` §SM; `22` waits on it (E17) |
+| `31a` | social contest: `sigma.py` → a host input builder + `modules/social_contest/` | IN/SC | BLOCKED | `30`'s falsifiers | — | SM | `_part5` §SM; `22` waits on it (E17) |
+| `31b` | combat: wrapper split; the reachable engine → `modules/combat/` | IN/PC | BLOCKED | `31a`'s falsifiers | — | SM | `_part5` §SM |
+| `31c` | mass battle: module state shed; wrapper split; `resolve_field`'s closure → `modules/mass_battle/` | IN/MB | BLOCKED | `31b`'s falsifiers | — | SM | `_part5` §SM |
+| `33` | the unplugged systems — design, not relocation | IN/WR/FI | JORDAN | A-11, A-20, A-24; `30` | — | SM | `_part5` §SM |
+| `36` | loop-resident computation modules, settlements first — design | SE/IN | JORDAN | a design of what each computes; `30` | — | SM | `_part5` §SM |
+| `2-ii` | RET-SC: kernel + veto | IN/SC | **HELD** | `22` | — | 3 | [SETTLED: `systems/social_contest/sim/contest/` exists, 16 files] — the kernel is still on disk; `parliamentary_{vote,stay}.py` went at `29b`. HELD 2026-10-02 (A-24): it deletes the social-contest kernel |
 | `9` | PC-SURRENDER build-or-strike | PC | JORDAN | J-7 | — | 4 | `HANDOFF_PC.md` [CODE] |
 | `10` | U5 / R-07 | IN | **CARVED OUT** (§0.6) | the telling workplan's own gates | R-07, R-01 | — | PR #442 (`c6f4252`) reverted the `tell`→stance write on H-79 and landed its side findings (H-62's producer gap closed by `march`'s M4 write; the `names_index.yaml` `stance` entry). Re-scoped by the telling workplan's first commit (`60c70bbf`) to T0→G8: `tell` writes no stance; regard is computed at read. This plan's earlier `fight`-write rewrite is withdrawn (§0.6) |
 | `12` | H-62-rest scar rebuild | IN | BLOCKED | cells commit | R-06, R-08 | 4 | |
@@ -283,17 +299,14 @@ found (`B0-CI-b`, `29d-ii`, `20-v`) landed in PR #451.
 | `12e` | H12 / H13 | IN | BLOCKED | H6 re-measure; G-Q6 (J-5) | R-06 | 4 | |
 | `13`-rest | W28-cast: 41 NPC + 97 ARC overlays | IN | **STOPPED** | the user's rule (2026-10-01): scale only if DISTINCT EXECUTED SETS rise — which the pilot COULD NOT SHOW | R-09, R-06 | 2 | `17-cast`'s pilot (eight overlays): DISTINCT EXECUTED SETS 41 → 41, uniform-cast control 26 [RAN 2026-10-02, seed 0]. ⚠ THE METRIC WAS BLIND FOR THIS PILOT: all eight cases were singletons in the no-overlay arm (the groups that share a set are {005,034} {007,052} {013,037} {041,050,080}, no pilot case among them), so the ceiling on a rise from them was 0. Per-case: 2 of 8 changed (NPC-038 on its `ought:` keys, NPC-083 on its `office:` keys, its second office an institution seated as a person), mean verbs 6.62 → 7.25. An ought's `predicate` is a declared non-causal label (`H-185`). 13 NPC overlays now, no new `capability`; `requirements.yaml` R-09 still says capability is empty everywhere — stale. **The user decides whether to scale on a better observable (per-case set change against the no-overlay arm; Q4 referents).** |
 | `19b` | U7-disp: `comply` · `evade / defy` · `construe` | IN | JORDAN | J-2 (`ED-IN-0210`) | R-05 | 4 | |
-| `22` | PROC-B steps 11(rest)–16 | SC | PARTIAL | — | R-05, R-09; M2 | 3 | steps 6/7/9/10 done, 8 built, 11 partial (`cardinality` form unimplemented) [PLAN 2026-09-30 §3 l] |
+| `22` | PROC-B steps 11(rest)–16 | SC | PARTIAL | `30`, `31a` (E17) | R-05, R-09; M2 | 3 | steps 6/7/9/10 done, 8 built, 11 partial (`cardinality` form unimplemented) [PLAN 2026-09-30 §3 l]. The provider is the social contest container's (`_part4` `22` WHERE; `_part5` A-25); the kernel is evaluated, not deleted (`2-ii` HELD) |
 | `22a` → `23` → `22b` | proceedings PHASE 3 · PART-E-0/2 · PHASE 4 | SC/IN | BLOCKED | `22` | R-05 | 3 | |
 | `24` | SE-BUILD umbrella | SE | PARTIAL | — | — | — | re-scoped into `24d`–`24h`; tracked by those rows only |
 | `24g` | bodies clock + P3 individuation | SE | JORDAN | J-6 (`ED-IN-0247`) | R-07 (texture) | 4 | |
-| `24h` P5 | S5 revolt Query | SE/IN | OPEN | — (`20-ii` ✓) | R-06/R-07 texture | 3 | the 2026-09-28/09-30 rows read BLOCKED whole; only P7 is |
 | `24h` P6 | forswearing (`repudiate` costs) | SE/IN | BLOCKED | `repudiate`'s formability (`14` declined it: no question referent is ever a Proposition) | R-05 | 3 | `14`'s `decline_note` on the verb row |
 | `24h` P7 | dispensation-as-document | SE/IN | JORDAN | J-10 | — | 4 | |
 | `26` | GO-VERSION | GO | JORDAN | J-9 | M3 | 4 | nothing may assert a version |
 | `27` | WR-SCOPE remainder | WR | PARTIAL | — | — | 2 | BUILT 2026-10-01 (PR #451): both `rendering.py` stubs struck with their reasons at the site; `ED-WR-0003` closed at ladder step 2; `attempt_mending` calls `recover()` (only tests call it; `environment_in_equilibrium` defaults to False); `threadwork/sim/{co_movement,opposing}.py` no longer import `ms_track` or `knots` [TEST]. Remainder, each outside this position's scope: the `R-14` practitioner-resilience term (arithmetic unruled), Mending aimed at the mender's own configuration (`coherence.mend_resting_point` has no non-test caller), and `collective.py`/`opposing.py`'s Mending feedback (`HANDOFF_WR.md`) |
-| `29a`-ms | `ms_track.py` | IN | OPEN | — | — | 3 | `27` ✓: no `*.py` imports `ms_track` from `threadwork` any more, so deleting `systems/overview/sim/ms_track.py` is the whole position |
-| `29e` / `29f` | characters / fieldwork `knots.py` | IN | OPEN | — (`27` ✓; `14` did not build `tie / knot`) | — | 3 | `threadwork/sim/opposing.py` no longer imports `sustain_knot`. ⚠ `29f`'s plan text says ED-912's ±5 gauge 'maps to `Tenure.degree` (F.4), recorded on `14`': `14` recorded nothing (grep of `engine/season`: no such mapping), and `H-182` says no position owns `_eff_tie`; `29f` records the mapping (in `H-182`'s cite) before it deletes `knots.py` |
 | `ED-FI-0009` | investigation degree producer | FI | **JORDAN** | J-22 | R-05, R-09 | 2 | [STOP CONDITION HIT 2026-10-01, nothing built: see its last ledger row] the six inquiries resolve Failure/none only today [RAN corpus degree histogram]; step 3 already closed "graded by degree" (2026-09-06); open: how a degree routes without `contests:` (a loader check `ED-FI-0009` added, not ratified Layer 1 text) and `finding.none`'s deposit (`H-111`) — J-22 |
 | cells commit | H6 + H8 with `12b`/`12c`/`12d` | IN | JORDAN | J-1 | R-05, R-06, R-08 | 4 | then H7 → H3 → H9 → `12` → H10 → H11 → `12e` |
 

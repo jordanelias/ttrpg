@@ -1189,6 +1189,46 @@ def holder_faction_of(w: World, rung_id: str) -> Optional[str]:
     return None
 
 
+def uncontrolled(w: World, rung_id: str) -> list[str]:
+    """THE REVOLT QUERY (plan position `24h` P5). The territories at or under `rung_id` that no
+    faction holds -- GD-3's *Uncontrolled* status, what a revolt leaves behind -- sorted. A read:
+    it takes no token, stores nothing, and is recomputed at every call (`AX` T-a).
+
+    ⚠ ITS ORACLE IS CODE, RETIRED AT `29d` AND RECOVERABLE:
+    `git show 5c5d8ec6:systems/world/sim/insurgency_pipeline.py`. `check_insurgency_triggers` began
+    from every territory with `is_uncontrolled()` (`owner is None`, `engine/autoload/game_state.py`
+    at the same ref). This is that line with one season-native stand-in, `holder_faction_of(w, r)
+    is None`: the single owner of *which faction holds this rung*, which the march path
+    (`loop/sides.py`, `loop/effects_combat.py`) also asks, so the two cannot disagree about who
+    holds a place. (`faction_q.resolve(...).holdings` is a second reading with no ancestry walk: a
+    two-faction holder's land is in both factions' holdings and uncontrolled here.) Three readings
+    come with it, none the oracle's:
+      * no live `hold` on the territory or any rung above it -> uncontrolled. `build_realm`'s
+        geography value `Uncontrolled` writes no edge; nor does faction land with no authored head,
+        and a holder's death closes his `hold` (`remove_person`), so a succession gap reads the same;
+      * a holder committed to NO rostered faction, or to MORE THAN ONE -> uncontrolled, because
+        `faction_holding` returns `None` for both (read as `provinces_of` reads it; a Proposition
+        not on the roster counts as none, `FACTION_BY_PROP`);
+      * an unheld territory beneath a faction-held rung -> NOT uncontrolled: `holder_faction_of`
+        walks `ancestry`, so the nearest held title governs (the oracle had no cascade).
+
+    ⚠ IT IS SMALLER THAN THE ORACLE ON PURPOSE: contiguity (the oracle grouped by `ADJACENCY`, which
+    the season does not carry), the two-season streak (a counter the oracle wrote) and promotion
+    (the retired stat vectors) have no season stand-in, and inventing one would put a rule in a
+    Query. `rung_id` SCOPES the answer, as `provinces_of` and `density` take theirs; it is not
+    contiguity. `H-186` registers what is missing and why.
+
+    ⚠ ITS ONE CALLER IS A REPORT: `harness/populated.py::census` counts it over each realm. That
+    meets the letter of r2 `05` §A.1.5 RULED (d), as `establishment_of` below records (*a Query
+    with no consumer is a false N-line*), and no more: nothing in the loop or the chooser asks it,
+    so the content hash cannot move by it and, under `CLAUDE.md` §0.2, it is a tested read that a
+    harness reports. `engine/season/tests/test_revolt_query.py` is its falsifier."""
+    TRACE.query("uncontrolled", "resolver")
+    return sorted(r for r in _subtree(w, rung_id)
+                  if r in w.rungs and w.rungs[r].kind == "territory"
+                  and holder_faction_of(w, r) is None)
+
+
 def establishment_of(w: World, office_id: str) -> list[str]:
     """§11 -- *"the named persons the office employs. Finite, contested, durable."* -- AS A QUERY
     OVER LIVE `oblige` TENURES, the persons obliged to this seat, in `w.tenures` order.

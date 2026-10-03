@@ -12,10 +12,11 @@
 
 | batch | items, in serial order (`{…}` = a parallel lane in its own worktree) | R-rows moved | golden / hash moves (declare each) | close |
 |---|---|---|---|---|
-| **0** | **LANDED** — `B0-CI` for `tests/valoria` (PR #450), `B0-CI-b` (PR #451); what remains is `unit-tests` reading green on `main` once #451 merges | — (CI green on `main`) | `B0-CI-b`: moved, declared (`_part6` §H.1) | `/code-review` only; no terminal critique (a seat/commit data fix whose own test is the falsifier) |
+| **0** | **LANDED** — `B0-CI` for `tests/valoria` (PR #450), `B0-CI-b` (PR #451); `B0-CI-c` split `season-tests` out of `unit-tests` after run 36967763315 cancelled at the shared 16-minute cap; its first complete run (PR #452, run 37026782154) took 11m11s against the 20-minute cap and `All Gates Green` passed on the PR; what remains is `All Gates Green` reading green on `main` itself | — (CI green on `main`) | `B0-CI-b`: moved, declared (`_part6` §H.1) | `/code-review` only; no terminal critique (a seat/commit data fix whose own test is the falsifier) |
 | **1** | **LANDED (PR #450); records in `_part6` §H.** Its tail, `29d-ii` and `20-v`, landed in PR #451 (`_part6` §H.1) | — | — | — |
 | **2** | **open — the telling workplan's Batch 2 closed and merged (PR #449, `fd321c81`; main §0.6)**. **Batch B landed in PR #451** (`11-fix` → `11` baseline, `8`, `27`, `LADDER-MBPC`, `ED-FI-0009`'s stop; `_part6` §H.1); Batch C landed `14` (+ `R05-THREAD`, declined), `13d-iii`, `17` and `17-cast` (`13`-rest stops at its pilot); the `11` re-take and `21`-rest have landed, so Batch 2's IN chain is finished (`13`-rest stops at its pilot) | R-01, R-02 (measured), R-04, R-05, R-06 (reason 1), R-07, R-09 | `8`: none (assert equal); `ED-FI-0009`, `14`, `17`, `13`-rest: corpus/realm pins move (declared per step); `13d-iii`: `build_realm` census + hash (declared) | full `methodology-close`; terminal critique **proportionate** — `14` is a judgment node and `11` is a number nobody else reproduces |
-| **3** | SC: `22` steps 11–16 → `22a` → `23` → `22b`; IN: `29f` → `29e` → `29a`-ms → `2-ii`; `{SE: 24h P5}`; `24h` P6 after `22`'s `verb_table.yaml` edits | R-05 (`speak`, `determine`), R-09 (a fourth graded chain), M2 (THE BAR) | `22`: corpus + realm hash move (declared); `2-ii`: none (byte-identity control) | full `methodology-close`; terminal critique **proportionate** — `22` is the largest new mechanism in the plan |
+| **SM** | **open — `34`'s gate is none** (`_part5` §SM, A-25): IN: `34` → `35` → `30` → `31a` → `31b` → `31c`. `34`, `35`, `30` and `31a` sit before Batch 3 (`22` waits on `30` and `31a`, E17); `31b` and `31c` follow and are serial with `22` on the files O.3 lists. `33` and `36` are Jordan-gated design work | none | none — every stage is graded on the unchanged `build_realm(0)` hashes (the two in `_part5` §SM, re-read on the base commit); a floor re-pin is declared | full `methodology-close` once per stage; terminal critique **proportionate** — `30` (a registrar and its refusals) and `31a` (the first adapter split) get it; `34`, `35`, `31b`, `31c` are moves and scan widenings whose hazard is a silent loss, which `35`'s planted falsifiers and the superset assertions observe |
+| **3** | SC: `22` steps 11–16 (after `30` → `31a`) → `22a` → `23` → `22b`; IN: `2-ii` (HELD, A-24); `{SE: 24h P5}` (**LANDED, Batch 3a** — first condition only; `H-186` registers the rest); the `29f` → `29e` → `29a`-ms chain was built and CANCELLED (A-24); `24h` P6 after `22`'s `verb_table.yaml` edits | R-05 (`speak`, `determine`), R-09 (a fourth graded chain), M2 (THE BAR) | `22`: corpus + realm hash move (declared); `2-ii`: none (byte-identity control) | full `methodology-close`; terminal critique **proportionate** — `22` is the largest new mechanism in the plan |
 | **4** | one sub-batch per Jordan ruling, as each lands: cells commit (J-1) → H7 → H3 → H9 → `12` → H10 (C3) → H11 (C4) → `12e`; `19b` (J-2); J-3's verbs; `9` (J-7); `24g` (J-6); `24h` P7 (J-10); `26` (J-9) | R-05, R-06, R-08; R-04 (J-3) | cells commit: headless + corpus hash move, `resolvable_verbs()` count moves (declared) | cells commit: full pipeline, terminal critique **proportionate**; `24g`, `26`, `24h` P7: `/code-review` + `/simplify` only — one value or one record each |
 
 **Why this order.** Batch 1 ran first because it was gate-free and purely subtractive: every later batch
@@ -23,8 +24,9 @@ touches less code now the spine is gone. Batch 2's IN chain is serial because fi
 share `rosters.yaml`/`verb_table.yaml`/`test_season_shape.py` (O.3). `11` runs **twice** in Batch 2 —
 once on HEAD after `11-fix` (the baseline the row needs today), once after the verb set has moved — so
 the second number has a control taken by the same instrument on a declared earlier tree. Batch 3 waits
-on Batch 2 because `22`'s `determine` needs `13d-iii`'s rung purview, and `24h` P6 / `29f` need `14`.
-Batch 4 opens only on rulings.
+on Batch 2 because `22`'s `determine` needs `13d-iii`'s rung purview, and `24h` P6 needs `14`; it also waits
+on `30` and `31a`, because `22` builds the social contest container's provider on `30`'s registrar and `31a`'s
+typed input (A-25). Batch SM is otherwise independent of the R-rows and moves none. Batch 4 opens only on rulings.
 
 ### O.2 Hard serial edges (live ones only)
 
@@ -34,8 +36,6 @@ the merge; it never removes it.
 
 | # | edge | why | origin |
 |---|---|---|---|
-| E2 | `27` → `29a`-ms; `27` → `29f` | `threadwork/sim/{co_movement,opposing}.py` import `ms_track.apply_ms_delta` and `knots.sustain_knot` | 09-28 §3.5.2 |
-| E3 | `14` → `29f` → `29e` | the `tie / knot` effect first; then `conviction.py` ← `knots.py` | 09-28 §3.5.3 |
 | E4 | `22` → `2-ii` | the prize-row repoint | 09-28 §3.5.4 |
 | E5 | the cells commit ↔ `8`, `9` | same `fight` row and combat wrapper. Either order; never interleaved | 09-18 §3.9.10 |
 | E7 | `8` → `ED-FI-0009` | both edit `seam/ladder.py` | new |
@@ -46,6 +46,8 @@ the merge; it never removes it.
 | E14 | telling T4 → `14` | `14`'s distinct-operand fix builds on T4's `operand_bags` / counterparty target; both edit `decision/options.py` and `verb_table.yaml` | carve-out (main §0.6) |
 | E15 | `11` baseline ∉ (telling T3a … T6); `11` re-take after both Batch 2s | T3a–T5 move the claim channel `11` measures; a baseline taken across them has no control | carve-out |
 | E16 | telling T6 → the AX-7 wiring (reopen only then) | same Claim producers and reader | carve-out |
+| E17 | `34` → `35` → `30` → `31a` → `22`; `31a` → `31b` → `31c` | `35` makes every path-keyed scan read `modules/` before anything lands there; `30`'s registrar and refusals precede the first module entry (`31a`); `22` builds on both (A-25). Each later `SM` stage waits on the previous stage's falsifiers observed | A-25 |
+| E18 | `34`, `35`, `30`–`31c` ↔ every position editing a file that O.3 lists with an `SM` position | `34` re-points every dice-engine importer, `30` edits `rosters.yaml`, and `31a`–`31c` re-key the corpus pins in `test_season_shape.py`; two worktrees editing one collide. Serial, never interleaved | A-25 |
 | E13 | every position → its own forward sweep's `requirements.yaml` / `hole_register.yaml` edits | the shared record files; never edited from two worktrees at once | §0.4 |
 
 ### O.3 File census — open positions × shared files
@@ -53,30 +55,30 @@ the merge; it never removes it.
 | file | edited by | consequence |
 |---|---|---|
 | `engine/season/verb_table.yaml` | telling T4 (`tell` row), `14`, `R05-THREAD`, `ED-FI-0009`, `22` (`speak`, `determine`), `24h` P6, `19b`, cells commit | serial in the IN/SC chains (E8, E9) |
-| `engine/season/rosters.yaml` | telling T4 (`known_person_operands`), `8`, `14`, `13d-iii` (`titles` block deleted), `22` (prize rows, `chronicle`), cells commit | serial (E8) |
-| `engine/season/seam/ladder.py` | `8`, `ED-FI-0009`, `2-ii` (veto `extension=`) | E7; `2-ii` is Batch 3 |
+| `engine/season/rosters.yaml` | telling T4 (`known_person_operands`), `8`, `14`, `13d-iii` (`titles` block deleted), `22` (prize rows, `chronicle`), cells commit, `30` (the `modules:` roster; prize `module:` names) | serial (E8, E18) |
+| `engine/season/seam/ladder.py` | `8`, `ED-FI-0009`, `2-ii` (veto `extension=`), `34` (the deferred dice-engine read), `31b` (the T-k docstring) | E7, E18; `2-ii` is Batch 3 |
 | `engine/season/loop/effects_combat.py` | cells commit | E5 |
 | `engine/season/loop/effects_information.py` | `14`, `ED-FI-0009`, `22` | serial |
 | `engine/season/loop/effects_governance.py` | `14` | — |
 | `engine/season/decision/options.py` | telling T1, T3a, T4; then `14` | E14 |
 | `engine/season/queries/person_q.py` | telling T1, T2, T3a, T6, G1; then `17`, cells commit | carve-out first; Batch 2 vs 4 |
-| `engine/season/queries/world_q.py` | telling T4 (`with`), `24h` P5 | the carve-out vs Batch 3; never interleaved |
+| `engine/season/queries/world_q.py` | telling T4 (`with`) | the telling carve-out only; `24h` P5 (Batch 3a) is landed, so no open position edits it |
 | `engine/season/harness/populated.py` | `13d-iii` | — |
 | `engine/season/harness/corpus_run.py` | `17` | — |
 | `engine/season/cases/exercises/*.yaml` | `13`-rest | parallel authoring; merges after `17` |
 | `engine/season/offices.yaml` | `13d-iii` | — |
-| `engine/season/tests/test_season_shape.py` | telling T2, T4; then `8`, `14`, `17`, `13`-rest, `22` | every pin re-taken serially |
+| `engine/season/tests/test_season_shape.py` | telling T2, T4; then `8`, `14`, `17`, `13`-rest, `22`, `30`–`31c` (corpus pins, wrapper imports, the prize-roster test) | every pin re-taken serially (E18) |
+| `references/module_contracts.yaml` and `engine/engine_params/composition.json`, `engine/season/manifest/`, `engine/season/data/files.py`, `engine/season/loop/driver.py`, `tools/ci_common.py`, `tools/export_sim_params.py` | `34`, `35`, `30`–`31c` (`2-ii` edits `module_contracts.yaml` too) | serial (E17, E18) |
 | `loop/witness.py`, `state/carriers.py`, `data/verbs.py`, `data/requires.py`, `loop/resolve.py`, `engine/season/tests/test_told_by_channel.py` | the telling workplan only | no v8 position edits them while a telling position is open |
 | `engine/season/requirements.yaml`, `engine/season/hole_register.yaml` | every forward sweep; `11`, `21`-rest | E13 |
-| `references/restructure_ledger.md` | `29a`-ms, `29e`, `29f`, `2-ii` | serial; appended rows conflict at the file end |
+| `references/restructure_ledger.md` | `2-ii`, `34`, `31b`, `31c` (MOVE rows) | serial; appended rows conflict at the file end |
 | `.github/workflows/valoria-ci.yml` | `2-ii` (the job folds) | — |
-| `tests/valoria/test_engine_does_not_import_systems.py` | `2-ii` | E4 |
-| `systems/threadwork/sim/*` | `27`, `29a`-ms (import site), `29f` (import site) | E2 |
+| `tests/valoria/test_engine_does_not_import_systems.py` | `2-ii`, `35` (scan roots), `30` (`R04_PENDING_SUBSYSTEMS` computed), `31b` | E4, E17 |
 
 **Parallel lanes this census permits:** Batch 2 `{WR: 27}` (only `systems/threadwork/` and
 `tests/valoria/test_coherence_elastic_plastic.py`) and `{MB/PC: LADDER-MBPC}` (only
 `registers/editorial_ledger_{mb,pc}.jsonl`); Batch 3 `{SE: 24h P5}` (`queries/world_q.py` or
-`faction_q.py`, read-only Query). Nothing else runs in parallel. Fable proposed FI `ED-FI-0009` as a
+`faction_q.py`, read-only Query; landed, Batch 3a). Nothing else runs in parallel. Fable proposed FI `ED-FI-0009` as a
 parallel lane; it shares `verb_table.yaml` and `effects_information.py` with `14`, so it is serial
 here (a departure, recorded in the receipt).
 
@@ -108,7 +110,7 @@ here (a departure, recorded in the receipt).
 | # | check | outcome |
 |---|---|---|
 | S-1 | `cat .git/shallow` | full clone in the writing container; re-check in yours |
-| S-2 | `register --requirements`; `m1_acceptance --summary` | met 1 · partial 5 · not_met 3; M1 NOT MET, row 3 FAIL 1/9 [RAN, 29 s] |
+| S-2 | `register --requirements`; `m1_acceptance --summary` | met 1 · partial 5 · not_met 3; M1 NOT MET, row 3 FAIL 1/9 [RAN, 29 s; dated; the command's current output governs] |
 | S-3 | `python -m pytest engine/season/tests -q -k we_only_a_verb_that_declares_contests_can_be_graded_today` (Fable's suspected known-red) | **1 passed** — not red; no Batch-0 fix for it |
 | S-4 | `gh run list --branch main --limit 3` + `gh run view 36803379833 --log-failed` | `unit-tests` FAILS on `main` (7 tests) — the `B0-CI` row |
 | S-5 | `ls systems/social_contest/sim/contest` | present, 16 files — `2-ii` still has its subject |
@@ -140,9 +142,13 @@ here (a departure, recorded in the receipt).
 
 ## B0. BATCH 0 — LANDED (PR #450, PR #451)
 
-`B0-CI` landed for `tests/valoria` in PR #450 and `B0-CI-b` in PR #451; records are `_part6` §H.1. What
-remains is observational: `unit-tests` should read green on `main` once #451 merges (`gh run list --branch main`).
-A red `main` hides every later regression, so read it before the next batch merges.
+`B0-CI` landed for `tests/valoria` in PR #450 and `B0-CI-b` in PR #451; records are `_part6` §H.1. #451 merged
+and `main` was still red: run 36967763315 (`59004d86`) was `cancelled` at `unit-tests`' 16-minute cap, 6m49s into the
+`engine/season/tests` step after `tests/valoria` had taken about 9m10s. `B0-CI-c` split that step and `register
+--requirements` into a `season-tests` job with its own 20-minute cap. Its first complete run, on PR #452 (run
+37026782154, 2026-10-02), took 11m11s beside `unit-tests`' 9m14s, and `All Gates Green` passed. What remains is
+observational: `All Gates Green` reading green on `main` itself once #452 merges (`gh run list --branch main`). A red
+`main` hides every later regression, so read it before the next batch merges.
 
 ---
 
