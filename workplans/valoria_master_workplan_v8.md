@@ -2,7 +2,7 @@
 
 ## Status: PROPOSED 2026-10-01 — directed by Jordan; adoption on merge (ED-1094)
 ## Lane: IN (cross-cutting). It is the ONE active plan (`CLAUDE.md` §2) for every lane whose items it carries — IN, SC, SE, MB, PC, FI, WR, GO. FA carries no open plan position: `29b` (landed, PR #450) deleted the code its handoff rows describe, and `HANDOFF_FA.md`'s remaining rows are authoring items this plan does not schedule. **Carved out of it by name: `workplans/2026-10-01-telling-workplan.md` (§0.6), which owns everything about A telling B about C.**
-## Reads in order: this file (head, milestones, state index) → `_part2` (THE NINE, one section per row) → `_part3` (orchestration, pre-flight, the Batch 0 remainder; Batch 1 landed) → `_part4` (Batches 2–3) → `_part5` (Batch 4, systems as modules `30`–`33`, the Jordan queue, the answered list) → `_part6` (standing content carried from the retired plans, and history).
+## Reads in order: this file (head, milestones, state index) → `_part2` (THE NINE, one section per row) → `_part3` (orchestration, pre-flight, the Batch 0 remainder; Batch 1 landed) → `_part4` (Batches 2–3) → `_part5` (Batch 4, modules and the dice engine `30`–`36` in §SM, the Jordan queue, the answered list) → `_part6` (standing content carried from the retired plans, and history).
 ## Grade under `CLAUDE.md` §0.2: `paper` throughout. A plan, not an execution artifact. Where a row says DONE it repeats cited evidence; the evidence is the thing cited, never this file.
 
 **Why this exists, in Jordan's words (2026-10-01, verbatim).** *"Retire ALL plans. We will work on one
@@ -84,8 +84,8 @@ left red) and `B0-CI-c` (the `unit-tests` job's 16-minute cap, which the two sui
 `R05-THREAD` (the `thread_read` operand decision), `LADDER-MBPC` (the MB/PC lanes' ladder pass
 over their flagged rows), and — found by Batch 1 — `29d-ii` and `20-v`.
 Each is defined at its batch; the last three in their state-index rows (§3). **Added 2026-10-03
-(`ED-IN-0284`, `_part5` A-25):** `30`, `31a`–`31e`, `32`, `33` (systems as modules; drafted 2026-10-03 as `S0`–`S3`, renumbered
-before anything built them), defined in `_part5` §SM — not the pre-flight rows `S-1`…`S-10` (`_part3` §P).
+(`ED-IN-0284`, `ED-IN-0285`, `_part5` A-25):** `30`, `31a`–`31c`, `33`–`36` (modules and the dice engine; drafted 2026-10-03 as `S0`–`S3`, renumbered
+before anything built them; `31d`, `31e` and `32` retired unbuilt, never reused), defined in `_part5` §SM — not the pre-flight rows `S-1`…`S-10` (`_part3` §P).
 
 ### 0.4 THE PER-STEP CADENCE — RULED by Jordan, 2026-09-18 (carried in full: this plan is now its only home)
 
@@ -251,12 +251,12 @@ gh run list --branch main --limit 3                             # read `All Gate
 
 **Batch 1 landed (PR #450)**; its records are `_part6` §H.1. **The telling workplan's T0–T6 landed (PR
 #449, `fd321c81`), so Batch 2's whole IN chain is open** (§0.6). Batch A (`B0-CI-b`, `20-v`, `29d-ii`) landed in PR #451
-(`_part6` §H.1); the next buildable positions are Batch 2 in `_part3` O.1's order and `30` (systems as modules, serial with every row sharing `verb_table.yaml`, E18), with
+(`_part6` §H.1); the next buildable positions are Batch 2 in `_part3` O.1's order and `34` (the dice engine, first in `_part5` §SM's order, E17), with
 `{27}` and `{LADDER-MBPC}` as parallel lanes. `11`'s baseline is taken after T6 (E15), i.e. on the tree
 from `fd321c81`. The pre-flight rows still open are P-4 and P-6 (`_part3` §P). Each batch runs through
-`methodology-execute` (`CLAUDE.md` §9). **Systems as modules (`ED-IN-0284`, `_part5` A-25):** `30` is
-buildable (its gate, the ruling, is met) and `22` waits on `30` → `31a` (`_part3` E17); read `_part5` §SM
-before dispatching either.
+`methodology-execute` (`CLAUDE.md` §9). **Modules (`ED-IN-0285`, `_part5` A-25):** `34` is buildable (gate
+none); the order is `_part5` §SM's, and `22` waits on `30` and `31a` (`_part3` E17); read `_part5` §SM before
+dispatching any of them.
 
 ---
 
@@ -276,18 +276,21 @@ with its side findings landed (PR #442), and position `10` itself now belongs to
 §H.1), except that Jordan's 2026-10-02 ruling (`ED-IN-0283`, `_part5` A-24) keeps the `systems/` folders
 as the homes of their systems: `29a`-ms, `29e` and `29f` were built in Batch 3a and CANCELLED, their
 deletions reversed, and the merged deletions under `29a`–`29d` are put to Jordan. What is open of Phase
-4: `2-ii` (HELD, A-24), gated on `22`, and — from Jordan's 2026-10-03 ruling (`ED-IN-0284`, `_part5` A-25) that
-every system is a module of the loop — `30`–`33`, which stage that structure and gate `22`. The three follow-ups
+4: `2-ii` (HELD, A-24), gated on `22`, and `30`–`36` (`ED-IN-0284`, `ED-IN-0285`; `_part5` §SM, A-25), of which
+`30` and `31a` gate `22`. The three follow-ups
 Batch 1 found (`B0-CI-b`, `29d-ii`, `20-v`) landed in PR #451.
 
 | position | handle | lane | STATE | GATE | R | batch | evidence / note |
 |---|---|---|---|---|---|---|---|
 | `B0-CI` | main's CI red | IN | **PARTIAL** | — | — | 0 | [RAN] PR #450's CI: the step `pytest tests/valoria -n auto` passes — the seven red tests are fixed (ledger `FORK:` refs re-pointed to commits that are ancestors of `main`; `sim_params.json` and `value_pointer_links.json` re-derived by their exporters; `tools/build_engine_atlas.py`'s stated inputs). **CI as a whole is NOT green:** the next step, `pytest engine/season/tests`, fails one test that predates this plan (red at `5c5d8ec6` on `main`, never reached there because the earlier step failed) — that test is `B0-CI-b`. `B0-CI-b` landed in PR #451 (`77f5175a`). **That did not turn `main` green:** on `main` @`59004d86` (run 36967763315) the `tests/valoria` step passed in about 9m10s and the `engine/season/tests` step was `cancelled` 6m49s in when `unit-tests`' 16-minute cap hit, so `register --requirements` was skipped and `All Gates Green` failed with no test failing. `B0-CI-c` (2026-10-02) moved `engine/season/tests` and `register --requirements` into their own job, `season-tests` (20-minute cap, set before any completed run existed). **First complete run, PR #452 @`866b3136` (run 37026782154, 2026-10-02):** `season-tests` 11m11s, `unit-tests` 9m14s, `All Gates Green` success; the workflow's comment carries the reading and its caveat (one hosted observation). What remains of this row is `All Gates Green` reading green on `main` itself, once #452 merges |
-| `30` | systems as modules: the registrar, the `system:` tag, the dropped-effect observer (no file moves) | IN | **OPEN** | — (`ED-IN-0284`, met) | — | SM | [CODE 2026-10-03] nothing observes a dropped effect, and `World.boot` is on no run path, so the registrar is wired at `SeasonDriver.__init__` (`_part5` §SM). `register(host)` has no production call until `31a`; the tag, the refusals and the registrar's pass over the (empty) row set run at every driver construction. Control: `build_realm(0)` hashes `a918cd1f…` / `05f022e2…` [RAN 2026-10-03, HEAD `52ec9a54`] must not move. Shrinks `R04_PENDING_SUBSYSTEMS` to the code-less names |
-| `31a` | sigma wrapper → `systems/social_contest/sim/`; the corpus helpers and floors | IN/SC | BLOCKED | `30`'s falsifiers | — | SM | `22` waits on this row (E17). Carries the corpus change that `31b`–`31e` extend |
-| `31b`–`31e` | combat wrapper · mass_battle wrapper · `effects_migration`/`effects_founding` · arrangements (conditional: a data loader stays in `data/` by default) | IN | BLOCKED | `31a`'s falsifiers | — | SM | one commit each; `32`'s matching item waits on `31b`, `31c`, `31d` (`31e` is waited on by nothing) |
-| `32` | splits by row ownership: combat · mass_battle · social_contest · settlements · factions | IN | BLOCKED | `31`'s falsifiers | — | SM | adds the `sides` and `degree` tables to the host's registration surface; `04` T-k is the Lens B question on the two degree moves |
-| `33` | the unplugged systems: threadwork · fieldwork `knots` · characters `conviction` · overview `ms_track` — design, not relocation | IN/WR/FI | BLOCKED | `32`'s falsifiers; A-11/A-20; A-24's open threadwork re-plugging (Jordan's) | — | SM | each sheds its module-level store first (the clause is AX-4, `04:115`, enforced at D-3, `04:1017`; never D-8) |
+| `34` | the dice engine: `engine/autoload/` → `engine/dice_engine/` | IN | **OPEN** | — | — | SM | `_part5` §SM; first in its order |
+| `35` | scan roots: every path-keyed scan of `systems/` also reads `modules/` | IN | BLOCKED | `34`'s falsifiers | — | SM | `_part5` §SM |
+| `30` | the registrar, the `modules:` roster, the refusals (no file moves) | IN | BLOCKED | `35`'s falsifiers | — | SM | `_part5` §SM; `22` waits on it (E17) |
+| `31a` | social contest: `sigma.py` → a host input builder + `modules/social_contest/` | IN/SC | BLOCKED | `30`'s falsifiers | — | SM | `_part5` §SM; `22` waits on it (E17) |
+| `31b` | combat: wrapper split; the reachable engine → `modules/combat/` | IN/PC | BLOCKED | `31a`'s falsifiers | — | SM | `_part5` §SM |
+| `31c` | mass battle: module state shed; wrapper split; `resolve_field`'s closure → `modules/mass_battle/` | IN/MB | BLOCKED | `31b`'s falsifiers | — | SM | `_part5` §SM |
+| `33` | the unplugged systems — design, not relocation | IN/WR/FI | JORDAN | A-11, A-20, A-24; `30` | — | SM | `_part5` §SM |
+| `36` | loop-resident computation modules, settlements first — design | SE/IN | JORDAN | a design of what each computes; `30` | — | SM | `_part5` §SM |
 | `2-ii` | RET-SC: kernel + veto | IN/SC | **HELD** | `22` | — | 3 | [SETTLED: `systems/social_contest/sim/contest/` exists, 16 files] — the kernel is still on disk; `parliamentary_{vote,stay}.py` went at `29b`. HELD 2026-10-02 (A-24): it deletes the social-contest kernel |
 | `9` | PC-SURRENDER build-or-strike | PC | JORDAN | J-7 | — | 4 | `HANDOFF_PC.md` [CODE] |
 | `10` | U5 / R-07 | IN | **CARVED OUT** (§0.6) | the telling workplan's own gates | R-07, R-01 | — | PR #442 (`c6f4252`) reverted the `tell`→stance write on H-79 and landed its side findings (H-62's producer gap closed by `march`'s M4 write; the `names_index.yaml` `stance` entry). Re-scoped by the telling workplan's first commit (`60c70bbf`) to T0→G8: `tell` writes no stance; regard is computed at read. This plan's earlier `fight`-write rewrite is withdrawn (§0.6) |
@@ -296,7 +299,7 @@ Batch 1 found (`B0-CI-b`, `29d-ii`, `20-v`) landed in PR #451.
 | `12e` | H12 / H13 | IN | BLOCKED | H6 re-measure; G-Q6 (J-5) | R-06 | 4 | |
 | `13`-rest | W28-cast: 41 NPC + 97 ARC overlays | IN | **STOPPED** | the user's rule (2026-10-01): scale only if DISTINCT EXECUTED SETS rise — which the pilot COULD NOT SHOW | R-09, R-06 | 2 | `17-cast`'s pilot (eight overlays): DISTINCT EXECUTED SETS 41 → 41, uniform-cast control 26 [RAN 2026-10-02, seed 0]. ⚠ THE METRIC WAS BLIND FOR THIS PILOT: all eight cases were singletons in the no-overlay arm (the groups that share a set are {005,034} {007,052} {013,037} {041,050,080}, no pilot case among them), so the ceiling on a rise from them was 0. Per-case: 2 of 8 changed (NPC-038 on its `ought:` keys, NPC-083 on its `office:` keys, its second office an institution seated as a person), mean verbs 6.62 → 7.25. An ought's `predicate` is a declared non-causal label (`H-185`). 13 NPC overlays now, no new `capability`; `requirements.yaml` R-09 still says capability is empty everywhere — stale. **The user decides whether to scale on a better observable (per-case set change against the no-overlay arm; Q4 referents).** |
 | `19b` | U7-disp: `comply` · `evade / defy` · `construe` | IN | JORDAN | J-2 (`ED-IN-0210`) | R-05 | 4 | |
-| `22` | PROC-B steps 11(rest)–16 | SC | PARTIAL | `30`, `31a` (E17) | R-05, R-09; M2 | 3 | steps 6/7/9/10 done, 8 built, 11 partial (`cardinality` form unimplemented) [PLAN 2026-09-30 §3 l]. The proceedings provider is a module's, in `systems/social_contest/sim/` (A-25), no longer `engine/season/seam/wrappers/proceedings.py` |
+| `22` | PROC-B steps 11(rest)–16 | SC | PARTIAL | `30`, `31a` (E17) | R-05, R-09; M2 | 3 | steps 6/7/9/10 done, 8 built, 11 partial (`cardinality` form unimplemented) [PLAN 2026-09-30 §3 l]. The provider is the social contest container's (`_part4` `22` WHERE; `_part5` A-25); the kernel is evaluated, not deleted (`2-ii` HELD) |
 | `22a` → `23` → `22b` | proceedings PHASE 3 · PART-E-0/2 · PHASE 4 | SC/IN | BLOCKED | `22` | R-05 | 3 | |
 | `24` | SE-BUILD umbrella | SE | PARTIAL | — | — | — | re-scoped into `24d`–`24h`; tracked by those rows only |
 | `24g` | bodies clock + P3 individuation | SE | JORDAN | J-6 (`ED-IN-0247`) | R-07 (texture) | 4 | |

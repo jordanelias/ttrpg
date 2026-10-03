@@ -110,16 +110,22 @@ admission; `data/requires.py`'s `cardinality` form (raises today); `seam/ladder.
 `engine/season/arrangements.yaml` header; H-161, H-163, H-173, H-174; `loop/effects_information.py`
 (`_eff_open_case`, `_eff_determine`) and `loop/effects_shared.py` (`_new_oblige_term`, `_oblige_term`).
 
-### `22` · PROC-B, steps 11–16 — the contest-resolution core · SC · gate `13d-iii` (E11, landed) and `30` → `31a` (E17, `_part5` §SM) · `opus`/`opus` (arrangements transcription `sonnet`) · `[design]`
+### `22` · PROC-B, steps 11–16 — the contest-resolution core · SC · gate `13d-iii` (E11, landed), `30` and `31a` (E17, `_part5` §SM) · `opus`/`opus` (arrangements transcription `sonnet`) · `[design]`
 
-**WHERE (A-25, 2026-10-03).** The proceedings provider is a module's, not the loop's: it lives in
-`systems/social_contest/sim/` beside the sigma provider that `31a` moves there, is registered by that module's
-`register(host)` (`30`'s registrar), is reached by the prize rows' string and never imported by the host, and
-may not construct a `Token` or call another module. The host-side edits below are unchanged
-(`verb_table.yaml`, `rosters.yaml`, `loop/effects_information.py`, `epistemic.py`, `data/requires.py`), and
-rows `22` adds to `verb_table.yaml` carry `system: social_contest`. This position therefore waits for `30` and
-`31a`; it does not wait for `31b`–`31e` or `32`. `22` used to plan `engine/season/seam/wrappers/proceedings.py`;
-that path is withdrawn.
+**WHERE (A-25, `ED-IN-0285`).** `22` builds the social contest container's contest provider. Its automated
+mode is decided by measurement here: the interim provider `31a` puts in `modules/social_contest/`, or the
+kernel `systems/social_contest/sim/contest/`, which `22` EVALUATES and does not delete (`2-ii` stays HELD,
+A-24). The kernel's entry `wrapper.py::build_contest`/`resolve_contest` (`:110`, `:248`) takes sides as
+`Contestant|int|dict`, draws from the global `random` (no rng parameter), wires only `agon` (`:200-237`) and
+returns `((band, reason), bout)` (`:255`), whose bands `degree_of` (`seam/ladder.py:195`) would refuse with
+`Unspecified`; adopting it needs `31a`'s typed input record, a seeded rng and a degree adapter. Adopt or keep
+the interim is this position's measurement, then Jordan's (`_part5` `SM-15`). The kernel's own proceedings are a
+separate bench concept from the host's `judging_set`. The proceedings verbs, docket and calendar step stay host,
+loop-resident institutions that schedule contests (A-25); which module owns those verbs is Jordan's (`SM-1`).
+The provider is reached by its prize rows' string through `30`'s registrar, never imported by the host. The
+host-side edits below are unchanged (`verb_table.yaml`, `rosters.yaml`, `loop/effects_information.py`,
+`epistemic.py`, `data/requires.py`). This position waits for `30` and `31a`, not for `31b` or `31c`. `22` once
+planned `engine/season/seam/wrappers/proceedings.py`; that path is withdrawn.
 
 **State (2026-09-30, `a1282b02`):** steps 6/7/9/10 DONE at `18`/`19`; step 8 built (a citation); step 7
 carries a caveat — `judging_set`'s `matter` parameter is not load-bearing yet. `arrangements.yaml` holds
@@ -135,19 +141,20 @@ degree-keyed effects, not a routine addition.
 - **Step 12:** `speak` — a typed cell, `contests: "a matter"`, four bands (the `speak` spec in
   `proposals/2026-09-05-proceedings-subsystem/04_VERBS.md` — design intent, never the reason it is right); `_eff_speak` in `loop/effects_information.py` only if `writes:` is non-empty.
 - **Step 13:** the two prize rows drop `interim: true` and repoint from `sigma_leverage` — **a row
-  change, not a code change** (ED-SC-0033 cl. 2); `chronicle` deleted (`rosters.yaml`, `epistemic.py`); the
+  change, not a code change** (ED-SC-0033 cl. 2), landing in step 15's commit; `chronicle` deleted (`rosters.yaml`, `epistemic.py`); the
   `rung=` fix (C-8) reads `world_q.place_of`, not a `Scene.place` field (there is none).
 - **Step 14:** the obstacle. **Contradiction 3, resolved (carried):** take the obstacle **CEILING**, its
   value injected and swept (`sigma_leverage`), never a pool floor — a ceiling caps how hard a matter can
   get; a floor raises everyone's competence, a statement about people. M-7 fails at the 1D floor
-  (`p_success` 0.0006 at Ob 3). The seam's own obstacle site (`_obstacle_of`, in
-  `systems/social_contest/sim/` after `31a`) is deleted (ED-SC-0033 cl. 3, one owner).
+  (`p_success` 0.0006 at Ob 3). The seam's own obstacle site (`_obstacle_of`, the host input builder's
+  after `31a`) is deleted (ED-SC-0033 cl. 3, one owner).
   `ED-SC-0038` is RULED; its per-matter / single-margin pick is this step's build decision.
-- **Step 15:** the provider — a file in `systems/social_contest/sim/` (A-25; named on the adjudication's
-  pattern, `provider.py`/`effects_*.py`, by the builder), registered by that module's `register(host)` and
-  resolved **by string at boot**, returning **a Margin, never a winner** (`04` provider rule); a misspelled
-  manifest row fails at boot naming the row, and so does a deleted `social_contest.register` composition row
-  (`30`'s refusal).
+- **Step 15:** the provider — a `verb_call` entry in `modules/social_contest/` (A-25) or the kernel adopted
+  per the WHERE above, called by its host adapter through `30`'s registrar and resolved **by string at driver
+  construction**, returning **a margin, never a winner** (`04` provider rule); a misspelled manifest row or a
+  deleted composition row refuses at driver construction naming the row (`30`'s refusals).
+  **Steps 13 and 15 land in ONE commit:** `30`'s refusal (c) makes a prize row naming an unregistered provider a
+  driver-construction failure, so a re-point committed before its provider would break every boot.
 - **Step 16 — THE BAR (M2's first gate):** two seeded proceedings run end to end with zero authored acts,
   twice, byte-identical including the hash, and `causes[]` walks from the determination back to the date
   that raised it.
@@ -194,9 +201,8 @@ inbound site: `module_contracts.yaml`, `canonical_sources.yaml`, `descriptor_reg
 CI job folds into `unit-tests` here; `test_sigma_leverage_parity.py` (substrate) moves out of
 `engine/tests`.
 **OBSERVABLE:** `rg -n social_contest engine/ tools/ tests/ references/ skills/` returns only logical-name
-rows (from `30`/`31a` (A-25) those include the `system:` tags, the roster entry and the
-`social_contest.register` composition row; `systems/social_contest/sim/` itself stays as the module's home
-and this position deletes `contest/` only); content hash stationary; `PROBE FLIPS 0`. **FALSIFIER:** plant a `tell` contest the old extension
+rows (from `30`/`31a` (A-25) those include the `modules:` roster entry and the social contest composition
+row; `systems/social_contest/` itself stays and this position deletes `contest/` only); content hash stationary; `PROBE FLIPS 0`. **FALSIFIER:** plant a `tell` contest the old extension
 demoted, at a pool where it would otherwise read its top band — red before the move, green after; and
 `seam/ladder.py::degree_of` never imports `systems.social_contest` (the `NESTED_BASELINE = 0` ratchet).
 **Hash:** none. **Lens B:** the veto relocation only.
