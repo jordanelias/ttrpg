@@ -462,7 +462,7 @@ _PRODUCES_BAND = re.compile(r'(?:return\s+|(?<![=!<>+])=\s*)(?:' + _BAND_RE + r'
 # The code roots come from the one owner (plan position `35`, A-25): a hand-rolled ladder in a module
 # under `modules/<name>/` is the same defect as one under `systems/`, and a root typed here would
 # have left that tree outside the sweep on the day code first landed there. `scanned >= 100` below
-# is the floor that makes a sweep seeing nothing fail instead of pass.
+# catches an empty walk only: `tests/` alone clears it, so it does not observe a dropped root.
 SCAN_ROOTS = ['engine', *ci_common.MODULE_CODE_DIRS, 'skills', 'tools', 'tests']
 
 

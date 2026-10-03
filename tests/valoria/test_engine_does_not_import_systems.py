@@ -57,10 +57,12 @@ ENGINE = REPO / 'engine'
 
 # THE ROOTS THIS FILE BANS ARE NOT SPELLED HERE (plan position `35`, A-25). `engine/` names no module
 # code by import, and "module code" lives under every root in `ci_common.MODULE_CODE_DIRS` — today
-# `systems/` and `modules/`. A module is reached by a composition row (`references/module_contracts.yaml`),
-# never by an import, so `modules/` is banned exactly as `systems/` is, and it is NOT allowed a
-# `PATH_SEAM_ALLOWED` entry below. Typing the root a second time here is how a scan goes blind the day
-# code lands under the one it forgot.
+# `systems/` and `modules/`. A module is reached by a composition row (`references/module_contracts.yaml`)
+# or, for `wrapper` and `combatant` only, through the one declared PATH seam below; never by an import.
+# `PATH_SEAM_ALLOWED` is keyed by the INSERTING FILE, not by the root it names, so
+# `substrate/pc_engine.py` keeps its entry when position `31b` re-points its insert into
+# `modules/combat/` (A-25); any other `sys.path` insert naming either root is a new seam. Typing the
+# root a second time here is how a scan goes blind the day code lands under the one it forgot.
 sys.path.insert(0, str(REPO / 'tools'))
 import ci_common  # noqa: E402
 
@@ -77,8 +79,9 @@ _ROOT_NAME_RE = re.compile(rf"""['"](?:{_ROOT_ALT})['"]|/(?:{_ROOT_ALT})/""")
 _ROOT_LITERAL = '"' + ci_common.MODULE_CODE_DIRS[0] + '"'
 
 # Top-level `from <root>...` / `import <root>...` — column 0 only, for every root in
-# `ci_common.MODULE_CODE_DIRS` (the NAME says `SYSTEMS` because it predates `modules/`; renaming it
-# would break the plan's anchors for nothing). An import nested inside a
+# `ci_common.MODULE_CODE_DIRS`. The NAME says `SYSTEMS` because it predates `modules/`; the file name
+# and the test `CLAUDE.md` §3 cites keep `systems` too, so the names are historical and the roots are
+# whatever `MODULE_CODE_DIRS` holds. An import nested inside a
 # function is a DIFFERENT (and also real) problem, counted separately BELOW — not merely promised to
 # be. Conflating the two counts would make the top-level list churn on refactors that change nothing
 # about the package graph; leaving the nested one UNCOUNTED, which is what this file did until
@@ -378,9 +381,9 @@ def _modules_loaded_from_systems(probe_body, cwd=None):
     ANY code root — `systems/` or `modules/`, i.e. every `ci_common.MODULE_CODE_DIRS` entry —
     regardless of what they are called in `sys.modules`. (The name predates `modules/`.)
 
-    A `modules/` hit here is a PYTHON module loaded from the `modules/` DIRECTORY; the two senses of
-    "module" are unrelated, and both are meant. `cwd` defaults to the repo; a test passes a temporary
-    tree to prove the probe sees a root without writing into the shared working tree."""
+    A hit under `modules/` is a Python module that is a file of an A-25 Module (reachable running code
+    in `modules/<name>/`). `cwd` defaults to the repo; a test passes a temporary tree to prove the
+    probe sees a root without writing into the shared working tree."""
     import subprocess
 
     probe = (
@@ -449,8 +452,9 @@ def test_the_one_declared_path_seam_is_still_the_only_one():
 
     Scans for the mechanism rather than the module: any `sys.path` mutation in `engine/` that names
     a code root (`systems` or `modules`, `ci_common.MODULE_CODE_DIRS`). A second one is a new seam of
-    the class that hid for two days. `modules/` is never in `PATH_SEAM_ALLOWED`: a module is reached
-    by a composition row, so a `sys.path` insert aimed at it is a seam by definition.
+    the class that hid for two days. `PATH_SEAM_ALLOWED` is keyed by the INSERTING FILE, not by the
+    root it names: `substrate/pc_engine.py` keeps its entry when position `31b` re-points its insert
+    into `modules/combat/`, and any other file inserting either root is a new seam.
     """
     offenders = {}
     for path in sorted((REPO / 'engine').rglob('*.py')):

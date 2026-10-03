@@ -134,8 +134,9 @@ def test_no_second_axis_roster_in_code():
             if len(hits) >= 2:
                 offenders.append(f'{rel}:{node.lineno} -> {sorted(hits)}')
     # The floor (CLAUDE.md §0.1 pt 2): the roots are derived (position `35`), and a derivation that
-    # sees nothing would pass this whole test. 239 files measured when the roots became derived.
-    assert checked >= 100, f'only {checked} files scanned — the root derivation is broken, not clean'
+    # drops a root would pass this whole test. `engine/` alone is about 136 files, so 200 is only met
+    # when the other roots are read too.
+    assert checked >= 200, f'only {checked} files scanned — the root derivation is broken, not clean'
     assert not offenders, (
         'a second ethical-axis roster has been hardcoded. The set is owned by '
         'references/descriptor_registry.yaml:axis_roster and read via '

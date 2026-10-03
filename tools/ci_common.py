@@ -87,13 +87,13 @@ _REPO = REPO
 # reachable running code and nothing else (A-25: no data, no prose). `modules/` need not exist yet:
 # every consumer below skips a root that is absent, and picks a module up the day its directory does.
 #
-# WHO DERIVES FROM THIS, so the next scan that names `systems` knows where to look instead:
-#   `sim_reference_roots()` / `sim_reference_prefixes()` -> `export_sim_params`'s scan list and
-#   `ci_sim_fabrication_check` rule 1; and, through `MODULE_CODE_DIRS`, the import ban and its probe
-#   (`test_engine_does_not_import_systems.py`), `test_degree_ladder_single_owner.py`,
-#   `test_tn7_always.py`, `test_axis_roster_single_owner.py` and `ci_pp_frozen_check.py`.
-# A scan that spells `systems` for the purpose "read module code" is the defect this block removes:
-# it goes silently blind the day code lands under `modules/`.
+# `MODULE_CODE_DIRS` means "every non-`engine/` tree holding game Python": what `engine/` must never
+# import and what the sweeps must read. The `systems` row stays after the moves in positions `31a`-`31c`:
+# legacy, workbench and unplugged Python remains there (A-25), and `engine/` still must not import it.
+#
+# WHO DERIVES FROM THIS: `rg -n 'MODULE_CODE_(DIRS|ROOTS)|sim_reference_(roots|prefixes)' tools tests
+# skills engine`. A scan that spells `systems` for the purpose "read module code" is the defect this
+# block removes: it goes silently blind the day code lands under `modules/`.
 MODULE_CODE_ROOTS = (
     ('systems', os.path.join('*', 'sim')),
     ('modules', '*'),
@@ -121,7 +121,8 @@ def sim_reference_roots(repo_root=None):
     That is the §0.1 point-5 pattern-defect signature (correct when written; broken because
     something else moved), so the answer is the standard shape: one owner for the question, every
     site routed through it, and a guard that fails on recurrence
-    (tests/valoria/test_sim_reference_roots.py). The glob is deliberate — a NEW subsystem gains its
+    (tests/valoria/test_export_sim_params.py::test_the_sim_reference_roots_owner_reads_modules_and_skips_pycache).
+    The glob is deliberate — a NEW subsystem gains its
     sim automatically, which is the property the hardcoded list never had.
     """
     root = repo_root or _REPO

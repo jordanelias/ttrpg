@@ -77,7 +77,20 @@ def test_the_scan_list_is_derived_and_cannot_silently_shrink():
     dirs = esp._scan_dirs()
     assert 'engine' in dirs, dirs
     assert len(dirs) >= 8, f'only {len(dirs)} sim reference roots derived: {dirs}'
-    assert all(os.path.isdir(os.path.join(ROOT, d)) for d in dirs), dirs
+
+
+def test_the_sim_reference_roots_owner_reads_modules_and_skips_pycache(tmp_path):
+    """Plan position `35` (A-25), the owner's own falsifier: `modules/` does not exist in the repo, so
+    a temporary tree plants one. `modules/<name>/` must join the roots after `systems/*/sim`;
+    `modules/__pycache__` and a plain file under `modules/` must not. Without the `('modules', '*')`
+    row this fails, which the live-tree test above cannot show."""
+    import ci_common
+    for d in ('engine', 'systems/s/sim', 'modules/m', 'modules/__pycache__'):
+        (tmp_path / d).mkdir(parents=True)
+    (tmp_path / 'modules' / 'note.txt').write_text('x')
+    got = [os.path.relpath(p, tmp_path).replace(os.sep, '/')
+           for p in ci_common.sim_reference_roots(str(tmp_path))]
+    assert got == ['engine', 'systems/s/sim', 'modules/m'], got
 
 
 def test_count_matches_records():

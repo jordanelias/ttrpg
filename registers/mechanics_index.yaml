@@ -215,7 +215,7 @@ mechanics:
     scale: service
     faction: universal
     canon_sources: ["registers/mechanics_index.yaml"]
-    sim_module: engine/autoload/registry.py
+    sim_module: null
     test_status: not_implemented
     notes: "Loads this very index file."
 

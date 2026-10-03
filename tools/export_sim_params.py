@@ -109,8 +109,8 @@ def _comment(src_lines: list[str], lineno: int) -> str:
 
 def _subsystem(p: Path) -> str:
     """The subsystem a sim file belongs to — links values back to the pointers/module map.
-    systems/<sub>/sim/... -> <sub>; modules/<name>/... -> <name> (A-25: one identity per module, its
-    directory name); engine/<x>/... -> engine.<x>; sim/<x>/... -> personal.<x>."""
+    systems/<sub>/sim/... -> <sub>; modules/<name>/... -> <name> (the module key a constant is filed
+    under, its directory name); engine/<x>/... -> engine.<x>; sim/<x>/... -> personal.<x>."""
     parts = p.relative_to(ROOT).parts
     if parts[0] in ci_common.MODULE_CODE_DIRS and len(parts) > 1:
         return parts[1]

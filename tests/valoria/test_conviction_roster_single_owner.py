@@ -18,10 +18,14 @@ fails. Mutation-verified 2026-08-24.
 """
 import ast
 import os
+import sys
 
 import pytest
 
 _ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+sys.path.insert(0, os.path.join(_ROOT, 'tools'))
+import ci_common  # noqa: E402
 
 #: The one module allowed to name Convictions as literals — because it is where they are cooked
 #: from the registry, and even there they are read from the artifact, not typed.
@@ -37,7 +41,9 @@ def _canonical():
 
 
 def _py_files():
-    for tree in ('engine', 'systems'):
+    # Every code root from the one owner (plan position `35`, A-25), so a second roster typed into a
+    # module under `modules/<name>/` is seen like one under `systems/`.
+    for tree in ('engine', *ci_common.MODULE_CODE_DIRS):
         for dirpath, dirnames, filenames in os.walk(os.path.join(_ROOT, tree)):
             dirnames[:] = [d for d in dirnames if d != '__pycache__']
             for fn in filenames:
@@ -71,10 +77,12 @@ def test_no_second_conviction_roster_in_code():
     """
     canon = _canonical()
     offenders = []
+    checked = 0
     for path in _py_files():
         rel = os.path.relpath(path, _ROOT)
         if rel in _ALLOWED:
             continue
+        checked += 1
         try:
             tree = ast.parse(open(path, encoding='utf-8').read())
         except SyntaxError:                                  # pragma: no cover - not our problem
@@ -91,6 +99,9 @@ def test_no_second_conviction_roster_in_code():
             hits = names & canon
             if len(hits) >= 2:
                 offenders.append(f'{rel}:{node.lineno} -> {sorted(hits)}')
+    # The floor (CLAUDE.md §0.1 pt 2). `engine/` alone is about 136 files, so 200 is only met when
+    # the other roots are read too: a derivation that drops them fails here instead of passing.
+    assert checked >= 200, f'only {checked} files scanned — the root derivation is broken, not clean'
     assert not offenders, (
         'a second Conviction roster has been hardcoded. The roster is owned by '
         'references/descriptor_registry.yaml:conviction_roster and read via '
