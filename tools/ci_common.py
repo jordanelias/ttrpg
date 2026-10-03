@@ -80,8 +80,37 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 _REPO = REPO
 
 
+# ── one owner: the top-level directories MODULE CODE may live under (plan position `35`, A-25) ──
+# WRITTEN ONCE, here. Each row is `(top-level directory, glob under it naming one unit's running
+# code)`. `systems/<name>/sim/` is the oracle's home since `sim/` was retired (see
+# `sim_reference_roots`); `modules/<name>/` is a module's whole directory, because a module is
+# reachable running code and nothing else (A-25: no data, no prose). `modules/` need not exist yet:
+# every consumer below skips a root that is absent, and picks a module up the day its directory does.
+#
+# WHO DERIVES FROM THIS, so the next scan that names `systems` knows where to look instead:
+#   `sim_reference_roots()` / `sim_reference_prefixes()` -> `export_sim_params`'s scan list and
+#   `ci_sim_fabrication_check` rule 1; and, through `MODULE_CODE_DIRS`, the import ban and its probe
+#   (`test_engine_does_not_import_systems.py`), `test_degree_ladder_single_owner.py`,
+#   `test_tn7_always.py`, `test_axis_roster_single_owner.py` and `ci_pp_frozen_check.py`.
+# A scan that spells `systems` for the purpose "read module code" is the defect this block removes:
+# it goes silently blind the day code lands under `modules/`.
+MODULE_CODE_ROOTS = (
+    ('systems', os.path.join('*', 'sim')),
+    ('modules', '*'),
+)
+
+# The bare directory names, derived from the rows above — never typed a second time. This is the
+# shape a scan wants when it joins a root onto its own path (`REPO / root`), builds an import
+# regex, or tests a loaded module's file against a prefix.
+MODULE_CODE_DIRS = tuple(name for name, _ in MODULE_CODE_ROOTS)
+
+
 def sim_reference_roots(repo_root=None):
     """Every directory the 1:1 Python sim reference now lives under. ONE OWNER (ED-IN-0087).
+
+    Position `35` (A-25): the second and later `MODULE_CODE_ROOTS` rows are read the same way the
+    first is, so `modules/<name>/` joins the sim reference the day it exists. `engine/` first, then
+    each row's matches in row order, each row sorted.
 
     `sim/` was RETIRED 2026-07-21 (ED-IN-0071 P4): the core moved to `engine/` and the
     per-subsystem sims to `systems/<subsystem>/sim/`. Two tools still walked the old flat tree, and
@@ -97,8 +126,11 @@ def sim_reference_roots(repo_root=None):
     """
     root = repo_root or _REPO
     roots = [os.path.join(root, 'engine')]
-    roots += sorted(glob.glob(os.path.join(root, 'systems', '*', 'sim')))
-    return [p for p in roots if os.path.isdir(p)]
+    for top, under in MODULE_CODE_ROOTS:
+        roots += sorted(glob.glob(os.path.join(root, top, under)))
+    # `modules/*` matches `modules/__pycache__` once anything is imported from there; it is a
+    # directory but never a module, and a prefix for it would claim a tree that holds no source.
+    return [p for p in roots if os.path.isdir(p) and os.path.basename(p) != '__pycache__']
 
 
 def sim_reference_prefixes(repo_root=None):

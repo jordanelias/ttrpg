@@ -52,8 +52,12 @@ PP_FROZEN_CEILING = 726
 # Left boundary excludes OPP-/APP-/etc.; right boundary stops PP-72 matching inside PP-726.
 PP_CITATION_RE = re.compile(r'(?<![A-Za-z0-9])PP-(\d+)\b')
 
-SCAN_ROOTS = ('canon/', 'systems/', 'references/', 'registers/', 'workplans/',
-              'godot/', 'engine/', 'proposals/', 'tools/')
+# The module-code roots come from the one owner (plan position `35`, A-25), in the slot `systems/`
+# held, so a PP id cited in code under `modules/<name>/` is under the ceiling like one under
+# `systems/`. A root typed here would let a frozen-vocabulary breach in moved code pass this
+# BLOCKING gate. (`modules/` need not exist: `_iter_live_files` skips an absent root.)
+SCAN_ROOTS = ('canon/', *(d + '/' for d in ci_common.MODULE_CODE_DIRS), 'references/', 'registers/',
+              'workplans/', 'godot/', 'engine/', 'proposals/', 'tools/')
 SCAN_EXTS = ('.md', '.yaml', '.jsonl', '.py', '.json')
 
 ARCHIVE_POINTER_RE = re.compile(r'(deprecated/archives/patches/[A-Za-z0-9_.]+\.yaml)')

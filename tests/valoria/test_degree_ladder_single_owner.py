@@ -68,6 +68,9 @@ if str(REPO) not in sys.path:
 
 from engine.dice_engine import dice_engine  # noqa: E402
 
+sys.path.insert(0, str(REPO / 'tools'))
+import ci_common  # noqa: E402
+
 # Ordinal bands, so vocabulary differences (enum / Title-Case / lower-case) cannot masquerade as
 # behavioural ones. Unknown spellings raise rather than defaulting to a band.
 FAIL, PARTIAL, SUCCESS, OVER = 0, 1, 2, 3
@@ -456,7 +459,11 @@ _BAND_RE = r"""['"](?:overwhelming|success|partial|failure)['"]|Degree\.(?:OVERW
 # commonest line in the tree) matches on the second `=` and every migrated file reads as a ladder.
 _PRODUCES_BAND = re.compile(r'(?:return\s+|(?<![=!<>+])=\s*)(?:' + _BAND_RE + r')', re.IGNORECASE)
 
-SCAN_ROOTS = ['engine', 'systems', 'skills', 'tools', 'tests']
+# The code roots come from the one owner (plan position `35`, A-25): a hand-rolled ladder in a module
+# under `modules/<name>/` is the same defect as one under `systems/`, and a root typed here would
+# have left that tree outside the sweep on the day code first landed there. `scanned >= 100` below
+# is the floor that makes a sweep seeing nothing fail instead of pass.
+SCAN_ROOTS = ['engine', *ci_common.MODULE_CODE_DIRS, 'skills', 'tools', 'tests']
 
 
 def test_no_new_hand_rolled_ladder():

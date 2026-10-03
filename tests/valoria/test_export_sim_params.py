@@ -68,6 +68,18 @@ def test_key_alone_is_known_to_collide_and_is_not_used_as_an_index():
     )
 
 
+def test_the_scan_list_is_derived_and_cannot_silently_shrink():
+    """Plan position `35` (A-25). The scan list was a hand list of `engine` and seven
+    `systems/<sub>/sim` directories; it is now `ci_common.sim_reference_roots()`, which also reads
+    `modules/<name>/`. The floor is the hand list's own size, so a derivation that sees nothing — or
+    that stops seeing a root after a module moves between `systems/` and `modules/` — fails here
+    instead of shrinking the export while `--check` stays green over a smaller artifact (§0.1 pt 2)."""
+    dirs = esp._scan_dirs()
+    assert 'engine' in dirs, dirs
+    assert len(dirs) >= 8, f'only {len(dirs)} sim reference roots derived: {dirs}'
+    assert all(os.path.isdir(os.path.join(ROOT, d)) for d in dirs), dirs
+
+
 def test_count_matches_records():
     d = json.load(open(os.path.join(ROOT, 'engine', 'engine_params', 'sim_params.json')))
     assert d["count"] == len(d["params"])

@@ -1,5 +1,6 @@
-"""`engine/` must not name `systems/`. As of 2026-08-22 none does — at module level OR inside a
-function — and this pins both counts at zero so neither can grow back.
+"""`engine/` must not name `systems/` — or, from plan position `35` (A-25), `modules/`. As of 2026-08-22
+none does — at module level OR inside a function — and this pins both counts at zero so neither can
+grow back. Every root is read from `ci_common.MODULE_CODE_DIRS`; none is spelled in this file's scans.
 
 THE PREMISE (Jordan, 2026-08-20): **`systems/` stems from `engine/` and `references/`.** `engine/`
 is the root — the executable model and the single owner of each rule — and `systems/<sub>/sim/`
@@ -47,23 +48,47 @@ import pathlib
 import ast
 import os
 import re
+import sys
 
 import pytest
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
 ENGINE = REPO / 'engine'
 
-# Top-level `from systems...` / `import systems...` — column 0 only. An import nested inside a
+# THE ROOTS THIS FILE BANS ARE NOT SPELLED HERE (plan position `35`, A-25). `engine/` names no module
+# code by import, and "module code" lives under every root in `ci_common.MODULE_CODE_DIRS` — today
+# `systems/` and `modules/`. A module is reached by a composition row (`references/module_contracts.yaml`),
+# never by an import, so `modules/` is banned exactly as `systems/` is, and it is NOT allowed a
+# `PATH_SEAM_ALLOWED` entry below. Typing the root a second time here is how a scan goes blind the day
+# code lands under the one it forgot.
+sys.path.insert(0, str(REPO / 'tools'))
+import ci_common  # noqa: E402
+
+#: `systems|modules` — the alternation every pattern and the probe below are built from.
+_ROOT_ALT = '|'.join(re.escape(d) for d in ci_common.MODULE_CODE_DIRS)
+
+#: A string literal NAMING a code root (`"systems"`, `'modules'`) or a path through one (`/modules/`):
+#: what an inserted `sys.path` expression must not contain. Both quote styles, because matching on
+#: typography instead of the concept hid a live seam for days (see the path-seam test below).
+_ROOT_NAME_RE = re.compile(rf"""['"](?:{_ROOT_ALT})['"]|/(?:{_ROOT_ALT})/""")
+
+#: One literal that `_ROOT_NAME_RE` matches — what the one-hop resolver substitutes for a sibling
+#: module's constant whose chain reaches a code root.
+_ROOT_LITERAL = '"' + ci_common.MODULE_CODE_DIRS[0] + '"'
+
+# Top-level `from <root>...` / `import <root>...` — column 0 only, for every root in
+# `ci_common.MODULE_CODE_DIRS` (the NAME says `SYSTEMS` because it predates `modules/`; renaming it
+# would break the plan's anchors for nothing). An import nested inside a
 # function is a DIFFERENT (and also real) problem, counted separately BELOW — not merely promised to
 # be. Conflating the two counts would make the top-level list churn on refactors that change nothing
 # about the package graph; leaving the nested one UNCOUNTED, which is what this file did until
 # 2026-08-21, is worse than conflating them (see NESTED_BASELINE).
-TOP_LEVEL_SYSTEMS_IMPORT = re.compile(r'^(?:from|import)\s+systems[.\s]', re.M)
+TOP_LEVEL_SYSTEMS_IMPORT = re.compile(rf'^(?:from|import)\s+(?:{_ROOT_ALT})[.\s]', re.M)
 
 # The same import, indented — i.e. inside a function or a class body. A deferred import hides the
 # cycle from the interpreter; it does not remove it. `engine/autoload/game_state.py` carried ELEVEN
 # of them, which is what made "autoload is a leaf" false until 2026-08-22.
-NESTED_SYSTEMS_IMPORT = re.compile(r'^[ \t]+(?:from|import)\s+systems[.\s]', re.M)
+NESTED_SYSTEMS_IMPORT = re.compile(rf'^[ \t]+(?:from|import)\s+(?:{_ROOT_ALT})[.\s]', re.M)
 
 # THE CEILING. Every entry is a seam to be moved to registration-driven composition
 # (proposals/2026-08-20-return-to-game-plan-v1.md Act C3). Remove the line when the seam lands.
@@ -313,7 +338,7 @@ def _inserts_a_systems_path(text, path=None):
             for t in node.targets:
                 if isinstance(t, ast.Name):
                     assigned[t.id] = ast.get_source_segment(text, node.value) or ""
-    names_re = re.compile(r"""['"]systems['"]|/systems/""")
+    names_re = _ROOT_NAME_RE
     # ONE HOP OUTWARD: `alias.CONST` resolves to that module's own top-level `CONST`, and the
     # resolution happens IN THAT MODULE'S NAMESPACE. ⚠ THE FIRST WRITING OF THIS HOP GOT THAT
     # WRONG AND STAYED BLIND: it copied `files.PC_ENGINE_DIR`'s right-hand side
@@ -334,7 +359,7 @@ def _inserts_a_systems_path(text, path=None):
                         mod_assigned[t.id] = ast.get_source_segment(mod_text, node.value) or ""
         for const, expr in mod_assigned.items():
             assigned[f'{alias}.{const}'] = (
-                '"systems"' if _chain_hits(expr, mod_assigned, names_re) else '')
+                _ROOT_LITERAL if _chain_hits(expr, mod_assigned, names_re) else '')
     for node in ast.walk(tree):
         if not (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)):
             continue
@@ -348,21 +373,25 @@ def _inserts_a_systems_path(text, path=None):
     return False
 
 
-def _modules_loaded_from_systems(probe_body):
+def _modules_loaded_from_systems(probe_body, cwd=None):
     """Run `probe_body` in a subprocess and return the modules it loaded whose FILE lives under
-    `systems/` — regardless of what they are called in `sys.modules`."""
+    ANY code root — `systems/` or `modules/`, i.e. every `ci_common.MODULE_CODE_DIRS` entry —
+    regardless of what they are called in `sys.modules`. (The name predates `modules/`.)
+
+    A `modules/` hit here is a PYTHON module loaded from the `modules/` DIRECTORY; the two senses of
+    "module" are unrelated, and both are meant. `cwd` defaults to the repo; a test passes a temporary
+    tree to prove the probe sees a root without writing into the shared working tree."""
     import subprocess
-    import sys
 
     probe = (
         'import sys, os\n'
         + probe_body +
-        "\nroot = os.path.join(os.path.abspath('.'), 'systems') + os.sep\n"
+        f"\nroots = tuple(os.path.join(os.path.abspath('.'), d) + os.sep for d in {tuple(ci_common.MODULE_CODE_DIRS)!r})\n"
         "bad = sorted(f'{n}<-{getattr(m, \"__file__\", \"\")}' for n, m in list(sys.modules.items())\n"
-        "            if getattr(m, '__file__', None) and str(m.__file__).startswith(root))\n"
+        "            if getattr(m, '__file__', None) and str(m.__file__).startswith(roots))\n"
         "print('|'.join(bad))\n"
     )
-    proc = subprocess.run([sys.executable, '-c', probe], cwd=str(REPO),
+    proc = subprocess.run([sys.executable, '-c', probe], cwd=str(cwd or REPO),
                           capture_output=True, text=True)
     assert proc.returncode == 0, f'the probe did not run:\n{proc.stderr}'
     return [m for m in proc.stdout.strip().split('|') if m]
@@ -398,7 +427,7 @@ def test_importing_every_engine_module_pulls_in_no_subsystem():
         f'importlib.import_module({m!r})\n' for m in mods)
     leaked = _modules_loaded_from_systems(body)
     assert not leaked, (
-        'importing engine/ loaded ' + str(len(leaked)) + ' module(s) whose file is under systems/: '
+        'importing engine/ loaded ' + str(len(leaked)) + ' module(s) whose file is under a code root (systems/ or modules/): '
         + ', '.join(leaked) + '\n'
         'engine/ is the root; systems/ stems from it. Resolve the dependency through a composition '
         'role (references/module_contracts.yaml) instead of importing it.'
@@ -419,7 +448,9 @@ def test_the_one_declared_path_seam_is_still_the_only_one():
     move yet is added deliberately, with its reason, never as a drive-by.
 
     Scans for the mechanism rather than the module: any `sys.path` mutation in `engine/` that names
-    `systems`. A second one is a new seam of the class that hid for two days.
+    a code root (`systems` or `modules`, `ci_common.MODULE_CODE_DIRS`). A second one is a new seam of
+    the class that hid for two days. `modules/` is never in `PATH_SEAM_ALLOWED`: a module is reached
+    by a composition row, so a `sys.path` insert aimed at it is a seam by definition.
     """
     offenders = {}
     for path in sorted((REPO / 'engine').rglob('*.py')):
@@ -443,7 +474,7 @@ def test_the_one_declared_path_seam_is_still_the_only_one():
         if _inserts_a_systems_path(text, path):
             offenders[rel] = True
     assert set(offenders) == PATH_SEAM_ALLOWED, (
-        f'sys.path seams into systems/ are now {sorted(offenders)}, declared {sorted(PATH_SEAM_ALLOWED)}. '
+        f'sys.path seams into a code root (systems/, modules/) are now {sorted(offenders)}, declared {sorted(PATH_SEAM_ALLOWED)}. '
         f'A NEW one is the invisible-seam class: it defeats both regexes above AND the import probe, '
         f'because the modules it loads are not named `systems.*`. Removing one? Delete it from '
         f'PATH_SEAM_ALLOWED in the same commit.'
@@ -490,7 +521,7 @@ def test_the_one_hop_relative_import_resolution_can_observe_the_seam_it_exists_t
     # 2026-09-07 defect. Reproduced directly, not inferred: the same chain with the sibling's
     # constant withheld from `assigned` (what `_relative_module_files` returning `{}` would starve
     # it of) does not reach the literal.
-    names_re = re.compile(r"""['"]systems['"]|/systems/""")
+    names_re = _ROOT_NAME_RE
     assert _chain_hits('str(_PC)', {'_PC': 'files.PC_ENGINE_DIR'}, names_re) is False, (
         'the local-assignment-only chain (no one-hop) unexpectedly reached "systems" on its own — '
         'this planted case no longer isolates what the one-hop branch adds'
@@ -518,6 +549,32 @@ def test_the_import_probe_can_observe_both_kinds_of_leak():
         '"combatant".'
     )
     assert any('combatant' in b for b in bare), bare
+
+
+def test_every_scan_here_reads_modules_as_well_as_systems(tmp_path):
+    """Plan position `35` (A-25), the hermetic half of its falsifier. `modules/` does not exist in the
+    repo yet, so the real tree cannot show that these scans would SEE a module — this plants one in a
+    temporary tree and asserts each instrument fires, for BOTH roots. (The other half, a plant under
+    a real `modules/_plant/`, was run when the position landed and is recorded in its commit.)
+
+    Four instruments, one assertion each: the two import regexes, the `sys.path` seam predicate, and the
+    subprocess probe. An instrument that sees only `systems` is blind to the whole of `modules/`."""
+    assert set(ci_common.MODULE_CODE_DIRS) >= {'systems', 'modules'}
+    for root in ci_common.MODULE_CODE_DIRS:
+        line = f'from {root}.plant.sim import leaf\n'
+        assert TOP_LEVEL_SYSTEMS_IMPORT.search(line), f'top-level `from {root}.…` went undetected'
+        assert NESTED_SYSTEMS_IMPORT.search('    ' + line), f'nested `from {root}.…` went undetected'
+        assert not NESTED_SYSTEMS_IMPORT.search(line) and not TOP_LEVEL_SYSTEMS_IMPORT.search('    ' + line)
+        seam = f'import sys\nsys.path.insert(0, str(_REPO / "{root}" / "plant"))\n'
+        assert _inserts_a_systems_path(seam) is True, f'`sys.path` insert aimed at {root}/ went undetected'
+        (tmp_path / root / 'plant').mkdir(parents=True)
+        (tmp_path / root / 'plant' / 'leaf.py').write_text('X = 1\n')
+        leaked = _modules_loaded_from_systems(
+            f"sys.path.insert(0, os.getcwd())\nimport {root}.plant.leaf\n", cwd=tmp_path)
+        assert leaked and any('leaf' in m for m in leaked), (
+            f'the probe reports NOTHING for a module loaded from {root}/ ({leaked!r})')
+    clean = _modules_loaded_from_systems("sys.path.insert(0, os.getcwd())\nimport json\n", cwd=tmp_path)
+    assert clean == [], f'the probe reported a leak for an import from no code root: {clean!r}'
 
 
 def test_the_composition_resolver_refuses_an_undeclared_role():

@@ -52,6 +52,24 @@ def test_an_id_above_the_ceiling_FAILS(tmp_path, monkeypatch):
     assert over in violations[0] and 'frozen ceiling' in violations[0]
 
 
+def test_an_id_above_the_ceiling_in_code_under_EVERY_code_root_FAILS(tmp_path, monkeypatch):
+    """Plan position `35` (A-25): the gate's roots come from `ci_common.MODULE_CODE_DIRS`, so moved
+    code under `modules/<name>/` is not outside the ceiling. One planted `.py` per root, each must
+    be reported — a gate that saw only `systems/` would report one fewer."""
+    import ci_common
+    over = f'PP-{pp.PP_FROZEN_CEILING + 1}'   # built, never spelled
+    for d in ci_common.MODULE_CODE_DIRS:
+        (tmp_path / d / 'plant').mkdir(parents=True)
+        (tmp_path / d / 'plant' / 'mod.py').write_text(f'# cites {over}\n')
+    monkeypatch.setattr(pp, 'REPO_ROOT', str(tmp_path))
+    monkeypatch.setattr(pp, 'SELF', 'tools/ci_pp_frozen_check.py')
+    violations = []
+    pp.check_pp_is_frozen(violations)
+    assert len(violations) == len(ci_common.MODULE_CODE_DIRS) >= 2, violations
+    for d in ci_common.MODULE_CODE_DIRS:
+        assert any(v.startswith(f'{d}/plant/mod.py') for v in violations), (d, violations)
+
+
 def test_an_id_at_the_ceiling_PASSES(tmp_path, monkeypatch):
     """The boundary is inclusive — PP-726 is a real, cited, historical id."""
     root = tmp_path

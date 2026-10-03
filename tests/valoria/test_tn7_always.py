@@ -41,6 +41,7 @@ from __future__ import annotations
 import pathlib
 import random
 import re
+import sys
 
 import pytest
 
@@ -50,6 +51,9 @@ from systems.mass_battle.sim import resolution as mb
 
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
+
+sys.path.insert(0, str(REPO / 'tools'))
+import ci_common  # noqa: E402
 
 # The canonical face rule, pinned face by face. 1 fumbles, 2-6 score nothing,
 # 7-9 each score one success, 10 scores two. No TN moves any of these boundaries.
@@ -119,7 +123,10 @@ def test_the_mass_battle_roller_also_refuses_non_7(bad_tn):
 # ── 3. No constant may name a TN that is not 7 ────────────────────────────────────────
 
 _TN_CONST = re.compile(r'^\s*([A-Z_]*TN[A-Z_]*)\s*=\s*(\d+)\s*(?:#.*)?$', re.M)
-_SCAN_ROOTS = ("engine", "systems")
+# `systems/` and `modules/` both, from the one owner (plan position `35`, A-25): a TN constant in a
+# module under `modules/<name>/` breaks the ruling exactly as one under `systems/` does, and the sweep
+# must not go blind the day code lands there. The floor is `test_the_tn_constant_sweep_actually_found_constants`.
+_SCAN_ROOTS = ("engine", *ci_common.MODULE_CODE_DIRS)
 
 
 def _tn_constants():

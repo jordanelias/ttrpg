@@ -32,8 +32,12 @@ what `test_the_roster_row_points_at_the_owner_and_carries_no_literal` is for: it
 """
 import ast
 import os
+import sys
 
 _ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+sys.path.insert(0, os.path.join(_ROOT, 'tools'))
+import ci_common  # noqa: E402
 
 #: The one module allowed to name the axes, and even there they are read from the artifact.
 _OWNER = os.path.join('engine', 'substrate', 'descriptors.py')
@@ -45,7 +49,9 @@ def _canonical():
 
 
 def _py_files():
-    for tree in ('engine', 'systems'):
+    # Every code root from the one owner (plan position `35`, A-25), so a second axis roster typed
+    # into a module under `modules/<name>/` is seen like one under `systems/`.
+    for tree in ('engine', *ci_common.MODULE_CODE_DIRS):
         for dirpath, dirnames, filenames in os.walk(os.path.join(_ROOT, tree)):
             dirnames[:] = [d for d in dirnames if d != '__pycache__']
             for fn in filenames:
@@ -105,10 +111,12 @@ def test_no_second_axis_roster_in_code():
     """
     canon = _canonical()
     offenders = []
+    checked = 0
     for path in _py_files():
         rel = os.path.relpath(path, _ROOT)
         if rel == _OWNER:
             continue
+        checked += 1
         try:
             tree = ast.parse(open(path, encoding='utf-8').read())
         except SyntaxError:                                  # pragma: no cover - not our problem
@@ -125,6 +133,9 @@ def test_no_second_axis_roster_in_code():
             hits = names & canon
             if len(hits) >= 2:
                 offenders.append(f'{rel}:{node.lineno} -> {sorted(hits)}')
+    # The floor (CLAUDE.md §0.1 pt 2): the roots are derived (position `35`), and a derivation that
+    # sees nothing would pass this whole test. 239 files measured when the roots became derived.
+    assert checked >= 100, f'only {checked} files scanned — the root derivation is broken, not clean'
     assert not offenders, (
         'a second ethical-axis roster has been hardcoded. The set is owned by '
         'references/descriptor_registry.yaml:axis_roster and read via '
