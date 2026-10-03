@@ -1,6 +1,6 @@
 # THE SEASON LOOP — A HOLONIC ARCHITECTURE, AND THE GUIDE TO BUILDING IT IN GODOT
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules registered into it under `systems/<name>/sim/`. ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone.**
 ## Under `CLAUDE.md` §0.05 this document is **REFERENCE, never mechanism.** Under §0.2 **nothing in it
 ## runs.** Part X says what would make each claim done and which steps cannot be satisfied by writing.
 
@@ -1506,7 +1506,7 @@ GAME
 | axis | values | why it is an axis and not a level |
 |---|---|---|
 | **`role:`** | the engine's vocabulary | **The engine names the ROLE; the registry names the MODULE.** Roles belong to the *engine*, not to a subsystem — and one role (`contest`) has **three** providers. Either role sits above subsystem or they collapse; **either horn breaks a tree** |
-| **`subsystem:`** | the three deferred systems | ⚠ In the chain "subsystem" means **only** personal combat, social contest and mass battle. **The loop's own modules have no subsystem**, so it cannot be a universal level |
+| **`system:`** | the modules registered against the loop under `systems/<name>/`, three of which are deferred (personal combat, social contest, mass battle) and resolve a contest by provider | ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284). The axis was `subsystem:`, the three deferred systems only, and "subsystem" still means only those three. Every system under `systems/` is now a module that plugs into the loop, so the axis is spelled `system:` and names the registered module. **The loop's own modules — steps, gate, stores, queries, decision, manifest, loaders — have no system**, so it cannot be a universal level |
 | **`key type:`** | `family.type`, lowercase dotted | **A key type has MANY consuming modules.** Making it a child would duplicate FIELD under every consumer — the exact argument that disqualifies the others |
 | **`phase:`** | a **SET** over the six steps | §41.4 |
 | **`scale:`** | advisory annotation | §41.3 |
@@ -1719,7 +1719,9 @@ res://
       calendar.gd  matter.gd  deliberate.gd  resolve.gd  witness.gd  census.gd
     seam/
       contest_resolver.gd    # the base the deferred subsystems extend (§39)
-      <subsystem>_wrapper.gd # §44.2 — entry point + extension injector, one per deferred subsystem
+    systems/
+      <name>/register.gd     # one per module under systems/<name>/, called by manifest/roles.gd AT BOOT (§43);
+                             # a deferred subsystem's provider and §44.2's extension injector live here
     manifest/
       roles.gd               # role -> provider, resolved AT BOOT (§43)
     params/params.gd         # class_name Params — the typed holder, loaded ONCE by the driver
@@ -1731,8 +1733,9 @@ res://
   tests/
 ```
 
-⚠ **`manifest/` and `seam/<subsystem>_wrapper.gd` are additions to the chain's stated layout**, marked
-here as departures rather than smuggled in. Both are §43's and §44.2's homes.
+⚠ **`manifest/` and `systems/<name>/register.gd` are additions to the chain's stated layout**, marked
+here as departures rather than smuggled in. Both are §43's and §44.2's homes. (AMENDED 2026-10-03,
+ED-IN-0284: this line named `seam/<subsystem>_wrapper.gd`, one per deferred subsystem.)
 
 ### §45.1 Declare `World` first
 
