@@ -1,6 +1,9 @@
 """`season.data.rosters` -- the roster/table layer, extracted from `shape.py` (step 2 of the
 decomposition, a PURE MOVE: no behaviour changed, only where the code lives).
 
+A ROSTER, in this repo, is a closed set of allowed values that a loader validates against
+(`rosters.yaml` is the file; the `roster()` reader below is the check).
+
 Owns everything that loads or reads `rosters.yaml`: the closed-set/mapping readers (`roster`,
 `roster_map`, `table`, `table_meta`), the roster constants bound at import (Jordan 2026-09-02 --
 "I do not want definitions etc to be hardcoded"), and the two lookups that resolve canon's own

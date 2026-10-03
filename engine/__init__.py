@@ -1,6 +1,11 @@
-"""engine/ — Valoria's executable model, THE ENGINE: the season loop (engine/season/, the HOST every
-system under systems/ registers into, ED-IN-0284) and the substrate it is built on (substrate/,
-autoload/, engine_params/). A system's code lives at systems/<name>/sim/ and depends UPWARD on this
-package; engine/ names no system by import (two declared path seams aside, PATH_SEAM_ALLOWED) — a
-system is reached by composition row at driver construction. (Package created under ED-IN-0071 P3.)
+"""engine/ — Valoria's executable model. THE ENGINE is the season loop, engine/season/ (ED-IN-0284):
+the host, and the only thing here that is "the engine". The rest of this package serves it:
+  substrate/      leaf readers the loop uses (descriptors, composition, names)
+  engine_params/  the typed exports (a fact the engine reads lives there or in one Python owner)
+  autoload/       the dice engine: the d10 chain, degree_from_net, sigma leverage (not the engine;
+                  renamed engine/dice_engine/ at plan position `34`)
+A MODULE is reachable running code, reached by a composition row (home modules/<name>/ once built).
+engine/ names no system by import: a system is resolved by string at driver construction. ONE path
+seam is declared, PATH_SEAM_ALLOWED in tests/valoria/test_engine_does_not_import_systems.py, and it
+holds a single entry. (Package created under ED-IN-0071 P3.)
 """

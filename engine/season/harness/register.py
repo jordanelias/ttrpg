@@ -1,5 +1,10 @@
 """THE HOLE REGISTER, AS AN OBJECT -- `W0` of `architecture/PLAN.md`.
 
+A REGISTER, in this repo, is a file of rows about one kind of thing, each row with an id; this
+module reads one. `references/` and `registers/` are directory names only: `references/` holds what
+tools look up and `registers/` what sessions write, except `registers/mechanics_index.yaml`, a
+machine-readable index. `references/` is not CLAUDE.md §0.05's "reference" (non-binding prose).
+
 `ARCHITECTURE_V2.md` §0.3 row 13 claims Part VII is *"rows, not prose"*. IT WAS A MARKDOWN TABLE
 THAT NOTHING READ. Not one of its 32 rows carried the `site:`, `sweep:` or `cite:` fields its own
 §G4 defines; its self-reported counts (39 holes · 8 ruled · 13 assumption · 12 absent · 1 mixed)
