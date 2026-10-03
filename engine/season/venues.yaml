@@ -14,8 +14,9 @@
 #
 # ⚠ THIS IS A MECHANISM, NOT REFERENCE (`CLAUDE.md` §0.05). `engine/season/harness/populated.py`
 # opens it at runtime and the rungs it builds come from these rows — delete this file and the
-# populated world has no buildings in it. That is why it lives beside the code that reads it
-# rather than under `systems/`, and why the names below are not duplicated into any design doc.
+# populated world has no buildings in it. It lives beside the host loader that reads it
+# (a host loader's data stays in the host; `modules/<name>/` holds reachable module code only, no data:
+# `_part5` A-25, ED-IN-0285), and the names below are not duplicated into any design doc.
 #
 # ⚠ WHAT A VENUE IS ON THE LADDER. `rosters.yaml: rung_kinds` is
 # `person < hearth < community < settlement < territory < province < duchy < realm`. A BUILDING is

@@ -90,7 +90,7 @@ that judgment 138 times** — where no source exists, leave `pool_default` and r
 
 **BUILT 2026-10-01 (PR #451):** both `rendering.py` stubs struck with their reasons at the site (the season has no clock to wire them to: `loop/census.py`, ED-WR-0011 option A); `ED-WR-0003` closed at ladder step 2
 (an `ED-WR-0003` superseding row); `attempt_mending` calls `recover()` and costs > 0 (only tests call it; `environment_in_equilibrium` defaults to False);
-`threadwork/sim/{co_movement,opposing}.py` import neither `ms_track` nor `knots`, which unblocks `29a`-ms and `29f`. **Remainder, each outside this position's scope** (`HANDOFF_WR.md`):
+`threadwork/sim/{co_movement,opposing}.py` import neither `ms_track` nor `knots`, which unblocked `29a`-ms and `29f` (both since CANCELLED, A-24: the modules stay, unplugged). **Remainder, each outside this position's scope** (`HANDOFF_WR.md`):
 the `R-14` practitioner-resilience term (arithmetic unruled); Mending aimed at the mender's own configuration (`coherence.mend_resting_point` has no non-test caller); and
 `collective.py`'s and `opposing.py`'s Mending feedback. **R:** none.
 
@@ -110,7 +110,22 @@ admission; `data/requires.py`'s `cardinality` form (raises today); `seam/ladder.
 `engine/season/arrangements.yaml` header; H-161, H-163, H-173, H-174; `loop/effects_information.py`
 (`_eff_open_case`, `_eff_determine`) and `loop/effects_shared.py` (`_new_oblige_term`, `_oblige_term`).
 
-### `22` · PROC-B, steps 11–16 — the contest-resolution core · SC · gate `13d-iii` (E11) · `opus`/`opus` (arrangements transcription `sonnet`) · `[design]`
+### `22` · PROC-B, steps 11–16 — the contest-resolution core · SC · gate `13d-iii` (E11, landed), `30` and `31a` (E17, `_part5` §SM) · `opus`/`opus` (arrangements transcription `sonnet`) · `[design]`
+
+**WHERE (A-25, `ED-IN-0285`).** `22` builds the social contest container's contest provider. Its automated
+mode is decided by measurement here: the interim provider `31a` puts in `modules/social_contest/`, or the
+kernel `systems/social_contest/sim/contest/`, which `22` EVALUATES and does not delete (`2-ii` stays HELD,
+A-24). The kernel's entry `wrapper.py::build_contest`/`resolve_contest` (`:110`, `:248`) takes sides as
+`Contestant|int|dict`, draws from the global `random` (no rng parameter), wires only `agon` (`:200-237`) and
+returns `((band, reason), bout)` (`:255`), whose bands `degree_of` (`seam/ladder.py:195`) would refuse with
+`Unspecified`; adopting it needs `31a`'s typed input record, a seeded rng and a degree adapter. Adopt or keep
+the interim is this position's measurement, then Jordan's (`_part5` `SM-15`). The kernel's own proceedings are a
+separate bench concept from the host's `judging_set`. The proceedings verbs, docket and calendar step stay host,
+loop-resident institutions that schedule contests (A-25); which module owns those verbs is Jordan's (`SM-1`).
+The provider is reached by its prize rows' string through `30`'s registrar, never imported by the host. The
+host-side edits below are unchanged (`verb_table.yaml`, `rosters.yaml`, `loop/effects_information.py`,
+`epistemic.py`, `data/requires.py`). This position waits for `30` and `31a`, not for `31b` or `31c`. `22` once
+planned `engine/season/seam/wrappers/proceedings.py`; that path is withdrawn.
 
 **State (2026-09-30, `a1282b02`):** steps 6/7/9/10 DONE at `18`/`19`; step 8 built (a citation); step 7
 carries a caveat — `judging_set`'s `matter` parameter is not load-bearing yet. `arrangements.yaml` holds
@@ -126,16 +141,20 @@ degree-keyed effects, not a routine addition.
 - **Step 12:** `speak` — a typed cell, `contests: "a matter"`, four bands (the `speak` spec in
   `proposals/2026-09-05-proceedings-subsystem/04_VERBS.md` — design intent, never the reason it is right); `_eff_speak` in `loop/effects_information.py` only if `writes:` is non-empty.
 - **Step 13:** the two prize rows drop `interim: true` and repoint from `sigma_leverage` — **a row
-  change, not a code change** (ED-SC-0033 cl. 2); `chronicle` deleted (`rosters.yaml`, `epistemic.py`); the
+  change, not a code change** (ED-SC-0033 cl. 2), landing in step 15's commit; `chronicle` deleted (`rosters.yaml`, `epistemic.py`); the
   `rung=` fix (C-8) reads `world_q.place_of`, not a `Scene.place` field (there is none).
 - **Step 14:** the obstacle. **Contradiction 3, resolved (carried):** take the obstacle **CEILING**, its
   value injected and swept (`sigma_leverage`), never a pool floor — a ceiling caps how hard a matter can
   get; a floor raises everyone's competence, a statement about people. M-7 fails at the 1D floor
-  (`p_success` 0.0006 at Ob 3). The seam's own obstacle site is deleted (ED-SC-0033 cl. 3, one owner).
+  (`p_success` 0.0006 at Ob 3). The seam's own obstacle site (`_obstacle_of`, the host input builder's
+  after `31a`) is deleted (ED-SC-0033 cl. 3, one owner).
   `ED-SC-0038` is RULED; its per-matter / single-margin pick is this step's build decision.
-- **Step 15:** the provider — `engine/season/seam/wrappers/proceedings.py`, resolved **by string at
-  boot**, returning **a Margin, never a winner** (`04` provider rule); a misspelled manifest row fails at
-  boot naming the row.
+- **Step 15:** the provider — a `verb_call` entry in `modules/social_contest/` (A-25) or the kernel adopted
+  per the WHERE above, called by its host adapter through `30`'s registrar and resolved **by string at driver
+  construction**, returning **a margin, never a winner** (`04` provider rule); a misspelled manifest row or a
+  deleted composition row refuses at driver construction naming the row (`30`'s refusals).
+  **Steps 13 and 15 land in ONE commit:** `30`'s refusal (c) makes a prize row naming an unregistered provider a
+  driver-construction failure, so a re-point committed before its provider would break every boot.
 - **Step 16 — THE BAR (M2's first gate):** two seeded proceedings run end to end with zero authored acts,
   twice, byte-identical including the hash, and `causes[]` walks from the determination back to the date
   that raised it.
@@ -161,38 +180,18 @@ a shipped world — `_part5` §L says when they escalate.
   scheduled here.)
 - **`22b`** — proceedings PHASE 4 (steps 23–27; step 22 = `Tenure.term`, DONE at `17b`).
 
-### `24h` P5 · S5 revolt as a Query · SE/IN · gate — · `{parallel worktree}` · `opus` · `[design]`
-
-The revolt **Query** in `queries/world_q.py` or `queries/faction_q.py` — a read, never a write — the
-season successor of `systems/world/sim/insurgency_pipeline.py` (deleted at `29d`, PR #450). **FALSIFIER:** the
-Query writes nothing (AX-2; the Query family by module); a seeded realm where its preconditions hold
-returns ≥ 1, one where they do not returns 0. **R:** R-06/R-07 texture (the world generating drama with
-nobody watching — NERS R).
-
 ### `24h` P6 · forswearing · SE/IN · gate `14` (E9), after `22`'s `verb_table.yaml` edits · `opus` · `[design]`
 
 `repudiate`'s costs (the forswearing half of S5). **FALSIFIER:** a forsworn commitment costs what the row
 declares and nothing else; no proper-noun branch. **R:** R-05 texture.
 
-### `29f` → `29e` → `29a`-ms · fieldwork `knots`, characters, `ms_track` · IN · gate `14`, `27` (E2, E3) · `sonnet` · `[cleanup]`
-
-- **`29f`:** `systems/fieldwork/sim/knots.py` (ED-912's ±5 gauge maps to `Tenure.degree`, F.4 — the
-  plan said `14` records it, **`14` did not** (it declined `tie / knot`; `H-182` says no position owns `_eff_tie`), so
-  `29f` writes the mapping into `H-182`'s cite, not invented, and then deletes); `engine/tests/test_knots_ed912.py` → `FORK:`.
-- **`29e`:** `systems/characters/sim/conviction.py` (← `knots.py`); `beliefs.py` already went at `28-0`'s
-  follow-up (PR #450). `test_conviction_roster_single_owner.py`'s `systems.characters` site re-pointed.
-- **`29a`-ms:** `systems/overview/sim/ms_track.py`.
-**FALSIFIER:** `opposing.py` no longer imports `sustain_knot`; nothing imports `apply_ms_delta`;
-`grep -rn "systems.overview\|systems.fieldwork\|systems.characters"` returns only fork-ledger rows.
-**Hash:** none.
-
-### `2-ii` · RET-SC: the kernel and the veto · IN/SC · gate `22` (E4) · `sonnet` producer, `opus` critic on the veto only, `haiku` for the inbound-site census · `[cleanup]`
+### `2-ii` · RET-SC: the kernel and the veto · IN/SC · gate `22` (E4) · `sonnet` producer, `opus` critic on the veto only, `haiku` for the inbound-site census · `[cleanup]` · **HELD 2026-10-02 (A-24): it deletes `systems/social_contest/sim/contest/`, the home of social contests; do not build until Jordan answers**
 
 **INSTRUCTION (carried from the retired position 2, corrected for what has since landed).**
 `systems/social_contest/sim/contest/` (16 files); `parliamentary_{vote,stay}.py` already went at `29b`
 (PR #450). `engine/tests/test_contest_kernel.py` → `FORK:`. **Re-derive the deletion set from `git ls-files`, never a
 `find` count.** The veto (`degree_extension.py`) is relocated as a forwarded `extension=` at
-`seam/ladder.py`'s degree site — a veto that can only demote, never a re-banding (`04`: `seam/wrappers/*`
+`seam/ladder.py`'s degree site — a veto that can only demote, never a re-banding (`04` §A.2: the contest providers
 own nothing and return a Margin). **Keep the logical name** — the prize rows key on it. Repoint every
 inbound site: `module_contracts.yaml`, `canonical_sources.yaml`, `descriptor_registry.yaml`,
 `lane_assignments.yaml`, `ci_checks_registry.yaml`, the `skills/` files that name it;
@@ -202,7 +201,8 @@ inbound site: `module_contracts.yaml`, `canonical_sources.yaml`, `descriptor_reg
 CI job folds into `unit-tests` here; `test_sigma_leverage_parity.py` (substrate) moves out of
 `engine/tests`.
 **OBSERVABLE:** `rg -n social_contest engine/ tools/ tests/ references/ skills/` returns only logical-name
-rows; content hash stationary; `PROBE FLIPS 0`. **FALSIFIER:** plant a `tell` contest the old extension
+rows (from `30`/`31a` (A-25) those include the `modules:` roster entry and the social contest composition
+row; `systems/social_contest/` itself stays and this position deletes `contest/` only); content hash stationary; `PROBE FLIPS 0`. **FALSIFIER:** plant a `tell` contest the old extension
 demoted, at a pool where it would otherwise read its top band — red before the move, green after; and
 `seam/ladder.py::degree_of` never imports `systems.social_contest` (the `NESTED_BASELINE = 0` ratchet).
 **Hash:** none. **Lens B:** the veto relocation only.

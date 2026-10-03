@@ -1,4 +1,4 @@
-# Valoria — Master Workplan v8, part 5: Batch 4 (opens per ruling) · the Jordan queue · what the ladder already answered
+# Valoria — Master Workplan v8, part 5: Batch 4 (opens per ruling) · modules and the dice engine (§SM) · the Jordan queue · what the ladder already answered
 
 ## Status: PROPOSED 2026-10-01 — directed by Jordan; adoption on merge (ED-1094). ⚠ HELD BACK, LOUDLY: every item in §J is OPEN and is Jordan's to answer individually. A merge of this plan answers none of them, and no position gated on one becomes buildable because this file merged.
 ## Reads after `workplans/valoria_master_workplan_v8_part4.md`.
@@ -29,7 +29,7 @@ carries `contests: "the body"`), with `loop/effects_combat.py` registrations; `1
 derived and never stored, **with a caller** (if nothing reads confliction yet — build-order 6f, `score`
 dotting against the basis — the Query waits for 6f, `ID-13`); `refusal_axis` set only if the ruling says
 arm H-146, reading the refusing pole from roster data. Audit the direct readers of
-`descriptors.CONVICTIONS` that survive Batch 1 (`npe.py`'s died at `29d`; `conviction.py`'s dies at `29e`). Re-pin
+`descriptors.CONVICTIONS` that survive Batch 1 (`npe.py`'s died at `29d`; `conviction.py` STAYS — `29e` cancelled, A-24). Re-pin
 `test_conviction_roster_single_owner.py` and `test_conviction_spread_solver.py` (declared, §7).
 **FALSIFIER:** Jordan's faith pair (the devout-Solmund builder and the Einhir dismantler, both high
 `faith` — his own worked example in the worksheet) sits outside the 60° bar (`cos ≤ 0.5`) —
@@ -120,6 +120,287 @@ corrects its oracle in place"*). **Nothing in this repository asserts a version 
 
 ---
 
+## SM. MODULES AND THE DICE ENGINE — `34` · `35` · `30` · `31a` · `31b` · `31c` · design: `33`, `36` · the contract is `A-25`, below
+
+**Ruled:** `ED-IN-0284`, revised by `ED-IN-0285`. The vocabulary, directories, adapter model, module entry kinds,
+containers and the retained-modules roster are **`A-25`** (§A), stated there once; this section stages the code
+and restates none of it.
+
+**Order:** `34` → `35` → `30` → `31a` → `31b` → `31c` → `22` (`_part4` B3). `33` and `36` are design work, gated
+as each says. **Retired ids, never reused:** `31d`, `31e`, `32` (cancelled before anything built them).
+**Names:** `30`–`36` are these positions and this is §SM — not the pre-flight rows `S-1`…`S-10` (`_part3` §P),
+not `_part6` §S. `SM-1`…`SM-15` are this section's open items.
+
+**Reading list** (one Haiku extract, handed to every producer): `A-25`; `references/module_contracts.yaml`
+`composition_roles:`; `tools/export_composition.py`; `engine/substrate/composition.py`;
+`engine/season/manifest/{registry,providers}.py`; `engine/season/loop/driver.py` (`resolvable_verbs`,
+`SeasonDriver.__init__`); `engine/season/seam/ladder.py` and `seam/wrappers/`; `tools/ci_common.py`; the test
+files each position names.
+
+**Grade under `CLAUDE.md` §0.2: `paper`, every position.** One commit per position. A stage is gated on the
+previous stage's falsifiers being OBSERVED, not on its commit existing; a falsifier that fails stops the stage:
+`git revert`, never widen (main §0.5).
+
+**THE CONTROL EVERY STAGE KEEPS.** `build_realm(0)`'s `content_hash()` `a918cd1f…` and its one-season hash
+`05f022e2…` byte-identical; `python -m engine.season.harness.aperture 4 0` reads the same per-verb funnel with the
+control hash EQUAL; `resolvable_verbs()` returns the same set (compare the two sets at the build — no number is
+written here); `python tools/export_composition.py --check` OK. The hashes are dated readings (`_part6` §H.1),
+taken on HEAD `52ec9a54` as `build_realm(0)` then `populated.run(seasons=1, seed=0, w=w)`, `w.content_hash()`
+after each; re-read both on the stage's base commit before it starts (`CLAUDE.md` §0.1 pt 3, row four).
+
+**A REFUSAL FALSIFIER RUNS IN A FRESH SUBPROCESS.** `EFFECTS` (`loop/effects_shared.py:39`), `PROVIDERS`
+(`manifest/providers.py:34`), the ladder's `_LADDER`/`_LADDER_ERROR` (`seam/ladder.py:92-93`) and `30`'s
+`MODULE_ENTRIES` are process globals: in a pytest process another test's imports can fill them, so an in-process
+test can pass on a table it did not build. Precedent: `tests/valoria/test_season_providers_are_registered.py`.
+
+**What is true today** (opened 2026-10-03 on `5390fc75`; re-derive by symbol — lines drift):
+- *Three verbs call a module* — `fight`, `march`, `tell`, the rows with `contests:`. Every other verb's effect is
+  host interpretation, its rules in the gate, `world_q`, the predicates and MATTER (`SM-8`).
+- *`World.boot` is on no run path* (`loop/driver.py:238-248`); `SeasonDriver.__init__` (`:234`) calls
+  `check_rows()` (`:249-250`), and every run passes there.
+- *Nothing observes a drop.* `@provider` and `@effect_for` are dict writes at import (`manifest/providers.py:37-40`,
+  `loop/effects_shared.py:42-44`); `resolvable_verbs()` (`driver.py:101`) excludes, each without a word, a verb
+  whose untyped precondition nothing evaluates (`:125-127`), a writing verb with no effect (`:128`), and a
+  contested verb whose provider is not registered (`:186-189`).
+- *The corpus helpers walk `engine/season/` by path* (`data/files.py:182`, `:206`, `:264`): a file that leaves the
+  package leaves every scan built on them with a green floor; a floor or superset assertion is the only observer.
+- *Every path-keyed scan names `systems` and none names `modules`* — which is why nothing lands in `modules/`
+  before `35`.
+
+### `34` · the dice engine — `engine/autoload/` → `engine/dice_engine/` · IN · gate none · `sonnet`/`opus` · `[infrastructure]`
+
+**Grade:** `paper`. **Hash:** unchanged. **R:** none. No module moves.
+**WHERE.**
+1. `git mv` the three files (`__init__.py`, `dice_engine.py`, `sigma_leverage.py`) to `engine/dice_engine/`, names
+   kept; `engine/__init__.py`'s docstring (`:5-6`) and `engine/autoload/__init__.py`'s.
+2. Every importer, found at the build by an `ast` walk plus `rg -l 'engine[./]autoload'` (it spans `engine/`,
+   `systems/*/sim/`, `tools/`, `tests/`, `skills/`); never a hand list.
+3. The two DEFERRED reads, which degrade instead of failing, so a missed one is a named gap at the ladder and not a
+   red test: `engine/season/seam/ladder.py:106-116` (`degree_ladder()`, the import at `:110`; the `needs=` string
+   at `:232`) and `engine/season/__init__.py:17`.
+4. `references/restructure_ledger.md`: one directory-prefix row `engine/autoload/` → `engine/dice_engine/`,
+   chained from the `sim/autoload/` → `engine/autoload/` row (`:799`), read through `tools/pathres.py`. The
+   exact-file `FORK:` rows for the deleted spine files (`:2653-2657`, `:2719`) are history and stay.
+5. Path keys and strings in `tests/valoria/test_degree_ladder_single_owner.py` (`:150`, `:383`; messages `:178`,
+   `:354`, `:483`); every generated artifact citing the path, re-derived by its own exporter, never by hand.
+**FALSIFIERS.** (1) Both hashes unchanged. (2) In a FRESH subprocess,
+`degree_ladder() is not None and ladder_error() == ""` — the only observer of a missed deferred read. (3)
+`test_degree_ladder_single_owner.py` green
+with its keys re-pointed. (4) `python tools/export_sim_params.py --check` OK. (5)
+`engine/tests/test_sigma_leverage_parity.py` green. (6) `rg 'engine[./]autoload'` lists only
+`references/restructure_ledger.md`, history files, and the Layer-0/Layer-1 lines this plan may not edit (`SM-10`)
+— read the list; do not count it.
+
+### `35` · scan roots — every path-keyed scan of `systems/` also reads `modules/`, from one owner · IN · gate `34` · `sonnet`/`opus` · `[infrastructure]`
+
+**Grade:** `paper`. **Hash:** unchanged. **R:** none. No file moves; `modules/` need not exist yet.
+**WHERE.** `tools/ci_common.py` becomes the one owner of the roots module code may live under — beside
+`sim_reference_roots()` (`:83`, its glob `:100`) and `sim_reference_prefixes()` (`:104`) — and every scan below
+derives from it instead of spelling `systems`; then `modules/` is added at the owner.
+- `tests/valoria/test_engine_does_not_import_systems.py`: `TOP_LEVEL_SYSTEMS_IMPORT` and `NESTED_SYSTEMS_IMPORT`
+  (`:61`, `:66`); the subprocess probe `_modules_loaded_from_systems` (`:351-365`, its root at `:360`); the
+  path-seam scan `test_the_one_declared_path_seam_is_still_the_only_one` (`:415`).
+- `tests/valoria/test_degree_ladder_single_owner.py` `SCAN_ROOTS` (`:459`).
+- `tools/export_sim_params.py` `SCAN_DIRS` (`:39-43`), a hand list → derived; `sim_params.json` re-derived by the
+  exporter, `--check` run.
+- `tools/ci_sim_fabrication_check.py` (rule 1, `sim_reference_prefixes()`, `:211`).
+**FALSIFIER** (`CLAUDE.md` §0.1 pt 2). For each scan, plant the violation it exists to catch under a temporary
+`modules/<x>/` — a top-level `from modules…` inside `engine/`, a module loaded from `modules/` in the subprocess
+probe, a hand-rolled ladder, a fabricated constant — see it fire; remove the plant, see it pass. A scan that does
+not fire on its plant is blind to `modules/`, and the stage is not done. Hashes unchanged.
+
+### `30` · the registrar, the `modules:` roster and the refusals — no file moves · IN · gate `35` · `opus`/`opus` · `[infrastructure]`
+
+**Grade:** `paper`. **Hash:** unchanged. **R:** none.
+**WHERE.**
+1. **Entry kinds.** `references/module_contracts.yaml` `composition_roles:` rows gain A-25's entry kind
+   (`verb_call` · `step_call` · `query`) and, on a `verb_call` row, its `verb:`. ⚠ The key `kind:` is taken: it holds
+   `callable | value`, refused outside `_KINDS` (`tools/export_composition.py:20`, `:69-72`). **[ASSUMPTION,
+   `CLAUDE.md` §4: one key, one meaning]** the entry kind is a second key, `entry:`, validated by the exporter beside
+   `kind:`; `engine/engine_params/composition.json` re-derived by the exporter.
+2. **The `modules:` roster** in `engine/season/rosters.yaml`, each entry with `kind:` and `home:`, validated by the
+   loader (`engine/season/data/rosters.py`). It is authored from the list `ED-IN-0284` and `ED-IN-0285` rule (A-25),
+   NOT from "the directories with code": that test would drop `factions`, whose directory holds only an untracked
+   identifier census. `R04_PENDING_SUBSYSTEMS` (`tests/valoria/test_engine_does_not_import_systems.py:607-610`)
+   becomes COMPUTED — the `systems/` directories no roster entry names as `home:` — and its comment (`:598-606`, a
+   retirement window that no longer exists) says so, citing A-25; `test_r04_pending_composition_roles_can_only_shrink`
+   (`:618`) reads `target.split('.', 2)[1]`, which names the module for a `modules.<name>…` target too. Point at the
+   roster instead of spelling directories: `engine/season/requirements.yaml`'s `subsystem:` entries and its stale
+   lines `:60` (`_architecture` "IS IN THE RETIRE SET") and `:84` ("systems/factions (deleted)");
+   `tools/evacuation_plan.py`'s two hand lists (`:225-226`, `:240-241`).
+3. **The registrar**, in `engine/season/manifest/`, run from `SeasonDriver.__init__` before `check_rows()`
+   (`loop/driver.py:249-250`), idempotent: it reads the composition rows through `engine/substrate/composition.py`
+   (`ROLES`, `require`), resolves each target by string, and records it in ONE table, `MODULE_ENTRIES`. It writes
+   nothing to `EFFECTS` or `PROVIDERS`; `@effect_for` stays (A-25), so `_derive_openers_from_effects` is untouched. A
+   row with no `entry:` (today's one row, `mass_battle.resolve_field`) keeps its caller and is re-keyed at `31c`.
+4. **Refusals at driver construction, each naming its row** — the shape of `check_rows()`
+   (`manifest/registry.py:205`), licensed by `CLAUDE.md` §0.05 `:158` ("the loader's refusal per data family"):
+   (a) a writing verb row with no effect and no `decline_note:`, EXEMPTING rows with `contests:` (they take the seam
+   path; `tell` writes and has no effect) — replacing `driver.py:128`'s silent exclusion. The shipped tree's writing
+   rows with no effect (`carry` `exchange` `forge` `repudiate` `succeed` `tie / knot`) all carry a `decline_note:`,
+   so (a) passes (run 2026-10-03). ⚠ The converse arm `ED-IN-0285` names — a row carrying both an effect and a
+   `decline_note:`, the two-sided `unproduced:` shape (`data/verbs.py:803-821`) — FIRES on the shipped tree:
+   `oblige` and `destroy_record` carry an effect and a `decline_note:` that declines their formation (`14`), not
+   their effect. **[ASSUMPTION]** `30` builds (a) one-sided; the converse waits for that column's split (`SM-9`).
+   (b) an `entry: verb_call` row whose `verb:` names no verb row.
+   (c) the contest roster, both halves: a verb whose `contests:` prize no prize row claims —
+   `manifest/registry.py::unclaimed_contest_prizes` (`:259-285`) turns from a returned list into this refusal, and its
+   caller (`engine/season/tests/test_season_shape.py:3153`) into a planted-violation test of it; and a prize row whose
+   `provider:` nobody registered — after which the `manifest.has` clause in `resolvable_verbs()`
+   (`driver.py:186-189`) can no longer be false, and is DELETED.
+   (d) one entry registered twice.
+5. **One identity per module, its directory name** (A-25): the prize rows' `module:` (`rosters.yaml:1108`,
+   `personal_combat` → `combat`) and the module names in `module_contracts.yaml` `modules:`, with their reader
+   (`manifest/registry.py:148-182`). `loop/sides.py:76` also reads `module:`, keyed on `mass_battle`, which keeps its
+   name; `provider:` names say what runs and are not renamed. Other readers: `rg personal_combat`.
+   `engine/engine_params/params_tables.yaml` is a frozen capture and is not edited (`CLAUDE.md` §5).
+**Re-pointed in the same commit.** `tests/valoria/test_season_providers_are_registered.py`: the first test also
+asserts every provider a prize row names (this adds `mass_battle`); its `_MUTATION` arm (`:51-93`) also clears
+`MODULE_ENTRIES`. A covering test with one planted violation per refusal, each in a subprocess.
+**FALSIFIERS** (each in a fresh subprocess). (1) Both hashes unchanged; `resolvable_verbs()` the same set.
+(2) Delete a planted composition row → driver construction refuses naming it. (3) Clear a prize row's provider →
+refuses naming the prize. (4) A verb whose `contests:` no row claims → refuses naming the verb. (5) Clear the
+effect of a writing row with no `decline_note:` → refuses naming the verb. (6) One entry registered twice →
+refuses. (7) `SeasonDriver(build_realm(0))` constructs. (8) `export_composition --check` OK and
+`test_importing_every_engine_module_pulls_in_no_subsystem` green (the registrar resolves by string at driver
+construction, never at import).
+⚠ **`ID-13`, read exactly.** `30` declares no production composition role — its covering test plants one — so the
+registrar's pass over production rows is first exercised at `31a`. The commit says so; `30`'s done-claim is the
+refusals running at every driver construction.
+
+### `31a` · social contest — `seam/wrappers/sigma.py` → a host input builder + `modules/social_contest/` · IN/SC · gate `30` · `opus`/`opus` · `[infrastructure]`
+
+**Grade:** `paper`. **Hash:** unchanged. **R:** none. Creates `modules/`.
+**WHERE.**
+1. **The typed input record first.** `resolve` (`sigma.py:125-172`) reads `World` directly — `w.persons` (`:154`;
+   `_obstacle_of` at `:119`) and `w.fixtures` (`:158`) — and its docstring admits the signature takes `w`
+   (`:44-46`). A host INPUT BUILDER turns `World` into a frozen typed record of exactly what the roll reads
+   (claimants; the pool from `_pool_of`, `:90`; the obstacle from `_obstacle_of`, `:105`;
+   `obstacle_refusal_multiple`, `:161`). The builder and the input and output types live host-side, where
+   projections are built (A-25); the module imports the types (it depends upward on `engine/`), and the host reaches
+   the module only by string.
+2. **The module entry** in `modules/social_contest/`: it takes the record and a seeded `rng` (already a parameter,
+   `:128`, never constructed in the provider — `04 §C.12` rejection 4, docstring `:138-145`) and imports the dice
+   engine and the record types, nothing else. One composition row: `entry: verb_call`, `verb: tell`.
+3. **The host adapter** keeps `@provider("contest", "sigma_leverage")` (`:125`) and S27.4's refusal: it builds the
+   record, calls the entry through `MODULE_ENTRIES`, returns the result. The prize rows keep `interim: true`
+   (`rosters.yaml:1134`, `:1152`) until `22` decides.
+4. **The corpus.** The margin-producer scan pins `{"seam/wrappers/sigma.py"}` (`test_season_shape.py:13113`) over
+   `files.package_modules()`, which does not walk `modules/`: widen it to `35`'s roots and re-pin under a superset
+   assertion naming the moved file, or it passes by finding nothing.
+5. **Scope.** Lens B's scope gains `modules/` (`skills/layer-conformance/SKILL.md:8`, `.claude/commands/close.md:30`).
+   Loop-resident proceedings stay host (A-25).
+*Wording edit deferred to this commit:* `_part4` `ED-FI-0009`'s INSTRUCTION and A-21 cite `sigma.py::_pool_of` and
+`_obstacle_of`; after the split those are the host input builder's — re-point both.
+**FALSIFIERS.** (1) Both hashes unchanged. (2) A module test that imports only `engine/dice_engine/` and the record
+types, builds a record by hand and asserts the result record (a `dict`, `status="RESOLVED"`, with `net` and `ob`; no
+`Margin` type exists, `sigma.py:44-49`). (3) In a fresh subprocess, delete the composition row → driver construction
+refuses naming it (the registrar's first production row). (4) `harness.aperture 4 0`: `tell` executes the same
+count, control hash EQUAL. (5) `test_importing_every_engine_module_pulls_in_no_subsystem` green over `modules/`.
+
+### `31b` · combat — wrapper split; the reachable engine → `modules/combat/` · IN/PC · gate `31a` · `sonnet`/`opus`, a `haiku` reachability census first · `[infrastructure]`
+
+**Grade:** `paper`. **Hash:** unchanged. **R:** none.
+**WHERE.**
+1. Split `seam/wrappers/combat.py` as `31a` split `sigma.py`: a host input builder, and a `verb_call` entry for
+   `fight` in `modules/combat/`.
+2. Move the reachable set of `systems/combat/combat_engine_v1/` — re-derived by an import walk from `wrapper` and
+   `combatant`; `workbench/` and anything unreached stay — to `modules/combat/`, keeping FLAT names: the files
+   bare-import each other, so a dotted import would give `wrapper`/`combatant` a second identity
+   (`engine/substrate/pc_engine.py:5-8`). `PC_ENGINE_DIR` (`pc_engine.py:29`) is re-pointed;
+   `PATH_SEAM_ALLOWED = {'substrate/pc_engine.py'}` (`test_engine_does_not_import_systems.py:223`) keeps its one
+   member. A directory-prefix MOVE row in `references/restructure_ledger.md`; every path reader re-derived with
+   `git grep -l combat_engine_v1` (registries under `references/`, `references/canonical_sources.yaml`'s pins read by
+   `tools/freshness_gate.py`, `.claude/launch.json`, `tools/`); every export citing a moved file re-derived by its
+   own exporter.
+3. **The bare-name importers left behind.** The commit lists every file under `systems/` that imports the moved
+   closure by bare name and re-points each. `systems/combat/combat_engine_v1/workbench/balance.py` is one (it puts
+   its parent directory on `sys.path`, `:14-15`), and it is what `CLAUDE.md` §9 routes combat balance to.
+4. `systems/combat/sim/combat.py` (DEPRECATED, no importer; its header names ED-900/904/1029) STAYS (`SM-4`).
+5. **The `04` T-k reading, recorded.** `combat_degree` (`seam/ladder.py:124-168`) and `field_degree` (`:171-192`)
+   STAY in the seam. Write into `seam/ladder.py`'s module docstring that T-k (`04:122`, "the ladder lives once, in
+   the seam") is read narrowly: `degree_from_net` is the one margin ladder and `degree_of` (`:195`) its one
+   dispatcher; the two reads grade a provider's own result against roster edges (`combat_band_edges`,
+   `field_degree_bands`) and hold no band table. Neither `31b` nor `31c` touches the deferred dice-engine read
+   (`ladder.py:106-116`).
+**FALSIFIERS.** (1) Both hashes unchanged. (2) One seed run twice in ONE process gives one hash (module-level state
+surviving between worlds makes the second run differ). (3) After the move `balance.py` still imports its engine and
+runs (`__main__`, `:222`), and every other listed importer's covering test is green. (4) In a fresh subprocess,
+delete the composition row → driver construction refuses naming it. (5)
+`test_the_one_declared_path_seam_is_still_the_only_one`, `engine/season/tests/test_combat_band_edges.py` and
+`python tools/freshness_gate.py` green.
+
+### `31c` · mass battle — shed module state; wrapper split; `resolve_field`'s closure → `modules/mass_battle/` · IN/MB · gate `31b` · `sonnet`/`opus`, a `haiku` reachability census first · `[infrastructure]`
+
+**Grade:** `paper`. **Hash:** unchanged. **R:** none.
+**WHERE.**
+1. **Shed the module-level state first**, under `systems/mass_battle/sim/`: `rngsource.py:39` `_active` (falls back
+   to the stdlib `random`), `terrain.py:82` `_cache`, `resolution.py:15` `_battle_trace` — each becomes per-call
+   state or a parameter (AX-4, `04:115`, enforced at D-3, `04:1017`).
+2. Split `seam/wrappers/mass_battle.py` as `31a` split `sigma.py`. `loop/sides.py` stays host: it builds the
+   claimants the input record carries.
+3. Move the reachable closure of `massbattle.py::resolve_field` (an import walk; `workbench/` and anything unreached
+   stay) to `modules/mass_battle/`, rewriting its internal `systems.mass_battle.sim.…` imports;
+   `mass_battle.resolve_field` (`module_contracts.yaml:103-105`) is re-keyed to the moved target with
+   `entry: verb_call`, `verb: march`, and `composition.json` re-derived. A directory-prefix MOVE row; path readers and
+   the bare-name importers left in `systems/` listed and re-pointed as at `31b`.
+*Wording edit deferred to this commit:* `_part2:160` "`march` → `seam/wrappers/mass_battle.py`" → "`march` → its
+host adapter and `modules/mass_battle/`".
+**FALSIFIERS.** (1) Both hashes unchanged — and blind here: the realm fights no field (H-149), so `march` is not
+exercised by the control; the commit says so. (2) The targeted probe instead:
+`engine/season/tests/test_mass_battle_provider.py` end to end, and one constructed `march` resolved twice in ONE
+process with one seed gives one result (nothing observes this today). (3) In a fresh subprocess, delete the
+composition row → driver construction refuses naming it. (4) `tests/valoria/test_mass_battle_d1_morale_baseline.py`
+and the mass-battle workbench's covering tests green.
+
+### `33` · the unplugged systems — design, not relocation · IN/WR/FI · gate A-11, A-20, A-24's open threadwork question (Jordan's); `30` built · `opus`/`opus` · `[design]`
+
+**Grade:** `paper`. Threadwork (`systems/threadwork/sim/`), fieldwork's `knots.py`, characters' `conviction.py` and
+overview's `ms_track.py` are reached by nothing, and no position moves them. Re-plugging one is design work:
+1. **Shed the store first.** `knots.py:155-156` (`_knots`, `_knot_id_counter`); `conviction.py:82`
+   (`_conviction_state`). `ms_track.py` holds no store but writes `world.clocks['MS']` on a `world` argument (`:70`,
+   `:91`), and the season `World` carries no `clocks`, so it cannot plug as it stands.
+2. **The clause** is AX-4 (`04:115`), enforced at D-3 (`04:1017`); `_knots` also breaches D-10 (`04:1024`). Never
+   D-8 (`04:1022`), which grades a stored aggregate.
+3. **The carrier each needs:** a knot's (`H-182`: ED-912's gauge → `Tenure.degree` mapping is UNLOCATED; and
+   `SM-3`); conviction's (`Person.pursuits` and scar counts — the cells commit, J-1); `rendering.py`'s stubs (A-20);
+   threadwork's re-plugging into `ms_track`/`knots` (A-24).
+**FALSIFIER.** A plugged module has a composition row whose deletion refuses at driver construction, and one seed
+run twice in one process gives equal hashes.
+
+### `36` · loop-resident computation modules, settlements first — design · SE/IN · gate a design of what each computes (Jordan's); `30` built · `opus`/`opus` · `[design]`
+
+**Grade:** `paper`. Nothing is built before its design says what the module computes. Extract the rules living today
+in the gate (`state/gate.py`), `world_q` and the MATTER step into `step_call` and `query` entries with a typed input
+and output (A-25); the verb adapters and every MATTER write stay host. Also owns the levy-to-mass-battle feed:
+`levy` moves stores, not troops (`loop/effects_governance.py:308-347`), and a season field is one troops-sized
+subunit (J-18).
+**FALSIFIER per extraction.** Both hashes unchanged; the rule's old host body is gone (one owner — `rg` its symbol);
+deleting the module's composition row refuses at driver construction; one seed run twice in one process gives one
+hash.
+
+### §SM open items — not decided here; each names its owner
+
+| # | item | owner |
+|---|---|---|
+| `SM-1` | which module owns the proceedings verbs (`convene` `open_case` `determine` `petition`, `_req_convene`, `arrangements.yaml`); until ruled they stay host | Jordan |
+| `SM-2` | `2-ii`, deleting the kernel `systems/social_contest/sim/contest/`, stays HELD | Jordan (A-24) |
+| `SM-3` | J-22 option A: fieldwork is a container that is not a `contest()` and needs a second role in `_ROLE_ROSTERS` (`manifest/registry.py:25`) | Jordan (§J J-22) |
+| `SM-4` | deleting `systems/combat/sim/combat.py` (would remove `test_degree_ladder_single_owner.py:407`'s key and re-derive `sim_params.json` and `value_pointer_links.json` by their exporters) | Jordan (A-24) |
+| `SM-5` | whether a grid or map variant is a MODE of one module (A-25's assumption) or a container of its own | Jordan |
+| `SM-6` | the suspension design for a playable mode (ENCOUNTER, `04:177`, the nearest precedent) | Jordan |
+| `SM-7` | a test asserting `modules/**` equals the reachable closure in both directions (the critic: licensed by `CLAUDE.md` §0.1 pt 5, as `modules/` is the port's input set; recommended, not ruled) | Jordan |
+| `SM-8` | standing: only `fight`, `march` and `tell` call a module today; the rest is host interpretation until `36` | Jordan (`36`'s gate) |
+| `SM-9` | `decline_note:` declines an effect on some rows and a formation on others (`oblige`, `destroy_record`); `30`'s refusal (a) stays one-sided until the column is split | `30`'s builder (`CLAUDE.md` §0, rule 5) |
+| `SM-10` | Layer-0/Layer-1 text this plan does not edit: `CLAUDE.md` §3, `:410`, `:514`; `CURRENT.md:22`; `04:1000` | Jordan |
+| `SM-11` | the precondition twin of refusal (a): a declared-absence column, then a refusal, for a verb whose untyped precondition nothing evaluates (`driver.py:125-127`) — it was retired `32`'s | IN lane, after `30` |
+| `SM-12` | holonic's `[engine]` tag (defined `:75`; e.g. `:1633`, `:1716`, `:1769`) means the Godot engine and collides with *engine* = the season loop | Jordan (Layer 1) |
+| `SM-13` | at the port, each module's path is listed in the generated manifest resource, so export packing sees the targets `load()` resolves by string | GO lane |
+| `SM-14` | RISK against the `modules/` ruling — the critic's option A (keep `systems/<name>/sim/`): unplugged code left in `systems/` looks unretained; the reachable code is the oracle heads; membership decays unnoticed. Mitigated by the `modules:` roster as the one owner of retention (`30`), `31b`'s workbench falsifier and `SM-7` | Jordan |
+| `SM-15` | adopt the kernel as the social contest container's automated mode, or keep the interim provider | `22`'s measurement, then Jordan |
+
+---
+
 ## J. THE JORDAN QUEUE — survives all five ladder steps; ranked by what each unblocks
 
 Each item went through `CLAUDE.md` §0's ladder (superseded · irrelevant · answered by a design document ·
@@ -177,7 +458,7 @@ and an attack that lands sends the question back through the ladder, not to Jord
 
 | # | question | step | answer / where decided |
 |---|---|---|---|
-| A-1 | the 2026-09-28 plan's §5.2 thirteen demotions | 1–5 | each with its step (content-hash tiebreak → H-54/H-122, step 4; MB golden → `ED-MB-0016`, step 1; held H5 → step 1; H-111 → one probe, step 5; `ED-MB-0075` → option (2), built; `mass_battle` `state: []` → `04 §C.5.1`, step 3; G-Q5 → post-H6 re-measure, step 5; M-7 / `upkeep` / `kill / wound` → contradictions 3 / 1 / 4; `titles` → `04 §B.7/§E.1`, step 3; d.1 → members' `commit` degree, attacked at `20-iv` and dropped (nothing writes a commit Tenure's `degree`, H-162; the morale source landed from stance instead, PR #450), step 5; `test_n3` floors → declared re-pin unless `11` shows a property, step 5; D-6/D-7 → swept fixtures at `18`; deleting the retire set → `requirements.yaml`'s own gate, not a question; GD-1 → a registered gap) |
+| A-1 | the 2026-09-28 plan's §5.2 thirteen demotions | 1–5 | each with its step (content-hash tiebreak → H-54/H-122, step 4; MB golden → `ED-MB-0016`, step 1; held H5 → step 1; H-111 → one probe, step 5; `ED-MB-0075` → option (2), built; `mass_battle` `state: []` → `04 §C.5.1`, step 3; G-Q5 → post-H6 re-measure, step 5; M-7 / `upkeep` / `kill / wound` → contradictions 3 / 1 / 4; `titles` → `04 §B.7/§E.1`, step 3; d.1 → members' `commit` degree, attacked at `20-iv` and dropped (nothing writes a commit Tenure's `degree`, H-162; the morale source landed from stance instead, PR #450), step 5; `test_n3` floors → declared re-pin unless `11` shows a property, step 5; D-6/D-7 → swept fixtures at `18`; deleting the retire set → `requirements.yaml`'s own gate, not a question — SUPERSEDED 2026-10-02 (A-24); GD-1 → a registered gap) |
 | A-2 | H-174 item 2 — the upkeep payment's target | 5 | `home_of` is the architecture's own definition of where a person is |
 | A-3 | `24f`'s cohort producer | 3 | `engine/season/cohorts.yaml` — built (ED-WR-0011, `npcs.yaml` header, ED-SE-0051) |
 | A-4 | R-04 reason 2's "no Faction-as-actor" | 3 | `04_CODE_ARCHITECTURE.md`: `Faction` is a resolved view with **no verbs**, never `Act.actor`; faction acts are person acts `via` seats |
@@ -187,7 +468,7 @@ and an attack that lands sends the question back through the ladder, not to Jord
 | A-8 | the "double `@effect_for('oblige')`" in `effects_governance.py` | — | false alarm: the second is docstring text |
 | A-9 | `return_to_game_queue.yaml` | 1 | superseded by its own header (2026-08-19); retired at `ebb43bf0` |
 | A-10 | GD-1, the victory requirement | 5 | registered as an `ABSENT_RULE` hole, `H-176`, at `28-iii` (PR #450) |
-| A-11 | `ms_track` / `knots` deletions | 4 | wait on `27` (the retired plan's §1.3 disposition) |
+| A-11 | `ms_track` / `knots` deletions | 4 | wait on `27` (the retired plan's §1.3 disposition) — SUPERSEDED 2026-10-02 (A-24): the modules stay |
 | A-12 | **former J-12** (does being told something move the hearer's stance?) **and position `10`'s write target** | 1 | superseded by the telling workplan, RATIFIED 2026-10-01 (main §0.6): `tell` writes no stance; told valence enters regard at read (G1); a judged deed counts there too, so this plan's stored `fight`-write rewrite of `10` is withdrawn |
 | A-13 | `destroy_record` unformable for everyone | 4 | needs a record-holding question referent — `give`'s shape, at `14` |
 | A-14 | v7's ruling R-7 — does the Churn Engine workstream survive `ED-IN-0204`? | 2 | its head lived under the dissolved `designs/` tree; nothing builds on it |
@@ -200,3 +481,46 @@ and an attack that lands sends the question back through the ladder, not to Jord
 | A-21 | `ED-FI-0009`'s obstacle source | 4 | `sigma.py::_obstacle_of`'s existing non-person default; one roll owner (S27.2) — stop if that needs a `contests:` shape |
 | A-22 | who seats `p_b`/`p_c` from the `cast:` — `13` or `17`? | 1 | `13`'s execution record (2026-09-28 plan §8.7) assigned the remainder to `17` |
 | A-23 | Fable's proposal to run FI `ED-FI-0009` as a parallel lane | 5 | serial — it shares `verb_table.yaml` and `effects_information.py` with `14` (`_part3` O.3) |
+| A-24 | do the `retire-set` `systems/` trees go — `characters`, `fieldwork`, `overview`, and the merged `29b`–`29d` deletions of `factions`, `world`, `settlements/sim` | ruled by Jordan 2026-10-02 (`ED-IN-0283`) | NO. The `systems/` folders are the homes of their systems. `29e`, `29f` and `29a`-ms (built `21c7133f`, `1b68d590`, `72623b61`) were reversed on this branch and cancelled. OPEN, put to Jordan and not decided here: whether the PR #450 deletions return; `2-ii` (held); threadwork re-plugging into `ms_track`/`knots`; CLAUDE.md §3 and CURRENT.md's season-loop row, which still describe the retire-set |
+| A-25 | how do the modules, the containers and the season loop relate, and where does code go? | ruled by Jordan 2026-10-03 (`ED-IN-0284`), revised by `ED-IN-0285` | **the contract, stated once: `### A-25`, below this table.** Staged by §SM; A-24's open items stay open |
+
+### A-25 · the module contract — the one statement (`ED-IN-0284`, revised by `ED-IN-0285`)
+
+Every other surface points here and restates none of it. Reference (`CLAUDE.md` §0.05): §SM's code is the mechanism.
+**Vocabulary** (one meaning each, defined again where code invokes it, `CLAUDE.md` §4). *Engine*: the season loop,
+`engine/season/`, the host. *Dice engine*: the d10 chain, `degree_from_net` and σ-leverage, `engine/dice_engine/`
+(`engine/autoload/` until `34`), not the engine. *Module*: running code reached by a composition row, in
+`modules/<name>/`; it never reads or writes `World`, holds no token, keeps no state between calls, imports no module.
+*Container*: a module with transient state that the player can also play, reached by a seam or a verb. MINIGAME: personal
+combat and its tactical grid, mass battle and its strategic map, social contests, fieldwork and investigations; MANAGEMENT
+SPACE: governance, faction management, the character sheet; WORLD SURFACE: where the player meets NPCs and events (Tails
+Noir, Lacuna, Disco Elysium, Esoteric Ebb, Shadows of Doubt, Pentiment). [ASSUMPTION] a grid or map variant is a MODE of
+one module (`SM-5`). *Subsystem*: only personal combat, social contest, mass battle (holonic §41.2). *The fold*: RESOLVE,
+`loop/resolve.py`. *Register, registry, ledger, roster*: each defined once, in the docstring of the code invoking it
+(`tools/pathres.py`, `data/rosters.py`, `manifest/registry.py`).
+**Directories.** `modules/<name>/`: reachable running code only, no data, no prose; membership is static reachability from
+the composition targets, the PATH seam's `wrapper`/`combatant` and the registrar's entries. `systems/<name>/` keeps its
+name: legacy, workbench, unplugged and design-stub homes; nothing reachable. `engine/season/decision/` stays host (the
+AX-2 scan is path-keyed, `04:1131-1132`): the AUTOMATED mode of the management spaces and the world surface. `game/`
+(Godot, holonic §45): the playable scenes; the port's `core/modules/<name>/` holds the module and its automated mode.
+**The adapter.** A verb is a loop-side adapter: the loop builds a typed INPUT record from a read-only projection of
+`World` (host `queries/` build projections), calls the module ENTRY, interprets the typed OUTPUT and writes `World`
+through the gate under its own token (`04` D-22, D-24, §A.2 as written). CALL verbs call a module: `fight`, `march`,
+`tell`, each declared by `contests:` and a prize row. ACTION verbs change `World` themselves, their results reaching a
+module later through a projection (`levy`, `migrate`, `found`, `build`, `transfer`).
+**Module entries**, on `references/module_contracts.yaml` `composition_roles:` rows: `verb_call` (a verb's adapter calls
+it), `step_call` (a step such as MATTER), `query` (a projection consumer). `EFFECTS`, `@effect_for` and every effect body
+stay host; no verb row names a module. Two owners say which module is called — the prize row (`contest_subsystems`) and
+the composition row; all else derives (`CLAUDE.md` §0.05 cl. 3). One identity per module: its directory name (`combat`).
+**Containers.** Transient state dies with the call; persistent state would be a second store (AX-4, `04:115`) and returns
+only through the fold. AUTOMATED mode: headless, for non-player parties and the Python oracle. PLAYABLE mode: a `game/`
+scene, for which the driver suspends (`SM-6`). A party test at the seam picks one; the host gets the same typed output
+either way. Fieldwork is a minigame that is not a `contest()` (`SM-3`). The world surface is DELIBERATE's player mode
+(`season(choose, …)`, `loop/driver.py:330`): it reads the player's own `View`/`Question`/`Candidate` and emits acts,
+owning no game state, as the management spaces do. Knowledge and witness are HOST.
+**The roster** (one owner from `30`: `rosters.yaml`'s `modules:`, with `kind:` and `home:`). Minigames, the subsystems:
+`combat`, `mass_battle`, `social_contest` (→ `modules/` at `31b`, `31c`, `31a`); `fieldwork` (no module code). Management
+spaces: governance, faction management, character sheet (host verbs; `decision/`; `systems/characters/`). World surface:
+`game/` + host DELIBERATE, unbuilt. Loop-resident: `settlements` (`36`); `overview`, `threadwork` (unplugged; `33`, A-24).
+Data registers: `world`, `npcs` (`references/npc_registry.yaml`). Host: decision making (the AX-2 island); proceedings,
+which schedule contests (`SM-1`). Not systems, kept as stubs: `_architecture`, `articulation`, `ui`, `victory`.

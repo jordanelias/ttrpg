@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """THE path-reference owner: extract path tokens, resolve them through the alias map, once.
 
+A LEDGER, in this repo, is an append-only register of dated rows that are flipped and never
+rewritten; the alias map this module reads, `references/restructure_ledger.md`, is one (its `FORK:`
+rows say where a retired path went).
+
 WHY THIS EXISTS — three confirmed instances of ONE defect, each of which looked plausible.
 
 A path-shaped string in this corpus is a *fuzzy pointer*: it can be relocated (the restructure

@@ -1,5 +1,8 @@
 """`manifest/registry.py` -- the role -> provider rows and the two checks over them.
 
+A REGISTRY, in this repo, is a register (see `harness/register.py`) that code reads at load to look
+a key up; these rows are one.
+
 `04 §C.5` spells the call the seam makes, and this module answers it:
 
     provider = manifest.resolve("contest", prizes[prize])

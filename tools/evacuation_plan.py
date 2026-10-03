@@ -203,6 +203,7 @@ RULES = [
      'LAYER 2 -- the game code, RATIFIED 2026-09-05. The executable season loop, the four '
      'registries it reads at runtime, its corpus and its suite. This is the mechanism'),
 
+    # ⚠ SUPERSEDED 2026-10-03 (ED-IN-0284) -- history below; the live reason is the string.
     # ---- DECISION 1 STEP A (ED-IN-0204, Jordan 2026-09-05): "only the repository's systems for
     # social contests, personal combat and mass battles to be retained. All work in /engine is
     # retained as well." Those two clauses collide TODAY -- a seeded 1-season probe loads 65
@@ -224,17 +225,13 @@ RULES = [
         'systems/characters/', 'systems/factions/', 'systems/fieldwork/', 'systems/overview/',
         'systems/settlements/', 'systems/threadwork/', 'systems/world/',
     )), 'keep', 'R-SUPERSEDED-RETAINED-PENDING-R04',
-     "SUPERSEDED by engine/season/ (ED-IN-0204, 2026-09-05) but RETAINED, and retained for exactly "
-     "one reason: engine/ still resolves into this subsystem at runtime through a composition role "
-     "declared in references/module_contracts.yaml's composition_roles: block (engine/substrate/"
-     "composition.py imports the role's target by string at first call, per CLAUDE.md 0.05's "
-     "distinction between reference prose and the code that is the actual mechanism). This is not "
-     "the design source of truth any more -- the season loop is -- and it is not evacuating either: "
-     "deleting it today would silently break a live composition role, which is exactly the "
-     "blocking-reader hazard this tool exists to catch. It becomes deletable only once every role "
-     "targeting it is removed or repointed at R-04's closure; until then this verdict is a record "
-     "of the collision, not a step toward resolving it -- DELETE NOTHING on the strength of it"),
+     "A SYSTEM -- the home of a module that plugs into the season loop (ED-IN-0284, 2026-10-03): "
+     "`systems/<name>/sim/` registers what it supplies through a composition row in "
+     "references/module_contracts.yaml, resolved by string at driver construction; engine/ names no "
+     "system by import. Not superseded, not evacuating; the rule id predates the ruling and is kept as "
+     "a stable key -- DELETE NOTHING on the strength of it"),
 
+    # ⚠ SUPERSEDED 2026-10-03 (ED-IN-0284, ED-IN-0231) -- history below; the live reason is the string.
     # The five code-free members of the same superseded set. Same ruling, DIFFERENT reason, and the
     # difference is the point: these are prose with no code pair, which this tool's own docstring
     # already covers ("prose with NO code pair -> KEEP, and it IS the spec"). Their retention does
@@ -243,13 +240,11 @@ RULES = [
         'systems/_architecture/', 'systems/articulation/', 'systems/npcs/',
         'systems/ui/', 'systems/victory/',
     )), 'keep', 'R-SUPERSEDED-DOC-ONLY',
-     "SUPERSEDED by engine/season/ (ED-IN-0204, 2026-09-05) and RETAINED, but NOT for the reason "
-     "its seven code-bearing siblings are. This subsystem holds ZERO .py files -- it is not an "
-     "importable package and no composition role targets it, so engine/ cannot resolve into it and "
-     "its retention is NOT gated on R-04. It is kept under this tool's standing rule for prose with "
-     "no code pair: the document IS the spec, and deleting it would delete design intent that "
-     "nothing else records. Whoever runs Step B should read this verdict as 'decide on the prose', "
-     "not as 'wait for the code dependency to clear' -- there is no code dependency to clear"),
+     "NOT A SYSTEM (ED-IN-0284, A-25): holds no .py, is no module and registers nothing; kept, and its "
+     "retention waits on nothing code-related. Each holds one generated `_identifier_census.yaml` "
+     "(tools/build_identifier_census.py); its design prose is quarantined in .designs/ (ED-IN-0231). "
+     "`npcs` is a data register whose head is references/npc_registry.yaml, not anything under "
+     "systems/. Whoever touches these reads this as 'nothing to clear'"),
 
     # ---- inside an evacuating parent, but KEEP (this is why the cut is per-file, not per-root)
     (lambda p: p.startswith('tests/sim/mass_battle/'), 'keep', 'R-MB-CANON',

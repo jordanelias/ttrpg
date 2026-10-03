@@ -42,7 +42,7 @@ def _scar(w: "World", p, verb: str) -> None:
     ⚠ THE FORM IS THE CHAIN'S OWN AMENDMENT, NOT THE SOURCE DOCUMENT'S, AND THE DIFFERENCE IS THE
     WHOLE REASON THIS SITS AT RESOLVE. `conviction_track_v1.md` §2 -- the mechanic's design home,
     quarantined and REFERENCE under §0.05 -- has an NPC *"accumulate Conviction Scars from
-    WITNESSING morally-loading events"*. `holonic_ARCHITECTURE.md:1901` folds that in AMENDED and
+    WITNESSING morally-loading events"*. `holonic_ARCHITECTURE.md:1911` folds that in AMENDED and
     says why in as many words: *"the source says written at WITNESS, which breaks two things --
     the moral layer's WITNESS row is nothing, and a scar written there is an Event writing a
     `(Person, ...)` social row, which is L4. Lawful form: a `(Person, scar[axis])` row,

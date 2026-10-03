@@ -286,6 +286,14 @@ jobs:
     # ~9-11m the paragraph above already predicted — measured 6m10s locally with numpy present, so a hosted
     # runner should land inside the existing 16-min cap with headroom. The cap is UNCHANGED; the growth is
     # the sweeps finally being paid for, not new work.
+    #
+    # [SPLIT 2026-10-02] THIS CAP NOW COVERS `tests/valoria` ALONE. Run 36967763315 (main @59004d8)
+    # measured why it had to: the `tests/valoria` step finished `success` in ~9m10s, then the
+    # `engine/season/tests` step that shared this cap was `cancelled` 6m49s in, `register
+    # --requirements` was skipped, the job concluded `cancelled` and `All Gates Green` failed with
+    # no test having failed. Both moved to `season-tests` below. The paragraphs above predate the
+    # season step (added 2026-09-05, ED-IN-0204) and describe `tests/valoria` alone, so they stand;
+    # ~9m10s against 16 minutes is the latest hosted-runner observation of that step.
     timeout-minutes: 16
     permissions:
       contents: read
@@ -340,10 +348,52 @@ jobs:
       # IF THIS EVER NEEDS TO BE FASTER STILL: split into JOBS whose union is the full
       # collection. Do not select a subset of it.
       - run: python -m pytest tests/valoria -q -n auto
+      # [SPLIT 2026-10-02] `engine/season/tests` and `register --requirements` MOVED to the
+      # `season-tests` job below (see the note at this job's cap). The union of the two jobs is the
+      # full collection of each path; nothing was filtered.
+      # tests/contracts EVACUATED 2026-08-05 (ED-IN-0145); its step is removed here. It had been
+      # wired since 2026-07-07 (ED-IN-0017) after being orphaned from CI. Content at fork ref c451bcb.
+
+  season-tests:
+    name: Season Loop Tests
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    # SPLIT OUT OF `unit-tests` 2026-10-02 so each suite gets its own cap. Run 36967763315 (main
+    # @59004d8): the `tests/valoria` step took ~9m10s of that job's 16 minutes and
+    # `engine/season/tests` was `cancelled` at 6m49s when the cap hit, so until then the season suite
+    # had never been observed to finish on a hosted runner.
+    # FIRST COMPLETE RUN (2026-10-02, run 37026782154, PR #452 @866b3136): this job 11m11s, `unit-tests`
+    # 9m14s, `All Gates Green` success. 20 minutes is 1.8x that run, as `unit-tests`' 16 is 1.7x its
+    # own: one hosted observation, not a distribution. The cap was set before any completed run existed
+    # (same as sim-regression's); re-derive it the next time a run lands within a few minutes of it, which
+    # is how sim-regression's 5-minute cap went wrong (ED-IN-0198).
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      # DEFAULT (depth-1) CHECKOUT, ON EVIDENCE RATHER THAN BY OMISSION (2026-10-02): nothing this job
+      # runs reads git history. `grep -rn 'git\|subprocess' engine/season` finds exactly three callers:
+      # `harness/soak.py` (`_require_clean_engine`, reached only from its CLI `main`; the one test that
+      # imports the module, test_told_by_channel.py, takes the pure row builder `_claim_row`),
+      # `harness/delta.py` (`git show <rev>:<path>`, a CLI differ no test imports), and
+      # test_season_shape.py::_run, whose subprocess is `python -m engine.season.harness.<module>`.
+      # `register --requirements` spawns nothing. `unit-tests` above is the opposite case and keeps
+      # `fetch-depth: 0` for test_forked_status.py; if a season test ever shells out to git, give THIS
+      # job `fetch-depth: 0` and name the test here.
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install test deps
+        run: pip install pyyaml pytest numpy pytest-xdist
       # ED-IN-0204 (adoption, 2026-09-05). `engine/season/` is the game code now and NOTHING ran
       # its 184 tests — `pytest.ini`'s `testpaths` is `tests/valoria` and the sim-regression job
       # runs `engine/tests`, so the suite fell between both. An adopted mechanism outside every
       # gate is the state this adoption exists to end.
+      #
+      # `-n auto` and no `-m`, for the reason `unit-tests` records: it changes WHERE tests run, never
+      # WHICH, and a `-m` filter here is a shipping-gate coverage cut that
+      # tests/valoria/test_pytest_marker_discipline.py::test_ci_invocation_is_unfiltered rejects.
       - run: python -m pytest engine/season/tests -q -n auto
       # The nine acceptance requirements (Jordan, 2026-09-05) — fails a row claiming a status
       # with no measurement behind it, or naming a measure command that resolves to nothing.
@@ -351,8 +401,6 @@ jobs:
       # module: run as a loose script it has no package, its relative imports fail, and the
       # step dies before it can check a single row.
       - run: python -m engine.season.harness.register --requirements
-      # tests/contracts EVACUATED 2026-08-05 (ED-IN-0145); its step is removed here. It had been
-      # wired since 2026-07-07 (ED-IN-0017) after being orphaned from CI. Content at fork ref c451bcb.
 
   sim-regression:
     name: Sim Reference Regression
@@ -393,8 +441,9 @@ jobs:
       # combat-bridge seam -- were deleted with the driver. What remains in `engine/tests` is the
       # sigma-leverage parity golden, the contest kernel, and the knots and thread-mending ED probes.
       # `parliamentary_action` left with its tree at `29b` and the accounting accord-drift probe at
-      # `29a`; two more leave with theirs (`2-ii`, `29f`), the thread-mending probe stays (`27`), and
-      # the sigma-leverage parity moves out when this job folds.
+      # `29a`; the knots and thread-mending probes stay (Jordan, 2026-10-02: the `systems/` folders
+      # are the homes of their systems and are kept), and the sigma-leverage parity moves out when
+      # this job folds.
       # SERIAL still: `-n auto` would need pytest-xdist in the install step above, for a job that
       # no longer needs the speed.
       - run: python -m pytest engine/tests -q
@@ -531,6 +580,7 @@ jobs:
       - syntax-check
       - validators
       - unit-tests
+      - season-tests
       - sim-regression
       - field-goldens
       - compliance-check
