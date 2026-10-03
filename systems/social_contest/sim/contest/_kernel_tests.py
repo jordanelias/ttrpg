@@ -36,7 +36,7 @@ ck("sigma_N", isclose(E.sigma_N(16), 3.2))
 # RE-PINNED 2026-08-27 (ED-SC-0031): degree(3,3) was 2, is now 1. `net == ob` means the obstacle
 # is MET but not EXCEEDED, which Jordan's 2026-08-14 ladder ruling bands as Partial. This is the
 # exact cell test_degree_ladder_single_owner.py's HELD entry named as the one the ruling flips.
-ck("degree bands", (degree(0,3), degree(3,3), degree(6,3)) == (0,1,3))  # [canonical: Jordan ruling 2026-08-14, the margin ladder — engine/dice_engine/dice_engine.py degree_from_net]
+ck("degree bands", (degree(0,3), degree(3,3), degree(6,3)) == (0,1,3))  # [canonical: Jordan ruling 2026-08-14, the margin ladder — engine/autoload/dice_engine.py degree_from_net]
 
 print("== contract: Panel aggregation ==")
 pan = Panel((Adjudicator(char_logos=.7, char_ethos=.2, char_pathos=.1, discipline=.8, learned=True),
