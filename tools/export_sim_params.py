@@ -125,8 +125,6 @@ def _iter_py_files():
     seen = set()
     for d in _scan_dirs():
         base = ROOT / d
-        if not base.exists():
-            continue
         for p in sorted(base.rglob("*.py")):
             # Skip test files: their fixture constants (GOLDEN_WINNERS, etc.) are not
             # engine params. (Before the sim/ hollow-out these lived under sim/tests/,
