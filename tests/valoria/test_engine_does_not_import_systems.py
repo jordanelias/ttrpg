@@ -572,6 +572,12 @@ def test_every_scan_here_reads_modules_as_well_as_systems(tmp_path):
         seam = f'import sys\nsys.path.insert(0, str(_REPO / "{root}" / "plant"))\n'
         assert _inserts_a_systems_path(seam) is True, f'`sys.path` insert aimed at {root}/ went undetected'
         (tmp_path / root / 'plant').mkdir(parents=True)
+        # REGULAR packages, not namespace portions: the repo ships a real `systems/__init__.py`, and a
+        # regular package found anywhere on `sys.path` beats a namespace portion found earlier. With
+        # the repo root on `PYTHONPATH` the plant would otherwise be shadowed by the real `systems`
+        # and the probe would die on ModuleNotFoundError instead of observing the plant.
+        (tmp_path / root / '__init__.py').write_text('')
+        (tmp_path / root / 'plant' / '__init__.py').write_text('')
         (tmp_path / root / 'plant' / 'leaf.py').write_text('X = 1\n')
         leaked = _modules_loaded_from_systems(
             f"sys.path.insert(0, os.getcwd())\nimport {root}.plant.leaf\n", cwd=tmp_path)

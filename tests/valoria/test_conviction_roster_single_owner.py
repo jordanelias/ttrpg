@@ -34,6 +34,9 @@ _OWNER = os.path.join('engine', 'substrate', 'descriptors.py')
 #: The alias map is allowed to name retired roster names against canonical ones.
 _ALLOWED = {_OWNER}
 
+#: A file outside `engine/` that the scan must reach (see the floors in the test below).
+_NON_ENGINE_WITNESS = os.path.join('systems', 'characters', 'sim', 'conviction.py')
+
 
 def _canonical():
     from engine.substrate import descriptors
@@ -78,11 +81,13 @@ def test_no_second_conviction_roster_in_code():
     canon = _canonical()
     offenders = []
     checked = 0
+    walked = set()
     for path in _py_files():
         rel = os.path.relpath(path, _ROOT)
         if rel in _ALLOWED:
             continue
         checked += 1
+        walked.add(rel)
         try:
             tree = ast.parse(open(path, encoding='utf-8').read())
         except SyntaxError:                                  # pragma: no cover - not our problem
@@ -99,9 +104,12 @@ def test_no_second_conviction_roster_in_code():
             hits = names & canon
             if len(hits) >= 2:
                 offenders.append(f'{rel}:{node.lineno} -> {sorted(hits)}')
-    # The floor (CLAUDE.md §0.1 pt 2). `engine/` alone is about 136 files, so 200 is only met when
-    # the other roots are read too: a derivation that drops them fails here instead of passing.
-    assert checked >= 200, f'only {checked} files scanned — the root derivation is broken, not clean'
+    # The floors (CLAUDE.md §0.1 pt 2). The roots are derived (position `35`), so a count cannot tell a
+    # dropped root from a smaller tree: `engine/` alone clears any count that today's total does. The
+    # observer of a dropped non-engine root is a named file under it, one this module already imports.
+    assert checked >= 100, f'only {checked} files scanned — the walk is broken, not clean'
+    assert _NON_ENGINE_WITNESS in walked, (
+        f'{_NON_ENGINE_WITNESS} was not walked — the derived roots dropped the tree it lives under')
     assert not offenders, (
         'a second Conviction roster has been hardcoded. The roster is owned by '
         'references/descriptor_registry.yaml:conviction_roster and read via '
