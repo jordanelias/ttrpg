@@ -105,6 +105,21 @@ def test_known_files_land_correctly(rel, expected):
     assert verdict == expected, f'{rel} classified {verdict}, expected {expected}'
 
 
+def test_a_modules_path_is_partitioned_and_the_systems_rules_read_the_roster():
+    """Plan position `30` (A-25). Nothing is tracked under `modules/` yet, so `test_partition_is_total`
+    cannot see this: without R-CODE reading `ci_common.MODULE_CODE_DIRS`, the first file `31a` moves
+    there would come back UNPARTITIONED and redden the partition. And the two `systems/` rules read
+    `engine/season/rosters.yaml`'s `modules:` roster: a system's home, a stub's directory, and a
+    directory the roster does not name each land where the roster says."""
+    assert ep.classify('modules/social_contest/entry.py')[:2] == ('keep', 'R-CODE')
+    assert ep.classify('systems/combat/combat_engine_v1/wrapper.py')[:2] == (
+        'keep', 'R-SUPERSEDED-RETAINED-PENDING-R04')
+    assert ep.classify('systems/victory/_identifier_census.yaml')[:2] == ('keep', 'R-SUPERSEDED-DOC-ONLY')
+    assert ep.classify('systems/npcs/_identifier_census.yaml')[:2] == ('keep', 'R-SUPERSEDED-DOC-ONLY')
+    assert ep.classify('systems/a_dir_no_roster_names/x.py')[:2] == ('keep', 'R-CODE')
+    assert 'systems/fieldwork/' in ep._SYSTEM_HOMES and 'systems/ui/' in ep._NOT_SYSTEMS
+
+
 def test_ordering_is_load_bearing():
     """FIRST-MATCH-WINS: these files match a later, opposite rule too.
 

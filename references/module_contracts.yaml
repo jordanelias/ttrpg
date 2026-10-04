@@ -99,6 +99,16 @@ composition_roles:
   # The deleted files are retrievable through their `references/restructure_ledger.md` rows.
   #
   # Exactly one role remains. ID-13 applies to the next row added: a role no caller requires is not declared.
+  #
+  # ── MODULE ENTRIES (plan position `30`; A-25, `ED-IN-0284` revised by `ED-IN-0285`) ──────────────────────
+  # A row may carry `entry:` -- HOW the season loop calls its target: `verb_call` (a verb's adapter calls it;
+  # the row names the verb in `verb:`), `step_call` (a loop step calls it) or `query` (a projection consumer
+  # calls it). It is a second key because `kind:` already means callable-or-value. `tools/export_composition.py`
+  # validates it beside `kind:` (`_ENTRIES`); `engine/season/manifest/registrar.py` registers every row that
+  # carries one into `MODULE_ENTRIES` at driver construction, resolving the target by string, and refuses a
+  # `verb:` that names no verb row and an entry registered twice. A row with no `entry:` is not a module
+  # entry: `mass_battle.resolve_field` keeps its `require()` caller and is re-keyed `entry: verb_call`,
+  # `verb: march` at `31c`. No production row carries `entry:` yet -- the first is `31a`'s.
 
   mass_battle.resolve_field:
     target: "systems.mass_battle.sim.massbattle:resolve_field"
@@ -984,7 +994,7 @@ modules:
       parity: data
       note: pure catalog; ports as a data table.
 
-  - module: personal_combat
+  - module: combat   # plan position `30` (A-25): one identity per module, its directory name. Was `personal_combat`; the prize row `the body` (`engine/season/rosters.yaml` `contest_subsystems`) names it by this key. Its PROVIDER keeps the name `personal_combat` -- a provider name says what runs, not whose module it is.
     registry_system: "personal_combat"   # Key Type Registry vocabulary
     doc: systems/combat/combat_engine_v1/   # CANONICAL (ED-900/904; docket ED-1029)
     sim_module: systems/combat/combat_engine_v1/   # OI-54 (ED-IN-0097, W4): directory — matches
@@ -1147,7 +1157,7 @@ wiring_vocabularies:
 
 # The one proof-of-concept the whole strategy leans on.
 golden_path:
-  unit: personal_combat
+  unit: combat   # the `modules:` row of that name (was `personal_combat`; plan position `30`)
   chain: combat_engine_v1 (Python oracle) -> engine/engine_params/combat_engine_v1.json (typed export, CI
     round-trip) -> godot/skeleton/engines/combat/ (strike + wound)
   note: The only unit where Python oracle + typed export + GDScript port all exist. This is the template

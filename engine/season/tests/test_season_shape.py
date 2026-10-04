@@ -3143,14 +3143,17 @@ def test_every_contested_verbs_prize_is_in_the_subsystem_roster():
     **naming no row** -- the exact failure mode `04:1031`'s done-condition replaces, surviving where
     nobody looked.
 
-    ⚠ AND THE CHECK LIVES IN `manifest/` WHILE ITS ENFORCEMENT LIVES HERE, WHICH IS A DECLARED
-    COMPROMISE RATHER THAN A PLACEMENT. `04:467` is one of §B.13's TWELVE LOADER invariants and
-    `04:131` gives `data/` "the ONE loader" -- which is unbuilt. Raising from the manifest would
-    make the seam the loader; this test is the caller until the loader exists, and it should MOVE
-    when it does.
+    ⚠ (plan position `30`) THE ENFORCEMENT MOVED OUT OF THIS TEST. `manifest.check_contest_prizes()`
+    raises at `SeasonDriver` construction, naming the verb, and `data/verbs.py`'s loader refuses the
+    same thing at load; this test was the caller of a returned list until then, and is now a
+    PLANTED-VIOLATION test of the refusal -- the table is passed in, so nothing process-global is
+    mutated (`tests/valoria/test_module_registrar.py` runs the driver-construction arm in a fresh
+    subprocess).
 
-    Two arms, because the first alone passes on an empty table."""
-    from ..manifest.registry import unclaimed_contest_prizes
+    Two arms, because the first alone passes on a refusal that never fires, and the floor above
+    them because both pass on a table that contests nothing."""
+    from ..gaps import Unspecified
+    from ..manifest.registry import check_contest_prizes
     from ..data.verbs import VERB_TABLE
 
     contested = [v for v, r in VERB_TABLE.items() if getattr(r, "contests", None)]
@@ -3159,11 +3162,17 @@ def test_every_contested_verbs_prize_is_in_the_subsystem_roster():
         "passes vacuously (§0.1 pt 2). If that is genuinely the state, this test is the thing to "
         "re-derive, not the thing to trust")
 
-    unclaimed = unclaimed_contest_prizes()
-    assert not unclaimed, (
-        f"verb(s) declare a `contests:` prize no `contest_subsystems` row claims: {unclaimed}. "
-        "04:467 -- contest prizes are a SUBSET of the subsystem roster. Unchecked, each of these "
-        "resolves to None at first call and the seam refuses generically, naming no row")
+    # ARM 1 -- the shipped table passes, and the provider half examined every prize row.
+    assert check_contest_prizes(VERB_TABLE), "check_contest_prizes() swept no prize row"
+
+    # ARM 2 -- one verb's prize planted to a name no row claims: refused, NAMING THE VERB.
+    planted = dict(VERB_TABLE)
+    planted[contested[0]] = dataclasses.replace(VERB_TABLE[contested[0]],
+                                                contests="a prize nobody claims")
+    with pytest.raises(Unspecified) as exc:
+        check_contest_prizes(planted)
+    assert contested[0] in str(exc.value) and "a prize nobody claims" in str(exc.value), (
+        f"the refusal does not name the verb and its prize: {exc.value}")
 
 
 def test_person_q_cannot_reach_the_world_side():
@@ -13034,7 +13043,9 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # moment an interim resolver stands in for an unbuilt subsystem, which is exactly `a standing`
     # and `a proposition`: module `social_contest`, provider `sigma_leverage`, `interim: true`.
     prizes = roster_map("contest_subsystems", "prizes")
-    assert prizes["the body"]["module"] == "personal_combat"
+    # Plan position `30` (A-25): one identity per module, its directory name -- `module:` became
+    # `combat`; `provider:` says what runs and keeps its name, so the two now differ here too.
+    assert prizes["the body"]["module"] == "combat"
     assert prizes["the body"]["provider"] == "personal_combat"
     # ⚠ **"THE SEAM REFUSES THE OTHER THREE" WAS TRUE BEFORE `U1`, "ONE REFUSES" WAS TRUE AFTER
     # IT, AND NEITHER IS TRUE NOW — ZERO REFUSE THIS WAY.** M3 of the mc_v18-retirement plan

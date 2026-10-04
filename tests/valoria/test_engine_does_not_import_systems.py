@@ -660,21 +660,36 @@ def test_every_declared_composition_role_resolves():
 
 
 # ---------------------------------------------------------------------------------------------
-# DECISION 1 STEP A (ED-IN-0204, 2026-09-05): "only ... social contests, personal combat and mass
-# battles to be retained. All work in /engine is retained as well." 19 of the 27 declared
-# composition roles above target one of the twelve subsystems that ruling does NOT retain
-# (`references/module_contracts.yaml`'s composition_roles: block). Retiring those subsystems is
-# Step B, gated on R-04, and has not happened — this ceiling only makes the count SHRINK-ONLY, the
-# same shape as `ALLOWED`/`PATH_SEAM_ALLOWED` above: a role LEAVING the set is Step B progress and
-# needs no update here; a role ENTERING it — a NEW seam into a subsystem Jordan ruled out — is
-# drift during a retirement window and must fail.
-R04_PENDING_SUBSYSTEMS = {
-    '_architecture', 'articulation', 'characters', 'factions', 'fieldwork', 'npcs', 'overview',
-    'settlements', 'threadwork', 'ui', 'victory', 'world',
-}
+# THE SYSTEMS THE ROSTER DOES NOT RETAIN -- COMPUTED, NOT LISTED (plan position `30`; A-25).
+#
+# This was a hand list of twelve names, written for DECISION 1 STEP A (ED-IN-0204, 2026-09-05), whose
+# retirement window no longer exists: ED-IN-0283 kept the `systems/` folders as the homes of their
+# systems, and ED-IN-0284/0285 (A-25) made `engine/season/rosters.yaml`'s `modules:` roster the ONE
+# OWNER OF RETENTION. So the set is now derived from that owner: the `systems/` directories that no
+# roster entry names as its `home:`. A `systems/<name>/` directory nothing retains -- one of
+# ED-IN-0284's five non-systems (`_architecture`, `articulation`, `ui`, `victory`, `npcs`) where a
+# checkout has one, or a directory nobody added to the roster -- may not be the target of a NEW
+# composition role; a role into a retained system, or into `modules/<name>/` (A-25), is the design.
+# The universe is the directories on disk under `systems/`, so a checkout's untracked
+# identifier-census directories count, exactly as ED-IN-0284 counted them.
+def _r04_pending(systems_dir, homes):
+    """`systems/` directory names that no `home:` in `homes` names (`systems/<name>/`)."""
+    named = {h.rstrip('/') for h in homes}
+    root = ci_common.MODULE_CODE_DIRS[0]
+    return {d.name for d in (systems_dir.iterdir() if systems_dir.is_dir() else ())
+            if d.is_dir() and not d.name.startswith(('__', '.'))
+            and f'{root}/{d.name}' not in named}
 
-# Every composition role now targets a retained subsystem, so this set is empty: a role that targets a
-# retiring subsystem would FAIL here rather than ride a stale entry (`scene_resolver.fieldwork` and
+
+def _roster_homes():
+    from engine.season.data.rosters import MODULES
+    return [row['home'] for row in MODULES.values()]
+
+
+R04_PENDING_SUBSYSTEMS = _r04_pending(REPO / ci_common.MODULE_CODE_DIRS[0], _roster_homes())
+
+# Every composition role now targets a retained system, so this set is empty: a role that targets an
+# unretained `systems/` directory would FAIL here rather than ride a stale entry (`scene_resolver.fieldwork` and
 # `.investigation` were here and exist in no registry).
 R04_PENDING_ROLES = set()
 
@@ -685,8 +700,24 @@ def test_r04_pending_composition_roles_can_only_shrink():
             if row['target'].split('.', 2)[1] in R04_PENDING_SUBSYSTEMS}
     new = sorted(live - R04_PENDING_ROLES)
     assert not new, (
-        'NEW composition role(s) target a non-retained subsystem during the ED-IN-0204 retirement '
-        'window: ' + ', '.join(new) + '. This is the exact collision Decision 1 Step A named — '
-        'engine/ naming more of the twelve superseded subsystems is drift, not Step A work. If the '
-        'role is genuine, say so in the plan and add it to R04_PENDING_ROLES deliberately.'
+        'NEW composition role(s) target a systems/ directory the `modules:` roster '
+        '(engine/season/rosters.yaml) does not retain: ' + ', '.join(new) + '. A-25: the roster is '
+        'the one owner of retention, so a role into an unretained directory is drift. If the system '
+        'is genuine, add its roster entry (kind:, home:) deliberately.'
     )
+
+
+def test_r04_pending_is_computed_from_the_roster_and_can_observe_an_unretained_directory(tmp_path):
+    """`R04_PENDING_SUBSYSTEMS` is DERIVED (plan position `30`), so its derivation is what can be
+    wrong. Two arms: on a planted tree, a directory no `home:` names is pending and one a `home:`
+    names is not; on the real tree, every roster home under `systems/` is excluded -- the three
+    subsystems among them, so a composition role into any of them is never refused here."""
+    root = ci_common.MODULE_CODE_DIRS[0]
+    for name in ('retained', 'unretained', '__pycache__'):
+        (tmp_path / name).mkdir()
+    assert _r04_pending(tmp_path, [f'{root}/retained/']) == {'unretained'}
+
+    homes = _roster_homes()
+    retained = {h.rstrip('/').split('/', 1)[1] for h in homes if h.startswith(f'{root}/')}
+    assert {'combat', 'mass_battle', 'social_contest'} <= retained, sorted(retained)
+    assert not (retained & R04_PENDING_SUBSYSTEMS), sorted(retained & R04_PENDING_SUBSYSTEMS)

@@ -52,6 +52,9 @@ Filed as **ED-IN-0206**; this is unit **L2** of
 # set with no exception anywhere. MEASURED while making this cut: with the import missing,
 # `resolvable_verbs()` returned 17 instead of 18 and `tell` executed ZERO times in `tiny_world`
 # where it had executed 32 — no error, no refusal, no `news.untold`, just a verb quietly gone.
+# ⚠ (plan position `30`) NO LONGER SILENT: `manifest.check_contest_prizes()` refuses an
+# unregistered prize provider at `SeasonDriver` construction, naming the prize, and the
+# `manifest.has` clause in `resolvable_verbs()` is deleted. The import is still what fills the table.
 # `tests/valoria/test_season_providers_are_registered.py` is the falsifier.
 from . import wrappers as _wrappers   # noqa: F401
 from .contest import ContestError, Resolution, contest, contest_subsystem

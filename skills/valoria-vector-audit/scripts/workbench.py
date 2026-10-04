@@ -147,9 +147,10 @@ def _resolve_doc(root, doc_rel):
         with open(p, encoding='utf-8', errors='replace') as fh:
             return _tags.strip(fh.read()), 'declared'
     if os.path.isdir(p):
-        # a DIRECTORY-valued doc (e.g. personal_combat -> systems/combat/combat_engine_v1/): the
+        # a DIRECTORY-valued doc (e.g. combat -> systems/combat/combat_engine_v1/): the
         # design lives across the dir's .md files — concatenate them so prose matching sees the
-        # whole corpus, not a spurious 'missing'. (Only personal_combat uses this today.)
+        # whole corpus, not a spurious 'missing'. (Only combat uses this today; the contract was
+        # named personal_combat until plan position 30.)
         # ED-IN-0179 (2026-09-09): design prose inside a code directory moved to its
         # `reference/` subfolder, so a top-level listdir now returns nothing. Look in both,
         # which keeps this working for a directory whose docs have not moved.

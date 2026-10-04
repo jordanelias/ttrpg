@@ -1064,7 +1064,7 @@ rosters:
       speak: "copying"
 
   contest_subsystems:
-    source: "`references/module_contracts.yaml` names `personal_combat`, `mass_battle` and `social_contest` as modules with real docs and real resolvers. `ARCHITECTURE_V2.md:394` declares `contests: <prize>` — *if set, routes to the seam at RESOLVE (§39)*."
+    source: "`references/module_contracts.yaml` names `combat` (was `personal_combat`; one identity per module, A-25), `mass_battle` and `social_contest` as modules with real docs and real resolvers. `ARCHITECTURE_V2.md:394` declares `contests: <prize>` — *if set, routes to the seam at RESOLVE (§39)*."
     cite: "H-88"
     note: >-
       ⚠ A CONTEST IS A DISPATCH, NOT A GENERIC ROLL. Jordan, 2026-09-02: *"a contest seems like it
@@ -1105,7 +1105,7 @@ rosters:
     # is what a manifest is for.
     prizes:
       "the body":
-        module:   "personal_combat"
+        module:   "combat"
         provider: "personal_combat"
         cite:     "H-88; the seam already calls it (seam/wrappers/combat.py)"
       "a field":
@@ -1840,6 +1840,61 @@ rosters:
       native band, §5 item 5) -- reachable-bands data on `speech_kinds`' own row, not a second
       roster.
     values: [deny, cite_incompatible, impugn_motive, concede_fact, concede_harm, hand_error_back]
+
+  module_kinds:
+    source: "plan v8 `_part5` `### A-25` (`ED-IN-0284`, revised by `ED-IN-0285`) -- the seven headings of its roster paragraph."
+    cite: "A-25"
+    note: >-
+      WHAT A `modules:` ENTRY IS, one word each, defined here and in `data/rosters.py` where the loader
+      reads it (`CLAUDE.md` §4). `minigame` -- a container the player can also play as a game inside
+      the game (combat, mass battle, social contests, fieldwork). `management_space` -- a container
+      played as an interface over the world (governance, faction management, the character sheet).
+      `world_surface` -- where the player meets NPCs and events: DELIBERATE's player mode, unbuilt.
+      `loop_resident` -- computation that runs inside the season loop's own steps. `data_register` --
+      a centralized register of information the loop reads, not a module. `host` -- the season loop's
+      own work, never a module. `stub` -- not a system of gameplay, kept so its name still resolves.
+    values: [minigame, management_space, world_surface, loop_resident, data_register, host, stub]
+
+  modules:
+    source: "plan v8 `_part5` `### A-25`'s roster paragraph -- authored from the list `ED-IN-0284` and `ED-IN-0285` rule, NOT from the directories that hold code (that test drops `factions`, whose directory holds at most an untracked identifier census)."
+    cite: "A-25; ED-IN-0284; ED-IN-0285"
+    note: >-
+      THE ONE OWNER OF RETENTION (A-25, `SM-14`): what the repository keeps as a system, a host
+      concern or a stub, and where each one lives. The KEY is the entry's one identity -- for a
+      module, its directory name (A-25: `combat`, never `personal_combat`; a `provider:` name on a
+      prize row says what runs and is a different name). `kind:` is a `module_kinds` member. `home:`
+      is the repo-relative path the entry lives at, a directory ending in `/`; a home may not exist
+      yet (`game/` is unbuilt) and nothing here moves a file (`31a`-`31c` move module code into
+      `modules/<name>/`, which A-25 derives from the composition rows, not from this roster). A
+      `systems/<name>/` directory that no entry names as its `home:` is not retained as a system:
+      `R04_PENDING_SUBSYSTEMS` is computed from exactly that, and `tools/evacuation_plan.py` reads
+      its two `systems/` rules from here instead of spelling directories. ⚠ [ASSUMPTION, position
+      `30`] the four stubs' homes follow `ED-IN-0284`'s own reasons -- `articulation` and `ui` are
+      presentation (holonic §45's `game/`), `victory` is a set of conditions the host would
+      evaluate (`H-176`, unbuilt), `_architecture` is not a system and its subject is Layer 1's --
+      so none is a `systems/` home, and a `systems/<stub>/` directory, where one exists, stays in
+      `R04_PENDING_SUBSYSTEMS` as `ED-IN-0284` rules (with `npcs`). `factions` keeps `systems/factions/` (`ED-IN-0283`: the folders are the
+      homes of their systems); its automated play is `decision/` (A-25).
+    members:
+      combat:          {kind: minigame,         home: "systems/combat/"}
+      mass_battle:     {kind: minigame,         home: "systems/mass_battle/"}
+      social_contest:  {kind: minigame,         home: "systems/social_contest/"}
+      fieldwork:       {kind: minigame,         home: "systems/fieldwork/"}
+      governance:      {kind: management_space, home: "engine/season/"}
+      factions:        {kind: management_space, home: "systems/factions/"}
+      characters:      {kind: management_space, home: "systems/characters/"}
+      world_surface:   {kind: world_surface,    home: "game/"}
+      settlements:     {kind: loop_resident,    home: "systems/settlements/"}
+      overview:        {kind: loop_resident,    home: "systems/overview/"}
+      threadwork:      {kind: loop_resident,    home: "systems/threadwork/"}
+      world:           {kind: data_register,    home: "systems/world/"}
+      npcs:            {kind: data_register,    home: "references/npc_registry.yaml"}
+      decision:        {kind: host,             home: "engine/season/decision/"}
+      proceedings:     {kind: host,             home: "engine/season/"}
+      _architecture:   {kind: stub,             home: "architecture/"}
+      articulation:    {kind: stub,             home: "game/"}
+      ui:              {kind: stub,             home: "game/"}
+      victory:         {kind: stub,             home: "engine/season/"}
 
 tables:
 

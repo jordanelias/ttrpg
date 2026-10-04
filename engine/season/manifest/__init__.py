@@ -23,7 +23,13 @@ value: `engine/dice_engine/sigma_leverage.py`, interim, repointed when the proce
 This unit lands the signature, the crossing and the boot-time failure only.
 """
 
-from .registry import PROVIDERS, call, check_rows, check_roles, has, provider, resolve
+from .registry import (
+    PROVIDERS, call, check_contest_prizes, check_effects, check_rows, check_roles, has, provider,
+    resolve,
+)
+# Plan position `30` (A-25): the REGISTRAR and its one table. `registrar.py`'s docstring defines
+# a module entry; `SeasonDriver.__init__` runs it, then the refusals above, on every construction.
+from .registrar import MODULE_ENTRIES, ModuleEntry, register_module_entries
 
 __all__ = sorted(
     _n for _n, _v in list(globals().items())

@@ -57,10 +57,10 @@ ed: "ED-IN-0204"
 #   well across scales of play" and "transitions and sequences cleanly" tests of NERS **S**
 #   (CLAUDE.md §0.06). The loop implements none of them.
 #
-# ⚠ `systems/_architecture/` IS IN THE RETIRE SET AND HOLDS ZERO `.py`. Under Step A's split rule
-# it is kept because "the document IS the spec" — and this is the worked case for why that rule
-# matters: the spec the adopted system must satisfy lives in a tree the ruling marked superseded.
-# Superseded means the LOOP must express it. It never meant the requirement goes away.
+# ⚠ `_architecture` IS NOT A SYSTEM (ED-IN-0284; a `stub` in `rosters.yaml` `modules:`, A-25) AND HOLDS
+# ZERO `.py`. It was kept because "the document IS the spec" — the worked case for why that rule
+# matters: the spec the adopted system must satisfy lived in a tree once marked superseded.
+# Superseded meant the LOOP must express it. It never meant the requirement goes away.
 
 # ⚠ RETENTION CORRECTED 2026-10-02 (Jordan, ED-IN-0283), verbatim: "we have to keep those systems folders as they are the home for those
 # systems"; of this roster's retire-set labels: "all of this is wrong". Every scale below is RETAINED. The notes that follow
@@ -69,7 +69,7 @@ ed: "ED-IN-0204"
 
 scales:
   - scale:    "character creation / development / chronicling"
-    subsystem: ["systems/characters (sim/conviction.py only)", "systems/npcs (no tracked file)"]
+    subsystem: [characters, npcs]   # `rosters.yaml` `modules:` entries -- the one owner of where each lives (A-25, plan position `30`)
     retention: "RETAINED (Jordan, 2026-10-02, ED-IN-0283 -- the systems/ folders are the homes of their systems)"
     in_loop:   false
     note: >-
@@ -81,7 +81,7 @@ scales:
       authored `capability` (`corpus_run.py:537-540`), which is why R-09's roll varies by seed and
       not by person in 142 of the 143 cases. W27 is the cast.
   - scale:    "grand strategy politics"
-    subsystem: ["systems/factions (deleted)", "systems/settlements (geography YAML, svg, package marker)", "systems/world (adjacency_map.jsx only)"]
+    subsystem: [factions, settlements, world]   # `rosters.yaml` `modules:` entries -- the one owner of where each lives (A-25, plan position `30`)
     retention: "RETAINED (Jordan, 2026-10-02, ED-IN-0283 -- the systems/ folders are the homes of their systems)"
     in_loop:   false
     note: >-
@@ -97,7 +97,7 @@ scales:
       `engine/season/state/carriers.py`). Intent, for vocabulary only: Layer 1 PART D rows 1/8/14,
       which rule out a faction that acts, a stored aggregate and a banner holding territory.
   - scale:    "social contests / debates"
-    subsystem: ["systems/social_contest (the kernel, under sim/contest/)"]
+    subsystem: [social_contest]   # `rosters.yaml` `modules:` entries -- the one owner of where each lives (A-25, plan position `30`)
     retention: RETAINED
     in_loop:   "seam unbuilt"
     note: >-
@@ -112,7 +112,7 @@ scales:
       by `seam/wrappers/sigma.py`, not by this kernel). The kernel retires at plan position `2-ii`
       (`workplans/valoria_master_workplan_v8.md`).
   - scale:    "mass battles / strategy warfare"
-    subsystem: ["systems/mass_battle"]
+    subsystem: [mass_battle]   # `rosters.yaml` `modules:` entries -- the one owner of where each lives (A-25, plan position `30`)
     retention: RETAINED
     in_loop:   "seam built; reached via a constructed `Question` (`test_march.py`) AND, measured,
       via natural computed play in `build_realm(0)`/`populated.run` (`harness/aperture.py`); not
@@ -140,7 +140,7 @@ scales:
       (`hole_register.yaml` H-175's `cite:`). `H-151`'s OWN `cite:` field, not H-175's, is where
       the earlier retraction of a stale "missing `operands_for` arm" citation actually lives.
   - scale:    "personal combat / grid-based map combat with units"
-    subsystem: ["systems/combat/combat_engine_v1"]
+    subsystem: [combat]   # `rosters.yaml` `modules:` entries -- the one owner of where each lives (A-25, plan position `30`)
     retention: "RETAINED, NOT DONE (Jordan, 2026-09-05: \"combat engine isn't done\")"
     in_loop:   "duel only, via combat_seam.py"
     note: >-
@@ -153,7 +153,7 @@ scales:
       tactical grid). This is unbuilt design, not an unwired seam, and it has no work item in the
       execution plan.
   - scale:    "settlement management / city building / domain actions"
-    subsystem: ["systems/settlements (geography YAML, svg, package marker)", "systems/overview (sim/ms_track.py only)"]
+    subsystem: [settlements, overview]   # `rosters.yaml` `modules:` entries -- the one owner of where each lives (A-25, plan position `30`)
     retention: "RETAINED (Jordan, 2026-10-02, ED-IN-0283 -- the systems/ folders are the homes of their systems)"
     in_loop:   false
     note: >-
@@ -168,7 +168,7 @@ scales:
       refused because no computed act declares a works (`H-165`); no domain-action mechanism exists.
 
   - scale:    "investigations / detective / interactive fiction"
-    subsystem: ["systems/fieldwork (sim/knots.py only)"]
+    subsystem: [fieldwork]   # `rosters.yaml` `modules:` entries -- the one owner of where each lives (A-25, plan position `30`)
     retention: "RETAINED (Jordan, 2026-10-02, ED-IN-0283 -- the systems/ folders are the homes of their systems)"
     in_loop:   false
     note: >-
@@ -184,9 +184,9 @@ scales:
       why it is in the R04-pending ceiling. Both roles went at plan position `28-0`, with the two
       stubs they were the only callers of (`systems/fieldwork/sim/{fieldwork,investigation}.py`);
       the one composition role left is `mass_battle.resolve_field` (`references/module_contracts.yaml`'s
-      `composition_roles:` block). `fieldwork` stays in `R04_PENDING_SUBSYSTEMS`
-      (`tests/valoria/test_engine_does_not_import_systems.py`) with no role to hold it there:
-      `R04_PENDING_ROLES` is empty.
+      `composition_roles:` block). `fieldwork` is a `rosters.yaml` `modules:` entry, so it is not in
+      the computed `R04_PENDING_SUBSYSTEMS` (`tests/valoria/test_engine_does_not_import_systems.py`,
+      plan position `30`); `R04_PENDING_ROLES` is empty.
 
 rows:
 

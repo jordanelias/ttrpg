@@ -87,8 +87,9 @@ def test_weave_all_corpus_map():
     unspecced = [s['module'] for s in summary
                  if s['node_state'] == 'engine-notional' and s['doc_status'] == 'none']
     assert 'engine_clock' in unspecced and len(unspecced) >= 5      # the T0 blocker is one of them
-    # personal_combat's directory doc is surfaced as such, not a false 'missing'
-    assert any(s['module'] == 'personal_combat' and s['doc_status'] == 'declared-dir' for s in summary)
+    # combat's directory doc is surfaced as such, not a false 'missing' (the contract was named
+    # `personal_combat` until plan position `30`: one identity per module, its directory name, A-25)
+    assert any(s['module'] == 'combat' and s['doc_status'] == 'declared-dir' for s in summary)
     view = workbench.render_all(summary)
     assert 'corpus-wide reconciliation map' in view and 'Built-but-unspecced' in view
 
@@ -165,10 +166,10 @@ def test_doc_resolver_distinguishes_none_declared_and_missing():
 
 
 def test_doc_resolver_handles_directory_valued_doc():
-    """A DIRECTORY-valued doc (personal_combat -> combat_engine_v1/) is resolved by concatenating
+    """A DIRECTORY-valued doc (combat -> combat_engine_v1/) is resolved by concatenating
     its .md files, not spuriously reported 'missing' — the corpus-wide Workbench run surfaced this
     false negative (a real dir mis-read as a broken pointer)."""
     text, status = workbench._resolve_doc(_ROOT, 'systems/combat/combat_engine_v1/')
     assert status == 'declared-dir' and text and len(text) > 500
-    eng, has_doc, cards, rows = workbench.weave(_ROOT, 'personal_combat')
+    eng, has_doc, cards, rows = workbench.weave(_ROOT, 'combat')
     assert has_doc and eng['doc_status'] == 'declared-dir'

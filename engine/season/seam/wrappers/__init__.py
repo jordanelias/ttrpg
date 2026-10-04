@@ -25,8 +25,9 @@ instrument; it does not remove it."*
 PROVIDERS (code).** A manifest importing seam code is the inversion; a seam importing its own
 wrappers is a package importing its own modules. Nothing in the `decision -> queries -> state`
 chain imports `seam/` -- checked by grep, not assumed -- so this edge closes no loop. Both
-`loop/driver.py` and `loop/resolve.py` import `..seam`, so by the time `resolvable_verbs()` asks
-`manifest.has(...)` or `contest()` dispatches, both providers are registered.
+`loop/driver.py` and `loop/resolve.py` import `..seam`, so by the time `SeasonDriver` construction
+asks `manifest.has(...)` (`check_contest_prizes`, plan position `30`) or `contest()` dispatches, every
+provider is registered.
 
 
 ⚠ **A WRAPPER'S IMPORTS STAY RELATIVE.** `tests/valoria/test_engine_does_not_import_systems.py`'s
