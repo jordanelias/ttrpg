@@ -20,6 +20,10 @@ than the direct import it replaced.
 A row may declare `kind: value` for a module CONSTANT; the default `kind: callable` keeps the
 original assertion. See `_KINDS` for why that widening exists and why it is per-row.
 
+A row may also declare a MODULE ENTRY KIND on a second key, `entry:` (`verb_call` with its `verb:`,
+`step_call` or `query`), which `engine/season/manifest/registrar.py` reads at driver construction.
+See `_ENTRIES`; it is validated here beside `kind:` (plan position `30`, A-25).
+
 IT ALSO VALIDATES THE `wiring:` FACTS, and that is a second rule in one tool, so here is why.
 Plan S5c folded `references/wiring_manifest.yaml` — a second registry keyed by the same 27 module
 names — into this file. Three of that manifest's gate's rules survive the fold; two die because a
@@ -64,6 +68,43 @@ _MISSING = object()
 #: re-derivation of a verdict the callee already returned). This is a widening of the ONE mechanism,
 #: not a second registry: same authored surface, same exporter, same artifact, same leaf.
 _KINDS = ('callable', 'value')
+
+#: A row's MODULE ENTRY KIND (plan position `30`; A-25, `ED-IN-0284` revised by `ED-IN-0285`) --
+#: HOW the season loop calls the target, on a SECOND key, `entry:`, because `kind:` already means
+#: callable-or-value (`CLAUDE.md` §4: one key, one meaning). Defined here, the one owner of the
+#: closed set, and in `engine/season/manifest/registrar.py`, where the registrar reads it:
+#:   `verb_call`  -- a verb's loop-side adapter calls it; the row names that verb in `verb:`.
+#:   `step_call`  -- a loop step calls it (MATTER, for instance).
+#:   `query`      -- a projection consumer calls it.
+#: A row with no `entry:` is not a module entry and keeps whatever caller already `require()`s it
+#: (`mass_battle.resolve_field` today, re-keyed at `31c`). Validated here, at export, beside `kind:`;
+#: `entry:` and `verb:` are cooked into every row, `None` where absent, so the artifact has one shape.
+_ENTRIES = ('verb_call', 'step_call', 'query')
+_VERB_ENTRY = _ENTRIES[0]
+
+
+def _check_entry(role, row):
+    """Refuse a malformed `entry:`/`verb:` pair, naming the role. Returns `(entry, verb)`."""
+    entry = row.get('entry') if isinstance(row, dict) else None
+    verb = row.get('verb') if isinstance(row, dict) else None
+    if entry is None:
+        if verb is not None:
+            raise SystemExit(f'composition_roles {role!r}: `verb: {verb!r}` with no `entry:` -- only '
+                             f'an `entry: {_VERB_ENTRY}` row names a verb.')
+        return None, None
+    if entry not in _ENTRIES:
+        raise SystemExit(f'composition_roles {role!r}: entry {entry!r} must be one of {_ENTRIES}.')
+    kind = (row.get('kind') or 'callable')
+    if kind != 'callable':
+        raise SystemExit(f'composition_roles {role!r}: `entry: {entry}` on a `kind: {kind}` row -- a '
+                         f'module entry is something the loop CALLS, so its row is `kind: callable`.')
+    # one predicate for "names a verb" in both branches: a `verb_call` row carries a non-empty string,
+    # and every other entry kind carries none (`verb is None`, as the no-entry branch above reads it)
+    named = isinstance(verb, str) and bool(verb.strip())
+    if (entry == _VERB_ENTRY and not named) or (entry != _VERB_ENTRY and verb is not None):
+        raise SystemExit(f'composition_roles {role!r}: `entry: {entry}` with `verb: {verb!r}` -- a '
+                         f'`{_VERB_ENTRY}` row names its verb, and no other entry kind names one.')
+    return entry, verb
 
 
 def _resolve(target, kind):
@@ -174,9 +215,12 @@ def build():
         target = row['target'] if isinstance(row, dict) else row
         kind = (row.get('kind') if isinstance(row, dict) else None) or 'callable'
         _resolve(target, kind)   # fail HERE, in CI, not at first call during a campaign
+        entry, verb = _check_entry(role, row)
         out[role] = {
             'target': target,
             'kind': kind,
+            'entry': entry,
+            'verb': verb,
             'needed_by': (row.get('needed_by') if isinstance(row, dict) else None),
         }
     return {
@@ -186,7 +230,9 @@ def build():
             'engine/substrate/composition.py. Every target is imported and resolved at export time, '
             'so a broken row fails a blocking CI gate rather than a campaign run.'
         ),
-        'schema_version': 2,   # 2: rows carry `kind` (callable | value), added at plan S5a
+        # 2: rows carry `kind` (callable | value), added at plan S5a. 3: rows carry `entry`
+        # (verb_call | step_call | query | None) and `verb`, added at plan position `30`.
+        'schema_version': 3,
         'source': 'references/module_contracts.yaml#composition_roles',
         'roles': out,
     }

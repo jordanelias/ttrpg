@@ -34,7 +34,8 @@ _PATH = os.path.normpath(os.path.join(_HERE, '..', 'engine_params', 'composition
 with open(_PATH) as _fh:
     _DATA = json.load(_fh)
 
-#: {role -> {target, kind, needed_by}} exactly as references/ declares it.
+#: {role -> {target, kind, entry, verb, needed_by}} exactly as references/ declares it (`entry` and
+#: `verb` are null where a row names no module entry).
 ROLES = _DATA['roles']
 
 _CACHE = {}

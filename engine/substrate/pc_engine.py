@@ -13,7 +13,8 @@ FAILURE MODE: RAISES, on first use. A loader that swallows an import error is th
 failure engine/season/data/files.py names; composition.require raises on a missing role for the same
 reason. A caller whose own contract is a typed refusal (04 §A.2 seam/contest: "returns Events +
 degree, or a typed refusal") translates the raise at the seam — see seam/wrappers/combat.py::engine.
-The path is hand-transcribed from references/module_contracts.yaml personal_combat.sim_module
+The path is hand-transcribed from references/module_contracts.yaml combat.sim_module (the contract
+was named personal_combat until plan position 30)
 (CLAUDE.md §5's live drift risk, now in one place instead of two). IT IS A LEAF: stdlib only;
 `import engine.substrate.pc_engine` mutates nothing (no sys.path change until load()).
 """

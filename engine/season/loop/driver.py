@@ -126,7 +126,12 @@ def resolvable_verbs() -> frozenset:
                  or row.requires_typed is not None
                  or v in REQUIRES_PREDICATES)
         effected = not row.writes or v in EFFECTS
-        # ⚠ AND A THIRD GATE: A VERB THAT CONTESTS DOES NOT TAKE THE EFFECT PATH AT ALL.
+        # ⚠ (plan position `30`) THE EXCLUSION ABOVE IS NO LONGER SILENT. A writing row with no
+        # effect reaches it only if its `verb_table.yaml` row carries a `decline_note:` saying why:
+        # `manifest.check_effects()` refuses every other such row at `SeasonDriver` construction,
+        # naming it (refusal (a), one-sided by `SM-9`) -- a CONTESTED row included, because
+        # `loop/resolve.py::_contest` folds the seam's result through `EFFECTS`.
+        # ⚠ AND A THIRD GATE: A VERB THAT CONTESTS ROUTES TO THE SEAM FIRST, AND FOLDS WHAT IT RETURNS.
         # `ARCHITECTURE_V2.md:394` — *"`contests: <prize>` — if set, ROUTES TO THE SEAM at
         # RESOLVE (§39)"* — so such a verb is executable only if the SEAM can return. It was
         # counted as executable only because the instrument read its own `EFFECTS` entry and never
@@ -155,14 +160,14 @@ def resolvable_verbs() -> frozenset:
         # set — so the unit would move R-05's executing count DOWN and its controls would pass
         # trivially.
         #
-        # THE TWO CLAUSES ARE THE GATE'S OWN GROUNDS, READ FORWARD:
-        #   * **a provider is registered for the prize.** `manifest.has(role, module)` asks the
-        #     CODE, not the data — a roster row may name a module the contracts file declares and
-        #     nothing may have registered a callable for it. `mass_battle` was exactly that until
-        #     ED-IN-0279 (M3) gave it a provider; every prize row has one as of that plan, but the
-        #     gate stays live rather than deleted, since a future row could land in the same state.
-        #     This is the same resolution-by-declaration the rest of the unit is built on, and it
-        #     keeps one owner for the question rather than adding a fourth.
+        # THE CLAUSES ARE THE GATE'S OWN GROUNDS, READ FORWARD:
+        #   * ⚠ **a provider is registered for the prize** -- `manifest.has(role, module)`, asking
+        #     the CODE, not the data -- STOOD HERE AND PLAN POSITION `30` DELETED IT. It dropped a
+        #     contested verb from the game without a word when its prize's provider was unregistered
+        #     (`mass_battle` was exactly that until ED-IN-0279, M3). `manifest.check_contest_prizes()`
+        #     now refuses that state at `SeasonDriver` construction, naming the prize, so on any run
+        #     the clause could no longer be false; a gate that cannot be false is not a gate.
+        #     `tests/valoria/test_season_providers_are_registered.py` watches the refusal instead.
         #   * **the verb is typed.** The paragraph above is the reason and it is unchanged:
         #     `operands_for` returns `{}` for an untyped row, so a computed contested act would
         #     reach the seam with ONE claimant and every case producing one would become a
@@ -170,10 +175,10 @@ def resolvable_verbs() -> frozenset:
         # `kill / wound` still fails the second clause — its `requires` is `—` — which is what
         # keeps Jordan's *"you can't just kill or wound imo."* true. Admitting it is `H-80`'s item.
         #
-        # ⚠ FALSIFIER FOR THE AMENDMENT SPECIFICALLY: delete the `@provider("contest",
-        # "sigma_leverage")` registration from `seam/wrappers/sigma.py` and any verb contesting a
-        # `sigma_leverage` prize drops back out of this set — the first clause going false with the
-        # data unchanged, which is the whole point of asking the code.
+        # ⚠ FALSIFIER, RE-POINTED AT `30`: delete the `@provider("contest", "sigma_leverage")`
+        # registration from `seam/wrappers/sigma.py` and `SeasonDriver` construction refuses naming
+        # the first prize `sigma_leverage` runs -- where this set used to shrink by every verb contesting
+        # them, with the data unchanged and nothing said.
         contested = bool(row.contests)
         resolvable_contest = False
         if contested:
@@ -183,10 +188,9 @@ def resolvable_verbs() -> frozenset:
             # A LITERAL HERE ... the map exists so `resolve` does not branch on a role's name."*
             # Two readings of one row's `provider:` is how a role added to `_ROLE_ROSTERS`, or a new
             # case in the row shape, silently stops reaching the verb set.
-            from ..manifest import has as _provider_registered, resolve as _resolve_row
+            from ..manifest import resolve as _resolve_row
             _mod = (_resolve_row("contest", row.contests) or {}).get("provider")
-            resolvable_contest = (bool(_mod) and _provider_registered("contest", _mod)
-                                  and row.requires_typed is not None)
+            resolvable_contest = bool(_mod) and row.requires_typed is not None
         if gated and effected and (not contested or resolvable_contest):
             out.add(v)
     return frozenset(out)
@@ -234,7 +238,7 @@ class SeasonDriver:
     def __init__(self, w: World):
         self.w = w
         # ⚠ **THE MANIFEST'S ROWS ARE VALIDATED HERE, BECAUSE THIS IS THE ONE PLACE EVERY RUN
-        # PASSES.** `04:1031`'s done-condition is *"a misspelled manifest row fails at boot naming
+        # PASSES.** `04 PART E step 10`'s done-condition is *"a misspelled manifest row fails at boot naming
         # the row"*, and unit L4 built `manifest.check_rows()` for it and wired it into
         # `World.boot()` -- which NOTHING ON A RUN PATH CALLS. `headless`, `corpus_run` and
         # `run_cases` never boot a world; only two probes and three tests do. So the behaviour
@@ -244,10 +248,23 @@ class SeasonDriver:
         # ⚠ IT IS `check_rows()` AND NOT `check_roles()`, AND THE SPLIT IS FORCED RATHER THAN
         # CHOSEN. `check_roles` needs `w.manifest`, which is populated by exactly one probe and is
         # EMPTY in every real run -- calling it here would raise `NoProducer` on every season.
-        # `check_rows` validates the REGISTRY, needs no manifest, and is the half `04:1031` names.
+        # `check_rows` validates the REGISTRY, needs no manifest, and is the half `04 PART E step 10` names.
         # The roles half stays on `World.boot()` for the callers that have a manifest to check.
-        from ..manifest import check_rows
+        #
+        # ⚠ PLAN POSITION `30` (A-25): THE REGISTRAR RUNS FIRST, THEN THE REFUSALS, EACH NAMING ITS
+        # ROW -- here for `check_rows()`'s reason, the one place every run passes. The registrar
+        # records every composition row carrying `entry:` in `manifest.MODULE_ENTRIES`, resolving by
+        # string (never at import), and refuses (b) a `verb:` naming no verb row and (d) an entry
+        # registered twice; it is idempotent, so a corpus constructing many drivers is refused
+        # nothing new. Then (c) the contest roster, both halves, and (a) a writing row with no effect
+        # and no `decline_note:`. `manifest/registrar.py` and `manifest/registry.py` hold the rules.
+        from ..manifest import (
+            check_contest_prizes, check_effects, check_rows, register_module_entries,
+        )
+        register_module_entries(VERB_TABLE)
         check_rows()
+        check_contest_prizes(VERB_TABLE)
+        check_effects(VERB_TABLE, EFFECTS)
         # OBSERVATION ONLY, and the distinction matters. Six probes used the removed `effect` hook
         # to record which acts reached RESOLVE and in what order. That is a thing to WATCH, not a
         # thing to DECIDE, and giving it back as a resolver parameter is how the second resolver

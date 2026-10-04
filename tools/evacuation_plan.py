@@ -59,6 +59,36 @@ import ci_common  # noqa: E402
 
 REPO = ci_common.REPO
 
+
+def _roster_system_dirs():
+    """`(homes, not_systems)` -- two tuples of `systems/<name>/` prefixes, READ FROM THE ROSTER.
+
+    Plan position `30` (A-25): `engine/season/rosters.yaml`'s `modules:` roster is the one owner of
+    retention, so the two `systems/` rules below derive their directories from it instead of spelling
+    them. An entry whose `home:` IS `systems/<its name>/` is a system's home; for every other entry
+    (a stub, a data register, a host concern, a management space homed in the loop) the directory
+    `systems/<its name>/`, where a checkout has one, is not a system. Read through the roster's own
+    loader (`engine/season/data/rosters.py::MODULES`), which validates it, rather than parsed a second
+    time here; the root is `ci_common.MODULE_CODE_DIRS[0]`, never typed."""
+    if REPO not in sys.path:
+        sys.path.insert(0, REPO)
+    from engine.season.data.rosters import MODULES
+    root = ci_common.MODULE_CODE_DIRS[0]
+    homes, not_systems = [], []
+    for name, row in sorted(MODULES.items()):
+        own = f'{root}/{name}/'
+        # the slash is stripped on both sides, as `R04_PENDING_SUBSYSTEMS` does: a home written
+        # `systems/<name>` and `systems/<name>/` name one directory
+        (homes if row['home'].rstrip('/') == own.rstrip('/') else not_systems).append(own)
+    return tuple(homes), tuple(not_systems)
+
+
+_SYSTEM_HOMES, _NOT_SYSTEMS = _roster_system_dirs()
+
+#: R-CODE's roots: `engine/` and every root game Python may live under (`ci_common.MODULE_CODE_DIRS`
+#: -- `systems/` and A-25's `modules/`), so a file landing under `modules/` at `31a` is classified.
+_CODE_ROOTS = ('engine/',) + tuple(f'{d}/' for d in ci_common.MODULE_CODE_DIRS)
+
 # The audit cutoff. Jordan first set a two-week rule ("we aren't keeping any older than two
 # weeks", 2026-07-21) then widened it to the calendar month: "probably keep audits from july
 # overall" (2026-08-04). July is the period the current architecture was built in, so the widening
@@ -221,25 +251,26 @@ RULES = [
     # importable packages, so nothing can resolve into them by any mechanism. Emitting that reason
     # verbatim as their verdict would tell a Step B session all twelve are blocked on R-04 when five
     # are not blocked on anything code-related. Two rules now, because there are two reasons.
-    (lambda p: p.startswith((
-        'systems/characters/', 'systems/factions/', 'systems/fieldwork/', 'systems/overview/',
-        'systems/settlements/', 'systems/threadwork/', 'systems/world/',
-    )), 'keep', 'R-SUPERSEDED-RETAINED-PENDING-R04',
-     "A SYSTEM -- the home of a module that plugs into the season loop (ED-IN-0284, 2026-10-03): "
-     "`systems/<name>/sim/` registers what it supplies through a composition row in "
-     "references/module_contracts.yaml, resolved by string at driver construction; engine/ names no "
-     "system by import. Not superseded, not evacuating; the rule id predates the ruling and is kept as "
-     "a stable key -- DELETE NOTHING on the strength of it"),
+    # ⚠ (plan position `30`) THE DIRECTORIES ARE THE ROSTER'S, `_roster_system_dirs()`: every
+    # `modules:` entry whose `home:` is its own `systems/<name>/`. That now includes `combat/`,
+    # `mass_battle/` and `social_contest/`, which fell through to R-CODE under the hand list; the
+    # verdict is `keep` either way, and A-25 makes them systems' homes on the same footing.
+    (lambda p: p.startswith(_SYSTEM_HOMES), 'keep', 'R-SUPERSEDED-RETAINED-PENDING-R04',
+     "A SYSTEM'S HOME -- engine/season/rosters.yaml's `modules:` roster names this directory as an "
+     "entry's `home:` (A-25; ED-IN-0283/0284/0285). It holds legacy, workbench, unplugged and "
+     "design-stub code; reachable module code goes to `modules/<name>/` (positions 31a-31c), reached "
+     "by a composition row and never by an engine/ import. Not superseded, not evacuating; the rule "
+     "id predates the ruling and is kept as a stable key -- DELETE NOTHING on the strength of it"),
 
     # ⚠ SUPERSEDED 2026-10-03 (ED-IN-0284, ED-IN-0231) -- history below; the live reason is the string.
     # The five code-free members of the same superseded set. Same ruling, DIFFERENT reason, and the
     # difference is the point: these are prose with no code pair, which this tool's own docstring
     # already covers ("prose with NO code pair -> KEEP, and it IS the spec"). Their retention does
     # not wait on R-04 and never did.
-    (lambda p: p.startswith((
-        'systems/_architecture/', 'systems/articulation/', 'systems/npcs/',
-        'systems/ui/', 'systems/victory/',
-    )), 'keep', 'R-SUPERSEDED-DOC-ONLY',
+    # ⚠ (plan position `30`) READ FROM THE ROSTER, `_roster_system_dirs()`: `systems/<name>/` for
+    # every `modules:` entry whose `home:` is elsewhere -- the four stubs and `npcs` this rule spelled,
+    # plus entries homed in the loop or `game/`, whose `systems/` directory does not exist.
+    (lambda p: p.startswith(_NOT_SYSTEMS), 'keep', 'R-SUPERSEDED-DOC-ONLY',
      "NOT A SYSTEM (ED-IN-0284, A-25): holds no .py, is no module and registers nothing; kept, and its "
      "retention waits on nothing code-related. Each holds one generated `_identifier_census.yaml` "
      "(tools/build_identifier_census.py); its design prose is quarantined in .designs/ (ED-IN-0231). "
@@ -379,7 +410,7 @@ RULES = [
      'philosophical canon P-01..P-15 -- prose with NO code pair, therefore authoritative'),
 
     # ---- code and the machinery that guards it
-    (lambda p: p.startswith(('engine/', 'systems/')), 'keep', 'R-CODE', 'the executable model'),
+    (lambda p: p.startswith(_CODE_ROOTS), 'keep', 'R-CODE', 'the executable model'),
     (lambda p: p.startswith(('tools/', '.github/', '.githooks/', '.claude/')), 'keep', 'R-INFRA',
      'infrastructure / compliance -- 99 of 102 tools are reachable; cut by SUBJECT, not orphan status'),
     (lambda p: p.startswith('references/'), 'keep', 'R-REGISTRIES',

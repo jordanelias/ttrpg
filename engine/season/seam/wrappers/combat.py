@@ -7,7 +7,8 @@ by name and then refuse. Resolving and refusing is a pointer; this is the call.
 
 WHAT THIS IS, AND WHAT IT DELIBERATELY IS NOT
 ---------------------------------------------
-`references/module_contracts.yaml` declares `personal_combat` with `sim_module:
+`references/module_contracts.yaml` declares `combat` (plan position `30`; the PROVIDER this module
+registers keeps the name `personal_combat`) with `sim_module:
 systems/combat/combat_engine_v1/` and `resolver: d_sigma`. Its public entry point is
 `wrapper.fight(A, B, cfg=None, rng=None, max_bouts=12) -> int` — `+1` A wins, `-1` B wins, and
 **`0` UNRESOLVED, which is a RULING and not a failure**: *"NO automatic tiebreak (Jordan
