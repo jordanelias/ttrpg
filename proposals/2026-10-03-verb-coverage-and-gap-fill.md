@@ -8,23 +8,27 @@
 > independent audit pass registered 27 conflicts in revision 1 and resolved them (§12). **Revision 3
 > (2026-10-04)** applies Jordan's statement of what a march is (§2, direction 8): the stake is derived at
 > the destination, `besiege` folds into `march`, war is the uttered Proposition the tree already reads,
-> and `proclaim` and `truce` are deferred with their readers (§12, K-28…K-34). **Revision 4
-> (2026-10-04)** interrogates the 44 and the suite against a survey Jordan supplied (§2, direction 9;
-> §6): it states Valoria's verification policy, adds `steal` (§9.3, R-8), carries the charge as an
-> uttered Proposition and the hostage as a composition, and registers six conflicts (K-35…K-40).
+> and `proclaim` and `truce` are deferred with their readers (§12, K-28…K-34; revision 5 un-defers
+> `proclaim`, K-42). **Revision 4 (2026-10-04)** interrogates the 44 and the suite against a survey
+> Jordan supplied (§2, direction 9; §6): it states Valoria's verification policy, adds `steal` (§9.3,
+> R-8), carries the charge as an uttered Proposition and the hostage as a composition, and registers six
+> conflicts (K-35…K-40). **Revision 5 (2026-10-04)** interrogates them against a second survey Jordan
+> supplied, on how a fact travels from those who saw it to those who did not (§2, directions 10 and
+> 11; §6.5–§6.8): it adds `forgive` (§9.4, R-9), un-defers `proclaim` (§9.2; K-34 retired for the
+> verb), widens `tell` to its own topic (§9.6), and registers nine conflicts (K-41…K-49).
 > **Merging the PR that carries it does NOT ratify the verification policy or any verdict in §6, any
 > verb, state, widening, cut, gate basis or roster edit in §7–§11, nor any recommendation in §13**, notwithstanding the merge-ratifies default (ED-1094): each of those
 > items carries its own decision and is **held back** until it is built in code, at its owner, with a
-> test that executes it. Every grade proposed here is `assumption` or `absent`; none is `ruled`. Five
-> residual decisions (§13: R-1, R-3, R-4, R-5, R-8) each carry a recommendation that the suite adopts and
+> test that executes it. Every grade proposed here is `assumption` or `absent`; none is `ruled`. Six
+> residual decisions (§13: R-1, R-3, R-4, R-5, R-8, R-9) each carry a recommendation that the suite adopts and
 > that Jordan may overrule; R-2 is resolved (§13.2) and leaves two one-line residuals (R-6, R-7). A design
 > document is never the reason a behaviour is correct — the code is.
 
 - **Date:** revision 1, 2026-10-03; revision 2, 2026-10-04; revision 3, 2026-10-04; revision 4,
-  2026-10-04.
+  2026-10-04; revision 5, 2026-10-04.
 - **Authorship:** Claude — orchestrating two read-only adjudication passes, seven extraction passes, an
   independent read-only audit pass, an independent read-only march analysis, an independent read-only
-  survey interrogation, and the write-up.
+  survey interrogation, an independent read-only churn-survey interrogation, and the write-up.
 - **Lane:** IN (cross-cutting). No ID was allocated; no ledger row was written.
 
 ---
@@ -40,8 +44,21 @@ existing verbs, from faction- and office-scale acts down to granular person acts
 revision 1 he asked that its conflicts be resolved and the result orchestrated into a coherent suite
 (§2, direction 7); after revision 2 he stated what a march is (direction 8), and revision 3 carries the
 consequences; after revision 3 he supplied a survey of other games' mechanics and asked that it be used
-to interrogate the verbs (direction 9), and revision 4 carries that (§6). This document is that answer.
-It changes no code.
+to interrogate the verbs (direction 9), and revision 4 carries that (§6); after revision 4 he supplied a
+second survey, asked for the same task with it and that verbs be added as justifiable (directions 10
+and 11), and revision 5 carries that (§6.5–§6.8, §9). This document is that answer. It changes no code.
+
+**The rule for adding a verb (direction 11).** A verb enters the suite only if it passes all five of
+these tests, and a candidate that fails one is recorded with the test it failed (§6.8):
+
+1. **A choice.** It names something an actor can choose and attempt — never an outcome (direction 3).
+2. **An axis.** It has a discriminating axis against every verb of the suite — write row, eligibility,
+   counterparty, prize or object kind — named in its CONFLICTS field.
+3. **The word.** It passes CLAUDE.md §4: a reader with no memory of this repo lands on one meaning, and
+   the word is the one ordinary use already supplies.
+4. **The rosters.** It fits the closed rosters and the loader's invariants, and what it writes has a
+   named reader.
+5. **A producer and a falsifier.** Something forms it, and an instrument that exists can observe it.
 
 **Pipeline.** A fact sheet was extracted from the live table (loading `engine/season/data/verbs.py`'s
 `VERB_TABLE`, `loop/effects.py`'s `EFFECTS`, `loop/driver.py`'s `resolvable_verbs()` and the raw YAML).
@@ -68,7 +85,8 @@ where its resolution collided with a ruling (§14.5).
 **The march analysis (revision 3).** An independent read-only analysis pass was given direction 8,
 revision 2 and the tree. It traced what `march` does today, derived each stake from state at the
 destination, decided `besiege`, the winner's write (R-2), war and truce, and returned an edit list and
-six conflicts (K-28…K-33). The orchestrator added one decision of its own (K-34, `proclaim` deferred).
+six conflicts (K-28…K-33). The orchestrator added one decision of its own (K-34, `proclaim` deferred;
+retired for the verb in revision 5, K-42).
 The author of revision 3 opened every citation the analysis relied on (§14.3) and corrected it where a
 cite did not say what it claimed or where its design would have broken a live check (§14.8).
 
@@ -82,6 +100,30 @@ the tree, interrogated every verb against it, mapped the 58 primitives, and retu
 conflicts (K-35…K-40) and one decision that survived the filter (R-8). The author of revision 4 opened
 every load-bearing citation it relied on (§14.3) and corrected it where a cite did not say what it
 claimed (§14.9).
+
+**The churn-survey interrogation (revision 5).** Jordan supplied *Narrative Churn: How NPCs, Events,
+Facts and World State Can Keep Changing One Another — A Verb-Level Teardown and Reorganization* (dated
+3 October 2026) in session. **It is not committed to this repository either**; this document cites it
+by title, by its own labels (Key Findings 1–6, failure modes 1–7, directives D1–D12, primitives
+F01–F84, sets A–K) and by the game it names, and writes out every point it relies on. The survey
+decomposes about thirty games into 84 primitives and regroups them into eleven sets by what each does
+to a fact's journey through one cycle — *event → record → carriage → held belief → appraisal →
+disposition → choice → new event* — then draws six findings, ranks seven failure modes and states
+twelve directives, each with a playtest test. It also cites "session documents" by label (N1, N2, D1,
+D2, D3, *Third Strand*, *A Tells B About C*, *Mechanics of Inquiry*); **none is committed**. Seven
+research documents and *The Third Strand* (`02458c7e…`, 78,634 bytes) are pinned by SHA-256 prefix and
+byte length at `proposals/2026-09-12-emergent-narrative-primitives-v2/04_PROVENANCE.md:126-138` and
+`:148-150`; *A Tells B About C* is the telling workplan's dossier, "not in the repo"
+(`workplans/2026-10-01-telling-workplan.md:5`); *Mechanics of Inquiry* is the first survey.
+[ASSUMPTION: N1 and N2 are the two narrative compendia and D1, D2, D3 the *Nine Titles*, *Thirteen
+Strategy Games* and *Twenty Games* documents, by the games each covers; the survey never expands the
+labels.] Every claim the survey tags [SESSION] is therefore carried at its word. An independent
+read-only pass, given the survey, revision 4 and the tree, interrogated every verb against it under
+direction 11's threshold, mapped the 84 primitives, tested thirteen candidate verbs and refused them
+all (it counted fourteen, §14.11), and returned two developed verbs, one widening, eight conflicts
+(K-41…K-48) and one decision that survived the filter (R-9). The author of revision 5 opened every
+load-bearing citation it relied on (§14.3), added one conflict of its own (K-49), and corrected it
+where a cite did not say what it claimed (§14.11).
 
 **Limits, stated plainly.**
 
@@ -115,6 +157,18 @@ claimed (§14.9).
   are patched continually. Nothing in it was re-checked here except against the games extraction pass
   where the two overlap (§6.4). Like every pass before it, the survey interrogation reads and does not
   execute.
+- **The churn survey's facts are the churn survey's, and so are its caveats**, carried as it states
+  them: several key mechanics rest on community wikis (*Dwarf Fortress*'s rumour levels, *RimWorld*'s
+  percentages, *Caves of Qud*'s penalties, the *Tropico* housing formula), reliable for behaviour but
+  possibly behind patches; *Crusader Kings III*'s secret and blackmail rules are cited from a
+  pre-release developer diary (2020) and were not re-verified under 1.20; the *Guild 3* shutdown is a
+  producer's forum post that predates Early Access and does not name the AI system; "*Oblivion*'s
+  Radiant AI cut back" is contested and is an unresolved anecdote; the *Nemesis* patent is U.S.
+  10,926,179 with an adjusted expiry of 11 August 2036; *Crusader Kings III* 1.20 and *Manor Lords*'
+  August 2026 update were not examined; its directive thresholds are proposed targets, not derived
+  norms; and its secondary titles were not re-verified. Nothing in it was re-checked here; its
+  directives' playtest tests are replaced by executable tests in this repo (§6.5), because this loop
+  has no player.
 
 **Instruments and measurements.**
 
@@ -135,7 +189,9 @@ Of the 15, ten are written by a non-act step or are immutable: `Act[].returned` 
 `Person.pursuits` (§9.4), and the contested `determine` writes `Tenure.degree` by band (§9.6) — the table's
 own note names the contested determination as that row's missing writer (`verb_table.yaml`, `determine`'s
 `writes_note`; the matrix row declares `unproduced: H-162`). A sixth row, `Person.capability`, is
-**retired** (`write_matrix.yaml:386`) and returns with `train` (§9.4).
+**retired** (`write_matrix.yaml:386`) and returns with `train` (§9.4). Revision 5's two verbs write
+rows that already have producers — `forgive` writes `Person.stance` (`march`) and `proclaim` writes
+`Proposition.exists` (`utter`) — so none of these counts moves.
 
 ---
 
@@ -143,8 +199,9 @@ own note names the contested determination as that row's missing writer (`verb_t
 
 Stated by Jordan **in conversation and NOT ledgered** — no ED id was allocated, so none of these is a
 ruling of record. Directions 1–6 were given on 2026-10-03, before revision 1; direction 7 after it was
-pushed; direction 8 on 2026-10-04, after revision 2; direction 9 on 2026-10-04, after revision 3. They
-are carried verbatim because the rest of this document is built on them.
+pushed; direction 8 on 2026-10-04, after revision 2; direction 9 on 2026-10-04, after revision 3;
+directions 10 and 11 on 2026-10-04, after revision 4. They are carried verbatim because the rest of
+this document is built on them.
 
 1. **Method.** *"we do etymology and comparative analysis and sets and everything else so that we can
    logically identify where we have coverage and the flexibility of what a verb should be able to do,
@@ -153,7 +210,7 @@ are carried verbatim because the rest of this document is built on them.
    coverage; §7 and §9 are the gap fill, each new verb carrying a CONFLICTS axis against its nearest
    neighbours.
 2. **Expectation.** *"I am expecting there to be gaps and missing coverage"* / *"so fill them"* / *"I
-   think you just need to develop more verbs"*. The suite adds twelve verbs and widens six (§7).
+   think you just need to develop more verbs"*. The suite adds fourteen verbs and widens seven (§7).
 3. **`kill` and `wound`.** *"kill and wound are verbs that handle outputs, which I think means they
    shouldn't exist as they just relay state changes? characters can not actively choose to kill or
    wound. they can choose to fight tho"*. The statement is hedged (*"I think"*). It agrees with the
@@ -168,7 +225,9 @@ are carried verbatim because the rest of this document is built on them.
    suite answers it without a new verb (K-23).
 4. **States.** *"we're also going to need states that can flag war and peace and alliances and treaties
    and stuff"*. §8 carries them. War needs no new carrier: it is a `WAR`-mood Proposition plus live
-   `commit`s, which the tree already reads (K-29); truce waits for a reader (K-32).
+   `commit`s, which the tree already reads (K-29) — uttered by a person; since revision 5 a seat may
+   also proclaim it, the proclamation a second Proposition naming the war (K-42); truce waits for a
+   reader (K-32).
 5. **Church and Riskbreakers.** *"remember we have to hook into inquisitions with church as well as stuff
    for riskbreakers for espionage and law and stuff"* and *"as well as heresy and trials and stuff"*.
    The law-and-custody verbs (§9.1), the polity instruments (§9.2), the covert verbs (§9.3) and the
@@ -196,6 +255,20 @@ are carried verbatim because the rest of this document is built on them.
    names the code site that decides it, and a survey pattern the code or a ruling refuses is recorded
    as not applying, never adopted against the code. Revision 4 carries it (§6; `steal`, §9.3; K-35…K-40;
    R-8).
+10. **The churn survey (2026-10-04, stated in conversation, not ledgered).** Supplying *Narrative
+    Churn: How NPCs, Events, Facts and World State Can Keep Changing One Another — A Verb-Level Teardown
+    and Reorganization* (dated 3 October 2026): *"Perform the same task with this document"* — the task
+    of direction 9, *"Use this document to interrogate existing verbs and determine applicability to
+    game."* Read as direction 9 is read: the survey is evidence about other games' design patterns —
+    their primitives, their failures, their directives — and the code decides what Valoria does. Each
+    verdict in §6.5–§6.8 names the code site that decides it; a directive's playtest test is replaced
+    by a test this repo can execute; a pattern the code or a ruling refuses is recorded as not
+    applying. Revision 5 carries it.
+11. **Verbs (2026-10-04, stated in conversation, not ledgered).** *"Add verbs as justifiable."* Read as a
+    threshold, not a quota: a verb enters the suite only when it passes the five tests stated once in
+    §1, and a candidate that fails one is recorded with the test it failed (§6.8). Revision 5 adds
+    `forgive` (§9.4), un-defers `proclaim` (§9.2; K-34 retired for the verb, K-42) and widens `tell`
+    (§9.6, K-43).
 
 **Resolved names.** "Shadows of darkness" is *Shadows of Doubt* (Jordan confirmed in session). "Romance of
 three kingdoms" is read as Koei's *Romance of the Three Kingdoms* game series [ASSUMPTION: basis — the
@@ -296,26 +369,26 @@ grouped the suite under eight coarser codes; this document keeps one grouping, t
 | **G4 Proceedings** | `carry`, `convene`, `determine`, `open_case` | — (`determine` widened: contested) | social contest by lineage: `a proposition` repoints to the proceedings provider when it lands (`rosters.yaml:1149-1153`); in the suite `determine` contests it | `DocketItem.matter` on three; `Date.due_at` on `convene` |
 | **G5 Writ answers and orders** | `comply`, `construe`, `dispatch`, `evade / defy` | — | none yet; H-36 rules construal receiver-side; all four retained by ruling (ED-IN-0210, K-01) | `writes: []` on all four |
 | **G6 Documents** | `create_record`, `destroy_record`, `forge`, `give`, `issue`, `petition`, `survey` | `conceal`, `steal` | world fact; `issue` and `petition` feed G4, G5 and G13; `steal` is `seize`'s write with no licence, so it also meets G13's column | `Record.exists`, or `give` or `steal` moving the two `hold` edges |
-| **G7 Seats and bonds** | `commit`, `confer`, `establish`, `oblige`, `release`, `repudiate` (cut recommended), `revoke`, `succeed`, `tie / knot` | — | world fact | `Tenure.since/until/term/payload`, `Office.exists/remit_acts`; the tenure kind is the discriminant (`rosters.yaml:115`) |
+| **G7 Seats and bonds** | `commit`, `confer`, `establish`, `oblige`, `release`, `repudiate` (cut recommended), `revoke`, `succeed`, `tie / knot` | — | world fact | `Tenure.since/until/term/payload`, `Office.exists/remit_acts`; the tenure kind is the discriminant (`rosters.yaml:115`). `forgive` ends a grudge and so sits beside `release` in meaning, but writes no Tenure, and is G15's |
 | **G8 Matter** | `exchange`, `levy`, `transfer` | — | world fact | `Rung.stores` written by one `_shift` body |
 | **G9 Ground and fabric** | `build`, `found`, `restore`, `work` | `raze`, `sabotage` | world fact | `Rung.exists`, `Site.exists`, `Site.condition`; `_rise` is the one formula and `sabotage` its mirror |
 | **G10 Movement** | `migrate`, `move` | — | world fact | stratum `movement`; `Person.travel_leg` and the `contain`/`reside` pairs |
 | **G11 Findings** | `examine`, `interview`, `reconstruct`, `research`, `surveil`, `thread_read` | — | investigation, "its own kind — not a contest" (`rosters.yaml:1008`); it must not be made a contest to become gradeable (`:1031`) | `writes: []`, `emits: finding.made` on all six |
 | **G12 Free speech acts** | `speak`, `utter` | — | `utter` is world fact (`Proposition.exists`); `speak` emits only | `requires: —`; empty `emits_on_refusal` |
 | **G13 Law and custody** | — | `detain`, `interrogate`, `pardon`, `seize` | proceedings' enforcement; `detain` and `interrogate` reach the `sigma_leverage` seam | a held warrant or a `custody`/`ban` edge is the precondition or the write; `detain` and `pardon` also meet G7's column, `seize` G6's |
-| **G14 Polity instruments** | — | `covenant` (`proclaim` deferred, K-34) | world fact between seats | Record kinds `treaty`, `alliance` minted under `remit:issue`, addressed across purview (also G6's column) |
-| **G15 The person** | — | `tend`, `train` | world fact on a body or a skill | `Person.body` raised; `Person.capability` |
+| **G14 Polity instruments** | — | `covenant`, `proclaim` (revision 5, K-42) | world fact between seats, or from a seat to a place | an instrument minted under `remit:issue`: Record kinds `treaty`, `alliance`, addressed across purview (also G6's column); or a Proposition proclaimed to a place, public by the chronicle (also G12's write row) |
+| **G15 The person** | — | `tend`, `train`, `forgive` (revision 5) | world fact on a body, a skill, or the actor's own regard | a field of a Person: `Person.body` raised; `Person.capability`; the actor's own `Person.stance` rows |
 
 ### 3.3 Comparative clusters
 
 | cluster | discriminating axis | verdict |
 |---|---|---|
 | `give` / `transfer` / `exchange` / `levy` (+ `seize`, `steal`) | what moves, to whom: a Record's `hold` to a known present person; stores from the actor's rung to the referent; stores from a rung in purview to the seat's rung under `remit:issue`; both sides' stores (no cell); a Record's `hold` taken without consent under a warrant; the same taken with no licence at all | `give`, `transfer`, `levy` EARN; `exchange` THIN — two `transfer`s survive its cut, losing only atomicity and the paired scarcity; its counterparty operands are registered under H-94 (`rosters.yaml:1562-1564`) |
-| `speak` / `tell` / `utter` | `utter` writes `Proposition.exists`; `tell` binds a hearer, contests a standing, carries `said`; `speak` binds, carries and contests nothing, and bystanders already hear a `tell` by presence (`verb_table.yaml:887`) | `utter`, `tell` EARN; `speak` THIN — retained (§3.5). It executes 104–139 corpus acts across the re-pins recorded at `hole_register.yaml:3521` and is the only row for speech by someone who knows nobody present or holds no claim on the topic |
+| `speak` / `tell` / `utter` (+ `proclaim`) | `utter` writes `Proposition.exists`, `own`; `proclaim` writes the same row through a seat (`remit:issue`), and its kind is public by the chronicle; `tell` binds a hearer, contests a standing, carries `said`; `speak` binds, carries and contests nothing, and bystanders already hear a `tell` by presence (`verb_table.yaml:887`) | `utter`, `tell` EARN; `proclaim` new (§9.2); `speak` THIN — retained (§3.5). It executes 104–139 corpus acts across the re-pins recorded at `hole_register.yaml:3521` and is the only row for speech by someone who knows nobody present or holds no claim on the topic |
 | `issue` / `petition` / `carry` / `open_case` | eligibility and direction: down a remit; up from a rung; `carry` and `open_case` both write `DocketItem.matter`, differing by eligibility (`own` vs `remit:determine`) and subject kind. A warrant, summons or charter is a `dispensation` distinguished by what its `terms` names; an accusation, demand or challenge is a `petition` the same way — no new kinds (K-11, K-23) | `issue`, `petition`, `open_case` EARN; `carry` THIN — H-52's `own` alternative, scoped to petitions |
 | the six findings | in code, only the `requires_typed` object class (Site, Person, Record, Rung, own claim, TS gate); under the survey interrogation, also the content source — the log at a present Site; another person's ledger, which the fold may not read; a Record's `subject_matter`; the log at a Rung across the season; the actor's own ledger; a TS gate (§6.3) | all six THIN, each with its own producer shape rather than one producer for six (work item 4.5, `verb_table.yaml:982-989`): `examine` and `surveil` read the log at a place; `research` reuses the content deposit; `interview` is a prompt (K-36); `reconstruct` and `thread_read` wait (K-37, H-85). THIN is about consequence, not a cut: Jordan ruled the six built as six rows (`verb_table.yaml:950-952`), which is also why `surveil`'s Person case waits for a grammar disjunction rather than a seventh row (K-16) |
 | `confer` / `establish` / `oblige` / `commit` / `succeed` / `tie / knot` | what is opened, and who reads it: `oblige` → `establishment_of`, `_ch_post_remit`, and in the suite `purview_reaches` (vassalage); `commit` → `ambitions` → need questions; `knot` → `_ch_witness_key`; `tie` and `succeed` → nobody | `confer`, `establish`, `oblige`, `commit` EARN; `succeed`, `tie / knot` THIN; `succeed`'s reader is R-5 |
-| `release` / `revoke` / `repudiate` / `pardon` | whose edge: one's own of any releasable kind; another's `hold` on a seat through a seat with a basis; one's own `commit` — already inside `release`'s domain (`verb_table.yaml:748`); another's `custody` or `ban` through the seat that owns it | `release`, `revoke` EARN; `repudiate` REDUNDANT-WITH `release` — cut recommended (R-3), with `_eff_release` earning `commitment.ended` on a closed `commit` (precedent: per-subject kinds, `effects_governance.py:90-91`) so the three alignment cells (`rosters.yaml:2158, :2194, :2232`) survive; `pardon` new (§9.1) |
+| `release` / `revoke` / `repudiate` / `pardon` (+ `forgive`) | whose edge: one's own of any releasable kind; another's `hold` on a seat through a seat with a basis; one's own `commit` — already inside `release`'s domain (`verb_table.yaml:748`); another's `custody` or `ban` through the seat that owns it; and, for `forgive`, no edge — one's own negative `stance` rows toward a referent | `release`, `revoke` EARN; `repudiate` REDUNDANT-WITH `release` — cut recommended (R-3), with `_eff_release` earning `commitment.ended` on a closed `commit` (precedent: per-subject kinds, `effects_governance.py:90-91`) so the three alignment cells (`rosters.yaml:2158, :2194, :2232`) survive; `pardon` new (§9.1); `forgive` new (§9.4) |
 | `restore` / `work` / `sabotage` | preconditions (floor vs presence), and sign; one formula | `restore` EARNS; `work` THIN — the floor-gated, works-only advance, restricted to a declared delta ≥ 0 (K-09); `sabotage` owns the negative sign (§9.3) — the thinnest pair in the suite (K-27) |
 | `move` / `migrate` (+ `march`'s arrival) | the `reside` edge and the capacity refusal; whose `contain` is re-homed — one's own, or (`march`) every mustered claimant's, through a seat | both EARN; `migrate` executes nowhere yet; `march` composes on their one body, `_relocate` (§9.6) |
 | `comply` / `evade / defy` / `construe` | none in code; what compliance performs is a `transfer` whose addressee comes off the held writ (`decision/options.py:717-729`; `rosters.yaml:1571-1584`) — the writ's `kind` and `amount` decline every time today, because neither live schema carries them (`options.py:548-555`) | all three retained by ruling (ED-IN-0210's last row, `registers/editorial_ledger_in_archive.jsonl:178`; K-01) and THIN. Whether `dispatch` and `comply` are two sides of one thing stays open under ED-IN-0211 and is not re-derived here |
@@ -327,7 +400,7 @@ grouped the suite under eight coarser codes; this document keeps one grouping, t
 
 *REACH* is what the row can do as built or as its cell reads; *NOT* is the nearest act it does not do and
 which verb owns it in the suite. "unowned" marks an act the suite leaves without a verb; "none-yet" marks
-one whose verb is deferred with its reader. The REACH of the six widened verbs in the suite is §7.2.
+one whose verb is deferred with its reader. The REACH of the seven widened verbs in the suite is §7.2.
 
 | verb | REACH | NOT → owner |
 |---|---|---|
@@ -351,29 +424,29 @@ one whose verb is deferred with its reader. The REACH of the six widened verbs i
 | `found` | a held works planning a `rung_kinds` member; strict ascent | Site (`build`); office (`establish`); league (`covenant`, kind `alliance`); charter (`issue`; its exemption reader deferred, §9.7) |
 | `give` | a held Record `to` a known present person; the gate's handover covers every non-seat hold | stores (`transfer`); take without consent (`seize` under a warrant; `steal` with none); (cede a rung hold: §7.2) |
 | `interview` | an existing person | interrogation under custody (`interrogate`); covert watching of a person (deferred, §9.7); the reply (the questioned person's own `tell`, K-36) |
-| `issue` | terms + `to` a person executor in purview | a documentless order (`dispatch`); a proclamation to a place (none-yet: `proclaim` deferred with its readers, K-34); an instrument to a foreign seat (`covenant`); rescind (unowned) |
+| `issue` | terms + `to` a person executor in purview | a documentless order (`dispatch`); a proclamation to a place (`proclaim`, K-42); an instrument to a foreign seat (`covenant`); rescind (unowned) |
 | `levy` | a rung in purview with stores → the seat's rung | tribute by term (`transfer`); a person's held Records (`seize`); muster (`march`) |
-| `march` | a settlement; `remit:dispatch`; prize a field at ENCOUNTER; writes the losing side; in the suite also the arriving army's presence, the stake read at the destination (§7.2) | title (`seize` under occupation, `give`, `release`, death — never `revoke`, K-30); a war declaration (`utter`, K-29); muster (its own `sides_of`) |
+| `march` | a settlement; `remit:dispatch`; prize a field at ENCOUNTER; writes the losing side; in the suite also the arriving army's presence, the stake read at the destination (§7.2) | title (`seize` under occupation, `give`, `release`, death — never `revoke`, K-30); a war declaration (`utter`; its public announcement `proclaim`; K-29, K-42); muster (its own `sides_of`); ending the grudge it writes (`forgive`, K-41) |
 | `migrate` | a rung with room; `contain` + `reside` | presence (`move`); exile another (a `ban` + the exile's own `migrate`); relocate a court (unowned) |
 | `move` | a rung up the ladder | residence (`migrate`); an army (`march`, through a seat); flight from custody (refused by `custody`'s reader, §8) |
 | `oblige` | a seat whose `binds` admits; own; with a term — including a seat-holder obliging himself to another seat, which the suite reads as vassalage (§7.2) | sentence (`determine`); hostage (`custody`) |
 | `open_case` | any matter at a place in purview; `remit:determine`; case file (kind `text`) + docket | own docketing (`carry`); private accusation (a `petition`); appeal (the same verb, nested); the charge (`utter`, mood `HOLDS`, subject the accused; K-35) |
 | `petition` | terms, `to` a person, `from` a rung; own | docket (`carry`); writ downward (`issue`); accusation, demand, challenge (a `petition` by what its `terms` names); the charge itself (`utter`, mood `HOLDS`, subject the accused — the accusation's `terms` names it; K-35) |
 | `reconstruct` | anything in one's own ledger | new information (the other five); decipher (`research`) |
-| `release` | the object of one's own live edge, six kinds (`verb_table.yaml:748`) | another's edge (`revoke`, `pardon`); waive what is owed you (refused by D-5, `verb_table.yaml:757`) |
+| `release` | the object of one's own live edge, six kinds (`verb_table.yaml:748`) | another's edge (`revoke`, `pardon`); waive what is owed you (refused by D-5, `verb_table.yaml:757`); end a grudge (`forgive` — a stance row is no edge) |
 | `repudiate` | one's own `commit` | renounce fealty (`release`); everything else is `release`'s — cut recommended (R-3) |
 | `research` | an existing Record | Site (`examine`); person (`interview`); a letter in transit (unowned) |
 | `restore` | a Site stood at; raise to ceiling | a body (`tend`); stake a works (`build`); damage (`sabotage`) |
 | `revoke` | an office via a seat with a basis | resign (`release`); excommunicate, outlaw (`determine`, `disposes: ban`); expel an obligee (refused by D-5; lapse instead, §7.2); dissolve (unowned); depose a seat with no rung above (none: R-4) |
-| `speak` | a referent, nothing carried | a motion (`utter`); a seat's proclamation (none-yet: `proclaim` deferred, K-34) |
+| `speak` | a referent, nothing carried | a motion (`utter`); a seat's proclamation (`proclaim`, K-42) |
 | `succeed` | a held office or estate; heir unbound | seat (`confer`); regency (`confer` + term); inheritance at death (R-5: an `inheritance` basis, later) |
 | `surveil` | a Rung stood at | a person over time (deferred, §9.7; `verb_table.yaml:1084`); intercept letters (unowned); plant an agent (composed) |
 | `survey` | a faction, or a person under one, in one's own ledger | (a rung: §7.2); census (unowned); yield assessment (unowned) |
-| `tell` | a topic in one's own ledger `to` a known present hearer; `said` | a public (presence covers bystanders); lie (deferred, §9.7); move convictions (`argue`) |
+| `tell` | a topic in one's own ledger `to` a known present hearer; `said`; in the suite `to` may be the topic itself — a warning or a confrontation (§7.2, K-43) | a public (presence; a seat's public declaration is `proclaim`); lie (deferred, §9.7); move convictions (`argue`) |
 | `thread_read` | a TS-gated finding | threadwork (deferred, plan positions 27/29f) |
 | `tie / knot` | a bond edge, partner unbound | marriage with terms (same + `transfer` + term); an alliance of seats (`covenant`) |
 | `transfer` | own rung → a rung; `kind`, `amount`; renews obligees via a seat | Records (`give`, `seize`, `steal`); treaty tribute (a `treaty` read by `_renewals`, §8) |
-| `utter` | an immutable Proposition, including a declaration of war (mood `WAR`, read by `faction_q.at_war` once committed, K-29) and a charge (mood `HOLDS`, subject the accused, K-35) | speech (`tell`); binding (`commit`); a seat's proclamation (none-yet: `proclaim` deferred, K-34); a charge's filing (`petition`, whose `terms` names it) and testimony to it (a witness's own `commit`, K-35) |
+| `utter` | an immutable Proposition, including a declaration of war (mood `WAR`, read by `faction_q.at_war` once committed, K-29) and a charge (mood `HOLDS`, subject the accused, K-35) | speech (`tell`); binding (`commit`); a seat's proclamation (`proclaim`, K-42); a charge's filing (`petition`, whose `terms` names it) and testimony to it (a witness's own `commit`, K-35) |
 | `work` | floor-gated advance of a works; a declared delta ≥ 0 | damage (`sabotage`); wage labour (unowned); practice (`train`) |
 
 ### 3.5 The one cut, and the cut proposals withdrawn
@@ -410,7 +483,7 @@ held-Record operand channel of §10.1. Full blocks are in Appendix A.
 | `comply` | the executor holds the writ after `give`; `comply` forms on the held writ and emits `compliance.given`; what it performs is the separate `transfer` the writ names · none | obedience with a trace, so defiance is legible by absence | `compliance.given` in `w.log` from `populated.run` with no hand-built act | H-44, H-94; ED-IN-0211's fork stays open · no (retained by ruling, K-01) |
 | `confer` | the office rides `subject` from a held dispensation's `terms` (the enabler), the conferee rides `to` via the known-person fan (`options.py:827-860`) · `Tenure.since/until` (+ `Tenure.term`, §7.2) | patronage | realm ex > 0 (70/0) | a holder's own seat is in `reach` (`world_q.py:461`); what is absent is any claim about a seat (`verb_table.yaml:676`) — K-25 · no |
 | `construe` | WITNESS-side, not an act: the content deposit already reads per holder (`witness.py:40,523-540`) · none | misreadings that travel by document | two holders of one writ holding different `content:dispensation` values | H-36 magnitude half, H-44 · no (retained by ruling) |
-| `convene` | pass CALENDAR's events into `witness()` (`driver.py:464`); `open_case` fills the fired slot's date · `Date.due_at`, `DocketItem.matter` | a sitting with a day people act toward | a `date.fired` claim in any ledger (`test_season_shape.py:4307-4316` pins 0) | H-163 limits 2, 4 · no |
+| `convene` | pass CALENDAR's events into `witness()` (`driver.py:464`); `open_case` fills the fired slot's date · `Date.due_at`, `DocketItem.matter` | a sitting with a day people act toward | a `date.fired` claim in any ledger (`test_calendar_a_forced_corpus_date_fires_and_emits_but_deposits_no_claim`, `test_season_shape.py:4478`, pins none; revision 1's `:4307-4316` had drifted, §14.12) | H-163 limits 2, 4 · no |
 | `create_record` | hooked; a computed act mints contentless `text` · `Record.exists`, `Record.stages` | documents to find, carry, forge, burn | corpus executed set; `test_works_founding.py:101` | H-80 · no |
 | `destroy_record` | `give`'s shape, built and held (`verb_table.yaml:199`) · `Record.exists` | the only way a document vanishes; in the suite, also how a `cover` Record is ended | `test_u7_own.py:153` flips | H-75; held on H-156 · yes, no new row (H-156) |
 | `determine` | a question whose referent is a docketed person in the bench's ground; direct via seat; contested in the suite (§7.2) · `Tenure.since`, `DocketItem.matter` (+ `Tenure.degree`) | a bench binding men with no player watching | realm ex (1/20); `test_u7_remit.py:278` | H-163 limit 2 (SC lane), H-162; the party-gap fold edit (K-02) · no |
@@ -426,14 +499,14 @@ held-Record operand channel of §10.1. Full blocks are in Appendix A.
 | `interview` | hooked · none | to be replaced by the Dialogue Lattice (`verb_table.yaml:1054`) | corpus executed set | work item 4.5; ED-FI-0004 · no |
 | `issue` | hooked (realm 6/30, with `via`); in the suite `to` fans over known persons so `terms` and the executor separate (§10.1) · `Record.exists` | authority as paper; the warrant | `test_u7_remit.py:460` | H-94; `15c` · no |
 | `levy` | a question whose referent is a full larder in purview (a positive `stores.changed`) · `Rung.stores` | how a seat eats | realm ex > 0 (23/0); `test_u7_remit.py:201` | H-163 limit 3 · no |
-| `march` | declared in the realm (16), fought 0 — H-149's check refuses every natural target (K-31); never attempted in the corpus (H-175); seam at ENCOUNTER · `Person.body`, `Person.stance`; in the suite also `Tenure.until/since`, `Person.travel_leg` (the arrival, §9.6) | war that leaves grudges, and armies that stand somewhere | `test_march.py:323`; leaves the never-attempted pin | H-175, H-149; the `muster` basis and three `ENC` cells (K-33) · no |
+| `march` | declared in the realm (16), fought 0 — H-149's check refuses every natural target (K-31); never attempted in the corpus (H-175); seam at ENCOUNTER · `Person.body`, `Person.stance`; in the suite also `Tenure.until/since`, `Person.travel_leg` (the arrival, §9.6) | war that leaves grudges, and armies that stand somewhere; the grudge's closer is `forgive` (§9.4) | `test_march.py:323`; leaves the never-attempted pin | H-175, H-149; the `muster` basis and three `ENC` cells (K-33) · no |
 | `migrate` | a destination channel: shortfall at home plus a positive `stores.changed` elsewhere in reach, or a founded hearth with room · as `move` | people who leave famine | leaves the always-refused pin | H-168 (H-94) · no |
 | `move` | hooked · `Person.travel_leg`, `Tenure.until/since` | presence is the epistemic model | `test_migrate_capacity.py:153` | none · no |
 | `oblige` | type clause 1 once a seat can be a referent — from a held Record's `terms` (the enabler) or a `tenure.opened` deposit (K-25) · `Tenure.since`, `Tenure.term` | retinues; vassalage, read by `purview_reaches` (H-101) | `test_obligees.py:282` flips; leaves the never-attempted pin | seat referents (H-94/H-54) · no |
 | `open_case` | hooked (realm 7/28) · `Record.exists`, `Record.stages`, `DocketItem.matter` | grievances enter the institution | `test_u7_remit.py:246` | H-52 · already registered |
 | `petition` | hooked; addressed to its own subject until the enabler separates them · `Record.exists` | the upward voice; accusation and challenge | `test_record_kind_fold.py:153` | H-94; closers unbuilt · no |
 | `reconstruct` | hooked; a self-feeding loop is visible (`test_season_shape.py:3974-3977`) · none | synthesis that can be wrong | corpus executed set | the obstacle; work item 4.5 · no |
-| `release` | a person-side decline in `opening_set` when the actor holds no releasable edge to the referent · `Tenure.until` | resignation, divorce, apostasy, *diffidatio* | refusals fall from 96% (`requirements.yaml:759-760`) | none · no |
+| `release` | a person-side decline in `opening_set` when the actor holds no releasable edge to the referent — one own-state decline, shared in revision 5 with `forgive`'s (§9.4) · `Tenure.until` | resignation, divorce, apostasy, *diffidatio* | refusals fall from 96% (`requirements.yaml:759-760`) | none · no |
 | `repudiate` | cut; `_eff_release` earns `commitment.ended` on a closed `commit` | nothing new | `test_u7_own.py:42` DECLINED tuple shrinks | none · yes (R-3) |
 | `research` | hooked · none | archives | corpus executed set | work item 4.5 · no |
 | `restore` | hooked (realm 18/82) · `Site.condition` | towns that mend; walls before a march | `test_works_founding.py:237-282` | H-164, H-166 · no |
@@ -442,7 +515,7 @@ held-Record operand channel of §10.1. Full blocks are in Appendix A.
 | `succeed` | heir via the known-person fan; a reader at the vacancy — `conferral_bases` is closed at appointed/elected/annex (`rosters.yaml:1737-1755`) · `Tenure.since` | dynasties | a `person.died` followed by the heir's `hold` | ED-IN-0256 ruling (2) · yes (R-5) |
 | `surveil` | hooked; the Person case waits (§9.7) · none | the covert act canon prices (`rosters.yaml:2205`) | corpus executed set | ED-FI-0009; work item 4.5 · no |
 | `survey` | hooked (realm 10/165); subject Rung in the suite (§7.2) · `Record.exists` | a stake once something reads the sheet | `test_information_cluster.py:146,204` | H-169 limit 5 · no |
-| `tell` | hooked · none (WITNESS) | rumour and the chain of tellers | `test_told_by_channel.py:1042` | `sigma`'s `REFUSED` raises an uncaught `Unspecified` (`resolve.py:585-590`) · no |
+| `tell` | hooked · none (WITNESS); in the suite `to` may be the topic, so an absent C can be told about himself (§9.6, K-43) — the told channel today carries mostly the event-kind claim, not content (§6.5) | rumour and the chain of tellers | `test_told_by_channel.py:1042` | `sigma`'s `REFUSED` raises an uncaught `Unspecified` (`resolve.py:585-590`) · no |
 | `thread_read` | a per-person TS value and a gate stem; `knowledge_kinds` is the taxonomy half · none | P-08's barrier made mechanical | enters `resolvable_verbs()` | H-85; plan 27/29f · no |
 | `tie / knot` | partner via the known-person fan; `tie`'s reader is `teller_weight`'s relation term; build as two rows · `Tenure.since` | telling knits people | `tie / knot` executes > 0 in `aperture 1 0` | H-182; `29f` owns `knot` · no |
 | `transfer` | hooked · `Rung.stores`, `Tenure.term` | relief, tribute, pay | `test_season_shape.py:9328`; `test_term_upkeep.py` | H-158 · no |
@@ -476,7 +549,8 @@ held-Record operand channel of §10.1. Full blocks are in Appendix A.
 ## 5. Coverage
 
 Pass 2 grouped the 707 candidates into 61 act families; revision 4 adds a 62nd, theft, from three
-extraction rows pass 2 left in no family (K-39). Each is classified against the resolved suite:
+extraction rows pass 2 left in no family (K-39); revision 5 adds a 63rd, feud and grudge, from the churn
+survey and from the code's own demand (§6.8). Each is classified against the resolved suite:
 
 - **COVERED** — an existing verb carries the family's central act, sometimes as data (an accusation is a
   `petition` whose `terms` names the accused);
@@ -487,8 +561,15 @@ extraction rows pass 2 left in no family (K-39). Each is classified against the 
 - **OUTCOME** — the family names a result, not a choice; by direction 3's logic it is not a verb;
 - **SYSTEM** — a property of a mechanism, a seam or a loop stage, not an act (§10.3).
 
-**Counts, one primary class per family:** COVERED 32 · WIDENED 6 · GAP 10 · DEFERRED 5 · OUTCOME 4 ·
-SYSTEM 5 — 62 in all. Verbs: 6 widened, 12 new, and every new verb fills at least one GAP family.
+**Counts, one primary class per family:** COVERED 32 · WIDENED 6 · GAP 12 · DEFERRED 4 · OUTCOME 4 ·
+SYSTEM 5 — 63 in all. Verbs: 7 widened, 14 new, and every new verb fills at least one GAP family.
+[Revision 5 moves family 13 (edict, law, emergency) from DEFERRED to GAP: `proclaim` is un-deferred
+(K-42), and the effect readers of what it would carry — an edict, an embargo, an interdict, an
+emergency — stay deferred (K-11). It adds family 63 (feud, grudge, reconciliation) as GAP, filled by
+`forgive`; the feud chain itself is SYSTEM (the telling workplan's G1 and G2). And it splits family
+37's text without moving its class: a false **charge** is COVERED today — `utter` of a `HOLDS`
+Proposition and a `petition` naming it, neither checking truth — while a false **telling** stays
+DEFERRED with G7 (K-15). The `tell` widening (K-43) fills no family; it answers the churn survey's D5.]
 [Revision 4 adds family 62 (steal, pilfer) as GAP, filled by `steal` on R-8's recommendation (K-39);
 the family exists whichever way R-8 is ruled, and under R-8 (b) it would stay GAP with no verb. No other
 family changes class; families 6, 11, 26, 27 and 30 gain the charge, testimony, hostage and theft
@@ -496,7 +577,8 @@ readings (Appendix B; K-35, K-38).]
 [Revision 3 moves two families: 21 (declare war) from GAP to COVERED — `utter` of a `WAR`-mood
 Proposition plus `commit`, read by `faction_q.at_war` (K-29); and 24 (siege, blockade) from GAP to
 WIDENED — a `march` that arrives at an enemy-held settlement, the siege a Query (K-28). Family 25 stays
-OUTCOME with its text changed (R-2 resolved); 13 stays DEFERRED with `proclaim` deferred (K-34).]
+OUTCOME with its text changed (R-2 resolved); 13 stays DEFERRED with `proclaim` deferred (K-34) —
+moved by revision 5, above.]
 [CORRECTION: revision 1 reported COVERED 29 · WIDENED 9 · GAP 14 + 1 · OUTCOME 3 · SYSTEM 5, then withdrew
 one WIDENED family in the same table without moving it (K-26). The suite moves seven families: 4 and 37
 (their widenings deferred, K-16, K-15), 13 (its kinds deferred, K-11) and 40 (`debt` deferred, K-14) to
@@ -507,12 +589,12 @@ COVERED; and 28 to OUTCOME (R-1).]
 |---|---|
 | COVERED (32) | 1 question a person · 2 inspect a place, body or object · 3 read and decipher records · 5 evidence board · 6 denounce, accuse · 7 open an inquiry or impeachment · 8 summons, writ, warrant, charter · 11 confess, swear, abjure · 14 motion, debate, vote · 15 elect · 16 appoint, invest, ennoble · 17 depose · 18 resign · 21 declare war (`utter`, mood `WAR`, + `commit`) · 23 muster · 31 spy, infiltrate, run informants · 33 expose, publish · 34 blackmail · 35 bribe, gift, subsidy · 36 court, marry · 39 trade, venality · 41 build, found, charter · 42 survey, census, visitation · 43 envoy, legate · 44 feast, coronation, progress · 49 claim, coup, revolt · 50 mediate, appeal, stay, adjourn · 51 recognize, endorse · 53 admit, expel · 54 defect, poach · 55 challenge and accept · 57 regency through a seat |
 | WIDENED (6) | 9 hear, try, judge (`determine` contested) · 12 excommunicate, absolve (`determine` disposing `ban`; `pardon`) · 19 heir, regency (`confer` + term) · 20 homage, fealty (`oblige`, read by `purview_reaches`) · 24 siege, blockade (`march` arriving at an enemy-held settlement; the siege a Query; its larder effect deferred) · 29 outlaw, banish (`determine` disposing `ban`) |
-| GAP (10) | 22 truce, peace, treaty, alliance, cession (`covenant`, kinds `treaty` and `alliance`; cession by widened `give`; truce deferred, K-32) · 26 arrest, custody, ransom, hostage (`detain`, `pardon`; a hostage composed on `move` + `issue` + `detain` + `pardon`, K-38) · 27 interrogate (`interrogate`) · 30 seize, confiscate, search (`seize`) · 32 cover identity, deniability (`conceal`) · 38 persuade, convert, preach (`argue`) · 45 heal, rest (`tend`) · 46 train, educate (`train`) · 52 damage, raze (`sabotage`, `raze`) · 62 steal, pilfer (`steal`, R-8) |
-| DEFERRED (5) | 4 watch a place, tail a person (the place is `surveil`'s; the person waits on a grammar disjunction, K-16) · 13 edict, law, emergency (`proclaim` deferred with its readers, K-34; its `edict`/`emergency` kinds wait on a reader each, K-11) · 37 slander, rumour (the telling workplan's G7, K-15) · 40 borrow, distrain (`debt` waits with its `seize` reader, K-14) · 47 thread operations (plan positions 27/29f, `verb_table.yaml:1103`) |
+| GAP (12) | 13 edict, law, emergency, declaration (`proclaim`, K-42; the effect readers of edict, embargo, interdict and emergency deferred, K-11) · 22 truce, peace, treaty, alliance, cession (`covenant`, kinds `treaty` and `alliance`; cession by widened `give`; truce deferred, K-32) · 26 arrest, custody, ransom, hostage (`detain`, `pardon`; a hostage composed on `move` + `issue` + `detain` + `pardon`, K-38) · 27 interrogate (`interrogate`) · 30 seize, confiscate, search (`seize`) · 32 cover identity, deniability (`conceal`) · 38 persuade, convert, preach (`argue`) · 45 heal, rest (`tend`) · 46 train, educate (`train`) · 52 damage, raze (`sabotage`, `raze`) · 62 steal, pilfer (`steal`, R-8) · 63 feud, grudge, reconciliation (`forgive`; the feud chain SYSTEM, G1/G2) |
+| DEFERRED (4) | 4 watch a place, tail a person (the place is `surveil`'s; the person waits on a grammar disjunction, K-16) · 37 slander, rumour (a false telling: the telling workplan's G7, K-15; a false charge is COVERED by `utter` + `petition`) · 40 borrow, distrain (`debt` waits with its `seize` reader, K-14) · 47 thread operations (plan positions 27/29f, `verb_table.yaml:1103`) |
 | OUTCOME (4) | 10 sentence (the disposal's kind: `oblige`, `custody`, `ban`) · 25 conquer, raid, usurp (a won or unopposed `march` writes occupation; title by `seize`, `give`, `release` or death, R-2 resolved) · 28 execute (a `fight` against a prisoner in `custody`, R-1) · 48 murder (a `fight` whose band is `Felled`, with `conceal`) — and, by direction 3, `kill` and `wound` |
 | SYSTEM (5) | 56 privileged counsel · 58 combat and battle moves (inside the seams) · 59 negotiation moves (inside a bout) · 60 events (disaster, plague, dearth, mutiny, death, succession, heresy outbreak, clocks, endings) · 61 inner mechanics (§10.3) |
 
-[NULL: all 62 families — examined for a family needing a fifth eligibility kind or a non-person actor;
+[NULL: all 63 families — examined for a family needing a fifth eligibility kind or a non-person actor;
 none found. Every faction-scale row resolved to an office-holder's act through a seat, or to members'
 own acts counted by a Query.]
 
@@ -523,20 +605,25 @@ per-family evidence is Appendix B.
 
 | source (rows) | distinctive contribution | suite members and states it backs |
 |---|---|---|
-| `research/` (80) | faction- and office-scale acts the setting's own research catalogued — sanctions put to a vote of factions, war declared with a compliance window, cession and tributary status, leagues, confinement and hostage-kin, the Riskbreakers' Shadow Renown and Deniability Debt meters — and nine event cards | `covenant`, `detain`, `pardon`, `conceal`; war (an uttered Proposition), treaty, alliance, hostage (embargo deferred with `proclaim`, K-34) |
+| `research/` (80) | faction- and office-scale acts the setting's own research catalogued — sanctions put to a vote of factions, war declared with a compliance window, cession and tributary status, leagues, confinement and hostage-kin, the Riskbreakers' Shadow Renown and Deniability Debt meters — and nine event cards | `covenant`, `detain`, `pardon`, `conceal`, `proclaim`; war (an uttered Proposition, which a seat may proclaim), treaty, alliance, hostage (an embargo is a proclaimed Proposition whose effect reader is deferred, K-11) |
 | governance proposals (67) | the 25 provisional faction actions; the proceedings design (speech kinds as data, hearing, quorum, stay, appeal by nesting, interposition, dissent); the inquisition procedure of `proposals/2026-09-04-social-contest-branches/03_INQUIRY.md` (a 2–4-season case, one interrogation per season, a three-way verdict, an excommunication tribunal, abjuration, a parliamentary stay); Riskbreaker operations | the contested `determine`, `interrogate`, `seize`, `conceal`; excommunication, sentence; the faction map (§10.2) |
 | narrative and play proposals (80) | the closers named and never built (waive, depose, fray, rescind, withdraw, abolish); the pursuit-basis worksheet's kill/wound and challenge/accept rulings; cover, planted evidence, infiltration, outlawry | `conceal`, `seize`, `train`; the single outlawry carrier (`ban`); challenge as a `petition` (K-23) |
 | season-loop demand (77) | what the running code and its registers say cannot be expressed, by hole id and case count: no custody kind; `church_standing` with no producer; a sentence read as a job (H-173); a graded hearing (H-162) and the four unseeded procedure games (`arrangements.yaml:16-21`); seizure (H-84); concealment (12 cases); recruiting (13); nothing raises `Person.body`; `Person.capability` retired; nothing ends a place (H-166) | `detain`, `seize`, `conceal`, `tend`, `train`, `raze`, `sabotage`, `argue`; custody, excommunication, sentence |
 | detective games (107) | the investigation family confirmed in all seven; *Pentiment*'s church hearing, judgement and execution; *L.A. Noire*'s read of a lie and the charge; arrest in three games; evidence decay; the time budget. **Negative:** no warrant, covert identity or distinct confession act verified in any of the seven | `detain`, `interrogate`; execution as custody + `fight` (§9.8); §10.3 |
 | CK3 and RTK (107) | CK3: crime as a standing legal basis for imprisonment and revocation; imprison, torture, execute, ransom; hooks and blackmail; casus belli, war goals, truces; fealty and vassal contracts; excommunication and holy war — every act a character's, as Valoria rules. RTK XIV: the schemes line (sabotage, estrangement, incited defection), alliances, submission demands — there the force itself acts | `detain`, `pardon`, `covenant`, `sabotage`, `raze`; war as an uttered `WAR` Proposition; `march`'s stakes; vassalage through `oblige` |
-| governance history (189) | procedure, step by step: the parliamentary motion, division, supply, impeachment and prorogation; the royal writ, edict, homage and *diffidatio*, pardon, regency; Venice's lot-and-ballot election, quorum, the Ten, the *bocca di leone*, the Avogadori's suspension; church justice from denunciation and the edict of grace through citation, interrogation, torture under limits, sentence, abjuration, relaxation, confiscation, excommunication and interdict; secular warrant, arrest, bail, *habeas corpus*, ordeal, execution, informants, interception, double agents | the procedural spine of the Active Inquisition chain (§10.2); `detain`, `interrogate`, `seize`, `pardon` (edicts and interdicts deferred with `proclaim`, K-34); the vote as members' own `commit`s and homage as `oblige`; custody, excommunication, outlawry (interdict and heresy declared deferred) |
+| governance history (189) | procedure, step by step: the parliamentary motion, division, supply, impeachment and prorogation; the royal writ, edict, homage and *diffidatio*, pardon, regency; Venice's lot-and-ballot election, quorum, the Ten, the *bocca di leone*, the Avogadori's suspension; church justice from denunciation and the edict of grace through citation, interrogation, torture under limits, sentence, abjuration, relaxation, confiscation, excommunication and interdict; secular warrant, arrest, bail, *habeas corpus*, ordeal, execution, informants, interception, double agents | the procedural spine of the Active Inquisition chain (§10.2); `detain`, `interrogate`, `seize`, `pardon`, `proclaim` (an edict or interdict is a proclaimed Proposition, its effect reader deferred, K-11); the vote as members' own `commit`s and homage as `oblige`; custody, excommunication, outlawry (interdict and heresy declared deferred) |
 | the survey, supplied by Jordan, not committed (58 primitives) | a primitive-level decomposition across investigative, narrative and grand-strategy games: the verification scale (per-item grading, batch confirmation, consequence-tested submission, no verification), approach over classification in questioning, stores of obligation spent at visible thresholds, agenda control, and succession as an investigable case. **Negative:** no primitive the suite lacked except theft and approach; most of its grand-strategy primitives (hooks, forced votes, intel levels, timers) are refused here by ruling or axiom (§6.4) | `steal`; the charge as an uttered Proposition (K-35); the verification policy and the six findings' producer shapes (§6.1, §6.3); approach as data; `carry` (P43) |
+| the churn survey, supplied by Jordan, not committed (84 primitives) | a regrouping of thirty-odd games by what each primitive does to a fact's journey — event, registration, carriage, holding, appraisal, choice — which turns "does anything carry belief?" into a test of one set (C, Carriage); the ranked failure modes (runaway hostility switched off, illegible causes, early closure, stale decisions, trivial carriage, oatmeal, instant defection); directives with falsifiable tests. **Negative:** most of its strategy-scale primitives (opinion scalars, meters, hazard-rate thresholds, per-tick probabilities) are refused here by axiom (§6.8); thirteen candidate verbs it suggests were tested and refused | `forgive` (the grudge's closer); `proclaim` (a seat's broadcast, set C); the `tell` widening (C's move); the cycle-completeness table and the executable tests of §6.5 |
 
 ---
 
-## 6. The survey interrogated
+## 6. The surveys interrogated
 
-The source is *Mechanics of Inquiry, Speech and Rule* (prepared 3 October 2026), supplied by Jordan and
+Two surveys, both supplied by Jordan and neither committed (§1). §6.1–§6.4 interrogate the first,
+*Mechanics of Inquiry, Speech and Rule* (direction 9, revision 4); §6.5–§6.8 the second, *Narrative
+Churn* (directions 10 and 11, revision 5).
+
+The first source is *Mechanics of Inquiry, Speech and Rule* (prepared 3 October 2026), supplied by Jordan and
 not committed (§1). It breaks investigative, narrative and grand-strategy games into 58 primitives —
 each the smallest unit of a mechanic that keeps a distinct function, labelled input, state, rule or
 feedback — and groups them into eleven verb families: A attending, B asking, C reading, D recording,
@@ -692,7 +779,7 @@ the code does it; PARTLY; GAP; STATE or SYSTEM (§5's senses); DEFERRED; DOES NO
 | 46 | advisory legislature — *Suzerain*'s Rizia | CARRIED · `parliamentary_debate` disposes a `Record` (`arrangements.yaml:103-115`), binding nobody until a seat acts |
 | 47 | succession law — *Crusader Kings III* | STATE and SYSTEM · R-5 plus a rule per basis on `REVOCATION_RULES`' dispatch (`rosters.yaml:1767-1771`) — K-40 |
 | 48 | forced vote — *Crusader Kings III*: spend a hook to dictate an elector | DOES NOT APPLY · D-5; `commit` is `own` |
-| 49 | decree — *Suzerain*'s Rizia | PARTLY · to a person, `issue` or `dispatch`; to a place, `proclaim` deferred (K-34) |
+| 49 | decree — *Suzerain*'s Rizia | PARTLY · to a person, `issue` or `dispatch`; to a place, `proclaim` (revision 5, §9.2, K-42) |
 | 50 | scheme with potential, phases and secrecy — *Crusader Kings III* | PARTLY composed · a Proposition, commits and a `cover`; phases as `Record.stages`; secrecy decay absent |
 | 51 | agent roles — *Crusader Kings III*, *Hearts of Iron IV*, *Espiocracy* | CARRIED by AX-1 · every agent a Person; delegation rides `Act.via` |
 | 52 | countermeasure focus — *Crusader Kings III* | CARRIED as an act · `surveil` each season; a standing focus would be a clock on a container (T-i) |
@@ -705,7 +792,7 @@ the code does it; PARTLY; GAP; STATE or SYSTEM (§5's senses); DEFERRED; DOES NO
 
 ### 6.3 The verbs, one by one
 
-The 44, then the twelve additions, alphabetical within each; none is skipped. **Family** is the survey's
+The 44, then revision 4's twelve additions, alphabetical within each; none is skipped. **Family** is the survey's
 A–K. **Producer** names, for the six findings, the distinct shape each takes — the survey interrogation's
 answer to 4.5's "claims graded by degree", one shape per verb rather than one producer for six.
 
@@ -749,7 +836,7 @@ answer to 4.5's "claims graded by degree", one shape per verb rather than one pr
 | `succeed` | G, J | P33, P47 | the dynasty as continuing identity; law decides; succession as a case | APPLIES; a carrier nobody reads (`verb_table.yaml:839`) | R-5's basis with a rule table (K-40); the heir by the known-person fan; a contested designation composed on `utter`, `commit` and `open_case` | `conferral_bases` closed — Jordan's (R-5) |
 | `surveil` | C, K | P52, P57, P6, P12 | counter-espionage is investigation of the one hiding | APPLIES | **producer:** the only finding over time at a place — the log's Events at the watched Rung across the season, which the actor need not have witnessed (against `examine`'s present Site); degree as `examine`; canon's Exposure +2 has no carrier and is §8.1's Query | the Person case held (K-16); canon's Exposure meter against T-a, resolved as a Query |
 | `survey` | C, D | P13 (resolved at writing, frozen), P53 (as a dated sheet, not a percentage), P58 | frozen records; intel levels | APPLIES for P13; P53 does not apply (T-a) | the suite's Rung widening | none |
-| `tell` | B, K, I | P9 (the teller's manner is nowhere), P55 (the lie: G7), P10 (showing is telling what one holds), P25 (the chain is the remembered source); P15 does not apply | conversation feeds the store; approach over classification | APPLIES | none (the telling workplan's G3, G6, G7) | none |
+| `tell` | B, K, I | P9 (the teller's manner is nowhere), P55 (the lie: G7), P10 (showing is telling what one holds), P25 (the chain is the remembered source); P15 does not apply | conversation feeds the store; approach over classification | APPLIES | none under this survey (the telling workplan's G3, G6, G7); the churn survey widens it (§6.7, K-43) | none |
 | `thread_read` | C, G | P29, P14 | a background unlocks readings | APPLIES exactly — P-08 (`canon/02_canon_constraints.md:50`) is P29 made metaphysical | **producer: waits** on H-85 (plan 27/29f) | P-08 forbids study — `train` excluded (K-20) |
 | `tie / knot` | I | P41 (a knot partner witnesses), P42 weakly | bonds store obligation | PARTLY | none (H-182) | none |
 | `transfer` | I | P38 (open, priced, witnessed), P39 | a bribe turned into votes, as an open act | PARTLY — priced, never converted | none | P38's conversion against D-5 |
@@ -780,8 +867,8 @@ answer to 4.5's "claims graded by degree", one shape per verb rather than one pr
 | WIDENED | P9 — approach as payload data on `interview` and `interrogate`; P35 — `hold:<dispensation naming the place>` on `examine` and `research` once H-75's `hold:` eligibility is live, the instrument being `issue`; P43 — `carry` built (§3.5) |
 | STATE | P8 and Recommendation 4 — the charge, a `HOLDS` Proposition (K-35); P42 — the hostage, `custody` by composition (K-38); P47 and P33 — R-5's basis and its rule table (K-40) |
 | SYSTEM | P12, P57 — a trace read later at a place (4.5's producer for `examine` and `surveil`); P14 — `why` has no reader; P23 — the contested bench closes it; P34 — trespass priced by reception: being seen, then a `petition` or a warrant, never a fine; P43's date↔docket join (H-163 limit 4); P45 — `appeal_basis`, two benches as two `determine`s, a nested `open_case` |
-| GAP → a new verb | theft — the Entering family's *steal*, three extraction rows and family 30's [C-08] → `steal` (R-8). P58's extraction closes by K-35, with no verb |
-| DEFERRED | P54 (cryptology); P49's decree to a place (`proclaim`, K-34) |
+| GAP → a new verb | theft — the Entering family's *steal*, three extraction rows and family 30's [C-08] → `steal` (R-8). P58's extraction closes by K-35, with no verb. P49's decree to a place → `proclaim` (revision 5, K-42) |
+| DEFERRED | P54 (cryptology) |
 | DOES NOT APPLY | P4, P7, P11, P15, P17, P20, P21, P25, P26, P27, P30, P40, P42's ward, P44 (an observation for the FA and WR lanes), P48, P53 — reasons in §6.2 |
 
 **The survey against the games extraction pass, or against itself.**
@@ -808,13 +895,359 @@ answer to 4.5's "claims graded by degree", one shape per verb rather than one pr
 | Finding 4's timers | AX-5; T-c; T-i | a term an act wound, never a clock — step 3 |
 | P44 shared loss | GD-1's single victory (`canon/02_canon_constraints.md:71`); endings absent (H-176) | an observation for the FA and WR lanes |
 
+### 6.5 The churn survey: its cycle, findings, failure modes and directives
+
+The second source is *Narrative Churn: How NPCs, Events, Facts and World State Can Keep Changing One
+Another — A Verb-Level Teardown and Reorganization* (dated 3 October 2026), supplied by Jordan and not
+committed (§1). Its thesis: churn depends less on how detailed NPCs are than on whether **facts can
+travel** — an event leaves a record, the record reaches people who were not there, they judge it
+through their own ties, and the changed disposition produces a new act that is itself witnessed. It
+decomposes *Dwarf Fortress* in depth; *RimWorld*, *Manor Lords*, *Mount & Blade* (*Warband*,
+*Bannerlord*), *Shadows of Doubt*, *Crusader Kings III*, the *Nemesis* system, *Caves of Qud*, Radiant
+AI (*Oblivion*, *Skyrim*), *Talk of the Town* and *Bad News*, *The Guild 2* and *3* and *Tropico*; and
+secondary titles it did not re-verify — into primitives F01–F84, each labelled input, state, rule or
+feedback. It regroups them by the step of the cycle each moves, holds, transforms or blocks: **A
+Occasion** (something happens that can be witnessed); **B Registration** (event → record or trace, who
+perceived what); **C Carriage** (record → people not present); **D Holding and decay** (how a belief is
+stored, graded, aged, lost); **E Appraisal** (belief → disposition, through ties, traits and norms);
+**F Obligation and standing** (dispositions turned into spendable claims or gates); **G Choice**
+(disposition → act, including refusal); **H Adjudication** (contested facts → an official fact); **I
+Concealment and falsification**; **J Pacing and damping** (gain control on any loop); **K Record and
+retelling**. Its minimal loop is A → B → C → D → E → G → A, with H and F as *accelerants* and I as the
+*differentiator*. Its evidence grades are [DEV], [PRIMARY], [COMMUNITY], [MKT] and [SESSION]; its
+caveats are in §1, its unverified items in §14.2, and the conflicts this interrogation raises against
+the suite are K-41…K-49 (§12). Each verdict names the code that decides it (direction 10).
+
+**How far the code completes the cycle, set by set.** *Populated* — the code does it for every person;
+*thin* — built, and measured to carry little; *empty* — no carrier.
+
+| set | status | the code that decides it |
+|---|---|---|
+| **A Occasion** | populated | every act is an Event (`loop/resolve.py:294-329`); actorless occasions are wear, decay, a term maturing, a body's loss and a journey's end (`loop/matter.py:139-221, :235-265, :426-453, :542-551`); a band crossing emits and decides nothing (`:36-82`; T-b, `01_AXIOMS.md:356-358`) |
+| **B Registration** | populated, graded by channel | five channel predicates (`epistemic.py:322-554`), with precedence and one claim source per channel (`rosters.yaml:398-405`); per (witness, Event), the event-kind claim (`loop/witness.py:380`), the observation (`:492`), the `seen` struct (`:513`; terms per channel, `rosters.yaml:949-954`) and the content of a newly held Record (`:540`); `who` is certain for presence and `why` is always `None` (`epistemic.py:748-764`) |
+| **C Carriage** | thin | the told deposit with its `chain` (`witness.py:583-691`); `give`'s content deposit; the `document_key`, `chronicle` and `post_remit` channels carry with no teller (`rosters.yaml:403-405`). Measured by the telling workplan: in the realm no told claim exceeds one hop (1 season, 3 chained claims; 3 seasons, none), the corpus holds 0 told claims, and `said_of` picks an empty-chain claim at all 378 / 1,480 / 16,810 calls (`workplans/2026-10-01-telling-workplan.md:258-262`); `inferred` reads 0 in the realm after 1 and 4 seasons with an obligee present, its cause not isolated (`epistemic.py:497-502`) |
+| **D Holding and decay** | populated | `Person.ledger` (`state/carriers.py:571`), capped and evicting on confidence × recency (`witness.py:697-731`); confidence decays at one rate, 5 a season (`matter.py:235-265`; `data/fixtures.py:258`); a lossy copy at `Partial` (`witness.py:137-174`); `Record.ttl` has a matrix row and no reader |
+| **E Appraisal** | populated for the hearer's tie to the teller; empty for the tie to the subject | `teller_weight` = `told_weight ** hops × relation × record` (`decision/options.py:1043-1097`); `regard` is the stored stance only (`queries/person_q.py:63-69`); the stake term is an `absent` hole (H-180, its marker at `options.py:1091`); `rank` reads 0 (H-181) |
+| **F Obligation and standing** | populated, as owned edges | `commit` and `oblige` with a term; `release` (`effects_governance.py:157-191`); no lever on another (D-5, `verb_table.yaml:757`) |
+| **G Choice, including refusal** | populated | Q2 through `reach`, Q4 need (`world_q.py:1426-1442`); `opening_set` (`options.py:43-204`); `score` = pursuits × alignment + stance + urgency (`decision/choose.py:326-329`) and a Gumbel draw; the person-side refusal gate (`options.py:111-114`, shipped dormant) and the counterparty declines (`:145`, `:172`) |
+| **H Adjudication** | thin | `open_case` and `determine` uncontested (`effects_information.py:183-297`), `bench_quorum` 1; the contested bench and the charge are suite work (§9.6, K-35) |
+| **I Concealment and falsification** | thin | concealment by channel (`document_key` supplies no term, `rosters.yaml:949-954`); `forge` THIN; `utter` has no precondition (`verb_table.yaml:1151-1160`), so a false Proposition is utterable today; a lie at `tell` is barred by `holds` (`:877-885`) |
+| **J Pacing and damping** | populated | the scene budget, rounds, one `opportunity_key` a season, the told deposit's dedup by origin (`witness.py:642-658`), `told_weight ** hops`, the ledger cap, decay, the draw's temperature |
+| **K Record and retelling** | populated for the engine; unread by characters | the append-only log with `causes[]` and `occasioned_by` (`world_q.py:1467-1530`); a Record is the one retellable object in the world (`research`, `give`); no character reads the log (AX-2); the chronicle render and the writ are proposals 1 and 11 of the emergent-narrative suite |
+
+**Refusal keying.** A fold refusal is keyed per conjunct where the row keys it (the loader's rule,
+`data/verbs.py:697-737`; `issue`'s shape, `verb_table.yaml:432-437`); a contested row may key one kind
+only (`data/verbs.py:717-720`), which is why `tell` emits `news.untold` for `holds` and `hearer` alike
+(`verb_table.yaml:941-944`). A person's *chosen* refusal (`evade / defy`) carries no reason: an Act has
+no motive, and `Seen.why` is `None` by a scope decision — the occasioning question survives one hop
+away, on the Scene (`epistemic.py:753-764`).
+
+**The six key findings.**
+
+| # | the survey's finding | verdict | deciding sites |
+|---|---|---|---|
+| 1 | **Carriage is the most commonly missing set.** Of thirty-odd systems only *Dwarf Fortress*, *Talk of the Town* (a research prototype), *The Guild 2* (slander) and, weakly, *Crusader Kings III* carry facts between NPCs; *Caves of Qud* carries them only from the player; every other game couples events straight to dispositions, so NPCs know everything at once and nothing is in transit | **APPLIES**, as a diagnosis of a thin channel, not an absence: Valoria carries in five forms, but what travels by `tell` is mostly the event-kind claim `(subject, news.told, True)` — content is outranked at `said_of`, and no two-hop content was observed (set C above) | `witness.py:583-691`; `person_q.py:210-232`; `epistemic.py:497-502` |
+| 2 | **Runaway hostility kills emergent layers, and was switched off rather than damped.** *The Guild 3*'s citizen AI burned the producer's residence "at every second start of the game" in a 2017 pre-release build; *RimWorld*'s insult → opinion → insult spiral; *Skyrim*'s kin-revenge quests defaulted to murder at the design stage. The common feature: hostility converts to action with no damping term and no warning stage | **APPLIES as a hazard the structure forbids at its root, with one embryo loop.** Appraisal without registration — the survey's suspected cause — cannot happen: a decision reads its own person only (`score` reads own state, `choose.py:326-329`), a threshold never acts (T-b), and there is no hazard clock (AX-5). The embryo: `_eff_march` appends a grudge row toward the winning faction to every loser of every lost field (`effects_combat.py:353-358`), with no cap, no decay and no closer, and `score` adds stance linearly (`choose.py:328`); the telling workplan's G2 would feed it back into `march` and `fight` (`…telling-workplan.md:305`). It is damped today only because the realm fights no field (K-31) | `effects_combat.py:345-358`; `data/fixtures.py:565-566` (the weights' sweep); ID-16, sign every loop (`01_AXIOMS.md:664-681`) |
+| 3 | **Legibility trades against naturalism, and developers say so.** TaleWorlds concedes *Bannerlord*'s traits drive AI decisions but "it can be difficult to discern their role"; *Skyrim*'s lead designer says each improvement to Radiant AI made it less noticeable | **APPLIES.** The corpus instrument prints that most candidates tie on conviction score and "the tie is broken BY THE DRAW" (`harness/corpus_run.py:969-971`); `tell`, `give`, `speak` and `march` have no alignment cell (`rosters.yaml:2119-2240`); the deciding term is traced, never deposited in the world (`why` is `None`) | `choose.py:326-329`; `epistemic.py:753-764` |
+| 4 | ***Dwarf Fortress* is the counterexample, with a precise limit.** Its rumours carry provenance (who saw, who was told, who heard it said), decay and propagation, but "no rumors in the game can be false" beyond a secret identity; falsity enters through false crime reports filed to frame another | **APPLIES — Valoria has *Dwarf Fortress*'s shape today.** `tell` passes on only what is held (`verb_table.yaml:877-881`), while a false *report* is producible: `utter` has no precondition and `petition` checks nothing against evidence (`:710-717`); `forge` is THIN | `effects_information.py:463-470`; K-15 |
+| 5 | **C's move comes too late.** No formal model of telling lets C learn of it, answer or retaliate; *Crusader Kings III*'s blackmail refusal — which exposes the target's own secret — is a shipped C-move, but only once C is confronted; no game tracks C's awareness that a telling occurred | **APPLIES, split.** A co-located C learns `(C, news.told, True)` at once — a deposit's subjects include the act's own (`epistemic.py:127-139, :175-198`; the shipped rule `both`, `data/fixtures.py:442`) — and Q2's first clause raises it (`world_q.py:1431`): ahead of *Crusader Kings III*. An absent C never can: `known_persons` discards the topic (`person_q.py:269`), so nobody can tell C about C; G4, C's move, is gated and droppable (`…telling-workplan.md:307`) | `witness.py:380`; `person_q.py:235-271` |
+| 6 | **Refusal with stated reasons exists at the proposal interface, rarely for standing orders.** *Crusader Kings III* itemizes the AI's acceptance terms; standing-order refusal appears as *Dwarf Fortress*'s need-driven pre-emption and a *Bannerlord* mod's "Lords at -20 or lower will refuse" | **APPLIES.** The fold is a proposal interface and keys refusals per conjunct; `tell` keys one kind for `holds` and `hearer` by design (`verb_table.yaml:941-944`; `person_q.py:246-248`); `evade / defy` carries no reason; a `dispatch`ed order has no document, so its refusal has no Event to be | `data/verbs.py:717-720`; ED-IN-0211 |
+
+**The seven failure modes, as the survey ranks them.**
+
+| # | the survey's mode — its case and cause | verdict | site |
+|---|---|---|---|
+| 1 | runaway hostility switched off — *The Guild 3* (2017), *Oblivion* (disputed); cause, appraisal without registration | APPLIES as a hazard; its cause is structurally impossible here; the grudge rows are the embryo (finding 2) | `effects_combat.py:353-358` |
+| 2 | illegible causation — *Bannerlord*'s traits, *Skyrim*'s quieter Radiant AI; many weak terms and no reported decider | APPLIES — the draw breaks most ties; the score is a sum of terms | `corpus_run.py:969-971` |
+| 3 | early closure by accumulated record — *Shadows of Doubt*'s print database, which never decays and outranks testimony | DOES NOT APPLY as shaped: claims decay and evict, and the permanent log is read by no character. One analogue: recognition by presence is perfect (`_term_who` is the actor; `marks` is `()`), so everyone present identifies the actor with certainty until `conceal` ships | `epistemic.py:739-750`; `witness.py:697-731` |
+| 4 | stale decisions — *Tropico*'s housing chosen once and never re-appraised | DOES NOT APPLY: no decision is stored; every deliberation recomputes from the live ledger; Tenures persist by design (AX-6) | `options.py:43-204` |
+| 5 | true but trivial carriage — *Talk of the Town*'s carried hair and eye colour; content uncoupled to stakes | **APPLIES, measured:** the told channel carries `news.told` event-kind claims (finding 1) | `…telling-workplan.md:255-267` |
+| 6 | oatmeal — Kate Compton's "10,000 bowls of oatmeal": variation the player cannot perceive as distinct | APPLIES at the engine's output: 117 distinct executed sets over the 143-case corpus (`…telling-workplan.md:246-247`, printed by `corpus_run.py:981`); perception is the player lane's | — |
+| 7 | instant defection — *Bannerlord*'s clans leaving the day they join; allegiance with no lag and no stated reason | PARTLY: `release` of a `commit` is one act, but it costs a scene and is witnessed; it states no reason | `effects_governance.py:157-191` |
+
+**The twelve directives.** Each playtest test is replaced by a test this repo can execute (direction
+10); *today* describes the code.
+
+| D | the survey's directive | verdict | executable test in this repo | today |
+|---|---|---|---|---|
+| D1 | route every disposition-relevant fact through registration; forbid omniscient appraisal | APPLIES | existing: `test_decision_package_never_names_world_anywhere_under_it` and `test_w5_sense_is_still_the_only_world_taking_non_decision_function` (named at `person_q.py:32-35`, `options.py:814-818`); new: over `populated.run(n, 0)`, every `Person.stance` write lands on a participant of its Event (`effects_combat.py:318-325`) | **met** — the one licensed world read is `Sensation.subsistence` |
+| D2 | store and display a provenance grade with each held fact | APPLIES | the corpus's `CLAIMS BY SOURCE` line (`corpus_run.py:1002-1003`); `test_15d_*` (`test_told_by_channel.py:77-216`) | partly met — stored (source, chain, confidence, `Seen`); display is the player lane's; `inferred` reads 0 |
+| D3 | damp at carriage and holding before choice; allow a choice threshold only with a visible warning stage | APPLIES, less the hazard rate (K-44) | dampers: `test_t5_*` (`test_told_by_channel.py:1184-1248`) and the H-40 sweep; warning: the band-crossing emission tests (`matter.py:36-82`); new: per season in `populated.run(4, 0)`, the share of `field.won`/`field.lost` Events whose `causes` walk through a `condition.band_crossed` or a `proclamation.made` | partly met — a crossing is T-b's own warning stage; `proclaim` adds a seat's (§9.2) |
+| D4 | appraise a carried fact through the listener's ties to teller and subject | APPLIES | the teller tie executes now: `test_t3_unplanted_members_with_opposite_loyalty_reach_different_verdicts` (`test_told_by_channel.py:438`); the subject tie is H-180 | partly met — *Dwarf Fortress*'s fourth party (Aliz hears that Urist robbed Kogan, and her view of Urist includes her view of Kogan) is H-180 plus G1 |
+| D5 | give C a move before confrontation: detect, repair, pre-empt, retaliate or confront | APPLIES | new: plant A telling B about C with C present, and assert that C's `questions_for` holds a `q:claim` on `(C, news.told)` and a Candidate forms; G4's two-arm count of C's acts naming A | partly met — an absent C waits on the `tell` widening (§9.6, K-43) |
+| D6 | report the deciding term for every refusal or major choice | APPLIES | `test_u7_remit.py`'s keyed refusals; new: over `w.log`, every refusal kind differs by failed conjunct wherever the row keys more than one | partly met — `tell` withholds the hearer's absence on purpose (K-46); a person's choice states no term |
+| D7 | allow false content in carriage, with believability weighting | APPLIES | weighting: `test_t6_*` (`test_told_by_channel.py:1298-1466`) and `test_t3b_*` (`:602-647`); falsity: new, the count of persons whose held `stores:` or `condition` claim differs from world state at season's end (staleness); the clause-4 drop pin (`…telling-workplan.md:247`) | partly met — reception built; production is G7 and `forge` (K-48) |
+| D8 | decay traces fast, reputations slowly, grudges least | APPLIES | the H-40 sweep; new: a MATTER test over a per-stem rate map | **unmet, and inverted in part:** one rate for every claim (`matter.py:235-265`); `record()` rides on claims, so a reputation decays with its detail; grudge rows never decay and never end — AX-6's own named cost, "permanent grudges" (`01_AXIOMS.md:236-238`) — answered by `forgive`, not by a fade (K-41, R-9) |
+| D9 | make the record a player verb | DOES NOT APPLY to a loop with no player; the character side is carried | `test_g1a_act_store_and_receipts.py`; `occasioned_by` | does not apply — the UI lane's (proposals 1 and 11; K-47) |
+| D10 | specify each loop's half-strength setting before building it | APPLIES | the sweeps: `test_t6_record_gain_zero_is_the_control` (`test_told_by_channel.py:1366`), H-40, `field_*_weight` at 0, 1, 3 (`data/fixtures.py:565-566`) | met for fixtured loops — [GAP] `score`'s stance term has no gain fixture (`choose.py:328`) |
+| D11 | re-appraise standing choices when relevant facts change | APPLIES | `test_migrate_capacity.py`; new: a `shortfall:` claim landing raises Q2, and a `migrate` or `transfer` Candidate forms at the next deliberation | **met** |
+| D12 | couple carried content to stakes | APPLIES | the corpus check R3 (`_r3_propagates`, `corpus_run.py:692`; R-01 `not_met` on its own break, `requirements.yaml:193-199`); new: the share of `told_by` claims that are the subject of a question whose Candidate executed | partly met — propagation by presence is high; by telling, near zero |
+
+Met 3 (D1, D10 for fixtured loops, D11); partly met 7 (D2–D7, D12); unmet 1 (D8); does not apply 1 (D9).
+
+**What the churn survey changes about revision 4's judgments.**
+
+1. **`tell`'s "change: none" (§6.3)** holds under the first survey and fails under this one: the told
+   channel carries the event-kind claim, not content (finding 1). The repair is the telling workplan's
+   T7 (`said_of` choosing content over `news.told`) and the widening to `to == subject` (§9.6, K-43).
+   Family 37 splits (§5).
+2. **`proclaim`'s deferral (K-34)** is answered by set C: the instrument is a Proposition, K-29's
+   shape, and its reader exists — `_ch_chronicle` (`epistemic.py:528-554`). Un-deferred (§9.2, K-42).
+3. **The grudge has no closer.** `march` writes it and nothing ends it — AX-6's named cost — and §8.1
+   listed no grudge state. It now does, with `forgive` (§8.1, §9.4, K-41).
+4. **`inferred` reads 0** with an obligee present, its cause not isolated (`epistemic.py:497-502`) —
+   the analogue of *Dwarf Fortress*'s site-government level of knowing; §10.4 never named it. §10.3 now
+   does.
+
+### 6.6 The primitive map, F01–F84
+
+Each line: the survey's primitive and its game, then the verdict, the carrier and the site, in §6.2's
+vocabulary. The survey's own tag is kept where it is [SESSION] or [UNVERIFIED].
+
+| F | the survey's primitive — game | verdict · carrier or reason |
+|---|---|---|
+| 01 | a knowledge list per historical figure — *Dwarf Fortress* | CARRIED · `Person.ledger` (`state/carriers.py:571`) |
+| 02 | an incident storing true identity, alias and visual identification — *Dwarf Fortress* | PARTLY · an Event stores no actor; each witness's `Seen.who` does (`epistemic.py:748-750`); an alias is `conceal`'s (§9.3) |
+| 03 | witness registration — *Dwarf Fortress* | CARRIED · `observers_for` (`epistemic.py:615-661`) |
+| 04 | rumour spread on a site's offload, scaled by importance — *Dwarf Fortress* | PARTLY · `tell` by presence only (`verb_table.yaml:887`); the chronicle is the one broadcast, instant and realm-wide (`epistemic.py:528-554`); importance scales nothing |
+| 05 | six levels of knowing an artefact's whereabouts — *Dwarf Fortress* | PARTLY · four claim sources and the `chain`'s hops (`rosters.yaml:414`); `with` is world-only |
+| 06 | timestamped fade reconciled at the individual, site-government, culture and civilization levels — *Dwarf Fortress* | PARTLY · per-person decay (`matter.py:235-265`); no collective reconciliation (T-a) |
+| 07 | liaison, diplomat and tavern-visitor rumours — *Dwarf Fortress* | PARTLY · `post_remit` (`inferred`, reads 0) and the chronicle |
+| 08 | bring up an incident, tell a story, drop a body part before a listener — *Dwarf Fortress* | CARRIED · `tell`; `give` of a Record deposits its content (`witness.py:532-548`) |
+| 09 | reputation computed from the incident and both parties — *Dwarf Fortress* | PARTLY · the hearer's relation to and record of the teller (`options.py:1085-1095`); the tie to the subject is absent (H-180) |
+| 10 | a three-state relationship: by alias, by true name, by sight — *Dwarf Fortress* | PARTLY · two states: `who` known by presence or a knot, or withheld by channel (`rosters.yaml:949-954`); `marks` is `()` |
+| 11 | secret identity and cover profession — *Dwarf Fortress* | GAP → `conceal` (§9.3) |
+| 12 | rumours cannot be false — *Dwarf Fortress* | CARRIED today · `tell`'s `holds` conjunct (`verb_table.yaml:877-881`) |
+| 13 | a false crime report to frame another — *Dwarf Fortress* | CARRIED, composed · `utter` of a `HOLDS` charge + `petition`, neither checking truth (`:703-726`) |
+| 14 | interrogation as a skill contest — *Dwarf Fortress* | GAP → `interrogate` (`a proposition`, interim `sigma_leverage`) |
+| 15 | conviction tolerating plausible error — *Dwarf Fortress* | CARRIED · `determine` reads no truth (`effects_information.py:284-297`) |
+| 16 | a spy befriending sources under a cover profession — *Dwarf Fortress* | COMPOSED · `tell` + the recruit's own `oblige` + the `post_remit` channel (`epistemic.py:445-525`) |
+| 17 | legends mode — *Dwarf Fortress* | SYSTEM · the log and `occasioned_by`; no character reads it (AX-2); proposal 1 |
+| 18 | values, facets and needs; memories rewriting values — *Dwarf Fortress* [SESSION] | PARTLY · `pursuits` × `alignment` (`choose.py:326-329`); Q4 need; memories never move pursuits (AX-3) — `argue` does |
+| 19 | interrogating an innocent costs nothing — *Dwarf Fortress* | PARTLY, by design · priced by reception, not by a penalty (`interrogate`) |
+| 20 | a thought or moodlet stack — *RimWorld* [SESSION] | DOES NOT APPLY · no moods; `stance` rows are the nearest |
+| 21 | mental-break thresholds — *RimWorld* [SESSION] | DOES NOT APPLY as an outcome · a crossing emits and never acts (`matter.py:49-50`; T-b) |
+| 22 | a social interaction roll: chat, deep talk, slight, insult — *RimWorld* | PARTLY · `tell` contests `a standing` (`verb_table.yaml:889`) |
+| 23 | an insult's 4% (a slight's 0.5%) chance of a social fight — *RimWorld* | DOES NOT APPLY · no per-tick probability (AX-5); `fight` is chosen |
+| 24 | a fight's outcome as opinion (+38 cathartic, −22 angering) — *RimWorld* | PARTLY · a lost field writes grudge and morale rows (`effects_combat.py:353-358`); `fight` writes none |
+| 25 | trait opinion filters — *RimWorld* | PARTLY · `stance_toward` in `score` |
+| 26 | trait damping and amplifying (Kind; Bloodlust ×4) — *RimWorld* | PARTLY · the person-side refusal gate, dormant (H-146) |
+| 27 | the storyteller; raid points from wealth — *RimWorld* [SESSION] | DOES NOT APPLY · AX-5; T-c |
+| 28 | ideoligion precepts — *RimWorld* [UNVERIFIED] | PARTLY · `pursuits` and `alignment`; H-146's gate |
+| 29 | approval-gated immigration — *Manor Lords* [SESSION] | CARRIED · `migrate`'s capacity throttle |
+| 30 | the family or burgage household — *Manor Lords* | CARRIED · the `hearth` rung and `reside` (`rosters.yaml:104-115`) |
+| 31 | AI towns and rival lords — *Manor Lords* | PARTLY · factions are Propositions and seats; no town acts (AX-1) |
+| 32 | development perks — *Manor Lords* | DOES NOT APPLY |
+| 33 | a lord's relation scalar — *Bannerlord* | PARTLY · `Person.stance` rows `(referent, valence, weight)` (`person_q.py:51-60`) |
+| 34 | traits consumed by AI decisions — *Bannerlord* | CARRIED · `score` (`choose.py:326-329`), and illegible for the same reason (finding 3) |
+| 35 | amplified relation swings per trait — *Bannerlord* | DOES NOT APPLY · gains are fixtures, not traits |
+| 36 | an execution starting a feud, through Honour, Mercy and clan relations — *Bannerlord* | PARTLY · a lost field's grudge rows toward a faction; a `Felled` `fight` leaves none; no kin graph is read (`tie / knot` unread) — family 63, `forgive` |
+| 37 | a kingdom vote weighted by influence — *Bannerlord* | PARTLY · members' own `commit`s counted by a Query (K-07), unweighted; `Person.weight` unread there |
+| 38 | periodic clan defection scoring — *Bannerlord* (mods) | CARRIED as a choice · `release` and `commit` through `score`; no periodic check |
+| 39 | persuasion with refusal thresholds — *Bannerlord* (mods) | GAP → `argue`; S27.4 refuses Ob > 2 × Pool (`resolve.py:585-590`) |
+| 40 | prisoner ransom or execution — *Bannerlord* | COMPOSED · `transfer` + `pardon`; execution is `custody` + `fight` (§9.8) |
+| 41 | a lord's memory of votes, promises and betrayals — the *Bellum Civile* mod | CARRIED · event-kind claims (`commitment.made`, `tenure.closed`) in witnesses' ledgers (`witness.py:380`), retellable by `tell` |
+| 42 | a treason indictment — *Warband*, *Bellum Civile* | COMPOSED · the charge (K-35) |
+| 43 | citizen routines, addresses and workplaces — *Shadows of Doubt* | PARTLY · `contain`, `reside`, `move`; no routine (AX-1) |
+| 44 | fingerprints and footprints with decay — *Shadows of Doubt* | PARTLY · `Claim.confidence` decays; no trace at a place for a later reader (§6.2, P12) |
+| 45 | witness recall weighted by familiarity and anomaly — *Shadows of Doubt* | PARTLY · the `seen` claim, with no familiarity weight |
+| 46 | case-board folders and fact strings — *Shadows of Doubt* | PARTLY · `reconstruct`, with no links |
+| 47 | incrimination transferred through linked facts — *Shadows of Doubt* | GAP · no reader joins claims |
+| 48 | case submission regardless of correctness — *Shadows of Doubt* [SESSION] | CARRIED · `petition`, `determine` |
+| 49 | a persistent print database — *Shadows of Doubt* | DOES NOT APPLY · decay and eviction; the log unread by characters |
+| 50 | a killer choosing acquaintances as victims — *Shadows of Doubt* | PARTLY · `tell` and `give` target known persons (`options.py:850`); `fight`'s subject is any referent |
+| 51 | social credit — *Shadows of Doubt* | DOES NOT APPLY · T-a; standing is computed (`standing_of`) |
+| 52 | a secret created by an illicit act — *Crusader Kings III* | CARRIED, composed · ledger asymmetry (AX-2); every act witnessed by presence |
+| 53 | a find-secrets task, witness-free — *Crusader Kings III* | DOES NOT APPLY, by design · a finding is an act at a place |
+| 54 | expose or blackmail — *Crusader Kings III* | COMPOSED · `tell`; the demand is a `petition` with a held Record (family 34) |
+| 55 | weak and strong hooks — *Crusader Kings III* | DOES NOT APPLY · D-5 (`verb_table.yaml:757`) |
+| 56 | refusing blackmail exposes the secret — *Crusader Kings III* | COMPOSED · `evade / defy` and the other's own `tell`; no automatic exposure (AX-1) |
+| 57 | a secret lost when its knowers die — *Crusader Kings III* | PARTLY · a dead person's ledger goes with him; others' copies persist, decaying |
+| 58 | a knower sharing a secret onward — *Crusader Kings III* | CARRIED, dormant · the chain extends per hop (`witness.py:682-685`); no two-hop content observed at defaults |
+| 59 | opinion, stress and memories; the Ledger of 1.19 — *Crusader Kings III* | PARTLY · `stance`, `ledger`, the log |
+| 60 | promotion in a hierarchy on an encounter's outcome — *Nemesis* | DOES NOT APPLY · `confer` by a basis, never automatic (T-b) |
+| 61 | player-specific memory that changes looks and lines — *Nemesis* | CARRIED · per-person ledgers; `record(p, teller)` is per hearer (`options.py:1001-1040`) |
+| 62 | a covenant whose violation costs −90 to −110 with every faction — *Caves of Qud* | DOES NOT APPLY · T-a; a breach is a sworn or performed Query |
+| 63 | reputation spent to buy secrets — *Caves of Qud* | COMPOSED · `give` or `transfer` + `tell`; no currency |
+| 64 | gossip valued by the faction it is about — *Caves of Qud* | GAP, SYSTEM · no subject-side valuation (H-180's shape) |
+| 65 | a secret tradable once — *Caves of Qud* | PARTLY · the told deposit's dedup by origin (`witness.py:642-658`) is the same damper's shape |
+| 66 | grammar-generated histories engraved on artefacts — *Caves of Qud* | PARTLY · a held `faction_sheet`'s content is a belief (`witness.py:532-548`); nothing generates |
+| 67 | needs-driven goals with open means — *Oblivion* | CARRIED · Q4 need → `opening_set` (`world_q.py:1436-1442`) |
+| 68 | a kinship-triggered revenge quest — *Skyrim* | GAP → SYSTEM · G1's judged regard over deed claims; the `tie`/`knot` carrier exists, unread — family 63 |
+| 69 | a relative inheriting the role — *Skyrim* | DEFERRED · R-5's `inheritance` (§13.5) |
+| 70 | a mental model per person and place — *Talk of the Town* | CARRIED · claims keyed by `subject` |
+| 71 | a belief facet with its evidence type — *Talk of the Town* | CARRIED · `Claim.source`, `chain`, `confidence` |
+| 72 | propagation, misremembering, forgetting — *Talk of the Town* | CARRIED, thin · `tell`'s chain; `_told_value`'s drift (`witness.py:137-174`); decay and eviction |
+| 73 | lies with claimed sources — *Talk of the Town* | GAP (G7) · `chain` is already the claimed-source carrier; a lie would fabricate one |
+| 74 | a human curator and actor — *Bad News* | DOES NOT APPLY |
+| 75 | fabricated evidence with strength, believability and ~6-year decay — *The Guild 2* [SESSION] | PARTLY · `forge` THIN, `forgery_quality` read by nothing (K-48); decay is confidence |
+| 76 | slander spreading a fabricated crime — *The Guild 2* [SESSION] | GAP (G7) for a false telling; a false charge COVERED (F13) |
+| 77 | a mob burning a residence at a popularity threshold — *The Guild 3* | DOES NOT APPLY as a mechanism · T-b; the crossing Event is the warning stage; a mob is persons' own `fight` or `sabotage` |
+| 78 | a housing score fixed once — *Tropico 5* | CARRIED, inversely · `migrate` is re-formed every deliberation |
+| 79 | die-hard → moderate opinion diffusion — *Tropico* [SESSION] | DOES NOT APPLY, by design · facts travel, dispositions do not (`rosters.yaml:869-873`) |
+| 80 | object advertisement and argmax — *The Sims* [SESSION] | CARRIED, varied · `score` and a Gumbel draw (`choose.py:280-286`) |
+| 81 | pop and interest-group approval — *Victoria 3* [UNVERIFIED] | DOES NOT APPLY · T-a; a cohort is a weighted Person with a ledger (`carriers.py:620-628`) |
+| 82 | discontent, hope and faction demands — *Frostpunk* [UNVERIFIED] | PARTLY · a cohort petitions as any Person does [UNVERIFIED: a cohort deliberating in the realm] |
+| 83 | qualities and storylets — *Fallen London* [SESSION] | DOES NOT APPLY · no script |
+| 84 | legacy characters carried across campaigns — *Wildermyth* [UNVERIFIED] | DOES NOT APPLY |
+
+### 6.7 The verbs, one by one, through carriage
+
+The 44, then revision 4's twelve additions, then revision 5's two, alphabetical within each; none is
+skipped. **Sets** are the churn survey's A–K; "implies" is what it says of a verb of this kind;
+applicability is decided by the code.
+
+| verb | sets | primitives | what the survey implies | applicability | change | conflict |
+|---|---|---|---|---|---|---|
+| `build` | A | none (F32 the nearest) | nothing | DOES NOT APPLY | none | none |
+| `carry` | G, H | F37, F43 (agenda) | who may put a matter before the room decides what is adjudicated | PARTLY — declined (`verb_table.yaml:121`) | none; nothing beyond §3.5 | none |
+| `commit` | F, G | F37, F41 (a commit is witnessed and remembered), F58 | obligation is the accelerant that forces acts | APPLIES; 802 of 802 refused | none (step 2) | none |
+| `comply` | G | finding 6 (compliance emits) | obedience should be legible against refusal | PARTLY (untyped) | none (K-01) | none |
+| `confer` | F, H | F60 inverted (promotion is a seat's act) | standing converted at a chokepoint | PARTLY | none beyond §7.2 | none |
+| `construe` | D, I | F72 (misremembering), F73's receiving side | distortion belongs where a fact is held | PARTLY — the per-holder content deposit already runs (`witness.py:532-548`); grade `absent` | none (ruled) | none |
+| `convene` | A, H | F37's "when" | a sitting is an occasion others act toward | APPLIES; `date.fired` never reaches WITNESS (`world_q.py:1362-1367`) | none to the row; H-163 limit 4 | none |
+| `create_record` | K, D | F46; F75's true twin | a content-bearing, carriable memory is the middle tier churn needs | APPLIES | none | none |
+| `destroy_record` | D, I, J | F57's deliberate form (ending a carrier), F65 | killing the carrier suppresses the fact | APPLIES; held (H-75) | none | none |
+| `determine` | H, E | F15, F48, F42; H → E | a verdict reshapes dispositions through what it emits — chronicle-public here | APPLIES; uncontested today, quorum 1 | the contested widening; the bench's obstacle from testimony (SC lane) | none |
+| `dispatch` | G, C | F49 inverted; finding 6 (an order with no refusal Event) | a standing order needs a refusal with a reason | APPLIES; `order.given` is chronicle-public and read by no decision | none (ruled; ED-IN-0211) | none |
+| `establish` | F | F31 | institutions as thresholds | PARTLY | none | none |
+| `evade / defy` | G, I | F56 (refusal); finding 6; failure mode 7 | a refusal should state its deciding term, and covert and open refusal should cost differently | PARTLY — one Event, no reason | none now (K-01, K-24) | none |
+| `examine` | B | F03, F44, F45 | traces should decay faster than reputations and be readable later at a place | APPLIES; content-free today (`witness.py:380`) | 4.5's producer (§6.3) | AX-7: band-mediated, never a bare `True` |
+| `exchange` | F | F63 (information is not currency here) | — | PARTLY (THIN) | none | none |
+| `fight` | A, G | F23 inverted (a choice, not a per-tick chance), F24 (no opinion write), F36 (no feud write) | the act most in need of a damping term and a grudge reader | APPLIES; a `Felled` band leaves no grudge | none to the row; the feud is G1/G2, its closer `forgive` (§9.4) | none |
+| `forge` | I, D | F75 (believability unread), F13's document form | fabricated evidence needs believability weighting and a detector | APPLIES; THIN (H-169) | none; D7's reader is `forgery_quality`, read where `teller_weight` reads a chain (K-48) | none |
+| `found` | A | none | nothing | DOES NOT APPLY | none | none |
+| `give` | C, D | F08 (physical evidence as a telling), F58 | a document in a new hand is a belief — the one carriage with no loss | APPLIES exactly (`witness.py:283-305`) | the suite's Rung widening | none |
+| `interview` | B, C | F45; F14's opposite (no contest) | asking reveals the asker (instrumental −0.3, `rosters.yaml:2218`) | APPLIES, as a prompt (K-36) | none beyond K-36 | none |
+| `issue` | F, K | F42, F53's warrant | a document is carriage with a licence attached | APPLIES | none | none |
+| `levy` | F | F27 inverted (no raid points) | — | APPLIES | none | none |
+| `march` | A, E | F24, F36: the **only** act that writes disposition, appended without bound (`effects_combat.py:353-358`) | hostility converting to action needs a signed loop and a damper (failure mode 1) | PARTLY | register the grudge loop's sign (ID-16, K-45); `forgive` as its closer (§9.4) | none |
+| `migrate` | G | F29; F78 inverted | re-appraised housing beats a one-off score | APPLIES (D11 met) | none | none |
+| `move` | A, B | F43; presence is the registration gate (`epistemic.py:322-347`) | — | APPLIES | none | none |
+| `oblige` | F, C | F16 (the obligee's channel, `inferred`) | institutional staff should know their seat's business second-hand | APPLIES; `inferred` reads 0 with an obligee seated (`epistemic.py:497-502`) | none to the row; isolate why `inferred` is 0 (SYSTEM, §10.3) | none |
+| `open_case` | H | F42, F47 | adjudication converts diffuse claims into one official fact | APPLIES | none (K-35) | none |
+| `petition` | H, C | F13 (a false report), F54 (a demand) | accusation is carriage into the institution; falsity enters at registration | APPLIES — not evidence-gated, by design | none | none |
+| `reconstruct` | D, E | F46, F47 | a board fails when the rules ignore links | APPLIES; a self-feeding loop; waits (K-37) | none | AX-3 |
+| `release` | F, G | F38 (defection); failure mode 7 | defection needs lag and a reason | APPLIES; instant, costed, witnessed, reasonless | none; its own-state decline is shared with `forgive`'s (§9.4) | none |
+| `repudiate` | F | F38 | — | DOES NOT APPLY distinctly | the cut stands (R-3) | none |
+| `research` | C, D | F66 (reading objects), F08 | reading is the second most grounded route, and carries provenance | APPLIES; content-free today | 4.5's producer, the cheapest (§6.3) | none |
+| `restore` | A | none | nothing | DOES NOT APPLY | none | none |
+| `revoke` | H, F | F42 (an indictment's end) | — | PARTLY | none (R-4) | none |
+| `speak` | B, C | F08's hollow form: witnessed, carries nothing, seeds `tell` (`epistemic.py:256-260`) | speech without content is trivial carriage (failure mode 5) | PARTLY | none (§3.5 stands) | none |
+| `succeed` | F, K | F69 | — | DEFERRED reader (R-5) | none | `conferral_bases` closed |
+| `surveil` | B, I | F16, F45; counter-espionage | — | APPLIES; the Person case held (K-16) | 4.5's producer; the Person case fails test 4 (six-as-six) | none |
+| `survey` | K, D | F66; F49's opposite (a sheet goes stale by construction) | a record is read because it can be spent (D9) — here, held | APPLIES | the Rung widening | none |
+| `tell` | C, E, I | F04, F08, F58, F72, F73 (the lie), F64 | carriage with a source tier, decay and C's reply; carried content must couple to stakes | APPLIES | **widened: `to` may be the topic** (D5; §9.6, K-43); the telling workplan's T7 so that content outranks `news.told` at `said_of` (failure mode 5); the lie stays G7 | none (T-e kept) |
+| `thread_read` | B | F18's neighbour (a gated reading) | — | APPLIES exactly (P-08) | waits (H-85) | P-08 |
+| `tie / knot` | E, B | F68 (kinship), F10 (a knot admits the witness key) | ties are what appraisal filters through; a feud needs a kin graph | PARTLY — `knot` read, undirected, by `witness_key` only | none (H-182); G1's tie weight is its reader | none |
+| `transfer` | F | F63, F40 (ransom) | — | APPLIES | none | none |
+| `utter` | A, I, K | F52 (a secret is an utterance others lack), F13 (false content utterable — no precondition) | falsity enters at registration | APPLIES | step 2 (the hold); a computed `mood` source (§8.1); one shared Proposition mint with `proclaim` (§9.2) | none |
+| `work` | A | none | nothing | DOES NOT APPLY | none (K-09) | none |
+| `argue` | E, G | F18 (values moved by argument), F39 | — | APPLIES | none | AX-3's licensed mover of what is held right |
+| `conceal` | I, B | F11, F10 (the alias) | — | APPLIES | none | none |
+| `covenant` | F | F62's shape, without the all-factions penalty | — | APPLIES | none | none |
+| `detain` | H, A | F40 | — | APPLIES | none | none |
+| `interrogate` | H, C | F14, F19 | — | APPLIES | approach as data (§6.1) | none |
+| `pardon` | H, F | F40 | — | APPLIES | none | distinct in ordinary use from `forgive` (§9.4) |
+| `raze` | A | none | — | DOES NOT APPLY | none | none |
+| `sabotage` | A | F77's outcome, as a choice | — | PARTLY | none | none |
+| `seize` | H, D | F53 (a document taken) | — | APPLIES | none | none |
+| `steal` | I, D | F63's covert half | — | APPLIES | none (R-8) | none |
+| `tend` | A | none | — | DOES NOT APPLY | none | none |
+| `train` | G | F18 | — | APPLIES | none | P-08 |
+| `forgive` (revision 5) | E, G, J | F24, F36, F68; D8; failure mode 1 | a grudge should barely decay, so retaliation can arrive late — not never end | APPLIES | new (§9.4) | the telling workplan's spine (K-41); its reach (K-49) |
+| `proclaim` (revision 5) | C, A | F04, F07, F77; D3's warning stage | a public fact reaches those not present, before a collective act | APPLIES | un-deferred (§9.2) | K-34, retired for the verb; K-11 (K-42) |
+| `determine` (contested), `confer` (+ term), `give` (+ Rung), `survey` (+ Rung), `march` (arrival), `oblige` (reader) | — | — | — | unchanged by this survey | — | — |
+
+### 6.8 What the churn survey leaves, the verbs it suggests, and where it disagrees
+
+**Its gaps, classed** (§5's senses; *verb* is a new verb).
+
+| churn gap | class | where it lives |
+|---|---|---|
+| C's awareness of a telling (D5) | COVERED for a co-located C (`witness.py:380`; `world_q.py:1431`); **WIDENED** for an absent C — `tell` admits `to == subject` (§9.6, K-43) | `person_q.py:269` (`out.discard(topic)`); `options.py:850` |
+| lies and fabricated evidence, with believability and a claimed source | SYSTEM, built for reception (`options.py:1043-1097`); production is `forge` THIN (H-169) and the lie G7 (K-15); the claimed source is already `Claim.chain` | `said_of`, G7's site (`…telling-workplan.md:311`) |
+| reputations decaying slower than detail (D8) | SYSTEM at MATTER — one rate for every claim (`matter.py:235-265`; `data/fixtures.py:258`); a per-stem rate map would be a declared, swept fixture (H-40's sweep widened) | `Fixtures.claim_decay` (§10.3) |
+| a warning stage before a collective act; hazard rates | SYSTEM, carried: every band crossing is a witnessable Event (`matter.py:36-82`; T-b); hazard rates refused (AX-5, K-44); a seat's public warning is `proclaim` (§9.2) | — |
+| refusal of a standing order with a stated deciding term | SYSTEM · fold refusals keyed per conjunct (`data/verbs.py:697-737`); a chosen refusal's term is its Scene's occasioning question, one hop off the Act (`epistemic.py:753-764`) | `_term_why` (§10.3) |
+| re-appraisal when facts change (D11) | COVERED | `options.py:43-204` |
+| the record as a usable instrument (D9) | COVERED character-side — held Records (`research`, `give`, `carry`, `seize`, `steal`); DOES NOT APPLY for the log (AX-2); the player's handle is the UI lane's | proposals 1 and 11 (K-47) |
+| a revenge or feud chain from kinship or an execution | SYSTEM · G1's judged regard, G2's polarity, `tie`/`knot` as G1's weights; and the grudge's closer → **verb: `forgive`** (§9.4) | `person_q.regard` (`:63-69`); `effects_combat.py:353-358` |
+| norm-gated social exchanges (*Prom Week*, *Versu*, both [SESSION]) | SYSTEM, partly built · the refusal gate (H-146), `binds` on seats, presence conjuncts | `options.py:111-114` |
+| a damping term proportional to hostility | SYSTEM · `score` adds stance raw (`choose.py:328`); the dampers are the budget, `opportunity_key`, dedup, hop decay and the cap; the grudge loop needs an ID-16 sign row (K-45) | `hole_register.yaml`'s `LOOP` rows |
+| a public announcement to a place | **verb: `proclaim`**, un-deferred (§9.2, K-42) | `epistemic.py:553-554` |
+| a documentless order refused with a reason (finding 6) | an observation · ED-IN-0211 holds `dispatch` and `comply` | — |
+| `inferred` reads 0 | SYSTEM · a defect to isolate (`epistemic.py:497-502`; §10.3) | `_ch_post_remit` |
+
+**Candidate verbs tested under §1's five tests, and refused.** The first test each fails is named.
+
+| candidate | fails | why, and what carries it instead |
+|---|---|---|
+| `warn`, `confront` | 2 — an axis | `tell` with `to` the topic (§9.6) |
+| `vouch` | 2 | `commit` to an uttered Proposition about the person |
+| `retaliate`, `avenge` | 1 — a choice | the outcome of a chosen `fight`, `march` or `sabotage` under a grudge (direction 3) |
+| `rally`, `incite` | 2 | `utter` and the hearers' own `commit`s; `argue` |
+| `denounce` | 2 | the charge: `utter` of a `HOLDS` Proposition + `petition` (K-35) |
+| `gossip` | 2 | `tell` |
+| `recant` | 2 | `release` of the `commit` + a contrary `tell` |
+| `reconcile` | 2 | two `forgive`s, and optionally a `tie` |
+| refuse a standing order openly | 2 | `evade / defy` |
+| `confirm`, `deny` a rumour | 2 | `tell`; the limit is `said_of`'s newest-wins pick (T7) |
+| `scapegoat` | 2 | `utter` of a `HOLDS` charge against an innocent + `petition`, neither checking truth |
+| `shadow`, `tail` | 4 — the rosters | six-as-six (`verb_table.yaml:950-960`); `surveil`'s Person case waits (K-16) |
+| `lie` | 5 — a producer | no producer for a false value — a value space nothing supplies (K-37's problem); G7 |
+
+Thirteen candidates (eighteen words), all refused.
+
+**Deferred items re-tested under direction 11.**
+
+- **`proclaim` — un-deferred** (§9.2); K-34 retires for the verb. K-11's Record kinds stay deferred:
+  an edict, an embargo, an interdict, an emergency or a condemnation is a proclaimed Proposition whose
+  *effect* reader is absent, so no Record kind is needed when the reader comes (K-42).
+- **`truce`** — stays deferred (K-32): no reader; when it comes, a Proposition both sides commit to,
+  not a Record.
+- **`debt`** — stays deferred (K-14).
+- **The outlawry of an organization** — stays deferred: a `condemnation` is a proclaimed `HOLDS`
+  Proposition naming the faction's Proposition in its `value`, and its reader is absent.
+- **`surveil`'s Person case** — stays held (test 4; K-16).
+- **`tell`'s lie** — partly: reception built, production G7 (K-15).
+- **Thread operations** — stay deferred (plan positions 27/29f; H-85).
+
+**Counts.** Verbs justified and developed: 2 (`forgive` new; `proclaim` un-deferred). Candidates
+tested and refused: 13. Deferred items un-deferred: 1. Widened reaches: +1 (`tell`).
+
+**The churn survey against the first survey and the sources.**
+
+| # | the churn survey says | the other source | disposition |
+|---|---|---|---|
+| 1 | *Crusader Kings III* 1.19 "Scribe" released 20 April 2026; 1.20 "Crozier" with *By God Alone* on 30 September 2026, hotfix 1.20.0.3 on 1 October 2026 [DEV via patch trackers] | revision 4 tagged 1.19 [UNVERIFIED] (§6.4, item 6); the games extraction pass confirms only 1.13 | still [UNVERIFIED] here; carried |
+| 2 | *Shadows of Doubt*'s case form is "accepted whether or not it is correct" [SESSION: *Mechanics of Inquiry*] | revision 4 found the first survey internally inconsistent on this (Appendix D, s(1)) | the disagreement stands; the churn survey repeats the first survey's claim without verifying it |
+| 3 | *Shadows of Doubt* reached 1.0 on 26 September 2024 | both agree; the churn survey omits early access (24 April 2023; §2) | not a conflict |
+| 4 | *The Guild 2*'s ~6-year evidence decay [SESSION]; *Manor Lords*' version dates; *RimWorld* 1.6 (11 July 2025); the *Nemesis* patent, U.S. 10,926,179, expiring 11 August 2036 | not in revision 4 | carried [UNVERIFIED] |
+| 5 | the *Third Strand*'s M3 — belief in transit with *source · strength · believability · decay* — which `04_PROVENANCE.md:162` says the `Claim` carrier "already has all four" | believability is no field of `Claim`; it is `teller_weight`, computed when read (`options.py:1043-1097`) | a correction to that file's wording (Appendix D, u); the survey's own reading — believability is unshipped in *Dwarf Fortress* — is unaffected |
+
+**The directives against rulings and directions.**
+
+| directive | ruling or direction | resolution (§0 filter step) |
+|---|---|---|
+| D7 false content | AX-7 forbids an unmediated truth, not falsity; AX-2 presupposes "may be false" (`01_AXIOMS.md:104-120`); K-15 gates the lie at `tell` to G7 | no conflict; sequencing — step 3 |
+| D9 the record as a player verb | no player in the loop; AX-2 forbids a character reading the log | DOES NOT APPLY to the engine; the UI lane's — step 3 (K-47) |
+| D3's hazard-rate thresholds | AX-5's three motions; T-c, no unwound clock | **refused** — the warning stage is T-b's own shape — step 3 (K-44) |
+| D6 report the deciding term | T4 withholds the hearer's absence from the teller on purpose (`person_q.py:246-248`; ED-IN-0282) | `tell` keeps one refusal kind — step 1 (K-46) |
+| D8 grudges decay least | AX-6, nothing permanent without an author; AX-5's fading only removes a claim's confidence (`01_AXIOMS.md:128-141`) | a closer act, `forgive`, not a fade — step 3 (K-41; R-9) |
+| D2 display provenance | the player clause, no state hidden (`01_AXIOMS.md:299-304`) | lawful; the UI lane's — step 3 |
+| D4 the subject tie | AX-2, one's own ledger only | H-180 reads the hearer's own claims — step 3 |
+| D12 carried content → choice | AX-3, evidence never moves what is held right | carried facts move choices through Q2 and clause 4, never `pursuits` — step 3 |
+| finding 2's damping term | T-b; AX-1 | a person-side weight in `score` is lawful; a damping clock is not — step 3 |
+| D1 forbid omniscient appraisal | AX-2; T-f | aligned — met |
+
 ---
 
 ## 7. The resolved suite
 
 ### 7.1 The roster
 
-One row per verb: the 44 (alphabetical), then the twelve new (alphabetical). Scale is the table's
+One row per verb: the 44 (alphabetical), then the fourteen new (alphabetical). Scale is the table's
 `scale`; "—" is a declared absence. The structural fields of the 44 were read off the live
 `VERB_TABLE` by import (2026-10-04) and agree with the audit pass's roster except in `fight`'s
 counterparty (§14.5, item 16); the group column uses §3.2's codes. Degree bands: `sigma_leverage` prizes use Overwhelming / Success / Partial / Failure; `a field`
@@ -860,7 +1293,7 @@ uses Declared / Won / Lost / Unopposed (`field_degree_bands`, `rosters.yaml:801-
 | `succeed` | retained (THIN, R-5) | binding_decision | person | own | subject | — | none | `Tenure.since` (succeed) | — | G7 | vs `confer`: an heir |
 | `surveil` | retained (Person case deferred) | contested_physical | person | own \| presence:\<rung\> | actor | — | none | `[]` | — | G11 | vs `examine`: a Rung over time |
 | `survey` | **widened** | uncontested_material | person | own | actor | — | none | `Record.exists` (faction_sheet; + a Rung's holding faction) | — | G6 | vs `create_record`: resolved content |
-| `tell` | retained (lie deferred) | social | person | own | subject | to | a standing | `[]` at every band | — | G3 | vs `argue`: any topic |
+| `tell` | **widened** (`to` may be the topic, K-43; lie deferred) | social | person | own | subject | to | a standing | `[]` at every band | — | G3 | vs `argue`: any topic |
 | `thread_read` | retained (deferred) | contested_physical | person | own \| presence:\<site\> | actor | — | none | `[]` | — | G11 | TS-gated |
 | `tie / knot` | retained (split when built) | social | person | own | actor | — | none | `Tenure.since` (tie \| knot) | a bond | G7 | vs `oblige`: person to person |
 | `transfer` | retained | uncontested_material | person | own \| hold:\<store\> | to | — | none | `Rung.stores`, `Tenure.term` | renews fealty; tribute | G8 | vs `levy`: own stores |
@@ -870,8 +1303,10 @@ uses Declared / Won / Lost / Unopposed (`field_degree_bands`, `rosters.yaml:801-
 | `conceal` | **new** | social | person | own | actor | — | none | `Record.exists` (cover) | concealed identity | G6 | vs `forge`: about oneself |
 | `covenant` | **new** | social | settlement | remit:issue | to | to | none | `Record.exists` (treaty \| alliance), `Record.stages` | treaty, alliance | G14 | vs `petition`: a seat, across |
 | `detain` | **new** | contested_physical | person | remit:dispatch | none | subject | a standing [CONFIDENCE: medium] | Overwhelming/Success: `Tenure.since` (custody); else `[]` | custody, hostage | G13 | vs `fight`: prize, write |
+| `forgive` | **new** (revision 5) | social | person | own | subject | — | none | `Person.stance` (the actor's own negative rows naming `subject`, removed) | ends a grudge | G15 | vs `pardon`: one's own regard, not another's edge |
 | `interrogate` | **new** | social | person | remit:determine | actor | subject | a proposition | `[]` at every band | — (a `confession` proof) | G13 | vs `interview`: remit, custody |
 | `pardon` | **new** | binding_decision | settlement | remit:determine | subject | — | none | `Tenure.until` (custody \| ban) | ends custody, a ban | G13 | vs `release`: another's edge, via the seat |
+| `proclaim` | **new** (revision 5; un-deferred, K-42) | binding_decision | settlement | remit:issue | none | — | none | `Proposition.exists` | an edict, an emergency, an embargo, an interdict, a recognition, a condemnation, or a war's public announcement — each a proclaimed Proposition about a place | G14 | vs `utter`: through a seat, and public |
 | `raze` | **new** | contested_physical | settlement | remit:dispatch | none | — | none | `Site.exists` / `Rung.exists` → absent | ends a place where the seat's faction is mustered | G9 | vs `sabotage`: existence |
 | `sabotage` | **new** | uncontested_material | person | own \| presence:\<site\> | actor | — | none | `Site.condition` (−) | — | G9 | vs `restore`, `work`: sign, beneficiary |
 | `seize` | **new** | uncontested_material | settlement | remit:issue | none | — | none | `Tenure.until`, `Tenure.since` (hold on a Record under a warrant; on a Rung under occupation) | ends another's hold; conquest of an occupied place | G13 | vs `give`: no consent |
@@ -879,20 +1314,21 @@ uses Declared / Won / Lost / Unopposed (`field_degree_bands`, `rosters.yaml:801-
 | `tend` | **new** | uncontested_material | person | own | subject | — | none | `Person.body` (+) | — | G15 | vs `restore`: a Person |
 | `train` | **new** | uncontested_material | person | own | subject | — | none | `Person.capability` (un-retired) | — | G15 | vs `tend`: capability |
 
-**Counts (recounted from the table by script, revision 4).** 56 rows: the 44 and 12 new. **The suite is
-55 verbs** — the 44, less the recommended cut of `repudiate`, plus 12 (`steal` carried on R-8's
-recommendation; under R-8 (b) the suite is 54). Of the 43 retained: 36 unchanged (four of them —
-`comply`, `construe`, `dispatch`, `evade / defy` — kept by ruling), 1 narrowed (`work`, delta ≥ 0) and 6
-widened (`confer`, `determine`, `give`, `march`, `oblige` by a new reader only, `survey`). Contested rows:
-7 of 55 (`argue`, `detain`, `determine`, `fight`, `interrogate`, `march`, `tell`); `steal` is uncontested.
-Across the suite, 38 of 55 rows admit `own` (29 of them `own` alone). New verbs by eligibility: `own` 6
-(`argue`, `conceal`, `sabotage` — `own` | `presence:<site>` — `steal`, `tend`, `train`);
-`remit:dispatch` 2 (`detain`, `raze`); `remit:determine` 2 (`interrogate`, `pardon`); `remit:issue` 2
-(`covenant`, `seize`) — every
-remit act already on the roster (`rosters.yaml:302`), so no `remit_acts` value is added and H-52's
-warning (`:298-301`) is not engaged. Not in the suite: `execute` (§9.8, R-1); `besiege`, folded into
-`march` (K-28); `proclaim`, deferred with its readers (K-34). `seize`'s Rung object is part of the new
-verb's own reach, not a widening of an existing row.
+**Counts (recounted from the table by script, revision 5).** 58 rows: the 44 and 14 new. **The suite is
+57 verbs** — the 44, less the recommended cut of `repudiate`, plus 14 (`steal` carried on R-8's
+recommendation; under R-8 (b) the suite is 56). Of the 43 retained: 35 unchanged (four of them —
+`comply`, `construe`, `dispatch`, `evade / defy` — kept by ruling), 1 narrowed (`work`, delta ≥ 0) and 7
+widened (`confer`, `determine`, `give`, `march`, `oblige` by a new reader only, `survey`, and in revision
+5 `tell`, whose `to` may be its topic). Contested rows: 7 of 57 (`argue`, `detain`, `determine`,
+`fight`, `interrogate`, `march`, `tell`); `steal`, `forgive` and `proclaim` are uncontested. Across the
+suite, 39 of 57 rows admit `own` (30 of them `own` alone), and 5 admit `remit:issue` (`issue`, `levy`,
+`covenant`, `proclaim`, `seize`). New verbs by eligibility: `own` 7 (`argue`, `conceal`, `forgive`,
+`sabotage` — `own` | `presence:<site>` — `steal`, `tend`, `train`); `remit:dispatch` 2 (`detain`,
+`raze`); `remit:determine` 2 (`interrogate`, `pardon`); `remit:issue` 3 (`covenant`, `proclaim`,
+`seize`) — every remit act already on the roster (`rosters.yaml:302`), so no `remit_acts` value is
+added and H-52's warning (`:298-301`) is not engaged. Not in the suite: `execute` (§9.8, R-1);
+`besiege`, folded into `march` (K-28). `seize`'s Rung object is part of the new verb's own reach, not a
+widening of an existing row.
 
 ### 7.2 REACH and NOT of the changed verbs
 
@@ -916,7 +1352,12 @@ verb's own reach, not a widening of an existing row.
   (capture attempt, interception or defence, relocation, arrival at unheld land, §9.6); writes the losing
   side's casualties and grudge and, on a won or unopposed field, the arriving army's presence. NOT: title
   (`seize`, `give`, `release`, death); muster (`sides_of`); a larder effect (deferred reader, §10.4); a war
-  declaration (`utter`).
+  declaration (`utter`; its public announcement, `proclaim`); ending the grudge it writes (`forgive`).
+- **`tell`** (widened, revision 5) — as before, and `to` may be the topic itself: B, holding a claim
+  about C, may tell C — a warning or a confrontation. `known_persons` stops discarding the topic
+  (`queries/person_q.py:269`); the counterparty decline (`decision/options.py:172`) still refuses a
+  telling to oneself, and T-e is unchanged — the hearer hears by presence. NOT: a public (`proclaim`); a
+  lie (G7); moving convictions (`argue`).
 - **`detain`** — a Person named in a held warrant; opens `custody` to the seat that issued the warrant.
   NOT: harm (`fight`); release (`pardon`).
 - **`interrogate`** — a Person in custody; the charge's disposition as `confession.made`, whose
@@ -945,14 +1386,22 @@ verb's own reach, not a widening of an existing row.
   inform (`tell`).
 - **`tend`** — raise a present Person's body. NOT: a Site (`restore`).
 - **`train`** — raise one capability on self or a present pupil. NOT: Thread Sensitivity (H-85, P-08).
+- **`forgive`** (revision 5) — remove one's own negative `stance` rows naming a referent, whatever wrote
+  them: a field's grudge, a field's morale row toward one's own faction, a seeded disloyalty (K-49).
+  NOT: another's custody or ban (`pardon`); an edge (`release`); a bond (`tie / knot`); another's
+  convictions (`argue`); a fade (R-9).
+- **`proclaim`** (revision 5) — mint a Proposition about a rung in the exercised seat's purview, through
+  that seat; its kind is public by the chronicle to everyone alive. NOT: a private vow (`utter`); a writ
+  to a named executor (`issue`); a documentless order (`dispatch`); an instrument across to another seat
+  (`covenant`); the effect of an embargo, interdict or emergency (deferred readers, K-11).
 
 ---
 
 ## 8. States
 
-Every state below is an **output**: the choices that set them are `utter`, `commit`, `covenant`,
-`march`, `move`, `determine`, `detain`, `conceal`, `issue`, `petition`, `confer` and `oblige`, and nothing
-names a state as a verb.
+Every state below is an **output**: the choices that set them are `utter`, `proclaim`, `commit`,
+`covenant`, `march`, `move`, `determine`, `detain`, `conceal`, `issue`, `petition`, `confer`, `oblige`
+and, ending one, `forgive`, and nothing names a state as a verb.
 
 **Carrier rules the code already enforces.** An instrument is a `Record` of a rostered kind with
 **exact** keys — `Record.__post_init__` refuses an unlisted kind and a key set that differs in either
@@ -970,8 +1419,8 @@ no code reads is §0.05's dead carrier.
 
 | state | carrier | parties | writers | readers | duration · drama | status |
 |---|---|---|---|---|---|---|
-| **War** | a `WAR`-mood Proposition whose `subject` and `value` are the two factions, plus live `commit`s to it — already built (`queries/faction_q.py:208-250`; `01_AXIOMS.md:1374-1384`: *"NEVER a stored flag"*) | the utterer and every committed person | `utter`, `commit`; ended by `release` of the commits (peace is `until`, T-m) | `faction_q.at_war` (and whatever `score` makes of it); it gates no verb — a march into an enemy-held settlement needs no war (K-29) | until the last commit is released · a war that outlives its supporters | COVERED — carrier and reader built; a computed declaration waits on build step 2 (`commit` formable on a Proposition) and on a source for `mood`, a payload key a computed act never carries, so a computed `utter` mints `OUGHT` (`loop/effects_information.py:467`; `decision/choose.py:358-369`) [GAP, the charge's too — §14.10] |
-| **Truce** | — | two seats | — | none: its only proposed reader was a `march` refusal or flag, which direction 8 forbids and the fold cannot express (emits are keyed per band, `hole_register.yaml:3309-3313`) | — | DEFERRED with its reader (K-32) |
+| **War** | a `WAR`-mood Proposition whose `subject` and `value` are the two factions, plus live `commit`s to it — already built (`queries/faction_q.py:208-250`; `01_AXIOMS.md:1374-1384`: *"NEVER a stored flag"*). Revision 5: a seat-holder may also `proclaim` the declaration — a second Proposition, about the place, whose `value` is the war's id — which makes it public by the chronicle. `at_war` still reads only the `WAR` Proposition, whose `subject` and `value` must be the two factions (`faction_q.py:244-246`); a proclaimed Proposition's `subject` is a rung, so it is never itself the war (K-42) | the utterer and every committed person | `utter`, then `commit`; announced by `proclaim`; ended by `release` of the commits (peace is `until`, T-m) | `faction_q.at_war` (and whatever `score` makes of it); it gates no verb — a march into an enemy-held settlement needs no war (K-29) | until the last commit is released · a war that outlives its supporters | COVERED — carrier and reader built; a computed declaration waits on build step 2 (`commit` formable on a Proposition) and on a source for `mood`, a payload key a computed act never carries, so a computed `utter` mints `OUGHT` (`loop/effects_information.py:467`; `decision/choose.py:358-369`) [GAP, the charge's too — §14.10] |
+| **Truce** | — | two seats | — | none: its only proposed reader was a `march` refusal or flag, which direction 8 forbids and the fold cannot express (emits are keyed per band, `hole_register.yaml:3309-3313`) | — | DEFERRED with its reader (K-32); re-tested in revision 5 and kept deferred — when its reader comes, a truce is a Proposition both sides commit to, not a Record (§6.8) |
 | **Treaty / peace** | Record `treaty` [terms, to, at] + both holders' `commit` to its Proposition | two or more seats | `covenant`, `commit`; it ends a war only through the parties' own `release` of the war's commits | `_renewals` (tribute as upkeep) | term or breach · lapsed tribute breaks a peace | GAP |
 | **Alliance** | Record `alliance` [terms, to, at] + both holders' `commit` | seats | `covenant`, `commit` | `world_q.mustered` (allies' persons present at a march's destination join the holder's side — interception by an ally) | term or breach · an ally's war pulls you in | GAP |
 | **Vassalage / fealty** | seat A's holder's own `oblige` to seat B; term renewed by `transfer` upkeep (`verb_table.yaml:1149`) | the two seats' holders | `oblige`; ended by `release` (*diffidatio*) or lapse | `state/gate.py::purview_reaches` (H-101: "nothing can be under anything", `hole_register.yaml:1961`) | the term · unpaid fealty lapses and the ladder breaks | GAP (the reader) |
@@ -990,8 +1439,10 @@ no code reads is §0.05's dead carrier.
 | **Faction membership / recognition** | `commit` to a Proposition | member | `commit`, `release` | `sides_of`, `faction_q` | standing | COVERED |
 | **Scheme** | a Proposition the conspirators `commit` to, plus `cover` Records; progress as `Record.stages` | conspirators | `utter`, `commit`, `conceal` | secrecy decay is SYSTEM (§10.3) | until discovered or done | COVERED (composed) |
 | **Debt** | a `covenant` kind with an `amount` key | creditor; debtor | — | `seize` on a lapse (unbuilt) | — | DEFERRED with its reader (K-14) |
-| **Embargo**, **interdict**, **emergency**, **edict** | none-yet: kinds of the deferred `proclaim` | — | — | none yet | — | DEFERRED with `proclaim` and its readers (K-11, K-34) |
-| **Heresy declared** / an organization outlawed | a `condemnation` of a Proposition | — | — | proposed: an accusation grounded on a live `commit` to a condemned Proposition (unbuilt) | — | DEFERRED (K-11) |
+| **Grudge** (revision 5) | `Person.stance` rows `(winning faction's Proposition, −1.0, field_grudge_weight)`, appended to every loser of a lost field at ENCOUNTER (`loop/effects_combat.py:353-358`); a row carries no kind, so a grudge is indistinguishable from any other negative row (K-49) | the holder; the referent | `march` (Won, Lost); ended by the holder's `forgive` | `score`'s stance term (`decision/choose.py:328`); `teller_weight`'s regard where the referent is a teller (`decision/options.py:1087-1090`); G2 would read it into `march` and `fight` (`…telling-workplan.md:305`) | until forgiven · a defeat remembered by everyone who lost it | GAP — the closer (`forgive`, §9.4); the loop's sign is K-45; whether it also fades is R-9 |
+| **Proclamation** (revision 5) | a Proposition minted by `proclaim` through a seat, about a rung in its purview — no new carrier (K-42) | the proclaimer; everyone alive, by the chronicle | `proclaim`; hearers' adherence is their own `commit` | `_ch_chronicle` (`epistemic.py:528-554`), depositing `told_by` with an empty chain to everyone not present (`rosters.yaml:404`); Q2 for those whose reach covers the proclaimer or the rung (`queries/world_q.py:1431-1432`); `ambitions` reads a committed `OUGHT` as a standing need | immutable · an edict nobody in the realm can claim not to have heard | COVERED once built — readers exist; the effect readers of particular proclamations are deferred (below) |
+| **Embargo**, **interdict**, **emergency**, **edict** | a proclaimed Proposition (revision 5, K-42); no Record kind | the proclaimer; whoever commits | `proclaim` | the proclamation's readers above; the **effect** reader of each — code refusing trade across two rungs, a sacrament refused, an emergency power — none yet | — | DEFERRED: the effect readers (K-11) |
+| **Heresy declared** / an organization outlawed | a `condemnation`: a proclaimed `HOLDS` Proposition naming the condemned Proposition in its `value` (revision 5) | — | `proclaim` | proposed: an accusation grounded on a live `commit` to a condemned Proposition (unbuilt) | — | DEFERRED: the effect reader (K-11) |
 | **Claim to a title** | none | — | — | none | — | DEFERRED — the word collides with the `Claim` carrier and the `claim.*` event kinds, and nothing reads it (K-11) |
 | **Charter / privilege / exemption** | a `dispensation` whose `terms` is the grantee | — | `issue` | proposed: a `purview_reaches` exemption (unbuilt) | — | DEFERRED — the instrument exists; the state ships with its reader |
 
@@ -1017,7 +1468,8 @@ shape; `accusation`, `demand`, `challenge` — likewise `petition`'s; `peace` �
 Record would be a second owner of one fact (K-29); `siege` — a Query over arrived armies (K-28);
 `truce` — no reader (K-32), and revision 1's `until` key was in any case a second owner beside
 `Record.stages`; `claim`, `embargo`, `interdict`, `emergency`, `edict`, `condemnation`, `debt` — no reader
-yet. Observation for the FA lane, not adopted here: `treaty` and `alliance` could take `at_war`'s shape
+yet; since revision 5 an embargo, interdict, emergency, edict or condemnation is a proclaimed
+Proposition, so none of those five needs a kind when its effect reader comes (K-42). Observation for the FA lane, not adopted here: `treaty` and `alliance` could take `at_war`'s shape
 (an uttered Proposition plus commits) rather than Records, for the reason `01_AXIOMS.md:1386-1389` gives.
 
 **`tenure_kinds` additions** — two: **`custody`** (prisoner → the issuing seat) and **`ban`** (person →
@@ -1055,8 +1507,9 @@ inquisition hearing — were left out because their `disposes:` tenure was an un
 
 ## 9. New verbs
 
-Twelve rows, written table-ready in the table's own columns and in their resolved form. Grade is
-`assumption` for all twelve. Evidence is written out; the bracketed id is the extraction row, kept as a
+Fourteen rows, written table-ready in the table's own columns and in their resolved form — twelve
+from revisions 1–4, and `proclaim` (§9.2) and `forgive` (§9.4) from revision 5, each passing §1's five
+tests. Grade is `assumption` for all fourteen. Evidence is written out; the bracketed id is the extraction row, kept as a
 courtesy. Every remit eligibility is `issue`, `determine` or `dispatch`, already on the roster
 (`rosters.yaml:302`). Every contested row keys its `writes:` and `emits:` by degree, as the loader
 requires (`data/verbs.py:589-620`; `tell`'s shape, `verb_table.yaml:890-899`). No precondition uses a new
@@ -1227,14 +1680,90 @@ to it, read by `faction_q.at_war` (`queries/faction_q.py:208-250`), on `01_AXIOM
 de jure/de facto shape. A declaration of war is `utter` of that Proposition and then the seats' own
 `commit`s; peace is each committed person's `release`. A march needs no war — `at_war` gates no verb,
 and a march into an enemy-held settlement is the casus belli the other side may answer by uttering.
+**Since revision 5 a declaration of war can also be proclaimed**, and the statement above stands: war
+is the `WAR`-mood Proposition the tree already reads. The two compose as two acts on one carrier. The
+seat-holder `utter`s the war — `subject` and `value` the two factions, which is what `at_war` matches
+(`faction_q.py:244-246`) — and `proclaim`s it to his purview: a second Proposition, about the place,
+mood `HOLDS`, whose `value` is the war's id, carried by the chronicle to everyone alive. `proclaim`
+cannot mint the war itself, because its cell makes its `subject` a rung (§9.2's spec below), and a
+Proposition whose `subject` is a rung is never a war between factions. A public declaration therefore
+costs the declarer two scenes; a private one, one.
 
-**`proclaim` is deferred, with its readers (K-34).** With `war` a Proposition and `truce` deferred
-(K-32), `proclaim` has no Record kind that any code reads — edict, embargo, interdict, emergency and
-condemnation were already deferred as orphans (K-11) — and a verb whose every kind is unread breaks the
-suite's own rule (§8, §10.4). It returns when its first kind has a reader. Its evidence — edicts and
-proclamations [H1-54], the edict of grace [H1-117], emergency decrees [R1-43], proscription lists
-[R1-34], the Policy Instrument [P1-60], censure and embargo [P1-11], a state of emergency [C-32] — stays
-indexed under families 13 and 29 (Appendix B); the war rows [G2-08, G2-55, P2-18, C-38] under family 21.
+**`proclaim` was deferred in revision 3 (K-34) and is un-deferred in revision 5 (K-42).** K-34's ground
+was that no Record kind it would mint had a reader. Revision 5 answers it: the instrument is a
+Proposition, which needs no kind, and its readers exist. The orphan kinds stay deferred with their
+effect readers (K-11).
+
+#### `proclaim` — G14 (revision 5; K-34 retired for the verb)
+*L* proclamare *'cry out', via OF* proclamer. **Fit:** FITS (§4) — the plain word for a seat's public
+announcement, which a reader with no memory of this repo lands on; this document has used it since
+revision 1.
+
+- **why a verb:** the churn survey's rarest and most decisive coupling is registration → carriage
+  (B → C): a fact reaching people who were not there. Valoria's one channel that reaches everyone not
+  present is the chronicle, which admits everyone alive for any kind a `binding_decision` row emits
+  (`epistemic.py:528-554`; claim source `told_by`, `rosters.yaml:404`; its meaning, `:909`). `utter` is
+  `social` and `own` (`verb_table.yaml:1151-1160`), so no public declaration exists: a seat can order a
+  person (`dispatch`), address a writ to an executor (`issue`) and deal across to another seat
+  (`covenant`), but cannot tell its own purview anything. The instrument is a Proposition — K-29's shape
+  (`01_AXIOMS.md:1386-1389`) — which answers K-34's ground: no Record kind is needed.
+- **row:** stratum `binding_decision` · scale settlement · eligibility `remit:issue` via a seat — the
+  substitution `levy` declares, a proclamation being issued (H-52's neighbour, `verb_table.yaml:587`) ·
+  beneficiary `none` · counterparty —
+- **requires:** `all: [existence of subject kind Rung (conjunct place), basis of subject purview
+  (conjunct authority)]` — `issue`'s two-conjunct shape (`verb_table.yaml:417-426`) with `subject` and
+  `Rung` in place of `to` and `Person`, its second conjunct `open_case`'s (`:685-690`). No new form,
+  operand or stem.
+- **writes:** `Proposition.exists` — a matrix row admitting RES, produced today by `utter`. `mood`,
+  `predicate` and `value` are read from the payload as `_eff_utter` reads them
+  (`loop/effects_information.py:463-468`), through **one shared mint** both effects call, so a
+  Proposition's construction lives once; its `subject` is the act's `subject`, the rung, so a proclaimed
+  Proposition is always about a place. A computed act carries none of the three, so it mints `OUGHT`
+  with an empty predicate about the rung — the computed-source gap the war and the charge already have
+  (§8.1), not a new one; a committed `OUGHT` is read by `ambitions` as each committer's standing need
+  about the rung.
+- **emits:** `proclamation.made`. Refusals keyed per clause, `issue`'s shape (`verb_table.yaml:432-437`):
+  eligibility, authority → `proclaim.unauthorized`; place, write → `proclaim.refused`.
+- **contests:** none.
+- **readers:** `_ch_chronicle` — everyone alive; those not co-located hold the deposit `told_by` with an
+  empty chain. `_ch_post_remit` admits the seat's obligees but credits none of them, because `chronicle`
+  precedes it in the ordered roster and the strongest admitting channel credits (`rosters.yaml:398-405`;
+  `loop/witness.py:335-339`) [CORRECTION, §14.11]. Q2: under the shipped claim-subject rule `both` the
+  deposit is about the proclaimer, the minted Proposition and the rung (`epistemic.py:175-198`); clause 2
+  raises it for everyone whose reach covers the proclaimer's place, and clause 1 for everyone whose reach
+  holds the rung — those living at or under it, or holding purview over it (`queries/world_q.py:460-469,
+  :1431-1432`).
+- **producer · composes:** Q2 on a claim about a rung in the seat's purview — reach limb 4
+  (`world_q.py:465-469`), on a `shortfall:` or `condition.band_crossed` claim · before `commit` (the
+  hearers' adherence, formable once build step 2 lands, as every `commit` is), `march` (the ultimatum
+  before a field — D3's warning stage), `determine` (an edict of grace before the bench); after `utter`
+  of a war, to make it public (above) [the author's composition, §14.11].
+- **CONFLICTS:** `utter` — axis: eligibility (`remit:issue` via a seat, not `own`) and stratum (public by
+  the chronicle); `issue` — axis: write row (a Proposition, not a `dispensation` Record) and counterparty
+  (a named executor); `covenant` — axis: write row and counterparty (a Record to another seat's holder);
+  `dispatch` — axis: write row (`dispatch` writes nothing); `speak` — axis: write row; `levy`, `seize` —
+  the other `remit:issue` acts, by write row (stores; a `hold`). The cheaper alternative, named and not
+  taken: re-key `_ch_chronicle` on `Act.via` so that a seat-exercised `utter` is public — a redesign of
+  the channel predicate (H-33, `assumption`) wider than one row, and a rule per act beside the rule per
+  kind.
+- **falsifier:** hand-built first: a `proclaim` through a seat leaves a `proclamation.made` claim held
+  `told_by`, with an empty chain, by a person not co-located with the proclaimer
+  (`test_15d_a_document_holder_who_was_not_there_holds_the_event_as_hearsay`'s shape,
+  `engine/season/tests/test_told_by_channel.py:133`); then `aperture 1 0` `proclaim` ex > 0. Control:
+  with the row withheld, `CLAIMS BY SOURCE`'s `told_by` count is unchanged.
+- **evidence:** the churn survey's F04 (*Dwarf Fortress*'s rumour spread, scaled by importance) and F07
+  (liaison and tavern-visitor rumours); D3's warning stage before a collective act; F77, *The Guild 3*'s
+  mob — what a seat can say before persons act; finding 6; the first survey's P49, a decree to a place
+  (*Suzerain*'s Rizia, §6.2); edicts and proclamations [H1-54]; the inquisitor's edict of grace, a
+  30–40-day window for self-denunciation [H1-117]; emergency decrees [R1-43]; proscription lists
+  [R1-34]; the Policy Instrument [P1-60]; censure and embargo in the faction roster [P1-11]; a state of
+  emergency [C-32] — indexed under families 13 and 29 (Appendix B); the war rows [G2-08, G2-55, P2-18,
+  C-38] under family 21.
+- **blocker · needs_jordan:** none structural · no (step 4: K-29's precedent and the shared mint;
+  overrulable, as K-34 was). Observation for H-33's owner: the chronicle reaches every person alive at
+  once and its deposits carry an empty chain, so `teller_weight` weighs them 1.0
+  (`decision/options.py:1079-1080`) — a proclamation is believed as firsthand everywhere; importance-
+  scaled spread (F04) would be a change to the channel's predicate, not to this row.
 
 #### `covenant` — G14
 *OF* covenant, *present participle of* convenir *'agree' ← L* convenire. **Fit:** FITS [CONFIDENCE:
@@ -1479,17 +2008,93 @@ names the outcome — the body rising — and is refused on direction 3's logic,
 - **blocker · needs_jordan:** a capability-key operand — the `kind` operand, from the fixture or referent
   fallback [ASSUMPTION] · no
 
+#### `forgive` — G15 (revision 5)
+*OE* forgiefan *'give up, remit'* (*for-* + *giefan*, `give`'s own root). **Fit:** FITS (§4) — in
+ordinary use a person *forgives* by ending his own grudge and an authority *pardons* by remitting a
+penalty, which is exactly the suite's split between `forgive` and `pardon`. *Reconcile* names two
+parties' acts, and is two `forgive`s (§6.8).
+
+- **why a verb:** `_eff_march` appends `(the winning faction's Proposition, −1.0, field_grudge_weight)`
+  to the `Person.stance` of every loser of every lost field (`loop/effects_combat.py:353-358`), and
+  nothing ends a row: no verb, and no MATTER motion — the only runtime writer of `Person.stance` is that
+  append (`:358`), and MATTER moves no social quantity (L4, `loop/matter.py:553`). A state nobody can end
+  is AX-6's own named cost, "permanent grudges" (`01_AXIOMS.md:236-238`), and the churn survey's D8 asks
+  that grudges decay *least*, not never. The closer is the holder's own act.
+- **row:** stratum `social` · scale person · eligibility `own` · beneficiary `subject` · counterparty —
+- **requires:** `own_ledger` of `subject` — the actor has heard of whom he forgives — unnamed, as on
+  `survey` (`verb_table.yaml:859-862`), so it carries no `said` and the refusal may stay flat. That a
+  negative row naming `subject` exists is a read of the actor's **own** state (`p.stance`), so it is a
+  person-side decline in `opening_set`, not a stem: the own-state decline pass 1 proposed for `release`
+  (Appendix A, `release`'s hook — declined when the actor holds no releasable edge to the referent),
+  keyed on the row's declared domain and never on a verb name; one decline shared by both rows, no World
+  read, no new form (K-18's route).
+- **writes:** `Person.stance` — the actor's rows naming `subject` with valence < 0, removed. The matrix
+  row admits RES, is `social: true` and already has a producer (`write_matrix.yaml:211-223`), so no
+  `unproduced:` declaration is touched. A stance row is `(referent, valence, weight)` with no kind, so the
+  write ends **every** negative row toward the referent — a field's grudge, the morale row `_eff_march`
+  writes toward the loser's own faction (`effects_combat.py:356-357`), a seeded disloyalty toward a
+  creed's subject (`harness/populated.py:849-851`; `data/cast.py:328-348`). That is the ordinary meaning:
+  to forgive is to stop holding something against someone, whatever it was (K-49).
+- **emits:** `stance.moved` — the matrix row's declared kind, emitted by nothing today
+  (`write_matrix.yaml:217`; `march` emits its field kinds, `verb_table.yaml:608-612`); refusal flat,
+  `forgive.refused` (no negative row → `NO_CHANGE`).
+- **contests:** none.
+- **readers today:** `score`'s stance term, `stance_toward(p, c.subject)` (`decision/choose.py:328`), for
+  every Candidate whose subject is the forgiven referent — a `commit` to a forgiven faction's
+  Proposition stops being discounted; and `teller_weight`'s regard (`decision/options.py:1087-1090`),
+  which asks regard of a **teller**, so it reads a forgiven row only where the referent is a person —
+  today a seeded row toward a creed's subject, never a field's grudge, whose referent is a faction's
+  Proposition id (`data/rosters.py:358`) [CORRECTION, §14.11].
+- **ranking, read from the code:** `score` adds `stance_toward(p, c.subject)`, and a `forgive`
+  Candidate's subject is the referent the actor holds negative rows toward, so the deeper the grudge the
+  lower the Candidate scores: the heaviest grudges are the least likely forgiven — D8's "grudges least"
+  with no fade (R-9). The row takes the default alignment cell, 0.0.
+- **producer · composes:** Q2 on a claim about the referent. A field's grudge names the **winning**
+  faction's Proposition, which enters a loser's `reach` only through a live Tenure to it (limb 2,
+  `queries/world_q.py:461`) — a loser commits to his own faction, not the winner's — and a Proposition has
+  no place for Q2's second clause (`place_of` answers `None`, `world_q.py:410-411`). So a computed
+  `forgive` of a field's grudge waits on a source of Proposition referents — the gap `verb_table.yaml:773`
+  records for `commit`, which build step 2 alone does not supply; until then it forms on what the actor
+  can reach, his own faction (the morale row) and persons [ASSUMPTION: Q2's third clause, a content claim
+  naming the faction, was not traced] [CORRECTION, §14.11] · after `march` (Lost) and `fight`; before
+  `tie`, `covenant`, `commit`.
+- **CONFLICTS:** `pardon` — axis: whose state (one's own interior, not another's `custody` or `ban`
+  through a seat) and write row; `release` — axis: write row (a stance row is no Tenure); `tie / knot` —
+  axis: write row (opens a bond, ends no grudge); `argue` — axis: whose field and which (another's
+  `pursuits`, by contest); `tell` — axis: write row (`tell` writes nothing).
+- **falsifier:** hand-built first: after a `field.lost` plants rows, a `forgive` naming the winner's
+  Proposition leaves `stance_toward(p, F) == 0` and a `stance.moved` in `w.log`; a `forgive` on a
+  referent with no negative row is refused with `forgive.refused`. At realm scale a bare `aperture 1 0`
+  `forgive` ex > 0 cannot observe the closer, because the realm fights no field (K-31) and so holds no
+  grudge row — every execution there would end a morale or seeded row (CLAUDE.md §0.1 pt 2). The realm
+  test therefore counts `forgive` executions whose subject is named by a row a `field.won` or
+  `field.lost` Event planted, walking `w.log` — expected 0 until H-149's and H-175's referents move
+  (K-49). Control: with the row withheld, `populated.run(4, 0)`'s hash is unchanged.
+- **evidence:** the churn survey's finding 2 and failure mode 1 (hostility converting to action with no
+  damper and no closer — *The Guild 3*'s mobs, *RimWorld*'s insult spiral); F24 (*RimWorld*'s fight
+  outcomes as opinion); F36 (*Bannerlord*'s execution starting a feud); F68 (*Skyrim*'s kin revenge);
+  D8; and the code's own demand, `effects_combat.py:353-358` against AX-6's "permanent grudges". Family
+  63 (Appendix B).
+- **blocker · needs_jordan:** the shared own-state decline (with `release`'s hook); a Proposition-referent
+  source for the computed field case · no (step 3, AX-6; step 4, the `march` and `release` precedents).
+  Whether a grudge also fades is R-9 (§13.10).
+- **AX-3:** untouched — what is held right (`pursuits`) moves only by `argue`; a stance row is regard's
+  stored half, which an act already writes (`march`).
+
 ### 9.5 Cross-check
 
 No two new verbs share write row, eligibility and counterparty. Eligibility is shared, and each sharing
 pair differs by write row or counterparty: `remit:dispatch` — `detain` (a `custody` edge; counterparty
 `subject`), `raze` (existence), beside the existing `dispatch` and `march`; `remit:determine` —
 `interrogate` (no write; a prize), `pardon` (`Tenure.until`), beside `determine` and `open_case`;
-`remit:issue` — `seize` (a `hold` moved), `covenant` (a Record `to` a person), beside `issue` and `levy`;
-`own` — `argue` (`Person.pursuits`), `conceal` (a `cover` Record), `sabotage` (`Site.condition`, −),
-`steal` (a `hold` moved), `tend` (`Person.body`), `train` (`Person.capability`). `steal` shares `seize`'s
-write row and differs by eligibility and licence — the `carry`/`open_case` shape, a sibling pair rather
-than a thin one.
+`remit:issue` — `seize` (a `hold` moved), `covenant` (a Record `to` a person), `proclaim`
+(`Proposition.exists`, no counterparty), beside `issue` and `levy`; `own` — `argue` (`Person.pursuits`),
+`conceal` (a `cover` Record), `forgive` (the actor's own `Person.stance`), `sabotage` (`Site.condition`,
+−), `steal` (a `hold` moved), `tend` (`Person.body`), `train` (`Person.capability`). `steal` shares
+`seize`'s write row and differs by eligibility and licence — the `carry`/`open_case` shape, a sibling pair
+rather than a thin one. `proclaim` shares `utter`'s write row and differs by eligibility and stratum —
+the same shape again. `forgive` shares `march`'s write row and nothing else: an `own` social act on the
+actor's own rows, not a contested act on the losers'.
 [CORRECTION: revision 1 said the law verbs "share eligibility"; `detain`, `seize` and `pardon` have three
 different eligibilities (K-26).] The one thin pair, named rather than hidden (K-27): `sabotage`/`work`
 (sign only); revision 2's second, `besiege`/`march`, is gone with `besiege` (K-28). No new verb depends
@@ -1504,6 +2109,7 @@ on the `repudiate` cut.
 | `give` | object kind Rung: cede a rung hold; the gate's `handover` already covers every non-seat hold, while the live cell narrows the verb to `kind: Record` (`verb_table.yaml:398`) — so this widening is load-bearing for cession, the one consensual route by which title moves | the same two-hold write; `cede` would duplicate it |
 | `march` | **The army arrives.** Today `_eff_march` writes `body` and `stance` on the losing side only (`loop/effects_combat.py:316-317, :345-370`) and moves nobody: after a `Won` the attackers are still `mustered` at their origin, so capture, interception and relocation are inexpressible, and a march on one's own occupied settlement fights one faction against itself (H-151). **One write is added:** on `Won` and `Unopposed`, every claimant is relocated to the destination by `_relocate`'s pair (`loop/effects_migration.py:68-89`, which gains a person parameter so the leg id keys on the mover) — close the live `contain`, open one to the destination, append it to `travel_leg` — emitting `army.arrived` beside the band's kind. `Lost` is unchanged (the attackers' casualties and grudge) [ASSUMPTION: a routed army does not arrive — R-7]. **The stake is derived at the destination `d`, never declared**, from three reads that exist: `mine` (the faction of the seat in `a.via`, `loop/sides.py:77-78`), `holder = holder_faction_of(w, d)`, `defenders = mustered(w, d, holder)`. `holder == mine` → relocation (or a defence, if an enemy march on `d` follows): no contest, `Unopposed`, the army arrives. `holder is None` → arrival at unheld land, no title write (who holds an unheld place is unruled, H-166). Another holder, `defenders` empty → capture attempt, unopposed: occupation. Another holder, `defenders` present → capture attempt, opposed: `Won` arrives, `Lost` does not. Interception needs no new state: an army that has arrived is in every later `mustered(d, holder)` read (`seam/wrappers/mass_battle.py:154`); within one round, two marches on one settlement are ordered by `_canonical_order`'s hash (`loop/resolve.py:47-54`), so same-round interception is order-dependent and cross-round interception deterministic. **Code edits, no new resolver or operand:** (i) `sides_of` returns `subject = None` when `holder == mine` (H-151's reverted fix, `hole_register.yaml:3258-3264`); (ii) the wrapper returns its existing `Unopposed` shape (`mass_battle.py:164-169`) instead of `PARTY-GAP` when `subject is None` and claimants and rung are given; (iii) H-149's non-settlement refusal moves from `subject = None` to empty `claimants`, so it still refuses at `loop/resolve.py:558-559` and `subject None` comes to mean only "no opposing holder" (§14.8); `ENC` on `(Tenure, since)`, `(Tenure, until)`, `(Person, travel_leg)` (`write_matrix.yaml:352-354, :366-368, :225-226`), on M4's own precedent for `body`/`stance` (`loop/encounter.py:25-28`); and a tenth gate basis, `muster` (K-33) | a stake is not a choice (direction 8). `besiege`, `intercept` or `relocate` beside `march` would each be a verb declaring its intended outcome — the `kill`/`wound` shape direction 3 retires — over one prize, one step and one muster |
 | `survey` | subject kind Rung, answered by the rung's holding faction (effect-side, `holder_faction_of`); declined at H-169 limit 6 today | the same sheet mint; `census` or `audit` would duplicate it |
+| `tell` (revision 5) | `to` may be the topic: drop `out.discard(topic)` in `known_persons` (`queries/person_q.py:269`), so B, holding a claim about C, forms a `tell` to C — a warning or a confrontation. The counterparty decline (`decision/options.py:172`) still refuses a telling to oneself; `act_key` and `opportunity_key` (`subject>to`) and T-e — the hearer hears by presence — are unchanged; `known_persons`' other caller, `give`, names a Record as its topic, which is never a person, so nothing moves there. The telling workplan's Decision 3 — a person may tell somebody about himself (`workplans/2026-10-01-telling-workplan.md:382`) — is the precedent in the other direction. The pin that moves: `test_t4_one_candidate_per_known_hearer`'s "the TOPIC is never the hearer" (`engine/season/tests/test_season_shape.py:14747-14752`). Falsifier: B holding `(C, x)` forms a `tell` with `to == C` (a new test beside `test_t4_a_telling_to_an_absent_hearer_is_refused_and_a_present_one_hears`, `test_told_by_channel.py:796`), and C's `questions_for` then raises Q2's first clause on the told claim (K-43) | `warn` and `confront` would duplicate the one telling with the topic as hearer — the same write row (none), prize and counterparty (§6.8) |
 | `oblige` (a reader) | no row change: a seat-holder's own `oblige` to another seat — `oblige : Person → Person \| Office`, owned by the person who swore it (`architecture/meta/01_AXIOMS.md:1205-1218`: *the Grandmaster forswore the King*) — is read by `purview_reaches` as subordination (H-101). Expulsion of a member is the seat withholding renewal, so the term matures at MATTER: the shipped `oblige_term` is 4 (`data/fixtures.py:694`), and only H-159's `None` control arm never matures [CORRECTION: revision 1 said expulsion waits on that fixture (K-26)] | homage is the same `oblige` with a term renewed by `transfer`; `swear` or `homage` would be a second opener. A seat closing a member's `oblige` would be the obligee-side closer D-5 refused (`verb_table.yaml:757`) |
 
 Revision 1 also widened `commit` and `oblige` by a `remit:` alternative, `march` to a title or stores for
@@ -1513,7 +2119,9 @@ suite: K-07, R-2 (resolved as occupation, not title — the `march` row above), 
 
 ### 9.7 Deferred, and classed as outcomes
 
-- **`tell`'s lie — deferred (K-15).** `opening_set` declines a `tell` whose `said_of` is `None`, because
+- **`tell`'s lie — deferred (K-15); reception built, production G7.** Reception is built: a teller is
+  weighed when read, by hops, relation and record (`decision/options.py:1043-1097`). Production is not.
+  `opening_set` declines a `tell` whose `said_of` is `None`, because
   the `holds` conjunct is named (`verb_table.yaml:930-932`), and `holds` refuses content the teller does
   not hold. A lie needs a second `said` source — a decision-layer change at `said_of`, not a row edit. It
   belongs to the telling workplan's position G7, deception (`workplans/2026-10-01-telling-workplan.md:311`,
@@ -1529,8 +2137,8 @@ suite: K-07, R-2 (resolved as occupation, not title — the `march` row above), 
   [P2-43]; eleven cases with graded, costed operations [C-51]. They belong to plan positions 27/29f
   (`verb_table.yaml:1103`); `thread_read` additionally waits on H-85.
 - **`debt` — deferred (K-14),** with the `seize` reader that would distrain on a lapse.
-- **`proclaim` — deferred (K-34),** with every kind it would mint; a declaration of war is `utter` and
-  `commit` (§9.2).
+- **C's awareness of a telling — not deferred:** an absent C is told by the widened `tell` (§9.6,
+  K-43); C's own move after it is the telling workplan's gated G4.
 - **`truce` — deferred (K-32).** Its only proposed reader was a `march` refusal or flag; refusal
   contradicts direction 8 and a flag has no mechanism, because emits are keyed per band
   (`hole_register.yaml:3309-3313`).
@@ -1543,16 +2151,21 @@ suite: K-07, R-2 (resolved as occupation, not title — the `march` row above), 
   and family 62 stays GAP with no verb.
 - **Cryptology (the survey's P54) — deferred,** with no demand and no reader; `research` reads content
   verbatim, and misreading is the receiver's (`construe`, WITNESS-side).
-- **The orphan Record kinds — deferred (K-11, K-34).** `edict`, `embargo`, `interdict`, `emergency`,
+- **The orphan Record kinds — deferred (K-11).** `edict`, `embargo`, `interdict`, `emergency`,
   `condemnation` (heresy declared; an organization outlawed), `claim` and a charter's exemption each ship
-  only with the code that reads them; the first five return with `proclaim`. `claim` also collides with the `Claim` carrier and the `claim.*`
-  event kinds, so it needs another word when it comes.
+  only with the code that reads them. Since revision 5 the first five are proclaimed Propositions
+  (K-42), so none of them needs a Record kind: what waits is each one's *effect* reader. `claim` also
+  collides with the `Claim` carrier and the `claim.*` event kinds, so it needs another word when it
+  comes.
+- **A grudge's fade — not built (R-9).** The suite closes a grudge by its holder's act (`forgive`); a
+  per-season fade of stance rows would be a fourth motion beside AX-5's three, and is R-9's alternative.
 - **Outcomes and stakes, not verbs.** A **sentence** (the disposal's kind); **occupation** (a won or
   unopposed `march`) and **conquest** (`seize` on the occupied place, R-2 resolved); **raid** and
   **usurpation** (the same occupation, then `raze` or `seize`); a **siege** (a Query over an arrived army,
   K-28); **capture, interception, relocation** (the stakes of a `march`, direction 8); **murder** (a
-  `fight` whose band is `Felled`, with `conceal`); **execution** (§9.8); and, by direction 3, **`kill`**
-  and **`wound`**.
+  `fight` whose band is `Felled`, with `conceal`); **execution** (§9.8); **revenge** and **retaliation**
+  (a chosen `fight`, `march` or `sabotage` under a grudge, §6.8); and, by direction 3, **`kill`** and
+  **`wound`**.
 
 ### 9.8 Why `execute` is not a verb (R-1, K-10)
 
@@ -1650,22 +2263,23 @@ and office-scale acts it lacks, resolve to seat-holders' acts or to members' own
 | Spy | `surveil` (a place; the Person case is deferred), **`conceal`**, and recruiting composed from `tell` and the recruit's own `oblige` (D-5 refuses a lever on a second person) |
 | Investigate | the six findings + `open_case` |
 | Counter-Intelligence | `surveil`, `examine`, **`seize`**, **`detain`**, `tell` (to expose) |
-| Censure | `determine` under an arrangement disposing a Record (`parliamentary_debate` already does, `arrangements.yaml:114`) |
-| Embargo | none-yet: deferred with its reader — it waits for code that refuses trade across two rungs, and for `proclaim` (K-34) |
+| Censure | `determine` under an arrangement disposing a Record (`parliamentary_debate` already does, `arrangements.yaml:114`); a seat's public censure is a **`proclaim`**ed `HOLDS` naming the censured in its `value` (K-42) |
+| Embargo | **`proclaim`** of the embargo through a seat — a Proposition, public by the chronicle; its effect, code refusing trade across two rungs, is deferred with that reader (K-11, K-42) |
 | Outlawry | a person: `determine` with `disposes: ban` on the realm's seat; an organization: a `condemnation` of its Proposition — deferred |
 | Excommunication | `determine` under a Church arrangement with `disposes: ban`; lifted by **`pardon`** |
 | Active Inquisition | `utter` (the charge: mood `HOLDS`, subject the accused, K-35) → a `petition` whose `terms` names it, and witnesses' own `commit`s to it → `open_case` (docketing the accused) → `issue` (a warrant) → **`detain`** → **`interrogate`** → `determine` (contested) → a sentence (`oblige`, `custody` or `ban`; death is `custody` + the enforcement seat-holder's `fight`, §9.8) → **`pardon`** |
 | Church Seizure | **`seize`** + `levy` |
-| Recognition Challenge | `petition` + `commit` (recognition withheld or given) |
+| Recognition Challenge | `petition` + `commit` (recognition withheld or given); a seat's public recognition or refusal of it is **`proclaim`** (K-42) |
 | Succession Endorsement | each endorser's own `commit` to the claimant's Proposition — the testimony channel the survey's "succession as an investigable case" asks for (§6.1, Rec 4): the claim uttered, endorsements committed, findings about it held, and a bench whose obstacle reads those commits (R-5, K-40) |
-| War Authorisation | each member's own `commit` to the motion, counted by a Query (K-07), then `utter` of a `WAR`-mood Proposition and each seat's own `commit` to it, read by `faction_q.at_war` (`faction_q.py:233-236` names the fold; K-29) |
+| War Authorisation | each member's own `commit` to the motion, counted by a Query (K-07), then `utter` of a `WAR`-mood Proposition — announced by the seat's **`proclaim`** — and each seat's own `commit` to it, read by `faction_q.at_war` (`faction_q.py:233-236` names the fold; K-29, K-42) |
 | Piety Spread | **`argue`** + `oblige` to Church seats |
 | Community Organising | `found`, `oblige`, **`covenant`** (kind `alliance`, a league) |
-| Martial Governance | **`detain`** and `levy` through seats; a declared emergency is none-yet: deferred with its reader and `proclaim` (K-34) |
+| Martial Governance | **`detain`** and `levy` through seats; a declared emergency is a **`proclaim`**ed Proposition, its effect reader deferred (K-11, K-42) |
 
-**Acts the roster lacks, mapped the same way.** Declarations of war (`utter` of a `WAR`-mood Proposition,
-then the seats' own `commit`s); edicts, interdicts and other proclamations (none-yet: deferred with their
-readers, K-34); treaties and alliances (`covenant` + `commit`; truces deferred, K-32); councils (`convene` + `utter` + members' `commit`s + `determine`); tribunals
+**Acts the roster lacks, mapped the same way.** Declarations of war (`utter` of a `WAR`-mood
+Proposition, announced by a seat's **`proclaim`**, then the seats' own `commit`s); edicts, interdicts and other
+proclamations (**`proclaim`**; each one's effect reader deferred, K-11, K-42); a lord ending a feud
+(**`forgive`**, his own act; K-41); treaties and alliances (`covenant` + `commit`; truces deferred, K-32); councils (`convene` + `utter` + members' `commit`s + `determine`); tribunals
 (`open_case` + `interrogate` + `determine` + `pardon`); elections and conclaves (members' `commit`s +
 `confer`, basis `elected`); impeachment (a `petition` + `open_case` + `determine` on a seat-holder +
 `revoke`); deposition of a seat with no rung above (none: R-4 — it ends by `release` or death); coronation
@@ -1712,6 +2326,11 @@ These are properties of a stage, a seam or a Query — not verbs. Each is listed
 | The verification policy (the survey's Finding 1 and Recommendation 1; §6.1) | WITNESS deposits readings, never the engine's resolution (AX-7); `record()` lowers a teller contradicted by firsthand claims (`decision/options.py:1001-1040`); confidence fades at MATTER (`loop/matter.py:235-265`); `pardon`, a nested `open_case` and `release` reverse | built: reception and decay; absent: 4.5's content deposit, which must be band- and channel-mediated, never a bare `True` (`loop/witness.py:380`) |
 | Agenda control: the date↔docket join (the survey's P43, *The Republic of Rome*) | CALENDAR's `date.fired` reaching WITNESS — it does not (`queries/world_q.py:1362-1367`) — and `open_case` filling the fired slot, where today it dockets with `date: None` (`loop/effects_information.py:220`) | absent — H-163 limit 4, registered |
 | Approach in questioning (the survey's P9: *Lacuna*'s calm or aggressive questioning; the *L.A. Noire* remaster's Good Cop / Bad Cop) | a non-operand payload key on `interview` and `interrogate`, read by the effect or the obstacle; the subject's `regard` (`queries/person_q.py:63-69`, the stored half only) is its reader | none yet |
+| Decay by kind of fact — traces fast, reputations slowly, grudges least (the churn survey's D8) | MATTER's confidence decay, one rate for every claim (`loop/matter.py:235-265`; `data/fixtures.py:258`); a per-stem rate map would be a declared fixture with H-40's sweep widened; a grudge is a stance row, which MATTER does not touch, and ends by `forgive` (R-9) | absent |
+| The grudge loop's sign (ID-16; the churn survey's finding 2) | `_eff_march` appends a grudge per lost field with no bound (`loop/effects_combat.py:353-358`); G2 would close it into `march`/`fight` choice. Recommended, not written here: a `LOOP` row with `sign: +` in `hole_register.yaml`, the declared form ID-16 owes (`01_AXIOMS.md:664-681`), closed by `forgive` (K-45) | absent |
+| `inferred` reads 0 with an obligee present (the churn survey's F07, F16) | `_ch_post_remit` (`epistemic.py:497-502`: "WHY … is NOT isolated"). One candidate cause, not isolated: for every kind a `binding_decision` row emits, `chronicle` precedes `post_remit` in the ordered roster (`rosters.yaml:398-405`), so `post_remit` never credits | a defect to isolate |
+| The subject tie in appraisal (the churn survey's D4: *Dwarf Fortress*'s Aliz, Urist and Kogan) | `teller_weight`'s stake term — H-180, an `absent` hole whose marker sits at `decision/options.py:1091`; G1's judged regard | absent |
+| The deciding term of a chosen act (the churn survey's D6) | `_term_why` returns `None` by a scope decision; the occasioning question survives one hop away, on the Scene (`epistemic.py:753-764`) — passing the Scene in is the supplier, and what a witness may infer of a motive is its own unit of work | absent |
 
 ### 10.4 Build order
 
@@ -1723,23 +2342,27 @@ steps 1 and 2 here.
 |---|---|---|---|
 | 1 | The enabler (§10.1): `record_sourced_operands`; `operand_bags` over held Records; `issue` joins the known-person fan for `to` | a held dispensation's `terms` answers `subject` in `_derive_operand`; `aperture 4 0` `confer` leaves 70/0 | K-25; H-94 in part |
 | 2 | `utter` mints the utterer's hold → `commit` on Propositions. With R-3: `repudiate` cut, `_eff_release` earning `commitment.ended` on a closed `commit` and its three alignment cells re-keyed | `commit` leaves the always-refused pin (`test_season_shape.py:7624`); with R-3, `test_u7_own.py:42`'s DECLINED tuple shrinks | K-14's precondition; R-3. H-156 (a)/(b) stays registered |
+| 2a | The `tell` widening (revision 5, §9.6), in step 2's batch: `known_persons` stops discarding the topic | B holding `(C, x)` forms a `tell` with `to == C`; `test_t4_one_candidate_per_known_hearer` re-pinned at `test_season_shape.py:14747-14752` | K-43 |
 | 3 | Tenure kinds `custody`, `ban`; their exclusion at `data/rosters.py:453`; the `determination` basis widened (opening any kind the exercised seat's arrangement `disposes:`; closing `custody` and `ban` only); the new `warrant` basis (opening `custody` whose object is the issuing seat, licensed by a held dispensation naming the owner); the four unseeded arrangement rows with `disposes: custody` or `ban` | the loader stays green; in `test_u7_remit.py`'s style, a determination under `disposes: ban` opens a `ban` and `release` is refused on it | K-03, K-12, K-17 |
 | 4 | `determine` contested, with the party-gap fold edit | the corpus `DEGREES RESOLVED` line gains `a proposition` bands for `determine`; `Tenure.degree` is written and its `unproduced: H-162` declaration deleted | K-02; H-162 |
 | 5 | `detain`, `pardon`, `interrogate` | `aperture 1 0` `detain` ex > 0; `move` refused in custody; `disposal.lifted` in `w.log`; `confession.made` in `w.log` | K-05, K-18, K-26 |
 | 5a | The charge, with step 5 (§8.1): `utter` of a `HOLDS`-mood Proposition whose `subject` is the accused, named by the accusation `petition`'s `terms` through the enabler (`record_sourced_operands`); `interrogate`'s effect-side read of it; `confession.made`'s claim value its id. A computed charge waits on a `mood` source, as a computed war does (§8.1) | a hand-built charge, a witness's `commit` to it formed from the held petition, and a `confession.made` whose deposited claim's value is the charge's `prop:` id | K-35 |
 | 6 | `seize`, with the `seizure` basis — object kind Record (a warrant); the Rung half lands at step 8, where its licence, occupation, lands | `record.seized` in `w.log`; a seat cannot be seized | K-04 |
 | 6a | `steal` (R-8), with the `theft` basis, after `seize`, whose write and effect-side declines it mirrors | `record.stolen` in `w.log` from `populated.run` with no hand-built act; the former holder's Q2 question about the Record the next season; refused on a Record the actor holds or whose holder stands elsewhere | K-39; R-8 |
-| 7 | `covenant` (kinds `treaty`, `alliance`) + `_renewals` and the `mustered` widening (allies present at a destination join the holder's side). No `war` kind (war is a Proposition, K-29); no `truce` (K-32); no `proclaim` (K-34) | allied persons appear in a march's `subject_members` (a named test in `test_mass_battle_provider.py`); tribute renewed by `_renewals` | K-11, K-14, K-29, K-32 |
+| 7 | `covenant` (kinds `treaty`, `alliance`) + `_renewals` and the `mustered` widening (allies present at a destination join the holder's side). No `war` kind (war is a Proposition, K-29); no `truce` (K-32); `proclaim` lands at step 12 | allied persons appear in a march's `subject_members` (a named test in `test_mass_battle_provider.py`); tribute renewed by `_renewals` | K-11, K-14, K-29, K-32 |
 | 8 | **The arrival** (§9.6's `march` row): `ENC` on `(Tenure, since)`, `(Tenure, until)`, `(Person, travel_leg)`; `sides_of` same-faction → `subject None`; the wrapper's `subject None` → `Unopposed`; H-149's refusal moved to empty `claimants`; the `muster` basis; `_relocate` taking a person; `army.arrived`; `seize` widened to Rung holds under occupation (untyped, `pardon`'s route) | in `test_march.py`: (i) `Won` (a constructed `Resolution`, since `Won` is unreachable at fixture scale, `:224-235`) and `Unopposed` at `set_s_036`/`set_s_003` leave `mustered(w, d, "fac_crown")` equal to the claimants, and `Lost` leaves them at `set_s_014` (fixture facts at `:78, :134-140, :238-239`); (ii) H-151's own falsifier (`hole_register.yaml:3293-3298`) with the expected outcome `field.unopposed`; (iii) interception: Crown relocates to a Crown-held settlement in one `_fold_one`, and a Church march on it in a second resolves `Won`/`Lost`, not `Unopposed`; (iv) `test_a_march_on_a_non_settlement_rung_refuses_h149_is_enforced` stays green; (v) the unheld-settlement test (`:196-221`) re-pinned to `field.unopposed` + `army.arrived`, and `test_declared_and_unopposed_are_no_change_directly` (`:267-274`) re-written with claimants in the `Resolution`, or it keeps passing and observes nothing (§14.8); (vi) `seize` on an occupied settlement flips `holder_faction_of` | K-27's second pair, K-28, K-30, K-33; H-151 closes; K-05 and K-08 amended |
 | 9 | `sabotage` (with `work`'s declared delta restricted to ≥ 0), `tend`, `argue`, `train` (with `Person.capability` un-retired and `Person.pursuits`' declaration deleted) | condition falls with a `sabotage` among its causes; `Person.body` rises; `Person.pursuits` moves; `sigma._pool_of` varies by person | K-09, K-20, K-21 |
 | 10 | `conceal` + the `anchor_of` cover read | an Event anchors on a `cover` id | K-19 |
 | 11 | `raze`, licensed by occupation (the exercised seat's faction `mustered` at the settlement), after H-166's own order | `w.rungs` shrinks; a `raze` where the seat has no army is refused | K-06 |
+| 12 | `proclaim` (revision 5, §9.2), with `_eff_utter`'s Proposition mint factored into one helper both effects call. No dependency on an earlier step: its readers — the chronicle and Q2 — exist | a hand-built `proclaim` leaves a `proclamation.made` claim held `told_by` by a person not co-located with the proclaimer (`test_told_by_channel.py:133`'s shape); `aperture 1 0` `proclaim` ex > 0 | K-34 (for the verb), K-42 |
+| 13 | `forgive` (revision 5, §9.4), with the person-side own-state decline shared with `release`'s hook (pass 1's, §4) | a hand-built `forgive` after a `field.lost` leaves `stance_toward(p, F) == 0` and a `stance.moved` in `w.log`; refused where no negative row exists; the realm count keyed to field-planted rows, expected 0 until H-149 and H-175 move | K-41, K-49; K-45's `LOOP` row recommended with it |
 | later | R-5, if it stands: `conferral_bases` + `inheritance`, read by CENSUS at `person.died`, the basis dispatching to a rule table on `REVOCATION_RULES`' precedent whose first rule is the designated heir (K-40) | a `person.died` followed by the designated heir's `hold` | R-5; K-40 |
 | deferred | **Siege subsistence** — recommended as a new hole in `engine/season/hole_register.yaml` (not written here): what an occupying army does to a besieged settlement's larder, and its MATTER-side reader over the occupation Query (the natural site is `nearest_store`'s walk, `world_q.py:498`). No ruling states a magnitude — H-148's shape — and the arrived army are weight-1 persons who do not eat (`world_q.py:559-572`), so nothing existing carries it | — | — |
 
 No cycle: every reader lands with or before its carrier, and `covenant` ← `commit` ← the `utter` hold is a
 chain, not a loop; `seize`'s Rung half lands with the arrival that licenses it; `steal` lands after
-`seize`, whose declines it reuses, and the charge with the verb that reads it. [CORRECTION: the audit
+`seize`, whose declines it reuses, and the charge with the verb that reads it; `proclaim` (step 12)
+and `forgive` (step 13) read only what exists, and the `tell` widening (step 2a) moves one decline. [CORRECTION: the audit
 pass listed K-13 as retired at step 1; revision 2 moved it to step 7, where `war` would have landed.
 Revision 3 supersedes it: no `war` Record lands at all (K-29).]
 
@@ -1770,6 +2393,9 @@ above. "After K-nn" means the resolution of that conflict is what makes it pass.
 | `give` (+ Rung) | `handover` is general over non-seat holds (`verb_table.yaml:398`) ✓ | ✓ |
 | `survey` (+ Rung) | effect-side (`holder_faction_of`) | ✓ |
 | `work` (delta ≥ 0) | an effect-side refusal of a negative declared delta in `_eff_work` (`loop/effects_economy.py:86-98`) | ✓ |
+| `forgive` (revision 5) | eligibility `own` ✓; beneficiary `subject`, structural ✓; an unnamed `own_ledger` conjunct with one flat refusal kind — lawful, since the keyed check runs only where a row keys refusals or names a conjunct (`data/verbs.py:697-698`); `Person.stance` a matrix row admitting RES, with a producer already (`write_matrix.yaml:211-223`), so no `unproduced:` touched; emits `stance.moved`, the row's declared kind; no gate basis — the gate judges Tenure writes (`state/gate.py:538`) | ✓; the own-state decline is person-side, not a stem (K-18) |
+| `proclaim` (revision 5) | eligibility `remit:issue` ∈ `remit_acts` (`rosters.yaml:302`) ✓; a typed `all:` of `existence` and `basis`, both existing forms ✓; refusals keyed for eligibility, place, authority and write — the clauses the loader expects of a remit row that writes (`data/verbs.py:700-703`) ✓; uncontested, so the one-kind rule for contested rows (`:717-720`) is not engaged; `Proposition.exists` a matrix row with a producer (`utter`) ✓; beneficiary `none` ✓; no gate basis | ✓ |
+| `tell` (widened, revision 5) | no row change; `queries/person_q.py:269`; the counterparty decline (`decision/options.py:172`) unchanged; one pin re-set (`test_season_shape.py:14747-14752`) | ✓ |
 
 **Roster and code edits, with owner file and openness.**
 
@@ -1781,11 +2407,14 @@ above. "After K-nn" means the resolution of that conflict is what makes it pass.
 | `rosters.yaml` `writ_sourced_operands` (`:1571-1584`) | → the per-kind `record_sourced_operands` map (§10.1); the subset check in `data/requires.py` kept and tightened to each kind's keys | — |
 | `arrangements.yaml` | the four unseeded procedure rows (`:16-21` names them) with `disposes: custody` or `ban` | — |
 | `write_matrix.yaml` | delete `Person.pursuits`' `unproduced:` (with `argue`); un-retire `Person.capability` (with `train`); delete `Tenure.degree`'s `unproduced:` (with step 4); `ENC` on `(Tenure, since)`, `(Tenure, until)`, `(Person, travel_leg)` (with step 8) | — |
-| `state/gate.py` | `determination` widened (§10.4 step 3); + `warrant`; + `seizure`, licensed by a warrant (Record) or occupation (Rung); + `muster` (K-33); + `theft` (K-39, R-8) — nine bases become thirteen (twelve under R-8 (b)); `conferral` admits `term` at opening | code |
+| `state/gate.py` | `determination` widened (§10.4 step 3); + `warrant`; + `seizure`, licensed by a warrant (Record) or occupation (Rung); + `muster` (K-33); + `theft` (K-39, R-8) — nine bases become thirteen (twelve under R-8 (b)); `conferral` admits `term` at opening. Revision 5 adds none: `forgive` and `proclaim` write no Tenure | code |
+| `queries/person_q.py::known_persons` | drop `out.discard(topic)` (`:269`) — the `tell` widening (K-43) | code |
+| `decision/options.py::opening_set` | one person-side own-state decline, keyed on a row's declared domain, shared by `release` and `forgive` | code |
+| `loop/effects_information.py` | `_eff_utter`'s Proposition mint factored into one helper that `_eff_proclaim` also calls | code |
 | `loop/resolve.py::_party_gap_refusal` and `data/verbs.py:717-720` | the fold edit (K-02) | code |
 | `loop/sides.py::sides_of`, `seam/wrappers/mass_battle.py::resolve` | same-faction → `subject None`; H-149's refusal → empty `claimants`; `subject None` with claimants and rung → `Unopposed` (step 8) | code |
 | `loop/effects_combat.py::_eff_march`, `loop/effects_migration.py::_relocate` | Won/Unopposed relocate every claimant through `_relocate`, which takes the person it moves (step 8) | code |
-| `verb_table.yaml` | + 12 rows; − `repudiate` (R-3); `determine`, `confer`, `give`, `march`, `survey` rows edited | — |
+| `verb_table.yaml` | + 14 rows; − `repudiate` (R-3); `determine`, `confer`, `give`, `march`, `survey` rows edited (`tell`'s and `oblige`'s widenings change no row) | — |
 | `loop/effects_economy.py::_eff_work` | refuse a negative declared delta | code |
 | `rosters.yaml` `remit_acts` (`:294-302`) | none | `open: true` |
 | `rosters.yaml` `contest_subsystems` | none | — |
@@ -1794,7 +2423,7 @@ above. "After K-nn" means the resolution of that conflict is what makes it pass.
 | `beneficiary_kinds`, `requires_operands`, `requires_forms`, `REQUIRES_STEMS` | none | closed |
 | `verb_capability` (`rosters.yaml:1045-1064`) | none required | open |
 | `alignment` | none: new rows take `default_cell` | — |
-| `hole_register.yaml` | recommended, not written here: one new row for the siege subsistence reader (§10.4); H-151 closes with step 8 | — |
+| `hole_register.yaml` | recommended, not written here: one new row for the siege subsistence reader (§10.4); a `LOOP` row with `sign: +` for the grudge loop (K-45); H-151 closes with step 8 | — |
 
 ---
 
@@ -1809,7 +2438,9 @@ the author assigned one. "Rev 1 §n" is revision 1's own numbering. Corrections 
 audit's resolutions are §14.5. Revision 3 registers seven more (K-28…K-34, after the closing paragraph
 of the audit's set): six from the march analysis and one decision of the orchestrator's; it retires
 K-22, K-13 and K-27's second pair and amends K-05, K-08 and K-11, each marked in place. Revision 4
-registers six more (K-35…K-40, after K-34) from the survey interrogation; it retires none.
+registers six more (K-35…K-40, after K-34) from the survey interrogation; it retires none. Revision 5
+registers nine more (K-41…K-49, after K-40): eight from the churn-survey interrogation and one of the
+author's (K-49); it retires K-34 for the verb, marked in place.
 
 **K-01 · ruling · blocks.** *Sides:* revision 1 (rev 1 §3.5, §9.1 item 8) escalated cutting `comply` and
 splitting `evade / defy`, on the ground that the triple is Jordan's (`verb_table.yaml:737`) — against
@@ -1905,6 +2536,8 @@ kinds (§8.2); a warrant, summons or charter is a `dispensation` and an accusati
 precedent. *Changed:* §3.3, §8, §9.2, §9.7. *Residual:* the deferred kinds wait for readers.
 *Revision 3:* three kinds, not six — `war` is a Proposition (K-29), `truce` is deferred (K-32), `siege`
 is a Query (K-28) — and `proclaim`, left with no kind that has a reader, is deferred (K-34).
+*Revision 5:* `proclaim` is un-deferred as a verb minting a Proposition (K-42); the deferred kinds stay
+deferred, and when their effect readers come they are proclaimed Propositions, not Record kinds.
 
 **K-12 · state and naming · weakens.** *Sides:* revision 1 said every kind needs an opener (loader
 invariant 6, `rosters.yaml:116`); openers are only REPORTED (`data/verbs.py:766`, `:831-840`) and only the
@@ -2091,7 +2724,8 @@ five were added after the first enumeration, `04_CODE_ARCHITECTURE.md:564-586`) 
 §4, §9.6, §10.4 step 8, §11. *Residual:* none.
 
 **K-34 · the suite's own rule vs `proclaim` · blocks `proclaim`. [THE ORCHESTRATOR'S DECISION — a human
-may overrule it.]** *Sides:* with `war` a Proposition (K-29) and `truce` deferred (K-32), `proclaim` is
+may overrule it.] [RETIRED for the verb in revision 5 by K-42: the instrument is a Proposition, which
+needs no Record kind, and its readers exist. The kinds half survives under K-11.]** *Sides:* with `war` a Proposition (K-29) and `truce` deferred (K-32), `proclaim` is
 left with no Record kind that any code reads — edict, embargo, interdict, emergency and condemnation were
 already deferred as orphans (K-11) — against the suite's rule that a kind ships only with its reader (§8)
 and that each build step lands its reader (§10.4). *Resolution:* `proclaim` deferred from the suite with
@@ -2163,16 +2797,87 @@ designated heir, ships with R-5, and a law selecting among rules is a second val
 *Filter:* step 4; the roster is Jordan's (`open: false`). *Changed:* §10.4 ("later"), §11, §13.5.
 *Residual:* R-5, extended.
 
+**Registered in revision 5.** K-41…K-48 are the churn-survey interrogation's, checked against the code
+by the author (§14.11 lists where they were corrected); K-49 is the author's.
+
+**K-41 · `forgive` vs the telling workplan's spine · weakens nothing.** *Sides:* the spine — *"A
+telling writes one thing: a claim in each hearer's ledger … Belief, regard, hostility and C's reply are
+computed from ledgers when read; none is written"*, with regard "never written"
+(`workplans/2026-10-01-telling-workplan.md:28-33`) — against `forgive`, which writes `Person.stance`,
+regard's stored half. *Resolution:* the spine binds a telling; `march` already writes stance by an act's
+outcome (`write_matrix.yaml:218-223`); `forgive` is the owner's act on his own rows — the owner ending
+what he holds, T-m's logic on an interior field. The spine is unamended. *Filter:* step 4. *Changed:*
+§8.1, §9.4. *Residual:* R-9, whether a grudge also fades.
+
+**K-42 · `proclaim` vs K-34 and K-11 · un-defers `proclaim`.** *Sides:* K-34 deferred `proclaim`
+because no Record kind it would mint had a reader; K-11 deferred the edict, embargo, interdict,
+emergency and condemnation kinds as orphans. *Resolution:* no Record kind — a Proposition read by the
+chronicle and Q2, K-29's precedent (`01_AXIOMS.md:1386-1389`). K-34 retires for the verb; K-11's kinds
+stay deferred with their *effect* readers and are proclaimed Propositions when those come. *Filter:*
+step 4. *Changed:* §2, §3.2–§3.4, §5 (family 13), §6.2 (P49), §6.4, §7, §8.1, §8.2, §9.2, §9.7, §10.2,
+§10.4 steps 7 and 12, §11, §13.9, Appendices A and B. A proclaimed Proposition is about a place and so
+is never itself a war; a public declaration is `utter` of the war and `proclaim` of a Proposition
+naming it (§9.2; §14.11, item 11). *Residual:* the chronicle's instant, realm-wide reach and firsthand
+weight — an observation for H-33's owner (`rosters.yaml:862-909`) and H-177's.
+
+**K-43 · `tell` with `to == subject` vs `known_persons`' "different people by construction".** *Sides:*
+`known_persons` excludes the topic because "a telling names its topic on `subject` and its hearer on
+`to`, and the two are different people by construction" (`queries/person_q.py:248-250`). *Resolution:*
+an assertion in a docstring, not a ruling; the telling workplan's Decision 3, a person may tell somebody
+about himself (`…telling-workplan.md:382`), is the precedent in the other direction, and the
+counterparty decline still refuses a telling to oneself (`decision/options.py:172`). *Filter:* step 5.
+*Changed:* §3.4, §4, §7, §9.6, §10.4 step 2a, §11. *Residual:* none.
+
+**K-44 · D3's hazard-rate thresholds vs AX-5 and T-c.** *Sides:* the churn survey would damp choice by
+thresholds with mean-time-to-happen hazard rates; AX-5 names three motions and T-c refuses a clock no
+act wound. *Resolution:* refused; the warning stage is T-b's crossing Event and, for a seat,
+`proclaim`. *Filter:* step 3. *Residual:* none.
+
+**K-45 · the grudge loop is unsigned.** *Sides:* `_eff_march` appends a grudge per lost field without
+bound (`loop/effects_combat.py:353-358`), and G2 would close the loop into choice; ID-16 requires every
+loop declared as a `LOOP` row with a sign (`01_AXIOMS.md:664-681`), and such rows exist in
+`hole_register.yaml`. *Resolution:* recommend a `LOOP` row with `sign: +` (not written here), and
+`forgive` as the closer. *Filter:* step 5. *Residual:* none.
+
+**K-46 · D6 vs `tell`'s single refusal kind.** *Sides:* D6 asks for the deciding term of every
+refusal; `tell` emits `news.untold` for `holds` and `hearer` alike. The contested-row rule
+(`data/verbs.py:717-720`) and T4 keep one kind; K-02's fold edit would make two lawful, but T4 withholds
+the hearer's absence from the teller on purpose (`queries/person_q.py:246-248`). *Resolution:* T4
+stands. *Filter:* step 1. *Residual:* none.
+
+**K-47 · D9 vs a loop with no player.** An observation: the record as a player verb is the UI lane's
+(proposals 1 and 11 of the emergent-narrative suite); characters already use held Records. No
+resolution needed.
+
+**K-48 · D7 vs a document's weight.** *Sides:* a document's content deposit is `firsthand` for its
+holder with an empty chain (`loop/witness.py:526-531`), so a forged sheet weighs 1.0, and
+`forgery_quality` is read by nothing. *Resolution:* deferred with H-169 (a consumer first); the consumer
+is a `content:`-aware weigh (G7 widens `_is_cell`, `hole_register.yaml:4120-4122`). *Filter:* step 3.
+*Residual:* none here.
+
+**K-49 · `forgive`'s reach vs its stated purpose (the author's).** *Sides:* the churn-survey
+interrogation states `forgive` as the grudge's closer. A stance row is `(referent, valence, weight)`
+with no kind (`queries/person_q.py:51-60`), so the write also ends the morale row `_eff_march` writes
+toward the loser's own faction (`effects_combat.py:356-357`) and a seeded disloyalty toward a creed's
+subject (`harness/populated.py:849-851`; `data/cast.py:328-348`); the computed producer reaches the
+actor's own faction and persons before any enemy faction's Proposition (§9.4); and the realm fights no
+field (K-31), so it holds no grudge row at all. *Resolution:* keep the reach — to forgive is to stop
+holding a thing against someone, whatever it was, and a kind column on stance rows for one verb would
+widen a carrier the write does not need; key the realm falsifier to field-planted rows, since a bare
+realm count would observe only morale and seeded rows (CLAUDE.md §0.1 pt 2); name the
+Proposition-referent source as the computed case's blocker. *Filter:* step 5. *Changed:* §7.2, §8.1,
+§9.4, §10.4 step 13. *Residual:* none needing a ruling; R-9 is separate.
+
 ---
 
 ## 13. Residual decisions
 
-Five decisions survive all five filter steps (R-1, R-3, R-4, R-5, R-8): in each, two defensible options
+Six decisions survive all five filter steps (R-1, R-3, R-4, R-5, R-8, R-9): in each, two defensible options
 lead to materially different games, or the answer amends a closed roster or a ratified row. **The suite
 carries the recommended option in each. Every recommendation is Jordan's to overrule**, and each entry
 says what the other option would change. R-2 is resolved in revision 3 inside the filter and is kept
-here with what its alternative would change; it leaves two one-line residuals (§13.6). No ledger row
-was written for any of them.
+here with what its alternative would change; it leaves two one-line residuals (§13.6). R-9 is §13.10,
+after the two lists, so that no section number moves. No ledger row was written for any of them.
 
 ### 13.1 R-1 — `execute`: judicial death by direct write, or only through the combat seam?
 
@@ -2182,7 +2887,7 @@ was written for any of them.
   enforcement seat-holder's `fight` against the prisoner through the seam; `person.died` arrives by degree.
 - **Why (b):** it keeps direction 3 whole — no character chooses an outcome — avoids the name collision
   with the repo's "executed" vocabulary (§4), and makes a botched execution a story.
-- **What (a) would change:** benches gain certain death, and the suite a thirteenth new verb (56 in all),
+- **What (a) would change:** benches gain certain death, and the suite a fifteenth new verb (58 in all),
   spelled something other than `execute`, with a disposal kind carrying "death" that no carrier has today
   [GAP]; §5 family 28 moves from OUTCOME to GAP; §9.8 and §10.2's Active Inquisition row change.
 
@@ -2220,7 +2925,7 @@ contestable (T-h (b)'s standing debt, `01_AXIOMS.md:474-480`).
   `effects_governance.py:90-91`), so vow-breaking stays witnessable and the three alignment cells that
   price it (`rosters.yaml:2158, :2194, :2232`) re-key on the event kind.
 - **Why (b):** one edge, one closer.
-- **What (a) would change:** two closers of one edge stay; the suite is 56 verbs; build step 2 loses its
+- **What (a) would change:** two closers of one edge stay; the suite is 58 verbs; build step 2 loses its
   second half.
 
 ### 13.4 R-4 — may a seat with no rung above be deposed by rule?
@@ -2274,8 +2979,8 @@ contestable (T-h (b)'s standing debt, `01_AXIOMS.md:474-480`).
   lift a text and the holder's recourse is law, one where documents move only by law.
 - **Why (a):** it gives the covert half of the survey's Finding 3 — the finder can take, not only see —
   a carrier, and three demand rows a family.
-- **What (b) would change:** `steal` leaves the suite (55 → 54 verbs, 12 → 11 new, 56 → 55 roster rows,
-  13 → 12 gate bases, new `own` verbs 6 → 5); family 62 stays GAP with no verb; the three extraction rows
+- **What (b) would change:** `steal` leaves the suite (57 → 56 verbs, 14 → 13 new, 58 → 57 roster rows,
+  13 → 12 gate bases, new `own` verbs 7 → 6); family 62 stays GAP with no verb; the three extraction rows
   [G1-38, G1-98, G2-26] and the Church's "text suppression" portfolio (`rosters.yaml:1536`) keep no covert
   route to a document; and the espionage layer is one in which the finder can never take.
 
@@ -2291,6 +2996,10 @@ contestable (T-h (b)'s standing debt, `01_AXIOMS.md:474-480`).
 - **The telling workplan's G7** carries the lie; **ED-FI-0009** the investigation rows, including
   `surveil`'s Person case and the value space a false lead needs (K-37).
 - **H-163 limit 4** carries the date↔docket join the survey's agenda control needs (§10.3).
+- **H-111** is already Jordan's: whether a refusal should seed deliberation. The churn survey's D6 and
+  D12 raise its stake; no new row.
+- **H-180** carries the subject tie the churn survey's D4 asks for; **H-169** the consumer a forged
+  document's weight waits on (K-48); **H-33** the chronicle's reach, which `proclaim` now uses (K-42).
 
 ### 13.9 Answered here, not escalated
 
@@ -2311,7 +3020,13 @@ contestable (T-h (b)'s standing debt, `01_AXIOMS.md:474-480`).
 | `speak` and `work`: cut? | No; retained, THIN | 4 — each owns a distinct act (§12) |
 | A siege: a verb, a Record, or a Query? | A Query over an arrived army; `besiege` folds into `march` | 1 and 5 — direction 8 (K-28) |
 | Does a march need a war? | No; `at_war` gates no verb, and war is an uttered Proposition the tree already reads | 3 and 4 (K-29) |
-| Is `proclaim` in the suite? | No; deferred with its readers — no kind it would mint has one | 5 — the orchestrator's decision, overrulable (K-34) |
+| Is `proclaim` in the suite — is a public declaration a verb? | Yes, since revision 5: a Proposition minted through a seat, read by the chronicle and Q2; no Record kind (revision 3 said no, K-34, now retired for the verb) | 4 — K-29's shape (K-42); overrulable, as K-34 was |
+| Does a grudge fade? | No — it ends by its holder's act, `forgive` | 3 — AX-5's three motions, AX-6 (K-41); the alternative is R-9 |
+| What does `forgive` end? | Every negative stance row toward its referent, whatever wrote it | 5 — a stance row carries no kind (K-49) |
+| May B tell C about C? | Yes — `tell`'s `to` may be its topic | 5 — the docstring's "different people" is an assertion; Decision 3 is precedent (K-43) |
+| Hazard-rate thresholds before a collective act (the churn survey's D3)? | Refused; the warning stage is a band crossing's Event, and a seat's `proclaim` | 3 — AX-5, T-c (K-44) |
+| Should `tell` key two refusal kinds, to report the deciding term (D6)? | No; T4 withholds the hearer's absence on purpose | 1 — ED-IN-0282's T4 (K-46) |
+| `warn`, `confront`, `vouch`, `gossip`, `recant`, `reconcile`, `denounce`, `scapegoat`, `rally`, `incite`, `retaliate`, `avenge`, `shadow`, `tail`, `lie`: verbs? | No — each fails one of §1's five tests (§6.8) | the test named per candidate |
 | What is Valoria's verification policy? | Consequence-tested submission over held truth, with hidden reliability grading of evidence at production, and judgment of a Proposition as probability (§6.1) | 3 and 4 — AX-2, AX-3, AX-7, T-j; `record()`; 4.5's own text |
 | Approach in questioning: verbs or data? | Data — a non-operand payload key on the one row | 4 — `mood` on `utter`; six-as-six (`verb_table.yaml:950-960`) |
 | Is `interview` a graded finding? | No; a prompt the questioned person answers by their own `tell` | 3 — the F8 carve-out (K-36) |
@@ -2320,6 +3035,21 @@ contestable (T-h (b)'s standing debt, `01_AXIOMS.md:474-480`).
 | What does 4.5's Failure deposit? | Nothing, until a value space is ruled | 5 — no invented number (K-37) |
 | Should the contested bench's obstacle read testimony? | Yes, as an observation for the SC lane; not built here | — ED-SC-0033 cl. 3 names the owner |
 | The survey's shared loss (P44), P-03's "GM is the rendering engine", GD-2's faction that selects | observations for the FA, WR and canon lanes; not acted on | — (Appendix D, f, n) |
+
+### 13.10 R-9 — does a grudge end only by its holder's act, or also fade at MATTER?
+
+- **(a) — recommended, carried in the suite.** Act only: a grudge ends when its holder `forgive`s
+  (§9.4). AX-5 names three motions, and its fading moves a claim's *confidence*, "only REMOVES and never
+  REVISES" (`01_AXIOMS.md:128-141`); a stance row has no confidence to fade, so a fading grudge would be a
+  fourth motion. And `score` already makes the deepest grudges the least likely forgiven (§9.4).
+- **(b)** A per-season valence decay on stance rows.
+- **Why it survives the filter.** Steps 1–4 are silent on stance in particular: no ruling, no design
+  document and no precedent fades a regard. Step 5 splits: both are sound architectures and they give
+  materially different games — one where a defeat is held against the victor until someone chooses to
+  let it go, one where grudges soften unasked, which is the churn survey's own D8 target.
+- **What (b) would change:** AX-5's list of motions; a MATTER write to a `social: true` row
+  (`write_matrix.yaml:215`) against L4's "no social quantity moves here" (`loop/matter.py:553`); a new
+  fixture and sweep for the rate; and `forgive` would remain, as the act that ends a grudge at once.
 
 ---
 
@@ -2353,6 +3083,10 @@ Every observable below is read by an instrument that exists: `harness.corpus_run
 | `oblige` (reader) | `purview_reaches` true across two seats joined by a holder's `oblige` |
 | `work` (delta ≥ 0) | a hand-built `work` with a negative declared delta is refused |
 | R-3 | `test_u7_own.py:42`'s DECLINED tuple shrinks; `commitment.ended` emitted by `release` |
+| `forgive` (revision 5) | hand-built: after a `field.lost`, `stance_toward(p, F) == 0` and `stance.moved` in `w.log`; `forgive.refused` on a referent with no negative row; realm: `forgive` executions whose subject is named by a field-planted row, walking `w.log` — expected 0 until H-149 and H-175 move (K-49) |
+| `proclaim` (revision 5) | a `proclamation.made` claim held `told_by`, with an empty chain, by a person not co-located with the proclaimer (`test_told_by_channel.py:133`'s shape); `aperture 1 0` `proclaim` ex > 0; control, `CLAIMS BY SOURCE`'s `told_by` unchanged with the row withheld |
+| `tell` (to its topic, revision 5) | B holding `(C, x)` forms a `tell` with `to == C`; C's `questions_for` raises Q2's first clause on the told claim; `test_season_shape.py:14747-14752` re-pinned |
+| the churn directives (§6.5) | the executable tests named per directive in §6.5's table; D8's per-stem rate map and D3's warning share are new tests, not yet written |
 | states | war: `at_war` true after an `utter` of a `WAR`-mood Proposition and a `commit` to it, false after the `release` (already a real fold, `faction_q.py:232-242`) · truce: deferred · treaty: tribute renewed by `_renewals` · alliance: allied persons in a `march`'s sides · vassalage: as `oblige` · hostage: a `custody` edge opened by `detain` under the receiving seat's warrant after the hostage's `move`, and his `move` refused while it is live (K-38) · siege: some faction other than the holder's `mustered` at a settlement after an arrival · excommunication: a `confer` refused on a banned person · outlawry: a seatless `detain` on a `ban` holder · custody: as `detain` · sentence: `_renewals` treating two disposal kinds differently · concealed identity: as `conceal` |
 
 ### 14.2 What was not verified
@@ -2392,8 +3126,46 @@ Every observable below is read by an instrument that exists: `harness.corpus_run
   from developer material; the *L.A. Noire* fan wiki's count of 236 interrogation questions (56 Truth,
   106 Doubt, 74 Lie); *Suzerain*'s two-thirds Assembly majority plus Supreme Court for an amendment, from
   one guide; *The Republic of Rome*'s designers. None was re-checked here (§6.4).
+- **The churn-survey interrogation** ran nothing; every count in §6.5 is the tree's own recorded
+  measurement (the telling workplan's, `epistemic.py`'s docstrings, `corpus_run`'s recorded output).
+  The author of revision 5 opened the sites in §14.3; every other `path:line` in §6.5–§6.8 is as the
+  churn-survey interrogation cites it and was not re-opened — among them `loop/resolve.py:294-329`,
+  `loop/matter.py:139-221, :426-453, :542-551`, `loop/witness.py:583-691, :697-731`,
+  `state/carriers.py:571, :620-628`, `epistemic.py:256-260, :322-347, :615-661`,
+  `world_q.py:1467-1530`, `test_told_by_channel.py`'s line ranges other than `:133`, `:438` and `:796`,
+  `corpus_run.py:692, :1002-1003`, `requirements.yaml:193-199`, `hole_register.yaml:4120-4122`,
+  `rosters.yaml:862-894` (the H-33 note above the lines opened), `data/fixtures.py:565-566`, and
+  `test_u7_remit.py`, which neither pass opened. H-177 is named as the interrogation names it.
+- **The churn survey's own unverified items**, carried as it states them: *Crusader Kings III* 1.19
+  "Scribe" (20 April 2026) and 1.20 "Crozier" (30 September 2026; hotfix 1.20.0.3, 1 October 2026),
+  from patch trackers; *The Guild 2*'s ~6-year evidence decay [SESSION]; *Manor Lords*' version dates
+  (Update 5, 19 December 2025; 0.8.065, 18 March 2026; the August 2026 update); *RimWorld* 1.6 and
+  *Odyssey* (11 July 2025); the *Nemesis* patent, U.S. 10,926,179, granted 23 February 2021, adjusted
+  expiry 11 August 2036; *Dwarf Fortress*'s wiki-documented v53.16 and its 2026 patch dates; every
+  [SESSION] claim drawn from the session documents, none of which is committed (§1); and every
+  secondary title, which it did not re-verify. None was re-checked here (§6.8).
 
 ### 14.3 Sites opened
+
+**By the author of revision 5 (2026-10-04).** `loop/witness.py` 335–390, and its `Claim(` sites by
+search (380, 492, 513, 540, 682) · `epistemic.py` 127–139, 175–225, 490–505, 520–559, 735–769 ·
+`rosters.yaml` 395–414, 895–914, the alignment cells 2088–2240 (by script: no cell for `tell`, `give`,
+`speak` or `march`) · `loop/effects_combat.py` 296–364 · `queries/person_q.py` 40–75, 232–272 ·
+`decision/options.py` 40–210, 830–864, 1040–1098 · `loop/matter.py` 230–266, 548–556 ·
+`data/fixtures.py` 250–264, 442 · `decision/choose.py` 318–333 · `architecture/meta/01_AXIOMS.md`
+128–142, 225–244, 660–684 · `verb_table.yaml` 405–444, 578–615, 676–700, 872–946, 1151–1180 ·
+`write_matrix.yaml` 205–229 · `data/verbs.py` 690–739 · `queries/world_q.py` 389–417, 436–470, 1420–1444
+· `loop/effects_information.py` 452–470 · `data/rosters.py` 358–366 · `data/cast.py` 328–348 ·
+`harness/populated.py` 835–856 · `harness/corpus_run.py` 966–983 · `state/gate.py` (by search: no
+`stance`, one `tenure_write_basis`) · `hole_register.yaml` 1423–1477 (the `LOOP` rows) ·
+`engine/season/tests/test_season_shape.py` 4422–4454, 14730–14780 ·
+`engine/season/tests/test_told_by_channel.py` (test names by search: `:133`, `:438`, `:796`) ·
+`workplans/2026-10-01-telling-workplan.md` 1–14, 28–36, 244–268, 305–315, 378–386 ·
+`proposals/2026-09-12-emergent-narrative-primitives-v2/04_PROVENANCE.md` 120–175 (and `M9` by search:
+absent) · every non-test Python file under `engine/season/` for `stance.moved` (no emitter) and for
+writes to `stance` (`loop/effects_combat.py:358`; `harness/populated.py:851`, at build) · the tree for
+the session documents' labels (four files: this one, the telling workplan, `04_PROVENANCE.md`,
+`registers/editorial_ledger_in.jsonl`). Outside the tree: the churn survey, whole.
 
 **By the author of revision 4 (2026-10-04).** `loop/witness.py` 135–162, 278–329, 370–394 ·
 `architecture/meta/01_AXIOMS.md` 100–153, 260–359, 480–491, 1395–1414 · `verb_table.yaml` 205–232,
@@ -2500,8 +3272,9 @@ all three (K-28, K-29, K-32).
 
 ### 14.5 Corrections to the audit pass, made by the author
 
-Items 5, 6 and 10 concern `war` and `proclaim`, which revision 3 has removed (K-29, K-34); they stand as
-the record of revision 2.
+Items 5, 6 and 10 concern `war` and `proclaim`, which revision 3 removed (K-29, K-34); they stand as
+the record of revision 2. `proclaim` returns in revision 5 with a different cell — a proclamation to a
+place in purview, never against a target outside it (K-42; §14.11, item 11).
 
 1. **K-05:** `detain`'s two refusal kinds are not "lawful only on a flat row". The loader refuses a
    contested keyed row with more than one kind (`data/verbs.py:717-720`); K-02's own fold edit narrows that
@@ -2687,6 +3460,93 @@ three theft rows and the two *Shadows of Doubt* dates in the games extraction ta
 3. Appendix C's "*Shadows of Doubt* (ColePowered, 2024)" is the full release; early access opened on
    24 April 2023 (§2).
 
+### 14.11 Corrections to the churn-survey interrogation, made by the author of revision 5
+
+1. **`proclaim`'s cell is `issue`'s shape, not `open_case`'s.** The interrogation calls `all: [existence
+   of subject kind Rung, basis of subject purview]` "`open_case`'s cell (`verb_table.yaml:685-690`)".
+   `open_case`'s cell is one conjunct, `basis … purview … authority`; the two-conjunct `all:` is
+   `issue`'s (`:417-426`: `existence` of `to` kind Person and `basis` of `to` purview). The cell stands —
+   both forms exist, no new form (§9.2).
+2. **`_ch_post_remit` credits nobody for a proclamation.** The interrogation lists it as a reader
+   depositing `inferred` to the seat's obligees. `chronicle` precedes `post_remit` in the ordered
+   `witness_channels` (`rosters.yaml:398-405`), and the strongest admitting channel credits a witness
+   (`loop/witness.py:335-339`); `_ch_chronicle`'s docstring measures `post_remit` strongest "for none"
+   (`epistemic.py:550-552`). Every holder not present takes `told_by`, none `inferred` (§9.2). Recorded in
+   §10.3 as one candidate cause of `inferred` reading 0, not isolated.
+3. **A proclamation's deposit is about the proclaimer, the Proposition and the rung.** The
+   interrogation names `(actor, proclamation.made, True)`. Under the shipped `both` rule
+   (`data/fixtures.py:442`) a deposit's subjects are the anchor, each change's subject and the act's
+   payload subject (`epistemic.py:127-139, :175-198`), so the rung's claim also raises Q2's first clause
+   for those whose reach holds it. A widening of the reading, not a reversal.
+4. **`teller_weight` never reads a forgiven grudge.** The interrogation says a forgiven referent's
+   claims "stop being discounted at once" through `teller_weight`'s regard (`options.py:1087-1090`).
+   That regard is asked of a teller — a person, `chain[-1]` — and a field's grudge names a faction's
+   Proposition id (`faction_prop_id`, `data/rosters.py:358`), never a teller. `score`'s stance term reads
+   it, for Candidates whose subject is that Proposition (§9.4).
+5. **`forgive`'s computed producer does not reach a field's grudge after build step 2.** The
+   interrogation: for a `fac_*` referent "the Proposition must be in reach … else it waits on step 2's
+   Proposition referents". Step 2 mints the utterer's own hold and puts no enemy faction's Proposition in
+   a loser's reach: `reach` admits a Proposition only through a live Tenure (`world_q.py:461`), a loser
+   commits to his own faction, and `place_of` answers `None` for a Proposition (`:410-411`), so Q2's
+   first two clauses cannot raise the winner's. The computed field case waits on a source of Proposition
+   referents (`verb_table.yaml:773`'s gap). [DISAGREE: the interrogation's reading would hold if a
+   content claim naming the winning faction — a held `faction_sheet`, say — reached the loser through
+   Q2's third clause; the author did not trace that clause, and both readings are kept (§9.4).]
+6. **`forgive`'s write reaches more than the grudge (K-49).** The interrogation does not name it: a
+   stance row carries no kind, so the write also ends the morale row toward the loser's own faction
+   (`effects_combat.py:356-357`) and a seeded disloyalty (`harness/populated.py:849-851`;
+   `data/cast.py:328-348`). And because the realm fights no field (K-31), its proposed realm falsifier,
+   `aperture 1 0` `forgive` ex > 0, would observe only those rows; it is re-keyed to field-planted rows
+   (§9.4).
+7. **The refused candidates are thirteen.** The interrogation lists thirteen (eighteen words, each slash
+   pair one candidate with one failing test) and counts "fourteen tested, fourteen refused" (§6.8).
+8. **Group codes.** The interrogation heads `forgive` "G7" and `proclaim` "G5/G12". §3.2 places a row
+   by the column that discriminates it: G7's is the Tenure fields, which `forgive` does not write; G5's
+   is `writes: []` and G12's `requires: —`, both of which `proclaim` fails. `forgive` is G15 (a Person's
+   own field); `proclaim` is G14 (an instrument under `remit:issue`), where revision 2 had placed it
+   before K-34.
+9. **`04_PROVENANCE.md` adjudicates M1–M8, not M1–M9.** The interrogation says the file adjudicates the
+   *Third Strand*'s "M1–M9 at `:154-171`". The file says "Seven of its nine modules" (`:154`), tables M1
+   to M5, M7 and M8, and names M6 at `:167`; M9 occurs nowhere in it.
+10. **Two cites placed.** `test_t4_one_candidate_per_known_hearer`, the pin the `tell` widening moves,
+    is `engine/season/tests/test_season_shape.py:14730` (the topic assertion at `:14747-14752`), not in
+    `test_told_by_channel.py`, beside which the interrogation places the new test. The oatmeal figure,
+    117 distinct executed sets, is the telling workplan's recorded measurement (`:246-247`), which
+    `corpus_run.py:981` prints and does not hold.
+11. **A proclaimed Proposition cannot itself be a war (the author's, not the interrogation's claim).**
+    The interrogation does not say how `proclaim` and war compose. `at_war` matches a `WAR`
+    Proposition's `{subject, value}` against a pair of factions (`queries/faction_q.py:244-246`), and
+    `proclaim`'s cell makes its `subject` a rung, which the shared mint carries into the Proposition. A
+    public declaration is therefore two acts: `utter` of the war, then `proclaim` of a `HOLDS`
+    Proposition about the place whose `value` is the war's id (§9.2). Carrying the place on another
+    operand so that one act could mint the war would coin a ninth operand (`rosters.yaml:1582`, refused),
+    and dropping the purview conjunct would let any seat proclaim anywhere — revision 2's own correction,
+    that a purview conjunct refuses every war whose target lies outside purview (§14.5, item 6), is the
+    same fact seen from the other side.
+
+Verified and not corrected: `loop/witness.py:380`; `epistemic.py:528-554` (the chronicle admits
+everyone alive for a `binding_decision` kind) and `:753-764` (`why` `None` by scope, the occasion one
+hop away); `rosters.yaml:404`, `:909`; `effects_combat.py:353-358` — every loser of every lost field, no
+cap, and the only runtime writer of `Person.stance`; `person_q.py:63-69`, `:248-250`, `:269`;
+`options.py:43-204`, `:172`, `:850`, `:1043-1097` (with `:1079-1080`'s empty-chain weight and `:1091`'s
+H-180 marker); `matter.py:235-265`; `data/fixtures.py:258`; `choose.py:328`; `01_AXIOMS.md:236-238`;
+`verb_table.yaml:587`, `:685-690` (as `open_case`'s), `:432-437`; `write_matrix.yaml:211-223`, with
+`stance.moved` emitted by nothing; `data/verbs.py:697-737`, `:717-720`; `world_q.py:460-469`,
+`:1431-1432`; the telling workplan at `:5`, `:28-33`, `:258-262`, `:305`, `:307`, `:311`, `:382`;
+`04_PROVENANCE.md:126-138`, `:148-150`, `:162`; no alignment cell for `tell`, `give`, `speak` or
+`march`; and the four files in the tree that name the survey's session documents.
+
+### 14.12 Corrections to revision 4, applied in revision 5
+
+1. §6.3's `tell` row, "change: none", holds only under the first survey; the churn survey widens `tell`
+   (§6.5, §6.7, K-43).
+2. §4's and Appendix A's `convene` falsifier cited `test_season_shape.py:4307-4316` as the `date.fired`
+   pin; those lines hold an S19.4 guard test today, and the pin is
+   `test_calendar_a_forced_corpus_date_fires_and_emits_but_deposits_no_claim` at `:4478` — line drift.
+3. K-34's ground is answered (K-42): every sentence that called `proclaim` deferred, or a proclamation
+   none-yet, now names `proclaim`.
+4. §8.1 listed no grudge state; it now does, with its closer.
+
 ---
 
 ## Appendix A. The 44, in full
@@ -2694,8 +3554,10 @@ three theft rows and the two *Shadows of Doubt* dates in the games extraction ta
 Pass 1's per-verb adjudication with pass 2's REACH and NOT merged in, as revision 1 carried it. Section
 references are renumbered to this revision, the exclusion kind is written `ban` (K-12), and a NOT entry
 that pointed at an unowned act now names the suite's owner; otherwise each block is revision 1's. **A block the suite changed carries one line `[SUPERSEDED by …]` naming what no
-longer holds; the section it names states the suite.** Citations are pass 1's unless §14.3 lists them as
-opened. *nj* = needs_jordan.
+longer holds; the section it names states the suite.** Revision 4 added a "Survey interrogation" line
+to the blocks the first survey judged; revision 5 adds a "Churn survey" line to the seventeen blocks
+the churn-survey interrogation judged or changed (§6.7). Citations are pass 1's unless §14.3 lists
+them as opened. *nj* = needs_jordan.
 
 ### `build`
 - **Etymology · fit:** OE *byldan* ← *bold* 'dwelling'; raise a dwelling → mint a Site at condition 0 from a held works. FITS.
@@ -2728,6 +3590,7 @@ opened. *nj* = needs_jordan.
 - **Falsifier:** leaves the always-refused pin (`test_season_shape.py:7624`).
 - **Blocker · nj:** H-156 · no for the hook; H-156's (a)/(b) stays Jordan's. A hold buys budget (`budget.py:57-58`, H-92; Appendix D, g).
 - [SUPERSEDED by §7.2 / K-07]: there is no vote through a seat — a vote is the holder's own `commit` and the count a Query; seat-to-seat fealty is a holder's own `oblige`, read by `purview_reaches`.
+- **Churn survey (§6.7):** APPLIES (sets F, G; F37, F41, F58) — obligation is the accelerant that forces acts, and a commit is witnessed and remembered; no change (step 2). A hearer's adherence to a proclamation is a `commit` (§9.2).
 
 ### `comply`
 - **Etymology · fit:** L *complere* → It. *complire* [UNVERIFIED: intermediate]; fulfil → act per a dispensation's terms. FITS.
@@ -2739,6 +3602,7 @@ opened. *nj* = needs_jordan.
 - **Falsifier:** `compliance.given` in `w.log` from `populated.run`, with no hand-built act.
 - **Blocker · nj:** H-44 (`hole_register.yaml:500`), H-94 · **yes**, for cutting a row of Jordan's triple (`verb_table.yaml:737`) — step 3.
 - [SUPERSEDED by §3.5, §4 / K-01]: retained unchanged by ruling (ED-IN-0210, 2026-09-18) — THIN, not REDUNDANT-WITH; no cut, nj no. `comply` itself emits `compliance.given`; the `transfer` it answers performs the terms, with no new emission.
+- **Churn survey (§6.7):** PARTLY (set G; finding 6) — obedience should be legible against refusal; the row is untyped; no change (K-01).
 
 ### `confer`
 - **Etymology · fit:** L *conferre*; bestow → seat an office by opening a `hold`. FITS.
@@ -2771,6 +3635,8 @@ opened. *nj* = needs_jordan.
 - **Why:** a sitting with a day people can act toward.
 - **Falsifier:** a `date.fired` claim in any ledger (`test_season_shape.py:4307-4316` pins 0 of 0).
 - **Blocker · nj:** H-163 limits 2 and 4 · no.
+- [SUPERSEDED by §4, §14.12]: the pin is `test_calendar_a_forced_corpus_date_fires_and_emits_but_deposits_no_claim` at `test_season_shape.py:4478` today; `:4307-4316` has drifted.
+- **Churn survey (§6.7):** APPLIES (sets A, H; F37's "when") — a sitting is an occasion others act toward, but `date.fired` never reaches WITNESS (`world_q.py:1362-1367`); no change to the row; H-163 limit 4.
 
 ### `create_record`
 - **Etymology · fit:** L *creare* + *recordari* → OF *record*; make a remembrance → mint a Record with stages. FITS.
@@ -2813,6 +3679,7 @@ opened. *nj* = needs_jordan.
 - **Falsifier:** leaves the never-attempted pin (`test_season_shape.py:8372`).
 - **Blocker · nj:** none · no.
 - [SUPERSEDED by §3.5 / K-24]: the rename to `order` is withdrawn — `order:` is an `arrangements.yaml` key and the fold's order key — and `dispatch` is kept by ruling (ED-IN-0210).
+- **Churn survey (§6.7):** APPLIES (sets G, C; finding 6) — a documentless order has no refusal Event to carry a reason; `order.given` is chronicle-public and read by no decision; no change (ruled; ED-IN-0211). A seat's public announcement is `proclaim`, not this row (§9.2).
 
 ### `establish`
 - **Etymology · fit:** L *stabilire* → OF *establir*; make firm → found an Office or change its remit. FITS.
@@ -2834,6 +3701,7 @@ opened. *nj* = needs_jordan.
 - **Falsifier:** `compliance.withheld` from computed play.
 - **Blocker · nj:** H-44, H-94 · **yes** — renaming or splitting Jordan's triple (`verb_table.yaml:737`), step 3.
 - [SUPERSEDED by §3.5 / K-01, K-24]: retained unchanged by ruling; no rename; split only when built; nj no.
+- **Churn survey (§6.7):** PARTLY (sets G, I; F56, finding 6, failure mode 7) — a refusal should state its deciding term, and covert and open refusal should cost differently; today one Event and no reason (`why` is `None` by scope, `epistemic.py:753-764`); no change now (K-01, K-24).
 
 ### `examine`
 - **Etymology · fit:** L *examinare* (*examen*, the tongue of a balance); weigh → study a Site one stands at. FITS.
@@ -2878,6 +3746,7 @@ opened. *nj* = needs_jordan.
 - **Falsifier:** `test_information_cluster.py:297` stops asserting that no act forges.
 - **Blocker · nj:** H-169 limits 2 and 5 (a consumer first) · no. Emits `record.created` where the matrix row emits `record.forged` (Appendix D, d).
 - [SUPERSEDED by §9.7 / K-15]: a false telling is deferred to the telling workplan's G7, not a `tell` widening.
+- **Churn survey (§6.7 / K-48):** APPLIES, THIN (sets I, D; F75, F13's document form) — fabricated evidence needs believability weighting and a detector; `forgery_quality` is read by nothing, and a held document's content deposit weighs 1.0 for its holder; no change — H-169's consumer first.
 
 ### `found`
 - **Etymology · fit:** L *fundare* → OF *fonder*; lay a base → mint a Rung under its works' `at`. FITS.
@@ -2900,6 +3769,7 @@ opened. *nj* = needs_jordan.
 - **Falsifier:** `test_give.py:94-399`.
 - **Blocker · nj:** none · no.
 - [SUPERSEDED by §9.3 / K-39]: taking a Record without consent and without a warrant is `steal` (R-8); `seize` needs a warrant or occupation.
+- **Churn survey (§6.7):** APPLIES exactly (sets C, D; F08, F58) — a document in a new hand is a held belief, the one carriage with no loss (`witness.py:283-305`); the Rung widening, no other change.
 
 ### `interview`
 - **Etymology · fit:** MF *entrevue*; a meeting → question an existing person. FITS.
@@ -2924,6 +3794,7 @@ opened. *nj* = needs_jordan.
 - **Blocker · nj:** H-94; `15c` · no. New kinds proposed: `warrant`, `summons`, `charter` (§8).
 - [SUPERSEDED by §8.2, §10.1 / K-11]: no new kinds — a warrant, summons or charter is a `dispensation` distinguished by its `terms`; in the suite `to` fans over known persons so `terms` and the executor separate.
 - [SUPERSEDED by §9.2 / K-34]: an edict to a place is none-yet — `proclaim` is deferred with its readers.
+- [SUPERSEDED by §9.2 / K-42]: `proclaim` is in the suite since revision 5; an edict to a place is a proclaimed Proposition.
 
 ### `levy`
 - **Etymology · fit:** L *levare* → OF *levée*; a raising → move a rung's stores into the seat's treasury. FITS.
@@ -2934,6 +3805,7 @@ opened. *nj* = needs_jordan.
 - **Why:** how a seat eats.
 - **Falsifier:** realm ex > 0 (23/0); `test_u7_remit.py:201`.
 - **Blocker · nj:** H-163 limit 3; the `remit:issue` substitution is H-52's neighbour (`verb_table.yaml:587`) · no for the hook.
+- **Churn survey (§6.7):** APPLIES (set F; F27 inverted — a seat takes stores by act, never by raid points); no change. Its `remit:issue` substitution is the one `proclaim` takes (§9.2).
 
 ### `march`
 - **Etymology · fit:** OF *marchier*, probably Frankish [UNVERIFIED]; tread → send a mustered side against a settlement. FITS.
@@ -2945,6 +3817,7 @@ opened. *nj* = needs_jordan.
 - **Falsifier:** `test_march.py:323`; leaves the never-attempted pin (`test_season_shape.py:8372`).
 - **Blocker · nj:** H-175, H-149 · no (the winner's writes: **yes**).
 - [SUPERSEDED by §7.2, §9.6, §13.2 / K-28, K-30, K-33]: there is no `besiege` — a siege is a Query over an arrived army; a won or unopposed march writes the arriving army's presence (basis `muster`) and no hold; title moves by `seize` under occupation, `give`, `release` or death, never `revoke`; R-2 is resolved, nj no (R-6 and R-7 remain as one-line residuals).
+- **Churn survey (§6.7 / K-41, K-45):** PARTLY (sets A, E; F24, F36) — the only act that writes disposition: a grudge row toward the winning faction on every loser of every lost field (`effects_combat.py:353-358`), with no cap, decay or closer. Change: register the loop's sign (a `LOOP` row, `sign: +`, ID-16) and close it with `forgive` (§9.4).
 
 ### `migrate`
 - **Etymology · fit:** L *migrare* → re-home `contain` and `reside`, throttled by capacity. FITS.
@@ -2976,6 +3849,7 @@ opened. *nj* = needs_jordan.
 - **Falsifier:** `test_obligees.py:282` flips; leaves the never-attempted pin.
 - **Blocker · nj:** seat referents (H-94/H-54) · no.
 - [SUPERSEDED by §7.2, §10.1 / K-07, K-25]: no `via` or remit alternative — vassalage is the row as it stands, a seat-holder's own `oblige` to another seat, read by `purview_reaches`; `reach` admits a held seat, and the seat referent comes from a held Record's `terms` or a `tenure.opened` deposit.
+- **Churn survey (§6.7):** APPLIES (sets F, C; F16, *Dwarf Fortress*'s spy collecting rumours) — institutional staff should know their seat's business second-hand, but the obligee's channel, `inferred`, reads 0 with an obligee seated (`epistemic.py:497-502`), and `chronicle`'s precedence keeps `post_remit` from crediting any `binding_decision` kind (§10.3); no row change; isolate the cause.
 
 ### `open_case`
 - **Etymology · fit:** L *casus* → OF *cas*; legal → mint a case file and docket the matter. FITS.
@@ -2988,6 +3862,7 @@ opened. *nj* = needs_jordan.
 - **Blocker · nj:** H-52 (`verb_table.yaml:700-701`) · already registered as H-52, no new row. New kind proposed: `case` (§8).
 - [SUPERSEDED by §8.2 / K-11]: no `case` kind — the effect mints `text` by its own ruling until a reader needs one (`effects_information.py:196-198`); an accusation is a `petition` by its `terms`, not a kind.
 - [SUPERSEDED by §8.1 / K-35]: the docket stays person-keyed — `open_case` dockets the accused — and what is charged is an uttered `HOLDS` Proposition the petition names.
+- **Churn survey (§6.7):** APPLIES (set H; F42, F47) — adjudication turns diffuse claims into one official fact; no change (K-35).
 
 ### `petition`
 - **Etymology · fit:** L *petitio* → OF; a request → mint a petition Record to a person, from a rung. FITS.
@@ -3000,6 +3875,7 @@ opened. *nj* = needs_jordan.
 - **Blocker · nj:** H-94; its closers are unbuilt (`effects_information.py:313-318`) · no.
 - [SUPERSEDED by §8.2 / K-11, K-23]: not kinds — an accusation, demand or challenge is a `petition` distinguished by what its `terms` names.
 - [SUPERSEDED by §8.1 / K-35]: an accusation's `terms` names the charge — an uttered `HOLDS` Proposition whose subject is the accused — and testimony is a witness's `commit` to it.
+- **Churn survey (§6.7):** APPLIES (sets H, C; F13, F54) — accusation is carriage into the institution, and falsity enters at registration; not evidence-gated by design, so a false charge is producible today (`utter` + `petition`, the shape of *Dwarf Fortress*'s framing report); no change.
 
 ### `reconstruct`
 - **Etymology · fit:** L *re-* + *construere* → make a finding from held claims. FITS.
@@ -3021,6 +3897,7 @@ opened. *nj* = needs_jordan.
 - **Why:** resignation, divorce, apostasy.
 - **Falsifier:** `release` refusals fall; `test_g3_release_is_the_owners_discretion_and_the_owners_only`.
 - **Blocker · nj:** none · no.
+- **Churn survey (§6.7):** APPLIES (sets F, G; F38, failure mode 7) — defection needs lag and a reason; `release` is instant but costs a scene, is witnessed, and states no reason; no change. Its person-side own-state decline is shared with `forgive`'s (§9.4), and ending a grudge is `forgive`'s, a stance row being no edge.
 
 ### `repudiate`
 - **Etymology · fit:** L *repudiare* (*repudium* 'divorce'); cast off → close one's own `commit`. FITS.
@@ -3076,6 +3953,8 @@ opened. *nj* = needs_jordan.
 - **Blocker · nj:** none · **yes** — cutting a §E3 row, step 4 [CONFIDENCE: medium]. Settle with a corpus run withholding `speak`: if claim counts and check R3 hold, cut.
 - [SUPERSEDED by §3.5]: retained, THIN — no cut and no new conjunct; nj no.
 - [SUPERSEDED by §3.4 / K-34]: a seat's proclamation is none-yet — `proclaim` is deferred with its readers.
+- [SUPERSEDED by §9.2 / K-42]: a seat's proclamation is `proclaim`.
+- **Churn survey (§6.7):** PARTLY (sets B, C) — F08's hollow form: witnessed, carrying nothing, it seeds `tell`; speech without content is the survey's trivial carriage (failure mode 5); no change (§3.5 stands).
 
 ### `succeed`
 - **Etymology · fit:** L *succedere* → OF *succeder*; follow in place → the HOLDER designates an heir. STRAINED — the heir succeeds; the actor designates. Plain alternative `designate` (proposal); `succeed` is also the tenure kind (`rosters.yaml:115`).
@@ -3110,6 +3989,7 @@ opened. *nj* = needs_jordan.
 - **Why:** a stake, once something reads the sheet.
 - **Falsifier:** `test_information_cluster.py:146,204`.
 - **Blocker · nj:** H-169 limit 5 · no.
+- **Churn survey (§6.7):** APPLIES (sets K, D; F66, and F49's opposite — a sheet goes stale by construction) — a record is read because it can be used, and here it is held; the Rung widening, no other change.
 
 ### `tell`
 - **Etymology · fit:** OE *tellan* 'recount' → tell a known present person what one holds, contesting their standing. FITS.
@@ -3121,6 +4001,8 @@ opened. *nj* = needs_jordan.
 - **Falsifier:** `test_told_by_channel.py:1042`.
 - **Blocker · nj:** `sigma`'s `REFUSED` raises an uncaught `Unspecified` (`resolve.py:585-590`) — an SC-lane observation · no. The declared beneficiary disagrees with the code (Appendix D, c).
 - [SUPERSEDED by §9.7 / K-15]: the lie is deferred to the telling workplan's G7, a decision-layer change at `said_of`, not a row widening.
+- [SUPERSEDED by §7.2, §9.6 / K-43]: `to` may be the topic — B may tell C about C — and the NOT "a public (presence covers bystanders)" reads "a public: presence, and a seat's `proclaim`".
+- **Churn survey (§6.7):** APPLIES (sets C, E, I; F04, F08, F58, F72, F73, F64) — carriage with a source tier, decay and C's reply, its content coupled to stakes. The told channel carries mostly the event-kind claim, not content (§6.5). Change: the widening to `to == subject` (D5) and the telling workplan's T7 at `said_of`; the lie stays G7; T-e kept.
 
 ### `thread_read`
 - **Etymology · fit:** OE *þrǣd* + *rǣdan* 'interpret' → a finding gated on Thread Sensitivity ≥ 30. FITS (canon term, `verb_table.yaml:959-960`).
@@ -3164,6 +4046,8 @@ opened. *nj* = needs_jordan.
 - **Blocker · nj:** H-92, the cost of a hold · no.
 - [SUPERSEDED by §9.2 / K-29, K-34]: a declaration of war is this verb — a `WAR`-mood Proposition, read by `faction_q.at_war` once committed; `proclaim` is deferred with its readers, so a seat's edict is none-yet.
 - [SUPERSEDED by §8.1 / K-35]: a charge is this verb too — mood `HOLDS`, subject the accused; a computed `utter` sets no mood, so a computed charge, like a computed war, waits on a source (§14.9).
+- [SUPERSEDED by §9.2 / K-42]: a seat's edict is `proclaim`, which mints a Proposition through the mint this verb shares; a declaration of war is still this verb, and a seat may announce it by `proclaim` — a second Proposition naming the war.
+- **Churn survey (§6.7):** APPLIES (sets A, I, K; F52, F13) — falsity enters at registration: a secret is an utterance others lack, and with no precondition a false Proposition is utterable today. Change: step 2 (the hold); a computed `mood` source (§8.1); one Proposition mint shared with `proclaim`.
 
 ### `work`
 - **Etymology · fit:** OE *weorc* → alter `Site.condition` by a declared delta, else advance a works' fabric. MISFIT — labour produces, and yield is MATTER's (`Rung.yield`, `write_matrix.yaml:316-322`); the row does `restore`'s rise under a floor (`effects_economy.py:73-77`).
@@ -3178,7 +4062,7 @@ opened. *nj* = needs_jordan.
 
 ---
 
-## Appendix B. The 62 act families and their evidence
+## Appendix B. The 63 act families and their evidence
 
 One class per family, against the resolved suite (§5). Evidence names the game and act, the repo
 document, or the historical procedure; bracketed ids are extraction rows. *R* `research/`; *P1*
@@ -3198,8 +4082,8 @@ CK3 and RTK; *H1* history.
 | 9 | Hear, try, judge | WIDENED · `determine` contested | *Pentiment*'s judgement and sentence [G1-12]; *L.A. Noire*, charging one of two suspects [G1-66]; *Shadows of Doubt*, resolving the case [G1-89]; second and third readings [H1-14]; the impeachment trial [H1-28]; the Forty [H1-103]; the public sentence [H1-125]; the consistory [H1-138]; condemning a doctrine [H1-150]; the inquiry verdict — tribunal recommended / inconclusive / exonerated [P1-40]; trying a heresy case [P2-67]; a graded hearing (H-162) and the four unseeded procedure games [C-02]; ordeal and judicial duel [H1-155, H1-156; P1-25] |
 | 10 | Sentence | OUTCOME — the disposal's kind: `oblige`, `custody`, `ban`; death is `custody` + `fight` (R-1) | penance [H1-127]; imprisonment [H1-129]; relaxation to the secular arm [H1-130]; execution [H1-174]; *Pentiment*'s execution [G1-13]; execution and erasure [R1-36]; a sentence read as a job (H-173) [C-04] |
 | 11 | Confess, swear, abjure | COVERED · `commit`, `tell`, `release` — swearing and testimony are `commit`s to the charge (an oath is an utterance, `01_AXIOMS.md:1399-1403`); a confession is `interrogate`'s `confession.made`, whose claim value is the charge's id (K-35) | swearing to answer truthfully [H1-120]; abjuration [H1-126]; compurgation [H1-154]; abjuring as releasing the commitment (`03_INQUIRY.md:280`) [P1-42]; `confession` as a rostered proof (`rosters.yaml:1828`) [C-10] |
-| 12 | Excommunicate, interdict, absolve | WIDENED · `determine` disposing `ban`; `pardon` (interdict deferred with `proclaim`, K-34) | CK3, excommunicate and lift [G2-54]; papal release from oaths [H1-77]; absolution [H1-128]; excommunication [H1-136]; interdict [H1-137]; the roster's Excommunication [P1-12]; a Cardinal's excommunication term [P2-68]; `church_standing` with no producer [C-06] |
-| 13 | Edict, law, coinage, emergency | DEFERRED · `proclaim` deferred with its readers (K-34); its `edict` and `emergency` kinds wait on a reader each (K-11) | edict and proclamation [H1-54]; the inquisitor's edict of grace, a 30–40-day window for self-denunciation [H1-117]; censure, embargo and outlawry in the faction roster [P1-11]; coinage [H1-64]; the dispensing power [H1-66]; debasement and recoinage [R1-23]; edicts and emergency decrees [R1-43]; martial governance [P1-05]; the Policy Instrument [P1-60]; a state of emergency [C-32]; CK3, changing a realm law [G2-41] |
+| 12 | Excommunicate, interdict, absolve | WIDENED · `determine` disposing `ban`; `pardon` (an interdict is a `proclaim`ed Proposition, its effect reader deferred, K-11, K-42) | CK3, excommunicate and lift [G2-54]; papal release from oaths [H1-77]; absolution [H1-128]; excommunication [H1-136]; interdict [H1-137]; the roster's Excommunication [P1-12]; a Cardinal's excommunication term [P2-68]; `church_standing` with no producer [C-06] |
+| 13 | Edict, law, coinage, emergency | GAP · `proclaim` (revision 5, K-42): an edict or a declared emergency is a Proposition proclaimed through a seat, public by the chronicle; each one's effect reader waits (K-11). Revision 3 had it DEFERRED with `proclaim` (K-34) | edict and proclamation [H1-54]; the inquisitor's edict of grace, a 30–40-day window for self-denunciation [H1-117]; censure, embargo and outlawry in the faction roster [P1-11]; coinage [H1-64]; the dispensing power [H1-66]; debasement and recoinage [R1-23]; edicts and emergency decrees [R1-43]; martial governance [P1-05]; the Policy Instrument [P1-60]; a state of emergency [C-32]; CK3, changing a realm law [G2-41] |
 | 14 | Motion, debate, vote, veto | COVERED · members' own `commit`s, counted by a Query (motion `utter`, speech `tell`, veto SYSTEM) (K-07) | moving a motion [H1-04]; the division [H1-10]; supply [H1-24]; the *liberum veto* [H1-35]; the Senate's ballot [H1-95]; casting a vote [P2-31]; argument moves as data [P2-37]; speech kinds [P1-17]; parliamentary manoeuvre [P1-59]; holdout in a consensus body [P1-67]; vote, veto, conditional assent [R1-02]; calling and casting a vote [C-34] |
 | 15 | Elect, conclave, lot | COVERED · members' `commit`s + `confer` basis `elected` (lot SYSTEM) | the Speaker's election [H1-03]; electing a king, tanistry [H1-72]; the doge by lot and ballot [H1-81]; procurators [H1-107]; conclave [P2-74]; acclamation and election [R1-08] |
 | 16 | Appoint, invest, ennoble | COVERED · `confer`, `establish` | CK3, granting a title [G2-36] and court posts [G2-46]; investiture [H1-45]; charters [H1-52]; appointment [H1-59]; ennoblement [H1-80]; appointing and recalling officers [R1-30] |
@@ -3207,7 +4091,7 @@ CK3 and RTK; *H1* history.
 | 18 | Resign | COVERED · `release` | resigning an office (`proposals/2026-09-05-proceedings-subsystem/04_VERBS.md:638-654`) [P1-20] |
 | 19 | Heir, regency | WIDENED · `confer` + term (`succeed` THIN; R-5) | heir designation [H1-69]; regency [H1-70]; fixing the succession [R1-49]; CK3 inheritance under law [G2-64] |
 | 20 | Homage, fealty | WIDENED · `oblige`, read by `purview_reaches` | homage and fealty [H1-43]; *diffidatio* [H1-44]; CK3, transferring or releasing vassals [G2-38] and swearing fealty [G2-39]; oath and homage [R1-48] |
-| 21 | Declare war | COVERED · `utter` of a `WAR`-mood Proposition + the seats' own `commit`s, read by `faction_q.at_war` (K-29; `proclaim` deferred, K-34) | CK3, casus belli [G2-08] and holy war [G2-55]; war on a casus belli held as a record [P2-18]; declaring war with a compliance window [R1-04]; war authorization [P1-15]; a graded war posture [C-38] |
+| 21 | Declare war | COVERED · `utter` of a `WAR`-mood Proposition, announced publicly by a seat's `proclaim` (a second Proposition naming it), + the seats' own `commit`s, read by `faction_q.at_war` (K-29, K-42) | CK3, casus belli [G2-08] and holy war [G2-55]; war on a casus belli held as a record [P2-18]; declaring war with a compliance window [R1-04]; war authorization [P1-15]; a graded war posture [C-38] |
 | 22 | Truce, peace, treaty, alliance, tribute, cession | GAP · `covenant`, kinds `treaty` and `alliance` (cession: widened `give`; peace also the `release` of a war's commits; truce deferred, K-32) | CK3, peace and purchased truce [G2-14]; RTK alliance [G2-96]; cession [R1-05]; treaty, tribute, surrender [R1-06]; leagues [R1-15]; Treaty and Diplomacy [P1-07]; settling a surplus [P1-65]; binding agreements in five cases [C-40] |
 | 23 | Muster, hire, allies | COVERED · `march`'s muster, `oblige` + `transfer` | CK3, calling allies [G2-10] and raising levies and mercenaries [G2-11]; Muster and Fortify [P1-01]; muster and recruit [R1-26]; non-march military acts [C-39] |
 | 24 | Siege, blockade, fortify | WIDENED · `march` arriving at an enemy-held settlement — the siege a Query over the arrived army; its larder effect deferred (K-28) (fortify COVERED) | naval blockade [P1-03]; CK3 sieges [G2-12]; besiege, storm, terms [R1-29] |
@@ -3223,7 +4107,7 @@ CK3 and RTK; *H1* history.
 | 34 | Blackmail, hooks | COVERED · a held Record + a `petition` whose `terms` is a demand + `tell` | CK3, fabricating [G2-17], blackmailing [G2-18] and spending a hook [G2-19]; pressing a fear [P1-28]; bribing an official [P1-29]; spending an obligation [P1-30]; evidence as standing leverage [C-29] |
 | 35 | Bribe, gift, subsidy | COVERED · `give`, `transfer` | *Shadows of Doubt* bribes [G1-93]; CK3 gifts [G2-01]; RTK rewards [G2-71]; bribing an office-holder [P2-02]; endowing a public good [P2-58]; gifts for favour [R1-64]; funding a party [C-58] |
 | 36 | Court, marry | COVERED · `tie / knot` (THIN) | CK3 personal and romantic schemes and marriage [G2-02, G2-03, G2-04]; courting [P2-14]; marriage with dowry [P2-52]; marrying into a house [R1-50]; forming a knot [R1-66]; marriage alliance [H1-76] |
-| 37 | Slander, rumour | DEFERRED · the telling workplan's G7 (K-15) | slander [P2-15]; a competing account [P2-27]; RTK's estrangement [G2-90] and Dual Destruction [G2-93]; planting a rumour [R1-63] |
+| 37 | Slander, rumour | DEFERRED · a false telling is the telling workplan's G7 (K-15); split in revision 5 — a false **charge** is COVERED today by `utter` of a `HOLDS` Proposition + `petition`, neither checking truth (the churn survey's F13 and F76) | slander [P2-15]; a competing account [P2-27]; RTK's estrangement [G2-90] and Dual Destruction [G2-93]; planting a rumour [R1-63] |
 | 38 | Persuade, convert, preach | GAP · `argue` | *Disco Elysium* persuasion [G1-23]; CK3 conversion [G2-52, G2-53]; persuading one listener [R1-62]; preaching [R1-69]; spreading piety [P1-16]; changing convictions (H-62) [C-53] |
 | 39 | Trade, wage, venality | COVERED · `exchange` (THIN) + `confer` | buying and selling in *Disco Elysium* [G1-29] and *Shadows of Doubt* [G1-100]; RTK trade [G2-78]; trading across a price gap [P2-55]; selling labour [P2-57]; selling office [R1-57]; venality and the *paulette* [H1-60]; a sold procuratorship [H1-109] |
 | 40 | Borrow, distrain | DEFERRED · a `covenant` kind `debt` + `seize`, deferred together (K-14) | borrowing and default [R1-22]; settling or distraining [P2-56]; the Monte [H1-112] |
@@ -3249,6 +4133,7 @@ CK3 and RTK; *H1* history.
 | 60 | Events | SYSTEM | disaster, famine, epidemic, mutiny, riot, sack, succession crisis, defeat or default, a discovered plot [R1-72 to R1-80]; the bodies clock, interception, lost news, crises of conviction, starvation, coup, revolt, disaster, miracle [P2-13, P2-25, P2-26, P2-35, P2-36, P2-62 to P2-65]; heresy outbreak, inheritance, life events, locusts and plague [G2-63 to G2-65, G2-102]; quiet-season initiative, rumour, conviction drift, forgetting, a date firing, an inquisitor's arrival, revolt, a works stalling, hunger [P1-32 to P1-36, P1-45, P1-56, P1-63, P1-64]; individuation, institutional clocks, thresholds, world-health decay, hazards, awakenings, crises, fracture, endings, loyalty reassessment, expiry [C-50, C-57, C-66 to C-74] |
 | 61 | Inner mechanics | SYSTEM (§10.3) | the non-act mechanics of both games tables |
 | 62 | Steal, pilfer | GAP · `steal` (R-8; K-39) — added in revision 4 | *Esoteric Ebb*, "steal anything in sight" [G1-38]; *Shadows of Doubt*, stealing a document on a side job [G1-98], and the survey's Entering family, whose verbs include *steal* beside *sneak*, *pick* and *climb*, access at the risk of a fine (P34); CK3, the steal-an-artifact scheme, effect inferred from its name [G2-26, UNVERIFIED]; taking a Record without consent [C-08]; the Riskbreakers' extralegal infiltration and the Cardinal of Justice's text suppression (`rosters.yaml:1544`, `:1536`) |
+| 63 | Feud, grudge, reconciliation | GAP · `forgive` (revision 5, K-41) — the feud chain itself is SYSTEM (the telling workplan's G1 and G2); revenge is the outcome of a chosen `fight`, `march` or `sabotage` | the churn survey: *Bannerlord*'s execution starting a feud through Honour, Mercy and clan relations (F36); *RimWorld*'s fight outcomes as opinion, +38 cathartic and −22 angering (F24), and its insult spiral; *Skyrim*'s kin-revenge quest, which defaulted to murder at the design stage (F68); its D8, grudges decaying least; the code: `_eff_march`'s grudge row on every loser of every lost field, with no closer (`effects_combat.py:353-358`), against AX-6's named cost, "permanent grudges" (`01_AXIOMS.md:236-238`) |
 
 ---
 
@@ -3336,6 +4221,31 @@ retained; this index and the evidence written out above are what survives.
   the hole rows it names; `01_AXIOMS.md` AX-1 to AX-7, T-a to T-l and §E.1.6–7; canon constraints 34–90.
   Not read: `.designs/`, `.audit/`, the inquiry proposal, `offices.yaml` beyond a search (no Riskbreaker
   seat row found by name). The author re-opened each load-bearing site (§14.3). It re-ran no count.
+- **The churn survey (revision 5)** — *Narrative Churn: How NPCs, Events, Facts and World State Can Keep
+  Changing One Another — A Verb-Level Teardown and Reorganization*, dated 3 October 2026, supplied by
+  Jordan and not committed. Read whole by the churn-survey interrogation and by the author. In depth:
+  *Dwarf Fortress* (Bay 12 / Kitfox), *RimWorld* (Ludeon), *Manor Lords* (Slavic Magic / Hooded Horse),
+  *Mount & Blade: Warband* and *Bannerlord* (TaleWorlds) with their mods, *Shadows of Doubt*, *Crusader
+  Kings III*, the *Nemesis* system (Monolith), *Caves of Qud* (Freehold Games), Radiant AI (*Oblivion*,
+  *Skyrim*), *Talk of the Town* and *Bad News* (James Ryan et al.), *The Guild 2* and *3*, *Tropico*.
+  Not re-verified by it: *The Sims*, *Prom Week*, *Versu*, *Fallen London*, *Against the Storm*,
+  *Banished*, *Medieval Dynasty*; not examined: *Victoria 3*, *Frostpunk*, *Songs of Syx*, *Stellaris*,
+  *Football Manager*, *Old World*, *Kenshi*, *STALKER*, *Wildermyth*, *Watch Dogs: Legion*, *Ultima VII*.
+  The session documents it cites are not committed (§1). Its caveats are carried in §1.
+- **The churn-survey interrogation (revision 5)** — opened, by its own account: the survey; this
+  document's §1–§2, §3.4–§5, §6–§13, §14.9–§14.10 and Appendices A, B and D; `loop/witness.py`,
+  `epistemic.py`, `loop/matter.py`, `state/carriers.py` 1–829, `decision/options.py`,
+  `decision/questions.py`, `queries/person_q.py`, `queries/world_q.py` 433–497 and 1309–1548,
+  `queries/faction_q.py` 195–264, `loop/effects_information.py`, `loop/effects_governance.py` 157–305,
+  `loop/effects_combat.py` 270–370, `loop/resolve.py` 270–329 and 520–609, `decision/choose.py` 280–409,
+  `state/gate.py` 538–637 and 690–757, `data/verbs.py` 480–629 and 690–849, all of `verb_table.yaml`,
+  `rosters.yaml` in the ranges it names, the hole rows H-62, H-111, H-180, H-181 and H-183,
+  `requirements.yaml`'s statuses, `01_AXIOMS.md` 1–797, 1186–1285 and 1366–1425, the telling workplan,
+  `canon/02_canon_constraints.md` 40–80, `04_PROVENANCE.md` 120–180, `corpus_run.py` 930–1014,
+  `aperture.py` 1–70, `write_matrix.yaml`'s row structure and `test_told_by_channel.py`'s test index.
+  Not opened by it: `seam/wrappers/sigma.py`, `test_u7_remit.py`, `loop/sides.py` beyond 37–97, and
+  `harness/populated.py` beyond its search hits. The author re-opened each load-bearing site (§14.3). It
+  executed nothing.
 
 ---
 
@@ -3366,3 +4276,6 @@ file decides.
 | r | Work item 4.5 says an investigation Failure deposits nothing; canon grades Failure as a false lead and a failed `reconstruct` as a wrong conclusion the player acts on — a claim with a wrong value, for which no value space exists (K-37) | `verb_table.yaml:972-973`, `:985-987`, `:1115` |
 | s | The survey against itself and against the games extraction pass: (1) Finding 1 and P22 class *Shadows of Doubt* with *Lacuna* as accepting a judgment "whether or not it is right", while its own account of the resolution form says optional entries "earn extra credit when correct" and handing it in "raises social credit if correct" — graded at submission [CONFIDENCE: medium — neither source verified a wrong name's consequence; the extraction pass's G1-89 reads "right or wrong answer [consequence UNVERIFIED]"]; (2) the survey says *Esoteric Ebb*'s conflict is "resolved by dialogue and skill checks rather than combat", while the extraction pass's store-page row G1-41 has turn-based encounters with "violence as a last resort"; (3) the survey attributes P27, a line closed on error, to *L.A. Noire* only, while G1-22 has *Disco Elysium*'s failed press locking options (snippet); (4) *Pentiment*'s "no truth value" (P23) sits beside the extraction pass's finding that proof gathered widens what can be argued at the hearing — evidence-gated input with unverified output (G1-10) | the survey (Finding 1; Parts 1 and 3); the games extraction pass |
 | t | AX-7's falsifier names the three `Claim`-constructing sites as `witness.py:191`, `:271`, `:361`; the event-kind deposit is at `:380` today, and `verb_table.yaml`'s investigation block cites `rosters.yaml:482`, `:487-491`, `:505-508` for text now at `:1008`, `:1013-1017`, `:1031-1034` — line drift | `architecture/meta/01_AXIOMS.md:307, :315-316`; `loop/witness.py:380`; `verb_table.yaml:974-980` |
+| u | The emergent-narrative provenance file says the `Claim` carrier "already has all four" of the *Third Strand*'s M3 — source, strength, believability, decay; believability is no field of `Claim`, it is `teller_weight`, computed when read (since the telling workplan's T3a) | `proposals/2026-09-12-emergent-narrative-primitives-v2/04_PROVENANCE.md:162`; `engine/season/decision/options.py:1043-1097` |
+| v | `tell`, `give`, `speak` and `march` have no alignment cell, so a `tell` Candidate ranks by stance, urgency and the draw alone — the churn survey's illegibility (finding 3) at its sharpest | `engine/season/rosters.yaml:2119-2240` |
+| w | `_ch_chronicle` precedes `_ch_post_remit` in the ordered channel roster, and a witness is credited to the strongest admitting channel, so `post_remit` can never credit a kind a `binding_decision` row emits — one candidate cause of `inferred` reading 0, not isolated (observation for H-33's owner) | `engine/season/rosters.yaml:398-405`; `engine/season/loop/witness.py:335-339`; `engine/season/epistemic.py:497-502, :550-552` |
