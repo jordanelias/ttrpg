@@ -32,8 +32,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from engine.autoload import dice_engine
-from engine.autoload.dice_engine import roll_pool
+from engine.dice_engine import dice_engine
+from engine.dice_engine.dice_engine import roll_pool
 from systems.threadwork.sim.operations import (
     DEPTH_OB, MENDING_OB, TN_STANDARD,
     _actor_pool, COHERENCE_COST_BY_SCALE, FR_SURCHARGE, OperationResult,

@@ -41,7 +41,7 @@ from ..gaps import Unspecified
 #
 #   1. THE LADDER, for a contest whose subsystem returns a MARGIN. `S39.4` -- one ladder for
 #      every scale, four bands read off the margin -- and the tree OWNS it:
-#      `engine/autoload/dice_engine.py::degree_from_net`, whose docstring reads *"THE degree
+#      `engine/dice_engine/dice_engine.py::degree_from_net`, whose docstring reads *"THE degree
 #      ladder. Single owner for every scale of the game (Jordan ruling, 2026-08-14)"*.
 #      ⚠ IT IS IMPORTED AND CALLED, NOT MIRRORED. `S27.2` names a second resolver as its
 #      highest-value refusal, and a band table copied into this file WOULD BE ONE -- it would go
@@ -107,7 +107,7 @@ def degree_ladder() -> Optional[tuple]:
     try:
         if str(root) not in sys.path:
             sys.path.insert(0, str(root))
-        from engine.autoload.dice_engine import (  # noqa: E402
+        from engine.dice_engine.dice_engine import (  # noqa: E402
             DEGREE_LABEL as _L, degree_from_net as _d)
         _LADDER = (_d, _L)
         return _LADDER
@@ -229,7 +229,7 @@ def degree_of(result: Any, subject: Optional[str] = None, fixtures: Any = None) 
             raise Unspecified(
                 f"a contest returned a margin and the tree's degree ladder is unavailable: "
                 f"{ladder_error()}", "S39.4",
-                needs="engine/autoload/dice_engine.py",
+                needs="engine/dice_engine/dice_engine.py",
                 law="S27.2 -- the ladder is imported from its single owner. A band table copied "
                     "into this file would be the second resolver, and would keep answering "
                     "after the owner changed its mind")

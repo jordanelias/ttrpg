@@ -2795,3 +2795,21 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 | `tools/export_world_initial_state.py` | `FORK:fd321c81` | FORKED (2026-10-01, plan position `29d-ii` — the exporter and its blocking `--check` (CI `validators` job, `tools/valoria_local.py`). It was the single writer of `world_initial_state.json`; with the artifact unread, the gate defended nothing the game loads) |
 | `engine/engine_params/world_initial_state.json` | `FORK:fd321c81` | FORKED (2026-10-01, plan position `29d-ii` — the cooked artifact, read only by `engine/substrate/world_initial_state.py`. `tests/valoria/test_engine_params_bridge.py`'s `ENGINE_READERS` row for it is removed in the same commit) |
 | `tests/valoria/test_world_initial_state.py` | `FORK:fd321c81` | FORKED (2026-10-01, plan position `29d-ii` — its subject was the chain above: the authored-source validation, the exporter's refusals and the artifact's pin against the seeded goldens' recorded values; it imported nothing else, and every module it exercised is retired) |
+
+## 2026-10-03 — `engine/autoload/` → `engine/dice_engine/` (plan position `34`, `ED-IN-0284`, `ED-IN-0285`)
+
+<!-- Chained from the `sim/autoload/` → `engine/autoload/` row (2026-07-16 section): `pathres.resolve` chases both
+     hops, so `sim/autoload/dice_engine.py` lands on `engine/dice_engine/dice_engine.py`. The exact-file `FORK:` rows for
+     the deleted spine files (`engine/autoload/game_state.py`, `engine_clock.py`, `season_manager.py`, `scene_slate.py`,
+     `victory.py`, `npc_ai.py`) are older and win: `resolve` reads an exact row before any prefix row. Only the package's
+     three files moved (`__init__`, `dice_engine`, `sigma_leverage`); any other name under the old path was already gone.
+     The three exact rows are for `tools/ci_claim_provenance_check.py`: it asks `load_alias_map()` for an EXACT row ("is THIS
+     FILE recorded as retired") and ignores prefix rows, so a frozen `MEASURED-BY: engine/autoload/sigma_leverage.py`
+     (`ED-IN-0207`, `registers/archive/`, never edited) reads as fabricated without one. -->
+
+| old path | new path |
+|---|---|
+| `engine/autoload/` | `engine/dice_engine/` |
+| `engine/autoload/__init__.py` | `engine/dice_engine/__init__.py` |
+| `engine/autoload/dice_engine.py` | `engine/dice_engine/dice_engine.py` |
+| `engine/autoload/sigma_leverage.py` | `engine/dice_engine/sigma_leverage.py` |

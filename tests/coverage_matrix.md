@@ -31,7 +31,7 @@ too — which is the point worth recording: **every pool >= 1 agreed to noise, s
 campaign could observe the defect.** It was reachable only by evaluating below the floor. A clamp
 applied to one moment of a distribution and not the other hides above that clamp.
 
-**Fixed in two places, kept byte-identical:** `engine/autoload/sigma_leverage.py::p_success` (the
+**Fixed in two places, kept byte-identical:** `engine/dice_engine/sigma_leverage.py::p_success` (the
 live `[CANONICAL]` owner) and `tests/sim/v32-combat-balance/m1_dice_sigma_core.py::p_success` (the
 Stage-1a seed the goldens are generated from, which is where the asymmetry was inherited from
 verbatim). Leaving the seed divergent would re-encode the bug on any future golden regeneration at a
@@ -402,7 +402,7 @@ unchanged in role and now guards the three margin boundaries instead of the old 
 
 **The ladder is spelled out here rather than imported, and that is deliberate.** This tree is the
 canon engine (J2) and takes no `engine.*` dependency; adding one is a porting-architecture call
-nobody has made. Equivalence with the owner (`engine/autoload/dice_engine.degree_from_net`) is held
+nobody has made. Equivalence with the owner (`engine/dice_engine/dice_engine.degree_from_net`) is held
 by measurement instead: `tests/valoria/test_degree_ladder_single_owner.py` evaluates both over 1,490
 cells (integer + quarter-step) and fails on any divergence, so drift is loud rather than silent.
 

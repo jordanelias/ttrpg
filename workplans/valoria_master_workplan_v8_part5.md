@@ -120,13 +120,13 @@ corrects its oracle in place"*). **Nothing in this repository asserts a version 
 
 ---
 
-## SM. MODULES AND THE DICE ENGINE — `34` · `35` · `30` · `31a` · `31b` · `31c` · design: `33`, `36` · the contract is `A-25`, below
+## SM. MODULES AND THE DICE ENGINE — `30` · `31a` · `31b` · `31c` · design: `33`, `36` · the contract is `A-25`, below
 
 **Ruled:** `ED-IN-0284`, revised by `ED-IN-0285`. The vocabulary, directories, adapter model, module entry kinds,
 containers and the retained-modules roster are **`A-25`** (§A), stated there once; this section stages the code
 and restates none of it.
 
-**Order:** `34` → `35` → `30` → `31a` → `31b` → `31c` → `22` (`_part4` B3). `33` and `36` are design work, gated
+**Order:** `30` → `31a` → `31b` → `31c` → `22` (`_part4` B3). `34` (the dice engine) and `35` (scan roots) have landed; the commits are their record. `33` and `36` are design work, gated
 as each says. **Retired ids, never reused:** `31d`, `31e`, `32` (cancelled before anything built them).
 **Names:** `30`–`36` are these positions and this is §SM — not the pre-flight rows `S-1`…`S-10` (`_part3` §P),
 not `_part6` §S. `SM-1`…`SM-15` are this section's open items.
@@ -164,52 +164,12 @@ test can pass on a table it did not build. Precedent: `tests/valoria/test_season
   contested verb whose provider is not registered (`:186-189`).
 - *The corpus helpers walk `engine/season/` by path* (`data/files.py:182`, `:206`, `:264`): a file that leaves the
   package leaves every scan built on them with a green floor; a floor or superset assertion is the only observer.
-- *Every path-keyed scan names `systems` and none names `modules`* — which is why nothing lands in `modules/`
-  before `35`.
+- *The path-keyed scans of module code derive their roots from `tools/ci_common.py` `MODULE_CODE_ROOTS`*, so
+  `modules/` may now be created. Scans still outside it have an owner below: `tools/evacuation_plan.py`'s R-CODE rule
+  (`30`), `tools/ci_pp_frozen_check.py` and `tools/ci_module_shape_check.py` (`31a`), the corpus pin in
+  `test_season_shape.py` (`31a`), and `modules/combat/` joining `sim_params.json` (`31b`).
 
-### `34` · the dice engine — `engine/autoload/` → `engine/dice_engine/` · IN · gate none · `sonnet`/`opus` · `[infrastructure]`
-
-**Grade:** `paper`. **Hash:** unchanged. **R:** none. No module moves.
-**WHERE.**
-1. `git mv` the three files (`__init__.py`, `dice_engine.py`, `sigma_leverage.py`) to `engine/dice_engine/`, names
-   kept; `engine/__init__.py`'s docstring (`:5-6`) and `engine/autoload/__init__.py`'s.
-2. Every importer, found at the build by an `ast` walk plus `rg -l 'engine[./]autoload'` (it spans `engine/`,
-   `systems/*/sim/`, `tools/`, `tests/`, `skills/`); never a hand list.
-3. The two DEFERRED reads, which degrade instead of failing, so a missed one is a named gap at the ladder and not a
-   red test: `engine/season/seam/ladder.py:106-116` (`degree_ladder()`, the import at `:110`; the `needs=` string
-   at `:232`) and `engine/season/__init__.py:17`.
-4. `references/restructure_ledger.md`: one directory-prefix row `engine/autoload/` → `engine/dice_engine/`,
-   chained from the `sim/autoload/` → `engine/autoload/` row (`:799`), read through `tools/pathres.py`. The
-   exact-file `FORK:` rows for the deleted spine files (`:2653-2657`, `:2719`) are history and stay.
-5. Path keys and strings in `tests/valoria/test_degree_ladder_single_owner.py` (`:150`, `:383`; messages `:178`,
-   `:354`, `:483`); every generated artifact citing the path, re-derived by its own exporter, never by hand.
-**FALSIFIERS.** (1) Both hashes unchanged. (2) In a FRESH subprocess,
-`degree_ladder() is not None and ladder_error() == ""` — the only observer of a missed deferred read. (3)
-`test_degree_ladder_single_owner.py` green
-with its keys re-pointed. (4) `python tools/export_sim_params.py --check` OK. (5)
-`engine/tests/test_sigma_leverage_parity.py` green. (6) `rg 'engine[./]autoload'` lists only
-`references/restructure_ledger.md`, history files, and the Layer-0/Layer-1 lines this plan may not edit (`SM-10`)
-— read the list; do not count it.
-
-### `35` · scan roots — every path-keyed scan of `systems/` also reads `modules/`, from one owner · IN · gate `34` · `sonnet`/`opus` · `[infrastructure]`
-
-**Grade:** `paper`. **Hash:** unchanged. **R:** none. No file moves; `modules/` need not exist yet.
-**WHERE.** `tools/ci_common.py` becomes the one owner of the roots module code may live under — beside
-`sim_reference_roots()` (`:83`, its glob `:100`) and `sim_reference_prefixes()` (`:104`) — and every scan below
-derives from it instead of spelling `systems`; then `modules/` is added at the owner.
-- `tests/valoria/test_engine_does_not_import_systems.py`: `TOP_LEVEL_SYSTEMS_IMPORT` and `NESTED_SYSTEMS_IMPORT`
-  (`:61`, `:66`); the subprocess probe `_modules_loaded_from_systems` (`:351-365`, its root at `:360`); the
-  path-seam scan `test_the_one_declared_path_seam_is_still_the_only_one` (`:415`).
-- `tests/valoria/test_degree_ladder_single_owner.py` `SCAN_ROOTS` (`:459`).
-- `tools/export_sim_params.py` `SCAN_DIRS` (`:39-43`), a hand list → derived; `sim_params.json` re-derived by the
-  exporter, `--check` run.
-- `tools/ci_sim_fabrication_check.py` (rule 1, `sim_reference_prefixes()`, `:211`).
-**FALSIFIER** (`CLAUDE.md` §0.1 pt 2). For each scan, plant the violation it exists to catch under a temporary
-`modules/<x>/` — a top-level `from modules…` inside `engine/`, a module loaded from `modules/` in the subprocess
-probe, a hand-rolled ladder, a fabricated constant — see it fire; remove the plant, see it pass. A scan that does
-not fire on its plant is blind to `modules/`, and the stage is not done. Hashes unchanged.
-
-### `30` · the registrar, the `modules:` roster and the refusals — no file moves · IN · gate `35` · `opus`/`opus` · `[infrastructure]`
+### `30` · the registrar, the `modules:` roster and the refusals — no file moves · IN · gate none · `opus`/`opus` · `[infrastructure]`
 
 **Grade:** `paper`. **Hash:** unchanged. **R:** none.
 **WHERE.**
@@ -221,13 +181,16 @@ not fire on its plant is blind to `modules/`, and the stage is not done. Hashes 
 2. **The `modules:` roster** in `engine/season/rosters.yaml`, each entry with `kind:` and `home:`, validated by the
    loader (`engine/season/data/rosters.py`). It is authored from the list `ED-IN-0284` and `ED-IN-0285` rule (A-25),
    NOT from "the directories with code": that test would drop `factions`, whose directory holds only an untracked
-   identifier census. `R04_PENDING_SUBSYSTEMS` (`tests/valoria/test_engine_does_not_import_systems.py:607-610`)
-   becomes COMPUTED — the `systems/` directories no roster entry names as `home:` — and its comment (`:598-606`, a
+   identifier census. `R04_PENDING_SUBSYSTEMS` (`tests/valoria/test_engine_does_not_import_systems.py`)
+   becomes COMPUTED — the `systems/` directories no roster entry names as `home:` — and its comment (a
    retirement window that no longer exists) says so, citing A-25; `test_r04_pending_composition_roles_can_only_shrink`
-   (`:618`) reads `target.split('.', 2)[1]`, which names the module for a `modules.<name>…` target too. Point at the
+   reads `target.split('.', 2)[1]`, which names the module for a `modules.<name>…` target too. Point at the
    roster instead of spelling directories: `engine/season/requirements.yaml`'s `subsystem:` entries and its stale
    lines `:60` (`_architecture` "IS IN THE RETIRE SET") and `:84` ("systems/factions (deleted)");
-   `tools/evacuation_plan.py`'s two hand lists (`:225-226`, `:240-241`).
+   `tools/evacuation_plan.py`'s two hand lists (`:225-226`, `:240-241`) **and its R-CODE rule**
+   (`p.startswith(('engine/', 'systems/'))`, `:382`), derived from `ci_common.MODULE_CODE_DIRS`, with a partition case
+   for a `modules/` path in `tests/valoria/test_evacuation_plan.py`: nothing is tracked under `modules/` yet, and at
+   `31a` `test_partition_is_total` goes red on the first file otherwise.
 3. **The registrar**, in `engine/season/manifest/`, run from `SeasonDriver.__init__` before `check_rows()`
    (`loop/driver.py:249-250`), idempotent: it reads the composition rows through `engine/substrate/composition.py`
    (`ROLES`, `require`), resolves each target by string, and records it in ONE table, `MODULE_ENTRIES`. It writes
@@ -286,9 +249,14 @@ refusals running at every driver construction.
    record, calls the entry through `MODULE_ENTRIES`, returns the result. The prize rows keep `interim: true`
    (`rosters.yaml:1134`, `:1152`) until `22` decides.
 4. **The corpus.** The margin-producer scan pins `{"seam/wrappers/sigma.py"}` (`test_season_shape.py:13113`) over
-   `files.package_modules()`, which does not walk `modules/`: widen it to `35`'s roots and re-pin under a superset
-   assertion naming the moved file, or it passes by finding nothing.
-5. **Scope.** Lens B's scope gains `modules/` (`skills/layer-conformance/SKILL.md:8`, `.claude/commands/close.md:30`).
+   `files.package_modules()`, which does not walk `modules/`: widen it to `ci_common.MODULE_CODE_DIRS` and re-pin under a superset
+   assertion naming the moved file, or it passes by finding nothing. That test reaches `tools/` the way the
+   `tests/valoria` files that import `ci_common` do (`sys.path.insert(0, <repo>/tools)`); the season package's own
+   path owner, `engine/season/data/files.py`, must not re-spell `modules` (a second owner).
+5. **Scope.** Lens B's scope gains `modules/` (`skills/layer-conformance/SKILL.md:8`, `.claude/commands/close.md:30`),
+   and so do two roots that still name only `systems`: `tools/ci_pp_frozen_check.py`'s `SCAN_ROOTS` (blocking; a PP id
+   cited in module code must be under the ceiling) and `tools/ci_module_shape_check.py`'s `RUNTIME_ROOTS`
+   (report-only). `31b`'s `git grep -l combat_engine_v1` catches the second only for combat.
    Loop-resident proceedings stay host (A-25).
 *Wording edit deferred to this commit:* `_part4` `ED-FI-0009`'s INSTRUCTION and A-21 cite `sigma.py::_pool_of` and
 `_obstacle_of`; after the split those are the host input builder's — re-point both.
@@ -312,7 +280,13 @@ count, control hash EQUAL. (5) `test_importing_every_engine_module_pulls_in_no_s
    member. A directory-prefix MOVE row in `references/restructure_ledger.md`; every path reader re-derived with
    `git grep -l combat_engine_v1` (registries under `references/`, `references/canonical_sources.yaml`'s pins read by
    `tools/freshness_gate.py`, `.claude/launch.json`, `tools/`); every export citing a moved file re-derived by its
-   own exporter.
+   own exporter. **Decide, in this commit, whether `modules/combat/` joins `sim_params.json`.** `ci_common`'s
+   `('modules', '*')` row puts it under `sim_reference_roots()`, so `tools/export_sim_params.py` would export its
+   module-scope constants as `combat.*` beside `combat_engine_v1.json` (which `_scan_dirs`'s docstring says keeps its
+   own export), `tools/export_game_constants.py` would prefer the `sim_params` entries, and
+   `ci_sim_fabrication_check` would start gating the personal-combat oracle (the KNOWN GAP in its docstring, ED-IN-0119,
+   a PC-lane call). Either keep it out at the owner or take all three; a `--build` that re-greens `--check` ships the
+   change unobserved.
 3. **The bare-name importers left behind.** The commit lists every file under `systems/` that imports the moved
    closure by bare name and re-points each. `systems/combat/combat_engine_v1/workbench/balance.py` is one (it puts
    its parent directory on `sys.path`, `:14-15`), and it is what `CLAUDE.md` §9 routes combat balance to.
@@ -392,7 +366,7 @@ hash.
 | `SM-7` | a test asserting `modules/**` equals the reachable closure in both directions (the critic: licensed by `CLAUDE.md` §0.1 pt 5, as `modules/` is the port's input set; recommended, not ruled) | Jordan |
 | `SM-8` | standing: only `fight`, `march` and `tell` call a module today; the rest is host interpretation until `36` | Jordan (`36`'s gate) |
 | `SM-9` | `decline_note:` declines an effect on some rows and a formation on others (`oblige`, `destroy_record`); `30`'s refusal (a) stays one-sided until the column is split | `30`'s builder (`CLAUDE.md` §0, rule 5) |
-| `SM-10` | Layer-0/Layer-1 text this plan does not edit: `CLAUDE.md` §3, `:410`, `:514`; `CURRENT.md:22`; `04:1000` | Jordan |
+| `SM-10` | Layer-0/Layer-1 text this plan does not edit: `CLAUDE.md` §3, `:407`, `:410`, `:514`; `CURRENT.md:22` and `:41` (the Dice / resolution head still names `engine/autoload/dice_engine.py`, and the currency stamp predates six heads); `04:1000`; `architecture/PLAN.md:1271`; `architecture/VOCABULARY.md:125` | Jordan |
 | `SM-11` | the precondition twin of refusal (a): a declared-absence column, then a refusal, for a verb whose untyped precondition nothing evaluates (`driver.py:125-127`) — it was retired `32`'s | IN lane, after `30` |
 | `SM-12` | holonic's `[engine]` tag (defined `:75`; e.g. `:1633`, `:1716`, `:1769`) means the Godot engine and collides with *engine* = the season loop | Jordan (Layer 1) |
 | `SM-13` | at the port, each module's path is listed in the generated manifest resource, so export packing sees the targets `load()` resolves by string | GO lane |
@@ -489,7 +463,7 @@ and an attack that lands sends the question back through the ladder, not to Jord
 Every other surface points here and restates none of it. Reference (`CLAUDE.md` §0.05): §SM's code is the mechanism.
 **Vocabulary** (one meaning each, defined again where code invokes it, `CLAUDE.md` §4). *Engine*: the season loop,
 `engine/season/`, the host. *Dice engine*: the d10 chain, `degree_from_net` and σ-leverage, `engine/dice_engine/`
-(`engine/autoload/` until `34`), not the engine. *Module*: running code reached by a composition row, in
+(formerly `engine/autoload/`), not the engine. *Module*: running code reached by a composition row, in
 `modules/<name>/`; it never reads or writes `World`, holds no token, keeps no state between calls, imports no module.
 *Container*: a module with transient state that the player can also play, reached by a seam or a verb. MINIGAME: personal
 combat and its tactical grid, mass battle and its strategic map, social contests, fieldwork and investigations; MANAGEMENT

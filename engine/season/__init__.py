@@ -14,7 +14,7 @@ The decomposition pays that price off rather than carrying it. Every import insi
 now relative, so there is exactly one identity per module and no path repair to perform. A package
 that repairs its own import path works from anywhere and therefore hides where it is being imported
 from; the `sys.path` mutations that remain are DECLARED SEAMS reaching OUT of this package — the
-flat personal-combat module set, the repo root for `engine.autoload`, the degree sweep — each
+flat personal-combat module set, the repo root for `engine.dice_engine`, the degree sweep — each
 inside a function body, each with its reason at the site.
 
 Entry points are modules, not scripts:

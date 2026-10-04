@@ -3,7 +3,7 @@ name: resolution-diagnostic
 description: >
   THE RESOLUTION DIAGNOSTIC — the Phase 0-6 stress test on anything in Valoria that resolves an
   outcome by a DRAW, run against the ONE engine: the sigma-leverage mu-shift layer
-  (engine/autoload/sigma_leverage.py) atop the d10 substrate (engine/autoload/dice_engine.py),
+  (engine/dice_engine/sigma_leverage.py) atop the d10 substrate (engine/dice_engine/dice_engine.py),
   with FRACTIONAL dice pools and FRACTIONAL obstacles. Five properties — legible odds, uniform
   leverage, bounded and monotonic response, graded and recoverable output, right engine for the
   pool regime. Its output is EVIDENCE, NOT A VERDICT: findings return to the `ners` skill, which
@@ -50,14 +50,14 @@ Substrate and advantage are separate modules. Diagnose them separately:
 
 | layer | owner | what it does |
 |---|---|---|
-| **substrate** | `engine/autoload/dice_engine.py` | pool and degree primitive. `roll_pool` (discrete), `continuous_engine_sample` (fractional), `degree_from_net` (**the** ladder, single owner for every scale) |
-| **advantage** | `engine/autoload/sigma_leverage.py` — `[CANONICAL]` | turns signed advantages in σ-units into a **μ-shift** on the roll. Stdlib plus `dice_engine`; no third-party dependency. Single-sources σ-leverage for **combat and social contest** — and for those two only |
+| **substrate** | `engine/dice_engine/dice_engine.py` | pool and degree primitive. `roll_pool` (discrete), `continuous_engine_sample` (fractional), `degree_from_net` (**the** ladder, single owner for every scale) |
+| **advantage** | `engine/dice_engine/sigma_leverage.py` — `[CANONICAL]` | turns signed advantages in σ-units into a **μ-shift** on the roll. Stdlib plus `dice_engine`; no third-party dependency. Single-sources σ-leverage for **combat and social contest** — and for those two only |
 | pinned by | `engine/tests/test_sigma_leverage_parity.py` + `engine/tests/goldens/sigma_leverage_parity.json` | the execution artifact. Read it before claiming behaviour |
 | ⚠ **a second σ path** | `systems/mass_battle/sim/resolution.py` | **declared divergent** (J2: no `engine.*` dependency). It carries its own `_sigma_softcap`, `_sigma_net_boost` with a local `_SIG_PER_DIE`, `roll_pool_fractional`, and a local `compute_degree` with `_DEGREE_EPS`. The **ladder** half is guarded by `tests/valoria/test_degree_ladder_single_owner.py` — known, not yours to re-file. The **σ** half and the **pool floor** are guarded by nothing. Diagnose it; it is in scope |
 
 ⚠ **"One engine" is the ruling, not a description of the tree.** Mass battle is one of the three
 subsystems ED-IN-0204 retained, and it runs the second path above. A diagnostic that reads only
-`engine/autoload/` will report a single-owner engine and miss it.
+`engine/dice_engine/` will report a single-owner engine and miss it.
 
 **The API you are auditing against** — read it, do not restate it from memory:
 `sigma_n(pool)` = `0.8·√max(1,pool)` · `soft_cap(σ)` = `M_MAX·tanh(σ/M_MAX)`, `M_MAX = 1.5` ·

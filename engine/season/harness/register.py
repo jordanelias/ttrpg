@@ -442,7 +442,7 @@ CITE_SOURCES = {
     "PLAN §": files.ARCH_PLAN_MD,
     "CLAUDE.md": files.CLAUDE_MD,
 }
-# Any repo-relative path the cite mentions, e.g. `engine/autoload/dice_engine.py`.
+# Any repo-relative path the cite mentions, e.g. `engine/dice_engine/dice_engine.py`.
 PATH_RE = re.compile(r"\b((?:[\w.-]+/)+[\w.-]+\.(?:py|md|ya?ml|json))\b")
 LINEREF_RE = re.compile(r":(\d{2,4})(?:-(\d{2,4}))?\b")
 # A quoted span long enough to be a claim rather than a term. `cite:` is free text, so this

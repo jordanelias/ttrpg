@@ -3,7 +3,7 @@
 
 WHY THIS EXISTS
 ---------------
-`engine/tests/test_sigma_leverage_parity.py` validates `engine/autoload/sigma_leverage.py`
+`engine/tests/test_sigma_leverage_parity.py` validates `engine/dice_engine/sigma_leverage.py`
 against two historical reference implementations that live OUTSIDE the engine tree:
 
   * `tests/sim/v32-combat-balance/m1_dice_sigma_core.py`  — the numpy original (combat surface)
@@ -151,7 +151,7 @@ def build() -> dict:
     return {
         "schema": 1,
         "generator": "tools/gen_sigma_parity_goldens.py",
-        "subject": "engine/autoload/sigma_leverage.py",
+        "subject": "engine/dice_engine/sigma_leverage.py",
         "oracles": {
             "m1": "tests/sim/v32-combat-balance/m1_dice_sigma_core.py",
             "groundup": "engine/reference/contest-groundup/engine.py",

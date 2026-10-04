@@ -37,7 +37,7 @@ it. ED-SC-0033 clause (3)'s single owner is the PROCEEDINGS SUBSYSTEM, not this 
 
 ⚠ **THE PLACEMENT QUESTION, ADJUDICATED AT THE SITE RATHER THAN ASSUMED.** `04 §A.2:135` reads
 *"one wrapper per **deferred subsystem**"*, and `sigma_leverage` is not a deferred subsystem — it is
-an in-engine resolver under `engine/autoload/`. Two readings were available: **(i)** it is a wrapper
+an in-engine resolver under `engine/dice_engine/`. Two readings were available: **(i)** it is a wrapper
 BY ROLE — it writes nothing, returns a margin, holds no token, which is exactly the `04:164` row, and
 a module satisfying that contract IS that row whatever supplies the margin; **(ii)** §A.2's
 enumeration is short by one and the finding goes on the ledger. **This unit takes (i).**
@@ -53,8 +53,8 @@ the actor genuinely has, leave every other operand at its registered fixture, an
 rather than fabricate a party.
 
 ⚠ THIS MODULE IMPORTS NOTHING FROM `systems/` AND INSERTS NO `sys.path`. It reaches
-`engine.autoload.sigma_leverage` by dotted path, which the package already does for
-`engine.autoload.dice_engine`, so NO entry is added to
+`engine.dice_engine.sigma_leverage` by dotted path, which the package already does for
+`engine.dice_engine.dice_engine`, so NO entry is added to
 `tests/valoria/test_engine_does_not_import_systems.py::PATH_SEAM_ALLOWED`. That set is shrink-only.
 """
 from __future__ import annotations
@@ -69,7 +69,7 @@ from ...data.rosters import VERB_CAPABILITY
 from ...manifest.providers import provider
 
 # RULED, ED-SC-0037. Both names; see the docstring for why `roll_net` alone is the bare pool roll.
-from engine.autoload.sigma_leverage import net_boost, roll_net
+from engine.dice_engine.sigma_leverage import net_boost, roll_net
 
 
 def _capability(entity: Any, verb: str):

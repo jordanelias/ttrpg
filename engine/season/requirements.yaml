@@ -102,8 +102,8 @@ scales:
     in_loop:   "seam unbuilt"
     note: >-
       The kernel exists and already rolls through the substrate (`resolver.py` imports
-      `degree_from_net` from `engine/autoload/dice_engine.py` and wraps `roll_net` from
-      `engine/autoload/sigma_leverage.py`). The loop does NOT reach it. ⚠ REWRITTEN 2026-10-01: this
+      `degree_from_net` from `engine/dice_engine/dice_engine.py` and wraps `roll_net` from
+      `engine/dice_engine/sigma_leverage.py`). The loop does NOT reach it. ⚠ REWRITTEN 2026-10-01: this
       sentence used to add "`parliamentary_vote.py` calls `roll_pool`"; that module and
       `parliamentary_stay.py` were deleted at `29b` (their `FORK:5c5d8ec6` rows), and nothing under
       `systems/social_contest` calls `roll_pool` now.

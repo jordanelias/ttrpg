@@ -1,6 +1,6 @@
 """
 engine/tests/test_sigma_leverage_parity.py — parity + property tests for
-engine.autoload.sigma_leverage.
+engine.dice_engine.sigma_leverage.
 
 TWO KINDS OF TEST LIVE HERE, AND THE DISTINCTION IS THE POINT:
 
@@ -45,7 +45,7 @@ _REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')
 if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)
 
-from engine.autoload import sigma_leverage as SL  # noqa: E402
+from engine.dice_engine import sigma_leverage as SL  # noqa: E402
 # ED-SC-0032: `degree` and the de-saturation bar MOVED out of the engine into the subsystem
 # that owns them. This file still tests the sigma layer; the degree half now addresses the
 # contest package, and that relocation is itself the point of the ruling being executed.
@@ -174,7 +174,7 @@ def test_golden_table_is_not_vacuous():
     fns = {r["fn"] for r in _LIVE_ROWS}
     assert fns == {"sigma_n", "soft_cap", "sigma_space_ob_shift", "net_boost", "eff_ob",
                    "p_success", "levels_to_net_sigma", "level"}, sorted(fns)
-    assert _TABLE["subject"] == "engine/autoload/sigma_leverage.py"
+    assert _TABLE["subject"] == "engine/dice_engine/sigma_leverage.py"
 
 
 def test_the_superseded_rows_are_exactly_the_non_7_TN_ones():
@@ -457,7 +457,7 @@ class TestPoolAwareDegree:
         cannot be satisfied by a second ladder that happens to agree at the named cells — which
         is how `sigma_leverage.degree` escaped the 2026-08-12 degree-vocabulary census.
         """
-        from engine.autoload import dice_engine as DE
+        from engine.dice_engine import dice_engine as DE
         checked = 0
         for ob10 in range(0, 61):          # ob 0.0 .. 6.0 in tenths
             ob = ob10 / 10.0
@@ -563,7 +563,7 @@ class TestPoolAwareDegree:
         the declared extension demotes 3 to 2, and that exception must itself be exactly
         `net < overwhelm_bar(pool)`.
         """
-        from engine.autoload import dice_engine as DE
+        from engine.dice_engine import dice_engine as DE
         demoted = checked = 0
         for pool in (1, 2, 5, 9, 16, 22, 25, 30):
             for ob10 in range(0, 41, 5):

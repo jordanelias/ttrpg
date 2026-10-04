@@ -12,7 +12,7 @@ def _owner_degree(net, ob):
     repo = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
     if repo not in sys.path:
         sys.path.insert(0, repo)
-    from engine.autoload import dice_engine
+    from engine.dice_engine import dice_engine
     return dice_engine.degree_from_net(net, ob)
 
 # Continuous engine (Decision E, params/core.md "Continuous Engine") — canonical for the
@@ -71,7 +71,7 @@ def roll_pool(n: int, tn: int, rng: Optional[random.Random] = None) -> int:
 def classify_outcome(r: float, ob: float) -> str:
     """Bucket a net result against an obstacle. Adapter over the owner, not a second ladder.
 
-    Owner: `engine.autoload.dice_engine.degree_from_net` — the ruled margin ladder (Jordan,
+    Owner: `engine.dice_engine.dice_engine.degree_from_net` — the ruled margin ladder (Jordan,
     2026-08-14). The Ob-10 special case this carried is RULED OUT along with the Ob-20 one in
     the owner: "3 or more is always overwhelming" admits no difficulty-indexed exception.
 
@@ -166,7 +166,7 @@ def continuous_outcome_probs(n: int, tn: int, ob: float) -> Dict[str, float]:
     even at small pools, per params/core.md's own equivalence note. Ob may be fractional
     (fractional Ob is canonical in videogame mode); clamped to the canonical [1, 20] range.
     Degree thresholds are the RULED margin ladder (Jordan 2026-08-14, ED-IN-0187), matching
-    `engine.autoload.dice_engine.degree_from_net`: Overwhelming at margin >= 3, Success at >= 1,
+    `engine.dice_engine.dice_engine.degree_from_net`: Overwhelming at margin >= 3, Success at >= 1,
     Partial at [0, 1), Failure below. The `2*Ob` bar and the Ob-20 exception this function used to
     implement are both ruled out. They are called out here because an ANALYTIC form is the one
     place a stale band can survive every guard in the tree — no per-cell equivalence test can see

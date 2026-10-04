@@ -1,5 +1,5 @@
 """Core engine module — canonical resolution primitives. Single source for ob/degree/roll/damage.
-Resolves the sigma kernel through engine.autoload.sigma_leverage (the numpy-free single source,
+Resolves the sigma kernel through engine.dice_engine.sigma_leverage (the numpy-free single source,
 Stage 1a / D0-2) so every subsystem resolves identically. No A/B knowledge here.
 
 [ED-1085 container de-leak, 2026-07-01] This module previously reached into the FROZEN
@@ -16,7 +16,7 @@ _REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')
 if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)          # resolve the sim.* shared-service layer (autoload)
 from math import tanh, exp
-from engine.autoload import sigma_leverage as SL
+from engine.dice_engine import sigma_leverage as SL
 import vocabulary as V   # the token ALPHABET (ED-PC-0042) — a zero-import leaf, so weapon_physics and
                          # capabilities (neither of which may import core) own-source the same tokens.
                          # This module owns the TABLES keyed by it; the asserts below pin the two together.
@@ -60,7 +60,7 @@ def degree(net, ob):
     a MEASUREMENT, not a preference.
 
     Jordan's 2026-08-14 ruling unified the degree ladder on the margin `net - ob` (bands at 0/1/3,
-    owner `engine.autoload.dice_engine.degree_from_net`). Every other resolver in the tree now
+    owner `engine.dice_engine.dice_engine.degree_from_net`). Every other resolver in the tree now
     routes through it. Applying it HERE, with the ER-2 shift preserved, moves this resolver's band
     edges at the fixed DECISIVE_OB of 3 from {fail <0.5, partial 0.5-2.5, success 2.5-5.5,
     overwhelming >=5.5} to {fail <2.5, partial 2.5-3.5, success 3.5-5.5, overwhelming >=5.5} — the

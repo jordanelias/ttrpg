@@ -39,8 +39,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional
 
-from engine.autoload import dice_engine
-from engine.autoload.dice_engine import roll_pool
+from engine.dice_engine import dice_engine
+from engine.dice_engine.dice_engine import roll_pool
 
 
 # §1 Combat Pool formula constants
@@ -59,7 +59,7 @@ OUT_OF_BREATH_PENALTY = -2              # "Stamina Out of Breath: -2D to all rol
 # The constant stays because it is exported to the Godot bridge
 # (tools/export_game_constants.py) — a varying difficulty is an Ob, not a TN.
 #
-# Deleting the matrix is ROLL-NEUTRAL: engine/autoload/dice_engine.roll_pool has never read
+# Deleting the matrix is ROLL-NEUTRAL: engine/dice_engine/dice_engine.roll_pool has never read
 # `tn` for any die (the face rule 1/-1, 2-6/0, 7-9/+1, 10/+2 is fixed), so the matrix has
 # been inert since this module was written. It changed no roll, ever.
 # ONE OBSERVABLE DOES CHANGE: ActionResult.notes embeds the TN as text, so a short and/or

@@ -35,6 +35,9 @@ def test_the_gate_exits_nonzero_when_it_finds_prose(tmp_path, monkeypatch):
     monkeypatch.setattr(gate, '_tracked_md',
                         lambda staged=False: ['systems/combat/some_design_doc.md'])
     assert gate.offenders() == ['systems/combat/some_design_doc.md']
+    # A-25: `modules/` is a game tree too. Without it in GAME_TREES a README there would pass CI.
+    monkeypatch.setattr(gate, '_tracked_md', lambda staged=False: ['modules/x/README.md'])
+    assert gate.offenders() == ['modules/x/README.md']
 
 
 def test_engine_season_is_exempt():

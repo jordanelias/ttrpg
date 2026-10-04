@@ -111,8 +111,6 @@ is the record; a row not marked DONE is still on disk.
 |---|---|
 | `10` | carved out (main §0.6); the telling workplan names its own Lens A/B subjects (A on T3a, B on T2) |
 | `14` | the counterparty check in the fold; invariant 4 per conjunct |
-| `34` | `engine/dice_engine/` stays a leaf the season loop and the modules import; no deferred read degrades (`_part5` §SM `34`) |
-| `35` | every path-keyed scan derives its roots from one owner and fires on a plant under `modules/` |
 | `30` | the registrar runs at driver construction, never at `World.boot` or at import; module entries are reached by string only; `EFFECTS` stays host (`_part5` A-25) |
 | `31a`–`31c` | each module reads a typed input record, never `World`; it holds no token, opens no write, imports no other module, keeps no module-level state; every re-pinned floor sits under a superset assertion; `31b` against `04` T-k |
 | `33`, `36` | a design is read before anything is built; the clause cited for a store is AX-4 at D-3, never D-8 |

@@ -72,7 +72,7 @@ mechanics:
     scale: primitive
     faction: universal
     canon_sources: ["engine/params/core.md#Die Rule"]
-    sim_module: engine/autoload/dice_engine.py
+    sim_module: engine/dice_engine/dice_engine.py
     test_status: not_implemented
     notes: "d10 with chain on 10s, subtract on 1s. Foundational dice primitive."
 
@@ -80,7 +80,7 @@ mechanics:
     scale: primitive
     faction: universal
     canon_sources: ["engine/params/core.md#TN Values"]
-    sim_module: engine/autoload/dice_engine.py
+    sim_module: engine/dice_engine/dice_engine.py
     test_status: not_implemented
     notes: "TN scale 5-9 mapping to action difficulty tiers."
 
@@ -88,14 +88,14 @@ mechanics:
     scale: primitive
     faction: universal
     canon_sources: ["engine/params/core.md#Obstacle Scale"]
-    sim_module: engine/autoload/dice_engine.py
+    sim_module: engine/dice_engine/dice_engine.py
     test_status: not_implemented
 
   degrees_of_success:
     scale: primitive
     faction: universal
     canon_sources: ["engine/params/core.md#Degrees of Success"]
-    sim_module: engine/autoload/dice_engine.py
+    sim_module: engine/dice_engine/dice_engine.py
     test_status: not_implemented
     notes: "Overwhelming / Success / Partial / Failure"
 
@@ -103,7 +103,7 @@ mechanics:
     scale: primitive
     faction: universal
     canon_sources: ["engine/params/core.md#Continuous Engine Decision E"]
-    sim_module: engine/autoload/dice_engine.py
+    sim_module: engine/dice_engine/dice_engine.py
     test_status: not_implemented
     notes: "Quasibinomial sampling phi ~= 2.67, p_hit=0.4. Canonized 2026-05-15."
 
@@ -111,7 +111,7 @@ mechanics:
     scale: primitive
     faction: universal
     canon_sources: ["engine/params/core.md#Pool Minimum"]
-    sim_module: engine/autoload/dice_engine.py
+    sim_module: engine/dice_engine/dice_engine.py
     test_status: not_implemented
     notes: "Pool floor 5."
 
@@ -119,7 +119,7 @@ mechanics:
     scale: primitive
     faction: universal
     canon_sources: ["engine/params/core.md#Net Successes Floor"]
-    sim_module: engine/autoload/dice_engine.py
+    sim_module: engine/dice_engine/dice_engine.py
     test_status: not_implemented
     notes: "PP-246 floor."
 
@@ -129,7 +129,7 @@ mechanics:
     canon_sources:
       - "engine/params/core.md#Momentum"
       - "engine/params/core.md#Momentum Carry"
-    sim_module: engine/autoload/dice_engine.py
+    sim_module: engine/dice_engine/dice_engine.py
     test_status: not_implemented
     notes: "PP-255 momentum carry mechanic."
 
@@ -215,7 +215,7 @@ mechanics:
     scale: service
     faction: universal
     canon_sources: ["registers/mechanics_index.yaml"]
-    sim_module: engine/autoload/registry.py
+    sim_module: null
     test_status: not_implemented
     notes: "Loads this very index file."
 

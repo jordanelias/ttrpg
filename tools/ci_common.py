@@ -80,8 +80,30 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 _REPO = REPO
 
 
+# ── one owner: the top-level directories game Python may live under, besides `engine/` (A-25) ──
+# Each row is `(top-level directory, glob under it naming the sim-reference directories)`:
+# `systems/<name>/sim/` and `modules/<name>/` (a module's whole directory). `modules/` may be absent;
+# a consumer skips an absent root and picks the directory up the day it exists. The `systems` row stays
+# after positions `31a`-`31c` move code out: legacy and unplugged Python remains there, and `engine/`
+# still must not import it. `MODULE_CODE_DIRS` is the directory-name view of the rows.
+# Consumers: `rg -n 'MODULE_CODE_(DIRS|ROOTS)|sim_reference_(roots|prefixes)' tools tests skills engine`.
+MODULE_CODE_ROOTS = (
+    ('systems', os.path.join('*', 'sim')),
+    ('modules', '*'),
+)
+
+# The bare directory names, derived from the rows above — never typed a second time. This is the
+# shape a scan wants when it joins a root onto its own path (`REPO / root`), builds an import
+# regex, or tests a loaded module's file against a prefix.
+MODULE_CODE_DIRS = tuple(name for name, _ in MODULE_CODE_ROOTS)
+
+
 def sim_reference_roots(repo_root=None):
     """Every directory the 1:1 Python sim reference now lives under. ONE OWNER (ED-IN-0087).
+
+    A-25: the second and later `MODULE_CODE_ROOTS` rows are read the same way the
+    first is, so `modules/<name>/` joins the sim reference the day it exists. `engine/` first, then
+    each row's matches in row order, each row sorted.
 
     `sim/` was RETIRED 2026-07-21 (ED-IN-0071 P4): the core moved to `engine/` and the
     per-subsystem sims to `systems/<subsystem>/sim/`. Two tools still walked the old flat tree, and
@@ -92,13 +114,17 @@ def sim_reference_roots(repo_root=None):
     That is the §0.1 point-5 pattern-defect signature (correct when written; broken because
     something else moved), so the answer is the standard shape: one owner for the question, every
     site routed through it, and a guard that fails on recurrence
-    (tests/valoria/test_sim_reference_roots.py). The glob is deliberate — a NEW subsystem gains its
+    (tests/valoria/test_export_sim_params.py::test_the_sim_reference_roots_owner_reads_modules_and_skips_pycache).
+    The glob is deliberate — a NEW subsystem gains its
     sim automatically, which is the property the hardcoded list never had.
     """
     root = repo_root or _REPO
     roots = [os.path.join(root, 'engine')]
-    roots += sorted(glob.glob(os.path.join(root, 'systems', '*', 'sim')))
-    return [p for p in roots if os.path.isdir(p)]
+    for top, under in MODULE_CODE_ROOTS:
+        roots += sorted(glob.glob(os.path.join(root, top, under)))
+    # `modules/*` matches `modules/__pycache__` once anything is imported from there; it is a
+    # directory but never a module, and a prefix for it would claim a tree that holds no source.
+    return [p for p in roots if os.path.isdir(p) and os.path.basename(p) != '__pycache__']
 
 
 def sim_reference_prefixes(repo_root=None):

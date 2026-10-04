@@ -102,7 +102,7 @@ _DEGREE_EPS = 1e-9   # [JUSTIFIED: ulp-recovery tolerance, 4 orders above measur
 
 
 def compute_degree(net, ob):
-    """The ruled margin ladder (Jordan, 2026-08-14). Owner: engine.autoload.dice_engine.
+    """The ruled margin ladder (Jordan, 2026-08-14). Owner: engine.dice_engine.dice_engine.
 
     Spelled out here rather than imported ON PURPOSE: this tree is the self-contained canon
     engine (J2) and deliberately takes no `engine.*` dependency — that coupling is a porting

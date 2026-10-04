@@ -21,6 +21,7 @@ CLI:
 from __future__ import annotations
 import argparse
 import ast
+import os
 import re
 import json
 import sys
@@ -35,12 +36,19 @@ import ci_common  # noqa: E402
 ROOT = Path(ci_common.REPO)
 OUT = ROOT / "engine" / "engine_params" / "sim_params.json"
 
-# The sim reference surfaces (the computational truth). Combat keeps its own dedicated export.
-SCAN_DIRS = [
-    "systems/social_contest/sim", "systems/mass_battle/sim",
-    "systems/threadwork/sim",
-    "systems/fieldwork/sim", "systems/combat/sim", "systems/characters/sim", "systems/overview/sim", "engine",
-]
+
+def _scan_dirs() -> list[str]:
+    """The sim reference surfaces (the computational truth), repo-relative. Combat keeps its own
+    dedicated export.
+
+    DERIVED, NOT LISTED (A-25). This was a hand list of `engine` and seven
+    `systems/<sub>/sim` directories, so a module landing under `modules/<name>/` would have fallen
+    out of the export and left the file's `--check` green over a smaller artifact. The owner is
+    `ci_common.sim_reference_roots()` (engine, then every `MODULE_CODE_ROOTS` row's matches); on
+    the tree as of this change it returns exactly the hand list it replaced, so `sim_params.json`
+    is byte-identical. Evaluated per call, not at import, so a root that appears later is read."""
+    return [os.path.relpath(p, ROOT).replace(os.sep, "/")
+            for p in ci_common.sim_reference_roots(str(ROOT))]
 
 
 def _literal(node):
@@ -101,9 +109,10 @@ def _comment(src_lines: list[str], lineno: int) -> str:
 
 def _subsystem(p: Path) -> str:
     """The subsystem a sim file belongs to — links values back to the pointers/module map.
-    systems/<sub>/sim/... -> <sub>; engine/<x>/... -> engine.<x>; sim/<x>/... -> personal.<x>."""
+    systems/<sub>/sim/... -> <sub>; modules/<name>/... -> <name> (the module key a constant is filed
+    under, its directory name); engine/<x>/... -> engine.<x>; sim/<x>/... -> personal.<x>."""
     parts = p.relative_to(ROOT).parts
-    if parts[0] == "systems" and len(parts) > 1:
+    if parts[0] in ci_common.MODULE_CODE_DIRS and len(parts) > 1:
         return parts[1]
     if parts[0] == "engine":
         return "engine." + parts[1].replace(".py", "") if len(parts) > 2 else "engine"
@@ -114,14 +123,12 @@ def _subsystem(p: Path) -> str:
 
 def _iter_py_files():
     seen = set()
-    for d in SCAN_DIRS:
+    for d in _scan_dirs():
         base = ROOT / d
-        if not base.exists():
-            continue
         for p in sorted(base.rglob("*.py")):
             # Skip test files: their fixture constants (GOLDEN_WINNERS, etc.) are not
             # engine params. (Before the sim/ hollow-out these lived under sim/tests/,
-            # which was never in SCAN_DIRS; now under engine/tests/ they must stay excluded.)
+            # which was never in the scan list; now under engine/tests/ they must stay excluded.)
             #
             # `engine/reference/` joins them (2026-09-16, ED-IN-0231). It holds FROZEN PARITY
             # ORACLES — independent reimplementations whose constants are, by construction, COPIES
