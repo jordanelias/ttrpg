@@ -8,7 +8,7 @@ a key up; these rows are one.
 
     provider = manifest.resolve("contest", prizes[prize])
 
-`04 §A.2:136` types the module -- *"role -> provider rows, resolved at boot"* -- and `04:1031`'s
+`04 §A.2:136` types the module -- *"role -> provider rows, resolved at boot"* -- and `04 PART E step 10`'s
 build step 10 states its done-condition: *"a misspelled manifest row fails at boot naming the row."*
 """
 
@@ -32,7 +32,7 @@ _ROLE_ROSTERS = {"contest": ("contest_subsystems", "prizes")}
 # ---------------------------------------------------------------------------
 # ⚠ THE CONTRACTS FILE IS READ AND PARSED **ONCE PER PROCESS**, AND THE CACHE IS A BUG FIX RATHER
 # THAN AN OPTIMISATION. `check_rows()` runs on every `SeasonDriver` construction (that is where
-# `04:1031`'s "at boot" actually reaches a run), and it resolves every row; each `resolve` was
+# `04 PART E step 10`'s "at boot" actually reaches a run), and it resolves every row; each `resolve` was
 # re-reading and re-parsing `references/module_contracts.yaml` from disk. The corpus builds many
 # drivers, and the season suite went from ~170s to over 600s -- measured, on the commit that wired
 # it. A per-process cache is safe because the file is repository content that cannot change under a
@@ -206,7 +206,7 @@ def check_roles(manifest: dict, required_roles: tuple) -> None:
 
 
 def check_rows() -> list:
-    """`04:1031`'s done-condition: **a misspelled manifest row fails at boot naming the row.**
+    """`04 PART E step 10`'s done-condition: **a misspelled manifest row fails at boot naming the row.**
 
     Every row of every declared role's roster is resolved once. A row naming a module no contract
     declares raises from `resolve` with the row in the message, so the failure names what to fix
@@ -227,7 +227,7 @@ def check_rows() -> list:
 
 def _check_step_declares(role: str, key: Any, row: Any) -> None:
     """M4 (`ED-IN-0279` clause (a)): a `step:`/`declares:` pair, or neither -- never one field
-    alone, and never a step or band the loop does not have. `04:1031`'s own done-condition --
+    alone, and never a step or band the loop does not have. `04 PART E step 10`'s own done-condition --
     *"a misspelled manifest row fails at boot naming the row"* -- extended to the two fields M4
     added to a prize row.
 
@@ -240,27 +240,27 @@ def _check_step_declares(role: str, key: Any, row: Any) -> None:
         return
     if (step is None) != (declares is None):
         raise Unspecified(
-            f"{role}:{key!r} carries `step:` xor `declares:` ({step!r}, {declares!r})", "04:1031",
+            f"{role}:{key!r} carries `step:` xor `declares:` ({step!r}, {declares!r})", "04 PART E step 10",
             needs="both fields together, or neither",
             law="a prize deferred to a later step must name the band its RESOLVE-time fold "
                 "writes; one field with no partner is a row nobody finished")
     from ..data.matrix import Step
     if step not in {s.value for s in Step}:
         raise Unspecified(
-            f"{role}:{key!r} declares `step: {step!r}`, which is on no row of `Step`", "04:1031",
+            f"{role}:{key!r} declares `step: {step!r}`, which is on no row of `Step`", "04 PART E step 10",
             needs=f"one of {sorted(s.value for s in Step)}",
-            law="04:1031 -- a misspelled manifest row fails at boot naming the row")
+            law="04 PART E step 10 -- a misspelled manifest row fails at boot naming the row")
     from ..data.rosters import FIELD_BANDS
     if declares not in FIELD_BANDS:
         raise Unspecified(
             f"{role}:{key!r} declares `declares: {declares!r}`, which is on no row of "
-            f"`field_degree_bands`", "04:1031",
+            f"`field_degree_bands`", "04 PART E step 10",
             needs=f"one of {sorted(FIELD_BANDS)}",
-            law="04:1031 -- a misspelled manifest row fails at boot naming the row")
+            law="04 PART E step 10 -- a misspelled manifest row fails at boot naming the row")
 
 
 def unclaimed_contest_prizes(verb_table: Optional[dict] = None) -> list:
-    """§B.13 invariant 9 (`04:467`): **every verb's `contests:` prize is in the subsystem roster.**
+    """§B.13 invariant 9 (`04 §B.13 #9`): **every verb's `contests:` prize is in the subsystem roster.**
     `[(verb, prize)]` for each prize no `contest_subsystems` row claims; `check_contest_prizes()`
     below is the refusal that reads it.
 
@@ -269,7 +269,7 @@ def unclaimed_contest_prizes(verb_table: Optional[dict] = None) -> list:
     declares. It says nothing about the KEY side: a verb declaring `contests: the bodyy` loads
     clean, boots clean, and at first call `resolve` returns `None` (a real answer, for a prize no row
     claims), so the seam falls through to its generic refusal, **naming no row.** That is the
-    first-call failure mode `04:1031` replaces, surviving in the half nobody checked. Found by the
+    first-call failure mode `04 PART E step 10` replaces, surviving in the half nobody checked. Found by the
     Fable gate on Arc 1.
 
     ⚠ (plan position `30`) IT IS RAISED NOW, AT DRIVER CONSTRUCTION, by `check_contest_prizes()`;
@@ -310,7 +310,7 @@ def check_contest_prizes(verb_table: dict) -> list:
         verb, prize = unclaimed[0]
         raise Unspecified(
             f"verb {verb!r} declares `contests: {prize!r}`, which no `contest_subsystems` row claims "
-            f"(all: {unclaimed})", "04:467",
+            f"(all: {unclaimed})", "04 §B.13 #9",
             needs="a `contest_subsystems.prizes` row for the prize, or the verb's `contests:` fixed",
             law="04 §B.13 #9 -- contest prizes are a SUBSET of the subsystem roster; an unclaimed "
                 "prize reaches the seam's generic refusal at first call, naming no row")
@@ -346,13 +346,22 @@ def check_contest_prizes(verb_table: dict) -> list:
 # `destroy_record` use the column to decline their FORMATION (`14`), not their effect. The column
 # means two things; the converse waits for it to be split.
 #
-# ⚠ ROWS WITH `contests:` ARE EXEMPT: they take the seam path, not the effect path.
+# ⚠ A CONTESTED ROW IS NOT EXEMPT. It routes to the seam first, but `loop/resolve.py::_contest` then
+# folds the seam's result through `EFFECTS` (`_fold` raises `Unspecified` for a writing row with no
+# entry there), so a contested writing row with no effect is the same silent exclusion
+# `resolvable_verbs()` makes. The plan's text (`_part5` `30` WHERE 4a) exempts them on the premise
+# that they take the seam path and not the effect path, and that premise is false: `fight` and
+# `march` write and have effects, and `tell` writes nothing at any degree, so `not row.writes` skips
+# it already. Dropping the exemption departs from the plan's text and refuses nothing on the
+# shipped tree.
 #
 # ⚠ `decline_note:` IS READ HERE, FROM THE FILE, AND NOT FROM `VerbRow`. The verb loader
-# (`data/verbs.py`) loads no `*_note` column -- they are annotations to it -- and that file is owned by
-# the telling workplan while a telling position is open (plan `_part3` O.3), so this position does not
-# add a field there. This is the column's one reader; the file is parsed once per process (the
-# `_CONTRACTS_CACHE` reason above: the corpus constructs many drivers).
+# (`data/verbs.py`) treats `decline_note` as an annotation it ignores (its `*_note` rule), whereas it
+# DOES load `requires_typed_note` into `VerbRow` and refuse an empty one -- the precedent shape for
+# a note a gate depends on. Moving this column into `VerbRow` is the cleaner home; it waits on the
+# telling workplan, which owns `data/verbs.py` while a telling position is open (plan `_part3`
+# O.3), so this position adds no field there. This is the column's one reader; the file is parsed
+# once per process (the `_CONTRACTS_CACHE` reason above: the corpus constructs many drivers).
 # ---------------------------------------------------------------------------
 _DECLINED_CACHE: list = []
 
@@ -368,20 +377,20 @@ def _declined_verbs() -> frozenset:
 
 
 def check_effects(verb_table: dict, effects: dict) -> list:
-    """Refusal (a): every WRITING verb row without `contests:` has an effect or a `decline_note:`.
+    """Refusal (a): every WRITING verb row has an effect or a `decline_note:` -- a contested row too.
 
     Raises naming every verb that has neither. Returns the writing rows it checked."""
     declined = _declined_verbs()
     checked, silent = [], []
     for verb, row in verb_table.items():
-        if not row.writes or row.contests:
+        if not row.writes:
             continue
         checked.append(verb)
         if verb not in effects and verb not in declined:
             silent.append(verb)
     if silent:
         raise Unspecified(
-            f"writing verb row(s) {silent} have no effect and no `decline_note:`", "04:1031",
+            f"writing verb row(s) {silent} have no effect and no `decline_note:`", "04 PART E step 10",
             needs="an `@effect_for` body for each, or a `decline_note:` on its verb_table.yaml row "
                   "saying why it has none",
             law="A-25 / plan position `30` -- a verb the fold cannot execute leaves the game only "

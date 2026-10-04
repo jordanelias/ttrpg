@@ -835,7 +835,10 @@ ROLE_TEMPLATE_OF = roster_map("role_templates", "by_faction")
 #     `composition_roles:`); its one identity is its directory name, which is an entry's key here.
 #   * an entry's `kind:` is a `module_kinds` member -- minigame, management space, world surface,
 #     loop-resident, data register, host or stub (`rosters.yaml` defines each in one line).
-#   * an entry's `home:` is the repo-relative path it lives at, a directory ending in `/`. It may
+#   * an entry's `home:` is the repo-relative path it lives at: a directory, written with a trailing
+#     `/`, or -- for `npcs` -- the one file that holds it. The loader checks it is a non-empty,
+#     relative string and nothing more; the consumers (`R04_PENDING_SUBSYSTEMS`, `tools/evacuation_plan.py`)
+#     each compare a directory home with the slash stripped. It may
 #     name a path that does not exist yet (`game/`); nothing here checks the disk, because a home is
 #     a declaration about where an entry BELONGS, and moving code is `31a`-`31c`'s, not a loader's.
 # Validated AT LOAD, `_load_rosters`' reason: a check that only runs when something reads the roster
@@ -858,11 +861,12 @@ def _load_modules(members: dict, kinds) -> dict:
                 f"`modules` entry {name!r} is not a row", "rosters.yaml",
                 needs="a mapping with `kind:` and `home:`",
                 law="A-25 -- every retained entry says what it is and where it lives")
-        extra = sorted(k for k in row if k not in _MODULE_FIELDS and not str(k).endswith("note"))
+        extra = sorted(k for k in row if k not in _MODULE_FIELDS
+                       and not (k == "note" or str(k).endswith("_note")))
         if extra:
             raise Unspecified(
                 f"`modules` entry {name!r} carries unknown key(s) {extra}", "rosters.yaml",
-                needs=f"only {list(_MODULE_FIELDS)}, or an annotation spelled `*note`",
+                needs=f"only {list(_MODULE_FIELDS)}, or an annotation spelled `note` or `*_note`",
                 law="04 §B.13 #10's rule for a data row -- a column nobody reads is a column that "
                     "silently does nothing")
         require_member(
@@ -872,7 +876,7 @@ def _load_modules(members: dict, kinds) -> dict:
         if not isinstance(home, str) or not home.strip() or home.startswith("/"):
             raise Unspecified(
                 f"`modules` entry {name!r} has home {home!r}", "rosters.yaml",
-                needs="a repo-relative path, a directory ending in `/`",
+                needs="a repo-relative path (a directory ends in `/`)",
                 law="A-25 -- the roster says where each retained entry lives; an absent home is an "
                     "entry nobody can find")
         out[str(name)] = {"kind": row["kind"], "home": home}

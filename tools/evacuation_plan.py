@@ -77,7 +77,9 @@ def _roster_system_dirs():
     homes, not_systems = [], []
     for name, row in sorted(MODULES.items()):
         own = f'{root}/{name}/'
-        (homes if row['home'] == own else not_systems).append(own)
+        # the slash is stripped on both sides, as `R04_PENDING_SUBSYSTEMS` does: a home written
+        # `systems/<name>` and `systems/<name>/` name one directory
+        (homes if row['home'].rstrip('/') == own.rstrip('/') else not_systems).append(own)
     return tuple(homes), tuple(not_systems)
 
 

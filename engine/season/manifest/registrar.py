@@ -23,16 +23,18 @@ pulls in no `systems.*`/`modules.*` code
 
 IDEMPOTENT. `SeasonDriver.__init__` runs it on every construction, and a corpus constructs many
 drivers in one process: the same rows give the same table and no refusal. What it REFUSES, naming
-the row (the shape of `registry.check_rows()`, `04:1031` -- *"a misspelled manifest row fails at
+the row (the shape of `registry.check_rows()`, `04 PART E step 10` -- *"a misspelled manifest row fails at
 boot naming the row"*):
 
   (b) an `entry: verb_call` row whose `verb:` names no verb row;
   (d) one entry registered twice -- one target under two roles, one verb bound by two `verb_call`
-      rows, or a role the table already holds bound to a different target;
-  and a role the table holds that NO ROW declares. That entry was written by something other than
-  this registrar from a row -- a second writer, or a row deleted under a live process -- and a
-  table with two writers is the import-time self-registration `ED-IN-0284` records as the measured
-  silent drop (`seam/__init__.py`'s own account).
+      rows, or a role the table already holds bound differently from its row (another target,
+      entry, verb or callable);
+  and a role the table holds that NO ROW declares as an entry. That entry was written by something
+  other than this registrar from a row -- a second writer, or a row deleted or stripped of its
+  `entry:` under a live process. The registrar is the table's only writer (A-25), and `ED-IN-0284`
+  rules out import-time self-registration, the measured silent drop (`seam/__init__.py`'s own
+  account of a missing import leaving the table empty).
 
 `ID-13`, READ EXACTLY: no production composition row carries `entry:` at `30`, so the pass over
 production rows registers nothing until `31a` lands the first; `tests/valoria/test_module_registrar.py`
@@ -64,8 +66,8 @@ MODULE_ENTRIES: dict = {}
 
 def _refuse(what: str, needs: str) -> None:
     raise Unspecified(
-        what, "04:1031", needs=needs,
-        law="04:1031 -- a misspelled manifest row fails at boot naming the row. A-25: a module is "
+        what, "04 PART E step 10", needs=needs,
+        law="04 PART E step 10 -- a misspelled manifest row fails at boot naming the row. A-25: a module is "
             "reached by ONE composition row, registered once, by the registrar alone")
 
 
@@ -97,6 +99,9 @@ def register_module_entries(verb_table: dict) -> list:
             _refuse(f"module entry {target!r} is registered twice, by composition rows "
                     f"{by_target[target]!r} and {role!r}",
                     needs="one composition row per module entry; delete the other")
+        # [ASSUMPTION, `SM-5`] one `verb_call` entry per verb: A-25's *"two owners say which module is
+        # called"* read as one answer per verb. A grid or map variant is a MODE of one module
+        # (A-25's own assumption); if `SM-5` rules a variant its own module, this clause is what changes.
         if verb is not None and verb in by_verb:
             _refuse(f"verb {verb!r} has two `{entry}` entries, composition rows {by_verb[verb]!r} "
                     f"and {role!r}",
@@ -110,13 +115,12 @@ def register_module_entries(verb_table: dict) -> list:
         new = fresh.get(role)
         if new is None:
             _refuse(f"MODULE_ENTRIES holds {role!r} ({getattr(held, 'target', held)!r}), which no "
-                    f"composition row declares",
+                    f"composition row declares as an entry",
                     needs="the composition row back, or the second writer of MODULE_ENTRIES removed "
                           "-- the registrar is its only writer")
         if new != held:
-            _refuse(f"module entry {role!r} is registered twice: the table holds "
-                    f"{getattr(held, 'target', held)!r} and "
-                    f"its composition row now names {new.target!r}",
+            _refuse(f"module entry {role!r} is registered twice: the table holds {held!r} and its "
+                    f"composition row now says {new!r}",
                     needs="one registration per entry, by the registrar from its row")
     MODULE_ENTRIES.update(fresh)
     return sorted(fresh)

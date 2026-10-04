@@ -98,7 +98,10 @@ def _check_entry(role, row):
     if kind != 'callable':
         raise SystemExit(f'composition_roles {role!r}: `entry: {entry}` on a `kind: {kind}` row -- a '
                          f'module entry is something the loop CALLS, so its row is `kind: callable`.')
-    if (entry == _VERB_ENTRY) != bool(verb):
+    # one predicate for "names a verb" in both branches: a `verb_call` row carries a non-empty string,
+    # and every other entry kind carries none (`verb is None`, as the no-entry branch above reads it)
+    named = isinstance(verb, str) and bool(verb.strip())
+    if (entry == _VERB_ENTRY and not named) or (entry != _VERB_ENTRY and verb is not None):
         raise SystemExit(f'composition_roles {role!r}: `entry: {entry}` with `verb: {verb!r}` -- a '
                          f'`{_VERB_ENTRY}` row names its verb, and no other entry kind names one.')
     return entry, verb

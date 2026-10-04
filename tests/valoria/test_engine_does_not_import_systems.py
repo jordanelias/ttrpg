@@ -694,10 +694,23 @@ R04_PENDING_SUBSYSTEMS = _r04_pending(REPO / ci_common.MODULE_CODE_DIRS[0], _ros
 R04_PENDING_ROLES = set()
 
 
+def _roles_into_pending(roles, pending):
+    """The roles whose target is `systems.<name>...` for a `<name>` in `pending`. Only the `systems.`
+    root is read: `pending` is a set of `systems/` directory names, so a `modules.<name>` or
+    `engine.<name>` target that happens to share a name must not be refused on a checkout that has
+    such a directory and accepted on one that has not."""
+    root = ci_common.MODULE_CODE_DIRS[0]
+    out = set()
+    for role, row in roles.items():
+        parts = row['target'].split('.', 2)
+        if len(parts) > 1 and parts[0] == root and parts[1] in pending:
+            out.add(role)
+    return out
+
+
 def test_r04_pending_composition_roles_can_only_shrink():
     from engine.substrate import composition
-    live = {role for role, row in composition.ROLES.items()
-            if row['target'].split('.', 2)[1] in R04_PENDING_SUBSYSTEMS}
+    live = _roles_into_pending(composition.ROLES, R04_PENDING_SUBSYSTEMS)
     new = sorted(live - R04_PENDING_ROLES)
     assert not new, (
         'NEW composition role(s) target a systems/ directory the `modules:` roster '
@@ -708,16 +721,26 @@ def test_r04_pending_composition_roles_can_only_shrink():
 
 
 def test_r04_pending_is_computed_from_the_roster_and_can_observe_an_unretained_directory(tmp_path):
-    """`R04_PENDING_SUBSYSTEMS` is DERIVED (plan position `30`), so its derivation is what can be
-    wrong. Two arms: on a planted tree, a directory no `home:` names is pending and one a `home:`
-    names is not; on the real tree, every roster home under `systems/` is excluded -- the three
-    subsystems among them, so a composition role into any of them is never refused here."""
+    """`R04_PENDING_SUBSYSTEMS` is DERIVED (plan position `30`), so its derivation and its consumer
+    are what can be wrong. Three arms. (1) On a planted tree, a directory no `home:` names is pending
+    and one a `home:` names is not. (2) The consumer: on a planted set of roles, a role into a pending
+    `systems/` directory is the one refused, and a role into a retained one, into `engine.`, or into
+    `modules.` under a pending name is not -- `R04_PENDING_SUBSYSTEMS` is empty on a clean checkout, so
+    the real-tree test above can fail only on a directory added later, and this arm is what shows its
+    comparison fires. (3) On the real tree, the roster keeps the three subsystems, so a composition
+    role into any of them is never refused here."""
     root = ci_common.MODULE_CODE_DIRS[0]
     for name in ('retained', 'unretained', '__pycache__'):
         (tmp_path / name).mkdir()
     assert _r04_pending(tmp_path, [f'{root}/retained/']) == {'unretained'}
 
+    planted = {'planted.role': {'target': f'{root}.unretained.sim.x:f'},
+               'retained.role': {'target': f'{root}.retained.sim.x:f'},
+               'engine.role': {'target': 'engine.unretained.x:f'},
+               'modules.role': {'target': 'modules.unretained.x:f'}}
+    assert _roles_into_pending(planted, {'unretained'}) == {'planted.role'}
+    assert _roles_into_pending(planted, set()) == set()
+
     homes = _roster_homes()
     retained = {h.rstrip('/').split('/', 1)[1] for h in homes if h.startswith(f'{root}/')}
     assert {'combat', 'mass_battle', 'social_contest'} <= retained, sorted(retained)
-    assert not (retained & R04_PENDING_SUBSYSTEMS), sorted(retained & R04_PENDING_SUBSYSTEMS)

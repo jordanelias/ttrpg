@@ -8,18 +8,22 @@ did not build. `tests/valoria/test_season_providers_are_registered.py` is the pr
 
 SUBJECT, under `CLAUDE.md` §0.1 pt 5: these are the loader's refusals per data family
 (`CLAUDE.md` §0.05, "the loader's refusal per data family") over rows the game resolves from -- the
-composition rows, the prize rows and the verb rows -- and each refusal replaces a path by which a
-verb used to leave the game without a word. Load-bearing on the game.
+composition rows, the prize rows and the verb rows. Refusal (a) and the second half of (c) replace a
+path by which a verb used to leave the game without a word. (b), (d) and the unbacked-entry refusal
+guard the entries `31a` onward declare and have no production row to refuse at `30` (`ID-13`, below);
+the first half of (c) repeats a refusal `data/verbs.py` already makes at load.
 
 `ID-13`, READ EXACTLY: no production composition row carries `entry:` at `30`, so every registrar
 case below PLANTS one; the registrar's pass over production rows is first exercised at `31a`.
 
 The plan's falsifiers, by number (`workplans/valoria_master_workplan_v8_part5.md`, position `30`):
-(2) `test_a_registered_row_deleted_under_a_live_process_refuses_naming_it` and
-`test_a_verb_call_row_naming_no_verb_refuses_naming_it`; (3) `test_a_prize_row_with_its_provider_cleared_refuses_naming_the_prize`;
+(2) `test_a_registered_row_deleted_under_a_live_process_refuses_naming_it` -- ONLY ITS WITHIN-PROCESS
+FORM (plant, construct, delete, construct): in a fresh process a deleted row leaves nothing to refuse
+on, since no data at `30` declares that a row must exist, so the fresh-process form is `31a`'s to place
+(its falsifier 3) -- and `test_a_verb_call_row_naming_no_verb_refuses_naming_it` (refusal (b)); (3) `test_a_prize_row_with_its_provider_cleared_refuses_naming_the_prize`;
 (4) `test_a_verb_contesting_a_prize_no_row_claims_refuses_naming_the_verb`; (5)
-`test_a_writing_row_with_its_effect_cleared_refuses_naming_the_verb`; (6) the three
-`test_one_entry_registered_twice_*`; (7) `test_the_populated_realm_constructs_a_driver_and_every_check_ran`;
+`test_a_writing_row_with_its_effect_cleared_refuses_naming_the_verb`; (6) the two
+`test_one_entry_registered_twice_*` and `test_two_verb_call_rows_for_one_verb_refuse`; (7) `test_the_populated_realm_constructs_a_driver_and_every_check_ran`;
 (8) `test_the_composition_export_round_trips`, with
 `test_engine_does_not_import_systems.py::test_importing_every_engine_module_pulls_in_no_subsystem`.
 """
@@ -54,9 +58,9 @@ def plant(role, verb, target=TARGET, entry="verb_call"):
 """
 
 
-def _run(body: str):
-    """Run `_HEAD` + `body` in a fresh interpreter; `body` prints one `repr(...)`, returned evaluated."""
-    out = subprocess.run([sys.executable, "-c", _HEAD.format(root=ROOT) + body],
+def _run(body: str, head: str = _HEAD):
+    """Run `head` + `body` in a fresh interpreter; `body` prints one `repr(...)`, returned evaluated."""
+    out = subprocess.run([sys.executable, "-c", head.format(root=ROOT) + body],
                          capture_output=True, text=True, timeout=600)
     assert out.returncode == 0, out.stderr[-3000:]
     return eval(out.stdout.strip().splitlines()[-1])     # our own probe's repr
@@ -70,20 +74,50 @@ def _assert_refused(refusal, *names):
         assert n in text, f"the refusal does not name {n!r}: {text}"
 
 
+#: Imports NOTHING from `engine.season` -- the row is planted before the driver and the manifest are
+#: imported, which is what lets a test see a registrar wired at import: it would run on that plant and
+#: `MODULE_ENTRIES` would be non-empty before any driver is constructed.
+_HEAD_BEFORE_THE_SEASON_IMPORTS = """
+import sys
+sys.path.insert(0, {root!r})
+import yaml
+from engine.substrate import composition
+
+TARGET = "engine.dice_engine.dice_engine:degree_from_net"
+_doc = yaml.safe_load(open({root!r} + "/engine/season/verb_table.yaml"))
+_verbs = sorted(str(r["verb"]) for r in _doc["verbs"])
+composition.ROLES["planted.entry"] = dict(
+    target=TARGET, kind="callable", entry="verb_call", verb=_verbs[0],
+    needed_by="planted by tests/valoria/test_module_registrar.py")
+
+from engine.season.loop.driver import SeasonDriver, EFFECTS, VERB_TABLE
+from engine.season.state.world import World
+from engine.season.manifest import MODULE_ENTRIES
+
+def construct():
+    try:
+        SeasonDriver(World(0))
+        return None
+    except Exception as exc:
+        return (type(exc).__name__, str(exc))
+"""
+
+
 def test_a_planted_entry_is_registered_by_string_at_construction_and_idempotently():
     """The registrar's positive half: a row with `entry:` is in `MODULE_ENTRIES` after construction,
-    resolved to the target's callable, and NOT before it (registration is at construction, never at
-    import); constructing again refuses nothing and leaves the one table unchanged."""
+    resolved to the target's callable, and NOT before it -- the row was planted BEFORE the driver and
+    the manifest were imported (`_HEAD_BEFORE_THE_SEASON_IMPORTS`), so a registrar that ran at import
+    would have filled the table by then; constructing again refuses nothing and leaves the one table
+    unchanged."""
     got = _run("""
-verb = sorted(VERB_TABLE)[0]
-plant("planted.entry", verb)
+verb = _verbs[0]
 before = sorted(MODULE_ENTRIES)
 first = construct()
 after = {r: (e.entry, e.verb, e.target, e.fn.__name__) for r, e in MODULE_ENTRIES.items()}
 second = construct()
 again = {r: (e.entry, e.verb, e.target, e.fn.__name__) for r, e in MODULE_ENTRIES.items()}
 print(repr((verb, before, first, after, second, again)))
-""")
+""", head=_HEAD_BEFORE_THE_SEASON_IMPORTS)
     verb, before, first, after, second, again = got
     assert before == [], f"MODULE_ENTRIES was filled before any driver was constructed: {before}"
     assert first is None and second is None, (first, second)
@@ -128,8 +162,11 @@ print(repr(construct()))
     _assert_refused(refusal, "registered twice", "planted.one", "planted.two")
 
 
-def test_one_entry_registered_twice_by_two_verb_calls_for_one_verb_refuses():
-    """Refusal (d): which module a verb calls has one answer -- two `verb_call` rows for one verb."""
+def test_two_verb_call_rows_for_one_verb_refuse():
+    """Refusal (d)'s second form -- [ASSUMPTION, `SM-5`]: which module a verb calls has one answer, so
+    two `verb_call` rows (two different targets) for one verb are refused. Two entries, not one
+    registered twice; the rule is the registrar's reading of A-25's *\"two owners say which module is
+    called\"*, and `SM-5` (a grid or map variant as its own module) is what could change it."""
     refusal = _run("""
 verb = sorted(VERB_TABLE)[0]
 plant("planted.one", verb)
@@ -140,7 +177,9 @@ print(repr(construct()))
 
 
 def test_one_entry_registered_twice_by_a_second_writer_refuses():
-    """Refusal (d): the table already holds the role, bound by something other than the registrar."""
+    """Refusal (d): the table already holds the role, bound by something other than the registrar.
+    The planted entry differs from its row in the CALLABLE only (same target), so the refusal must
+    show both entries whole -- naming the targets alone would read "holds X and now names X"."""
     refusal = _run("""
 from engine.season.manifest import ModuleEntry
 verb = sorted(VERB_TABLE)[0]
@@ -148,7 +187,8 @@ plant("planted.entry", verb)
 MODULE_ENTRIES["planted.entry"] = ModuleEntry("planted.entry", "verb_call", verb, TARGET, print)
 print(repr(construct()))
 """)
-    _assert_refused(refusal, "planted.entry", "registered twice")
+    _assert_refused(refusal, "planted.entry", "registered twice", "built-in function print",
+                    "degree_from_net")
 
 
 def test_a_prize_row_with_its_provider_cleared_refuses_naming_the_prize():
@@ -197,25 +237,32 @@ print(repr((verb, construct())))
     _assert_refused(refusal, repr(verb), "decline_note")
 
 
-def test_refusal_a_is_one_sided_and_exempts_contests():
-    """Refusal (a)'s two declared limits, observed: a writing row with no effect that DOES carry a
-    `decline_note:` constructs (every shipped such row does), and the converse arm -- a row carrying
-    BOTH an effect and a `decline_note:` (`SM-9`) -- is NOT refused, since the column also declines
-    a formation on some rows. And a contested row with its effect cleared constructs: it takes the
-    seam path."""
+def test_refusal_a_is_one_sided_and_covers_contested_rows():
+    """Refusal (a)'s declared limit and its reach, observed. One-sided (`SM-9`): a writing row with no
+    effect that DOES carry a `decline_note:` constructs (every shipped such row does), and a row
+    carrying BOTH an effect and a `decline_note:` is NOT refused, since the column also declines a
+    formation on some rows. And a CONTESTED writing row is not exempt: it routes to the seam and then
+    folds the result through `EFFECTS` (`loop/resolve.py::_contest` -> `_fold`), so clearing its effect
+    is refused, naming it -- while a contested row that writes nothing (`tell`) needs no effect and is
+    not named."""
     got = _run("""
 from engine.season.manifest.registry import _declined_verbs
 declined = _declined_verbs()
 silent_ok = sorted(v for v, r in VERB_TABLE.items() if r.writes and v not in EFFECTS and v in declined)
 both = sorted(v for v in declined if v in EFFECTS)
-contested = sorted(v for v, r in VERB_TABLE.items() if r.contests and v in EFFECTS)
-for v in contested:
+control = construct()
+contested_writers = sorted(v for v, r in VERB_TABLE.items() if r.contests and r.writes and v in EFFECTS)
+contested_no_write = sorted(v for v, r in VERB_TABLE.items() if r.contests and not r.writes)
+for v in contested_writers:
     del EFFECTS[v]
-print(repr((silent_ok, both, contested, construct())))
+print(repr((silent_ok, both, control, contested_writers, contested_no_write, construct())))
 """)
-    silent_ok, both, contested, refusal = got
-    assert silent_ok and both and contested, (silent_ok, both, contested)
-    assert refusal is None, refusal
+    silent_ok, both, control, contested_writers, contested_no_write, refusal = got
+    assert silent_ok and both and contested_writers and contested_no_write, got
+    assert control is None, control          # the shipped state (with the declined/both rows) constructs
+    _assert_refused(refusal, "decline_note", *[repr(v) for v in contested_writers])
+    for v in contested_no_write:
+        assert repr(v) not in refusal[1], (v, refusal)
 
 
 def test_the_populated_realm_constructs_a_driver_and_every_check_ran():
@@ -262,10 +309,14 @@ def test_the_exporter_refuses_a_malformed_entry():
     spec.loader.exec_module(mod)
     assert mod._check_entry("r", {"target": "a:b"}) == (None, None)
     assert mod._check_entry("r", {"entry": "verb_call", "verb": "tell"}) == ("verb_call", "tell")
-    for bad in ({"entry": "no_such_entry"},
-                {"entry": "verb_call"},
-                {"entry": "query", "verb": "tell"},
-                {"verb": "tell"},
-                {"entry": "query", "kind": "value"}):
-        with pytest.raises(SystemExit):
+    assert mod._check_entry("r", {"entry": "query"}) == ("query", None)
+    for bad, said in (({"entry": "no_such_entry"}, "must be one of"),
+                      ({"entry": "verb_call"}, "names its verb"),
+                      ({"entry": "verb_call", "verb": ""}, "names its verb"),
+                      ({"entry": "verb_call", "verb": ["tell"]}, "names its verb"),
+                      ({"entry": "query", "verb": "tell"}, "names its verb"),
+                      ({"entry": "query", "verb": ""}, "names its verb"),
+                      ({"verb": "tell"}, "with no `entry:`"),
+                      ({"entry": "query", "kind": "value"}, "kind: value")):
+        with pytest.raises(SystemExit, match=said):
             mod._check_entry("r", bad)

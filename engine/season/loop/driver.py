@@ -127,10 +127,11 @@ def resolvable_verbs() -> frozenset:
                  or v in REQUIRES_PREDICATES)
         effected = not row.writes or v in EFFECTS
         # ⚠ (plan position `30`) THE EXCLUSION ABOVE IS NO LONGER SILENT. A writing row with no
-        # effect reaches it only if its `verb_table.yaml` row carries a `decline_note:` saying why,
-        # or contests (the seam path): `manifest.check_effects()` refuses every other such row at
-        # `SeasonDriver` construction, naming it (refusal (a), one-sided by `SM-9`).
-        # ⚠ AND A THIRD GATE: A VERB THAT CONTESTS DOES NOT TAKE THE EFFECT PATH AT ALL.
+        # effect reaches it only if its `verb_table.yaml` row carries a `decline_note:` saying why:
+        # `manifest.check_effects()` refuses every other such row at `SeasonDriver` construction,
+        # naming it (refusal (a), one-sided by `SM-9`) -- a CONTESTED row included, because
+        # `loop/resolve.py::_contest` folds the seam's result through `EFFECTS`.
+        # ⚠ AND A THIRD GATE: A VERB THAT CONTESTS ROUTES TO THE SEAM FIRST, AND FOLDS WHAT IT RETURNS.
         # `ARCHITECTURE_V2.md:394` — *"`contests: <prize>` — if set, ROUTES TO THE SEAM at
         # RESOLVE (§39)"* — so such a verb is executable only if the SEAM can return. It was
         # counted as executable only because the instrument read its own `EFFECTS` entry and never
@@ -176,7 +177,7 @@ def resolvable_verbs() -> frozenset:
         #
         # ⚠ FALSIFIER, RE-POINTED AT `30`: delete the `@provider("contest", "sigma_leverage")`
         # registration from `seam/wrappers/sigma.py` and `SeasonDriver` construction refuses naming
-        # the prizes `sigma_leverage` runs -- where this set used to shrink by every verb contesting
+        # the first prize `sigma_leverage` runs -- where this set used to shrink by every verb contesting
         # them, with the data unchanged and nothing said.
         contested = bool(row.contests)
         resolvable_contest = False
@@ -237,7 +238,7 @@ class SeasonDriver:
     def __init__(self, w: World):
         self.w = w
         # ⚠ **THE MANIFEST'S ROWS ARE VALIDATED HERE, BECAUSE THIS IS THE ONE PLACE EVERY RUN
-        # PASSES.** `04:1031`'s done-condition is *"a misspelled manifest row fails at boot naming
+        # PASSES.** `04 PART E step 10`'s done-condition is *"a misspelled manifest row fails at boot naming
         # the row"*, and unit L4 built `manifest.check_rows()` for it and wired it into
         # `World.boot()` -- which NOTHING ON A RUN PATH CALLS. `headless`, `corpus_run` and
         # `run_cases` never boot a world; only two probes and three tests do. So the behaviour
@@ -247,7 +248,7 @@ class SeasonDriver:
         # ⚠ IT IS `check_rows()` AND NOT `check_roles()`, AND THE SPLIT IS FORCED RATHER THAN
         # CHOSEN. `check_roles` needs `w.manifest`, which is populated by exactly one probe and is
         # EMPTY in every real run -- calling it here would raise `NoProducer` on every season.
-        # `check_rows` validates the REGISTRY, needs no manifest, and is the half `04:1031` names.
+        # `check_rows` validates the REGISTRY, needs no manifest, and is the half `04 PART E step 10` names.
         # The roles half stays on `World.boot()` for the callers that have a manifest to check.
         #
         # ⚠ PLAN POSITION `30` (A-25): THE REGISTRAR RUNS FIRST, THEN THE REFUSALS, EACH NAMING ITS

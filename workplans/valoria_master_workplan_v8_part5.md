@@ -198,8 +198,11 @@ test can pass on a table it did not build. Precedent: `tests/valoria/test_season
    row with no `entry:` (today's one row, `mass_battle.resolve_field`) keeps its caller and is re-keyed at `31c`.
 4. **Refusals at driver construction, each naming its row** — the shape of `check_rows()`
    (`manifest/registry.py:205`), licensed by `CLAUDE.md` §0.05 `:158` ("the loader's refusal per data family"):
-   (a) a writing verb row with no effect and no `decline_note:`, EXEMPTING rows with `contests:` (they take the seam
-   path; `tell` writes and has no effect) — replacing `driver.py:128`'s silent exclusion. The shipped tree's writing
+   (a) a writing verb row with no effect and no `decline_note:`, a contested row included — replacing `driver.py:128`'s
+   silent exclusion. [CORRECTED 2026-10-04, at `30`'s build: this line exempted rows with `contests:` on the premise that
+   they take the seam path and `tell` writes and has no effect. Both are false: `_contest` folds the seam's result
+   through `EFFECTS` (`loop/resolve.py::_fold` refuses a writing row with none), and `tell` writes nothing at any
+   degree, so `not row.writes` already skips it; `fight` and `march` have effects.] The shipped tree's writing
    rows with no effect (`carry` `exchange` `forge` `repudiate` `succeed` `tie / knot`) all carry a `decline_note:`,
    so (a) passes (run 2026-10-03). ⚠ The converse arm `ED-IN-0285` names — a row carrying both an effect and a
    `decline_note:`, the two-sided `unproduced:` shape (`data/verbs.py:803-821`) — FIRES on the shipped tree:
@@ -263,7 +266,11 @@ refusals running at every driver construction.
 **FALSIFIERS.** (1) Both hashes unchanged. (2) A module test that imports only `engine/dice_engine/` and the record
 types, builds a record by hand and asserts the result record (a `dict`, `status="RESOLVED"`, with `net` and `ob`; no
 `Margin` type exists, `sigma.py:44-49`). (3) In a fresh subprocess, delete the composition row → driver construction
-refuses naming it (the registrar's first production row). (4) `harness.aperture 4 0`: `tell` executes the same
+refuses naming it (the registrar's first production row). ⚠ `30` observed its own falsifier 2 in the within-process form only: the registrar's "no row declares" refusal fires
+only once an earlier construction has filled `MODULE_ENTRIES`, because no data at `30` declares that a row must exist
+(A-25: verb rows name no module). This falsifier needs such a declaration — the candidate is the prize row ↔ composition
+row agreement (A-25, "two owners say which module is called"), checked at construction — which `31a` places; `31b` (4)
+and `31c` (3) read the same. (4) `harness.aperture 4 0`: `tell` executes the same
 count, control hash EQUAL. (5) `test_importing_every_engine_module_pulls_in_no_subsystem` green over `modules/`.
 
 ### `31b` · combat — wrapper split; the reachable engine → `modules/combat/` · IN/PC · gate `31a` · `sonnet`/`opus`, a `haiku` reachability census first · `[infrastructure]`

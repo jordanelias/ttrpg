@@ -3135,12 +3135,12 @@ def test_a_misspelled_manifest_row_fails_at_boot_naming_the_row():
 
 
 def test_every_contested_verbs_prize_is_in_the_subsystem_roster():
-    """§B.13 invariant 9 (`04:467`): **contest prizes ⊆ the subsystem roster.**
+    """§B.13 invariant 9 (`04 §B.13 #9`): **contest prizes ⊆ the subsystem roster.**
 
     ⚠ THE HALF OF A MANIFEST ROW `check_rows()` DOES NOT COVER, found by the Fable gate on Arc 1.
     `check_rows` validates every roster row's PROVIDER; a verb declaring a MISSPELLED prize is the
     key side, and it loads clean, boots clean, and reaches the seam's generic refusal at first call
-    **naming no row** -- the exact failure mode `04:1031`'s done-condition replaces, surviving where
+    **naming no row** -- the exact failure mode `04` PART E step 10's done-condition replaces, surviving where
     nobody looked.
 
     ⚠ (plan position `30`) THE ENFORCEMENT MOVED OUT OF THIS TEST. `manifest.check_contest_prizes()`

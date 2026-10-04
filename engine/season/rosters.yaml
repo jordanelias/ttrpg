@@ -1863,7 +1863,8 @@ rosters:
       concern or a stub, and where each one lives. The KEY is the entry's one identity -- for a
       module, its directory name (A-25: `combat`, never `personal_combat`; a `provider:` name on a
       prize row says what runs and is a different name). `kind:` is a `module_kinds` member. `home:`
-      is the repo-relative path the entry lives at, a directory ending in `/`; a home may not exist
+      is the repo-relative path the entry lives at -- a directory ends in `/`; `npcs`' is the one file
+      that holds it; a home may not exist
       yet (`game/` is unbuilt) and nothing here moves a file (`31a`-`31c` move module code into
       `modules/<name>/`, which A-25 derives from the composition rows, not from this roster). A
       `systems/<name>/` directory that no entry names as its `home:` is not retained as a system:
