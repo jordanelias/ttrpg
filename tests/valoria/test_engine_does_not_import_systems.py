@@ -56,8 +56,8 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 ENGINE = REPO / 'engine'
 
 # THE ROOTS THIS FILE BANS ARE NOT SPELLED HERE (A-25). `engine/` names no module
-# code by import, and "module code" lives under every root in `ci_common.MODULE_CODE_DIRS` — today
-# `systems/` and `modules/`. A module is reached by a composition row (`references/module_contracts.yaml`)
+# code by import, and game Python outside `engine/` lives under every root in `ci_common.MODULE_CODE_DIRS`
+# — `modules/` (the A-25 modules) and `systems/` (legacy and unplugged code). A module is reached by a composition row (`references/module_contracts.yaml`)
 # or, for `wrapper` and `combatant` only, through the one declared PATH seam below; never by an import.
 # `PATH_SEAM_ALLOWED` is keyed by the INSERTING FILE, not by the root it names, so
 # `substrate/pc_engine.py` keeps its entry when position `31b` re-points its insert into

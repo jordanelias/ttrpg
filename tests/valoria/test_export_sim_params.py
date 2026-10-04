@@ -69,7 +69,7 @@ def test_key_alone_is_known_to_collide_and_is_not_used_as_an_index():
     )
 
 
-def test_the_scan_list_is_derived_and_cannot_silently_shrink():
+def test_the_scan_list_is_derived_and_cannot_silently_shrink(monkeypatch):
     """A-25. The scan list was a hand list of `engine` and seven
     `systems/<sub>/sim` directories; it is now `ci_common.sim_reference_roots()`, which also reads
     `modules/<name>/`. The floor is the hand list's own size, so a derivation that sees nothing — or
@@ -78,6 +78,11 @@ def test_the_scan_list_is_derived_and_cannot_silently_shrink():
     dirs = esp._scan_dirs()
     assert 'engine' in dirs, dirs
     assert len(dirs) >= 8, f'only {len(dirs)} sim reference roots derived: {dirs}'
+    # The list is DERIVED, not a hand list that happens to match: whatever the owner returns is what
+    # the exporter scans.
+    planted = os.path.join(str(esp.ROOT), 'modules', 'm')
+    monkeypatch.setattr(esp.ci_common, 'sim_reference_roots', lambda *a, **k: [planted])
+    assert esp._scan_dirs() == ['modules/m']
 
 
 def test_the_sim_reference_roots_owner_reads_modules_and_skips_pycache(tmp_path):

@@ -251,10 +251,10 @@ gh run list --branch main --limit 3                             # read `All Gate
 
 **Batch 1 landed (PR #450)**; its records are `_part6` §H.1. **The telling workplan's T0–T6 landed (PR
 #449, `fd321c81`), so Batch 2's whole IN chain is open** (§0.6). Batch A (`B0-CI-b`, `20-v`, `29d-ii`) landed in PR #451
-(`_part6` §H.1); the next buildable positions are Batch 2 in `_part3` O.1's order and `34` (the dice engine, first in `_part5` §SM's order, E17), with
+(`_part6` §H.1); the next buildable positions are Batch 2 in `_part3` O.1's order and `30` (the registrar, first in `_part5` §SM's order, E17; `34` and `35` have landed), with
 `{27}` and `{LADDER-MBPC}` as parallel lanes. `11`'s baseline is taken after T6 (E15), i.e. on the tree
 from `fd321c81`. The pre-flight rows still open are P-4 and P-6 (`_part3` §P). Each batch runs through
-`methodology-execute` (`CLAUDE.md` §9). **Modules (`ED-IN-0285`, `_part5` A-25):** `34` is buildable (gate
+`methodology-execute` (`CLAUDE.md` §9). **Modules (`ED-IN-0285`, `_part5` A-25):** `30` is buildable (gate
 none); the order is `_part5` §SM's, and `22` waits on `30` and `31a` (`_part3` E17); read `_part5` §SM before
 dispatching any of them.
 
@@ -283,9 +283,7 @@ Batch 1 found (`B0-CI-b`, `29d-ii`, `20-v`) landed in PR #451.
 | position | handle | lane | STATE | GATE | R | batch | evidence / note |
 |---|---|---|---|---|---|---|---|
 | `B0-CI` | main's CI red | IN | **PARTIAL** | — | — | 0 | [RAN] PR #450's CI: the step `pytest tests/valoria -n auto` passes — the seven red tests are fixed (ledger `FORK:` refs re-pointed to commits that are ancestors of `main`; `sim_params.json` and `value_pointer_links.json` re-derived by their exporters; `tools/build_engine_atlas.py`'s stated inputs). **CI as a whole is NOT green:** the next step, `pytest engine/season/tests`, fails one test that predates this plan (red at `5c5d8ec6` on `main`, never reached there because the earlier step failed) — that test is `B0-CI-b`. `B0-CI-b` landed in PR #451 (`77f5175a`). **That did not turn `main` green:** on `main` @`59004d86` (run 36967763315) the `tests/valoria` step passed in about 9m10s and the `engine/season/tests` step was `cancelled` 6m49s in when `unit-tests`' 16-minute cap hit, so `register --requirements` was skipped and `All Gates Green` failed with no test failing. `B0-CI-c` (2026-10-02) moved `engine/season/tests` and `register --requirements` into their own job, `season-tests` (20-minute cap, set before any completed run existed). **First complete run, PR #452 @`866b3136` (run 37026782154, 2026-10-02):** `season-tests` 11m11s, `unit-tests` 9m14s, `All Gates Green` success; the workflow's comment carries the reading and its caveat (one hosted observation). What remains of this row is `All Gates Green` reading green on `main` itself, once #452 merges |
-| `34` | the dice engine: `engine/autoload/` → `engine/dice_engine/` | IN | **OPEN** | — | — | SM | `_part5` §SM; first in its order |
-| `35` | scan roots: every path-keyed scan of `systems/` also reads `modules/` | IN | BLOCKED | `34`'s falsifiers | — | SM | `_part5` §SM |
-| `30` | the registrar, the `modules:` roster, the refusals (no file moves) | IN | BLOCKED | `35`'s falsifiers | — | SM | `_part5` §SM; `22` waits on it (E17) |
+| `30` | the registrar, the `modules:` roster, the refusals (no file moves) | IN | **OPEN** | — | — | SM | `_part5` §SM; `22` waits on it (E17) |
 | `31a` | social contest: `sigma.py` → a host input builder + `modules/social_contest/` | IN/SC | BLOCKED | `30`'s falsifiers | — | SM | `_part5` §SM; `22` waits on it (E17) |
 | `31b` | combat: wrapper split; the reachable engine → `modules/combat/` | IN/PC | BLOCKED | `31a`'s falsifiers | — | SM | `_part5` §SM |
 | `31c` | mass battle: module state shed; wrapper split; `resolve_field`'s closure → `modules/mass_battle/` | IN/MB | BLOCKED | `31b`'s falsifiers | — | SM | `_part5` §SM |
