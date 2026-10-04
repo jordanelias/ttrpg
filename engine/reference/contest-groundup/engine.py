@@ -32,7 +32,7 @@ import random
 
 # Base engine (params/core.md): net ~ Normal(0.40·pool, 0.80·√pool) at TN 7;
 # die map 1→−1, 2-6→0, 7-9→+1, 10→+2; degrees Failure/Partial/Success/Overwhelming; Ob 1–20.
-MU_PER_DIE, SD_PER_DIE = 0.40, 0.80  # [canonical: engine/autoload/dice_engine.py §_MU_PER_DIE/_SIGMA_PER_DIE — 0.40 / 0.800 at TN 7; also in this directory's sim_verification_ledger.json]
+MU_PER_DIE, SD_PER_DIE = 0.40, 0.80  # [canonical: engine/dice_engine/dice_engine.py §_MU_PER_DIE/_SIGMA_PER_DIE — 0.40 / 0.800 at TN 7; also in this directory's sim_verification_ledger.json]
 OB_MIN, OB_MAX = 1, 20
 OVERWHELM_SIGMA = 0.85  # de-saturation (diagnostic Lesson 2): live degree-3 bar = pool mean + this·σ,
                         # holding the Overwhelming rate ≈ uniform (~21%) across pools instead of 20%→91%.

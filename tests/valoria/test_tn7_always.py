@@ -18,7 +18,7 @@ because `dice_engine.roll_pool` never read its `tn` argument:
 
     systems/combat/sim/combat.py        WEAPON_TN_MOD, shifting TN across 5-8
     systems/threadwork/sim/operations.py TN_BINDING=8, TN_POP=8, TN_POP_BINDING=9
-    engine/autoload/sigma_leverage.py    a "Controlled 6 / Standard 7 / Desperate 8" scale
+    engine/dice_engine/sigma_leverage.py    a "Controlled 6 / Standard 7 / Desperate 8" scale
 
 Those constants READ AS BUGS: named, plausible, and provably doing nothing. The natural
 "fix" a future session would reach for is to make `dice_engine` honour `tn` — and that one
@@ -41,15 +41,19 @@ from __future__ import annotations
 import pathlib
 import random
 import re
+import sys
 
 import pytest
 
-from engine.autoload import dice_engine as de
-from engine.autoload import sigma_leverage as sl
+from engine.dice_engine import dice_engine as de
+from engine.dice_engine import sigma_leverage as sl
 from systems.mass_battle.sim import resolution as mb
 
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
+
+sys.path.insert(0, str(REPO / 'tools'))
+import ci_common  # noqa: E402
 
 # The canonical face rule, pinned face by face. 1 fumbles, 2-6 score nothing,
 # 7-9 each score one success, 10 scores two. No TN moves any of these boundaries.
@@ -119,7 +123,10 @@ def test_the_mass_battle_roller_also_refuses_non_7(bad_tn):
 # ── 3. No constant may name a TN that is not 7 ────────────────────────────────────────
 
 _TN_CONST = re.compile(r'^\s*([A-Z_]*TN[A-Z_]*)\s*=\s*(\d+)\s*(?:#.*)?$', re.M)
-_SCAN_ROOTS = ("engine", "systems")
+# `systems/` and `modules/` both, from the one owner (`ci_common`, A-25): a TN constant in a
+# module under `modules/<name>/` breaks the ruling exactly as one under `systems/` does, and the sweep
+# must not go blind the day code lands there. The floor is `test_the_tn_constant_sweep_actually_found_constants`.
+_SCAN_ROOTS = ("engine", *ci_common.MODULE_CODE_DIRS)
 
 
 def _tn_constants():

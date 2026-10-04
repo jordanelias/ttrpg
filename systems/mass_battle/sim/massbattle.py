@@ -70,7 +70,7 @@ from systems.mass_battle.sim.terrain import (FOREST_BROKEN, WALLS, WALLS_DEFENDE
 
 #: Size-ratio -> degree thresholds. CARRIED OVER VERBATIM from the pre-port adapter so that the
 #: golden movement this commit causes is attributable to the engine swap and nothing else. These are
-#: NOT the canonical degree ladder (`engine/autoload/dice_engine.degree_from_net`, margin-based);
+#: NOT the canonical degree ladder (`engine/dice_engine/dice_engine.degree_from_net`, margin-based);
 #: they are a bespoke post-hoc classification of a finished battle's survivor ratios, and
 #: reconciling the two is open MB-lane work, not a port concern.
 # [canonical: carried over unchanged from the pre-port adapter, systems/mass_battle/sim/massbattle.py

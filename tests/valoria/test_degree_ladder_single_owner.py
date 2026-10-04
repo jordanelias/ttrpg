@@ -66,7 +66,10 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 if str(REPO) not in sys.path:
     sys.path.insert(0, str(REPO))
 
-from engine.autoload import dice_engine  # noqa: E402
+from engine.dice_engine import dice_engine  # noqa: E402
+
+sys.path.insert(0, str(REPO / 'tools'))
+import ci_common  # noqa: E402
 
 # Ordinal bands, so vocabulary differences (enum / Title-Case / lower-case) cannot masquerade as
 # behavioural ones. Unknown spellings raise rather than defaulting to a band.
@@ -132,7 +135,7 @@ def _combat_engine():
 
 
 def _contest_surface():
-    # MOVED 2026-08-27 (ED-SC-0032): this was `engine.autoload.sigma_leverage.degree`. The
+    # MOVED 2026-08-27 (ED-SC-0032): this was `engine.dice_engine.sigma_leverage.degree`. The
     # contest's pool-aware rule left the engine for the subsystem that owns it, and now reaches
     # the ladder through `dice_engine.BandExtension` instead of post-filtering the owner's answer.
     from systems.social_contest.sim.contest import degree_extension
@@ -147,7 +150,7 @@ def _dice_model_skill():
 
 
 LADDERS = {
-    'engine/autoload/dice_engine.py (OWNER)': _owner,
+    'engine/dice_engine/dice_engine.py (OWNER)': _owner,
     'systems/threadwork/sim/operations.py': _threadwork_operations,
     'systems/mass_battle/sim/resolution.py': _massbattle_canon,
     'skills/valoria-dice-model/valoria_dice.py': _dice_model_skill,
@@ -175,7 +178,7 @@ LADDERS = {
 RULINGS = {
     '2026-08-14 — the ladder itself': (
         "The margin `net - ob` decides the band; '3 or more is always overwhelming'; meeting the "
-        "obstacle without exceeding it is a Partial. Owner: engine/autoload/dice_engine.py's "
+        "obstacle without exceeding it is a Partial. Owner: engine/dice_engine/dice_engine.py's "
         "degree_from_net. Ruled out by name: Ob-scaled Overwhelming (net >= 2*Ob), the separate "
         "PP-232 net >= 3 floor, and the Ob-20 exception."),
     '(same session) — one faction write mechanism': (
@@ -351,7 +354,7 @@ def test_every_ladder_is_behaviourally_the_owner():
         'the domain lost its fractional OBSTACLES — the axis the 2026-08-14 ruling actually adds'
     assert not mismatches, (
         f'{len(mismatches)} cell(s) diverge from the single owner '
-        f'(engine.autoload.dice_engine.degree_from_net). First 10:\n  '
+        f'(engine.dice_engine.dice_engine.degree_from_net). First 10:\n  '
         + '\n  '.join(mismatches[:10]))
 
 
@@ -380,7 +383,7 @@ _FROZEN_ORACLE = (
     'against. It carries the old 2*Ob ladder ON PURPOSE and must keep carrying it.')
 
 LADDER_OWNERS = {
-    'engine/autoload/dice_engine.py': 'THE owner — the ladder itself and its label map',
+    'engine/dice_engine/dice_engine.py': 'THE owner — the ladder itself and its label map',
 }
 
 DECLARED_ADAPTERS = {
@@ -456,19 +459,23 @@ _BAND_RE = r"""['"](?:overwhelming|success|partial|failure)['"]|Degree\.(?:OVERW
 # commonest line in the tree) matches on the second `=` and every migrated file reads as a ladder.
 _PRODUCES_BAND = re.compile(r'(?:return\s+|(?<![=!<>+])=\s*)(?:' + _BAND_RE + r')', re.IGNORECASE)
 
-SCAN_ROOTS = ['engine', 'systems', 'skills', 'tools', 'tests']
+# The code roots come from the one owner (`ci_common`, A-25): a hand-rolled ladder in a module
+# under `modules/<name>/` is the same defect as one under `systems/`, and a root typed here would
+# have left that tree outside the sweep on the day code first landed there.
+SCAN_ROOTS = ['engine', *ci_common.MODULE_CODE_DIRS, 'skills', 'tools', 'tests']
 
 
 def test_no_new_hand_rolled_ladder():
     """A new `if net ...: return 'Success'` outside the registry fails until it is routed."""
     allowed = set(LADDER_OWNERS) | set(DECLARED_ADAPTERS) | set(HELD)
-    offenders, scanned = [], 0
+    offenders, scanned, roots_seen = [], 0, set()
     for root in SCAN_ROOTS:
         for path in (REPO / root).rglob('*.py'):
             rel = path.relative_to(REPO).as_posix()
             if 'deprecated/' in rel or '__pycache__' in rel:
                 continue
             scanned += 1
+            roots_seen.add(rel.split('/', 1)[0])
             if rel in allowed:
                 continue
             text = path.read_text(encoding='utf-8', errors='replace')
@@ -478,7 +485,10 @@ def test_no_new_hand_rolled_ladder():
                 offenders.append(rel)
 
     assert scanned >= 100, f'sweep scanned only {scanned} files — the walk is broken, not clean'
+    # `tests/` alone clears the count, so the count cannot see a dropped code root; `systems/` holds game
+    # Python as long as any legacy sim remains (A-25), and it is read only through the derived roots.
+    assert 'systems' in roots_seen, f'no file under systems/ was scanned (roots seen: {sorted(roots_seen)})'
     assert not offenders, (
         'new hand-rolled degree ladder(s) found. Route them through '
-        'engine.autoload.dice_engine.degree_from_net, or add them to DECLARED_ADAPTERS with a '
+        'engine.dice_engine.dice_engine.degree_from_net, or add them to DECLARED_ADAPTERS with a '
         'reason:\n  ' + '\n  '.join(sorted(offenders)))

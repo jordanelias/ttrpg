@@ -39,8 +39,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional, Any
 
-from engine.autoload import dice_engine
-from engine.autoload.dice_engine import roll_pool
+from engine.dice_engine import dice_engine
+from engine.dice_engine.dice_engine import roll_pool
 from systems.threadwork.sim.coherence import apply_coherence_delta, get_state, recover
 
 
@@ -51,7 +51,7 @@ from systems.threadwork.sim.coherence import apply_coherence_delta, get_state, r
 # registers/supersession_register.yaml.
 #
 # This is ROLL-NEUTRAL — precisely, and the precision matters. Every threadwork roll goes
-# through engine/autoload/dice_engine.roll_pool, which has never read `tn` for any die, so
+# through engine/dice_engine/dice_engine.roll_pool, which has never read `tn` for any die, so
 # the differential was inert from the day it was written: Locking, Dissolution and POP have
 # always rolled at the same difficulty as Weaving. No die, draw or outcome moves.
 # ONE OBSERVABLE DOES CHANGE, and it is not a roll: OperationResult.tn is a returned field,

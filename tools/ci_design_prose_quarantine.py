@@ -57,8 +57,9 @@ import ci_common  # noqa: E402
 # ONE OWNER for the repo root (plan G7, ED-IN-0159 §8.1) — never re-derive it.
 REPO = ci_common.REPO
 
-# Trees that hold the game. Prose in them is the defect this gate names.
-GAME_TREES = ('systems/', 'engine/')
+# Trees that hold the game. Prose in them is the defect this gate names. The code roots come from the
+# one owner, so `modules/<name>/` (A-25: reachable running code, no prose) is held to it like `systems/`.
+GAME_TREES = (*(d + '/' for d in ci_common.MODULE_CODE_DIRS), 'engine/')
 
 # `engine/season/` is Layer 2 — the live season loop. Its own run reports,
 # case briefs and decision logs are execution artifacts, not design prose, and

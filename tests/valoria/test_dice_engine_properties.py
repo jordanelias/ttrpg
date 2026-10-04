@@ -1,4 +1,4 @@
-"""Property tests against engine/autoload/dice_engine.py — an INDIVIDUAL engine, ahead of the
+"""Property tests against engine/dice_engine/dice_engine.py — an INDIVIDUAL engine, ahead of the
 full season loop (return_to_game_queue.yaml S2 action 3; tools/m1_acceptance.py's
 `row_invariant_violations` names this exact move: "properties can be authored against
 individual engines TODAY, ahead of the loop").
@@ -29,7 +29,7 @@ import sys
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 sys.path.insert(0, REPO_ROOT)
 
-from engine.autoload import dice_engine as de  # noqa: E402
+from engine.dice_engine import dice_engine as de  # noqa: E402
 
 N_TRIALS = 500
 SWEEP_SEED = 20260819  # same fixed-seed convention as tools/m1_acceptance.py's M1_PROBE_SEED

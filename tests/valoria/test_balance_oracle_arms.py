@@ -16,7 +16,7 @@ WHAT MOVED, AND WHY (`arms.py`'s own module docstring has the full account). The
 `private_ladder`/`owner_ladder`, is retired rather than ported: verified against the live tree that
 it is NOT season-reachable (`engine/season/seam/ladder.py`'s `degree_of` never calls
 `systems.social_contest.sim.contest.resolver`; the season loop's own margin path imports
-`engine.autoload.dice_engine.degree_from_net` directly), and porting it even as inert historical
+`engine.dice_engine.dice_engine.degree_from_net` directly), and porting it even as inert historical
 code would add a NEW nested `engine -> systems` import `test_engine_does_not_import_systems.py`'s
 `NESTED_BASELINE = 0` ratchet forbids. Its code survives at this commit's `FORK:` row in
 `references/restructure_ledger.md` for `tools/balance_oracle.py`. The OTHER retired pair,

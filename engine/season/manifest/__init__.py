@@ -19,7 +19,7 @@ what `season/data/__init__.py` and `season/state/__init__.py` both record at len
 this package loads lazily. `boot()` is the boot. `check_rows()` is called from there.
 
 **NO PROVIDER ROW IS LANDED HERE.** The row for a social contest is U1's, and `ED-SC-0037` rules its
-value: `engine/autoload/sigma_leverage.py`, interim, repointed when the proceedings subsystem lands.
+value: `engine/dice_engine/sigma_leverage.py`, interim, repointed when the proceedings subsystem lands.
 This unit lands the signature, the crossing and the boot-time failure only.
 """
 

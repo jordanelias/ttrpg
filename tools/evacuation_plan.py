@@ -786,7 +786,7 @@ def module_import_readers(evac_set: set, retained: list[str]) -> dict:
     Bare-name imports only -- a dotted package import is already visible to the path scans.
     """
     # A bare name that is ALSO a real top-level package resolves to the package, not to a
-    # same-named file in an evacuating tree. Without this, `import engine` in engine/autoload/*.py
+    # same-named file in an evacuating tree. Without this, `import engine` in engine/dice_engine/*.py
     # reports tests/sim_framework/engine.py as a breakage -- a false positive on the most
     # load-bearing package in the repo. Checked before reporting, not after.
     packages = {d for d in os.listdir(REPO)

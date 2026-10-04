@@ -2334,7 +2334,7 @@ def test_w2_the_class_column_is_derived_and_cross_checked():
 # `rosters.yaml` roster of its own at all -- a `degree_bands` roster with the same four values
 # collided with a pre-existing, unrelated literal in `tests/test_mass_battle_provider.py` (this
 # guard, correctly, reading two owners of one fact) and is instead imported from
-# `engine/autoload/dice_engine.py::DEGREE_LABEL`, the single owner, so it contributes no exemption
+# `engine/dice_engine/dice_engine.py::DEGREE_LABEL`, the single owner, so it contributes no exemption
 # site at all. None of (a)/(b)/(c) is the game's vocabulary -- they are the grammar and the shape a
 # designer's row is checked against and handed back as, on the same footing as `REQUIRES_FORMS`'s
 # own `needs:` table. One new loader, one schema, all for the identical reason, is the file earning
@@ -12900,7 +12900,7 @@ def test_we_emits_at_has_a_caller_and_the_band_selects_the_kind():
 def test_we_the_ladder_is_the_trees_own_and_not_a_copy_of_it():
     """§27.2's highest-value refusal, applied to the one function this item was most tempted to
     re-implement. `S39.4` reads four bands off a MARGIN; the tree owns that ladder at
-    `engine/autoload/dice_engine.py::degree_from_net` -- *"THE degree ladder. Single owner for
+    `engine/dice_engine/dice_engine.py::degree_from_net` -- *"THE degree ladder. Single owner for
     every scale of the game (Jordan ruling, 2026-08-14)"*. `shape.degree_of` IMPORTS AND CALLS it.
 
     THREE ASSERTIONS, EACH EXCLUDING A DIFFERENT WAY OF FAILING:
@@ -12919,7 +12919,7 @@ def test_we_the_ladder_is_the_trees_own_and_not_a_copy_of_it():
     where that is measured rather than asserted."""
     lad = degree_ladder()
     assert lad is not None, f"the tree's degree ladder is unavailable: {ladder_error()}"
-    from engine.autoload.dice_engine import DEGREE_LABEL, Degree, degree_from_net
+    from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree, degree_from_net
     assert lad[0] is degree_from_net and lad[1] is DEGREE_LABEL, (
         "`degree_of` is holding something other than the tree's own ladder -- a copy of a single "
         "owner is a second resolver with a delayed fuse")
@@ -13090,7 +13090,7 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # ⚠⚠ THE SUBSTRING HAZARD FIRED FOR REAL 2026-09-29 AND WAS FIXED TWICE, THE SECOND TIME AT
     # THE RIGHT DEPTH (`/simplify` ALTITUDE pass, same methodology close as the fix below).
     # `harness/arms.py`'s retired `_pool_arm` (plan position `28-i`, `1320045`) monkeypatches
-    # `engine.autoload.sigma_leverage.roll_net_continuous` -- a DIFFERENT, older dice-engine
+    # `engine.dice_engine.sigma_leverage.roll_net_continuous` -- a DIFFERENT, older dice-engine
     # function this test does not guard, coincidentally sharing the `roll_net` substring this
     # comment already named as the scan's known hazard. THE FIRST FIX excluded the one file by
     # exact path (`_FALSE_POSITIVE_NOT_A_PRODUCER = {"harness/arms.py"}`) rather than touching the

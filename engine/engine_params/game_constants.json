@@ -15,7 +15,7 @@
     "KNOT_FORMATION_OB": "fieldwork.KNOT_FORMATION_OB",
     "KNOT_FORMATION_TN": "fieldwork.KNOT_FORMATION_TN",
     "SEASONS_PER_YEAR": "overview.SEASONS_PER_YEAR",
-    "TN_STANDARD": "engine.autoload.TN_STANDARD",
+    "TN_STANDARD": "engine.dice_engine.TN_STANDARD",
     "WEAPON_TN_BASE": "combat.WEAPON_TN_BASE"
   },
   "collisions": {
@@ -26,7 +26,7 @@
       "reason": "Different quantities sharing a word. combat_engine_v1/core.py:47 POOL_FLOOR is the COMBAT POOL minimum, used as max(POOL_FLOOR, history + BASE_POOL) at :52 \u2014 the game calls that COMBAT_POOL_MINIMUM and it AGREES at 5. The game's POOL_FLOOR is the universal dice-pool floor applied by RollContext.effective_pool() (RollContext.gd:26). Not a divergence."
     },
     "MOMENTUM_MAX": {
-      "python_name": "engine.autoload.M_MAX",
+      "python_name": "engine.dice_engine.M_MAX",
       "python_value": 1.5,
       "gd_value": 4,
       "reason": "M_MAX is the kernel's tanh multiplier ceiling (sigma_leverage), not a Momentum cap. Momentum 0-4 has no scalar owner in engine/ today. Not a divergence."

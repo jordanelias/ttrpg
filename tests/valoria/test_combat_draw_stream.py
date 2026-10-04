@@ -114,7 +114,7 @@ PINNED_STATIC_SHAPE = {
 PINNED_STATIC_CALLS = 34
 PINNED_STATIC_LINES = 33
 # TWO DELIBERATE SCOPE CHOICES, noted because they will surprise whoever trips them:
-#  · `dice_engine.py` lives in `engine/autoload/` — OUTSIDE the PC lane. It is in scope anyway because
+#  · `dice_engine.py` lives in `engine/dice_engine/` — OUTSIDE the PC lane. It is in scope anyway because
 #    `core.resolve` reaches it for every resolution, so an rng call added there genuinely moves the
 #    combat stream. A cross-lane change tripping this PC guard is the coupling being reported, not a
 #    false positive; the fix is to re-pin here and re-measure, not to narrow the scan.
