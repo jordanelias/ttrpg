@@ -5,17 +5,21 @@
 > **SCOPE, STATED LOUDLY.** This document is **reference and a proposal** (CLAUDE.md §0.05): it resolves
 > nothing at runtime, and if it were deleted the game would behave identically. **Revision 2
 > (2026-10-04)** rewrites revision 1 (2026-10-03) so that it states one coherent suite, after an
-> independent audit pass registered 27 conflicts in revision 1 and resolved them (§11). **Merging the PR
+> independent audit pass registered 27 conflicts in revision 1 and resolved them (§11). **Revision 3
+> (2026-10-04)** applies Jordan's statement of what a march is (§2, direction 8): the stake is derived at
+> the destination, `besiege` folds into `march`, war is the uttered Proposition the tree already reads,
+> and `proclaim` and `truce` are deferred with their readers (§11, K-28…K-34). **Merging the PR
 > that carries it does NOT ratify any verb, state, widening, cut, gate basis or roster edit in §6–§10,
 > nor any recommendation in §12**, notwithstanding the merge-ratifies default (ED-1094): each of those
 > items carries its own decision and is **held back** until it is built in code, at its owner, with a
-> test that executes it. Every grade proposed here is `assumption` or `absent`; none is `ruled`. The
-> five residual decisions (§12) each carry a recommendation that the suite adopts and that Jordan may
-> overrule. A design document is never the reason a behaviour is correct — the code is.
+> test that executes it. Every grade proposed here is `assumption` or `absent`; none is `ruled`. Four
+> residual decisions (§12: R-1, R-3, R-4, R-5) each carry a recommendation that the suite adopts and that
+> Jordan may overrule; R-2 is resolved (§12.2) and leaves two one-line residuals (R-6, R-7). A design
+> document is never the reason a behaviour is correct — the code is.
 
-- **Date:** revision 1, 2026-10-03; revision 2, 2026-10-04.
+- **Date:** revision 1, 2026-10-03; revision 2, 2026-10-04; revision 3, 2026-10-04.
 - **Authorship:** Claude — orchestrating two read-only adjudication passes, seven extraction passes, an
-  independent read-only audit pass, and the write-up.
+  independent read-only audit pass, an independent read-only march analysis, and the write-up.
 - **Lane:** IN (cross-cutting). No ID was allocated; no ledger row was written.
 
 ---
@@ -29,7 +33,8 @@ instantiation of world facts; a hook proposal per verb; and the missing verbs an
 comparing the table's reach against precedents and research and filled without conflicting with the
 existing verbs, from faction- and office-scale acts down to granular person acts and events. After
 revision 1 he asked that its conflicts be resolved and the result orchestrated into a coherent suite
-(§2, direction 7). This document is that answer. It changes no code.
+(§2, direction 7); after revision 2 he stated what a march is (direction 8), and revision 3 carries the
+consequences. This document is that answer. It changes no code.
 
 **Pipeline.** A fact sheet was extracted from the live table (loading `engine/season/data/verbs.py`'s
 `VERB_TABLE`, `loop/effects.py`'s `EFFECTS`, `loop/driver.py`'s `resolvable_verbs()` and the raw YAML).
@@ -53,6 +58,13 @@ filter, each with a recommendation (R-1…R-5). The author of revision 2 opened 
 citation the audit relied on (§13.3) and corrected the audit where a cite did not say what it claimed or
 where its resolution collided with a ruling (§13.5).
 
+**The march analysis (revision 3).** An independent read-only analysis pass was given direction 8,
+revision 2 and the tree. It traced what `march` does today, derived each stake from state at the
+destination, decided `besiege`, the winner's write (R-2), war and truce, and returned an edit list and
+six conflicts (K-28…K-33). The orchestrator added one decision of its own (K-34, `proclaim` deferred).
+The author of revision 3 opened every citation the analysis relied on (§13.3) and corrected it where a
+cite did not say what it claimed or where its design would have broken a live check (§13.8).
+
 **Limits, stated plainly.**
 
 - The extraction tables were built partly from headings and greps, not full reads. Each extraction
@@ -73,6 +85,8 @@ where its resolution collided with a ruling (§13.5).
   They were not re-run, by the authoring passes or by the audit pass.
 - **The audit pass reads; it does not execute.** It ran no instrument, re-ran none of the counts revision
   1 copied, and its resolutions are judgments over code it opened. Where it was wrong, §13.5 says so.
+  The march analysis is the same: its realm figures are H-149's and H-175's own recorded measurements,
+  not a run, and §13.8 lists where it was wrong.
 - The adjudication and audit passes are judgments over the extraction tables and the code sites they
   opened. They are not execution evidence, and nothing in this document is.
 
@@ -103,7 +117,8 @@ own note names the contested determination as that row's missing writer (`verb_t
 
 Stated by Jordan **in conversation and NOT ledgered** — no ED id was allocated, so none of these is a
 ruling of record. Directions 1–6 were given on 2026-10-03, before revision 1; direction 7 after it was
-pushed. They are carried verbatim because the rest of this document is built on them.
+pushed; direction 8 on 2026-10-04, after revision 2. They are carried verbatim because the rest of this
+document is built on them.
 
 1. **Method.** *"we do etymology and comparative analysis and sets and everything else so that we can
    logically identify where we have coverage and the flexibility of what a verb should be able to do,
@@ -112,7 +127,7 @@ pushed. They are carried verbatim because the rest of this document is built on 
    coverage; §6 and §8 are the gap fill, each new verb carrying a CONFLICTS axis against its nearest
    neighbours.
 2. **Expectation.** *"I am expecting there to be gaps and missing coverage"* / *"so fill them"* / *"I
-   think you just need to develop more verbs"*. The suite adds thirteen verbs and widens five (§6).
+   think you just need to develop more verbs"*. The suite adds eleven verbs and widens six (§6).
 3. **`kill` and `wound`.** *"kill and wound are verbs that handle outputs, which I think means they
    shouldn't exist as they just relay state changes? characters can not actively choose to kill or
    wound. they can choose to fight tho"*. The statement is hedged (*"I think"*). It agrees with the
@@ -121,11 +136,13 @@ pushed. They are carried verbatim because the rest of this document is built on 
    `fight`. [ASSUMPTION: this direction **closes** the still-pending split of `fight` into `kill` and
    `wound` that the table records at `verb_table.yaml:446-448` and again at `:467` — basis: the
    direction names both as outputs that "shouldn't exist"; Jordan to correct if he meant otherwise.] The
-   same logic is why the suite has no `execute` (§8.8, R-1). The **other half** of the pending note —
+   same logic is why the suite has no `execute` (§8.8, R-1) and, with direction 8, no `besiege` (K-28).
+   The **other half** of the pending note —
    `challenge` → `accept` — is a different question (whether a fight may be offered and taken); the
    suite answers it without a new verb (K-23).
 4. **States.** *"we're also going to need states that can flag war and peace and alliances and treaties
-   and stuff"*. §7 carries them.
+   and stuff"*. §7 carries them. War needs no new carrier: it is a `WAR`-mood Proposition plus live
+   `commit`s, which the tree already reads (K-29); truce waits for a reader (K-32).
 5. **Church and Riskbreakers.** *"remember we have to hook into inquisitions with church as well as stuff
    for riskbreakers for espionage and law and stuff"* and *"as well as heresy and trials and stuff"*.
    The law-and-custody verbs (§8.1), the polity instruments (§8.2), the covert verbs (§8.3) and the
@@ -138,6 +155,14 @@ pushed. They are carried verbatim because the rest of this document is built on 
    option, carry that option in the suite and say plainly that Jordan may overrule it (§12); where a
    revision-1 proposal was refuted, delete it from the body and record it once (§11); leave no sentence
    that contradicts the suite.
+8. **March (2026-10-04).** *"march simply indicates that an army has been sent to a location. the stakes
+   for a march are variable--is it to capture another's settlement (capturing attempt) march to
+   intercept someone's army that is targetting your settlement (defending), or move an army to one of
+   your own settlements (relocate)?"* Read as: the verb is the simple choice — send the army to a place —
+   and the stake is **derived from world state at the destination**, never declared by a separate verb.
+   It is direction 3's principle applied to a field: as `kill` and `wound` are outcomes of a `fight`, a
+   capture, an interception and a relocation are stakes of a `march`. Revision 3 carries it (§6.2, §8.6,
+   §12.2; K-28…K-33).
 
 **Resolved names.** "Shadows of darkness" is *Shadows of Doubt* (Jordan confirmed in session). "Romance of
 three kingdoms" is read as Koei's *Romance of the Three Kingdoms* game series [ASSUMPTION: basis — the
@@ -188,7 +213,7 @@ Renames are deferred until a row gains its operand, so a hash move is paid once 
 | `interview` | MF *entrevue* ← *s'entrevoir* 'see each other' | a meeting | question an existing person | FITS | THIN | G11 |
 | `issue` | OF *issir* ← L *exire* 'go out' | send out | mint a dispensation to an executor in purview | FITS | YES | G6 |
 | `levy` | OF *levée* ← L *levare* 'raise' | a raising | move a rung's stores into the seat's rung | FITS | YES | G8 |
-| `march` | F *marcher*, prob. Frankish [UNVERIFIED] | tread | send a mustered side against a settlement | FITS | YES | G2 |
+| `march` | F *marcher*, prob. Frankish [UNVERIFIED] | tread | send a mustered side against a settlement; writes the losing side and moves nobody (K-28) | FITS | YES | G2 |
 | `migrate` | L *migrare* | change abode | re-home `contain` and `reside`, throttled by room | FITS | YES | G10 |
 | `move` | L *movere* via AN | set in motion | re-home `contain` only | FITS | YES — presence | G10 |
 | `oblige` | L *obligare* 'bind to' via OF *obligier* | bind | open an `oblige` edge with a term to a seat | FITS | YES | G7 |
@@ -221,15 +246,15 @@ ground of the `designate` rename, deferred with the row's heir operand (K-24, R-
 
 Each group is defined by a column, named in the last cell; a row that meets two columns is placed by the
 one that discriminates it, and the overlap is named. Of the 44, three reach a contest seam today
-(`fight`, `march`, `tell`); in the suite eight do (`fight`, `march`, `besiege`, `tell`, `argue`,
-`determine`, `detain`, `interrogate`). The six findings are investigation, ruled not a contest;
+(`fight`, `march`, `tell`); in the suite seven do (`fight`, `march`, `tell`, `argue`, `determine`,
+`detain`, `interrogate`). The six findings are investigation, ruled not a contest;
 twenty-six of the 44 instantiate world facts directly. G13–G15 hold only new verbs. The audit pass
 grouped the suite under eight coarser codes; this document keeps one grouping, this one.
 
 | group | the 44 | suite additions (§6) | relation to combat, contest, proceedings, world fact | the column that makes it true |
 |---|---|---|---|---|
 | **G1 Personal combat** | `fight` | — | personal_combat owns the prize (`rosters.yaml:1107-1110`); world facts only as the band's consequence | `contests: "the body"`; degree-keyed `writes:` |
-| **G2 Mass battle** | `march` | `besiege` | mass_battle through the `mass_battle.resolve_field` role, fought at ENCOUNTER (`rosters.yaml:1111-1130`); sides are armies | `contests: "a field"`; `step: ENCOUNTER` on the prize row |
+| **G2 Mass battle** | `march` | — (`march` widened: the army arrives, K-28) | mass_battle through the `mass_battle.resolve_field` role, fought at ENCOUNTER (`rosters.yaml:1111-1130`); sides are armies; in the suite a won or unopposed march re-homes the army, so `march` also meets G10's column | `contests: "a field"`; `step: ENCOUNTER` on the prize row |
 | **G3 Social contest** | `tell` | `argue` | social_contest through the interim `sigma_leverage` (`rosters.yaml:1131-1153`); the opponent is `to` | a `sigma_leverage` prize with the opponent bound as `to` |
 | **G4 Proceedings** | `carry`, `convene`, `determine`, `open_case` | — (`determine` widened: contested) | social contest by lineage: `a proposition` repoints to the proceedings provider when it lands (`rosters.yaml:1149-1153`); in the suite `determine` contests it | `DocketItem.matter` on three; `Date.due_at` on `convene` |
 | **G5 Writ answers and orders** | `comply`, `construe`, `dispatch`, `evade / defy` | — | none yet; H-36 rules construal receiver-side; all four retained by ruling (ED-IN-0210, K-01) | `writes: []` on all four |
@@ -241,7 +266,7 @@ grouped the suite under eight coarser codes; this document keeps one grouping, t
 | **G11 Findings** | `examine`, `interview`, `reconstruct`, `research`, `surveil`, `thread_read` | — | investigation, "its own kind — not a contest" (`rosters.yaml:1008`); it must not be made a contest to become gradeable (`:1031`) | `writes: []`, `emits: finding.made` on all six |
 | **G12 Free speech acts** | `speak`, `utter` | — | `utter` is world fact (`Proposition.exists`); `speak` emits only | `requires: —`; empty `emits_on_refusal` |
 | **G13 Law and custody** | — | `detain`, `interrogate`, `pardon`, `seize` | proceedings' enforcement; `detain` and `interrogate` reach the `sigma_leverage` seam | a held warrant or a `custody`/`ban` edge is the precondition or the write; `detain` and `pardon` also meet G7's column, `seize` G6's |
-| **G14 Polity instruments** | — | `proclaim`, `covenant` | world fact between seats | Record kinds `war`, `truce`, `treaty`, `alliance` minted under `remit:issue`, addressed to a place or across purview (also G6's column) |
+| **G14 Polity instruments** | — | `covenant` (`proclaim` deferred, K-34) | world fact between seats | Record kinds `treaty`, `alliance` minted under `remit:issue`, addressed across purview (also G6's column) |
 | **G15 The person** | — | `tend`, `train` | world fact on a body or a skill | `Person.body` raised; `Person.capability` |
 
 ### 3.3 Comparative clusters
@@ -255,23 +280,23 @@ grouped the suite under eight coarser codes; this document keeps one grouping, t
 | `confer` / `establish` / `oblige` / `commit` / `succeed` / `tie / knot` | what is opened, and who reads it: `oblige` → `establishment_of`, `_ch_post_remit`, and in the suite `purview_reaches` (vassalage); `commit` → `ambitions` → need questions; `knot` → `_ch_witness_key`; `tie` and `succeed` → nobody | `confer`, `establish`, `oblige`, `commit` EARN; `succeed`, `tie / knot` THIN; `succeed`'s reader is R-5 |
 | `release` / `revoke` / `repudiate` / `pardon` | whose edge: one's own of any releasable kind; another's `hold` on a seat through a seat with a basis; one's own `commit` — already inside `release`'s domain (`verb_table.yaml:748`); another's `custody` or `ban` through the seat that owns it | `release`, `revoke` EARN; `repudiate` REDUNDANT-WITH `release` — cut recommended (R-3), with `_eff_release` earning `commitment.ended` on a closed `commit` (precedent: per-subject kinds, `effects_governance.py:90-91`) so the three alignment cells (`rosters.yaml:2158, :2194, :2232`) survive; `pardon` new (§8.1) |
 | `restore` / `work` / `sabotage` | preconditions (floor vs presence), and sign; one formula | `restore` EARNS; `work` THIN — the floor-gated, works-only advance, restricted to a declared delta ≥ 0 (K-09); `sabotage` owns the negative sign (§8.3) — the thinnest pair in the suite (K-27) |
-| `move` / `migrate` | the `reside` edge and the capacity refusal | both EARN; `migrate` executes nowhere yet |
+| `move` / `migrate` (+ `march`'s arrival) | the `reside` edge and the capacity refusal; whose `contain` is re-homed — one's own, or (`march`) every mustered claimant's, through a seat | both EARN; `migrate` executes nowhere yet; `march` composes on their one body, `_relocate` (§8.6) |
 | `comply` / `evade / defy` / `construe` | none in code; what compliance performs is a `transfer` whose addressee comes off the held writ (`decision/options.py:717-729`; `rosters.yaml:1571-1584`) — the writ's `kind` and `amount` decline every time today, because neither live schema carries them (`options.py:548-555`) | all three retained by ruling (ED-IN-0210's last row, `registers/editorial_ledger_in_archive.jsonl:178`; K-01) and THIN. Whether `dispatch` and `comply` are two sides of one thing stays open under ED-IN-0211 and is not re-derived here |
-| `fight` / `march` / `besiege` / `detain` | prize, sides, step, write target | all EARN their place; `besiege` differs from `march` by write row only (K-27) |
+| `fight` / `march` / `detain` | prize, sides, step, write target | all EARN their place; `besiege` was folded into `march` (K-28) |
 | `create_record` / `forge` / `survey` / `conceal` | content source: verbatim; falsified with an unread quality; resolved at writing; about the maker himself, read by attribution | `create_record`, `survey` EARN; `forge` THIN; `conceal` new (§8.3) |
 | singletons | `convene` — sole `Date.due_at` writer, but `date.fired` never reaches WITNESS; `dispatch` — writes nothing, read by channels and tests only; `destroy_record` — sole closer of `Record.exists`; `found`/`build` — sole producers of `Rung.exists`/`Site.exists` | `convene`, `dispatch` THIN; `determine`, `destroy_record`, `found`, `build` EARN |
 
 ### 3.4 REACH and NOT — the coverage baseline
 
 *REACH* is what the row can do as built or as its cell reads; *NOT* is the nearest act it does not do and
-which verb owns it in the suite. "unowned" marks an act the suite leaves without a verb. The REACH of the
-five widened verbs in the suite is §6.2.
+which verb owns it in the suite. "unowned" marks an act the suite leaves without a verb; "none-yet" marks
+one whose verb is deferred with its reader. The REACH of the six widened verbs in the suite is §6.2.
 
 | verb | REACH | NOT → owner |
 |---|---|---|
 | `build` | a held `works` planning a `site_kinds` member, at the rung it names | found a Rung (`found`); raise condition (`restore`); end a Site (`raze`) |
 | `carry` | a held petition → the docket | file (`petition`); docket by remit (`open_case`); forward, amend, drop (unowned) |
-| `commit` | any existing Proposition — an OUGHT, a faction, a treaty, a motion; opens `commit`; formable once `utter` mints a hold or a held Record names the Proposition | utter (`utter`); duty to a seat (`oblige`); a vote through a seat (none: a vote is each holder's own `commit`, the count a Query, K-07) |
+| `commit` | any existing Proposition — an OUGHT, a faction, a treaty, a motion, a war; opens `commit`; formable once `utter` mints a hold or a held Record names the Proposition | utter (`utter`); duty to a seat (`oblige`); a vote through a seat (none: a vote is each holder's own `commit`, the count a Query, K-07) |
 | `comply` | a held writ; emission only | perform the terms (the writ-sourced `transfer`); withhold (`evade / defy`); misread (`construe`) |
 | `confer` | an Office, `to` a person, `remit:confer` via a seat with purview | found it (`establish`); strip (`revoke`); elect (the basis exists, `rosters.yaml:1755`; the votes are members' own `commit`s); heir (`succeed`, R-5) |
 | `construe` | a held writ; a receiver-side reading | lie (deferred: the telling workplan's G7, §8.7); forge (`forge`) |
@@ -289,11 +314,11 @@ five widened verbs in the suite is §6.2.
 | `found` | a held works planning a `rung_kinds` member; strict ascent | Site (`build`); office (`establish`); league (`covenant`, kind `alliance`); charter (`issue`; its exemption reader deferred, §8.7) |
 | `give` | a held Record `to` a known present person; the gate's handover covers every non-seat hold | stores (`transfer`); seize (`seize`); (cede a rung hold: §6.2) |
 | `interview` | an existing person | interrogation under custody (`interrogate`); covert watching of a person (deferred, §8.7) |
-| `issue` | terms + `to` a person executor in purview | a documentless order (`dispatch`); a proclamation to a place (`proclaim`); an instrument to a foreign seat (`covenant`); rescind (unowned) |
+| `issue` | terms + `to` a person executor in purview | a documentless order (`dispatch`); a proclamation to a place (none-yet: `proclaim` deferred with its readers, K-34); an instrument to a foreign seat (`covenant`); rescind (unowned) |
 | `levy` | a rung in purview with stores → the seat's rung | tribute by term (`transfer`); a person's held Records (`seize`); muster (`march`) |
-| `march` | a settlement; `remit:dispatch`; prize a field at ENCOUNTER; writes the losing side | siege (`besiege`); title or stores for the winner (none: R-2 — title moves by the loser's `release`, a `revoke`, or death); muster (its own `sides_of`) |
+| `march` | a settlement; `remit:dispatch`; prize a field at ENCOUNTER; writes the losing side; in the suite also the arriving army's presence, the stake read at the destination (§6.2) | title (`seize` under occupation, `give`, `release`, death — never `revoke`, K-30); a war declaration (`utter`, K-29); muster (its own `sides_of`) |
 | `migrate` | a rung with room; `contain` + `reside` | presence (`move`); exile another (a `ban` + the exile's own `migrate`); relocate a court (unowned) |
-| `move` | a rung up the ladder | residence (`migrate`); flight from custody (refused by `custody`'s reader, §7) |
+| `move` | a rung up the ladder | residence (`migrate`); an army (`march`, through a seat); flight from custody (refused by `custody`'s reader, §7) |
 | `oblige` | a seat whose `binds` admits; own; with a term — including a seat-holder obliging himself to another seat, which the suite reads as vassalage (§6.2) | sentence (`determine`); hostage (`custody`) |
 | `open_case` | any matter at a place in purview; `remit:determine`; case file (kind `text`) + docket | own docketing (`carry`); private accusation (a `petition`); appeal (the same verb, nested) |
 | `petition` | terms, `to` a person, `from` a rung; own | docket (`carry`); writ downward (`issue`); accusation, demand, challenge (a `petition` by what its `terms` names) |
@@ -303,7 +328,7 @@ five widened verbs in the suite is §6.2.
 | `research` | an existing Record | Site (`examine`); person (`interview`); a letter in transit (unowned) |
 | `restore` | a Site stood at; raise to ceiling | a body (`tend`); stake a works (`build`); damage (`sabotage`) |
 | `revoke` | an office via a seat with a basis | resign (`release`); excommunicate, outlaw (`determine`, `disposes: ban`); expel an obligee (refused by D-5; lapse instead, §6.2); dissolve (unowned); depose a seat with no rung above (none: R-4) |
-| `speak` | a referent, nothing carried | a motion (`utter`); a seat's proclamation (`proclaim`) |
+| `speak` | a referent, nothing carried | a motion (`utter`); a seat's proclamation (none-yet: `proclaim` deferred, K-34) |
 | `succeed` | a held office or estate; heir unbound | seat (`confer`); regency (`confer` + term); inheritance at death (R-5: an `inheritance` basis, later) |
 | `surveil` | a Rung stood at | a person over time (deferred, §8.7; `verb_table.yaml:1084`); intercept letters (unowned); plant an agent (composed) |
 | `survey` | a faction, or a person under one, in one's own ledger | (a rung: §6.2); census (unowned); yield assessment (unowned) |
@@ -311,7 +336,7 @@ five widened verbs in the suite is §6.2.
 | `thread_read` | a TS-gated finding | threadwork (deferred, plan positions 27/29f) |
 | `tie / knot` | a bond edge, partner unbound | marriage with terms (same + `transfer` + term); an alliance of seats (`covenant`) |
 | `transfer` | own rung → a rung; `kind`, `amount`; renews obligees via a seat | Records (`give`, `seize`); treaty tribute (a `treaty` read by `_renewals`, §7) |
-| `utter` | an immutable Proposition | speech (`tell`); binding (`commit`); a seat's proclamation (`proclaim`) |
+| `utter` | an immutable Proposition, including a declaration of war (mood `WAR`, read by `faction_q.at_war` once committed, K-29) | speech (`tell`); binding (`commit`); a seat's proclamation (none-yet: `proclaim` deferred, K-34) |
 | `work` | floor-gated advance of a works; a declared delta ≥ 0 | damage (`sabotage`); wage labour (unowned); practice (`train`) |
 
 ### 3.5 The one cut, and the cut proposals withdrawn
@@ -324,7 +349,7 @@ Every verdict below changes, or declines to change, a row of the ratified table.
 | `comply`, `evade / defy` | retained, unchanged | ED-IN-0210's last row (2026-09-18, ruled) keeps the three response verbs and `dispatch`: *"i did not realize that meant deleting those verbs. i think that's wrong"* (`registers/editorial_ledger_in_archive.jsonl:178`). Revision 1's escalation is superseded | no — K-01, filter step 1 |
 | `speak` | retained, THIN | it binds no hearer and carries nothing, which no other row does, and it executes (104–139 corpus acts, `hole_register.yaml:3521`). A row that does something different, thinly, is not a duplicate; revision 1's settling run (a corpus run withholding `speak`) is not needed to keep it | no — withdrawn (§11, after K-27) |
 | `work` | retained; declared delta ≥ 0 | `_eff_work` stages a declared delta with no sign check (`loop/effects_economy.py:86-98`), so today a hand-built `work` is also sabotage; restricting it gives each verb one sign | no — K-09 |
-| `exchange` | retained, THIN | its counterparty operands are reserved for H-94's ruling (`rosters.yaml:1562-1564`) | no new row — already registered (§12.6) |
+| `exchange` | retained, THIN | its counterparty operands are reserved for H-94's ruling (`rosters.yaml:1562-1564`) | no new row — already registered (§12.7) |
 | `carry` | retained; build on `open_case`'s body, writing the petition's `Record.stages` | H-63 is answered by precedent (`open_case` dockets its subject) | no |
 | `dispatch` → `order` | rename withdrawn | `order:` is an `arrangements.yaml` key (`:95`, `:112`) and the fold's order key — a cold reader lands on the wrong meaning (§4) | no — K-24 |
 | `carry`, `succeed` renames | deferred | until each row gains its operand, so the hash moves once | no — K-24 |
@@ -344,13 +369,13 @@ held-Record operand channel of §9.1. Full blocks are in Appendix A.
 |---|---|---|---|---|
 | `build` | a question whose referent is a `works` the actor holds · `Site.exists` | housing throttles migration (`effects_migration.py:140-149`) | leaves the always-refused pin (`test_season_shape.py:7624`); realm ex > 0 (65/0) | H-165 limit 2, carried as J-4 · no new row |
 | `carry` | the petitioner holds his petition; on `open_case`'s body, writing the petition's `Record.stages` · `DocketItem.matter` | a complaint reaching a bench without a seat's leave | `test_record_kind_fold.py:119` (`..._and_carry_is_not`) flips | H-63, answered by precedent · no |
-| `commit` | `_eff_utter` mints the utterer's `hold` on the Proposition, so Q2 can name it; a Proposition named in a held `treaty`, `truce` or `alliance` reaches it through the enabler · `Tenure.since` | utter → commit → ambition → a quiet-season act; a covenant's acceptance | leaves the always-refused pin | H-156; a hold buys budget (`budget.py:57-58`) · no for the hook; H-156 (a)/(b) stays Jordan's |
+| `commit` | `_eff_utter` mints the utterer's `hold` on the Proposition, so Q2 can name it; a Proposition named in a held `treaty` or `alliance` reaches it through the enabler · `Tenure.since` | utter → commit → ambition → a quiet-season act; a covenant's acceptance; a war's backing | leaves the always-refused pin | H-156; a hold buys budget (`budget.py:57-58`) · no for the hook; H-156 (a)/(b) stays Jordan's |
 | `comply` | the executor holds the writ after `give`; `comply` forms on the held writ and emits `compliance.given`; what it performs is the separate `transfer` the writ names · none | obedience with a trace, so defiance is legible by absence | `compliance.given` in `w.log` from `populated.run` with no hand-built act | H-44, H-94; ED-IN-0211's fork stays open · no (retained by ruling, K-01) |
 | `confer` | the office rides `subject` from a held dispensation's `terms` (the enabler), the conferee rides `to` via the known-person fan (`options.py:827-860`) · `Tenure.since/until` (+ `Tenure.term`, §6.2) | patronage | realm ex > 0 (70/0) | a holder's own seat is in `reach` (`world_q.py:461`); what is absent is any claim about a seat (`verb_table.yaml:676`) — K-25 · no |
 | `construe` | WITNESS-side, not an act: the content deposit already reads per holder (`witness.py:40,523-540`) · none | misreadings that travel by document | two holders of one writ holding different `content:dispensation` values | H-36 magnitude half, H-44 · no (retained by ruling) |
 | `convene` | pass CALENDAR's events into `witness()` (`driver.py:464`); `open_case` fills the fired slot's date · `Date.due_at`, `DocketItem.matter` | a sitting with a day people act toward | a `date.fired` claim in any ledger (`test_season_shape.py:4307-4316` pins 0) | H-163 limits 2, 4 · no |
 | `create_record` | hooked; a computed act mints contentless `text` · `Record.exists`, `Record.stages` | documents to find, carry, forge, burn | corpus executed set; `test_works_founding.py:101` | H-80 · no |
-| `destroy_record` | `give`'s shape, built and held (`verb_table.yaml:199`) · `Record.exists` | the only way a document vanishes; in the suite, also how a `war`, `siege` or `cover` Record is ended | `test_u7_own.py:153` flips | H-75; held on H-156 · yes, no new row (H-156) |
+| `destroy_record` | `give`'s shape, built and held (`verb_table.yaml:199`) · `Record.exists` | the only way a document vanishes; in the suite, also how a `cover` Record is ended | `test_u7_own.py:153` flips | H-75; held on H-156 · yes, no new row (H-156) |
 | `determine` | a question whose referent is a docketed person in the bench's ground; direct via seat; contested in the suite (§6.2) · `Tenure.since`, `DocketItem.matter` (+ `Tenure.degree`) | a bench binding men with no player watching | realm ex (1/20); `test_u7_remit.py:278` | H-163 limit 2 (SC lane), H-162; the party-gap fold edit (K-02) · no |
 | `dispatch` | hooked; the named person gets a claim about himself · none | a command the chronicle carries | leaves the never-attempted pin (`test_season_shape.py:8372`) | none · no (retained by ruling) |
 | `establish` | operands outside the closed eight refuse; the enabler's `terms` replaces the `office` payload key; direct via seat · `Office.exists`, `Office.remit_acts`, `Tenure.payload` | institutions that grow | realm ex > 0 (19/0) | plan position `15c` · no |
@@ -364,7 +389,7 @@ held-Record operand channel of §9.1. Full blocks are in Appendix A.
 | `interview` | hooked · none | to be replaced by the Dialogue Lattice (`verb_table.yaml:1054`) | corpus executed set | work item 4.5; ED-FI-0004 · no |
 | `issue` | hooked (realm 6/30, with `via`); in the suite `to` fans over known persons so `terms` and the executor separate (§9.1) · `Record.exists` | authority as paper; the warrant | `test_u7_remit.py:460` | H-94; `15c` · no |
 | `levy` | a question whose referent is a full larder in purview (a positive `stores.changed`) · `Rung.stores` | how a seat eats | realm ex > 0 (23/0); `test_u7_remit.py:201` | H-163 limit 3 · no |
-| `march` | hooked in the realm (16/16), never in the corpus (H-175); seam at ENCOUNTER · `Person.body`, `Person.stance` | war that leaves grudges | `test_march.py:323`; leaves the never-attempted pin | H-175, H-149; the winner writes nothing (R-2) · no |
+| `march` | declared in the realm (16), fought 0 — H-149's check refuses every natural target (K-31); never attempted in the corpus (H-175); seam at ENCOUNTER · `Person.body`, `Person.stance`; in the suite also `Tenure.until/since`, `Person.travel_leg` (the arrival, §8.6) | war that leaves grudges, and armies that stand somewhere | `test_march.py:323`; leaves the never-attempted pin | H-175, H-149; the `muster` basis and three `ENC` cells (K-33) · no |
 | `migrate` | a destination channel: shortfall at home plus a positive `stores.changed` elsewhere in reach, or a founded hearth with room · as `move` | people who leave famine | leaves the always-refused pin | H-168 (H-94) · no |
 | `move` | hooked · `Person.travel_leg`, `Tenure.until/since` | presence is the epistemic model | `test_migrate_capacity.py:153` | none · no |
 | `oblige` | type clause 1 once a seat can be a referent — from a held Record's `terms` (the enabler) or a `tenure.opened` deposit (K-25) · `Tenure.since`, `Tenure.term` | retinues; vassalage, read by `purview_reaches` (H-101) | `test_obligees.py:282` flips; leaves the never-attempted pin | seat referents (H-94/H-54) · no |
@@ -384,7 +409,7 @@ held-Record operand channel of §9.1. Full blocks are in Appendix A.
 | `thread_read` | a per-person TS value and a gate stem; `knowledge_kinds` is the taxonomy half · none | P-08's barrier made mechanical | enters `resolvable_verbs()` | H-85; plan 27/29f · no |
 | `tie / knot` | partner via the known-person fan; `tie`'s reader is `teller_weight`'s relation term; build as two rows · `Tenure.since` | telling knits people | `tie / knot` executes > 0 in `aperture 1 0` | H-182; `29f` owns `knot` · no |
 | `transfer` | hooked · `Rung.stores`, `Tenure.term` | relief, tribute, pay | `test_season_shape.py:9328`; `test_term_upkeep.py` | H-158 · no |
-| `utter` | hooked but reaches nobody's questions; mint the utterer's `hold` · `Proposition.exists` (+ `Tenure.since`) | vows that bind the speaker; a covenant's terms | a `commit` executing on a `prop:` id in `populated.run` | H-92, the cost of a hold · no |
+| `utter` | hooked but reaches nobody's questions; mint the utterer's `hold` · `Proposition.exists` (+ `Tenure.since`) | vows that bind the speaker; a covenant's terms; a declaration of war (mood `WAR`, K-29) | a `commit` executing on a `prop:` id in `populated.run` | H-92, the cost of a hold · no |
 | `work` | as `build` (the J-4 works channel); declared delta ≥ 0 · `Site.condition` | a works advanced by hands | leaves the always-refused pin | H-165 limit 2 · no |
 
 ### 4.1 Dependency order (pass 1)
@@ -422,8 +447,12 @@ Pass 2 grouped the 707 candidates into 61 act families. Each is classified again
 - **OUTCOME** — the family names a result, not a choice; by direction 3's logic it is not a verb;
 - **SYSTEM** — a property of a mechanism, a seam or a loop stage, not an act (§9.3).
 
-**Counts, one primary class per family:** COVERED 31 · WIDENED 5 · GAP 11 · DEFERRED 5 · OUTCOME 4 ·
-SYSTEM 5 — 61 in all. Verbs: 5 widened, 13 new, and every new verb fills at least one GAP family.
+**Counts, one primary class per family:** COVERED 32 · WIDENED 6 · GAP 9 · DEFERRED 5 · OUTCOME 4 ·
+SYSTEM 5 — 61 in all. Verbs: 6 widened, 11 new, and every new verb fills at least one GAP family.
+[Revision 3 moves two families: 21 (declare war) from GAP to COVERED — `utter` of a `WAR`-mood
+Proposition plus `commit`, read by `faction_q.at_war` (K-29); and 24 (siege, blockade) from GAP to
+WIDENED — a `march` that arrives at an enemy-held settlement, the siege a Query (K-28). Family 25 stays
+OUTCOME with its text changed (R-2 resolved); 13 stays DEFERRED with `proclaim` deferred (K-34).]
 [CORRECTION: revision 1 reported COVERED 29 · WIDENED 9 · GAP 14 + 1 · OUTCOME 3 · SYSTEM 5, then withdrew
 one WIDENED family in the same table without moving it (K-26). The suite moves seven families: 4 and 37
 (their widenings deferred, K-16, K-15), 13 (its kinds deferred, K-11) and 40 (`debt` deferred, K-14) to
@@ -432,11 +461,11 @@ COVERED; and 28 to OUTCOME (R-1).]
 
 | class | families (Appendix B numbers) |
 |---|---|
-| COVERED (31) | 1 question a person · 2 inspect a place, body or object · 3 read and decipher records · 5 evidence board · 6 denounce, accuse · 7 open an inquiry or impeachment · 8 summons, writ, warrant, charter · 11 confess, swear, abjure · 14 motion, debate, vote · 15 elect · 16 appoint, invest, ennoble · 17 depose · 18 resign · 23 muster · 31 spy, infiltrate, run informants · 33 expose, publish · 34 blackmail · 35 bribe, gift, subsidy · 36 court, marry · 39 trade, venality · 41 build, found, charter · 42 survey, census, visitation · 43 envoy, legate · 44 feast, coronation, progress · 49 claim, coup, revolt · 50 mediate, appeal, stay, adjourn · 51 recognize, endorse · 53 admit, expel · 54 defect, poach · 55 challenge and accept · 57 regency through a seat |
-| WIDENED (5) | 9 hear, try, judge (`determine` contested) · 12 excommunicate, absolve (`determine` disposing `ban`; `pardon`) · 19 heir, regency (`confer` + term) · 20 homage, fealty (`oblige`, read by `purview_reaches`) · 29 outlaw, banish (`determine` disposing `ban`) |
-| GAP (11) | 21 declare war (`proclaim`, kind `war`) · 22 truce, peace, treaty, alliance, cession (`covenant`; cession by widened `give`) · 24 siege, blockade (`besiege`) · 26 arrest, custody, ransom, hostage (`detain`, `pardon`) · 27 interrogate (`interrogate`) · 30 seize, confiscate, search (`seize`) · 32 cover identity, deniability (`conceal`) · 38 persuade, convert, preach (`argue`) · 45 heal, rest (`tend`) · 46 train, educate (`train`) · 52 damage, raze (`sabotage`, `raze`) |
-| DEFERRED (5) | 4 watch a place, tail a person (the place is `surveil`'s; the person waits on a grammar disjunction, K-16) · 13 edict, law, emergency (`proclaim` exists; its `edict`/`emergency` kinds wait on a reader each, K-11) · 37 slander, rumour (the telling workplan's G7, K-15) · 40 borrow, distrain (`debt` waits with its `seize` reader, K-14) · 47 thread operations (plan positions 27/29f, `verb_table.yaml:1103`) |
-| OUTCOME (4) | 10 sentence (the disposal's kind: `oblige`, `custody`, `ban`) · 25 conquer, raid, usurp (a won `march` writes nothing for the winner, R-2) · 28 execute (a `fight` against a prisoner in `custody`, R-1) · 48 murder (a `fight` whose band is `Felled`, with `conceal`) — and, by direction 3, `kill` and `wound` |
+| COVERED (32) | 1 question a person · 2 inspect a place, body or object · 3 read and decipher records · 5 evidence board · 6 denounce, accuse · 7 open an inquiry or impeachment · 8 summons, writ, warrant, charter · 11 confess, swear, abjure · 14 motion, debate, vote · 15 elect · 16 appoint, invest, ennoble · 17 depose · 18 resign · 21 declare war (`utter`, mood `WAR`, + `commit`) · 23 muster · 31 spy, infiltrate, run informants · 33 expose, publish · 34 blackmail · 35 bribe, gift, subsidy · 36 court, marry · 39 trade, venality · 41 build, found, charter · 42 survey, census, visitation · 43 envoy, legate · 44 feast, coronation, progress · 49 claim, coup, revolt · 50 mediate, appeal, stay, adjourn · 51 recognize, endorse · 53 admit, expel · 54 defect, poach · 55 challenge and accept · 57 regency through a seat |
+| WIDENED (6) | 9 hear, try, judge (`determine` contested) · 12 excommunicate, absolve (`determine` disposing `ban`; `pardon`) · 19 heir, regency (`confer` + term) · 20 homage, fealty (`oblige`, read by `purview_reaches`) · 24 siege, blockade (`march` arriving at an enemy-held settlement; the siege a Query; its larder effect deferred) · 29 outlaw, banish (`determine` disposing `ban`) |
+| GAP (9) | 22 truce, peace, treaty, alliance, cession (`covenant`, kinds `treaty` and `alliance`; cession by widened `give`; truce deferred, K-32) · 26 arrest, custody, ransom, hostage (`detain`, `pardon`) · 27 interrogate (`interrogate`) · 30 seize, confiscate, search (`seize`) · 32 cover identity, deniability (`conceal`) · 38 persuade, convert, preach (`argue`) · 45 heal, rest (`tend`) · 46 train, educate (`train`) · 52 damage, raze (`sabotage`, `raze`) |
+| DEFERRED (5) | 4 watch a place, tail a person (the place is `surveil`'s; the person waits on a grammar disjunction, K-16) · 13 edict, law, emergency (`proclaim` deferred with its readers, K-34; its `edict`/`emergency` kinds wait on a reader each, K-11) · 37 slander, rumour (the telling workplan's G7, K-15) · 40 borrow, distrain (`debt` waits with its `seize` reader, K-14) · 47 thread operations (plan positions 27/29f, `verb_table.yaml:1103`) |
+| OUTCOME (4) | 10 sentence (the disposal's kind: `oblige`, `custody`, `ban`) · 25 conquer, raid, usurp (a won or unopposed `march` writes occupation; title by `seize`, `give`, `release` or death, R-2 resolved) · 28 execute (a `fight` against a prisoner in `custody`, R-1) · 48 murder (a `fight` whose band is `Felled`, with `conceal`) — and, by direction 3, `kill` and `wound` |
 | SYSTEM (5) | 56 privileged counsel · 58 combat and battle moves (inside the seams) · 59 negotiation moves (inside a bout) · 60 events (disaster, plague, dearth, mutiny, death, succession, heresy outbreak, clocks, endings) · 61 inner mechanics (§9.3) |
 
 [NULL: all 61 families — examined for a family needing a fifth eligibility kind or a non-person actor;
@@ -450,13 +479,13 @@ per-family evidence is Appendix B.
 
 | source (rows) | distinctive contribution | suite members and states it backs |
 |---|---|---|
-| `research/` (80) | faction- and office-scale acts the setting's own research catalogued — sanctions put to a vote of factions, war declared with a compliance window, cession and tributary status, leagues, confinement and hostage-kin, the Riskbreakers' Shadow Renown and Deniability Debt meters — and nine event cards | `proclaim`, `covenant`, `detain`, `pardon`, `conceal`; war, treaty, alliance, hostage (embargo deferred) |
+| `research/` (80) | faction- and office-scale acts the setting's own research catalogued — sanctions put to a vote of factions, war declared with a compliance window, cession and tributary status, leagues, confinement and hostage-kin, the Riskbreakers' Shadow Renown and Deniability Debt meters — and nine event cards | `covenant`, `detain`, `pardon`, `conceal`; war (an uttered Proposition), treaty, alliance, hostage (embargo deferred with `proclaim`, K-34) |
 | governance proposals (67) | the 25 provisional faction actions; the proceedings design (speech kinds as data, hearing, quorum, stay, appeal by nesting, interposition, dissent); the inquisition procedure of `proposals/2026-09-04-social-contest-branches/03_INQUIRY.md` (a 2–4-season case, one interrogation per season, a three-way verdict, an excommunication tribunal, abjuration, a parliamentary stay); Riskbreaker operations | the contested `determine`, `interrogate`, `seize`, `conceal`; excommunication, sentence; the faction map (§9.2) |
 | narrative and play proposals (80) | the closers named and never built (waive, depose, fray, rescind, withdraw, abolish); the pursuit-basis worksheet's kill/wound and challenge/accept rulings; cover, planted evidence, infiltration, outlawry | `conceal`, `seize`, `train`; the single outlawry carrier (`ban`); challenge as a `petition` (K-23) |
 | season-loop demand (77) | what the running code and its registers say cannot be expressed, by hole id and case count: no custody kind; `church_standing` with no producer; a sentence read as a job (H-173); a graded hearing (H-162) and the four unseeded procedure games (`arrangements.yaml:16-21`); seizure (H-84); concealment (12 cases); recruiting (13); nothing raises `Person.body`; `Person.capability` retired; nothing ends a place (H-166) | `detain`, `seize`, `conceal`, `tend`, `train`, `raze`, `sabotage`, `argue`; custody, excommunication, sentence |
 | detective games (107) | the investigation family confirmed in all seven; *Pentiment*'s church hearing, judgement and execution; *L.A. Noire*'s read of a lie and the charge; arrest in three games; evidence decay; the time budget. **Negative:** no warrant, covert identity or distinct confession act verified in any of the seven | `detain`, `interrogate`; execution as custody + `fight` (§8.8); §9.3 |
-| CK3 and RTK (107) | CK3: crime as a standing legal basis for imprisonment and revocation; imprison, torture, execute, ransom; hooks and blackmail; casus belli, war goals, truces; fealty and vassal contracts; excommunication and holy war — every act a character's, as Valoria rules. RTK XIV: the schemes line (sabotage, estrangement, incited defection), alliances, submission demands — there the force itself acts | `detain`, `pardon`, `proclaim` (war), `covenant`, `sabotage`, `raze`; vassalage through `oblige` |
-| governance history (189) | procedure, step by step: the parliamentary motion, division, supply, impeachment and prorogation; the royal writ, edict, homage and *diffidatio*, pardon, regency; Venice's lot-and-ballot election, quorum, the Ten, the *bocca di leone*, the Avogadori's suspension; church justice from denunciation and the edict of grace through citation, interrogation, torture under limits, sentence, abjuration, relaxation, confiscation, excommunication and interdict; secular warrant, arrest, bail, *habeas corpus*, ordeal, execution, informants, interception, double agents | the procedural spine of the Active Inquisition chain (§9.2); `detain`, `interrogate`, `seize`, `pardon`, `proclaim`; the vote as members' own `commit`s and homage as `oblige`; custody, excommunication, outlawry (interdict and heresy declared deferred) |
+| CK3 and RTK (107) | CK3: crime as a standing legal basis for imprisonment and revocation; imprison, torture, execute, ransom; hooks and blackmail; casus belli, war goals, truces; fealty and vassal contracts; excommunication and holy war — every act a character's, as Valoria rules. RTK XIV: the schemes line (sabotage, estrangement, incited defection), alliances, submission demands — there the force itself acts | `detain`, `pardon`, `covenant`, `sabotage`, `raze`; war as an uttered `WAR` Proposition; `march`'s stakes; vassalage through `oblige` |
+| governance history (189) | procedure, step by step: the parliamentary motion, division, supply, impeachment and prorogation; the royal writ, edict, homage and *diffidatio*, pardon, regency; Venice's lot-and-ballot election, quorum, the Ten, the *bocca di leone*, the Avogadori's suspension; church justice from denunciation and the edict of grace through citation, interrogation, torture under limits, sentence, abjuration, relaxation, confiscation, excommunication and interdict; secular warrant, arrest, bail, *habeas corpus*, ordeal, execution, informants, interception, double agents | the procedural spine of the Active Inquisition chain (§9.2); `detain`, `interrogate`, `seize`, `pardon` (edicts and interdicts deferred with `proclaim`, K-34); the vote as members' own `commit`s and homage as `oblige`; custody, excommunication, outlawry (interdict and heresy declared deferred) |
 
 ---
 
@@ -464,7 +493,7 @@ per-family evidence is Appendix B.
 
 ### 6.1 The roster
 
-One row per verb: the 44 (alphabetical), then the thirteen new (alphabetical). Scale is the table's
+One row per verb: the 44 (alphabetical), then the eleven new (alphabetical). Scale is the table's
 `scale`; "—" is a declared absence. The structural fields of the 44 were read off the live
 `VERB_TABLE` by import (2026-10-04) and agree with the audit pass's roster except in `fight`'s
 counterparty (§13.5, item 16); the group column uses §3.2's codes. Degree bands: `sigma_leverage` prizes use Overwhelming / Success / Partial / Failure; `a field`
@@ -474,13 +503,13 @@ uses Declared / Won / Lost / Unopposed (`field_degree_bands`, `rosters.yaml:801-
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | `build` | retained | uncontested_material | person | own | none | — | none | `Site.exists` | — | G9 | vs `found`: a Site |
 | `carry` | retained (THIN) | social | person | own | none | — | none | `DocketItem.matter` | accusation pending | G4 | vs `open_case`: own, a held petition |
-| `commit` | retained | social | person | own | actor | — | none | `Tenure.since` (commit) | membership, recognition, a vote, a covenant's acceptance | G7 | vs `oblige`: the object is a Proposition |
+| `commit` | retained | social | person | own | actor | — | none | `Tenure.since` (commit) | membership, recognition, a vote, a covenant's acceptance, war (backing a `WAR` Proposition) | G7 | vs `oblige`: the object is a Proposition |
 | `comply` | retained (ruled) | social | person | own | none | — | none | `[]` | — | G5 | vs `transfer`: an emission on a held writ |
 | `confer` | **widened** | binding_decision | settlement | remit:confer | subject | — | none | `Tenure.until`, `Tenure.since` (hold; + `Tenure.term`) | regency | G7 | vs `establish`: fills a seat |
 | `construe` | retained (ruled) | social | person | own | actor | — | none | `[]` | — | G5 | vs `comply`: one's own reading |
 | `convene` | retained | binding_decision | person | remit:convene | none | — | none | `Date.due_at`, `ConveningCondition.attached` | a sitting | G4 | vs `open_case`: a date, not a matter |
 | `create_record` | retained | uncontested_material | person | own | none | — | none | `Record.exists`, `Record.stages` | — | G6 | vs `issue`: own, any kind |
-| `destroy_record` | retained | uncontested_material | person | hold:\<record\> \| presence | actor | — | none | `Record.exists` | ends a `war`, `siege` or `cover` Record | G6 | vs `seize`: ends, does not move |
+| `destroy_record` | retained | uncontested_material | person | hold:\<record\> \| presence | actor | — | none | `Record.exists` | ends a `cover` Record | G6 | vs `seize`: ends, does not move |
 | `determine` | **widened** | binding_decision | settlement | remit:determine | none | subject | **a proposition** | by band: `Tenure.since` (+ `Tenure.degree`), `DocketItem.matter` | sentence (`oblige` \| `custody` \| `ban`), excommunication, outlawry | G4 | vs `pardon`: opens |
 | `dispatch` | retained (ruled) | binding_decision | territory | remit:dispatch | none | — | none | `[]` | — | G5 | vs `issue`: no document |
 | `establish` | retained | binding_decision | settlement | remit:confer | none | — | none | `Office.exists`, `Office.remit_acts`, `Tenure.payload` | — | G7 | vs `confer`: the seat itself |
@@ -492,16 +521,16 @@ uses Declared / Won / Lost / Unopposed (`field_degree_bands`, `rosters.yaml:801-
 | `found` | retained | uncontested_material | person | own | none | — | none | `Rung.exists`, `Tenure.since` (contain) | — | G9 | vs `build`: a Rung |
 | `give` | **widened** | social | person | own \| hold:\<record\> | to | to | none | `Tenure.until`, `Tenure.since` (hold; + on a Rung) | cession | G6 | vs `seize`: consensual |
 | `interview` | retained | social | person | own | actor | — | none | `[]` | — | G11 | vs `interrogate`: own, no custody |
-| `issue` | retained | binding_decision | province | remit:issue | none | to | none | `Record.exists` (dispensation: a warrant, summons or charter by its `terms`) | warrant | G6 | vs `proclaim`: to an executor |
+| `issue` | retained | binding_decision | province | remit:issue | none | to | none | `Record.exists` (dispensation: a warrant, summons or charter by its `terms`) | warrant | G6 | vs `dispatch`: a document |
 | `levy` | retained | uncontested_material | settlement | remit:issue \| presence:\<rung\> | actor | — | none | `Rung.stores` | — | G8 | vs `transfer`: taken by remit |
-| `march` | retained (winner: R-2) | contested_physical | settlement | remit:dispatch | actor | — | a field @ENCOUNTER | by band: `Person.body`, `Person.stance` (the losing side) | breaks a truce | G2 | vs `besiege`: bodies |
+| `march` | **widened** (the army arrives; R-2 resolved) | contested_physical | settlement | remit:dispatch | actor | — | a field @ENCOUNTER | by band: Won/Lost `Person.body`, `Person.stance` (the losing side); Won/Unopposed `Tenure.until`, `Tenure.since` (contain), `Person.travel_leg` (the arriving side) | occupation and siege (a Query) | G2 | vs `move`: an army, through a seat |
 | `migrate` | retained | movement | person | own | actor | — | none | `Person.travel_leg`, `Tenure.until/since` (contain, reside) | — | G10 | vs `move`: reside |
 | `move` | retained | movement | person | own | actor | — | none | `Person.travel_leg`, `Tenure.until/since` (contain) | — | G10 | vs `migrate`: presence only |
 | `oblige` | **widened (reader)** | social | person | own | actor | subject | none | `Tenure.since`, `Tenure.term` (oblige) | vassalage | G7 | vs `commit`: a seat, with a term |
 | `open_case` | retained | social | person | remit:determine | none | — | none | `Record.exists`, `Record.stages`, `DocketItem.matter` | accusation pending | G4 | vs `carry`: by remit |
 | `petition` | retained | social | person | own | actor | to | none | `Record.exists` (petition: an accusation, demand or challenge by its `terms`) | accusation pending | G6 | vs `issue`: upward |
 | `reconstruct` | retained | uncontested_material | person | own | actor | — | none | `[]` | — | G11 | vs `research`: own ledger |
-| `release` | retained | binding_decision | person | own | subject | — | none | `Tenure.until` (hold, commit, oblige, succeed, tie, knot) | ends fealty, a service sentence, membership | G7 | vs `pardon`: one's own edge |
+| `release` | retained | binding_decision | person | own | subject | — | none | `Tenure.until` (hold, commit, oblige, succeed, tie, knot) | ends fealty, a service sentence, membership, a war (its commits) | G7 | vs `pardon`: one's own edge |
 | `repudiate` | **cut (recommended, R-3)** | social | person | own | actor | — | none | `Tenure.until` (commit) | — | G7 | vs `release`: none |
 | `research` | retained | uncontested_material | person | own \| presence:\<site\> | actor | — | none | `[]` | — | G11 | vs `examine`: a Record |
 | `restore` | retained | uncontested_material | person | own \| presence:\<site\> | none | — | none | `Site.condition` (+) | — | G9 | vs `work`: no floor |
@@ -514,31 +543,31 @@ uses Declared / Won / Lost / Unopposed (`field_degree_bands`, `rosters.yaml:801-
 | `thread_read` | retained (deferred) | contested_physical | person | own \| presence:\<site\> | actor | — | none | `[]` | — | G11 | TS-gated |
 | `tie / knot` | retained (split when built) | social | person | own | actor | — | none | `Tenure.since` (tie \| knot) | a bond | G7 | vs `oblige`: person to person |
 | `transfer` | retained | uncontested_material | person | own \| hold:\<store\> | to | — | none | `Rung.stores`, `Tenure.term` | renews fealty; tribute | G8 | vs `levy`: own stores |
-| `utter` | retained | social | person | own | none | — | none | `Proposition.exists` | — | G12 | vs `proclaim`: no seat |
+| `utter` | retained | social | person | own | none | — | none | `Proposition.exists` | war (a `WAR`-mood Proposition) | G12 | vs `speak`: writes a Proposition |
 | `work` | retained (delta ≥ 0) | uncontested_material | person | own \| presence:\<site\> | none | — | none | `Site.condition` (+; a floor; a works) | — | G9 | vs `restore`: floor + works |
 | `argue` | **new** | social | person | own | actor | to | a proposition | Overwhelming/Success: `Person.pursuits`; else `[]` | — | G3 | vs `tell`: a Proposition, and a write |
-| `besiege` | **new** | contested_physical | settlement | remit:dispatch | actor | — | a field @ENCOUNTER | Won/Unopposed: `Record.exists` (siege); Declared/Lost: `[]` | siege | G2 | vs `march`: a standing Record |
 | `conceal` | **new** | social | person | own | actor | — | none | `Record.exists` (cover) | concealed identity | G6 | vs `forge`: about oneself |
-| `covenant` | **new** | social | settlement | remit:issue | to | to | none | `Record.exists` (treaty \| truce \| alliance), `Record.stages` | treaty, truce, alliance | G14 | vs `petition`: a seat, across |
+| `covenant` | **new** | social | settlement | remit:issue | to | to | none | `Record.exists` (treaty \| alliance), `Record.stages` | treaty, alliance | G14 | vs `petition`: a seat, across |
 | `detain` | **new** | contested_physical | person | remit:dispatch | none | subject | a standing [CONFIDENCE: medium] | Overwhelming/Success: `Tenure.since` (custody); else `[]` | custody, hostage | G13 | vs `fight`: prize, write |
 | `interrogate` | **new** | social | person | remit:determine | actor | subject | a proposition | `[]` at every band | — (a `confession` proof) | G13 | vs `interview`: remit, custody |
 | `pardon` | **new** | binding_decision | settlement | remit:determine | subject | — | none | `Tenure.until` (custody \| ban) | ends custody, a ban | G13 | vs `release`: another's edge, via the seat |
-| `proclaim` | **new** | binding_decision | province | remit:issue | none | — | none | `Record.exists` (war; later kinds with a reader each) | war | G14 | vs `issue`: `terms` a place |
-| `raze` | **new** | contested_physical | settlement | remit:dispatch | none | — | none | `Site.exists` / `Rung.exists` → absent | ends a place | G9 | vs `sabotage`: existence |
+| `raze` | **new** | contested_physical | settlement | remit:dispatch | none | — | none | `Site.exists` / `Rung.exists` → absent | ends a place where the seat's faction is mustered | G9 | vs `sabotage`: existence |
 | `sabotage` | **new** | uncontested_material | person | own \| presence:\<site\> | actor | — | none | `Site.condition` (−) | — | G9 | vs `restore`, `work`: sign, beneficiary |
-| `seize` | **new** | uncontested_material | settlement | remit:issue | none | — | none | `Tenure.until`, `Tenure.since` (hold) | ends another's hold | G13 | vs `give`: no consent |
+| `seize` | **new** | uncontested_material | settlement | remit:issue | none | — | none | `Tenure.until`, `Tenure.since` (hold on a Record under a warrant; on a Rung under occupation) | ends another's hold; conquest of an occupied place | G13 | vs `give`: no consent |
 | `tend` | **new** | uncontested_material | person | own | subject | — | none | `Person.body` (+) | — | G15 | vs `restore`: a Person |
 | `train` | **new** | uncontested_material | person | own | subject | — | none | `Person.capability` (un-retired) | — | G15 | vs `tend`: capability |
 
-**Counts (recounted from the table).** 57 rows: the 44 and 13 new. **The suite is 56 verbs** — the 44,
-less the recommended cut of `repudiate`, plus 13. Of the 43 retained: 37 unchanged (four of them —
-`comply`, `construe`, `dispatch`, `evade / defy` — kept by ruling), 1 narrowed (`work`, delta ≥ 0) and 5
-widened (`confer`, `determine`, `give`, `oblige` by a new reader only, `survey`). Contested rows: 8 of 56
-(`argue`, `besiege`, `detain`, `determine`, `fight`, `interrogate`, `march`, `tell`). New verbs by
-eligibility: `own` 5 (`argue`, `conceal`, `sabotage`, `tend`, `train`); `remit:dispatch` 3 (`besiege`,
-`detain`, `raze`); `remit:determine` 2 (`interrogate`, `pardon`); `remit:issue` 3 (`covenant`,
-`proclaim`, `seize`) — every remit act already on the roster (`rosters.yaml:302`), so no `remit_acts`
-value is added and H-52's warning (`:298-301`) is not engaged. `execute` is not in the suite (§8.8, R-1).
+**Counts (recounted from the table).** 55 rows: the 44 and 11 new. **The suite is 54 verbs** — the 44,
+less the recommended cut of `repudiate`, plus 11. Of the 43 retained: 36 unchanged (four of them —
+`comply`, `construe`, `dispatch`, `evade / defy` — kept by ruling), 1 narrowed (`work`, delta ≥ 0) and 6
+widened (`confer`, `determine`, `give`, `march`, `oblige` by a new reader only, `survey`). Contested rows:
+7 of 54 (`argue`, `detain`, `determine`, `fight`, `interrogate`, `march`, `tell`). New verbs by
+eligibility: `own` 5 (`argue`, `conceal`, `sabotage`, `tend`, `train`); `remit:dispatch` 2 (`detain`,
+`raze`); `remit:determine` 2 (`interrogate`, `pardon`); `remit:issue` 2 (`covenant`, `seize`) — every
+remit act already on the roster (`rosters.yaml:302`), so no `remit_acts` value is added and H-52's
+warning (`:298-301`) is not engaged. Not in the suite: `execute` (§8.8, R-1); `besiege`, folded into
+`march` (K-28); `proclaim`, deferred with its readers (K-34). `seize`'s Rung object is part of the new
+verb's own reach, not a widening of an existing row.
 
 ### 6.2 REACH and NOT of the changed verbs
 
@@ -557,22 +586,25 @@ value is added and H-52's warning (`:298-301`) is not engaged. `execute` is not 
 - **`commit`** (unchanged row) — a motion's or a covenant's Proposition reaches it through `utter`'s hold
   or the enabler. NOT: a vote through a remit — a vote is the holder's own `commit`, the count a Query
   over bench members' live commits (K-07).
-- **`march`** (unchanged) — writes the losing side only (R-2). NOT: a siege (`besiege`).
+- **`march`** (widened) — send the mustered army to a settlement; the stake is read at the destination
+  (capture attempt, interception or defence, relocation, arrival at unheld land, §8.6); writes the losing
+  side's casualties and grudge and, on a won or unopposed field, the arriving army's presence. NOT: title
+  (`seize`, `give`, `release`, death); muster (`sides_of`); a larder effect (deferred reader, §9.4); a war
+  declaration (`utter`).
 - **`detain`** — a Person named in a held warrant; opens `custody` to the seat that issued the warrant.
   NOT: harm (`fight`); release (`pardon`).
 - **`interrogate`** — a Person in custody; the charge's disposition as `confession.made` /
   `confession.withheld`. NOT: a finding (the six).
-- **`seize`** — a Record named in a held warrant; whatever `hold` it carries closes and the actor's opens
-  under the `seizure` basis. NOT: stores (`levy`); a seat.
+- **`seize`** — a Record named in a held warrant, or (from build step 8) a settlement where the exercised
+  seat's faction is mustered and the holder's is not; whatever `hold` it carries closes and the actor's
+  opens under the `seizure` basis. NOT: stores (`levy`); a seat; a place the seat has no army at.
 - **`pardon`** — a live `custody` or `ban` whose object is the exercised seat. NOT: an `oblige` (D-5,
   `verb_table.yaml:757`).
-- **`proclaim`** — a Record about a place outside the seat's purview, through `remit:issue`; kind `war`
-  first. NOT: an executor (`issue`).
-- **`covenant`** — a `treaty`, `truce` or `alliance` Record `to` another seat's holder about an uttered
-  Proposition; in force by both holders' `commit`s. NOT: a private debt (deferred).
-- **`besiege`** — a `siege` Record at a Rung, fought at ENCOUNTER if opposed. NOT: casualties (`march`).
-- **`raze`** — end a Site or Rung where the actor's side holds the field. NOT: lower condition
-  (`sabotage`).
+- **`covenant`** — a `treaty` or `alliance` Record `to` another seat's holder about an uttered
+  Proposition; in force by both holders' `commit`s. NOT: a private debt (deferred); a truce (deferred,
+  K-32).
+- **`raze`** — end a Site or Rung at a settlement where the exercised seat's faction is `mustered`. NOT:
+  lower condition (`sabotage`); any place the seat has no army at.
 - **`conceal`** — a `cover` Record on oneself; `anchor_of` answers its id. NOT: a false document
   (`forge`).
 - **`sabotage`** — lower a present Site's condition by `_rise`'s mirror. NOT: end it (`raze`).
@@ -585,8 +617,8 @@ value is added and H-52's warning (`:298-301`) is not engaged. `execute` is not 
 
 ## 7. States
 
-Every state below is an **output**: the choices that set them are `proclaim`, `covenant`, `besiege`,
-`determine`, `detain`, `conceal`, `issue`, `petition`, `commit`, `confer` and `oblige`, and nothing names a
+Every state below is an **output**: the choices that set them are `utter`, `commit`, `covenant`,
+`march`, `determine`, `detain`, `conceal`, `issue`, `petition`, `confer` and `oblige`, and nothing names a
 state as a verb.
 
 **Carrier rules the code already enforces.** An instrument is a `Record` of a rostered kind with
@@ -605,13 +637,13 @@ no code reads is §0.05's dead carrier.
 
 | state | carrier | parties | writers | readers | duration · drama | status |
 |---|---|---|---|---|---|---|
-| **War** | Record `war` [terms, at] — `terms` = the rung proclaimed against | the proclaiming seat; the target rung's holders | `proclaim`; ended by a later `treaty` between the same seats (reader precedence) or by `destroy_record` | `loop/sides.py::sides_of` (new read; a march without a war is H-151's own-faction question); `_ch_chronicle` | until a treaty · marches form between enemies, allies muster | GAP — ships at build step 7 |
-| **Truce** | Record `truce` [terms, to, at] + `Record.stages` (the term; matures at MAT, `write_matrix.yaml:266-272`) | two seats | `covenant`; lapses at MAT with no actor | `sides_of` (a `march` between truced seats refused or flagged as breach) | the term · a truce lapsing on a fixed season | GAP |
-| **Treaty / peace** | Record `treaty` [terms, to, at] + both holders' `commit` to its Proposition | two or more seats | `covenant`, `commit` | `sides_of`; `_renewals` (tribute as upkeep) | term or breach · lapsed tribute breaks a peace | GAP |
-| **Alliance** | Record `alliance` [terms, to, at] + both holders' `commit` | seats | `covenant`, `commit` | `world_q.mustered` (allies' persons join sides) | term or breach · an ally's war pulls you in | GAP |
+| **War** | a `WAR`-mood Proposition whose `subject` and `value` are the two factions, plus live `commit`s to it — already built (`queries/faction_q.py:208-250`; `01_AXIOMS.md:1374-1384`: *"NEVER a stored flag"*) | the utterer and every committed person | `utter`, `commit`; ended by `release` of the commits (peace is `until`, T-m) | `faction_q.at_war` (and whatever `score` makes of it); it gates no verb — a march into an enemy-held settlement needs no war (K-29) | until the last commit is released · a war that outlives its supporters | COVERED — carrier and reader built; a computed declaration waits on build step 2 (`commit` formable on a Proposition) |
+| **Truce** | — | two seats | — | none: its only proposed reader was a `march` refusal or flag, which direction 8 forbids and the fold cannot express (emits are keyed per band, `hole_register.yaml:3309-3313`) | — | DEFERRED with its reader (K-32) |
+| **Treaty / peace** | Record `treaty` [terms, to, at] + both holders' `commit` to its Proposition | two or more seats | `covenant`, `commit`; it ends a war only through the parties' own `release` of the war's commits | `_renewals` (tribute as upkeep) | term or breach · lapsed tribute breaks a peace | GAP |
+| **Alliance** | Record `alliance` [terms, to, at] + both holders' `commit` | seats | `covenant`, `commit` | `world_q.mustered` (allies' persons present at a march's destination join the holder's side — interception by an ally) | term or breach · an ally's war pulls you in | GAP |
 | **Vassalage / fealty** | seat A's holder's own `oblige` to seat B; term renewed by `transfer` upkeep (`verb_table.yaml:1149`) | the two seats' holders | `oblige`; ended by `release` (*diffidatio*) or lapse | `state/gate.py::purview_reaches` (H-101: "nothing can be under anything", `hole_register.yaml:1961`) | the term · unpaid fealty lapses and the ladder breaks | GAP (the reader) |
 | **Hostage** | a `custody` edge under a covenant's terms | the giving and receiving seats | `detain`; ended by `pardon` on performance | `sides_of` (the hostage's side will not march) | the covenant's term · breach costs a life or a release | GAP [GAP: the `warrant` basis reads a held dispensation; how a covenant stands in for one is unproposed] |
-| **Siege / blockade** | Record `siege` [terms, at] — `terms` = the besieged rung | the besieging seat; the besieged rung | `besiege`; ended by `destroy_record`, a won relief `march`, or a covenant | MATTER subsistence at the rung (`loop/matter.py`), `_eff_transfer` into it, `move` paths | until relieved · a larder runs down with no actor | GAP — ships with the subsistence reader (step 8) |
+| **Siege / blockade** | none — a Query: some faction other than the holder's `mustered` at a settlement it does not hold (`world_q.py:980-996` against `:1165-1189`), over `contain` edges each person owns | the occupying seat; the holder | `march` (Won, Unopposed); ended by the army marching on or dying | `raze` and `seize`'s occupation licence (both built with it, steps 8 and 11); a larder effect has no reader — only cohorts eat (`world_q.py:559-572`), and a cohort holds no `commit`, so never musters (`harness/populated.py:386-398`) | while the army stands · a town sat before | WIDENED (`march`, step 8); the subsistence reader DEFERRED as a new hole (§9.4) |
 | **Excommunication** | Tenure `ban` (person → a Church seat), opened by `determine` under a Church arrangement with `disposes: ban` | the banned person; the Church seat | `determine`; ended by `pardon` | `_req_oblige` / `may_fill` (a banned person cannot serve or be seated); `_ch_chronicle` broadcasts the `tenure.opened` (`engine/season/epistemic.py:553-554`); deposits the `church_standing` claim nothing produces today (`rosters.yaml:576`) | until pardon · clients' commits waver | GAP |
 | **Outlawry** | a person: Tenure `ban` to the realm's seat. An organization: a `condemnation` of its Proposition — deferred, no reader | the outlaw; the realm's seat | `determine`; ended by `pardon` | proposed: `detain` gains an `own` alternative against a `ban` holder, its custody's object the banning seat — a second gate clause, unbuilt | until pardon · anyone may seize him | GAP |
 | **Custody** | Tenure `custody` (prisoner → the seat that issued the warrant) | the prisoner; that seat | `detain` (and a second `detain` under a second bench's warrant — "relax to the secular arm"); ended by `pardon` | `move`/`migrate` refuse; `sides_of` excludes; a `budget` floor | until released · a prisoner's faction petitions, ransoms or marches | GAP |
@@ -624,14 +656,14 @@ no code reads is §0.05's dead carrier.
 | **Faction membership / recognition** | `commit` to a Proposition | member | `commit`, `release` | `sides_of`, `faction_q` | standing | COVERED |
 | **Scheme** | a Proposition the conspirators `commit` to, plus `cover` Records; progress as `Record.stages` | conspirators | `utter`, `commit`, `conceal` | secrecy decay is SYSTEM (§9.3) | until discovered or done | COVERED (composed) |
 | **Debt** | a `covenant` kind with an `amount` key | creditor; debtor | — | `seize` on a lapse (unbuilt) | — | DEFERRED with its reader (K-14) |
-| **Embargo**, **interdict**, **emergency**, **edict** | `proclaim` kinds | — | — | none yet | — | DEFERRED — no carrier until a reader exists (K-11) |
+| **Embargo**, **interdict**, **emergency**, **edict** | none-yet: kinds of the deferred `proclaim` | — | — | none yet | — | DEFERRED with `proclaim` and its readers (K-11, K-34) |
 | **Heresy declared** / an organization outlawed | a `condemnation` of a Proposition | — | — | proposed: an accusation grounded on a live `commit` to a condemned Proposition (unbuilt) | — | DEFERRED (K-11) |
 | **Claim to a title** | none | — | — | none | — | DEFERRED — the word collides with the `Claim` carrier and the `claim.*` event kinds, and nothing reads it (K-11) |
 | **Charter / privilege / exemption** | a `dispensation` whose `terms` is the grantee | — | `issue` | proposed: a `purview_reaches` exemption (unbuilt) | — | DEFERRED — the instrument exists; the state ships with its reader |
 
 ### 7.2 Exact roster additions
 
-**`record_kinds` additions** — six, each with its exact keys (`Record.__post_init__` refuses any other
+**`record_kinds` additions** — three, each with its exact keys (`Record.__post_init__` refuses any other
 set; no name is a `tenure_kinds` member). `terms` reads from the act's `subject` (`rosters.yaml:225-226`).
 `at` follows `dispensation`'s precedent: it is no operand, so the mint reads it from the act's payload as
 declared and a computed act carries `at: None` (`loop/effects_information.py:84-85`); the seat's rung,
@@ -639,19 +671,20 @@ where a reader needs it, is where the Record is drawn up (`_seat_rung`, `:145`).
 
 | kind | keys | producer | reader |
 |---|---|---|---|
-| `war` | [terms, at] | `proclaim` | `sides_of` |
-| `truce` | [terms, to, at] | `covenant` | `sides_of` |
-| `treaty` | [terms, to, at] | `covenant` | `sides_of`, `_renewals` |
+| `treaty` | [terms, to, at] | `covenant` | `_renewals` |
 | `alliance` | [terms, to, at] | `covenant` | `mustered` |
-| `siege` | [terms, at] | `besiege` | `loop/matter.py`, `_eff_transfer`, `move` |
 | `cover` | [terms] | `conceal` | `attribution.anchor_of` |
 
 **Not added, and why (K-11):** `case` — `_eff_open_case` mints kind `text` by its own ruling until a
 reader needs a case kind (`effects_information.py:196-198`); `warrant`, `summons`, `charter` — each would
 carry `dispensation`'s exact keys `[terms, to, at]` (`rosters.yaml:212`), a second vocabulary for one
 shape; `accusation`, `demand`, `challenge` — likewise `petition`'s; `peace` — one instrument with
-`treaty`; `truce`'s `until` key — a second owner beside `Record.stages`; `claim`, `embargo`, `interdict`,
-`emergency`, `edict`, `condemnation`, `debt` — no reader yet.
+`treaty`; `war` — it exists as a `WAR`-mood Proposition read by `at_war` (`faction_q.py:214-250`), and a
+Record would be a second owner of one fact (K-29); `siege` — a Query over arrived armies (K-28);
+`truce` — no reader (K-32), and revision 1's `until` key was in any case a second owner beside
+`Record.stages`; `claim`, `embargo`, `interdict`, `emergency`, `edict`, `condemnation`, `debt` — no reader
+yet. Observation for the FA lane, not adopted here: `treaty` and `alliance` could take `at_war`'s shape
+(an uttered Proposition plus commits) rather than Records, for the reason `01_AXIOMS.md:1386-1389` gives.
 
 **`tenure_kinds` additions** — two: **`custody`** (prisoner → the issuing seat) and **`ban`** (person →
 the excluding seat). Both join `contain` and `reside` in the exclusion at `data/rosters.py:453`, so
@@ -688,8 +721,8 @@ inquisition hearing — were left out because their `disposes:` tenure was an un
 
 ## 8. New verbs
 
-Thirteen rows, written table-ready in the table's own columns and in their resolved form. Grade is
-`assumption` for all thirteen. Evidence is written out; the bracketed id is the extraction row, kept as a
+Eleven rows, written table-ready in the table's own columns and in their resolved form. Grade is
+`assumption` for all eleven. Evidence is written out; the bracketed id is the extraction row, kept as a
 courtesy. Every remit eligibility is `issue`, `determine` or `dispatch`, already on the roster
 (`rosters.yaml:302`). Every contested row keys its `writes:` and `emits:` by degree, as the loader
 requires (`data/verbs.py:589-620`; `tell`'s shape, `verb_table.yaml:890-899`). No precondition uses a new
@@ -775,27 +808,39 @@ is at stake.
 - **row:** `uncontested_material` · settlement · `remit:issue` via a seat · beneficiary `none` ·
   counterparty — (K-04: a non-consensual act on another's edge names no counterparty, on `revoke`'s and
   `destroy_record`'s precedent; the dispossessed is read at the effect)
-- **requires:** `existence` of `subject` kind Record. The warrant is the Candidate's source (a held
-  dispensation whose `terms` names the Record); the effect declines a Record the actor already holds (the
-  grammar has no negation).
-- **writes:** `Tenure.until`, `Tenure.since` — whatever `hold` the Record carries closes and the actor's
-  opens, under a new gate basis `seizure`: purview over the Record's place and a held warrant naming it
-  (judged in `tenure_write_basis`, `state/gate.py:538`) · `record.seized`; refusals `seize.unauthorized`
-  (eligibility), `seize.refused`
+- **requires:** at build step 6, `existence` of `subject` kind Record. The warrant is the Candidate's
+  source (a held dispensation whose `terms` names the Record); the effect declines a Record the actor
+  already holds (the grammar has no negation). At build step 8 the object widens to a Rung (a
+  settlement), and "Record or Rung" is a disjunction the typed grammar lacks (`rosters.yaml:1699-1703`),
+  so the row then takes `pardon`'s route: `requires_typed: none` with the reason, a registered predicate,
+  and the licence read at the effect — a held warrant for a Record, occupation for a Rung (§13.8).
+- **writes:** `Tenure.until`, `Tenure.since` — whatever `hold` the object carries closes and the actor's
+  opens, under a new gate basis `seizure` (judged in `tenure_write_basis`, `state/gate.py:538`), licensed
+  for a Record by purview over its place and a held warrant naming it, and for a Rung by **occupation**:
+  the exercised seat's faction `mustered` at the settlement and the holder's not. A hold on the settlement
+  itself is lawful (`hold_object_kinds` admits a Rung) and shadows a territory hold in
+  `holder_faction_of`'s walk (`world_q.py:1165-1189`), so one town can change hands without its
+  territory · `record.seized`, `rung.seized`; refusals `seize.unauthorized` (eligibility), `seize.refused`
 - **contests:** none
-- **producer · composes:** the enabler's fan over held dispensations whose `terms` names a Record ·
-  `issue`, `destroy_record` (burn it after), `levy` (the stores half)
+- **producer · composes:** the enabler's fan over held dispensations whose `terms` names a Record; for a
+  Rung, Q2 on an `army.arrived` claim the seat-holder holds about a place his faction occupies ·
+  `issue`, `destroy_record` (burn it after), `levy` (the stores half), `march` (the occupation that
+  licenses a Rung seizure)
 - **CONFLICTS:** `give` — axis: consent and eligibility; `levy` — axis: object (Record vs stores);
-  `destroy_record` — axis: moves, does not end
+  `destroy_record` — axis: moves, does not end; `march` — axis: write row (a `hold`, not the army's
+  `contain`; occupation licenses the seizure and does not perform it)
 - **falsifier:** `record.seized` in `w.log`; realm ex > 0; a seat cannot be seized (a `hold` on an Office
-  is `conferral`'s and `T-o`'s alone; in `test_give.py:285`'s style)
+  is `conferral`'s and `T-o`'s alone; in `test_give.py:285`'s style); a `seize` on an occupied settlement
+  flips `holder_faction_of` there, and one on a settlement the seat's faction does not occupy is refused
 - **evidence:** the Cardinal of Justice's portfolio includes "text suppression" (`rosters.yaml:1536`),
   and NPC-088's copied text can be found and taken [C-08]; `give` is the only Record mover and it is
   consensual (H-84); confiscating a heretic's goods in thirds (*Ad extirpanda*; Spanish practice)
   [H1-132]; the index and seizure of copies [H1-134]; pursuivants searching premises and seizing papers on
   warrant [H1-175]; the Church's mass seizure of territory declared by an Archbishop (corpus-rebuild annex
-  A, `:477-483`) [P1-14]; nationalizing church lands and foreign charters [R1-12].
-- **blocker · needs_jordan:** build steps 1 and 6 · no
+  A, `:477-483`) [P1-14]; nationalizing church lands and foreign charters [R1-12]; for the Rung half,
+  family 25's conquest, raid and usurpation rows (Appendix B).
+- **blocker · needs_jordan:** build steps 1 and 6 (Records), 8 (Rungs) · no; R-6 asks whether a won field
+  should instead transfer title directly
 
 #### `pardon` — G13
 *OF* pardoner *← ML* perdonare *'grant wholly'*. **Fit:** FITS.
@@ -827,38 +872,20 @@ is at stake.
 
 ### 8.2 Polity and war
 
-#### `proclaim` — G14
-*L* proclamare *'cry out'*. **Fit:** FITS.
+**War needs no new verb and no new carrier (K-29).** The tree already carries it: a `WAR`-mood
+Proposition whose `subject` and `value` are the two factions, uttered by a person, plus live `commit`s
+to it, read by `faction_q.at_war` (`queries/faction_q.py:208-250`), on `01_AXIOMS.md:1374-1384`'s
+de jure/de facto shape. A declaration of war is `utter` of that Proposition and then the seats' own
+`commit`s; peace is each committed person's `release`. A march needs no war — `at_war` gates no verb,
+and a march into an enemy-held settlement is the casus belli the other side may answer by uttering.
 
-- **row:** `binding_decision` · province (the seat's rung) · `remit:issue` via a seat · beneficiary
-  `none` · counterparty — (the addressee is a place, carried as `terms`)
-- **requires:** `existence` of `subject` kind Rung (conjunct `target`). A war's target lies outside the
-  exercised seat's purview, so the effect declines a rung inside it — a negation the grammar cannot spell,
-  declined effect-side as `_eff_open_case` declines a matter already before a room
-  (`verb_table.yaml:690`). No purview conjunct: one would refuse every war.
-- **writes:** `Record.exists`, kind `war` [terms, at], `terms` = the rung proclaimed against. Later kinds
-  (edict, embargo, interdict, emergency, condemnation) land one at a time, each with its reader (§8.7) ·
-  `proclamation.made`; refusals keyed: eligibility → `proclaim.unauthorized`; target, write →
-  `proclaim.refused`
-- **contests:** none
-- **producer · composes:** a need question (an OUGHT about a place) or Q2 on a rung; the chronicle
-  broadcasts it as a `binding_decision` (`epistemic.py:553-554`) · `covenant` (a treaty ends the war),
-  `march`, `besiege`; the casus belli is a separate `commit` by the proclaimer to its Proposition, not a
-  key on the Record (K-13); state war
-- **CONFLICTS:** `issue` — axis: counterparty (`to` a person vs a place) and the executor conjunct (the
-  `issue` cell refuses a rung, `verb_table.yaml:427`); `utter` — axis: eligibility (remit vs own) and
-  Record vs Proposition
-- **falsifier:** enters the corpus executed set; `aperture` `march` counts split by a `war` Record present
-  or absent between the two sides
-- **evidence:** the royal edict, *ordonnance* or proclamation — general rule by royal word, curbed by the
-  Case of Proclamations 1610 [H1-54]; the inquisitor's edict of grace opening a 30–40-day window for
-  self-denunciation [H1-117]; edicts, emergency decrees and royal warrants overriding an assembly
-  [R1-43]; published proscription lists [R1-34]; the Crown's Policy Instrument [P1-60]; censure, embargo
-  and outlawry in the faction roster [P1-11]; a state of emergency suspending ordinary rules [C-32]; a
-  graded war posture [C-38]; CK3 — declare war on a casus belli, or a holy war [G2-08, G2-55]; war
-  declared on a casus belli held as a record [P2-18]. The rows on edicts, emergencies, embargo and
-  outlawry back the deferred kinds, not the `war` kind that ships first.
-- **blocker · needs_jordan:** build step 7, with `sides_of` as the reader · no
+**`proclaim` is deferred, with its readers (K-34).** With `war` a Proposition and `truce` deferred
+(K-32), `proclaim` has no Record kind that any code reads — edict, embargo, interdict, emergency and
+condemnation were already deferred as orphans (K-11) — and a verb whose every kind is unread breaks the
+suite's own rule (§7, §9.4). It returns when its first kind has a reader. Its evidence — edicts and
+proclamations [H1-54], the edict of grace [H1-117], emergency decrees [R1-43], proscription lists
+[R1-34], the Policy Instrument [P1-60], censure and embargo [P1-11], a state of emergency [C-32] — stays
+indexed under families 13 and 29 (Appendix B); the war rows [G2-08, G2-55, P2-18, C-38] under family 21.
 
 #### `covenant` — G14
 *OF* covenant, *present participle of* convenir *'agree' ← L* convenire. **Fit:** FITS [CONFIDENCE:
@@ -871,10 +898,10 @@ risks; `pact` (L *pactum*) is the alternative].
   uttered first). No question's referent is a Proposition today (`verb_table.yaml:773`; 802 of 802
   refused, `hole_register.yaml:3521`), so the row is built after `utter` mints the utterer's hold (build
   step 2), or it joins the always-refused set.
-- **writes:** `Record.exists`, kinds `treaty`, `truce`, `alliance` [terms, to, at], `terms` = the
-  Proposition; `Record.stages` as the term (matures at MAT) · `covenant.offered`; refusal
-  `covenant.refused`. [GAP: which of the three kinds a computed covenant mints — the `kind` operand has no
-  source for it today; a hand-built act declares it.]
+- **writes:** `Record.exists`, kinds `treaty`, `alliance` [terms, to, at], `terms` = the Proposition;
+  `Record.stages` as the term (matures at MAT) · `covenant.offered`; refusal `covenant.refused`. `truce`
+  is deferred with its reader (K-32). [GAP: which of the two kinds a computed covenant mints — the `kind`
+  operand has no source for it today; a hand-built act declares it.]
 - **contests:** none. The instrument is in force when both holders `commit` to its Proposition; the
   acceptance is the counterparty's own act. This two-sidedness stands on its own argument — revision 1
   tagged it to ED-IN-0210 ruling 2, which is `petition`'s withdraw/deny pair (`verb_table.yaml:719`), not
@@ -883,8 +910,9 @@ risks; `pact` (L *pactum*) is the alternative].
   `utter`, `commit`, `transfer` (tribute renews through `_renewals`), `march` (breach)
 - **CONFLICTS:** `issue` — axis: purview (a writ reaches down; a covenant reaches across, so the authority
   conjunct is dropped); `petition` — axis: eligibility (a seat) and the two-sided commit
-- **falsifier:** a `commit` by the addressee to the covenant's Proposition in `w.log`; a `march` between
-  truced seats refused or flagged
+- **falsifier:** a `commit` by the addressee to the covenant's Proposition in `w.log`; an ally's persons
+  present at a march's destination appear in its `subject_members` (a named test in
+  `test_mass_battle_provider.py`)
 - **evidence:** negotiating, ratifying or letting lapse a treaty, tribute or terms of surrender [R1-06];
   a league of towns [R1-15]; Treaty and Diplomacy in the faction roster, the Formal Crown Treaty being
   Crown-only [P1-07]; settlement as the split of a jointly created surplus, composing `utter` and `commit`
@@ -895,36 +923,19 @@ risks; `pact` (L *pactum*) is the alternative].
 - **blocker · needs_jordan:** build steps 2 and 7; the `debt` kind is deferred with its `seize` reader
   (§8.7) · no
 
-#### `besiege` — G2
-*be- + OF* sege *'seat' ← VL \**sedicum*: to sit down before. **Fit:** FITS [CONFIDENCE: medium — a siege
-may be `march` repeated; if a standing Record at a rung finds no reader before a repeated ENCOUNTER does,
-widen `march` instead].
-
-- **row:** `contested_physical` · settlement · `remit:dispatch` via a seat · beneficiary `actor` ·
-  counterparty — (sides come from `sides_of`, as `march`'s do)
-- **requires:** `existence` of `subject` kind Rung (`march`'s cell)
-- **contests:** `a field`, at ENCOUNTER — `march`'s prize row (`rosters.yaml:1111-1115`)
-- **writes (by band):** Declared → `[]` (RESOLVE's deferral fold); Won, Unopposed → `Record.exists`, kind
-  `siege` [terms, at], `terms` = the besieged rung; Lost → `[]`.
-- **emits (by band):** Declared → `siege.declared`; Won, Unopposed → `siege.laid`; Lost →
-  `siege.repulsed`. **Refusal:** `siege.refused` (one kind).
-- **producer · composes:** the `war` state and a referent rung · `march`, `proclaim`, `levy`; state siege
-- **CONFLICTS:** `march` — axis: write row only (a standing Record, not bodies); same prize and step — one
-  of the suite's two thinnest pairs (K-27)
-- **falsifier:** MATTER subsistence at the besieged rung falls with no act; realm ex > 0
-- **evidence:** besiege, storm or take terms — circumvallation, starvation, parley
-  (`research/historical/precedents_warfare.md:74-102`) [R1-29]; naval blockade in the faction roster
-  [P1-03]; CK3 armies besieging holdings [G2-12]; muster, fortify or blockade as the non-march military
-  acts the cases ask for [C-39].
-- **blocker · needs_jordan:** build step 8 lands it **with** the MATTER subsistence reader (K-22) · no
+**There is no `besiege` (K-28).** Revision 2's `besiege` shared `march`'s prize, step, eligibility,
+cell and sides, and differed only in what it wrote on `Won` — a verb declaring its intended outcome,
+which direction 3 retires and direction 8 names as a stake. A siege is a `march` that has arrived at a
+settlement its side does not hold, read as a Query (§7.1); its larder effect waits for a reader (§9.4).
+Its evidence [R1-29, P1-03, G2-12] stays under family 24 (Appendix B).
 
 #### `raze` — G9
 *F* raser *'shave, scrape' ← L* radere. **Fit:** FITS.
 
 - **row:** `contested_physical` · settlement · `remit:dispatch` via a seat · beneficiary `none` (the
   loader requires the column, `data/verbs.py:528-534`; K-06) · counterparty —
-- **requires:** the Site or Rung exists; that the actor's side holds the field (a `siege` Record of its
-  own at the rung, or a `march` won this season) is read at the effect
+- **requires:** the Site or Rung exists; occupation — the exercised seat's faction `mustered` at the
+  settlement (`world_q.py:980-996`) — is read at the effect. No log read, no Record.
 - **writes:** `Site.exists` / `Rung.exists` to absent (the rows admit RES, `write_matrix.yaml:302-336`;
   `destroy_record` is the precedent on `Record.exists`) · `site.razed`, `rung.razed`; refusal
   `raze.refused`
@@ -1069,13 +1080,13 @@ names the outcome — the body rising — and is refused on direction 3's logic,
 
 No two new verbs share write row, eligibility and counterparty. Eligibility is shared, and each sharing
 pair differs by write row or counterparty: `remit:dispatch` — `detain` (a `custody` edge; counterparty
-`subject`), `besiege` (a `siege` Record), `raze` (existence), beside the existing `dispatch` and `march`;
-`remit:determine` — `interrogate` (no write; a prize), `pardon` (`Tenure.until`), beside `determine` and
-`open_case`; `remit:issue` — `seize` (a `hold` moved), `proclaim` (a `war` Record), `covenant` (a Record
-`to` a person), beside `issue` and `levy`. [CORRECTION: revision 1 said the law verbs "share
-eligibility"; `detain`, `seize` and `pardon` have three different eligibilities (K-26).] The two thin
-pairs, named rather than hidden (K-27): `sabotage`/`work` (sign only) and `besiege`/`march` (write row
-only, same step and prize). No new verb depends on the `repudiate` cut.
+`subject`), `raze` (existence), beside the existing `dispatch` and `march`; `remit:determine` —
+`interrogate` (no write; a prize), `pardon` (`Tenure.until`), beside `determine` and `open_case`;
+`remit:issue` — `seize` (a `hold` moved), `covenant` (a Record `to` a person), beside `issue` and `levy`.
+[CORRECTION: revision 1 said the law verbs "share eligibility"; `detain`, `seize` and `pardon` have three
+different eligibilities (K-26).] The one thin pair, named rather than hidden (K-27): `sabotage`/`work`
+(sign only); revision 2's second, `besiege`/`march`, is gone with `besiege` (K-28). No new verb depends
+on the `repudiate` cut.
 
 ### 8.6 Widened reaches — and why no new verb
 
@@ -1083,13 +1094,15 @@ only, same step and prize). No new verb depends on the `repudiate` cut.
 |---|---|---|
 | `determine` | `contests: "a proposition"` (social_contest through the interim `sigma_leverage`, repointing to the proceedings provider, `rosters.yaml:1149-1153`). Writes by band: Overwhelming, Success, Partial → `Tenure.since`, `Tenure.degree`, `DocketItem.matter` (the disposal opened and graded); Failure → `DocketItem.matter` (acquittal: the matter leaves the docket, nothing opens) [ASSUMPTION: which bands convict]. Emits by band: `matter.determined` / `matter.dismissed`. Disposes whatever kind the arrangement `disposes:` — `oblige`, and with the suite `custody` and `ban`. **One fold edit is needed:** the row keys two refusal kinds (`verb_table.yaml:235-242`) and the loader refuses a contested keyed row with more than one (`data/verbs.py:717-720`), because the seam's party-gap refusal emits the union (`loop/resolve.py:546-553`). The party gap IS the counterparty clause failing, so `_party_gap_refusal` emits `row.refusal_for(COUNTERPARTY_CLAUSE)` where the row keys it, and the loader rule narrows to rows that do not (K-02) | the matter, bench, docket and eligibility are `determine`'s; a `try` or `judge` beside it would be a second act disposing the same docket item — shape divergence. A judicial duel composes as a challenge (`petition` + `fight`, K-23) whose outcome the bench reads [ASSUMPTION]; the row's one prize does not change by arrangement |
 | `confer` | a seat-`hold` carrying `Tenure.term` (regency, a term-limited seat). The `conferral` basis admits a seat-hold's opening and its `payload`; it must also admit a `term` at opening — one gate clause | same edge and basis; regency is a term, and `Act.via` already carries delegation |
-| `give` | object kind Rung: cede a rung hold; the gate's `handover` already covers every non-seat hold (`verb_table.yaml:398`) | the same two-hold write; `cede` would duplicate it |
+| `give` | object kind Rung: cede a rung hold; the gate's `handover` already covers every non-seat hold, while the live cell narrows the verb to `kind: Record` (`verb_table.yaml:398`) — so this widening is load-bearing for cession, the one consensual route by which title moves | the same two-hold write; `cede` would duplicate it |
+| `march` | **The army arrives.** Today `_eff_march` writes `body` and `stance` on the losing side only (`loop/effects_combat.py:316-317, :345-370`) and moves nobody: after a `Won` the attackers are still `mustered` at their origin, so capture, interception and relocation are inexpressible, and a march on one's own occupied settlement fights one faction against itself (H-151). **One write is added:** on `Won` and `Unopposed`, every claimant is relocated to the destination by `_relocate`'s pair (`loop/effects_migration.py:68-89`, which gains a person parameter so the leg id keys on the mover) — close the live `contain`, open one to the destination, append it to `travel_leg` — emitting `army.arrived` beside the band's kind. `Lost` is unchanged (the attackers' casualties and grudge) [ASSUMPTION: a routed army does not arrive — R-7]. **The stake is derived at the destination `d`, never declared**, from three reads that exist: `mine` (the faction of the seat in `a.via`, `loop/sides.py:77-78`), `holder = holder_faction_of(w, d)`, `defenders = mustered(w, d, holder)`. `holder == mine` → relocation (or a defence, if an enemy march on `d` follows): no contest, `Unopposed`, the army arrives. `holder is None` → arrival at unheld land, no title write (who holds an unheld place is unruled, H-166). Another holder, `defenders` empty → capture attempt, unopposed: occupation. Another holder, `defenders` present → capture attempt, opposed: `Won` arrives, `Lost` does not. Interception needs no new state: an army that has arrived is in every later `mustered(d, holder)` read (`seam/wrappers/mass_battle.py:154`); within one round, two marches on one settlement are ordered by `_canonical_order`'s hash (`loop/resolve.py:47-54`), so same-round interception is order-dependent and cross-round interception deterministic. **Code edits, no new resolver or operand:** (i) `sides_of` returns `subject = None` when `holder == mine` (H-151's reverted fix, `hole_register.yaml:3258-3264`); (ii) the wrapper returns its existing `Unopposed` shape (`mass_battle.py:164-169`) instead of `PARTY-GAP` when `subject is None` and claimants and rung are given; (iii) H-149's non-settlement refusal moves from `subject = None` to empty `claimants`, so it still refuses at `loop/resolve.py:558-559` and `subject None` comes to mean only "no opposing holder" (§13.8); `ENC` on `(Tenure, since)`, `(Tenure, until)`, `(Person, travel_leg)` (`write_matrix.yaml:352-354, :366-368, :225-226`), on M4's own precedent for `body`/`stance` (`loop/encounter.py:25-28`); and a tenth gate basis, `muster` (K-33) | a stake is not a choice (direction 8). `besiege`, `intercept` or `relocate` beside `march` would each be a verb declaring its intended outcome — the `kill`/`wound` shape direction 3 retires — over one prize, one step and one muster |
 | `survey` | subject kind Rung, answered by the rung's holding faction (effect-side, `holder_faction_of`); declined at H-169 limit 6 today | the same sheet mint; `census` or `audit` would duplicate it |
 | `oblige` (a reader) | no row change: a seat-holder's own `oblige` to another seat — `oblige : Person → Person \| Office`, owned by the person who swore it (`architecture/meta/01_AXIOMS.md:1205-1218`: *the Grandmaster forswore the King*) — is read by `purview_reaches` as subordination (H-101). Expulsion of a member is the seat withholding renewal, so the term matures at MATTER: the shipped `oblige_term` is 4 (`data/fixtures.py:694`), and only H-159's `None` control arm never matures [CORRECTION: revision 1 said expulsion waits on that fixture (K-26)] | homage is the same `oblige` with a term renewed by `transfer`; `swear` or `homage` would be a second opener. A seat closing a member's `oblige` would be the obligee-side closer D-5 refused (`verb_table.yaml:757`) |
 
-Revision 1 also widened `commit` and `oblige` by a `remit:` alternative, `march` to the winner, `tell` to an
-authored `said`, `surveil` to a Person and `revoke` to an `oblige`. None is in the suite: K-07, R-2, K-15,
-K-16, and revision 1's own D-5 withdrawal (§11).
+Revision 1 also widened `commit` and `oblige` by a `remit:` alternative, `march` to a title or stores for
+the winner, `tell` to an authored `said`, `surveil` to a Person and `revoke` to an `oblige`. None is in the
+suite: K-07, R-2 (resolved as occupation, not title — the `march` row above), K-15, K-16, and revision
+1's own D-5 withdrawal (§11).
 
 ### 8.7 Deferred, and classed as outcomes
 
@@ -1109,13 +1122,22 @@ K-16, and revision 1's own D-5 withdrawal (§11).
   [P2-43]; eleven cases with graded, costed operations [C-51]. They belong to plan positions 27/29f
   (`verb_table.yaml:1103`); `thread_read` additionally waits on H-85.
 - **`debt` — deferred (K-14),** with the `seize` reader that would distrain on a lapse.
-- **The orphan Record kinds — deferred (K-11).** `edict`, `embargo`, `interdict`, `emergency`,
+- **`proclaim` — deferred (K-34),** with every kind it would mint; a declaration of war is `utter` and
+  `commit` (§8.2).
+- **`truce` — deferred (K-32).** Its only proposed reader was a `march` refusal or flag; refusal
+  contradicts direction 8 and a flag has no mechanism, because emits are keyed per band
+  (`hole_register.yaml:3309-3313`).
+- **A siege's effect on a larder — deferred,** with its reader, as a new hole (§9.4).
+- **The orphan Record kinds — deferred (K-11, K-34).** `edict`, `embargo`, `interdict`, `emergency`,
   `condemnation` (heresy declared; an organization outlawed), `claim` and a charter's exemption each ship
-  only with the code that reads them. `claim` also collides with the `Claim` carrier and the `claim.*`
+  only with the code that reads them; the first five return with `proclaim`. `claim` also collides with the `Claim` carrier and the `claim.*`
   event kinds, so it needs another word when it comes.
-- **Outcomes, not verbs.** A **sentence** (the disposal's kind); **conquest, raid, usurpation** (a won
-  `march`, which writes nothing for the winner, R-2); **murder** (a `fight` whose band is `Felled`, with
-  `conceal`); **execution** (§8.8); and, by direction 3, **`kill`** and **`wound`**.
+- **Outcomes and stakes, not verbs.** A **sentence** (the disposal's kind); **occupation** (a won or
+  unopposed `march`) and **conquest** (`seize` on the occupied place, R-2 resolved); **raid** and
+  **usurpation** (the same occupation, then `raze` or `seize`); a **siege** (a Query over an arrived army,
+  K-28); **capture, interception, relocation** (the stakes of a `march`, direction 8); **murder** (a
+  `fight` whose band is `Felled`, with `conceal`); **execution** (§8.8); and, by direction 3, **`kill`**
+  and **`wound`**.
 
 ### 8.8 Why `execute` is not a verb (R-1, K-10)
 
@@ -1160,7 +1182,6 @@ floor`, `rosters.yaml:1569`) a held Record of that kind answers, and from which 
 record_sourced_operands:        # per Record kind -- operand (one of the closed eight): content key
   dispensation: {to: to, subject: terms}
   petition:     {to: to, subject: terms}
-  truce:        {to: to, subject: terms}
   treaty:       {to: to, subject: terms}
   alliance:     {to: to, subject: terms}
 ```
@@ -1200,11 +1221,11 @@ and office-scale acts it lacks, resolve to seat-holders' acts or to members' own
 
 | faction action | person acts at a rung |
 |---|---|
-| Muster | `march`'s own `sides_of` muster; a retinue by `oblige` + `transfer` |
-| March | `march` |
-| Fortify | `build` (a garrison Site), `restore` |
-| Blockade | **`besiege`** |
-| Conquest | a won `march`, which writes nothing for the winner (R-2); title then moves by the loser's `release`, a seat's `revoke`, or death |
+| Muster | `march`'s own `sides_of` muster; a retinue by `oblige` + `transfer`. Cohorts carry no `commit`, so no cohort ever musters — the realm's armies are named persons (`harness/populated.py:393`) |
+| March | `march`; capture, interception and relocation are its stakes, read at the destination (direction 8) |
+| Fortify | `build` (a garrison Site), `restore` (`fortification_of`, `world_q.py:999-1020`) |
+| Blockade | a `march` that arrives at an enemy-held settlement (occupation, a Query); its larder effect is deferred (§9.4) |
+| Conquest | `march` (occupation), then **`seize`** of the Rung hold under the `seizure` basis; or the holder's `release` or `give`; or death — never `revoke`, which closes seat-holds only (K-30) |
 | Govern | `issue`, `levy`, `determine`, `open_case` through seats |
 | Trade | `exchange` (THIN), `transfer` |
 | Subsidy | `transfer` |
@@ -1214,26 +1235,28 @@ and office-scale acts it lacks, resolve to seat-holders' acts or to members' own
 | Investigate | the six findings + `open_case` |
 | Counter-Intelligence | `surveil`, `examine`, **`seize`**, **`detain`**, `tell` (to expose) |
 | Censure | `determine` under an arrangement disposing a Record (`parliamentary_debate` already does, `arrangements.yaml:114`) |
-| Embargo | **`proclaim`**, kind `embargo` — deferred until a reader refuses trade across the two rungs |
+| Embargo | none-yet: deferred with its reader — it waits for code that refuses trade across two rungs, and for `proclaim` (K-34) |
 | Outlawry | a person: `determine` with `disposes: ban` on the realm's seat; an organization: a `condemnation` of its Proposition — deferred |
 | Excommunication | `determine` under a Church arrangement with `disposes: ban`; lifted by **`pardon`** |
 | Active Inquisition | a `petition` whose `terms` is the accused → `open_case` → `issue` (a warrant) → **`detain`** → **`interrogate`** → `determine` (contested) → a sentence (`oblige`, `custody` or `ban`; death is `custody` + the enforcement seat-holder's `fight`, §8.8) → **`pardon`** |
 | Church Seizure | **`seize`** + `levy` |
 | Recognition Challenge | `petition` + `commit` (recognition withheld or given) |
 | Succession Endorsement | each endorser's own `commit` to the claimant's Proposition |
-| War Authorisation | each member's own `commit` to the motion, counted by a Query (K-07), then **`proclaim`** kind `war` |
+| War Authorisation | each member's own `commit` to the motion, counted by a Query (K-07), then `utter` of a `WAR`-mood Proposition and each seat's own `commit` to it, read by `faction_q.at_war` (`faction_q.py:233-236` names the fold; K-29) |
 | Piety Spread | **`argue`** + `oblige` to Church seats |
 | Community Organising | `found`, `oblige`, **`covenant`** (kind `alliance`, a league) |
-| Martial Governance | **`detain`** and `levy` through seats; the `emergency` kind of **`proclaim`** is deferred until it has a reader |
+| Martial Governance | **`detain`** and `levy` through seats; a declared emergency is none-yet: deferred with its reader and `proclaim` (K-34) |
 
-**Acts the roster lacks, mapped the same way.** Declarations (`proclaim`); truces, treaties, alliances
-(`covenant` + `commit`); councils (`convene` + `utter` + members' `commit`s + `determine`); tribunals
+**Acts the roster lacks, mapped the same way.** Declarations of war (`utter` of a `WAR`-mood Proposition,
+then the seats' own `commit`s); edicts, interdicts and other proclamations (none-yet: deferred with their
+readers, K-34); treaties and alliances (`covenant` + `commit`; truces deferred, K-32); councils (`convene` + `utter` + members' `commit`s + `determine`); tribunals
 (`open_case` + `interrogate` + `determine` + `pardon`); elections and conclaves (members' `commit`s +
 `confer`, basis `elected`); impeachment (a `petition` + `open_case` + `determine` on a seat-holder +
 `revoke`); deposition of a seat with no rung above (none: R-4 — it ends by `release` or death); coronation
-(`convene` + `confer`); sieges (`besiege`); purges (`revoke`, `seize`, `detain`, and a death sentence as
-`custody` + `fight`); regency (`confer` + term); vassalage (a seat-holder's own `oblige`, read by
-`purview_reaches`); raids (a won `march`); a challenge to single combat (a `petition` whose `terms` is the
+(`convene` + `confer`); sieges (a `march` that arrives at an enemy-held settlement; the siege a Query);
+purges (`revoke`, `seize`, `detain`, and a death sentence as `custody` + `fight`); regency (`confer` +
+term); vassalage (a seat-holder's own `oblige`, read by `purview_reaches`); raids (a won or unopposed
+`march`, then `raze` or `seize` at the occupied place); a challenge to single combat (a `petition` whose `terms` is the
 challenger, then the acceptor's `fight`, K-23 [CONFIDENCE: medium — nothing in a petition's content marks
 it as a challenge rather than an accusation; the addressee's choice of act does]).
 
@@ -1284,17 +1307,19 @@ steps 1 and 2 here.
 | 3 | Tenure kinds `custody`, `ban`; their exclusion at `data/rosters.py:453`; the `determination` basis widened (opening any kind the exercised seat's arrangement `disposes:`; closing `custody` and `ban` only); the new `warrant` basis (opening `custody` whose object is the issuing seat, licensed by a held dispensation naming the owner); the four unseeded arrangement rows with `disposes: custody` or `ban` | the loader stays green; in `test_u7_remit.py`'s style, a determination under `disposes: ban` opens a `ban` and `release` is refused on it | K-03, K-12, K-17 |
 | 4 | `determine` contested, with the party-gap fold edit | the corpus `DEGREES RESOLVED` line gains `a proposition` bands for `determine`; `Tenure.degree` is written and its `unproduced: H-162` declaration deleted | K-02; H-162 |
 | 5 | `detain`, `pardon`, `interrogate` | `aperture 1 0` `detain` ex > 0; `move` refused in custody; `disposal.lifted` in `w.log`; `confession.made` in `w.log` | K-05, K-18, K-26 |
-| 6 | `seize`, with the `seizure` basis | `record.seized` in `w.log`; a seat cannot be seized | K-04 |
-| 7 | `proclaim` (kind `war`) + `sides_of` as its reader; `covenant` (kinds `treaty`, `truce`, `alliance`) + `sides_of`, `mustered`, `_renewals` | `aperture` `march` counts split by war present or absent; a truced `march` flagged | K-11, K-13, K-14 |
-| 8 | `besiege` + the MATTER subsistence reader at a besieged rung | subsistence falls with no act | K-22 |
+| 6 | `seize`, with the `seizure` basis — object kind Record (a warrant); the Rung half lands at step 8, where its licence, occupation, lands | `record.seized` in `w.log`; a seat cannot be seized | K-04 |
+| 7 | `covenant` (kinds `treaty`, `alliance`) + `_renewals` and the `mustered` widening (allies present at a destination join the holder's side). No `war` kind (war is a Proposition, K-29); no `truce` (K-32); no `proclaim` (K-34) | allied persons appear in a march's `subject_members` (a named test in `test_mass_battle_provider.py`); tribute renewed by `_renewals` | K-11, K-14, K-29, K-32 |
+| 8 | **The arrival** (§8.6's `march` row): `ENC` on `(Tenure, since)`, `(Tenure, until)`, `(Person, travel_leg)`; `sides_of` same-faction → `subject None`; the wrapper's `subject None` → `Unopposed`; H-149's refusal moved to empty `claimants`; the `muster` basis; `_relocate` taking a person; `army.arrived`; `seize` widened to Rung holds under occupation (untyped, `pardon`'s route) | in `test_march.py`: (i) `Won` (a constructed `Resolution`, since `Won` is unreachable at fixture scale, `:224-235`) and `Unopposed` at `set_s_036`/`set_s_003` leave `mustered(w, d, "fac_crown")` equal to the claimants, and `Lost` leaves them at `set_s_014` (fixture facts at `:78, :134-140, :238-239`); (ii) H-151's own falsifier (`hole_register.yaml:3293-3298`) with the expected outcome `field.unopposed`; (iii) interception: Crown relocates to a Crown-held settlement in one `_fold_one`, and a Church march on it in a second resolves `Won`/`Lost`, not `Unopposed`; (iv) `test_a_march_on_a_non_settlement_rung_refuses_h149_is_enforced` stays green; (v) the unheld-settlement test (`:196-221`) re-pinned to `field.unopposed` + `army.arrived`, and `test_declared_and_unopposed_are_no_change_directly` (`:267-274`) re-written with claimants in the `Resolution`, or it keeps passing and observes nothing (§13.8); (vi) `seize` on an occupied settlement flips `holder_faction_of` | K-27's second pair, K-28, K-30, K-33; H-151 closes; K-05 and K-08 amended |
 | 9 | `sabotage` (with `work`'s declared delta restricted to ≥ 0), `tend`, `argue`, `train` (with `Person.capability` un-retired and `Person.pursuits`' declaration deleted) | condition falls with a `sabotage` among its causes; `Person.body` rises; `Person.pursuits` moves; `sigma._pool_of` varies by person | K-09, K-20, K-21 |
 | 10 | `conceal` + the `anchor_of` cover read | an Event anchors on a `cover` id | K-19 |
-| 11 | `raze`, after H-166's own order | `w.rungs` shrinks | K-06 |
+| 11 | `raze`, licensed by occupation (the exercised seat's faction `mustered` at the settlement), after H-166's own order | `w.rungs` shrinks; a `raze` where the seat has no army is refused | K-06 |
 | later | R-5, if it stands: `conferral_bases` + `inheritance`, read by CENSUS at `person.died` | a `person.died` followed by the designated heir's `hold` | R-5 |
+| deferred | **Siege subsistence** — recommended as a new hole in `engine/season/hole_register.yaml` (not written here): what an occupying army does to a besieged settlement's larder, and its MATTER-side reader over the occupation Query (the natural site is `nearest_store`'s walk, `world_q.py:498`). No ruling states a magnitude — H-148's shape — and the arrived army are weight-1 persons who do not eat (`world_q.py:559-572`), so nothing existing carries it | — | — |
 
 No cycle: every reader lands with or before its carrier, and `covenant` ← `commit` ← the `utter` hold is a
-chain, not a loop. [CORRECTION: the audit pass listed K-13 as retired at step 1; its resolution makes
-`war` independent of the enabler, so it retires at step 7, where `war` lands.]
+chain, not a loop; `seize`'s Rung half lands with the arrival that licenses it. [CORRECTION: the audit
+pass listed K-13 as retired at step 1; revision 2 moved it to step 7, where `war` would have landed.
+Revision 3 supersedes it: no `war` Record lands at all (K-29).]
 
 ---
 
@@ -1308,11 +1333,10 @@ above. "After K-nn" means the resolution of that conflict is what makes it pass.
 | `determine` (contested) | invariant 12, degree maps; invariant 9, prize `a proposition` ∈ `contest_subsystems` (`rosters.yaml:1149`); invariant 4, a contested keyed row with one refusal kind | 12 ✓, 9 ✓; 4 ✗ until K-02's fold edit (`data/verbs.py:717-720`) |
 | `detain` | eligibility `remit` (`rosters.yaml:438`) ✓; prize `a standing` ✓; counterparty `subject` bound by the cell ✓; beneficiary `none` ✓; writes and emits degree-keyed; `Tenure.since` a matrix row ✓; two refusal kinds | passes after K-05 and K-02 (step 4 precedes step 5) |
 | `interrogate` | prize ✓; writes and emits degree maps; beneficiary `actor` ✓; counterparty `subject` ✓; one refusal kind; no new stem | passes after K-05, K-18 |
-| `seize` | counterparty empty (K-04); `Tenure.until/since` matrix rows ✓; the new `seizure` basis | passes after K-04 + the basis |
+| `seize` | counterparty empty (K-04); `Tenure.until/since` matrix rows ✓; the new `seizure` basis; from step 8 a Record-or-Rung object, untyped on `pardon`'s route (`rosters.yaml:1699-1703`) | passes after K-04 + the basis; the Rung half after step 8 |
 | `pardon` | `Tenure.until` ✓; beneficiary `subject` ✓; untyped with a declared domain, as `release`; the widened `determination` basis | passes after K-03 |
-| `proclaim` | `Record.exists` ✓; kind `war` rostered; refusals keyed `eligibility` → `.unauthorized`, `target` and `write` → `.refused` | ✓ |
-| `covenant` | beneficiary `to` carriable, since the cell binds `to` (`data/verbs.py:563-575`) ✓; `Record.stages` ✓ | ✓, built after step 2 (K-14) |
-| `besiege` | prize `a field` with `step: ENCOUNTER` (`rosters.yaml:1111-1115`); degree maps over `field_degree_bands`; one refusal kind | passes after K-05 |
+| `covenant` | beneficiary `to` carriable, since the cell binds `to` (`data/verbs.py:563-575`) ✓; `Record.stages` ✓; kinds `treaty`, `alliance` rostered | ✓, built after step 2 (K-14) |
+| `march` (widened) | degree maps over `field_degree_bands` ✓; one refusal kind ✓; Won/Unopposed write `Tenure.until`, `Tenure.since`, `Person.travel_leg`, whose matrix rows admit no `ENC` today (`write_matrix.yaml:225-226, :352-354, :366-368`); the gate admits no seat-authored re-home of another person's `contain` (`state/gate.py:707-757`) | ⚠ after K-33: three `ENC` cells and the `muster` basis |
 | `raze` | beneficiary `none` (`data/verbs.py:528-534`); `Site.exists`/`Rung.exists` admit RES (`write_matrix.yaml:302-336`) ✓ | passes after K-06 |
 | `conceal` | `own`, no precondition → an empty `emits_on_refusal` is lawful; kind `cover` rostered | ✓ |
 | `sabotage` | counterparty empty (K-04); `Site.condition` ✓ | ✓ |
@@ -1330,13 +1354,15 @@ above. "After K-nn" means the resolution of that conflict is what makes it pass.
 |---|---|---|
 | `rosters.yaml` `tenure_kinds` (`:101-115`) | + `custody`, + `ban` | `open: true` |
 | `data/rosters.py:453` `RELEASABLE_KINDS` | exclusion becomes {`contain`, `reside`, `custody`, `ban`}; `release`'s `domain:` unchanged | code |
-| `rosters.yaml` `record_kinds` (`:164-215`) | + `war`, `truce`, `treaty`, `alliance`, `siege`, `cover` | `open: true` |
+| `rosters.yaml` `record_kinds` (`:164-215`) | + `treaty`, `alliance`, `cover` | `open: true` |
 | `rosters.yaml` `writ_sourced_operands` (`:1571-1584`) | → the per-kind `record_sourced_operands` map (§9.1); the subset check in `data/requires.py` kept and tightened to each kind's keys | — |
 | `arrangements.yaml` | the four unseeded procedure rows (`:16-21` names them) with `disposes: custody` or `ban` | — |
-| `write_matrix.yaml` | delete `Person.pursuits`' `unproduced:` (with `argue`); un-retire `Person.capability` (with `train`); delete `Tenure.degree`'s `unproduced:` (with step 4) | — |
-| `state/gate.py` | `determination` widened (§9.4 step 3); + `warrant`; + `seizure` — nine bases become eleven; `conferral` admits `term` at opening | code |
+| `write_matrix.yaml` | delete `Person.pursuits`' `unproduced:` (with `argue`); un-retire `Person.capability` (with `train`); delete `Tenure.degree`'s `unproduced:` (with step 4); `ENC` on `(Tenure, since)`, `(Tenure, until)`, `(Person, travel_leg)` (with step 8) | — |
+| `state/gate.py` | `determination` widened (§9.4 step 3); + `warrant`; + `seizure`, licensed by a warrant (Record) or occupation (Rung); + `muster` (K-33) — nine bases become twelve; `conferral` admits `term` at opening | code |
 | `loop/resolve.py::_party_gap_refusal` and `data/verbs.py:717-720` | the fold edit (K-02) | code |
-| `verb_table.yaml` | + 13 rows; − `repudiate` (R-3); `determine`, `confer`, `give`, `survey` rows edited | — |
+| `loop/sides.py::sides_of`, `seam/wrappers/mass_battle.py::resolve` | same-faction → `subject None`; H-149's refusal → empty `claimants`; `subject None` with claimants and rung → `Unopposed` (step 8) | code |
+| `loop/effects_combat.py::_eff_march`, `loop/effects_migration.py::_relocate` | Won/Unopposed relocate every claimant through `_relocate`, which takes the person it moves (step 8) | code |
+| `verb_table.yaml` | + 11 rows; − `repudiate` (R-3); `determine`, `confer`, `give`, `march`, `survey` rows edited | — |
 | `loop/effects_economy.py::_eff_work` | refuse a negative declared delta | code |
 | `rosters.yaml` `remit_acts` (`:294-302`) | none | `open: true` |
 | `rosters.yaml` `contest_subsystems` | none | — |
@@ -1345,6 +1371,7 @@ above. "After K-nn" means the resolution of that conflict is what makes it pass.
 | `beneficiary_kinds`, `requires_operands`, `requires_forms`, `REQUIRES_STEMS` | none | closed |
 | `verb_capability` (`rosters.yaml:1045-1064`) | none required | open |
 | `alignment` | none: new rows take `default_cell` | — |
+| `hole_register.yaml` | recommended, not written here: one new row for the siege subsistence reader (§9.4); H-151 closes with step 8 | — |
 
 ---
 
@@ -1356,7 +1383,9 @@ precedent · 5 answered by what the architecture needs), what changed in this re
 *Severity:* **blocks** — the proposal as written could not load or run; **weakens** — it would run and be
 wrong or incoherent; **cosmetic** — a defect of wording or citation. Where the audit named no filter step,
 the author assigned one. "Rev 1 §n" is revision 1's own numbering. Corrections the author made to the
-audit's resolutions are §13.5.
+audit's resolutions are §13.5. Revision 3 registers seven more (K-28…K-34, after the closing paragraph
+of the audit's set): six from the march analysis and one decision of the orchestrator's; it retires
+K-22, K-13 and K-27's second pair and amends K-05, K-08 and K-11, each marked in place.
 
 **K-01 · ruling · blocks.** *Sides:* revision 1 (rev 1 §3.5, §9.1 item 8) escalated cutting `comply` and
 splitting `evade / defy`, on the ground that the triple is Jordan's (`verb_table.yaml:737`) — against
@@ -1399,7 +1428,8 @@ prize with a flat `writes: []`; `detain` a prize with a flat `Tenure.since` and 
 a prize with a flat `Record.exists`. A contested row with a flat `writes:` or `emits:` fails the load
 (`data/verbs.py:589-620`). *Resolution:* degree maps in `tell`'s shape (`verb_table.yaml:890-899`) —
 `interrogate` `[]` at every band; `detain` writes on Overwhelming and Success only; `besiege` on Won and
-Unopposed only. *Filter:* step 4. *Changed:* §8.1, §8.2. *Residual:* none.
+Unopposed only. *Filter:* step 4. *Changed:* §8.1, §8.2. *Residual:* none. *Revision 3:* the `besiege`
+clause is struck — `besiege` is folded into `march` (K-28), whose own degree maps already load.
 
 **K-06 · code · cosmetic.** *Sides:* `raze` declared no `beneficiary:`; the loader requires the column on
 every row (`data/verbs.py:528-534`). *Resolution:* `none`, the declaration for an act whose good accrues
@@ -1414,12 +1444,15 @@ and the count a Query over bench members' live commits (C-7, no stored tally); v
 holder's own `oblige` to seat B (`architecture/meta/01_AXIOMS.md:1205-1218`), read by `purview_reaches`.
 *Filter:* steps 3 and 4. *Changed:* §3.4, §5 (family 14), §6.2, §8.6, §9.2. *Residual:* none.
 
-**K-08 · ruling and source · weakens; residual R-2.** *Sides:* revision 1 said the ruling is silent on a
+**K-08 · ruling and source · weakens; R-2 resolved in revision 3 (§12.2).** *Sides:* revision 1 said the ruling is silent on a
 won `march`'s winner (`loop/effects_combat.py:277-279`); the table's note says Jordan ruled "nothing on the
 WINNING side" (`verb_table.yaml:607`); ED-IN-0279's third row (`registers/editorial_ledger_in.jsonl:34`)
 reads *"nothing specified for the winner"*. *Resolution:* revision 1 upheld — the ruling is silent, and
 the table note overstates it (Appendix D). The decision survives the filter: R-2, recommended no winner
-writes. *Filter:* survives step 5. *Changed:* §3.4, §8.7, §9.2, §12. *Residual:* R-2.
+writes. *Filter:* survives step 5. *Changed:* §3.4, §8.7, §9.2, §12. *Residual:* R-2. *Revision 3:* the
+finding stands — silence, not a ruling, for the winner — and R-2 is resolved at steps 1, 3 and 5: a won
+or unopposed `march` writes occupation (the army arrives) and no hold; title moves by `seize`, `give`,
+`release` or death (§12.2). What remains is R-6 (α or β) and R-7 (a routed army).
 
 **K-09 · overlap · weakens.** *Sides:* revision 1 justified `sabotage` by "no act lowers a built Site's
 condition"; `_eff_work` stages a declared delta with no sign check (`loop/effects_economy.py:86-98`), so a
@@ -1446,6 +1479,8 @@ it; `interdict`, `emergency`, `embargo` are orphans by revision 1's own rule; `t
 kinds (§7.2); a warrant, summons or charter is a `dispensation` and an accusation, demand or challenge a
 `petition`, distinguished by what `terms` names. *Filter:* step 4 — revision 1's own `petition`-kinds
 precedent. *Changed:* §3.3, §7, §8.2, §8.7. *Residual:* the deferred kinds wait for readers.
+*Revision 3:* three kinds, not six — `war` is a Proposition (K-29), `truce` is deferred (K-32), `siege`
+is a Query (K-28) — and `proclaim`, left with no kind that has a reader, is deferred (K-34).
 
 **K-12 · state and naming · weakens.** *Sides:* revision 1 said every kind needs an opener (loader
 invariant 6, `rosters.yaml:116`); openers are only REPORTED (`data/verbs.py:766`, `:831-840`) and only the
@@ -1459,7 +1494,8 @@ a rung}` needs two operands, and non-operand keys a computed act fills with noth
 (`loop/effects_information.py:84-85`). *Resolution:* `war [terms, at]`, `terms` = `subject` = the rung
 proclaimed against (`rosters.yaml:225-226`); the casus belli is a separate `commit`. One referent; no
 dependence on the enabler. *Filter:* step 5, on `issue`'s shape. *Changed:* §7.2, §8.2, §9.4 step 7.
-*Residual:* none.
+*Residual:* none. **[SUPERSEDED in revision 3 by K-29]** — there is no `war` Record to key; war is the
+`WAR`-mood Proposition `at_war` already reads.
 
 **K-14 · proposal · weakens.** *Sides:* `covenant` required an existing Proposition, and no question's
 referent is one (`verb_table.yaml:773`; 802 of 802 refused, `hole_register.yaml:3521`), so it would join
@@ -1516,7 +1552,9 @@ the declaration and un-retire the row in the same commit as each producer. *Filt
 matrix's own discipline, "a row exists because a producer produces it". *Changed:* §8.4, §9.4 step 9,
 §10. *Residual:* none.
 
-**K-22 · order · weakens.** *Sides:* revision 1's build step 8 landed `besiege` with no reader, against
+**K-22 · order · weakens. [RETIRED in revision 3 — moot: `besiege` is folded into `march` (K-28), and
+the subsistence reader, never buildable as written (§13.8), is deferred as a new hole (§9.4).]**
+*Sides:* revision 1's build step 8 landed `besiege` with no reader, against
 its own rule that each step lands its reader with its carrier; `siege`'s readers appeared only as
 blockers. *Resolution:* step 8 is `besiege` with the MATTER subsistence reader; `raze` waits on H-166's
 own order (`hole_register.yaml:3651-3652`). *Filter:* step 4. *Changed:* §9.4. *Residual:* none.
@@ -1551,7 +1589,8 @@ facts. *Changed:* §5, §7, §8.5, §8.6. *Residual:* none.
 
 **K-27 · overlap · [NULL].** Pairwise over the resolved suite, every pair differs on counterparty, prize,
 write row or object kind. The two thin pairs are `sabotage`/`work` (sign) and `besiege`/`march` (write row
-only, same step and prize). Named rather than hidden. *Changed:* §3.3, §8.5.
+only, same step and prize). Named rather than hidden. *Changed:* §3.3, §8.5. *Revision 3:* the second
+pair is retired with `besiege` (K-28); `sabotage`/`work` is the one thin pair.
 
 **Revision-1 proposals withdrawn that the audit did not register as conflicts.** The audit's roster
 retains `speak` and `work`, and revision 1 had proposed cutting both (rev 1 §3.5 and §9.1 items 5 and 7). The
@@ -1562,14 +1601,99 @@ what ED-IN-0210's reversal warns against. Revision 1's [DISAGREE] on `interrogat
 resolved on the confession side (§8.1, `rosters.yaml:1031`). Revision 1's own earlier withdrawals stand:
 the `revoke` widening to expel a member (D-5) and the second outlawry carrier.
 
+**Registered in revision 3.** K-28…K-33 are the march analysis's, checked against the code by the author
+(§13.8 lists where they were corrected); K-34 is the orchestrator's.
+
+**K-28 · direction vs proposal · blocks `besiege`.** *Sides:* revision 2's `besiege` — same prize, step,
+eligibility, cell and sides as `march`, differing only in writing a `siege` Record on `Won` — against
+direction 8 (the stake is derived at the destination) and direction 3's principle (a verb that declares
+its intended outcome is an outcome, not a choice). And `march` today moves nobody: `_eff_march` writes
+`body` and `stance` only (`loop/effects_combat.py:345-370`), so capture, interception and relocation are
+inexpressible or conflated. *Resolution:* `besiege` folds into `march`; a won or unopposed march
+relocates the army (`_relocate`'s pair), and the stake is read from `holder_faction_of` against the seat's
+faction and `mustered` at the destination (§8.6). A siege is a Query over an arrived opposing army, not a
+Record: a `siege` Record minted at ENCOUNTER would need `(Record, exists)`, which admits `RES` only
+(`write_matrix.yaml:252-254`), widened to carry a fact the `contain` edges already state — two homes for
+one relation (§0.05 clause 3; `04_CODE_ARCHITECTURE.md:910`, D-10). *Filter:* step 1 (a later direction)
+and step 5. *Changed:* §2, §3.2, §3.3, §5 (families 24, 25), §6, §7.1, §7.2, §8.2, §8.5, §8.6, §8.7,
+§9.2, §9.4 steps 8 and 11, §10, Appendices A and B. *Residual:* the siege's larder effect, deferred as a
+new hole (§9.4).
+
+**K-29 · code vs proposal · weakens `proclaim` and `covenant`.** *Sides:* revision 2's Record kind `war`
+(§7.1, §7.2; K-13) against the war the tree already carries — a `WAR`-mood Proposition plus live
+`commit`s, read by `faction_q.at_war` (`queries/faction_q.py:208-250`; `01_AXIOMS.md:1374-1384`;
+*"NEVER a stored flag"*). *Resolution:* no `war` Record; war is uttered and committed; peace is each
+committed person's `release`. No march gate: refusing a march on `at_war` would refuse every capture
+attempt, since `at_war` is measurably `False` for every pair in every built world (`faction_q.py:232-242`),
+and a march may not mint a war, since `Proposition.exists` has one writer, `utter`
+(`write_matrix.yaml:245-250`). *Filter:* step 3 (the axioms) and step 4 (built precedent). *Changed:* §2,
+§3.4, §5 (family 21), §6.1, §7.1, §7.2, §8.2, §9.2, §9.4 step 7. *Residual:* observation for the FA lane —
+`treaty` and `alliance` could take the same shape (§7.2).
+
+**K-30 · code vs proposal · cosmetic but load-bearing.** *Sides:* revision 2's "title moves by … a seat's
+`revoke`" (§3.4, §9.2, §12.2, Appendix A) against the code: `_req_revoke` requires `obj in w.offices`
+(`loop/predicates.py:432-444`) and `T-o` admits a closure of a `hold` on a seat only (`state/gate.py:589-590,
+:751-754`). A rung `hold` ends by its owner's `release` (`hold` is releasable, `data/rosters.py:453`), by
+death's cascade, by `give` (once widened to a Rung, §8.6), or by the suite's `seize`. *Resolution:* each
+site corrected. *Filter:* a fact. *Residual:* none.
+
+**K-31 · measurement vs proposal · weakens §4.** *Sides:* revision 2's "hooked in the realm (16/16)"
+against H-149's own measurement: the realm declares 11 marches in one `populated.run(4, 0)` and ENCOUNTER
+refuses all 11 at H-149's check — 9 target a `hearth`, 2 a `person`-kind rung
+(`hole_register.yaml:3148-3156`; `requirements.yaml:1020-1023`); the 16/16 pair's own note calls its
+`both` column "a two-Event convention" (`requirements.yaml:674-676`). *Resolution:* declared 16, fought 0;
+a realm count is a fake control for any stake split until H-149's and H-175's referents move (CLAUDE.md
+§7). *Filter:* a fact (§0.1 pt 3, row 2). *Changed:* §4, §13.1, Appendix A. *Residual:* none.
+
+**K-32 · the suite's own rule vs the truce row.** *Sides:* "a kind ships only with its reader" (§7)
+against `truce`, whose only proposed reader was a `march` refused or flagged between truced seats.
+Refusal contradicts direction 8 — breaking a truce is a choice with consequences — and a flag has no
+mechanism, because emits are keyed per band (`hole_register.yaml:3309-3313`). *Resolution:* `truce`
+deferred with its reader. *Filter:* step 5. *Changed:* §5 (family 22), §6, §7, §8.2, §8.7, §9.1, §9.4
+step 7. *Residual:* `truce` returns with a reader.
+
+**K-33 · gate vs the relocation write.** *Sides:* direction 8 ("sent to a location") against the gate's
+nine bases, none of which admits a seat's act re-homing another person's `contain`
+(`state/gate.py:707-757`: `T-m` needs the actor to own the edge; `handover` is `hold` only; `cascade` and
+`founding` are causation-bound; `T-o`, `conferral`, `renewal` and `determination` read seats or
+`oblige`). *Resolution:* a tenth basis, **`muster`** [CONFIDENCE: medium on the name — `dispatch` is both
+the remit act and a verb, so the ordinary word that already names the query, `mustered`, is the safer
+choice under CLAUDE.md §4]: a `contain` re-home — one closure and one opening on the same Person subject
+in one write, judged across the batch as `handover` is (`gate.py:660-669`) — by a seat in `Act.via` the
+actor sits in, whose grant carries `dispatch`, for a subject whose `faction_holding` is the seat's
+faction. Nothing else: no `hold`, no other kind. Authority-bound like `T-o`. Whether a mustered person may
+refuse is pre-existing in `sides_of` and not opened here. *Filter:* step 4 (a basis per plan position:
+five were added after the first enumeration, `04_CODE_ARCHITECTURE.md:564-586`) and step 5. *Changed:*
+§4, §8.6, §9.4 step 8, §10. *Residual:* none.
+
+**K-34 · the suite's own rule vs `proclaim` · blocks `proclaim`. [THE ORCHESTRATOR'S DECISION — a human
+may overrule it.]** *Sides:* with `war` a Proposition (K-29) and `truce` deferred (K-32), `proclaim` is
+left with no Record kind that any code reads — edict, embargo, interdict, emergency and condemnation were
+already deferred as orphans (K-11) — against the suite's rule that a kind ships only with its reader (§7)
+and that each build step lands its reader (§9.4). *Resolution:* `proclaim` deferred from the suite with
+its readers, as `thread_read` and `debt` are; a declaration of war is `utter` of a `WAR`-mood Proposition,
+then the seats' own `commit`s. **Every site that leaned on it, checked:** the faction map's Embargo,
+Martial Governance and War Authorisation rows and its declarations line (§9.2) — re-pointed or marked
+none-yet; Censure (`determine`) and Recognition Challenge (`petition` + `commit`) never named it; G14 and
+the roster (§3.2, §6.1); the NOT entries of `issue`, `speak` and `utter` (§3.4); `covenant`'s composition
+(§8.2); the states table (§7.1); build step 7 (§9.4); the invariant and roster-edit tables (§10);
+Appendices A and B. One possible dependency was examined and does not hold: `_ch_chronicle` would
+broadcast a `proclamation.made` as a `binding_decision` emission (`epistemic.py:553-554`), but that reads
+the Event, not a Record's state, and revision 2 already deferred edict, embargo, interdict and emergency
+though that broadcast would have carried them (K-11). No dependency found makes the deferral wrong.
+*Filter:* step 5 (CLAUDE.md §0). *Changed:* the sites listed. *Residual:* `proclaim` returns with its
+first kind that has a reader.
+
 ---
 
 ## 12. Residual decisions
 
-Five decisions survived all five filter steps: in each, two defensible options lead to materially
-different games, or the answer amends a closed roster or a ratified row. **The suite carries the
-recommended option in each. Every recommendation is Jordan's to overrule**, and each entry says what the
-other option would change. No ledger row was written for any of them.
+Four decisions survive all five filter steps (R-1, R-3, R-4, R-5): in each, two defensible options lead
+to materially different games, or the answer amends a closed roster or a ratified row. **The suite
+carries the recommended option in each. Every recommendation is Jordan's to overrule**, and each entry
+says what the other option would change. A fifth, R-2, is resolved in revision 3 inside the filter and is
+kept here with what its alternative would change; it leaves two one-line residuals (§12.6). No ledger row
+was written for any of them.
 
 ### 12.1 R-1 — `execute`: judicial death by direct write, or only through the combat seam?
 
@@ -1579,23 +1703,34 @@ other option would change. No ledger row was written for any of them.
   enforcement seat-holder's `fight` against the prisoner through the seam; `person.died` arrives by degree.
 - **Why (b):** it keeps direction 3 whole — no character chooses an outcome — avoids the name collision
   with the repo's "executed" vocabulary (§4), and makes a botched execution a story.
-- **What (a) would change:** benches gain certain death, and the suite a fourteenth new verb (57 in all),
+- **What (a) would change:** benches gain certain death, and the suite a twelfth new verb (55 in all),
   spelled something other than `execute`, with a disposal kind carrying "death" that no carrier has today
   [GAP]; §5 family 28 moves from OUTCOME to GAP; §8.8 and §9.2's Active Inquisition row change.
 
-### 12.2 R-2 — does a won `march` write the winner's side?
+### 12.2 R-2 — does a won `march` write the winner's side? (resolved in revision 3)
 
-- **(a)** A won field writes the winner a hold on the rung, or stores. That needs a fifth lawful non-owner
-  Tenure write, amending ratified `04_CODE_ARCHITECTURE.md` §C.2 (ED-IN-0279's first row,
-  `registers/editorial_ledger_in.jsonl:32`, option (i)).
-- **(b) — recommended, carried in the suite.** No winner writes. The ruling covers the loser — *"casualties
-  only, decrease in morale, and a grudge token"* — and specifies nothing for the winner (ED-IN-0279's third
-  row, `:34`); title moves afterward by the loser's `release`, a seat's `revoke`, or death — option (ii) of
-  the first row (`:32`).
-- **Why (b):** it amends nothing ratified, and every change of title stays an authored act (AX-6,
-  `architecture/meta/01_AXIOMS.md:199`: *"nothing becomes permanent without an author"*).
-- **What (a) would change:** war becomes decisive in one season; conquest leaves OUTCOME for a widened
-  `march` (§5 family 25); the faction map's Conquest row and §8.7 change.
+**Resolved, at filter steps 1, 3 and 5.** A won or unopposed `march` writes the arriving army's presence
+— `_relocate`'s pair for every claimant, under the `muster` basis (K-33) — and nothing on any hold.
+ED-IN-0279's third row (`registers/editorial_ledger_in.jsonl:34`) fixes the loser's writes, *"casualties
+only, decrease in morale, and a grudge token"*, and its "nothing else" stands; direction 8 names stakes,
+not writes, and its own words — "sent to a location" — require the arrival (step 1, not contradicted;
+step 5). `04_CODE_ARCHITECTURE.md` §C.5.1 types holdings as what a defeat can cost (`04:794`), and
+`01_AXIOMS.md` §E.1.6 separates title from ground (step 3). Title moves by `seize` of the Rung hold under
+the `seizure` basis licensed by occupation, by `give`, by `release`, or by death — not by `revoke`, which
+closes seat-holds only (`loop/predicates.py:432-444`; `state/gate.py:751-754`; K-30). Every change of
+title stays an authored act (AX-6, `01_AXIOMS.md:199`: *"nothing becomes permanent without an author"*),
+and `seize` under occupation is the first route by which a hold whose banner nobody carries becomes
+contestable (T-h (b)'s standing debt, `01_AXIOMS.md:474-480`).
+
+- **(α) — Jordan may rule it instead.** A won field transfers title directly. What α changes: war becomes
+  decisive in one season; ED-IN-0279 row 3's "nothing else" on the loser is amended; `_eff_march` carries
+  the `seizure` licence itself — without it, `T-m` would admit a first capture as the actor opening a
+  non-seat `hold` for himself (`gate.py:707-710`) and refuse every recapture on the non-owner's close; the
+  faction map's Conquest row and §8.7's family 25 become "a won march".
+- **(β) — carried in the suite.** Occupation, then `seize`. It changes nothing ruled.
+- **What revision 2 said, corrected.** Its option (a) "needs a fifth lawful non-owner Tenure write,
+  amending ratified §C.2" is overtaken: five bases were added after that enumeration, each by a plan
+  position (`04_CODE_ARCHITECTURE.md:564-586`), so adding one is precedent, not re-ratification (§13.7).
 
 ### 12.3 R-3 — cut `repudiate`?
 
@@ -1606,7 +1741,7 @@ other option would change. No ledger row was written for any of them.
   `effects_governance.py:90-91`), so vow-breaking stays witnessable and the three alignment cells that
   price it (`rosters.yaml:2158, :2194, :2232`) re-key on the event kind.
 - **Why (b):** one edge, one closer.
-- **What (a) would change:** two closers of one edge stay; the suite is 57 verbs; build step 2 loses its
+- **What (a) would change:** two closers of one edge stay; the suite is 55 verbs; build step 2 loses its
   second half.
 
 ### 12.4 R-4 — may a seat with no rung above be deposed by rule?
@@ -1632,7 +1767,14 @@ other option would change. No ledger row was written for any of them.
 - **What (a) would change:** `succeed` stays THIN indefinitely and dynasties stay unbuilt; the "later"
   row of §9.4 drops.
 
-### 12.6 Already registered — no new row
+### 12.6 R-6 and R-7 — one line each, not blockers
+
+- **R-6.** Does ED-IN-0279 row 3's "nothing else" on the loser survive capture named as a stake — β,
+  occupation then `seize` (carried) — or should a won field transfer title directly, α (§12.2)?
+- **R-7.** [ASSUMPTION] A routed army (`Lost`) stays at its origin rather than arriving; the alternative
+  puts a beaten force in occupation of the field (§8.6).
+
+### 12.7 Already registered — no new row
 
 - **H-156's (a)/(b)** decides `destroy_record`'s held shape, the `found`/`build` formation policy and
   `commit`'s cost.
@@ -1644,7 +1786,7 @@ other option would change. No ledger row was written for any of them.
 - **The telling workplan's G7** carries the lie; **ED-FI-0009** the investigation rows, including
   `surveil`'s Person case.
 
-### 12.7 Answered here, not escalated
+### 12.8 Answered here, not escalated
 
 | question | answer | step |
 |---|---|---|
@@ -1661,6 +1803,9 @@ other option would change. No ledger row was written for any of them.
 | New Record kinds for warrants, accusations, cases? | No; a `dispensation` or `petition` by its `terms`; `case` is refused by the effect's own ruling | 4 — K-11 |
 | May anyone mint a treaty? | No; `covenant` is `remit:issue` only | 5 — K-14 |
 | `speak` and `work`: cut? | No; retained, THIN | 4 — each owns a distinct act (§11) |
+| A siege: a verb, a Record, or a Query? | A Query over an arrived army; `besiege` folds into `march` | 1 and 5 — direction 8 (K-28) |
+| Does a march need a war? | No; `at_war` gates no verb, and war is an uttered Proposition the tree already reads | 3 and 4 (K-29) |
+| Is `proclaim` in the suite? | No; deferred with its readers — no kind it would mint has one | 5 — the orchestrator's decision, overrulable (K-34) |
 
 ---
 
@@ -1677,9 +1822,8 @@ Every observable below is read by an instrument that exists: `harness.corpus_run
 | `interrogate` | the corpus `DEGREES RESOLVED` histogram gains this prize's bands; `confession.made` in `w.log` |
 | `seize` | `record.seized` in `w.log`; realm ex > 0; a seat cannot be seized |
 | `pardon` | a `custody` edge closes with `disposal.lifted`; the next season's `move` is admitted |
-| `proclaim` | enters the corpus executed set; `aperture` `march` counts split by a `war` Record present or absent |
-| `covenant` | the addressee's `commit` to the covenant's Proposition in `w.log` |
-| `besiege` | subsistence falls at the besieged rung with no act |
+| `covenant` | the addressee's `commit` to the covenant's Proposition in `w.log`; an ally's persons in a march's `subject_members` |
+| `march` (arrival) | the step-8 tests in `test_march.py` (§9.4): `mustered(w, d, f)` equals the claimants after `Won`/`Unopposed`, and the origin keeps them after `Lost`; an interception resolves `Won`/`Lost`, not `Unopposed`; H-149's refusal stays green. At realm scale, a named test over `populated.run`/`build_realm(0)` reading `w.log` (`test_build_realm_determinism.py:104-116`'s precedent) counts `army.arrived` and splits it by stake through `w.acts` (`causes` → act → `subject` → `holder_faction_of`) — expected 0 today, since the realm fights no field (K-31), so it proves nothing either way until H-149's and H-175's referents move |
 | `raze` | `w.rungs` shrinks |
 | `conceal` | an Event's anchor resolves to a `cover` id |
 | `sabotage` | `Site.condition` falls at RESOLVE with a computed `sabotage` among its causes |
@@ -1692,7 +1836,7 @@ Every observable below is read by an instrument that exists: `harness.corpus_run
 | `oblige` (reader) | `purview_reaches` true across two seats joined by a holder's `oblige` |
 | `work` (delta ≥ 0) | a hand-built `work` with a negative declared delta is refused |
 | R-3 | `test_u7_own.py:42`'s DECLINED tuple shrinks; `commitment.ended` emitted by `release` |
-| states | war: `march` counts split by war present/absent · truce: a `march` between truced seats refused or flagged · treaty: tribute renewed by `_renewals` · alliance: allied persons in a `march`'s sides · vassalage: as `oblige` · hostage: `sides_of` excludes the hostage's side · siege: as `besiege` · excommunication: a `confer` refused on a banned person · outlawry: a seatless `detain` on a `ban` holder · custody: as `detain` · sentence: `_renewals` treating two disposal kinds differently · concealed identity: as `conceal` |
+| states | war: `at_war` true after an `utter` of a `WAR`-mood Proposition and a `commit` to it, false after the `release` (already a real fold, `faction_q.py:232-242`) · truce: deferred · treaty: tribute renewed by `_renewals` · alliance: allied persons in a `march`'s sides · vassalage: as `oblige` · hostage: `sides_of` excludes the hostage's side · siege: some faction other than the holder's `mustered` at a settlement after an arrival · excommunication: a `confer` refused on a banned person · outlawry: a seatless `detain` on a `ban` holder · custody: as `detain` · sentence: `_renewals` treating two disposal kinds differently · concealed identity: as `conceal` |
 
 ### 13.2 What was not verified
 
@@ -1714,8 +1858,25 @@ Every observable below is read by an instrument that exists: `harness.corpus_run
   (`state/attribution.py`, read at its docstring and the `anchor_of` definition only).
 - **The custody floor** on a prisoner's combat pool (§8.8) and **which bands of a contested `determine`
   convict** (§8.6) are assumptions with no fixture behind them.
+- **The march analysis** ran nothing. Its realm figures are H-149's and H-175's recorded measurements;
+  the author of revision 3 opened those rows and the code sites in §13.3 and re-ran nothing. Not opened
+  by the author: `Tenure.granted_acts` (`state/carriers.py:107-131`, the grant the `muster` basis reads),
+  `world_q.py:999-1020` (`fortification_of`) and `hole_register.yaml:3651, :3657` (H-166's clauses) —
+  each as the analysis cites it.
 
 ### 13.3 Sites opened
+
+**By the author of revision 3 (2026-10-04).** `engine/season/verb_table.yaml` 384–407, 585–615 ·
+`loop/sides.py` 1–122 · `loop/effects_combat.py` 270–370 · `loop/encounter.py` 20–64 ·
+`seam/wrappers/mass_battle.py` 140–194 · `loop/resolve.py` 44–56, 505–604 · `loop/effects_migration.py`
+30–109 · `state/gate.py` 575–757 · `state/world.py` 150–163, 262–325, 560–585 · `loop/predicates.py`
+425–445 · `queries/world_q.py` 555–608, 951–996, 1125–1189 · `queries/faction_q.py` 200–250 ·
+`hole_register.yaml` H-148 (3076–3120), H-149 (3122–3158), H-150 (3160–3245), H-151 (3247–3300), H-152
+(3302–3375), H-175 (3767–3806) · `tests/test_march.py` 55–279 · `tests/test_build_realm_determinism.py`
+100–118 · `harness/aperture.py` 150–178, 214–226 · `harness/populated.py` 384–400 · `write_matrix.yaml`
+220–259, 345–372 · `data/rosters.py` 444–457 · `rosters.yaml` 130–150, 845–860, 1695–1706 ·
+`requirements.yaml` 672–677, 1018–1024 · `architecture/meta/01_AXIOMS.md` 197–201, 472–482, 1370–1391 ·
+`architecture/meta/04_CODE_ARCHITECTURE.md` 560–590, 790–796, 908–912.
 
 **By the author of revision 2 (2026-10-04).** `registers/editorial_ledger_in_archive.jsonl` 178 ·
 `registers/editorial_ledger_in.jsonl` 32, 34 · `engine/season/data/verbs.py` 92–93, 503–510, 528–534,
@@ -1754,7 +1915,9 @@ H-166 (3648–3653), H-183 (4083–4110) · `write_matrix.yaml` 186–194, 380�
 
 ### 13.4 Corrections to revision 1, applied in this revision
 
-From the audit pass (its §7 defects and K-items), and two of the author's own (marked †):
+From the audit pass (its §7 defects and K-items), and two of the author's own (marked †). Items 4, 5, 9,
+24 and 26 record what revision 2 corrected in `war`, `truce` and `besiege`; revision 3 has since removed
+all three (K-28, K-29, K-32).
 
 1. Cutting `comply` and splitting `evade / defy` was escalated against a later ruling that keeps them
    (K-01).
@@ -1793,6 +1956,9 @@ From the audit pass (its §7 defects and K-items), and two of the author's own (
     unanchored `:176-179`.
 
 ### 13.5 Corrections to the audit pass, made by the author
+
+Items 5, 6 and 10 concern `war` and `proclaim`, which revision 3 has removed (K-29, K-34); they stand as
+the record of revision 2.
 
 1. **K-05:** `detain`'s two refusal kinds are not "lawful only on a flat row". The loader refuses a
    contested keyed row with more than one kind (`data/verbs.py:717-720`); K-02's own fold edit narrows that
@@ -1858,6 +2024,59 @@ From the audit pass (its §7 defects and K-items), and two of the author's own (
    (§8.3).
 8. **The typed grammar's `all` form** is at `data/requires.py:858`, not `:542` as the `release` row's note
    says (Appendix D, l).
+
+### 13.7 Corrections to revision 2, applied in revision 3
+
+From the march analysis, each checked against the code:
+
+1. "Hooked in the realm (16/16)": declared 16, fought 0 — every natural target is refused at H-149's check
+   (K-31).
+2. "Title moves by … a seat's `revoke`": `revoke` closes seat-holds only; a rung hold ends by `release`,
+   `give`, `seize` or death (K-30).
+3. R-2's option (a) "needs a fifth lawful non-owner Tenure write, amending ratified §C.2": five bases were
+   added after that enumeration, each by a plan position (`04_CODE_ARCHITECTURE.md:564-586`) (§12.2).
+4. A `war` Record was a second owner of the war `faction_q.at_war` already reads (K-29).
+5. "`aperture` `march` counts split by war present or absent" named no existing instrument: `aperture`
+   counts attempts, executions and refusal kinds per (holder, verb) and splits nothing by target
+   (`harness/aperture.py:154-176`). Replaced by a named `w.log` + `w.acts` test (§13.1).
+6. `besiege`'s subsistence reader was never buildable as written: only cohorts eat (`world_q.py:559-572`),
+   a cohort holds no `commit` and so never musters (`harness/populated.py:393`), and an arrived army of
+   weight-1 persons draws nothing (`world_q.py:604`) (K-22 retired; §9.4).
+
+### 13.8 Corrections to the march analysis, made by the author of revision 3
+
+1. **Its two code edits would have broken H-149.** `sides_of` signals H-149's refusal of a non-settlement
+   target by `subject = None` (`loop/sides.py:89-92, :105-107`) — the same value an unheld settlement
+   produces. Edit (ii), the wrapper's `subject None` → `Unopposed`, would therefore turn every march on a
+   hearth or a person-kind rung into an arrival — all eleven of the realm's natural marches
+   (`hole_register.yaml:3148-3156`), each re-homing an army into the actor's own building — and fail
+   `test_a_march_on_a_non_settlement_rung_refuses_h149_is_enforced` (`tests/test_march.py:158-171`). A
+   third edit is needed: H-149's branch returns empty `claimants`, which refuses at `loop/resolve.py:558-559`
+   with the same `march.refused`. That splits `sides.py:89-92`'s "one mechanism for both causes" on
+   purpose: the two causes now mean different outcomes (§8.6).
+2. **`test_declared_and_unopposed_are_no_change_directly` does not flip as the analysis says.** It passes
+   `Resolution("Unopposed", {})` with no `parties` (`tests/test_march.py:267-274`), so an effect that
+   relocates the claimants named in `res.result["parties"]` still returns `NO_CHANGE`; the assertion keeps
+   passing and stops observing the band it names (CLAUDE.md §0.1 pt 2). It must be re-written with
+   claimants (§9.4 step 8).
+3. **`seize` widened to a Rung needs a disjunction the grammar lacks.** "Record or Rung" cannot be one
+   typed cell (`rosters.yaml:1699-1703`) — K-16's ground — which the analysis did not address. Resolved on
+   `pardon`'s route: untyped, a registered predicate, the licence read at the effect (§8.1).
+4. **`_relocate` moves `a.actor` and keys its leg id on him** (`loop/effects_migration.py:77-81`), so
+   reusing it "for every claimant" needs the mover as a parameter, or every claimant's leg shares one id
+   (§8.6).
+5. **H-152 is cited for more than it says.** It states that emits are fixed per degree, not per swept
+   fixture (`hole_register.yaml:3309-3313`); "never per stake" is the analysis's extension. It holds, since
+   the schema keys emits on degree alone, but the row does not say it.
+6. **§E.1.6 is cited for more than it says.** `01_AXIOMS.md:1386-1389` recommends an uttered Proposition
+   plus an owned edge for a relation between things that cannot act. It supports refusing an ownerless
+   stored `siege` Record; it does not name a Query. The siege's carrier is the persons' own `contain`
+   edges (§7.1).
+
+Verified and not corrected: the §10 ladder admits the relocation — a person's `contain` to a settlement
+ascends (`state/world.py:282-285`: a non-rung subject passes, and a `person`-kind rung sits below a
+settlement) — and `_subtree` includes the settlement itself (`world_q.py:956`), so an army re-homed onto
+the settlement is in every later `mustered` read.
 
 ---
 
@@ -2025,7 +2244,7 @@ opened. *nj* = needs_jordan.
 - **Why:** trade, with scarcity paired on both sides.
 - **Falsifier:** `exchange.made` in `w.log`.
 - **Blocker · nj:** H-94 · **yes** — the register reserves coining these operands for H-94's ruling, step 5.
-- [SUPERSEDED by §12.6]: already registered under H-94; no new row.
+- [SUPERSEDED by §12.7]: already registered under H-94; no new row.
 
 ### `fight`
 - **Etymology · fit:** OE *feohtan* → contest the body of a living person. FITS.
@@ -2090,7 +2309,8 @@ opened. *nj* = needs_jordan.
 - **Why:** authority as paper.
 - **Falsifier:** `test_u7_remit.py:460`.
 - **Blocker · nj:** H-94; `15c` · no. New kinds proposed: `warrant`, `summons`, `charter` (§7).
-- [SUPERSEDED by §7.2, §9.1 / K-11]: no new kinds — a warrant, summons or charter is a `dispensation` distinguished by its `terms`; in the suite `to` fans over known persons so `terms` and the executor separate; an edict is `proclaim`'s deferred kind.
+- [SUPERSEDED by §7.2, §9.1 / K-11]: no new kinds — a warrant, summons or charter is a `dispensation` distinguished by its `terms`; in the suite `to` fans over known persons so `terms` and the executor separate.
+- [SUPERSEDED by §8.2 / K-34]: an edict to a place is none-yet — `proclaim` is deferred with its readers.
 
 ### `levy`
 - **Etymology · fit:** L *levare* → OF *levée*; a raising → move a rung's stores into the seat's treasury. FITS.
@@ -2107,11 +2327,11 @@ opened. *nj* = needs_jordan.
 - **Earns:** YES (`sides.py:75-118`; `effects_combat.py:274-358`).
 - **Group · module:** G2 · mass battle.
 - **Reach:** a settlement; `remit:dispatch`; prize a field at ENCOUNTER; writes the losing side (`effects_combat.py:274-358`). **Not:** siege (→ `besiege`); conquest or raid writes (WIDEN, Jordan — the ruling is silent on the winner, `:277-279`); muster (its own `sides_of`).
-- **Hook:** hooked in the realm (16/16); never in the corpus (H-175). Seam at ENCOUNTER. Rows `Person.body`, `Person.stance`.
+- **Hook:** declared in the realm (16; fought 0, every natural target refused at H-149's check — K-31); never in the corpus (H-175). Seam at ENCOUNTER. Rows `Person.body`, `Person.stance`.
 - **Why:** war that leaves grudges.
 - **Falsifier:** `test_march.py:323`; leaves the never-attempted pin (`test_season_shape.py:8372`).
 - **Blocker · nj:** H-175, H-149 · no (the winner's writes: **yes**).
-- [SUPERSEDED by §12 / R-2]: the suite carries no winner writes (recommended); title moves by the loser's `release`, a `revoke`, or death.
+- [SUPERSEDED by §6.2, §8.6, §12.2 / K-28, K-30, K-33]: there is no `besiege` — a siege is a Query over an arrived army; a won or unopposed march writes the arriving army's presence (basis `muster`) and no hold; title moves by `seize` under occupation, `give`, `release` or death, never `revoke`; R-2 is resolved, nj no (R-6 and R-7 remain as one-line residuals).
 
 ### `migrate`
 - **Etymology · fit:** L *migrare* → re-home `contain` and `reside`, throttled by capacity. FITS.
@@ -2238,6 +2458,7 @@ opened. *nj* = needs_jordan.
 - **Falsifier:** leaves the executed set; `test_seen_claim.py:55`.
 - **Blocker · nj:** none · **yes** — cutting a §E3 row, step 4 [CONFIDENCE: medium]. Settle with a corpus run withholding `speak`: if claim counts and check R3 hold, cut.
 - [SUPERSEDED by §3.5]: retained, THIN — no cut and no new conjunct; nj no.
+- [SUPERSEDED by §3.4 / K-34]: a seat's proclamation is none-yet — `proclaim` is deferred with its readers.
 
 ### `succeed`
 - **Etymology · fit:** L *succedere* → OF *succeder*; follow in place → the HOLDER designates an heir. STRAINED — the heir succeeds; the actor designates. Plain alternative `designate` (proposal); `succeed` is also the tenure kind (`rosters.yaml:115`).
@@ -2321,7 +2542,7 @@ opened. *nj* = needs_jordan.
 - **Why:** vows that bind the speaker (`rosters.yaml:2173`).
 - **Falsifier:** a `commit` executing on a `prop:` id in `populated.run`.
 - **Blocker · nj:** H-92, the cost of a hold · no.
-- [SUPERSEDED by §8.7 / K-11]: `proclaim` ships kind `war` first; a seat's edict waits for a reader.
+- [SUPERSEDED by §8.2 / K-29, K-34]: a declaration of war is this verb — a `WAR`-mood Proposition, read by `faction_q.at_war` once committed; `proclaim` is deferred with its readers, so a seat's edict is none-yet.
 
 ### `work`
 - **Etymology · fit:** OE *weorc* → alter `Site.condition` by a declared delta, else advance a works' fabric. MISFIT — labour produces, and yield is MATTER's (`Rung.yield`, `write_matrix.yaml:316-322`); the row does `restore`'s rise under a floor (`effects_economy.py:73-77`).
@@ -2356,8 +2577,8 @@ CK3 and RTK; *H1* history.
 | 9 | Hear, try, judge | WIDENED · `determine` contested | *Pentiment*'s judgement and sentence [G1-12]; *L.A. Noire*, charging one of two suspects [G1-66]; *Shadows of Doubt*, resolving the case [G1-89]; second and third readings [H1-14]; the impeachment trial [H1-28]; the Forty [H1-103]; the public sentence [H1-125]; the consistory [H1-138]; condemning a doctrine [H1-150]; the inquiry verdict — tribunal recommended / inconclusive / exonerated [P1-40]; trying a heresy case [P2-67]; a graded hearing (H-162) and the four unseeded procedure games [C-02]; ordeal and judicial duel [H1-155, H1-156; P1-25] |
 | 10 | Sentence | OUTCOME — the disposal's kind: `oblige`, `custody`, `ban`; death is `custody` + `fight` (R-1) | penance [H1-127]; imprisonment [H1-129]; relaxation to the secular arm [H1-130]; execution [H1-174]; *Pentiment*'s execution [G1-13]; execution and erasure [R1-36]; a sentence read as a job (H-173) [C-04] |
 | 11 | Confess, swear, abjure | COVERED · `commit`, `tell`, `release` | swearing to answer truthfully [H1-120]; abjuration [H1-126]; compurgation [H1-154]; abjuring as releasing the commitment (`03_INQUIRY.md:280`) [P1-42]; `confession` as a rostered proof (`rosters.yaml:1828`) [C-10] |
-| 12 | Excommunicate, interdict, absolve | WIDENED · `determine` disposing `ban`; `pardon` (interdict deferred) | CK3, excommunicate and lift [G2-54]; papal release from oaths [H1-77]; absolution [H1-128]; excommunication [H1-136]; interdict [H1-137]; the roster's Excommunication [P1-12]; a Cardinal's excommunication term [P2-68]; `church_standing` with no producer [C-06] |
-| 13 | Edict, law, coinage, emergency | DEFERRED · `proclaim` exists; its `edict` and `emergency` kinds wait on a reader each (K-11) | edict and proclamation [H1-54]; coinage [H1-64]; the dispensing power [H1-66]; debasement and recoinage [R1-23]; edicts and emergency decrees [R1-43]; martial governance [P1-05]; the Policy Instrument [P1-60]; a state of emergency [C-32]; CK3, changing a realm law [G2-41] |
+| 12 | Excommunicate, interdict, absolve | WIDENED · `determine` disposing `ban`; `pardon` (interdict deferred with `proclaim`, K-34) | CK3, excommunicate and lift [G2-54]; papal release from oaths [H1-77]; absolution [H1-128]; excommunication [H1-136]; interdict [H1-137]; the roster's Excommunication [P1-12]; a Cardinal's excommunication term [P2-68]; `church_standing` with no producer [C-06] |
+| 13 | Edict, law, coinage, emergency | DEFERRED · `proclaim` deferred with its readers (K-34); its `edict` and `emergency` kinds wait on a reader each (K-11) | edict and proclamation [H1-54]; the inquisitor's edict of grace, a 30–40-day window for self-denunciation [H1-117]; censure, embargo and outlawry in the faction roster [P1-11]; coinage [H1-64]; the dispensing power [H1-66]; debasement and recoinage [R1-23]; edicts and emergency decrees [R1-43]; martial governance [P1-05]; the Policy Instrument [P1-60]; a state of emergency [C-32]; CK3, changing a realm law [G2-41] |
 | 14 | Motion, debate, vote, veto | COVERED · members' own `commit`s, counted by a Query (motion `utter`, speech `tell`, veto SYSTEM) (K-07) | moving a motion [H1-04]; the division [H1-10]; supply [H1-24]; the *liberum veto* [H1-35]; the Senate's ballot [H1-95]; casting a vote [P2-31]; argument moves as data [P2-37]; speech kinds [P1-17]; parliamentary manoeuvre [P1-59]; holdout in a consensus body [P1-67]; vote, veto, conditional assent [R1-02]; calling and casting a vote [C-34] |
 | 15 | Elect, conclave, lot | COVERED · members' `commit`s + `confer` basis `elected` (lot SYSTEM) | the Speaker's election [H1-03]; electing a king, tanistry [H1-72]; the doge by lot and ballot [H1-81]; procurators [H1-107]; conclave [P2-74]; acclamation and election [R1-08] |
 | 16 | Appoint, invest, ennoble | COVERED · `confer`, `establish` | CK3, granting a title [G2-36] and court posts [G2-46]; investiture [H1-45]; charters [H1-52]; appointment [H1-59]; ennoblement [H1-80]; appointing and recalling officers [R1-30] |
@@ -2365,11 +2586,11 @@ CK3 and RTK; *H1* history.
 | 18 | Resign | COVERED · `release` | resigning an office (`proposals/2026-09-05-proceedings-subsystem/04_VERBS.md:638-654`) [P1-20] |
 | 19 | Heir, regency | WIDENED · `confer` + term (`succeed` THIN; R-5) | heir designation [H1-69]; regency [H1-70]; fixing the succession [R1-49]; CK3 inheritance under law [G2-64] |
 | 20 | Homage, fealty | WIDENED · `oblige`, read by `purview_reaches` | homage and fealty [H1-43]; *diffidatio* [H1-44]; CK3, transferring or releasing vassals [G2-38] and swearing fealty [G2-39]; oath and homage [R1-48] |
-| 21 | Declare war | GAP · `proclaim` kind `war` | CK3, casus belli [G2-08] and holy war [G2-55]; war on a casus belli held as a record [P2-18]; declaring war with a compliance window [R1-04]; war authorization [P1-15]; a graded war posture [C-38] |
-| 22 | Truce, peace, treaty, alliance, tribute, cession | GAP · `covenant` (cession: widened `give`) | CK3, peace and purchased truce [G2-14]; RTK alliance [G2-96]; cession [R1-05]; treaty, tribute, surrender [R1-06]; leagues [R1-15]; Treaty and Diplomacy [P1-07]; settling a surplus [P1-65]; binding agreements in five cases [C-40] |
+| 21 | Declare war | COVERED · `utter` of a `WAR`-mood Proposition + the seats' own `commit`s, read by `faction_q.at_war` (K-29; `proclaim` deferred, K-34) | CK3, casus belli [G2-08] and holy war [G2-55]; war on a casus belli held as a record [P2-18]; declaring war with a compliance window [R1-04]; war authorization [P1-15]; a graded war posture [C-38] |
+| 22 | Truce, peace, treaty, alliance, tribute, cession | GAP · `covenant`, kinds `treaty` and `alliance` (cession: widened `give`; peace also the `release` of a war's commits; truce deferred, K-32) | CK3, peace and purchased truce [G2-14]; RTK alliance [G2-96]; cession [R1-05]; treaty, tribute, surrender [R1-06]; leagues [R1-15]; Treaty and Diplomacy [P1-07]; settling a surplus [P1-65]; binding agreements in five cases [C-40] |
 | 23 | Muster, hire, allies | COVERED · `march`'s muster, `oblige` + `transfer` | CK3, calling allies [G2-10] and raising levies and mercenaries [G2-11]; Muster and Fortify [P1-01]; muster and recruit [R1-26]; non-march military acts [C-39] |
-| 24 | Siege, blockade, fortify | GAP · `besiege` (fortify COVERED) | naval blockade [P1-03]; CK3 sieges [G2-12]; besiege, storm, terms [R1-29] |
-| 25 | Conquer, raid, usurp | OUTCOME of a won `march`, which writes nothing for the winner (R-2) | conquest [P1-04]; CK3 raids [G2-13], war goals [G2-15], usurpation [G2-34]; the *chevauchée* [R1-58] |
+| 24 | Siege, blockade, fortify | WIDENED · `march` arriving at an enemy-held settlement — the siege a Query over the arrived army; its larder effect deferred (K-28) (fortify COVERED) | naval blockade [P1-03]; CK3 sieges [G2-12]; besiege, storm, terms [R1-29] |
+| 25 | Conquer, raid, usurp | OUTCOME — a won or unopposed `march` writes occupation; title by `seize`, `give`, `release` or death (R-2 resolved) | conquest [P1-04]; CK3 raids [G2-13], war goals [G2-15], usurpation [G2-34]; the *chevauchée* [R1-58] |
 | 26 | Arrest, custody, bail, ransom, hostage | GAP · `detain`, `pardon` | arrest in *Disco Elysium* [G1-32, UNVERIFIED], *L.A. Noire* [G1-67] and *Shadows of Doubt* [G1-90]; CK3, abduct [G2-24], imprison [G2-47], ransom and release [G2-51]; inquisitorial imprisonment [H1-129]; the constable's arrest [H1-160]; bail [H1-163]; *habeas corpus* [H1-173]; confinement and hostage-kin [R1-35]; arrest and restraint [P2-45]; hostages and fostering [P2-53]; no custody kind [C-05]; rescue [C-24]; hostages [C-25] |
 | 27 | Interrogate, torture | GAP · `interrogate` | pressing in *Disco Elysium* [G1-22]; Truth / Doubt / Lie [G1-64]; accusing a lie [G1-65]; CK3 torture [G2-48, UNVERIFIED]; interrogation with a notary [H1-121]; torture under limits [H1-122]; one scene per season [P1-38] |
 | 28 | Execute | OUTCOME — `custody` + the enforcement seat-holder's `fight` (R-1) | *Pentiment* [G1-13]; CK3 [G2-49]; relaxation to the secular arm [H1-130]; execution of sentence [H1-174] |
@@ -2473,6 +2694,10 @@ retained; this index and the evidence written out above are what survives.
   §E.1; `04_CODE_ARCHITECTURE.md` §A.3, §B.2 and PART D rows 1, 8, 14; canon P-01..P-15 and GD-1..3; the
   proceedings `04_VERBS.md` §B.2 and `21_RECONCILIATION.md` C-1 and PART E; `03_INQUIRY.md:176-193`. It
   re-ran no count.
+- **The march analysis (revision 3)** — opened the `march` path end to end (the verb row, `sides_of`,
+  `_contest`, the mass-battle wrapper, `_eff_march`, ENCOUNTER), the holder and muster Queries, `at_war`,
+  the gate's bases, the write matrix's Tenure and `travel_leg` rows, H-148 to H-152, H-166 and H-175, and
+  `test_march.py`; the author re-opened each load-bearing site (§13.3). It re-ran no count.
 
 ---
 
@@ -2498,3 +2723,5 @@ file decides.
 | m | The `march` row's note says Jordan ruled "nothing on the WINNING side"; ED-IN-0279's third row says "nothing specified for the winner" — silence, not a ruling (K-08) | `verb_table.yaml:607`; `registers/editorial_ledger_in.jsonl:34` |
 | n | GD-2 presupposes a faction selecting actions (`select_actions(faction, world)`), against AX-1 and Layer 1's ban on a faction that acts — cross-lane observation, not ruled here (K-20) | `canon/02_canon_constraints.md:72`; `rosters.yaml:1026-1029` |
 | o | `release`'s `domain_note` says the loader compares its domain with `tenure_kinds` minus `contain`; `RELEASABLE_KINDS` excludes `contain` and `reside` | `verb_table.yaml:754`; `data/rosters.py:453` |
+| p | `T-m` admits an actor opening a `hold` on any non-seat object naming himself, with no other basis — the seat carve-out covers seats only — so a direct title write would pass on a first capture and fail on every recapture (`NotYours` on the non-owner close) | `state/gate.py:677-688, :707-710` |
+| q | `sides_of`'s same-faction comment points to an "`H-150`-adjacent note"; the row is H-151 | `loop/sides.py:116-117`; `hole_register.yaml:3247` |
