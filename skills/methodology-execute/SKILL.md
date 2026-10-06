@@ -66,7 +66,9 @@ does not exist yet — and it changes *when* the closing phases fire, not what t
 pass — code-review/simplify/layer-conformance, the agonist/antagonist fan, the terminal critique,
 and the full pytest suite — does not run after every item.** the live plan's per-step cadence (its
 §0.4, ruled 2026-09-18: one step is one position and one commit, with `/code-review` and `/simplify`
-at the end of each step) is written for a session working one position by hand. `methodology-execute` orchestrates many
+at the end of each step) is written for a session working one position by hand. **Jordan ruled
+2026-10-06 (*"code review and simplify to be at batch close"*)** that those two run at BATCH-CLOSE
+here; the plan's §0.4 and §O.4 carry the supersession. `methodology-execute` orchestrates many
 items in one run, and re-running that cadence per item is the over-fanning CLAUDE.md §10 warns
 against, plus the exact "full suite is a close step, not an inner loop" mistake CLAUDE.md §0.4
 already forbids. So for a run this skill orchestrates: **every item still gets its own commit
@@ -282,9 +284,9 @@ still sees earlier landed work — which is why a group may be cut:
    - **per-batch discipline** the plan states (reading list, receipt, commit shape, tiers) — the
      plan's, and **below** CLAUDE.md and `methodology-close`: a plan-stated close, cadence or suite
      rule that differs from Phases 1–3, from this skill's per-item rule, or from CLAUDE.md §0.4 —
-     lighter *or heavier* (the live plan's per-step cadence asks `/code-review` and `/simplify` at
-     each step) — is a conflict to state at the 0.1 stop, never silently substituted and never
-     silently adopted.
+     lighter *or heavier* — is a conflict to state at the 0.1 stop, never silently substituted and
+     never silently adopted. (`/code-review` and `/simplify` at batch close is RULED — Jordan,
+     2026-10-06 — so a plan still asking for them per step is stale on that point, not a conflict.)
 3. **Batch rows another agent or session left in the lane's handoff** for a task with no plan.
 4. **A proposal or another agent's unratified plan** (`proposals/`, a delegate's report): input to
    the 0.1 stop, presented and never adopted silently — a plan lives under `workplans/` (CLAUDE.md §2).
