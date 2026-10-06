@@ -5,14 +5,8 @@
 # (CLAUDE.md §8) instead of hardcoded inside the vector-audit skill — the vector-audit
 # sources CLASSES['action'] from here (token_class: action).
 #
-# ⚠️ STATUS: PROVISIONAL. This is NOT the authoritative domain-action registry — the
-# `domain_actions` subsystem home is unbuilt (doc:null, zero code; module_contracts.yaml
-# port_rank 8, resolver d_sigma). The verbs below are curated from the module_contracts
-# ED-FA-0006 verb note + the faction_state wiring note's "conquest/muster/govern/uniques" enumeration,
-# exactly as they were previously hand-listed in the audit. When the domain_actions home
-# is authored (ED-FA-0002), that becomes the source of truth and this roster should be
-# regenerated from / folded into it — treat this file as the relocation of a provisional
-# hand-list, not a design ratification.
+# ⚠️ STATUS: PROVISIONAL — NOT the authoritative domain-action registry (the `domain_actions`
+# home is unbuilt; see `blocked_on`). History and discussion: references/vocab_history.md
 #
 # Distinct from the `da.*` 5-tag OUTCOME taxonomy (da.antinomian_action, da.covert_betrayal,
 # da.diplomatic_alliance, da.economic_intervention, da.public_governance) which lives in
