@@ -631,9 +631,11 @@ _CONTRACTS_HEADER_RE = re.compile(r'^\*\*Subsystem:\*\*.*?\*\*Contracts:\*\*(.*)
 #: short-circuited with it. A permanently-skipping test is worse than a re-derived roster.
 _YAML_MODULE_RE = re.compile(r'^  - module: ([a-z_]+)\s*$', re.M)
 
-#: Module contracts retired by ruling rather than renamed away. Listed one per line for the same
-#: reason `RETIRED_SYMBOLS` is: a pattern would also swallow a row someone deleted by accident.
-RETIRED_CONTRACTS = frozenset({'articulation_layer'})
+#: Module contract names no longer in the registry: retired by ruling (`articulation_layer`) or
+#: renamed at `30` (`personal_combat` -> `combat`; the archived skeleton is frozen). Listed one per
+#: line for the same reason `RETIRED_SYMBOLS` is: a pattern would also swallow a row someone
+#: deleted by accident.
+RETIRED_CONTRACTS = frozenset({'articulation_layer', 'personal_combat'})
 
 
 @pytest.mark.parametrize('subsystem,lane,relpath', ROSTER, ids=SUBSYSTEM_IDS)
