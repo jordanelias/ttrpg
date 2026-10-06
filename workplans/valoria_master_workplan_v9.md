@@ -83,6 +83,10 @@ sweep to see how it impacts stuff"*
 | 4 | **FORWARD SWEEP** | defined below. |
 | 5 | **CLOSE** | `tools/valoria_local.py --staged`, the lane validator, then the `[scope]` commit citing its `PP`/`ED`. **The full suite runs once per BATCH close, not per step** (§0.5). |
 
+**SUPERSEDED IN PART, 2026-10-06 (Jordan: *"code review and simplify to be at batch close"*):** phases 2 and 3 run once per
+BATCH at the close (`methodology-execute`'s BATCH-CLOSE; `methodology-close` Phase 2), not at each step. Phases 1, 4 and 5
+stand per step.
+
 **FORWARD SWEEP — defined, because it is a coinage and `CLAUDE.md` §4 requires it survive the session reset.** *What did
 this change reach that nobody asked it to?* Five checks, each with an artifact:
 
@@ -189,7 +193,8 @@ gh run list --branch main --limit 3                             # read `All Gate
 ```
 
 **How a session works from here.** One session works ONE batch, then its context is cleared; continuity is the batch's HANDOFF
-line (`_part3` §B.2) and git. The first batch is **B-A**, the adoption of this plan (`_part8` §K): it opens only after Jordan
+line (`_part3` §B.2) and git. At the boundary the batch's finished positions are deleted from the plan in one net-deleting
+commit and the run stops for a cleared window (`methodology-execute`, `CLAUDE.md` §9). The first batch is **B-A**, the adoption of this plan (`_part8` §K): it opens only after Jordan
 has read §K's still-held list and `_part5` §J. `main` was red from PR #456 on one test
 (`test_flow_skeletons.py::test_contract_names_resolve_in_the_generated_index[combat]`); the one-line fix (`personal_combat`
 joins `RETIRED_CONTRACTS`) is built and rides the adoption branch (`7b619328`), so it is not a position — read `All Gates
@@ -200,8 +205,8 @@ large to read whole: grep the assertion).
 
 ## 3. THE STATE INDEX — every open position, all lanes, one row each (generated from the entries; read 2026-10-06)
 
-**Generated from the entries, not hand-kept:** each row is read from its entry's `STATE`/`LANE`/`BATCH`/`R` line in the
-home part, so a row cannot disagree with its entry; if one does, the entry wins and this table is regenerated. The full entry
+**Read from the entries, not hand-kept:** each row is read from its entry's `STATE`/`LANE`/`BATCH`/`R` line in the
+home part; no tool generates it (`CLAUDE.md` §0.1 pt 5), so a row that disagrees with its entry is wrong — the entry wins and the row is re-read. When a batch closes, its positions leave the plan (`CLAUDE.md` §2) and their rows leave with them. The full entry
 lives once, at the home part; a row reading `= X` is an alias whose entry is X's. `GATE` here is the head of the entry's gate —
 the entry holds the whole of it. Evidence tags (`[RAN]`, `[CODE]`, `[PLAN]`) live in the entry, not here. `R` = the R-rows or
 milestone the position moves. `batch` = `_part3` §B (a position in two batches lists both, in landing order). Closed positions

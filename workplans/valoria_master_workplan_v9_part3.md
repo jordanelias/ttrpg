@@ -202,6 +202,7 @@ B-T; B-U beside B-P and B-Q (opens after B-N, merges before B-R); B-V after B-M 
 ruled. [medium; Jordan to correct — B-P before B-Q and these gates; revert: Jordan states the other option.]
 
 - **Continuity** is the batch's HANDOFF line (§B.2) and git; the session is cleared at the clear point its card names.
+- **Boundary:** when a batch closes, its finished positions are deleted from the plan in one net-deleting commit (`CLAUDE.md` §2: the commit is their record) and the run stops for a cleared window before the next batch opens (`methodology-execute`'s BATCH BOUNDARY).
 - **Full suite:** once per batch, at its close, and only where the pins make a per-file run blind (`CLAUDE.md` §0.4 pt 1);
   B-A and B-X run none locally (records; CI is the gate). Each position's own EXIT and FALSIFIER are in its entry
   (`_part4`…`_part7`); the exit instrument here is what proves the batch.
@@ -498,7 +499,7 @@ have landed (`rosters.yaml:1858` `modules:`; `R04_PENDING_SUBSYSTEMS` derived at
   position cheaply; `methodology-close`'s pipeline (agonist/antagonist → `/code-review` → `/simplify`
   → `layer-conformance` → terminal Opus critique, the full pipeline at B-G and proportionate elsewhere) and the pytest
   suite run **once per batch** — the heavy batches (B-G, B-I, B-J, B-N, B-O) take `methodology-close` per sub-batch at the
-  clear points §B.2 names, the suite still once. The per-step cadence (main file §0.4) runs inside each step, minus the suite.
+  clear points §B.2 names, the suite still once. The per-step cadence (main file §0.4) runs inside each step, minus the suite and minus its `/code-review` and `/simplify` phases, which run at batch close (Jordan, 2026-10-06).
 - **Share the reading** (`CLAUDE.md` §10): one Haiku `valoria-measure` extract per batch, from the
   batch's reading list, handed to every producer. Fire one producer, await its first token, then fan
   out.
