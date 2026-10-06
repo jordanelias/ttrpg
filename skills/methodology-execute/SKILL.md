@@ -64,14 +64,14 @@ does not exist yet — and it changes *when* the closing phases fire, not what t
 
 **Per Jordan's directive when this skill was split from `methodology-close`: the expensive
 pass — code-review/simplify/layer-conformance, the agonist/antagonist fan, the terminal critique,
-and the full pytest suite — does not run after every item.** CLAUDE.md §0's baseline cadence
-("one step is one position and one commit... at end of each step, `/code-review` and `/simplify`")
-is written for a session working one position by hand. `methodology-execute` orchestrates many
+and the full pytest suite — does not run after every item.** the live plan's per-step cadence (its
+§0.4, ruled 2026-09-18: one step is one position and one commit, with `/code-review` and `/simplify`
+at the end of each step) is written for a session working one position by hand. `methodology-execute` orchestrates many
 items in one run, and re-running that cadence per item is the over-fanning CLAUDE.md §10 warns
 against, plus the exact "full suite is a close step, not an inner loop" mistake CLAUDE.md §0.4
 already forbids. So for a run this skill orchestrates: **every item still gets its own commit
-(that part of the baseline cadence is unchanged); the review and test cost is deferred to
-BATCH-CLOSE**, below. This is a named, deliberate scoping of the baseline cadence to this skill's
+(that part of the per-step cadence is unchanged); the review and test cost is deferred to
+BATCH-CLOSE**, below. This is a named, deliberate scoping of the per-step cadence to this skill's
 own batch granularity — not a silent departure from it, and not licence to skip BATCH-CLOSE
 itself.
 
@@ -83,7 +83,7 @@ itself.
   BATCH k    OPEN ──▶ item 1 ──▶ PHASE 0 · BUILD ──▶ commit ─┐
   (as a      (orient  item 2 ──▶ PHASE 0 · BUILD ──▶ commit ─┼─▶ BATCH-CLOSE (once per batch):
   session    from        ⋮  (repeats for every item)         ┘     PHASE 1 · AGONIST FAN → ANTAGONIST
-  opens)     disk)                                                 PHASE 2 · MECHANICAL GATES (+ the one suite run, §0.4)
+  opens)     disk)                                                 PHASE 2 · MECHANICAL GATES (+ the one suite run, CLAUDE.md §0.4)
                                                                    PHASE 3 · TERMINAL CRITIQUE
                                                                           │
                                                           EXPUNGE ◀───────┘  (delete the batch from the plan)
@@ -125,11 +125,16 @@ does not guess which unit was meant.
    `HANDOFF_<LANE>.md` Open table (where an ad hoc task's batches and any in-flight row live), for
    a position whose handle or `what runs` plausibly matches the text.
 2. **Classify what the search found.** **Text beginning `approved:`** means a person already
-   approved the sequence the stop below would present (an interactive first run, or a driver's
-   operator passing `--approved`); skip **only that stop** — the gate checks, the in-flight check
-   and every `STOPPED` condition of §THE STATUS LINE still apply.
-   - **Exactly one position, `GATE` already met** — proceed straight to 0.2 with that position's
-     content-owner entry. No confirmation needed: the position's own gate already establishes it
+   approved the sequence the "more than one position" stop below would present (an interactive
+   first run, or a driver's operator passing `--approved`). It skips **only that stop**: the gate
+   checks, the in-flight check and every other `STOPPED` condition of §THE STATUS LINE still apply.
+   **It never licenses a new task:** finished positions are expunged, so `approved:` text that
+   matches nothing now is `STOPPED` (*finished, or the plan changed*) — otherwise a re-run after the
+   last expunge would rebuild the work. An optional trailing `[next: <handle>]` (a driver copies it
+   from the previous `NEXT` line) fixes the batch to run: if the plan's next batch is not that
+   handle, `STOPPED`.
+   - **Exactly one position, `GATE` already met, and it is a whole batch of its own (not part of a
+     larger plan batch)** — proceed straight to 0.2 with that position's content-owner entry. No confirmation needed: the position's own gate already establishes it
      is buildable now, and building it is exactly what was asked.
    - **More than one matching position** — a free-text area of work ("governance branch for
      faction") will usually name a *cluster*, not one step. Resolve the ordered subsequence
@@ -145,10 +150,10 @@ does not guess which unit was meant.
    otherwise derived, and presented in the same stop as the sequence, so one approval covers both.
    The single-position case is a one-item batch and needs no confirmation. **Once the batches are
    confirmed, take them in order: for each, BATCH OPEN, then 0.2 onward once per item**
-   — one BUILD → integrate → commit per item (the commit carries the `Item: <handle>` trailer and the
-   in-flight row's update) — **then BATCH-CLOSE, then the BATCH BOUNDARY.**
+   — one BUILD → integrate → commit per item (the commit carries the `Item: <handle>` trailer, the in-flight
+   row's update, and the producer's receipt in its body, `NOT DONE` included) — **then BATCH-CLOSE, then the BATCH BOUNDARY.**
    **Never one diff spanning several items**: each item keeps its own commit, the one part of
-   CLAUDE.md §0's baseline cadence this skill does not defer (see "What this skill owns" above).
+   the per-step cadence this skill does not defer (see "What this skill owns" above).
    If a later queued item's `GATE` turns out unmet when its turn comes (something outside this
    run's scope, or a `JORDAN` item), **stop there and report it** (`STOPPED`, §THE STATUS LINE) — do not skip it silently and continue to the next, and do not run BATCH-CLOSE on a batch
    that stopped short without saying so.
@@ -172,8 +177,8 @@ sequentially. No `isolation: worktree` is needed for a single producer — nothi
 this tree concurrently within this run.
 
 **Fan only when the instruction itself names genuinely independent sub-parts that share no file**
-— the same test the workplan's own hard-serial-edge tables (e.g. `THE PLAN` part 1 §3.5, and the
-2026-09-18 plan's §3.9) exist to catch. Never fan by default, and never size the fan to "how many
+— the same test the live plan's own hard-serial-edge table (reached through `CURRENT.md`) exists to
+catch. Never fan by default, and never size the fan to "how many
 files changed" alone — CLAUDE.md §10: *"before spawning N agents, ask what N-1 would miss."* Most
 workplan positions are one commit, one step, one producer.
 
@@ -233,13 +238,15 @@ which must name them) — never guessed, never restated here:
 Two items are **linked** when `edits(i) ∩ edits(j) ≠ ∅`, when `gates(i) ∩ gates(j) ≠ ∅` (a common
 dependency: the same position or the same ruling), or when one gates on the other. What an item
 only *reads* — a falsifier's instrument, a registry — goes into its context set `C`, below: it
-decides what BATCH OPEN reloads, not which items share a diff. A file or gate that **every item of
-the run** names — the plan's shared ledgers, `CLAUDE.md`, `CURRENT.md`, the plan's head — is the
-permanent surface and links nothing.
+decides what BATCH OPEN reloads, not which items share a diff. The **permanent surface** links nothing,
+and is defined by kind, never by how many items name it (in a two-item run every shared file is
+named by every item): `CLAUDE.md`, `CURRENT.md`, `HANDOFF.md` and the lane file, the plan's head,
+and the ledgers and registers every position of the *plan* appends to (the hole register, the
+requirements register).
 
 **By default a batch is a connected group of linked items**, ordered so every gate points from an
-earlier item to a later one. Items with no link belong to different batches; they commute, so the
-plan's order stands, or any order where there is none.
+earlier item to a later one. Items with no link belong to different batches unless merged for a stated reason (below); they
+commute, so the plan's order stands, or any order where there is none.
 
 Why: linked items read and edit the same things, so they need one window, and their edits land in
 one diff where the batch's reviewers see them together. The second reason is the weaker one —
@@ -273,9 +280,11 @@ still sees earlier landed work — which is why a group may be cut:
    - the plan's own **serial-edge and file-census tables** — they are the gates and edit sets, so
      derive nothing the plan states;
    - **per-batch discipline** the plan states (reading list, receipt, commit shape, tiers) — the
-     plan's, and **below** CLAUDE.md and `methodology-close`: a plan naming a lighter close than
-     Phases 1–3, or a suite run CLAUDE.md §0.4 does not license, is a conflict to state at the 0.1
-     stop — never silently substituted, and never silently adopted.
+     plan's, and **below** CLAUDE.md and `methodology-close`: a plan-stated close, cadence or suite
+     rule that differs from Phases 1–3, from this skill's per-item rule, or from CLAUDE.md §0.4 —
+     lighter *or heavier* (the live plan's per-step cadence asks `/code-review` and `/simplify` at
+     each step) — is a conflict to state at the 0.1 stop, never silently substituted and never
+     silently adopted.
 3. **Batch rows another agent or session left in the lane's handoff** for a task with no plan.
 4. **A proposal or another agent's unratified plan** (`proposals/`, a delegate's report): input to
    the 0.1 stop, presented and never adopted silently — a plan lives under `workplans/` (CLAUDE.md §2).
@@ -288,15 +297,16 @@ still sees earlier landed work — which is why a group may be cut:
 
 **The invocation text selects which batch to run; it never changes a batch's membership.** Text
 naming a plan batch by its handle runs that batch. Text naming some but not all of one batch's
-positions, or spanning batches, is stated at the 0.1 stop: build the whole batch, or close what was
-built.
+positions, or spanning batches, is stated at the 0.1 stop: build the whole batch, or run a
+**partial batch** — BATCH-CLOSE over just those items' range, and the expunge removing just them;
+the plan's batch and its boundary row stay.
 
 Test every plan batch against the partition. A batch that gates on a later batch, or two of the
 plan's own sources that disagree about a batch (a table against a column), is a conflict — say so
 at the 0.1 stop and leave the plan's grouping standing until it is ruled. Lumping or splitting
 more finely than the partition would is the plan's judgment, not a conflict. This skill does not
-re-split a plan on its own authority. **A one-batch task writes nothing:** its commits are its
-record.
+re-split a plan on its own authority. **A one-batch task writes no batch rows:** its commits and its
+in-flight row are its record.
 
 ### The context set — what each batch declares
 
@@ -322,10 +332,13 @@ While a batch is open, **one row in the Open table of the lane file its plan nam
 the batch handle, a pointer to the batch in the plan, **`open <sha>`** (`HEAD` before the first
 item), **`built <handles>`** (each item's handle, appended **in that item's own commit**, which also
 carries the trailer line `Item: <handle>`, so a handle is listed if and only if its commit
-exists), and **`close <none|1|2|3>`** (the last BATCH-CLOSE phase whose commit landed; each
-phase's reconciliation commit updates it). Handles and
-SHAs are ids and pointers, never a count or narrative (CLAUDE.md §1). For an ad hoc task with no
-plan, the batch's own row (its items, files, gates — §Where the batches live) gains these fields.
+exists), and **`close <none|1|2|3|final>`** (the last BATCH-CLOSE phase finished, `final` once `/close` has
+committed; **each phase's end updates the row, in a commit of its own if the phase edited nothing**
+— a clean phase leaves no other mark, and a resume would re-run it). Handles and
+SHAs are ids and pointers, never a count or narrative (CLAUDE.md §1). In the lane's three-column Open table (item | where it lives | next step):
+item `Batch <handle> — IN FLIGHT`; where it lives, the batch's place in the plan plus `open <sha>`;
+next step, `built <handles> · close <phase> · <what remains>`. For an ad hoc task with no batch
+row, the in-flight row is created whole (items, files, gates, then these fields).
 **The expunge deletes the row with the batch: the ledger exists only while the batch is open,
 which is why it is allowed (CLAUDE.md §2 — a finished position's record is its commit, not a mark).**
 
@@ -335,7 +348,10 @@ run BATCH-CLOSE from the phase after `close`, and take `open` as the batch's sta
 the row against the tree before trusting it:** every `built` handle must have a commit in
 `open..HEAD` carrying `Item: <handle>`, and every such trailer there must be in the row; where
 they disagree, the commits win — correct the row and say so; if they cannot be reconciled, ask.
-**A position the plan or handoff already records as BUILT with its close not run** enters at
+**Then look at the tree:** a killed run leaves residue. If `git status` is dirty, it is the killed
+item's partial build — report its paths, `git stash push -u` it (reversible) and rebuild the
+item; never commit it unreviewed. `git worktree list` shows fan lanes left behind: integrate or
+remove each. **A position the plan or handoff already records as BUILT with its close not run** enters at
 BATCH-CLOSE: write the row with `built` filled and `open` the range start that record names; if it
 names none, ask. An invocation whose text does not match an in-flight batch stops and reports
 it (`STOPPED`); it never opens a second batch.
@@ -344,24 +360,31 @@ it (`STOPPED`); it never opens a second batch.
 
 1. **Establish currency:** `/currency`, then the lane's handoff and the plan's rows for this batch
    only (CLAUDE.md §0's first bullet).
-2. **Load `C(k)` from disk**, the overlap with the last batch included. Do not rely on having read it.
-3. **Check every item's gate against the tree**, not against any earlier window's belief that it
-   landed. A gate rewritten to a SHA is met iff `git merge-base --is-ancestor <sha> HEAD`; a gate
-   naming a position still in the plan is met by that position's own entry; **a gate that names a
-   batch is met iff that batch's close landed** — its rows gone from the plan (or marked closed by
-   the plan's own rule) and its closing SHA, written into the gate, an ancestor of `HEAD`; a gate
-   that names none of these is unmet — `STOPPED`.
+2. **Load this batch's context set from disk**, the overlap with the last batch included. Do not
+   rely on having read it.
+3. **Check every item's gate against the tree**, never an earlier window's belief that it landed.
+   By gate kind: a **SHA** is met iff `git merge-base --is-ancestor <sha> HEAD`; a **position** is
+   met iff the plan no longer holds it and its landing SHA is written in the gate, or the plan's
+   own status vocabulary marks it landed with the evidence named — a position recorded BUILT with
+   its close not run is **not** landed; a **batch** is met iff its close landed (its rows gone or
+   marked closed by the plan's own rule, its closing SHA in the gate and an ancestor of `HEAD`); a
+   **ruling or decision** is met iff the ledger row that owns it (`registers/`, last row governs)
+   records it resolved. A gate of none of these kinds is unmet — `STOPPED`.
 4. **Record the starting commit — `HEAD` — in the in-flight row (below), in the first item's own
    commit.** Every item commits at once (0.1 step 3), so when BATCH-CLOSE runs the tree is clean
    and there is no uncommitted diff. The batch's diff is the **commit range from that SHA to `HEAD`** (`git diff <batch-start-sha>..HEAD`
    for the content; `/code-review`'s own branch/PR-target mode, not its bare "current diff" mode,
-   for the dispatch itself), and BATCH-CLOSE hands every phase that range.
+   for the dispatch itself), and BATCH-CLOSE hands every phase that range. `valoria-critic` holds
+   only Read, Grep and Glob and cannot run `git diff`: write the range's diff to a scratchpad file
+   and hand the critics its path.
 
 ### The last batch is also the run's `/close`
 
-When the resolved sequence is exhausted, BATCH-CLOSE is immediately followed by `/close` itself
-(its suite step is BATCH-CLOSE's, not run twice — lane validator, commit, handoff), per that
-skill's own definition, **after** the BATCH BOUNDARY's expunge. A mid-run boundary does not invoke
+When the resolved sequence is exhausted, BATCH-CLOSE is followed by `/close` itself (its suite step
+is BATCH-CLOSE's, not run twice — lane validator, commit, handoff), per that skill's own
+definition, and **then** the BATCH BOUNDARY's expunge. The order is deliberate: the in-flight row is
+deleted by the expunge, so it is the last thing to go and a death anywhere earlier — the long
+suite-running stretch included — still resumes from the row. A mid-run boundary does not invoke
 `/close`; it runs BATCH-CLOSE, then the BATCH BOUNDARY.
 
 ---
@@ -383,7 +406,8 @@ against a working-tree diff, since nothing is left uncommitted by the time a bat
 - Its **Phase 2 order and apply-before-next-reads discipline** (§2.1–2.4) apply as written there,
   against the batch's full cumulative diff. **The test suite is CLAUDE.md §0.4's, not
   `methodology-close`'s:** it runs at most once per batch, here, and only if it can observe
-  something CI will not (cl.1), over only the files and suites the batch's diff can reach (cl.4); a
+  something CI will not (cl.1), over only the files and suites the batch's diff can reach (§0.4's
+  closing paragraph); a
   batch of prose or ledger edits runs just the files that read what it touched. No item inside the
   batch runs it.
 - Its **Phase 3 tier, escalation trigger, checklist, and the top-down/bottom-up handshake**
@@ -400,7 +424,7 @@ Nothing in this section is restated in full here; a change to any of it is made 
 ## BATCH BOUNDARY — expunge, then clear
 
 Runs after BATCH-CLOSE's reconciliations are committed, after **every** batch including the last
-(for the last, only item 1 applies, and `/close` follows it).
+(for the last, only item 1 applies, and it follows `/close`).
 
 1. **Expunge on disk — one commit.** **Before deleting anything, grep the tree for what points at
    it:** every remaining batch's rows (the plan and the lane handoff) for each handle and file
@@ -448,11 +472,13 @@ Runs after BATCH-CLOSE's reconciliations are committed, after **every** batch in
 Every invocation ends its final message with exactly one line, last, plain text (no markdown),
 after the human-readable report:
 
-- `METHODOLOGY-EXECUTE: NEXT <batch handle, as its plan writes it>` — a batch closed and was expunged; at least one
-  remains and its first item's gates are met.
-- `METHODOLOGY-EXECUTE: COMPLETE` — the sequence is exhausted and `/close` ran.
+- `METHODOLOGY-EXECUTE: NEXT <batch handle, as its plan writes it>` — a batch closed and was
+  expunged; at least one remains and its first item's gates are met. A driver copies the handle
+  into the next invocation as `[next: <handle>]`.
+- `METHODOLOGY-EXECUTE: COMPLETE` — the sequence is exhausted, `/close` ran and the last expunge
+  landed.
 - `METHODOLOGY-EXECUTE: STOPPED <one-line reason>` — anything that needs a person: the 0.1
-  approval stop; an unmet gate or a `JORDAN` item; a `needs_jordan` ruling that survives
+  approval stop; `approved:` text that matches nothing; an unmet gate or a `JORDAN` item; a `needs_jordan` ruling that survives
   CLAUDE.md §0's five-step ladder; an in-flight row that cannot be reconciled with the commits; a
   BATCH-CLOSE finding that can neither be applied nor rejected with a measurement; the next
   batch's gate unmet.
@@ -475,7 +501,8 @@ this spelling.
   not in a commit, the plan, the handoff or the permanent surface does not exist for the next
   batch; if the next batch needs it, the partition missed a link — add the link or write the fact
   down, never reconstruct it from memory. No scratchpad file or summary carries state between
-  batches.
+  batches. (Auto memory, where enabled, loads in every fresh process: fresh context, not fresh
+  memory — treat it as permanent surface and put nothing batch-specific in it.)
 - **Expunge deletes; it keeps no log of its own.** The boundary commit removes the in-flight row
   with the batch. A "batch k done" row, count or narrative that the plan's own rule for finished
   positions does not prescribe is the growth CLAUDE.md §1 forbids; the only state this skill keeps
