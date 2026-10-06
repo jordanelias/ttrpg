@@ -274,6 +274,27 @@ context, it is a dependency:** it travels as a commit, a plan edit or a handoff 
 on disk — and appears in the next batch's `C` as a gate, never as a recollection.
 `valoria-author` is told the same: a fact worth keeping goes into the artifact.
 
+### The in-flight row — where a cleared window learns where the batch stands
+
+While a batch is open, **one row in the Open table of the lane file its plan names**
+(`registers/handoffs/HANDOFF_<LANE>.md` — CLAUDE.md §2's place for mid-task state) carries:
+the batch handle, a pointer to the batch in the plan, **`open <sha>`** (`HEAD` before the first
+item), **`built <handles>`** (each item's handle, appended **in that item's own commit**, so a
+handle is listed if and only if its commit exists), and **`close <none|1|2|3>`** (the last
+BATCH-CLOSE phase whose commit landed; each phase's reconciliation commit updates it). Handles and
+SHAs are ids and pointers, never a count or narrative (CLAUDE.md §1). For an ad hoc task with no
+plan, the batch's own row (its items, files, gates — §Where the batches live) gains these fields.
+**The expunge deletes the row with the batch: the ledger exists only while the batch is open,
+which is why it is allowed (CLAUDE.md §2 — a finished position's record is its commit, not a mark).**
+
+**Resuming.** If the lane's Open table already holds an in-flight row, that batch is the one to
+continue — BATCH OPEN's first check, ahead of 0.1's search. Build only the items not in `built`,
+run BATCH-CLOSE from the phase after `close`, and take `open` as the batch's starting commit. **Check
+the row against the tree before trusting it:** every `built` handle must have a commit in
+`open..HEAD`, and every commit there naming a handle must be in the row; where they disagree, the
+commits win — correct the row and say so; if they cannot be reconciled, ask. An invocation whose
+text does not match an in-flight batch stops and reports it; it never opens a second batch.
+
 ### BATCH OPEN — orient as a session opens
 
 1. **Establish currency:** `/currency`, then the lane's handoff and the plan's rows for this batch
@@ -281,10 +302,8 @@ on disk — and appears in the next batch's `C` as a gate, never as a recollecti
 2. **Load `C(k)` from disk**, the overlap with the last batch included. Do not rely on having read it.
 3. **Check every item's gate against the tree**, not against any earlier window's belief that it
    landed (0.5's third rule).
-4. **Record the starting commit — `HEAD` — before the first item builds.** After an interruption (a
-   batch with item commits and no expunge) it is the parent of the earliest commit whose subject
-   names one of the batch's handles (`git log --reverse --grep`; the plan's commit shape names the
-   handle); if none does, or the match is ambiguous, ask. Every item commits at once (0.1 step 3),
+4. **Record the starting commit — `HEAD` — in the in-flight row (below), in the first item's own
+   commit.** Every item commits at once (0.1 step 3),
    so when BATCH-CLOSE runs the tree is clean and there is no uncommitted diff — which is what
    `methodology-close`'s Phase 1 and Phase 3 assume they are handed when run on their own. The
    batch's diff is the **commit range from that SHA to `HEAD`** (`git diff <batch-start-sha>..HEAD`
@@ -371,8 +390,9 @@ is `/close`).
   batch; if the next batch needs it, the partition missed a link — add the link or write the fact
   down, never reconstruct it from memory. No scratchpad file or summary carries state between
   batches.
-- **Expunge deletes; it does not log.** The boundary commit nets out removals. A "batch k done"
-  row, count or narrative in the plan or handoff is the growth CLAUDE.md §1 forbids.
+- **Expunge deletes; it does not log.** The boundary commit nets out removals, the in-flight row
+  included. A "batch k done" row, count or narrative in the plan or handoff is the growth
+  CLAUDE.md §1 forbids; the only state kept is the in-flight row, and only while its batch is open.
 - **No new roster entry.** Phase 0 dispatches `valoria-author`; BATCH-CLOSE dispatches
   `valoria-critic`, exactly as `methodology-close` already does. Nothing here mints a third agent
   file.
@@ -395,7 +415,8 @@ is `/close`).
 | "the batch size was right" | a linked group was carried whole through BATCH-CLOSE with no stated reason not to cut it along its gates, or was cut with no stated reason the whole group would have been too large |
 | "the plan's own batches were used" | a batch the plan already names was re-split or merged without a conflict stated at the 0.1 stop |
 | "the context was cleared at the boundary" | the next batch's work cites a receipt, finding, SHA or fact that is neither on disk nor in the permanent surface; or two batches ran in one window and the report did not say context was NOT cleared |
-| "the batch was expunged" | a finished position is still in the plan after the boundary commit, or that commit added a narrative, a "done" row or a count |
+| "the batch was expunged" | a finished position, or its in-flight row, is still present after the boundary commit, or that commit added a narrative, a "done" row or a count |
+| "the batch resumed from its row" | a resumed batch rebuilt an item whose handle was in `built`, skipped one that was not, or re-ran a BATCH-CLOSE phase at or before `close` — or the row was trusted over the commits where they disagreed |
 | "BATCH-CLOSE ran once per batch" | the full pytest suite, `/code-review`, `/simplify`, `layer-conformance`, the agonist/antagonist fan, or the terminal critique ran between two items of the *same* batch, or did not run at all before the batch's items were reported done |
 | every Phase 1–3 claim, at BATCH-CLOSE | `methodology-close`'s own falsifier table, unchanged, checked against the batch's cumulative post-Phase-0 diff |
 
