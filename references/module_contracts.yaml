@@ -2,6 +2,7 @@
 # Module wrapper contracts — every game system/mechanic as IN → resolver → OUT(+Keys).
 # Its governing skill and checker (valoria-module-adjudicator, contract_adjudicator.py) were
 # Key-based and are retired (ED-IN-0232, ED-IN-0265; FORK:88fc88e). Read this file directly.
+# History and discussion: references/module_contracts_history.md
 #
 # DISCIPLINE (normative, from the skill):
 #   - Edges are transcribed VERBATIM from canonical sources, including type strings
@@ -19,48 +20,14 @@
 #     for Jordan (ED-IN-0103, audit/2026-07-29-centralization-single-owner/
 #     01_orchestration_plan_v1.md §6 row 1). No vocabulary unification lands here or
 #     anywhere else until that fork resolves — this is a coordination pointer, not a change.
-#
-# v2 (2026-06-10) — Stage-1 extraction pass: registry emitting/consuming_systems
-# matrix parsed wholesale (38 typed entries, 29 named systems); 5 of 7 v1 stubs
-# extracted; political_dynamics CONSOLIDATED into npc_behavior (doc-12 = PP-687
-# npc-procedure Keys migration); 10 registry-named systems added as new modules;
-# personal_combat deferred (canonical-candidate, handoff-owned); campaign_architecture
-# reclassified (consolidation doc, retirement recommended).
-# v1 seeded 2026-06-09/10 from key_substrate_v30 §8 / key_type_registry_v30 /
-# scale_transitions_v30 / derived_stats_v30 (commit cdbd1b50).
 
-# v3 (2026-06-10) — gates + per-system calculations folded into the contract so the
-# enforcer checks them (A10 gates / A11 derivations / A12 sequence). Migrated verbatim
-# from the cited contract_flowchart.py literals; the flowchart now READS these from here
-# (single source of truth). settlement_layer Mandate↔L/PS loop annotated with its §1.8
-# canon damper. schema_version 1 -> 2.
-# v2 (2026-06-10) — Stage-1 extraction pass: registry emitting/consuming_systems
-# matrix parsed wholesale (38 typed entries, 29 named systems); 5 of 7 v1 stubs
-# extracted; political_dynamics CONSOLIDATED into npc_behavior (doc-12 = PP-687
-# npc-procedure Keys migration); 10 registry-named systems added as new modules;
-# personal_combat deferred (canonical-candidate, handoff-owned); campaign_architecture
-# reclassified (consolidation doc, retirement recommended).
-# v1 seeded 2026-06-09/10 from key_substrate_v30 §8 / key_type_registry_v30 /
-# scale_transitions_v30 / derived_stats_v30 (commit cdbd1b50).
 
 schema_version: 2
 generated: "2026-06-10"
-status: EXTRACTED_STAGE1  # campaign_architecture stub remains; personal_combat EXTRACTED 2026-06-23 (v4, below)
+status: EXTRACTED_STAGE1   # campaign_architecture stub remains
 
-# v4 (2026-06-23) — personal_combat EXTRACTED (deferral resolved: combat_engine_v1 ratified CANONICAL
-# by ED-900/904 + docket ED-1029; the stale README 'canonical-candidate' line that gated the trigger is
-# corrected). Shaped as CombatEngine (BaseEngine, d_sigma) hosting the 11-action module set; combat.strike
-# + combat.wound ported to the Godot skeleton (slice). F3 resolved (scene.combat_* outcome Key family).
-# Model corrected off the v30 placeholder (Agi×2/TN-7/mult-STR) to the canonical sigma engine + ED-1041
-# bilateral-Ob wounds. See the personal_combat entry below + the 2026-06-22 personal-combat audit.
 
 # ── COMPOSITION ROLES (added 2026-08-20, plan Act C3) ────────────────────────────────────────────
-# WHY THIS IS HERE AND NOT IN engine/. The premise this repo works from is that `systems/` stems
-# from `engine/` and `references/`. Until 2026-08-20 the campaign driver `engine/mc_v18.py` named
-# its subsystems directly (`from systems.factions.sim.faction_action import faction_take_action`),
-# which inverts that: the root named its own dependents, and the package graph acquired a cycle.
-#
-# These rows move the naming to where the premise says it belongs — a registry under `references/`.
 # `engine/substrate/composition.py` resolves a ROLE to a callable through the cooked artifact
 # `engine/engine_params/composition.json` (written by `tools/export_composition.py`, blocking
 # `--check`), so `engine/` states WHAT it needs and `references/` states WHICH module provides it.
@@ -68,37 +35,9 @@ status: EXTRACTED_STAGE1  # campaign_architecture stub remains; personal_combat 
 # Adding a subsystem to the campaign loop is now a row here, not an import in the engine.
 # `target` is `dotted.module:callable`. The resolver imports lazily, at first call.
 composition_roles:
-  # ── RETIRED AT PLAN POSITION `28-iii` (SPINE-DELETE, 2026-10-01) ─────────────────────────────────
-  # Seventeen rows went with the callers that were their only readers, deleted the same commit:
-  #   `faction_action`, `season_driver` -- `engine/mc_v18.py`;  `accounting` -- `engine/autoload/engine_clock.py`;
-  #   `scene_builder.contest`, `scene_resolver.contest`, `contest_side.a`, `contest_side.b` --
-  #   `engine/cross_scale/scene_dispatch.py`;  the ten `snapshot_state.*` rows -- `game_state.py::restore_world`.
-  # The deleted files are retrievable through their `references/restructure_ledger.md` rows (ref `5c5d8ec6`).
-  #
-  # THE "KEPT NAMED" RULING FOR THE THREE ORPHANS EXPIRES HERE, AND ITS EXPIRY IS RECORDED RATHER THAN
-  # SILENT. `rs_track_delta`, `territory_transfer_candidate` and `territory_transfer_proposal` were kept
-  # after 2026-09-16 (ED-IN-0232) on the argument that an orphaned role is more useful named than deleted:
-  # the target resolves, the exporter imports it, and deleting would hide an orphaned mechanic behind a tidy
-  # registry. `architecture/meta/01_AXIOMS.md` `ID-13` answers it -- a declared field that reaches no reader
-  # is not declared -- and the exporter importing three dead targets every run was the price of the name.
-  # WHAT THE DELETION DOES NOT DO: it does not give the mechanic a driver. The §§1-4 CB-gated parliamentary
-  # TERRITORY TRANSFER motion in `systems/factions/sim/parliamentary_transfer.py` is untouched and still
-  # nothing drives it; `engine/season/` has no replacement (its `transfer` verb is an unrelated store-to-store
-  # rung move). That file leaves with its tree at `29b`, which is where the mechanic's fate is decided.
-  #
-
-  # ── RETIRED AT PLAN POSITION `29b` (2026-10-01): four rows, with the tree that was their only reader ──
-  #   `parliamentary_vote`, `parliamentary_motion`, `parliamentary_vote_declaration` -- read by
-  #   `systems/factions/sim/{parliamentary_transfer,parliamentary_action}.py`; their targets in
-  #   `systems/social_contest/sim/parliamentary_vote.py` (and its sibling `parliamentary_stay.py`, which imported
-  #   only `parliamentary_vote`) went with the readers. Faction acts are person acts `via` seats in the season loop; the
-  #   vote's verb content is `levy`/`open_case`/`determine`/`issue` + `march`.
-  #   `world_gen_settlements` -- read by `game_state.create_world`; the season's world is built by
-  #   `engine/season/harness/populated.build_realm`. `systems/settlements/sim/registry.populate_from_geography`
-  #   lost its only role there and was deleted with the rest of that tree at `29c` (2026-10-01).
-  # The deleted files are retrievable through their `references/restructure_ledger.md` rows.
-  #
-  # Exactly one role remains. ID-13 applies to the next row added: a role no caller requires is not declared.
+  # Retired roles, not to be re-added without a caller: `rs_track_delta`, `territory_transfer_candidate`, `territory_transfer_proposal`,
+  # `parliamentary_vote`, `parliamentary_motion`, `parliamentary_vote_declaration`, `world_gen_settlements`.
+  # ID-13 applies to the next row added: a role no caller requires is not declared.
   #
   # ── MODULE ENTRIES (plan position `30`; A-25, `ED-IN-0284` revised by `ED-IN-0285`) ──────────────────────
   # A row may carry `entry:` -- HOW the season loop calls its target: `verb_call` (a verb's adapter calls it;
@@ -108,7 +47,7 @@ composition_roles:
   # carries one into `MODULE_ENTRIES` at driver construction, resolving the target by string, and refuses a
   # `verb:` that names no verb row and an entry registered twice. A row with no `entry:` is not a module
   # entry: `mass_battle.resolve_field` keeps its `require()` caller and is re-keyed `entry: verb_call`,
-  # `verb: march` at `31c`. No production row carries `entry:` yet -- the first is `31a`'s.
+  # `verb: march` at `31c`.
 
   mass_battle.resolve_field:
     target: "systems.mass_battle.sim.massbattle:resolve_field"
@@ -119,12 +58,8 @@ modules:
   - module: faction_state
     aliases: ["Faction Layer"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "faction_layer"   # Key Type Registry vocabulary
-    doc: .designs/systems/factions/reference/faction_behavior_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    sim_module: none   # was `engine/autoload/game_state.py` (the `Faction` dataclass, OI-54): deleted at plan
-      # position `29b` (2026-10-01) with `systems/factions/`. No season counterpart holds a faction stat vector, by
-      # architecture (`architecture/meta/04_CODE_ARCHITECTURE.md`: `faction_q.resolve` builds a view that is NEVER a field of its own), so this
-      # contract's `state:` block now describes no code. The row is kept, not deleted: it is a registry row other
-      # contracts' `with:` joins name, and removing it is its own change.
+    doc: .designs/systems/factions/reference/faction_behavior_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    sim_module: none   # this contract's state: block describes no code (row kept: other contracts' `with:` joins name it)
     scales: [provincial]
     resolver: deterministic_accounting   # [ASSUMPTION] accounting-cadence procedures; d_sigma for contested resolution per ED-874
     state:
@@ -155,19 +90,8 @@ modules:
   - module: npc_behavior
     aliases: ["NPC Behaviour"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "npc_behavior (+ Procedures B/D/E)"   # Key Type Registry vocabulary
-    doc: .designs/systems/factions/reference/political_dynamics_keys_migration_v30.md   # ED-IN-0231: quarantined, and RESTORED here on purpose. This module has NO CODE, so severing its doc would not hand authority to the code — it would leave the module a bare name with nothing defining it, which tests/valoria/test_key_graph.py rightly refused until it retired with the Key substrate (2026-09-16, ED-IN-0232 — the guard is gone, the reason the pointer was restored is not). Its twelve code-bearing siblings stay null: there the code IS the authority (CLAUDE.md §0.05).
-    sim_module: none   # OI-54 (ED-IN-0097, W4): re-verified — systems/npcs/ has ZERO .py files
-      # (matches this entry's own consumes: comment above, "npc_behavior has no runtime"). Doc is
-      # real (not doc:null) but there is no code home yet; the NPC family lane is unresolved (§5
-      # row 9 / OI-59).
-      # NEAR-MISS DISCLOSED (W4 gate, adj finding 8 / critic Q-8 — the mechanics_index cross-check
-      # this row's first draft skipped): mechanics_index.yaml:192-196 carries
-      # `npc_ai_service -> engine/autoload/npc_ai.py`, whose own docstring declares entry points
-      # `select_action` / `evaluate_priority_stack` — i.e. exactly this contract's stated role.
-      # Still `none`, deliberately: that module was converted to `stubwire` in W1 (ED-IN-0093,
-      # OI-17 armature-stub batch), so it is an explicitly-flagged not-built shell, not an
-      # implementation of this contract. Declaring it would make the join report a code home that
-      # answers no Key. Recorded rather than silently omitted; revisit when the NPC lane resolves.
+    doc: .designs/systems/factions/reference/political_dynamics_keys_migration_v30.md   # ED-IN-0231: quarantined, and RESTORED here on purpose. This module has NO CODE, so severing its doc would leave the module a bare name with nothing defining it.
+    sim_module: none
     scales: [personal, scene]
     resolver: deterministic_accounting   # [ASSUMPTION] doc-12 §8 sequencing-within-Accounting + §9 determinism; Conviction-armature reads (substrate §8.2) feed decision derivation §4
     state:
@@ -213,8 +137,7 @@ modules:
   - module: npc_memory
     registry_system: "npc_memory"   # Key Type Registry vocabulary
     doc: null
-    sim_module: none   # OI-54 (ED-IN-0097, W4): doc:null/no-sim per the W4 preflight; re-verified
-      # (find/grep for npc_memory* across the tree returns nothing).
+    sim_module: none
     scales: [personal]
     resolver: state_reader   # [ASSUMPTION] Memory store written from Keys; queried by Procedures (doc-12 §2.3 bridge)
     state: []
@@ -236,12 +159,8 @@ modules:
   - module: piety_track
     aliases: ["Conviction Track"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "conviction_track"   # Key Type Registry vocabulary
-    doc: .designs/systems/characters/reference/conviction_track_v1.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    sim_module: systems/characters/sim/conviction.py   # OI-54 (ED-IN-0097, W4): matches
-      # mechanics_index.yaml's `certainty_track`/`conviction_scar` entries (same file); content
-      # verified directly (apply_conviction_scar, per-Conviction Scar thresholds — §2 of this
-      # module's own doc). This is the PERSONAL piety_track, not territorial_piety below (3-way
-      # name collision noted in gap_notes) — do not conflate the two sim_module: values.
+    doc: .designs/systems/characters/reference/conviction_track_v1.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    sim_module: systems/characters/sim/conviction.py   # the PERSONAL piety_track's code, not territorial_piety's (3-way name collision, see gap_notes)
     scales: [personal]
     resolver: deterministic_accounting   # [ASSUMPTION] scar accumulation thresholds (conviction_track_v1 §2)
     state:
@@ -274,19 +193,13 @@ modules:
       note: conviction.py Scar accumulation real; reached only via the unwired knot chain.
 
   - module: territorial_piety
-    doc: .designs/systems/characters/reference/conviction_track_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    sim_module: none   # was `systems/overview/sim/ci_track.py` (the CI half) and `Territory.pt` in
-      # `engine/autoload/game_state.py` (the CV half): both deleted at plan position `29b` (2026-10-01). The Accord / CI /
-      # IP / RS clocks have no season analogue (`engine/season/loop/census.py`: no clock generates anything).
+    doc: .designs/systems/characters/reference/conviction_track_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    sim_module: none
     scales: [territory, provincial]
     resolver: deterministic_accounting   # [ASSUMPTION] CV movement rules §1.2 + seasonal TC calculation §3
     state:
       - {name: "CV (per-territory Piety)", bucket: track, writable: true}   # conviction_track_v30 §1, 0-base
       - {name: "CI (Church Influence)", bucket: clock, writable: true}   # CI generation §3 — clock_registry: CI 0-100 source = conviction_track_v30 §3
-      # "TC (Theocracy Counter)" row STRUCK 2026-07-08 (ED-IN-0029 docket, OPT-AV-7): TC is CI's
-      # retired predecessor name, not a second live clock (conviction_track_v30.md's glossary
-      # note, corrected same pass). This entry was carrying it as a separate, still-writable state
-      # slot alongside CI itself — pure propagation of an already-decided rename, no new ruling.
     transitions: []
     loops: []
     gates:
@@ -317,17 +230,12 @@ modules:
 
   - module: threadwork
     registry_system: "threadwork"   # Key Type Registry vocabulary
-    doc: .designs/systems/threadwork/reference/threadwork_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    sim_module: systems/threadwork/sim/operations.py   # OI-54 (ED-IN-0097, W4): matches
-      # mechanics_index.yaml's `thread_leap`/`thread_weaving`/`thread_pulling`/`thread_locking`/
-      # `thread_dissolution`/`thread_mending` entries (all this file — the operation-roll
-      # resolver this contract's `resolver: dice_pool` names). Coherence/Fatigue state and the
-      # co_movement/collective/opposing/rendering/threadcut siblings are separate mechanics_index
-      # entries under systems/threadwork/sim/ — not this module's own state:, not cited here.
+    doc: .designs/systems/threadwork/reference/threadwork_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    sim_module: systems/threadwork/sim/operations.py
     scales: [personal, thread]
     resolver: dice_pool   # Leap Roll + operation rolls (threadwork_v30 Part Two)
     state:
-      - {name: "Coherence", bucket: track, writable: true}   # bucket pool->track RATIFIED 2026-07-08 (ED-IN-0029 docket, OPT-AV-3/D7): propagates the already-resolved-but-never-applied ED-830 ruling ("Coherence reclassified from Derived Value to Track"); now also registered in descriptor_registry.yaml not_descriptors.tracks. Prior [ASSUMPTION bucket] tag struck (canonical pool notice PP-616/618/619/624/625 was about the depletion MECHANIC, not the bucket taxonomy)
+      - {name: "Coherence", bucket: track, writable: true}   # bucket pool->track (ED-IN-0029 docket, OPT-AV-3/D7); also registered in descriptor_registry.yaml not_descriptors.tracks
       - {name: "Thread Fatigue", bucket: clock, writable: true}   # bucket track->clock [verification A4: advances to Spirit*5 contact-break threshold] — ED-694, replaces Contact Rounds
     transitions:
       - {via: "scale_transitions §3.1 Personal → Thread"}
@@ -352,14 +260,8 @@ modules:
   - module: fieldwork_knots
     aliases: ["Knots"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "fieldwork"   # Key Type Registry vocabulary
-    doc: .designs/systems/fieldwork/reference/knots_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    sim_module: systems/fieldwork/sim/knots.py   # OI-54 (ED-IN-0097, W4): matches
-      # mechanics_index.yaml's `knots` entry directly (module alias is literally "Knots"); this
-      # module's gap_notes already flag it as needing a rebuild (C-TW-12) — real code, imperfect
-      # fidelity, still a genuine G_code join. The Evidence/Disposition Track rows of this
-      # contract's state: are implemented in the SIBLING systems/fieldwork/sim/fieldwork.py
-      # (mechanics_index `disposition_track`/`evidence_track`), not in knots.py — disclosed, not
-      # papered over; knots.py is picked as primary because the module/alias name matches it.
+    doc: .designs/systems/fieldwork/reference/knots_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    sim_module: systems/fieldwork/sim/knots.py   # primary: knots.py; the Evidence/Disposition Track rows are implemented in the sibling systems/fieldwork/sim/fieldwork.py
     scales: [personal, scene]
     resolver: dice_pool   # Fieldwork Pool (fieldwork_v30 §2); knot formation procedure (knots_v30 §3.2)
     state:
@@ -406,12 +308,7 @@ modules:
   - module: scene_slate
     registry_system: "scene_slate"   # Key Type Registry vocabulary
     doc: null
-    sim_module: none   # RETIRED AT PLAN POSITION `28-iii` (2026-10-01). It was engine/autoload/scene_slate.py,
-      # a 59-line queue, deleted (its restructure_ledger row, ref 5c5d8ec6). The season loop's counterpart is
-      # `engine/season/loop/deliberate.py` + `pack_scenes`, and this row is NOT re-pointed at it: this contract's
-      # resolver is the 7-priority slate GENERATOR, which the wiring note below records as never built.
-      # (Until then OI-54, ED-IN-0097 had recorded the row as DISCREPANT with the W4 preflight's "no-sim" list,
-      # because the file was real, scanned code. With the file gone the preflight's characterization holds.)
+    sim_module: none
     scales: [scene]
     resolver: manifest   # deterministic 7-priority slate generation [verification RU-5: manifest-generator, not state_reader] (settlement_layer §4.1; player_agency §4.2)
     state: []
@@ -434,17 +331,7 @@ modules:
   - module: game_director
     registry_system: "game_director"   # Key Type Registry vocabulary
     doc: null
-    sim_module: none   # OI-54 (ED-IN-0097, W4): doc:null/no-sim per the W4 preflight; re-verified —
-      # grep for mechanical.scene_entered/scene_exited/scene_skipped across systems/+engine/ finds
-      # NO emitter anywhere. engine/autoload/season_manager.py implements a season-loop
-      # (advance_season/check_arc_boundary) but is not a zoom-stack orchestrator and emits none of
-      # this module's declared Keys — a partial behavioral analog, not this contract's code home.
-      # SECOND NEAR-MISS DISCLOSED (W4 gate, adj finding 8 / critic Q-8): engine/cross_scale/
-      # scene_dispatch.py is the closer analog for the "zoom-stack orchestrator" half of this
-      # contract's resolver: manifest — it routes scene entry/exit across scales. Still `none`:
-      # it is NOT in mechanics_index.yaml at all (grep: zero hits, so there is no indexed
-      # precedent to cite) and it emits none of this module's `mechanical.scene_*` Keys either.
-      # Both analogs named so the `none` is a measured absence, not an unexamined one.
+    sim_module: none
     scales: [scene]
     resolver: manifest   # season-loop + zoom-stack orchestrator [verification RU-5: orchestrator, not state_reader]
     state: []
@@ -465,8 +352,7 @@ modules:
   - module: scene_timer
     registry_system: "scene_timer"   # Key Type Registry vocabulary
     doc: null
-    sim_module: none   # OI-54 (ED-IN-0097, W4): doc:null/no-sim per the W4 preflight; re-verified
-      # (find for scene_timer* across the tree returns nothing).
+    sim_module: none
     scales: [scene]
     resolver: state_reader   # OBSERVABILITY/tooling: wall-clock sidecar OUTSIDE the Key log, advances no game clock [verification RU-5 — not a runtime gameplay resolver]
     state: []
@@ -487,9 +373,7 @@ modules:
   - module: audit
     registry_system: "audit"   # Key Type Registry vocabulary
     doc: null
-    sim_module: none   # OI-54 (ED-IN-0097, W4): doc:null/no-sim per the W4 preflight; re-verified —
-      # this is the observability/QA-tooling "audit" module (see resolver comment), distinct from
-      # the tools/ audit apparatus outside the gameplay runtime; no runtime consumer code found.
+    sim_module: none
     scales: [scene]
     resolver: state_reader   # OBSERVABILITY/tooling consumer [verification RU-5: QA/telemetry, not a runtime gameplay system]
     state: []
@@ -509,10 +393,8 @@ modules:
 
   - module: social_contest
     registry_system: "social_contest"   # Key Type Registry vocabulary
-    doc: .designs/systems/social_contest/reference/social_contest_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    sim_module: systems/social_contest/sim/contest/   # OI-54 (ED-IN-0097, W4): directory path —
-      # matches mechanics_index.yaml's `social_contest` entry verbatim (the live contest kernel
-      # package, contest_rebuild Stages 0-3 landed per that entry's own note).
+    doc: .designs/systems/social_contest/reference/social_contest_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    sim_module: systems/social_contest/sim/contest/
     scales: [scene]
     resolver: dice_pool
     state:
@@ -536,14 +418,8 @@ modules:
   - module: mass_battle
     aliases: ["Mass Combat"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "mass_battle"   # Key Type Registry vocabulary
-    doc: .designs/systems/mass_battle/reference/mass_battle_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    # sim_module: DELIBERATELY NOT ADDED HERE (OI-54, ED-IN-0097, W4): this module's rows are
-    # MB-owned per the plan's shared-file single-writer table ("module_contracts.yaml: MB owns
-    # rows [mass_battle] and its E1 deletion; IN owns the rest") — the join lane does not touch
-    # MB's rows even to add a field. The join-verified checker (structure_audit.py) therefore
-    # reports this module as `undeclared` (not `unresolvable` — the field is legitimately absent,
-    # not wrong) until the MB session adds it. LEAD for MB: mechanics_index.yaml already carries
-    # `mass_battle -> systems/mass_battle/sim/massbattle.py`.
+    doc: .designs/systems/mass_battle/reference/mass_battle_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    # sim_module: deliberately absent on this row (reported `undeclared`, not `unresolvable`); mechanics_index.yaml carries `mass_battle -> systems/mass_battle/sim/massbattle.py`.
     scales: [scene]
     resolver: dice_pool
     state: []
@@ -577,21 +453,7 @@ modules:
     aliases: ["Domain Echo"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "da_framework"   # Key Type Registry vocabulary
     doc: null
-    sim_module: none   # OI-54 (ED-IN-0097, W4): doc:null/no-sim per the W4 preflight; re-verified —
-      # grep for every da.* Key-type string literal (antinomian_action/covert_betrayal/
-      # diplomatic_alliance/economic_intervention/public_governance) across systems/+engine/ finds
-      # ZERO emitter code (only engine/cross_scale/articulation.py's consumer constant list). The
-      # accounting_sequence's "select_proposal()/execute_proposed_domain_actions()" prose (below,
-      # DA_proposal phase) names no function that exists in systems/factions/sim/faction_action.py
-      # (checked directly) — descriptive doc-12 prose, not a code pointer.
-      # NEAR-MISS DISCLOSED (W4 gate, adj finding 8 / critic Q-8 — the mechanics_index cross-check
-      # this row's first draft skipped): this entry's OWN `aliases: ["Domain Echo"]` above matches
-      # mechanics_index.yaml:899-903's `domain_echo -> engine/cross_scale/domain_echo.py`, a real
-      # scene->faction stat-propagation module. Still `none`, deliberately: domain_echo.py
-      # TRANSPORTS the echo (it is the cross-scale carrier wired under ECHO_TRANSPORT, ED-IN-0028)
-      # and emits none of the five `da.*` Key types this contract declares — the alias is a naming
-      # collision between "Domain Echo (§5 transport)" and "domain actions (the DA framework)",
-      # not a shared code home. Recorded rather than silently omitted.
+    sim_module: none
     scales: [provincial]
     resolver: d_sigma   # [ASSUMPTION] Domain Action resolver = deterministic+stochastic d+sigma (ED-874)
     state: []
@@ -616,23 +478,14 @@ modules:
 
   - module: peninsular_strain
     registry_system: "peninsular_strain"   # Key Type Registry vocabulary
-    doc: .designs/systems/overview/reference/peninsular_strain_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    sim_module: systems/overview/sim/   # OI-54 (ED-IN-0097, W4): DIRECTORY — this module's
-      # state: block splits across several files with no single owner: MS is
-      # systems/overview/sim/ms_track.py (this module's own state: comment already names it as
-      # "the canonical MS-arithmetic surface", cross-checked with mechanics_index.yaml's `ms_track`
-      # entry), IP WAS systems/overview/sim/ip_track.py (deleted 2026-10-01, plan position 29a: two stubs, no
-      # production caller; the mechanics_index `ip_track` row is left standing). Turmoil has
-      # NO tracker file anywhere (verified: grep for a Turmoil writer finds none) — this is the
-      # open §5 row 7 fork (Turmoil writer unruled), not papered over by pointing at a directory.
-      # A directory join is honest disclosure of the split, not a claim that every file in it
-      # implements this contract.
+    doc: .designs/systems/overview/reference/peninsular_strain_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    sim_module: systems/overview/sim/   # DIRECTORY: the state: block splits across several files with no single owner (MS: ms_track.py; Turmoil has no tracker file)
     scales: [peninsula]
     resolver: deterministic_accounting   # [ASSUMPTION]
     state:
       - {name: "Turmoil", bucket: clock, writable: true}   # clock_registry: 0-10, peninsular_strain_v30 §4
       - {name: "IP (Institutional Pressure)", bucket: clock, writable: true}   # clock_registry: 0-100 [PROVISIONAL ED-793 start value]
-      - {name: "MS (Mending Stability)", bucket: clock, writable: true}   # OI-32a ownership declaration (2026-07-29, W3 item 3): mechanically-determinable GAP-F1 owner. Floor 0 (Rupture) / ceiling 100; baseline decay -1/in-game-year at Year-End Accounting, PP-255 (params/core.md §MS Baseline Decay). Live tick: systems/overview/sim/ms_track.py (apply_ms_baseline_decay / apply_ms_delta, the canonical MS-arithmetic surface), (its former caller, systems/overview/sim/accounting.py, was deleted at plan position `29a`). CORRECTED 2026-07-29 (W3 item 8): the prior version of this comment claimed "accounting.py L36-39 also inlines the same PP-255 decay pending a migration" — that claim is FALSE against the current tree (re-verified directly: accounting.py has no inline decay logic anywhere; :36-39 is drift-probe docstring prose, not code, and the sole decay call fully delegates to ms_track.apply_ms_baseline_decay). The claim was carried over from ms_track.py's own docstring (a stale note predating accounting.py's migration to the delegated call — not corrected there, out of this file's scope; logged per CLAUDE.md §0.1 point 5). No env.ms_delta emit added here — a new emit would itself be a new dangling emit; see gap_notes GAP-F1 residual.
+      - {name: "MS (Mending Stability)", bucket: clock, writable: true}   # OI-32a ownership declaration: the GAP-F1 owner of MS. Floor 0 (Rupture) / ceiling 100; baseline decay -1/in-game-year at Year-End Accounting, PP-255. Live tick: systems/overview/sim/ms_track.py (apply_ms_baseline_decay / apply_ms_delta, the canonical MS-arithmetic surface). No env.ms_delta emit: a new emit would itself be a new dangling emit; see gap_notes GAP-F1 residual
     transitions: []
     loops: []
     gates:
@@ -678,13 +531,8 @@ modules:
 
   - module: settlement_layer
     registry_system: "settlement_layer"   # Key Type Registry vocabulary
-    doc: .designs/systems/settlements/reference/settlement_layer_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    sim_module: none   # RETIRED AT PLAN POSITION `29c` (2026-10-01). It was `systems/settlements/sim/settlement.py`
-      # (OI-54: the §1.3 Prosperity/Order/Local-Economy computation), with the Legitimacy/Popular Support
-      # fields in the sibling `registry.py`; the whole `systems/settlements/sim/` tree is deleted (each file has
-      # an exact row in `references/restructure_ledger.md`, ref 5c5d8ec6). The season's settlement is a `Rung`
-      # with `Site`s (`Site.condition`, `world_q.fortification_of`). The row is kept, not deleted: removing a
-      # contract row is its own change, and `doc:` above still resolves.
+    doc: .designs/systems/settlements/reference/settlement_layer_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    sim_module: none
     scales: [settlement, territory]
     resolver: deterministic_accounting
     state:
@@ -759,9 +607,7 @@ modules:
   - module: settlement_economy
     registry_system: "settlement_economy"   # Key Type Registry vocabulary
     doc: null
-    sim_module: none   # OI-54 (ED-IN-0097, W4): doc:null/no-sim per the W4 preflight; re-verified
-      # (no settlement_economy*.py anywhere) and consistent with this entry's own gap_notes
-      # ("RECOMMEND RETIRE ... phantom module (no doc/state/logic)").
+    sim_module: none
     scales: [settlement]
     resolver: deterministic_accounting   # [ASSUMPTION]
     state: []
@@ -782,13 +628,8 @@ modules:
       note: phantom (in-3/out-0); ED-SE-0005 folds it into settlement_layer.
 
   - module: ci_political
-    doc: .designs/systems/factions/reference/ci_political_v30.md   # ED-IN-0231: quarantined, and RESTORED here on purpose. This module has NO CODE, so severing its doc would not hand authority to the code — it would leave the module a bare name with nothing defining it, which tests/valoria/test_key_graph.py rightly refused until it retired with the Key substrate (2026-09-16, ED-IN-0232 — the guard is gone, the reason the pointer was restored is not). Its twelve code-bearing siblings stay null: there the code IS the authority (CLAUDE.md §0.05).
-    sim_module: none   # OI-54 (ED-IN-0097, W4): re-verified — no dedicated code found (grep for
-      # political_pool/card_hand/ci_political across systems/+engine/ finds only a docstring
-      # listing in systems/factions/__init__.py, not implementation). Matches this entry's own
-      # gap_notes ("ZERO Key integration in a CANONICAL doc"). Not the same file as
-      # territorial_piety's ci_track.py (CI GENERATION lives there per clock_registry's ownership
-      # split; ci_political reads CI for political effects §3-§5, which is unbuilt).
+    doc: .designs/systems/factions/reference/ci_political_v30.md   # ED-IN-0231: quarantined, and RESTORED here on purpose. This module has NO CODE, so severing its doc would leave the module a bare name with nothing defining it.
+    sim_module: none
     scales: [provincial]
     resolver: deterministic_accounting   # stat economy §4 + card system §5; CI bonus dice feed dice_pool contexts §3.2-§3.4
     state:
@@ -812,10 +653,8 @@ modules:
       note: CANONICAL doc, ZERO Key integration; card system unbuilt.
 
   - module: victory
-    doc: .designs/systems/victory/reference/victory_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    sim_module: none   # RETIRED AT PLAN POSITION `28-iii` (2026-10-01). It was engine/autoload/victory.py, deleted
-      # (its restructure_ledger row, ref 5c5d8ec6); disposition (c), no season replacement. The GD-1 requirement
-      # it implemented survives as the `ABSENT_RULE` row `H-176` in engine/season/hole_register.yaml.
+    doc: .designs/systems/victory/reference/victory_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    sim_module: none
     scales: [provincial, peninsula]
     resolver: state_reader   # reads aggregated clocks/state at Accounting; era transitions are deterministic
     state:
@@ -862,13 +701,7 @@ modules:
   - module: engine_clock
     registry_system: "engine_clock"   # Key Type Registry vocabulary
     doc: null
-    sim_module: engine/season/loop/driver.py   # RE-POINTED AT PLAN POSITION `28-iii` (2026-10-01). This row said
-      # `none` all the while engine/autoload/engine_clock.py existed (ED-IN-0199) -- it never named that file,
-      # and that file and engine/autoload/season_manager.py are now deleted (their restructure_ledger rows,
-      # ref 5c5d8ec6). It now describes the code that owns the season tick in the adopted game:
-      # `engine/season/loop/driver.py` (`SeasonDriver.season`, the ONE `w.tick += 1`) with
-      # `engine/season/loop/calendar.py` (barrier 1, `Date.fired`). So `CLAUDE.md` §6's "starting with
-      # `engine_clock`" means that driver + calendar pair, not a module. `doc:` stays null pending ED-1051.
+    sim_module: engine/season/loop/driver.py   # the season tick: `engine/season/loop/driver.py` (`SeasonDriver.season`, the ONE `w.tick += 1`) with `engine/season/loop/calendar.py` (barrier 1, `Date.fired`); `doc:` stays null pending ED-1051
     scales: [provincial]
     resolver: clock_advance
     state:
@@ -893,20 +726,14 @@ modules:
 
   - module: faction_politics
     registry_system: "faction_politics"   # Key Type Registry vocabulary
-    doc: .designs/systems/factions/reference/faction_politics_v30.md   # ED-IN-0231: quarantined, and RESTORED here on purpose. This module has NO CODE, so severing its doc would not hand authority to the code — it would leave the module a bare name with nothing defining it, which tests/valoria/test_key_graph.py rightly refused until it retired with the Key substrate (2026-09-16, ED-IN-0232 — the guard is gone, the reason the pointer was restored is not). Its twelve code-bearing siblings stay null: there the code IS the authority (CLAUDE.md §0.05).
-    sim_module: none   # OI-54 (ED-IN-0097, W4): re-verified — no dedicated code found (a
-      # Standing/coup_attempted/succession grep across systems/+engine/ turns up only unrelated
-      # substring hits). Matches this entry's own state: comment above ("contract-truth
-      # declaration, not a sim build — OI-20's sim half stays DEFERRED to the FA lane, §3.5").
+    doc: .designs/systems/factions/reference/faction_politics_v30.md   # ED-IN-0231: quarantined, and RESTORED here on purpose. This module has NO CODE, so severing its doc would leave the module a bare name with nothing defining it.
+    sim_module: none
     scales: [provincial]
     resolver: deterministic_accounting   # [ASSUMPTION]
     state:
-      # ── added 2026-07-29 (W3 item 3, OI-24 contract-truth sweep): top-level state items,
-      #    read directly off faction_politics_v30.md's own definitions. Contract truth only —
-      #    no sim build (OI-20's sim half is DEFERRED → FA lane, §3.5). ──
-      - {name: "Standing", bucket: track, writable: true}   # §1.0 Ladder Architecture: 8-position per-faction rank ladder, 0 (pre-initiation) to 7 (senior-most short of Leadership); one ladder per faction (Crown §1.1, Hafenmark §1.2, Varfell §1.3, Church §1.4) + sub-office ladders (§2.1-§2.7). Bidirectional: demotion (§1.0a, ED-776) drops 1 rank by default, 2-3 for severe institutional-violation triggers — track, not clock (parallels Prosperity/Defense/Order §1.3 pattern elsewhere in this file). Emits state.standing_change.
-      - {name: "Coup posture", bucket: track, writable: true}   # §1.1d/§2.1 (Löwenritter Grand Master row): "Coup Counter mechanisms (original factions_ttrpg_v30 §8.9)"; classification per §10.1 ED-POL-09 ("types can combine — a Palace Coup can trigger a Constitutional Crisis response; specific mechanics deferred to faction_layer_v30 update"). This doc does not itself specify the counter's numeric mechanics (deferred, per ED-POL-09, to a faction_layer_v30 update) — declared here as the state item behind state.coup_attempted, not as a ratified formula. NOTE: engine/params/factions_personal.md records the Löwenritter-specific instance of this mechanic as STRUCK/superseded by "Graduated Autonomy" (ED-781/ED-589); faction_politics_v30.md itself has not been migrated off "Coup Counter" terminology — contract reflects the doc as written, migration is a separate (unstarted) editorial item, not fabricated here.
-      - {name: "Succession status", bucket: track, writable: true}   # §1.0 intro: Leadership is reached "via the succession mechanisms in Part 2 of the original register (SUC-01-03, LIN-01-04)"; per-faction Standing 6/7 rows are explicitly succession-eligible/succession-prepared states (Crown §1.1 Std 6-7, Hafenmark §1.2 Std 6-7, Varfell §1.3 Std 7, Church §1.4 Std 5); §6 specifies the three Baralta Crown Claim succession-contest outcomes (Outcome A/B/C). Emits state.succession.
+      - {name: "Standing", bucket: track, writable: true}   # §1.0 Ladder Architecture: 8-position per-faction rank ladder, 0 (pre-initiation) to 7; bidirectional (§1.0a, ED-776). Emits state.standing_change
+      - {name: "Coup posture", bucket: track, writable: true}   # §1.1d/§2.1 + §10.1 ED-POL-09: the state item behind state.coup_attempted, not a ratified formula (numeric mechanics deferred to a faction_layer_v30 update)
+      - {name: "Succession status", bucket: track, writable: true}   # §1.0 intro + §6 (Baralta Crown Claim succession-contest outcomes A/B/C). Emits state.succession
     transitions: []
     loops: []
     gap_notes:
@@ -926,10 +753,8 @@ modules:
 
   - module: miraculous_event
     registry_system: "miraculous_event"   # Key Type Registry vocabulary
-    doc: .designs/systems/world/reference/miraculous_event_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE — workbench node-state, the key graph's authority check, the census — not by an agent hunting canon, and the `.designs/` prefix now carries the NOT-CANON signal that a bare `systems/` path did not. Nulling it broke five tools and lost the provenance without hiding anything.
-    sim_module: none   # RETIRED AT PLAN POSITION `29d` (2026-10-01). It was `systems/world/sim/miraculous_event.py`
-      # (OI-54): one `stubwire.stub_resolve` armature stub, no importer, deleted with its tree. The row is kept, not
-      # deleted: removing a contract row is its own change, and `doc:` above still resolves.
+    doc: .designs/systems/world/reference/miraculous_event_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    sim_module: none
     scales: [personal, settlement, peninsula]   # [verification P6: was [personal, scene]; matches registry default_scale_signature]
     resolver: state_reader   # [ASSUMPTION] gated emitter: fires on high-Ob Mending near T15
     state: []
@@ -950,10 +775,7 @@ modules:
   - module: scenario_authoring
     registry_system: "scenario_authoring"   # Key Type Registry vocabulary
     doc: null
-    sim_module: none   # OI-54 (ED-IN-0097, W4): doc:null/no-sim per the W4 preflight; re-verified
-      # (no scenario_authoring*.py anywhere; tools/mechanics_index_gen.py's one hit is the
-      # generator script mentioning the module name in a comment, not runtime code). Matches this
-      # entry's own gap_notes ("Execution unbuilt — no Stage-1 compile tooling").
+    sim_module: none
     scales: [peninsula]
     resolver: manifest   # [ASSUMPTION] authoring-time event injection
     state: []
@@ -972,11 +794,8 @@ modules:
       note: compile-time injection; execution unbuilt.
 
   - module: clock_registry
-    doc: .designs/systems/overview/reference/clock_registry_v30.md   # ED-IN-0231: quarantined, and RESTORED here on purpose. This module has NO CODE, so severing its doc would not hand authority to the code — it would leave the module a bare name with nothing defining it, which tests/valoria/test_key_graph.py rightly refused until it retired with the Key substrate (2026-09-16, ED-IN-0232 — the guard is gone, the reason the pointer was restored is not). Its twelve code-bearing siblings stay null: there the code IS the authority (CLAUDE.md §0.05).
-    sim_module: none   # OI-54 (ED-IN-0097, W4): by design, per this module's own resolver comment
-      # ("catalog of clocks/tracks; owns no state, resolves nothing") and gap_notes ("pure
-      # manifest — every listed clock is owned by its source system"). Re-verified: no
-      # clock_registry*.py anywhere. Not a gap — a module that is intentionally code-free.
+    doc: .designs/systems/overview/reference/clock_registry_v30.md   # ED-IN-0231: quarantined, and RESTORED here on purpose. This module has NO CODE, so severing its doc would leave the module a bare name with nothing defining it.
+    sim_module: none   # by design: a module that is intentionally code-free
     scales: [provincial]
     resolver: manifest   # catalog of clocks/tracks; owns no state, resolves nothing
     state: []
@@ -994,13 +813,10 @@ modules:
       parity: data
       note: pure catalog; ports as a data table.
 
-  - module: combat   # plan position `30` (A-25): one identity per module, its directory name. Was `personal_combat`; the prize row `the body` (`engine/season/rosters.yaml` `contest_subsystems`) names it by this key. Its PROVIDER keeps the name `personal_combat` -- a provider name says what runs, not whose module it is.
+  - module: combat   # one identity per module, its directory name; the prize row `the body` (`engine/season/rosters.yaml` `contest_subsystems`) names it by this key. Its PROVIDER keeps the name `personal_combat` -- a provider name says what runs, not whose module it is
     registry_system: "personal_combat"   # Key Type Registry vocabulary
     doc: systems/combat/combat_engine_v1/   # CANONICAL (ED-900/904; docket ED-1029)
-    sim_module: systems/combat/combat_engine_v1/   # OI-54 (ED-IN-0097, W4): directory — matches
-      # mechanics_index.yaml's `combat` entry verbatim (same doc:/sim_module: path, as expected
-      # for the canonical engine). NOTE: this is a module_contracts.yaml edit only — no file
-      # under systems/combat/** (the STOP-list path) is touched by adding this pointer.
+    sim_module: systems/combat/combat_engine_v1/
     godot_home: godot/skeleton/engines/combat/   # CombatEngine (BaseEngine) + Strike/Wound modules (slice)
     typed_params: engine/engine_params/combat_engine_v1.json   # GENERATED from config.py + core.py (tools/export_engine_params.py, schema v2 — OPT-AV-17 added the core-constants section); round-trip-checked blocking in CI; the port regenerates from THIS, never hand-edits (ED-1050 discipline; ED-1052 seed)
     scales: [personal]
@@ -1026,11 +842,11 @@ modules:
     modules:   # the EngineModules the CombatEngine hosts (the canonical 11-action set; the slice ports 2)
       - {id: "combat.strike",  resolver: d_sigma,      status: PORTED,  in: ["scene.combat_strike"], out: ["scene.combat_hit"]}
       - {id: "combat.wound",   resolver: state_reader, status: PORTED,  in: ["scene.combat_hit"], out: ["scene.combat_felled"]}
-      - {id: "combat.feint",   resolver: d_sigma,      status: RETIRED}   # ED-PC-0035: NOT pending — the feint was deliberately DISSOLVED into the attack (WS-5, 2026-06-29); FEINT_*/feint_eval are gone. Listing it PENDING invited a re-implementation of a retired design.
+      - {id: "combat.feint",   resolver: d_sigma,      status: RETIRED}   # RETIRED (ED-PC-0035): the feint was deliberately DISSOLVED into the attack (WS-5); FEINT_*/feint_eval are gone. Do not list it PENDING
       - {id: "combat.bind",    resolver: d_sigma,      status: PENDING}   # winding / Stärke-Schwäche / kuzushi
       - {id: "combat.approach", resolver: d_sigma,     status: PENDING}   # closing / stop-hit / reach re-open
       - {id: "combat.displace", resolver: d_sigma,     status: PENDING}   # displace-and-step-inside
-      - {id: "combat.grapple", resolver: d_sigma,      status: PARTIAL}   # ED-PC-0035: was PENDING with a note pointing at "the currently-unconsumed `clinch` weapon field" — but that field was DELETED and is actively FORBIDDEN (D9/JD-7; capabilities.py self-tests that `clinch=` is absent from weapons.py), and the contact axis is BUILT and wired (contact.py: grab_sigma + the branching grapple menu, called from the wrapper outcome tail). Residual scope (choke/pin depth) is ED-PC-0007.
+      - {id: "combat.grapple", resolver: d_sigma,      status: PARTIAL}   # PARTIAL (ED-PC-0035): the contact axis is built and wired (contact.py: grab_sigma + the branching grapple menu); residual choke/pin depth is ED-PC-0007
       - {id: "combat.halfsword", resolver: state_reader, status: PENDING} # auto-switch to the half-sword form vs plate
       - {id: "combat.initiative", resolver: state_reader, status: PENDING} # Vor/Nach decay/drift/steal/edge
       - {id: "combat.poise",   resolver: state_reader, status: PENDING}   # structure / kuzushi recovery
@@ -1064,12 +880,8 @@ modules:
         which is canon, not a flag flip or a wiring fix. Jordan call.'
 
   - module: campaign_architecture
-    doc: .designs/systems/_architecture/reference/campaign_architecture_v30.md   # ED-IN-0231: quarantined, and RESTORED here on purpose. This module has NO CODE, so severing its doc would not hand authority to the code — it would leave the module a bare name with nothing defining it, which tests/valoria/test_key_graph.py rightly refused until it retired with the Key substrate (2026-09-16, ED-IN-0232 — the guard is gone, the reason the pointer was restored is not). Its twelve code-bearing siblings stay null: there the code IS the authority (CLAUDE.md §0.05).
-    sim_module: none   # OI-54 (ED-IN-0097, W4): status: stub below — RECLASSIFIED 2026-06-10 as a
-      # cross-cutting consolidation doc, not a runtime module (this entry's own gap_notes); its
-      # contents distribute across victory/threadwork/settlement_layer/peninsular_strain, each
-      # already sim_module:-joined above. Retire-candidate per §5 row 9 of this program's Jordan
-      # docket (unruled) — recorded, not acted on here.
+    doc: .designs/systems/_architecture/reference/campaign_architecture_v30.md   # ED-IN-0231: quarantined, and RESTORED here on purpose. This module has NO CODE, so severing its doc would leave the module a bare name with nothing defining it.
+    sim_module: none
     scales: [provincial]
     gap_notes:
       - "RECLASSIFIED 2026-06-10: doc is the 2026-04-17 victory-revision CONSOLIDATION (Church infra, RM identity, MS/Coherence reform, Thread revelation, IP escalation, Warden, Portrait/Lineage) — a cross-cutting design doc, not a runtime module; its contents distribute across victory/threadwork/settlement_layer/peninsular_strain. Recommend stub retirement [OPEN — Jordan]"
@@ -1115,25 +927,9 @@ accounting_sequence:
     source: "settlement §1.3/§1.8; knots §5"
 
 # ═══════════════════════════════════════════════════════════════════════════════════════════
-# WIRING — build state and Godot port status (folded in from references/wiring_manifest.yaml,
-# 2026-08-23, plan S5c). Filed ED-IN-0074 (2026-07-17 MC-wiring coverage audit).
-#
-# WHY IT LIVES HERE NOW. It was a second registry keyed by the SAME 27 module names as `modules:`
-# above, so "every wiring tag resolves to a module contract" and "coverage is 27/27" were CHECKED
-# invariants that a join makes STRUCTURAL — they cannot fail once the facts sit on the row they
-# describe. What the split actually bought was a place for the two registries to disagree, and
-# they did: the manifest carried `resolver: armature_dot_product` for articulation_layer, which is
-# the reading verification RU-4 had already corrected on the contract row ("the armature
-# dot-product is the SUBSTRATE interpretation primitive, NOT a system resolver"). Nothing joined
-# them, so the corrected fact and the stale one both shipped. `tier`/`scale`/`resolver` are NOT
-# carried here for that reason — the contract row owns them.
-#
+# WIRING — build state and Godot port status. `tier`/`scale`/`resolver` are NOT carried here: the contract row owns them.
 # Validated by tools/export_composition.py --check (blocking): every module row is named, uniquely
 # named and carries a wiring block, and every build/godot value is in the vocabularies below.
-# The `adapters:` block (cross-scale seams, tags resolving to engine/cross_scale/) and its two rules
-# were retired at plan position `28-iii` (2026-10-01) with the directory they named.
-# Ranked port work-list: WAS `python3 tools/build_contract_index.py --work-list`; that tool
-# retired with the Key substrate (2026-09-16, ED-IN-0232) and has no replacement.
 #
 # Analysis-derived; build/godot fields are the audit's verdicts (adversarially verified over
 # 7-seed run_campaign + 6 lanes + a 4-vector coverage diff) — revise as the port advances.
@@ -1157,7 +953,7 @@ wiring_vocabularies:
 
 # The one proof-of-concept the whole strategy leans on.
 golden_path:
-  unit: combat   # the `modules:` row of that name (was `personal_combat`; plan position `30`)
+  unit: combat   # the `modules:` row of that name
   chain: combat_engine_v1 (Python oracle) -> engine/engine_params/combat_engine_v1.json (typed export, CI
     round-trip) -> godot/skeleton/engines/combat/ (strike + wound)
   note: The only unit where Python oracle + typed export + GDScript port all exist. This is the template
