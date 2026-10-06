@@ -138,7 +138,7 @@ def main(argv):
         # the recorded remedy for a three-instance pattern was a dangling reference.
         #
         # `compliance_check.py` stays deliberately absent and is NOT part of this residual —
-        # ci_checks_registry.yaml:262 records that call ("local-green != compliance-green").
+        # ci_checks_registry.yaml:275 records that call ("local-green != compliance-green").
         #
         # Report-only, following the freshness_gate/wf_harness precedent above: all four scan
         # the WHOLE tree rather than the changeset, so a blocking local copy would hold an

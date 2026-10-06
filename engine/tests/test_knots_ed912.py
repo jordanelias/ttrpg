@@ -162,7 +162,7 @@ def test_an_unknown_conviction_name_raises_instead_of_scoring_zero():
         conv.apply_conviction_scar("actor-unknown", "src", magnitude=1, conviction="Loyalty")
     # NOTHING IS TRANSLATED, including the two legacy tags this test briefly asserted WOULD be.
     # `Reason` and `Autonomy` were aliased to Scholastic and Liberty for a few hours on 2026-08-24;
-    # conviction_taxonomy_v30.md:282 and references/alias_registry.yaml:658-663 both route legacy
+    # conviction_taxonomy_v30.md:282 and references/alias_registry.yaml:653-658 both route legacy
     # tags to PER-CHARACTER migration under PP-685 and name no single target, so the alias decided
     # a ruling by accident. They raise like any other non-canonical name.
     for legacy in ("Reason", "Autonomy", "Continuity"):

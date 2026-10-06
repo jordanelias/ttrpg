@@ -482,7 +482,7 @@ rosters:
   # `open:`, `forbidden:` and `from_descriptor:` are byte-identical to before the rename.
   pursuit_axes:
     source: >-
-      references/descriptor_registry.yaml:258 — the `axis.*` by_reference row, "4 ethical axes
+      references/descriptor_registry.yaml:177 — the `axis.*` by_reference row, "4 ethical axes
       (hierarchical/sacred/instrumental/traditional)", scale "[-1,+1] basis", sourced to
       .designs/systems/characters/reference/conviction_axis_matrix_v30.md / PP-687 (quarantined
       2026-09-16, ED-IN-0231). Owned in code by descriptors.py's `axis_roster` leaf, NOT keys.py.
@@ -2051,7 +2051,7 @@ tables:
   pursuit_projection:
     source: >-
       systems/characters/reference/conviction_axis_matrix_v30.md §2 / PP-687, registered by
-      reference at references/descriptor_registry.yaml:259 — the `map.conviction_axis` row,
+      reference at references/descriptor_registry.yaml:178 — the `map.conviction_axis` row,
       shape 13x4.
     row: H-46
     default_cell: 0.0

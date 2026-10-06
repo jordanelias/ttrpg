@@ -602,7 +602,7 @@ DEFAULT_FIXTURES = Fixtures(
     # NEG pole of `deontological/instrumental`) and the THRESHOLD is the person's own projected
     # weight, so there is no magnitude here to sweep. `None` is the CONTROL and is SHIPPED, but NOT
     # because no matching axis exists today -- a `layer-conformance` attack (2026-09-27) found that
-    # `instrumental` (`references/descriptor_registry.yaml:286`) already carries the same
+    # `instrumental` (`references/descriptor_registry.yaml:169`) already carries the same
     # `deontological/instrumental` sign convention, so `refusal_axis="instrumental"` WOULD arm this
     # gate against the current 13-pursuit content. `None` is shipped because arming it now is an
     # unruled design choice, not because the axis is unavailable -- whether to arm it before or wait

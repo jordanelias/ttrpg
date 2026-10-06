@@ -121,7 +121,7 @@ def test_every_non_canonical_name_raises_and_nothing_is_silently_migrated():
 
     `Reason` and `Autonomy` were aliased to Scholastic and Liberty for a few hours on 2026-08-24,
     justified as "a rename rather than a design call". Both conviction_taxonomy_v30.md:282 and
-    references/alias_registry.yaml:658-663 route legacy tags to PER-CHARACTER migration under
+    references/alias_registry.yaml:653-658 route legacy tags to PER-CHARACTER migration under
     PP-685 and deliberately name no single target, so the alias decided a ruling by accident.
     This pins that no future edit quietly reintroduces one.
     """
