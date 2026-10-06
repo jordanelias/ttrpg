@@ -1,6 +1,6 @@
 # Character and play surface — a digest of one design session
 
-## Status: PROPOSED (2026-09-30) · design-only · **HELD BACK IN FULL: merging this directory ratifies nothing** (`CLAUDE.md` §2's default is waived here, loudly) · reference under `CLAUDE.md` §0.05
+## Status: RATIFIED AS INTENT (v9, ED-IN-0290) for S-1, M-1/S-4, S-2/L-1, K-3, U-3, P-1 (→ IN-18 G1 / IN-13, regard-at-read), P-2 and P-3's mechanism; S-6 → FI-01, its deposit half H-111's SKIP arm (RS-21 item 1); V-1 follows IN-09's `comply` cell; K-2 only with its first reader; K-4 superseded by IN-12 step 9's `train`; `05` §4.1/§4.2 attach to M-2, its two modes are Jordan's intent (SM-5), suspension IN-46; P-3's content ratified as the plan's recommendation (#457 D4, RS-21 item 4) [medium; Jordan to correct]; the character sheet IN-47; the rest reference · design-only · reference under `CLAUDE.md` §0.05
 ## Lanes: IN, PC, MB, SC, FI · IDs: none allocated · `references/id_reservations.yaml` untouched
 ## Measured at HEAD `c8cc408` (#444). Every figure was produced by running the named function or harness; an independent read-only critic attacked the drafts against the tree.
 

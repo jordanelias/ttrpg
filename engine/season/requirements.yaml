@@ -110,7 +110,7 @@ scales:
       3 of 44 verb rows declare `contests:` — `fight` (the body, the combat seam), `march` (a
       field, the mass-battle seam, `ecacb57`) and `tell` (a standing, resolved on the season side
       by `seam/wrappers/sigma.py`, not by this kernel). The kernel retires at plan position `2-ii`
-      (`workplans/valoria_master_workplan_v8.md`).
+      (`workplans/valoria_master_workplan_v9.md`).
   - scale:    "mass battles / strategy warfare"
     subsystem: [mass_battle]   # `rosters.yaml` `modules:` entries -- the one owner of where each lives (A-25, plan position `30`)
     retention: RETAINED
@@ -319,7 +319,7 @@ rows:
       `b53f9b81` committed and `53cf0ddb` UNTRACKED as regenerable run output (the 36-cell sweep, about
       75 minutes on 4 cores, then `wd_collect.py`; local copies stay), and `runs/WD_LOG.txt`, which
       stays tracked and IS THE COMMITTED RECORD. Produced by the acceptance command of
-      `workplans/valoria_master_workplan_v8_part4.md` §`11` verbatim, every step exit 0. Taken after the
+      `workplans/valoria_master_workplan_v9_part2.md` §`11` verbatim, every step exit 0. Taken after the
       telling workplan's T6 closed (`fd321c81`), so the plan's E15 timing holds. **CLAUSE 2 (`wd_collect.py`) HOLDS.** At the acceptance point
       `2x3`, reconvergence reads `none` 1710/2217 = 77.13% · default `actor` 942/2189 = **43.03%** ·
       `total` 832/2163 = 38.47% (unasserted). At `2x1` (`narrow`) it reads 88.39% / 69.41% / 69.51%,
@@ -402,7 +402,7 @@ rows:
       `not_met`, honestly, on the instrument that owed the number rather than on a guess.
       ⚠⚠ **PLAN POSITION `11` (U6, run (i): the baseline after `11-fix`), 2026-10-01: MEASURED,
       AND THE STATUS MOVES TO `met` ON THE PRINTED NUMBER.** THE RUN: the acceptance command of
-      `workplans/valoria_master_workplan_v8_part4.md` §`11` -- the 36 `wd_chunk.py <mode> <cell> <start>
+      `workplans/valoria_master_workplan_v9_part2.md` §`11` -- the 36 `wd_chunk.py <mode> <cell> <start>
       <end>` cells over slices 0/36/72/108/143, then `python proposals/2026-09-04-degree-sweep/wd_collect.py`,
       which is this row's `measure:` -- on HEAD `c2ee345a` (`11-fix`), 2026-10-01, seed 0, four seasons, all
       143 case slots, every step exit 0. The cells were committed at `b53f9b81` and UNTRACKED at `53cf0ddb`
@@ -501,7 +501,7 @@ rows:
       and `total` +0.11 (38.47 -> 38.58), the last two AGAINST it, all within half a point -- so THE
       PREDICTION IS NOT SUPPORTED AT THIS RESOLUTION (and the re-take also carries `13d-iii` and
       `17-cast`, not `14` alone). The status stays `met`: the bar is 96% and no arm is near it.
-    measure: "python proposals/2026-09-04-degree-sweep/wd_collect.py  # after wd_chunk.py x4 per arm per cell over the 143-case corpus (slices 0 36/36 72/72 108/108 143) -- U6's command, workplans/valoria_master_workplan_v8_part4.md §`11`"
+    measure: "python proposals/2026-09-04-degree-sweep/wd_collect.py  # after wd_chunk.py x4 per arm per cell over the 143-case corpus (slices 0 36/36 72/72 108/108 143) -- U6's command, workplans/valoria_master_workplan_v9_part2.md §`11`"
     blocks: [W-F, H-111]
 
   - id: R-03

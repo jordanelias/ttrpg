@@ -1,6 +1,6 @@
 # 04 · MATTER AND WORKS — how matter reaches people, and what it is to build something
 
-## Status: **PROPOSED (2026-09-17). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## Status: **RATIFIED AS INTENT (v9); absorbed where built (03 → `offices.yaml`, 04 §A.3–A.4 → `matter.py`, 05 → the plans); residue → IN-28, SE-03 (ED-SE-0053)**
 ## Lane: **`SE`** · id: **`ED-SE-0053`**. Round two of `proposals/2026-09-17-governance-and-holdings/`; this file **supersedes `02_THE_BUILT_WORLD.md`'s delivery and hearth-store moves** and keeps the rest of it by pointer, struck where overturned.
 ## Grade under `CLAUDE.md` §0.2: **`paper`.** Nothing designed here executes. §C.5 names the artifact that would move it and says what it costs.
 ## Method: authored at tier **`opus`** (`CLAUDE.md` §10 — *"large-context synthesis"* and *"contract closure"*), from a read-only `fable`-tier plan that adjudicated the round-one verdict before this file was written. Four sibling documents were authored concurrently from that plan; this file writes only its own subject (**Q3**) and the `works` lifecycle.

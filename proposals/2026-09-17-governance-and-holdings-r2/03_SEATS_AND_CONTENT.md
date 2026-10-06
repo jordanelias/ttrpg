@@ -1,6 +1,6 @@
 # 03 · SEATS AND CONTENT — how a seat becomes fillable
 
-## Status: **PROPOSED (2026-09-17). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## Status: **RATIFIED AS INTENT (v9); absorbed where built (03 → `offices.yaml`, 04 §A.3–A.4 → `matter.py`, 05 → the plans); residue → IN-28, SE-03 (ED-IN-0235)**
 ## Lane: `IN` · id: **ED-IN-0235**. Carries **RR-B**.
 ## Grade under `CLAUDE.md` §0.2: **`paper`**. Nothing in this file executes. §C.8 names the artifacts
 ## that would move it and says why none has been produced. No row here may be cited as done.

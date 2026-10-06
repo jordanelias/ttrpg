@@ -5,17 +5,11 @@
 ## Open
 | item | where it lives | next step |
 |---|---|---|
-| ~~score/2 obstacle-Ob derivation: three sites disagree~~ **CLOSED 2026-10-01, not Jordan's** — plan position `29b` deleted all three sites (`parliamentary_transfer.py`, `tribunal.py`, `crown_initiative.py`) and `test_faction_obstacle_conventions.py` with `systems/factions/`; the season's own obstacle derivation is `engine/season/seam/wrappers/sigma.py` | `references/restructure_ledger.md` FORK rows, ref `5c5d8ec6` | nothing to rule |
-| Author the `domain_actions` / strategic-turn home doc | ED-FA-0002 | author the home doc unifying card-hand + faction actions + resolver + `da.*` tagging |
-| BG victory-params re-export | ED-FA-0003 | re-derive `params/bg/victory.md` from `victory_v30.md`, fix `params/board_game.md` index |
-| Fiscal Stance Treasury coupling (design drafted, sim not wired) | ED-FA-0008 | sim half closed — both consumers `ED-FA-0008` names are deleted (`systems/settlements/sim/registry.py` at `29c`, `systems/overview/sim/accounting.py` at `29a`; `FORK:5c5d8ec6`); only the prose design remains |
-| §1.0d Kaochengfa merge + E11 counter-mechanic authoring | ED-FA-0021, `.designs/systems/factions/reference/faction_politics_v30.md:137` | author the merge into `faction_politics_v30.md` in the same pass as E11 |
-| Round-2 docket promote-ready items never filed as ED rows (HRE-2, HAB-4, IT-2) | `.audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md`, `.designs/systems/_architecture/reference/ners_vsg_reconciliation_v1.md` | file as `ED-FA-NNNN` and land per the NERS review's sequencing before landing |
-| Round-2 docket `needs_jordan` queue never filed (BYZ-1, HAB-2, etc.) | `.audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md` | take to a decision memo, starting with BYZ-1 (composes with HAB-2) |
+| Seat faction heads and let a head act (#445 P-3; FORCE-FOREIGN's cast) | v9 FA-01 (`workplans/valoria_master_workplan_v9_part7.md`); `engine/season/offices.yaml`, `engine/season/harness/populated.py` | The mechanism is buildable (a head's act executes `via` its seat; B-J); the content is the plan's recommendation (#457 D4, RS-21 item 4, [medium; Jordan to correct]): one foreign faction, two seats, in `references/npc_registry.yaml`, built at B-V after IN-36; the Schoenland trade demand's one copy is FA-01's (G-6) |
+| Insurgency and an emerged faction (H-186); vassalage (H-101) | v9 IN-30 and IN-40 (`workplans/valoria_master_workplan_v9_part5.md`) | IN-30 (B-U) builds on #457 D6 as the plan's recommendation (RS-21 item 3, [medium]); IN-40 (B-J): H-101 answered [medium; Jordan to correct], `under` is derived (rung containment plus a seat-holder's `oblige`), never a stored parent |
+| §1.0d Kaochengfa merge + E11 counter-mechanic authoring | ED-FA-0021, `.designs/systems/factions/reference/faction_politics_v30.md:137` | author the merge into `faction_politics_v30.md` in the same pass as E11 (LEAVE, v9 `workplans/valoria_master_workplan_v9_part7.md` §2: `ED-FA-0021` stays `ratified`, not superseded; v9 schedules no authoring into a quarantined document; D6's intent is reference at IN-09's `evade / defy`) |
 
 ## Standing orders — do not re-raise, do not do
 | order | source |
 |---|---|
-| ~~Do not wire `score/2` by editing the three disagreeing sites into agreement~~ **RETIRED 2026-10-01 (`29b`)** — the three sites are deleted; narrative at `HANDOFF_FA_history.md` § "SUSPENDED — the `score/2` obstacle derivation" | `references/restructure_ledger.md` FORK rows, ref `5c5d8ec6` |
 | Do not author faction-roster content assuming the old territory-nesting model — local/provincial/national tiers are independent, people-based | ED-IN-0047 (B12) |
-| ~~Faction stat writes go through `engine.autoload.game_state.Faction.adjust` only — no second write path~~ **RETIRED 2026-10-01 (`29b`)** — `Faction`, `adjust` and the sweep test are deleted; the season's faction carries no stat vector | ED-FA-0038, `references/restructure_ledger.md` FORK rows, ref `5c5d8ec6` |

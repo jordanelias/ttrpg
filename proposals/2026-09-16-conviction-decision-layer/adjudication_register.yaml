@@ -1,8 +1,8 @@
 # ---------------------------------------------------------------------------
 # BEHAVIOUR LAYER — ADJUDICATION REGISTER
 #
-# STATUS: PROPOSED — held back in full. Every `ruling:` is empty and stays empty
-#         until Jordan fills it. Nothing here is decided.
+# STATUS: REFERENCE — rulings absorbed into ED-IN-0251/0261; cited as a register (v9; ED-IN-0289). The rows it carried were
+#         run through the ladder and ruled elsewhere; the empty `ruling:` fields are history, not a queue.
 #
 # WHY YAML AND NOT PROSE: CLAUDE.md §0.05 clause 1, as widened 2026-09-16 —
 #   "A `.md` is NEVER the authored head of a fact code reads. The head is YAML

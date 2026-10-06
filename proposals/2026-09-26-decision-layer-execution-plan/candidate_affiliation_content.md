@@ -1,6 +1,6 @@
 # CANDIDATE — affiliation roster, verb×affiliation table, and crisis threshold-3 recommendation (draft, 2026-09-27). RATIFIES NOTHING. Every value either cites its source or is marked null with a stated reason. Pending Jordan's approve/vet.
 
-## Status: **DRAFT FOR JORDAN'S REVIEW. Not canon, not a ruling, not wired to anything.**
+## Status: **FOLDED INTO THE BUILD (v9; Jordan 2026-10-06, RS-1; ED-IN-0291) — the source of IN-08's cells (B-G); the authoring surface until that commit lands, then retired with `proposals/2026-09-18-character-decision-layer/PROPOSAL.md` by its `FORK:` rows. The pursuit `faith` is `doctrine` (its row PROVISIONAL, RS-3) and `warden` is `stewardship` (RS-4). Not wired to anything until IN-08 lands; reference under `CLAUDE.md` §0.05.**
 ## Authority: **none.** Nothing here lands until Jordan approves it. The owners it would land at (`references/descriptor_registry.yaml` for the roster, `engine/season/rosters.yaml` for the `incompatible` table and any verb×affiliation table, `proposals/2026-09-18-conviction-basis-worksheet.yaml` as the authoring surface) are **untouched** by this file.
 ## Scope: C3 (the affiliation roster, the ten `incompatible:` cells, `intensity.scale` / `player_sees` / `bands`), C4 (verb × affiliation engagement), and a recommendation on G-Q6 (crisis threshold 3's terminal branch) — per `PROPOSAL.md` §3.4, §3.5 H13 and §5 Q3/Q4/Q6.
 ## Companion: `candidate_pursuit_cells.md` (C1/C2/G-Q5) — not duplicated; where the two touch (the `faith` row, the `sacred` column, `tell`/`speak`) this file points at it.

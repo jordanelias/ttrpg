@@ -1,6 +1,6 @@
 # 04 · THE VERBS — what a person may do, and the count that justifies it
 
-## Status: **PROPOSED (2026-09-05). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## Status: **RATIFIED AS INTENT (v9) — ownership ED-SC-0033; PHASE 2–4 = SC-01/SC-02; 00–20 reference, superseded in part by 21. Nothing exists in `engine/season/` until SC-01 is built with its tests. (ED-SC-0039)**
 
 > ### THE HEADLINE
 > **The game structure adds ZERO new verbs.** It gives a body to **four rows that exist and do

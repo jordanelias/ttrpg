@@ -1,6 +1,6 @@
 # Governance and behaviour — the two suites as one program
 
-## Status: **PROPOSED (2026-09-17). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## Status: **REFERENCE (v9) — the index of a suite whose rulings are SPENT and whose build order is ABSORBED; ratified AS INTENT (ED-IN-0243).**
 ## Lane: `IN` (cross-cutting) · **`ED-IN-0243`**
 ## Grade under `CLAUDE.md` §0.2: **`paper`** for the design, **`measured`** for `00`'s findings. **Nothing in this suite has run.** r2's `EXECUTION_PLAN` item 1 is the first thing that would.
 ## Subjects: **`../2026-09-17-governance-and-holdings-r2/`** (#408) and **`../2026-09-16-conviction-decision-layer/`** (#409). This suite **supersedes neither** and takes no position inside either. Its whole subject is the **seam**.

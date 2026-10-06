@@ -1,6 +1,6 @@
 # 21 · THE RECONCILIATION — every issue the stress suite raised, ruled against the doctrine, and ordered
 
-## Status: **PROPOSED (2026-09-07). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## Status: **RATIFIED AS INTENT (v9) — ownership ED-SC-0033; PHASE 2–4 = SC-01/SC-02; 00–20 reference, superseded in part by 21. Nothing exists in `engine/season/` until SC-01 is built with its tests. (ED-SC-0039)**
 ## Review: a read-only **Fable 5.1** audit-and-planning pass over `20_STRESS_TESTS.md` PARTS A–F,
 ## judged against `proposals/2026-09-03-meta-architecture/04_CODE_ARCHITECTURE.md` and
 ## `references/design_rulings_2026-09-06.md` (R1–R8). Per `CLAUDE.md` §10 that tier is

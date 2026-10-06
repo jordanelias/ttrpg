@@ -2,8 +2,8 @@
 # RULINGS.yaml — the twenty-one open questions between Jordan and two suites,
 #                run through `CLAUDE.md` §0's five-step gate.
 #
-# ## Status: PROPOSED — held back. NOTHING HERE RATIFIES ANYTHING, and this file
-#            flips no `## Status:` line anywhere in the tree.
+# ## Status: SPENT — 12 closed · 9 ruled · 0 escalated (ED-IN-0244/0245). Ratified AS INTENT by the v9
+#            adoption (ED-IN-0243); nothing here is read by code, and it flips no other `## Status:` line.
 #
 # WHAT IT IS. Twenty-one questions sit between Jordan and two suites that cannot
 #   be built until they are answered:

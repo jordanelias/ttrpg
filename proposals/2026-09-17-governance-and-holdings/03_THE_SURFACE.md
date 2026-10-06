@@ -1,6 +1,6 @@
 # 03 · THE SURFACE — the interface through which a player engages the game world
 
-## Status: **PROPOSED (2026-09-17). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## Status: **RATIFIED AS INTENT (v9) — the Surface behind PC-06 S-2/L-1 (ED-IN-0237); reference under `CLAUDE.md` §0.05.**
 ## ✅ **STANDS 2026-09-17 — NOT superseded.** Round two
 ## (`../2026-09-17-governance-and-holdings-r2/`) replaces the mechanism this file reads FROM and keeps the
 ## file. Its **Surface Law `L-1..L-3`**, its **cell law** (HELD / STALE / UNHELD / CONTRADICTED), its

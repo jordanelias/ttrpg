@@ -1,6 +1,6 @@
 # 05 · THE LEDGER AND THE BUILD — what this suite deletes, what it adds, in what order, and what Jordan must rule
 
-## Status: **PROPOSED (2026-09-17). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## Status: **RATIFIED AS INTENT (v9); absorbed where built (03 → `offices.yaml`, 04 §A.3–A.4 → `matter.py`, 05 → the plans); residue → IN-28, SE-03 (ED-IN-0233)**
 ## Method: `opus` author, read-only against the working tree at `46aa21d`. Every `path:line` below was opened in this session before it was written, and every count was re-measured with the command printed beside it. Four documents were authored **concurrently** from one plan; where my measurement and the plan disagree, **my measurement is in the text and the plan's figure is struck beside it.** Repairs in the APPENDIX.
 ## Grade: **`paper`** (`CLAUDE.md` §0.2). **Nothing in this suite has run.** This file's own first execution artifact is build item 1's. Two probes in §A.2 and one ladder in §A.4 item 3b DID execute in this session; they measure the TREE, not the design, and they are labelled EXECUTED where they appear.
 ## Lane: **IN**, sharing **`ED-IN-0233`** with `01_ATTENTION_AND_REACH.md` — same lane, same commit. **This file introduces no design claim of its own.** Its two objects are the COUNT (§A.1) and the ORDER (§A.4); everything else it states belongs to `01`–`04` and is cited to them. It allocates no id and edits no ledger.

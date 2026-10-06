@@ -1,6 +1,6 @@
 # What else the game needs — outside forcing, its transmission to decisions, bounded escalation, and a story bar
 
-## Status: PROPOSED
+## Status: RATIFIED AS INTENT (v9, ED-IN-0287) for the §4 handles whose class is not held; FORCE-BODIES, FORCE-FOREIGN, END-VICTORY and CAST-DISPOSITION's capability writer ratified as the plan's recommendation (RS-21) [medium; Jordan to correct]; CAST-POPULACE NOT ratified (its spread construal is held); §5 cuts stand; §6 superseded by v9's order; §7 item 1 answered [medium] (the Calamity is tensile, D-3), item 3 answered (a dated pin is a clock, T-c), item 5 is IN-06. Reference under `CLAUDE.md` §0.05.
 
 > **SCOPE, STATED LOUDLY.** This document is **reference and a proposal** (CLAUDE.md §0.05): it
 > resolves nothing at runtime, and if it were deleted the game would behave identically. It creates

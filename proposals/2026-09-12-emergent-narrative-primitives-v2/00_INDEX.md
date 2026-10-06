@@ -1,6 +1,6 @@
 # Emergent-narrative primitives, v2 — scored on what they do for the game
 
-## Status: **PROPOSED (2026-09-12, ED-IN-0217). HELD BACK FROM RATIFICATION-ON-MERGE, IN FULL.**
+## Status: **RATIFIED AS INTENT (v9, ED-IN-0217) for proposal 1 (IN-37) and proposal 5 (IN-34, as the plan's recommendation: #457 D2, RS-21 item 5) [medium; Jordan to correct]; proposal 13 NOT ratified (CAST-POPULACE's spread construal is held); the rest unscheduled.**
 
 ⚠ **ED-1094 does not apply to this set, and the exception is stated rather than assumed.** Merging a PR
 normally ratifies its `PROPOSED` contents. **Nothing here ratifies on merge.** Every proposal is a design

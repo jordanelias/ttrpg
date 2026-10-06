@@ -1,6 +1,6 @@
 # Degrees of success across the ARC and NPC corpus — what 143 cases have never exercised
 
-## Status: **PROPOSED. HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## Status: **INSTRUMENT HOME — the `wd_*` scripts are R-01 and R-02's `measure:` (`engine/season/requirements.yaml`); the documents are reference.**
 ## This is an INSTRUMENT and its output. It changes no head, no roster, no verb table, no code under test.
 
 Per `CLAUDE.md` §2 a merge ratifies PROPOSED contents *by default*, with one exception — held back
