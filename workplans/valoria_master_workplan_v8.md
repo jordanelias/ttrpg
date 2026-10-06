@@ -102,6 +102,10 @@ sweep to see how it impacts stuff"*
 | 4 | **FORWARD SWEEP** | defined below. |
 | 5 | **CLOSE** | `tools/valoria_local.py --staged`, the lane validator, then the `[scope]` commit citing its `PP`/`ED`. **The full suite runs once per BATCH close, not per step** (§0.5). |
 
+**SUPERSEDED IN PART, 2026-10-06 (Jordan: *"code review and simplify to be at batch close"*):** phases 2
+and 3 run once per BATCH at the close (`methodology-execute`'s BATCH-CLOSE; `methodology-close` Phase 2),
+not at each step. Phases 1, 4 and 5 stand per step.
+
 **FORWARD SWEEP — defined, because it is a coinage and `CLAUDE.md` §4 requires it survive the session
 reset.** *What did this change reach that nobody asked it to?* Five checks, each with an artifact:
 
