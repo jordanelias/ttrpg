@@ -42,6 +42,7 @@ import argparse
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 
@@ -70,7 +71,8 @@ def invoke(prompt, extra, timeout):
     if out.get('is_error') or out.get('subtype') != 'success':
         return None, sid, cost, 'subtype=%s is_error=%s' % (out.get('subtype'), out.get('is_error'))
     lines = [ln.strip() for ln in (out.get('result') or '').splitlines() if ln.strip()]
-    hit = STATUS.match(lines[-1]) if lines else None
+    # The skill asks for plain text; tolerate a model wrapping the line in backticks or bold.
+    hit = STATUS.match(lines[-1].strip('`*_> ')) if lines else None
     return (hit, sid, cost, None) if hit else (None, sid, cost, 'no status line')
 
 
@@ -83,6 +85,9 @@ def main(argv):
     ap.add_argument('--timeout', type=int, default=0, help='seconds per invocation; 0 = none')
     args, extra = ap.parse_known_args(argv)
     extra = [x for x in extra if x != '--']
+    if not shutil.which(os.environ.get('CLAUDE_BIN', 'claude')):
+        print('driver: no `claude` binary on PATH (set CLAUDE_BIN)', file=sys.stderr)
+        return 2
     if not os.path.exists(os.path.join(REPO, SKILL)):
         print('driver: %s not found; a `/name` that matches nothing is sent to the model as plain '
               'text, so refusing to start' % SKILL, file=sys.stderr)
@@ -92,6 +97,7 @@ def main(argv):
     for batch in range(1, args.max_batches + 1):
         prompt = '/methodology-execute %s%s' % ('approved: ' if (args.approved or ran) else '', args.text)
         for attempt in range(1, args.attempts + 1):
+            print('driver: batch %d attempt %d starting: %s' % (batch, attempt, prompt[:80]), flush=True)
             hit, sid, cost, note = invoke(prompt, extra, args.timeout)
             total += cost
             print('driver: batch %d attempt %d session=%s cost=$%.2f total=$%.2f %s'
