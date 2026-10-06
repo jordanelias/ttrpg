@@ -1,6 +1,6 @@
 # The unified build order — one program, two suites
 
-## Status: **PROPOSED (2026-09-17). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## Status: **ABSORBED (v9) — Phases 1–5 are built or carried by v9 (the works and founding residue is IN-28); Phase 6 → IN-08 (6a/6c in its cells commit, content by RS-1; 6f at B-H; 6g, H-71's second half, as IN-08's entry maps it). RATIFIED AS INTENT (ED-IN-0243); reference under `CLAUDE.md` §0.05.**
 ## ⚠⚠ **FOLDED INTO THE SINGLE PLAN 2026-09-18 (`ED-IN-0253`). THIS FILE IS A *CONTENT* OWNER AND NO
 ## LONGER AN ORDER.** The order is `workplans/2026-09-18-governance-settlement-behaviour-plan.md` §3.
 ## ⚠ **ITS ITEM NUMBERS COLLIDE WITH THAT FILE'S POSITION NUMBERS AND ONE PAIR WAS THE SAME WORK

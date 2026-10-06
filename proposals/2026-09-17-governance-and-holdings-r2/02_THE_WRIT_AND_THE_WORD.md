@@ -1,6 +1,6 @@
 # 02 · THE WRIT AND THE WORD — how authority descends without broadcast
 
-## Status: **PROPOSED (2026-09-17). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## Status: **RATIFIED AS INTENT (v9); absorbed where built (03 → `offices.yaml`, 04 §A.3–A.4 → `matter.py`, 05 → the plans); residue → IN-28, SE-03 (ED-IN-0234)**
 ## Lane: `IN` · id: **ED-IN-0234**. Grade under `CLAUDE.md` §0.2: **`paper`** — nothing in this file
 ## executes. §C.5 names the artifacts that would move it, in order, and no row here may be cited as done.
 ## Method: authored at tier **`opus`** (`CLAUDE.md` §10 — *competing-considerations judgment,

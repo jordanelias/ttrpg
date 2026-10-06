@@ -1,6 +1,6 @@
 # Verb coverage and gap fill — the 44 verbs of `engine/season/verb_table.yaml`, what they reach, what is missing, and the resolved suite
 
-## Status: PROPOSED
+## Status: RATIFIED AS INTENT (v9, ED-IN-0288) — §7 suite and §10.4 scheduled (IN-10..IN-13, IN-18 step 2a, SC-03a/SC-03b); step 9 (`train`) and §13 R-5 (b) (`inheritance`, IN-51) ratified as the plan's recommendation (RS-21) [medium; Jordan to correct]; §13 R-1(b), R-3(b), R-4(b), R-8(b), R-9(a) adopted at the step each names; §13.9's kill/wound reading ADOPTED (Jordan's words): `kill` and `wound` are not verbs, `challenge` → `accept` stay; K-23 (a challenge as a `petition` + `fight`) NOT ratified, struck by IN-08; §6.1 reference. Nothing exists until built with its test.
 
 > **SCOPE, STATED LOUDLY.** This document is **reference and a proposal** (CLAUDE.md §0.05): it resolves
 > nothing at runtime, and if it were deleted the game would behave identically. **Revision 2

@@ -192,7 +192,8 @@ lane_ids:
     # recommendation. next_free bumped 12->13.
     FI: { name: "Field investigation", next_free: 10 }   # no reservation held; allocate at next_free as normal. ED-FI-0009 allocated 2026-09-10 (the six investigation acts built as six verb rows; the seam/pool/obstacle/exposure ruling request). Narrative: id_reservations_history.md#fi
     # ED-FI-0003 allocated 2026-07-07 (status open): ed_options OPT-6 (knots propagation completion) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
-    SC: { name: "Social contest",      next_free: 39 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0017-0020 returned, max allocated ED-SC-0016. Narrative: id_reservations_history.md#sc
+    SC: { name: "Social contest",      next_free: 40 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0017-0020 returned, max allocated ED-SC-0016. Narrative: id_reservations_history.md#sc
+    # ED-SC-0039 allocated 2026-10-06 at the v9 adoption (status ratified: the proceedings subsystem, AS INTENT ONLY). Entry: registers/editorial_ledger_sc.jsonl.
     # ED-SC-0038 allocated 2026-09-26 (status ruled, NOT needs_jordan): two of Jordan's 2026-09-04
     # rulings (multi-matter/conditional adjudication; binding-in-scene), relayed only inside the
     # scope-banned 09-04-social-contest-branches corpus, apply to all twelve proceeding rows in the
@@ -253,7 +254,10 @@ lane_ids:
     # below. origin/main's PR #437 (the `methodology` skill) merged first and keeps ED-IN-0280;
     # this branch's PR #438 renumbers its own allocation to ED-IN-0281 (THE PLAN re-adopted as the
     # single order). Neither commit's content changes, only the number.
-    IN: { name: "Infrastructure",      next_free: 286 }   # ED-IN-0279..0285 allocated 2026-09-27..10-03 (0280/0281 collision, renumbered; 0282 = the telling workplan; 0283 = Jordan's 2026-10-02 ruling that the systems/ folders are kept; 0284 = Jordan's 2026-10-03 ruling that every system is a module that plugs into the season loop, with the Layer-1 amendment; 0285 = his twenty later rulings: modules/, dice_engine, the adapter model, containers, and the correction of 0284's contract); DELIBERATE GAP: CSO holds 0103-0111. Narrative: id_reservations_history.md#in
+    IN: { name: "Infrastructure",      next_free: 292 }   # ED-IN-0279..0285 allocated 2026-09-27..10-03 (0280/0281 collision, renumbered; 0282 = the telling workplan; 0283 = Jordan's 2026-10-02 ruling that the systems/ folders are kept; 0284 = Jordan's 2026-10-03 ruling that every system is a module that plugs into the season loop, with the Layer-1 amendment; 0285 = his twenty later rulings: modules/, dice_engine, the adapter model, containers, and the correction of 0284's contract); DELIBERATE GAP: CSO holds 0103-0111. Narrative: id_reservations_history.md#in
+    # ED-IN-0286..0291 allocated 2026-10-06 at the v9 adoption (0286 = v9 as the one active plan; 0287 = #457 as intent;
+    # 0288 = #453 as intent, its kill/wound reading adopted; 0289 = the Gather's dispositions applied; 0290 = #445 as intent;
+    # 0291 = Jordan's RS-1..RS-4 rulings on the cells and the ten RS-21 adopted recommendations). Entries: registers/editorial_ledger_in.jsonl.
     # [ED-IN-0064 DUP-KEY REPAIR] A stale duplicate `IN:` mapping once shadowed the authoritative one above (YAML last-key-wins). Neutralized; full incident write-up, including why a duplicate key is silent rather than an error: id_reservations_history.md#dup-key
     # 2026-07-07 (status open unless noted): ED-IN-0012/0013's edge-playability pair RENUMBERED to
     # ED-IN-0019/0020 (armature §5.10 decided + executed, see repair note above); ED-IN-0021..0025

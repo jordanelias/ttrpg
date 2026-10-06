@@ -1,6 +1,6 @@
 # 01 · ATTENTION AND REACH — how a decision reaches a person, and how it stops reaching everybody
 
-## Status: **PROPOSED (2026-09-17). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## Status: **RATIFIED AS INTENT (v9); absorbed where built (03 → `offices.yaml`, 04 §A.3–A.4 → `matter.py`, 05 → the plans); residue → IN-28, SE-03 (ED-IN-0233)**
 ## Lane: `IN` · id: **ED-IN-0233** (shared with `05_LEDGER_AND_BUILD.md` — same lane, same commit).
 ## Grade under `CLAUDE.md` §0.2: **`paper`.** Nothing in this file executes. Every number below was
 ## produced by running the engine; **not one of the CHANGES below has run.** PART C.5 says what

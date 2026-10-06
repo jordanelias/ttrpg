@@ -1,6 +1,6 @@
 # Squad Engagement Engine v5, reconciled against mass-battle canon: what to build, what not to, what Jordan decides
 
-## Status: RULED (Jordan, 2026-09-25) — design decided; unimplemented
+## Status: RULED (Jordan, 2026-09-25) — design decided; built: HANDOFF_MB (ED-MB-0069..0077); open: MB-01..07 (J-18 adopted as (A), MB-07)
 
 **Date:** 2026-09-25 · **Lane:** MB · **Ledger:** `ED-MB-0067` (two rows — the second records this ruling; the
 last row governs).

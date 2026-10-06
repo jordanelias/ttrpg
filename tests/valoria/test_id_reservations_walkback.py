@@ -275,7 +275,9 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # a real dwelling Site kind rather than a hearth-rung reinterpretation). Lane ledger:
     # registers/editorial_ledger_se.jsonl. Independent of the SC bump above -- two concurrent
     # sessions' allocations, combined here rather than either overwriting the other.
-    released = {'SC': 39, 'FA': 39, 'WR': 13, 'SE': 56}
+    # PIN UPDATED 2026-10-06: SC 39 -> 40. ED-SC-0039 allocated at the v9 adoption (the proceedings
+    # subsystem ratified AS INTENT ONLY; ED-IN-0286). Lane ledger: registers/editorial_ledger_sc.jsonl.
+    released = {'SC': 40, 'FA': 39, 'WR': 13, 'SE': 56}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (

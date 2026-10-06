@@ -3,7 +3,7 @@
 
 # How a Valorian decides — the synthesis
 
-## Status: PROPOSED — HELD BACK
+## Status: REFERENCE — rulings absorbed into ED-IN-0251/0261; cited as a register (v9; ED-IN-0289)
 
 > ⚠ **Superseded in part by ED-IN-0232 (the Key substrate retired).** Owner:
 > `references/restructure_ledger.md#the-key-substrate-retired-2026-09-16-ed-in-0232`, with the

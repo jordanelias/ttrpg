@@ -1,6 +1,6 @@
 # The seam — where the governance suite and the behaviour layer meet
 
-## Status: **PROPOSED (2026-09-17). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## Status: **REFERENCE (v9) — the seam it states is carried by `01_THE_BUILD_ORDER.md`'s phases (ABSORBED there); ratified AS INTENT (ED-IN-0243); no code reads it.**
 ## Lane: `IN` · **`ED-IN-0243`**
 ## Grade under `CLAUDE.md` §0.2: **`measured`** — every row below was opened at its cited line or executed on this tree. **No design in this file has run.**
 ## Subjects: `../2026-09-17-governance-and-holdings-r2/` (#408) and `../2026-09-16-conviction-decision-layer/` (#409). This file judges the SEAM between them and nothing inside either.

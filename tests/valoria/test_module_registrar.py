@@ -16,7 +16,7 @@ the first half of (c) repeats a refusal `data/verbs.py` already makes at load.
 `ID-13`, READ EXACTLY: no production composition row carries `entry:` at `30`, so every registrar
 case below PLANTS one; the registrar's pass over production rows is first exercised at `31a`.
 
-The plan's falsifiers, by number (`workplans/valoria_master_workplan_v8_part5.md`, position `30`):
+The plan's falsifiers, by number (`workplans/valoria_master_workplan_v9_part4.md`, IN-02 = position `30`):
 (2) `test_a_registered_row_deleted_under_a_live_process_refuses_naming_it` -- ONLY ITS WITHIN-PROCESS
 FORM (plant, construct, delete, construct): in a fresh process a deleted row leaves nothing to refuse
 on, since no data at `30` declares that a row must exist, so the fresh-process form is `31a`'s to place

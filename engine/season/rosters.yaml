@@ -747,7 +747,7 @@ rosters:
     values: [felled, wounds, max_wounds, health_remaining, health_full]
 
   combat_band_edges:
-    source: "`H-98`, plan position `8` (`workplans/valoria_master_workplan_v8_part4.md`) -- the edge between the bands was two literals in `seam/ladder.py::combat_degree` (`if st[\"felled\"]` / `st[\"wounds\"] > 0`). Jordan 2026-09-02: *\"I do not want definitions etc to be hardcoded\"*. The bands themselves are `combat_degree_bands`, ruled 2026-09-03/04 as a READ of the scene."
+    source: "`H-98`, plan position `8` (closed; `workplans/valoria_master_workplan_v8_part4.md`, retired, at `FORK:7b619328`) -- the edge between the bands was two literals in `seam/ladder.py::combat_degree` (`if st[\"felled\"]` / `st[\"wounds\"] > 0`). Jordan 2026-09-02: *\"I do not want definitions etc to be hardcoded\"*. The bands themselves are `combat_degree_bands`, ruled 2026-09-03/04 as a READ of the scene."
     cite: "H-98"
     keyed_on: combat_degree_bands
     note: >-
