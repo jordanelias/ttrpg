@@ -351,9 +351,15 @@ Nothing in this section is restated in full here; a change to any of it is made 
 Runs after BATCH-CLOSE's reconciliations are committed, and not after the run's last batch (that
 is `/close`).
 
-1. **Expunge on disk — one commit, net deletion.** Delete the batch's finished positions from the
-   plan, by CLAUDE.md §2 and the plan's own rule for where a finished position's one line goes, and
-   delete the lane-handoff Open rows its items occupied. Add no narrative, no "done" row and no
+1. **Expunge on disk — one commit, net deletion.** **First, grep every remaining batch's rows (the
+   plan and the lane handoff) for each handle and file about to go; delete only what no remaining
+   batch needs.** A **gate** naming a finished position is satisfied: rewrite that reference to the
+   position's landing commit SHA in this same commit, so the later batch's gate check has something
+   to read. A position a remaining batch **reads** (its INSTRUCTION or FALSIFIER is in that batch's
+   `C`) stays, narrowed, until that batch closes. The same test governs any file or row judged
+   stale: retire it only if no remaining batch's `C` names it. Then delete the batch's finished
+   positions from the plan, by CLAUDE.md §2 and the plan's own rule for where a finished position's
+   one line goes, and delete the lane-handoff Open rows its items occupied. Add no narrative, no "done" row and no
    count (CLAUDE.md §1). The batch's record is its commit range (`git log --grep=<handle>`). A
    position the batch only part-finished stays, narrowed to its receipt's `NOT DONE`. What
    BATCH-CLOSE found and applied is already in the batch's commits; a finding nobody can apply
@@ -415,6 +421,7 @@ is `/close`).
 | "the batch size was right" | a linked group was carried whole through BATCH-CLOSE with no stated reason not to cut it along its gates, or was cut with no stated reason the whole group would have been too large |
 | "the plan's own batches were used" | a batch the plan already names was re-split or merged without a conflict stated at the 0.1 stop |
 | "the context was cleared at the boundary" | the next batch's work cites a receipt, finding, SHA or fact that is neither on disk nor in the permanent surface; or two batches ran in one window and the report did not say context was NOT cleared |
+| "the expunge took only what no remaining batch needs" | after the boundary commit, a remaining batch's gate or reading list names a handle or file that is gone from the tree, with no landing SHA written in its place |
 | "the batch was expunged" | a finished position, or its in-flight row, is still present after the boundary commit, or that commit added a narrative, a "done" row or a count |
 | "the batch resumed from its row" | a resumed batch rebuilt an item whose handle was in `built`, skipped one that was not, or re-ran a BATCH-CLOSE phase at or before `close` — or the row was trusted over the commits where they disagreed |
 | "BATCH-CLOSE ran once per batch" | the full pytest suite, `/code-review`, `/simplify`, `layer-conformance`, the agonist/antagonist fan, or the terminal critique ran between two items of the *same* batch, or did not run at all before the batch's items were reported done |
