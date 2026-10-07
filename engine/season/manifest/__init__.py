@@ -26,8 +26,8 @@ This unit lands the signature, the crossing and the boot-time failure only.
 """
 
 from .registry import (
-    PROVIDERS, call, check_contest_prizes, check_effects, check_rows, check_roles, has, provider,
-    resolve,
+    PROVIDERS, call, check_contest_prizes, check_effects, check_preconditions, check_rows,
+    check_roles, has, provider, resolve,
 )
 # Plan position `30` (A-25): the REGISTRAR and its one table. `registrar.py`'s docstring defines
 # a module entry; `SeasonDriver.__init__` runs it, then the refusals above, on every construction.

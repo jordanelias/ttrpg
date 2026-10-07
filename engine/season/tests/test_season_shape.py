@@ -4450,24 +4450,30 @@ def test_calendar_emits_date_fired_with_the_venue_as_subject_and_chains_by_venue
 
     assert not [e for e in w.log if e.kind == "date.fired"], (
         "control: a fresh tiny_world already carries a date.fired Event")
-    d.calendar(mint_token(w, WriteClass.CALENDAR))
+    got0 = d.calendar(mint_token(w, WriteClass.CALENDAR))
     assert not [e for e in w.log if e.kind == "date.fired"], (
         "CALENDAR emitted with no date ever planted -- the control failed")
+    # IN-29: what `calendar()` RETURNS is what `season()` hands to `witness()`, so it is pinned here
+    # directly, where its control already exists: nothing emitted, nothing returned.
+    assert got0 == [], f"calendar() returned {got0!r} with no date planted"
 
     # a date whose `due_at` is not the current tick: nothing fires. Due far in the future, not
     # `tick + 1` -- the chain check below advances the tick by exactly one and a `due_at` this
     # date shares would make it fire there too, which is a fixture bug, not a second finding.
     w.dates["d_future"] = dict(id="d_future", venue="D", due_at=w.tick + 100, holder=None, fired=False)
-    d.calendar(mint_token(w, WriteClass.CALENDAR))
+    got_future = d.calendar(mint_token(w, WriteClass.CALENDAR))
     assert w.dates["d_future"]["fired"] is False, "a date due later fired early"
     assert not [e for e in w.log if e.kind == "date.fired"], "a date due later emitted anyway"
+    assert got_future == [], f"calendar() returned {got_future!r} though no date was due"
 
     # a date due NOW: it fires, anchors on the venue, and roots at ROOT (its genuine first).
     w.dates["d_now"] = dict(id="d_now", venue="D", due_at=w.tick, holder=None, fired=False)
-    d.calendar(mint_token(w, WriteClass.CALENDAR))
+    got1 = d.calendar(mint_token(w, WriteClass.CALENDAR))
     fired = [e for e in w.log if e.kind == "date.fired"]
     assert len(fired) == 1, fired
     ev1 = fired[0]
+    assert [e.id for e in got1] == [ev1.id], (
+        f"calendar() must return exactly its own Event: got {[e.id for e in got1]}, fired {ev1.id}")
     assert anchor_of(w, ev1) == "D" and ev1.causes == [ROOT], (
         f"first firing at a venue: anchor={anchor_of(w, ev1)!r}, causes={ev1.causes}")
 
@@ -4475,16 +4481,37 @@ def test_calendar_emits_date_fired_with_the_venue_as_subject_and_chains_by_venue
     # than re-rooting -- the whole point of passing `causes=` instead of defaulting it.
     w.tick += 1
     w.dates["d_later"] = dict(id="d_later", venue="D", due_at=w.tick, holder=None, fired=False)
-    d.calendar(mint_token(w, WriteClass.CALENDAR))
+    got2 = d.calendar(mint_token(w, WriteClass.CALENDAR))
     fired2 = [e for e in w.log if e.kind == "date.fired" and e.id != ev1.id]
     assert len(fired2) == 1, fired2
     ev2 = fired2[0]
+    # `ev1` is already in the log, so a wrong mark would return `[ev1, ev2]`; this is the call that
+    # shows the return is the log tail of THIS barrier and not the whole log.
+    assert [e.id for e in got2] == [ev2.id], (
+        f"calendar() must return only this barrier's Event: got {[e.id for e in got2]}, fired {ev2.id}")
     assert ev2.causes == [ev1.id], (
         f"a second date firing at the same venue carries causes={ev2.causes}, not [{ev1.id!r}] "
         "-- the chain re-rooted instead of naming its own previous emission at this venue")
 
+    # `docket.formed` (`04 §A.2`, `write_matrix.yaml`'s (DocketItem, matter) row): a date that fires WITH a holder puts a
+    # matter-less item on the docket, and that write emits, chained on the `date.fired` it follows. CONTROL: the vacant
+    # dates above fired and formed no docket Event at all.
+    assert not [e for e in w.log if e.kind == "docket.formed"], "a vacant date formed a docket Event"
+    w.tick += 1
+    w.dates["d_held"] = dict(id="d_held", venue="D", due_at=w.tick, holder="a_holder", fired=False)
+    n_docket = len(w.docket)
+    got3 = d.calendar(mint_token(w, WriteClass.CALENDAR))
+    fired3 = [e for e in got3 if e.kind == "date.fired"]
+    formed = [e for e in got3 if e.kind == "docket.formed"]
+    assert len(w.docket) == n_docket + 1 and len(fired3) == 1 and len(formed) == 1, (
+        f"a held date must fire once and form one docket item and one docket.formed: docket "
+        f"{n_docket}->{len(w.docket)}, fired {len(fired3)}, formed {len(formed)}")
+    assert formed[0].causes == [fired3[0].id] and anchor_of(w, formed[0]) == "D", (
+        f"docket.formed must chain on the date.fired it follows and anchor on the venue: "
+        f"causes={formed[0].causes} (fired {fired3[0].id}), anchor={anchor_of(w, formed[0])!r}")
 
-def test_calendar_a_forced_corpus_date_fires_and_emits_but_deposits_no_claim():
+
+def test_calendar_a_forced_corpus_date_fires_emits_and_lands_a_claim():
     """The plan's own OBSERVABLE for `11b`: `harness/corpus_run.build_at` plants `d_forced`
     (`due_at: 1`, no holder) on every case `cases/ENDINGS_CLASSIFIED.yaml` marks
     `forced_by_threshold` -- COUNTED here, not assumed, and asserted `>= 1` so this is never a
@@ -4493,16 +4520,15 @@ def test_calendar_a_forced_corpus_date_fires_and_emits_but_deposits_no_claim():
     On at least one such world, running its season(s) fires `d_forced` and the fired Event now
     anchors on the venue (`11b`'s own change) rather than not existing at all.
 
-    ⚠ NO CLAIM LANDS IN ANYONE'S LEDGER ABOUT IT, AND THAT IS A SEPARATE, UNCLOSED GAP -- NOT
-    `11b`'s TO FIX. `loop/driver.py::season` calls `self.calendar(...)` BEFORE the round loop and
-    never captures its return (`calendar` returns `None`); `matter()`'s own `_emitted_by_write`
-    buffer only fills `if step is Step.MATTER` (`state/world.py:1104`), so CALENDAR's own write
-    never enters it either. The Event this position added lands in `w.log` -- reachable by
-    `last_emission_of` and any direct log scan -- but it is never among the `events` `season()`
-    hands to `witness()` (`loop/driver.py:462`), so WITNESS's `claim.deposited` never fires for it.
-    MEASURED on this corpus (2026-09-29): 0 of 0 attempts. Recording the absence rather than
-    asserting the presence the plan's prose assumed -- `CLAUDE.md` §0.1 pt 3's row on "X is
-    absent": run the thing that would show presence, and this ran it."""
+    ⚠ RENAMED AT IN-29 from `..._fires_and_emits_but_deposits_no_claim`, the pre-IN-29 state; the
+    plan's `-k calendar_a_forced_corpus_date` still selects it. Before IN-29 NO CLAIM LANDED about
+    a fired date: `season()` discarded `calendar()`'s return, and `World.write` buffers an
+    emission for fan-out only at `Step.MATTER`, so CALENDAR's `date.fired` reached `w.log` and no
+    ledger (MEASURED 2026-09-29: 0 of 0 attempts; the pin was `assert not claimed_any`).
+    `calendar()` now RETURNS its own Events and `season()` hands them to `witness()` beside
+    MATTER's, so the last clause is `assert claimed_any` and it can fail: reverting either half
+    of the routing turns it red (observed, IN-29). What a fired date does once someone holds it (`convene`'s sitting) is
+    SC-01's, not pinned here."""
     from ..harness import corpus_run as CR
     from ..harness import run_cases as RC
 
@@ -4546,9 +4572,9 @@ def test_calendar_a_forced_corpus_date_fires_and_emits_but_deposits_no_claim():
     assert fired_any, (
         "no forced_by_threshold world fired its planted date -- 11b's OBSERVABLE is unreachable "
         "on this corpus")
-    assert not claimed_any, (
-        "a claim now references date.fired -- WITNESS's fan-out changed to reach CALENDAR's "
-        "emission; update this test's docstring, it no longer describes the gap it once measured")
+    assert claimed_any, (
+        "no ledger claim references a fired date -- CALENDAR's own Events no longer reach "
+        "`witness()` (IN-29: `calendar()` returns them, `season()` fans them out beside MATTER's)")
 
 
 # ===========================================================================
@@ -7541,7 +7567,7 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # stem, so a giver names a receiver from the persons he knows (`operand_bags`); it executes in 1
     # world and is refused in 63. Nothing leaves. ⚠ `destroy_record`'s formability (`A-13`) was
     # measured and HELD: formable, it executed in 3 worlds and crowded `release` out of the 2 it
-    # holds, growing the always-refused set (the row's `decline_note`). MEASURED by a one-off script
+    # holds, growing the always-refused set (the row's `formation_decline_note`). MEASURED by a one-off script
     # over `corpus_run.run_case`'s same 143 live worlds, seed 0, against a `git archive` of the tree
     # before `14`; the per-verb world counts are at the `by_sig` note below.
     assert ever == {"create_record", "examine", "interview", "fight", "give", "issue", "move",
@@ -8060,7 +8086,17 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `transfer` 88 -> 85, `research` 99 -> 97, `surveil` 65 -> 64, `tell` 88 -> 87, `utter`
     # 143 -> 142; `release` unmoved at 2. THE SAME-BREATH CHECK: the universal set moved, `utter`
     # losing one world (asserted below).
-    assert len(by_sig) == 120, (
+    # ⚠⚠ **120 -> 119, PLAN POSITION `29` (IN-29: CALENDAR's own `date.fired` Events reach `witness()`), 2026-10-07,
+    # MEASURED AGAINST a62dae5, THE COMMIT BEFORE 9f191fe (120 there, same 143 live worlds, seed 0), AND
+    # `corpus_run` AT 9f191fe ITSELF READS IDENTICAL TO THE HEAD OF B-B, so the close-phase edits moved nothing.**
+    # THE UNIT AND THE DIRECTION: variety FELL by one, `live` did not move; the degrees resolved and the claims
+    # held moved with it (`Failure` 148 -> 159, `Success` 21 -> 19, `firsthand` claims 73994 -> 74406), because a
+    # date's firing now reaches the ledger and the scenes re-ranked at the margin. Per-verb world counts executed,
+    # before -> after: `examine` 14 -> 11, `fight` 33 -> 30, `give` 1 -> 2, `move` 55 -> 54, `petition` 70 -> 72,
+    # `release` 2 -> 3, `research` 97 -> 99, `restore` 7 -> 9, `surveil` 64 -> 65, `tell` 87 -> 88,
+    # `transfer` 86 -> 85; every other verb unmoved.
+    # THE SAME-BREATH CHECK: the universal set did not move (asserted below).
+    assert len(by_sig) == 119, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "

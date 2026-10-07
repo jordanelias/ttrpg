@@ -44,7 +44,7 @@ from ..data.rosters import OBSERVATION_DEPOSIT_MODES, STRATA, WITNESS_CHANNELS
 from ..data.requires import (
     LEDGER_DERIVED_STEMS, UNKNOWN, Verdict, binding_from_act, binding_of, evaluate,
 )
-from ..data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow, opportunity_key
+from ..data.verbs import VERB_TABLE, VerbRow, opportunity_key
 from ..gaps import (
     Collision, Forbidden, InstrumentDefect, NoProducer, Ungraded, Unowned, Unspecified,
 )
@@ -99,8 +99,8 @@ def mint_token(w: World, wclass: WriteClass) -> Token:
 
 
 def resolvable_verbs() -> frozenset:
-    """The verbs the fold can actually carry through RESOLVE: no precondition, or a precondition
-    some `REQUIRES_PREDICATES` entry evaluates.
+    """The verbs the fold can actually carry through RESOLVE: a precondition the fold can evaluate
+    (`VerbRow.precondition_evaluable`: none, a typed cell, or a `REQUIRES_PREDICATES` entry).
 
     COMPUTED, NEVER LISTED. A caller narrowing an option set to these is not authoring a roster --
     it is asking the fold what it can execute, and the answer moves when `verb_table.yaml` or the
@@ -122,15 +122,19 @@ def resolvable_verbs() -> frozenset:
         # question -- *can the fold evaluate this precondition* -- is the same question `_fold`
         # asks two hundred lines down, and leaving it reading only `REQUIRES_PREDICATES` would
         # give the two sites different answers for every typed verb (§8: the rule lives once).
-        gated = ((row.requires or "").strip() in NO_PRECONDITION
-                 or row.requires_typed is not None
-                 or v in REQUIRES_PREDICATES)
-        effected = not row.writes or v in EFFECTS
+        # ⚠ (plan position IN-41, `SM-11`) AND THE ANSWER LIVES ON `VerbRow`, ONE OWNER FOR THIS
+        # GATE AND THE REFUSAL OVER IT: a row this gate drops reaches it only if its
+        # `verb_table.yaml` row carries a `requires_decline_note:` saying why nothing evaluates its
+        # precondition -- `manifest.check_preconditions()` refuses every other such row at
+        # `SeasonDriver` construction, naming it. Before IN-41 this drop was without a word.
+        gated = row.precondition_evaluable(REQUIRES_PREDICATES)
+        effected = row.effect_carried(EFFECTS)
         # ⚠ (plan position `30`) THE EXCLUSION ABOVE IS NO LONGER SILENT. A writing row with no
-        # effect reaches it only if its `verb_table.yaml` row carries a `decline_note:` saying why:
-        # `manifest.check_effects()` refuses every other such row at `SeasonDriver` construction,
-        # naming it (refusal (a), one-sided by `SM-9`) -- a CONTESTED row included, because
-        # `loop/resolve.py::_contest` folds the seam's result through `EFFECTS`.
+        # effect reaches it only if its `verb_table.yaml` row carries an `effect_decline_note:`
+        # saying why: `manifest.check_effects()` refuses every other such row at `SeasonDriver`
+        # construction, naming it (refusal (a); two-sided since IN-41 split `SM-9`'s column) -- a
+        # CONTESTED row included, because `loop/resolve.py::_contest` folds the seam's result
+        # through `EFFECTS`.
         # ⚠ AND A THIRD GATE: A VERB THAT CONTESTS ROUTES TO THE SEAM FIRST, AND FOLDS WHAT IT RETURNS.
         # `ARCHITECTURE_V2.md:394` — *"`contests: <prize>` — if set, ROUTES TO THE SEAM at
         # RESOLVE (§39)"* — so such a verb is executable only if the SEAM can return. It was
@@ -257,14 +261,18 @@ class SeasonDriver:
         # string (never at import), and refuses (b) a `verb:` naming no verb row and (d) an entry
         # registered twice; it is idempotent, so a corpus constructing many drivers is refused
         # nothing new. Then (c) the contest roster, both halves, and (a) a writing row with no effect
-        # and no `decline_note:`. `manifest/registrar.py` and `manifest/registry.py` hold the rules.
+        # and no `effect_decline_note:` (and its converse), and -- plan position IN-41, `SM-11` --
+        # (a)'s precondition twin: a precondition nothing evaluates and no `requires_decline_note:`
+        # (and its converse). `manifest/registrar.py` and `manifest/registry.py` hold the rules.
         from ..manifest import (
-            check_contest_prizes, check_effects, check_rows, register_module_entries,
+            check_contest_prizes, check_effects, check_preconditions, check_rows,
+            register_module_entries,
         )
         register_module_entries(VERB_TABLE)
         check_rows()
         check_contest_prizes(VERB_TABLE)
         check_effects(VERB_TABLE, EFFECTS)
+        check_preconditions(VERB_TABLE, REQUIRES_PREDICATES)
         # OBSERVATION ONLY, and the distinction matters. Six probes used the removed `effect` hook
         # to record which acts reached RESOLVE and in what order. That is a thing to WATCH, not a
         # thing to DECIDE, and giving it back as a resolver parameter is how the second resolver
@@ -375,8 +383,8 @@ class SeasonDriver:
 
         ⚠ **WITNESS RUNS PER ROUND AND MATTER'S EVENTS ARE WITNESSED ONCE.** A deposit that only
         landed at the end of the season could not reach a later round's deliberation, which is the
-        whole channel R-03 asks for. MATTER's events are seasonal, so they join round 0's fan-out
-        and no other — carrying them into every round would deposit one wear five times.
+        whole channel R-03 asks for. MATTER's and CALENDAR's events are seasonal, so they join round
+        0's fan-out and no other — carrying them into every round would deposit one wear five times.
 
         ⚠ **THE CONTROL IS THE `scene_budget = 1` ARM, AND THE FIRST WRITING OF THIS DOCSTRING
         NAMED THE WRONG ONE.** It read that `H-124`'s `scenes_per_round = 5` gives every person
@@ -420,11 +428,15 @@ class SeasonDriver:
         # G2 / `04 §C.1`: ONE TOKEN PER BARRIER, MINTED HERE, PASSED IN, NEVER KEPT. Each is built
         # inline in the call so no local outlives its step -- the pseudocode's `drop` is the end of
         # the expression. DELIBERATE, below, is the one step called with none.
-        self.calendar(mint_token(w, WriteClass.CALENDAR))
+        calendar_events = self.calendar(mint_token(w, WriteClass.CALENDAR))
         matter_events = self.matter(mint_token(w, WriteClass.MATTER), actorless)
         rounds = int(w.fixtures.get("scene_budget"))
         n_acts, n_events, deposits = 0, len(matter_events), 0
-        pending_matter = list(matter_events)
+        # IN-29: CALENDAR's own Events (`date.fired`) are seasonal like MATTER's and ride the same
+        # first-round fan-out, in barrier order. They were discarded here, so they reached `w.log`
+        # and no ledger. `n_events` does not count them (it counts MATTER's and each round's, as
+        # before): that figure is not this position's, and the log already holds these.
+        pending_matter = calendar_events + matter_events
         for r in range(rounds):
             self.round = r
             # S26.2 again, not a second rule: RESOLVE thaws, so each round re-freezes before its
@@ -476,8 +488,9 @@ class SeasonDriver:
             for e in events:
                 w.log.append(e)              # S19.5 -- ONE LOG, NOT TWO
                 TRACE.event(e.id, e.kind, e.causes)
-            # MATTER's events are seasonal and join the FIRST round's fan-out only; the alternative
-            # deposits one wear once per round, which is the fourth clock this docstring refuses.
+            # MATTER's and CALENDAR's events are seasonal and join the FIRST round's fan-out only;
+            # the alternative deposits one wear once per round, which is the fourth clock this
+            # docstring refuses.
             deposits += self.witness(mint_token(w, WriteClass.INTERIOR), pending_matter + events)
             pending_matter = []
             n_acts += len(acts)

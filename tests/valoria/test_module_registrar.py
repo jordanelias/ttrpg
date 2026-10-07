@@ -16,7 +16,7 @@ the first half of (c) repeats a refusal `data/verbs.py` already makes at load.
 `ID-13`, READ EXACTLY: no production composition row carries `entry:` at `30`, so every registrar
 case below PLANTS one; the registrar's pass over production rows is first exercised at `31a`.
 
-The plan's falsifiers, by number (`workplans/valoria_master_workplan_v9_part4.md`, IN-02 = position `30`):
+Position `30`'s falsifiers, by number (its plan entry, IN-02, left the plan at B-B's close, `4a2e4494`; the commit `5097e49` is its record):
 (2) `test_a_registered_row_deleted_under_a_live_process_refuses_naming_it` -- ONLY ITS WITHIN-PROCESS
 FORM (plant, construct, delete, construct): in a fresh process a deleted row leaves nothing to refuse
 on, since no data at `30` declares that a row must exist, so the fresh-process form is `31a`'s to place
@@ -26,6 +26,14 @@ on, since no data at `30` declares that a row must exist, so the fresh-process f
 `test_one_entry_registered_twice_*` and `test_two_verb_call_rows_for_one_verb_refuse`; (7) `test_the_populated_realm_constructs_a_driver_and_every_check_ran`;
 (8) `test_the_composition_export_round_trips`, with
 `test_engine_does_not_import_systems.py::test_importing_every_engine_module_pulls_in_no_subsystem`.
+
+Plan position IN-41 (`SM-11` + `SM-9`; it left the plan at B-B's close, `4a2e4494`), which split the retired `decline_note:` column into
+`effect_decline_note:`, `formation_decline_note:` and `requires_decline_note:`: falsifier (1)
+`test_a_row_with_an_untyped_precondition_nothing_evaluates_refuses_naming_the_verb`, with its converse
+`test_a_row_whose_precondition_is_evaluable_and_declined_refuses_naming_the_verb`; falsifier (2)
+`test_a_row_with_an_effect_and_an_effect_declining_note_refuses_naming_the_verb`, and its "`oblige` and
+`destroy_record` construct" half in
+`test_refusal_a_covers_contested_rows_and_lets_every_declared_row_construct`.
 """
 from __future__ import annotations
 
@@ -224,45 +232,140 @@ print(repr((verb, construct())))
 
 
 def test_a_writing_row_with_its_effect_cleared_refuses_naming_the_verb():
-    """Falsifier (5), refusal (a): clear the effect of a writing row that carries no `decline_note:`.
-    Chosen from the tables -- a writing, uncontested row with an effect and no decline -- not named."""
+    """Falsifier (5), refusal (a): clear the effect of a writing row that carries no
+    `effect_decline_note:`. Chosen from the tables -- a writing, uncontested row with an effect and no
+    decline -- not named."""
     got = _run("""
-from engine.season.manifest.registry import _declined_verbs
 verb = sorted(v for v, r in VERB_TABLE.items()
-              if r.writes and not r.contests and v in EFFECTS and v not in _declined_verbs())[0]
+              if r.writes and not r.contests and v in EFFECTS and not r.effect_decline_note)[0]
 del EFFECTS[verb]
 print(repr((verb, construct())))
 """)
     verb, refusal = got
-    _assert_refused(refusal, repr(verb), "decline_note")
+    _assert_refused(refusal, repr(verb), "effect_decline_note")
 
 
-def test_refusal_a_is_one_sided_and_covers_contested_rows():
-    """Refusal (a)'s declared limit and its reach, observed. One-sided (`SM-9`): a writing row with no
-    effect that DOES carry a `decline_note:` constructs (every shipped such row does), and a row
-    carrying BOTH an effect and a `decline_note:` is NOT refused, since the column also declines a
-    formation on some rows. And a CONTESTED writing row is not exempt: it routes to the seam and then
-    folds the result through `EFFECTS` (`loop/resolve.py::_contest` -> `_fold`), so clearing its effect
-    is refused, naming it -- while a contested row that writes nothing (`tell`) needs no effect and is
-    not named."""
-    got = _run("""
-from engine.season.manifest.registry import _declined_verbs
-declined = _declined_verbs()
-silent_ok = sorted(v for v, r in VERB_TABLE.items() if r.writes and v not in EFFECTS and v in declined)
-both = sorted(v for v in declined if v in EFFECTS)
+#: The rows whose `verb_table.yaml` entry carries `formation_decline_note:` -- an annotation the loader
+#: does not load into `VerbRow` (its `*_note` rule), so it is read off the file here.
+_FORMATION_DECLINED = """
+import yaml
+_doc = yaml.safe_load(open({root!r} + "/engine/season/verb_table.yaml"))
+formation_declined = sorted(str(r["verb"]) for r in _doc["verbs"]
+                            if str(r.get("formation_decline_note") or "").strip())
+"""
+
+
+def test_refusal_a_covers_contested_rows_and_lets_every_declared_row_construct():
+    """Refusal (a)'s reach, observed. A writing row with no effect that carries an
+    `effect_decline_note:` constructs (every shipped such row does); a row whose note declines its
+    FORMATION (`formation_decline_note:` -- `oblige`, `destroy_record`, derived from the file, not
+    named) HAS an effect and constructs, which is what the `SM-9` split exists to allow. And a
+    CONTESTED writing row is not exempt: it routes to the seam and then folds the result through
+    `EFFECTS` (`loop/resolve.py::_contest` -> `_fold`), so clearing its effect is refused, naming it --
+    while a contested row that writes nothing (`tell`) needs no effect and is not named."""
+    got = _run(_FORMATION_DECLINED.format(root=ROOT) + """
+silent_ok = sorted(v for v, r in VERB_TABLE.items()
+                   if r.writes and v not in EFFECTS and r.effect_decline_note)
+formation_with_effect = sorted(v for v in formation_declined if v in EFFECTS)
 control = construct()
 contested_writers = sorted(v for v, r in VERB_TABLE.items() if r.contests and r.writes and v in EFFECTS)
 contested_no_write = sorted(v for v, r in VERB_TABLE.items() if r.contests and not r.writes)
 for v in contested_writers:
     del EFFECTS[v]
-print(repr((silent_ok, both, control, contested_writers, contested_no_write, construct())))
+print(repr((silent_ok, formation_declined, formation_with_effect, control, contested_writers,
+            contested_no_write, construct())))
 """)
-    silent_ok, both, control, contested_writers, contested_no_write, refusal = got
-    assert silent_ok and both and contested_writers and contested_no_write, got
-    assert control is None, control          # the shipped state (with the declined/both rows) constructs
-    _assert_refused(refusal, "decline_note", *[repr(v) for v in contested_writers])
+    (silent_ok, formation_declined, formation_with_effect, control, contested_writers,
+     contested_no_write, refusal) = got
+    assert silent_ok and formation_declined and contested_writers and contested_no_write, got
+    assert formation_with_effect == formation_declined, (
+        f"a formation-declined row has no effect, so the split is not what this test observes: {got}")
+    assert control is None, control          # the shipped state (declined rows of both kinds) constructs
+    _assert_refused(refusal, "effect_decline_note", *[repr(v) for v in contested_writers])
     for v in contested_no_write:
         assert repr(v) not in refusal[1], (v, refusal)
+
+
+def test_a_row_with_an_effect_and_an_effect_declining_note_refuses_naming_the_verb():
+    """IN-41 falsifier (2), refusal (a)'s CONVERSE arm (`SM-9`): plant an `effect_decline_note:` on a
+    writing row that HAS an effect -- chosen from the tables, not named. Before the split this arm
+    could not be armed, because `oblige` and `destroy_record` carried an effect and a `decline_note:`
+    that declined their formation."""
+    got = _run("""
+import dataclasses
+verb = sorted(v for v, r in VERB_TABLE.items() if r.writes and v in EFFECTS)[0]
+VERB_TABLE[verb] = dataclasses.replace(VERB_TABLE[verb], effect_decline_note="planted")
+print(repr((verb, construct())))
+""")
+    verb, refusal = got
+    _assert_refused(refusal, repr(verb), "effect_decline_note", "HAVE an effect")
+
+
+def test_a_row_that_writes_nothing_and_carries_an_effect_decline_note_refuses_naming_the_verb():
+    """The converse arm's OTHER cell: `effect_decline_note:` declines an effect a WRITING row lacks
+    (`data/verbs.py`'s own definition of the column), so on a row that writes nothing there is no
+    effect to decline and the note is stale. The two arms of the twin `check_preconditions` cover
+    every row; this one covers the row the first arm skipped."""
+    got = _run("""
+import dataclasses
+verb = sorted(v for v, r in VERB_TABLE.items() if not r.writes and v not in EFFECTS)[0]
+VERB_TABLE[verb] = dataclasses.replace(VERB_TABLE[verb], effect_decline_note="planted")
+print(repr((verb, construct())))
+""")
+    verb, refusal = got
+    _assert_refused(refusal, repr(verb), "effect_decline_note", "write nothing")
+
+
+def test_a_row_with_an_untyped_precondition_nothing_evaluates_refuses_naming_the_verb():
+    """IN-41 falsifier (1), `check_preconditions` (`SM-11`): un-type a row whose precondition a TYPED
+    CELL evaluates (and no `REQUIRES_PREDICATES` entry does), with no `requires_decline_note:` --
+    chosen from the tables, not named. Before IN-41 `resolvable_verbs()` dropped such a row without a
+    word; the control is that the same row is in that set before the plant and out of it after."""
+    got = _run("""
+import dataclasses
+from engine.season.loop.driver import REQUIRES_PREDICATES, resolvable_verbs
+verb = sorted(v for v, r in VERB_TABLE.items()
+              if r.has_precondition and r.requires_typed is not None
+              and v not in REQUIRES_PREDICATES and not r.requires_decline_note)[0]
+before = verb in resolvable_verbs()
+VERB_TABLE[verb] = dataclasses.replace(VERB_TABLE[verb], requires_typed=None)
+after = verb in resolvable_verbs()
+print(repr((verb, before, after, construct())))
+""")
+    verb, before, after, refusal = got
+    assert before and not after, f"the plant did not move {verb!r} out of resolvable_verbs(): {got}"
+    _assert_refused(refusal, repr(verb), "nothing evaluates", "requires_decline_note")
+
+
+def test_a_row_whose_precondition_is_evaluable_and_declined_refuses_naming_the_verb():
+    """`check_preconditions`'s CONVERSE arm, refusal (a)'s shape one gate over: plant a
+    `requires_decline_note:` on a row a registered predicate evaluates -- chosen from the tables, not
+    named. A note saying nothing evaluates a precondition that something does is a stale declaration."""
+    got = _run("""
+import dataclasses
+from engine.season.loop.driver import REQUIRES_PREDICATES
+verb = sorted(v for v in VERB_TABLE if v in REQUIRES_PREDICATES)[0]
+VERB_TABLE[verb] = dataclasses.replace(VERB_TABLE[verb], requires_decline_note="planted")
+print(repr((verb, construct())))
+""")
+    verb, refusal = got
+    _assert_refused(refusal, repr(verb), "requires_decline_note", "IS evaluable")
+
+
+def test_every_shipped_row_dropped_on_its_precondition_says_why():
+    """`SM-11`'s positive half on the shipped tree: every row `resolvable_verbs()`'s first gate drops
+    carries a `requires_decline_note:`, and the shipped tree constructs -- derived, not listed. A
+    vacuous sweep (no such row) would observe nothing, so it asserts there is at least one."""
+    got = _run("""
+from engine.season.loop.driver import REQUIRES_PREDICATES
+dropped = sorted(v for v, r in VERB_TABLE.items() if not r.precondition_evaluable(REQUIRES_PREDICATES))
+unsaid = [v for v in dropped if not VERB_TABLE[v].requires_decline_note]
+print(repr((dropped, unsaid, construct())))
+""")
+    dropped, unsaid, control = got
+    assert dropped, "no shipped row is dropped on its precondition; this test observes nothing"
+    assert unsaid == [], unsaid
+    assert control is None, control
 
 
 def test_the_populated_realm_constructs_a_driver_and_every_check_ran():
@@ -272,7 +375,8 @@ def test_the_populated_realm_constructs_a_driver_and_every_check_ran():
 import engine.season.manifest as M
 from engine.season.harness.populated import build_realm
 seen = {}
-for name in ("register_module_entries", "check_rows", "check_contest_prizes", "check_effects"):
+for name in ("register_module_entries", "check_rows", "check_contest_prizes", "check_effects",
+             "check_preconditions"):
     real = getattr(M, name)
     def wrapped(*a, _real=real, _name=name, **k):
         out = _real(*a, **k)
@@ -284,8 +388,9 @@ SeasonDriver(w)
 print(repr(seen))
 """)
     assert set(got) == {"register_module_entries", "check_rows", "check_contest_prizes",
-                        "check_effects"}, got
-    assert got["check_rows"] and got["check_contest_prizes"] and got["check_effects"], got
+                        "check_effects", "check_preconditions"}, got
+    assert (got["check_rows"] and got["check_contest_prizes"] and got["check_effects"]
+            and got["check_preconditions"]), got
     assert got["register_module_entries"] == 0, (
         f"{got['register_module_entries']} production row(s) registered; at `30` there are none "
         "(ID-13), and the first is `31a`'s -- re-read this test when one lands")

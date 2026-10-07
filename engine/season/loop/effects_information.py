@@ -313,7 +313,7 @@ def _eff_petition(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
     a second party shares it. ⚠ WHAT THIS DOES NOT BUILD: the two closers. Ruling 2's
     WITHDRAW and DENY both close `(Record, exists)`, whose one closer is `destroy_record` -- which
     declines on both its eligibility alternatives today (`H-75`; plan position `14` built its
-    formable shape and HELD it on measurement, the row's `decline_note`), and which the receiver
+    formable shape and HELD it on measurement, the row's `formation_decline_note`), and which the receiver
     can only reach once `give` (position `16`) puts the petition in his hand. The fold makes both
     sides NAMEABLE on the document; neither side can yet end it."""
     return _mint_document(w, a, "petition", _content_of(a, "petition"), _operand(a, "from"))

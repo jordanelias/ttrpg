@@ -16,6 +16,7 @@ it. This module constructs none and calls no minter -- `tests/test_g2_token.py` 
 from __future__ import annotations
 
 from ..data.matrix import Step
+from ..state.carriers import Event
 from ..state.gate import Token
 from ..state.ids import ROOT
 from ..trace_log import TRACE
@@ -23,11 +24,17 @@ from ..trace_log import TRACE
 
 
 # -- CALENDAR -- barrier 1 -- DECIDES NOTHING (S24) ----------------------
-def calendar(self, token: Token) -> None:
+def calendar(self, token: Token) -> list[Event]:
     w = self.w
     w.step = Step.CALENDAR
     TRACE.step("CALENDAR", "enter"); TRACE.barrier(1, "CALENDAR")
     w.discard_caches()
+    # ⚠ RETURNS ITS OWN EMISSIONS, SO `season()` CAN HAND THEM TO WITNESS BESIDE MATTER'S (IN-29).
+    # `World.write` buffers an emission for fan-out ONLY at `Step.MATTER` (`state/world.py`, the
+    # `_emitted_by_write` guard, which exists to keep WITNESS's own `claim.deposited` from looping),
+    # so CALENDAR's `date.fired` reached `w.log` and nothing else. The log tail since this mark is
+    # exactly what this barrier's writes emitted -- nothing else writes between here and the return.
+    _mark = len(w.log)
     for did, d in list(w.dates.items()):
         if d.get("due_at") != w.tick:
             continue
@@ -49,7 +56,14 @@ def calendar(self, token: Token) -> None:
                 emits="date.fired", subject=d.get("venue"),
                 causes=[prior] if prior else [ROOT])
         if not vacant:
+            # `04 §A.2` and `write_matrix.yaml`'s (DocketItem, matter) row give CALENDAR `docket.formed`; the write
+            # emitted nothing, the same defect `11b` closed for `date.fired`. Chained on the `date.fired` just emitted
+            # at this venue, under the same subject, so the antecedent is the firing that put the matter on the docket.
+            fired = w.last_emission_of("date.fired", d.get("venue"))
             w.write("DocketItem", token,
                     lambda did=did: w.docket.append({"date": did, "matter": None}),
-                    record_kind="DocketItem", fieldname="matter", driver="Event")
+                    record_kind="DocketItem", fieldname="matter", driver="Event",
+                    emits="docket.formed", subject=d.get("venue"),
+                    causes=[fired] if fired else [ROOT])
     TRACE.step("CALENDAR", "leave")
+    return w.log[_mark:]

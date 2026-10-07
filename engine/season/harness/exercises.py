@@ -312,10 +312,14 @@ def resolve(token: str, *, probes, verb_table, resolvable, register, matrix) -> 
                     detail=f"{token!r} is on no verb-table row")
     if token not in resolvable:
         row = verb_table[token]
+        # The two gates `resolvable_verbs()` applies, asked of the one owner each (`CLAUDE.md` §8), so a typed
+        # row is not reported as "needs a predicate" and a row that has its effect is not reported as lacking one.
+        from ..loop.effects import EFFECTS
+        from ..loop.predicates import REQUIRES_PREDICATES
         missing = []
-        if (row.requires or "").strip() not in ("—", "-", ""):
+        if not row.precondition_evaluable(REQUIRES_PREDICATES):
             missing.append("a `requires:` predicate")
-        if row.writes:
+        if not row.effect_carried(EFFECTS):
             missing.append("an effect")
         return dict(ok=False, bound=True, kind="verb",
                     detail=f"{token!r} is on the table and the fold cannot execute it: needs "

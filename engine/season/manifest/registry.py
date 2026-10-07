@@ -1,5 +1,6 @@
 """`manifest/registry.py` -- the role -> provider rows and the checks over them: `check_rows()`, and
-(plan position `30`) the driver-construction refusals `check_contest_prizes()` and `check_effects()`.
+(plan position `30`) the driver-construction refusals `check_contest_prizes()` and `check_effects()`,
+and (plan position IN-41) `check_preconditions()`, refusal (a)'s precondition twin.
 
 A REGISTRY, in this repo, is a register (see `harness/register.py`) that code reads at load to look
 a key up; these rows are one.
@@ -259,7 +260,7 @@ def _check_step_declares(role: str, key: Any, row: Any) -> None:
             law="04 PART E step 10 -- a misspelled manifest row fails at boot naming the row")
 
 
-def unclaimed_contest_prizes(verb_table: Optional[dict] = None) -> list:
+def unclaimed_contest_prizes(verb_table: dict) -> list:
     """§B.13 invariant 9 (`04 §B.13 #9`): **every verb's `contests:` prize is in the subsystem roster.**
     `[(verb, prize)]` for each prize no `contest_subsystems` row claims; `check_contest_prizes()`
     below is the refusal that reads it.
@@ -277,8 +278,6 @@ def unclaimed_contest_prizes(verb_table: Optional[dict] = None) -> list:
     too -- `data/verbs.py` refuses an unclaimed prize at load (invariant 9) -- so a violation reaches
     the driver only through a table changed after load, which is exactly what a planted-violation
     test does."""
-    if verb_table is None:
-        from ..data.verbs import VERB_TABLE as verb_table
     claimed = set(roster_map(*_ROLE_ROSTERS["contest"]))
     out = []
     for verb, row in verb_table.items():
@@ -331,20 +330,26 @@ def check_contest_prizes(verb_table: dict) -> list:
 
 
 # ---------------------------------------------------------------------------
-# REFUSAL (a), plan position `30`: A WRITING VERB ROW WITH NO EFFECT AND NO `decline_note:`.
+# REFUSAL (a), plan position `30`: A WRITING VERB ROW WITH NO EFFECT AND NO `effect_decline_note:`
+# -- AND, SINCE PLAN POSITION IN-41 (`SM-9`), ITS CONVERSE: A ROW WITH AN EFFECT THAT DECLARES IT HAS
+# NONE. Its twin, `check_preconditions` (`SM-11`), follows it.
 #
 # `EFFECTS` (`loop/effects_shared.py`) is the verb -> effect table and `@effect_for` its decorator --
 # this module's `PROVIDERS`/`@provider` pattern one table over (the comment above `providers` says
 # so) -- so the check over it sits beside `check_contest_prizes()`. `resolvable_verbs()`'s second
 # gate (`loop/driver.py`) drops a writing verb with no effect from the game, and it used to do that
 # WITHOUT A WORD: a row whose effect was deleted, or never written, quietly left the game. After
-# this refusal every row that gate drops has SAID why, in its `decline_note:`, or the driver does
-# not construct.
+# this refusal every row that gate drops has SAID why, in its `effect_decline_note:`, or the driver
+# does not construct.
 #
-# ⚠ ONE-SIDED, BY [ASSUMPTION] (plan `_part5` §SM, `SM-9`). The converse `ED-IN-0285` names -- a row
-# carrying BOTH an effect and a `decline_note:` -- fires on the shipped tree, because `oblige` and
-# `destroy_record` use the column to decline their FORMATION (`14`), not their effect. The column
-# means two things; the converse waits for it to be split.
+# ⚠ TWO-SIDED SINCE IN-41. At `30` it was one-sided by [ASSUMPTION] (`SM-9`): the converse
+# (`SM-9`) -- a row carrying BOTH an effect and a declining note -- fired on the shipped
+# tree, because `oblige` and `destroy_record` used the one `decline_note:` column to decline their
+# FORMATION (`14`), not their effect. IN-41 split the column: `effect_decline_note:` (read here),
+# `formation_decline_note:` (an annotation nothing gates on; those two rows) and
+# `requires_decline_note:` (`check_preconditions`, below). With the split the converse fires on
+# nothing shipped, so it is armed: a note declining an effect that exists is a stale declaration,
+# and a declaration that can be false is the silent state this refusal ends.
 #
 # ⚠ A CONTESTED ROW IS NOT EXEMPT. It routes to the seam first, but `loop/resolve.py::_contest` then
 # folds the seam's result through `EFFECTS` (`_fold` raises `Unspecified` for a writing row with no
@@ -355,44 +360,88 @@ def check_contest_prizes(verb_table: dict) -> list:
 # it already. Dropping the exemption departs from the plan's text and refuses nothing on the
 # shipped tree.
 #
-# ⚠ `decline_note:` IS READ HERE, FROM THE FILE, AND NOT FROM `VerbRow`. The verb loader
-# (`data/verbs.py`) treats `decline_note` as an annotation it ignores (its `*_note` rule), whereas it
-# DOES load `requires_typed_note` into `VerbRow` and refuse an empty one -- the precedent shape for
-# a note a gate depends on. Moving this column into `VerbRow` is the cleaner home; it waits on the
-# telling workplan, which owns `data/verbs.py` while a telling position is open (plan `_part3`
-# O.3), so this position adds no field there. This is the column's one reader; the file is parsed
-# once per process (the `_CONTRACTS_CACHE` reason above: the corpus constructs many drivers).
+# ⚠ THE NOTES ARE READ OFF `VerbRow`, NOT RE-PARSED FROM THE FILE. At `30` this module parsed
+# `verb_table.yaml` itself for `decline_note:`, because the loader ignored the column (its `*_note`
+# rule) and `data/verbs.py` was then held by the telling workplan. That carve-out is absorbed into
+# plan v9, which gives `data/verbs.py` to IN-41, so the two gate-read notes are `VerbRow` fields on
+# `requires_typed_note`'s precedent, and a planted row is one `dataclasses.replace` away -- the
+# table the refusal reads is the table the driver runs.
 # ---------------------------------------------------------------------------
-_DECLINED_CACHE: list = []
-
-
-def _declined_verbs() -> frozenset:
-    """The verbs whose `verb_table.yaml` row carries a non-empty `decline_note:`, parsed once."""
-    if not _DECLINED_CACHE:
-        doc = load_yaml(files.VERB_TABLE_YAML.read_text()) or {}
-        _DECLINED_CACHE.append(frozenset(
-            str(r["verb"]) for r in (doc.get("verbs") or ())
-            if str(r.get("decline_note") or "").strip()))
-    return _DECLINED_CACHE[0]
 
 
 def check_effects(verb_table: dict, effects: dict) -> list:
-    """Refusal (a): every WRITING verb row has an effect or a `decline_note:` -- a contested row too.
+    """Refusal (a), both arms: every WRITING verb row has an effect or an `effect_decline_note:`
+    -- a contested row too -- and no row that has an effect, or writes nothing, carries one.
 
-    Raises naming every verb that has neither. Returns the writing rows it checked."""
-    declined = _declined_verbs()
-    checked, silent = [], []
+    Raises at the first arm broken (the missing note before the converse), naming every verb that
+    breaks it. Returns the writing rows it checked."""
+    checked, silent, stale = [], [], []
     for verb, row in verb_table.items():
+        carried = row.effect_carried(effects)
+        if row.effect_decline_note and carried:
+            stale.append(verb)
         if not row.writes:
             continue
         checked.append(verb)
-        if verb not in effects and verb not in declined:
+        if not carried and not row.effect_decline_note:
             silent.append(verb)
     if silent:
         raise Unspecified(
-            f"writing verb row(s) {silent} have no effect and no `decline_note:`", "04 PART E step 10",
-            needs="an `@effect_for` body for each, or a `decline_note:` on its verb_table.yaml row "
-                  "saying why it has none",
+            f"writing verb row(s) {silent} have no effect and no `effect_decline_note:`",
+            "04 §A.1 ID-13",
+            needs="an `@effect_for` body for each, or an `effect_decline_note:` on its "
+                  "verb_table.yaml row saying why it has none",
             law="A-25 / plan position `30` -- a verb the fold cannot execute leaves the game only "
                 "by declaring why; before this it left without a word (`resolvable_verbs()`)")
+    if stale:
+        raise Unspecified(
+            f"verb row(s) {stale} carry an `effect_decline_note:` and HAVE an effect, or write "
+            f"nothing and need none",
+            "04 §A.1 ID-13",
+            needs="the note deleted (the effect exists, or the row writes nothing and so has no "
+                  "effect to decline), or -- if it declines something else -- "
+                  "moved to the column for that: `formation_decline_note:` (no Candidate forms) "
+                  "or `requires_decline_note:` (nothing evaluates the precondition)",
+            law="IN-41 / `SM-9` -- a declared absence the code contradicts is a declaration nobody "
+                "can trust; refusal (a)'s converse arm")
+    return checked
+
+
+def check_preconditions(verb_table: dict, predicates: dict) -> list:
+    """`SM-11`, refusal (a)'s PRECONDITION TWIN (plan position IN-41), both arms: every row whose
+    precondition NOTHING EVALUATES -- no typed cell, no `predicates` entry -- carries a
+    `requires_decline_note:` saying why, and no row whose precondition IS evaluable carries one.
+
+    `resolvable_verbs()`'s first gate (`loop/driver.py`) drops the first kind from the game, and
+    until IN-41 it did so WITHOUT A WORD. The answer to *evaluable* is `VerbRow.precondition_evaluable`,
+    the one both sites read. `predicates` is `loop/predicates.py::REQUIRES_PREDICATES`, passed by the
+    driver as `check_effects` is passed `EFFECTS`. Raises at the first arm broken (the missing note
+    before the converse), naming every verb that breaks it; returns the rows that carry a
+    precondition, so a caller can see the sweep was not empty."""
+    checked, silent, stale = [], [], []
+    for verb, row in verb_table.items():
+        evaluable = row.precondition_evaluable(predicates)
+        if evaluable and row.requires_decline_note:
+            stale.append(verb)
+        if not row.has_precondition:
+            continue
+        checked.append(verb)
+        if not evaluable and not row.requires_decline_note:
+            silent.append(verb)
+    if silent:
+        raise Unspecified(
+            f"verb row(s) {silent} have a precondition nothing evaluates and no "
+            "`requires_decline_note:`", "04 §A.1 ID-13",
+            needs="a typed `requires_typed:` cell or a `REQUIRES_PREDICATES` entry for each, or a "
+                  "`requires_decline_note:` on its verb_table.yaml row saying why it has neither",
+            law="IN-41 / `SM-11` -- a verb the fold cannot evaluate leaves the game only by "
+                "declaring why; before this `resolvable_verbs()` dropped it without a word")
+    if stale:
+        raise Unspecified(
+            f"verb row(s) {stale} carry a `requires_decline_note:` and their precondition IS "
+            "evaluable (no precondition, a typed cell, or a `REQUIRES_PREDICATES` entry)",
+            "04 §A.1 ID-13",
+            needs="the note deleted, since the fold can evaluate the precondition",
+            law="IN-41 / `SM-11` -- a declared absence the code contradicts is a declaration nobody "
+                "can trust; the converse arm, as refusal (a)'s")
     return checked
