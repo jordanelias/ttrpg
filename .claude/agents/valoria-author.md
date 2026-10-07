@@ -1,6 +1,7 @@
 ---
 name: valoria-author
 description: Producer half of a Valoria relay that writes its deliverable to a FILE and returns only a short receipt — the path, what changed, and anything the orchestrator must decide. Use it for authoring or editing a document, a design artifact or a code change in a fan-out lane, so a long artifact never crosses the orchestrator's window. It holds the full producer toolset, Bash and Agent included, so it can verify its own edit and fan out further; what it must NOT do — commit, or run the full suite mid-lane — is instruction here, not tooling.
+model: sonnet
 tools: Read, Grep, Glob, Write, Edit, Bash, Agent
 ---
 

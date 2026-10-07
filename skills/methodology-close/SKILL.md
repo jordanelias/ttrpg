@@ -2,14 +2,15 @@
 name: methodology-close
 description: >
   METHODOLOGY-CLOSE — the three-phase agonist/antagonist pipeline for verifying a nontrivial code
-  change against a stated plan, before it closes. PHASE 1: a fan of Sonnet reviewers (agonists,
-  effort max), each holding one lens over the diff, reconciled by a single Opus cross-examiner
-  (antagonist, effort high) checking accuracy, fidelity to plan, correctness, compliance with code
+  change against a stated plan, before it closes. PHASE 1: Sonnet reviewers (agonists, effort
+  medium), each holding one or more lenses over the diff — one agonist carrying every lens where one
+  reader can hold the diff — reconciled by a single Opus cross-examiner (antagonist, effort high)
+  checking accuracy, fidelity to plan, correctness, compliance with code
   architecture, and logic — the same five lenses double as the default agonist roster, sized to
   the plan's own independent parts, never a fixed count. PHASE 2: the native `/code-review --fix`,
   then `/simplify`, then the `layer-conformance` skill, run in that order on one shared tree, each
-  one's fixes applied before the next reads it. PHASE 3: one terminal critique — Opus, always at
-  effort max — auditing code correctness, interdependencies,
+  one's fixes applied before the next reads it. PHASE 3: one terminal critique — Opus at
+  effort high, max only on a named trigger — auditing code correctness, interdependencies,
   and forward/backward sweeps, run as a top-down holistic pass that HANDSHAKES a bottom-up granular
   one (every altitude-level finding traced to the site that causes it, and back). Reuses
   `valoria-critic` for every critic dispatch in all three phases; mints no new roster entry. Use
@@ -80,16 +81,15 @@ PHASE 3 · TERMINAL CRITIQUE            Opus: holistic × granular, interdepende
 
 Cheap and broad runs first. Phase 1's Sonnet fan catches gross deviations from the plan and
 obvious bugs for a fraction of a terminal Opus pass's cost; Phase 2's native tools catch the
-mechanical classes they already exist to catch. **Opus sits at two places, not one, by Jordan's
-2026-09-29 tiering ruling for this skill:** the Phase 1 antagonist, because reconciling five
-independent (and possibly disagreeing) lenses into one verdict is itself the
-competing-considerations judgment CLAUDE.md §10 names for Opus — not a defect a Sonnet pass would
-already have caught, but the act of deciding which of several Sonnet findings survives; and the
-Phase 3 terminal critique, run unconditionally at max effort rather than escalated on a trigger,
-because it is this pipeline's final gate. ⚠ **This departs from CLAUDE.md §10's general default
-("reserve Opus for judgment," "defaulting straight to max is the tiering mistake §10 exists to
-prevent") as a deliberate, named exception for this skill's two judgment nodes — not a general
-licence to skip the trigger discipline elsewhere.** Running the phases out of order, or skipping
+mechanical classes they already exist to catch. **Opus sits at two places, not one:** the Phase 1
+antagonist, because reconciling independent (and possibly disagreeing) lenses into one verdict is
+itself the competing-considerations judgment CLAUDE.md §10 names for Opus — the act of deciding
+which of several Sonnet findings survives; and the Phase 3 terminal critique, because it is this
+pipeline's final gate. **Both run at CLAUDE.md §10's default, `high`; `max` is an escalation with a
+named trigger (§3.2), never a default** — Jordan, 2026-10-07, reduced effort and tiered the
+models: the 2026-09-29 ruling had put every agonist and the terminal critique at `max`. Every
+dispatch sets its `model` and its `effort` on the Agent call, never left to inherit the session's.
+Running the phases out of order, or skipping
 one because an earlier one found nothing, is not a shortcut: each phase checks a different axis,
 and a clean pass on one is not evidence about the others (see GUARDRAILS).
 
@@ -115,17 +115,20 @@ The antagonist's checklist (1.4) doubles as the default set of agonist lenses:
 | **COMPLIANCE WITH CODE ARCHITECTURE** | a first-pass placement sanity check only — *not* the full Lens A/B pass, that is Phase 2's job |
 | **LOGIC** | is the control flow and conditional structure internally sound, independent of whether it is the *right* thing |
 
-Collapse a lens that plainly does not apply (a one-line config change has no architecture surface
+**For a diff one reader can hold entire, run ONE Sonnet agonist carrying all five lenses** (CLAUDE.md
+§10: agents converging on one diff are redundancy, not corroboration); split by lens or by
+independent module only where the diff is too large for one reader. Collapse a lens that plainly does not apply (a one-line config change has no architecture surface
 worth a dedicated pass). Split a lens further along component lines if the diff touches several
 independent modules under one lens. Before adding a sixth agonist, or collapsing below five, name
 what the change buys — CLAUDE.md §10: *"before spawning N agents, ask what N-1 would miss."*
 
 ### 1.3 Dispatch the fan
 
-Each agonist is `Agent({ subagent_type: "valoria-critic", model: "sonnet", ... })`, prompted with
-its one lens, the plan, and the diff — never the other agonists' output. State the effort in the
-prompt itself (`Effort: max`): the Agent tool carries no effort field of its own, so this is the
-only place to put it. **No `isolation: worktree`** — every Phase 1 dispatch is read-only, so there
+Each agonist is `Agent({ subagent_type: "valoria-critic", model: "sonnet", effort: "medium", ... })`,
+prompted with its lens or lenses, the plan, and the diff — never the other agonists' output. The
+Agent tool's own `effort` parameter sets the effort; a line of prose in the prompt sets nothing.
+`valoria-critic` holds only Read, Grep and Glob and cannot run `git diff`: hand it the diff as a file
+path under the scratchpad. **No `isolation: worktree`** — every Phase 1 dispatch is read-only, so there
 is no write-write hazard to isolate against.
 
 Fire the first dispatch alone, wait for its first streamed token, *then* send the rest in one
@@ -135,10 +138,10 @@ them at once pays full price on every one.
 
 ### 1.4 The antagonist
 
-One dispatch, same `valoria-critic` agent, `model: "opus"`, `Effort: high` stated in the prompt —
-Opus because reconciling five lenses into one verdict is a competing-considerations judgment, not
-another lens-pass; `high` rather than `max` because Phase 3 is where this pipeline spends its
-top effort. Hand it every agonist's output — not their reasoning — plus the plan and the tree. Its
+One dispatch, same `valoria-critic` agent, `model: "opus"`, `effort: "high"` — Opus because
+reconciling lenses into one verdict is a competing-considerations judgment, not another lens-pass.
+With a single agonist there is nothing to reconcile between lenses; the dispatch still
+re-verifies every claim against disk. Hand it every agonist's output — not their reasoning — plus the plan and the tree. Its
 job is `valoria-critic`'s own contract, run once across all five lenses: re-verify every claim
 against disk; rule `uphold`/`overturn`/`soften`/`sharpen` per claim; and additionally cross-check
 the agonists against *each other* — two lenses disagreeing about the same site is itself a
@@ -161,7 +164,8 @@ they queue.
 
 ### 2.2 The order, and why it is this one
 
-1. **`/code-review --fix`** — correctness bugs first. Nothing else here is worth checking on a tree
+1. **`/code-review medium --fix`** — correctness bugs first. (Name the level: with none given it
+   reuses whatever was typed last.) Nothing else here is worth checking on a tree
    that still has an open correctness defect.
 2. **`/simplify`** — reuse, simplification, efficiency, on the now-correct tree. It applies its own
    fixes by contract; no flag needed.
@@ -191,15 +195,17 @@ The point of the top tier is a single judgment pass. A chorus of Opus critics is
 CLAUDE.md §10 warns against, not corroboration. If you can name what a second Opus critic would
 catch that the first missed, that is Phase-1-shaped work — run it there, at Sonnet, first.
 
-### 3.2 Tier — always max, no trigger needed
+### 3.2 Tier — Opus at `high`; `max` only on a named trigger
 
-`model: "opus"`, `Effort: max` in the prompt, every time (Jordan's 2026-09-29 ruling for this
-phase specifically). No escalation logic to apply and no trigger to name: this is the pipeline's
-one unconditional top-tier dispatch, run after two cheaper phases have already narrowed what it
-needs to check. ⚠ This is the named exception CLAUDE.md §10's "defaulting straight to `max` is the
-tiering mistake §10 exists to prevent" warns against elsewhere — it applies here because this
-phase *is* the judgment-node use case §10 reserves Opus for, not because the warning stopped
-applying in general.
+`model: "opus"`, `effort: "high"` on the Agent call (Jordan, 2026-10-07: reduce effort — the
+2026-09-29 ruling had this at `max` every time). **Escalate to `max` only when the dispatch names
+one of these triggers**, each a fact about the batch rather than a feeling: (a) the Phase 1
+antagonist upheld a HIGH finding, or two agonists disagreed about one site; (b) the diff changes a
+seam or registry another lane reads (`references/module_contracts.yaml`, a shared descriptor
+registry) or re-records a golden (CLAUDE.md §7: nothing else verifies a re-pin was intended); (c)
+Phase 2 added a tool, guard, hook or governance rule. No trigger, no `max`. The phase *is* the
+judgment-node use case CLAUDE.md §10 reserves Opus for; what that section does not license is
+spending the top effort by default.
 
 ### 3.3 What it is handed
 
@@ -207,6 +213,12 @@ The plan, the post-Phase-2 diff, and a bare receipt of what Phases 1–2 already
 one line each, the same shape `valoria-author`'s own receipt takes — never their transcripts or
 reasoning. Independence here is structural, the same as everywhere else in this pipeline: it comes
 from what the critic is handed, not from how hard it tries not to peek.
+
+**Share the reading, fork only the judgment** (CLAUDE.md §10 pt 1). The INTERDEPENDENCIES scan —
+each changed name against every caller and importer in the whole tree, with the §B3 floor — is
+mechanical: one `valoria-measure` dispatch (Haiku) produces the table and the critic verifies it at
+the sites that matter. The critic still owns every judgment, and the table is a claim to check, not
+a verdict.
 
 ### 3.4 The checklist
 
@@ -271,8 +283,8 @@ Same as 1.5 — the orchestrator applies or rejects with a measurement, in this 
   one does not yet.
 - **Nothing here is a fixed count.** Fan size and the lens roster are read from the diff and the
   plan at hand every time. An edit that hard-codes a number into this file is the defect §10 names:
-  "sized for its typical subject, not for yours." (Tier and effort ARE fixed, by 1.4's and 3.2's
-  named exception — that is a model/effort choice, not a count.)
+  "sized for its typical subject, not for yours." (Model and effort are set per node by 1.3, 1.4 and
+  3.2, and escalate only on 3.2's named triggers — a model/effort choice, not a count.)
 - **No self-scheduling** (CLAUDE.md §11, as always).
 
 ## FALSIFIERS
@@ -283,9 +295,9 @@ Same as 1.5 — the orchestrator applies or rejects with a measurement, in this 
 | "the antagonist checked all five" | one lens has neither a finding nor a stated attack that failed |
 | "code-review, simplify, and layer-conformance all ran, fixed" | no invocation record for one of the three, or a later one graded a tree still carrying an earlier one's unapplied finding |
 | "the terminal critique handshook" | a top-down finding with no cited `file:line`, or a granular finding with no stated holistic disposition |
-| "the fan ran at max" | any agonist dispatch's stated effort was below `max` |
-| "the antagonist ran Opus at high" | the antagonist dispatch was `sonnet`, or its stated effort was anything other than `high` |
-| "Phase 3 ran at max" | the terminal critique's stated effort was anything other than `max` |
+| "the fan ran at medium" | an agonist dispatch was not `sonnet` with `effort: "medium"` set on the Agent call (prose in the prompt does not count), or a diff one reader could hold was fanned with no stated reason |
+| "the antagonist ran Opus at high" | the antagonist dispatch was `sonnet`, or its `effort` parameter was anything other than `high` |
+| "Phase 3 ran Opus at high, `max` only on a trigger" | the terminal critique was not `opus`, ran below `high`, or ran at `max` with no named trigger stated in the dispatch |
 | "Phase 3 found nothing" | no named failed attack — only an absent finding |
 
 **If this skill's guidance conflicts with `CLAUDE.md` or `architecture/`, they win.** This file is a

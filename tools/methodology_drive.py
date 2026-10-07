@@ -32,7 +32,10 @@ USAGE
 
   Everything after `--` goes to `claude` unchanged. The permission posture is YOURS to choose;
   nothing is defaulted here. Examples (check `claude --version`; the docs gate some flags by it):
-      -- --permission-mode acceptEdits --max-budget-usd 40
+      -- --permission-mode acceptEdits --model sonnet --effort medium --max-budget-usd 40
+  The process this starts is the orchestrator, which dispatches and commits: sonnet-class is enough.
+  The skill sets the model and effort of every subagent it dispatches, so `--model` here does not
+  decide theirs.
   `--max-budget-usd` is per process; `--max-total-usd` here caps the whole run. `-c`, `--continue`,
   `-r`, `--resume` and `--bare` are refused: the first four carry context across batches, and
   `--bare` skips skills, CLAUDE.md and hooks. `permissions.deny` in `.claude/settings.json`

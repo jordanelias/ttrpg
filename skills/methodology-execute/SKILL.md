@@ -47,6 +47,7 @@ description: >
 | the sequence, tiers, checklists, the handshake, the guardrails and the falsifiers for verifying the resulting (batch) diff | **`methodology-close`**, invoked by reference — not copied |
 | the producer contract — full toolset, a receipt not a transcript, no commit, no full-suite mid-lane | **`.claude/agents/valoria-author.md`** |
 | model tiers, the effort ladder, and the fan-out sizing rule ("ask what N-1 would miss") | **CLAUDE.md §10** |
+| the tier and effort of each BATCH-CLOSE dispatch | **`methodology-close`** (§1.3, §1.4, §3.2); this file sets Phase 0's only (§0.3) |
 | a workplan position's INSTRUCTION / WHERE / FALSIFIER / GATE | **that position's own content-owner file** — never re-derived or restated here |
 
 **Word discipline, inherited, not re-opened.** `methodology-close` defines *agonist* and
@@ -175,8 +176,14 @@ it, paraphrase it, or draft a second version for the producer — hand it the sa
 
 ### 0.3 Size the build — one producer is the default
 
-Dispatch one `Agent({ subagent_type: "valoria-author", ... })` to build the entire instruction,
-sequentially. No `isolation: worktree` is needed for a single producer — nothing else is writing
+Dispatch one `Agent({ subagent_type: "valoria-author", model: ..., effort: ..., ... })` to build the
+entire instruction, sequentially. **Set `model` and `effort` on every dispatch** — an un-annotated
+producer inherits the session's model (CLAUDE.md §10), and a line of prose in the prompt sets no
+effort. **Model:** the item's own `tier` where the plan carries one; otherwise `sonnet`. `haiku` for
+deterministic work (find-replace, a deletion, a re-host, a transcription); `opus` only where the
+instruction names a competing-considerations judgment (design intent, contract closure).
+**Effort:** `medium`; `high` only for an `opus` item. The orchestrator that reads receipts and
+commits needs no more than sonnet-class: a driver passes `--model` and `--effort` after its `--`. No `isolation: worktree` is needed for a single producer — nothing else is writing
 this tree concurrently within this run.
 
 **Fan only when the instruction itself names genuinely independent sub-parts that share no file**
@@ -382,6 +389,13 @@ it (`STOPPED`); it never opens a second batch.
    only Read, Grep and Glob and cannot run `git diff`: write the range's diff to a scratchpad file
    and hand the critics its path.
 
+### Share the reading — once per batch, on Haiku
+
+After BATCH OPEN's reads, one `valoria-measure` dispatch (Haiku) extracts the batch's reading list into
+a table, handed to every producer so none re-opens the same files (CLAUDE.md §10 pt 1: the cost of a
+fan-out is its reading). Fire one producer, await its first token, then the rest (§0.3). The extract
+is a claim the producer checks where it edits, not a verdict.
+
 ### The last batch is also the run's `/close`
 
 When the resolved sequence is exhausted, BATCH-CLOSE is followed by `/close` itself (its suite step
@@ -520,6 +534,8 @@ this spelling.
 - **No new roster entry.** Phase 0 dispatches `valoria-author`; BATCH-CLOSE dispatches
   `valoria-critic`, exactly as `methodology-close` already does. Nothing here mints a third agent
   file.
+- **Every dispatch names its model and its effort.** A Phase 0 producer, a Haiku extract, a critic:
+  none inherits the session's, and none is set by prose in the prompt (§0.3).
 - **Nothing here is a fixed count.** Producer-fan size, agonist-fan size, and batch size are each
   read from the instruction (or the batch) at hand every time — never a default fan, never a
   fixed item-count per batch.

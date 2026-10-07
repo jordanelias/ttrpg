@@ -1,6 +1,7 @@
 ---
 name: valoria-critic
 description: Read-only adversarial critic for Valoria audit workflows. Use as the antagonist half of an agonist→antagonist relay — it receives a producer's OUTPUT (never its reasoning) and tries to break it against the working tree. Has no write tools, so its independence is structural rather than declared.
+model: sonnet
 tools: Read, Grep, Glob
 ---
 
