@@ -388,7 +388,7 @@ def check_effects(verb_table: dict, effects: dict) -> list:
     if silent:
         raise Unspecified(
             f"writing verb row(s) {silent} have no effect and no `effect_decline_note:`",
-            "04 PART E step 10",
+            "04 §A.1 ID-13",
             needs="an `@effect_for` body for each, or an `effect_decline_note:` on its "
                   "verb_table.yaml row saying why it has none",
             law="A-25 / plan position `30` -- a verb the fold cannot execute leaves the game only "
@@ -397,7 +397,7 @@ def check_effects(verb_table: dict, effects: dict) -> list:
         raise Unspecified(
             f"verb row(s) {stale} carry an `effect_decline_note:` and HAVE an effect, or write "
             f"nothing and need none",
-            "04 PART E step 10",
+            "04 §A.1 ID-13",
             needs="the note deleted (the effect exists, or the row writes nothing and so has no "
                   "effect to decline), or -- if it declines something else -- "
                   "moved to the column for that: `formation_decline_note:` (no Candidate forms) "
@@ -431,7 +431,7 @@ def check_preconditions(verb_table: dict, predicates: dict) -> list:
     if silent:
         raise Unspecified(
             f"verb row(s) {silent} have a precondition nothing evaluates and no "
-            "`requires_decline_note:`", "04 PART E step 10",
+            "`requires_decline_note:`", "04 §A.1 ID-13",
             needs="a typed `requires_typed:` cell or a `REQUIRES_PREDICATES` entry for each, or a "
                   "`requires_decline_note:` on its verb_table.yaml row saying why it has neither",
             law="IN-41 / `SM-11` -- a verb the fold cannot evaluate leaves the game only by "
@@ -440,7 +440,7 @@ def check_preconditions(verb_table: dict, predicates: dict) -> list:
         raise Unspecified(
             f"verb row(s) {stale} carry a `requires_decline_note:` and their precondition IS "
             "evaluable (no precondition, a typed cell, or a `REQUIRES_PREDICATES` entry)",
-            "04 PART E step 10",
+            "04 §A.1 ID-13",
             needs="the note deleted, since the fold can evaluate the precondition",
             law="IN-41 / `SM-11` -- a declared absence the code contradicts is a declaration nobody "
                 "can trust; the converse arm, as refusal (a)'s")
