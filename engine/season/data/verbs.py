@@ -245,6 +245,14 @@ class VerbRow:
         (`CLAUDE.md` §8)."""
         return (self.requires or "").strip() not in NO_PRECONDITION
 
+    def effect_carried(self, effects) -> bool:
+        """Can the fold carry this row's effect: it writes nothing, so none is owed, or an
+        `@effect_for` body exists in `effects` (`loop/effects.py`'s `EFFECTS`). The ONE answer
+        `resolvable_verbs()`'s second gate and `manifest/registry.py::check_effects` both read
+        (`CLAUDE.md` §8), as `precondition_evaluable` is for the first gate. `effects` is a
+        parameter because this loader may not import `loop/`."""
+        return not self.writes or self.verb in effects
+
     def refusal_for(self, clause: Optional[str]) -> tuple:
         """`04 §C.4`'s `row.refusal_for(clause)`: the kinds a refusal AT `clause` emits.
 
@@ -709,7 +717,7 @@ def _load_verb_table() -> dict:
         # checked at row grain only (the block directly below): `restore`, `examine` and `surveil`
         # carry an `AllOf` of two and one flat kind, which is lawful -- a flat row DECLARES that all
         # its conjuncts refuse alike -- and moving them is not `19`'s.
-        _failable = (row.requires.strip() not in NO_PRECONDITION
+        _failable = (row.has_precondition
                      or any(k != "own" for k in row.eligibility_kinds()))
         if _failable and not row.emits_on_refusal:
             raise SystemExit(
@@ -743,7 +751,7 @@ def _load_verb_table() -> dict:
                 _expected.add(COUNTERPARTY_CLAUSE)
             if not by_clause:
                 _defects.append(f"names conjuncts {list(_names)} and keys no refusal to them")
-            if row.requires.strip() not in NO_PRECONDITION and (
+            if row.has_precondition and (
                     row.requires_typed is None or not row.requires_typed.names
                     or None in row.requires_typed.names):
                 _defects.append("keys its refusals, so its precondition must be a typed cell with "

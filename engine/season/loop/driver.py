@@ -128,7 +128,7 @@ def resolvable_verbs() -> frozenset:
         # precondition -- `manifest.check_preconditions()` refuses every other such row at
         # `SeasonDriver` construction, naming it. Before IN-41 this drop was without a word.
         gated = row.precondition_evaluable(REQUIRES_PREDICATES)
-        effected = not row.writes or v in EFFECTS
+        effected = row.effect_carried(EFFECTS)
         # ⚠ (plan position `30`) THE EXCLUSION ABOVE IS NO LONGER SILENT. A writing row with no
         # effect reaches it only if its `verb_table.yaml` row carries an `effect_decline_note:`
         # saying why: `manifest.check_effects()` refuses every other such row at `SeasonDriver`
@@ -436,7 +436,7 @@ class SeasonDriver:
         # first-round fan-out, in barrier order. They were discarded here, so they reached `w.log`
         # and no ledger. `n_events` does not count them (it counts MATTER's and each round's, as
         # before): that figure is not this position's, and the log already holds these.
-        pending_matter = list(calendar_events) + list(matter_events)
+        pending_matter = calendar_events + matter_events
         for r in range(rounds):
             self.round = r
             # S26.2 again, not a second rule: RESOLVE thaws, so each round re-freezes before its

@@ -324,9 +324,8 @@ def test_a_row_with_an_untyped_precondition_nothing_evaluates_refuses_naming_the
     got = _run("""
 import dataclasses
 from engine.season.loop.driver import REQUIRES_PREDICATES, resolvable_verbs
-from engine.season.data.verbs import NO_PRECONDITION
 verb = sorted(v for v, r in VERB_TABLE.items()
-              if r.requires.strip() not in NO_PRECONDITION and r.requires_typed is not None
+              if r.has_precondition and r.requires_typed is not None
               and v not in REQUIRES_PREDICATES and not r.requires_decline_note)[0]
 before = verb in resolvable_verbs()
 VERB_TABLE[verb] = dataclasses.replace(VERB_TABLE[verb], requires_typed=None)

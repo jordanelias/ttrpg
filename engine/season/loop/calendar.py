@@ -60,4 +60,4 @@ def calendar(self, token: Token) -> list[Event]:
                     lambda did=did: w.docket.append({"date": did, "matter": None}),
                     record_kind="DocketItem", fieldname="matter", driver="Event")
     TRACE.step("CALENDAR", "leave")
-    return list(w.log[_mark:])
+    return w.log[_mark:]

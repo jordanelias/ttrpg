@@ -260,7 +260,7 @@ def _check_step_declares(role: str, key: Any, row: Any) -> None:
             law="04 PART E step 10 -- a misspelled manifest row fails at boot naming the row")
 
 
-def unclaimed_contest_prizes(verb_table: Optional[dict] = None) -> list:
+def unclaimed_contest_prizes(verb_table: dict) -> list:
     """§B.13 invariant 9 (`04 §B.13 #9`): **every verb's `contests:` prize is in the subsystem roster.**
     `[(verb, prize)]` for each prize no `contest_subsystems` row claims; `check_contest_prizes()`
     below is the refusal that reads it.
@@ -278,8 +278,6 @@ def unclaimed_contest_prizes(verb_table: Optional[dict] = None) -> list:
     too -- `data/verbs.py` refuses an unclaimed prize at load (invariant 9) -- so a violation reaches
     the driver only through a table changed after load, which is exactly what a planted-violation
     test does."""
-    if verb_table is None:
-        from ..data.verbs import VERB_TABLE as verb_table
     claimed = set(roster_map(*_ROLE_ROSTERS["contest"]))
     out = []
     for verb, row in verb_table.items():
@@ -379,12 +377,13 @@ def check_effects(verb_table: dict, effects: dict) -> list:
     breaks it. Returns the writing rows it checked."""
     checked, silent, stale = [], [], []
     for verb, row in verb_table.items():
-        if row.effect_decline_note and (verb in effects or not row.writes):
+        carried = row.effect_carried(effects)
+        if row.effect_decline_note and carried:
             stale.append(verb)
         if not row.writes:
             continue
         checked.append(verb)
-        if verb not in effects and not row.effect_decline_note:
+        if not carried and not row.effect_decline_note:
             silent.append(verb)
     if silent:
         raise Unspecified(
