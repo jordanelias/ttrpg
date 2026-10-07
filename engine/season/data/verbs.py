@@ -208,6 +208,33 @@ class VerbRow:
     # precedent, one column over. Empty = a flat row, whose every refusal emits the flat tuple exactly
     # as before `19` -- so no row that did not opt in moves by a byte.
     refusals_by_clause: dict = field(default_factory=dict)
+    # ⚠ THE TWO DECLARED ABSENCES A DRIVER-CONSTRUCTION REFUSAL READS (plan position IN-41, `SM-9` +
+    # `SM-11`). Each is the row SAYING WHY the fold cannot carry it, so `resolvable_verbs()` drops it
+    # with a reason on record rather than without a word; `manifest/registry.py` refuses both
+    # directions -- a gap with no note, and a note on a row that has no gap.
+    #
+    # `effect_decline_note:` -- the row WRITES and no `@effect_for` body exists, and here is why
+    # (refusal (a), `check_effects`). It is one of THREE columns the retired `decline_note:` was split
+    # into, because that one column declined an effect on some rows and a FORMATION on others
+    # (`oblige`, `destroy_record` have effects; their notes say why no Candidate forms). The formation
+    # half is `formation_decline_note:`, an annotation this loader ignores (its `*_note` rule) and no
+    # gate reads -- a row whose effect EXISTS is resolvable, and why nobody forms it is a reader's fact.
+    effect_decline_note: str = ""
+    # `requires_decline_note:` -- the row has a precondition that NOTHING EVALUATES (no typed cell, no
+    # `REQUIRES_PREDICATES` entry), and here is why (`check_preconditions`). The third column of the
+    # split. NOT `requires_typed_note`, which says why the cell is untyped and stands on rows a
+    # registered predicate DOES evaluate (`oblige`, `release`).
+    requires_decline_note: str = ""
+
+    def precondition_evaluable(self, predicates) -> bool:
+        """Can the fold evaluate this row's precondition: none at all, a typed cell, or a
+        `predicates` (`loop/predicates.py::REQUIRES_PREDICATES`) entry. The ONE answer
+        `resolvable_verbs()`'s first gate and `check_preconditions` both read (`CLAUDE.md` §8);
+        `loop/resolve.py::_fold` branches the same three ways. `predicates` is a parameter because
+        this loader may not import `loop/`."""
+        return ((self.requires or "").strip() in NO_PRECONDITION
+                or self.requires_typed is not None
+                or self.verb in predicates)
 
     def refusal_for(self, clause: Optional[str]) -> tuple:
         """`04 §C.4`'s `row.refusal_for(clause)`: the kinds a refusal AT `clause` emits.
@@ -489,7 +516,9 @@ def _load_verb_table() -> dict:
                       str(r.get("requires_typed_note") or "").strip(),
                       str(r.get("beneficiary") or "").strip(),
                       str(r.get("counterparty") or "").strip(),
-                      refusals_by_clause=by_clause)
+                      refusals_by_clause=by_clause,
+                      effect_decline_note=str(r.get("effect_decline_note") or "").strip(),
+                      requires_decline_note=str(r.get("requires_decline_note") or "").strip())
         # THE COUNTERPARTY IS AN OPERAND THE ACT CARRIES, OR IT IS NOTHING. `opening_set` compares
         # it with the person; a name the typed cell does not BIND is absent from every Candidate,
         # so the comparison would pass silently and the rule would be a column nothing enforced.

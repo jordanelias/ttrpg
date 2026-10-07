@@ -7541,7 +7541,7 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # stem, so a giver names a receiver from the persons he knows (`operand_bags`); it executes in 1
     # world and is refused in 63. Nothing leaves. ⚠ `destroy_record`'s formability (`A-13`) was
     # measured and HELD: formable, it executed in 3 worlds and crowded `release` out of the 2 it
-    # holds, growing the always-refused set (the row's `decline_note`). MEASURED by a one-off script
+    # holds, growing the always-refused set (the row's `formation_decline_note`). MEASURED by a one-off script
     # over `corpus_run.run_case`'s same 143 live worlds, seed 0, against a `git archive` of the tree
     # before `14`; the per-verb world counts are at the `by_sig` note below.
     assert ever == {"create_record", "examine", "interview", "fight", "give", "issue", "move",

@@ -44,7 +44,7 @@ from ..data.rosters import OBSERVATION_DEPOSIT_MODES, STRATA, WITNESS_CHANNELS
 from ..data.requires import (
     LEDGER_DERIVED_STEMS, UNKNOWN, Verdict, binding_from_act, binding_of, evaluate,
 )
-from ..data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow, opportunity_key
+from ..data.verbs import VERB_TABLE, VerbRow, opportunity_key
 from ..gaps import (
     Collision, Forbidden, InstrumentDefect, NoProducer, Ungraded, Unowned, Unspecified,
 )
@@ -122,15 +122,19 @@ def resolvable_verbs() -> frozenset:
         # question -- *can the fold evaluate this precondition* -- is the same question `_fold`
         # asks two hundred lines down, and leaving it reading only `REQUIRES_PREDICATES` would
         # give the two sites different answers for every typed verb (§8: the rule lives once).
-        gated = ((row.requires or "").strip() in NO_PRECONDITION
-                 or row.requires_typed is not None
-                 or v in REQUIRES_PREDICATES)
+        # ⚠ (plan position IN-41, `SM-11`) AND THE ANSWER LIVES ON `VerbRow`, ONE OWNER FOR THIS
+        # GATE AND THE REFUSAL OVER IT: a row this gate drops reaches it only if its
+        # `verb_table.yaml` row carries a `requires_decline_note:` saying why nothing evaluates its
+        # precondition -- `manifest.check_preconditions()` refuses every other such row at
+        # `SeasonDriver` construction, naming it. Before IN-41 this drop was without a word.
+        gated = row.precondition_evaluable(REQUIRES_PREDICATES)
         effected = not row.writes or v in EFFECTS
         # ⚠ (plan position `30`) THE EXCLUSION ABOVE IS NO LONGER SILENT. A writing row with no
-        # effect reaches it only if its `verb_table.yaml` row carries a `decline_note:` saying why:
-        # `manifest.check_effects()` refuses every other such row at `SeasonDriver` construction,
-        # naming it (refusal (a), one-sided by `SM-9`) -- a CONTESTED row included, because
-        # `loop/resolve.py::_contest` folds the seam's result through `EFFECTS`.
+        # effect reaches it only if its `verb_table.yaml` row carries an `effect_decline_note:`
+        # saying why: `manifest.check_effects()` refuses every other such row at `SeasonDriver`
+        # construction, naming it (refusal (a); two-sided since IN-41 split `SM-9`'s column) -- a
+        # CONTESTED row included, because `loop/resolve.py::_contest` folds the seam's result
+        # through `EFFECTS`.
         # ⚠ AND A THIRD GATE: A VERB THAT CONTESTS ROUTES TO THE SEAM FIRST, AND FOLDS WHAT IT RETURNS.
         # `ARCHITECTURE_V2.md:394` — *"`contests: <prize>` — if set, ROUTES TO THE SEAM at
         # RESOLVE (§39)"* — so such a verb is executable only if the SEAM can return. It was
@@ -257,14 +261,18 @@ class SeasonDriver:
         # string (never at import), and refuses (b) a `verb:` naming no verb row and (d) an entry
         # registered twice; it is idempotent, so a corpus constructing many drivers is refused
         # nothing new. Then (c) the contest roster, both halves, and (a) a writing row with no effect
-        # and no `decline_note:`. `manifest/registrar.py` and `manifest/registry.py` hold the rules.
+        # and no `effect_decline_note:` (and its converse), and -- plan position IN-41, `SM-11` --
+        # (a)'s precondition twin: a precondition nothing evaluates and no `requires_decline_note:`
+        # (and its converse). `manifest/registrar.py` and `manifest/registry.py` hold the rules.
         from ..manifest import (
-            check_contest_prizes, check_effects, check_rows, register_module_entries,
+            check_contest_prizes, check_effects, check_preconditions, check_rows,
+            register_module_entries,
         )
         register_module_entries(VERB_TABLE)
         check_rows()
         check_contest_prizes(VERB_TABLE)
         check_effects(VERB_TABLE, EFFECTS)
+        check_preconditions(VERB_TABLE, REQUIRES_PREDICATES)
         # OBSERVATION ONLY, and the distinction matters. Six probes used the removed `effect` hook
         # to record which acts reached RESOLVE and in what order. That is a thing to WATCH, not a
         # thing to DECIDE, and giving it back as a resolver parameter is how the second resolver
