@@ -712,3 +712,301 @@ What would actually have prevented it is the structural fix the reservations fil
 and PARKS: `wiring_status.auto_allocation`. Until that exists, the only real mitigation is the one
 §4 names — land the `next_free` bump on `main` **before** anything cites the number — which narrows
 the window rather than closing it, and a branch open for hours cannot use it at all.
+
+---
+
+## Part 2 — the remaining YAML comment narrative (B-X extraction, 2026-10-06)
+
+*(Jordan, 2026-10-06: "you can extract all edit histories/discussion from .yaml files in references and
+just make those a supplement".)* The first split (above) moved the per-lane `Narrative:` rows. This part
+moves what that pass left in `id_reservations.yaml`: the header's provenance lines, the very long trailing
+comment on `verified_live_max.ED` (the ED-1095/1096 collision incident), the Round-1 and lane-namespace
+motivation, the 2026-07-07 duplicate-lane-key repair, and the stand-alone per-ED comment blocks that sat
+between the lane rows (MB, PC, FI, SC, FA, WR, IN, SE).
+
+**What stayed in the YAML:** the ALLOCATION PROTOCOL, the schema and `FORMAT`/`MIGRATION` notes, every
+`next_free`, block and gap, the lane rows with their one-line summaries and pointers, and a one-line
+summary where an editor needs the fact (the duplicate-lane-key hazard, the frozen flat-ED ceiling).
+`0103-0111` stays on the IN row because `tests/valoria/test_id_reservations_walkback.py` and
+`tests/valoria/test_audit_plan_ids_are_allocated.py` read it there.
+
+The text below is VERBATIM, grouped under the YAML section it came from. Nothing was deleted.
+
+### <a id="p2-header"></a>Header: source and the session-time verification note
+
+*(original lines 8-10 at 8b57336, verbatim)*
+
+```yaml
+# Source: Valoria Master Workplan v2 (2026-05-31) — RESERVED ID RANGES + item 5.10.
+# Live maxima VERIFIED this session (don't trust the doc blind): ED 884, PP 726 — so every
+# reserved block below is clear of existing IDs.
+```
+
+### <a id="frozen-ed"></a>`verified_live_max.ED` — the freeze point and the ED-1095/1096 collision incident (the full trailing comment)
+
+*(original lines 25-25 at 8b57336, verbatim)*
+
+```yaml
+  ED: 1096                         # FROZEN 2026-07-02 (ED-IN-0001 cutover, origin/main) — 1094 was the FINAL flat ED-NNNN value AS OF THAT CUTOVER; no new flat allocations from here on. This branch's own ED-1095/ED-1096 (T1-T4 charge-recoil ruling; movement/pathing audit ratification) were filed on the mass-battle lane BEFORE this branch learned of the cutover, using the old flat scheme, and do not collide with anything origin/main claimed (origin/main jumped straight from 1094 to ED-IN-0001/0002) — so 1095/1096 stand as valid, permanent flat IDs, just filed after the nominal freeze point. Any FURTHER new ED from this point on uses the ED-<LANE>-NNNN namespace below, not a flat number. Full incident history (three same-session collisions on this one block): registers/editorial_ledger.jsonl (max ED referenced, 2026-07-02 — origin/main's concurrent month-overview-consolidation lane independently claimed ED-1093/1094 for its own content (J-38 propagation-spec + merge-ratifies-by-default convention, itself already twice-renumbered on that lane) while this branch held ED-1093 (T1-T4 charge-recoil ruling) + ED-1094 (movement/pathing audit ratification) — this branch's two colliding IDs renumbered to ED-1095/ED-1096 before merging origin/main in, which itself had independently landed ED-1088-1092 (mass-battle LC-8 + three Jordan rulings + Stage F investigation, PRs #59/#62/#64/#65) against this branch's own now-renumbered ED-1089/1090 — two same-session collisions on origin/main's side plus this branch's own third motivated the ED-<LANE>-NNNN namespace below)
+```
+
+### Round 1 overrun note (above `reservations:`)
+
+*(original lines 29-31 at 8b57336, verbatim)*
+
+```yaml
+# Round-1 blocks A/B/C (ED 890-999) were exhausted and overrun to ED-1042 in the unreserved
+# 1000-1042 overflow — exactly the collision class this file exists to prevent. Round 2 below
+# opens a fresh disjoint block starting safely above the live max (1043-1049 left as buffer).
+```
+
+### <a id="lane-namespace"></a>ED-<LANE>-NNNN namespace — the motivating collisions
+
+*(original lines 66-76 at 8b57336, verbatim)*
+
+```yaml
+# Motivated by TWO same-session concurrent-allocation collisions on the flat ED-NNNN
+# sequence above (ED-1088 collided with mass-battle LC-8, renumbered to 1090; ED-1089/
+# 1090 then collided AGAIN with three more mass-battle EDs, renumbered to 1093/1094 —
+# see ED-1094's ledger entry for the full incident). The A-E reservation-block scheme
+# above only prevents collision through allocation DISCIPLINE (read next_free before
+# allocating); two sessions in the same numeric block that both skip that step, or read
+# next_free before the other commits, can still collide. A lane tag makes CROSS-LANE
+# collision impossible BY CONSTRUCTION — two sessions in different lanes can never
+# collide, full stop. Same-lane collisions are still possible (two sessions both doing
+# mass-battle work concurrently) but are a much narrower, already-expected case, and
+# the existing CollisionError-retry append-safety still applies within a lane.
+```
+
+### <a id="lane-key-repair"></a>`lane_ids`: the 2026-07-07 duplicate-lane-key repair, and the ED-IN-0012/0013 renumber
+
+*(original lines 92-106 at 8b57336, verbatim)*
+
+```yaml
+# ⚠ 2026-07-07 REPAIR (this file previously carried DUPLICATE lane keys for FI/SC/FA/WR/IN —
+# a merge artifact of the two concurrent 2026-07-05 ratification PRs (#82 edge-playability batch,
+# #83 SC-audit batch) each appending its own full lane list. YAML last-key-wins made the stale
+# duplicates authoritative: SC's effective next_free regressed to 2, colliding with the already-
+# allocated ED-SC-0002..0010. Repaired here to ONE block per lane, next_free = the true union
+# maximum, comment histories merged. SEPARATE residue, since RULED (Jordan-reserved authority
+# exercised directly by Jordan, ED-306 precedent — merged ledger lines are not rewritten
+# unilaterally, but Jordan himself may rule the renumber): ED-IN-0012 and ED-IN-0013 were each
+# allocated TWICE in the merged ledger — once by PR #83 (SC-audit acceptance sweep: throughline-
+# registry/UI refresh; rolling-engine re-run) and once by PR #81/#82 (edge-playability §7 items
+# 1-2: registry×rendering sweep; GM-token sweep). ⚠ 2026-07-07 RULED + EXECUTED (armature §5.10,
+# Jordan's consolidated "ratify all" pass, ED-IN-0026): the edge-playability pair is renumbered to
+# fresh ED-IN-0019 (registry×rendering sweep) / ED-IN-0020 (GM-token sweep). ED-IN-0012/0013
+# themselves are NOT rewritten (existing ledger lines stand) — they now unambiguously mean the
+# SC-audit batch content only. Cite ED-IN-0019/0020 for edge-playability work going forward.
+```
+
+### <a id="p2-mb"></a>MB: older per-ED notes (ED-MB-0001..0007 and the OPT-13 allocation)
+
+*(original lines 112-123 at 8b57336, verbatim)*
+
+```yaml
+    # Older MB history (moved to its own comment lines 2026-07-13 so a fresh OPEN citation on the
+    # primary line above no longer inherits a "ratified"/"resolved" basis-keyword hit from these —
+    # tools/validate_ed_citations.py's OPEN_AS_BASIS check is line-scoped; mirrors the PC lane's
+    # existing convention below):
+    # ED-MB-0001: movement/pathing audit (ED-1096) fix-plan execution + adversarial review, 2026-07-02
+    # ED-MB-0002: Cannae gauge-band root-cause audit, ratified + DG-3/DG-4 ruled 2026-07-04
+    # ED-MB-0003: D1-D4 defects found+fixed, DG-1/DG-3 completion + DG-2-as-workplan ruled+executed, 2026-07-05
+    # ED-MB-0004: partition-invariance fix + RC-5 preliminary finding, resolved 2026-07-08
+    # ED-MB-0005: DG-2 commanded-entry slice built, 2026-07-08
+    # ED-MB-0006: Command abandoned for combat pool -- troop type/quality/numbers model (POOL_QUALITY_MODEL), 2026-07-08
+    # ED-MB-0007: 11-surface agonist-antagonist gauge architecture audit (why 7/20), resolved 2026-07-08, opens DG-6..DG-16
+    # ED-MB-0004 allocated 2026-07-07 (status open): unaddressed-areas ed_options OPT-13 (gauge triage continuation) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
+```
+
+### <a id="p2-pc"></a>PC: per-ED notes ED-PC-0003..0012
+
+*(original lines 125-192 at 8b57336, verbatim)*
+
+```yaml
+    # ED-PC-0003 + ED-PC-0004 allocated 2026-07-07 (status open): ed_options OPT-10 (sigma band-discipline unification, executes armature §5.12) + OPT-15 (ED-1042 reconciliation) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
+    # ED-PC-0005 allocated 2026-07-07 (status open): ED-1042 residual wound-Ob prose drift, re-filed from ED-PC-0004/OPT-15 during the Stratum-A execution PR. NOTE: a plan-text label "ED-PC-0005" in designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md:115 (U4 item) is NOT an allocation and must renumber when actually filed (the ED-PC-0001 plan-label collision class). RESOLVED 2026-07-08 (Jordan ruling "never -1D, always fractional Ob").
+    # ED-PC-0006 allocated 2026-07-08 (status resolved): non-combat wound fractional-Ob calibration — follow-on to the ED-PC-0005 ruling. RESOLVED 2026-07-08: adopted +0.15 Ob per wound (cumulative), reusing ED-1041's combat "attacking" magnitude, propagated to Thread ops/fieldwork/mass-battle Command + params mirrors (see ledger entry). next_free bumped 6→7.
+    # ED-PC-0007 allocated 2026-07-08 (status deferred): pessimist-audit PC action-consolidation work items.
+    # DEFERRED 2026-07-08 (Jordan: "Defer PC") — the audited combat_v30 §4 ACTIONS menu predates the current
+    # continuous resolver combat_engine_v1/, which has no discrete player-action surface yet; the subtractive
+    # consolidations are already realized/moot under combat_engine_v1's design. No edits to the stale surface.
+    # Forward constraints (see ledger entry for the full list) attach to the post-R3 player-input-surface item.
+    # next_free bumped 7→8.
+    # ED-PC-0008 allocated 2026-07-08 (status open, needs_jordan): U2 scoping findings — attempted U2 (graded
+    # mode affordance + Phase-C percussion enactment) this session and found it materially underspecified
+    # relative to consolidation_v1.md's one-line description; three NEW forks surfaced (percussion self-gate
+    # removal produces a severe balance regression without new grounding; thrust_factor carries its own
+    # undocumented floor bug; the graded-affordance change has a much wider blast radius on exact-set tests
+    # than the plan's 5 named acceptance tests). U2 NOT implemented this pass — see ledger entry for full
+    # evidence. next_free bumped 8->9.
+    # ED-PC-0009 allocated 2026-07-08 (status resolved): JD-4 + JD-9 DETERMINED by testing bottom-up emergent
+    # primitives (mass/position/geometry, no per-weapon table) and validating top-down against HEMA sourcing +
+    # physics (Jordan directive 2026-07-08). geometry.py's cut_factor/thrust_factor floor-drop fixes; a new
+    # weapon_physics.reversed_grip_percussion (the grounded Mordhau/Mordschlag pommel-strike model, hands==2
+    # bladed weapons only, ~1.4-1.8/8 vs mace's 8.0/poleaxe's ~7.5) replaces percussion_authority's non-blunt
+    # hard-zero self-gate. Live mode-selection wiring for JD-4/JD-9 IN PROGRESS under ED-PC-0011 (below), a
+    # separate later allocation — not this entry. next_free bumped 9->10.
+    # ED-PC-0010 allocated 2026-07-08 (status resolved), RENUMBERED at merge time from an original ED-PC-0007
+    # allocation: R3 U1 — PoB recalibration (JD-1 RULED by Jordan: "accept plan bands" — consolidation_v1.md's
+    # default arms-scholarship ranges). weapons.py data-only mass redistribution (rapier/arming/longsword/
+    # greatsword blade->pommel; bec_de_corbin/lucerne_hammer haft->head) for the 6 flagged weapons (V7 evidence
+    # table); HEFT_REF re-anchored to longsword's recalibrated PoB; two NEW deliberately-left-failing tests
+    # document a corroborating spear-dominance finding (see ledger entry). RENUMBER NOTE: this entry was
+    # originally filed as ED-PC-0007 (the U1/JD-1 execution, chronologically the FIRST PC-lane ED filed this
+    # session) but collided at merge with main's own independently-allocated ED-PC-0007 (pessimist-audit PC
+    # action-consolidation deferral, above) — same plan-label-vs-allocation collision class as ED-PC-0001/
+    # ED-PC-0005's precedent notes (this same file). Main's ED-PC-0007 was already merged to main first, so it
+    # keeps the number; this entry (not yet merged) moves to the next free PC-lane slot instead. All internal
+    # citations updated to match (weapons.py, weapon_physics.py, tests/valoria/test_combat_invariants.py,
+    # test_combat_heft.py, test_combat_pob_bands.py, CURRENT.md, consolidation_v1.md, HANDOFF_PC.md). Note this
+    # entry numerically follows ED-PC-0008/0009 despite being chronologically first — file/allocation order
+    # diverge here precisely because of the merge-time renumber, exactly as this file's own header docs warn
+    # ("never max+1"; read next_free, allocate, bump). next_free bumped 10->11.
+    # ED-PC-0011 allocated 2026-07-08 (status: resolved): live mode-selection wiring for JD-4 (Mordhau reversed-
+    # grip percussion) + JD-9 (thrust_factor floor drop), the integration ED-PC-0009 explicitly deferred as a
+    # real architectural gap. core.py: FIX-1b's percussion-authority transmit scaling extended from
+    # `mat in ('mail','plate')` to every material, with a dual-reference split (PERC_AUTH_REF=8.0 unchanged for
+    # mail/plate, PERC_AUTH_REF_SOFT=6.5 for none/cloth) found necessary by an adversarial review of a first
+    # attempt that collapsed both onto one reference and silently regressed poleaxe/bec_de_corbin/
+    # lucerne_hammer. systems.py: the three graded secondary-affordance checks (percussion/cut/point)
+    # re-enabled in element_afforded via dict.setdefault. Also fixes the related gap: core.coupling's
+    # DELIVERY['cut'] now scales by the candidate's own derived cut magnitude via CUT_AUTH_REF=0.70 (anchored
+    # on the weakest attested native cutter, hook_sword) — an incidental secondary 'cut' token (e.g. rapier)
+    # no longer outscores a weapon's own dedicated 'point' regardless of how weak the incidental edge is.
+    # Validated via a 13-agent agonist/antagonist adversarial Workflow (6 Sonnet producer/critic weapon-group
+    # pairs + 1 Opus synthesis) against HEMA/physics grounding across the full roster. NOTE: this ID was
+    # drafted into in-progress code comments (core.py, systems.py) BEFORE the ED-PC-0007 merge collision above
+    # was discovered and U1 was renumbered to claim ED-PC-0010 first — comments originally said "ED-PC-0010"
+    # and were corrected to ED-PC-0011 to avoid a second collision on the same slot. next_free bumped 11->12.
+    # ED-PC-0012 allocated 2026-07-08 (status: open): a SECOND, structurally identical gap to the one ED-PC-0011
+    # fixed for 'cut', found by the same adversarial Workflow, this time on 'point' — DELIVERY['point']=1.45 is
+    # NOT scaled by the candidate's own derived thrust magnitude, and the puncture transmit path is floor-
+    # locked (verified: scimitar/sabre/falchion/hook_sword's secondary point ALL score the identical coupling
+    # at 'light' armour regardless of their wildly different point geometry, 0.16-0.40). Judged by the
+    # adversarial pass to matter concretely for the one-handed sabre-class roster (sabre/scimitar/falchion —
+    # FLAG-AS-FORK, their historically-attested pure-slashing identity makes this switch a floor-locked
+    # artifact, not earned capability) but NOT for the two-handed cutter roster (their switches are historically
+    # defensible regardless). Deliberately NOT implemented this pass — a THRUST_AUTH_REF fix analogous to
+    # CUT_AUTH_REF would also touch several two-handed cutters (tachi/nandao/glaive/podao, whose own point sits
+    # below the proposed reference too) and needs its own roster-wide re-verification before landing, not a
+    # third redesign-and-reverify cycle rushed through in the same session. See ledger entry for the full
+    # recommendation. next_free bumped 12->13.
+```
+
+### <a id="p2-fi"></a>FI: ED-FI-0003
+
+*(original lines 194-194 at 8b57336, verbatim)*
+
+```yaml
+    # ED-FI-0003 allocated 2026-07-07 (status open): ed_options OPT-6 (knots propagation completion) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
+```
+
+### <a id="p2-sc"></a>SC: per-ED notes ED-SC-0011, 0017..0024, 0033..0038
+
+*(original lines 196-222 at 8b57336, verbatim)*
+
+```yaml
+    # ED-SC-0038 allocated 2026-09-26 (status ruled, NOT needs_jordan): two of Jordan's 2026-09-04
+    # rulings (multi-matter/conditional adjudication; binding-in-scene), relayed only inside the
+    # scope-banned 09-04-social-contest-branches corpus, apply to all twelve proceeding rows in the
+    # 09-05-proceedings-subsystem successor, not just negotiation. Reopens 19_PLAN.md PART I item 1
+    # and P-14/D-8 for a build session. next_free 38 -> 39.
+    # ED-SC-0037 allocated 2026-09-09 (status open, NEEDS_JORDAN): which provider resolves a
+    # social contest until proceedings lands -- interim dice now vs. wait. The one call in the
+    # R-execution plan that survived all five of CLAUDE.md section 0's tests. next_free 37 -> 38.
+    # ED-SC-0036 allocated 2026-09-07 (status open, NOT needs_jordan): the stress suite run against
+    # the proceedings subsystem -- 38 executable tests, 23 inventions, 8 mechanical decisions, 35
+    # findings of which 15 new; two independent read-only critics killed two of them, overturned a
+    # third as stale and voided one execution, all applied in place. next_free 36 -> 37.
+    # ED-SC-0033..0035 allocated 2026-09-06 (all status ruled, none needs_jordan): the proceedings
+    # subsystem rulings -- 0033 ownership of all social contests + retirement of the orphaned tree;
+    # 0034 resolution (aggregates licensed, multilateral + debate score accepted, latitude pool-only
+    # with a floor, M-7/M-8 blocking); 0035 the character model (fears pressed not spent, the break
+    # lands on the feared thing, pressure is the gap, second-person lever refused). next_free 33->36.
+    # ED-SC-0023..0024 allocated 2026-08-06 (both open, both needs_jordan): the precedent-grounded
+    # consolidation/integration programme CIP-0..CIP-10 (proposals/social_contest_consolidation_integration_v1.md)
+    # + the CIP-9b amendment to the RATIFIED Auto/Manual Duality parity constraint. next_free 23->25.
+    # ED-SC-0017..0022 allocated 2026-08-06 (all status open; 0017/0019/0020/0021 needs_jordan):
+    # three-lens pessimistic NERS audit + upload delta (audit/2026-08-06-social-contest-three-lens-audit/).
+    # 0017 spec/kernel divergence + KU-1 sharpening + params-provenance break; 0018 CR4 reachability
+    # (Projection half); 0019 no record spine / compose on settlements LedgerTag + M2 Scope; 0020 FORK A
+    # burden-parameterized gate; 0021 FORK B anti-collapse device; 0022 live bug batch (8 defects).
+    # next_free bumped 17->23.
+    # ED-SC-0011 allocated 2026-07-07 (status open): ed_options OPT-11 (contest live-dispatch acceptance criterion) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
+```
+
+### <a id="p2-fa"></a>FA: ED-FA-0004 / 0005
+
+*(original lines 224-224 at 8b57336, verbatim)*
+
+```yaml
+    # ED-FA-0004 + ED-FA-0005 allocated 2026-07-07 (status open): ed_options OPT-1 (faction-oracle reconciliation, banner-now sequencing ruled) + OPT-2 (elimination-lockout, no-permanent-lockout ruled) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
+```
+
+### <a id="p2-wr"></a>WR: ED-WR-0004 / 0005 / 0006
+
+*(original lines 226-226 at 8b57336, verbatim)*
+
+```yaml
+    # ED-WR-0004/0005/0006 allocated 2026-07-07 (status open): ed_options OPT-4 (Turmoil victory-gate, wire-the-clock ruled) / OPT-5 (threadwork execution reconciliation) / OPT-12 (NPC orphan triage ED) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
+```
+
+### <a id="p2-in-a"></a>IN: the duplicate-`IN:`-key collapse (ED-IN-0068) and the ED-IN-0068..0072 / 0280-0281 notes above the IN row
+
+*(original lines 227-255 at 8b57336, verbatim)*
+
+```yaml
+    # IN lane (Infrastructure / cross-cutting). 4 duplicate IN: keys collapsed -> 1
+    # (2026-07-15, ED-IN-0068): the recurring 2026-07-07 duplicate-IN class — YAML
+    # last-key-wins hazard. All four agreed on next_free:68; per-ED allocation history is
+    # preserved in registers/editorial_ledger_in.jsonl (prior: ED-IN-0062/0064/0066/0067) and
+    # the comment block below. ED-IN-0068 allocated 2026-07-15 (apparatus consolidation:
+    # shared observability core + build_proposals generator + apparatus registry).
+    # ED-IN-0069/0070 allocated 2026-07-15 (proposal-reconciliation pass,
+    # designs/audit/2026-07-15-proposal-reconciliation/): 0069 = reconciliation-pass umbrella
+    # (census + Nature-A flips + A2 reclassify + Nature-D status-lines + Nature-C dispositions
+    # + reconciliation map + broken-path fix; open, needs_jordan); 0070 =
+    # governance_cluster_reconciliation_v1.md unified governance-play head (PROPOSED, open, needs_jordan).
+    # RENUMBERED from ED-IN-0068/0069 at merge — collision with PR #146's ED-IN-0068 (merged first
+    # keeps the number; same class as ED-IN-0031/0044/0064 precedents). next_free 69->71.
+    # ED-IN-0071 allocated 2026-07-15 (repository reorganization proposal,
+    # proposals/repo-reorganization-v1.md): content-class taxonomy critique + resolved
+    # target buckets + phased P0-P5 migration plan; PROPOSED, needs_jordan, all forks HELD-BACK.
+    # Captures Jordan's previously-untracked repo-reorg suggestion (found nowhere in the corpus).
+    # next_free 71->72.
+    # ED-IN-0072 allocated 2026-07-16 (RENUMBERED from this branch's original ED-IN-0071 --
+    # COLLISION: origin/main PR #150 concurrently claimed ED-IN-0071 for the repo-reorg proposal
+    # above and merged first; same class as the ED-IN-0044/0064 precedents, later-merging side
+    # renumbers): register-honesty fix to tools/observability/build_proposals.py --
+    # obs_core.text_needs_jordan() rescues design-doc + flat-ledger Jordan-gating (register
+    # needs_jordan 79->97). status resolved, no ruling needed. next_free 72->73.
+    # [ED-IN-0280/0281 COLLISION, 2026-09-28] Two concurrent sessions both read next_free 280 and
+    # both allocated ED-IN-0280 -- same class as ED-IN-0072/ED-IN-0209-0211's precedent above and
+    # below. origin/main's PR #437 (the `methodology` skill) merged first and keeps ED-IN-0280;
+    # this branch's PR #438 renumbers its own allocation to ED-IN-0281 (THE PLAN re-adopted as the
+    # single order). Neither commit's content changes, only the number.
+```
+
+### <a id="p2-in-b"></a>IN: the 2026-07-07 note and ED-IN-0028 below the IN row
+
+*(original lines 258-265 at 8b57336, verbatim)*
+
+```yaml
+    # 2026-07-07 (status open unless noted): ED-IN-0012/0013's edge-playability pair RENUMBERED to
+    # ED-IN-0019/0020 (armature §5.10 decided + executed, see repair note above); ED-IN-0021..0025
+    # allocated: ed_options OPT-3/7/8/14/17 (F7 smoke oracle / registry hygiene / consumer-closure /
+    # intent-hygiene addenda / C-VERIFY carry-forward); ED-IN-0026 (status: the consolidated
+    # ruling-pass record itself) allocated. ED-IN-0017/0018 status flipped in the ledger this same
+    # pass (see their own ledger entries) — not repeated here to avoid a stray basis-keyword tainting
+    # this comment's open-ED citations.
+    # ED-IN-0028 allocated 2026-07-08 (status resolved — plumbing complete, downstream deferred): Key & Echo Armature PR-2a — deterministic echo-transport plumbing (ECHO_TRANSPORT flag, default OFF/byte-exact) un-orphaning domain_echo.py + the campaign's first substrate KeyLog. next_free bumped 28->29. Downstream owned by FA-comeback (ED-FA-0005) + SC context-derivation bridge (ED-SC-0006/0007).
+```
+
+### <a id="p2-se"></a>SE: ED-SE-0003 / 0004
+
+*(original lines 268-268 at 8b57336, verbatim)*
+
+```yaml
+    # ED-SE-0003 + ED-SE-0004 allocated 2026-07-07 (status open): ed_options OPT-9 (armature keying wave) + OPT-16 (execute ED-SE-0001's own updates) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
+```

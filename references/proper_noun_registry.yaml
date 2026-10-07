@@ -1,5 +1,5 @@
 # Valoria Proper Noun Registry
-# Auto-triage round 2: 466 candidates fully classified
+# History and discussion: references/vocab_history.md
 # Categories: character, territory, faction, subfaction, organization,
 # realm, region, people, concept, structure
 
@@ -330,13 +330,7 @@ territories:
 
 factions:
   faction_x:
-    # ⚠⚠ A TEST FACTION, NOT CANON — RULED by Jordan 2026-09-18: "place them all under 'faction x'
-    # as a test faction". THIS FILE IS A MIRROR: `references/names_index.yaml` is authoritative
-    # and `tools/ci_names_consistency.py` refuses a divergence, which is how this entry came to
-    # exist — the gate caught the missing mirror on the same commit that authored the index row.
-    # It exists so `engine/season/harness/governance_spine.py`'s generic governance spine can seat offices:
-    # `office_faction` refuses an office naming neither a `body` nor a `faction`, so a fully
-    # generic seat is forbidden by design (`H-99` + §42.2's polarity rule).
+    # ⚠⚠ A TEST FACTION, NOT CANON. A mirror of `references/names_index.yaml` (authoritative).
     canonical: "faction x"
     aliases: []
     source: fixture
@@ -347,11 +341,7 @@ factions:
     added_via_triage: true
     entry_note: "vector-audit faction-class member (CLASSES['faction']); classification pending Jordan confirmation — ED-IN-0082"
   church:
-    # ⭐ RULED by Jordan, 2026-09-13: "the church is Church of Solmund." Kept in step with
-    # `references/names_index.yaml`, which is authoritative and which `tools/ci_names_consistency.py`
-    # enforces this mirror against — the gate caught this row the moment the index moved, which is
-    # the gate working. `Church` becomes an alias, not a deprecation: the short form stays lawful
-    # prose and the 256 occurrences below are not a rename backlog.
+    # A mirror of `references/names_index.yaml` (authoritative); `Church` is an alias, not a deprecation.
     canonical: "Church of Solmund"
     aliases: ["Church"]
     source: "systems/world/reference/geography_v30.md"

@@ -1,10 +1,7 @@
 # names_index.yaml — UNIFIED NAMES INDEX (the one place a definition's name lives).
 #
-# WHY: names used to be hardcoded and duplicated across 50+ prose docs, engine/params/, the
-# registries, and the tools (ci_naming_check.py even hardcoded the deprecated proper
-# noun). descriptor_registry.yaml already promised "a descriptor can be renamed HERE
-# without rewriting any consumer" — this index makes that real for ALL named
-# definitions, not just descriptors.
+# One place a definition's name lives; rename HERE, never in a consumer.
+# History and discussion: references/names_index_history.md
 #
 # HOW IT IS READ (one source, many readers — all via tools/names.py):
 #   * tools/ci_naming_check.py   — hard gate; flags any `legacy` name of an `enforce: block` entry.
@@ -40,11 +37,8 @@
 # Mechanic/clock/track legacy entries are seeded from references/deprecated_terms_registry.yaml
 # and references/synonym_registry.yaml; they drive the drift lint + rename, not a mirror.
 #
-# MIGRATION: seeded 2026-06-28 (attributes, faction/settlement stats, the proper-noun
-# naming invariant, and the clean mechanic renames). 2026-07-01 (ED-1084): the rest of the
-# proper-noun corpus folded in below as warn-tier `world.*` entries (generated from
-# proper_noun_registry.yaml; ci_names_consistency keeps the pair agreeing). Remaining
-# follow-up: flipping `warn -> block` per entry as each is triaged.
+# `world.*` rows are warn-tier (`world.solmund` is block; `world.faction_x` carries no tier); proper_noun_registry.yaml
+# mirrors them and ci_names_consistency keeps the pair agreeing. Flipping `warn -> block` per entry is done as each is triaged.
 
 # ── NAMESPACE PREFIXES (id ↔ silo table; Reconciliation Program §3.2) ─────────────────
 # Every id's first dotted segment is a namespace prefix bound to ONE class/silo. Engine and
@@ -85,12 +79,7 @@ entries:
   attr.mind.acuity:      {canonical: Acuity,     aliases: [Reasoning, Cognition], legacy: [], category: attribute, enforce: warn}
   attr.mind.will:        {canonical: Will,       aliases: [Spirit],               legacy: [], category: attribute, enforce: warn}
   attr.social.attunement: {canonical: Attunement, aliases: [Perception],          legacy: [], category: attribute, enforce: warn}
-  # `Influence` REMOVED from this alias list 2026-09-16: it was the canonical name of
-  # `fac.influence` (a 0-7 faction stat, retired 2026-10-01 at plan position `29b`; the alias is NOT
-  # restored by that retirement -- which attribute owns the word is a design call), so as an alias here
-  # it made one string name two quantities. MEASURED before removing: every bare `Influence` in
-  # the corpus is the roll stat (`conviction_track_v30.md` -- *"Influence vs Ob 2"*, *"Church
-  # Influence vs Ob"*); none means Charisma, and no code read this list. `Presence` stays.
+  # `Influence` is deliberately NOT an alias here: it is the roll stat's own name, not Charisma's.
   attr.social.charisma:  {canonical: Charisma,   aliases: [Presence],  legacy: [], category: attribute, enforce: warn}
   attr.social.bonds:     {canonical: Bonds,      aliases: [Sincerity, Affability], legacy: [], category: attribute, enforce: warn}
 
@@ -99,11 +88,9 @@ entries:
   agg.mind:   {canonical: Mind,   aliases: [], legacy: [], category: aggregate, enforce: warn}
   agg.social: {canonical: Social, aliases: [], legacy: [], category: aggregate, enforce: warn}
 
-  # ── CONVICTIONS (the 7-axis character conviction class; new 2026-07-21, R2 / ED-IN-0082) ──
-  # `context` is the §3.5 disambiguation gate, migrated VERBATIM from vector_audit's former
-  # hardcoded SEED table (test_vector_audit pins byte-identical behaviour). vector_audit now
-  # reads these FROM here (CLAUDE.md §8). enforce: warn — every display collides with a common
-  # word. Single-quoted so YAML keeps the regex backslashes literal.
+# ── CONVICTIONS (the 7-axis character conviction class) ──
+# `context` is the §3.5 disambiguation gate; vector_audit reads it FROM here. enforce: warn — every
+# display collides with a common word. Single-quoted so YAML keeps the regex backslashes literal.
   conv.faith:      {canonical: Faith,      aliases: [], legacy: [], category: conviction, enforce: warn, context: ['\bConviction\b', '\bFramework\b', '\bDivine\b', '\bChurch\b', '\bCardinal\b', '\bdoctrine\b']}
   conv.order:      {canonical: Order,      aliases: [], legacy: [], category: conviction, enforce: warn, context: ['\bConviction\b', '\bFaith\b', '\bAutonomy\b', '\bReason\b', '\bEquity\b']}
   conv.reason:     {canonical: Reason,     aliases: [], legacy: [], category: conviction, enforce: warn, context: ['\bConviction\b', '\bFaith\b', '\bOrder\b', '\bAutonomy\b']}
@@ -112,21 +99,16 @@ entries:
   conv.autonomy:   {canonical: Autonomy,   aliases: [], legacy: [], category: conviction, enforce: warn, context: ['\bConviction\b', '\bVarfell\b', 'L[oö]wenritter']}
   conv.continuity: {canonical: Continuity, aliases: [], legacy: [], category: conviction, enforce: warn, context: ['\bConviction\b', '\bRestoration\b']}
 
-  # ── PRESSURE POINTS (the 4-axis social-contest class; new 2026-07-21, R2 / ED-IN-0082) ──
-  # Same shape as convictions: `context` is the §3.5 disambiguation gate, migrated VERBATIM from
-  # vector_audit's former hardcoded SEED (test_vector_audit pins byte-identical). vector_audit
-  # sources CLASSES['pressure_point'] + the SEED tokens FROM here (§8). enforce: warn — the
-  # displays collide with common words.
+# ── PRESSURE POINTS (the 4-axis social-contest class) ──
+# Same shape as convictions; vector_audit sources CLASSES['pressure_point'] + the SEED tokens FROM here.
   ppt.evidence:    {canonical: Evidence,    aliases: [], legacy: [], category: pressure_point, enforce: warn, context: ['\bPressure Point\b', '\bInvestigation\b', '\bEvidence Track\b']}
   ppt.consequence: {canonical: Consequence, aliases: [], legacy: [], category: pressure_point, enforce: warn, context: ['\bPressure Point\b', '\bConsequentialist\b']}
   ppt.authority:   {canonical: Authority,   aliases: [], legacy: [], category: pressure_point, enforce: warn, context: ['\bPressure Point\b', '\bAuthority Challenge\b', '\binstitutional\b']}
   ppt.loyalty:     {canonical: Loyalty,     aliases: [], legacy: [], category: pressure_point, enforce: warn, context: ['\bPressure Point\b', '\bKnot\b', '\brelational\b']}
 
-  # ── MECHANICS (strategic-layer mechanic tokens; new 2026-07-22, R2 namespacing / ED-IN-0082) ──
-  # Namespaced ids so a generic "Stability"/"Mandate"/"Standing" is COLLISION-SAFE from the faction
-  # stat `fac.stability` etc. (retired at `29b`; the namespace stays) — author with [[mech.stability]]. patterns
-  # migrated verbatim from the hardcoded SEED; token_class: mechanic sources them into the audit
-  # (category mechanic has no proper-noun mirror). enforce: warn (all collide with common words).
+# ── MECHANICS (strategic-layer mechanic tokens) ──
+# Namespaced ids keep a generic "Stability"/"Mandate"/"Standing" collision-safe — author with
+# [[mech.stability]]. token_class: mech sources `patterns` into the audit.
   mech.disposition: {canonical: Disposition, aliases: [], legacy: [], category: mechanic, token_class: mech, scale: mechanic, enforce: warn, patterns: ['\bDisposition\b']}
   mech.standing:    {canonical: Standing,    aliases: [], legacy: [], category: mechanic, token_class: mech, scale: mechanic, enforce: warn, patterns: ['\bStanding\b']}
   mech.stability:   {canonical: Stability,   aliases: [], legacy: [], category: mechanic, token_class: mech, scale: mechanic, enforce: warn, patterns: ['\bStability\b']}
@@ -139,23 +121,15 @@ entries:
   # separate). token_class clock_track so the 2 existing full-name clock.* aren't pulled.
   clock.ms: {canonical: "MS", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bMS\b(?![A-Za-z])', 'Mending Stability']}
   clock.ci: {canonical: "CI", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bCI\b(?![A-Za-z])', 'Church Influence']}
-  # ⚠ CANONICAL SECOND, RIVAL THIRD (2026-09-16). This row carried ONLY 'Invasion Pressure' — which
-  # is not the canonical expansion and is not the recorded rival either. Canon is INSTITUTIONAL
-  # Pressure (`glossary.md`, `alias_registry.yaml`, `name_collision_database.yaml`), and the matcher
-  # missed all 100 of its corpus occurrences while catching 28 of a name no registry blesses. The
-  # rival STAYS: `patterns:` is a matcher list, not a definition, and finding drift is its job.
+  # `patterns:` is a matcher list, not a definition: canonical expansion before the recorded rival (after the abbreviation pattern).
   clock.ip: {canonical: "IP", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bIP\b(?![A-Za-z])', 'Institutional Pressure', 'Invasion Pressure']}
-  # ⚠ SAME DEFECT, SAME BLOCK, SAME FIX. Canon is PUBLIC Instability (68 corpus occurrences, missed);
-  # 'Political Instability' has 3 and no registry blesses it. Both matchers, canonical first.
+  # Same shape: canonical (`Public Instability`) first, rival second.
   clock.pi: {canonical: "PI", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bPI\b(?![A-Za-z])', 'Public Instability', 'Political Instability']}
   clock.ts: {canonical: "TS", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bTS\b(?![A-Za-z])', 'Thread Sensitivity']}
   clock.tcv: {canonical: "TCV", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bTCV\b']}
 
-  # ── FACTION STATS: RETIRED at plan position `29b` (2026-10-01) ───────────────────────────────
-  # `fac.influence`, `fac.wealth`, `fac.military`, `fac.intel`, `fac.stability` and `fac.legitimacy` mirrored
-  # `descriptor_registry.yaml`'s `faction_stats` block, which left with `game_state.Faction` (`ID-13`), and
-  # `tools/ci_names_consistency.py` refuses a mirror row with no registry entry. They are in git at
-  # `5c5d8ec6:references/names_index.yaml`. `Legitimacy` is now `set.legitimacy` alone.
+  # ── FACTION STATS: RETIRED. No `fac.*` rows: a mirror row with no `descriptor_registry.yaml`
+  # entry is refused by tools/ci_names_consistency.py. `Legitimacy` is `set.legitimacy` alone. ──
 
   # ── SETTLEMENT STATS (mirror: descriptor_registry.yaml settlement_stats) ──────
   set.legitimacy:      {canonical: Legitimacy,      aliases: [], legacy: [], category: settlement_stat, enforce: warn}
@@ -163,10 +137,7 @@ entries:
   set.prosperity:      {canonical: Prosperity,      aliases: [], legacy: [], category: settlement_stat, enforce: warn}
   set.defense:         {canonical: Defense,         aliases: [], legacy: [], category: settlement_stat, enforce: warn}
   set.order:           {canonical: Order,           aliases: [], legacy: [], category: settlement_stat, enforce: warn}
-  # ADDED 2026-09-16, found the moment `ci_names_consistency.py` learned to check the OTHER
-  # direction -- the second instance of the same gap as `fac.legitimacy` above. Declared in
-  # `descriptor_registry.yaml:173` since 2026-07-08 (ED-IN-0029 D5 residual) and never mirrored
-  # here. Its two aliases are transcribed from that row, not invented.
+  # set.facility_tier's aliases are transcribed from `descriptor_registry.yaml`, not invented.
   set.facility_tier:   {canonical: Facility Tier,   aliases: [FacilityTier, FacilityTier_s], legacy: [], category: settlement_stat, enforce: warn}
 
   # ── PROPER-NOUN NAMING INVARIANT (mirror: proper_noun_registry.yaml) ──────────
@@ -252,14 +223,9 @@ entries:
   # mirror-checked by ci_names_consistency (last key segment -> registry entry).
   # world.solmund stays above at block tier (the naming invariant).
   #
-  # NPC audit sourcing (R2/ED-IN-0082, 2026-07-22): the 10 curated tracked NPCs carry
-  # `token_class: npc` + explicit `patterns:` so the vector-audit sources them from HERE
-  # (§8 "every rule lives once") instead of a hardcoded SEED roster. Patterns use the
-  # FIRST NAME / TITLE and deliberately DROP the shared `Almqvist` dynasty surname (Jordan
-  # 2026-07-22: "drop all Almqvist and use their first name … or title") — a family name is
-  # ambiguous across four royals, so matching it would collide distinct people. `scale`
-  # defaults to the token_class ('npc'). This also unifies the former Lisbeth/Grandmaster
-  # Ehrenwall duplicate onto one token. Untagged characters below stay proper-noun tokens.
+  # The 10 curated tracked NPCs carry `token_class: npc` + explicit `patterns:` so the vector-audit
+  # sources them from HERE. Patterns use FIRST NAME / TITLE and deliberately DROP the shared
+  # `Almqvist` surname (ambiguous across four royals). Untagged characters stay proper-noun tokens.
   # -- characters --
   world.aldric_tormann: {canonical: "Aldric Tormann", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.annika_feldhaus: {canonical: "Annika Feldhaus", aliases: ["Feldhaus"], legacy: [], category: proper_noun, enforce: warn}
@@ -298,44 +264,24 @@ entries:
   world.lowenskyst: {canonical: "Lowenskyst", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.oastad: {canonical: "Oastad", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.rendstad: {canonical: "Rendstad", aliases: [], legacy: [], category: proper_noun, enforce: warn}
-  # ⚠ FILED WITH THE PLACES, CLASSED AS A FACTION, AND BOTH ARE RIGHT. Schoenland is a foreign
-  # polity AND the eighth member of `engine/season/rosters.yaml: factions`, whose own note says
-  # *"`Schoenland` IS A MEMBER AND IS FOREIGN"*. The class was simply never set, so `cast.py`'s
-  # `_alias_map` -- which selects on `token_class: faction` -- saw seven of eight. The absences
-  # at `rosters.yaml` :926 and :963 are about a LEADER and a `role_template`, not membership.
+  # Schoenland is filed with the places AND classed `token_class: faction`: it is the eighth member of
+  # `engine/season/rosters.yaml: factions`, and `cast.py`'s `_ALIAS_MAP` selects on that class.
   world.schoenland: {canonical: "Schoenland", aliases: ["Schoenland Factor"], legacy: [], category: proper_noun, enforce: warn, token_class: faction}
   world.sigurdshelm: {canonical: "Sigurdshelm", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.spartfell: {canonical: "Spartfell", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.stillhelm: {canonical: "Stillhelm", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.valorsplatz: {canonical: "Valorsplatz", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   # -- factions --
-  # ⚠⚠ A TEST FACTION, NOT CANON — RULED BY JORDAN 2026-09-18: *"place them all under 'faction x'
-  # as a test faction"*. It exists so `engine/season/harness/governance_spine.py`'s generic governance spine
-  # can seat offices at all: `office_faction` REFUSES an office naming neither a `body` nor a
-  # `faction`, and a declared faction must be a member of this roster (`H-99` + §42.2's polarity
-  # rule, *"no evidence of belonging is a refusal, never a default faction"*). So a fully generic
-  # seat is forbidden by design, which is the code being right.
-  # ⚠ IT IS DELIBERATELY UNMISTAKABLE. `faction x` names no polity, appears nowhere in
-  # `systems/world/`, and would be absurd as canon — the same discipline as
-  # `rosters.yaml: remit_default`, where a transparently wrong placeholder is safer than a
-  # plausible one because nobody mistakes it for a design. An earlier attempt used `Crown`, which
-  # would have made a fixture look like canon Crown structure.
-  # ⚠ THIS ROW CARRIES NO `enforce:` TIER, AND AN EARLIER VERSION SET `enforce: off` ON THE
-  # STATED GROUND THAT *"the naming guard must not nag about a fixture in prose"*. MEASURED
-  # 2026-09-19: THAT NAG COULD NEVER HAVE FIRED. `tools/names.py: all_legacy` builds matchers
-  # by iterating a row's `legacy:` list, and this row's is empty — so it contributes ZERO
-  # matchers at every tier, and `off`, `warn`, `block` and omitting the field are
-  # byte-identical here. The tier was a third enum value invented to solve a problem that did
-  # not exist, and no validator would have caught that. Omitted rather than documented.
+  # ⚠⚠ A TEST FACTION, NOT CANON (Jordan, 2026-09-18). It lets the generic governance spine seat offices:
+  # `office_faction` refuses an office naming neither a `body` nor a `faction`, and a declared faction
+  # must be a roster member. Deliberately unmistakable — `faction x` names no polity.
+  # ⚠ NO `enforce:` TIER, ON PURPOSE: the row has no `legacy:` entries, so every tier (and omitting the
+  # field) reads identically in `tools/names.py: all_legacy`. Do not add one.
   world.faction_x: {canonical: "faction x", aliases: [], legacy: [], category: proper_noun, token_class: faction}
   world.guilds: {canonical: "Guilds", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bGuilds?\b']}
-  # RULED by Jordan, 2026-09-13: "the church is Church of Solmund." This row said `Church` while
-  # `engine/season/rosters.yaml: factions` said `Church of Solmund`, so two registries single-owned
-  # one faction name and disagreed — a §8 violation that surfaced when `references/npc_registry.yaml`
-  # (which uses the short form) was first read by executing code. `Church` becomes an ALIAS, not a
-  # `legacy:` name: the gate enforces only `legacy` names, so the short form stays lawful prose and
-  # nothing in the corpus is newly flagged. `patterns` is unchanged — a bare "Church" still MENTIONS
-  # the faction, which is what that field is for.
+  # RULED by Jordan, 2026-09-13: "the church is Church of Solmund." `Church` is an ALIAS, not a
+  # `legacy:` name (the gate enforces only `legacy`), and `patterns` is unchanged — a bare "Church"
+  # still MENTIONS the faction.
   world.church: {canonical: "Church of Solmund", aliases: ["Church"], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bChurch\b(?! Influence)'], context: ['\bArne\b', '\bCardinal\b', '\bPiety\b', '\bHeresy\b', '\bfaction\b', '\bConfessor\b', '\bdoctrine\b']}
   world.crown: {canonical: "Crown", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bCrown\b(?! Treaty)'], context: ['\bAlmud\b', '\bfaction\b', '\bMandate\b', '\bTreaty\b', '\bTorben\b']}
   world.hafenmark: {canonical: "Hafenmark", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bHafenmark\b']}

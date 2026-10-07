@@ -198,7 +198,7 @@ commit and the run stops for a cleared window (`methodology-execute`, `CLAUDE.md
 has read §K's still-held list and `_part5` §J. `main` was red from PR #456 on one test
 (`test_flow_skeletons.py::test_contract_names_resolve_in_the_generated_index[combat]`); the one-line fix (`personal_combat`
 joins `RETIRED_CONTRACTS`) is built and rides the adoption branch (`7b619328`), so it is not a position — read `All Gates
-Green` on `main` once the branch merges. Then **B-X** (the `references/*.yaml` edit-history extraction), then **B-B, B-C and
+Green` on `main` once the branch merges. Then **B-B, B-C and
 B-D1/D2/D3 in parallel sessions**, then B-G → B-H → B-E → {B-F ∥ B-I} → B-J → … the spine `_part3` §B names. Every batch runs
 through `methodology-execute` (`CLAUDE.md` §9), and a batch's READ-FIRST list names the sites to read (the pins file is far too
 large to read whole: grep the assertion).

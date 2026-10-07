@@ -127,7 +127,7 @@ AXIS_SCALE = _DATA['axis_roster'].get('scale', '')
 #
 #   systems/characters/conviction_taxonomy_v30.md:282
 #       | Reason (legacy tag) | composite — see PP-685 per character |
-#   references/alias_registry.yaml:658-663
+#   references/alias_registry.yaml:653-658
 #       legacy: [... 'Reason (legacy tag)', 'Continuity (legacy tag)'] with NO canonical target,
 #       note: "Per-character migration in PP-685 / conviction_migration_roster_v30."
 #

@@ -78,7 +78,7 @@ DATE_HEADER_RE = re.compile(r'^##\s*Date:.*$', re.M)
 LANE_ID_RE = re.compile(r'\bED-([A-Z]{2})-(\d{3,4})\b')
 
 # IDs inside a lane's DELIBERATE RESERVATION GAP are not allocated either (ED-IN-0177).
-# `references/id_reservations.yaml:234` records that IN holds 0103–0111 for
+# `references/id_reservations.yaml:93` records that IN holds 0103–0111 for
 # `audit/2026-07-29-centralization-single-owner/`. Those numbers are below `next_free`, so a bare
 # `num >= next_free` test calls them allocated. The stated property is "citing a number nobody
 # allocated", and a held-but-unissued number is exactly that. Parsed from the register rather than
@@ -231,7 +231,7 @@ def test_the_reserved_gap_is_actually_parsed():
     """Assert that it asserted: if the gap parse silently returns nothing, the gap rule is off."""
     gaps = reserved_gaps()
     assert gaps.get('IN'), (
-        'no reserved gap parsed for IN. references/id_reservations.yaml:234 records "CSO holds '
+        'no reserved gap parsed for IN. references/id_reservations.yaml:93 records "CSO holds '
         '0103-0111"; if that wording changed, this rule went quiet without failing.')
     assert 105 in gaps['IN'] and 112 not in gaps['IN']
 
