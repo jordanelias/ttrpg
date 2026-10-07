@@ -182,7 +182,7 @@ producer inherits the session's model (CLAUDE.md §10), and a line of prose in t
 effort. **Model:** the item's own `tier` where the plan carries one; otherwise `sonnet`. `haiku` for
 deterministic work (find-replace, a deletion, a re-host, a transcription); `opus` only where the
 instruction names a competing-considerations judgment (design intent, contract closure).
-**Effort:** `medium`; `high` only for an `opus` item. The orchestrator that reads receipts and
+**Effort:** `high`; `xhigh` for an `opus` item; never `max`. The orchestrator that reads receipts and
 commits needs no more than sonnet-class: a driver passes `--model` and `--effort` after its `--`. No `isolation: worktree` is needed for a single producer — nothing else is writing
 this tree concurrently within this run.
 

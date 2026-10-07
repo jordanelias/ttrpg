@@ -3,14 +3,15 @@ name: methodology-close
 description: >
   METHODOLOGY-CLOSE — the three-phase agonist/antagonist pipeline for verifying a nontrivial code
   change against a stated plan, before it closes. PHASE 1: Sonnet reviewers (agonists, effort
-  medium), each holding one or more lenses over the diff — one agonist carrying every lens where one
-  reader can hold the diff — reconciled by a single Opus cross-examiner (antagonist, effort high)
+  high), each holding one or more lenses over the diff — one agonist carrying every lens where one
+  reader can hold the diff — reconciled, when more than one ran, by a single Opus cross-examiner (antagonist, effort xhigh)
   checking accuracy, fidelity to plan, correctness, compliance with code
   architecture, and logic — the same five lenses double as the default agonist roster, sized to
-  the plan's own independent parts, never a fixed count. PHASE 2: the native `/code-review --fix`,
-  then `/simplify`, then the `layer-conformance` skill, run in that order on one shared tree, each
+  the plan's own independent parts, never a fixed count. PHASE 2: the native `/code-review high --fix`,
+  then `/simplify`, then — only when the batch touches `engine/season/` or adds a tool, guard, hook or
+  governance rule — the `layer-conformance` skill, run in that order on one shared tree, each
   one's fixes applied before the next reads it. PHASE 3: one terminal critique — Opus at
-  effort high — auditing code correctness, interdependencies,
+  effort xhigh — auditing code correctness, interdependencies,
   and forward/backward sweeps, run as a top-down holistic pass that HANDSHAKES a bottom-up granular
   one (every altitude-level finding traced to the site that causes it, and back). Reuses
   `valoria-critic` for every critic dispatch in all three phases; mints no new roster entry. Use
@@ -74,20 +75,20 @@ the sequence, the tiers or the checklists below is made once, here.
 ## THE THREE PHASES, AND WHY THE ORDER IS NOT NEGOTIABLE
 
 ```
-PHASE 1 · AGONIST FAN → ANTAGONIST     lens-review the diff against the plan, cheap and early   ──▶
-PHASE 2 · MECHANICAL GATES             code-review → simplify → layer-conformance, fixed        ──▶
+PHASE 1 · AGONIST(S) → ANTAGONIST (>1) lens-review the diff against the plan, cheap and early   ──▶
+PHASE 2 · MECHANICAL GATES             code-review → simplify → layer-conformance (on trigger) ──▶
 PHASE 3 · TERMINAL CRITIQUE            Opus: holistic × granular, interdependencies, sweeps
 ```
 
 Cheap and broad runs first. Phase 1's Sonnet fan catches gross deviations from the plan and
 obvious bugs for a fraction of a terminal Opus pass's cost; Phase 2's native tools catch the
-mechanical classes they already exist to catch. **Opus sits at two places, not one:** the Phase 1
-antagonist, because reconciling independent (and possibly disagreeing) lenses into one verdict is
+mechanical classes they already exist to catch. **Opus sits at up to two places:** the Phase 1
+antagonist — only when more than one agonist ran — because reconciling independent (and possibly disagreeing) lenses into one verdict is
 itself the competing-considerations judgment CLAUDE.md §10 names for Opus — the act of deciding
 which of several Sonnet findings survives; and the Phase 3 terminal critique, because it is this
-pipeline's final gate. **Both run at CLAUDE.md §10's default, `high`, and nothing here runs at `max`** — Jordan, 2026-10-07,
-reduced effort and tiered the models: the 2026-09-29 ruling had put every agonist and the terminal
-critique at `max`. Every
+pipeline's final gate. **Both run at `xhigh`; the Sonnet passes run at `high`; nothing here runs at `max`** — Jordan,
+2026-10-07: `max` draws too much usage, but this is a complex project, so the Opus gates sit one step
+below it. The 2026-09-29 ruling had put every agonist and the terminal critique at `max`. Every
 dispatch sets its `model` and its `effort` on the Agent call, never left to inherit the session's.
 Running the phases out of order, or skipping
 one because an earlier one found nothing, is not a shortcut: each phase checks a different axis,
@@ -124,7 +125,7 @@ what the change buys — CLAUDE.md §10: *"before spawning N agents, ask what N-
 
 ### 1.3 Dispatch the fan
 
-Each agonist is `Agent({ subagent_type: "valoria-critic", model: "sonnet", effort: "medium", ... })`,
+Each agonist is `Agent({ subagent_type: "valoria-critic", model: "sonnet", effort: "high", ... })`,
 prompted with its lens or lenses, the plan, and the diff — never the other agonists' output. The
 Agent tool's own `effort` parameter sets the effort; a line of prose in the prompt sets nothing.
 `valoria-critic` holds only Read, Grep and Glob and cannot run `git diff`: hand it the diff as a file
@@ -136,21 +137,24 @@ message. CLAUDE.md §10 point 3: parallel agents sharing a long prefix (CLAUDE.m
 diff) cannot read each other's cache until the first response begins streaming — firing all of
 them at once pays full price on every one.
 
-### 1.4 The antagonist
+### 1.4 The antagonist — only when more than one agonist ran
 
-One dispatch, same `valoria-critic` agent, `model: "opus"`, `effort: "high"` — Opus because
-reconciling lenses into one verdict is a competing-considerations judgment, not another lens-pass.
-With a single agonist there is nothing to reconcile between lenses; the dispatch still
-re-verifies every claim against disk. Hand it every agonist's output — not their reasoning — plus the plan and the tree. Its
-job is `valoria-critic`'s own contract, run once across all five lenses: re-verify every claim
-against disk; rule `uphold`/`overturn`/`soften`/`sharpen` per claim; and additionally cross-check
-the agonists against *each other* — two lenses disagreeing about the same site is itself a
-finding, not a tie to average away.
+**One agonist, no antagonist** (Jordan, 2026-10-07, approving the cut): there is nothing to
+reconcile between lenses, and §1.5's reconcile already verifies each finding against disk before it
+is applied. **With two or more**, one dispatch, same `valoria-critic` agent, `model: "opus"`,
+`effort: "xhigh"` — Opus because reconciling lenses into one verdict is a competing-considerations
+judgment, not another lens-pass. Hand it every agonist's output — not their reasoning — plus the
+plan and the tree. Its job is `valoria-critic`'s own contract, run once across the lenses:
+re-verify every claim against disk; rule `uphold`/`overturn`/`soften`/`sharpen` per claim; and
+additionally cross-check the agonists against *each other* — two lenses disagreeing about the same
+site is itself a finding, not a tie to average away.
 
 ### 1.5 Reconcile
 
 The orchestrator — not a subagent — applies each surviving finding, or rejects it with the
 measurement that rejects it. Never a bare "disagree." This is an edit to the diff, not a document.
+With no antagonist (one agonist), the orchestrator opens each finding's site on disk before applying
+it: a finding is a bug report, not a verdict.
 
 ---
 
@@ -164,14 +168,14 @@ they queue.
 
 ### 2.2 The order, and why it is this one
 
-1. **`/code-review medium --fix`** — correctness bugs first. (Name the level: with none given it
+1. **`/code-review high --fix`** — correctness bugs first. (Name the level: with none given it
    reuses whatever was typed last.) Nothing else here is worth checking on a tree
    that still has an open correctness defect.
 2. **`/simplify`** — reuse, simplification, efficiency, on the now-correct tree. It applies its own
    fixes by contract; no flag needed.
-3. **`layer-conformance`** — placement and Layer-1 conformance, last. Its own doc places it at
-   `/close` step 4 for the same reason: it wants the tree to have stopped moving before it grades
-   placement.
+3. **`layer-conformance`, only on its trigger (§2.4)** — placement and Layer-1 conformance, last.
+   Its own doc places it at `/close` step 4 for the same reason: it wants the tree to have stopped
+   moving before it grades placement.
 
 ### 2.3 Apply before the next stage reads the tree
 
@@ -181,9 +185,11 @@ the next.
 
 ### 2.4 layer-conformance's own trigger, not re-derived here
 
-Run its Lens B always — by the time this phase runs, the diff is Layer-2 code by definition. Run
-Lens A too if Phase 1 or `/code-review` added a tool, a guard, a hook, or a governance rule. Its
-own A1–A5 decide anything finer; this skill does not restate them.
+Run it only on a trigger (Jordan, 2026-10-07, approving the cut; `/close` step 4 has the same
+trigger): **Lens B** when the batch's range touches `engine/season/`; **Lens A** when the batch,
+Phase 1 or `/code-review` added a tool, a guard, a hook or a governance rule. A batch that does
+neither skips the skill — a batch of prose, ledger or skill edits is not Layer-2 code. Its own
+A1–A5 decide anything finer; this skill does not restate them.
 
 ---
 
@@ -195,14 +201,14 @@ The point of the top tier is a single judgment pass. A chorus of Opus critics is
 CLAUDE.md §10 warns against, not corroboration. If you can name what a second Opus critic would
 catch that the first missed, that is Phase-1-shaped work — run it there, at Sonnet, first.
 
-### 3.2 Tier — Opus at `high`, never `max`
+### 3.2 Tier — Opus at `xhigh`, never `max`
 
-`model: "opus"`, `effort: "high"` on the Agent call. **`max` is not used anywhere in this pipeline**
-(Jordan, 2026-10-07: it draws too much usage, and a close with this many layers — the agonist
-pass, three mechanical gates, the plan's validation, this critique, then `/close` — does not need
-it; the 2026-09-29 ruling had this phase at `max` every time). No escalation trigger replaces it:
-if a batch looks to need more than `high`, the answer is a narrower batch or a better-targeted
-lens, not a higher effort. The phase is the judgment-node use case CLAUDE.md §10 reserves Opus for.
+`model: "opus"`, `effort: "xhigh"` on the Agent call. **`max` is not used anywhere in this
+pipeline** (Jordan, 2026-10-07: it draws too much usage, and a close with this many layers — the
+agonist pass, the mechanical gates, the plan's validation, this critique, then `/close` — does not
+need it; the 2026-09-29 ruling had this phase at `max` every time). No escalation replaces it: if a
+batch looks to need more than `xhigh`, the answer is a narrower batch or a better-aimed lens, not a
+higher effort. The phase is the judgment-node use case CLAUDE.md §10 reserves Opus for.
 
 ### 3.3 What it is handed
 
@@ -281,7 +287,7 @@ Same as 1.5 — the orchestrator applies or rejects with a measurement, in this 
 - **Nothing here is a fixed count.** Fan size and the lens roster are read from the diff and the
   plan at hand every time. An edit that hard-codes a number into this file is the defect §10 names:
   "sized for its typical subject, not for yours." (Model and effort are set per node by 1.3, 1.4 and
-  3.2, and never `max` — a model/effort choice, not a count.)
+  3.2 — `high` for Sonnet, `xhigh` for Opus, never `max` — a model/effort choice, not a count.)
 - **No self-scheduling** (CLAUDE.md §11, as always).
 
 ## FALSIFIERS
@@ -289,13 +295,13 @@ Same as 1.5 — the orchestrator applies or rejects with a measurement, in this 
 | the claim | what would show it false |
 |---|---|
 | "the fan matched the plan" | more or fewer independent lenses existed in the plan than agonists were dispatched, with no stated collapse or split reason |
-| "the antagonist checked all five" | one lens has neither a finding nor a stated attack that failed |
-| "code-review, simplify, and layer-conformance all ran, fixed" | no invocation record for one of the three, or a later one graded a tree still carrying an earlier one's unapplied finding |
+| "the antagonist checked every lens" | an antagonist ran (more than one agonist) and one lens has neither a finding nor a stated attack that failed |
+| "code-review, simplify, and layer-conformance (on trigger) all ran, fixed" | no invocation record for `/code-review` or `/simplify`, or for `layer-conformance` when §2.4's trigger held (or one run when it did not), or a later one graded a tree still carrying an earlier one's unapplied finding |
 | "the terminal critique handshook" | a top-down finding with no cited `file:line`, or a granular finding with no stated holistic disposition |
-| "the fan ran at medium" | an agonist dispatch was not `sonnet` with `effort: "medium"` set on the Agent call (prose in the prompt does not count), or a diff one reader could hold was fanned with no stated reason |
-| "the antagonist ran Opus at high" | the antagonist dispatch was `sonnet`, or its `effort` parameter was anything other than `high` |
-| "Phase 3 ran Opus at high" | the terminal critique was not `opus`, or its `effort` parameter was anything other than `high` |
-| "nothing ran at max" | any dispatch in any phase carried `effort: "max"` or `"xhigh"` |
+| "the fan ran at high" | an agonist dispatch was not `sonnet` with `effort: "high"` set on the Agent call (prose in the prompt does not count), or a diff one reader could hold was fanned with no stated reason |
+| "the antagonist ran Opus at xhigh, only for a fan" | an antagonist ran after a single agonist, was `sonnet`, or its `effort` parameter was anything other than `xhigh` |
+| "Phase 3 ran Opus at xhigh" | the terminal critique was not `opus`, or its `effort` parameter was anything other than `xhigh` |
+| "nothing ran at max" | any dispatch in any phase carried `effort: "max"` |
 | "Phase 3 found nothing" | no named failed attack — only an absent finding |
 
 **If this skill's guidance conflicts with `CLAUDE.md` or `architecture/`, they win.** This file is a
