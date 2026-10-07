@@ -428,11 +428,15 @@ class SeasonDriver:
         # G2 / `04 §C.1`: ONE TOKEN PER BARRIER, MINTED HERE, PASSED IN, NEVER KEPT. Each is built
         # inline in the call so no local outlives its step -- the pseudocode's `drop` is the end of
         # the expression. DELIBERATE, below, is the one step called with none.
-        self.calendar(mint_token(w, WriteClass.CALENDAR))
+        calendar_events = self.calendar(mint_token(w, WriteClass.CALENDAR))
         matter_events = self.matter(mint_token(w, WriteClass.MATTER), actorless)
         rounds = int(w.fixtures.get("scene_budget"))
         n_acts, n_events, deposits = 0, len(matter_events), 0
-        pending_matter = list(matter_events)
+        # IN-29: CALENDAR's own Events (`date.fired`) are seasonal like MATTER's and ride the same
+        # first-round fan-out, in barrier order. They were discarded here, so they reached `w.log`
+        # and no ledger. `n_events` is left counting MATTER's only: that figure is not this
+        # position's, and the log already holds these.
+        pending_matter = list(calendar_events) + list(matter_events)
         for r in range(rounds):
             self.round = r
             # S26.2 again, not a second rule: RESOLVE thaws, so each round re-freezes before its

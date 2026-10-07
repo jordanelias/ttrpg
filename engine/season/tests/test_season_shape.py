@@ -4493,16 +4493,15 @@ def test_calendar_a_forced_corpus_date_fires_and_emits_but_deposits_no_claim():
     On at least one such world, running its season(s) fires `d_forced` and the fired Event now
     anchors on the venue (`11b`'s own change) rather than not existing at all.
 
-    ⚠ NO CLAIM LANDS IN ANYONE'S LEDGER ABOUT IT, AND THAT IS A SEPARATE, UNCLOSED GAP -- NOT
-    `11b`'s TO FIX. `loop/driver.py::season` calls `self.calendar(...)` BEFORE the round loop and
-    never captures its return (`calendar` returns `None`); `matter()`'s own `_emitted_by_write`
-    buffer only fills `if step is Step.MATTER` (`state/world.py:1104`), so CALENDAR's own write
-    never enters it either. The Event this position added lands in `w.log` -- reachable by
-    `last_emission_of` and any direct log scan -- but it is never among the `events` `season()`
-    hands to `witness()` (`loop/driver.py:462`), so WITNESS's `claim.deposited` never fires for it.
-    MEASURED on this corpus (2026-09-29): 0 of 0 attempts. Recording the absence rather than
-    asserting the presence the plan's prose assumed -- `CLAUDE.md` §0.1 pt 3's row on "X is
-    absent": run the thing that would show presence, and this ran it."""
+    ⚠ THE NAME IS THE PRE-IN-29 STATE AND IS KEPT SO THE PLAN'S AND THE PROPOSALS' CITATIONS OF
+    IT STILL RESOLVE. Before IN-29 NO CLAIM LANDED about a fired date: `season()` discarded
+    `calendar()`'s return, and `World.write` buffers an emission for fan-out only at
+    `Step.MATTER`, so CALENDAR's `date.fired` reached `w.log` and no ledger (MEASURED
+    2026-09-29: 0 of 0 attempts; the pin was `assert not claimed_any`). `calendar()` now RETURNS
+    its own Events and `season()` hands them to `witness()` beside MATTER's, so the last clause
+    is `assert claimed_any` and it can fail: reverting either half of the routing turns it red
+    (observed, IN-29). What a fired date does once someone holds it (`convene`'s sitting) is
+    SC-01's, not pinned here."""
     from ..harness import corpus_run as CR
     from ..harness import run_cases as RC
 
@@ -4546,9 +4545,9 @@ def test_calendar_a_forced_corpus_date_fires_and_emits_but_deposits_no_claim():
     assert fired_any, (
         "no forced_by_threshold world fired its planted date -- 11b's OBSERVABLE is unreachable "
         "on this corpus")
-    assert not claimed_any, (
-        "a claim now references date.fired -- WITNESS's fan-out changed to reach CALENDAR's "
-        "emission; update this test's docstring, it no longer describes the gap it once measured")
+    assert claimed_any, (
+        "no ledger claim references a fired date -- CALENDAR's own Events no longer reach "
+        "`witness()` (IN-29: `calendar()` returns them, `season()` fans them out beside MATTER's)")
 
 
 # ===========================================================================
