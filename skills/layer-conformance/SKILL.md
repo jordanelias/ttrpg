@@ -409,8 +409,7 @@ the expected result and is declared, not apologised for.
 
 Run the standing instrument set after **every** unit — **and under `methodology-execute`, or any
 batched run, a "unit" is a BATCH:** the instrument set, and stage 3's ATTACK, run once at the batch
-close rather than after each item (Jordan, 2026-10-07: validation and skills at batch close, not per
-step). ⚠ **No single file owns this list, and saying one
+close rather than after each item. ⚠ **No single file owns this list, and saying one
 did would be the defect B1 is about.** `engine/season/__init__.py:20-27` owns the six season entry
 points (and note it spells `register --counts`, not `--requirements`); the governing ED row's
 `MEASURED-BY` field owns which of them evidenced that row; the repo-wide gates come from

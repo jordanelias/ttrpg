@@ -27,8 +27,6 @@ description: >
 
 # METHODOLOGY-CLOSE — the agonist/antagonist verification pipeline
 
-## Created 2026-09-28 (ED-IN-0280) as `methodology`, per Jordan's directive to add this pipeline as a skill. Split 2026-09-29 into `methodology-close` (this file, unchanged in content) and `methodology-execute` (adds a build phase ahead of it), when Jordan asked for the pipeline to also orchestrate the build. Invocable as a project skill through the symlink `.claude/skills/methodology-close`.
-
 ## What this skill owns, and what it copies
 
 | the content | its single owner |
@@ -86,9 +84,8 @@ mechanical classes they already exist to catch. **Opus sits at up to two places:
 antagonist — only when more than one agonist ran — because reconciling independent (and possibly disagreeing) lenses into one verdict is
 itself the competing-considerations judgment CLAUDE.md §10 names for Opus — the act of deciding
 which of several Sonnet findings survives; and the Phase 3 terminal critique, because it is this
-pipeline's final gate. **Both run at `xhigh`; the Sonnet passes run at `high`; nothing here runs at `max`** — Jordan,
-2026-10-07: `max` draws too much usage, but this is a complex project, so the Opus gates sit one step
-below it. The 2026-09-29 ruling had put every agonist and the terminal critique at `max`. Every
+pipeline's final gate. **Both run at `xhigh`; the Sonnet passes run at `high`; nothing here runs at `max`** (it draws too much usage, and the layered close does not need
+it). Every
 dispatch sets its `model` and its `effort` on the Agent call, never left to inherit the session's.
 Running the phases out of order, or skipping
 one because an earlier one found nothing, is not a shortcut: each phase checks a different axis,
@@ -139,7 +136,7 @@ them at once pays full price on every one.
 
 ### 1.4 The antagonist — only when more than one agonist ran
 
-**One agonist, no antagonist** (Jordan, 2026-10-07, approving the cut): there is nothing to
+**One agonist, no antagonist:** there is nothing to
 reconcile between lenses, and §1.5's reconcile already verifies each finding against disk before it
 is applied. **With two or more**, one dispatch, same `valoria-critic` agent, `model: "opus"`,
 `effort: "xhigh"` — Opus because reconciling lenses into one verdict is a competing-considerations
@@ -174,8 +171,7 @@ they queue.
 2. **`/simplify`** — reuse, simplification, efficiency, on the now-correct tree. It applies its own
    fixes by contract; no flag needed.
 3. **`layer-conformance`, only on its trigger (§2.4)** — placement and Layer-1 conformance, last, so
-   it grades the tree the two earlier gates left rather than one about to change. (`/close` step 4
-   also runs it; its own file says only that, not why it runs last.)
+   it grades the tree the two earlier gates left rather than one about to change.
 
 ### 2.3 Apply before the next stage reads the tree
 
@@ -185,8 +181,7 @@ the next.
 
 ### 2.4 layer-conformance's own trigger, not re-derived here
 
-Run it only on a trigger (Jordan, 2026-10-07, approving the cut; `/close` step 4 has the same
-trigger): **Lens B** when the batch's range touches `engine/season/`; **Lens A** when the batch,
+Run it only on a trigger (`/close` step 4 has the same trigger): **Lens B** when the batch's range touches `engine/season/`; **Lens A** when the batch,
 Phase 1 or `/code-review` added a tool, a guard, a hook or a governance rule. A batch that does
 neither skips the skill. Lens B "runs only on Layer-2 code against a Layer-1 row", so a batch of
 prose or ledger edits has nothing for it; a batch that adds a governance rule — a skill's standing
@@ -206,9 +201,9 @@ catch that the first missed, that is Phase-1-shaped work — run it there, at So
 ### 3.2 Tier — Opus at `xhigh`, never `max`
 
 `model: "opus"`, `effort: "xhigh"` on the Agent call. **`max` is not used anywhere in this
-pipeline** (Jordan, 2026-10-07: it draws too much usage, and a close with this many layers — the
-agonist pass, the mechanical gates, the plan's validation, this critique, then `/close` — does not
-need it; the 2026-09-29 ruling had this phase at `max` every time). No escalation replaces it: if a
+pipeline:** it draws too much usage, and a close with this many layers — the agonist pass, the
+mechanical gates, the plan's validation, this critique, then `/close` — does not need it. No
+escalation replaces it: if a
 batch looks to need more than `xhigh`, the answer is a narrower batch or a better-aimed lens, not a
 higher effort. The phase is the judgment-node use case CLAUDE.md §10 reserves Opus for.
 

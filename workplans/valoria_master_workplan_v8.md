@@ -102,11 +102,10 @@ sweep to see how it impacts stuff"*
 | 4 | **FORWARD SWEEP** | defined below. |
 | 5 | **CLOSE** | `tools/valoria_local.py --staged`, the lane validator, then the `[scope]` commit citing its `PP`/`ED`. **The full suite runs once per BATCH close, not per step** (§0.5). |
 
-**SUPERSEDED IN PART, 2026-10-06 and 2026-10-07 (Jordan: *"code review and simplify to be at batch
-close"*; *"everything is to occur at batch close rather than per step when it comes to validation and
-skills etc"*):** per step only phase 1 (BUILD) and the `[scope]` commit stand. Phases 2, 3 and 4 and the
-validation half of phase 5 (`tools/valoria_local.py --staged`, the lane validator) run once per BATCH at
-the close (`methodology-execute`'s BATCH-CLOSE; `methodology-close` Phase 2).
+**Current (Jordan: *"everything is to occur at batch close rather than per step when it comes to
+validation and skills etc"*):** per step only phase 1 (BUILD) and the `[scope]` commit. Phases 2, 3 and 4
+and the validation half of phase 5 (`tools/valoria_local.py --staged`, the lane validator) run once per
+BATCH at the close (`methodology-execute`'s BATCH-CLOSE, step 2).
 
 **FORWARD SWEEP — defined, because it is a coinage and `CLAUDE.md` §4 requires it survive the session
 reset.** *What did this change reach that nobody asked it to?* Five checks, each with an artifact:
@@ -131,7 +130,7 @@ fixed in that commit or dropped.
 
 ### 0.5 Verification cadence, stopping rule, and what every producer must not do
 
-- **Suite cadence (`CLAUDE.md` §0.4, RULED 2026-09-23).** Mid-step: nothing (Jordan, 2026-10-07: validation and skills at batch close).
+- **Suite cadence (`CLAUDE.md` §0.4, RULED 2026-09-23).** Mid-step: nothing; validation and skills run at batch close.
   `python -m pytest tests/valoria -q -n auto` (and `engine/season/tests`, `engine/tests` where the batch
   can reach them) runs **once per batch close**, as `methodology-execute` prescribes — never to
   re-confirm a green already held. ⚠ The 2026-09-18 cadence put the suite at every step's CLOSE; the

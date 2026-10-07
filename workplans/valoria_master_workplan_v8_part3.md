@@ -85,11 +85,11 @@ here (a departure, recorded in the receipt).
 ### O.4 The run discipline every batch uses
 
 - **Driver:** `methodology-execute` (`CLAUDE.md` §9): `valoria-author` builds and commits each
-  position cheaply; `methodology-close`'s pipeline (agonist/antagonist → `/code-review` → `/simplify`
+  position cheaply; BATCH-CLOSE (review → `/code-review` → `/simplify`
   → `layer-conformance` → terminal Opus critique where O.1 says proportionate) and the pytest suite run
   **once per batch**. Per step: BUILD and the `[scope]` commit only. Everything else in the per-step cadence (main file §0.4) —
   `/code-review`, `/simplify`, the forward sweep, the lane validator, the covering test file — and the
-  suite run at batch close (Jordan, 2026-10-06 and 2026-10-07).
+  suite run at batch close.
 - **Share the reading** (`CLAUDE.md` §10): one Haiku `valoria-measure` extract per batch, from the
   batch's reading list, handed to every producer. Fire one producer, await its first token, then fan
   out.

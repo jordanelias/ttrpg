@@ -327,7 +327,7 @@ reaching WITNESS, plan position `22`).
 
 1. **Build** under `methodology-execute`, one `valoria-author` per position; no parallel write lanes
    (every position after T2 touches `options.py` or `person_q.py`).
-2. **Close once per batch** under `methodology-close`: `pytest engine/season/tests -q -n auto` and
+2. **Close once per batch** under `methodology-execute`'s BATCH-CLOSE: `pytest engine/season/tests -q -n auto` and
    `pytest tests/valoria -q -n auto` once (§0.4); `/code-review`, `/simplify`, `layer-conformance`
    (Lens A on T3a, B on T2); one terminal Opus `valoria-critic`. A red close re-runs only the failing file.
 3. **No self-scheduling** (§11); **no guard over process** (§0.1 pt 5).
