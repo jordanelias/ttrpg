@@ -14,82 +14,55 @@ description: >
 
 ## Input Validation (MANDATORY BEFORE ANY AUDIT)
 
-Before running any audit mode, read the following from the working tree:
+Read from the working tree, never from memory:
 
-- `references/canonical_sources.yaml` — confirm which design doc is canonical
-- the target system doc — session-local work OR canonical; need NOT be canon (D2); canon is the baseline
-- `params/<system>.md` — extracted mechanical values (e.g. `params/core.md`, `params/contest.md`, `params/mass_combat.md`)
+- `references/canonical_sources.yaml` — which design doc is canonical
+- the target — any working-tree work or files; it need not be canon (D2). Canon is the baseline;
+  where the target has a canonical version, the latest work supersedes it — note which supersedes which.
+- mechanical values from their owner: a typed artifact under `engine/engine_params/` or the single
+  Python owner (`CLAUDE.md` §0.05, §5)
 - `canon/02_canon_constraints.md` — P-01–P-15
 - `references/propagation_map.md` — dependency map
-
-**The audit target may be whatever work/files exist in the working tree — it need NOT be canon (D2).** Read canon as the *baseline/yardstick*; where a canonical version of the target exists, the latest working-tree work *supersedes the stale canon* (note which artifact supersedes which source). The standing prohibition is narrower than before: **never audit from *memory* — read the actual artifact from the working tree, never a remembered or hallucinated version.**
 
 ## Audit Modes
 
 ### Mode A — Formula Validation
-For each formula in the design doc (read from the working tree):
-- Verify all variables are defined elsewhere in the ruleset
-- Calculate output at minimum, average, and maximum input values
-- Check for: division by zero, negative pools, impossible states, results outside stated range
-- Check for: undefined behavior at boundary values (attribute = 1 or max)
+For each formula in the design doc: confirm every variable is defined elsewhere in the ruleset;
+compute output at minimum, average and maximum inputs; check for division by zero, negative pools,
+impossible states, results outside the stated range, and boundary behaviour (attribute = 1 or max).
 
-**Output:** `formula_audit.md`
-```
-| ID | Formula | Min Output | Max Output | Issues | Status |
-```
+**Output table:** `| ID | Formula | Min Output | Max Output | Issues | Status |`
 
 ### Mode B — Number System Coherence
-Inventory all numerical scales:
-- Character attributes (range), derived scores (range + formula), faction stats, tracks (Thread Tension (TT), Thread Charge (TC), Influence Points (IP), Thread Sensitivity (TS), Thread Debt (TD), Taint, Certainty, Deniability Debt)
-- Flag: inconsistent ranges across systems, redundant difficulty levers (TN × Ob interaction), unintuitive derived values
-- Flag: different scales for analogous concepts
-- Propose unification where possible without violating Foundations
+Inventory every numerical scale: attributes (range), derived scores (range + formula), faction
+stats, tracks (Thread Tension (TT), Thread Charge (TC), Influence Points (IP), Thread Sensitivity
+(TS), Thread Debt (TD), Taint, Certainty, Deniability Debt). Flag inconsistent ranges across
+systems, different scales for analogous concepts, redundant difficulty levers (TN × Ob) and
+unintuitive derived values. Propose unification where it does not violate the Foundations.
 
-**Output:** `number_systems_audit.md`
-```
-| System | Range | Scale Basis | Analogous Systems | Inconsistency |
-```
+**Output table:** `| System | Range | Scale Basis | Analogous Systems | Inconsistency |`
 
 ### Mode C — Interaction Chain Analysis
-For each mechanic in the design doc (read from the working tree): map inputs and outputs.
-Build dependency chains:
-- What feeds this mechanic? (upstream)
-- What does this mechanic feed? (downstream)
-- Where do chains intersect?
+Map each mechanic's upstream (what feeds it), downstream (what it feeds) and where chains
+intersect. Flag:
+- circular dependencies (A → B → A) and amplification loops (output feeds back to raise input)
+- dead ends (calculated, never consumed) and unconnected systems (no links either way)
+- interacting mechanics with no interaction rule
 
-**Flag:**
-- Circular dependencies (A → B → A)
-- Dead-end mechanics (calculated but never consumed)
-- Unconnected systems (no upstream or downstream links)
-- Mechanics that interact but lack an interaction rule
-- Amplification loops (output feeds back to increase input)
-
-**Output:** `mechanic_dependency_graph.md`
-```
-| Mechanic | Upstream | Downstream | Chain Length | Flags |
-```
+**Output table:** `| Mechanic | Upstream | Downstream | Chain Length | Flags |`
 
 ### Mode D — Gap Detection
-Systematic check:
-- Referenced but undefined mechanics
-- Placeholder sections ("[Content as per prior ruleset]", "[TBD]")
-- Defined but never-referenced mechanics (orphaned rules)
-- Missing edge case rules (value reaches 0, exceeds max, threshold crossed, simultaneous triggers)
-- Missing resolution procedures (what happens when X and Y conflict?)
-- Missing tables
+Find:
+- referenced but undefined mechanics; defined but never-referenced (orphaned) rules
+- placeholders ("[Content as per prior ruleset]", "[TBD]")
+- missing edge-case rules (value reaches 0, exceeds max, threshold crossed, simultaneous triggers)
+- missing resolution procedures (X and Y conflict) and missing tables
 
-**Output:** `gap_register_update.md` — findings feed the ED-disposition table (Output Rules
-below); there is no `canon/editorial_ledger.yaml` file. P1 gaps get filed as
-`ED-<LANE>-NNNN` entries in the relevant `registers/editorial_ledger_<lane>.jsonl`, per
-`references/id_reservations.yaml`'s allocation protocol (see `valoria-editorial-register`'s
-ID Law section) — not appended to a YAML file.
-```
-| ID | Type | Description | Location | Severity | Status |
-```
-Severity: P1 (blocks play), P2 (causes ambiguity), P3 (polish)
+**Output:** ED-disposition rows only (Output Rules); no gap-register file.
 
 ### Mode E — Core Principles Compliance
-Cross-reference against the 13 core principles from the Foundations (read from the working tree):
+Rate each of the 13 core principles from the Foundations PRESENT / ALTERED (justification checked) /
+ABSENT:
 
 | # | Principle | Test |
 |---|-----------|------|
@@ -107,29 +80,17 @@ Cross-reference against the 13 core principles from the Foundations (read from t
 | 12 | Beginner's Luck | Is accessibility for untrained attempts present? |
 | 13 | Circles and Resources | Are social/economic resolution systems present? |
 
-For each: PRESENT / ALTERED (with justification check) / ABSENT
-
-**Output:** `core_principles_audit.md`
-
 ## Output Rules
-- Findings land in a dated `designs/audit/<date>-<topic>/` folder (matching the naming
-  pattern used throughout `designs/audit/`) — not standalone files at unspecified locations.
-  (`deprecated/archives/audit/` holds older runs that have since been superseded/archived — it is
-  history only, never a target for new output; CLAUDE.md §1.)
-- Modes can run independently or as full suite (A–E); when multiple modes run in one session, their
-  findings can share one dated folder (one file per mode, e.g. `formula_audit.md`,
-  `number_systems_audit.md`, `mechanic_dependency_graph.md`, `gap_register_update.md`,
-  `core_principles_audit.md`), or be combined into a single report — either is fine as long as the
-  folder is dated and topic-named.
-- All findings assigned severity (P1/P2/P3)
-- Every finding must resolve to an **ED-disposition table**: one row per finding, each row citing
-  either the `ED-<LANE>-NNNN` id filed for it (per `references/id_reservations.yaml`'s allocation
-  protocol) or an explicit no-action line (e.g. "no action — working as intended", "no action —
-  superseded by PP-NNN"). P1 findings must be filed as ED entries, not merely noted.
-- No editorial judgment — mechanical analysis only
-- All mechanical values cited with source file and section from the working tree
-
-## Registry logging — retired
-
-**Retired.** `tools/audit_registry.py` and `references/audit_registry.jsonl` were retired 2026-08-21 (`FORK:1e4c6f4`, ED-IN-0194). A pass records nothing in a registry: its output is edits plus at most one commit paragraph (`CLAUDE.md` §0).
-
+- Output is edits plus at most one commit paragraph (`CLAUDE.md` §0); nothing is recorded in a
+  registry and no audit directory is created. Modes run singly or as the full suite (A–E).
+- Exception (`CLAUDE.md` §0, terminal pass): findings may go in a section of the audited artifact or
+  a sibling file in its directory only if that record creates no work for a future session; if it
+  does, drop it.
+- Every finding carries a severity: P1 blocks play, P2 causes ambiguity, P3 polish.
+- Every finding resolves to a row of an **ED-disposition table** citing either its filed
+  `ED-<LANE>-NNNN` or an explicit no-action line ("no action — working as intended", "no action —
+  superseded by PP-NNN"). P1 findings are filed, not merely noted: an entry in
+  `registers/editorial_ledger_<lane>.jsonl`, id allocated per `references/id_reservations.yaml`
+  (`valoria-editorial-register`'s ID Law section).
+- Mechanical analysis only; no editorial judgment.
+- Cite every mechanical value with its source file and section.

@@ -17,7 +17,7 @@ The synthesis is a single integrated voice. All twelve authors contribute. The w
    - `references/anti-patterns-skeleton.md` — failure-mode rules as symptom→fix triplets
    - `references/calibration-skeleton.md` — source-author anchors as use-when reference
 3. **Determine the PC's coherence tier, Thread Sensitivity, and Spirit.** Consult `references/coherence-tiers.md` for the tier-tables (10-8, 7-5, 4-3, 2, 1). All three axes are orthogonal and independently affect the prose. If coherence is not established, default to Tier 10-8. If TS is not established, default to 0. If Spirit is not established, default to mid-range (3–4) — neutral, neither agency-grip nor agency-dissolution dominant.
-4. **If prose involves Church speakers, religious texts, or characters with established Certainty levels:** consult Solmund Voice canon at `designs/world/solmund_voice_v30.md` per the scoped-override section below.
+4. **If prose involves Church speakers, religious texts, or characters with established Certainty levels:** consult the Solmund voice canon (`solmund_voice_v30.md`) per the scoped-override section below.
 5. Identify focalization. For chronicle-mode prose, this MUST be one of the four canonical chroniclers per P-03.
 6. **Plan beats with cliche risk flags (for non-trivial passages).** Before writing, outline the passage's beats. For each beat, identify the specific cliche or anti-pattern most likely to fire. One line per beat. This is a risk register, not a template.
 
@@ -40,9 +40,9 @@ The synthesis is a single integrated voice. All twelve authors contribute. The w
 7. Write. Apply techniques as content, focalization, and coherence tier demand. Multiple authors per sentence is normal.
 8. **Audit against the beat-risk flags.** For each flagged risk in step 6, check whether the written passage triggered it. This is the targeted review — not a general audit but a check against the specific traps identified before writing. Then run the general self-check (below).
 9. **General audit** using the skeletons as live rule-set, not memory check.
-10. **Infill-on-demand:** If a skeleton rule needs deeper context (rationale, expanded examples, academic citation, full technique discussion), load the matching section from the corresponding `-infill.md` file. Do not load full infill files routinely.
+10. **Infill-on-demand:** If a skeleton rule needs further examples, load the matching section of the corresponding `-infill.md` file. Do not load full infill files routinely.
 
-The skeletons are the live working memory during composition. The infill files are reference material for cases where a rule needs justification or expansion.
+Other references, loaded when the task needs them: `rendstad-arc.md` and `rendstad-scenes-6-7.md` (an in-domain arc across tiers and focalizations), `three-axis-test.md` and `composition-test-definitive.md` (one scene rendered across coherence, TS and Spirit), `test-battery-part1.md`–`test-battery-part6.md` (per-author, paired, stress and emergent-arc tests with audits), `literary-review-technique.md` (per-author techniques and tier transformations) and `literary-review-critical.md` (per-author deployment risks and cross-author combinations).
 
 ## Coherence-Indexed Weighting Principle
 
@@ -119,8 +119,6 @@ When in doubt, test the passage against these six. If it violates any, rewrite -
 
 The writer does not consciously deploy "Tolkien now, then Mistry, then Lispector." The writer writes the passage that the content, focalization, and coherence tier demand, and the synthesis surfaces the appropriate techniques at clause-level granularity. The reference files and self-check exist to verify — after the writing — that the deployment is right.
 
-When reviewing, ask: does the coherence tier match? Is the PC's rendering functioning at the level this tier demands? Have irreal techniques been deployed as world-surrealism rather than as the PC's categorical failure? Has the prose conflated rendering failure with substrate perception?
-
 <!-- concept:observing-around -->
 ## The Observing-Around Principle
 
@@ -161,7 +159,7 @@ The player-character is observed, not inhabited. All prose involving the player-
 
 ## Voice Canon
 
-The voice canon — lexical register, grammar latitude (the twelve source authors), and what the voice does not do — is maintained as a single source in `designs/world/narrative_voice_canon_v30.md`. Fetch it when writing; it is not duplicated here. This skill provides the *procedure* (weighting, focalization, splicing, synthesis); the voice canon provides the *aesthetic* it applies.
+The voice canon — lexical register, grammar latitude (the twelve source authors), and what the voice does not do — is maintained as a single source in `narrative_voice_canon_v30.md` (a quarantined design reference, ED-IN-0231). Fetch it when writing; it is not duplicated here. Grammar latitude for the skill's own use is also tabled in `references/techniques-skeleton.md` §0.2. This skill provides the *procedure* (weighting, focalization, splicing, synthesis); the voice canon provides the *aesthetic* it applies.
 
 ## Self-Check
 
@@ -172,9 +170,9 @@ Before delivering prose, verify:
 - [ ] Is the PC's rendering functioning at the level this tier demands — not better, not worse?
 - [ ] Are irreal techniques serving the PC's categorical failure, not making the world surreal?
 - [ ] Has the prose avoided conflating rendering failure with substrate perception (unless the PC has the TS to perceive the substrate)?
-- [ ] **Spirit axis check (Coherence 4 and below):** High Spirit = exteriority. The prose renders what the character DOES (action, movement) and is opaque about WHY. The will is inferred from the behavior. No interior declarations. Low Spirit = agent-insufficiency. The prose cannot name an action because the agent is insufficient to the verb. Veering, failed predication, tautology. The two produce categorically different prose.
+- [ ] **Spirit axis check (Coherence 4 and below):** High Spirit renders action and is opaque about motive, with no interior declarations of will; low Spirit cannot name the action (veer, failed predication, tautology). Anti-pattern IV.1.
 - [ ] **Subject/object distinction (high TS, intact rendering):** When the PC has high TS and high coherence, are irreal techniques targeting the OBJECT (what the PC perceives in the substrate) and not the SUBJECT (the PC's own cognition)? The PC's rendering is intact; the resistance is in what they perceive.
-- [ ] **Within-observation gradient (TS 50+):** At elevated TS, does the prose render near (articulable), middle (Lem observing-around — the trained eye circling the aporia with pre-scientific precision), and far (veer, silence — the observing-around itself fails) within the same observation? Skipping the middle layer is a failure. The middle layer is the substrate-aporia: consciousness given something it cannot categorize, the prose gesturing toward it by describing around it.
+- [ ] **Within-observation gradient (TS 50+):** Does one observation render near (articulable), middle (Lem observing-around) and far (veer, silence)? Skipping the middle layer is a failure. Anti-pattern III.1.
 - [ ] Does every editorial word belong to the focalized perspective?
 - [ ] Have I avoided system/mechanical terminology when focalized through an in-world perspective?
 - [ ] Does every modifier earn its place?
@@ -206,7 +204,7 @@ Before delivering prose, verify:
 
 ### Solmund Voice Canon (Scoped Override)
 
-For **in-world ecclesiastical artifacts** — Solmund manuscripts, cathedral inscriptions, liturgical text, doctrinal treatises, creeds — and for **Solmund clergy speaking ecclesiastically** (sermons, formal pronouncements, theological discourse), the prose-writer skill's twelve-author synthesis does **not** apply. Use the Solmund voice canon at `designs/world/solmund_voice_v30.md`.
+For **in-world ecclesiastical artifacts** — Solmund manuscripts, cathedral inscriptions, liturgical text, doctrinal treatises, creeds — and for **Solmund clergy speaking ecclesiastically** (sermons, formal pronouncements, theological discourse), the prose-writer skill's twelve-author synthesis does **not** apply. Use the Solmund voice canon (`solmund_voice_v30.md`).
 
 The prose-writer skill **continues to apply** for:
 - All narration *about* Solmund clergy, manuscripts, or ceremonies

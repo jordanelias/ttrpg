@@ -1,21 +1,17 @@
 # Handoff
 
 **Pointer index for continuity.** Every row names where its fact lives: a path, a ledger id (its
-LAST row governs), or a command to run. **This file restates no count, status, figure or date of
-state.** Jordan: *"anything that gets pulled up frequently cannot be hard coded with
-numbers/values/dates."* If you are about to write a number or a status here, write the pointer to
-its owner instead. Nothing surfaces this file automatically: read it, and your lane's file, yourself.
-
-Everything this file said before it became an index is verbatim in
-`registers/handoffs/HANDOFF_archive.md` under *"Pre-pointer body of root HANDOFF.md"*.
+LAST row governs), or a command to run. **Write no count, status, figure or date of state here** —
+write the pointer to its owner. Nothing surfaces this file automatically: read it, and your lane's
+file, yourself.
 
 ## Next actions — where they live
 
-**This heading is load-bearing:** `tools/currency_consistency_check.py` reports drift without it.
+Keep this heading: `tools/currency_consistency_check.py` reports drift without it.
 
 | you want | open or run |
 |---|---|
-| **the ordered work — start here** | the lane's one active plan, named in `CURRENT.md`'s "The plan" row (every earlier plan is retired, `FORK:0671283`) |
+| **the ordered work — start here** | the lane's one active plan, named in `CURRENT.md`'s "The plan" row |
 | your lane's open items | `registers/handoffs/HANDOFF_<LANE>.md` (`MB PC FI SC FA WR IN GO SE`) |
 | which head is canonical | `CURRENT.md` |
 | does the milestone run | `python tools/m1_acceptance.py --summary` |
@@ -27,7 +23,7 @@ Everything this file said before it became an index is verbatim in
 | what landed recently | `git log --oneline -20` and the ledgers' last fortnight of rows |
 
 **Do not append a dated bullet here.** Ordered work goes in the plan; lane work in its lane file;
-the narrative of what happened goes in the commit message and the PR body.
+what happened goes in the commit message and the PR body.
 
 ## Before you start
 
@@ -35,10 +31,10 @@ the narrative of what happened goes in the commit message and the PR body.
 |---|---|
 | build a guard over process | `CLAUDE.md` §0.1 pt 5 |
 | re-derive a measured hole | check `engine/season/hole_register.yaml` and the requirement's `measured:` block first |
-| start without reading the ledgers' recent rows | work has been redone that a ruling two days earlier had already answered — `registers/editorial_ledger*.jsonl` |
+| start without reading the ledgers' recent rows | a recent ruling may already answer it — `registers/editorial_ledger*.jsonl` |
 | run the full suite after each edit | `CLAUDE.md` §0.4 |
 | cache a count in any file read at session start | run the instrument instead |
-| write a tracked data file from a test and restore it in a `finally` | under `pytest -n` another worker that builds a realm inside the window reads the doctored file: `b12f1e4a` (the NPC-roster test; it showed up as a claim count 30 short in an unrelated test). Point the loader at a `tmp_path` copy. Only `engine/season/tests` was searched for this; `tests/valoria` was not |
+| write a tracked data file from a test and restore it in a `finally` | under `pytest -n` another worker that builds a realm inside the window reads the doctored file. Point the loader at a `tmp_path` copy. Swept in `engine/season/tests` only; `tests/valoria` is NOT swept (unread candidates: `tests/valoria/test_module_shape_check.py`, `tests/valoria/conftest.py`) |
 | edit `architecture/holonic_ARCHITECTURE.md` and assume `register --check` is the gate | the `#353 :NNN` line cites in `engine/season/hole_register.yaml` (H-04, H-20, H-37) move when lines are added above them, and `register --check` does not read them: run `pytest engine/season/tests/test_season_shape.py -k test_w1` after any edit to that file, and re-point each cite to the EXACT line, not within the six-line tolerance |
 | debug `tests/valoria/test_forked_status.py` on a shallow clone | `cat .git/shallow` — its `FORK:` rows name commits the clone cannot reach |
 
@@ -59,4 +55,4 @@ The bodies are in `registers/handoffs/HANDOFF_archive.md`; search for the headin
 
 `registers/handoffs/HANDOFF_archive.md` holds the root file's dated narrative;
 `registers/handoffs/HANDOFF_<LANE>_history.md` and `_closed.md` hold each lane's.
-They grow by archival and are not read at session start.
+Not read at session start.

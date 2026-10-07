@@ -4,18 +4,14 @@ Live technique inventory. Each entry: technique → source → signature pattern
 
 **Twelve-author roster:** Tolkien, Márquez, Ishiguro, Mistry, Tartt, Lispector, Borges, Ocampo (Silvina), Beckett, Lem, McCarthy, Le Carré.
 
-**Coherence-indexed weighting:** The synthesis weights shift across tiers aligned to canonical coherence thresholds (10-8, 7-5, 4-3, 2, 1). See `coherence-tiers.md` for the tier-tables. As coherence drops, the PC's rendering recalibrates away from human reference points — realist authors (which depend on the human frame as a generative source) decrease; irreal authors (which serve content produced from a recalibrated frame) increase. Coherence is orthogonal to Thread Sensitivity. The weighting describes aggregate tendency, not per-passage quota.
-
-**Intra-sentence splicing:** Authors may shift between clauses or across conjunctions within a single sentence. Grammar must hold OR be deliberately broken under §0.2 below.
+**Weighting, splicing, focalization:** owned by SKILL.md and `coherence-tiers.md`. The weighting describes aggregate tendency, not per-passage quota. Under intra-sentence splicing, grammar must hold OR be deliberately broken under §0.2 below.
 
 ---
 
 ## 0. Master Principles
 
 ### 0.1 Focalization
-Every passage carries a perspective. No neutral narrator. Before writing, name the focalization: specific character / community / chronicler / retrospective self.
-
-**Chronicle-mode constraint:** Per P-03, only the four canonical chroniclers (Church, Hafenmark, Restoration, Warden) are valid for in-world chronicle prose.
+See SKILL.md, "The Master Principle: Focalization" (including the P-03 four-chronicler constraint).
 
 ### 0.2 Grammar Latitude
 Grammatical deviation is licensed when it (a) corresponds to a documented stylistic mode of one of the twelve authors AND (b) improves impact. Both required. Not license for sloppy grammar; license for *motivated* deviation.
@@ -38,34 +34,14 @@ Grammatical deviation is licensed when it (a) corresponds to a documented stylis
 <!-- concept:observing-around -->
 ### 0.3 The Observing-Around Principle
 
-When the prose confronts something it cannot render directly — the interior of a low-C high-Spirit character, the substrate perceived at high TS, the nature of a threadcut being — it describes AROUND the thing. What it does, what it affects, how it behaves, what surrounds it. The thing takes shape from the precision of the descriptions that circle it.
-
-Three applications:
-- **Self-exteriority (high Spirit, low C):** The will produces action; the prose renders the action and is opaque about motive.
-- **Substrate-aporia (high TS):** Consciousness perceives what it cannot categorize; the prose gestures toward the given by speaking around it.
-- **Limit case (low Spirit, low C):** The agent is insufficient; the observing-around technique breaks down because the self is not producing enough output at the surface. The prose veers and fails predication.
-
-The structured complement to the Wittgenstein constraint. Where the constraint says "do not describe the silence," the principle says "describe what is beside the silence, and the silence takes shape."
+Owned by SKILL.md, "The Observing-Around Principle"; audit form in `anti-patterns-skeleton.md` I.6b.
 
 <!-- concept:spirit-axis -->
 ### 0.4 Spirit Axis (orthogonal to Coherence and TS)
 
-Spirit is the metaphysical attribute (range 1–7) governing the PC's will and its relationship to the threadwork. Beyond its mechanical role, Spirit determines how the prose renders the PC at low coherence. Where coherence determines whether the rendering holds the human frame and TS determines what is perceived beneath the rendering, **Spirit determines whether the will continues to grip as the rendering recalibrates**.
+Definitions: SKILL.md (Coherence-Indexed Weighting Principle). Spirit table and per-tier texture, including C0: `coherence-tiers.md` §Spirit Axis Interaction. Audit rule: `anti-patterns-skeleton.md` IV.1. This section holds only the invocation examples those owners do not.
 
-The Spirit axis becomes audible at Coherence 4 and below. Above 4, the rendering is intact enough that the will operates within its normal apparatus. At 4 and below, what remains of the PC is increasingly governed by Spirit. The same coherence tier produces categorically different prose at high vs low Spirit.
-
-| Spirit | Texture | Author register | Closing |
-|---|---|---|---|
-| **High (5–7)** | Beckett continuation. The will grips. The decision recurs. Repetition is willful. The self insists on what it still has. | Beckett (the texture, not in the eight-author roster — invoked through declarative repetition of agency). Layered onto the tier's primary irreal authors. | On the act: "she walks." The verb the self still owns. |
-| **Mid (3–4)** | Default. No specific Spirit-axis effect. The PC neither grips nor dissolves; the recalibration proceeds without will-axis emphasis. | Tier's standard weighting applies. | Per coherence tier's standard closing. |
-| **Low (1–2)** | Lispector dissolution. Predication of self breaks. The name recedes. Agency yields. The body's parts replace the agent. | Lispector (categorical recalibration on the SUBJECT). Layered onto the tier's primary irreal authors. | On the noun: "the feet move." The body without the self. |
-
-**Beckett texture (high Spirit) — invocation rules:**
-- The decision/walking/holding is named and re-named. "She had decided." "The decision held." "She had decided." Three repetitions are common; the repetition is the act of grip.
-- The self insists on possession: "this is hers," "the walking is hers," "she holds it."
-- Identity may dissolve while agency persists: "Whatever she was now, it was walking." The voice doesn't know what it is, but it goes on.
-- Even involuntary perceptual events at low coherence are things the self pushes through: "she walks through it because walking is the thing she does."
-- Beckett texture is invoked, not deployed as a ninth author — it is the willful-repetition mode used inside the tier's standard weighting.
+**High Spirit — invocation:** identity may dissolve while agency persists: "Whatever she was now, it was walking." The voice doesn't know what it is, but it goes on — rendered through action, not interior declaration of will (V.9, I.5).
 
 **Lispector dissolution (low Spirit) — invocation rules:**
 - Predication of self breaks: "Vael was — she was on the path." The being-on-the-path is past tense.
@@ -74,9 +50,7 @@ The Spirit axis becomes audible at Coherence 4 and below. Above 4, the rendering
 - The body's parts replace the agent: "the thing the feet belong to," "the feet move," "the name was for the thing."
 - Low-Spirit dissolution intensifies Lispector's standard weight at the tier — it is the tier's irreal authorship targeted at the SUBJECT (the self) rather than at the world.
 
-**Spirit axis at Coherence 0:**
-- **High Spirit C0 — the competent monstrous:** Recognizable intentionality applied through alien method. The being inherits the shape of who they were (the Warden tends; the protector visits). What "tend" or "protect" means now operates on a principle the observer cannot access. The proper nouns are the same; the meanings have shifted onto foundations no longer human. Closing on the mismatch: "Tending is what you do and the fire is what is there."
-- **Low Spirit C0 — the unrecognizable:** No recognizable intentionality. The being's actions occur without inherited shape. The work "was simply occurring, the way weather occurs." No intent, no direction, no object. The being breathes; it does not decide.
+**Spirit at C0:** competent monstrous vs unrecognizable — `coherence-tiers.md`. High-Spirit C0 closing example: "Tending is what you do and the fire is what is there."
 
 ---
 
@@ -147,12 +121,12 @@ The Spirit axis becomes audible at Coherence 4 and below. Above 4, the rendering
 
 | Technique | Source | Signature |
 |---|---|---|
-| Free indirect discourse (FID) | All except Tartt | 3rd-person narration slipping into character's vocabulary/judgments. No quotation marks. **Distinct from direct thought** (character's words rendered as interior monologue) **and narrative report** (narrator summarizing character's thought). Three distinct narratological modes — do not conflate. The eight authors deploy them differently (Walkowitz on Ishiguro: closer to quoted monologue; Mistry: FID inside omniscient frame; Lispector: collapse of narrator/character into a single perceiving voice). |
+| Free indirect discourse (FID) | All except Tartt | 3rd-person narration slipping into character's vocabulary/judgments. No quotation marks. **Distinct from direct thought** (character's words rendered as interior monologue) **and narrative report** (narrator summarizing character's thought). Three distinct narratological modes — do not conflate. The twelve authors deploy them differently (Walkowitz on Ishiguro: closer to quoted monologue; Mistry: FID inside omniscient frame; Lispector: collapse of narrator/character into a single perceiving voice). |
 | Stance through selection | All | What gets named, what gets a sentence, what gets compressed. Selection IS stance. |
 | Restrained narrator | Ishiguro | Narrator cannot bear to look at central material directly. Prose circles, hedges. **Requires unreliability presenting as restraint** — not just formal-measured prose. |
 | Aesthetic narrator | Tartt | Narrator's perception colored by aesthetic obsession or class outsidership. |
 | Ambiguous pronoun reference | Ishiguro | Pronouns whose antecedents are deliberately unclear. Linguistic uncertainty as narrative technique. |
-| Vagueness as language of truth | Lispector | Explicitly opposed to Tolkien's named-specificity. Vagueness names what specificity cannot reach. |
+| Vagueness as language of truth | Lispector | Looks opposed to Tolkien's named-specificity; the two laminate (§11.5). Vagueness names what specificity cannot reach. |
 | The unsayable as primary territory | Lispector | What cannot be said is what the prose reaches for. Distinct from Ishiguro (what won't be said) and Tolkien (what is said with weight). |
 | Author-intrusion / self-aware fictional construction | Lispector | The fiction knows it is fiction. A thinly-disguised authorial voice surfaces within narration. |
 | Fictive-as-real | Borges | Apocryphal references, invented authors, imaginary books treated as documented. Footnotes destabilize the text they footnote. |
@@ -241,8 +215,7 @@ The Spirit axis becomes audible at Coherence 4 and below. Above 4, the rendering
 ## 10. Structural Devices
 
 <!-- concept:ratchet-principle -->
-**The Ratchet (political/faction scenes).** Political encounters between principals are not balanced — they are cumulative. Each scene tightens constraints that subsequent scenes inherit. Structure political sequences as ratchets: each encounter locks the principals further into their positions, narrows the space between them, and moves marginal actors into detonation positions. The principals do not cause the explosion. The explosion comes from the margins — the people the principals moved, the alliances they forced, the information they surfaced. The structural pattern: Goliaths collide → space narrows → margin detonates.
-
+**The Ratchet (political/faction scenes).** Rule: SKILL.md Ratchet Principle and `anti-patterns-skeleton.md` VI.5. As structure across a sequence: each encounter tightens constraints the next inherits and moves marginal actors into detonation positions. Goliaths collide → space narrows → margin detonates.
 
 | Technique | Source | Signature |
 |---|---|---|
@@ -270,21 +243,19 @@ The Wittgenstein Constraint (*Tractatus* 7) governs: where the prose cannot spea
 | Author | Mode of Silence | Mechanism |
 |---|---|---|
 <!-- author:lispector -->
-| Lispector | The veer / paradox / juxtaposition | Sentence attempts to reach the unsayable through new attempts, never repetition. Each try is *different*: a wrong name, then another wrong name, then a paradox ("what I say is never what I say"), then a juxtaposition (unlike terms placed side by side to find meanings the categorical vocabulary cannot reach). The sentences move toward abstraction through subtle, surprising juxtapositions — recurrence-with-difference, same target approached from a different angle each time (Moser's reading; the technique is the veer, not the iteration). The sentence does not announce that it has not arrived. It simply ends somewhere other than where it was going. (Moser: "veers toward abstraction without ever quite reaching it." Cixous: "does not say the thing — it does the thing.") <!-- concept:agent-insufficiency -->
-**At low Spirit, low C:** the veer is not a stylistic choice but a consequence of agent-insufficiency. The prose cannot name an action because the agent-subject is dissolving — "she walked" requires a "she" who intended to walk. The grammatical-subject incompleteness IS the interiority dissolving. |
+| Lispector | The veer / paradox / juxtaposition | Sentence attempts to reach the unsayable through new attempts, never repetition. Each try is *different*: a wrong name, then another wrong name, then a paradox ("what I say is never what I say"), then a juxtaposition (unlike terms placed side by side to find meanings the categorical vocabulary cannot reach). Recurrence-with-difference: the same target approached from a new angle each time — the veer, not the iteration. The sentence does not announce that it has not arrived; it ends somewhere other than where it was going. <!-- concept:agent-insufficiency --> At low Spirit, low C the veer is the consequence of agent-insufficiency (IV.1), not a stylistic choice. |
 <!-- author:beckett -->
-| Beckett | Continuation without ground | The voice goes on past the point where it has lost what it was speaking about. Three distinct modes (Beckett added to twelve-author roster 2026-05-07). **Enumerative:** working through a combinatorial space of permutations — "shoe-socks, boot-shoe-slipper" — each item different. The series exhausts a finite space until the possibilities are spent. **Anaphoric litany:** parallel structure with progressive variation — "This body homeless. This mind ignoring. These emptied hands. This emptied heart." The structure is uniform; the content is different at each anchor. **Dialectical succession:** affirmation and negation in adjacent clauses, neither resolving the other — "I can't go on. I'll go on." The ground is gone; the will continues; the sentence proceeds through different formulations without accumulating into resolution. Beckett serves *high Spirit at low coherence* — the self persists through will alone, the prose continues because the self continues, the continuation is willful rather than mechanical. <!-- concept:exteriority -->
-**The exteriority principle:** at low C high Spirit, the will is visible through what the body does — walks, works, carries, continues — not through interior declaration. The prose renders action and is opaque about motive. The reader infers the will from the behavior. |
+| Beckett | Continuation without ground | The voice goes on past the point where it has lost what it was speaking about. Three distinct modes. **Enumerative:** working through a combinatorial space of permutations — "shoe-socks, boot-shoe-slipper" — each item different. The series exhausts a finite space until the possibilities are spent. **Anaphoric litany:** parallel structure with progressive variation — "This body homeless. This mind ignoring. These emptied hands. This emptied heart." The structure is uniform; the content is different at each anchor. **Dialectical succession:** affirmation and negation in adjacent clauses, neither resolving the other — "I can't go on. I'll go on." The ground is gone; the will continues; the sentence proceeds through different formulations without accumulating into resolution. Beckett serves *high Spirit at low coherence*, rendered through exteriority (IV.1): <!-- concept:exteriority --> the will visible in what the body does, opaque about motive. |
 <!-- author:ishiguro -->
-| Ishiguro | Confident misidentification | The narrator identifies the thing. Commits. The identification is wrong. The narrator deploys certainty formulas ("she was fairly certain," "she believed"). The reader detects the wrongness from context. The narrator does not. Repair sequences reveal more than the original, but the narrator does not notice. (Walkowitz: unreliability is covert. Beedham: the detective who does not realize the real case is himself.) |
+| Ishiguro | Confident misidentification | The narrator identifies the thing. Commits. The identification is wrong. The narrator deploys certainty formulas ("she was fairly certain," "she believed"). The reader detects the wrongness from context. The narrator does not. Repair sequences reveal more than the original, but the narrator does not notice. The unreliability is covert: the detective who does not realize the real case is himself. |
 <!-- author:borges -->
-| Borges | Precision on the impossible | The scholarly apparatus — footnotes, exact measurements, catalogue entries — is applied to impossible content. The precision is flawless. The content is impossible. The impossibility emerges from the gap. The apparatus may document its own gaps (institutional silence: "the archives note and do not answer") but does not confess inadequacy. (Sarlo: "through flawless formal consistency, they display how limited the mind is.") |
+| Borges | Precision on the impossible | The scholarly apparatus — footnotes, exact measurements, catalogue entries — is applied to impossible content. The precision is flawless. The content is impossible. The impossibility emerges from the gap. The apparatus may document its own gaps (institutional silence: "the archives note and do not answer") but does not confess inadequacy. |
 <!-- author:ocampo -->
-| Ocampo | Flat-affect report | The narrator describes what happened in plain, insufficient language. The narrator does not notice the insufficiency. The gap between the content's magnitude and the prose's flatness is the technique. Close on the wrong detail — the pin, the cup, the eggs. (Borges on Ocampo: "her strange taste for a certain kind of innocent and oblique cruelty." Klingenberg, Mancini: the technique is structural absence rather than cool detachment — the narrator is not there to register, not present-but-restrained.) |
+| Ocampo | Flat-affect report | The narrator describes what happened in plain, insufficient language. The narrator does not notice the insufficiency. The gap between the content's magnitude and the prose's flatness is the technique. Close on the wrong detail — the pin, the cup, the eggs. Structural absence, not cool detachment: the narrator is not there to register, not present-but-restrained. |
 <!-- author:tolkien -->
-| Tolkien | Building around the absence | The physical world is described with care — the wall, the ruin, the mortar, the darker soil. The thing the physical world implies is never named. The absence has shape because the surrounding structure has shape. (Shippey: "asterisk reality" — the unknown implied by the known points around it. Flieger: splintered light — the whole exists only as fragments.) |
+| Tolkien | Building around the absence | The physical world is described with care — the wall, the ruin, the mortar, the darker soil. The thing the physical world implies is never named. The absence has shape because the surrounding structure has shape. "Asterisk reality": the unknown implied by the known points around it. |
 <!-- author:marquez -->
-| Márquez | Ordinary syntax for impossibility | The impossible is stated in the same register as the ordinary. Exact numbers attached. No wonder-markers. The prose treats the impossible as documented fact. (Short/Leech: "deviation from the norm at lexical/semantic level" — the sentence is grammatically normal and semantically impossible.) |
+| Márquez | Ordinary syntax for impossibility | The impossible is stated in the same register as the ordinary. Exact numbers attached. No wonder-markers. The prose treats the impossible as documented fact. The sentence is grammatically normal and semantically impossible. |
 <!-- author:mistry -->
 | Mistry | Accumulation without summary | Each sentence adds one particular. The reader synthesizes. The prose does not step back to interpret its own accumulation. Dignity through refusal to editorialize. |
 <!-- author:tartt -->
@@ -296,13 +267,13 @@ The Wittgenstein Constraint (*Tractatus* 7) governs: where the prose cannot spea
 <!-- author:lecarre -->
 | Le Carré | Institutional silence | Power operates through what is not said. The memo that doesn't name its subject. The committee meeting where the decision was made before the meeting began. The professional courtesy that conceals threat. The prose renders the procedural surface; the reader infers the power beneath. The institution's silence is not the narrator's silence — it is the institution's mode of operation. |
 
-**Repetition operates with difference — never as iteration.** Across all source authors, the technique that the prose reader experiences as "repetition" is in fact recurrence-with-variation. Beckett's enumerations are permutational (each item different in a combinatorial space). Beckett's litanies are anaphoric structures with different content at each anchor (body / mind / hands / heart). Beckett's dialectic is contrastive (affirmation and negation in succession). Lispector's recurrence is paradoxical (statement and undermining). Lispector's veering is each new attempt different (a wrong name, another wrong name, a paradox, a juxtaposition). Borges is economical at sentence level; his "recursion" is at the conceptual level (the labyrinth that contains the labyrinth). The scholarship is unanimous: serious literary repetition produces difference; lexical iteration without variation is the failure mode. See anti-pattern I.5 for the specific prohibition.
+**Repetition operates with difference — never as iteration.** Each mode above carries difference; lexical iteration without variation is the failure mode. Per-author breakdown and the prohibition: `anti-patterns-skeleton.md` I.5. (Borges's "recursion" is conceptual — the labyrinth that contains the labyrinth — never sentence-level.)
 
 ---
 
 ## 11.5 Valoria-Specific Synthesis Moves
 
-The synthesis goes beyond what any individual source author does. The following moves are signatures of the Valoria voice as it has been authored, not techniques drawn from a single source. Where they conflict with what the sources do, the Valoria voice supersedes the sources — these are the prose's own decisions about how to render its specific subject.
+Four moves that are signatures of the Valoria voice rather than of any source author. Deploy them where the source-author techniques would be inadequate or would over-explain; where they conflict with a source's practice, the Valoria move takes precedence.
 
 **The self-predicate displacement.** When the rendering of the self is failing (low coherence, low Spirit), the verb of being looks for its self-predicate and the predicate that arrives is something other than self — geography, weather, a body part, a fact. "Vael was — she was in the valley, had been beside the river." The "she was" begins a self-statement; the predicate is location. The displacement IS the failure, enacted structurally. This is distinct from Lispector's veer (which changes direction in search of an unsayable object) — here the self is the object that has been displaced. The prose does not say "she could not locate herself." It locates her in geography while her self-predicate goes missing. Use sparingly: one or two displacements per passage at C4, more sustained at C2 and C1 only when the self has further receded.
 
@@ -311,8 +282,6 @@ The synthesis goes beyond what any individual source author does. The following 
 **Tautology as structural placement, not texture.** "The birch was here, and the birch was itself." A tautology placed in coordinate clauses with a non-tautological clause beside it. The first clause does ordinary work (locates the birch). The second clause performs the strange identity-confirmation. ONE such moment per passage. The juxtaposition with the ordinary clause is what makes the tautology land — without the ordinary clause, the tautology becomes mannerism. With it, the tautology is a single point of strain in an otherwise functional construction. This is how Lispector's tautology actually works (rare, structurally placed, beside ordinary content), distilled into a deployable rule.
 
 **Geography substituting for self-statement.** Related to self-predicate displacement but distinct. Where a passage would naturally state something about the PC's interiority or active spatial position, replace it with the broader geographic frame the rendering can still grip — beside the river, in the valley, at the tree line. The active spatial frame (on the path, at the door, in the chair) is what fails: this is the frame that connects the body to its motion or its situated act. The broader frame still arrives. The active frame goes missing or arrives wrong. "Vael was — she was in the valley, had been beside the river." The valley and the river arrive; the path, where she actually is, does not. Distinct from the cliché of "she felt small against the mountains" — the geography is not metaphor for emotion, it is the locus of the self that the rendering can still grip while the active spatial frame fails. **Do not turn the body into geography** (do not say "the side that was Vael was harder to find than the side that was the river" — this fragments the body rather than displacing the location). The character stays a character; the broader geography stands in for the active spatial frame the rendering can no longer produce.
-
-These four moves are deployed where the source-author techniques would be inadequate or would over-explain. They are signatures of the Valoria voice. When the synthesis produces them and the source-author equivalents would not, the synthesis takes precedence.
 
 **Interpolation principle:** When multiple authors appear in one passage, each must serve a different function. One author's content sits inside another author's process. Lispector's veer acts upon Tolkien's named landscape. Ocampo's flat-affect carries Márquez's ordinary impossibility. Ishiguro's misidentification wraps around Borges's precision. The transitions are invisible. The reader perceives one voice.
 
@@ -326,7 +295,7 @@ These four moves are deployed where the source-author techniques would be inadeq
 - **Tolkien specificity + Lispector vagueness:** Not a conflict — a lamination. The name holds the surface. The veer reaches past it. Both are present in the same sentence. "The wall [Tolkien] was also the running and the east and the paces and none of these were the thing [Lispector]."
 - **Ishiguro + Ocampo:** Rational explanation followed by flat contradiction. "The shadow seemed larger, which she attributed to the afternoon light. The shadow had more than two arms." Neither narrator nor character acknowledges the contradiction.
 - **Borges + Márquez:** Scholarly precision + ordinary impossibility. The apparatus documents impossible content without remarking on the impossibility. Complementary, not competing.
-- **Borges + Ocampo + Tolkien closing (the Lem combination):** Clinical incommensurability emerges from the layering. Borges supplies the scholarly precision; Ocampo supplies the flat-affect frame that does not register the impossibility; Tolkien closes on the physical thing the description has been circling. The result is the texture associated with Lem's clinical alien — precise description producing blankness, the apparatus complete and the content unparsable. Lem is not a ninth author; the texture is achieved through this combination. Use when the substrate content is intelligible to apparatus (countable, specifiable) but not to comprehension (the description is correct and tells you nothing).
+- **Borges + Ocampo + Tolkien closing (the Lem combination):** Clinical incommensurability emerges from the layering. Borges supplies the scholarly precision; Ocampo supplies the flat-affect frame that does not register the impossibility; Tolkien closes on the physical thing the description has been circling. The result is Lem's clinical-alien texture — precise description producing blankness, the apparatus complete and the content unparsable — reachable through this combination as well as through Lem's own observing-around (V.10). Use when the substrate content is intelligible to apparatus (countable, specifiable) but not to comprehension (the description is correct and tells you nothing).
 
 **The within-observation gradient (TS 50+):**
 
@@ -335,7 +304,7 @@ At elevated TS, the prose must layer three depths within a single observation. S
 | Layer | Authors | What it does |
 |---|---|---|
 | **Near** | Tolkien, Mistry | Articulable in the PC's own vocabulary — the operation type, the approximate target, the practitioner's training-words. "Restorative. Layered. Careful." Sentences complete normally. |
-| **Middle** | Borges, with Ocampo flat-affect framing | The Lem texture. Scholarly precision applied to substrate detail. The description tells you exactly what is there and what it does and does not yield to the description. The PC names the lines, counts them, identifies their direction — and the count is correct and the count tells you nothing about what the lines are. |
+| **Middle** | Lem observing-around; Borges precision with Ocampo flat-affect framing | The Lem texture. Scholarly precision applied to substrate detail. The description tells you exactly what is there and what it does and does not yield to the description. The PC names the lines, counts them, identifies their direction — and the count is correct and the count tells you nothing about what the lines are. |
 | **Far** | Lispector veer, or Tolkien building-around-absence | The predication breaks. The sentence reaches for what the perception is *of* and produces only the copula or silence. "What the feeling was a feeling OF was. Was." Or: the prose names the surrounding structure and leaves the central thing unnamed; the absence has shape because the surrounding structure has shape. |
 
 The three layers may occupy three sentences or three clauses within one sentence. They must be present together. A passage that uses only near and far feels two-tiered; a passage that uses near, middle, and far feels gradient.
@@ -347,7 +316,7 @@ When the PC has high coherence (rendering intact) and high TS (substrate percept
 - **Subject-axis (the PC):** Tolkien (the PC's clear perception of the world), Mistry (the PC's competent registering of detail), Ishiguro (the PC's reading of their own perception, which may be slightly off — the PC reading their TS perception with their training).
 - **Object-axis (the substrate):** Lispector veer (what the substrate is OF resists predication), Borges precision (the apparatus catches countable content but not comprehension), Ocampo flat-affect (the substrate reports without affect).
 
-A test: replace "she could not articulate the lines" with "the lines did not articulate." If the second is closer to true, the rendering has been targeted at the object correctly. If "she could not articulate" is what the prose is doing, the rendering has been wrongly targeted at the subject — which would be appropriate only if the PC's coherence is failing.
+Test: `anti-patterns-skeleton.md` III.2 ("she could not articulate" vs "the lines did not articulate"); subject-targeting is correct only if the PC's coherence is failing.
 
 **Coherence-gated technique availability:**
 
@@ -374,24 +343,4 @@ A test: replace "she could not articulate the lines" with "the lines did not art
 
 ## Author-Specific Mannerism Risk
 
-If used twice in same passage, becomes mannerism:
-- **Tolkien:** Inverted syntax ("Great was the ruin")
-- **Ishiguro:** "perhaps as it should have been," "I cannot now recall"
-- **Mistry:** Sensory catalogues
-- **Tartt:** Atmospheric long sentences
-- **Márquez:** Hyperbolic precision
-- **Lispector:** "This instant-now" temporal shift
-- **Borges:** Infinite recursion / mirror metaphor
-- **Ocampo:** Flat-affect horror
-- **Beckett:** Austere negation-dialectic ("I can't go on. I'll go on.")
-- **Lem:** Scientific-clinical register applied to everything
-- **McCarthy:** Biblical parataxis in violence
-- **Le Carré:** Institutional circumlocution in every conversation
-
-**Discipline:** Borrow techniques in rotation. No single source's signature move twice in same passage.
-
----
-
-## The Master Rule
-
-If a sentence could appear in any story about any settlement / character / event, it belongs to no story. Cut it.
+Owned by `anti-patterns-skeleton.md` §V (one entry per author). Discipline: borrow techniques in rotation — no single source's signature move twice in the same passage. The Master Rule is in the same file.

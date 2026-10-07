@@ -12,11 +12,7 @@ Continuation from Part 1. Same principles: prose, then audit. Allow failure.
 
 *Vael in the parish house. Maren present. TS 0. Categories loosening. Belief Co-Authorship. Dissociative episodes.*
 
-The ledger was on the table. Maren's hands were on the table beside it. Vael knew these things the way she knew the — they were facts and they were beside each other. The chalk on Maren's sleeves. The pin beside the binding. The twenty — the volume. A number. Vael looked at the number and the number stayed and she looked at it again and it was the same number and looking at it a second time had been a thing she had done though she remembered only looking once.
-
-Maren said the binding was tight enough and Vael agreed and the agreement came out of her mouth in the right shape but the belief that the binding mattered — the belief that records were worth keeping, that years followed years, that one ledger succeeded another in an order that was — this belief sat in her chest like a coat she had put on in someone else's house. It fit. It was warm. It was not hers.
-
-Her weight was wrong in the chair. She shifted. The wrongness shifted with her. Outside, the lane ran in a direction and from the direction came the smell of cut hay, and the lane and the hay were in the same place, which was outside, which was where Vael was not, which was — she was in the chair. The pin was beside the book.
+Prose: `composition-test-definitive.md`, "Coherence 2 (Fractured)" — identical except that this test's third paragraph ends "…which was outside, which was where Vael was not, which was — she was in the chair. The pin was beside the book."
 
 **Audit:**
 - **No meta-description:** ✓. No "she could not connect them" — instead: "they were facts and they were beside each other." The disconnection is enacted by the prose presenting facts in sequence without connecting syntax. The parataxis IS the disconnection.
@@ -27,7 +23,7 @@ Her weight was wrong in the chair. She shifted. The wrongness shifted with her. 
 - **Closing:** "The pin was beside the book." ✓. Wrong-detail close. Ocampo.
 - **Weight passage:** "She shifted. The wrongness shifted with her." — Mistry's body-as-record applied to a body whose rendering is failing. The body tells the history of its own wrongness. Two sentences, no commentary. ✓
 - **Author tally:** Lispector (categorical failure — facts without connection), Ocampo (flat-affect, wrong-detail close, dissociative report), Ishiguro (embedded unreliability — "she remembered only looking once"), Márquez (ordinary syntax for impossible — looking twice while remembering once), Mistry (body-wrongness), Tolkien (the lane, the hay — fragment of landscape, last ground). Borges minimal — the only Borgesian touch is the recursive structure of "a number" being confirmed by looking. Tartt minimal.
-- **Concern:** The passage is quite short. At Coherence 2, can longer passages be sustained? The categories are loosening — longer structures (multi-paragraph development, extended scene-building) might not be available to the rendering. Short passages might be the correct formal constraint at this tier. **Leave as design question for next session.**
+- **Concern:** The passage is quite short. At Coherence 2, can longer passages be sustained? The categories are loosening — longer structures (multi-paragraph development, extended scene-building) might not be available to the rendering. Short passages are the correct formal constraint at this tier (passage length is coherence-gated: `techniques-skeleton.md` §11.5).
 - **Verdict:** Pass. The coat passage is the risk point, decided narrowly.
 
 ---
@@ -253,31 +249,12 @@ Elen accepted a cup of water. She held it with both hands. The water moved in th
 
 ---
 
-## Interim Findings — Part 2
-
-**New rules confirmed:**
+## Findings — Part 2
 
 1. **Dialogue at low coherence:** The speech is normal (Maren speaks normally). The reception is impaired (Vael receives it through failing rendering). The prose must render both — the normal speech and the impaired reception — in the same passage, without announcing the impairment.
 
 2. **Action at low coherence:** Movement becomes the last voluntary capacity. Feet do things. The agent behind the feet becomes inaccessible. Agency collapses — the action happens and the self that would claim the action is the self whose rendering is failing. "Going-into was the thing her feet were doing."
 
-3. **The last simile:** At Coherence 1, a simile can appear ONCE if the text immediately enacts the collapse of the analogical capacity. The simile is the last one. The apparatus that produced it breaks in the sentence following it.
+3. **Chronicle-mode with TS observer:** When the focalizer has both high coherence AND high TS, both rendered-level effects and substrate conditions are available. The passage can describe both without conflation because the observer is qualified to observe both.
 
-4. **Chronicle-mode with TS observer:** When the focalizer has both high coherence AND high TS, both rendered-level effects and substrate conditions are available. The passage can describe both without conflation because the observer is qualified to observe both.
-
-5. **Closing vocabulary by tier:**
-   - 10-8: Full closing (landscape, atmosphere, physical world complete)
-   - 7-5: Closing with ground-check ("these were good," "the distance had been the right distance")
-   - 4-3: Closing on isolated detail (the pin, the crack, the door)
-   - 2: Closing on isolated detail with flat-affect (the pin was beside the book)
-   - 1: Closing on isolated noun (the pin)
-
-6. **Passage length by tier:** The rendering constrains passage length. At 10-8, full paragraphs. At 7-5, paragraphs with interruptions. At 4-3, short paragraphs. At 2, very short paragraphs. At 1, fragments. This is not a rule the writer imposes — it is a consequence of the rendering's capacity to sustain structured prose.
-
-**Remaining for Part 3:**
-- Stress tests: rules in conflict
-- Mistry body-as-record at low coherence
-- Tolkien deep-time at low coherence
-- Tartt loaded object at low coherence
-- The edge between Coherence 5 and Coherence 4 (where similes stop being available)
-- Skeleton/infill distillation
+4. **The last simile, closing vocabulary by tier, passage length by tier:** now in `techniques-skeleton.md` §11.5.

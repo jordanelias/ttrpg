@@ -7,49 +7,24 @@ description: >
   or when any Valoria skill produces a finding that needs canon verification. Trigger on:
   "check philosophy", "canon check", "does this violate the foundations", "philosophy compliance",
   "is this consistent with the philosophy", any new mechanic proposal, any audit finding requiring
-  philosophical validation, or whenever the orchestrator routes a compliance check.
-  This skill NEVER approves content that contradicts the Foundations.
+  philosophical validation, or whenever the orchestrator routes a compliance check. This skill NEVER
+  approves content that contradicts the Foundations.
 ---
 
 ## Input Validation (MANDATORY BEFORE ANY COMPLIANCE CHECK)
 
-Before running any compliance check, read these files from the working tree:
+Read from the working tree, never memory; cite Foundations text and values (P-15 especially) from them:
 
 - `canon/00_philosophical_foundations_rules.md` — primary authority
-- `canon/02_canon_constraints.md` — P-01–P-15 derived constraints
-- any `canon/01_*.md` amendments relevant to the target system
-
-Read them from the working tree — do not rely on remembered Foundations content; the file on disk is authoritative.
-
-## Canon Constraints Reference (P-01 through P-15)
-
-| ID | Constraint | Key Test |
-|----|-----------|----------|
-| P-01 | Inseparability: all three dimensions co-move | Does every thread op produce mandatory secondary consequences? |
-| P-02 | Ein Sof = infinite positive being | Is the unintelligible ground framed as fullness, not void/chaos? |
-| P-03 | Rendering = consciousness-performed | Is GM positioned as rendering engine? Is information asymmetry mechanical? |
-| P-04 | Monstrosity = ontological, not moral | Are monstrous entities framed as rendering failures, not evil? |
-| P-05 | Three emergence modes mechanically distinct | Do Modes 1/2/3 have distinct stat blocks and behaviors? |
-| P-06 | Threadcut = radically is without becoming | Do threadcut beings maintain via Thread work? Past-Pull → auto-Gap? No Taint? |
-| P-07 | Calamity = rendered-side mechanism | Does TT system imply over-drawing, not ground responsiveness? |
-| P-08 | Epistemological barrier = inaccessibility, not suppression | Is knowledge transmission framed as "religious poetry"? Church reinforces, doesn't cause? |
-| P-09 | Memory pulling = messy, costly, detectable | Not a clean eraser? Produces orphaned configurations? |
-| P-10 | Epistemic seduction = perceptual shift | Is transformation framed as dissolving categories, not corruption? |
-| P-11 | Temporal Disjunction (TD) is universal | Do ALL thread ops produce some TD? Not just Past-Pulls? |
-| P-12 | Relational contagion via knotting | Does a transforming practitioner's shift propagate through Knots? |
-| P-13 | Forgetting = rendering failure | Is Southernmost knowledge mechanically untransmittable to non-sensitives? |
-| P-14 | Board/VG modes must express inseparability | Is co-movement mechanically implemented in all play modes? |
-| P-15 | [Read from canon/02_canon_constraints.md in the working tree — do not use memory] | |
+- `canon/02_canon_constraints.md` — constraints P-01–P-15; each row's Violation Test column is the test
+- any `canon/01_*.md` amendment relevant to the target system
 
 ## Process
-1. Read `canon/00_philosophical_foundations_rules.md` and `canon/02_canon_constraints.md` from the working tree
-2. Load relevant Foundations section by chunk reference or direct read
-3. For each applicable constraint:
-   - **PASS**: mechanic satisfies the constraint
-   - **PARTIAL**: mechanic partially satisfies — identify what's missing
-   - **FAIL**: mechanic violates the constraint
-4. For FAIL: cite specific Foundations text (by section, from the working-tree file), explain philosophical reasoning, propose repair
-5. For PARTIAL: flag what's missing and assess severity (cosmetic vs. structural)
+1. Load the relevant Foundations section (chunk reference or direct read).
+2. Score each applicable constraint. Philosophy governs mechanics: soundness never rescues a violation.
+   - **PASS** — satisfied.
+   - **PARTIAL** — state what is missing and its severity (cosmetic / structural). If unsure, PARTIAL.
+   - **FAIL** — cite the Foundations section, give the philosophical reasoning, propose a repair.
 
 ## Output Format
 ```markdown
@@ -75,15 +50,5 @@ Read them from the working tree — do not rely on remembered Foundations conten
 ```
 
 ## Critical Rules
-- This skill NEVER approves content that contradicts the Foundations, regardless of mechanical elegance.
-- Philosophy governs mechanics. Never the reverse.
-- If a mechanic is mechanically sound but philosophically incoherent, it fails.
-- If a repair proposal involves setting/narrative/character content: flag `[EDITORIAL: requires user approval]`.
-- When uncertain whether something violates: flag as PARTIAL with reasoning, not PASS.
-- All Foundations citations must reference the working-tree file, not memory.
-- Do not use remembered constraint values — P-15 in particular must be read from `canon/02_canon_constraints.md` in the working tree.
-
-## Registry logging — retired
-
-**Retired.** `tools/audit_registry.py` and `references/audit_registry.jsonl` were retired 2026-08-21 (`FORK:1e4c6f4`, ED-IN-0194). A pass records nothing in a registry: its output is edits plus at most one commit paragraph (`CLAUDE.md` §0).
-
+- A repair touching setting, narrative or character content: flag `[EDITORIAL: requires user approval]`.
+- Output is edits plus at most one commit paragraph (`CLAUDE.md` §0); nothing is recorded in a registry.

@@ -6,76 +6,50 @@ description: >
   analyzed by any analysis skill. Trigger on: full document provided to any Valoria skill,
   "chunk the ruleset", "prepare for analysis", "build section map", "extract mechanics",
   "build cross-reference map", or when any Valoria skill receives >500 lines of input.
-  This skill MUST run before canon-guard, mechanic-audit, or simulator receive input.
+  This skill MUST run before canon-guard or mechanic-audit receives input.
 ---
 
 Structural extraction only — no content judgment.
 
 ## Commit Protocol (MANDATORY)
 
-**Rules:**
-- All chunk output paths must be in `references/` or `tests/` — not root
-- Commit all chunks for a document in one atomic commit, e.g. message `[infrastructure] chunk <document> — section map + extractions`
+- Chunk outputs go under `references/` or `tests/`, never root.
+- One atomic commit per document, e.g. `[infrastructure] chunk <document> — section map + extractions`.
 
 ## Input Validation (MANDATORY)
 
-The document to be chunked must be read from the working tree. Do not chunk a document from memory.
-
-Read the target document from the working tree before chunking; if the path does not exist, stop — cannot chunk.
-
-**Requires:** Document version label for file naming (read from `references/canonical_sources.yaml`).
+Read the target from the working tree; if the path does not exist, stop. Take its version label
+(for file naming) from `references/canonical_sources.yaml`.
 
 ## Modes
 
 ### A — Section Map
-Extract all headings with hierarchy.
-**Output:** `valoria_section_map.md`
-**Format:**
-```
-| Part | Section | Heading | Level | Lines | Est. Tokens |
-```
-Regenerate only on version change. Reuse across sessions.
+All headings, with hierarchy → `valoria_section_map.md`:
+`| Part | Section | Heading | Level | Lines | Est. Tokens |`. Regenerate only on version change.
 
 ### B — Section Extraction
-Extract sections by heading or line range into individual chunk files.
-**Output:** `chunk_[part]_[section_slug].md` per section
-**Target:** 200–500 lines/chunk. Split at sub-heading boundaries if >500 lines.
-**Header per chunk:**
+Sections by heading or line range → one `chunk_[part]_[section_slug].md` each, 200–500 lines.
+Over 500: split at sub-heading boundaries; still over 500: at the next sub-heading level.
+Header per chunk:
 ```
 # Chunk: [Part].[Section] — [Title]
 Source: [repo-relative document path], Lines [N–M], Version: [label]
 ```
 
 ### C — Mechanic Extraction
-Extract all mechanical rules: formulas, tables, resolution procedures, tracks.
-**Output:** `mechanics_index.md`
-**Format:**
-```
-| ID | Mechanic | Location | Formula/Procedure | Input Variables | Output | Dependencies |
-```
-Number each mechanic sequentially (M-001, M-002, ...).
+All mechanical rules (formulas, tables, resolution procedures, tracks) → `mechanics_index.md`,
+numbered M-001, M-002, …:
+`| ID | Mechanic | Location | Formula/Procedure | Input Variables | Output | Dependencies |`
 
 ### D — Cross-Reference Map
-Extract all inter-section references (§ citations, "see above", implicit dependencies).
-**Output:** `xref_map.md`
-**Format:**
-```
-| Source Section | References Section | Type | Note |
-```
-Type = uses / modifies / conflicts / undefined
+All inter-section references (§ citations, "see above", implicit dependencies) → `xref_map.md`:
+`| Source Section | References Section | Type | Note |`; Type = uses / modifies / conflicts / undefined.
 
 ### E — Canon Constraint Extract
-Extract philosophical constraints from Foundations into structured checklist.
-**Output:** `canon_constraints.md`
-**Format:**
-```
-| ID | Constraint | Foundations Ref | Mechanical Implication | Violation Test |
-```
-Run once per project. Update only when Foundations changes (check `canonical_sources.yaml` version).
+The Foundations' philosophical constraints → `canon_constraints.md`:
+`| ID | Constraint | Foundations Ref | Mechanical Implication | Violation Test |`. Run once per
+project; update only when the Foundations version in `canonical_sources.yaml` changes.
 
 ## Rules
-- Chunk boundaries at heading level — never split mid-section
-- No content judgment — extraction and indexing only
-- Report after completion: sections found · chunk count · estimated tokens/chunk
-- If a chunk exceeds 500 lines after heading-level split, split at next sub-heading level
-- Source path in every chunk header must be the repo-relative path
+- Chunk at heading boundaries; never split mid-section.
+- Report on completion: sections found · chunk count · estimated tokens/chunk.
