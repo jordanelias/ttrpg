@@ -198,7 +198,7 @@ commit and the run stops for a cleared window (`methodology-execute`, `CLAUDE.md
 has read §K's still-held list and `_part5` §J. `main` was red from PR #456 on one test
 (`test_flow_skeletons.py::test_contract_names_resolve_in_the_generated_index[combat]`); the one-line fix (`personal_combat`
 joins `RETIRED_CONTRACTS`) is built and rides the adoption branch (`7b619328`), so it is not a position — read `All Gates
-Green` on `main` once the branch merges. Then **B-B, B-C and
+Green` on `main` once the branch merges. Then **B-C and
 B-D1/D2/D3 in parallel sessions**, then B-G → B-H → B-E → {B-F ∥ B-I} → B-J → … the spine `_part3` §B names. Every batch runs
 through `methodology-execute` (`CLAUDE.md` §9), and a batch's READ-FIRST list names the sites to read (the pins file is far too
 large to read whole: grep the assertion).
@@ -214,8 +214,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 
 | handle | alias | lane | STATE | GATE (the entry holds the whole of it) | R | batch | home |
 |---|---|---|---|---|---|---|---|
-| IN-02 | `30` | IN | B | — | — | B-B | `_part4` |
-| IN-03 | `31a` | IN/SC | BLK | IN-02 | — | B-L | `_part4` |
+| IN-03 | `31a` | IN/SC | B | — | — | B-L | `_part4` |
 | IN-04 | `31b`; #457 SEAM-LADDER | IN/PC | BLK | IN-03, PC-02, PC-03, PC-04 | — | B-L | `_part4` |
 | IN-05 | `31c`; SM-7 | IN/MB | BLK | IN-04, MB-01, MB-02, MB-05 | — | B-L | `_part4` |
 | IN-06 | `33`; #457 D5; A-24's threadwork; H-47 | IN/WR/FI | B | design | — | B-C · B-S | `_part4` |
@@ -226,7 +225,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-11 | #453 step 2 | IN/SE | B | after B-G | R-05, R-06 | B-I | `_part5` |
 | IN-12 | #453 steps 5, 5a, 6, 7, 9, 10, 11, 13 | IN/SC/SE/MB | BLK | per step | R-04, R-05, R-09 | B-K · B-M · B-Q · B-R | `_part5` |
 | IN-13 | #453 step 8 | IN/MB | BLK | IN-05 | R-07, R-05, R-01 | B-M | `_part5` |
-| IN-14 | #457 BOUND-ATTENTION; H-92, H-10 | IN | B | — | — | B-B | `_part4` |
+| IN-14 | #457 BOUND-ATTENTION; H-92, H-10 | IN | ask-then | — | — | B-Z | `_part4` |
 | IN-15 | AX-7 wiring | IN | BLK | IN-16, IN-18 | — | B-E | `_part4` |
 | IN-16 | telling T7 (G9) | IN | B | — | — | B-E | `_part4` |
 | IN-17 | telling measurement; H-180/181/182 re-check | IN | BLK | IN-16 | — | B-E | `_part4` |
@@ -241,7 +240,6 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-26 | #457 BOUND-PAPER; H-156 (a)/(b); `Record.ttl` | IN/SC | BLK | SC-01, FI-01 | R-05 | B-Q | `_part5` |
 | IN-27 | #457 END-VICTORY; H-176 (GD-1) | IN/FA | BLK | IN-37 | — | B-U | `_part5` |
 | IN-28 | H-166 | IN/SE | BLK | IN-45 `work` | R-05 | B-K | `_part5` |
-| IN-29 | H-110 | IN | B | — | R-03 | B-B | `_part4` |
 | IN-30 | `24h` P5 remainder; H-186 | IN/FA/SE | BLK | IN-27 | — | B-U | `_part5` |
 | IN-31 | H-100 | IN/SE | BLK | SC-03a | — | B-J · B-Q | `_part5` |
 | IN-32 | H-182 ties | IN/FI | BLK | IN-06 | R-05 | B-S | `_part5` |
@@ -253,7 +251,6 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-38 | `13`-rest | IN | B | — | R-09, R-06 | B-V | `_part5` |
 | IN-39 | pre-flight P-4, P-6; H-175 | IN | B | — | R-01, R-04 | B-C | `_part4` |
 | IN-40 | H-101 | IN/FA/SE | BLK | IN-10 | R-04 | B-J | `_part5` |
-| IN-41 | SM-9, SM-11 | IN | BLK | IN-02 | — | B-B | `_part4` |
 | IN-42 | Gate-0: `engine_clock`'s `doc:`; ED-1051 | IN/GO | B | — | — | B-C | `_part4` |
 | IN-43 | housekeeping: stale handoff rows, retired-plan cites, R-09's `u1_` selector, `domain_echo` rows | IN | B | — | R-01, R-09 | B-C | `_part4` |
 | IN-44 | SM-10, SM-12; A-24's wording | IN | J | Layer 0/1: Jordan's files | — | — | `_part8` (table, not an entry) |
@@ -264,7 +261,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-49 | H-163 limit 3 | SE/IN | BLK | IN-10 | R-04, R-05 | B-K | `_part5` |
 | IN-50 | — | IN | BLK | IN-43 | R-01 | B-C | `_part4` |
 | IN-51 | #453 R-5 (b) | IN/FA/SE | BLK | IN-12 | R-05 | B-R | `_part5` |
-| SC-01 | `22` steps 11–16 | SC | BLK | IN-02, IN-03 | R-04, R-05, R-08, R-09, M2 | B-N | `_part6` |
+| SC-01 | `22` steps 11–16 | SC | BLK | IN-03 | R-04, R-05, R-08, R-09, M2 | B-N | `_part6` |
 | SC-02 | `22a` → `23` → `22b` | SC | BLK | SC-01 | — | B-P | `_part6` |
 | SC-03a | #453 steps 2b, 3 | SC | BLK | IN-10, IN-11 | R-05 | B-J | `_part6` |
 | SC-03b | #453 step 4; H-162 | SC | BLK | SC-01, SC-08, SC-03a | R-05, R-04 | B-O | `_part6` |

@@ -16,7 +16,7 @@ the first half of (c) repeats a refusal `data/verbs.py` already makes at load.
 `ID-13`, READ EXACTLY: no production composition row carries `entry:` at `30`, so every registrar
 case below PLANTS one; the registrar's pass over production rows is first exercised at `31a`.
 
-The plan's falsifiers, by number (`workplans/valoria_master_workplan_v9_part4.md`, IN-02 = position `30`):
+Position `30`'s falsifiers, by number (its plan entry, IN-02, left the plan at B-B's close, `4a2e4494`; the commit `5097e49` is its record):
 (2) `test_a_registered_row_deleted_under_a_live_process_refuses_naming_it` -- ONLY ITS WITHIN-PROCESS
 FORM (plant, construct, delete, construct): in a fresh process a deleted row leaves nothing to refuse
 on, since no data at `30` declares that a row must exist, so the fresh-process form is `31a`'s to place
@@ -27,7 +27,7 @@ on, since no data at `30` declares that a row must exist, so the fresh-process f
 (8) `test_the_composition_export_round_trips`, with
 `test_engine_does_not_import_systems.py::test_importing_every_engine_module_pulls_in_no_subsystem`.
 
-Plan position IN-41 (`SM-11` + `SM-9`; `_part4`), which split the retired `decline_note:` column into
+Plan position IN-41 (`SM-11` + `SM-9`; it left the plan at B-B's close, `4a2e4494`), which split the retired `decline_note:` column into
 `effect_decline_note:`, `formation_decline_note:` and `requires_decline_note:`: falsifier (1)
 `test_a_row_with_an_untyped_precondition_nothing_evaluates_refuses_naming_the_verb`, with its converse
 `test_a_row_whose_precondition_is_evaluable_and_declined_refuses_naming_the_verb`; falsifier (2)

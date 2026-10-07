@@ -21,7 +21,7 @@ here).
 |---|---|---|---|---|
 | R-01 | not_met | IN-43 prints which ARC case fails R3, IN-50 diagnoses it (both B-C; IN-50's repair slots by `_part3` §B.0 once the case is known) → `11` re-take after IN-08 as the control (B-G) → #453 steps 1, 2 (IN-10, IN-11: new cross-person edges; B-I, `11` re-take) → step 8 (IN-13: B-M, `11` re-take); IN-39's P-4 (B-C) before the first re-take; H-116 named first if a re-take reads ≥ 96 % | `corpus_run` R3 rows + control (`:376`); `wd_collect.py` < 96 % at `2x3` (`:504`) | B-M, if IN-50's repair is slotted and merged by then; otherwise none |
 | R-02 | met | keep met; the `11` re-takes at B-G (control), B-I, B-M, and B-N only if a reconvergence input moved (`_part3` O.2 E15) | `wd_collect.py` (`:504`) | met; re-checked at each re-take |
-| R-03 | met | keep met; `-k test_u2_` green through IN-29 (H-110; B-B) and PC-06 S-1 (B-E) | `headless` + `-k test_u2_` (`:594`) | met; holds at B-B's and B-E's exits |
+| R-03 | met | keep met; `-k test_u2_` green through IN-29 (H-110; landed `4a2e4494`) and PC-06 S-1 (B-E) | `headless` + `-k test_u2_` (`:594`) | met; holds at B-E's exit |
 | R-04 | partial | #453 step 1 (IN-10: `confer`/`establish`/`revoke` via; B-I) · IN-40 revised (vassalage as an `oblige` edge; B-J) · FA-01 mechanism (a faction head acts through a seat; B-J) · IN-49 (`levy`, after IN-10's second operand channel; B-K) · `22` (SC-01: `determine` in the realm; B-N); conjunct (3): an owner per `scales:` row (R-04's table) — IN-46 (SM-6) and IN-47 (the character sheet) are DESIGN positions (B-C) with no build batch | `aperture 4 0` (`:684`) | not before IN-46's and IN-47's builds have a batch and every `scales:` row has an owner — R-04, hence M1, cannot read `met` until then |
 | R-05 | not_met | every verb row it counts, each with its batch, in R-05's table below: B-G · B-I · B-K · B-M · B-N · B-O · B-Q · B-R (with IN-51: `succeed`'s reader, #453 R-5) · B-S; pins re-recorded per step | `corpus_run` `WHERE THE <n> GO` (`:830`); `aperture 4 0` for seat-gated verbs | after B-S and B-R both merged — only if every owner's EXIT recorded ≥ 1 execution, and unless `carry` stops at a Layer 1 amendment (R-05) |
 | R-06 | partial | cells commit (IN-08: B-G; RANKING under G-1's reading; the doctrine-pair measurement recorded) → H7's standing pair test, H3/H9 (IN-08's chain: B-H) → IN-11 (`release` ends an ambition; B-I) → `13`-rest (IN-38: B-V) | RANKING DISCRIMINATION (`:977`) + H7's pair test + `conviction_spread`'s `within_60deg` | B-V |
@@ -128,7 +128,7 @@ the `scene_budget = 1` arm. The `measured:` block also holds a fresh re-run of t
 and the verb table 32 → 44 since the 2026-09-11 reading.
 
 **What keeps it met.** Nothing builds on it; every position that touches the rounds loop
-(`loop/driver.py`, `loop/deliberate.py` — IN-29 (B-B) and PC-06 S-1 (B-E) edit `driver.py`, `_part3` §C; IN-27 (B-U) adds an ending step to it) must keep `pytest engine/season/tests -q -k test_u2_` green, read at each of those batches' exits.
+(`loop/driver.py`, `loop/deliberate.py` — IN-29 (landed `4a2e4494`) and PC-06 S-1 (B-E) edit `driver.py`, `_part3` §C; IN-27 (B-U) adds an ending step to it) must keep `pytest engine/season/tests -q -k test_u2_` green, read at each of those batches' exits.
 The `measured:` refresh v8 owed is done (the 2026-10-02 re-run above); a later one is one re-run of the row's own `measure:` command,
 dated, changing nothing else.
 
