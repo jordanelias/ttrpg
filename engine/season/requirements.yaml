@@ -819,7 +819,7 @@ rows:
       it leaves the always-refused set on one execution, not on a changed share: `H-84`), and `dispatch` moved from
       always-refused to never-attempted (the `17-cast` pilot's fourth seat in NPC-038; stable across seven hash seeds, the
       mechanism not traced). **POSITION `14` BUILT NO OTHER ROW**: `repudiate`, `succeed`, `tie / knot`, `forge`, `exchange`,
-      `carry` and `thread_read` were declined or stopped, each with an `effect_decline_note`, `formation_decline_note` or `requires_decline_note` on its verb row (IN-41 split the old `decline_note`); `succeed` and `tie`
+      `carry` and `thread_read` were declined or stopped, each with an `effect_decline_note` or `requires_decline_note` on its verb row (IN-41 split the old `decline_note`); `succeed` and `tie`
       rest on ID-13 (nothing reads the edge) and on an operand their rows do not bind, NOT on holonic §15 (`04 §A.3` rows 8-9
       make them directed edges the holder owns and `release` ends, `H-182`). `knot` is NOT an ID-13 case -- it has a reader
       (`epistemic.py::_ch_witness_key`, undirected) -- so `tie / knot` stops on the missing partner operand and on `knot`

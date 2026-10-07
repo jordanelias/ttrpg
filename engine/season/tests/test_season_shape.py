@@ -4493,6 +4493,23 @@ def test_calendar_emits_date_fired_with_the_venue_as_subject_and_chains_by_venue
         f"a second date firing at the same venue carries causes={ev2.causes}, not [{ev1.id!r}] "
         "-- the chain re-rooted instead of naming its own previous emission at this venue")
 
+    # `docket.formed` (`04 §A.2`, `write_matrix.yaml`'s (DocketItem, matter) row): a date that fires WITH a holder puts a
+    # matter-less item on the docket, and that write emits, chained on the `date.fired` it follows. CONTROL: the vacant
+    # dates above fired and formed no docket Event at all.
+    assert not [e for e in w.log if e.kind == "docket.formed"], "a vacant date formed a docket Event"
+    w.tick += 1
+    w.dates["d_held"] = dict(id="d_held", venue="D", due_at=w.tick, holder="a_holder", fired=False)
+    n_docket = len(w.docket)
+    got3 = d.calendar(mint_token(w, WriteClass.CALENDAR))
+    fired3 = [e for e in got3 if e.kind == "date.fired"]
+    formed = [e for e in got3 if e.kind == "docket.formed"]
+    assert len(w.docket) == n_docket + 1 and len(fired3) == 1 and len(formed) == 1, (
+        f"a held date must fire once and form one docket item and one docket.formed: docket "
+        f"{n_docket}->{len(w.docket)}, fired {len(fired3)}, formed {len(formed)}")
+    assert formed[0].causes == [fired3[0].id] and anchor_of(w, formed[0]) == "D", (
+        f"docket.formed must chain on the date.fired it follows and anchor on the venue: "
+        f"causes={formed[0].causes} (fired {fired3[0].id}), anchor={anchor_of(w, formed[0])!r}")
+
 
 def test_calendar_a_forced_corpus_date_fires_emits_and_lands_a_claim():
     """The plan's own OBSERVABLE for `11b`: `harness/corpus_run.build_at` plants `d_forced`
@@ -8069,7 +8086,17 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `transfer` 88 -> 85, `research` 99 -> 97, `surveil` 65 -> 64, `tell` 88 -> 87, `utter`
     # 143 -> 142; `release` unmoved at 2. THE SAME-BREATH CHECK: the universal set moved, `utter`
     # losing one world (asserted below).
-    assert len(by_sig) == 120, (
+    # ⚠⚠ **120 -> 119, PLAN POSITION `29` (IN-29: CALENDAR's own `date.fired` Events reach `witness()`), 2026-10-07,
+    # MEASURED AGAINST a62dae5, THE COMMIT BEFORE 9f191fe (120 there, same 143 live worlds, seed 0), AND
+    # `corpus_run` AT 9f191fe ITSELF READS IDENTICAL TO THE HEAD OF B-B, so the close-phase edits moved nothing.**
+    # THE UNIT AND THE DIRECTION: variety FELL by one, `live` did not move; the degrees resolved and the claims
+    # held moved with it (`Failure` 148 -> 159, `Success` 21 -> 19, `firsthand` claims 73994 -> 74406), because a
+    # date's firing now reaches the ledger and the scenes re-ranked at the margin. Per-verb world counts executed,
+    # before -> after: `examine` 14 -> 11, `fight` 33 -> 30, `give` 1 -> 2, `move` 55 -> 54, `petition` 70 -> 72,
+    # `release` 2 -> 3, `research` 97 -> 99, `restore` 7 -> 9, `surveil` 64 -> 65, `tell` 87 -> 88,
+    # `transfer` 86 -> 85; every other verb unmoved.
+    # THE SAME-BREATH CHECK: the universal set did not move (asserted below).
+    assert len(by_sig) == 119, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "

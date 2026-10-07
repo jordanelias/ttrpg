@@ -56,8 +56,14 @@ def calendar(self, token: Token) -> list[Event]:
                 emits="date.fired", subject=d.get("venue"),
                 causes=[prior] if prior else [ROOT])
         if not vacant:
+            # `04 §A.2` and `write_matrix.yaml`'s (DocketItem, matter) row give CALENDAR `docket.formed`; the write
+            # emitted nothing, the same defect `11b` closed for `date.fired`. Chained on the `date.fired` just emitted
+            # at this venue, under the same subject, so the antecedent is the firing that put the matter on the docket.
+            fired = w.last_emission_of("date.fired", d.get("venue"))
             w.write("DocketItem", token,
                     lambda did=did: w.docket.append({"date": did, "matter": None}),
-                    record_kind="DocketItem", fieldname="matter", driver="Event")
+                    record_kind="DocketItem", fieldname="matter", driver="Event",
+                    emits="docket.formed", subject=d.get("venue"),
+                    causes=[fired] if fired else [ROOT])
     TRACE.step("CALENDAR", "leave")
     return w.log[_mark:]

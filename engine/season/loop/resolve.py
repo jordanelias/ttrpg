@@ -25,7 +25,7 @@ from ..data.rosters import STRATA
 from typing import Optional
 from ..data.matrix import Step, matrix_row
 from ..data.requires import UNKNOWN, Verdict, binding_from_act, evaluate
-from ..data.verbs import (COUNTERPARTY_CLAUSE, ELIGIBILITY_CLAUSE, NO_PRECONDITION, VERB_TABLE,
+from ..data.verbs import (COUNTERPARTY_CLAUSE, ELIGIBILITY_CLAUSE, VERB_TABLE,
                           WRITE_CLAUSE, VerbRow)
 from ..gaps import Forbidden, Unspecified
 from ..loop.effects import EFFECTS
@@ -202,7 +202,7 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
         return (False, row.refusal_for(ELIGIBILITY_CLAUSE) or ("act.ineligible",),
                 Verdict(UNKNOWN, ()))
     verdict = Verdict(UNKNOWN, ())
-    if row.requires.strip() not in NO_PRECONDITION:
+    if row.has_precondition:
         if row.requires_typed is not None:
             # ⚠ THE TYPED CELL, AND `is True` RATHER THAN A TRUTH TEST. `evaluate` returns
             # three values, and UNKNOWN -- an operand the act does not carry, or a question
