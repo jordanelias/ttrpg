@@ -1,14 +1,14 @@
 # vocabulary registers — history
 
 Companion to the vocabulary registers under `references/`. **The YAML files are STATE; this one is HISTORY.**
-Reference only: nothing reads this file (CLAUDE.md §0.05). It is not read at session start.
+Reference only: no code consumes it as a fact (CLAUDE.md §0.05); `tools/validate_ed_citations.py` scans it like every `references/*.md`. It is not read at session start.
 
 ## Why the split (B-X, 2026-10-06)
 
 Jordan, 2026-10-06: *"you can extract all edit histories/discussion from .yaml files in references and
 just make those a supplement"*. The precedent is `references/id_reservations_history.md`. Dated narrative,
 rationale and provenance moved here **verbatim, not rewritten; nothing was deleted**. What stayed in each
-YAML is its purpose, schema, field definitions, anything a loader, validator or test reads, and a pointer
+YAML is its title or purpose statement, schema, field definitions, anything a loader, validator or test reads, and a pointer
 line to this file.
 
 **Which file is the head.** `alias_registry.yaml` and `censured_vocabulary.yaml` are GENERATED views

@@ -18,7 +18,7 @@ The moved text below is VERBATIM, grouped by the YAML's own sections. Nothing wa
 
 ### Head: WHY (purpose and what the index replaced)
 
-*(original lines 3-7 at HEAD, verbatim)*
+*(original lines 3-7 at 8b57336, verbatim)*
 
 ```yaml
 # WHY: names used to be hardcoded and duplicated across 50+ prose docs, engine/params/, the
@@ -30,7 +30,7 @@ The moved text below is VERBATIM, grouped by the YAML's own sections. Nothing wa
 
 ### Head: MIGRATION (how the file was seeded)
 
-*(original lines 43-47 at HEAD, verbatim)*
+*(original lines 43-47 at 8b57336, verbatim)*
 
 ```yaml
 # MIGRATION: seeded 2026-06-28 (attributes, faction/settlement stats, the proper-noun
@@ -42,7 +42,7 @@ The moved text below is VERBATIM, grouped by the YAML's own sections. Nothing wa
 
 ### ATTRIBUTES: why `Influence` was removed from the Charisma alias list
 
-*(original lines 88-93 at HEAD, verbatim)*
+*(original lines 88-93 at 8b57336, verbatim)*
 
 ```yaml
   # `Influence` REMOVED from this alias list 2026-09-16: it was the canonical name of
@@ -55,7 +55,7 @@ The moved text below is VERBATIM, grouped by the YAML's own sections. Nothing wa
 
 ### CONVICTIONS: header (migration of the disambiguation gate)
 
-*(original lines 102-106 at HEAD, verbatim)*
+*(original lines 102-106 at 8b57336, verbatim)*
 
 ```yaml
   # ── CONVICTIONS (the 7-axis character conviction class; new 2026-07-21, R2 / ED-IN-0082) ──
@@ -67,7 +67,7 @@ The moved text below is VERBATIM, grouped by the YAML's own sections. Nothing wa
 
 ### PRESSURE POINTS: header
 
-*(original lines 115-119 at HEAD, verbatim)*
+*(original lines 115-119 at 8b57336, verbatim)*
 
 ```yaml
   # ── PRESSURE POINTS (the 4-axis social-contest class; new 2026-07-21, R2 / ED-IN-0082) ──
@@ -79,7 +79,7 @@ The moved text below is VERBATIM, grouped by the YAML's own sections. Nothing wa
 
 ### MECHANICS: header
 
-*(original lines 125-129 at HEAD, verbatim)*
+*(original lines 125-129 at 8b57336, verbatim)*
 
 ```yaml
   # ── MECHANICS (strategic-layer mechanic tokens; new 2026-07-22, R2 namespacing / ED-IN-0082) ──
@@ -91,7 +91,7 @@ The moved text below is VERBATIM, grouped by the YAML's own sections. Nothing wa
 
 ### CLOCK TRACKS: clock.ip — canonical second, rival third
 
-*(original lines 142-146 at HEAD, verbatim)*
+*(original lines 142-146 at 8b57336, verbatim)*
 
 ```yaml
   # ⚠ CANONICAL SECOND, RIVAL THIRD (2026-09-16). This row carried ONLY 'Invasion Pressure' — which
@@ -103,7 +103,7 @@ The moved text below is VERBATIM, grouped by the YAML's own sections. Nothing wa
 
 ### CLOCK TRACKS: clock.pi — same defect, same block, same fix
 
-*(original lines 148-149 at HEAD, verbatim)*
+*(original lines 148-149 at 8b57336, verbatim)*
 
 ```yaml
   # ⚠ SAME DEFECT, SAME BLOCK, SAME FIX. Canon is PUBLIC Instability (68 corpus occurrences, missed);
@@ -112,7 +112,7 @@ The moved text below is VERBATIM, grouped by the YAML's own sections. Nothing wa
 
 ### FACTION STATS: retired at plan position `29b`
 
-*(original lines 154-158 at HEAD, verbatim)*
+*(original lines 154-158 at 8b57336, verbatim)*
 
 ```yaml
   # ── FACTION STATS: RETIRED at plan position `29b` (2026-10-01) ───────────────────────────────
@@ -124,7 +124,7 @@ The moved text below is VERBATIM, grouped by the YAML's own sections. Nothing wa
 
 ### SETTLEMENT STATS: set.facility_tier (ADDED)
 
-*(original lines 166-169 at HEAD, verbatim)*
+*(original lines 166-169 at 8b57336, verbatim)*
 
 ```yaml
   # ADDED 2026-09-16, found the moment `ci_names_consistency.py` learned to check the OTHER
@@ -135,7 +135,7 @@ The moved text below is VERBATIM, grouped by the YAML's own sections. Nothing wa
 
 ### PROPER-NOUN CORPUS FOLD-IN: NPC audit sourcing
 
-*(original lines 255-262 at HEAD, verbatim)*
+*(original lines 255-262 at 8b57336, verbatim)*
 
 ```yaml
   # NPC audit sourcing (R2/ED-IN-0082, 2026-07-22): the 10 curated tracked NPCs carry
@@ -150,7 +150,7 @@ The moved text below is VERBATIM, grouped by the YAML's own sections. Nothing wa
 
 ### territories: Schoenland filed with the places, classed as a faction
 
-*(original lines 301-305 at HEAD, verbatim)*
+*(original lines 301-305 at 8b57336, verbatim)*
 
 ```yaml
   # ⚠ FILED WITH THE PLACES, CLASSED AS A FACTION, AND BOTH ARE RIGHT. Schoenland is a foreign
@@ -162,7 +162,7 @@ The moved text below is VERBATIM, grouped by the YAML's own sections. Nothing wa
 
 ### factions: world.faction_x — the test faction
 
-*(original lines 312-329 at HEAD, verbatim)*
+*(original lines 312-329 at 8b57336, verbatim)*
 
 ```yaml
   # ⚠⚠ A TEST FACTION, NOT CANON — RULED BY JORDAN 2026-09-18: *"place them all under 'faction x'
@@ -187,7 +187,7 @@ The moved text below is VERBATIM, grouped by the YAML's own sections. Nothing wa
 
 ### factions: world.church — Church of Solmund ruling
 
-*(original lines 332-338 at HEAD, verbatim)*
+*(original lines 332-338 at 8b57336, verbatim)*
 
 ```yaml
   # RULED by Jordan, 2026-09-13: "the church is Church of Solmund." This row said `Church` while

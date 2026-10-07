@@ -28,8 +28,8 @@ field, and it carries character facts such as TS and card identity, not only his
 and a two-line summary of the open items.
 
 **Two live pointers into this history, outside this file's lane.** `engine/season/rosters.yaml`
-(the comment near its line 68) says the Holdar `Continuity` -> `Warden` migration is "documented in
-the registry's own rows", and `engine/season/cases/NPC4.yaml` (`why:` text near lines 370 and 495)
+(the comment near its line 72) points the Holdar `Continuity` -> `Warden` migration here (Holdar has no
+row of his own; NPC-001's note states the default), and `engine/season/cases/NPC4.yaml` (`why:` text near lines 370 and 495)
 cites "her migration_notes" / "migration_notes ... Templar arm". Those rows now live in the
 per-entry sections below.
 

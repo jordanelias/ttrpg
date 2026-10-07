@@ -5,7 +5,7 @@
 # History and discussion: references/lane_assignments_history.md
 #
 # ⚠️ The session-lane declaration, the bootstrap Status Block, github_ops and the registers/handoffs/*.yaml
-# machinery this file once drove are RETIRED (LB-22; relocated to deprecated/session_machinery/). The lane
+# machinery this file once drove are RETIRED (LB-22). The lane
 # OWNS-globs and reserved-ID ranges below remain live; launch_protocol steps naming github_ops/g.* or
 # registers/handoffs/*.yaml are historical.
 # ⚠️ This file's Lane A/B/C (write-disjoint session lanes) is a DIFFERENT, OLDER concept from the nine
@@ -146,4 +146,4 @@ launch_prerequisites:
   - "[DONE 2026-05-31] Commit this lane spec where bootstrap surfaces it (item 5.11)."
   - "[DONE 2026-05-31] references/id_reservations.yaml committed (item 5.10 — reserved blocks)."
   - "[OPTIONAL] Revive the session-log/index registry (5.7) for the active-session line; NOT a hard prerequisite (handoffs carry disjointness + visibility)."
-  - "[BEFORE LANE A] Run Track 1.1 reconciliation so Lane A's owns no longer overlap the faction handoff."
+  - "[DONE 2026-06-09] Run Track 1.1 reconciliation so Lane A's owns no longer overlap the faction handoff."

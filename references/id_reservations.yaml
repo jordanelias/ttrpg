@@ -60,7 +60,7 @@ exhaustion_policy: "at integration: assign the next disjoint blocks per lane; ne
 # =====================================================================================
 # ED-<LANE>-NNNN LANE-TAGGED NAMESPACE (2026-07-02, ED-IN-0001)
 # =====================================================================================
-# WHY: a lane tag makes CROSS-LANE collision impossible by construction. History: id_reservations_history.md#lane-namespace
+# WHY: a lane tag makes CROSS-LANE collision impossible by construction; same-lane collisions remain possible. History: id_reservations_history.md#lane-namespace
 #
 # FORMAT: ED-<LANE>-NNNN, zero-padded to 4 digits (e.g. ED-<LANE>-0001). Citation matching
 # (tools/validate_ed_citations.py) normalises padding away, same as the flat format.
@@ -85,7 +85,7 @@ lane_ids:
     MB: { name: "Mass battle",         next_free: 79 }   # ED-MB-0078 allocated 2026-10-01 (plan position 20-iv: d.1's season morale source, one open choice). ED-MB-0076/0077 allocated 2026-09-29 (workplan position 11: MB hand pass + 25 MB-GOLDEN executed; ED-MB-0075 option (2) built). ED-MB-0065..0074: synthesis ruling + Tier-1 build slate + Tier-2 (A3/A7/A8/C4) executed, A7 corrected post-review. Per-ED detail: registers/editorial_ledger_mb.jsonl. Narrative: id_reservations_history.md#mb
     PC: { name: "Personal combat",     next_free: 59 }   # ED-PC-0058 allocated 2026-09-29 (workplan position 12: the partisan deletion + Ob-from-defender). ED-PC-0057 (2026-08-27, fiat-ceiling abolition); ED-PC-0056 (2026-08-08, doc consolidation 5->1). Narrative: id_reservations_history.md#pc
     FI: { name: "Field investigation", next_free: 10 }   # no reservation held; allocate at next_free as normal. ED-FI-0009 allocated 2026-09-10 (the six investigation acts built as six verb rows; the seam/pool/obstacle/exposure ruling request). Narrative: id_reservations_history.md#fi
-    SC: { name: "Social contest",      next_free: 40 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0017-0020 returned, max allocated ED-SC-0016. Narrative: id_reservations_history.md#sc
+    SC: { name: "Social contest",      next_free: 40 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0017-0020 returned, max allocated ED-SC-0016 at that time. Narrative: id_reservations_history.md#sc, #p2-sc
     # ED-SC-0039 allocated 2026-10-06 at the v9 adoption (status ratified: the proceedings subsystem, AS INTENT ONLY). Entry: registers/editorial_ledger_sc.jsonl.
     FA: { name: "Faction actions",     next_free: 39 }  # ED-FA-0037 allocated 2026-08-25 (mass-seizure Accord tier/continuous write). Block RELEASED 2026-07-30 (ED-IN-0098): 0037-0039 returned, max allocated ED-FA-0036 at that time. Narrative: id_reservations_history.md#fa
     WR: { name: "World",               next_free: 13 }   # ED-WR-0012 2026-09-20 (detail in the lane ledger).   # ED-WR-0011 allocated 2026-09-13 (OI-05 filed as a ruling; needs_jordan). ED-WR-0010 allocated 2026-09-10 (threadwork PRACTICAL APPLICATIONS by subsystem — the uploaded Unreality Suite's applied corpus carried across and re-priced against canon/philosophy/; PROPOSED and HELD BACK FROM RATIFICATION-ON-MERGE IN FULL). Block RELEASED 2026-07-30 (ED-IN-0098): 0010-0012 returned, max allocated ED-WR-0009 at that time. Narrative: id_reservations_history.md#wr

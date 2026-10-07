@@ -16,7 +16,7 @@ comment moves are invisible to code.
 note, the naming-collision warning and the ID-allocation note, and a pointer here. **What moved:** the
 header's provenance prose, the dated notes, the annotated-out `tests/hooks/**` entry, one long trailing
 comment, and the `launch_blocker_resolved` key (a dated `[RESOLVED 2026-06-09]` note that nothing reads;
-the one deliberate data change, `yaml.safe_load` differs from HEAD in that key alone).
+the one deliberate data change, `yaml.safe_load` differs from the file at 8b57336 in that key alone).
 
 **Adding here, not there.** New dated narrative about a lane goes in this file; the YAML keeps only what
 an editor needs to act.
@@ -25,7 +25,7 @@ The moved text is VERBATIM, grouped by the YAML's own sections. Nothing was dele
 
 ### Head: source and verification provenance
 
-*(original lines 4-6 at HEAD, verbatim)*
+*(original lines 4-6 at 8b57336, verbatim)*
 
 ```yaml
 # Source of truth a cold "proceed lane X" session reads. Built bottom-up from the
@@ -35,7 +35,7 @@ The moved text is VERBATIM, grouped by the YAML's own sections. Nothing was dele
 
 ### Head: session-lane declaration, and the RETIRED-MACHINERY note (2026-07-01, ED-1084)
 
-*(original lines 8-16 at HEAD, verbatim)*
+*(original lines 8-16 at 8b57336, verbatim)*
 
 ```yaml
 # A session DECLARES its lane via:  env VALORIA_LANE=<A|B|C>   OR   file /home/claude/.valoria_lane
@@ -51,7 +51,7 @@ The moved text is VERBATIM, grouped by the YAML's own sections. Nothing was dele
 
 ### Head: NAMING COLLISION WARNING (2026-07-02)
 
-*(original lines 17-23 at HEAD, verbatim)*
+*(original lines 17-23 at 8b57336, verbatim)*
 
 ```yaml
 # ⚠️ NAMING COLLISION WARNING (2026-07-02): this file's "Lane A/B/C" (write-disjoint
@@ -65,7 +65,7 @@ The moved text is VERBATIM, grouped by the YAML's own sections. Nothing was dele
 
 ### Head: ID ALLOCATION note (2026-07-05)
 
-*(original lines 30-34 at HEAD, verbatim)*
+*(original lines 30-34 at 8b57336, verbatim)*
 
 ```yaml
 # ID ALLOCATION (2026-07-05 note superseding the v5 §0a exhaustion warning): the flat ED
@@ -77,7 +77,7 @@ The moved text is VERBATIM, grouped by the YAML's own sections. Nothing was dele
 
 ### Lane A `owns`: the `designs/scene/**` annotation (2026-06-12, Jordan)
 
-*(original lines 64-64 at HEAD, verbatim)*
+*(original lines 64-64 at 8b57336, verbatim)*
 
 ```yaml
       - "designs/scene/**"          # [2026-06-12 Jordan] scene -> Lane A (sole design-content lane; owns all sibling designs/ globs). Resolves OWNS-GAP: social_contest/combat_engine_v1/conviction_track/derived_stats/miraculous_event/investigation_systems/fieldwork were unowned. Fieldwork to move into designs/scene/fieldwork/ (separate Lane-A op).
@@ -85,7 +85,7 @@ The moved text is VERBATIM, grouped by the YAML's own sections. Nothing was dele
 
 ### Lane A: `launch_blocker_resolved` (the one key removed from the data)
 
-*(original lines 76-80 at HEAD, verbatim)*
+*(original lines 76-80 at 8b57336, verbatim)*
 
 ```yaml
     launch_blocker_resolved: >
@@ -97,7 +97,7 @@ The moved text is VERBATIM, grouped by the YAML's own sections. Nothing was dele
 
 ### Lane B `owns`: the retired-harness annotation (S6/6a)
 
-*(original lines 85-85 at HEAD, verbatim)*
+*(original lines 85-85 at 8b57336, verbatim)*
 
 ```yaml
       - "deprecated/skills/valoria-orchestrator/scripts/**"   # retired harness — forked 2026-08-23 (S6/6a); pattern now matches nothing and is kept only so an old lane citation still reads
@@ -105,7 +105,7 @@ The moved text is VERBATIM, grouped by the YAML's own sections. Nothing was dele
 
 ### Lane B `owns`: the annotated-out `tests/hooks/**` entry (ED-IN-0119)
 
-*(original lines 87-90 at HEAD, verbatim)*
+*(original lines 87-90 at 8b57336, verbatim)*
 
 ```yaml
       # - "tests/hooks/**"   # tree emptied 2026-08-01 (ED-IN-0119): 11 dead modules

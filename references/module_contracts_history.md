@@ -22,8 +22,10 @@ which no code reads by key), the `wiring_vocabularies` definitions, and the shor
 that define a value (`[ASSUMPTION]`, `[verification ...]`, `prose display-names`).
 
 **What reads this file:** every loader found by grep over `tests/`, `tools/`, `engine/`, `skills/` and
-`.claude/` uses a YAML loader, which discards comments, so the move is invisible to them. The one
-reader of the raw text is `tests/valoria/test_flow_skeletons.py` (`leaf in _read(target)`), which
+`.claude/` uses a YAML loader, which discards comments, so the move is invisible to them. Raw-text
+readers: `tools/freshness_gate.py` (the blob pin, so any byte edit needs `--update`),
+`tools/ci_register_size_check.py` (token count), `tools/validate_ed_citations.py` (line scan) and
+`tests/valoria/test_flow_skeletons.py` (`- module:` rows; `leaf in _read(target)`), which
 requires a symbol cited by a frozen skeleton to occur anywhere in the file: that is why the retired
 role names (`parliamentary_vote`, `territory_transfer_proposal`, ...) stay in a retained comment under
 `composition_roles:`. `tools/export_composition.py --check` is the blocking round-trip over

@@ -69,7 +69,7 @@
 #            behaviour on every contested cell: two-person councils, the same two people in each,
 #            the same four resonant styles. The one apparent difference is Björn Holdar's
 #            conviction (behaviour `Continuity`, registry `Warden`), and that is the ratified
-#            PP-685 §4 legacy migration (documented in references/npc_registry_history.md), not a conflict.
+#            PP-685 §4 legacy migration (its Continuity -> Warden default: NPC-001's note, references/npc_registry_history.md), not a conflict.
 #            So the superseding document and the machine-readable cast agree, and building from
 #            the registry IS building to this ruling. MEASURED 2026-09-13.
 #   TIER 3 · `research/`        — REFERENCE. Verbatim: *"research/ contains useful information to
@@ -443,7 +443,7 @@ rosters:
   # byte-identical and still carry the old 13-name taxonomy — only the season-side label moved.
   pursuits:
     source: >-
-      references/descriptor_registry.yaml `conviction_roster` (:235-251), count 13, itself sourced
+      references/descriptor_registry.yaml `conviction_roster` (:132-148), count 13, itself sourced
       from systems/characters/reference/conviction_taxonomy_v30.md §2 and exported to
       engine/engine_params/descriptors.json behind a BLOCKING --check (tools/export_descriptors.py).
     open: true

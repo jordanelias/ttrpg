@@ -734,7 +734,7 @@ The text below is VERBATIM, grouped under the YAML section it came from. Nothing
 
 ### <a id="p2-header"></a>Header: source and the session-time verification note
 
-*(original lines 8-10 at HEAD, verbatim)*
+*(original lines 8-10 at 8b57336, verbatim)*
 
 ```yaml
 # Source: Valoria Master Workplan v2 (2026-05-31) — RESERVED ID RANGES + item 5.10.
@@ -744,7 +744,7 @@ The text below is VERBATIM, grouped under the YAML section it came from. Nothing
 
 ### <a id="frozen-ed"></a>`verified_live_max.ED` — the freeze point and the ED-1095/1096 collision incident (the full trailing comment)
 
-*(original lines 25-25 at HEAD, verbatim)*
+*(original lines 25-25 at 8b57336, verbatim)*
 
 ```yaml
   ED: 1096                         # FROZEN 2026-07-02 (ED-IN-0001 cutover, origin/main) — 1094 was the FINAL flat ED-NNNN value AS OF THAT CUTOVER; no new flat allocations from here on. This branch's own ED-1095/ED-1096 (T1-T4 charge-recoil ruling; movement/pathing audit ratification) were filed on the mass-battle lane BEFORE this branch learned of the cutover, using the old flat scheme, and do not collide with anything origin/main claimed (origin/main jumped straight from 1094 to ED-IN-0001/0002) — so 1095/1096 stand as valid, permanent flat IDs, just filed after the nominal freeze point. Any FURTHER new ED from this point on uses the ED-<LANE>-NNNN namespace below, not a flat number. Full incident history (three same-session collisions on this one block): registers/editorial_ledger.jsonl (max ED referenced, 2026-07-02 — origin/main's concurrent month-overview-consolidation lane independently claimed ED-1093/1094 for its own content (J-38 propagation-spec + merge-ratifies-by-default convention, itself already twice-renumbered on that lane) while this branch held ED-1093 (T1-T4 charge-recoil ruling) + ED-1094 (movement/pathing audit ratification) — this branch's two colliding IDs renumbered to ED-1095/ED-1096 before merging origin/main in, which itself had independently landed ED-1088-1092 (mass-battle LC-8 + three Jordan rulings + Stage F investigation, PRs #59/#62/#64/#65) against this branch's own now-renumbered ED-1089/1090 — two same-session collisions on origin/main's side plus this branch's own third motivated the ED-<LANE>-NNNN namespace below)
@@ -752,7 +752,7 @@ The text below is VERBATIM, grouped under the YAML section it came from. Nothing
 
 ### Round 1 overrun note (above `reservations:`)
 
-*(original lines 29-31 at HEAD, verbatim)*
+*(original lines 29-31 at 8b57336, verbatim)*
 
 ```yaml
 # Round-1 blocks A/B/C (ED 890-999) were exhausted and overrun to ED-1042 in the unreserved
@@ -762,7 +762,7 @@ The text below is VERBATIM, grouped under the YAML section it came from. Nothing
 
 ### <a id="lane-namespace"></a>ED-<LANE>-NNNN namespace — the motivating collisions
 
-*(original lines 66-76 at HEAD, verbatim)*
+*(original lines 66-76 at 8b57336, verbatim)*
 
 ```yaml
 # Motivated by TWO same-session concurrent-allocation collisions on the flat ED-NNNN
@@ -780,7 +780,7 @@ The text below is VERBATIM, grouped under the YAML section it came from. Nothing
 
 ### <a id="lane-key-repair"></a>`lane_ids`: the 2026-07-07 duplicate-lane-key repair, and the ED-IN-0012/0013 renumber
 
-*(original lines 92-106 at HEAD, verbatim)*
+*(original lines 92-106 at 8b57336, verbatim)*
 
 ```yaml
 # ⚠ 2026-07-07 REPAIR (this file previously carried DUPLICATE lane keys for FI/SC/FA/WR/IN —
@@ -802,7 +802,7 @@ The text below is VERBATIM, grouped under the YAML section it came from. Nothing
 
 ### <a id="p2-mb"></a>MB: older per-ED notes (ED-MB-0001..0007 and the OPT-13 allocation)
 
-*(original lines 112-123 at HEAD, verbatim)*
+*(original lines 112-123 at 8b57336, verbatim)*
 
 ```yaml
     # Older MB history (moved to its own comment lines 2026-07-13 so a fresh OPEN citation on the
@@ -821,7 +821,7 @@ The text below is VERBATIM, grouped under the YAML section it came from. Nothing
 
 ### <a id="p2-pc"></a>PC: per-ED notes ED-PC-0003..0012
 
-*(original lines 125-192 at HEAD, verbatim)*
+*(original lines 125-192 at 8b57336, verbatim)*
 
 ```yaml
     # ED-PC-0003 + ED-PC-0004 allocated 2026-07-07 (status open): ed_options OPT-10 (sigma band-discipline unification, executes armature §5.12) + OPT-15 (ED-1042 reconciliation) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
@@ -896,7 +896,7 @@ The text below is VERBATIM, grouped under the YAML section it came from. Nothing
 
 ### <a id="p2-fi"></a>FI: ED-FI-0003
 
-*(original lines 194-194 at HEAD, verbatim)*
+*(original lines 194-194 at 8b57336, verbatim)*
 
 ```yaml
     # ED-FI-0003 allocated 2026-07-07 (status open): ed_options OPT-6 (knots propagation completion) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
@@ -904,7 +904,7 @@ The text below is VERBATIM, grouped under the YAML section it came from. Nothing
 
 ### <a id="p2-sc"></a>SC: per-ED notes ED-SC-0011, 0017..0024, 0033..0038
 
-*(original lines 196-222 at HEAD, verbatim)*
+*(original lines 196-222 at 8b57336, verbatim)*
 
 ```yaml
     # ED-SC-0038 allocated 2026-09-26 (status ruled, NOT needs_jordan): two of Jordan's 2026-09-04
@@ -938,7 +938,7 @@ The text below is VERBATIM, grouped under the YAML section it came from. Nothing
 
 ### <a id="p2-fa"></a>FA: ED-FA-0004 / 0005
 
-*(original lines 224-224 at HEAD, verbatim)*
+*(original lines 224-224 at 8b57336, verbatim)*
 
 ```yaml
     # ED-FA-0004 + ED-FA-0005 allocated 2026-07-07 (status open): ed_options OPT-1 (faction-oracle reconciliation, banner-now sequencing ruled) + OPT-2 (elimination-lockout, no-permanent-lockout ruled) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
@@ -946,7 +946,7 @@ The text below is VERBATIM, grouped under the YAML section it came from. Nothing
 
 ### <a id="p2-wr"></a>WR: ED-WR-0004 / 0005 / 0006
 
-*(original lines 226-226 at HEAD, verbatim)*
+*(original lines 226-226 at 8b57336, verbatim)*
 
 ```yaml
     # ED-WR-0004/0005/0006 allocated 2026-07-07 (status open): ed_options OPT-4 (Turmoil victory-gate, wire-the-clock ruled) / OPT-5 (threadwork execution reconciliation) / OPT-12 (NPC orphan triage ED) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
@@ -954,7 +954,7 @@ The text below is VERBATIM, grouped under the YAML section it came from. Nothing
 
 ### <a id="p2-in-a"></a>IN: the duplicate-`IN:`-key collapse (ED-IN-0068) and the ED-IN-0068..0072 / 0280-0281 notes above the IN row
 
-*(original lines 227-255 at HEAD, verbatim)*
+*(original lines 227-255 at 8b57336, verbatim)*
 
 ```yaml
     # IN lane (Infrastructure / cross-cutting). 4 duplicate IN: keys collapsed -> 1
@@ -990,7 +990,7 @@ The text below is VERBATIM, grouped under the YAML section it came from. Nothing
 
 ### <a id="p2-in-b"></a>IN: the 2026-07-07 note and ED-IN-0028 below the IN row
 
-*(original lines 258-265 at HEAD, verbatim)*
+*(original lines 258-265 at 8b57336, verbatim)*
 
 ```yaml
     # 2026-07-07 (status open unless noted): ED-IN-0012/0013's edge-playability pair RENUMBERED to
@@ -1005,7 +1005,7 @@ The text below is VERBATIM, grouped under the YAML section it came from. Nothing
 
 ### <a id="p2-se"></a>SE: ED-SE-0003 / 0004
 
-*(original lines 268-268 at HEAD, verbatim)*
+*(original lines 268-268 at 8b57336, verbatim)*
 
 ```yaml
     # ED-SE-0003 + ED-SE-0004 allocated 2026-07-07 (status open): ed_options OPT-9 (armature keying wave) + OPT-16 (execute ED-SE-0001's own updates) — 2026-07-07 consolidated ruling pass, see ED-IN-0026

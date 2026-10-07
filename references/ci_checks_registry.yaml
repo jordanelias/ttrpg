@@ -313,7 +313,7 @@ ci_checks:
     posture: harden
     role: "Authored cases -> the cast: tools/export_npc_roster.py --check re-derives engine/season/npcs.yaml from engine/season/cases/NPC*.yaml and REPORTS every row that differs WITHOUT failing -- a hand-corrected home or tie is the roster working as intended. It FAILS only on a row naming a case, a place or a person that does not exist. (The word 'must match' stood here and was wrong about the gate this line defines: §4 makes this role: the machine-read place a tool's verb is defined, and it was telling every reader that a hand edit reds CI when the tool deliberately guarantees it does not.) npcs.yaml is read by engine/season/harness/populated.py, so a stale artifact is a populated world whose people are not the people the cases authored."
     ci_job: validators
-    notes: "WIRED into CI (ci_job below): an unrun --check is a single-owner property the tree lacks, which tools/ci_common.py names against itself. NOT A SECOND HEAD: references/npc_registry.yaml carries identity, convictions and role; npcs.yaml carries placement and wants — disjoint fields, so the two readers cannot disagree about content."
+    notes: "WIRED into CI (ci_job above): an unrun --check leaves a single-owner property unenforced, the defect tools/ci_common.py names against itself. NOT A SECOND HEAD: references/npc_registry.yaml carries identity, convictions and role; npcs.yaml carries placement and wants — disjoint fields, so the two readers cannot disagree about content."
 
   - path: tools/export_composition.py
     level: 5
@@ -433,7 +433,7 @@ ci_checks:
       `python tools/fold_ledger_to_latest.py --queue`. Does NOT scan the older, pre-migration
       `registers/archive/*.yaml` corpus, structurally separate from the `.jsonl` ledgers this tool reads — a row
       resolved only there reads as "not found," not as resolved, to `--id` (exact-id lookup only; it does not accept
-      a fragment or a prefix).
+      a fragment or a prefix). That corpus is not reliably all-terminal (a live flagged row can sit there) and this tool does not verify it.
 
 
 # ── Level 1-2 (text/skill, supervisory only) ─────────────────────────────────

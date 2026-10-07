@@ -10,8 +10,8 @@ defaults:
   compliance_check_on_bootstrap: true
   compliance_check_on_commit: true
   compliance_check_on_close: true
-  # auto_fix_on_violation is honoured at commit time but overridden to print-only at bootstrap
-  # (valoria_hooks.assert_bootstrap). History: references/atomization_rules_history.md.
+  # No program reads `defaults:` (tools/compliance_check.py reads `policies:` only; its auto-fix half was excised).
+  # History: references/atomization_rules_history.md.
   auto_fix_on_violation: true
   # RULED 2026-07-26 (Jordan): the index/skeleton + infill split is RETIRED as a default.
   force_skeleton_routing_for_design_docs: false
@@ -260,7 +260,7 @@ policies:
   - match: "references/module_contracts.yaml"
     max_tokens: 32000
     on_exceed: "warn_only"
-    note: "Genuinely comprehensive per-module IN/resolver/OUT contract registry, machine-checked by skills/valoria-module-adjudicator/scripts/contract_adjudicator.py; expected to grow, not shrink, as doc:null gaps close. The cap is single-sourced here: tools/ci_register_size_check.py reads this max_tokens (MODULE_CONTRACTS_LIMIT). Re-measure with `python3 tools/ci_register_size_check.py`, which prints the token count. Raise history and measurements: references/atomization_rules_history.md."
+    note: "Genuinely comprehensive per-module IN/resolver/OUT contract registry, validated by tools/export_composition.py (blocking --check); expected to grow, not shrink, as doc:null gaps close. The cap is single-sourced here: tools/ci_register_size_check.py reads this max_tokens (MODULE_CONTRACTS_LIMIT). Re-measure with `python3 tools/ci_register_size_check.py`, which prints the token count. Raise history and measurements: references/atomization_rules_history.md."
 
 
   # ────────────────────────────────────────────────────────────

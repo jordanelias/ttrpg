@@ -98,7 +98,7 @@ silently swallowed:
     "Influence" WAS both an alias of attr.social.charisma and the canonical name of fac.influence,
     and the attribute won the string because it is checked first. The fold-in this paragraph used
     to await was a DATA change and it has been made: the alias is removed from both registries that
-    carried it (names_index.yaml, descriptor_registry.yaml:58), so resolve("Influence") now returns
+    carried it (names_index.yaml, descriptor_registry.yaml:46), so resolve("Influence") now returns
     fac.influence — the faction stat that owns the name. MEASURED before removing: every bare
     "Influence" in the corpus is the roll stat, none means Charisma. tools/export_names.py now
     REFUSES an alias that shadows another row's canonical, which is what stops it recurring.

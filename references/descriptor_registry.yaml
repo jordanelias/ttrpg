@@ -121,8 +121,7 @@ category_b_scalars:
     Registrations, not schema bindings (see section header). Bucket values (track / clock /
     derived_value) are transcribed from the cited module_contracts.yaml row for orientation only
     -- module_contracts.yaml remains the authoritative bucket source; if the two ever disagree,
-    module_contracts.yaml wins and this entry is stale (re-sync on discovery, same convention as
-    the Coherence 3-way-disagreement note below).
+    module_contracts.yaml wins and this entry is stale (re-sync on discovery).
 
 # ============================================================================
 # CONVICTION ROSTER -- ENUMERATED HERE, because a roster stated only in prose is one no code can read (CLAUDE.md 0.05).

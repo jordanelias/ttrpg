@@ -161,7 +161,7 @@ def test_module_contracts_sim_module_join_is_exact():
     assert checked == len(meta) == 26, f'expected all 26 module_contracts.yaml rows accounted, got {checked}'
     assert join['unresolvable'] == [], f"unresolvable (fictional/stale sim_module:) rows: {join['unresolvable']}"
     # SUBSET, not equality, and deliberately so. `mass_battle` is undeclared because the row is
-    # MB-lane-owned and this (IN-owned) wave may not edit it — but module_contracts.yaml:552
+    # MB-lane-owned and this (IN-owned) wave may not edit it — but module_contracts.yaml:422
     # explicitly invites the MB session to add its `sim_module:`, and mechanics_index already
     # carries the path. An `== ['mass_battle']` pin would go RED the moment MB lands its own row,
     # forcing MB to edit an IN-owned test file to ship in-lane work — a foreseeable cross-lane

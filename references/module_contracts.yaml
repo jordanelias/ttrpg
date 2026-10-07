@@ -35,7 +35,7 @@ status: EXTRACTED_STAGE1   # campaign_architecture stub remains
 # Adding a subsystem to the campaign loop is now a row here, not an import in the engine.
 # `target` is `dotted.module:callable`. The resolver imports lazily, at first call.
 composition_roles:
-  # Retired roles, not to be re-added without a caller: `rs_track_delta`, `territory_transfer_candidate`, `territory_transfer_proposal`,
+  # Retired roles (among others; full list: module_contracts_history.md), not to be re-added without a caller: `rs_track_delta`, `territory_transfer_candidate`, `territory_transfer_proposal`,
   # `parliamentary_vote`, `parliamentary_motion`, `parliamentary_vote_declaration`, `world_gen_settlements`.
   # ID-13 applies to the next row added: a role no caller requires is not declared.
   #
@@ -58,7 +58,7 @@ modules:
   - module: faction_state
     aliases: ["Faction Layer"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "faction_layer"   # Key Type Registry vocabulary
-    doc: .designs/systems/factions/reference/faction_behavior_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    doc: .designs/systems/factions/reference/faction_behavior_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
     sim_module: none   # this contract's state: block describes no code (row kept: other contracts' `with:` joins name it)
     scales: [provincial]
     resolver: deterministic_accounting   # [ASSUMPTION] accounting-cadence procedures; d_sigma for contested resolution per ED-874
@@ -159,7 +159,7 @@ modules:
   - module: piety_track
     aliases: ["Conviction Track"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "conviction_track"   # Key Type Registry vocabulary
-    doc: .designs/systems/characters/reference/conviction_track_v1.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    doc: .designs/systems/characters/reference/conviction_track_v1.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
     sim_module: systems/characters/sim/conviction.py   # the PERSONAL piety_track's code, not territorial_piety's (3-way name collision, see gap_notes)
     scales: [personal]
     resolver: deterministic_accounting   # [ASSUMPTION] scar accumulation thresholds (conviction_track_v1 §2)
@@ -193,7 +193,7 @@ modules:
       note: conviction.py Scar accumulation real; reached only via the unwired knot chain.
 
   - module: territorial_piety
-    doc: .designs/systems/characters/reference/conviction_track_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    doc: .designs/systems/characters/reference/conviction_track_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
     sim_module: none
     scales: [territory, provincial]
     resolver: deterministic_accounting   # [ASSUMPTION] CV movement rules §1.2 + seasonal TC calculation §3
@@ -230,7 +230,7 @@ modules:
 
   - module: threadwork
     registry_system: "threadwork"   # Key Type Registry vocabulary
-    doc: .designs/systems/threadwork/reference/threadwork_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    doc: .designs/systems/threadwork/reference/threadwork_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
     sim_module: systems/threadwork/sim/operations.py
     scales: [personal, thread]
     resolver: dice_pool   # Leap Roll + operation rolls (threadwork_v30 Part Two)
@@ -260,7 +260,7 @@ modules:
   - module: fieldwork_knots
     aliases: ["Knots"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "fieldwork"   # Key Type Registry vocabulary
-    doc: .designs/systems/fieldwork/reference/knots_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    doc: .designs/systems/fieldwork/reference/knots_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
     sim_module: systems/fieldwork/sim/knots.py   # primary: knots.py; the Evidence/Disposition Track rows are implemented in the sibling systems/fieldwork/sim/fieldwork.py
     scales: [personal, scene]
     resolver: dice_pool   # Fieldwork Pool (fieldwork_v30 §2); knot formation procedure (knots_v30 §3.2)
@@ -393,7 +393,7 @@ modules:
 
   - module: social_contest
     registry_system: "social_contest"   # Key Type Registry vocabulary
-    doc: .designs/systems/social_contest/reference/social_contest_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    doc: .designs/systems/social_contest/reference/social_contest_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
     sim_module: systems/social_contest/sim/contest/
     scales: [scene]
     resolver: dice_pool
@@ -418,8 +418,8 @@ modules:
   - module: mass_battle
     aliases: ["Mass Combat"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "mass_battle"   # Key Type Registry vocabulary
-    doc: .designs/systems/mass_battle/reference/mass_battle_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
-    # sim_module: deliberately absent on this row (reported `undeclared`, not `unresolvable`); mechanics_index.yaml carries `mass_battle -> systems/mass_battle/sim/massbattle.py`.
+    doc: .designs/systems/mass_battle/reference/mass_battle_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
+    # sim_module: deliberately absent until the MB lane adds it (reported `undeclared`, not `unresolvable`); mechanics_index.yaml carries `mass_battle -> systems/mass_battle/sim/massbattle.py`.
     scales: [scene]
     resolver: dice_pool
     state: []
@@ -478,7 +478,7 @@ modules:
 
   - module: peninsular_strain
     registry_system: "peninsular_strain"   # Key Type Registry vocabulary
-    doc: .designs/systems/overview/reference/peninsular_strain_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    doc: .designs/systems/overview/reference/peninsular_strain_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
     sim_module: systems/overview/sim/   # DIRECTORY: the state: block splits across several files with no single owner (MS: ms_track.py; Turmoil has no tracker file)
     scales: [peninsula]
     resolver: deterministic_accounting   # [ASSUMPTION]
@@ -531,7 +531,7 @@ modules:
 
   - module: settlement_layer
     registry_system: "settlement_layer"   # Key Type Registry vocabulary
-    doc: .designs/systems/settlements/reference/settlement_layer_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    doc: .designs/systems/settlements/reference/settlement_layer_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
     sim_module: none
     scales: [settlement, territory]
     resolver: deterministic_accounting
@@ -653,7 +653,7 @@ modules:
       note: CANONICAL doc, ZERO Key integration; card system unbuilt.
 
   - module: victory
-    doc: .designs/systems/victory/reference/victory_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    doc: .designs/systems/victory/reference/victory_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
     sim_module: none
     scales: [provincial, peninsula]
     resolver: state_reader   # reads aggregated clocks/state at Accounting; era transitions are deterministic
@@ -753,7 +753,7 @@ modules:
 
   - module: miraculous_event
     registry_system: "miraculous_event"   # Key Type Registry vocabulary
-    doc: .designs/systems/world/reference/miraculous_event_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the key graph's authority check, the census).
+    doc: .designs/systems/world/reference/miraculous_event_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
     sim_module: none
     scales: [personal, settlement, peninsula]   # [verification P6: was [personal, scene]; matches registry default_scale_signature]
     resolver: state_reader   # [ASSUMPTION] gated emitter: fires on high-Ob Mending near T15
