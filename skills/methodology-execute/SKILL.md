@@ -434,7 +434,7 @@ against a working-tree diff, since nothing is left uncommitted by the time a bat
   sees any fix it forces. The plan's own definition of each check governs what it is; this skill
   only moves when. A falsifier that fails here follows the plan's own stopping rule for that
   position.
-- Its **Phase 3 tier, escalation trigger, checklist, and the top-down/bottom-up handshake**
+- Its **Phase 3 tier, checklist, and the top-down/bottom-up handshake**
   (§3.1–3.7) apply as written there, run against the batch's post-Phase-2 diff. INTERDEPENDENCIES
   and the FORWARD/BACKWARD SWEEPS are more likely to find something real here than at single-item
   scale, precisely because several items have now landed together — that is the case BATCH-CLOSE

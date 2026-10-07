@@ -10,7 +10,7 @@ description: >
   the plan's own independent parts, never a fixed count. PHASE 2: the native `/code-review --fix`,
   then `/simplify`, then the `layer-conformance` skill, run in that order on one shared tree, each
   one's fixes applied before the next reads it. PHASE 3: one terminal critique — Opus at
-  effort high, max only on a named trigger — auditing code correctness, interdependencies,
+  effort high — auditing code correctness, interdependencies,
   and forward/backward sweeps, run as a top-down holistic pass that HANDSHAKES a bottom-up granular
   one (every altitude-level finding traced to the site that causes it, and back). Reuses
   `valoria-critic` for every critic dispatch in all three phases; mints no new roster entry. Use
@@ -85,9 +85,9 @@ mechanical classes they already exist to catch. **Opus sits at two places, not o
 antagonist, because reconciling independent (and possibly disagreeing) lenses into one verdict is
 itself the competing-considerations judgment CLAUDE.md §10 names for Opus — the act of deciding
 which of several Sonnet findings survives; and the Phase 3 terminal critique, because it is this
-pipeline's final gate. **Both run at CLAUDE.md §10's default, `high`; `max` is an escalation with a
-named trigger (§3.2), never a default** — Jordan, 2026-10-07, reduced effort and tiered the
-models: the 2026-09-29 ruling had put every agonist and the terminal critique at `max`. Every
+pipeline's final gate. **Both run at CLAUDE.md §10's default, `high`, and nothing here runs at `max`** — Jordan, 2026-10-07,
+reduced effort and tiered the models: the 2026-09-29 ruling had put every agonist and the terminal
+critique at `max`. Every
 dispatch sets its `model` and its `effort` on the Agent call, never left to inherit the session's.
 Running the phases out of order, or skipping
 one because an earlier one found nothing, is not a shortcut: each phase checks a different axis,
@@ -195,17 +195,14 @@ The point of the top tier is a single judgment pass. A chorus of Opus critics is
 CLAUDE.md §10 warns against, not corroboration. If you can name what a second Opus critic would
 catch that the first missed, that is Phase-1-shaped work — run it there, at Sonnet, first.
 
-### 3.2 Tier — Opus at `high`; `max` only on a named trigger
+### 3.2 Tier — Opus at `high`, never `max`
 
-`model: "opus"`, `effort: "high"` on the Agent call (Jordan, 2026-10-07: reduce effort — the
-2026-09-29 ruling had this at `max` every time). **Escalate to `max` only when the dispatch names
-one of these triggers**, each a fact about the batch rather than a feeling: (a) the Phase 1
-antagonist upheld a HIGH finding, or two agonists disagreed about one site; (b) the diff changes a
-seam or registry another lane reads (`references/module_contracts.yaml`, a shared descriptor
-registry) or re-records a golden (CLAUDE.md §7: nothing else verifies a re-pin was intended); (c)
-Phase 2 added a tool, guard, hook or governance rule. No trigger, no `max`. The phase *is* the
-judgment-node use case CLAUDE.md §10 reserves Opus for; what that section does not license is
-spending the top effort by default.
+`model: "opus"`, `effort: "high"` on the Agent call. **`max` is not used anywhere in this pipeline**
+(Jordan, 2026-10-07: it draws too much usage, and a close with this many layers — the agonist
+pass, three mechanical gates, the plan's validation, this critique, then `/close` — does not need
+it; the 2026-09-29 ruling had this phase at `max` every time). No escalation trigger replaces it:
+if a batch looks to need more than `high`, the answer is a narrower batch or a better-targeted
+lens, not a higher effort. The phase is the judgment-node use case CLAUDE.md §10 reserves Opus for.
 
 ### 3.3 What it is handed
 
@@ -284,7 +281,7 @@ Same as 1.5 — the orchestrator applies or rejects with a measurement, in this 
 - **Nothing here is a fixed count.** Fan size and the lens roster are read from the diff and the
   plan at hand every time. An edit that hard-codes a number into this file is the defect §10 names:
   "sized for its typical subject, not for yours." (Model and effort are set per node by 1.3, 1.4 and
-  3.2, and escalate only on 3.2's named triggers — a model/effort choice, not a count.)
+  3.2, and never `max` — a model/effort choice, not a count.)
 - **No self-scheduling** (CLAUDE.md §11, as always).
 
 ## FALSIFIERS
@@ -297,7 +294,8 @@ Same as 1.5 — the orchestrator applies or rejects with a measurement, in this 
 | "the terminal critique handshook" | a top-down finding with no cited `file:line`, or a granular finding with no stated holistic disposition |
 | "the fan ran at medium" | an agonist dispatch was not `sonnet` with `effort: "medium"` set on the Agent call (prose in the prompt does not count), or a diff one reader could hold was fanned with no stated reason |
 | "the antagonist ran Opus at high" | the antagonist dispatch was `sonnet`, or its `effort` parameter was anything other than `high` |
-| "Phase 3 ran Opus at high, `max` only on a trigger" | the terminal critique was not `opus`, ran below `high`, or ran at `max` with no named trigger stated in the dispatch |
+| "Phase 3 ran Opus at high" | the terminal critique was not `opus`, or its `effort` parameter was anything other than `high` |
+| "nothing ran at max" | any dispatch in any phase carried `effort: "max"` or `"xhigh"` |
 | "Phase 3 found nothing" | no named failed attack — only an absent finding |
 
 **If this skill's guidance conflicts with `CLAUDE.md` or `architecture/`, they win.** This file is a
