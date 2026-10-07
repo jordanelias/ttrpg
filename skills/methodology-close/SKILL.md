@@ -173,9 +173,9 @@ they queue.
    that still has an open correctness defect.
 2. **`/simplify`** — reuse, simplification, efficiency, on the now-correct tree. It applies its own
    fixes by contract; no flag needed.
-3. **`layer-conformance`, only on its trigger (§2.4)** — placement and Layer-1 conformance, last.
-   Its own doc places it at `/close` step 4 for the same reason: it wants the tree to have stopped
-   moving before it grades placement.
+3. **`layer-conformance`, only on its trigger (§2.4)** — placement and Layer-1 conformance, last, so
+   it grades the tree the two earlier gates left rather than one about to change. (`/close` step 4
+   also runs it; its own file says only that, not why it runs last.)
 
 ### 2.3 Apply before the next stage reads the tree
 
@@ -188,8 +188,10 @@ the next.
 Run it only on a trigger (Jordan, 2026-10-07, approving the cut; `/close` step 4 has the same
 trigger): **Lens B** when the batch's range touches `engine/season/`; **Lens A** when the batch,
 Phase 1 or `/code-review` added a tool, a guard, a hook or a governance rule. A batch that does
-neither skips the skill — a batch of prose, ledger or skill edits is not Layer-2 code. Its own
-A1–A5 decide anything finer; this skill does not restate them.
+neither skips the skill. Lens B "runs only on Layer-2 code against a Layer-1 row", so a batch of
+prose or ledger edits has nothing for it; a batch that adds a governance rule — a skill's standing
+order, a plan rule — is Lens A's. Its own A1–A5 decide anything finer; this skill does not restate
+them.
 
 ---
 
