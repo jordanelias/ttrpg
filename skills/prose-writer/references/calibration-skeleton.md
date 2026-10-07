@@ -25,23 +25,23 @@ All eight anchors share these properties. The synthesized voice has all of them 
 4. **Tolerate aporia.** None resolve into single legible meaning.
 5. **Concrete physical anchors.** Mountains, pantry, train-side shacks, snow on mountains, adobe houses, the rust on a gate, the library's hexagonal galleries, the kitchen where the child holds the scissors. Place always present.
 6. **Licensed grammatical deviation.** All eight break rules in specific motivated ways. The deviations are part of the voice.
-7. **Rendering failure as prose territory.** The irreal authors (Lispector, Borges, Ocampo) introduce a quality the original six-author synthesis did not have: the capacity to render the PC's categorical failure — temporal structuring breaking (Lispector), logical structure loosening (Borges), belonging eroding (Ocampo). At high coherence these techniques serve content-appropriate functions. At low coherence they serve the PC's rendering failure. The world does not change; the practitioner does.
+7. **Rendering failure as prose territory.** The irreal authors (Lispector, Borges, Ocampo) supply the capacity to render the PC's categorical failure — temporal structuring breaking (Lispector), logical structure loosening (Borges), belonging eroding (Ocampo). At high coherence these techniques serve content-appropriate functions. At low coherence they serve the PC's rendering failure. The world does not change; the practitioner does.
 
 ---
 
 ## Author Pairing Notes
 
-When intra-sentence splicing combines authors, certain pairings have natural compatibilities. Each is marked **[anchored]** (validated by the critical literature on the source authors — see `literary-review-critical.md` §9.1) or **[synthesis]** (a Valoria-internal innovation without precedent in the twelve-author scholarship — §9.2). Both kinds work, but anchored pairings carry the weight of a critical tradition the synthesis is faithful to; synthesis pairings require the audit to bear the work the tradition would otherwise do.
+When intra-sentence splicing combines authors, certain pairings have natural compatibilities. Each is marked **[anchored]** (supported by the critical tradition — `literary-review-critical.md` C.1) or **[synthesis]** (a Valoria-internal innovation — C.2). Both work; synthesis pairings require the audit to bear the work a tradition would otherwise do.
 
 - **Tolkien landscape + Lispector defamiliarization** [synthesis] — the named place that the PC's rendering fails to process normally
 - **Borges recursion + Ishiguro unreliability** [synthesis] — the narrator whose rendering loops without recognizing the loop
 - **Ocampo flat-affect + Mistry occupational specificity** [synthesis] — the worker whose belonging in the scene has eroded, performing the trade placidly while wrong
 - **Lispector "this instant-now" + Tartt atmospheric immersion** [synthesis] — temporal structuring failure immersed in a charged interior
-- **Borges encyclopedia + Tolkien deep-time** [anchored — González Echevarría's *Myth and Archive* reads both as inheritors of the colonial-archive chronicle voice] — the codex of impossibly old history
+- **Borges encyclopedia + Tolkien deep-time** [synthesis] — the codex of impossibly old history
 - **Ocampo charged object + Tartt loaded object** [synthesis] — the domestic object that is both aesthetic and uncanny
-- **Tolkien deep-time + Márquez compression** [anchored — González Echevarría on chronicle voice; both inherit the documentation register] — chronicled scale meeting generational fold
+- **Tolkien deep-time + Márquez compression** [synthesis] — chronicled scale meeting generational fold
 - **Ishiguro hedging + Tartt punch** [synthesis] — restraint released at moments of revelation
-- **Lispector vagueness + Borges erudition** [synthesis — close to the Lem combination of techniques §11] — the inarticulable rendered in scholarly apparatus
-- **Ocampo belonging-failure + Lispector categorical failure** [anchored — Méndez, *Crónicas Travestis*, reads them together as exploring transgressive registers in the Latin American women's tradition] — the domestic scene where the PC neither fits nor can process
-- **Borges precision + Ocampo flat-affect** [anchored — both writers worked together on the *Antología de la Literatura Fantástica* (1940); Negroni's *Galería Fantástica* treats them within a single Argentine-fantastic tradition] — the substrate detail described with full apparatus and zero affect
-- **Lispector veer + Ishiguro commitment** [anchored — Avelar's *The Untimely Present* reads Lispector through unreliability; Walkowitz reads Ishiguro through covert quantity-violation; both unreliabilities operate on the narrator-not-knowing axis] — the narrator commits, veers, recommits
+- **Lispector vagueness + Borges erudition** [synthesis — close to the Lem combination, `techniques-skeleton.md` §11.5] — the inarticulable rendered in scholarly apparatus
+- **Ocampo belonging-failure + Lispector categorical failure** [anchored] — the domestic scene where the PC neither fits nor can process
+- **Borges precision + Ocampo flat-affect** [anchored] — the substrate detail described with full apparatus and zero affect
+- **Lispector veer + Ishiguro commitment** [anchored] — the narrator commits, veers, recommits

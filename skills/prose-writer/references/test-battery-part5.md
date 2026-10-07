@@ -1,6 +1,4 @@
-# Test Battery — Part 5: New Author Mechanisms (Beckett, Lem, McCarthy, Le Carré)
-
-Added 2026-05-07 with twelve-author roster expansion.
+# Test Battery — Part 5: Beckett, Lem, McCarthy, Le Carré
 
 ---
 
@@ -88,7 +86,7 @@ She had decided to remain. The remaining was the decision and the decision was t
 **Low Spirit (Lispector, Spirit 2):**
 The wall was — the wall was grey. Vael was — on the path. The path was — she was. The name for the thing that would walk on the path was — the feet were on the stones. The stones were cold. The feet were on the cold stones and the walking was — the walking. There was walking. There were stones. The name that would say who was walking was beside the walking the way a shadow is beside a body when the body has — the stones were cold.
 
-**Audit:**
+**Audit** (⚠ the high-Spirit bullets describe Test 39's passage — walking into wind, carrying a pack, "the moving was hers" — not the prose above; the criteria still apply):
 - Spirit distinction audible: ✓. **Two categorically different prose problems.** High Spirit: the character acts — walks into wind, carries pack. The prose renders action and is opaque about motive. Low Spirit: the character cannot act because the agent is insufficient to the verb. "The name for the thing that would walk on the path was —" The prose attempts to assemble "she walked" and cannot because the "she" is dissolving.
 - Same coherence tier: ✓. Both are C2. Both have failed temporal sequencing. But the failure manifests differently: high Spirit produces declarative action sentences; low Spirit produces incomplete predications.
 - High Spirit = exteriority: ✓. The will inferred from the body's behavior (walking, carrying, closing hands). No interior access.
@@ -148,9 +146,9 @@ She supposed she had always known, in some fashion, that the Chapter would take 
 
 ---
 
-## Interim Findings — Part 5
+## Findings — Part 5
 
-The four new authors produce distinct textures that do not collapse into existing roster techniques:
+These four authors produce textures that do not collapse into the other eight:
 
 1. **Beckett** is not Lispector-at-high-Spirit. The dialectical succession and anaphoric litany are structurally different from the veer. The Spirit modifier produces categorical distinction at the same coherence tier (Test 43).
 
@@ -159,5 +157,3 @@ The four new authors produce distinct textures that do not collapse into existin
 3. **McCarthy** is not Tolkien-without-agency. McCarthy's landscape is geological and indifferent; Tolkien's is agential and remembering. They compose well (Test 45) because geological specificity and deep-time chronicle are complementary techniques.
 
 4. **Le Carré** is not Ishiguro-in-an-institution. Le Carré's withholding is strategic and institutional; Ishiguro's is personal and self-deceptive. They are distinguishable under direct comparison (Test 46).
-
-The twelve-author roster produces a richer texture space than the eight-author version, with the new authors occupying positions the original eight did not cover: will-at-low-coherence (Beckett), clinical substrate observation (Lem), violence/landscape indifference (McCarthy), and institutional power-language (Le Carré).

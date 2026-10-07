@@ -1,6 +1,6 @@
-# Three-Axis Prose Test — v4
+# Three-Axis Prose Test
 
-Applies the four Valoria-specific synthesis moves from §11.5: self-predicate displacement, single-word sentences as juxtaposition, tautology as structural placement (not texture), geography substituting for self-statement. These are deployed where they fit, sparingly, and always once per passage maximum for the rarest moves.
+One walk rendered across coherence, Thread Sensitivity and Spirit. Applies the four Valoria-specific synthesis moves from `techniques-skeleton.md` §11.5: self-predicate displacement, single-word sentences as juxtaposition, tautology as structural placement (not texture), geography substituting for self-statement. These are deployed where they fit, sparingly, and always once per passage maximum for the rarest moves.
 
 ---
 
@@ -156,16 +156,11 @@ She did not turn when Tamar came down the bank. The air did not shift. There was
 - C4 Low Spirit: "She was in the valley. She was somewhere on the path between the trees, where the path went, where the river went beside it, but the path itself was something her feet were doing rather than something she was on." The valley arrives. The path-as-active-frame does not.
 - C1 High Spirit: "she is inside the valley, walking. Inside." The valley arrives; "on the path" is absent.
 
-**What was cut as wrong:** "the side that was Vael was harder to find than the side that was the river" — this turned the body into geography rather than displacing the location into proper geography. The character should stay a character. Geography (the broader spatial frame) substitutes for the active spatial frame (on the path). The body does not become terrain. Same correction applied to C2 High Spirit ("left side of her own body" cut) and C2 Low Spirit ("the chest was the place the warmth was" cut).
+**Body is not terrain** (§11.5): "the side that was Vael was harder to find than the side that was the river" fails — it turns the body into geography instead of displacing the location. Likewise wrong: "left side of her own body" (C2 High Spirit) and "the chest was the place the warmth was" (C2 Low Spirit). The character stays a character.
 
----
+## Tier notes
 
-## What v4 corrects from v3
-
-The C4 Low Spirit and C4 High Spirit passages now have parallel openings — both end with "and the birch was itself" — establishing the tautology as a Valoria signature for that tier. C4 is where the rendering is fragmented enough that identity-confirmation becomes necessary. The birch needing to be itself is the diagnostic. The High Spirit version recovers ("Whatever else was — the walking was hers"); the Low Spirit version does not ("She moved through it the way smoke moves through air, which is to say without pushing").
-
-The C2 passages now both deploy self-predicate displacement and single-word "Was." — at this tier, the past tense and the bare existence become indistinguishable, and the single word holds both.
-
-The C1 passages now deploy "Inside." (High Spirit, locating-as-interiority) and "Was." (Low Spirit, past-as-existence). At C1 these single-word sentences are doing the heaviest possible work — a single word as the entire predication, holding multiple meanings, no resolution.
-
-The C0 passages remain unchanged. The C0 High Spirit's "She noticed and did nothing" is already the Valoria move (cut from a longer over-explanation). The C0 Low Spirit closing — "the word was 'river' and referred to the river and did nothing else, and Tamar went back up the bank" — is your edit. Both pass.
+- **C4:** both Spirit passages end a paragraph with "and the birch was itself" — the tautology as the tier's signature. C4 is where identity-confirmation becomes necessary; the birch needing to be itself is the diagnostic. High Spirit recovers ("Whatever else was — the walking was hers"); Low Spirit does not ("She moved through it the way smoke moves through air, which is to say without pushing").
+- **C2:** Low Spirit uses self-predicate displacement and the single words "Both." and "Was." — past tense and bare existence become indistinguishable, and the one word holds both. High Spirit has neither: it grips through the walking and lets the conviction become "a coat someone kind had given her."
+- **C1:** "Inside." (High Spirit, locating-as-interiority) and "Was." (Low Spirit, past-as-existence): a single word as the entire predication, holding several meanings, unresolved.
+- **C0:** "She noticed and did nothing" is the Valoria move (IV.2). The Low Spirit close — "the word was 'river' and referred to the river and did nothing else, and Tamar went back up the bank" — passes.

@@ -1,18 +1,16 @@
-# Test Battery — Part 4: Audit Fixes and Spirit-Axis Stress Tests
+# Test Battery — Part 4: Fix Demonstrations and Spirit-Axis Stress Tests
 
-Continuation from Parts 1–3 and the three-axis audit (input). Tests the rules added in commit `05a3579a` — Spirit axis (techniques §0.3, coherence-tiers §Spirit Axis Interaction), within-observation gradient (techniques §11), Lem combination (techniques §11), subject/object lamination (techniques §11), and anti-patterns 53–59.
+Tests for the Spirit axis (`coherence-tiers.md` §Spirit Axis Interaction; IV.1), the within-observation gradient (III.1), the Lem combination and subject/object lamination (`techniques-skeleton.md` §11.5), and anti-patterns III.2, IV.2, V.2, V.4, V.7. Tests 30–32 each show a failing passage's fix; the audit names the failure.
 
-Format: prose, then audit. Allow failure. Flag what doesn't read.
-
-Rendstad. Vael. Same continuity as Parts 1–3.
+Format: prose, then audit. Rendstad. Vael. Same continuity as Parts 1–3.
 
 ---
 
-## PART NINE: Audit Fixes — Re-doing the Three Failed Passages
+## PART NINE: Fix Demonstrations
 
-### Test 30. C10. TS 70. Revised — with Borges middle layer + Lem texture
+### Test 30. C10. TS 70. — with Borges middle layer + Lem texture
 
-*Vael walking the path with the old work beneath. The passage that previously skipped the middle layer of the within-observation gradient.*
+*Vael walking the path with the old work beneath. Failure fixed: skipping the middle layer of the within-observation gradient.*
 
 The path ran east along the lower headland and the wall on the right was Greinmar dry-stone, the joints close, the cap-stones turned the long way. The path was old. Vael walked. Beneath the path the work was there.
 
@@ -26,18 +24,18 @@ The root. The birch. The wall. She walked on.
 
 - **Within-observation gradient (TS 50+) — middle layer present?** Yes. Three layers operate: **Near** (articulable in Vael's training vocabulary): "restorative," "the layering," "third pass," "eighty years old, perhaps a hundred." Sentences complete normally. **Middle** (Borges precision + Ocampo flat-affect frame = Lem texture): "she could count the passes by the way each had bedded into what was below it... The count was correct. The count told her the work was old, layered, and made by a hand that knew its work. The count did not tell her what the work *was*." The apparatus catches countable content (passes, age, hand-habit) flawlessly; the precision tells you nothing about what the work is. ✓ **Far** (Lispector veer): "what the work beneath the third pass was a work *of* — was. Was." The predication breaks. ✓
 - **Subject/object distinction (anti-pattern III.2):** Vael's rendering is intact (C10). The veer targets the OBJECT — what the work is *of* — not the subject. The PC's cognition is fine. The substrate resists. ✓
-- **Anti-pattern III.1 (gradient skip) — fixed.** Where the previous passage went near→far and skipped middle, this passage holds the middle long enough for the reader to feel the apparatus catching content flawlessly while telling you nothing. The Lem texture is the second paragraph's whole second half.
+- **Anti-pattern III.1 (gradient skip) — fixed.** Where a near→far passage skips the middle, this passage holds the middle long enough for the reader to feel the apparatus catching content flawlessly while telling you nothing. The Lem texture is the second paragraph's whole second half.
 - **Anti-pattern I.7 (design vocabulary):** "Restorative," "layering," "third pass" — Vael's training vocabulary as a TS 70 practitioner. ✓
-- **#48 (meta-description):** "These were the things she could read" — borderline, same as previous. The contrast is between what she *can* read (root, birch) and what she cannot (the work's *of*). The "read" is functional, not analytical. ✓
+- **I.6 (meta-description):** "These were the things she could read" — borderline. The contrast is between what she *can* read (root, birch) and what she cannot (the work's *of*). The "read" is functional, not analytical. ✓
 - **Closing:** "The root. The birch. The wall. She walked on." Three concrete things, then the act. The closing rule applied. ✓
 
 **Verdict:** Pass. The middle layer reads. The Lem texture (count is correct, count tells you nothing) is the audit's missing texture, now present. The earlier two-tier feel is gone.
 
 ---
 
-### Test 31. C0. High Spirit. Revised — over-explanation cut
+### Test 31. C0. High Spirit. — over-explanation cut
 
-*Tamar (C10, TS 75) observing Edda at the river. The previously-flagged "noticing did not produce the thing that noticing produces" sentence cut to declarative.*
+*Tamar (C10, TS 75) observing Edda at the river. Failure fixed: the "noticing did not produce the thing that noticing produces" sentence, cut to declarative.*
 
 Edda was in the river. The water was at her knees and she stood at the slow place where the current bent west around the gravel bar. She did not turn when Tamar came down the bank. The air did not shift around her the way it shifted around a person who has heard another person approach.
 
@@ -49,7 +47,7 @@ Tamar said her name. Edda did not turn. She made room on the gravel bar — a sm
 
 **Audit:**
 
-- **Anti-pattern IV.2 (over-explained absence) — fixed.** The previous passage had: *"She did not seem to notice this, or she noticed and the noticing did not produce the thing that noticing produces in a person, which is a response."* The revision is: *"She did not turn when Tamar came down the bank. The air did not shift around her the way it shifted around a person who has heard another person approach."* The absence is stated declaratively. The reader infers what didn't happen. ✓
+- **Anti-pattern IV.2 (over-explained absence) — fixed.** The failing version had: *"She did not seem to notice this, or she noticed and the noticing did not produce the thing that noticing produces in a person, which is a response."* The revision is: *"She did not turn when Tamar came down the bank. The air did not shift around her the way it shifted around a person who has heard another person approach."* The absence is stated declaratively. The reader infers what didn't happen. ✓
 - **Competent monstrous (Spirit axis at C0 high):** Edda's habits are intact — the head-tilt, the patience, the adjustment of the foot when someone enters her workspace. She inherits the shape of who she was. The application is alien (the river does not need tending). ✓
 - **Márquez ordinary syntax for impossibility:** "Tending is what you do and the water is what is there." Stated flat. The contradiction (tending applied to the river) is not commented on. ✓
 - **Ishiguro on Tamar (the focalizer):** "The slowness she meant was not the slowness of the current. The distance between the word and what Edda meant was the distance between Edda and the person Edda had been." Tamar reads Edda's word with her TS perception and identifies the gap. The second sentence is rueful, precise, habitual — the Warden Chronicler register. The "thematic" feel is mitigated by it being clearly Tamar's perception, not narrative voice. ✓
@@ -60,9 +58,9 @@ Tamar said her name. Edda did not turn. She made room on the gravel bar — a sm
 
 ---
 
-### Test 32. C7. TS 35. Revised — sharper Ishiguro directional contradiction
+### Test 32. C7. TS 35. — sharper Ishiguro directional contradiction
 
-*Vael in the upper Greinmar valley feeling warmth where there should not be warmth. The previously-flagged passage where the directional contradiction was buried.*
+*Vael in the upper Greinmar valley feeling warmth where there should not be warmth. Failure fixed: a buried directional contradiction.*
 
 She was twenty paces past the seep when she felt the warmth on her face. The seep itself was cold — she had touched the moss and her fingertips were still cold from the touch — but the air higher up was warm, and the warmth was at her cheekbones and her forehead.
 
@@ -72,10 +70,10 @@ The warmth was on the left side of her face. It was not on the right. The valley
 
 **Audit:**
 
-- **Anti-pattern V.2 (Ishiguro contradiction without sharpness) — fixed.** The previous passage stated the warmth had a direction and noted the mineral explanation, but the directional contradiction was not staged. The revision stages it: paragraph 3 names the asymmetry directly (left, not right; upper end vs south face), notes that the sun was on the south face all afternoon, and then reasserts the Ishiguro commitment ("She walked on") with the contradiction left unresolved ("The warmth was on the left"). The reader hears: minerals warmed by sun on the south face would be warm on the right side of her face, not the left. Vael's commitment does not register this. ✓
+- **Anti-pattern V.2 (Ishiguro contradiction without sharpness) — fixed.** The failing version stated the warmth had a direction and noted the mineral explanation without staging the contradiction. This version stages it: paragraph 3 names the asymmetry directly (left, not right; upper end vs south face), notes that the sun was on the south face all afternoon, and then reasserts the Ishiguro commitment ("She walked on") with the contradiction left unresolved ("The warmth was on the left"). The reader hears: minerals warmed by sun on the south face would be warm on the right side of her face, not the left. Vael's commitment does not register this. ✓
 - **TS 35 scope:** Direction and vague quality. Three short paragraphs. Prose moves on. ✓
-- **#48 (meta-description):** ✓ None. The prose reports what Vael perceives and what she dismisses.
-- **#50 (similes below C4):** Not applicable — C7. Similes available but not used. ✓
+- **I.6 (meta-description):** ✓ None. The prose reports what Vael perceives and what she dismisses.
+- **II.5 (similes below C4):** Not applicable — C7. Similes available but not used. ✓
 - **Closing:** "The warmth was on the left." Flat, declarative, terminal. The contradiction stands. ✓
 - **Coherence 7 texture:** No simile, no analytical self-observation in the breakdown — just the fact stated against the explanation. The Ishiguro repair is the recommitment ("She walked on") with the original misidentification still in force. ✓
 
@@ -109,7 +107,7 @@ Vael walked. The stones were warm. The wind was at her back.
 
 ### Test 34. C2. High Spirit. — Belief Co-Authorship with values content
 
-*Vael at the parish house. Coherence 2. Spirit 6 (high). Holding to her conviction (Equity — the binding, the ledger, the work for everyone) even as the categories loosen. Audit identified C2 High Spirit + values content as a gap.*
+*Vael at the parish house. Coherence 2. Spirit 6 (high). Holding to her conviction (Equity — the binding, the ledger, the work for everyone) even as the categories loosen.*
 
 The ledger was on the table. Maren's hands were on the table. The numbers in the ledger were the count of bindings completed and the names of the households the bindings had been completed for. The numbers held. The names held. Vael had decided this work belonged to everyone in the parish and the deciding had been hers and the deciding still was.
 
@@ -128,10 +126,12 @@ Maren said something. Vael did not hear it the first time. Maren said it again. 
 - **High Spirit (Beckett texture):** "She had decided" appears five times. "The deciding was the thread and she held the thread." "The work was for the list. She had decided." The willful repetition is the act of grip. The decision is what the self anchors to when the conviction itself is loosening. ✓
 - **Lispector dissolution targeted at the OBJECT not the SUBJECT:** "The conviction was — it was foreign" — the conviction (the object of belief) is what the veer hits. The self does not dissolve. The high Spirit holds the self while the conviction loosens. This is the inverse of low-Spirit C2 where the self dissolves and the conviction is irrelevant. ✓
 - **Subject/object distinction:** The Belief Co-Authorship operates on the connection between PC and concept — the concept persists ("the work was for the list"), but the thread-connection to it is fraying. The high Spirit re-establishes the connection through deciding. The deciding is the substitute for the (failing) inherited connection. ✓
-- **#48 (meta-description):** "Reading was a thing she had to do slowly now and the slowness was the only way the names came." Borderline. It states a fact about her current capacity. But the fact is structural — reading IS slow now — not analytical (she is NOT observing herself reading slowly). At C2, the meta-cognitive capacity is gone; this is description of behavior, not analytical self-observation. **Pass narrowly.**
+- **I.6 (meta-description):** "Reading was a thing she had to do slowly now and the slowness was the only way the names came." Borderline. It states a fact about her current capacity. But the fact is structural — reading IS slow now — not analytical (she is NOT observing herself reading slowly). At C2, the meta-cognitive capacity is gone; this is description of behavior, not analytical self-observation. **Pass narrowly.**
 - **Closing:** "Six. The numbers held. She had decided." Per C2 closing register: isolated detail with flat affect. The "She had decided" is the high-Spirit anchor reasserted. ✓
 
 **Verdict:** Pass. Belief Co-Authorship reads at C2 — the conviction loosening, the high Spirit gripping the deciding rather than the conviction. The audit's identified gap (C2 with values content) is filled by demonstrating that high-Spirit C2 anchors to the deciding, not the belief.
+
+**Open conflict — do not imitate the repetition until resolved:** this passage grips through five interior declarations ("She had decided"). V.9 and IV.1 now classify repeated interior declarations of will as iteration (I.5), and render high Spirit through exteriority (Test 39). The deciding-for-conviction substitution stands; its rendering here may not.
 
 ---
 
@@ -159,7 +159,7 @@ The work is on the table.
   - Conviction: high-Spirit grips the deciding when the conviction loosens; low-Spirit lets both go.
   - Closing: high-Spirit "She had decided"; low-Spirit "The work is on the table" — the object without the subject. ✓
 - **Anti-pattern IV.1 (Spirit axis flatness) — held distinct from Test 34?** Yes. The two passages occupy the same coherence tier and read categorically differently. The audit's earlier finding (Spirit distinction reads at every tier) is confirmed at C2 with values content. ✓
-- **#48 (meta-description):** None. ✓
+- **I.6 (meta-description):** None. ✓
 - **Closing:** "The work is on the table." Isolated. Flat. The object the self no longer owns. ✓
 
 **Verdict:** Pass. The Spirit axis at C2 with values content distinguishes sharply between high (deciding-grip replacing fading conviction) and low (both letting go). Confirms anti-pattern IV.1.
@@ -183,7 +183,7 @@ Whoever had been at the bench had stood up perhaps a count of ten before Vael ha
 - **C5 dissonance — micro-slippage present?** Yes. "She had heard the door from the lane — there had been no door from the lane." The temporal-perceptual micro-slip at C5: she heard something that was either not there or arrived fractionally before its cause. The Ishiguro repair recommits ("there had been the wind"). The reader catches the slip; Vael does not register it as anything but a brief mistake. ✓
 - **Loaded-object as test of Tartt's coherence-dependence:** The loaded-object works at C5 because the rendering can still produce interpretation. Compare Test 26 (Tartt loaded-object at C3) where the chain breaks. The boundary is somewhere between C5 (works) and C4 (degrading) and C3 (broken). C5/4 is therefore not only the simile boundary but also the Tartt loaded-object boundary. ✓
 - **Closing:** "Almost still." Per C5 closing register: the temporal observation that closes the loaded-object reading. ✓
-- **#48:** None. ✓
+- **I.6:** None. ✓
 
 **Verdict:** Pass. Confirms Tartt loaded-object survives at C5 with effortful interpretation but is the technique most coherence-dependent. The 5/4 boundary is not only the simile boundary — it is also where Tartt's interpretive chain begins to fail. **New rule for skeleton: the 5/4 boundary marks the ceiling of Tartt's loaded-object availability.**
 
@@ -212,7 +212,7 @@ The cap-stone was warm. The wren was still there.
 - **Within-observation gradient — three layers present:** Near (Tolkien/Mistry): the wall, the cap-stone, the count, the joint, the lime-mortar. Middle (Lem combination): the nine bindings, the interval, the sequence-that-doesn't-behave. Far (Lispector): "Together they were —" / "What they were *of* —". ✓
 - **C10 closing register:** "The cap-stone was warm. The wren was still there." Landscape detail, ground-check. Per C10-8 closing: full closing on the physical world. The wren — Ocampo's animal-as-witness — is present. ✓
 - **Anti-pattern I.7 (design vocabulary):** "Restorative, layered, careful" — Tamar's Warden training vocabulary. Her words. Not the designer's. ✓
-- **#48 (meta-description):** "She was not confused" — declarative, not analytical. She is reporting a fact about her own cognition. At C10, this is fully available without becoming meta. ✓
+- **I.6 (meta-description):** "She was not confused" — declarative, not analytical. She is reporting a fact about her own cognition. At C10, this is fully available without becoming meta. ✓
 
 **Verdict:** Strong pass. Anti-pattern III.2 verified — the irreal techniques (Lispector veer, Borges precision, Ocampo flat-affect frame) are targeted at the OBJECT (the configuration). The PC's rendering is uniformly Tolkien/Mistry/Ishiguro at full capacity. The subject/object lamination reads cleanly. The within-observation gradient at TS 90 has the most resistant substrate yet tested, and the three layers hold.
 
@@ -220,7 +220,7 @@ The cap-stone was warm. The wren was still there.
 
 ### Test 38. C3. TS 0. — Mistry deep-time at low coherence with disruption
 
-*Vael in Maren's workshop. Coherence 3. Spirit mid. Test 24 in the original battery flagged Mistry tautology aestheticization risk — the prose risks reading as meditative rather than pathological. The new anti-pattern V.7 says: break the meditation with sharp disruption. This passage adds the disruption.*
+*Vael in Maren's workshop. Coherence 3. Spirit mid. Test 24 risked Mistry tautology reading as meditative rather than pathological; V.7 says break the meditation with sharp disruption. This passage adds the disruption.*
 
 The callus on Maren's finger was the callus. Vael could see it. The first joint. Right hand. The awl had made it, or the years had made it, or the thing that makes calluses had — the skin was thicker there and the thickness meant something. It meant the years or the awl or the — it meant the callus.
 
@@ -236,43 +236,19 @@ Maren said her name. Vael answered. The answer was an answer. It was about the b
 - **Mistry accretion under pressure:** "The callus. The first joint. The thickness of the skin." The accretion still happens, but its function (portrait-through-particulars) is broken — these are now the LAST things she can read, anchors to retreat to when the rendering of Maren's face fails. The same technique, used as a panic-handle rather than as a portrait. ✓
 - **C3 dissociative gap:** "Vael had been looking at the callus. The looking had been a long time." Time stretched. She does not remember when she started looking. ✓
 - **C3 ontic alteration in the world (the shadow on Maren):** Wait — is this rendered correctly? At C3 (Fragmented), the PC's *outward facing* fails (others perceive THE PC differently). But here Vael is perceiving Maren's shadow as wrong. Is this rendering failure (Vael's perception) or substrate event (Maren is genuinely altered)? The passage's framing: "Vael looked away." She immediately retreats to anchored detail. This frames the wrong-shadow as a perceptual event in Vael's rendering — at C3 her perception of others' materiality is unreliable. The substrate is unchanged; her rendering of it is fragmenting. ✓ But this is borderline — the prose could be read as the world becoming strange (anti-pattern II.3, world-surrealism). The retreat to anchored detail (looking away, naming the callus) is what saves it: the wrongness is in the rendering, not in Maren. **Borderline pass — the retreat is the indicator.**
-- **Anti-pattern II.3 (world-surrealism) — risk?** Yes. The shadow-on-Maren reads close to the world becoming surreal. The fix would be to make the perceptual nature of the alteration explicit — but explicit-rendering would be meta-description (#48). The current solution (Vael looks away, names what she can read) leaves the wrongness ambiguous between perception and world. At C3, this ambiguity may be appropriate — Vael's rendering cannot reliably distinguish her perceptual error from a real-world event. **Pass narrowly. The ambiguity is the texture.**
-- **#48 (meta-description):** "These were the things she could read" — same borderline as before. Functional, not analytical. ✓
+- **Anti-pattern II.3 (world-surrealism) — risk?** Yes. The shadow-on-Maren reads close to the world becoming surreal. The fix would be to make the perceptual nature of the alteration explicit — but explicit-rendering would be meta-description (I.6). The current solution (Vael looks away, names what she can read) leaves the wrongness ambiguous between perception and world. At C3, this ambiguity may be appropriate — Vael's rendering cannot reliably distinguish her perceptual error from a real-world event. **Pass narrowly. The ambiguity is the texture.**
+- **I.6 (meta-description):** "These were the things she could read" — same borderline as before. Functional, not analytical. ✓
 - **Closing:** "Maren's shadow was on the wall." Per C2-3 closing register: isolated detail with flat affect. The shadow is on the wall now (correctly), an implicit recovery. The close reads: the world is the world; Vael's rendering caught up. ✓
 
 **Verdict:** Pass with one borderline. The disruption (dissociative gap, perceived ontic alteration) breaks the meditation. Anti-pattern V.7 is addressed. The ambiguity between rendering failure and world-event at the shadow-on-Maren is the C3 texture — at this tier, the PC cannot reliably tell which it is, and the prose holds that uncertainty without resolving it.
 
 ---
 
-## Summary — Part 4
+## Findings — Part 4
 
-### Audit fixes verified (3/3):
-1. **C10 TS 70 (Test 30)** — Within-observation gradient middle layer + Lem texture now present. Anti-pattern III.1 fixed.
-2. **C0 High Spirit (Test 31)** — Over-explanation cut, declarative replacement reads. Anti-pattern IV.2 fixed.
-3. **C7 TS 35 (Test 32)** — Ishiguro directional contradiction now sharp; reader hears the wrongness. Anti-pattern V.2 fixed.
+1. **The 5/4 boundary is the Tartt loaded-object ceiling** — now in `techniques-skeleton.md` coherence-gated availability.
+2. **Belief Co-Authorship at high Spirit grips the deciding rather than the conviction** — now in `coherence-tiers.md`, Coherence 2.
+3. **The within-observation gradient extends to TS 90:** the most resistant substrate tested still admits three layers; the middle layer is what makes the gradient continuous.
+4. **C3 perceived ontic alteration is texture-ambiguous.** At C3 the PC's perception of others' materiality is unreliable and the prose may not separate perceptual error from world-event. The retreat to anchored detail marks rendering-failure mode rather than world-surrealism (II.3).
 
-### Spirit axis stress tests passed (4/4):
-- **Test 33 (C7 high Spirit)** — Spirit invisibility above C4 confirmed.
-- **Test 34 (C2 high Spirit + values)** — Belief Co-Authorship gap filled; high-Spirit grips the deciding when conviction loosens.
-- **Test 35 (C2 low Spirit + values)** — Same scene reads categorically different at low Spirit; both axes give.
-- **Test 37 (C10 TS 90 subject/object)** — Anti-pattern III.2 verified at the most extreme subject/object stress yet tested.
-
-### New stress tests passed (2/2):
-- **Test 36 (C5 Tartt loaded-object boundary)** — confirmed: 5/4 boundary is the Tartt loaded-object ceiling, not just the simile boundary.
-- **Test 38 (C3 Mistry with disruption)** — anti-pattern V.7 fixable with dissociative gap + perceived ontic alteration. Borderline at the perceived-shadow ambiguity, which is the C3 texture itself.
-
-### New rules confirmed (for future skeleton promotion):
-1. **The 5/4 boundary is the Tartt loaded-object ceiling** — at C5 the loading still works with effort; at C4 the interpretive chain breaks. This is a new finding to add to coherence-gated technique availability.
-2. **Belief Co-Authorship at high Spirit substitutes deciding for the conviction itself** — when the thread-connection to a conviction loosens, high Spirit grips the act of deciding-it-is-mine rather than the conviction. This is the Beckett move applied to Belief Co-Authorship.
-3. **Within-observation gradient extends to TS 90** — the most resistant substrate yet tested still admits the three-layer structure. The middle layer (Lem) is what makes the gradient continuous rather than discrete.
-4. **C3 perceived ontic alteration is texture-ambiguous** — at C3, the PC's perception of others' materiality is unreliable, and the prose may not be able to clearly distinguish perceptual error from world-event. The retreat to anchored detail is the indicator that the prose is in rendering-failure mode rather than world-surrealism mode.
-
-### Gaps remaining:
-- **C0 NPC focalization through Companion vs Chronicler vs Environmental observer** — the three options listed in coherence-tiers.md §C0 have not been compared in test passages. Only the Chronicler option (Tamar/Warden) has been tested. Future battery: same C0 NPC scene rendered through Companion (a party member) and through Environmental observer (Tolkien landscape-as-agent).
-- **Spirit axis at C5–7 with elevated TS** — the dissonant tier with substrate perception. High vs low Spirit not yet tested at this tier. The rule says Spirit becomes audible at C4 and below — but with elevated TS at C5, does the Spirit axis bleed up? Stress test pending.
-- **Lem combination at high coherence without elevated TS** — can the Lem texture deploy in a non-substrate context (e.g., an institutional process the PC perceives clearly but does not understand)? Tested only at TS 70 and TS 90.
-
-### For skeleton update (next session):
-- Add to techniques-skeleton.md coherence-gated availability table: Tartt loaded-object — Available at 10-8, 7-5; degrading at 4-3; broken at 2 and below.
-- Document the Beckett substitution for Belief Co-Authorship at high Spirit in coherence-tiers.md §Spirit Axis Interaction → C2 entry.
-- The C3 perceived ontic ambiguity rule may warrant its own anti-pattern entry, or a clarification to anti-pattern II.3 (world-surrealism conflation).
+**Untested coordinates** (no exemplar exists — write with extra audit): C0 NPC focalized through a Companion or an Environmental observer (only the Chronicler is tested); Spirit at C5–7 with elevated TS; the Lem combination at high coherence without elevated TS (e.g. an institutional process the PC perceives clearly but does not understand).

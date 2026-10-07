@@ -12,22 +12,13 @@ The audit produces five structural graphs over the design corpus and surfaces fi
 | **G_pp** | `registers/patch_register_active.yaml` `affects:` lists; tokens whose primary docs co-appear | Tokens touched by the same patch |
 | **G_tfidf** | sklearn TfidfVectorizer over paragraphs (supporting only, not primary) | Lexical co-occurrence baseline |
 
-**G_tfidf is supporting only.** v3's central pivot from v2 was demoting TF-IDF from primary to supporting role. Use it for cross-checking Mode A (multi-graph hubs) and Mode E (sparse-context), never for primary findings.
+**G_tfidf is supporting only.** Use it for cross-checking Mode A (multi-graph hubs) and Mode E (sparse-context), never for primary findings.
 
 ---
 
 ## §2 Diagnostic modes (8)
 
-See `diagnostic_modes.md` for full specifications. Brief:
-
-- A. Multi-graph hubs (top quintile in ≥3 of 4)
-- B. Implied-but-missing (≥2 metadata graphs link, G_cite doesn't, cross-class)
-- C. Notional edges (G_cite present, no metadata)
-- D. Cascade-without-return (G_cite chains length ≥3, no return)
-- E. Sparse-context (paragraph ≤10th percentile AND cite degree ≤10th percentile)
-- F. Throughline orphan (≤2 substantiating paragraphs per throughline)
-- G. Vocabulary debt (direct grep for known-struck terms)
-- H. Multi-graph isolates (max degree ≤1 across all graphs)
+Modes A–H: definitions in `SKILL.md` Step 4, full specifications in `diagnostic_modes.md`, locked thresholds in §3.7.
 
 ---
 
@@ -35,18 +26,18 @@ See `diagnostic_modes.md` for full specifications. Brief:
 
 ### §3.1 Corpus extraction with banner classifier
 
-**Bypass index routing.** Direct GitHub Contents API for full body content. Index files lack the prose needed for citation graph extraction.
+**Bypass index routing.** Read full files from the working tree. Index files lack the prose needed for citation graph extraction.
 
 **Scope:** all `design_doc` and `params` paths from `references/canonical_sources.yaml`, plus `canon/00..03`, plus `references/throughlines_meta*.md`, plus key recent provisional design docs.
 
-**Classifier per doc:**
-- `STATUS: CANONICAL` or `STATUS: DESIGN` → **design corpus**
-- `STATUS: PROVISIONAL` → **design corpus** (provisional design IS design, just unstable)
+**Classifier per doc** (owner: `banner_classify()` in `scripts/vector_audit.py`; first match wins):
+- `STATUS: CANONICAL` / `DESIGN` / `REFERENCE` / `CURRENT` / `WORKING` → **design corpus**
 - `[STRUCK]` banner or `deprecated/` path → **excluded**
-- `STATUS: AUDIT` / `STATUS: SESSION` / `WORKPLAN` / file in `designs/audit/*-session/` (non-development_specification) → **discourse corpus**
+- `STATUS: PROVISIONAL` → **design corpus** (provisional design IS design, just unstable)
+- `WORKPLAN` / `AUDIT` / `SESSION CLOSE` / `STRESS TEST` banner, or an `audit/` path (non-development_specification) → **discourse corpus**
 - Default: design
 
-Primary topology built from design corpus. Discourse corpus is overlay-only for Mode 2.9 (discourse/design ratio).
+Primary topology built from design corpus. Discourse corpus is overlay-only for Stage 7 (discourse/design ratio).
 
 ### §3.2 Token curation: seed + auto
 
@@ -112,7 +103,7 @@ TfidfVectorizer(
 
 Per-token vector = sum of paragraph TF-IDF vectors weighted by token mention count, then L2 normalized. Cosine similarity matrix is `g_tfidf`.
 
-**Document weighting from v2 (1.0/0.7/0.3 by status) is DROPPED.** v3 uses uniform weights; status filtering happens at the diagnostic level. The weights were arbitrary and never validated.
+**Uniform document weights.** Never weight documents by status; status filtering happens at the diagnostic level.
 
 ### §3.7 Pre-committed thresholds (LOCKED)
 
@@ -135,27 +126,19 @@ Three properties checked. Methodology validates if ≥2 of 3 pass. None depend o
 
 **P1 — Foundation periphery:** Foundation tokens (Self-Rendering, Leap, Coherence, Throughlines, Ein Sof) have HIGHER mean degree than corpus median, in BOTH G_cite and G_throughline.
 
-**P2 — Conviction class symmetry (v4, RULED 2026-07-21 — ED-IN-0080, Jordan option A):** The 7
-Convictions show ≤50% coefficient of variation in **context-gated prose presence** (the §3.5
-disambiguation-gated `paragraph_count`), NOT G_throughline degree. The 0.5 bar is unchanged.
-*Why the measure changed:* the v3 throughline formulation was **unsatisfiable by construction** —
-`throughlines_meta_infill.md` routes all 7 convictions through the aggregate `conviction_track`
-slug and never names them individually, so their degrees were permanently `[0,…,0]` regardless of
-the corpus (the PP-677 column did not change this). The 2026-07-21 backtrace + A8 re-derivation
-established the property genuinely holds on gated presence (CV 0.403, a **thin** pass) with a real
-per-conviction spread (Equity/Continuity/Reason ~2–3× thinner than Faith/Order/Autonomy) that
-runs must report alongside the verdict, plus a disclosed co-mention bias in the gate itself
-(context words are partly other conviction names). See the 2026-07-21 reconciliation-program §5.
-**Sentinel (same ruling):** an all-zero vector reports **NOT MEASURABLE**, never "maximally
-asymmetric" — the `cv=999` sentinel is retired; a not-measurable P2 does not count as a pass.
-*Future extension (Jordan, same ruling):* once the descriptor-registry attribute roster stabilizes
-(currently IN FLUX, 9-vs-10) **and** the attributes gain disambiguation contexts (Will/Focus/Order
-are common words; ungated counts are noise), attribute-class symmetry becomes a second calibration
-probe on the same measure and bar.
+**P2 — Conviction class symmetry (v4, ED-IN-0080):** The 7 Convictions show ≤50% coefficient of
+variation in **context-gated prose presence** (the §3.5 disambiguation-gated `paragraph_count`).
+Never measure it on G_throughline degree: `throughlines_meta_infill.md` routes all 7 through the
+aggregate `conviction_track` slug, so that vector is all-zero by construction. Report the
+per-conviction spread alongside the verdict, and disclose the gate's co-mention bias (context words
+are partly other conviction names). An all-zero vector reports **NOT MEASURABLE**, never "maximally
+asymmetric" (no `cv=999` sentinel); a not-measurable P2 does not count as a pass. Attribute-class
+symmetry joins as a second probe on the same measure and bar only once the descriptor-registry
+attribute roster is stable **and** the attributes have disambiguation contexts.
 
 **P3 — Citation density smoke test:** G_cite has ≥100 token-edges. Lower = explicit-only parsing, structurally inadequate for filter use.
 
-**Validation FAILED** (P2 specifically) was itself a finding in v3: throughlines lack lexical anchoring of Convictions. PP-677 added the Load-bearing systems column, which did **not** resolve it (the column carries the aggregate slug, not the 7 names) — resolved instead by the v4 measure change above.
+A failing property is reported as a finding, never tuned away.
 
 ---
 
@@ -172,7 +155,7 @@ def neighbors_union(graph, t):
 deg_cite = {t: len(neighbors_union(g_cite, t)) for t in token_names}
 ```
 
-Tokens without primary docs (~55 of 84 in v3 run) cannot be citation sources. Out-only computation gives them artificial degree 0. In+out reveals their actual centrality from being citation TARGETS.
+Tokens without primary docs cannot be citation sources, so out-only computation gives them artificial degree 0; in+out counts them as citation TARGETS.
 
 Metadata graphs (G_throughline, G_mu, G_pp) are constructed symmetrically, so out=in=union.
 
@@ -180,25 +163,16 @@ Metadata graphs (G_throughline, G_mu, G_pp) are constructed symmetrically, so ou
 
 ## §5 Output structure
 
-Audit folder: `designs/audit/{date}-{audit-name}/`
+The run folder's top-level files are listed in `SKILL.md` Step 5. The `data/` that `write_outputs()` writes:
 
 ```
-00_workplan.md          # config + pre-committed thresholds (this run)
-01_methodology.md       # executed parameters; what changed from prior runs
-02_weakness_register.md # PRIMARY DELIVERABLE — narrative findings
-03_validation_report.md # P1/P2/P3 results
 data/
 ├── corpus_manifest.json
-├── corpus_design.json
-├── corpus_discourse.json
 ├── tokens.json
-├── auto_candidates.json
-├── pilot.json
 ├── g_cite.json
 ├── g_metadata.json
-├── g_tfidf.npz
-├── validation.json
 ├── degrees.json
+├── validation.json
 └── multigraph_diagnostics.json
 ```
 
@@ -206,7 +180,7 @@ data/
 
 ## §6 What this can't find
 
-1. **Conceptual relationships not lexically encoded.** The throughlines framework relates systems conceptually but the framework's text doesn't always say the system names. Lexical methods can't bridge this gap — hand-curation is the only way. PP-677 partially addresses by formalizing system-token coupling.
+1. **Conceptual relationships not lexically encoded.** The throughlines framework relates systems conceptually but the framework's text doesn't always say the system names. Lexical methods can't bridge this gap — hand-curation is the only way.
 2. **Quality of design within a system.** The audit measures connectivity, centrality, citation density — not whether a system's internal design is sound.
 3. **Latent design dependencies.** Two systems coupled by shared design assumptions without ever co-occurring or cross-citing are invisible.
 4. **Implementation order optimality.** Centrality findings suggest ordering, but the audit doesn't direction-disambiguate citations or capture true dependencies.
@@ -214,17 +188,7 @@ data/
 
 ---
 
-## §7 v1 → v2 → v3 lessons embedded in this methodology
+## §7 What may and may not be relaxed
 
-The methodology above is not "the way to do it" — it's "the way that works after v1 and v2 failed." Lessons baked in:
-
-- **v1 (TF-IDF only, no validation gate):** produced findings that turned out to be artifacts. v2 added validation; v3 made validation structural.
-- **v2 (TF-IDF primary, k-NN Jaccard validation):** validation FAILED (Jaccard 0.222), but the threshold itself was unsatisfiable for small expected_groups, so the failure was partly a methodology defect not a corpus problem. v3 replaced k-NN Jaccard with structural properties.
-- **v2 threshold deviation (cosine 0.35 → 0.20 post-hoc):** invalidated those findings. v3 LOCKS thresholds.
-- **v2 within-class clustering pollution:** Top 8 of 103 implied-missing pairs were within-class artifacts. v3 §3.4 class taxonomy filters them.
-- **v2 out-degree-only:** produced "faction/NPC/Conviction-as-hub" finding that was a paragraph-breadth artifact. v3 in+out union corrects.
-- **v2 sparse citation graph:** 11 token-edges; "no citation" was trivially true for nearly any pair. v3 implicit ≥2 mention threshold gives 421 edges.
-- **v2 unconventional paragraph-IDF:** undefended; v3 uses standard sklearn.
-- **v2 arbitrary document weights (1.0/0.7/0.3):** dropped in v3; uniform weighting.
-
-The lessons are why these procedural choices look the way they do. Don't relax them without understanding why each was tightened.
+Never relax a §3 procedure without first knowing the failure it prevents (`SKILL.md` Common Failure
+Modes; `v1_v2_v3_history.md` for what is locked outright).

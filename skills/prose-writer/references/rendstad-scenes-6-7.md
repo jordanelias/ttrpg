@@ -1,4 +1,4 @@
-# Rendstad Arc — Scenes 6-7: The Former Warden (Revised)
+# Rendstad Arc — Scenes 6-7: The Former Warden
 
 *Edda. Former Warden. Upper valley above Rendstad, three years. Coherence 0 eighteen months ago. TS 72 — reconstituted. Still visits. Still goes to the old sites. Still speaks, when spoken to. Her face is the same face. Ilse still brings her food.*
 
@@ -58,7 +58,7 @@ Ilse brought water in a cup. Edda held it with both hands. The water did not mov
 
 ## Audit
 
-### Scene 6 (revised)
+### Scene 6
 
 **System vocabulary:** Zero. No "configuration," "substrate," "rendering," "coherence," "thread." Vael's vocabulary: cold, direction, altitude, sun, stone, face, path, scrub. ✓
 
@@ -68,11 +68,11 @@ Ilse brought water in a cup. Edda held it with both hands. The water did not mov
 
 **Edda's "yes":** One word. No confirmation that it was "the right word" or that it "did what yes does." At C7, Vael hears "yes" and it's "yes." The scene moves on. ✓
 
-**Compared to previous versions:** The tautological cycling ("the face was the face Ilse had described"), the word-confirmation ("it did what the word yes does"), and the repetitive looking ("she looked at the scrub, she looked at the path, she looked at the blanket") have been removed. These were C4 textures misdeployed at C7. The revised scene reads as normal prose with one uneasy moment (looking away from the face) and one TS 35 perception (the cold from Edda's direction). This is correct for the tier.
+**Tier discipline:** tautological cycling ("the face was the face Ilse had described"), word-confirmation ("it did what the word yes does") and repetitive looking ("she looked at the scrub, she looked at the path, she looked at the blanket") are C4 textures and fail at C7. At C7 the scene is normal prose with one uneasy moment (looking away from the face) and one TS 35 perception (the cold from Edda's direction).
 
 ---
 
-### Scene 7 (revised)
+### Scene 7
 
 **System vocabulary:** Zero. No "configuration," "substrate," "structural-scale," "Ein Sof," "three-axis framework," "restorative lattice," "stabilization loop," "possibility-actuality," "intelligibility." ✓
 

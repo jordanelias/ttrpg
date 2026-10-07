@@ -1,6 +1,4 @@
-# Composition Test — Definitive (All Rules Applied)
-
-**Supersedes:** `composition_test_v2.md` (old banding, world-surrealism), `ts_exploration.md` (meta-description). Those files in `/mnt/user-data/outputs/` are invalidated by this test.
+# Composition Test — One Event Across Tiers (All Rules Applied)
 
 **Rules applied:** Wittgenstein constraint, structural enactment, canonical banding (10-8, 7-5, 4-3, 2, 1), rendering failure (not world-surrealism), TS orthogonality, no meta-description, no similes below 4, no analytical self-observation below 5, closing on concrete thing.
 

@@ -2,7 +2,7 @@
 
 Live rules for composition and audit. Each entry: rule name → symptom → fix. Quadrant scope noted where rules are coordinate-dependent.
 
-This is the audit-time layer. SKILL.md's "What the Voice Does NOT Do" and Self-Check operate at composition-time. Both layers enforce AI-pattern safeguards; this one is heavier and diagnostic.
+This is the audit-time layer and the single owner of the anti-pattern rules. SKILL.md's Self-Check is the composition-time checklist over the same rules; `anti-patterns-infill.md` holds extra examples only.
 
 **Quadrant key:**
 - **Q1** (high X / low Y) = Coherence 7+, TS < 30. Realist territory. Tolkien/Mistry/Tartt/Ishiguro/Márquez/Le Carré dominant.
@@ -44,7 +44,7 @@ When in doubt about whether a passage is working, test against these six. If the
 - **Symptom (register failure):** Latinate replacing Germanic without precision gain (commenced/began, perambulated/walked). Modern corporate language in historical settings (stakeholders, leverage). Thesaurus syndrome. "Not just X, but Y" negative parallelism. Tense drift between past and present.
 - **Symptom (register flattening):** All characters in similar register regardless of background. Vernacular smoothed. Class-marked speech lost. Working-class and educated-class characters sound interchangeable.
 - **Symptom (lexical poverty):** Heavy nominalization ("the implementation of the strategy"). Generic abstract nouns: ecosystem, framework, dynamic, landscape, navigation. Reduced lexical diversity across passages.
-- **Fix:** Replace received phrases with specific detail. Test each rare word: does it save syllables vs. its periphrasis, or just add register? Preserve distinct registers across characters. Use untranslated terms with context teaching. Prefer concrete verbs and nouns. Hold tense deliberately. Affirm directly without negative setup.
+- **Fix:** Replace received phrases with specific detail. Test each rare word: does it save syllables vs. its periphrasis, or just add register? Preserve distinct registers across characters. Use untranslated terms with context teaching. Prefer concrete verbs and nouns. Choose a tense and hold it, especially in descriptive passages; make any shift deliberate and visible. Affirm directly without negative setup.
 
 ### I.2 Sentence Architecture
 **Consolidates:** sentence structure homogeneity, hypotaxis-parataxis indecision, excessive symmetry.
@@ -69,7 +69,7 @@ When in doubt about whether a passage is working, test against these six. If the
 **Consolidates:** hammering repetition, lexical iteration (the LLM fallback).
 
 - **Symptom (hammering):** Repeating phrase/word for emphasis when one instance carries the weight. "It was there. It was always there." — the second adds nothing.
-- **Symptom (LLM fallback):** The same noun, phrase, or clause repeats across consecutive sentences without progression. "The path was in the valley. The valley was — she was on the path. The path was the path." The prose imitates dissolution by hammering identity rather than enacting it. **This is the model failing to generate the next move, not a literary technique** (Caglar et al., "Repetitions are not all alike," arXiv 2024).
+- **Symptom (LLM fallback):** The same noun, phrase, or clause repeats across consecutive sentences without progression. "The path was in the valley. The valley was — she was on the path. The path was the path." The prose imitates dissolution by hammering identity rather than enacting it. **This is the model failing to generate the next move, not a literary technique.**
 - **Why none of the source authors do this:** Beckett's enumerations are *permutational* — items differ within a combinatorial space. His litanies are *anaphoric with progressive variation* ("This body homeless. This mind ignoring. These emptied hands." — four different objects under one structural anaphora). His dialectic is *contrastive* ("I can't go on. I'll go on." — not iteration). Lispector's recurrence is *paradoxical* ("What I say is never what I say but instead something else"). Her veering is each attempt different — same target approached from new angle, never repeated. Borges is economical and precise; his sentences do not iterate.
 - **Fix — substitute the actual technique:**
   - Beckett enumerative: "Left foot. Right foot. Left." Each item different. NOT "the foot moved. The foot moved."
@@ -97,17 +97,13 @@ No sentence in the Valoria voice may describe its own inadequacy to the content 
 <!-- concept:observing-around -->
 ### I.6b The Observing-Around Principle
 
-The structured complement to the Wittgenstein constraint. Where the constraint says *the prose does not describe its own inadequacy*, the observing-around principle says *the prose describes what surrounds the thing it cannot enter, and the thing takes shape from the surround*.
+The principle and its three applications (self-exteriority, substrate-aporia, the low-Spirit limit case) are stated in SKILL.md, "The Observing-Around Principle." What this entry adds:
 
-Three applications across the three axes:
+- **Self-exteriority (X-axis).** The self is rendered from outside the way a planet is inferred from its gravitational effects. (See IV.1, V.9 Beckett.)
+- **Substrate-aporia (Y-axis).** The perception is real, consistent, and does not yield to naming; the thing takes shape from the precision of the descriptions that circle it without entering it. (See III.1, V.10 Lem.)
+- **Limit case (Z-axis).** Low-Spirit veering, failed predication and tautology are *not* observing-around: there is no surface output to circle. Here the Wittgenstein constraint operates alone — the prose is silent not by circling the silence but by being unable to complete the sentence. (See IV.1, V.7 Lispector.)
 
-**X-axis (Coherence) — self-exteriority at high Spirit, low C.** The interior has moved beyond the domain the narrative can access, but the will still operates and produces action. The prose describes AROUND the interior through what the body does — walks, works, holds, continues. The reader infers the will from the behavior. The self is rendered from outside the way a planet is inferred from its gravitational effects. (See IV.1, V.9 Beckett.)
-
-**Y-axis (Thread Sensitivity) — substrate-aporia at high TS.** The practitioner perceives something that exceeds human categories. The perception is real, consistent, and does not yield to naming. The prose describes AROUND the aporia — what the perceived thing does, what it affects, how it behaves, what surrounds it — and the thing takes shape from the precision of the descriptions that circle it without entering it. This is phenomenological: consciousness is given something it cannot categorize, so the prose gestures toward the given by speaking around it. (See III.1 within-observation gradient, V.10 Lem.)
-
-**Z-axis (Spirit) — the limit case at low Spirit, low C.** The agent-subject is dissolving. There is insufficient intentional armature to produce action the narrative could observe around. The prose cannot use the observing-around technique because the self is not generating enough output at the surface. The veering, failed predication, and tautology of low Spirit are not observing-around — they are the narrative attempting and failing to assemble sentences because the agent is insufficient to the verb. This is where the Wittgenstein constraint operates alone: the prose is silent not by circling the silence but by being unable to complete the sentence. (See IV.1 low Spirit, V.7 Lispector.)
-
-**The principle unifies Lem, Beckett, and the within-observation gradient** as three instances of the same fundamental technique — rendering what the narrative cannot enter by rendering what surrounds it. Low Spirit is the boundary where the technique breaks down because there is nothing at the surface to observe.
+The principle unifies Lem, Beckett and the within-observation gradient as three instances of one technique; low Spirit is where it breaks down.
 
 - **Symptom of violation:** The prose enters the thing directly — names the substrate, explains the motive, describes the interior state. Or: the prose announces its own failure to enter ("she could not describe," "there were no words for").
 - **Fix:** Circle. Describe what the thing does, what it affects, how it behaves, what is beside it. Let the reader assemble the shape from the surround.
@@ -253,7 +249,7 @@ The LLM's most deeply embedded cliche patterns operate at scene level, not sente
 **Scope:** Q2, Q4 (TS 50+).
 
 - **Symptom:** At TS 50+, the prose renders the near layer (articulable) and the far layer (veer, silence) but skips the middle layer — the observing-around layer where precise description circles the aporia without entering it.
-- **Fix:** At TS 50+, deploy three layers within a single observation. **Near** (Tolkien/Mistry register): articulable in the PC's vocabulary. **Middle** (Lem observing-around register): the trained eye cataloguing what the perceived thing does, what it affects, how it behaves — circling the aporia with pre-scientific precision, the descriptions exact, the thing itself not yielded to. This is the phenomenological layer: consciousness is given something it cannot categorize, so the prose gestures toward the given by speaking around it. **Far** (Lispector veer / Tolkien building-around-absence): the predication breaks, the sentence reaches for what the perception is *of* and produces only the copula or silence — the observing-around technique itself fails because the thing exceeds even the surround. Skipping the middle layer makes the gradient discrete instead of continuous. The continuity is the point — near shades into middle shades into far, and the reader experiences the approach toward the aporia as a continuous narrowing of what the prose can do.
+- **Fix:** Deploy all three layers within a single observation — near (articulable), middle (Lem observing-around: the trained eye circling the aporia with pre-scientific precision, the descriptions exact, the thing not yielded to), far (the predication breaks; even the surround fails). Layer authors and examples: `techniques-skeleton.md` §11.5 gradient table. The continuity is the point — near shades into middle shades into far, and the reader experiences the approach toward the aporia as a continuous narrowing of what the prose can do.
 
 ### III.2 Subject/Object Axis Conflation
 **Scope:** Q2 (high coherence, high TS).
@@ -276,13 +272,9 @@ The LLM's most deeply embedded cliche patterns operate at scene level, not sente
 <!-- concept:spirit-axis -->
 ### IV.1 Spirit Axis Flatness at Low Coherence
 - **Symptom:** At C4 and below, the prose renders the recalibration without distinguishing high Spirit from low Spirit. The PC dissolves regardless of what their will is doing, OR the PC grips regardless of whether agency persists.
-- **Fix:** At C4 and below, Spirit determines whether the will continues to grip. These are **two categorically different prose problems**, not two flavors of the same thing.
-
-  <!-- concept:exteriority -->
-**High Spirit** = Beckett continuation through action. The will operates beyond human rationality but it *operates* — it produces action. The character acts: walks, works, holds, continues. The prose renders the action with precision and is opaque about why. The reader infers the will from the behavior. The narrative describes AROUND the interior through its exteriority. The interior is inaccessible but functional — it is producing output the narrative can render (action), it just can't render the motive. **The prose problem:** can render action, cannot render motive. Closing: the act ("she walks").
-
-  <!-- concept:agent-insufficiency -->
-**Low Spirit** = Lispector dissolution through insufficient intentional armature. The character lacks the strength of intentionality/will/purpose/belief/motivation to simply act. There is no agent sufficient to the verb. The narrative struggles to even name an action — "she walked" requires a "she" who intended to walk, and the interiority that produces intention is dissolving. The prose veers, fails to complete predication, falls into tautology. "She was — she was on the path." The path is there. The feet are there. But the prose cannot assemble the sentence because the agent is insufficient to the construction. **The prose problem:** cannot render action because the agent-subject is dissolving. Closing: the noun ("the feet"), never the act.
+- **Fix:** At C4 and below, render the two **categorically different prose problems** defined in SKILL.md (Coherence-Indexed Weighting Principle; tier detail in `coherence-tiers.md` §Spirit Axis Interaction):
+  - <!-- concept:exteriority --> **High Spirit** (Beckett exteriority): can render action, cannot render motive. The interior is inaccessible but functional. Closing: the act ("she walks").
+  - <!-- concept:agent-insufficiency --> **Low Spirit** (Lispector agent-insufficiency): cannot render action because the agent-subject is dissolving — "She was — she was on the path." The path is there; the feet are there; the sentence will not assemble. Closing: the noun ("the feet"), never the act.
 
 ### IV.2 Over-Explained Absence
 - **Symptom:** When rendering missing capacity — at C0 low Spirit, or observing a being whose intentionality has dissolved — the prose explains what is missing: "the thing that noticing produces in a person, which is a response," or "the thing that agency does, which is to direct the action." The narrator analyzes the absence into an explicit proposition.
@@ -318,7 +310,7 @@ Each entry: the author's primary quadrants, the mannerism risk, and deployment c
 **Primary:** Q1.
 - **Mannerism risk:** Atmospheric long sentences. Once: immersion. Repeatedly: fog. Three-word punch sentences. Once: weight. Repeatedly: drumbeat.
 - **Deployment constraint (loaded-object at low C, Q3/Q4):** Tartt's loaded-object technique requires the rendering to produce interpretation. At C4 and below, the object becomes heavy but unread — present but not meaning. The chain to implication breaks. "There was something about the water. The something was —" The veer (Lispector) replaces the interpretation. The object is loaded in the world; the rendering that would unload it into narrative is failing. Most coherence-dependent technique in the roster.
-- **Deployment constraint (atmospheric excess):** In long passages, check that atmospheric immersion is doing work (focalization, reality-effect, temporal anchoring) — not just producing tone. Sustained atmospheric immersion without function becomes the failure Mendelsohn identified.
+- **Deployment constraint (atmospheric excess):** In long passages, check that atmospheric immersion is doing work (focalization, reality-effect, temporal anchoring) — not just producing tone. Sustained atmospheric immersion without function becomes the failure Francine Prose identified in *The Goldfinch*.
 
 <!-- author:marquez -->
 ### V.5 Márquez
@@ -347,14 +339,14 @@ Each entry: the author's primary quadrants, the mannerism risk, and deployment c
 ### V.9 Beckett
 **Primary:** Q3, Q4 high Z. The will-continuation author.
 - **Mannerism risk:** Austere negation-dialectic. Once: the contradiction holds ("I can't go on. I'll go on."). Repeatedly: every sentence becomes affirmation-negation toggle. Also: repetitive interior declarations of will ("she held it. She held it. She held it.") — this is iteration (I.5), not Beckett.
-- **Deployment constraint (exteriority):** At low coherence high Spirit, the Beckett voice renders the will through **what the character does**, not through interior declaration. The prose describes action — walking, working, holding, continuing — with precision. The interior is opaque because it has moved beyond the domain the narrative can access. The reader infers the will from the behavior. "She walked into the wind and the wind did not stop her" — not "she had decided to walk." The narrative describes AROUND the interior through its exteriority. This is the "observing around" principle applied to the self: you cannot enter the interior, so you render what the interior produces at the surface.
+- **Deployment constraint (exteriority, IV.1):** At low coherence high Spirit, the Beckett voice renders the will through **what the character does**, not through interior declaration. "She walked into the wind and the wind did not stop her" — not "she had decided to walk."
 - **Deployment constraint (technique):** Beckett's permutational enumeration, anaphoric litany, and dialectical succession all carry *difference*. Each item in a Beckett series differs from the last. If the prose cycles the same word or clause without variation, it has fallen into iteration (see I.5), not Beckett. Beckett's minimalism is economical, not empty — every word displaced from its expected position does work.
 
 <!-- author:lem -->
 ### V.10 Lem
 **Primary:** Q2. The observing-around author.
 - **Mannerism risk:** Modern scientific register. Once: the precision illuminates the alien. Repeatedly: the prose reads as a lab report. **Critical achronism risk:** Valoria is Renaissance-era. No thermometers, no frequencies, no measurement instruments. The analytical method is pre-scientific: careful observation, cataloguing, distinguishing, noting — the methodology of the trained eye without the technology.
-- **Deployment constraint (observing around):** Lem's core technique is describing AROUND the thing that cannot be described directly. The observation is precise — what the thing does, what it affects, how it behaves, what surrounds it — but the observation circles the object without entering it. The gap between the precision of the description and the resistance of the described is the technique. This "observing around" principle is Lem's primary contribution to the synthesis and extends beyond TS-gated content to become available wherever the prose confronts something it cannot render directly: the interior of a low-coherence high-Spirit character, the nature of a threadcut being, the substrate itself.
+- **Deployment constraint (observing around, I.6b):** The gap between the precision of the description and the resistance of the described is the technique. It extends beyond TS-gated content wherever the prose confronts something it cannot render directly: the interior of a low-coherence high-Spirit character, the nature of a threadcut being, the substrate itself.
 - **Deployment constraint (register):** The analytical register must be motivated by the PC's training or disposition — a practitioner's Hafenmark education, a scholar's methodical habits, a warden's systematic observation. Pre-scientific precision: "she counted six axes, each distinct, each behaving differently from the others" — not "oscillation at 4.2-second intervals." The observer catalogues, distinguishes, and notes. The taxonomy fails not because the instruments are insufficient but because the categories are.
 
 <!-- author:mccarthy -->
@@ -405,13 +397,13 @@ Each entry: the author's primary quadrants, the mannerism risk, and deployment c
 
 These rules govern *how to audit*, not *what to avoid*. Apply after composition, during review passes.
 
-### D.1 Narrativity Drift (PNAS Reinhart et al. 2025)
+### D.1 Narrativity Drift
 LLMs produce fewer past-tense verbs and fewer third-person pronouns than human reference. Audit past-tense verb count and third-person pronoun frequency.
 
-### D.2 Aidiolect (Mikros 2025; Bitton et al. 2025)
+### D.2 Aidiolect
 Each LLM has a distinct default style. Generic anti-AI rules don't catch model-specific defaults. Identify model-default features active in the current composition and counter explicitly.
 
-### D.3 Algorithmic Mono-Voice Within Session (Hutchinson et al. 2025)
+### D.3 Algorithmic Mono-Voice Within Session
 Within a long composition session, prose drifts toward one persistent texture. Audit cross-paragraph variance after writing. If three consecutive paragraphs share the same dominant technique without content motivation, break the pattern.
 
 ### D.4 Large-Magnitude Direction-Uniform Revisions
@@ -427,27 +419,27 @@ Auditing for one rule at a time misses dimensional patterns. Co-occurring featur
 
 ## D.7 Critical-Diagnostic Framework (Subtext Calibration)
 
-Six diagnostics drawn from narrative theory, each targeting a specific failure mode in subtext management. Apply after composition, during the beat-risk audit (SKILL.md workflow step 8).
+Six diagnostics from narrative theory, each targeting a specific failure mode in subtext management. Apply after composition, during the beat-risk audit (SKILL.md workflow step 8).
 
 <!-- concept:critical-diagnostics -->
 
 **D.7a Booth Gap Test (unreliable narration calibration).**
-Source: Wayne C. Booth, *The Rhetoric of Fiction* (University of Chicago Press, 1961). Booth's "implied author" framework: the gap between what the narrator says and what the implied author shows is the mechanism of unreliable narration and dramatic irony. **Diagnostic:** Is the gap the right size? Too wide (narrated irony, I.9a) = the prose explains the irony. Too narrow (no gap) = the prose is straightforwardly reliable when it should be unreliable. Calibrate: the reader should perceive the gap without the prose pointing at it. The gap is visible in what the narrator omits, misidentifies, or frames wrongly -- not in the prose announcing the omission.
+Booth's "implied author" framework: the gap between what the narrator says and what the implied author shows is the mechanism of unreliable narration and dramatic irony. **Diagnostic:** Is the gap the right size? Too wide (narrated irony, I.9a) = the prose explains the irony. Too narrow (no gap) = the prose is straightforwardly reliable when it should be unreliable. Calibrate: the reader should perceive the gap without the prose pointing at it. The gap is visible in what the narrator omits, misidentifies, or frames wrongly -- not in the prose announcing the omission.
 
 **D.7b Sternberg Information Management.**
-Source: Meir Sternberg, *Expositional Modes and Temporal Ordering in Fiction* (Indiana University Press, 1978). Sternberg's suspense/curiosity/surprise framework classifies how information gaps between reader and character create engagement. **Diagnostic:** For each beat, classify: is the reader ahead of the character (dramatic irony), behind the character (suspense), or aligned (surprise on reveal)? Then check: has the prose collapsed the gap by over-signaling? Telegraphed subtext is a specific failure -- the prose converts curiosity (reader doesn't know) into collapsed dramatic irony (reader knows because the prose pointed) without earning the reveal.
+Sternberg's suspense/curiosity/surprise framework classifies how information gaps between reader and character create engagement. **Diagnostic:** For each beat, classify: is the reader ahead of the character (dramatic irony), behind the character (suspense), or aligned (surprise on reveal)? Then check: has the prose collapsed the gap by over-signaling? Telegraphed subtext is a specific failure -- the prose converts curiosity (reader doesn't know) into collapsed dramatic irony (reader knows because the prose pointed) without earning the reveal.
 
 **D.7c Shklovsky Automatization Test.**
-Source: Viktor Shklovsky, "Art as Device" (1917). Defamiliarization: art slows perception by making the familiar strange. Automatization: the reader processes without perceiving. **Diagnostic:** Read the passage and ask: does the reader process any sentence automatically -- recognizing the pattern without actually perceiving the content? Genre signals (I.9b) are automatized perception: "pressure behind the eyes" is instantly recognized as "hidden powers" without the reader slowing on the specific detail. The antidote is thisness (Wood, D.7f): the irreducibly specific detail that resists pattern-recognition.
+Defamiliarization: art slows perception by making the familiar strange. Automatization: the reader processes without perceiving. **Diagnostic:** Read the passage and ask: does the reader process any sentence automatically -- recognizing the pattern without actually perceiving the content? Genre signals (I.9b) are automatized perception: "pressure behind the eyes" is instantly recognized as "hidden powers" without the reader slowing on the specific detail. The antidote is thisness (Wood, D.7f): the irreducibly specific detail that resists pattern-recognition.
 
 **D.7d Zunshine ToM Detection.**
-Source: Lisa Zunshine, *Why We Read Fiction: Theory of Mind and the Novel* (Ohio State University Press, 2006). Readers track characters' mental states using Theory of Mind. The ToM apparatus is calibrated to detect concealment. **Diagnostic:** If the prose performs a secret (I.9), the reader's ToM fires immediately -- they detect the concealment rather than discovering the hidden property. The reader experiences being told, not discovering. Check: would a reader's ToM detect that the prose is hiding something? If yes, the concealment is performed. Fix: render the surface so that the reader's ToM tracks the character's stated mental state (e.g., "I am a thorough investigator") and discovers the discrepancy only through accumulated evidence that the stated state is insufficient to explain the observed behavior.
+Readers track characters' mental states using Theory of Mind. The ToM apparatus is calibrated to detect concealment. **Diagnostic:** If the prose performs a secret (I.9), the reader's ToM fires immediately -- they detect the concealment rather than discovering the hidden property. The reader experiences being told, not discovering. Check: would a reader's ToM detect that the prose is hiding something? If yes, the concealment is performed. Fix: render the surface so that the reader's ToM tracks the character's stated mental state (e.g., "I am a thorough investigator") and discovers the discrepancy only through accumulated evidence that the stated state is insufficient to explain the observed behavior.
 
 **D.7e Bakhtin Register Violation.**
-Source: Mikhail Bakhtin, "Discourse in the Novel" (1934; English trans. in *The Dialogic Imagination*, University of Texas Press, 1981). Heteroglossia: each character's register should remain distinct from the author's. **Diagnostic:** Does the prose sound like the author thinking about the character, or like the character thinking? If philosophical vocabulary appears in a parish investigator's focalization, the author's analytical voice has colonized the character's voice. This is a heteroglossia violation. Fix: the prose speaks in the character's register -- mortar and ledgers, not phenomenology.
+Heteroglossia: each character's register should remain distinct from the author's. **Diagnostic:** Does the prose sound like the author thinking about the character, or like the character thinking? If philosophical vocabulary appears in a parish investigator's focalization, the author's analytical voice has colonized the character's voice. This is a heteroglossia violation. Fix: the prose speaks in the character's register -- mortar and ledgers, not phenomenology.
 
 **D.7f Wood Thisness Test.**
-Source: James Wood, *How Fiction Works* (Farrar, Straus and Giroux, 2008). Thisness (haecceity): the irreducibly specific detail that resists generalization. Genre signals are the opposite: general, recognizable, transferable between stories. **Diagnostic:** For each significant detail in the passage, ask: could this detail appear in any story about this kind of character? If yes, it is a genre signal. If it could only appear in THIS story about THIS character -- the specific mortar discolouration between courses 3 and 4 of the north transept, the cope missing from a specific parish inventory -- it is thisness. Prefer thisness. Always prefer thisness.
+Thisness (haecceity): the irreducibly specific detail that resists generalization. Genre signals are the opposite: general, recognizable, transferable between stories. **Diagnostic:** For each significant detail in the passage, ask: could this detail appear in any story about this kind of character? If yes, it is a genre signal. If it could only appear in THIS story about THIS character -- the specific mortar discolouration between courses 3 and 4 of the north transept, the cope missing from a specific parish inventory -- it is thisness. Prefer thisness. Always prefer thisness.
 
 ---
 
@@ -457,32 +449,8 @@ If a sentence could appear in any story about any settlement / character / event
 
 ---
 
-## Migration Notes
+## Retired Rules
 
-**Moved to infill:**
-- Former #62 (Critical-Tradition Flattening) — interpretive caution per author, not pattern-matchable. Lives in `anti-patterns-infill.md` and `literary-review-critical.md` per-author "Risks" sections.
-- Former #47 (Cultural-Tradition Appropriation) — deployment-context reference, absorbed into infill.
-
-**Absorbed:**
-- Former #28 (Too-Clever Constructions) → V.6 Borges mannerism risk.
-
-**Subsumed:**
-- Former #40 (Stress-and-Release Fractal) — Le Guin is not a roster author. The general principle (don't claim structural deployment at levels where it isn't operating) is covered by V.13 (single-author dominance) and the per-author deployment constraints.
-- Former #41 (Synthesis-Weighting Mismatch with PC Coherence) — the general case is covered by II.1 (realist anchor at low C) + II.2 (irreal at high C). Consult `coherence-tiers.md` before composing.
-
-**Consolidated rule mapping (old → new):**
-- #1, #6, #7, #10, #14, #16 → I.1
-- #4, #17, #18 → I.2
-- #5 → I.3
-- #2, #3, #8, #9, #11, #12, #15, #19, #20, #21, #27 → I.4
-- #22, #60 → I.5
-- #48, #49, #52, closing rule → I.6
-- #25, #29 → I.7
-- #13 → I.8
-- #42 → II.1; #43 → II.2; #44 → II.3; #61 → II.4; #50, #51 → II.5
-- #54 → III.1; #56 → III.2; #45 → III.3
-- #53 → IV.1; #55 → IV.2
-- #36 → V.1; #37, #57 → V.2; #39 → V.3; #59, Tartt mannerism → V.4; Márquez mannerism → V.5; #28, Borges mannerism → V.6; #58, Lispector mannerism → V.7; Ocampo mannerism → V.8; NEW → V.9–V.12; #24 → V.13
-- #23 → VI.1; #26 → VI.2; #38 → VI.3; #46 → VI.4
-- #30–#35 → D.1–D.6
-- Master Rule → Master Rule
+The old flat numbering (#1–#62) is no longer cited anywhere in this skill; citations use the section IDs above.
+- **Critical-tradition flattening and cultural-tradition appropriation** (former #62, #47) are interpretive cautions, not pattern-matchable rules. They live in `literary-review-critical.md`, "Recruit the technique, never the tradition."
+- **Stress-and-release fractal** (former #40) is covered by V.13 and the per-author deployment constraints; **weighting mismatch with PC coherence** (former #41) by II.1 + II.2 — consult `coherence-tiers.md` before composing.
