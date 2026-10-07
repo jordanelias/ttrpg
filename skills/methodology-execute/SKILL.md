@@ -17,9 +17,9 @@ description: >
   (a workplan position's content-owner entry, or the stated plan for an ad hoc task) and dispatch a
   `valoria-author` producer to build it — one producer by default, fanned into
   `isolation: worktree` lanes only when the instruction itself names independent sub-parts with no
-  shared file — then commit. **No full pytest suite, no `/code-review`/`/simplify`/
-  `layer-conformance`, and no agonist/antagonist fan or terminal critique after each item** — those
-  are BATCH-CLOSE's job, not Phase 0's, run once per batch (§BATCHES) or at the run's own final
+  shared file — then commit. **No test, validator, forward sweep or skill after each
+  item** (no suite, `/code-review`/`/simplify`/`layer-conformance`, agonist/antagonist fan or
+  terminal critique) — all of it is BATCH-CLOSE's job, not Phase 0's, run once per batch (§BATCHES) or at the run's own final
   `/close`, never per item.
   BATCH-CLOSE: `methodology-close`'s full Phases 1–3, run once against the batch's commit-range
   diff (its recorded starting SHA through HEAD, since every item already committed) — invoked
@@ -62,20 +62,22 @@ the same way every time, per CLAUDE.md §4.
 file. This skill adds exactly one thing ahead of it: a phase that writes the diff, for when one
 does not exist yet — and it changes *when* the closing phases fire, not what they do.
 
-**Per Jordan's directive when this skill was split from `methodology-close`: the expensive
-pass — code-review/simplify/layer-conformance, the agonist/antagonist fan, the terminal critique,
-and the full pytest suite — does not run after every item.** the live plan's per-step cadence (its
-§0.4, ruled 2026-09-18: one step is one position and one commit, with `/code-review` and `/simplify`
-at the end of each step) is written for a session working one position by hand. **Jordan ruled
-2026-10-06 (*"code review and simplify to be at batch close"*)** that those two run at BATCH-CLOSE
-here; the plan's §0.4 and §O.4 carry the supersession. `methodology-execute` orchestrates many
-items in one run, and re-running that cadence per item is the over-fanning CLAUDE.md §10 warns
-against, plus the exact "full suite is a close step, not an inner loop" mistake CLAUDE.md §0.4
-already forbids. So for a run this skill orchestrates: **every item still gets its own commit
-(that part of the per-step cadence is unchanged); the review and test cost is deferred to
-BATCH-CLOSE**, below. This is a named, deliberate scoping of the per-step cadence to this skill's
-own batch granularity — not a silent departure from it, and not licence to skip BATCH-CLOSE
-itself.
+**Per Jordan's rulings — the split from `methodology-close`; 2026-10-06, *"code review and simplify to
+be at batch close"*; 2026-10-07, *"everything is to occur at batch close rather than per step when it
+comes to validation and skills etc"* — an item gets a build and a commit, and nothing else.** No
+test, validator, forward sweep or skill runs after it: not the agonist/antagonist fan,
+`/code-review`, `/simplify`, `layer-conformance` or the terminal critique, and not the covering test
+file, the lane validator, `tools/valoria_local.py --staged`, the plan's forward sweep or the suite.
+All of it runs once per batch, at BATCH-CLOSE. The live plan's per-step cadence (its §0.4, ruled
+2026-09-18: one step is one position and one commit, with `/code-review`, `/simplify` and a forward
+sweep at each step's end) is written for a session working one position by hand; the plan's §0.4,
+§0.5 and §O.4 carry the supersession. `methodology-execute` orchestrates many items in one run, and
+re-running that cadence per item is the over-fanning CLAUDE.md §10 warns against, plus the "full
+suite is a close step, not an inner loop" mistake CLAUDE.md §0.4 already forbids. Every item still
+gets its own commit; the review, validation and test cost is deferred to BATCH-CLOSE, below. This
+is a named, deliberate scoping — not a silent departure from the per-step cadence, and not licence
+to skip BATCH-CLOSE itself. (CLAUDE.md §0.4 cl.2 permits a mid-session run of the covering test
+file; under this skill that permission is not taken up.)
 
 ---
 
@@ -95,11 +97,10 @@ itself.
   BATCH k+1  OPEN ──▶ …
 ```
 
-**Phase 0 repeats per item; BATCH-CLOSE does not.** Each item is one producer, one commit, and — at
-most — the cheap, file-scoped self-check CLAUDE.md §0.4 already allows mid-session (the one test
-file the change touches, never the full suite). The expensive layer — the agonist/antagonist fan,
-`/code-review`→`/simplify`→`layer-conformance`, the full pytest suite, and the terminal critique —
-fires once, against every item's cumulative diff since the last BATCH-CLOSE, at a batch boundary
+**Phase 0 repeats per item; BATCH-CLOSE does not.** Each item is one producer and one commit,
+and nothing else: no test, validator, sweep or skill. Everything that checks — the agonist/antagonist
+fan, `/code-review`→`/simplify`→`layer-conformance`, the plan's forward sweep and validators, the
+covering test files, the suite, and the terminal critique — fires once, against every item's cumulative diff since the last BATCH-CLOSE, at a batch boundary
 (§BATCHES) or at the run's own final `/close`. **A batch is also the unit of context:** nothing a
 finished batch built, read or found is carried into the next except what the two have in common
 (§BATCH BOUNDARY).
@@ -210,9 +211,10 @@ collision is exactly the failure the `FALSIFIERS` table below is written to catc
 
 ### 0.5 What this phase must not do
 
-- **Never review its own output.** `valoria-author` may verify its own edit runs (it holds `Bash`
-  for exactly that), but that is not Phase 1's independent fidelity check, and Phase 0 does not
-  attempt to be one.
+- **Never review or validate its own output.** The dispatch prompt tells `valoria-author` to write
+  the edit, return its receipt, and run no test, validator or sweep: its own file otherwise says to
+  run the covering test file, and that run is BATCH-CLOSE's here (Jordan, 2026-10-07). Phase 0 is
+  not Phase 1's independent fidelity check and does not attempt to be one.
 - **Never commit, and never run the full suite mid-lane** — `valoria-author`'s own file already
   forbids both; this skill adds no exception.
 - **Never skip 0.1's gate check** because the instruction "looks buildable" — a position gated on
@@ -412,6 +414,12 @@ against a working-tree diff, since nothing is left uncommitted by the time a bat
   closing paragraph); a
   batch of prose or ledger edits runs just the files that read what it touched. No item inside the
   batch runs it.
+- **Plan-defined per-step validation, moved here.** What a plan asks of every step beyond BUILD and
+  commit — its forward sweep, its lane validator, `tools/valoria_local.py --staged`, a covering
+  test file — runs once here over the batch's range, after Phase 2 and before Phase 3, so Phase 3
+  sees any fix it forces. The plan's own definition of each check governs what it is; this skill
+  only moves when. A falsifier that fails here follows the plan's own stopping rule for that
+  position.
 - Its **Phase 3 tier, escalation trigger, checklist, and the top-down/bottom-up handshake**
   (§3.1–3.7) apply as written there, run against the batch's post-Phase-2 diff. INTERDEPENDENCIES
   and the FORWARD/BACKWARD SWEEPS are more likely to find something real here than at single-item
@@ -534,7 +542,7 @@ this spelling.
 | "the expunge took only what no remaining batch needs" | after the boundary commit, a remaining batch's gate or reading list names a handle or file that is gone from the tree, with no landing SHA written in its place |
 | "the batch was expunged" | a finished position, or its in-flight row, is still present after the boundary commit, or that commit added a narrative, a "done" row or a count beyond what the plan's own rule for finished positions prescribes |
 | "the batch resumed from its row" | a resumed batch rebuilt an item whose handle was in `built`, skipped one that was not, or re-ran a BATCH-CLOSE phase at or before `close` — or the row was trusted over the commits where they disagreed |
-| "BATCH-CLOSE ran once per batch" | the full pytest suite, `/code-review`, `/simplify`, `layer-conformance`, the agonist/antagonist fan, or the terminal critique ran between two items of the *same* batch, or the review phases did not run before the batch's items were reported done (the suite runs per CLAUDE.md §0.4 cl.1, not unconditionally) |
+| "BATCH-CLOSE ran once per batch" | a test file, validator, forward sweep or the suite, `/code-review`, `/simplify`, `layer-conformance`, the agonist/antagonist fan, or the terminal critique ran between two items of the *same* batch, or the review phases did not run before the batch's items were reported done (the suite runs per CLAUDE.md §0.4 cl.1, not unconditionally) |
 | every Phase 1–3 claim, at BATCH-CLOSE | `methodology-close`'s own falsifier table, unchanged, checked against the batch's cumulative post-Phase-0 diff |
 
 **If this skill's guidance conflicts with `CLAUDE.md`, `architecture/`, or `methodology-close`,
