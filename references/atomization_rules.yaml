@@ -255,7 +255,7 @@ policies:
 
   - match: "references/canonical_sources.yaml"
     max_tokens: 14000
-    note: "Machine-written canonical_sha metadata (freshness_gate --update), not authored content, drives this cap. There is no _archive file, so the checker's suggested action does not exist. tools/ci_register_size_check.py carries its own literal for this file (14_000) and points here."
+    note: "Machine-written canonical_sha metadata (freshness_gate --update), not authored content, drives this cap. There is no _archive file, so the checker's suggested action does not exist. tools/ci_register_size_check.py carries its own literal for this file and points here; the raise rationale (ED-IN-0179, 2026-09-09) is in references/atomization_rules_history.md."
 
   - match: "references/module_contracts.yaml"
     max_tokens: 32000
@@ -364,9 +364,6 @@ policies:
     note: "Per-run sim activity logs. Frozen historical output (same class as tests/sim/sim_*.md)."
 
   # RETIRED 2026-08-12 (ED-IN-0165): the `skip` row for one file under designs/audit/ was DELETED, not repointed.
-  # ⚠ The `note:` key below is a DUPLICATE on the preceding row (tests/sim/**/session_activity_log.md); PyYAML keeps
-  # the last, so this one is the value that row parses to. Left as found, because removing either changes the data.
-    note: "Frozen evidence artifact of a completed one-off audit merge stage (self-declared 'QUARANTINE-NOTE: not a registry and not a source of canonical truth' in the file header). Was hitting the generic **/*.yaml 10000 catch-all at ~18.5k tokens with no action possible or intended — same class as the tests/sim/ and research/ skip-policies above, scoped to this specific file rather than a blanket designs/audit/**/*.yaml exemption."
 
   # ────────────────────────────────────────────────────────────
   # AUDIT CORPUS — 30k (Jordan, 2026-08-11)

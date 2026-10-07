@@ -100,6 +100,8 @@ ci_workflow: .github/workflows/valoria-ci.yml
 # ── Level 5 (CI external) ────────────────────────────────────────────────────
 # These run on every push to main / PR. Cannot be bypassed by Claude.
 ci_checks:
+  # Keep every comment in this section indented: tools/broken_dependency_checker.py cuts the section at the first
+  # column-0 line, so a column-0 comment would silently drop the rows after it from the existence check.
 
   - path: tools/ci_register_size_check.py
     level: 5

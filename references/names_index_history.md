@@ -8,8 +8,9 @@ from .yaml files in references and just make those a supplement"*).
 
 **What stayed in the YAML:** the one-line purpose, how the file is read, the entry schema, the mirror
 rules, the namespace-prefix table, every entry, and a one-line summary of each moved note where an editor
-needs the fact to edit the entry correctly today. Every reader parses the file with `yaml.safe_load`, so
-comment moves are invisible to code.
+needs the fact to edit the entry correctly today. Every code reader but two parses the file with `yaml.safe_load`, so
+comment moves are invisible to it; `tests/valoria/test_names_chain.py` plants text edits on two entry lines (untouched
+by this move) and `tools/ci_register_size_check.py` counts tokens.
 
 **Adding here, not there.** New dated narrative, rulings and provenance about a row go in this file under
 the heading of the YAML section they concern; the YAML keeps only what an editor needs to act.

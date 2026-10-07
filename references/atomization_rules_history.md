@@ -25,11 +25,15 @@ in the YAML to their operative sentences; the original is here. No program reads
 has no `note` access), and the one raw-text reader of this file, `tests/valoria/test_compliance_on_exceed_vocabulary.py`,
 scans for `on_exceed: "<token>"` and still finds every token the rows declare.
 
-**One defect found and left as found.** The `tests/sim/**/session_activity_log.md` row ends with TWO
-`note:` keys (the first at the row itself, the second after the retired-row comment below).
-PyYAML keeps the last, so the surviving note describes a `designs/audit/` file the row no longer
-refers to. Removing either would change what the file parses to, so neither was touched; the
-second block is reproduced in the YAML with a comment saying so.
+**One defect found at the batch's close and repaired.** The `tests/sim/**/session_activity_log.md` row ended with TWO
+`note:` keys (the first at the row itself, the second after the retired-row comment below). PyYAML keeps the last,
+so the note the row parsed to described a `designs/audit/` file the row no longer refers to. The second, misattached
+note was removed from the YAML, so the row now parses to its own first note (an unread key); the removed text is
+reproduced here verbatim:
+
+```yaml
+    note: "Frozen evidence artifact of a completed one-off audit merge stage (self-declared 'QUARANTINE-NOTE: not a registry and not a source of canonical truth' in the file header). Was hitting the generic **/*.yaml 10000 catch-all at ~18.5k tokens with no action possible or intended — same class as the tests/sim/ and research/ skip-policies above, scoped to this specific file rather than a blanket designs/audit/**/*.yaml exemption."
+```
 
 **Adding here, not there.** New dated rationale, raise-histories and rulings about a row belong in
 this file. The YAML comment should say what the row does today.

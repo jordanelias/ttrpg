@@ -29,7 +29,7 @@ and a two-line summary of the open items.
 
 **Two live pointers into this history, outside this file's lane.** `engine/season/rosters.yaml`
 (the comment near its line 72) points the Holdar `Continuity` -> `Warden` migration here (Holdar has no
-row of his own; NPC-001's note states the default), and `engine/season/cases/NPC4.yaml` (`why:` text near lines 370 and 495)
+row of his own; NPC-001's note states the default), and `engine/season/cases/NPC4.yaml` (`why:` text near lines 50, 238, 306, 357, 370, 495 and 500)
 cites "her migration_notes" / "migration_notes ... Templar arm". Those rows now live in the
 per-entry sections below.
 

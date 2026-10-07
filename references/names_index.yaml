@@ -37,8 +37,8 @@
 # Mechanic/clock/track legacy entries are seeded from references/deprecated_terms_registry.yaml
 # and references/synonym_registry.yaml; they drive the drift lint + rename, not a mirror.
 #
-# `world.*` rows are warn-tier (except `world.solmund`, block) and generated from proper_noun_registry.yaml; ci_names_consistency
-# keeps the pair agreeing. Flipping `warn -> block` per entry is done as each is triaged.
+# `world.*` rows are warn-tier (`world.solmund` is block; `world.faction_x` carries no tier); proper_noun_registry.yaml
+# mirrors them and ci_names_consistency keeps the pair agreeing. Flipping `warn -> block` per entry is done as each is triaged.
 
 # ── NAMESPACE PREFIXES (id ↔ silo table; Reconciliation Program §3.2) ─────────────────
 # Every id's first dotted segment is a namespace prefix bound to ONE class/silo. Engine and
@@ -121,7 +121,7 @@ entries:
   # separate). token_class clock_track so the 2 existing full-name clock.* aren't pulled.
   clock.ms: {canonical: "MS", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bMS\b(?![A-Za-z])', 'Mending Stability']}
   clock.ci: {canonical: "CI", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bCI\b(?![A-Za-z])', 'Church Influence']}
-  # `patterns:` is a matcher list, not a definition: canonical expansion FIRST, recorded rival SECOND.
+  # `patterns:` is a matcher list, not a definition: canonical expansion before the recorded rival (after the abbreviation pattern).
   clock.ip: {canonical: "IP", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bIP\b(?![A-Za-z])', 'Institutional Pressure', 'Invasion Pressure']}
   # Same shape: canonical (`Public Instability`) first, rival second.
   clock.pi: {canonical: "PI", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bPI\b(?![A-Za-z])', 'Public Instability', 'Political Instability']}

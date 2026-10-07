@@ -16,7 +16,9 @@ comment moves are invisible to code.
 note, the naming-collision warning and the ID-allocation note, and a pointer here. **What moved:** the
 header's provenance prose, the dated notes, the annotated-out `tests/hooks/**` entry, one long trailing
 comment, and the `launch_blocker_resolved` key (a dated `[RESOLVED 2026-06-09]` note that nothing reads;
-the one deliberate data change, `yaml.safe_load` differs from the file at 8b57336 in that key alone).
+a deliberate data change; `yaml.safe_load` also differs from the file at 8b57336 in the Track 1.1 prerequisite, whose
+original text `[BEFORE LANE A] Run Track 1.1 reconciliation so Lane A's owns no longer overlap the faction handoff.` now
+reads `[DONE 2026-06-09] ...`, because the removed key had recorded that it was resolved on that date).
 
 **Adding here, not there.** New dated narrative about a lane goes in this file; the YAML keeps only what
 an editor needs to act.

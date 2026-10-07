@@ -197,5 +197,5 @@ not_descriptors:
   clocks:  [Evidence, CI, MS, IP]
   pools:   [Combat, Argue, Thread, Fieldwork, Knot, MassCombat, FactionDomain, Political Pool]
   # Name collisions to know: "Legitimacy (faction, derived)" is Mandate x 20, distinct from `set.legitimacy`;
-  # "Discipline (faction)" is Stability x 10, distinct from the mass-battle Discipline stat; "Coherence" is a
+  # "Discipline (faction)" is Stability x 10, distinct from the mass-battle Discipline stat (display label ratified OPT-AV-18: prefer "Faction Discipline" in new UI/prose); "Coherence" is a
   # `track`; "Political Pool" is the parliamentary vote-tally construct. Derivation specs: derived_stats §14.1.
