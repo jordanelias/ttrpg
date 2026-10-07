@@ -2818,5 +2818,5 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 
 | Old path | New path | Status |
 |---|---|---|
-| `skills/methodology-close/SKILL.md` | `FORK:8b57336b` | FORKED (2026-10-07, Jordan: *"we might be able to just delete methodology close"* — the pipeline lives on as `skills/methodology-execute/SKILL.md` §BATCH-CLOSE, which also takes a diff that already exists) |
+| `skills/methodology-close/SKILL.md` | `FORK:8b57336b` | FORKED (2026-10-07 — folded into `skills/methodology-execute/SKILL.md` §BATCH-CLOSE, which also takes a diff that already exists) |
 | `.claude/skills/methodology-close` | `FORK:8b57336b` | FORKED (2026-10-07 — the symlink to the file above) |

@@ -31,10 +31,7 @@ description: >
 (BATCH-CLOSE's review roles, defined there). The orchestrator's merge of fanned lanes is the
 **integrator**. Three roles, three words (CLAUDE.md §4).
 
-## Cadence — RULED by Jordan
-
-*"code review and simplify to be at batch close"* · *"everything is to occur at batch close rather
-than per step when it comes to validation and skills etc"*
+## Cadence
 
 - **Per item: a build and a commit, nothing else.** No test, covering test file, validator
   (`tools/valoria_local.py --staged`, the lane validator), forward sweep, `/code-review`, `/simplify`,
@@ -189,9 +186,8 @@ a later batch's close still sees earlier work), which is why a group may be cut:
    - **per-batch discipline** (reading list, receipt, commit shape, tiers): the plan's, and **below**
      CLAUDE.md and this file's BATCH-CLOSE. A plan-stated close, cadence or suite rule that differs
      from BATCH-CLOSE, this file's per-item rule or CLAUDE.md §0.4, lighter *or heavier*, is a conflict to
-     state at the 0.1 stop — never silently adopted, never silently overridden. (`/code-review` and
-     `/simplify` at batch close is ruled, so a plan still asking for them per step is stale, not
-     conflicting.)
+     state at the 0.1 stop — never silently adopted, never silently overridden. (A plan still asking for `/code-review` and
+     `/simplify` per step is stale on that point, not in conflict.)
 3. **Batch rows another agent or session left in the lane's handoff** for a task with no plan.
 4. **A proposal or another agent's unratified plan** (`proposals/`, a delegate's report): input to
    the 0.1 stop, presented, never adopted silently (a plan lives under `workplans/`).
@@ -401,8 +397,7 @@ and has only step 1).
    discards) and re-invoke the same way. The driver is the operator's loop, outside any session; this
    skill never arms its own (CLAUDE.md §11).
 3. **Do not hand a batch to a subagent to get a clean window:** a delegate that cannot dispatch
-   `valoria-author` and `valoria-critic` cannot run a batch, and a general-purpose subagent has held
-   `Skill` without `Agent`. Check the delegate's tool list before relying on one.
+   `valoria-author` and `valoria-critic` cannot run a batch; check a delegate's tool list before relying on one.
 4. **If the invocation told the run to continue through several batches in one window,** do, and say
    at each boundary that **context was NOT cleared**: only the expunge happened, and each later batch
    carries the earlier ones' residue. Never report a fresh start the window did not have.

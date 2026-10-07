@@ -102,8 +102,7 @@ sweep to see how it impacts stuff"*
 | 4 | **FORWARD SWEEP** | defined below. |
 | 5 | **CLOSE** | `tools/valoria_local.py --staged`, the lane validator, then the `[scope]` commit citing its `PP`/`ED`. **The full suite runs once per BATCH close, not per step** (§0.5). |
 
-**Current (Jordan: *"everything is to occur at batch close rather than per step when it comes to
-validation and skills etc"*):** per step only phase 1 (BUILD) and the `[scope]` commit. Phases 2, 3 and 4
+**Current:** per step only phase 1 (BUILD) and the `[scope]` commit. Phases 2, 3 and 4
 and the validation half of phase 5 (`tools/valoria_local.py --staged`, the lane validator) run once per
 BATCH at the close (`methodology-execute`'s BATCH-CLOSE, step 2).
 
