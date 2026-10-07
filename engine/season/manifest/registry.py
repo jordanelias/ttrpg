@@ -419,14 +419,12 @@ def check_preconditions(verb_table: dict, predicates: dict) -> list:
     driver as `check_effects` is passed `EFFECTS`. Raises at the first arm broken (the missing note
     before the converse), naming every verb that breaks it; returns the rows that carry a
     precondition, so a caller can see the sweep was not empty."""
-    # Lazily, for `unclaimed_contest_prizes`'s reason: importing `data/verbs.py` loads the table.
-    from ..data.verbs import NO_PRECONDITION
     checked, silent, stale = [], [], []
     for verb, row in verb_table.items():
         evaluable = row.precondition_evaluable(predicates)
         if evaluable and row.requires_decline_note:
             stale.append(verb)
-        if (row.requires or "").strip() in NO_PRECONDITION:
+        if not row.has_precondition:
             continue
         checked.append(verb)
         if not evaluable and not row.requires_decline_note:

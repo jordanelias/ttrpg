@@ -233,9 +233,17 @@ class VerbRow:
         `resolvable_verbs()`'s first gate and `check_preconditions` both read (`CLAUDE.md` §8);
         `loop/resolve.py::_admits` (which `_fold` calls) branches the same three ways. `predicates`
         is a parameter because this loader may not import `loop/`."""
-        return ((self.requires or "").strip() in NO_PRECONDITION
+        return (not self.has_precondition
                 or self.requires_typed is not None
                 or self.verb in predicates)
+
+    @property
+    def has_precondition(self) -> bool:
+        """The row's `requires` cell names a precondition (it is not one of `NO_PRECONDITION`'s
+        "no cell" spellings). The ONE spelling of that test for the two readers that sweep the whole
+        table for it -- `precondition_evaluable` above and `manifest/registry.py::check_preconditions`
+        (`CLAUDE.md` §8)."""
+        return (self.requires or "").strip() not in NO_PRECONDITION
 
     def refusal_for(self, clause: Optional[str]) -> tuple:
         """`04 §C.4`'s `row.refusal_for(clause)`: the kinds a refusal AT `clause` emits.
