@@ -1,6 +1,6 @@
 # Calibration — Source Author Prose Anchors
 
-Anchor passages from each of the eight source authors, with technique analysis. Calibration targets for composition.
+Anchor passages from eight of the twelve source authors, with technique analysis, plus four Valoria-domain anchors. Calibration targets for composition.
 
 Each excerpt is held to under 15 words per source for fair-use purposes. Fuller analysis follows from secondary sources.
 
@@ -126,17 +126,7 @@ Each excerpt is held to under 15 words per source for fair-use purposes. Fuller 
 
 ## Cross-Author Synthesis Notes
 
-What emerges from comparing these eight anchors:
-
-1. **All eight refuse explanation.** None of these openings explain themselves. None translate cultural reference. None summarize their own meaning. The reader is positioned as a competent inferrer.
-
-2. **All eight have specific perspective.** Tolkien's panorama is from a vantage; Stevens speaks; Mistry's narrator carries the village's stance; Lispector's narrator collapses into the perceiving consciousness; Borges's apparatus is itself a perspective; Ocampo's narrator is incurious about the extraordinary; Tartt's "we" is collective and confessional; Márquez's narrator speaks from a deep-time chronicler position. None are neutral omniscient.
-
-3. **All eight operate at structural simplicity with semantic depth.** Sentences are not lexically baroque (with the partial exception of Tartt's longer subordinations). The depth is in what's implied, structured, focalized — not in what's ornamented.
-
-4. **All eight tolerate aporia.** None resolve into a single legible meaning. Tolkien's exaltation is not explained; Stevens' interiority is not unpacked; Mistry's "anywhere" is universalization without thesis; Lispector's veer does not arrive; Borges's precision describes the impossible; Ocampo's cruelty goes unresolved; Tartt's "gravity" is named but not specified; Márquez's time-fold is not commented on.
-
-5. **All eight have concrete physical anchors.** Mountains, pantry, tracks-side shacks, snow on mountains, adobe houses by a river, the cockroach in G.H.'s maid's room, the encyclopedia footnote, the velvet dress. Place and object always present, always specific.
+The shared properties of the anchors are listed in `calibration-skeleton.md`, "Cross-Author Synthesis Properties." How each anchor tolerates aporia: Tolkien's exaltation is not explained; Stevens' interiority is not unpacked; Mistry's "anywhere" is universalization without thesis; Lispector's veer does not arrive; Borges's precision describes the impossible; Ocampo's cruelty goes unresolved; Tartt's "gravity" is named but not specified; Márquez's time-fold is not commented on.
 
 The Valoria voice synthesizes these properties into one practice. Not "borrow Tolkien for landscape, Ocampo for horror." Rather: the voice always has these properties available, and which surface in a given sentence depends on focalization, content, and coherence tier.
 

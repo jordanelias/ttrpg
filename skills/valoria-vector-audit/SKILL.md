@@ -11,9 +11,7 @@ description: >
   "where are the gaps", "rerun topographic", "validate against corpus", or any
   request to surface non-obvious structural properties of the design corpus.
   This skill owns ALL vectorized-audit work — do not reconstruct the pipeline
-  inline. Successor methodology to one-off pipelines (v1 TF-IDF-only failed
-  validation; v2 added pilot+citation but was TF-IDF-primary; v3 multi-graph
-  triangulation passed validation 2/3 structural properties).
+  inline. Canonical methodology: v3 multi-graph triangulation.
 ---
 
 # Valoria Vector Audit
@@ -28,37 +26,24 @@ description: >
 > *surfaced, reasoned exclusion*, never a silent drop.
 > - `vector_audit.audit_exclusions(root)` surfaces every cull (the `SKIP_SYSTEMS` denylist + the
 >   `AUDIT_FLOORS`) with reasons — nothing is dropped silently.
-> - The Incompleteness Ledger (`tools/observability/build_incompleteness.py`) and the dashboard it fed were
->   retired 2026-08-21 (`FORK:1e4c6f4`, ED-IN-0194); nothing here reads or feeds them.
 > - If you find yourself filtering results to look "cleaner," STOP: that is the failure mode this
->   doctrine exists to prevent (recorded 2026-07-22 after the audit was found silently culling 16
->   systems + four length/threshold floors).
-> - **The `--emit-findings` feed carries ALL EIGHT modes now (2026-07-23, schema 2).** It used to
->   surface only B (implied-missing) + H (isolates) — the ledger saw ¼ of what the audit computed.
->   Now C (notional), D (cascade-sinks), E (sparse-context), F (throughline-orphans), G (vocab-debt)
->   ride the feed too; high-volume modes carry a bounded sample + a true `_total` (never a silent cap).
->   The Incompleteness Ledger stamps a **severity** (high/med/low) per category so findings can be
->   triaged — the port-blocking spine (isolates, doc:null, orphan-emit) ranks above hygiene (notional,
->   sparse, vocab-debt). Adding a mode = extend `emit_structural_findings` + `scan_audit_structural`.
-> - **The `--emit-findings` feed obeys this too (retain-and-flag, added 2026-07-22).** An adversarial
->   pass caught the first cut *dropping* lower-confidence findings (hub×hub Mode-B pairs, and — before
->   Direction #5 — Key-token Mode-H isolates) from `audit_findings.json`. FIX: emit EVERY finding;
->   attach `filtered` + `filter_reason` to the lower-confidence hub×hub Mode-B pairs. The Incompleteness
->   Ledger reads only the unfiltered rows for its Missing face, but the feed itself is complete — a
->   reader auditing it sees everything and can overrule a flag. Never delete a finding from the feed to
->   raise the ledger's signal. (The Key-token isolate filter is GONE entirely — Direction #5 gave the
->   audit the actual Key graph, so those tokens are resolved for real, not flagged; no isolate is
->   filtered anymore.)
+>   doctrine exists to prevent.
+> - **The `--emit-findings` feed carries ALL EIGHT modes (schema 2).** High-volume modes carry a
+>   bounded sample + a true `_total` (never a silent cap). Adding a mode = extend
+>   `emit_structural_findings`.
+> - **The feed is retain-and-flag.** Emit EVERY finding; the lower-confidence hub×hub Mode-B pairs
+>   carry `filtered` + `filter_reason` rather than being dropped, so a reader auditing the feed sees
+>   everything and can overrule a flag. No isolate is filtered. Never delete a finding from the feed
+>   to raise its signal.
+> - The Incompleteness Ledger and its dashboard are retired (`FORK:1e4c6f4`); feed nothing to them.
 
 Surface project weaknesses that hand-curation cannot reliably find: implied-but-missing cross-references, notional citations (cited but content-empty), citation-graph cascades without return paths, hub overload, sparse-context tokens, multi-graph isolates, throughline orphans, vocabulary debt, and discourse/design divergence. Operates over corpus-derived structural graphs, not LLM judgment.
 
-**⚠️ What it is BLIND to (state this with every result).** It sees the design **citation/registry STRUCTURE** — not the `sim/*.py` behaviour, not the typed `engine/params` **values**, not actual runtime. A wrong number, a mis-tuned formula, or a broken simulation is invisible to it (sim *stubs* are surfaced via the ledger's `sim_not_implemented`, but only that a stub exists, never that live logic is wrong). And **Mode D (cascade sinks)** uses a capped return-path search that trips heavily on a dense corpus — Mode-D findings are UNVERIFIED LEADS carrying their own trip count, not confirmed gaps (the ledger's `coverage_gaps` says so too).
+**⚠️ What it is BLIND to (state this with every result).** It sees the design **citation/registry STRUCTURE** — not simulation `.py` behaviour, not the typed `engine/engine_params/` **values**, not actual runtime. A wrong number, a mis-tuned formula, or a broken simulation is invisible to it. And **Mode D (cascade sinks)** uses a capped return-path search that trips heavily on a dense corpus — Mode-D findings are UNVERIFIED LEADS carrying their own trip count, not confirmed gaps.
 
-**Five structural graphs (Direction #5, 2026-07-22 — "why not key propagation too"):** the triangulation is `cite` (citation), `throughline` + `mu` (throughlines_meta + throughlines_complete), `pp` (patch co-affects), and **`key` — the engine KEY-PROPAGATION graph** (`build_g_key`, from `module_contracts.yaml`'s emit→consume flow: the actual IN→resolver→OUT wiring the Godot engine runs). ⚠ **Empty since ED-IN-0232:** the emit/consume interface was deleted from `module_contracts.yaml` with the Key substrate, so `build_g_key` returns no edges and the triangulation effectively runs on four graphs. Folding `key` in means Mode-A hubs / Mode-B implied-missing / Mode-H isolates now triangulate **design intent against engine data-flow** — "wired in the engine but never cited in the design" is a real port gap; a Key-type token isolated in the citation graph but central in the Key graph is *resolved*, not filtered; and a Key that stays isolated is a real finding whose mechanism is NOT assumed — an **orphan/dangling emit** (emitted but unconsumed, per `structure_audit`'s `dangling_emit`), an unemitted/unconsumed Key, or a `derivations`-only cross-module flow this typed graph doesn't read. This retired the old "filter Key tokens as expected false alarms" cull — the audit now SEES the Key graph instead of apologising for not seeing it. ⚠️ `build_g_key` is a deliberately-narrower TOKEN projection of `module_contracts` emit/consume; **`tools/observability/build_graph.py` is the authoritative richer engine graph** (folds the Key Type Registry, `from:`, drift-normalization) — do not treat the two as equal (§8 single-source follow-up tracked).
+**Five structural graphs:** `cite` (citation), `throughline` + `mu` (throughlines_meta + throughlines_complete), `pp` (patch co-affects), and **`key`** (`build_g_key`, a token projection of `module_contracts.yaml`'s emit→consume flow). ⚠ **`key` is empty since ED-IN-0232** (the emit/consume interface was deleted with the Key substrate), so the triangulation effectively runs on four graphs. A Key-type token left isolated is surfaced, never filtered as an expected false alarm, and its mechanism is NOT assumed — an orphan/dangling emit (`structure_audit`'s `dangling_emit`), an unemitted/unconsumed Key, or a `derivations`-only cross-module flow this graph does not read.
 
 **Scope:** **Analytic instrument only**, never gameplay mechanic. Self-exempting on Ω/Μ vetting (Class A, mu: [], M-ratings ○ across the board) — produces evidence for design decisions but is not itself a design decision. Findings are PROVISIONAL leads, not verdicts; methodology validation outcome must be reported with results.
-
-**History:** v1 (commit ac8f55aa) hand-curated TF-IDF, no validation gate. v2 (PP-676) added pilot + citation graph + validation; FAILED validation at Jaccard 0.222. v3 (PP-676) pivoted to multi-graph triangulation, PASSED 2/3 structural properties. **v3 is the canonical methodology.** This skill enshrines v3.
 
 ---
 
@@ -67,11 +52,11 @@ Surface project weaknesses that hand-curation cannot reliably find: implied-but-
 Read the following files from the working tree (use the Read tool) before proceeding. The checkout is authoritative — do not fetch from GitHub and do not work from memory. If a listed file is absent from the working tree, stop and report it.
 
 - `references/canonical_sources.yaml` — systems list (controlled vocabulary)
-- `systems/_architecture/reference/complete_systems_reference.md` — NPC list, faction list (moved from the retired `designs/architecture/` 2026-07-19, ED-IN-0071 P4/P5)
+- `complete_systems_reference.md` and `throughlines_complete.md` — NPC/faction lists and the second throughline→systems source; quarantined under `.designs/` (ED-IN-0231), and the script reads them there
 - `references/throughlines_meta.md` — T-NN framework header
 - `references/throughlines_meta_infill.md` — T-NN table (parsed for G_throughline)
 - `registers/patch_register_active.yaml` — PP affects: lists for G_pp
-- `references/module_contracts.yaml` — emit→consume Key flow for G_key (Direction #5)
+- `references/module_contracts.yaml` — emit→consume Key flow for G_key (empty since ED-IN-0232)
 
 The pipeline ALWAYS bypasses index routing for content reads — index files lack the body content needed for citation graph extraction; read the full files above.
 
@@ -81,7 +66,7 @@ The pipeline ALWAYS bypasses index routing for content reads — index files lac
 
 | Parameter | Default | Notes |
 |---|---|---|
-| Corpus scope | full design + foundation | Audit/session corpus split via banner classifier (§3.1 below) |
+| Corpus scope | full design + foundation | Audit/session corpus split via banner classifier (methodology §3.1) |
 | Token list | seed (canonical_sources + named NPCs) + auto-extract | Auto threshold: ≥3 docs, ≥10 paragraph mentions |
 | Disambiguation | enabled | Required for English-word collisions (Faith, Order, Reason, Equity, etc.) |
 | Diagnostics | all 8 | A subset can be requested for partial runs |
@@ -89,33 +74,31 @@ The pipeline ALWAYS bypasses index routing for content reads — index files lac
 | Implicit citation threshold | ≥ 2 mentions | Body-mention count for G_cite implicit edges |
 | Random seed | 42 | t-SNE / force-directed reproducibility |
 
-**Pre-committed thresholds (§3.7) MUST NOT be tuned post-hoc.** Threshold deviation invalidates findings. v2 deviated on implied-missing (0.35 → 0.20) — this is the methodology problem v3 was designed to prevent.
+**Pre-committed thresholds (methodology §3.7) MUST NOT be tuned post-hoc.** Threshold deviation invalidates findings.
 
 ---
 
 ## Step 3 — Pipeline Stages
 
-The pipeline's specification is this stage table. **`scripts/vector_audit.py` now implements it**
-(stage dispatcher landed 2026-07-13, repo-realignment WS0a): it reads the working tree, builds the
-five graphs, runs P1/P2/P3 validation and all 8 diagnostic modes, and writes the outputs below. Run
-it directly:
+The pipeline's specification is this stage table. **`scripts/vector_audit.py` implements it**: it
+reads the working tree, builds the five graphs, runs P1/P2/P3 validation and all 8 diagnostic modes,
+and writes the outputs below. Run it directly:
 
 ```
 python3 skills/valoria-vector-audit/scripts/vector_audit.py --repo-root . --output-dir <run-dir>
 ```
 
 **Corpus-breadth layers (`--layer`).** The default **L0** is a CURATED slice — only the
-`canonical_sources.yaml` heads (~6% of the repo's `.md`); it is the calibrated P1/P2/P3 scope, so a
-green L0 result is **not** whole-repo coverage. `--layer L1` extends the trace across the whole
-**design** tree (systems/engine/canon/godot/proposals; ~15% of all `.md` = the full design corpus,
-~2.5× the docs, fewer structural isolates). **Scope honesty — L1 is one direction, not "all
+`canonical_sources.yaml` heads; it is the calibrated P1/P2/P3 scope, so a green L0 result is **not**
+whole-repo coverage. `--layer L1` extends the trace across the whole **design** tree
+(systems/engine/canon/godot/proposals). **Scope honesty — L1 is one direction, not "all
 directions":** it extends corpus breadth and the **cite graph only**. It does **NOT** extend the
 throughline/mu/key graphs (registry-derived: throughline from `throughlines_meta` + `throughlines_complete`,
 mu from `throughlines_meta`, key from `module_contracts` — the same at every layer), the token universe
 (registry-derived — a token absent from `names_index`/`proper_noun`/`module_contracts` is invisible at
-every layer), non-`.md` content (sim `.py`, typed `engine/params`), or the
+every layer), non-`.md` content (simulation `.py`, typed params), or the
 P1/P2/P3 thresholds (calibrated on L0 — an L1 run reuses them but does **not** re-validate). Narrative
-`arcs/` + `workplans/` are excluded (would pollute cite with story co-mention). L0 stays the default;
+and `workplans/` trees are excluded (would pollute cite with story co-mention). L0 stays the default;
 every run's weakness register discloses the layer, the coverage %, AND the un-extended directions —
 surface the slice, never let a green slice read as the whole.
 
@@ -134,51 +117,39 @@ supporting TF-IDF graph is skipped; the multi-graph core still runs). Stage tabl
 | 6 | Multi-graph diagnostics (8 modes, see Step 4) | `data/multigraph_diagnostics.json` |
 | 7 | Discourse/design divergence overlay | `data/discourse_overlay.json` |
 
-Stages 0 and 5 are **gates**: pilot must produce ≥6/8 intuitive top-3 neighbors; validation must pass ≥2/3 properties.
+Stages 0 and 5 are **gates**: pilot must produce ≥6/8 intuitive top-3 neighbors; validation must pass ≥2/3 properties. ⚠ The script implements Stages 1–6; Stage 0 (pilot) and Stage 7 (discourse overlay) are reserved, so the pilot gate is not run.
 
 ---
 
 ## Step 4 — Diagnostic Modes
 
-Each diagnostic targets a specific structural weakness. Modes can run independently after stages 1-5 are complete.
+Each diagnostic targets a specific structural weakness and can run independently after stages 1-5. Full method, output format and recommended action per mode: `references/diagnostic_modes.md`; locked thresholds: methodology §3.7.
 
-### Mode A — Multi-graph hubs
-Tokens in top quintile by degree in **≥3 of 4 metadata-graphs** (cite, throughline, mu, pp). High confidence centrality. Single-graph hubs reported separately as supplementary.
-
-### Mode B — Implied-but-missing edges
-Pairs where ≥2 of {G_throughline, G_mu, G_pp} link them but G_cite does not. Cross-class only (within-class pairs filtered using class taxonomy in §3.4 of `references/methodology.md`). These are connections the structured metadata says exist but no explicit citation has been written.
-
-### Mode C — Notional edges
-Pairs where G_cite links them but no metadata graph does. Citation without content support — likely stale ref or vocabulary debt.
-
-### Mode D — Cascade-without-return
-Chains of length ≥3 in G_cite with no return path. Surfaces downstream sinks (one-way pressure patterns that violate Ω-d feedback principle).
-
-### Mode E — Sparse-context tokens
-Tokens in bottom 10th percentile of paragraph count AND bottom 10th percentile of G_cite degree. Either under-developed or vocabulary debt.
-
-### Mode F — Throughline orphan check
-For each throughline, count substantiating paragraphs (paragraphs mentioning ≥2 of throughline's load-bearing systems). ≤2 substantiating = at risk of being orphaned. **Requires `references/throughlines_meta_infill.md` to have the Load-bearing systems column** (added by PP-677). Without that column, this mode degenerates to null — diagnose accordingly.
-
-### Mode G — Vocabulary debt sweep
-Direct grep for known-struck terms (parsed from `registers/supersession_register.yaml`). Reports paragraph count + doc-level concentration per legacy term.
-
-### Mode H — Multi-graph isolates
-Tokens with degree ≤1 in **every** graph. Conceptually present, structurally disconnected. Often canonical concepts lacking first-class doc status.
+- **A — Multi-graph hubs.** Top quintile by degree in **≥3 of 4 metadata-graphs** (cite, throughline, mu, pp). Single-graph hubs reported separately as supplementary.
+- **B — Implied-but-missing edges.** ≥2 of {G_throughline, G_mu, G_pp} link the pair but G_cite does not. Cross-class only (class taxonomy, methodology §3.4).
+- **C — Notional edges.** G_cite links the pair but no metadata graph does — likely stale ref or vocabulary debt.
+- **D — Cascade-without-return.** G_cite chains of length ≥3 with no return path: downstream sinks (one-way pressure patterns that violate Ω-d feedback principle).
+- **E — Sparse-context tokens.** Bottom 10th percentile of paragraph count AND of G_cite degree. Either under-developed or vocabulary debt.
+- **F — Throughline orphan check.** ≤2 substantiating paragraphs (a paragraph mentioning ≥2 of the throughline's load-bearing systems). **Requires `references/throughlines_meta_infill.md` to have the Load-bearing systems column** (PP-677). Without that column, this mode degenerates to null — diagnose accordingly.
+- **G — Vocabulary debt sweep.** Direct grep for known-struck terms (parsed from `registers/supersession_register.yaml`); paragraph count + doc-level concentration per legacy term.
+- **H — Multi-graph isolates.** Degree ≤1 in **every** graph. Often canonical concepts lacking first-class doc status.
 
 ---
 
 ## Step 5 — Output Format
 
-The skill produces three deliverables in `designs/audit/{date}-{audit-name}/`:
+The skill produces these deliverables in the run's `--output-dir`. `designs/audit/` is dissolved and
+`.audit/` takes no additions (CLAUDE.md §3); where a run's folder lives is the orchestrator's call.
 
 ```
-00_workplan.md            # config + pre-committed thresholds
-01_methodology.md         # executed parameters; what changed from prior runs
-02_weakness_register.md   # PRIMARY DELIVERABLE — narrative findings per mode
-03_validation_report.md   # P1/P2/P3 structural property results
-data/                     # all intermediate JSON/NPZ
+00_workplan.md            # hand-written, before the run: config + pre-committed thresholds
+01_methodology.md         # hand-written: executed parameters; what changed from prior runs
+02_weakness_register.md   # script — PRIMARY DELIVERABLE, narrative findings per mode
+03_validation_report.md   # script — P1/P2/P3 structural property results
+data/                     # script — intermediate JSON (methodology §5)
 ```
+
+The script writes no `pilot.json`, `g_tfidf.npz` or discourse overlay (Stages 0 and 7 are reserved).
 
 Each finding in `02_weakness_register.md` carries:
 - Confidence flag derived from how many graphs agree
@@ -212,19 +183,25 @@ PP entry references the audit folder; ED entry describes what was found.
 
 ## Common Failure Modes (learned from v1 → v2 → v3)
 
-1. **Threshold deviation post-hoc.** v2 lowered cosine 0.35 → 0.20 because magnitudes were lower than expected. Forbidden — if signal is weaker than thresholds, that's a finding, not a tuning opportunity. Pre-committed thresholds in §3.7 of `references/methodology.md` are LOCKED.
+1. **Threshold deviation post-hoc.** If signal is weaker than thresholds, that's a finding, not a tuning opportunity. Pre-committed thresholds in §3.7 of `references/methodology.md` are LOCKED.
 
-2. **Validation criterion mathematically impossible.** v2's k=4 k-NN excluded small expected_groups (3-token groups maxed at Jaccard 0.25 < 0.30 threshold). v3 uses **structural properties** (foundation periphery, conviction symmetry, citation density) that don't depend on group composition.
+2. **Validation criterion mathematically impossible or circular.** Validate on **structural properties** (methodology §3.8), which depend neither on group composition nor on a prior grouping.
 
-3. **Within-class clustering pollutes implied-missing.** Convictions cluster with Convictions, factions with factions — this is taxonomy, not a missing connection. Class taxonomy filter in §3.4 of methodology MUST be applied.
+3. **Within-class clustering pollutes implied-missing.** Convictions cluster with Convictions — taxonomy, not a missing connection. Class taxonomy filter in §3.4 of methodology MUST be applied.
 
-4. **Out-degree-only computation.** v2 measured cite degree as `len(g_cite[t])` which is out-only; tokens without dedicated docs (55 of 84) had artificial degree 0. Use **in+out neighbor union** for accurate centrality.
+4. **Out-degree-only computation.** Tokens without dedicated docs get artificial degree 0. Use **in+out neighbor union** (methodology §4).
 
-5. **TF-IDF cosine artifact mistaken for centrality.** v2's "faction/NPC/Conviction-as-hub" finding was an artifact of paragraph breadth, not connection strength. v3 demoted TF-IDF to supporting role; multi-graph hub measure (Mode A) is the correct centrality.
+5. **TF-IDF cosine artifact mistaken for centrality.** TF-IDF is supporting only; Mode A is the correct centrality.
 
-6. **Citation graph too sparse to filter.** v1 used explicit-only refs (11 token-edges across 84 tokens); "no citation" was the default for nearly every pair, making the citation-absence filter trivially false. v3 expanded to ≥2 implicit body mentions (421 edges) — citation-absence becomes informative.
+6. **Citation graph too sparse to filter.** Explicit-only refs make "no citation" true of nearly every pair; the ≥2 implicit body-mention threshold makes citation-absence informative.
 
-7. **Single-doc concentration of legacy terms is the cleanup signal.** Game Master sweep was 11/16 in threadwork_v30.md. Cultural Reformation was 10/15 in peninsular_strain_v30.md. Single-doc grep-replace handles concentrated cleanups; PP-678 demonstrated the workflow.
+7. **Single-doc concentration of legacy terms is the cleanup signal.** Single-doc grep-replace handles concentrated cleanups.
+
+8. **A zero or null reported instead of debugged.** A token at 0 paragraphs, or a diagnostic returning nothing, triggers a tokenization/threshold debug before it is reported.
+
+9. **Duplicate tokens.** Merge or flag known-coupled tokens (methodology §3.3) before the run; review auto-extracted tokens before they count.
+
+10. **A planned step silently skipped.** Every step `00_workplan.md` (hand-written) names is run or reported as not run.
 
 ---
 
@@ -235,149 +212,74 @@ PP entry references the audit folder; ED entry describes what was found.
 - Validation result is reported up-front; findings inherit its confidence
 - No commit until P1/P2/P3 validation outcome is reported
 - Sweep modes (G) produce single-doc concentration reports (essential for actionable cleanup)
-- Audit folder is `designs/audit/{date}-{audit-name}/` — never overwritten across reruns; new run = new dated folder
+- Name the `--output-dir` `{date}-{audit-name}/`; never overwritten across reruns; new run = new dated folder
+- Every finding resolves to a filed `ED-<LANE>-NNNN` id (per `references/id_reservations.yaml`'s
+  allocation protocol) or an explicit no-action line (e.g. "no action — working as intended," "no
+  action — superseded by PP-NNN"), as in `valoria-mechanic-audit`'s disposition table
+- Record nothing in a registry: a pass's output is edits plus at most one commit paragraph
+  (`CLAUDE.md` §0)
 
 ---
 
 ## Reference Files
 
 - `references/methodology.md` — v3 multi-graph triangulation specification (full §3 procedure, all pre-committed thresholds, class taxonomy)
-- `references/diagnostic_modes.md` — A through H mode specifications with worked examples
-- `references/v1_v2_v3_history.md` — methodology evolution, why each pivot was needed (institutional memory)
-- `scripts/vector_audit.py` — **runnable pipeline** (stage dispatcher implemented 2026-07-13,
-  repo-realignment WS0a; supersedes the 2026-07-11 STUB status noted under ED-IN-0035/0036).
-  Implements Stages 1–6 (Stage 0 pilot + Stage 7 discourse overlay reserved), reads the working
-  tree only, and writes `data/*.json` + `02_weakness_register.md` + `03_validation_report.md`.
-  Reuses the in-file `SEED_TOKENS`/`PILOT_TOKENS`/`CLASSES`/helper scaffolding. `numpy`/`sklearn`
-  are optional (only the supporting TF-IDF graph needs them). Invoke via the command in Step 3.
-  Note: it reads *today's* corpus, so its numbers differ from the frozen 2026-04-29 archived run.
-  P2 conviction-symmetry is **v4 as of 2026-07-21 (ED-IN-0080, Jordan ruling A)**: measured on
-  context-gated prose presence (the v3 throughline formulation was unsatisfiable by construction),
-  with an all-zero vector reporting NOT MEASURABLE rather than the retired `cv=999` sentinel —
-  see methodology §3.8 for the ruling, the thin-pass caveats, and the staged attribute-symmetry
-  extension.
-- `scripts/structure_audit.py` — the observatory's **architecture layers** (WS0b core, added
-  2026-07-13). Companion to `vector_audit.py` (which is the L0 prose layer). Builds **G_code** (AST
-  import graph over `sim/` + `tools/` — cycles, cut-vertices, orphans) and **L2** (the
-  `module_contracts.yaml` producer→consumer wiring graph — Key emit/consume closure, phantom
-  producers, dangling non-terminal emits, `doc:null` modules, cross-scale locality). Stdlib + PyYAML
-  only (no numpy/sklearn/networkx — the graph algorithms are implemented in-file), working-tree only,
-  deterministic. **Provenance-tagged** (notional/`[ASSUMPTION]`/`doc:null` modules bucketed as
-  lower-confidence) and it **measures, never gates** (pytest + import-smoke gate). Invoke:
-  `python3 scripts/structure_audit.py --repo-root . --output-dir <run>` → `structure_register.md` +
-  `data/*.json`. Regression-pinned in `tests/valoria/test_structure_audit.py` against PR #131's
-  hand-caught L2 defects (the mass_battle fabricated emit, the personal_combat dead emits).
-- `scripts/pointer_audit.py` — the observatory's **G_pointer** layer (WS0b, added 2026-07-13; the WS1
-  registry-work progress meter). For every stat/quantity identifier on the same surfaces A17 scans
-  (`module_contracts.yaml` `state`/`derivations` + `sim/*.py` `stat_deltas`/`impact_vector` literals),
-  does it resolve to a `descriptor_registry`/`names_index` key, or is it hardcoded pointer-debt? It
-  **reuses A17's rule, does not reimplement it** (CLAUDE.md §8) — imports `tools/quantity_registry.py`
-  `resolve()` and `tools/ci_quantity_vocabulary_check.py`'s scanners verbatim; A17 is the CI gate, this
-  is the graph/meter VIEW. Stdlib + PyYAML only, working-tree only, deterministic. **Measures, never
-  gates.** The unresolved list is *candidate* debt — it explicitly flags that some rows are
-  computed/internal quantities (e.g. `cumulative_damage`, `L_s`) that A17 calls "expected backlog, not
-  a bug," so triage before acting. Invoke:
-  `python3 scripts/pointer_audit.py --repo-root . --output-dir <run>` → `pointer_register.md` +
-  `data/{g_pointer,pointer_scorecard}.json`. Tests: `tests/valoria/test_pointer_audit.py` (pins the
-  §8 reuse-by-identity + the A17 ground-truth count match).
-- `scripts/formula_audit.py` — the observatory's **L1 formula-dependency** layer (WS0b, added
-  2026-07-13). Builds the quantity-dependency DAG (output ← input) from `module_contracts.yaml`
-  `derivations` + `descriptor_registry.yaml`, detecting orphan inputs (a quantity consumed but never
-  produced), multi-definition conflicts (the "Combat Pool defined three ways" class), and dependency
-  cycles. **Reuses** `tools/quantity_registry.py` `resolve()`,
-  `ci_quantity_vocabulary_check._split_bundled`, and `structure_audit.py`'s `tarjan_scc`/`degrees`
-  (no reimplementation, §8). Stdlib + PyYAML only, working-tree only, deterministic. **Measures, never
-  gates**; the unresolved/orphan list is *candidate* debt (triage first — some are computed/placeholder
-  quantities). A malformed derivation with a null `output` is surfaced via a sentinel node, never
-  silently dropped. Invoke: `python3 scripts/formula_audit.py --repo-root . --output-dir <run>` →
-  `formula_register.md` + `data/*.json`. Tests: `tests/valoria/test_formula_audit.py` (§8
-  reuse-by-identity + end-to-end cycle detection + the null-output regression).
-- `scripts/gen_audit.py` — the observatory's **G_generation** currency layer (WS0b, added 2026-07-13;
-  the WS3 / NS4 v40-transition meter). Partitions the whole `.md` corpus into LIVE heads vs HISTORICAL
-  records (so a historical doc's stale refs are *structurally* never scanned), then runs three
-  detections: (1) **stale version-pointers** inside live heads — a `_vNN.md` ref that is superseded,
-  *moved* (successor exists per the restructure ledger — a trivial repoint), or genuinely nonexistent;
-  (2) **unregistered canonical heads** (a `## Status: CANONICAL` doc absent from
-  `canonical_sources.yaml`); (3) **currency drift** (registered AND superseded). **Reuses**
-  `ci_generation_consistency.py`'s currency rule (`canonical_docs`/`status_of`/`superseded_ids`/
-  `RECOGNIZED`), `broken_dependency_checker.py`'s
-  `extract_file_refs`/`get_all_repo_files`/`_load_restructure_map`, and `vector_audit.banner_classify`
-  — no rule re-derived (§8). Authoritative registration beats the weak banner content-keyword; physical
-  archival paths still demote. Stdlib + PyYAML only, working-tree only, deterministic. **Measures, never
-  gates** (`ci_generation_consistency.py` is the WARN-only gate). The stale-pointer list is
-  severity-triaged (superseded/moved = mechanical repoints; only *nonexistent* needs a human). Invoke:
-  `python3 scripts/gen_audit.py --repo-root . --output-dir <run>` → `generation_register.md` +
-  `data/g_generation.json`. Tests: `tests/valoria/test_gen_audit.py` (33 tests: §8 reuse-by-identity,
-  the LIVE/HISTORICAL discriminator, the moved-vs-nonexistent severity split).
-- `scripts/ripple_audit.py` — the observatory's **L3 cross-scale RIPPLE / propagation** layer (added
-  2026-07-21). The **qualitative** complement to `vector_audit`'s **quantized** map: where the vector
-  audit gives every token numeric coordinates, this makes the typed dependency **chains** explicit and
-  traversable in **all directions** and **sliceable** by scale, answering *"if I change X, what ripples —
-  downstream (what a change affects) AND upstream (provenance) — and WHY does each hop exist?"* It is a
-  **composition, not a new parser** (§8): unifies `structure_audit.build_l2()` (module→module Key wiring,
-  the mechanic scale) + `formula_audit.build_contract_edges()` (quantity input→output derivations, the
-  value scale) into one typed directed graph, **bridged across scales** (`quantity --reads--> module
-  --emits_consumes(Key)--> module --produces--> quantity`). Edge types `emits_consumes` / `derives` /
-  `produces` / `reads`, all oriented src→dst = "flows into"; forward-BFS = downstream ripple, backward-BFS
-  = provenance. Every hop carries **WHAT** (node kind), **HOW** (edge type), **WHY** (provenance: the Key
-  type / formula / contract source — never synthesized). **Provenance-tagged** (`⚠notional` hop = through a
-  doc:null / [ASSUMPTION]-grade module). Optional **quantized overlay** (`--vector-run <dir>`) annotates
-  name-matching nodes with a vector_audit run's cite/tl/mu/pp degrees, so the qualitative chain and the
-  quantized coordinate travel on one node. Stdlib + PyYAML only, working-tree only, deterministic.
-  **Measures, never gates.** Invoke: `python3 scripts/ripple_audit.py --repo-root . --output-dir <run>`
-  (→ `ripple_register.md` + `data/ripple_graph.json`, the machine-hookable surface other tooling reads),
-  or ad-hoc `--node <X> --direction {up,down,both} --depth N --layers <slice>`. **Full-token
-  impact query (2026-07-21):** `--vector-run <dir> --impact <token>` loads a vector_audit run's
-  exported full-token `G_cite`+metadata graph and does UNDIRECTED transitive reachability —
-  "tug anything, see what moves" — ranking every reachable token by graph distance and flagging
-  the far (≥3 hop) cross-subsystem *surprising* hits with their path (e.g. `Clocks → Factions →
-  Key: mechanical.project_advanced → Game Director`). This unifies the vector audit's QUANTIZED
-  graph with ripple's directional reachability into one query. Tests:
-  `tests/valoria/test_ripple_audit.py` (§8 reuse-by-identity, bidirectionality, depth/slice, cycle-safety).
-  **v1 scope:** L1+L2 (mechanic+value+Key scales). Documented extension points: fold in `vector_audit`'s
-  L0 doc-citation graph (design scale), `pointer_audit`'s G_pointer (identifier→key), and `gen_audit`'s
-  G_generation (supersedes) as further edge types on the same node namespace — so every
-  wrapper/system/subsystem/mechanic/routine/primitive/formula/value/token/key becomes one navigable,
-  all-directions, all-scales chain the rest of the toolchain (audits, sim, tests, design) can hook into.
-- `scripts/workbench.py` — the **Reconciliation Workbench** (R1 prototype, 2026-07-21; program doc
-  `proposals/2026-07-21-reconciliation-program.md` §2). Holds the **ENGINE** view (warp — what the
-  contracts/sim actually wire) beside the **PROSE** view (weft — what a design doc articulates) for a
-  module, and flags every **divergence** as an iteration **card**. Engine and prose are complementary
-  and iterative: a card is a question a human resolves by moving *either* side (articulate the prose,
-  or change the engine) — the Workbench never auto-reconciles. **Composition, not a parser** (§8): reuses
-  `structure_audit.build_l2` (module→module Key wiring + notional provenance) + `formula_audit.build_contract_edges`
-  (derivations). Edge axis = **articulated / mentioned / silent**; the `mentioned` state (endpoints in
-  the doc, relationship unstated) is the siloed-prose fingerprint. Cards carry a **stable id** so
-  `references/observatory_dispositions.yaml` (shared with Augur) records human answers and only OPEN/CHANGED
-  cards surface; **notional-shadow guard** stops a fabricated contract row (the ED-MB-0010 class) from
-  being reconciled *to*. **Measures, never gates**; deterministic, model-free; prose matching is heuristic
-  co-mention, confidence-tagged (a lead, not a verdict). Invoke: `python3 scripts/workbench.py --repo-root .
-  --module <name> [--output-dir <run>]`. Tests: `tests/valoria/test_workbench.py` (§8 reuse-by-identity, the
-  two-sided rows, stable/deterministic card ids, the notional-shadow guard, dispositions memory, and the
-  two program vignettes — `settlement_layer` both-sided at 9/16 articulated, `domain_actions` one-sided/notional).
+- `references/diagnostic_modes.md` — A through H mode specifications, output shape and recommended action
+- `references/v1_v2_v3_history.md` — what may and may not be relaxed
 
-## Cross-references
+Every script below reads the working tree only, is deterministic, and **measures, never gates**.
+The five siblings of `vector_audit.py` are stdlib + PyYAML only (no numpy/sklearn/networkx).
+Each reuses an existing owner's rule rather than re-deriving it (CLAUDE.md §8) — the module
+docstring names the owners; extend them, never re-implement. Given `--output-dir <run>`, each writes
+a markdown register (`structure_register.md`, `pointer_register.md`, `formula_register.md`,
+`generation_register.md`, `ripple_register.md`, `workbench_<module>.md`) + `data/*.json`.
 
-- Original execution: `deprecated/archives/audit/2026-04-29-topographic-analysis/` (v1, v2, v3 all on file —
-  moved from `designs/audit/` to `deprecated/archives/audit/` at some point after this skill was written;
-  corrected 2026-07-11, ED-IN-0036)
-- Workplan v3: `deprecated/archives/audit/2026-04-29-topographic-analysis/00_workplan.md`
-- Weakness register: `deprecated/archives/audit/2026-04-29-topographic-analysis/02_weakness_register.md`
-- PP-676 / ED-762 (v2+v3 execution)
-- PP-677 / ED-764 (throughlines load-bearing systems column — restored Mode F)
-- PP-678 / ED-765 (vocabulary debt sweep workflow demonstrated)
-
-## Forward-only findings-disposition discipline
-
-Every finding in `02_weakness_register.md` must resolve to either a filed `ED-<LANE>-NNNN` id
-(per `references/id_reservations.yaml`'s allocation protocol) or an explicit no-action line (e.g.
-"no action — working as intended," "no action — superseded by PP-NNN"). This mirrors the
-disposition-table discipline added to `valoria-mechanic-audit`'s output contract in the same
-audit-ecosystem consolidation batch. Applies going forward only — the existing
-`02_weakness_register.md` from the 2026-04-29 run is not retroactively required to carry this
-(no findings-schema existed at that time to check it against).
-
-## Registry logging — retired
-
-**Retired.** `tools/audit_registry.py` and `references/audit_registry.jsonl` were retired 2026-08-21 (`FORK:1e4c6f4`, ED-IN-0194). A pass records nothing in a registry: its output is edits plus at most one commit paragraph (`CLAUDE.md` §0).
-
+- `scripts/vector_audit.py` — **runnable pipeline**, the L0 prose layer (Step 3). `numpy`/`sklearn`
+  are optional. P2 conviction-symmetry is **v4 (ED-IN-0080)** — methodology §3.8.
+- `scripts/structure_audit.py` — **architecture layers**: **G_code** (AST import graph over `CODE_ROOTS` +
+  `EXTRA_CODE_ROOTS` — cycles, cut-vertices, orphans) and **L2** (the `module_contracts.yaml`
+  producer→consumer wiring graph — Key emit/consume closure, phantom producers, dangling non-terminal
+  emits, `doc:null` modules, cross-scale locality). Notional/`[ASSUMPTION]`/`doc:null` modules are
+  bucketed as lower-confidence. Invoke:
+  `python3 scripts/structure_audit.py --repo-root . --output-dir <run>`. Its gate is pytest
+  (`tests/valoria/test_structure_audit.py`) + import-smoke.
+- `scripts/pointer_audit.py` — **G_pointer**: does each stat/quantity identifier on the surfaces A17
+  scans resolve to a `descriptor_registry`/`names_index` key, or is it hardcoded pointer-debt? A17
+  is the CI gate; this is the meter view. The unresolved list is *candidate* debt — triage before
+  acting, as some rows are computed/internal quantities. Invoke:
+  `python3 scripts/pointer_audit.py --repo-root . --output-dir <run>`. Tests:
+  `tests/valoria/test_pointer_audit.py`.
+- `scripts/formula_audit.py` — **L1 formula-dependency** DAG (output ← input) from
+  `module_contracts.yaml` `derivations` + `descriptor_registry.yaml`: orphan inputs (consumed but
+  never produced), multi-definition conflicts, dependency cycles. The orphan list is *candidate*
+  debt (triage first). A null-`output` derivation is surfaced via a sentinel node, never dropped.
+  Invoke: `python3 scripts/formula_audit.py --repo-root . --output-dir <run>`. Tests:
+  `tests/valoria/test_formula_audit.py`.
+- `scripts/gen_audit.py` — **G_generation** currency. Partitions the `.md` corpus into LIVE heads vs
+  HISTORICAL records (historical docs are never scanned), then detects (1) **stale
+  version-pointers** in live heads — superseded, *moved* (a mechanical repoint) or nonexistent (only
+  this needs a human); (2) **unregistered canonical heads** (a `## Status: CANONICAL` doc absent from
+  `canonical_sources.yaml`); (3) **currency drift** (registered AND superseded). Authoritative
+  registration beats the banner content-keyword; archival paths still demote.
+  `ci_generation_consistency.py` is the WARN-only gate. Invoke:
+  `python3 scripts/gen_audit.py --repo-root . --output-dir <run>`. No test file.
+- `scripts/ripple_audit.py` — **L3 cross-scale RIPPLE**: *"if I change X, what ripples — downstream
+  AND upstream (provenance) — and WHY does each hop exist?"* One typed directed graph over module
+  wiring and quantity derivations, bridged across scales (node kinds, edge types, directions: the
+  module docstring). Every hop carries **WHAT**, **HOW** and **WHY** (provenance — never
+  synthesized); a `⚠notional` hop passes through a doc:null / [ASSUMPTION]-grade module. Invoke:
+  `python3 scripts/ripple_audit.py --repo-root . --output-dir <run>` (`data/ripple_graph.json` is the
+  machine-hookable surface), or ad-hoc `--node <X> --direction {up,down,both} --depth N --layers
+  <slice>`. `--vector-run <dir>` overlays a vector_audit run's degrees; `--vector-run <dir> --impact
+  <token>` ranks every token reachable (undirected) in that run's graph and flags far (≥3 hop)
+  cross-subsystem hits with their path. Tests: `tests/valoria/test_ripple_audit.py`. Scope: L1+L2
+  only; the L0 doc-citation, G_pointer and G_generation graphs are not folded in.
+- `scripts/workbench.py` — the **Reconciliation Workbench**. Holds the **ENGINE** view beside the
+  **PROSE** view for a module and flags every **divergence** as a **card**: a question a human
+  resolves by moving *either* side — it never auto-reconciles. The `mentioned` edge state (endpoints
+  in the doc, relationship unstated) is the siloed-prose fingerprint. Cards carry a **stable id** so
+  `references/observatory_dispositions.yaml` (absent today; read as empty) records human answers and
+  only OPEN/CHANGED cards surface; the **notional-shadow guard** stops a fabricated contract row from
+  being reconciled *to*. Prose matching is heuristic co-mention — a lead, not a verdict. Invoke:
+  `python3 scripts/workbench.py --repo-root . --module <name> [--output-dir <run>]`. Tests:
+  `tests/valoria/test_workbench.py`.

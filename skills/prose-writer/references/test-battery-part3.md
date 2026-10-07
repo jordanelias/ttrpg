@@ -61,7 +61,7 @@ The glass was still on the table. The water was still in the glass. These were s
 - **Tartt's technique depends on rendering:** ✓. This is the key finding. The loaded object requires the perceiver to interpret the detail — to connect the still-moving water to recent presence to implied narrative. At low coherence, the interpretation fails. The object is still there. The weight is still there. But the rendering that would process the weight into implication is degrading. The object becomes unloaded — present but not read. Tartt's technique is the most coherence-dependent of the eight.
 - **"There was something about the water. She knew this."** — This is close to meta-description. "There was something" announces the presence of significance without producing the significance. But: at Coherence 3, this is what the experience IS. Vael can feel that the glass is significant. She cannot produce the significance. "She knew there was something and the something was —" The sentence breaks. The something was. Lispector's veer — the sentence reaches for the significance and does not arrive. The difference from meta-description: the prose does not say "she could not determine the significance." It says "the something was —" and breaks. The attempt is present. The arrival is not. **Pass — the attempt is what distinguishes this from meta-description.**
 - **Closing:** "These were the things that were still." Tautological. "Still" as both "remaining" and "unmoving." The double meaning is unintended by Vael — her rendering produces the word "still" and does not distinguish between its senses. ✓
-- **Verdict:** Pass. Important finding: Tartt's loaded-object technique is the most coherence-dependent. It requires the rendering to produce interpretation. At low coherence, the object becomes heavy but unread — present but not meaning. This should be documented as a rule.
+- **Verdict:** Pass. Important finding: Tartt's loaded-object technique is the most coherence-dependent. It requires the rendering to produce interpretation. At low coherence, the object becomes heavy but unread — present but not meaning. (Rule: `techniques-skeleton.md` §11.5; V.4.)
 
 ---
 
@@ -85,7 +85,7 @@ Her hand on the table. Her hand was on the table. It was there and it was — he
 - **The simile boundary:** Version A uses two similes ("like a glove or a tool," "the way one sits with a finished letter"). These require analogical reasoning — X is like Y. At Coherence 5 (Dissonant), the rendering produces analogies with effort. The similes are functional but they feel slightly labored — "or a tool on a workbench at the end of the day" is reaching for precision in the comparison.
 - **Version B eliminates similes entirely.** The hand is the hand. The table is the table. The rendering cannot produce "X is like Y" because the apparatus for holding X and Y simultaneously and mapping the relation between them is failing. Instead: tautology, declaration, flat predication.
 - **The transition between A and B** is sharp. This is correct — the coherence thresholds are band-based. At 5, the rendering is dissonant but functional. At 4, it is fragmented. The shift is not gradual across these two tiers — it is a threshold. Similes are available at 5 and gone at 4. The prose at 4 is categorically different from the prose at 5.
-- **Finding:** The simile boundary is one of the sharpest transitions in the coherence gradient. The difference between a passage with similes and a passage without them is immediately audible to the reader. This makes the 5/4 boundary the most perceptible tier-shift in the voice. **Document this.**
+- **Finding:** The simile boundary is one of the sharpest transitions in the coherence gradient. The difference between a passage with similes and a passage without them is immediately audible to the reader. This makes the 5/4 boundary the most perceptible tier-shift in the voice.
 - **Verdict:** Both pass. The pairing confirms the rule: no similes below Coherence 4.
 
 ---
@@ -112,7 +112,7 @@ Her hand on the table was — she thought it was the cold. It was certainly the 
 
 ### Test 29. Conflict: Tolkien Named Specificity vs Lispector Vagueness-as-Truth
 
-*These are explicitly opposed in the techniques-skeleton. Tolkien names. Lispector refuses to name because vagueness reaches what specificity cannot. How do they coexist?*
+*These look opposed in the techniques-skeleton. Tolkien names. Lispector refuses to name because vagueness reaches what specificity cannot. How do they coexist?*
 
 **Scenario:** Coherence 6. Vael on the headland. The wall, the grass, the darker soil. The rendering is slightly impaired.
 
@@ -131,37 +131,9 @@ She stood at the end. The names were right. The wall was the wall. The thing tha
 
 ---
 
-## Summary of All Findings — Parts 1-3
+## Where these findings now live
 
-### Confirmed Rules (new this battery):
-
-1. **Interpolation is lamination, not alternation.** Each author operates at a different depth or function. Tolkien holds the surface. Lispector holds the depth. Ishiguro holds the narrator's self-deception. Ocampo holds the flat-affect report. They do not take turns. They layer.
-
-2. **Tartt is the most coherence-dependent author.** Loaded-object technique requires the rendering to produce interpretation. At low coherence, the object becomes heavy but unread.
-
-3. **The 5/4 boundary is the sharpest transition.** Similes disappear. The reader perceives this immediately. Document as the most audible tier-shift.
-
-4. **Lispector veer + Ishiguro commitment = commit → veer → recommit.** The veer sits inside the repair sequence. The recommitment is less convincing than the original. The narrator doesn't know.
-
-5. **Tolkien specificity + Lispector vagueness = lamination.** The name holds the surface. The veer reaches past it. Both are present. Both are true. Not a conflict.
-
-6. **Passage length is coherence-gated.** 10-8: full paragraphs. 7-5: paragraphs with interruptions. 4-3: short paragraphs. 2: very short. 1: fragments.
-
-7. **Closing vocabulary is coherence-gated.** 10-8: landscape. 7-5: landscape with ground-check. 4-3: isolated detail. 2: isolated detail, flat. 1: isolated noun.
-
-8. **Mistry under coherence pressure risks aestheticization.** The tautological loops can read as meditative rather than pathological. Needs sharp disruption to break the mood.
-
-9. **The last simile rule:** At Coherence 1, one simile may appear if the text immediately enacts the collapse of the capacity that produced it.
-
-10. **Chronicle-mode with qualified observer:** When the Chronicler has high coherence + high TS, both rendered and substrate information are available. No conflation because the observer is qualified for both.
-
-### For Skeleton Promotion:
-- Rules 1, 2, 3, 4, 5, 6, 7 → techniques-skeleton §11 (structural enactment)
-- Rules 8, 9 → anti-patterns-skeleton (author-specific mannerism / coherence-gated)
-- Rule 10 → coherence-tiers.md (TS interaction guidance)
-
-### Remaining (Part 4, next session):
-- Full skeleton/infill distillation
-- Infill file rewrites with Morrison removed, new authors integrated
-- Additional stress tests if needed
-- Composition test rewrite applying all confirmed rules
+- Lamination, not alternation; Lispector veer + Ishiguro commitment (commit → veer → recommit); Tolkien specificity + Lispector vagueness — `techniques-skeleton.md` §11.5 (interpolation and pairings).
+- Tartt as the most coherence-dependent author; the 5/4 boundary; passage length and closing vocabulary by tier; the last-simile rule — `techniques-skeleton.md` §11.5 (coherence-gated availability).
+- Mistry under coherence pressure aestheticizes — `anti-patterns-skeleton.md` V.7.
+- Chronicle-mode with a qualified observer — `test-battery-part2.md`, Findings.

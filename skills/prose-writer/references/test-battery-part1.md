@@ -252,30 +252,8 @@ The sexton's wife brought water in a cup that had been repaired — the handle r
 
 ---
 
-*[Part 3 continues next session with: Coherence 2 synthesis, Coherence 1 synthesis, TS overlay synthesis, dialogue tests, action sequence tests. Then Part 4: skeleton/infill distillation.]*
+## Findings not stated in the skeletons
 
----
-
-## Interim Findings
-
-**What works:**
-1. Interpolation is structural, not decorative — each author's technique serves a different function in the same content. One author's content sits inside another author's process.
-2. The Wittgenstein constraint is enforceable: close on the nearest concrete thing. The pin. The eggs. The cup. The grass.
-3. Ishiguro + Ocampo is a powerful pairing: rational explanation followed by flat contradiction. Neither narrator nor character acknowledges.
-4. Borges + Márquez is natural for codex/chronicle: precision and ordinary impossibility are complementary, not competing.
-5. Lispector's repetition-as-rendering-cycling works at Coherence 3-5 but is high-risk — if it fails, it reads as monotonous writing.
-
-**What fails or risks failure:**
-1. Analytical self-observation degrades with coherence. "She stopped reconstructing" is too analytical at Coherence 5. Must be ruthlessly cut at lower tiers.
-2. Similes require analogical reasoning. Must be eliminated below Coherence 4.
-3. Borges's scholarly apparatus can tip into meta-description if the apparatus comments on its own inadequacy too directly. The apparatus must reach its limit and STOP, or document the gap as an institutional silence, not as the narrator's confession.
-4. Lispector's tautology ("the eggs were eggs") works once per passage. Repeated, it becomes a trick.
-5. Ocampo's flat-affect depends on content contrast — if the content isn't genuinely terrible or strange, the flatness is just flatness. The technique requires magnitude beneath the surface.
-
-**Rules confirmed:**
-- Close on the concrete thing. Always.
-- No "she could not." The prose attempts. The attempt fails or veers or commits wrongly.
-- No similes below Coherence 4.
-- No analytical self-observation below Coherence 5.
-- Interpolation works when each author serves a different function. It fails when two authors serve the same function (e.g., Lispector veer + Ishiguro uncertainty both serving "the narrator is unsure" — choose one).
-- The physical world is always present. At Coherence 1, it is fragmentary. At Coherence 10, it is full. It is never absent.
+The rules these tests confirmed now live in `techniques-skeleton.md` (§11, §11.5) and `anti-patterns-skeleton.md` (I.6, II.5). Two findings stand only here:
+1. **Lispector's repetition-as-rendering-cycling** works at Coherence 3–5 but fails silently: if the reader does not feel the rendering cycling, it reads as monotonous writing, and there is no fallback (Test 12).
+2. **Ocampo's flat affect depends on content contrast.** If the content is not genuinely terrible or strange, the flatness is just flatness; the technique needs magnitude beneath the surface (Tests 5, 10).
