@@ -211,7 +211,8 @@ class VerbRow:
     # ⚠ THE TWO DECLARED ABSENCES A DRIVER-CONSTRUCTION REFUSAL READS (plan position IN-41, `SM-9` +
     # `SM-11`). Each is the row SAYING WHY the fold cannot carry it, so `resolvable_verbs()` drops it
     # with a reason on record rather than without a word; `manifest/registry.py` refuses both
-    # directions -- a gap with no note, and a note on a row that has no gap.
+    # directions -- a gap with no note, and a note on a row that has no gap (for `effect_decline_note:`
+    # a row that has an effect or writes nothing).
     #
     # `effect_decline_note:` -- the row WRITES and no `@effect_for` body exists, and here is why
     # (refusal (a), `check_effects`). It is one of THREE columns the retired `decline_note:` was split
@@ -230,8 +231,8 @@ class VerbRow:
         """Can the fold evaluate this row's precondition: none at all, a typed cell, or a
         `predicates` (`loop/predicates.py::REQUIRES_PREDICATES`) entry. The ONE answer
         `resolvable_verbs()`'s first gate and `check_preconditions` both read (`CLAUDE.md` §8);
-        `loop/resolve.py::_fold` branches the same three ways. `predicates` is a parameter because
-        this loader may not import `loop/`."""
+        `loop/resolve.py::_admits` (which `_fold` calls) branches the same three ways. `predicates`
+        is a parameter because this loader may not import `loop/`."""
         return ((self.requires or "").strip() in NO_PRECONDITION
                 or self.requires_typed is not None
                 or self.verb in predicates)

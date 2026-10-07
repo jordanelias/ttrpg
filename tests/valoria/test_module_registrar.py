@@ -301,6 +301,21 @@ print(repr((verb, construct())))
     _assert_refused(refusal, repr(verb), "effect_decline_note", "HAVE an effect")
 
 
+def test_a_row_that_writes_nothing_and_carries_an_effect_decline_note_refuses_naming_the_verb():
+    """The converse arm's OTHER cell: `effect_decline_note:` declines an effect a WRITING row lacks
+    (`data/verbs.py`'s own definition of the column), so on a row that writes nothing there is no
+    effect to decline and the note is stale. The two arms of the twin `check_preconditions` cover
+    every row; this one covers the row the first arm skipped."""
+    got = _run("""
+import dataclasses
+verb = sorted(v for v, r in VERB_TABLE.items() if not r.writes and v not in EFFECTS)[0]
+VERB_TABLE[verb] = dataclasses.replace(VERB_TABLE[verb], effect_decline_note="planted")
+print(repr((verb, construct())))
+""")
+    verb, refusal = got
+    _assert_refused(refusal, repr(verb), "effect_decline_note", "write nothing")
+
+
 def test_a_row_with_an_untyped_precondition_nothing_evaluates_refuses_naming_the_verb():
     """IN-41 falsifier (1), `check_preconditions` (`SM-11`): un-type a row whose precondition a TYPED
     CELL evaluates (and no `REQUIRES_PREDICATES` entry does), with no `requires_decline_note:` --

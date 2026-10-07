@@ -1361,11 +1361,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     claim, so the fold is entirely in what admits that claim as a question, not in what produces
     it. `date_due`'s half needs CALENDAR to emit `date.fired` first (position `11b`, BUILT
     2026-09-29 -- `loop/calendar.py`'s write now carries `emits="date.fired"`) AND needs that
-    emission to actually reach WITNESS, which it still does not: `loop/driver.py`'s barrier-4
-    dispatch (`:404,462`) passes only MATTER's and the fold's events into `witness()`, never
-    CALENDAR's own (found at BATCH-CLOSE, methodology-close Phase 3 terminal critique, F4;
-    `test_season_shape.py:4307-4316` already pins the resulting "0 of 0" claims). So `date_due`
-    is unblocked by neither half yet -- 11b closed the emission gap and opened the routing one;
+    emission to reach WITNESS, which IN-29 closed: `calendar()` returns its own Events and
+    `season()` hands them to `witness()` in round 0 beside MATTER's, so a fired date deposits a
+    claim (`test_calendar_a_forced_corpus_date_*` pins `claimed_any`). Whether `claim_landed` then
+    admits that claim as a question is not measured here;
     `band_crossed`'s half needs nothing further, because `_crossings` (`loop/matter.py`) already
     emits a witnessable Event whose claim's subject is the site (`epistemic.claim_subjects`'s
     anchor fallback) -- `reach`/`place_of`, below, are what let a claim about a place reach someone

@@ -99,8 +99,8 @@ def mint_token(w: World, wclass: WriteClass) -> Token:
 
 
 def resolvable_verbs() -> frozenset:
-    """The verbs the fold can actually carry through RESOLVE: no precondition, or a precondition
-    some `REQUIRES_PREDICATES` entry evaluates.
+    """The verbs the fold can actually carry through RESOLVE: a precondition the fold can evaluate
+    (`VerbRow.precondition_evaluable`: none, a typed cell, or a `REQUIRES_PREDICATES` entry).
 
     COMPUTED, NEVER LISTED. A caller narrowing an option set to these is not authoring a roster --
     it is asking the fold what it can execute, and the answer moves when `verb_table.yaml` or the
@@ -383,8 +383,8 @@ class SeasonDriver:
 
         ⚠ **WITNESS RUNS PER ROUND AND MATTER'S EVENTS ARE WITNESSED ONCE.** A deposit that only
         landed at the end of the season could not reach a later round's deliberation, which is the
-        whole channel R-03 asks for. MATTER's events are seasonal, so they join round 0's fan-out
-        and no other — carrying them into every round would deposit one wear five times.
+        whole channel R-03 asks for. MATTER's and CALENDAR's events are seasonal, so they join round
+        0's fan-out and no other — carrying them into every round would deposit one wear five times.
 
         ⚠ **THE CONTROL IS THE `scene_budget = 1` ARM, AND THE FIRST WRITING OF THIS DOCSTRING
         NAMED THE WRONG ONE.** It read that `H-124`'s `scenes_per_round = 5` gives every person
@@ -434,8 +434,8 @@ class SeasonDriver:
         n_acts, n_events, deposits = 0, len(matter_events), 0
         # IN-29: CALENDAR's own Events (`date.fired`) are seasonal like MATTER's and ride the same
         # first-round fan-out, in barrier order. They were discarded here, so they reached `w.log`
-        # and no ledger. `n_events` is left counting MATTER's only: that figure is not this
-        # position's, and the log already holds these.
+        # and no ledger. `n_events` does not count them (it counts MATTER's and each round's, as
+        # before): that figure is not this position's, and the log already holds these.
         pending_matter = list(calendar_events) + list(matter_events)
         for r in range(rounds):
             self.round = r
@@ -488,8 +488,9 @@ class SeasonDriver:
             for e in events:
                 w.log.append(e)              # S19.5 -- ONE LOG, NOT TWO
                 TRACE.event(e.id, e.kind, e.causes)
-            # MATTER's events are seasonal and join the FIRST round's fan-out only; the alternative
-            # deposits one wear once per round, which is the fourth clock this docstring refuses.
+            # MATTER's and CALENDAR's events are seasonal and join the FIRST round's fan-out only;
+            # the alternative deposits one wear once per round, which is the fourth clock this
+            # docstring refuses.
             deposits += self.witness(mint_token(w, WriteClass.INTERIOR), pending_matter + events)
             pending_matter = []
             n_acts += len(acts)

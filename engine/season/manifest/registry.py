@@ -345,7 +345,7 @@ def check_contest_prizes(verb_table: dict) -> list:
 # does not construct.
 #
 # ⚠ TWO-SIDED SINCE IN-41. At `30` it was one-sided by [ASSUMPTION] (`SM-9`): the converse
-# `ED-IN-0285` names -- a row carrying BOTH an effect and a declining note -- fired on the shipped
+# (`SM-9`) -- a row carrying BOTH an effect and a declining note -- fired on the shipped
 # tree, because `oblige` and `destroy_record` used the one `decline_note:` column to decline their
 # FORMATION (`14`), not their effect. IN-41 split the column: `effect_decline_note:` (read here),
 # `formation_decline_note:` (an annotation nothing gates on; those two rows) and
@@ -373,12 +373,13 @@ def check_contest_prizes(verb_table: dict) -> list:
 
 def check_effects(verb_table: dict, effects: dict) -> list:
     """Refusal (a), both arms: every WRITING verb row has an effect or an `effect_decline_note:`
-    -- a contested row too -- and NO row carries both.
+    -- a contested row too -- and no row that has an effect, or writes nothing, carries one.
 
-    Raises naming every verb that breaks either arm. Returns the writing rows it checked."""
+    Raises at the first arm broken (the missing note before the converse), naming every verb that
+    breaks it. Returns the writing rows it checked."""
     checked, silent, stale = [], [], []
     for verb, row in verb_table.items():
-        if row.effect_decline_note and verb in effects:
+        if row.effect_decline_note and (verb in effects or not row.writes):
             stale.append(verb)
         if not row.writes:
             continue
@@ -395,9 +396,11 @@ def check_effects(verb_table: dict, effects: dict) -> list:
                 "by declaring why; before this it left without a word (`resolvable_verbs()`)")
     if stale:
         raise Unspecified(
-            f"verb row(s) {stale} carry an `effect_decline_note:` and HAVE an effect",
+            f"verb row(s) {stale} carry an `effect_decline_note:` and HAVE an effect, or write "
+            f"nothing and need none",
             "04 PART E step 10",
-            needs="the note deleted (the effect exists), or -- if it declines something else -- "
+            needs="the note deleted (the effect exists, or the row writes nothing and so has no "
+                  "effect to decline), or -- if it declines something else -- "
                   "moved to the column for that: `formation_decline_note:` (no Candidate forms) "
                   "or `requires_decline_note:` (nothing evaluates the precondition)",
             law="IN-41 / `SM-9` -- a declared absence the code contradicts is a declaration nobody "
@@ -413,8 +416,9 @@ def check_preconditions(verb_table: dict, predicates: dict) -> list:
     `resolvable_verbs()`'s first gate (`loop/driver.py`) drops the first kind from the game, and
     until IN-41 it did so WITHOUT A WORD. The answer to *evaluable* is `VerbRow.precondition_evaluable`,
     the one both sites read. `predicates` is `loop/predicates.py::REQUIRES_PREDICATES`, passed by the
-    driver as `check_effects` is passed `EFFECTS`. Raises naming every verb that breaks either arm;
-    returns the rows that carry a precondition, so a caller can see the sweep was not empty."""
+    driver as `check_effects` is passed `EFFECTS`. Raises at the first arm broken (the missing note
+    before the converse), naming every verb that breaks it; returns the rows that carry a
+    precondition, so a caller can see the sweep was not empty."""
     # Lazily, for `unclaimed_contest_prizes`'s reason: importing `data/verbs.py` loads the table.
     from ..data.verbs import NO_PRECONDITION
     checked, silent, stale = [], [], []
