@@ -60,8 +60,8 @@ MB_FACING_ROUT = (_hu_os.environ.get('MB_FACING_ROUT', '1') == '1')  # (d) route
 # (None, why it is unwired). A keyword drives only a primitive that already existed; where none could
 # honestly carry it, it stays unwired and says why, rather than gaining a fabricated effect.
 #   * rows read through this table: 'stance:<s>' rows via Subunit.eff_stance (the default posture a role
-#     sets when the explicit stance is the neutral 'balanced' -- an explicit stance always wins, as it
-#     does over every other role default in engine.build_army), and the 'feigned_retreat' row via
+#     sets when the stance was never written on purpose -- an explicit stance, 'balanced' included,
+#     always wins, as it does over every other role default in engine.build_army), and the 'feigned_retreat' row via
 #     unit_lures at orchestration.resolve_feigned_retreat. Both read live, so an order that rewrites
 #     `instructions` or `stance` mid-battle is honoured (no write-time copy to go stale).
 #   * 'literal' rows were wired before MB-04 and are read by their keyword at the named site; listed so
@@ -95,7 +95,8 @@ ROLE_INSTRUCTION_PRIMITIVES = {
     'pursue':  (None, "pursuit is gated by speed, not instruction (orchestration.pursuit_damage: Fast "
                       "victors always pursue, others never can, mass_battle_v30 §A.12); nothing to select."),
     'volley':  (None, "redundant: volley fire is gated by unit_type == 'ranged' and ammunition; every "
-                      "VolleyLine troop type is already ranged."),
+                      "VolleyLine troop type is already ranged. VolleyLine carries no 'hold': that stance "
+                      "freezes archers (STANCE_SPEED_MOD['hold'] = -99) and braces them against shock."),
     'shoot_move': (None, "redundant: a ranged body volleys whenever in range, moving or not; nothing to select."),
 }
 _STANCE_PREFIX = 'stance:'
@@ -598,6 +599,9 @@ class Subunit:
     # never executes for any existing Subunit (byte-exact).
     orders: Tuple[Order, ...] = ()
     _order_idx: int = 0
+    # [MB-04] True once the stance was WRITTEN on purpose (an Order's `stance` behavior, or a build spec's
+    # `stance` key), including 'balanced': eff_stance then never lets a role keyword override it.
+    _stance_explicit: bool = field(default=False, repr=False)
     # [Stage C] Escort / formation-relative positioning ("hold position in front of the marching
     # archers"): a subunit tracking a friendly's position instead of (or until) engaging an enemy.
     # All default-inert -> byte-exact for any existing Subunit.
@@ -749,10 +753,11 @@ class Subunit:
     @property
     def eff_stance(self):
         """[MB-04] The stance every movement/intent/shock site reads: the explicit `stance`, unless it is
-        the neutral 'balanced', in which case the first instruction with a 'stance:' row in
-        ROLE_INSTRUCTION_PRIMITIVES sets it (ShieldWall's 'hold', Push's 'push'). Equal to `stance` for
-        every subunit without such a keyword, and whenever MB_ROLE_INSTRUCTIONS is off."""
-        if self.stance != 'balanced' or not MB_ROLE_INSTRUCTIONS:
+        the neutral 'balanced' and was never written on purpose (`_stance_explicit`), in which case the first
+        instruction with a 'stance:' row in ROLE_INSTRUCTION_PRIMITIVES sets it (ShieldWall's 'hold', Push's
+        'push'). Equal to `stance` for every subunit without such a keyword, and whenever
+        MB_ROLE_INSTRUCTIONS is off. An Order that releases a role-held body to 'balanced' therefore releases it."""
+        if self.stance != 'balanced' or self._stance_explicit or not MB_ROLE_INSTRUCTIONS:
             return self.stance
         for k in self.instructions:
             s = _INSTRUCTION_STANCE.get(k)

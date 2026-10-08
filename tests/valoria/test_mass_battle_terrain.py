@@ -56,12 +56,12 @@ def test_point_in_polygon_against_a_real_geography_entry():
 
 def test_every_real_province_resolves_to_one_of_the_six_rows():
     """No province should fall through to something outside A.9's closed set -- a NULL-result alarm,
-    not a claim that every row actually occurs (RIVER_CROSSING never does; see terrain.py). Called at
+    not a claim that every row actually occurs (RIVER_CROSSING never does: it comes from a caller's `river_crossing` fact, not from the polygon lookup; see terrain.py). Called at
     fort_level=0 uniformly: fortification is a separate, already-isolated concern (the tests below),
     and this test is specifically about the polygon lookup's own closed-set property."""
     geo = _load_geography()
     valid = {NARROW_PASS, UPHILL, FOREST_BROKEN, WALLS, OPEN_FLAT,
-             'river_crossing'}  # not currently reachable, but still a valid A.9 row name
+             'river_crossing'}  # a valid A.9 row name; this polygon-only call (river_crossing=False) never returns it
     seen = set()
     for tid in geo['provinces']:
         row = terrain_row_for_territory(tid, fort_level=0)
@@ -75,7 +75,7 @@ def test_every_geography_terrain_type_has_a_row_mapping():
     OPEN_FLAT for any `type:` this dict does not cover -- indistinguishable from a genuine open-flat
     result. If the geography file ever gains a terrain type this module has not been told about, that
     silent fallback is a real, unflagged mechanical error, not a documented gap like RIVER_CROSSING is
-    (which is absent from the FUNCTION'S REACHABLE SET, not from the file's own type vocabulary)."""
+    (which is not a file type at all: the caller supplies it)."""
     geo = _load_geography()
     real_types = {entry['type'] for entry in geo['terrain']}
     uncovered = real_types - set(_TYPE_TO_ROW)

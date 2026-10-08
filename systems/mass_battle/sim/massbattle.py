@@ -232,7 +232,7 @@ def _run_and_grade(unit_a, unit_b, terrain, rng, walls_dr=None):
     ⚠ CAVEATS THAT LIVED IN THE DELETED FUNCTION'S DOCSTRING AND STILL BIND THIS PATH.
     DETERMINISM: `rng` is scoped over the battle by `rngsource.using`; the canon engine drew from the
     global `random` module at seven sites, so without that holder a seeded run is unpinnable.
-    TERRAIN: four rows are applied, each in part; the attacker is `unit_a`, the defender `unit_b`.
+    TERRAIN: UPHILL, RIVER_CROSSING and WALLS are applied (UPHILL's two A.9 clauses fully; NARROW_PASS is identified and applies nothing, see below); the attacker is `unit_a`, the defender `unit_b`.
     FOREST_BROKEN's speed half is INERT -- `run_battle` never reads `.speed` (only
     `orchestration.pursuit_damage` and `run_multi_unit_battle` do, and neither is reachable from here).
     WALLS (plan position `20-iv`, the garrisoned march target) adds `terrain.WALLS_DEFENDER_DR` to the
@@ -336,7 +336,7 @@ def resolve_field(w, side_a, side_b, *, territory=None, fort_level=0.0, stance_a
           `False` (the default) is what the season provider passes today, by omission: it holds the
           target rung but not the march's origin, so it cannot derive the fact (see `terrain.py`).
     The old `terrain=` keyword, which the one caller always passed as `None`, is gone: the row is
-    derived here from the two facts that decide it, so no caller can hand in a row that disagrees.
+    derived here from the three facts that decide it (`territory`, `fort_level`, `river_crossing`), so no caller can hand in a row that disagrees.
 
     Returns exactly what `_run_and_grade` returns."""
     weight_a = sum(w.persons[pid].weight for pid in side_a if pid in w.persons)

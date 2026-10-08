@@ -6,9 +6,9 @@ so the role was a label, not a design axis. `hierarchy.units.ROLE_INSTRUCTION_PR
 owner of which keyword drives which primitive; this file is its falsifier.
 
 U-3's own observable: a `ShieldWall` and a `Push` of the same subunit produce different density and
-advance. On the pre-MB-04 tree (HEAD 48fd2561) the two runs were identical to the last float — the
-`advance`/`hold` keywords were read by nothing, and the shared `brace` never fires against a body that
-is not charging it. `MB_ROLE_INSTRUCTIONS=0` reproduces that tree, and the OFF arm below pins it, so a
+advance. On the pre-MB-04 tree the two runs were identical to the last float — the `advance`/`hold`
+keywords were read by nothing, and ShieldWall's `brace` never fires against a body that is not
+charging it (Push carries none). `MB_ROLE_INSTRUCTIONS=0` reproduces that tree, and the OFF arm below pins it, so a
 mapping that only renames keywords cannot turn this file green.
 """
 import random
@@ -84,6 +84,34 @@ def test_explicit_stance_beats_the_role_default(wired):
     assert su.eff_stance == 'aggressive'
     su = build_army([{'role': 'Shock', 'troop_type': 'cavalry'}], 'R', 'A').subunits[0]
     assert su.eff_stance == 'aggressive'
+
+
+def test_an_order_that_releases_to_balanced_beats_the_role_keyword(wired):
+    """The engine's own release idiom (build_envelopment, build_refused_flank) writes
+    {'stance': 'balanced'}. 'balanced' is also the neutral default, so it must be remembered as WRITTEN:
+    a ShieldWall released by an Order moves again instead of re-asserting its 'hold' keyword."""
+    from systems.mass_battle.sim.core.contact import check_orders
+    u = build_army([{'role': 'ShieldWall', 'troop_type': 'heavy_infantry',
+                     'orders': (_hu.Order('tick:3', {'stance': 'balanced'}),)}], 'R', 'A')
+    su = u.subunits[0]
+    assert su.eff_stance == 'hold'
+    check_orders(u, 2, [])
+    assert su.eff_stance == 'hold', "the order must not fire before its tick"
+    check_orders(u, 3, [])
+    assert su.stance == 'balanced' and su.eff_stance == 'balanced'
+
+
+def test_a_build_spec_that_writes_balanced_beats_the_role_keyword(wired):
+    su = build_army([{'role': 'ShieldWall', 'troop_type': 'heavy_infantry', 'stance': 'balanced'}],
+                    'R', 'A').subunits[0]
+    assert su.eff_stance == 'balanced'
+
+
+def test_a_volley_line_is_not_frozen_by_its_role(wired):
+    """VolleyLine used to carry 'hold', which (STANCE_SPEED_MOD['hold'] = -99) stops archers advancing
+    and braces them against shock. Its role keyword is 'volley' alone."""
+    su = build_army([{'role': 'VolleyLine', 'troop_type': 'archers'}], 'R', 'A').subunits[0]
+    assert su.eff_stance == 'balanced'
 
 
 def test_lure_declares_the_feigned_retreat(wired, monkeypatch):

@@ -3,7 +3,7 @@
 The uncapped stack counts every rank behind the contact rank — 1.0, 0.7, 0.5, then 0.3 at EVERY depth
 with no cutoff — so of two forces of EQUAL troops the deeper one keeps adding pool from ranks its weapons
 could never bring to bear. `config.support_weight` is the single owner of a rank's weight; with
-`MB_SUPPORT_RANK_CAP` ON, a rank past `TROOP_TYPE_SUPPORT_RANKS[troop_type]` weighs 0.
+`MB_SUPPORT_RANK_CAP` ON, a rank past `support_ranks_for(troop_type)` weighs 0.
 
 SHIPPED OFF (config.py at the flag): ON stalls the bat.py battery (mirror/cav_shaken/ranged at
 MAX_TURNS=20 in every probed seed, ~2.8x slower, cell_field_mor0 688.7s) until casualty/pool magnitudes
@@ -51,7 +51,7 @@ def _force(troop_type, shape):
 
 
 def _cap(troop_type):
-    return C.TROOP_TYPE_SUPPORT_RANKS.get(troop_type, C.SUPPORT_RANKS_DEFAULT)
+    return C.support_ranks_for(troop_type)
 
 
 def _pool(troop_type, shape):
@@ -151,7 +151,12 @@ def test_table_follows_the_weapon_classes():
     """P-DEC-1 weapon classes: non-pole 1 < pole/lance 2 < pike 3; unmapped = non-pole."""
     assert _cap('infantry') < _cap('heavy_infantry') < _cap('pike')
     assert _cap('heavy_infantry') == _cap('cavalry')
-    assert _cap('no_such_type') == C.SUPPORT_RANKS_DEFAULT == _cap('infantry')
+    assert _cap('no_such_type') == _cap('infantry') == 1
+    # derived from the reach map, so EVERY mapped type is covered and a reach edit moves its rank
+    from systems.mass_battle.sim.troop_types.registry import TROOP_TYPE_REACH
+    expect = {0.1: 1, 0.2: 2, 0.3: 3}
+    assert len(TROOP_TYPE_REACH) == 12
+    assert {t: _cap(t) for t in TROOP_TYPE_REACH} == {t: expect[r] for t, r in TROOP_TYPE_REACH.items()}
 
 
 # ── what the cap does to play (measured, Python 3.11.17) ─────────────────────────────────────────

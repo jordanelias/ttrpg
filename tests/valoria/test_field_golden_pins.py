@@ -77,10 +77,13 @@ _KNOWN_INERT = {
     'MB_RESERVE_COMMIT', 'RESERVE_COMMIT_TURN',
     # dead behind MB_CELL_MORALE (pinned '0'):
     'CELL_BREAK_ROUT_FRAC', 'CELL_MORALE_PULL',
-    # [MB-04] needs a role keyword with a row in hierarchy.units.ROLE_INSTRUCTION_PRIMITIVES that the
-    # table routes ('hold'/'push'/'charge'/'lure'); the battery's only instructions are 'brace' and the
-    # envelop presets' 'envelop', both literal rows. Measured: all three modes BYTE-EXACT OK on the
-    # unchanged digests with the flag at its default ON.
+    # [MEASURED-INERT 2026-10-08, MB-04] needs a role keyword with a row in
+    # hierarchy.units.ROLE_INSTRUCTION_PRIMITIVES that the table routes ('hold'/'push'/'charge'/'lure');
+    # the battery's only instructions are 'brace' and the envelop presets' 'envelop' (bat.py), both
+    # literal rows (the gauge's 'kite' and the validators' 'sweep' are literal rows too). Not inert
+    # off-battery: the MB-07 charger fixture moves under it (test_mass_battle_support_rank_cap.py).
+    # Measured with `python3 tools/ci_golden_modes_check.py` (PATH python3 = 3.11): all three modes
+    # BYTE-EXACT OK on the unchanged digests with the flag at its default ON.
     'MB_ROLE_INSTRUCTIONS',
 }
 # [A6, ED-MB-0067 Part A, 2026-09-26] MB_AMMO_ENABLED/MB_VOLLEYS_START/MB_VOLLEYS_RESUPPLY are NOT

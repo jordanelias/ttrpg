@@ -55,25 +55,9 @@ CELL_PATTERN_FN = {
 }
 
 # ─── CONTINUOUS-SCALE FOOTPRINT GENERATOR (Jordan directive 2026-06-03) ───
-# Dimension-parametric cell builders (the tier *_cells fns above stay for the legacy path).
-# footprint_for lays a continuous troop count into a shape at a user-set concentration,
-# bounded so per-cell troops stay in [CELL_FLOOR, CELL_CAP]; achievable density is the closest
-# the shape's discrete geometry allows within that bound.
-def _cells_line(width, depth):
-    return [(r, c) for r in range(depth) for c in range(width)]
-def _cells_arrowhead(depth):
-    cells = []
-    for r in range(depth):
-        w = 2 * r + 1; start = (depth - 1) - r
-        cells += [(r, c) for c in range(start, start + w)]
-    return cells
-def _cells_gapped_line(half_w, depth):
-    cells = []
-    for r in range(depth):
-        cells += [(r, c) for c in range(half_w)]
-        cells += [(r, c) for c in range(half_w + 1, 2 * half_w + 1)]
-    return cells
-
+# The tier *_cells fns above stay for the legacy path. footprint_for lays a continuous troop count into a
+# shape at a user-set concentration, bounded so per-cell troops stay in [CELL_FLOOR, CELL_CAP]; achievable
+# density is the closest the shape's discrete geometry allows within that bound.
 def _build_shape_n(shape, n):
     """Build a footprint of EXACTLY `n` cells in `shape`'s aspect, for any n>=1 (ED-MB-0025).
     The retired size-parameter shape-builder table only yielded a SPARSE set of cell counts (a Line

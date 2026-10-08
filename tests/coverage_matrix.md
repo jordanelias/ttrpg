@@ -504,14 +504,18 @@ at the gauge's own production sample size (n=60, multi mode): `decA=47.2` (band 
 11.7% (well under the 30% low-draw ceiling, though R3's own `draw_exp` is `'high'` and does not require
 it). No other gauge row changed shape or kwargs.
 
-## 2026-10-08 — ED-MB-0045 (B-D2 MB-01): the 2:1 friction band, and one gauge citation re-labelled
+## 2026-10-08 — ED-MB-0045 (B-D2 MB-01): the 4:1 friction band, and one gauge citation re-labelled
 
 `tests/sim/gauge_mb.py`'s `triplex acies` citation is re-labelled CALIBRATED-DEBT (the T3-tier and
 honest_gauge_readout citations are kept); no gauge row changed shape, kwargs or sample size. The coverage
-change is in `lanchester_signature.check_linear`, which now reads a BAND for the 2:1 big-win quantity
-(`LINEAR_BIG_WIN_BAND`, the 1.5:1 and 3:1 points of the curve `MB_FRICTION_SIGMA` is calibrated against) in place
-of the one-sided floor `LINEAR_MIN_BIG_WIN = 65`. Measured, `check_linear` only, 100 deterministic seeds, Python
-3.11: friction off (`MB_FRICTION=0`) reads 100.0 % and now FAILS (the floor passed it); the shipped engine reads
-77.0 % and passes; a planted collapse (`MB_FRICTION_SIGMA=4`) reads 57.0 % and fails. The `lanchester-signature`
-CI job stays report-only. The flag and its helpers are renamed `MB_FRICTION*`, and `test_friction_cev.py` is now
-`test_friction.py`.
+change is in `lanchester_signature.check_linear`, which now reads a BAND for the big-win quantity
+(`LINEAR_BIG_WIN_BAND` = 74-83, the DLEDB "3:1+" plateau `MB_FRICTION_SIGMA` is calibrated against) in place
+of the one-sided floor `LINEAR_MIN_BIG_WIN = 65`. The pair it fights is Tier 4 v Tier 2 = 800 v 200 troops
+(`TROOPS_PER_TIER`; frontage 7 v 5 cells), i.e. 4:1, not the 2:1 it was first labelled. Measured, `check_linear`
+only, 100 deterministic seeds, Python 3.11.17, numpy 2.4.6, run as
+`PYTHONPATH=. MB_FRICTION=0 python -c "from systems.mass_battle.sim import lanchester_signature as L; print(L.check_linear())"`
+(and with `MB_FRICTION_SIGMA=4`, and with neither): friction off reads 100.0 % and FAILS (the floor passed it);
+the shipped engine reads 77.0 % and passes; a planted collapse reads 57.0 % and fails. A true 2:1 pair
+(Tier 3 v Tier 2, 400 v 200, equal 5-cell frontage) reads 47.0 % shipped, 37.0 % friction off: it is not graded here.
+The `lanchester-signature` CI job stays report-only. The flag and its helpers are renamed `MB_FRICTION*`, and
+`test_friction_cev.py` is now `test_friction.py`.

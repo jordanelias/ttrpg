@@ -17,7 +17,8 @@ Requires LANCHESTER_ENABLED on (the engine default). Run from the repo root (no 
     python3 -m systems.mass_battle.sim.lanchester_signature
 
 All numeric thresholds below are class-B TOLERANCES derived from validated P-L behaviour,
-NOT canonical magnitudes; the SIGNATURES are the spec section-four validation plan.
+NOT canonical magnitudes (the one exception, LINEAR_BIG_WIN_BAND, is the cited DLEDB plateau); the
+SIGNATURES are the spec section-four validation plan.
 """
 import contextlib
 import os, random, statistics
@@ -32,21 +33,20 @@ from systems.mass_battle.sim.engine import (Subunit, Unit, run_battle,
 import systems.mass_battle.sim.core.state as _state   # [ED-MB-0050 / A6a] patched by _rout_disabled below
 
 # --- signature thresholds (class-B tolerances; signatures per spec §4) ---
-# [ED-MB-0045 superseding row, item (1)] ONE band for the 2:1 big-win quantity. It replaces the
+# [ED-MB-0045 superseding row, item (1)] ONE band for the big-force win quantity. It replaces the
 # one-sided floor `LINEAR_MIN_BIG_WIN = 65`, which passed every win rate from 65 to 100, including the
-# 100.0% this check reads with friction off (MB_FRICTION=0). The edges are read off the force-ratio
-# win-rate curve MB_FRICTION_SIGMA is calibrated against (config.py), so the instrument and the
-# calibration share one target: a 2:1 win rate must lie between the curve's 1.5:1 and 3:1 points,
-# inclusive. Above the top edge is the certainty friction exists to remove; below the bottom edge is
-# a collapse toward a coin flip. Both fail; the floor could fail only the second.
-DLEDB_WIN_CURVE = {1.2: 55, 1.5: 62, 2.0: 70, 3.0: 80}   # [canonical: audit/2026-07-22-mass-battle-stress-test/dg6_friction_resolution.md §4 — the Dupuy DLEDB target row (attacker win %, by force ratio) MB_FRICTION_SIGMA=1.1 is calibrated against]
-LINEAR_BIG_WIN_BAND = (DLEDB_WIN_CURVE[1.5], DLEDB_WIN_CURVE[3.0])   # the 2:1 point's neighbours on that curve
+# 100.0% this check reads with friction off (MB_FRICTION=0). The pair fought is BIG_TIER vs SMALL_TIER =
+# 800 vs 200 troops, i.e. 4:1 (config.TROOPS_PER_TIER), so the band is the DLEDB "3:1+" plateau
+# MB_FRICTION_SIGMA is calibrated against (config.py): 74-83%, "plateaus, never certain". Above the top
+# edge is the certainty friction exists to remove; below the bottom edge is a collapse toward a coin flip.
+# Both fail; the floor could fail only the second.
+LINEAR_BIG_WIN_BAND = (74, 83)   # [canonical: audit/2026-07-22-mass-battle-stress-test/dg6_friction_resolution.md §3 "Historical decisiveness bands" — Dupuy DLEDB attacker win-rate, "74–83% at 3:1+"; the force-ratio calibration table is §4]
 LINEAR_MIN_CASDIFF  = 20       # [canonical: mb_lanchester_design.md §4(2) — linear sig: casualty diff (small−big); class-B tolerance]
 SQUARE_MIN_RATIO    = 4        # [canonical: mb_lanchester_design.md §4(3) — square sig: cas-exchange ratio ≥ (size ratio)² at 2:1; class-B tolerance]
 NOANNIH_MAX_CAS     = 60       # [canonical: mb_lanchester_design.md §4(4) — no-annihilation: winner-side casualty% ceiling; class-B tolerance]
-BIG_TIER            = 4        # [canonical: mb_lanchester_design.md §4(2) — 2:1 size pair (Tier 4 = 800 vs Tier 2 = 200... here 400 vs 200 at company scale); class-B]
+BIG_TIER            = 4        # [canonical: mb_lanchester_design.md §4(2) — size pair; TROOPS_PER_TIER makes Tier 4 = 800 vs Tier 2 = 200, i.e. 4:1 in troops (frontage 7 v 5 cells), NOT 2:1; check_square reads the same pair; class-B]
 MIRROR_TIER         = 3        # [canonical: mb_lanchester_design.md §4(4) — equal-size mirror baseline; class-B]
-SMALL_TIER          = 2        # exempt literal (2): the smaller force in the 2:1 pair
+SMALL_TIER          = 2        # exempt literal (2): the smaller force of the pair
 SEED_BASE           = 2000000  # [canonical: mb_lanchester_design.md §4 — deterministic seed base; class-B]
 N                   = 100      # exempt literal (100): sample size per matchup
 
@@ -98,20 +98,20 @@ def _sweep(big_tier, small_tier, unit_type, stance='balanced', instructions=()):
         cas_b.append(100 * (b0 - ub.hp) / b0)
         hp_a.append(100 * ua.hp / a0)
         hp_b.append(100 * ub.hp / b0)
-    return dict(big_win=aw / N * 100,
+    return dict(big_win=100 * aw / N,
                 cas_big=statistics.mean(cas_a), cas_small=statistics.mean(cas_b),
                 hp_big=statistics.mean(hp_a), hp_small=statistics.mean(hp_b))
 
 
 def check_linear():
-    """Melee 2:1 → big force wins decisively but not certainly (frontage/durability linear edge,
-    banded by friction): big_win inside LINEAR_BIG_WIN_BAND, casualty difference above its floor."""
+    """Melee 4:1 in troops (800 v 200) → big force wins decisively but not certainly (frontage/durability
+    linear edge, banded by friction): big_win inside LINEAR_BIG_WIN_BAND, casualty difference above its floor."""
     r = _sweep(BIG_TIER, SMALL_TIER, 'melee')
     casdiff = r['cas_small'] - r['cas_big']
     lo, hi = LINEAR_BIG_WIN_BAND
     ok = lo <= r['big_win'] <= hi and casdiff >= LINEAR_MIN_CASDIFF
-    return ('LINEAR (melee 2:1)', ok,
-            f"big_win={r['big_win']:.1f}%% (in [{lo}, {hi}]) "
+    return ('LINEAR (melee 4:1)', ok,
+            f"big_win={r['big_win']:.1f}% (in [{lo}, {hi}]) "
             f"cas_diff={casdiff:+.1f} (≥{LINEAR_MIN_CASDIFF})")
 
 

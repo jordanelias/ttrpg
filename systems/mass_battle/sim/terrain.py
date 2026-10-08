@@ -61,7 +61,8 @@ OPEN_FLAT = 'open_flat'
 # for a case no ruling has asked for. 'mountain'/'highland' -> UPHILL: the only A.9 row describing
 # elevated ground; neither name is a literal match, only the closest available. 'coast' -> OPEN_FLAT:
 # adjacency to open sea is not itself obstructive to a land battle (the actual crossing case, a RIVER,
-# is not yet reachable from this lookup at all — see the module docstring). 'fjord_coast' ->
+# is reached only through `terrain_row_for_territory`'s `river_crossing` argument — the caller's fact, not
+# the geography file's — see the module docstring). 'fjord_coast' ->
 # FOREST_BROKEN, not OPEN_FLAT: [CORRECTED, adversarial review 2026-09-27] the geography file's own
 # `terrain_cost_matrix` names it "broken inlet land terrain" at cost 2.5 — higher than forest's 1.5 or
 # marsh's 2.0, and using A.9's own word "broken" — so OPEN_FLAT's "no modifiers" was the wrong read of

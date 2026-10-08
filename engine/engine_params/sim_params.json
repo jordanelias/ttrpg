@@ -3,18 +3,18 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 113,
-    "total": 270,
-    "uncited": 157,
+    "total": 268,
+    "uncited": 155,
     "of_which_assumption_grade": 3
   },
-  "count": 270,
+  "count": 268,
   "by_module": {
     "engine.dice_engine": 6,
     "engine.season": 11,
     "characters": 5,
     "combat": 12,
     "fieldwork": 15,
-    "mass_battle": 153,
+    "mass_battle": 151,
     "overview": 5,
     "social_contest": 31,
     "threadwork": 32
@@ -1340,17 +1340,6 @@
       "citation_grade": "source"
     },
     {
-      "key": "mass_battle.SUPPORT_RANKS_DEFAULT",
-      "name": "SUPPORT_RANKS_DEFAULT",
-      "value": 1,
-      "kind": "scalar",
-      "module": "mass_battle",
-      "file": "systems/mass_battle/sim/config.py",
-      "note": "unmapped type: non-pole melee, matching reach_for's REACH_MELEE_DEFAULT fallthrough",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
       "key": "mass_battle.SUPPORT_WEIGHTS",
       "name": "SUPPORT_WEIGHTS",
       "value": {
@@ -1439,30 +1428,6 @@
       "note": "mounted: ~half infantry density (a horse+rider occupies ~2x a man's ground). GROUNDED default, needs_jordan on the value.  # [canonical: P-DEC-3 mechanism; value calibration pending]",
       "citation": "P-DEC-3 mechanism; value calibration pending",
       "citation_grade": "source"
-    },
-    {
-      "key": "mass_battle.TROOP_TYPE_SUPPORT_RANKS",
-      "name": "TROOP_TYPE_SUPPORT_RANKS",
-      "value": {
-        "levy": 1,
-        "light_infantry": 1,
-        "infantry": 1,
-        "heavy_infantry": 2,
-        "cavalry": 2,
-        "knights_templar": 2,
-        "pike": 3,
-        "archers": 1,
-        "crossbow": 1,
-        "sling": 1,
-        "artillery": 1,
-        "mounted_archers": 1
-      },
-      "kind": "table",
-      "module": "mass_battle",
-      "file": "systems/mass_battle/sim/config.py",
-      "note": "[ASSUMPTION; medium; Jordan to correct] rank counts are the builder's derivation",
-      "citation": null,
-      "citation_grade": null
     },
     {
       "key": "mass_battle.UNIT_GRID_SIZE",
@@ -1592,24 +1557,22 @@
       "kind": "scalar",
       "module": "mass_battle",
       "file": "systems/mass_battle/sim/lanchester_signature.py",
-      "note": "[canonical: mb_lanchester_design.md §4(2) — 2:1 size pair (Tier 4 = 800 vs Tier 2 = 200... here 400 vs 200 at company scale); class-B]",
-      "citation": "mb_lanchester_design.md §4(2) — 2:1 size pair (Tier 4 = 800 vs Tier 2 = 200... here 400 vs 200 at company scale); class-B",
+      "note": "[canonical: mb_lanchester_design.md §4(2) — size pair; TROOPS_PER_TIER makes Tier 4 = 800 vs Tier 2 = 200, i.e. 4:1 in troops (frontage 7 v 5 cells), NOT 2:1; check_square reads the same pair; class-B]",
+      "citation": "mb_lanchester_design.md §4(2) — size pair; TROOPS_PER_TIER makes Tier 4 = 800 vs Tier 2 = 200, i.e. 4:1 in troops (frontage 7 v 5 cells), NOT 2:1; check_square reads the same pair; class-B",
       "citation_grade": "source"
     },
     {
-      "key": "mass_battle.DLEDB_WIN_CURVE",
-      "name": "DLEDB_WIN_CURVE",
-      "value": {
-        "1.2": 55,
-        "1.5": 62,
-        "2.0": 70,
-        "3.0": 80
-      },
-      "kind": "table",
+      "key": "mass_battle.LINEAR_BIG_WIN_BAND",
+      "name": "LINEAR_BIG_WIN_BAND",
+      "value": [
+        74,
+        83
+      ],
+      "kind": "vector",
       "module": "mass_battle",
       "file": "systems/mass_battle/sim/lanchester_signature.py",
-      "note": "[canonical: audit/2026-07-22-mass-battle-stress-test/dg6_friction_resolution.md §4 — the Dupuy DLEDB target row (attacker win %, by force ratio) MB_FRICTION_SIGMA=1.1 is calibrated against]",
-      "citation": "audit/2026-07-22-mass-battle-stress-test/dg6_friction_resolution.md §4 — the Dupuy DLEDB target row (attacker win %, by force ratio) MB_FRICTION_SIGMA=1.1 is calibrated against",
+      "note": "[canonical: audit/2026-07-22-mass-battle-stress-test/dg6_friction_resolution.md §3 \"Historical decisiveness bands\" — Dupuy DLEDB attacker win-rate, \"74–83% at 3:1+\"; the force-ratio calibration table is §4]",
+      "citation": "audit/2026-07-22-mass-battle-stress-test/dg6_friction_resolution.md §3 \"Historical decisiveness bands\" — Dupuy DLEDB attacker win-rate, \"74–83% at 3:1+\"; the force-ratio calibration table is §4",
       "citation_grade": "source"
     },
     {
@@ -1696,7 +1659,7 @@
       "kind": "scalar",
       "module": "mass_battle",
       "file": "systems/mass_battle/sim/lanchester_signature.py",
-      "note": "exempt literal (2): the smaller force in the 2:1 pair",
+      "note": "exempt literal (2): the smaller force of the pair",
       "citation": null,
       "citation_grade": null
     },

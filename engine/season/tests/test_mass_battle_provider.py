@@ -59,7 +59,8 @@ from engine.season.seam.contest import contest
 
 def _bare(target):
     """`build_realm(0)` with `target`'s garrison Site deleted -- `fortification_of` reads 0, so the
-    field is whatever row the target's territory resolves to (blocks 5, 5b, 7)."""
+    field is whatever row the target's territory resolves to (blocks 5 and 7). Block 5 fights it through
+    `_fight_open` for the open-ground arm; block 7 reads the real territory."""
     w = build_realm(0)
     for sid in [sid for sid, s in w.sites.items() if s.kind == "garrison" and s.rung == target]:
         del w.sites[sid]
@@ -168,20 +169,19 @@ def test_a_real_faction_that_musters_nobody_at_the_rung_is_unopposed():
     assert r["parties"]["subject_members"] == []
 
 
-def test_a_garrisoned_defender_resolves_differently_from_an_ungarrisoned_one():
+def test_a_garrisoned_defender_resolves_differently_from_an_ungarrisoned_one(monkeypatch):
     """PLAN POSITION `20-iv` -- `H-150`'s falsifier. `set_s_036` (Church of Solmund, territory T9)
     carries the one garrison Site `build_realm` seeds per settlement; the bare world deletes it, so
-    `fortification_of` reads 1.0 against 0.0. Eight seeds, both worlds, the same 2-man Crown army.
+    `fortification_of` reads 1.0 against 0.0. The bare arm is fought through `_fight_open`: T9 is UPHILL
+    since MB-05, so a bare world on its real territory would compare WALLS against a hill, not walls
+    against open ground. Eight seeds, both worlds, the same 2-man Crown army.
     Every one is a FOUGHT field (asserted, so this cannot pass on `Unopposed` short-circuits), and
     the garrison changes at least one result and never leaves the defenders with fewer survivors.
     Pre-`20-iv`, `differs` was 0: the provider never read the garrison."""
     from engine.season.seam.wrappers.mass_battle import resolve as provider_resolve
     target = "set_s_036"
-    garrisoned, bare = build_realm(0), build_realm(0)
-    for sid in [sid for sid, s in bare.sites.items() if s.kind == "garrison" and s.rung == target]:
-        del bare.sites[sid]
+    garrisoned, bare = build_realm(0), _bare(target)
     assert world_q.fortification_of(garrisoned, target) > 0.0, "the fixture no longer garrisons the target"
-    assert world_q.fortification_of(bare, target) == 0.0, "deleting the garrison left a fortification"
     attackers = world_q.mustered(garrisoned, "set_s_014", "fac_crown")
     assert attackers and attackers == world_q.mustered(bare, "set_s_014", "fac_crown")
     fought = differs = 0
@@ -189,9 +189,7 @@ def test_a_garrisoned_defender_resolves_differently_from_an_ungarrisoned_one():
         walled = provider_resolve(garrisoned, attackers, ["c"], "a field",
                                   subject="fac_church_of_solmund", rung=target,
                                   rng=random.Random(seed))
-        open_ = provider_resolve(bare, attackers, ["c"], "a field",
-                                 subject="fac_church_of_solmund", rung=target,
-                                 rng=random.Random(seed))
+        open_ = _fight_open(monkeypatch, bare, attackers, "fac_church_of_solmund", target, seed)
         for r in (walled, open_):
             assert r["status"] == "RESOLVED" and r["unopposed"] is False, f"seed {seed}: not fought: {r}"
         fought += 1
