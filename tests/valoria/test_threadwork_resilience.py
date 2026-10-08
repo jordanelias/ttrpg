@@ -111,14 +111,10 @@ def test_the_owner_leaves_zero_cost_alone_and_refuses_negative_resilience(monkey
     assert ops.resist_coherence_cost(-3, _Practitioner("a")) == -3        # absent attribute = 0
     assert ops.resist_coherence_cost(-7, _Practitioner("b", 2)) == -1
     for bad in (-1, 1.5, True, None):
+        actor = _Practitioner("bad")
+        actor.resilience = bad
         with pytest.raises(ValueError):
-            ops.resist_coherence_cost(-1, _Practitioner("bad", bad) if bad is not None else _NoneResilience())
-
-
-class _NoneResilience(_Practitioner):
-    def __init__(self):
-        super().__init__("none")
-        self.resilience = None
+            ops.resist_coherence_cost(-1, actor)
 
 
 @pytest.mark.parametrize("odd", [None, -1, 1.5, True, float("inf"), float("nan")])

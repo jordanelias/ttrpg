@@ -16,7 +16,7 @@ Implements:
 
 Dependencies:
   - systems/threadwork/sim/operations
-  - systems/threadwork/sim/coherence (apply_coherence_delta per-practitioner)
+  - systems/threadwork/sim/operations.charge_working (resist + apply per-practitioner)
 
 Entry points:
   - attempt_collective_operation(actors, op_type, target, world) -> CollectiveResult
@@ -30,10 +30,9 @@ from systems.threadwork.sim.operations import (
     attempt_leap,
     COHERENCE_COST_BY_SCALE, DEPTH_OB, MENDING_OB, TN_STANDARD,
     _actor_pool, OperationResult,
-    aims_at_own_configuration, apply_mending_feedback, mending_priced_scale, price_mending,
-    resist_coherence_cost,
+    aims_at_own_configuration, apply_mending_feedback, charge_working, mending_priced_scale,
+    price_mending,
 )
-from systems.threadwork.sim.coherence import apply_coherence_delta
 from engine.dice_engine import dice_engine
 from engine.dice_engine.dice_engine import roll_pool
 
@@ -84,7 +83,7 @@ def attempt_collective_operation(actors: list, op_type: str, target: dict,
              False (unstated is not established), as `operations.attempt_mending` does.
 
     COHERENCE (R-14, WR-03). Every participant whose Leap succeeded pays the working's cost, each
-    resisted by their OWN resilience through `operations.resist_coherence_cost` (identity at the
+    resisted by their OWN resilience through `operations.charge_working` (identity at the
     shipped gain 0); the reported `coherence_delta` is the Anchor's. A Mending is priced by
     `operations.price_mending` on `operations.mending_priced_scale(target)` — 0 cost at every degree
     (ED-871), the owner's Mending Stability delta, and the restorative term handed to every such
@@ -204,9 +203,8 @@ def attempt_collective_operation(actors: list, op_type: str, target: dict,
     for pid, ok in leap_results.items():
         if not ok:
             continue
-        applied[pid] = resist_coherence_cost(coh_delta, participants[pid])
-        if applied[pid] != 0:
-            apply_coherence_delta(pid, applied[pid], f"Collective {op_type} {degree}", world=world)
+        applied[pid] = charge_working(participants[pid], pid, coh_delta,
+                                      f"Collective {op_type} {degree}", world=world)
         if is_mending:
             restored[pid] = apply_mending_feedback(
                 pid, price, environment_in_equilibrium=environment_in_equilibrium,

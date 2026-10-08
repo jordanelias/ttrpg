@@ -246,18 +246,17 @@ def test_three_sites_price_one_mending_alike(monkeypatch):
     """Every (scale, degree, environment) cell: the three sites return the same cost, MS delta and
     elastic displacement returned. With the environment stated False the restorative term is 0 at all
     three (E-1's gate is `recover`'s, and each site must pass the caller's fact through)."""
-    reached = restored_cells = 0
+    restored_cells = 0
     for scale in PARITY_SCALES:
         priced = ops.mending_priced_scale({"scale": scale})
         for degree in PARITY_DEGREES:
             price = ops.price_mending(priced, degree)
             for env in (True, False):
-                with monkeypatch.context() as m:
-                    single = _single(scale, degree, m, env)
-                with monkeypatch.context() as m:
-                    collective = _collective(scale, degree, m, env)
-                with monkeypatch.context() as m:
-                    opposed = _opposing(scale, degree, m, env)
+                cells = []
+                for site in (_single, _collective, _opposing):
+                    with monkeypatch.context() as m:
+                        cells.append(site(scale, degree, m, env))
+                single, collective, opposed = cells
                 restored = price.restorative if env else 0
                 expected = (ops.MENDING_OB[priced], price.coherence_cost, price.mending_stability_delta,
                             restored, coh.ELASTIC_RANGE - restored)
@@ -266,7 +265,6 @@ def test_three_sites_price_one_mending_alike(monkeypatch):
                     f"{scale}/{degree}/env={env}: single={single} collective={collective} "
                     f"opposed={opposed} owner={expected}")
                 assert price.coherence_cost == 0, "ED-871"
-                reached += 1
                 restored_cells += single[3] > 0
     # Non-vacuity: the restorative comparison was not 0 == 0 throughout.
     assert restored_cells == len(PARITY_SCALES) * (len(PARITY_DEGREES) - 1)

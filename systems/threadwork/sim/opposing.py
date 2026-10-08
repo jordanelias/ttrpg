@@ -37,10 +37,9 @@ from engine.dice_engine.dice_engine import roll_pool
 from systems.threadwork.sim.operations import (
     DEPTH_OB, MENDING_OB, TN_STANDARD,
     _actor_pool, COHERENCE_COST_BY_SCALE, FR_SURCHARGE, OperationResult,
-    aims_at_own_configuration, apply_mending_feedback, mending_priced_scale, price_mending,
-    resist_coherence_cost,
+    aims_at_own_configuration, apply_mending_feedback, charge_working, mending_priced_scale,
+    price_mending,
 )
-from systems.threadwork.sim.coherence import apply_coherence_delta
 
 
 # §2.6 Opposing Engagement Modifier
@@ -118,7 +117,7 @@ def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
     only state this function writes is each side's Coherence.
 
     COHERENCE (R-14, WR-03). Each side's `coherence_delta` is resisted by THAT side's resilience
-    through `operations.resist_coherence_cost` (identity at the shipped gain 0) and the dict reports
+    through `operations.charge_working` (identity at the shipped gain 0) and the dict reports
     the cost actually applied. A Mending is priced by the owner, not the table: on
     `operations.mending_priced_scale(target)`, each side's `coherence_delta` is its
     `operations.price_mending` cost (0 at every degree, ED-871), its restorative term goes through
@@ -254,9 +253,8 @@ def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
     source = f"Opposing {op_type} A:{a_deg}/B:{b_deg}"
     for side, actor, actor_id, cons in (('a', actor_a, actor_a_id, a_cons),
                                         ('b', actor_b, actor_b_id, b_cons)):
-        cons['coherence_delta'] = resist_coherence_cost(cons['coherence_delta'], actor)
-        if cons['coherence_delta'] != 0:
-            apply_coherence_delta(actor_id, cons['coherence_delta'], source, world=world)
+        cons['coherence_delta'] = charge_working(actor, actor_id, cons['coherence_delta'], source,
+                                                 world=world)
         if is_mending:
             cons['coherence_restored'] = apply_mending_feedback(
                 actor_id, prices[side], environment_in_equilibrium=environment_in_equilibrium,

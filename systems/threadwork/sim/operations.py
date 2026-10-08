@@ -250,9 +250,9 @@ def _actor_pool(actor) -> int:
 def resist_coherence_cost(cost: int, actor) -> int:
     """R-14: the working's Coherence `cost` (<= 0) after the practitioner's resilience resists it.
 
-    THE ONE OWNER of the practitioner-side term. Every caller that forms a working's cost for a
-    practitioner routes it through here, after the working's own terms (type x scale, direction,
-    degree) are applied; nothing re-implements the arithmetic.
+    THE ONE OWNER of the practitioner-side ARITHMETIC. The three operation sites reach it through
+    `charge_working`, after the working's own terms (type x scale, direction, degree) are applied;
+    nothing re-implements it.
 
     Resistance is `RESILIENCE_GAIN * actor.resilience` whole units, and it can only bring a cost
     TOWARD zero: the result is floored at 0, so a resilient practitioner takes nothing from a small
@@ -272,6 +272,19 @@ def resist_coherence_cost(cost: int, actor) -> int:
     if isinstance(resilience, bool) or not isinstance(resilience, int) or resilience < 0:
         raise ValueError(f"resist_coherence_cost: resilience is an int >= 0 (got {resilience!r})")
     return min(0, cost + RESILIENCE_GAIN * resilience)
+
+
+def charge_working(actor, actor_id, cost: int, source: str, world=None) -> int:
+    """R-14 + the write: resist `cost` through `resist_coherence_cost`, apply what is left to
+    `actor_id`'s Coherence (a zero cost writes nothing, so nothing is logged), and return the amount
+    APPLIED. The one place a working's cost reaches `coherence.apply_coherence_delta` from the three
+    operation sites (`_resolve_operation`, `collective.py`, `opposing.py`), so what they report is what
+    was applied by construction. (`apply_coherence_delta` takes an id string, so it cannot read the
+    actor's resilience itself; that is why the resisting sits here.)"""
+    applied = resist_coherence_cost(cost, actor)
+    if applied != 0:
+        apply_coherence_delta(actor_id, applied, source, world=world)
+    return applied
 
 
 def _resolve_operation(operation: str, actor, ob: int, tn: int,
@@ -309,10 +322,7 @@ def _resolve_operation(operation: str, actor, ob: int, tn: int,
     if degree in ("Partial", "Failure") and operation != "Mending":
         effective_coh -= 1
     # R-14: the practitioner's resilience resists the working's cost (RESILIENCE_GAIN; 0 = control).
-    effective_coh = resist_coherence_cost(effective_coh, actor)
-
-    if effective_coh != 0:
-        apply_coherence_delta(actor_id, effective_coh, f"{operation} {degree}", world=world)
+    effective_coh = charge_working(actor, actor_id, effective_coh, f"{operation} {degree}", world=world)
 
     # Mending Stability impact. Weaving/Pulling: the degree table's Partial/Failure values,
     # OVERRIDDEN by scale per P-25 (ED-WR-0008, see the comment above): Partial = the scale's
