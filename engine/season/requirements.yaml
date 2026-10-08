@@ -106,7 +106,7 @@ scales:
       sentence used to add "`parliamentary_vote.py` calls `roll_pool`"; that module and
       `parliamentary_stay.py` were deleted at `29b` (their `FORK:5c5d8ec6` rows), and nothing under
       `systems/social_contest` calls `roll_pool` now.
-      3 of 44 verb rows declare `contests:` — `fight` (the body, the combat seam), `march` (a
+      4 of 46 verb rows declare `contests:` — `fight` and `accept` (the body, the combat seam), `march` (a
       field, the mass-battle seam, `ecacb57`) and `tell` (a standing, resolved on the season side
       by `seam/wrappers/sigma.py`, not by this kernel). The kernel retires at plan position `2-ii`
       (`workplans/valoria_master_workplan_v9.md`).
@@ -856,7 +856,7 @@ rows:
       20 of 46 AS OF IN-08's CELLS COMMIT (B-G); THE ROW STAYS `not_met`. `corpus_run`, seed 0, 143 cases:
       `VERBS THAT EXECUTED : 20 of 46` (17 of 44 on the base commit 13715804) -- `challenge` and `accept` (the
       duel pair's new rows) and `levy` join, nothing leaves. `WHERE THE 46 GO`: 10 no predicate/effect, 10
-      foldable but never attempted, 6 attempted and always refused (7 before; `levy` left it), 20 executed.
+      foldable but never attempted, 6 attempted and always refused (7 before; `levy` left it), 20 executed. `accept` is among the 20 WITHOUT its challenge: no carrier holds one, so it executes as a second `fight` (`verb_table.yaml`, `accept`'s `requires_note`).
     measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE) -- 44 today; it was '38' as of ED-IN-0261, '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
     blocks: [H-65, IN-09, IN-10, IN-33, IN-45]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W10-core removed (it gates corpus_run's R2 check, not this row's WHERE THE <n> GO); H-94 is carried by its owners IN-10, IN-09, IN-45, IN-33

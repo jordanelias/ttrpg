@@ -946,6 +946,7 @@ def main(seed: int = 0) -> int:
     # BY VERB NAME. Reported rather than inferred, because "the worlds agree" is worthless without
     # saying WHY they agree (`H-97`).
     sep = []
+    excluded: set = set()
     celled = celled_verbs()          # ALIGNMENT is not rebound inside this loop: read it once
     for c in R.load_cases("NPC") + R.load_cases("ARC"):
         if str(c.get("scale")) not in set(RUNG_KINDS):
@@ -967,12 +968,14 @@ def main(seed: int = 0) -> int:
         cc = [x for x in cd if x.verb in celled]
         nz = sum(1 for x in cc if any(axis_w[a] * align(x.verb, a) for a in PURSUIT_AXES))
         sep.append((nz, len(cc), len(cd)))
+        excluded.update(x.verb for x in cd if x.verb not in celled)
     if sep:
         print(f"\n  RANKING DISCRIMINATION   {min(s[0] for s in sep)}..{max(s[0] for s in sep)} "
               f"(numerator) of {min(s[1] for s in sep)}..{max(s[1] for s in sep)} (denominator: "
               f"candidates whose verb has >= 1 celled axis; {min(s[2] for s in sep)}.."
               f"{max(s[2] for s in sep)} candidates in all) carry a nonzero pursuit score; the "
               f"rest TIE and the tie is broken BY THE DRAW (U4/H-96), not by the verb's name")
+        print(f"  RANKING EXCLUDES         {sorted(excluded)} (no celled axis: declared `uncelled:` or all-`null`)")
     # ⚠ A CASE THAT EXECUTED, WHATEVER ITS BAR STATUS. `W18` renamed the statuses (`RAN` became
     # `RUNS-UNDECLARED` / `RUNS-ALONE-UNDECLARED`), and this filter still named the old ones — so
     # the verb counts went to 0 of 32 the moment the bar landed, silently, because an empty set has

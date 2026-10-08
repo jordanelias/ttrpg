@@ -274,7 +274,7 @@ def loyalty(r: dict, faction: Optional[str]) -> Optional[int]:
     """How far this person's own ethics run with their faction's, `0..100`. `None` if unmeasurable.
 
     **50 IS INDIFFERENT, NOT AVERAGE.** The measure is the cosine between two positions in the
-    four-axis ethical space — the person's, and their faction's role template's — mapped from
+    seven-axis ethical space — the person's, and their faction's role template's — mapped from
     `[-1, +1]` onto `[0, 100]`. So `100` is a person whose values point exactly where the faction
     expects, `50` is orthogonal (the creed is simply not about anything they care about), and `0`
     is someone whose ethics point the opposite way. A member at `0` is not a bad member; they are
@@ -292,9 +292,9 @@ def loyalty(r: dict, faction: Optional[str]) -> Optional[int]:
 
     ⚠ **A LEADER MAY SCORE LOW AND THAT IS CANON, NOT A BUG.** `faction_canon_v30.md` §4 on the two
     factions sharing `military-order`: *"their differentiation comes from Mission, leader
-    Convictions, and stat profile, not role template."* Vaynard reads 3 against the order he leads
-    because his authored `Utility` pulls hard on the instrumental axis where `military-order`
-    expects `Honor`. A pragmatist at the head of a traditionalist order is a situation.
+    Convictions, and stat profile, not role template."* Vaynard read 3 against the order he leads
+    on the old thirteen-conviction basis, where his authored `Utility` pulled on the instrumental
+    axis and `military-order` expected `Honor` (re-measure on the 15x7). A pragmatist at the head of a traditionalist order is a situation.
 
     ⚠ **`None` FOR A FACTION WITH NO TEMPLATE, NEVER A DEFAULT.** `Guilds` and `Schoenland` have no
     `role_template`, no expected convictions and no authored leader — so there is nothing to be

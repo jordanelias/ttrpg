@@ -34,13 +34,14 @@ def test_the_shipped_alignment_is_dense_and_every_verb_is_celled_or_declared_unc
     the verb table -- no verb is both, none is neither."""
     cells, uncelled = _shipped()
     V._load_alignment(cells, uncelled)                       # raises if the rule is broken
-    keyed = {v for row in cells.values() for v in row}
+    verbs_of = lambda row: {k for k in row if not k.startswith(V.DEED_PREFIX)}    # `deed:<kind>` keys are lawful (IN-18 G1)
+    keyed = {v for row in cells.values() for v in verbs_of(row)}
     assert set(uncelled) and set(uncelled) <= set(V.VERB_TABLE)
     assert keyed.isdisjoint(uncelled)
     assert keyed | set(uncelled) == set(V.VERB_TABLE), sorted(set(V.VERB_TABLE) - keyed - set(uncelled))
     assert set(cells) == set(PURSUIT_AXES)
     for ax in PURSUIT_AXES:
-        assert set(cells[ax]) == set(V.VERB_TABLE) - set(uncelled), ax
+        assert verbs_of(cells[ax]) == set(V.VERB_TABLE) - set(uncelled), ax
 
 
 def test_a_verb_missing_a_cell_on_one_axis_and_not_declared_uncelled_refuses_naming_both():

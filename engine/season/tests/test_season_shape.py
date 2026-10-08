@@ -13264,8 +13264,9 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # ⚠ THE FOURTH ENTRY, `accept` (IN-08's cells commit, ED-IN-0261: *`accept` carrying `contests:
     # "the body"`*), re-recorded here with its reason. It is NOT a new kind of grading: the same
     # prize as `fight`, routed to the same provider, read off the same scene by the same effect
-    # (`loop/effects_combat.py::_eff_kill`, registered for both). Its own measurement is
-    # `tests/valoria/test_module_registrar.py`'s refusals 4 and 5 run on it in a fresh subprocess.
+    # (`loop/effects_combat.py::_eff_kill`, registered for both). The registrar test derives its
+    # contested rows from the table, so refusal 4 and the contested-reach test observe `accept`;
+    # `challenge` is uncontested and writes nothing, so neither refusal applies to it.
     assert contested == {"fight": "the body", "tell": "a standing", "march": "a field",
                          "accept": "the body"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
