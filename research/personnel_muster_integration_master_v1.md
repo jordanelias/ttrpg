@@ -161,7 +161,7 @@ residence *from* Governor assignment). The overloaded term is **officer**, not g
 - `references/npc_registry.yaml` — 46 records (§1.1). No loader.
 - `systems/world/sim/npe.py::generate_npc` — a working, territory-conditioned generator. **No
   production call site.**
-- `engine/mc_v18.py:194` — a `stubwire.stub_resolve('generate_npc(world-gen|season-tick)')` with an
+- The retired campaign driver at `:194` — a `stubwire.stub_resolve('generate_npc(world-gen|season-tick)')` with an
   honest documented reason: no canon head names a world-gen initial count or a season-tick
   generation trigger, so rather than invent one it generates none.
 - `systems/world/sim/npe.py::simulate_npc_actions` — **runs every accounting, over an empty dict.**
@@ -214,7 +214,7 @@ it must land and be proven byte-inert *before* any loader.
   substream derived deterministically from the campaign seed, e.g. a module-level
   `random.Random(world_seed ^ NPC_DRIFT_SALT)` stashed on `world` at creation the way
   `world.echo_scheduler`'s presence-flag pattern already works.
-- Falsifier (§0.1 pt 3): a test asserting `test_mc_v18_regression` and `test_f7_smoke_oracle`
+- Falsifier (§0.1 pt 3): a test asserting the retired campaign regression test and `test_f7_smoke_oracle`
   goldens are **byte-identical** across the change with an empty NPC store, *and* that they remain
   byte-identical with a two-NPC store — the second assertion is the one that proves the substream
   did its job. Without it this change is unfalsifiable.
@@ -229,7 +229,7 @@ it must land and be proven byte-inert *before* any loader.
   `references/module_contracts.yaml`, then regenerate `engine/engine_params/composition.json` via
   `tools/export_composition.py` and run its blocking `--check`. Do **not** import across the seam —
   `engine/substrate/composition.py::require('npc_roster_loader')` is the call shape.
-- `engine/mc_v18.py` — replace the `stub_resolve('generate_npc(world-gen|season-tick)')` call with
+- The retired campaign driver — replace the `stub_resolve('generate_npc(world-gen|season-tick)')` call with
   the loader call, and **update the stubwire reason text** rather than deleting it silently, since
   `engine/tests/test_pipeline_reach.py` carries a strict xfail against that site.
 - **The 7/46 territory-coverage gap is the practical blocker**: 39 records have no `territory`, so
@@ -422,7 +422,7 @@ consume (it produces a unit with Size/Power/Discipline/Type). Model A's `Mil +5/
 
 **Impact: MOVES, and substantially.** `_try_muster` is one of four buckets drawn every season in
 every campaign; changing its Ob, its output, and its effect on `faction.Mil` re-phases campaign
-state and every downstream draw. Requires re-pinned `test_mc_v18_regression` and
+state and every downstream draw. Requires re-pinned the retired campaign regression test and
 `test_f7_smoke_oracle` goldens plus a `balance_oracle.py` control at ≥120 campaigns per arm.
 
 **Sequencing note:** this is the highest-impact single change in the document and it should not be
@@ -834,7 +834,7 @@ garrison question (§9 settles it on 4/4 convergence).
 
 **Code audited directly** (working tree, this session): `engine/autoload/{game_state,dice_engine,
 sigma_leverage,engine_clock,scene_slate,victory}.py` · `engine/cross_scale/{scene_dispatch,
-zoom_in_out,combat_bridge}.py` · `engine/mc_v18.py` · `engine/substrate/composition.py` ·
+zoom_in_out,combat_bridge}.py` · the retired campaign driver · `engine/substrate/composition.py` ·
 `systems/factions/sim/*.py` · `systems/settlements/sim/{registry,ledger,settlement,infrastructure,
 temperaments,adjacency}.py` · `systems/world/sim/npe.py` · `systems/mass_battle/sim/**` ·
 `systems/combat/combat_engine_v1/*.py` · `systems/social_contest/sim/contest/*.py` ·

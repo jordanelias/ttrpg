@@ -73,7 +73,7 @@ resolving through a random roll into a single scoring scalar. What cards fixed d
 the per-turn decision problem**, of which a persistent claim board is the second carrier — no deckbuilder required.
 
 **C-8 (NEW) — "the contest is sealed off from the world" was false.** The companion document's headline claim, and
-mine. A second path is live by default: `mc_v18.py:148-151` ✓ runs `parliamentary_bridge` every season
+mine. A second path is live by default: the retired campaign driver at `:148-151` ✓ runs `parliamentary_bridge` every season
 (`ECHO_TRANSPORT` default ON — Jordan, 2026-07-08, "the baseline campaign"); `_derive_vote`
 (`parliamentary_bridge.py:82-97` ✓) **generates a topic from world pressure**; `parliamentary_vote.py:206-216` ✓
 writes back to `world.factions`. The falsifier that catches this was published in that document and never run.

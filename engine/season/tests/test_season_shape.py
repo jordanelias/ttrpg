@@ -13023,7 +13023,7 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     sentence read *THE THREE PRIZES THAT ARE NOT `the body`*, resting on Jordan's 2026-09-02 *"we
     don't NEED to worry about them at this point in time."* `U1` spent his 2026-09-09 ruling on two
     of them -- *"we have the sigma leverage d10 resolver in engine to use"* -- and M3 of the
-    `mc_v18`-retirement plan (`ED-IN-0279`, 2026-09-27) gave the last one, `a field`, its provider
+    driver-retirement plan (`ED-IN-0279`, 2026-09-27) gave the last one, `a field`, its provider
     too, once `faction_q.resolve` existed to build its sides (R-04/U9, closed by M2 of that same
     plan). The (now-empty) refusal set is asserted below on the field that decides it, `provider:`,
     rather than on the module name, which after `U1` no longer predicts whether anything runs.
@@ -13084,7 +13084,7 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     assert prizes["the body"]["module"] == "combat"
     assert prizes["the body"]["provider"] == "personal_combat"
     # ⚠ **"THE SEAM REFUSES THE OTHER THREE" WAS TRUE BEFORE `U1`, "ONE REFUSES" WAS TRUE AFTER
-    # IT, AND NEITHER IS TRUE NOW — ZERO REFUSE THIS WAY.** M3 of the mc_v18-retirement plan
+    # IT, AND NEITHER IS TRUE NOW — ZERO REFUSE THIS WAY.** M3 of the driver-retirement plan
     # (`ED-IN-0279`) gave `a field` a `provider:` too (`seam/wrappers/mass_battle.py`, which
     # resolves `subject` via `faction_q.resolve` -- the R-04/U9 gap this comment used to name).
     # Every prize row now carries a `provider:`, so this loop finds nothing left to refuse BY

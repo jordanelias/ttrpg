@@ -168,7 +168,7 @@ rate is the expected count of *qualifying items*, not a quota:
 |---|---|---|
 | candidates : Slate entries (Normal, B = 6) | **≈ 33 : 1** | ≈ 21 : 1 |
 | candidates : scene actions (Normal, A = 4) | **≈ 49 : 1** | ≈ 32 : 1 |
-| over a 50-season campaign (`engine/tests/test_mc_v18_regression.py:16` runs 50-season campaigns) | ≈ **9,750 candidates resolve** · ≈ **300 surface** · ≈ **200 are played** | ≈ 6,400 · 300 · 200 |
+| over a 50-season campaign (the retired campaign regression test at `:16` runs 50-season campaigns) | ≈ **9,750 candidates resolve** · ≈ **300 surface** · ≈ **200 are played** | ≈ 6,400 · 300 · 200 |
 | **fraction of what happens that the player ever sees** | **≈ 3.1%** | ≈ 4.7% |
 | **fraction the player acts on** | **≈ 2.1%** | ≈ 3.1% |
 | **fraction that resolves** | **100%** | 100% |

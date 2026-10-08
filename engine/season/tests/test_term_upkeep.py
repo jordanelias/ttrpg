@@ -2,7 +2,7 @@
 §3.2 row 10 and its "Contradiction 1" box: *"`Tenure.term`, the T-n basis at the gate, `Office.upkeep`'s
 reader, and payment by `transfer` renewing `oblige` terms."* Content owners: `04_CODE_ARCHITECTURE.md`
 §B.8 (`term? (matures_at, declared_by, …)`), F.3 (*"MATTER matures it"*), F.18 (*"the repair is a
-verb"*), and the `mc_v18` retirement plan's G2.
+verb"*), and the driver-retirement plan's G2.
 
 What the position built, each asked of the real fold, the real MATTER barrier and the real gate:
   * `Tenure.term` (`state/carriers.py::Term`) -- `_eff_oblige` declares it on the edge it opens.

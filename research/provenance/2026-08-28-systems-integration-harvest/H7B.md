@@ -127,12 +127,12 @@ I now have sufficient material across all four trees. Let me write the final rep
   touches: [cross-scale-plumbing]
   slice: gap
   statement: >-
-    `mc_v18.DEFAULT_PARAMS['VICTORY_THRESHOLD']` is declared with value 11 but never read by any
+    the retired driver's `DEFAULT_PARAMS`['VICTORY_THRESHOLD']` is declared with value 11 but never read by any
     production code path — the live GD-1 gate is `engine/autoload/victory.py`'s own module
     constant `VICTORY_THRESHOLD = 15`, a completely different, unwired owner. Pinned live by a
     falsifier test that sweeps the dead param 11→999→1 and shows win_share never moves.
   status: gap
-  status_evidence: "engine/mc_v18.py:50-62 (dead DEFAULT_PARAMS entry); engine/autoload/victory.py:27 (the real constant)"
+  status_evidence: "the retired campaign driver at :50-62 (dead DEFAULT_PARAMS entry); engine/autoload/victory.py:27 (the real constant)"
   rolls: "no"
   shape: none
 
@@ -144,14 +144,14 @@ I now have sufficient material across all four trees. Let me write the final rep
   slice: mechanic
   statement: >-
     When no faction satisfies GD-1 sustained-2-season Peninsular Sovereignty by the season cap,
-    `mc_v18.run_campaign` computes a fallback winner entirely outside `engine/autoload/victory.py`:
+    the retired driver's `run_campaign` computes a fallback winner entirely outside `engine/autoload/victory.py`:
     among parliamentary factions with territories, it scores held-territory count against
     `ALL_PLAYABLE_15` plus `Faction.L` plus `len(Faction.territories)`, and takes the max. This
     formula is undocumented in `references/module_contracts.yaml`'s victory entry, which lists
     only the GD-1 resolver.
   formula: "score = held_count + Faction.L + len(Faction.territories)"
   status: built
-  status_evidence: "engine/mc_v18.py:284-294 run_campaign"
+  status_evidence: "the retired campaign driver at :284-294 run_campaign"
   rolls: "no"
   shape: none
 
@@ -519,12 +519,12 @@ I now have sufficient material across all four trees. Let me write the final rep
   statement: >-
     `generate_npc` is fully implemented (two-tier archetype+deviation generation per Territory
     Social Ecology) but is never called at world-gen or on a season-tick trigger anywhere in
-    production. `engine.mc_v18._faction_actions_callback` records the absence explicitly via a
+    production. the retired driver's `_faction_actions_callback` records the absence explicitly via a
     named `stubwire.stub_resolve('generate_npc(world-gen|season-tick)', ...)` call rather than
     inventing a trigger, because no canon head names either an initial population count or a
     per-season generation rate. `npc_counter` stays at 0 for a full seeded campaign.
   status: gap
-  status_evidence: "engine/mc_v18.py:186-194; systems/world/sim/npe.py:226-350 generate_npc (fully implemented, uncalled)"
+  status_evidence: "the retired campaign driver at :186-194; systems/world/sim/npe.py:226-350 generate_npc (fully implemented, uncalled)"
   rolls: "no"
   shape: none
   baseline_ref: "research/personnel_muster_integration_master_v1.md §3 (P0.1/P0.2 build order, R-A ruling docket)"
@@ -906,4 +906,4 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 ## Coverage notes
 
-The two named baselines cover almost nothing of this lane directly — the catalogue names only Mass Seizure (H7B-014) and the code-file list at its end; the personnel-muster master document's NPE/REL findings (H7B-024, H7B-025) are cited as `baseline_ref` rather than re-derived. The three flow-skeleton documents (victory, world, overview) turned out to be the highest-value source in the lane: pre-verified, path:line-cited execution traces that independently confirmed several defects I found by reading code directly (Turmoil dead-write, dead VICTORY_THRESHOLD param) and surfaced others I would not have found alone (InsurgencyRecord.L never incrementing was my own find via grep, but PI/Strain total deadness, the undocumented mc_v18 fallback-winner formula, and Conviction mechanics' zero production reachability came from the skeletons). The biggest surprise was `systems/characters/reference/conviction_track_v30.md`: despite its filename and location, it is not about personal Conviction at all — it's an older, largely GD-1-superseded draft of the territorial Piety Track / Church Victory material that lives properly in `victory_v30.md` and `peninsular_strain_v30.md`, which I recorded as a standalone gap (H7B-016) rather than re-harvesting its content as if novel. The boundary cut hardest through `systems/world/` and `systems/characters/reference/character_histories_v30.md`: a large fraction of both trees (Solmund voice/literary-register guides, artifact taxonomy, character lifepath skill trees) is genuinely pure lore or personal-combat content with no governance/faction/NPC/territory mechanical weight, so those files got 0-record manifest rows on purpose rather than padding the harvest with `content` records for material that fails the "does it bear on governance" test.
+The two named baselines cover almost nothing of this lane directly — the catalogue names only Mass Seizure (H7B-014) and the code-file list at its end; the personnel-muster master document's NPE/REL findings (H7B-024, H7B-025) are cited as `baseline_ref` rather than re-derived. The three flow-skeleton documents (victory, world, overview) turned out to be the highest-value source in the lane: pre-verified, path:line-cited execution traces that independently confirmed several defects I found by reading code directly (Turmoil dead-write, dead VICTORY_THRESHOLD param) and surfaced others I would not have found alone (InsurgencyRecord.L never incrementing was my own find via grep, but PI/Strain total deadness, the undocumented the retired campaign driver fallback-winner formula, and Conviction mechanics' zero production reachability came from the skeletons). The biggest surprise was `systems/characters/reference/conviction_track_v30.md`: despite its filename and location, it is not about personal Conviction at all — it's an older, largely GD-1-superseded draft of the territorial Piety Track / Church Victory material that lives properly in `victory_v30.md` and `peninsular_strain_v30.md`, which I recorded as a standalone gap (H7B-016) rather than re-harvesting its content as if novel. The boundary cut hardest through `systems/world/` and `systems/characters/reference/character_histories_v30.md`: a large fraction of both trees (Solmund voice/literary-register guides, artifact taxonomy, character lifepath skill trees) is genuinely pure lore or personal-combat content with no governance/faction/NPC/territory mechanical weight, so those files got 0-record manifest rows on purpose rather than padding the harvest with `content` records for material that fails the "does it bear on governance" test.

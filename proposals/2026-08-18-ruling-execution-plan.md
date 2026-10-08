@@ -157,7 +157,7 @@ So "+0.15 Ob per wound everywhere" converts a **dice-pool penalty into an obstac
 
 ### §6.3 R10's population cost is currently pinned at zero **by a test** (MEASURED — and stronger than the trace stated)
 
-`generate_npc` has **no automatic call site**: not at world-gen, not in the season tick. `mc_v18.py:175` records the deliberate omission. And it is **guarded**:
+`generate_npc` has **no automatic call site**: not at world-gen, not in the season tick. The retired campaign driver at `:175` records the deliberate omission. And it is **guarded**:
 
 - `engine/tests/test_world_population.py:142` — `test_generate_npc_has_no_automatic_call_site_this_wave`
 - `engine/tests/test_f7_smoke_oracle.py:162` — `assert npcs == 0, "npcs_generated is no longer 0 … update the golden"`

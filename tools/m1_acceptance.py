@@ -10,7 +10,7 @@ This file makes it five falsifiable rows.
 
 WHAT CHANGED (S2, workplans/return_to_game_queue.yaml, ED-IN-0112). The "headless season run
 that does not exist" this file used to name as the blocker for rows 1-2 DID exist —
-engine.mc_v18.run_campaign (since deleted, 28-iii) ran 50-season campaigns in ~2.5s with a
+the old campaign driver's run_campaign (since deleted, 28-iii) ran 50-season campaigns in ~2.5s with a
 deterministic KeyLog hash. Rows 1 and 2 were blocked only because nothing pointed this oracle at it; they
 are now MEASURED from a real headless 1-season probe run (`_run_probe_season` below). Row 5 is
 MEASURED since 2026-09-14: engine/season/harness/invariants.py sweeps eight run-time
@@ -61,7 +61,7 @@ import ci_common  # noqa: E402
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = ci_common.REPO   # ONE OWNER (plan G7, ED-IN-0159 §8.3)
 
-# ⚠⚠ **ROWS 1-2 PROBED `engine/mc_v18.py` UNTIL 2026-09-13, AND THAT WAS A SUPERSEDED TREE** (deleted 28-iii).
+# ⚠⚠ **ROWS 1-2 PROBED THE OLD CAMPAIGN DRIVER UNTIL 2026-09-13, AND THAT WAS A SUPERSEDED TREE** (deleted 28-iii).
 # Jordan ruled 2026-09-07 that **`engine/season/` IS THE HEAD** (`HANDOFF_IN.md`: *"#371 EXISTS.
 # `engine/season/` IS THE HEAD. THE DECOMPOSITION WAS DONE ON THE PROTOTYPE"*), and `ED-IN-0204`
 # adopted the season loop in full. This file went on measuring the prototype for six days, which
@@ -135,7 +135,7 @@ def _run_probe_season(seed):
     Returns a `_Probe`: `(stub_hits, content_hash, events)`.
 
     ⚠ THIS INSTRUMENT NOW OWNS THE STUB DELTA, AND THE PREVIOUS OWNER IS WHY THAT IS A CHANGE
-    RATHER THAN A COPY. `mc_v18.run_campaign` computed its own before/after delta on the
+    RATHER THAN A COPY. the old driver's `run_campaign` computed its own before/after delta on the
     process-cumulative counter and this file deliberately did NOT re-implement it (§8: never
     re-implement a rule that already lives once). The head has no equivalent, because the head
     calls `stubwire` nowhere at all — so there is no owner to defer to and the delta is computed
@@ -145,7 +145,7 @@ def _run_probe_season(seed):
     ⚠ THE DELTA, NOT THE COUNTER AT REST. `stubwire.invocations` is process-cumulative, so
     reading it after the run would report every stub any earlier import fired and reading it at
     rest would report 0 and mean nothing — the false green the old docstring warned about, which
-    survives the move because it was a fact about the counter and not about `mc_v18`.
+    survives the move because it was a fact about the counter and not about the driver.
 
     ⚠ NO `reset_invocations()`, for the reason the old probe recorded and which still holds:
     `engine/substrate/stubwire.py:70-72` declares it test-only and *"never called from a
@@ -191,15 +191,15 @@ def row_stub_invocations():
 
     ⚠ SCOPE, CARRIED FORWARD BECAUSE IT IS STILL TRUE: one season is a PROXY for "the M1 path",
     not the M1 path. Row 4 shows 0/7 junctures executing, so most M1 sites are unreachable by any
-    single probe. The old text said this of an `mc_v18` season and it survives the move unchanged
+    single probe. The old text said this of an old-driver season and it survives the move unchanged
     — the proxy was never the problem; the tree was.
 
     ⚠ WHAT THIS ROW NO LONGER COUNTS, said plainly so nobody reads the flip as progress:
-    `engine/mc_v18.py`'s two deferrals (OI-05 `generate_npc`, OI-07 `form_knot`) were never on
+    the old driver's two deferrals (OI-05 `generate_npc`, OI-07 `form_knot`) were never on
     the head's path, so they never blocked a milestone measured over the head. OI-05 was RULED by
     Jordan on 2026-09-13 (`ED-WR-0011` — the cast is the authored 46) and the head already
     implements it. Both deferrals DIED WITH THE FILE at plan position `28-iii`, which deleted
-    `engine/mc_v18.py` (its ledger row, ref `5c5d8ec6`) — they were resolved by deletion, not
+    that driver (its ledger row, ref `5c5d8ec6`) — they were resolved by deletion, not
     built.
     """
     if _headless is None:
@@ -220,8 +220,8 @@ def row_stub_invocations():
         'detail': (
             f'1-season headless run of engine/season (the HEAD), seed={M1_PROBE_SEED}: '
             f'{value} stub_resolve call(s), as a delta on the process-cumulative '
-            'engine.substrate.stubwire.invocations counter. Re-pointed from engine/mc_v18 '
-            '2026-09-13 — that tree is superseded (engine/season is the head, Jordan 2026-09-07).'
+            'engine.substrate.stubwire.invocations counter. Re-pointed from the old campaign '
+            'driver 2026-09-13 — that tree was superseded (engine/season is the head, Jordan 2026-09-07).'
         ),
     }
 
@@ -269,7 +269,7 @@ def row_determinism():
             f'two independent 1-season headless runs of engine/season, seed={M1_PROBE_SEED}: '
             + ('hashes match' if match else 'HASHES DIVERGE OR EMPTY')
             + f' ({h1[:12] if h1 else "<empty>"}… vs {h2[:12] if h2 else "<empty>"}…). '
-              'Was KeyLog.content_hash() over an mc_v18 campaign until 2026-09-13; '
+              'Was KeyLog.content_hash() over an old-driver campaign until 2026-09-13; '
               'World.content_hash folds all state, not only the log (H-118).'
         ),
     }

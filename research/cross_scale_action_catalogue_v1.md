@@ -79,7 +79,7 @@ game calls "opposed" is actually SO or BI.
 
 ## 1. Faction / political scale
 
-**Live driver:** `engine/mc_v18.py` → `systems/factions/sim/faction_action.py::faction_take_action`,
+**Driver at the time (since retired; the season loop is `engine/season/loop/driver.py::SeasonDriver.season`):** the retired campaign driver → `systems/factions/sim/faction_action.py::faction_take_action`,
 one action per faction per season.
 
 ### 1.1 The selection model (BUILT)
@@ -907,7 +907,7 @@ unexecuted decision in the tree — it touches every SO row above.
 ## Sources read
 
 Code: `engine/autoload/{dice_engine,sigma_leverage,engine_clock,scene_slate,victory}.py` ·
-`engine/cross_scale/{scene_dispatch,zoom_in_out,combat_bridge}.py` · `engine/mc_v18.py` ·
+`engine/cross_scale/{scene_dispatch,zoom_in_out,combat_bridge}.py` · the retired campaign driver ·
 `references/module_contracts.yaml` · `systems/factions/sim/*.py` (17 modules) ·
 `systems/settlements/sim/` · `systems/mass_battle/sim/**` · `systems/combat/combat_engine_v1/*.py` ·
 `systems/social_contest/sim/contest/*.py` · `systems/fieldwork/sim/*.py` ·

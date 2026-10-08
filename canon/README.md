@@ -12,7 +12,7 @@ another.
 |---|---|
 | `philosophy/` | **Rank 1** — the foundations suite, eleven sections plus rulings and supplement |
 | `03_canonical_timeline.md` | Canonical setting chronology |
-| `04_game_design_constraints.md` | GD-1…GD-3. Mutable canon — victory conditions, AI action selection, faction emergence. Cited by `engine/autoload/victory.py` and `engine/mc_v18.py` |
+| `04_game_design_constraints.md` | GD-1…GD-3. Mutable canon — victory conditions, AI action selection, faction emergence. |
 
 ## Superseded, retained for citation resolution
 

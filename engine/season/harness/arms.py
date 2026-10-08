@@ -1,8 +1,8 @@
 """arms.py — the n-seed two-arm CONTROLLED comparison, ported from `tools/balance_oracle.py`
 onto `engine/season`'s own `build_realm` + season-loop execution (plan position `28-i`, M5).
 
-WHY THIS IS NOT A FILE COPY. `tools/balance_oracle.py` ran `engine.mc_v18.run_campaign` — the
-faction/strategic-scale campaign driver — under one mechanic patched to its old and new
+WHY THIS IS NOT A FILE COPY. `tools/balance_oracle.py` ran the old faction/strategic-scale
+campaign driver's `run_campaign` (deleted at plan position `28-iii`) under one mechanic patched to its old and new
 behaviour, tallied a WINNER per campaign, and reported a per-faction win-share delta with a
 two-proportion z. `engine/season/` has no campaign, no winner and no faction-elimination
 condition, so none of that host loop survives the port unchanged. What DOES survive is the
@@ -24,7 +24,7 @@ that engine-owned ladder, not the subsystem's. So patching the subsystem's copy 
 `engine/season/` would leave BOTH arms of a `build_realm`-based comparison identical by
 construction — exactly the "campaign-unreachable change" CLAUDE.md §7 names as a FAKE CONTROL,
 not a measurement. This is the same shape of mistake `rosters.yaml`'s own
-`field_casualty_models` note (see below) already warns about for a DIFFERENT mc_v18-only tool
+`field_casualty_models` note (see below) already warns about for a DIFFERENT campaign-driver-only tool
 reaching for a season-only question; here it is the reverse defect, a season-side tool reaching
 for a question outside its own subsystem's wiring.
 
@@ -44,8 +44,9 @@ WHAT REPLACES IT AS THE LIVE COMPARISON: `field_casualty_model` (H-148), and the
 invented here — `rosters.yaml`'s own `field_casualty_models` note (2026-09-04/M4) says so by name:
 
     "`tools/balance_oracle.py` DOES NOT APPLY TO THIS QUESTION AND MUST NOT BE RUN FOR IT. That
-    tool patches `mc_v18`/`dice_engine` and compares `mc_v18.run_campaign` arms; `march` and
-    `field_casualty_model` live entirely in `engine/season/`, which `mc_v18` cannot reach ...
+    tool patched `dice_engine` and compared campaign-driver arms (the driver was deleted at
+    plan position `28-iii`); `march` and
+    `field_casualty_model` live entirely in `engine/season/`, which that driver could not reach ...
     Patching it would leave both of `balance_oracle.py`'s arms identical by construction --
     exactly the 'campaign-unreachable change' CLAUDE.md §7 names as a fake control, not a
     measurement. If this arm is ever re-examined, the instrument is a `field_casualty_model` sweep
@@ -202,8 +203,8 @@ def two_proportion_z(a_count: int, a_n: int, b_count: int, b_n: int) -> float:
 # undoes cleanly against the live tree (verified 2026-09-29). THE OTHER TWO PAIRS THAT WERE PORTED WITH
 # IT, `_ARMS_BOUNDS` (`_pre_ruling_bounds_arm`) AND `_ARMS_FLOOR` (`_floor_arm`), WERE DELETED AT PLAN
 # POSITION `29b` (2026-10-01): they patched `descriptors.faction_bounds` and `game_state.Faction.adjust`,
-# both deleted with the faction layer, and their own note said they ran against `engine.mc_v18`'s Faction
-# model, deleted at `28-iii`. Their source is at the `FORK:` ref in `references/restructure_ledger.md`.
+# both deleted with the faction layer, and their own note said they ran against the old campaign driver's
+# Faction model, deleted at `28-iii`. Their source is at the `FORK:` ref in `references/restructure_ledger.md`.
 # `_contest_ladder_arm` does NOT
 # appear here — see the module docstring for why it is retired to the `FORK:` ref instead of
 # carried forward inert.

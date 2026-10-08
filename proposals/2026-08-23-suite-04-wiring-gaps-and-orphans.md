@@ -29,7 +29,7 @@ and the only Python that opens the file is a parse test and a documentation gene
 What that single absence blocks:
 
 1. **Conviction scarring** — `record_scar` needs an actor with state; there are no actors.
-2. **Knot formation** — `mc_v18.py:204-209` stubwires it; the participants do not exist.
+2. **Knot formation** — the retired campaign driver at `:204-209` stubwires it; the participants do not exist.
 3. **Settlement habitation** — `Settlement.npc_ids` is empty on all 37 (Suite 02 §3); the only writer
    in the tree is a test fixture (`goldenfurt_fixture.py:89`), and `get_npcs_in_territory` has zero
    callers.
@@ -185,7 +185,7 @@ discards the bout.
 **But three things below that link are missing, and they are not kwargs:**
 
 1. **No home.** `World` has no chronicle field (`game_state.py:167-212`); `CampaignResult` has no slot
-   (`mc_v18.py:84-105`) — it carries winner, `key_log_hash` and final state. A rendered chronicle has
+   (the retired campaign driver at `:84-105`) — it carries winner, `key_log_hash` and final state. A rendered chronicle has
    nowhere to be stored or returned.
 2. **No output channel from the consumer.** `articulation.py:140` subscribes as `_on_key(key,
    scheduler)` — it never receives `world`. Return values are discarded at notify

@@ -535,7 +535,7 @@ def p9():
     assert "refuse" in log and "ran-own-choose" in log
     return ("PASS: `dispatch` names ONE PERSON; that person runs their OWN `choose` and refused. "
             "The King's reach really is other people's decisions, mechanically. NOTE the refusal "
-            "and the order landed in the SAME season with no ordering between them -- see A14/A36")
+            "and the order landed in the SAME season with no ordering between them -- see A36 (A14 shows a reaction across rounds, not an order within one)")
 
 
 @probe("P10", "a person tracks multi-season work in progress", "S13", by="construction",
@@ -1634,7 +1634,8 @@ def f17():
     return (f"PASS-CONDITIONALLY, AND THE CONDITION IS THE FINDING: sequence={seen}. Both acts "
             "landed in ONE season and THE FOLD'S CONTENT-DERIVED ORDER -- not intent, not rank, "
             "not the superior's seniority -- decided whether the raid counted as authorised. "
-            "There is no within-season sequencing a person can rely on. See A14 and A36")
+            "There is no within-season sequencing a person can rely on. See A36 (A14 shows a reaction across rounds, "
+            "not an order within one)")
 
 
 @probe("F18", "a place's demands conflict with its superior's orders", "S36.1", by="probe-model",
@@ -2160,14 +2161,48 @@ def a13():
 
 
 @probe("A14", "a person reacts within the season to what another just did", "S40.2",
-       by="no-signature",
+       by="probe-model",
        tests="a character must be able to respond inside the same season to something that just happened")
 def a14():
-    raise Collision(
-        "'no reaction inside a season' vs the seam's nested DELIBERATE", "S40.2",
-        needs="a ruling on which sentence binds",
-        law="S34.1 says 'NO REACTION INSIDE A SEASON AT PERSON SCALE -- you anticipated, or you are late'. S40.2 says a contest 'runs the same steps over a smaller person set on a shorter clock' INSIDE RESOLVE, and 'a contest can open a contest', so DELIBERATE RE-RUNS INSIDE RESOLVE against a partially-moved world. BOTH SENTENCES ARE IN THE CHAIN and the design has NOT reconciled them",
-    )
+    """THE WITHIN-SEASON HALF OF `H-56`, RE-POINTED AT `R-03` (plan position IN-43). This probe
+    raised `Collision` -- 'no reaction inside a season' (S34.1) against the seam's nested DELIBERATE
+    (S40.2) -- until `R-03` was met: the season is `R = scene_budget` rounds, each deposit lands in
+    the hearers' ledgers at the round's WITNESS, and the next round's DELIBERATE reads them
+    (`requirements.yaml` R-03, `loop/driver.py::SeasonDriver.season`). So the question this probe
+    names -- may a person react inside the season to what another just did -- is answered by running
+    it: ONE season on `tiny_world`, a control arm in which `p_low` does nothing, and `p_mid`'s
+    ledger read at each round's DELIBERATE.
+
+    ⚠ IT DOES NOT TOUCH THE OTHER HALF. A DELIBERATE nested INSIDE RESOLVE (S40.2's 'a contest can
+    open a contest' against a partially-moved world) is not exercised here and `H-56` keeps its
+    grade on it."""
+    def p_mid_ledger_by_round(p_low_acts: bool) -> dict:
+        w = tiny_world()
+        d = SeasonDriver(w)
+        seen: dict = {}
+
+        def choose(p, v, s, ask_budget):
+            if p.id == "p_mid":
+                seen[d.round] = len(p.ledger)
+            if p_low_acts and p.id == "p_low" and d.round == 0:
+                return [Act_(w, p, "speak")]
+            return []
+
+        d.season(choose, question=None, subsistence=SUBSIST)
+        return seen
+
+    acted, control = p_mid_ledger_by_round(True), p_mid_ledger_by_round(False)
+    assert len(acted) >= 2, f"the season ran {len(acted)} round(s); a reaction needs a later one: {acted}"
+    # The arms are the same experiment until the act lands: round 0 is read BEFORE it is witnessed.
+    assert acted[0] == control[0], (f"the arms differ in round 0, before the act can land: "
+                                    f"{acted} vs {control}")
+    assert acted[1] > control[1], (f"p_low's round-0 act changed nothing p_mid holds in round 1: "
+                                   f"acted {acted}, control {control}")
+    return (f"PASS: within ONE season, p_mid's ledger reads {acted[0]} claims in round 0 and "
+            f"{acted[1]} in round 1 after p_low's round-0 `speak`, against {control[1]} in the "
+            "control arm where p_low does nothing. R-03's channel: a deposit at one round's WITNESS "
+            "is read by the next round's DELIBERATE. NOT SHOWN: a DELIBERATE nested inside RESOLVE "
+            "(`H-56`'s other half)")
 
 
 @probe("A15", "a spiral terminates", "S40.1", by="no-signature",

@@ -1,7 +1,7 @@
 """Plan position `28-ii` (M6, successor goldens) -- `28-i`'s own record (§8.5,
 `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md`) names the gap this file closes:
-`test_mc_v18_regression.py`'s seed-0 golden (`run_batch(n=2, base_seed=0)`, two 50-season
-`engine/mc_v18` campaigns) needs a season-side successor, and "which [existing test] is [one] was
+the deleted campaign-driver regression's seed-0 golden (`run_batch(n=2, base_seed=0)`, two
+50-season campaigns) needs a season-side successor, and "which [existing test] is [one] was
 not verified" (the plan's own §9).
 
 CHECKED, NOT ASSUMED. Two existing candidates pin `World.content_hash()` determinism already, and
@@ -76,8 +76,8 @@ def seed0_hash():
 
 def test_build_realm_seed_0_is_deterministic_across_n_seasons(seed0_hash):
     """Same seed, `_SEASONS` seasons, run TWICE independently through the real driver -- the
-    successor to `test_mc_v18_regression.py::test_mc_v18_batch_is_deterministic`, over
-    `engine/season` (the head) rather than the superseded `engine/mc_v18` campaign driver. `w1` is
+    successor to the deleted campaign-driver batch-determinism test, over
+    `engine/season` (the head, driven by `loop/driver.py::SeasonDriver.season`). `w1` is
     built fresh HERE; the second independent build is `seed0_hash`'s (the module-scoped fixture
     above), not a third private build of the same seed -- see that fixture's own docstring for
     why sharing it does not weaken the two-independent-builds property this test is named for."""

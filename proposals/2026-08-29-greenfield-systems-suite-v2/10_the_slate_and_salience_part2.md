@@ -177,7 +177,7 @@ nothing to do with the kind's name, so it is deleted rather than renamed.**
 1. **The cost it insures against cannot arise, by this document's own boundedness proof.** The log is
    written by `sl.truncate` **once per Slate member**, and §5.2 proves `|Slate| ≤ B` with `B ≤ 9`
    (`player_agency_v30.md:305`). So it grows at **≤ 9 rows per season and ≤ 450 over the 50-season
-   campaign** `engine/tests/test_mc_v18_regression.py:16` runs, and `inertia_bp` needs one `max` over
+   campaign** the retired campaign regression test at `:16` runs, and `inertia_bp` needs one `max` over
    the rows carrying a given `candidate_id`. **The number that could have made this expensive is the
    candidate rate — ≈195/season, ≈9,750/campaign (§1.3) — and the log does not record candidates, only
    LIT ones.** The fallback confused the two, and re-deriving §1.3 is what made the gap between them

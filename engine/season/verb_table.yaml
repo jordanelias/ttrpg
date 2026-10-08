@@ -615,7 +615,7 @@ verbs:
       Unopposed: ["field.unopposed"]
     emits_on_refusal: ["march.refused"]
     grade:       "ruled"
-    source:      "M4 of the mc_v18-retirement plan (`ED-IN-0279`), Jordan's ruling on both open clauses of that row (verb name: `march`; loss effects: casualties/morale/grudge). No `ARCHITECTURE_V2.md` cell -- this verb does not exist in the chain."
+    source:      "M4 of the driver-retirement plan (`ED-IN-0279`), Jordan's ruling on both open clauses of that row (verb name: `march`; loss effects: casualties/morale/grudge). No `ARCHITECTURE_V2.md` cell -- this verb does not exist in the chain."
   # ===========================================================================================
   # PLAN POSITION `19c` -- MIGRATE (`RULINGS.yaml` RR-2: *"must be able to build hearths and accept
   # people who move settlements"*; *"migration is a verb persons take"*). `move` is travel: it

@@ -8,7 +8,7 @@ check.` over all of it.
 Nothing was wrong with the code. `is_sim_file()` asked "does the BASENAME contain 'sim'", which was
 a fine proxy while the oracle lived under `sim/` — every path did. `sim/` was retired 2026-07-21 and
 its contents moved to `engine/` and `systems/<subsystem>/sim/`, where no basename contains "sim"
-(`massbattle.py`, `mc_v18.py`, `resolver.py`). The proxy became a predicate for nothing. That is the
+(`massbattle.py`, `driver.py`, `resolver.py`). The proxy became a predicate for nothing. That is the
 §0.1 point-5 signature: correct when written, broken by a move somewhere else.
 
 Per point 5, a sweep needs a guard that fails on recurrence, and the guard is what makes grep's
@@ -88,7 +88,7 @@ def test_a_basename_heuristic_would_still_see_none_of_it():
 
 @pytest.mark.parametrize('path,expected', [
     ('systems/mass_battle/sim/massbattle.py', True),
-    ('engine/mc_v18.py', True),
+    ('engine/season/loop/driver.py', True),
     ('engine/substrate/keys.py', True),
     ('tests/sim/mass_battle/bat.py', True),      # frozen, but was already in scope — not dropped
     ('engine/tests/test_pipeline_reach.py', False),  # the oracle's own tests, excluded on purpose

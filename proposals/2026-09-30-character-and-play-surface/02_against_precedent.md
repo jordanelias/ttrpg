@@ -2,7 +2,7 @@
 
 ## Status: PROPOSED (2026-09-30) · design-only · ratifies nothing on merge · reference under `CLAUDE.md` §0.05
 ## Lane: IN (cross-cutting) · IDs: none allocated
-## Re-scored at HEAD `c8cc408`. The August verdicts quoted here were judged against the mc_v18-era campaign, not `engine/season/`.
+## Re-scored at HEAD `c8cc408`. The August verdicts quoted here were judged against the retired campaign driver's campaign, not `engine/season/`.
 ## Suite: [README](README.md) · [01 the season loop](01_the_season_loop.md) · **02 against precedent** · [03 play surface](03_play_surface.md)
 
 **The question from the session:** if the current plan were finished, how would this game compare with
@@ -15,7 +15,7 @@ the campaign driver it was written about.
 ## 1. What "the plan finished" means
 
 The plan is `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` (ED-IN-0281), with its Phase 4
-superseded by `workplans/2026-09-30-phase-4-post-ners-revision.md`. Retiring `engine/mc_v18.py` is one
+superseded by `workplans/2026-09-30-phase-4-post-ners-revision.md`. Retiring that driver was one
 phase of four. Its end-state (§6) consolidates onto the season loop: it deletes
 `systems/{overview, factions, world, characters, fieldwork}/`, retires `systems/social_contest/` at
 `2-ii`, and keeps `combat`, `mass_battle` and `threadwork`. Phase 2 — governance, settlements, economy,
@@ -30,7 +30,7 @@ nothing in the plan builds those.
 `research/valoria_game_precedent_companion_v1_part3.md` §7.11 (2026-08-28) judged each system against
 what the genre treats as table stakes. Re-read against `engine/season/` at `c8cc408`:
 
-| system | August verdict (mc_v18) | now |
+| system | August verdict (retired campaign driver) | now |
 |---|---|---|
 | **faction strategy** | below the floor — a faction was a scalar bundle, one weighted draw a season | **structure without agency.** `faction_q` makes a faction a query over persons, seats and holdings, storing no stat — the parts every surveyed interior presupposes now exist. But nothing acts *as* a faction: `head` is empty and `at_war` false in every buildable world (R-04 partial) |
 | **parliament** | below the floor — a vote without procedure | **still below.** `convene`, `petition`, `open_case`, `determine`, `issue` have effects (#444), but `determine` executes zero times on the populated realm; agenda, chair, drafting and recorded defeat are unmodelled; the proceedings subsystem is partly built under plan position `22` (steps 6, 7, 9 and 10 done; the contest-resolution core, steps 11–16, open), while its proposal stays held back |
@@ -81,6 +81,6 @@ change this verdict, because the missing pieces are not in the plan.
 | **P-2** | Give scarcity teeth, with a reachability bar and a control arm: at default fixtures, shortfalls should occur in ordinary play. A mechanism engineered not to fire is indistinguishable from one that does not exist (part 1 §2.2, EU4's estates). | `SITE_YIELD`, subsistence fixtures | shortfall events per season on the populated realm > 0 at defaults; a control arm at today's yields shows the difference | small | IN |
 | **P-3** | Seat faction heads, then let a head act for the faction. The cheapest precedent the survey found is Old World's: goals emitted by a person crossed with the houses around them, expiring on that person's death — it needs the person object and nothing else (part 1 §2.1, part 2 K6). | `faction_q.head`, a `commit` carrying a degree | `head` non-empty on the populated realm; a faction-scale act executes in a season | medium | IN, FA |
 | **P-4** | When the proceedings subsystem is taken up, build procedure before the vote: agenda control, the chair's order of motions, and recorded defeat — the last *"nearly free to implement"* (part 1 §2.2). | `proposals/2026-09-05-proceedings-subsystem/` | a carried-and-vetoed motion persists as a citable record | small–medium | SC, when un-held |
-| **P-5** | Point the August verdict table at this re-score, so the next reader does not take mc_v18-era verdicts as the season loop's. | one line in `research/valoria_game_precedent_companion_v1_part3.md` §7.11 | — | trivial | IN |
+| **P-5** | Point the August verdict table at this re-score, so the next reader does not take the retired driver's verdicts as the season loop's. | one line in `research/valoria_game_precedent_companion_v1_part3.md` §7.11 | — | trivial | IN |
 
 No new Jordan item: the order in which these are taken up is the plan's to set.

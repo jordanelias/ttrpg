@@ -229,10 +229,12 @@ def l2():
 
 
 
-def test_l2_flags_engine_clock_doc_null(l2):
-    # engine_clock (the temporal spine) is doc:null per CLAUDE.md §6.
-    assert 'engine_clock' in l2['findings']['doc_null']
-    assert l2['meta']['engine_clock']['notional'] is True
+def test_l2_flags_doc_null_modules(l2):
+    # engine_clock (the temporal spine) was doc:null until IN-42 pointed its `doc:` at the
+    # propagation spec; the finding still fires for the modules whose `doc:` is null.
+    assert 'engine_clock' not in l2['findings']['doc_null']
+    assert l2['findings']['doc_null'], 'no doc:null module left to flag'
+    assert l2['meta']['engine_clock']['notional'] is False   # documented now, no longer notional
 
 
 def test_l2_has_provenance(l2):

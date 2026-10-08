@@ -50,7 +50,7 @@ Every row verified by reading the file, not by citation.
 | Scale | The delegation object the gate needs | State at HEAD |
 |---|---|---|
 | **Faction** | a leader field | **Does not exist.** `Faction` (`game_state.py:109-140`) has six stats, a territory list, `standing`, four turn-flags — and no leader, ruler or head |
-| **Faction** | the gate itself | `mc_v18.py:132-136` gates the faction pass on exactly two conditions — `faction.parliamentary` and `faction.territories` — then calls the action unconditionally |
+| **Faction** | the gate itself | The retired campaign driver at `:132-136` gates the faction pass on exactly two conditions — `faction.parliamentary` and `faction.territories` — then calls the action unconditionally |
 | **Faction** | the decider | `faction_take_action` selects with **one `rng.random()`** against a prior re-weighted by three **faction-level** signals. **No person is consulted anywhere in the path** |
 | **Settlement** | `governor_id` | Exists, is `None` on all 37 after world-gen; its only writer `succeed_governor` has **zero callers** |
 | **Battle** | a commander | `_faction_to_unit` sets **neither** charisma nor cognition, so `derive_command` falls back to the hardcoded `command = 4` — despite `COMMAND_SIGMA_ENABLED` now defaulting **ON** |
@@ -173,7 +173,7 @@ Not a proposal — the ruling is made. This is the dependency order the measured
 | 2 | **Re-point the three population guards at `world.npcs`** | They observe `world.npc_counter`, which only `generate_npc` increments and a loader never touches — so they cannot see the change they exist to catch | INERT |
 | 3 | **A leader field on `Faction`, and a `roles` notion on the person** | The delegation object C1 gates on. Part 7: on-behalf needs a delegation object; this is it | **RULING-adjacent** (schema), then MOVES |
 | 4 | **Load the 46 authored characters at world-gen, assigning leaders** | C1 cannot be satisfied on season 1 otherwise. `role` + `faction` are on 46/46 already | **MOVES** — every golden |
-| 5 | **The gate itself**, at `mc_v18`'s faction pass | One condition added beside `parliamentary` and `territories` | MOVES |
+| 5 | **The gate itself**, at the retired campaign driver's faction pass | One condition added beside `parliamentary` and `territories` | MOVES |
 | 6 | **C2 at faction scale** — the leader changes the option set and the pool source, per §19 | The decider half. Route it through `npc_ai`, not `faction_action` | MOVES |
 | 7 | **`tick_settlements` + `succeed_governor` caller** | C1 at settlement scale needs a governor, and appointment needs a flow | MOVES |
 | 8 | **Charisma and cognition through `_faction_to_unit`** | C1/C2 at battle scale. Strict superset — with no commander attached the value stays `None` and the path is byte-identical | MOVES on attach, INERT before |
@@ -193,5 +193,5 @@ should land before the schema question in step 3 is settled.
   generated officer, or a role held by whoever has highest Standing, is a schema question the ruling
   leaves open — and step 3 above cannot proceed without it.
 - **Whether the gate applies to the four non-parliamentary or territory-less factions**, which
-  `mc_v18` already skips on other grounds.
+  the retired campaign driver already skips on other grounds.
 - **The commander ambiguity** of §20.

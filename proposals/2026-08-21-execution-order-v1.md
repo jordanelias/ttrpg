@@ -384,7 +384,7 @@ sidecars rather than reading them, so it degrades safely. Verified by running it
 blocking validator, with all 25 files moved off disk: `broken_dependency_checker`,
 `ci_claim_provenance_check`, `compliance_check`, `ci_co_file_checker`, `freshness_gate`,
 `ci_vetting_check`, `ci_register_size_check`, `ci_names_consistency`, and all five export `--check`
-round-trips — all green. `engine.autoload.game_state` and `engine.mc_v18` also import cleanly with
+round-trips — all green. `engine.autoload.game_state` and the retired campaign driver also import cleanly with
 the layer absent, which is the no-runtime-reader claim proven rather than asserted.
 
 **Gate — MET.** Full suite from a simulated clean checkout (every artifact deleted first):
@@ -808,7 +808,7 @@ def spy(pool, tn=SL.TN_STANDARD, rng=None):
     seen['frac' if float(pool) != round(float(pool)) else 'int'] += 1
     return real(pool, tn, rng=rng)
 SL.roll_net_continuous = spy
-from engine import mc_v18; mc_v18.run_campaign(seed=20260819, max_seasons=4)
+run_campaign(seed=20260819, max_seasons=4)   # the retired campaign driver's entry point
 print(seen)          # -> Counter({'frac': 20, 'int': 20}) on 2026-08-21
 ``` `sigma_leverage.py:284` does
 `max(1, int(round(pool)))` while `dice_engine.continuous_engine_sample` already accepts fractional
@@ -908,7 +908,7 @@ artifacts**.
 
 **Where runtime observability sits: L0** — which is what licenses S10 above and exempts it from the
 cap. The precedent is already in the tree: `KeyLog` (`engine/substrate/keys.py:336`) is append-only,
-deterministically serialized, consumed at runtime by `mc_v18.py:313`, and is the surface the Godot
+deterministically serialized, consumed at runtime by the retired campaign driver at `:313`, and is the surface the Godot
 port's key-log parity validates against. Telemetry the engine emits and the port must reproduce is
 **oracle surface**, no more subject to a tooling depth cap than `dice_engine.py` is. The boundary test
 comes from the corpse of the counterexample — the retired `tools/observability/` tier died because its
@@ -1010,23 +1010,23 @@ apparatus.
     with what it catches.**
 
 **The actual error surface is two swallow points in the driver layer, and one of them already knows
-it.** `engine/mc_v18.py:137-144` catches faction-action exceptions and prints to stderr — its own
+it.** The retired campaign driver at `:137-144` catches faction-action exceptions and prints to stderr — its own
 comment says *"it must NOT be swallowed SILENTLY either (audit ED-IN-0074 D7)"* and then counts it
 nowhere. A resolver that raises **before consuming RNG** (an `AttributeError` on a renamed field —
 precisely the fractional-pools class) leaves the RNG stream unchanged, every seeded golden green, the
 faction silently inactive, and the only trace is stderr nothing reads.
 `engine/cross_scale/scene_dispatch.py:374-376` turns a resolver crash into
 `out["reason"] = f"resolver raised: {e!r}"`, which flows into `report["deferred"]` and is **dropped**
-at `mc_v18.py:149-150`, which reads only `["dispatch"]["resolved"]`. A resolver crash is currently
+at the retired campaign driver at `:149-150`, which reads only `["dispatch"]["resolved"]`. A resolver crash is currently
 indistinguishable from a designed deferral in every consumed output.
 
 **The change.**
 
 (a) `CampaignResult` gains `faction_action_errors`, `scene_resolver_errors`, `scene_deferrals` (int
-defaults). `mc_v18.py:139` increments a world attribute beside the kept stderr print;
+defaults). The retired campaign driver at `:139` increments a world attribute beside the kept stderr print;
 `scene_dispatch.py:372` sets `out["error"] = True` beside the existing reason; `dispatch_scenes`
-counts it; `mc_v18.py:149` folds the count instead of dropping the report. **Mirror the
-`accord_drift_probe_hits` idiom** (`mc_v18.py:312`, `getattr(world, ..., 0)`) — that is this repo's
+counts it; the retired campaign driver at `:149` folds the count instead of dropping the report. **Mirror the
+`accord_drift_probe_hits` idiom** (the retired campaign driver at `:312`, `getattr(world, ..., 0)`) — that is this repo's
 ratified shape for "record a defect without fixing it", and it already has a dedicated consumer test.
 
 (b) At the four seams: the `try` covers **the import only**; `ImportError` routes to
@@ -1038,13 +1038,13 @@ again.
 already runs, assert both new counters are 0 and report `len(KeyLog.stat_vocabulary_warnings)`. Keep
 `unblocked_by` naming the full N-seed sweep that remains.
 
-(d) `mc_v18.__main__` gains `--seed / --seasons / --dump PATH`: one campaign, then the `KeyLog`
+(d) the retired campaign driver's `__main__` gains `--seed / --seasons / --dump PATH`: one campaign, then the `KeyLog`
 serialization, every `CampaignResult` field, and the per-scene reports **including the deferral and
 error reasons currently dropped**. Written **only when asked**. Never by default, never committed —
 S4 just untracked the generated layer and a default-written run record regrows it.
 
 **Consumers, named, because §0.3 demands it.** Zero-assertions in
-`engine/tests/test_mc_v18_regression.py` + `test_f7_smoke_oracle.py` (blocking CI) · `m1_acceptance
+the retired campaign regression test + `test_f7_smoke_oracle.py` (blocking CI) · `m1_acceptance
 --summary` (Jordan's instrument) · `stub_hits` → m1 row 1 · the `--dump` file's consumer is the human
 who invoked it, and later the port's V.2 recorded-draw replay harness.
 

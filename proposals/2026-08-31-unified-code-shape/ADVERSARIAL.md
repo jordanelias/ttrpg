@@ -132,7 +132,7 @@ parliamentary_vote · parliamentary_vote_declaration · scene_builder.contest ·
 scene_resolver.contest · season_driver · territory_transfer_candidate · world_gen_settlements
 ```
 
-**Ground.** Monkeypatched `composition.require` before importing `mc_v18`, ran a default campaign,
+**Ground.** Monkeypatched `composition.require` before importing the retired campaign driver, ran a default campaign,
 collected the role strings. This is a **lower bound**: a caller doing `from …composition import require`
 would bypass the spy. I checked — `grep` over `engine/` and `systems/` shows **every** caller uses
 `from engine.substrate import composition` then `composition.require(…)`, so the spy sees all of them
@@ -231,7 +231,7 @@ stability term unconditionally true."*
 ### 1.6 · MINOR — `13_EXECUTION.md` §3: two stale-oracle assertions are three, and "twelve lines below" is 287
 
 - *"**Two** test files assert that no large-N balance oracle exists."* — **three** do:
-  `engine/tests/test_f7_smoke_oracle.py:266`, `engine/tests/test_mc_v18_regression.py:97`,
+  `engine/tests/test_f7_smoke_oracle.py:266`, the retired campaign regression test at `:97`,
   `engine/tests/test_parliamentary_bridge.py:96`, all carrying the same sentence
   (*"an n>=100 oracle that still does not exist"*). The register's C12 also says two.
 - *"A golden test's docstring states win-shares that contradict the constant **twelve lines below
@@ -898,7 +898,7 @@ same gap seen from the other side).
   defects reproduced:
   - `max_seasons` is dead — `run_campaign(seed=7, max_seasons=3)` ran **50** seasons; only
     `params={'CAMPAIGN_SEASONS':3}` ran 3. `DEFAULT_PARAMS` always supplies the key, so the fallback at
-    `engine/mc_v18.py:239` is never taken.
+    the retired campaign driver at `:239` is never taken.
   - Four malformed cooked registry fields across two types, and **both types raise** when emitted with
     no explicit scale signature — proven by emitting them and catching
     `KeyValidationError: … non-canonical scale '['`.

@@ -3,7 +3,7 @@
 
 WHY THIS EXISTS, and why it is a tool rather than a table in a document.
 
-`tools/build_fork.py` carries `CARRY` and `LEAVE`. They read like a partition and are not one:
+`tools/build_fork.py` (retired at B-C IN-43, `FORK:4558f85`) carried `CARRY` and `LEAVE`. They read like a partition and were not one:
 `CARRY | LEAVE` leaves a large NEITHER set -- `.github/`, `.githooks/`, `.claude/`, `tools/`,
 `tests/valoria/`, most of `references/`, `research/`, `skills/`, `CLAUDE.md`, `CURRENT.md`,
 `HANDOFF.md`. Under EXTRACT (copy CARRY into an empty tree) the neither-set silently defaults to
@@ -147,7 +147,7 @@ RELOCATE = [
     # engine/tests/test_sigma_leverage_parity.py asserts on. Its docstring said it "cannot move"
     # because sibling files in that directory `from engine import ...` -- but those siblings are
     # one-off session code that EVACUATES, so the constraint dissolves: there is nothing left to
-    # break. engine/reference/ is the pre-designed home (build_fork.py:70 already maps the OTHER
+    # break. engine/reference/ is the pre-designed home (build_fork.py:70, retired `FORK:4558f85`, already mapped the OTHER
     # parity oracle, tests/sim/v32-combat-balance, to exactly that destination), so this puts both
     # frozen reference implementations in one place beside the code they validate.
     # EXECUTION NOTE: the move requires updating gen_sigma_parity_goldens.py's load path in the
@@ -872,7 +872,7 @@ ARCHIVE_PREFIX = '.designs/'
 def contract_guard(evacuating: set[str]) -> list[str]:
     """Nothing that a module contract points at may be evacuated.
 
-    build_fork.py's contract_coverage() states the trap: the tempting "minimal" cut drops the 14
+    build_fork.py's contract_coverage() (retired, `FORK:4558f85`) stated the trap: the tempting "minimal" cut drops the 14
     units that have a contract but no code YET, plus every `build: stub` unit -- which is the
     backlog, not dead weight. Same guard, opposite direction.
     """

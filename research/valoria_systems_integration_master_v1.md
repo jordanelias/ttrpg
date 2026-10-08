@@ -37,7 +37,7 @@ and their beats:
 | H6 | `systems/settlements/` + `systems/world/` — settlement layer, scale hierarchy, insurgency, strain |
 | H7A/H7B | `systems/_architecture/reference/scale_transitions_v30.md`, `engine/cross_scale/`, `engine/substrate/` |
 | H8A/H8B | `research/` roster and historical-precedent corpus; `research/governance/` |
-| H9 | `engine/` core — `game_state`, `dice_engine`, `sigma_leverage`, `victory`, `mc_v18` |
+| H9 | `engine/` core — `game_state`, `dice_engine`, `sigma_leverage`, `victory`, the retired campaign driver |
 
 ### 1.2 Two coverage limits, stated rather than papered over
 
@@ -244,7 +244,7 @@ because their interiors are settled and only their edges are in scope; two are n
 
 | thing | slice | what it does | status | where it lives |
 |---|---|---|---|---|
-| `faction_take_action` | process | The season loop's faction step: signals → re-weight → one draw → dispatch through four **non-`elif`** buckets. A bucket returning the `'invalid'` sentinel falls through to the terminal unconditional `_try_govern`, whose return the caller discards. | BUILT | `faction_action.py:208-273`; `engine/mc_v18.py:130-145` |
+| `faction_take_action` | process | The season loop's faction step: signals → re-weight → one draw → dispatch through four **non-`elif`** buckets. A bucket returning the `'invalid'` sentinel falls through to the terminal unconditional `_try_govern`, whose return the caller discards. | BUILT | `faction_action.py:208-273`; the retired campaign driver at `:130-145` |
 | Emergency Council | process | The one executing intra-faction two-sided contest, fired by the Stability Crisis trigger. Both sides are derived from the *same* faction's aggregate stats — `side_a = max(1, round(L))`, `side_b = max(1, round(7 − Sta))` — both run the identical default policy, and the echo returns to the faction it came from. | BUILT | `engine/cross_scale/scene_dispatch.py:120-139` |
 | `run_accounting` | process | CI, MS year-end decay, insurgency triggers and promotions, NPC ecology, an accord drift probe. **No faction step at all** — no Mandate aggregation, no Treasury accrual, no upkeep, no Stability check. | BUILT | `systems/overview/sim/accounting.py:96-143` |
 
@@ -272,7 +272,7 @@ because their interiors are settled and only their edges are in scope; two are n
 | Constructive motions | mechanic | Subsidy, War Authorisation, Treaty Ratification, Recognition Challenge, Succession Endorsement — genuinely distinct actions, explicitly *not* part of the Sanction parameterisation. None built; two have durable outcomes with no state field to land in. | DESIGNED | `faction_layer_v30.md:462-468` |
 | Parliamentary Territory Transfer | mechanic | `Pool = max(0, I + vote_mod[−1,0,+1])`; `Ob = holder.L + 2`; four narrative modes; 1/arc/faction via `parl_transfer_used_this_arc`; last-territory and self-transfer guards. Partial grants a retry CB. | BUILT | `parliamentary_transfer.py:248-386` |
 | Casus Belli gate | mechanic | Eight canonized CB sources gate the four Transfer modes. Only `crown_constitutional_restoration` is ever populated, and it maps to `adversarial` alone — so in a fresh campaign the other three modes and seven sources are unreachable. Two "canonical" enumerations of the eight disagree on five names. | INERT | `parliamentary_transfer.py:76-121`; `faction_systems_overview_v30.md:175-186` |
-| Parliamentary bridge | process | Runs every season by default: lowest-Stability eligible faction proposes on Projection, highest-Mandate defends on Memory, `motion_id = f"parl_s{season}"`. Derives *who*, never *what* — the identical contentless motion fires every season. | BUILT | `engine/cross_scale/parliamentary_bridge.py:88-107`; `engine/mc_v18.py:152-158` |
+| Parliamentary bridge | process | Runs every season by default: lowest-Stability eligible faction proposes on Projection, highest-Mandate defends on Memory, `motion_id = f"parl_s{season}"`. Derives *who*, never *what* — the identical contentless motion fires every season. | BUILT | `engine/cross_scale/parliamentary_bridge.py:88-107`; the retired campaign driver at `:152-158` |
 | Motion of No Confidence | mechanic | Two-step Crown deposal: Influence vs Crown Mandate, then Holy See concurrence, giving the Church a structural veto over Crown regime change. Zero code. | DESIGNED | `systems/world/reference/worldbuilding_v30.md:179` |
 | CI institutional weight | formula | Church vote contribution `Mandate + floor(CI/20)`; a faction voting against Church contributes `max(0, Mandate − floor(CI/30))`. | DESIGNED | `faction_layer_v30.md:450` |
 | "Sanction" naming collision | gap | The collision database prescribes renaming the Authority pressure point to "Sanction" — which collides head-on with the live five-tier Parliamentary Sanction ladder. A vocabulary fix that manufactures a second collision. | — | `references/name_collision_database.yaml:421-425` |
@@ -433,7 +433,7 @@ Every `status` below is measured against the working tree, not against a documen
 | thing | slice | what it does | status | where it lives |
 |---|---|---|---|---|
 | Peninsular Sovereignty (GD-1) | formula | `held ≥ 15 ∧ all(accord ≥ 2) ∧ Turmoil ≤ 6`, sustained 2 consecutive Accountings — the sole victory condition for every faction | BUILT, with the Turmoil clause structurally always-true | `engine/autoload/victory.py:52-80` |
-| Fallback winner | formula | `score = held_count + Faction.L + len(Faction.territories)`, max wins when nobody achieves GD-1 by the season cap | BUILT, computed outside `victory.py` and undocumented in the module contracts | `engine/mc_v18.py` |
+| Fallback winner | formula | `score = held_count + Faction.L + len(Faction.territories)`, max wins when nobody achieves GD-1 by the season cap | BUILT, computed outside `victory.py` and undocumented in the module contracts | The retired campaign driver |
 | `province_accord = floor(mean settlement Order)` | derivative | The settlement-grain Accord aggregate | BUILT, read-only | `registry.py:185` |
 | `canonical_accord(continuous) → 0–4` | derivative | Converts the continuous field to the canonical index for like-for-like comparison | BUILT | `game_state.py` |
 | Insurgency formation | formula | 2+ contiguous Uncontrolled territories, sustained 2 consecutive seasons | BUILT, runs every season | `insurgency_pipeline.py:139-196` |

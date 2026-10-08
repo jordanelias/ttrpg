@@ -80,7 +80,7 @@ Sensitivity** (0–100+) and **Thread Pool Score** (TS ÷ 10) as practitioner st
 |---|---|---|
 | personal combat | `Combatant` strength, agi, end, cog, att, spirit, focus, history, disp | legacy names via the aliases; no Charisma or Bonds |
 | mass battle | `Officer` and the general's `Unit`: charisma, cognition → `command` | mass-battle-only dataclasses |
-| threadwork | Coherence as `CoherenceState` in `world.practitioners` (the mc_v18-era World) or a module fallback; Thread Sensitivity read duck-typed as `.ts` | the season loop's write matrix declares and gates `(Person, coherence)`, and `Person` has no such field; TS is set only by test stubs |
+| threadwork | Coherence as `CoherenceState` in `world.practitioners` (the retired campaign driver's World) or a module fallback; Thread Sensitivity read duck-typed as `.ts` | the season loop's write matrix declares and gates `(Person, coherence)`, and `Person` has no such field; TS is set only by test stubs |
 | social contest kernel | Standing and Face 0–10, Room, Reserve | a kernel retiring at `2-ii` |
 | the season loop | `standing_of(p)` | a **perception gap** — how far what others have told p about p departs from what p witnessed firsthand — not a rank |
 

@@ -8,7 +8,7 @@ verified one** and the discrepancy is logged in §10.
 - Structured counts use `yaml.safe_load` / `json.load`, never `grep -c`. Where a value lives in a
   YAML **comment** (and is therefore invisible to the parser) that is stated explicitly.
 - Reachability claims come from an executed probe, not from reading imports: a seeded
-  `mc_v18.run_campaign(seed=42)` with `sys.modules` inspected after the run.
+  the retired driver's `run_campaign(seed=42)` with `sys.modules` inspected after the run.
 - Absence claims name the search that produced them.
 
 **Status legend:** `LIVE` = executes in a default seeded campaign · `BUILT-INERT` = correct
@@ -159,7 +159,7 @@ scheduler-internal and is never logged.
 | 593 | `next_tick()` | @598–599 **raises `TerminationBreach("tick advanced with undrained emissions in queue")` if `_queue` is non-empty**; @600 resets `_emitted_this_tick`; @601 returns `_phase` to ACTION |
 
 **What happens when a cap is exceeded:** a `TerminationBreach` (RuntimeError) propagates. Nothing
-catches it in `engine_clock` or `mc_v18`; the campaign aborts. Production caps come from
+catches it in `engine_clock` or the retired campaign driver; the campaign aborts. Production caps come from
 `engine/cross_scale/echo_transport.py:102–103`: `DEFAULT_CASCADE_DEPTH_MAX = 0` and
 `DEFAULT_EMISSIONS_PER_TICK_MAX = 64`. **A depth cap of 0 makes any `schedule_emission` issued
 during a drain raise immediately** — cascading is structurally impossible in a default campaign.
@@ -185,7 +185,7 @@ during a drain raise immediately** — cascading is structurally impossible in a
 | 16–19 | observer resolution / armature interpretation (`key_substrate §4.1` steps 3–4) | **ORD-3 unratified** — implementing `compute_observers()` first would bake in hash-order nondeterminism |
 | 20 | `decay()` over the key log (AU-4) | **OF-3, unspecified** |
 | 21–22 | canonical cap constants | **OF-CAP open** — caps stay REQUIRED caller parameters |
-| 23 | campaign-loop wiring | "PR-2 scope (flag-gated), not this module" — **this one is now DONE elsewhere** (`mc_v18.py:249–266`); the list is stale on this row |
+| 23 | campaign-loop wiring | "PR-2 scope (flag-gated), not this module" — **this one is now DONE elsewhere** (the retired campaign driver at `:249–266`); the list is stale on this row |
 | 26–41 | re-exports | `AXES, ROLES, SCALES, PERMANENCE_VALUES, TIME_HORIZON_VALUES, EmittedAt, Key, KeyLog, KeyValidationError, Target, TerminationBreach, TickScheduler, TypeRegistry, Visibility` — 14 names |
 
 ---
@@ -300,8 +300,8 @@ DERIVATION IS IMPLEMENTED NOWHERE — every call site in the tree still passes a
 fourteen registries stay empty for the whole campaign.**
 
 Two attributes are set **dynamically and are not dataclass fields**: `world.echo_scheduler` +
-`world.key_log` + `world._echo_key_seq` (`mc_v18.py:251/257/258`), `world.dispatch_combat_bridge`
-(`mc_v18.py:245`), and `world.accord_drift_probe_hits` (`accounting.py:93`).
+`world.key_log` + `world._echo_key_seq` (the retired campaign driver at `:251/257/258`), `world.dispatch_combat_bridge`
+(the retired campaign driver at `:245`), and `world.accord_drift_probe_hits` (`accounting.py:93`).
 
 ### 4.2 `Faction` (@109–205) — every field
 
@@ -456,7 +456,7 @@ as `accounting.py:78-82`; that is stale — see §10.)
 
 **Where `generate_npc` is called from: NOWHERE in production.** Search:
 `grep -rn "generate_npc" --include=*.py engine/ systems/ tools/` → the definition at `npe.py:226`,
-docstring mentions at `npe.py:23/:29`, and the `stubwire` deferral text in `mc_v18.py:195`. The
+docstring mentions at `npe.py:23/:29`, and the `stubwire` deferral text in the retired campaign driver at `:195`. The
 consequence is measured: `npcs_generated == 0` in every campaign.
 
 ### 5.2 `engine/autoload/npc_ai.py` (47 lines) — STUB
@@ -473,7 +473,7 @@ consequence is measured: `npcs_generated == 0` in every campaign.
 `run_campaign(seed=42)`: `engine.autoload.npc_ai` is absent from the 89 loaded `engine.*`/`systems.*`
 modules.
 
-### 5.3 `engine/mc_v18.py` (348 lines) — the stubwire deferrals and the population
+### 5.3 The retired campaign driver (348 lines) — the stubwire deferrals and the population
 
 | Line | Item | Contract |
 |---|---|---|
@@ -483,8 +483,8 @@ modules.
 | 149–150 | `scene_dispatch.run_scene_phase(world, world.rng)`; `world.scenes_resolved += …` | The scale seam |
 | 156–160 | parliamentary bridge, gated on `world.echo_scheduler is not None` | |
 | 162–168 | comment | Records that `accounting_boundary()` / `next_tick()` **MOVED OUT** to `engine_clock.run_tick` on 2026-08-27 |
-| **194–202** | `stubwire.stub_resolve('engine.mc_v18', 'generate_npc(world-gen\|season-tick)', reason=…)` | **DEFERRAL 1** — no world-gen count and no season-tick trigger exists in canon to cite |
-| **212–217** | `stubwire.stub_resolve('engine.mc_v18', 'form_knot(world-gen\|season-tick)', reason=…)` | **DEFERRAL 2** — `knots_v30 §3.1` prerequisites (Disposition, Bonds, TS) are personal-scale fields absent from the aggregate World |
+| **194–202** | `stubwire.stub_resolve('<retired driver module>', 'generate_npc(world-gen\|season-tick)', reason=…)` | **DEFERRAL 1** — no world-gen count and no season-tick trigger exists in canon to cite |
+| **212–217** | `stubwire.stub_resolve('<retired driver module>', 'form_knot(world-gen\|season-tick)', reason=…)` | **DEFERRAL 2** — `knots_v30 §3.1` prerequisites (Disposition, Bonds, TS) are personal-scale fields absent from the aggregate World |
 | 230 | `_stub_start = stubwire.invocations` | Snapshot for the delta |
 | 268–278 | the season loop | `for _ in range(max_s): … composition.require('season_driver')(world, action_callback=_faction_actions_callback)` |
 | 310 | `npcs_generated=world.npc_counter` | |
@@ -570,9 +570,9 @@ modules.
 `PATH_SEAM_ALLOWED = {'cross_scale/combat_bridge.py'}` — **one entry, shrink-only**, asserted for exact
 set equality at `:288`.
 
-**The flag:** `mc_v18.py:78–89` `_dispatch_combat_bridge_on()` — **default OFF**
+**The flag:** the retired campaign driver at `:78–89` `_dispatch_combat_bridge_on()` — **default OFF**
 (`os.environ.get('DISPATCH_COMBAT_BRIDGE','0') == '1'`), stashed once per campaign on
-`world.dispatch_combat_bridge` at `mc_v18.py:245`. **Verified: `engine.cross_scale.combat_bridge` is
+`world.dispatch_combat_bridge` at the retired campaign driver at `:245`. **Verified: `engine.cross_scale.combat_bridge` is
 NOT in `sys.modules` after a default `run_campaign(seed=42)`.**
 
 ### 6.4 `engine/cross_scale/echo_transport.py` (474 lines) — THE ONE KEY-MEDIATED WRITE LOOP
@@ -707,7 +707,7 @@ only from `restore_world`. **MEASURED: `world.beliefs` is empty after `run_campa
 | 35 / 44 / 53 | `render_protagonist_lens` / `evaluate_articulation_triggers` / `generate_chronicle_entry` | **All three are `stubwire.stub_resolve` no-ops.** The render layer is ED-IN-0073's docket, unbuilt |
 | **116–130** | `_TRIGGER_TYPE_IDS` | **13 type ids** (verified `len == 13`): `state.scar_acquired`, `state.coup_attempted`, `state.succession`, `mechanical.mission_shift`, `da.covert_betrayal`, `meta.knot_formed`, `meta.knot_ruptured`, `env.peninsular_strain_shock`, `meta.cascade_cluster_event`, `state.belief_revised`, `scene.combat_resolved`, `scene.combat_felled`, `scene.accord_echo` |
 | 133 | `_make_trigger_callback(type_id)` | Each callback is a `stubwire` flag that observes and returns, **storing nothing and rendering nothing** |
-| 152–170 | `subscribe_all(scheduler) -> int` | Called from `mc_v18.py:266`. Returns 13 |
+| 152–170 | `subscribe_all(scheduler) -> int` | Called from the retired campaign driver at `:266`. Returns 13 |
 
 **MEASURED (seed 42, 50 seasons, ECHO_TRANSPORT on): the key log contains exactly two types —
 `scene.contest_resolved` ×104 and `scene.battle_concluded` ×65 (169 total).** **None of the 13
@@ -715,7 +715,7 @@ subscribed types is ever emitted.** All 13 subscriber callbacks are dead at runt
 
 ### 7.5 Every non-test module NOT loaded by a seeded campaign
 
-Method: `sys.modules` after `mc_v18.run_campaign(seed=42)`, differenced against every non-`__init__`
+Method: `sys.modules` after the retired driver's `run_campaign(seed=42)`, differenced against every non-`__init__`
 `.py` under `engine/` and `systems/` (excluding test dirs).
 
 **140 modules on disk · 69 reached · 71 unreached.** Excluding the `combat_engine_v1` and
@@ -750,7 +750,7 @@ unreached list that bears on the season loop, world churn, persons or narrative:
 
 ## 8. THE GOLDENS AND CONTROLS
 
-### 8.1 `engine/tests/test_mc_v18_regression.py` (189 lines) — seed 0, n=2
+### 8.1 the retired campaign regression test (189 lines) — seed 0, n=2
 
 | Line | Constant | Value |
 |---|---|---|
@@ -761,8 +761,8 @@ unreached list that bears on the season loop, world churn, persons or narrative:
 | 129 | `GOLDEN_BATTLES_MEAN` | `36.0` |
 
 Campaign length: **50 seasons** (`DEFAULT_PARAMS['CAMPAIGN_SEASONS']`; `run_batch` passes no override).
-Tests: `test_mc_v18_batch_is_deterministic` @132 · `test_mc_v18_batch_matches_golden` @142 ·
-`test_mc_v18_resolves_at_least_one_contest` @151 · `test_mc_v18_win_share_is_well_formed` @162 ·
+Tests (the file is retired; names elided): batch is deterministic @132 · batch matches golden @142 ·
+resolves at least one contest @151 · win share is well formed @162 ·
 `test_flag_on_resolves_at_least_one_contest` @171.
 @123–125 records honestly that **only `battles_mean` moved on the last re-pin (34.5 → 36.0)** and that
 at n=2 the win-share is quantised to 50pp steps, so its stability *is not evidence*.
@@ -797,7 +797,7 @@ Tests: `test_f7_determinism` @335 · `test_f7_golden_win_share` @344 ·
 | 15–18 | | Runs the same seeds **twice in one process**, one arm patched to the old behaviour, so the only difference between arms is the mechanic |
 | 54 | `Z_THRESHOLD = 1.96` | two-sided 5% |
 | 57 | `_pool_arm(round_pool: bool)` | Patches `sigma_leverage.roll_net_continuous`; returns an undo |
-| 230 | `mc_v18.run_campaign(seed=base_seed + i, max_seasons=50)` | The per-campaign call |
+| 230 | the retired driver's `run_campaign(seed=base_seed + i, max_seasons=50)` | The per-campaign call |
 | 261 | `--n` default `120` | campaigns **per arm** |
 | 262 | `--seed` default `20260819` | |
 | 140 | comment | **"NOTHING EXECUTES THIS FILE"** — no CI job, no test |
@@ -920,28 +920,28 @@ Each row: two surfaces that disagree, both cited, verified this pass.
 | **C2** | `engine/autoload/sigma_leverage.py:292` — *"`dice_engine.continuous_engine_sample` has always accepted a fractional pool and says so at **`dice_engine.py:92`**"* | The "Pool may be fractional" line is **`dice_engine.py:214`**. Line 92 is a comment about band-extension power |
 | **C3** | `engine/cross_scale/echo_transport.py:458` — *"now genuinely in-log (**keys.py:325**)"* | `self.log.append(key)` is **`keys.py:567`**. Line 325 is inside `TypeRegistry.apply_defaults` |
 | **C4** | `engine/cross_scale/articulation.py:63` — *"`TickScheduler.subscribe` (**engine/substrate/keys.py:447**)"*, and `:163` — *"**keys.py:447-448** appends to a list"* | `subscribe` is **`keys.py:506–507`**. Line 447 is inside `KeyLog._check_stat_vocabulary` |
-| **C5** | `systems/world/sim/npe.py:28`, `engine/mc_v18.py:177`, `engine/tests/test_world_population.py:133` — all three cite *"**accounting.py:78-82**"* as where `simulate_npc_actions` is wired | The call is **`accounting.py:139`**. Lines 78–82 are inside `_probe_province_accord_drift`'s docstring. **Three surfaces carry the same stale citation** |
+| **C5** | `systems/world/sim/npe.py:28`, the retired campaign driver at `:177`, `engine/tests/test_world_population.py:133` — all three cite *"**accounting.py:78-82**"* as where `simulate_npc_actions` is wired | The call is **`accounting.py:139`**. Lines 78–82 are inside `_probe_province_accord_drift`'s docstring. **Three surfaces carry the same stale citation** |
 | **C6** | `systems/overview/sim/accounting.py:33` and `:66–67` — *"`Territory.accord` … written DIRECTLY by **`parliamentary_transfer.py:210`** and **`mass_seizure.py:295`**"* | The writes are **`parliamentary_transfer.py:346`** and **`mass_seizure.py:296`**. `:210` is off by 136 lines and lands in a docstring |
 | **C7** | `engine/cross_scale/articulation.py:86–87` — *"**All 10** §3.1 type_ids are therefore subscribed"* | `_TRIGGER_TYPE_IDS` (`:116–130`) has **13** entries; `subscribe_all`'s own docstring at `:158` says 13. The "10" is a stale pre-W3 sentence left standing beside the correction that supersedes it |
 | **C8** | `engine/tests/test_f7_smoke_oracle.py:16` — *"The n=8 seed-42 golden win-share **{Crown 37.5, Church 12.5, Hafenmark 12.5, Varfell 37.5}**"* | The live constant at **`:303`** is `{'Crown': 12.5, 'Church': 0.0, 'Hafenmark': 12.5, 'Varfell': 75.0}`. **A docstring stating a golden its own module no longer holds** |
 | **C9** | `engine/tests/test_f7_smoke_oracle.py:24` — islands are *"**C-EMERGE-5/6**"* | Same file, `:361` — *"**C-EMERGE-4/5**"*. Two IDs for the same pair, in one file |
 | **C10** | `engine/tests/test_f7_smoke_oracle.py:311` comment — the `GOLDEN_SCENES_RESOLVED` history reads *"975 → 1072 (ED-SC-0031); 862 → 858 … → 947 … → **967** (roster rulings, 08-23)"* | The live value is **`1072`**. The comment's chain terminates at 967, so the comment's own last entry contradicts the constant it annotates |
-| **C11** | `engine/substrate/__init__.py:23` — *"campaign-loop wiring: PR-2 scope (flag-gated), **not this module**"*, listed under **"Deliberately NOT implemented"** | The campaign loop IS wired: `mc_v18.py:249–266` attaches the scheduler, log and subscribers. The item is done and the list is stale |
-| **C12** | `engine/tests/test_f7_smoke_oracle.py:8` — *"no balance claim without an oracle + n ≥ 100"*, echoed as an absence at `engine/tests/test_mc_v18_regression.py:97` (*"an n≥100 oracle that still does not exist"*) | **`tools/balance_oracle.py` has existed since 2026-08-21** and its own header (`:4`) cites `test_f7_smoke_oracle.py:8` as the line it closes. `CLAUDE.md §7` already carries this correction; the two test files do not |
+| **C11** | `engine/substrate/__init__.py:23` — *"campaign-loop wiring: PR-2 scope (flag-gated), **not this module**"*, listed under **"Deliberately NOT implemented"** | The campaign loop IS wired: the retired campaign driver at `:249–266` attaches the scheduler, log and subscribers. The item is done and the list is stale |
+| **C12** | `engine/tests/test_f7_smoke_oracle.py:8` — *"no balance claim without an oracle + n ≥ 100"*, echoed as an absence at the retired campaign regression test at `:97` (*"an n≥100 oracle that still does not exist"*) | **`tools/balance_oracle.py` has existed since 2026-08-21** and its own header (`:4`) cites `test_f7_smoke_oracle.py:8` as the line it closes. `CLAUDE.md §7` already carries this correction; the two test files do not |
 | **C13** | `engine/autoload/npc_ai.py:2` header — *"`sim/autoload/npc_ai.py`"*; `:9–10` Dependencies — *"`sim/autoload/game_state`, `systems/factions/sim/faction_action`"* | `sim/` was retired 2026-07-21, and the module's **only** import is `from engine.substrate import stubwire` (`:19`). It depends on neither named module. (`dice_engine.py:3` and `sigma_leverage.py:3` both fixed this same header defect on 2026-08-27; `npc_ai.py` was missed) |
 
 ### B. Declared-but-unreachable fields, parameters and API
 
 | # | Declared | Why unreachable |
 |---|---|---|
-| **C14** | `engine/mc_v18.py:220` — `def run_campaign(seed=None, **max_seasons: int = 50**, params=None)` | **DEAD PARAMETER.** `:239` reads `max_s = effective_params.get('CAMPAIGN_SEASONS', max_seasons)` and `DEFAULT_PARAMS` (`:51`) *always* supplies `CAMPAIGN_SEASONS: 50`, so the fallback is never taken. **Executed: `run_campaign(seed=42, max_seasons=3)` runs 50 seasons; `run_campaign(seed=42, params={'CAMPAIGN_SEASONS':3})` runs 3.** `engine/tests/test_world_population.py:151` passes `max_seasons=5` and silently gets 50 |
+| **C14** | The retired campaign driver at `:220` — `def run_campaign(seed=None, **max_seasons: int = 50**, params=None)` | **DEAD PARAMETER.** `:239` reads `max_s = effective_params.get('CAMPAIGN_SEASONS', max_seasons)` and `DEFAULT_PARAMS` (`:51`) *always* supplies `CAMPAIGN_SEASONS: 50`, so the fallback is never taken. **Executed: `run_campaign(seed=42, max_seasons=3)` runs 50 seasons; `run_campaign(seed=42, params={'CAMPAIGN_SEASONS':3})` runs 3.** `engine/tests/test_world_population.py:151` passes `max_seasons=5` and silently gets 50 |
 | **C15** | `engine/autoload/game_state.py:123` — `Faction.intel: float = 0.0`, ratified 2026-07-08 | `MULTS` (`:74`) has no `intel` key, so `adjust('intel', …)` raises `KeyError` at `:193` before any bound is consulted. `descriptors.faction_bounds('intel')` returns `(0,7)` that no code path can reach. **0 of 31 `.adjust(` sites write it** |
-| **C16** | `engine/autoload/game_state.py:264` — `World.scenes_resolved` | **Written every season** (`mc_v18.py:150`, `:160`) but **absent from `serialize_world` (`:365–422`) and from `restore_world` (`:425–513`)**. A save/restore round-trip silently zeroes it. Same for `Faction.intel`, `Faction.peaceful`, `Faction.senator_inward_used`, `Faction.consul_used` and `Territory.uncontrolled_since` |
+| **C16** | `engine/autoload/game_state.py:264` — `World.scenes_resolved` | **Written every season** (the retired campaign driver at `:150`, `:160`) but **absent from `serialize_world` (`:365–422`) and from `restore_world` (`:425–513`)**. A save/restore round-trip silently zeroes it. Same for `Faction.intel`, `Faction.peaceful`, `Faction.senator_inward_used`, `Faction.consul_used` and `Territory.uncontrolled_since` |
 | **C17** | `systems/settlements/sim/ledger.py:30` — `TAG_KINDS` | Never read. `ledger_add` (`:47`) does not validate `tag.kind` against it. `grep -rn "TAG_KINDS" --include=*.py .` → the definition only |
 | **C18** | `systems/settlements/sim/registry.py:92/100/104/107/199` — `Settlement.ap`, `.add_tag`, `.has_tag`, `.tags`, `succeed_governor` | **Zero callers anywhere.** `grep -rn "add_tag\|succeed_governor\|has_tag\|\.tags(" --include=*.py .` → the definitions plus three unrelated hits in `tools/tag_normalizer.py` and its test |
 | **C19** | `systems/settlements/sim/registry.py:74–75` — `Settlement.legitimacy`, `.popular_support` | **Never read or written by any code.** Only reached via `to_dict`/`from_dict` |
 | **C20** | `engine/autoload/npc_ai.py:33/:41` — `world: GameState` | **`GameState` is never imported.** `typing.get_type_hints(select_action)` raises `NameError` (executed). **The same phantom annotation appears in 14 other modules** (AST-scanned): `articulation.py:35`, `ip_track.py:29`, `rs_track.py:28`, `restoration_movement.py:30`, `miraculous_event.py:28`, `altonian_reinforcements.py:20`, `varfell_territorial_acquisition.py:42`, `home_sanctuary.py:29`, `infrastructure_reclamation.py:29`, `charter_liberties.py:27`, `varfell_mandate_action.py:40`, `rendering.py:29`, `investigation.py:30`, and `fieldwork.py:38` (`FieldworkScene`). **Two of these — `fieldwork.py` and `investigation.py` — are composition-role targets `scene_resolver.fieldwork` / `.investigation`** |
-| **C21** | `engine/mc_v18.py:61` — `DEFAULT_PARAMS['VICTORY_THRESHOLD'] = 11` | **A dead param copy, deliberately kept.** The live gate is `engine/autoload/victory.py:27` `VICTORY_THRESHOLD = 15`. `test_f7_smoke_oracle.py:452` sweeps 11 → 999 → 1 and asserts **no outcome moves** |
+| **C21** | The retired campaign driver at `:61` — `DEFAULT_PARAMS['VICTORY_THRESHOLD'] = 11` | **A dead param copy, deliberately kept.** The live gate is `engine/autoload/victory.py:27` `VICTORY_THRESHOLD = 15`. `test_f7_smoke_oracle.py:452` sweeps 11 → 999 → 1 and asserts **no outcome moves** |
 | **C22** | `engine/autoload/season_manager.py:48` — `check_arc_boundary(season)` | **Zero callers.** The live arc check is the inline `world.season % SEASONS_PER_ARC == 1` at `:36` — the same rule, written twice |
 | **C23** | `engine/autoload/game_state.py:248/251` — `Territory.adjust_accord` / `adjust_pt` | Clamp to **hardcoded `0.5` / `7.0`**, while `Faction.adjust` (`:188`) reads `descriptors.faction_bounds()`. Territory bounds are not registry-owned. Also: **`adjust_pt` has zero non-test callers** |
 
@@ -955,7 +955,7 @@ Each row: two surfaces that disagree, both cited, verified this pass.
 | **C27** | `references/module_contracts.yaml` declares `scene_resolver.combat` → `systems.combat.sim.combat:resolve_combat_round`, and `echo_transport.py:110` maps `"combat" → "scene.combat_resolved"` | **No live trigger ever queues a `combat` scene.** `scene_dispatch.py:37` states it; the runtime census confirms `scene.combat_resolved` is emitted zero times. Both the resolver role and the bridge are unreachable from the trigger side |
 | **C28** | `composition_roles.rs_track_delta` → `systems.overview.sim.rs_track:apply_rs_delta`, called at `echo_transport.py:365` | `rs_track.py` (33 lines) is a **`stub_resolve` no-op**, AND `systems.overview.sim.rs_track` is **never imported by a campaign** — the §5.5 Accord leg that would call it is DORMANT (`echo_transport.py:136–139`: it needs a caller-declared `echo['scene_outcome']` that nothing declares) |
 | **C29** | `composition_roles.scene_resolver.fieldwork` / `.investigation` | Both targets are `stubwire` no-ops and neither module is loaded by a campaign |
-| **C30** | 10 `snapshot_state.*` composition roles (`game_state.py:458–511`) | Reached **only** from `restore_world`, which **no campaign path calls**. `serialize_world` runs every campaign (`mc_v18.py:318`); its inverse never does |
+| **C30** | 10 `snapshot_state.*` composition roles (`game_state.py:458–511`) | Reached **only** from `restore_world`, which **no campaign path calls**. `serialize_world` runs every campaign (the retired campaign driver at `:318`); its inverse never does |
 | **C31** | `systems/factions/sim/mass_seizure.py:296` writes `Territory.accord` — cited by `accounting.py:33` as one of two live write paths | **`systems.factions.sim.mass_seizure` is never imported by a campaign.** Only `parliamentary_transfer.py:346` executes. The drift probe measures 342 divergences against a single live writer |
 | **C32** | `systems/world/sim/insurgency_pipeline` is imported and called every season (`accounting.py:125`, `:132–133`) | **`insurgencies_formed == 0`** in every campaign — `test_f7_smoke_oracle.py:370` pins it. A live consumer with an emitter that never fires |
 
@@ -976,8 +976,8 @@ Each row: two surfaces that disagree, both cited, verified this pass.
 # Runtime module reachability + key-type census
 python3 -c "
 import sys; sys.path.insert(0,'.')
-from engine import mc_v18
-r = mc_v18.run_campaign(seed=42)
+from engine import <retired campaign driver> as driver   # no longer exists
+r = driver.run_campaign(seed=42)
 print(r.winner, r.season, r.keys_emitted, r.scenes_resolved, r.npcs_generated, r.stub_hits)
 print(sorted(m for m in sys.modules if m.startswith(('engine.','systems.'))))
 "

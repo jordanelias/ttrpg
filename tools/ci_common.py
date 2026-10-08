@@ -488,7 +488,7 @@ def load_yaml(path, default=_RAISE):
     honestly. An adversarial pass re-earned it here within one commit.
 
     Migrated: 12 call sites, both idioms — `yaml.safe_load(open(x))` and
-    `with open(x) as f: y = yaml.safe_load(f)`. **20 bare `yaml.safe_load` calls
+    `with open(x) as f: y = yaml.safe_load(f)`. **18 bare `yaml.safe_load` calls
     remain in `tools/`**, each of which does something this helper does not (loads
     a stream, a string, a StringIO, or wants the exception on a missing file).
     (21 -> 20 on 2026-09-29, plan position `28-i`/M5, `1320045`: `tools/build_execution_map.py`,

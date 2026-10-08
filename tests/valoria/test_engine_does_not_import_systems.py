@@ -99,8 +99,8 @@ NESTED_SYSTEMS_IMPORT = re.compile(rf'^[ \t]+(?:from|import)\s+(?:{_ROOT_ALT})[.
 #   Seam 1 (cross_scale/echo_transport.py, 2026-08-20) — imported systems.settlements.sim.registry
 #     for STAT_MIN/STAT_MAX alone, a 0-5 bound that references/descriptor_registry.yaml already
 #     declares as `set.order`, so it reads the root via engine.substrate.descriptors instead.
-#   Seam 2 (mc_v18.py, 2026-08-20) — the campaign driver's two subsystem callbacks resolve through
-#     engine.substrate.composition, with references/module_contracts.yaml's composition_roles:
+#   Seam 2 (the campaign driver, deleted at 28-iii; 2026-08-20) — its two subsystem callbacks
+#     resolve through engine.substrate.composition, with references/module_contracts.yaml's composition_roles:
 #     block naming the providers.
 #   Seam 3 (cross_scale/parliamentary_bridge.py, 2026-08-22) — the §10 vote, its two record types
 #     and the territory-transfer entry points resolve as roles; the transfer DERIVATION moved to

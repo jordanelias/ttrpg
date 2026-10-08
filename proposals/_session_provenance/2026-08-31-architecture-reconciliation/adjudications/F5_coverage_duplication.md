@@ -337,7 +337,7 @@ disposition is 1 RULED-with-convergence (D-2), 3 DISSOLVE (F1, F2, F3), 1 NOT-A-
 > is chosen from the same option set with the same information. Clause 2 is presence-as-identity,
 > not presence-as-a-stat: the person must change the choice, not scale a modifier. MEASURED STATE AT
 > HEAD. engine/autoload/game_state.py Faction has NO leader/ruler/head field (verified by read,
-> :109-140). engine/mc_v18.py's faction pass gates on exactly two conditions, `faction.parliamentary`
+> :109-140). The retired campaign driver's faction pass gates on exactly two conditions, `faction.parliamentary`
 > and `faction.territories`, then calls faction_action unconditionally.
 > systems/factions/sim/faction_action.py selects with one rng.random() against a prior re-weighted
 > by three RNG-free FACTION-level signals; no person is consulted anywhere. Settlement.governor_id
@@ -378,7 +378,7 @@ disposition is 1 RULED-with-convergence (D-2), 3 DISSOLVE (F1, F2, F3), 1 NOT-A-
 
 **Ruling:** ED-IN-0201 — *the ideal-v2 design is its unwitting execution vehicle on the design
 side*; the ledger row stays open until the code side lands (world-gen leaders, the gate in
-`mc_v18`, a person-AI). Session work: add a cross-citation both ways. The commander ambiguity
+The retired campaign driver, a person-AI). Session work: add a cross-citation both ways. The commander ambiguity
 inside it closes by the design's own partition — "no social thing occurs without a person acting"
 selects reading (a), the gate; record it, don't escalate. ED-IN-0200 — stays open; the suite should
 declare itself the *template* for the hierarchy (levels: game → subsystem → module → Key → field,

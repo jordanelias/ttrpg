@@ -156,7 +156,7 @@ count any of it as done: *"Nothing in this suite has moved a single byte of exec
    right, including its correction of the audit's stale 0.5-floor claim. — **structural**
 8. **[DEFECT] Claimed vs executing: the suite's contribution is 0%.** All thirteen documents are
    DOC-class and the falsifier holds — zero executable lines on the branch. What executes headless today
-   is the pre-suite loop only: `mc_v18.py:124-217` (faction actions, contest dispatch, parliamentary vote)
+   is the pre-suite loop only: the retired campaign driver at `:124-217` (faction actions, contest dispatch, parliamentary vote)
    plus `accounting.py:96-120` (CI, MS, insurgency emergence and promotion — **which creates factions** —
    NPE stance drift). No NPC generation, no knots, no combat scenes ever queued. **T8 is true today at one
    scale only, and the funnel's "100% resolves" describes a world of which roughly six subsystems do not
@@ -211,7 +211,7 @@ names the seam, keeps both owners, and ships only wiring.**
    investigation … is canon's"* — but the FI resolver is **six typed no-ops** design-gated on ED-916
    (`fieldwork.py:38-59`, `investigation.py:30-51`); `fieldwork`/`investigation` have no
    `module_contracts.yaml` entry; and even `knots.py`, the "only live module", has **zero production
-   callers** — `mc_v18.py:204-205` records a `stub_resolve` under the literal name
+   callers** — the retired campaign driver at `:204-205` records a `stub_resolve` under the literal name
    `'form_knot(world-gen|season-tick)'`, which **sharpens** PR #337's claim. Canon's investigation text is
    **GM-mediated in a no-GM game**: *"The GM sets the threshold"*, *"GM may offer a misleading clue"*,
    *"The GM introduces a complication"*. **Authorize opens a case nothing can conduct**: no module, no post

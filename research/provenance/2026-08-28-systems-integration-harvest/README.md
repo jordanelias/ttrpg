@@ -37,7 +37,7 @@ edited after the fact stops being evidence of anything.
 | `H6` | `systems/settlements/` + `systems/world/` |
 | `H7A` / `H7B` | `scale_transitions_v30.md`, `engine/cross_scale/`, `engine/substrate/` |
 | `H8A` / `H8B` | `research/` roster and historical-precedent corpus; `research/governance/` |
-| `H9` | `engine/` core — `game_state`, `dice_engine`, `sigma_leverage`, `victory`, `mc_v18` |
+| `H9` | `engine/` core — `game_state`, `dice_engine`, `sigma_leverage`, `victory`, the retired campaign driver |
 
 ---
 

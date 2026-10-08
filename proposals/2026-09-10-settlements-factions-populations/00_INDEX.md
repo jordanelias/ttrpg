@@ -165,7 +165,7 @@ Called out here because `CLAUDE.md` §2 requires anything needing separate sign-
 
 ## What this set does not do
 
-It does not bridge `engine/season/` to the legacy campaign (`engine/mc_v18.py` + `systems/*/sim/`).
+It does not bridge `engine/season/` to the legacy campaign (the retired campaign driver + `systems/*/sim/`).
 That is `W28` + `W27`'s work (`architecture/PLAN.md:1583-1624`), and these proposals supply what
 `PLAN.md` §4B.2 says re-scaling the 47 faction-scale cases does **not** buy: *behaviour*. It does not
 propose a settlement registry, an AP economy, an event deck, a Directive cadence or a pressure meter —

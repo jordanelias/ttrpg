@@ -2,23 +2,28 @@
 
 A SOAK run drives the unmodified season loop for many consecutive seasons on ONE World and ONE
 SeasonDriver, and records what only duration exposes: an uncaught exception, memory or wall-clock
-growth, and churn that degenerates. It grades nothing, pins nothing and is wired into no gate
+growth, and churn that degenerates. It pins nothing and is wired into no gate
 (`harness/aperture.py`'s own disclaimer, `:48`, repeated here because it applies unchanged). It
-decides nothing either -- true of this harness too, but that clause is added here, not quoted from
-aperture.py, which does not carry it.
+grades exactly TWO things, both over a finished run's per-season series (`grade_cost`,
+`grade_mix`, below): that the cost of a season stays flat, and that the mix of acts settles into a
+stable, non-collapsed shape.
 
 Entry point: `python -m engine.season.harness.soak --seed S --arm ARM --batches B
---seasons-per-batch N --season-wall-ceiling SECONDS --out DIR`. Every argument is required and
-none has a default — this module sits under `engine/`, inside the blocking scope of
+--seasons-per-batch N --season-wall-ceiling SECONDS --out DIR [--cost-growth-ceiling X]
+[--mix-drift-ceiling X] [--mix-top-share-ceiling X]`. Every argument is caller-supplied and none
+has a default — this module sits under `engine/`, inside the blocking scope of
 `tools/ci_sim_fabrication_check.py`, and an uncited literal default here is exactly the uncited
-mechanical value that gate exists to refuse. The caller supplies every value.
+mechanical value that gate exists to refuse. The first five are required. A grade's ceilings are
+optional ONLY in the sense that omitting them omits the grade: the run still prints that grade's
+measured readings and reports it `UNGRADED`, naming the missing flag, rather than inventing a
+threshold. A `FAIL` makes the exit status 1.
 
 WHAT THIS IS NOT. It is not a second `populated.run` — that owner is untouched, imported and
 reused for its construction (`build_realm`, `make_chooser`, `SeasonDriver`, `resolvable_verbs`,
 `H`, `draw_factory`). This module only keeps ONE driver alive across many seasons, where every
 existing caller builds a fresh one, and records what crosses its path along the way. It is not a
-grader: `corpus_run` and `run_cases` still own PLAYABLE/DEGRADED/BLOCKED and R1/R3/R4/R5; this
-harness reports raw per-season and per-act facts, never a verdict.
+second `corpus_run`/`run_cases`: those still own PLAYABLE/DEGRADED/BLOCKED and R1/R3/R4/R5; the two
+grades here are about duration alone and read only the rows this harness itself wrote.
 
 WHERE THE OUTPUT GOES, AND WHY NOT `engine/season/runs/`. That tree is `harness/report.py`'s
 alone (`data/files.py`'s own header: *"`runs/` is written by `harness/report.py` alone"*), and the
@@ -49,6 +54,7 @@ import argparse
 import json
 import os
 import resource
+import statistics
 import subprocess
 import sys
 import time
@@ -428,6 +434,143 @@ def _run_world(args: argparse.Namespace, head: str, world_dir: Path, argv: list)
 
 
 # ---------------------------------------------------------------------------------------------
+# THE GRADES. Pure functions over plain data (a list of per-season costs; a list of per-season
+# `{verb: count}` mixes) so a test can plant on them. Every ceiling is an ARGUMENT: nothing here
+# invents a threshold, and the only literals are structural (halving, the empty case).
+#
+# Both grades compare blocks of seasons taken from the END of the series, never one season against
+# another, because a single season is noise (a wall-clock reading, one realm's draw). Blocks are
+# built by halving only: `half = n // 2` for the cost grade, `block = half // 2` for the mix grade.
+# ---------------------------------------------------------------------------------------------
+
+def grade_cost(costs: list, growth_ceiling: float) -> dict:
+    """Flat cost per season: the median cost of the LATER half of the run over the median cost of
+    the EARLIER half is at most `growth_ceiling`. Medians, not means, so one stalled season does
+    not read as growth. A cost that grew 13 s -> 169 s (the proposal's own observation) puts the
+    later median far above the earlier one; a cost that rose and then plateaued inside the first
+    half still passes, because the grade asks whether cost is STILL growing, not whether it ever
+    did. `UNGRADED` below two seasons per half: a median of one season is the season itself."""
+    n = len(costs)
+    half = n // 2
+    if half < 2:
+        return {"grade": "UNGRADED", "why": f"{n} season(s); a half needs at least two",
+                "seasons": n}
+    early = statistics.median(costs[:half])
+    late = statistics.median(costs[n - half:])
+    # an earlier median of zero: any later cost at all is unbounded growth, none is flat
+    ratio = (late / early) if early > 0 else (float("inf") if late > 0 else 1.0)
+    return {"grade": "PASS" if ratio <= growth_ceiling else "FAIL", "seasons": n,
+            "early_median": early, "late_median": late, "ratio": ratio,
+            "growth_ceiling": growth_ceiling}
+
+
+def _tv_distance(p: dict, q: dict) -> float:
+    """Total-variation distance between two `{verb: count}` mixes read as shares (0 = identical
+    shape, 1 = disjoint). An empty mix against a non-empty one is maximally distant."""
+    tp, tq = sum(p.values()), sum(q.values())
+    if tp == 0 and tq == 0:
+        return 0.0
+    if tp == 0 or tq == 0:
+        return 1.0
+    return 0.5 * sum(abs(p.get(v, 0) / tp - q.get(v, 0) / tq) for v in set(p) | set(q))
+
+
+def grade_mix(mixes: list, drift_ceiling: float, top_share_ceiling: float) -> dict:
+    """Convergence of the act mix ("season 40 resembles season 30"): the pooled mix of the last
+    block of seasons against the block before it (the final two quarters of the run) must
+
+      * DRIFT by at most `drift_ceiling` (total-variation distance; the mix has settled), and
+      * not be COLLAPSED: no single verb's share of the last block may exceed `top_share_ceiling`.
+
+    The second condition is not decoration. A mix that has collapsed onto one act drifts by
+    exactly zero, so a drift test alone passes the worst case; convergence here means settling
+    into a SHAPE, not merely holding still. An empty last block fails (a run that stopped acting
+    has not converged on anything). `UNGRADED` below eight
+    seasons (a block needs two, as `grade_cost`'s half does: a block of one season is that
+    season, and the grade would compare one season to one)."""
+    n = len(mixes)
+    block = (n // 2) // 2
+    if block < 2:
+        return {"grade": "UNGRADED", "why": f"{n} season(s); two blocks of two need at least eight",
+                "seasons": n}
+    prev, last = Counter(), Counter()
+    for m in mixes[n - 2 * block:n - block]:
+        prev.update(m)
+    for m in mixes[n - block:]:
+        last.update(m)
+    total = sum(last.values())
+    top_verb, top_n = (last.most_common(1)[0] if total else (None, 0))
+    top_share = (top_n / total) if total else 1.0
+    drift = _tv_distance(prev, last)
+    reasons = []
+    if total == 0:
+        reasons.append("no acts in the last block")
+    if drift > drift_ceiling:
+        reasons.append(f"drift {drift:.3f} over {drift_ceiling}")
+    if total and top_share > top_share_ceiling:
+        reasons.append(f"collapsed onto {top_verb!r}: share {top_share:.3f} over "
+                       f"{top_share_ceiling}")
+    return {"grade": "FAIL" if reasons else "PASS", "seasons": n, "block": block,
+            "drift": drift, "drift_ceiling": drift_ceiling, "top_verb": top_verb,
+            "top_share": top_share, "top_share_ceiling": top_share_ceiling,
+            "distinct_verbs_last": len(last), "reasons": reasons}
+
+
+def _read_jsonl(path: Path) -> list:
+    """The records of a JSON-lines file, in order; `[]` when the file is absent."""
+    if not path.exists():
+        return []
+    with path.open(encoding="utf-8") as f:
+        return [json.loads(line) for line in f if line.strip()]
+
+
+def load_series(world_dir: Path) -> tuple:
+    """`(costs, mixes)` for a finished world: one entry per completed season, in run order, read
+    from the `seasons.jsonl` and `acts.jsonl` this harness wrote (so the grades apply to a prior
+    run's directory as well as to a fresh one)."""
+    seasons = _read_jsonl(world_dir / "seasons.jsonl")    # a run killed in season 0 wrote none
+    mix_by: dict = defaultdict(Counter)
+    for r in _read_jsonl(world_dir / "acts.jsonl"):
+        mix_by[(r["batch"], r["season"])][r["verb"]] += 1
+    costs = [s["wall_s"] for s in seasons]
+    mixes = [dict(mix_by.get((s["batch"], s["season"]), {})) for s in seasons]
+    return costs, mixes
+
+
+def grade_run(world_dir: Path, args: argparse.Namespace) -> tuple:
+    """Print the per-season cost and act-mix readings and the two grades for `world_dir`; return
+    `(cost_grade, mix_grade, lines)`. A grade whose ceiling flag was not supplied is `UNGRADED`
+    and names the flag, and still prints what it measured."""
+    costs, mixes = load_series(world_dir)
+    lines = []
+    for i, (c, m) in enumerate(zip(costs, mixes)):
+        tot = sum(m.values())
+        top = max(m.items(), key=lambda kv: kv[1]) if m else (None, 0)
+        lines.append(f"  season {i}: wall_s={c:.3f} acts={tot} distinct_verbs={len(m)} "
+                     f"top_verb={top[0]} top_share={(top[1] / tot) if tot else 0.0:.3f}")
+
+    if args.cost_growth_ceiling is None:
+        cost = {"grade": "UNGRADED", "why": "--cost-growth-ceiling not supplied"}
+    else:
+        cost = grade_cost(costs, args.cost_growth_ceiling)
+    missing = [f for f, v in (("--mix-drift-ceiling", args.mix_drift_ceiling),
+                              ("--mix-top-share-ceiling", args.mix_top_share_ceiling))
+               if v is None]
+    if missing:
+        mix = {"grade": "UNGRADED", "why": f"{', '.join(missing)} not supplied"}
+    else:
+        mix = grade_mix(mixes, args.mix_drift_ceiling, args.mix_top_share_ceiling)
+    lines.append(f"soak grade cost: {_fmt_grade(cost)}")
+    lines.append(f"soak grade act-mix convergence: {_fmt_grade(mix)}")
+    return cost, mix, lines
+
+
+def _fmt_grade(g: dict) -> str:
+    return g["grade"] + "".join(f" {k}={v:.3f}" if isinstance(v, float) else f" {k}={v}"
+                                for k, v in g.items() if k != "grade")
+
+
+# ---------------------------------------------------------------------------------------------
 # CLI.
 # ---------------------------------------------------------------------------------------------
 
@@ -443,6 +586,17 @@ def _parse_args(argv) -> argparse.Namespace:
                          "fixture")
     ap.add_argument("--out", type=str, required=True,
                     help="must resolve OUTSIDE the repository root")
+    # The grades' ceilings. No defaults (a default is an invented value): omitting one omits its
+    # grade, which then reads UNGRADED.
+    ap.add_argument("--cost-growth-ceiling", type=float, default=None,
+                    help="grade_cost: largest allowed (later-half median season wall time) / "
+                         "(earlier-half median); omitted = cost UNGRADED")
+    ap.add_argument("--mix-drift-ceiling", type=float, default=None,
+                    help="grade_mix: largest allowed total-variation distance between the last "
+                         "two blocks' act-verb mixes; omitted = mix UNGRADED")
+    ap.add_argument("--mix-top-share-ceiling", type=float, default=None,
+                    help="grade_mix: largest allowed share of the last block held by one verb "
+                         "(a single-act mix fails); omitted = mix UNGRADED")
     return ap.parse_args(argv)
 
 
@@ -474,7 +628,9 @@ def main(argv=None) -> int:
     end_reason = _run_world(args, head, world_dir, used_argv)
     print(f"soak seed={args.seed} arm={args.arm} batches={args.batches} "
           f"seasons_per_batch={args.seasons_per_batch} end_reason={end_reason} out={world_dir}")
-    return 0
+    cost, mix, lines = grade_run(world_dir, args)
+    print("\n".join(lines))
+    return 1 if "FAIL" in (cost["grade"], mix["grade"]) else 0
 
 
 if __name__ == "__main__":

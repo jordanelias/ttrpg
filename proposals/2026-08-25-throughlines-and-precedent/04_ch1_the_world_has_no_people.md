@@ -43,7 +43,7 @@ The corpus's absences are easy to misread as an unbuilt game. It is not one.
 | Subsystem | Executable Python | Scale |
 |---|---:|---|
 | `systems/mass_battle/sim` | 11,612 | unit / battle |
-| `engine/` (substrate, autoload, cross_scale, mc_v18) | 8,942 | spine |
+| `engine/` (substrate, autoload, cross_scale, the retired campaign driver) | 8,942 | spine |
 | `systems/combat/combat_engine_v1` | 7,901 | personal |
 | `systems/social_contest/sim` | 7,045 | personal |
 | `systems/factions/sim` | 2,744 | faction / political |
@@ -72,7 +72,7 @@ from strategic state*. It is currently false. Flip it and all four change by con
 
 | # | Primitive | State at HEAD | Locator (checked by me) |
 |---|---|---|---|
-| 1 | `npe.generate_npc` — territory-conditioned two-tier generator | works; zero production callers | `systems/world/sim/npe.py:226`; the only non-test mentions are the deferral stub and its telemetry comment, `engine/mc_v18.py:183,195` |
+| 1 | `npe.generate_npc` — territory-conditioned two-tier generator | works; zero production callers | `systems/world/sim/npe.py:226`; the only non-test mentions are the deferral stub and its telemetry comment, the retired campaign driver at `:183,195` |
 | 2 | `references/npc_registry.yaml` — 46 authored officeholders | zero runtime loaders | parsed: 46 characters, 46 with `role`, 36 with `arc_trajectory`, 7 with `title`; the only `.py` naming it is `tests/valoria/test_references_yaml_parse.py` |
 | 3 | `valoria_geography_v30.yaml` `provinces:` block | no production reader | `populate_from_geography` reads only the `settlements:` map (`systems/settlements/sim/registry.py:216-248`); grep for a `provinces` reader in `engine/`+`systems/` returns comments only |
 | 4 | `succeed_governor` | zero callers | `systems/settlements/sim/registry.py:199`; grep across every `.py` returns exactly two hits, the `def` and the module-docstring listing at `:24` |
@@ -214,7 +214,7 @@ Byte-identical to baseline. The channel is isolated exactly.
 
 **Three conclusions, all falsifiable and all consequential.**
 
-1. **Neither named guard fires.** `npcs_generated` is `world.npc_counter` (`mc_v18.py:100,307`),
+1. **Neither named guard fires.** `npcs_generated` is `world.npc_counter` (the retired campaign driver at `:100,307`),
    incremented only in `npe._next_npc_id` (`npe.py:116-122`), which is called only from
    `generate_npc` (`:335`). A loader that constructs `NPC(...)` from authored records and assigns
    the registry's own ids leaves the counter at 0. The `strict=True` xfail still xfails; the
@@ -334,7 +334,7 @@ My commission's assigned cells, each with what crosses, in which direction, and 
 |---|---|---|---|---|
 | **SETTLEMENT → PERSONAL** | **EMPTY** | nothing | no | I executed `create_world(42)`: 37 settlements, **all 37 with `governor_id is None`**, all 37 with `npc_ids` empty. Nothing queues a scene from a settlement. `registry.py:61`, and `populate_from_geography`'s docstring (`:238-241`) states the omission deliberately: *"a later system (charter assignment, governor appointment) is what populates"* |
 | **FACTION → PERSONAL** | **BROKEN** | one integer | no | `engine/cross_scale/combat_bridge.py:103-111`: `history = max(1, round(f.Mil))`, then `Combatant(label=fid, history=history)` — every other field a constructor default. Gated behind `DISPATCH_COMBAT_BRIDGE`, default OFF, and unreachable even ON: grep confirms the only production `queue_scene` caller is the generic `queue_triggered_scenes` (`scene_dispatch.py:106`), corroborated at `tools/build_execution_map.py:112`. No `queue_scene("combat", …)` exists |
-| **PERSONAL → FACTION** | **EXECUTED (degenerate)** | one stat delta, self-addressed | **yes, by default** | `ECHO_TRANSPORT` default ON (`mc_v18.py:65-75`, Jordan ratification quoted in the docstring). `ctx["echo"] = {"actor_faction": winner_fid, "target_faction": winner_fid, "most_relevant_stat": "Mil", …}` (`scene_dispatch.py:267-268`) — actor and target are the same value |
+| **PERSONAL → FACTION** | **EXECUTED (degenerate)** | one stat delta, self-addressed | **yes, by default** | `ECHO_TRANSPORT` default ON (the retired campaign driver at `:65-75`, Jordan ratification quoted in the docstring). `ctx["echo"] = {"actor_faction": winner_fid, "target_faction": winner_fid, "most_relevant_stat": "Mil", …}` (`scene_dispatch.py:267-268`) — actor and target are the same value |
 | **PERSONAL → SETTLEMENT** | **BROKEN** | `scene.accord_echo` → `settlement.order` | carrier yes, producer no | `echo_transport._apply_accord_echo` (`engine/cross_scale/echo_transport.py:211-360`) is fully wired through the accounting boundary (Key construction, `targets[]`, deferred `_apply` closure, registry-clamped write). `classify_scene_outcome`'s own docstring records the dormancy: *"no live producer in the campaign loop sets `echo['scene_outcome']` today (scene_dispatch.py's emergency_council/combat branches, parliamentary_bridge.py's vote ctx — none do)"* |
 
 **Read the four together and the pattern is not subtle.** The one cell that executes is a faction
@@ -392,7 +392,7 @@ unchanged.
 names a governorship. Called from `engine/autoload/game_state.py::create_world` alongside
 `populate_from_geography`.
 **Why:** OI-05's stated blocker is *"no world-gen initial count … exist[s] in canon to cite"*
-(`mc_v18.py:196-200`). Forty-six citable records with per-record `source` fields are a count, and
+(the retired campaign driver at `:196-200`). Forty-six citable records with per-record `source` fields are a count, and
 loading them fabricates nothing — which is the exact value the deferral was protecting. Under
 CLAUDE.md's five-test ladder this is test #4, **answered by precedent**, not a `needs_jordan` item.
 Copy `populate_from_geography`'s field-mapping discipline exactly: every mapping carries an inline
@@ -534,7 +534,7 @@ cleanliness it did not have.*
 `references/npc_registry.yaml` carries **35 `status: canonical`** records and **11 `status: proposed`**
 (`:820, :837, :852, :867, :883, :897, :912, :927, :942, :957, :972`). This chapter's loader
 recommendation rests on the claim that loading authored records *fabricates nothing* — the exact value
-OI-05's deferral protects (`engine/mc_v18.py:196-200`). **Loading the 11 `proposed` records would be
+OI-05's deferral protects (the retired campaign driver at `:196-200`). **Loading the 11 `proposed` records would be
 that fabrication.** The loader must therefore filter on `status == 'canonical'` and **raise** on any
 other value: registering a `proposed` record is the failure mode, and a silent skip is the
 second-worst.
@@ -577,7 +577,7 @@ Discriminator 3 does not carry the thesis; per this chapter's own rule, Discrimi
 **5. The re-pin cost was understated by roughly 2.5×.** Because the loader is called from
 `create_world`, every seeded world inherits the stream shift — not just the 8-campaign oracle. The
 pinned constants at risk are **at least ten across four files**: `test_f7_smoke_oracle.py:267/273/274/275`,
-`test_mc_v18_regression.py:98/99/101`, `test_echo_transport.py:45`, and
+the retired campaign regression test at `:98/99/101`, `test_echo_transport.py:45`, and
 `test_parliamentary_bridge.py:177-178` — **the last of which pins a KeyLog content hash, the same
 artifact `tools/m1_acceptance.py` row 2 reads.** `test_f7_smoke_oracle.py:334`'s `insurgencies == 0`
 is additionally at risk of tripping. This *strengthens* the R1→R2 ordering argument: the RNG substream
@@ -606,7 +606,7 @@ not an **R** failure; **R** is behaviour at the extremes, and filing it there bo
 authority for something the framework does not measure.
 
 **8. Two invocation/exec claims qualified.** "400 invocations per seeded golden batch" is an **upper
-bound**, not a measurement — `engine/mc_v18.py:268-270` breaks early on a victory condition, so the
+bound**, not a measurement — the retired campaign driver at `:268-270` breaks early on a victory condition, so the
 true count is unknown without instrumenting it, and an uncontrolled number is exactly what §0.1 pt 4
 forbids. And `PI_RUNAWAY_SUSTAINED` appears in **zero** `.py` files (its only tree occurrence is one
 line of `systems/_architecture/_identifier_census.yaml`); Π's calibration is Chapter 4's lane and the
@@ -614,7 +614,7 @@ reference is withdrawn from here.
 
 ### What the critic could not break
 The mechanism behind this chapter's headline finding survived in full, statically: `npcs_generated`
-reads `world.npc_counter` (`mc_v18.py:100, 307`), which is incremented **only** in `_next_npc_id`
+reads `world.npc_counter` (the retired campaign driver at `:100, 307`), which is incremented **only** in `_next_npc_id`
 (`npe.py:116-122`), called **only** from `generate_npc` (`:335`) — so a loader constructing `NPC(...)`
 directly leaves all three guards green. `world.npcs` has exactly three consumers tree-wide, and only
 `simulate_npc_actions` has behaviour, drawing `rng.randint(1, 6)` from `world.rng` (`npe.py:361, 385`)

@@ -94,7 +94,7 @@ seeded campaign, `world.npcs` is an empty dictionary: **the population of Valori
 The circularity is exact and worth naming: **nothing appoints a governor because there is nobody to
 appoint, and nobody is generated because no mechanic needs one.** `generate_npc` is a complete
 two-tier generator — it reads territory ecology, biases 60% toward the controlling faction, then
-rolls a d6 and flips one axis so populations are not uniform — and it has no call site. `mc_v18`
+rolls a d6 and flips one axis so populations are not uniform — and it has no call site. The retired campaign driver
 fires a named `stub_resolve` in its place.
 
 Meanwhile 46 characters are authored in `references/npc_registry.yaml`, under an enforcement line

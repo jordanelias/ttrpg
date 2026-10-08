@@ -15,7 +15,7 @@ Measured, not asserted:
 - **Every core object of this architecture is absent from `engine/` and `systems/`** as a named
   identifier: `Person`, `Rung`, `Office`, `Site`, `Tenure`, `Query`, `Act`, `Claim`.
 - **The running campaign resolves with zero people in it.** `world.npcs` is empty in every seeded
-  campaign; `generate_npc` has no call site; `mc_v18.py` stub-wires NPC generation and knot formation
+  campaign; `generate_npc` has no call site; the retired campaign driver stub-wires NPC generation and knot formation
   rather than fabricate a trigger it has no canon for.
 - **The population guards are blind to a direct loader.** They watch `world.npc_counter`, which only
   `generate_npc` increments — so writing `world.npcs` directly is invisible to every existing check.

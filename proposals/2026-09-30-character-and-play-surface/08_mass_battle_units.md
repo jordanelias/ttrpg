@@ -82,8 +82,8 @@ to troop."*
   mustered, but power fixed at 4 and morale at 5. Headcount is the only input from the world.
 - **Cohorts** arrived with #444: `engine/season/cohorts.yaml` seats one weight-2 `Person` per settlement
   (37 rows), used today for subsistence, population and migration capacity.
-- The mc_v18-era `_faction_to_unit` (power from `Mil`, morale from `Sta` since ED-MB-0068) is reached only
-  from `resolve_mass_battle` on mc_v18's conquest path; the plan's end-state deletes both.
+- The retired campaign driver's `_faction_to_unit` (power from `Mil`, morale from `Sta` since ED-MB-0068) is reached only
+  from `resolve_mass_battle` on that driver's conquest path; the plan's end-state deletes both.
 - **Officers** (`hierarchy/units.py::Officer`), and the general's `Unit` likewise, carry `command`, `charisma` and `cognition`; when both
   of the latter are set, `command = derive_command(charisma, cognition)`, clamped to 1–7. These are
   mass-battle fields; no `Person` supplies them ([09](09_the_character_sheet.md)).

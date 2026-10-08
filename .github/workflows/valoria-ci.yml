@@ -373,8 +373,9 @@ jobs:
     steps:
       # DEFAULT (depth-1) CHECKOUT, ON EVIDENCE RATHER THAN BY OMISSION (2026-10-02): nothing this job
       # runs reads git history. `grep -rn 'git\|subprocess' engine/season` finds exactly three callers:
-      # `harness/soak.py` (`_require_clean_engine`, reached only from its CLI `main`; the one test that
-      # imports the module, test_told_by_channel.py, takes the pure row builder `_claim_row`),
+      # `harness/soak.py` (`_require_clean_engine`, reached only from its CLI `main`; the tests that
+      # import the module, test_told_by_channel.py and test_soak_grades.py, take the pure row builder
+      # `_claim_row` and the pure graders, and `grade_run`/`load_series` read files, never git),
       # `harness/delta.py` (`git show <rev>:<path>`, a CLI differ no test imports), and
       # test_season_shape.py::_run, whose subprocess is `python -m engine.season.harness.<module>`.
       # `register --requirements` spawns nothing. `unit-tests` above is the opposite case and keeps
@@ -437,7 +438,7 @@ jobs:
       # RUNTIME: ~6m15s with the campaign goldens (measured 2026-08-25, four runs, 375-383s); NOT
       # re-measured since `28-iii` deleted them. The "~20s" that stood before was the pre-port figure.
       # RE-SCOPED 2026-10-01 (plan position `28-iii`): the five campaign-scale files this job was
-      # built around -- the `mc_v18` goldens, the cross-scale reach and population probes, the
+      # built around -- the campaign-driver goldens, the cross-scale reach and population probes, the
       # combat-bridge seam -- were deleted with the driver. What remains in `engine/tests` is the
       # sigma-leverage parity golden, the contest kernel, and the knots and thread-mending ED probes.
       # `parliamentary_action` left with its tree at `29b` and the accounting accord-drift probe at

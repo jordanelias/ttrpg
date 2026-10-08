@@ -76,7 +76,7 @@ or ⚠ (a correction to something this session previously asserted).
 | B1 | **Cross-repo constants have no comparer — the worst hole.** `valoria-game` contains **zero `.json` files**. All ~90 numbers in `systems/util/Constants.gd:7-95` are hand-transcribed. The `--check` gates verify *oracle → JSON*; **nothing verifies JSON → `.gd`.** A session can change any game constant in either repo and no gate compares them. | OPEN — §3.C1 |
 | B2 | **Zero GDScript tests execute anywhere.** `valoria-game/tests/*.gd` (14 files) are excluded from the ratchet count (`godot-ci.yml:87-88`) and gdUnit4 is not vendored, so no `.gd` test has ever run in CI. The port↔oracle discipline of `CLAUDE.md` §6 (the ED-1050 defect class) has **no executing guard at all**. | OPEN — §3.B3 |
 | B3 | **`params_tables.yaml` has no integrity guard.** Its generator was retired with `engine/params/`, making the 43-table capture hand-edit-only, and no CI tool reads it for checking. A silent edit is unobservable. | OPEN — §3.C4 |
-| B4 | ⚠ **`CLAUDE.md` §7 is stale: full `mc_v18` campaigns DO run in CI.** `valoria-ci.yml:321` runs `pytest engine/tests`, which executes 50-season campaigns at n=2/seed-0 (`test_mc_v18_regression.py:15`) and n=8/seed-42 (`test_f7_smoke_oracle.py:16`), pinning exact win-share/winners/battles. What is genuinely missing is the n≥100 balance oracle the f7 file itself demands (`test_f7_smoke_oracle.py:8`) and any control on golden *re-pinning*. | CORRECT §7 — §3.D5 |
+| B4 | ⚠ **`CLAUDE.md` §7 is stale: full campaigns of the retired campaign driver DO run in CI.** `valoria-ci.yml:321` runs `pytest engine/tests`, which executes 50-season campaigns at n=2/seed-0 (the retired campaign regression test at `:15`) and n=8/seed-42 (`test_f7_smoke_oracle.py:16`), pinning exact win-share/winners/battles. What is genuinely missing is the n≥100 balance oracle the f7 file itself demands (`test_f7_smoke_oracle.py:8`) and any control on golden *re-pinning*. | CORRECT §7 — §3.D5 |
 | B5 | **The compile ratchet can be held at 84 while the project gets worse.** It counts, it does not identify: fix five errors, add five, "OK: held at 84". Move a broken script under `res://tests/` and its errors vanish via the exclusion; the second filter drops any line containing `GdUnitTestSuite` **regardless of path**. And the falling branch has no "did the project actually finish loading" assertion — a crash that makes the grep match nothing reads as improvement. | OPEN — §3.B2 |
 | B6 | `systems/characters/sim/` has **zero tests anywhere**, and `test_f7_smoke_oracle.py:23-24` pins `insurgencies_formed`/`npcs_generated` at **0**, so `systems/world/sim/npe.py` and `insurgency_pipeline.py` can be arbitrarily broken and stay green. | ACCEPTED (deferred; the zero-pin trips when a bridge lands) |
 
@@ -85,9 +85,9 @@ or ⚠ (a correction to something this session previously asserted).
 | # | Finding | Status |
 |---|---|---|
 | C1 | **`references/` is not load-bearing at runtime — the central finding.** No `engine/` or `systems/` module loads `module_contracts.yaml` or `descriptor_registry.yaml`; every runtime hit is a comment or docstring (`engine/autoload/game_state.py:109`, `stubwire.py:59`, `substrate/__init__.py:11`). Their only machine readers are apparatus (`ci_names_consistency.py:45`). The rosters code actually runs on are **hardcoded twins** in `game_state.py` (`MULTS`, `ALL_PLAYABLE_15`, the `fac.*` keys). | OPEN — §3.C2 |
-| C2 | ⚠ **The dependency direction is inverted, and `CLAUDE.md` §3's "acyclic, autoload is a leaf" is false.** `engine/` imports `systems/` at top level in five places: `engine/mc_v18.py:37-38` (factions, overview), `engine/cross_scale/echo_transport.py:58` (settlements), `engine/cross_scale/parliamentary_bridge.py:64-66` (factions, social_contest ×2). **Autoload is not a leaf**: `engine/autoload/game_state.py:260,368-420` imports seven subsystems' state classes. Package-level cycle: `systems/factions/sim/faction_action.py:42` imports `engine.autoload.game_state` while `game_state.py:384` imports `systems.factions.sim.treaty`. Function-local imports hide it from import-time crashes; they do not remove it. | OPEN — §3.C3, and CORRECT §3 of CLAUDE.md |
+| C2 | ⚠ **The dependency direction is inverted, and `CLAUDE.md` §3's "acyclic, autoload is a leaf" is false.** `engine/` imports `systems/` at top level in five places: the retired campaign driver at `:37-38` (factions, overview), `engine/cross_scale/echo_transport.py:58` (settlements), `engine/cross_scale/parliamentary_bridge.py:64-66` (factions, social_contest ×2). **Autoload is not a leaf**: `engine/autoload/game_state.py:260,368-420` imports seven subsystems' state classes. Package-level cycle: `systems/factions/sim/faction_action.py:42` imports `engine.autoload.game_state` while `game_state.py:384` imports `systems.factions.sim.treaty`. Function-local imports hide it from import-time crashes; they do not remove it. | OPEN — §3.C3, and CORRECT §3 of CLAUDE.md |
 | C3 | **Lateral `systems/`→`systems/` imports are widespread**, including a mutual cycle. factions→settlements (`faction_action.py:43`), factions→mass_battle (`:452`), factions→social_contest (`parliamentary_transfer.py:54`, `parliamentary_action.py:41`), overview→settlements+world (`accounting.py:45-51`), world→settlements (`insurgency_pipeline.py:116`), fieldwork→characters (`knots.py:349`), **fieldwork↔threadwork** (`knots.py:364` ↔ `opposing.py:245`). The parliamentary seam is owned twice — once in `engine/cross_scale/parliamentary_bridge.py:64-66` and again laterally in `systems/factions/sim/parliamentary_transfer.py:54`. | OPEN — §3.C3 |
-| C4 | **The three-file tax.** Adding or rewiring any subsystem today requires coordinated edits to `engine/autoload/game_state.py:416-468`, `engine/cross_scale/scene_dispatch.py:233-352` (hardcoded per-subsystem dispatch), and `engine/mc_v18.py:37-38`. That is the recurring cost on exactly the game-code commits §0.2 demands. | OPEN — §3.C3 |
+| C4 | **The three-file tax.** Adding or rewiring any subsystem today requires coordinated edits to `engine/autoload/game_state.py:416-468`, `engine/cross_scale/scene_dispatch.py:233-352` (hardcoded per-subsystem dispatch), and the retired campaign driver at `:37-38`. That is the recurring cost on exactly the game-code commits §0.2 demands. | OPEN — §3.C3 |
 | C5 | Contract counts verified: **27 modules, 10 `doc: null`, 11 `[ASSUMPTION]`-grade resolvers** in `references/module_contracts.yaml`. | CONFIRMED |
 
 ### 1.D — What Opus verified independently
@@ -314,15 +314,15 @@ while the rosters code runs on are hardcoded twins in `engine/autoload/game_stat
 This is the ONE architectural change the modularity audit named, and it is what makes the premise
 structurally true rather than aspirational.
 - **Target:** `engine/` never names a `systems.*` module. Today it does in five places
-  (`mc_v18.py:37-38`, `cross_scale/echo_transport.py:58`, `cross_scale/parliamentary_bridge.py:64-66`)
+  (the retired campaign driver at `:37-38`, `cross_scale/echo_transport.py:58`, `cross_scale/parliamentary_bridge.py:64-66`)
   and `engine/autoload/game_state.py:260,368-420` imports seven subsystems' state classes.
 - **Mechanism:** add a registration point in `engine/substrate/` — each `systems/<sub>/sim/` registers
   its resolver and state class at import; `engine/cross_scale/scene_dispatch.py:233-352`,
-  `engine/mc_v18.py` and `game_state.py` consume the registry instead of importing by name. The
+  the retired campaign driver and `game_state.py` consume the registry instead of importing by name. The
   registry's **legal roster is loaded from `module_contracts.yaml`** via C2's export — so an
   unregistered or undeclared subsystem is an error, not a silent gap.
 - **Do this incrementally, one seam per commit, goldens green each time.** Suggested order, cheapest
-  first: (1) `echo_transport` (one import), (2) `mc_v18` callbacks, (3) `parliamentary_bridge` —
+  first: (1) `echo_transport` (one import), (2) the retired campaign driver callbacks, (3) `parliamentary_bridge` —
   and in the same commit delete the lateral duplicate at
   `systems/factions/sim/parliamentary_transfer.py:54`, which owns the same seam a second time,
   (4) `game_state` state classes, (5) `scene_dispatch`.
@@ -385,7 +385,7 @@ Only start after B is green. Each row below is a §8 "every rule lives once" rep
   are prose citations and are fine as history.
 - **D6. Correct the three false/stale claims the audits found in `CLAUDE.md`** — in one commit, with
   the evidence inline: §3's "acyclic, autoload is a leaf" (false, C2 in §1.C); §7's "no CI job executes
-  full `mc_v18` campaigns" (stale — `valoria-ci.yml:321` does, at n=2 and n=8; the real gap is the
+  full campaigns of the retired campaign driver" (stale — `valoria-ci.yml:321` does, at n=2 and n=8; the real gap is the
   n≥100 balance oracle and the unguarded golden re-pin); and the Godot **4.6 vs 4.3** conflict (§7-Q3).
 
 ### ACT E — the remaining culling waves (`2026-08-18-culling-plan-v1.md`, still RATIFIED)
@@ -485,5 +485,5 @@ Produced 2026-08-20 on branch `claude/return-to-game-execution-74fdvc`. Three re
 auditors (recursion efficacy · guardrail depth · centralization/modularity), each given the session's
 claimed output and not its reasoning, each with `Read, Grep, Glob` only. Opus reconciled, verified
 §1.D independently, and wrote this. Auditor corrections carried rather than dropped: the banner claim
-(A3), the `mc_v18` CI claim (B4), and the `freshness_gate` merge (D4) — one softened, one stale, one
+(A3), the CI claim about the retired campaign driver (B4), and the `freshness_gate` merge (D4) — one softened, one stale, one
 overturned.

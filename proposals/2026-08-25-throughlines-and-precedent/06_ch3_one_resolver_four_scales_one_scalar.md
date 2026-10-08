@@ -179,7 +179,7 @@ checked, two ways.
 face 1–10 — I enumerated all ten — and consume the same number of RNG draws. Bit-identical.
 
 *By execution:* I applied the parameterised rule in memory (no repo file touched) and ran both seeded
-campaign goldens. `engine/tests/test_mc_v18_regression.py` (n=2, seed 0) → **5 passed in 71.54s**.
+campaign goldens. The retired campaign regression test (n=2, seed 0) → **5 passed in 71.54s**.
 `engine/tests/test_f7_smoke_oracle.py` (n=8, seed 42) → **6 passed**, matching its unpatched baseline
 run exactly. The live win-share pin `GOLDEN_WIN_SHARE = {'Crown': 62.5, 'Church': 25.0,
 'Hafenmark': 0.0, 'Varfell': 12.5}` (`test_f7_smoke_oracle.py:267`, regenerated 2026-08-24 for the
@@ -217,7 +217,7 @@ Why it is safe: **every campaign-path call site resolves `tn` to 7.** I resolved
 constants — `BG_VOTE_TN`, `ARGUE_POOL_TN`, `PARL_TRANSFER_TN`, `TRIBUNAL_TN`, `KNOT_FORMATION_TN` and
 three `_TN` — and all nine are `7`. The sites that pass a *variable* TN are the three threadwork
 modules and one deprecated combat adapter, and **threadwork does not execute on the campaign path**:
-`mc_v18.py:192` and `:204-217` stubwire it deliberately rather than fabricate personal-scale actors.
+The retired campaign driver at `:192` and `:204-217` stubwire it deliberately rather than fabricate personal-scale actors.
 
 That last fact is the diagnosis, not the reprieve. The declared difficulty tiers that would expose the
 defect are `TN_BINDING = 8`, `TN_POP = 8`, `TN_POP_BINDING = 9` (`operations.py:47-50`), routed into
@@ -481,7 +481,7 @@ N: PASS — introduces no draw of its own; it constructs operands for an existin
 R: FAIL — one rounded int carries the entire aggregate world state into a resolver whose measured
          customisation levers span ~90pp of outcome. Leverage is not in-band; there is one band.
 S: FAIL — asymmetric with its own return path (one int in, one int out) and unreachable: the flag
-         is default-OFF (`mc_v18.py:78-88`) AND no `queue_scene("combat", ...)` call site exists,
+         is default-OFF (the retired campaign driver at `:78-88`) AND no `queue_scene("combat", ...)` call site exists,
          so it is dead twice over. P5 S1.3 names this exact state as the one option NO surveyed
          precedent defends: "never let the bridge's default state be 'off equals doesn't exist.'"
 E: n/a — no player surface.
@@ -657,7 +657,7 @@ executing seams do not deliver.
 Take the implementation from `systems/mass_battle/sim/resolution.py:36-42`. Land the falsifier first
 (§9). **Cost: ~6 lines. Both seeded campaign goldens do not move** — proven analytically
 (bit-identical at tn=7, all ten faces enumerated) and by execution against both pins, patched in
-memory (`test_mc_v18_regression.py` 5 passed; `test_f7_smoke_oracle.py` 6 passed, matching its
+memory (the retired campaign regression test 5 passed; `test_f7_smoke_oracle.py` 6 passed, matching its
 unpatched baseline). The only behaviour that changes is threadwork's TN 8/9 tiers, which currently do
 not run. **This is the highest value-to-risk change in the chapter and it should not wait for
 anything.** Note precisely what the green run licenses, per §2.3's caution: it is a reproducibility
@@ -712,7 +712,7 @@ declared ladder holds, kills `DECISIVE_OB`, and makes difficulty relational at e
 Never a second approximation (P5 §S2.1). Gate it with the equivalence protocol: same engine, two entry
 points; a **two-sample distribution test** (K-S on casualty-percentage, binomial CI on win rate) at
 n ≥ 100 seeds per state across declared extremes — 1v1, 1000v1000, 100:1, zero-morale, max-fatigue —
-checked into CI beside `test_mc_v18_regression.py`. **Cost: real, and there are two honest caveats,
+checked into CI beside the retired campaign regression test. **Cost: real, and there are two honest caveats,
 not one.** *First* (§5.5): the protocol verifies *resolution* consistency and does **not** verify that
 the personal contribution's relative weight stays sane from N=1 to N=1000. No precedent supplies that
 metric; if Valoria wants it, it must be designed, and that is a genuine original contribution rather
@@ -763,7 +763,7 @@ measurement). The parameterised face rule was applied in memory; **no repo file 
 |---|---|---|
 | baseline, unpatched | `engine/tests` (whole suite) | **2055 passed, 5 xfailed** in 562.85s |
 | baseline, unpatched | `test_f7_smoke_oracle.py` (n=8, seed 42) | **6 passed** in 177.81s |
-| **patched** | `test_mc_v18_regression.py` (n=2, seed 0) | **5 passed** in 71.54s |
+| **patched** | the retired campaign regression test (n=2, seed 0) | **5 passed** in 71.54s |
 | **patched** | `test_f7_smoke_oracle.py` (n=8, seed 42) | **6 passed** in 179.59s |
 
 Both goldens hold under the patch, against a run baseline rather than against an assumption. And the
@@ -784,7 +784,7 @@ what a balance claim would require, and it still does not exist.
 `cross_scale/combat_bridge.py:103-128` · `cross_scale/scene_dispatch.py:121-139, :250-268` ·
 `cross_scale/zoom_in_out.py:110-130` · `mass_battle/sim/massbattle.py:37-90` ·
 `combat/combat_engine_v1/core.py:45, :56, :60-104` · `combat/sim/combat.py:1-60, :195-225` ·
-`social_contest/sim/contest/resolver.py:155, :286-289` · `mc_v18.py:192, :204-217` ·
+`social_contest/sim/contest/resolver.py:155, :286-289` · the retired campaign driver at `:192, :204-217` ·
 `tests/valoria/test_degree_ladder_single_owner.py` (full) · `tests/valoria/test_faction_obstacle_conventions.py`
 (full) · `references/throughlines_meta.md:14, :45-55, :155-175, :185, :194` ·
 `skills/valoria-resolution-diagnostic/SKILL.md:250, :369`.

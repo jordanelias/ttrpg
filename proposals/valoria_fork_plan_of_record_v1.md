@@ -213,7 +213,7 @@ legitimate runtime writers at all**. Two layers instead:
    frozen dataclass (records). A runtime write then raises `TypeError` **loudly** rather than
    succeeding-and-doing-nothing — the exact inversion of the morale defect. `config.CFG` is a plain
    mutable dict today. Legitimate runtime variation keeps its one existing owner, the `effective_params`
-   overlay in `mc_v18`, which composes *on top of* the frozen base and never mutates it.
+   overlay in the retired campaign driver, which composes *on top of* the frozen base and never mutates it.
 2. **An AST tripwire against new bare source constants**, reusing `export_sim_params.build()`'s existing
    module-scope `ast.Assign` walker. For every *governed* file — a per-module allowlist,
    field-parameterized exactly like `_CELL_OWNED`, so inverting a new module means adding one key — any
@@ -253,7 +253,7 @@ subsystem state types (`CoherenceState`, `TreatyRecord`, `InsurgencyRecord`, …
 because the imports are lazy.
 
 The real architecture is four layers — **substrate → autoload services → subsystems → orchestrator**
-(`cross_scale` + `mc_v18`) — with the orchestrator legitimately on top. That survives the fork *except*
+(`cross_scale` + the retired campaign driver) — with the orchestrator legitimately on top. That survives the fork *except*
 `game_state`: `World` knowing every subsystem's state type is exactly the coupling that, ported
 naively, makes the Godot `GameState` autoload preload every subsystem Resource. **Reversible fix, no
 ruling required:** invert to registration — each subsystem registers its state slice with `World` at
@@ -269,7 +269,7 @@ no-synchronous-re-entry, and OF-7 deferred-apply at the accounting boundary, all
 under ED-IN-0026.
 
 So the gate is **downward *Key* delivery only (ED-1006)**. Downward *function-call* orchestration
-already exists canonically — `mc_v18` → systems, and the `action_callback` port seam. The plan must not
+already exists canonically — the retired campaign driver → systems, and the `action_callback` port seam. The plan must not
 widen ED-1006 into a general prohibition on top-down control flow; that would block work no ruling
 covers.
 

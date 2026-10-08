@@ -41,9 +41,9 @@ def test_the_gate_exits_nonzero_when_it_finds_prose(tmp_path, monkeypatch):
 
 
 def test_engine_season_is_exempt():
-    monkeypatched = ['engine/season/runs/DECISIONS.md', 'engine/mc_v18_walkthrough.md']
+    monkeypatched = ['engine/season/runs/DECISIONS.md', 'engine/some_walkthrough.md']
     kept = [p for p in monkeypatched if not p.startswith(gate.EXEMPT)]
-    assert kept == ['engine/mc_v18_walkthrough.md'], (
+    assert kept == ['engine/some_walkthrough.md'], (
         "engine/season/ is exempt by ruling; the rest of engine/ is not."
     )
 

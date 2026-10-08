@@ -241,7 +241,7 @@ cannot work.
 `engine/cross_scale/articulation.py:26-27`, `engine/autoload/npc_ai.py:25-26`,
 `engine/cross_scale/scene_dispatch.py:366-367`, `engine/substrate/canon_buckets.py:6,11`.
 ⚠ Precise scope: the colonisation of **rationale** is real; **behaviour** is not — `stubwire` does
-feed `mc_v18`'s `CampaignResult.stub_hits` and `engine/tests/test_pipeline_reach.py` consumes it.
+feed the retired campaign driver's `CampaignResult.stub_hits` and `engine/tests/test_pipeline_reach.py` consumes it.
 
 ### 3.6 The generator nobody has put in any wave: the prompts
 
@@ -276,7 +276,7 @@ time**"* — `valoria-canon-guard:89`, `valoria-editorial-register:407`, `valori
 
 **`jordanelias/ttrpg`** — 3,728 commits, 3.3% of which touched executable game code; 921
 `[infrastructure]` commits to 11 `[godot]`. Apparatus + prose is 69.9% of the tree, and the ratio
-has risen every month since May (0.24 → 6.42). `engine/mc_v18.py` **works**: a 50-season campaign
+has risen every month since May (0.24 → 6.42). The retired campaign driver **works**: a 50-season campaign
 runs in ~2.5s and returns a winner plus a deterministic key-log hash. `tests/valoria` is 1,933
 passing. The degree ladder is **not** fully unified despite the 2026-08-14 ruling — two live
 implementations remain deliberately HELD and asserted to diverge.

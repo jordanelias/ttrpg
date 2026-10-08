@@ -82,7 +82,7 @@ def test_the_totality_guard_can_fail():
     ('CLAUDE.md', 'keep'),
     ('CURRENT.md', 'keep'),
     # code
-    ('engine/mc_v18.py', 'keep'),
+    ('engine/dice_engine/dice_engine.py', 'keep'),
     ('engine/substrate/keys.py', 'keep'),
     ('systems/mass_battle/sim/massbattle.py', 'keep'),
     # prose with NO code pair -> authoritative spec

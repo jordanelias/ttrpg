@@ -1422,7 +1422,7 @@ the dispatcher's own verification note:
 > *"yet queues a combat scene either way (**verified 2026-07-29: no `queue_scene("combat", …)`**"*
 
 The only `scene_type` the dispatcher queues is `"contest"` (`:86`). `DISPATCH_COMBAT_BRIDGE` defaults
-**OFF** (`mc_v18.py:71,81`), and the note is explicit that the flag's state does not change this.
+**OFF** (the retired campaign driver at `:71,81`), and the note is explicit that the flag's state does not change this.
 
 > **Personal combat is currently 0% of the generated game surface.** By the allocation argument,
 > **physical attributes are currently worth ~0 of the character sheet** — not because they are

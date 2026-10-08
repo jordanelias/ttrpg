@@ -527,7 +527,7 @@ def test_the_bare_yaml_load_residual_can_only_shrink():
     """`load_yaml` is the INTENDED owner, not the only loader, and its docstring
     says so. This pins the residual so the honest number cannot rot upward.
 
-    24 bare `yaml.safe_load` calls remain in tools/, each doing something the
+    18 bare `yaml.safe_load` calls remain in tools/, each doing something the
     helper does not — loading a stream, a string, or wanting the exception on a
     missing file. If this fails HIGH, a new bare call was added; if it fails LOW,
     migrate the count in the docstring with it.

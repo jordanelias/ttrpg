@@ -132,10 +132,10 @@ expensive than anyone has costed, because there is no value to promote.
 
 ### 2.6 The spine: three stubs, one reason
 
-Read in full (see [`00 §2`](00_INDEX.md)): `mc_v18.py:212-218` defers knot formation because *"Prerequisites
+Read in full (see [`00 §2`](00_INDEX.md)): the retired campaign driver at `:212-218` defers knot formation because *"Prerequisites
 … are personal-scale actor fields (Disposition, Bonds, TS) that do not exist anywhere on the aggregate
 strategic World — the same 'context-derivation gap' the `scene_dispatch.py` module docstring already
-names for combat/contest actor derivation"*; `mc_v18.py:194-202` defers NPC generation for the same class
+names for combat/contest actor derivation"*; the retired campaign driver at `:194-202` defers NPC generation for the same class
 of reason; `combat_bridge.py:103-111` derives one field from `faction.Mil` and labels the Combatant with
 the faction id. **One absence explains four stubs, and the suite closes it without naming it.**
 

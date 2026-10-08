@@ -365,7 +365,7 @@ outside the measurement, outside `engine/`+`systems/`, and disconnected from the
   and it is the same question Critic D independently named as the largest unexecuted game work
   (the J2 canon-engine migration, adapter with `degree_map` never built).
   *Files:* `tests/sim/mass_battle/`, `systems/mass_battle/sim/`, `engine/sim_reference_README.md:27-29`,
-  `engine/mc_v18_walkthrough.md:81`, `registers/handoffs/HANDOFF_MB.md`.
+  the retired driver walkthrough (`:81`), `registers/handoffs/HANDOFF_MB.md`.
 - **R11-B.** Correct `sim_reference_README.md`'s stale stamp and frozen-archive claim (R4 class).
 
 ### R11.2 — A ratified formula the code does not implement — **in a file I edited today**
@@ -476,7 +476,7 @@ and forking the doc blindly leaves no spec on `main` either.
 `systems/combat/combat_engine_v1/{weapons,config,combat_systems}.py`,
 `systems/social_contest/sim/contest/primitives.py`, `engine/substrate/{descriptors,keys}.py`,
 `engine/cross_scale/{articulation,echo_transport}.py`, `engine/autoload/game_state.py`,
-`engine/mc_v18.py`.
+the retired campaign driver.
 
 **Registries / artifacts:** `references/{descriptor_registry,module_contracts,alias_registry,
 ci_checks_registry,restructure_ledger,engine_atlas}.{yaml,md,json}`,
@@ -484,7 +484,7 @@ ci_checks_registry,restructure_ledger,engine_atlas}.{yaml,md,json}`,
 `registers/editorial_ledger*.jsonl`.
 
 **Tests:** `engine/tests/{test_knots_ed912,test_pipeline_reach,test_parliamentary_bridge,
-test_world_population,test_mc_v18_regression,test_f7_smoke_oracle}.py`,
+test_world_population,test_f7_smoke_oracle}.py` and the retired campaign regression test,
 `tests/valoria/{test_flow_skeletons,test_engine_params_bridge,test_ci_common_primitives,
 test_ed_citation_scope,test_conviction_roster_single_owner,test_module_contracts_artifact,
 test_contract_runtime_conformance}.py`.

@@ -111,7 +111,8 @@ def build_world(seed: int = 0, fixtures: "S.Fixtures" = None) -> World:
     #     for the institution and the reach without it; the bailiff is the procedural one.
     # ⚠ THIS IS A SUBSTITUTION AND IT IS DECLARED AS ONE. Nothing in canon maps the three retired
     # names onto the thirteen; the mapping above is argued from the old cells' own reasons and is
-    # this harness's choice, not a reading of `conviction_axis_matrix_v30.md`. `H-46` stays open.
+    # this harness's choice, not a reading of `conviction_axis_matrix_v30.md`. `H-46` is closed as
+    # framed (IN-43); these are the old thirteen until IN-08.
     # ⚠⚠ **EACH NAME IS LOOKED UP IN THE OWNER RATHER THAN TYPED, AND THE GUARD THAT FORCED THIS
     # IS RIGHT EVEN THOUGH ITS FIRST READING OF THESE LINES WAS NOT.**
     # `tests/valoria/test_conviction_roster_single_owner.py` fails on any literal holding TWO OR
@@ -124,7 +125,7 @@ def build_world(seed: int = 0, fixtures: "S.Fixtures" = None) -> World:
     # against `CONVICTIONS`, which IS `engine.substrate.descriptors.CONVICTIONS` — the same object,
     # not a copy. A rename in `references/descriptor_registry.yaml` now raises here by name instead
     # of silently seeding a conviction nobody holds, which is strictly more than the literals did.
-    # [JUSTIFIED: these five weights are AUTHORED CHARACTER, not a mechanical constant -- #353 §14 types convictions as "weights over the closed 13 | 1-3 primary + distributed" and supplies no magnitudes. Carin at Precedent 0.9 is what the docstring above explains starts her causal chain; the rest are her, the bailiff and the warden being three different people. `H-46` is the row and it is open]
+    # [JUSTIFIED: these five weights are AUTHORED CHARACTER, not a mechanical constant -- #353 §14 types convictions as "weights over the closed 13 | 1-3 primary + distributed" and supplies no magnitudes. Carin at Precedent 0.9 is what the docstring above explains starts her causal chain; the rest are her, the bailiff and the warden being three different people. `H-46` is the row, closed as framed by IN-43]
     w.persons[CARIN].pursuits = {_pursuit("Precedent"): 0.9, _pursuit("Utility"): 0.3}
     # [JUSTIFIED: as the line above -- authored character under `H-46`, not a mechanical constant. The bailiff is procedural-first (Order 0.8) and the warden holds one conviction weakly, which is what makes the three people three]
     w.persons[BAILIFF].pursuits = {_pursuit("Order"): 0.8, _pursuit("Precedent"): 0.4}

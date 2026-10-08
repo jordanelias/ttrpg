@@ -551,7 +551,7 @@ DEFAULT_FIXTURES = Fixtures(
     # this line, read by `_eff_march` (`loop/effects.py`, M4 build step 7). The default is settled
     # by `wound_harm_model`'s own precedent (Jordan, 2026-09-04: *"the combat engine determines
     # the result there"*) applied to this magnitude too -- not by `tools/balance_oracle.py`, which
-    # is `mc_v18`-only and cannot observe an `engine/season`-only mechanic (`rosters.yaml`'s
+    # was a campaign-driver instrument and could not observe an `engine/season`-only mechanic (`rosters.yaml`'s
     # `field_casualty_models` note, M4 build step 8).
     # ⚠ NOT YET REGISTERED ON `hole_register.yaml`'s `site:` column -- deferred to M4 build step 10,
     # in the same pass as `field_morale_weight`/`field_grudge_weight` below.
