@@ -163,23 +163,23 @@ reading, what moves it, what no position yet owns, `met` as an instrument outcom
 ### M2 — THE ANY-SEED STORY BAR
 
 v7: *N seeds each yield a chronicle that is connected, continuous, rooted, live and distinct* — M1's invariant sweep
-generalized. **Its precondition is met** (M1 row 4, read above). **Its bar still has no instrument:** `harness/soak.py`
-(#446) runs seasons and grades nothing; `corpus_run`'s `ARC ENDS` count prints `NOT-COMPUTABLE — closed by W23 + W26 + W30`
-[v8's reading, 2026-10-01; not re-run here]. Candidate gates, none built: (i) SC-01 step 16 (`22`) — THE BAR for
-proceedings (two seeded proceedings run end to end twice byte-identical, `causes[]` walking to the raising date);
-(ii) `corpus_run`'s ARC ENDS becoming computable; (iii) a chronicle render, IN-37 (the `chronicle` witness channel dies at
-SC-01 step 13). **v9 builds the instrument first:** IN-19 (#457 STORY-BAR — cross-person antecedent share and chain depth
-per season over N seeds, forcing on/off), with IN-20 making `soak.py` grade. Path: IN-19 → SC-01 step 16 → IN-37 → IN-27
-(#457 D6, the ending vocabulary: answered as the plan's recommendation, RS-21 item 3) (`_part3` §A(2)).
+generalized. **Its precondition is met** (M1 row 4, read above). **Its instrument landed at B-C:** `harness/storybar.py`
+(IN-19, #457 STORY-BAR — cross-person antecedent share and chain depth per season over N seeds, forcing arms compared; it
+grades nothing) and `harness/soak.py`'s cost and act-mix grades (IN-20). `corpus_run`'s `ARC ENDS` count prints
+`NOT-COMPUTABLE — closed by W23 + W26 + W30` [v8's reading, 2026-10-01; not re-run here]. Candidate gates, none built:
+(i) SC-01 step 16 (`22`) — THE BAR for proceedings (two seeded proceedings run end to end twice byte-identical, `causes[]`
+walking to the raising date); (ii) `corpus_run`'s ARC ENDS becoming computable; (iii) a chronicle render, IN-37 (the
+`chronicle` witness channel dies at SC-01 step 13). Path: SC-01 step 16 → IN-37 → IN-27 (#457 D6, the ending vocabulary:
+answered as the plan's recommendation, RS-21 item 3) (`_part3` §A(2)).
 
 ### M3 — GODOT VERTICAL SLICE
 
 Last, unchanged in substance: GO-01 (`26`). **The Godot engine version is UNRESOLVED and nothing here asserts one**
-(`_part5` §J, J-9). `godot/godot_conversion_strategy_v1.md` is PROPOSED and HELD (§K); GO-03 strikes its version string and
-Key-runtime rows. `references/module_contracts.yaml`'s `engine_clock` row keeps `doc:` null until IN-42 (= GO-02).
-`engine/autoload/engine_clock.py` is deleted (`28-iii`, PR #450); the temporal spine is `engine/season/loop/driver.py` +
+(`_part5` §J, J-9). `godot/godot_conversion_strategy_v1.md` is PROPOSED and HELD (§K); its version string was struck and its
+Key-runtime rows marked RETIRED at B-C (GO-03, landed). `references/module_contracts.yaml`'s `engine_clock` row got its `doc:`
+(the propagation spec) at B-C (IN-42 = GO-02, landed). `engine/autoload/engine_clock.py` is deleted (`28-iii`, PR #450); the temporal spine is `engine/season/loop/driver.py` +
 `loop/calendar.py`, which that row describes, so `CLAUDE.md` §6's "starting with `engine_clock`" means the season calendar
-(Layer 0: listed at IN-44, not edited here). `godot/skeleton/` is not a head start. Path: IN-42 → GO-03 and GO-04 (B-L, behind IN-42 only) → GO-01 (J-9) → (IN-05 → GO-05)
+(Layer 0: listed at IN-44, not edited here). `godot/skeleton/` is not a head start. Path: GO-04 (B-L's tail; its gate landed at B-C) · GO-01 (J-9) → (IN-05 → GO-05)
 (`_part3` §A(2)).
 
 ## 2. ⭐ START HERE — the first commands the next session runs
@@ -198,8 +198,7 @@ commit and the run stops for a cleared window (`methodology-execute`, `CLAUDE.md
 has read §K's still-held list and `_part5` §J. `main` was red from PR #456 on one test
 (`test_flow_skeletons.py::test_contract_names_resolve_in_the_generated_index[combat]`); the one-line fix (`personal_combat`
 joins `RETIRED_CONTRACTS`) is built and rides the adoption branch (`7b619328`), so it is not a position — read `All Gates
-Green` on `main` once the branch merges. Then **B-C and
-B-D1/D2/D3 in parallel sessions**, then B-G → B-H → B-E → {B-F ∥ B-I} → B-J → … the spine `_part3` §B names. Every batch runs
+Green` on `main` once the branch merges. B-C is closed. Then **B-D1/D2/D3 in parallel sessions**, then B-G → B-H → B-E → {B-F ∥ B-I} → B-J → … the spine `_part3` §B names. Every batch runs
 through `methodology-execute` (`CLAUDE.md` §9), and a batch's READ-FIRST list names the sites to read (the pins file is far too
 large to read whole: grep the assertion).
 
@@ -217,8 +216,8 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-03 | `31a` | IN/SC | B | — | — | B-L | `_part4` |
 | IN-04 | `31b`; #457 SEAM-LADDER | IN/PC | BLK | IN-03, PC-02, PC-03, PC-04 | — | B-L | `_part4` |
 | IN-05 | `31c`; SM-7 | IN/MB | BLK | IN-04, MB-01, MB-02, MB-05 | — | B-L | `_part4` |
-| IN-06 | `33`; #457 D5; A-24's threadwork; H-47 | IN/WR/FI | B | design | — | B-C · B-S | `_part4` |
-| IN-07 | `36` | IN/SE | B | design | — | B-C · B-T | `_part4` |
+| IN-06 | `33`; #457 D5; A-24's threadwork; H-47 | IN/WR/FI | B | build (design landed at B-C; re-reviewed after B-H) | — | B-S | `_part4` |
+| IN-07 | `36` | IN/SE | B | build (design landed at B-C) | — | B-T | `_part4` |
 | IN-08 | cells commit; `12b` `12c` `12d`, H6–H11, `12`, `12e`, 6f; #457 CARRY-INTERIOR; #445 P-1 | IN | BLK | PC-01 | R-05, R-06, R-08 | B-G · B-H | `_part5` |
 | IN-09 | `19b` | IN | B | after B-G | R-05 | B-I | `_part5` |
 | IN-10 | #453 step 1 | IN/SC | B | after B-G | R-04, R-05 | B-I | `_part5` |
@@ -230,12 +229,9 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-16 | telling T7 (G9) | IN | B | — | — | B-E | `_part4` |
 | IN-17 | telling measurement; H-180/181/182 re-check | IN | BLK | IN-16 | — | B-E | `_part4` |
 | IN-18 | telling G1–G8 | IN | BLK | IN-17 | R-07 | B-E · B-I | `_part4` |
-| IN-19 | #457 STORY-BAR | IN | B | — | — | B-C | `_part4` |
-| IN-20 | #457 STORY-SOAK | IN | B | — | — | B-C | `_part4` |
-| IN-21 | #457 FORCE-WEATHER; H-26 | IN/SE | BLK | IN-19 | — | B-F | `_part5` |
+| IN-21 | #457 FORCE-WEATHER; H-26 | IN/SE | B | — | — | B-F | `_part5` |
 | IN-22 | #457 CARRY-SHORTFALL; H-160 limit 1; #445 P-2 | IN/SE | BLK | IN-15, IN-18 | — | B-E · B-F | `_part5` |
-| IN-23 | #457 CARRY-STABILITY | IN | BLK | IN-19 | — | B-U | `_part5` |
-| IN-24 | #457 BOUND-LOOPS; H-106, H-25 | IN | B | — | — | B-C | `_part4` |
+| IN-23 | #457 CARRY-STABILITY | IN | B | — | — | B-U | `_part5` |
 | IN-25 | #457 BOUND-STAKES | IN | BLK | IN-18 | — | B-E | `_part5` |
 | IN-26 | #457 BOUND-PAPER; H-156 (a)/(b); `Record.ttl` | IN/SC | BLK | SC-01, FI-01 | R-05 | B-Q | `_part5` |
 | IN-27 | #457 END-VICTORY; H-176 (GD-1) | IN/FA | BLK | IN-37 | — | B-U | `_part5` |
@@ -247,20 +243,18 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-34 | #457 FORCE-BODIES | IN/SE | BLK | SE-01, IN-21 | — | B-F | `_part5` |
 | IN-35 | #457 FORCE-HAZARD; SEAM-CLOCK | IN/WR/SE | BLK | IN-06 | — | B-S | `_part5` |
 | IN-36 | #457 FORCE-FOREIGN | IN/FA/MB | BLK | IN-13 | — | B-V | `_part5` |
-| IN-37 | #457 STORY-READ | IN | BLK | IN-19, SC-01 step 16 | — | B-U | `_part5` |
+| IN-37 | #457 STORY-READ | IN | BLK | SC-01 step 16 | — | B-U | `_part5` |
 | IN-38 | `13`-rest | IN | B | — | R-09, R-06 | B-V | `_part5` |
-| IN-39 | pre-flight P-4, P-6; H-175 | IN | B | — | R-01, R-04 | B-C | `_part4` |
 | IN-40 | H-101 | IN/FA/SE | BLK | IN-10 | R-04 | B-J | `_part5` |
-| IN-42 | Gate-0: `engine_clock`'s `doc:`; ED-1051 | IN/GO | B | — | — | B-C | `_part4` |
-| IN-43 | housekeeping: stale handoff rows, retired-plan cites, R-09's `u1_` selector, `domain_echo` rows | IN | B | — | R-01, R-09 | B-C | `_part4` |
 | IN-44 | SM-10, SM-12; A-24's wording | IN | J | Layer 0/1: Jordan's files | — | — | `_part8` (table, not an entry) |
 | IN-45 | `forge` `carry` `work` `migrate` | IN/SC/SE | BLK | IN-10, SC-03a, IN-22 | R-05 | B-K | `_part5` |
-| IN-46 | = SM-6 | IN/PC | B | design | R-04 | B-C | `_part4` |
-| IN-47 | #445 (character sheet) | IN/PC/WR | B | design | R-04 | B-C | `_part4` |
+| IN-46 | = SM-6 | IN/PC | B | review (design landed at B-C); no build batch | R-04 | B-L (re-read) | `_part4` |
+| IN-47 | #445 (character sheet) | IN/PC/WR | B | review (design landed at B-C); no build batch | R-04 | B-H (review) | `_part4` |
 | IN-48 | H-108 (delegation half) | IN/FA/SE | BLK | IN-10, IN-11 | R-04 | B-J | `_part5` |
 | IN-49 | H-163 limit 3 | SE/IN | BLK | IN-10 | R-04, R-05 | B-K | `_part5` |
-| IN-50 | — | IN | BLK | IN-43 | R-01 | B-C | `_part4` |
+| IN-50 | ARC-23's R3 repair (diagnosed at B-C) | IN | B | — | R-01 | B-H | `_part4` |
 | IN-51 | #453 R-5 (b) | IN/FA/SE | BLK | IN-12 | R-05 | B-R | `_part5` |
+| IN-52 | the levy-to-field feed (from IN-07's design); LF-1..LF-3 | IN/SE/MB | BLK | IN-49, MB-07, IN-07's extractions | — | B-T | `_part4` |
 | SC-01 | `22` steps 11–16 | SC | BLK | IN-03 | R-04, R-05, R-08, R-09, M2 | B-N | `_part6` |
 | SC-02 | `22a` → `23` → `22b` | SC | BLK | SC-01 | — | B-P | `_part6` |
 | SC-03a | #453 steps 2b, 3 | SC | BLK | IN-10, IN-11 | R-05 | B-J | `_part6` |
@@ -271,7 +265,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | SC-07 | #445 P-4, V-4, V-5 | SC | BLK | SC-01 | — | B-N | `_part6` |
 | SC-08 | — | SC | BLK | SC-01 | — | B-O | `_part6` |
 | SE-01 | `24g`; H-51 | SE | BLK | IN-21 | R-07 | B-F | `_part6` |
-| SE-02 | = IN-07 | — | — | — | — | B-C · B-T | `_part4` |
+| SE-02 | = IN-07 | — | — | — | — | B-T | `_part4` |
 | SE-03 | ED-SE-0053 §A.6–A.8 | SE | BLK | IN-28 | — | B-K | `_part6` |
 | SE-04 | #457 CAST-POPULACE; H-170, H-171 | SE | BLK | IN-07 | — | B-T | `_part6` |
 | SE-05 | = IN-30 | — | — | — | — | B-U | `_part5` |
@@ -296,17 +290,13 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | FI-01 | `ED-FI-0009`; J-22 (A); #445 S-6 | FI | BLK | SC-01, SC-03b, IN-03 | R-05, R-09 | B-O | `_part6` |
 | FI-02 | SM-3 | FI | BLK | FI-01 | — | B-O | `_part6` |
 | FI-03 | ED-FI-0002 | FI | BLK | IN-06 | — | B-S | `_part6` |
-| FI-04 | ED-914 residual; PP-719 | FI | B | a ledger row, no code | — | B-C | `_part6` |
 | FI-05 | = IN-32 | — | — | — | — | B-S | `_part5` |
 | WR-01 | `27` remainder: the R-14 term | WR | B | in-module | — | B-D3 · B-S | `_part7` |
 | WR-02 | `27` remainder: own-configuration Mending | WR | BLK | WR-01 | — | B-D3 | `_part7` |
 | WR-03 | `27` remainder: Mending feedback, one pricing owner | WR | BLK | WR-02 | — | B-D3 | `_part7` |
-| WR-04 | ED-WR-0010 c.3 doc half | WR | B | tiny | — | B-C | `_part7` |
 | WR-05 | = IN-35 | — | — | — | — | B-S | `_part5` |
 | GO-01 | `26`; D2 tenth attribute | GO | J | J-9 | — | B-Z | `_part7` |
-| GO-02 | = IN-42 | — | — | — | — | B-C | `_part4` |
-| GO-03 | strategy-doc record edit | GO | B | a GO-lane document edit | — | B-C | `_part7` |
-| GO-04 | ED-IN-0017 seam audit | GO | BLK | GO-02 | — | B-L | `_part7` |
+| GO-04 | ED-IN-0017 seam audit | GO | B | — | — | B-L | `_part7` |
 | GO-05 | SM-13; ED-PC-0013 (1) | GO | BLK | IN-05, GO-01 | — | B-Z | `_part7` |
 | GO-06 | `valoria-game` parity | GO | BLK | `valoria-game` checkout | — | B-Z | `_part7` |
 | FA-01 | #445 P-3; FORCE-FOREIGN's cast | FA | B | mechanism | R-04 | B-J · B-V | `_part7` |
@@ -319,13 +309,13 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 
 | v8 position · telling · §SM | v9 |
 |---|---|
-| `B0-CI` · `30` · `31a` · `31b` · `31c` · `33` · `36` | built (`7b619328`; not a position) · IN-02 · IN-03 · IN-04 (= PC-09) · IN-05 (= MB-09) · IN-06 · IN-07 (= SE-02) |
+| `B0-CI` · `30` · `31a` · `31b` · `31c` · `33` · `36` | built (`7b619328`; not a position) · IN-02 · IN-03 · IN-04 (= PC-09) · IN-05 (= MB-09) · IN-06 · IN-07 (= SE-02; its levy feed split to IN-52 at B-C) |
 | cells commit, `12b`/`12c`/`12d`, H6–H11, `12`, `12e`, Phase 6f | IN-08 |
-| `19b` · `13`-rest · pre-flight P-4, P-6 | IN-09 · IN-38 · IN-39 |
+| `19b` · `13`-rest · pre-flight P-4, P-6 | IN-09 · IN-38 · read at B-C (IN-39, landed; `_part3` §P) |
 | `22` · `22a` → `23` → `22b` · `2-ii` | SC-01 · SC-02 · SC-05 |
 | `24g` · `24h` P5 · `24` (umbrella) | SE-01 · IN-30 (= SE-05, FA-02) · not carried — its letters are the rows |
 | `9` · `26` · `27` remainder · `ED-FI-0009` | PC-01 · GO-01 · WR-01, WR-02, WR-03 · FI-01 |
-| `11` | no handle: re-taken at B-G (control), B-I and B-M (E15), after IN-39's P-4 |
+| `11` | no handle: re-taken at B-G (control), B-I and B-M (E15); P-4 passed before it, at B-C |
 | SM-1 · SM-2, SM-15 · SM-3 · SM-7 · SM-9, SM-11 · SM-10, SM-12 · SM-13 · SM-5, SM-6 | SC-06 · SC-05 · FI-02 · IN-05 · IN-41 · IN-44 · GO-05 · SM-5 confirmed (RS-6), SM-6 = IN-46 |
 | telling T7 · its measurement + H-180/181/182 re-check · G1–G8 | IN-16 · IN-17 · IN-18 |
 
@@ -339,10 +329,10 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 
 | #457 — `proposals/2026-10-04-forcing-churn-and-the-story-bar.md` | v9 |
 |---|---|
-| STORY-BAR · STORY-SOAK · STORY-READ | IN-19 · IN-20 · IN-37 |
+| STORY-BAR · STORY-SOAK · STORY-READ | landed at B-C (IN-19, `harness/storybar.py`) · landed at B-C (IN-20, `harness/soak.py`'s grades) · IN-37 |
 | FORCE-WEATHER · FORCE-BODIES · FORCE-HAZARD (+ SEAM-CLOCK) · FORCE-FOREIGN | IN-21 · IN-34 · IN-35 · IN-36 (+ FA-01's cast) |
 | CARRY-INTERIOR · CARRY-SHORTFALL · CARRY-STABILITY | merged into IN-08 · IN-22 · IN-23 |
-| BOUND-LOOPS · BOUND-STAKES · BOUND-ATTENTION · BOUND-PAPER | IN-24 · IN-25 · IN-14 · IN-26 |
+| BOUND-LOOPS · BOUND-STAKES · BOUND-ATTENTION · BOUND-PAPER | instrument landed at B-C (IN-24, `harness/loops.py`; the church ratchet's bound is read at IN-10) · IN-25 · IN-14 · IN-26 |
 | CAST-POPULACE · CAST-DISPOSITION | SE-04 · merged into IN-08 + IN-12 step 9 (J-13 (iii) the adopted interim; `tell` stays uncelled, G-1) |
 | SEAM-LADDER · END-VICTORY | merged into IN-04 · IN-27 |
 | §7 D1 · D2 · D3 · D4 · D5 · D6 | IN-35 · IN-34 · answered: no dated pins (T-c) · IN-36, FA-01 · A-24 → IN-06 · IN-27 (D2, D4, D6 answered as the plan's recommendation, RS-21) |
@@ -351,9 +341,9 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 · U-1/U-2/U-6 → MB-08 · P-1 → IN-08 · P-2 → IN-22 · P-3 → FA-01 · P-4, V-4, V-5 → SC-07 · S-6 → FI-01 · V-1 → J-2
 (answered) · K-2 only with its first reader · M-2..M-6, K-4/V-3 → PC-08.
 
-**Hole-register rows a position now owns:** H-25, H-106 → IN-24 · H-26 → IN-21 · H-44 → IN-09 · H-47 → IN-06 · H-48 →
+**Hole-register rows a position now owns:** H-25, H-106 → IN-10 (their instrument landed at B-C: `engine/season/harness/loops.py`; IN-10's EXIT reads it) · H-26 → IN-21 · H-44 → IN-09 · H-47 → IN-06 · H-48 →
 IN-18 (G6) · H-51 → SE-01 · H-58 → IN-33 · H-59 → IN-12 (`forgive`) · H-92, H-10 → IN-14 · H-100 → IN-31 · H-101 → IN-40 ·
-H-110 → IN-29 · H-160 → IN-22 · H-162 → SC-03b · H-166 → IN-28 · H-170, H-171 → SE-04 · H-175 → IN-39 · H-176 → IN-27 ·
+H-110 → IN-29 · H-160 → IN-22 · H-162 → SC-03b · H-166 → IN-28 · H-170, H-171 → SE-04 · H-175 → read at B-C (IN-39, landed; the reading is its `cite:`), its remainder unowned · H-176 → IN-27 ·
 H-180, H-181 → IN-17 · H-182 → IN-17, IN-32 · H-186 → IN-30.
 
 **Retired, never reused:**

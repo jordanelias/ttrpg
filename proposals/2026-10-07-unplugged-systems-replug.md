@@ -239,7 +239,7 @@ operation returns its coherence cost (the module's callers already compute a non
   cites H-47 and H-62. H-47's own text (`hole_register.yaml:534-545`) still reads *"a 54 fold-in with no
   Part D row"*, grade `absent`, owner unassigned, though the matrix row now cites it. What is actually
   absent is the field and a producer. The v9 plan assigns H-47 to IN-06
-  (`workplans/valoria_master_workplan_v9.md:354`).
+  (`workplans/valoria_master_workplan_v9.md` §4, 'Hole-register rows a position now owns').
 
   The value has two quantities, `resting_point` and `elastic_displacement` (`coherence.py:21-30`). Each
   has its own remedy, and they are stored apart so that recovery *"never assigns"* the resting point

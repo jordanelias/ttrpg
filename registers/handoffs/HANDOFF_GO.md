@@ -5,9 +5,7 @@
 ## Open
 | item | where it lives | next step |
 |---|---|---|
-| Gate-0 entry blocked | `registers/editorial_ledger.jsonl` (`ED-1051`) | Resolve `engine_clock` ratification and the module-contract doc:null/[ASSUMPTION] grades before Gate-0 opens (v9 GO-02 = IN-42: point the `engine_clock` row's `doc:` at the season calendar; `workplans/valoria_master_workplan_v9_part4.md`, `_part7.md`) |
-| strategy doc's open decision register (Key-runtime items) | `godot/godot_conversion_strategy_v1.md` | Rule the open register; re-scope any Key-runtime-form item against `ED-IN-0232` (Key substrate retired) first (v9 GO-03, `workplans/valoria_master_workplan_v9_part7.md`: retire the Key-runtime rows, re-scope Part II to A-25's roster, remove the version string) |
-| port-seam audit, deferred | `registers/editorial_ledger.jsonl` (`ED-IN-0017`) | Run the scoped audit once Gate-0 entry opens (trigger = `ED-1051` resolution) (v9 GO-04, `workplans/valoria_master_workplan_v9_part7.md`: after GO-02) |
+| port-seam audit (GO-04) — its trigger, `ED-1051`'s resolution, is met | `registers/editorial_ledger_in_archive.jsonl` (`ED-IN-0017`); `registers/editorial_ledger.jsonl` (`ED-1051`, its last row) | Run the scoped audit as a B-L tail lane, reading each seam after the move (v9 GO-04, `workplans/valoria_master_workplan_v9_part7.md`) |
 
 ## Standing orders — do not re-raise, do not do
 | order | source |

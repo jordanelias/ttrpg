@@ -1,7 +1,7 @@
 # The character sheet as three spaces — creation, development, chronicling
 
 ## Status: PROPOSED (2026-10-07) · design-only · builds nothing · HELD BACK from ratification-on-merge (ED-1094) until its review in B-H against IN-08's carriers · reference under `CLAUDE.md` §0.05
-## Lane: IN, with PC and WR · Plan position: IN-47 (`workplans/valoria_master_workplan_v9_part4.md:110-115`) · IDs: none allocated
+## Lane: IN, with PC and WR · Plan position: IN-47 (`workplans/valoria_master_workplan_v9_part4.md` §4.2, the IN-47 entry) · IDs: none allocated
 ## Read at HEAD `4558f85`. Every `file:line` below was opened at that HEAD; a line that has drifted since is a defect in this document, not in the code.
 ## Builds on: `proposals/2026-09-30-character-and-play-surface/09_the_character_sheet.md` (#445; what a person is in code, one sheet) — not re-derived here.
 
@@ -207,7 +207,7 @@ The review in B-H passes this design only if all four hold.
   only `stance` and `body`.
 - **No build position exists** (`_part4:114`): R-04 conjunct (3) cannot read `met` for this row until
   one does; `_part3` §B.0's R4/R7 place it once this design is reviewed
-  (`workplans/valoria_master_workplan_v9_part3.md:223`, `:226`).
+  (`workplans/valoria_master_workplan_v9_part3.md` §B.0, rules R4 and R7).
 - **Not re-run here:** the row's count of 429 of 430 built persons with empty `capability`
   (`engine/season/requirements.yaml:76-79`, measured 2026-10-02). Not re-opened here: Jordan's
   2026-09-30 *"design one character sheet"*, which the plan entry itself tags `[UNVERIFIED]`.
