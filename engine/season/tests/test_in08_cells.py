@@ -53,7 +53,7 @@ def test_a_verb_missing_a_cell_on_one_axis_and_not_declared_uncelled_refuses_nam
         V._load_alignment(planted, uncelled)
     assert repr(verb) in str(e.value) and axis in str(e.value)
     # and DECLARING it uncelled is not enough while its other cells remain
-    with pytest.raises(Forbidden):
+    with pytest.raises(Forbidden, match=re.escape('is declared `uncelled:` and is celled on')):
         V._load_alignment(planted, dict(uncelled, **{verb: "planted"}))
 
 
@@ -62,11 +62,11 @@ def test_an_uncelled_verb_that_carries_a_cell_or_names_no_verb_refuses():
     verb = sorted(uncelled)[0]
     planted = {ax: dict(row) for ax, row in cells.items()}
     planted[sorted(PURSUIT_AXES)[0]][verb] = 0.1
-    with pytest.raises(Forbidden):
+    with pytest.raises(Forbidden, match=re.escape('is declared `uncelled:` and is celled on')):
         V._load_alignment(planted, uncelled)
-    with pytest.raises(Forbidden):
+    with pytest.raises(Forbidden, match=re.escape('which the verb table does not carry')):
         V._load_alignment(cells, dict(uncelled, **{"a verb nobody declared": "planted"}))
-    with pytest.raises(Forbidden):
+    with pytest.raises(Forbidden, match=re.escape('gives no reason')):
         V._load_alignment(cells, dict(uncelled, **{verb: ""}))   # a declaration with no reason
 
 
@@ -74,11 +74,11 @@ def test_an_unrostered_axis_or_verb_key_refuses():
     cells, uncelled = _shipped()
     planted = {ax: dict(row) for ax, row in cells.items()}
     planted["sacred"] = {sorted(V.VERB_TABLE)[0]: 0.3}          # an axis the seven do not carry
-    with pytest.raises(Forbidden):
+    with pytest.raises(Forbidden, match=re.escape('which is not in the roster')):
         V._load_alignment(planted, uncelled)
     planted = {ax: dict(row) for ax, row in cells.items()}
     planted[sorted(PURSUIT_AXES)[0]]["kill"] = 0.7               # a verb the table does not carry
-    with pytest.raises(Forbidden):
+    with pytest.raises(Forbidden, match=re.escape('outside the roster')):
         V._load_alignment(planted, uncelled)
 
 
@@ -92,7 +92,7 @@ def test_a_role_template_naming_a_retired_pursuit_refuses_at_load(monkeypatch):
             t = dict(t, **{first: dict(t[first], Authority=0.2)})
         return t
     monkeypatch.setattr(V, "table", planted)
-    with pytest.raises(Forbidden):
+    with pytest.raises(Forbidden, match=re.escape('outside the roster')):
         V._load_role_template_pursuits()
 
 
@@ -101,7 +101,7 @@ def test_no_retired_pursuit_name_survives_in_the_cast_or_the_tables():
     rows, the role templates and every NPC's `conviction:` value. The in-world Warden offices,
     faction and titles live in other files and are untouched (RS-4)."""
     assert not {"faith", "warden"} & {p.lower() for p in PURSUITS}
-    assert {"doctrine", "stewardship"} <= set(PURSUITS)
+    assert "doctrine" in PURSUITS and "stewardship" in PURSUITS   # one name per test, not a roster literal
     for name in ("pursuit_projection", "role_template_pursuits"):
         rows = table(name)
         keys = set(rows) | {k for r in rows.values() for k in r}

@@ -185,7 +185,7 @@ def pursuits_of(r: dict) -> dict:
 
     ⚠ IT VALIDATES THROUGH THE ONE OWNER AND DOES NOT RE-DO THE MEMBERSHIP TEST.
     `data.pursuits.pursuit` already is that check, delegating in turn to
-    `engine.substrate.descriptors.resolve_conviction` — the single reader of the single export of
+    `engine.substrate.descriptors.resolve_pursuit` — the single reader of the single export of
     the single roster. A second membership test here is the exact shape
     `tests/valoria/test_conviction_roster_single_owner.py` exists to prevent, and that guard is
     mutation-verified: three incompatible rosters once shipped at once and silently disabled the
@@ -197,8 +197,8 @@ def pursuits_of(r: dict) -> dict:
 
     ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): this function was
     `convictions_of`. It still reads `r.get("convictions")` -- `references/npc_registry.yaml`'s
-    own key -- UNCHANGED: that registry is canon and its per-character migration to the new
-    pursuits is Jordan's own later, separate authoring step, not this rename."""
+    own key -- UNCHANGED; the values under it were migrated to the fifteen pursuits in IN-08's
+    cells commit (the registry's header names the rule)."""
     from .pursuits import pursuit
     out: dict = {}
     block = r.get("convictions") or {}

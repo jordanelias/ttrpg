@@ -39,12 +39,12 @@ def _sym(k: int, rng: random.Random) -> list:
     return a
 
 
-# [JUSTIFIED: matrix widths, not game values — 4 is the live basis, the rest are the widths a
+# [JUSTIFIED: matrix widths, not game values — 7 is the live basis (IN-08), the rest are the widths a
 #  candidate basis could take and the ones the old solver silently failed at]
 # [JUSTIFIED: matrix widths — arithmetic, not game values]
-@pytest.mark.parametrize("k", [2, 4, 8, 12, 16])
+@pytest.mark.parametrize("k", [2, 4, 7, 8, 12, 16])
 def test_the_solver_converges_at_every_width_a_candidate_basis_could_have(k):
-    """`k` goes past 4 deliberately: 4 is the live basis and the width that never failed."""
+    """`k` goes past 4 deliberately: 7 is the live basis (IN-08); 4 was the old basis and the width that never failed."""
     # [JUSTIFIED: an arbitrary fixed seed — determinism, not a game value]
     rng = random.Random(11)
     for _ in range(25):

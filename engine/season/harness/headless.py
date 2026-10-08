@@ -122,7 +122,7 @@ def build_world(seed: int = 0, fixtures: "S.Fixtures" = None) -> World:
     # between a ROSTER (an enumeration that can drift out of step with the owner) and a REFERENCE
     # (a choice of one member) is not one an AST scan can draw.
     # `_pursuit` draws it by CONSTRUCTION rather than by argument: one name per call, each checked
-    # against `CONVICTIONS`, which IS `engine.substrate.descriptors.CONVICTIONS` — the same object,
+    # against the pursuit roster, which IS `engine.substrate.descriptors.PURSUITS` — the same object,
     # not a copy. A rename in `references/descriptor_registry.yaml` now raises here by name instead
     # of silently seeding a conviction nobody holds, which is strictly more than the literals did.
     # ⚠ IN-08's CELLS COMMIT MIGRATED THE THREE TO THE FIFTEEN PURSUITS, by the rule the cast

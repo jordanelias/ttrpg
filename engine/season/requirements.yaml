@@ -853,6 +853,10 @@ rows:
       2939 acts, up from 2781 before `14` and 2836 before `13d-iii`; `levy.unauthorized` fell from 18 of 19 attempts to 4 of
       23 and `issue` executed 6 of 30 times with `Act.via` set (`13d-iii`, `H-163` limit 1 lifted). 17 of 44 executing (39%) is
       a rise of one verb on 16 of 44.
+      20 of 46 AS OF IN-08's CELLS COMMIT (B-G); THE ROW STAYS `not_met`. `corpus_run`, seed 0, 143 cases:
+      `VERBS THAT EXECUTED : 20 of 46` (17 of 44 on the base commit 13715804) -- `challenge` and `accept` (the
+      duel pair's new rows) and `levy` join, nothing leaves. `WHERE THE 46 GO`: 10 no predicate/effect, 10
+      foldable but never attempted, 6 attempted and always refused (7 before; `levy` left it), 20 executed.
     measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE) -- 44 today; it was '38' as of ED-IN-0261, '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
     blocks: [H-65, IN-09, IN-10, IN-33, IN-45]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W10-core removed (it gates corpus_run's R2 check, not this row's WHERE THE <n> GO); H-94 is carried by its owners IN-10, IN-09, IN-45, IN-33
@@ -1005,7 +1009,9 @@ rows:
       HOW THIS ROW READS ITS RANKING LINE CHANGES WITH IT (G-1, [medium; Jordan to correct]).** The
       15x7 `pursuit_projection` and the alignment re-cell over every table verb (`rosters.yaml:
       tables`, from the folded drafts, RS-1) replace the 13x4 above; `tell`, `thread_read` and
-      `restore` are the declared `uncelled:` set. READING (G-1): the RANKING line counts only
+      `restore` are the declared `uncelled:` set; `carry`, `examine` and `interview` are celled
+      `null` on all seven axes and fall outside the denominator on the same ground
+      (`data/verbs.py::celled_verbs` counts non-zero cells). READING (G-1): the RANKING line counts only
       candidates whose verb has at least one celled axis and prints numerator and denominator,
       because an uncelled verb scores 0.0 for every person by construction and can neither
       discriminate nor be a tie the ranking failed to break. MEASURED off this row's own `measure:`

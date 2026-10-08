@@ -212,7 +212,7 @@ def _report(s: dict, tag: str) -> None:
         print(f"    {a:14} {pos:2} / {neg:2}")
     sp = s["spectrum"]
     print(f"\n  HOW MANY DIRECTIONS THE {len(s['axes'])}-AXIS BASIS ACTUALLY CARRIES")
-    print("  (covariance of the axis COLUMNS across the thirteen rows):")
+    print(f"  (covariance of the axis COLUMNS across the {s['total']} rows):")
     cum = 0.0
     for i, (v, share) in enumerate(zip(sp["eigenvalues"], sp["share"]), 1):
         cum += share

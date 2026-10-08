@@ -2312,11 +2312,11 @@ tables:
         surveil:         0.3    # carried: watching "without leave" is unauthorized by definition
         destroy_record:  0.4    # carried: defacing what an office's ruling produced
         convene:        -0.4    # derived: a `remit:convene` act that gathers a venue's rung -- the remit-act family `dispatch`/`issue` sit in
-        found:          -0.3    # reasoned: its cell demands strict ascent into the works' `at` -- a new rung on the containment ladder; `establish`'s reason read for a place, not an office, and `own`-eligible, so smaller
+        found:          -0.3    # reasoned: its effect demands strict ascent into the works' `at` -- a new rung on the containment ladder; `establish`'s reason read for a place, not an office, and `own`-eligible, so smaller
         march:          -0.5    # reasoned: `remit:dispatch`-eligible -- an army sent under an office's remit, `dispatch`'s own cell
         carry:          null    # carried absence: the old table refused this cell as "the lowest-magnitude, weakest-justified cell in the set"
         build:          null    # reasoned: `own`-eligible, and the row names no rank -- a works held by its maker, whoever he is
-        give:           null    # reasoned: `own`-eligible, a handover between peers present together; no remit is exercised
+        give:           null    # reasoned: `own`-eligible, a handover between two persons present together; no remit is exercised
         migrate:        null    # reasoned: `own`-eligible; where a person chooses to live says nothing about rank
         survey:         null    # reasoned: `own`-eligible; commissioning a sheet uses no seat
         # no source: no old cell and no row text about rank (draft §3.1, "the other 26")

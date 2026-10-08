@@ -1165,10 +1165,6 @@ def _load_alignment(cells: Optional[dict] = None, uncelled: Optional[dict] = Non
 
 ALIGNMENT = _load_alignment()
 
-# `uncelled:` -- the verbs declared to carry no cell on any axis, each with its reason. Bound once,
-# for `celled_verbs()` and the readers that report it (`harness/corpus_run.py`'s RANKING line).
-ALIGNMENT_UNCELLED = dict(table_meta("alignment").get("uncelled") or {})
-
 # The immutable baseline. `ALIGNMENT` is REBOUND by a sweep; this is not, so every sweep point is
 # built from the declared table rather than from the previous point (see `alignment_at`).
 ALIGNMENT_DECLARED = {ax: dict(row) for ax, row in ALIGNMENT.items()}
