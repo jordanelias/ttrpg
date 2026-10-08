@@ -191,7 +191,7 @@ def _charge_shock_sigma(defender, def_cells, zone, atom=None, t=None):
     else:                 g_face = 1.0                 # YELLOW flank
     # atom (Jordan directive): per-subunit defender stats; None -> unit. Single-subunit: atom.stance==unit.stance,
     # eff_discipline/eff_morale inherit -> byte-exact. brace gate (multiplicative): hold-stance x discipline x depth.
-    _stance = atom.stance if atom is not None else getattr(defender, 'stance', 'balanced')
+    _stance = atom.eff_stance if atom is not None else getattr(defender, 'stance', 'balanced')  # [MB-04] role keyword via eff_stance
     _braced = _subunit_braced(atom, t) if atom is not None else _unit_braced(defender, t)
     b_stance = MB_SHOCK_HOLD_BRACE if (_stance == 'hold' or _braced) else 1.0
     disc = atom.eff_discipline if atom is not None else getattr(defender, 'discipline', 5)

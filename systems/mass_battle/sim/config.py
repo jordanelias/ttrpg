@@ -593,8 +593,8 @@ POOL_QUALITY_MODEL = _sigma_os.environ.get('POOL_QUALITY_MODEL', '1') == '1'  # 
 # silently patched by picking a smaller scale that merely LOOKS closer.
 POOL_QUALITY_SCALE = float(_sigma_os.environ.get('POOL_QUALITY_SCALE', '0.5'))
 
-# ─── P-C COMPOSITIONAL-FORMATION ROLES (SCAFFOLD — data only; INERT until the instruction→
-# primitive modulation lands, which is behaviour-cascading; see pc_formation_design.md §3.5/§9.1).
+# ─── P-C COMPOSITIONAL-FORMATION ROLES (data; the instruction→primitive wiring is
+# hierarchy.units.ROLE_INSTRUCTION_PRIMITIVES, MB-04; see pc_formation_design.md §3.5/§9.1).
 # Troop type gates the role menu (the FM "position"→role model). This is a STARTING POINT for the
 # historical troop-type/role research — expect the taxonomy and per-type role lists to be revised.
 TROOP_TYPE_ROLES = {
@@ -611,14 +611,15 @@ TROOP_TYPE_ROLES = {
 }
 
 # Each role = a typical shape + an instruction package (the FM "role + tactics" model). Instructions
-# are the behaviour layer; they MODULATE foundational primitives (brace->density/hold, charge->momentum,
-# etc.) and never add flat numbers. Behaviour wiring + calibration is the next step -- the brace mechanism
-# in particular needs strengthening per the measured baseline (see pc_formation_design.md). Data only here.
+# are the behaviour layer; they MODULATE foundational primitives and never add flat numbers. Data only
+# here: which keyword drives which primitive -- and which stay unwired, with the reason -- is owned by
+# hierarchy.units.ROLE_INSTRUCTION_PRIMITIVES (MB-04, #445 U-3). Push's keyword was 'advance', read by
+# nothing; it is 'push' since MB-04, the role's own name, driving the aggressive stance.
 ROLE_SPEC = {
     "ShieldWall": {"shape": "Line",       "instructions": ("brace", "hold")},
     "Hold":       {"shape": "Line",       "instructions": ("hold",)},
     "Anvil":      {"shape": "Line",       "instructions": ("brace", "pin")},
-    "Push":       {"shape": "Line",       "instructions": ("advance",)},
+    "Push":       {"shape": "Line",       "instructions": ("push",)},
     "Skirmish":   {"shape": "GappedLine", "instructions": ("loose", "harass")},
     "Screen":     {"shape": "Line",       "instructions": ("screen",)},
     "Pursue":     {"shape": "Line",       "instructions": ("pursue",)},

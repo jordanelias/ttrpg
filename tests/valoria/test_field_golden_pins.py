@@ -77,6 +77,11 @@ _KNOWN_INERT = {
     'MB_RESERVE_COMMIT', 'RESERVE_COMMIT_TURN',
     # dead behind MB_CELL_MORALE (pinned '0'):
     'CELL_BREAK_ROUT_FRAC', 'CELL_MORALE_PULL',
+    # [MB-04] needs a role keyword with a row in hierarchy.units.ROLE_INSTRUCTION_PRIMITIVES that the
+    # table routes ('hold'/'push'/'charge'/'lure'); the battery's only instructions are 'brace' and the
+    # envelop presets' 'envelop', both literal rows. Measured: all three modes BYTE-EXACT OK on the
+    # unchanged digests with the flag at its default ON.
+    'MB_ROLE_INSTRUCTIONS',
 }
 # [A6, ED-MB-0067 Part A, 2026-09-26] MB_AMMO_ENABLED/MB_VOLLEYS_START/MB_VOLLEYS_RESUPPLY are NOT
 # classified here (in _KNOWN_INERT) -- round 1 briefly did, while the flag shipped OFF; reclassified

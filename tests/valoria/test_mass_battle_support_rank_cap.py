@@ -173,16 +173,20 @@ def _standing(ta, tb, n=12):
 def test_capped_pike_out_retains_heavy_after_repelling_a_charge(field_path, monkeypatch):
     """Both pike (0.3) and heavy (0.2) clear the lance (0.2), so the recoil gate treats them alike; with
     the cap ON the melee after the repel separates them by the pike's third supported rank. Measured over
-    test_reach_weapon_class's 16-seed braced-vs-charge fixture: capped pike 0.9805 > heavy 0.9714 > levy
-    0.9275; uncapped pike == heavy == 0.9663 (levy 0.9244)."""
+    test_reach_weapon_class's 16-seed braced-vs-charge fixture: capped pike 0.9774 > heavy 0.9665 > levy
+    0.9225; uncapped pike == heavy == 0.958 (levy 0.9188).
+    Re-measured at MB-04: the fixture's charger carries the 'charge' keyword, which now drives the
+    aggressive stance (hierarchy.units.ROLE_INSTRUCTION_PRIMITIVES). With MB_ROLE_INSTRUCTIONS=0 the
+    MB-07 readings return exactly (capped 0.9805/0.9714/0.9275, uncapped 0.9663, levy 0.9244); the
+    ordering this test exists for holds under both."""
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', False)
     pike0, heavy0 = _charge_vs_brace('pike'), _charge_vs_brace('heavy_infantry')
     assert math.isclose(pike0, heavy0, abs_tol=1e-6)
-    assert pike0 == pytest.approx(0.9663, abs=1e-4)
+    assert pike0 == pytest.approx(0.958, abs=1e-4)
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', True)
     pike, heavy, levy = (_charge_vs_brace(t) for t in ('pike', 'heavy_infantry', 'levy'))
     assert pike > heavy > levy, (pike, heavy, levy)
-    assert (pike, heavy, levy) == pytest.approx((0.9805, 0.9714, 0.9275), abs=1e-4)
+    assert (pike, heavy, levy) == pytest.approx((0.9774, 0.9665, 0.9225), abs=1e-4)
 
 
 @pytest.mark.slow

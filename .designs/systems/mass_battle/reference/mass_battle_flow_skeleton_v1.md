@@ -161,9 +161,9 @@ the return value is consumed):
 | `world.battle_count` | W | `systems/factions/sim/faction_action.py` (outside this subsystem's own folder — see §6) | `systems/factions/sim/faction_action.py:525` |
 | **ENGINE** | | | |
 | `unit.hp` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Unit`) | write `systems/mass_battle/sim/orchestration.py:2064-2065` |
-| `unit.morale` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Unit.set_morale`, `Unit.cascade_morale_hit`) | `systems/mass_battle/sim/hierarchy/units.py:2820 set_morale` |
-| `unit.routed` / `atom.routed` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Unit.derive_rout`) | `systems/mass_battle/sim/hierarchy/units.py:2799 derive_rout`; write site `systems/mass_battle/sim/orchestration.py:2154-2161` |
-| `unit.stamina` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Subunit.drain_stamina`) | `systems/mass_battle/sim/hierarchy/units.py:796 drain_stamina` |
+| `unit.morale` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Unit.set_morale`, `Unit.cascade_morale_hit`) | `systems/mass_battle/sim/hierarchy/units.py:2891 set_morale` |
+| `unit.routed` / `atom.routed` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Unit.derive_rout`) | `systems/mass_battle/sim/hierarchy/units.py:2870 derive_rout`; write site `systems/mass_battle/sim/orchestration.py:2154-2161` |
+| `unit.stamina` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Subunit.drain_stamina`) | `systems/mass_battle/sim/hierarchy/units.py:867 drain_stamina` |
 | `unit.col_grid` (per-column grid, `PER_CELL` only) | RW | `systems/mass_battle/sim/percell.py` | `systems/mass_battle/sim/orchestration.py:2201-2202 sync_col_grid` |
 
 ## 6. Seams

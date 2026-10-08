@@ -384,7 +384,7 @@ from systems.mass_battle.sim.geometry import *  # P-A stage 2: geometry extracte
 # ─── ATOM ────────────────────────────────────────────────────────────────────
 
 # P-C scaffold: troop_type→role gating (the FM position→role model). Pure accessors over
-# TROOP_TYPE_ROLES; INERT until the instruction→primitive modulation lands. See design §3.5.
+# TROOP_TYPE_ROLES; the instruction→primitive wiring is hierarchy.units.ROLE_INSTRUCTION_PRIMITIVES (MB-04).
 def _momentum_speed(atom, contact_abs_cells):
     """F-ii: mean cell_last_speed for contact cells.
     [canonical: Jordan handoff §(2)]"""
@@ -1264,8 +1264,8 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                 # ~even at OFF≈DEF — the pin is NOT crushed, it survives to buy time (Cannae centre); two
                 # holders grind slowly; two aggressors trade fast and bloody. Delta-sigma (uniform-impact),
                 # like every other advantage above — NOT a raw damage multiplier. Gated; balanced=0 -> inert.
-                cA = STANCE_COMMITMENT.get(atom_a.stance, 0)
-                cB = STANCE_COMMITMENT.get(atom_b.stance, 0)
+                cA = STANCE_COMMITMENT.get(atom_a.eff_stance, 0)   # [MB-04] role keyword reads through eff_stance
+                cB = STANCE_COMMITMENT.get(atom_b.eff_stance, 0)
                 ns_a += (cA * INTENT_OFFENSE_D + cB * INTENT_DEFENSE_D) * SIGMA_PER_D
                 ns_b += (cB * INTENT_OFFENSE_D + cA * INTENT_DEFENSE_D) * SIGMA_PER_D
             # [MB-05] A.9 terrain dice (`Unit.terrain_off_d`/`terrain_def_d`, set by
@@ -2621,7 +2621,9 @@ def resolve_feigned_retreat(pursuer, feigning_unit):
     engagement pool is cut by OVEREXTEND_PENALTY — see units.base_combat_pool). Returns a dict
     describing the outcome, or None if the feint did not apply.
     [canonical: PP-256, mass_battle_v30.md §A.12 / §B.4 tactic card — Overextended]"""
-    if not MB_FEIGNED_RETREAT or not getattr(feigning_unit, 'feigned', False):
+    # [MB-04] A 'lure' instruction (the Feint role) declares the same feint the 'feign_retreat' order
+    # pseudo-field does; read live here (hierarchy.units.unit_lures), never copied onto `.feigned`.
+    if not MB_FEIGNED_RETREAT or not (getattr(feigning_unit, 'feigned', False) or unit_lures(feigning_unit)):
         return None
     if feigned_retreat_recognized(pursuer):
         return {'recognized': True, 'overextended': False}
