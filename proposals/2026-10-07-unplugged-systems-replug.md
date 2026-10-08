@@ -1,6 +1,6 @@
 # The unplugged systems: what each needs before a composition row can reach it (IN-06, `33`)
 
-## Status: PROPOSED — the design half of IN-06 (`workplans/valoria_master_workplan_v9_part4.md` §4.5), written in B-C, built in B-S, re-reviewed after IN-08 (B-G, B-H) before B-S opens
+## Status: PROPOSED — the design half of IN-06 (`workplans/valoria_master_workplan_v9_part4.md` §4.5), written in B-C, built in B-S, re-reviewed after IN-08 (B-G, B-H) before B-S opens · HELD BACK from ratification-on-merge (ED-1094) until that re-review; the PR body lists it as held back
 
 > **SCOPE.** This document is reference and a proposal (`CLAUDE.md` §0.05). It resolves nothing at
 > runtime: delete it and the game behaves exactly the same. It builds nothing, allocates no ID, writes

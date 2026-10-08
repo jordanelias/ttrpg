@@ -1,6 +1,6 @@
 # The settlements module — what each loop-resident computation computes, and the levy-to-field feed
 
-## Status: PROPOSED — the design IN-07 (`36`, = SE-02) owes before its build (B-T). Nothing here is built. What each extraction COMPUTES is Jordan's to review (the entry's gate, `workplans/valoria_master_workplan_v9_part4.md:398`); every judgment call is marked [ASSUMPTION]. HELD BACK from ratification-on-merge (ED-1094): §5's A13-A15 (the levy feed) are Jordan's, and the PR body lists them as held back.
+## Status: PROPOSED — the design IN-07 (`36`, = SE-02) owes before its build (B-T). Nothing here is built. What each extraction COMPUTES is Jordan's to review (the entry's gate, `workplans/valoria_master_workplan_v9_part4.md:398`); every judgment call is marked [ASSUMPTION]. HELD BACK from ratification-on-merge (ED-1094): §5's LF-1 to LF-3 (the levy feed) are Jordan's, and the PR body lists them as held back.
 
 > **Scope.** Reference, not mechanism (`CLAUDE.md` §0.05): if this file were deleted the game would behave
 > identically. It allocates no ID, writes no ledger row and schedules nothing; the plan (`_part3` §B, row B-T)
@@ -375,7 +375,7 @@ unnecessary overhead"*), they drop and E1–E3 stand alone.
 - So **nothing a levy does reaches a field.** `massbattle.py:187-196` records that a weight-to-troops conversion
   is open work and refuses to invent one.
 
-**The feed, proposed [ASSUMPTION A13].** A levied treasury **provisions** a field; it does not create troops.
+**The feed, proposed [ASSUMPTION LF-1].** A levied treasury **provisions** a field; it does not create troops.
 Troops stay people; stores bound how many of them can be fielded. A new query, `settlements.provision`
 (`modules/settlements/provision.py`), is called by the field adapter for each side.
 
@@ -392,9 +392,9 @@ Troops stay people; stores bound how many of them can be fielded. A new query, `
     `consumed = ration[k] × troops`, per kind.
 - **The treasuries.**
   - Attacker: the rung of `a.via`'s office, the same treasury `levy` fills (`effects_governance.py:342`).
-  - Defender **[ASSUMPTION A14]**: the stores of the nearest held rung at or above the target, the walk
+  - Defender **[ASSUMPTION LF-2]**: the stores of the nearest held rung at or above the target, the walk
     `holder_faction_of` already makes (`world_q.py:1185-1188`).
-- **Consumption [ASSUMPTION A15].** `_eff_march` (RESOLVE, host) debits `consumed` from each side's treasury.
+- **Consumption [ASSUMPTION LF-3].** `_eff_march` (RESOLVE, host) debits `consumed` from each side's treasury.
   A field that only *bounded* would be a ratchet: levy once and you are provisioned for every battle after,
   which fails NERS-R's completeness. The march row's `writes:` gains `Rung.stores` once per side.
   - **Rejected, with reasons:**
@@ -480,15 +480,15 @@ The feed (§5) is a separate position. It edits `seam/wrappers/mass_battle.py`, 
 | A7 | `state/gate.py`: zero extractions | Jordan names a gate rule as a settlement rule |
 | A10 | Site wear stays host | Wear joins E3 |
 | A12 | E4–E6 are extracted | Drop them as overhead |
-| A13 | The feed bounds troops by the treasury, using the larder's ration, behind a `field_provisioning` fixture that ships off | No feed (the control arm) |
-| A14 | The defender's treasury is the nearest held rung's stores | The target settlement's larder ladder |
-| A15 | The field consumes its ration from the treasury, written by `_eff_march` | Bound only, accepting the ratchet |
+| LF-1 | The feed bounds troops by the treasury, using the larder's ration, behind a `field_provisioning` fixture that ships off | No feed (the control arm) |
+| LF-2 | The defender's treasury is the nearest held rung's stores | The target settlement's larder ladder |
+| LF-3 | The field consumes its ration from the treasury, written by `_eff_march` | Bound only, accepting the ratchet |
 | A16 | An unprovisioned side gets the crash floor, not a refusal | The march precondition refuses |
 | A17 | No record carries `envelope` | SE-04 (b) gives it a writer → it becomes a `Housing` field |
 | A18 | The roster's settlements home moves to `modules/settlements/` | Keep it and add a second root |
 
 **Two of these lead to materially different games and are the ones Jordan's review should weigh first:**
-- A13 + A15: whether levied stores bound and feed a field at all.
-- A14: whose stores the defender eats.
+- LF-1 + LF-3: whether levied stores bound and feed a field at all.
+- LF-2: whose stores the defender eats.
 
 Every other line is answered by precedent or by the architecture (`CLAUDE.md` §0, steps 4–5).

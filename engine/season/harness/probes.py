@@ -535,7 +535,7 @@ def p9():
     assert "refuse" in log and "ran-own-choose" in log
     return ("PASS: `dispatch` names ONE PERSON; that person runs their OWN `choose` and refused. "
             "The King's reach really is other people's decisions, mechanically. NOTE the refusal "
-            "and the order landed in the SAME season with no ordering between them -- see A14/A36")
+            "and the order landed in the SAME season with no ordering between them -- see A36 (A14 shows a reaction across rounds, not an order within one)")
 
 
 @probe("P10", "a person tracks multi-season work in progress", "S13", by="construction",

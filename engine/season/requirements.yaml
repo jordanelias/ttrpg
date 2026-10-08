@@ -393,7 +393,7 @@ rows:
       False). The repair is a RULE in `loop/resolve.py`: the occasion goes on every
       act-emission, at the one emission owner and not at the call sites. ⚠ Three refusals do not pass through that owner (`loop/resolve.py:72-73`, `:746-747` and `:776-779` construct `Event` directly), and the scratch counterfactual patched `_act_events` only, so it never touched them: the B-H repair routes them through `_act_events` first and commits the counterfactual as its falsifier test. It moves
       `World.content_hash()` wherever an occasioned act is refused. NOT REPAIRED HERE: a loop
-      edit is not R5. It slots to **B-H** (`workplans/valoria_master_workplan_v9_part3.md:256`,
+      edit is not R5. It slots to **B-H** (`workplans/valoria_master_workplan_v9_part3.md` §B.1, the B-H row,
       the batch whose files already include `loop/resolve.py`'s fold), or to the earliest V
       batch by §B.0 R1 if the hash move re-records a count or set pin. IN-10, IN-11 and IN-13's
       new edges do not close it; they could only route ARC-23 around it.
@@ -707,7 +707,7 @@ rows:
       different worlds (143 corpus cases against one populated realm and one spine) and are not
       summed. Status stays `partial`.
     measure: "python -m engine.season.harness.aperture 4 0  # the per-verb lines: `levy` and the seat-gated rows (about 25 minutes); `corpus_run` prints no 'unrepresentable scales:' line any more, the census is empty"
-    blocks: []
+    blocks: [IN-10, IN-40, FA-01, IN-49, SC-01, IN-46, IN-47]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W10 spent (declared routing landed); W13 removed (no conjunct of this row reads the ARC re-authoring lane)
 
   - id: R-05
@@ -1200,6 +1200,6 @@ rows:
       so "corpus hearers carry no capability" in the T4 paragraph is true of its own date and not of
       this tree. Status stays `partial`: the roll still varies by seed and fixture, and by person in
       one case of 143.
-    measure: "python -m pytest engine/season/tests/test_season_shape.py::test_we_only_a_verb_that_declares_contests_can_be_graded_today ; python -m engine.season.harness.headless --seasons 2 --seed 0"
+    measure: "python -m engine.season.harness.headless --seasons 2 --seed 0 ; python -m pytest engine/season/tests -k test_we_only_a_verb_that_declares_contests_can_be_graded_today"
     blocks: [H-98]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W23 spent in substance (`fight` resolves through the combat seam and is graded)

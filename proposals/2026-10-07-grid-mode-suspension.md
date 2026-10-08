@@ -1,6 +1,6 @@
 # The grid mode's suspension at ENCOUNTER's barrier
 
-## Status: PROPOSED (2026-10-07) · design-only, builds nothing · reference under `CLAUDE.md` §0.05
+## Status: PROPOSED (2026-10-07) · design-only, builds nothing · reference under `CLAUDE.md` §0.05 · HELD BACK from ratification-on-merge (ED-1094) until it is re-read against the moved `combat` container at B-L; the PR body lists it as held back
 ## Position: IN-46 (= SM-6), `workplans/valoria_master_workplan_v9_part4.md` · Lane: IN (PC) · IDs: none allocated
 ## Measured at HEAD `4558f85`. Every `file:line` below was opened at that HEAD; a path without a top-level directory is under `engine/season/`.
 
