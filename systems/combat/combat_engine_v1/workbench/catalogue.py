@@ -242,7 +242,7 @@ def mechanics():
 def constants():
     out = ["\n## Constant tables (`core.py`)\n"]
     for nm in ('HEAD_MODE', 'DELIVERY', 'RESIST', 'TIER2MAT', 'GAP_EXPOSURE', 'PEN_THR', 'QUAL',
-               'COVERAGE_GAP', 'DECISIVE_OB', 'PERC_AUTH_REF', 'PERC_AUTH_REF_SOFT', 'CUT_AUTH_REF',
+               'COVERAGE_GAP', 'PERC_AUTH_REF', 'PERC_AUTH_REF_SOFT', 'CUT_AUTH_REF',
                'THRUST_AUTH_REF', 'GAP_PREC_REF', 'PEN_DEFICIT_K'):
         if hasattr(core, nm):
             out.append(f"- **`core.{nm}`** = `{getattr(core, nm)}`")

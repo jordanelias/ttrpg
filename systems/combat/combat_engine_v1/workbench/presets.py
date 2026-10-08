@@ -34,8 +34,7 @@ def param_surface():
         'per_die_mean_TN7': m1.PER_DIE[7][0],
         'per_die_sigma_TN7': m1.PER_DIE[7][1],
         'TN_standard': m1.TN_STANDARD,
-        'decisive_Ob': core.DECISIVE_OB,
-    }
+    }   # 'decisive_Ob' removed with core.DECISIVE_OB (PC-03): Ob is per-defender (core.ob_from_defender), not a knob
     if r8 is not None:
         A.update(attr_average=r8.ATTR_AVG, attr_creation_max=r8.ATTR_MAX, attr_budget=r8.EXPECTED_BUDGET)
     B = {

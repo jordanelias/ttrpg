@@ -15,6 +15,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 _REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..'))
 if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)          # resolve the sim.* shared-service layer (autoload)
+import functools
 from math import tanh, exp
 from engine.dice_engine import sigma_leverage as SL
 from engine.dice_engine import dice_engine as DE   # THE degree ladder's owner (degree() below routes through it)
@@ -43,7 +44,9 @@ import weapon_physics as WP   # Phase-3 consolidation: percussion authority live
                               # retiring the duplicate core.p_auth that read the hand-set pob_frac. WP imports only math + the
                               # zero-import `vocabulary` leaf at module scope (cycle-free), so this import is safe.
 
-DECISIVE_OB = 3    # [canonical: combat_v30 §5 degree band centre (decisive sub-action Ob); relocated verbatim from the frozen r8 harness, ED-1085]
+# DECISIVE_OB (the fixed Ob 3) is DELETED (PC-03): retired as a resolution input by ED-PC-0058 (Jordan: "DECISIVE_OB
+# for combat is stupid as hell and is dead"), and its last reader, strike()'s severity tail, now starts at the owner's
+# bar. test_no_dead_exported_engine_params forbids shipping it into the Godot contract with no reader.
 TN = SL.TN_STANDARD
 POOL_FLOOR = 5     # [canonical: params/core.md §Derived Scores (Combat Pool min 5)]
 BASE_POOL = 6      # [class-C: armature — History-driven pool base; pool = max(5, History+6), ED-901; relocated verbatim from r1, ED-1085]
@@ -72,10 +75,32 @@ def degree(net, ob):
     The ceiling that once blocked the move (guandao 2.5% -> 47.5% of plate fights against a 40% cap) was
     abolished by ED-PC-0057 before this migration; `test_plate_participation_tracks_armour_defeat_capability`
     reports that rate and no longer bounds it.
-    `DECISIVE_OB` SURVIVES only as `strike()`'s unrelated severity-tail reference (a distinct,
-    unruled formula measuring how far a roll sits past the overwhelming bar) — it is no longer read
-    by anything that decides a degree."""
+    `DECISIVE_OB` is DELETED (PC-03): `strike()`'s severity tail, its last reader, now starts at
+    `band_floor('overwhelming', ob)`."""
     return _COMBAT_LABEL[DE.degree_from_net(net, ob)]
+
+_DEGREE_OF = {label: deg for deg, label in _COMBAT_LABEL.items()}
+@functools.lru_cache(maxsize=None)
+def band_floor(band, ob):
+    """The smallest `net` the owner ladder reads as `band` OR BETTER at `ob` — a band EDGE, read off
+    `DE.degree_from_net` by bisection (ranked by the owner's `DEGREE_ORDINAL`), never re-declared here.
+    PC-03: the workbench's displayed distribution and `strike()`'s overwhelming tail both need an edge, and
+    each had kept its own copy of the pre-ruling one; a copy is what went stale, so the edge is DERIVED.
+    Exact to the float: `degree(band_floor(b, ob), ob)` is `b` and the next float down is not. The
+    +/-64 bracket around `ob` is asserted, not assumed (the owner's edges sit within 3 of `ob`). Pure; cached
+    per (band, ob) — Ob is History/2, so a fight touches a handful of values."""
+    k = DE.DEGREE_ORDINAL[_DEGREE_OF[band]]
+    rank = lambda x: DE.DEGREE_ORDINAL[DE.degree_from_net(x, ob)]
+    lo, hi = ob - 64.0, ob + 64.0
+    assert rank(lo) < k <= rank(hi), (band, ob)
+    while True:
+        mid = (lo + hi) / 2
+        if mid <= lo or mid >= hi:
+            return hi
+        if rank(mid) >= k:
+            hi = mid
+        else:
+            lo = mid
 
 def ob_from_defender(defender):
     """RULED Ob-derivation (Jordan, 2026-08-15, verbatim: "DECISIVE_OB for combat is stupid as hell and is dead
@@ -101,8 +126,8 @@ def resolve(pool, net_sigma, rng, ob):
     SL.eff_ob is display-only per its own docstring; resolving via the floored Ob-shift distorted the degree
     bands (overwhelming trivialised by the Ob-floor).
     `ob`: the RULED Ob-from-defender value (Jordan 2026-08-15) — callers pass `ob_from_defender(defender)`,
-    never `DECISIVE_OB` (retired as a resolution input; it survives only as strike()'s severity-tail
-    reference, an unrelated formula). REQUIRED rather than defaulted: the ruling is "Ob should be determined
+    never the fixed `DECISIVE_OB` (retired as a resolution input; deleted at PC-03).
+    REQUIRED rather than defaulted: the ruling is "Ob should be determined
     by your opponent", so a silent DECISIVE_OB fallback would let a caller skip the derivation exactly as
     every call site did before ED-PC-0058.
     Returns (deg, net)."""
@@ -587,7 +612,11 @@ def strike(attacker, defender, deg, cfg, net=None, pool=None):
     thrust-protected, mode-split Phi_grip degrades the SAME grip the wielder actually holds."""
     q=None
     if net is not None and deg=='overwhelming':                  # M-QUAL: sigma-leverage tail (canonical sigma_n + tanh)
-        z=max(0.0,(net-2*DECISIVE_OB)/SL.sigma_n(pool))          # severity beyond the overwhelming bar (net>=6)
+        # severity beyond the overwhelming bar THIS roll was banded at: the owner's edge at the defender's Ob (PC-03).
+        # Was `net - 2*DECISIVE_OB` (a fixed net of 6, the pre-ruling bar at the retired Ob 3), which left q clamped at
+        # the tail floor for every overwhelming net between the real bar and 6. Every caller banded its roll at
+        # ob_from_defender(defender) of this same `defender` (wrapper: the exchange, the stop-hit, the pursuit).
+        z=max(0.0,(net-band_floor('overwhelming', ob_from_defender(defender)))/SL.sigma_n(pool))
         q=1.5+(OW_MAX-1.5)*tanh(z/OW_Z)
     head=getattr(attacker, 'sel_head', None) or attacker.head    # the SELECTED use-mode head (systems.select_mode, set by the wrapper); falls back to the native head
     gap=getattr(attacker, 'sel_gap', None); gap = gap if gap is not None else attacker.w['gap']

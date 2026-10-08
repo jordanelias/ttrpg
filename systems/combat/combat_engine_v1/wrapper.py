@@ -209,9 +209,10 @@ def engagement(A, B, first, cfg, rng, prev_closed=False):
             if measure_gap > 0.0 and rng.random() < stophit_p:
                 pool=max(1, core.resolution_pool(longer.history))
                 nsig=S.stophit_sigma(longer, shorter, measure_gap, cfg)
-                deg, net = core.resolve(pool, nsig, rng, core.ob_from_defender(shorter))   # Ob-from-defender (ED-PC-0058): `shorter` is struck if the stop-thrust lands.
+                _ob=core.ob_from_defender(shorter)
+                deg, net = core.resolve(pool, nsig, rng, _ob)   # Ob-from-defender (ED-PC-0058): `shorter` is struck if the stop-thrust lands.
                 _emit('stophit', longer=longer.label, shorter=shorter.label, gap=round(measure_gap,2),
-                      pool=pool, net_sigma=round(nsig,3), net=round(net,2), degree=deg)
+                      pool=pool, net_sigma=round(nsig,3), ob=_ob, net=round(net,2), degree=deg)   # `ob`: the workbench bands its distribution at it (PC-03)
                 if deg in ('success','overwhelming'):
                     d=core.strike(longer, shorter, deg, cfg, net=net, pool=pool)
                     shorter.apply_wound(d); shorter.conc=max(0,shorter.conc-cfg['CONC_DRAIN_HIT'])
@@ -302,8 +303,9 @@ def engagement(A, B, first, cfg, rng, prev_closed=False):
             aggressor.initiative=S.clamp_initiative(aggressor.initiative-steal, cfg)
             counter_attempt=S.counter_select(defender, cfg, rng, TR)
         pool=max(1, core.resolution_pool(aggressor.history))
-        deg, net = core.resolve(pool, net_sigma, rng, core.ob_from_defender(defender))   # Ob-from-defender (ED-PC-0058)
-        _emit('roll', aggressor=_agg0, pool=pool, net_sigma=round(net_sigma,3), net=round(net,2), degree=deg, mode=mode)
+        _ob=core.ob_from_defender(defender)
+        deg, net = core.resolve(pool, net_sigma, rng, _ob)   # Ob-from-defender (ED-PC-0058)
+        _emit('roll', aggressor=_agg0, pool=pool, net_sigma=round(net_sigma,3), ob=_ob, net=round(net,2), degree=deg, mode=mode)   # `ob`: the workbench bands its distribution at it (PC-03)
         close = closed   # C-1: per-beat close-coupling follows the engagement measure-state (not raw reach alone)
         # OVERCOMMIT EXPOSURE — systems computes it; the wrapper applies the initiative/poise loss.
         overcommit_exposure = S.overcommit_exposure(aggressor, commit, fat_a, cfg, TR)
