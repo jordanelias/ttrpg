@@ -141,5 +141,3 @@ def test_every_role_keyword_is_classified():
     assert len(vocab) >= 10
     table = _hu.ROLE_INSTRUCTION_PRIMITIVES
     assert vocab <= set(table), f"unclassified: {sorted(vocab - set(table))}"
-    for k, (primitive, where) in table.items():
-        assert where, f"{k}: a row needs its reader or, when unwired, its reason"

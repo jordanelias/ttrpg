@@ -56,8 +56,8 @@ MB_FACING_ROUT = (_hu_os.environ.get('MB_FACING_ROUT', '1') == '1')  # (d) route
 
 # ─── ROLE INSTRUCTIONS → PRIMITIVES (MB-04, A5 role instincts; #445 U-3) ──────────────────────────────
 # config.ROLE_SPEC gives each role a shape and an instruction package. This table is the SINGLE OWNER of
-# which keyword drives which engine primitive: keyword -> (primitive, where it is read), or
-# (None, why it is unwired). A keyword drives only a primitive that already existed; where none could
+# which keywords the STANCE and FEINT primitives read (the 'stance:<s>' and 'feigned_retreat' rows, below);
+# its other rows are reference: where a literal keyword is read elsewhere, or (None, why it is unwired). A keyword drives only a primitive that already existed; where none could
 # honestly carry it, it stays unwired and says why, rather than gaining a fabricated effect.
 #   * rows read through this table: 'stance:<s>' rows via Subunit.eff_stance (the default posture a role
 #     sets when the stance was never written on purpose -- an explicit stance, 'balanced' included,
