@@ -4,8 +4,8 @@ Plan position IN-19 (`STORY-BAR`). Over N seeded realms it prints, per season, h
 ANOTHER PERSON'S act among their antecedents (the cross-person share) and the distribution of
 cross-person chain depth, for each forcing arm, and whether the arms read equal. It grades nothing,
 pins nothing and is wired into no gate: like `harness/aperture.py` it reports raw readings, never a
-verdict (`harness/soak.py` now grades; this module does not). The prose that asked for it is reference (`CLAUDE.md` §0.05); what this
-module computes is what the reading IS.
+verdict (`harness/soak.py` now grades; this module does not). The prose that asked for it is
+reference (`CLAUDE.md` §0.05); what this module computes is what the reading IS.
 
 Entry point: `python -m engine.season.harness.storybar --base-seed S --n N --seasons K
 --arms ARM ARM [--cap C]`. Every numeric argument is required and none has a default (the same reason
@@ -150,9 +150,10 @@ def summarise(acts) -> dict:
             "depth": dict(sorted(dep.items())), "max_depth": max(dep, default=0)}
 
 
-def per_season(reading: dict, seasons: int) -> list:
-    """`[(season_reading, cumulative_reading)]` for seasons `0..seasons-1`."""
-    rows = list(reading["acts"].values())
+def per_season(acts, seasons: int) -> list:
+    """`[(season_reading, cumulative_reading)]` for seasons `0..seasons-1`, over an iterable of act
+    rows from `read`."""
+    rows = list(acts)
     return [(summarise(r for r in rows if r["season"] == s),
              summarise(r for r in rows if r["season"] <= s)) for s in range(seasons)]
 
@@ -161,8 +162,11 @@ def per_season(reading: dict, seasons: int) -> list:
 # ONE SEEDED REALM, ONE ARM.
 # ---------------------------------------------------------------------------------------------
 
-def drive(seed: int, seasons: int, arm: str, cap=None) -> tuple:
-    """Build the realm, run `seasons` seasons under `arm`; return `(world, driver, bounds)`."""
+def drive(seed: int, seasons: int, arm: str, cap=None, on_season=None) -> tuple:
+    """Build the realm, run `seasons` seasons under `arm`; return `(world, driver, bounds)`.
+
+    `on_season(world, season summary, events logged this season)`, when given, is called after each
+    season -- `harness/loops.py::observe` reads its per-season quantities through it."""
     if arm not in ARMS:
         raise ValueError(f"forcing arm {arm!r} is not built; this tree runs {ARMS}")
     w = build_realm(seed, cap)
@@ -173,32 +177,33 @@ def drive(seed: int, seasons: int, arm: str, cap=None) -> tuple:
     bounds = []
     for _ in range(seasons):
         bounds.append(len(w.log))
-        d.season(ch, question=None, subsistence=P.SUBSIST,
-                 contest_max_depth=w.fixtures.get("contest_max_depth"))
+        summary = d.season(ch, question=None, subsistence=P.SUBSIST,
+                           contest_max_depth=w.fixtures.get("contest_max_depth"))
+        if on_season is not None:
+            on_season(w, summary, len(w.log) - bounds[-1])
     return w, d, bounds
 
 
 def run_seed(seed: int, seasons: int, arm: str, cap=None) -> dict:
-    """`drive`, then `read`; the result carries `bounds` and the resolved-act count too."""
+    """`drive`, then `read`; the result carries the resolved-act count too."""
     w, d, bounds = drive(seed, seasons, arm, cap)
     out = read(w.log, d.act_of, bounds)
-    out["bounds"] = bounds
     out["resolved"] = len(d.resolved)
     return out
 
 
-def compare(arms, seeds, seasons: int, cap=None) -> dict:
-    """`{arm_index: {"arm", "seeds": {seed: per_season}, "pooled": per_season}}` for each arm."""
-    out = {}
-    for i, arm in enumerate(arms):
+def compare(arms, seeds, seasons: int, cap=None) -> list:
+    """`[{"arm", "seeds": {seed: per_season}, "pooled": per_season}]`, one per arm in `arms` order."""
+    out = []
+    for arm in arms:
         by_seed, pooled_rows = {}, []
         for seed in seeds:
             r = run_seed(seed, seasons, arm, cap)
-            by_seed[seed] = {"per_season": per_season(r, seasons), "unread": r["unread"],
+            by_seed[seed] = {"per_season": per_season(r["acts"].values(), seasons),
+                             "unread": r["unread"],
                              "resolved": r["resolved"]}
             pooled_rows.extend(r["acts"].values())
-        out[i] = {"arm": arm, "seeds": by_seed,
-                  "pooled": per_season({"acts": dict(enumerate(pooled_rows))}, seasons)}
+        out.append({"arm": arm, "seeds": by_seed, "pooled": per_season(pooled_rows, seasons)})
     return out
 
 
@@ -228,14 +233,14 @@ def main(argv=None) -> int:
     res = compare(args.arms, seeds, args.seasons, args.cap)
     print(f"storybar seeds={seeds[0]}..{seeds[-1]} seasons={args.seasons} arms={list(args.arms)} "
           f"cap={args.cap} PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')}")
-    for i in sorted(res):
-        arm = res[i]["arm"]
-        for seed, sr in res[i]["seeds"].items():
+    for i, arm_res in enumerate(res):
+        arm = arm_res["arm"]
+        for seed, sr in arm_res["seeds"].items():
             print(f"[arm {i}:{arm}] seed={seed} resolved={sr['resolved']} unread={sr['unread']}")
             for s, (this, cum) in enumerate(sr["per_season"]):
                 print(f"  season {s}: {_fmt(this)}")
                 print(f"  through {s}: {_fmt(cum)}")
-        for s, (this, cum) in enumerate(res[i]["pooled"] if len(seeds) > 1 else ()):
+        for s, (this, cum) in enumerate(arm_res["pooled"] if len(seeds) > 1 else ()):
             print(f"[arm {i}:{arm}] pooled season {s}: {_fmt(this)}")
             print(f"[arm {i}:{arm}] pooled through {s}: {_fmt(cum)}")
     equal = res[0]["pooled"] == res[1]["pooled"]

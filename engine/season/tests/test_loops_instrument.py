@@ -7,19 +7,24 @@ Plus that the derivation can observe a declared loop going missing (a check that
 "equal" observes nothing), and that a drifted read map is reported rather than raised.
 """
 
+import pytest
+
 from engine.season.harness import loops as L
 from engine.season.harness import register as R
 
 
-def _shipped():
+@pytest.fixture(scope="module")
+def shipped():
+    """`(processes, LOOP-row signs, derived cycles)` of the shipped tree. `Process` is frozen and
+    `compare` only reads, so the tests that only read these share one build."""
     procs, _ = L.build_processes()
     signs = {r: row.get("sign") for r, row in L.loop_rows(R.load()).items()}
-    return procs, signs
+    return procs, signs, L.derive_cycles(procs)
 
 
-def test_planted_amplifier_with_no_loop_row_makes_derived_differ_and_is_named():
-    procs, signs = _shipped()
-    control = L.compare(L.derive_cycles(procs), signs, L.DECLARED_CYCLES)
+def test_planted_amplifier_with_no_loop_row_makes_derived_differ_and_is_named(shipped):
+    procs, signs, derived = shipped
+    control = L.compare(derived, signs, L.DECLARED_CYCLES)
     plant = L.Process("PLANTED: stores breed stores", (("Rung.stores", "+"),),
                       (("Rung.stores", "+"),))
     res = L.compare(L.derive_cycles(procs + (plant,)), signs, L.DECLARED_CYCLES)
@@ -30,8 +35,8 @@ def test_planted_amplifier_with_no_loop_row_makes_derived_differ_and_is_named():
     assert res["by_sign"]["+"]["underived"] == control["by_sign"]["+"]["underived"]
 
 
-def test_removing_the_witness_fan_out_makes_its_declared_loops_underived():
-    procs, signs = _shipped()
+def test_removing_the_witness_fan_out_makes_its_declared_loops_underived(shipped):
+    procs, signs, _ = shipped
     cut = tuple(p for p in procs if p.name != "WITNESS: fan-out over the log")
     assert len(cut) == len(procs) - 1
     res = L.compare(L.derive_cycles(cut), signs, L.DECLARED_CYCLES)
@@ -40,9 +45,9 @@ def test_removing_the_witness_fan_out_makes_its_declared_loops_underived():
     assert gone == {"H-102", "H-112"}
 
 
-def test_a_loop_row_with_no_cycle_key_is_a_mismatch_not_a_silent_pass():
-    procs, signs = _shipped()
-    res = L.compare(L.derive_cycles(procs), {**signs, "H-999": "+"}, L.DECLARED_CYCLES)
+def test_a_loop_row_with_no_cycle_key_is_a_mismatch_not_a_silent_pass(shipped):
+    _, signs, derived = shipped
+    res = L.compare(derived, {**signs, "H-999": "+"}, L.DECLARED_CYCLES)
     assert not res["equal"] and res["unmapped"] == ["H-999"]
 
 
@@ -71,12 +76,8 @@ def test_over_bound_value_fails_the_bound_check():
 
 
 def test_a_bound_on_a_quantity_off_the_row_refuses():
-    try:
+    with pytest.raises(ValueError, match="names no looped quantity"):
         L.check_bounds({"H-104": ("Person.claim_ledger",)}, {}, {("H-104", "Event"): 1})
-    except ValueError as e:
-        assert "names no looped quantity" in str(e)
-    else:
-        raise AssertionError("a bound on a quantity the row does not loop was accepted")
 
 
 def test_a_requires_stem_with_no_read_map_is_reported_as_drift(monkeypatch):
@@ -92,10 +93,6 @@ def test_a_bad_bound_is_refused_before_the_slow_observation(monkeypatch):
     def boom(*a, **k):
         raise AssertionError("observe ran before the bound was validated")
     monkeypatch.setattr(L, "observe", boom)
-    try:
-        L.main(["--base-seed", "1", "--n", "1", "--seasons", "1",
-                "--bound", "H-104:Event=1"])
-    except SystemExit as e:
-        assert e.code == 2          # argparse's refusal, not the exit of a finished run
-    else:
-        raise AssertionError("a bound on a quantity off its row was accepted")
+    with pytest.raises(SystemExit) as excinfo:
+        L.main(["--base-seed", "1", "--n", "1", "--seasons", "1", "--bound", "H-104:Event=1"])
+    assert excinfo.value.code == 2          # argparse's refusal, not the exit of a finished run

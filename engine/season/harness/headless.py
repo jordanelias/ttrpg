@@ -111,7 +111,8 @@ def build_world(seed: int = 0, fixtures: "S.Fixtures" = None) -> World:
     #     for the institution and the reach without it; the bailiff is the procedural one.
     # ⚠ THIS IS A SUBSTITUTION AND IT IS DECLARED AS ONE. Nothing in canon maps the three retired
     # names onto the thirteen; the mapping above is argued from the old cells' own reasons and is
-    # this harness's choice, not a reading of `conviction_axis_matrix_v30.md`. `H-46` is closed as framed (IN-43); these are the old thirteen until IN-08.
+    # this harness's choice, not a reading of `conviction_axis_matrix_v30.md`. `H-46` is closed as
+    # framed (IN-43); these are the old thirteen until IN-08.
     # ⚠⚠ **EACH NAME IS LOOKED UP IN THE OWNER RATHER THAN TYPED, AND THE GUARD THAT FORCED THIS
     # IS RIGHT EVEN THOUGH ITS FIRST READING OF THESE LINES WAS NOT.**
     # `tests/valoria/test_conviction_roster_single_owner.py` fails on any literal holding TWO OR

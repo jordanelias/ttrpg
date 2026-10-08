@@ -56,18 +56,20 @@ def test_a_severed_antecedent_edge_drops_the_cross_person_share(driven):
 
     control_log, control_act_of = _copy_log(w.log, d.act_of)
     control = SB.read(control_log, control_act_of, bounds)
-    assert SB.per_season(control, SEASONS) == SB.per_season(base, SEASONS), (
+    base_ps = SB.per_season(base["acts"].values(), SEASONS)
+    assert SB.per_season(control["acts"].values(), SEASONS) == base_ps, (
         "copying the log moved the reading; the planted arm below would not isolate the edge")
 
     planted_log, planted_act_of = _copy_log(w.log, d.act_of, target, severed_from)
     planted = SB.read(planted_log, planted_act_of, bounds)
     assert planted["acts"][target]["cls"] != "cross"
+    planted_ps = SB.per_season(planted["acts"].values(), SEASONS)
 
     checked = 0
     season = base["acts"][target]["season"]
     for s in range(SEASONS):
-        b_this, b_cum = SB.per_season(base, SEASONS)[s]
-        p_this, p_cum = SB.per_season(planted, SEASONS)[s]
+        b_this, b_cum = base_ps[s]
+        p_this, p_cum = planted_ps[s]
         if s >= season:
             assert p_cum["cross_share"] < b_cum["cross_share"], (s, b_cum, p_cum)
             assert p_cum["classes"]["cross"] == b_cum["classes"]["cross"] - 1

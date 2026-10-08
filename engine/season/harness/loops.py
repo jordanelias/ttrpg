@@ -24,8 +24,8 @@ THE PROCESSES, AND WHERE EACH EDGE COMES FROM (`build_processes`):
   * EVERY VERB of `data/verbs.py::VERB_TABLE` is a RESOLVE process. It reads `Act[].returned` (`+`:
     a verb resolves only an act DELIBERATE returned) and the cells its `requires_typed:` cell asks
     for -- the `requires` grammar (`data/requires.py`), walked through `AllOf`, each leaf's predicate
-    stem mapped to cells by `STEM_READS`. It writes its `writes:` cells (and every `writes_by_degree`
-    band's) at polarity `?` -- THE GRAMMAR TYPES WHICH CELL A VERB WRITES AND NOT WHICH WAY -- and
+    stem mapped to cells by `STEM_READS`. It writes its `writes:` cells (the flat union over any
+    degree bands) at polarity `?` -- THE GRAMMAR TYPES WHICH CELL A VERB WRITES AND NOT WHICH WAY -- and
     `Event` at `+` when its row declares any emission.
   * THE STEP READERS `H-106` NAMES -- the question sources, the witness channel predicates and the
     eviction comparator -- plus WITNESS's fan-out over the log and MATTER's claim decay, which
@@ -73,7 +73,6 @@ from __future__ import annotations
 import argparse
 import sys
 from dataclasses import dataclass
-from itertools import product
 
 from ..data import files
 from ..data.rosters import QUESTION_SOURCES, WITNESS_CHANNELS
@@ -127,23 +126,22 @@ class Process:
     name: str
     reads: tuple
     writes: tuple
-    source: str = ""
     step: str = ""
 
 
-#: The step readers, each with the code site its reads were read off. `writes` to a matrix cell are
-#: checked against that cell's `steps:`.
+#: The step readers, each with the code site its reads were read off (the `#` above it). `writes` to a
+#: matrix cell are checked against that cell's `steps:`.
 STEP_READS = (
+    # loop/driver.py::SeasonDriver.season -- `self.witness(` over every round's Events; the deposit
+    # emits `claim.deposited` (write_matrix `(Person, claim_ledger)`)
     Process("WITNESS: fan-out over the log", ((EVENT, "+"),),
-            (("Person.claim_ledger", "+"), (EVENT, "+")),
-            "loop/driver.py::SeasonDriver.season -- `self.witness(` over every round's Events; "
-            "the deposit emits `claim.deposited` (write_matrix `(Person, claim_ledger)`)", "WIT"),
+            (("Person.claim_ledger", "+"), (EVENT, "+")), "WIT"),
+    # loop/witness.py::witness -- `evict_over_cap`; emits nothing
     Process("WITNESS: eviction comparator", (("Person.claim_ledger", "+"),),
-            (("Person.claim_ledger", "-"),),
-            "loop/witness.py::witness -- `evict_over_cap`; emits nothing", "WIT"),
+            (("Person.claim_ledger", "-"),), "WIT"),
+    # loop/matter.py::matter -- `claim_decay`; emits `claim.decayed`
     Process("MATTER: claim decay", (("Claim.confidence", "+"),),
-            (("Claim.confidence", "-"), (EVENT, "+")),
-            "loop/matter.py::matter -- `claim_decay`; emits `claim.decayed`", "MAT"),
+            (("Claim.confidence", "-"), (EVENT, "+")), "MAT"),
 )
 
 #: Each LOOP row's cycle(s), as canonical quantity tuples (see `canonical`). The SIGN is the row's.
@@ -191,9 +189,10 @@ def _simple_cycles(adj: dict) -> list:
     """Every elementary cycle, each once, led by its least node (DFS over larger nodes only)."""
     nodes = sorted(adj)
     rank = {n: i for i, n in enumerate(nodes)}
+    sadj = {n: sorted(v) for n, v in adj.items()}
     found = []
     for s in nodes:
-        stack = [(s, iter(sorted(adj.get(s, ()))))]
+        stack = [(s, iter(sadj.get(s, ())))]
         path, on = [s], {s}
         while stack:
             node, it = stack[-1]
@@ -207,7 +206,7 @@ def _simple_cycles(adj: dict) -> list:
             elif nxt not in on and rank.get(nxt, -1) > rank[s]:
                 path.append(nxt)
                 on.add(nxt)
-                stack.append((nxt, iter(sorted(adj.get(nxt, ())))))
+                stack.append((nxt, iter(sadj.get(nxt, ()))))
     return found
 
 
@@ -222,12 +221,9 @@ def derive_cycles(processes) -> list:
     out = []
     for cyc in _simple_cycles(adj):
         hops = [L[(cyc[i], cyc[(i + 1) % len(cyc)])] for i in range(len(cyc))]
-        signs = set()
-        for choice in product(*(sorted(h) for h in hops)):
-            s = "+"
-            for x in choice:
-                s = _mul(s, x)
-            signs.add(s)
+        signs = {"+"}
+        for h in hops:
+            signs = {_mul(s, x) for s in signs for x in h}
         via = tuple(tuple(sorted({n for names in h.values() for n in names})) for h in hops)
         for s in sorted(signs):
             out.append({"key": canonical(cyc), "sign": s, "via": via})
@@ -305,30 +301,21 @@ QUANTITY_READERS = {
 
 def observe(quantities, seeds, seasons: int, cap=None) -> dict:
     """`{quantity: largest per-season reading over seeds x seasons}` for each quantity with a reader;
-    a quantity with none reads `None`. The composition is `harness/storybar.py::drive`'s, repeated
-    because a reading is taken after EVERY season and `drive` exposes no per-season hook."""
-    from ..decision import make_chooser
-    from ..loop.driver import SeasonDriver, resolvable_verbs
-    from ..state.ids import H, draw_factory
-    from . import probes as P
-    from .populated import build_realm
+    a quantity with none reads `None`. The realm is driven by `harness/storybar.py::drive`, whose
+    `on_season` hook is where a reading is taken after EVERY season."""
+    from .storybar import drive
 
     best = {q: None for q in quantities}
+
+    def fold(w, summary, n_logged):
+        for q in quantities:
+            read = QUANTITY_READERS.get(q)
+            v = None if read is None else read(w, summary, n_logged)
+            if v is not None and (best[q] is None or v > best[q]):
+                best[q] = v
+
     for seed in seeds:
-        w = build_realm(seed, cap)
-        d = SeasonDriver(w)
-        mint = lambda pid, verb, subj, w=w: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-        ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                          draw=draw_factory(w.world_seed, lambda w=w: w.tick))
-        for _ in range(seasons):
-            before = len(w.log)
-            summary = d.season(ch, question=None, subsistence=P.SUBSIST,
-                               contest_max_depth=w.fixtures.get("contest_max_depth"))
-            for q in quantities:
-                read = QUANTITY_READERS.get(q)
-                v = None if read is None else read(w, summary, len(w.log) - before)
-                if v is not None and (best[q] is None or v > best[q]):
-                    best[q] = v
+        drive(seed, seasons, "off", cap, on_season=fold)
     return best
 
 
@@ -386,20 +373,19 @@ def build_processes() -> tuple:
                               else STEM_READS.get(stem) or ())
         elif str(row.requires).strip() not in NO_PRECONDITION:
             untyped.append(verb)
-        wr = list(row.writes) + [c for band in (row.writes_by_degree or {}).values() for c in band]
-        writes = [(c, "?") for c in dict.fromkeys(wr)]
-        emits = list(row.emits) + list(_flat(row.emits_on_refusal))
-        if emits:
+        writes = [(c, "?") for c in dict.fromkeys(row.writes)]
+        if row.emits or row.emits_on_refusal:
             writes.append((EVENT, "+"))
-        procs.append(Process(f"RESOLVE:{verb}", tuple(dict.fromkeys(reads)), tuple(writes),
-                             "verb_table.yaml", "RES"))
+        # reads and writes: `data/verbs.py::VERB_TABLE` (`verb_table.yaml`)
+        procs.append(Process(f"RESOLVE:{verb}", tuple(dict.fromkeys(reads)), tuple(writes), "RES"))
     ledger_w = (("Person.claim_ledger", "+"),)
+    # queries/world_q.py::questions_for
     procs.append(Process("DELIBERATE: question sources",
                          tuple(dict.fromkeys(x for s in QUESTION_SOURCES
                                              for x in QUESTION_SOURCE_READS.get(s, ()))),
-                         ((ACTS, "+"),), "queries/world_q.py::questions_for", "DEL"))
-    procs.append(Process("WITNESS: channel predicates", CHANNEL_READS, ledger_w,
-                         "epistemic.py::CHANNEL_PREDICATES", "WIT"))
+                         ((ACTS, "+"),), "DEL"))
+    # epistemic.py::CHANNEL_PREDICATES
+    procs.append(Process("WITNESS: channel predicates", CHANNEL_READS, ledger_w, "WIT"))
     procs.extend(STEP_READS)
 
     for p in procs:
@@ -407,10 +393,12 @@ def build_processes() -> tuple:
             if q not in known:
                 raise SystemExit(f"loops: {p.name} names {q!r}, not a write_matrix cell")
         for q, _ in p.writes:
-            if q != EVENT and p.step and p.step not in {k for k, v in _STEP_OF.items()
-                                                        if _matrix_has(cells[q], v)}:
+            if q == EVENT or not p.step:
+                continue
+            listed = {s.value for s in cells[q].steps}
+            if _STEP_OF[p.step] not in listed:
                 drift.append(f"loops: {p.name} writes {q} at {p.step}, and the write_matrix "
-                             f"row lists {sorted(s.value for s in cells[q].steps)}")
+                             f"row lists {sorted(listed)}")
     writing_steps = {s.value for row in MATRIX.values() for s in row.steps}
     declared = {_STEP_OF[p.step] for p in procs if p.step}
     blind = {"untyped_requires": untyped, "drift": drift,
@@ -418,16 +406,6 @@ def build_processes() -> tuple:
              + ["MATTER (every pass but claim decay)", "DELIBERATE (all but its question sources)",
                 f"WITNESS channels as one union, not per channel ({len(WITNESS_CHANNELS)} rostered)"]}
     return tuple(procs), blind
-
-
-def _flat(cell):
-    if isinstance(cell, dict):
-        return [k for v in cell.values() for k in v]
-    return list(cell or ())
-
-
-def _matrix_has(row, step_value: str) -> bool:
-    return any(s.value == step_value for s in row.steps)
 
 
 def loop_rows(reg: dict) -> dict:
@@ -464,7 +442,8 @@ def main(argv=None) -> int:
     ap.add_argument("--all-unsigned", action="store_true", help="print every unsigned cycle")
     a = ap.parse_args(argv)
     run_c = (a.base_seed, a.n, a.seasons)
-    if any(x is not None for x in run_c) and not all(x is not None for x in run_c):
+    seeded = all(x is not None for x in run_c)
+    if any(x is not None for x in run_c) and not seeded:
         ap.error("part (c) needs all of --base-seed, --n and --seasons")
 
     rows = loop_rows(R.load())
@@ -507,7 +486,7 @@ def main(argv=None) -> int:
 
     rq = row_quantities({r: DECLARED_CYCLES.get(r, ()) for r in rows})
     bounds = dict(a.bound)
-    if not all(x is not None for x in run_c):
+    if not seeded:
         print("(c) BOUNDS: not run -- no seeds supplied (--base-seed/--n/--seasons); nothing "
               "observed, nothing passed")
         if bounds:

@@ -3,9 +3,10 @@
 A SOAK run drives the unmodified season loop for many consecutive seasons on ONE World and ONE
 SeasonDriver, and records what only duration exposes: an uncaught exception, memory or wall-clock
 growth, and churn that degenerates. It pins nothing and is wired into no gate
-(`harness/aperture.py`'s own disclaimer, `:48`, repeated here because it applies unchanged). It grades exactly TWO things, both over a finished run's
-per-season series (`grade_cost`, `grade_mix`, below): that the cost of a season stays flat, and
-that the mix of acts settles into a stable, non-collapsed shape.
+(`harness/aperture.py`'s own disclaimer, `:48`, repeated here because it applies unchanged). It
+grades exactly TWO things, both over a finished run's per-season series (`grade_cost`,
+`grade_mix`, below): that the cost of a season stays flat, and that the mix of acts settles into a
+stable, non-collapsed shape.
 
 Entry point: `python -m engine.season.harness.soak --seed S --arm ARM --batches B
 --seasons-per-batch N --season-wall-ceiling SECONDS --out DIR [--cost-growth-ceiling X]
@@ -515,21 +516,22 @@ def grade_mix(mixes: list, drift_ceiling: float, top_share_ceiling: float) -> di
             "distinct_verbs_last": len(last), "reasons": reasons}
 
 
+def _read_jsonl(path: Path) -> list:
+    """The records of a JSON-lines file, in order; `[]` when the file is absent."""
+    if not path.exists():
+        return []
+    with path.open(encoding="utf-8") as f:
+        return [json.loads(line) for line in f if line.strip()]
+
+
 def load_series(world_dir: Path) -> tuple:
     """`(costs, mixes)` for a finished world: one entry per completed season, in run order, read
     from the `seasons.jsonl` and `acts.jsonl` this harness wrote (so the grades apply to a prior
     run's directory as well as to a fresh one)."""
-    seasons_path = world_dir / "seasons.jsonl"
-    seasons = ([json.loads(line) for line in
-                seasons_path.read_text(encoding="utf-8").splitlines() if line]
-               if seasons_path.exists() else [])         # a run killed in season 0 wrote none
+    seasons = _read_jsonl(world_dir / "seasons.jsonl")    # a run killed in season 0 wrote none
     mix_by: dict = defaultdict(Counter)
-    acts_path = world_dir / "acts.jsonl"
-    if acts_path.exists():
-        for line in acts_path.read_text(encoding="utf-8").splitlines():
-            if line:
-                r = json.loads(line)
-                mix_by[(r["batch"], r["season"])][r["verb"]] += 1
+    for r in _read_jsonl(world_dir / "acts.jsonl"):
+        mix_by[(r["batch"], r["season"])][r["verb"]] += 1
     costs = [s["wall_s"] for s in seasons]
     mixes = [dict(mix_by.get((s["batch"], s["season"]), {})) for s in seasons]
     return costs, mixes

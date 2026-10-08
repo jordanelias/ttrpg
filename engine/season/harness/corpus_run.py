@@ -1042,10 +1042,9 @@ def main(seed: int = 0) -> int:
         for c in ("R1", "R3", "R4", "R5"):
             n = sum(1 for r in live if r["checks"].get(c) is True)
             print(f"     check {c}: {n} of {len(live)} pass")
-            if c == "R3":
-                # IN-43: the count says THAT a case failed, not WHICH. Same `live` set as the count.
-                failing = [r["id"] for r in live if r["checks"].get(c) is not True]
-                print(f"     check R3 not True: {', '.join(failing) if failing else 'none'}")
+            # IN-43: the count says THAT a case failed, not WHICH. Same `live` set as the count.
+            failing = [r["id"] for r in live if r["checks"].get(c) is not True]
+            print(f"     check {c} not True: {', '.join(failing) if failing else 'none'}")
     b, a = planted_control(seed)
     print(f"\n  CONTROL — planted cross-person edge: R3 {b} -> {a}  "
           f"{'(the detector works)' if (not b and a) else '⚠ THE CONTROL DID NOT FIRE'}")
