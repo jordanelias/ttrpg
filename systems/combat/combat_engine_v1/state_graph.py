@@ -20,6 +20,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 TRACE_KINDS = {
     'fight_start', 'turn_start', 'engagement_start', 'approach', 'stophit',
     'commit', 'read', 'mode', 'roll', 'outcome', 'contact', 'separation', 'engagement_end', 'fight_result',
+    'yield',   # §11.4 (PC-01): a Phase-1 declaration; an unrefused one ends the fight straight at FinalResult
 }
 
 # Separation reasons the engine can emit (wrapper.engagement `return None` sites). The dynamic coverage check
@@ -133,9 +134,11 @@ def reachable_from(start):
 def fired_states_from_events(events):
     """Map a trace event stream to the SET of state-graph nodes it visited (for dynamic coverage)."""
     fired = set()
+    yielded = False   # an unrefused §11.4 yield returns before the UPSET_FLOOR draw: UpsetCheck is bypassed
     for e in events:
         k = e['kind']
-        if k == 'fight_start': fired.add('FightInit')
+        if k == 'yield': yielded = yielded or e.get('refused') is None
+        elif k == 'fight_start': fired.add('FightInit')
         elif k == 'turn_start': fired.add('EngagementInit')
         elif k == 'engagement_start': fired.add('AwaitTempo' if e['closed'] else 'Approach')
         elif k == 'approach': fired.add('Approach'); fired.add('AwaitTempo') if e.get('just_closed') else None
@@ -152,7 +155,7 @@ def fired_states_from_events(events):
             fired.add('Decided' if e['felled'] else 'InterTurn')
         elif k == 'fight_result':
             fired.add('FinalResult')
-            fired.add('Unresolved' if e['winner'] is None else 'UpsetCheck')
+            fired.add('Unresolved' if e['winner'] is None else ('Decided' if yielded else 'UpsetCheck'))
             if e['winner'] is not None: fired.add('Decided')
     return fired
 
