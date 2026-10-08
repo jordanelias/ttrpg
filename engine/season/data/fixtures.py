@@ -602,11 +602,10 @@ DEFAULT_FIXTURES = Fixtures(
     # NEG pole of `deontological/instrumental`) and the THRESHOLD is the person's own projected
     # weight, so there is no magnitude here to sweep. `None` is the CONTROL and is SHIPPED, but NOT
     # because no matching axis exists today -- a `layer-conformance` attack (2026-09-27) found that
-    # `instrumental` (`references/descriptor_registry.yaml:168`) already carries the same
-    # `deontological/instrumental` sign convention, so `refusal_axis="instrumental"` WOULD arm this
-    # gate against the current 13-pursuit content. `None` is shipped because arming it now is an
-    # unruled design choice, not because the axis is unavailable -- whether to arm it before or wait
-    # for `H6`'s 15-pursuit landing is for the orchestrator/Jordan to decide, not this row.
+    # `deontological_instrumental` (`references/descriptor_registry.yaml:179`, negative = the
+    # deontological pole) WOULD arm this gate on the 15x7 basis. `None` is shipped because arming it
+    # is an unruled design choice, not because the axis is unavailable -- `H6` has landed (IN-08);
+    # arming waits on G-3's ruling (H-146 unarmed), not on this row.
     refusal_axis=None,                 # `H-146`, control None (SHIPPED)
     # `H-153` (D-6, `19_PLAN.md:952-955`) -- THE ONE CORPUS FAULT THAT DOES NOT RECONCILE WITH
     # FAIL-FORWARD: *"whoever touches it is killed"* has no corpus-supplied next move. Swept

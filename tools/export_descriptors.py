@@ -87,35 +87,35 @@ def _section(reg, name):
     return out
 
 
-def _conviction_roster(reg):
-    """The 13 Convictions, from the registry. The SOLE machine-readable statement of the roster.
+def _pursuit_roster(reg):
+    """The fifteen pursuits, from the registry. The SOLE machine-readable statement of the roster.
 
     Validated here rather than trusted: the count is declared alongside the names and they must
     agree, because a roster that silently loses a name is exactly how the two subsystem copies
     drifted apart in the first place.
     """
-    block = reg.get('conviction_roster') or {}
+    block = reg.get('pursuit_roster') or {}
     names = [n for n in (block.get('names') or []) if isinstance(n, str)]
     if not names:
-        raise SystemExit('descriptor_registry.yaml: conviction_roster.names is missing or empty. '
-                         'It is the single owner of the Conviction roster; two subsystems read it.')
+        raise SystemExit('descriptor_registry.yaml: pursuit_roster.names is missing or empty. '
+                         'It is the single owner of the pursuit roster; two subsystems read it.')
     declared = block.get('count')
     if declared is not None and int(declared) != len(names):
-        raise SystemExit(f'descriptor_registry.yaml: conviction_roster declares count={declared} '
+        raise SystemExit(f'descriptor_registry.yaml: pursuit_roster declares count={declared} '
                          f'but lists {len(names)} names. A roster whose own count disagrees with '
                          f'itself is how the 9-vs-8-vs-13 split started.')
     if len(set(names)) != len(names):
-        raise SystemExit('descriptor_registry.yaml: conviction_roster.names contains duplicates.')
+        raise SystemExit('descriptor_registry.yaml: pursuit_roster.names contains duplicates.')
     return {'source': block.get('source'), 'count': len(names), 'names': names}
 
 
 def _axis_roster(reg):
-    """The 4 ethical axes, from the registry. The SOLE machine-readable statement of the name set.
+    """The seven bipolar axes, from the registry. The SOLE machine-readable statement of the name set.
 
-    Validated exactly as `_conviction_roster` is, and for the same reason one level up: this set
-    is what `engine/substrate/keys.py` validates a Key's axis names against AND what
-    `engine/season/decision/choose.py` sums a candidate's score over. Before 2026-09-14 each held
-    its own literal and nothing compared them, so the two could disagree in silence.
+    Validated exactly as `_pursuit_roster` is, and for the same reason one level up: this set is
+    what `engine/season/decision/choose.py` sums a candidate's score over and what every
+    `pursuit_projection`/`alignment` column must name. Before 2026-09-14 two literals held it and
+    nothing compared them, so the two could disagree in silence.
     """
     block = reg.get('axis_roster') or {}
     names = [n for n in (block.get('names') or []) if isinstance(n, str)]
@@ -169,11 +169,11 @@ def build():
                 'the current roster for a closed one; delete it in the commit that names the tenth.'
             ) if len(roster) < 10 else None,
         },
-        # THE CONVICTION ROSTER, centralized 2026-08-24. Enumerated in the registry rather than
+        # THE PURSUIT ROSTER, centralized 2026-08-24. Enumerated in the registry rather than
         # left `by_reference` to a design document, because two subsystems had each invented their
         # own roster in the absence of one code could read — and the disagreement was costing a
         # ratified mechanic (a Close-Knot-break Scar that silently never landed).
-        'conviction_roster': _conviction_roster(reg),
+        'pursuit_roster': _pursuit_roster(reg),
         # THE ETHICAL-AXIS ROSTER, centralized 2026-09-14 (ED-IN-0230). Same move as the line
         # above and after the same class of defect: `keys.py::AXES` and `rosters.yaml:
         # conviction_axes` each held a literal and NOTHING compared them, while the roster's own

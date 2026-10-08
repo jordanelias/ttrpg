@@ -41,8 +41,9 @@ from typing import Optional
 from engine.substrate import descriptors
 
 
-# THE CONVICTION ROSTER IS NOT DEFINED HERE. It is read from the one owner:
-# `references/descriptor_registry.yaml:conviction_roster` -> `tools/export_descriptors.py` ->
+# THE CONVICTION ROSTER IS NOT DEFINED HERE. It is read from the one owner -- since IN-08's cells
+# commit the fifteen PURSUITS, which are what a Scar now keys on:
+# `references/descriptor_registry.yaml:pursuit_roster` -> `tools/export_descriptors.py` ->
 # `engine/engine_params/descriptors.json` -> `engine.substrate.descriptors`. That is the same
 # authored-surface / one-exporter / one-leaf-reader path every other descriptor takes.
 #
@@ -55,8 +56,8 @@ from engine.substrate import descriptors
 #
 # Three of the nine (Reason, Autonomy, Continuity) are not canonical names. Reason and Autonomy
 # alias to Scholastic and Liberty; Continuity has no canonical twin and is GONE.
-# [canonical: conviction_taxonomy_v30 §2 via references/descriptor_registry.yaml:conviction_roster]
-CONVICTIONS = descriptors.CONVICTIONS
+# [canonical: references/descriptor_registry.yaml:pursuit_roster (ED-IN-0261)]
+CONVICTIONS = descriptors.PURSUITS
 
 # §2 Per-Conviction Scar thresholds
 # [canonical: §2 Per-Conviction Scar table]
@@ -200,9 +201,9 @@ def apply_conviction_scar(actor: str, source: str, magnitude: int,
 
     # An unknown NAME is a caller defect and is now LOUD. It used to return a magnitude=0
     # ScarRecord, which is indistinguishable from a season-capped one — that is precisely how the
-    # knots.py 'Loyalty' no-op survived. `resolve_conviction` also folds the two rename aliases, so
-    # a caller still saying 'Reason' scars Scholastic rather than falling off a cliff.
-    conviction = descriptors.resolve_conviction(conviction)
+    # knots.py 'Loyalty' no-op survived. `resolve_pursuit` translates nothing: a retired name
+    # raises (IN-08 moved the roster to the fifteen pursuits; the Scar keys on those names).
+    conviction = descriptors.resolve_pursuit(conviction)
 
     state = _get_or_create(actor, world)
     before = state.scars.get(conviction, 0)

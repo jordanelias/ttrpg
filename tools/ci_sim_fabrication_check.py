@@ -465,6 +465,21 @@ def load_ledger_pairs(sim_path: str) -> dict:
     return dict(pairs)
 
 
+def displaced_citation_paths(removed, added):
+    """Paths whose changeset removed a provenance tag and did not put the SAME tag back.
+
+    A tag counts as displaced when its exact text (`# [JUSTIFIED: ...]`, bracket included) is on a
+    removed line of the file and on no added line of it. Editing the CODE on a line that carries a
+    citation removes that line and adds its successor with the tag intact; that is not a lost
+    citation, and treating it as one sent every touched file back to a whole-file scan of debt
+    that is not the changeset's. A deleted tag, or one whose text was reworded, is still displaced:
+    reworded provenance has to be looked at, so the file is scanned in full.
+    """
+    def tags(lines):
+        return {m.group(0) for ln in lines for m in _CANONICAL_COMMENT_PATTERN.finditer(ln)}
+    return {p for p, lines in removed.items() if tags(lines) - tags(added.get(p, []))}
+
+
 def added_only(genuine, added_lines):
     """Keep the violations that sit on a line THIS CHANGESET ADDED.
 
@@ -528,10 +543,7 @@ def main(argv) -> int:
     # that file goes back to a full scan — the narrow, targeted restoration of the old behaviour
     # exactly where the new behaviour is unsound. Found by adversarial review of this very fix.
     removed = ci_common.get_removed_lines(mode)
-    citation_removed = {
-        p for p, lines in removed.items()
-        if any(_CANONICAL_COMMENT_PATTERN.search(ln) for ln in lines)
-    }
+    citation_removed = displaced_citation_paths(removed, added)
     sim_paths = sorted(p for p in changed if is_sim_file(p) and (p in added or p in citation_removed))
     if not sim_paths:
         print("[SIM-FABRICATION OK] no changed sim .py files — nothing to check.")

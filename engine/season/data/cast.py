@@ -4,8 +4,9 @@
 characters"* and carries 46 rows. MEASURED 2026-09-13: its ids are an EXACT 1:1 MATCH with
 `run_cases.load_cases("NPC")` — 46 for 46, zero symmetric difference — and every row carries an
 authored `faction` and `role`, 31 a `territory`, 30 `goals`, 29 `stats`, 32 `ts`, and 7 a `title`.
-All 81 weighted conviction entries across the 46 name one of the canonical thirteen; not one is
-invalid.
+Every weighted `conviction:` entry across the 46 names one of the canonical fifteen pursuits since
+IN-08's cells commit migrated them (`references/descriptor_registry.yaml: pursuit_roster`); not one
+is invalid, and `pursuits_of` raises on the first that would be.
 
 ⚠ NOTHING THAT EXECUTES HAD EVER OPENED IT. The only two Python files naming it are a test that
 checks it PARSES (`tests/valoria/test_references_yaml_parse.py`, a regression guard from when it
@@ -180,11 +181,11 @@ def resolve_faction(name: Optional[str]) -> Optional[str]:
 
 
 def pursuits_of(r: dict) -> dict:
-    """`{conviction: weight}` from the row, every name checked against the canonical thirteen.
+    """`{pursuit: weight}` from the row, every name checked against the canonical fifteen.
 
     ⚠ IT VALIDATES THROUGH THE ONE OWNER AND DOES NOT RE-DO THE MEMBERSHIP TEST.
     `data.pursuits.pursuit` already is that check, delegating in turn to
-    `engine.substrate.descriptors.resolve_conviction` — the single reader of the single export of
+    `engine.substrate.descriptors.resolve_pursuit` — the single reader of the single export of
     the single roster. A second membership test here is the exact shape
     `tests/valoria/test_conviction_roster_single_owner.py` exists to prevent, and that guard is
     mutation-verified: three incompatible rosters once shipped at once and silently disabled the
@@ -196,8 +197,8 @@ def pursuits_of(r: dict) -> dict:
 
     ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): this function was
     `convictions_of`. It still reads `r.get("convictions")` -- `references/npc_registry.yaml`'s
-    own key -- UNCHANGED: that registry is canon and its per-character migration to the new
-    pursuits is Jordan's own later, separate authoring step, not this rename."""
+    own key -- UNCHANGED; the values under it were migrated to the fifteen pursuits in IN-08's
+    cells commit (the registry's header names the rule)."""
     from .pursuits import pursuit
     out: dict = {}
     block = r.get("convictions") or {}
@@ -273,7 +274,7 @@ def loyalty(r: dict, faction: Optional[str]) -> Optional[int]:
     """How far this person's own ethics run with their faction's, `0..100`. `None` if unmeasurable.
 
     **50 IS INDIFFERENT, NOT AVERAGE.** The measure is the cosine between two positions in the
-    four-axis ethical space — the person's, and their faction's role template's — mapped from
+    seven-axis ethical space — the person's, and their faction's role template's — mapped from
     `[-1, +1]` onto `[0, 100]`. So `100` is a person whose values point exactly where the faction
     expects, `50` is orthogonal (the creed is simply not about anything they care about), and `0`
     is someone whose ethics point the opposite way. A member at `0` is not a bad member; they are
@@ -291,9 +292,9 @@ def loyalty(r: dict, faction: Optional[str]) -> Optional[int]:
 
     ⚠ **A LEADER MAY SCORE LOW AND THAT IS CANON, NOT A BUG.** `faction_canon_v30.md` §4 on the two
     factions sharing `military-order`: *"their differentiation comes from Mission, leader
-    Convictions, and stat profile, not role template."* Vaynard reads 3 against the order he leads
-    because his authored `Utility` pulls hard on the instrumental axis where `military-order`
-    expects `Honor`. A pragmatist at the head of a traditionalist order is a situation.
+    Convictions, and stat profile, not role template."* Vaynard read 3 against the order he leads
+    on the old thirteen-conviction basis, where his authored `Utility` pulled on the instrumental
+    axis and `military-order` expected `Honor` (re-measure on the 15x7). A pragmatist at the head of a traditionalist order is a situation.
 
     ⚠ **`None` FOR A FACTION WITH NO TEMPLATE, NEVER A DEFAULT.** `Guilds` and `Schoenland` have no
     `role_template`, no expected convictions and no authored leader — so there is nothing to be
@@ -301,12 +302,13 @@ def loyalty(r: dict, faction: Optional[str]) -> Optional[int]:
     polarity rule)."""
     import math
     from .pursuits import to_axes
-    from .rosters import ROLE_TEMPLATE_OF, table
+    from .rosters import ROLE_TEMPLATE_OF
+    from .verbs import ROLE_TEMPLATE_PURSUITS
     template = ROLE_TEMPLATE_OF.get(str(faction or ""))
     if template is None:
         return None
     mine = to_axes(pursuits_of(r))
-    theirs = to_axes((table("role_template_pursuits") or {}).get(template) or {})
+    theirs = to_axes(ROLE_TEMPLATE_PURSUITS.get(template) or {})
     dot = sum(mine.get(a, 0.0) * theirs.get(a, 0.0) for a in set(mine) | set(theirs))
     na = math.sqrt(sum(v * v for v in mine.values()))
     nb = math.sqrt(sum(v * v for v in theirs.values()))

@@ -106,7 +106,7 @@ scales:
       sentence used to add "`parliamentary_vote.py` calls `roll_pool`"; that module and
       `parliamentary_stay.py` were deleted at `29b` (their `FORK:5c5d8ec6` rows), and nothing under
       `systems/social_contest` calls `roll_pool` now.
-      3 of 44 verb rows declare `contests:` — `fight` (the body, the combat seam), `march` (a
+      4 of 46 verb rows declare `contests:` — `fight` and `accept` (the body, the combat seam), `march` (a
       field, the mass-battle seam, `ecacb57`) and `tell` (a standing, resolved on the season side
       by `seam/wrappers/sigma.py`, not by this kernel). The kernel retires at plan position `2-ii`
       (`workplans/valoria_master_workplan_v9.md`).
@@ -526,6 +526,13 @@ rows:
       and `total` +0.11 (38.47 -> 38.58), the last two AGAINST it, all within half a point -- so THE
       PREDICTION IS NOT SUPPORTED AT THIS RESOLUTION (and the re-take also carries `13d-iii` and
       `17-cast`, not `14` alone). The status stays `met`: the bar is 96% and no arm is near it.
+      `11` RE-TAKEN AT IN-08's CELLS COMMIT (B-G), THE CONTROL FOR B-I's RE-TAKE (`_part2` §11): the
+      `2x3` cell only (the acceptance point; the `default` and `narrow` cells and `wd_collect.py`'s own
+      controls were not run), 143 cases, `wd_chunk.py` x4 per arm, `collect("2x3", mode)`: `none`
+      1549/2068 = 74.90% · `actor` 896/2039 = 43.94% · `total` 868/2047 = 42.40%, 0 failed cases. Against
+      the previous re-take: `none` -2.32 points, `actor` +1.35, `total` +3.82 -- the re-celled chooser
+      moves the arms by more than half a point, and none is near 96%, so the status stays `met`. The
+      instrument's run-to-run noise is still not measured. B-I's re-take reads against THESE figures.
     measure: "python proposals/2026-09-04-degree-sweep/wd_collect.py  # after wd_chunk.py x4 per arm per cell over the 143-case corpus (slices 0 36/36 72/72 108/108 143) -- U6's command, workplans/valoria_master_workplan_v9_part2.md §`11`"
     blocks: [FI-01]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); H-111 is FI-01's deposit half
@@ -853,6 +860,10 @@ rows:
       2939 acts, up from 2781 before `14` and 2836 before `13d-iii`; `levy.unauthorized` fell from 18 of 19 attempts to 4 of
       23 and `issue` executed 6 of 30 times with `Act.via` set (`13d-iii`, `H-163` limit 1 lifted). 17 of 44 executing (39%) is
       a rise of one verb on 16 of 44.
+      20 of 46 AS OF IN-08's CELLS COMMIT (B-G); THE ROW STAYS `not_met`. `corpus_run`, seed 0, 143 cases:
+      `VERBS THAT EXECUTED : 20 of 46` (17 of 44 on the base commit 13715804) -- `challenge` and `accept` (the
+      duel pair's new rows) and `levy` join, nothing leaves. `WHERE THE 46 GO`: 10 no predicate/effect, 10
+      foldable but never attempted, 6 attempted and always refused (7 before; `levy` left it), 20 executed. `accept` is among the 20 WITHOUT its challenge: no carrier holds one, so it executes as a second `fight` (`verb_table.yaml`, `accept`'s `requires_note`).
     measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE) -- 44 today; it was '38' as of ED-IN-0261, '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
     blocks: [H-65, IN-09, IN-10, IN-33, IN-45]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W10-core removed (it gates corpus_run's R2 check, not this row's WHERE THE <n> GO); H-94 is carried by its owners IN-10, IN-09, IN-45, IN-33
@@ -1001,6 +1012,27 @@ rows:
       NPC-083, the only case that is, depends on the institution-as-person seat above.
       `corpus_run` stdout md5 d714ba5c -> 6a65a264 (declared; the
       `DISTINCT EXECUTED SETS 120` and `17 of 44` lines did not move). Stays `partial`.
+      ⚠⚠ **IN-08's CELLS COMMIT (B-G) -- THE BASIS IS FIFTEEN PURSUITS OVER SEVEN BIPOLAR AXES, AND
+      HOW THIS ROW READS ITS RANKING LINE CHANGES WITH IT (G-1, [medium; Jordan to correct]).** The
+      15x7 `pursuit_projection` and the alignment re-cell over every table verb (`rosters.yaml:
+      tables`, from the folded drafts, RS-1) replace the 13x4 above; `tell`, `thread_read` and
+      `restore` are the declared `uncelled:` set; `carry`, `examine` and `interview` are celled
+      `null` on all seven axes and fall outside the denominator on the same ground
+      (`data/verbs.py::celled_verbs` counts non-zero cells). READING (G-1): the RANKING line counts only
+      candidates whose verb has at least one celled axis and prints numerator and denominator,
+      because an uncelled verb scores 0.0 for every person by construction and can neither
+      discriminate nor be a tie the ranking failed to break. MEASURED off this row's own `measure:`
+      at seed 0: `RANKING DISCRIMINATION   19..27 (numerator) of 27..27 (denominator: candidates
+      whose verb has >= 1 celled axis; 32..32 candidates in all)`, against `15..21 of 30` on the
+      base commit `13715804` (all candidates counted there). ⚠ `ED-IN-0214` IS SUPERSEDED (v9 §A,
+      the 2026-10-06 fold): the re-centring question the paragraph above calls Jordan's was about the
+      13x4, which no longer exists; on the 15x7 `conviction_spread` reads 4 of 15 within 60 degrees of
+      the mean and 3.81 of 7 effective axes (from 9 of 13 and 1.85 of 4). THE DOCTRINE PAIR, MEASURED
+      AND RECORDED, NOT GATED (RS-3): Jordan's devout-Solmund builder against the Einhir dismantler at
+      the draft's weights (`doctrine` .45) project through the live rows to cos +0.229 -- inside the
+      60-degree bar; the `doctrine` row is PROVISIONAL. Distinct executed sets 118 -> 135. Stays
+      `partial` for the reasons above that this did not touch (the corpus cast is still one shared
+      OUGHT per world).
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' line"
     blocks: [IN-38, IN-08, IN-18, IN-12]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W27: `17` landed (build_at seats a `cast:`), IN-38 remains; H-62 re-scoped to IN-08, IN-18, IN-12 step 9
@@ -1101,6 +1133,14 @@ rows:
       still breaks ties (built, `U4`), and inclination still does not (the alignment table is
       still sparse) — nothing in U7-U10's own work touched `choose.py`, `choice_temperature` or the
       alignment table.
+      ⚠⚠ **IN-08's CELLS COMMIT (B-G) -- THE RANKING LINE IS READ OVER CELLED CANDIDATES (G-1,
+      [medium; Jordan to correct]).** R-06's note states the reading and the figure: the tie this
+      row asks inclination to break is counted only among candidates whose verb has at least one
+      celled axis on the re-celled 15x7 basis, because an `uncelled:` verb (`tell` by design) or an
+      all-`null` one cannot be broken by inclination at all, and counting it would report a tie no
+      person could have broken. Off this row's `measure:` at seed 0: 19..27 of 27 celled candidates
+      carry a nonzero pursuit score (32 in all); the remainder still tie and the DRAW breaks them.
+      `choose.py` and `choice_temperature` are untouched; what moved is the table. Stays `partial`.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' + tie ordering"
     blocks: [SC-01, IN-08, IN-18, IN-12]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W26 is SC-01's; H-62 re-scoped to IN-08, IN-18, IN-12 step 9

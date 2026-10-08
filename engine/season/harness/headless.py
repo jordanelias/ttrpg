@@ -92,27 +92,10 @@ def build_world(seed: int = 0, fixtures: "S.Fixtures" = None) -> World:
     # ⚠ THESE ARE WORLD DATA, NOT A DEFINITION, and the distinction is the one `rosters.yaml`
     # states: a roster or a table is a definition the GAME resolves from; a person's conviction
     # weight is a fact about that person, like their name. It is nonetheless load-bearing on the
-    # result and saying so is owed — `Precedent: 0.9` against the alignment table's
-    # `Precedent -> create_record: 0.9` is what puts `create_record` first in her ranking every
-    # season, and therefore what starts the causal chain check 2 measures. A different Carin
+    # result and saying so is owed — her `stability` projected onto `precedent_substantive` against
+    # the alignment table's `create_record: -0.8` there is what puts `create_record` high in her
+    # ranking, and therefore what starts the causal chain check 2 measures. A different Carin
     # produces a different season, which is the point of her having convictions at all.
-    # ⚠ `U3`: THESE ARE CONVICTIONS NOW, AND TWO OF THE OLD THREE NAMES WERE NEVER CONVICTIONS.
-    # The line read `{"Precedent": 0.9, "self_preservation": 0.3}` / `{"suspicion": 0.8, ...}` /
-    # `{"Precedent": 0.6}` — `Precedent` IS one of the thirteen and survives unchanged, while
-    # `self_preservation` and `suspicion` were ad-hoc scalars the old four-name roster carried and
-    # are not things a person can believe. They are replaced by the conviction each was standing
-    # in for, at the same weight, so the three people keep the characters the docstring above
-    # describes:
-    #   * `self_preservation` -> `Utility`  — "effectiveness, results, instrumental judgment"
-    #     (`conviction_taxonomy_v30.md` §2). The old cells priced it as caution about exposure and
-    #     cost, which is the instrumental reading.
-    #   * `suspicion`        -> `Order`     — "procedural correctness, rule-following". The old
-    #     `suspicion` block's own cells were `open_case: 0.9` and `surveil: 0.9`, i.e. the reach
-    #     for the institution and the reach without it; the bailiff is the procedural one.
-    # ⚠ THIS IS A SUBSTITUTION AND IT IS DECLARED AS ONE. Nothing in canon maps the three retired
-    # names onto the thirteen; the mapping above is argued from the old cells' own reasons and is
-    # this harness's choice, not a reading of `conviction_axis_matrix_v30.md`. `H-46` is closed as
-    # framed (IN-43); these are the old thirteen until IN-08.
     # ⚠⚠ **EACH NAME IS LOOKED UP IN THE OWNER RATHER THAN TYPED, AND THE GUARD THAT FORCED THIS
     # IS RIGHT EVEN THOUGH ITS FIRST READING OF THESE LINES WAS NOT.**
     # `tests/valoria/test_conviction_roster_single_owner.py` fails on any literal holding TWO OR
@@ -122,15 +105,29 @@ def build_world(seed: int = 0, fixtures: "S.Fixtures" = None) -> World:
     # between a ROSTER (an enumeration that can drift out of step with the owner) and a REFERENCE
     # (a choice of one member) is not one an AST scan can draw.
     # `_pursuit` draws it by CONSTRUCTION rather than by argument: one name per call, each checked
-    # against `CONVICTIONS`, which IS `engine.substrate.descriptors.CONVICTIONS` — the same object,
+    # against the pursuit roster, which IS `engine.substrate.descriptors.PURSUITS` — the same object,
     # not a copy. A rename in `references/descriptor_registry.yaml` now raises here by name instead
     # of silently seeding a conviction nobody holds, which is strictly more than the literals did.
-    # [JUSTIFIED: these five weights are AUTHORED CHARACTER, not a mechanical constant -- #353 §14 types convictions as "weights over the closed 13 | 1-3 primary + distributed" and supplies no magnitudes. Carin at Precedent 0.9 is what the docstring above explains starts her causal chain; the rest are her, the bailiff and the warden being three different people. `H-46` is the row, closed as framed by IN-43]
-    w.persons[CARIN].pursuits = {_pursuit("Precedent"): 0.9, _pursuit("Utility"): 0.3}
-    # [JUSTIFIED: as the line above -- authored character under `H-46`, not a mechanical constant. The bailiff is procedural-first (Order 0.8) and the warden holds one conviction weakly, which is what makes the three people three]
-    w.persons[BAILIFF].pursuits = {_pursuit("Order"): 0.8, _pursuit("Precedent"): 0.4}
-    # [JUSTIFIED: as above -- one conviction, held weakly; the warden is the least opinionated of the three by design]
-    w.persons[WARDEN].pursuits = {_pursuit("Precedent"): 0.6}
+    # ⚠ IN-08's CELLS COMMIT MIGRATED THE THREE TO THE FIFTEEN PURSUITS, by the rule the cast
+    # registry was migrated by (`candidate_pursuit_cells.md` §4.1, folded into the build by Jordan
+    # 2026-10-06): `Precedent` and `Order` have no pursuit of their own name -- `stability` is the
+    # successor for the procedural readers; `Utility` has none, and goes to the pursuit the
+    # character's own goal names. Weights are carried, not renormalised.
+    #   * Carin: `Precedent .9` -> `stability .9`; `Utility .3` -> `community .3`, the pursuit her
+    #     one standing goal names (the `commit` above: *"the Einhir texts should survive"* -- the
+    #     §4.3 reading of NPC-082's *"Fights for Einhir"* as categorical belonging).
+    #   * the bailiff: `Order .8` -> `stability .8`; `Precedent .4` -> `justice .4`, §4.1's other
+    #     successor for `Precedent` (Baralta's *"procedure IS justice"*), rather than collapsing into
+    #     `stability` at 1.2, past the 0-1 weight scale.
+    #   * the warden: `Precedent .6` -> `stability .6`.
+    # So the three stay three: Carin and the warden share a direction only in `stability`, and
+    # Carin's `community` separates their rankings (a pure rescale would not).
+    # [JUSTIFIED: these five weights are AUTHORED CHARACTER, not a mechanical constant -- #353 §14 types pursuits as "weights over the closed roster | 1-3 primary + distributed" and supplies no magnitudes. Carin's `stability` is what puts `create_record` (precedent_substantive -0.8) high in her ranking and starts her causal chain; the rest are her, the bailiff and the warden being three different people. `H-46` is the row, closed as framed by IN-43]
+    w.persons[CARIN].pursuits = {_pursuit("stability"): 0.9, _pursuit("community"): 0.3}
+    # [JUSTIFIED: as the line above -- authored character under `H-46`, not a mechanical constant. The bailiff is procedural-first (stability 0.8) and the warden holds one pursuit weakly, which is what makes the three people three]
+    w.persons[BAILIFF].pursuits = {_pursuit("stability"): 0.8, _pursuit("justice"): 0.4}
+    # [JUSTIFIED: as above -- one pursuit, held weakly; the warden is the least opinionated of the three by design]
+    w.persons[WARDEN].pursuits = {_pursuit("stability"): 0.6}
     return w
 
 

@@ -39,12 +39,12 @@ def _sym(k: int, rng: random.Random) -> list:
     return a
 
 
-# [JUSTIFIED: matrix widths, not game values — 4 is the live basis, the rest are the widths a
+# [JUSTIFIED: matrix widths, not game values — 7 is the live basis (IN-08), the rest are the widths a
 #  candidate basis could take and the ones the old solver silently failed at]
 # [JUSTIFIED: matrix widths — arithmetic, not game values]
-@pytest.mark.parametrize("k", [2, 4, 8, 12, 16])
+@pytest.mark.parametrize("k", [2, 4, 7, 8, 12, 16])
 def test_the_solver_converges_at_every_width_a_candidate_basis_could_have(k):
-    """`k` goes past 4 deliberately: 4 is the live basis and the width that never failed."""
+    """`k` goes past 4 deliberately: the old solver silently failed above it."""
     # [JUSTIFIED: an arbitrary fixed seed — determinism, not a game value]
     rng = random.Random(11)
     for _ in range(25):
@@ -105,12 +105,16 @@ def test_the_control_reproduces_the_figure_the_open_ledger_row_cites():
     """`spread()` with no candidate is the CONTROL and must keep reproducing `ED-IN-0214`'s
     reading. A parameterisation that perturbed the default path would move this."""
     s = spread()
-    # [canonical: ED-IN-0214 (registers/editorial_ledger_in.jsonl) — the row this instrument
-    #  produces; the roster size is references/descriptor_registry.yaml:conviction_roster]
-    # [canonical: ED-IN-0214 — nine of thirteen within 60 degrees, the row's own figure]
-    assert s["within_60deg"] == 9 and s["total"] == 13
+    # ⚠ RE-PINNED AT IN-08's CELLS COMMIT (B-G), A RE-RECORD WITH ITS REASON: the live basis is
+    # the 15x7 now, so the control reads it. ED-IN-0214's 13x4 figure (nine of thirteen within 60
+    # degrees, PR 1.85) is the superseded basis's and is no longer what `spread()` can reproduce.
+    # The new figures were NOT chosen: they are `candidate_pursuit_cells.md` §5.3's revision-5
+    # reading of the draft grid (4 of 15, PR 3.81), reproduced here off the transcribed rows --
+    # which is also the falsifier for a transcription slip in `tables.pursuit_projection`.
+    # [canonical: the roster size is references/descriptor_registry.yaml:pursuit_roster]
+    assert s["within_60deg"] == 4 and s["total"] == 15
     # [JUSTIFIED: the control figure and its float tolerance — reproduced, not chosen]
-    assert s["spectrum"]["effective_axes"] == pytest.approx(1.85, abs=0.01)
+    assert s["spectrum"]["effective_axes"] == pytest.approx(3.81, abs=0.01)
 
 
 def test_a_candidate_basis_is_scored_by_the_same_rule_as_the_live_one():

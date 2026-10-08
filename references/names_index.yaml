@@ -203,6 +203,12 @@ entries:
   season.seed: {canonical: seed_pursuits, legacy: ["seed_convictions"], category: substrate, enforce: warn}
   season.of: {canonical: pursuits_of, legacy: ["convictions_of"], category: substrate, enforce: warn}
   season.role_template: {canonical: role_template_pursuits, legacy: ["role_template_convictions"], category: substrate, enforce: warn}
+  # Two of the fifteen pursuits (roster owner: descriptor_registry.yaml `pursuit_roster`) whose names meet
+  # in-world vocabulary — Church doctrine; the Wardens and their offices — and so need their PURSUIT sense
+  # named here. `doctrine`: how much of a person's action concerns religious matters at all.
+  # `stewardship`: care of the dependent and the vulnerable.
+  season.pursuit.doctrine: {canonical: doctrine, aliases: [], legacy: [], category: substrate, enforce: warn}
+  season.pursuit.stewardship: {canonical: stewardship, aliases: [], legacy: [], category: substrate, enforce: warn}
   season.pursuit_axes:
     canonical: pursuit_axes
     aliases: []

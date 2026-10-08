@@ -677,7 +677,9 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         w.add_tenure(Tenure(f"t_{pid}_home", pid, home, RESIDE_KIND, 0))
         # ⚠⚠ AUTHORED, NOT DRAWN — AND THE DRAW REMAINS AS THE NAMED FALLBACK IT ALWAYS WAS.
         # `references/npc_registry.yaml` carries a weighted conviction vector for all 46 of these
-        # people, cited to canon, using only the canonical thirteen. Nothing that executes had ever
+        # people, cited to canon, using only canonical names (the fifteen pursuits since IN-08's
+        # cells commit; the figures below are the thirteen-name roster's, as measured then -- the
+        # names they quote are retired, the contrast stands). Nothing that executes had ever
         # opened it, so `seed_pursuits` — a `blake2b(seed, case_id, pid)` draw — was supplying
         # the one quantity that orders every candidate in these worlds. The contrast is not
         # cosmetic: Carin Vedel (NPC-088), whose case is hand-copying SUPPRESSED texts, is authored

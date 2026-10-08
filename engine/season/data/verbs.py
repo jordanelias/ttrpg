@@ -981,7 +981,8 @@ def _check_sparse_table(name: str, cells: dict, rows: "set|tuple", row_what: str
 
 
 def _load_projection() -> dict:
-    """`tables.pursuit_projection`, the 13x4 that maps a person's convictions into axis space.
+    """`tables.pursuit_projection`, the 15x7 that maps a person's pursuits into axis space
+    (IN-08's cells commit).
 
     ⚠⚠ **THIS TABLE EXISTS BECAUSE `pursuit_axes` USED TO DO TWO JOBS AND COULD DO NEITHER
     WELL.** Before `U3` the roster held four names -- `Precedent`, `self_preservation`,
@@ -999,27 +1000,53 @@ def _load_projection() -> dict:
       * an all-zero matrix makes every person's convictions project to the zero vector, which is
         `uniform`'s control arm shipped as the default -- the dead-carrier defect, one table along.
 
-    ⚠ IT DOES NOT CHECK THAT ALL 13 x 4 CELLS ARE PRESENT. Sparse is lawful here exactly as it is
-    for `alignment`: an unlisted pair reads `default_cell`. What is checked is that every cell
-    NAMED is nameable."""
+    ⚠ IT DOES NOT CHECK THAT ALL 15 x 7 CELLS ARE PRESENT. Sparse is lawful here: an unlisted pair
+    reads `default_cell`. What is checked is that every cell NAMED is nameable -- which is what
+    makes a HALF-DONE ROSTER SWAP an `ImportError` rather than a plausible score: a row still keyed
+    on a retired name, or a column on a retired axis, refuses here at module scope."""
     cells = table("pursuit_projection")
     return _check_sparse_table(
-        "pursuit_projection", cells, PURSUITS, "conviction", PURSUIT_AXES, "axis",
-        row_law=("§F2 -- a person's convictions are weights over the roster. A projection row for a "
-                 "conviction nobody can hold is read by nothing"),
-        col_law=("engine/substrate/keys.py::AXES single-owns the four names; a fifth is one edit "
-                 "there and a refusal here, never two rosters drifting apart"))
+        "pursuit_projection", cells, PURSUITS, "pursuit", PURSUIT_AXES, "axis",
+        row_law=("§F2 -- a person's pursuits are weights over the roster. A projection row for a "
+                 "pursuit nobody can hold is read by nothing"),
+        col_law=("references/descriptor_registry.yaml: axis_roster single-owns the seven names; an "
+                 "eighth is one edit there and a refusal here, never two rosters drifting apart"))
 
 
 PURSUIT_PROJECTION = _load_projection()
+
 # ⚠ NO `PROJECTION_DECLARED` HERE, AND ITS ABSENCE IS DELIBERATE. `ALIGNMENT_DECLARED` below
 # exists because `ALIGNMENT` is REBOUND by `alignment_at()`'s sweep, so every arm must be
 # built from an immutable baseline rather than from the previous arm. The projection has a
 # declared `sweep:` on its row and NO `projection_at()` yet, so a frozen copy here would be a
-# second 13x4 in memory that a reader assumes is wired to something because its sibling is.
+# second 15x7 in memory that a reader assumes is wired to something because its sibling is.
 # It comes back in the commit that adds the sweep, the way `ALIGNMENT_DECLARED` arrived with
 # `ALIGNMENT_SWEEP`.
 PROJECTION_DEFAULT_CELL = float(table_meta("pursuit_projection").get("default_cell", 0.0))
+
+
+def _load_role_template_pursuits(rows: Optional[dict] = None) -> dict:
+    """`tables.role_template_pursuits`, CHECKED AT LOAD, because its one read path cannot refuse.
+
+    ⚠ THE VALIDATION STEP IN-08 OWES. `data/cast.py::loyalty` reads this table through
+    `data/pursuits.py::to_axes`, which SKIPS a pursuit `PURSUIT_PROJECTION` has no row for -- the
+    sparse default, correct for a person's map that `pursuit()` has already checked, and SILENT for
+    this table, whose names nothing checks. A template still keyed on a retired name would project
+    a plausible, smaller vector and `loyalty` would read it without a word. So the same three
+    checks the two sibling tables get are run here, on the one owner of them
+    (`_check_sparse_table`): an unrostered template, an unrostered pursuit, an all-zero table. `rows` is the table under test (default: the shipped one)."""
+    return _check_sparse_table(
+        "role_template_pursuits", table("role_template_pursuits") if rows is None else rows,
+        roster("role_templates"),
+        "role template", PURSUITS, "pursuit",
+        row_law=("rosters.yaml: role_templates -- a template row nobody's faction can name is read "
+                 "by nothing"),
+        col_law=("references/descriptor_registry.yaml: pursuit_roster -- `to_axes` skips a pursuit "
+                 "it has no projection row for, so a misspelt or retired name here would be a "
+                 "silently smaller expectation vector, not an error"))
+
+
+ROLE_TEMPLATE_PURSUITS = _load_role_template_pursuits()
 
 
 def _derive_kind_verb() -> tuple:
@@ -1045,28 +1072,90 @@ KIND_VERB, EMITTED_KINDS = _derive_kind_verb()
 DEED_PREFIX = "deed:"
 
 
-def _load_alignment(cells: Optional[dict] = None) -> dict:
-    """§F2's `alignment(c.verb, axis)`, from `rosters.yaml`, with THREE load-time checks.
+_DENSITY_LAW = ("IN-08 (`workplans/valoria_master_workplan_v9_part5.md`) -- every table verb carries "
+                "a cell on each axis, or is listed in the declared `uncelled:` set with its reason; "
+                "a verb nobody considered is not the same claim as a verb considered and left at "
+                "zero, and only the first is refused")
+
+
+def _check_alignment_density(cells: dict, uncelled: dict) -> None:
+    """IN-08's DENSITY RULE, at load: each `VERB_TABLE` verb is either keyed on EVERY axis row
+    (a number, or an explicit `null` -- "considered; no source, no lean") or named in `uncelled:`
+    with a reason, and then keyed on NO axis.
+
+    ⚠ WHY IT IS NEEDED, IN THE LOADER'S OWN WORDS: `_check_sparse_table` *"does not check that all
+    ... cells are present"*, and that is right for the VALUES -- sparse is lawful. What it let
+    through silently is a NEW VERB ROW that nobody celled: it scores 0.0 on every axis, which reads
+    exactly like a verb considered and judged neutral. Every verb row added after IN-08 (IN-12's
+    steps, IN-51, IN-32, PC-06 K-3) lands its cells or its `uncelled:` line, or this refuses,
+    naming the verb and the axes it is missing."""
+    if not isinstance(uncelled, dict):
+        raise Forbidden(
+            f"alignment `uncelled:` is a {type(uncelled).__name__}, not a mapping of verb -> reason",
+            "rosters.yaml", needs="`uncelled: {<verb>: <reason>}`", law=_DENSITY_LAW)
+    unknown = sorted(v for v in uncelled if v not in VERB_TABLE)
+    if unknown:
+        raise Forbidden(
+            f"alignment `uncelled:` names {unknown}, which the verb table does not carry",
+            "rosters.yaml", needs="spell it as `verb_table.yaml` does, or drop the line",
+            law=_DENSITY_LAW)
+    unreasoned = sorted(v for v, why in uncelled.items() if not str(why or "").strip())
+    if unreasoned:
+        raise Forbidden(
+            f"alignment `uncelled:` gives no reason for {unreasoned}", "rosters.yaml",
+            needs="a reason per verb -- the declaration IS the reason", law=_DENSITY_LAW)
+    for verb in sorted(VERB_TABLE):
+        keyed = [ax for ax in PURSUIT_AXES if verb in cells.get(ax, {})]
+        if verb in uncelled:
+            if keyed:
+                raise Forbidden(
+                    f"alignment: {verb!r} is declared `uncelled:` and is celled on {keyed}",
+                    "rosters.yaml", needs="drop the cells or the `uncelled:` line", law=_DENSITY_LAW)
+            continue
+        if len(keyed) != len(PURSUIT_AXES):
+            absent = sorted(ax for ax in PURSUIT_AXES if ax not in keyed)
+            raise Forbidden(
+                f"alignment: verb {verb!r} has no cell on axis(es) {absent} and is not in the "
+                f"declared `uncelled:` set", "rosters.yaml",
+                needs=f"a cell for {verb!r} on each of {absent} (`null` for no lean), or an "
+                      f"`uncelled:` line naming it with its reason",
+                law=_DENSITY_LAW)
+
+
+def _load_alignment(cells: Optional[dict] = None, uncelled: Optional[dict] = None) -> dict:
+    """§F2's `alignment(c.verb, axis)`, from `rosters.yaml`, with FOUR load-time checks.
 
     Each check exists because the corresponding failure would be SILENT. A cell naming a verb the
     table no longer carries is dead weight nothing reports; an axis outside the roster makes
-    `conviction[axis]` unreachable; and an all-zero matrix -- PLAN §W5's named guardrail -- "would
+    `axis_weight[axis]` unreachable; and an all-zero matrix -- PLAN §W5's named guardrail -- "would
     pass every test while meaning nothing", which is the dead-carrier defect #353 `:739-744`
-    describes. All three raise HERE rather than producing a plausible score later.
+    describes. The fourth is IN-08's density rule (`_check_alignment_density`). All four raise HERE
+    rather than producing a plausible score later.
 
     A `deed:<kind>` key is admitted beside the verbs, for kinds in `EMITTED_KINDS` only (the same
-    first check, one column wider). `cells` defaults to the roster table; a caller may pass another
-    to exercise the loader without touching the shipped one."""
+    first check, one column wider). `cells` defaults to the roster table, and then `uncelled`
+    defaults to the table's own `uncelled:` declaration and the density rule runs; a caller may
+    pass another table to exercise the loader without touching the shipped one, and the density
+    rule runs on it only if that caller passes an `uncelled` too.
+
+    An explicit `null` cell is a considered zero: it satisfies the density rule and is DROPPED
+    from the returned table, so every reader (`align`, the sweep, `_scar`) sees the sparse numeric
+    table it always saw and reads `default_cell` for it."""
     if cells is None:
         cells = table("alignment")
+        if uncelled is None:
+            uncelled = table_meta("alignment").get("uncelled") or {}
     admitted = set(VERB_TABLE) | {DEED_PREFIX + k for k in EMITTED_KINDS}
-    return _check_sparse_table(
+    checked = _check_sparse_table(
         "alignment", cells, PURSUIT_AXES, "axis", admitted, "verb or `deed:<kind>`",
-        row_law=("§F2 -- `conviction[axis] * alignment(verb, axis)` sums over the ROSTER. A cell on "
-                 "an unrostered axis is never read and never reported"),
+        row_law=("§F2 -- `axis_weight[axis] * alignment(verb, axis)` sums over the ROSTER. A cell "
+                 "on an unrostered axis is never read and never reported"),
         col_law=("§E2 -- the verb table is the roster of verbs. A cell keyed on a verb that does "
                  "not exist is a weight on an option nobody can ever form; a `deed:` key for a "
                  "kind no verb emits is a weight on an event nobody can see"))
+    if uncelled is not None:
+        _check_alignment_density(checked, uncelled)
+    return {ax: {k: v for k, v in row.items() if v is not None} for ax, row in checked.items()}
 
 ALIGNMENT = _load_alignment()
 
@@ -1085,6 +1174,19 @@ def align(verb: str, axis: str) -> float:
     this function, so one rebind moves every reader. A second binding anywhere (a `from .verbs
     import ALIGNMENT` in a reader module) would be a stale snapshot the rebind never reaches."""
     return float(ALIGNMENT.get(axis, {}).get(verb, ALIGNMENT_DEFAULT_CELL))
+
+
+def celled_verbs() -> frozenset:
+    """The verbs with AT LEAST ONE CELLED AXIS: a non-zero cell in the live `ALIGNMENT` binding.
+
+    ⚠ G-1 (2026-10-06, [medium; Jordan to correct]) IS ITS FIRST READER: R-06 and R-08 count only
+    candidates whose verb has a celled axis, because a verb with none -- an `uncelled:` verb such as
+    `tell`, or one whose every cell is a considered `null` -- scores 0.0 for every person by
+    construction, and its candidates can neither discriminate nor be a tie the ranking failed to
+    break. Read off `ALIGNMENT`, the binding the sweep rebinds, so under `uniform` every verb is
+    celled -- the control arm's own answer."""
+    return frozenset(v for row in ALIGNMENT.values() for v, val in row.items()
+                     if val and not str(v).startswith(DEED_PREFIX))
 
 
 def align_kind(kind: str, axis: str) -> float:

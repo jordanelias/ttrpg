@@ -1,7 +1,7 @@
 """engine.substrate — the engine's leaf readers.
 
 Status: [live] — the package holds the single-owner leaves `engine/` resolves through:
-`descriptors` (the axis and conviction rosters, cooked from `references/descriptor_registry.yaml`),
+`descriptors` (the axis and pursuit rosters, cooked from `references/descriptor_registry.yaml`),
 `names` (cooked from `references/names_index.yaml`), `composition` (the role -> module registry),
 `stubwire` and `pc_engine`.
 

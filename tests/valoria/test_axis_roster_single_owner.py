@@ -82,11 +82,11 @@ def test_both_readers_resolve_to_the_same_object():
         f'the season engine scores over {sorted(rosters.PURSUIT_AXES)} while the registry '
         f'declares {sorted(descriptors.AXES)}. One of them is a second literal — read '
         'engine.substrate.descriptors.AXES, do not retype it')
-    assert len(descriptors.AXES) == 4, (
-        f'{len(descriptors.AXES)} axes. key_substrate_v30.md §2.4 permits a 5th as a Class B '
-        'extension "if Stage 10 calibration finds the simplification load-bearing; treat as '
-        'deferred unless required" — if that ruling has been taken, update this line WITH its '
-        'citation rather than loosening it')
+    # RE-PINNED 4 -> 7 at IN-08's cells commit, WITH ITS CITATION as this line always asked:
+    # ED-IN-0261 (Jordan, 2026-09-20) rules seven bipolar axes, both poles named.
+    assert len(descriptors.AXES) == 7, (
+        f'{len(descriptors.AXES)} axes. ED-IN-0261 rules SEVEN bipolar axes; if a later ruling '
+        'changes the count, update this line WITH its citation rather than loosening it')
 
 
 def test_the_roster_row_points_at_the_owner_and_carries_no_literal():
