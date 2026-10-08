@@ -302,12 +302,13 @@ def loyalty(r: dict, faction: Optional[str]) -> Optional[int]:
     polarity rule)."""
     import math
     from .pursuits import to_axes
-    from .rosters import ROLE_TEMPLATE_OF, table
+    from .rosters import ROLE_TEMPLATE_OF
+    from .verbs import ROLE_TEMPLATE_PURSUITS
     template = ROLE_TEMPLATE_OF.get(str(faction or ""))
     if template is None:
         return None
     mine = to_axes(pursuits_of(r))
-    theirs = to_axes((table("role_template_pursuits") or {}).get(template) or {})
+    theirs = to_axes(ROLE_TEMPLATE_PURSUITS.get(template) or {})
     dot = sum(mine.get(a, 0.0) * theirs.get(a, 0.0) for a in set(mine) | set(theirs))
     na = math.sqrt(sum(v * v for v in mine.values()))
     nb = math.sqrt(sum(v * v for v in theirs.values()))

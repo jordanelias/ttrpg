@@ -26,7 +26,7 @@ from collections import Counter
 from ..data import files
 from ..data.matrix import MATRIX, Step, WriteClass
 from ..data.rosters import CONFERRAL_BASES, REVOCATION_BASES, RUNG_KINDS, TITLE_DOMAINS, title_domain
-from ..data.verbs import VERB_TABLE
+from ..data.verbs import VERB_TABLE, align
 from ..epistemic import CHANNEL_PREDICATES, observers_for
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..data.cast import faction_leader
@@ -1079,7 +1079,7 @@ def test_lb6e_a_wound_scars_and_the_axes_come_from_the_alignment_table():
     # the cell's sign and `scar` is a signed accumulator"*), and on the seven axes `fight` carries
     # `grandiose_humble -0.3` beside `deontological_instrumental +0.3`. So the property is that each
     # scar has its CELL's sign -- which `all(v > 0)` was the one-cell special case of.
-    assert all((v > 0) == (float(ALIGNMENT[ax]["fight"]) > 0) and v for ax, v in got.items()), got
+    assert all(v * float(align("fight", ax)) > 0 for ax, v in got.items()), got   # the cell's sign, non-zero
 
 
 def test_lb6e_the_zero_arm_writes_no_scar_and_reports_none():

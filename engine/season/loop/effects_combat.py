@@ -86,10 +86,8 @@ def _scar(w: "World", p, verb: str) -> None:
     # sweep now reaches both readers.
     from ..data.verbs import align
     # ⚠ SIGNED, AND THE `abs()` THAT STOOD HERE COLLAPSED A DISTINCTION THE READER NEEDS.
-    # 17 of the 52 populated `ALIGNMENT` cells are NEGATIVE, so a verb that VIOLATES an axis and
-    # one that UPHOLDS it cut an identical wound under `abs()`. It is invisible today only
-    # because `kill / wound`'s one cell is `+0.3`; it bites the moment a negative-cell verb is
-    # wired, and the scar's named reader -- the Conviction crisis -- is about the DIRECTION of
+    # Cells are signed, so a verb that VIOLATES an axis and one that UPHOLDS it cut an identical
+    # wound under `abs()`; `fight` carries negative cells, and the scar's named reader -- the Conviction crisis -- is about the DIRECTION of
     # the wound. The magnitude keeps the cell's sign and `scar` is a signed accumulator.
     for axis in PURSUIT_AXES:
         weight = float(align(verb, axis))
@@ -107,13 +105,12 @@ def _scar(w: "World", p, verb: str) -> None:
         p.scar = {k: p.scar[k] for k in sorted(p.scar)}
 
 
-@effect_for("fight")  # RENAMED from "kill / wound", 2026-09-29 (plan `FIGHT-RENAME`) -- same
-# effect, same body; only the `EFFECTS` dict key (and its `verb_table.yaml` row) moved.
-# `accept` (IN-08's cells commit, the duel pair's second half) is the same contest over the same
-# prize, `contests: "the body"`, with the same degree-keyed writes read off the same scene -- so it
-# is the same effect, registered twice, not a second body. `_scar` reads `a.verb`, so a duel's
-# moral layer reads `accept`'s own alignment cells, not `fight`'s. (`challenge` writes nothing and
-# needs no effect: `VerbRow.effect_carried`.)
+# `accept` (the duel pair's second half) is the same contest over the same prize, `contests: "the
+# body"`, with the same degree-keyed writes read off the same scene: one effect registered twice.
+# `_scar` reads `a.verb`, so a duel's moral layer reads `accept`'s own alignment cells. (`challenge`
+# writes nothing and needs no effect: `VerbRow.effect_carried`.) `fight` was RENAMED from
+# "kill / wound" (plan `FIGHT-RENAME`); only the `EFFECTS` key and its row moved.
+@effect_for("fight")
 @effect_for("accept")
 def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """§E3: writes `(Person, body)`, `(Person, exists)` and `(Tenure, until)`.

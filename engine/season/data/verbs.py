@@ -982,7 +982,7 @@ def _check_sparse_table(name: str, cells: dict, rows: "set|tuple", row_what: str
 
 def _load_projection() -> dict:
     """`tables.pursuit_projection`, the 15x7 that maps a person's pursuits into axis space
-    (IN-08's cells commit; the history below is the 13x4 it replaced, and its checks are unchanged).
+    (IN-08's cells commit).
 
     ⚠⚠ **THIS TABLE EXISTS BECAUSE `pursuit_axes` USED TO DO TWO JOBS AND COULD DO NEITHER
     WELL.** Before `U3` the roster held four names -- `Precedent`, `self_preservation`,
@@ -1015,10 +1015,17 @@ def _load_projection() -> dict:
 
 PURSUIT_PROJECTION = _load_projection()
 
-ROLE_TEMPLATE_NAMES = roster("role_templates")
+# ⚠ NO `PROJECTION_DECLARED` HERE, AND ITS ABSENCE IS DELIBERATE. `ALIGNMENT_DECLARED` below
+# exists because `ALIGNMENT` is REBOUND by `alignment_at()`'s sweep, so every arm must be
+# built from an immutable baseline rather than from the previous arm. The projection has a
+# declared `sweep:` on its row and NO `projection_at()` yet, so a frozen copy here would be a
+# second 15x7 in memory that a reader assumes is wired to something because its sibling is.
+# It comes back in the commit that adds the sweep, the way `ALIGNMENT_DECLARED` arrived with
+# `ALIGNMENT_SWEEP`.
+PROJECTION_DEFAULT_CELL = float(table_meta("pursuit_projection").get("default_cell", 0.0))
 
 
-def _load_role_template_pursuits() -> dict:
+def _load_role_template_pursuits(rows: Optional[dict] = None) -> dict:
     """`tables.role_template_pursuits`, CHECKED AT LOAD, because its one read path cannot refuse.
 
     ⚠ THE VALIDATION STEP IN-08 OWES. `data/cast.py::loyalty` reads this table through
@@ -1027,9 +1034,10 @@ def _load_role_template_pursuits() -> dict:
     this table, whose names nothing checks. A template still keyed on a retired name would project
     a plausible, smaller vector and `loyalty` would read it without a word. So the same three
     checks the two sibling tables get are run here, on the one owner of them
-    (`_check_sparse_table`): an unrostered template, an unrostered pursuit, an all-zero table."""
+    (`_check_sparse_table`): an unrostered template, an unrostered pursuit, an all-zero table. `rows` is the table under test (default: the shipped one)."""
     return _check_sparse_table(
-        "role_template_pursuits", table("role_template_pursuits"), ROLE_TEMPLATE_NAMES,
+        "role_template_pursuits", table("role_template_pursuits") if rows is None else rows,
+        roster("role_templates"),
         "role template", PURSUITS, "pursuit",
         row_law=("rosters.yaml: role_templates -- a template row nobody's faction can name is read "
                  "by nothing"),
@@ -1039,14 +1047,6 @@ def _load_role_template_pursuits() -> dict:
 
 
 ROLE_TEMPLATE_PURSUITS = _load_role_template_pursuits()
-# ⚠ NO `PROJECTION_DECLARED` HERE, AND ITS ABSENCE IS DELIBERATE. `ALIGNMENT_DECLARED` below
-# exists because `ALIGNMENT` is REBOUND by `alignment_at()`'s sweep, so every arm must be
-# built from an immutable baseline rather than from the previous arm. The projection has a
-# declared `sweep:` on its row and NO `projection_at()` yet, so a frozen copy here would be a
-# second 13x4 in memory that a reader assumes is wired to something because its sibling is.
-# It comes back in the commit that adds the sweep, the way `ALIGNMENT_DECLARED` arrived with
-# `ALIGNMENT_SWEEP`.
-PROJECTION_DEFAULT_CELL = float(table_meta("pursuit_projection").get("default_cell", 0.0))
 
 
 def _derive_kind_verb() -> tuple:
@@ -1104,12 +1104,6 @@ def _check_alignment_density(cells: dict, uncelled: dict) -> None:
         raise Forbidden(
             f"alignment `uncelled:` gives no reason for {unreasoned}", "rosters.yaml",
             needs="a reason per verb -- the declaration IS the reason", law=_DENSITY_LAW)
-    missing_axes = [ax for ax in PURSUIT_AXES if ax not in cells]
-    if missing_axes:
-        raise Forbidden(
-            f"alignment carries no row for axis(es) {sorted(missing_axes)}", "rosters.yaml",
-            needs="a row per axis, every verb keyed on it (`null` where there is no lean)",
-            law=_DENSITY_LAW)
     for verb in sorted(VERB_TABLE):
         keyed = [ax for ax in PURSUIT_AXES if verb in cells.get(ax, {})]
         if verb in uncelled:

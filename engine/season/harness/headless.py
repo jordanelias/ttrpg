@@ -96,23 +96,6 @@ def build_world(seed: int = 0, fixtures: "S.Fixtures" = None) -> World:
     # the alignment table's `create_record: -0.8` there is what puts `create_record` high in her
     # ranking, and therefore what starts the causal chain check 2 measures. A different Carin
     # produces a different season, which is the point of her having convictions at all.
-    # ⚠ `U3`: THESE ARE CONVICTIONS NOW, AND TWO OF THE OLD THREE NAMES WERE NEVER CONVICTIONS.
-    # The line read `{"Precedent": 0.9, "self_preservation": 0.3}` / `{"suspicion": 0.8, ...}` /
-    # `{"Precedent": 0.6}` — `Precedent` IS one of the thirteen and survives unchanged, while
-    # `self_preservation` and `suspicion` were ad-hoc scalars the old four-name roster carried and
-    # are not things a person can believe. They are replaced by the conviction each was standing
-    # in for, at the same weight, so the three people keep the characters the docstring above
-    # describes:
-    #   * `self_preservation` -> `Utility`  — "effectiveness, results, instrumental judgment"
-    #     (`conviction_taxonomy_v30.md` §2). The old cells priced it as caution about exposure and
-    #     cost, which is the instrumental reading.
-    #   * `suspicion`        -> `Order`     — "procedural correctness, rule-following". The old
-    #     `suspicion` block's own cells were `open_case: 0.9` and `surveil: 0.9`, i.e. the reach
-    #     for the institution and the reach without it; the bailiff is the procedural one.
-    # ⚠ THIS IS A SUBSTITUTION AND IT IS DECLARED AS ONE. Nothing in canon maps the three retired
-    # names onto the thirteen; the mapping above is argued from the old cells' own reasons and is
-    # this harness's choice, not a reading of `conviction_axis_matrix_v30.md`. `H-46` is closed as
-    # framed (IN-43); these are the old thirteen until IN-08.
     # ⚠⚠ **EACH NAME IS LOOKED UP IN THE OWNER RATHER THAN TYPED, AND THE GUARD THAT FORCED THIS
     # IS RIGHT EVEN THOUGH ITS FIRST READING OF THESE LINES WAS NOT.**
     # `tests/valoria/test_conviction_roster_single_owner.py` fails on any literal holding TWO OR

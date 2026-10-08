@@ -47,7 +47,7 @@ def test_a_verb_missing_a_cell_on_one_axis_and_not_declared_uncelled_refuses_nam
     cells, uncelled = _shipped()
     verb = sorted(set(V.VERB_TABLE) - set(uncelled))[0]          # chosen from the table, not named
     axis = sorted(PURSUIT_AXES)[0]
-    planted = {ax: dict(row) for ax, row in cells.items()}
+    planted, _ = _shipped()                                     # `table()` copies on every call
     del planted[axis][verb]
     with pytest.raises(Forbidden) as e:
         V._load_alignment(planted, uncelled)
@@ -60,7 +60,7 @@ def test_a_verb_missing_a_cell_on_one_axis_and_not_declared_uncelled_refuses_nam
 def test_an_uncelled_verb_that_carries_a_cell_or_names_no_verb_refuses():
     cells, uncelled = _shipped()
     verb = sorted(uncelled)[0]
-    planted = {ax: dict(row) for ax, row in cells.items()}
+    planted, _ = _shipped()                                     # `table()` copies on every call
     planted[sorted(PURSUIT_AXES)[0]][verb] = 0.1
     with pytest.raises(Forbidden, match=re.escape('is declared `uncelled:` and is celled on')):
         V._load_alignment(planted, uncelled)
@@ -72,28 +72,23 @@ def test_an_uncelled_verb_that_carries_a_cell_or_names_no_verb_refuses():
 
 def test_an_unrostered_axis_or_verb_key_refuses():
     cells, uncelled = _shipped()
-    planted = {ax: dict(row) for ax, row in cells.items()}
+    planted, _ = _shipped()                                     # `table()` copies on every call
     planted["sacred"] = {sorted(V.VERB_TABLE)[0]: 0.3}          # an axis the seven do not carry
     with pytest.raises(Forbidden, match=re.escape('which is not in the roster')):
         V._load_alignment(planted, uncelled)
-    planted = {ax: dict(row) for ax, row in cells.items()}
+    planted, _ = _shipped()                                     # `table()` copies on every call
     planted[sorted(PURSUIT_AXES)[0]]["kill"] = 0.7               # a verb the table does not carry
     with pytest.raises(Forbidden, match=re.escape('outside the roster')):
         V._load_alignment(planted, uncelled)
 
 
-def test_a_role_template_naming_a_retired_pursuit_refuses_at_load(monkeypatch):
+def test_a_role_template_naming_a_retired_pursuit_refuses_at_load():
     """The read path (`to_axes`) skips an unknown pursuit silently; the load-time check does not."""
-    real = V.table
-    def planted(name):
-        t = real(name)
-        if name == "role_template_pursuits":
-            first = sorted(t)[0]
-            t = dict(t, **{first: dict(t[first], Authority=0.2)})
-        return t
-    monkeypatch.setattr(V, "table", planted)
+    t = table("role_template_pursuits")
+    first = sorted(t)[0]
+    t[first] = dict(t[first], Authority=0.2)
     with pytest.raises(Forbidden, match=re.escape('outside the roster')):
-        V._load_role_template_pursuits()
+        V._load_role_template_pursuits(t)
 
 
 def test_no_retired_pursuit_name_survives_in_the_cast_or_the_tables():
@@ -111,7 +106,6 @@ def test_no_retired_pursuit_name_survives_in_the_cast_or_the_tables():
     checked = 0
     for r in _rows().values():
         for name in pursuits_of(r):                  # raises on any name outside the fifteen
-            assert name in PURSUITS
             checked += 1
     assert checked >= 40, f"only {checked} weighted entries were checked -- the cast did not load"
 
@@ -120,4 +114,7 @@ def test_the_split_adds_challenge_and_accept_and_no_kill_or_wound_row():
     assert "challenge" in V.VERB_TABLE and "accept" in V.VERB_TABLE
     assert V.VERB_TABLE["accept"].contests == "the body"
     assert not V.VERB_TABLE["challenge"].contests
+    # `accept` carries `fight`'s degree-keyed writes and emits by hand (the YAML has no inheritance)
+    fight, accept = V.VERB_TABLE["fight"], V.VERB_TABLE["accept"]
+    assert accept.writes == fight.writes and accept.emits == fight.emits
     assert not {"kill", "wound", "kill / wound"} & set(V.VERB_TABLE)

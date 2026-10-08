@@ -71,10 +71,9 @@ def seed_pursuits(seed: int, case_id: str, pid: str) -> dict:
     than all holding exactly N. Weights descend 0.9 / 0.5 / 0.3: "primary" is §14's own word for
     the first, and the rest are the "distributed" remainder.
 
-    ⚠ `U3`: THE WEIGHTS ARE OVER THE THIRTEEN CONVICTIONS, NOT OVER THE FOUR AXES. Seeding from
-    `PURSUIT_AXES` was correct while that roster WAS the conviction set; after the swap it
-    would hand every person a weight on `hierarchical`, which is a basis vector and not something
-    anybody believes.
+    ⚠ THE WEIGHTS ARE OVER THE PURSUIT ROSTER, NOT OVER THE AXES. Seeding from `PURSUIT_AXES`
+    would hand every person a weight on `hierarchical_equal`, which is a basis vector and not
+    something anybody believes.
     """
     pursuits = sorted(PURSUITS)
     # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s blake2b hexdigest -- same as combat_seam.py:153. The `3` is #353 §14's own upper bound: "1-3 primary + distributed"]

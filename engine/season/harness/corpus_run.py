@@ -474,9 +474,8 @@ def build_at(case: dict, seed: int = 0) -> World:
     in authored order, each named for its `who` and carrying its own `capability`, and pads with
     anonymous people only up to the floor of three. An 11-entry cast seats eleven.
 
-    ⚠ THE CONVICTIONS ARE SEEDED FROM THE CASE ID, over the THIRTEEN CONVICTIONS -- not over
-    `conviction_axes`, which this said until 2026-09-16 and which `U3` superseded when the set
-    it indexes went from 4 to 13. The draw itself lives in `run_cases.seed_pursuits`, its
+    ⚠ THE PURSUITS ARE SEEDED FROM THE CASE ID, over the pursuit roster -- not over the axes.
+    The draw itself lives in `run_cases.seed_pursuits`, its
     single owner; this module only calls it. Rev 1 wrote
     three axis names and the weight `0.9` as literals, which is a fill off the register (`G1`) and,
     worse, was the ENTIRE ranking function — `stance` is empty in these worlds and §F2's `urgency`
@@ -963,12 +962,8 @@ def main(seed: int = 0) -> int:
         # the failure mode `H-97` exists to report on. `make_chooser` scores the same way (§8: the
         # rule lives once), so this instrument and the thing it measures cannot drift apart.
         axis_w = decision.project(pr)
-        # ⚠ G-1 (2026-10-06, [medium; Jordan to correct]; IN-08's cells commit): THE DENOMINATOR
-        # IS THE CANDIDATES WHOSE VERB HAS AT LEAST ONE CELLED AXIS (`data/verbs.py::celled_verbs`).
-        # A candidate whose verb has none -- `tell`, declared `uncelled:` by design, or a verb every
-        # cell of which is a considered `null` -- scores 0.0 for every person by construction, so
-        # counting it would read as a tie the ranking failed to break when no score could break it.
-        # R-06 and R-08 read this line that way; both figures are printed, never a ratio alone.
+        # G-1 [medium; Jordan to correct]: the denominator is the candidates whose verb has a celled
+        # axis (`data/verbs.py::celled_verbs`, which holds the reasoning); both figures are printed.
         cc = [x for x in cd if x.verb in celled]
         nz = sum(1 for x in cc if any(axis_w[a] * align(x.verb, a) for a in PURSUIT_AXES))
         sep.append((nz, len(cc), len(cd)))

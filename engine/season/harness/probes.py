@@ -35,6 +35,7 @@ from ..queries import person_q, world_q
 from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import CLAIM_SOURCES, RUNG_KINDS, STRATA, WITNESS_CHANNELS, roster, table
+from ..data.pursuits import pursuit as _pursuit
 from ..data.verbs import VERB_TABLE
 from ..decision import body_band_penalty, make_chooser, standing_of
 from ..epistemic import CHANNEL_PREDICATES, observers_for
@@ -1042,12 +1043,12 @@ def p31():
     # test this: it scored an authored roster of three verbs the table does not carry.
     inner = make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}",
                          draw=draw_factory(w.world_seed, lambda: w.tick))
-    p.pursuits = {"stability": 0.9}  # [JUSTIFIED: the sign, not the magnitude, is what P31 observes -- any nonzero weight of opposite sign at the second line below would show the same property. `stability` is the `Precedent` conviction's successor pursuit (IN-08, `candidate_pursuit_cells.md` §4.1), projecting onto `precedent_substantive` where `create_record` and `destroy_record` sit at opposite signs]
+    p.pursuits = {_pursuit("stability"): 0.9}  # [JUSTIFIED: the sign, not the magnitude, is what P31 observes -- any nonzero weight of opposite sign at the second line below would show the same property. `stability` is the `Precedent` conviction's successor pursuit (IN-08, `candidate_pursuit_cells.md` §4.1), projecting onto `precedent_substantive` where `create_record` and `destroy_record` sit at opposite signs]
     # `W17`: `choose` returns SCENES now, so the pick is the first interaction of
     # the first scene. The default policy fills scenes in score order, so that is
     # still the highest-scoring candidate.
     principled = inner(p, v, Sensation(0), ask)[0].acts[0].verb
-    p.pursuits = {"stability": -0.9}  # [JUSTIFIED: the sign flip is the test; see the line above]
+    p.pursuits = {_pursuit("stability"): -0.9}  # [JUSTIFIED: the sign flip is the test; see the line above]
     inverted = inner(p, v, Sensation(0), ask)[0].acts[0].verb
     assert principled != inverted, (
         f"flipping the sign of the only conviction changed nothing: both chose {principled!r}. "
@@ -2597,7 +2598,7 @@ def p37():
     # conviction nobody can hold.
     # [JUSTIFIED: 0.9 is a single strong conviction, the same magnitude this probe used before `U3` under the retired name `suspicion`; P37 branches on `> 0.5` so any value above the threshold shows the same property, and the NUMBER is not what it observes]
     # IN-08: `Order` -> `stability`, its successor pursuit (`candidate_pursuit_cells.md` §4.1).
-    p.pursuits = {"stability": 0.9}
+    p.pursuits = {_pursuit("stability"): 0.9}
     chosen = []
     def choose(q, v, s, ask_budget):
         if q.id != p.id:
