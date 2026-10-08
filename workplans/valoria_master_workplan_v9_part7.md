@@ -73,36 +73,22 @@ ALIAS PC-09 = IN-04 (_part4)
 
 ALIAS WR-05 = IN-06 (_part4), IN-35 (_part5)
 
-`27` is built; WR-01..03 are its three remainders, each outside its own scope (`registers/handoffs/HANDOFF_WR.md` (row "threadwork WR-SCOPE build")). The v8 block (retired, `FORK:<sha>`) is carried verbatim below (`v8_part4.md:89-95`; heading marker only changed).
+`27` is built; its three remainders (WR-01..03) landed in-module at B-D3 (`0a690b30`); WR-01 stays, narrowed to its `engine/season/` reach (`registers/handoffs/HANDOFF_WR.md`, row "threadwork WR-SCOPE build"). The v8 block (retired, `FORK:<sha>`) is carried verbatim below (`v8_part4.md:89-95`; heading marker only changed).
 
 **v8 heading: `27` · WR-SCOPE remainder · WR · gate — · `[design]`** (v8's tier annotation dropped)
 
 **BUILT 2026-10-01 (PR #451):** both `rendering.py` stubs struck with their reasons at the site (the season has no clock to wire them to: `loop/census.py`, ED-WR-0011 option A); `ED-WR-0003` closed at ladder step 2
 (an `ED-WR-0003` superseding row); `attempt_mending` calls `recover()` and costs > 0 (only tests call it; `environment_in_equilibrium` defaults to False);
-`threadwork/sim/{co_movement,opposing}.py` import neither `ms_track` nor `knots`, which unblocked `29a`-ms and `29f` (both since CANCELLED, A-24: the modules stay, unplugged). **Remainder, each outside this position's scope** (`HANDOFF_WR.md`):
+`threadwork/sim/{co_movement,opposing}.py` import neither `ms_track` nor `knots`, which unblocked `29a`-ms and `29f` (both since CANCELLED, A-24: the modules stay, unplugged). **Remainder at the time, since built at B-D3 (`0a690b30`):**
 the `R-14` practitioner-resilience term (arithmetic unruled); Mending aimed at the mender's own configuration (`coherence.mend_resting_point` has no non-test caller); and
 `collective.py`'s and `opposing.py`'s Mending feedback. **R:** none.
 
-### WR-01 · `27` remainder 1 · R-14 practitioner-resilience term
-- STATE: B (in-module); reach into `engine/season/` BLK:IN-06      LANE: WR      BATCH: B-D3 (in-module half) · B-S (`engine/season/` reach)      R: —
-- WHAT: No caller applies `R-14`'s practitioner-resilience term; `RULINGS.md` Batch 13 retracted "no toughness term" and its arithmetic is unruled. Build it as a swept fixture whose control 0 is today's behaviour, on the precedent of `H-94`'s `sweep: [0, 1, 3]`; the sweep arms are the builder's, recorded at the site.
-- DEPS: none for the in-module half (B-X, closed at `1438d44`, was B-D3's whole entry gate); IN-06 (D, `_part3` §A: the design names the carriers) for the reach only, and the reach waits on B-S's gate (IN-06's design reviewed AND B-R and B-V merged)      EDITS: `systems/threadwork/sim/{operations,coherence}.py`; `engine/season/` only after IN-06's build in B-S
-- EXIT: `python -m pytest tests/valoria/test_coherence_elastic_plastic.py -q`, 0 failed (the in-module half, B-D3); the `engine/season/` reach has no instrument of its own until IN-06's design names the carriers [GAP], and is observed at B-S by IN-06's build exit (a plugged row's deletion refuses in a fresh subprocess; one seed twice in one process gives one hash).      FALSIFIER: at control 0 every existing output equals today's (the test above is the control and must stay unedited); at a term > 0 a practitioner with resilience takes strictly less than one without, on one planted pair.
-- SOURCE: `registers/handoffs/HANDOFF_WR.md` (row "threadwork WR-SCOPE build"); `canon/philosophy/06_operations.md:331-359`; `engine/season/hole_register.yaml:1168` (`H-94`); `tests/valoria/test_coherence_elastic_plastic.py:1-12`.
-
-### WR-02 · `27` remainder 2 · Mending aimed at the mender's own configuration
-- STATE: BLK:WR-01 (F: one file)      LANE: WR      BATCH: B-D3 (after WR-01)      R: —
-- WHAT: `coherence.mend_resting_point` has no non-test caller, because the `target` dict names no whose-configuration field to route on (`attempt_mending`'s docstring, "NOT ROUTED HERE"). Add that field and route own-configuration Mending to `mend_resting_point`; adding the field is the design call, recorded in the commit.
-- DEPS: F — WR-01 first (one file, `operations.py`)      EDITS: `systems/threadwork/sim/{operations,coherence}.py`
-- EXIT: `python -m pytest tests/valoria/test_coherence_elastic_plastic.py -q`, 0 failed with the new case.      FALSIFIER: the resting point moves for the mender only — Mending aimed at another's configuration leaves it unmoved, and `recover` alone never reaches it (the existing `test_recovery_is_elastic_only`).
-- SOURCE: `systems/threadwork/sim/operations.py:402-407`; `systems/threadwork/sim/coherence.py:373`; `registers/handoffs/HANDOFF_WR.md` (row "threadwork WR-SCOPE build").
-
-### WR-03 · `27` remainder 3 · collective and opposing Mending: one pricing owner, restorative feedback
-- STATE: BLK:WR-02 (F: same file family)      LANE: WR      BATCH: B-D3 (after WR-02)      R: —
-- WHAT: `collective.py` and `opposing.py` give the mender no restorative feedback, so they disagree with `attempt_mending` (NERS S: calculations consistent in methodology), and each still prices Mending Stability its own way (`opposing.py`'s scale-cost proxy; `collective.py`'s flat 0). Route all three through one pricing owner.
-- DEPS: F — after WR-02 (same file family)      EDITS: `systems/threadwork/sim/{collective,opposing,operations}.py`
-- EXIT: `python -m pytest tests/valoria/test_coherence_elastic_plastic.py -q` plus a new parity test.      FALSIFIER: the three sites return the same cost and the same restorative term for the same (scale, outcome) pair; a planted change at one site alone reddens the parity test.
-- SOURCE: `systems/threadwork/sim/collective.py:143`; `systems/threadwork/sim/opposing.py:128`; `registers/handoffs/HANDOFF_WR.md` (row "threadwork WR-SCOPE build").
+### WR-01 · `27` remainder 1 · R-14 practitioner-resilience term · the `engine/season/` reach
+- STATE: BLK:IN-06      LANE: WR      BATCH: B-S (`engine/season/` reach)      R: —
+- WHAT: B-D3 built the in-module half, landed at `0a690b30`: `operations.RESILIENCE_GAIN` (shipped at the control 0; `RESILIENCE_GAIN_SWEEP = (0, 1, 3)`) and `operations.resist_coherence_cost`, applied to every practitioner's working cost through `operations.charge_working` in `operations.py`, `collective.py` and `opposing.py`. What remains is the reach: nothing in `engine/season/` supplies `actor.resilience` or a gain. Two unruled things must be settled with IN-06's design before it is built: the slot's name and what fills it (the builder's `resilience` is a placeholder; Spirit is a candidate input, GO-01 / J-9 in this part), and where the gain lives (a module global patched by tests today, not a `Fixtures` field as in H-94).
+- DEPS: IN-06 (D, `_part3` §A: the design names the carriers); the reach waits on B-S's gate (IN-06's design reviewed AND B-R and B-V merged)      EDITS: `engine/season/` only after IN-06's build in B-S
+- EXIT: observed at B-S by IN-06's build exit (a plugged row's deletion refuses in a fresh subprocess; one seed twice in one process gives one hash), plus `python -m pytest tests/valoria/test_threadwork_resilience.py -q`, 0 failed.      FALSIFIER: at gain 0 the plugged practitioner's costs equal the unplugged ones; at a gain > 0 a practitioner with resilience takes strictly less than one without, on one planted pair, in a season run.
+- SOURCE: `registers/handoffs/HANDOFF_WR.md` (row "threadwork WR-SCOPE build"); `canon/philosophy/06_operations.md:331-359`; `engine/season/hole_register.yaml:1168` (`H-94`); `tests/valoria/test_threadwork_resilience.py`.
 
 ### 1.4 GO — Godot port
 
@@ -185,7 +171,7 @@ ALIAS FA-02 = IN-30 (_part5), IN-40 (_part5)
 | PC: `ED-PC-0047`, `0052`–`0054`; `0019`, `0021` flags | closed or answered (LADDER-MBPC) | `0021` and `0019` are superseded by `ED-PC-0022` (U10, ratified 2026-07-23): `CHOKE_THRUST` is retired from the force channel and re-homed to `CHOKE_ACCURACY_K`, and `phi_grip('point')` is grip-invariant unconditionally (`weapon_physics.py:236-246`, `config.py:56-60`) | flags cleared |
 | PC: `ED-PC-0055` (J-20, off-hand); `ED-PC-0051` (J-21, katana anchor) | answered: J-20 (B), J-21 (A) [medium; Jordan to correct] | RS-21 items 7 and 8 (`_part5` §J); `systems/combat/combat_engine_v1/core.py:208,344` | → PC-07, landed (`9054df80`: J-20's dead branch deleted; J-21 closed with nothing to build); superseding rows `needs_jordan: false` |
 | PC: `ED-IN-0187`; `ED-PC-0003` | held site answered (the ledger status of `ED-IN-0187` stays `executed`) | owner is `engine/dice_engine`; ceiling abolished by `ED-PC-0057` | → PC-02, landed (`9054df80`) |
-| WR: `27`'s built parts and the P-25 reader | STALE-CLOSED | PR #451 `ff40b960`; `ED-WR-0008` | the three remainders are WR-01..03 |
+| WR: `27`'s built parts and the P-25 reader | STALE-CLOSED | PR #451 `ff40b960`; `ED-WR-0008` | the three remainders landed in-module at B-D3 (`0a690b30`); WR-01 keeps the reach |
 | WR: port-bridge constants parity | not checkable here | `registers/handoffs/HANDOFF_WR.md` (row "Port-bridge constants-parity risk from the coherence reshape") | → GO-06 |
 | FA: `ED-FA-0002` (`domain_actions` home doc) | CUT | `Faction` has no verbs; acts are persons' `via` seats (A-4); §0.05 | `closed` row |
 | FA: `ED-FA-0003` (BG victory-params re-export) | STALE-CLOSED | `params/` has 0 tracked files; the board game was retired at `FORK:c451bcb` (not resolvable in this shallow clone; `references/restructure_ledger.md:1213`) | `closed` row |

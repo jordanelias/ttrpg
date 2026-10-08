@@ -6,7 +6,7 @@
 
 ---
 
-Position keys: v8 numbers stay as ALIAS in the blocks below — `22` = SC-01, `22a`/`23`/`22b` = SC-02, `2-ii` = SC-05, `31a`/`31b`/`31c` = IN-03/IN-04/IN-05, `30` = IN-02 (partly built), `33`/`36` = IN-06/IN-07, `34`/`35` landed, `27` = WR-01..03 (`_part7`), `24g` = SE-01, `19b` = IN-09. The home of each is `valoria_master_workplan_v9.md` §3 (state index) and §4 (crosswalk).
+Position keys: v8 numbers stay as ALIAS in the blocks below — `22` = SC-01, `22a`/`23`/`22b` = SC-02, `2-ii` = SC-05, `31a`/`31b`/`31c` = IN-03/IN-04/IN-05, `30` = IN-02 (partly built), `33`/`36` = IN-06/IN-07, `34`/`35` landed, `27` = WR-01 (`_part7`; WR-02, WR-03 landed at B-D3), `24g` = SE-01, `19b` = IN-09. The home of each is `valoria_master_workplan_v9.md` §3 (state index) and §4 (crosswalk).
 
 ## C. THE NINE CONTRADICTIONS (2026-09-28 plan §4, `FORK:0671283`) — each resolved to one side; none went to Jordan
 

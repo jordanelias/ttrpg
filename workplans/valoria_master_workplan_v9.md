@@ -198,7 +198,7 @@ commit and the run stops for a cleared window (`methodology-execute`, `CLAUDE.md
 has read §K's still-held list and `_part5` §J. `main` was red from PR #456 on one test
 (`test_flow_skeletons.py::test_contract_names_resolve_in_the_generated_index[combat]`); the one-line fix (`personal_combat`
 joins `RETIRED_CONTRACTS`) is built and rides the adoption branch (`7b619328`), so it is not a position — read `All Gates
-Green` on `main` once the branch merges. B-C is closed. B-D1 is closed (`9054df80`) and B-D2 is closed (`b31d2c31`). Then **B-D3**, then B-G → B-H → B-E → {B-F ∥ B-I} → B-J → … the spine `_part3` §B names. Every batch runs
+Green` on `main` once the branch merges. B-C is closed. B-D is closed: D1 (`9054df80`), D2 (`b31d2c31`), D3 (`0a690b30`). Then B-G → B-H → B-E → {B-F ∥ B-I} → B-J → … the spine `_part3` §B names. Every batch runs
 through `methodology-execute` (`CLAUDE.md` §9), and a batch's READ-FIRST list names the sites to read (the pins file is far too
 large to read whole: grep the assertion).
 
@@ -282,9 +282,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | FI-02 | SM-3 | FI | BLK | FI-01 | — | B-O | `_part6` |
 | FI-03 | ED-FI-0002 | FI | BLK | IN-06 | — | B-S | `_part6` |
 | FI-05 | = IN-32 | — | — | — | — | B-S | `_part5` |
-| WR-01 | `27` remainder: the R-14 term | WR | B | in-module | — | B-D3 · B-S | `_part7` |
-| WR-02 | `27` remainder: own-configuration Mending | WR | BLK | WR-01 | — | B-D3 | `_part7` |
-| WR-03 | `27` remainder: Mending feedback, one pricing owner | WR | BLK | WR-02 | — | B-D3 | `_part7` |
+| WR-01 | `27` remainder: the R-14 term, the `engine/season/` reach | WR | BLK | IN-06 | — | B-S | `_part7` |
 | WR-05 | = IN-35 | — | — | — | — | B-S | `_part5` |
 | GO-01 | `26`; D2 tenth attribute | GO | J | J-9 | — | B-Z | `_part7` |
 | GO-04 | ED-IN-0017 seam audit | GO | B | — | — | B-L | `_part7` |
@@ -305,7 +303,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | `19b` · `13`-rest · pre-flight P-4, P-6 | IN-09 · IN-38 · read at B-C (IN-39, landed; `_part3` §P) |
 | `22` · `22a` → `23` → `22b` · `2-ii` | SC-01 · SC-02 · SC-05 |
 | `24g` · `24h` P5 · `24` (umbrella) | SE-01 · IN-30 (= SE-05, FA-02) · not carried — its letters are the rows |
-| `9` · `26` · `27` remainder · `ED-FI-0009` | PC-01 (landed, `9054df80`) · GO-01 · WR-01, WR-02, WR-03 · FI-01 |
+| `9` · `26` · `27` remainder · `ED-FI-0009` | PC-01 (landed, `9054df80`) · GO-01 · WR-01 (the reach; WR-02 and WR-03 landed, `0a690b30`) · FI-01 |
 | `11` | no handle: re-taken at B-G (control), B-I and B-M (E15); P-4 passed before it, at B-C |
 | SM-1 · SM-2, SM-15 · SM-3 · SM-7 · SM-9, SM-11 · SM-10, SM-12 · SM-13 · SM-5, SM-6 | SC-06 · SC-05 · FI-02 · IN-05 · IN-41 · IN-44 · GO-05 · SM-5 confirmed (RS-6), SM-6 = IN-46 |
 | telling T7 · its measurement + H-180/181/182 re-check · G1–G8 | IN-16 · IN-17 · IN-18 |
