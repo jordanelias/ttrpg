@@ -74,17 +74,9 @@ def _cells_gapped_line(half_w, depth):
         cells += [(r, c) for c in range(half_w + 1, 2 * half_w + 1)]
     return cells
 
-# [LC-8] Horseshoe/RefusedFlank retired here too -- see CELL_PATTERN_FN's note.
-_SHAPE_BUILD = {
-    "Line":         (lambda s: dict(width=max(1, round(LINE_ASPECT * s)), depth=s), _cells_line),
-    "Arrowhead":    (lambda s: dict(depth=s),                                       _cells_arrowhead),
-    "GappedLine":   (lambda s: dict(half_w=s, depth=s),                             _cells_gapped_line),
-    "Column":       (lambda s: dict(width=max(1, round(s)), depth=max(1, round(LINE_ASPECT * LINE_ASPECT * s))), _cells_line),
-}
-
 def _build_shape_n(shape, n):
     """Build a footprint of EXACTLY `n` cells in `shape`'s aspect, for any n>=1 (ED-MB-0025).
-    The legacy `_SHAPE_BUILD` size-parameter families only yield a SPARSE set of cell counts (a Line
+    The retired size-parameter shape-builder table only yielded a SPARSE set of cell counts (a Line
     could be 1,5,11,… never 2,3,4), so an explicit troops-per-cell density could not be honoured — a
     133-troop subunit collapsed to 1 cell at every concentration. These builders instead lay out n cells
     directly in the shape's characteristic silhouette, so `density` (troops/cell) truly bounds the cell

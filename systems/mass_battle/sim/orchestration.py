@@ -886,7 +886,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
             mods = []
             op = _oriented(defender_subunit)   # kept: frontage SPAN (_dc below) reads the static oriented pattern
             # [Fable-audit B3 fix, 2026-07-24] abs->orig from the single live identity map, not the dead
-            # spawn lattice (see _octagon_dmg_mod). Live _node_pos on the field path; byte-identical
+            # spawn lattice (see _octagon_cell_mods). Live _node_pos on the field path; byte-identical
             # starting_position+cell_offsets on the grid path.
             abs_to_orig = _oriented_abs_map(defender_subunit)
             seen = set()
@@ -1026,18 +1026,12 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
         # reading the whole enemy line's centre as an oblique (flank) bearing -- verified front->1.00x,
         # rear->2.00x exactly. [canonical: Jordan design -- octagon damage multiplier; du Picq flank/rear
         # lethality + reaction time under surprise]
-        def _octagon_dmg_mod(defender_subunit, defender_cells, attacker_cells):
-            """Subunit-scalar arc = the MEAN of the per-cell arcs (see _octagon_cell_mods, the single
-            owner of the per-cell logic). Byte-exact: identical value, same iteration order."""
-            cm = _octagon_cell_mods(defender_subunit, defender_cells, attacker_cells)
-            return sum(cm.values()) / len(cm) if cm else 0.0
-
         def _octagon_cell_mods(defender_subunit, defender_cells, attacker_cells):
             """[ED-MB-0040] THE single owner of the per-cell octagon arc (Jordan: "each cell has its own
             octagon facing"). Returns {abs_cell: arc_mod} — 0 (GREEN/front) .. -2 (RED/rear) per ANGLE_DEF_MOD,
             each cell judged against ITS OWN facing, its own local attacker centroid, its own pin/FOV state and
-            its own reaction clock. `_octagon_dmg_mod` is the troop-blind MEAN of this map (byte-exact,
-            unchanged); MB_CELL_DAMAGE reads the map itself so casualties land on the cells that are actually
+            its own reaction clock. The subunit scalar (`a_arc`/`b_arc` at the call site) is the troop-blind
+            MEAN of this map; MB_CELL_DAMAGE reads the map itself so casualties land on the cells that are actually
             exposed instead of being averaged into one subunit scalar and smeared back uniformly."""
             if not defender_cells or not attacker_cells:
                 return {}
@@ -1320,7 +1314,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
         b_deg = compute_degree(b_net, max(1, a_net))
         # [ED-MB-0018] Octagon = DAMAGE-RECEIVED MULTIPLIER (Jordan): the arc the attacker strikes from
         # multiplies the DEFENDER's casualties -- front 1.0x, flank 1.5x, rear 2.0x -- interpolated from the
-        # dedicated per-cell FACING-ARC (`_octagon_dmg_mod`, 0..-2 -> mult = 1 - arc*(RED-1)/2, capped at
+        # dedicated per-cell FACING-ARC (`_octagon_cell_mods`, 0..-2 -> mult = 1 - arc*(RED-1)/2, capped at
         # RED). This is the pure octagon arc (local-centroid, reaction-gated), NOT the legacy
         # `a_angle_mod`/`b_angle_mod` bundle (which also carries wrapper/pocket/roll-up pool penalties and
         # spuriously reads a wide line's wings as flanked head-on). Under MB_OCTAGON_DMG the legacy pool
@@ -1331,8 +1325,8 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
         _red = OCTAGON_DMG_MULT["RED"]
         _a_cw = _b_cw = None
         if MB_OCTAGON_DMG:
-            # [ED-MB-0040] One evaluation of the per-cell arcs; the subunit scalar is their MEAN (exactly
-            # what _octagon_dmg_mod returns — byte-exact), and under MB_CELL_DAMAGE the SAME map also
+            # [ED-MB-0040] One evaluation of the per-cell arcs; the subunit scalar is their MEAN
+            # (the retired `_octagon_dmg_mod` scalar, byte-exact), and under MB_CELL_DAMAGE the SAME map also
             # yields the per-cell allocation weights. The pair TOTAL is unchanged either way; the flag only
             # changes WHERE those casualties land (see _cell_damage_weights).
             _a_cm = _octagon_cell_mods(atom_a, list(set(p["a_cells"])), list(set(p["b_cells"])))
