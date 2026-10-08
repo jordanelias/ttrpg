@@ -1268,6 +1268,13 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                 cB = STANCE_COMMITMENT.get(atom_b.stance, 0)
                 ns_a += (cA * INTENT_OFFENSE_D + cB * INTENT_DEFENSE_D) * SIGMA_PER_D
                 ns_b += (cB * INTENT_OFFENSE_D + cA * INTENT_DEFENSE_D) * SIGMA_PER_D
+            # [MB-05] A.9 terrain dice (`Unit.terrain_off_d`/`terrain_def_d`, set by
+            # `massbattle._run_and_grade`): a side's own offence dice, less the enemy's defence dice --
+            # the same Off/Def reading as the INTENT term above. Guarded so an untouched pair adds nothing.
+            _ta = unit_a.terrain_off_d - unit_b.terrain_def_d
+            _tb = unit_b.terrain_off_d - unit_a.terrain_def_d
+            if _ta: ns_a += _ta * SIGMA_PER_D
+            if _tb: ns_b += _tb * SIGMA_PER_D
             if MB_FRACTIONAL_POOL:
                 # [ED-MB-0032] roll the CONTINUOUS pool without flooring — the σ-boost reads the fractional
                 # pool too (a dead atom's net is forced to 0 below regardless, same as the integer path).
@@ -1298,6 +1305,11 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                 if eng_counts.get(id(atom_b), 0) >= 2: b_pool = max(1, b_pool - ENCIRCLEMENT_PENALTY)
             if atom_a.unit_type == 'ranged': a_pool = max(1, a_pool // 3)
             if atom_b.unit_type == 'ranged': b_pool = max(1, b_pool // 3)
+            # [MB-05] A.9 terrain dice, whole dice on the pool (this path's currency) -- see the sigma head.
+            _ta = round(unit_a.terrain_off_d - unit_b.terrain_def_d)
+            _tb = round(unit_b.terrain_off_d - unit_a.terrain_def_d)
+            if _ta: a_pool = max(1, a_pool + _ta)
+            if _tb: b_pool = max(1, b_pool + _tb)
             a_net = roll_pool(a_pool)
             b_net = roll_pool(b_pool)
         # [D3 fix, part 2 -- 2026-07-05 adversarial-review correction] `roll_pool`/`_sigma_net_boost`

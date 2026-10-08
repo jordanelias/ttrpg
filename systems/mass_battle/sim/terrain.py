@@ -34,11 +34,11 @@ not a near-miss, a disjoint region — so neither can resolve to NARROW_PASS via
 regardless of fortification. `test_mass_battle_terrain.py` covers the "Done when" criterion with a
 synthetic province rather than a real one for exactly this reason.
 
-RIVER_CROSSING is not yet reachable from this lookup at all: `_TYPE_TO_ROW` has no entry that
-produces it, and no code path here reads the geography file's `water:`/`bridges:` keys (the crossing
-data ED-780's extension implies exists). Adding it needs a caller-side signal (does the engagement
-cross a mapped river edge between two provinces) that this province-interior point-test cannot derive
-by itself — follow-up work, not this pass's.
+RIVER_CROSSING is not reachable from the polygon lookup: `_TYPE_TO_ROW` has no entry producing it and
+nothing here reads the geography file's `water:`/`bridges:` keys. It is reached only through the
+CALLER'S signal, `terrain_row_for_territory(..., river_crossing=True)` (MB-05); no season caller
+derives that signal yet (the provider is handed the target rung, not the march's origin, and whether a
+bridge on the route cancels the crossing is unruled) — see that function's own docstring.
 """
 import os
 
@@ -52,7 +52,7 @@ NARROW_PASS = 'narrow_pass'
 UPHILL = 'uphill'
 FOREST_BROKEN = 'forest_broken'
 WALLS = 'walls'
-RIVER_CROSSING = 'river_crossing'  # not yet reachable from this lookup — see the module docstring's own gap note
+RIVER_CROSSING = 'river_crossing'  # reached only by the caller's `river_crossing` signal — see the module docstring
 OPEN_FLAT = 'open_flat'
 
 # [ASSUMPTION: geography `type:` values with no direct A.9 analogue mapped to the closest existing
@@ -122,8 +122,16 @@ def _polygon_area(polygon):
     return abs(total) / 2.0
 
 
-def terrain_row_for_territory(tid, fort_level=0):
+def terrain_row_for_territory(tid, fort_level=0, river_crossing=False):
     """The A.9 row (one of this module's six constants) for a battle fought over province `tid`.
+
+    `river_crossing` (MB-05): the CALLER's fact that the attacker fights its way across a river to
+    reach the field -- the only way RIVER_CROSSING is ever returned (the module docstring says why the
+    polygon lookup cannot produce it). Default `False` is every caller today, so no live field moves.
+    `[ASSUMPTION: priority WALLS > RIVER_CROSSING > polygon -- the same one-row-of-six shape that forced
+    the fortification rule below forces one here; a crossing outranks the surrounding polygon because it
+    is what happens AT the engagement, and walls outrank the crossing by that rule's own reasoning.]`
+    Like fortification, it is read only for a KNOWN `tid`.
 
     `fort_level`: the LIVE fortification of the place fought over — pass it, do not omit it, for any
     season-reachable call. Since plan position `20-iv` the one production caller is
@@ -173,6 +181,8 @@ def terrain_row_for_territory(tid, fort_level=0):
         return OPEN_FLAT
     if fort_level > 0:
         return WALLS
+    if river_crossing:
+        return RIVER_CROSSING
     anchor = province.get('anchor')
     if anchor is None:
         return OPEN_FLAT
@@ -196,3 +206,21 @@ def terrain_row_for_territory(tid, fort_level=0):
 #: lookup, not beside the row constants, so the lookup's line stays where the mass-battle flow
 #: skeleton's line anchor cites it (`tests/valoria/test_flow_skeletons.py`). Applied since `20-iv`.
 WALLS_DEFENDER_DR = 3  # [canonical: mass_battle_v30.md §A.9 ENVIRONMENTAL MODIFIERS — "Walls / fortifications | Defender +3 DR"]
+
+#: MB-05. A.9's two dice rows, as DICE -- A.6's currency (`Off dice | Def dice`). They land on
+#: `Unit.terrain_off_d`/`terrain_def_d` (`massbattle._run_and_grade`), and the engine turns a die into
+#: sigma only through `config.SIGMA_PER_D`, a CALIBRATED-DEBT conversion (its own line says so): the dice
+#: counts are canon's, the size of their effect on a fight is that constant's. Def dice are spent the
+#: way the engine already spends a defensive commitment (`INTENT_DEFENSE_D`): they blunt the enemy's
+#: offence, so on an uphill field the attacker's offence falls by both rows together.
+UPHILL_ATTACKER_OFF_D = -1  # [canonical: mass_battle_v30.md §A.9 ENVIRONMENTAL MODIFIERS — "Uphill | Defender +1D Def; attacker −1D Off"]
+UPHILL_DEFENDER_DEF_D = 1  # [canonical: mass_battle_v30.md §A.9 ENVIRONMENTAL MODIFIERS — "Uphill | Defender +1D Def; attacker −1D Off"]
+#: River crossing's dice row, on the CROSSING side -- the attacker, `unit_a` (`[ASSUMPTION: A.9 does
+#: not say who crosses; the side that marched to the field is the one that can have crossed to reach
+#: it]`). The row's other clauses: "−1 Speed tier" is applied by `SPEED_TIERS` below (inert on the
+#: season path, as forest's speed half is); "Discipline check (treat Size lost = 1)" is NOT coded,
+#: because under §A.4's deterministic check (PP-502: degrade when Size lost > current Discipline AND
+#: exceeds the enemy's loss) a Size loss of 1 degrades no unit with Discipline >= 1 -- a no-op by canon's
+#: own arithmetic, so code for it would observe nothing.
+RIVER_CROSSING_OFF_D = -1  # [canonical: mass_battle_v30.md §A.9 ENVIRONMENTAL MODIFIERS — "River crossing | −1 Speed tier; −1D Off; Discipline check"]
+SPEED_TIERS = ('Slow', 'Standard', 'Fast')  # [canonical: mass_battle_v30.md §A.4 — "Speed — Slow / Standard / Fast (3 tiers)", in that order]

@@ -2718,6 +2718,14 @@ class Unit:
     # introspection/a future UI -- nothing at resolution time reads it. Default empty -> byte-exact
     # for every existing Unit, which never sets it (matches `fired_signals`' own A4 precedent).
     officers: Tuple['Officer', ...] = ()
+    # [MB-05, A7 terrain] The dice the battle's A.9 terrain row moves, battle-wide, in A.6's own two
+    # currencies: `terrain_off_d` shifts THIS unit's offence; `terrain_def_d` is defence, which this
+    # engine spends the way INTENT_DEFENSE_D does -- it blunts the ENEMY's offence against this unit.
+    # Set once, before the battle, by `massbattle._run_and_grade` from `terrain.py`'s row constants;
+    # read in `orchestration.resolve_engagements` (sigma head: x SIGMA_PER_D, legacy path: whole dice
+    # on the pool). Default 0 -> inert, byte-exact for every Unit no terrain row touches.
+    terrain_off_d: float = 0.0
+    terrain_def_d: float = 0.0
 
     def __post_init__(self):
         # [canonical: Jordan directive 2026-06-02] Command DERIVED from Charisma (primary) +
