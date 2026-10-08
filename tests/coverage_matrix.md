@@ -503,3 +503,15 @@ letting `_kite_goal`'s band-seeking primitive close to volley range and hold it.
 at the gauge's own production sample size (n=60, multi mode): `decA=47.2` (band 42-58, PASS), draws
 11.7% (well under the 30% low-draw ceiling, though R3's own `draw_exp` is `'high'` and does not require
 it). No other gauge row changed shape or kwargs.
+
+## 2026-10-08 — ED-MB-0045 (B-D2 MB-01): the 2:1 friction band, and one gauge citation re-labelled
+
+`tests/sim/gauge_mb.py`'s `triplex acies` citation is re-labelled CALIBRATED-DEBT (the T3-tier and
+honest_gauge_readout citations are kept); no gauge row changed shape, kwargs or sample size. The coverage
+change is in `lanchester_signature.check_linear`, which now reads a BAND for the 2:1 big-win quantity
+(`LINEAR_BIG_WIN_BAND`, the 1.5:1 and 3:1 points of the curve `MB_FRICTION_SIGMA` is calibrated against) in place
+of the one-sided floor `LINEAR_MIN_BIG_WIN = 65`. Measured, `check_linear` only, 100 deterministic seeds, Python
+3.11: friction off (`MB_FRICTION=0`) reads 100.0 % and now FAILS (the floor passed it); the shipped engine reads
+77.0 % and passes; a planted collapse (`MB_FRICTION_SIGMA=4`) reads 57.0 % and fails. The `lanchester-signature`
+CI job stays report-only. The flag and its helpers are renamed `MB_FRICTION*`, and `test_friction_cev.py` is now
+`test_friction.py`.
