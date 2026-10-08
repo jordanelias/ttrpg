@@ -235,10 +235,7 @@
   },
   "core": {
    "BASE_POOL": 6,
-   "COVERAGE_GAP": {
-    "full": 0.15,
-    "partial": 0.5
-   },
+   "COVERAGE_GAP": 0.15,
    "CUT_AUTH_REF": 0.7,
    "CUT_REF_NATIVE": 1.0,
    "DELIVERY": {

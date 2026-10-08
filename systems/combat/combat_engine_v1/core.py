@@ -140,7 +140,7 @@ def resolve(pool, net_sigma, rng, ob):
 # damage as a live gradient (the old tanh cap saturated everything to ~the cap and flattened the gradient).
 #   Impact   = strength + heft; BLUNT heft is CONTINUOUS from percussion authority P_auth (perc carries it);
 #              cut/thrust heft is weight-class (continuous-mass cut-impact deferred, plan #9).
-#   Coupling = DELIVERY(head) x transmit(material-resistance-per-mode) x gap(coverage) — material/mode physics.
+#   Coupling = DELIVERY(head) x transmit(material-resistance-per-mode) x gap(COVERAGE_GAP) — material/mode physics.
 #   Quality  = degree factor.   Constants from damage_model (emergent-calibrated so an even Success ~= 1 WI).
 HEFT_HEAVY=3.0                                                      # heavy-class cut/thrust heft scale (unchanged — the multiplier below anchors on the SAME 2H cut-thrust reference WP.heft() normalises to 1.0)
 def heft_resp(w, cfg, grip=0.0, sel_head=None, sel_pc=None, sel_arm=None):
@@ -162,9 +162,9 @@ QUAL={'graze':0.25,'partial':0.5,'success':1.0,'overwhelming':1.5}  # [damage_mo
 # entry exists — and removing it could not even raise KeyError (which would have been the louder, safer failure).
 # The honest reason to keep it is narrower: 'partial' IS a real degree from degree() (0 <= net - ob < 1), the wrapper
 # maps it to an explicit graze/bind rather than a damage call, and a quality table that silently omits a member of
-# its own domain is a worse artifact than an unused row. NOTE COVERAGE_GAP['partial'] below is NOT the same thing —
-# that key is the `coverage` (hit-location) level, unrelated to degrees; conflating them was a category error in
-# this comment's first draft. It is retained as the not-yet-wired hit-location hook.
+# its own domain is a worse artifact than an unused row. NOTE the former 'partial' row of COVERAGE_GAP was NOT the same
+# thing — that key was the `coverage` (hit-location) level, unrelated to degrees; conflating them was a category error in
+# this comment's first draft. That hook was deleted as a dead branch (ED-PC-0055, J-20 (B)); see COVERAGE_GAP below.
 OW_MAX=2.5; OW_Z=1.5          # [M-QUAL D-A: overwhelming quality saturates 1.5->OW_MAX by sigma-leverage severity]
 DMG_SCALE=1.55                                                      # [damage_model — even Success ~= 1 WI; emergent-tunable]
 # PENETRATION THRESHOLD (ED-PC-0032, rapier plate fall-off): armour resists up to a floor — a blow whose coupling-
@@ -197,7 +197,11 @@ RESIST={'none': {'percussion':0,   'shear':0,   'puncture':0},
         'mail': {'percussion':.20, 'shear':.85, 'puncture':.45},
         'plate':{'percussion':.30, 'shear':.95, 'puncture':.70}}
 TIER2MAT={'none':'none','light':'cloth','medium':'mail','heavy':'plate'}  # [armour_axes presets — tier->material]
-COVERAGE_GAP={'full':0.15,'partial':0.5}                            # [damage_model — gap/bare-zone exposure]
+COVERAGE_GAP=0.15                                                   # [damage_model — gap/bare-zone exposure, full coverage]
+# [ED-PC-0055, J-20 (B)] A scalar: the `coverage` level ('full' | 'partial') it was keyed on is gone. Every caller
+# passed the literal 'full' and none passed 'partial' (an off-hand / partial-coverage hit location is out of scope for
+# personal combat), so the 'partial' row (0.5) and the `coverage` parameters of _transmit, cut_thrust_arm and coupling
+# were a dead branch. Re-add the key and the parameter with the first weapon or armour that needs a second level.
 # ── SITUATIONAL GAP GAME (2026-06-30) — a thrust/puncture is GAP-SEEKING ─────────────────────────────────────────
 # grounded_weapon_armour_usemode_model.md + Williams (The Knight and the Blast Furnace, 2003): a point does NOT punch
 # through plate — it SEEKS the reach-ladder gaps (visor/armpit/groin/palm). Its plate-defeat effectiveness is the
@@ -279,7 +283,7 @@ GAP_PREC_REF=0.65                                                   # neutral ga
 # dependency edge, and byte-identical (same float, 8.0). PERC_AUTH_REF_SOFT is NOT bound: it is a DIFFERENT anchor
 # (bec_de_corbin's 6.51 live authority, the weakest dedicated hammer — see the U2 block above), not the scale top.
 PERC_AUTH_REF=WP.PERC_CAP; PERC_AUTH_REF_SOFT=6.5; PERC_TRANSMIT_FLOOR=0.35
-def _transmit(mode, mat, coverage, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, thrust_auth=1.0):
+def _transmit(mode, mat, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, thrust_auth=1.0):
     t=1.0-RESIST[mat][mode]
     if mode=='puncture':                                           # SITUATIONAL GAP GAME: a thrust takes through-
         # material OR the reach-ladder gap it seeks. The gap term is GAP-SEEKING: the material's thrust-accessible gap
@@ -298,7 +302,7 @@ def _transmit(mode, mat, coverage, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, th
         ref = PERC_AUTH_REF if mat in ('mail', 'plate') else PERC_AUTH_REF_SOFT   # rigid armour keeps the original, pre-existing reference; none/cloth uses the softer one (see comment above)
         t*=max(PERC_TRANSMIT_FLOOR, min(1.0, perc/ref))
     if mat!='none':
-        g=COVERAGE_GAP[coverage]; return t*(1-g)+1.0*g             # some blows reach a bare zone
+        g=COVERAGE_GAP; return t*(1-g)+1.0*g                       # some blows reach a bare zone
     return t
 # CUT_AUTH_REF [U2/ED-PC-0011, 2026-07-08]: the bare 'cut' token key is NEVER a weapon's own native head —
 # verified against the full roster (top-level `head` and every mode_element's `head`): no weapon is authored
@@ -345,8 +349,8 @@ CUT_REF_NATIVE=1.00
 def _shear_yield(mat):
     """How much this material yields to an EDGE, normalised so unarmoured == 1.0. Reads the owned resist table; adds
     no constant of its own. Pure."""
-    base = _transmit('shear', 'none', 'full')
-    return (_transmit('shear', mat, 'full') / base) if base > 0 else 0.0
+    base = _transmit('shear', 'none')
+    return (_transmit('shear', mat) / base) if base > 0 else 0.0
 # THRUST_LEVER_REF / _FLOOR [PC-5 / ED-PC-0015, 2026-07-22]: thrust AUTHORITY — the capacity to drive a point home
 # behind body-weight and a pommel-press — is a PRIMITIVE derived from the point-to-controlling-hand lever (head_len,
 # METRES). A SHORT lever (a rondel dagger, head_len 0.21; a half-sworded longsword, head_len 0.42) can be pressed home
@@ -390,7 +394,7 @@ def thrust_authority(head_len):
     1.0 (pommel-pressed, body-weight-backed); long reach-thrust decays toward the floor. head_len in METRES."""
     if head_len is None or head_len<=0: return 1.0
     return max(THRUST_LEVER_FLOOR, min(1.0, THRUST_LEVER_REF/head_len))
-def cut_thrust_arm(mat, coverage='full', gap_prec=GAP_PREC_REF, eff_cut=None, eff_thrust=None, thrust_auth=1.0, impact=None):
+def cut_thrust_arm(mat, gap_prec=GAP_PREC_REF, eff_cut=None, eff_thrust=None, thrust_auth=1.0, impact=None):
     """SINGLE OWNER of the cut-and-thrust versatility contest. Returns `(value, mode)` — the winning arm's coupling and
     which arm won ('shear' | 'puncture') — so the DAMAGE and the REPORTED MODE can never disagree (ED-PC-0036).
 
@@ -418,8 +422,8 @@ def cut_thrust_arm(mat, coverage='full', gap_prec=GAP_PREC_REF, eff_cut=None, ef
     swing can cut where its point coupled better. Every wielder-bearing caller (`strike`, `select_mode`) passes
     `impact`; None keeps the coupling-only contest for a weapon-only probe with no wielder. The returned value is
     the winning arm's COUPLING either way (impact is paid separately, in `damage`). Pure."""
-    cut_arm = DELIVERY['cut']*_transmit('shear',mat,coverage)
-    thr_arm = DELIVERY['point']*_transmit('puncture',mat,coverage,gap_prec=gap_prec,thrust_auth=thrust_auth)
+    cut_arm = DELIVERY['cut']*_transmit('shear',mat)
+    thr_arm = DELIVERY['point']*_transmit('puncture',mat,gap_prec=gap_prec,thrust_auth=thrust_auth)
     # PER-ARM quality [ED-PC-0037, adversarial-review fix]. Each arm is de-rated by ITS OWN derived magnitude — the
     # edge by geo['cut'], the point by geo['thrust']. The first revision scaled BOTH by the element's blended
     # sel_eff = max(cut, thrust), which credited an incidental edge with a dedicated point's quality: a ranseur
@@ -439,7 +443,7 @@ def cut_thrust_impacts(w, strength, grip=0.0, sel_pc=None):
                                                    sel_arm=_a), V.HEAD_CUT_THRUST)
                  for _a in ('shear', 'puncture'))
 
-def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None, ct_impact=None):
+def coupling(head, armor, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None, ct_impact=None):
     """DELIVERY x transmit. cut_thrust is VERSATILE — takes the better of its edge (shear) or the half-sword thrust
     (puncture/gaps) at each armour level: a longsword half-swords vs plate instead of bouncing (restores the prior
     engine's max(cut,point) mode-shift; HEMA: you half-sword vs harness). [damage_model.coupling + cut_thrust versatility]
@@ -477,7 +481,7 @@ def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC
         # rather than by physics. On its own token the shift is REAL and matches the doctrine stated above: cut the
         # unarmoured man (1.500 > 1.450), half-sword-thrust anything armoured (light 0.926 < 1.276, more so at
         # medium/heavy) — because padding and plate resist an edge far more than they resist a point.
-        return cut_thrust_arm(mat, coverage, gap_prec, eff_cut, eff_thrust, thrust_auth, impact=ct_impact)[0]
+        return cut_thrust_arm(mat, gap_prec, eff_cut, eff_thrust, thrust_auth, impact=ct_impact)[0]
     d=DELIVERY.get(head,1.5)
     if head=='cut' and eff is not None:
         d*=min(1.0, eff/CUT_AUTH_REF)
@@ -493,7 +497,7 @@ def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC
         d *= (1.0 + (rel-1.0)*_shear_yield(mat)) if rel >= 1.0 else rel
     elif head=='point' and eff is not None:
         d*=min(1.0, eff/THRUST_AUTH_REF)          # PC-4/ED-PC-0012: scale a POINT token by its own derived thrust magnitude — a weak incidental point on a slasher is not a dedicated thruster; native pointers (eff>=bear_spear 0.53) clamp to 1.0, unaffected
-    return d*_transmit(HEAD_MODE.get(head,'shear'),mat,coverage,perc,gap_prec,thrust_auth=thrust_auth)
+    return d*_transmit(HEAD_MODE.get(head,'shear'),mat,perc,gap_prec,thrust_auth=thrust_auth)
 def _puncture_adef(w, cfg, grip, room):
     """SINGLE OWNER of the percussion-driven puncture armour-defeat term: a concentrated beak/spike defeats a harness
     by the ENERGY behind it, scored against ADEF_PERC_REF. Extracted 2026-07-29 — the expression was written twice in
@@ -666,7 +670,7 @@ def strike(attacker, defender, deg, cfg, net=None, pool=None):
     _arm = _imp = None
     if head == V.HEAD_CUT_THRUST:
         _imp = cut_thrust_impacts(attacker.w, attacker.strength, grip=grip, sel_pc=sel_pc)
-        _arm = cut_thrust_arm(TIER2MAT[defender.armor], 'full', gap,
+        _arm = cut_thrust_arm(TIER2MAT[defender.armor], gap,
                               eff_cut=(_ec if _ec is not None else _geo.get('cut')),
                               eff_thrust=(_et if _et is not None else _geo.get('thrust')),
                               thrust_auth=tauth, impact=_imp)[1]

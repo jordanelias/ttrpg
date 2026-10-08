@@ -171,7 +171,7 @@ def test_cut_thrust_label_matches_the_arm_actually_paid(weapon, armor):
         pytest.skip(f"{weapon} selects {head!r} at {armor}, not the versatile head")
     _geo = c.w.get('geo', {})
     # [ED-PC-0050] the arm core.strike pays is priced on DAMAGE with the wielder's impact pair — read it that way.
-    _value, mode = core.cut_thrust_arm(core.TIER2MAT[armor], 'full', gap, _geo.get('cut'), _geo.get('thrust'),
+    _value, mode = core.cut_thrust_arm(core.TIER2MAT[armor], gap, _geo.get('cut'), _geo.get('thrust'),
                                        core.thrust_authority(c.w['head_len']),
                                        impact=core.cut_thrust_impacts(c.w, c.strength, grip=c.grip_position, sel_pc=pc))
     assert dm == mode, (f"{weapon}@{armor}: select_mode reports {dm!r} but coupling pays the {mode!r} arm — "
@@ -213,7 +213,7 @@ def test_cut_thrust_versatility_is_not_decided_by_constant_ordering():
     for armor in ('none', 'light', 'medium', 'heavy'):
         dm, head, gap, perc, pc, eff = S.select_mode(c, armor, True, CFG, measure_gap=0.0)
         _geo = c.w.get('geo', {})
-        modes.add(core.cut_thrust_arm(core.TIER2MAT[armor], 'full', gap, _geo.get('cut'), _geo.get('thrust'),
+        modes.add(core.cut_thrust_arm(core.TIER2MAT[armor], gap, _geo.get('cut'), _geo.get('thrust'),
                                       core.thrust_authority(c.w['head_len']))[1])
     assert modes == {'shear', 'puncture'}, (
         f"the cut/thrust contest resolved to {modes} across all four armour tiers — one arm is structurally dead")

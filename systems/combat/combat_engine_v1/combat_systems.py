@@ -728,7 +728,7 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None, grip=None, roo
         # EASY 1.25) scoring a mode the fighter never performed. Deriving it also captures cases no armour rule can
         # express: a poor-edged weapon (spetum, eff 0.63 < CUT_AUTH_REF) correctly prefers its point even unarmoured.
         # [ED-PC-0050] priced on damage with the wielder's own impact pair — the same input core.strike passes.
-        dm = core.cut_thrust_arm(core.TIER2MAT[defender_armor], 'full', heads[h].gap,
+        dm = core.cut_thrust_arm(core.TIER2MAT[defender_armor], heads[h].gap,
                                  heads[h].eff_cut, heads[h].eff_thrust, core.thrust_authority(w['head_len']),
                                  impact=core.cut_thrust_impacts(w, c.strength, grip=grip, sel_pc=heads[h].pc))[1]
     else:

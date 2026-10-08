@@ -8,7 +8,7 @@
 
 | item | where it lives | next step |
 |---|---|---|
-| Batch B-D1 — IN FLIGHT | `workplans/valoria_master_workplan_v9_part3.md` §B.1 (B-D1 lane) and §B.2; `open 002c9ebcc39a766ef38b969961cb4e2eea5a8684` | built PC-01, PC-02, PC-03, PC-04 · close none · PC-07, PC-05(3) remain |
+| Batch B-D1 — IN FLIGHT | `workplans/valoria_master_workplan_v9_part3.md` §B.1 (B-D1 lane) and §B.2; `open 002c9ebcc39a766ef38b969961cb4e2eea5a8684` | built PC-01, PC-02, PC-03, PC-04, PC-07 · close none · PC-05(3) remains |
 | ED-PC-0001 — post-R3 player-input surface (superseded) | `registers/editorial_ledger_pc_archive.jsonl` (id `ED-PC-0001`); v9 PC-06 S-1 (`workplans/valoria_master_workplan_v9_part7.md`) | PC-06 S-1: a dispatching `choose`, the world surface's player mode |
 | ED-PC-0003 — OPT-10 sigma band-discipline unification (superseded by PC-02) | `registers/editorial_ledger_pc_archive.jsonl` (id `ED-PC-0003`); v9 PC-02 (`workplans/valoria_master_workplan_v9_part7.md`) | PC-02: migrate `core.py::degree` to `degree_from_net`, as its own verified PR with a regression pass (touches live resolver math) |
 | ED-PC-0007 — pessimist-audit PC action-menu consolidation | `registers/editorial_ledger_pc_archive.jsonl` (id `ED-PC-0007`, status deferred) | Reopen only if `combat_engine_v1` grows a discrete player-action menu |

@@ -137,7 +137,7 @@ def _arm_damage(w, strength, mat, arm):
     share the code it checks."""
     geo = w.get('geo', {})
     force = (1.0, 0.0) if arm == 'shear' else (0.0, 1.0)
-    coup, got = core.cut_thrust_arm(mat, 'full', w['gap'], eff_cut=geo.get('cut'), eff_thrust=geo.get('thrust'),
+    coup, got = core.cut_thrust_arm(mat, w['gap'], eff_cut=geo.get('cut'), eff_thrust=geo.get('thrust'),
                                     thrust_auth=core.thrust_authority(w['head_len']), impact=force)
     assert got == arm, (arm, got)
     return (strength + core.HEFT_HEAVY * WP.heft(w, sel_head=V.HEAD_CUT_THRUST, sel_arm=arm)) * coup
@@ -163,7 +163,7 @@ def test_selection_and_damage_agree_on_the_pinned_population():
             for strength in (2, 4, 6):
                 dmg = {a: _arm_damage(w, strength, mat, a) for a in ('shear', 'puncture')}
                 _v, arm = core.cut_thrust_arm(
-                    mat, 'full', w['gap'], eff_cut=geo.get('cut'), eff_thrust=geo.get('thrust'),
+                    mat, w['gap'], eff_cut=geo.get('cut'), eff_thrust=geo.get('thrust'),
                     thrust_auth=core.thrust_authority(w['head_len']),
                     impact=core.cut_thrust_impacts(w, strength))
                 other = 'shear' if arm == 'puncture' else 'puncture'
@@ -171,7 +171,7 @@ def test_selection_and_damage_agree_on_the_pinned_population():
                 if dmg[other] > dmg[arm] + 1e-9:
                     bad.append((n, tier, strength, arm, dmg))
                 _v0, arm0 = core.cut_thrust_arm(
-                    mat, 'full', w['gap'], eff_cut=geo.get('cut'), eff_thrust=geo.get('thrust'),
+                    mat, w['gap'], eff_cut=geo.get('cut'), eff_thrust=geo.get('thrust'),
                     thrust_auth=core.thrust_authority(w['head_len']))
                 if dmg['shear' if arm0 == 'puncture' else 'puncture'] > dmg[arm0] + 1e-9:
                     coupling_only_wrong += 1
