@@ -448,11 +448,12 @@ rosters:
       engine/engine_params/descriptors.json behind a BLOCKING --check (tools/export_descriptors.py).
     open: true
     note: >-
-      ⚠ **READ FROM THE SINGLE OWNER, NOT RE-TYPED, AND `H-46` DOES NOT CLOSE.** That row is graded
-      `absent` and its own cite carries JORDAN, 2026-09-02, VERBATIM: *"please note that convictions
-      roster and axes etc may be modified in future. THIS ROW THEREFORE STAYS OPEN."* Populating a
-      roster from a single-owner export is a DATA EDIT, which the same ruling says is the correct
-      shape; it is not a closure, and `open: true` says so in data rather than in this note alone.
+      ⚠ **READ FROM THE SINGLE OWNER, NOT RE-TYPED.** `H-46` was closed by IN-43 AS FRAMED: the
+      thirteen are replaced by fifteen pursuits over seven axes (`ED-IN-0261`), and THIS ROSTER STILL
+      CARRIES THE OLD THIRTEEN until IN-08's cells commit applies that ruling. JORDAN, 2026-09-02,
+      VERBATIM: *"please note that convictions roster and axes etc may be modified in future."*
+      Populating a roster from a single-owner export is a DATA EDIT, which the same ruling says is
+      the correct shape; `open: true` says in data that the roster may change.
       ⚠ **THESE ARE CONVICTIONS AND THEY ARE NOT AXES.** The row immediately below carries FOUR
       ethical axes; a person's convictions are weights over THESE THIRTEEN, and they reach the
       axes only through `tables.pursuit_projection`. Before `U3` this file held one index set
@@ -967,7 +968,8 @@ rosters:
   #    into the world and the world never reaches into a subsystem.
   #
   # 2. IT IS THE PROCESSOR OF ALL EVENTS — ONE LOG, NOT TWO (S19.5). `season()` merges both
-  #    channels before deposit: `witness(matter_events + events)`. Already true in code.
+  #    channels before deposit: `self.witness(token, pending_matter + events)` (`loop/driver.py`).
+  #    Already true in code.
   #
   # 3. IT ENABLES EVENTS WITHOUT A SCENE, FOR NON-PLAYERS. `matter(actorless)` is that channel and
   #    it already exists: an actorless Event has NO ACTOR by type — "attribution is a per-witness
@@ -1002,26 +1004,26 @@ rosters:
   #
   # | mode of play        | attaches at        | in | out | state |
   # |---------------------|--------------------|----|-----|-------|
-  # | personal combat     | RESOLVE (S39)      | claimants, prize, causes | a degree | BUILT — `combat_seam.py`. Jordan: "combat engine isn't done" |
-  # | social contest      | RESOLVE (S39)      | claimants, prize, causes | a degree | refuses by name |
-  # | mass battle         | RESOLVE (S39)      | claimants, prize, causes | a degree | refuses by name |
+  # | personal combat     | RESOLVE (S39)      | claimants, prize, causes | a degree | BUILT — `seam/wrappers/combat.py`. Jordan: "combat engine isn't done" |
+  # | social contest      | RESOLVE (S39)      | claimants, prize, causes | a degree | INTERIM — `a standing` is rolled by `seam/wrappers/sigma.py` (`contest_subsystems`' `interim: true`) |
+  # | mass battle         | ENCOUNTER (`a field`) | claimants, prize, causes | a degree | BUILT — `seam/wrappers/mass_battle.py` (the `contest_subsystems` row `a field`) |
   # | investigation       | UNRULED            | UNRULED | UNRULED | ITS OWN KIND — not a contest |
-  # | settlement mgmt     | UNRULED (see below)| UNRULED | UNRULED | ⚠ NOT CALLED — done INLINE, which is the defect |
+  # | settlement mgmt     | UNRULED (see below)| UNRULED | UNRULED | ⚠ NOT CALLED — done INLINE (see below) |
   # | faction mgmt        | UNRULED            | UNRULED | UNRULED | absent from the loop entirely |
   # | character dev       | UNRULED            | UNRULED | UNRULED | no creation, no progression, no chronicle |
   #
-  # ⚠ ONE ROW'S CONTRACT IS RULED AND SIX ARE HONEST BLANKS. S39 fixes the contest attach point at
+  # ⚠ THE CONTEST ROWS' CONTRACT IS RULED AND FOUR ARE HONEST BLANKS. S39 fixes the contest attach point at
   # RESOLVE — "exactly one place" — and its return at a degree. The blanks are Jordan questions, not
   # session guesses: writing a plausible IN/OUT for a mode nobody has ruled would be inventing the
   # architecture rather than recording it, and the seam is precisely the thing that must not be
   # invented.
   #
-  # ⚠ SETTLEMENT IS THE ONE THE RULING RESOLVES. `SeasonDriver.matter` runs stores/yield/subsistence
-  # INLINE while `systems/settlements` holds a fuller economy. Before this ruling that read as an
-  # open question — which owner wins. It is not open: if every mode is separately CALLED from the
-  # loop, then an economy the loop computes itself is a mode that never got its seam, and the inline
-  # version is the thing to remove. Two ladders for one quantity is also a NERS **S** defect
-  # (§0.06, *calculations consistent in methodology*).
+  # ⚠ SETTLEMENT IS THE ONE THE RULING RESOLVES. `loop/matter.py::matter` runs stores/yield/subsistence
+  # INLINE, and `systems/settlements` holds no sim module now (its economy sims were deleted at plan
+  # position `29c`), so which owner wins is moot: the loop's own is the only one. Under the ruling an
+  # economy the loop computes itself is a mode that never got its seam; whether it is ever CALLED
+  # instead is unruled, which is why the row above reads UNRULED. Two ladders for one quantity is a
+  # NERS **S** defect (§0.06, *calculations consistent in methodology*).
   #
   # ⚠ FACTION CANNOT BE A STRAIGHT PORT even once its seam is ruled. Layer 1 PART D rows 1/8/14
   # forbid a faction that acts, a stored aggregate, and a banner holding territory, so

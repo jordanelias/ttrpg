@@ -606,7 +606,7 @@ mechanics:
       - "audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-1"
     canon_authoring_target: "systems/factions/varfell_territorial_acquisition_v30.md (NOT YET AUTHORED — Pass 2d pending; lane FA. Home derived from its own sim_module systems/factions/sim/varfell_territorial_acquisition.py per RULED §2a: one subsystem = one folder = one ID lane. Placeholder-named per VARFELL-TERRITORIAL-ACQUISITION-001.)"
     sim_module: null
-    test_status: validated_n1000_v12c
+    test_status: not_implemented   # was validated_n1000_v12c, a result of the v12c balance sim, which is deleted; no code remains to reproduce it
     test_results:
       v12c_n1000: {varfell_win_rate: 22.5, in_band_20_30: true}
     dependencies:
@@ -657,7 +657,7 @@ mechanics:
       - "audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-4"
     canon_authoring_target: "systems/factions/parliamentary_transfer_v30.md (Pass 2h canonized 2026-05-17)"
     sim_module: null
-    test_status: validated_n1000_v12c
+    test_status: not_implemented   # was validated_n1000_v12c, a result of the v12c balance sim, which is deleted; no code remains to reproduce it
     dependencies:
       mechanics: [parliamentary_vote]
     notes: "CB-required, 4 modes (adversarial / consensual / punishment / appeasement). Crown auto-CB <6. Pass 2h canon authoring pending."
@@ -690,7 +690,7 @@ mechanics:
       - "audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-5"
     canon_authoring_target: "systems/factions/treaty_expiration_v30.md (Pass 2h canonized 2026-05-17)"
     sim_module: null
-    test_status: validated_n1000_v12c
+    test_status: not_implemented   # was validated_n1000_v12c, a result of the v12c balance sim, which is deleted; no code remains to reproduce it
     notes: "90-95%/arc lapse per v12c balance. Crown nerf primary effect."
 
   franchise:
@@ -863,7 +863,7 @@ mechanics:
       - "systems/characters/conviction_track_v30.md#section-5"
     canon_authoring_target: "systems/world/restoration_movement_v30.md (NOT YET AUTHORED — Pass 2d pending; lane WR. Home derived from its own sim_module systems/world/sim/restoration_movement.py per RULED §2a; scale is world/emergent, which is why it lands in systems/world/ and not with the faction rows.)"
     sim_module: null    # was systems/world/sim/restoration_movement.py (two stubwire stubs); deleted at plan position 29d
-    test_status: validated_n1000_v12c
+    test_status: not_implemented   # was validated_n1000_v12c, a result of the v12c balance sim, which is deleted; no code remains to reproduce it
     gd_applicable: [GD-3]
     dependencies:
       mechanics: [insurgency_pipeline]
@@ -908,7 +908,7 @@ mechanics:
     scale: cross_scale
     faction: universal
     canon_sources: ["systems/_architecture/scale_transitions_v30.md#section-5"]
-    sim_module: null
+    sim_module: null    # was engine/cross_scale/domain_echo.py (no caller); the file went in #439, the pointer in #450
     test_status: not_implemented
     notes: "Scene -> Faction propagation. ED-300 autonomous resolution."
 

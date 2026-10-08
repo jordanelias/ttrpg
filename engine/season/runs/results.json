@@ -10011,13 +10011,11 @@
   },
   "A14": {
    "id": "A14",
-   "verdict": "GAP",
-   "detail": "'no reaction inside a season' vs the seam's nested DELIBERATE",
-   "kind": "COLLISION",
+   "verdict": "PASS",
+   "detail": "PASS: within ONE season, p_mid's ledger reads 0 claims in round 0 and 2 in round 1 after p_low's round-0 `speak`, against 0 in the control arm where p_low does nothing. R-03's channel: a deposit at one round's WITNESS is read by the next round's DELIBERATE. NOT SHOWN: a DELIBERATE nested inside RESOLVE (`H-56`'s other half)",
+   "kind": null,
    "section": "S40.2",
    "title": "a person reacts within the season to what another just did",
-   "needs": "a ruling on which sentence binds",
-   "law": "S34.1 says 'NO REACTION INSIDE A SEASON AT PERSON SCALE -- you anticipated, or you are late'. S40.2 says a contest 'runs the same steps over a smaller person set on a shorter clock' INSIDE RESOLVE, and 'a contest can open a contest', so DELIBERATE RE-RUNS INSIDE RESOLVE against a partially-moved world. BOTH SENTENCES ARE IN THE CHAIN and the design has NOT reconciled them",
    "by": "no-signature",
    "tests": "a character must be able to respond inside the same season to something that just happened"
   },
@@ -10986,15 +10984,6 @@
    "expected": false
   },
   {
-   "kind": "COLLISION",
-   "what": "'no reaction inside a season' vs the seam's nested DELIBERATE",
-   "where": "S40.2",
-   "needs": "a ruling on which sentence binds",
-   "law": "S34.1 says 'NO REACTION INSIDE A SEASON AT PERSON SCALE -- you anticipated, or you are late'. S40.2 says a contest 'runs the same steps over a smaller person set on a shorter clock' INSIDE RESOLVE, and 'a contest can open a contest', so DELIBERATE RE-RUNS INSIDE RESOLVE against a partially-moved world. BOTH SENTENCES ARE IN THE CHAIN and the design has NOT reconciled them",
-   "case": "probe:A14",
-   "expected": false
-  },
-  {
    "kind": "UNSPECIFIED",
    "what": "a termination argument per self-feeding loop",
    "where": "S40.1",
@@ -11203,15 +11192,15 @@
   }
  ],
  "_trace_counts": {
-  "STEP": 7100,
-  "BARRIER": 1871,
-  "DECISION": 1889,
-  "QUERY": 28254,
-  "WRITE": 15423,
-  "EVENT": 15219,
-  "ACT": 96,
-  "CLAIM": 1679,
-  "GAP": 86,
+  "STEP": 7192,
+  "BARRIER": 1895,
+  "DECISION": 1913,
+  "QUERY": 28619,
+  "WRITE": 15453,
+  "EVENT": 15250,
+  "ACT": 97,
+  "CLAIM": 1701,
+  "GAP": 85,
   "NOTE": 153
  },
  "_corpus_defects": [

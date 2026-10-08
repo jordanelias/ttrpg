@@ -18,9 +18,9 @@ checking.* So every probe declares its provenance:
 
 ## ⚠ THE ENFORCEMENT SPLIT — the single most important number in this ledger
 
-**Of 59 PROBES that did not pass, 29 were raised BY THE SHAPE ITSELF and 23 exist only because THERE IS NO SIGNATURE TO CALL.**
+**Of 58 PROBES that did not pass, 29 were raised BY THE SHAPE ITSELF and 22 exist only because THERE IS NO SIGNATURE TO CALL.**
 
-> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 86 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 59 of 121. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
+> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 85 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 58 of 121. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
 
 That is close to an even split, and it matters more than any case verdict. A refusal a
 gate enforces and a refusal that exists because nobody wrote the function are different
@@ -32,7 +32,7 @@ has no module system and no visibility modifiers, so the guarantee there is
 a contributor closes by simply writing the function — no gate fires, no test goes red,
 and the design's own §27.2 admission applies: *enforced by a person noticing*.
 
-**And 13 of 62 PASSes are not by construction
+**And 14 of 63 PASSes are not by construction
 either** — they are listed individually below and should be discounted accordingly. A
 `probe-model` PASS means the instrument supplied something the design does not.
 
@@ -43,7 +43,6 @@ either** — they are listed individually below and should be discounted accordi
 | `A1` | **FORBIDDEN** | construction | S19.4 | the story must be able to be reconstructed from what caused what |
 | `A11` | **FORBIDDEN** | construction | S10.1 | a place must be able to keep a running total so it does not recompute every time |
 | `A12` | **FORBIDDEN** | construction | S4 | an expensive derived value must be able to be reused within a step |
-| `A14` | **COLLISION** | no-signature | S40.2 | a character must be able to respond inside the same season to something that just happened |
 | `A15` | **UNSPECIFIED** | no-signature | S40.1 | a self-feeding situation must be able to stop |
 | `A16` | **FORBIDDEN** | no-signature | S40.3 | a region must be able to advance on its own schedule while others wait |
 | `A18` | **UNSPECIFIED** | no-signature | S41 | a developer must be able to work one module without reading the world |
@@ -101,6 +100,7 @@ either** — they are listed individually below and should be discounted accordi
 | `W5` | **UNOWNED** | no-signature | S22.3 | the harvest must be able to come in, better or worse from season to season |
 | `A10` | PASS | construction | S4 | a place must be able to know something summed over everything inside it |
 | `A13` | PASS | construction | S4 | a repeated derivation must be able to be computed once per step |
+| `A14` | PASS | no-signature | S40.2 | a character must be able to respond inside the same season to something that just happened |
 | `A17` | PASS | convention | S27.2 | every outcome in the game must go through one place |
 | `A2` | PASS | probe-model | S19.4 | a sequence of related happenings must be able to be read back as one story |
 | `A24` | PASS | construction | S35 | a mechanism written for the powerful must be able to work for a whole population |
@@ -180,12 +180,6 @@ either** — they are listed individually below and should be discounted accordi
 **what:** cache 'k' built inside a parallel map
 
 **law:** S4 -- the cache is built AT A BARRIER; NOTHING INSIDE A PARALLEL MAP BUILDS ONE
-
-### `A14` — a person reacts within the season to what another just did  ·  **COLLISION**  ·  `S40.2`  ·  by `no-signature`
-**what:** 'no reaction inside a season' vs the seam's nested DELIBERATE
-
-**needs:** a ruling on which sentence binds
-**law:** S34.1 says 'NO REACTION INSIDE A SEASON AT PERSON SCALE -- you anticipated, or you are late'. S40.2 says a contest 'runs the same steps over a smaller person set on a shorter clock' INSIDE RESOLVE, and 'a contest can open a contest', so DELIBERATE RE-RUNS INSIDE RESOLVE against a partially-moved world. BOTH SENTENCES ARE IN THE CHAIN and the design has NOT reconciled them
 
 ### `A15` — a spiral terminates  ·  **UNSPECIFIED**  ·  `S40.1`  ·  by `no-signature`
 **what:** a termination argument per self-feeding loop
