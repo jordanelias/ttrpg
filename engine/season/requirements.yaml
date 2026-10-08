@@ -87,9 +87,8 @@ scales:
     note: >-
       R-04's opening headline, the pre-`20-ii` reading: 44 of 143 cases UNREPRESENTABLE at faction
       scale and 10 at world scale. `20-ii` closed that census on 2026-09-30 (R-04's `measured:`
-      carries the run). ⚠ REWRITTEN 2026-10-01: this note used to say "`engine/mc_v18.py` runs this
-      scale today and the season loop does not; the two are not joined." That cannot be said any
-      more. THIS SCALE HAS NO CODE OF ITS OWN: the driver (`engine/mc_v18.py`, plan position
+      carries the run). ⚠ REWRITTEN 2026-10-01: no second driver runs this scale beside the season
+      loop. THIS SCALE HAS NO CODE OF ITS OWN: the old campaign driver (plan position
       `28-iii`), `systems/factions/` and `game_state.Faction`, the stat-vector dataclass (both
       `29b`), are deleted (their `FORK:5c5d8ec6` rows). A faction is a resolved VIEW
       (`engine/season/queries/faction_q.py::Faction`: built at a barrier, never a field of `World`,
@@ -605,9 +604,8 @@ rows:
       reads `DISTINCT WORLDS RUN 143 (scales ['duchy', 'person', 'realm', 'settlement'], ...)`.
       54 of 143 cases are UNREPRESENTABLE — 44 at faction scale, 10 at world scale. The loop
       runs at person, settlement and realm only. The strategic layer has no expression in this
-      model. ⚠ REWRITTEN 2026-10-01: this sentence used to end "`engine/mc_v18.py` runs the faction
-      scale and the two are not joined", which can no longer be said. The driver was deleted at plan
-      position `28-iii`, and `systems/factions/` with `game_state.Faction` at `29b` (their
+      model. ⚠ REWRITTEN 2026-10-01: no second driver runs the faction scale beside the season loop.
+      The old campaign driver was deleted at plan position `28-iii`, and `systems/factions/` with `game_state.Faction` at `29b` (their
       `FORK:5c5d8ec6` rows). The faction scale has no code of its own: a faction is a resolved VIEW
       (`engine/season/queries/faction_q.py::Faction`), never `Act.actor`, and a faction's act is a
       person's act `via` a seat.
@@ -643,9 +641,8 @@ rows:
       remit act gated the same way, already executes in the corpus (`ever`,
       `test_season_shape.py`); the census cleared before `levy`'s own purview gap did.
       (2) The deeper gap this row opened with is
-      UNCHANGED IN KIND AND RESTATED 2026-10-01, BECAUSE ITS FIRST HALF CAN NO LONGER BE MADE: this
-      reason used to read "`engine/mc_v18.py` still runs the faction scale and the two are still not
-      joined". That driver was deleted at `28-iii` (with `systems/factions/` and `game_state.Faction`
+      UNCHANGED IN KIND AND RESTATED 2026-10-01, BECAUSE ITS FIRST HALF CAN NO LONGER BE MADE: it used
+      to say a second system ran the faction scale and was not joined. That driver was deleted at `28-iii` (with `systems/factions/` and `game_state.Faction`
       at `29b`; `FORK:5c5d8ec6`), so there is no second system left to be joined to: the faction
       scale has no code of its own, a faction is a resolved VIEW (`queries/faction_q.py::Faction`,
       never `Act.actor`), and its acts are persons' acts `via` seats. What this reason still says is

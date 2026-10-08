@@ -437,7 +437,7 @@ jobs:
       # RUNTIME: ~6m15s with the campaign goldens (measured 2026-08-25, four runs, 375-383s); NOT
       # re-measured since `28-iii` deleted them. The "~20s" that stood before was the pre-port figure.
       # RE-SCOPED 2026-10-01 (plan position `28-iii`): the five campaign-scale files this job was
-      # built around -- the `mc_v18` goldens, the cross-scale reach and population probes, the
+      # built around -- the campaign-driver goldens, the cross-scale reach and population probes, the
       # combat-bridge seam -- were deleted with the driver. What remains in `engine/tests` is the
       # sigma-leverage parity golden, the contest kernel, and the knots and thread-mending ED probes.
       # `parliamentary_action` left with its tree at `29b` and the accounting accord-drift probe at

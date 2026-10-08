@@ -7,9 +7,8 @@ two whose subject is the executable model; the retired one's subject was the rep
 ratchet.
 
 Two claims, one fixture, one mutation (§0.1 point 3 "name the falsifier"):
-  1. `stub_resolve` bumps the module-level `invocations` counter — the telemetry
-     `engine/mc_v18.py`'s `CampaignResult.stub_hits` folds the same way as the existing F7
-     `npcs_generated` counter.
+  1. `stub_resolve` bumps the module-level `invocations` counter — the counter
+     `tools/m1_acceptance.py`'s probe reads as a before/after delta.
   2. `structure_audit.py`'s `stub_wired` node attribute (derived from the SAME AST import pass
      `build_g_code` already runs — no second parser) sees a module that imports
      `engine.substrate.stubwire`.

@@ -64,7 +64,7 @@ def test_the_guard_itself_can_fail(tmp_path):
     """
     pkg = tmp_path / "engine"
     pkg.mkdir()
-    planted = pkg / "mc_v18.py"
+    planted = pkg / "some_module.py"
     planted.write_text("X = 1\n", encoding="utf-8")
     (tmp_path / "notes.md").write_text("ignored\n", encoding="utf-8")
 

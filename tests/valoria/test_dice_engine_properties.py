@@ -6,7 +6,7 @@ individual engines TODAY, ahead of the loop").
 WHAT THIS IS AND IS NOT. This is a BEGINNING, not the M1 acceptance row itself. Row 5
 ("N seeds, zero invariant violations") measures invariants over a full season KeyLog; this file
 measures two much narrower, fully-specified invariants of the dice primitive alone, seeded and
-swept across many trials. It does not touch engine.mc_v18 and does not change
+swept across many trials. It does not touch the season loop and does not change
 row_invariant_violations()'s reported `state` (still `blocked`, correctly).
 
 WHY NO HYPOTHESIS. The `hypothesis` package is not a dependency anywhere in this tree (grep

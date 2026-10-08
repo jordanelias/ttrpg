@@ -27,9 +27,9 @@ Contract (frozen, per the plan's §2.1 pin — do not widen without updating the
     change (§0.1 "No fabrication" / CLAUDE.md §7). `reason` is free-text provenance for why
     the call site is stubbed (cite the design-gate, e.g. an OI-nn / ED-nnnn row) — this module
     does not validate that string; the caller owns its own provenance discipline.
-  - `invocations` — a module-level counter, incremented once per `stub_resolve` call. The
-    season loop folds it into campaign telemetry (`engine/mc_v18.py` `CampaignResult.stub_hits`,
-    the same pattern as the existing F7 `npcs_generated` counter — see that module's docstring).
+  - `invocations` — a module-level counter, incremented once per `stub_resolve` call. A
+    caller wanting a per-run figure reads the delta across the run (`tools/m1_acceptance.py`'s
+    probe does exactly this).
   - `reset_invocations()` — test-only helper so `tests/valoria/test_stubwire.py` (and any other
     suite) can assert an exact per-test invocation delta without cross-test leakage. Not called
     by any production path.
@@ -53,7 +53,7 @@ class StubResult:
 
 # Module-level invocation counter (§2.1: "the season loop folds it into campaign telemetry").
 # Process-lifetime cumulative; callers wanting a per-run delta snapshot `invocations` before and
-# after (see engine/mc_v18.py's stub_hits wiring) rather than this module resetting itself.
+# after (see `tools/m1_acceptance.py`'s probe) rather than this module resetting itself.
 # The original reason named tools/review_core.py's ratchet, which read a fresh subprocess's
 # cumulative count; that tool retired 2026-08-21 (ED-IN-0194). The reason still holds for the
 # consumer that replaced it — tools/m1_acceptance.py row 1 takes a before/after delta around a

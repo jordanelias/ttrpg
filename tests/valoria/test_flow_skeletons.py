@@ -315,7 +315,7 @@ LINE_UNSTABLE_TARGETS = frozenset({'references/canonical_sources.yaml'})
 # ⚠ THESE DO NOT JOIN `LINE_UNSTABLE_TARGETS`, AND THE REASON IS A MEASUREMENT, NOT A PREFERENCE.
 # That set demands a symbol in place of the line, which worked for `canonical_sources.yaml` because
 # every anchor into it carried one. Measured across `.designs/` on 2026-09-16 (ED-IN-0232), for the files then listed (several since deleted): **281 of the
-# 587 anchors are BARE LINE NUMBERS** — 132 into `mc_v18.py` alone. Adding these files to that set
+# 587 anchors are BARE LINE NUMBERS** — 132 into the (since deleted) campaign driver alone. Adding these files to that set
 # would fail all 281 with "cite a symbol", in documents that are ARCHIVED and frozen and therefore
 # cannot be corrected. An unsatisfiable requirement is not a stricter gate; it is a red one.
 #
@@ -370,7 +370,7 @@ RETIREMENT_SHIFTED = frozenset({
 # `echo_scheduler` was removed in that same correction AND PUT BACK, which is worth recording
 # because the correction was itself half wrong: the token does survive, but ONLY inside four
 # comments that describe its retirement (`scene_dispatch.py:228,:388` and the two golden re-pin
-# notes). Every anchor citing it points at `faction_action.py` or `mc_v18.py`, where the identifier
+# notes). Every anchor citing it points at `faction_action.py` or the (since deleted) campaign driver, where the identifier
 # is genuinely gone. A symbol whose last occurrences are prose about its own deletion is retired.
 # Every entry below was grepped across `engine/`, `systems/` and `tools/` and occurs nowhere.
 RETIRED_SYMBOLS = frozenset({

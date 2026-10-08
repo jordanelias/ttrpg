@@ -218,8 +218,8 @@ def trial_vector(ua, ub, r):
 #
 # CONTROLS, per CLAUDE.md §0.1 point 4 (a number without a control is not a measurement):
 #   1. CAMPAIGN GOLDENS DID NOT MOVE. engine/tests 1282 passed / 5 xfailed, byte-identical before
-#      and after — test_mc_v18_regression, test_f7_smoke_oracle and every key-log content hash
-#      unchanged. This is the load-bearing control: campaign armies are built melee-only
+#      and after — the campaign-driver regression and test_f7_smoke_oracle (both since deleted)
+#      and every key-log content hash unchanged. This is the load-bearing control: campaign armies are built melee-only
 #      (massbattle.py:84 unit_type='melee'), so volley is unreachable from a campaign and a
 #      campaign-golden move would have meant the forecast was wrong. It was not.
 #   2. DIRECTION. Per-die EV falls 0.50 -> 0.40 (TN 6 scores faces 6-9, TN 7 scores 7-9; fumble

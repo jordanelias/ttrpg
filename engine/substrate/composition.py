@@ -2,9 +2,8 @@
 
 Status: [live, 2026-08-20]
 
-WHY. `systems/` stems from `engine/` and `references/`. The campaign driver contradicted that:
-`engine/mc_v18.py` imported `systems.factions.sim.faction_action` and `systems.overview.sim.season`
-at module level, so the root named its own dependents and the package graph carried a cycle
+WHY. `systems/` stems from `engine/` and `references/`. The old campaign driver (deleted at plan position `28-iii`) contradicted that: it imported
+`systems.factions.sim.faction_action` and `systems.overview.sim.season` at module level, so the root named its own dependents and the package graph carried a cycle
 (`faction_action.py` -> `engine.autoload.game_state` -> `systems.factions.sim.treaty`).
 
 `engine/` now states WHAT it needs — a role name — and `references/module_contracts.yaml`'s

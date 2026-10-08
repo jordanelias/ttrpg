@@ -218,7 +218,7 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # Same update-the-pin-and-say-so path this test's own failure message asks for.
     # PIN UPDATED 2026-09-13: WR 11 -> 12. ED-WR-0011 allocated to file OI-05 AS A RULING -- the
     # world-gen NPC count and season-tick generation trigger, which until now lived only as a
-    # `reason=` string inside a stubwire call at engine/mc_v18.py:194 and was invisible to every queue
+    # `reason=` string inside a stubwire call in the (since deleted) campaign driver and was invisible to every queue
     # instrument in the repo. workplans/valoria_master_workplan_v7.md §3.1 names filing it "the first
     # action this document asks for"; it is M1 acceptance row 1's remaining ruling-side blocker,
     # `status: open`, `needs_jordan: true`, and the entry exists in registers/editorial_ledger_wr.jsonl.

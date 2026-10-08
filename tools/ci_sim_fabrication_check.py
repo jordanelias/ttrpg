@@ -143,7 +143,7 @@ def is_sim_file(path: str) -> bool:
     `sim/`, where "basename contains 'sim'" was a serviceable proxy — every path had `sim/` in
     it. `sim/` was retired 2026-07-21 and its contents distributed to `engine/` and
     `systems/<subsystem>/sim/`, where no BASENAME contains "sim" (`massbattle.py`,
-    `mc_v18.py`, `resolver.py`). The proxy silently became a predicate for nothing, and the
+    `driver.py`, `resolver.py`). The proxy silently became a predicate for nothing, and the
     gate printed "[SIM-FABRICATION OK] no changed sim .py files" over the entire oracle.
 
     That is the §0.1 point-5 signature exactly: correct when written, broken by a move

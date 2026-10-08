@@ -1,5 +1,5 @@
 """THE MASS-BATTLE PROVIDER -- the seam's wrapper around `systems/mass_battle/sim/massbattle.py`'s
-season-facing entry point, `resolve_field`. Wired M3 of the `mc_v18`-retirement plan
+season-facing entry point, `resolve_field`. Wired M3 of the driver-retirement plan
 (`ED-IN-0279`); `rosters.yaml`'s "a field" row previously had a `module:` and NO `provider:`,
 whose own comment said the absence WAS the row -- *"sides need `faction_q.resolve` (04 §C.5.1)"*.
 M2 built `faction_q.resolve`; this is the call that reads it.

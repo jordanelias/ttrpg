@@ -3,10 +3,10 @@ ED-IN-0112, tools/m1_acceptance.py).
 
 WHAT THESE TESTS ARE FOR. Before S2, `row_stub_invocations` and `row_determinism` were
 unconditionally `blocked` — the module docstring said the "headless season run" that would
-unblock them "does not exist". S2 pointed both rows at `engine.mc_v18.run_campaign`, which
-already existed.
+unblock them "does not exist". S2 pointed both rows at the old campaign driver's `run_campaign`,
+which already existed (the driver was since deleted at plan position `28-iii`).
 
-⚠ **RE-POINTED 2026-09-13 AT `engine/season/`, THE HEAD.** `mc_v18` is the superseded prototype
+⚠ **RE-POINTED 2026-09-13 AT `engine/season/`, THE HEAD.** the campaign driver was a superseded prototype
 (Jordan, 2026-09-07: *"engine/season/ IS THE HEAD"*), so for six days this gate certified a model
 the repository had already replaced. These tests move with it: what they pin is unchanged in
 KIND — the rows are genuinely `measured`, and reproducible under a fixed seed — and changed in
@@ -20,7 +20,7 @@ which is exactly what `row_determinism` itself measures and what
 `test_stub_invocations_reproducible_under_the_fixed_probe_seed` below re-checks independently
 for the other row.
 
-Deliberately NOT pinned: the literal stub-call count. It read 2 against `mc_v18` (its OI-05 and
+Deliberately NOT pinned: the literal stub-call count. It read 2 against the old driver (its OI-05 and
 OI-07 deferrals) and reads 0 against the head, which calls `stubwire` nowhere; pinning either
 would be a maintenance tax that teaches nothing. What must never
 change is that the row is MEASURED (not blocked) and that repeated probes under the same seed
@@ -50,14 +50,11 @@ def test_engine_probe_import_succeeded():
 def test_the_probe_runs_the_head_and_not_the_superseded_prototype():
     """THE POINT OF THE 2026-09-13 RE-POINT, ASSERTED RATHER THAN TRUSTED TO A COMMENT.
 
-    `engine/mc_v18.py` is the superseded campaign driver; `engine/season/` is the head. A gate
+    The old campaign driver was a superseded prototype; `engine/season/` is the head. A gate
     aimed at the wrong tree does not report nothing — it answers the milestone question
     incorrectly, in the direction that looks like progress, which is how this survived six days.
     So the import is asserted by MODULE PATH, which cannot be satisfied by a comment."""
     assert m1._headless.__name__.startswith('engine.season.'), m1._headless.__name__
-    assert not hasattr(m1, '_mc_v18'), (
-        'm1_acceptance still holds an mc_v18 handle; rows 1-2 must probe the head only'
-    )
 
 
 def test_stub_invocations_row_is_measured_not_blocked():

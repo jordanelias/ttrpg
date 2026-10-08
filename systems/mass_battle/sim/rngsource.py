@@ -10,8 +10,8 @@ explicit `rng` parameter end to end (49 references), because of a documented 202
 
 Porting the canon engine over the top WITHOUT restoring that property would not merely move the
 seeded campaign goldens — it would make them UNPINNABLE, which is strictly worse: a moved golden is
-a measurement, an unreproducible one is the end of measurement. `engine/tests/test_mc_v18_regression`,
-`test_f7_smoke_oracle` and `test_parliamentary_bridge` all depend on same-seed byte-exactness.
+a measurement, an unreproducible one is the end of measurement. the campaign-driver regression,
+`test_f7_smoke_oracle` and `test_parliamentary_bridge` (all since deleted) all depended on same-seed byte-exactness.
 
 WHY A MODULE-LEVEL HOLDER RATHER THAN A THREADED PARAMETER. The old engine's approach — an `rng=None`
 argument on every roll, passed down every call chain — is the more explicit design and it is what the

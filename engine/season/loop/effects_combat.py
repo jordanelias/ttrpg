@@ -293,8 +293,8 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     re-running "losing costs everything" deliberately), `none` (body is not written at all -- the
     second control, isolating the write from the band). The default is settled by Jordan's
     2026-09-04 ruling on `wound_harm_model` -- *"the combat engine determines the result there"*
-    -- applied to this magnitude too, not by a fresh measurement; `tools/balance_oracle.py` is
-    `mc_v18`-only and cannot observe an `engine/season`-only mechanic (`rosters.yaml`'s
+    -- applied to this magnitude too, not by a fresh measurement; `tools/balance_oracle.py` was
+    a campaign-driver instrument and could not observe an `engine/season`-only mechanic (`rosters.yaml`'s
     `field_casualty_models` note).
 
     ⚠ THE STANCE ROWS FOLLOW THE SEEDED-LOYALTY SHAPE (`harness/data/cast.py`'s own

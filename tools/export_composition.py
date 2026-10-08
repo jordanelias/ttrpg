@@ -2,8 +2,8 @@
 """Cook the composition-role map so `engine/` can stop naming `systems/`.
 
 WHY THIS EXISTS. `systems/` stems from `engine/` and `references/` (Jordan, 2026-08-20). The
-campaign driver contradicted that: `engine/mc_v18.py:37-38` imported two subsystem callables by
-name, so the root named its own dependents and the package graph carried a cycle
+old campaign driver (deleted at plan position `28-iii`) contradicted that: it imported two
+subsystem callables by name, so the root named its own dependents and the package graph carried a cycle
 (`systems/factions/sim/faction_action.py` -> `engine.autoload.game_state` -> `systems.factions.sim.treaty`).
 
 `references/module_contracts.yaml`'s `composition_roles:` block now declares WHICH module provides

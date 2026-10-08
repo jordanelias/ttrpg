@@ -1,4 +1,4 @@
-"""`systems/mass_battle/sim/massbattle.py::resolve_field` -- M3 of the `mc_v18`-retirement plan
+"""`systems/mass_battle/sim/massbattle.py::resolve_field` -- M3 of the driver-retirement plan
 (`ED-IN-0279`), the season-facing entry point `engine/season/seam/wrappers/mass_battle.py` calls.
 
 Lives here, not in `engine/season/tests/`, because it needs `from systems.mass_battle...` at

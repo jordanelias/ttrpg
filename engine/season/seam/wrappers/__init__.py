@@ -4,7 +4,7 @@ read the projection, and they emit a `Margin`.
 
 Three wrappers: `combat.py`, the IN-side of the personal-combat call `seam/contest.py` dispatches
 to; `sigma.py`, the interim social provider `ED-SC-0037` rules (`engine/dice_engine/sigma_leverage.py`);
-and `mass_battle.py`, wired M3 of the `mc_v18`-retirement plan (`ED-IN-0279`) -- `rosters.yaml`'s
+and `mass_battle.py`, wired M3 of the driver-retirement plan (`ED-IN-0279`) -- `rosters.yaml`'s
 "a field" row now has a `provider:`, closing the gap this docstring used to describe.
 ⚠⚠ **THIS PACKAGE IMPORTS ITS OWN WRAPPERS, AND THAT IS WHAT REGISTERS THEM.
 `manifest/registry.py` USED TO, AND IT WAS AN IMPORT CYCLE.** `U1` had

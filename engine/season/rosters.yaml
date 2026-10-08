@@ -836,9 +836,9 @@ rosters:
       settles the magnitude, so this row still ships `assumption`-graded -- but the choice among
       the three arms is settled by that precedent, not by a pending measurement.
       ⚠ `tools/balance_oracle.py` DOES NOT APPLY TO THIS QUESTION AND MUST NOT BE RUN FOR IT.
-      That tool patches `mc_v18`/`dice_engine` and compares `mc_v18.run_campaign` arms; `march`
-      and `field_casualty_model` live entirely in `engine/season/`, which `mc_v18` cannot reach
-      (`CLAUDE.md` §0.2 -- `mc_v18` was deprecated in place, then deleted at plan position `28-iii`).
+      That tool patched `dice_engine` and compared campaign-driver arms (the driver was deleted at
+      plan position `28-iii`); `march` and `field_casualty_model` live entirely in `engine/season/`,
+      which that driver could not reach.
       Patching it would leave both of `balance_oracle.py`'s arms identical by construction --
       exactly the "campaign-unreachable change" `CLAUDE.md` §7 names as **a fake control**, not a
       measurement. If this arm is ever re-examined, the instrument is a `field_casualty_model`
@@ -1116,7 +1116,7 @@ rosters:
         step:     "ENCOUNTER"
         declares: "Declared"
         cite: >-
-          M3 of the mc_v18-retirement plan (ED-IN-0279): the row had a `module:` and no `provider:`
+          M3 of the driver-retirement plan (ED-IN-0279): the row had a `module:` and no `provider:`
           because sides needed `faction_q.resolve` (`04 §C.5.1`), which M2 built. `provider:` now
           names `seam/wrappers/mass_battle.py`, which resolves the `subject` side by proposition id
           and calls `systems.mass_battle.sim.massbattle:resolve_field` through the
@@ -1588,7 +1588,7 @@ rosters:
   shortfall_sourced_operands:
     source: >-
       plan position `19d` (DEMAND · DELIVERY), `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md`
-      §3.2 row 11, and the mc_v18 retirement plan's G3: *"wiring the existing `transfer` verb's
+      §3.2 row 11, and the driver-retirement plan's G3: *"wiring the existing `transfer` verb's
       operands from a shortfall claim"*.
     note: >-
       ⚠ `writ_sourced_operands`' SHAPE, ONE ROW DOWN, FOR A SECOND KIND OF CLAIM: the operand names a

@@ -3070,7 +3070,7 @@ rows:
       the ATTACKER's OWN claimants lost. `_eff_march` (loop/effects.py) is the reader that turns
       this into a side; `test_march.py` is the falsifier, folding a real fight through the driver
       both cross-faction and unopposed."
-    source:    "M4 of the mc_v18-retirement plan (`ED-IN-0279`), Jordan's ruling on the ENCOUNTER
+    source:    "M4 of the driver-retirement plan (`ED-IN-0279`), Jordan's ruling on the ENCOUNTER
       timing (M4 planning round 2)"
 
   - id:        H-148
@@ -3106,9 +3106,9 @@ rows:
       the write from the band, exactly as `wound_harm_model`'s `none` arm does)"]
     unblocks:  "`march` having a real cost on its losing side rather than a token-only defeat"
     cite:      "M4 build step 7-8 (`ED-IN-0279` clause (a)). ⚠ `tools/balance_oracle.py` DOES NOT
-      APPLY TO THIS QUESTION -- it patches `mc_v18`/`dice_engine` and compares
-      `mc_v18.run_campaign` arms; `march` lives entirely in `engine/season/`, which `mc_v18` cannot
-      reach (`mc_v18` was deprecated in place, `CLAUDE.md` §0.2, and deleted at plan position `28-iii`).
+      APPLY TO THIS QUESTION -- it patched the old campaign driver's `dice_engine` and compared
+      that driver's `run_campaign` arms; `march` lives entirely in `engine/season/`, which that driver
+      could not reach (it was deprecated in place and deleted at plan position `28-iii`).
       Patching it would leave both arms identical by construction, exactly the
       \"campaign-unreachable change\" `CLAUDE.md` §7 names as a fake control, not a measurement.
       The default is settled by the engine-reads-the-magnitude precedent above, not by a balance
@@ -3116,7 +3116,7 @@ rows:
       `test_the_total_casualty_model_zeroes_the_losing_side` and
       `test_the_none_casualty_model_writes_stance_only`, the two controls run deliberately through
       the real driver fold."
-    source:    "M4 of the mc_v18-retirement plan (`ED-IN-0279`), invented on `wound_harm_model`'s
+    source:    "M4 of the driver-retirement plan (`ED-IN-0279`), invented on `wound_harm_model`'s
       own precedent -- no ruling states a magnitude, exactly as `H-123` records for that row"
 
   - id:        H-149
@@ -3154,7 +3154,7 @@ rows:
       `march.refused` fire at RESOLVE, `requires_typed`'s `exists:Rung` read on a Site and a Record.)
       The referents come from the chooser (`H-175`); the restriction is ruled; widening either is
       not this row's."
-    source:    "M4 of the mc_v18-retirement plan (`ED-IN-0279`), Jordan's ruling on the march
+    source:    "M4 of the driver-retirement plan (`ED-IN-0279`), Jordan's ruling on the march
       target (M4 planning round 2)"
 
   - id:        H-150
@@ -3241,7 +3241,7 @@ rows:
       (0.0564 -> 0.06 at seed 0, a one-off figure; the scale gap also hides the SIZE of the effect), which `_eff_march` reads only on a `Won` band this scale does not
       reach (`_MIN_TROOPS`' scale gap). And the realm fights no field at all yet: every march it
       declares targets a non-settlement and is refused at `H-149`'s check (that row's `cite:`)."
-    source:    "M4 of the mc_v18-retirement plan (`ED-IN-0279`), found by the orchestrator (Claude
+    source:    "M4 of the driver-retirement plan (`ED-IN-0279`), found by the orchestrator (Claude
       Sonnet 5) auditing its own build rather than ruled or reported by Jordan"
 
   - id:        H-151
