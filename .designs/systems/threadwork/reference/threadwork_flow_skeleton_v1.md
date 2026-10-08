@@ -21,19 +21,19 @@
 
 | Callable | Anchor | Called-by |
 |---|---|---|
-| `attempt_leap(actor, target_state, world, rng)` | `systems/threadwork/sim/operations.py:268 attempt_leap` | `systems/threadwork/sim/collective.py:93 attempt_leap` (internal, lateral) — no cross-subsystem or production caller found |
+| `attempt_leap(actor, target_state, world, rng)` | `systems/threadwork/sim/operations.py:268 attempt_leap` | `systems/threadwork/sim/collective.py:110 attempt_leap` (internal, lateral) — no cross-subsystem or production caller found |
 | `attempt_weaving(actor, target, world, rng)` | `systems/threadwork/sim/operations.py:292 attempt_weaving` | `engine/tests/test_thread_mending_ed871.py:26 attempt_weaving` (test only) |
 | `attempt_pulling(actor, target, world, rng)` | `systems/threadwork/sim/operations.py:305 attempt_pulling` | — none found |
 | `attempt_past_pulling(actor, target_moment, world, rng)` | `systems/threadwork/sim/operations.py:314 attempt_past_pulling` | — none found |
 | `attempt_locking(actor, target, world, rng)` | `systems/threadwork/sim/operations.py:334 attempt_locking` | — none found |
 | `attempt_dissolution(actor, target, world, rng)` | `systems/threadwork/sim/operations.py:351 attempt_dissolution` | — none found |
 | `attempt_mending(actor, target, world, rng)` | `systems/threadwork/sim/operations.py:360 attempt_mending` | `engine/tests/test_thread_mending_ed871.py:26 attempt_mending` (test only) |
-| `attempt_collective_operation(actors, op_type, target, world, rng)` | `systems/threadwork/sim/collective.py:67 attempt_collective_operation` | — none found |
+| `attempt_collective_operation(actors, op_type, target, world, rng)` | `systems/threadwork/sim/collective.py:71 attempt_collective_operation` | — none found |
 | `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` | — none found |
 | `opposing_engagement_modifier(opponent_tps)` | `systems/threadwork/sim/opposing.py:80 opposing_engagement_modifier` | — none found |
-| `apply_coherence_delta(actor, delta, source, world)` | `systems/threadwork/sim/coherence.py:294 apply_coherence_delta` | `systems/threadwork/sim/operations.py:242 apply_coherence_delta` (internal); `systems/threadwork/sim/collective.py:173 apply_coherence_delta` (internal); `systems/threadwork/sim/opposing.py:228 apply_coherence_delta` (internal); `systems/fieldwork/sim/knots.py:374 apply_coherence_delta` (cross-subsystem, lateral, on Knot rupture — the only cross-subsystem production call site found) |
-| `check_coherence_failure_transition(actor, world)` | `systems/threadwork/sim/coherence.py:399 check_coherence_failure_transition` | — none found |
-| `get_state(actor, world)` | `systems/threadwork/sim/coherence.py:423 get_state` | — none found |
+| `apply_coherence_delta(actor, delta, source, world)` | `systems/threadwork/sim/coherence.py:294 apply_coherence_delta` | `systems/threadwork/sim/operations.py:242 apply_coherence_delta` (internal); `systems/threadwork/sim/collective.py:203 apply_coherence_delta` (internal); `systems/threadwork/sim/opposing.py:228 apply_coherence_delta` (internal); `systems/fieldwork/sim/knots.py:374 apply_coherence_delta` (cross-subsystem, lateral, on Knot rupture — the only cross-subsystem production call site found) |
+| `check_coherence_failure_transition(actor, world)` | `systems/threadwork/sim/coherence.py:410 check_coherence_failure_transition` | — none found |
+| `get_state(actor, world)` | `systems/threadwork/sim/coherence.py:434 get_state` | — none found |
 | `draw_comovement_card(op_type, depth, world, rng)` | `systems/threadwork/sim/co_movement.py:87 draw_comovement_card` | — none found |
 | `apply_comovement_effects(card, op_result, world)` | `systems/threadwork/sim/co_movement.py:130 apply_comovement_effects` | — none found |
 | `apply_rs_strain(delta, source, world)` | `systems/threadwork/sim/rendering.py:29 apply_rs_strain` | `engine/tests/test_pipeline_reach.py:789 apply_rs_strain` (stub-wired conformance probe only) |
@@ -77,7 +77,7 @@
 
 **S3. [emit] Per-operation entry points build on S2** with operation-specific Ob/TN/Coherence-cost lookups: `attempt_weaving`/`attempt_pulling` (Depth Ob, standard TN), `attempt_past_pulling` (recency-banded Ob, TN_POP, extra −1 Coherence), `attempt_locking`/`attempt_dissolution` (Depth Ob, TN_BINDING, FR surcharge), `attempt_mending` (Mending Ob table, 0 Coherence at every degree per ED-871). `systems/threadwork/sim/operations.py:248-334`
 
-**S4. [gate][branch][loop] Collective operation.** `attempt_collective_operation` ranks actors by TS descending (Anchor = highest); all actors Leap independently (S1) in the same round. `systems/threadwork/sim/collective.py:67-189 attempt_collective_operation`
+**S4. [gate][branch][loop] Collective operation.** `attempt_collective_operation` ranks actors by TS descending (Anchor = highest); all actors Leap independently (S1) in the same round. `systems/threadwork/sim/collective.py:71-224 attempt_collective_operation`
 
 - S4.1 [branch] Anchor's Leap fails → no lattice forms, return early. `systems/threadwork/sim/collective.py:98-105`
 - S4.2 [branch] Anchor succeeds → pool sums Anchor's solo pool + successful helpers' `_helper_contribution` (floor(Cognition/2)); lattice fracture (+1 Ob) computed by comparing remaining pool to expected pool. `systems/threadwork/sim/collective.py:107-137`
