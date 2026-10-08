@@ -27,11 +27,9 @@ def test_flat_cost_passes_and_planted_growth_fails():
     growing = [3.0 * (1.5 ** i) for i in range(8)]            # per-season cost growth, planted
     g_flat = S.grade_cost(flat, COST_CEIL)
     g_grow = S.grade_cost(growing, COST_CEIL)
-    checked = 2
     assert g_flat["grade"] == "PASS", g_flat                  # the control is not trivially failing
     assert g_grow["grade"] == "FAIL", g_grow                  # the planted growth is caught
     assert g_grow["ratio"] > COST_CEIL > g_flat["ratio"]
-    assert checked == 2                                        # both assertions above ran
 
 
 def test_cost_that_plateaued_inside_the_first_half_still_passes():
@@ -57,14 +55,12 @@ def test_convergent_mix_passes_and_planted_single_act_mix_fails():
     single = [{"tell": 10} for _ in range(8)]                  # one act, every season
     g_ok = S.grade_mix(convergent, DRIFT_CEIL, TOP_CEIL)
     g_single = S.grade_mix(single, DRIFT_CEIL, TOP_CEIL)
-    checked = 2
-    assert g_ok["grade"] == "PASS", g_ok                       # the control passes
+    assert g_ok["grade"] == "PASS", g_ok                      # the control passes
     assert g_single["grade"] == "FAIL", g_single               # the planted collapse is caught
     # it fails on COLLAPSE, not drift: a single-act mix holds perfectly still
     assert g_single["drift"] == 0.0
     assert g_single["top_share"] == 1.0 > TOP_CEIL
     assert any("collapsed" in r for r in g_single["reasons"])
-    assert checked == 2
 
 
 def test_mix_that_is_still_moving_fails_on_drift():
@@ -74,6 +70,16 @@ def test_mix_that_is_still_moving_fails_on_drift():
     g = S.grade_mix(early + late_a + late_b, DRIFT_CEIL, TOP_CEIL)
     assert g["grade"] == "FAIL" and g["drift"] > DRIFT_CEIL, g
     assert any("drift" in r for r in g["reasons"])
+    # last block {march:10, give:10} against the block before {tell:10, give:10}: shares .5/.5 on
+    # both sides, differing on two verbs by .5 each, so 0.5 * (.5 + .5) -- exact, and 1.0 if the
+    # half-sum factor were dropped
+    assert g["drift"] == 0.5
+
+
+def test_mix_that_churned_early_and_settled_in_the_last_blocks_passes():
+    churned = [{"march": 5, "give": 5} for _ in range(4)]
+    g = S.grade_mix(churned + [dict(STEADY) for _ in range(4)], DRIFT_CEIL, TOP_CEIL)
+    assert g["grade"] == "PASS" and g["drift"] == 0.0, g       # only the final two blocks are read
 
 
 def test_mix_that_collapses_over_the_run_fails():
@@ -85,6 +91,9 @@ def test_mix_that_collapses_over_the_run_fails():
 def test_mix_that_stops_acting_fails_and_short_runs_are_ungraded():
     assert S.grade_mix([dict(STEADY)] * 4 + [{}] * 4, DRIFT_CEIL, TOP_CEIL)["grade"] == "FAIL"
     assert S.grade_mix([dict(STEADY)] * 3, DRIFT_CEIL, TOP_CEIL)["grade"] == "UNGRADED"
+    # seven seasons would make blocks of ONE season: one season against one, which the grade refuses
+    assert S.grade_mix([dict(STEADY)] * 7, DRIFT_CEIL, TOP_CEIL)["grade"] == "UNGRADED"
+    assert S.grade_mix([dict(STEADY)] * 8, DRIFT_CEIL, TOP_CEIL)["grade"] == "PASS"
 
 
 def _write_world(world_dir, costs, mixes):

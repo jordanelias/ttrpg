@@ -7,8 +7,9 @@
 A-25 (`_part5` §A, `workplans/valoria_master_workplan_v9_part5.md:411-414`) says the PLAYABLE mode is a
 `game/` scene "for which the driver suspends", and that the host gets "the same typed output either way".
 This document says where it suspends, what it holds, what it exchanges and why the two modes replay
-equal. It does not decide either question #445 `05` holds for Jordan (§4.1, §4.2: J-15). The suspension
-works the same however those are answered. One suspension covers **one provider call for one deferred act**.
+equal. It does not decide either question #445 `05` holds for Jordan (§4.1, §4.2: J-15). The suspension point (§1-§2)
+works the same however those are answered; §3-§4 design the whole-`fight()` variant, and M-2's per-act
+`engagement()` variant is re-read at B-L. One suspension covers **one provider call for one deferred act**.
 Whether that call runs one engagement or `fight()`'s whole loop is a §4.1 / M-2 question, and so is
 whether a grid fight spans several acts. It does not build the map. No grid exists in the tree
 (`requirements.yaml:146-153`), and the map belongs to the scene.
@@ -87,7 +88,7 @@ The pair is the one AUTOMATED already uses at `seam/wrappers/combat.py:177`. The
 adds no field.
 
 - **Input:** `(A, B, rng)`. `A` and `B` are `Combatant`s from `derive_party`
-  (`seam/wrappers/combat.py:108-120`, called at `:165`), and `rng = random.Random(seed)` (`:170`).
+  (`seam/wrappers/combat.py:108-120`, called at `:165`), and an `rng` seeded from the seed at `:170` (`random.Random(seed)` is built inline at `:177`).
 - **Output:** the engine's `int` (`+1`/`-1`/`0`, `wrapper.fight`, `systems/combat/combat_engine_v1/wrapper.py:465-496`).
   The other part is the post-fight `WoundTracker` state on `A` and `B`, which the provider reads at
   `seam/wrappers/combat.py:186-206` and returns as the `RESOLVED` dict (`:208-219`). `_contest` folds

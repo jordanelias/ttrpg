@@ -104,7 +104,6 @@ AUTHORED_PARSERS = {
     # `references/restructure_ledger.md`), so neither parses anything any more.
     'module_contracts.yaml': {'tools/export_composition.py',
                               'tools/build_engine_atlas.py',
-                              'tools/build_fork.py',
                               'tools/ci_quantity_vocabulary_check.py',
                               'tools/evacuation_plan.py',
                               'tools/m1_acceptance.py'},

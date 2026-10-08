@@ -44,7 +44,8 @@ WHAT REPLACES IT AS THE LIVE COMPARISON: `field_casualty_model` (H-148), and the
 invented here — `rosters.yaml`'s own `field_casualty_models` note (2026-09-04/M4) says so by name:
 
     "`tools/balance_oracle.py` DOES NOT APPLY TO THIS QUESTION AND MUST NOT BE RUN FOR IT. That
-    tool patched `dice_engine` and compared campaign-driver arms; `march` and
+    tool patched `dice_engine` and compared campaign-driver arms (the driver was deleted at
+    plan position `28-iii`); `march` and
     `field_casualty_model` live entirely in `engine/season/`, which that driver could not reach ...
     Patching it would leave both of `balance_oracle.py`'s arms identical by construction --
     exactly the 'campaign-unreachable change' CLAUDE.md §7 names as a fake control, not a

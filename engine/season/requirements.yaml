@@ -391,7 +391,7 @@ rows:
       committed): in-process, every `_act_events` call appends the act's occasion ids. ARC-23
       then reads True, and so do all 143 cases (97 of 97 ARC, 46 of 46 NPC, none flips to
       False). The repair is a RULE in `loop/resolve.py`: the occasion goes on every
-      act-emission, at the one emission owner and not at the call sites. It moves
+      act-emission, at the one emission owner and not at the call sites. ⚠ Three refusals do not pass through that owner (`loop/resolve.py:72-73`, `:746-747` and `:776-779` construct `Event` directly), and the scratch counterfactual patched `_act_events` only, so it never touched them: the B-H repair routes them through `_act_events` first and commits the counterfactual as its falsifier test. It moves
       `World.content_hash()` wherever an occasioned act is refused. NOT REPAIRED HERE: a loop
       edit is not R5. It slots to **B-H** (`workplans/valoria_master_workplan_v9_part3.md:256`,
       the batch whose files already include `loop/resolve.py`'s fold), or to the earliest V

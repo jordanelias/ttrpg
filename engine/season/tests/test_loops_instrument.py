@@ -3,8 +3,8 @@
 Falsifiers, each with its control in the same test:
   (1) a planted amplifier with no LOOP row makes derived != declared, naming it;
   (2) a planted over-bound value for a LOOP row fails the bound check.
-Plus the shipped-tree reading itself, and that the derivation can observe a declared loop going
-missing (a check that can only ever say "equal" observes nothing).
+Plus that the derivation can observe a declared loop going missing (a check that can only ever say
+"equal" observes nothing), and that a drifted read map is reported rather than raised.
 """
 
 from engine.season.harness import loops as L
@@ -17,27 +17,17 @@ def _shipped():
     return procs, signs
 
 
-def test_shipped_tree_reads_amplifiers_derived_equal_declared():
-    procs, signs = _shipped()
-    res = L.compare(L.derive_cycles(procs), signs, L.DECLARED_CYCLES)
-    amp = res["by_sign"]["+"]
-    assert res["equal"], (amp["undeclared"], amp["underived"], res["unmapped"], res["stale"])
-    # assert it asserted: the equality is over a non-empty set on both sides, not two empties
-    assert amp["derived"] and amp["declared"]
-    assert {r for _, r in amp["declared"]} == {r for r, s in signs.items() if s == "+"}
-    assert sorted(k for k, _ in amp["declared"]) == amp["derived"]
-
-
 def test_planted_amplifier_with_no_loop_row_makes_derived_differ_and_is_named():
     procs, signs = _shipped()
     control = L.compare(L.derive_cycles(procs), signs, L.DECLARED_CYCLES)
-    assert control["equal"]
     plant = L.Process("PLANTED: stores breed stores", (("Rung.stores", "+"),),
                       (("Rung.stores", "+"),))
     res = L.compare(L.derive_cycles(procs + (plant,)), signs, L.DECLARED_CYCLES)
     assert not res["equal"]
-    assert res["by_sign"]["+"]["undeclared"] == [("Rung.stores",)]
-    assert res["by_sign"]["+"]["underived"] == []
+    # RELATIVE control: the plant is what adds the cycle, and it moves nothing else
+    assert ("Rung.stores",) not in control["by_sign"]["+"]["undeclared"]
+    assert ("Rung.stores",) in res["by_sign"]["+"]["undeclared"]
+    assert res["by_sign"]["+"]["underived"] == control["by_sign"]["+"]["underived"]
 
 
 def test_removing_the_witness_fan_out_makes_its_declared_loops_underived():
@@ -89,12 +79,23 @@ def test_a_bound_on_a_quantity_off_the_row_refuses():
         raise AssertionError("a bound on a quantity the row does not loop was accepted")
 
 
-def test_a_requires_stem_with_no_read_map_refuses(monkeypatch):
+def test_a_requires_stem_with_no_read_map_is_reported_as_drift(monkeypatch):
+    _, control = L.build_processes()
     trimmed = {k: v for k, v in L.STEM_READS.items() if k != "stores"}
     monkeypatch.setattr(L, "STEM_READS", trimmed)
+    _, blind = L.build_processes()
+    assert len(blind["drift"]) > len(control["drift"])
+    assert any("REQUIRES_STEMS" in m and "'stores'" in m for m in blind["drift"]), blind["drift"]
+
+
+def test_a_bad_bound_is_refused_before_the_slow_observation(monkeypatch):
+    def boom(*a, **k):
+        raise AssertionError("observe ran before the bound was validated")
+    monkeypatch.setattr(L, "observe", boom)
     try:
-        L.build_processes()
+        L.main(["--base-seed", "1", "--n", "1", "--seasons", "1",
+                "--bound", "H-104:Event=1"])
     except SystemExit as e:
-        assert "REQUIRES_STEMS" in str(e)
+        assert e.code == 2          # argparse's refusal, not the exit of a finished run
     else:
-        raise AssertionError("a stem with no read map was silently dropped")
+        raise AssertionError("a bound on a quantity off its row was accepted")

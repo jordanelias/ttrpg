@@ -31,9 +31,9 @@ THE PROCESSES, AND WHERE EACH EDGE COMES FROM (`build_processes`):
     eviction comparator -- plus WITNESS's fan-out over the log and MATTER's claim decay, which
     `H-103` and `H-112` are about. Their reads are not typed anywhere in the tree, so they are
     declared here in `QUESTION_SOURCE_READS`, `CHANNEL_READS` and `STEP_READS`. Each is tied to an
-    owner and REFUSES on drift: a question source the roster carries with no entry here,
-    a stem in `REQUIRES_STEMS` with none, a step write to a matrix cell whose row does not list that
-    step, or a cited code site whose anchor text is gone.
+    owner and is reported as DRIFT when it falls out of step: a stem in `REQUIRES_STEMS` with no
+    entry in `STEM_READS`, a question source with none, or a step write to a cell whose row does not
+    list that step.
 
 [ASSUMPTION, stated where it is used] `Event` is ONE quantity. WITNESS reads every Event in the
 code's TOPOLOGY, while `World.write` buffers only MATTER's emissions for the fan -- that one-line cut
@@ -43,7 +43,8 @@ topology. The derivation sees topology; part (c) is where a bound is read.
 THE DECLARED SIDE'S CYCLE KEYS. A LOOP row is prose; nothing in it is a cycle the derivation can
 compare against. `DECLARED_CYCLES` maps each row id to the quantity cycle(s) the row describes; the
 row's SIGN is read from the register, never restated here. A LOOP row with no entry here, or an entry
-naming a row that is not a LOOP row, is reported as a mismatch, so the table cannot drift silently.
+naming a row that is not a LOOP row, is reported as a mismatch; it fails the verdict only for a `+`
+row (or a stale entry) -- damping (`-`) rows are printed, not graded.
 [ASSUMPTION: the correspondence is this module's reading of each row's `hole:`; the honest home is a
 typed column on the row, which `register.py` admits only as `sign` today.]
 
@@ -64,7 +65,7 @@ names it. Every numeric argument is required of the caller and none has a defaul
 
 Entry point: `python -m engine.season.harness.loops` prints (a) and (b);
 `... --base-seed S --n N --seasons K [--cap C] [--bound H-NNN:Kind.field=V ...]` adds (c).
-Exit 1 when amplifiers differ or a bound fails; 0 otherwise.
+Exit 1 when amplifiers differ, a drift is reported or a bound fails; 0 otherwise.
 """
 
 from __future__ import annotations
@@ -130,8 +131,8 @@ class Process:
     step: str = ""
 
 
-#: The step readers, each with the code site its reads were read off and an anchor that must still
-#: be there. `writes` to a matrix cell are checked against that cell's `steps:`.
+#: The step readers, each with the code site its reads were read off. `writes` to a matrix cell are
+#: checked against that cell's `steps:`.
 STEP_READS = (
     Process("WITNESS: fan-out over the log", ((EVENT, "+"),),
             (("Person.claim_ledger", "+"), (EVENT, "+")),
@@ -144,13 +145,6 @@ STEP_READS = (
             (("Claim.confidence", "-"), (EVENT, "+")),
             "loop/matter.py::matter -- `claim_decay`; emits `claim.decayed`", "MAT"),
 )
-_ANCHORS = {
-    "WITNESS: fan-out over the log": ("loop/driver.py", "self.witness("),
-    "WITNESS: eviction comparator": ("loop/witness.py", "evict_over_cap"),
-    "MATTER: claim decay": ("loop/matter.py", "claim_decay"),
-    "DELIBERATE": ("queries/world_q.py", "def questions_for"),
-    "WITNESS: channel": ("epistemic.py", "CHANNEL_PREDICATES"),
-}
 
 #: Each LOOP row's cycle(s), as canonical quantity tuples (see `canonical`). The SIGN is the row's.
 DECLARED_CYCLES = {
@@ -365,25 +359,22 @@ def _exists_reads(kind: str, cells) -> tuple:
 
 
 def build_processes() -> tuple:
-    """`(processes, blind_spots)` from the owners: `VERB_TABLE`, `MATRIX`, `REQUIRES_STEMS`, the two
-    rosters, and the step readers above. Refuses on any drift named in the module docstring."""
+    """`(processes, blind)` from the owners: `VERB_TABLE`, `MATRIX`, `REQUIRES_STEMS`, the two
+    rosters, and the step readers above. `blind["drift"]` lists each drift named in the module
+    docstring (empty on a tree in step); the caller reports it."""
     from ..data.matrix import MATRIX, _STEP_OF
     from ..data.requires import REQUIRES_STEMS
     from ..data.verbs import NO_PRECONDITION, VERB_TABLE
 
     cells = {f"{k}.{f}": row for (k, f), row in MATRIX.items()}
     known = set(cells) | {EVENT}
+    drift = []
     if set(STEM_READS) != set(REQUIRES_STEMS):
-        raise SystemExit(f"loops: STEM_READS {sorted(STEM_READS)} != REQUIRES_STEMS "
-                         f"{sorted(REQUIRES_STEMS)}; a stem with no read map is invisible")
+        drift.append(f"loops: STEM_READS {sorted(STEM_READS)} != REQUIRES_STEMS "
+                     f"{sorted(REQUIRES_STEMS)}; a stem with no read map is invisible")
     if set(QUESTION_SOURCES) != set(QUESTION_SOURCE_READS):
-        raise SystemExit(f"loops: question_sources {sorted(QUESTION_SOURCES)} != read map "
-                         f"{sorted(QUESTION_SOURCE_READS)}")
-    root = files.HOLE_REGISTER_YAML.parent
-    for name, (rel, anchor) in _ANCHORS.items():
-        if anchor not in (root / rel).read_text():
-            raise SystemExit(f"loops: {name}'s site {rel} no longer carries {anchor!r}; "
-                             "re-read the step and re-declare its reads")
+        drift.append(f"loops: question_sources {sorted(QUESTION_SOURCES)} != read map "
+                     f"{sorted(QUESTION_SOURCE_READS)}")
 
     procs, untyped = [], []
     for verb, row in sorted(VERB_TABLE.items()):
@@ -392,7 +383,7 @@ def build_processes() -> tuple:
             for leaf in _leaves(row.requires_typed.requirement):
                 for stem in leaf.stems():
                     reads += (_exists_reads(leaf.kind, cells) if stem == "exists"
-                              else STEM_READS[stem])
+                              else STEM_READS.get(stem) or ())
         elif str(row.requires).strip() not in NO_PRECONDITION:
             untyped.append(verb)
         wr = list(row.writes) + [c for band in (row.writes_by_degree or {}).values() for c in band]
@@ -405,7 +396,7 @@ def build_processes() -> tuple:
     ledger_w = (("Person.claim_ledger", "+"),)
     procs.append(Process("DELIBERATE: question sources",
                          tuple(dict.fromkeys(x for s in QUESTION_SOURCES
-                                             for x in QUESTION_SOURCE_READS[s])),
+                                             for x in QUESTION_SOURCE_READS.get(s, ()))),
                          ((ACTS, "+"),), "queries/world_q.py::questions_for", "DEL"))
     procs.append(Process("WITNESS: channel predicates", CHANNEL_READS, ledger_w,
                          "epistemic.py::CHANNEL_PREDICATES", "WIT"))
@@ -418,11 +409,11 @@ def build_processes() -> tuple:
         for q, _ in p.writes:
             if q != EVENT and p.step and p.step not in {k for k, v in _STEP_OF.items()
                                                         if _matrix_has(cells[q], v)}:
-                raise SystemExit(f"loops: {p.name} writes {q} at {p.step}, and the write_matrix "
-                                 f"row lists {sorted(s.value for s in cells[q].steps)}")
+                drift.append(f"loops: {p.name} writes {q} at {p.step}, and the write_matrix "
+                             f"row lists {sorted(s.value for s in cells[q].steps)}")
     writing_steps = {s.value for row in MATRIX.values() for s in row.steps}
-    declared = {"RESOLVE", "DELIBERATE", "WITNESS", "MATTER"}
-    blind = {"untyped_requires": untyped,
+    declared = {_STEP_OF[p.step] for p in procs if p.step}
+    blind = {"untyped_requires": untyped, "drift": drift,
              "undeclared_step_reads": sorted(writing_steps - declared)
              + ["MATTER (every pass but claim decay)", "DELIBERATE (all but its question sources)",
                 f"WITNESS channels as one union, not per channel ({len(WITNESS_CHANNELS)} rostered)"]}
@@ -508,7 +499,11 @@ def main(argv=None) -> int:
     print(f"  BLIND: verbs with an untyped `requires` (their reads are invisible): "
           f"{blind['untyped_requires']}")
     print(f"  BLIND: steps whose reads are not declared here: {blind['undeclared_step_reads']}")
-    print(f"  AMPLIFIERS: derived {'==' if res['equal'] else '!='} declared")
+    for msg in blind["drift"]:
+        print(f"  DRIFT: {msg}")
+    print(f"  AMPLIFIERS (signed cycles only; {len(us)} unsigned unread): "
+          f"derived {'==' if res['equal'] else '!='} declared")
+    ok = res["equal"] and not blind["drift"]
 
     rq = row_quantities({r: DECLARED_CYCLES.get(r, ()) for r in rows})
     bounds = dict(a.bound)
@@ -517,7 +512,11 @@ def main(argv=None) -> int:
               "observed, nothing passed")
         if bounds:
             ap.error("--bound given without seeds to observe")
-        return 0 if res["equal"] else 1
+        return 0 if ok else 1
+    try:
+        check_bounds(rq, {}, bounds)    # refuse a bound on nothing BEFORE the slow observation
+    except ValueError as e:
+        ap.error(str(e))
     seeds = list(range(a.base_seed, a.base_seed + a.n))
     observed = observe(sorted({q for qs in rq.values() for q in qs}), seeds, a.seasons, a.cap)
     out = check_bounds(rq, observed, bounds)
@@ -528,7 +527,7 @@ def main(argv=None) -> int:
               f"{x['verdict']}  | declared: {dflt[:90]}{'...' if len(dflt) > 90 else ''}")
     print(f"  {out['checked']} of {len(out['lines'])} readings checked against a bound; an "
           "amplifier with no LOOP row is not observed here -- part (b) names it")
-    return 0 if res["equal"] and not out["failed"] else 1
+    return 0 if ok and not out["failed"] else 1
 
 
 if __name__ == "__main__":

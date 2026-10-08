@@ -3,9 +3,7 @@
 A SOAK run drives the unmodified season loop for many consecutive seasons on ONE World and ONE
 SeasonDriver, and records what only duration exposes: an uncaught exception, memory or wall-clock
 growth, and churn that degenerates. It pins nothing and is wired into no gate
-(`harness/aperture.py`'s own disclaimer, `:48`, repeated here because it applies unchanged). It
-decides nothing either -- true of this harness too, but that clause is added here, not quoted from
-aperture.py, which does not carry it. It grades exactly TWO things, both over a finished run's
+(`harness/aperture.py`'s own disclaimer, `:48`, repeated here because it applies unchanged). It grades exactly TWO things, both over a finished run's
 per-season series (`grade_cost`, `grade_mix`, below): that the cost of a season stays flat, and
 that the mix of acts settles into a stable, non-collapsed shape.
 
@@ -486,11 +484,13 @@ def grade_mix(mixes: list, drift_ceiling: float, top_share_ceiling: float) -> di
     The second condition is not decoration. A mix that has collapsed onto one act drifts by
     exactly zero, so a drift test alone passes the worst case; convergence here means settling
     into a SHAPE, not merely holding still. An empty last block fails (a run that stopped acting
-    has not converged on anything). `UNGRADED` below four seasons (a block needs one season)."""
+    has not converged on anything). `UNGRADED` below eight
+    seasons (a block needs two, as `grade_cost`'s half does: a block of one season is that
+    season, and the grade would compare one season to one)."""
     n = len(mixes)
     block = (n // 2) // 2
-    if block < 1:
-        return {"grade": "UNGRADED", "why": f"{n} season(s); two blocks need at least four",
+    if block < 2:
+        return {"grade": "UNGRADED", "why": f"{n} season(s); two blocks of two need at least eight",
                 "seasons": n}
     prev, last = Counter(), Counter()
     for m in mixes[n - 2 * block:n - block]:

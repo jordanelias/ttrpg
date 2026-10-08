@@ -11,8 +11,8 @@ checking.* So every probe declares its provenance:
 
 | `by=` | means | count |
 |---|---|---|
-| `construction` | **the shape itself raised** — a gate, a law or a type stopped it. This is evidence | 78 |
-| `no-signature` | nothing to call. The design supplies no function by which it could be attempted — which *is* the refusal, but **absence is not a guard** | 25 |
+| `construction` | **the shape itself raised** — a gate, a law or a type stopped it. This is evidence | 79 |
+| `no-signature` | nothing to call. The design supplies no function by which it could be attempted — which *is* the refusal, but **absence is not a guard** | 24 |
 | `convention` | the shape permits it and only a reader stops it. §27.2 is the design's own example and says so out loud | 1 |
 | `probe-model` | the probe supplies a model the design does not, to reach the question at all | 17 |
 
@@ -32,7 +32,7 @@ has no module system and no visibility modifiers, so the guarantee there is
 a contributor closes by simply writing the function — no gate fires, no test goes red,
 and the design's own §27.2 admission applies: *enforced by a person noticing*.
 
-**And 14 of 63 PASSes are not by construction
+**And 13 of 63 PASSes are not by construction
 either** — they are listed individually below and should be discounted accordingly. A
 `probe-model` PASS means the instrument supplied something the design does not.
 
@@ -100,7 +100,7 @@ either** — they are listed individually below and should be discounted accordi
 | `W5` | **UNOWNED** | no-signature | S22.3 | the harvest must be able to come in, better or worse from season to season |
 | `A10` | PASS | construction | S4 | a place must be able to know something summed over everything inside it |
 | `A13` | PASS | construction | S4 | a repeated derivation must be able to be computed once per step |
-| `A14` | PASS | no-signature | S40.2 | a character must be able to respond inside the same season to something that just happened |
+| `A14` | PASS | construction | S40.2 | a character must be able to respond inside the same season to something that just happened |
 | `A17` | PASS | convention | S27.2 | every outcome in the game must go through one place |
 | `A2` | PASS | probe-model | S19.4 | a sequence of related happenings must be able to be read back as one story |
 | `A24` | PASS | construction | S35 | a mechanism written for the powerful must be able to work for a whole population |

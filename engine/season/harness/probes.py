@@ -1634,7 +1634,8 @@ def f17():
     return (f"PASS-CONDITIONALLY, AND THE CONDITION IS THE FINDING: sequence={seen}. Both acts "
             "landed in ONE season and THE FOLD'S CONTENT-DERIVED ORDER -- not intent, not rank, "
             "not the superior's seniority -- decided whether the raid counted as authorised. "
-            "There is no within-season sequencing a person can rely on. See A14 and A36")
+            "There is no within-season sequencing a person can rely on. See A36 (A14 shows a reaction across rounds, "
+            "not an order within one)")
 
 
 @probe("F18", "a place's demands conflict with its superior's orders", "S36.1", by="probe-model",
@@ -2160,7 +2161,7 @@ def a13():
 
 
 @probe("A14", "a person reacts within the season to what another just did", "S40.2",
-       by="no-signature",
+       by="construction",
        tests="a character must be able to respond inside the same season to something that just happened")
 def a14():
     """THE WITHIN-SEASON HALF OF `H-56`, RE-POINTED AT `R-03` (plan position IN-43). This probe
