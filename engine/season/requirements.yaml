@@ -369,8 +369,36 @@ rows:
       A DENOMINATOR CHANGE** (89 live cases then, all 143 now, as the 2026-09-30 paragraph says), not
       a re-measured gain. No contradiction with this row's status: `not_met` on clause 1 (96/97),
       unchanged.
+      ⚠⚠ **IN-50 (B-C), 2026-10-08: THE ONE FAILING ARC CASE IS `ARC-23` ("The General Falls",
+      `cases/chain/ARC2.yaml`, `span_seasons: 1`), AND THE DEFECT IS A LOOP GAP, NOT THE CASE OR
+      THE INSTRUMENT.** Tree `395094b`. THIS RUN: `python -m engine.season.harness.corpus_run`,
+      exit 0: `check R3: 46 of 46 pass` (NPC), `check R3: 96 of 97 pass` (ARC), `check R3 not
+      True: ARC-23`, control `False -> True`. `_r3_propagates` fails on its SECOND branch
+      (`harness/corpus_run.py:720-727`), not the first: 27 resolved acts by three actors (`p_a`
+      11, `p_b` 9, `p_c` 7), 267 Events, and no act-emitted Event cites another actor's
+      act-Event. A walk through the un-acted Events (deposits, world Events) finds none either,
+      so the check misses no edge in the log. **THE EDGE EXISTS ONE STEP EARLIER AND IS DROPPED
+      AT EMISSION.** Five acts were chosen from a scene whose occasion is ANOTHER person's
+      act-Event: four `p_c` acts (`move`, `research`, `survey`, `restore`) occasioned by
+      `p_b`'s `record.created`, and one `p_a` `research` occasioned by `p_b`'s `finding.none`.
+      All five were REFUSED (`travel.blocked`, `finding.none`, `survey.refused`,
+      `restore.refused`), and every refusal return in `loop/resolve.py` emits `causes=[a.id]`
+      without the occasion: `_fold`'s `_admits` refusal (`:372`) and no-op-write refusal
+      (`:448`), `_party_gap_refusal` (`:554`) and `_refuse_after_the_fact` (`:912`). Only
+      `_fold`'s success return appends `self._occasion_ids(w, a)` (`:487`), and the comment
+      there calls it "the one path every act-emission takes", which it is not; the contest
+      branch (`:577`) passes `[a.id]` as well. THE FALSIFIER, a scratch counterfactual (not
+      committed): in-process, every `_act_events` call appends the act's occasion ids. ARC-23
+      then reads True, and so do all 143 cases (97 of 97 ARC, 46 of 46 NPC, none flips to
+      False). The repair is a RULE in `loop/resolve.py`: the occasion goes on every
+      act-emission, at the one emission owner and not at the call sites. It moves
+      `World.content_hash()` wherever an occasioned act is refused. NOT REPAIRED HERE: a loop
+      edit is not R5. It slots to **B-H** (`workplans/valoria_master_workplan_v9_part3.md:256`,
+      the batch whose files already include `loop/resolve.py`'s fold), or to the earliest V
+      batch by §B.0 R1 if the hash move re-records a count or set pin. IN-10, IN-11 and IN-13's
+      new edges do not close it; they could only route ARC-23 around it.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
-    blocks: [IN-10, IN-11, IN-13, FI-01, H-116]
+    blocks: [IN-10, IN-11, IN-13, FI-01, H-116, IN-50]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1: regard is computed at read; the cross-person half is IN-10's, IN-11's, IN-13's); H-111 is FI-01's deposit half
 
   - id: R-02
