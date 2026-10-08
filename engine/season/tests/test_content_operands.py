@@ -237,6 +237,10 @@ def test_the_populated_corpus_forms_candidates_with_writ_derived_operands():
     referent copy (`c.subject`) and names a real, live person is asserted > 0 -- not merely
     nonzero-looking, and not a value the fold could only ever refuse."""
     w = populated.build_realm(0)
+    # The ids that exist BEFORE the season: a writ's addressee who dies during it (a combat
+    # outcome the ladder decides) leaves `w.persons` but is still a well-formed referent, which
+    # is all this control asks (B-D1 PC-02: the degree-ladder migration kills `p_npc_034` here).
+    seeded = set(w.persons)
     populated.run(seasons=1, seed=0, w=w)
     writ_derived = []
     for pid, p in w.persons.items():
@@ -247,12 +251,14 @@ def test_the_populated_corpus_forms_candidates_with_writ_derived_operands():
                 if to is not None and to != c.subject and isinstance(to, str):
                     writ_derived.append((pid, c.verb, to))
     assert len(writ_derived) > 0, "no Candidate carried a writ-derived operand on the real corpus"
-    # CONTROL, THE OTHER DIRECTION: every one of them names something that actually exists,
-    # so the count above is not an artefact of a malformed value the fold would refuse outright
-    # for a reason that has nothing to do with the writ.
-    unresolvable = [(pid, verb, to) for pid, verb, to in writ_derived if to not in w.persons]
+    # CONTROL, THE OTHER DIRECTION: every one of them names a person who actually exists (or
+    # existed at the season's start), so the count above is not an artefact of a malformed value
+    # -- a tuple, an id no realm ever held -- that the fold would refuse outright for a reason
+    # that has nothing to do with the writ.
+    unresolvable = [(pid, verb, to) for pid, verb, to in writ_derived if to not in seeded]
     assert not unresolvable, (
-        f"{len(unresolvable)} writ-derived `to` values name no live person: {unresolvable[:5]}")
+        f"{len(unresolvable)} writ-derived `to` values name no person the realm ever held: "
+        f"{unresolvable[:5]}")
 
 
 def test_no_writ_derived_operand_is_ever_a_raw_tuple():
