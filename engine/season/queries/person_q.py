@@ -155,6 +155,12 @@ def crisis_weights(p: Person, shift: float = 0.0) -> dict:
     itself, so the arm at its control is the unmodified read by construction.
 
     Person-side, no World (AX-2). Keys keep `p.pursuits`' own order, which `to_axes` sums in."""
+    # `shift` is a FRACTION of a weight: past 1 a crisis pursuit's weight goes negative and the
+    # heirs gain more than was given up. `not 0 <= shift <= 1` also refuses a NaN (cf. the
+    # `confliction_weight` check in `decision/choose.py::make_chooser`).
+    if not 0 <= shift <= 1:
+        raise ValueError(f"scar_weight_shift {shift} is not in [0, 1]: it is the fraction of a "
+                         f"weight given up, and outside that range a weight goes negative (H-187)")
     base = p.pursuits or {}
     if not shift or not p.scar:
         return base
