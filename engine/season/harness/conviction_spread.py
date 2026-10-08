@@ -9,8 +9,10 @@ here, because a ledger entry stating measured numbers must name a re-runnable in
 
 TWO QUANTITIES, AND THE SECOND ONE ASKS A DIFFERENT QUESTION FROM THE FIRST.
 
-  1. **How far is each conviction from the common direction** — the cosine table. It answers
-     *are the thirteen thirteen characters, or five?*
+  1. **How far is each pursuit from the common direction** — the cosine table. It answers
+     *are the fifteen fifteen characters, or five?* (The rows were the thirteen CONVICTIONS when
+     this was written; they are the fifteen PURSUITS since `ED-IN-0261`, and "conviction" now
+     names `Person.conviction`, the religious affiliations of IN-08 H10, which this does not read.)
   2. **How many independent directions the four-axis basis actually carries** — the covariance
      spectrum over the same thirteen rows. It answers *are the four axes four?* A basis whose
      columns co-vary is a smaller basis wearing a larger one's coordinates, and no re-weighting of
@@ -200,13 +202,13 @@ def _report(s: dict, tag: str) -> None:
     IDENTICALLY -- two printers would let the two halves of a comparison diverge in format, and
     a comparison whose sides are formatted differently invites reading a difference that is not
     in the numbers."""
-    print(f"\n=== {tag} — {s['total']} convictions over {len(s['axes'])} axes ===")
+    print(f"\n=== {tag} — {s['total']} pursuits over {len(s['axes'])} axes ===")
     print("  mean vector   " + "  ".join(f"{a} {s['mean'][a]:+.3f}" for a in s["axes"]))
     print(f"  magnitude     {s['magnitude']:.3f}")
     print("\n  cosine with the mean direction (a variation on the common theme vs a dissent):")
     for c, x in sorted(s["cosines"].items(), key=lambda kv: -kv[1]):
         print(f"    {c:12} {x:+.3f}")
-    print(f"\n  {s['within_60deg']} of {s['total']} convictions lie within 60 degrees of the mean")
+    print(f"\n  {s['within_60deg']} of {s['total']} pursuits lie within 60 degrees of the mean")
     print("  per axis (positive / negative):")
     for a, (pos, neg) in s["per_axis_signs"].items():
         print(f"    {a:14} {pos:2} / {neg:2}")

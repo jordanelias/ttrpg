@@ -589,6 +589,14 @@ class Person:
     # pre-seeded: a pursuit nobody has been scarred on is absent, not 0, so an unscarred person's
     # `repr` is unchanged. NOTHING READS IT YET: its reader is the crisis (H9, threshold 2).
     scar: dict = field(default_factory=dict)
+    # IN-08 H10 -- `conviction` IS `{affiliation: intensity}` (ED-IN-0251 R1/R2): which religious
+    # affiliations this person holds, each an int on `affiliation_roster.scale` (0-5; 5 is full
+    # intensity), validated by `data/affiliations.py::conviction_map` -- not the pursuit `doctrine`,
+    # which is the magnitude of religious concern, not its side. Absent = not held, never 0. Filled at
+    # world build from the cast's authored `affiliations:` (`data/cast.py::conviction_of`); its
+    # `write_matrix.yaml` row admits a RESOLVE write and no act writes it yet. Confliction is DERIVED
+    # from it (`queries/person_q.py::confliction`), never stored here.
+    conviction: dict = field(default_factory=dict)
     travel_leg: list[str] = field(default_factory=list)
     # ⚠ W5 MOVED THE TENURE STORE HERE, and `Tenure`'s OWN DOCSTRING already said this: "S15 --
     # THE ONE EDGE. Owned by its SUBJECT (S15.1)." The class asserted the ownership and the

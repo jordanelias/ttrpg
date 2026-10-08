@@ -124,6 +124,17 @@ PURSUITS = tuple(_DATA['pursuit_roster']['names'])
 AXES = tuple(_DATA['axis_roster']['names'])
 AXIS_SCALE = _DATA['axis_roster'].get('scale', '')
 
+# ---------------------------------------------------------------------------
+# AFFILIATIONS — IN-08 H10 (ED-IN-0251 R1/R2). THE ONLY AFFILIATION ROSTER IN THE ENGINE.
+# ---------------------------------------------------------------------------
+# `Person.conviction` is `{affiliation: intensity}` over these names, each intensity an int inside
+# `[AFFILIATION_FLOOR, AFFILIATION_CEILING]`; the ceiling is "full intensity". The pursuits' move,
+# made a third time: one roster in `references/descriptor_registry.yaml`, exported behind the
+# blocking `--check` (which validates the scale), read here.
+AFFILIATIONS = tuple(_DATA['affiliation_roster']['names'])
+AFFILIATION_FLOOR = _DATA['affiliation_roster']['scale']['floor']
+AFFILIATION_CEILING = _DATA['affiliation_roster']['scale']['ceiling']
+
 # ⚠ THERE IS NO ALIAS MAP, AND ITS REMOVAL IS THE POINT (corrected 2026-08-24, same day it was
 # added, by an adversarial pass). This module briefly carried
 # `CONVICTION_ALIASES = {'Reason': 'Scholastic', 'Autonomy': 'Liberty'}`, justified in a comment as

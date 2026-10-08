@@ -41,18 +41,18 @@ def _person(pursuits: dict, scar: dict) -> Person:
 
 
 def test_h9_threshold_two_shifts_that_pursuit_down_and_the_others_gain_proportionally():
-    p = _person({"virtue": 0.6, "honour": 0.3, "wealth": 0.1}, {"virtue": SCAR_WEIGHT_SHIFT_AT})
+    p = _person(dict(virtue=0.6, honour=0.3, wealth=0.1), {"virtue": SCAR_WEIGHT_SHIFT_AT})
     w = crisis_weights(p, 0.5)
     assert w["virtue"] == pytest.approx(0.3)
     assert w["honour"] == pytest.approx(0.3 + 0.3 * 0.75)
     assert w["wealth"] == pytest.approx(0.1 + 0.3 * 0.25)
     assert sum(w.values()) == pytest.approx(1.0), "the shift must conserve total weight"
-    assert p.pursuits == {"virtue": 0.6, "honour": 0.3, "wealth": 0.1}, "the reader wrote Person.pursuits"
+    assert p.pursuits == dict(virtue=0.6, honour=0.3, wealth=0.1), "the reader wrote Person.pursuits"
     assert p.scar == {"virtue": SCAR_WEIGHT_SHIFT_AT}, "the reader wrote Person.scar"
 
 
 def test_h9_below_threshold_and_at_control_the_read_is_the_unmodified_one():
-    pursuits = {"virtue": 0.6, "honour": 0.3}
+    pursuits = dict(virtue=0.6, honour=0.3)
     one_short = _person(pursuits, {"virtue": SCAR_WEIGHT_SHIFT_AT - 1})
     assert crisis_weights(one_short, 1.0) == pursuits, "threshold 2 fired at a count of 1"
     scarred = _person(pursuits, {"virtue": 5})
@@ -64,7 +64,7 @@ def test_h9_below_threshold_and_at_control_the_read_is_the_unmodified_one():
 
 
 def test_h9_a_person_with_nobody_to_gain_is_unshifted_not_drained():
-    everything = _person({"virtue": 0.6, "honour": 0.4}, {"virtue": 3, "honour": 2})
+    everything = _person(dict(virtue=0.6, honour=0.4), dict(virtue=3, honour=2))
     assert crisis_weights(everything, 1.0) == everything.pursuits
     assert crisis_weights(_person({"virtue": 1.0}, {"virtue": 9}), 1.0) == {"virtue": 1.0}
 

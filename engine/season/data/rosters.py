@@ -629,6 +629,9 @@ STRATA = roster("strata", ordered=True)
 # what `roster()` and `tests/valoria/test_conviction_roster_single_owner.py` refuse.
 from engine.substrate.descriptors import PURSUITS  # noqa: E402
 PURSUIT_AXES = roster("pursuit_axes")
+# IN-08 H10: the religious affiliations `Person.conviction` is keyed on, through the same pointer
+# (`from_descriptor: affiliation_roster`); its intensity bounds are the leaf's.
+AFFILIATIONS = roster("affiliations")
 QUESTION_SOURCES = roster("question_sources", ordered=True)
 PERSON_PREDICATES = roster("person_predicates")
 VIEW_BUILDER_RULES = roster("view_builder_rules")

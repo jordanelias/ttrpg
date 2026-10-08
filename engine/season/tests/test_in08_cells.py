@@ -135,8 +135,8 @@ def test_the_split_adds_challenge_and_accept_and_no_kill_or_wound_row():
 # them (`faith` there is `doctrine` here, RS-2) -- and the cosine is COMPUTED from the shipped
 # `pursuit_projection` through `to_axes`, the one owner of convictions -> axes. No cell value and no
 # expected cosine is copied into this file.
-_BUILDER = {"doctrine": .45, "stability": .20, "honour": .15, "community": .10, "virtue": .10}
-_DISMANTLER = {"doctrine": .45, "liberty": .20, "justice": .15, "community": .10, "individuality": .10}
+_BUILDER = dict(doctrine=.45, stability=.20, honour=.15, community=.10, virtue=.10)
+_DISMANTLER = dict(doctrine=.45, liberty=.20, justice=.15, community=.10, individuality=.10)
 
 
 class _PairUncomputable(Exception):

@@ -178,6 +178,31 @@ axis_roster:
     - grandiose_humble            # - puts oneself forward before witnesses · + does not
     - deontological_instrumental  # - will not take a disagreeable act even for a good outcome · + the outcome justifies the means
 
+# ----------------------------------------------------------------------------
+# THE AFFILIATION ROSTER (IN-08 H10; ED-IN-0251 R1/R2, the content folded in by Jordan 2026-10-06,
+# RS-1, ED-IN-0291). `Person.conviction` is a vector over THESE: a religious affiliation held at an
+# INTENSITY on `scale:`. A person may hold two at full intensity at once (R2: the old Truth pole's two
+# ends became two affiliations); `engine/season/rosters.yaml: tables.incompatible` says which pairs
+# strain, and `queries/person_q.py::confliction` derives the strain, never stored (R1).
+# ⚠ An affiliation is a DOCTRINE HELD, not membership of the faction `Church of Solmund` (an office is a
+# `hold` Tenure), and not the pursuit `doctrine` above (that is the MAGNITUDE of religious concern; this
+# is the SIDE). The four names are the source draft's recommended roster (§1.3), its two renames taken
+# (`threadwork` -> `thread_truth`, `einhir_revival` -> `einhir_restoration`) and `altonian_theocracy`
+# struck. [ASSUMPTION] `inner_tradition` is kept as its own affiliation (the draft's "keep if
+# Church-adjacent", §6.1 item 1); merging it into `thread_truth` is a roster edit here.
+# `scale:` "0-5" is the draft's recommendation (a), the one ruled number (the absorbed Truth spine,
+# ED-IN-0075); `player_sees: bands` is inherited from the same ruling; band NAMES are unauthored.
+affiliation_roster:
+  source: "ED-IN-0251 R1/R2; content from candidate_affiliation_content.md §1.3, §3.2, folded in by RS-1 (ED-IN-0291)"
+  count: 4
+  scale: "0-5"
+  player_sees: bands
+  names:
+    - solmund_orthodoxy    # the Church's positive theology of Solmund
+    - inner_tradition      # the Church-adjacent apophatic lineage of thread practice
+    - thread_truth         # the Thread as the ground of being (the absorbed Truth track's pole 0)
+    - einhir_restoration   # Einhir-as-theology, the Restoration counter-theology (pole 0 of the territory track)
+
 # ============================================================================
 # REGISTERED BY REFERENCE -- authoritative content stays in the source doc (no re-transcription).
 # ============================================================================

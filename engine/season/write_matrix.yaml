@@ -66,7 +66,8 @@
 #   row and carrier field together (see `retired:`), and each of the EIGHT remaining RES rows with
 #   no producing verb carries an `unproduced:` cell naming its hole. The loader refuses an orphan
 #   without one, and refuses the cell on a row a verb now writes. Re-running the command above
-#   lists exactly the eight.
+#   lists exactly the eight. (IN-08 H10 adds `(Person, conviction)` with its own `unproduced:`
+#   cell; later rows have moved the count since, so re-run the command rather than trust a figure.)
 #
 # ⚠ THE SIX `Person` ROWS ARE THE FINDING, AND THEY ARE ONE HOLE, NOT SIX.
 # NO VERB IN THE 32-ROW TABLE WRITES ANY `Person` INTERIOR FIELD. That is tier-0 `H-62`, and it
@@ -186,6 +187,14 @@ rows:
     # ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): this row was
     # `field: "convictions"` / `emits: "\`conviction.moved\`"`. No producer exists for either
     # name (grep-confirmed), so this is a pure rename, not a behaviour change.
+  - kind:    "Person"
+    field:   "conviction"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "IN-08 H10 (`12b`'s carrier; ED-IN-0251 R1/R2): `{affiliation: intensity}` over `affiliation_roster`, filled at world build from the cast; moved only by argument and consequence, never by evidence (§9.3), on `(Person, pursuits)`'s precedent"
+    emits:   "`conviction.moved`"
+    unproduced: "H-62: no act moves a religious affiliation yet; the planned first writer is the crisis fold at scar threshold 3 (IN-08 `12e` H13, G-Q6 as the affiliation draft recommends), which rewrites the vector"
   - kind:    "Person"
     field:   "exists"
     steps:   [MAT, RES, CEN]

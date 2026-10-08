@@ -87,50 +87,67 @@ def _section(reg, name):
     return out
 
 
-def _pursuit_roster(reg):
-    """The fifteen pursuits, from the registry. The SOLE machine-readable statement of the roster.
+def _named_roster(reg, key, missing_why):
+    """`(block, names)` for a registry block that enumerates a closed set. THE ONE VALIDATION of a
+    named roster: the names exist, the declared count agrees with them, and none repeats. The three
+    roster blocks below share it, so a fourth check is made once (`CLAUDE.md` §8).
 
-    Validated here rather than trusted: the count is declared alongside the names and they must
-    agree, because a roster that silently loses a name is exactly how the two subsystem copies
-    drifted apart in the first place.
-    """
-    block = reg.get('pursuit_roster') or {}
+    Validated here rather than trusted: a roster that silently loses a name is exactly how the two
+    subsystem copies of the conviction roster drifted apart (9-vs-8-vs-13) in the first place."""
+    block = reg.get(key) or {}
     names = [n for n in (block.get('names') or []) if isinstance(n, str)]
     if not names:
-        raise SystemExit('descriptor_registry.yaml: pursuit_roster.names is missing or empty. '
-                         'It is the single owner of the pursuit roster; two subsystems read it.')
+        raise SystemExit(f'descriptor_registry.yaml: {key}.names is missing or empty. {missing_why}')
     declared = block.get('count')
     if declared is not None and int(declared) != len(names):
-        raise SystemExit(f'descriptor_registry.yaml: pursuit_roster declares count={declared} '
+        raise SystemExit(f'descriptor_registry.yaml: {key} declares count={declared} '
                          f'but lists {len(names)} names. A roster whose own count disagrees with '
                          f'itself is how the 9-vs-8-vs-13 split started.')
     if len(set(names)) != len(names):
-        raise SystemExit('descriptor_registry.yaml: pursuit_roster.names contains duplicates.')
+        raise SystemExit(f'descriptor_registry.yaml: {key}.names contains duplicates.')
+    return block, names
+
+
+def _pursuit_roster(reg):
+    """The fifteen pursuits, from the registry. The SOLE machine-readable statement of the roster."""
+    block, names = _named_roster(reg, 'pursuit_roster',
+                                 'It is the single owner of the pursuit roster; two subsystems read it.')
     return {'source': block.get('source'), 'count': len(names), 'names': names}
 
 
 def _axis_roster(reg):
     """The seven bipolar axes, from the registry. The SOLE machine-readable statement of the name set.
 
-    Validated exactly as `_pursuit_roster` is, and for the same reason one level up: this set is
-    what `engine/season/decision/choose.py` sums a candidate's score over and what every
+    Validated as `_pursuit_roster` is, and for the same reason one level up: this set is what
+    `engine/season/decision/choose.py` sums a candidate's score over and what every
     `pursuit_projection`/`alignment` column must name. Before 2026-09-14 two literals held it and
     nothing compared them, so the two could disagree in silence.
     """
-    block = reg.get('axis_roster') or {}
-    names = [n for n in (block.get('names') or []) if isinstance(n, str)]
-    if not names:
-        raise SystemExit('descriptor_registry.yaml: axis_roster.names is missing or empty. '
-                         'It is the single owner of the ethical-axis set; the Key substrate and '
-                         'the season engine both read it.')
-    declared = block.get('count')
-    if declared is not None and int(declared) != len(names):
-        raise SystemExit(f'descriptor_registry.yaml: axis_roster declares count={declared} '
-                         f'but lists {len(names)} names.')
-    if len(set(names)) != len(names):
-        raise SystemExit('descriptor_registry.yaml: axis_roster.names contains duplicates.')
+    block, names = _named_roster(reg, 'axis_roster',
+                                 'It is the single owner of the ethical-axis set; the season '
+                                 'engine reads it.')
     return {'source': block.get('source'), 'count': len(names),
             'scale': block.get('scale'), 'names': names}
+
+
+def _affiliation_roster(reg):
+    """The religious affiliations `Person.conviction` is a vector over (IN-08 H10; ED-IN-0251 R1/R2).
+
+    Validated as the two rosters above are, plus its INTENSITY SCALE: `scale:` must parse as a
+    closed `lo-hi` through `_bounds` (the one scale parser), because the season engine refuses an
+    intensity outside it and a missing or open ceiling would leave "full intensity" undefined. The
+    bounds are emitted beside the raw string so no reader re-parses it."""
+    block, names = _named_roster(reg, 'affiliation_roster',
+                                 'It is the single owner of the affiliations Person.conviction '
+                                 'is keyed on.')
+    lo, hi, _soft = _bounds(block.get('scale'))
+    if lo is None or hi is None or not (isinstance(lo, int) and isinstance(hi, int)) or lo >= hi:
+        raise SystemExit(f'descriptor_registry.yaml: affiliation_roster.scale {block.get("scale")!r} '
+                         f'is not a closed integer "lo-hi" with lo < hi. An intensity is a held '
+                         f'fixed-point int, and full intensity is the ceiling.')
+    return {'source': block.get('source'), 'count': len(names),
+            'scale': {'floor': lo, 'ceiling': hi},
+            'player_sees': block.get('player_sees'), 'names': names}
 
 
 def build():
@@ -179,6 +196,8 @@ def build():
         # conviction_axes` each held a literal and NOTHING compared them, while the roster's own
         # note claimed a refusal that did not exist.
         'axis_roster': _axis_roster(reg),
+        # THE AFFILIATION ROSTER (IN-08 H10): what `Person.conviction` is keyed on, with its scale.
+        'affiliation_roster': _affiliation_roster(reg),
         'settlement_stats': _section(reg, 'settlement_stats'),
         'practitioner_stats': _section(reg, 'practitioner_stats'),
         'territory_stats': _section(reg, 'territory_stats'),

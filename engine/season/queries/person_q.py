@@ -97,6 +97,25 @@ def violated_pursuits(p: Person, verb: str) -> tuple:
     return tuple(out)
 
 
+def confliction(p: Person) -> int:
+    """HOW FAR `p`'s RELIGIOUS AFFILIATIONS STRAIN AGAINST EACH OTHER -- IN-08 H10, `12b`'s derived
+    Query (ED-IN-0251 R1: *confliction is DERIVED from an `incompatible` relation and never stored*).
+
+    `Σ over the incompatible pairs {a, b} of min(conviction[a], conviction[b])`: a pair strains as
+    far as the WEAKER of its two holdings, so it is 0 unless both are held, and a person holding
+    both at full intensity is in confliction at the ceiling. [ASSUMPTION; Jordan to correct] No source
+    states the magnitude -- the draft gives only *"holding BOTH at high intensity"*; `min` is chosen
+    because it stays an int on the intensity's own 0-5 spine (the alternative the draft names, a
+    product of the two, leaves the scale). Composes on `data/affiliations.py::INCOMPATIBLE`, the one
+    loaded relation. Person-side, no World (AX-2).
+
+    UNWIRED: nothing reads it yet. Its caller is IN-08 6f (`score` dotting against the basis)."""
+    from ..data.affiliations import INCOMPATIBLE
+    held = p.conviction or {}
+    return sum(min(int(held.get(a, 0)), int(held.get(b, 0)))
+               for a, b in (tuple(pair) for pair in INCOMPATIBLE))
+
+
 # `ED-IN-0261`'s scar thresholds are 1 (destabilise), 2 (weight shifts, the others gain
 # proportionally) and 3+ (crisis, terminal). IN-08 H9 reads THRESHOLD 2 ONLY: threshold 1 has no
 # mechanism anywhere, and 3 is H13's (G-Q6). The count is the ruled threshold, not a swept value.
