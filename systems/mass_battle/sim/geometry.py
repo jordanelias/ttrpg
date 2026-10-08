@@ -295,7 +295,8 @@ def cells_to_orig_coords(atom, abs_cells):
 
 def support_engage_frac(atom, contact_abs_cells):
     """F-i: support-stack-adjusted engage_frac.
-    Cells behind the contact zone contribute weighted support.
+    Cells behind the contact zone contribute weighted support, up to the ranks the atom's weapon
+    reaches (config.support_weight, MB-07).
     [canonical: Jordan handoff §(1)]"""
     max_w = atom_max_width(atom.shape, atom.tier)
     if not SUPPORT_STACK_ENABLED:
@@ -317,7 +318,7 @@ def support_engage_frac(atom, contact_abs_cells):
         if orig_r <= front_r:
             continue
         depth = orig_r - front_r
-        w = SUPPORT_WEIGHTS.get(depth, SUPPORT_WEIGHT_FLOOR)
+        w = support_weight(depth, getattr(atom, 'troop_type', None))
         supporter_total += w
 
     effective_engaged = len(contact_orig) + supporter_total

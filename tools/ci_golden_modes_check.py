@@ -109,6 +109,10 @@ FIELD_PINS = {
     # not a mystery digest mismatch, the same reason every entry in this dict exists. See
     # bat.py's EXPECTED comment (same ED, same date) for which mode(s) this re-recorded.
     'MB_AMMO_ENABLED': '1', 'MB_VOLLEYS_START': '10', 'MB_VOLLEYS_RESUPPLY': '3',
+    # [MB-07, J-18 (A)] Support rank cap: shared non-gated pool code (core/exchange._pair_engaged_troops),
+    # digest-moving in all three modes when ON. Shipped OFF (see config.py at the flag); pinned at that
+    # default so an ambient '1' produces a named red, not a mystery mismatch.
+    'MB_SUPPORT_RANK_CAP': '0',
 }
 
 # [ED-MB-0053 / plan-v2 §4a, 2026-07-29] Renamed from ci_field_golden_check.py: this tool is the

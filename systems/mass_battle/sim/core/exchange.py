@@ -161,7 +161,8 @@ def pair_pool_contribution(atom, contact_abs_cells, base_pool):
     gauge-audit/README.md's own confirmation that per-cell type doesn't exist yet) in the cells
     ACTUALLY engaged with the other atom in THIS pair (`contact_abs_cells`, already pair-scoped by
     `find_contacts`), plus depth-weighted support from ranks behind the contact line (reusing the
-    same `SUPPORT_WEIGHTS`/`SUPPORT_WEIGHT_FLOOR` falloff `support_engage_frac` already uses).
+    same `config.support_weight` falloff `support_engage_frac` already uses, capped at the ranks the
+    atom's troop type's weapon reaches -- MB-07, `MB_SUPPORT_RANK_CAP`).
 
     This replaces a flat "divide the whole subunit's pool by how many simultaneous pairs it's in"
     approximation with an exact, troop-weighted split: a subunit fighting two enemies with an uneven
@@ -216,5 +217,5 @@ def _pair_engaged_troops(atom, contact_abs_cells):
             weighted_troops += troops
         elif SUPPORT_STACK_ENABLED and orig_r > front_r:
             depth = orig_r - front_r
-            weighted_troops += troops * SUPPORT_WEIGHTS.get(depth, SUPPORT_WEIGHT_FLOOR)
+            weighted_troops += troops * support_weight(depth, getattr(atom, 'troop_type', None))
     return weighted_troops

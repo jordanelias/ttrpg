@@ -3,18 +3,18 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 113,
-    "total": 268,
-    "uncited": 155,
+    "total": 270,
+    "uncited": 157,
     "of_which_assumption_grade": 3
   },
-  "count": 268,
+  "count": 270,
   "by_module": {
     "engine.dice_engine": 6,
     "engine.season": 11,
     "characters": 5,
     "combat": 12,
     "fieldwork": 15,
-    "mass_battle": 151,
+    "mass_battle": 153,
     "overview": 5,
     "social_contest": 31,
     "threadwork": 32
@@ -1340,6 +1340,17 @@
       "citation_grade": "source"
     },
     {
+      "key": "mass_battle.SUPPORT_RANKS_DEFAULT",
+      "name": "SUPPORT_RANKS_DEFAULT",
+      "value": 1,
+      "kind": "scalar",
+      "module": "mass_battle",
+      "file": "systems/mass_battle/sim/config.py",
+      "note": "unmapped type: non-pole melee, matching reach_for's REACH_MELEE_DEFAULT fallthrough",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
       "key": "mass_battle.SUPPORT_WEIGHTS",
       "name": "SUPPORT_WEIGHTS",
       "value": {
@@ -1428,6 +1439,30 @@
       "note": "mounted: ~half infantry density (a horse+rider occupies ~2x a man's ground). GROUNDED default, needs_jordan on the value.  # [canonical: P-DEC-3 mechanism; value calibration pending]",
       "citation": "P-DEC-3 mechanism; value calibration pending",
       "citation_grade": "source"
+    },
+    {
+      "key": "mass_battle.TROOP_TYPE_SUPPORT_RANKS",
+      "name": "TROOP_TYPE_SUPPORT_RANKS",
+      "value": {
+        "levy": 1,
+        "light_infantry": 1,
+        "infantry": 1,
+        "heavy_infantry": 2,
+        "cavalry": 2,
+        "knights_templar": 2,
+        "pike": 3,
+        "archers": 1,
+        "crossbow": 1,
+        "sling": 1,
+        "artillery": 1,
+        "mounted_archers": 1
+      },
+      "kind": "table",
+      "module": "mass_battle",
+      "file": "systems/mass_battle/sim/config.py",
+      "note": "[ASSUMPTION; medium; Jordan to correct] rank counts are the builder's derivation",
+      "citation": null,
+      "citation_grade": null
     },
     {
       "key": "mass_battle.UNIT_GRID_SIZE",
