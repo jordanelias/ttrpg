@@ -151,14 +151,6 @@ rows:
     by:      "DR-2 -- `establish` is an act. ⚠ RETIRED BY W2, RETURNED BY W3 WITH its producer. V2 named `establish` in THIS ROW while giving it no verb row, which is how the row came to look dead"
     emits:   "`remit.changed`"
   - kind:    "Person"
-    field:   "axis_count"
-    steps:   [RES]
-    class:   "ACTS"
-    social:  "true"
-    by:      "ONE ROW PER AXIS (V2 writes it `axis_count[axis]`). D6. L3 clause 1's counter. `axis` on D6's registry"
-    emits:   "`axis.incremented`"
-    unproduced: "H-62: an interior write is a consequence of an outcome and no verb writes one yet -- no trigger for the axis counter is specified anywhere (its axis registry is H-20)"
-  - kind:    "Person"
     field:   "body"
     steps:   [MAT, RES, ENC]
     class:   "MATTER/ACTS"
@@ -203,11 +195,15 @@ rows:
     emits:   "`person.died` · `person.individuated`"
   - kind:    "Person"
     field:   "scar"
-    steps:   [RES]
+    steps:   [RES, ENC]
     class:   "ACTS"
     social:  "true"
-    by:      "ONE ROW PER AXIS (V2 writes it `scar[axis]`). stated in chain — §54 item 21"
+    by:      "IN-08 H3 (`ED-IN-0261`'s scar model): `{pursuit: count}`, one count per OBSERVER per violated pursuit, written by the act's outcome through `loop/resolve.py::_scar_witnesses` (was V2's `scar[axis]` on the wounded person, §54 item 21)"
     emits:   "`scar.taken`"
+    # ⚠ `ENC` ADDED AT IN-08 H3 ON M4's PRECEDENT for `(Person, stance)` above: `march`'s outcome
+    # folds at ENCOUNTER, which shares RESOLVE's write class (`data/matrix.py`), and the scar is
+    # written by every fold whose outcome moved state, so a lost field battle's observers are
+    # scarred where it is decided. `class:` is unchanged.
   - kind:    "Person"
     field:   "stance"
     steps:   [RES, ENC]
@@ -385,6 +381,17 @@ rows:
 retired:
   - "Person.capability"
   - "Person.marks"
+  - name: "Person.axis_count"
+    reason: >-
+      RETIRED AT IN-08 H3 (`workplans/valoria_master_workplan_v9_part5.md`: *"Retire the `(Person,
+      axis_count)` row or give it the field -- never both"*). The row never had a carrier field,
+      producer or reader (`unproduced:` H-62), and the count it named -- L3 clause 1's per-AXIS
+      counter -- is the per-element COUNT `(Person, scar)` now carries per pursuit (`ED-IN-0261`'s
+      scar model: *"key per-element ... type COUNT"*). A per-axis count beside it would be a second
+      home for the same tally, projected.
+    needs: >-
+      nothing -- a per-axis reading of the scar is `data/pursuits.py::to_axes` over `Person.scar`
+      when a reader wants one; do not re-add this row or a carrier field for it
   - name: "Rung.stake"
     reason: >-
       ROW RETIRED BY W2 (no verb produces its `emits:` kind), AND ITS CARRIER FIELD DELETED

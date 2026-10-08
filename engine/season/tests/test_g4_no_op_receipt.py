@@ -21,7 +21,7 @@ What each block proves, and the control that stops it passing vacuously:
   4. A NO-OP PUTS BACK THE TENURES ITS CLOSURE TOUCHED, even lawful ones, so a refusal Event never
      stands beside an edge the refused write opened.
   5. PER-EFFECT DECISIONS, EACH WITH ITS CONTROL: `fight` (renamed from `kill / wound`, plan
-     `FIGHT-RENAME`) judges body and existence and not the scar; a second identical `convene` in
+     `FIGHT-RENAME`) judges body and existence, and a refused wound scars nobody (IN-08 H3); a second identical `convene` in
      one season is refused and a reschedule is not; a
      `transfer` from a rung to itself is refused and a real one is made.
 
@@ -176,29 +176,38 @@ def _kill(w, aid, res):
                                         payload={"subject": "p_mid"}), res)]
 
 
-def test_g4_kill_is_judged_on_body_and_existence_and_the_scar_is_a_rider():
+def test_g4_kill_is_judged_on_body_and_existence_and_a_refused_wound_scars_nobody():
     """`_eff_kill`'s subject is the victim read as presence and `body` -- not the whole Person.
 
       * A `Wounded` scene that took NO health leaves `body` where it was: refused, not
         `body.changed` (the old contract published the success over an unchanged body).
-      * The same, at `scar_step = 10`: STILL refused, and the scar IS written -- the rider. Judging
-        the whole Person would turn this into `body.changed` and make `H-123`'s refusing control
-        arm depend on `H-128`'s sweep, which is the coupling `_eff_kill` moved the scar to avoid.
-      * CONTROL: a scene that took half the health moves `body` and is `body.changed`."""
-    w = P.tiny_world()
+      * RE-RECORDED AT IN-08 H3. This arm swept `scar_step = 10` and asserted the scar WAS written
+        on the refused wound -- a rider inside `_eff_kill`. H3 retires `_scar` and `scar_step`: the
+        fold scars the act's OBSERVERS only after an outcome that MOVED state, so a refused wound
+        now scars nobody. Asserted over every person, so a scar landing on anyone fails it.
+      * CONTROL: a scene that took half the health moves `body` and is `body.changed` -- and DOES
+        scar an observer, so the no-scar arm above can fail (`tiny_world`'s persons hold no
+        pursuits, so every person is given all fifteen; without that both arms read empty)."""
+    from ..data.rosters import PURSUITS
+
+    def _with_pursuits():
+        w = P.tiny_world()
+        for p in w.persons.values():
+            p.pursuits = {e: 0.5 for e in PURSUITS}
+        return w
+
+    w = _with_pursuits()
     body = w.persons["p_mid"].body
     assert _kill(w, "g4_k0", _wounded("p_mid", 10, 10)) == ["kill.refused"]
     assert w.persons["p_mid"].body == body
+    scarred = {pid: p.scar for pid, p in w.persons.items() if p.scar}
+    assert not scarred, f"a refused wound scarred {scarred}"
 
-    w = P.tiny_world()
-    w.fixtures = w.fixtures.sweep("scar_step", 10)
-    assert _kill(w, "g4_k1", _wounded("p_mid", 10, 10)) == ["kill.refused"]
-    assert w.persons["p_mid"].scar, "the scar rider was not written on a refused wound"
-    assert w.persons["p_mid"].body == body
-
-    w = P.tiny_world()
+    w = _with_pursuits()
     assert _kill(w, "g4_k2", _wounded("p_mid", 10, 5)) == ["body.changed"]
     assert w.persons["p_mid"].body == body // 2
+    assert any(p.scar for p in w.persons.values()), (
+        "a wound that moved `body` scarred nobody, so the refused arm's empty scar proves nothing")
 
 
 def test_g4_a_second_identical_convening_is_refused_and_a_reschedule_is_not():

@@ -997,35 +997,16 @@ def test_lb6d_the_column_resolves_on_candidates_the_engine_actually_forms():
 # one interior row whose TRIGGER the chain actually specifies, so it is the one that can be built
 # without inventing the condition.
 #
-# THE SHIPPED ARM IS `scar_step = 0` AND IS PINNED BELOW. Every other test here sets the fixture
-# explicitly, so the behaviour is EXERCISED rather than merely present (`CLAUDE.md` §0.2).
+# ⚠ RE-SHAPED AT IN-08 H3 (`ED-IN-0261`'s scar model). LB-6e built the scar as a signed float per
+# AXIS on the wounded person (`_scar`, magnitude `scar_step`), and three tests here pinned that
+# mechanism: `..._a_wound_scars_and_the_axes_come_from_the_alignment_table` (keys == the axes
+# `fight` engages), `..._the_zero_arm_writes_no_scar_and_reports_none` (`scar_step = 0` inert) and
+# `..._a_verb_that_engages_no_axis_scars_nothing` (called `_scar` directly). H3 RETIRES `_scar` and
+# `scar_step`, so all three are RETIRED with their subject, not re-pointed: the scar is now
+# `{pursuit: count}` on the act's OBSERVERS, and its falsifiers -- including the no-celled-axis
+# control -- are `test_h3_scar_by_observation.py`. The field test below survives: the row still
+# has its carrier.
 # =================================================================================================
-
-
-def _scar_bands(scar_step, ids=range(24)):
-    """Fold `kill / wound` through the REAL road at a given `scar_step`, and report each band's
-    scar. Deliberately `_we_bands`' shape (`test_season_shape.py`) rather than a new harness: the
-    act id is the only thing that varies, because `combat_seam` seeds its RNG from it, so nothing
-    about the WORLD is tuned to reach a band."""
-    from ..data.matrix import Step as _Step
-    from ..state.carriers import Act as _Act
-
-    seen = {}
-    for i in ids:
-        w = P.tiny_world()
-        w.step = _Step.RESOLVE
-        w.fixtures = w.fixtures.sweep("scar_step", scar_step)
-        d = SeasonDriver(w)
-        act = _Act(id=f"scar{i}", actor="p_low", verb="fight",
-                   payload={"subject": "p_mid"})
-        evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], w.fixtures.get("contest_max_depth"))
-        deg = evs[0].degree if evs else None
-        alive = "p_mid" in w.persons
-        seen.setdefault(deg, dict(
-            alive=alive,
-            scar=(dict(w.persons["p_mid"].scar) if alive else None),
-            kinds=sorted(e.kind for e in evs)))
-    return seen
 
 
 def test_lb6e_the_matrix_row_finally_has_a_field():
@@ -1037,116 +1018,9 @@ def test_lb6e_the_matrix_row_finally_has_a_field():
     p = Person(id="p1")
     assert hasattr(p, "scar"), "`(Person, scar)` still names a field the carrier does not have"
     assert p.scar == {}, (
-        "`scar` ships pre-seeded. It is keyed on the AXIS ROSTER, and `STR-2` rules those members "
-        "change -- seeding them here would put a copy of a roster about to be replaced into a "
-        "carrier (§0.05 clause 3)")
-
-
-def test_lb6e_a_wound_scars_and_the_axes_come_from_the_alignment_table():
-    """**LB-6e**, and it observes BOTH halves: that a scar is WRITTEN, and that its KEYS are the
-    ones `ALIGNMENT` engages -- not a second table, and not a literal.
-
-    §8: `ALIGNMENT` already owns *which axes a verb engages*, and `choose` scores against it. A
-    second outcome->axis table would be a second owner of that claim, free to disagree with the
-    one the decision layer reads."""
-    from ..data.rosters import PURSUIT_AXES
-    from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL
-    from ..seam.wrappers import combat as C
-    if C.engine() is None:                      # a NAMED gap, never a silent skip
-        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
-
-    engaged = {ax for ax in PURSUIT_AXES
-               if float(ALIGNMENT.get(ax, {}).get("fight", ALIGNMENT_DEFAULT_CELL))}
-    if not engaged:
-        pytest.skip("`fight` engages no axis in ALIGNMENT, so this item has nothing to key "
-                    "a scar on -- a data state, reported rather than asserted around")
-
-    seen = _scar_bands(scar_step=10)
-    wounded = [v for k, v in seen.items() if k == "Wounded"]
-    assert wounded, (
-        f"the sweep reached bands {sorted(str(k) for k in seen)} and never `Wounded`, so this "
-        "test asserted nothing about a scar")
-    got = wounded[0]["scar"]
-    assert got, "a wound at `scar_step=10` left no scar at all"
-    assert set(got) <= set(PURSUIT_AXES), (
-        f"scar is keyed on {sorted(set(got) - set(PURSUIT_AXES))}, which the axis roster does "
-        "not carry -- the keys came from somewhere other than the roster")
-    assert set(got) == engaged, (
-        f"scar keys {sorted(got)} != the axes ALIGNMENT engages for this verb {sorted(engaged)}; "
-        "a second owner of *which axes a verb engages* has appeared")
-    # ⚠ RE-PINNED AT IN-08's CELLS COMMIT: this read `all(v > 0)`, true only while `fight`'s one
-    # cell was the old `sacred +0.3`. The scar is SIGNED by design (`_scar`: *"the magnitude keeps
-    # the cell's sign and `scar` is a signed accumulator"*), and on the seven axes `fight` carries
-    # `grandiose_humble -0.3` beside `deontological_instrumental +0.3`. So the property is that each
-    # scar has its CELL's sign -- which `all(v > 0)` was the one-cell special case of.
-    assert all(v * float(align("fight", ax)) > 0 for ax, v in got.items()), got   # the cell's sign, non-zero
-
-
-def test_lb6e_the_zero_arm_writes_no_scar_and_reports_none():
-    """THE SHIPPED ARM, PINNED. At `scar_step = 0` `_scar` returns BEFORE touching the carrier, so
-    no key is added. A zero-valued cell would still be a key, which is the difference between an
-    arm that is inert and one that merely looks it.
-
-    ⚠ THIS PINS THE BEHAVIOUR, NOT THE WHOLE TREE, AND THE NARROWER NAME IS A CORRECTION. It was
-    called `..._is_the_pre_item_tree_exactly` and that was FALSE: `World.content_hash` digests a
-    dataclass as `repr(obj)`, so `Person` gaining a field moves every person's digest whatever its
-    value (`ff5c5765f4d2` -> `ab77c30d273b`, measured against a clean `origin/main` worktree).
-    `runs/TRACE.txt` IS byte-identical -- no behaviour changes -- and that is the claim this test
-    can actually make. `H-128` carries the full accounting of the two-line re-record."""
-    from ..seam.wrappers import combat as C
-    if C.engine() is None:
-        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
-
-    seen = _scar_bands(scar_step=0)
-    assert seen, "the sweep folded nothing; this pin asserts nothing"
-    scarred = {k: v["scar"] for k, v in seen.items() if v["alive"] and v["scar"]}
-    assert not scarred, (
-        f"the control arm wrote a scar: {scarred}. `scar_step=0` must reproduce the pre-item tree "
-        "exactly, or this item moved a golden it claims not to have")
-    # ⚠ THE ASSERTION THAT STOOD HERE COULD NOT FAIL, AND SAYING WHY IS THE REPAIR. It read
-    # `assert "scar.taken" not in v["kinds"]` -- but `scar.taken` is in NO band's `emits:` in
-    # `verb_table.yaml`, so `emits_at` can never return it, for any band, any fixture value and
-    # any future edit short of adding the column. That is §0.1 pt 2 exactly: an absent test
-    # wearing a present one's clothes, sitting inside this item's own control. What is actually
-    # worth pinning is that the table has not GROWN the kind while the magnitude is still 0 --
-    # which is a claim about the data, so it is asserted against the data.
-    from ..data.verbs import VERB_TABLE
-    row = VERB_TABLE["fight"]
-    declared = {k for band in row.emits_by_degree for k in row.emits_by_degree[band]}
-    assert "scar.taken" not in declared, (
-        "`scar.taken` has been added to this verb's `emits:` while `scar_step` still ships at 0, "
-        "so every wound now reports a scar that was not written -- the `ID-9` defect the row's "
-        f"own note refuses. Declared kinds: {sorted(declared)}")
-
-
-def test_lb6e_a_verb_that_engages_no_axis_scars_nothing():
-    """THE CONTROL ON THE MECHANISM, not on the magnitude (§0.1 pt 4). `_scar` keys off
-    `ALIGNMENT`, so a verb with no engaged axis must leave no scar even at a large step. Without
-    this, `_scar` could be scarring every axis unconditionally and the test above -- which only
-    checks the keys it DOES find -- would not see it."""
-    from ..data.rosters import PURSUIT_AXES
-    from ..loop.effects import _scar
-    from ..state.carriers import Person
-
-    w = P.tiny_world()
-    w.fixtures = w.fixtures.sweep("scar_step", 10)
-    p = Person(id="p_test")
-    _scar(w, p, "no_such_verb_engages_no_axis")
-    assert p.scar == {}, (
-        f"a verb engaging no axis still scarred {p.scar} -- `_scar` is not reading ALIGNMENT, it "
-        "is writing every axis unconditionally")
-    # AND THE POSITIVE ARM, so this is not a test that passes because `_scar` never writes.
-    engaged = [ax for ax in PURSUIT_AXES if ALIGNMENT_OF("fight", ax)]
-    if engaged:
-        q = Person(id="p_test2")
-        _scar(w, q, "fight")
-        assert q.scar, "`_scar` wrote nothing for a verb that DOES engage an axis; the negative "\
-                       "arm above proves nothing on its own"
-
-
-def ALIGNMENT_OF(verb, axis):
-    from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL
-    return float(ALIGNMENT.get(axis, {}).get(verb, ALIGNMENT_DEFAULT_CELL))
+        "`scar` ships pre-seeded. It is keyed on the PURSUIT ROSTER as a count, and a pursuit "
+        "nobody has been scarred on is absent rather than 0 -- seeding the keys here would put a "
+        "copy of the roster into a carrier (§0.05 clause 3)")
 
 
 # =================================================================================================

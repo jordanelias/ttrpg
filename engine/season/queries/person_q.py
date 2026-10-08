@@ -69,6 +69,34 @@ def regard(p: Person, referent: str) -> float:
     return stance_toward(p, referent)
 
 
+def violated_pursuits(p: Person, verb: str) -> tuple:
+    """WHICH OF `p`'s OWN PURSUITS AN ACT OF `verb` VIOLATES -- the per-element half of the scar
+    (IN-08 H3, `ED-IN-0261`'s scar model: a COUNT per element, accrued by WITNESSING).
+
+    A pursuit `e` that `p` holds (weight > 0) is violated when `Σ_axis projection[e][axis] ·
+    alignment(verb, axis) < 0` -- the verb leans against where the pursuit points. ⚠ THAT SIGN TEST
+    IS A CANDIDATE READING RECORDED FOR REVIEW, NOT A RULING (`workplans/valoria_master_workplan_v9_part5.md`,
+    IN-08 H3): no source states the violation predicate; this is the plainest one the two owned
+    tables admit. It composes on the two owners and copies neither: `data/pursuits.py::to_axes`
+    (pursuit -> axes, one owner) and `data/verbs.py::align` (the one binding the alignment sweep
+    rebinds). A verb with no celled axis violates nothing, by construction. Person-side, no World
+    (AX-2). Sorted, so a caller writing counts in this order writes a canonical dict."""
+    from ..data.pursuits import to_axes
+    from ..data.rosters import PURSUIT_AXES
+    from ..data.verbs import align
+    lean = {ax: align(verb, ax) for ax in PURSUIT_AXES}
+    if not any(lean.values()):
+        return ()
+    out = []
+    for e in sorted(p.pursuits or {}):
+        if not float(p.pursuits[e]) > 0:
+            continue
+        proj = to_axes({e: 1.0})
+        if sum(proj[ax] * lean[ax] for ax in PURSUIT_AXES) < 0:
+            out.append(e)
+    return tuple(out)
+
+
 # ---------------------------------------------------------------------------
 # `LedgerReader` -- MOVED HERE FROM `queries/readers.py` AT UNIT L3 (ED-IN-0206). It asks ONE
 # PERSON'S OWN CLAIMS and nothing else: it takes neither a `World` nor even a `Person`, only the

@@ -32,6 +32,8 @@ from ..loop.effects import EFFECTS
 from ..loop.predicates import REQUIRES_PREDICATES
 from ..loop.sides import sides_of
 from .. import manifest
+from ..epistemic import observers_for
+from ..queries.person_q import violated_pursuits
 from ..queries.world_q import WorldReader, ceiling, occasioned_by
 from ..seam import ContestError, Resolution, contest, degree_of
 from ..state.carriers import Act, Event, StateChange
@@ -484,7 +486,72 @@ def _fold(self, w: "World", token: Token, a: Act,
     # occasion is on the Scene the act belongs to; `occasioned_by` turns it into the
     # antecedent Event ids. Adding them here rather than at the twelve `ev(...)` call sites
     # is `§8`: the rule lives once, on the one path every act-emission takes.
-    return ev(kinds, [a.id] + self._occasion_ids(w, a), list(a.changes) + changed)
+    out = ev(kinds, [a.id] + self._occasion_ids(w, a), list(a.changes) + changed)
+    # IN-08 H3: THE SCAR, AFTER THE ACT'S EVENTS ARE FORMED, BY THE OUTCOME. `changed` is the
+    # gate's own receipts for this act's writes, so it is empty on every path that is not a deed:
+    # each refusal above returned early, and a band that declares no writes (`tell`'s `Failure`,
+    # `fight`'s `Untouched`, `march`'s `Declared`) moved nothing. The scar is earned by an outcome
+    # that MOVED, as a success kind is (G4's `earned`), and never by a band's name.
+    if changed:
+        _scar_witnesses(w, token, a, out)
+    return out
+
+
+def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
+    """IN-08 H3 -- `(Person, scar)` as `{pursuit: count}`: ONE COUNT PER OBSERVER PER VIOLATED
+    PURSUIT, written AT RESOLVE BY THE ACT (`ED-IN-0261`'s scar model).
+
+    ⚠ WHY HERE AND NOT AT WITNESS. L4 constrains WHO writes a `social: true` row -- only an act --
+    and S9.3 forbids WITNESS to touch a belief (`state/world.py`'s `MATRIX_REFUSAL_LAW` refuses
+    `(Person, scar)` at WITNESS). So the ACT writes it, here, through the gate, with the driver's
+    ACTS token. WHO saw it is not private to WITNESS: `epistemic.observers_for` is the one owner of
+    perception and is called here exactly as WITNESS calls it (`fan_out_mode`, everyone alive), so
+    the scar follows the same channels the deposit does.
+
+    ⚠ DECLARED DIVERGENCE (`ED-IN-0261`): RESOLVE's call can differ from WITNESS's on `co_located`,
+    since a later act can move someone. The presence cache is a barrier cache, so it is DISCARDED
+    before the call -- the scar reflects who stood there when THIS act happened, not when the
+    first act of the round was folded. (`presence` is the one barrier-cache key in the tree, and
+    nothing else at RESOLVE reads it.)
+
+    ⚠ THE VIOLATION PREDICATE IS A CANDIDATE READING, NOT A RULING: `person_q.violated_pursuits`
+    (a sign test of the pursuit's projection against the verb's alignment). WHETHER THE ACTOR
+    COUNTS is `scar_excludes_actor`, a swept `Fixtures` arm. Nothing is emitted: `scar.taken` is
+    declared on the row and no reader consumes it, and putting the receipts on the act's Event
+    would deposit claims about every scarred observer at WITNESS -- a propagation change H3 does
+    not license. Nothing reads the count yet (the crisis reader is H9)."""
+    everyone = list(w.persons)
+    if not events:
+        return
+    # Whose pursuits this verb violates is person-side and known before anyone is asked whether
+    # they saw it; when it is nobody (a verb with no celled axis, or no one holding a pursuit it
+    # leans against) the presence index is not rebuilt for nothing.
+    broken_of = {pid: violated_pursuits(w.persons[pid], a.verb) for pid in everyone}
+    if not any(broken_of.values()):
+        return
+    mode = w.fixtures.get("fan_out_mode")
+    exclude_actor = bool(w.fixtures.get("scar_excludes_actor"))
+    w.discard_caches()
+    seen = {pid for e in events for pid, _ch in observers_for(w, e, mode, everyone)}
+    hits = [(pid, broken_of[pid]) for pid in everyone   # `everyone`'s order, as WITNESS's
+            if broken_of[pid] and pid in seen and not (exclude_actor and pid == a.actor)]
+    if not hits:
+        return
+
+    def perform() -> None:
+        for pid, broken in hits:
+            p = w.persons[pid]
+            counts = dict(p.scar)
+            for e in broken:
+                counts[e] = int(counts.get(e, 0)) + 1
+            # SORTED ON WRITE: `repr` of a dict field is insertion-ordered and reaches
+            # `World.content_hash()`; the retired `_scar` found this the hard way.
+            p.scar = {k: counts[k] for k in sorted(counts)}
+
+    w.write("scar", token, None, record_kind="Person", fieldname="scar", driver="Act",
+            actor=a.actor, via=a.via,
+            change=Change(tuple(Subject.entity("persons", pid, fields=("scar",))
+                                for pid, _b in hits), perform))
 
 
 def _contest(self, w: "World", token: Token, a: Act, contests: list,

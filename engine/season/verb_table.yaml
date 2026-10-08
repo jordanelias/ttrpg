@@ -513,10 +513,14 @@ verbs:
     # bands below are the ones the scene can distinguish.
     # ⚠ `Person.scar` ADDED TO BOTH SURVIVING-OUTCOME BANDS 2026-09-18 (`ED-IN-0249`, §54 item 21
     # — *"written at RESOLVE in the ACTS class BY THE OUTCOME THAT NAMES THE PERSON"*). It is on
-    # `Felled` as well as `Wounded` because the write is declared by the BAND, and `_eff_kill`
-    # runs `_scar` before the person is removed; declaring it only on `Wounded` would make the
-    # table say a felling cannot scar, which is a claim about the moral layer rather than about
-    # this item. At the shipped `scar_step = 0` neither branch writes anything.
+    # `Felled` as well as `Wounded` because the write is declared by the BAND; declaring it only on
+    # `Wounded` would make the table say a felling cannot scar, which is a claim about the moral
+    # layer rather than about this item. ⚠ RE-SHAPED AT IN-08 H3: `_eff_kill`'s `_scar` (a float on
+    # the wounded person, `scar_step`) is RETIRED; the FOLD now scars the act's OBSERVERS after ANY
+    # outcome that moved state (`loop/resolve.py::_scar_witnesses`), so these two cells are no
+    # longer the only road to the row -- every verb whose outcome writes reaches it. They stay as
+    # the row's declared producer (`data/verbs.py`'s invariant 2 refuses a RES row no verb names
+    # without an `unproduced:` cell, and this row IS produced).
     # ⚠ AND `scar.taken` IS DELIBERATELY NOT ADDED TO `emits:` BELOW. The matrix names that kind
     # for the row, but an `emits:` cell fires PER BAND from the table, not per write, so adding it
     # would report a scar on every wound including at the control arm where none is taken — the

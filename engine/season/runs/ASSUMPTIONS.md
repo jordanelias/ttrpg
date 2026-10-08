@@ -60,7 +60,7 @@ exercised by this run.**
 | `field_morale_weight` | `1` | no — a harness fixture |
 | `field_grudge_weight` | `1` | no — a harness fixture |
 | `field_walls_dr` | `None` | no — a harness fixture |
-| `scar_step` | `0` | no — a harness fixture |
+| `scar_excludes_actor` | `False` | no — a harness fixture |
 | `refusal_axis` | `None` | no — a harness fixture |
 | `speech_kind_terminal_fault` | `removal` | no — a harness fixture |
 | `denial_detail_outperforms` | `equal` | no — a harness fixture |

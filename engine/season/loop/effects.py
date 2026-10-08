@@ -96,5 +96,5 @@ from . import effects_combat
 # Re-exported because reached BY IDENTITY, off THIS module's own dotted path, from outside this
 # file (see the docstring above for the call sites) -- not a re-implementation: each name below
 # is the same object its owning domain file defines.
-from .effects_combat import _eff_kill, _scar
+from .effects_combat import _eff_kill
 from .effects_economy import _renewals
