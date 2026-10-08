@@ -262,7 +262,15 @@ def test_15d_falsifier_the_realm_holds_hearsay_no_telling_minted(monkeypatch):
     # SEED 5 IS A CHOICE, NOT THE LOWEST SEED STRONG ENOUGH: seed 4's one deposit already passes the
     # `live_channel > 0` guard below; 5 is the lowest seed with more than one, so the control's `==`
     # compares a count that is neither 0 nor 1. The assertions below are unmoved.
-    SEED = 5
+    # ⚠ RE-PINNED SEED 5 -> 4 AT IN-08's CELLS COMMIT (B-G), BY THE SAME RULE: at seed 5 the first
+    # season stopped depositing any chained told claim (6 before). The chooser is re-scored on the
+    # 15x7 basis, the cast's pursuits migrated and `challenge`/`accept` form, so the realm's act mix
+    # moved. The same quantity, the same script, on the tree after:
+    #   seed                0   1   2   3   4   5   6   7    8   9
+    #   chained, after      0   0   0   0   4   0   0   0    7   0
+    # Seed 4 is the lowest seed with more than one; the mechanism by which the count moved per seed
+    # is NOT isolated, as before. The assertions below are unmoved.
+    SEED = 4
 
     def told_by_count() -> tuple:
         w = populated.build_realm(SEED)

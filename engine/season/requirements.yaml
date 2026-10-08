@@ -1001,6 +1001,25 @@ rows:
       NPC-083, the only case that is, depends on the institution-as-person seat above.
       `corpus_run` stdout md5 d714ba5c -> 6a65a264 (declared; the
       `DISTINCT EXECUTED SETS 120` and `17 of 44` lines did not move). Stays `partial`.
+      ⚠⚠ **IN-08's CELLS COMMIT (B-G) -- THE BASIS IS FIFTEEN PURSUITS OVER SEVEN BIPOLAR AXES, AND
+      HOW THIS ROW READS ITS RANKING LINE CHANGES WITH IT (G-1, [medium; Jordan to correct]).** The
+      15x7 `pursuit_projection` and the alignment re-cell over every table verb (`rosters.yaml:
+      tables`, from the folded drafts, RS-1) replace the 13x4 above; `tell`, `thread_read` and
+      `restore` are the declared `uncelled:` set. READING (G-1): the RANKING line counts only
+      candidates whose verb has at least one celled axis and prints numerator and denominator,
+      because an uncelled verb scores 0.0 for every person by construction and can neither
+      discriminate nor be a tie the ranking failed to break. MEASURED off this row's own `measure:`
+      at seed 0: `RANKING DISCRIMINATION   19..27 (numerator) of 27..27 (denominator: candidates
+      whose verb has >= 1 celled axis; 32..32 candidates in all)`, against `15..21 of 30` on the
+      base commit `13715804` (all candidates counted there). ⚠ `ED-IN-0214` IS SUPERSEDED (v9 §A,
+      the 2026-10-06 fold): the re-centring question the paragraph above calls Jordan's was about the
+      13x4, which no longer exists; on the 15x7 `conviction_spread` reads 4 of 15 within 60 degrees of
+      the mean and 3.81 of 7 effective axes (from 9 of 13 and 1.85 of 4). THE DOCTRINE PAIR, MEASURED
+      AND RECORDED, NOT GATED (RS-3): Jordan's devout-Solmund builder against the Einhir dismantler at
+      the draft's weights (`doctrine` .45) project through the live rows to cos +0.229 -- inside the
+      60-degree bar; the `doctrine` row is PROVISIONAL. Distinct executed sets 118 -> 135. Stays
+      `partial` for the reasons above that this did not touch (the corpus cast is still one shared
+      OUGHT per world).
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' line"
     blocks: [IN-38, IN-08, IN-18, IN-12]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W27: `17` landed (build_at seats a `cast:`), IN-38 remains; H-62 re-scoped to IN-08, IN-18, IN-12 step 9
@@ -1101,6 +1120,14 @@ rows:
       still breaks ties (built, `U4`), and inclination still does not (the alignment table is
       still sparse) — nothing in U7-U10's own work touched `choose.py`, `choice_temperature` or the
       alignment table.
+      ⚠⚠ **IN-08's CELLS COMMIT (B-G) -- THE RANKING LINE IS READ OVER CELLED CANDIDATES (G-1,
+      [medium; Jordan to correct]).** R-06's note states the reading and the figure: the tie this
+      row asks inclination to break is counted only among candidates whose verb has at least one
+      celled axis on the re-celled 15x7 basis, because an `uncelled:` verb (`tell` by design) or an
+      all-`null` one cannot be broken by inclination at all, and counting it would report a tie no
+      person could have broken. Off this row's `measure:` at seed 0: 19..27 of 27 celled candidates
+      carry a nonzero pursuit score (32 in all); the remainder still tie and the DRAW breaks them.
+      `choose.py` and `choice_temperature` are untouched; what moved is the table. Stays `partial`.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' + tie ordering"
     blocks: [SC-01, IN-08, IN-18, IN-12]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W26 is SC-01's; H-62 re-scoped to IN-08, IN-18, IN-12 step 9

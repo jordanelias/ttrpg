@@ -4,8 +4,9 @@
 characters"* and carries 46 rows. MEASURED 2026-09-13: its ids are an EXACT 1:1 MATCH with
 `run_cases.load_cases("NPC")` — 46 for 46, zero symmetric difference — and every row carries an
 authored `faction` and `role`, 31 a `territory`, 30 `goals`, 29 `stats`, 32 `ts`, and 7 a `title`.
-All 81 weighted conviction entries across the 46 name one of the canonical thirteen; not one is
-invalid.
+Every weighted `conviction:` entry across the 46 names one of the canonical fifteen pursuits since
+IN-08's cells commit migrated them (`references/descriptor_registry.yaml: pursuit_roster`); not one
+is invalid, and `pursuits_of` raises on the first that would be.
 
 ⚠ NOTHING THAT EXECUTES HAD EVER OPENED IT. The only two Python files naming it are a test that
 checks it PARSES (`tests/valoria/test_references_yaml_parse.py`, a regression guard from when it
@@ -180,7 +181,7 @@ def resolve_faction(name: Optional[str]) -> Optional[str]:
 
 
 def pursuits_of(r: dict) -> dict:
-    """`{conviction: weight}` from the row, every name checked against the canonical thirteen.
+    """`{pursuit: weight}` from the row, every name checked against the canonical fifteen.
 
     ⚠ IT VALIDATES THROUGH THE ONE OWNER AND DOES NOT RE-DO THE MEMBERSHIP TEST.
     `data.pursuits.pursuit` already is that check, delegating in turn to

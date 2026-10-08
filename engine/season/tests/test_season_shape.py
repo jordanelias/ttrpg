@@ -8395,11 +8395,22 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # crowding that displaces `release`, above — pushes the earliest `tell` in every one-season
     # case that used to reach it back out to season 2. `max(lo)` is UNCHANGED at 2 throughout this
     # whole sweep, so the assertion below is not touched.
-    assert min(hi) == 2, (
-        f"the shortest case reaching `tell` runs {min(hi)} seasons. A 1 means the INTRA-SEASON "
-        "channel `U2` built (a claim deposited by an earlier ROUND of the SAME season) is once "
-        "again the binding constraint rather than `7a`'s scene-budget crowding — re-derive which "
-        "one is current before touching this line, do not just restore 1")
+    # ⚠⚠ `min(hi)` MOVES 2 -> 1 AT IN-08's CELLS COMMIT (B-G), AND IT WAS RE-DERIVED, NOT RESTORED,
+    # AS THE MESSAGE BELOW DEMANDS. A ONE-SEASON case has no previous season's WITNESS, so a `tell`
+    # there can only read a claim an EARLIER ROUND of the same season deposited -- `U2`'s
+    # intra-season channel, which therefore IS the binding constraint again. What moved is `7a`'s
+    # crowding: the chooser is re-scored on the 15x7 basis and `challenge`/`accept` join the slate,
+    # and `commit` no longer pushes `tell` out of every one-season case -- 4 of the 8 one-season
+    # live cases reach it (ARC-26, ARC-42, ARC-43, SCN-02). `hi` reads {1,2,3,4,5,6}; `lo` reads
+    # {1,2,3}, so `max(lo) > 1` (below) still holds and reaching `tell` is still not a function of
+    # length alone.
+    # [GROUNDED: measured at IN-08's cells commit through `corpus_run.run_case` over the 143 live worlds, seed 0 -- one-season cases 8, reaching `tell` 4; hi {1..6}, lo {1, 2, 3}]
+    assert min(hi) == 1, (
+        f"the shortest case reaching `tell` runs {min(hi)} seasons. 1 is the INTRA-SEASON channel "
+        "`U2` built (a claim deposited by an earlier ROUND of the SAME season) being the binding "
+        "constraint, as measured at IN-08's cells commit; a 2 means scene-budget crowding (`7a`'s) "
+        "pushes every one-season `tell` out again -- re-derive which one is current before "
+        "touching this line")
     assert lo and max(lo) > 1, (
         f"cases WITHOUT `tell` run {sorted(lo)} seasons. If every case that misses `tell` is a "
         "one-season case, reaching it has become a function of LENGTH alone and the scene budget "
@@ -11676,8 +11687,18 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # surveil 6, fight 6, interview 6, petition 6, build 5, found 5, examine 3, restore 3. `tell` is
     # absent and nothing left the set.
     # [GROUNDED: measured 2026-10-01 at plan position `14` -- ARC-01 shipped drops on {build, commit, examine, fight, found, give, interview, petition, research, restore, surveil}, 102 of them, read off the test's own printed `shipped` list]
-    assert {v for v, _ in live} == {"build", "commit", "examine", "fight", "found", "give",
-                                    "interview", "petition", "research", "restore", "surveil"}, (
+    # ⚠ {11 verbs} -> {12 verbs}, IN-08's CELLS COMMIT (B-G), UNIT: VERBS IN THE DROP SET. IN:
+    # `challenge` and `accept`, the new rows on `fight`'s `exists:Person` cell, dropped on `r_realm`
+    # exactly as `fight` is (12 each, `fight` 12). OUT: `surveil`, by the act mix -- the chooser is
+    # re-scored on the 15x7 basis and this multi-season case's act sequence moved, so the belief
+    # that dropped its Candidate is no longer deposited (the direction the message does NOT warn
+    # about: it warns on `surveil` RETURNING). `tell` is absent. 108 drops (from 102): accept 12,
+    # challenge 12, fight 12, interview 12, petition 12, commit 10, build 9, found 9, examine 6,
+    # restore 6, give 5, research 3.
+    # [GROUNDED: measured at IN-08's cells commit -- ARC-01 shipped drops on {accept, build, challenge, commit, examine, fight, found, give, interview, petition, research, restore}, 108 of them, read off the test's own printed `shipped` list]
+    assert {v for v, _ in live} == {"accept", "build", "challenge", "commit", "examine", "fight",
+                                    "found", "give", "interview", "petition", "research",
+                                    "restore"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
         "`LEDGER_DERIVED_STEMS` excludes. `surveil` RETURNING means `tell`'s degree has stopped "
