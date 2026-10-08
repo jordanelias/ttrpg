@@ -229,6 +229,8 @@ def _collective(scale, degree, monkeypatch, env=True):
 
 def _opposing(scale, degree, monkeypatch, env=True):
     monkeypatch.setattr(opp, "_degree_label", lambda net, ob: _THREE_BAND[degree])
+    # The price reads the owner's four bands off the same roll (not the three-label shorthand).
+    monkeypatch.setattr(opp.dice_engine, "degree_label", lambda net, ob: degree)
     w = _World()
     _pre_stressed(w)
     a, b = _Practitioner("prac"), _Practitioner("other")
@@ -268,13 +270,6 @@ def test_three_sites_price_one_mending_alike(monkeypatch):
                 restored_cells += single[3] > 0
     # Non-vacuity: the restorative comparison was not 0 == 0 throughout.
     assert restored_cells == len(PARITY_SCALES) * (len(PARITY_DEGREES) - 1)
-
-
-def test_the_owner_does_not_price_overwhelming_apart_from_success():
-    """Opposing folds Overwhelming and Success to 'Meets' (the section 2.6 table has no fourth band) and
-    maps it back to Success; that round trip is lossless only while the price ignores the difference."""
-    for scale in ops.MENDING_OB:
-        assert ops.price_mending(scale, "Overwhelming") == ops.price_mending(scale, "Success")
 
 
 @pytest.mark.parametrize("aim", ["self", "prac", "other"])

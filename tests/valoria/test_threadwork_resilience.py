@@ -134,14 +134,18 @@ def test_at_the_shipped_gain_the_owner_is_the_identity_whatever_resilience_holds
 
 
 def test_mending_is_unaffected_by_resilience(monkeypatch):
-    """ED-871: Mending costs 0 at every degree; resistance has nothing to resist."""
+    """ED-871: Mending costs 0 at every degree; resistance has nothing to resist. The mender is
+    pre-stressed and the environment stated, so the restorative path actually runs (a fresh mender
+    with nothing to return would make the comparison 0 == 0)."""
     outcomes = {}
     for gain in (0, 3):
         monkeypatch.setattr(ops, "RESILIENCE_GAIN", gain)
         w = _World()
+        coh.apply_coherence_delta("mender", -coh.ELASTIC_RANGE, "pre-stress", world=w)
         r = ops.attempt_mending(_Practitioner("mender", 5), {"scale": "Field"}, world=w,
-                                rng=random.Random(_SEED))
+                                rng=random.Random(_SEED), environment_in_equilibrium=True)
         outcomes[gain] = (r.degree, r.coherence_delta, r.coherence_restored,
                           _displacement_taken("mender", w))
     assert outcomes[0] == outcomes[3]
     assert outcomes[0][1] == 0
+    assert outcomes[0][2] > 0, f"the restorative term never ran: {outcomes[0]}"

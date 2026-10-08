@@ -194,7 +194,6 @@ def attempt_collective_operation(actors: list, op_type: str, target: dict,
         coh_delta = price.coherence_cost
         ms_delta = price.mending_stability_delta
     else:
-        price = None
         coh_delta = COHERENCE_COST_BY_SCALE.get(scale, 0)
         if degree in ("Partial", "Failure"):
             coh_delta -= 1

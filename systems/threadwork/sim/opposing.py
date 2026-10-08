@@ -100,11 +100,6 @@ def _degree_label(net: int | float, ob: int | float) -> str:
     return 'Failure'
 
 
-# §2.6's three labels back onto the owner's four bands, for `operations.price_mending` (WR-03).
-# 'Meets' folds Overwhelming and Success, which the Mending price does not distinguish.
-_FOUR_BAND = {'Meets': 'Success', 'Partial': 'Partial', 'Failure': 'Failure'}
-
-
 def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
                                 world=None, rng=None, *,
                                 environment_in_equilibrium: bool = False) -> OpposingResult:
@@ -248,8 +243,9 @@ def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
     # Mending Stability values (WR-03). Every other table field stands.
     prices = {}
     if is_mending:
-        prices = {'a': price_mending(scale, _FOUR_BAND[a_deg]),
-                  'b': price_mending(scale, _FOUR_BAND[b_deg])}
+        # The owner's four bands straight off the roll, not §2.6's three-label shorthand folded back.
+        prices = {'a': price_mending(scale, dice_engine.degree_label(a_roll, a_ob)),
+                  'b': price_mending(scale, dice_engine.degree_label(b_roll, b_ob))}
         a_cons['coherence_delta'] = prices['a'].coherence_cost
         b_cons['coherence_delta'] = prices['b'].coherence_cost
         ms_delta = min(prices['a'].mending_stability_delta, prices['b'].mending_stability_delta)
@@ -258,9 +254,8 @@ def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
     source = f"Opposing {op_type} A:{a_deg}/B:{b_deg}"
     for side, actor, actor_id, cons in (('a', actor_a, actor_a_id, a_cons),
                                         ('b', actor_b, actor_b_id, b_cons)):
-        if 'coherence_delta' in cons:
-            cons['coherence_delta'] = resist_coherence_cost(cons['coherence_delta'], actor)
-        if cons.get('coherence_delta', 0) != 0:
+        cons['coherence_delta'] = resist_coherence_cost(cons['coherence_delta'], actor)
+        if cons['coherence_delta'] != 0:
             apply_coherence_delta(actor_id, cons['coherence_delta'], source, world=world)
         if is_mending:
             cons['coherence_restored'] = apply_mending_feedback(
