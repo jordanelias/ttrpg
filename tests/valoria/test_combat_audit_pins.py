@@ -230,6 +230,14 @@ def test_cut_thrust_versatility_is_not_decided_by_constant_ordering():
     assert modes == {'shear', 'puncture'}, (
         f"the damage-priced cut/thrust contest resolved to {modes} across the roster and all four armour tiers "
         f"— one arm is structurally dead")
+    # ...and the shift is ARMOUR-CONDITIONAL, not a per-weapon constant ordering (some weapons always cut, the rest
+    # always thrust): at least one weapon must change arm with the tier. Measured 2026-10-08: spetum, naginata,
+    # tsurugi, changdao, jian and szabla do.
+    arms_by_weapon = {}
+    for w, _a, dm in cells:
+        arms_by_weapon.setdefault(w, set()).add(dm)
+    shifting = sorted(w for w, ms in arms_by_weapon.items() if len(ms) == 2)
+    assert shifting, "no cut_thrust weapon changes arm with armour: the contest is a constant ordering per weapon"
 
 
 def test_cut_thrust_coupling_respects_weapon_quality():

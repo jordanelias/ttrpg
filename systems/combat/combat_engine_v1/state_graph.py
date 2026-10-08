@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 TRACE_KINDS = {
     'fight_start', 'turn_start', 'engagement_start', 'approach', 'stophit',
     'commit', 'read', 'mode', 'roll', 'outcome', 'contact', 'separation', 'engagement_end', 'fight_result',
-    'yield',   # §11.4 (PC-01): a Phase-1 declaration; an unrefused one ends the fight straight at FinalResult
+    'yield',   # §11.4 (PC-01): a Phase-1 declaration; an unrefused one ends the fight at FinalResult via Yielded
 }
 
 # Separation reasons the engine can emit (wrapper.engagement `return None` sites). The dynamic coverage check
@@ -37,7 +37,7 @@ SEPARATION_REASONS = {'collapse', 'burst_ceiling', 'clean_defence', 'beat_exhaus
 
 STATES = {
     # ---- outer loop (fight) ----
-    'FightInit':      {'entry': True, 'to': ['EngagementInit'], 'emits': ['fight_start'], 'site': 'wrapper.fight:282'},
+    'FightInit':      {'entry': True, 'to': ['EngagementInit', 'Yielded'], 'emits': ['fight_start'], 'site': 'wrapper.fight:282'},
     'EngagementInit': {'to': ['Approach', 'AwaitTempo'], 'emits': ['turn_start', 'engagement_start'], 'site': 'wrapper.engagement:16-34'},
     # ---- inner loop (engagement), per beat ----
     'Approach':       {'to': ['Approach', 'AwaitTempo', 'Felled', 'Separation'], 'emits': ['approach', 'stophit'], 'site': 'wrapper.engagement:66-85'},
@@ -54,8 +54,11 @@ STATES = {
     # ---- engagement terminals -> back to the outer loop ----
     'Felled':         {'to': ['Decided'], 'emits': ['engagement_end'], 'site': 'wrapper.engagement:82,212,232,250,259'},
     'Separation':     {'to': ['InterTurn'], 'emits': ['separation', 'engagement_end'], 'site': 'wrapper.engagement:84,270-273'},
-    'InterTurn':      {'to': ['EngagementInit', 'Unresolved'], 'emits': [], 'site': 'wrapper.fight:290-292'},
+    'InterTurn':      {'to': ['EngagementInit', 'Unresolved', 'Yielded'], 'emits': [], 'site': 'wrapper.fight:290-292'},
     # ---- decision ----
+    # §11.4 (PC-01): an unrefused Yield, declared at Phase 1 of a turn (so from FightInit or InterTurn), ends the fight
+    # straight at FinalResult with no UPSET_FLOOR draw. A REFUSED declaration emits `yield` and falls through unchanged.
+    'Yielded':        {'to': ['FinalResult'], 'emits': ['yield'], 'site': 'wrapper.fight (Phase-1 yield declaration)'},
     'Decided':        {'to': ['UpsetCheck'], 'emits': [], 'site': 'wrapper.fight:287-289'},
     'UpsetCheck':     {'to': ['FinalResult'], 'emits': [], 'site': 'wrapper.fight:298'},
     'Unresolved':     {'to': ['FinalResult'], 'emits': [], 'site': 'wrapper.fight:293'},
@@ -134,10 +137,10 @@ def reachable_from(start):
 def fired_states_from_events(events):
     """Map a trace event stream to the SET of state-graph nodes it visited (for dynamic coverage)."""
     fired = set()
-    yielded = False   # an unrefused §11.4 yield returns before the UPSET_FLOOR draw: UpsetCheck is bypassed (one per fight)
     for e in events:
         k = e['kind']
-        if k == 'yield': yielded = e.get('refused') is None
+        if k == 'yield':
+            if e.get('refused') is None: fired.add('Yielded')   # a refused declaration falls through: no state of its own
         elif k == 'fight_start': fired.add('FightInit')
         elif k == 'turn_start': fired.add('EngagementInit')
         elif k == 'engagement_start': fired.add('AwaitTempo' if e['closed'] else 'Approach')
@@ -156,9 +159,8 @@ def fired_states_from_events(events):
         elif k == 'fight_result':
             fired.add('FinalResult')
             if e['winner'] is None: fired.add('Unresolved')
-            else:
-                fired.add('Decided')
-                if not yielded: fired.add('UpsetCheck')
+            elif 'Yielded' not in fired:   # a yield ends the fight before the decision nodes
+                fired.add('Decided'); fired.add('UpsetCheck')
     return fired
 
 
@@ -204,7 +206,7 @@ if __name__ == '__main__':
             _, ev = run_traced_fight(A, B, seed=s)
             fired |= fired_states_from_events(ev); reasons |= separation_reasons_from_events(ev)
     KNOWN_RARE = {'Felled'}  # felled needs a kill within the matchup; covered separately by the long sweep below
-    never = (valid - TERMINAL_STATES - fired) - KNOWN_RARE - {'Unresolved'}
+    never = (valid - TERMINAL_STATES - fired) - KNOWN_RARE - {'Unresolved', 'Yielded'}
     e_ok = not never
     checks.append(e_ok); print(f"(e) dynamic coverage (live trace visits declared states): {'OK' if e_ok else 'FAIL — never fired: ' + str(never)}")
     dead_reasons = SEPARATION_REASONS - reasons
@@ -222,6 +224,19 @@ if __name__ == '__main__':
         if any(e['kind'] == 'engagement_end' and e['felled'] for e in ev):
             felled_seen = True; break
     checks.append(felled_seen); print(f"(f) Felled terminal reachable (a kill occurs): {'OK' if felled_seen else 'FAIL'}")
+
+    # (g) the §11.4 yield path (PC-01): an unrefused Yield visits Yielded and FinalResult and skips the decision nodes
+    import random as _random
+    import wrapper as _W
+    _A, _B, _ev = Combatant('A'), Combatant('B'), []
+    _prev, _W._TRACE = _W._TRACE, _ev.append
+    try:
+        _W.fight(_A, _B, None, _random.Random(0), yield_decl=_W.Yield(by=_B, turn=1))
+    finally:
+        _W._TRACE = _prev
+    _fy = fired_states_from_events(_ev)
+    g_ok = {'Yielded', 'FinalResult'} <= _fy and not ({'UpsetCheck', 'Decided'} & _fy)
+    checks.append(g_ok); print(f"(g) yield path (Yielded -> FinalResult, decision nodes skipped): {'OK' if g_ok else 'FAIL — ' + str(sorted(_fy))}")
 
     # (g) every injection point references a defined state (the WS-1 bridge stays synced with the graph)
     bad_inj = {k: v['node'] for k, v in INJECTION_POINTS.items() if v['node'] not in valid}

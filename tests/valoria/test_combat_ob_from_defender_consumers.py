@@ -194,6 +194,7 @@ def _defender_side_sigma(aggressor, defender, mode):
 @pytest.mark.xfail(strict=True, raises=AssertionError, reason=(
     'PC-03 finding 3, OBSERVED NOT RULED: the defender\'s History reaches the main roll through TWO channels — '
     'the Ob (`core.ob_from_defender` = History/2) AND the net sigma (`mode_sigma`\'s `tech` term for parry/wind, '
+    '`reading()`\'s READ_HISTORY_K term, which `mode_sigma` folds in for all three modes, and '
     '`init_emphasis_sigma`\'s INIT_HISTORY_K term). Whether that is a '
     'double-count is a design question; no physics was changed. strict=True: if History is ever routed '
     'through one channel this XPASSes and fails, so the record cannot go stale.'))

@@ -210,3 +210,19 @@ def test_strike_pays_the_arm_it_selected(monkeypatch):
             checked += 1
     assert checked == len(CUT_THRUST) * 4 and checked >= 15 * 4, checked
     assert arms == {'shear', 'puncture'}, f"only {arms} observed: the test cannot see a mismatch if one arm never wins"
+
+
+def test_heft_by_arm_is_exactly_heft_per_arm_at_every_grip():
+    """`WP.heft_by_arm` evaluates `phi_grip` once and returns both arms' heft; its contract is that each value is
+    EXACTLY (`==`, not approx) `WP.heft(..., sel_arm=<that arm>)`. Every other test reaches it at grip 0, where
+    `phi_grip` is 1.0; live closed exchanges run at grip > 0, so the claim is checked there, over the whole roster
+    and over a head the weapon does not natively have (the function takes `sel_head`)."""
+    checked = 0
+    for n, w in C.WEAPONS.items():
+        for grip in (0.0, 0.25, 0.5, 1.0):
+            for head in (None, V.HEAD_CUT_THRUST):
+                pair = WP.heft_by_arm(w, grip=grip, sel_head=head)
+                assert pair == tuple(WP.heft(w, grip=grip, sel_head=head, sel_arm=a)
+                                     for a in (V.MODE_SHEAR, V.MODE_PUNCTURE)), (n, grip, head)
+                checked += 1
+    assert checked == len(C.WEAPONS) * 4 * 2 and checked >= 50 * 8, checked
