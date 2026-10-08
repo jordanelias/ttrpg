@@ -97,6 +97,44 @@ def violated_pursuits(p: Person, verb: str) -> tuple:
     return tuple(out)
 
 
+# `ED-IN-0261`'s scar thresholds are 1 (destabilise), 2 (weight shifts, the others gain
+# proportionally) and 3+ (crisis, terminal). IN-08 H9 reads THRESHOLD 2 ONLY: threshold 1 has no
+# mechanism anywhere, and 3 is H13's (G-Q6). The count is the ruled threshold, not a swept value.
+SCAR_WEIGHT_SHIFT_AT = 2
+
+
+def crisis_weights(p: Person, shift: float = 0.0) -> dict:
+    """`p`'s pursuit weights as the chooser should read them once scars have reached threshold 2
+    (IN-08 H9, `ED-IN-0261`: *"WEIGHT SHIFTS, others gain proportionally"*) -- A READER, it writes
+    nothing and `Person.pursuits` is untouched.
+
+    A held pursuit `e` with `p.scar[e] >= SCAR_WEIGHT_SHIFT_AT` gives up the fraction `shift` of
+    its weight (downward: `conviction_track_v1.md` §2, reference for intent), and the mass given up
+    is shared among the held pursuits that have NOT reached the threshold in proportion to their
+    own weights, so a person's total weight is conserved. Where every held pursuit is at the
+    threshold there is nobody to gain and the weights are returned unshifted rather than lose mass.
+    `shift` is `Fixtures.scar_weight_shift`; `0` -- the shipped control -- returns `p.pursuits`
+    itself, so the arm at its control is the unmodified read by construction.
+
+    Person-side, no World (AX-2). Keys keep `p.pursuits`' own order, which `to_axes` sums in."""
+    base = p.pursuits or {}
+    if not shift or not p.scar:
+        return base
+    held = {e: float(w) for e, w in base.items() if float(w) > 0}
+    crisis = {e for e in held if int(p.scar.get(e, 0)) >= SCAR_WEIGHT_SHIFT_AT}
+    heirs = {e: w for e, w in held.items() if e not in crisis}
+    if not crisis or not heirs:
+        return base
+    given = sum(held[e] * shift for e in crisis)
+    pool = sum(heirs.values())
+    out = dict(base)
+    for e in crisis:
+        out[e] = held[e] * (1.0 - shift)
+    for e, w in heirs.items():
+        out[e] = w + given * w / pool
+    return out
+
+
 # ---------------------------------------------------------------------------
 # `LedgerReader` -- MOVED HERE FROM `queries/readers.py` AT UNIT L3 (ED-IN-0206). It asks ONE
 # PERSON'S OWN CLAIMS and nothing else: it takes neither a `World` nor even a `Person`, only the

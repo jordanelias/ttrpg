@@ -322,7 +322,9 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         # into the four-axis basis once per deliberation rather than looked up per candidate.
         # Hoisted out of `score` deliberately: it does not depend on `c`, and computing it inside
         # would run it once per candidate for an identical answer.
-        axis_w = project(p)
+        # IN-08 H9: a pursuit whose scar count has reached threshold 2 is read at a shifted weight
+        # (`person_q.crisis_weights`), by the swept `scar_weight_shift` arm; 0 is the control.
+        axis_w = project(p, fx.get("scar_weight_shift"))
         def score(c: Candidate) -> float:
             return (sum(axis_w[ax] * align(c.verb, ax) for ax in PURSUIT_AXES)
                     + stance_toward(p, c.subject or "")

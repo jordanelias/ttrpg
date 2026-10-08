@@ -587,6 +587,18 @@ DEFAULT_FIXTURES = Fixtures(
     # is shipped as the arm that ADDS NO RULE to `observers_for`'s answer.
     # [JUSTIFIED: engine/season/hole_register.yaml H-128 -- the moral-wound row; ED-IN-0261 rules the unit (a count) and the trigger (witnessing) and leaves the actor's own standing as a witness unstated, so it is swept]
     scar_excludes_actor=False,         # `H-128`, swept False (SHIPPED, no actor rule) / True
+    # IN-08 H9 / `ED-IN-0261`'s threshold 2 (*"WEIGHT SHIFTS, others gain proportionally"*): THE
+    # FRACTION OF A PURSUIT'S WEIGHT A PERSON GIVES UP ONCE THEIR SCAR COUNT ON IT REACHES 2, shared
+    # among their other held pursuits in proportion to those weights (total weight conserved).
+    # Injection site: this line, read by `decision/choose.py`'s `make_chooser` -> `options.project`
+    # -> `queries/person_q.py::crisis_weights`. A READER: it writes nothing and `Person.pursuits`
+    # is untouched. `0` is the CONTROL and is SHIPPED [ASSUMPTION]: the plan names the arm "control
+    # `0`, swept" and is silent on shipping it ON, and a non-zero value moves every outcome, so
+    # arming it is a design choice (the sign test that feeds the counts is itself a candidate
+    # reading; see `H-128`). At `0` the chooser reads `p.pursuits` itself, so the hash and the
+    # fork divergence are those of the tree without the arm.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-187 -- the threshold-2 weight shift; ED-IN-0261 rules THAT the weight shifts and the others gain proportionally, and states no magnitude]
+    scar_weight_shift=0,               # `H-187`, swept 0 (control, SHIPPED) / 0.5 / 1
     # `H-146` / `ED-IN-0261`. WHICH `pursuit_axes` MEMBER GATES `opening_set` -- deontology as a
     # REFUSAL, read by `decision/options.py::opening_set`. The axis NAME is ruled (`deontological`, the
     # NEG pole of `deontological/instrumental`) and the THRESHOLD is the person's own projected

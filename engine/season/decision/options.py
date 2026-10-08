@@ -35,7 +35,7 @@ from ..data.rosters import PERSON_PREDICATES, PURSUIT_AXES, RECORD_CONTENT, requ
 from ..data.verbs import ELIGIBILITY_KINDS, VERB_TABLE, align
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
-from ..queries.person_q import LedgerReader, known_persons, regard, said_of
+from ..queries.person_q import LedgerReader, crisis_weights, known_persons, regard, said_of
 from ..state.carriers import Candidate, Claim, Person, Question, View
 from ..trace_log import TRACE
 
@@ -218,7 +218,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
 # `data/pursuits.to_axes`, its own docstring's stated single owner; not done here.
 
 
-def project(p: Person) -> dict:
+def project(p: Person, scar_shift: float = 0.0) -> dict:
     """A person's thirteen conviction weights, in the four-axis basis. `U3` / R-06a.
 
     ⚠⚠ **§F2's `conviction[axis]` IS COMPUTED NOW, NOT LOOKED UP, AND THE FORMULA IS UNCHANGED IN
@@ -247,8 +247,14 @@ def project(p: Person) -> dict:
     ⚠ DELEGATED, NOT DUPLICATED. `data.pursuits.to_axes` is the one owner of *convictions → axes*,
     because a second caller appeared that does not have a `Person`: `data.cast.loyalty` projects a
     ROLE TEMPLATE's expected-conviction vector through the same 13×4. `to_axes` reads
-    `data.verbs.PURSUIT_PROJECTION` at call time, so that is still the rebind that reaches here."""
-    return to_axes(p.pursuits)
+    `data.verbs.PURSUIT_PROJECTION` at call time, so that is still the rebind that reaches here.
+
+    ⚠ `scar_shift` is IN-08 H9's crisis reader (`Fixtures.scar_weight_shift`, `H-187`): the weights
+    `to_axes` projects are `person_q.crisis_weights(p, scar_shift)` -- a pursuit whose scar count has
+    reached threshold 2 gives weight to the others. `0`, the shipped control, hands `to_axes` the
+    person's own `pursuits` untouched. Only `choose`'s score passes it; `refusal_tolerance` (dormant)
+    reads the unshifted weight."""
+    return to_axes(crisis_weights(p, scar_shift))
 
 
 def refusal_tolerance(p: Person, axis: Optional[str]) -> Optional[float]:
