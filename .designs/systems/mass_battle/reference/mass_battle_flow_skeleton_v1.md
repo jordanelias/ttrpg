@@ -64,7 +64,7 @@ the calling chain through `systems/factions/sim/faction_action.py` and `engine/m
 | `shape_a`, `shape_b`, `anchor_map` | arg | caller-supplied deployment geometry | `systems/mass_battle/sim/orchestration.py:2480-2537 run_multi_turn_battle` |
 | `pairings`, `shapes_a`, `shapes_b` | arg | caller-supplied multi-unit roster | `systems/mass_battle/sim/orchestration.py:2681-2985 run_multi_unit_battle` |
 | `max_turns` / `max_battle_turns` | param (default) | function signature default | `systems/mass_battle/sim/orchestration.py:1821 run_battle`, `:2426 run_multi_turn_battle` |
-| engine mode toggles read from `os.environ` at import time (`PER_CELL`, `LANCHESTER_ENABLED`, `REFORM_CHECK_ENABLED`, `MB_RESERVE_COMMIT`, and dozens more) | flag | env var, defaulted | `systems/mass_battle/sim/config.py:363 PER_CELL`, `systems/mass_battle/sim/config.py:514 LANCHESTER_ENABLED`, `systems/mass_battle/sim/orchestration.py:294 REFORM_CHECK_ENABLED`, `systems/mass_battle/sim/config.py:256 MB_RESERVE_COMMIT` |
+| engine mode toggles read from `os.environ` at import time (`PER_CELL`, `LANCHESTER_ENABLED`, `REFORM_CHECK_ENABLED`, `MB_RESERVE_COMMIT`, and dozens more) | flag | env var, defaulted | `systems/mass_battle/sim/config.py:345 PER_CELL`, `systems/mass_battle/sim/config.py:514 LANCHESTER_ENABLED`, `systems/mass_battle/sim/orchestration.py:294 REFORM_CHECK_ENABLED`, `systems/mass_battle/sim/config.py:256 MB_RESERVE_COMMIT` |
 | `CASCADING_ENABLED` | flag | hardcoded module constant, not env-read (see §7) | `systems/mass_battle/sim/config.py:152 CASCADING_ENABLED` |
 
 ## 3. Flow

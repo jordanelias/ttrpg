@@ -83,8 +83,8 @@ def _ratio_winrate(ratio, base, n, seed0=9000):
 # ─── default-inert (byte-exact when off) ─────────────────────────────────────
 
 def test_default_off_is_inert(field_path):
-    """MB_FRICTION defaults OFF: _draw_friction sets the factor to exactly 1.0 (no pool change),
-    so the mechanism is byte-exact / behaviourless until explicitly enabled."""
+    """MB_FRICTION OFF is a true no-op: _draw_friction sets the factor to exactly 1.0 (no pool change),
+    so the mechanism is byte-exact / behaviourless when switched off (the shipped default is ON)."""
     # [ED-MB-0061] The default is now ON (Jordan, 2026-07-29). The INERTNESS claim below is still
     # worth holding — an OFF flag must be a true no-op, which is what makes the flag safe to pin in
     # the grid oracle — so the flag is pinned off explicitly rather than assumed from the default.

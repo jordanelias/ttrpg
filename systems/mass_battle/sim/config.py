@@ -140,10 +140,11 @@ SUPPORT_WEIGHTS = {1: 1.0, 2: 0.7, 3: 0.5}
 SUPPORT_WEIGHT_FLOOR = 0.3  # [CALIBRATED-DEBT: cell-support-stacking floor (F-i) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 # [MB-07, J-18 (A), ED-MB-0041] SUPPORT RANK CAP: support counts only from the ranks a troop type's weapon
 # reaches past the contact rank; a rank deeper than the cap adds 0 to the pool. SHIPPED OFF = today's uncapped
-# stack exactly. ON stalls the bat.py battery: `MB_SUPPORT_RANK_CAP=1 python3 tools/ci_golden_modes_check.py`
-# against the same command with the flag at its default, whose digests are the control. The mirror/cav_shaken/ranged
-# rows hit MAX_TURNS=20 on every seed with it ON (3-10 turns OFF) and cell_field_mor0 passes the golden tool's
-# 300s/mode (`ci_golden_modes_check.py`, the per-mode timeout). To flip it: recalibrate casualty/pool magnitudes so
+# stack exactly. ON stalls the bat.py battery: `python3 tools/ci_golden_modes_check.py --perturb MB_SUPPORT_RANK_CAP=1`
+# (FIELD_PINS pins the flag to '0', so an ambient env var does nothing; --perturb overrides the pin) against the same
+# command without --perturb, whose digests are the control. The mirror/cav_shaken/ranged rows hit MAX_TURNS=20 on
+# every probed seed with it ON (4 of the battery's seeds; 3-10 turns OFF) and cell_field_mor0 exceeds the golden
+# tool's 300s/mode (`ci_golden_modes_check.py`, the per-mode timeout). To flip it: recalibrate casualty/pool magnitudes so
 # the capped modes finish under MAX_TURNS and the timeout, set this default and FIELD_PINS to '1', and declare the
 # re-pinned digests. Not done: J-18 (A) does not execute in play while this is OFF (workplan MB-07).
 MB_SUPPORT_RANK_CAP = (_sigma_os.environ.get('MB_SUPPORT_RANK_CAP', '0') == '1')
