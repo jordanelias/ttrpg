@@ -134,8 +134,10 @@ def confliction(p: Person) -> int:
 
 # `ED-IN-0261`'s scar thresholds are 1 (destabilise), 2 (weight shifts, the others gain
 # proportionally) and 3+ (crisis, terminal). IN-08 H9 reads THRESHOLD 2 ONLY: threshold 1 has no
-# mechanism anywhere, and 3 is H13's (G-Q6). The count is the ruled threshold, not a swept value.
+# mechanism anywhere, and 3 is H13's (G-Q6, `conviction_after_crisis` below). Each count is the
+# ruled threshold, not a swept value.
 SCAR_WEIGHT_SHIFT_AT = 2
+SCAR_CRISIS_AT = 3
 
 
 def crisis_weights(p: Person, shift: float = 0.0) -> dict:
@@ -168,6 +170,72 @@ def crisis_weights(p: Person, shift: float = 0.0) -> dict:
     for e, w in heirs.items():
         out[e] = w + given * w / pool
     return out
+
+
+def conviction_after_crisis(p: Person) -> dict:
+    """`p.conviction` as the crisis at scar threshold 3 leaves it -- IN-08 `12e` H13, G-Q6 as the
+    affiliation draft recommends (folded into the build by Jordan's 2026-10-06 ruling, `ED-IN-0261`'s
+    superseding row): THE ENGINE CHOOSES PER CASE, BY A RULE OVER STATE THE CRISIS ALREADY READS, AND
+    ROLLS NOTHING (the crisis rewrites the vector, never an outcome). A READER: it returns a new
+    vector and writes nothing; the write is `loop/resolve.py::_conviction_crisis`'s, by an act.
+
+    A held affiliation is IN CRISIS when `p.scar` for it is `>= SCAR_CRISIS_AT`. ONE CRISIS AT A
+    TIME: where several are, the one taken is the highest-held, ties to the first by name -- the
+    design's own multi-crisis rule (`conviction_track_v1.md` §2 `:62`, quarantined, reference for
+    intent: *"the most recent Scar event ... ties resolve to highest-weighted primary"*) with its
+    first key dropped, because a count carries no time and one act scars every holding it violates
+    at once [ASSUMPTION; Jordan to correct]. For that one, `x`, the first branch that applies:
+      * FOLD -- `x` is co-held with an affiliation `y` it is `incompatible` with
+        (`data/affiliations.py::INCOMPATIBLE`, the one loaded relation): `x`'s intensity transfers
+        to `y` and `x` drops. With several such `y`, the highest-held takes it, ties to the first
+        by name (the draft's *"highest-weighted other element"*; the name order is only the tie
+        rule). The sum is clamped to the intensity's ceiling [ASSUMPTION: the spine is closed,
+        `conviction_map` refuses past it].
+      * RESTABILISE -- `x` is co-held with nothing it is incompatible with, and something else is
+        held: the draft's branch is "the threshold-2 mechanism continuing". NOT BUILT -- the vector
+        is left as it is. The threshold-2 mechanism is a reader over PURSUIT weights (H9's
+        `crisis_weights`, a float fraction); `conviction` is an int on the 0-5 spine, so moving it
+        by that fraction needs a rounding rule nobody has chosen.
+      * DESTROYED -- nothing else is held: `x` drops, leaving the zero vector (no affiliation
+        held, a real state).
+    "Held" is a present key: `conviction_map` drops a zero, so every key is held at 1 or more
+    [ASSUMPTION: the draft's "held above threshold" is read as held at all].
+
+    ⚠ UNDER THE SHARED COLUMN THE FOLD'S DIRECTION IS INTENSITY'S, NOT CONTENT'S. The draft gives
+    the direction as *"which affiliation was scarred"*, but `affiliation_engagement`'s shared column
+    (R-C4.1) violates every held creed alike, so co-held creeds accrue equal counts and reach the
+    threshold in the same act; the selector above then folds the HIGHER-held creed into the lower.
+    Only a per-affiliation cell (R-C4.2) scars one creed alone, and of those only `thread_read`'s
+    exists, which writes nothing at RESOLVE. The heir keeps its own count, already at the
+    threshold, so its next violation breaks it.
+
+    Re-evaluated at every count at or over the threshold, not only the one that reaches it: a
+    folded or destroyed affiliation is no longer held, so it is never violated (hence never
+    counted) again, and a restabilised one is left unwritten. CONVICTION TRACK ONLY: the pursuit
+    track has no `incompatible` relation to fold along and `Person.pursuits` has no writer (H-62;
+    its first is SC-02 `22b`). Person-side, no World (AX-2). With no held affiliation in crisis it
+    returns `p.conviction` unchanged."""
+    from ..data.affiliations import AFFILIATION_CEILING, INCOMPATIBLE, conviction_map
+    held = dict(p.conviction or {})
+    scar = p.scar or {}
+    crisis = [x for x in sorted(held) if int(scar.get(x, 0)) >= SCAR_CRISIS_AT]
+    if not crisis:
+        return p.conviction
+
+    def first_highest(names: list) -> str:
+        return max(names, key=lambda k: (int(held[k]), -names.index(k)))
+
+    x = first_highest(crisis)
+    heirs = [y for y in sorted(held) if y != x and frozenset((x, y)) in INCOMPATIBLE]
+    if heirs:
+        y = first_highest(heirs)
+        held[y] = min(AFFILIATION_CEILING, int(held[y]) + int(held[x]))
+        del held[x]
+    elif len(held) == 1:
+        del held[x]
+    else:                            # RESTABILISE -- not built (above)
+        return p.conviction
+    return conviction_map(held, where=f"{p.id}: conviction after crisis")
 
 
 # ---------------------------------------------------------------------------

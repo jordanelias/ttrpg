@@ -33,7 +33,8 @@ from ..loop.predicates import REQUIRES_PREDICATES
 from ..loop.sides import sides_of
 from .. import manifest
 from ..epistemic import observers_for
-from ..queries.person_q import violated_affiliations, violated_pursuits
+from ..queries.person_q import (conviction_after_crisis, violated_affiliations,
+                                violated_pursuits)
 from ..queries.world_q import WorldReader, ceiling, occasioned_by
 from ..seam import ContestError, Resolution, contest, degree_of
 from ..state.carriers import Act, Event, StateChange
@@ -527,7 +528,8 @@ def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
     `violated_pursuits`, and the two answers are one list of elements written by this one write --
     same observers, same actor arm, same `changed` gate, same token. The two rosters cannot share a
     name (`data/affiliations.py::_load_engagement` refuses it), so a count is never merged across
-    them. Its reader is the crisis at threshold 3 (H13); H9's reader counts held pursuits only."""
+    them. Its reader is the crisis at threshold 3 (H13, `_conviction_crisis` below, called after
+    this write); H9's reader counts held pursuits only."""
     everyone = list(w.persons)
     if not events:
         return
@@ -561,6 +563,41 @@ def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
             actor=a.actor, via=a.via,
             change=Change(tuple(Subject.entity("persons", pid, fields=("scar",))
                                 for pid, _b in hits), perform))
+    _conviction_crisis(w, token, a, [pid for pid, _b in hits])
+
+
+def _conviction_crisis(w: "World", token: Token, a: Act, scarred: list) -> None:
+    """IN-08 `12e` H13 -- THE CRISIS AT SCAR THRESHOLD 3 (G-Q6), the first writer of `(Person,
+    conviction)`. Called only by `_scar_witnesses`, after its write, with the persons that write
+    just counted: a crisis is reached only by a scar count moving, and a scar count moves only by an
+    act's outcome that moved state (`_fold`'s `changed` gate). So the conviction write inherits every
+    bound the scar has -- never from a refused act or a band that wrote nothing (`tell`'s `Failure`),
+    and at RESOLVE (or ENCOUNTER, where `march` folds) with the driver's ACTS token; WITNESS's token
+    is refused at the row (S9.3, `state/world.py`'s `MATRIX_REFUSAL_LAW`).
+
+    WHAT THE CRISIS DOES is `queries/person_q.py::conviction_after_crisis` (fold, restabilise --
+    not built -- or destroyed, rolling nothing); this function only asks it of each scarred person
+    and writes the answers, once, through the gate. A person whose vector it leaves as it was is not
+    named, so the gate's no-op refusal (F9) cannot fire on a crisis that changed nothing. Nothing is
+    emitted, on the scar's precedent: `conviction.moved` is declared on the row and no reader
+    consumes it, and an Event here would deposit claims about every observer at WITNESS."""
+    moved = []
+    for pid in scarred:
+        p = w.persons[pid]
+        after = conviction_after_crisis(p)
+        if after != p.conviction:
+            moved.append((pid, after))
+    if not moved:
+        return
+
+    def perform() -> None:
+        for pid, after in moved:
+            w.persons[pid].conviction = after
+
+    w.write("conviction", token, None, record_kind="Person", fieldname="conviction",
+            driver="Act", actor=a.actor, via=a.via,
+            change=Change(tuple(Subject.entity("persons", pid, fields=("conviction",))
+                                for pid, _a in moved), perform))
 
 
 def _contest(self, w: "World", token: Token, a: Act, contests: list,
