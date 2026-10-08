@@ -511,24 +511,18 @@ verbs:
     # a decisive win from a narrow one beyond wound count on the VICTOR, so a fourth band
     # (Overwhelming vs Success) has no source in the data. It is NOT invented here. The three
     # bands below are the ones the scene can distinguish.
-    # ⚠ `Person.scar` ADDED TO BOTH SURVIVING-OUTCOME BANDS 2026-09-18 (`ED-IN-0249`, §54 item 21
-    # — *"written at RESOLVE in the ACTS class BY THE OUTCOME THAT NAMES THE PERSON"*). It is on
-    # `Felled` as well as `Wounded` because the write is declared by the BAND; declaring it only on
-    # `Wounded` would make the table say a felling cannot scar, which is a claim about the moral
-    # layer rather than about this item. ⚠ RE-SHAPED AT IN-08 H3: `_eff_kill`'s `_scar` (a float on
-    # the wounded person, `scar_step`) is RETIRED; the FOLD now scars the act's OBSERVERS after ANY
-    # outcome that moved state (`loop/resolve.py::_scar_witnesses`), so these two cells are no
-    # longer the only road to the row -- every verb whose outcome writes reaches it. They stay as
-    # the row's declared producer (`data/verbs.py`'s invariant 2 refuses a RES row no verb names
-    # without an `unproduced:` cell, and this row IS produced).
-    # ⚠ AND `scar.taken` IS DELIBERATELY NOT ADDED TO `emits:` BELOW. The matrix names that kind
-    # for the row, but an `emits:` cell fires PER BAND from the table, not per write, so adding it
-    # would report a scar on every wound including at the control arm where none is taken — the
-    # exact `ID-9` defect the flat `person.died` above was, in the same row, one column across.
-    # The kind lands with the magnitude that makes it true.
+    # ⚠ `Person.scar` IS NOT A BAND WRITE, AND ITS TWO CELLS HERE (added 2026-09-18, `ED-IN-0249`)
+    # WERE DROPPED: since IN-08 H3 `_eff_kill` writes no scar. The scar is per OBSERVER, written by
+    # the fold after any outcome that moved state (`loop/resolve.py::_scar_witnesses`), so no band
+    # produces it and declaring it here only ran a check-only gate call for a write nobody made.
+    # The `(Person, scar)` row in `write_matrix.yaml` carries the honest `unproduced:` instead.
+    # ⚠ AND `scar.taken` IS DELIBERATELY NOT ADDED TO `emits:` BELOW. An `emits:` cell fires PER
+    # BAND from the table, but a scar is taken per observer and may be taken by nobody, so a
+    # band-level `scar.taken` would report a scar nobody took — the exact `ID-9` defect the flat
+    # `person.died` above was, in the same row, one column across.
     writes:
-      Felled:       ["Person.body", "Person.exists", "Tenure.until", "Person.scar"]
-      Wounded:      ["Person.body", "Person.scar"]
+      Felled:       ["Person.body", "Person.exists", "Tenure.until"]
+      Wounded:      ["Person.body"]
       Untouched:    []
     writes_grade_note: "ruled -- the SPLIT is read from scene combat (Jordan 2026-09-03); H-98 keeps only the question of whether a decisive win is distinguishable from a narrow one, which the engine currently does not answer. ⚠ EXECUTED 2026-09-04 (`W-E`): all three branches now run end to end through `SeasonDriver.resolve` -> `contest()` -> `combat_seam` -> `wrapper.fight`, and their consequences differ -- Felled deletes the subject and emits `person.died`, Wounded leaves them alive with a lower body and emits `body.changed`, Untouched writes nothing and emits `contest.undecided`. Falsifier: `test_we_a_contested_acts_consequence_differs_by_degree`."
     writes_source_note: "combat_seam.resolve -> wound_state[THE ACT'S SUBJECT]: felled | wounds. ⚠ CORRECTED 2026-09-04 BY `W-E`, AND THE OLD CELL SAID `wound_state[loser]`, WHICH WOULD KILL THE WRONG PERSON. This verb's writes land on `payload[\"subject\"]` (`_eff_kill`), so if the ACTOR is the one felled, reading `[loser]` selects the `Felled` branch and the fold deletes the TARGET -- who is standing. The band is read off the person the writes land on. `health_remaining`/`health_full` are still read, but for the MAGNITUDE (`wound_harm_model`, `H-123`), not for the band."
@@ -605,8 +599,8 @@ verbs:
     # registered for both rows). A duel is a fight both sides agreed to; what the scene can
     # distinguish about its outcome is exactly what it distinguishes for `fight`.
     writes:
-      Felled:       ["Person.body", "Person.exists", "Tenure.until", "Person.scar"]
-      Wounded:      ["Person.body", "Person.scar"]
+      Felled:       ["Person.body", "Person.exists", "Tenure.until"]
+      Wounded:      ["Person.body"]
       Untouched:    []
     emits:
       Felled:      ["person.died"]

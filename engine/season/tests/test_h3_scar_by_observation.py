@@ -173,6 +173,26 @@ def test_h3_no_failure_band_declares_a_write():
     assert not bad, f"a `{failure}` band declares writes, so a failed act would scar: {bad}"
 
 
+def test_h3_a_fold_at_encounter_scars_its_observers():
+    """The `(Person, scar)` row declares RESOLVE and ENCOUNTER (where a deferred contest such as
+    `march` folds). The same act folded at ENCOUNTER scars the same observers by the same counts as
+    at RESOLVE, and only persons `observers_for` admits."""
+    from engine.season.data.matrix import matrix_row
+    assert Step.ENCOUNTER in matrix_row("Person", "scar").steps
+    at = {}
+    for step in (Step.RESOLVE, Step.ENCOUNTER):
+        w = _world("presence_only")
+        w.step = step
+        events = _fight(w)
+        assert [e.kind for e in events] == ["body.changed"], (step, [e.kind for e in events])
+        at[step] = _scars(w)
+        w.discard_caches()
+        seen = {pid for e in events
+                for pid, _ch in observers_for(w, e, "presence_only", list(w.persons))}
+        assert at[step] and set(at[step]) <= seen, (step, at[step], seen)
+    assert at[Step.ENCOUNTER] == at[Step.RESOLVE], at
+
+
 def test_h3_witness_cannot_write_a_scar():
     """FALSIFIER 3b. WITNESS's token cannot reach `(Person, scar)`: the gate refuses the row at
     WITNESS under S9.3 (WITNESS NEVER TOUCHES A BELIEF), and WITNESS's own body names neither the

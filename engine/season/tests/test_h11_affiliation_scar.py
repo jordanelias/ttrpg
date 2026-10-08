@@ -198,6 +198,17 @@ def test_h11_loader_accepts_the_shipped_table_and_refuses_each_planted_defect():
         A._load_engagement({A.SHARED_COLUMN: {verb: None}}, A.SHARED_COLUMN)
 
 
+def test_h11_loader_refuses_a_name_on_both_the_affiliation_and_pursuit_rosters(monkeypatch):
+    """`Person.scar` keys both rosters at once, so one name on both would merge two counts. The
+    loader imports `rosters.PURSUITS` at call time, so rebinding it here is what the check reads;
+    the control is the same call on the shipped rosters, which loads."""
+    from engine.season.data import rosters as R
+    A._load_engagement(_shipped(), A.SHARED_COLUMN)
+    monkeypatch.setattr(R, "PURSUITS", tuple(R.PURSUITS) + (_ROSTER[0],))
+    with pytest.raises(Forbidden, match="name both an affiliation and a pursuit"):
+        A._load_engagement(_shipped(), A.SHARED_COLUMN)
+
+
 def test_h11_witness_cannot_reach_the_scar_row():
     """The row H11 writes through is H3's `(Person, scar)`; WITNESS's token is refused there (S9.3),
     and H11 adds no second row and no `conviction` write (its `unproduced:` stands)."""

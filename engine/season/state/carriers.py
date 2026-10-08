@@ -595,7 +595,8 @@ class Person:
     # intensity), validated by `data/affiliations.py::conviction_map` -- not the pursuit `doctrine`,
     # which is the magnitude of religious concern, not its side. Absent = not held, never 0. Filled at
     # world build from the cast's authored `affiliations:` (`data/cast.py::conviction_of`); its
-    # `write_matrix.yaml` row admits a RESOLVE write and no act writes it yet. Confliction is DERIVED
+    # `write_matrix.yaml` row admits a RESOLVE/ENCOUNTER write, made only by the crisis at scar
+    # threshold 3 (`loop/resolve.py::_conviction_crisis`, IN-08 H13). Confliction is DERIVED
     # from it (`queries/person_q.py::confliction`), never stored here.
     conviction: dict = field(default_factory=dict)
     travel_leg: list[str] = field(default_factory=list)

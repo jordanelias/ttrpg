@@ -136,7 +136,7 @@ def _affiliation_roster(reg):
     Validated as the two rosters above are, plus its INTENSITY SCALE: `scale:` must parse as a
     closed `lo-hi` through `_bounds` (the one scale parser), because the season engine refuses an
     intensity outside it and a missing or open ceiling would leave "full intensity" undefined. The
-    bounds are emitted beside the raw string so no reader re-parses it."""
+    bounds are emitted in place of the raw string, as `{floor, ceiling}`, so no reader re-parses it."""
     block, names = _named_roster(reg, 'affiliation_roster',
                                  'It is the single owner of the affiliations Person.conviction '
                                  'is keyed on.')

@@ -1,4 +1,4 @@
-"""HOW FAR APART THE THIRTEEN CONVICTIONS ACTUALLY ARE, in the four-axis basis.
+"""HOW FAR APART THE FIFTEEN PURSUITS ARE, in the seven-axis basis.
 
 `ED-IN-0214`'s instrument. That row escalates one question — whether
 `conviction_axis_matrix_v30.md`'s 13x4 should be re-centred — and every number in it is produced
@@ -13,8 +13,8 @@ TWO QUANTITIES, AND THE SECOND ONE ASKS A DIFFERENT QUESTION FROM THE FIRST.
      *are the fifteen fifteen characters, or five?* (The rows were the thirteen CONVICTIONS when
      this was written; they are the fifteen PURSUITS since `ED-IN-0261`, and "conviction" now
      names `Person.conviction`, the religious affiliations of IN-08 H10, which this does not read.)
-  2. **How many independent directions the four-axis basis actually carries** — the covariance
-     spectrum over the same thirteen rows. It answers *are the four axes four?* A basis whose
+  2. **How many independent directions the seven-axis basis actually carries** — the covariance
+     spectrum over the same fifteen rows. It answers *are the seven axes seven?* A basis whose
      columns co-vary is a smaller basis wearing a larger one's coordinates, and no re-weighting of
      a person's convictions can recover a direction the MATRIX does not span.
 
@@ -50,10 +50,10 @@ from ..data.verbs import PURSUIT_PROJECTION, PROJECTION_DEFAULT_CELL
 def _covariance(rows: dict, axes: list) -> list:
     """The `len(axes)` x `len(axes)` covariance of the matrix's COLUMNS, over its rows.
 
-    The rows are the thirteen convictions and the columns are the four axes, so this asks how far
-    the axes move together ACROSS the authored set — not how far the convictions move apart, which
+    The rows are the fifteen pursuits and the columns are the seven axes, so this asks how far
+    the axes move together ACROSS the authored set — not how far the pursuits move apart, which
     is what the cosine table above already answers. Sample covariance (`n - 1`), because the
-    thirteen are the whole authored population but the question is about the shape they describe.
+    fifteen are the whole authored population but the question is about the shape they describe.
     """
     k = len(axes)
     m = [[float(v[i]) for i in range(k)] for v in rows.values()]

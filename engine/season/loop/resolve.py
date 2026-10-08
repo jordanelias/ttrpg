@@ -492,7 +492,10 @@ def _fold(self, w: "World", token: Token, a: Act,
     # gate's own receipts for this act's writes, so it is empty on every path that is not a deed:
     # each refusal above returned early, and a band that declares no writes (`tell`'s `Failure`,
     # `fight`'s `Untouched`, `march`'s `Declared`) moved nothing. The scar is earned by an outcome
-    # that MOVED, as a success kind is (G4's `earned`), and never by a band's name.
+    # that MOVED, as a success kind is (G4's `earned`), and never by a band's name. A STAGED write
+    # (`work`, `restore`) counts as moved at fold time; if the accumulator's clamp later replaces
+    # the success Event (`_refuse_after_the_fact`), the scar already written stands -- a candidate
+    # reading, rare in computed play, not a Jordan question.
     if changed:
         _scar_witnesses(w, token, a, out)
     return out
@@ -563,10 +566,12 @@ def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
             actor=a.actor, via=a.via,
             change=Change(tuple(Subject.entity("persons", pid, fields=("scar",))
                                 for pid, _b in hits), perform))
-    _conviction_crisis(w, token, a, [pid for pid, _b in hits])
+    _conviction_crisis(w, token, a, [pid for pid, _b in hits],
+                       broken_of={pid: broken for pid, broken in hits})
 
 
-def _conviction_crisis(w: "World", token: Token, a: Act, scarred: list) -> None:
+def _conviction_crisis(w: "World", token: Token, a: Act, scarred: list,
+                       broken_of: Optional[dict] = None) -> None:
     """IN-08 `12e` H13 -- THE CRISIS AT SCAR THRESHOLD 3 (G-Q6), the first writer of `(Person,
     conviction)`. Called only by `_scar_witnesses`, after its write, with the persons that write
     just counted: a crisis is reached only by a scar count moving, and a scar count moves only by an
@@ -580,11 +585,17 @@ def _conviction_crisis(w: "World", token: Token, a: Act, scarred: list) -> None:
     and writes the answers, once, through the gate. A person whose vector it leaves as it was is not
     named, so the gate's no-op refusal (F9) cannot fire on a crisis that changed nothing. Nothing is
     emitted, on the scar's precedent: `conviction.moved` is declared on the row and no reader
-    consumes it, and an Event here would deposit claims about every observer at WITNESS."""
+    consumes it, and an Event here would deposit claims about every observer at WITNESS.
+
+    `broken_of` maps each scarred person to the elements this act just scarred them on, and the
+    crisis is asked only among those (`conviction_after_crisis(p, among=...)`): a person already at
+    the threshold on one affiliation and scarred on a pursuit alone has no affiliation count that
+    moved, so no crisis. `None` (a direct caller) asks over every held affiliation."""
     moved = []
     for pid in scarred:
         p = w.persons[pid]
-        after = conviction_after_crisis(p)
+        among = None if broken_of is None else frozenset(broken_of.get(pid, ()))
+        after = conviction_after_crisis(p, among=among)
         if after != p.conviction:
             moved.append((pid, after))
     if not moved:

@@ -203,9 +203,10 @@ def test_the_doctrine_pair_instrument_can_fail_and_the_shipped_table_is_untouche
     monkeypatch.setattr(V, "PURSUIT_PROJECTION", planted)
     with pytest.raises(_PairUncomputable, match="doctrine"):
         _doctrine_pair_cosine()
-    planted = {k: {ax: 0.0 for ax in PURSUIT_AXES} for k in shipped}   # every row inert: zero vectors
+    # every row inert: the all-zero `doctrine` row is refused first, before the zero-vector check
+    planted = {k: {ax: 0.0 for ax in PURSUIT_AXES} for k in shipped}
     monkeypatch.setattr(V, "PURSUIT_PROJECTION", planted)
-    with pytest.raises(_PairUncomputable):
+    with pytest.raises(_PairUncomputable, match="doctrine"):
         _doctrine_pair_cosine()
 
     monkeypatch.undo()

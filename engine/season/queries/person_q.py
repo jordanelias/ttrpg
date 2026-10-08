@@ -159,7 +159,9 @@ def crisis_weights(p: Person, shift: float = 0.0) -> dict:
     if not shift or not p.scar:
         return base
     held = {e: float(w) for e, w in base.items() if float(w) > 0}
-    crisis = {e for e in held if int(p.scar.get(e, 0)) >= SCAR_WEIGHT_SHIFT_AT}
+    # A LIST IN `held`'s ORDER, not a set: `given` sums over it, and a set's order is
+    # PYTHONHASHSEED's, so the float sum would not be reproducible across processes.
+    crisis = [e for e in held if int(p.scar.get(e, 0)) >= SCAR_WEIGHT_SHIFT_AT]
     heirs = {e: w for e, w in held.items() if e not in crisis}
     if not crisis or not heirs:
         return base
@@ -173,7 +175,7 @@ def crisis_weights(p: Person, shift: float = 0.0) -> dict:
     return out
 
 
-def conviction_after_crisis(p: Person) -> dict:
+def conviction_after_crisis(p: Person, among: frozenset | None = None) -> dict:
     """`p.conviction` as the crisis at scar threshold 3 leaves it -- IN-08 `12e` H13, G-Q6 as the
     affiliation draft recommends (folded into the build by Jordan's 2026-10-06 ruling, `ED-IN-0261`'s
     superseding row): THE ENGINE CHOOSES PER CASE, BY A RULE OVER STATE THE CRISIS ALREADY READS, AND
@@ -208,7 +210,13 @@ def conviction_after_crisis(p: Person) -> dict:
     threshold in the same act; the selector above then folds the HIGHER-held creed into the lower.
     Only a per-affiliation cell (R-C4.2) scars one creed alone, and of those only `thread_read`'s
     exists, which writes nothing at RESOLVE. The heir keeps its own count, already at the
-    threshold, so its next violation breaks it.
+    threshold, so the heir's next scar ON THAT AFFILIATION breaks it.
+
+    `among` is the set of elements the calling act has just scarred `p` on: only an affiliation in
+    it can be in crisis, because a crisis follows THAT affiliation's count moving -- a person held
+    at the threshold on one creed and scarred on a pursuit alone is not in crisis.
+    `loop/resolve.py::_conviction_crisis` passes it; `None` (a direct caller) considers every held
+    affiliation at the threshold.
 
     Re-evaluated at every count at or over the threshold, not only the one that reaches it: a
     folded or destroyed affiliation is no longer held, so it is never violated (hence never
@@ -219,7 +227,8 @@ def conviction_after_crisis(p: Person) -> dict:
     from ..data.affiliations import AFFILIATION_CEILING, INCOMPATIBLE, conviction_map
     held = dict(p.conviction or {})
     scar = p.scar or {}
-    crisis = [x for x in sorted(held) if int(scar.get(x, 0)) >= SCAR_CRISIS_AT]
+    crisis = [x for x in sorted(held) if int(scar.get(x, 0)) >= SCAR_CRISIS_AT
+              and (among is None or x in among)]
     if not crisis:
         return p.conviction
 

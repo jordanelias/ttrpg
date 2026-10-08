@@ -98,5 +98,5 @@ def test_6f_a_compatible_pair_at_the_same_arm_is_unmoved(monkeypatch):
 
 def test_6f_a_negative_arm_is_refused(monkeypatch):
     bad, _ = _pairs()
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="confliction_weight"):
         _ranking(_person(bad), -1.0, monkeypatch)

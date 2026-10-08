@@ -70,9 +70,9 @@
 #   cell; later rows have moved the count since, so re-run the command rather than trust a figure.)
 #
 # ⚠ THE SIX `Person` ROWS ARE THE FINDING, AND THEY ARE ONE HOLE, NOT SIX.
-# NO VERB IN THE 32-ROW TABLE WRITES ANY `Person` INTERIOR FIELD. That is tier-0 `H-62`, and it
-# means every interior consequence is inert: convictions cannot move, so `choose` scores against a
-# constant and `standing` has nothing to diverge from. #358 rev.2 §C.4 supplies the SHAPE of the
+# No verb row DECLARES a Person interior write; `scar` and `conviction` are written by the fold
+# (loop/resolve.py), not by a band. That is tier-0 `H-62`: the rest of the interior has no writer,
+# so `pursuits` cannot move and `standing` has nothing to diverge from. #358 rev.2 §C.4 supplies the SHAPE of the
 # answer -- an interior write is a CONSEQUENCE OF AN OUTCOME, which is what the new `Degree`-keyed
 # `writes` column declares. The verbs are still unwritten; what changed is that there is now a
 # column to write them in.
@@ -212,6 +212,7 @@ rows:
     social:  "true"
     by:      "IN-08 H3 (`ED-IN-0261`'s scar model): `{element: count}`, one count per OBSERVER per violated pursuit -- and, from IN-08 H11, per violated held affiliation (`rosters.yaml: tables.affiliation_engagement`) -- written by the act's outcome through `loop/resolve.py::_scar_witnesses` (was V2's `scar[axis]` on the wounded person, §54 item 21)"
     emits:   "`scar.taken`"
+    unproduced: "H-62 (loader invariant 2 counts verb writes only): no verb row declares it; written by loop/resolve.py::_scar_witnesses after any outcome that moved state"
     # ⚠ `ENC` ADDED AT IN-08 H3 ON M4's PRECEDENT for `(Person, stance)` above: `march`'s outcome
     # folds at ENCOUNTER, which shares RESOLVE's write class (`data/matrix.py`), and the scar is
     # written by every fold whose outcome moved state, so a lost field battle's observers are

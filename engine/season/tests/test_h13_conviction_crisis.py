@@ -187,6 +187,39 @@ def test_h13_a_failure_band_reaches_no_crisis(monkeypatch):
         "a landed fight in the same world reached no crisis, so the arm above proves nothing"
 
 
+def test_h13_a_pursuit_only_scar_reaches_no_crisis(monkeypatch):
+    """A crisis follows an AFFILIATION's count moving. A person already at the threshold on a held
+    affiliation who is scarred on a PURSUIT alone (the shipped engagement table leaves `fight`
+    uncelled, so no holding is violated) keeps the vector; the control is the same world with
+    `fight` rebound to violate the holding, which folds as before."""
+    from engine.season.data.rosters import PURSUITS
+    hub, (y, *_r) = _hub()
+    holdings = dict([(hub, 3), (y, 1)])
+
+    def world():
+        w = _world(holdings, SCAR_CRISIS_AT)
+        for p in w.persons.values():
+            p.pursuits = {e: 0.5 for e in PURSUITS}
+        return w
+
+    w = world()
+    assert not violated_affiliations(w.persons["p_mid"], "fight"), \
+        "the shipped table violates the holding, so this arm is not pursuit-only"
+    before = {pid: dict(p.scar) for pid, p in w.persons.items()}
+    _fight(w)
+    pursuit_scarred = [pid for pid, p in w.persons.items()
+                       if p.scar != before[pid] and p.scar.get(hub) == SCAR_CRISIS_AT]
+    assert pursuit_scarred, "the act scarred nobody on a pursuit, so the unmoved vector proves nothing"
+    for pid in pursuit_scarred:
+        assert w.persons[pid].conviction == holdings, (pid, w.persons[pid].conviction)
+
+    monkeypatch.setattr(A, "ENGAGEMENT", _rebound(**{A.SHARED_COLUMN: {"fight": -0.3}}))
+    control = world()
+    _fight(control)
+    assert any(control.persons[pid].conviction == {y: 4} for pid in pursuit_scarred), \
+        "the affiliation-scarred control did not fold, so the arm above proves nothing"
+
+
 def test_h13_witness_token_is_refused_and_encounter_is_admitted():
     hub, (y, *_r) = _hub()
     w = _world(dict([(hub, 3), (y, 1)]), SCAR_CRISIS_AT)
