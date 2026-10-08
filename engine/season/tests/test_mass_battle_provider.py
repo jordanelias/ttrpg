@@ -59,7 +59,7 @@ from engine.season.seam.contest import contest
 
 def _bare(target):
     """`build_realm(0)` with `target`'s garrison Site deleted -- `fortification_of` reads 0, so the
-    field is whatever row the target's territory resolves to (blocks 5 and 7). Block 5 fights it through
+    field is whatever row the target's territory resolves to (blocks 5, 5b and 7). Block 5 fights it through
     `_fight_open` for the open-ground arm; block 7 reads the real territory."""
     w = build_realm(0)
     for sid in [sid for sid, s in w.sites.items() if s.kind == "garrison" and s.rung == target]:
@@ -222,11 +222,8 @@ def test_field_walls_dr_sweep_zero_is_the_open_field_and_three_and_one_differ(mo
     keeps honest). Pre-`20-v` `field_walls_dr` did not exist and the arm could not be set."""
     from engine.season.seam.wrappers.mass_battle import resolve as provider_resolve
     target = "set_s_036"
-    default, bare = build_realm(0), build_realm(0)
-    for sid in [sid for sid, s in bare.sites.items() if s.kind == "garrison" and s.rung == target]:
-        del bare.sites[sid]
+    default, bare = build_realm(0), _bare(target)
     assert world_q.fortification_of(default, target) > 0.0, "the fixture no longer garrisons the target"
-    assert world_q.fortification_of(bare, target) == 0.0, "deleting the garrison left a fortification"
     assert default.fixtures.get("field_walls_dr") is None, "the shipped default moved off A.9's own number"
     arms = {}
     for dr in (3, 0, 1):

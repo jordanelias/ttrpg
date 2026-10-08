@@ -2113,7 +2113,8 @@ class Subunit:
         """
         if MB_NODE_COHESION and hasattr(self, '_node_pos'):
             return self._node_advance(discipline, target_centroid, enemy_cells, enemy_cells_float)
-        if self.eff_stance == "hold":
+        _stance = self.eff_stance   # read once: nothing in this method writes stance, instructions or _stance_explicit
+        if _stance == "hold":
             for _cid in self.cell_last_speed:   # [ED-MB-0041 Tier-2] see _node_advance's hold branch
                 self.cell_last_speed[_cid] = 0
             return
@@ -2157,7 +2158,7 @@ class Subunit:
         self._moved_this_turn = set()
         op = _oriented(self)
         disc_mult = 1.0 if discipline >= 5 else (0.7 if discipline >= 3 else 0.4)  # [canonical: mass_battle_v30.md §A.4 — Discipline degradation tiers]
-        stance_mod = STANCE_SPEED_MOD[self.eff_stance]
+        stance_mod = STANCE_SPEED_MOD[_stance]
         all_speeds = [cell_speed(self.shape, self.tier, r, c) for r, c, _, _ in op]
         nonzero_speeds = [s for s in all_speeds if s > 0]
         min_speed = min(nonzero_speeds) if nonzero_speeds else 0
@@ -2279,7 +2280,7 @@ class Subunit:
             if cell_target:
                 dr = cell_target[0] - my_r
                 dc = cell_target[1] - my_c
-                if self.eff_stance == "retreat": dr, dc = -dr, -dc
+                if _stance == "retreat": dr, dc = -dr, -dc
                 if kite_mode == 'away': dr, dc = -dr, -dc  # kiter opens the gap; 'toward' keeps dr,dc (closes in); 'hold' returned above
                 abs_dr, abs_dc = abs(dr), abs(dc)
                 total = abs_dr + abs_dc

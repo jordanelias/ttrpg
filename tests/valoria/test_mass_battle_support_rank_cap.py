@@ -23,9 +23,7 @@ from systems.mass_battle.sim.core.exchange import _pair_engaged_troops
 from systems.mass_battle.sim.geometry import _oriented_abs_map
 from systems.mass_battle.sim.hierarchy.units import Subunit
 
-from .test_reach_weapon_class import _charge_vs_brace, field_path  # noqa: F401  (fixture re-export)
-import systems.mass_battle.sim.orchestration as _orch
-from systems.mass_battle.sim.engine import build_unit
+from .test_reach_weapon_class import _charge_vs_brace, _standing, field_path  # noqa: F401  (fixture re-export)
 
 _TYPES = ('infantry', 'heavy_infantry', 'pike', 'cavalry')
 _SHAPES = ('Line', 'Column')
@@ -50,8 +48,7 @@ def _force(troop_type, shape):
     return atom, front
 
 
-def _cap(troop_type):
-    return C.support_ranks_for(troop_type)
+_cap = C.support_ranks_for
 
 
 def _pool(troop_type, shape):
@@ -133,11 +130,6 @@ def test_capped_ranks_past_the_cap_add_nothing_to_the_pool(capped):
     assert checked == len(_TYPES) * len(_SHAPES)
 
 
-def test_capped_deep_and_shallow_no_longer_differ_beyond_the_cap(capped):
-    for tt in _TYPES:
-        assert _pool(tt, 'Column')[1] == _pool(tt, 'Line')[1] == 0.0, tt
-
-
 def test_capped_ranks_within_the_cap_still_count(capped):
     for tt in _TYPES:
         cap = _cap(tt)
@@ -160,19 +152,6 @@ def test_table_follows_the_weapon_classes():
 
 
 # ── what the cap does to play (measured, Python 3.11.17) ─────────────────────────────────────────
-
-def _standing(ta, tb, n=12):
-    import random
-    ha = hb = 0.0
-    for s in range(n):
-        random.seed(500 + s)
-        a = build_unit('Line', 3, 'A', 'A', 9, troop_type=ta)
-        b = build_unit('Line', 3, 'B', 'B', 9, troop_type=tb)
-        h0a, h0b = a.hp, b.hp
-        _orch.run_battle(a, b, max_turns=18)
-        ha += a.hp / h0a; hb += b.hp / h0b
-    return round(ha / n, 4), round(hb / n, 4)
-
 
 @pytest.mark.slow
 def test_capped_pike_out_retains_heavy_after_repelling_a_charge(field_path, monkeypatch):

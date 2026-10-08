@@ -393,8 +393,8 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
         # None the same way; no current spec anywhere sets unit_type=None explicitly, so this is a
         # latent-inconsistency fix, not a behavior change for any existing call site.
         spec_unit_type = sp.pop('unit_type', None)
-        stance_explicit = 'stance' in sp   # [MB-04] read before the pop below
         kw = dict(unit_type=spec_unit_type if spec_unit_type is not None else unit_type_for(tt),
+                  _stance_explicit='stance' in sp,   # [MB-04] evaluated before the pop on the next line
                   stance=sp.pop('stance', stance),
                   instructions=tuple(instructions), advance_dir=advance_dir, role=role)
         for k in ('power', 'discipline', 'morale', 'morale_start', 'dr', 'stamina', 'stamina_max',
@@ -445,9 +445,7 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
         # bookkeeping; what matters is that the SHOOTER's own pool is isolated.
         if kw.get('volleys') is None and kw['unit_type'] == 'ranged':
             kw['volleys'] = MB_VOLLEYS_START
-        sub = Subunit.of_type(tt, shape, tier, pos, **kw)
-        sub._stance_explicit = stance_explicit
-        subs.append(sub)
+        subs.append(Subunit.of_type(tt, shape, tier, pos, **kw))
     return Unit(name=name, faction=faction, power=power, command=command,
                 discipline=discipline, discipline_start=discipline,
                 morale=morale, morale_start=(morale if morale_start is None else morale_start),
