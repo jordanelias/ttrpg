@@ -198,7 +198,7 @@ commit and the run stops for a cleared window (`methodology-execute`, `CLAUDE.md
 has read §K's still-held list and `_part5` §J. `main` was red from PR #456 on one test
 (`test_flow_skeletons.py::test_contract_names_resolve_in_the_generated_index[combat]`); the one-line fix (`personal_combat`
 joins `RETIRED_CONTRACTS`) is built and rides the adoption branch (`7b619328`), so it is not a position — read `All Gates
-Green` on `main` once the branch merges. B-C is closed. B-D1 is closed (`9054df80`). Then **B-D2/D3 in parallel sessions**, then B-G → B-H → B-E → {B-F ∥ B-I} → B-J → … the spine `_part3` §B names. Every batch runs
+Green` on `main` once the branch merges. B-C is closed. B-D1 is closed (`9054df80`) and B-D2 is closed (`b31d2c31`). Then **B-D3**, then B-G → B-H → B-E → {B-F ∥ B-I} → B-J → … the spine `_part3` §B names. Every batch runs
 through `methodology-execute` (`CLAUDE.md` §9), and a batch's READ-FIRST list names the sites to read (the pins file is far too
 large to read whole: grep the assertion).
 
@@ -215,7 +215,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 |---|---|---|---|---|---|---|---|
 | IN-03 | `31a` | IN/SC | B | — | — | B-L | `_part4` |
 | IN-04 | `31b`; #457 SEAM-LADDER | IN/PC | BLK | IN-03 (PC-02, PC-03, PC-04 landed, `9054df80`) | — | B-L | `_part4` |
-| IN-05 | `31c`; SM-7 | IN/MB | BLK | IN-04, MB-01, MB-02, MB-05 | — | B-L | `_part4` |
+| IN-05 | `31c`; SM-7 | IN/MB | BLK | IN-04 | — | B-L | `_part4` |
 | IN-06 | `33`; #457 D5; A-24's threadwork; H-47 | IN/WR/FI | B | build (design landed at B-C; re-reviewed after B-H) | — | B-S | `_part4` |
 | IN-07 | `36` | IN/SE | B | build (design landed at B-C) | — | B-T | `_part4` |
 | IN-08 | cells commit; `12b` `12c` `12d`, H6–H11, `12`, `12e`, 6f; #457 CARRY-INTERIOR; #445 P-1 | IN | B | — (PC-01 landed, `9054df80`) | R-05, R-06, R-08 | B-G · B-H | `_part5` |
@@ -254,7 +254,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-49 | H-163 limit 3 | SE/IN | BLK | IN-10 | R-04, R-05 | B-K | `_part5` |
 | IN-50 | ARC-23's R3 repair (diagnosed at B-C) | IN | B | — | R-01 | B-H | `_part4` |
 | IN-51 | #453 R-5 (b) | IN/FA/SE | BLK | IN-12 | R-05 | B-R | `_part5` |
-| IN-52 | the levy-to-field feed (from IN-07's design); LF-1..LF-3 | IN/SE/MB | BLK | IN-49, MB-07, IN-07's extractions | — | B-T | `_part4` |
+| IN-52 | the levy-to-field feed (from IN-07's design); LF-1..LF-3 | IN/SE/MB | BLK | IN-49, IN-07's extractions | — | B-T | `_part4` |
 | SC-01 | `22` steps 11–16 | SC | BLK | IN-03 | R-04, R-05, R-08, R-09, M2 | B-N | `_part6` |
 | SC-02 | `22a` → `23` → `22b` | SC | BLK | SC-01 | — | B-P | `_part6` |
 | SC-03a | #453 steps 2b, 3 | SC | BLK | IN-10, IN-11 | R-05 | B-J | `_part6` |
@@ -269,13 +269,9 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | SE-03 | ED-SE-0053 §A.6–A.8 | SE | BLK | IN-28 | — | B-K | `_part6` |
 | SE-04 | #457 CAST-POPULACE; H-170, H-171 | SE | BLK | IN-07 | — | B-T | `_part6` |
 | SE-05 | = IN-30 | — | — | — | — | B-U | `_part5` |
-| MB-01 | ED-MB-0045 build | MB | B | — | — | B-D2 | `_part7` |
-| MB-02 | ED-MB-0057 | MB | B | — | — | B-D2 | `_part7` |
 | MB-03 | ED-MB-0078 | MB | BLK | IN-05 | — | B-L | `_part7` |
-| MB-04 | A5; #445 U-3 | MB | B | — | — | B-D2 | `_part7` |
-| MB-05 | A7 terrain; ED-MB-0074 | MB | B | — | — | B-D2 | `_part7` |
-| MB-06 | ED-MB-0075 attack | MB | B | — | — | B-D2 | `_part7` |
-| MB-07 | J-18 | MB | B | — | — | B-D2 | `_part7` |
+| MB-05r | A7 terrain: RIVER_CROSSING season wiring | MB | BLK | IN-05 | — | B-L | `_part7` |
+| MB-07r | J-18 (A): flip the depth support cap ON | MB | BLK | J (recalibration; the golden gate's time budget) | — | B-Z | `_part7` |
 | MB-08 | #445 U-1, U-2, U-6 | MB | LEAVE | named, unscheduled | — | B-Z | `_part7` |
 | MB-09 | = IN-05 | — | — | — | — | B-L | `_part4` |
 | PC-05 | ED-PC-0013 (1) | PC | BLK | GO-01, GO-05 | — | B-Z | `_part7` |
@@ -332,7 +328,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | SEAM-LADDER · END-VICTORY | merged into IN-04 · IN-27 |
 | §7 D1 · D2 · D3 · D4 · D5 · D6 | IN-35 · IN-34 · answered: no dated pins (T-c) · IN-36, FA-01 · A-24 → IN-06 · IN-27 (D2, D4, D6 answered as the plan's recommendation, RS-21) |
 
-**#445** (`proposals/2026-09-30-character-and-play-surface/`): S-1, M-1/S-4, S-2/L-1, K-1/K-5, K-3 → PC-06 · U-3 → MB-04
+**#445** (`proposals/2026-09-30-character-and-play-surface/`): S-1, M-1/S-4, S-2/L-1, K-1/K-5, K-3 → PC-06 · U-3 → landed at B-D2 (`b31d2c31`)
 · U-1/U-2/U-6 → MB-08 · P-1 → IN-08 · P-2 → IN-22 · P-3 → FA-01 · P-4, V-4, V-5 → SC-07 · S-6 → FI-01 · V-1 → J-2
 (answered) · K-2 only with its first reader · M-2..M-6, K-4/V-3 → PC-08.
 
