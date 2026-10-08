@@ -1,6 +1,6 @@
 """PC-01 (`ED-PC-0056`): §11.4 Yield, built as a declaration on `wrapper.fight`, NO fourth band.
 
-The two falsifiers are the workplan position's own (`valoria_master_workplan_v9_part7.md`, PC-01):
+The two falsifiers are the workplan position's own (v9 `_part7`, PC-01, landed at 9054df80 and since deleted from the plan):
   (a) a planted yield ends the exchange with ZERO further rolls -- the bout count is asserted, and
       every engine-level draw is counted (`_draw_stream.RecordingRandom`, which also sees the `gauss`
       draws a `random()` counter would miss), so a yield that "ends" the fight after one more draw is seen;

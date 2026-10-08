@@ -52,7 +52,7 @@ B-C (INSTRUMENTS + RECORDS) is closed; its finished positions left the plan and 
 
 ## 4.3 B-L — MODULES (§SM, carried from v8)
 
-Members, order, entry gate and exit instrument: `_part3` §B. B-L is IN-03 → IN-04 → IN-05, then the tail lanes MB-03, PC-06 M-1 and S-2/L-1, GO-04, with IN-46's design re-read against the moved `combat` container. It is placed after B-K, so THE NINE move first: nothing in B-G..B-K reads a module, and SC-01 (IN-03) and IN-13 (IN-05) are the positions that do; Jordan may run B-L right after B-D with no edge broken. Entry gate: B-B closed (`4a2e4494`; IN-02's falsifiers observed, E17) and B-D1 and B-D2 merged, so that every lane edit to the two closures lands before the move (B-D1: PC-01..04, PC-07, PC-05 item 3; B-D2: MB-01, MB-02, MB-05, MB-06, MB-07, MB-04, each at its pre-move paths). The section's standing preamble, carried from `v8_part5.md:125-171`:
+Members, order, entry gate and exit instrument: `_part3` §B. B-L is IN-03 → IN-04 → IN-05, then the tail lanes MB-03, PC-06 M-1 and S-2/L-1, GO-04, with IN-46's design re-read against the moved `combat` container. It is placed after B-K, so THE NINE move first: nothing in B-G..B-K reads a module, and SC-01 (IN-03) and IN-13 (IN-05) are the positions that do; Jordan may run B-L right after B-D with no edge broken. Entry gate: B-B closed (`4a2e4494`; IN-02's falsifiers observed, E17), B-D1 closed (`9054df80`: the PC lane's edits to the combat closure landed) and B-D2 merged, so that every lane edit to the two closures lands before the move (B-D2: MB-01, MB-02, MB-05, MB-06, MB-07, MB-04, each at its pre-move paths). The section's standing preamble, carried from `v8_part5.md:125-171`:
 
 **Ruled:** `ED-IN-0284`, revised by `ED-IN-0285`. The vocabulary, directories, adapter model, module entry kinds,
 containers and the retained-modules roster are **`A-25`** (`_part5` §A), stated there once; this section stages the code
@@ -74,7 +74,7 @@ previous stage's falsifiers being OBSERVED, not on its commit existing; a falsif
 
 **THE CONTROL EVERY STAGE KEEPS.** `build_realm(0)`'s `content_hash()` and its one-season hash byte-identical across
 the stage (`a918cd1f…` and `05f022e2…` were the readings at `52ec9a54`; the batches before B-L move them — declared movers
-include IN-08, IN-34, SC-03a's docket items and PC-02..04 — so each stage's control is the reading on ITS OWN base
+include IN-08, IN-34 and SC-03a's docket items, and PC-02..04 moved them at `9054df80` — so each stage's control is the reading on ITS OWN base
 commit, taken before the first edit); `python -m engine.season.harness.aperture 4 0` reads the same per-verb funnel with the
 control hash EQUAL; `resolvable_verbs()` returns the same set (compare the two sets at the build — no number is
 written here); `python tools/export_composition.py --check` OK. The two readings above were taken (v8 `_part6` §H.1, at its `FORK:` ref)
@@ -105,7 +105,7 @@ test can pass on a table it did not build. Precedent: `tests/valoria/test_season
 
 ### IN-03 · `31a` · social contest — `seam/wrappers/sigma.py` → a host input builder + `modules/social_contest/` · IN/SC · gate `30` · `opus`/`opus` · `[infrastructure]`
 - STATE: B      LANE: IN (SC)      BATCH: B-L (head)      R: —
-- WHAT: the spec carried below; creates `modules/`. Its entry gate is B-L's (B-B closed, `4a2e4494`; B-D1 and B-D2 merged; after B-K unless Jordan runs B-L early).
+- WHAT: the spec carried below; creates `modules/`. Its entry gate is B-L's (B-B closed, `4a2e4494`; B-D1 closed, `9054df80`, and B-D2 merged; after B-K unless Jordan runs B-L early).
 - DEPS: IN-02 (landed `5097e49`) → IN-03 (R, satisfied); IN-03 → IN-04 (R); IN-03 → SC-01 (R: E17/A-25 — `22` builds its provider on this typed input record; SC-01 is B-N, so B-N's entry gate is B-L merged); IN-03 → PC-06 S-2 (D; a B-L tail lane)      EDITS: `rosters.yaml`, `seam/wrappers/sigma.py`, `module_contracts.yaml` + `composition.json`, `manifest/`, shape pins
 - EXIT: both control hashes unchanged (re-read on the base commit) and falsifier (3) observed in a fresh subprocess      FALSIFIER: (1)–(5) below; (3) is `30`'s falsifier (2) (`tests/valoria/test_module_registrar.py`) in its fresh-process form
 - SOURCE: `engine/season/seam/wrappers/sigma.py`; carried below, `v8_part5.md:239-275`:
@@ -149,9 +149,9 @@ count, control hash EQUAL. (5) `test_importing_every_engine_module_pulls_in_no_s
 
 
 ### IN-04 · `31b` · combat — wrapper split; the reachable engine → `modules/combat/` · IN/PC · gate `31a` · `sonnet`/`opus`, a `haiku` reachability census first · `[infrastructure]`
-- STATE: BLK:IN-03, PC-02, PC-03, PC-04      LANE: IN (PC)      BATCH: B-L (after IN-03)      R: —
+- STATE: BLK:IN-03 (PC-02, PC-03, PC-04 landed, `9054df80`)      LANE: IN (PC)      BATCH: B-L (after IN-03)      R: —
 - WHAT: the spec carried below; the `sim_params.json` decision is made in this commit; SEAM-LADDER (#457) folds into item 5's T-k reading (`architecture/meta/03_VERBS_AND_LOOPS.md:286`).
-- DEPS: IN-03 → IN-04 → IN-05 (R); IN-04 → PC-06 M-1 (D; a B-L tail lane); PC-02/03/04 → IN-04 (F: lane edits first), and so is every other B-D1 edit to the closure — PC-01, PC-07 (J-20 (B): the dead `COVERAGE_GAP['partial']` branch and the `coverage` parameters are deleted before the move), PC-05 item 3 — all landed at B-D1's merge, so the control hashes are read on B-L's base commit, after PC-02/03/04 moved combat outcomes      EDITS: `seam/wrappers/combat.py`, `seam/ladder.py`, `module_contracts.yaml` + `composition.json`, shape pins, the `systems/combat` move
+- DEPS: IN-03 → IN-04 → IN-05 (R); IN-04 → PC-06 M-1 (D; a B-L tail lane); the F edges from the PC lane's edits to the closure (PC-01..04, PC-07, PC-05 item 3) are satisfied, all landed at `9054df80`, so the control hashes are read on B-L's base commit, after PC-02/03/04 moved combat outcomes      EDITS: `seam/wrappers/combat.py`, `seam/ladder.py`, `module_contracts.yaml` + `composition.json`, shape pins, the `systems/combat` move
 - EXIT: both hashes unchanged; `balance.py` runs; one seed run twice in one process gives one hash      FALSIFIER: (1)–(5) below, and (6): IN-08 (B-G) adds `accept` with `contests: "the body"`, which the prize row `"the body"` already claims (`rosters.yaml` `prizes:`), while this stage's composition row names `verb: fight` and the registrar's `verb:` names one verb — after the split `aperture 4 0` shows `accept` still reaches the one `combat` provider, and whether a second `verb_call` row is needed is read at the split [GAP: the contested-verb check resolves by prize (`loop/driver.py:182-192`), so `accept` is claimed; whether the composition row must also name it (A-25: the prize row and the composition row are the two owners; `manifest/registry.py:104-111` states the one-`verb:` shape) was not traced]
 - SOURCE: `proposals/2026-10-04-forcing-churn-and-the-story-bar.md:173`; carried below, `v8_part5.md:278-312`:
 

@@ -120,7 +120,7 @@ bound). It creates no document and no directory. A finding that needs no ruling 
   2026-09-29 revert (H-79) is the precedent.
 - **Must NOT, in any batch:** edit `.designs/` or `.audit/`; cite a `.md` as the reason a behaviour is correct; build a
   guard whose subject is process (§0.1 pt 5); create a directory or standing document; author a cell, a Godot version, or
-  a Jordan item's answer; interleave the cells commit (IN-08) with `9` (PC-01); build anything in `engine/mc_v18.py`;
+  a Jordan item's answer; build anything in `engine/mc_v18.py`;
   `git add` a file another lane is editing (use `isolation: worktree`); re-fetch from the GitHub API; write a count into
   `CURRENT.md`/`HANDOFF.md`.
 
@@ -198,7 +198,7 @@ commit and the run stops for a cleared window (`methodology-execute`, `CLAUDE.md
 has read §K's still-held list and `_part5` §J. `main` was red from PR #456 on one test
 (`test_flow_skeletons.py::test_contract_names_resolve_in_the_generated_index[combat]`); the one-line fix (`personal_combat`
 joins `RETIRED_CONTRACTS`) is built and rides the adoption branch (`7b619328`), so it is not a position — read `All Gates
-Green` on `main` once the branch merges. B-C is closed. Then **B-D1/D2/D3 in parallel sessions**, then B-G → B-H → B-E → {B-F ∥ B-I} → B-J → … the spine `_part3` §B names. Every batch runs
+Green` on `main` once the branch merges. B-C is closed. B-D1 is closed (`9054df80`). Then **B-D2/D3 in parallel sessions**, then B-G → B-H → B-E → {B-F ∥ B-I} → B-J → … the spine `_part3` §B names. Every batch runs
 through `methodology-execute` (`CLAUDE.md` §9), and a batch's READ-FIRST list names the sites to read (the pins file is far too
 large to read whole: grep the assertion).
 
@@ -214,11 +214,11 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | handle | alias | lane | STATE | GATE (the entry holds the whole of it) | R | batch | home |
 |---|---|---|---|---|---|---|---|
 | IN-03 | `31a` | IN/SC | B | — | — | B-L | `_part4` |
-| IN-04 | `31b`; #457 SEAM-LADDER | IN/PC | BLK | IN-03, PC-02, PC-03, PC-04 | — | B-L | `_part4` |
+| IN-04 | `31b`; #457 SEAM-LADDER | IN/PC | BLK | IN-03 (PC-02, PC-03, PC-04 landed, `9054df80`) | — | B-L | `_part4` |
 | IN-05 | `31c`; SM-7 | IN/MB | BLK | IN-04, MB-01, MB-02, MB-05 | — | B-L | `_part4` |
 | IN-06 | `33`; #457 D5; A-24's threadwork; H-47 | IN/WR/FI | B | build (design landed at B-C; re-reviewed after B-H) | — | B-S | `_part4` |
 | IN-07 | `36` | IN/SE | B | build (design landed at B-C) | — | B-T | `_part4` |
-| IN-08 | cells commit; `12b` `12c` `12d`, H6–H11, `12`, `12e`, 6f; #457 CARRY-INTERIOR; #445 P-1 | IN | BLK | PC-01 | R-05, R-06, R-08 | B-G · B-H | `_part5` |
+| IN-08 | cells commit; `12b` `12c` `12d`, H6–H11, `12`, `12e`, 6f; #457 CARRY-INTERIOR; #445 P-1 | IN | B | — (PC-01 landed, `9054df80`) | R-05, R-06, R-08 | B-G · B-H | `_part5` |
 | IN-09 | `19b` | IN | B | after B-G | R-05 | B-I | `_part5` |
 | IN-10 | #453 step 1 | IN/SC | B | after B-G | R-04, R-05 | B-I | `_part5` |
 | IN-11 | #453 step 2 | IN/SE | B | after B-G | R-05, R-06 | B-I | `_part5` |
@@ -278,13 +278,8 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | MB-07 | J-18 | MB | B | — | — | B-D2 | `_part7` |
 | MB-08 | #445 U-1, U-2, U-6 | MB | LEAVE | named, unscheduled | — | B-Z | `_part7` |
 | MB-09 | = IN-05 | — | — | — | — | B-L | `_part4` |
-| PC-01 | `9`; ED-PC-0056 | PC | B | J-7 answered: build | — | B-D1 | `_part7` |
-| PC-02 | ED-PC-0003; ED-IN-0187's held site | PC | B | — | — | B-D1 | `_part7` |
-| PC-03 | ED-PC-0058 | PC | B | finding 1 | — | B-D1 | `_part7` |
-| PC-04 | ED-PC-0016, 0049, 0050 | PC | B | — | — | B-D1 | `_part7` |
-| PC-05 | ED-PC-0013 (1), (3) | PC | B | item 3, after a check | — | B-D1 · B-Z | `_part7` |
+| PC-05 | ED-PC-0013 (1) | PC | BLK | GO-01, GO-05 | — | B-Z | `_part7` |
 | PC-06 | #445 S-1, M-1/S-4, S-2/L-1, K-1/K-5, K-3; ED-PC-0001 | PC | B | S-1 | R-03; R-05 | B-E · B-L · B-S | `_part7` |
-| PC-07 | J-20, J-21 | PC | B | J-20 (B) | — | B-D1 | `_part7` |
 | PC-08 | Phase 4a/4b/5, WS-7; #445 M-2..M-6, K-4/V-3 | PC | LEAVE | named, unscheduled | — | B-Z | `_part7` |
 | PC-09 | = IN-04 | — | — | — | — | B-L | `_part4` |
 | FI-01 | `ED-FI-0009`; J-22 (A); #445 S-6 | FI | BLK | SC-01, SC-03b, IN-03 | R-05, R-09 | B-O | `_part6` |
@@ -314,7 +309,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | `19b` · `13`-rest · pre-flight P-4, P-6 | IN-09 · IN-38 · read at B-C (IN-39, landed; `_part3` §P) |
 | `22` · `22a` → `23` → `22b` · `2-ii` | SC-01 · SC-02 · SC-05 |
 | `24g` · `24h` P5 · `24` (umbrella) | SE-01 · IN-30 (= SE-05, FA-02) · not carried — its letters are the rows |
-| `9` · `26` · `27` remainder · `ED-FI-0009` | PC-01 · GO-01 · WR-01, WR-02, WR-03 · FI-01 |
+| `9` · `26` · `27` remainder · `ED-FI-0009` | PC-01 (landed, `9054df80`) · GO-01 · WR-01, WR-02, WR-03 · FI-01 |
 | `11` | no handle: re-taken at B-G (control), B-I and B-M (E15); P-4 passed before it, at B-C |
 | SM-1 · SM-2, SM-15 · SM-3 · SM-7 · SM-9, SM-11 · SM-10, SM-12 · SM-13 · SM-5, SM-6 | SC-06 · SC-05 · FI-02 · IN-05 · IN-41 · IN-44 · GO-05 · SM-5 confirmed (RS-6), SM-6 = IN-46 |
 | telling T7 · its measurement + H-180/181/182 re-check · G1–G8 | IN-16 · IN-17 · IN-18 |
