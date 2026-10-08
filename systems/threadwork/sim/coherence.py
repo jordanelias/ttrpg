@@ -59,7 +59,9 @@ empties the stack, so a practitioner who recuperates between workings never yiel
   - How much a working costs (the caller's `delta`): D-5 type x scale and §6.6's direction test
     live in the callers. R-14 (ruled 2026-09-09) adds a practitioner-side term — "how resilient
     their spirit is" — whose ARITHMETIC is unruled; it belongs in the working's cost, not in this
-    state, and no caller applies it yet. ⚠ C-3's "cost is relative magnitude / no toughness term"
+    state. Its one owner is `operations.resist_coherence_cost`, a swept fixture
+    (`operations.RESILIENCE_GAIN`, shipped at the control 0), applied in
+    `operations._resolve_operation`; `collective.py`/`opposing.py` do not route through it yet. ⚠ C-3's "cost is relative magnitude / no toughness term"
     was RETRACTED (RULINGS.md Batch 13) and is not modelled.
   - What follows the crossing (P-15's TS-gated branching, §7.5 reality-strain): this module reports
     the crossing and keeps the arithmetic running. Routing post-crossing load into the substrate has

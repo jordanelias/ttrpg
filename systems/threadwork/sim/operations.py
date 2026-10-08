@@ -135,6 +135,21 @@ COHERENCE_COST_BY_SCALE = {
 # [canonical: §3.2 — "FR surcharge cap exemption (PP-196)"]
 FR_SURCHARGE = -1
 
+# R-14 — THE PRACTITIONER-SIDE TERM ON A WORKING'S COHERENCE COST (WR-01).
+# canon/philosophy/06_operations.md "How large the cost is, and what resists it" (ruled 2026-09-09):
+# "What determines their ability to prevent that cost is how resilient their spirit is — which is how
+# strongly configured they are." It is NOT thread sensitivity, NOT imbrication, NOT size, so it is read
+# off its own duck-typed attribute (`actor.resilience`, a non-negative int, absent = 0) and derived from
+# none of `.ts`/`.spirit`/history. It "sits alongside" D-5's type x scale and §6.6's direction test:
+# those still form the working's cost; this term only RESISTS it (`resist_coherence_cost` below).
+# THE ARITHMETIC IS UNRULED (RULINGS.md Batch 13 retracted C-3's "no toughness term" without ruling a
+# shape), so it ships as a SWEPT FIXTURE on H-94's precedent (engine/season/hole_register.yaml,
+# `sweep: [0, 1, 3]`): the gain is whole Coherence units resisted per point of resilience, and the
+# shipped value 0 is THE CONTROL — today's behaviour, byte-for-byte. Arms 1 and 3 are the builder's.
+# The sweep is a tuple here, not a comment, so tests/valoria/test_threadwork_resilience.py runs it.
+RESILIENCE_GAIN_SWEEP = (0, 1, 3)  # [JUSTIFIED: R-14 ruled 2026-09-09 sources the mechanism (resilience resists the cost); magnitude unruled — swept fixture on H-94's precedent, arms are the builder's]
+RESILIENCE_GAIN = 0                # [JUSTIFIED: R-14 ruled 2026-09-09 sources the mechanism; magnitude unruled — shipped arm RESILIENCE_GAIN_SWEEP[0], the control = pre-R-14 behaviour]
+
 # P-25 "Scale-based Mending Stability" — the SCALE TERM on Mending Stability, authored here because
 # ED-WR-0008's superseding row (2026-09-15, registers/editorial_ledger_wr_archive.jsonl) says so:
 # the P-25 override table was truncated at authoring to its header plus the label `Object`, NOTHING
@@ -211,6 +226,27 @@ def _actor_pool(actor) -> int:
     return (spirit * 2) + history_contrib + tps
 
 
+def resist_coherence_cost(cost: int, actor) -> int:
+    """R-14: the working's Coherence `cost` (<= 0) after the practitioner's resilience resists it.
+
+    THE ONE OWNER of the practitioner-side term. Every caller that forms a working's cost for a
+    practitioner routes it through here, after the working's own terms (type x scale, direction,
+    degree) are applied; nothing re-implements the arithmetic.
+
+    Resistance is `RESILIENCE_GAIN * actor.resilience` whole units, and it can only bring a cost
+    TOWARD zero: the result is floored at 0, so a resilient practitioner takes nothing from a small
+    working but is never handed a positive delta (which `coherence.apply_coherence_delta` refuses —
+    restoration is `recover`'s, not a cost's). A cost that is already 0 (Mending, ED-871; Leap) or
+    positive is returned unchanged.
+    """
+    resilience = getattr(actor, 'resilience', 0)
+    if resilience < 0:
+        raise ValueError(f"resist_coherence_cost: resilience is non-negative (got {resilience!r})")
+    if cost >= 0:
+        return cost
+    return min(0, cost + RESILIENCE_GAIN * resilience)
+
+
 def _resolve_operation(operation: str, actor, ob: int, tn: int,
                        coherence_delta: int, world=None,
                        rng=None, scale: str = "Object") -> OperationResult:
@@ -245,6 +281,8 @@ def _resolve_operation(operation: str, actor, ob: int, tn: int,
     effective_coh = coherence_delta
     if degree in ("Partial", "Failure") and operation != "Mending":
         effective_coh -= 1
+    # R-14: the practitioner's resilience resists the working's cost (RESILIENCE_GAIN; 0 = control).
+    effective_coh = resist_coherence_cost(effective_coh, actor)
 
     if effective_coh != 0:
         apply_coherence_delta(actor_id, effective_coh, f"{operation} {degree}", world=world)
