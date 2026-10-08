@@ -33,6 +33,9 @@ Entry points:
   - attempt_dissolution(actor, target, world) -> OperationResult
   - attempt_mending(actor, target, world, *, environment_in_equilibrium=False) -> OperationResult
     (keyword-only; defaults to False, so a caller that states no environment gets no restorative term)
+  - mending_priced_scale / price_mending / apply_mending_feedback — THE one pricing owner for a
+    Mending, read by attempt_mending, collective.py and opposing.py alike (WR-03)
+  - resist_coherence_cost(cost, actor) -> int — R-14's one owner, read by all three likewise
 """
 from __future__ import annotations
 
@@ -414,6 +417,75 @@ def attempt_dissolution(actor, target: dict, world=None, rng=None) -> OperationR
                               coherence_delta=coh, world=world, rng=rng)
 
 
+# ─── WR-03: THE ONE PRICING OWNER FOR MENDING ────────────────────────────────────────────────────
+# Three sites resolve a Mending: `attempt_mending` (one practitioner), `collective.py` (§2.5) and
+# `opposing.py` (§2.6). Each priced it its own way until WR-03; all three now read these three
+# functions, so the scale worked, the cost, the Mending Stability delta and the restorative term
+# cannot disagree between them (tests/valoria/test_threadwork_mending_parity.py).
+
+# ED-871 (2026-05-31) + canon/02 Amendment 3: Mending is RESTORATIVE and costs 0 Coherence at every
+# degree. Named so `attempt_mending` can hand it to `_resolve_operation` before the degree is known.
+MENDING_COHERENCE_COST = 0  # [canonical: ED-871 — Mending costs 0 Coherence at every degree]
+MENDING_FALLBACK_SCALE = "Relational"
+
+
+@dataclass(frozen=True)
+class MendingPrice:
+    """What one Mending at one (priced scale, degree) costs and returns. Built by `price_mending`."""
+    coherence_cost: int            # the STRESS the working charges its practitioner (ED-871: 0)
+    mending_stability_delta: int   # REPORTED, written nowhere (see OperationResult)
+    restorative: int               # the `mending` term offered to `coherence.recover` (>= 0)
+
+
+def mending_priced_scale(target: dict) -> str:
+    """The scale a Mending actually WORKS: `target['scale']` (absent = Relational), and a scale
+    MENDING_OB does not price falls back to Relational. Ob, cost and restorative term all read this
+    one answer, so no site can price a scale it did not roll against."""
+    scale = target.get('scale', MENDING_FALLBACK_SCALE)
+    return scale if scale in MENDING_OB else MENDING_FALLBACK_SCALE
+
+
+def price_mending(scale: str, degree: str) -> MendingPrice:
+    """THE price of a Mending at a priced `scale` (`mending_priced_scale`'s answer) and a four-band
+    `degree` label ('Overwhelming' / 'Success' / 'Partial' / 'Failure').
+
+      - coherence_cost: MENDING_COHERENCE_COST (0) at every degree — ED-871.
+      - mending_stability_delta: 0 — what `attempt_mending` has always reported for Mending.
+      - restorative: the working's type x scale term read backwards (-COHERENCE_COST_BY_SCALE[scale];
+        see `attempt_mending`'s docstring for why), and 0 on Failure — a failed Mending returns
+        nothing to the attractor, so nothing is drawn along with it (§6.8).
+
+    An unpriced scale RAISES rather than being folded here: the fallback is `mending_priced_scale`'s
+    alone, and a caller that skipped it would otherwise get a price for a scale it never rolled.
+    """
+    if scale not in MENDING_OB:
+        raise ValueError(f"price_mending: {scale!r} is not a scale MENDING_OB prices; "
+                         "pass mending_priced_scale(target)")
+    if degree not in dice_engine.DEGREE_LABEL.values():
+        raise ValueError(f"price_mending: {degree!r} is not a four-band degree label")
+    restorative = 0 if degree == "Failure" else -COHERENCE_COST_BY_SCALE[scale]
+    return MendingPrice(coherence_cost=MENDING_COHERENCE_COST, mending_stability_delta=0,
+                        restorative=restorative)
+
+
+def apply_mending_feedback(actor_id: str, price: MendingPrice, *, environment_in_equilibrium: bool,
+                           source: str, world=None) -> int:
+    """Hand a Mending's restorative term to `actor_id` and return the elastic displacement ACTUALLY
+    returned (>= 0) — measured off state before/after, not the amount offered.
+
+    `coherence.recover` is still called whenever there is a term to offer, so it stays the one owner
+    of E-1's environment gate and of "never past the resting point". A price with no term (Failure)
+    calls nothing: nothing was offered, and nothing is logged.
+    """
+    if price.restorative == 0:
+        return 0
+    prior = get_state(actor_id, world=world)
+    elastic_before = prior.elastic_displacement if prior is not None else 0
+    state = recover(actor_id, seasons=0, environment_in_equilibrium=environment_in_equilibrium,
+                    source=source, mending=price.restorative, world=world)
+    return elastic_before - state.elastic_displacement
+
+
 def attempt_mending(actor, target: dict, world=None, rng=None, *,
                     environment_in_equilibrium: bool = False) -> OperationResult:
     """§2.4 Mending — Repairing the Substrate.
@@ -438,9 +510,11 @@ def attempt_mending(actor, target: dict, world=None, rng=None, *,
         scale manipulation would cost (`COHERENCE_COST_BY_SCALE`, negated). §6.8 grounds the
         direction ("the operational channel read backwards ... one channel, one imbrication,
         opposite relations to the equilibrium"); the REUSE of the §3.2 table as its size is this
-        position's choice, as `opposing.py`'s and the P-25 term's reuse of it is theirs. A scale
-        MENDING_OB does not price falls back to Relational for both the Ob and the term, so the two
-        cannot disagree about which scale was worked.
+        position's choice, as the P-25 term's reuse of it is its own. A scale MENDING_OB does not
+        price falls back to Relational for both the Ob and the term, so the two cannot disagree
+        about which scale was worked. Scale, price and feedback are `mending_priced_scale`,
+        `price_mending` and `apply_mending_feedback` (WR-03) — the same three `collective.py` and
+        `opposing.py` read, so a Mending is priced alike at every site.
       - FAILURE RETURNS NOTHING: the feedback is being joined to "a configuration that is being
         returned to the attractor" (§6.8), and a failed Mending returns nothing to it.
       - `environment_in_equilibrium` is E-1's CONDITION ("so long as you are in an environment where
@@ -464,25 +538,20 @@ def attempt_mending(actor, target: dict, world=None, rng=None, *,
     reaches as deep as self-mending"). A value naming another actor takes the elastic path for the
     mender and moves nothing of the target's.
     """
-    scale = target.get('scale', 'Relational')
-    priced = scale if scale in MENDING_OB else 'Relational'
+    priced = mending_priced_scale(target)
     ob = MENDING_OB[priced]
-    # ED-871: Mending Coherence cost = 0 (restorative-operation exception).
-    coh = 0
+    # ED-871: Mending Coherence cost = 0 (restorative-operation exception) — known before the roll.
     result = _resolve_operation("Mending", actor, ob, TN_STANDARD,
-                                coherence_delta=coh, world=world, rng=rng)
+                                coherence_delta=MENDING_COHERENCE_COST, world=world, rng=rng)
+    price = price_mending(priced, result.degree)
+    result.mending_stability_delta = price.mending_stability_delta
     configuration_of = target.get('configuration_of')
     if configuration_of is not None and configuration_of in ('self', result.actor):
         _mend_own_configuration(result, world)
-    elif result.degree != "Failure":
-        restorative = -COHERENCE_COST_BY_SCALE[priced]
-        prior = get_state(result.actor, world=world)
-        elastic_before = prior.elastic_displacement if prior is not None else 0
-        state = recover(result.actor, seasons=0,
-                        environment_in_equilibrium=environment_in_equilibrium,
-                        source=f"Mending {result.degree} at {priced}: restorative feedback",
-                        mending=restorative, world=world)
-        result.coherence_restored = elastic_before - state.elastic_displacement
+    else:
+        result.coherence_restored = apply_mending_feedback(
+            result.actor, price, environment_in_equilibrium=environment_in_equilibrium,
+            source=f"Mending {result.degree} at {priced}: restorative feedback", world=world)
     # Mending never produces Scars per conviction §3 Mending exception;
     # caller responsible for skipping Scar attribution
     return result

@@ -27,11 +27,12 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from systems.threadwork.sim.operations import (
-    attempt_weaving, attempt_pulling, attempt_locking, attempt_dissolution,
-    attempt_mending, attempt_past_pulling, attempt_leap,
-    DEPTH_OB, MENDING_OB, TN_STANDARD,
-    _actor_pool, _resolve_operation, OperationResult,
+    attempt_leap,
+    COHERENCE_COST_BY_SCALE, DEPTH_OB, MENDING_OB, TN_STANDARD,
+    _actor_pool, OperationResult,
+    apply_mending_feedback, mending_priced_scale, price_mending, resist_coherence_cost,
 )
+from systems.threadwork.sim.coherence import apply_coherence_delta
 from engine.dice_engine import dice_engine
 from engine.dice_engine.dice_engine import roll_pool
 
@@ -53,6 +54,9 @@ class CollectiveResult:
     lattice_fractured: bool        # +1 Ob penalty applied
     operation_result: Optional[OperationResult]
     notes: list[str] = field(default_factory=list)
+    # Mending only (WR-03): actor_id -> elastic displacement the restorative term actually returned
+    # to that participant (`operations.apply_mending_feedback`). Empty for every other op_type.
+    coherence_restored: dict = field(default_factory=dict)
 
 
 def _helper_contribution(actor) -> int:
@@ -65,7 +69,8 @@ def _helper_contribution(actor) -> int:
 
 
 def attempt_collective_operation(actors: list, op_type: str, target: dict,
-                                 world=None, rng=None) -> CollectiveResult:
+                                 world=None, rng=None, *,
+                                 environment_in_equilibrium: bool = False) -> CollectiveResult:
     """§2.5 — multi-practitioner operation.
 
     actors: list of practitioner objects; ranked by .ts descending,
@@ -73,6 +78,16 @@ def attempt_collective_operation(actors: list, op_type: str, target: dict,
     op_type: 'Weaving' / 'Pulling' / 'Locking' / 'Dissolution' / 'POP' /
              'Mending'.
     target: same shape as single-op target dict.
+    environment_in_equilibrium: E-1's condition on the restorative term a Mending hands each
+             participant; a fact about where they stand that only the caller knows. Defaults to
+             False (unstated is not established), as `operations.attempt_mending` does.
+
+    COHERENCE (R-14, WR-03). Every participant whose Leap succeeded pays the working's cost, each
+    resisted by their OWN resilience through `operations.resist_coherence_cost` (identity at the
+    shipped gain 0); the reported `coherence_delta` is the Anchor's. A Mending is priced by
+    `operations.price_mending` on `operations.mending_priced_scale(target)` — 0 cost at every degree
+    (ED-871), the owner's Mending Stability delta, and the restorative term handed to every such
+    participant through `operations.apply_mending_feedback` — exactly as a single Mending is.
     """
     if not actors:
         return CollectiveResult(op_type=op_type, anchor='', helpers=[],
@@ -90,10 +105,12 @@ def attempt_collective_operation(actors: list, op_type: str, target: dict,
 
     # §2.5 — All practitioners Leap independently in same round
     leap_results = {}
+    participants = {}              # actor_id -> actor, keyed exactly as leap_results is
     for a in [anchor] + helpers:
         leap_res = attempt_leap(a, target, world=world, rng=rng)
         actor_id = getattr(a, 'actor_id', getattr(a, 'name', 'unknown'))
         leap_results[actor_id] = leap_res.degree not in ("Failure",)
+        participants[actor_id] = a
 
     # §2.5 — If the Anchor fails: collective lattice does not form
     if not leap_results.get(anchor_id, False):
@@ -138,10 +155,12 @@ def attempt_collective_operation(actors: list, op_type: str, target: dict,
 
     # Resolve the operation with the pooled dice
     # Map op_type to depth-Ob lookup
-    scale = target.get('scale', 'Object')
+    is_mending = op_type == 'Mending'
+    # A Mending works the owner's priced scale (WR-03), so its Ob and its price read one answer.
+    scale = mending_priced_scale(target) if is_mending else target.get('scale', 'Object')
     # TN7 always (ED-IN-0196) — the op_type only selects the Ob now.
-    if op_type == 'Mending':
-        ob = MENDING_OB.get(scale, MENDING_OB['Relational'])
+    if is_mending:
+        ob = MENDING_OB[scale]
     else:
         ob = DEPTH_OB.get(scale, 1)
     tn = TN_STANDARD
@@ -163,21 +182,37 @@ def attempt_collective_operation(actors: list, op_type: str, target: dict,
     # Apply Coherence cost to each successful Leap participant per §3.2 + §2.5
     # ("Co-Movement / Coherence fires per-practitioner per §3.2 — each
     # suspended their own layer 2")
-    from systems.threadwork.sim.coherence import apply_coherence_delta
-    coh_delta = -1 if scale in ("Relational", "Field", "Territorial") else -2 if scale in ("Structural", "Foundational") else 0
-    if degree in ("Partial", "Failure"):
-        coh_delta -= 1
+    if is_mending:
+        price = price_mending(scale, degree)
+        coh_delta = price.coherence_cost
+        ms_delta = price.mending_stability_delta
+    else:
+        price = None
+        coh_delta = COHERENCE_COST_BY_SCALE.get(scale, 0)
+        if degree in ("Partial", "Failure"):
+            coh_delta -= 1
+        ms_delta = 0
 
+    applied = {}                   # actor_id -> the cost that participant actually took (R-14)
+    restored = {}
     for pid, ok in leap_results.items():
-        if ok and coh_delta != 0:
-            apply_coherence_delta(pid, coh_delta, f"Collective {op_type} {degree}", world=world)
+        if not ok:
+            continue
+        applied[pid] = resist_coherence_cost(coh_delta, participants[pid])
+        if applied[pid] != 0:
+            apply_coherence_delta(pid, applied[pid], f"Collective {op_type} {degree}", world=world)
+        if is_mending:
+            restored[pid] = apply_mending_feedback(
+                pid, price, environment_in_equilibrium=environment_in_equilibrium,
+                source=f"Collective Mending {degree} at {scale}: restorative feedback", world=world)
 
     op_result = OperationResult(
         operation=f"Collective {op_type}",
         actor=anchor_id, degree=degree,
         net_successes=net, pool=total_pool, tn=tn, ob=ob,
-        coherence_delta=coh_delta,
-        mending_stability_delta=0,
+        coherence_delta=applied[anchor_id],
+        mending_stability_delta=ms_delta,
+        coherence_restored=restored.get(anchor_id, 0),
         notes=[f"collective {len(actors)} actors; expected_pool={expected_pool} actual={total_pool}"
                + ("; lattice fractured (+1 Ob)" if lattice_fractured else "")],
     )
@@ -186,4 +221,5 @@ def attempt_collective_operation(actors: list, op_type: str, target: dict,
         op_type=op_type, anchor=anchor_id, helpers=helper_ids,
         leap_results=leap_results, lattice_formed=True,
         lattice_fractured=lattice_fractured, operation_result=op_result,
+        coherence_restored=restored,
     )

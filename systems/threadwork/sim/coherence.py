@@ -60,8 +60,8 @@ empties the stack, so a practitioner who recuperates between workings never yiel
     live in the callers. R-14 (ruled 2026-09-09) adds a practitioner-side term — "how resilient
     their spirit is" — whose ARITHMETIC is unruled; it belongs in the working's cost, not in this
     state. Its one owner is `operations.resist_coherence_cost`, a swept fixture
-    (`operations.RESILIENCE_GAIN`, shipped at the control 0), applied in
-    `operations._resolve_operation`; `collective.py`/`opposing.py` do not route through it yet. ⚠ C-3's "cost is relative magnitude / no toughness term"
+    (`operations.RESILIENCE_GAIN`, shipped at the control 0), applied per practitioner in
+    `operations._resolve_operation`, `collective.py` and `opposing.py` alike (WR-03). ⚠ C-3's "cost is relative magnitude / no toughness term"
     was RETRACTED (RULINGS.md Batch 13) and is not modelled.
   - What follows the crossing (P-15's TS-gated branching, §7.5 reality-strain): this module reports
     the crossing and keeps the arithmetic running. Routing post-crossing load into the substrate has
@@ -350,10 +350,12 @@ def recover(actor: str, *, seasons, environment_in_equilibrium: bool, source: st
                                   returns nothing.
       mending                     ACCELERATES: extra units of return from one's own or another's
                                   mending — "accelerates the return without being required for it".
-                                  `operations.attempt_mending` supplies it for the MENDER (C-1's
-                                  restorative feedback, position 27) when the Mending is aimed at
-                                  ANOTHER's configuration; aimed at the mender's own, it moves the
-                                  resting point instead (`mend_resting_point`, WR-02).
+                                  `operations.apply_mending_feedback` supplies it for the MENDER
+                                  (C-1's restorative feedback, position 27) — from a single, a
+                                  collective or an opposed Mending alike (WR-03) — when the Mending
+                                  is aimed at ANOTHER's configuration; `attempt_mending` aimed at the
+                                  mender's own moves the resting point instead (`mend_resting_point`,
+                                  WR-02).
 
     ⚠ DERIVED, NOT RULED: `mending` is gated by the environment too. E-1 says mending accelerates
     "this" — the return that has the condition — and §7.1's reason for the condition ("nothing to
