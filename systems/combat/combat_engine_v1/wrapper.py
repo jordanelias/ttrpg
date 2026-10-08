@@ -486,6 +486,10 @@ class Yield:
 
 def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None):
     import random
+    if yield_decl is not None and not (yield_decl.by is A or yield_decl.by is B):
+        raise ValueError("Yield.by must be the A or B Combatant passed to fight (compared by identity)")
+    if yield_decl is not None and not (1 <= yield_decl.turn <= max_bouts):
+        raise ValueError(f"Yield.turn {yield_decl.turn} is outside 1..max_bouts ({max_bouts}): it would never fire")
     cfg=cfg or CFG; rng=rng or random.Random()   # stdlib RNG (ED-1085 numpy de-leak; pass random.Random(seed) for determinism)
     # reset wounds — must mirror Combatant.__init__'s tracker construction (combatant.py:71). WoundTracker.__init__
     # defaults spirit=3/strength=4, so re-init'ing with end alone silently reverts non-default fighters to those

@@ -127,7 +127,7 @@ def combat_degree(result: dict, subject: Optional[str], wounded_above=None) -> s
     `combat_seam` constructed and still holds after `wrapper.fight` collapsed them to an int.
 
     The bands read `felled`, never `result`: `wrapper.fight` sets a non-zero result on a felling AND
-    on an accepted §11.4 yield (PC-01), so the three bands are: the subject went down; the subject is
+    on any §11.4 yield the engine did not refuse, accepted or not (PC-01), so the three bands are: the subject went down; the subject is
     standing and bled; the subject is standing and untouched. ⚠ A YIELDER IS STANDING, so this walk
     reads him `Untouched`/`Wounded` and the surrender rides on `result["surrender"]` -- NO FOURTH BAND:
     a yield sets no quantity in `wound_quantities` that a fourth edge could be drawn over.

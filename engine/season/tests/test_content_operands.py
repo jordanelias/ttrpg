@@ -234,8 +234,10 @@ def test_the_populated_corpus_forms_candidates_with_writ_derived_operands():
     """r2 `05:1247`'s OBSERVABLE: `probes` on the corpus, `Candidates with writ-derived operands
     > 0`. Measured directly rather than trusted: every naturally-occurring `content:` holder's
     candidate set is walked, and the count of Candidates whose `to` differs from the naive
-    referent copy (`c.subject`) and names a real, live person is asserted > 0 -- not merely
-    nonzero-looking, and not a value the fold could only ever refuse."""
+    referent copy (`c.subject`) and names a person the realm held at the season's start is asserted
+    > 0 -- not merely nonzero-looking, and not a value the fold could only ever refuse. At least one
+    names a person still alive at the season's end, so the positive count is carried by a live
+    addressee and not only by the dead one."""
     w = populated.build_realm(0)
     # The ids that exist BEFORE the season: a writ's addressee who dies during it (a combat
     # outcome the ladder decides) leaves `w.persons` but is still a well-formed referent, which
@@ -251,6 +253,8 @@ def test_the_populated_corpus_forms_candidates_with_writ_derived_operands():
                 if to is not None and to != c.subject and isinstance(to, str):
                     writ_derived.append((pid, c.verb, to))
     assert len(writ_derived) > 0, "no Candidate carried a writ-derived operand on the real corpus"
+    assert any(to in w.persons for _pid, _verb, to in writ_derived), (
+        "every writ-derived addressee is dead at the season's end: the positive count rests on no live person")
     # CONTROL, THE OTHER DIRECTION: every one of them names a person who actually exists (or
     # existed at the season's start), so the count above is not an artefact of a malformed value
     # -- a tuple, an id no realm ever held -- that the fold would refuse outright for a reason

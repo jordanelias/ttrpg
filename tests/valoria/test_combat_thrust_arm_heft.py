@@ -180,3 +180,33 @@ def test_selection_and_damage_agree_on_the_pinned_population():
     assert coupling_only_wrong, (
         "the coupling-only contest agrees with damage everywhere on this population, so this pin cannot observe "
         "the E5/M7 defect — widen the population or retire the pin")
+
+
+def test_strike_pays_the_arm_it_selected(monkeypatch):
+    """B-D1 close (agonist finding). `core.strike` resolves the cut_thrust arm once (to pick the heft lever) and
+    `damage` -> `coupling` resolves it again (to pay the coupling); the two must be the SAME arm, which holds only
+    while `strike` hands its impact pair on as `ct_impact`. Dropping `ct_impact=_imp` leaves `heft_resp` on the
+    damage-priced arm and `coupling` on the coupling-priced one, in exactly the cells where the two contests differ
+    -- and no other test calls `strike` end to end. This records the arm every `cut_thrust_arm` call returns inside
+    one `strike` and asserts the two agree, on every cut_thrust weapon at every tier."""
+    seen = []
+    real = core.cut_thrust_arm
+
+    def recorder(*a, **k):
+        out = real(*a, **k)
+        seen.append(out[1])
+        return out
+
+    monkeypatch.setattr(core, 'cut_thrust_arm', recorder)
+    checked = 0
+    arms = set()
+    for n in CUT_THRUST:
+        for tier in ('none', 'light', 'medium', 'heavy'):
+            seen.clear()
+            core.strike(C.Combatant('A', weapon=n), C.Combatant('D', armor=tier), 'success', CFG)
+            assert len(seen) == 2, (n, tier, seen)      # strike's own call + coupling's, no more, no fewer
+            assert seen[0] == seen[1], (n, tier, seen)
+            arms.add(seen[0])
+            checked += 1
+    assert checked == len(CUT_THRUST) * 4 and checked >= 15 * 4, checked
+    assert arms == {'shear', 'puncture'}, f"only {arms} observed: the test cannot see a mismatch if one arm never wins"

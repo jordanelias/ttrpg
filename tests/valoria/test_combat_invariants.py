@@ -252,7 +252,8 @@ def test_combatant_hosts_no_cached_pool():
 #
 #   weapon_physics.PERC_CAP = 8.0     the CLAMP that creates the scale        <- the physical fact
 #   core.PERC_AUTH_REF      = 8.0     _transmit's full-transmission denominator
-#   core.damage()           perc/8.0  the blunt-heft continuity denominator (and its `perc=8` default)
+#   core.strike_impact()    perc/8.0  the blunt-heft continuity denominator (moved out of core.damage() by PC-04;
+#                                     core.damage()'s own `perc=8` default stays)
 #   config.CFG['ADEF_PERC_REF'] = 8.0 adef_cap's blunt armour-defeat denominator
 #
 # Only the first is a primitive. The other three are DENOMINATORS THAT NORMALISE AN AUTHORITY VALUE
@@ -276,7 +277,7 @@ def test_combatant_hosts_no_cached_pool():
 # scratch overlay is for), but neither is one that ships. Scoping is BY NAME, never by the value 8:
 # config.POISE_SOLID_HIT is an unrelated 8.0 four lines from POISE_FLOOR, and a value-keyed scan would
 # have collided with it — the same defect class CLAUDE.md §7 records in ci_sim_fabrication_check.
-# A second gap (adversarial review, 2026-07-29): the divisor scan covers only damage() and the
+# A second gap (adversarial review, 2026-07-29): the divisor scan covers only damage() and strike_impact() and the
 # assignment scan only core.py/weapon_physics.py — a NEW module (or a different core function)
 # re-spelling 8.0 as the scale top is not caught. Vacuous today (engine-wide, every other 8.0 is a
 # comment or a different quantity); this guard covers the four sites that exist, not all futures.
@@ -347,15 +348,19 @@ def test_damage_blunt_heft_routes_through_the_percussion_anchor():
         f"owned anchor weapon_physics.PERC_CAP ({WP.PERC_CAP!r})")
 
     tree = ast.parse(open(os.path.join(os.path.abspath(ENGINE), 'core.py'), encoding='utf-8').read())
-    fn = next(n for n in ast.walk(tree)
-              if isinstance(n, ast.FunctionDef) and n.name == 'damage')
-    bare = [n.lineno for n in ast.walk(fn)
+    # `damage` and `strike_impact`: PC-04 moved the blunt-heft divisor out of `damage` into `strike_impact`,
+    # and a scan of `damage` alone then saw no division at all (it could not observe `perc/8.0` at the new
+    # site). Both are scanned, and the count is asserted so a rename cannot empty the scan again.
+    fns = [n for n in ast.walk(tree)
+           if isinstance(n, ast.FunctionDef) and n.name in ('damage', 'strike_impact')]
+    assert sorted(f.name for f in fns) == ['damage', 'strike_impact'], [f.name for f in fns]
+    bare = [n.lineno for fn in fns for n in ast.walk(fn)
             if isinstance(n, ast.BinOp) and isinstance(n.op, ast.Div)
             and isinstance(n.right, ast.Constant)
             and isinstance(n.right.value, (int, float)) and not isinstance(n.right.value, bool)
             and n.right.value == WP.PERC_CAP]
     assert not bare, (
-        f"core.damage() divides by a bare {WP.PERC_CAP!r} at core.py line(s) {bare} — that is the "
+        f"core.damage()/strike_impact() divides by a bare {WP.PERC_CAP!r} at core.py line(s) {bare} — that is the "
         f"percussion-scale top written down a fourth time; divide by PERC_AUTH_REF instead")
 
 

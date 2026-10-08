@@ -47,7 +47,8 @@ def _fight(seed, yield_decl=None, max_bouts=12):
     prev = wrapper._TRACE
     rng = _CountingRandom(seed)
     try:
-        wrapper._TRACE = trace.append
+        # each event carries the draws taken so far, so "no draw after the declaration" is observable at any turn
+        wrapper._TRACE = lambda e: trace.append(dict(e, _draws=rng.draws))
         kw = {} if yield_decl is None else {'yield_decl': yield_decl}
         result = wrapper.fight(A, B, CFG, rng, max_bouts=max_bouts, **kw)
     finally:
@@ -85,8 +86,10 @@ def test_a_planted_yield_ends_the_exchange_with_zero_further_rolls():
         # ZERO FURTHER ROLLS: no draw-bearing event after the yield, and no engagement after it.
         after = [e['kind'] for e in trace[ylds[0] + 1:]]
         assert not [k for k in after if k in ROLL_KINDS + ('turn_start', 'engagement_start')], after
-        # ...and the RNG is not touched after the declaration: the draws equal the control's
-        # draws up to the same point (every bout before `turn` is the control's, draw for draw).
+        # ...and the RNG is not touched after the declaration: the total draws equal the draws the
+        # yield event itself recorded (an extra draw at any turn, e.g. the UPSET_FLOOR roll, breaks
+        # this); every bout before `turn` is the control's, draw for draw.
+        assert rng.draws == trace[ylds[0]]['_draws'], (rng.draws, trace[ylds[0]]['_draws'])
         assert rng.draws < ctrl_rng.draws, (rng.draws, ctrl_rng.draws)
         assert trace[:ylds[0]] == ctrl_trace[:ylds[0]]
         # The combat ENDS with the yielder standing: the opponent's result, no felling.
@@ -102,6 +105,37 @@ def test_a_planted_yield_takes_no_draw_after_the_declaration():
     assert rng.draws == 0, rng.draws
     assert _bouts(trace) == 0
     assert result == -1 and not A.felled
+
+
+def test_a_yield_the_opponent_refuses_still_ends_the_fight_with_no_further_roll():
+    """`accepted=False` is the OPPONENT declining the yield: the yielder is unresisting, so no contest roll
+    resolves anything further and the fight ends exactly as an accepted yield does. The engine has no
+    decider and no free-strike resolver (that would be a fourth resolver); the opponent's disposition
+    is the caller's, carried on the `yield` event. Pinned so the two cannot drift apart unnoticed."""
+    import wrapper
+    from engine.season.seam.wrappers.combat import surrender_of
+    result, trace, rng, A, B = _fight(7, lambda A, B: wrapper.Yield(by=A, turn=1, accepted=False))
+    assert rng.draws == 0 and _bouts(trace) == 0
+    assert result == -1 and not A.felled
+    assert surrender_of(trace) == dict(by='A', turn=1, accepted=False)
+    ok_result, ok_trace, ok_rng, _, _ = _fight(7, lambda A, B: wrapper.Yield(by=A, turn=1, accepted=True))
+    assert (result, rng.draws) == (ok_result, ok_rng.draws)
+
+
+def test_a_yield_that_could_never_fire_is_refused_loudly():
+    import pytest
+    import wrapper
+    import combatant as C
+    from config import CFG
+    A, B = C.Combatant('A'), C.Combatant('B')
+    other = C.Combatant('C')
+    for bad in (wrapper.Yield(by=other, turn=1),        # neither combatant: would silently award A the win
+                wrapper.Yield(by=A, turn=0),             # before the first turn
+                wrapper.Yield(by=A, turn=13)):           # after max_bouts
+        with pytest.raises(ValueError):
+            wrapper.fight(A, B, CFG, random.Random(0), max_bouts=12, yield_decl=bad)
+    with pytest.raises(ValueError):
+        wrapper.fight(A, B, CFG, random.Random(0), max_bouts=12, yield_decl=wrapper.Yield(by='A', turn=1))
 
 
 def test_a_yield_while_the_objective_is_contested_in_the_zone_is_refused():

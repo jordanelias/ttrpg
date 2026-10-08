@@ -8096,7 +8096,17 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `release` 2 -> 3, `research` 97 -> 99, `restore` 7 -> 9, `surveil` 64 -> 65, `tell` 87 -> 88,
     # `transfer` 86 -> 85; every other verb unmoved.
     # THE SAME-BREATH CHECK: the universal set did not move (asserted below).
-    assert len(by_sig) == 119, (
+        # ⚠⚠ **119 -> 118, B-D1 PC-03 (`strike()`'s overwhelming-hit tail `z` reads the owner's bar for the defender's Ob), 2026-10-08,
+        # MEASURED AGAINST A CLEAN `git worktree` AT `2cc8b34e` (119 there, the PC-02 state; same 143 live worlds, seed 0).** THE UNIT
+        # AND THE DIRECTION: variety FELL by one, `live` did not move. A fight's severity tail now starts at the bar its roll was
+        # banded at, so the damage some overwhelming hits do changed, fights end differently and the scenes re-ranked at the margin.
+        # PC-04 (the cut/thrust arm repriced on damage) and PC-07 (the off-hand branch deleted) moved neither the one-season
+        # `build_realm(0)` hash nor this count: the hash was `ef04434c` before and after both. Per-verb world counts executed,
+        # before -> after: `give` 2 -> 1, `interview` 65 -> 66, `petition` 69 -> 72, `release` 3 -> 2, `research` 97 -> 99,
+        # `speak` 83 -> 82, `tell` 85 -> 87; every other verb unmoved (`fight` 30 -> 30).
+        # THE SAME-BREATH CHECK: the universal set is empty on both sides and the status census is identical (102 RUNS-UNDECLARED
+        # · 40 SPAN-UNAUTHORED · 1 RUNS-ALONE-UNDECLARED). PC-02's own ladder migration did not move this count (119 at `2cc8b34e`).
+    assert len(by_sig) == 118, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "

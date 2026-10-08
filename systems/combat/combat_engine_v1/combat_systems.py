@@ -720,13 +720,14 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None, grip=None, roo
         # atomic versatile head: the damage coupling already takes max(cut, half-sword gap-thrust) internally, so the
         # head token is unchanged. The REPORTED mode (legibility only) follows the documented armour-conditional shift
         # the engine has always modelled: a cut-thrust sword SWINGS (cuts) — reads easy — until it must half-sword-
-        # thrust to the gaps vs a harness (medium/heavy), then reads hard. This reproduces the prior legibility exactly.
+        # thrust to the gaps vs a harness (medium/heavy), then reads hard. [ED-PC-0050 MOVED THIS: see below.]
         # [ED-PC-0036] The label is READ FROM the coupling contest itself (core.cut_thrust_arm, its single owner), so
         # damage and reported mode cannot diverge. This used to be an independent armour rule ('shear' at none/light,
         # else 'puncture') that contradicted what coupling actually paid — the thrust arm won at EVERY tier, so a
         # cut-and-thrust sword was damaged as a thrust and READ as a swing, with legibility (thrust HARD 0.80, swing
         # EASY 1.25) scoring a mode the fighter never performed. Deriving it also captures cases no armour rule can
-        # express: a poor-edged weapon (spetum, eff 0.63 < CUT_AUTH_REF) correctly prefers its point even unarmoured.
+        # express. Since ED-PC-0050 the contest is priced on damage: hand-balanced swords now thrust unarmoured and a
+        # heavy-swinging polearm (spetum) cuts -- see core.cut_thrust_arm.
         # [ED-PC-0050] priced on damage with the wielder's own impact pair — the same input core.strike passes.
         dm = core.cut_thrust_arm(core.TIER2MAT[defender_armor], heads[h].gap,
                                  heads[h].eff_cut, heads[h].eff_thrust, core.thrust_authority(w['head_len']),

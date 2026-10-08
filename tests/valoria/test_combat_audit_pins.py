@@ -207,16 +207,25 @@ def test_cut_thrust_label_gate_is_not_vacuous():
 def test_cut_thrust_versatility_is_not_decided_by_constant_ordering():
     """ED-PC-0036 (F12). The whole point of the versatile head is an ARMOUR-CONDITIONAL shift. If one arm wins in every
     cell, the max() is decorative and the shift is a constant ordering wearing physics' clothes — which is exactly what
-    the audit found. Pin that BOTH arms win somewhere across the tier range for a well-edged sword."""
-    c = Combatant('X', weapon='arming')
-    modes = set()
-    for armor in ('none', 'light', 'medium', 'heavy'):
-        dm, head, gap, perc, pc, eff = S.select_mode(c, armor, True, CFG, measure_gap=0.0)
-        _geo = c.w.get('geo', {})
-        modes.add(core.cut_thrust_arm(core.TIER2MAT[armor], gap, _geo.get('cut'), _geo.get('thrust'),
-                                      core.thrust_authority(c.w['head_len']))[1])
+    the audit found. Pin that BOTH arms win somewhere across the roster and the tier range.
+
+    [B-D1 PC-04 / ED-PC-0050] REWRITTEN to observe the LIVE contest. The arm contest is now priced on damage with the
+    wielder's impact pair, and `arming` — this test's former subject — thrusts at every tier under that pricing (its
+    old four-tier shear/puncture split lived only in the coupling-only probe no wielder uses, so the test stayed green
+    while its subject went constant). `dm` is the arm `core.strike` pays (pinned above), read off `select_mode` for every
+    cut_thrust weapon at every tier where the versatile head is selected; the property now holds across the roster."""
+    modes, checked = set(), 0
+    for weapon in [n for n, r in WEAPONS.items() if r.get('head') == 'cut_thrust']:
+        for armor in ('none', 'light', 'medium', 'heavy'):
+            dm, head, gap, perc, pc, eff = S.select_mode(Combatant('X', weapon=weapon), armor, True, CFG,
+                                                         measure_gap=0.0)
+            if head == 'cut_thrust':
+                modes.add(dm)
+                checked += 1
+    assert checked >= 51, f"only {checked} versatile cells observed (the label gate's floor is 51)"
     assert modes == {'shear', 'puncture'}, (
-        f"the cut/thrust contest resolved to {modes} across all four armour tiers — one arm is structurally dead")
+        f"the damage-priced cut/thrust contest resolved to {modes} across the roster and all four armour tiers "
+        f"— one arm is structurally dead")
 
 
 def test_cut_thrust_coupling_respects_weapon_quality():

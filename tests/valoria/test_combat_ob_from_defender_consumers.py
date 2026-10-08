@@ -11,13 +11,13 @@ change kept reading the retired fixed `core.DECISIVE_OB = 3`:
     they differ far beyond sampling noise; after it they agree.
  2. `core.strike`'s overwhelming-hit quality measured its severity tail `z` from `net - 2*DECISIVE_OB`,
     i.e. from a fixed net of 6, while the band it qualifies starts at the owner's bar for THIS defender's
-    Ob. So q sat clamped at the tail floor for every overwhelming net between the bar and 6 (26% of
-    overwhelming hits over 1,200 fights, measured at PC-03), and the tail's start moved with nothing the
-    ladder reads. The workplan's "likely fix" `2*ob` is the PRE-ruling ladder's bar (`net >= 2*Ob`),
+    Ob. So q sat clamped at the tail floor for every overwhelming net between the bar and 6, and the
+    tail's start moved with nothing the ladder reads. The workplan's "likely fix" `2*ob` is the PRE-ruling ladder's bar (`net >= 2*Ob`),
     which the 2026-08-14 ruling RULED OUT (`degree_from_net`'s docstring); it would start the tail
     below the bar for ob < 3 and clamp again above it for ob > 3. The fix reads the bar off the owner.
  3. Observation only (no physics change): does History enter the net sigma exactly once? It does not —
-    see `test_history_enters_the_roll_through_exactly_one_channel`, xfailed with the measured numbers.
+    see `test_history_enters_the_roll_through_exactly_one_channel`, xfailed (strict, raising
+    AssertionError only); its failure message prints the measured per-channel deltas.
 """
 import math
 import os
@@ -191,10 +191,10 @@ def _defender_side_sigma(aggressor, defender, mode):
     return init - dsig
 
 
-@pytest.mark.xfail(strict=True, reason=(
+@pytest.mark.xfail(strict=True, raises=AssertionError, reason=(
     'PC-03 finding 3, OBSERVED NOT RULED: the defender\'s History reaches the main roll through TWO channels — '
     'the Ob (`core.ob_from_defender` = History/2) AND the net sigma (`mode_sigma`\'s `tech` term for parry/wind, '
-    '`reading()`\'s READ_HISTORY_K term, `init_emphasis_sigma`\'s INIT_HISTORY_K term). Whether that is a '
+    '`init_emphasis_sigma`\'s INIT_HISTORY_K term). Whether that is a '
     'double-count is a design question; no physics was changed. strict=True: if History is ever routed '
     'through one channel this XPASSes and fails, so the record cannot go stale.'))
 def test_history_enters_the_roll_through_exactly_one_channel():

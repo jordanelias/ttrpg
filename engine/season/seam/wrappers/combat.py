@@ -57,8 +57,8 @@ mechanical, and it invents nothing: this module already returns `parties={id: A.
 the Combatants after the fight, and the wound state is the same read one field deeper.
 
 ⚠ WHAT IS STILL REGISTERED, NARROWED RATHER THAN CLOSED (`H-98`). The engine distinguishes exactly
-two terminal states — FELLED (`result != 0`; `wrapper.fight` sets a result when a fighter is
-felled, or when a §11.4 yield ends the scene, which `surrender` on the result carries) and UNRESOLVED (`result == 0`, *"an undecided fight is a legitimate outcome"*, Jordan
+two terminal states — DECIDED (`result != 0`; `wrapper.fight` sets a result when a fighter is
+felled, or when an unrefused §11.4 yield ends the scene, which `surrender` on the result carries) and UNRESOLVED (`result == 0`, *"an undecided fight is a legitimate outcome"*, Jordan
 2026-06-02) — and the wound counts grade the second. What the DATA does not carry is any
 separation of a decisive win from a narrow one beyond wound count on the victor. So the bands
 below the felled/unresolved split are the remaining decision, and they are edges over a quantity

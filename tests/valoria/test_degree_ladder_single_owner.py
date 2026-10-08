@@ -21,7 +21,7 @@ as history: SEVEN ladders are migrated and ONE hold remains (`combat_engine_v1/c
 commit: it returns the owner's bands through `dice_engine.DEGREE_ORDINAL`, and its pool-aware
 Overwhelming bar survives as a declared extension that may only demote Overwhelming to Success.
 The tree still does NOT collapse to a single implementation and this file must not be read as
-claiming it does — the remaining hold is real and is asserted to still diverge below.
+claiming it does — `sigma_leverage.degree` keeps its declared extension (above); no hold remains in `HELD`.
 
 THE UNIT OF REPAIR IS THE PATTERN, NOT THE EIGHT SITES (CLAUDE.md 0.1 point 5). A ladder is four
 lines of `if`, which is exactly why it kept being retyped: writing one is cheaper than finding the
@@ -255,7 +255,7 @@ RULINGS = {
         "'deletes a guard and gains nothing', since guandao only reaches 47.5% after the "
         "migration. The answer is that the cap is illegitimate on its own terms, independent of "
         "when guandao gets there. WHAT REMAINS OPEN is the other half and only the other half: "
-        "combat's ladder still has not migrated, and per this same 2026-08-15 ruling the step "
+        "combat's ladder had not migrated, and per this same 2026-08-15 ruling the step "
         "that comes FIRST is deriving Ob from the DEFENDER (score/2 plus that instance's "
         "modifiers), which is new mechanism rather than a re-siting. ⚠ THAT STEP EXECUTED "
         "2026-09-29 (ED-PC-0058) — see the '2026-08-15 — combat, and the sequence' entry above. "

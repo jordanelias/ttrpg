@@ -409,8 +409,8 @@ def cut_thrust_arm(mat, gap_prec=GAP_PREC_REF, eff_cut=None, eff_thrust=None, th
     pre-max blended constant, and BOTH arms carry the same `eff` quality scaling their standalone tokens use (this
     branch previously ignored `eff` outright, discarding the derived edge-quality and thrust-magnitude of all 19
     cut_thrust weapons). The result is the doctrine this module already claimed: CUT the unarmoured man, half-sword
-    THRUST anything armoured — and a poor-edged weapon (spetum, eff 0.63 < CUT_AUTH_REF) correctly prefers its point
-    even unarmoured, which an armour-keyed label rule could not express.
+    THRUST anything armoured — and a poor-edged weapon (spetum, eff 0.63 < CUT_AUTH_REF) preferred its point
+    even unarmoured, which an armour-keyed label rule could not express (before ED-PC-0050; see below).
 
     PRICED ON DAMAGE when `impact` is given [ED-PC-0050, E5/M7 — the ratified direction of ED-PC-0036]: `impact` is
     the (shear, puncture) pair from `cut_thrust_impacts`, the Str+Heft each arm is paid. Since E3b a cut_thrust
@@ -419,8 +419,9 @@ def cut_thrust_arm(mat, gap_prec=GAP_PREC_REF, eff_cut=None, eff_thrust=None, th
     the product `damage()` pays (its remaining factors are common to both arms, and its penetration knee is monotone),
     so the arm chosen is the arm that does more damage. This MOVES the doctrine above: a hand-balanced sword, whose
     thrust heft exceeds its swing heft, now thrusts the unarmoured man too, and a forward-balanced polearm with a heavy
-    swing can cut where its point coupled better. Every wielder-bearing caller (`strike`, `select_mode`) passes
-    `impact`; None keeps the coupling-only contest for a weapon-only probe with no wielder. The returned value is
+    swing can cut where its point coupled better. `strike` and `select_mode`'s label call pass `impact`;
+    `select_mode`'s cross-head comparator ranks every head on coupling alone and so reaches this contest without it,
+    as does a weapon-only probe with no wielder (None keeps the coupling-only contest). The returned value is
     the winning arm's COUPLING either way (impact is paid separately, in `damage`). Pure."""
     cut_arm = DELIVERY['cut']*_transmit('shear',mat)
     thr_arm = DELIVERY['point']*_transmit('puncture',mat,gap_prec=gap_prec,thrust_auth=thrust_auth)
@@ -574,7 +575,7 @@ def strike_impact(strength, heft_units, weapon_head, perc=PERC_AUTH_REF):
     # ED-PC-0042 rider I1b: the denominator was a bare `8.0` — the percussion-scale top written down a fourth time,
     # invisible to any Phase-C re-fit; it now routes through the owned anchor (byte-identical, same float). The
     # NUMERATOR 3.0 is deliberately UNTOUCHED and is a SEPARATE concern: it is the blunt branch's damage-scale
-    # magnitude, numerically equal to HEFT_HEAVY (core.py:85) but not established as the same constant — whether
+    # magnitude, numerically equal to HEFT_HEAVY (`core.HEFT_HEAVY`) but not established as the same constant — whether
     # "blunt heft at full authority" IS the heavy cut/thrust class, or merely coincides with it, is an unresolved
     # design question, and absorbing it here on the strength of `3.0 == 3.0` would be exactly the value-collision
     # reasoning CLAUDE.md §7 warns about. Filed, not fixed.
