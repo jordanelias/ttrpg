@@ -700,8 +700,8 @@ modules:
 
   - module: engine_clock
     registry_system: "engine_clock"   # Key Type Registry vocabulary
-    doc: null
-    sim_module: engine/season/loop/driver.py   # the season tick: `engine/season/loop/driver.py` (`SeasonDriver.season`, the ONE `w.tick += 1`) with `engine/season/loop/calendar.py` (barrier 1, `Date.fired`); `doc:` stays null pending ED-1051
+    doc: .designs/systems/_architecture/reference/propagation_spec_v1.md
+    sim_module: engine/season/loop/driver.py   # the season tick: `engine/season/loop/driver.py` (`SeasonDriver.season`, the ONE `w.tick += 1`) with `engine/season/loop/calendar.py` (barrier 1, `Date.fired`); `doc:` points at the canonical propagation spec, not a new spine: RULED ED-IN-0125 §(4) C3 (Jordan 2026-08-04), recorded as already ruled, not yet applied, in ED-1051's last row; quarantined, so it keeps its `.designs/` prefix (ED-IN-0231)
     scales: [provincial]
     resolver: clock_advance
     state:
