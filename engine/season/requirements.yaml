@@ -526,6 +526,13 @@ rows:
       and `total` +0.11 (38.47 -> 38.58), the last two AGAINST it, all within half a point -- so THE
       PREDICTION IS NOT SUPPORTED AT THIS RESOLUTION (and the re-take also carries `13d-iii` and
       `17-cast`, not `14` alone). The status stays `met`: the bar is 96% and no arm is near it.
+      `11` RE-TAKEN AT IN-08's CELLS COMMIT (B-G), THE CONTROL FOR B-I's RE-TAKE (`_part2` §11): the
+      `2x3` cell only (the acceptance point; the `default` and `narrow` cells and `wd_collect.py`'s own
+      controls were not run), 143 cases, `wd_chunk.py` x4 per arm, `collect("2x3", mode)`: `none`
+      1549/2068 = 74.90% · `actor` 896/2039 = 43.94% · `total` 868/2047 = 42.40%, 0 failed cases. Against
+      the previous re-take: `none` -2.32 points, `actor` +1.35, `total` +3.82 -- the re-celled chooser
+      moves the arms by more than half a point, and none is near 96%, so the status stays `met`. The
+      instrument's run-to-run noise is still not measured. B-I's re-take reads against THESE figures.
     measure: "python proposals/2026-09-04-degree-sweep/wd_collect.py  # after wd_chunk.py x4 per arm per cell over the 143-case corpus (slices 0 36/36 72/72 108/108 143) -- U6's command, workplans/valoria_master_workplan_v9_part2.md §`11`"
     blocks: [FI-01]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); H-111 is FI-01's deposit half
