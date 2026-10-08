@@ -17,6 +17,7 @@ if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)          # resolve the sim.* shared-service layer (autoload)
 from math import tanh, exp
 from engine.dice_engine import sigma_leverage as SL
+from engine.dice_engine import dice_engine as DE   # THE degree ladder's owner (degree() below routes through it)
 import vocabulary as V   # the token ALPHABET (ED-PC-0042) — a zero-import leaf, so weapon_physics and
                          # capabilities (neither of which may import core) own-source the same tokens.
                          # This module owns the TABLES keyed by it; the asserts below pin the two together.
@@ -54,61 +55,27 @@ def resolution_pool(history):
 # docstring records that the Ob-shift path it wrapped is DISPLAY-ONLY and distorts the degree bands. Leaving a
 # mis-resolving helper sitting next to the live resolver is a trap for a future caller, not a convenience.
 def roll_net(pool, rng): return SL.roll_net_continuous(pool, TN, rng=rng)
+# Combat's lower-case band spelling of the owner's enum. A RELABEL, not a ladder: every key is decided by
+# `DE.degree_from_net`, and this map cannot move a boundary.
+_COMBAT_LABEL = {DE.Degree.FAILURE: 'fail', DE.Degree.PARTIAL: 'partial',
+                 DE.Degree.SUCCESS: 'success', DE.Degree.OVERWHELMING: 'overwhelming'}
 def degree(net, ob):
-    """⚠ HELD AT THE PRE-2026-08-14 LADDER, DELIBERATELY. Everything below this paragraph describes
-    the ladder as it still stands; the reason it was not migrated is ED-IN-0187, and the reason is
-    a MEASUREMENT, not a preference.
+    """The degree of a continuous `net` against `ob`, read off THE owner ladder
+    (`engine.dice_engine.dice_engine.degree_from_net`, Jordan's 2026-08-14 ruling: the margin `net - ob`
+    decides the band, 3 or more is always Overwhelming) and spelled in combat's lower-case vocabulary.
 
-    Jordan's 2026-08-14 ruling unified the degree ladder on the margin `net - ob` (bands at 0/1/3,
-    owner `engine.dice_engine.dice_engine.degree_from_net`). Every other resolver in the tree now
-    routes through it. Applying it HERE, with the ER-2 shift preserved, moves this resolver's band
-    edges at the fixed DECISIVE_OB of 3 from {fail <0.5, partial 0.5-2.5, success 2.5-5.5,
-    overwhelming >=5.5} to {fail <2.5, partial 2.5-3.5, success 3.5-5.5, overwhelming >=5.5} — the
-    Failure edge moves by two whole successes. This engine's damage constants (QUAL, DMG_SCALE,
-    ADEF_THRESHOLD, the penetration floor) were emergent-calibrated AGAINST the old placement, and
-    the shift breaks a ratified invariant: `test_plate_participation_tracks_armour_defeat_capability`
-    takes guandao (armour-defeat capability 0.13) from settling 2.5% of its plate fights to 47.5%,
-    against a 40% ceiling — i.e. penetration decouples from armour-defeat capability, which is
-    exactly what ED-PC-0038/0039 ratified this guard to prevent.
-
-    Re-recording that golden would hide the collision; relaxing the guard would discard the ruling
-    it was built to protect. So this site is HELD and the collision is Jordan's to resolve.
-
-    ⚠ THE OTHER HALF OF THE SAME RULING NOW LANDS (ED-PC-0058, 2026-09-29; workplan position `12`,
-    "PC lane"). Jordan, 2026-08-15, verbatim, ON THE ORDER: "DECISIVE_OB for combat is stupid as
-    hell and is dead because Ob should be determined by your opponent more than anything" — and
-    the order is settled and is the opposite of the obvious one: derive Ob from the DEFENDER first
-    (score/2 plus that instance's modifiers), THEN the owner's ladder applies. `resolve()` below no
-    longer carries a fixed Ob; every call site now passes `ob_from_defender(defender)`.
+    MIGRATED (workplan PC-02; supersedes the ED-IN-0187 hold and ED-PC-0003). The pre-2026-08-14 ladder that
+    stood here (fail <0.5, Overwhelming at net >= 2*ob - 0.5, the ER-2 k-0.5 continuity shift) is gone with no
+    local re-banding: a continuity shift on top of the owner would be a second ladder, which the single-owner
+    guard (`tests/valoria/test_degree_ladder_single_owner.py`, where this site is now enrolled in LADDERS) fails
+    on. Its order was ruled first: Ob comes from the DEFENDER (`ob_from_defender`, ED-PC-0058), then this ladder.
+    The ceiling that once blocked the move (guandao 2.5% -> 47.5% of plate fights against a 40% cap) was
+    abolished by ED-PC-0057 before this migration; `test_plate_participation_tracks_armour_defeat_capability`
+    reports that rate and no longer bounds it.
     `DECISIVE_OB` SURVIVES only as `strike()`'s unrelated severity-tail reference (a distinct,
     unruled formula measuring how far a roll sits past the overwhelming bar) — it is no longer read
-    by anything that decides a degree. THIS FUNCTION'S OWN BAND-BOUNDARY FORMULA IS UNCHANGED: the
-    HELD ladder below still bands on the fixed-form thresholds relative to whatever `ob` it is
-    given, so a fight against a low-score defender (small `ob`) now clears Overwhelming far more
-    easily than the old fixed-3 form did — that IS the ruling ("Ob should be determined by your
-    opponent"), not a defect of this migration. Migrating the LADDER ITSELF (this function's
-    band-boundary formula, to the owner's margin form) is the SEPARATE, still-open step this
-    docstring's paragraph above describes — that recalibration has NOT happened, and doing it
-    without recalibrating the damage constants against the new Ob distribution is still the wasted
-    work this docstring warned about. Ob-from-defender does not require it: this function takes
-    whatever `ob` it is given and bands exactly as before.
-
-    `tests/valoria/test_degree_ladder_single_owner.py` records the ladder-migration half as a
-    declared hold with the same reasoning, so the divergence is visible in the guard rather than
-    silently tolerated.
-
-    ---- the held ladder, unchanged ----
-
-    Band a CONTINUOUS net into a degree, with the ER-2 continuity correction applied (params/core.md
-    §Continuous Engine, commit a3d3888 — landed in canon TEXT, never propagated to engine CODE until now).
-    The continuous net approximates a sum of integer per-die effects, so each integer degree threshold k is
-    read at the k-0.5 boundary; without it the continuous read ran 5-9pp LOW across the whole 5-13D combat
-    band (NERS R+S fail, 2026-06-23 critique). Self-contained here (NOT routed through the harness degree_of_success)
-    so the DISCRETE/TTRPG path r1 serves stays exactly net>=k. [AUDIT-FIX — re-sweep Class-C calibration.]"""
-    if net < 0.5: return 'fail'                                   # discrete net <= 0
-    if net >= 2*ob - 0.5 and net >= 2.5: return 'overwhelming'    # discrete net >= 2*ob AND net >= 3
-    if net >= ob - 0.5: return 'success'                          # discrete net >= ob
-    return 'partial'                                              # discrete 1 <= net < ob
+    by anything that decides a degree."""
+    return _COMBAT_LABEL[DE.degree_from_net(net, ob)]
 
 def ob_from_defender(defender):
     """RULED Ob-derivation (Jordan, 2026-08-15, verbatim: "DECISIVE_OB for combat is stupid as hell and is dead
@@ -168,7 +135,7 @@ QUAL={'graze':0.25,'partial':0.5,'success':1.0,'overwhelming':1.5}  # [damage_mo
 # caller from silently taking the 0 branch. It does not: damage() gates on the LITERAL tuple
 # ('graze','success','overwhelming'), not on QUAL membership, so a partial takes the 0 branch whether or not this
 # entry exists — and removing it could not even raise KeyError (which would have been the louder, safer failure).
-# The honest reason to keep it is narrower: 'partial' IS a real degree from degree() (1 <= net < ob), the wrapper
+# The honest reason to keep it is narrower: 'partial' IS a real degree from degree() (0 <= net - ob < 1), the wrapper
 # maps it to an explicit graze/bind rather than a damage call, and a quality table that silently omits a member of
 # its own domain is a worse artifact than an unused row. NOTE COVERAGE_GAP['partial'] below is NOT the same thing —
 # that key is the `coverage` (hit-location) level, unrelated to degrees; conflating them was a category error in
