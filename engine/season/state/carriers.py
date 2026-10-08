@@ -588,7 +588,7 @@ class Person:
     # The pre-H3 shape -- a signed float per AXIS, written on the wounded person by `_eff_kill` --
     # is retired with `_scar` and `scar_step`. Keys are never literals here and the dict is never
     # pre-seeded: a pursuit nobody has been scarred on is absent, not 0, so an unscarred person's
-    # `repr` is unchanged. NOTHING READS IT YET: its reader is the crisis (H9, threshold 2).
+    # `repr` is unchanged. READERS: `person_q.crisis_weights` (threshold 2, H9), `conviction_after_crisis` (3, H13).
     scar: dict = field(default_factory=dict)
     # IN-08 H10 -- `conviction` IS `{affiliation: intensity}` (ED-IN-0251 R1/R2): which religious
     # affiliations this person holds, each an int on `affiliation_roster.scale` (0-5; 5 is full

@@ -520,7 +520,7 @@ def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
     COUNTS is `scar_excludes_actor`, a swept `Fixtures` arm. Nothing is emitted: `scar.taken` is
     declared on the row and no reader consumes it, and putting the receipts on the act's Event
     would deposit claims about every scarred observer at WITNESS -- a propagation change H3 does
-    not license. Nothing reads the count yet (the crisis reader is H9).
+    not license. Readers: `person_q.crisis_weights` (threshold 2, H9; dark at `scar_weight_shift=0`), `conviction_after_crisis` (3, H13).
 
     IN-08 H11 -- THE SAME MECHANISM OVER THE AFFILIATION TABLE (J-5's C4). An element is a pursuit
     OR a held religious affiliation: `person_q.violated_affiliations` (the verb's cell for that
