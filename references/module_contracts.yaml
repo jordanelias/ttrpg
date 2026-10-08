@@ -869,7 +869,8 @@ modules:
       port_rank: 0
       parity: key-log + typed-export round-trip
       note: 'built + typed-exported + 2 of 11 EngineModules GDScript-ported (strike/wound) — the golden path
-        — BUT the mc_v18 loop never routes here, so end-to-end parity is unvalidated. BLOCKER IDENTIFIED 2026-08-03
+        — BUT the campaign driver read on 2026-08-03 (since deleted; the season seam now calls this engine through
+        engine/season/seam/wrappers/combat.py) never routed here, so end-to-end parity was unvalidated then. BLOCKER IDENTIFIED 2026-08-03
         (ED-IN-0123), and it is NOT the DISPATCH_COMBAT_BRIDGE flag: flipping that flag ON for a full seeded
         campaign changes nothing at all — same 157 keys, same key-type composition, same winner, identical Faction.L
         and Territory.owner. Measured cause: a whole campaign dispatches 29 scene slots and ALL 29 are `contest`.

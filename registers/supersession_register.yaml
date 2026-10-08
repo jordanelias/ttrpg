@@ -491,9 +491,9 @@ entries:
       (mass_battle_v30.md:254) and rout fires at morale<=0, so a Stability-0 faction must not
       field a pre-routed unit. `_GarrisonStub` (the uncontrolled-territory defender, which has no
       backing Faction) is held at the PRE-change flat morale-start of 5, unchanged, so the swap is
-      attributable to real factions' Stability alone. Goldens re-recorded:
-      `engine/tests/test_mc_v18_regression.py` (seed-0, n=2) and
-      `engine/tests/test_f7_smoke_oracle.py` (seed-42, n=8) — both move because
+      attributable to real factions' Stability alone. Goldens re-recorded then (both campaign
+      goldens, since deleted with the campaign driver at 28-iii): a seed-0 (n=2) campaign regression
+      golden and `engine/tests/test_f7_smoke_oracle.py` (seed-42, n=8) — both moved because
       `_try_conquest` -> `resolve_mass_battle` -> `_faction_to_unit` runs on every
       campaign-reachable Military Conquest. `tests/valoria/test_mass_battle_byte_exact.py`,
       `tests/valoria/test_field_golden_pins.py` and `tools/ci_golden_modes_check.py`'s three
@@ -502,5 +502,4 @@ entries:
     files_to_recheck:
       - .designs/systems/mass_battle/reference/mass_battle_v30.md   # reference only (§0.05); not gating
       - systems/mass_battle/sim/massbattle.py   # DONE — the derivation itself
-      - engine/tests/test_mc_v18_regression.py   # DONE — golden re-recorded
       - engine/tests/test_f7_smoke_oracle.py   # DONE — golden re-recorded

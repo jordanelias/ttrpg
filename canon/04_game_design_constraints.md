@@ -7,9 +7,8 @@ retired and its §A (P-01…P-15) was superseded by `canon/philosophy/10_constra
 **Why this file exists.** §B was always a different kind of thing from §A — the source file said so
 itself: *"Unlike §A (P-XX) which derives from immutable Philosophical Foundations, §B (GD-XX) is
 mutable canon."* §A concerns what the world is; §B concerns victory conditions, AI action selection
-and faction emergence. The philosophy suite does not carry them, and `engine/autoload/victory.py` and
-`engine/mc_v18.py` cite them as their canon source, so they get their own home rather than being
-retired with the file that happened to hold them.
+and faction emergence. The philosophy suite does not carry them, so they get their own home rather
+than being retired with the file that happened to hold them.
 
 **Nothing below is edited.** The text is as it stood, including its own dated version line, its
 provisional hook table, and its cross-references to trees that have since moved. Path resolution for

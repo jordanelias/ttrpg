@@ -25,8 +25,7 @@
 > sections they contradicted.
 >
 > **§B (GD-1, GD-2, GD-3)** was extracted verbatim to `canon/04_game_design_constraints.md` — it is
-> mutable canon of a different kind, and `engine/autoload/victory.py` and `engine/mc_v18.py` cite it
-> as their canon source. **Code citing §B should be repointed at that file.**
+> mutable canon of a different kind. **Anything citing §B should be repointed at that file.**
 >
 > **The text below this banner is unedited** and is the text the review was run against. For
 > byte-exactness without the banner, see `canon/philosophy/PROVENANCE.md`.
