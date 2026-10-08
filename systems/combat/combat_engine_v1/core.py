@@ -70,13 +70,7 @@ def degree(net, ob):
     MIGRATED (workplan PC-02; supersedes the ED-IN-0187 hold and ED-PC-0003). The pre-2026-08-14 ladder that
     stood here (fail <0.5, Overwhelming at net >= 2*ob - 0.5, the ER-2 k-0.5 continuity shift) is gone with no
     local re-banding: a continuity shift on top of the owner would be a second ladder, which the single-owner
-    guard (`tests/valoria/test_degree_ladder_single_owner.py`, where this site is now enrolled in LADDERS) fails
-    on. Its order was ruled first: Ob comes from the DEFENDER (`ob_from_defender`, ED-PC-0058), then this ladder.
-    The ceiling that once blocked the move (guandao 2.5% -> 47.5% of plate fights against a 40% cap) was
-    abolished by ED-PC-0057 before this migration; `test_plate_participation_tracks_armour_defeat_capability`
-    reports that rate and no longer bounds it.
-    `DECISIVE_OB` is DELETED (PC-03): `strike()`'s severity tail, its last reader, now starts at
-    `band_floor('overwhelming', ob)`."""
+    guard (`tests/valoria/test_degree_ladder_single_owner.py`, where this site is enrolled in LADDERS) fails on."""
     return _COMBAT_LABEL[DE.degree_from_net(net, ob)]
 
 _DEGREE_OF = {label: deg for deg, label in _COMBAT_LABEL.items()}
@@ -88,7 +82,8 @@ def band_floor(band, ob):
     each had kept its own copy of the pre-ruling one; a copy is what went stale, so the edge is DERIVED.
     Exact to the float: `degree(band_floor(b, ob), ob)` is `b` and the next float down is not. The
     +/-64 bracket around `ob` is asserted, not assumed (the owner's edges sit within 3 of `ob`). Pure; cached
-    per (band, ob) — Ob is History/2, so a fight touches a handful of values."""
+    per (band, ob) — Ob is History/2, so a fight touches a handful of values. `band` is 'partial', 'success' or
+    'overwhelming': 'fail' is the lowest band and has no edge (it fails the bracket assert)."""
     k = DE.DEGREE_ORDINAL[_DEGREE_OF[band]]
     rank = lambda x: DE.DEGREE_ORDINAL[DE.degree_from_net(x, ob)]
     lo, hi = ob - 64.0, ob + 64.0
@@ -125,11 +120,8 @@ def resolve(pool, net_sigma, rng, ob):
     (boost = eff_sigma*sigma_N = soft_cap(net_sigma)*sigma_n(pool)), it does NOT shift the Ob.
     SL.eff_ob is display-only per its own docstring; resolving via the floored Ob-shift distorted the degree
     bands (overwhelming trivialised by the Ob-floor).
-    `ob`: the RULED Ob-from-defender value (Jordan 2026-08-15) — callers pass `ob_from_defender(defender)`,
-    never the fixed `DECISIVE_OB` (retired as a resolution input; deleted at PC-03).
-    REQUIRED rather than defaulted: the ruling is "Ob should be determined
-    by your opponent", so a silent DECISIVE_OB fallback would let a caller skip the derivation exactly as
-    every call site did before ED-PC-0058.
+    `ob`: the RULED Ob-from-defender value (Jordan 2026-08-15) — callers pass `ob_from_defender(defender)`.
+    REQUIRED rather than defaulted, so no caller can skip the derivation (ED-PC-0058).
     Returns (deg, net)."""
     net = roll_net(pool, rng) + SL.soft_cap(net_sigma) * SL.sigma_n(pool)
     return degree(net, ob), net
@@ -162,9 +154,7 @@ QUAL={'graze':0.25,'partial':0.5,'success':1.0,'overwhelming':1.5}  # [damage_mo
 # entry exists — and removing it could not even raise KeyError (which would have been the louder, safer failure).
 # The honest reason to keep it is narrower: 'partial' IS a real degree from degree() (0 <= net - ob < 1), the wrapper
 # maps it to an explicit graze/bind rather than a damage call, and a quality table that silently omits a member of
-# its own domain is a worse artifact than an unused row. NOTE the former 'partial' row of COVERAGE_GAP was NOT the same
-# thing — that key was the `coverage` (hit-location) level, unrelated to degrees; conflating them was a category error in
-# this comment's first draft. That hook was deleted as a dead branch (ED-PC-0055, J-20 (B)); see COVERAGE_GAP below.
+# its own domain is a worse artifact than an unused row.
 OW_MAX=2.5; OW_Z=1.5          # [M-QUAL D-A: overwhelming quality saturates 1.5->OW_MAX by sigma-leverage severity]
 DMG_SCALE=1.55                                                      # [damage_model — even Success ~= 1 WI; emergent-tunable]
 # PENETRATION THRESHOLD (ED-PC-0032, rapier plate fall-off): armour resists up to a floor — a blow whose coupling-
@@ -440,9 +430,8 @@ def cut_thrust_arm(mat, gap_prec=GAP_PREC_REF, eff_cut=None, eff_thrust=None, th
 def cut_thrust_impacts(w, strength, grip=0.0, sel_pc=None):
     """(shear, puncture): the Str+Heft impact each arm of a cut_thrust weapon is paid — `strike_impact` on that arm's
     own heft (heft_resp with sel_arm). The `impact` input of `cut_thrust_arm` [ED-PC-0050, E5/M7]. Pure."""
-    return tuple(strike_impact(strength, heft_resp(w, None, grip=grip, sel_head=V.HEAD_CUT_THRUST, sel_pc=sel_pc,
-                                                   sel_arm=_a), V.HEAD_CUT_THRUST)
-                 for _a in ('shear', 'puncture'))
+    return tuple(strike_impact(strength, h, V.HEAD_CUT_THRUST)
+                 for h in WP.heft_by_arm(w, grip=grip, sel_head=V.HEAD_CUT_THRUST, sel_pc=sel_pc))
 
 def coupling(head, armor, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None, ct_impact=None):
     """DELIVERY x transmit. cut_thrust is VERSATILE — takes the better of its edge (shear) or the half-sword thrust
@@ -668,14 +657,19 @@ def strike(attacker, defender, deg, cfg, net=None, pool=None):
     # the heft call is byte-identical outside the cut_thrust roster.
     # [ED-PC-0050, E5/M7] The contest is priced on DAMAGE: `_imp` is the Str+Heft each arm is paid, and the same pair
     # rides into damage() -> coupling() -> cut_thrust_arm, so the coupling paid is the arm chosen here.
-    _arm = _imp = None
     if head == V.HEAD_CUT_THRUST:
-        _imp = cut_thrust_impacts(attacker.w, attacker.strength, grip=grip, sel_pc=sel_pc)
+        # both arms' heft in ONE grip evaluation (WP.heft_by_arm); the impact pair and the paid heft come from it
+        _hefts = WP.heft_by_arm(attacker.w, grip=grip, sel_head=head, sel_pc=sel_pc)
+        _imp = tuple(strike_impact(attacker.strength, h, head) for h in _hefts)
         _arm = cut_thrust_arm(TIER2MAT[defender.armor], gap,
                               eff_cut=(_ec if _ec is not None else _geo.get('cut')),
                               eff_thrust=(_et if _et is not None else _geo.get('thrust')),
                               thrust_auth=tauth, impact=_imp)[1]
-    return damage(deg, heft_resp(attacker.w, cfg, grip=grip, sel_head=head, sel_pc=sel_pc, sel_arm=_arm), head, attacker.strength,
+        _heft = _hefts[0] if _arm == V.MODE_SHEAR else _hefts[1]
+    else:
+        _imp = None
+        _heft = heft_resp(attacker.w, cfg, grip=grip, sel_head=head, sel_pc=sel_pc)
+    return damage(deg, _heft, head, attacker.strength,
                   defender.armor, gap, perc, q=q, eff=eff, thrust_auth=tauth,
                   eff_cut=(_ec if _ec is not None else _geo.get('cut')),
                   eff_thrust=(_et if _et is not None else _geo.get('thrust')),

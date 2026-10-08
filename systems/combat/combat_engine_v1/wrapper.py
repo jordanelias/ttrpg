@@ -486,10 +486,11 @@ class Yield:
 
 def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None):
     import random
-    if yield_decl is not None and not (yield_decl.by is A or yield_decl.by is B):
-        raise ValueError("Yield.by must be the A or B Combatant passed to fight (compared by identity)")
-    if yield_decl is not None and not (1 <= yield_decl.turn <= max_bouts):
-        raise ValueError(f"Yield.turn {yield_decl.turn} is outside 1..max_bouts ({max_bouts}): it would never fire")
+    if yield_decl is not None:
+        if not (yield_decl.by is A or yield_decl.by is B):
+            raise ValueError("Yield.by must be the A or B Combatant passed to fight (compared by identity)")
+        if not (1 <= yield_decl.turn <= max_bouts):
+            raise ValueError(f"Yield.turn {yield_decl.turn} is outside 1..max_bouts ({max_bouts}): it would never fire")
     cfg=cfg or CFG; rng=rng or random.Random()   # stdlib RNG (ED-1085 numpy de-leak; pass random.Random(seed) for determinism)
     # reset wounds — must mirror Combatant.__init__'s tracker construction (combatant.py:71). WoundTracker.__init__
     # defaults spirit=3/strength=4, so re-init'ing with end alone silently reverts non-default fighters to those
@@ -502,14 +503,13 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None):
     prev_closed=False   # measure state threaded across engagements (ED-PC-0033): a reach weapon only re-presents at open measure if it can hold a crowding opponent off; the first engagement always opens at measure
     for turn in range(max_bouts):   # each iteration = ONE engagement (~10s turn); victor emerges over MULTIPLE turns with persistent wounds/fatigue. fight() is the multi-turn SIM harness (runs to a decision for win-rates); the GAME calls one engagement per turn.
         if yield_decl is not None and yield_decl.turn == turn+1:   # PHASE 1: the declaration precedes every draw of its turn
-            _by = yield_decl.by
             _refused = 'objective_contested' if yield_decl.objective_contested else None
-            _emit('yield', turn=turn+1, by=_by.label, accepted=(yield_decl.accepted and _refused is None), refused=_refused)
+            _emit('yield', turn=turn+1, by=yield_decl.by.label, accepted=(yield_decl.accepted and _refused is None), refused=_refused)
             if _refused is None:
                 # Combat ends with the yielder standing; the opponent holds the field. NO UPSET_FLOOR draw: that is a
                 # roll, and §11.4 is "no further rolls" -- a lucky blow cannot steal a fight nobody is contesting.
-                result = -1 if _by is A else 1
-                _emit('fight_result', result=result, winner=(A.label if result==1 else B.label))
+                result, winner = (-1, B) if yield_decl.by is A else (1, A)
+                _emit('fight_result', result=result, winner=winner.label)
                 return result
         first = A if rng.random()<0.5 else B
         _emit('turn_start', turn=turn+1, first=first.label)

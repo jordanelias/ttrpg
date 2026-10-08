@@ -806,6 +806,24 @@ THRUST_POB = 0.16   # [SIM-CALIBRATE] the PoB-DECOUPLED effective lever for a TH
 # the approach (systems.arrest_impulse), not a raw-heft penalty. THRUST_POB (the PoB-decoupled thrust lever,
 # ED-PC-0027) stays; it is the correct, already-merged thrust-heft model.
 
+def _arm_lever(d, head, sel_arm):
+    """The base lever `heft` multiplies by the striking mass: the axial thrust lever for the puncture arm, the swing
+    moment (floored forward-balance) for the shear arm, token-keyed when no arm is resolved. See `heft`."""
+    if sel_arm == V.MODE_PUNCTURE:
+        return THRUST_POB
+    if sel_arm == V.MODE_SHEAR:
+        return max(0.0, d['PoB_frac'])
+    return THRUST_POB if head == V.HEAD_POINT else max(0.0, d['PoB_frac'])
+
+def heft_by_arm(w, grip=0.0, sel_head=None, sel_pc=None):
+    """(shear, puncture) heft of one weapon at one grip, with `phi_grip` evaluated ONCE: each value is exactly
+    `heft(w, grip, sel_head, sel_pc, sel_arm=<that arm>)` (same expression, same order, same `phi`), for a caller that
+    needs both arms (core.cut_thrust_impacts, core.strike) without paying the grip circumstance twice. Pure."""
+    d = derive(w)
+    head = sel_head if sel_head is not None else w['head']
+    phi = phi_grip(w, grip, head, sel_pc)
+    return tuple(((d['m_head'] * _arm_lever(d, head, a)) / HEFT_REF) * phi for a in (V.MODE_SHEAR, V.MODE_PUNCTURE))
+
 def heft(w, grip=0.0, sel_head=None, sel_pc=None, sel_arm=None):
     """Impact heft — the weapon's striking mass × how forward-balanced it is (a heavy, forward-loaded head hits
     harder than a light, hand-balanced one), normalised so the 2H cut-thrust anchor (longsword) reads 1.0. PoB_frac
@@ -835,12 +853,7 @@ def heft(w, grip=0.0, sel_head=None, sel_pc=None, sel_arm=None):
     # conceded the bypass. `sel_arm` is 'shear' | 'puncture' | None; None keeps the token-keyed behaviour and is
     # byte-identical for every caller that does not pass it (pinned by test_arm_defaults_are_byte_identical).
     # Arm tokens come from vocabulary (V.MODE_PUNCTURE / V.MODE_SHEAR) — the alphabet has one owner (E0/ED-PC-0042).
-    if sel_arm == V.MODE_PUNCTURE:
-        lever = THRUST_POB
-    elif sel_arm == V.MODE_SHEAR:
-        lever = max(0.0, d['PoB_frac'])
-    else:
-        lever = THRUST_POB if head == V.HEAD_POINT else max(0.0, d['PoB_frac'])
+    lever = _arm_lever(d, head, sel_arm)
     base = (d['m_head'] * lever) / HEFT_REF
     return base * phi_grip(w, grip, head, sel_pc)
 

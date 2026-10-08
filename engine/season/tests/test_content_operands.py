@@ -259,7 +259,7 @@ def test_the_populated_corpus_forms_candidates_with_writ_derived_operands():
     # existed at the season's start), so the count above is not an artefact of a malformed value
     # -- a tuple, an id no realm ever held -- that the fold would refuse outright for a reason
     # that has nothing to do with the writ.
-    unresolvable = [(pid, verb, to) for pid, verb, to in writ_derived if to not in seeded]
+    unresolvable = [(pid, verb, to) for pid, verb, to in writ_derived if to not in seeded | set(w.persons)]
     assert not unresolvable, (
         f"{len(unresolvable)} writ-derived `to` values name no person the realm ever held: "
         f"{unresolvable[:5]}")

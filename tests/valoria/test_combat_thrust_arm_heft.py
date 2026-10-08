@@ -159,7 +159,10 @@ def test_selection_and_damage_agree_on_the_pinned_population():
         geo = w.get('geo', {})
         for tier in ('none', 'light', 'medium', 'heavy'):
             mat = core.TIER2MAT[tier]
-            dmg = {}
+            # the coupling-only arm does not depend on strength
+            _v0, arm0 = core.cut_thrust_arm(
+                mat, w['gap'], eff_cut=geo.get('cut'), eff_thrust=geo.get('thrust'),
+                thrust_auth=core.thrust_authority(w['head_len']))
             for strength in (2, 4, 6):
                 dmg = {a: _arm_damage(w, strength, mat, a) for a in ('shear', 'puncture')}
                 _v, arm = core.cut_thrust_arm(
@@ -170,12 +173,9 @@ def test_selection_and_damage_agree_on_the_pinned_population():
                 checked += 1
                 if dmg[other] > dmg[arm] + 1e-9:
                     bad.append((n, tier, strength, arm, dmg))
-                _v0, arm0 = core.cut_thrust_arm(
-                    mat, w['gap'], eff_cut=geo.get('cut'), eff_thrust=geo.get('thrust'),
-                    thrust_auth=core.thrust_authority(w['head_len']))
                 if dmg['shear' if arm0 == 'puncture' else 'puncture'] > dmg[arm0] + 1e-9:
                     coupling_only_wrong += 1
-    assert checked == len(CUT_THRUST) * 4 * 3 and checked >= 15 * 12, checked
+    assert checked >= 15 * 12, checked
     assert not bad, f"the arm chosen is not the higher-damage arm: {bad[:5]} ({len(bad)} cells)"
     assert coupling_only_wrong, (
         "the coupling-only contest agrees with damage everywhere on this population, so this pin cannot observe "

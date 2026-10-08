@@ -364,11 +364,14 @@ def test_lever_log_edge_is_the_single_owner_and_is_exactly_inert_at_defaults():
     EXACTLY 0.0 — not approximately — for the default build, which is what makes `x + shift == x`
     bit-for-bit and the batch's byte-identity argument true rather than asserted."""
     assert S.lever_log_edge(1.0, 1.0) == 0.0
-    plain = Combatant('p', weapon='arming')
-    for channel in sorted({a['lever'] for a in ABIL.ABILITIES.values()} |
-                          {'measure', 'leverage', 'tempo', 'tactile', 'balance', 'visual', 'precommit'}):
-        assert TR.eff_cw(plain, channel) == 1.0, channel
-        assert S.lever_log_edge(TR.eff_cw(plain, channel), TR.eff_cw(plain, channel)) == 0.0, channel
+    # every weapon, the NEW_SINCE_PINS forms included: this is the structural form of the byte-identity claim,
+    # and it needs no per-weapon pin (so it covers the weapons that have none)
+    for weapon in WEAPONS:
+        plain = Combatant('p', weapon=weapon)
+        for channel in sorted({a['lever'] for a in ABIL.ABILITIES.values()} |
+                              {'measure', 'leverage', 'tempo', 'tactile', 'balance', 'visual', 'precommit'}):
+            assert TR.eff_cw(plain, channel) == 1.0, (weapon, channel)
+            assert S.lever_log_edge(TR.eff_cw(plain, channel), TR.eff_cw(plain, channel)) == 0.0, (weapon, channel)
     # sign-safety of the primitive itself, over the full clamped factor range ability_factor can emit
     grid = (ABIL.ABIL_FACTOR_FLOOR, 0.4, 0.9, 1.0, 1.15, 1.2, 4.3, 43.0, ABIL.ABIL_FACTOR_CEIL)
     checked = 0

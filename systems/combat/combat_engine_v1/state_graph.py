@@ -134,10 +134,10 @@ def reachable_from(start):
 def fired_states_from_events(events):
     """Map a trace event stream to the SET of state-graph nodes it visited (for dynamic coverage)."""
     fired = set()
-    yielded = False   # an unrefused §11.4 yield returns before the UPSET_FLOOR draw: UpsetCheck is bypassed
+    yielded = False   # an unrefused §11.4 yield returns before the UPSET_FLOOR draw: UpsetCheck is bypassed (one per fight)
     for e in events:
         k = e['kind']
-        if k == 'yield': yielded = yielded or e.get('refused') is None
+        if k == 'yield': yielded = e.get('refused') is None
         elif k == 'fight_start': fired.add('FightInit')
         elif k == 'turn_start': fired.add('EngagementInit')
         elif k == 'engagement_start': fired.add('AwaitTempo' if e['closed'] else 'Approach')
@@ -155,8 +155,10 @@ def fired_states_from_events(events):
             fired.add('Decided' if e['felled'] else 'InterTurn')
         elif k == 'fight_result':
             fired.add('FinalResult')
-            fired.add('Unresolved' if e['winner'] is None else ('Decided' if yielded else 'UpsetCheck'))
-            if e['winner'] is not None: fired.add('Decided')
+            if e['winner'] is None: fired.add('Unresolved')
+            else:
+                fired.add('Decided')
+                if not yielded: fired.add('UpsetCheck')
     return fired
 
 

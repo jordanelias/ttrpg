@@ -152,8 +152,25 @@ def test_each_morphology_lever_is_individually_live(lever, weapons):
         f"on={on_v!r} off={off_v!r}")
 
 
-@pytest.mark.parametrize('weapon', [n for n, r in WEAPONS.items() if r.get('head') == 'cut_thrust'])
-@pytest.mark.parametrize('armor', ['none', 'light', 'medium', 'heavy'])
+CUT_THRUST = [n for n, r in WEAPONS.items() if r.get('head') == 'cut_thrust']
+TIERS = ('none', 'light', 'medium', 'heavy')
+
+
+def _versatile_cells():
+    """[(weapon, tier, dm)] for every cut_thrust weapon x tier where `select_mode` selects the versatile head; `dm` is
+    the arm `core.strike` pays. One walk shared by the floor and the versatility test, so the floor lives once."""
+    out = []
+    for weapon in CUT_THRUST:
+        c = Combatant('X', weapon=weapon)
+        for armor in TIERS:
+            dm, head, *_ = S.select_mode(c, armor, True, CFG, measure_gap=0.0)
+            if head == 'cut_thrust':
+                out.append((weapon, armor, dm))
+    return out
+
+
+@pytest.mark.parametrize('weapon', CUT_THRUST)
+@pytest.mark.parametrize('armor', list(TIERS))
 def test_cut_thrust_label_matches_the_arm_actually_paid(weapon, armor):
     """ED-PC-0036 (F12). `coupling` resolves a cut-and-thrust weapon as max(cut arm, half-sword thrust arm), and
     `select_mode` reports the damage-mode that legibility scores (thrust reads HARD 0.80, swing EASY 1.25). Those two
@@ -191,16 +208,9 @@ def test_cut_thrust_label_gate_is_not_vacuous():
     RE-MEASURED 2026-09-29 (ED-PC-0058, the `partisan` deletion): partisan was cut_thrust and all 4 of its tier
     cells selected the versatile head, so the roster drops to 18 cut_thrust weapons (72 cells) and the floor
     drops 55->51 by exactly that removal — not a narrowing of the property itself."""
-    ct = [n for n, r in WEAPONS.items() if r.get('head') == 'cut_thrust']
-    checked = 0
-    for weapon in ct:
-        for armor in ('none', 'light', 'medium', 'heavy'):
-            c = Combatant('X', weapon=weapon)
-            _dm, head, _gap, _perc, _pc, _eff = S.select_mode(c, armor, True, CFG, measure_gap=0.0)
-            if head == 'cut_thrust':
-                checked += 1
+    checked = len(_versatile_cells())
     assert checked >= 51, (
-        f"only {checked} of {len(ct) * 4} cut_thrust cells still select the versatile head (was 51, ED-PC-0058) — "
+        f"only {checked} of {len(CUT_THRUST) * 4} cut_thrust cells still select the versatile head (was 51, ED-PC-0058) — "
         f"test_cut_thrust_label_matches_the_arm_actually_paid is skipping its way to a vacuous green")
 
 
@@ -214,15 +224,9 @@ def test_cut_thrust_versatility_is_not_decided_by_constant_ordering():
     old four-tier shear/puncture split lived only in the coupling-only probe no wielder uses, so the test stayed green
     while its subject went constant). `dm` is the arm `core.strike` pays (pinned above), read off `select_mode` for every
     cut_thrust weapon at every tier where the versatile head is selected; the property now holds across the roster."""
-    modes, checked = set(), 0
-    for weapon in [n for n, r in WEAPONS.items() if r.get('head') == 'cut_thrust']:
-        for armor in ('none', 'light', 'medium', 'heavy'):
-            dm, head, gap, perc, pc, eff = S.select_mode(Combatant('X', weapon=weapon), armor, True, CFG,
-                                                         measure_gap=0.0)
-            if head == 'cut_thrust':
-                modes.add(dm)
-                checked += 1
-    assert checked >= 51, f"only {checked} versatile cells observed (the label gate's floor is 51)"
+    cells = _versatile_cells()
+    modes = {dm for _w, _a, dm in cells}
+    assert len(cells) >= 51, f"only {len(cells)} versatile cells observed (the label gate's floor is 51)"
     assert modes == {'shear', 'puncture'}, (
         f"the damage-priced cut/thrust contest resolved to {modes} across the roster and all four armour tiers "
         f"— one arm is structurally dead")

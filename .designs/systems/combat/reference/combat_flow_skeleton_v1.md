@@ -95,9 +95,9 @@ S2. **`engagement(A, B, first, cfg, rng, prev_closed)`** — one exchange-bout i
     - S2.7.22 `[gate]` **Turn/exchange separation checks**: stamina collapse → `return None`; `exchanges >= BURST_MAX` → `return None`; clean defence (no hit/riposte/bind) → `return None`. Otherwise the beat loop continues (a burst of exchanges). `systems/combat/combat_engine_v1/wrapper.py:460-462`.
   - S2.8 `[emit]` Loop exhaustion (`beat_exhaustion`) → `return None, closed`. `systems/combat/combat_engine_v1/wrapper.py:463`.
 
-S3. **`core.resolve(pool, net_sigma, rng, ob) -> (degree, net)`** — the shared dice-pool roll + degree band, delegated to `engine.autoload.sigma_leverage`. CORRECTED at the Phase-1 methodology close (2026-09-29, `/code-review`, ED-PC-0058): `ob` is now a required 4th argument (`core.ob_from_defender(defender)`, `defender.history / 2.0`), replacing the fixed `DECISIVE_OB` constant this line used to name — see S2.7.11's matching correction. `systems/combat/combat_engine_v1/core.py:131 resolve`.
+S3. **`core.resolve(pool, net_sigma, rng, ob) -> (degree, net)`** — the shared dice-pool roll + degree band, delegated to `engine.autoload.sigma_leverage`. CORRECTED at the Phase-1 methodology close (2026-09-29, `/code-review`, ED-PC-0058): `ob` is now a required 4th argument (`core.ob_from_defender(defender)`, `defender.history / 2.0`), replacing the fixed `DECISIVE_OB` constant this line used to name — see S2.7.11's matching correction. `systems/combat/combat_engine_v1/core.py:118 resolve`.
 
-S4. **`core.strike(attacker, defender, deg, cfg, net=None, pool=None) -> damage`** — damage-number resolver consumed by every hit site in S2. `systems/combat/combat_engine_v1/core.py:632 strike`.
+S4. **`core.strike(attacker, defender, deg, cfg, net=None, pool=None) -> damage`** — damage-number resolver consumed by every hit site in S2. `systems/combat/combat_engine_v1/core.py:621 strike`.
 
 S5. **Campaign-seam dispatch** (outside `systems/combat/`, traced for the IN-side seam): `scene_dispatch._resolve_slot` on `st == "combat"`. `engine/cross_scale/scene_dispatch.py:226` (st == "combat").
   - S5.1 `[gate][branch]` `if getattr(world, "dispatch_combat_bridge", False):` — flag decided once per campaign by `mc_v18.run_campaign` (default OFF). `engine/cross_scale/scene_dispatch.py:234`, `engine/mc_v18.py:256`.
