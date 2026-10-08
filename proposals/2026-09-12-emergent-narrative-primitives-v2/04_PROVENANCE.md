@@ -67,7 +67,7 @@ was dropped rather than carried.
 | `(Rung, exists)` is declared at `[RES]`, `by: "W2/H-41 — founding a hearth"`; nothing writes it | `write_matrix.yaml:294-299` |
 | `standing_of` is a **computed gap**, returning maximum gap when nothing pairs | `decision/options.py:443-464` |
 | questions are ranked; `qs[0]` decided by the ordering in **801 of 1,068** deliberations | `queries/world_q.py:250-269` |
-| `handoff_rules.py` implements **all eight** cross-scale rules; `cross_scale` is imported only by `mc_v18.py` | `engine/cross_scale/handoff_rules.py:1-14` |
+| `handoff_rules.py` implements **all eight** cross-scale rules; `cross_scale` is imported only by the retired campaign driver | `engine/cross_scale/handoff_rules.py:1-14` |
 | `forge` has no `EFFECTS` entry, so `resolvable_verbs()` excludes it | `loop/effects.py`, `loop/driver.py:99` |
 
 **A critic finding that was dropped**, recorded because a dropped finding is evidence the verification was

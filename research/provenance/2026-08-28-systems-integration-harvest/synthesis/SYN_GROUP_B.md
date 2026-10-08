@@ -170,7 +170,7 @@ That is on the order of forty lines, adds no new mechanic, and converts four ine
 | thing | slice | what it does | status | where it lives |
 |---|---|---|---|---|
 | Peninsular Sovereignty (GD-1) | formula | `held ≥ 15 ∧ all(accord ≥ 2) ∧ Turmoil ≤ 6`, sustained 2 consecutive Accountings — the sole victory condition for every faction | BUILT, with the Turmoil clause structurally always-true | `engine/autoload/victory.py:52-80` |
-| Fallback winner | formula | `score = held_count + Faction.L + len(Faction.territories)`, max wins when nobody achieves GD-1 by the season cap | BUILT, computed outside `victory.py` and undocumented in the module contracts | `engine/mc_v18.py` |
+| Fallback winner | formula | `score = held_count + Faction.L + len(Faction.territories)`, max wins when nobody achieves GD-1 by the season cap | BUILT, computed outside `victory.py` and undocumented in the module contracts | The retired campaign driver |
 | `province_accord = floor(mean settlement Order)` | derivative | The settlement-grain Accord aggregate | BUILT, read-only | `registry.py:185` |
 | `canonical_accord(continuous) → 0–4` | derivative | Converts the continuous field to the canonical index for like-for-like comparison | BUILT | `game_state.py` |
 | Insurgency formation | formula | 2+ contiguous Uncontrolled territories, sustained 2 consecutive seasons | BUILT, runs every season | `insurgency_pipeline.py:139-196` |

@@ -133,7 +133,7 @@ next layer the obvious move.
 ## §R1 — GODOT READINESS (agent, sonnet, completed)
 
 **THE SINGLE MOST IMPORTANT POSITIVE FINDING IN THIS ENTIRE INVESTIGATION:**
-`engine/mc_v18.py` was executed live. `run_campaign(seed=1, max_seasons=2)` **completed in 2.47s**,
+The retired campaign driver was executed live. `run_campaign(seed=1, max_seasons=2)` **completed in 2.47s**,
 ran to season 50, produced 35 battles, 168 scenes resolved, **217 Keys emitted**, full faction /
 territory / settlement state with 37 named settlements. `tests/valoria` collects 1,971 tests in 3s.
 **The game simulation is real, deterministic, and runs end to end today.**
@@ -616,7 +616,7 @@ sequences it **first** — apparatus built to retire apparatus, as step 1.
 
 **Agent's self-refutations (recorded, not buried):**
 - F1 "sessions never do real game work" — **FALSE.** ~112 game test files / 19,285 lines;
-  `mc_v18.run_campaign(seed=7)` → winner Varfell, season 50, 41 battles, 153 keys, deterministic
+  the retired driver's `run_campaign(seed=7)` → winner Varfell, season 50, 41 battles, 153 keys, deterministic
   hash, **2.4s**. Corrected claim: real game work happens in *personal combat and mass battle*, and
   essentially none on the M1 critical path or the port.
 - F2 "recent churn is overwhelmingly apparatus" — **REFUTED** (also self-refuted by the repo last

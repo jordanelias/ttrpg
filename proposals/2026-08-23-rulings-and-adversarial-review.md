@@ -86,7 +86,7 @@ systems/factions/sim/faction_action.py:452
     from systems.mass_battle.sim.massbattle import resolve_mass_battle
 ```
 
-That is the whole of it. The rest are tooling registries (`build_decisions`, `build_fork`, `build_key_graph`, `export_sim_params`) and tests. The campaign path is `mc_v18` → `faction_take_action` → `_try_conquest` → `resolve_mass_battle(faction_a, faction_b, terrain, world)`, **every season**.
+That is the whole of it. The rest are tooling registries (`build_decisions`, `build_fork`, `build_key_graph`, `export_sim_params`) and tests. The campaign path is the retired campaign driver → `faction_take_action` → `_try_conquest` → `resolve_mass_battle(faction_a, faction_b, terrain, world)`, **every season**.
 
 ### §2.3 The blocker, reproduced
 

@@ -171,7 +171,7 @@ a term whose meaning must be re-derived from context, in the one file whose job 
 | Subsystem | Executable Python | Scale |
 |---|---:|---|
 | `systems/mass_battle/sim` | **11,612** | unit / battle |
-| `engine/` (substrate, autoload, cross_scale, mc_v18) | **8,942** | spine |
+| `engine/` (substrate, autoload, cross_scale, the retired campaign driver) | **8,942** | spine |
 | `systems/combat/combat_engine_v1` | **7,901** | personal |
 | `systems/social_contest/sim` | **7,045** | personal |
 | `systems/factions/sim` | **2,744** | faction / political |
@@ -495,7 +495,7 @@ status counts: {'canonical': 35, 'proposed': 11}
 **Thirty-five canonical, eleven proposed.** And the eleven are not a rounding error — they are the
 whole argument. The loader recommendation rests on the claim that loading authored records
 *fabricates nothing*, which is precisely the value OI-05's deferral exists to protect
-(`engine/mc_v18.py:196-200`: *"Honest deferral, not fabrication"*). **Loading eleven unratified people
+(the retired campaign driver at `:196-200`: *"Honest deferral, not fabrication"*). **Loading eleven unratified people
 into the world is that fabrication.** A reader following the recommendation as I first published it
 would have forfeited its only citable ground while believing they were honouring it.
 

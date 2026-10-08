@@ -403,7 +403,7 @@ verdict: NOT MET  —  2 row(s) failing
 ```
 
 **Per CLAUDE.md §0.2's own qualification** (`CLAUDE.md`, §0.2, "the instrument is not yet
-uniformly execution-bound"): rows 1-2 genuinely execute the engine (a seeded `mc_v18` probe +
+uniformly execution-bound"): rows 1-2 genuinely execute the engine (a seeded the retired campaign driver probe +
 same-seed `KeyLog.content_hash()` comparison) and are the only rows a document edit cannot satisfy.
 **Row 4 is explicitly flagged DOC-DERIVED by the tool's own output** — it counts `state: done`
 strings on the hand-edited board, so editing seven board rows would green it without a single

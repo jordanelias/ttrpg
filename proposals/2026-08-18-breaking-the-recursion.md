@@ -678,7 +678,7 @@ Each is unblocked right now, and each moves the game rather than the repository.
   found seven defects in `1e3e0e1e`, and refuted its own headline claim last week. **Any cut that
   treats all apparatus as equivalent will destroy real value.**
 - **Not that sessions do no game work.** ~112 game test files / 19,285 lines exist, and
-  `engine/mc_v18.py` runs a 50-season campaign in 2.4 seconds producing a winner and a deterministic
+  the retired campaign driver runs a 50-season campaign in 2.4 seconds producing a winner and a deterministic
   key-log hash. The narrower true claim: substantial game work happens in **personal combat and mass
   battle**, and essentially none on the M1 critical path or the port.
 - **Not that the Godot code is better than the Python.** It is not. The Python engine is 33,235
@@ -782,7 +782,7 @@ referent; every claim is checked against another claim inside it. The single cha
 it is to install an arbiter."*
 
 **Refuted by the tree.** The Python engine has hard external referents: the interpreter executes it,
-`mc_v18` emits a deterministic key-log hash, `engine/tests/` is a seeded regression suite, and
+The retired campaign driver emits a deterministic key-log hash, `engine/tests/` is a seeded regression suite, and
 `tools/ci_golden_modes_check.py` compares battle output **byte-exactly** against recorded goldens in
 three pinned modes. And the deepest guard stack in the repository grew on top of the strictest of
 them. In the gate's own words (`ci_golden_modes_check.py:1-22`): the goldens sat red for five days
@@ -810,7 +810,7 @@ gate (`tools/validate_ed_citations.py:353-361`).
 | "monotonic layer accretion" | **accretion with function migration** | 8 of 21 deletions had their function rebuilt under a different name; `extract_values.py` → `export_sim_params.py` (9-day gap) is the one true delete-then-rebuild |
 | "~95% of its own mandate" | **audit-sourced items outnumber ruling-sourced several-fold** | 95% = 100% − 4.8% treated every non-citing row as self-generated, including rows that *execute* rulings |
 | "no gate, no missing ruling, no dependency" | **"nobody took it" survives; "nothing was missing" does not** | `workplan_v6_progress.yaml:43` records real unformalized prerequisites |
-| `stubwire` "does nothing in the game" | claim dropped | it feeds `mc_v18`'s `CampaignResult.stub_hits`, and `engine/tests/test_pipeline_reach.py` consumes the `stub_wired` contract. The colonisation of *rationale* is real; of *behaviour*, not shown |
+| `stubwire` "does nothing in the game" | claim dropped | it feeds the retired campaign driver's `CampaignResult.stub_hits`, and `engine/tests/test_pipeline_reach.py` consumes the `stub_wired` contract. The colonisation of *rationale* is real; of *behaviour*, not shown |
 | "every one of those deletions turns a kept blocking gate red" | **some may; not every one** | `ci_claim_provenance_check.py:104-110` validates only rows matching five claim patterns, so a row citing a deleted tool can pass green — demonstrated live on `main` for `measure_stamp_false_positives.py` |
 
 **What survived the adjudication unchanged**, verified independently and often to the digit: the

@@ -20,7 +20,7 @@ locators across the two: **55 exact (86%)**, 9 failing (5 wrong, 4 off-by-N). Th
 ~82%. The corrections that change a conclusion are recorded here rather than absorbed.*
 
 **1. The threadwork citation names the wrong subsystem.** The claim that threadwork does not execute
-on the campaign path cited `mc_v18.py:192` and `:204-217` — but those stubwire **`generate_npc`** and
+on the campaign path cited the retired campaign driver at `:192` and `:204-217` — but those stubwire **`generate_npc`** and
 **`form_knot`**, a different gap entirely. The conclusion is nonetheless true, on better evidence: the
 only importers of `systems.threadwork.sim.operations` anywhere under `engine/` are two tests
 (`engine/tests/test_thread_mending_ed871.py:26`, `engine/tests/test_pipeline_reach.py:790`); no

@@ -156,7 +156,7 @@ I proposed a synthesis: *every finding in this session is the same defect at a d
 **The predictive test, on seams nobody in this session had examined — one of two held:**
 
 - `engine/autoload/npc_ai.py` — **held.** Both entry points are `stubwire.stub_resolve`, no production caller, stubbed since 2026-05-17.
-- **`engine/autoload/victory.py` — failed, decisively.** `mc_v18.py:269-274` calls `victory.check_all_factions(world)` **every season in the live loop**; a win sets `world.winner` and terminates the campaign; the implementation is real (15 territories, Accord ≥ 2, PS ≤ 6, sustained 2 seasons). **A declared seam with real traffic and real consequence.**
+- **`engine/autoload/victory.py` — failed, decisively.** The retired campaign driver at `:269-274` calls `victory.check_all_factions(world)` **every season in the live loop**; a win sets `world.winner` and terminates the campaign; the implementation is real (15 territories, Accord ≥ 2, PS ≤ 6, sustained 2 seasons). **A declared seam with real traffic and real consequence.**
 
 **The strongest rival explanation, argued honestly.** *"This is what honest deferral discipline looks like from the inside."* Nearly every large empty seam is **labeled, cited and guarded**: `stubwire.stub_resolve` is a designed single-owner primitive whose invocations are counted by ratchets; `generate_npc`'s deferral is pinned by two tests and an xfail manifest; `causes=[]` carries its reasoning inline; `resistance` names its reserved ED; articulation cites its docket. **This rival is largely correct about the big seams** — and it does **not** explain the small unlabeled rot: `temperaments.py:117` vs `:153-158`'s read/write asymmetry, and the `'Loyalty'`-scar test that asserts an intent flag rather than the effect. **The flattering explanation must not be allowed to absorb those.**
 
@@ -442,7 +442,7 @@ Doc 3's 14 steps, annotated with what the later censuses did to them.
 
 ## §10 COVERAGE
 
-**Read in full this session (union across passes):** the nine session documents; `CLAUDE.md`; `engine/autoload/{game_state,victory,npc_ai}.py`; `engine/mc_v18.py`; `engine/cross_scale/{scene_dispatch,parliamentary_bridge,articulation,echo_transport,combat_bridge}.py`; `systems/settlements/sim/{registry,ledger,infrastructure,temperaments,settlement,adjacency}.py`; `systems/world/sim/npe.py`; `systems/characters/sim/{conviction,beliefs,companion}.py`; `systems/social_contest/sim/contest/{wrapper,policy,narrative}.py`; `systems/combat/combat_engine_v1/workbench/{narrate,trace}.py`; `systems/world/narrative_voice_canon_v30.md`; `systems/fieldwork/sim/knots.py`; `engine/tests/{test_world_population,test_pipeline_reach,test_knots_ed912}.py`.
+**Read in full this session (union across passes):** the nine session documents; `CLAUDE.md`; `engine/autoload/{game_state,victory,npc_ai}.py`; the retired campaign driver; `engine/cross_scale/{scene_dispatch,parliamentary_bridge,articulation,echo_transport,combat_bridge}.py`; `systems/settlements/sim/{registry,ledger,infrastructure,temperaments,settlement,adjacency}.py`; `systems/world/sim/npe.py`; `systems/characters/sim/{conviction,beliefs,companion}.py`; `systems/social_contest/sim/contest/{wrapper,policy,narrative}.py`; `systems/combat/combat_engine_v1/workbench/{narrate,trace}.py`; `systems/world/narrative_voice_canon_v30.md`; `systems/fieldwork/sim/knots.py`; `engine/tests/{test_world_population,test_pipeline_reach,test_knots_ed912}.py`.
 
 **Parsed in full (not eyeballed):** `references/npc_registry.yaml` (all 46 entries, every field censused) · `systems/settlements/valoria_geography_v30.yaml` (all 37 settlements).
 
@@ -474,8 +474,8 @@ Three Fable 5 read-only passes read §10's entire not-opened list in full: the 1
 
 | Question | Answer |
 |---|---|
-| Does `run_accounting` really fire every season? | **Yes — settled by read, not comment.** `mc_v18.py:260-267` → `season.py:69-72` (`run_accounting(world)`, unconditional, no flag) → `accounting.py:139` (`simulate_npc_actions`, unconditional). §10's open item is closed. |
-| Is the §10 Mandate penalty real code? | **Yes, and it is live every season** — `parliamentary_vote.py:207-219` performs a real `adjust("L", …)` world write, reached via `mc_v18.py:148-152` with ECHO_TRANSPORT default ON. It was never just a docstring. |
+| Does `run_accounting` really fire every season? | **Yes — settled by read, not comment.** The retired campaign driver at `:260-267` → `season.py:69-72` (`run_accounting(world)`, unconditional, no flag) → `accounting.py:139` (`simulate_npc_actions`, unconditional). §10's open item is closed. |
+| Is the §10 Mandate penalty real code? | **Yes, and it is live every season** — `parliamentary_vote.py:207-219` performs a real `adjust("L", …)` world write, reached via the retired campaign driver at `:148-152` with ECHO_TRANSPORT default ON. It was never just a docstring. |
 | Does anything emit `state.succession`? | **No.** The only occurrences are articulation's consumer roster and a test. `key_graph.json` names its producer as `faction_politics` — **which exists only as a design doc**. And the Key's required payload (`prior_leader_id`, `new_leader_id`) has no coded source: `Faction` carries **no leader field of any kind**. Design gap 14 is three layers deep, not one. |
 
 ### §11.2 The claim I most doubted was right — and it was executed

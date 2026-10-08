@@ -309,7 +309,7 @@ return (max(1, round(f.L)), max(1, round(7.0 - f.Sta)))
 
 `side_a` is "the sitting leadership's case to stay the course"; `side_b` "the crisis's own case for
 change." This runs on the **default** path — `ECHO_TRANSPORT` is default-ON with Jordan's 2026-07-08
-ratification quoted in the flag's own docstring (`engine/mc_v18.py:63-77`) — and
+ratification quoted in the flag's own docstring (the retired campaign driver at `:63-77`) — and
 `engine/tests/test_f7_smoke_oracle.py:275` pins `GOLDEN_SCENES_RESOLVED = 975` over the 8-campaign
 seed-42 batch.
 
@@ -605,7 +605,7 @@ one repeats the §0 error. Choose from what the writes do (±1/±2 across ten si
 symmetric band.
 
 **Cost.** (a) **will move the seeded goldens** — `standing` enters a pool size, so clamping changes
-draws, and `test_f7_smoke_oracle.py` and `test_mc_v18_regression.py` must be re-pinned in the same
+draws, and `test_f7_smoke_oracle.py` and the retired campaign regression test must be re-pinned in the same
 commit. CLAUDE.md §7 flags golden re-pinning as an uncontrolled path, so it must be argued with a
 before/after, not performed quietly. (b) may be golden-inert if standing is 0 at all reachable seeds —
 **measurable before deciding, and measuring it is the first task.**

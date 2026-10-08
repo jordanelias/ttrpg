@@ -99,7 +99,7 @@ And the season consumer is already ticking: `accounting.py:139` calls `simulate_
 
 So: load the registry today against the live validator and **half the authored conviction data silently evaporates.** `apply_conviction_scar` returns a magnitude-0 record for any unrecognized name (`conviction.py:191-193`) — no exception, no warning.
 
-**The rejection surface is narrower than it looks.** There is exactly **one** production write path — `knots.py:349-353` — and it is itself latent, because knot formation is a stubwired deferral (`mc_v18.py:204-209`). `check_conviction_threshold` and `get_state` have no production callers. `world.convictions` is read by nothing in production except `serialize_world`/`restore_world`.
+**The rejection surface is narrower than it looks.** There is exactly **one** production write path — `knots.py:349-353` — and it is itself latent, because knot formation is a stubwired deferral (the retired campaign driver at `:204-209`). `check_conviction_threshold` and `get_state` have no production callers. `world.convictions` is read by nothing in production except `serialize_world`/`restore_world`.
 
 **Three coded rosters would still disagree after the tuple swap:** `npe.py:80`'s 8 (quoted verbatim from its own canon head, `investigation_systems_v30.md:84`), the deviation-opposites table keyed on those 8 (`npe.py:290-293`), and `knots.py`'s `'Loyalty'` — a member of the 8, and also the NPC affiliation scalar, and in neither the 9 nor the 13.
 
@@ -184,7 +184,7 @@ Consumer **CODED** (`resolver.py:155`, default 2.0, live at `:288-289`). Produce
 
 ### B6 · The consequence spine and its terminus
 
-**Where it ends today, read end to end:** `emit_scene_echo` (`echo_transport.py:360-455`) → `compute_domain_echo` → a `scene.contest_resolved` Key plus a deferred `_apply` closure calling `Faction.adjust` (`:430-436`), landing at the accounting boundary (`mc_v18.py:158-161`). **That `Faction.adjust` on L/I is the entire consequence spine of every live contest.**
+**Where it ends today, read end to end:** `emit_scene_echo` (`echo_transport.py:360-455`) → `compute_domain_echo` → a `scene.contest_resolved` Key plus a deferred `_apply` closure calling `Faction.adjust` (`:430-436`), landing at the accounting boundary (the retired campaign driver at `:158-161`). **That `Faction.adjust` on L/I is the entire consequence spine of every live contest.**
 
 **Four coded, currently-unfed sinks it could also write to:**
 
@@ -202,7 +202,7 @@ Consumer **CODED** (`resolver.py:155`, default 2.0, live at `:288-289`). Produce
 
 | | |
 |---|---|
-| **FROM** | `mc_v18.py:257-258`, where `world` **is** in scope |
+| **FROM** | The retired campaign driver at `:257-258`, where `world` **is** in scope |
 | **TO** | `articulation.py::_on_key(key, scheduler)` (`:140`) |
 | **STATUS** | **STUBBED** |
 | **BLOCKED BY** | nothing structurally; gated on the ED-IN-0073 Q1–Q4 fork |
@@ -225,7 +225,7 @@ The discard at `keys.py:576-577` is **CODED by contract** (§4.1 step 5, synchro
 
 ### C4 · The destination
 
-`World` has 20 registries and **no chronicle field** (`game_state.py:167-212`). `CampaignResult` has 12 fields and **no chronicle slot** (`mc_v18.py:84-105`). The full checklist to add one is set by the OI-07 settlements precedent: declare, serialize, restore, tolerate-missing.
+`World` has 20 registries and **no chronicle field** (`game_state.py:167-212`). `CampaignResult` has 12 fields and **no chronicle slot** (the retired campaign driver at `:84-105`). The full checklist to add one is set by the OI-07 settlements precedent: declare, serialize, restore, tolerate-missing.
 
 > **DESIGN GAP 10.** Whether the chronicle is a World registry (save/restore-surviving) or CampaignResult-only telemetry — **and whether the KeyLog, already in `final_state` via `key_log_hash`/`keys_emitted`, is the chronicle's source of truth, making a separate store redundant.**
 
@@ -283,7 +283,7 @@ The bridge is read end to end and is real: `derive_parties(ctx, world)` requires
 
 **What would have to be true for a combat scene to be queued:**
 1. **A trigger** producing `scene_type="combat"` with `ctx['factions']`. The other 7 §4.3.2 triggers are deferred precisely because their conditions are not evaluable on the aggregate World (`scene_dispatch.py:58-60`, `:96-99`), so a new evaluable condition must be ruled.
-2. **The flag flipped ON.** `DISPATCH_COMBAT_BRIDGE` defaults OFF (`mc_v18.py:70-81`), and the flip's named precondition is the cross-faction attribution model — `scene_dispatch.py:246-259`: *"who is credited/debited on a win … are all open design questions."*
+2. **The flag flipped ON.** `DISPATCH_COMBAT_BRIDGE` defaults OFF (the retired campaign driver at `:70-81`), and the flip's named precondition is the cross-faction attribution model — `scene_dispatch.py:246-259`: *"who is credited/debited on a win … are all open design questions."*
 
 > **DESIGN GAP 12.** The combat trigger condition, and the echo attribution model.
 

@@ -26,7 +26,7 @@ R1, R2, R4. **Verified directly against the working tree (my own greps/reads, no
    :384-388, invariant 4 (cycle-freedom by construction) :390-392, `class KeyLog` :336,
    `class TickScheduler` present. Header docstring (:1-46) states §4.1 steps 3-4 (observer/witness)
    are **deliberately NOT implemented**, blocked on unratified ORD-3.
-4. `engine/mc_v18.py:66-75`: `ECHO_TRANSPORT` **default ON** (Jordan ratification; env default `'1'`);
+4. The retired campaign driver at `:66-75`: `ECHO_TRANSPORT` **default ON** (Jordan ratification; env default `'1'`);
    `engine/cross_scale/parliamentary_bridge.py:5` — *"Activates the Key & Echo transport in the LIVE
    campaign loop"*; `engine/tests/test_parliamentary_bridge.py:35,70,85,105,120,148` pins
    `_ON_KEYLOG_HASH` values and `keys_emitted 13 → 75 → 187 → 169` across golden re-pins. **Keys are
@@ -82,7 +82,7 @@ witness, `memory_query()` = Query, `causes[]` = provenance — and `resolve : (A
 - **Event: YES, in substance.** `Key` (`keys.py:138`) is an executable, canonical (ED-IN-0018/0026,
   ratified 2026-07-07), append-only, id-unique, referentially-checked, cycle-free-by-construction,
   content-hashed event record with `causes[]` provenance — and it RUNS: default-ON in every seeded
-  campaign (`mc_v18.py:75`), goldens pin its hash and emission count
+  campaign (the retired campaign driver at `:75`), goldens pin its hash and emission count
   (`test_parliamentary_bridge.py:70-148`). Calling this "greenfield territory" is false.
 - **Claim/witness/Query: NO, as mechanism.** `compute_observers`, `memory.record`, `memory_query`,
   `MemoryIndex` exist **only as pseudocode** in `key_substrate_v30.md:195-314`. The executable
@@ -117,7 +117,7 @@ EXECUTING SUBSTRATE.** Precisely:
 **Falsifier:** my ruling is wrong if (a) any `.py` file in the tree defines
 `compute_observers`/`memory_query`/a per-person claim ledger that executes — the grep in §0.1 would
 have found it and found only the not-implemented docstring; or (b) the Key substrate were dormant in
-default campaigns — refuted by `mc_v18.py:75` (default ON) and the pinned `keys_emitted`/hash goldens.
+default campaigns — refuted by the retired campaign driver at `:75` (default ON) and the pinned `keys_emitted`/hash goldens.
 
 **What this ruling costs:** R1's headline sentence ("greenfield, not a refactor") can no longer be
 quoted whole, and R2's headline ("already canonical and executable") can no longer be quoted at all.
@@ -384,7 +384,7 @@ remains. This is §0's test 5 (an architecture call with one right answer), not 
    seven-plus bespoke `def resolve` shapes). Overturned as stated.
 3. **R1's headline verdict** — "This is greenfield territory, not a refactor." Overturned as a
    whole-architecture claim: the Event/id/determinism substrate exists, is canonical, and EXECUTES
-   in every default campaign (`mc_v18.py:75` default-ON; `test_parliamentary_bridge.py` pins
+   in every default campaign (the retired campaign driver at `:75` default-ON; `test_parliamentary_bridge.py` pins
    `keys_emitted` 13→75→187→169 and four `_ON_KEYLOG_HASH` values). R1's own §9.2 contradicts its
    own summary sentence.
 4. **R1's keys.py line citations** — `Key` "at keys.py:126-158" (actual class at :138, fields to

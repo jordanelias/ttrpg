@@ -15,7 +15,7 @@ Primary sources read directly, not inherited from trace logs:
 - `proposals/2026-08-31-ideal/10_SUPERSEDING.md` §5.5-§7.1 (`sed 600-720`) — the seven-phase table
   and three-write-class table, verbatim.
 - `engine/autoload/engine_clock.py` — **in full** (127 lines).
-- `engine/mc_v18.py` — the callback, stubs, `run_campaign` loop (`:110-300`); dataclass fields per R1.
+- The retired campaign driver — the callback, stubs, `run_campaign` loop (`:110-300`); dataclass fields per R1.
 - `engine/substrate/keys.py:422-601` — `TickScheduler` in full: emission paths, OF-7 deferred-apply,
   `accounting_boundary()`, `next_tick()`.
 - `references/module_contracts.yaml:1128-1141` — the `engine_clock` `doc: null` row, verbatim.
@@ -27,7 +27,7 @@ Primary sources read directly, not inherited from trace logs:
 - `tests/valoria/` (167 files) and `engine/tests/` (15 files + goldens) enumerated;
   `tests/valoria/test_engine_clock_phases.py:1-33` read; `engine/tests/test_f7_smoke_oracle.py:361-371`,
   `engine/tests/test_world_population.py:1-30`, `systems/world/sim/npe.py:105-122`,
-  `engine/mc_v18.py:100,310` read to verify the npc-counter guard-blindness claim myself.
+  the retired campaign driver at `:100,310` read to verify the npc-counter guard-blindness claim myself.
 - Trace logs R1/R2/R6 and PR337/338/343/344 logs read as secondary sources; every load-bearing claim
   below re-cites the primary file:line I checked.
 
@@ -82,12 +82,12 @@ if sched is not None:
     sched.next_tick()                                # --- tick closes ---
 ```
 
-This runs today: `mc_v18.run_campaign` calls `composition.require('season_driver')` every season
-(`mc_v18.py:271`), which resolves to `season.run_season` wrapping `run_tick`; the ACTION body is
-`_faction_actions_callback` (`mc_v18.py:124-215`). Phase ordering is pinned by
+This runs today: the retired driver's `run_campaign` calls `composition.require('season_driver')` every season
+(the retired campaign driver at `:271`), which resolves to `season.run_season` wrapping `run_tick`; the ACTION body is
+`_faction_actions_callback` (the retired campaign driver at `:124-215`). Phase ordering is pinned by
 `tests/valoria/test_engine_clock_phases.py` (falsifier `test_accounting_runs_inside_the_accounting_phase`,
 red against the pre-move tree per its docstring `:30-33`), and campaign output is pinned by byte-exact
-seeded goldens (`engine/tests/test_mc_v18_regression.py`, `test_f7_smoke_oracle.py`,
+seeded goldens (the retired campaign regression test, `test_f7_smoke_oracle.py`,
 `test_parliamentary_bridge.py`'s `_ON_KEYLOG_HASH`). The barrier semantics are real code:
 `keys.py:_emit_at_depth` defers an `apply` iff `self._phase == _PHASE_ACTION` (OF-7);
 `accounting_boundary()` (`keys.py:585-596`) drains pending applies in emission order and flips phase;
@@ -125,7 +125,7 @@ The two real seams, stated so nobody discovers them mid-implementation:
 
 1. **`run_accounting` runs after ACTION today; MATTER runs before deliberation in the design.**
    `systems/overview/sim/accounting.py`'s world-self-writes (track drift, NPC stance drift via
-   `simulate_npc_actions` — `mc_v18.py:174-182` comment) are MATTER-class work sitting in the
+   `simulate_npc_actions` — the retired campaign driver at `:174-182` comment) are MATTER-class work sitting in the
    boundary phase. `02:257-259` requires "events resolve FIRST, and acts resolve against the world
    they leave." Migrating accounting's matter-half to a pre-deliberation position is a
    **golden-moving reorder** and is sequenced late in §6 (step 8) with a mandatory control. Until it
@@ -297,11 +297,11 @@ required for order-independence of the *map*; it is not a birth/death pass (that
 
 **As built** (verified in code): one seeded stream, `World.rng = random.Random(seed)`
 (`game_state.py:306`), passed explicitly to faction actions, scene dispatch, and the parliamentary
-bridge (`mc_v18.py:138,149,158` region); sub-stream derivation at the combat bridge
+bridge (the retired campaign driver at `:138,149,158` region); sub-stream derivation at the combat bridge
 (`combat_bridge.py:140`, `random.Random(rng.getrandbits(32))`); one documented global-state
 save/restore around the contest kernel (`scene_dispatch.py:299-306`); replay surface =
 `KeyLog.content_hash()` (sha256 over sorted-key JSON per Key in log order, `keys.py:454-461`) plus
-byte-exact seeded goldens (`test_mc_v18_regression.py:126-132` — n=2 seed 0 win-share/winners/battles
+byte-exact seeded goldens (the retired campaign regression test at `:126-132` — n=2 seed 0 win-share/winners/battles
 and a same-seed equality assertion; `test_f7_smoke_oracle.py` — n=8 seed 42 plus telemetry pins).
 
 **As designed**: `substream(op) = H(world_seed, tick, subject_id, purpose)` (ARCH §6), covering
@@ -425,10 +425,10 @@ source.)
 **Current state, established from code by me:** `Faction` has no leader field
 (`game_state.py:109-140` region per R1 inventory, corroborated by the ledger's own read);
 `_faction_actions_callback` gates on exactly `faction.parliamentary` and `faction.territories`
-(`mc_v18.py:132-137`) then acts unconditionally; `generate_npc` has no live call site — both season
-hooks are honest `stub_resolve` deferrals (`mc_v18.py:193-215`), and my `m1_acceptance` run measured
+(the retired campaign driver at `:132-137`) then acts unconditionally; `generate_npc` has no live call site — both season
+hooks are honest `stub_resolve` deferrals (the retired campaign driver at `:193-215`), and my `m1_acceptance` run measured
 exactly those 2 stub hits on the probe season; `npcs_generated` is `world.npc_counter`
-(`mc_v18.py:100,310`), incremented only inside `generate_npc`'s id path (`npe.py:117-122`);
+(the retired campaign driver at `:100,310`), incremented only inside `generate_npc`'s id path (`npe.py:117-122`);
 `test_f7_smoke_oracle.py:368-371` asserts `npcs == 0` across the pinned batch. **The guard blindness
 is confirmed:** a loader that appends to `world.npcs` directly never touches `npc_counter`, so both
 the F7 telemetry pin and the population guard stay green while the world silently gains people —
@@ -447,7 +447,7 @@ breaks when it does:**
    `sum(len(v) for v in world.npcs.values()) == world.npc_counter` after any campaign, so a future
    bypass loader trips loudly.
 3. **The seeded goldens move** — `GOLDEN_WIN_SHARE`/`GOLDEN_WINNERS`/`GOLDEN_BATTLES_MEAN`
-   (`test_mc_v18_regression.py:126-129`), the f7 pins, `_ON_KEYLOG_HASH` — on the flag-ON arm only.
+   (the retired campaign regression test at `:126-129`), the f7 pins, `_ON_KEYLOG_HASH` — on the flag-ON arm only.
 
 **The §0.1-pt-4 control, specified:** two arms, same experiment. **Arm A (control):** head +
 loader code, `PERSONNEL` OFF — must be byte-identical to head across five seeded campaigns and both

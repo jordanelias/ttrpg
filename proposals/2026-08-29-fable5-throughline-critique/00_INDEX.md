@@ -80,16 +80,16 @@ Read, not matched:
 
 | site | what it says |
 |---|---|
-| `engine/mc_v18.py:212-218` | knot formation gets no call because *"Prerequisites … are personal-scale actor fields (Disposition, Bonds, TS) that do not exist anywhere on the aggregate strategic World — the same 'context-derivation gap' the `scene_dispatch.py` module docstring already names for combat/contest actor derivation"* |
+| The retired campaign driver at `:212-218` | knot formation gets no call because *"Prerequisites … are personal-scale actor fields (Disposition, Bonds, TS) that do not exist anywhere on the aggregate strategic World — the same 'context-derivation gap' the `scene_dispatch.py` module docstring already names for combat/contest actor derivation"* |
 | `engine/cross_scale/combat_bridge.py:103-111` | the bridge derives **one** field per side, `history` from `faction.Mil`, and labels the `Combatant` with the **faction id** |
 | `engine/cross_scale/scene_dispatch.py` | carries the same declared `"context-derivation gap"` reason string; no live trigger ever queues a `combat` scene |
-| `engine/mc_v18.py:194-202` | NPC generation likewise deferred, honestly, for the same class of reason |
+| The retired campaign driver at `:194-202` | NPC generation likewise deferred, honestly, for the same class of reason |
 
 This single absence is why **T1** is false at the battle seam, why **T2**'s and **T3**'s belief layer
 has no perceiver, why **T4**'s NPCs read world truth (there is no person whose knowledge could be
 partial), and why **T9**'s investigations cannot be conducted. It is also the strongest argument
 *for* the suite: `01`–`04` are precisely the person layer whose absence these stubs name. **The suite
-builds the missing thing and never says so** — no document cites `mc_v18.py:212`, and `13`'s build
+builds the missing thing and never says so** — no document cites the retired campaign driver at `:212`, and `13`'s build
 order motivates Phase 3 by dependency ordering rather than by the four honest deferrals it unblocks.
 
 **Consequence for the handoff.** `13 §5` Phase 3 ("people and posts") is currently justified as *"population bounds what generation may produce"*. Its real justification is stronger and is measurable: it is the phase after which `form_knot`, `derive_parties` and `generate_npc` stop being honest deferrals. That is an execution artifact under `CLAUDE.md` §0.2, and it is the only one in the plan that converts four stubs at once.

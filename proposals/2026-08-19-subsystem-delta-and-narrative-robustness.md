@@ -31,7 +31,7 @@ And the shape of the loss, in one comparison:
 
 | Mechanism | Status |
 |---|---|
-| **threadwork, entire** | 7 operation types, a 6-branch opposing-outcome table matching its design cell-for-cell, a 15-card Co-Movement deck, a working Coherence track. `mc_v18` never imports it; no `scene_type` branch exists |
+| **threadwork, entire** | 7 operation types, a 6-branch opposing-outcome table matching its design cell-for-cell, a 15-card Co-Movement deck, a working Coherence track. The retired campaign driver never imports it; no `scene_type` branch exists |
 | **settlement ledger** | Precedent / Grudge / Debt / Reputation / Leverage — complete write API, dedupe, TTL, succession-survival. **Only production caller is `ledger_sweep`** |
 | **`combat_engine_v1`** | 6,155 lines, 53 weapons, a real acquisition layer. **No path by which a game turn calls it** — `scene_dispatch.py:37-38` states no `queue_scene("combat", ...)` call site exists |
 | **`references/npc_registry.yaml`** | **46 fully-authored characters** — see §6. Zero loaders (ED-IN-0121) |
@@ -43,14 +43,14 @@ And the shape of the loss, in one comparison:
 
 **This section was wrong in my first draft, in both directions. The antagonist overturned it and I verified every structural fact by reading.**
 
-`engine/mc_v18.py:257-258` does call `articulation.subscribe_all(world.echo_scheduler)`, registering 13 trigger types. What I got wrong:
+The retired campaign driver at `:257-258` does call `articulation.subscribe_all(world.echo_scheduler)`, registering 13 trigger types. What I got wrong:
 
-**(a) It is flag-gated, not unconditional.** The call sits *inside* `if _echo_transport_on(effective_params):` (`mc_v18.py:241`). Default-ON, but a flag.
+**(a) It is flag-gated, not unconditional.** The call sits *inside* `if _echo_transport_on(effective_params):` (the retired campaign driver at `:241`). Default-ON, but a flag.
 
 **(b) Zero callbacks fire in a default campaign.** I checked `_TRIGGER_TYPE_IDS` (`articulation.py:116-130`) against what the live loop actually emits:
 
 - `scene.contest_resolved` — the *only* type a default campaign emits — **is not in the trigger list.**
-- `scene.combat_resolved` / `scene.combat_felled` need `DISPATCH_COMBAT_BRIDGE`, **default OFF** (`mc_v18.py:81`), *and* a queued combat scene that nothing queues.
+- `scene.combat_resolved` / `scene.combat_felled` need `DISPATCH_COMBAT_BRIDGE`, **default OFF** (the retired campaign driver at `:81`), *and* a queued combat scene that nothing queues.
 - `scene.accord_echo` is *"organically DORMANT … fires zero times in any seeded campaign"* (`echo_transport.py:246-247`).
 
 The repo's own oracle says so: the reach test is `xfail` *"while DISPATCH_COMBAT_BRIDGE is OFF (today's default)"* and hand-builds the `SceneSlot` to test at all (`test_pipeline_reach.py:703-706, 725-726`).
@@ -163,7 +163,7 @@ I reported that the only prose renderer is `contest/narrative.py` with no produc
 
 **A contest still has no subject.** No topic, claim, or argument content exists anywhere; `ground` is one of six abstract stasis tags. The authored flavor prose describes *kinds* of move and *kinds* of room, never what a debate is about. **This is the finding in this section I could not break.**
 
-**What a campaign outputs today:** `CampaignResult` — with the correction that it does carry `winner: str` (`mc_v18.py:86`), `key_log_hash` (`:103`), and `final_state=serialize_world(world)` (`:307`), which means **37 authored settlement names do reach the terminal result.** "No string field" was false as written.
+**What a campaign outputs today:** `CampaignResult` — with the correction that it does carry `winner: str` (the retired campaign driver at `:86`), `key_log_hash` (`:103`), and `final_state=serialize_world(world)` (`:307`), which means **37 authored settlement names do reach the terminal result.** "No string field" was false as written.
 
 ---
 
@@ -242,11 +242,11 @@ Per CLAUDE.md §0.1 point 3, the corrections belong in the same document as the 
 | Claim | Basis | Confidence |
 |---|---|---|
 | Population is zero; `generate_npc` uncalled | Fable full-read + antagonist + xfail manifest | **high** |
-| Articulation cannot render from what it receives | antagonist, **re-verified by me** at `articulation.py:140/152`, `keys.py:576-577`, `mc_v18.py:241/257` | **high** |
+| Articulation cannot render from what it receives | antagonist, **re-verified by me** at `articulation.py:140/152`, `keys.py:576-577`, the retired campaign driver at `:241/257` | **high** |
 | `owner_faction` 37/37; 8 of 25 fields | **re-verified by me**, YAML parsed | **high** |
 | `conviction.py` = legacy 9 verbatim | **re-verified by me**, both files read side by side | **high** |
 | 46 authored characters in `npc_registry.yaml` | **re-verified by me**, YAML parsed | **high** |
-| The `'Loyalty'` scar no-op | Fable + antagonist + a filed proposal | **high**, but **latent, not live** — knot formation is itself deferred (`mc_v18.py:204-209`) |
+| The `'Loyalty'` scar no-op | Fable + antagonist + a filed proposal | **high**, but **latent, not live** — knot formation is itself deferred (the retired campaign driver at `:204-209`) |
 | Ledger's only production caller is `ledger_sweep` | Fable + antagonist full season-path read | **high** |
 | Social contest is `logos_spammer` vs `logos_spammer` live | producer + the lane's own prior audit | medium-high |
 | Threadwork entirely unreachable | producer | medium — **no antagonist ran on this** |

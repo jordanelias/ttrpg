@@ -61,7 +61,7 @@ anecdote; a guard that cannot name its module is a wish.
 | 8 | **Total War's autoresolve divergence** — two paths that are different algorithms, ~20 years unfixed, exploited in both directions (P5 §3.3). *Lesson: two paths for one event are two distributions, and players route through whichever favours them* | `systems/mass_battle/sim/massbattle.py:37-50` — the survivor-ratio degree map whose own comment says it is **NOT the canonical ladder** | Reconcile it into `degree_from_net` or **register the divergence explicitly**. If a fast path is ever built, ship P5 §S2's protocol: one resolver two entry points; a two-sample K-S test on outcome distributions at the declared extremes; CI-gated. **A failing instance is a design bug, not a known issue** |
 | 9 | **Dominions' single-commander rout** — "the biggest army in the universe will rout if it is led by a single commander, and he is killed" (P5 §2.3 — `[UNVERIFIED — player-community consensus, not a developer statement]`), and its mirror, **Mount & Blade's player-irrelevance at scale** (§4.3). *Lesson: the two failure directions of one seam — flat leverage dominates small N and vanishes at large N* | `engine/cross_scale/zoom_in_out.py:138-153` — **both directions are live in the same 16 lines** (§3) | Any personal→unit effect must be **a fraction of the unit's own size or cohesion, never a flat amount**. Guard: a leverage-in-band test sweeping N across three orders of magnitude, asserting the personal contribution's share of outcome variance stays inside a declared band at both ends |
 | 10 | **CK2's apophenia** — a real, delightful effect its own developer flagged as not-a-mechanism; Paradox was exploring "emergence detection" because waiting for coincidence is a limitation, not a strategy (P2 §8.2). *Lesson: substrate plus player pattern-seeking is not a designed output and cannot be budgeted* | Valoria's ablation-based emergence test, wherever it lands | The ablation must be **two-armed**: remove the story-recognition layer and measure whether perceived quality moves. If it does not, that layer is not earning its cost. If it does, it is essential and missing. Running only the with-layer arm is the failure |
-| **+** | **DOMESTIC — not a precedent, and the sharpest instance in the set.** Both guards believed to hold the world empty pin `generate_npc`'s **call counter**, not the population: `engine/mc_v18.py:100` says so itself (*"F7 telemetry: `world.npc_counter` (generate_npc call-count proxy)"*, assigned `:307`), and `test_pipeline_reach.py:628`'s failure message reads *"world.npcs stayed empty"* while asserting on something else. *Lesson: **a guard's name is not evidence of what it guards — assert the effect, not the call**; and "X cannot move a golden" is a measurement, so it needs a control arm before it is banked* | `test_f7_smoke_oracle.py:335`, `test_pipeline_reach.py:628`, `mc_v18.py:100,307`; live channel `npe.py:353` `simulate_npc_actions`, called each season at `systems/overview/sim/accounting.py:139` | Re-point both guards at `world.npcs` itself. Then adopt the cheap general rule: **any assertion whose message names a state must assert on that state.** Chapter 1 ran the experiment: two NPCs written into `world.npcs` left both guards green at `npcs_generated == 0` **and moved seed-42's winner from Crown to Hafenmark**, with a neutered-`simulate_npc_actions` control arm reproducing baseline byte-exact |
+| **+** | **DOMESTIC — not a precedent, and the sharpest instance in the set.** Both guards believed to hold the world empty pin `generate_npc`'s **call counter**, not the population: the retired campaign driver at `:100` says so itself (*"F7 telemetry: `world.npc_counter` (generate_npc call-count proxy)"*, assigned `:307`), and `test_pipeline_reach.py:628`'s failure message reads *"world.npcs stayed empty"* while asserting on something else. *Lesson: **a guard's name is not evidence of what it guards — assert the effect, not the call**; and "X cannot move a golden" is a measurement, so it needs a control arm before it is banked* | `test_f7_smoke_oracle.py:335`, `test_pipeline_reach.py:628`, the retired campaign driver at `:100,307`; live channel `npe.py:353` `simulate_npc_actions`, called each season at `systems/overview/sim/accounting.py:139` | Re-point both guards at `world.npcs` itself. Then adopt the cheap general rule: **any assertion whose message names a state must assert on that state.** Chapter 1 ran the experiment: two NPCs written into `world.npcs` left both guards green at `npcs_generated == 0` **and moved seed-42's winner from Crown to Hafenmark**, with a neutered-`simulate_npc_actions` control arm reproducing baseline byte-exact |
 
 ---
 
@@ -101,7 +101,7 @@ closes, these two carriers become the seam's semantics by default — inherited 
 The guard must land **before** the producer.
 
 P5's third structural warning binds here too, and Valoria currently violates it:
-`DISPATCH_COMBAT_BRIDGE` is **default OFF** (`engine/mc_v18.py:78-80`), and P5 §S1.3 found *no
+`DISPATCH_COMBAT_BRIDGE` is **default OFF** (the retired campaign driver at `:78-80`), and P5 §S1.3 found *no
 precedent defending* a bridge whose default state is "off equals doesn't exist" — every surveyed
 game either has no seam to disable or ships an explicit, imperfect crossing. Ship one of those two.
 A flag that silently returns to zero-state is the option with no precedent behind it.
@@ -415,7 +415,7 @@ without an explicit `git show`. For this run: `Varfell 87.5` remains retracted; 
 position held that loading persons at world-gen could not move a seeded golden, on the strength of
 `populate_from_geography`'s precedent. Chapter 1 tested it instead of believing it, and the claim is
 false. I verified the mechanism by reading: **both guards pin a call counter, not a population.**
-`engine/mc_v18.py:100` labels the field in its own comment — *"F7 telemetry: `world.npc_counter`
+The retired campaign driver at `:100` labels the field in its own comment — *"F7 telemetry: `world.npc_counter`
 (generate_npc call-count proxy)"* — and assigns it at `:307`; `test_f7_smoke_oracle.py:335` and
 `test_pipeline_reach.py:628` both read that field. The second is the sharpest artifact in the
 corpus: its failure message reads *"world.npcs stayed empty (OI-05: generate_npc has zero
@@ -474,8 +474,8 @@ the `adjust()` bounds path every `standing` write bypasses) · `contest/primitiv
 (plus a grep confirming `pressure` has three references in the whole tree) · `ledger.py:25-58` ·
 `treaty.py:42-46` and `:121-142` · `coherence.py:138-158` **plus all five call sites of
 `apply_coherence_delta`, none of which passes a positive delta** · `zoom_in_out.py:105-160` ·
-`scene_dispatch.py:118-139` · `npe.py:320-350` · `mc_v18.py:64-80` · `faction_layer_v30.md:599-614` ·
-`faction_politics_v30.md:129` · `mc_v18.py:100,307` · `test_pipeline_reach.py:628` ·
+`scene_dispatch.py:118-139` · `npe.py:320-350` · the retired campaign driver at `:64-80` · `faction_layer_v30.md:599-614` ·
+`faction_politics_v30.md:129` · the retired campaign driver at `:100,307` · `test_pipeline_reach.py:628` ·
 `test_f7_smoke_oracle.py:16,74-78,262-267,335` · `accounting.py:130-143` · `npe.py:353-383`.
 
 **Two did not check out, and both were the brief's own.** (i) The "live golden" win-share
