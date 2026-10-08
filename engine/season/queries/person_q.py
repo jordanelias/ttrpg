@@ -125,7 +125,8 @@ def confliction(p: Person) -> int:
     product of the two, leaves the scale). Composes on `data/affiliations.py::INCOMPATIBLE`, the one
     loaded relation. Person-side, no World (AX-2).
 
-    UNWIRED: nothing reads it yet. Its caller is IN-08 6f (`score` dotting against the basis)."""
+    Its caller is IN-08 6f: `decision/choose.py`'s `make_chooser` damps the pursuit dot by it, at
+    the swept `confliction_weight` arm (H-188; control 0, shipped)."""
     from ..data.affiliations import INCOMPATIBLE
     held = p.conviction or {}
     return sum(min(int(held.get(a, 0)), int(held.get(b, 0)))
@@ -137,7 +138,7 @@ def confliction(p: Person) -> int:
 # mechanism anywhere, and 3 is H13's (G-Q6, `conviction_after_crisis` below). Each count is the
 # ruled threshold, not a swept value.
 SCAR_WEIGHT_SHIFT_AT = 2
-SCAR_CRISIS_AT = 3
+SCAR_CRISIS_AT = 3  # [JUSTIFIED: the ruled threshold, not a swept value -- `ED-IN-0261` rules 3+ as the terminal crisis; the draft's G-Q6 gives the mechanism]
 
 
 def crisis_weights(p: Person, shift: float = 0.0) -> dict:

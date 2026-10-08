@@ -4176,6 +4176,19 @@ rows:
     cite:      "MEASURED at H9, NPC-088 slice, seed 0, 4 seasons at 2 slots (W-D genuine/diverged): `total` arm 0 -> 29/6 (the baseline, unmoved), 0.5 -> 29/6, 1 -> 32/10; `none` 37/4, 37/5, 37/5; `actor` 35/9, 35/8, 35/7. So the verdict at `total` FLIPS across the sweep (no move at 0.5, up at 1), and the other arms move without rising. ONE POPULATED SEASON (`build_realm(0)`, seed 0): 43 of 80 persons hold pursuits, 42 of those are at or over threshold 2 on at least one pursuit at the control, 29 of 43 are at it on EVERY held pursuit (nobody to give weight to, so unshifted) and 13 can be moved; hashes c0c161b8 (0) / 36be6f6d (0.5) / cbfb0139 (1). THE SIGN TEST IS PERMISSIVE AND THAT IS WHY the threshold trips for nearly everyone within a season: it is NOT tuned here, and neither is the predicate. FALSIFIERS, run: `engine/season/tests/test_h9_crisis_reader.py` (5 passed): the control returns the person's own mapping, a count of 1 does not fire, a count of 5 does, the arm writes nothing, `total` divergence at 1 exceeds the baseline while 0 reproduces it, and a populated season's hash moves"
     source:    "IN-08 H9 (`workplans/valoria_master_workplan_v9_part5.md`), `ED-IN-0261` item 4"
 
+  - id:        H-188
+    tier:      1
+    hole:      "HOW RELIGIOUS CONFLICTION ENTERS THE SCORE. `ED-IN-0251` R1 rules confliction DERIVED from an `incompatible` relation and never stored, and IN-08 names `score` as the derived Query's caller (6f, ID-13); no source states the form or a magnitude. Built as the narrowest form that names no entity: the pursuit dot is read at `1 / (1 + k * confliction(p))`, so strain damps how hard a person's pursuits pull, relative to regard, and never inverts it [ASSUMPTION]"
+    kind:      "NUMBER"
+    owner:     "`queries/person_q.py::confliction` (the Query), read by `decision/choose.py`'s `make_chooser`"
+    grade:     "assumption"
+    default:   "0 -- THE CONTROL ARM, SHIPPED [ASSUMPTION]. The plan names the caller and is silent on the form and on shipping it on; at 0 the factor is exactly 1.0. And it is INERT IN THE SHIPPED REALM BY CONSTRUCTION, at any value: no cast row carries affiliation content, so every `Person.conviction` is {} and `confliction` is 0 for all 83 persons of `build_realm(0)`, before and after one season"
+    site:      "Fixtures confliction_weight, read by `engine/season/decision/choose.py`'s `make_chooser` (`damp = 1.0 / (1.0 + k * confliction(p))`, multiplying the pursuit dot); a negative value raises"
+    sweep:     ["0 (control, SHIPPED -- the unmodified dot)", "0.2", "1"]
+    unblocks:  "the confliction Query's reader (ID-13), and any affiliation content: the first cast row with two incompatible affiliations makes this arm an outcome mover"
+    cite:      "MEASURED at IN-08 6f on base 912b3d0a, `build_realm(0)`, seed 0, one season: realm 5b8618f2 and season d0015936 at 0, 0.2 and 1 alike, equal to the base; 6852 events, kind multiset 9dc73e04 and (kind, `actor_of`) sequence 1aaa2da4 at every arm and on the base; `march.declared` 6, `march.refused` 7 (the `test_build_realm_determinism.py` pin holds). FALSIFIERS, run: `engine/season/tests/test_6f_score_confliction.py` (3 passed): a planted person holding an incompatible pair at full intensity ranks a two-candidate pair the other way round at arm 1 than at the control; the same person holding a compatible pair is unmoved at arm 1; a negative arm raises. Mutation, run and restored: `damp` held at 1.0 reddens the first test"
+    source:    "IN-08 6f (`workplans/valoria_master_workplan_v9_part5.md`), `ED-IN-0251` R1"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

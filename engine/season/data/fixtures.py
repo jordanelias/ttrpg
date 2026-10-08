@@ -599,6 +599,14 @@ DEFAULT_FIXTURES = Fixtures(
     # fork divergence are those of the tree without the arm.
     # [JUSTIFIED: engine/season/hole_register.yaml H-187 -- the threshold-2 weight shift; ED-IN-0261 rules THAT the weight shifts and the others gain proportionally, and states no magnitude]
     scar_weight_shift=0,               # `H-187`, swept 0 (control, SHIPPED) / 0.5 / 1
+    # IN-08 6f: HOW HARD RELIGIOUS STRAIN DAMPS A PERSON'S PURSUIT PULL. `make_chooser` reads the
+    # pursuit dot at `1 / (1 + k * confliction(p))` (`queries/person_q.py::confliction`, the derived
+    # Query 6f is the caller of). Injection site: this line, read by `decision/choose.py`'s
+    # `make_chooser`. `0` is the CONTROL and is SHIPPED [ASSUMPTION]: the plan names 6f as the
+    # Query's caller and states neither the form nor shipping it on; at `0` the factor is exactly
+    # 1.0. Must be >= 0 (a negative `k` could invert the pull or divide by zero; `make_chooser` raises).
+    # [JUSTIFIED: engine/season/hole_register.yaml H-188 -- the confliction term; ED-IN-0251 R1 rules confliction derived and states no effect on the score]
+    confliction_weight=0,              # `H-188`, swept 0 (control, SHIPPED) / 0.2 / 1
     # `H-146` / `ED-IN-0261`. WHICH `pursuit_axes` MEMBER GATES `opening_set` -- deontology as a
     # REFUSAL, read by `decision/options.py::opening_set`. The axis NAME is ruled (`deontological`, the
     # NEG pole of `deontological/instrumental`) and the THRESHOLD is the person's own projected
