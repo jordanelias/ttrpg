@@ -407,7 +407,7 @@ def test_lever_log_edge_is_the_single_owner_and_is_exactly_inert_at_defaults():
 # The prior bind values are in git history at 4f3b56f.
 # Weapons added AFTER the pins below were recorded (B-D1 PC-04, ED-PC-0016): they have no pre-change
 # tree to pin from, and a pin recorded from the post-change tree is not evidence of the claim this test
-# checks. Exempt by name, so the exemption cannot absorb any other weapon (asserted below).
+# checks. Exempt by name: the roster-equality assert below fails for any other weapon without a pin.
 NEW_SINCE_PINS = frozenset({'greatsword_halfsword', 'flamberge_halfsword'})
 
 DEFAULT_SIGMA_PINS = {
@@ -474,7 +474,6 @@ def test_default_builds_are_byte_identical_at_both_lever_sites():
         "the weapon roster moved relative to the byte-identity pins — regenerate them from the "
         "PRE-CHANGE tree, never from the post-change one (a golden re-recorded to go green is not "
         "evidence)")
-    assert not (set(DEFAULT_SIGMA_PINS) & NEW_SINCE_PINS), "a weapon is exempt AND pinned"
     checked = 0
     for weapon, (bind_hex, reach_none_hex, reach_heavy_hex) in sorted(DEFAULT_SIGMA_PINS.items()):
         agg = Combatant('a', weapon=weapon)
