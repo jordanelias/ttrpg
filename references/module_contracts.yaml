@@ -701,7 +701,7 @@ modules:
   - module: engine_clock
     registry_system: "engine_clock"   # Key Type Registry vocabulary
     doc: .designs/systems/_architecture/reference/propagation_spec_v1.md
-    sim_module: engine/season/loop/driver.py   # the season tick: `engine/season/loop/driver.py` (`SeasonDriver.season`, the ONE `w.tick += 1`) with `engine/season/loop/calendar.py` (barrier 1, `Date.fired`); `doc:` points at the canonical propagation spec, not a new spine: RULED ED-IN-0125 §(4) C3 (Jordan 2026-08-04), a ruling recorded as not yet applied until this row took it; quarantined, so it keeps its `.designs/` prefix (ED-IN-0231)
+    sim_module: engine/season/loop/driver.py   # the season tick: `engine/season/loop/driver.py` (`SeasonDriver.season`, the ONE `w.tick += 1`) with `engine/season/loop/calendar.py` (barrier 1, `Date.fired`); `doc:` points at the propagation spec (ED-1093; the file sits in `.designs/`, bannered ARCHIVED-NOT-CANON), not a new spine: RULED ED-IN-0125 §(4) C3 (Jordan 2026-08-04), a ruling recorded as not yet applied until this row took it; quarantined, so it keeps its `.designs/` prefix (ED-IN-0231)
     scales: [provincial]
     resolver: clock_advance
     state:
@@ -710,8 +710,8 @@ modules:
     loops: []
     accounting_phase: [season_tick]
     gap_notes:
-      - "registry-derived; home doc unlocated [GAP] — campaign_architecture_v30 examined and is NOT it (victory-revision consolidation, no clock-spine sections)"
-      - "2026-07-02: systems/_architecture/reference/propagation_spec_v1.md (ED-1093, CANONICAL per ED-1094 merge-ratifies-by-default) supplies the candidate home doc. ED-1051, open — awaiting Jordan: doc: null stays unflipped until then (a separate editorial item this doc's ratification does not by itself close)."
+      - "registry-derived; the home doc was unlocated until IN-42 set `doc:` to propagation_spec_v1.md (ED-1051); campaign_architecture_v30 was examined and is NOT it (victory-revision consolidation, no clock-spine sections)"
+      - "2026-07-02: systems/_architecture/reference/propagation_spec_v1.md (ED-1093, CANONICAL per ED-1094 merge-ratifies-by-default) supplies the candidate home doc. ED-1051 ruled (ED-IN-0125 section 4 C3) and APPLIED at IN-42 (B-C, 2026-10-08): `doc:` now points at it."
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
@@ -720,8 +720,8 @@ modules:
       godot: no-oracle
       port_rank: 8
       parity: key-log
-      note: doc:null temporal spine — the sole remaining T0 blocker (ED-1051). Blocks the season/accounting
-        cadence port. `build` was `design` while `sim_module` read `none`; re-set to `live` when the row was
+      note: temporal spine — `doc:` set at IN-42 (ED-1051 applied), so it no longer blocks the season/accounting
+        cadence port on that count. `build` was `design` while `sim_module` read `none`; re-set to `live` when the row was
         re-pointed at the season driver at `28-iii`.
 
   - module: faction_politics

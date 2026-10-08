@@ -89,9 +89,10 @@ def test_forcing_off_the_two_arms_read_equal():
 
 
 def test_an_unbuilt_forcing_arm_is_refused_not_invented():
-    assert SB.ARMS == ("off",)
+    unbuilt = "no-such-forcing-arm"
+    assert unbuilt not in SB.ARMS
     with pytest.raises(ValueError):
-        SB.drive(SEED, 1, "on", CAP)
+        SB.drive(SEED, 1, unbuilt, CAP)
 
 
 def test_depth_runs_along_cross_person_edges_only():

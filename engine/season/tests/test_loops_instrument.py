@@ -89,6 +89,15 @@ def test_a_requires_stem_with_no_read_map_is_reported_as_drift(monkeypatch):
     assert any("REQUIRES_STEMS" in m and "'stores'" in m for m in blind["drift"]), blind["drift"]
 
 
+def test_a_process_naming_a_non_cell_is_reported_as_drift_not_raised(monkeypatch):
+    _, control = L.build_processes()
+    planted = L.Process("PLANTED: reads a cell the write_matrix lacks", (("No.such.cell", "+"),), ())
+    monkeypatch.setattr(L, "STEP_READS", tuple(L.STEP_READS) + (planted,))
+    _, blind = L.build_processes()                       # a drifted name must not raise
+    assert len(blind["drift"]) == len(control["drift"]) + 1
+    assert any("No.such.cell" in m and "PLANTED" in m for m in blind["drift"]), blind["drift"]
+
+
 def test_a_bad_bound_is_refused_before_the_slow_observation(monkeypatch):
     def boom(*a, **k):
         raise AssertionError("observe ran before the bound was validated")

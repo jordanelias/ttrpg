@@ -9,7 +9,7 @@
 # THIS DESTINATION WAS ALREADY RULED, not chosen here: tools/evacuation_plan.py's R-REL-ORACLE
 # names `engine/reference/contest-groundup/` and carries the execution steps (update the
 # generator's load path in the same commit, regenerate, confirm byte-identical). It is the
-# pre-designed home because build_fork.py already maps the OTHER parity oracle,
+# pre-designed home because build_fork.py (retired, `FORK:4558f85`) already mapped the OTHER parity oracle,
 # tests/sim/v32-combat-balance, to engine/reference/v32-combat-balance — both frozen
 # reference implementations in one place, beside the code they validate.
 #

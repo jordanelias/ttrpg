@@ -106,6 +106,11 @@ STEM_READS = {
 }
 
 #: What each `rosters.yaml: question_sources` member reads (`queries/world_q.py::questions_for`).
+#: Keyed by the members of the `rosters.yaml: question_sources` roster, the same shape the roster scan
+#: refuses for channels (below): it passes that scan only because the scan skips rosters of fewer than
+#: three members (`test_season_shape.py`, `test_jordan_no_definition_is_hardcoded_in_a_body`), and the
+#: roster is `open: true`. A third source forces a matching key here and then trips that scan; at that
+#: point read the sources as ONE union, as `CHANNEL_READS` does, and list them among the blind spots.
 QUESTION_SOURCE_READS = {
     "claim_landed": (("Person.claim_ledger", "+"),) + _TENURE,   # the landing, filtered by reach
     "need":         _TENURE + (("Proposition.exists", "?"),),    # a live `commit` to an OUGHT
@@ -342,7 +347,7 @@ def _exists_reads(kind: str, cells) -> tuple:
         return (("DocketItem.matter", "+"),)
     if f"{kind}.exists" in cells:
         return ((f"{kind}.exists", "+"),)
-    raise SystemExit(f"loops: `exists:{kind}` maps to no write_matrix cell; extend `_exists_reads`")
+    return None        # the caller reports it as DRIFT: this kind needs a branch here
 
 
 def build_processes() -> tuple:
@@ -369,8 +374,13 @@ def build_processes() -> tuple:
         if row.requires_typed is not None:
             for leaf in _leaves(row.requires_typed.requirement):
                 for stem in leaf.stems():
-                    reads += (_exists_reads(leaf.kind, cells) if stem == "exists"
-                              else STEM_READS.get(stem) or ())
+                    if stem != "exists":
+                        reads += STEM_READS.get(stem) or ()
+                    elif (er := _exists_reads(leaf.kind, cells)) is None:
+                        drift.append(f"loops: `exists:{leaf.kind}` maps to no write_matrix cell; "
+                                     f"extend `_exists_reads`")
+                    else:
+                        reads += er
         elif str(row.requires).strip() not in NO_PRECONDITION:
             untyped.append(verb)
         writes = [(c, "?") for c in dict.fromkeys(row.writes)]
@@ -391,9 +401,9 @@ def build_processes() -> tuple:
     for p in procs:
         for q, _ in p.reads + p.writes:
             if q not in known:
-                raise SystemExit(f"loops: {p.name} names {q!r}, not a write_matrix cell")
+                drift.append(f"loops: {p.name} names {q!r}, not a write_matrix cell")
         for q, _ in p.writes:
-            if q == EVENT or not p.step:
+            if q == EVENT or not p.step or q not in known:
                 continue
             listed = {s.value for s in cells[q].steps}
             if _STEP_OF[p.step] not in listed:

@@ -125,7 +125,7 @@ def build_world(seed: int = 0, fixtures: "S.Fixtures" = None) -> World:
     # against `CONVICTIONS`, which IS `engine.substrate.descriptors.CONVICTIONS` — the same object,
     # not a copy. A rename in `references/descriptor_registry.yaml` now raises here by name instead
     # of silently seeding a conviction nobody holds, which is strictly more than the literals did.
-    # [JUSTIFIED: these five weights are AUTHORED CHARACTER, not a mechanical constant -- #353 §14 types convictions as "weights over the closed 13 | 1-3 primary + distributed" and supplies no magnitudes. Carin at Precedent 0.9 is what the docstring above explains starts her causal chain; the rest are her, the bailiff and the warden being three different people. `H-46` is the row and it is open]
+    # [JUSTIFIED: these five weights are AUTHORED CHARACTER, not a mechanical constant -- #353 §14 types convictions as "weights over the closed 13 | 1-3 primary + distributed" and supplies no magnitudes. Carin at Precedent 0.9 is what the docstring above explains starts her causal chain; the rest are her, the bailiff and the warden being three different people. `H-46` is the row, closed as framed by IN-43]
     w.persons[CARIN].pursuits = {_pursuit("Precedent"): 0.9, _pursuit("Utility"): 0.3}
     # [JUSTIFIED: as the line above -- authored character under `H-46`, not a mechanical constant. The bailiff is procedural-first (Order 0.8) and the warden holds one conviction weakly, which is what makes the three people three]
     w.persons[BAILIFF].pursuits = {_pursuit("Order"): 0.8, _pursuit("Precedent"): 0.4}

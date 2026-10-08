@@ -67,7 +67,7 @@ Source: `references/module_contracts.yaml` v2 (verbatim resolver/scale/edges) + 
 | 5 | ci_political | — | accounting + clock | provincial | political-effects reader + card system (refit) | 1 | Reads CI (owner=#3); CI=100 Theocracy attempt **unkeyed** [§10 candidate]. |
 | 6 | victory | `victory` (stub) | state_reader | provincial/peninsula | `VictoryManager`-class refit | 1 | **GD-1: single peninsula-control victory only** — existing VG faction paths are superseded code; era transitions unkeyed [§10]; treaty wiring open (Jordan). |
 | 7 | clock_registry | — | manifest | provincial | ClockData resources seeding TrackerRegistry | S | Pure data; carries PROVISIONAL ED-793/794/795 flags. |
-| 8 | engine_clock | — | clock_advance | provincial | `SeasonManager`/`GameStateMachine` (refit) | S | Emits mechanical.accounting / season_change; **home doc unlocated [GAP]** — contract is the spec seed. |
+| 8 | engine_clock | — | clock_advance | provincial | `SeasonManager`/`GameStateMachine` (refit) | S | Emits mechanical.accounting / season_change; **home doc set at IN-42** (`module_contracts.yaml`: `propagation_spec_v1.md`, quarantined under `.designs/`) — contract is the spec seed. |
 | 9 | game_director | — | state_reader | scene | `GameDirector.gd` (exists, refit lifecycle Keys) | S | scene_entered/exited/skipped; attribution conflict with scene_slate [OPEN]. |
 | 10 | scene_slate | — | state_reader | scene | `SituationGenerator`+slate (refit) | S/4 | Home doc [GAP] (spec scattered: settlement §4.1 + substrate §8.5). |
 | 11 | scene_timer | — | clock_advance | scene | `autoload/SceneTimer.gd` (**already exists**) | S | Consumes lifecycle Keys; align to registry. |

@@ -373,8 +373,9 @@ jobs:
     steps:
       # DEFAULT (depth-1) CHECKOUT, ON EVIDENCE RATHER THAN BY OMISSION (2026-10-02): nothing this job
       # runs reads git history. `grep -rn 'git\|subprocess' engine/season` finds exactly three callers:
-      # `harness/soak.py` (`_require_clean_engine`, reached only from its CLI `main`; the one test that
-      # imports the module, test_told_by_channel.py, takes the pure row builder `_claim_row`),
+      # `harness/soak.py` (`_require_clean_engine`, reached only from its CLI `main`; the tests that
+      # import the module, test_told_by_channel.py and test_soak_grades.py, take the pure row builder
+      # `_claim_row` and the pure graders, and `grade_run`/`load_series` read files, never git),
       # `harness/delta.py` (`git show <rev>:<path>`, a CLI differ no test imports), and
       # test_season_shape.py::_run, whose subprocess is `python -m engine.season.harness.<module>`.
       # `register --requirements` spawns nothing. `unit-tests` above is the opposite case and keeps
