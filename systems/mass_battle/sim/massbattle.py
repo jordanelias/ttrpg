@@ -232,7 +232,8 @@ def _run_and_grade(unit_a, unit_b, terrain, rng, walls_dr=None):
     ⚠ CAVEATS THAT LIVED IN THE DELETED FUNCTION'S DOCSTRING AND STILL BIND THIS PATH.
     DETERMINISM: `rng` is scoped over the battle by `rngsource.using`; the canon engine drew from the
     global `random` module at seven sites, so without that holder a seeded run is unpinnable.
-    TERRAIN: UPHILL, RIVER_CROSSING and WALLS are applied (UPHILL's two A.9 clauses fully; NARROW_PASS is identified and applies nothing, see below); the attacker is `unit_a`, the defender `unit_b`.
+    TERRAIN: UPHILL, RIVER_CROSSING and WALLS are applied (UPHILL's two A.9 clauses fully; NARROW_PASS
+    is identified and applies nothing, see below); the attacker is `unit_a`, the defender `unit_b`.
     FOREST_BROKEN's speed half is INERT -- `run_battle` never reads `.speed` (only
     `orchestration.pursuit_damage` and `run_multi_unit_battle` do, and neither is reachable from here).
     WALLS (plan position `20-iv`, the garrisoned march target) adds `terrain.WALLS_DEFENDER_DR` to the

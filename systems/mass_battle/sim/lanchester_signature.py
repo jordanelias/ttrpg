@@ -27,7 +27,7 @@ import os, random, statistics
 os.environ.setdefault('LANCHESTER_ENABLED', '1')
 os.environ.setdefault('PER_CELL', '0')
 
-from systems.mass_battle.sim.config import BLOCK_SIZE   # [ED-MB-0050 / A6a] the annihilation threshold
+from systems.mass_battle.sim.config import BLOCK_SIZE, TROOPS_PER_TIER   # [ED-MB-0050 / A6a] the annihilation threshold
 from systems.mass_battle.sim.engine import (Subunit, Unit, run_battle,
                                 SIDE_A_START_ROW, SIDE_B_START_ROW, LANCHESTER_ENABLED)
 import systems.mass_battle.sim.core.state as _state   # [ED-MB-0050 / A6a] patched by _rout_disabled below
@@ -116,7 +116,7 @@ def check_linear():
 
 
 def check_square():
-    """Volley 2:1 → cas-exchange ratio super-linear in size (square concentration).
+    """Volley 4:1 in troops (800 v 200) → cas-exchange ratio super-linear in size (square concentration).
 
     [ED-MB-0050 / A6a] Scenario repaired: was `stance='hold'`, under which neither archer body ever
     closed and BOTH sides took 0.0% casualties — so the `inf` this reported was a 0/0 guard and the
@@ -128,14 +128,14 @@ def check_square():
     r = _sweep(BIG_TIER, SMALL_TIER, 'ranged', VOLLEY_STANCE, VOLLEY_INSTRUCTIONS)
     fired = r['cas_big'] > 0 or r['cas_small'] > 0
     if not fired:
-        return ('SQUARE (volley 2:1)', False,
-                "PRECONDITION FAILED — 0.0%% casualties on BOTH sides: no exchange occurred, so there "
+        return ('SQUARE (volley 4:1)', False,
+                "PRECONDITION FAILED — 0.0% casualties on BOTH sides: no exchange occurred, so there "
                 "is no ratio to test (this is what `inf` used to hide)")
     ratio = r['cas_small'] / r['cas_big'] if r['cas_big'] > 0 else float('inf')
     ok = ratio >= SQUARE_MIN_RATIO
-    return ('SQUARE (volley 2:1)', ok,
+    return ('SQUARE (volley 4:1)', ok,
             f"cas_exchange small/big={ratio:.1f} (≥{SQUARE_MIN_RATIO}; linear law would give "
-            f"~{BIG_TIER//SMALL_TIER}) [cas big={r['cas_big']:.2f}%% small={r['cas_small']:.2f}%%]")
+            f"~{TROOPS_PER_TIER[BIG_TIER]//TROOPS_PER_TIER[SMALL_TIER]}) [cas big={r['cas_big']:.2f}% small={r['cas_small']:.2f}%]")
 
 
 def check_no_annihilation():
@@ -145,7 +145,7 @@ def check_no_annihilation():
     loser_hp = min(r['hp_big'], r['hp_small'])
     ok = worst_cas <= NOANNIH_MAX_CAS and loser_hp > 0
     return ('NO-ANNIHILATION (mirror)', ok,
-            f"max_cas={worst_cas:.1f}%% (≤{NOANNIH_MAX_CAS}) loser_hp={loser_hp:.1f}%% (>0)")
+            f"max_cas={worst_cas:.1f}% (≤{NOANNIH_MAX_CAS}) loser_hp={loser_hp:.1f}% (>0)")
 
 
 # --- conserved-quantity exponent guard (the rigorous law check) ---
