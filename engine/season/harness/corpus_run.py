@@ -947,6 +947,7 @@ def main(seed: int = 0) -> int:
     # BY VERB NAME. Reported rather than inferred, because "the worlds agree" is worthless without
     # saying WHY they agree (`H-97`).
     sep = []
+    celled = celled_verbs()          # ALIGNMENT is not rebound inside this loop: read it once
     for c in R.load_cases("NPC") + R.load_cases("ARC"):
         if str(c.get("scale")) not in set(RUNG_KINDS):
             continue
@@ -968,7 +969,6 @@ def main(seed: int = 0) -> int:
         # cell of which is a considered `null` -- scores 0.0 for every person by construction, so
         # counting it would read as a tie the ranking failed to break when no score could break it.
         # R-06 and R-08 read this line that way; both figures are printed, never a ratio alone.
-        celled = celled_verbs()
         cc = [x for x in cd if x.verb in celled]
         nz = sum(1 for x in cc if any(axis_w[a] * align(x.verb, a) for a in PURSUIT_AXES))
         sep.append((nz, len(cc), len(cd)))

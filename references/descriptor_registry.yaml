@@ -182,9 +182,9 @@ axis_roster:
 # REGISTERED BY REFERENCE -- authoritative content stays in the source doc (no re-transcription).
 # ============================================================================
 by_reference:
-  - {key: "conv.*",  kind: conviction_weight,    name: "13 Convictions",                                         scale: "0-1 weight (vector)", scope: "actor + faction", source: "systems/characters/reference/conviction_taxonomy_v30.md §2"}
-  - {key: "axis.*",  kind: ethical_axis,         name: "4 ethical axes (hierarchical/sacred/instrumental/traditional)", scale: "[-1,+1] basis",       source: "systems/characters/reference/conviction_axis_matrix_v30.md / PP-687"}
-  - {key: map.conviction_axis, kind: conviction_axis_map, name: CONVICTION_AXIS_MATRIX,                           shape: "13x4",                source: "systems/characters/reference/conviction_axis_matrix_v30.md §2"}
+  - {key: "conv.*",  kind: conviction_weight,    name: "13 Convictions -- RETIRED basis; the live roster is `pursuit_roster` above (15, ED-IN-0261)", scale: "0-1 weight (vector)", scope: "actor + faction", source: "systems/characters/reference/conviction_taxonomy_v30.md §2"}
+  - {key: "axis.*",  kind: ethical_axis,         name: "4 ethical axes (hierarchical/sacred/instrumental/traditional) -- RETIRED basis; the live roster is `axis_roster` above (7 bipolar, ED-IN-0261)", scale: "[-1,+1] basis",       source: "systems/characters/reference/conviction_axis_matrix_v30.md / PP-687"}
+  - {key: map.conviction_axis, kind: conviction_axis_map, name: "CONVICTION_AXIS_MATRIX (RETIRED; live: engine/season/rosters.yaml tables.pursuit_projection)", shape: "13x4",                source: "systems/characters/reference/conviction_axis_matrix_v30.md §2"}
   - {key: orient.self_other,   kind: orientation_scalar,  name: "Self-Other Orientation",                         scale: "[-1,+1]",             source: "systems/characters/reference/conviction_taxonomy_v30.md §3"}
   - {key: "style.*", kind: contest_style,        name: "Contest styles (Precedent/Suppression/Vision/Insinuation = Memory|Projection x Revealing|Obscuring)", effect: "style bonus die", source: "systems/social_contest/reference/social_contest_v30.md (Step 2-3)"}
   - {key: "temp.*",  kind: temperament_type,     name: "5 territory temperaments",                               value: "alpha (outcomes) + beta (conduct) weights", scope: "territory/faction (pop-weighted avg)", source: "systems/settlements/reference/territory_temperaments_v30.md §3.4.1"}
