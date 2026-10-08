@@ -90,10 +90,10 @@ FIELD_PINS = {
     'MB_REACH_FACING_GATE': '1', 'MB_WHEEL': '1', 'MB_ENVELOP_PATH': '1', 'MB_SWEEP': '1',
     # Critic-pass additions (2026-07-29): default-inert but REACHABLE at these pins —
     # an ambient flip produces a loud spurious red, so pin them for hermeticity.
-    # (MB_FRICTION_CEV enabling shifts the RNG stream — orchestration.py's own comment;
+    # (MB_FRICTION enabling shifts the RNG stream — orchestration.py's own comment;
     # MB_INTENT_RESOLUTION is live via the battery's stance='hold' rows; MB_CLOSE_RANKS
     # via the PER_CELL lifecycle; MB_TROOP_DENSITY_CAP via the cavalry rows.)
-    'MB_FRICTION_CEV': '0', 'MB_FRICTION_SIGMA': '1.1', 'MB_FRACTIONAL_POOL': '0',
+    'MB_FRICTION': '0', 'MB_FRICTION_SIGMA': '1.1', 'MB_FRACTIONAL_POOL': '0',
     'MB_INTENT_RESOLUTION': '0', 'MB_CLOSE_RANKS': '0', 'MB_TROOP_DENSITY_CAP': '0',
     # [ED-MB-0059, 2026-07-29] Same-side cell exclusion. Default ON, and STRONGLY digest-moving on
     # the two field modes (it is a no-op on the legacy-lattice modes — the pass lives inside

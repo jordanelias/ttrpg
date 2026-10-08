@@ -1733,18 +1733,18 @@ def _unit_snapshot(unit):
 
 # ─── BATTLE ──────────────────────────────────────────────────────────────────
 
-def _draw_friction_cev(unit):
+def _draw_friction(unit):
     """[ED-MB-0016, DG-6 resolution] Draw `unit`'s per-battle combat-effectiveness friction factor ONCE.
-    Idempotent within a battle: a fresh unit has no `_friction_cev`; once set it is never redrawn (so a
+    Idempotent within a battle: a fresh unit has no `_friction`; once set it is never redrawn (so a
     multi-turn battle's repeated run_battle entries keep the single per-battle draw). M ~ LogNormal(0,
-    MB_FRICTION_SIGMA^2) via exp(gauss) on the seeded `random` stream. MB_FRICTION_CEV off -> 1.0
-    (default-inert, byte-exact). See config.py MB_FRICTION_CEV for the full grounding."""
-    if getattr(unit, '_friction_cev', None) is not None:
+    MB_FRICTION_SIGMA^2) via exp(gauss) on the seeded `random` stream. MB_FRICTION off -> 1.0
+    (default-inert, byte-exact). See config.py MB_FRICTION for the full grounding."""
+    if getattr(unit, '_friction', None) is not None:
         return
-    if MB_FRICTION_CEV and MB_FRICTION_SIGMA > 0.0:
-        unit._friction_cev = math.exp(rngsource.get().gauss(0.0, MB_FRICTION_SIGMA))
+    if MB_FRICTION and MB_FRICTION_SIGMA > 0.0:
+        unit._friction = math.exp(rngsource.get().gauss(0.0, MB_FRICTION_SIGMA))
     else:
-        unit._friction_cev = 1.0
+        unit._friction = 1.0
 
 
 # ─── [ED-MB-0052 / plan-v2 §5 C1] PER-PHASE CASUALTY ATTRIBUTION ─────────────
@@ -1824,15 +1824,15 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
     # FIELD_MOVEMENT is OFF (byte-exact).
     assert (not FIELD_MOVEMENT) or MB_NODE_COHESION, \
         "FIELD_MOVEMENT=1 requires MB_NODE_COHESION=1 (the coordinate field runs on the node float path)"
-    # [ED-MB-0016, DG-6 resolution] Draw each side's per-BATTLE combat-effectiveness (CEV) friction factor
+    # [ED-MB-0016, DG-6 resolution] Draw each side's per-BATTLE combat-effectiveness friction factor
     # ONCE, lazily: the FIRST run_battle entry for a fresh unit draws it; subsequent turns of a multi-turn
     # battle (which re-enter run_battle with persistent unit state) see it already set and do NOT re-draw
     # -- so the shock is drawn once per battle, not per turn (per-turn re-draws would self-average away the
     # very variance this restores). A fresh unit per gauge trial gets a fresh draw. Default-inert: with
-    # MB_FRICTION_CEV off, _draw_friction_cev sets 1.0 (no behaviour change; byte-exact). Uses the seeded
+    # MB_FRICTION off, _draw_friction sets 1.0 (no behaviour change; byte-exact). Uses the seeded
     # `random` stream so determinism (I2) holds; enabling it shifts the stream (field goldens re-record).
-    _draw_friction_cev(unit_a)
-    _draw_friction_cev(unit_b)
+    _draw_friction(unit_a)
+    _draw_friction(unit_b)
     turns = 0
     current_phase = 0
     # [ED-MB-0048 / A3] battle-scoped totals for the sub-phase truncation counter; see

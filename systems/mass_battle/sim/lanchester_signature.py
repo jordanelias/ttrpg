@@ -32,7 +32,15 @@ from systems.mass_battle.sim.engine import (Subunit, Unit, run_battle,
 import systems.mass_battle.sim.core.state as _state   # [ED-MB-0050 / A6a] patched by _rout_disabled below
 
 # --- signature thresholds (class-B tolerances; signatures per spec §4) ---
-LINEAR_MIN_BIG_WIN  = 65       # [canonical: mb_lanchester_design.md §4(2) — linear sig: big-force win%; class-B tolerance]
+# [ED-MB-0045 superseding row, item (1)] ONE band for the 2:1 big-win quantity. It replaces the
+# one-sided floor `LINEAR_MIN_BIG_WIN = 65`, which passed every win rate from 65 to 100, including the
+# 100.0% this check reads with friction off (MB_FRICTION=0). The edges are read off the force-ratio
+# win-rate curve MB_FRICTION_SIGMA is calibrated against (config.py), so the instrument and the
+# calibration share one target: a 2:1 win rate must lie between the curve's 1.5:1 and 3:1 points,
+# inclusive. Above the top edge is the certainty friction exists to remove; below the bottom edge is
+# a collapse toward a coin flip. Both fail; the floor could fail only the second.
+DLEDB_WIN_CURVE = {1.2: 55, 1.5: 62, 2.0: 70, 3.0: 80}   # [canonical: audit/2026-07-22-mass-battle-stress-test/dg6_friction_resolution.md §4 — the Dupuy DLEDB target row (attacker win %, by force ratio) MB_FRICTION_SIGMA=1.1 is calibrated against]
+LINEAR_BIG_WIN_BAND = (DLEDB_WIN_CURVE[1.5], DLEDB_WIN_CURVE[3.0])   # the 2:1 point's neighbours on that curve
 LINEAR_MIN_CASDIFF  = 20       # [canonical: mb_lanchester_design.md §4(2) — linear sig: casualty diff (small−big); class-B tolerance]
 SQUARE_MIN_RATIO    = 4        # [canonical: mb_lanchester_design.md §4(3) — square sig: cas-exchange ratio ≥ (size ratio)² at 2:1; class-B tolerance]
 NOANNIH_MAX_CAS     = 60       # [canonical: mb_lanchester_design.md §4(4) — no-annihilation: winner-side casualty% ceiling; class-B tolerance]
@@ -96,12 +104,14 @@ def _sweep(big_tier, small_tier, unit_type, stance='balanced', instructions=()):
 
 
 def check_linear():
-    """Melee 2:1 → big force wins decisively (frontage/durability linear edge)."""
+    """Melee 2:1 → big force wins decisively but not certainly (frontage/durability linear edge,
+    banded by friction): big_win inside LINEAR_BIG_WIN_BAND, casualty difference above its floor."""
     r = _sweep(BIG_TIER, SMALL_TIER, 'melee')
     casdiff = r['cas_small'] - r['cas_big']
-    ok = r['big_win'] >= LINEAR_MIN_BIG_WIN and casdiff >= LINEAR_MIN_CASDIFF
+    lo, hi = LINEAR_BIG_WIN_BAND
+    ok = lo <= r['big_win'] <= hi and casdiff >= LINEAR_MIN_CASDIFF
     return ('LINEAR (melee 2:1)', ok,
-            f"big_win={r['big_win']:.1f}%% (≥{LINEAR_MIN_BIG_WIN}) "
+            f"big_win={r['big_win']:.1f}%% (in [{lo}, {hi}]) "
             f"cas_diff={casdiff:+.1f} (≥{LINEAR_MIN_CASDIFF})")
 
 

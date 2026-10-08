@@ -1,12 +1,15 @@
-"""DG-6 resolution acceptance: per-battle combat-effectiveness (CEV) friction restores scale-invariant
+"""DG-6 resolution acceptance: per-battle combat-effectiveness friction restores scale-invariant
 outcome variance (ED-MB-0016).
 
 The melee pool sums N independent dice, so its coefficient of variation collapses as ~1/sqrt(N) — large
 battles become near-deterministic and lopsided matchups resolve 100%/0% where history shows bands. The
-fix (config.MB_FRICTION_CEV) multiplies each side's combat pool by a per-BATTLE, per-side LogNormal
-combat-effectiveness factor drawn ONCE per battle (Dupuy CEV / Clausewitzian friction), whose variance is
+fix (config.MB_FRICTION) multiplies each side's combat pool by a per-BATTLE, per-side LogNormal
+combat-effectiveness factor drawn ONCE per battle (Clausewitzian friction), whose variance is
 force-INDEPENDENT — so a large advantage stays decisive-but-uncertain (banded) rather than certain.
 Grounding + calibration: audit/2026-07-22-mass-battle-stress-test/dg6_friction_resolution.md.
+
+[ED-MB-0045 item (3)] This file, the flag and its helpers were named after Dupuy's CEV; renamed to the
+ordinary word, friction. Dupuy's CEV is a per-force fitted residual; this is an i.i.d. per-battle draw.
 
 This file pins the MECHANISM (not the gauge bands, which are validated separately): default-inert /
 byte-exact when off; drawn once per battle (not per turn); scale-invariant (a 2:1 matchup does NOT
@@ -44,18 +47,18 @@ def field_path():
 
 @pytest.fixture
 def friction(field_path):
-    """Enable MB_FRICTION_CEV across the modules that read it (config is star-imported), restore after."""
+    """Enable MB_FRICTION across the modules that read it (config is star-imported), restore after."""
     mods = [_cfg, _exch, _orch]
-    saved = [(m, getattr(m, 'MB_FRICTION_CEV', False), getattr(m, 'MB_FRICTION_SIGMA', 1.1)) for m in mods]
+    saved = [(m, getattr(m, 'MB_FRICTION', False), getattr(m, 'MB_FRICTION_SIGMA', 1.1)) for m in mods]
     for m in mods:
-        if hasattr(m, 'MB_FRICTION_CEV'):
-            m.MB_FRICTION_CEV = True
+        if hasattr(m, 'MB_FRICTION'):
+            m.MB_FRICTION = True
     try:
         yield
     finally:
-        for m, cev, sig in saved:
-            if hasattr(m, 'MB_FRICTION_CEV'):
-                m.MB_FRICTION_CEV = cev
+        for m, flag, sig in saved:
+            if hasattr(m, 'MB_FRICTION'):
+                m.MB_FRICTION = flag
                 m.MB_FRICTION_SIGMA = sig
 
 
@@ -80,45 +83,45 @@ def _ratio_winrate(ratio, base, n, seed0=9000):
 # ─── default-inert (byte-exact when off) ─────────────────────────────────────
 
 def test_default_off_is_inert(field_path):
-    """MB_FRICTION_CEV defaults OFF: _draw_friction_cev sets the factor to exactly 1.0 (no pool change),
+    """MB_FRICTION defaults OFF: _draw_friction sets the factor to exactly 1.0 (no pool change),
     so the mechanism is byte-exact / behaviourless until explicitly enabled."""
     # [ED-MB-0061] The default is now ON (Jordan, 2026-07-29). The INERTNESS claim below is still
     # worth holding — an OFF flag must be a true no-op, which is what makes the flag safe to pin in
     # the grid oracle — so the flag is pinned off explicitly rather than assumed from the default.
-    assert _cfg.MB_FRICTION_CEV is True, (
-        "MB_FRICTION_CEV must default ON (ED-MB-0061). ⚠ Turning it on is also what exposed F1: it "
+    assert _cfg.MB_FRICTION is True, (
+        "MB_FRICTION must default ON (ED-MB-0061). ⚠ Turning it on is also what exposed F1: it "
         "confers a large SYSTEMATIC one-sided advantage (mean end-state hp A 0.9910 / B 0.8634 over "
         "the 20 historical rows, 13 of 20 at exactly 1.0000; with it alone off, A 0.8625 / B 0.9390). "
         "That is an open engine defect, not a reason to re-gate the mechanic.")
-    # ⚠ Pin it on ORCHESTRATION, not on config. `_draw_friction_cev` reads its own module global,
+    # ⚠ Pin it on ORCHESTRATION, not on config. `_draw_friction` reads its own module global,
     # populated by `from systems.mass_battle.sim.config import *` at import time — so every star-importing module
-    # holds its own COPY of the flag and setting `_cfg.MB_FRICTION_CEV` reaches none of them. Caught by
+    # holds its own COPY of the flag and setting `_cfg.MB_FRICTION` reaches none of them. Caught by
     # this test failing with 5.717 != 1.0 after the config-side pin. It is the F20/§8 multiple-owners
     # problem in miniature, at the flag layer rather than the quantity layer.
-    saved = _orch.MB_FRICTION_CEV
-    _orch.MB_FRICTION_CEV = False
+    saved = _orch.MB_FRICTION
+    _orch.MB_FRICTION = False
     try:
         a = build_unit('Line', 3, 'A', 'A', 9)
-        _orch._draw_friction_cev(a)
-        assert a._friction_cev == 1.0
+        _orch._draw_friction(a)
+        assert a._friction == 1.0
     finally:
-        _orch.MB_FRICTION_CEV = saved
+        _orch.MB_FRICTION = saved
 
 
 # ─── drawn ONCE per battle, not per turn ─────────────────────────────────────
 
 def test_drawn_once_per_battle(friction):
     """The friction factor is a per-BATTLE latent: a fresh unit draws it exactly once, and a second
-    _draw_friction_cev call (as happens on every turn of a multi-turn battle) does NOT redraw it.
+    _draw_friction call (as happens on every turn of a multi-turn battle) does NOT redraw it.
     (Per-turn redraws would self-average the shock away — the very thing this restores.)"""
     import random
     random.seed(1)
     a = build_unit('Line', 3, 'A', 'A', 9)
-    _orch._draw_friction_cev(a)
-    first = a._friction_cev
+    _orch._draw_friction(a)
+    first = a._friction
     assert first != 1.0  # a real LogNormal draw (prob. 1)
-    _orch._draw_friction_cev(a); _orch._draw_friction_cev(a)
-    assert a._friction_cev == first, "friction redrawn within a battle -> variance would self-average away"
+    _orch._draw_friction(a); _orch._draw_friction(a)
+    assert a._friction == first, "friction redrawn within a battle -> variance would self-average away"
 
 
 def test_lognormal_positive_zero_mean_log(friction):
@@ -130,10 +133,10 @@ def test_lognormal_positive_zero_mean_log(friction):
     logs = []
     for i in range(400):
         u = build_unit('Line', 3, 'A', 'A', 9)
-        u._friction_cev = None
-        _orch._draw_friction_cev(u)
-        assert u._friction_cev > 0
-        logs.append(math.log(u._friction_cev))
+        u._friction = None
+        _orch._draw_friction(u)
+        assert u._friction > 0
+        logs.append(math.log(u._friction))
     assert abs(statistics.mean(logs)) < 0.15   # ~ mu = 0, well within ~3 SE (1.1/sqrt(400)=0.055)
 
 
@@ -149,12 +152,12 @@ def test_variance_does_not_collapse_at_scale(friction):
     base = 1600   # a large force where attrition has fully self-averaged
     on = _ratio_winrate(2.0, base, n=40)
     for m in (_cfg, _exch, _orch):
-        if hasattr(m, 'MB_FRICTION_CEV'):
-            m.MB_FRICTION_CEV = False
+        if hasattr(m, 'MB_FRICTION'):
+            m.MB_FRICTION = False
     off = _ratio_winrate(2.0, base, n=40)
     for m in (_cfg, _exch, _orch):
-        if hasattr(m, 'MB_FRICTION_CEV'):
-            m.MB_FRICTION_CEV = True
+        if hasattr(m, 'MB_FRICTION'):
+            m.MB_FRICTION = True
     assert off >= 95.0, f"large-force 2:1 should collapse to ~certain without friction ({off}%) — the DG-6 defect"
     assert on < 90.0, f"friction failed to band the large-force 2:1 ({on}%) — variance collapsed at scale"
     assert off - on >= 10.0, f"friction barely moved the large-force outcome ({off}->{on}%)"
@@ -166,12 +169,12 @@ def test_friction_reduces_decisiveness(friction):
     on = _ratio_winrate(2.0, 400, n=40)
     # turn it off within this test and compare
     for m in (_cfg, _exch, _orch):
-        if hasattr(m, 'MB_FRICTION_CEV'):
-            m.MB_FRICTION_CEV = False
+        if hasattr(m, 'MB_FRICTION'):
+            m.MB_FRICTION = False
     off = _ratio_winrate(2.0, 400, n=40)
     for m in (_cfg, _exch, _orch):
-        if hasattr(m, 'MB_FRICTION_CEV'):
-            m.MB_FRICTION_CEV = True
+        if hasattr(m, 'MB_FRICTION'):
+            m.MB_FRICTION = True
     assert off > on, f"friction OFF ({off}%) should be MORE decisive than ON ({on}%)"
     assert off >= 90.0, f"baseline 2:1 should be over-decisive ({off}%) — the DG-6 defect"
 
@@ -179,7 +182,7 @@ def test_friction_reduces_decisiveness(friction):
 # ─── I1 / I2 with friction on ────────────────────────────────────────────────
 
 def test_conservation_with_friction(friction):
-    """I1 with the CEV multiplier live: friction scales the pool, not the casualty bookkeeping.
+    """I1 with the friction multiplier live: friction scales the pool, not the casualty bookkeeping.
 
     [ED-MB-0045 S6] Routed through the single owner `_conservation.assert_troop_conservation`; the
     old open-coded loop skipped routed/broken units without counting the skip, so it could assert
@@ -203,6 +206,6 @@ def test_determinism_with_friction(friction):
         b = build_unit('Line', 3, 'B', 'B', 9)
         r = _orch.run_battle(a, b, max_turns=18)
         return (r['winner'], r['turns'], round(a.hp, 6), round(b.hp, 6),
-                round(a._friction_cev, 6), round(b._friction_cev, 6))
+                round(a._friction, 6), round(b._friction, 6))
 
     assert _run() == _run()

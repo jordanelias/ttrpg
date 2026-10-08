@@ -11,7 +11,7 @@ UNCOUNTED skip::
         assert math.isclose(_unit_troops(unit), unit.hp, ...)
 
 (`test_frontage_conservation.py` — which calls it "the hardest check" — plus
-`test_reach_weapon_class.py`, `test_friction_cev.py`, `test_obb_contact_toi.py`.) A conditional assertion
+`test_reach_weapon_class.py`, `test_friction.py`, `test_obb_contact_toi.py`.) A conditional assertion
 with no counter cannot distinguish "the invariant held" from "the loop never reached an assertion",
 which is exactly the failure §0.1 #2 names. So: one owner, every site routed through it, and the
 owner RETURNS the count so each call site can assert it actually checked something.

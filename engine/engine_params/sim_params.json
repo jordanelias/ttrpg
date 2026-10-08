@@ -1562,14 +1562,19 @@
       "citation_grade": "source"
     },
     {
-      "key": "mass_battle.LINEAR_MIN_BIG_WIN",
-      "name": "LINEAR_MIN_BIG_WIN",
-      "value": 65,
-      "kind": "scalar",
+      "key": "mass_battle.DLEDB_WIN_CURVE",
+      "name": "DLEDB_WIN_CURVE",
+      "value": {
+        "1.2": 55,
+        "1.5": 62,
+        "2.0": 70,
+        "3.0": 80
+      },
+      "kind": "table",
       "module": "mass_battle",
       "file": "systems/mass_battle/sim/lanchester_signature.py",
-      "note": "[canonical: mb_lanchester_design.md §4(2) — linear sig: big-force win%; class-B tolerance]",
-      "citation": "mb_lanchester_design.md §4(2) — linear sig: big-force win%; class-B tolerance",
+      "note": "[canonical: audit/2026-07-22-mass-battle-stress-test/dg6_friction_resolution.md §4 — the Dupuy DLEDB target row (attacker win %, by force ratio) MB_FRICTION_SIGMA=1.1 is calibrated against]",
+      "citation": "audit/2026-07-22-mass-battle-stress-test/dg6_friction_resolution.md §4 — the Dupuy DLEDB target row (attacker win %, by force ratio) MB_FRICTION_SIGMA=1.1 is calibrated against",
       "citation_grade": "source"
     },
     {

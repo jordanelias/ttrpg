@@ -137,13 +137,13 @@ def subunit_combat_pool(unit, atom):
     # (default OFF) -> this reduces to the plain yield malus for every existing scenario.
     if getattr(atom, 'yield_active', False) and not getattr(atom, 'pocketed', False):
         raw *= YIELD_POOL_MULT
-    # [ED-MB-0016, DG-6 resolution] Per-battle combat-effectiveness (CEV) friction: scale this subunit's
-    # combat score by its UNIT's once-per-battle LogNormal draw (`_friction_cev`, set by orchestration.
-    # _draw_friction_cev at battle start). 1.0 when MB_FRICTION_CEV is off -> byte-exact. This is the
-    # Dupuy-style CEV multiplier on the whole combat power; the force-independent, once-per-battle
+    # [ED-MB-0016, DG-6 resolution] Per-battle combat-effectiveness friction: scale this subunit's
+    # combat score by its UNIT's once-per-battle LogNormal draw (`_friction`, set by orchestration.
+    # _draw_friction at battle start). 1.0 when MB_FRICTION is off -> byte-exact. A multiplier on the
+    # whole combat power (named friction, not CEV: ED-MB-0045 item (3)); the force-independent, once-per-battle
     # variance it injects is what turns a certain (100%) large-advantage outcome into a decisive-but-
-    # uncertain (historically-banded) one. [grounding: config.py MB_FRICTION_CEV]
-    raw *= getattr(unit, '_friction_cev', 1.0)
+    # uncertain (historically-banded) one. [grounding: config.py MB_FRICTION]
+    raw *= getattr(unit, '_friction', 1.0)
     return max(1, math.floor(raw))
 
 
