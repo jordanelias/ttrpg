@@ -10,7 +10,7 @@ WHAT THIS IS, AND WHAT IT DELIBERATELY IS NOT
 `references/module_contracts.yaml` declares `combat` (plan position `30`; the PROVIDER this module
 registers keeps the name `personal_combat`) with `sim_module:
 systems/combat/combat_engine_v1/` and `resolver: d_sigma`. Its public entry point is
-`wrapper.fight(A, B, cfg=None, rng=None, max_bouts=12) -> int` — `+1` A wins, `-1` B wins, and
+`wrapper.fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None) -> int` — `+1` A wins, `-1` B wins, and
 **`0` UNRESOLVED, which is a RULING and not a failure**: *"NO automatic tiebreak (Jordan
 2026-06-02): if neither fighter is felled, the round ends UNRESOLVED... an undecided fight is a
 legitimate outcome."*
@@ -57,8 +57,8 @@ mechanical, and it invents nothing: this module already returns `parties={id: A.
 the Combatants after the fight, and the wound state is the same read one field deeper.
 
 ⚠ WHAT IS STILL REGISTERED, NARROWED RATHER THAN CLOSED (`H-98`). The engine distinguishes exactly
-two terminal states — FELLED (`result != 0`; `wrapper.fight` sets a result only when a fighter is
-felled) and UNRESOLVED (`result == 0`, *"an undecided fight is a legitimate outcome"*, Jordan
+two terminal states — FELLED (`result != 0`; `wrapper.fight` sets a result when a fighter is
+felled, or when a §11.4 yield ends the scene, which `surrender` on the result carries) and UNRESOLVED (`result == 0`, *"an undecided fight is a legitimate outcome"*, Jordan
 2026-06-02) — and the wound counts grade the second. What the DATA does not carry is any
 separation of a decisive win from a narrow one beyond wound count on the victor. So the bands
 below the felled/unresolved split are the remaining decision, and they are edges over a quantity
@@ -103,6 +103,20 @@ def engine() -> Optional[tuple]:
 def load_error() -> str:
     engine()
     return _LOAD_ERROR
+
+
+def surrender_of(trace: list) -> Optional[dict]:
+    """§11.4 YIELD, LIFTED OFF THE SCENE'S TRACE (PC-01, `ED-PC-0056`) -- `wrapper.fight`'s `yield` event,
+    or `None` when nobody yielded. A declaration the engine REFUSED (the yielder's objective still
+    contested in the zone) is not a surrender and reads `None`: the fight it left behind is the record.
+
+    ⚠ THE SURRENDER RIDES ON THE RESULT, NOT IN THE BAND. A yielder is standing, so `combat_degree`'s
+    shipped walk reads him `Untouched`/`Wounded` off his own `WoundTracker`; `combat_degree_bands` gains
+    no value, because a yield sets no new quantity the band roster could be an edge over."""
+    for e in trace:
+        if e.get("kind") == "yield" and e.get("refused") is None:
+            return dict(by=e["by"], turn=e["turn"], accepted=e["accepted"])
+    return None
 
 
 def derive_party(person: Any, fx: Any, label: str) -> Any:
@@ -215,5 +229,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
                 # *"an undecided fight is a legitimate outcome."* The seam must not retry it into
                 # a decision, which is what a caller expecting a winner would be tempted to do.
                 unresolved=(result == 0),
+                # §11.4: `None` unless a yield ended the scene; then a non-zero `result` with nobody felled.
+                surrender=surrender_of(trace),
                 bouts=sum(1 for e in trace if e.get("kind") == "turn_start"),
                 parties={a_id: A.end, b_id: B.end}, seed=seed)

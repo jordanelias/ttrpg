@@ -126,9 +126,11 @@ def combat_degree(result: dict, subject: Optional[str], wounded_above=None) -> s
     every quantity below is a field of the engine's own `WoundTracker`, on the Combatants
     `combat_seam` constructed and still holds after `wrapper.fight` collapsed them to an int.
 
-    `felled` and `result == 0` are the SAME event from the engine's side -- `wrapper.fight` sets a
-    non-zero result only on a felling -- so the three bands are: the subject went down; the
-    subject is standing and bled; the subject is standing and untouched.
+    The bands read `felled`, never `result`: `wrapper.fight` sets a non-zero result on a felling AND
+    on an accepted §11.4 yield (PC-01), so the three bands are: the subject went down; the subject is
+    standing and bled; the subject is standing and untouched. ⚠ A YIELDER IS STANDING, so this walk
+    reads him `Untouched`/`Wounded` and the surrender rides on `result["surrender"]` -- NO FOURTH BAND:
+    a yield sets no quantity in `wound_quantities` that a fourth edge could be drawn over.
 
     ⚠ WHERE THE BANDS FALL IS DATA, NOT TWO LITERALS (`H-98`, plan position `8`; Jordan 2026-09-02:
     definitions are not hardcoded). `rosters.yaml: combat_band_edges` carries one `{quantity, above}`
