@@ -2161,7 +2161,7 @@ def a13():
 
 
 @probe("A14", "a person reacts within the season to what another just did", "S40.2",
-       by="construction",
+       by="probe-model",
        tests="a character must be able to respond inside the same season to something that just happened")
 def a14():
     """THE WITHIN-SEASON HALF OF `H-56`, RE-POINTED AT `R-03` (plan position IN-43). This probe

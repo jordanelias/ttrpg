@@ -86,7 +86,8 @@ def test_weave_all_corpus_map():
     assert all('node_state' in s and 'doc_status' in s and 'edges' in s for s in summary)
     unspecced = [s['module'] for s in summary
                  if s['node_state'] == 'engine-notional' and s['doc_status'] == 'none']
-    assert 'engine_clock' in unspecced and len(unspecced) >= 5      # the T0 blocker is one of them
+    # engine_clock left this set when IN-42 gave it a `doc:` (the propagation spec)
+    assert 'engine_clock' not in unspecced and len(unspecced) >= 5
     # combat's directory doc is surfaced as such, not a false 'missing' (the contract was named
     # `personal_combat` until plan position `30`: one identity per module, its directory name, A-25)
     assert any(s['module'] == 'combat' and s['doc_status'] == 'declared-dir' for s in summary)
