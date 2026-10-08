@@ -581,8 +581,9 @@ class Person:
     body: int = field(default_factory=lambda: DEFAULT_FIXTURES.get("condition_scale"))
     # ⚠ `scar` IS `{element: count}` -- IN-08 H3, `ED-IN-0261`'s scar model (*"counted PER
     # ELEMENT ... the unit is a COUNT, thresholds 1/2/3"*). An element is a PURSUIT name (the
-    # fifteen of `references/descriptor_registry.yaml`'s `pursuit_roster`); `Person.conviction`'s
-    # elements join at H11. One count per act this person OBSERVED that violated that pursuit,
+    # fifteen of `references/descriptor_registry.yaml`'s `pursuit_roster`) or, since IN-08 H11, an
+    # AFFILIATION name (`affiliation_roster`, the keys of `conviction` below; the two rosters are
+    # refused a shared name). One count per act this person OBSERVED that violated that element,
     # written at RESOLVE by the act (`loop/resolve.py::_scar_witnesses`), never at WITNESS (S9.3).
     # The pre-H3 shape -- a signed float per AXIS, written on the wounded person by `_eff_kill` --
     # is retired with `_scar` and `scar_step`. Keys are never literals here and the dict is never

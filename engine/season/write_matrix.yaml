@@ -207,7 +207,7 @@ rows:
     steps:   [RES, ENC]
     class:   "ACTS"
     social:  "true"
-    by:      "IN-08 H3 (`ED-IN-0261`'s scar model): `{pursuit: count}`, one count per OBSERVER per violated pursuit, written by the act's outcome through `loop/resolve.py::_scar_witnesses` (was V2's `scar[axis]` on the wounded person, §54 item 21)"
+    by:      "IN-08 H3 (`ED-IN-0261`'s scar model): `{element: count}`, one count per OBSERVER per violated pursuit -- and, from IN-08 H11, per violated held affiliation (`rosters.yaml: tables.affiliation_engagement`) -- written by the act's outcome through `loop/resolve.py::_scar_witnesses` (was V2's `scar[axis]` on the wounded person, §54 item 21)"
     emits:   "`scar.taken`"
     # ⚠ `ENC` ADDED AT IN-08 H3 ON M4's PRECEDENT for `(Person, stance)` above: `march`'s outcome
     # folds at ENCOUNTER, which shares RESOLVE's write class (`data/matrix.py`), and the scar is

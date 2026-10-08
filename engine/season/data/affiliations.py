@@ -109,3 +109,83 @@ def _load_incompatible(cells: Optional[dict] = None) -> frozenset:
 
 
 INCOMPATIBLE = _load_incompatible()
+
+
+# ---------------------------------------------------------------------------
+# IN-08 H11 -- THE VERB x AFFILIATION TABLE (J-5's C4, the draft's R-C4), `rosters.yaml:
+# tables.affiliation_engagement`. One shared column every held affiliation reads identically
+# (R-C4.1), plus per-affiliation SIGN cells where canon names what an affiliation condemns
+# (R-C4.2). R-C4.3's content-keyed half is not a cell and is not built (the table's own note).
+# ---------------------------------------------------------------------------
+
+_ENGAGEMENT_LAW = ("IN-08 H11 (J-5's C4, R-C4) -- `affiliation_engagement`'s columns are the one "
+                   "shared column and the rostered affiliations; its rows are verb-table verbs")
+
+
+def _load_engagement(cells: Optional[dict] = None, shared: Optional[str] = None) -> tuple:
+    """`(shared_column, cells)` from `tables.affiliation_engagement`, checked at import.
+
+    `cells`/`shared` default to the shipped table; a caller may pass planted ones to exercise the
+    refusals. Refused, each because the failure would otherwise be SILENT:
+      * no `shared_column:`, or one that is also an affiliation's name -- a column read for every
+        holding and for one holding at once has no single meaning;
+      * a column that is neither, or a verb outside `verb_table.yaml`, or an all-null table
+        (`data/verbs.py::_check_sparse_table`, the one owner of those three checks);
+      * a per-affiliation cell other than `-1`, `1` or `null` -- those cells are graded "sign only",
+        and a magnitude there would be a number nobody chose that a later reader takes for one;
+      * a verb carrying both a shared cell and a per-affiliation cell -- no source says how the two
+        compose, so neither order of precedence is chosen here;
+      * an affiliation spelled like a pursuit -- `Person.scar` keys both, so one name for two
+        elements would merge two counts into one."""
+    from .rosters import PURSUITS, table_meta
+    from .verbs import VERB_TABLE, _check_sparse_table
+    if shared is None:
+        shared = table_meta("affiliation_engagement").get("shared_column")
+    if cells is None:
+        cells = table("affiliation_engagement")
+    if not shared or shared in AFFILIATIONS:
+        raise Unspecified(
+            f"affiliation_engagement's shared column is {shared!r}", "rosters.yaml",
+            needs="a `shared_column:` naming a column that is not a rostered affiliation",
+            law=_ENGAGEMENT_LAW)
+    _check_sparse_table(
+        "affiliation_engagement", cells, set(AFFILIATIONS) | {shared}, "column",
+        set(VERB_TABLE), "verb", row_law=_ENGAGEMENT_LAW,
+        col_law="verb_table.yaml -- a cell on a verb nobody can perform is read by nothing")
+    shared_verbs = {v for v, val in (cells.get(shared) or {}).items() if val is not None}
+    for name, row in cells.items():
+        if name == shared:
+            continue
+        for verb, val in row.items():
+            if val is None:
+                continue
+            if isinstance(val, bool) or val not in (-1, 1):
+                raise Forbidden(
+                    f"affiliation_engagement[{name}][{verb}] = {val!r} is not a sign",
+                    "rosters.yaml", needs="`-1`, `1` or `null`",
+                    law="candidate C4 R-C4.2 -- the per-affiliation cells are derived, SIGN ONLY")
+            if verb in shared_verbs:
+                raise Forbidden(
+                    f"`{verb}` carries a shared cell and a cell under {name!r}", "rosters.yaml",
+                    needs="one or the other", law=_ENGAGEMENT_LAW + "; no source composes the two")
+    clash = sorted(set(AFFILIATIONS) & set(PURSUITS))
+    if clash:
+        raise Forbidden(
+            f"{clash} name both an affiliation and a pursuit", "descriptor_registry.yaml",
+            needs="distinct names", law="IN-08 H11 -- `Person.scar` is keyed on both rosters at once")
+    return shared, {name: {v: float(x) for v, x in row.items() if x is not None}
+                    for name, row in cells.items()}
+
+
+SHARED_COLUMN, ENGAGEMENT = _load_engagement()
+
+
+def engagement(verb: str, name: str) -> float:
+    """The table's cell for an act of `verb` on a holder of affiliation `name`: that affiliation's
+    own cell where it has one, else the shared column's, else `0.0` (no source -- not "compatible").
+    The loader refuses a verb in both, so the fallback never hides a cell. Reads the module-level
+    binding at call time, so a planted table (`ENGAGEMENT` rebound) is what is read."""
+    own = (ENGAGEMENT.get(name) or {}).get(verb)
+    if own is not None:
+        return own
+    return (ENGAGEMENT.get(SHARED_COLUMN) or {}).get(verb, 0.0)

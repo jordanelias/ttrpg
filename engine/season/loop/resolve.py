@@ -33,7 +33,7 @@ from ..loop.predicates import REQUIRES_PREDICATES
 from ..loop.sides import sides_of
 from .. import manifest
 from ..epistemic import observers_for
-from ..queries.person_q import violated_pursuits
+from ..queries.person_q import violated_affiliations, violated_pursuits
 from ..queries.world_q import WorldReader, ceiling, occasioned_by
 from ..seam import ContestError, Resolution, contest, degree_of
 from ..state.carriers import Act, Event, StateChange
@@ -519,14 +519,23 @@ def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
     COUNTS is `scar_excludes_actor`, a swept `Fixtures` arm. Nothing is emitted: `scar.taken` is
     declared on the row and no reader consumes it, and putting the receipts on the act's Event
     would deposit claims about every scarred observer at WITNESS -- a propagation change H3 does
-    not license. Nothing reads the count yet (the crisis reader is H9)."""
+    not license. Nothing reads the count yet (the crisis reader is H9).
+
+    IN-08 H11 -- THE SAME MECHANISM OVER THE AFFILIATION TABLE (J-5's C4). An element is a pursuit
+    OR a held religious affiliation: `person_q.violated_affiliations` (the verb's cell for that
+    affiliation in `rosters.yaml: tables.affiliation_engagement` is negative) is asked beside
+    `violated_pursuits`, and the two answers are one list of elements written by this one write --
+    same observers, same actor arm, same `changed` gate, same token. The two rosters cannot share a
+    name (`data/affiliations.py::_load_engagement` refuses it), so a count is never merged across
+    them. Its reader is the crisis at threshold 3 (H13); H9's reader counts held pursuits only."""
     everyone = list(w.persons)
     if not events:
         return
-    # Whose pursuits this verb violates is person-side and known before anyone is asked whether
-    # they saw it; when it is nobody (a verb with no celled axis, or no one holding a pursuit it
-    # leans against) the presence index is not rebuilt for nothing.
-    broken_of = {pid: violated_pursuits(w.persons[pid], a.verb) for pid in everyone}
+    # Whose elements this verb violates is person-side and known before anyone is asked whether
+    # they saw it; when it is nobody (a verb with no celled axis and no affiliation cell, or no one
+    # holding an element it leans against) the presence index is not rebuilt for nothing.
+    broken_of = {pid: violated_pursuits(w.persons[pid], a.verb)
+                 + violated_affiliations(w.persons[pid], a.verb) for pid in everyone}
     if not any(broken_of.values()):
         return
     mode = w.fixtures.get("fan_out_mode")

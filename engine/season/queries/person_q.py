@@ -97,6 +97,22 @@ def violated_pursuits(p: Person, verb: str) -> tuple:
     return tuple(out)
 
 
+def violated_affiliations(p: Person, verb: str) -> tuple:
+    """WHICH OF `p`'s OWN RELIGIOUS AFFILIATIONS AN ACT OF `verb` VIOLATES -- IN-08 H11, H3's
+    mechanism over the affiliation table (J-5's C4).
+
+    An affiliation `a` that `p` holds (intensity > 0) is violated when `data/affiliations.py::
+    engagement(verb, a) < 0`: the verb's cell for that affiliation, which is the shared column's
+    cell when the affiliation has none of its own (R-C4.1: the vow-shaped verbs engage every creed
+    alike). A sign test, as `violated_pursuits` is; the intensity does not enter it, because the
+    scar is a COUNT per element and an act is witnessed or not. It is `violated_pursuits`'
+    sibling and not a second scar path: `loop/resolve.py::_scar_witnesses` asks both and writes
+    once. Person-side, no World (AX-2). Sorted, as `violated_pursuits` is."""
+    from ..data.affiliations import engagement
+    held = p.conviction or {}
+    return tuple(a for a in sorted(held) if int(held[a]) > 0 and engagement(verb, a) < 0)
+
+
 def confliction(p: Person) -> int:
     """HOW FAR `p`'s RELIGIOUS AFFILIATIONS STRAIN AGAINST EACH OTHER -- IN-08 H10, `12b`'s derived
     Query (ED-IN-0251 R1: *confliction is DERIVED from an `incompatible` relation and never stored*).
