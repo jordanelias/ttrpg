@@ -2599,7 +2599,7 @@ def p37():
     # conviction nobody can hold.
     # [JUSTIFIED: 0.9 is a single strong conviction, the same magnitude this probe used before `U3` under the retired name `suspicion`; P37 branches on `> 0.5` so any value above the threshold shows the same property, and the NUMBER is not what it observes]
     # IN-08: `Order` -> `stability`, its successor pursuit (`candidate_pursuit_cells.md` §4.1).
-    p.pursuits = {_pursuit("stability"): 0.9}
+    p.pursuits = {_pursuit("stability"): 0.9}  # [JUSTIFIED: any weight above the 0.5 the verb choice below tests shows the property; 0.9 is the value the probe has always used]
     chosen = []
     def choose(q, v, s, ask_budget):
         if q.id != p.id:
