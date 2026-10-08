@@ -143,15 +143,16 @@ def test_a_broken_close_knot_actually_LANDS_the_conviction_scar():
 
     _make("Close", 5, knot_id="KSCAR")
     actor = "actor-scar-falsifier"
-    before = conv.check_conviction_threshold(actor).scar_counts.get("Honor", 0)
+    # RE-PINNED at IN-08's cells commit: the scar keys on the pursuit `honour` (the old `Honor`).
+    before = conv.check_conviction_threshold(actor).scar_counts.get("honour", 0)
     c = knots.apply_knot_loss(actor, "KSCAR", mode="break")
-    after = conv.check_conviction_threshold(actor).scar_counts.get("Honor", 0)
+    after = conv.check_conviction_threshold(actor).scar_counts.get("honour", 0)
 
     assert c["conviction_scar"] == 1
     assert after == before + 1, (
         "knots.py reported a Conviction Scar and the scar store did not move — the announcement "
         "and the mechanic have come apart again. Check the `conviction=` name knots.py passes "
-        "against engine.substrate.descriptors.CONVICTIONS."
+        "against engine.substrate.descriptors.PURSUITS."
     )
 
 
@@ -165,9 +166,11 @@ def test_an_unknown_conviction_name_raises_instead_of_scoring_zero():
     # conviction_taxonomy_v30.md:282 and references/alias_registry.yaml:653-658 both route legacy
     # tags to PER-CHARACTER migration under PP-685 and name no single target, so the alias decided
     # a ruling by accident. They raise like any other non-canonical name.
-    for legacy in ("Reason", "Autonomy", "Continuity"):
+    # RE-PINNED at IN-08's cells commit: a name from the retired thirteen (`Honor`) raises like any
+    # legacy tag, and the pursuit that replaced it (`honour`) lands the scar.
+    for legacy in ("Reason", "Autonomy", "Continuity", "Honor"):
         with pytest.raises(ValueError):
             conv.apply_conviction_scar("actor-alias", "src", magnitude=1, conviction=legacy)
     # A canonical name still lands a real scar.
-    r = conv.apply_conviction_scar("actor-canonical", "src", magnitude=1, conviction="Honor")
-    assert r.conviction == "Honor" and r.magnitude > 0
+    r = conv.apply_conviction_scar("actor-canonical", "src", magnitude=1, conviction="honour")
+    assert r.conviction == "honour" and r.magnitude > 0

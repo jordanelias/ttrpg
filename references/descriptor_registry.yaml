@@ -124,49 +124,59 @@ category_b_scalars:
     module_contracts.yaml wins and this entry is stale (re-sync on discovery).
 
 # ============================================================================
-# CONVICTION ROSTER -- ENUMERATED HERE, because a roster stated only in prose is one no code can read (CLAUDE.md 0.05).
+# PURSUIT ROSTER -- ENUMERATED HERE, because a roster stated only in prose is one no code can read (CLAUDE.md 0.05).
 # ============================================================================
 # Exported into `engine/engine_params/descriptors.json` behind the existing blocking `--check`, and read by
 # `engine/substrate/descriptors.py`; every subsystem reads that leaf. One roster, one home: edit it HERE.
-conviction_roster:
-  source: "systems/characters/reference/conviction_taxonomy_v30.md §2"
-  count: 13
+# A PURSUIT is something a person is AFTER, not a position they hold (ED-IN-0261, Jordan 2026-09-20; the
+# fifteen as named by ED-IN-0261's 2026-10-06 row, RS-2 and RS-4). A person's weights over these reach
+# the axes below only through `engine/season/rosters.yaml: tables.pursuit_projection` (15 x 7).
+pursuit_roster:
+  source: "ED-IN-0261 (2026-09-20 ruling; the fifteen as read by its 2026-10-06 row)"
+  count: 15
   names:
-    - Faith        # devotion to ecclesiastical authority and theological order
-    - Authority    # deference to and assertion of legitimate command
-    - Order        # procedural correctness, rule-following, institutional regularity
-    - Scholastic   # reasoned inquiry, learning, scholarly method
-    - Utility      # effectiveness, results, instrumental judgment
-    - Equity       # fairness across station; relief of injustice
-    - Liberty      # self-determination, freedom from imposed authority
-    - Precedent    # reverence for ancestral practice
-    - Community    # belonging to the immediate community; common life
-    - Identity     # membership in a categorical group; tribe, lineage, faction
-    - Warden       # stewardship of the dependent and the vulnerable
-    - Virtue       # cultivation of moral character
-    - Honor        # pledged oath, honor-code, reputation as binding
+    - virtue         # cultivation of moral character; the good life
+    - honour         # pledged oath, honour-code, standing kept as binding
+    - liberty        # self-determination, freedom from imposed authority
+    - justice        # fairness: distributive, under law, structural
+    - wealth         # material means and their increase
+    - reputation     # how one stands in others' eyes
+    - scholastics    # reasoned inquiry, learning, scholarly method
+    - stability      # an ordered, continuing state of affairs (orthogonal to hierarchical/equal)
+    - individuality  # being and becoming oneself, apart from the group
+    - community      # belonging to the immediate community; common life
+    - doctrine       # how much of one's action concerns religious matters at all (the magnitude; Person.conviction carries the side)
+    - happiness      # one's own well-being and contentment
+    - family         # kin and lineage
+    - love           # the beloved
+    - stewardship    # care of the dependent and the vulnerable
 
 # ----------------------------------------------------------------------------
-# THE FOUR ETHICAL AXES -- enumerated here for the same reason the Convictions are: one roster, read through
-# `engine/substrate/descriptors.py`, so a fifth axis or a rename is ONE edit every reader sees. `by_reference`
-# below still carries the `axis.*` row for the axis SEMANTICS; what is here is the NAME SET code compares against.
+# THE SEVEN BIPOLAR AXES (ED-IN-0261) -- enumerated here for the same reason the pursuits are: one roster,
+# read through `engine/substrate/descriptors.py`, so an eighth axis or a rename is ONE edit every reader sees.
+# Each name spells BOTH poles, first-named pole first.
 #
-# ⚠ THE ORDER IS SEMANTIC AND IS `keys.py`'s, EXACTLY. `engine/season/decision/choose.py` sums
-# over this set per candidate; a projection matrix column is keyed by name, so a reorder is safe
-# for scoring and unsafe for anything that zips two axis vectors positionally. Keep it stable.
+# ⚠ THE SIGN CONVENTION IS DATA, IN `scale:` BELOW: NEGATIVE = the FIRST-named pole, POSITIVE = the
+# second (`candidate_pursuit_cells.md` §0.1, accepted by Jordan's 2026-10-06 fold, RS-1). A
+# hierarchical person projects NEGATIVE on `hierarchical_equal`, a hierarchical act aligns negative, and
+# `score = Σ axis_w · align` rewards the match. Every cell in `pursuit_projection` and `alignment` is
+# written in this convention.
 #
-# ⚠ A FIFTH AXIS IS PERMITTED BUT DEFERRED. `key_substrate_v30.md` §2.4: *"A 5th axis is permitted
-# as a Class B extension if Stage 10 calibration finds the simplification load-bearing; treat as
-# deferred unless required."* Adding one here is now ONE edit that both readers see.
+# ⚠ THE ORDER IS SEMANTIC. `engine/season/decision/choose.py` sums over this set per candidate; a
+# projection matrix column is keyed by name, so a reorder is safe for scoring and unsafe for anything
+# that zips two axis vectors positionally. Keep it stable.
 axis_roster:
-  source: "systems/_architecture/reference/key_substrate_v30.md §2.4 / conviction_axis_matrix_v30.md / PP-687"
-  count: 4
-  scale: "[-1,+1] basis"
+  source: "ED-IN-0261 (2026-09-20) -- seven bipolar axes, both poles named"
+  count: 7
+  scale: "[-1,+1] bipolar; negative = the first-named pole, positive = the second"
   names:
-    - hierarchical   # + rank-bearing, status-asserting · - egalitarian, peer-levelling
-    - sacred         # + numinous, oath-binding · - secular, contractually bounded
-    - instrumental   # + end-justifies-means, calculative · - principled, deontological
-    - traditional    # + precedent-respecting, ancestral · - progressive, reformist
+    - hierarchical_equal          # - rank-bearing, status-asserting · + equal, peer-levelling
+    - precedent_substantive       # - returns to previous ideas/actions for resolution · + forges new ones
+    - partisan_equitable          # - for one's own · + impartial treatment
+    - selfish_selfless            # - for oneself · + for others
+    - rigid_flexible              # - unwilling to deviate in the face of difficulties · + will deviate
+    - grandiose_humble            # - puts oneself forward before witnesses · + does not
+    - deontological_instrumental  # - will not take a disagreeable act even for a good outcome · + the outcome justifies the means
 
 # ============================================================================
 # REGISTERED BY REFERENCE -- authoritative content stays in the source doc (no re-transcription).

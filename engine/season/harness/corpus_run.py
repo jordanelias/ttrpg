@@ -53,7 +53,7 @@ from ..data.matrix import Step
 # single owner, and nothing here reads the roster any more.
 from ..data.rosters import (PURSUIT_AXES, RUNG_KINDS, VERB_CAPABILITY, load_yaml,
                             refuse_a_titled_post_off_its_rung)
-from ..data.verbs import VERB_TABLE, align
+from ..data.verbs import VERB_TABLE, align, celled_verbs
 from ..decision import make_chooser
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, Unspecified
 from ..loop.driver import SeasonDriver, resolvable_verbs
@@ -962,13 +962,22 @@ def main(seed: int = 0) -> int:
         # the failure mode `H-97` exists to report on. `make_chooser` scores the same way (§8: the
         # rule lives once), so this instrument and the thing it measures cannot drift apart.
         axis_w = decision.project(pr)
-        nz = sum(1 for x in cd if any(axis_w[a] * align(x.verb, a) for a in PURSUIT_AXES))
-        sep.append((nz, len(cd)))
+        # ⚠ G-1 (2026-10-06, [medium; Jordan to correct]; IN-08's cells commit): THE DENOMINATOR
+        # IS THE CANDIDATES WHOSE VERB HAS AT LEAST ONE CELLED AXIS (`data/verbs.py::celled_verbs`).
+        # A candidate whose verb has none -- `tell`, declared `uncelled:` by design, or a verb every
+        # cell of which is a considered `null` -- scores 0.0 for every person by construction, so
+        # counting it would read as a tie the ranking failed to break when no score could break it.
+        # R-06 and R-08 read this line that way; both figures are printed, never a ratio alone.
+        celled = celled_verbs()
+        cc = [x for x in cd if x.verb in celled]
+        nz = sum(1 for x in cc if any(axis_w[a] * align(x.verb, a) for a in PURSUIT_AXES))
+        sep.append((nz, len(cc), len(cd)))
     if sep:
-        tot = sep[0][1]
-        print(f"\n  RANKING DISCRIMINATION   {min(n for n, _ in sep)}..{max(n for n, _ in sep)} of "
-              f"{tot} candidates carry a nonzero conviction score; the rest TIE and the tie is "
-              f"broken BY THE DRAW (U4/H-96), not by the verb's name")
+        print(f"\n  RANKING DISCRIMINATION   {min(s[0] for s in sep)}..{max(s[0] for s in sep)} "
+              f"(numerator) of {min(s[1] for s in sep)}..{max(s[1] for s in sep)} (denominator: "
+              f"candidates whose verb has >= 1 celled axis; {min(s[2] for s in sep)}.."
+              f"{max(s[2] for s in sep)} candidates in all) carry a nonzero pursuit score; the "
+              f"rest TIE and the tie is broken BY THE DRAW (U4/H-96), not by the verb's name")
     # ⚠ A CASE THAT EXECUTED, WHATEVER ITS BAR STATUS. `W18` renamed the statuses (`RAN` became
     # `RUNS-UNDECLARED` / `RUNS-ALONE-UNDECLARED`), and this filter still named the old ones — so
     # the verb counts went to 0 of 32 the moment the bar landed, silently, because an empty set has

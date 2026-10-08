@@ -437,28 +437,24 @@ rosters:
       nobody has tested.
     values: [own, remit, hold, presence]
 
-  # ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): this row was `convictions:`.
-  # The season-side name is now `pursuits`/`PURSUITS`; the row's SOURCE, values (read via
-  # `from_descriptor:`) and the underlying `descriptor_registry.yaml:conviction_roster` block are
-  # byte-identical and still carry the old 13-name taxonomy — only the season-side label moved.
+  # The season-side roster of PURSUITS (`ED-IN-0261`), read from the single owner. IN-08's cells
+  # commit (B-G) swapped the owner block to the fifteen; this row's values move with it.
   pursuits:
     source: >-
-      references/descriptor_registry.yaml `conviction_roster` (:131-147), count 13, itself sourced
-      from systems/characters/reference/conviction_taxonomy_v30.md §2 and exported to
+      references/descriptor_registry.yaml `pursuit_roster`, count 15 (ED-IN-0261), exported to
       engine/engine_params/descriptors.json behind a BLOCKING --check (tools/export_descriptors.py).
     open: true
     note: >-
       ⚠ **READ FROM THE SINGLE OWNER, NOT RE-TYPED.** `H-46` was closed by IN-43 AS FRAMED: the
-      thirteen are replaced by fifteen pursuits over seven axes (`ED-IN-0261`), and THIS ROSTER STILL
-      CARRIES THE OLD THIRTEEN until IN-08's cells commit applies that ruling. JORDAN, 2026-09-02,
-      VERBATIM: *"please note that convictions roster and axes etc may be modified in future."*
-      Populating a roster from a single-owner export is a DATA EDIT, which the same ruling says is
-      the correct shape; `open: true` says in data that the roster may change.
-      ⚠ **THESE ARE CONVICTIONS AND THEY ARE NOT AXES.** The row immediately below carries FOUR
-      ethical axes; a person's convictions are weights over THESE THIRTEEN, and they reach the
-      axes only through `tables.pursuit_projection`. Before `U3` this file held one index set
-      doing both jobs, and `pursuit_axes`'s own note called that *"the likeliest thing to change
-      when `H-46` closes"* — it changed here without closing it.
+      fifteen pursuits over seven axes (`ED-IN-0261`) are what this roster carries since IN-08's
+      cells commit. JORDAN, 2026-09-02, VERBATIM: *"please note that convictions roster and axes
+      etc may be modified in future."* Populating a roster from a single-owner export is a DATA
+      EDIT, which the same ruling says is the correct shape; `open: true` says in data that the
+      roster may change.
+      ⚠ **THESE ARE PURSUITS AND THEY ARE NOT AXES.** The row immediately below carries SEVEN
+      bipolar axes; a person's pursuits are weights over THESE FIFTEEN, and they reach the axes
+      only through `tables.pursuit_projection` (15×7). Before `U3` this file held one index set
+      doing both jobs.
     # ⚠⚠ **NO `values:` HERE, AND THAT IS THE WHOLE POINT OF THE ROW.** A first writing of `U3`
     # listed the thirteen names in this file, and that was a SECOND ROSTER —
     # `tests/valoria/test_conviction_roster_single_owner.py` exists because three incompatible
@@ -468,7 +464,7 @@ rosters:
     # scans PYTHON, so a copy in YAML would have slipped past it while being the same defect.
     # `data/rosters.py` binds `PURSUITS` from `engine.substrate.descriptors` (as `CONVICTIONS`,
     # the leaf's own unrenamed name) — the one leaf reader, fed by the one exporter, from the one
-    # owner at `references/descriptor_registry.yaml:conviction_roster`. This row carries the
+    # owner at `references/descriptor_registry.yaml:pursuit_roster`. This row carries the
     # SOURCE and the NOTE, which is what a roster row is for when the values live somewhere better.
     # ⚠ `from_descriptor:`, NOT `values: []` (2026-09-15). This row carried an EMPTY list
     # while the real thirteen arrived by a separate direct import in `data/rosters.py`, so
@@ -477,20 +473,19 @@ rosters:
     # opposite. `from_descriptor` is the mechanism ED-IN-0230 built; this is the row that
     # motivated it, finally migrated. It also puts the data-side `forbidden:` bar within
     # reach of this roster, which a direct import cannot do.
-    from_descriptor: conviction_roster
+    from_descriptor: pursuit_roster
 
-  # ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): this row was `conviction_axes:`.
-  # `open:`, `forbidden:` and `from_descriptor:` are byte-identical to before the rename.
   pursuit_axes:
     source: >-
-      references/descriptor_registry.yaml:176 — the `axis.*` by_reference row, "4 ethical axes
-      (hierarchical/sacred/instrumental/traditional)", scale "[-1,+1] basis", sourced to
-      .designs/systems/characters/reference/conviction_axis_matrix_v30.md / PP-687 (quarantined
-      2026-09-16, ED-IN-0231). Owned in code by descriptors.py's `axis_roster` leaf, NOT keys.py.
+      references/descriptor_registry.yaml `axis_roster` — SEVEN bipolar axes, both poles named
+      (ED-IN-0261), scale "[-1,+1] bipolar; negative = the first-named pole, positive = the second".
+      Owned in code by descriptors.py's `axis_roster` leaf.
     open: true
     forbidden: [exposure]
     note: >-
-      ⚠⚠ **FOUR, AND FOUR IS THE WHOLE COUNT — THIS ROW USED TO SAY "FOUR OF THIRTEEN".** It read
+      ⚠⚠ **SEVEN SINCE IN-08's CELLS COMMIT (`ED-IN-0261`).** What follows is the history of the
+      roster's shape; the count it argues about was four, and it is seven now.
+      ⚠⚠ **FOUR, AND FOUR WAS THE WHOLE COUNT — THIS ROW USED TO SAY "FOUR OF THIRTEEN".** It read
       *"#353 says 'the closed 13' and NEVER ENUMERATES THEM ... this roster is NOT the closed 13 and
       must never be cited as it"*, and carried `incomplete: {have: 4, target: 13}` in data. That was
       an honest statement of a CONFLATION, not of a shortfall: the thirteen are CONVICTIONS and the
@@ -1991,13 +1986,14 @@ tables:
     keys: [role_templates, pursuits]
     note: >-
       ⚠ **WHAT A FACTION EXPECTS OF ITS MEMBERS, WHICH IS NOT THE SAME AS WHAT ANY MEMBER HOLDS.**
-      `pursuit_projection` maps a PERSON's thirteen weights into the four ethical axes; this maps
-      a ROLE TEMPLATE's expectations onto the same thirteen. The two multiply against each other
-      nowhere — they are different objects with one shared vocabulary, and the vocabulary is the
-      canonical thirteen in both cases, read from the single owner.
-      ⚠ **TRANSCRIBED, NOT INVENTED.** Every cell is §4's own table. The weights are the document's
-      and each row sums to 1.00 there; nothing is normalised, rounded or filled in here, and a
-      template's unlisted convictions read `default_cell` (0.0) rather than being assigned a share.
+      `pursuit_projection` maps a PERSON's fifteen weights into the seven axes; this maps a ROLE
+      TEMPLATE's expectations onto the same fifteen. The two multiply against each other nowhere —
+      they are different objects with one shared vocabulary, and the vocabulary is the canonical
+      fifteen in both cases, read from the single owner.
+      ⚠ **TRANSCRIBED, THEN MIGRATED BY A STATED RULE.** Every cell is §4's own weight, carried to
+      the fifteen by `candidate_pursuit_cells.md` §4.1/§4.2 (see the comment above `cells:`).
+      Nothing is normalised, rounded or filled in here, and a template's unlisted pursuits read
+      `default_cell` (0.0) rather than being assigned a share.
       ⚠ **SIX TEMPLATES, AND TWO FACTIONS HAVE NONE.** `role_templates.by_faction` covers Crown,
       Church of Solmund, Hafenmark, Varfell, Löwenritter and Restoration Movement. `Guilds` and
       `Schoenland` are absent from §4's player-eligible column and get no row — the same deliberate
@@ -2009,144 +2005,248 @@ tables:
       differentiation comes from Mission, leader Convictions, and stat profile, not role template."*
       So the two factions have the SAME expectation vector and differ in who actually holds what —
       which is precisely the quantity `cast.loyalty` measures.
+    # ⚠ IN-08's CELLS COMMIT (B-G): §4's thirteen-name weights migrated to the fifteen pursuits by
+    # `candidate_pursuit_cells.md` §4.1's derivation rule and §4.2's table (folded into the build,
+    # Jordan 2026-10-06, RS-1), with `doctrine` and `stewardship` as named (RS-2, RS-4). Weights are
+    # §4's own and nothing is renormalised; where two old names collapse into one pursuit their
+    # weights ADD (§4.2: `ecclesiastical` and `military-order`'s `stability`). TWO DROPS, BOTH IN
+    # `intelligence-diplomatic`: §4.2 leaves its `Utility .30` and `Identity .10` with no successor
+    # ("Recommend Jordan either drops the template or names the two") and the template is held by
+    # no faction; the weights are DROPPED rather than given an invented home, the draft's own
+    # precedent for an orphan with nothing to read from (§4.3, NPC-033 and NPC-086).
+    # ⚠ THE READ PATH DOES NOT RAISE ON AN UNKNOWN NAME (`data/pursuits.py::to_axes` skips a pursuit
+    # the projection has no row for), so these cells are VALIDATED AT LOAD against the roster:
+    # `data/verbs.py::ROLE_TEMPLATE_PURSUITS`.
     cells:
       sovereign:
-        Virtue:     0.30
-        Authority:  0.30
-        Honor:      0.20
-        Faith:      0.10
-        Warden:     0.10
+        virtue:       0.30
+        stability:    0.30
+        honour:       0.20
+        doctrine:     0.10
+        stewardship:  0.10
       ecclesiastical:
-        Faith:      0.40
-        Authority:  0.20
-        Scholastic: 0.20
-        Precedent:  0.10
-        Virtue:     0.10
+        doctrine:     0.40
+        stability:    0.30
+        scholastics:  0.20
+        virtue:       0.10
       mercantile-procedural:
-        Order:      0.35
-        Utility:    0.25
-        Scholastic: 0.20
-        Liberty:    0.10
-        Equity:     0.10
+        stability:    0.35
+        wealth:       0.25
+        scholastics:  0.20
+        liberty:      0.10
+        justice:      0.10
       intelligence-diplomatic:
-        Scholastic: 0.30
-        Utility:    0.30
-        Authority:  0.20
-        Precedent:  0.10
-        Identity:   0.10
+        scholastics:  0.30
+        stability:    0.30
       reformist:
-        Equity:     0.30
-        Liberty:    0.25
-        Community:  0.20
-        Virtue:     0.15
-        Scholastic: 0.10
+        justice:      0.30
+        liberty:      0.25
+        community:    0.20
+        virtue:       0.15
+        scholastics:  0.10
       military-order:
-        Honor:      0.30
-        Authority:  0.25
-        Virtue:     0.15
-        Identity:   0.15
-        Order:      0.15
+        honour:       0.30
+        stability:    0.40
+        virtue:       0.15
+        community:    0.15
 
-  # ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): this table was
-  # `conviction_projection:`; `source:`, `row:`, `default_cell:`, `sweep:` and the 52 cells are
-  # byte-identical.
   pursuit_projection:
     source: >-
-      systems/characters/reference/conviction_axis_matrix_v30.md §2 / PP-687, registered by
-      reference at references/descriptor_registry.yaml:177 — the `map.conviction_axis` row,
-      shape 13x4.
+      proposals/2026-09-26-decision-layer-execution-plan/candidate_pursuit_cells.md §2 (the 105
+      cells; grid at §2.16, revision 5), FOLDED INTO THE BUILD by Jordan 2026-10-06 (RS-1,
+      ED-IN-0291); `doctrine` and `stewardship` named by RS-2 and RS-4. Shape 15x7, sign per
+      `references/descriptor_registry.yaml: axis_roster.scale`.
     row: H-46
     default_cell: 0.0
     sweep: [declared, uniform, sign_only]
     keys: [pursuits, pursuit_axes]
     note: >-
-      ⚠⚠ **THESE 52 CELLS ARE READ, NOT INVENTED, AND THAT IS WHAT SEPARATES THIS TABLE FROM
-      `alignment` BELOW.** Every value is transcribed from `conviction_axis_matrix_v30.md` §2's
-      matrix, and that document's §3 carries a PER-CELL RATIONALE for each one — e.g. Faith's
-      `sacred +0.9` is argued there, and its `hierarchical +0.4` is argued as *"moderate-to-strong
-      but not maximal — Faith's primary axis is sacred, not hierarchical."* `alignment`'s note says
-      of its own cells *"a reason is not a citation"*; this table's cells HAVE a citation, and the
-      distinction is worth keeping visible because the two tables multiply together.
-      ⚠ **IT IS A PROJECTION, NOT A SECOND OPINION ABOUT VERBS.** It maps a person's thirteen
-      conviction weights into the four-axis basis and stops there. What a verb is worth on an axis
+      ⚠⚠ **105 CELLS, EVERY ONE GRADED, NONE NULL, AND EACH ROW CITES THE DRAFT SECTION THAT ARGUES
+      IT.** The draft's grades are `cited` (transcribed from a source holding the number, at most a
+      sign flip), `derived`/`analogy` (direction read off a source, magnitude the draft's) and
+      `reasoned` (no corpus citation; placed by stated definitional reasoning — the 55 cells Jordan
+      accepted "as placed" in the 2026-10-06 fold). A row's comment marks its reasoned cells. The
+      per-cell argument is the draft's §2.N table for that pursuit, readable at its `FORK:` ref
+      once the draft retires; the values here are the build's, and the draft is not a reason the
+      behaviour is correct (`CLAUDE.md` §0.05).
+      ⚠ **IT IS A PROJECTION, NOT A SECOND OPINION ABOUT VERBS.** It maps a person's fifteen
+      pursuit weights into the seven-axis basis and stops there. What a verb is worth on an axis
       is `alignment`'s, and nothing here names a verb.
-      ⚠ **`row: H-46`, CLOSED AS FRAMED BY IN-43; THIS TABLE STAYS 13×4 UNTIL IN-08's CELLS COMMIT.** Jordan, 2026-09-02: *"convictions roster and axes
-      etc may be modified in future."* The sweep is the standard three: `declared` is this matrix,
-      `uniform` makes every conviction project identically and is THE CONTROL — under it a person's
-      convictions cannot discriminate between axes at all — and `sign_only` keeps the directions
-      the document argues and discards the magnitudes it calibrates, which is the separation worth
-      having when the argument is stronger than the arithmetic.
+      ⚠ **THE `doctrine` ROW IS PROVISIONAL** at the draft's revision-5 values (Jordan 2026-10-06,
+      RS-3: *"when we get to cell values and cosines for the axes*poles stuff, doctrine will
+      change"*). It is the MAGNITUDE of a person's orientation toward religious matters, not its
+      DIRECTION (which side is `Person.conviction`'s, ED-IN-0251 R1/R2) — so its cells are non-zero
+      only where all four of Jordan's examples agree (§2.11). THE DOCTRINE PAIR (Jordan's devout
+      Solmund builder against the Einhir dismantler, both high `doctrine`) IS MEASURED, NOT GATED:
+      at the draft's weights (`doctrine` .45, §5.1 arm A) the two persons' projections through
+      THIS table read cos +0.229 — inside the 60-degree bar (cos <= 0.5) — recomputed on these
+      rows at IN-08's cells commit; at `doctrine` .60 / .70 (arms B, C) the draft read +0.524 /
+      +0.527, just outside it. H7 (B-H) builds the standing test that pins it.
+      ⚠ **`row: H-46`, CLOSED AS FRAMED BY IN-43.** Jordan, 2026-09-02: *"convictions roster and
+      axes etc may be modified in future."* The sweep is the standard three: `declared` is this
+      matrix, `uniform` makes every pursuit project identically and is THE CONTROL — under it a
+      person's pursuits cannot discriminate between axes at all — and `sign_only` keeps the
+      directions the draft argues and discards the magnitudes it calibrates.
     cells:
-      Faith:
-        hierarchical:  0.4
-        sacred:  0.9
-        instrumental: -0.3
-        traditional:  0.6
-      Authority:
-        hierarchical:  0.9
-        sacred:  0.2
-        instrumental:  0.1
-        traditional:  0.4
-      Order:
-        hierarchical:  0.5
-        sacred: -0.1
-        instrumental:  0.2
-        traditional:  0.4
-      Scholastic:
-        hierarchical:  0.1
-        sacred:  0.2
-        instrumental:  0.3
-        traditional: -0.1
-      Utility:
-        hierarchical: -0.1
-        sacred: -0.5
-        instrumental:  0.9
-        traditional: -0.4
-      Equity:
-        hierarchical: -0.4
-        sacred:  0.2
-        instrumental: -0.2
-        traditional: -0.2
-      Liberty:
-        hierarchical: -0.7
-        sacred: -0.2
-        instrumental:  0.1
-        traditional: -0.5
-      Precedent:
-        hierarchical:  0.3
-        sacred:  0.4
-        instrumental: -0.4
-        traditional:  0.9
-      Community:
-        hierarchical:  0.0
-        sacred:  0.3
-        instrumental: -0.2
-        traditional:  0.5
-      Identity:
-        hierarchical:  0.4
-        sacred:  0.2
-        instrumental:  0.0
-        traditional:  0.6
-      Warden:
-        hierarchical:  0.5
-        sacred:  0.4
-        instrumental: -0.1
-        traditional:  0.4
-      Virtue:
-        hierarchical:  0.2
-        sacred:  0.4
-        instrumental: -0.5
-        traditional:  0.3
-      Honor:
-        hierarchical:  0.5
-        sacred:  0.4
-        instrumental: -0.7
-        traditional:  0.8
+      # Columns in `axis_roster` order. "reasoned:" names the row's reasoned cells (draft §2.16 °);
+      # every other cell is cited, derived or analogy. Each row's argument is the draft section named.
+      virtue:            # §2.1 · reasoned: precedent_substantive (a source conflict resolved), rigid_flexible, grandiose_humble, deontological_instrumental
+        hierarchical_equal:          -0.2
+        precedent_substantive:       -0.2
+        partisan_equitable:           0.3
+        selfish_selfless:            -0.2
+        rigid_flexible:               0.2
+        grandiose_humble:             0.2
+        deontological_instrumental:  -0.3
+      honour:            # §2.2 · reasoned: selfish_selfless, grandiose_humble
+        hierarchical_equal:          -0.5
+        precedent_substantive:       -0.8
+        partisan_equitable:          -0.3
+        selfish_selfless:             0.2
+        rigid_flexible:              -0.6
+        grandiose_humble:            -0.4
+        deontological_instrumental:  -0.7
+      liberty:           # §2.3 · reasoned: partisan_equitable, rigid_flexible, grandiose_humble
+        hierarchical_equal:           0.7
+        precedent_substantive:        0.5
+        partisan_equitable:           0.2
+        selfish_selfless:            -0.1
+        rigid_flexible:              -0.3
+        grandiose_humble:             0.0
+        deontological_instrumental:   0.1
+      justice:           # §2.4 · reasoned: precedent_substantive (a source conflict resolved), partisan_equitable, rigid_flexible, grandiose_humble
+        hierarchical_equal:           0.4
+        precedent_substantive:        0.1
+        partisan_equitable:           0.8
+        selfish_selfless:             0.2
+        rigid_flexible:              -0.3
+        grandiose_humble:             0.0
+        deontological_instrumental:  -0.2
+      wealth:            # §2.5 · reasoned: hierarchical_equal, partisan_equitable, rigid_flexible, grandiose_humble
+        hierarchical_equal:          -0.2
+        precedent_substantive:        0.4
+        partisan_equitable:          -0.4
+        selfish_selfless:            -0.6
+        rigid_flexible:               0.5
+        grandiose_humble:             0.0
+        deontological_instrumental:   0.6
+      reputation:        # §2.6 · reasoned: hierarchical_equal, precedent_substantive, partisan_equitable, rigid_flexible, deontological_instrumental
+        hierarchical_equal:          -0.3
+        precedent_substantive:       -0.2
+        partisan_equitable:          -0.3
+        selfish_selfless:            -0.6
+        rigid_flexible:               0.3
+        grandiose_humble:            -0.4
+        deontological_instrumental:   0.3
+      scholastics:       # §2.7 · reasoned: precedent_substantive (a source conflict resolved), rigid_flexible, grandiose_humble
+        hierarchical_equal:          -0.1
+        precedent_substantive:       -0.1
+        partisan_equitable:           0.4
+        selfish_selfless:             0.0
+        rigid_flexible:               0.3
+        grandiose_humble:             0.2
+        deontological_instrumental:   0.3
+      stability:         # §2.8 · reasoned: grandiose_humble
+        hierarchical_equal:           0.0
+        precedent_substantive:       -0.4
+        partisan_equitable:           0.4
+        selfish_selfless:             0.0
+        rigid_flexible:              -0.3
+        grandiose_humble:             0.2
+        deontological_instrumental:   0.2
+      individuality:     # §2.9 · reasoned: hierarchical_equal, precedent_substantive, partisan_equitable, rigid_flexible, grandiose_humble, deontological_instrumental
+        hierarchical_equal:           0.3
+        precedent_substantive:        0.5
+        partisan_equitable:          -0.2
+        selfish_selfless:            -0.4
+        rigid_flexible:              -0.4
+        grandiose_humble:            -0.1
+        deontological_instrumental:   0.0
+      community:         # §2.10 · reasoned: partisan_equitable, rigid_flexible, grandiose_humble
+        hierarchical_equal:           0.0
+        precedent_substantive:       -0.5
+        partisan_equitable:          -0.3
+        selfish_selfless:             0.4
+        rigid_flexible:              -0.2
+        grandiose_humble:             0.4
+        deontological_instrumental:  -0.2
+      doctrine:          # §2.11 · PROVISIONAL (RS-3) · revision 5, Jordan's magnitude ruling: four cells 0.0 as ruled; partisan_equitable and deontological_instrumental stand (three of four examples hold)
+        hierarchical_equal:           0.0
+        precedent_substantive:        0.0
+        partisan_equitable:           0.2
+        selfish_selfless:             0.0
+        rigid_flexible:               0.0
+        grandiose_humble:             0.0
+        deontological_instrumental:  -0.3
+      happiness:         # §2.12 · reasoned: all seven
+        hierarchical_equal:           0.0
+        precedent_substantive:        0.3
+        partisan_equitable:          -0.2
+        selfish_selfless:            -0.4
+        rigid_flexible:               0.4
+        grandiose_humble:             0.1
+        deontological_instrumental:   0.4
+      family:            # §2.13 · reasoned: hierarchical_equal, rigid_flexible, grandiose_humble
+        hierarchical_equal:          -0.3
+        precedent_substantive:       -0.3
+        partisan_equitable:          -0.6
+        selfish_selfless:             0.5
+        rigid_flexible:              -0.3
+        grandiose_humble:             0.3
+        deontological_instrumental:   0.0
+      love:              # §2.14 · reasoned: hierarchical_equal, precedent_substantive, partisan_equitable, rigid_flexible, grandiose_humble, deontological_instrumental
+        hierarchical_equal:           0.3
+        precedent_substantive:        0.4
+        partisan_equitable:          -0.7
+        selfish_selfless:             0.7
+        rigid_flexible:              -0.4
+        grandiose_humble:             0.3
+        deontological_instrumental:   0.1
+      stewardship:       # §2.15 · reasoned: hierarchical_equal, precedent_substantive (a source conflict resolved), rigid_flexible, grandiose_humble
+        hierarchical_equal:          -0.2
+        precedent_substantive:       -0.1
+        partisan_equitable:          -0.3
+        selfish_selfless:             0.5
+        rigid_flexible:              -0.3
+        grandiose_humble:             0.5
+        deontological_instrumental:  -0.1
 
   alignment:
-    source: "ARCHITECTURE_V2.md §F2 — `score(c) = Σ_axis conviction[axis] · alignment(c.verb, axis)`"
+    source: >-
+      proposals/2026-09-26-decision-layer-execution-plan/candidate_pursuit_cells.md §3 (the re-cell
+      over the seven axes), FOLDED INTO THE BUILD by Jordan 2026-10-06 (RS-1, ED-IN-0291), plus the
+      six table verbs the draft does not cell (`build`, `found`, `give`, `march`, `migrate`,
+      `survey`), celled in IN-08's cells commit by the draft's own method (each cell's reason
+      below). Formula: ARCHITECTURE_V2.md §F2 — `score(c) = Σ_axis axis_weight[axis] ·
+      alignment(c.verb, axis)`, the person's axis weights being their pursuits projected through
+      `pursuit_projection`.
     row: H-66
     default_cell: 0.0
+    # ⚠⚠ THE DENSITY RULE (IN-08), AND THE LOADER ENFORCES IT (`data/verbs.py::_load_alignment`):
+    # every `verb_table.yaml` verb carries a cell on EACH of the seven axis rows below -- a number,
+    # or an explicit `null` meaning "considered; no source and no lean" (the draft's `null` grade,
+    # read as `default_cell`) -- OR it is named here, in `uncelled:`, with its reason, and then it
+    # carries no cell on any axis. A verb row added to the table without either refuses at load,
+    # naming the verb and the missing axes. Sparse is still lawful in the VALUES (a `null` reads
+    # 0.0); what is no longer lawful is a verb nobody considered.
+    uncelled:
+      tell: >-
+        No cell on any axis BY DESIGN: testimony's moral weight is in WHAT is told (a claim), which
+        no verb x axis cell can carry, and telling is driven by regard (the telling workplan's G1),
+        not by pursuit (`candidate_pursuit_cells.md` §3.6 `:999`, §7.4 `:1377`; G-1, [medium;
+        Jordan to correct]). `corpus_run`'s RANKING counts only candidates whose verb has a celled
+        axis, so a `tell` is neither a tie nor a discrimination there.
+      thread_read: >-
+        No typed cell (`H-85`), not in `resolvable_verbs()`, and `opening_set` can never form a
+        Candidate for it, so a weight on it would be dead (`candidate_pursuit_cells.md` §3.7
+        `:1028`, carrying the old table's rule).
+      restore: >-
+        The draft gives it no cell (§7.4 `:1382`) on the premise that it is unresolvable. ⚠ THE
+        PREMISE IS STALE: `restore` IS in `resolvable_verbs()` and executes in `corpus_run` (read
+        on IN-08's base commit). It is listed here because the plan's declared set names it, not
+        because the reason still holds; its cells are owed by the draft's method and it scores
+        0.0 on every axis meanwhile, exactly as it did on the old four-axis table, which gave it
+        no cell either.
     # §G's third term. ORDER IS SEMANTIC: `declared` is the default and the first arm, and every
     # point is built from it rather than from the previous one. `uniform` is THE CONTROL — every
     # (verb, axis) pair equal, so convictions cannot discriminate at all and a verdict that does
@@ -2156,12 +2256,20 @@ tables:
     sweep: [declared, uniform, sign_only]
     keys: [pursuit_axes, verb_table]
     note: >-
-      ⚠ THESE WEIGHTS ARE INVENTED, AND THE ROW IS WHAT MAKES THAT LAWFUL. PLAN `W5`: the table is
-      "**registered as its own `assumption` row** … the closed 13 axes are enumerated nowhere, so
-      **the table is a row before it is a formula**." §G's discipline is DECLARE · DEFAULT · SWEEP,
-      and all three are discharged — `H-66` is the declaration, this is the default, and
-      `sweep: [declared, uniform, sign_only]` is the sweep. What is NOT claimed is that any cell
-      below is derived from a source. Each carries a one-line reason; a reason is not a citation.
+      ⚠ THESE WEIGHTS ARE ARGUED, NOT SOURCED, AND THE ROW IS WHAT MAKES THAT LAWFUL. PLAN `W5`: the
+      table is "**registered as its own `assumption` row** … **the table is a row before it is a
+      formula**." §G's discipline is DECLARE · DEFAULT · SWEEP, and all three are discharged —
+      `H-66` is the declaration, this is the default, and `sweep: [declared, uniform, sign_only]`
+      is the sweep. Each cell carries its grade and one-line reason: `carried` (an old-table cell
+      moved to the new axis with its reason, sign per `axis_roster.scale`), `derived` (direction
+      read off the verb row's text or an old reason re-homed, magnitude the draft's) and `reasoned`
+      (the six extension verbs, placed by the same method in IN-08's cells commit). A reason is not
+      a citation.
+      ⚠ `selfish_selfless` CARRIES NO NON-NULL CELL, BY DESIGN (draft §3.4): the per-candidate fact
+      "for whom" is single-owned by `verb_table.yaml`'s `beneficiary:` column (ED-IN-0261: *"the
+      selfish axis score supplies the disposition, the column supplies the per-candidate fact"*); a
+      cell here would be a second copy of that column. Its row is all `null`, so the density rule
+      still sees every verb considered on it.
       ⚠ IT MUST NOT BE A ZERO MATRIX and `--check` enforces it. PLAN §W5's guardrail: "a zero
       matrix makes convictions inert, which is the dead-carrier defect #353 `:739-744` names, and
       it would pass every test while meaning nothing". `default_cell: 0.0` is the SPARSE default
@@ -2173,125 +2281,349 @@ tables:
       VERB KEYS ARE VERB-TABLE KEYS, spelled exactly as `verb_table.yaml` spells them (`evade /
       defy`, `fight`). The loader raises on a key naming no verb, so a rename over there cannot
       leave a silently dead cell over here -- exactly what caught this cell when `kill / wound`
-      was renamed to `fight` (2026-09-29, plan `FIGHT-RENAME`).
+      was renamed to `fight` (2026-09-29, plan `FIGHT-RENAME`). The draft's `kill`/`wound` cells
+      are moot: they are not verbs (Jordan, RS-5; ED-IN-0288).
     cells:
-      # ⚠⚠ **ALL FOUR BLOCKS ARE RE-AUTHORED BY `U3`, AND THE OLD FOUR WERE NOT AXES.** This table
-      # was keyed `Precedent / self_preservation / suspicion / harm_borne` — one conviction and
-      # three ad-hoc scalars — because `conviction_axes` was carrying the conviction set. With the
-      # roster swapped to `engine/substrate/keys.py::AXES` every cell had to be re-homed onto an
-      # axis that exists; the loader refuses an unrostered axis name, so this was not optional and
-      # could not be deferred.
-      # ⚠ **THE JUDGMENTS SURVIVED; THE FILING CHANGED.** The old reasons were mostly about the
-      # VERB and only incidentally about the name above them — `destroy_record: -1.0` "unmaking the
-      # record is the anti-procedural act" is a TRADITIONAL judgment, `surveil`'s "+2 Exposure; the
-      # most conspicuous of the six" is an INSTRUMENTAL price. Where an old cell's reason carries
-      # over it is carried, and the block below says so at the cell. Three cells are PRICED BY
-      # CANON rather than judged (`fieldwork_v30.md` §4.2 charges Surveil +2 Exposure, Thread-Read
-      # +1, and Reconstruct nothing) and keep their prices.
-      # ⚠ **WHAT IS STILL TRUE OF THESE CELLS: they are INVENTED, and `H-66` is what makes that
-      # lawful.** The note above states the standard and it is unchanged — *"Each carries a
-      # one-line reason; a reason is not a citation."* The 13x4 `conviction_projection` beside this
-      # table is the opposite case: its cells ARE cited, to `conviction_axis_matrix_v30.md` §3. The
-      # two multiply, so which is argued and which is sourced is worth being able to tell apart.
-      # ⚠ NO CELL FOR `thread_read`: it has no typed cell (`H-85`), is not in `resolvable_verbs()`,
-      # and `opening_set` can never form a Candidate for it. The previous block removed three such
-      # cells for that reason and the rule is kept.
-      hierarchical:
-        # U3. Deference to legitimate command and rank (`descriptors.py` `axis_roster`).
-        # `determine`, `evade / defy` and `surveil` are the old `Precedent` block's own
-        # judgments, correctly re-homed: what they were pricing was never procedure in the
-        # abstract, it was standing INSIDE OR OUTSIDE an office's leave, which is this axis.
-        # The rest are freshly read off which verbs an office (a `remit`) alone may do.
-        determine:       1.0    # the licensed judgement made by the holder licensed to make it
-        confer:          0.8    # conferral seats an office; the paradigm top-down act
-        evade / defy:   -0.9    # refusing a demand outright is the direct negation of command
-        establish:       0.7    # founding an office adds a rung to the ladder that was not there
-        revoke:          0.7    # an officeholder unmaking a subordinate's standing; rank exercised
-        issue:           0.6    # a dispensation is a remit reaching the executors named in scope
-        comply:          0.6    # obeying a dispensation's terms is literal deference to the issuer
-        levy:            0.6    # taking a rung's stores under a remit is rank drawing on subjects
-        dispatch:        0.5    # an order sent down the office to a named person
-        open_case:       0.5    # opening a case invokes the remit's institution over the matter
-        petition:        0.4    # the channel a subordinate has; using it works the hierarchy, not around it
-        repudiate:      -0.5    # unmaking a commitment un-does a standing another's authority made
-        surveil:        -0.3    # watching "without leave" (Precedent's own phrase) is unauthorized by definition
-        destroy_record: -0.4    # defacing what an office's ruling produced, though `traditional` carries the harder edge
-        # `carry` IS DELIBERATELY ABSENT HERE. The author's report named it "the
-        # lowest-magnitude, weakest-justified cell in the set", invented from the verb's docket
-        # mechanics with no reason carried over. `default_cell: 0.0` is the declared answer for
-        # an unlisted pair, and a sparse cell is strictly better than a weak one: the table's
-        # note says a reason is not a citation, but it still has to be a reason.
+      # ⚠⚠ RE-CELLED OVER THE SEVEN BIPOLAR AXES BY IN-08's CELLS COMMIT (B-G). The source is the
+      # draft's §3, which carried the four-axis table's cells forward where an old reason still
+      # holds (`hierarchical` -> `hierarchical_equal`, sign kept under the bipolar convention, so an
+      # old `+x` is `-x` here; `traditional` -> `precedent_substantive`, sign flipped likewise;
+      # `instrumental` -> `deontological_instrumental`, unchanged; `sacred` LEFT the moral basis for
+      # `Person.conviction`, ED-IN-0261, and three of its reasons were re-homed to
+      # `deontological_instrumental` where they were about binding rather than the numinous).
+      # Every cell names its grade. `null` is a considered "no source, no lean" and reads 0.0.
+      # The six extension verbs' cells (`build`, `found`, `give`, `march`, `migrate`, `survey`)
+      # are graded `reasoned`, derived from their own `verb_table.yaml` rows in this commit, one
+      # reason each so Jordan can strike any of them.
+      hierarchical_equal:
+        # negative = rank-bearing, status-asserting · positive = equal, peer-levelling (draft §3.1)
+        determine:      -1.0    # carried: the licensed judgement made by the holder licensed to make it
+        confer:         -0.8    # carried: conferral seats an office; the paradigm top-down act
+        evade / defy:    0.9    # carried: refusing a demand outright is the direct negation of command
+        establish:      -0.7    # carried: founding an office adds a rung to the ladder that was not there
+        revoke:         -0.7    # carried: an officeholder unmaking a subordinate's standing; rank exercised
+        issue:          -0.6    # carried: a dispensation is a remit reaching the executors named in scope
+        comply:         -0.6    # carried: obeying a dispensation's terms is literal deference to the issuer
+        levy:           -0.6    # carried: taking a rung's stores under a remit is rank drawing on subjects
+        dispatch:       -0.5    # carried: an order sent down the office to a named person
+        open_case:      -0.5    # carried: opening a case invokes the remit's institution over the matter
+        petition:       -0.4    # carried: the channel a subordinate has; using it works the hierarchy
+        repudiate:       0.5    # carried: unmaking a commitment un-does a standing another's authority made
+        surveil:         0.3    # carried: watching "without leave" is unauthorized by definition
+        destroy_record:  0.4    # carried: defacing what an office's ruling produced
+        convene:        -0.4    # derived: a `remit:convene` act that gathers a venue's rung -- the remit-act family `dispatch`/`issue` sit in
+        found:          -0.3    # reasoned: its cell demands strict ascent into the works' `at` -- a new rung on the containment ladder; `establish`'s reason read for a place, not an office, and `own`-eligible, so smaller
+        march:          -0.5    # reasoned: `remit:dispatch`-eligible -- an army sent under an office's remit, `dispatch`'s own cell
+        carry:          null    # carried absence: the old table refused this cell as "the lowest-magnitude, weakest-justified cell in the set"
+        build:          null    # reasoned: `own`-eligible, and the row names no rank -- a works held by its maker, whoever he is
+        give:           null    # reasoned: `own`-eligible, a handover between peers present together; no remit is exercised
+        migrate:        null    # reasoned: `own`-eligible; where a person chooses to live says nothing about rank
+        survey:         null    # reasoned: `own`-eligible; commissioning a sheet uses no seat
+        # no source: no old cell and no row text about rank (draft §3.1, "the other 26")
+        commit:         null
+        create_record:  null
+        exchange:       null
+        forge:          null
+        fight:          null
+        move:           null
+        oblige:         null
+        construe:       null
+        release:        null
+        speak:          null
+        succeed:        null
+        examine:        null
+        interview:      null
+        research:       null
+        reconstruct:    null
+        tie / knot:     null
+        transfer:       null
+        utter:          null
+        work:           null
+        challenge:      null
+        accept:         null
 
-      sacred:
-        # U3. The consecrated and theological (`descriptors.py` `axis_roster`). None of the old
-        # four ad-hoc axes named this ground — `Precedent`/`self_preservation`/`suspicion`/
-        # `harm_borne` were never asking what was numinous — so this block is freshly read off
-        # which verbs carry oath-, rite- or vow-shaped weight, calibrated against the matrix's
-        # own Faith (+0.9) and Utility (-0.5) rows.
-        utter:           0.8    # the word once spoken becomes an immutable Proposition — a vow's shape, not mere speech
-        tie / knot:      0.7    # a bound tie is the marriage-and-fealty shape, the consecrated bond of the six kinds
-        commit:          0.7    # a standing obligation is the vow's own form; Honor scores the same shape +0.4
-        confer:          0.5    # investiture into office carries the anointing/oath-of-office residue
-        oblige:          0.4    # duty-taken has the same vow-shape as `commit`, without the immutable Proposition behind it
-        establish:       0.3    # founding a new office-seat is a small consecration of a place that had none
-        # ⚠ THE REASON HERE WAS REWRITTEN. The author's own report flagged it as "my own
-        # historical inference about trial-by-combat, not sourced from any doc in this
-        # repo" — and it read as one, naming `judicium Dei`. An invented weight with a
-        # reason is what `H-66` licenses; a weight whose reason imports REAL-WORLD
-        # institutions this setting has not ruled is a different thing, because a later
-        # reader takes it for canon. The cell is kept at the same magnitude and the reason
-        # is restated as the judgment it actually is.
-        # ⚠ RENAMED `kill / wound` -> `fight`, 2026-09-29 (plan `FIGHT-RENAME`; `verb_table.yaml`'s
-        # own row-rename note). Same verb, same weight, only the spelling moved -- the loader
-        # (`data/verbs.py::_load_alignment`) raises if this key does not match a `VERB_TABLE` row.
-        fight:           0.3    # a body-contest is settled before witnesses, which is the only consecrating frame this table has
-        evade / defy:   -0.3    # refusing what a vow or office asked undercuts the oath behind the demand, not just the demand
-        destroy_record: -0.3    # erasing what a ruling produced touches the same desecration `traditional` scores harder
-        forge:          -0.5    # counterfeiting a record for advantage is the false-witness shape, dressed as evidence
-        surveil:        -0.3    # covert watching is worldly craft; nothing in it is oath, rite, or witness
-        repudiate:      -0.6    # breaking a live commit breaks the vow itself — the anti-sacred act, not just the anti-social one
+      precedent_substantive:
+        # negative = returns to previous ideas/actions · positive = forges new ones (draft §3.2)
+        destroy_record:  1.0    # carried: unmaking the record is the anti-procedural act -- the record is what precedent is consulted in
+        create_record:  -0.8    # carried: the record IS what precedent is made of
+        research:       -0.7    # carried: archives, oral histories, institutional records -- looking to prior cases
+        succeed:        -0.6    # carried: heir designation is dynastic continuity in one act
+        tie / knot:     -0.5    # carried (a weaker fit, the draft flags it): the ancestral social technology
+        repudiate:       0.5    # carried: breaks with the practice of keeping vows
+        evade / defy:    0.5    # carried: breaks with the expected, established course
+        reconstruct:    -0.4    # carried: assembling what stands, not creating what is new
+        confer:         -0.4    # carried: office and title pass down established forms of investiture
+        open_case:      -0.4    # carried: a case runs the stage-and-terms template -- procedure by precedent
+        oblige:         -0.3    # carried: duty-taking has the same ancestral shape as any tie
+        release:         0.3    # carried: the un-binding -- runs opposite `tie / knot`
+        construe:        0.5    # derived: a deliberate reading of the terms for THIS case rather than as they have been read
+        challenge:      -0.3    # derived (weak): the duel pair is a formal, established form (ED-IN-0261)
+        build:           0.2    # reasoned: the row's fabric "begins at NOTHING" -- something new in the world; mild, because it carries out a works already recorded
+        found:           0.3    # reasoned: a new place where there was none -- the unprecedented made
+        migrate:         0.3    # reasoned: leaves where one has lived for a place one has not -- the answer sought in a new situation
+        survey:          0.3    # reasoned: the sheet is the faction's view "AT THE MOMENT OF WRITING" -- the present case, `research`'s archive inverted
+        give:           null    # reasoned: handing a held document on is neither a return to a past form nor a new one
+        march:          null    # reasoned: the row says nothing of where the decision to march is sought
+        # no source (draft §3.2, "the other 28")
+        carry:          null
+        commit:         null
+        comply:         null
+        convene:        null
+        determine:      null
+        dispatch:       null
+        establish:      null
+        exchange:       null
+        forge:          null
+        issue:          null
+        fight:          null
+        levy:           null
+        move:           null
+        petition:       null
+        revoke:         null
+        speak:          null
+        examine:        null
+        interview:      null
+        surveil:        null
+        transfer:       null
+        utter:          null
+        work:           null
+        accept:         null
 
-      instrumental:
-        # U3. Calculative, means-to-ends reasoning (`descriptors.py` `axis_roster`). `reconstruct`,
-        # `research`, `interview`, `surveil`, `commit`, `utter`, `comply`, `move` and `evade / defy`
-        # are the old `self_preservation` block's own judgments, carried over unchanged in
-        # direction: what that block was pricing was never safety as its own end, it was the
-        # actor doing cost/benefit arithmetic, which IS this axis. `surveil` and `reconstruct` are
-        # two of the three cells `fieldwork_v30.md` §4.2 PRICES rather than judges (Surveil +2
-        # Exposure, Reconstruct no cost) — the third, Thread-Read +1, has no cell here because
-        # `thread_read` forms no Candidate (`H-85`) and a weight on it would be dead.
-        surveil:        -0.8    # priced by canon, not judged — fieldwork_v30 §4.2 charges Surveil +2 Exposure
-        commit:         -0.8    # binds regardless of what later calculation would recommend — Honor's own -0.7 shape
-        utter:          -0.7    # the uttered word binds the utterer whatever advantage later counsels — `commit`, one step up
-        forge:           0.8    # counterfeiting a record for advantage is the purest means-to-ends act on the table
-        evade / defy:    0.7    # putting your own calculus over a demand — self_preservation's 0.8, read for what it always was
-        construe:        0.7    # a deliberate reading of the terms calculated to serve the construer's aim, not to keep the bond
-        exchange:        0.6    # a trade that must balance on both sides is ledger-logic, no oath behind either side
-        transfer:        0.6    # moving stores between hearths is bald calculation, stripped of any binding or vow
-        comply:          0.5    # the safe route is obeying — the lower-risk, calculated path over what conviction prefers
-        move:            0.5    # leaving is the cheapest safety there is — self_preservation's own reading, unchanged
-        reconstruct:     0.4    # priced by canon at zero cost ("no new information gathered") — the free, riskless route
-        work:            0.4    # labor is the straightforwardly instrumental act: presence converted into yield
-        research:        0.3    # the archive is the lower-cost, calculated route to a finding, weighed against interview
-        interview:      -0.3    # asking shows the person what you want to know — the hand-revealing cost `research` avoids
+      partisan_equitable:
+        # negative = for one's own · positive = impartial treatment (draft §3.3)
+        determine:       0.6    # derived: the act's own form is impartial adjudication; who it favours is the `judging_set`'s
+        construe:       -0.6    # derived: calculated to serve the construer's aim, not to keep the bond
+        forge:          -0.5    # derived: counterfeiting a record for advantage
+        open_case:       0.3    # derived: the case runs by template regardless of who stands before it
+        levy:           -0.3    # derived: rank drawing on subjects -- one's own office's take
+        march:          -0.4    # reasoned: `sides_of` divides the claimants into sides and the loss lands on the other one -- war for one's own against another; `levy`'s reason, stronger
+        build:          null    # reasoned: beneficiary `none` -- who gains from the fabric is a world read (its `beneficiary_note`)
+        found:          null    # reasoned: beneficiary `none`, for `build`'s reason
+        give:           null    # reasoned: partial toward a person, but toward WHOM is the candidate's fact, not the verb's (§3.3's rule for `transfer` and `tell`)
+        migrate:        null    # reasoned: a person's own relocation treats nobody else at all
+        survey:         null    # reasoned: the sheet describes a faction; it treats nobody
+        # no source (draft §3.3, "the other 37")
+        carry:          null
+        commit:         null
+        comply:         null
+        confer:         null
+        convene:        null
+        create_record:  null
+        destroy_record: null
+        dispatch:       null
+        establish:      null
+        evade / defy:   null
+        exchange:       null
+        issue:          null
+        fight:          null
+        move:           null
+        oblige:         null
+        petition:       null
+        release:        null
+        repudiate:      null
+        revoke:         null
+        speak:          null
+        succeed:        null
+        examine:        null
+        interview:      null
+        research:       null
+        surveil:        null
+        reconstruct:    null
+        tie / knot:     null
+        transfer:       null
+        utter:          null
+        work:           null
+        challenge:      null
+        accept:         null
 
-      traditional:
-        # U3. Ancestral practice and continuity (`descriptors.py` `axis_roster`). `destroy_record`,
-        # `create_record`, `research` and `reconstruct` are the old `Precedent` block's own
-        # judgments: `Precedent` the CONVICTION loads at traditional +0.9 in the matrix
-        # (`conviction_axis_matrix_v30.md` §3.8) against only +0.3 hierarchical and -0.4
-        # instrumental, so most of what that block priced as "procedural" belongs here, not on
-        # `hierarchical` where `determine` alone actually sat.
-        destroy_record: -1.0    # unmaking the record is the anti-procedural act, exactly inverse of making one
-        create_record:   0.8    # the record IS what precedent is made of; making one extends institutional continuity
-        research:        0.7    # archives, oral histories, institutional records — continuity's own method (fieldwork_v30 §4.2)
-        succeed:         0.6    # heir designation is dynastic continuity in one act; the office outlives its holder unchanged
-        tie / knot:      0.5    # binding bonds (marriage, fealty) are the ancestral social technology, not an invention
-        repudiate:      -0.5    # breaking a live commitment breaks with the practice of keeping vows, not just the vow itself
-        evade / defy:   -0.5    # defiance breaks with the expected, established course rather than merely refusing a person
-        reconstruct:     0.4    # a Finding is what a record gets made of; assembling what stands, not creating what is new
-        confer:          0.4    # office and title pass down established forms of investiture
-        open_case:       0.4    # a case still runs the stage-and-terms template §13.1 sets down — procedure by precedent
-        oblige:          0.3    # duty-taking has the same ancestral shape as any tie, just unwitnessed
-        release:        -0.3    # ending a hold/commit/oblige/tie is the un-binding — runs opposite `tie / knot`'s own weight
+      selfish_selfless:
+        # negative = for oneself · positive = for others. NO NON-NULL CELL BY DESIGN (draft §3.4):
+        # the per-candidate "for whom" is `verb_table.yaml`'s `beneficiary:` column, single-owned
+        # there; a cell here would be its second copy. Every verb, the six extension verbs included,
+        # is `null` for that one reason.
+        carry:          null
+        commit:         null
+        comply:         null
+        confer:         null
+        convene:        null
+        create_record:  null
+        destroy_record: null
+        determine:      null
+        dispatch:       null
+        establish:      null
+        evade / defy:   null
+        exchange:       null
+        forge:          null
+        found:          null
+        build:          null
+        give:           null
+        issue:          null
+        fight:          null
+        levy:           null
+        march:          null
+        migrate:        null
+        move:           null
+        oblige:         null
+        open_case:      null
+        petition:       null
+        construe:       null
+        release:        null
+        repudiate:      null
+        revoke:         null
+        speak:          null
+        succeed:        null
+        survey:         null
+        examine:        null
+        interview:      null
+        research:       null
+        surveil:        null
+        reconstruct:    null
+        tie / knot:     null
+        transfer:       null
+        utter:          null
+        work:           null
+        challenge:      null
+        accept:         null
+
+      rigid_flexible:
+        # negative = unwilling to deviate in the face of difficulties · positive = will (draft §3.5)
+        construe:        0.7    # derived: bending the terms to fit
+        repudiate:       0.5    # derived: un-binding a live commitment
+        comply:         -0.4    # derived: literal deference to the terms
+        commit:         -0.4    # derived: binds regardless of what later calculation would recommend
+        release:         0.3    # derived: the un-binding
+        oblige:         -0.3    # derived: duty-taken -- the vow's own form
+        accept:         -0.3    # derived: accepting the challenge as offered -- bound by its form
+        tie / knot:     -0.2    # derived: a bound tie
+        migrate:         0.3    # reasoned: abandons the established hearth for another -- a deviation from one's course when circumstances press
+        build:          null    # reasoned: the row says nothing about holding or leaving a course
+        found:          null    # reasoned: as `build`
+        give:           null    # reasoned: a handover, neither a course held nor one left
+        march:          null    # reasoned: the row's bands record the field's outcome, not whether the marcher would turn back
+        survey:         null    # reasoned: gathering a view commits to no course
+        # no source (draft §3.5, "the other 34")
+        carry:          null
+        confer:         null
+        convene:        null
+        create_record:  null
+        destroy_record: null
+        determine:      null
+        dispatch:       null
+        establish:      null
+        evade / defy:   null
+        exchange:       null
+        forge:          null
+        issue:          null
+        fight:          null
+        levy:           null
+        move:           null
+        open_case:      null
+        petition:       null
+        revoke:         null
+        speak:          null
+        succeed:        null
+        examine:        null
+        interview:      null
+        research:       null
+        surveil:        null
+        reconstruct:    null
+        transfer:       null
+        utter:          null
+        work:           null
+        challenge:      null
+
+      grandiose_humble:
+        # negative = puts oneself forward before witnesses · positive = does not (draft §3.6)
+        challenge:      -0.6    # derived: the public challenge -- putting oneself forward before witnesses
+        speak:          -0.4    # derived: emits `speech.made`, no subject, no writes -- its whole content is being heard
+        fight:          -0.3    # derived: as `challenge`, without the declaration
+        establish:      -0.3    # derived: founding a new office-seat -- adding a seat to the world
+        petition:        0.3    # derived: the channel a subordinate has
+        accept:         -0.2    # derived: as `fight`
+        build:          -0.2    # reasoned: adds a fabric to the world -- `establish`'s reason, smaller: a site, not a seat
+        found:          -0.3    # reasoned: adds a hearth to the world -- `establish`'s own reason and magnitude
+        march:          -0.4    # reasoned: declared before the realm (`march.declared`) -- between `fight`'s -0.3 and `challenge`'s -0.6
+        survey:          0.2    # reasoned: a private act -- it emits a kind neither broadcast channel reads (its `emits_note`)
+        give:           null    # reasoned: one-to-one in presence, and broadcast by neither channel -- `tell`'s reading, not a display
+        migrate:        null    # reasoned: the row records a change of residence, not a showing
+        # no source (draft §3.6, "the other 35"; `tell` is in `uncelled:`)
+        carry:          null
+        commit:         null
+        comply:         null
+        confer:         null
+        convene:        null
+        create_record:  null
+        destroy_record: null
+        determine:      null
+        dispatch:       null
+        evade / defy:   null
+        exchange:       null
+        forge:          null
+        issue:          null
+        levy:           null
+        move:           null
+        oblige:         null
+        open_case:      null
+        construe:       null
+        release:        null
+        repudiate:      null
+        revoke:         null
+        succeed:        null
+        examine:        null
+        interview:      null
+        research:       null
+        surveil:        null
+        reconstruct:    null
+        tie / knot:     null
+        transfer:       null
+        utter:          null
+        work:           null
+
+      deontological_instrumental:
+        # negative = will not take a disagreeable act even for a good outcome · positive = the
+        # outcome justifies the means (draft §3.7)
+        forge:           0.8    # carried: the purest means-to-ends act on the table
+        commit:         -0.8    # carried: binds regardless of what later calculation would recommend
+        utter:          -0.7    # carried: the uttered word binds the utterer whatever advantage later counsels
+        evade / defy:    0.7    # carried: putting your own calculus over a demand
+        construe:        0.7    # carried: calculated to serve the construer's aim
+        exchange:        0.6    # carried: ledger-logic, no oath behind either side
+        transfer:        0.6    # carried: bald calculation, stripped of any binding or vow
+        comply:          0.5    # carried: the safe route is obeying -- the lower-risk, calculated path
+        move:            0.5    # carried: leaving is the cheapest safety there is
+        reconstruct:     0.4    # carried: the free, riskless route
+        work:            0.4    # carried: presence converted into yield
+        research:        0.3    # carried: the lower-cost, calculated route to a finding
+        repudiate:       0.5    # derived (re-homed from the old sacred cell): breaking a live commit -- the outcome over the bond
+        oblige:         -0.3    # derived (re-homed from the old sacred cell): duty-taken has the vow-shape of `commit`
+        tie / knot:     -0.4    # derived (re-homed from the old sacred cell): the consecrated bond -- binding oneself, as `commit`
+        fight:           0.3    # derived: the attempt (ED-IN-0261)
+        challenge:      -0.3    # derived: honour's act -- issued regardless of outcome
+        accept:         -0.4    # derived: accepting regardless of odds -- stronger, because the acceptor did not choose the ground
+        give:           -0.2    # reasoned: the row writes no return to the giver -- the non-ledger counterpart of `exchange` and `transfer`; mild
+        march:           0.4    # reasoned: `fight`'s attempt, larger because the casualties land on many others -- defenders and one's own claimants -- for the outcome
+        migrate:         0.4    # reasoned: `move`'s journey (`_relocate`, one body for both) and `move`'s reason, smaller for a settled choice than for flight
+        survey:          0.3    # reasoned: intelligence before action -- `research`'s calculated route to a finding
+        surveil:        null    # CONFLICT resolved to null: the old -0.8 was a COST (fieldwork_v30 §4.2's Surveil +2 Exposure) wearing an axis cell
+        interview:      null    # CONFLICT resolved to null: the old -0.3 was a price ("the hand-revealing cost"), the same defect
+        build:          null    # reasoned: the row weighs no outcome against a scruple; its yield arrives through `work`, which carries its own cell
+        found:          null    # reasoned: as `build`
+        # no source (draft §3.7, "the other 19"; `thread_read` is in `uncelled:`)
+        carry:          null
+        confer:         null
+        convene:        null
+        create_record:  null
+        destroy_record: null
+        determine:      null
+        dispatch:       null
+        establish:      null
+        issue:          null
+        levy:           null
+        open_case:      null
+        petition:       null
+        release:        null
+        revoke:         null
+        speak:          null
+        succeed:        null
+        examine:        null
 

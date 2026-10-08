@@ -78,7 +78,7 @@ def canonical_for(name: str) -> str:
       · an ambiguous display string -- two rows claim it, so there is no answer;
       · a legacy tag -- it names what replaced it, because resolving a deprecation silently is how
         a rename never finishes;
-      · an unknown name -- the same polarity `descriptors.resolve_conviction` uses, and for its
+      · an unknown name -- the same polarity `descriptors.resolve_pursuit` uses, and for its
         reason: a silent pass-through made a wrong name indistinguishable from a right one.
     """
     if name in AMBIGUOUS:

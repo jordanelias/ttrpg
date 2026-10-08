@@ -1,4 +1,5 @@
-"""`season.loop.effects_combat` -- casualties and morale: fight (renamed from "kill / wound"), march.
+"""`season.loop.effects_combat` -- casualties and morale: fight (renamed from "kill / wound") and
+the duel's `accept`, march.
 
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the two effects that read a
 severity off a scene the seam already resolved rather than choosing one (Jordan, 2026-09-04: *"the
@@ -108,6 +109,12 @@ def _scar(w: "World", p, verb: str) -> None:
 
 @effect_for("fight")  # RENAMED from "kill / wound", 2026-09-29 (plan `FIGHT-RENAME`) -- same
 # effect, same body; only the `EFFECTS` dict key (and its `verb_table.yaml` row) moved.
+# `accept` (IN-08's cells commit, the duel pair's second half) is the same contest over the same
+# prize, `contests: "the body"`, with the same degree-keyed writes read off the same scene -- so it
+# is the same effect, registered twice, not a second body. `_scar` reads `a.verb`, so a duel's
+# moral layer reads `accept`'s own alignment cells, not `fight`'s. (`challenge` writes nothing and
+# needs no effect: `VerbRow.effect_carried`.)
+@effect_for("accept")
 def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """§E3: writes `(Person, body)`, `(Person, exists)` and `(Tenure, until)`.
 

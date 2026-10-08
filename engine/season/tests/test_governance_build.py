@@ -812,9 +812,11 @@ def test_lb6d_every_verb_declares_a_rostered_beneficiary():
     # 40 -> 42, `found` and `build` (plan position `24e`), 2026-09-29 -- both `beneficiary: none`;
     # 42 -> 43, `migrate` (plan position `19c`), 2026-09-30 -- `beneficiary: actor`, `move`'s;
     # 43 -> 44, `survey` (plan position `20-iii`), 2026-09-30 -- `beneficiary: actor`, the
-    # investigation acts' (the sheet and its content land in the surveyor's hand and ledger).
+    # investigation acts' (the sheet and its content land in the surveyor's hand and ledger);
+    # 44 -> 46, `challenge` and `accept` (IN-08's cells commit, the duel pair) -- both
+    # `beneficiary: actor`, `fight`'s (a re-record, said so here).
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops this census passing over a loader that returned a subset]
-    assert len(VERB_TABLE) == 44, "the verb count moved; this row's census is stale"
+    assert len(VERB_TABLE) == 46, "the verb count moved; this row's census is stale"
     undeclared = [v for v, r in VERB_TABLE.items() if not r.beneficiary]
     assert not undeclared, f"verbs with no `beneficiary:`: {undeclared}"
     off_roster = [(v, r.beneficiary) for v, r in VERB_TABLE.items()
@@ -1072,7 +1074,12 @@ def test_lb6e_a_wound_scars_and_the_axes_come_from_the_alignment_table():
     assert set(got) == engaged, (
         f"scar keys {sorted(got)} != the axes ALIGNMENT engages for this verb {sorted(engaged)}; "
         "a second owner of *which axes a verb engages* has appeared")
-    assert all(v > 0 for v in got.values()), got
+    # ⚠ RE-PINNED AT IN-08's CELLS COMMIT: this read `all(v > 0)`, true only while `fight`'s one
+    # cell was the old `sacred +0.3`. The scar is SIGNED by design (`_scar`: *"the magnitude keeps
+    # the cell's sign and `scar` is a signed accumulator"*), and on the seven axes `fight` carries
+    # `grandiose_humble -0.3` beside `deontological_instrumental +0.3`. So the property is that each
+    # scar has its CELL's sign -- which `all(v > 0)` was the one-cell special case of.
+    assert all((v > 0) == (float(ALIGNMENT[ax]["fight"]) > 0) and v for ax, v in got.items()), got
 
 
 def test_lb6e_the_zero_arm_writes_no_scar_and_reports_none():

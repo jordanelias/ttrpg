@@ -1037,22 +1037,22 @@ def p31():
     ask = lambda: 1
 
     # The SAME person, the SAME question, the SAME option set -- one variable, the motive.
-    # `create_record` and `destroy_record` sit at opposite signs on `Precedent` in the alignment
+    # `create_record` and `destroy_record` sit at opposite signs on `precedent_substantive` in the alignment
     # table, so a conviction on that axis has somewhere to move the ranking TO. Rev 2 could not
     # test this: it scored an authored roster of three verbs the table does not carry.
     inner = make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}",
                          draw=draw_factory(w.world_seed, lambda: w.tick))
-    p.pursuits = {"Precedent": 0.9}  # [JUSTIFIED: the sign, not the magnitude, is what P31 observes -- any nonzero weight of opposite sign at the second line below would show the same property]
+    p.pursuits = {"stability": 0.9}  # [JUSTIFIED: the sign, not the magnitude, is what P31 observes -- any nonzero weight of opposite sign at the second line below would show the same property. `stability` is the `Precedent` conviction's successor pursuit (IN-08, `candidate_pursuit_cells.md` §4.1), projecting onto `precedent_substantive` where `create_record` and `destroy_record` sit at opposite signs]
     # `W17`: `choose` returns SCENES now, so the pick is the first interaction of
     # the first scene. The default policy fills scenes in score order, so that is
     # still the highest-scoring candidate.
     principled = inner(p, v, Sensation(0), ask)[0].acts[0].verb
-    p.pursuits = {"Precedent": -0.9}  # [JUSTIFIED: the sign flip is the test; see the line above]
+    p.pursuits = {"stability": -0.9}  # [JUSTIFIED: the sign flip is the test; see the line above]
     inverted = inner(p, v, Sensation(0), ask)[0].acts[0].verb
     assert principled != inverted, (
         f"flipping the sign of the only conviction changed nothing: both chose {principled!r}. "
         "`pursuits` is a dead carrier -- the exact defect #353 :739-744 names")
-    return (f"PASS BY CONSTRUCTION: {principled!r} at Precedent +0.9, {inverted!r} at -0.9. The "
+    return (f"PASS BY CONSTRUCTION: {principled!r} at stability +0.9, {inverted!r} at -0.9. The "
             "motive is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with NO "
             "branch in the resolver and nothing stored about the bias -- nobody, the holder and "
             "his superiors included, has a signature that reads it out. ⚠ THE MAGNITUDES ARE "
@@ -2596,12 +2596,13 @@ def p37():
     # and never goes through `make_chooser`; it is corrected so the corpus does not seed a
     # conviction nobody can hold.
     # [JUSTIFIED: 0.9 is a single strong conviction, the same magnitude this probe used before `U3` under the retired name `suspicion`; P37 branches on `> 0.5` so any value above the threshold shows the same property, and the NUMBER is not what it observes]
-    p.pursuits = {"Order": 0.9}
+    # IN-08: `Order` -> `stability`, its successor pursuit (`candidate_pursuit_cells.md` §4.1).
+    p.pursuits = {"stability": 0.9}
     chosen = []
     def choose(q, v, s, ask_budget):
         if q.id != p.id:
             return []
-        verb = "purge" if q.pursuits.get("Order", 0) > 0.5 else "tolerate"
+        verb = "purge" if q.pursuits.get("stability", 0) > 0.5 else "tolerate"
         chosen.append(verb)
         return [Act_(w, q, verb)]
     _run(w, choose)

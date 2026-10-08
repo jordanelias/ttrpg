@@ -24,34 +24,39 @@
     "count": 9,
     "pending_tenth": "Jordan ruled 2026-08-14 that the roster WILL BE 10 attributes. The registry ships 9 and the tenth is UNNAMED. This sentinel exists so a reader cannot mistake the current roster for a closed one; delete it in the commit that names the tenth."
   },
-  "conviction_roster": {
-    "source": "systems/characters/reference/conviction_taxonomy_v30.md \u00a72",
-    "count": 13,
+  "pursuit_roster": {
+    "source": "ED-IN-0261 (2026-09-20 ruling; the fifteen as read by its 2026-10-06 row)",
+    "count": 15,
     "names": [
-      "Faith",
-      "Authority",
-      "Order",
-      "Scholastic",
-      "Utility",
-      "Equity",
-      "Liberty",
-      "Precedent",
-      "Community",
-      "Identity",
-      "Warden",
-      "Virtue",
-      "Honor"
+      "virtue",
+      "honour",
+      "liberty",
+      "justice",
+      "wealth",
+      "reputation",
+      "scholastics",
+      "stability",
+      "individuality",
+      "community",
+      "doctrine",
+      "happiness",
+      "family",
+      "love",
+      "stewardship"
     ]
   },
   "axis_roster": {
-    "source": "systems/_architecture/reference/key_substrate_v30.md \u00a72.4 / conviction_axis_matrix_v30.md / PP-687",
-    "count": 4,
-    "scale": "[-1,+1] basis",
+    "source": "ED-IN-0261 (2026-09-20) -- seven bipolar axes, both poles named",
+    "count": 7,
+    "scale": "[-1,+1] bipolar; negative = the first-named pole, positive = the second",
     "names": [
-      "hierarchical",
-      "sacred",
-      "instrumental",
-      "traditional"
+      "hierarchical_equal",
+      "precedent_substantive",
+      "partisan_equitable",
+      "selfish_selfless",
+      "rigid_flexible",
+      "grandiose_humble",
+      "deontological_instrumental"
     ]
   },
   "settlement_stats": {

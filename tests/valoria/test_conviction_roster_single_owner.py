@@ -1,4 +1,8 @@
-"""The Conviction roster has ONE owner, and this fails if a second one appears.
+"""The pursuit roster (the old Conviction roster) has ONE owner, and this fails if a second one appears.
+
+RE-PINNED at IN-08's cells commit (B-G): the owner block is `pursuit_roster`, fifteen names, read as
+`engine.substrate.descriptors.PURSUITS` / `resolve_pursuit`. The guard's subject and its history are
+unchanged; the names below that say "Conviction" describe the defect it was built for.
 
 WHY THIS GUARD EARNS ITS EXISTENCE (CLAUDE.md §0.1 pt 5, the load-bearing predicate). The artifact
 it protects is game code, and the defect it caught was not hypothetical: three incompatible rosters
@@ -8,7 +12,7 @@ disagreement silently disabled ED-912 §6.1's Close-Knot-break Conviction Scar f
 modules existed. That is the signature §0.1 pt 5 describes: each roster was correct when written and
 stopped being correct because the other changed.
 
-So: one owner (`references/descriptor_registry.yaml:conviction_roster`), one exporter
+So: one owner (`references/descriptor_registry.yaml:pursuit_roster`), one exporter
 (`tools/export_descriptors.py`), one leaf reader (`engine.substrate.descriptors`), every consumer
 reads the leaf — and this fails on recurrence.
 
@@ -40,7 +44,7 @@ _NON_ENGINE_WITNESS = os.path.join('systems', 'characters', 'sim', 'conviction.p
 
 def _canonical():
     from engine.substrate import descriptors
-    return set(descriptors.CONVICTIONS)
+    return set(descriptors.PURSUITS)
 
 
 def _py_files():
@@ -56,7 +60,8 @@ def _py_files():
 
 def test_the_roster_comes_from_the_registry_not_a_literal():
     from engine.substrate import descriptors
-    assert len(descriptors.CONVICTIONS) == 13
+    # RE-PINNED 13 -> 15 at IN-08's cells commit (ED-IN-0261's fifteen pursuits).
+    assert len(descriptors.PURSUITS) == 15
     # Every consumer is the SAME object, not a copy that can drift. `systems/world/sim/npe.py` was the
     # second consumer until plan position `29d` deleted it; the season's own binding replaces it, so the
     # assertion observes the consumer the game actually runs. Both bindings are imports, so each fails
@@ -64,8 +69,8 @@ def test_the_roster_comes_from_the_registry_not_a_literal():
     # is a literal the AST test below does not count.
     from systems.characters.sim import conviction
     from engine.season.data import rosters
-    assert conviction.CONVICTIONS is descriptors.CONVICTIONS
-    assert rosters.PURSUITS is descriptors.CONVICTIONS
+    assert conviction.CONVICTIONS is descriptors.PURSUITS
+    assert rosters.PURSUITS is descriptors.PURSUITS
 
 
 def test_no_second_conviction_roster_in_code():
@@ -109,9 +114,9 @@ def test_no_second_conviction_roster_in_code():
     assert _NON_ENGINE_WITNESS in walked, (
         f'{_NON_ENGINE_WITNESS} was not walked — the derived roots dropped the tree it lives under')
     assert not offenders, (
-        'a second Conviction roster has been hardcoded. The roster is owned by '
-        'references/descriptor_registry.yaml:conviction_roster and read via '
-        'engine.substrate.descriptors.CONVICTIONS — read it, do not retype it:\n  '
+        'a second pursuit roster has been hardcoded. The roster is owned by '
+        'references/descriptor_registry.yaml:pursuit_roster and read via '
+        'engine.substrate.descriptors.PURSUITS — read it, do not retype it:\n  '
         + '\n  '.join(offenders)
     )
 
@@ -129,10 +134,15 @@ def test_every_non_canonical_name_raises_and_nothing_is_silently_migrated():
     assert not hasattr(descriptors, 'CONVICTION_ALIASES'), (
         'an alias map is back. A legacy Conviction tag has no single canonical target — see '
         'conviction_taxonomy_v30.md §6 and references/alias_registry.yaml.')
+    # RE-PINNED at IN-08's cells commit: the retired thirteen join the dead names (`Faith`/`Warden`
+    # renamed to `doctrine`/`stewardship`, RS-2/RS-4; the rest have no same-named pursuit), and
+    # nothing translates them -- the cast registry was migrated by hand, per character.
     for dead in ('Justice', 'Survival', 'Loyalty', 'Truth', 'Power',
-                 'Continuity', 'Reason', 'Autonomy'):
+                 'Continuity', 'Reason', 'Autonomy',
+                 'Faith', 'Warden', 'Honor', 'Authority', 'Order', 'Utility', 'Equity',
+                 'Precedent', 'Identity', 'Scholastic', 'faith', 'warden'):
         with pytest.raises(ValueError):
-            descriptors.resolve_conviction(dead)
+            descriptors.resolve_pursuit(dead)
     # A canonical name passes through unchanged — the function translates nothing.
-    for good in descriptors.CONVICTIONS:
-        assert descriptors.resolve_conviction(good) == good
+    for good in descriptors.PURSUITS:
+        assert descriptors.resolve_pursuit(good) == good

@@ -447,9 +447,9 @@ verbs:
     # `requires_typed:`, the band machinery below) is unchanged, because that machinery already IS
     # the attempt-verb semantics `ED-IN-0261` ruled for `fight` (opponent is `subject`, needs a
     # typed precondition). Jordan, 2026-09-27, verbatim: "a character can only attempt to kill or
-    # wound, never choose the outcome directly" -- read as a rename of THIS row, not as the SPLIT
-    # (`kill`/`wound`/`challenge`->`accept`), which still rides the ALIGNMENT re-cell commit (H6 +
-    # H8) and is NOT built here. Declared content-hash move, per `governance_spine.yaml:7`'s own
+    # wound, never choose the outcome directly" -- read as a rename of THIS row, not as the SPLIT.
+    # The split LANDED with the alignment re-cell (IN-08's cells commit) as `challenge` -> `accept`
+    # only, the two rows after this one: `kill` and `wound` are not verbs (RS-5, ED-IN-0288). Declared content-hash move, per `governance_spine.yaml:7`'s own
     # convention: `Act.verb` carries the row's key into `World.content_hash()`, so any world whose
     # log includes this verb digests differently under the new name -- accepted rather than hidden,
     # and no test in this tree pins a literal hash value (checked, not assumed: `git grep
@@ -467,7 +467,7 @@ verbs:
       of:        subject
       kind:      Person
     contests: "the body"
-    requires_typed_note: "⚠⚠ RULED BY JORDAN 2026-09-20: *\"admit kill and wound as resolvable verbs\"* (`ED-IN-0261`, amended). This cell is what carries that ruling, and the ruling it REVERSES is in the same row: `ED-IN-0261` as first written refused `H-80`'s item on the ground that the row is not a verb. THE ROW WAS UNTYPED (`requires: —`) AND THAT IS THE WHOLE OF WHY IT WAS UNCHOOSABLE — `driver.py`'s contest gate asks `row.requires_typed is not None` because `operands_for` returns `{}` for an untyped row, so a computed contested act would have reached the seam with ONE claimant and `combat_seam` would have returned `PARTY-GAP`. Typing it binds `subject`, which IS the second claimant, and the gate's own recorded reason for the exclusion therefore no longer holds. ⚠ THE CLAUSE IS NOT A STAND-IN AND IS THE NARROWEST ONE THAT DOES THE JOB: you cannot fight someone who is not there, `Person.exists` is the field this row's `Felled` band writes, and `exists:Person` is answered by the reader today (`requires.py:191`). A WIDER precondition — a hostility test, a co-location test, an eligibility-to-fight test — would be an invention, and `G4` weighs under-refusing and inventing equally. What this cell must NOT be read as saying is that a killing needs no more justification than a living target; it says the FOLD can form and carry the act, and everything about whether the person WANTS to is `score` and the deontological gate, neither of which exists yet. ⚠ THE SLASHED NAME SURVIVES THIS COMMIT AND IS SEPARATELY RULED WRONG (*\"kill / wound isn't supposed to be a verb by itself\"*). Splitting it into `kill` and `wound` needs a row of alignment cells each, and `ALIGNMENT` is being re-celled whole over the seven `pursuit_axes` — so the split rides that commit, where the cells are authored once, rather than inventing two rows of four old-basis cells that are about to be deleted."
+    requires_typed_note: "⚠⚠ RULED BY JORDAN 2026-09-20: *\"admit kill and wound as resolvable verbs\"* (`ED-IN-0261`, amended). This cell is what carries that ruling, and the ruling it REVERSES is in the same row: `ED-IN-0261` as first written refused `H-80`'s item on the ground that the row is not a verb. THE ROW WAS UNTYPED (`requires: —`) AND THAT IS THE WHOLE OF WHY IT WAS UNCHOOSABLE — `driver.py`'s contest gate asks `row.requires_typed is not None` because `operands_for` returns `{}` for an untyped row, so a computed contested act would have reached the seam with ONE claimant and `combat_seam` would have returned `PARTY-GAP`. Typing it binds `subject`, which IS the second claimant, and the gate's own recorded reason for the exclusion therefore no longer holds. ⚠ THE CLAUSE IS NOT A STAND-IN AND IS THE NARROWEST ONE THAT DOES THE JOB: you cannot fight someone who is not there, `Person.exists` is the field this row's `Felled` band writes, and `exists:Person` is answered by the reader today (`requires.py:191`). A WIDER precondition — a hostility test, a co-location test, an eligibility-to-fight test — would be an invention, and `G4` weighs under-refusing and inventing equally. What this cell must NOT be read as saying is that a killing needs no more justification than a living target; it says the FOLD can form and carry the act, and everything about whether the person WANTS to is `score` and the deontological gate, neither of which exists yet. ⚠ THE SLASHED NAME SURVIVES THIS COMMIT AND IS SEPARATELY RULED WRONG (*\"kill / wound isn't supposed to be a verb by itself\"*). Splitting it into `kill` and `wound` needed a row of alignment cells each, and `ALIGNMENT` was re-celled whole over the seven `pursuit_axes` — so the split rode that commit (IN-08), where it landed as `challenge` -> `accept` alone: `kill` and `wound` are not verbs (RS-5, ED-IN-0288)."
     requires_note: "⚠ `contests:` IS A REAL FIELD NOW, NOT A NOTE. ARCHITECTURE_V2.md:394 declares the column -- `contests: <prize> | none`, *if set, routes to the seam at RESOLVE (§39)* -- and :434 sets it on this row. The transcription put it here, where nothing reads it, so the fold executed a kill as a DIRECT WRITE. Jordan, 2026-09-02: *that would trigger the personal combat scene. you can't just kill or wound.* The design already said so."
     # ⚠ DEGREE-KEYED 2026-09-03 (#358 rev.2 §C.4 / F6, loader invariant 12). The flat list below
     # was UNCONDITIONAL AFTER THE SEAM RESOLVED, so LOSING the fight killed the loser's target
@@ -554,6 +554,64 @@ verbs:
     emits_on_refusal: ["kill.refused"]
     grade:       "ruled"
     source:      "ARCHITECTURE_V2.md §E3, transcribed; writes re-keyed by #358 rev.2 §C.4"
+  # ⚠ THE DUEL PAIR, `challenge` -> `accept` (IN-08's cells commit, B-G; ED-IN-0261's verb split as
+  # narrowed by its 2026-10-06 row). `kill` and `wound` are NOT verbs -- they are outputs of a
+  # `fight` or a duel having been called (Jordan 2026-09-27, RS-5; ED-IN-0288) -- so the split adds
+  # exactly these two rows beside `fight`. The duel composing as `challenge` then `accept` rests on
+  # Jordan's short reply "3 accept" (2026-09-20) [medium; Jordan to correct; revert: the duel
+  # composes as #453 K-23 has it, a `petition` answered by `fight`, and these two rows go]. `duel`
+  # is not a verb either: it is the name of what resolves, through the same seam as `fight`.
+  # Each row is celled on the seven axes in `rosters.yaml: tables.alignment`.
+  - verb:        "challenge"
+    stratum:     "social"
+    eligibility: ["own"]
+    beneficiary: "actor"
+    beneficiary_note: "`fight`'s column and reason (`candidate_pursuit_cells.md` §3.4: *`challenge`: `actor`*): the challenger stands to gain by the contest he calls for, and the challenged is the one put to the question."
+    requires:    "the challenged is a living person other than the challenger"
+    requires_typed:
+      form:      existence
+      of:        subject
+      kind:      Person
+    requires_typed_note: "`fight`'s cell, for `fight`'s reason: you cannot call out someone who is not there, and `exists:Person` is answered by the reader today. Nothing narrower is invented (`G4`). The SELF-challenge is the `counterparty:` column's, below."
+    counterparty: subject
+    counterparty_note: "THE CHALLENGED IS THE SECOND SIDE, AND A MAN DOES NOT CHALLENGE HIMSELF. `determine`'s and `oblige`'s shape (`counterparty: subject`): `decision/options.py::opening_set` forms no Candidate whose counterparty is the person, and the fold's `counterparty` clause (`loop/resolve.py::_admits`) refuses a hand-built one."
+    writes:      []
+    writes_note: "WRITES NOTHING, `speak`'s shape one party narrower: the challenge is an utterance made before witnesses, and what it changes is what they -- the challenged first -- come to know, by the witness channels (`challenge.issued` is deposited like any kind). No state carries a standing challenge: the one that would (a held challenge `accept` reads in its precondition) has no carrier in the tree, and inventing a `Tenure` kind or `Record` kind for it is a design call this commit does not make. So the link from a challenge to its acceptance is the CHOOSER's -- the challenged hears of it and may answer -- and not the fold's [ASSUMPTION; the residue is named in `accept`'s `requires_note`]."
+    emits:       ["challenge.issued"]
+    emits_on_refusal: ["challenge.refused"]
+    refusal_note: "FLAT: one kind for every failable clause. Refusal conditions: the challenged is no living person (the cell), or -- for a hand-built act only, a computed one never being formed -- he is the challenger (the fold's `counterparty` clause)."
+    grade:       "assumption"
+    grade_note: "the VERB is ruled (ED-IN-0261: *fight, challenge, accept are* verbs); its row -- the cell, writing nothing, the kinds -- is IN-08's reading, graded as `found` and `survey` are."
+    source:      "ED-IN-0261 (2026-09-20; as narrowed 2026-10-06); `proposals/2026-09-20-pursuit-basis-worksheet.yaml` §4 (*`challenge` / `accept` -- the duel pair*)"
+  - verb:        "accept"
+    stratum:     "contested_physical"
+    eligibility: ["own"]
+    beneficiary: "actor"
+    beneficiary_note: "`fight`'s column and reason, `candidate_pursuit_cells.md` §3.4 (*`accept`: `actor`*). As on `fight`, the writes land on the SUBJECT -- here the challenger -- and a harm is not a benefit to the person harmed."
+    requires:    "the challenger is a living person"
+    requires_typed:
+      form:      existence
+      of:        subject
+      kind:      Person
+    contests: "the body"
+    requires_typed_note: "`fight`'s cell exactly, and for `fight`'s reason: typing it binds `subject`, the second claimant the seam needs, so a computed `accept` reaches `combat_seam` with two parties rather than returning `PARTY-GAP`. `contests: \"the body\"` is ED-IN-0261's own words for this row."
+    requires_note: "⚠ WHAT THIS CELL CANNOT YET ASK: *the subject has challenged me*. `challenge` writes nothing (its `writes_note`), so no state holds a standing challenge for the fold to read, and the cell refuses only a dead or absent challenger. An `accept` formed with no challenge behind it resolves as a duel all the same -- the fold cannot tell the difference. Recorded as a residue rather than closed by inventing a carrier [ASSUMPTION; Jordan to correct]."
+    # The SAME degree-keyed writes and emits as `fight`, read off the SAME scene (`combat_seam` ->
+    # `wound_state[THE ACT'S SUBJECT]`), by the SAME effect (`loop/effects_combat.py::_eff_kill`,
+    # registered for both rows). A duel is a fight both sides agreed to; what the scene can
+    # distinguish about its outcome is exactly what it distinguishes for `fight`.
+    writes:
+      Felled:       ["Person.body", "Person.exists", "Tenure.until", "Person.scar"]
+      Wounded:      ["Person.body", "Person.scar"]
+      Untouched:    []
+    emits:
+      Felled:      ["person.died"]
+      Wounded:     ["body.changed"]
+      Untouched:   ["contest.undecided"]
+    emits_on_refusal: ["accept.refused"]
+    grade:       "assumption"
+    grade_note: "the VERB and its `contests:` are ruled (ED-IN-0261); the composition as challenge-then-accept rests on a short reply, [medium]; the rest is `fight`'s row, carried."
+    source:      "ED-IN-0261 (2026-09-20; as narrowed 2026-10-06); `fight`'s row for the writes, emits and cell"
   - verb:        "levy"
     scale:   "settlement"
     scale_note: "a levy moves a Rung's stores -- the rung IS the subject"
@@ -643,7 +701,7 @@ verbs:
       write: ["migrate.refused"]
     refusal_note: "KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half, plan position `19`'s shape). `path` is the journey failing, and it emits `move`'s own `travel.blocked` because it IS the same fact -- *there is no road from here to there* -- so a witness of either verb learns the same thing. `write` is the destination refusing the settler: the ladder will not seat him there, he already lives there, or -- RR-2's throttle -- it is AT CAPACITY, a newcomer whose weight would take `world_q.population` past `world_q.capacity`. ELIGIBILITY is `own`, which cannot decline, so it keys nothing."
     grade:       "assumption"
-    grade_note:  "the VERB is RR-2's (ruled: *a verb persons take*); its row -- the cell, the writes, the kinds, the throttle's place -- is plan position `19c`'s, argued at `_eff_migrate`, graded as `found`'s and `build`'s are. No `alignment` cell: `default_cell` 0.0 is the declared answer for an unlisted pair, and a settler's motive has no argued axis weight yet."
+    grade_note:  "the VERB is RR-2's (ruled: *a verb persons take*); its row -- the cell, the writes, the kinds, the throttle's place -- is plan position `19c`'s, argued at `_eff_migrate`, graded as `found`'s and `build`'s are. Its `alignment` cells arrived with IN-08's cells commit, graded `reasoned` (`rosters.yaml: tables.alignment`)."
     source:      "plan `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` 19c (MIGRATE, carrying 24d-ii); `proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml` RR-2; `01_THE_BUILD_ORDER.md` S9"
   - verb:        "move"
     stratum:     "movement"

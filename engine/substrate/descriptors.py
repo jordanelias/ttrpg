@@ -62,13 +62,13 @@ UNIMPLEMENTED = _DATA['unimplemented']
 
 
 def block(name: str) -> dict:
-    """One registry block by name, e.g. `block('conviction_roster')`. THE PUBLIC WAY IN.
+    """One registry block by name, e.g. `block('pursuit_roster')`. THE PUBLIC WAY IN.
 
     ⚠ `engine/season/data/rosters.py`'s `from_descriptor:` pointer reached `_DATA` directly, via
     `getattr(_desc, "_DATA", {})`. Two things were wrong with that. `_DATA` is underscore-private
     and carries no compatibility contract, so renaming or wrapping it is a legal refactor here --
     and the `{}` default turned that refactor into a LIE: every pointed-at roster would raise
-    *"points at descriptor block 'conviction_roster', which is absent or has no `names`"*, sending
+    *"points at descriptor block 'pursuit_roster', which is absent or has no `names`"*, sending
     the next session to edit `references/descriptor_registry.yaml`, which would be perfectly
     correct and completely unrelated to the actual cause.
 
@@ -81,8 +81,11 @@ def block(name: str) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# CONVICTIONS — added 2026-08-24. THIS IS THE ONLY CONVICTION ROSTER IN THE ENGINE.
+# PURSUITS — added 2026-08-24. THIS IS THE ONLY PURSUIT ROSTER IN THE ENGINE.
 # ---------------------------------------------------------------------------
+# ⚠ THE FIFTEEN (IN-08's cells commit, ED-IN-0261): the roster this leaf reads is
+# `references/descriptor_registry.yaml: pursuit_roster`. What follows is the history of why there is
+# one roster at all, and it holds for the fifteen exactly as it held for the thirteen it replaced.
 # Before this, three incompatible rosters shipped: nine names in
 # `systems/characters/sim/conviction.py`, eight in `systems/world/sim/npe.py` (overlapping the
 # first in three), and thirteen registered `by_reference` in `references/descriptor_registry.yaml`
@@ -101,7 +104,7 @@ def block(name: str) -> dict:
 # Autonomy, Continuity) and five of npe's eight (Justice, Survival, Loyalty, Truth, Power) are not
 # canonical names. `CONVICTION_ALIASES` below carries the two that have an unambiguous canonical
 # twin; the rest are gone, and a caller passing one now raises instead of silently scoring zero.
-CONVICTIONS = tuple(_DATA['conviction_roster']['names'])
+PURSUITS = tuple(_DATA['pursuit_roster']['names'])
 
 # ---------------------------------------------------------------------------
 # ETHICAL AXES — centralized 2026-09-14 (ED-IN-0230). THE ONLY AXIS ROSTER IN THE ENGINE.
@@ -115,8 +118,9 @@ CONVICTIONS = tuple(_DATA['conviction_roster']['names'])
 # engine scoring on four, and one in the roster alone left `keys.py` invariant 6 rejecting every
 # Key that named it.
 #
-# This is the CONVICTIONS move above, applied one level up, and it is the tree's own precedent for
-# this exact object rather than a new decision.
+# This is the PURSUITS move above, applied one level up, and it is the tree's own precedent for
+# this exact object rather than a new decision. Seven bipolar names since IN-08 (ED-IN-0261);
+# `AXIS_SCALE` carries the sign convention as data (negative = the first-named pole).
 AXES = tuple(_DATA['axis_roster']['names'])
 AXIS_SCALE = _DATA['axis_roster'].get('scale', '')
 
@@ -137,21 +141,21 @@ AXIS_SCALE = _DATA['axis_roster'].get('scale', '')
 # surface at all. So the alias map was inventing exactly the canon the comment beside it claimed to
 # refuse for Survival and Power, and it is gone: every non-canonical name now raises, and the error
 # names the migration rather than guessing its outcome.
-def resolve_conviction(name):
-    """`name` if it is a canonical Conviction, else raise ValueError. Nothing is translated.
+def resolve_pursuit(name):
+    """`name` if it is a canonical pursuit, else raise ValueError. Nothing is translated.
 
     THE RAISE IS THE POINT. The bug this module closes was a *silent* one — an unknown name scored
     magnitude=0 and no caller could tell the difference between "this Scar was capped" and "this
-    Conviction does not exist". A wrong name is a defect in the caller, so it is loud here.
+    pursuit does not exist". A wrong name is a defect in the caller, so it is loud here.
     """
-    if name in CONVICTIONS:
+    if name in PURSUITS:
         return name
     raise ValueError(
-        f'unknown Conviction {name!r}. The roster is owned by '
-        'references/descriptor_registry.yaml:conviction_roster and read here; the canonical '
-        f'{len(CONVICTIONS)} are: ' + ', '.join(CONVICTIONS) + '. If this is a LEGACY tag '
-        '(Reason, Continuity and the retired npe names), the corpus does not map it to a single '
-        'canonical Conviction — conviction_taxonomy_v30.md §6 and references/alias_registry.yaml '
-        'both route it to PER-CHARACTER migration under PP-685. Do the migration, or fix the '
-        'caller; do not add a local alias, which decides that migration by accident.'
+        f'unknown pursuit {name!r}. The roster is owned by '
+        'references/descriptor_registry.yaml:pursuit_roster and read here; the canonical '
+        f'{len(PURSUITS)} are: ' + ', '.join(PURSUITS) + '. If this is a name from the retired '
+        'thirteen-Conviction roster or an older LEGACY tag, it has no automatic successor: the '
+        'per-character migration is authored in references/npc_registry.yaml and the role '
+        'templates in engine/season/rosters.yaml. Do the migration, or fix the caller; do not add '
+        'a local alias, which decides that migration by accident.'
     )

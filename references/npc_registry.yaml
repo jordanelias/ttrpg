@@ -3,7 +3,14 @@
 # Every named NPC, faction leader, royal family member, or arc character gets an entry.
 #
 # ENFORCEMENT: No character name may appear in design docs without an entry here.
-# Conviction vectors use 13-Conviction taxonomy (PP-684). Legacy labels DEPRECATED and removed.
+# Each `convictions:` entry's `conviction:` value is a PURSUIT from
+# `references/descriptor_registry.yaml: pursuit_roster` (fifteen; ED-IN-0261), read through
+# `engine/season/data/cast.py::pursuits_of`, which RAISES on any other name. The values were
+# migrated in IN-08's cells commit by `candidate_pursuit_cells.md` §4.1's rule and §4.3's table
+# (folded into the build, Jordan 2026-10-06, RS-1); weights are carried, never renormalised, and
+# two names that collapse into one pursuit add. Three weights had no successor and no text to read
+# one from and are DROPPED, not homed: NPC-033 Utility .30, NPC-086 Utility .20 (§4.3's own drops)
+# and NPC-089 Identity .50 (§4.3 left it to Jordan; dropped on the same precedent) [ASSUMPTION].
 #
 # Stats are deferred per npc_roster_v30 (most rows carry `stats: null`).
 # History and discussion: references/npc_registry_history.md
@@ -36,8 +43,8 @@ characters:
       social: 3–4
     convictions:
       primary:
-        - {conviction: Warden, weight: 0.40}
-        - {conviction: Precedent, weight: 0.20}
+        - {conviction: stewardship, weight: 0.40}
+        - {conviction: community, weight: 0.20}
       cultural_label: varfell_alpine  # [ASSUMPTION: placeholder per PP-685 §3 — Southernmost template not yet defined]
       self_other_initial: -0.30
     goals: ["Maintain substrate stability", "Protect Southernmost practitioners", "Continue the work regardless of interference"]
@@ -60,8 +67,8 @@ characters:
     stats: null  # [GAP: deferred per npc_roster_v30 §Stat Blocks]
     convictions:
       primary:
-        - {conviction: Equity, weight: 0.50}
-        - {conviction: Warden, weight: 0.30}
+        - {conviction: justice, weight: 0.50}
+        - {conviction: stewardship, weight: 0.30}
       cultural_label: restoration_reformist
       self_other_initial: -0.10
     goals: ["Serve Varfell intelligence", "Privately sympathize with Restoration Movement"]
@@ -83,8 +90,8 @@ characters:
     stats: null  # [GAP: deferred]
     convictions:
       primary:
-        - {conviction: Equity, weight: 0.40}
-        - {conviction: Warden, weight: 0.25}
+        - {conviction: justice, weight: 0.40}
+        - {conviction: stewardship, weight: 0.25}
       cultural_label: varfell_alpine
       self_other_initial: -0.30
     goals: ["Cultural restoration", "Equity and social contract"]
@@ -106,8 +113,8 @@ characters:
     stats: null  # [GAP: deferred]
     convictions:
       primary:
-        - {conviction: Faith, weight: 0.60}
-        - {conviction: Authority, weight: 0.20}
+        - {conviction: doctrine, weight: 0.60}
+        - {conviction: stability, weight: 0.20}
       cultural_label: ecclesiastical
       self_other_initial: 0.00
     goals: ["Investigate heresy", "Enforce Church orthodoxy"]
@@ -129,8 +136,8 @@ characters:
     stats: null  # [GAP: deferred]
     convictions:
       primary:
-        - {conviction: Utility, weight: 0.40}
-        - {conviction: Honor, weight: 0.20}
+        - {conviction: stewardship, weight: 0.40}
+        - {conviction: honour, weight: 0.20}
       cultural_label: lowenritter_military
       self_other_initial: 0.00
     goals: ["Mission success", "Minimize Thread collateral"]
@@ -151,8 +158,8 @@ characters:
     stats: null  # [GAP: deferred. npc_roster_v30 notes "high personal combat stats (career soldier)"]
     convictions:
       primary:
-        - {conviction: Honor, weight: 0.35}
-        - {conviction: Authority, weight: 0.25}
+        - {conviction: honour, weight: 0.35}
+        - {conviction: stability, weight: 0.25}
       cultural_label: lowenritter_military
       self_other_initial: -0.10
     goals: ["Counter Altonian threat", "Strengthen peninsular defenses"]
@@ -174,8 +181,8 @@ characters:
     stats: null  # [GAP: deferred]
     convictions:
       primary:
-        - {conviction: Utility, weight: 0.50}
-        - {conviction: Community, weight: 0.10}
+        - {conviction: wealth, weight: 0.50}
+        - {conviction: community, weight: 0.10}
       cultural_label: hafenmark_procedural
       self_other_initial: +0.10
     goals: ["Maximize Guilds Wealth", "Protect artisan livelihoods"]
@@ -196,8 +203,7 @@ characters:
     stats: null  # [GAP: deferred]
     convictions:
       primary:
-        - {conviction: Order, weight: 0.40}
-        - {conviction: Precedent, weight: 0.20}
+        - {conviction: stability, weight: 0.60}
       cultural_label: valorian_court
       self_other_initial: 0.00
     goals: ["Maintain procedural correctness", "Block radical action through procedure"]
@@ -218,8 +224,8 @@ characters:
     stats: null  # [GAP: deferred]
     convictions:
       primary:
-        - {conviction: Authority, weight: 0.30}
-        - {conviction: Utility, weight: 0.30}
+        - {conviction: stability, weight: 0.30}
+        - {conviction: reputation, weight: 0.30}
       cultural_label: valorian_court
       self_other_initial: -0.10
     goals: ["Efficient Crown administration", "Maintain personal indispensability"]
@@ -240,8 +246,8 @@ characters:
     stats: null  # [GAP: deferred]
     convictions:
       primary:
-        - {conviction: Utility, weight: 0.30}
-        - {conviction: Honor, weight: 0.30}
+        - {conviction: wealth, weight: 0.30}
+        - {conviction: honour, weight: 0.30}
       cultural_label: hafenmark_procedural  # [ASSUMPTION: placeholder — niflhel template not yet defined]
       self_other_initial: +0.10
     goals: ["Maintain Virke trade network", "Protect personal trust relationships"]
@@ -263,8 +269,8 @@ characters:
     stats: null  # [GAP: deferred]
     convictions:
       primary:
-        - {conviction: Virtue, weight: 0.50}
-        - {conviction: Authority, weight: 0.20}
+        - {conviction: virtue, weight: 0.50}
+        - {conviction: stability, weight: 0.20}
       cultural_label: altonian  # [ASSUMPTION: placeholder — altonian template not yet defined in PP-684 §5]
       self_other_initial: -0.20
     goals: ["Protect Elske's safety", "Maintain province stability", "Sandbag imperial directives"]
@@ -285,8 +291,8 @@ characters:
     stats: null  # [GAP: deferred]
     convictions:
       primary:
-        - {conviction: Utility, weight: 0.30}
-        - {conviction: Order, weight: 0.30}
+        - {conviction: wealth, weight: 0.30}
+        - {conviction: stability, weight: 0.30}
       cultural_label: hafenmark_procedural  # [ASSUMPTION: placeholder — Schoenland template not defined]
       self_other_initial: 0.00
     goals: ["Maintain stable trade", "Avoid escalation", "Return home eventually"]
@@ -307,8 +313,8 @@ characters:
     stats: null  # [GAP: deferred]
     convictions:
       primary:
-        - {conviction: Order, weight: 0.50}
-        - {conviction: Liberty, weight: 0.30}
+        - {conviction: stability, weight: 0.50}
+        - {conviction: liberty, weight: 0.30}
       cultural_label: ecclesiastical
       self_other_initial: +0.10
     goals: ["Maximize Church Wealth throughput", "Aggressive tithe collection"]
@@ -334,8 +340,8 @@ characters:
     stats: null  # [GAP: deferred]
     convictions:
       primary:
-        - {conviction: Virtue, weight: 0.45}
-        - {conviction: Authority, weight: 0.30}
+        - {conviction: virtue, weight: 0.45}
+        - {conviction: stability, weight: 0.30}
       cultural_label: valorian_court
       self_other_initial: -0.10
     goals: null  # [GAP]
@@ -358,8 +364,8 @@ characters:
     stats: null  # [GAP: deferred]
     convictions:
       primary:
-        - {conviction: Faith, weight: 0.50}
-        - {conviction: Authority, weight: 0.20}
+        - {conviction: doctrine, weight: 0.50}
+        - {conviction: stability, weight: 0.20}
       cultural_label: ecclesiastical
       self_other_initial: 0.00
     goals: null  # [GAP]
@@ -426,8 +432,8 @@ characters:
     stats: null  # [GAP]
     convictions:
       primary:
-        - {conviction: Equity, weight: 0.45}
-        - {conviction: Liberty, weight: 0.25}
+        - {conviction: justice, weight: 0.45}
+        - {conviction: liberty, weight: 0.25}
       cultural_label: valorian_court
       self_other_initial: -0.20
     goals: ["Einhir revival through Crown authority", "Caste dismantlement through royal decree"]
@@ -449,8 +455,7 @@ characters:
     stats: null  # [GAP]
     convictions:
       primary:
-        - {conviction: Liberty, weight: 0.30}
-        - {conviction: Utility, weight: 0.30}
+        - {conviction: liberty, weight: 0.30}
       cultural_label: valorian_court
       self_other_initial: 0.00
     goals: null  # [GAP]
@@ -472,8 +477,8 @@ characters:
     stats: null  # [GAP]
     convictions:
       primary:
-        - {conviction: Faith, weight: 0.60}
-        - {conviction: Authority, weight: 0.20}
+        - {conviction: doctrine, weight: 0.60}
+        - {conviction: stability, weight: 0.20}
       cultural_label: ecclesiastical
       self_other_initial: 0.00
     goals: null  # [GAP]
@@ -494,8 +499,7 @@ characters:
     stats: null  # [GAP]
     convictions:
       primary:
-        - {conviction: Order, weight: 0.35}
-        - {conviction: Authority, weight: 0.25}
+        - {conviction: stability, weight: 0.60}
       cultural_label: lowenritter_military
       self_other_initial: -0.10
     goals: null  # [GAP]
@@ -516,8 +520,7 @@ characters:
     stats: null  # [GAP]
     convictions:
       primary:
-        - {conviction: Order, weight: 0.35}
-        - {conviction: Authority, weight: 0.25}
+        - {conviction: stability, weight: 0.60}
       cultural_label: valorian_court
       self_other_initial: 0.00
     goals: null  # [GAP]
@@ -538,8 +541,7 @@ characters:
     stats: null  # [GAP]
     convictions:
       primary:
-        - {conviction: Precedent, weight: 0.35}
-        - {conviction: Authority, weight: 0.25}
+        - {conviction: stability, weight: 0.60}
       cultural_label: valorian_court
       self_other_initial: 0.00
     goals: null  # [GAP]
@@ -567,8 +569,8 @@ characters:
     stats: null  # [GAP]
     convictions:
       primary:
-        - {conviction: Faith, weight: 0.60}
-        - {conviction: Authority, weight: 0.20}
+        - {conviction: doctrine, weight: 0.60}
+        - {conviction: stability, weight: 0.20}
       cultural_label: ecclesiastical
       self_other_initial: 0.00
     goals: null  # [GAP]
@@ -590,8 +592,8 @@ characters:
     stats: null  # [GAP]
     convictions:
       primary:
-        - {conviction: Scholastic, weight: 0.35}
-        - {conviction: Faith, weight: 0.25}
+        - {conviction: scholastics, weight: 0.35}
+        - {conviction: doctrine, weight: 0.25}
       cultural_label: ecclesiastical
       self_other_initial: -0.10
     goals: null  # [GAP]
@@ -613,8 +615,8 @@ characters:
     stats: null  # [GAP]
     convictions:
       primary:
-        - {conviction: Faith, weight: 0.50}
-        - {conviction: Order, weight: 0.30}
+        - {conviction: doctrine, weight: 0.50}
+        - {conviction: stability, weight: 0.30}
       cultural_label: ecclesiastical
       self_other_initial: 0.00
     goals: null  # [GAP]
@@ -659,8 +661,8 @@ characters:
     stats: null  # [GAP]
     convictions:
       primary:
-        - {conviction: Precedent, weight: 0.50}
-        - {conviction: Authority, weight: 0.30}
+        - {conviction: justice, weight: 0.30}
+        - {conviction: stability, weight: 0.50}
       cultural_label: hafenmark_procedural
       self_other_initial: -0.30
     goals: ["Sovereign Authority Doctrine", "Constitutional framework supersedes Church jurisdiction", "Hafenmark parliamentary sovereignty"]
@@ -682,8 +684,8 @@ characters:
     stats: null  # [GAP]
     convictions:
       primary:
-        - {conviction: Equity, weight: 0.35}
-        - {conviction: Utility, weight: 0.30}
+        - {conviction: justice, weight: 0.35}
+        - {conviction: individuality, weight: 0.30}
       cultural_label: lowenritter_military
       self_other_initial: -0.40
     goals: ["Einhir cultural revival at any cost", "Varfell military expansion", "Dismantle post-war caste order", "Intelligence-first approach to RM"]
@@ -705,8 +707,8 @@ characters:
     cultural_label: lowenritter_military
     convictions:
       primary:
-        - {conviction: Order, weight: 0.60}
-        - {conviction: Liberty, weight: 0.20}
+        - {conviction: stability, weight: 0.60}
+        - {conviction: liberty, weight: 0.20}
     arc_trajectory: "Drives Autonomy track (Loyal→Restless→Autonomous→Split). Brandt succession if removed. Konrad von Jungingen archetype — if Autonomy track reaches Split, the Tannenberg parallel completes."
     source: behavior_v30 §2.5
 
@@ -721,7 +723,8 @@ characters:
     cultural_label: hafenmark_procedural
     convictions:
       primary:
-        - {conviction: Precedent, weight: 0.70}
+        - {conviction: stability, weight: 0.40}
+        - {conviction: scholastics, weight: 0.30}
     source: behavior_v30 §2.16
 
   - id: NPC-072
@@ -735,7 +738,7 @@ characters:
     cultural_label: hafenmark_procedural
     convictions:
       primary:
-        - {conviction: Order, weight: 0.70}
+        - {conviction: stability, weight: 0.70}
     source: behavior_v30 §2.16
 
   - id: NPC-073
@@ -749,7 +752,7 @@ characters:
     cultural_label: einhir_traditional
     convictions:
       primary:
-        - {conviction: Warden, weight: 0.70}
+        - {conviction: stewardship, weight: 0.70}
     source: behavior_v30 §2.17
 
   - id: NPC-074
@@ -763,7 +766,7 @@ characters:
     cultural_label: einhir_traditional
     convictions:
       primary:
-        - {conviction: Community, weight: 0.70}
+        - {conviction: community, weight: 0.70}
     source: behavior_v30 §2.17
 
   - id: NPC-075
@@ -780,8 +783,8 @@ characters:
     cultural_label: einhir_traditional
     convictions:
       primary:
-        - {conviction: Warden, weight: 0.60}
-        - {conviction: Equity, weight: 0.20}
+        - {conviction: stewardship, weight: 0.60}
+        - {conviction: justice, weight: 0.20}
     goals: ["The work. Only the work."]
     arc_trajectory: "Arc C: death-Mending seals one Gap permanently (RS +5). 31 years at the Southernmost. Chernobyl liquidator archetype."
     source: arc_expansion_v30
@@ -798,8 +801,8 @@ characters:
     cultural_label: lowenritter_military
     convictions:
       primary:
-        - {conviction: Honor, weight: 0.60}
-        - {conviction: Utility, weight: 0.20}
+        - {conviction: honour, weight: 0.60}
+        - {conviction: stability, weight: 0.20}
     arc_trajectory: "Completes missions Sigrid aborts. TS 0 = can't see Thread collateral. Pre-germ-theory surgeon archetype — perceptual limitation, not malice. Cannot see Thread collateral (TS 0)."
     source: proposed
 
@@ -813,8 +816,8 @@ characters:
     resonant_style: Consequence
     convictions:
       primary:
-        - {conviction: Community, weight: 0.50}
-        - {conviction: Precedent, weight: 0.30}
+        - {conviction: community, weight: 0.50}
+        - {conviction: stability, weight: 0.30}
     arc_trajectory: "IC seat #4. Succession candidate if Baralta falls (popular mandate). Niklaus von Flüe archetype — Swiss mediator at the Diet of Stans (1481), commune voice against city power-politics."
     source: proposed
 
@@ -828,8 +831,8 @@ characters:
     resonant_style: Solidarity
     convictions:
       primary:
-        - {conviction: Identity, weight: 0.60}
-        - {conviction: Honor, weight: 0.20}
+        - {conviction: community, weight: 0.60}
+        - {conviction: honour, weight: 0.20}
     arc_trajectory: "Fights for Einhir, not Vaynard. Fracture line if Vaynard's ego diverges from cause. Einar Thambarskelfir archetype — conditional loyalty to the cause, not the person."
     source: proposed
 
@@ -844,8 +847,7 @@ characters:
     resonant_style: Evidence
     convictions:
       primary:
-        - {conviction: Authority, weight: 0.50}
-        - {conviction: Order, weight: 0.30}
+        - {conviction: stability, weight: 0.80}
     arc_trajectory: "Switchboard NPC at geographic chokepoint (5 adjacencies). Matilda of Tuscany archetype — governed critical territory at the intersection of Pope and Emperor."
     source: proposed
 
@@ -859,7 +861,7 @@ characters:
     resonant_style: Solidarity
     convictions:
       primary:
-        - {conviction: Community, weight: 0.70}
+        - {conviction: community, weight: 0.70}
     arc_trajectory: "Internal opposition to Feldhaus. Pushes Mandate over Wealth. Katharina Schütz Zell archetype — guild-class communal advocate."
     source: proposed
 
@@ -873,8 +875,8 @@ characters:
     resonant_style: Evidence
     convictions:
       primary:
-        - {conviction: Liberty, weight: 0.50}
-        - {conviction: Scholastic, weight: 0.30}
+        - {conviction: liberty, weight: 0.50}
+        - {conviction: scholastics, weight: 0.30}
     arc_trajectory: "Defends guild autonomy against Crown regulation. Bartolus de Saxoferrato archetype."
     source: proposed
 
@@ -888,8 +890,7 @@ characters:
     resonant_style: Evidence
     convictions:
       primary:
-        - {conviction: Scholastic, weight: 0.60}
-        - {conviction: Utility, weight: 0.20}
+        - {conviction: scholastics, weight: 0.60}
     arc_trajectory: "Has data proving southern sea route is physically blocked, not politically. Undermines Varfell conspiracy narrative. Fra Mauro archetype."
     source: proposed
 
@@ -903,8 +904,8 @@ characters:
     resonant_style: Solidarity
     convictions:
       primary:
-        - {conviction: Community, weight: 0.50}
-        - {conviction: Equity, weight: 0.30}
+        - {conviction: community, weight: 0.50}
+        - {conviction: justice, weight: 0.30}
     arc_trajectory: "Illegal Einhir education in southwest. Player discovery → protect/report/leverage. Josef Dobrovský archetype."
     source: proposed
 
@@ -918,8 +919,8 @@ characters:
     resonant_style: Evidence
     convictions:
       primary:
-        - {conviction: Liberty, weight: 0.60}
-        - {conviction: Equity, weight: 0.20}
+        - {conviction: liberty, weight: 0.60}
+        - {conviction: justice, weight: 0.20}
     arc_trajectory: "Propagation mechanism. Hand-copied manuscripts increase Church AP. Lollard copyist archetype — each copy takes weeks, possession is a heresy charge, no press to seize."
     source: proposed
 
@@ -933,8 +934,7 @@ characters:
     resonant_style: Consequence
     convictions:
       primary:
-        - {conviction: Identity, weight: 0.50}
-        - {conviction: Authority, weight: 0.30}
+        - {conviction: stability, weight: 0.30}
     arc_trajectory: "Decides whether Altonia probes, presses, or invades. Sincere imperialist. Basil Boioannes archetype."
     source: proposed
 
@@ -948,8 +948,7 @@ characters:
     resonant_style: Authority
     convictions:
       primary:
-        - {conviction: Precedent, weight: 0.50}
-        - {conviction: Order, weight: 0.30}
+        - {conviction: stability, weight: 0.80}
     arc_trajectory: "Enforces ancient trade treaties. Counterparty to Solberg. Book of the Eparch archetype."
     source: proposed
 

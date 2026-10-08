@@ -347,10 +347,11 @@ def apply_knot_loss(actor: str, knot_id: str, mode: str = 'break',
             # Late-import conviction
             try:
                 from systems.characters.sim.conviction import apply_conviction_scar
-                # Which Conviction a broken Close Knot Scars: HONOR — "pledged oath, honor-code,
-                # reputation as binding" (descriptor_registry.yaml:conviction_roster). A Close Knot
-                # IS a pledged bond, so breaking one is the honor-code case; no other canonical
-                # Conviction covers a broken personal pledge.
+                # Which pursuit a broken Close Knot Scars: `honour` — "pledged oath, honour-code,
+                # standing kept as binding" (descriptor_registry.yaml:pursuit_roster; the old
+                # thirteen's `Honor`, carried to the fifteen by IN-08). A Close Knot IS a pledged
+                # bond, so breaking one is the honour-code case; no other pursuit covers a broken
+                # personal pledge.
                 #
                 # ⚠ THIS CALL WAS DEAD UNTIL 2026-08-24. It passed conviction='Loyalty', a name from
                 # npe.py's roster that conviction.py had never heard of, and that module's unknown-
@@ -359,7 +360,7 @@ def apply_knot_loss(actor: str, knot_id: str, mode: str = 'break',
                 # asserts on that dict, so it stayed green over a no-op. The roster is centralized
                 # now and an unknown name RAISES, which is why this is a real name and not a flag.
                 apply_conviction_scar(actor, f"Close Knot break (id={knot_id})",
-                                      magnitude=1, conviction='Honor',
+                                      magnitude=1, conviction='honour',
                                       world=world)
             except (ImportError, AttributeError):
                 pass

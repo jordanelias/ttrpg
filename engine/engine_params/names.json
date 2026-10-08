@@ -3,7 +3,7 @@
   "schema_version": 1,
   "source": "references/names_index.yaml",
   "registry_version": 3,
-  "count": 117,
+  "count": 119,
   "canonical": {
     "agg.body": "Body",
     "agg.mind": "Mind",
@@ -45,6 +45,8 @@
     "ppt.evidence": "Evidence",
     "ppt.loyalty": "Loyalty",
     "season.of": "pursuits_of",
+    "season.pursuit.doctrine": "doctrine",
+    "season.pursuit.stewardship": "stewardship",
     "season.pursuit_axes": "pursuit_axes",
     "season.pursuit_projection": "pursuit_projection",
     "season.pursuits": "pursuits",

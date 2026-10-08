@@ -59,7 +59,7 @@ def test_a_legacy_tag_raises_and_names_its_replacement():
 
 
 def test_an_unknown_name_raises_rather_than_passing_through():
-    """The polarity `descriptors.resolve_conviction` uses, for its stated reason: a silent
+    """The polarity `descriptors.resolve_pursuit` uses, for its stated reason: a silent
     pass-through makes a wrong name indistinguishable from a right one at every later site."""
     with pytest.raises(ValueError) as e:
         N.canonical_for("NotAName")
