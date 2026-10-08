@@ -13,7 +13,7 @@ delta, restorative term) and `operations.apply_mending_feedback` (the term, thro
     three sites return the same cost, the same MS delta and the same elastic displacement returned
     to a pre-stressed mender. Falsifier: a planted change at ONE site alone (re-pricing collective's
     Mending off the unfallen scale, say) reddens it.
-  * THE CONTROL (`test_*_unchanged_outside_mending`): every op_type EXCEPT Mending, in both
+  * THE CONTROL (`test_collective_and_opposing_unchanged_outside_mending`, `test_attempt_mending_unchanged`): every op_type EXCEPT Mending, in both
     collective and opposing, and every `attempt_mending` output, equals the base commit dd91783a
     at the shipped `RESILIENCE_GAIN` (0). The captured values are inlined as one sha256 per
     (site, op_type) over a canonical JSON of every result field and every resulting Coherence
@@ -133,6 +133,12 @@ def digest(records):
 
 # sha256 of `digest(<site>_records(op_type))`, captured at dd91783a (WR-02, before WR-03) with
 # RESILIENCE_GAIN = 0. Mending in collective/opposing is NOT here: it is the declared mover.
+# 10 digests x 84 records (7 scales x 12 seeds) here, plus BASE_MENDING_DIGEST over 288 records = 1128
+# pinned. TO RE-DERIVE (the SHA will not survive a squash merge, so the recipe is the provenance): check
+# out systems/threadwork/sim/{operations,collective,opposing,coherence}.py from the last commit before
+# WR-03's owner existed (the parent of the commit that added `price_mending`), set RESILIENCE_GAIN = 0,
+# and run `digest(collective_records(op))` / `digest(opposing_records(op))` / `digest(mending_records())`
+# from this file.
 BASE_DIGESTS = {
     ("collective", "Weaving"): "12c54575a96ea3181cbbee8a028fa1b409a2661b33de49b9d3a629e22691fe6a",
     ("collective", "Pulling"): "0565bff6080038a7b630a023a584d6e3bf8ad177ca2c8d1bd7541c27d519efd2",
@@ -152,14 +158,13 @@ BASE_MENDING_DIGEST = "df54b6f5164d89f7a83b17299772622546f35598b3568dcf2da0cc144
 def test_collective_and_opposing_unchanged_outside_mending(site, op_type):
     assert ops.RESILIENCE_GAIN == 0, "the control is defined at the shipped gain"
     records = {"collective": collective_records, "opposing": opposing_records}[site](op_type)
-    assert len(records) == len(CONTROL_SCALES) * len(CONTROL_SEEDS)
     assert digest(records) == BASE_DIGESTS[(site, op_type)], (
         f"{site} {op_type} moved off dd91783a; first record now: {json.dumps(records[0])[:800]}")
 
 
 def test_control_grid_reaches_every_branch():
-    """Non-vacuity of the control: the grid reaches all four collective degrees and all nine §2.6
-    resolution-table rows, so the digests above cover every path a non-Mending result can take."""
+    """Non-vacuity of the control: the grid reaches all four collective degrees and all nine ordered (A, B)
+    pairs of the §2.6 table's three degrees, so the digests above cover every path a non-Mending result can take."""
     degrees = {r["operation_result"]["degree"] for r in collective_records("Weaving")
                if r["operation_result"] is not None}
     assert degrees == {"Overwhelming", "Success", "Partial", "Failure"}
@@ -182,8 +187,8 @@ def test_attempt_mending_unchanged():
 # ─── (a) THE PARITY TEST ─────────────────────────────────────────────────────────────────────────
 
 PARITY_SCALES = (*ops.MENDING_OB, "Object")          # every priced scale, and one it does not price
-PARITY_DEGREES = ("Success", "Partial", "Failure")
-_THREE_BAND = {"Success": "Meets", "Partial": "Partial", "Failure": "Failure"}
+PARITY_DEGREES = ("Overwhelming", "Success", "Partial", "Failure")
+_THREE_BAND = {"Overwhelming": "Meets", "Success": "Meets", "Partial": "Partial", "Failure": "Failure"}
 
 
 def _pre_stressed(w, actor_id="prac"):
@@ -194,16 +199,16 @@ def _elastic(w, actor_id="prac"):
     return coh.get_state(actor_id, world=w).elastic_displacement
 
 
-def _single(scale, degree, monkeypatch):
+def _single(scale, degree, monkeypatch, env=True):
     monkeypatch.setattr(ops, "_compute_degree", lambda net, ob: degree)
     w = _World()
     _pre_stressed(w)
     r = ops.attempt_mending(_Practitioner("prac"), {"scale": scale}, world=w,
-                            rng=random.Random(0), environment_in_equilibrium=True)
+                            rng=random.Random(0), environment_in_equilibrium=env)
     return (r.ob, r.coherence_delta, r.mending_stability_delta, r.coherence_restored, _elastic(w))
 
 
-def _collective(scale, degree, monkeypatch):
+def _collective(scale, degree, monkeypatch, env=True):
     # Force the Leap to take and the working's degree, through collective's own module names only.
     monkeypatch.setattr(col, "attempt_leap",
                         lambda a, t, world=None, rng=None: SimpleNamespace(degree="Success"))
@@ -213,7 +218,7 @@ def _collective(scale, degree, monkeypatch):
     _pre_stressed(w, "second")
     r = col.attempt_collective_operation([_Practitioner("prac", ts=60), _Practitioner("second")],
                                          "Mending", {"scale": scale}, world=w,
-                                         rng=random.Random(0), environment_in_equilibrium=True)
+                                         rng=random.Random(0), environment_in_equilibrium=env)
     op = r.operation_result
     assert op.degree == degree and not r.lattice_fractured
     # Every participant whose Leap took is priced alike, not only the Anchor.
@@ -222,13 +227,13 @@ def _collective(scale, degree, monkeypatch):
     return (op.ob, op.coherence_delta, op.mending_stability_delta, op.coherence_restored, _elastic(w))
 
 
-def _opposing(scale, degree, monkeypatch):
+def _opposing(scale, degree, monkeypatch, env=True):
     monkeypatch.setattr(opp, "_degree_label", lambda net, ob: _THREE_BAND[degree])
     w = _World()
     _pre_stressed(w)
     a, b = _Practitioner("prac"), _Practitioner("other")
     r = opp.resolve_opposing_operations(a, b, "Mending", {"scale": scale}, world=w,
-                                        rng=random.Random(0), environment_in_equilibrium=True)
+                                        rng=random.Random(0), environment_in_equilibrium=env)
     assert r.a_degree == _THREE_BAND[degree]
     cons = r.a_consequences
     # OpposingResult reports no Ob, so the opposed site is compared on the price alone.
@@ -236,29 +241,65 @@ def _opposing(scale, degree, monkeypatch):
 
 
 def test_three_sites_price_one_mending_alike(monkeypatch):
+    """Every (scale, degree, environment) cell: the three sites return the same cost, MS delta and
+    elastic displacement returned. With the environment stated False the restorative term is 0 at all
+    three (E-1's gate is `recover`'s, and each site must pass the caller's fact through)."""
     reached = restored_cells = 0
     for scale in PARITY_SCALES:
         priced = ops.mending_priced_scale({"scale": scale})
         for degree in PARITY_DEGREES:
-            with monkeypatch.context() as m:
-                single = _single(scale, degree, m)
-            with monkeypatch.context() as m:
-                collective = _collective(scale, degree, m)
-            with monkeypatch.context() as m:
-                opposed = _opposing(scale, degree, m)
             price = ops.price_mending(priced, degree)
-            expected = (ops.MENDING_OB[priced], price.coherence_cost, price.mending_stability_delta,
-                        price.restorative, coh.ELASTIC_RANGE - price.restorative)
-            assert single[0] == collective[0] == expected[0], f"{scale}/{degree}: Ob differs"
-            assert single[1:] == collective[1:] == opposed[1:] == expected[1:], (
-                f"{scale}/{degree}: single={single} collective={collective} opposed={opposed} "
-                f"owner={expected}")
-            assert price.coherence_cost == 0, "ED-871"
-            reached += 1
-            restored_cells += single[3] > 0
-    # (b) non-vacuity: every cell ran, and the restorative comparison was not 0 == 0 throughout.
-    assert reached == len(PARITY_SCALES) * len(PARITY_DEGREES)
+            for env in (True, False):
+                with monkeypatch.context() as m:
+                    single = _single(scale, degree, m, env)
+                with monkeypatch.context() as m:
+                    collective = _collective(scale, degree, m, env)
+                with monkeypatch.context() as m:
+                    opposed = _opposing(scale, degree, m, env)
+                restored = price.restorative if env else 0
+                expected = (ops.MENDING_OB[priced], price.coherence_cost, price.mending_stability_delta,
+                            restored, coh.ELASTIC_RANGE - restored)
+                assert single[0] == collective[0] == expected[0], f"{scale}/{degree}: Ob differs"
+                assert single[1:] == collective[1:] == opposed[1:] == expected[1:], (
+                    f"{scale}/{degree}/env={env}: single={single} collective={collective} "
+                    f"opposed={opposed} owner={expected}")
+                assert price.coherence_cost == 0, "ED-871"
+                reached += 1
+                restored_cells += single[3] > 0
+    # Non-vacuity: the restorative comparison was not 0 == 0 throughout.
     assert restored_cells == len(PARITY_SCALES) * (len(PARITY_DEGREES) - 1)
+
+
+def test_the_owner_does_not_price_overwhelming_apart_from_success():
+    """Opposing folds Overwhelming and Success to 'Meets' (the section 2.6 table has no fourth band) and
+    maps it back to Success; that round trip is lossless only while the price ignores the difference."""
+    for scale in ops.MENDING_OB:
+        assert ops.price_mending(scale, "Overwhelming") == ops.price_mending(scale, "Success")
+
+
+@pytest.mark.parametrize("aim", ["self", "prac", "other"])
+def test_collective_and_opposed_mending_refuse_own_configuration_aim(aim):
+    """Only `attempt_mending` routes an own-configuration Mending to the resting point. The other two
+    sites name no routing for it, so a target that aims at a participant's own configuration is
+    refused instead of silently taking the elastic path."""
+    target = {"scale": "Relational", "configuration_of": aim}
+    w = _World()
+    with pytest.raises(ValueError, match="OWN configuration"):
+        col.attempt_collective_operation([_Practitioner("prac", ts=60), _Practitioner("other")],
+                                         "Mending", target, world=w, rng=random.Random(0))
+    with pytest.raises(ValueError, match="OWN configuration"):
+        opp.resolve_opposing_operations(_Practitioner("prac"), _Practitioner("other"), "Mending",
+                                        target, world=w, rng=random.Random(0))
+    assert w.practitioners == {}, "a refused Mending must not have touched any state"
+
+
+def test_a_non_mending_working_ignores_configuration_of():
+    """The refusal is Mending's: the field means nothing to a Weaving."""
+    target = {"scale": "Relational", "configuration_of": "self"}
+    col.attempt_collective_operation([_Practitioner("prac", ts=60), _Practitioner("other")],
+                                     "Weaving", target, world=_World(), rng=random.Random(0))
+    opp.resolve_opposing_operations(_Practitioner("prac"), _Practitioner("other"), "Weaving",
+                                    target, world=_World(), rng=random.Random(0))
 
 
 def test_owner_refuses_an_unpriced_scale_and_an_unknown_degree():

@@ -21,7 +21,7 @@
 
 | Callable | Anchor | Called-by |
 |---|---|---|
-| `attempt_leap(actor, target_state, world, rng)` | `systems/threadwork/sim/operations.py:268 attempt_leap` | `systems/threadwork/sim/collective.py:110 attempt_leap` (internal, lateral) — no cross-subsystem or production caller found |
+| `attempt_leap(actor, target_state, world, rng)` | `systems/threadwork/sim/operations.py:268 attempt_leap` | `systems/threadwork/sim/collective.py:117 attempt_leap` (internal, lateral) — no cross-subsystem or production caller found |
 | `attempt_weaving(actor, target, world, rng)` | `systems/threadwork/sim/operations.py:292 attempt_weaving` | `engine/tests/test_thread_mending_ed871.py:26 attempt_weaving` (test only) |
 | `attempt_pulling(actor, target, world, rng)` | `systems/threadwork/sim/operations.py:305 attempt_pulling` | — none found |
 | `attempt_past_pulling(actor, target_moment, world, rng)` | `systems/threadwork/sim/operations.py:314 attempt_past_pulling` | — none found |
@@ -31,7 +31,7 @@
 | `attempt_collective_operation(actors, op_type, target, world, rng)` | `systems/threadwork/sim/collective.py:71 attempt_collective_operation` | — none found |
 | `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` | — none found |
 | `opposing_engagement_modifier(opponent_tps)` | `systems/threadwork/sim/opposing.py:80 opposing_engagement_modifier` | — none found |
-| `apply_coherence_delta(actor, delta, source, world)` | `systems/threadwork/sim/coherence.py:294 apply_coherence_delta` | `systems/threadwork/sim/operations.py:242 apply_coherence_delta` (internal); `systems/threadwork/sim/collective.py:203 apply_coherence_delta` (internal); `systems/threadwork/sim/opposing.py:228 apply_coherence_delta` (internal); `systems/fieldwork/sim/knots.py:374 apply_coherence_delta` (cross-subsystem, lateral, on Knot rupture — the only cross-subsystem production call site found) |
+| `apply_coherence_delta(actor, delta, source, world)` | `systems/threadwork/sim/coherence.py:298 apply_coherence_delta` | `systems/threadwork/sim/operations.py:242 apply_coherence_delta` (internal); `systems/threadwork/sim/collective.py:210 apply_coherence_delta` (internal); `systems/threadwork/sim/opposing.py:228 apply_coherence_delta` (internal); `systems/fieldwork/sim/knots.py:374 apply_coherence_delta` (cross-subsystem, lateral, on Knot rupture — the only cross-subsystem production call site found) |
 | `check_coherence_failure_transition(actor, world)` | `systems/threadwork/sim/coherence.py:410 check_coherence_failure_transition` | — none found |
 | `get_state(actor, world)` | `systems/threadwork/sim/coherence.py:434 get_state` | — none found |
 | `draw_comovement_card(op_type, depth, world, rng)` | `systems/threadwork/sim/co_movement.py:87 draw_comovement_card` | — none found |
@@ -115,7 +115,7 @@
 | `OperationResult` (degree, net_successes, pool, coherence_delta, mending_stability_delta) | return value | caller (test only in practice) | `systems/threadwork/sim/operations.py:166-178 OperationResult` |
 | `CollectiveResult` | return value | caller (no found caller) | `systems/threadwork/sim/collective.py:46-55 CollectiveResult` |
 | `OpposingResult` | return value | caller (no found caller) | `systems/threadwork/sim/opposing.py:64-77 OpposingResult` |
-| `CoherenceState` (per-practitioner track) | `world-state write` | `world.practitioners`, read back by `engine/autoload/game_state.py` snapshot restore | `systems/threadwork/sim/coherence.py:191-204 CoherenceState`; `engine/autoload/game_state.py:457-460` |
+| `CoherenceState` (per-practitioner track) | `world-state write` | `world.practitioners`, read back by `engine/autoload/game_state.py` snapshot restore | `systems/threadwork/sim/coherence.py:195-208 CoherenceState`; `engine/autoload/game_state.py:457-460` |
 | `CoMovementCard` | return value | caller of `apply_comovement_effects` (no found production caller) | `systems/threadwork/sim/co_movement.py:55-62 CoMovementCard` |
 | MS clock delta (`world.clocks['MS']`) | `world-state write` | `systems.overview.sim.ms_track` (shared MS surface) | `systems/threadwork/sim/opposing.py:238-239`; `systems/threadwork/sim/co_movement.py:142-143` |
 | Knot strain (`sustain_knot`) | cross-subsystem call | `systems.fieldwork.sim.knots` | `systems/threadwork/sim/opposing.py:245-254` |
@@ -127,8 +127,8 @@
 
 | Field | R/W | Owning module | Anchor |
 |---|---|---|---|
-| `world.practitioners[actor_id]` (`CoherenceState`) | RW | `systems/threadwork/sim/coherence.py` | `systems/threadwork/sim/coherence.py:142-147 _store`, `systems/threadwork/sim/coherence.py:286-291 _get_or_create` |
-| `_practitioner_state` (module-level fallback) | RW | `systems/threadwork/sim/coherence.py` | `systems/threadwork/sim/coherence.py:139 _practitioner_state` |
+| `world.practitioners[actor_id]` (`CoherenceState`) | RW | `systems/threadwork/sim/coherence.py` | `systems/threadwork/sim/coherence.py:146-151 _store`, `systems/threadwork/sim/coherence.py:290-295 _get_or_create` |
+| `_practitioner_state` (module-level fallback) | RW | `systems/threadwork/sim/coherence.py` | `systems/threadwork/sim/coherence.py:143 _practitioner_state` |
 | `world.threadcut_beings[being_id]` (`ThreadcutState`) | RW | `systems/threadwork/sim/threadcut.py` | `systems/threadwork/sim/threadcut.py:63-68 _store` |
 | `_threadcut_registry` (module-level fallback) | RW | `systems/threadwork/sim/threadcut.py` | `systems/threadwork/sim/threadcut.py:60 _threadcut_registry` |
 | `world.comovement_deck['remaining'/'discard']` | RW | `systems/threadwork/sim/co_movement.py` | `systems/threadwork/sim/co_movement.py:69-74 _store` |

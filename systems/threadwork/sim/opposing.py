@@ -37,7 +37,8 @@ from engine.dice_engine.dice_engine import roll_pool
 from systems.threadwork.sim.operations import (
     DEPTH_OB, MENDING_OB, TN_STANDARD,
     _actor_pool, COHERENCE_COST_BY_SCALE, FR_SURCHARGE, OperationResult,
-    apply_mending_feedback, mending_priced_scale, price_mending, resist_coherence_cost,
+    aims_at_own_configuration, apply_mending_feedback, mending_priced_scale, price_mending,
+    resist_coherence_cost,
 )
 from systems.threadwork.sim.coherence import apply_coherence_delta
 
@@ -130,9 +131,15 @@ def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
     `ms_delta` is the worse of the two sides' prices. The table's composure and Knot-strain fields
     stand — they are not Coherence or Mending Stability pricing. `environment_in_equilibrium` is
     E-1's condition on that term, default False exactly as in `operations.attempt_mending`.
+    Own-configuration aim (`target['configuration_of']`, WR-02) is routed by `attempt_mending` ONLY:
+    here it is refused with a ValueError, not silently given the elastic path.
     """
     actor_a_id = getattr(actor_a, 'actor_id', getattr(actor_a, 'name', 'A'))
     actor_b_id = getattr(actor_b, 'actor_id', getattr(actor_b, 'name', 'B'))
+    if op_type == 'Mending' and (aims_at_own_configuration(target, actor_a_id)
+                                 or aims_at_own_configuration(target, actor_b_id)):
+        raise ValueError("resolve_opposing_operations: Mending aimed at a side's OWN configuration "
+                         "(target['configuration_of']) is routed by operations.attempt_mending only")
 
     # §2.6 Opposing Engagement Modifier
     a_tps = getattr(actor_a, 'ts', 30) // 10

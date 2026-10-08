@@ -61,8 +61,9 @@ empties the stack, so a practitioner who recuperates between workings never yiel
     their spirit is" — whose ARITHMETIC is unruled; it belongs in the working's cost, not in this
     state. Its one owner is `operations.resist_coherence_cost`, a swept fixture
     (`operations.RESILIENCE_GAIN`, shipped at the control 0), applied per practitioner in
-    `operations._resolve_operation`, `collective.py` and `opposing.py` alike (WR-03). ⚠ C-3's "cost is relative magnitude / no toughness term"
-    was RETRACTED (RULINGS.md Batch 13) and is not modelled.
+    `operations._resolve_operation` (WR-01) and in `collective.py` and `opposing.py` (WR-03).
+    ⚠ C-3's "cost is relative magnitude / no toughness term" was RETRACTED (RULINGS.md Batch 13) and
+    is not modelled.
   - What follows the crossing (P-15's TS-gated branching, §7.5 reality-strain): this module reports
     the crossing and keeps the arithmetic running. Routing post-crossing load into the substrate has
     NO carrier: `systems/threadwork/sim/rendering.py`'s `apply_rs_strain` was STRUCK at position 27,

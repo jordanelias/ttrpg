@@ -30,7 +30,8 @@ from systems.threadwork.sim.operations import (
     attempt_leap,
     COHERENCE_COST_BY_SCALE, DEPTH_OB, MENDING_OB, TN_STANDARD,
     _actor_pool, OperationResult,
-    apply_mending_feedback, mending_priced_scale, price_mending, resist_coherence_cost,
+    aims_at_own_configuration, apply_mending_feedback, mending_priced_scale, price_mending,
+    resist_coherence_cost,
 )
 from systems.threadwork.sim.coherence import apply_coherence_delta
 from engine.dice_engine import dice_engine
@@ -87,7 +88,10 @@ def attempt_collective_operation(actors: list, op_type: str, target: dict,
     shipped gain 0); the reported `coherence_delta` is the Anchor's. A Mending is priced by
     `operations.price_mending` on `operations.mending_priced_scale(target)` — 0 cost at every degree
     (ED-871), the owner's Mending Stability delta, and the restorative term handed to every such
-    participant through `operations.apply_mending_feedback` — exactly as a single Mending is.
+    participant through `operations.apply_mending_feedback` — as a single Mending aimed at ANOTHER's
+    configuration is. Own-configuration aim (`target['configuration_of']`, WR-02) is routed by
+    `operations.attempt_mending` ONLY: here it is refused with a ValueError, not silently given the
+    elastic path.
     """
     if not actors:
         return CollectiveResult(op_type=op_type, anchor='', helpers=[],
@@ -102,6 +106,9 @@ def attempt_collective_operation(actors: list, op_type: str, target: dict,
     anchor_id = getattr(anchor, 'actor_id', getattr(anchor, 'name', 'anchor'))
     helper_ids = [getattr(h, 'actor_id', getattr(h, 'name', f'helper{i}'))
                   for i, h in enumerate(helpers)]
+    if op_type == 'Mending' and any(aims_at_own_configuration(target, pid) for pid in [anchor_id] + helper_ids):
+        raise ValueError("attempt_collective_operation: Mending aimed at a participant's OWN configuration "
+                         "(target['configuration_of']) is routed by operations.attempt_mending only")
 
     # §2.5 — All practitioners Leap independently in same round
     leap_results = {}

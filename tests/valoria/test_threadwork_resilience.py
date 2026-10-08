@@ -3,8 +3,10 @@
 canon/philosophy/06_operations.md (ruled 2026-09-09): "What determines their ability to prevent that
 cost is how resilient their spirit is." The arithmetic is unruled, so it ships as a swept fixture
 (`operations.RESILIENCE_GAIN`, arms `operations.RESILIENCE_GAIN_SWEEP`) whose shipped arm 0 is the
-control — today's behaviour. tests/valoria/test_coherence_elastic_plastic.py is the byte-for-byte
-control and is not edited by this position.
+control — today's behaviour. The identity at gain 0 is observed by
+engine/tests/test_thread_mending_ed871.py (Weaving's applied Coherence, CI job sim-regression) and by the
+base digests in tests/valoria/test_threadwork_mending_parity.py (every op_type, collective and opposing);
+test_coherence_elastic_plastic.py asserts no non-Mending cost, so it is not that control.
 
 Falsifier: with the application line in `_resolve_operation` disabled,
 `test_a_resilient_practitioner_takes_strictly_less_on_one_planted_pair` fails at every gain > 0.
@@ -94,7 +96,6 @@ def test_a_huge_resilience_floors_at_zero_and_never_raises(attempt, gain, monkey
     """The floor: resistance brings a cost toward 0 and stops; it is never a positive delta
     (which apply_coherence_delta would refuse) and never a negative displacement."""
     monkeypatch.setattr(ops, "RESILIENCE_GAIN", gain)
-    checked = 0
     for seed in range(20):
         w = _World()
         r = attempt(_Practitioner("titan", 10 ** 6), _WORKING, world=w, rng=random.Random(seed))
@@ -102,8 +103,6 @@ def test_a_huge_resilience_floors_at_zero_and_never_raises(attempt, gain, monkey
         assert _displacement_taken("titan", w) == -r.coherence_delta >= 0
         if gain > 0:
             assert r.coherence_delta == 0
-        checked += 1
-    assert checked == 20
 
 
 def test_the_owner_leaves_zero_cost_alone_and_refuses_negative_resilience(monkeypatch):
@@ -111,8 +110,27 @@ def test_the_owner_leaves_zero_cost_alone_and_refuses_negative_resilience(monkey
     assert ops.resist_coherence_cost(0, _Practitioner("m", 4)) == 0       # Mending (ED-871), Leap
     assert ops.resist_coherence_cost(-3, _Practitioner("a")) == -3        # absent attribute = 0
     assert ops.resist_coherence_cost(-7, _Practitioner("b", 2)) == -1
-    with pytest.raises(ValueError):
-        ops.resist_coherence_cost(-1, _Practitioner("bad", -1))
+    for bad in (-1, 1.5, True, None):
+        with pytest.raises(ValueError):
+            ops.resist_coherence_cost(-1, _Practitioner("bad", bad) if bad is not None else _NoneResilience())
+
+
+class _NoneResilience(_Practitioner):
+    def __init__(self):
+        super().__init__("none")
+        self.resilience = None
+
+
+@pytest.mark.parametrize("odd", [None, -1, 1.5, True, float("inf"), float("nan")])
+def test_at_the_shipped_gain_the_owner_is_the_identity_whatever_resilience_holds(odd):
+    """The control must hold for every actor, not only well-formed ones: at gain 0 the owner returns the
+    cost before it reads the attribute, so an odd value neither raises nor leaks a float."""
+    assert ops.RESILIENCE_GAIN == 0
+    actor = _Practitioner("odd")
+    actor.resilience = odd
+    for cost in (0, -1, -2, -5):
+        got = ops.resist_coherence_cost(cost, actor)
+        assert got == cost and type(got) is int
 
 
 def test_mending_is_unaffected_by_resilience(monkeypatch):
