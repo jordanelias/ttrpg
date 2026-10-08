@@ -1039,11 +1039,12 @@ def p31():
 
     # The SAME person, the SAME question, the SAME option set -- one variable, the motive.
     # `create_record` and `destroy_record` sit at opposite signs on `precedent_substantive` in the alignment
-    # table, so a conviction on that axis has somewhere to move the ranking TO. Rev 2 could not
+    # table, so a pursuit that projects onto that axis has somewhere to move the ranking TO (`stability`,
+    # the `Precedent` conviction's successor, IN-08: `candidate_pursuit_cells.md` §4.1). Rev 2 could not
     # test this: it scored an authored roster of three verbs the table does not carry.
     inner = make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}",
                          draw=draw_factory(w.world_seed, lambda: w.tick))
-    p.pursuits = {_pursuit("stability"): 0.9}  # [JUSTIFIED: the sign, not the magnitude, is what P31 observes -- any nonzero weight of opposite sign at the second line below would show the same property. `stability` is the `Precedent` conviction's successor pursuit (IN-08, `candidate_pursuit_cells.md` §4.1), projecting onto `precedent_substantive` where `create_record` and `destroy_record` sit at opposite signs]
+    p.pursuits = {_pursuit("stability"): 0.9}  # [JUSTIFIED: the sign, not the magnitude, is what P31 observes -- any nonzero weight of opposite sign at the second line below would show the same property]
     # `W17`: `choose` returns SCENES now, so the pick is the first interaction of
     # the first scene. The default policy fills scenes in score order, so that is
     # still the highest-scoring candidate.

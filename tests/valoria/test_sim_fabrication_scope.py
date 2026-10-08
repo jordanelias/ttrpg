@@ -214,3 +214,17 @@ def test_deleting_a_citation_puts_the_file_back_under_a_full_scan():
     assert mod._CANONICAL_COMMENT_PATTERN.search('# [canonical: engine/params/core.md §2]')
     assert mod._CANONICAL_COMMENT_PATTERN.search('  # [GROUNDED: measured 2026-05-01]')
     assert not mod._CANONICAL_COMMENT_PATTERN.search('# an ordinary comment')
+
+
+def test_a_citation_kept_verbatim_on_an_edited_line_is_not_displaced():
+    """Editing the code on a cited line removes the line and adds its successor with the SAME tag:
+    nothing was lost, so the file stays under added-line scoping. A deleted tag, or a reworded one,
+    is still displaced and puts the file back under a full scan."""
+    mod = _load()
+    tag = '# [JUSTIFIED: the sign is the test]'
+    removed = {'a.py': ['    x = {"Old": 0.9}  ' + tag], 'b.py': ['    y = 1  ' + tag],
+               'c.py': ['    z = 1  ' + tag], 'd.py': ['    w = 1']}
+    added = {'a.py': ['    x = {new("k"): 0.9}  ' + tag],            # edited line, tag verbatim
+             'b.py': [],                                              # tag deleted
+             'c.py': ['    z = 1  # [JUSTIFIED: the sign is the whole test]']}   # tag reworded
+    assert mod.displaced_citation_paths(removed, added) == {'b.py', 'c.py'}
