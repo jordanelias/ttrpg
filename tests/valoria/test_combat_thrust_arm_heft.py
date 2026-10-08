@@ -30,14 +30,13 @@ reads 0.7992 instead of 2.5151) while guard 1 stays green. That mutation is exac
 review R-8 identified, so it is not hypothetical. `test_the_arm_split_is_not_paid_on_both_arms`
 below encodes it as a standing assertion rather than a one-off run.
 
-DISCLOSED CONSEQUENCE, stated not discovered (the plan's own instruction): `core.cut_thrust_arm`
-picks the arm on COUPLING alone. Now that impact differs by arm, the chosen arm is no longer the
-max-DAMAGE arm for every weapon — a fresh instance of the B1/F24 "selection contradicts damage"
-class, introduced by a correctness batch and interacting with E5/M7. The ranseur resolves `puncture`
-even at `none`, so this is live at every tier. It is NOT fixed here: repricing the contest on damage
-is E5's, and bundling it would repeat the batch-4/5 "while I'm here" failure.
-`test_selection_contradicts_damage_is_disclosed_not_silent` pins the population so it cannot grow
-unnoticed before E5 picks it up.
+CONSEQUENCE, then CLOSED: with heft split by arm, a contest picking on COUPLING alone no longer
+picked the max-DAMAGE arm for every weapon (the B1/F24 "selection contradicts damage" class). E5/M7
+(ED-PC-0050, the ratified direction of ED-PC-0036) repriced the contest on damage:
+`core.cut_thrust_arm` takes the wielder's (shear, puncture) impact pair from
+`core.cut_thrust_impacts`, and `test_selection_and_damage_agree_on_the_pinned_population` pins that
+the chosen arm is the higher-damage arm (it replaced the disclosure pin that asserted the
+disagreement still existed).
 """
 import os
 import sys
@@ -131,32 +130,53 @@ def test_arm_defaults_are_byte_identical():
     assert not bad, f"sel_arm=None is not inert: {bad}"
 
 
-def test_selection_contradicts_damage_is_disclosed_not_silent():
-    """The disclosed consequence, pinned as a POPULATION so it cannot grow unnoticed before E5.
+def _arm_damage(w, strength, mat, arm):
+    """One arm's Str+Heft x coupling — the product `core.damage` pays before its common factors and its monotone
+    knee. The arm's coupling is read from the owner by FORCING that arm (a zero price on the other); the impact is
+    written out here from its definition rather than through `core.cut_thrust_impacts`, so this oracle does not
+    share the code it checks."""
+    geo = w.get('geo', {})
+    force = (1.0, 0.0) if arm == 'shear' else (0.0, 1.0)
+    coup, got = core.cut_thrust_arm(mat, 'full', w['gap'], eff_cut=geo.get('cut'), eff_thrust=geo.get('thrust'),
+                                    thrust_auth=core.thrust_authority(w['head_len']), impact=force)
+    assert got == arm, (arm, got)
+    return (strength + core.HEFT_HEAVY * WP.heft(w, sel_head=V.HEAD_CUT_THRUST, sel_arm=arm)) * coup
 
-    `core.cut_thrust_arm` picks the arm on coupling alone. Now that heft differs by arm, the chosen
-    arm is not always the higher-damage arm. This test does not assert the disagreement away — it
-    records which weapons are in it, so E5/M7 inherits a measured work-list rather than a rumour and
-    a future change that widens the class fails here."""
-    disagree = set()
+
+def test_selection_and_damage_agree_on_the_pinned_population():
+    """E5/M7 landed (ED-PC-0050): the cut_thrust arm contest is priced on DAMAGE, so the arm a wielder picks is
+    the arm that does more damage. Was `test_selection_contradicts_damage_is_disclosed_not_silent`, which pinned
+    the disagreement as existing while the contest still picked on coupling alone.
+
+    Population: every cut_thrust weapon x every armour tier x three strengths, at grip 0 — the selection a
+    wielder-bearing caller makes (`core.cut_thrust_impacts` -> `core.cut_thrust_arm`). Falsifier, standing: the
+    coupling-only contest (impact=None) must FAIL this property somewhere on the same population, or the pin could
+    not have observed the defect it replaces."""
+    checked = coupling_only_wrong = 0
+    bad = []
     for n in CUT_THRUST:
         w = C.WEAPONS[n]
+        geo = w.get('geo', {})
         for tier in ('none', 'light', 'medium', 'heavy'):
             mat = core.TIER2MAT[tier]
-            geo = w.get('geo', {})
-            val, arm = core.cut_thrust_arm(
-                mat, 'full', w['gap'], eff_cut=geo.get('cut'), eff_thrust=geo.get('thrust'),
-                thrust_auth=core.thrust_authority(w['head_len']))
-            h_chosen = WP.heft(w, sel_head=V.HEAD_CUT_THRUST, sel_arm=arm)
-            other = 'shear' if arm == 'puncture' else 'puncture'
-            h_other = WP.heft(w, sel_head=V.HEAD_CUT_THRUST, sel_arm=other)
-            if h_other > h_chosen + 1e-9:
-                disagree.add(n)
-    # This is a DISCLOSURE pin, not a correctness claim: the class is known, measured, and owned by
-    # E5/M7. Assert it is non-empty (so the pin stays honest about the defect existing) and that it
-    # has not silently widened beyond the cut_thrust roster it was measured on.
-    assert disagree, (
-        "no cut_thrust weapon shows the selection-vs-damage disagreement any more — either E5/M7 "
-        "landed (update this pin and the ED-PC-0050 disclosure) or the arm contest changed shape."
-    )
-    assert disagree <= set(CUT_THRUST), f"the disagreement escaped the cut_thrust roster: {disagree}"
+            dmg = {}
+            for strength in (2, 4, 6):
+                dmg = {a: _arm_damage(w, strength, mat, a) for a in ('shear', 'puncture')}
+                _v, arm = core.cut_thrust_arm(
+                    mat, 'full', w['gap'], eff_cut=geo.get('cut'), eff_thrust=geo.get('thrust'),
+                    thrust_auth=core.thrust_authority(w['head_len']),
+                    impact=core.cut_thrust_impacts(w, strength))
+                other = 'shear' if arm == 'puncture' else 'puncture'
+                checked += 1
+                if dmg[other] > dmg[arm] + 1e-9:
+                    bad.append((n, tier, strength, arm, dmg))
+                _v0, arm0 = core.cut_thrust_arm(
+                    mat, 'full', w['gap'], eff_cut=geo.get('cut'), eff_thrust=geo.get('thrust'),
+                    thrust_auth=core.thrust_authority(w['head_len']))
+                if dmg['shear' if arm0 == 'puncture' else 'puncture'] > dmg[arm0] + 1e-9:
+                    coupling_only_wrong += 1
+    assert checked == len(CUT_THRUST) * 4 * 3 and checked >= 15 * 12, checked
+    assert not bad, f"the arm chosen is not the higher-damage arm: {bad[:5]} ({len(bad)} cells)"
+    assert coupling_only_wrong, (
+        "the coupling-only contest agrees with damage everywhere on this population, so this pin cannot observe "
+        "the E5/M7 defect — widen the population or retire the pin")

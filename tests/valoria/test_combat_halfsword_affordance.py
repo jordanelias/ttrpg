@@ -20,27 +20,31 @@ def test_affords_halfsword_emergent_set():
     """The emergent affordance set. PC-1 (ED-PC-0014) shipped {longsword, estoc}; PC-2 (ED-PC-0016) marks the two
     further attested ricassos grippable=True — greatsword ("with ricasso, often flanked by parrying lugs") and
     flamberge (a dedicated `ricasso` element + Parierhaken grip-stop) — so the CAPABILITY set is now exactly these
-    four. (The greatsword/flamberge SWITCH is deliberately HELD — see test_pc2_capability_recorded_but_switch_held
-    and audit/2026-07-22-combat-engine-stress-test/pc2_halfsword_expansion.md; the capability is a physical fact,
-    the switch activation is a separate, duel-aware design call.)"""
+    four. (Their SWITCH is wired too — see test_pc2_capability_recorded_and_switch_wired.)"""
     aff = {n for n, w in WEAPONS.items() if 'base' not in w and S.affords_halfsword(w)}
     assert aff == {'longsword', 'estoc', 'greatsword', 'flamberge'}, aff
 
 
-def test_pc2_capability_recorded_but_switch_held():
-    """PC-2 held-back invariant (ED-PC-0016): greatsword/flamberge AFFORD the half-sword (physical fact recorded) but
-    do NOT switch — no `*_halfsword` form is wired into HALFSWORD_FORM for them, so halfsword_target returns the base
-    at every armour tier. This guards against a naive re-activation re-introducing the documented liability (the
-    unconditional switch loses ~40pp at medium for these reach+mass-dominant weapons)."""
+def test_pc2_capability_recorded_and_switch_wired():
+    """PC-2 built (ED-PC-0016): greatsword/flamberge AFFORD the half-sword (physical fact recorded) AND switch, exactly
+    as the longsword and estoc do — their authored `*_halfsword` form records are wired into HALFSWORD_FORM, so
+    halfsword_target returns the form when closed against rigid armour (medium/heavy) and the base everywhere else.
+    Was `test_pc2_capability_recorded_but_switch_held`, which pinned the 2026-07-22 hold; the hold's premise (a
+    measured liability at medium) did not reproduce, and the ruling (ED-PC-0014) prescribes the unconditional switch.
+    The every-afforder-has-a-form clause keeps the name table from silently re-acquiring a gating role."""
     from combatant import HALFSWORD_FORM
     for n in ('greatsword', 'flamberge'):
+        form = f'{n}_halfsword'
         assert S.affords_halfsword(WEAPONS[n]), n            # capability recorded
-        assert n not in HALFSWORD_FORM, n                    # but no form wired
-        assert f'{n}_halfsword' not in WEAPONS, n            # and no orphan form record
+        assert HALFSWORD_FORM.get(n) == form, n              # form wired
+        assert WEAPONS[form].get('base') == n, n             # and the form record names its base
         c = Combatant.__new__(Combatant); c.weapon = n
         for closed in (True, False):
             for a in ('none', 'light', 'medium', 'heavy'):
-                assert S.halfsword_target(c, closed, a) == n, (n, closed, a)   # never switches
+                want = form if (closed and a in ('medium', 'heavy')) else n
+                assert S.halfsword_target(c, closed, a) == want, (n, closed, a)
+    afforders = {n for n, w in WEAPONS.items() if 'base' not in w and S.affords_halfsword(w)}
+    assert afforders == set(HALFSWORD_FORM), (afforders, set(HALFSWORD_FORM))
 
 
 def test_grippable_is_the_gate_not_geometry_alone():

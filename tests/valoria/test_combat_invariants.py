@@ -1532,7 +1532,10 @@ def test_plate_participation_tracks_armour_defeat_capability(n=40):
     clears = sorted(w for w in cap if cap[w] >= 0.9)
     marginal = sorted(w for w in cap if thr <= cap[w] < 0.9)
     under = sorted(w for w in cap if cap[w] < 0.45)
-    assert len(clears) >= 10 and marginal and len(under) >= 30, (
+    # `under` floor 30 -> 28 (ED-PC-0016 build): greatsword and flamberge now reach their wired half-sword forms, so
+    # capability() reads those (0.81 / 0.89, marginal) instead of their base forms (0.32 / 0.33, under) — exactly the
+    # two weapons that left the band, and the derivation moving them is this guard's own design.
+    assert len(clears) >= 10 and marginal and len(under) >= 28, (
         f"the capability partition itself collapsed ({len(clears)} clear / {len(marginal)} marginal / "
         f"{len(under)} under) — adef_cap or the heavy threshold moved; re-derive the bands before trusting them")
 

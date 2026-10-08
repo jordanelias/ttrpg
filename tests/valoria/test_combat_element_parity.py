@@ -7,7 +7,14 @@ sum over located parts with a synthesized single reproduction element per weapon
 proof it stayed identical while the Phase-A plumbing (bake extension, element-union afforded_heads,
 sel_element threading) landed.
 
-PROVENANCE, CURRENT: the fixture was last regenerated at base commit f03357d for **E2b / M9 / ED-PC-0048
+PROVENANCE, CURRENT: regenerated SURGICALLY at base commit 2a3ce24c for **ED-PC-0016 + ED-PC-0050 (B-D1 PC-04)**
+— no derive/dynamics/afforded field moved. ADDED the two wired half-sword forms (`greatsword_halfsword`,
+`flamberge_halfsword`). MOVED only the `select_mode` damage-mode label in the 9 cut_thrust cells where the
+damage-priced arm contest picks the other arm: arming, cinquedea, dagger, flamberge, longsword, paired_short at
+none (shear -> puncture), naginata at medium (shear -> puncture), odachi at light and spetum at none
+(puncture -> shear).
+
+PRIOR: regenerated at base commit f03357d for **E2b / M9 / ED-PC-0048
 (2026-07-29)** — `percussion_element_authority`'s lever moved from `abs(elem_x)/Lt` (exactly 0 for any element
 mounted AT the working hand) to the same `weapon_physics.strike_point_lever` E2a shipped, called with the
 DELIVERED mass so it reduces to the geometric `(STRIKE_HAND_LEVER + |x|)/(STRIKE_HAND_LEVER + Lt)`. Moved:

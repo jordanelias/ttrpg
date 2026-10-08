@@ -390,7 +390,7 @@ def thrust_authority(head_len):
     1.0 (pommel-pressed, body-weight-backed); long reach-thrust decays toward the floor. head_len in METRES."""
     if head_len is None or head_len<=0: return 1.0
     return max(THRUST_LEVER_FLOOR, min(1.0, THRUST_LEVER_REF/head_len))
-def cut_thrust_arm(mat, coverage='full', gap_prec=GAP_PREC_REF, eff_cut=None, eff_thrust=None, thrust_auth=1.0):
+def cut_thrust_arm(mat, coverage='full', gap_prec=GAP_PREC_REF, eff_cut=None, eff_thrust=None, thrust_auth=1.0, impact=None):
     """SINGLE OWNER of the cut-and-thrust versatility contest. Returns `(value, mode)` — the winning arm's coupling and
     which arm won ('shear' | 'puncture') — so the DAMAGE and the REPORTED MODE can never disagree (ED-PC-0036).
 
@@ -406,7 +406,18 @@ def cut_thrust_arm(mat, coverage='full', gap_prec=GAP_PREC_REF, eff_cut=None, ef
     branch previously ignored `eff` outright, discarding the derived edge-quality and thrust-magnitude of all 19
     cut_thrust weapons). The result is the doctrine this module already claimed: CUT the unarmoured man, half-sword
     THRUST anything armoured — and a poor-edged weapon (spetum, eff 0.63 < CUT_AUTH_REF) correctly prefers its point
-    even unarmoured, which an armour-keyed label rule could not express. Pure."""
+    even unarmoured, which an armour-keyed label rule could not express.
+
+    PRICED ON DAMAGE when `impact` is given [ED-PC-0050, E5/M7 — the ratified direction of ED-PC-0036]: `impact` is
+    the (shear, puncture) pair from `cut_thrust_impacts`, the Str+Heft each arm is paid. Since E3b a cut_thrust
+    weapon's heft differs by arm (the puncture arm takes the axial thrust lever, the shear arm the swing moment), so
+    the better-COUPLING arm is not always the more-DAMAGING one; with `impact` the contest compares impact x coupling,
+    the product `damage()` pays (its remaining factors are common to both arms, and its penetration knee is monotone),
+    so the arm chosen is the arm that does more damage. This MOVES the doctrine above: a hand-balanced sword, whose
+    thrust heft exceeds its swing heft, now thrusts the unarmoured man too, and a forward-balanced polearm with a heavy
+    swing can cut where its point coupled better. Every wielder-bearing caller (`strike`, `select_mode`) passes
+    `impact`; None keeps the coupling-only contest for a weapon-only probe with no wielder. The returned value is
+    the winning arm's COUPLING either way (impact is paid separately, in `damage`). Pure."""
     cut_arm = DELIVERY['cut']*_transmit('shear',mat,coverage)
     thr_arm = DELIVERY['point']*_transmit('puncture',mat,coverage,gap_prec=gap_prec,thrust_auth=thrust_auth)
     # PER-ARM quality [ED-PC-0037, adversarial-review fix]. Each arm is de-rated by ITS OWN derived magnitude — the
@@ -418,9 +429,17 @@ def cut_thrust_arm(mat, coverage='full', gap_prec=GAP_PREC_REF, eff_cut=None, ef
     # the ranseur's cut scales to 1.5*0.30/0.70 = 0.643 and its point correctly wins.
     if eff_cut is not None:    cut_arm *= min(1.0, eff_cut/CUT_AUTH_REF)
     if eff_thrust is not None: thr_arm *= min(1.0, eff_thrust/THRUST_AUTH_REF)
-    return (cut_arm, 'shear') if cut_arm >= thr_arm else (thr_arm, 'puncture')
+    cut_price, thr_price = (cut_arm, thr_arm) if impact is None else (cut_arm*impact[0], thr_arm*impact[1])
+    return (cut_arm, 'shear') if cut_price >= thr_price else (thr_arm, 'puncture')
 
-def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None):
+def cut_thrust_impacts(w, strength, grip=0.0, sel_pc=None):
+    """(shear, puncture): the Str+Heft impact each arm of a cut_thrust weapon is paid — `strike_impact` on that arm's
+    own heft (heft_resp with sel_arm). The `impact` input of `cut_thrust_arm` [ED-PC-0050, E5/M7]. Pure."""
+    return tuple(strike_impact(strength, heft_resp(w, None, grip=grip, sel_head=V.HEAD_CUT_THRUST, sel_pc=sel_pc,
+                                                   sel_arm=_a), V.HEAD_CUT_THRUST)
+                 for _a in ('shear', 'puncture'))
+
+def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None, ct_impact=None):
     """DELIVERY x transmit. cut_thrust is VERSATILE — takes the better of its edge (shear) or the half-sword thrust
     (puncture/gaps) at each armour level: a longsword half-swords vs plate instead of bouncing (restores the prior
     engine's max(cut,point) mode-shift; HEMA: you half-sword vs harness). [damage_model.coupling + cut_thrust versatility]
@@ -436,7 +455,8 @@ def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC
     `thrust_auth` [PC-5/ED-PC-0015] scales the GAP-PRESS term of the puncture path (the 'point' head + the cut_thrust
     half-sword thrust) by the point-to-hand lever authority (thrust_authority(head_len)). It scopes to the gap game vs
     a harness ONLY — a thrust that lands on soft targets (through-material) is untouched, so reach weapons stay lethal
-    vs the unarmoured. 1.0 (the default) is byte-identical to before this parameter existed; inert for shear/percussion."""
+    vs the unarmoured. 1.0 (the default) is byte-identical to before this parameter existed; inert for shear/percussion.
+    `ct_impact` [ED-PC-0050]: cut_thrust_arm's `impact` pair (price the arm contest on damage); inert for other heads."""
     mat=TIER2MAT[armor]
     if head=='cut_thrust':
         # VERSATILE: better of the edge (shear — a cut is not pommel-pressed, no lever term) or the half-sword/gap
@@ -457,7 +477,7 @@ def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC
         # rather than by physics. On its own token the shift is REAL and matches the doctrine stated above: cut the
         # unarmoured man (1.500 > 1.450), half-sword-thrust anything armoured (light 0.926 < 1.276, more so at
         # medium/heavy) — because padding and plate resist an edge far more than they resist a point.
-        return cut_thrust_arm(mat, coverage, gap_prec, eff_cut, eff_thrust, thrust_auth)[0]
+        return cut_thrust_arm(mat, coverage, gap_prec, eff_cut, eff_thrust, thrust_auth, impact=ct_impact)[0]
     d=DELIVERY.get(head,1.5)
     if head=='cut' and eff is not None:
         d*=min(1.0, eff/CUT_AUTH_REF)
@@ -543,7 +563,20 @@ def adef_cap(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
 # coupling/adef/legibility machinery is unchanged) and one DAMAGE mode. The wielder greedily SELECTS the afforded
 # head whose resulting damage-coupling vs THIS armour is highest — generalizing the existing cut_thrust max() and the
 # blunt max(concussion,puncture) from 2 modes to N. Pure.
-def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc=PERC_AUTH_REF, q=None, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None, weapon_geo=None, cfg_adef=None, grip=0.0, room=1.0):
+def strike_impact(strength, heft_units, weapon_head, perc=PERC_AUTH_REF):
+    """The Str+Heft IMPACT term of `damage` — its single owner, so `cut_thrust_impacts` prices the cut_thrust arm
+    contest on exactly what `damage` pays (ED-PC-0050). Pure."""
+    heft = 3.0*(perc/PERC_AUTH_REF) if weapon_head=='blunt' else HEFT_HEAVY*heft_units   # blunt heft is percussion-authority-continuous; cut/thrust/point heft_units is WP.heft() (Phase B6), normalised to 1.0 at the longsword anchor -> HEFT_HEAVY*1.0 reproduces the old heavy-class magnitude there
+    # ED-PC-0042 rider I1b: the denominator was a bare `8.0` — the percussion-scale top written down a fourth time,
+    # invisible to any Phase-C re-fit; it now routes through the owned anchor (byte-identical, same float). The
+    # NUMERATOR 3.0 is deliberately UNTOUCHED and is a SEPARATE concern: it is the blunt branch's damage-scale
+    # magnitude, numerically equal to HEFT_HEAVY (core.py:85) but not established as the same constant — whether
+    # "blunt heft at full authority" IS the heavy cut/thrust class, or merely coincides with it, is an unresolved
+    # design question, and absorbing it here on the strength of `3.0 == 3.0` would be exactly the value-collision
+    # reasoning CLAUDE.md §7 warns about. Filed, not fixed.
+    return strength + heft                                        # additive force (damage_model design: Str+Heft). M-STR commit 2a2c9f78 reverted per sim v33-mstr-impact (mstr_lin stalled low-Str+heavy).
+
+def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc=PERC_AUTH_REF, q=None, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None, weapon_geo=None, cfg_adef=None, grip=0.0, room=1.0, ct_impact=None):
     """Linear: (strength+heft) x Coupling x Quality x DMG_SCALE — no tanh/cap. perc carries P_auth; blunt heft
     continuous from it. DMG_SCALE (above) is the single damage-scaling knob; the old tanh-cap scale/cap_end
     parameters were dead under the linear model and have been removed (with the config DAMAGE_SCALE/CAP_END
@@ -554,19 +587,13 @@ def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc
     plumbed. `eff` [U2/ED-PC-0011] is the SELECTED element's own derived cut/thrust magnitude — threaded into
     coupling's DELIVERY scaling (the 'cut' token only, see CUT_AUTH_REF); it does NOT touch `heft` above, which
     stays the separate, already-deferred weight-class quantity (plan #9, WP.heft() — cut/thrust magnitude-driven
-    heft is future work, not this fix's scope)."""
+    heft is future work, not this fix's scope).
+    `ct_impact` [ED-PC-0050] is the cut_thrust arm contest's (shear, puncture) impact pair, passed through `coupling`
+    to `cut_thrust_arm` so the coupling paid here is the arm `strike` priced on damage; None for every other head."""
     if deg not in ('graze','success','overwhelming'): return 0
-    heft = 3.0*(perc/PERC_AUTH_REF) if weapon_head=='blunt' else HEFT_HEAVY*heft_units   # blunt heft is percussion-authority-continuous; cut/thrust/point heft_units is WP.heft() (Phase B6), normalised to 1.0 at the longsword anchor -> HEFT_HEAVY*1.0 reproduces the old heavy-class magnitude there
-    # ED-PC-0042 rider I1b: the denominator was a bare `8.0` — the percussion-scale top written down a fourth time,
-    # invisible to any Phase-C re-fit; it now routes through the owned anchor (byte-identical, same float). The
-    # NUMERATOR 3.0 is deliberately UNTOUCHED and is a SEPARATE concern: it is the blunt branch's damage-scale
-    # magnitude, numerically equal to HEFT_HEAVY (core.py:85) but not established as the same constant — whether
-    # "blunt heft at full authority" IS the heavy cut/thrust class, or merely coincides with it, is an unresolved
-    # design question, and absorbing it here on the strength of `3.0 == 3.0` would be exactly the value-collision
-    # reasoning CLAUDE.md §7 warns about. Filed, not fixed.
     qf = q if q is not None else QUAL[deg]
-    impact = strength + heft                                      # additive force (damage_model design: Str+Heft). M-STR commit 2a2c9f78 reverted per sim v33-mstr-impact (mstr_lin stalled low-Str+heavy).
-    raw = impact * coupling(weapon_head, armor, perc=perc, gap_prec=gap, eff=eff, thrust_auth=thrust_auth, eff_cut=eff_cut, eff_thrust=eff_thrust) * qf * DMG_SCALE   # FIX-1b: perc scales blunt transmit vs rigid armour; gap: the situational gap game (thrust seeks the reach-ladder gaps); eff: the 'cut' token's own edge-quality scaling; thrust_auth (PC-5): the point-to-hand lever authority
+    impact = strike_impact(strength, heft_units, weapon_head, perc)
+    raw = impact * coupling(weapon_head, armor, perc=perc, gap_prec=gap, eff=eff, thrust_auth=thrust_auth, eff_cut=eff_cut, eff_thrust=eff_thrust, ct_impact=ct_impact) * qf * DMG_SCALE   # FIX-1b: perc scales blunt transmit vs rigid armour; gap: the situational gap game (thrust seeks the reach-ladder gaps); eff: the 'cut' token's own edge-quality scaling; thrust_auth (PC-5): the point-to-hand lever authority
     # PENETRATION THRESHOLD (ED-PC-0032), now CAPABILITY-RELATIVE (ED-PC-0038). The knee used to key on RAW magnitude
     # alone, which let a heavy-headed weapon buy its way through a harness it demonstrably cannot defeat: measured vs
     # plate, a guandao (adef_cap 0.169 against a 0.72 threshold — the worst armour-defeat on the board) landed 12
@@ -634,14 +661,18 @@ def strike(attacker, defender, deg, cfg, net=None, pool=None):
     # the versatility contest (ED-PC-0036), never a second copy of the comparison. A composite that resolves the
     # puncture arm must be paid the axial thrust lever, not the swing moment. Inert (None) for every other head, so
     # the heft call is byte-identical outside the cut_thrust roster.
-    _arm = None
+    # [ED-PC-0050, E5/M7] The contest is priced on DAMAGE: `_imp` is the Str+Heft each arm is paid, and the same pair
+    # rides into damage() -> coupling() -> cut_thrust_arm, so the coupling paid is the arm chosen here.
+    _arm = _imp = None
     if head == V.HEAD_CUT_THRUST:
+        _imp = cut_thrust_impacts(attacker.w, attacker.strength, grip=grip, sel_pc=sel_pc)
         _arm = cut_thrust_arm(TIER2MAT[defender.armor], 'full', gap,
                               eff_cut=(_ec if _ec is not None else _geo.get('cut')),
                               eff_thrust=(_et if _et is not None else _geo.get('thrust')),
-                              thrust_auth=tauth)[1]
+                              thrust_auth=tauth, impact=_imp)[1]
     return damage(deg, heft_resp(attacker.w, cfg, grip=grip, sel_head=head, sel_pc=sel_pc, sel_arm=_arm), head, attacker.strength,
                   defender.armor, gap, perc, q=q, eff=eff, thrust_auth=tauth,
                   eff_cut=(_ec if _ec is not None else _geo.get('cut')),
                   eff_thrust=(_et if _et is not None else _geo.get('thrust')),
-                  weapon_geo=attacker.w, cfg_adef=cfg, grip=grip, room=getattr(attacker,'range_avail',1.0))   # [ED-PC-0039] same grip/room the sigma path threads, so the two cannot disagree about the same question
+                  weapon_geo=attacker.w, cfg_adef=cfg, grip=grip, room=getattr(attacker,'range_avail',1.0),
+                  ct_impact=_imp)   # [ED-PC-0039] same grip/room the sigma path threads, so the two cannot disagree about the same question

@@ -727,8 +727,10 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None, grip=None, roo
         # cut-and-thrust sword was damaged as a thrust and READ as a swing, with legibility (thrust HARD 0.80, swing
         # EASY 1.25) scoring a mode the fighter never performed. Deriving it also captures cases no armour rule can
         # express: a poor-edged weapon (spetum, eff 0.63 < CUT_AUTH_REF) correctly prefers its point even unarmoured.
+        # [ED-PC-0050] priced on damage with the wielder's own impact pair — the same input core.strike passes.
         dm = core.cut_thrust_arm(core.TIER2MAT[defender_armor], 'full', heads[h].gap,
-                                 heads[h].eff_cut, heads[h].eff_thrust, core.thrust_authority(w['head_len']))[1]
+                                 heads[h].eff_cut, heads[h].eff_thrust, core.thrust_authority(w['head_len']),
+                                 impact=core.cut_thrust_impacts(w, c.strength, grip=grip, sel_pc=heads[h].pc))[1]
     else:
         dm=core.HEAD_MODE.get(h, V.MODE_SHEAR)
     sel = heads[h]   # the WINNING option's own record; the transposition below is deliberate and lives in exactly one place
@@ -868,11 +870,9 @@ def affords_halfsword(w):
     un-extended roster the derived set was exactly {longsword, estoc}; marking a further attested ricasso
     grippable=True is the JD-3 roster-expansion decision.
     [ED-PC-0035 correction] That set is STALE: ED-PC-0016 marked greatsword and flamberge grippable too, so the
-    derived set is now {longsword, greatsword, flamberge, estoc} — FOUR weapons. What still limits the auto-SWITCH to
-    two is `HALFSWORD_FORM` (whose two entries the ED-PC-0016 auto-switch decision deliberately HELD), which means
-    that name table is currently doing exactly the behaviour-gating this docstring says it no longer does. Tracked as
-    a live inconsistency, not silently reworded: giving greatsword/odachi real half-sword forms is the Batch-6 roster
-    item (they presently lose EVERY decided plate fight — an arming sword beats a greatsword at plate)."""
+    derived set is now {longsword, greatsword, flamberge, estoc} — FOUR weapons, and since the ED-PC-0016 build all
+    four have a `HALFSWORD_FORM` entry, so the name table again gates nothing
+    (test_pc2_capability_recorded_and_switch_wired pins that every afforder has a form)."""
     return (any(e.get('grippable') for e in w.get('elements', ()))
             and bool(w.get('geo', {}).get('halfsword', False)))
 
