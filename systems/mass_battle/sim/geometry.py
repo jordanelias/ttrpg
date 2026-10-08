@@ -4,6 +4,7 @@ NB: explicit __all__ so underscore-prefixed helpers cross `import *`."""
 import math
 from dataclasses import dataclass
 from systems.mass_battle.sim.config import *
+from systems.mass_battle.sim.troop_types.registry import support_weight
 
 __all__ = ['arrowhead_cells', 'line_cells', 'gapped_line_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', '_oriented_abs_map', 'support_engage_frac', 'cell_speed', '_oriented', 'CellBox', 'cellbox_from', 'obb_overlap', 'obb_front_reach_overlap', '_normalize_heading', '_rotate90', '_cellbox_axes', '_cellbox_corners', '_sat_separated', 'engaged_frontage', '_project_interval', '_merge_intervals', '_interval_union_length']
 
@@ -280,7 +281,7 @@ def cells_to_orig_coords(atom, abs_cells):
 def support_engage_frac(atom, contact_abs_cells):
     """F-i: support-stack-adjusted engage_frac.
     Cells behind the contact zone contribute weighted support, up to the ranks the atom's weapon
-    reaches (config.support_weight, MB-07).
+    reaches (registry.support_weight, MB-07).
     [canonical: Jordan handoff §(1)]"""
     max_w = atom_max_width(atom.shape, atom.tier)
     if not SUPPORT_STACK_ENABLED:

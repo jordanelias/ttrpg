@@ -5,10 +5,13 @@ per-subunit combat stats. Depends on config (TROOP_TYPE_ROLES) only — no up-DA
 Re-imported by orchestration via star-import (Subunit.of_type and the stress-test imports unchanged).
 [canonical: mass_battle_v30.md §B.2 troop table; config TROOP_TYPE_ROLES/ROLE_SPEC]"""
 from systems.mass_battle.sim.config import *
+import systems.mass_battle.sim.config as _cfg
+import functools as _functools
 from systems.mass_battle.sim.equipment import loadout_for
 
 __all__ = ['roles_for', 'role_allowed', 'TROOP_TYPE_STATS', 'stats_for',
            'REACH_SHORT', 'REACH_MELEE_DEFAULT', 'TROOP_TYPE_REACH', 'reach_for',
+           'support_ranks_for', 'support_weight',
            'unit_type_for']
 
 
@@ -109,6 +112,29 @@ def reach_for(troop_type):
     if troop_type is None:
         return REACH_MELEE_DEFAULT
     return TROOP_TYPE_REACH.get(str(troop_type).strip().lower(), REACH_MELEE_DEFAULT)
+
+
+# ─── support depth (MB-07, J-18 (A), ED-MB-0041) ─────────────────────────────────
+# Ranks behind contact a troop type's weapon reaches: DERIVED from the reach map above, not kept, as
+# reach / REACH_MELEE_DEFAULT: non-pole melee 0.1 -> 1, pole/spear/lance 0.2 -> 2, pike 0.3 -> 3 (sword/axe: only
+# the rank directly behind presses its blade into the fight; a spear is levelled from the second rank behind; a
+# pike's points project from the third; ranged types fight hand-to-hand with a sidearm). Lives here, not in
+# config, because it reads reach_for and config sits below this module. [ASSUMPTION; medium; Jordan to correct]
+# dividing a lattice-unit reach by 0.1 to get a rank count is the builder's step -- the note on the reach map
+# above calls its scale finer than PP-290's.
+@_functools.lru_cache(maxsize=None)   # pure in troop_type and the static reach map; read per supporter cell
+def support_ranks_for(troop_type):
+    return max(1, round(reach_for(troop_type) / REACH_MELEE_DEFAULT))
+
+
+def support_weight(depth, troop_type):
+    """Pool weight of a cell `depth` ranks behind its contact rank, for one troop type. The single owner of
+    the support stack: core.exchange._pair_engaged_troops and geometry.support_engage_frac both read it.
+    The cap flag and the weight table are read from config at CALL time, so a test can set the control
+    without reloading anything."""
+    if _cfg.MB_SUPPORT_RANK_CAP and depth > support_ranks_for(troop_type):
+        return 0.0
+    return _cfg.SUPPORT_WEIGHTS.get(depth, _cfg.SUPPORT_WEIGHT_FLOOR)
 
 
 # ─── unit_type (movement audit gate 2, ED-MB-0001) ──────────────────────────────

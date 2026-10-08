@@ -2,7 +2,7 @@
 
 The uncapped stack counts every rank behind the contact rank — 1.0, 0.7, 0.5, then 0.3 at EVERY depth
 with no cutoff — so of two forces of EQUAL troops the deeper one keeps adding pool from ranks its weapons
-could never bring to bear. `config.support_weight` is the single owner of a rank's weight; with
+could never bring to bear. `registry.support_weight` is the single owner of a rank's weight; with
 `MB_SUPPORT_RANK_CAP` ON, a rank past `support_ranks_for(troop_type)` weighs 0.
 
 SHIPPED OFF (config.py at the flag): ON stalls the bat.py battery (mirror/cav_shaken/ranged at
@@ -19,6 +19,7 @@ import os
 import pytest
 
 import systems.mass_battle.sim.config as C
+from systems.mass_battle.sim.troop_types.registry import support_ranks_for, support_weight
 from systems.mass_battle.sim.core.exchange import _pair_engaged_troops
 from systems.mass_battle.sim.geometry import _oriented_abs_map
 from systems.mass_battle.sim.hierarchy.units import Subunit
@@ -48,7 +49,7 @@ def _force(troop_type, shape):
     return atom, front
 
 
-_cap = C.support_ranks_for
+_cap = support_ranks_for
 
 
 def _pool(troop_type, shape):
@@ -65,7 +66,7 @@ def _pool(troop_type, shape):
 
 @pytest.fixture
 def capped(monkeypatch):
-    """The cap ON. Read at call time by config.support_weight, so no module reload."""
+    """The cap ON. Read at call time by registry.support_weight, so no module reload."""
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', True)
 
 
@@ -83,7 +84,7 @@ def test_shipped_default_is_off_and_is_todays_stack_exactly():
         pytest.skip("ambient MB_SUPPORT_RANK_CAP=1 — the shipped-default arm cannot be observed here")
     for tt in _TYPES + (None, 'no_such_type'):
         for d in range(1, 12):
-            assert C.support_weight(d, tt) == C.SUPPORT_WEIGHTS.get(d, C.SUPPORT_WEIGHT_FLOOR), (tt, d)
+            assert support_weight(d, tt) == C.SUPPORT_WEIGHTS.get(d, C.SUPPORT_WEIGHT_FLOOR), (tt, d)
     checked = 0
     for tt in _TYPES:
         for shape in _SHAPES:
@@ -135,8 +136,8 @@ def test_capped_ranks_within_the_cap_still_count(capped):
         cap = _cap(tt)
         assert cap >= 1
         for d in range(1, cap + 1):
-            assert C.support_weight(d, tt) == C.SUPPORT_WEIGHTS.get(d, C.SUPPORT_WEIGHT_FLOOR), (tt, d)
-        assert C.support_weight(cap + 1, tt) == 0.0, tt
+            assert support_weight(d, tt) == C.SUPPORT_WEIGHTS.get(d, C.SUPPORT_WEIGHT_FLOOR), (tt, d)
+        assert support_weight(cap + 1, tt) == 0.0, tt
 
 
 def test_table_follows_the_weapon_classes():

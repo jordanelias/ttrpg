@@ -10,6 +10,7 @@ for the base pool term by Jordan's 2026-07-08 directive, see config.py's POOL_QU
 import math
 import os as _exch_os
 from systems.mass_battle.sim.config import *
+from systems.mass_battle.sim.troop_types.registry import support_weight
 from systems.mass_battle.sim.geometry import cells_to_orig_coords
 
 __all__ = ['_stamina_pool_penalty', 'derive_command', 'clamp_command', 'command_base_pool',
@@ -161,7 +162,7 @@ def pair_pool_contribution(atom, contact_abs_cells, base_pool):
     gauge-audit/README.md's own confirmation that per-cell type doesn't exist yet) in the cells
     ACTUALLY engaged with the other atom in THIS pair (`contact_abs_cells`, already pair-scoped by
     `find_contacts`), plus depth-weighted support from ranks behind the contact line (reusing the
-    same `config.support_weight` falloff `support_engage_frac` already uses, capped at the ranks the
+    same `registry.support_weight` falloff `support_engage_frac` already uses, capped at the ranks the
     atom's troop type's weapon reaches -- MB-07, `MB_SUPPORT_RANK_CAP`).
 
     This replaces a flat "divide the whole subunit's pool by how many simultaneous pairs it's in"
