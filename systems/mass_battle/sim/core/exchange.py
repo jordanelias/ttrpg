@@ -10,6 +10,7 @@ for the base pool term by Jordan's 2026-07-08 directive, see config.py's POOL_QU
 import math
 import os as _exch_os
 from systems.mass_battle.sim.config import *
+from systems.mass_battle.sim.troop_types.registry import support_weight
 from systems.mass_battle.sim.geometry import cells_to_orig_coords
 
 __all__ = ['_stamina_pool_penalty', 'derive_command', 'clamp_command', 'command_base_pool',
@@ -137,13 +138,13 @@ def subunit_combat_pool(unit, atom):
     # (default OFF) -> this reduces to the plain yield malus for every existing scenario.
     if getattr(atom, 'yield_active', False) and not getattr(atom, 'pocketed', False):
         raw *= YIELD_POOL_MULT
-    # [ED-MB-0016, DG-6 resolution] Per-battle combat-effectiveness (CEV) friction: scale this subunit's
-    # combat score by its UNIT's once-per-battle LogNormal draw (`_friction_cev`, set by orchestration.
-    # _draw_friction_cev at battle start). 1.0 when MB_FRICTION_CEV is off -> byte-exact. This is the
-    # Dupuy-style CEV multiplier on the whole combat power; the force-independent, once-per-battle
+    # [ED-MB-0016, DG-6 resolution] Per-battle combat-effectiveness friction: scale this subunit's
+    # combat score by its UNIT's once-per-battle LogNormal draw (`_friction`, set by orchestration.
+    # _draw_friction at battle start). 1.0 when MB_FRICTION is off -> byte-exact. A multiplier on the
+    # whole combat power (named friction, not CEV: ED-MB-0045 item (3)); the force-independent, once-per-battle
     # variance it injects is what turns a certain (100%) large-advantage outcome into a decisive-but-
-    # uncertain (historically-banded) one. [grounding: config.py MB_FRICTION_CEV]
-    raw *= getattr(unit, '_friction_cev', 1.0)
+    # uncertain (historically-banded) one. [grounding: config.py MB_FRICTION]
+    raw *= getattr(unit, '_friction', 1.0)
     return max(1, math.floor(raw))
 
 
@@ -161,7 +162,8 @@ def pair_pool_contribution(atom, contact_abs_cells, base_pool):
     gauge-audit/README.md's own confirmation that per-cell type doesn't exist yet) in the cells
     ACTUALLY engaged with the other atom in THIS pair (`contact_abs_cells`, already pair-scoped by
     `find_contacts`), plus depth-weighted support from ranks behind the contact line (reusing the
-    same `SUPPORT_WEIGHTS`/`SUPPORT_WEIGHT_FLOOR` falloff `support_engage_frac` already uses).
+    same `registry.support_weight` falloff `support_engage_frac` already uses, capped at the ranks the
+    atom's troop type's weapon reaches -- MB-07, `MB_SUPPORT_RANK_CAP`).
 
     This replaces a flat "divide the whole subunit's pool by how many simultaneous pairs it's in"
     approximation with an exact, troop-weighted split: a subunit fighting two enemies with an uneven
@@ -216,5 +218,5 @@ def _pair_engaged_troops(atom, contact_abs_cells):
             weighted_troops += troops
         elif SUPPORT_STACK_ENABLED and orig_r > front_r:
             depth = orig_r - front_r
-            weighted_troops += troops * SUPPORT_WEIGHTS.get(depth, SUPPORT_WEIGHT_FLOOR)
+            weighted_troops += troops * support_weight(depth, getattr(atom, 'troop_type', None))
     return weighted_troops

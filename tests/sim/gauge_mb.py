@@ -175,10 +175,10 @@ def make_unit(shape, tier, name, faction, unit_type='melee', power=4, command=4,
                        dr=1, stance=stance, speed=speed)
 
 
-def _command_army(shape, tier=3, n_cmd=3):  # [canonical: sim_mb_06_v9_historical_spec.md — T3 tier; n_cmd=3 = the ancient tripartite battle line (Polybius VI / Roman triplex acies)]
+def _command_army(shape, tier=3, n_cmd=3):  # [canonical: sim_mb_06_v9_historical_spec.md — T3 tier] [CALIBRATED-DEBT: n_cmd=3 — no independent anchor; the triplex acies is three lines in DEPTH, not a lateral split (ED-MB-0045 item 2)]
     """[ED-MB-0038] MATCHED COMMAND-GRANULARITY builder — a shape deployed as `n_cmd` side-by-side
-    commands (the canonical ancient tripartite battle line: left wing / centre / right wing — Roman
-    triplex acies; Polybius VI) at constant density (GAUGE_CONC), summing to GAUGE_TROOPS. Returns a
+    commands (left wing / centre / right wing; n_cmd=3 is CALIBRATED-DEBT, not a historical anchor —
+    see the tag at the end) at constant density (GAUGE_CONC), summing to GAUGE_TROOPS. Returns a
     matchup-callable (name, faction, **kw) so it drops into a TESTS row exactly where a shape-STRING
     would, but yields a MULTI-BODY unit instead of one monolith.
 
@@ -195,8 +195,8 @@ def _command_army(shape, tier=3, n_cmd=3):  # [canonical: sim_mb_06_v9_historica
     cannot fracture cannot measure envelopment. FIX: match the composed side's command-granularity —
     the enveloper is 3 bodies, so its opponent is 3 commands, and the only thing that varies across the
     matchup is geometry/posture (exactly ED-MB-0027's density-constant argument, one axis up).
-    [canonical: honest-gauge granularity match — audit/2026-07-22-mass-battle-stress-test/honest_gauge_readout.md;
-     ancient tripartite deployment (Polybius VI, Roman triplex acies) as the independent granularity anchor.]"""
+    [canonical: honest-gauge granularity match — audit/2026-07-22-mass-battle-stress-test/honest_gauge_readout.md]
+    [CALIBRATED-DEBT: n_cmd=3 — the Roman triplex acies (Polybius VI) names three lines in DEPTH, not a lateral three-way division, so it anchors no granularity here (ED-MB-0045 item 2).]"""
     anchor = ANCHOR_MAP.get((shape, tier), 10)
 
     def _build(name, faction, unit_type='melee', power=4, command=4, discipline=5, morale=6,  # [canonical: sim_mb_06_v9_historical_spec.md — uniform T3 baseline P4/C4/D5/M6, same defaults as make_unit]

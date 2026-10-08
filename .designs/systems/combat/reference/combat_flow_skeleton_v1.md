@@ -21,7 +21,7 @@
 
 | Callable | Anchor | Called by |
 |---|---|---|
-| `wrapper.fight(A, B, cfg=None, rng=None, max_bouts=12) -> int` | `systems/combat/combat_engine_v1/wrapper.py:465 fight` | `engine/cross_scale/combat_bridge.py:106 resolve` (campaign seam, flag-gated — §7); `systems/combat/combat_engine_v1/workbench/balance.py:65`, `systems/combat/combat_engine_v1/workbench/server.py:77`, `systems/combat/combat_engine_v1/workbench/trace.py:23`, `systems/combat/combat_engine_v1/workbench/armour_participation.py:78`, `systems/combat/combat_engine_v1/workbench/armour_participation.py:145`, `systems/combat/combat_engine_v1/workbench/build_levers.py:73` (offline balance/trace harnesses, CLI-invoked); `tests/valoria/test_combat_invariants.py` |
+| `wrapper.fight(A, B, cfg=None, rng=None, max_bouts=12) -> int` | `systems/combat/combat_engine_v1/wrapper.py:487 fight` | `engine/cross_scale/combat_bridge.py:106 resolve` (campaign seam, flag-gated — §7); `systems/combat/combat_engine_v1/workbench/balance.py:65`, `systems/combat/combat_engine_v1/workbench/server.py:77`, `systems/combat/combat_engine_v1/workbench/trace.py:23`, `systems/combat/combat_engine_v1/workbench/armour_participation.py:78`, `systems/combat/combat_engine_v1/workbench/armour_participation.py:145`, `systems/combat/combat_engine_v1/workbench/build_levers.py:73` (offline balance/trace harnesses, CLI-invoked); `tests/valoria/test_combat_invariants.py` |
 | `wrapper.engagement(A, B, first, cfg, rng, prev_closed=False)` | `systems/combat/combat_engine_v1/wrapper.py:47 engagement` | `wrapper.fight:480` only — internal, not an outside-callable entry |
 | `combat_bridge.derive_parties(ctx, world)` | `engine/cross_scale/combat_bridge.py:89 derive_parties` | `engine/cross_scale/scene_dispatch.py:236 derive_parties` |
 | `combat_bridge.resolve(a, b, rng)` | `engine/cross_scale/combat_bridge.py:106 resolve` | `engine/cross_scale/scene_dispatch.py:240 resolve` |
@@ -34,10 +34,10 @@
 
 | Input | Kind | Origin | Anchor |
 |---|---|---|---|
-| `A`, `B` (`Combatant` objects) | arg | caller-constructed | `systems/combat/combat_engine_v1/wrapper.py:465 fight` |
+| `A`, `B` (`Combatant` objects) | arg | caller-constructed | `systems/combat/combat_engine_v1/wrapper.py:487 fight` |
 | `cfg` (defaults to module-level `CFG`) | param | `systems/combat/combat_engine_v1/config.py:2 CFG` (in-code literal dict, not file-read) | `systems/combat/combat_engine_v1/wrapper.py:467` (cfg=cfg or CFG) |
 | `rng` (`random.Random`) | arg | caller-supplied or freshly constructed | `systems/combat/combat_engine_v1/wrapper.py:467` (rng=rng or random.Random()) |
-| `max_bouts` | arg | caller-supplied, default 12 | `systems/combat/combat_engine_v1/wrapper.py:465` (max_bouts=12) |
+| `max_bouts` | arg | caller-supplied, default 12 | `systems/combat/combat_engine_v1/wrapper.py:487` (max_bouts=12) |
 | `Combatant.__init__` attribute overrides (`weapon`, `armor`, `tradition`, `strength`, `agi`, `end`, `cog`, `att`, `spirit`, `focus`, `history`, `disp`, `skills`, `equipped`) | arg | caller-constructed, else class defaults | `systems/combat/combat_engine_v1/combatant.py:93 Combatant.__init__` |
 | `WEAPONS`, `GEOMETRY`, `HALFSWORD_FORM/BASE` (weapon data registry) | registry | `systems/combat/combat_engine_v1/weapons.py:74 WEAPONS` | `systems/combat/combat_engine_v1/combatant.py:7` (from weapons import) |
 | `TRADITIONS`, `ADJACENT`, `ABILITIES`, `TRADITION_KIT` (tradition/ability registries) | registry | `systems/combat/combat_engine_v1/traditions.py:18 TRADITIONS`, `ability_primitives.py` | `systems/combat/combat_engine_v1/tradition.py:13-19` facade re-export |
@@ -48,7 +48,7 @@
 
 ## 3. Flow
 
-S1. **`fight(A, B, cfg, rng, max_bouts)`** — the multi-bout sim harness that runs to a decision (win-rate harness); the intended per-turn game call is **`engagement`** (S2), one engagement per game turn — see §7 for that entry point's reachability. `systems/combat/combat_engine_v1/wrapper.py:465 fight`.
+S1. **`fight(A, B, cfg, rng, max_bouts)`** — the multi-bout sim harness that runs to a decision (win-rate harness); the intended per-turn game call is **`engagement`** (S2), one engagement per game turn — see §7 for that entry point's reachability. `systems/combat/combat_engine_v1/wrapper.py:487 fight`.
   - S1.1 `[write]` Re-init both `WoundTracker`s and live state (`stamina`, `conc`, `initiative`, `poise`) via `_init_live`. `systems/combat/combat_engine_v1/wrapper.py:471-472`.
   - S1.2 `[emit]` `_emit('fight_start', …)`. `systems/combat/combat_engine_v1/wrapper.py:473`.
   - S1.3 `[loop]` For `turn` in `range(max_bouts)` (each iteration = one **engagement**, `systems/combat/combat_engine_v1/wrapper.py:477`):
@@ -95,9 +95,9 @@ S2. **`engagement(A, B, first, cfg, rng, prev_closed)`** — one exchange-bout i
     - S2.7.22 `[gate]` **Turn/exchange separation checks**: stamina collapse → `return None`; `exchanges >= BURST_MAX` → `return None`; clean defence (no hit/riposte/bind) → `return None`. Otherwise the beat loop continues (a burst of exchanges). `systems/combat/combat_engine_v1/wrapper.py:460-462`.
   - S2.8 `[emit]` Loop exhaustion (`beat_exhaustion`) → `return None, closed`. `systems/combat/combat_engine_v1/wrapper.py:463`.
 
-S3. **`core.resolve(pool, net_sigma, rng, ob) -> (degree, net)`** — the shared dice-pool roll + degree band, delegated to `engine.autoload.sigma_leverage`. CORRECTED at the Phase-1 methodology close (2026-09-29, `/code-review`, ED-PC-0058): `ob` is now a required 4th argument (`core.ob_from_defender(defender)`, `defender.history / 2.0`), replacing the fixed `DECISIVE_OB` constant this line used to name — see S2.7.11's matching correction. `systems/combat/combat_engine_v1/core.py:131 resolve`.
+S3. **`core.resolve(pool, net_sigma, rng, ob) -> (degree, net)`** — the shared dice-pool roll + degree band, delegated to `engine.autoload.sigma_leverage`. CORRECTED at the Phase-1 methodology close (2026-09-29, `/code-review`, ED-PC-0058): `ob` is now a required 4th argument (`core.ob_from_defender(defender)`, `defender.history / 2.0`), replacing the fixed `DECISIVE_OB` constant this line used to name — see S2.7.11's matching correction. `systems/combat/combat_engine_v1/core.py:118 resolve`.
 
-S4. **`core.strike(attacker, defender, deg, cfg, net=None, pool=None) -> damage`** — damage-number resolver consumed by every hit site in S2. `systems/combat/combat_engine_v1/core.py:608 strike`.
+S4. **`core.strike(attacker, defender, deg, cfg, net=None, pool=None) -> damage`** — damage-number resolver consumed by every hit site in S2. `systems/combat/combat_engine_v1/core.py:621 strike`.
 
 S5. **Campaign-seam dispatch** (outside `systems/combat/`, traced for the IN-side seam): `scene_dispatch._resolve_slot` on `st == "combat"`. `engine/cross_scale/scene_dispatch.py:226` (st == "combat").
   - S5.1 `[gate][branch]` `if getattr(world, "dispatch_combat_bridge", False):` — flag decided once per campaign by `mc_v18.run_campaign` (default OFF). `engine/cross_scale/scene_dispatch.py:234`, `engine/mc_v18.py:256`.

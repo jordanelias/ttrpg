@@ -378,3 +378,100 @@ def test_rolled_mending_executes_both_branches(monkeypatch):
             took += 1
             assert len(calls) == n + 1 and r.coherence_restored == 1
     assert took >= 1 and failed >= 1, f"took={took} failed={failed}: a branch never executed"
+
+
+# ── WR-02: Mending aimed at the mender's OWN configuration moves the resting point ─────────────
+# `target['configuration_of']` routes the working: 'self' or the mender's own id goes to
+# `coherence.mend_resting_point` (instead of the elastic term); absent / None / another's id keeps
+# the path above. The falsifier is the aim distinction itself (§6.8, derived): the floor moves for
+# the mender only when the mender is the target, and `recover` alone never reaches it.
+
+TOOK = ("Overwhelming", "Success")
+INSIDE_BAND_SET = 3      # a permanent set that leaves the resting point inside the human band
+assert 0 < INSIDE_BAND_SET <= coh.HUMAN_BAND_LIMIT
+
+
+def _mend_aimed(w, degree, monkeypatch, *, configuration_of, set_=INSIDE_BAND_SET, env=True):
+    """One Mending by "prac", whose resting point was first pushed out by `set_` (stress past the
+    elastic range), with the degree FORCED. `configuration_of=...` omits the field entirely."""
+    monkeypatch.setattr(ops, "_compute_degree", lambda net, ob: degree)
+    _stress("prac", coh.ELASTIC_RANGE + set_, w)
+    target = {"scale": "Relational"}
+    if configuration_of is not ...:
+        target["configuration_of"] = configuration_of
+    return ops.attempt_mending(_Practitioner(), target, world=w, rng=random.Random(0),
+                               environment_in_equilibrium=env)
+
+
+@pytest.mark.parametrize("aim", ("self", "prac"))
+@pytest.mark.parametrize("degree", TOOK)
+def test_own_configuration_mending_moves_the_resting_point(aim, degree, monkeypatch, w):
+    amount = ops.RESTING_POINT_MEND_BY_DEGREE[degree]
+    assert amount > 0, "a Mending of one's own configuration that took must move the floor"
+    r = _mend_aimed(w, degree, monkeypatch, configuration_of=aim)
+    s = coh.get_state("prac", world=w)
+    assert s.resting_point == INSIDE_BAND_SET - amount
+    assert r.resting_point_mended == amount
+    assert s.elastic_displacement == coh.ELASTIC_RANGE, "the own-configuration path is not elastic"
+
+
+@pytest.mark.parametrize("aim", (..., None, "someone_else"))
+def test_mending_another_never_moves_the_menders_resting_point(aim, monkeypatch, w):
+    calls = _spy_recover(monkeypatch)
+    r = _mend_aimed(w, "Overwhelming", monkeypatch, configuration_of=aim)
+    s = coh.get_state("prac", world=w)
+    assert len(calls) == 1 and r.coherence_restored > 0, "another's aim keeps the elastic path"
+    assert r.resting_point_mended == 0 and s.resting_point == INSIDE_BAND_SET
+    _rest_fully("prac", w)                    # recover alone never reaches the floor either
+    s = coh.get_state("prac", world=w)
+    assert (s.resting_point, s.elastic_displacement) == (INSIDE_BAND_SET, 0)
+
+
+@pytest.mark.parametrize("degree", ("Partial", "Failure"))
+def test_own_configuration_mending_that_did_not_take_moves_nothing(degree, monkeypatch, w):
+    assert ops.RESTING_POINT_MEND_BY_DEGREE[degree] == 0
+    calls = _spy_recover(monkeypatch)
+    r = _mend_aimed(w, degree, monkeypatch, configuration_of="self")
+    s = coh.get_state("prac", world=w)
+    assert calls == [] and r.resting_point_mended == 0 and r.coherence_restored == 0
+    assert (s.resting_point, s.elastic_displacement) == (INSIDE_BAND_SET, coh.ELASTIC_RANGE)
+
+
+def test_own_configuration_mending_past_the_crossing_is_refused_not_raised(monkeypatch, w):
+    past = coh.HUMAN_BAND_LIMIT + 2
+    r = _mend_aimed(w, "Overwhelming", monkeypatch, configuration_of="self", set_=past)
+    s = coh.get_state("prac", world=w)
+    assert s.crossed and s.resting_point == past and r.resting_point_mended == 0
+    assert any("not mended" in n and "human band" in n for n in r.notes), r.notes
+
+
+def test_own_configuration_mending_gives_no_elastic_term_and_no_stress(monkeypatch, w):
+    calls = _spy_recover(monkeypatch)
+    r = _mend_aimed(w, "Success", monkeypatch, configuration_of="self")
+    assert calls == [], "own-configuration Mending reached recover(): it is the floor, not elastic"
+    assert r.coherence_restored == 0 and r.coherence_delta == 0
+
+
+def test_own_configuration_mending_hides_no_other_error(monkeypatch, w):
+    """Only the crossing refusal is absorbed: a ValueError on an uncrossed state propagates."""
+    def broken(*a, **k):
+        raise ValueError("not the crossing")
+    monkeypatch.setattr(ops, "mend_resting_point", broken)
+    with pytest.raises(ValueError, match="not the crossing"):
+        _mend_aimed(w, "Success", monkeypatch, configuration_of="self")
+
+
+def test_rolled_own_configuration_mending_executes_both_branches():
+    """Unforced dice: a Mending of one's own configuration moves the floor by the table's amount
+    for its degree. Asserts it asserted (CLAUDE.md §0.1 pt 2)."""
+    moved = still = 0
+    for seed in range(300):
+        w = _World()
+        _stress("prac", coh.ELASTIC_RANGE + INSIDE_BAND_SET, w)
+        r = ops.attempt_mending(_Practitioner(), {"scale": "Relational", "configuration_of": "self"},
+                                world=w, rng=random.Random(seed), environment_in_equilibrium=True)
+        expected = ops.RESTING_POINT_MEND_BY_DEGREE[r.degree]
+        assert r.resting_point_mended == expected
+        assert coh.get_state("prac", world=w).resting_point == INSIDE_BAND_SET - expected
+        moved, still = moved + (expected > 0), still + (expected == 0)
+    assert moved >= 1 and still >= 1, f"moved={moved} still={still}: a branch never executed"

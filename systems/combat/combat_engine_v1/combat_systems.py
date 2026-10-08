@@ -720,15 +720,18 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None, grip=None, roo
         # atomic versatile head: the damage coupling already takes max(cut, half-sword gap-thrust) internally, so the
         # head token is unchanged. The REPORTED mode (legibility only) follows the documented armour-conditional shift
         # the engine has always modelled: a cut-thrust sword SWINGS (cuts) — reads easy — until it must half-sword-
-        # thrust to the gaps vs a harness (medium/heavy), then reads hard. This reproduces the prior legibility exactly.
+        # thrust to the gaps vs a harness (medium/heavy), then reads hard. [ED-PC-0050 MOVED THIS: see below.]
         # [ED-PC-0036] The label is READ FROM the coupling contest itself (core.cut_thrust_arm, its single owner), so
         # damage and reported mode cannot diverge. This used to be an independent armour rule ('shear' at none/light,
         # else 'puncture') that contradicted what coupling actually paid — the thrust arm won at EVERY tier, so a
         # cut-and-thrust sword was damaged as a thrust and READ as a swing, with legibility (thrust HARD 0.80, swing
         # EASY 1.25) scoring a mode the fighter never performed. Deriving it also captures cases no armour rule can
-        # express: a poor-edged weapon (spetum, eff 0.63 < CUT_AUTH_REF) correctly prefers its point even unarmoured.
-        dm = core.cut_thrust_arm(core.TIER2MAT[defender_armor], 'full', heads[h].gap,
-                                 heads[h].eff_cut, heads[h].eff_thrust, core.thrust_authority(w['head_len']))[1]
+        # express. Since ED-PC-0050 the contest is priced on damage: hand-balanced swords now thrust unarmoured and a
+        # heavy-swinging polearm (spetum) cuts -- see core.cut_thrust_arm.
+        # [ED-PC-0050] priced on damage with the wielder's own impact pair — the same input core.strike passes.
+        dm = core.cut_thrust_arm(core.TIER2MAT[defender_armor], heads[h].gap,
+                                 heads[h].eff_cut, heads[h].eff_thrust, core.thrust_authority(w['head_len']),
+                                 impact=core.cut_thrust_impacts(w, c.strength, grip=grip, sel_pc=heads[h].pc))[1]
     else:
         dm=core.HEAD_MODE.get(h, V.MODE_SHEAR)
     sel = heads[h]   # the WINNING option's own record; the transposition below is deliberate and lives in exactly one place
@@ -868,11 +871,9 @@ def affords_halfsword(w):
     un-extended roster the derived set was exactly {longsword, estoc}; marking a further attested ricasso
     grippable=True is the JD-3 roster-expansion decision.
     [ED-PC-0035 correction] That set is STALE: ED-PC-0016 marked greatsword and flamberge grippable too, so the
-    derived set is now {longsword, greatsword, flamberge, estoc} — FOUR weapons. What still limits the auto-SWITCH to
-    two is `HALFSWORD_FORM` (whose two entries the ED-PC-0016 auto-switch decision deliberately HELD), which means
-    that name table is currently doing exactly the behaviour-gating this docstring says it no longer does. Tracked as
-    a live inconsistency, not silently reworded: giving greatsword/odachi real half-sword forms is the Batch-6 roster
-    item (they presently lose EVERY decided plate fight — an arming sword beats a greatsword at plate)."""
+    derived set is now {longsword, greatsword, flamberge, estoc} — FOUR weapons, and since the ED-PC-0016 build all
+    four have a `HALFSWORD_FORM` entry, so the name table again gates nothing
+    (test_pc2_capability_recorded_and_switch_wired pins that every afforder has a form)."""
     return (any(e.get('grippable') for e in w.get('elements', ()))
             and bool(w.get('geo', {}).get('halfsword', False)))
 

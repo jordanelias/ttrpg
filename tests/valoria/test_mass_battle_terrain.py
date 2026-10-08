@@ -10,10 +10,11 @@ canon's own citation, `designs/territory/...::terrain_polygons`, is stale in bot
 Two things this file does NOT claim: (1) "dominant polygon by area weight" (ED-780's own wording) —
 this implementation point-tests each province's `anchor` against terrain polygons rather than
 computing true intersection area; disclosed in `terrain.py`'s own docstring, not re-litigated here.
-(2) full A.9 mechanical coverage — only FOREST_BROKEN's speed half ("Cavalry -> Standard") and WALLS'
-defender DR (plan position `20-iv`) are wired into `massbattle.py::_run_and_grade`; UPHILL/NARROW_PASS/
-RIVER_CROSSING are identified by the lookup but not yet mechanically applied (see `_run_and_grade`'s own
-docstring for why each is deferred, not silently dropped).
+(2) full A.9 mechanical coverage — `massbattle.py::_run_and_grade` applies FOREST_BROKEN's speed half
+("Cavalry -> Standard"), WALLS' defender DR (plan position `20-iv`), and, since MB-05, UPHILL's and
+RIVER_CROSSING's dice (plus the crossing's speed step); NARROW_PASS is identified and not applied, and
+`_run_and_grade`'s own docstring says why that changes nothing on a one-subunit field. RIVER_CROSSING
+comes only from the caller's `river_crossing` signal, which no season caller derives yet.
 
 [CORRECTED, adversarial review 2026-09-27] `terrain_row_for_territory` no longer reads fortification
 from the geography YAML — it takes the live `fort_level` as a caller-supplied argument (see its own
@@ -25,7 +26,7 @@ import pytest
 
 from systems.mass_battle.sim.terrain import (
     terrain_row_for_territory, _point_in_polygon, _load_geography, _TYPE_TO_ROW,
-    NARROW_PASS, UPHILL, FOREST_BROKEN, WALLS, OPEN_FLAT,
+    NARROW_PASS, UPHILL, FOREST_BROKEN, WALLS, OPEN_FLAT, RIVER_CROSSING,
 )
 
 
@@ -55,12 +56,12 @@ def test_point_in_polygon_against_a_real_geography_entry():
 
 def test_every_real_province_resolves_to_one_of_the_six_rows():
     """No province should fall through to something outside A.9's closed set -- a NULL-result alarm,
-    not a claim that every row actually occurs (RIVER_CROSSING never does; see terrain.py). Called at
+    not a claim that every row actually occurs (RIVER_CROSSING never does: it comes from a caller's `river_crossing` fact, not from the polygon lookup; see terrain.py). Called at
     fort_level=0 uniformly: fortification is a separate, already-isolated concern (the tests below),
     and this test is specifically about the polygon lookup's own closed-set property."""
     geo = _load_geography()
     valid = {NARROW_PASS, UPHILL, FOREST_BROKEN, WALLS, OPEN_FLAT,
-             'river_crossing'}  # not currently reachable, but still a valid A.9 row name
+             'river_crossing'}  # a valid A.9 row name; this polygon-only call (river_crossing=False) never returns it
     seen = set()
     for tid in geo['provinces']:
         row = terrain_row_for_territory(tid, fort_level=0)
@@ -74,7 +75,7 @@ def test_every_geography_terrain_type_has_a_row_mapping():
     OPEN_FLAT for any `type:` this dict does not cover -- indistinguishable from a genuine open-flat
     result. If the geography file ever gains a terrain type this module has not been told about, that
     silent fallback is a real, unflagged mechanical error, not a documented gap like RIVER_CROSSING is
-    (which is absent from the FUNCTION'S REACHABLE SET, not from the file's own type vocabulary)."""
+    (which is not a file type at all: the caller supplies it)."""
     geo = _load_geography()
     real_types = {entry['type'] for entry in geo['terrain']}
     uncovered = real_types - set(_TYPE_TO_ROW)
@@ -105,6 +106,23 @@ def test_unknown_territory_falls_back_to_open_flat():
     assert terrain_row_for_territory('T-does-not-exist', fort_level=0) == OPEN_FLAT
 
 
+def test_river_crossing_comes_only_from_the_callers_signal_and_walls_outrank_it():
+    """MB-05: RIVER_CROSSING has no polygon route, so the caller's `river_crossing` is its only source.
+    T1 resolves OPEN_FLAT by polygon; the signal turns it into the crossing, a positive fortification
+    still wins (the module's WALLS > RIVER_CROSSING > polygon assumption), an unknown territory stays the
+    no-modifier fallback, and the default (`False`) leaves every territory's polygon row unchanged --
+    the half that keeps every season field, none of which passes the signal, where it was."""
+    assert terrain_row_for_territory('T1', fort_level=0) == OPEN_FLAT, "T1's polygon row moved"
+    assert terrain_row_for_territory('T1', fort_level=0, river_crossing=True) == RIVER_CROSSING
+    assert terrain_row_for_territory('T4', fort_level=0, river_crossing=True) == RIVER_CROSSING
+    assert terrain_row_for_territory('T1', fort_level=1.0, river_crossing=True) == WALLS
+    assert terrain_row_for_territory('T-does-not-exist', fort_level=0, river_crossing=True) == OPEN_FLAT
+    geo = _load_geography()
+    for tid in geo['provinces']:
+        assert (terrain_row_for_territory(tid, fort_level=0, river_crossing=False)
+                == terrain_row_for_territory(tid, fort_level=0)), f"{tid}: the default signal moved the row"
+
+
 # ─── real committed provinces, pinned to their actual row (not just "some valid row") ────────────
 # [adversarial review 2026-09-27] the tests above establish the mechanism; these pin actual results
 # for actual data, so a regression in the polygon/type-mapping logic (e.g. forest silently resolving
@@ -114,6 +132,9 @@ def test_unknown_territory_falls_back_to_open_flat():
     ('T4', UPHILL),          # terrain-highland-grauwald; anchor [1090,1430] inside [970-1170]x[1300-1480]
     ('T7', FOREST_BROKEN),   # terrain-forest-rendstad; anchor [720,800] inside [420-970]x[700-1000]
     ('T6', FOREST_BROKEN),   # terrain-marsh-stillhelm (marsh -> FOREST_BROKEN); anchor [1180,2300]
+    # MB-05: the territory of `set_s_036`, the target `engine/season/tests/test_mass_battle_provider.py`'s
+    # uphill test fights over -- that file may not import this lookup, so the row it relies on is pinned here.
+    ('T9', UPHILL),
 ])
 def test_real_unfortified_provinces_pin_to_their_actual_terrain_row(tid, expected):
     assert terrain_row_for_territory(tid, fort_level=0) == expected
@@ -255,3 +276,100 @@ def test_open_flat_does_not_touch_speed():
     a.speed = 'Fast'
     _run_and_grade(a, b, OPEN_FLAT, None)
     assert a.speed == 'Fast', "OPEN_FLAT must not touch speed (control)"
+
+
+# ─── MB-05: the two dice rows, UPHILL and RIVER_CROSSING ─────────────────────────────────────────
+
+def _terrain_dice(u):
+    return (u.terrain_off_d, u.terrain_def_d)
+
+
+@pytest.mark.parametrize('row,attacker,defender', [
+    (UPHILL, (-1, 0), (0, 1)),            # A.9: "Defender +1D Def; attacker −1D Off"
+    (RIVER_CROSSING, (-1, 0), (0, 0)),    # A.9: "−1D Off", on the crossing side (the attacker)
+    (OPEN_FLAT, (0, 0), (0, 0)),          # the control: "No modifiers"
+    (WALLS, (0, 0), (0, 0)),              # walls move DR, never dice
+])
+def test_each_row_puts_its_a9_dice_on_the_right_side_once(row, attacker, defender):
+    """Which unit takes which die, and that it lands once -- the stochastic tests below cannot tell the
+    sides apart. Spelled as A.9's own numbers, so a constant moved off canon's die count fails here."""
+    from systems.mass_battle.sim.massbattle import _run_and_grade
+
+    a, b = _units()
+    assert _terrain_dice(a) == _terrain_dice(b) == (0, 0), "a fresh unit already carries terrain dice"
+    _run_and_grade(a, b, row, None)
+    assert _terrain_dice(a) == attacker and _terrain_dice(b) == defender, (row, _terrain_dice(a), _terrain_dice(b))
+
+
+@pytest.mark.parametrize('before,after', [('Fast', 'Standard'), ('Standard', 'Slow'), ('Slow', 'Slow')])
+def test_river_crossing_steps_the_crosser_one_speed_tier_slower(before, after):
+    """A.9: "River crossing | −1 Speed tier" -- the crosser only, floored at Slow. Inert on the season
+    path, like forest's speed half (`run_battle` never reads `.speed`); pinned so the write is right
+    the day a reader exists."""
+    from systems.mass_battle.sim.massbattle import _run_and_grade
+
+    a, b = _units()
+    a.speed = before
+    _run_and_grade(a, b, RIVER_CROSSING, None)
+    assert (a.speed, b.speed) == (after, 'Standard')
+
+
+@pytest.mark.parametrize('row,zeroed', [
+    (UPHILL, ('UPHILL_ATTACKER_OFF_D', 'UPHILL_DEFENDER_DEF_D')),
+    (RIVER_CROSSING, ('RIVER_CROSSING_OFF_D',)),
+])
+def test_a_dice_row_resolves_differently_from_open_flat_and_identically_with_its_dice_zeroed(
+        monkeypatch, row, zeroed):
+    """MB-05's falsifier, both arms in one run. The same two units and seeds fought on the row and on
+    OPEN_FLAT: with the row's A.9 dice zeroed (the pre-MB-05 world, where the row was identified and not
+    applied) the two are EQUAL on every seed; with canon's dice they DIFFER on at least one, and the
+    defender never ends with fewer survivors. Measured 2026-10-08 (Python 3.11): 0/16 differ before
+    MB-05, 3/16 after, for both rows at these weights -- one-off figures, not asserted. RIVER_CROSSING's
+    speed step is inert here (see the test above), so the zeroed arm is equal for it too."""
+    import random
+    from systems.mass_battle.sim import massbattle as MB
+
+    def fight(r, seed):
+        a, b = _units()
+        return MB._run_and_grade(a, b, r, random.Random(seed))
+
+    checked = differs = 0
+    for seed in range(16):
+        on_row, flat = fight(row, seed), fight(OPEN_FLAT, seed)
+        assert on_row['defender_size_pct'] >= flat['defender_size_pct'], (
+            f"{row} seed {seed}: the row left the defender FEWER survivors: {on_row} vs {flat}")
+        differs += on_row != flat
+        with monkeypatch.context() as m:
+            for name in zeroed:
+                m.setattr(MB, name, 0)
+            assert fight(row, seed) == flat, f"{row} seed {seed}: with its dice zeroed it still differs"
+        checked += 1
+    assert checked == 16
+    assert differs >= 1, f"{row} resolved identically to OPEN_FLAT on every seed"
+
+
+def test_resolve_field_carries_the_river_crossing_signal_to_the_engine():
+    """MB-05: RIVER_CROSSING's season-side test, at `resolve_field` -- the season provider cannot pass
+    the signal (it is handed the target rung, not the march's origin), so a provider test could only
+    observe `False`. The provider's own fixture sides (the 2-man Crown army mustered at `set_s_014`
+    against the Church at `set_s_036`), fought over T1 (OPEN_FLAT by polygon) with and without the
+    signal: they differ on at least one of 16 seeds (3, measured 2026-10-08, not asserted), and the
+    defenders never end with fewer survivors."""
+    import random
+    from engine.season.harness.populated import build_realm
+    from engine.season.queries import world_q
+    from systems.mass_battle.sim.massbattle import resolve_field
+
+    w = build_realm(0)
+    att = world_q.mustered(w, 'set_s_014', 'fac_crown')
+    dfn = world_q.mustered(w, 'set_s_036', 'fac_church_of_solmund')
+    assert att and dfn, "the provider's fixture sides no longer muster"
+    checked = differs = 0
+    for seed in range(16):
+        crossed = resolve_field(w, att, dfn, territory='T1', river_crossing=True, rng=random.Random(seed))
+        dry = resolve_field(w, att, dfn, territory='T1', rng=random.Random(seed))
+        assert crossed['defender_size_pct'] >= dry['defender_size_pct'], (seed, crossed, dry)
+        differs += crossed != dry
+        checked += 1
+    assert checked == 16
+    assert differs >= 1, "the river_crossing signal never reached the engine"

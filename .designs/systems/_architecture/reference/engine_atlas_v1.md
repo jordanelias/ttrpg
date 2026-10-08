@@ -201,7 +201,7 @@ zero callers, so a live campaign can never contain a Belief — `systems/charact
 
 **`combat` — the personal-combat resolver.** The most developed subsystem in the repo: a bout → engagement → beat
 loop with measure, cadence, read contest, σ-assembly, wound application, bind sub-loop and a contact axis —
-`systems/combat/combat_engine_v1/wrapper.py:465 fight`; CLI-runnable, typed-exported, partly GDScript-ported. No
+`systems/combat/combat_engine_v1/wrapper.py:487 fight`; CLI-runnable, typed-exported, partly GDScript-ported. No
 live trigger queues a combat-type scene, so it is structurally unreachable from the campaign regardless of its
 flag — the blocker is a missing trigger, not a wiring bug — `engine/cross_scale/scene_dispatch.py:77 evaluate_triggers` (§3a).
 

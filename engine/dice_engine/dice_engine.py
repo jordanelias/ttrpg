@@ -246,8 +246,8 @@ def degree_from_net(net: int | float, ob: int | float,
     clause is FALSE. Measured: `systems/factions/sim/crown_initiative.py::coronation_renewal_ob`
     implements `floor(Church.L / 2) + 1` exactly, Royal Progress derives its Ob from the standing
     gap, and the tribunal derives under formal grounds. What is true is narrower: there is NO
-    SINGLE-OWNER derivation — most sites still hand-set (Muster 1, Govern 2, DECISIVE_OB 3, the
-    threadwork table), the three opposed sites disagree, and `parliamentary_transfer`'s `L+2`
+    SINGLE-OWNER derivation — most sites still hand-set (Muster 1, Govern 2, the
+    threadwork table; combat's fixed Ob 3 is deleted, PC-03), the three opposed sites disagree, and `parliamentary_transfer`'s `L+2`
     contradicts the ruling while being stated as canon in `parliamentary_transfer_v30.md`.
     Reconciling them is a systems ruling, not an edit, and is SUSPENDED by Jordan (2026-08-21).
     The distinction matters here more than anywhere else, because this is the function a reader

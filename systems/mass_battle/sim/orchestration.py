@@ -384,7 +384,7 @@ from systems.mass_battle.sim.geometry import *  # P-A stage 2: geometry extracte
 # ─── ATOM ────────────────────────────────────────────────────────────────────
 
 # P-C scaffold: troop_type→role gating (the FM position→role model). Pure accessors over
-# TROOP_TYPE_ROLES; INERT until the instruction→primitive modulation lands. See design §3.5.
+# TROOP_TYPE_ROLES; the instruction→primitive wiring is hierarchy.units.ROLE_INSTRUCTION_PRIMITIVES (MB-04).
 def _momentum_speed(atom, contact_abs_cells):
     """F-ii: mean cell_last_speed for contact cells.
     [canonical: Jordan handoff §(2)]"""
@@ -886,7 +886,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
             mods = []
             op = _oriented(defender_subunit)   # kept: frontage SPAN (_dc below) reads the static oriented pattern
             # [Fable-audit B3 fix, 2026-07-24] abs->orig from the single live identity map, not the dead
-            # spawn lattice (see _octagon_dmg_mod). Live _node_pos on the field path; byte-identical
+            # spawn lattice (see _octagon_cell_mods). Live _node_pos on the field path; byte-identical
             # starting_position+cell_offsets on the grid path.
             abs_to_orig = _oriented_abs_map(defender_subunit)
             seen = set()
@@ -1026,18 +1026,12 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
         # reading the whole enemy line's centre as an oblique (flank) bearing -- verified front->1.00x,
         # rear->2.00x exactly. [canonical: Jordan design -- octagon damage multiplier; du Picq flank/rear
         # lethality + reaction time under surprise]
-        def _octagon_dmg_mod(defender_subunit, defender_cells, attacker_cells):
-            """Subunit-scalar arc = the MEAN of the per-cell arcs (see _octagon_cell_mods, the single
-            owner of the per-cell logic). Byte-exact: identical value, same iteration order."""
-            cm = _octagon_cell_mods(defender_subunit, defender_cells, attacker_cells)
-            return sum(cm.values()) / len(cm) if cm else 0.0
-
         def _octagon_cell_mods(defender_subunit, defender_cells, attacker_cells):
             """[ED-MB-0040] THE single owner of the per-cell octagon arc (Jordan: "each cell has its own
             octagon facing"). Returns {abs_cell: arc_mod} — 0 (GREEN/front) .. -2 (RED/rear) per ANGLE_DEF_MOD,
             each cell judged against ITS OWN facing, its own local attacker centroid, its own pin/FOV state and
-            its own reaction clock. `_octagon_dmg_mod` is the troop-blind MEAN of this map (byte-exact,
-            unchanged); MB_CELL_DAMAGE reads the map itself so casualties land on the cells that are actually
+            its own reaction clock. The subunit scalar (`a_arc`/`b_arc` at the call site) is the troop-blind
+            MEAN of this map; MB_CELL_DAMAGE reads the map itself so casualties land on the cells that are actually
             exposed instead of being averaged into one subunit scalar and smeared back uniformly."""
             if not defender_cells or not attacker_cells:
                 return {}
@@ -1270,10 +1264,17 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                 # ~even at OFF≈DEF — the pin is NOT crushed, it survives to buy time (Cannae centre); two
                 # holders grind slowly; two aggressors trade fast and bloody. Delta-sigma (uniform-impact),
                 # like every other advantage above — NOT a raw damage multiplier. Gated; balanced=0 -> inert.
-                cA = STANCE_COMMITMENT.get(atom_a.stance, 0)
-                cB = STANCE_COMMITMENT.get(atom_b.stance, 0)
+                cA = STANCE_COMMITMENT.get(atom_a.eff_stance, 0)   # [MB-04] role keyword reads through eff_stance
+                cB = STANCE_COMMITMENT.get(atom_b.eff_stance, 0)
                 ns_a += (cA * INTENT_OFFENSE_D + cB * INTENT_DEFENSE_D) * SIGMA_PER_D
                 ns_b += (cB * INTENT_OFFENSE_D + cA * INTENT_DEFENSE_D) * SIGMA_PER_D
+            # [MB-05] A.9 terrain dice (`Unit.terrain_off_d`/`terrain_def_d`, set by
+            # `massbattle._run_and_grade`): a side's own offence dice, less the enemy's defence dice --
+            # the same Off/Def reading as the INTENT term above. Guarded so an untouched pair adds nothing.
+            _ta = unit_a.terrain_off_d - unit_b.terrain_def_d
+            _tb = unit_b.terrain_off_d - unit_a.terrain_def_d
+            if _ta: ns_a += _ta * SIGMA_PER_D
+            if _tb: ns_b += _tb * SIGMA_PER_D
             if MB_FRACTIONAL_POOL:
                 # [ED-MB-0032] roll the CONTINUOUS pool without flooring — the σ-boost reads the fractional
                 # pool too (a dead atom's net is forced to 0 below regardless, same as the integer path).
@@ -1304,6 +1305,11 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                 if eng_counts.get(id(atom_b), 0) >= 2: b_pool = max(1, b_pool - ENCIRCLEMENT_PENALTY)
             if atom_a.unit_type == 'ranged': a_pool = max(1, a_pool // 3)
             if atom_b.unit_type == 'ranged': b_pool = max(1, b_pool // 3)
+            # [MB-05] A.9 terrain dice, whole dice on the pool (this path's currency) -- see the sigma head.
+            _ta = round(unit_a.terrain_off_d - unit_b.terrain_def_d)
+            _tb = round(unit_b.terrain_off_d - unit_a.terrain_def_d)
+            if _ta: a_pool = max(1, a_pool + _ta)
+            if _tb: b_pool = max(1, b_pool + _tb)
             a_net = roll_pool(a_pool)
             b_net = roll_pool(b_pool)
         # [D3 fix, part 2 -- 2026-07-05 adversarial-review correction] `roll_pool`/`_sigma_net_boost`
@@ -1320,7 +1326,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
         b_deg = compute_degree(b_net, max(1, a_net))
         # [ED-MB-0018] Octagon = DAMAGE-RECEIVED MULTIPLIER (Jordan): the arc the attacker strikes from
         # multiplies the DEFENDER's casualties -- front 1.0x, flank 1.5x, rear 2.0x -- interpolated from the
-        # dedicated per-cell FACING-ARC (`_octagon_dmg_mod`, 0..-2 -> mult = 1 - arc*(RED-1)/2, capped at
+        # dedicated per-cell FACING-ARC (`_octagon_cell_mods`, 0..-2 -> mult = 1 - arc*(RED-1)/2, capped at
         # RED). This is the pure octagon arc (local-centroid, reaction-gated), NOT the legacy
         # `a_angle_mod`/`b_angle_mod` bundle (which also carries wrapper/pocket/roll-up pool penalties and
         # spuriously reads a wide line's wings as flanked head-on). Under MB_OCTAGON_DMG the legacy pool
@@ -1331,8 +1337,8 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
         _red = OCTAGON_DMG_MULT["RED"]
         _a_cw = _b_cw = None
         if MB_OCTAGON_DMG:
-            # [ED-MB-0040] One evaluation of the per-cell arcs; the subunit scalar is their MEAN (exactly
-            # what _octagon_dmg_mod returns — byte-exact), and under MB_CELL_DAMAGE the SAME map also
+            # [ED-MB-0040] One evaluation of the per-cell arcs; the subunit scalar is their MEAN
+            # (the retired `_octagon_dmg_mod` scalar, byte-exact), and under MB_CELL_DAMAGE the SAME map also
             # yields the per-cell allocation weights. The pair TOTAL is unchanged either way; the flag only
             # changes WHERE those casualties land (see _cell_damage_weights).
             _a_cm = _octagon_cell_mods(atom_a, list(set(p["a_cells"])), list(set(p["b_cells"])))
@@ -1733,18 +1739,18 @@ def _unit_snapshot(unit):
 
 # ─── BATTLE ──────────────────────────────────────────────────────────────────
 
-def _draw_friction_cev(unit):
+def _draw_friction(unit):
     """[ED-MB-0016, DG-6 resolution] Draw `unit`'s per-battle combat-effectiveness friction factor ONCE.
-    Idempotent within a battle: a fresh unit has no `_friction_cev`; once set it is never redrawn (so a
+    Idempotent within a battle: a fresh unit has no `_friction`; once set it is never redrawn (so a
     multi-turn battle's repeated run_battle entries keep the single per-battle draw). M ~ LogNormal(0,
-    MB_FRICTION_SIGMA^2) via exp(gauss) on the seeded `random` stream. MB_FRICTION_CEV off -> 1.0
-    (default-inert, byte-exact). See config.py MB_FRICTION_CEV for the full grounding."""
-    if getattr(unit, '_friction_cev', None) is not None:
+    MB_FRICTION_SIGMA^2) via exp(gauss) on the seeded `random` stream. MB_FRICTION off -> 1.0
+    (default-inert, byte-exact). See config.py MB_FRICTION for the full grounding."""
+    if getattr(unit, '_friction', None) is not None:
         return
-    if MB_FRICTION_CEV and MB_FRICTION_SIGMA > 0.0:
-        unit._friction_cev = math.exp(rngsource.get().gauss(0.0, MB_FRICTION_SIGMA))
+    if MB_FRICTION and MB_FRICTION_SIGMA > 0.0:
+        unit._friction = math.exp(rngsource.get().gauss(0.0, MB_FRICTION_SIGMA))
     else:
-        unit._friction_cev = 1.0
+        unit._friction = 1.0
 
 
 # ─── [ED-MB-0052 / plan-v2 §5 C1] PER-PHASE CASUALTY ATTRIBUTION ─────────────
@@ -1824,15 +1830,15 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
     # FIELD_MOVEMENT is OFF (byte-exact).
     assert (not FIELD_MOVEMENT) or MB_NODE_COHESION, \
         "FIELD_MOVEMENT=1 requires MB_NODE_COHESION=1 (the coordinate field runs on the node float path)"
-    # [ED-MB-0016, DG-6 resolution] Draw each side's per-BATTLE combat-effectiveness (CEV) friction factor
+    # [ED-MB-0016, DG-6 resolution] Draw each side's per-BATTLE combat-effectiveness friction factor
     # ONCE, lazily: the FIRST run_battle entry for a fresh unit draws it; subsequent turns of a multi-turn
     # battle (which re-enter run_battle with persistent unit state) see it already set and do NOT re-draw
     # -- so the shock is drawn once per battle, not per turn (per-turn re-draws would self-average away the
     # very variance this restores). A fresh unit per gauge trial gets a fresh draw. Default-inert: with
-    # MB_FRICTION_CEV off, _draw_friction_cev sets 1.0 (no behaviour change; byte-exact). Uses the seeded
+    # MB_FRICTION off, _draw_friction sets 1.0 (no behaviour change; byte-exact). Uses the seeded
     # `random` stream so determinism (I2) holds; enabling it shifts the stream (field goldens re-record).
-    _draw_friction_cev(unit_a)
-    _draw_friction_cev(unit_b)
+    _draw_friction(unit_a)
+    _draw_friction(unit_b)
     turns = 0
     current_phase = 0
     # [ED-MB-0048 / A3] battle-scoped totals for the sub-phase truncation counter; see
@@ -2615,7 +2621,9 @@ def resolve_feigned_retreat(pursuer, feigning_unit):
     engagement pool is cut by OVEREXTEND_PENALTY — see units.base_combat_pool). Returns a dict
     describing the outcome, or None if the feint did not apply.
     [canonical: PP-256, mass_battle_v30.md §A.12 / §B.4 tactic card — Overextended]"""
-    if not MB_FEIGNED_RETREAT or not getattr(feigning_unit, 'feigned', False):
+    # [MB-04] A 'lure' instruction (the Feint role) declares the same feint the 'feign_retreat' order
+    # pseudo-field does; read live here (hierarchy.units.unit_lures), never copied onto `.feigned`.
+    if not MB_FEIGNED_RETREAT or not (getattr(feigning_unit, 'feigned', False) or unit_lures(feigning_unit)):
         return None
     if feigned_retreat_recognized(pursuer):
         return {'recognized': True, 'overextended': False}

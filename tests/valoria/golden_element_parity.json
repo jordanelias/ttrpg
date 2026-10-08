@@ -40,7 +40,7 @@
         0.84
       ],
       "none": [
-        "shear",
+        "puncture",
         "cut_thrust",
         0.55,
         null,
@@ -307,7 +307,7 @@
         0.75
       ],
       "none": [
-        "shear",
+        "puncture",
         "cut_thrust",
         0.56,
         null,
@@ -358,7 +358,7 @@
         0.88
       ],
       "none": [
-        "shear",
+        "puncture",
         "cut_thrust",
         0.84,
         null,
@@ -688,7 +688,7 @@
         0.8
       ],
       "none": [
-        "shear",
+        "puncture",
         "cut_thrust",
         0.61,
         null,
@@ -697,6 +697,65 @@
       ]
     },
     "static_moment": 0.5436874999999999
+  },
+  "flamberge_halfsword": {
+    "MoI": 1.5045483016666668,
+    "PoB_frac": -0.33106310316228466,
+    "PoB_m": -0.5462541202177698,
+    "afforded": {
+      "blunt": [
+        2.0,
+        "percussion"
+      ],
+      "cut": [
+        0.5,
+        "shear"
+      ],
+      "point": [
+        0.74,
+        "puncture"
+      ]
+    },
+    "agility": 0.19442767430474475,
+    "gap": 0.74,
+    "length_m": 1.6500000000000001,
+    "m_head": 0.4641,
+    "perc_auth": 2.0,
+    "select_mode": {
+      "heavy": [
+        "puncture",
+        "point",
+        0.74,
+        null,
+        0.72,
+        0.74
+      ],
+      "light": [
+        "puncture",
+        "point",
+        0.74,
+        null,
+        0.72,
+        0.74
+      ],
+      "medium": [
+        "puncture",
+        "point",
+        0.74,
+        null,
+        0.72,
+        0.74
+      ],
+      "none": [
+        "puncture",
+        "point",
+        0.74,
+        null,
+        0.72,
+        0.74
+      ]
+    },
+    "static_moment": -1.47494075
   },
   "glaive": {
     "MoI": 1.0175893333333335,
@@ -866,6 +925,65 @@
       ]
     },
     "static_moment": 0.4947749999999999
+  },
+  "greatsword_halfsword": {
+    "MoI": 1.5081743333333335,
+    "PoB_frac": -0.3037573113908992,
+    "PoB_m": -0.5011995637949836,
+    "afforded": {
+      "blunt": [
+        2.0,
+        "percussion"
+      ],
+      "cut": [
+        0.5,
+        "shear"
+      ],
+      "point": [
+        0.74,
+        "puncture"
+      ]
+    },
+    "agility": 0.19431070549579074,
+    "gap": 0.74,
+    "length_m": 1.65,
+    "m_head": 0.673,
+    "perc_auth": 2.0,
+    "select_mode": {
+      "heavy": [
+        "puncture",
+        "point",
+        0.74,
+        null,
+        0.72,
+        0.74
+      ],
+      "light": [
+        "puncture",
+        "point",
+        0.74,
+        null,
+        0.72,
+        0.74
+      ],
+      "medium": [
+        "puncture",
+        "point",
+        0.74,
+        null,
+        0.72,
+        0.74
+      ],
+      "none": [
+        "puncture",
+        "point",
+        0.74,
+        null,
+        0.72,
+        0.74
+      ]
+    },
+    "static_moment": -1.3788
   },
   "guandao": {
     "MoI": 6.14265375,
@@ -1309,7 +1427,7 @@
         0.8
       ],
       "none": [
-        "shear",
+        "puncture",
         "cut_thrust",
         0.78,
         null,
@@ -1623,7 +1741,7 @@
         1.14
       ],
       "medium": [
-        "shear",
+        "puncture",
         "cut_thrust",
         0.4,
         null,
@@ -1729,7 +1847,7 @@
         1.5945389269784853
       ],
       "light": [
-        "puncture",
+        "shear",
         "cut_thrust",
         0.47,
         null,
@@ -1796,7 +1914,7 @@
         0.84
       ],
       "none": [
-        "shear",
+        "puncture",
         "cut_thrust",
         0.58,
         null,
@@ -2432,7 +2550,7 @@
         0.63
       ],
       "none": [
-        "puncture",
+        "shear",
         "cut_thrust",
         0.62,
         null,

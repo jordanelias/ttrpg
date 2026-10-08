@@ -17,7 +17,8 @@ Requires LANCHESTER_ENABLED on (the engine default). Run from the repo root (no 
     python3 -m systems.mass_battle.sim.lanchester_signature
 
 All numeric thresholds below are class-B TOLERANCES derived from validated P-L behaviour,
-NOT canonical magnitudes; the SIGNATURES are the spec section-four validation plan.
+NOT canonical magnitudes (the one exception, LINEAR_BIG_WIN_BAND, is the cited DLEDB plateau); the
+SIGNATURES are the spec section-four validation plan.
 """
 import contextlib
 import os, random, statistics
@@ -26,19 +27,26 @@ import os, random, statistics
 os.environ.setdefault('LANCHESTER_ENABLED', '1')
 os.environ.setdefault('PER_CELL', '0')
 
-from systems.mass_battle.sim.config import BLOCK_SIZE   # [ED-MB-0050 / A6a] the annihilation threshold
+from systems.mass_battle.sim.config import BLOCK_SIZE, TROOPS_PER_TIER   # [ED-MB-0050 / A6a] the annihilation threshold
 from systems.mass_battle.sim.engine import (Subunit, Unit, run_battle,
                                 SIDE_A_START_ROW, SIDE_B_START_ROW, LANCHESTER_ENABLED)
 import systems.mass_battle.sim.core.state as _state   # [ED-MB-0050 / A6a] patched by _rout_disabled below
 
 # --- signature thresholds (class-B tolerances; signatures per spec §4) ---
-LINEAR_MIN_BIG_WIN  = 65       # [canonical: mb_lanchester_design.md §4(2) — linear sig: big-force win%; class-B tolerance]
+# [ED-MB-0045 superseding row, item (1)] ONE band for the big-force win quantity. It replaces the
+# one-sided floor `LINEAR_MIN_BIG_WIN = 65`, which passed every win rate from 65 to 100, including the
+# 100.0% this check reads with friction off (MB_FRICTION=0). The pair fought is BIG_TIER vs SMALL_TIER =
+# 800 vs 200 troops, i.e. 4:1 (config.TROOPS_PER_TIER), so the band is the DLEDB "3:1+" plateau
+# MB_FRICTION_SIGMA is calibrated against (config.py): 74-83%, "plateaus, never certain". Above the top
+# edge is the certainty friction exists to remove; below the bottom edge is a collapse toward a coin flip.
+# Both fail; the floor could fail only the second.
+LINEAR_BIG_WIN_BAND = (74, 83)   # [canonical: audit/2026-07-22-mass-battle-stress-test/dg6_friction_resolution.md §3 "Historical decisiveness bands" — Dupuy DLEDB attacker win-rate, "74–83% at 3:1+"; the force-ratio calibration table is §4]
 LINEAR_MIN_CASDIFF  = 20       # [canonical: mb_lanchester_design.md §4(2) — linear sig: casualty diff (small−big); class-B tolerance]
 SQUARE_MIN_RATIO    = 4        # [canonical: mb_lanchester_design.md §4(3) — square sig: cas-exchange ratio ≥ (size ratio)² at 2:1; class-B tolerance]
 NOANNIH_MAX_CAS     = 60       # [canonical: mb_lanchester_design.md §4(4) — no-annihilation: winner-side casualty% ceiling; class-B tolerance]
-BIG_TIER            = 4        # [canonical: mb_lanchester_design.md §4(2) — 2:1 size pair (Tier 4 = 800 vs Tier 2 = 200... here 400 vs 200 at company scale); class-B]
+BIG_TIER            = 4        # [canonical: mb_lanchester_design.md §4(2) — size pair; TROOPS_PER_TIER makes Tier 4 = 800 vs Tier 2 = 200, i.e. 4:1 in troops (frontage 7 v 5 cells), NOT 2:1; check_square reads the same pair; class-B]
 MIRROR_TIER         = 3        # [canonical: mb_lanchester_design.md §4(4) — equal-size mirror baseline; class-B]
-SMALL_TIER          = 2        # exempt literal (2): the smaller force in the 2:1 pair
+SMALL_TIER          = 2        # exempt literal (2): the smaller force of the pair
 SEED_BASE           = 2000000  # [canonical: mb_lanchester_design.md §4 — deterministic seed base; class-B]
 N                   = 100      # exempt literal (100): sample size per matchup
 
@@ -90,23 +98,25 @@ def _sweep(big_tier, small_tier, unit_type, stance='balanced', instructions=()):
         cas_b.append(100 * (b0 - ub.hp) / b0)
         hp_a.append(100 * ua.hp / a0)
         hp_b.append(100 * ub.hp / b0)
-    return dict(big_win=aw / N * 100,
+    return dict(big_win=100 * aw / N,
                 cas_big=statistics.mean(cas_a), cas_small=statistics.mean(cas_b),
                 hp_big=statistics.mean(hp_a), hp_small=statistics.mean(hp_b))
 
 
 def check_linear():
-    """Melee 2:1 → big force wins decisively (frontage/durability linear edge)."""
+    """Melee 4:1 in troops (800 v 200) → big force wins decisively but not certainly (frontage/durability
+    linear edge, banded by friction): big_win inside LINEAR_BIG_WIN_BAND, casualty difference above its floor."""
     r = _sweep(BIG_TIER, SMALL_TIER, 'melee')
     casdiff = r['cas_small'] - r['cas_big']
-    ok = r['big_win'] >= LINEAR_MIN_BIG_WIN and casdiff >= LINEAR_MIN_CASDIFF
-    return ('LINEAR (melee 2:1)', ok,
-            f"big_win={r['big_win']:.1f}%% (≥{LINEAR_MIN_BIG_WIN}) "
+    lo, hi = LINEAR_BIG_WIN_BAND
+    ok = lo <= r['big_win'] <= hi and casdiff >= LINEAR_MIN_CASDIFF
+    return ('LINEAR (melee 4:1)', ok,
+            f"big_win={r['big_win']:.1f}% (in [{lo}, {hi}]) "
             f"cas_diff={casdiff:+.1f} (≥{LINEAR_MIN_CASDIFF})")
 
 
 def check_square():
-    """Volley 2:1 → cas-exchange ratio super-linear in size (square concentration).
+    """Volley 4:1 in troops (800 v 200) → cas-exchange ratio super-linear in size (square concentration).
 
     [ED-MB-0050 / A6a] Scenario repaired: was `stance='hold'`, under which neither archer body ever
     closed and BOTH sides took 0.0% casualties — so the `inf` this reported was a 0/0 guard and the
@@ -118,14 +128,14 @@ def check_square():
     r = _sweep(BIG_TIER, SMALL_TIER, 'ranged', VOLLEY_STANCE, VOLLEY_INSTRUCTIONS)
     fired = r['cas_big'] > 0 or r['cas_small'] > 0
     if not fired:
-        return ('SQUARE (volley 2:1)', False,
-                "PRECONDITION FAILED — 0.0%% casualties on BOTH sides: no exchange occurred, so there "
+        return ('SQUARE (volley 4:1)', False,
+                "PRECONDITION FAILED — 0.0% casualties on BOTH sides: no exchange occurred, so there "
                 "is no ratio to test (this is what `inf` used to hide)")
     ratio = r['cas_small'] / r['cas_big'] if r['cas_big'] > 0 else float('inf')
     ok = ratio >= SQUARE_MIN_RATIO
-    return ('SQUARE (volley 2:1)', ok,
+    return ('SQUARE (volley 4:1)', ok,
             f"cas_exchange small/big={ratio:.1f} (≥{SQUARE_MIN_RATIO}; linear law would give "
-            f"~{BIG_TIER//SMALL_TIER}) [cas big={r['cas_big']:.2f}%% small={r['cas_small']:.2f}%%]")
+            f"~{TROOPS_PER_TIER[BIG_TIER]//TROOPS_PER_TIER[SMALL_TIER]}) [cas big={r['cas_big']:.2f}% small={r['cas_small']:.2f}%]")
 
 
 def check_no_annihilation():
@@ -135,7 +145,7 @@ def check_no_annihilation():
     loser_hp = min(r['hp_big'], r['hp_small'])
     ok = worst_cas <= NOANNIH_MAX_CAS and loser_hp > 0
     return ('NO-ANNIHILATION (mirror)', ok,
-            f"max_cas={worst_cas:.1f}%% (≤{NOANNIH_MAX_CAS}) loser_hp={loser_hp:.1f}%% (>0)")
+            f"max_cas={worst_cas:.1f}% (≤{NOANNIH_MAX_CAS}) loser_hp={loser_hp:.1f}% (>0)")
 
 
 # --- conserved-quantity exponent guard (the rigorous law check) ---

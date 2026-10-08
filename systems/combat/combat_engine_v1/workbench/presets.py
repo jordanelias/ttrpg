@@ -3,7 +3,7 @@
 Aggregates the engine's parameters into one place, tagged by PROVENANCE CLASS so the workbench can guard
 what must not be casually tuned and separate what is method-not-balance:
 
-  A  CANONICAL    — params/core.md / m1 / r8 anchors (d10 EV/sigma, TN, decisive Ob, the 18-pt budget).
+  A  CANONICAL    — params/core.md / m1 / r8 anchors (d10 EV/sigma, TN, the 18-pt budget).
                     READ-ONLY in the workbench; changing these is a canon decision, not a tuning pass.
   B  SIM-SEED     — modifier_system_spec sigma-levels and soft-cap (m1). Tunable, not canonical.
   C  TUNABLE      — the live combat knobs (config.CFG) + the r8 per-point dsig seeds. The main surface.
@@ -34,8 +34,7 @@ def param_surface():
         'per_die_mean_TN7': m1.PER_DIE[7][0],
         'per_die_sigma_TN7': m1.PER_DIE[7][1],
         'TN_standard': m1.TN_STANDARD,
-        'decisive_Ob': core.DECISIVE_OB,
-    }
+    }   # 'decisive_Ob' removed with core.DECISIVE_OB (PC-03): Ob is per-defender (core.ob_from_defender), not a knob
     if r8 is not None:
         A.update(attr_average=r8.ATTR_AVG, attr_creation_max=r8.ATTR_MAX, attr_budget=r8.EXPECTED_BUDGET)
     B = {

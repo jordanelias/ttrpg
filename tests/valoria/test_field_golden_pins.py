@@ -77,6 +77,14 @@ _KNOWN_INERT = {
     'MB_RESERVE_COMMIT', 'RESERVE_COMMIT_TURN',
     # dead behind MB_CELL_MORALE (pinned '0'):
     'CELL_BREAK_ROUT_FRAC', 'CELL_MORALE_PULL',
+    # [MEASURED-INERT 2026-10-08, MB-04] needs a role keyword with a row in
+    # hierarchy.units.ROLE_INSTRUCTION_PRIMITIVES that the table routes ('hold'/'push'/'charge'/'lure');
+    # the battery's only instructions are 'brace' and the envelop presets' 'envelop' (bat.py), both
+    # literal rows (the gauge's 'kite' and the validators' 'sweep' are literal rows too). Not inert
+    # off-battery: the MB-07 charger fixture moves under it (test_mass_battle_support_rank_cap.py).
+    # Measured with `python3 tools/ci_golden_modes_check.py` (PATH python3 = 3.11): all three modes
+    # BYTE-EXACT OK on the unchanged digests with the flag at its default ON.
+    'MB_ROLE_INSTRUCTIONS',
 }
 # [A6, ED-MB-0067 Part A, 2026-09-26] MB_AMMO_ENABLED/MB_VOLLEYS_START/MB_VOLLEYS_RESUPPLY are NOT
 # classified here (in _KNOWN_INERT) -- round 1 briefly did, while the flag shipped OFF; reclassified
@@ -128,7 +136,7 @@ def _source_defaults():
 # (MB_FEIGNED_RETREAT, MB_RESERVE_COMMIT, MB_YIELD_EMERGENT/POCKET/RALLY) live in _KNOWN_INERT, and
 # that is its own problem — see test_known_inert_reasons_are_not_self_referential below.
 _PENDING_REBASE = {
-    'MB_CELL_DAMAGE', 'MB_CELL_MORALE', 'MB_CLOSE_RANKS', 'MB_FRACTIONAL_POOL', 'MB_FRICTION_CEV',
+    'MB_CELL_DAMAGE', 'MB_CELL_MORALE', 'MB_CLOSE_RANKS', 'MB_FRACTIONAL_POOL', 'MB_FRICTION',
     'MB_INTENT_RESOLUTION', 'MB_TROOP_DENSITY_CAP', 'FIELD_CONTACT', 'MB_FACING_MODEL',
     'REFORM_CHECK_ENABLED',
 }

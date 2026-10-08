@@ -21,7 +21,7 @@ Implements 7 operation entry points + the Three-Axis Ob lookup (Depth + Breadth
 Dependencies:
   - sim/autoload/dice_engine
   - systems/threadwork/sim/coherence (apply_coherence_delta; recover + get_state for Mending's
-    restorative feedback)
+    restorative feedback; mend_resting_point for Mending aimed at the mender's own configuration)
   - sim/cross_scale/handoff_rules (TS-banded coherence cost for mass-battle context)
 
 Entry points:
@@ -33,6 +33,9 @@ Entry points:
   - attempt_dissolution(actor, target, world) -> OperationResult
   - attempt_mending(actor, target, world, *, environment_in_equilibrium=False) -> OperationResult
     (keyword-only; defaults to False, so a caller that states no environment gets no restorative term)
+  - mending_priced_scale / price_mending / apply_mending_feedback — THE one pricing owner for a
+    Mending, read by attempt_mending, collective.py and opposing.py alike (WR-03)
+  - resist_coherence_cost(cost, actor) -> int — R-14's one owner, read by all three likewise
 """
 from __future__ import annotations
 
@@ -41,7 +44,8 @@ from typing import Optional, Any
 
 from engine.dice_engine import dice_engine
 from engine.dice_engine.dice_engine import roll_pool
-from systems.threadwork.sim.coherence import apply_coherence_delta, get_state, recover
+from systems.threadwork.sim.coherence import (RESTING_POINT_START, apply_coherence_delta, get_state,
+                                              mend_resting_point, recover)
 
 
 # §TN — TN IS 7. ALWAYS.
@@ -135,6 +139,34 @@ COHERENCE_COST_BY_SCALE = {
 # [canonical: §3.2 — "FR surcharge cap exemption (PP-196)"]
 FR_SURCHARGE = -1
 
+# R-14 — THE PRACTITIONER-SIDE TERM ON A WORKING'S COHERENCE COST (WR-01).
+# canon/philosophy/06_operations.md "How large the cost is, and what resists it" (ruled 2026-09-09):
+# "What determines their ability to prevent that cost is how resilient their spirit is — which is how
+# strongly configured they are." Canon says it is NOT thread sensitivity, NOT imbrication, NOT size. This
+# module derives it from nothing: it reads one duck-typed slot (`actor.resilience`, a non-negative int,
+# absent = 0). The slot's NAME and what fills it (Spirit is a candidate input, GO-01 / J-9 in the plan) are
+# unruled, and the builder's `resilience` is a placeholder until they are. It "sits alongside" D-5's type
+# x scale and §6.6's direction test:
+# those still form the working's cost; this term only RESISTS it (`resist_coherence_cost` below).
+# THE ARITHMETIC IS UNRULED (RULINGS.md Batch 13 retracted C-3's "no toughness term" without ruling a
+# shape), so it ships as a SWEPT FIXTURE on H-94's precedent (engine/season/hole_register.yaml,
+# `sweep: [0, 1, 3]`): the gain is whole Coherence units resisted per point of resilience, and the
+# shipped value 0 is THE CONTROL — today's behaviour, byte-for-byte. Arms 1 and 3 are the builder's.
+# The sweep is a tuple here, not a comment, so tests/valoria/test_threadwork_resilience.py runs it.
+RESILIENCE_GAIN_SWEEP = (0, 1, 3)  # [JUSTIFIED: R-14 ruled 2026-09-09 sources the mechanism (resilience resists the cost); magnitude unruled — swept fixture on H-94's precedent, arms are the builder's]
+RESILIENCE_GAIN = 0                # [JUSTIFIED: R-14 ruled 2026-09-09 sources the mechanism; magnitude unruled — shipped arm RESILIENCE_GAIN_SWEEP[0], the control = pre-R-14 behaviour]
+
+# WR-02 — WHAT A MENDING AIMED AT THE MENDER'S OWN CONFIGURATION ACHIEVES ON THE RESTING POINT, by
+# degree: the `amount` handed to `coherence.mend_resting_point` (see `attempt_mending`). The floor
+# moves only when the working clearly took, so Partial and Failure move nothing. One owner; tests read it
+# rather than restate it. ⚠ [GAP] C-1 calls moving the floor "extremely difficult to do but possible",
+# and the difficulty belongs in the caller's Ob (coherence.mend_resting_point). It is NOT modelled here:
+# an own-aim Mending rolls the ordinary MENDING_OB (a target with no scale prices Relational, Ob 2), so a
+# Success is roughly 0.6 likely at pool 8 and 0.85 at pool 14 (hand estimate, normal approximation, not a
+# measurement), and an attempt costs nothing (ED-871), so repeated casts can walk a permanent set to 0.
+# A cost, a cadence or a harder Ob is a design call, carried in HANDOFF_WR.md.
+RESTING_POINT_MEND_BY_DEGREE = {"Overwhelming": 1, "Success": 1, "Partial": 0, "Failure": 0}  # [JUSTIFIED: RULINGS.md C-1 (floor movable, "extremely difficult") + canon/philosophy/06_operations.md §6.8 aim distinction (derived) source the mechanism; magnitude invented]
+
 # P-25 "Scale-based Mending Stability" — the SCALE TERM on Mending Stability, authored here because
 # ED-WR-0008's superseding row (2026-09-15, registers/editorial_ledger_wr_archive.jsonl) says so:
 # the P-25 override table was truncated at authoring to its header plus the label `Object`, NOTHING
@@ -183,6 +215,10 @@ class OperationResult:
     # `coherence.recover` moved, not what was offered to it. Only Mending sets it; see
     # `attempt_mending`.
     coherence_restored: int = 0
+    # How far a Mending aimed at the mender's OWN configuration actually moved their RESTING POINT
+    # inward (>= 0): measured off state before/after `coherence.mend_resting_point`, like
+    # `coherence_restored`. Only `attempt_mending`'s own-configuration path sets it.
+    resting_point_mended: int = 0
     notes: list[str] = field(default_factory=list)
 
 
@@ -209,6 +245,46 @@ def _actor_pool(actor) -> int:
     # PP-624: (Spirit × 2) + (History + 3 constant, capped +3D from level) + TPS
     history_contrib = min(3, history + 3)
     return (spirit * 2) + history_contrib + tps
+
+
+def resist_coherence_cost(cost: int, actor) -> int:
+    """R-14: the working's Coherence `cost` (<= 0) after the practitioner's resilience resists it.
+
+    THE ONE OWNER of the practitioner-side ARITHMETIC. The three operation sites reach it through
+    `charge_working`, after the working's own terms (type x scale, direction, degree) are applied;
+    nothing re-implements it.
+
+    Resistance is `RESILIENCE_GAIN * actor.resilience` whole units, and it can only bring a cost
+    TOWARD zero: the result is floored at 0, so a resilient practitioner takes nothing from a small
+    working but is never handed a positive delta (which `coherence.apply_coherence_delta` refuses —
+    restoration is `recover`'s, not a cost's). A cost that is already 0 (Mending, ED-871) or positive is
+    returned unchanged. A Leap that rolls Partial or Failure carries C-TW-3's blanket -1 (see
+    `_resolve_operation`), so it is a cost like any other and is resisted too.
+
+    AT THE SHIPPED GAIN 0 THIS IS THE IDENTITY FOR EVERY ACTOR, whatever `resilience` holds: it is
+    returned before the attribute is read. At a live gain the attribute must be an int >= 0 (an absent
+    one is 0); anything else is refused rather than guessed, as `coherence.apply_coherence_delta`
+    refuses a positive delta.
+    """
+    if cost >= 0 or RESILIENCE_GAIN == 0:
+        return cost
+    resilience = getattr(actor, 'resilience', 0)
+    if isinstance(resilience, bool) or not isinstance(resilience, int) or resilience < 0:
+        raise ValueError(f"resist_coherence_cost: resilience is an int >= 0 (got {resilience!r})")
+    return min(0, cost + RESILIENCE_GAIN * resilience)
+
+
+def charge_working(actor, actor_id, cost: int, source: str, world=None) -> int:
+    """R-14 + the write: resist `cost` through `resist_coherence_cost`, apply what is left to
+    `actor_id`'s Coherence (a zero cost writes nothing, so nothing is logged), and return the amount
+    APPLIED. The one place a working's cost reaches `coherence.apply_coherence_delta` from the three
+    operation sites (`_resolve_operation`, `collective.py`, `opposing.py`), so what they report is what
+    was applied by construction. (`apply_coherence_delta` takes an id string, so it cannot read the
+    actor's resilience itself; that is why the resisting sits here.)"""
+    applied = resist_coherence_cost(cost, actor)
+    if applied != 0:
+        apply_coherence_delta(actor_id, applied, source, world=world)
+    return applied
 
 
 def _resolve_operation(operation: str, actor, ob: int, tn: int,
@@ -245,9 +321,8 @@ def _resolve_operation(operation: str, actor, ob: int, tn: int,
     effective_coh = coherence_delta
     if degree in ("Partial", "Failure") and operation != "Mending":
         effective_coh -= 1
-
-    if effective_coh != 0:
-        apply_coherence_delta(actor_id, effective_coh, f"{operation} {degree}", world=world)
+    # R-14: the practitioner's resilience resists the working's cost (RESILIENCE_GAIN; 0 = control).
+    effective_coh = charge_working(actor, actor_id, effective_coh, f"{operation} {degree}", world=world)
 
     # Mending Stability impact. Weaving/Pulling: the degree table's Partial/Failure values,
     # OVERRIDDEN by scale per P-25 (ED-WR-0008, see the comment above): Partial = the scale's
@@ -365,6 +440,75 @@ def attempt_dissolution(actor, target: dict, world=None, rng=None) -> OperationR
                               coherence_delta=coh, world=world, rng=rng)
 
 
+# ─── WR-03: THE ONE PRICING OWNER FOR MENDING ────────────────────────────────────────────────────
+# Three sites resolve a Mending: `attempt_mending` (one practitioner), `collective.py` (§2.5) and
+# `opposing.py` (§2.6). Each priced it its own way until WR-03; all three now read these three
+# functions, so the scale worked, the cost, the Mending Stability delta and the restorative term
+# cannot disagree between them (tests/valoria/test_threadwork_mending_parity.py).
+
+# ED-871 (2026-05-31) + canon/02 Amendment 3: Mending is RESTORATIVE and costs 0 Coherence at every
+# degree. Named so `attempt_mending` can hand it to `_resolve_operation` before the degree is known.
+MENDING_COHERENCE_COST = 0  # [canonical: ED-871 — Mending costs 0 Coherence at every degree]
+MENDING_FALLBACK_SCALE = "Relational"
+
+
+@dataclass(frozen=True)
+class MendingPrice:
+    """What one Mending at one (priced scale, degree) costs and returns. Built by `price_mending`."""
+    coherence_cost: int            # the STRESS the working charges its practitioner (ED-871: 0)
+    mending_stability_delta: int   # REPORTED, written nowhere (see OperationResult)
+    restorative: int               # the `mending` term offered to `coherence.recover` (>= 0)
+
+
+def mending_priced_scale(target: dict) -> str:
+    """The scale a Mending actually WORKS: `target['scale']` (absent = Relational), and a scale
+    MENDING_OB does not price falls back to Relational. Ob, cost and restorative term all read this
+    one answer, so no site can price a scale it did not roll against."""
+    scale = target.get('scale', MENDING_FALLBACK_SCALE)
+    return scale if scale in MENDING_OB else MENDING_FALLBACK_SCALE
+
+
+def price_mending(scale: str, degree: str) -> MendingPrice:
+    """THE price of a Mending at a priced `scale` (`mending_priced_scale`'s answer) and a four-band
+    `degree` label ('Overwhelming' / 'Success' / 'Partial' / 'Failure').
+
+      - coherence_cost: MENDING_COHERENCE_COST (0) at every degree — ED-871.
+      - mending_stability_delta: 0 — what `attempt_mending` has always reported for Mending.
+      - restorative: the working's type x scale term read backwards (-COHERENCE_COST_BY_SCALE[scale];
+        see `attempt_mending`'s docstring for why), and 0 on Failure — a failed Mending returns
+        nothing to the attractor, so nothing is drawn along with it (§6.8).
+
+    An unpriced scale RAISES rather than being folded here: the fallback is `mending_priced_scale`'s
+    alone, and a caller that skipped it would otherwise get a price for a scale it never rolled.
+    """
+    if scale not in MENDING_OB:
+        raise ValueError(f"price_mending: {scale!r} is not a scale MENDING_OB prices; "
+                         "pass mending_priced_scale(target)")
+    if degree not in dice_engine.DEGREE_LABEL.values():
+        raise ValueError(f"price_mending: {degree!r} is not a four-band degree label")
+    restorative = 0 if degree == "Failure" else -COHERENCE_COST_BY_SCALE[scale]
+    return MendingPrice(coherence_cost=MENDING_COHERENCE_COST, mending_stability_delta=0,
+                        restorative=restorative)
+
+
+def apply_mending_feedback(actor_id: str, price: MendingPrice, *, environment_in_equilibrium: bool,
+                           source: str, world=None) -> int:
+    """Hand a Mending's restorative term to `actor_id` and return the elastic displacement ACTUALLY
+    returned (>= 0) — measured off state before/after, not the amount offered.
+
+    `coherence.recover` is still called whenever there is a term to offer, so it stays the one owner
+    of E-1's environment gate and of "never past the resting point". A price with no term (Failure)
+    calls nothing: nothing was offered, and nothing is logged.
+    """
+    if price.restorative == 0:
+        return 0
+    prior = get_state(actor_id, world=world)
+    elastic_before = prior.elastic_displacement if prior is not None else 0
+    state = recover(actor_id, seasons=0, environment_in_equilibrium=environment_in_equilibrium,
+                    source=source, mending=price.restorative, world=world)
+    return elastic_before - state.elastic_displacement
+
+
 def attempt_mending(actor, target: dict, world=None, rng=None, *,
                     environment_in_equilibrium: bool = False) -> OperationResult:
     """§2.4 Mending — Repairing the Substrate.
@@ -389,9 +533,12 @@ def attempt_mending(actor, target: dict, world=None, rng=None, *,
         scale manipulation would cost (`COHERENCE_COST_BY_SCALE`, negated). §6.8 grounds the
         direction ("the operational channel read backwards ... one channel, one imbrication,
         opposite relations to the equilibrium"); the REUSE of the §3.2 table as its size is this
-        position's choice, as `opposing.py`'s and the P-25 term's reuse of it is theirs. A scale
-        MENDING_OB does not price falls back to Relational for both the Ob and the term, so the two
-        cannot disagree about which scale was worked.
+        position's choice, as the P-25 term's reuse of it is its own. A scale MENDING_OB does not
+        price falls back to Relational for both the Ob and the term, so the two cannot disagree
+        about which scale was worked. Scale, price and feedback are `mending_priced_scale`,
+        `price_mending` and `apply_mending_feedback` (WR-03) — the same three `collective.py` and
+        `opposing.py` read, so a Mending aimed at ANOTHER's configuration is priced alike at every
+        site (own-aim is `attempt_mending`'s alone; the other two refuse it).
       - FAILURE RETURNS NOTHING: the feedback is being joined to "a configuration that is being
         returned to the attractor" (§6.8), and a failed Mending returns nothing to it.
       - `environment_in_equilibrium` is E-1's CONDITION ("so long as you are in an environment where
@@ -399,26 +546,66 @@ def attempt_mending(actor, target: dict, world=None, rng=None, *,
         know. It defaults to False because the condition is a positive fact: unstated is not
         established, and a default of True would hand recovery to a mender standing in a Locked
         Zone — Mending's ordinary workplace. `recover` is still called, so the gate stays its.
-    ⚠ NOT ROUTED HERE: Mending aimed at the mender's OWN configuration, which is what moves a resting
-    point (`coherence.mend_resting_point`; §6.8's aim distinction, itself flagged derived). The
-    target dict names no whose-configuration field to route on, and adding one is a design call.
+    WHOSE CONFIGURATION (WR-02): `target['configuration_of']` names it, and routes the working.
+      - absent, None, or any value other than below: ANOTHER's configuration — the path above,
+        unchanged (the mender is drawn along; the restorative term is elastic only).
+      - 'self', or the mender's own actor id: the mender's OWN configuration — §6.8's aim
+        distinction ("Mending oneself aims at one's own configuration, and that is what moves a
+        resting point decisively"; flagged DERIVED there, and rejectable). This path goes to
+        `coherence.mend_resting_point` INSTEAD OF the elastic term: `recover` is not called and
+        `coherence_restored` stays 0. The amount is `RESTING_POINT_MEND_BY_DEGREE[degree]` (Partial
+        and Failure move nothing); what actually moved is `result.resting_point_mended`.
+      - PAST THE CROSSING `mend_resting_point` refuses (a remembered state, not Mending); here that
+        refusal moves nothing, raises nothing, and is recorded in `result.notes`.
+      ED-871's zero STRESS holds on both paths (`coherence_delta` stays 0).
+    ⚠ NOT ROUTED: §6.8's third case, being mended BY someone else (which "aims at you, so it
+    reaches as deep as self-mending"). A value naming another actor takes the elastic path for the
+    mender and moves nothing of the target's.
     """
-    scale = target.get('scale', 'Relational')
-    priced = scale if scale in MENDING_OB else 'Relational'
+    priced = mending_priced_scale(target)
     ob = MENDING_OB[priced]
-    # ED-871: Mending Coherence cost = 0 (restorative-operation exception).
-    coh = 0
+    # ED-871: Mending Coherence cost = 0 (restorative-operation exception) — known before the roll.
     result = _resolve_operation("Mending", actor, ob, TN_STANDARD,
-                                coherence_delta=coh, world=world, rng=rng)
-    if result.degree != "Failure":
-        restorative = -COHERENCE_COST_BY_SCALE[priced]
-        prior = get_state(result.actor, world=world)
-        elastic_before = prior.elastic_displacement if prior is not None else 0
-        state = recover(result.actor, seasons=0,
-                        environment_in_equilibrium=environment_in_equilibrium,
-                        source=f"Mending {result.degree} at {priced}: restorative feedback",
-                        mending=restorative, world=world)
-        result.coherence_restored = elastic_before - state.elastic_displacement
+                                coherence_delta=MENDING_COHERENCE_COST, world=world, rng=rng)
+    price = price_mending(priced, result.degree)
+    result.mending_stability_delta = price.mending_stability_delta
+    if aims_at_own_configuration(target, result.actor):
+        _mend_own_configuration(result, world)
+    else:
+        result.coherence_restored = apply_mending_feedback(
+            result.actor, price, environment_in_equilibrium=environment_in_equilibrium,
+            source=f"Mending {result.degree} at {priced}: restorative feedback", world=world)
     # Mending never produces Scars per conviction §3 Mending exception;
     # caller responsible for skipping Scar attribution
     return result
+
+
+def aims_at_own_configuration(target: dict, actor_id) -> bool:
+    """WR-02: does this Mending `target` name the MENDER's own configuration ('self', or their id)?
+
+    The one owner of that test. `attempt_mending` routes on it; `collective.py` and `opposing.py` do not
+    route own-aim, so they REFUSE it (a ValueError) rather than silently give it the elastic path."""
+    configuration_of = target.get('configuration_of')
+    return configuration_of is not None and configuration_of in ('self', actor_id)
+
+
+def _mend_own_configuration(result: OperationResult, world) -> None:
+    """`attempt_mending`'s own-configuration path: hand what the working achieved to
+    `coherence.mend_resting_point` (the one owner of moving the floor inward, and of refusing to
+    past the crossing) and record on `result` what actually moved."""
+    amount = RESTING_POINT_MEND_BY_DEGREE[result.degree]
+    if amount == 0:
+        return
+    prior = get_state(result.actor, world=world)
+    resting_before = prior.resting_point if prior is not None else RESTING_POINT_START
+    try:
+        state = mend_resting_point(result.actor, amount,
+                                   source=f"Mending {result.degree}: own configuration",
+                                   world=world)
+    except ValueError as refusal:
+        # Only the crossing refusal is absorbed; any other ValueError is a defect and propagates.
+        if prior is None or not prior.crossed:
+            raise
+        result.notes.append(f"Resting point not mended: {refusal}")
+        return
+    result.resting_point_mended = resting_before - state.resting_point

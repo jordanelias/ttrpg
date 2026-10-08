@@ -87,7 +87,7 @@ def commentate(events, cfg):
         elif k == 'mode':
             cur['mode'] = e['mode']; cur['chosen_by'] = e['chosen_by']
         elif k == 'roll':
-            cur['pool'] = e['pool']; cur['net_sigma'] = e['net_sigma']; cur['degree'] = e['degree']
+            cur['pool'] = e['pool']; cur['net_sigma'] = e['net_sigma']; cur['ob'] = e['ob']; cur['degree'] = e['degree']
         elif k == 'outcome':
             out.append(_beat(cur, e, cfg, wound_str))
             cur = {}
@@ -167,7 +167,7 @@ def _beat(cur, outcome, cfg, wound_str):
          'took': band},
         {'label': 'the read', 'dist': {f'{d} reads it': round(rp, 3), f'{a} hides it': round(1 - rp, 3)},
          'took': f'{d} reads it' if rw else f'{a} hides it'},
-        {'label': 'the resolution roll', 'dist': P.degree_distribution(cur.get('pool', 5), cur.get('net_sigma', 0.0)),
+        {'label': 'the resolution roll', 'dist': P.degree_distribution(cur.get('pool', 5), cur.get('net_sigma', 0.0), cur['ob']),
          'took': deg, 'dist2': {dg: P.outcome_distribution(dg, mode, cfg) for dg in ('fail', 'partial', 'success', 'overwhelming')}},
     ]
     return {'type': 'beat', 'line': call, 'mech': mech, 'branches': branches, 'cls': cls}

@@ -134,6 +134,21 @@ WEAPONS = {
    haft=dict(x_m=-0.195, mass_kg=0.263, extent_m=0.39),
    pommel=dict(x_m=-0.39, mass_kg=0.884),
    geometry=dict(curvature=0.0, point_concentration=0.62, cross_section=0.82, edge_keenness=0.8, strike_concentration=0.1)),
+ # half-sword: the SHORTENED greatsword (working hand up on the ricasso/forte; the ricasso + parrying lugs are the
+ # attested grip). Total length + mass conserved from the base. Auto-switched form (ED-PC-0016).
+ 'greatsword_halfsword': dict(
+   mass=2.751, head_len=0.6, grip_len=1.05, hands=2, head='point', hand_guard=0.4, blade_guard=0.45, reach_adj=-0.05,
+   wclass='bladed', hilt='simple',
+   elements=[
+     dict(x_m=0.3, mass_kg=0.673, extent_m=0.6, orient_deg=0, material='steel'),  # free blade tip (forward of the new hand-on-blade grip point)
+    ],
+   guards=[
+     dict(x_m=-0.66, mass_kg=0.19, extent_m=0.26, type='cross', orient_deg=90, material='steel'),  # cross guard (trailing behind the working hand)
+    ],
+   haft=dict(x_m=-0.525, mass_kg=1.004, extent_m=1.05),
+   pommel=dict(x_m=-1.05, mass_kg=0.884),
+   geometry=dict(curvature=0.0, point_concentration=0.72, cross_section=0.92, edge_keenness=0.5, strike_concentration=0.1),
+   base='greatsword'),
  'sabre': dict(
    mass=0.9, head_len=0.78, grip_len=0.21, hands=1, head='curved_cut', hand_guard=0.52, blade_guard=0.45, reach_adj=-0.1,
    wclass='bladed', hilt='simple',
@@ -680,6 +695,23 @@ WEAPONS = {
    haft=dict(x_m=-0.2225, mass_kg=0.297, extent_m=0.445),
    pommel=dict(x_m=-0.445, mass_kg=0.4624),
    geometry=dict(curvature=0.0, point_concentration=0.62, cross_section=0.82, edge_keenness=0.8, strike_concentration=0.1)),
+ # half-sword: the SHORTENED flamberge — the forward hand grips at the Parierhaken (the hooked side-lugs are the attested
+ # half-sword grip stop), so the plain distal tip projects forward while the flame-ground/waved section stays BEHIND the
+ # hand (you grip the plain ricasso/forte, never the waves). Auto-switched form (ED-PC-0016).
+ 'flamberge_halfsword': dict(
+   mass=2.7001, head_len=0.455, grip_len=1.195, hands=2, head='point', hand_guard=0.4, blade_guard=0.5, reach_adj=-0.05,
+   wclass='bladed', hilt='simple',
+   elements=[
+     dict(x_m=0.23, mass_kg=0.4641, extent_m=0.45, orient_deg=0, material='steel'),  # free blade tip (plain distal section, forward of the Parierhaken grip point)
+    ],
+   guards=[
+     dict(x_m=0.0, mass_kg=0.1266, extent_m=0.1, type='lug', orient_deg=60, material='steel'),  # Parierhaken (now AT the working hand, the forward grip stop)
+     dict(x_m=-0.75, mass_kg=0.2953, extent_m=0.3, type='cross', orient_deg=90, material='steel'),  # main cross-guard (trailing behind the working hand)
+    ],
+   haft=dict(x_m=-0.5975, mass_kg=1.3517, extent_m=1.195),
+   pommel=dict(x_m=-1.195, mass_kg=0.4624),
+   geometry=dict(curvature=0.0, point_concentration=0.72, cross_section=0.92, edge_keenness=0.5, strike_concentration=0.1),
+   base='flamberge'),
  'estoc': dict(
    mass=2.0, head_len=1.12449, grip_len=0.44451, hands=2, head='point', hand_guard=0.35, blade_guard=0.75, reach_adj=0.1,
    wclass='bladed', hilt='compound',
@@ -892,14 +924,12 @@ GEOMETRY = {_w: _rec['geometry'] for _w, _rec in WEAPONS.items()}
 
 # HALF-SWORD FORM mapping (weapon data): which base weapon switches to which shortened gripped-blade form. The
 # inverse is DERIVED (not a second hand-maintained dict). Read by systems.halfsword_target + capabilities.
-HALFSWORD_FORM = {'longsword': 'longsword_halfsword', 'estoc': 'estoc_halfsword'}
-# PC-2/ED-PC-0016 (2026-07-22) HELD: greatsword/flamberge carry attested ricassos (grippable=True below, so
-# affords_halfsword=True — the physical CAPABILITY is recorded), but their auto-switch is deliberately NOT wired here.
-# The adversarial pass found the unconditional switch is a NET LIABILITY for these reach+mass-dominant weapons (their
-# base form already out-fights the half-sword when closed: greatsword vs arming @medium 93%->50%, @heavy 71%->55%),
-# and that a cheap per-form conditional (single-strike closed-damage comparison) is UNSOUND — it is strength-fragile
-# and contradicts the full-duel outcome (the real signal is armour-defeat sigma-control + reach + multi-exchange, not
-# one strike). Activation needs a DUEL-AWARE decision (the reach differential lives at the wrapper) — a design call
-# held for Jordan. The authored greatsword_halfsword/flamberge_halfsword form records + full analysis live in
-# audit/2026-07-22-combat-engine-stress-test/pc2_halfsword_expansion.md, ready to activate once the decision lands.
+HALFSWORD_FORM = {'longsword': 'longsword_halfsword', 'estoc': 'estoc_halfsword',
+                  'greatsword': 'greatsword_halfsword', 'flamberge': 'flamberge_halfsword'}
+# ED-PC-0016 (built): greatsword/flamberge carry attested ricassos (grippable=True on their records), so they afford the
+# half-sword, and the switch is now WIRED like the longsword's and estoc's — the ruling (ED-PC-0014: any weapon with a
+# ricasso + the required geometry half-swords) applied without a conditional. The 2026-07-22 hold rested on a measured
+# liability (an unconditional switch losing ~40pp at medium) that did not reproduce when the decision was taken; the
+# switched weapons' effect vs arming at medium/heavy is re-measured with workbench/armour_participation.py when this
+# table changes, never quoted here (the records were authored in pc2_halfsword_expansion.md).
 HALFSWORD_BASE = {_form: _base for _base, _form in HALFSWORD_FORM.items()}

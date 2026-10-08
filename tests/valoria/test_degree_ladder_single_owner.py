@@ -15,12 +15,13 @@ claim about the tree, not a measurement of it: this file's roster is therefore p
 source sweep (`test_no_new_hand_rolled_ladder`) so a ladder that nobody enrolled still fails
 something.
 
-⚠ STATE AS OF 2026-08-27 (ED-SC-0031): SEVEN ladders are migrated and ONE hold remains
-(`combat_engine_v1/core.py`). `sigma_leverage.degree` — the ninth ladder above — left HELD this
+⚠ STATE AFTER WORKPLAN PC-02: NO hold remains — `combat_engine_v1/core.py`, the last one, now
+routes through the owner and is enrolled in LADDERS. STATE AS OF 2026-08-27 (ED-SC-0031), kept
+as history: SEVEN ladders are migrated and ONE hold remains (`combat_engine_v1/core.py`). `sigma_leverage.degree` — the ninth ladder above — left HELD this
 commit: it returns the owner's bands through `dice_engine.DEGREE_ORDINAL`, and its pool-aware
 Overwhelming bar survives as a declared extension that may only demote Overwhelming to Success.
 The tree still does NOT collapse to a single implementation and this file must not be read as
-claiming it does — the remaining hold is real and is asserted to still diverge below.
+claiming it does — `sigma_leverage.degree` keeps its declared extension (above); no hold remains in `HELD`.
 
 THE UNIT OF REPAIR IS THE PATTERN, NOT THE EIGHT SITES (CLAUDE.md 0.1 point 5). A ladder is four
 lines of `if`, which is exactly why it kept being retyped: writing one is cheaper than finding the
@@ -162,6 +163,11 @@ LADDERS = {
     # here is the whole claim and not a partial one. The extension's own contract is pinned by
     # engine/tests/test_sigma_leverage_parity.py::TestPoolAwareDegree.
     'systems/social_contest/sim/contest/degree_extension.py': _contest_surface,
+    # MIGRATED out of HELD (workplan PC-02; supersedes ED-IN-0187's hold and ED-PC-0003). `degree()`
+    # returns `degree_from_net`'s bands relabelled to combat's lower-case spelling, with no local
+    # re-banding (the ER-2 continuity shift went with the old ladder). Ob is the defender's
+    # (`ob_from_defender`, ED-PC-0058), the order the 2026-08-15 ruling set.
+    'systems/combat/combat_engine_v1/core.py': _combat_engine,
 }
 
 # ── THE RULINGS THIS FILE ENFORCES, kept verbatim ──────────────────────────────────────────────
@@ -238,8 +244,8 @@ RULINGS = {
         "exists yet at this call boundary; wound impairment keeps its own owner, folded into "
         "net_sigma, ED-1041), and every core.resolve() call site in combat_engine_v1/wrapper.py "
         "now passes it instead of the retired DECISIVE_OB constant. THE SECOND HALF — migrating "
-        "this resolver's own band-boundary formula to the owner's margin ladder — remains open; "
-        "see the HELD entry below, which still asserts the divergence."),
+        "this resolver's own band-boundary formula to the owner's margin ladder — EXECUTED at "
+        "workplan PC-02: core.degree returns degree_from_net's bands and is enrolled in LADDERS."),
     '2026-08-25 — the combat ceiling, EXECUTED 2026-08-27': (
         "Jordan, 2026-08-25, verbatim: 'one degree ladder. guandao should be 47.5%, and 40% "
         "ceiling is to be abolished.' ⚠ THIS ENTRY READ 'NOT EXECUTED' UNTIL 2026-08-27 AND THAT "
@@ -249,11 +255,11 @@ RULINGS = {
         "'deletes a guard and gains nothing', since guandao only reaches 47.5% after the "
         "migration. The answer is that the cap is illegitimate on its own terms, independent of "
         "when guandao gets there. WHAT REMAINS OPEN is the other half and only the other half: "
-        "combat's ladder still has not migrated, and per this same 2026-08-15 ruling the step "
+        "combat's ladder had not migrated, and per this same 2026-08-15 ruling the step "
         "that comes FIRST is deriving Ob from the DEFENDER (score/2 plus that instance's "
         "modifiers), which is new mechanism rather than a re-siting. ⚠ THAT STEP EXECUTED "
         "2026-09-29 (ED-PC-0058) — see the '2026-08-15 — combat, and the sequence' entry above. "
-        "The live PC-lane item now is the ladder migration ALONE. ⚠ THE FAILURE THIS CORRECTION RECORDS: for the length of one commit this dict "
+        "The live PC-lane item now is the ladder migration ALONE — EXECUTED at workplan PC-02. ⚠ THE FAILURE THIS CORRECTION RECORDS: for the length of one commit this dict "
         "held two entries contradicting each other about whether the ceiling existed — the "
         "2026-08-27 row said ABOLISHED and this one still said NOT EXECUTED, forty lines apart. "
         "Found by an adversarial pass, and it is verbatim the defect the comment at the bottom of "
@@ -262,7 +268,10 @@ RULINGS = {
 }
 
 
-# ── the ONE declared HOLD ───────────────────────────────────────────────────────────────────────
+# ── the declared HOLDs — NONE remain ─────────────────────────────────────────────────────────────
+# The last one, `combat_engine_v1/core.py`, left this commit (workplan PC-02): its `degree()` now
+# returns the owner's bands and it is enrolled in LADDERS above. HELD stays as the place a future
+# hold is declared; while it is empty, the divergence test below asserts nothing.
 # ⚠ This header read "the TWO declared HOLDs" until 2026-08-27, 143 lines below the same file's
 # own header, which HAD been updated. That is verbatim the failure the comment at the bottom of
 # this file lectures about — a claim about a data structure that a targeted string edit never
@@ -271,32 +280,7 @@ RULINGS = {
 # A hold is not an exemption. It is a divergence with a measured reason and an owner, and it is
 # asserted to STILL DIVERGE below — so when it is resolved, this file fails and forces the update.
 # Silence would let a resolved hold sit here forever looking like a live exception.
-HELD = {
-    'systems/combat/combat_engine_v1/core.py': (
-        _combat_engine,
-        "⚠ RULED 2026-08-15 — THE HOLD IS RESOLVED IN PRINCIPLE AND THE SEQUENCE IS FIXED. Jordan: "
-        "'systems should not need different degree bands', and separately 'DECISIVE_OB for combat is "
-        "stupid as hell and is dead because Ob should be determined by your opponent more than "
-        "anything'. So this site MIGRATES. It is still held here because the ORDER is now settled and "
-        "is the opposite of the obvious one: derive Ob from the defender FIRST (score/2 + that "
-        "instance's modifiers), THEN the owner's ladder applies directly. Migrating the bands against "
-        "the fixed Ob first is precisely the wasted work core.py's own docstring predicted. "
-        "⚠ THE OB DERIVATION LANDED 2026-09-29 (ED-PC-0058) — core.ob_from_defender, every "
-        "core.resolve() call site updated — and this entry is NOT deleted, because that sentence's "
-        "own reading of 'when the Ob derivation lands' was imprecise: THIS FUNCTION'S BANDS ARE "
-        "STILL THE PRE-2026-08-14 FORM, degree()'s own body is untouched, so `_combat_engine()` "
-        "still diverges from the owner over the domain exactly as before — correctly, since the "
-        "test below asserts it. Delete this entry when the LADDER ITSELF migrates to the owner's "
-        "margin form, not before — that is the step still owed. Original reason follows, still true "
-        "of the fixed-Ob form (now a variable, defender-derived Ob, but the SAME held formula): "
-        "Migrating it moves the Failure edge two whole successes (at DECISIVE_OB=3: fail <0.5 -> "
-        "<2.5) and breaks a ratified invariant — guandao, armour-defeat capability 0.13, goes from "
-        "settling 2.5% of plate fights to 47.5% against a 40% ceiling "
-        "(test_plate_participation_tracks_armour_defeat_capability, ED-PC-0038/0039). The engine's "
-        "damage constants were calibrated against the old placement, and the same ruling's "
-        "score/2 Ob derivation would move the bands again, so calibrating the fixed-Ob form first "
-        "is wasted work. Held for Jordan — ED-IN-0187."),
-}
+HELD = {}
 
 
 def test_the_held_site_still_diverges_and_the_hold_is_still_needed():

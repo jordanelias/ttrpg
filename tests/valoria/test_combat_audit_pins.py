@@ -152,8 +152,25 @@ def test_each_morphology_lever_is_individually_live(lever, weapons):
         f"on={on_v!r} off={off_v!r}")
 
 
-@pytest.mark.parametrize('weapon', [n for n, r in WEAPONS.items() if r.get('head') == 'cut_thrust'])
-@pytest.mark.parametrize('armor', ['none', 'light', 'medium', 'heavy'])
+CUT_THRUST = [n for n, r in WEAPONS.items() if r.get('head') == 'cut_thrust']
+TIERS = ('none', 'light', 'medium', 'heavy')
+
+
+def _versatile_cells():
+    """[(weapon, tier, dm)] for every cut_thrust weapon x tier where `select_mode` selects the versatile head; `dm` is
+    the arm `core.strike` pays. One walk shared by the floor and the versatility test, so the floor lives once."""
+    out = []
+    for weapon in CUT_THRUST:
+        c = Combatant('X', weapon=weapon)
+        for armor in TIERS:
+            dm, head, *_ = S.select_mode(c, armor, True, CFG, measure_gap=0.0)
+            if head == 'cut_thrust':
+                out.append((weapon, armor, dm))
+    return out
+
+
+@pytest.mark.parametrize('weapon', CUT_THRUST)
+@pytest.mark.parametrize('armor', list(TIERS))
 def test_cut_thrust_label_matches_the_arm_actually_paid(weapon, armor):
     """ED-PC-0036 (F12). `coupling` resolves a cut-and-thrust weapon as max(cut arm, half-sword thrust arm), and
     `select_mode` reports the damage-mode that legibility scores (thrust reads HARD 0.80, swing EASY 1.25). Those two
@@ -170,8 +187,10 @@ def test_cut_thrust_label_matches_the_arm_actually_paid(weapon, armor):
     if head != 'cut_thrust':
         pytest.skip(f"{weapon} selects {head!r} at {armor}, not the versatile head")
     _geo = c.w.get('geo', {})
-    _value, mode = core.cut_thrust_arm(core.TIER2MAT[armor], 'full', gap, _geo.get('cut'), _geo.get('thrust'),
-                                       core.thrust_authority(c.w['head_len']))
+    # [ED-PC-0050] the arm core.strike pays is priced on DAMAGE with the wielder's impact pair — read it that way.
+    _value, mode = core.cut_thrust_arm(core.TIER2MAT[armor], gap, _geo.get('cut'), _geo.get('thrust'),
+                                       core.thrust_authority(c.w['head_len']),
+                                       impact=core.cut_thrust_impacts(c.w, c.strength, grip=c.grip_position, sel_pc=pc))
     assert dm == mode, (f"{weapon}@{armor}: select_mode reports {dm!r} but coupling pays the {mode!r} arm — "
                         f"the damage path and the read contest disagree about what the fighter did")
 
@@ -189,32 +208,36 @@ def test_cut_thrust_label_gate_is_not_vacuous():
     RE-MEASURED 2026-09-29 (ED-PC-0058, the `partisan` deletion): partisan was cut_thrust and all 4 of its tier
     cells selected the versatile head, so the roster drops to 18 cut_thrust weapons (72 cells) and the floor
     drops 55->51 by exactly that removal — not a narrowing of the property itself."""
-    ct = [n for n, r in WEAPONS.items() if r.get('head') == 'cut_thrust']
-    checked = 0
-    for weapon in ct:
-        for armor in ('none', 'light', 'medium', 'heavy'):
-            c = Combatant('X', weapon=weapon)
-            _dm, head, _gap, _perc, _pc, _eff = S.select_mode(c, armor, True, CFG, measure_gap=0.0)
-            if head == 'cut_thrust':
-                checked += 1
+    checked = len(_versatile_cells())
     assert checked >= 51, (
-        f"only {checked} of {len(ct) * 4} cut_thrust cells still select the versatile head (was 51, ED-PC-0058) — "
+        f"only {checked} of {len(CUT_THRUST) * 4} cut_thrust cells still select the versatile head (was 51, ED-PC-0058) — "
         f"test_cut_thrust_label_matches_the_arm_actually_paid is skipping its way to a vacuous green")
 
 
 def test_cut_thrust_versatility_is_not_decided_by_constant_ordering():
     """ED-PC-0036 (F12). The whole point of the versatile head is an ARMOUR-CONDITIONAL shift. If one arm wins in every
     cell, the max() is decorative and the shift is a constant ordering wearing physics' clothes — which is exactly what
-    the audit found. Pin that BOTH arms win somewhere across the tier range for a well-edged sword."""
-    c = Combatant('X', weapon='arming')
-    modes = set()
-    for armor in ('none', 'light', 'medium', 'heavy'):
-        dm, head, gap, perc, pc, eff = S.select_mode(c, armor, True, CFG, measure_gap=0.0)
-        _geo = c.w.get('geo', {})
-        modes.add(core.cut_thrust_arm(core.TIER2MAT[armor], 'full', gap, _geo.get('cut'), _geo.get('thrust'),
-                                      core.thrust_authority(c.w['head_len']))[1])
+    the audit found. Pin that BOTH arms win somewhere across the roster and the tier range.
+
+    [B-D1 PC-04 / ED-PC-0050] REWRITTEN to observe the LIVE contest. The arm contest is now priced on damage with the
+    wielder's impact pair, and `arming` — this test's former subject — thrusts at every tier under that pricing (its
+    old four-tier shear/puncture split lived only in the coupling-only probe no wielder uses, so the test stayed green
+    while its subject went constant). `dm` is the arm `core.strike` pays (pinned above), read off `select_mode` for every
+    cut_thrust weapon at every tier where the versatile head is selected; the property now holds across the roster."""
+    cells = _versatile_cells()
+    modes = {dm for _w, _a, dm in cells}
+    assert len(cells) >= 51, f"only {len(cells)} versatile cells observed (the label gate's floor is 51)"
     assert modes == {'shear', 'puncture'}, (
-        f"the cut/thrust contest resolved to {modes} across all four armour tiers — one arm is structurally dead")
+        f"the damage-priced cut/thrust contest resolved to {modes} across the roster and all four armour tiers "
+        f"— one arm is structurally dead")
+    # ...and the shift is ARMOUR-CONDITIONAL, not a per-weapon constant ordering (some weapons always cut, the rest
+    # always thrust): at least one weapon must change arm with the tier. Measured 2026-10-08: spetum, naginata,
+    # tsurugi, changdao, jian and szabla do.
+    arms_by_weapon = {}
+    for w, _a, dm in cells:
+        arms_by_weapon.setdefault(w, set()).add(dm)
+    shifting = sorted(w for w, ms in arms_by_weapon.items() if len(ms) == 2)
+    assert shifting, "no cut_thrust weapon changes arm with armour: the contest is a constant ordering per weapon"
 
 
 def test_cut_thrust_coupling_respects_weapon_quality():

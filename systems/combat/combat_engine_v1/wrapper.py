@@ -209,9 +209,10 @@ def engagement(A, B, first, cfg, rng, prev_closed=False):
             if measure_gap > 0.0 and rng.random() < stophit_p:
                 pool=max(1, core.resolution_pool(longer.history))
                 nsig=S.stophit_sigma(longer, shorter, measure_gap, cfg)
-                deg, net = core.resolve(pool, nsig, rng, core.ob_from_defender(shorter))   # Ob-from-defender (ED-PC-0058): `shorter` is struck if the stop-thrust lands.
+                _ob=core.ob_from_defender(shorter)
+                deg, net = core.resolve(pool, nsig, rng, _ob)   # Ob-from-defender (ED-PC-0058): `shorter` is struck if the stop-thrust lands.
                 _emit('stophit', longer=longer.label, shorter=shorter.label, gap=round(measure_gap,2),
-                      pool=pool, net_sigma=round(nsig,3), net=round(net,2), degree=deg)
+                      pool=pool, net_sigma=round(nsig,3), ob=_ob, net=round(net,2), degree=deg)   # `ob`: the workbench bands its distribution at it (PC-03)
                 if deg in ('success','overwhelming'):
                     d=core.strike(longer, shorter, deg, cfg, net=net, pool=pool)
                     shorter.apply_wound(d); shorter.conc=max(0,shorter.conc-cfg['CONC_DRAIN_HIT'])
@@ -302,8 +303,9 @@ def engagement(A, B, first, cfg, rng, prev_closed=False):
             aggressor.initiative=S.clamp_initiative(aggressor.initiative-steal, cfg)
             counter_attempt=S.counter_select(defender, cfg, rng, TR)
         pool=max(1, core.resolution_pool(aggressor.history))
-        deg, net = core.resolve(pool, net_sigma, rng, core.ob_from_defender(defender))   # Ob-from-defender (ED-PC-0058)
-        _emit('roll', aggressor=_agg0, pool=pool, net_sigma=round(net_sigma,3), net=round(net,2), degree=deg, mode=mode)
+        _ob=core.ob_from_defender(defender)
+        deg, net = core.resolve(pool, net_sigma, rng, _ob)   # Ob-from-defender (ED-PC-0058)
+        _emit('roll', aggressor=_agg0, pool=pool, net_sigma=round(net_sigma,3), ob=_ob, net=round(net,2), degree=deg, mode=mode)   # `ob`: the workbench bands its distribution at it (PC-03)
         close = closed   # C-1: per-beat close-coupling follows the engagement measure-state (not raw reach alone)
         # OVERCOMMIT EXPOSURE — systems computes it; the wrapper applies the initiative/poise loss.
         overcommit_exposure = S.overcommit_exposure(aggressor, commit, fat_a, cfg, TR)
@@ -462,8 +464,33 @@ def engagement(A, B, first, cfg, rng, prev_closed=False):
         if not (hit>0 or riposte or bind): _emit('separation', reason='clean_defence'); return None, closed
     _emit('separation', reason='beat_exhaustion'); return None, closed
 
-def fight(A, B, cfg=None, rng=None, max_bouts=12):
+class Yield:
+    """§11.4 YIELD (PC-01, `ED-PC-0056`), a Phase-1 DECLARATION, not a fourth resolver and not a fourth band.
+
+    `by` is the yielding Combatant; `turn` the 1-based turn at whose Phase 1 it is declared; `accepted` is the
+    OPPONENT's choice (the engine has no decider for it, so the caller supplies it); `objective_contested` is the
+    world fact the engine cannot see -- the yielder's faction objective is still contested in the same zone.
+      - contested            -> the declaration is REFUSED ("cannot Yield while... contested") and the fight runs on,
+                                untouched: no draw is taken by the refusal.
+      - accepted             -> combat ENDS. No further rolls.
+      - not accepted (refused by the opponent) -> the yielder is UNRESISTING, so no contest roll resolves anything
+                                further either; what the opponent does with an unresisting man (execute, take
+                                prisoner, release) is the CALLER's disposition, carried on the `yield` event.
+    THE MAPPING (no fourth band): a yielder is STANDING, so the seam's existing walk reads him `Untouched`/`Wounded`
+    off his own WoundTracker; the surrender rides on the result (the `yield` trace event), never in the band. A band
+    would be a second reading of `felled`, which a yield does not set. No constant: the rule carries no number."""
+    __slots__ = ('by', 'turn', 'accepted', 'objective_contested')
+
+    def __init__(self, by, turn=1, accepted=True, objective_contested=False):
+        self.by, self.turn, self.accepted, self.objective_contested = by, int(turn), bool(accepted), bool(objective_contested)
+
+def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None):
     import random
+    if yield_decl is not None:
+        if not (yield_decl.by is A or yield_decl.by is B):
+            raise ValueError("Yield.by must be the A or B Combatant passed to fight (compared by identity)")
+        if not (1 <= yield_decl.turn <= max_bouts):
+            raise ValueError(f"Yield.turn {yield_decl.turn} is outside 1..max_bouts ({max_bouts}): it would never fire")
     cfg=cfg or CFG; rng=rng or random.Random()   # stdlib RNG (ED-1085 numpy de-leak; pass random.Random(seed) for determinism)
     # reset wounds — must mirror Combatant.__init__'s tracker construction (combatant.py:71). WoundTracker.__init__
     # defaults spirit=3/strength=4, so re-init'ing with end alone silently reverts non-default fighters to those
@@ -475,6 +502,15 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12):
     result=0
     prev_closed=False   # measure state threaded across engagements (ED-PC-0033): a reach weapon only re-presents at open measure if it can hold a crowding opponent off; the first engagement always opens at measure
     for turn in range(max_bouts):   # each iteration = ONE engagement (~10s turn); victor emerges over MULTIPLE turns with persistent wounds/fatigue. fight() is the multi-turn SIM harness (runs to a decision for win-rates); the GAME calls one engagement per turn.
+        if yield_decl is not None and yield_decl.turn == turn+1:   # PHASE 1: the declaration precedes every draw of its turn
+            _refused = 'objective_contested' if yield_decl.objective_contested else None
+            _emit('yield', turn=turn+1, by=yield_decl.by.label, accepted=(yield_decl.accepted and _refused is None), refused=_refused)
+            if _refused is None:
+                # Combat ends with the yielder standing; the opponent holds the field. NO UPSET_FLOOR draw: that is a
+                # roll, and §11.4 is "no further rolls" -- a lucky blow cannot steal a fight nobody is contesting.
+                result, winner = (-1, B) if yield_decl.by is A else (1, A)
+                _emit('fight_result', result=result, winner=winner.label)
+                return result
         first = A if rng.random()<0.5 else B
         _emit('turn_start', turn=turn+1, first=first.label)
         loser, prev_closed = engagement(A,B,first,cfg,rng,prev_closed)

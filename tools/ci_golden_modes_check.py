@@ -90,10 +90,10 @@ FIELD_PINS = {
     'MB_REACH_FACING_GATE': '1', 'MB_WHEEL': '1', 'MB_ENVELOP_PATH': '1', 'MB_SWEEP': '1',
     # Critic-pass additions (2026-07-29): default-inert but REACHABLE at these pins —
     # an ambient flip produces a loud spurious red, so pin them for hermeticity.
-    # (MB_FRICTION_CEV enabling shifts the RNG stream — orchestration.py's own comment;
+    # (MB_FRICTION enabling shifts the RNG stream — orchestration.py's own comment;
     # MB_INTENT_RESOLUTION is live via the battery's stance='hold' rows; MB_CLOSE_RANKS
     # via the PER_CELL lifecycle; MB_TROOP_DENSITY_CAP via the cavalry rows.)
-    'MB_FRICTION_CEV': '0', 'MB_FRICTION_SIGMA': '1.1', 'MB_FRACTIONAL_POOL': '0',
+    'MB_FRICTION': '0', 'MB_FRICTION_SIGMA': '1.1', 'MB_FRACTIONAL_POOL': '0',
     'MB_INTENT_RESOLUTION': '0', 'MB_CLOSE_RANKS': '0', 'MB_TROOP_DENSITY_CAP': '0',
     # [ED-MB-0059, 2026-07-29] Same-side cell exclusion. Default ON, and STRONGLY digest-moving on
     # the two field modes (it is a no-op on the legacy-lattice modes — the pass lives inside
@@ -109,6 +109,10 @@ FIELD_PINS = {
     # not a mystery digest mismatch, the same reason every entry in this dict exists. See
     # bat.py's EXPECTED comment (same ED, same date) for which mode(s) this re-recorded.
     'MB_AMMO_ENABLED': '1', 'MB_VOLLEYS_START': '10', 'MB_VOLLEYS_RESUPPLY': '3',
+    # [MB-07, J-18 (A)] Support rank cap: shared non-gated pool code (core/exchange._pair_engaged_troops),
+    # digest-moving in all three modes when ON. Shipped OFF (see config.py at the flag); pinned at that
+    # default so an ambient '1' produces a named red, not a mystery mismatch.
+    'MB_SUPPORT_RANK_CAP': '0',
 }
 
 # [ED-MB-0053 / plan-v2 §4a, 2026-07-29] Renamed from ci_field_golden_check.py: this tool is the

@@ -54,8 +54,68 @@ MB_FACING_SLEW_BASE = float(_hu_os.environ.get('MB_FACING_SLEW_BASE', '60'))  # 
 MB_FACING_FOV_GATE = (_hu_os.environ.get('MB_FACING_FOV_GATE', '1') == '1')  # (c) rear blind arc GATES reaction/targeting; reuses REAR_BLIND_DEG/FOV_HALF_DEG
 MB_FACING_ROUT = (_hu_os.environ.get('MB_FACING_ROUT', '1') == '1')  # (d) routed body faces AWAY from the enemy
 
+# ─── ROLE INSTRUCTIONS → PRIMITIVES (MB-04, A5 role instincts; #445 U-3) ──────────────────────────────
+# config.ROLE_SPEC gives each role a shape and an instruction package. This table is the SINGLE OWNER of
+# which keywords the STANCE and FEINT primitives read (the 'stance:<s>' and 'feigned_retreat' rows, below);
+# its other rows are reference: where a literal keyword is read elsewhere, or (None, why it is unwired). A keyword drives only a primitive that already existed; where none could
+# honestly carry it, it stays unwired and says why, rather than gaining a fabricated effect.
+#   * rows read through this table: 'stance:<s>' rows via Subunit.eff_stance (the default posture a role
+#     sets when the stance was never written on purpose -- an explicit stance, 'balanced' included,
+#     always wins, as it does over every other role default in engine.build_army), and the 'feigned_retreat' row via
+#     unit_lures at orchestration.resolve_feigned_retreat. Both read live, so an order that rewrites
+#     `instructions` or `stance` mid-battle is honoured (no write-time copy to go stale).
+#   * 'literal' rows were wired before MB-04 and are read by their keyword at the named site; listed so
+#     the table covers the whole vocabulary, not re-routed (byte-exact).
+# MB_ROLE_INSTRUCTIONS=0 restores the pre-MB-04 reading, where only the literal rows did anything.
+MB_ROLE_INSTRUCTIONS = (_hu_os.environ.get('MB_ROLE_INSTRUCTIONS', '1') == '1')
+ROLE_INSTRUCTION_PRIMITIVES = {
+    # literal (pre-MB-04)
+    'brace':   ('literal: brace', 'resolution._subunit_braced/_unit_braced (charge-shock floor, recoil); core.contact.check_orders (setup delay)'),
+    'envelop': ('literal: envelop path', 'Subunit._resolve_maneuver_goal -> _envelop_goal; Subunit.advance_cells'),
+    'sweep':   ('literal: sweep path', 'Subunit._resolve_maneuver_goal -> _sweep_goal; Subunit.advance_cells'),
+    'kite':    ('literal: kite standoff band', 'Subunit._resolve_maneuver_goal -> _kite_goal; Subunit.advance_cells'),
+    'reserve': ('literal: reserve commitment', 'orchestration.unit_in_reserve'),
+    # MB-04 -- the STANCE primitive (STANCE_SPEED_MOD movement, STANCE_COMMITMENT intent, MB_SHOCK_HOLD_BRACE)
+    'hold':    ('stance:hold', 'Subunit.eff_stance'),
+    'push':    ('stance:aggressive', 'Subunit.eff_stance'),
+    'charge':  ('stance:aggressive', 'Subunit.eff_stance'),
+    # MB-04 -- PP-256 Feigned Retreat (the same Unit-wide feint the 'feign_retreat' order pseudo-field declares)
+    'lure':    ('feigned_retreat', 'unit_lures -> orchestration.resolve_feigned_retreat'),
+    # unwired -- no existing primitive this keyword could honestly drive
+    'pin':     (None, "pinning is emergent, not chosen: a body engaged in an enemy's front arc pins it "
+                      "(MB_PIN_REACH, fixed_by_other in the per-cell refusal pass). Anvil's own behaviour is "
+                      "brace and closing to contact at the balanced stance, which already fixes the enemy."),
+    'loose':   (None, "open order is carried by the role's shape (GappedLine's footprint gaps); no "
+                      "instruction-level spacing primitive exists, and adding one would be a new number."),
+    'harass':  (None, "the only stand-off primitive is the kite band, and the one troop type offered "
+                      "Skirmish (light_infantry, melee light_cut) has an EMPTY band there "
+                      "(reach_for < MB_KITE_STANDOFF): it would hover and never strike."),
+    'screen':  (None, "the screening primitive is escort mode, which needs a named friendly to screen; "
+                      "the keyword names none, and yield (the other candidate) flees from tick 0."),
+    'pursue':  (None, "pursuit is gated by speed, not instruction (orchestration.pursuit_damage: Fast "
+                      "victors always pursue, others never can, mass_battle_v30 §A.12); nothing to select."),
+    'volley':  (None, "redundant: volley fire is gated by unit_type == 'ranged' and ammunition; every "
+                      "VolleyLine troop type is already ranged. VolleyLine carries no 'hold': that stance "
+                      "freezes archers (STANCE_SPEED_MOD['hold'] = -99) and braces them against shock."),
+    'shoot_move': (None, "redundant: a ranged body volleys whenever in range, moving or not; nothing to select."),
+}
+_STANCE_PREFIX = 'stance:'
+_INSTRUCTION_STANCE = {k: p[len(_STANCE_PREFIX):] for k, (p, _w) in ROLE_INSTRUCTION_PRIMITIVES.items()
+                       if p and p.startswith(_STANCE_PREFIX)}
+_FEINT_KEYWORDS = frozenset(k for k, (p, _w) in ROLE_INSTRUCTION_PRIMITIVES.items() if p == 'feigned_retreat')
+
+
+def unit_lures(unit):
+    """True if any subunit's instructions declare PP-256's Feigned Retreat (the 'lure' row above).
+    Read where the feint resolves, beside the order-set `Unit.feigned`; mirrors
+    orchestration.unit_in_reserve. False whenever MB_ROLE_INSTRUCTIONS is off."""
+    return MB_ROLE_INSTRUCTIONS and any(k in _FEINT_KEYWORDS for a in getattr(unit, 'subunits', ())
+                                        for k in getattr(a, 'instructions', ()))
+
+
 __all__ = ['Subunit', 'Unit', 'Order', 'Officer', 'clamp_command', 'MB_ENVELOP_PATH', 'MB_SWEEP', 'FIELD_MOVEMENT', 'FIELD_CONTACT', 'CONTACT_REACH', 'COL_WIDTH',
            'MB_FACING_MODEL', 'MB_FACING_ATTENTION', 'MB_FACING_SLEW_BASE', 'MB_FACING_FOV_GATE', 'MB_FACING_ROUT',
+           'MB_ROLE_INSTRUCTIONS', 'ROLE_INSTRUCTION_PRIMITIVES', 'unit_lures',
            'CELL_RADIUS', 'standoff_from_reach', 'standoff', 'MB_REACH_FACING_GATE', 'resolve_toi_and_commit']
 
 # [Stage A — true-adjacency halt] Per-cell physical-body radius, distinct from core.contact._cell_radius
@@ -465,9 +525,8 @@ class Subunit:
     # [field-movement, default OFF] per-cell fractional-speed carry for FIELD_MOVEMENT (continuous speed).
     # Empty and untouched on the default (floor) path -> byte-exact. [movement-substrate review 06 — finding 2]
     _speed_accum: Dict[Tuple[int, int], float] = field(default_factory=dict)
-    # P-C scaffold (INERT): role drawn from the troop_type-gated menu (FM position→role) + the
-    # instruction package the role applies. Not consumed yet — wiring instructions to primitives
-    # (brace→+density, etc.) is the behaviour-cascading next step (design §3.5/§9.1).
+    # P-C: role drawn from the troop_type-gated menu (FM position→role) + the instruction package
+    # the role applies. Which keyword drives which primitive is ROLE_INSTRUCTION_PRIMITIVES (MB-04).
     role: Optional[str] = None
     instructions: Tuple[str, ...] = ()
     # Continuous-scale (Jordan directive 2026-06-03): when `troops` is set the footprint is
@@ -540,6 +599,9 @@ class Subunit:
     # never executes for any existing Subunit (byte-exact).
     orders: Tuple[Order, ...] = ()
     _order_idx: int = 0
+    # [MB-04] True once the stance was WRITTEN on purpose (an Order's `stance` behavior, or a build spec's
+    # `stance` key), including 'balanced': eff_stance then never lets a role keyword override it.
+    _stance_explicit: bool = field(default=False, repr=False)
     # [Stage C] Escort / formation-relative positioning ("hold position in front of the marching
     # archers"): a subunit tracking a friendly's position instead of (or until) engaging an enemy.
     # All default-inert -> byte-exact for any existing Subunit.
@@ -688,6 +750,20 @@ class Subunit:
         for archers to exploit for permanent standoff"). One property, not five repeated inline
         conditions, so the gate can't drift out of sync between call sites."""
         return self.yielding and self.eff_discipline >= D_YIELD and self.unit_type != 'ranged'
+    @property
+    def eff_stance(self):
+        """[MB-04] The stance every movement/intent/shock site reads: the explicit `stance`, unless it is
+        the neutral 'balanced' and was never written on purpose (`_stance_explicit`), in which case the first
+        instruction with a 'stance:' row in ROLE_INSTRUCTION_PRIMITIVES sets it (ShieldWall's 'hold', Push's
+        'push'). Equal to `stance` for every subunit without such a keyword, and whenever
+        MB_ROLE_INSTRUCTIONS is off. An Order that releases a role-held body to 'balanced' therefore releases it."""
+        if self.stance != 'balanced' or self._stance_explicit or not MB_ROLE_INSTRUCTIONS:
+            return self.stance
+        for k in self.instructions:
+            s = _INSTRUCTION_STANCE.get(k)
+            if s is not None:
+                return s
+        return self.stance
     @property
     def eff_morale(self):
         """[ED-MB-0041 phase 1] AGGREGATE-UP: when per-cell morale is seeded, the subunit's holistic
@@ -1348,7 +1424,7 @@ class Subunit:
 
         [adversarial-pass fix, defence-in-depth] Also guards `_node_anchor` (see
         _clamp_route_to_budget's note) in case this is ever reached off the node path."""
-        if self.yield_active or self.stance == 'retreat':
+        if self.yield_active or self.eff_stance == 'retreat':
             if self.route:
                 trace_event('route_abandoned', reason=('yield' if self.yield_active else 'retreat'),
                             idx=self._route_idx, remaining=len(self.route) - self._route_idx)
@@ -1737,7 +1813,7 @@ class Subunit:
         # approach speed in cell_last_speed forever -- and _momentum_speed would go on reading a stationary
         # braced wall as though it were still charging, muting the very differential the recoil depends on.
         # Same staleness class as the halted-cell branch below; same fix.
-        if self.stance == "hold":
+        if self.eff_stance == "hold":
             for _cid in self.cell_last_speed:
                 self.cell_last_speed[_cid] = 0
             return
@@ -1745,7 +1821,7 @@ class Subunit:
         self._moved_this_turn = set()
         op = _oriented(self)
         disc_mult = 1.0 if discipline >= 5 else (0.7 if discipline >= 3 else 0.4)  # [canonical: mass_battle_v30.md §A.4 — Discipline degradation tiers]
-        stance_mod = STANCE_SPEED_MOD[self.stance]
+        stance_mod = STANCE_SPEED_MOD[self.eff_stance]
         speeds = [cell_speed(self.shape, self.tier, r, c) for r, c, _o, _p in op]
         nz = [s for s in speeds if s > 0]
         base = min(nz) if nz else 0
@@ -1858,7 +1934,7 @@ class Subunit:
                 goal_r, goal_c = ar, ac
             dr = goal_r - ar
             dc = goal_c - ac
-            if self.stance == "retreat":
+            if self.eff_stance == "retreat":
                 dr, dc = -dr, -dc
             if not toi_deferred and enemy_cells:
                 # [migration S2, unchanged] legacy anchor pre-cap -- FIELD_MOVEMENT off (MB_NODE_COHESION
@@ -2037,7 +2113,8 @@ class Subunit:
         """
         if MB_NODE_COHESION and hasattr(self, '_node_pos'):
             return self._node_advance(discipline, target_centroid, enemy_cells, enemy_cells_float)
-        if self.stance == "hold":
+        _stance = self.eff_stance   # read once: nothing in this method writes stance, instructions or _stance_explicit
+        if _stance == "hold":
             for _cid in self.cell_last_speed:   # [ED-MB-0041 Tier-2] see _node_advance's hold branch
                 self.cell_last_speed[_cid] = 0
             return
@@ -2081,7 +2158,7 @@ class Subunit:
         self._moved_this_turn = set()
         op = _oriented(self)
         disc_mult = 1.0 if discipline >= 5 else (0.7 if discipline >= 3 else 0.4)  # [canonical: mass_battle_v30.md §A.4 — Discipline degradation tiers]
-        stance_mod = STANCE_SPEED_MOD[self.stance]
+        stance_mod = STANCE_SPEED_MOD[_stance]
         all_speeds = [cell_speed(self.shape, self.tier, r, c) for r, c, _, _ in op]
         nonzero_speeds = [s for s in all_speeds if s > 0]
         min_speed = min(nonzero_speeds) if nonzero_speeds else 0
@@ -2203,7 +2280,7 @@ class Subunit:
             if cell_target:
                 dr = cell_target[0] - my_r
                 dc = cell_target[1] - my_c
-                if self.stance == "retreat": dr, dc = -dr, -dc
+                if _stance == "retreat": dr, dc = -dr, -dc
                 if kite_mode == 'away': dr, dc = -dr, -dc  # kiter opens the gap; 'toward' keeps dr,dc (closes in); 'hold' returned above
                 abs_dr, abs_dc = abs(dr), abs(dc)
                 total = abs_dr + abs_dc
@@ -2718,6 +2795,14 @@ class Unit:
     # introspection/a future UI -- nothing at resolution time reads it. Default empty -> byte-exact
     # for every existing Unit, which never sets it (matches `fired_signals`' own A4 precedent).
     officers: Tuple['Officer', ...] = ()
+    # [MB-05, A7 terrain] The dice the battle's A.9 terrain row moves, battle-wide, in A.6's own two
+    # currencies: `terrain_off_d` shifts THIS unit's offence; `terrain_def_d` is defence, which this
+    # engine spends the way INTENT_DEFENSE_D does -- it blunts the ENEMY's offence against this unit.
+    # Set once, before the battle, by `massbattle._run_and_grade` from `terrain.py`'s row constants;
+    # read in `orchestration.resolve_engagements` (sigma head: x SIGMA_PER_D, legacy path: whole dice
+    # on the pool). Default 0 -> inert, byte-exact for every Unit no terrain row touches.
+    terrain_off_d: float = 0.0
+    terrain_def_d: float = 0.0
 
     def __post_init__(self):
         # [canonical: Jordan directive 2026-06-02] Command DERIVED from Charisma (primary) +

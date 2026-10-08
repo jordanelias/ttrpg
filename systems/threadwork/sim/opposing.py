@@ -37,8 +37,9 @@ from engine.dice_engine.dice_engine import roll_pool
 from systems.threadwork.sim.operations import (
     DEPTH_OB, MENDING_OB, TN_STANDARD,
     _actor_pool, COHERENCE_COST_BY_SCALE, FR_SURCHARGE, OperationResult,
+    aims_at_own_configuration, apply_mending_feedback, charge_working, mending_priced_scale,
+    price_mending,
 )
-from systems.threadwork.sim.coherence import apply_coherence_delta
 
 
 # §2.6 Opposing Engagement Modifier
@@ -99,7 +100,8 @@ def _degree_label(net: int | float, ob: int | float) -> str:
 
 
 def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
-                                world=None, rng=None) -> OpposingResult:
+                                world=None, rng=None, *,
+                                environment_in_equilibrium: bool = False) -> OpposingResult:
     """§2.6 Resolve contested operation between two practitioners.
 
     actor_a / actor_b: practitioner objects (with .spirit, .ts, .history,
@@ -113,9 +115,25 @@ def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
     census.py`: "NO CLOCK GENERATES ANYTHING"; `29a` deleted its siblings in PR #450 and that module stays, unplugged). And the `a_knot_id`/`b_knot_id` parameters fed Knot strain into the `fieldwork` Knot store (`systems/fieldwork/sim/knots.py`, which stays, unplugged). No source in the repo says where its gauge maps in the season (`H-182`'s cite).
     Neither is re-wired: both values stay REPORTED (`ms_delta`; each side's `knot_ob_penalty`). The
     only state this function writes is each side's Coherence.
+
+    COHERENCE (R-14, WR-03). Each side's `coherence_delta` is resisted by THAT side's resilience
+    through `operations.charge_working` (identity at the shipped gain 0) and the dict reports
+    the cost actually applied. A Mending is priced by the owner, not the table: on
+    `operations.mending_priced_scale(target)`, each side's `coherence_delta` is its
+    `operations.price_mending` cost (0 at every degree, ED-871), its restorative term goes through
+    `operations.apply_mending_feedback` by ITS OWN degree (recorded as `coherence_restored`), and
+    `ms_delta` is the worse of the two sides' prices. The table's composure and Knot-strain fields
+    stand — they are not Coherence or Mending Stability pricing. `environment_in_equilibrium` is
+    E-1's condition on that term, default False exactly as in `operations.attempt_mending`.
+    Own-configuration aim (`target['configuration_of']`, WR-02) is routed by `attempt_mending` ONLY:
+    here it is refused with a ValueError, not silently given the elastic path.
     """
     actor_a_id = getattr(actor_a, 'actor_id', getattr(actor_a, 'name', 'A'))
     actor_b_id = getattr(actor_b, 'actor_id', getattr(actor_b, 'name', 'B'))
+    if op_type == 'Mending' and (aims_at_own_configuration(target, actor_a_id)
+                                 or aims_at_own_configuration(target, actor_b_id)):
+        raise ValueError("resolve_opposing_operations: Mending aimed at a side's OWN configuration "
+                         "(target['configuration_of']) is routed by operations.attempt_mending only")
 
     # §2.6 Opposing Engagement Modifier
     a_tps = getattr(actor_a, 'ts', 30) // 10
@@ -123,10 +141,12 @@ def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
     a_ob_mod = opposing_engagement_modifier(b_tps)
     b_ob_mod = opposing_engagement_modifier(a_tps)
 
-    scale = target.get('scale', 'Object')
+    is_mending = op_type == 'Mending'
+    # A Mending works the owner's priced scale (WR-03), so its Ob and its price read one answer.
+    scale = mending_priced_scale(target) if is_mending else target.get('scale', 'Object')
     # TN7 always (ED-IN-0196) — the op_type only selects the Ob now.
-    if op_type == 'Mending':
-        base_ob = MENDING_OB.get(scale, MENDING_OB['Relational'])
+    if is_mending:
+        base_ob = MENDING_OB[scale]
     else:
         base_ob = DEPTH_OB.get(scale, 1)
     tn = TN_STANDARD
@@ -218,13 +238,27 @@ def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
         a_cons = {'coherence_delta': -1, 'composure': 1}
         b_cons = dict(a_cons)
 
-    # Apply Coherence deltas
-    if a_cons.get('coherence_delta', 0) != 0:
-        apply_coherence_delta(actor_a_id, a_cons['coherence_delta'],
-                              f"Opposing {op_type} A:{a_deg}/B:{b_deg}", world=world)
-    if b_cons.get('coherence_delta', 0) != 0:
-        apply_coherence_delta(actor_b_id, b_cons['coherence_delta'],
-                              f"Opposing {op_type} A:{a_deg}/B:{b_deg}", world=world)
+    # Mending: the owner prices each side by its own degree, replacing the table's Coherence and
+    # Mending Stability values (WR-03). Every other table field stands.
+    prices = {}
+    if is_mending:
+        # The owner's four bands straight off the roll, not §2.6's three-label shorthand folded back.
+        prices = {'a': price_mending(scale, dice_engine.degree_label(a_roll, a_ob)),
+                  'b': price_mending(scale, dice_engine.degree_label(b_roll, b_ob))}
+        a_cons['coherence_delta'] = prices['a'].coherence_cost
+        b_cons['coherence_delta'] = prices['b'].coherence_cost
+        ms_delta = min(prices['a'].mending_stability_delta, prices['b'].mending_stability_delta)
+
+    # Apply Coherence deltas, each resisted by its own side's resilience (R-14)
+    source = f"Opposing {op_type} A:{a_deg}/B:{b_deg}"
+    for side, actor, actor_id, cons in (('a', actor_a, actor_a_id, a_cons),
+                                        ('b', actor_b, actor_b_id, b_cons)):
+        cons['coherence_delta'] = charge_working(actor, actor_id, cons['coherence_delta'], source,
+                                                 world=world)
+        if is_mending:
+            cons['coherence_restored'] = apply_mending_feedback(
+                actor_id, prices[side], environment_in_equilibrium=environment_in_equilibrium,
+                source=f"{source} at {scale}: restorative feedback", world=world)
 
     return OpposingResult(
         actor_a=actor_a_id, actor_b=actor_b_id, op_type=op_type,

@@ -32,7 +32,15 @@
      `test_a_won_field...` docstring measured that).
   5b. THE WALLS' DR IS AN INJECTABLE FIXTURE (plan position `20-v`, `H-150`): `field_walls_dr` swept
      3 / 0 / 1 on block 5's fixture -- 0 reproduces the open field exactly (the control), 3 and 1
-     differ from it and from each other, and 3 equals the unset default.
+     differ from it and from each other, and 3 equals the unset default. Its open arm is fought with
+     the territory read made `None` (`_fight_open`): since MB-05 the bare target's own territory, T9,
+     is a live UPHILL field, so "no garrison" alone is no longer "open ground".
+  7. AN UPHILL FIELD RESOLVES DIFFERENTLY FROM THE SAME FIELD ON OPEN GROUND (MB-05, A.9's Uphill row):
+     block 5's bare fixture as found (T9 -> UPHILL) against itself with the territory read made `None`
+     (OPEN_FLAT). The other two MB-05 rows have no provider test, and why is a finding, not an
+     omission: RIVER_CROSSING needs a signal this provider cannot derive (it holds the target rung,
+     not the march's origin) -- `resolve_field`'s own test is in `tests/valoria/test_mass_battle_terrain.py`;
+     NARROW_PASS is not applied (`massbattle._run_and_grade`'s docstring says why it would change nothing).
 
 Block 6 (`resolve_field` sums `Person.weight` per side into army SIZE, not quality) lives in
 `tests/valoria/test_mass_battle_resolve_field.py`, not here: it needs `from systems.mass_battle...`
@@ -47,6 +55,28 @@ import random
 from engine.season.harness.populated import build_realm
 from engine.season.queries import faction_q, world_q
 from engine.season.seam.contest import contest
+
+
+def _bare(target):
+    """`build_realm(0)` with `target`'s garrison Site deleted -- `fortification_of` reads 0, so the
+    field is whatever row the target's territory resolves to (blocks 5, 5b and 7). Block 5 fights it through
+    `_fight_open` for the open-ground arm; block 7 reads the real territory."""
+    w = build_realm(0)
+    for sid in [sid for sid, s in w.sites.items() if s.kind == "garrison" and s.rung == target]:
+        del w.sites[sid]
+    assert world_q.fortification_of(w, target) == 0.0, "deleting the garrison left a fortification"
+    return w
+
+
+def _fight_open(monkeypatch, w, attackers, subject, target, seed):
+    """The same fight with the provider's territory read made `None` -- `terrain_row_for_territory`'s
+    no-modifier case, OPEN_FLAT, whatever the territory and fortification. Patched for this one call
+    only, so a sibling arm in the same test reads the real territory."""
+    from engine.season.seam.wrappers import mass_battle as wrapper
+    with monkeypatch.context() as m:
+        m.setattr(wrapper, "_territory_of", lambda _w, _rung: None)
+        return wrapper.resolve(w, attackers, ["c"], "a field", subject=subject, rung=target,
+                               rng=random.Random(seed))
 
 
 def test_resolves_end_to_end_through_contest():
@@ -139,20 +169,19 @@ def test_a_real_faction_that_musters_nobody_at_the_rung_is_unopposed():
     assert r["parties"]["subject_members"] == []
 
 
-def test_a_garrisoned_defender_resolves_differently_from_an_ungarrisoned_one():
+def test_a_garrisoned_defender_resolves_differently_from_an_ungarrisoned_one(monkeypatch):
     """PLAN POSITION `20-iv` -- `H-150`'s falsifier. `set_s_036` (Church of Solmund, territory T9)
     carries the one garrison Site `build_realm` seeds per settlement; the bare world deletes it, so
-    `fortification_of` reads 1.0 against 0.0. Eight seeds, both worlds, the same 2-man Crown army.
+    `fortification_of` reads 1.0 against 0.0. The bare arm is fought through `_fight_open`: T9 is UPHILL
+    since MB-05, so a bare world on its real territory would compare WALLS against a hill, not walls
+    against open ground. Eight seeds, both worlds, the same 2-man Crown army.
     Every one is a FOUGHT field (asserted, so this cannot pass on `Unopposed` short-circuits), and
     the garrison changes at least one result and never leaves the defenders with fewer survivors.
     Pre-`20-iv`, `differs` was 0: the provider never read the garrison."""
     from engine.season.seam.wrappers.mass_battle import resolve as provider_resolve
     target = "set_s_036"
-    garrisoned, bare = build_realm(0), build_realm(0)
-    for sid in [sid for sid, s in bare.sites.items() if s.kind == "garrison" and s.rung == target]:
-        del bare.sites[sid]
+    garrisoned, bare = build_realm(0), _bare(target)
     assert world_q.fortification_of(garrisoned, target) > 0.0, "the fixture no longer garrisons the target"
-    assert world_q.fortification_of(bare, target) == 0.0, "deleting the garrison left a fortification"
     attackers = world_q.mustered(garrisoned, "set_s_014", "fac_crown")
     assert attackers and attackers == world_q.mustered(bare, "set_s_014", "fac_crown")
     fought = differs = 0
@@ -160,9 +189,7 @@ def test_a_garrisoned_defender_resolves_differently_from_an_ungarrisoned_one():
         walled = provider_resolve(garrisoned, attackers, ["c"], "a field",
                                   subject="fac_church_of_solmund", rung=target,
                                   rng=random.Random(seed))
-        open_ = provider_resolve(bare, attackers, ["c"], "a field",
-                                 subject="fac_church_of_solmund", rung=target,
-                                 rng=random.Random(seed))
+        open_ = _fight_open(monkeypatch, bare, attackers, "fac_church_of_solmund", target, seed)
         for r in (walled, open_):
             assert r["status"] == "RESOLVED" and r["unopposed"] is False, f"seed {seed}: not fought: {r}"
         fought += 1
@@ -173,13 +200,15 @@ def test_a_garrisoned_defender_resolves_differently_from_an_ungarrisoned_one():
     assert differs >= 1, "a garrisoned target fought identically to a bare one on every seed (H-150)"
 
 
-def test_field_walls_dr_sweep_zero_is_the_open_field_and_three_and_one_differ():
+def test_field_walls_dr_sweep_zero_is_the_open_field_and_three_and_one_differ(monkeypatch):
     """PLAN POSITION `20-v` -- `H-150`'s three-point sweep of the `field_walls_dr` fixture, on the
     `20-iv` fixture (`set_s_036`, the 2-man Crown army, garrisoned vs the garrison deleted).
 
       * `0` IS THE CONTROL: with no DR bonus the garrisoned field resolves IDENTICALLY to the bare
-        one on every seed -- DR is the only live difference between a walled and an open field, and the
-        sweep removes it exactly (`==`, not `approx`).
+        one on OPEN GROUND on every seed -- DR is the only live difference between a walled and an
+        open field, and the sweep removes it exactly (`==`, not `approx`). The bare arm is fought with
+        the territory read made `None` (`_fight_open`): since MB-05 applies UPHILL, the bare target's
+        own territory (T9) is no longer open ground, and comparing against it would test the hill.
       * `3` (A.9) AND `1` DIFFER from that control and from each other, and the defenders' survivors
         rise monotonically 0 -> 1 -> 3 on every seed -- so the fixture reaches the engine and its
         magnitude is what moves the result, rather than the sweep being three spellings of one run.
@@ -193,11 +222,8 @@ def test_field_walls_dr_sweep_zero_is_the_open_field_and_three_and_one_differ():
     keeps honest). Pre-`20-v` `field_walls_dr` did not exist and the arm could not be set."""
     from engine.season.seam.wrappers.mass_battle import resolve as provider_resolve
     target = "set_s_036"
-    default, bare = build_realm(0), build_realm(0)
-    for sid in [sid for sid, s in bare.sites.items() if s.kind == "garrison" and s.rung == target]:
-        del bare.sites[sid]
+    default, bare = build_realm(0), _bare(target)
     assert world_q.fortification_of(default, target) > 0.0, "the fixture no longer garrisons the target"
-    assert world_q.fortification_of(bare, target) == 0.0, "deleting the garrison left a fortification"
     assert default.fixtures.get("field_walls_dr") is None, "the shipped default moved off A.9's own number"
     arms = {}
     for dr in (3, 0, 1):
@@ -215,7 +241,9 @@ def test_field_walls_dr_sweep_zero_is_the_open_field_and_three_and_one_differ():
 
     checked = zero_differs_from_3 = zero_differs_from_1 = three_differs_from_1 = 0
     for seed in range(16):
-        open_, dflt = fight(bare, seed), fight(default, seed)
+        open_ = _fight_open(monkeypatch, bare, attackers, "fac_church_of_solmund", target, seed)
+        assert open_["status"] == "RESOLVED" and open_["unopposed"] is False, f"seed {seed}: not fought"
+        open_, dflt = open_["result"], fight(default, seed)
         r3, r0, r1 = fight(arms[3], seed), fight(arms[0], seed), fight(arms[1], seed)
         assert r0 == open_, f"seed {seed}: walls at DR 0 still differ from the open field: {r0} vs {open_}"
         assert r3 == dflt, f"seed {seed}: DR 3 is not the unset default: {r3} vs {dflt}"
@@ -229,3 +257,37 @@ def test_field_walls_dr_sweep_zero_is_the_open_field_and_three_and_one_differ():
     assert zero_differs_from_3 >= 1, "DR 3 resolved identically to the control on every seed"
     assert zero_differs_from_1 >= 1, "DR 1 resolved identically to the control on every seed"
     assert three_differs_from_1 >= 1, "DR 3 and DR 1 resolved identically on every seed"
+
+
+def test_an_uphill_field_resolves_differently_from_the_same_field_on_open_ground(monkeypatch):
+    """MB-05 -- A.9's Uphill row ("Defender +1D Def; attacker −1D Off"), through the provider.
+
+    `set_s_036` sits in T9, whose anchor resolves UPHILL once its garrison is deleted
+    (`tests/valoria/test_mass_battle_terrain.py` pins T9 -> UPHILL; this file may not import the lookup).
+    The SAME bare world, army and seeds are fought twice: as found, and with the territory read made
+    `None` (`_fight_open`, OPEN_FLAT) -- the row is the only difference between the arms.
+
+    THE FALSIFIER, BOTH WAYS. Before MB-05 the row was identified and not applied, and the two arms were
+    EQUAL on all 16 seeds (measured 2026-10-08, CI's Python 3.11); after, they differ on seeds 0, 4 and
+    10 (a one-off figure, not asserted -- `>= 1` is, and `checked` keeps it honest). The DIRECTION is
+    asserted per seed: uphill, the attacker is the weaker party, so the defenders never end with fewer
+    survivors than on open ground -- a sign error in the Def dice would break this first."""
+    from engine.season.seam.wrappers.mass_battle import resolve as provider_resolve, _territory_of
+    target, subject = "set_s_036", "fac_church_of_solmund"
+    w = _bare(target)
+    assert _territory_of(w, target) == "T9", "the target moved off T9; re-pin it to an UPHILL territory"
+    attackers = world_q.mustered(w, "set_s_014", "fac_crown")
+    assert attackers, "the fixture no longer musters a Crown army at set_s_014"
+    checked = differs = 0
+    for seed in range(16):
+        uphill = provider_resolve(w, attackers, ["c"], "a field", subject=subject, rung=target,
+                                  rng=random.Random(seed))
+        open_ = _fight_open(monkeypatch, w, attackers, subject, target, seed)
+        for r in (uphill, open_):
+            assert r["status"] == "RESOLVED" and r["unopposed"] is False, f"seed {seed}: not fought: {r}"
+        assert uphill["result"]["defender_size_pct"] >= open_["result"]["defender_size_pct"], (
+            f"seed {seed}: uphill left the defenders FEWER survivors: {uphill} vs {open_}")
+        checked += 1
+        differs += uphill["result"] != open_["result"]
+    assert checked == 16
+    assert differs >= 1, "an uphill field fought identically to open ground on every seed (MB-05)"

@@ -59,8 +59,11 @@ empties the stack, so a practitioner who recuperates between workings never yiel
   - How much a working costs (the caller's `delta`): D-5 type x scale and §6.6's direction test
     live in the callers. R-14 (ruled 2026-09-09) adds a practitioner-side term — "how resilient
     their spirit is" — whose ARITHMETIC is unruled; it belongs in the working's cost, not in this
-    state, and no caller applies it yet. ⚠ C-3's "cost is relative magnitude / no toughness term"
-    was RETRACTED (RULINGS.md Batch 13) and is not modelled.
+    state. Its one owner is `operations.resist_coherence_cost`, a swept fixture
+    (`operations.RESILIENCE_GAIN`, shipped at the control 0), applied per practitioner in
+    `operations._resolve_operation` (WR-01) and in `collective.py` and `opposing.py` (WR-03).
+    ⚠ C-3's "cost is relative magnitude / no toughness term" was RETRACTED (RULINGS.md Batch 13) and
+    is not modelled.
   - What follows the crossing (P-15's TS-gated branching, §7.5 reality-strain): this module reports
     the crossing and keeps the arithmetic running. Routing post-crossing load into the substrate has
     NO carrier: `systems/threadwork/sim/rendering.py`'s `apply_rs_strain` was STRUCK at position 27,
@@ -348,8 +351,12 @@ def recover(actor: str, *, seasons, environment_in_equilibrium: bool, source: st
                                   returns nothing.
       mending                     ACCELERATES: extra units of return from one's own or another's
                                   mending — "accelerates the return without being required for it".
-                                  `operations.attempt_mending` supplies it for the MENDER (C-1's
-                                  restorative feedback, position 27).
+                                  `operations.apply_mending_feedback` supplies it for the MENDER
+                                  (C-1's restorative feedback, position 27) — from a single, a
+                                  collective or an opposed Mending alike (WR-03) — when the Mending
+                                  is aimed at ANOTHER's configuration; `attempt_mending` aimed at the
+                                  mender's own moves the resting point instead (`mend_resting_point`,
+                                  WR-02).
 
     ⚠ DERIVED, NOT RULED: `mending` is gated by the environment too. E-1 says mending accelerates
     "this" — the return that has the condition — and §7.1's reason for the condition ("nothing to
@@ -376,7 +383,9 @@ def mend_resting_point(actor: str, amount: int, source: str, world=None) -> Cohe
 
     A SEPARATE operation from recovery, and the only thing in this module that moves the floor
     inward. How hard it is to achieve is the caller's roll (the Ob of the working), not this
-    function's: `amount` is what the working achieved. It floors at the equilibrium.
+    function's: `amount` is what the working achieved. It floors at the equilibrium. Its game caller
+    is `operations.attempt_mending` with `target['configuration_of']` naming the mender (WR-02),
+    which absorbs the refusal below into its result's notes.
 
     ⚠ REFUSED PAST THE CROSSING. Once the resting point has left the human band, human is no longer
     where the configuration tends, so working it back is "restoring a remembered state — which is

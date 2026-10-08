@@ -61,7 +61,7 @@ def render(events, seed=None):
             landed = ev['degree'] in ('success', 'overwhelming')
             verb = f"LANDS ({ev['degree']})" if landed else f"misses ({ev['degree']})"
             line(f"      stop-hit from {ev['longer']} {verb}   "
-                 f"[{_dist(P.degree_distribution(ev['pool'], ev['net_sigma']), DEGORD)}]")
+                 f"[{_dist(P.degree_distribution(ev['pool'], ev['net_sigma'], ev['ob']), DEGORD)}]")
         elif k == 'commit':
             line(f"    · {ev['aggressor']} commits {ev['commit']}   "
                  f"[bands {_dist(P.beta_band_probs(ev['beta_a'], ev['beta_b']))}]")
@@ -74,7 +74,7 @@ def render(events, seed=None):
             line(f"        {ev['defender']} {verb}{how}")
         elif k == 'roll':
             line(f"        {ev['aggressor']} resolves: pool {ev['pool']}, edge {_sig(ev['net_sigma'])} -> "
-                 f"{ev['degree'].upper()}   [{_dist(P.degree_distribution(ev['pool'], ev['net_sigma']), DEGORD)}]")
+                 f"{ev['degree'].upper()}   [{_dist(P.degree_distribution(ev['pool'], ev['net_sigma'], ev['ob']), DEGORD)}]")
         elif k == 'outcome':
             wounds = f"({a_label} {ev['A_wounds']} / {b_label} {ev['B_wounds']} wounds)"
             if ev['hit'] > 0:

@@ -65,7 +65,9 @@ from systems.mass_battle.sim import rngsource
 from systems.mass_battle.sim.config import CELL_CAP
 from systems.mass_battle.sim.hierarchy.units import Subunit, Unit
 from systems.mass_battle.sim.orchestration import run_battle
-from systems.mass_battle.sim.terrain import (FOREST_BROKEN, WALLS, WALLS_DEFENDER_DR,
+from systems.mass_battle.sim.terrain import (FOREST_BROKEN, RIVER_CROSSING, RIVER_CROSSING_OFF_D,
+                                             SPEED_TIERS, UPHILL, UPHILL_ATTACKER_OFF_D,
+                                             UPHILL_DEFENDER_DEF_D, WALLS, WALLS_DEFENDER_DR,
                                              terrain_row_for_territory)
 
 #: Size-ratio -> degree thresholds. CARRIED OVER VERBATIM from the pre-port adapter so that the
@@ -230,19 +232,24 @@ def _run_and_grade(unit_a, unit_b, terrain, rng, walls_dr=None):
     ⚠ CAVEATS THAT LIVED IN THE DELETED FUNCTION'S DOCSTRING AND STILL BIND THIS PATH.
     DETERMINISM: `rng` is scoped over the battle by `rngsource.using`; the canon engine drew from the
     global `random` module at seven sites, so without that holder a seeded run is unpinnable.
-    TERRAIN: two rows are applied, each in part. FOREST_BROKEN's speed half is INERT -- `run_battle`
-    never reads `.speed` (only `orchestration.pursuit_damage` and `run_multi_unit_battle` do, and
-    neither is reachable from here). WALLS (plan position `20-iv`, the garrisoned march target) adds
-    `terrain.WALLS_DEFENDER_DR` to the DEFENDER's (`unit_b`'s) `dr`, read live at every melee and rout
-    hit (`eff_dr` falls through to the Unit; `h_per_size`, the one field derived from `dr` at
-    construction, has no reader), so mutating it here is the same in-place shape the speed half uses.
-    WALLS' other clauses, "no flanking; Slow cannot advance", are NOT applied: this engine's one-subunit
-    season units have no flank or advance order to forbid. UPHILL, NARROW_PASS and RIVER_CROSSING are
-    identified by `terrain_row_for_territory` and not applied: UPHILL's number is a dice count
-    (+1D/-1D), which this engine reaches only through `config.SIGMA_PER_D`, a calibrated-debt
-    conversion -- a step WALLS' DR skipped (its +3 is applied 1:1 to `Unit.dr`, an assumption: `H-150`),
-    and terrain work `20-iv` (a garrison position) did not take. DEGREE: the bands below are the bespoke survivor-ratio thresholds carried over from the
-    pre-port adapter, not `dice_engine.degree_from_net`.
+    TERRAIN: UPHILL, RIVER_CROSSING and WALLS are applied (UPHILL's two A.9 clauses fully; NARROW_PASS
+    is identified and applies nothing, see below); the attacker is `unit_a`, the defender `unit_b`.
+    FOREST_BROKEN's speed half is INERT -- `run_battle` never reads `.speed` (only
+    `orchestration.pursuit_damage` and `run_multi_unit_battle` do, and neither is reachable from here).
+    WALLS (plan position `20-iv`, the garrisoned march target) adds `terrain.WALLS_DEFENDER_DR` to the
+    DEFENDER's `dr`, read live at every melee and rout hit (`eff_dr` falls through to the Unit;
+    `h_per_size`, the one field derived from `dr` at construction, has no reader), so mutating it here is
+    the same in-place shape the speed half uses. WALLS' other clauses, "no flanking; Slow cannot
+    advance", are NOT applied: this engine's one-subunit season units have no flank or advance order to
+    forbid. UPHILL and RIVER_CROSSING (MB-05) are dice rows: their A.9 dice go onto
+    `Unit.terrain_off_d`/`terrain_def_d` (`terrain.py`'s constants, which say how a die reaches the
+    engine -- `config.SIGMA_PER_D`, calibrated debt); RIVER_CROSSING also steps the crosser one
+    `SPEED_TIERS` slower (inert, as forest's is). NARROW_PASS is identified and NOT applied, and it is
+    not a deferral: "1 engagement per side; Fibonacci impossible" restricts how many subunits engage and
+    the Concentration tactic, and a season unit is ONE subunit with no tactic -- both clauses already
+    hold on every field this function fights, so applying them would change nothing. DEGREE: the bands
+    below are the bespoke survivor-ratio thresholds carried over from the pre-port adapter, not
+    `dice_engine.degree_from_net`.
 
     Takes `rng` directly rather than a `world`-shaped object -- this is the only thing either
     caller ever reads off `world`, so narrowing the parameter to what is actually used means
@@ -255,6 +262,12 @@ def _run_and_grade(unit_a, unit_b, terrain, rng, walls_dr=None):
             unit_b.speed = 'Standard'
     elif terrain == WALLS:
         unit_b.dr += WALLS_DEFENDER_DR if walls_dr is None else walls_dr
+    elif terrain == UPHILL:
+        unit_a.terrain_off_d += UPHILL_ATTACKER_OFF_D
+        unit_b.terrain_def_d += UPHILL_DEFENDER_DEF_D
+    elif terrain == RIVER_CROSSING:
+        unit_a.terrain_off_d += RIVER_CROSSING_OFF_D
+        unit_a.speed = SPEED_TIERS[max(0, SPEED_TIERS.index(unit_a.speed) - 1)]
 
     with rngsource.using(rng):
         # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6), the canon engine's own default]
@@ -282,7 +295,7 @@ def _run_and_grade(unit_a, unit_b, terrain, rng, walls_dr=None):
 
 
 def resolve_field(w, side_a, side_b, *, territory=None, fort_level=0.0, stance_a=0.0, stance_b=0.0,
-                  walls_dr=None, rng=None):
+                  walls_dr=None, river_crossing=False, rng=None):
     """THE SEASON-FACING ENTRY POINT — `04 §C.5.1`'s roster contract, reconciled with this module's
     OWN requirement for a `Unit` to hand `run_battle`.
 
@@ -319,13 +332,18 @@ def resolve_field(w, side_a, side_b, *, territory=None, fort_level=0.0, stance_a
       `walls_dr` -- plan position `20-v` (`H-150`): the defender DR a WALLS field adds, handed to
           `_run_and_grade` unchanged. `None` (the default) is A.9's number, `terrain.WALLS_DEFENDER_DR`;
           an int overrides it. Inert on a field `terrain_row_for_territory` does not call WALLS.
+      `river_crossing` -- MB-05: the caller's fact that the attacker crossed a river to reach the
+          field, handed to `terrain_row_for_territory`, the one place RIVER_CROSSING can come from.
+          `False` (the default) is what the season provider passes today, by omission: it holds the
+          target rung but not the march's origin, so it cannot derive the fact (see `terrain.py`).
     The old `terrain=` keyword, which the one caller always passed as `None`, is gone: the row is
-    derived here from the two facts that decide it, so no caller can hand in a row that disagrees.
+    derived here from the three facts that decide it (`territory`, `fort_level`, `river_crossing`), so no caller can hand in a row that disagrees.
 
     Returns exactly what `_run_and_grade` returns."""
     weight_a = sum(w.persons[pid].weight for pid in side_a if pid in w.persons)
     weight_b = sum(w.persons[pid].weight for pid in side_b if pid in w.persons)
     unit_a = _weighted_unit("side_a", weight_a, _morale_start(stance_a))
     unit_b = _weighted_unit("side_b", weight_b, _morale_start(stance_b))
-    return _run_and_grade(unit_a, unit_b, terrain_row_for_territory(territory, fort_level), rng,
+    return _run_and_grade(unit_a, unit_b,
+                          terrain_row_for_territory(territory, fort_level, river_crossing), rng,
                           walls_dr=walls_dr)

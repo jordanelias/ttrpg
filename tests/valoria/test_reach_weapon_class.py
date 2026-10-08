@@ -85,6 +85,20 @@ def test_pike_troop_type_authored():
 
 # ─── the reach ADVANTAGE (charge-recoil reach gate) ──────────────────────────
 
+def _standing(ta, tb, n=12):
+    """Mean surviving share of two Line-3 forces of types `ta`, `tb` after a standing melee (seeds 500..)."""
+    import random
+    ha = hb = 0.0
+    for s in range(n):
+        random.seed(500 + s)
+        a = build_unit('Line', 3, 'A', 'A', 9, troop_type=ta)
+        b = build_unit('Line', 3, 'B', 'B', 9, troop_type=tb)
+        h0a, h0b = a.hp, b.hp
+        _orch.run_battle(a, b, max_turns=18)
+        ha += a.hp / h0a; hb += b.hp / h0b
+    return round(ha / n, 4), round(hb / n, 4)
+
+
 def _charge_vs_brace(def_type, n=16):
     """Braced defender of `def_type` holding vs a Fast cavalry charge; returns mean defender hp retained."""
     import random
@@ -120,19 +134,6 @@ def test_standing_melee_reach_independent(field_path):
     """Disclosed finding: reach differentiation does NOT change symmetric standing melee (the exchange
     is mutual once contact fires; reach only shifts contact TIMING). pike-vs-levy standing == levy-vs-levy
     standing. Documents that reach is a charge/brace lever here, not a standing-melee one."""
-    import random
-
-    def _standing(ta, tb, n=12):
-        ha = hb = 0.0
-        for s in range(n):
-            random.seed(500 + s)
-            a = build_unit('Line', 3, 'A', 'A', 9, troop_type=ta)
-            b = build_unit('Line', 3, 'B', 'B', 9, troop_type=tb)
-            h0a, h0b = a.hp, b.hp
-            _orch.run_battle(a, b, max_turns=18)
-            ha += a.hp / h0a; hb += b.hp / h0b
-        return round(ha / n, 4), round(hb / n, 4)
-
     assert _standing('pike', 'levy') == _standing('levy', 'levy')
 
 

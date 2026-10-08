@@ -10,7 +10,7 @@ source per references/canonical_sources.yaml `resolution_engine`) to a typed JSO
 
 The `cfg` section mirrors config.CFG; the `core` section (added under OPT-AV-17 / ED-PC-0013,
 widening ED-1052's typed-export slice) carries core.py's ~20 canonical resolution/damage/armour
-constants — DECISIVE_OB, POOL_FLOOR, BASE_POOL, TN, the QUAL/DELIVERY/RESIST/GAP_EXPOSURE model
+constants — POOL_FLOOR, BASE_POOL, TN, the QUAL/DELIVERY/RESIST/GAP_EXPOSURE model
 tables, etc. — that a Godot port previously had to hand-transcribe (the RESIST/GAP_EXPOSURE
 never-carried gap, C6-M2/OPT-AV-15). Constants are AUTO-COLLECTED (every uppercase JSON-typeable
 module constant), not hand-listed, so a new canonical constant in the oracle cannot be silently
@@ -52,7 +52,8 @@ REPO_ROOT = ci_common.REPO
 ENGINE_DIR = os.path.join(REPO_ROOT, 'systems', 'combat', 'combat_engine_v1')
 OUT_PATH = os.path.join(REPO_ROOT, 'engine', 'engine_params', 'combat_engine_v1.json')
 
-SCHEMA_VERSION = 2  # v2 (OPT-AV-17): added the `core` section (core.py canonical constants).
+SCHEMA_VERSION = 3  # v2 (OPT-AV-17): added the `core` section (core.py canonical constants).
+                    # v3 (B-D1 PC-07): core.COVERAGE_GAP dict -> scalar (a type change); DECISIVE_OB removed (PC-03).
 
 
 def _typed(value):

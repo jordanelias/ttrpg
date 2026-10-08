@@ -52,7 +52,7 @@ B-C (INSTRUMENTS + RECORDS) is closed; its finished positions left the plan and 
 
 ## 4.3 B-L — MODULES (§SM, carried from v8)
 
-Members, order, entry gate and exit instrument: `_part3` §B. B-L is IN-03 → IN-04 → IN-05, then the tail lanes MB-03, PC-06 M-1 and S-2/L-1, GO-04, with IN-46's design re-read against the moved `combat` container. It is placed after B-K, so THE NINE move first: nothing in B-G..B-K reads a module, and SC-01 (IN-03) and IN-13 (IN-05) are the positions that do; Jordan may run B-L right after B-D with no edge broken. Entry gate: B-B closed (`4a2e4494`; IN-02's falsifiers observed, E17) and B-D1 and B-D2 merged, so that every lane edit to the two closures lands before the move (B-D1: PC-01..04, PC-07, PC-05 item 3; B-D2: MB-01, MB-02, MB-05, MB-06, MB-07, MB-04, each at its pre-move paths). The section's standing preamble, carried from `v8_part5.md:125-171`:
+Members, order, entry gate and exit instrument: `_part3` §B. B-L is IN-03 → IN-04 → IN-05, then the tail lanes MB-03 and MB-05r, PC-06 M-1 and S-2/L-1, GO-04, with IN-46's design re-read against the moved `combat` container. It is placed after B-K, so THE NINE move first: nothing in B-G..B-K reads a module, and SC-01 (IN-03) and IN-13 (IN-05) are the positions that do; Jordan may run B-L right after B-D with no edge broken. Entry gate: B-B closed (`4a2e4494`; IN-02's falsifiers observed, E17), B-D1 closed (`9054df80`: the PC lane's edits to the combat closure landed) and B-D2 closed, `b31d2c31`, so that every lane edit to the two closures lands before the move (B-D2: MB-01, MB-02, MB-05, MB-06, MB-07, MB-04, each at its pre-move paths). The section's standing preamble, carried from `v8_part5.md:125-171`:
 
 **Ruled:** `ED-IN-0284`, revised by `ED-IN-0285`. The vocabulary, directories, adapter model, module entry kinds,
 containers and the retained-modules roster are **`A-25`** (`_part5` §A), stated there once; this section stages the code
@@ -74,7 +74,7 @@ previous stage's falsifiers being OBSERVED, not on its commit existing; a falsif
 
 **THE CONTROL EVERY STAGE KEEPS.** `build_realm(0)`'s `content_hash()` and its one-season hash byte-identical across
 the stage (`a918cd1f…` and `05f022e2…` were the readings at `52ec9a54`; the batches before B-L move them — declared movers
-include IN-08, IN-34, SC-03a's docket items and PC-02..04 — so each stage's control is the reading on ITS OWN base
+include IN-08, IN-34 and SC-03a's docket items, and PC-02..04 moved them at `9054df80` — so each stage's control is the reading on ITS OWN base
 commit, taken before the first edit); `python -m engine.season.harness.aperture 4 0` reads the same per-verb funnel with the
 control hash EQUAL; `resolvable_verbs()` returns the same set (compare the two sets at the build — no number is
 written here); `python tools/export_composition.py --check` OK. The two readings above were taken (v8 `_part6` §H.1, at its `FORK:` ref)
@@ -105,7 +105,7 @@ test can pass on a table it did not build. Precedent: `tests/valoria/test_season
 
 ### IN-03 · `31a` · social contest — `seam/wrappers/sigma.py` → a host input builder + `modules/social_contest/` · IN/SC · gate `30` · `opus`/`opus` · `[infrastructure]`
 - STATE: B      LANE: IN (SC)      BATCH: B-L (head)      R: —
-- WHAT: the spec carried below; creates `modules/`. Its entry gate is B-L's (B-B closed, `4a2e4494`; B-D1 and B-D2 merged; after B-K unless Jordan runs B-L early).
+- WHAT: the spec carried below; creates `modules/`. Its entry gate is B-L's (B-B closed, `4a2e4494`; B-D1 closed, `9054df80`, and B-D2 closed, `b31d2c31`; after B-K unless Jordan runs B-L early).
 - DEPS: IN-02 (landed `5097e49`) → IN-03 (R, satisfied); IN-03 → IN-04 (R); IN-03 → SC-01 (R: E17/A-25 — `22` builds its provider on this typed input record; SC-01 is B-N, so B-N's entry gate is B-L merged); IN-03 → PC-06 S-2 (D; a B-L tail lane)      EDITS: `rosters.yaml`, `seam/wrappers/sigma.py`, `module_contracts.yaml` + `composition.json`, `manifest/`, shape pins
 - EXIT: both control hashes unchanged (re-read on the base commit) and falsifier (3) observed in a fresh subprocess      FALSIFIER: (1)–(5) below; (3) is `30`'s falsifier (2) (`tests/valoria/test_module_registrar.py`) in its fresh-process form
 - SOURCE: `engine/season/seam/wrappers/sigma.py`; carried below, `v8_part5.md:239-275`:
@@ -149,9 +149,9 @@ count, control hash EQUAL. (5) `test_importing_every_engine_module_pulls_in_no_s
 
 
 ### IN-04 · `31b` · combat — wrapper split; the reachable engine → `modules/combat/` · IN/PC · gate `31a` · `sonnet`/`opus`, a `haiku` reachability census first · `[infrastructure]`
-- STATE: BLK:IN-03, PC-02, PC-03, PC-04      LANE: IN (PC)      BATCH: B-L (after IN-03)      R: —
+- STATE: BLK:IN-03 (PC-02, PC-03, PC-04 landed, `9054df80`)      LANE: IN (PC)      BATCH: B-L (after IN-03)      R: —
 - WHAT: the spec carried below; the `sim_params.json` decision is made in this commit; SEAM-LADDER (#457) folds into item 5's T-k reading (`architecture/meta/03_VERBS_AND_LOOPS.md:286`).
-- DEPS: IN-03 → IN-04 → IN-05 (R); IN-04 → PC-06 M-1 (D; a B-L tail lane); PC-02/03/04 → IN-04 (F: lane edits first), and so is every other B-D1 edit to the closure — PC-01, PC-07 (J-20 (B): the dead `COVERAGE_GAP['partial']` branch and the `coverage` parameters are deleted before the move), PC-05 item 3 — all landed at B-D1's merge, so the control hashes are read on B-L's base commit, after PC-02/03/04 moved combat outcomes      EDITS: `seam/wrappers/combat.py`, `seam/ladder.py`, `module_contracts.yaml` + `composition.json`, shape pins, the `systems/combat` move
+- DEPS: IN-03 → IN-04 → IN-05 (R); IN-04 → PC-06 M-1 (D; a B-L tail lane); the F edges from the PC lane's edits to the closure (PC-01..04, PC-07, PC-05 item 3) are satisfied, all landed at `9054df80`, so the control hashes are read on B-L's base commit, after PC-02/03/04 moved combat outcomes      EDITS: `seam/wrappers/combat.py`, `seam/ladder.py`, `module_contracts.yaml` + `composition.json`, shape pins, the `systems/combat` move
 - EXIT: both hashes unchanged; `balance.py` runs; one seed run twice in one process gives one hash      FALSIFIER: (1)–(5) below, and (6): IN-08 (B-G) adds `accept` with `contests: "the body"`, which the prize row `"the body"` already claims (`rosters.yaml` `prizes:`), while this stage's composition row names `verb: fight` and the registrar's `verb:` names one verb — after the split `aperture 4 0` shows `accept` still reaches the one `combat` provider, and whether a second `verb_call` row is needed is read at the split [GAP: the contested-verb check resolves by prize (`loop/driver.py:182-192`), so `accept` is claimed; whether the composition row must also name it (A-25: the prize row and the composition row are the two owners; `manifest/registry.py:104-111` states the one-`verb:` shape) was not traced]
 - SOURCE: `proposals/2026-10-04-forcing-churn-and-the-story-bar.md:173`; carried below, `v8_part5.md:278-312`:
 
@@ -192,9 +192,9 @@ delete the composition row → driver construction refuses naming it. (5)
 `python tools/freshness_gate.py` green.
 
 ### IN-05 · `31c` · mass battle — shed module state; wrapper split; `resolve_field`'s closure → `modules/mass_battle/` · IN/MB · gate `31b` · `sonnet`/`opus`, a `haiku` reachability census first · `[infrastructure]`
-- STATE: BLK:IN-04, MB-01, MB-02, MB-05      LANE: IN (MB)      BATCH: B-L (after IN-04)      R: —
+- STATE: BLK:IN-04      LANE: IN (MB)      BATCH: B-L (after IN-04)      R: —
 - WHAT: the spec carried below. SM-7's test — `modules/**` equals the reachable closure in both directions — lands here (licensed by `CLAUDE.md` §0.1 pt 5: `modules/` is the port's input set).
-- DEPS: IN-04 → IN-05 (R); IN-05 → IN-13 (F: `seam/wrappers/mass_battle.py`; IN-13 is B-M), IN-05 → MB-03 (F: `massbattle.py`; a B-L tail lane); MB-01/02/05 → IN-05 (F), and so is every other B-D2 edit to the closure — MB-06, MB-07 (J-18 (A): cap support at the ranks a troop type's weapon reaches) and MB-04, each built at its pre-move paths and landed at B-D2's merge; IN-05 → GO-05 (D: the manifest resource lists `modules/**`)      EDITS: `seam/wrappers/mass_battle.py`, `module_contracts.yaml` + `composition.json`, shape pins, the `systems/mass_battle` move
+- DEPS: IN-04 → IN-05 (R); IN-05 → IN-13 (F: `seam/wrappers/mass_battle.py`; IN-13 is B-M), IN-05 → MB-03 (F: `massbattle.py`; a B-L tail lane); the B-D2 edits to the closure (MB-01, 02, 04, 05, 06 and MB-07, J-18 (A)) are satisfied, each built at its pre-move paths and landed at `b31d2c31`; IN-05 → GO-05 (D: the manifest resource lists `modules/**`)      EDITS: `seam/wrappers/mass_battle.py`, `module_contracts.yaml` + `composition.json`, shape pins, the `systems/mass_battle` move
 - EXIT: the provider test end to end; one constructed `march` resolved twice in one process gives one result; SM-7's test green      FALSIFIER: (1)–(4) below; SM-7's test reds on a planted unreached file under `modules/`
 - SOURCE: `v8_part5.md:373` (SM-7); carried below, `v8_part5.md:316-335`:
 
@@ -339,10 +339,10 @@ deleting the module's composition row refuses at driver construction; one seed r
 hash.
 
 ### IN-52 · the levy-to-field feed · levied stores provision a season field (split from IN-07 at B-C)
-- STATE: BLK:IN-49 (B-K), MB-07 (B-D2), IN-07's extractions (B-T); the arm's flip is ask-then (`_part5` §J.2, LF-1..LF-3)      LANE: IN (SE, MB)      BATCH: B-T (tail lane, after IN-07's build, merging last)      R: —
-- WHY B-T: it is the earliest batch whose entry gate covers all three D edges — IN-49 lands in B-K, MB-07 in B-D2, and the extraction the feed reads lands in B-T itself, so no earlier batch can hold it. §B.0 R1 would put a `march`-row edit in the verb cluster, but no V batch follows B-T, so it runs as B-T's tail lane (R9, §C.2). Shipping OFF, it moves no hash, so B-T's "hashes unchanged per extraction" still holds.
+- STATE: BLK:IN-49 (B-K), IN-07's extractions (B-T); the arm's flip is ask-then (`_part5` §J.2, LF-1..LF-3)      LANE: IN (SE, MB)      BATCH: B-T (tail lane, after IN-07's build, merging last)      R: —
+- WHY B-T: it is the earliest batch whose entry gate covers all three D edges — IN-49 lands in B-K, MB-07 landed in B-D2 (`b31d2c31`, the cap shipped OFF), and the extraction the feed reads lands in B-T itself, so no earlier batch can hold it. §B.0 R1 would put a `march`-row edit in the verb cluster, but no V batch follows B-T, so it runs as B-T's tail lane (R9, §C.2). Shipping OFF, it moves no hash, so B-T's "hashes unchanged per extraction" still holds.
 - WHAT: designed at B-C inside IN-07's document (`proposals/2026-10-07-settlements-computation-modules.md`, the feed section; HELD BACK): `levy` moves stores, not troops (`loop/effects_governance.py:308-347`), and a season field is one troops-sized subunit (J-18); a `settlements.provision` query feeds the field. The three [ASSUMPTION]s the design makes are Jordan's (`_part5` §J.2 ask-then): **LF-1** the feed bounds troops by the treasury, using the larder's ration; **LF-2** the defender's treasury is the nearest held rung's stores; **LF-3** the field consumes its ration from the treasury, written by `_eff_march`. The build ships the arm OFF behind a `field_provisioning` fixture; the flip waits on the answer.
-- DEPS: IN-49 → IN-52 (D: `levy` executing); MB-07 → IN-52 (D: how a season force scales); IN-07 → IN-52 (D: the settlements module and its query); IN-05 → IN-52 (F: the moved mass-battle module, B-L)      EDITS: `seam/wrappers/mass_battle.py`, `loop/effects_combat.py` (`_eff_march`), the `march` row (`verb_table.yaml`), the moved mass-battle module (`modules/mass_battle/`), the `field_provisioning` fixture
+- DEPS: IN-49 → IN-52 (D: `levy` executing); MB-07 (landed, `b31d2c31`) → IN-52 (D: how a season force scales: `support_weight` as shipped, the cap OFF; flipping it is MB-07r, a declared mover that re-pins any season-force reading, not a gate); IN-07 → IN-52 (D: the settlements module and its query); IN-05 → IN-52 (F: the moved mass-battle module, B-L)      EDITS: `seam/wrappers/mass_battle.py`, `loop/effects_combat.py` (`_eff_march`), the `march` row (`verb_table.yaml`), the moved mass-battle module (`modules/mass_battle/`), the `field_provisioning` fixture
 - EXIT: with `field_provisioning` off, both hashes equal B-T's base; with it on, in a seeded season, a side's fielded troops are bounded by its levied treasury [ASSUMPTION: the EXIT, read from the design's feed section; re-read it there at B-T]      FALSIFIER: the off arm moves a hash → not off; on, a side with an empty treasury fields as many troops as a full one → the bound is not built
 - SOURCE: `proposals/2026-10-07-settlements-computation-modules.md` (the feed section and its LF table); `engine/season/loop/effects_governance.py:308-347`; J-18 (`_part5` §J.1)
 

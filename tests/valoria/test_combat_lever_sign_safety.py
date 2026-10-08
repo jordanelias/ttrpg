@@ -364,11 +364,14 @@ def test_lever_log_edge_is_the_single_owner_and_is_exactly_inert_at_defaults():
     EXACTLY 0.0 — not approximately — for the default build, which is what makes `x + shift == x`
     bit-for-bit and the batch's byte-identity argument true rather than asserted."""
     assert S.lever_log_edge(1.0, 1.0) == 0.0
-    plain = Combatant('p', weapon='arming')
-    for channel in sorted({a['lever'] for a in ABIL.ABILITIES.values()} |
-                          {'measure', 'leverage', 'tempo', 'tactile', 'balance', 'visual', 'precommit'}):
-        assert TR.eff_cw(plain, channel) == 1.0, channel
-        assert S.lever_log_edge(TR.eff_cw(plain, channel), TR.eff_cw(plain, channel)) == 0.0, channel
+    # every weapon, the NEW_SINCE_PINS forms included: this is the structural form of the byte-identity claim,
+    # and it needs no per-weapon pin (so it covers the weapons that have none)
+    for weapon in WEAPONS:
+        plain = Combatant('p', weapon=weapon)
+        for channel in sorted({a['lever'] for a in ABIL.ABILITIES.values()} |
+                              {'measure', 'leverage', 'tempo', 'tactile', 'balance', 'visual', 'precommit'}):
+            assert TR.eff_cw(plain, channel) == 1.0, (weapon, channel)
+            assert S.lever_log_edge(TR.eff_cw(plain, channel), TR.eff_cw(plain, channel)) == 0.0, (weapon, channel)
     # sign-safety of the primitive itself, over the full clamped factor range ability_factor can emit
     grid = (ABIL.ABIL_FACTOR_FLOOR, 0.4, 0.9, 1.0, 1.15, 1.2, 4.3, 43.0, ABIL.ABIL_FACTOR_CEIL)
     checked = 0
@@ -402,6 +405,11 @@ def test_lever_log_edge_is_the_single_owner_and_is_exactly_inert_at_defaults():
 # reach_sigma), and every sign-safety PROPERTY these tests exist for still holds unchanged — the moment
 # term is equipped-independent, so `inv - base` and the log-odds composition assertion are unaffected.
 # The prior bind values are in git history at 4f3b56f.
+# Weapons added AFTER the pins below were recorded (B-D1 PC-04, ED-PC-0016): they have no pre-change
+# tree to pin from, and a pin recorded from the post-change tree is not evidence of the claim this test
+# checks. Exempt by name: the roster-equality assert below fails for any other weapon without a pin.
+NEW_SINCE_PINS = frozenset({'greatsword_halfsword', 'flamberge_halfsword'})
+
 DEFAULT_SIGMA_PINS = {
     'arming': ('0x0.0p+0', '0x0.0p+0', '0x0.0p+0'),
     'bardiche': ('0x1.b9b3beb0d6710p-1', '-0x1.067affeff5aafp+0', '-0x1.52af39b9c11ebp-2'),
@@ -462,7 +470,7 @@ def test_default_builds_are_byte_identical_at_both_lever_sites():
     """THE SAFETY ARGUMENT (plan §4 E1a: "Blast radius: zero for default builds — VERIFY that claim").
     With `equipped=[]` every `eff_cw` is exactly 1.0, so `lever_log_edge` is exactly 0.0 and both
     rewritten terms are bit-identical to the pre-fix ratio form (`x * 1.0` vs `x + 0.0`)."""
-    assert set(DEFAULT_SIGMA_PINS) == set(WEAPONS), (
+    assert set(DEFAULT_SIGMA_PINS) | NEW_SINCE_PINS == set(WEAPONS), (
         "the weapon roster moved relative to the byte-identity pins — regenerate them from the "
         "PRE-CHANGE tree, never from the post-change one (a golden re-recorded to go green is not "
         "evidence)")
@@ -475,4 +483,4 @@ def test_default_builds_are_byte_identical_at_both_lever_sites():
         assert _reach_sigma(agg, light).hex() == reach_none_hex, weapon
         assert _reach_sigma(agg, heavy).hex() == reach_heavy_hex, weapon
         checked += 3
-    assert checked == 3 * len(WEAPONS), checked
+    assert checked == 3 * len(DEFAULT_SIGMA_PINS), checked

@@ -4,7 +4,7 @@ import os as _os
 import os as _sigma_os
 import math
 
-__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'MB_TROOP_DENSITY_CAP', 'TROOP_TYPE_DENSITY_CAP', 'cell_cap_for', 'SUBUNIT_ROUT_FLOOR', 'ROUT_CASCADE_FRAC', 'MB_CELL_MORALE', 'CELL_MORALE_PULL', 'CELL_BREAK_ROUT_FRAC', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'MB_STOCHASTIC_ROUT', 'ROUT_ONSET_FRAC', 'ROUT_CAP_FRAC', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'RANGED_DR_DEFAULT', 'VOLLEY_LETHALITY_SCALE', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'MB_VOLLEY_DENSITY_ENABLED', 'MB_VOLLEY_DENSITY_REF', 'MB_VOLLEY_DENSITY_FLOOR', 'MB_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'OCTAGON_DMG_MULT', 'MB_OCTAGON_DMG', 'FACING_REACTION_TICKS', 'MULTI_SIDE_SHOCK', 'OCTAGON_LOCAL_REACH', 'MB_FEIGNED_RETREAT', 'FEIGNED_RECOGNIZE_OB', 'FEIGNED_RETREAT_OB', 'OVEREXTEND_PENALTY', 'MB_RESERVE_COMMIT', 'RESERVE_COMMIT_TURN', 'MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'YIELD_RALLY_MORALE_FRAC', 'MB_YIELD_POCKET', 'YIELD_POCKET_REACH', 'STANCE_SPEED_MOD', 'MB_INTENT_RESOLUTION', 'STANCE_COMMITMENT', 'INTENT_OFFENSE_D', 'INTENT_DEFENSE_D', 'MB_FRACTIONAL_POOL', 'PER_DIE_NET_EV', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'MB_FRICTION_CEV', 'MB_FRICTION_SIGMA', 'PER_CELL', 'MB_STAMINA_DRAIN', 'MB_STAMINA_REST', 'MB_ROTATE_FLOOR', 'MB_STAM_SIGMA', 'MB_DEPTH_ROTATE', 'MB_FRONTAGE_BLEND', 'MB_FRONTAGE_REF', 'MB_REFILL_FLOOR', 'MB_CLOSE_RANKS', 'MB_CELL_DAMAGE', 'MB_CHARGE_SIGMA', 'MB_SHOCK_FRONT', 'MB_SHOCK_REAR', 'MB_SHOCK_BRACE_FLOOR', 'MB_SHOCK_HOLD_BRACE', 'MB_SHOCK_DISC_FULL', 'MB_SHOCK_DEPTH_FULL', 'MB_SHOCK_DEPTH_REF', 'MB_SHOCK_SHAKEN_GAIN', 'MB_CAVALRY_SPEED_MULT', 'MB_ENVELOP_SPEED_MULT', 'ENVELOP_STANDOFF', 'ENVELOP_ORBIT_CAP', 'MB_BRACE_ENABLED', 'MB_RECOIL_FRONTAL', 'MB_CHARGE_RECOIL', 'MB_BRACE_SETUP_DELAY', 'MB_RECOIL_CHARGER_GATE', 'MB_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'MB_PIN_REACH', 'MB_REFUSE', 'MB_ENVELOP_MOD', 'MB_ENVELOP_DEPTH_RESIST', 'MB_POCKET_MOD', 'MB_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'POOL_QUALITY_MODEL', 'POOL_QUALITY_SCALE', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'MB_KITE_ENABLED', 'MB_KITE_STANDOFF', 'MB_NODE_COHESION', 'MB_CELL_EXCLUSION', 'ROUTE_WAYPOINT_EPS', 'ROUTE_BUDGET_TICKS', 'MB_AMMO_ENABLED', 'MB_VOLLEYS_START', 'MB_VOLLEYS_RESUPPLY']
+__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'MB_TROOP_DENSITY_CAP', 'TROOP_TYPE_DENSITY_CAP', 'cell_cap_for', 'SUBUNIT_ROUT_FLOOR', 'ROUT_CASCADE_FRAC', 'MB_CELL_MORALE', 'CELL_MORALE_PULL', 'CELL_BREAK_ROUT_FRAC', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'MB_SUPPORT_RANK_CAP', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'MB_STOCHASTIC_ROUT', 'ROUT_ONSET_FRAC', 'ROUT_CAP_FRAC', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'RANGED_DR_DEFAULT', 'VOLLEY_LETHALITY_SCALE', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'MB_VOLLEY_DENSITY_ENABLED', 'MB_VOLLEY_DENSITY_REF', 'MB_VOLLEY_DENSITY_FLOOR', 'MB_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'OCTAGON_DMG_MULT', 'MB_OCTAGON_DMG', 'FACING_REACTION_TICKS', 'MULTI_SIDE_SHOCK', 'OCTAGON_LOCAL_REACH', 'MB_FEIGNED_RETREAT', 'FEIGNED_RECOGNIZE_OB', 'FEIGNED_RETREAT_OB', 'OVEREXTEND_PENALTY', 'MB_RESERVE_COMMIT', 'RESERVE_COMMIT_TURN', 'MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'YIELD_RALLY_MORALE_FRAC', 'MB_YIELD_POCKET', 'YIELD_POCKET_REACH', 'STANCE_SPEED_MOD', 'MB_INTENT_RESOLUTION', 'STANCE_COMMITMENT', 'INTENT_OFFENSE_D', 'INTENT_DEFENSE_D', 'MB_FRACTIONAL_POOL', 'PER_DIE_NET_EV', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'MB_FRICTION', 'MB_FRICTION_SIGMA', 'PER_CELL', 'MB_STAMINA_DRAIN', 'MB_STAMINA_REST', 'MB_ROTATE_FLOOR', 'MB_STAM_SIGMA', 'MB_DEPTH_ROTATE', 'MB_FRONTAGE_BLEND', 'MB_FRONTAGE_REF', 'MB_REFILL_FLOOR', 'MB_CLOSE_RANKS', 'MB_CELL_DAMAGE', 'MB_CHARGE_SIGMA', 'MB_SHOCK_FRONT', 'MB_SHOCK_REAR', 'MB_SHOCK_BRACE_FLOOR', 'MB_SHOCK_HOLD_BRACE', 'MB_SHOCK_DISC_FULL', 'MB_SHOCK_DEPTH_FULL', 'MB_SHOCK_DEPTH_REF', 'MB_SHOCK_SHAKEN_GAIN', 'MB_CAVALRY_SPEED_MULT', 'MB_ENVELOP_SPEED_MULT', 'ENVELOP_STANDOFF', 'ENVELOP_ORBIT_CAP', 'MB_BRACE_ENABLED', 'MB_RECOIL_FRONTAL', 'MB_CHARGE_RECOIL', 'MB_BRACE_SETUP_DELAY', 'MB_RECOIL_CHARGER_GATE', 'MB_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'MB_PIN_REACH', 'MB_REFUSE', 'MB_ENVELOP_MOD', 'MB_ENVELOP_DEPTH_RESIST', 'MB_POCKET_MOD', 'MB_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'POOL_QUALITY_MODEL', 'POOL_QUALITY_SCALE', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'MB_KITE_ENABLED', 'MB_KITE_STANDOFF', 'MB_NODE_COHESION', 'MB_CELL_EXCLUSION', 'ROUTE_WAYPOINT_EPS', 'ROUTE_BUDGET_TICKS', 'MB_AMMO_ENABLED', 'MB_VOLLEYS_START', 'MB_VOLLEYS_RESUPPLY']
 
 # [ED-MB-0041] Volley Size-loss -> troop-casualty scale. Replaces the per-target
 # `max(1,(h_per_size+1)//2)`, which made better armour/discipline/command INCREASE a unit's own missile
@@ -138,6 +138,16 @@ SUPPORT_STACK_ENABLED = True
 # [CALIBRATED-DEBT: cell-support-stacking taper (F-i) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 SUPPORT_WEIGHTS = {1: 1.0, 2: 0.7, 3: 0.5}
 SUPPORT_WEIGHT_FLOOR = 0.3  # [CALIBRATED-DEBT: cell-support-stacking floor (F-i) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
+# [MB-07, J-18 (A), ED-MB-0041] SUPPORT RANK CAP: support counts only from the ranks a troop type's weapon
+# reaches past the contact rank; a rank deeper than the cap adds 0 to the pool. SHIPPED OFF = today's uncapped
+# stack exactly. ON stalls the bat.py battery: `python3 tools/ci_golden_modes_check.py --perturb MB_SUPPORT_RANK_CAP=1`
+# (FIELD_PINS pins the flag to '0', so an ambient env var does nothing; --perturb overrides the pin) against the same
+# command without --perturb, whose digests are the control. The mirror/cav_shaken/ranged rows hit MAX_TURNS=20 on
+# every probed seed with it ON (4 of the battery's seeds; 3-10 turns OFF) and cell_field_mor0 exceeds the golden
+# tool's 300s/mode (`ci_golden_modes_check.py`, the per-mode timeout). To flip it: recalibrate casualty/pool magnitudes so
+# the capped modes finish under MAX_TURNS and the timeout, set this default and FIELD_PINS to '1', and declare the
+# re-pinned digests. Not done: J-18 (A) does not execute in play while this is OFF (workplan MB-07).
+MB_SUPPORT_RANK_CAP = (_sigma_os.environ.get('MB_SUPPORT_RANK_CAP', '0') == '1')
 PUNCTURE_ENABLED = True
 PUNCTURE_CAP = 3
 CASCADING_ENABLED = True
@@ -308,7 +318,7 @@ MORALE_FIX = _sigma_os.environ.get('MORALE_FIX', '1') == '1'   # toggle; OFF rep
 # correctly self-averages as ~1/sqrt(N) (Kingman 2002, stochastic Lanchester); this once-per-battle
 # latent shock adds a SECOND variance layer whose magnitude is force-INDEPENDENT (law of total variance:
 # Var = E[Var|M] + Var(E[·|M]); the first term ->0 with N, the second stays O(1)). Effect: a large
-# force/tactical advantage produces a DECISIVE-but-UNCERTAIN (historically-banded ~65-83%) outcome
+# force/tactical advantage produces a DECISIVE-but-UNCERTAIN (historically-banded: DLEDB 55-83% by force ratio, 74-83% at 3:1+) outcome
 # instead of a certain (100%) one. Grounding: Kingman, J.F.C. (2002) J.Appl.Prob. 39(3):455-465;
 # Beyerchen (1992) Int.Security 17(3) DOI 10.2307/2539130; Dupuy DLEDB 752-case force-ratio win-rate
 # table; Rowland "The Stress of Battle"; Sabin "Lost Battles" (2007). See audit/2026-07-22-mass-battle-
@@ -319,7 +329,7 @@ MORALE_FIX = _sigma_os.environ.get('MORALE_FIX', '1') == '1'   # toggle; OFF rep
 # three golden modes (hermeticity, not the ambient default); bat.py's own grid-legacy _PINNED_OFF does
 # NOT pin it, a separate pre-existing digest-mismatch gap tracked at ED-MB-0070/ED-MB-0061, not fixed
 # by this comment edit.
-MB_FRICTION_CEV = _sigma_os.environ.get('MB_FRICTION_CEV', '1') == '1'
+MB_FRICTION = _sigma_os.environ.get('MB_FRICTION', '1') == '1'  # [ED-MB-0045 item (3)] renamed from its CEV name to the ordinary word (CLAUDE.md §4) -- the draw is i.i.d. per battle, not Dupuy's fitted per-force CEV
 # per-side log-SD; CALIBRATED against the Dupuy DLEDB win-rate curve (see dg6_friction_resolution.md),
 # not fitted to the gauge. [canonical: audit/2026-07-22-mass-battle-stress-test/dg6_friction_resolution.md — Dupuy-DLEDB-calibrated combat-friction log-SD]
 MB_FRICTION_SIGMA = float(_sigma_os.environ.get('MB_FRICTION_SIGMA', '1.1'))
@@ -565,8 +575,8 @@ POOL_QUALITY_MODEL = _sigma_os.environ.get('POOL_QUALITY_MODEL', '1') == '1'  # 
 # silently patched by picking a smaller scale that merely LOOKS closer.
 POOL_QUALITY_SCALE = float(_sigma_os.environ.get('POOL_QUALITY_SCALE', '0.5'))
 
-# ─── P-C COMPOSITIONAL-FORMATION ROLES (SCAFFOLD — data only; INERT until the instruction→
-# primitive modulation lands, which is behaviour-cascading; see pc_formation_design.md §3.5/§9.1).
+# ─── P-C COMPOSITIONAL-FORMATION ROLES (data; the instruction→primitive wiring is
+# hierarchy.units.ROLE_INSTRUCTION_PRIMITIVES, MB-04; see pc_formation_design.md §3.5/§9.1).
 # Troop type gates the role menu (the FM "position"→role model). This is a STARTING POINT for the
 # historical troop-type/role research — expect the taxonomy and per-type role lists to be revised.
 TROOP_TYPE_ROLES = {
@@ -583,21 +593,22 @@ TROOP_TYPE_ROLES = {
 }
 
 # Each role = a typical shape + an instruction package (the FM "role + tactics" model). Instructions
-# are the behaviour layer; they MODULATE foundational primitives (brace->density/hold, charge->momentum,
-# etc.) and never add flat numbers. Behaviour wiring + calibration is the next step -- the brace mechanism
-# in particular needs strengthening per the measured baseline (see pc_formation_design.md). Data only here.
+# are the behaviour layer; they MODULATE foundational primitives and never add flat numbers. Data only
+# here: which keyword drives which primitive -- and which stay unwired, with the reason -- is owned by
+# hierarchy.units.ROLE_INSTRUCTION_PRIMITIVES (MB-04, #445 U-3). Push's keyword was 'advance', read by
+# nothing; it is 'push' since MB-04, the role's own name, driving the aggressive stance.
 ROLE_SPEC = {
     "ShieldWall": {"shape": "Line",       "instructions": ("brace", "hold")},
     "Hold":       {"shape": "Line",       "instructions": ("hold",)},
     "Anvil":      {"shape": "Line",       "instructions": ("brace", "pin")},
-    "Push":       {"shape": "Line",       "instructions": ("advance",)},
+    "Push":       {"shape": "Line",       "instructions": ("push",)},
     "Skirmish":   {"shape": "GappedLine", "instructions": ("loose", "harass")},
     "Screen":     {"shape": "Line",       "instructions": ("screen",)},
     "Pursue":     {"shape": "Line",       "instructions": ("pursue",)},
     "Shock":      {"shape": "Arrowhead",  "instructions": ("charge",)},
     "Flanker":    {"shape": "Line",       "instructions": ("envelop",)},   # Column shape not yet defined; Line placeholder
     "Feint":      {"shape": "Line",       "instructions": ("lure",)},
-    "VolleyLine": {"shape": "Line",       "instructions": ("volley", "hold")},
+    "VolleyLine": {"shape": "Line",       "instructions": ("volley",)},   # [MB-04] not "hold": hold freezes archers (STANCE_SPEED_MOD -99) and braces them against shock; see units.ROLE_INSTRUCTION_PRIMITIVES
     "Harass":     {"shape": "GappedLine", "instructions": ("loose", "shoot_move")},
     "Kite":       {"shape": "GappedLine", "instructions": ("kite", "shoot_move")},   # blocked on the kiting primitive
     "Support":    {"shape": "Line",       "instructions": ("reserve",)},

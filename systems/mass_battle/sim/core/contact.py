@@ -155,6 +155,8 @@ def check_orders(unit, t, enemy_cells):
                     # battle-boundary reset, so a fully-built, ratified mechanic never fired.
                     unit.feigned = bool(v)
                     continue
+                if k == 'stance':
+                    sub._stance_explicit = True   # [MB-04] an Order's stance (even 'balanced') beats a role keyword
                 setattr(sub, k, v)
             # [A1, ED-MB-0067 Part A] Clamp a freshly-assigned route to Jordan's ruled path-length
             # budget (0.5*speed*max-ticks) THE MOMENT it is assigned, using the sub-unit's position

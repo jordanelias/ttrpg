@@ -4,6 +4,7 @@ NB: explicit __all__ so underscore-prefixed helpers cross `import *`."""
 import math
 from dataclasses import dataclass
 from systems.mass_battle.sim.config import *
+from systems.mass_battle.sim.troop_types.registry import support_weight
 
 __all__ = ['arrowhead_cells', 'line_cells', 'gapped_line_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', '_oriented_abs_map', 'support_engage_frac', 'cell_speed', '_oriented', 'CellBox', 'cellbox_from', 'obb_overlap', 'obb_front_reach_overlap', '_normalize_heading', '_rotate90', '_cellbox_axes', '_cellbox_corners', '_sat_separated', 'engaged_frontage', '_project_interval', '_merge_intervals', '_interval_union_length']
 
@@ -55,36 +56,12 @@ CELL_PATTERN_FN = {
 }
 
 # ─── CONTINUOUS-SCALE FOOTPRINT GENERATOR (Jordan directive 2026-06-03) ───
-# Dimension-parametric cell builders (the tier *_cells fns above stay for the legacy path).
-# footprint_for lays a continuous troop count into a shape at a user-set concentration,
-# bounded so per-cell troops stay in [CELL_FLOOR, CELL_CAP]; achievable density is the closest
-# the shape's discrete geometry allows within that bound.
-def _cells_line(width, depth):
-    return [(r, c) for r in range(depth) for c in range(width)]
-def _cells_arrowhead(depth):
-    cells = []
-    for r in range(depth):
-        w = 2 * r + 1; start = (depth - 1) - r
-        cells += [(r, c) for c in range(start, start + w)]
-    return cells
-def _cells_gapped_line(half_w, depth):
-    cells = []
-    for r in range(depth):
-        cells += [(r, c) for c in range(half_w)]
-        cells += [(r, c) for c in range(half_w + 1, 2 * half_w + 1)]
-    return cells
-
-# [LC-8] Horseshoe/RefusedFlank retired here too -- see CELL_PATTERN_FN's note.
-_SHAPE_BUILD = {
-    "Line":         (lambda s: dict(width=max(1, round(LINE_ASPECT * s)), depth=s), _cells_line),
-    "Arrowhead":    (lambda s: dict(depth=s),                                       _cells_arrowhead),
-    "GappedLine":   (lambda s: dict(half_w=s, depth=s),                             _cells_gapped_line),
-    "Column":       (lambda s: dict(width=max(1, round(s)), depth=max(1, round(LINE_ASPECT * LINE_ASPECT * s))), _cells_line),
-}
-
+# The tier *_cells fns above stay for the legacy path. footprint_for lays a continuous troop count into a
+# shape at a user-set concentration, bounded so per-cell troops stay in [CELL_FLOOR, CELL_CAP]; achievable
+# density is the closest the shape's discrete geometry allows within that bound.
 def _build_shape_n(shape, n):
     """Build a footprint of EXACTLY `n` cells in `shape`'s aspect, for any n>=1 (ED-MB-0025).
-    The legacy `_SHAPE_BUILD` size-parameter families only yield a SPARSE set of cell counts (a Line
+    The retired size-parameter shape-builder table only yielded a SPARSE set of cell counts (a Line
     could be 1,5,11,… never 2,3,4), so an explicit troops-per-cell density could not be honoured — a
     133-troop subunit collapsed to 1 cell at every concentration. These builders instead lay out n cells
     directly in the shape's characteristic silhouette, so `density` (troops/cell) truly bounds the cell
@@ -303,7 +280,8 @@ def cells_to_orig_coords(atom, abs_cells):
 
 def support_engage_frac(atom, contact_abs_cells):
     """F-i: support-stack-adjusted engage_frac.
-    Cells behind the contact zone contribute weighted support.
+    Cells behind the contact zone contribute weighted support, up to the ranks the atom's weapon
+    reaches (registry.support_weight, MB-07).
     [canonical: Jordan handoff §(1)]"""
     max_w = atom_max_width(atom.shape, atom.tier)
     if not SUPPORT_STACK_ENABLED:
@@ -325,7 +303,7 @@ def support_engage_frac(atom, contact_abs_cells):
         if orig_r <= front_r:
             continue
         depth = orig_r - front_r
-        w = SUPPORT_WEIGHTS.get(depth, SUPPORT_WEIGHT_FLOOR)
+        w = support_weight(depth, getattr(atom, 'troop_type', None))
         supporter_total += w
 
     effective_engaged = len(contact_orig) + supporter_total

@@ -490,8 +490,8 @@ verbs:
     #
     # WHAT THE SCENE ACTUALLY CARRIES (`combat_seam.resolve` -> `wound_state`, read from the
     # engine's own WoundTracker on the combatants the seam holds):
-    #   felled            -- the fighter went down. `wrapper.fight` sets a result ONLY on a
-    #                        felling, so `result != 0` and `felled` are the same event.
+    #   felled            -- the fighter went down. `wrapper.fight` sets a result on a
+    #                        felling or an unrefused §11.4 yield: read `felled`, never `result != 0`.
     #   wounds            -- gates crossed, floor(cumulative_damage / wound_interval)
     #   health_remaining  -- what is left
     #   result == 0       -- UNRESOLVED, and a RULED legitimate outcome (Jordan 2026-06-02):

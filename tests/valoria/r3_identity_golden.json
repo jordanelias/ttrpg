@@ -11960,6 +11960,466 @@
      "weapon_tempo": 0.7
     }
    }
+  },
+  "flamberge_halfsword": {
+   "agility": 0.19442767430474475,
+   "armour_defeat_mode": "gap-thrust",
+   "at_circumstance": [
+    {
+     "I_g": 1.5045483016666668,
+     "S_g": 1.47494075,
+     "d_g": -0.5462541202177698,
+     "geom_slide_m": 0.0,
+     "grip": 0.0,
+     "rear_clearance": 1.195,
+     "u": 0.0
+    },
+    {
+     "I_g": 1.5045483016666668,
+     "S_g": 1.47494075,
+     "d_g": -0.5462541202177698,
+     "geom_slide_m": 0.03875000000000001,
+     "grip": 0.25,
+     "rear_clearance": 1.2337500000000001,
+     "u": 0.0
+    },
+    {
+     "I_g": 1.5045483016666668,
+     "S_g": 1.47494075,
+     "d_g": -0.5462541202177698,
+     "geom_slide_m": 0.07750000000000001,
+     "grip": 0.5,
+     "rear_clearance": 1.2725,
+     "u": 0.0
+    },
+    {
+     "I_g": 1.5045483016666668,
+     "S_g": 1.47494075,
+     "d_g": -0.5462541202177698,
+     "geom_slide_m": 0.11625000000000002,
+     "grip": 0.75,
+     "rear_clearance": 1.31125,
+     "u": 0.0
+    },
+    {
+     "I_g": 1.5045483016666668,
+     "S_g": 1.47494075,
+     "d_g": -0.5462541202177698,
+     "geom_slide_m": 0.15500000000000003,
+     "grip": 1.0,
+     "rear_clearance": 1.35,
+     "u": 0.0
+    }
+   ],
+   "baked_blade_guard": 0.664,
+   "baked_hand_guard": 0.3318,
+   "blade_guard_fn": 0.6640367702678491,
+   "defense_affinities": {
+    "dodge": 0.4,
+    "parry": 0.4,
+    "wind": 1.0
+   },
+   "derive": {
+    "MoI": 1.5045483016666668,
+    "PoB_frac": -0.33106310316228466,
+    "PoB_m": -0.5462541202177698,
+    "fwd_extent_m": 0.455,
+    "length_m": 1.6500000000000001,
+    "m_head": 0.4641,
+    "static_moment": -1.47494075
+   },
+   "distraction": 0.0,
+   "edge_vibration": 0.0,
+   "energy_credit": 1.4141666666666666,
+   "gap": 0.74,
+   "grip_choke_max": 1.0,
+   "grip_swing_ratio": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "grip_travel_max": 0.895,
+   "hand_guard_fn": 0.33176331893131206,
+   "handling": 0.0,
+   "heft": [
+    0.772744583478031,
+    0.772744583478031,
+    0.772744583478031,
+    0.772744583478031,
+    0.772744583478031
+   ],
+   "heft_point_override": 0.772744583478031,
+   "percussion_authority": [
+    {
+     "grip": 0.0,
+     "room": 1.0,
+     "v": 2.0
+    },
+    {
+     "grip": 0.0,
+     "room": 0.7,
+     "v": 1.7
+    },
+    {
+     "grip": 0.0,
+     "room": 0.4,
+     "v": 1.4
+    },
+    {
+     "grip": 0.25,
+     "room": 1.0,
+     "v": 2.0
+    },
+    {
+     "grip": 0.25,
+     "room": 0.7,
+     "v": 1.7
+    },
+    {
+     "grip": 0.25,
+     "room": 0.4,
+     "v": 1.4
+    },
+    {
+     "grip": 0.5,
+     "room": 1.0,
+     "v": 2.0
+    },
+    {
+     "grip": 0.5,
+     "room": 0.7,
+     "v": 1.7
+    },
+    {
+     "grip": 0.5,
+     "room": 0.4,
+     "v": 1.4
+    },
+    {
+     "grip": 0.75,
+     "room": 1.0,
+     "v": 2.0
+    },
+    {
+     "grip": 0.75,
+     "room": 0.7,
+     "v": 1.7
+    },
+    {
+     "grip": 0.75,
+     "room": 0.4,
+     "v": 1.4
+    },
+    {
+     "grip": 1.0,
+     "room": 1.0,
+     "v": 2.0
+    },
+    {
+     "grip": 1.0,
+     "room": 0.7,
+     "v": 1.7
+    },
+    {
+     "grip": 1.0,
+     "room": 0.4,
+     "v": 1.4
+    }
+   ],
+   "phi_grip_native": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "phi_grip_point": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "puncture_pressure": [
+    0.2,
+    0.2,
+    0.2,
+    0.2,
+    0.2
+   ],
+   "systems": {
+    "0.0": {
+     "close_tempo": 1.196,
+     "close_unwieldiness": 0.48300000000000004,
+     "reach_base": 5.92485,
+     "rear_clearance": 1.195,
+     "recoverability_factor": 8.914068155267532,
+     "str_demand": 5.696178176569667,
+     "weapon_tempo": 0.8031294103028177,
+     "wield_heft": 2.0432306765696677
+    },
+    "0.5": {
+     "close_tempo": 1.196,
+     "close_unwieldiness": 0.4055,
+     "reach_base": 5.760808333333333,
+     "rear_clearance": 1.2725,
+     "recoverability_factor": 8.914068155267532,
+     "str_demand": 5.650388593236334,
+     "weapon_tempo": 0.7,
+     "wield_heft": 2.0432306765696677
+    },
+    "1.0": {
+     "close_tempo": 1.196,
+     "close_unwieldiness": 0.328,
+     "reach_base": 5.5967666666666664,
+     "rear_clearance": 1.35,
+     "recoverability_factor": 8.914068155267532,
+     "str_demand": 5.6045990099030005,
+     "weapon_tempo": 0.7,
+     "wield_heft": 2.0432306765696677
+    },
+    "can_choke": true,
+    "grab_short_reach": false,
+    "grip_target_closed": 0.322,
+    "leverage": 0.9392,
+    "lunge_quality": 0.2504675465872118,
+    "lunged": {
+     "recoverability_factor": 12.734158664007497,
+     "weapon_tempo": 0.7
+    }
+   }
+  },
+  "greatsword_halfsword": {
+   "agility": 0.19431070549579074,
+   "armour_defeat_mode": "gap-thrust",
+   "at_circumstance": [
+    {
+     "I_g": 1.5081743333333335,
+     "S_g": 1.3788,
+     "d_g": -0.5011995637949836,
+     "geom_slide_m": 0.0,
+     "grip": 0.0,
+     "rear_clearance": 1.05,
+     "u": 0.0
+    },
+    {
+     "I_g": 1.5081743333333335,
+     "S_g": 1.3788,
+     "d_g": -0.5011995637949836,
+     "geom_slide_m": 0.075,
+     "grip": 0.25,
+     "rear_clearance": 1.125,
+     "u": 0.0
+    },
+    {
+     "I_g": 1.5081743333333335,
+     "S_g": 1.3788,
+     "d_g": -0.5011995637949836,
+     "geom_slide_m": 0.15,
+     "grip": 0.5,
+     "rear_clearance": 1.2,
+     "u": 0.0
+    },
+    {
+     "I_g": 1.5081743333333335,
+     "S_g": 1.3788,
+     "d_g": -0.5011995637949836,
+     "geom_slide_m": 0.22499999999999998,
+     "grip": 0.75,
+     "rear_clearance": 1.275,
+     "u": 0.0
+    },
+    {
+     "I_g": 1.5081743333333335,
+     "S_g": 1.3788,
+     "d_g": -0.5011995637949836,
+     "geom_slide_m": 0.3,
+     "grip": 1.0,
+     "rear_clearance": 1.35,
+     "u": 0.0
+    }
+   ],
+   "baked_blade_guard": 0.4777,
+   "baked_hand_guard": 0.0556,
+   "blade_guard_fn": 0.47770001216849795,
+   "defense_affinities": {
+    "dodge": 0.4,
+    "parry": 0.4,
+    "wind": 0.9
+   },
+   "derive": {
+    "MoI": 1.5081743333333335,
+    "PoB_frac": -0.3037573113908992,
+    "PoB_m": -0.5011995637949836,
+    "fwd_extent_m": 0.6,
+    "length_m": 1.65,
+    "m_head": 0.673,
+    "static_moment": -1.3788
+   },
+   "distraction": 0.0,
+   "edge_vibration": 0.0,
+   "energy_credit": 1.3900000000000001,
+   "gap": 0.74,
+   "grip_choke_max": 1.0,
+   "grip_swing_ratio": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "grip_travel_max": 0.75,
+   "hand_guard_fn": 0.055604376971251625,
+   "handling": 0.0,
+   "heft": [
+    1.1205712231861988,
+    1.1205712231861988,
+    1.1205712231861988,
+    1.1205712231861988,
+    1.1205712231861988
+   ],
+   "heft_point_override": 1.1205712231861988,
+   "percussion_authority": [
+    {
+     "grip": 0.0,
+     "room": 1.0,
+     "v": 2.0
+    },
+    {
+     "grip": 0.0,
+     "room": 0.7,
+     "v": 1.7
+    },
+    {
+     "grip": 0.0,
+     "room": 0.4,
+     "v": 1.4
+    },
+    {
+     "grip": 0.25,
+     "room": 1.0,
+     "v": 2.0
+    },
+    {
+     "grip": 0.25,
+     "room": 0.7,
+     "v": 1.7
+    },
+    {
+     "grip": 0.25,
+     "room": 0.4,
+     "v": 1.4
+    },
+    {
+     "grip": 0.5,
+     "room": 1.0,
+     "v": 2.0
+    },
+    {
+     "grip": 0.5,
+     "room": 0.7,
+     "v": 1.7
+    },
+    {
+     "grip": 0.5,
+     "room": 0.4,
+     "v": 1.4
+    },
+    {
+     "grip": 0.75,
+     "room": 1.0,
+     "v": 2.0
+    },
+    {
+     "grip": 0.75,
+     "room": 0.7,
+     "v": 1.7
+    },
+    {
+     "grip": 0.75,
+     "room": 0.4,
+     "v": 1.4
+    },
+    {
+     "grip": 1.0,
+     "room": 1.0,
+     "v": 2.0
+    },
+    {
+     "grip": 1.0,
+     "room": 0.7,
+     "v": 1.7
+    },
+    {
+     "grip": 1.0,
+     "room": 0.4,
+     "v": 1.4
+    }
+   ],
+   "phi_grip_native": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "phi_grip_point": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "puncture_pressure": [
+    0.2,
+    0.2,
+    0.2,
+    0.2,
+    0.2
+   ],
+   "systems": {
+    "0.0": {
+     "close_tempo": 1.196,
+     "close_unwieldiness": 0.5700000000000001,
+     "reach_base": 6.109000000000001,
+     "rear_clearance": 1.05,
+     "recoverability_factor": 8.365808084079575,
+     "str_demand": 5.740356716558872,
+     "weapon_tempo": 0.8045850375023333,
+     "wield_heft": 2.044706716558872
+    },
+    "0.5": {
+     "close_tempo": 1.196,
+     "close_unwieldiness": 0.42,
+     "reach_base": 5.7915,
+     "rear_clearance": 1.2,
+     "recoverability_factor": 8.365808084079575,
+     "str_demand": 5.6517317165588725,
+     "weapon_tempo": 0.7,
+     "wield_heft": 2.044706716558872
+    },
+    "1.0": {
+     "close_tempo": 1.196,
+     "close_unwieldiness": 0.26999999999999996,
+     "reach_base": 5.474,
+     "rear_clearance": 1.35,
+     "recoverability_factor": 8.365808084079575,
+     "str_demand": 5.563106716558871,
+     "weapon_tempo": 0.7,
+     "wield_heft": 2.044706716558872
+    },
+    "can_choke": true,
+    "grab_short_reach": false,
+    "grip_target_closed": 0.38000000000000006,
+    "leverage": 0.8116000000000001,
+    "lunge_quality": 0.23855221933986342,
+    "lunged": {
+     "recoverability_factor": 12.052795982453617,
+     "weapon_tempo": 0.7
+    }
+   }
   }
  }
 }
