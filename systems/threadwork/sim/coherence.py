@@ -351,7 +351,9 @@ def recover(actor: str, *, seasons, environment_in_equilibrium: bool, source: st
       mending                     ACCELERATES: extra units of return from one's own or another's
                                   mending — "accelerates the return without being required for it".
                                   `operations.attempt_mending` supplies it for the MENDER (C-1's
-                                  restorative feedback, position 27).
+                                  restorative feedback, position 27) when the Mending is aimed at
+                                  ANOTHER's configuration; aimed at the mender's own, it moves the
+                                  resting point instead (`mend_resting_point`, WR-02).
 
     ⚠ DERIVED, NOT RULED: `mending` is gated by the environment too. E-1 says mending accelerates
     "this" — the return that has the condition — and §7.1's reason for the condition ("nothing to
@@ -378,7 +380,9 @@ def mend_resting_point(actor: str, amount: int, source: str, world=None) -> Cohe
 
     A SEPARATE operation from recovery, and the only thing in this module that moves the floor
     inward. How hard it is to achieve is the caller's roll (the Ob of the working), not this
-    function's: `amount` is what the working achieved. It floors at the equilibrium.
+    function's: `amount` is what the working achieved. It floors at the equilibrium. Its game caller
+    is `operations.attempt_mending` with `target['configuration_of']` naming the mender (WR-02),
+    which absorbs the refusal below into its result's notes.
 
     ⚠ REFUSED PAST THE CROSSING. Once the resting point has left the human band, human is no longer
     where the configuration tends, so working it back is "restoring a remembered state — which is

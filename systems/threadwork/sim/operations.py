@@ -21,7 +21,7 @@ Implements 7 operation entry points + the Three-Axis Ob lookup (Depth + Breadth
 Dependencies:
   - sim/autoload/dice_engine
   - systems/threadwork/sim/coherence (apply_coherence_delta; recover + get_state for Mending's
-    restorative feedback)
+    restorative feedback; mend_resting_point for Mending aimed at the mender's own configuration)
   - sim/cross_scale/handoff_rules (TS-banded coherence cost for mass-battle context)
 
 Entry points:
@@ -41,7 +41,8 @@ from typing import Optional, Any
 
 from engine.dice_engine import dice_engine
 from engine.dice_engine.dice_engine import roll_pool
-from systems.threadwork.sim.coherence import apply_coherence_delta, get_state, recover
+from systems.threadwork.sim.coherence import (RESTING_POINT_START, apply_coherence_delta, get_state,
+                                              mend_resting_point, recover)
 
 
 # §TN — TN IS 7. ALWAYS.
@@ -150,6 +151,12 @@ FR_SURCHARGE = -1
 RESILIENCE_GAIN_SWEEP = (0, 1, 3)  # [JUSTIFIED: R-14 ruled 2026-09-09 sources the mechanism (resilience resists the cost); magnitude unruled — swept fixture on H-94's precedent, arms are the builder's]
 RESILIENCE_GAIN = 0                # [JUSTIFIED: R-14 ruled 2026-09-09 sources the mechanism; magnitude unruled — shipped arm RESILIENCE_GAIN_SWEEP[0], the control = pre-R-14 behaviour]
 
+# WR-02 — WHAT A MENDING AIMED AT THE MENDER'S OWN CONFIGURATION ACHIEVES ON THE RESTING POINT, by
+# degree: the `amount` handed to `coherence.mend_resting_point` (see `attempt_mending`). The floor
+# moves only when the working clearly took — C-1 calls moving it "extremely difficult to do but
+# possible" — so Partial and Failure move nothing. One owner; tests read it rather than restate it.
+RESTING_POINT_MEND_BY_DEGREE = {"Overwhelming": 1, "Success": 1, "Partial": 0, "Failure": 0}  # [JUSTIFIED: RULINGS.md C-1 (floor movable, "extremely difficult") + canon/philosophy/06_operations.md §6.8 aim distinction (derived) source the mechanism; magnitude invented]
+
 # P-25 "Scale-based Mending Stability" — the SCALE TERM on Mending Stability, authored here because
 # ED-WR-0008's superseding row (2026-09-15, registers/editorial_ledger_wr_archive.jsonl) says so:
 # the P-25 override table was truncated at authoring to its header plus the label `Object`, NOTHING
@@ -198,6 +205,10 @@ class OperationResult:
     # `coherence.recover` moved, not what was offered to it. Only Mending sets it; see
     # `attempt_mending`.
     coherence_restored: int = 0
+    # How far a Mending aimed at the mender's OWN configuration actually moved their RESTING POINT
+    # inward (>= 0): measured off state before/after `coherence.mend_resting_point`, like
+    # `coherence_restored`. Only `attempt_mending`'s own-configuration path sets it.
+    resting_point_mended: int = 0
     notes: list[str] = field(default_factory=list)
 
 
@@ -437,9 +448,21 @@ def attempt_mending(actor, target: dict, world=None, rng=None, *,
         know. It defaults to False because the condition is a positive fact: unstated is not
         established, and a default of True would hand recovery to a mender standing in a Locked
         Zone — Mending's ordinary workplace. `recover` is still called, so the gate stays its.
-    ⚠ NOT ROUTED HERE: Mending aimed at the mender's OWN configuration, which is what moves a resting
-    point (`coherence.mend_resting_point`; §6.8's aim distinction, itself flagged derived). The
-    target dict names no whose-configuration field to route on, and adding one is a design call.
+    WHOSE CONFIGURATION (WR-02): `target['configuration_of']` names it, and routes the working.
+      - absent, None, or any value other than below: ANOTHER's configuration — the path above,
+        unchanged (the mender is drawn along; the restorative term is elastic only).
+      - 'self', or the mender's own actor id: the mender's OWN configuration — §6.8's aim
+        distinction ("Mending oneself aims at one's own configuration, and that is what moves a
+        resting point decisively"; flagged DERIVED there, and rejectable). This path goes to
+        `coherence.mend_resting_point` INSTEAD OF the elastic term: `recover` is not called and
+        `coherence_restored` stays 0. The amount is `RESTING_POINT_MEND_BY_DEGREE[degree]` (Partial
+        and Failure move nothing); what actually moved is `result.resting_point_mended`.
+      - PAST THE CROSSING `mend_resting_point` refuses (a remembered state, not Mending); here that
+        refusal moves nothing, raises nothing, and is recorded in `result.notes`.
+      ED-871's zero STRESS holds on both paths (`coherence_delta` stays 0).
+    ⚠ NOT ROUTED: §6.8's third case, being mended BY someone else (which "aims at you, so it
+    reaches as deep as self-mending"). A value naming another actor takes the elastic path for the
+    mender and moves nothing of the target's.
     """
     scale = target.get('scale', 'Relational')
     priced = scale if scale in MENDING_OB else 'Relational'
@@ -448,7 +471,10 @@ def attempt_mending(actor, target: dict, world=None, rng=None, *,
     coh = 0
     result = _resolve_operation("Mending", actor, ob, TN_STANDARD,
                                 coherence_delta=coh, world=world, rng=rng)
-    if result.degree != "Failure":
+    configuration_of = target.get('configuration_of')
+    if configuration_of is not None and configuration_of in ('self', result.actor):
+        _mend_own_configuration(result, world)
+    elif result.degree != "Failure":
         restorative = -COHERENCE_COST_BY_SCALE[priced]
         prior = get_state(result.actor, world=world)
         elastic_before = prior.elastic_displacement if prior is not None else 0
@@ -460,3 +486,25 @@ def attempt_mending(actor, target: dict, world=None, rng=None, *,
     # Mending never produces Scars per conviction §3 Mending exception;
     # caller responsible for skipping Scar attribution
     return result
+
+
+def _mend_own_configuration(result: OperationResult, world) -> None:
+    """`attempt_mending`'s own-configuration path: hand what the working achieved to
+    `coherence.mend_resting_point` (the one owner of moving the floor inward, and of refusing to
+    past the crossing) and record on `result` what actually moved."""
+    amount = RESTING_POINT_MEND_BY_DEGREE[result.degree]
+    if amount == 0:
+        return
+    prior = get_state(result.actor, world=world)
+    resting_before = prior.resting_point if prior is not None else RESTING_POINT_START
+    try:
+        state = mend_resting_point(result.actor, amount,
+                                   source=f"Mending {result.degree}: own configuration",
+                                   world=world)
+    except ValueError as refusal:
+        # Only the crossing refusal is absorbed; any other ValueError is a defect and propagates.
+        if prior is None or not prior.crossed:
+            raise
+        result.notes.append(f"Resting point not mended: {refusal}")
+        return
+    result.resting_point_mended = resting_before - state.resting_point
