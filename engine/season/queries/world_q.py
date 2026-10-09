@@ -37,6 +37,9 @@ from ..data.rosters import (
     TENURE_KINDS,
 )
 from ..gaps import Forbidden, Unspecified
+# Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
+# the asker-first module (which may not import this one; this edge runs the other way).
+from .person_q import INTENT_STEM, intent_named
 from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE (G3, plan position 6). The
 # write gate's F3 clause needs both -- ruling (3)'s parent rung and ruling (4)'s purview subtree --
@@ -487,8 +490,17 @@ def named(c) -> tuple:
     `()` -- never `None`, so a bare caller need not guard -- for a claim whose `predicate` does
     not start `content:`, or whose `value` names nobody. Takes a `Claim`, not a `World`: it reads
     one object already in hand, the same shape as `place_of(w, c.subject)` beside it in `Q2`, and
-    is not a second read of `p.ledger` (`AX-2` stays satisfied by the caller's own loop)."""
+    is not a second read of `p.ledger` (`AX-2` stays satisfied by the caller's own loop).
+
+    ⚠ A SECOND KIND OF CONTENT NAMES SOMEBODY: A DECLARED INTENT (telling `T7`, G9; v9 IN-16). A
+    hearer told that the teller will do an act holds `(teller, intent:<verb>, ((name, id), ...))`
+    (`rosters.yaml: intent_claim`), and the ids it carries are whom the intent is aimed at. Read
+    through `person_q.intent_named`, the one owner of that value's shape, so a hearer whose reach
+    covers the act's target is asked about the teller -- *the realm hears what A means to do to B*.
+    No intent claim exists while `intent_disclosure` is 0, so the branch reads nothing there."""
     stem, sep, _ = str(c.predicate).partition(":")
+    if sep and stem == INTENT_STEM:
+        return intent_named(c)
     if not sep or stem != RECORD_CONTENT.get("predicate") or c.value is None:
         return ()
     ids = dict(c.value).get(RECORD_CONTENT.get("addressee"))

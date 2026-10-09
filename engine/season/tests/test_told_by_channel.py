@@ -1500,3 +1500,252 @@ def test_t6_a_seen_pair_and_an_event_kind_pair_are_not_scored():
     assert rec("news.told", True, True) == 1.0, "an event-kind pair was scored"
     assert rec("stores:grain", 5, 0) == 0.5, "the control: a disagreeing cell pair does not register"
     assert rec("stores:grain", 5, 5) == 1.5, "the control: an agreeing cell pair does not register"
+
+
+# ---------------------------------------------------------------------------------------------
+# T7 (v9 IN-16, G9 declared intent, `ED-IN-0282`; `H-190`, `H-191`): A TELLER MAY TELL A HEARER AN
+# ACT THEY HAVE CHOSEN AND NOT YET DONE. `decision/choose.py::declare_intents` swaps a telling's
+# `said` for `queries/person_q.py::intent_said(...)` with chance `intent_disclosure` (control 0,
+# shipped 0); the told deposit lands `(teller, intent:<verb>, ((name, id), ...))` in each hearer's
+# ledger; `queries/world_q.py::named` reads the ids back for `questions_for`'s clause 3.
+# ---------------------------------------------------------------------------------------------
+
+class _T7Always:
+    """A draw stream whose every draw discloses (`random() < rate` for any rate > 0)."""
+
+    def random(self):
+        return 0.0
+
+
+def _t7_scenes(w, teller, topic, later, same_scene=()):
+    """`teller`'s own triage as `pack_scenes` returns it: scene 0 a telling about `topic` to
+    `p_high`, carrying what the teller holds about it (`said_of`, as `opening_set` sets it), plus
+    `same_scene` acts beside it; then one scene per `(verb, payload)` in `later` -- acts the teller
+    has chosen and that have not run."""
+    from ..state.carriers import Scene
+    p = w.persons[teller]
+    said = said_of(p.ledger, topic, w.fixtures)
+    assert said is not None, f"{teller} holds nothing about {topic}: the telling would not form"
+    tell = Act(f"a_t7_tell_{topic}", teller, "tell",
+               payload={"subject": topic, "to": "p_high", "said": said})
+    first = [tell] + [Act(f"a_t7_same_{n}", teller, v, payload=pay)
+                      for n, (v, pay) in enumerate(same_scene)]
+    scenes = [Scene("sc_t7_0", teller, first)]
+    for n, (verb, pay) in enumerate(later, 1):
+        scenes.append(Scene(f"sc_t7_{n}", teller, [Act(f"a_t7_{n}", teller, verb, payload=pay)]))
+    return p, tell, scenes
+
+
+def _t7_hear(w, act):
+    """One telling through the REAL WITNESS barrier (`_t5_world`'s drive, with the act built by the
+    caller): whoever stands with the teller hears it."""
+    d = SeasonDriver(w)
+    w.tick += 1
+    w.acts.append(act)
+    ev = Event(H(w.world_seed, w.tick, act.actor, f"ev:news.told:{act.id}"), "news.told",
+               [], [act.id], w.tick, "Success", ())
+    w.log.append(ev)
+    d.act_of[ev.id] = act
+    d.witness(mint_token(w, WriteClass.INTERIOR), [ev])
+
+
+def _t7_own(w, pid, subject, value=7):
+    w.persons[pid].ledger.append(
+        Claim(f"c_t7_{pid}_{subject}", pid, subject, "stores:grain", value, 0, "firsthand", 100, "own"))
+
+
+def test_t7_a_hearer_holds_the_tellers_chosen_not_done_act():
+    """THE PLAN'S FALSIFIER, ABOVE 0. `p_mid` holds a claim about `Hh` and has chosen, this season, a
+    telling about `Hh` (scene 0) and a `transfer` out of `Hh` (scene 1, not yet run). At
+    `intent_disclosure` 1.0 the telling's `said` becomes the intent, and every hearer -- the people
+    standing with `p_mid` -- holds `(p_mid, intent:transfer, (("subject", "Hh"), ("to", "S")))` as a
+    `told_by` claim whose chain is the teller; the `transfer` is in no act store and no log when they
+    hear it. THE CONTROL is the same triage at 0: the telling passes on the held `stores:grain`
+    claim, as before `T7`, and nobody holds an intent.
+
+    MUTATION (run 2026-10-09, `T7`): `declare_intents`' swap line deleted (`a.payload = ...`) -- the
+    1.0 arm deposits the `stores:grain` claim and this goes RED on the `said` assertion. Restored,
+    GREEN."""
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..decision.choose import declare_intents
+    from ..queries.person_q import INTENT_STEM
+    from ..state.ids import draw_factory
+
+    teller = "p_mid"
+    held = {}
+    for rate in (0.0, 1.0):
+        w, _tell, _told = _t5_world()
+        _t7_own(w, teller, "Hh")
+        p, tell, scenes = _t7_scenes(w, teller, "Hh", [("transfer", {"subject": "Hh", "to": "S"})])
+        before = tell.payload["said"]
+        assert before.predicate == "stores:grain" and before.subject == "Hh"
+        fx = DEFAULT_FIXTURES.sweep("intent_disclosure", rate)
+        assert declare_intents(p, scenes, fx, draw_factory(w.world_seed, lambda: w.tick)) is scenes
+        said = tell.payload["said"]
+        assert not any(a.actor == teller and a.verb == "transfer" for a in w.acts)
+        assert not any(e.kind.startswith("transfer") for e in w.log)
+        _t7_hear(w, tell)
+        held[rate] = {pid: [(c.subject, c.predicate, c.value, c.source, c.chain) for c in q.ledger
+                            if str(c.predicate).startswith(f"{INTENT_STEM}:")]
+                      for pid, q in w.persons.items()}
+        if rate == 0.0:
+            assert said is before, "the control touched the telling's `said`"
+            assert not any(held[rate].values()), f"an intent was held at the control: {held[rate]}"
+            told = [pid for pid, q in w.persons.items()
+                    if any(c.predicate == "stores:grain" and c.chain == (teller,) for c in q.ledger)]
+            assert told, "the control's telling reached nobody, so its silence proves nothing"
+            continue
+        want = (teller, f"{INTENT_STEM}:transfer", (("subject", "Hh"), ("to", "S")), "told_by",
+                (teller,))
+        assert said == Said(teller, want[1], want[2], DEFAULT_FIXTURES.get("confidence_default"), ())
+        checked = 0
+        for pid, rows in held[rate].items():
+            if pid == teller:
+                assert rows == [], "the teller deposited their own intent"
+                continue
+            if rows:
+                assert rows == [want], (pid, rows)
+                checked += 1
+        assert checked >= 1, "no hearer holds the declared intent"
+
+
+def test_t7_the_intent_is_the_first_later_act_that_names_the_topic():
+    """WHICH CHOSEN ACT IS DECLARED. A telling about `Hh` sits in scene 0 beside a `move` naming `Hh`
+    (the SAME scene: it runs with the telling, so it is not "not yet done"); scene 1 is a `move` to
+    `S` (does not name `Hh`); scene 2 a `transfer` out of `Hh`. The intent is the `transfer`. A
+    SELF-telling (topic = the teller, Decision 3) declares the first later act whatever it names:
+    the `move` to `S`. A telling in the last scene has no later act and is untouched.
+
+    MUTATION (run 2026-10-09, `T7`, with the first test's): the swap line deleted -- RED on the
+    first `predicate` assertion. Restored, GREEN."""
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..decision.choose import declare_intents
+
+    fx = DEFAULT_FIXTURES.sweep("intent_disclosure", 1.0)
+    always = lambda _pid, _purpose: _T7Always()
+    later = [("move", {"subject": "S"}), ("transfer", {"subject": "Hh", "to": "S"})]
+    w = P.tiny_world()
+    _t7_own(w, "p_mid", "Hh")
+    _t7_own(w, "p_mid", "p_mid")
+    p, tell, scenes = _t7_scenes(w, "p_mid", "Hh", later, same_scene=[("move", {"subject": "Hh"})])
+    declare_intents(p, scenes, fx, always)
+    assert tell.payload["said"].predicate == "intent:transfer", tell.payload["said"]
+    p, tell, scenes = _t7_scenes(w, "p_mid", "p_mid", later)
+    declare_intents(p, scenes, fx, always)
+    assert tell.payload["said"].predicate == "intent:move", tell.payload["said"]
+    assert tell.payload["said"].value == (("subject", "S"),)
+    p, tell, scenes = _t7_scenes(w, "p_mid", "Hh", [])
+    before = tell.payload["said"]
+    declare_intents(p, scenes, fx, always)
+    assert tell.payload["said"] is before, "a telling with no later act declared something"
+
+
+def test_t7_an_intent_names_its_target_into_the_hearers_question():
+    """THE `world_q` BRANCH. `p_low` holds, as a fresh `told_by` claim, that `x_far` -- an id with no
+    place and outside `p_low`'s reach -- intends to `fight` `p_low`. `named` returns `("p_low",)`, so
+    `questions_for`'s clause 3 raises a `claim_landed` question about `x_far`. THE CONTROL is the
+    same claim, same value, under a cell predicate: `named` returns `()` and no question forms, so
+    the question is the intent branch's and not clause 1 or 2's.
+
+    MUTATION (run 2026-10-09, `T7`): `named`'s intent branch disabled (`if False:`) -- `named`
+    returns `()` for the intent claim and this goes RED. Restored, GREEN."""
+    from ..queries.world_q import named, questions_for
+
+    for predicate, want in (("intent:fight", ("p_low",)), ("stores:grain", ())):
+        w = P.tiny_world()
+        low = w.persons["p_low"]
+        c = Claim("c_t7_intent", "p_low", "x_far", predicate, (("subject", "p_low"),), w.tick,
+                  "told_by", 100, "own", 0, chain=("x_far",))
+        low.ledger.append(c)
+        assert named(c) == want, (predicate, named(c))
+        qs = [q for q in questions_for(w, low) if q.about == c.id]
+        if want:
+            assert [(q.source, q.referents) for q in qs] == [("claim_landed", ("x_far",))], qs
+        else:
+            assert qs == [], f"the control claim raised a question by another clause: {qs}"
+
+
+def test_t7_the_claim_kind_and_the_rate_refuse_what_they_cannot_mean():
+    """`intent_disclosure` is a chance: outside [0, 1] (or NaN) it raises, and a non-zero rate with a
+    telling to declare and no draw raises rather than declaring every intent or none; at 0 nothing
+    is read, so no draw is needed. The claim kind's stem is refused at import if another reader
+    already answers it -- a `requires` stem, the `seen` predicate, the `content:` predicate, an
+    emitted event kind -- or if it carries a colon, and a carried name that is no operand refuses."""
+    import pytest
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..data.requires import REQUIRES_OPERANDS, REQUIRES_STEMS
+    from ..data.rosters import RECORD_CONTENT
+    from ..decision.choose import declare_intents
+    from ..gaps import Unspecified
+    from ..queries.person_q import INTENT_NAMES, INTENT_STEM, _check_intent_claim
+
+    w = P.tiny_world()
+    _t7_own(w, "p_mid", "Hh")
+    p, _tell, scenes = _t7_scenes(w, "p_mid", "Hh", [("transfer", {"subject": "Hh"})])
+    for bad in (-0.1, 1.5, float("nan")):
+        with pytest.raises(ValueError):
+            declare_intents(p, scenes, DEFAULT_FIXTURES.sweep("intent_disclosure", bad), None)
+    with pytest.raises(Unspecified):
+        declare_intents(p, scenes, DEFAULT_FIXTURES.sweep("intent_disclosure", 0.5), None)
+    assert declare_intents(p, scenes, DEFAULT_FIXTURES.sweep("intent_disclosure", 0.0), None) is scenes
+    taken = {SEEN_PREDICATE, RECORD_CONTENT.get("predicate"), "news.told"}
+    _check_intent_claim(INTENT_STEM, INTENT_NAMES, REQUIRES_STEMS, REQUIRES_OPERANDS, taken)
+    for stem in ("stores", SEEN_PREDICATE, RECORD_CONTENT.get("predicate"), "news.told", "intent:x", ""):
+        with pytest.raises(ValueError):
+            _check_intent_claim(stem, INTENT_NAMES, REQUIRES_STEMS, REQUIRES_OPERANDS, taken)
+    with pytest.raises(ValueError):
+        _check_intent_claim(INTENT_STEM, ("subject", "bogus"), REQUIRES_STEMS, REQUIRES_OPERANDS, taken)
+
+
+def test_t7_intent_disclosure_zero_is_the_control_on_the_realm(monkeypatch):
+    """THE PLAN'S FALSIFIER, AT 0. `build_realm(0)`, one season, run twice: once through the shipped
+    chooser at `intent_disclosure` 0, once with `declare_intents` excised (the pre-`T7` chooser,
+    which returned `pack_scenes`' scenes as they were). Equal in BOTH observables: the
+    `content_hash()`, and what every act in the store CARRIED -- `(act id, said)` -- because a
+    payload is not hashed (`T1`), and in the realm's first season every telling that carries an
+    intent is refused (`news.untold`), so a leak at 0 moves the said and not the hash (scratch
+    `t7_arms.py`: the one-season hash is d0015936 at 0, 0.5 and 1.0; at three seasons 0.5 moves it).
+    [GROUNDED: measured 2026-10-09 on B-E's base commit a59d52f9, BEFORE T7's first edit:
+    `build_realm(0)` 5b8618f2..., one season d0015936..., three seasons 43b1fac8...; after T7, at
+    `intent_disclosure` 0, d0015936 and 43b1fac8 again -- scratch, not re-read here.]
+    The control is NOT VACUOUS: the shipped arm's `declare_intents` is spied, and on a COPY of each
+    triage the same rule at 1.0 (a draw that always discloses) counts the tellings that had a
+    chosen-not-done act to declare (`checked >= 1`); at least one telling in the store carries a
+    `said` (so the said comparison compares something).
+
+    MUTATION (run 2026-10-09, `T7`): the `rate == 0` early return deleted and the draw test made
+    `<=` (every opportunity declares at 0) -- the hashes still match and this goes RED on the
+    `said` comparison. Restored, GREEN."""
+    import copy
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..decision import choose as CH
+
+    assert DEFAULT_FIXTURES.get("intent_disclosure") == 0, "the shipped rate moved: restate this test"
+    real = CH.declare_intents
+    seen = {"calls": 0, "opportunities": 0}
+
+    def spy(p, scenes, fx, draw=None):
+        assert fx.get("intent_disclosure") == 0
+        seen["calls"] += 1
+        copies = copy.deepcopy(scenes)
+        before = [a.payload.get("said") for sc in copies for a in sc.acts if isinstance(a.payload, dict)]
+        real(p, copies, fx.sweep("intent_disclosure", 1.0), lambda _p, _u: _T7Always())
+        after = [a.payload.get("said") for sc in copies for a in sc.acts if isinstance(a.payload, dict)]
+        seen["opportunities"] += sum(1 for b, a in zip(before, after) if a is not b)
+        return real(p, scenes, fx, draw)
+
+    hashes, carried = {}, {}
+    for arm, fn in (("shipped", spy), ("excised", lambda p, scenes, fx, draw=None: scenes)):
+        monkeypatch.setattr(CH, "declare_intents", fn)
+        w = populated.build_realm(0)
+        populated.run(1, 0, w=w)
+        hashes[arm] = w.content_hash()
+        carried[arm] = [(a.id, a.payload.get("said")) for a in w.acts
+                        if isinstance(a.payload, dict) and a.payload.get("said") is not None]
+    print(f"\n  T7 -- realm one season at intent_disclosure 0: {seen['calls']} triages, "
+          f"{seen['opportunities']} tellings with a declarable intent, {len(carried['shipped'])} "
+          f"acts carrying a said; hash {hashes['shipped']}")
+    assert seen["calls"] >= 1 and seen["opportunities"] >= 1, seen
+    assert len(carried["shipped"]) >= 1, "no act in the store carried a said: nothing was compared"
+    assert carried["shipped"] == carried["excised"], "a telling's said differs from the pre-T7 chooser's"
+    assert hashes["shipped"] == hashes["excised"], hashes

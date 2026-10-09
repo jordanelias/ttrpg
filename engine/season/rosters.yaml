@@ -1643,6 +1643,27 @@ rosters:
       seen_term: who
     values: [to]
 
+  intent_claim:
+    source: >-
+      v9 IN-16, telling `T7` (G9, declared intent; `workplans/valoria_master_workplan_v9_part4.md`,
+      `ED-IN-0282`): *"a teller may tell a hearer an act they have CHOSEN-AND-NOT-YET-DONE, as a
+      position and a claim kind"*.
+    note: >-
+      THE CLAIM KIND A DECLARED INTENT IS. `decision/choose.py::declare_intents` mints it at CHOOSE,
+      through `queries/person_q.py::intent_said`, onto a telling's `said`, so the told deposit lands
+      it in each hearer's ledger as `(teller, <stem>:<verb>, ((name, id), ...))`: `claim.predicate`
+      is the STEM, the intended act's verb its argument, and `values` are the operand names of the
+      intended act whose ids the value carries, in this order. `queries/world_q.py::named` reads
+      those ids back (through `person_q.intent_named`), so a hearer whose reach covers a person or
+      place the intent names is raised a `claim_landed` question about the teller. ⚠ NOT A CELL:
+      the stem is refused at import if it is a `requires` grammar stem (it would read as a world
+      fact and `record` would pair it), the `seen` predicate, the `content:` predicate or an emitted
+      event kind (`person_q._check_intent_claim`). Whether the act was later done is not read by
+      anything (`hole_register.yaml` `H-191`).
+    claim:
+      predicate: intent
+    values: [subject, to]
+
   beneficiary_kinds:
     source: >-
       `CAT-2`, closed at step 5 (`proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml`).
