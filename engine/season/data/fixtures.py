@@ -720,6 +720,16 @@ DEFAULT_FIXTURES = Fixtures(
     # and is silent on shipping `valence`, and `valence` moves what tellings carry.
     # [JUSTIFIED: engine/season/hole_register.yaml H-196 -- the slant arm; no document says which claim a teller chooses to pass on, so both readings are declared and swept newest / valence]
     said_slant="newest",               # `H-196`, swept newest (control, SHIPPED) / valence
+    # `H-199` (v9 IN-15, `AX-7`'s divergence formula; `H-36` rules its shape). HOW FAR THE CHANNEL A
+    # CLAIM ARRIVED ON AND WHAT ITS RECEIVER ALREADY HELD LOWER THE CONFIDENCE IT LANDS AT:
+    # `decision/options.py::refracted_confidence` = `confidence * (1 - g*remove(channel)) *
+    # (1 - g*dissent)`, applied by `loop/witness.py::_refract` to every deposit a person receives of
+    # an act not their own. `0` is the CONTROL and is SHIPPED [ASSUMPTION], on `H-190`/`H-192`'s
+    # precedent: the plan names the control and is silent on shipping a live gain, and a live gain
+    # moves the realm. At 0 nothing is refracted and every deposit is the pre-IN-15 one. Must lie in
+    # [0, 1] (`refracted_confidence` raises outside it).
+    # [JUSTIFIED: engine/season/hole_register.yaml H-199 -- the refraction gain; AX-7 rules THAT channel, competence and prior belief govern divergence and H-36 that it is receiver-side, and no document gives how much, so it is injected and swept 0 / 0.5 / 1.0]
+    refraction_gain=0.0,               # `H-199`, swept 0 (control, SHIPPED) / 0.5 / 1.0
     # `H-159` (plan position `17b`, `04 §B.8`'s `term?`; `T-n`, `architecture/meta/01_AXIOMS.md`:
     # *"the opening act declares the terms"*). HOW MANY SEASONS AN `oblige` RUNS BEFORE IT MATURES
     # UNPAID -- the term `_eff_oblige` declares on the edge it opens (`matures_at = tick + this`),

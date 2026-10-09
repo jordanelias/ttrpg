@@ -29,7 +29,10 @@ from ..data.pursuits import to_axes
 from ..data.requires import (
     CELL_STEMS, SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS, WRIT_SOURCED_OPERANDS,
 )
-from ..data.rosters import PERSON_PREDICATES, PURSUIT_AXES, RECORD_CONTENT, require_member
+from ..data.rosters import (
+    CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, RECORD_CONTENT, WITNESS_CHANNELS,
+    require_member,
+)
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import ELIGIBILITY_KINDS, VERB_TABLE, align
@@ -989,6 +992,85 @@ def standing_of(p: Person, fx: "Fixtures") -> int:
     own = [c for c in p.ledger if c.subject == p.id and c.source == "firsthand"]
     _agree, dis, paired = agreement(told, own)
     return scale if paired == 0 else (dis * scale) // paired
+
+
+def channel_remove(channel: str) -> float:
+    """HOW FAR FROM THE THING ITSELF A CHANNEL PUTS ITS WITNESS, in `[0, 1]`: `0` for presence, `1`
+    for the most removed channel. REFRACTION's channel term (`refracted_confidence`, v9 IN-15).
+
+        remove(ch) = k / (K - 1),   k = the place of `claim_source[ch]` in the ordinal of remove,
+                                    K = how many distinct sources that ordinal holds
+
+    ⚠ THE ORDINAL IS READ OFF THE ROSTER, NOT WRITTEN HERE. `rosters.yaml: witness_channels` is
+    ordered strongest first and its note says the order follows `19_PLAN.md`'s ordinal of remove
+    (*firsthand > knot-sourced > told > inferred*); the distinct `claim_source:` values in that order
+    ARE the ordinal, so a channel's remove is its SOURCE's place. Two channels with one source
+    (`document_key`, `chronicle`: both `told_by`) are equally removed, which keeps that note's
+    *"the order decides only which channel is reported, never the source"* true of this term too.
+    EQUAL SPACING between the ranks is the [ASSUMPTION] (`H-199`): the ordinal is ruled, the
+    distances are not."""
+    ordinal = tuple(dict.fromkeys(CHANNEL_CLAIM_SOURCE[ch] for ch in WITNESS_CHANNELS))
+    return ordinal.index(CHANNEL_CLAIM_SOURCE[channel]) / (len(ordinal) - 1)
+
+
+def dissents(p: Person, c: Claim) -> bool:
+    """DOES WHAT `p` ALREADY HOLDS FIRSTHAND DISAGREE WITH `c`? REFRACTION's prior-belief term.
+
+    `c` is a claim about to land in `p`'s ledger and not yet in it. The pairing is the tree's one
+    pairing step, `_pair`, on the key the tree already pairs that kind of claim on -- no third key:
+      * a claim ABOUT `p` on a `person_predicates` member: `agreement` -- §18.2's comparison of what
+        others read off you against what you hold true of yourself, which is `AX-7`'s *"(2) IS
+        REVISABLE BY (3)"* seen from the receiving end;
+      * a claim on a CELL (`_is_cell`): `record`'s pairing, `(subject, predicate)`;
+      * anything else -- an event-kind claim (always `True`), a `seen` struct (each sighting a new
+        value, so it would "disagree" with the sighting it reports), a `content:` claim -- `False`,
+        for the reason `record`'s docstring gives for not scoring those.
+    The prior is FIRSTHAND only (empty chain, source `firsthand`), as in `agreement` and `record`:
+    what you saw resists what you hear, and hearsay does not resist hearsay here.
+    ⚠ WHETHER A WITNESS BELIEVED THE WITNESSED ACT COULD NOT HAPPEN -- `belief_contradicts` over the
+    act's own `requires` -- IS NOT A TERM YET: that function binds the actor to `p.id`, and a witness
+    asks about somebody else's act (`H-201`)."""
+    own = [x for x in p.ledger if not x.chain and x.source == "firsthand"]
+    if c.subject == p.id and c.predicate in PERSON_PREDICATES:
+        return agreement([c], [x for x in own if x.subject == p.id])[1] > 0
+    if _is_cell(c):
+        return _pair([c], [x for x in own if _is_cell(x)], lambda x: (x.subject, x.predicate))[1] > 0
+    # ABSENT: H-201 act-level prior  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
+    return False
+
+
+def refracted_confidence(p: Person, c: Claim, channel: str, gain: float) -> int:
+    """REFRACTION -- `AX-7`'s divergence formula (v9 IN-15; `H-36`'s shape, `H-199`'s magnitude).
+    How much `p` credits a claim landing in their ledger, from the channel it reached them by and
+    what they already held:
+
+        confidence' = floor( c.confidence * (1 - g * remove(channel))
+                                          * (1 - g * dissent(p, c)) * competence + 1/2 )
+
+    `g` is `refraction_gain`, in `[0, 1]`; `remove` is `channel_remove`; `dissent` is `dissents`, 0
+    or 1; `competence` is 1, unbuilt (`H-200`). Each factor is in `[0, 1]`, so refraction only
+    ever LOWERS a confidence, and at `g = 0` every factor is exactly 1: THE CONTROL, and the deposit
+    is today's.
+
+    ⚠ `H-36`'s SHAPE, KEPT: RECEIVER-SIDE, PER RECEIVER, AND NEVER THE EMISSION. Nothing here reads
+    or writes an Event or an Act; it grades one person's copy as it lands, so two witnesses of one
+    act hold it with different confidence and the act is untouched (`AX-7` layer (1)).
+    ⚠ CONFIDENCE, NOT VALUE. `AX-7` allows either; what a copy may LOSE in its value is already
+    owned (`loop/witness.py::_told_value`, r2 `02` §A.10), and a second value rule here would be a
+    second owner of it. This is the axis no rule moved: every deposit took `confidence_default`, or
+    the teller's own.
+    ⚠ FROZEN AT DEPOSIT, UNLIKE `teller_weight`. CAT-3 grades a told claim WHEN READ because the
+    hearer's relation to the teller can change later; the channel and the prior are facts of the
+    moment the claim lands, and the carrier stores neither, so they are applied here, once. The two
+    multiply into nothing shared: `teller_weight` never reads `confidence`.
+    ⚠ THE PRODUCT IS THE SIBLINGS' METHOD (`teller_weight`'s `told_weight ** hops * relation *
+    record`): the three inputs `AX-7` rules *"together"* each scale the credit independently."""
+    if not 0.0 <= gain <= 1.0:
+        raise ValueError(f"refraction_gain {gain!r} is outside [0, 1] (H-199): a factor below 0 "
+                         "would turn a deposit's confidence negative")
+    # ABSENT: H-200 competence  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
+    factor = (1.0 - gain * channel_remove(channel)) * (1.0 - gain * dissents(p, c))
+    return int(c.confidence * factor + 0.5)
 
 
 def _clamp(x: float, lo: float, hi: float) -> float:

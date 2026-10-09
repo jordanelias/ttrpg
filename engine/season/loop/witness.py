@@ -17,6 +17,7 @@ fails if it does.
 from __future__ import annotations
 
 import math
+from dataclasses import replace
 
 from ..data.matrix import Step
 from ..state.gate import Token
@@ -25,6 +26,7 @@ from ..data.rosters import (
     CHANNEL_CLAIM_SOURCE, OBSERVATION_DEPOSIT_MODES, RECORD_CONTENT, WITNESS_CHANNELS,
     require_member,
 )
+from ..decision.options import refracted_confidence
 from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, claim_subjects,
                          observers_for, seen_of, seen_subject)
 from ..queries import cache
@@ -174,6 +176,15 @@ def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = 
     return held.value  # nothing either mechanism can act on -- deposited verbatim, honestly
 
 
+def _refract(c: Claim, p, channel: str, gain: float) -> Claim:
+    """`c` AS THIS WITNESS RECEIVES IT: `c` with `decision/options.py::refracted_confidence`'s
+    confidence (v9 IN-15, `AX-7`'s divergence formula; `H-199`). The one place every deposit below
+    passes through, so the five `Claim` constructions share one rule rather than five. The caller
+    decides WHETHER to refract (the gain is live and the witness is not the act's own actor); this
+    decides HOW MUCH, and only the confidence moves -- id, value, source and chain are `c`'s."""
+    return replace(c, confidence=refracted_confidence(p, c, channel, gain))
+
+
 # -- WITNESS -- barrier 4 -- THE JOIN (S28) -----------------------------
 def witness(self, token: Token, events: list[Event]) -> int:
     w = self.w
@@ -228,6 +239,10 @@ def witness(self, token: Token, events: list[Event]) -> int:
     cap = w.fixtures.get("ledger_cap")
     conf = w.fixtures.get("confidence_default")
     claim_rule = w.fixtures.get("claim_subject_rule")
+    # v9 IN-15 / `H-199`: REFRACTION'S GAIN, read once per barrier for the reason `obs_mode` below
+    # is. `0` is the control and is SHIPPED: no deposit is refracted and the barrier is the pre-IN-15
+    # one exactly (no `actor_of` call, no ledger scan).
+    gain = w.fixtures.get("refraction_gain")
     # `W-B` / `H-122`. WHO RECEIVES A CLAIM MINTED FROM WHAT THE FOLD READ. `none` is the
     # CONTROL -- the behaviour before `W-B`, so every measurement of this item has a baseline
     # (§0.1 point 4). Read here rather than inside the loop so the fixture is consulted once
@@ -357,6 +372,13 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # speech directly holds it firsthand"*. Downgrading it would be the downgrade the
         # precedence exists to prevent.
         src = CHANNEL_CLAIM_SOURCE[channel]
+        # v9 IN-15: `AX-7` -- WHAT EVERYONE ELSE HOLDS OF AN ACT IS A READING, BY CHANNEL, COMPETENCE
+        # AND PRIOR BELIEF. Every deposit below passes through `_refract` when this is true. ⚠ NOT
+        # FOR THE ACT'S OWN ACTOR: `AX-7`'s layer (2), the performer's understanding of their own
+        # act, *"may be wrong ... by its OWN mechanism -- a person does not witness themselves"*,
+        # and this formula is layer (3)'s. An Event no person acted (`actor_of` is `None`) has no
+        # performer, so every witness of it refracts.
+        refracting = bool(gain) and actor_of(w, e) != pid
         # S28: A KNOT DEPOSIT REUSES THE EVENT ID. Rev 1 wrote the rule and switched it off
         # with `if False`. This is the rule, on -- keyed on the knot SOURCE, i.e. on `witness_key`
         # being the strongest channel, as `rosters.yaml: witness_channel_predicates` defines it.
@@ -378,6 +400,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
             # sort BEFORE the deliberation that should see it — Q2 dead inside the season, which is
             # the exact shape of the bug that kept Q2 dead across seasons before the `tick - 1` fix.
             c = Claim(cid, pid, subj, e.kind, True, w.tick, src, conf, "own", self.round)
+            if refracting:
+                c = _refract(c, p, channel, gain)
             # `W4`. THE DEPOSIT EMITS, AND THAT IS WHAT GIVES A DECAY AN ANTECEDENT.
             # Part D declares `claim.deposited` on this row and NOTHING EMITTED IT, so a
             # claim entered the world uncaused — and every later `claim.decayed` would have
@@ -492,6 +516,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 oc = Claim(H(w.world_seed, w.tick, pid, f"obs:{e.id}:{len(seen_obs)}"),
                            pid, o.subject, o.predicate, o.value, w.tick, src, conf, "own",
                            self.round)   # `U2`: see the deposit above
+                if refracting:
+                    oc = _refract(oc, p, channel, gain)
                 w.write("claim_ledger", token,
                         lambda p=p, c=oc: p.ledger.append(c),
                         record_kind="Person", fieldname="claim_ledger", driver="Event",
@@ -513,6 +539,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
             sc = Claim(H(w.world_seed, w.tick, pid, f"seen:{e.id}"),
                        pid, _seen[0], SEEN_PREDICATE, _seen[1], w.tick, src, conf, "own",
                        self.round)   # `U2`: see the first deposit
+            if refracting:
+                sc = _refract(sc, p, channel, gain)
             w.write("claim_ledger", token,
                     lambda p=p, c=sc: p.ledger.append(c),
                     record_kind="Person", fieldname="claim_ledger", driver="Event",
@@ -540,6 +568,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
             dc = Claim(H(w.world_seed, w.tick, pid, f"content:{e.id}:{rec.id}"),
                        pid, rec.id, pred, said, w.tick, src, conf,
                        "own", self.round)   # `U2`: see the first deposit
+            if refracting:
+                dc = _refract(dc, p, channel, gain)
             w.write("claim_ledger", token,
                     lambda p=p, c=dc: p.ledger.append(c),
                     record_kind="Person", fieldname="claim_ledger", driver="Event",
@@ -568,8 +598,12 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # fixed at CHOOSE, and at `Partial` the dedup compares the lossy copy, so the teller can pass
         # the guard and must be excluded here; it also skips the ledger scan for the common case.
         #
-        # ⚠ CONFIDENCE IS THE TELLER'S OWN, NOT A DEGRADED ONE, AND THAT IS A DEFERRAL RATHER
-        # THAN A CHOICE. Nothing in the chain states how much a hearing costs a belief, and
+        # ⚠ CONFIDENCE IS THE TELLER'S OWN, THEN REFRACTED (v9 IN-15): the hearer's copy starts at
+        # what the teller held and `_refract` lowers it by the channel the hearer heard the speech
+        # through and by what they already held firsthand -- at `refraction_gain` 0, the shipped
+        # control, it is the teller's own exactly. The hop itself is still graded at READ
+        # (`teller_weight`), never here. The text below is why the start point is the teller's own:
+        # Nothing in the chain states how much a hearing costs a belief, and
         # `probes.py` builds every hand-written `told_by` claim at full confidence (`:380`,
         # `:568`, `:650`, `:861`) -- so precedent carries it and inventing a ladder here would
         # author a number the design has not. The DEGREE already decides the thing the design
@@ -684,6 +718,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
                                pid, _held.subject, _held.predicate, _told_val, w.tick,
                                "told_by", _held.confidence, "own", self.round,
                                chain=_held.chain + (_act.actor,))
+                    if refracting:
+                        tc = _refract(tc, p, channel, gain)
                     w.write("claim_ledger", token,
                             lambda p=p, c=tc: p.ledger.append(c),
                             record_kind="Person", fieldname="claim_ledger", driver="Event",

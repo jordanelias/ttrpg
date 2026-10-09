@@ -77,6 +77,7 @@ exercised by this run.**
 | `told_valence_gain` | `0.0` | no — a harness fixture |
 | `stance_polarity` | `legacy` | no — a harness fixture |
 | `said_slant` | `newest` | no — a harness fixture |
+| `refraction_gain` | `0.0` | no — a harness fixture |
 | `oblige_term` | `4` | no — a harness fixture |
 | `default_upkeep` | `1` | no — a harness fixture |
 | `bench_quorum` | `1` | no — a harness fixture |
