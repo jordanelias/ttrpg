@@ -13,14 +13,12 @@ The pairs and verbs are read from the loaded tables, not typed, so no roster nam
 """
 from __future__ import annotations
 
-import itertools
 from types import SimpleNamespace
 
 import pytest
 
-from ..data.affiliations import INCOMPATIBLE
 from ..data.fixtures import DEFAULT_FIXTURES
-from ..data.rosters import AFFILIATIONS, PURSUIT_AXES
+from ..data.rosters import PURSUIT_AXES
 from ..data.verbs import VERB_TABLE, align
 from ..decision import choose as CH
 from ..decision.options import project
@@ -28,13 +26,13 @@ from ..queries.person_q import confliction
 from ..state.carriers import Candidate, Person
 from engine.substrate.descriptors import AFFILIATION_CEILING
 
+from ._scar_helpers import compatible_pairs, incompatible_pairs
+
 _HI_SUBJECT, _LO_SUBJECT = "p_h6f_a", "p_h6f_b"
 
 
 def _pairs():
-    bad = sorted(tuple(sorted(pair)) for pair in INCOMPATIBLE)
-    good = [pr for pr in itertools.combinations(sorted(AFFILIATIONS), 2)
-            if frozenset(pr) not in {frozenset(b) for b in bad}]
+    bad, good = incompatible_pairs(), compatible_pairs()
     assert bad, "no incompatible pair is loaded: the confliction term has nothing to read"
     assert good, "no compatible pair is loaded: the control below has no subject"
     return bad[0], good[0]

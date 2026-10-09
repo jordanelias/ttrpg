@@ -21,7 +21,7 @@ import pytest
 
 from engine.season.data import verbs as _verbs
 from engine.season.data.matrix import Step, WriteClass
-from engine.season.data.rosters import FAN_OUT_MODES, PURSUITS, WOUNDED
+from engine.season.data.rosters import FAN_OUT_MODES, PURSUITS
 from engine.season.epistemic import observers_for
 from engine.season.gaps import Forbidden
 from engine.season.harness import probes as P
@@ -29,6 +29,9 @@ from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.queries.person_q import said_of, violated_pursuits
 from engine.season.seam import Resolution
 from engine.season.state.carriers import Act, Claim, Tenure
+
+from ._scar_helpers import fight
+from ._scar_helpers import scars as _scars
 
 
 def _world(mode: str = "all_five", exclude_actor: bool = False):
@@ -42,29 +45,13 @@ def _world(mode: str = "all_five", exclude_actor: bool = False):
     return w
 
 
-def _wounded(victim="p_mid", full=10, left=5):
-    return Resolution(WOUNDED, {"wound_state": {victim: {"health_full": full,
-                                                         "health_remaining": left}}})
-
-
-def _fight(w, aid="h3_fight"):
-    d = SeasonDriver(w)
-    return d._fold(w, mint_token(w, WriteClass.ACTS),
-                   Act(id=aid, actor="p_low", verb="fight", payload={"subject": "p_mid"}),
-                   _wounded())
-
-
-def _scars(w) -> dict:
-    return {pid: dict(p.scar) for pid, p in w.persons.items() if p.scar}
-
-
 def test_h3_scar_counts_differ_between_presence_only_and_all_five():
     """FALSIFIER 1. The same act, the same world, the two fan-out arms: the counts differ, and the
     difference is exactly the person only the wider arm admits."""
     totals, scarred = {}, {}
     for mode in ("presence_only", "all_five"):
         w = _world(mode)
-        kinds = [e.kind for e in _fight(w)]
+        kinds = [e.kind for e in fight(w, "h3_fight")]
         assert kinds == ["body.changed"], f"{mode}: the fight did not land ({kinds})"
         scarred[mode] = _scars(w)
         totals[mode] = sum(sum(s.values()) for s in scarred[mode].values())
@@ -83,7 +70,7 @@ def test_h3_no_scar_on_a_person_who_did_not_observe_the_act(mode):
     violable pursuits did NOT observe, and is asserted unscarred -- so the subset claim is not
     satisfied by a world in which everyone saw everything."""
     w = _world(mode)
-    events = _fight(w)
+    events = fight(w, "h3_fight")
     w.discard_caches()
     seen = {pid for e in events for pid, _ch in observers_for(w, e, mode, list(w.persons))}
     scars = _scars(w)
@@ -104,17 +91,17 @@ def test_h3_one_count_per_act_and_the_actor_arm():
     """A second identical act adds ONE to each count (the unit is a count, `ED-IN-0261`), and the
     `scar_excludes_actor` arm removes the actor and nobody else."""
     w = _world()
-    _fight(w, "h3_f1")
+    fight(w, "h3_f1")
     once = _scars(w)
-    _fight(w, "h3_f2")
+    fight(w, "h3_f2")
     twice = _scars(w)
     assert twice == {pid: {e: 2 * n for e, n in s.items()} for pid, s in once.items()}, twice
     assert all(isinstance(n, int) for s in twice.values() for n in s.values()), twice
     assert all(list(s) == sorted(s) for s in twice.values()), "a scar dict is not key-sorted"
 
     w_in, w_out = _world(exclude_actor=False), _world(exclude_actor=True)
-    _fight(w_in)
-    _fight(w_out)
+    fight(w_in, "h3_fight")
+    fight(w_out, "h3_fight")
     with_actor, without = _scars(w_in), _scars(w_out)
     assert "p_low" in with_actor, "under `False` the actor observed his own act and was not scarred"
     assert "p_low" not in without, without
@@ -156,7 +143,7 @@ def test_h3_a_failure_band_and_a_refusal_scar_nobody(monkeypatch):
                                                      Resolution(failure, {}))]
     assert not _scars(w), f"a refusal ({kinds}) scarred {_scars(w)}"
 
-    _fight(w)
+    fight(w, "h3_fight")
     assert _scars(w), "a landed fight scarred nobody in this world, so the arms above prove nothing"
 
 
@@ -183,7 +170,7 @@ def test_h3_a_fold_at_encounter_scars_its_observers():
     for step in (Step.RESOLVE, Step.ENCOUNTER):
         w = _world("presence_only")
         w.step = step
-        events = _fight(w)
+        events = fight(w, "h3_fight")
         assert [e.kind for e in events] == ["body.changed"], (step, [e.kind for e in events])
         at[step] = _scars(w)
         w.discard_caches()

@@ -49,10 +49,8 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     `kill.refused`. MEASURED BEFORE THIS POSITION on `build_realm(0)`, four seasons: every
     `kill / wound` that reached this effect moved its subject, so no run moves.
 
-    ⚠ AND THE TWO `Unspecified` RAISES NOW COME BEFORE ANYTHING IS WRITTEN. The no-scene raise
-    always did; the no-health-scale raise came AFTER the (since retired) scar write, so a season that
-    died on it died with the scar already moved. Both are read while the `Change` is built, which touches
-    nothing.
+    ⚠ AND THE TWO `Unspecified` RAISES COME BEFORE ANYTHING IS WRITTEN: both are read while the
+    `Change` is built, which touches nothing.
 
     ⚠ THE TENURE ENDS THROUGH THE DEATH, which is §15.3's rule and the reason this is ONE effect
     rather than three writes a caller sequences: "a plague that kills the praefect ends his
@@ -128,9 +126,6 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         "H-123",
         law="`observers_for`'s precedent and its reason -- *an unrecognised mode silently "
             "falling back would make every measurement of this sweep read the control*")
-    # The scar no longer runs here (IN-08 H3): the fold scars the act's OBSERVERS after an outcome
-    # that moved state, so `wound_harm_model`'s `none` arm -- whose write the gate refuses -- scars
-    # nobody, and sweeping `H-123` no longer decides whether a scar was written beside a refusal.
     if res.degree == FELLED:
         # The scene says this person went down, and the table says that is the kill. The body
         # goes to 0 on every arm: the arms grade a WOUND, and a felling is not one.

@@ -339,7 +339,7 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         if not k >= 0:               # `not >=`, so a NaN is refused too
             raise ValueError(f"confliction_weight {k} is not >= 0: it would invert, divide by zero "
                              f"or poison the score (H-188)")
-        damp = 1.0 / (1.0 + k * confliction(p))
+        damp = 1.0 if k == 0 else 1.0 / (1.0 + k * confliction(p))
         def score(c: Candidate) -> float:
             return (damp * sum(axis_w[ax] * align(c.verb, ax) for ax in PURSUIT_AXES)
                     + stance_toward(p, c.subject or "")

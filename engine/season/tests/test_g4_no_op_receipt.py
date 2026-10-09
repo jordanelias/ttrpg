@@ -31,15 +31,15 @@ What each block proves, and the control that stops it passing vacuously:
 import pytest
 
 from engine.season.data.matrix import Step, WriteClass
-from engine.season.data.rosters import WOUNDED
 from engine.season.gaps import InstrumentDefect
 from engine.season.harness import probes as P
 from engine.season.loop import effects as _effects
 from engine.season.loop.driver import SeasonDriver, mint_token
-from engine.season.seam import Resolution
 from engine.season.state.carriers import Act, Receipt, Tenure
 from engine.season.state.gate import Change, NoOpReceipt, NotYours, Subject
 from engine.season.state.world import World
+
+from ._scar_helpers import wounded as _wounded
 
 
 def _driver(w):
@@ -163,11 +163,6 @@ def test_g4_a_no_op_puts_back_a_lawful_edge_its_closure_opened(monkeypatch):
 # ======================================================================================
 # 3 -- PER-EFFECT DECISIONS
 # ======================================================================================
-
-def _wounded(victim, full, left):
-    return Resolution(WOUNDED, {"wound_state": {victim: {"health_full": full,
-                                                         "health_remaining": left}}})
-
 
 def _kill(w, aid, res):
     d = _driver(w)

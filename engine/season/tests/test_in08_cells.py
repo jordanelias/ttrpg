@@ -18,6 +18,7 @@ change that moves the cosine, even across the 60-degree bar, leaves it green.
 """
 from __future__ import annotations
 
+import copy
 import math
 import re
 
@@ -185,7 +186,6 @@ def test_the_doctrine_pair_instrument_can_fail_and_the_shipped_table_is_untouche
     """FALSIFIER, on PLANTED copies (`monkeypatch` restores; the shipped table is never edited).
     A control first: the shipped table computes, and zeroing its `doctrine` row MOVES the value, so
     the planted-table runs below are observably reading the planted table and not a cached one."""
-    import copy
     shipped = copy.deepcopy(V.PURSUIT_PROJECTION)
     control = _doctrine_pair_cosine()
     # the shipped `doctrine` row is live in the projection: dropping the weight changes the vector,
@@ -217,7 +217,6 @@ def test_the_doctrine_pair_instrument_can_fail_and_the_shipped_table_is_untouche
 def test_a_moved_doctrine_cosine_does_not_turn_the_pair_test_red(monkeypatch):
     """RECORDED, NOT GATED, observed: scale the `doctrine` row's cells and the cosine moves (here
     far from the recorded value); the instrument still returns it. Were this gated, it would raise."""
-    import copy
     control = _doctrine_pair_cosine()
     planted = copy.deepcopy(V.PURSUIT_PROJECTION)
     planted["doctrine"] = {ax: -3.0 * float(c) for ax, c in planted["doctrine"].items()}

@@ -23,7 +23,7 @@ import pytest
 
 from engine.season.data import affiliations as A
 from engine.season.data.matrix import Step, WriteClass
-from engine.season.data.rosters import AFFILIATIONS, FAN_OUT_MODES, WOUNDED, table
+from engine.season.data.rosters import AFFILIATIONS, FAN_OUT_MODES, table
 from engine.season.data.verbs import VERB_TABLE
 from engine.season.epistemic import observers_for
 from engine.season.gaps import Forbidden, Unspecified
@@ -33,6 +33,10 @@ from engine.season.queries.person_q import said_of, violated_affiliations, viola
 from engine.season.seam import Resolution
 from engine.season.state.carriers import Act, Claim, Person, Tenure
 from engine.substrate.descriptors import AFFILIATION_CEILING
+
+from ._scar_helpers import fight
+from ._scar_helpers import rebound as _rebound
+from ._scar_helpers import scars as _scars
 
 _ROSTER = sorted(AFFILIATIONS)
 _STRAINED = sorted(_ROSTER)[:2]          # any two holdings; which two is not the point
@@ -54,26 +58,6 @@ def _world(mode="presence_only", holdings=None):
     w.fixtures = w.fixtures.sweep("fan_out_mode", mode)
     w.step = Step.RESOLVE
     return w
-
-
-def _fight(w, aid="h11_fight"):
-    res = Resolution(WOUNDED, {"wound_state": {"p_mid": {"health_full": 10,
-                                                         "health_remaining": 5}}})
-    return SeasonDriver(w)._fold(w, mint_token(w, WriteClass.ACTS),
-                                 Act(id=aid, actor="p_low", verb="fight",
-                                     payload={"subject": "p_mid"}), res)
-
-
-def _scars(w):
-    return {pid: dict(p.scar) for pid, p in w.persons.items() if p.scar}
-
-
-def _rebound(**cells):
-    """The loaded table with `cells` laid over it: `{column: {verb: value}}`."""
-    out = {col: dict(row) for col, row in A.ENGAGEMENT.items()}
-    for col, row in cells.items():
-        out.setdefault(col, {}).update(row)
-    return out
 
 
 # ---------------------------------------------------------------------------- the table, shipped
@@ -105,16 +89,16 @@ def test_h11_an_observed_violation_scars_each_observer_on_his_violated_holdings(
     table scars exactly the observers, on exactly the holdings the table says `fight` violates,
     once each, and writes no `conviction`."""
     w0 = _world(mode)
-    _fight(w0)
+    fight(w0, "h11_fight")
     assert not _scars(w0), f"{mode}: an unaffiliated, pursuit-less world was scarred {_scars(w0)}"
 
     w1 = _world(mode, _HOLDING)
-    _fight(w1)
+    fight(w1, "h11_fight")
     assert not _scars(w1), f"{mode}: the shipped table gives `fight` no cell, yet {_scars(w1)}"
 
     monkeypatch.setattr(A, "ENGAGEMENT", _rebound(**{A.SHARED_COLUMN: {"fight": -0.3}}))
     w = _world(mode, _HOLDING)
-    events = _fight(w)
+    events = fight(w, "h11_fight")
     assert [e.kind for e in events] == ["body.changed"], [e.kind for e in events]
     w.discard_caches()
     seen = {pid for e in events for pid, _ch in observers_for(w, e, mode, list(w.persons))}
@@ -139,7 +123,7 @@ def test_h11_a_per_affiliation_cell_scars_only_that_holding(monkeypatch):
     target, other = _STRAINED
     monkeypatch.setattr(A, "ENGAGEMENT", _rebound(**{target: {"fight": -1.0}}))
     w = _world("all_five", _HOLDING)
-    _fight(w)
+    fight(w, "h11_fight")
     scars = _scars(w)
     assert scars and all(s == {target: 1} for s in scars.values()), scars
     assert not any(other in s for s in scars.values())
@@ -163,7 +147,7 @@ def test_h11_a_failure_band_scars_nobody_on_an_affiliation(monkeypatch):
     evs = SeasonDriver(w)._fold(w, mint_token(w, WriteClass.ACTS), tell, Resolution(failure, {}))
     assert [e.degree for e in evs] == [failure], [(e.kind, e.degree) for e in evs]
     assert not _scars(w), f"a `{failure}` band scarred {_scars(w)}"
-    _fight(w)
+    fight(w, "h11_fight")
     assert _scars(w), "a landed rebound fight scarred nobody, so the arm above proves nothing"
 
 

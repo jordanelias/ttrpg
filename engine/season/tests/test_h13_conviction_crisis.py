@@ -23,7 +23,7 @@ import pytest
 
 from engine.season.data import affiliations as A
 from engine.season.data.matrix import Step, WriteClass, matrix_row
-from engine.season.data.rosters import AFFILIATIONS, WOUNDED
+from engine.season.data.rosters import AFFILIATIONS
 from engine.season.epistemic import observers_for
 from engine.season.gaps import Forbidden
 from engine.season.harness import probes as P
@@ -35,24 +35,23 @@ from engine.season.seam import Resolution
 from engine.season.state.carriers import Act, Claim, Person, Tenure
 from engine.substrate.descriptors import AFFILIATION_CEILING
 
-
-def _pairs():
-    return sorted(tuple(sorted(p)) for p in A.INCOMPATIBLE)
+from ._scar_helpers import compatible_pairs, fight, incompatible_pairs
+from ._scar_helpers import rebound as _rebound
 
 
 def _hub():
     """The affiliation in the most incompatible pairs, ties to the first by name, and its partners."""
-    count = {a: sum(a in p for p in _pairs()) for a in sorted(AFFILIATIONS)}
+    pairs = incompatible_pairs()
+    count = {a: sum(a in p for p in pairs) for a in sorted(AFFILIATIONS)}
     hub = max(sorted(count), key=lambda a: count[a])
-    return hub, sorted(b for p in _pairs() if hub in p for b in p if b != hub)
+    return hub, sorted(b for p in pairs if hub in p for b in p if b != hub)
 
 
 def _compatible_pair():
-    for a in sorted(AFFILIATIONS):
-        for b in sorted(AFFILIATIONS):
-            if a < b and frozenset((a, b)) not in A.INCOMPATIBLE:
-                return a, b
-    pytest.skip("every rostered pair is incompatible; restabilise has no case to read")
+    pairs = compatible_pairs()
+    if not pairs:
+        pytest.skip("every rostered pair is incompatible; restabilise has no case to read")
+    return pairs[0]
 
 
 def _person(held, scar):
@@ -110,13 +109,6 @@ def test_h13_one_crisis_at_a_time_the_highest_held_folds_into_the_lower():
 
 # ---------------------------------------------------------------------------- the falsifier, planted
 
-def _rebound(**cells):
-    out = {col: dict(row) for col, row in A.ENGAGEMENT.items()}
-    for col, row in cells.items():
-        out.setdefault(col, {}).update(row)
-    return out
-
-
 def _world(holdings, count, mode="presence_only"):
     """H11's planted world: one `knot` ties `p_low` to `p_high`, who stands away from the act; no
     pursuits held; `holdings` on every person, each holding planted at scar `count`."""
@@ -131,35 +123,27 @@ def _world(holdings, count, mode="presence_only"):
     return w
 
 
-def _fight(w, aid="h13_fight"):
-    res = Resolution(WOUNDED, {"wound_state": {"p_mid": {"health_full": 10,
-                                                         "health_remaining": 5}}})
-    return SeasonDriver(w)._fold(w, mint_token(w, WriteClass.ACTS),
-                                 Act(id=aid, actor="p_low", verb="fight",
-                                     payload={"subject": "p_mid"}), res)
-
-
 def test_h13_an_observed_violation_at_the_threshold_folds_each_observer_only(monkeypatch):
     hub, (y, *_r) = _hub()
     holdings = dict([(hub, 3), (y, 1)])
     monkeypatch.setattr(A, "ENGAGEMENT", _rebound(**{A.SHARED_COLUMN: {"fight": -0.3}}))
 
     control = _world(holdings, SCAR_CRISIS_AT - 2)
-    _fight(control)
+    fight(control, "h13_fight")
     assert any(p.scar.get(hub) == SCAR_CRISIS_AT - 1 for p in control.persons.values()), \
         "the control's act scarred nobody, so its unwritten conviction proves nothing"
     assert all(p.conviction == holdings for p in control.persons.values()), "written below 3"
 
     w = _world(holdings, SCAR_CRISIS_AT - 1)
-    events = _fight(w)
+    events = fight(w, "h13_fight")
     w.discard_caches()
     seen = {pid for e in events for pid, _ch in observers_for(w, e, "presence_only",
                                                               list(w.persons))}
     unseen = set(w.persons) - seen
     assert seen and unseen, (seen, unseen)
+    assert violated_affiliations(Person(id="x", conviction=holdings), "fight")
     for pid in seen:
         p = w.persons[pid]
-        assert violated_affiliations(Person(id="x", conviction=holdings), "fight")
         assert p.scar.get(hub) == SCAR_CRISIS_AT, (pid, p.scar)
         assert p.conviction == {y: 4}, (pid, p.conviction)
     for pid in unseen:
@@ -182,7 +166,7 @@ def test_h13_a_failure_band_reaches_no_crisis(monkeypatch):
     evs = SeasonDriver(w)._fold(w, mint_token(w, WriteClass.ACTS), tell, Resolution(failure, {}))
     assert [e.degree for e in evs] == [failure], [(e.kind, e.degree) for e in evs]
     assert all(p.conviction == holdings for p in w.persons.values()), "a Failure band wrote"
-    _fight(w)
+    fight(w, "h13_fight")
     assert any(p.conviction != holdings for p in w.persons.values()), \
         "a landed fight in the same world reached no crisis, so the arm above proves nothing"
 
@@ -206,7 +190,7 @@ def test_h13_a_pursuit_only_scar_reaches_no_crisis(monkeypatch):
     assert not violated_affiliations(w.persons["p_mid"], "fight"), \
         "the shipped table violates the holding, so this arm is not pursuit-only"
     before = {pid: dict(p.scar) for pid, p in w.persons.items()}
-    _fight(w)
+    fight(w, "h13_fight")
     pursuit_scarred = [pid for pid, p in w.persons.items()
                        if p.scar != before[pid] and p.scar.get(hub) == SCAR_CRISIS_AT]
     assert pursuit_scarred, "the act scarred nobody on a pursuit, so the unmoved vector proves nothing"
@@ -215,21 +199,23 @@ def test_h13_a_pursuit_only_scar_reaches_no_crisis(monkeypatch):
 
     monkeypatch.setattr(A, "ENGAGEMENT", _rebound(**{A.SHARED_COLUMN: {"fight": -0.3}}))
     control = world()
-    _fight(control)
+    fight(control, "h13_fight")
     assert any(control.persons[pid].conviction == {y: 4} for pid in pursuit_scarred), \
         "the affiliation-scarred control did not fold, so the arm above proves nothing"
 
 
 def test_h13_witness_token_is_refused_and_encounter_is_admitted():
     hub, (y, *_r) = _hub()
-    w = _world(dict([(hub, 3), (y, 1)]), SCAR_CRISIS_AT)
+    holdings = dict([(hub, 3), (y, 1)])
+    w = _world(holdings, SCAR_CRISIS_AT)
     act = Act(id="h13_direct", actor="p_low", verb="fight", payload={})
+    scarred = {"p_mid": tuple(holdings)}
     w.step = Step.WITNESS
     with pytest.raises(Forbidden) as exc:
-        _conviction_crisis(w, mint_token(w, WriteClass.INTERIOR), act, ["p_mid"])
+        _conviction_crisis(w, mint_token(w, WriteClass.INTERIOR), act, scarred)
     assert exc.value.where == "S9.3", exc.value.where
-    assert w.persons["p_mid"].conviction == dict([(hub, 3), (y, 1)])
+    assert w.persons["p_mid"].conviction == holdings
     assert Step.ENCOUNTER in matrix_row("Person", "conviction").steps
     w.step = Step.ENCOUNTER
-    _conviction_crisis(w, mint_token(w, WriteClass.ACTS), act, ["p_mid"])
+    _conviction_crisis(w, mint_token(w, WriteClass.ACTS), act, scarred)
     assert w.persons["p_mid"].conviction == {y: 4}
