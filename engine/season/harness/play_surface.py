@@ -14,8 +14,8 @@ module is.
 ⚠ **THE CALLBACK SEES WHAT `choose` SEES AND NOTHING MORE.** It is called as
 `callback(p, v, s, ask_budget, auto)`: the same four person-side arguments DELIBERATE passes (a
 `Person`, a `View`, a `Sensation`, the budget QUERY), plus `auto`, the delegate chooser itself. No
-`World` reaches it, so a client built on this seam is held to the same boundary `make_chooser` is
-(`test_choose_receives_no_world` pins the four-argument call). `auto` is passed so a client can show
+`World` reaches it through this seam; what a callback closes over is the client's own, and no scan
+reaches it (CONVENTION, `04:246`'s MECHANICAL path scan covers `make_chooser`, not a callback). `auto` is passed so a client can show
 or replay what the shipped policy would have done; calling it is the caller's choice.
 
 ⚠ **THE SEAM ADDS NO RULE.** It does not validate what the callback returns: DELIBERATE already

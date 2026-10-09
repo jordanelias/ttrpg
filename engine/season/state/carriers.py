@@ -153,7 +153,9 @@ class Tenure:
         (`World._grant_remit`). The same SNAPSHOT semantics: as at seating, re-stamped by `establish`.
         It extends `H-71` arm 2's precedent (the grant rides on the Tenure) to the seat's rung, which
         no act can change: `_req_establish` refuses a rung difference on an existing id
-        (`loop/predicates.py`).
+        (`loop/predicates.py`; MECHANICAL for `establish`). Layer-1 grade of the stamp itself
+        (`04` §B.8's `Tenure :=` lists no payload field; it is a second home for `Office.rung`):
+        CONVENTION, an untyped dict key with no per-property guard; ruled defensible at B-E close.
 
         `None` for every Tenure carrying no grant, and for the grant of a rungless seat -- which has
         no treasury, so a payment through it is not formed."""

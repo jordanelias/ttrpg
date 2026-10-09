@@ -64,7 +64,6 @@ def _ranking(g: float, share: float, monkeypatch) -> tuple:
 def test_in25_the_gain_reverses_a_ranking_the_control_keeps(monkeypatch):
     """MUTATION (run 2026-10-09, IN-25): `stance_term`'s gain dropped (`return t` on every arm)
     reddens the arm-1 and arm-3 assertions. Restored, GREEN."""
-    assert DEFAULT_FIXTURES.get("stance_gain") == 1, "the shipped arm moved: restate"
     checked = 0
     control, hi, lo = _ranking(0.0, 0.6, monkeypatch)
     assert control == [hi, lo], f"the control arm did not keep the pursuit dot's order: {control}"

@@ -348,7 +348,7 @@ def person_side_eligible(p: Person, row: "VerbRow") -> bool:
 def exercised_seat(p: Person, row: "Optional[VerbRow]") -> Optional[str]:
     """G3 -- THE SEAT A COMPUTED ACT EXERCISES: the office id its `Act.via` carries, or `None`.
 
-    `04 §B.9` gives `Act` a `via : SeatId?` and `04:332` asks purview of the seat exercised, so
+    `04 §B.9` gives `Act` a `via : SeatId?` and `04:350` asks purview of the seat exercised, so
     the act a person mints has to say which seat it is exercised through -- and only the person can
     say, because only the person's own Tenures are in scope here (AX-2). It is the seat through
     which `person_side_eligible` ADMITTED the verb, read by the SAME walk (`_admitted_through`) so

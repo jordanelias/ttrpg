@@ -27,6 +27,13 @@ from ..data.rosters import (
     require_member,
 )
 from ..data.verbs import VERB_TABLE
+# ⚠ `04:178` lists WITNESS's reads as the log, the presence cache, the channel predicates and the act
+# store, and `04:142` keeps `decision/` an island; this is the first non-DELIBERATE step to import it.
+# Refraction (v9 IN-15, H-201) is asker-first -- it grades what THIS holder believes -- so its rule lives
+# beside `teller_weight`/`record`, which `queries/person_q.py` cannot host (it may not reach
+# `epistemic`, test_season_shape's allow-list); it reads the verb table (`_happened`, `dissents`) and the
+# holder's own stance (`regard`). `04:178` is exceeded on those two reads. Layer-conformance, B-E close:
+# CONVENTION, no scan reads this step's imports; the spec is ambiguous, `decision/` chosen.
 from ..decision.options import ledger_weigh, refracted_confidence
 from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, claim_subjects,
                          live_channels, observers_for, seen_of, seen_subject)
@@ -202,8 +209,9 @@ def _refract(c: Claim, p, channel: str, gain: float, act=None, weigh=None) -> Cl
 
 def _happened(act, e: Event):
     """THE ACT `e` REPORTS HAPPENING, or `None` -- what `dissents`' act-level prior (`H-201`) is asked
-    of. `e` must be one of the act's verb row's `emits:` and none of its `emits_on_refusal:` (the
-    union of every refusal kind; `loop/driver.py`'s test for *this Event is a refusal*): a witness
+    of. `e` must be one of the act's verb row's `emits:` and none of its `emits_on_refusal:` (this ROW's
+    column, the test `loop/driver.py` applies to *this Event is a refusal*; `verbs.REFUSAL_KINDS` is the
+    cross-row union `is_deed` uses, and the two agree today): a witness
     who believed the act could not happen and saw it refused has nothing to doubt. A kind on both
     columns (`tell`'s `news.untold`) cannot say which, and takes no prior. An Event no act caused
     (MATTER, CALENDAR) and an act whose verb has no row report no act."""

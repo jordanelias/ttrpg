@@ -461,7 +461,7 @@ def _ch_post_remit(w: "World", e, pid) -> bool:
       1. THE SEAT is `Act.via` of the act that caused the Event (`state/attribution.causing_act`,
          `actor_of`'s own first-match rule) -- `04:120` (AX-1): *"only a person acts ... a seat
          enters through `Act.via`"*. An Event no act caused, or an act exercised through no seat
-         (every `own` verb), admits nobody here. The retired predicate's EVENT side -- kinds a
+         (every `own` verb), admits nobody THROUGH THIS PREDICATE (`loop/witness.py`'s IN-22 purview limb is the one other admission under this channel: reads only, to seat holders, `rosters.yaml` states it). The retired predicate's EVENT side -- kinds a
          `remit:` verb emits -- is what `via` now says exactly: the acts a post did under its remit.
       2. THE OBLIGEES are `world_q.establishment_of(w, seat)`, a Query over live `oblige` Tenures,
          and this channel is its caller -- r2 `05` §A.1.5 RULED (d): *"`establishment_of` becomes the

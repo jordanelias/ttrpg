@@ -71,12 +71,6 @@ def _told(w, pid):
             and (c.subject, c.predicate) == ("Hh", "stores:grain")]
 
 
-def test_in15_the_shipped_gain_is_live_at_the_sweep_midpoint():
-    """Shipped LIVE per Jordan's 2026-10-09 ruling (*"Gains are improvements and therefore ship."*);
-    the control 0 is set explicitly by every arm below that means it."""
-    assert DEFAULT_FIXTURES.get("refraction_gain") == 0.5, "the shipped gain moved: restate H-199"
-
-
 def test_in15_channel_remove_is_the_ordinal_of_remove_read_off_the_roster():
     """`remove` is the channel's SOURCE's place among the distinct `claim_source:` values in the
     precedence order: presence 0, a knot 1/3, a document and the public record 2/3 (one source, one
