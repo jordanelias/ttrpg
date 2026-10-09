@@ -39,7 +39,8 @@ from engine.season.state.carriers import Act, Candidate, Claim, Question, View
 # The rows this position DECLINED or STOPPED on, each recorded with its reason in the position's
 # receipt; none may become resolvable without the reason being answered first.
 # roster-exempt: TEST EXPECTATION, the declined set this position's falsifier asserts.
-DECLINED = ("carry", "exchange", "forge", "repudiate", "succeed", "thread_read", "tie / knot")
+# v9 IN-11 (#453 R-3 (b)): `repudiate` LEFT -- its row is cut, not built (`release` ends a `commit`).
+DECLINED = ("carry", "exchange", "forge", "succeed", "thread_read", "tie / knot")
 
 
 def _view(w, pid):

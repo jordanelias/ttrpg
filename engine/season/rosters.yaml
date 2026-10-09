@@ -2079,7 +2079,10 @@ tables:
       (R-C4.1, R-C4.2, R-C4.3) and §4.3 (the sketch), FOLDED INTO THE BUILD by Jordan 2026-10-06
       (RS-1, ED-IN-0291). The shared column's ten cells and their reasons are the old `sacred`
       alignment row as it stood before IN-08's cells work removed it (`git show 16faff76:engine/season/
-      rosters.yaml`, the `sacred:` block of `alignment`), carried as R-C4.1 says.
+      rosters.yaml`, the `sacred:` block of `alignment`), carried as R-C4.1 says. v9 IN-11 (#453
+      R-3 (b)) cut `repudiate` and DROPPED its shared cell (-0.6, the vow-break) with the row --
+      not moved onto `release`, which ends a commitment voluntarily and is a different act -- so
+      nine of the ten remain.
     default_cell: null
     # The outer key is a COLUMN: the one shared column (named by `shared_column:`, read by the
     # loader rather than spelled in code) or a rostered affiliation. The inner key is a verb, spelled
@@ -2130,7 +2133,6 @@ tables:
         destroy_record: -0.3    # carried: erasing what a ruling produced is a desecration (the vow-shaped half; the content half is R-C4.3)
         forge:          -0.5    # carried: counterfeiting a record for advantage is the false-witness shape, dressed as evidence
         surveil:         null   # struck by R-C4.1: covert watching is worldly craft, a cost and not a creed
-        repudiate:      -0.6    # carried: breaking a live commit breaks the vow itself -- the anti-sacred act, not just the anti-social one
       solmund_orthodoxy:
         thread_read:    -1      # derived, sign only: witnessed threadwork violates orthodoxy -- the Church's theology is "an anti-threadwork formation" (canon/philosophy/08_history.md §8.8, §8.10)
       inner_tradition:
@@ -2473,7 +2475,6 @@ tables:
         dispatch:       -0.5    # carried: an order sent down the office to a named person
         open_case:      -0.5    # carried: opening a case invokes the remit's institution over the matter
         petition:       -0.4    # carried: the channel a subordinate has; using it works the hierarchy
-        repudiate:       0.5    # carried: unmaking a commitment un-does a standing another's authority made
         surveil:         0.3    # carried: watching "without leave" is unauthorized by definition
         destroy_record:  0.4    # carried: defacing what an office's ruling produced
         convene:        -0.4    # derived: a `remit:convene` act that gathers a venue's rung -- the remit-act family `dispatch`/`issue` sit in
@@ -2514,7 +2515,6 @@ tables:
         research:       -0.7    # carried: archives, oral histories, institutional records -- looking to prior cases
         succeed:        -0.6    # carried: heir designation is dynastic continuity in one act
         tie / knot:     -0.5    # carried (a weaker fit, the draft flags it): the ancestral social technology
-        repudiate:       0.5    # carried: breaks with the practice of keeping vows
         evade / defy:    0.5    # carried: breaks with the expected, established course
         reconstruct:    -0.4    # carried: assembling what stands, not creating what is new
         confer:         -0.4    # carried: office and title pass down established forms of investiture
@@ -2585,7 +2585,6 @@ tables:
         oblige:         null
         petition:       null
         release:        null
-        repudiate:      null
         revoke:         null
         speak:          null
         succeed:        null
@@ -2633,7 +2632,6 @@ tables:
         petition:       null
         construe:       null
         release:        null
-        repudiate:      null
         revoke:         null
         speak:          null
         succeed:        null
@@ -2653,7 +2651,6 @@ tables:
       rigid_flexible:
         # negative = unwilling to deviate in the face of difficulties · positive = will (draft §3.5)
         construe:        0.7    # derived: bending the terms to fit
-        repudiate:       0.5    # derived: un-binding a live commitment
         comply:         -0.4    # derived: literal deference to the terms
         commit:         -0.4    # derived: binds regardless of what later calculation would recommend
         release:         0.3    # derived: the un-binding
@@ -2731,7 +2728,6 @@ tables:
         open_case:      null
         construe:       null
         release:        null
-        repudiate:      null
         revoke:         null
         succeed:        null
         examine:        null
@@ -2759,7 +2755,6 @@ tables:
         reconstruct:     0.4    # carried: the free, riskless route
         work:            0.4    # carried: presence converted into yield
         research:        0.3    # carried: the lower-cost, calculated route to a finding
-        repudiate:       0.5    # derived (re-homed from the old sacred cell): breaking a live commit -- the outcome over the bond
         oblige:         -0.3    # derived (re-homed from the old sacred cell): duty-taken has the vow-shape of `commit`
         tie / knot:     -0.4    # derived (re-homed from the old sacred cell): the consecrated bond -- binding oneself, as `commit`
         fight:           0.3    # derived: the attempt (ED-IN-0261)

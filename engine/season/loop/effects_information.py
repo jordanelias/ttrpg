@@ -459,15 +459,35 @@ def _eff_utter(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
     G4 -- WHAT IT NAMES: THE PROPOSITION, whole; it always moves (absent -> present), because an
     id already uttered is declined before anything is built (`NO_CHANGE` -> `act.refused`, the
-    fold's own kind, since the row declares no refusal -- as the old `None` produced)."""
+    fold's own kind, since the row declares no refusal -- as the old `None` produced).
+
+    v9 IN-11 (#453 §10.4 step 2) -- THE UTTERER HOLDS WHAT HE UTTERED. Beside the Proposition the
+    effect opens a `hold` Tenure owned by the actor whose object is the new Proposition, the
+    maker's-hold shape `_mint_document` already gives a Record (S13: possession is a `hold`, never
+    a field; `rosters.yaml: hold_object_kinds` admits a Proposition). It is what makes `commit`
+    reachable from computed play: a Proposition has no place (`world_q.place_of` answers `None`),
+    so until it is somebody's own edge no question can be ABOUT it -- `reach`'s limb 2 (every live
+    Tenure's object) is the one route, and Q2 then raises the utterer's own claim about the
+    Proposition as a question whose referent `commit`'s cell (`existence` of `subject` kind
+    `Proposition`) admits. The edge is the actor's own (`T-m`), like the Record maker's. NOT
+    NAMED as a subject, on `_mint_document`'s precedent: the receipt this write mints is the
+    Proposition's (`Proposition.exists`, the row's first pair), and naming the edge would mint a
+    `(tenure, Proposition.exists)` receipt for a write that pair never made (`_eff_confer`'s
+    ID-9 note); G3's tenure observation still judges it. What a hold costs is `H-92`'s (it buys
+    budget, `decision/budget.py`) -- registered, not decided here."""
     d = a.payload if isinstance(a.payload, dict) else {}
     pid = d.get("proposition") or f"prop:{a.id}"
     if pid in w.propositions:
         return NO_CHANGE                  # immutable: an utterance never overwrites one
     prop = Proposition(pid, d.get("mood") or "OUGHT", d.get("subject") or a.actor,
                        d.get("predicate") or "", d.get("value"), w.tick)
-    return Change((Subject.entity("propositions", pid),),
-                  lambda: w.propositions.__setitem__(pid, prop))
+    held = Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{pid}"),
+                  a.actor, pid, "hold", since=w.tick)
+
+    def perform() -> None:
+        w.propositions[pid] = prop
+        w.add_tenure(held)
+    return Change((Subject.entity("propositions", pid),), perform)
 
 
 @effect_for("commit")

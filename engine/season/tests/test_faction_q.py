@@ -245,7 +245,12 @@ def test_at_war_through_the_real_fold_utter_then_commit_then_release():
 
     kinds = _resolve_one(w, d, Act(id="c_20ii_atwar_release", actor=declarer, verb="release",
                                    payload={"subject": prop_id}))
-    assert kinds == ["tenure.closed"], f"peace (release) did not close cleanly: {kinds}"
+    # v9 IN-11 (R-3 (b), `repudiate` cut): a release that closes a `commit` also earns
+    # `commitment.ended` -- re-recorded from `["tenure.closed"]`. The declarer's own `hold` on the
+    # Proposition he uttered (IN-11's maker's hold) closes in the same act.
+    assert kinds == ["tenure.closed", "commitment.ended"], (
+        f"peace (release) did not close cleanly: {kinds}")
+    assert not [t for t in w.persons[declarer].tenures if t.object == prop_id and t.live]
 
     assert faction_q.at_war(w, "fac_crown", "fac_guilds") is False, (
         "at_war stayed True after the declaring commit was released -- peace is not being read")
