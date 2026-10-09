@@ -1091,6 +1091,16 @@ rows:
       carry R-01's realm paragraph's two instrument bounds. The status stays `partial`. WHAT WOULD
       OVERTURN THIS PARAGRAPH: a re-run whose act totals or content hash differ, or a `stance`
       writer a death or a witnessed claim can reach (`W-F`).
+      ⚠⚠ **v9 IN-18 G1 LANDED AT B-E (`ac9724fc`), SHIPPED LIVE: REGARD NOW DIFFERS BY WHAT A PERSON
+      HAS BEEN TOLD AND HAS JUDGED, NOT BY STORED STANCE ALONE.** `queries/person_q.py::regard` reads
+      stored stance + `judged_gain` x judged deeds + `told_valence_gain` x told valence, both gains
+      0.5 (H-192, H-193; the midpoint is an [ASSUMPTION]). THE REALM READER, RUN 2026-10-09 at
+      `ac9724fc`:
+      `engine/season/tests/test_told_by_channel.py::test_r07_realm_regard_differs_between_hearers_by_claim_not_stance_alone`
+      (`build_realm(0)`, two seasons) printed control (both gains 0) 0 of 11449 pairs differing
+      beyond stance, shipped arm 3270 of 11449. Regard is computed at read and writes no `stance`,
+      so the paragraph above stands (W-F spent, A-12). The status stays `partial`: SE-01 (B-F) and a
+      fought field (IN-13, B-M) remain on the row's path (v9 `_part2` R-07).
     measure: "python -m pytest engine/season/tests -k 'choose_receives_no_world or a_view or r7_two_persons'"
     blocks: [IN-38]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); W27: `17` landed, IN-38 remains
