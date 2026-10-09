@@ -497,15 +497,15 @@ rows:
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-44
     tier:      1
-    hole:      "[RE-SCOPED AT PLAN POSITION IN-09, NOT CLOSED] WHICH ACTS A DISPENSATION'S `terms` MAY NAME -- the NINE Dispensation term types, enumerated nowhere in the chain. ⚠ WHAT THIS ROW NO LONGER HOLDS: whether `comply` / `evade / defy` can EXECUTE. They did not wait on the nine types: under #453's hook (`proposals/2026-10-03-verb-coverage-and-gap-fill.md:502`) `comply` writes nothing itself and emits `compliance.given`, and what it performs is the separate `transfer` the writ names, so IN-09 typed the three rows (`comply`, `evade / defy`, `construe`) on the held writ (`existence` kind `dispensation` + `own_ledger`, `verb_table.yaml`) and they execute with no term-type row. WHAT STAYS OPEN HERE: the rows' `writes_note` *'per the term's own row'* still names rows that do not exist -- a writ's `terms` is one entity id (the issuing act's `subject`), so nothing says which act a term obliges, and a `comply` cannot be checked against the `transfer` (or any act) it should have caused [medium; Jordan to correct; revert: Jordan wants the nine types first, and they land as rows before the cells are typed]."
+    hole:      "the NINE Dispensation term types. `comply` / `evade` / `defy` write 'per the term's own row' -- rows that do not exist, and the nine types are enumerated nowhere in the chain"
     kind:      "SCHEMA_ROW ×9"
-    owner:     "the design (a static registry); the reader would be `verb_table.yaml`'s `comply` / `evade / defy` rows, which today emit only"
+    owner:     "the design (a static registry)"
     grade:     "absent"
     default:   "none"
     site:      ""
     sweep:     []
-    unblocks:  "a writ whose terms name an act, so compliance and its absence are checkable against what the executor did (#453 `:551-552`, *H-44 decides what compliance performs*)"
-    cite:      "re-scoped by plan position IN-09 (`workplans/valoria_master_workplan_v9_part5.md` IN-09; J-2 arm A, J-10)"
+    unblocks:  "unmeasured"
+    cite:      ""
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-45
     tier:      1
