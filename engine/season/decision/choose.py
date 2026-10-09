@@ -66,8 +66,25 @@ def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = 
     would regard its HOLDER; that operand needs a `held_by` claim, and M0g measured none (`H-195`).
 
     `memo` caches `regard` per subject for one deliberation: it depends on the subject and `p`'s
-    ledger alone, which do not change inside one `choose` call."""
+    ledger alone, which do not change inside one `choose` call.
+
+    THE GAIN (v9 IN-25, BOUND-STAKES, `H-202`): whatever the arm returns is read at `1 + g`, `g` the
+    swept `Fixtures.stance_gain`. §F2 gives the term weight 1 and no gain, so `g` is the weight the
+    term carries ABOVE §F2's, and `0` -- the CONTROL, SHIPPED -- returns the arm's value untouched.
+    It scales the SIGNED term, so under `declared` a grudge pulls `fight` on its object up and
+    `tell` about it down, both harder. A negative or NaN `g` raises: below 0 the term is damped
+    towards nothing and below -1 its sign flips, which is G2's polarity and not this gain."""
     # ABSENT: H-195 holder  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
+    g = fx.get("stance_gain")
+    if not g >= 0:                   # `not >=`, so a NaN is refused too
+        raise ValueError(f"stance_gain {g} is not >= 0: it would damp or invert §F2's stance "
+                         f"term, and inverting it is G2's polarity, not this gain (H-202)")
+    t = _stance_arm(p, c, fx, memo)
+    return t if g == 0 else (1.0 + g) * t
+
+
+def _stance_arm(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict]) -> float:
+    """`stance_term`'s value at gain 1: the arm `Fixtures.stance_polarity` names (H-194)."""
     subject = c.subject or ""
     arm = fx.get("stance_polarity")
     if arm == "legacy":

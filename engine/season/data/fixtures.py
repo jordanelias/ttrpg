@@ -713,6 +713,16 @@ DEFAULT_FIXTURES = Fixtures(
     # on which ships, and `declared` moves the realm.
     # [JUSTIFIED: engine/season/hole_register.yaml H-194 -- the polarity arm; §F2 gives the term and no sign by role, so the readings are declared and swept legacy / regard / declared]
     stance_polarity="legacy",          # `H-194`, swept legacy (control, SHIPPED) / regard / declared
+    # `H-202` (v9 IN-25, BOUND-STAKES). HOW HARD §F2's STANCE TERM PULLS ON A CHOICE: the term
+    # `stance_polarity` signs is read at `1 + this` (`decision/choose.py::stance_term`), so a grudge
+    # or a judged deed outweighs a person's pursuits sooner as it rises. §F2 weights the term 1 and
+    # states no gain, so this is the weight above §F2's; swept beside `field_morale_weight`/
+    # `field_grudge_weight` (`H-148`), which set how much stance a lost field WRITES while this sets
+    # how much the written stance WEIGHS. `0` is the CONTROL and is SHIPPED [ASSUMPTION], on
+    # `H-190`'s precedent: the plan names 0 as today's hash and is silent on shipping a live gain,
+    # and a live gain moves the realm. At 0 the term is the pre-IN-25 one exactly. Must be >= 0.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-202 -- the stance term's gain; §F2 gives the term and no gain, and the dukes' and Church's rising stakes have no rate, so it is injected and swept 0 / 1 / 3]
+    stance_gain=0.0,                   # `H-202`, swept 0 (control, SHIPPED) / 1 / 3
     # `H-196` (v9 IN-18 `G3`, slant). WHAT A TELLER PASSES ON ABOUT A SUBJECT: `newest` is the
     # pre-G3 pick; `valence` passes on the deed the teller judges most strongly by their own
     # pursuits, however old (`queries/person_q.py::said_of`; `rosters.yaml: said_slants`). `newest`
