@@ -6,7 +6,7 @@ emission is never distorted. REFRACTION (`decision/options.py::refracted_confide
 
     confidence' = floor(confidence * (1 - g*remove(channel)) * (1 - g*dissent) * competence + 1/2)
 
-with `g` = `refraction_gain` (`H-199`, shipped at its control 0), `remove` the channel's source's place
+with `g` = `refraction_gain` (`H-199`, control 0, shipped live at 0.5), `remove` the channel's source's place
 in the ordinal of remove, `dissent` the receiver's firsthand prior disagreeing -- or, for the
 event-kind and `seen` deposits of an act's own emission, the receiver's ledger making the act's
 `requires` known-false for its ACTOR (`H-201`, the `test_h201_*` tests) -- `competence` 1 (`H-200`,
@@ -71,8 +71,10 @@ def _told(w, pid):
             and (c.subject, c.predicate) == ("Hh", "stores:grain")]
 
 
-def test_in15_the_shipped_gain_is_the_control():
-    assert DEFAULT_FIXTURES.get("refraction_gain") == 0, "the shipped gain moved: restate H-199"
+def test_in15_the_shipped_gain_is_live_at_the_sweep_midpoint():
+    """Shipped LIVE per Jordan's 2026-10-09 ruling (*"Gains are improvements and therefore ship."*);
+    the control 0 is set explicitly by every arm below that means it."""
+    assert DEFAULT_FIXTURES.get("refraction_gain") == 0.5, "the shipped gain moved: restate H-199"
 
 
 def test_in15_channel_remove_is_the_ordinal_of_remove_read_off_the_roster():

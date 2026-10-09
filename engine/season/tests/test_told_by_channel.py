@@ -1882,19 +1882,20 @@ def _r07_pairs(w, fx):
 
 def test_r07_realm_regard_differs_between_hearers_by_claim_not_stance_alone():
     """R-07'S REALM READER (v9 IN-18 EXIT, `_part2` R-07): a two-season `build_realm(0)` run at G1's
-    LIVE arm (`judged_gain`, `told_valence_gain` 0.5, the sweep midpoint) reads `regard(p, C)` for
-    every pair of persons holding a claim about one `C`, and at least one pair's regard differs
-    because of a claim (or a teller) and not from stored stance alone; the same run at G1's CONTROL
-    arm -- both gains 0, the shipped fixtures -- shows no such pair, while reading at least as many.
+    LIVE arm -- the SHIPPED fixtures, `judged_gain` and `told_valence_gain` 0.5 (the sweep midpoint,
+    shipped live per Jordan's 2026-10-09 ruling) -- reads `regard(p, C)` for every pair of persons
+    holding a claim about one `C`, and at least one pair's regard differs because of a claim (or a
+    teller) and not from stored stance alone; the same run at G1's CONTROL arm -- both gains set to
+    0 explicitly, every other fixture shipped -- shows no such pair, while reading at least as many.
 
     MUTATION (run 2026-10-09, IN-18): `regard` returning the stored half whatever `fx` reddens the
     live arm's `differ >= 1`. Restored, GREEN."""
     from ..data.fixtures import DEFAULT_FIXTURES
-    assert DEFAULT_FIXTURES.get("judged_gain") == 0 and DEFAULT_FIXTURES.get("told_valence_gain") == 0, (
-        "G1 no longer ships at its control: restate this test's control arm")
+    assert DEFAULT_FIXTURES.get("judged_gain") == 0.5 and DEFAULT_FIXTURES.get("told_valence_gain") == 0.5, (
+        "G1's shipped gains moved: restate this test's live arm")
     out = {}
-    for arm, fx in (("control", DEFAULT_FIXTURES),
-                    ("live", _g1_fx(0.5, 0.5))):
+    for arm, fx in (("control", _g1_fx(0.0, 0.0)),
+                    ("live", DEFAULT_FIXTURES)):
         w = populated.build_realm(0)
         w.fixtures = fx
         populated.run(2, 0, w=w)
@@ -1963,15 +1964,20 @@ def test_g2_a_grudge_raises_fight_on_its_object_under_declared_not_legacy(monkey
     checked += 1
     p = Person(id="p_g2", name="p_g2")
     p.stance = list(grudge)
+    # The term's SIGN at the CONTROL gains, set explicitly: `stance_gain` (H-202) and G1's two gains
+    # (H-192/H-193) ship live (Jordan, 2026-10-09), and this test reads polarity, not magnitude --
+    # `test_in25_stance_gain.py` owns the gain's scaling.
+    ctl = (DEFAULT_FIXTURES.sweep("stance_gain", 0.0).sweep("judged_gain", 0.0)
+           .sweep("told_valence_gain", 0.0))
     for arm in ("legacy", "declared"):
-        fx = DEFAULT_FIXTURES.sweep("stance_polarity", arm)
+        fx = ctl.sweep("stance_polarity", arm)
         # a row NOT contested against its subject keeps the sign: telling about the disliked
         assert stance_term(p, Candidate("tell", "p_x"), fx) == -3.0
         # a Rung subject reads 0 on both arms: its holder is the absent operand (H-195)
         assert stance_term(p, Candidate("march", "R"), fx) == 0.0
-    assert stance_term(p, Candidate("fight", "p_x"), DEFAULT_FIXTURES.sweep("stance_polarity", "declared")) == 3.0
+    assert stance_term(p, Candidate("fight", "p_x"), ctl.sweep("stance_polarity", "declared")) == 3.0
     # the `regard` midpoint: G1's regard, no sign -- at G1's control gains it is the legacy term
-    assert stance_term(p, Candidate("fight", "p_x"), DEFAULT_FIXTURES.sweep("stance_polarity", "regard")) == -3.0
+    assert stance_term(p, Candidate("fight", "p_x"), ctl.sweep("stance_polarity", "regard")) == -3.0
     assert checked >= 1
 
 

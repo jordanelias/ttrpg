@@ -1,6 +1,7 @@
 """v9 IN-25 (BOUND-STAKES, `workplans/valoria_master_workplan_v9_part5.md`) -- a gain on `score`'s
 stance term: `decision/choose.py::stance_term` reads the term `stance_polarity` signs (IN-18 G2,
-H-194) at `1 + g`, `g` the swept `Fixtures` arm `stance_gain` (H-202; control `0`, shipped).
+H-194) at `1 + g`, `g` the swept `Fixtures` arm `stance_gain` (H-202; control `0`; shipped live at
+`1` per Jordan's 2026-10-09 ruling, so every arm here sets `g` explicitly).
 
 THE FALSIFIER, executed and able to fail:
   * a planted person whose pursuits pull one candidate above another, holding stance toward the
@@ -63,7 +64,7 @@ def _ranking(g: float, share: float, monkeypatch) -> tuple:
 def test_in25_the_gain_reverses_a_ranking_the_control_keeps(monkeypatch):
     """MUTATION (run 2026-10-09, IN-25): `stance_term`'s gain dropped (`return t` on every arm)
     reddens the arm-1 and arm-3 assertions. Restored, GREEN."""
-    assert DEFAULT_FIXTURES.get("stance_gain") == 0, "the shipped arm moved: restate"
+    assert DEFAULT_FIXTURES.get("stance_gain") == 1, "the shipped arm moved: restate"
     checked = 0
     control, hi, lo = _ranking(0.0, 0.6, monkeypatch)
     assert control == [hi, lo], f"the control arm did not keep the pursuit dot's order: {control}"
@@ -89,7 +90,8 @@ def test_in25_the_gain_scales_the_signed_term_on_every_polarity_arm():
     checked = 0
     assert len(CH.STANCE_POLARITIES) >= 3, CH.STANCE_POLARITIES
     for polarity in CH.STANCE_POLARITIES:
-        base = DEFAULT_FIXTURES.sweep("stance_polarity", polarity)
+        # the CONTROL, explicitly: `t0` is the un-gained term only at `stance_gain` 0
+        base = DEFAULT_FIXTURES.sweep("stance_polarity", polarity).sweep("stance_gain", 0.0)
         for verb in ("fight", "tell"):
             c = Candidate(verb, "p_x")
             t0 = CH.stance_term(p, c, base)
