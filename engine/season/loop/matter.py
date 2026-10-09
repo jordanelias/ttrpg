@@ -365,8 +365,8 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     #     no rung, so no write carries the gap. The emission is the CROSSING into dearth, not the
     #     state: once a place has run dry and been reported, its next empty season is silent, like a
     #     band that is crossed once.
-    #   * A GOVERNOR WHO NEITHER STANDS AT THE RUNG NOR HOLDS IT. Purview is a term of `reach`
-    #     (Q2's filter), not a witness channel, so a claim never deposited cannot be admitted.
+    #   * (LIFTED at v9 IN-22; `world_q.governors_of`, `witness.py::SEAT_CHANNEL`.) A GOVERNOR WHO
+    #     NEITHER STANDS AT THE RUNG NOR HOLDS IT: WITNESS now deposits this record into every live seat whose purview contains it.
     # The value is the SUBTREE's gap (`demanded(w, S) - delivered(w, S)`), not only the part owed by
     # eaters whose walk ended at `S`. It counts people under `S` fed short by a larder below `S`,
     # and so NESTS: a hearth larder and its settlement's can both report one hungry household. That

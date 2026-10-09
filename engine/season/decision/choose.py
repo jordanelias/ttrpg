@@ -32,21 +32,78 @@ from __future__ import annotations
 
 import math as _math
 from typing import Any, Callable, Optional
-from ..data.rosters import PURSUIT_AXES, SCENE_PACKING_RULES, require_member
+from ..data.rosters import PURSUIT_AXES, SCENE_PACKING_RULES, require_member, roster
 # `PURSUIT_PROJECTION` / `PROJECTION_DEFAULT_CELL` were imported here until 2026-09-16 and
 # are not any more: the loop that read the 13x4 moved into `data/pursuits.to_axes`, its
 # single owner. Keeping the imports declared a dependency this module no longer has.
 from ..data.verbs import VERB_TABLE, act_key, align
 from ..gaps import Unspecified
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
-# imports `person_q` and `data/`); `make_chooser`'s score calls it, and `confliction` (IN-08 6f,
+# imports `person_q` and `data/`); `_stance_arm` calls it, and `confliction` (IN-08 6f,
 # the derived Query's caller, ID-13).
-from ..queries.person_q import confliction, stance_toward
+from ..queries.person_q import confliction, intent_named, intent_said, regard, stance_toward
 from ..state.carriers import Act, Candidate, Person, Question, Scene, Sensation, View
 # `project` is DEFINED in `options.py` (see this module's docstring) and imported here because
 # `make_chooser`'s score calls it; `options` never imports this module.
 # `exercised_seat` is `options.py`'s own G3 helper (`via=exercised_seat(...)`, below).
-from .options import exercised_seat, opening_set, project
+from .options import exercised_seat, opening_set, project, subject_is_opponent
+
+STANCE_POLARITIES = roster("stance_polarities")
+
+
+def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = None) -> float:
+    """§F2's SECOND TERM, by `Fixtures.stance_polarity` (v9 IN-18 `G2`, `H-194`).
+
+      * `legacy` (CONTROL, shipped): `stance_toward(p, c.subject)` -- the pre-G2 term, verbatim.
+      * `regard`: `regard(p, c.subject, fx)` with `+` on every row -- G1's regard and no polarity,
+        the midpoint that separates what regard adds from what the sign adds.
+      * `declared`: `regard(p, c.subject, fx)`, NEGATED where the subject is the act's opponent
+        (`options.subject_is_opponent`): a grudge makes `fight` on its object score higher, where
+        `legacy` scored it lower. Every other row keeps `+`, so the arms differ on contested rows
+        only. `regard` is G1's, so its judged and told halves enter at their own gains
+        (0.5 each, shipped).
+
+    A Rung subject reads 0 at G1's control; at live gains it reads the deed claims held about it
+    (`transfer.made` on a changed rung, under `claim_subject_rule: both`) -- nobody holds stance
+    about a rung -- where the ROLE reading would regard its HOLDER; that operand needs a `held_by`
+    claim, and M0g measured none (`H-195`).
+
+    `memo` caches `regard` per subject for one deliberation: it depends on the subject and `p`'s
+    ledger alone, which do not change inside one `choose` call.
+
+    THE GAIN (v9 IN-25, BOUND-STAKES, `H-202`): whatever the arm returns is read at `1 + g`, `g` the
+    swept `Fixtures.stance_gain`. §F2 gives the term weight 1 and no gain, so `g` is the weight the
+    term carries ABOVE §F2's, and `0` -- the CONTROL (`1` ships, H-202) -- returns the arm's value
+    untouched. It scales the SIGNED term, so under `declared` a grudge pulls `fight` on its object
+    up and `tell` about it down, both harder. A negative or NaN `g` raises: below 0 the term is damped
+    towards nothing and below -1 its sign flips, which is G2's polarity and not this gain."""
+    # ABSENT: H-195 holder  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
+    g = fx.get("stance_gain")
+    if not g >= 0:                   # `not >=`, so a NaN is refused too
+        raise ValueError(f"stance_gain {g} is not >= 0: it would damp or invert §F2's stance "
+                         f"term, and inverting it is G2's polarity, not this gain (H-202)")
+    t = _stance_arm(p, c, fx, memo)
+    return (1.0 + g) * t             # at g == 0 this is 1.0 * t: exact for every float
+
+
+def _stance_arm(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict]) -> float:
+    """`stance_term`'s value at §F2's weight (gain 0): the arm `Fixtures.stance_polarity` names (H-194)."""
+    subject = c.subject or ""
+    arm = fx.get("stance_polarity")
+    if arm == "legacy":
+        return stance_toward(p, subject)
+    require_member(arm, STANCE_POLARITIES, f"stance polarity {arm!r} is not in the roster", "H-194",
+                   law="§G -- declare it, default it, sweep it; an unknown arm silently reading "
+                       "`legacy` would make the sweep report the control twice")
+    if memo is None:
+        memo = {}
+    if subject not in memo:
+        memo[subject] = regard(p, subject, fx)
+    r = memo[subject]
+    if arm == "regard":
+        return r
+    row = VERB_TABLE.get(c.verb)
+    return -r if row is not None and subject_is_opponent(row) else r
 
 
 def beneficiary_of(p: Person, c: Candidate) -> Optional[str]:
@@ -340,9 +397,12 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
             raise ValueError(f"confliction_weight {k} is not >= 0: it would invert, divide by zero "
                              f"or poison the score (H-188)")
         damp = 1.0 if k == 0 else 1.0 / (1.0 + k * confliction(p))
+        # v9 IN-18 `G2`: term 2 by the role the subject plays (`stance_term`; `legacy` is the
+        # pre-G2 `stance_toward(p, c.subject)`). `memo` holds one regard per subject per call.
+        memo: dict = {}
         def score(c: Candidate) -> float:
             return (damp * sum(axis_w[ax] * align(c.verb, ax) for ax in PURSUIT_AXES)
-                    + stance_toward(p, c.subject or "")
+                    + stance_term(p, c, fx, memo)
                     + u)
         # ⚠ SCORED ONCE, NOT TWICE. `score` was passed to `_sample_order` and re-invoked there for
         # every candidate it had just been invoked for in this sort key — measured by a `/simplify`
@@ -368,8 +428,70 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         # releases `scenes_per_round` of it per round (`H-124`). Nothing is discarded, so S26.3's
         # *the engine never truncates* is untouched -- what the round bounds is WHEN a chosen scene
         # runs, not WHETHER.
-        return pack_scenes(p, ranked, ask_budget(), fx, mint, occasion=q)
+        # Telling `T7` (G9): what the person has chosen is known HERE, whole, before any of it runs,
+        # so this is where a telling may declare a later chosen act. `intent_disclosure` 0 returns
+        # the scenes untouched.
+        return declare_intents(p, pack_scenes(p, ranked, ask_budget(), fx, mint, occasion=q),
+                               fx, draw)
     return choose
+
+
+def declare_intents(p: Person, scenes: list, fx: "Fixtures", draw=None) -> list:
+    """TELLING `T7` (G9, declared intent; v9 IN-16, `ED-IN-0282`): A TELLER MAY TELL A HEARER AN ACT
+    THEY HAVE CHOSEN AND NOT YET DONE.
+
+    `scenes` is the person's own triage, in the order the driver releases it (`pack_scenes`; the
+    driver runs at most `scenes_per_round` of it per round and queues the rest). An act in a LATER
+    scene than a telling is one the person has chosen and that has not run when the telling does.
+    For each act carrying a `said` (a telling: the payload key `opening_set` sets on a NAMED
+    own-ledger conjunct, never a verb name), the first act in a later scene that NAMES THE TELLING'S
+    TOPIC -- the topic is the teller (a self-telling, Decision 3), or one of the ids the act binds
+    under `rosters.yaml: intent_claim` -- is the intent it may declare. With chance
+    `intent_disclosure` (`H-190`; one draw keyed by the telling's own id, so no other stream moves)
+    the telling's `said` becomes `person_q.intent_said(...)`, and the told deposit lands
+    `(teller, intent:<verb>, ((name, id), ...))` in each hearer's ledger. What the teller held about
+    the topic is not told by THAT telling; nothing is deleted from anybody's ledger.
+
+    ⚠ `0` RETURNS `scenes` UNTOUCHED AND TAKES NO DRAW: the control is the pre-`T7` chooser by
+    construction, and the realm test observes it. ⚠ NOTHING CHECKS THAT THE ACT IS LATER DONE: the
+    driver may re-deliberate and replace the queue, the fold may refuse the act, or the act may be
+    one the driver drops as already realised this season (`loop/deliberate.py::
+    _drop_what_was_already_done`, which this person-side function cannot see, AX-2). Reconciling a
+    declared intent against what was done is `H-191`, absent. A missing `draw` at a non-zero rate
+    RAISES rather than declaring every intent or none (`_sample_order`'s precedent).
+
+    ⚠ *not yet done* holds at `scenes_per_round` 1 (shipped, H-124); at 2 or 5 a later scene can
+    release in the telling's own round."""
+    rate = float(fx.get("intent_disclosure"))
+    if not 0 <= rate <= 1:           # `not ... <=`, so a NaN is refused too
+        raise ValueError(f"intent_disclosure {rate} is not a chance in [0, 1] (H-190)")
+    if rate == 0:
+        return scenes
+    conf = fx.get("confidence_default")
+    for i, sc in enumerate(scenes):
+        for a in sc.acts:
+            pay = a.payload if isinstance(a.payload, dict) else None
+            if pay is None or pay.get("said") is None:
+                continue
+            topic = pay.get("subject")
+            intent = None
+            for later in (b for s in scenes[i + 1:] for b in s.acts):
+                said = intent_said(p.id, later.verb, later.payload, conf)
+                if topic == p.id or topic in intent_named(said):
+                    intent = said
+                    break
+            if intent is None:
+                continue
+            if draw is None:
+                raise Unspecified(
+                    "the intent-disclosure draw", "H-190",
+                    needs=f"`make_chooser(fx, mint, verbs, draw)` with a draw at "
+                          f"intent_disclosure={rate}",
+                    law="T7/H-190 -- whether a telling declares an intent is a CHANCE; a chooser "
+                        "with no draw would answer every telling alike")
+            if draw(p.id, f"intent:{a.id}").random() < rate:
+                a.payload = {**pay, "said": intent}
+    return scenes
 
 
 def _payload_of(c: "Candidate") -> Optional[dict]:

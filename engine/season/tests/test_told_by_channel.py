@@ -270,7 +270,19 @@ def test_15d_falsifier_the_realm_holds_hearsay_no_telling_minted(monkeypatch):
     #   chained, after      0   0   0   0   4   0   0   0    7   0
     # Seed 4 is the lowest seed with more than one; the mechanism by which the count moved per seed
     # is NOT isolated, as before. The assertions below are unmoved.
-    SEED = 4
+    # ⚠ RE-PINNED SEED 4 -> 18 AT `H-160` LIMIT 1 (IN-22's paying half), BY THE SAME RULE. THIS TIME
+    # THE MECHANISM IS ISOLATED: seed 4's four chained claims were all one telling of
+    # `(b_s_036_cathedral, stores:grain, 0)` by `p_npc_037`, a read he held from his OWN REFUSED
+    # `transfer` out of that hearth. `transfer`'s first alternative is now `remit:issue`, so a seated
+    # holder gives through his seat out of its rung -- his refused transfer reads `terr_T1` instead,
+    # and the hearth-stores telling is gone. Seed 4's acts are otherwise the same list (604 resolved,
+    # 7 rows differ, every one a seated holder's `transfer`, still refused). The same quantity, the
+    # same script, on the tree after:
+    #   seed                0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17  18
+    #   chained, after      0  0  0  0  0  0  0  0  0  0   0  0  0  0  0  0  0  0   9
+    # Seed 18 is the lowest seed with more than one, and reads 9 on the tree before too. Unchained
+    # `told_by` is unchanged at seeds 0-9. The assertions below are unmoved.
+    SEED = 18
 
     def told_by_count() -> tuple:
         w = populated.build_realm(SEED)
@@ -577,9 +589,9 @@ def test_t3_opening_set_hands_clause_4_the_teller_weight(monkeypatch):
     seen = []
     real = O.belief_contradicts
 
-    def spy(pp, row, subject, operands, via=None, weigh=None):
+    def spy(pp, row, subject, operands, via=None, weigh=None, actor=None):
         seen.append(weigh)
-        return real(pp, row, subject, operands, via, weigh=weigh)
+        return real(pp, row, subject, operands, via, weigh=weigh, actor=actor)
 
     monkeypatch.setattr(O, "belief_contradicts", spy)
 
@@ -1500,3 +1512,570 @@ def test_t6_a_seen_pair_and_an_event_kind_pair_are_not_scored():
     assert rec("news.told", True, True) == 1.0, "an event-kind pair was scored"
     assert rec("stores:grain", 5, 0) == 0.5, "the control: a disagreeing cell pair does not register"
     assert rec("stores:grain", 5, 5) == 1.5, "the control: an agreeing cell pair does not register"
+
+
+# ---------------------------------------------------------------------------------------------
+# T7 (v9 IN-16, G9 declared intent, `ED-IN-0282`; `H-190`, `H-191`): A TELLER MAY TELL A HEARER AN
+# ACT THEY HAVE CHOSEN AND NOT YET DONE. `decision/choose.py::declare_intents` swaps a telling's
+# `said` for `queries/person_q.py::intent_said(...)` with chance `intent_disclosure` (control 0,
+# shipped 0); the told deposit lands `(teller, intent:<verb>, ((name, id), ...))` in each hearer's
+# ledger; `queries/world_q.py::named` reads the ids back for `questions_for`'s clause 3.
+# ---------------------------------------------------------------------------------------------
+
+class _T7Always:
+    """A draw stream whose every draw discloses (`random() < rate` for any rate > 0)."""
+
+    def random(self):
+        return 0.0
+
+
+def _t7_scenes(w, teller, topic, later, same_scene=()):
+    """`teller`'s own triage as `pack_scenes` returns it: scene 0 a telling about `topic` to
+    `p_high`, carrying what the teller holds about it (`said_of`, as `opening_set` sets it), plus
+    `same_scene` acts beside it; then one scene per `(verb, payload)` in `later` -- acts the teller
+    has chosen and that have not run."""
+    from ..state.carriers import Scene
+    p = w.persons[teller]
+    said = said_of(p.ledger, topic, w.fixtures)
+    assert said is not None, f"{teller} holds nothing about {topic}: the telling would not form"
+    tell = Act(f"a_t7_tell_{topic}", teller, "tell",
+               payload={"subject": topic, "to": "p_high", "said": said})
+    first = [tell] + [Act(f"a_t7_same_{n}", teller, v, payload=pay)
+                      for n, (v, pay) in enumerate(same_scene)]
+    scenes = [Scene("sc_t7_0", teller, first)]
+    for n, (verb, pay) in enumerate(later, 1):
+        scenes.append(Scene(f"sc_t7_{n}", teller, [Act(f"a_t7_{n}", teller, verb, payload=pay)]))
+    return p, tell, scenes
+
+
+def _t7_hear(w, act):
+    """One telling through the REAL WITNESS barrier (`_t5_world`'s drive, with the act built by the
+    caller): whoever stands with the teller hears it."""
+    d = SeasonDriver(w)
+    w.tick += 1
+    w.acts.append(act)
+    ev = Event(H(w.world_seed, w.tick, act.actor, f"ev:news.told:{act.id}"), "news.told",
+               [], [act.id], w.tick, "Success", ())
+    w.log.append(ev)
+    d.act_of[ev.id] = act
+    d.witness(mint_token(w, WriteClass.INTERIOR), [ev])
+
+
+def _t7_own(w, pid, subject, value=7):
+    w.persons[pid].ledger.append(
+        Claim(f"c_t7_{pid}_{subject}", pid, subject, "stores:grain", value, 0, "firsthand", 100, "own"))
+
+
+def test_t7_a_hearer_holds_the_tellers_chosen_not_done_act():
+    """THE PLAN'S FALSIFIER, ABOVE 0. `p_mid` holds a claim about `Hh` and has chosen, this season, a
+    telling about `Hh` (scene 0) and a `transfer` out of `Hh` (scene 1, not yet run). At
+    `intent_disclosure` 1.0 the telling's `said` becomes the intent, and every hearer -- the people
+    standing with `p_mid` -- holds `(p_mid, intent:transfer, (("subject", "Hh"), ("to", "S")))` as a
+    `told_by` claim whose chain is the teller; the `transfer` is in no act store and no log when they
+    hear it. THE CONTROL is the same triage at 0: the telling passes on the held `stores:grain`
+    claim, as before `T7`, and nobody holds an intent.
+
+    MUTATION (run 2026-10-09, `T7`): `declare_intents`' swap line deleted (`a.payload = ...`) -- the
+    1.0 arm deposits the `stores:grain` claim and this goes RED on the `said` assertion. Restored,
+    GREEN."""
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..decision.choose import declare_intents
+    from ..queries.person_q import INTENT_STEM
+    from ..state.ids import draw_factory
+
+    teller = "p_mid"
+    held = {}
+    for rate in (0.0, 1.0):
+        w, _tell, _told = _t5_world()
+        _t7_own(w, teller, "Hh")
+        p, tell, scenes = _t7_scenes(w, teller, "Hh", [("transfer", {"subject": "Hh", "to": "S"})])
+        before = tell.payload["said"]
+        assert before.predicate == "stores:grain" and before.subject == "Hh"
+        fx = DEFAULT_FIXTURES.sweep("intent_disclosure", rate)
+        assert declare_intents(p, scenes, fx, draw_factory(w.world_seed, lambda: w.tick)) is scenes
+        said = tell.payload["said"]
+        assert not any(a.actor == teller and a.verb == "transfer" for a in w.acts)
+        assert not any(e.kind.startswith("transfer") for e in w.log)
+        _t7_hear(w, tell)
+        held[rate] = {pid: [(c.subject, c.predicate, c.value, c.source, c.chain) for c in q.ledger
+                            if str(c.predicate).startswith(f"{INTENT_STEM}:")]
+                      for pid, q in w.persons.items()}
+        if rate == 0.0:
+            assert said is before, "the control touched the telling's `said`"
+            assert not any(held[rate].values()), f"an intent was held at the control: {held[rate]}"
+            told = [pid for pid, q in w.persons.items()
+                    if any(c.predicate == "stores:grain" and c.chain == (teller,) for c in q.ledger)]
+            assert told, "the control's telling reached nobody, so its silence proves nothing"
+            continue
+        want = (teller, f"{INTENT_STEM}:transfer", (("subject", "Hh"), ("to", "S")), "told_by",
+                (teller,))
+        assert said == Said(teller, want[1], want[2], DEFAULT_FIXTURES.get("confidence_default"), ())
+        checked = 0
+        for pid, rows in held[rate].items():
+            if pid == teller:
+                assert rows == [], "the teller deposited their own intent"
+                continue
+            if rows:
+                assert rows == [want], (pid, rows)
+                checked += 1
+        assert checked >= 1, "no hearer holds the declared intent"
+
+
+def test_t7_the_intent_is_the_first_later_act_that_names_the_topic():
+    """WHICH CHOSEN ACT IS DECLARED. A telling about `Hh` sits in scene 0 beside a `move` naming `Hh`
+    (the SAME scene: it runs with the telling, so it is not "not yet done"); scene 1 is a `move` to
+    `S` (does not name `Hh`); scene 2 a `transfer` out of `Hh`. The intent is the `transfer`. A
+    SELF-telling (topic = the teller, Decision 3) declares the first later act whatever it names:
+    the `move` to `S`. A telling in the last scene has no later act and is untouched.
+
+    MUTATION (run 2026-10-09, `T7`, with the first test's): the swap line deleted -- RED on the
+    first `predicate` assertion. Restored, GREEN."""
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..decision.choose import declare_intents
+
+    fx = DEFAULT_FIXTURES.sweep("intent_disclosure", 1.0)
+    always = lambda _pid, _purpose: _T7Always()
+    later = [("move", {"subject": "S"}), ("transfer", {"subject": "Hh", "to": "S"})]
+    w = P.tiny_world()
+    _t7_own(w, "p_mid", "Hh")
+    _t7_own(w, "p_mid", "p_mid")
+    p, tell, scenes = _t7_scenes(w, "p_mid", "Hh", later, same_scene=[("move", {"subject": "Hh"})])
+    declare_intents(p, scenes, fx, always)
+    assert tell.payload["said"].predicate == "intent:transfer", tell.payload["said"]
+    p, tell, scenes = _t7_scenes(w, "p_mid", "p_mid", later)
+    declare_intents(p, scenes, fx, always)
+    assert tell.payload["said"].predicate == "intent:move", tell.payload["said"]
+    assert tell.payload["said"].value == (("subject", "S"),)
+    p, tell, scenes = _t7_scenes(w, "p_mid", "Hh", [])
+    before = tell.payload["said"]
+    declare_intents(p, scenes, fx, always)
+    assert tell.payload["said"] is before, "a telling with no later act declared something"
+
+
+def test_t7_an_intent_names_its_target_into_the_hearers_question():
+    """THE `world_q` BRANCH. `p_low` holds, as a fresh `told_by` claim, that `x_far` -- an id with no
+    place and outside `p_low`'s reach -- intends to `fight` `p_low`. `named` returns `("p_low",)`, so
+    `questions_for`'s clause 3 raises a `claim_landed` question about `x_far`. THE CONTROL is the
+    same claim, same value, under a cell predicate: `named` returns `()` and no question forms, so
+    the question is the intent branch's and not clause 1 or 2's.
+
+    MUTATION (run 2026-10-09, `T7`): `named`'s intent branch disabled (`if False:`) -- `named`
+    returns `()` for the intent claim and this goes RED. Restored, GREEN."""
+    from ..queries.world_q import named, questions_for
+
+    for predicate, want in (("intent:fight", ("p_low",)), ("stores:grain", ())):
+        w = P.tiny_world()
+        low = w.persons["p_low"]
+        c = Claim("c_t7_intent", "p_low", "x_far", predicate, (("subject", "p_low"),), w.tick,
+                  "told_by", 100, "own", 0, chain=("x_far",))
+        low.ledger.append(c)
+        assert named(c) == want, (predicate, named(c))
+        qs = [q for q in questions_for(w, low) if q.about == c.id]
+        if want:
+            assert [(q.source, q.referents) for q in qs] == [("claim_landed", ("x_far",))], qs
+        else:
+            assert qs == [], f"the control claim raised a question by another clause: {qs}"
+
+
+def test_t7_the_claim_kind_and_the_rate_refuse_what_they_cannot_mean():
+    """`intent_disclosure` is a chance: outside [0, 1] (or NaN) it raises, and a non-zero rate with a
+    telling to declare and no draw raises rather than declaring every intent or none; at 0 nothing
+    is read, so no draw is needed. The claim kind's stem is refused at import if another reader
+    already answers it -- a `requires` stem, the `seen` predicate, the `content:` predicate, an
+    emitted event kind -- or if it carries a colon, and a carried name that is no operand refuses."""
+    import pytest
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..data.requires import REQUIRES_OPERANDS, REQUIRES_STEMS
+    from ..data.rosters import RECORD_CONTENT
+    from ..decision.choose import declare_intents
+    from ..gaps import Unspecified
+    from ..queries.person_q import INTENT_NAMES, INTENT_STEM, _check_intent_claim
+
+    w = P.tiny_world()
+    _t7_own(w, "p_mid", "Hh")
+    p, _tell, scenes = _t7_scenes(w, "p_mid", "Hh", [("transfer", {"subject": "Hh"})])
+    for bad in (-0.1, 1.5, float("nan")):
+        with pytest.raises(ValueError):
+            declare_intents(p, scenes, DEFAULT_FIXTURES.sweep("intent_disclosure", bad), None)
+    with pytest.raises(Unspecified):
+        declare_intents(p, scenes, DEFAULT_FIXTURES.sweep("intent_disclosure", 0.5), None)
+    assert declare_intents(p, scenes, DEFAULT_FIXTURES.sweep("intent_disclosure", 0.0), None) is scenes
+    taken = {SEEN_PREDICATE, RECORD_CONTENT.get("predicate"), "news.told"}
+    _check_intent_claim(INTENT_STEM, INTENT_NAMES, REQUIRES_STEMS, REQUIRES_OPERANDS, taken)
+    for stem in ("stores", SEEN_PREDICATE, RECORD_CONTENT.get("predicate"), "news.told", "intent:x", ""):
+        with pytest.raises(ValueError):
+            _check_intent_claim(stem, INTENT_NAMES, REQUIRES_STEMS, REQUIRES_OPERANDS, taken)
+    with pytest.raises(ValueError):
+        _check_intent_claim(INTENT_STEM, ("subject", "bogus"), REQUIRES_STEMS, REQUIRES_OPERANDS, taken)
+
+
+def test_t7_intent_disclosure_zero_is_the_control_on_the_realm(monkeypatch):
+    """THE PLAN'S FALSIFIER, AT 0. `build_realm(0)`, one season, run twice: once through the shipped
+    chooser at `intent_disclosure` 0, once with `declare_intents` excised (the pre-`T7` chooser,
+    which returned `pack_scenes`' scenes as they were). Equal in BOTH observables: the
+    `content_hash()`, and what every act in the store CARRIED -- `(act id, said)` -- because a
+    payload is not hashed (`T1`), and in the realm's first season every telling that carries an
+    intent is refused (`news.untold`), so a leak at 0 moves the said and not the hash (scratch
+    `t7_arms.py`: the one-season hash is d0015936 at 0, 0.5 and 1.0; at three seasons 0.5 moves it).
+    [GROUNDED: measured 2026-10-09 on the pre-rebase base a59d52f9 (off HEAD's first-parent line,
+    reachable only through the merge 48991c37), BEFORE T7's first edit:
+    `build_realm(0)` 5b8618f2..., one season d0015936..., three seasons 43b1fac8...; after T7, at
+    `intent_disclosure` 0, d0015936 and 43b1fac8 again -- scratch, not re-read here.]
+    The control is NOT VACUOUS: the shipped arm's `declare_intents` is spied, and on a COPY of each
+    triage the same rule at 1.0 (a draw that always discloses) counts the tellings that had a
+    chosen-not-done act to declare (`checked >= 1`); at least one telling in the store carries a
+    `said` (so the said comparison compares something).
+
+    MUTATION (run 2026-10-09, `T7`): the `rate == 0` early return deleted and the draw test made
+    `<=` (every opportunity declares at 0) -- the hashes still match and this goes RED on the
+    `said` comparison. Restored, GREEN."""
+    import copy
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..decision import choose as CH
+
+    assert DEFAULT_FIXTURES.get("intent_disclosure") == 0, "the shipped rate moved: restate this test"
+    real = CH.declare_intents
+    seen = {"calls": 0, "opportunities": 0}
+
+    def spy(p, scenes, fx, draw=None):
+        assert fx.get("intent_disclosure") == 0
+        seen["calls"] += 1
+        copies = copy.deepcopy(scenes)
+        before = [a.payload.get("said") for sc in copies for a in sc.acts if isinstance(a.payload, dict)]
+        real(p, copies, fx.sweep("intent_disclosure", 1.0), lambda _p, _u: _T7Always())
+        after = [a.payload.get("said") for sc in copies for a in sc.acts if isinstance(a.payload, dict)]
+        seen["opportunities"] += sum(1 for b, a in zip(before, after) if a is not b)
+        return real(p, scenes, fx, draw)
+
+    hashes, carried = {}, {}
+    for arm, fn in (("shipped", spy), ("excised", lambda p, scenes, fx, draw=None: scenes)):
+        monkeypatch.setattr(CH, "declare_intents", fn)
+        w = populated.build_realm(0)
+        populated.run(1, 0, w=w)
+        hashes[arm] = w.content_hash()
+        carried[arm] = [(a.id, a.payload.get("said")) for a in w.acts
+                        if isinstance(a.payload, dict) and a.payload.get("said") is not None]
+    print(f"\n  T7 -- realm one season at intent_disclosure 0: {seen['calls']} triages, "
+          f"{seen['opportunities']} tellings with a declarable intent, {len(carried['shipped'])} "
+          f"acts carrying a said; hash {hashes['shipped']}")
+    assert seen["calls"] >= 1 and seen["opportunities"] >= 1, seen
+    assert len(carried["shipped"]) >= 1, "no act in the store carried a said: nothing was compared"
+    assert carried["shipped"] == carried["excised"], "a telling's said differs from the pre-T7 chooser's"
+    assert hashes["shipped"] == hashes["excised"], hashes
+
+
+# ---------------------------------------------------------------------------------------------------
+# v9 IN-18 `G1` -- JUDGED REGARD (`queries/person_q.py::regard`, `deeds_judged`; H-192, H-193).
+# ---------------------------------------------------------------------------------------------------
+
+def _g1_split():
+    """A DEED KIND AND TWO PURSUITS THAT JUDGE IT OPPOSITELY, read off the shipped tables -- nothing
+    planted: the first DEED kind (sorted; an `EMITTED_KINDS` member no row emits on refusal, as
+    `person_q.is_deed` reads it) on which some pursuit's projection, dotted with `align_kind`, is
+    positive and another's negative. Returns `(kind, pursuit_for, pursuit_against)`."""
+    from ..data import verbs as V
+    from ..data.pursuits import to_axes
+    from ..data.rosters import PURSUIT_AXES, PURSUITS
+
+    def dot(e, k):
+        ax = to_axes({e: 1.0})
+        return sum(ax[a] * V.align_kind(k, a) for a in PURSUIT_AXES)
+
+    for k in sorted(V.DEED_KINDS):
+        d = {e: dot(e, k) for e in sorted(PURSUITS)}
+        pos = [e for e in d if d[e] > 0]
+        neg = [e for e in d if d[e] < 0]
+        if pos and neg:
+            return k, pos[0], neg[0]
+    raise AssertionError("no emitted kind splits two pursuits by sign: G1's falsifier has no deed")
+
+
+def _g1_fx(judged, told):
+    from ..data.fixtures import DEFAULT_FIXTURES
+    return DEFAULT_FIXTURES.sweep("judged_gain", judged).sweep("told_valence_gain", told)
+
+
+def _g1_hearers(kind, pro, con, chain=()):
+    """`p_low` holds `pro` and `p_mid` holds `con`, each at weight 1, NO stance row; both hold the
+    same deed claim `(p_other, kind, True)` -- firsthand with an empty `chain`, else told by it."""
+    w = P.tiny_world()
+    for pid, e in (("p_low", pro), ("p_mid", con)):
+        p = w.persons[pid]
+        p.pursuits = {e: 1.0}
+        assert not p.stance, f"{pid} carries a stance row: the stored half would not be 0"
+        p.ledger.append(Claim(f"c_g1_{pid}", pid, "p_other", kind, True, 0, "firsthand", 100, "own",
+                              chain=chain))
+    return w, w.persons["p_low"], w.persons["p_mid"]
+
+
+def test_g1_opposite_pursuits_judge_one_deed_with_opposite_regard():
+    """THE PLAN'S FALSIFIER (§5 row G1): *"no planted rows; two hearers, opposite `pursuits` on a
+    deed's axis, same deed claim about X: `regard` signs differ; both 0 at control."* No stance row,
+    no alignment cell planted: the kind and the two pursuits are read off the shipped tables. Both
+    halves: the deed held firsthand moves the JUDGED half, the same deed told moves the TOLD half,
+    and each gain alone moves only its own half.
+
+    MUTATION (run 2026-10-09, IN-18): `deeds_judged` returning `(0.0, 0.0)` reddens the sign
+    assertions; `regard` ignoring `fx` (returning the stored half) reddens them too. Restored, GREEN."""
+    from ..queries.person_q import regard, stance_toward
+    kind, pro, con = _g1_split()
+    checked = 0
+    for chain, live in (((), _g1_fx(0.5, 0.0)), (("p_king",), _g1_fx(0.0, 0.5))):
+        w, a, b = _g1_hearers(kind, pro, con, chain)
+        ra, rb = regard(a, "p_other", live), regard(b, "p_other", live)
+        assert ra > 0 > rb, (kind, pro, con, chain, ra, rb)
+        # CONTROL: both gains 0 -- and no `fx` at all -- is the stored half, which is 0 here.
+        for fx in (_g1_fx(0.0, 0.0), None):
+            assert regard(a, "p_other", fx) == regard(b, "p_other", fx) == 0.0
+        assert stance_toward(a, "p_other") == stance_toward(b, "p_other") == 0.0
+        # Each gain reads only its own half: the firsthand deed is invisible to the told gain, and
+        # the told one to the judged gain.
+        other = _g1_fx(0.0, 0.5) if not chain else _g1_fx(0.5, 0.0)
+        assert regard(a, "p_other", other) == regard(b, "p_other", other) == 0.0
+        checked += 1
+    assert checked == 2
+
+
+def test_g1_regard_at_control_reads_no_ledger_and_a_victims_kind_judges_nothing():
+    """At both gains 0 `regard` is `stance_toward` and never scans the ledger (so the control cannot
+    differ from the pre-G1 reader by construction); and a kind several rows emit -- the ones whose
+    claim subject may be the PATIENT, `person.died` among them -- has no `KIND_VERB` and judges 0."""
+    from ..data import verbs as V
+    from ..queries import person_q as PQ
+    kind, pro, con = _g1_split()
+    w, a, _b = _g1_hearers(kind, pro, con)
+
+    class _Boom(list):
+        def __iter__(self):
+            raise AssertionError("the control read the ledger")
+
+    a.ledger = _Boom(a.ledger)
+    assert PQ.regard(a, "p_other", _g1_fx(0.0, 0.0)) == 0.0
+    a.ledger = list(a.ledger.copy())
+    assert "person.died" in V.EMITTED_KINDS and "person.died" not in V.KIND_VERB
+    a.ledger.append(Claim("c_g1_died", a.id, "p_other", "person.died", True, 0, "firsthand", 100, "own"))
+    j_with, _ = PQ.deeds_judged(a, "p_other")
+    a.ledger.pop()
+    j_without, _ = PQ.deeds_judged(a, "p_other")
+    assert j_with == j_without > 0, (j_with, j_without)
+
+
+def test_g1_a_told_by_deed_with_an_empty_chain_is_told_not_judged():
+    """`judged` IS FIRSTHAND ONLY (`H-193`): a deed claim sourced `told_by` with an empty `chain` is
+    hearsay, and lands in `told`. CONTROL: the same claim sourced `firsthand` lands in `judged`."""
+    from dataclasses import replace
+    from ..queries import person_q as PQ
+    kind, pro, con = _g1_split()
+    w, a, _b = _g1_hearers(kind, pro, con)
+    (c,) = [c for c in a.ledger if c.subject == "p_other" and c.predicate == kind]
+    j_first, t_first = PQ.deeds_judged(a, "p_other")
+    assert j_first != 0.0 and t_first == 0.0, (j_first, t_first)
+    a.ledger = [x for x in a.ledger if x is not c] + [replace(c, source="told_by", chain=())]
+    assert PQ.deeds_judged(a, "p_other") == (0.0, j_first)
+
+
+def test_g1_a_refusal_is_no_deed():
+    """A REFUSAL REPORTS AN ACT THAT DID NOT HAPPEN (`data/verbs.py::REFUSAL_KINDS`): a firsthand
+    `kill.refused` about V judges nothing. `kill.refused` has a `KIND_VERB` (one row emits it), so
+    without the exclusion it would be scored as that verb's deed. `news.untold`, which `tell` emits
+    on success AND refusal, is no deed either."""
+    from ..data import verbs as V
+    from ..data.pursuits import to_axes
+    from ..data.rosters import PURSUIT_AXES, PURSUITS
+    from ..queries import person_q as PQ
+    kind = "kill.refused"
+    assert kind in V.REFUSAL_KINDS and V.KIND_VERB.get(kind), "the falsifier needs a scored kind"
+    w = P.tiny_world()
+    a = w.persons["p_low"]
+    # CONTROL that the claim WOULD score: a pursuit under which the refusal's verb leans non-zero.
+    e = next(e for e in sorted(PURSUITS)
+             if sum(to_axes({e: 1.0})[x] * V.align_kind(kind, x) for x in PURSUIT_AXES))
+    a.pursuits = {e: 1.0}
+    a.ledger = [x for x in a.ledger if x.subject != "p_other"] + [
+        Claim("c_g1_ref", a.id, "p_other", kind, True, 0, "firsthand", 100, "own")]
+    assert PQ.deeds_judged(a, "p_other") == (0.0, 0.0)
+    assert not PQ.is_deed(Claim("c_untold", a.id, "p_other", "news.untold", True, 0, "firsthand",
+                                100, "own"))
+
+
+def _r07_pairs(w, fx):
+    """R-07's reading over one world: for every person `C` and every pair of persons holding a claim
+    about `C` (neither of them `C`), whether their `regard` of `C` differs BEYOND their stored
+    stance -- `regard - stance_toward` unequal, so the difference is a claim's or a teller's and not
+    stance alone. Returns `(pairs read, pairs differing beyond stance)`."""
+    from ..queries.person_q import regard, stance_toward
+    holders: dict = {}
+    for p in w.persons.values():
+        for c in p.ledger:
+            if c.subject in w.persons and c.subject != p.id:
+                holders.setdefault(c.subject, set()).add(p.id)
+    read = differ = 0
+    for subject, ids in sorted(holders.items()):
+        beyond = sorted((regard(w.persons[i], subject, fx) - stance_toward(w.persons[i], subject), i)
+                        for i in ids)
+        for n, (a, _ia) in enumerate(beyond):
+            for b, _ib in beyond[n + 1:]:
+                read += 1
+                differ += a != b
+    return read, differ
+
+
+def test_r07_realm_regard_differs_between_hearers_by_claim_not_stance_alone():
+    """R-07'S REALM READER (v9 IN-18 EXIT, `_part2` R-07): a two-season `build_realm(0)` run at G1's
+    LIVE arm -- the SHIPPED fixtures, `judged_gain` and `told_valence_gain` 0.5 (the sweep midpoint,
+    shipped live per Jordan's 2026-10-09 ruling) -- reads `regard(p, C)` for every pair of persons
+    holding a claim about one `C`, and at least one pair's regard differs because of a claim (or a
+    teller) and not from stored stance alone; the same run at G1's CONTROL arm -- both gains set to
+    0 explicitly, every other fixture shipped -- shows no such pair, while reading at least as many.
+
+    MUTATION (run 2026-10-09, IN-18): `regard` returning the stored half whatever `fx` reddens the
+    live arm's `differ >= 1`. Restored, GREEN."""
+    from ..data.fixtures import DEFAULT_FIXTURES
+    assert DEFAULT_FIXTURES.get("judged_gain") == 0.5 and DEFAULT_FIXTURES.get("told_valence_gain") == 0.5, (
+        "G1's shipped gains moved: restate this test's live arm")
+    out = {}
+    for arm, fx in (("control", _g1_fx(0.0, 0.0)),
+                    ("live", DEFAULT_FIXTURES)):
+        w = populated.build_realm(0)
+        w.fixtures = fx
+        populated.run(2, 0, w=w)
+        out[arm] = _r07_pairs(w, fx)
+    print(f"\n  R-07 -- realm two seasons, (pairs read, differing beyond stance): {out}")
+    assert out["control"][0] >= 1 and out["live"][0] >= 1, out
+    assert out["control"][1] == 0, out
+    assert out["live"][1] >= 1, out
+
+
+# ---------------------------------------------------------------------------------------------------
+# v9 IN-18 `G2` -- POLARITY IN §F2 TERM 2 (`decision/choose.py::stance_term`; H-194, H-195).
+# ---------------------------------------------------------------------------------------------------
+
+def _g2_ranked(arm, cands, stance, monkeypatch):
+    """`make_chooser`'s real ranking of `cands` for a person with NO pursuits (term 1 is 0 for every
+    candidate) and the stance rows `stance`, at `stance_polarity == arm`, temperature 0."""
+    from types import SimpleNamespace
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..decision import choose as CH
+    from ..state.carriers import Person
+    p = Person(id="p_g2", name="p_g2")
+    p.stance = list(stance)
+    seen = {}
+    monkeypatch.setattr(CH, "opening_set", lambda person, view, q, fx: list(cands))
+
+    def spy(person, ranked, budget, fx, mint, occasion=None):
+        seen["ranked"] = [(c.verb, c.subject) for c in ranked]
+        return []
+    monkeypatch.setattr(CH, "pack_scenes", spy)
+    fx = DEFAULT_FIXTURES.sweep("choice_temperature", 0).sweep("stance_polarity", arm)
+    CH.make_chooser(fx, lambda *a: "act")(p, SimpleNamespace(question=object()),
+                                         SimpleNamespace(subsistence=0), lambda: 1)
+    assert "ranked" in seen, "the chooser never ranked: the falsifier did not run"
+    return seen["ranked"]
+
+
+def test_g2_a_grudge_raises_fight_on_its_object_under_declared_not_legacy(monkeypatch):
+    """THE PLAN'S FALSIFIER (§5 row G2), its observable half: *"`fight` against the disliked
+    rises"* under `declared` against `legacy` (`checked >= 1`). A person holding `march`'s grudge
+    shape -- `(X, -1.0, weight)`, `loop/effects_combat.py::_eff_march`'s row -- toward `p_x` and
+    nothing toward `p_y`: under `legacy` `fight` on `p_x` ranks BELOW `fight` on `p_y` (the old term
+    adds the negative stance), under `declared` ABOVE it. Rows not contested against their subject
+    keep the sign on both arms (`tell` is contested against its `to`, not its topic).
+
+    The falsifier's `march` half -- members of a faction choose `march` on F-held rungs more -- is
+    NOT observable while the `holder` operand reads 0 (`H-195`: no ledger holds a `held_by` claim,
+    M0g 0 % on `build_realm(0)`), so a rung subject's term is 0 on both arms, asserted below.
+
+    MUTATION (run 2026-10-09, IN-18): `stance_term`'s negation removed (declared returns `r`)
+    reddens the `declared` ordering. Restored, GREEN."""
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..data.verbs import VERB_TABLE
+    from ..decision.choose import stance_term
+    from ..decision.options import subject_is_opponent
+    from ..state.carriers import Candidate, Person
+    assert DEFAULT_FIXTURES.get("stance_polarity") == "legacy", "the shipped arm moved: restate"
+    assert subject_is_opponent(VERB_TABLE["fight"]) and not subject_is_opponent(VERB_TABLE["tell"])
+    grudge = [("p_x", -1.0, 3.0)]
+    cands = [Candidate("fight", "p_x"), Candidate("fight", "p_y")]
+    checked = 0
+    legacy = _g2_ranked("legacy", cands, grudge, monkeypatch)
+    declared = _g2_ranked("declared", cands, grudge, monkeypatch)
+    assert legacy == [("fight", "p_y"), ("fight", "p_x")], legacy
+    assert declared == [("fight", "p_x"), ("fight", "p_y")], declared
+    checked += 1
+    p = Person(id="p_g2", name="p_g2")
+    p.stance = list(grudge)
+    # The term's SIGN at the CONTROL gains, set explicitly: `stance_gain` (H-202) and G1's two gains
+    # (H-192/H-193) ship live (Jordan, 2026-10-09), and this test reads polarity, not magnitude --
+    # `test_in25_stance_gain.py` owns the gain's scaling.
+    ctl = (DEFAULT_FIXTURES.sweep("stance_gain", 0.0).sweep("judged_gain", 0.0)
+           .sweep("told_valence_gain", 0.0))
+    for arm in ("legacy", "declared"):
+        fx = ctl.sweep("stance_polarity", arm)
+        # a row NOT contested against its subject keeps the sign: telling about the disliked
+        assert stance_term(p, Candidate("tell", "p_x"), fx) == -3.0
+        # a Rung subject reads 0 on both arms: its holder is the absent operand (H-195)
+        assert stance_term(p, Candidate("march", "R"), fx) == 0.0
+    assert stance_term(p, Candidate("fight", "p_x"), ctl.sweep("stance_polarity", "declared")) == 3.0
+    # the `regard` midpoint: G1's regard, no sign -- at G1's control gains it is the legacy term
+    assert stance_term(p, Candidate("fight", "p_x"), ctl.sweep("stance_polarity", "regard")) == -3.0
+    assert checked >= 1
+
+
+def test_g2_an_unknown_polarity_arm_refuses():
+    import pytest
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..decision.choose import stance_term
+    from ..state.carriers import Candidate, Person
+    with pytest.raises(Exception, match="stance polarity"):
+        stance_term(Person(id="p", name="p"), Candidate("fight", "p_x"),
+                    DEFAULT_FIXTURES.sweep("stance_polarity", "inverted"))
+
+
+# ---------------------------------------------------------------------------------------------------
+# v9 IN-18 `G3` -- SLANT (`queries/person_q.py::said_of`; H-196).
+# ---------------------------------------------------------------------------------------------------
+
+def test_g3_the_strongly_valenced_older_claim_is_told_under_valence_the_newer_at_control():
+    """THE PLAN'S FALSIFIER (§5 row G3): *"the strongly valenced older claim is told under
+    `valence`, the newer neutral one at control."* The teller holds, about `p_other`, an OLDER deed
+    claim their own pursuits judge strongly (`_g1_split`'s kind, read off the shipped tables) and a
+    NEWER claim no pursuit judges (`exists:Person`). At `newest` -- and with no teller, and at no
+    `fx` -- the newer is said; at `valence` the older deed. A teller whose pursuits judge nothing
+    says the newer at `valence` too (no valenced claim: the unslanted pick exactly).
+
+    MUTATION (run 2026-10-09, IN-18): the narrowing deleted (`valence` keeps the whole pool)
+    reddens the `valence` assertion. Restored, GREEN."""
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..queries.person_q import said_of
+    assert DEFAULT_FIXTURES.get("said_slant") == "newest", "the shipped arm moved: restate"
+    kind, pro, _con = _g1_split()
+    w = P.tiny_world()
+    p = w.persons["p_low"]
+    p.pursuits = {pro: 1.0}
+    old = Claim("c_g3_old", p.id, "p_other", kind, True, 0, "firsthand", 100, "own")
+    new = Claim("c_g3_new", p.id, "p_other", "exists:Person", 1, 3, "firsthand", 100, "own")
+    p.ledger.extend([old, new])
+    slant = DEFAULT_FIXTURES.sweep("said_slant", "valence")
+    for fx, teller in ((DEFAULT_FIXTURES, p), (slant, None), (None, p)):
+        assert said_of(p.ledger, "p_other", fx, teller=teller).predicate == "exists:Person"
+    assert said_of(p.ledger, "p_other", slant, teller=p).predicate == kind
+    p.pursuits = {}
+    assert said_of(p.ledger, "p_other", slant, teller=p).predicate == "exists:Person"
+
+
+def test_g3_an_unknown_slant_refuses():
+    import pytest
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..queries.person_q import said_of
+    w = P.tiny_world()
+    p = w.persons["p_low"]
+    p.ledger.append(Claim("c_g3", p.id, "Hh", "exists:Rung", 1, 0, "firsthand", 100, "own"))
+    with pytest.raises(ValueError, match="said_slant"):
+        said_of(p.ledger, "Hh", DEFAULT_FIXTURES.sweep("said_slant", "loudest"), teller=p)
+
+
+def test_claim_firsthand_needs_an_empty_chain_and_the_firsthand_source():
+    def c(chain, source):
+        return Claim("c", "p", "Hh", "stores:grain", 8, 0, source, 100, "own", chain=chain)
+    assert [c((), "firsthand").firsthand, c((), "told_by").firsthand,
+            c(("x",), "firsthand").firsthand] == [True, False, False]

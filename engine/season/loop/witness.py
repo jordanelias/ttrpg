@@ -17,6 +17,7 @@ fails if it does.
 from __future__ import annotations
 
 import math
+from dataclasses import replace
 
 from ..data.matrix import Step
 from ..state.gate import Token
@@ -25,9 +26,18 @@ from ..data.rosters import (
     CHANNEL_CLAIM_SOURCE, OBSERVATION_DEPOSIT_MODES, RECORD_CONTENT, WITNESS_CHANNELS,
     require_member,
 )
+from ..data.verbs import VERB_TABLE
+# ⚠ `04:178` lists WITNESS's reads as the log, the presence cache, the channel predicates and the act
+# store, and `04:142` keeps `decision/` an island; this is the first non-DELIBERATE step to import it.
+# Refraction (v9 IN-15, H-201) is asker-first -- it grades what THIS holder believes -- so its rule lives
+# beside `teller_weight`/`record`, which `queries/person_q.py` cannot host (it may not reach
+# `epistemic`, test_season_shape's allow-list); it reads the verb table (`_happened`, `dissents`) and the
+# holder's own stance (`regard`). `04:178` is exceeded on those two reads. Layer-conformance, B-E close:
+# CONVENTION, no scan reads this step's imports; the spec is ambiguous, `decision/` chosen.
+from ..decision.options import ledger_weigh, refracted_confidence
 from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, claim_subjects,
-                         observers_for, seen_of, seen_subject)
-from ..queries import cache
+                         live_channels, observers_for, seen_of, seen_subject)
+from ..queries import cache, world_q
 from ..queries.world_q import hold_force
 from ..state.attribution import actor_of
 from ..state.carriers import Claim, Event
@@ -35,6 +45,18 @@ from ..state import ledgers
 from ..state.ids import H
 from ..trace_log import TRACE
 
+# v9 IN-22: THE SEAT CHANNEL -- the obligee channel (`epistemic._ch_post_remit`), borrowed for its
+# `inferred` source and its live/off switch; this route's recipients are seat holders
+# (`world_q.governors_of`), not obligees. The purview deposit in `witness` below
+# rides it: its claim source is this channel's roster `claim_source:`, and it is live exactly when
+# this channel is. Named once here and refused at import if the roster stops carrying it, so a
+# renamed channel cannot leave the route silently dead (`RESIDE_KIND`'s shape, `world_q`).
+SEAT_CHANNEL = "post_remit"
+require_member(SEAT_CHANNEL, WITNESS_CHANNELS,
+               f"seat channel {SEAT_CHANNEL!r} is not a `witness_channels` member",
+               "rosters.yaml -- witness_channels",
+               law="v9 IN-22 -- the purview deposit takes the seat channel's source and switch; a "
+                   "name the roster does not carry would leave it dead or unsourced")
 
 
 def content_value(subject_matter):
@@ -174,6 +196,31 @@ def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = 
     return held.value  # nothing either mechanism can act on -- deposited verbatim, honestly
 
 
+def _refract(c: Claim, p, channel: str, gain: float, act=None, weigh=None) -> Claim:
+    """`c` AS THIS WITNESS RECEIVES IT: `c` with `decision/options.py::refracted_confidence`'s
+    confidence (v9 IN-15, `AX-7`'s divergence formula; `H-199`). The one place every deposit below
+    passes through, so the five `Claim` constructions share one rule rather than five. The caller
+    decides WHETHER to refract (the gain is live and the witness is not the act's own actor); this
+    decides HOW MUCH, and only the confidence moves -- id, value, source and chain are `c`'s.
+    `act`/`weigh` reach `dissents`' act-level term (`H-201`): passed by the two deposits that report
+    an act happening (event-kind and `seen`), `None` from the other three."""
+    return replace(c, confidence=refracted_confidence(p, c, channel, gain, act, weigh))
+
+
+def _happened(act, e: Event):
+    """THE ACT `e` REPORTS HAPPENING, or `None` -- what `dissents`' act-level prior (`H-201`) is asked
+    of. `e` must be one of the act's verb row's `emits:` and none of its `emits_on_refusal:` (this ROW's
+    column, the test `loop/driver.py` applies to *this Event is a refusal*; `verbs.REFUSAL_KINDS` is the
+    cross-row union `is_deed` uses, and the two agree today): a witness
+    who believed the act could not happen and saw it refused has nothing to doubt. A kind on both
+    columns (`tell`'s `news.untold`) cannot say which, and takes no prior. An Event no act caused
+    (MATTER, CALENDAR) and an act whose verb has no row report no act."""
+    row = VERB_TABLE.get(getattr(act, "verb", None)) if act is not None else None
+    if row is None or e.kind not in (row.emits or ()) or e.kind in (row.emits_on_refusal or ()):
+        return None
+    return act
+
+
 # -- WITNESS -- barrier 4 -- THE JOIN (S28) -----------------------------
 def witness(self, token: Token, events: list[Event]) -> int:
     w = self.w
@@ -215,6 +262,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # `WITNESS_CHANNELS`' declared precedence -- and no longer the mode, which is `mode` above.
     fan: list[tuple[str, Event, str]] = [
         (pid, e, ch) for e in events for pid, ch in observers_for(w, e, mode, everyone)]
+    # (this count is the FAN alone: IN-22's purview extension below appends after it)
     TRACE.decision(f"fan-out over {len(events)} events -> {len(fan)} deposits", "S28/S61",
                    chose=f"mode={mode} over {len(everyone)} persons "
                          f"({'#353 S61 as specified, and H-33 control' if mode == 'total' else 'H-33 arm; `all_five` is the ruled default since 2026-09-07, R7'})",
@@ -228,6 +276,10 @@ def witness(self, token: Token, events: list[Event]) -> int:
     cap = w.fixtures.get("ledger_cap")
     conf = w.fixtures.get("confidence_default")
     claim_rule = w.fixtures.get("claim_subject_rule")
+    # v9 IN-15 / `H-199`: REFRACTION'S GAIN, read once per barrier for the reason `obs_mode` below
+    # is. `0` is the control (0.5 ships, H-199): no deposit is refracted and the barrier is the
+    # pre-IN-15 one exactly (no `actor_of` call, no ledger scan).
+    gain = w.fixtures.get("refraction_gain")
     # `W-B` / `H-122`. WHO RECEIVES A CLAIM MINTED FROM WHAT THE FOLD READ. `none` is the
     # CONTROL -- the behaviour before `W-B`, so every measurement of this item has a baseline
     # (§0.1 point 4). Read here rather than inside the loop so the fixture is consulted once
@@ -326,6 +378,41 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 h = hold_force(w, rec.id)
                 if h is not None and h.since == w.tick:
                     newly_held.setdefault(e.id, {})[rec.id] = (h.subject, rec)
+    # v9 IN-22 (#457 `CARRY-SHORTFALL`, `H-160` limit 2): AN ACTORLESS EVENT'S READS REACH THE SEATS
+    # WHOSE PURVIEW CONTAINS WHAT WAS READ. MATTER's larder pass is the one actorless writer of
+    # `observed` (`loop/matter.py`, `19d`): a drained larder's `(rung, "shortfall:<kind>", units)`.
+    # Before this, that record reached only those standing at the rung or holding it, so a lord
+    # whose seat covers the town but who neither holds it nor stands in it never learned -- `reach`'s
+    # purview limb admits a claim about the town, and there was never a claim to admit.
+    # ⚠ THE READS, NOT THE EVENT. A governor here gets the OBSERVATION deposit only: no event-kind
+    # claim, no `seen` claim, no document content -- he did not witness the write, he learns what
+    # MATTER recorded about a place under his seat. So no `stores.changed` of any larder anywhere
+    # becomes a seat-holder's news; only a read that MATTER actually recorded does.
+    # ⚠ PLACE-BOUND, NOT THE BROADCAST r2 `01`/`02` §A.7 RETIRED. The recipients are
+    # `world_q.governors_of` -- `state/gate.py::purview_reaches`, the one owner of *is this rung
+    # within this seat*, the relation `reach`'s limb 4 is -- per observation subject, so a seat whose
+    # rung does not contain the read rung (a sibling territory, a rungless cluster seat) receives
+    # nothing. `reach` itself is still not called from here (`01` §A.4.4).
+    # ⚠ IT RIDES THE SEAT CHANNEL, AND THAT IS ITS SOURCE AND ITS SWITCH. `SEAT_CHANNEL`'s claim
+    # source is the roster's (`inferred`, `ARCH §C.6`: known from the business of the office, not
+    # seen), and the route is live exactly when that channel is (`live_channels`): `all_five` (the
+    # shipped mode) yes, `presence_only` no; under `total` everyone is already in the fan. Under
+    # `observation_deposit_mode: none` nothing is deposited, as for every other witness.
+    # ⚠ APPENDED AFTER THE FAN, so every deposit the fan makes lands in the same order as before and
+    # a world with no actorless read deposits exactly what it did (a person the fan already admitted
+    # to the Event is skipped: the fan's deposit is the stronger source).
+    reported: dict = {}
+    if obs_mode != "none" and SEAT_CHANNEL in live_channels(mode):
+        admitted = {(pid, e.id) for pid, e, _ch in fan}
+        for e in events:
+            if not e.observed or actor_of(w, e) is not None:
+                continue
+            for o in e.observed:
+                for pid in world_q.governors_of(w, o.subject):
+                    if (pid, e.id) not in admitted:
+                        reported.setdefault((pid, e.id), set()).add(o.subject)
+        by_id = {e.id: e for e in events}
+        fan = fan + [(pid, by_id[eid], SEAT_CHANNEL) for pid, eid in sorted(reported)]
     w._in_parallel_map = True
     for pid, e, channel in fan:
         p = w.persons.get(pid)
@@ -357,6 +444,26 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # speech directly holds it firsthand"*. Downgrading it would be the downgrade the
         # precedence exists to prevent.
         src = CHANNEL_CLAIM_SOURCE[channel]
+        # v9 IN-15: `AX-7` -- WHAT EVERYONE ELSE HOLDS OF AN ACT IS A READING, BY CHANNEL, COMPETENCE
+        # AND PRIOR BELIEF. Every deposit below passes through `_refract` when this is true. ⚠ NOT
+        # FOR THE ACT'S OWN ACTOR: `AX-7`'s layer (2), the performer's understanding of their own
+        # act, *"may be wrong ... by its OWN mechanism -- a person does not witness themselves"*,
+        # and this formula is layer (3)'s. An Event no person acted (`actor_of` is `None`) has no
+        # performer, so every witness of it refracts.
+        refracting = bool(gain) and actor_of(w, e) != pid
+        # `H-201`: THE ACT THE EVENT-KIND AND `seen` DEPOSITS REPORT, AND HOW THIS WITNESS WEIGHS
+        # THEIR OWN LEDGER -- `dissents`' act-level prior, *could the actor have done this, on what
+        # I hold*. Read once per (witness, Event), only when refracting, so the control reads
+        # neither. `weigh` is taken before this Event's own deposits land: the ones between it and
+        # the `seen` deposit (the observation reads) carry no chain and weigh 1.0 under any closure.
+        prior_act = prior_weigh = None
+        if refracting:
+            prior_act = _happened(self.act_of.get(e.id), e)
+            if prior_act is not None:
+                prior_weigh = ledger_weigh(p, w.fixtures)
+        # v9 IN-22: a governor reached by purview (above) receives only the reads about the rungs
+        # his seat contains, and none of the other deposits. `None` for every fan witness.
+        only = reported.get((pid, e.id)) if channel == SEAT_CHANNEL else None
         # S28: A KNOT DEPOSIT REUSES THE EVENT ID. Rev 1 wrote the rule and switched it off
         # with `if False`. This is the rule, on -- keyed on the knot SOURCE, i.e. on `witness_key`
         # being the strongest channel, as `rosters.yaml: witness_channel_predicates` defines it.
@@ -366,7 +473,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # §F1's Q2 clause "a claim whose subject is SOMETHING THEY HOLD" unreachable and left
         # the narrative substrate empty. `changes[]` already names what an act touched, so
         # this reads the Event the design has rather than adding a field to it (§8.1).
-        for n, subj in enumerate(claim_subjects(w, e, claim_rule,
+        for n, subj in enumerate(() if only is not None else
+                                 claim_subjects(w, e, claim_rule,
                                                 act_refs(self.act_of.get(e.id)))):
             cid = (e.id if via_knot and n == 0
                    else H(w.world_seed, w.tick, pid, f"claim:{e.id}:{n}"))
@@ -378,6 +486,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
             # sort BEFORE the deliberation that should see it — Q2 dead inside the season, which is
             # the exact shape of the bug that kept Q2 dead across seasons before the `tick - 1` fix.
             c = Claim(cid, pid, subj, e.kind, True, w.tick, src, conf, "own", self.round)
+            if refracting:
+                c = _refract(c, p, channel, gain, prior_act, prior_weigh)
             # `W4`. THE DEPOSIT EMITS, AND THAT IS WHAT GIVES A DECAY AN ANTECEDENT.
             # Part D declares `claim.deposited` on this row and NOTHING EMITTED IT, so a
             # claim entered the world uncaused — and every later `claim.decayed` would have
@@ -459,6 +569,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
             for o in e.observed:
                 if o.value is UNKNOWN or o.value is None:
                     continue
+                if only is not None and o.subject not in only:
+                    continue      # v9 IN-22: a read about a rung outside this governor's seat
                 # ⚠ AND A READ COMPUTED FROM THE LEDGER IS NEVER DEPOSITED INTO IT. See
                 # `LEDGER_DERIVED_STEMS` for the measurement and for the alternative that was
                 # rejected. In one line: `WorldReader.read(X, "claim.held")` answers from
@@ -492,6 +604,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 oc = Claim(H(w.world_seed, w.tick, pid, f"obs:{e.id}:{len(seen_obs)}"),
                            pid, o.subject, o.predicate, o.value, w.tick, src, conf, "own",
                            self.round)   # `U2`: see the deposit above
+                if refracting:
+                    oc = _refract(oc, p, channel, gain)
                 w.write("claim_ledger", token,
                         lambda p=p, c=oc: p.ledger.append(c),
                         record_kind="Person", fieldname="claim_ledger", driver="Event",
@@ -513,6 +627,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
             sc = Claim(H(w.world_seed, w.tick, pid, f"seen:{e.id}"),
                        pid, _seen[0], SEEN_PREDICATE, _seen[1], w.tick, src, conf, "own",
                        self.round)   # `U2`: see the first deposit
+            if refracting:
+                sc = _refract(sc, p, channel, gain, prior_act, prior_weigh)
             w.write("claim_ledger", token,
                     lambda p=p, c=sc: p.ledger.append(c),
                     record_kind="Person", fieldname="claim_ledger", driver="Event",
@@ -529,7 +645,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # carries NO attribution: it says *this document says X*, never *the Duke wrote X* (r2 `02`
         # §A.9 -- the separation is what makes a forgery playable). The exact-triple guard is the
         # told channel's, for its reason: one belief is stored once.
-        for holder, rec in (newly_held.get(e.id) or {}).values():
+        for holder, rec in ((newly_held.get(e.id) or {}) if only is None else {}).values():
             if holder != pid:
                 continue
             pred = f"{content_stem}:{rec.kind}"
@@ -540,6 +656,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
             dc = Claim(H(w.world_seed, w.tick, pid, f"content:{e.id}:{rec.id}"),
                        pid, rec.id, pred, said, w.tick, src, conf,
                        "own", self.round)   # `U2`: see the first deposit
+            if refracting:
+                dc = _refract(dc, p, channel, gain)
             w.write("claim_ledger", token,
                     lambda p=p, c=dc: p.ledger.append(c),
                     record_kind="Person", fieldname="claim_ledger", driver="Event",
@@ -568,8 +686,12 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # fixed at CHOOSE, and at `Partial` the dedup compares the lossy copy, so the teller can pass
         # the guard and must be excluded here; it also skips the ledger scan for the common case.
         #
-        # ⚠ CONFIDENCE IS THE TELLER'S OWN, NOT A DEGRADED ONE, AND THAT IS A DEFERRAL RATHER
-        # THAN A CHOICE. Nothing in the chain states how much a hearing costs a belief, and
+        # ⚠ CONFIDENCE IS THE TELLER'S OWN, THEN REFRACTED (v9 IN-15): the hearer's copy starts at
+        # what the teller held and `_refract` lowers it by the channel the hearer heard the speech
+        # through and by what they already held firsthand -- at `refraction_gain` 0 it is the
+        # teller's own exactly. The hop itself is still graded at READ
+        # (`teller_weight`), never here. The text below is why the start point is the teller's own:
+        # Nothing in the chain states how much a hearing costs a belief, and
         # `probes.py` builds every hand-written `told_by` claim at full confidence (`:380`,
         # `:568`, `:650`, `:861`) -- so precedent carries it and inventing a ladder here would
         # author a number the design has not. The DEGREE already decides the thing the design
@@ -580,7 +702,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # observation block gives one screen up: `claim.held` answers from ledger MEMBERSHIP,
         # so storing it makes its own content true.
         _act = self.act_of.get(e.id)
-        if e.kind == "news.told" and _act is not None and pid != _act.actor:
+        if e.kind == "news.told" and _act is not None and pid != _act.actor and only is None:
             # A `_teller = w.persons.get(_act.actor)` stood here until 2026-09-16 and was never
             # read -- a per-(hearer, telling) dict lookup left from the draft that scanned the
             # teller's ledger inline, before `_told_content` became its one owner. Removed rather
@@ -679,10 +801,13 @@ def witness(self, token: Token, events: list[Event]) -> int:
                     # its last element, derived. A KEYWORD, never a positional: `chain` sits where
                     # the removed `teller` field did, so a stray string in that slot would be
                     # read as a chain of one-character hops.
+                    # ABSENT: H-197 confidences  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
                     tc = Claim(_told_hash or H(w.world_seed, w.tick, pid, f"told:{e.id}"),
                                pid, _held.subject, _held.predicate, _told_val, w.tick,
                                "told_by", _held.confidence, "own", self.round,
                                chain=_held.chain + (_act.actor,))
+                    if refracting:
+                        tc = _refract(tc, p, channel, gain)
                     w.write("claim_ledger", token,
                             lambda p=p, c=tc: p.ledger.append(c),
                             record_kind="Person", fieldname="claim_ledger", driver="Event",

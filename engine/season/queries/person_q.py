@@ -41,8 +41,12 @@ from ..data import verbs as _verbs
 from ..data import affiliations as _aff
 from ..data.affiliations import AFFILIATION_CEILING, conviction_map, engagement
 from ..data.pursuits import to_axes
-from ..data.requires import KNOWN_PERSON_CLAIM, UNKNOWN, WORLD_ONLY_STEMS
-from ..data.rosters import AFFILIATIONS, PURSUIT_AXES, SEEN_PREDICATE
+from ..data.requires import (
+    KNOWN_PERSON_CLAIM, REQUIRES_OPERANDS, REQUIRES_STEMS, UNKNOWN, WORLD_ONLY_STEMS,
+)
+from ..data.rosters import (
+    AFFILIATIONS, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, roster, roster_map,
+)
 from ..state.carriers import Person, Said
 from ..trace_log import TRACE
 
@@ -64,13 +68,82 @@ def stance_toward(p: Person, referent: str) -> float:
     return total
 
 
-def regard(p: Person, referent: str) -> float:
+def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
+    """`(judged, told)`: WHAT `p` MAKES OF THE DEEDS THEY HOLD ABOUT `referent`, by `p`'s OWN
+    pursuits (v9 IN-18 `G1`, telling workplan §3's `regard` row). A deed claim is an event-kind
+    claim `(referent, <kind>, True)` -- WITNESS's first deposit, or a told copy of one -- with
+    `<kind>` in `data/verbs.py::EMITTED_KINDS`. Each is scored as `choose`'s score term 1 scores a
+    verb, one owner per factor: `Σ_axis to_axes(crisis_weights(p, scar_shift))[axis] ·
+    align_kind(kind, axis)`, so a deed that leans the way `p`'s pursuits point reads positive and
+    one that leans against them negative. `judged` sums the deed claims `p` holds FIRSTHAND
+    (an empty `chain`, source `firsthand`); `told` sums every other deed claim -- the told valence. Neither weighs the teller
+    (§3: *"`judged` has no relation factor, so regard never calls weigh"*), so `regard` cannot
+    recurse through `teller_weight`.
+
+    ⚠ A KIND SEVERAL ROWS EMIT HAS NO `KIND_VERB` AND READS 0 (`align_kind`): `person.died`,
+    `body.changed`, `contest.undecided` among them. Those are exactly the kinds whose claim subject
+    may be the PATIENT (WITNESS's `both` rule deposits one claim per changed subject), so a victim
+    is not judged for dying. No `deed:` cell is authored (M0b ≥ 5 % at `declared`, IN-18 §6).
+    [ASSUMPTION, H-192: a deed's claim subject is read as its doer; the sum is unnormalised.]
+    Person-side, no World (AX-2)."""
+    axis_w = None
+    judged = told = 0.0
+    for c in p.ledger:
+        if c.subject != referent or not is_deed(c):
+            continue
+        if axis_w is None:
+            axis_w = to_axes(crisis_weights(p, scar_shift))
+        v = deed_valence(axis_w, c)
+        # FIRSTHAND only is judged (`dissents`' and `record`'s precedent, `decision/options.py`):
+        # a `told_by` claim whose chain is empty is still hearsay, and lands in `told`.
+        if c.firsthand:
+            judged += v
+        else:
+            told += v
+    return judged, told
+
+
+def is_deed(c) -> bool:
+    """A DEED CLAIM: an event-kind claim `(x, <kind>, True)`, `<kind>` in `EMITTED_KINDS` -- what
+    WITNESS's first deposit writes, or a told copy of it (a `Claim` or a `Said`). A kind some row
+    emits on refusal (`REFUSAL_KINDS`) is no deed: it reports an act that did not happen."""
+    return c.value is True and c.predicate in _verbs.DEED_KINDS
+
+
+def deed_valence(axis_w: dict, c) -> float:
+    """How a holder whose projected pursuits are `axis_w` judges one deed claim `c`:
+    `Σ_axis axis_w[axis] · align_kind(c.predicate, axis)`; 0 for a claim that is no deed. The one
+    scoring of a deed, read by `deeds_judged` (G1) and `said_of`'s slant (G3)."""
+    if not is_deed(c):
+        return 0.0
+    return sum(axis_w[ax] * _verbs.align_kind(c.predicate, ax) for ax in PURSUIT_AXES)
+
+
+def regard(p: Person, referent: str, fx=None) -> float:
     """HOW `p` REGARDS `referent`, computed when read and never written (telling workplan §1's
-    spine). Today it is the STORED HALF ONLY -- `stance_toward`, the person's own stance rows.
-    The judged-deeds and told-valence halves are the gated position `G1`, not built; nothing here
-    stands in for them. A second name for one sum is deliberate: `decision/options.py::
-    teller_weight` asks for REGARD, and when `G1` widens what regard is, the reader does not move."""
-    return stance_toward(p, referent)
+    spine):
+
+        regard = stance_toward(p, x) + judged_gain · judged + told_valence_gain · told
+
+    the stored half (`stance_toward`, the person's own stance rows) plus `deeds_judged`'s two
+    halves (v9 IN-18 `G1`). With no `fx`, or with both gains 0 -- the CONTROL (both ship live at 0.5,
+    `H-192`/`H-193`) -- it is the stored half exactly and reads no ledger. ⚠ `judged_gain` IS NOT
+    `regard_gain`: the shape row spells `regard_gain · judged`, but `regard_gain` is `teller_weight`'s
+    relation gain (`H-179`, shipped 0.5), and zeroing it for G1's control would move every told
+    claim's weight -- two decisions on one fixture, `H-121`'s defect. A second name for one sum is
+    deliberate: `decision/options.py::teller_weight` asks for REGARD, so when the gains move, the
+    reader does not."""
+    stored = stance_toward(p, referent)
+    if fx is None:
+        return stored
+    jg = float(fx.get("judged_gain"))
+    tg = float(fx.get("told_valence_gain"))
+    if not (jg >= 0 and tg >= 0):
+        raise ValueError(f"judged_gain {jg} / told_valence_gain {tg} must be >= 0 (H-192/H-193)")
+    if not jg and not tg:
+        return stored
+    judged, told = deeds_judged(p, referent, fx.get("scar_weight_shift"))
+    return stored + jg * judged + tg * told
 
 
 def violated_pursuits(p: Person, verb: str) -> tuple:
@@ -433,7 +506,21 @@ class LedgerReader:
         return self._best(lambda _c: True)
 
 
-def said_of(claims, subject, fx) -> "Said | None":
+SAID_SLANTS = roster("said_slants")
+
+
+def _slant(fx) -> str:
+    """`Fixtures.said_slant`, held to `rosters.yaml: said_slants` (`H-196`): an unknown arm raises
+    rather than silently reading the control. `ValueError` for this module's reason
+    (`_check_intent_claim`'s: the AX-2 allow-list)."""
+    arm = fx.get("said_slant")
+    if arm not in SAID_SLANTS:
+        raise ValueError(f"said_slant {arm!r} is not in rosters.yaml: said_slants "
+                         f"{sorted(SAID_SLANTS)} (H-196)")
+    return arm
+
+
+def said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | None":
     """WHAT THIS PERSON WOULD SAY ABOUT `subject`, as the `Said` a telling carries -- or `None` for
     nothing to say. Asked of the TELLER'S OWN claims at CHOOSE (`decision/options.py::opening_set`),
     never at WITNESS: what a telling passes on is decided when it is chosen, and rides the Act.
@@ -447,10 +534,24 @@ def said_of(claims, subject, fx) -> "Said | None":
     a sighting still travels when a sighting is all the teller has.
 
     ⚠ THE COMPARATOR IS `LedgerReader`'s, BOTH TIMES. *Most recent, then most confident* lives once
-    (`_best`); only the pool differs. `fx` is unread; the workplan's §3 shape names it and G3 (slant)
-    is its first reader (`workplans/2026-10-01-telling-workplan.md`), and a signature that changes
-    under every caller is the churn this avoids."""
-    reader = LedgerReader(claims)
+    (`_best`); only the pool differs.
+
+    ⚠ SLANT (v9 IN-18 `G3`, `H-196`): at `Fixtures.said_slant == "valence"`, with the `teller`
+    given, the pool is first narrowed to the claims the teller judges MOST STRONGLY -- the largest
+    `|deed_valence|` by the teller's own projected pursuits -- and the comparator picks among those;
+    where no claim carries valence (every one 0) the pick is the unslanted one exactly. A teller
+    passes on the deed that matters most to THEM, not the newest thing they hold. At `newest` (the
+    CONTROL, shipped), with no `teller`, or with no `fx`, it is the pre-G3 pick and reads no
+    pursuits."""
+    pool = [c for c in claims if c.subject == subject] if claims else []
+    if teller is not None and fx is not None and pool and _slant(fx) == "valence":
+        axis_w = to_axes(crisis_weights(teller, fx.get("scar_weight_shift")))
+        strength = {id(c): abs(deed_valence(axis_w, c)) for c in pool}
+        top = max(strength.values())
+        if top > 0:
+            pool = [c for c in pool if strength[id(c)] == top]
+    reader = LedgerReader(pool)
+    # ABSENT: H-198 deception  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
     c = (reader._best(lambda c: c.subject == subject and c.predicate != SEEN_PREDICATE)
          or reader.latest_about(subject))
     if c is None:
@@ -458,9 +559,61 @@ def said_of(claims, subject, fx) -> "Said | None":
     return Said(c.subject, c.predicate, c.value, c.confidence, c.chain)
 
 
-def known_persons(claims, actor, topic) -> tuple:
+# ---------------------------------------------------------------------------
+# A DECLARED INTENT -- telling `T7` (G9; v9 IN-16, `ED-IN-0282`). The claim kind
+# `rosters.yaml: intent_claim` declares: `(actor, <stem>:<verb>, ((name, id), ...))`, an act the actor
+# has CHOSEN and not yet done. Minted at CHOOSE by `decision/choose.py::declare_intents` onto a
+# telling's `said`, so the told deposit (`loop/witness.py`) lands it in each hearer's ledger with the
+# teller as the chain; read back by `queries/world_q.py::named` (`intent_named`). Both halves of the
+# value's shape live here, once.
+# ---------------------------------------------------------------------------
+INTENT_STEM = roster_map("intent_claim", "claim").get("predicate")
+INTENT_NAMES = roster("intent_claim", ordered=True)
+
+
+def _check_intent_claim(stem, names, requires_stems, requires_operands, taken) -> None:
+    """Refuse, at import, an intent stem that another reader already answers, and a carried name
+    that is no operand. A `requires` grammar stem would read the intent as a WORLD FACT
+    (`WorldReader.read`) and make it a cell `record` pairs; the `seen` or `content:` predicate, or an
+    emitted event kind, would give one predicate two meanings. `ValueError`, not `gaps.Unspecified`:
+    this module may reach `data/`, the carriers and the trace sink only (the AX-2 allow-list)."""
+    if not stem or ":" in str(stem):
+        raise ValueError(f"rosters.yaml: intent_claim.claim.predicate is {stem!r}; it is a bare stem "
+                         f"and the intended verb is its argument")
+    if stem in requires_stems or stem in taken:
+        raise ValueError(f"rosters.yaml: intent_claim.claim.predicate {stem!r} is already a "
+                         f"predicate another reader answers; an intent is not a world fact or an event")
+    bad = [n for n in names if n not in requires_operands]
+    if bad:
+        raise ValueError(f"rosters.yaml: intent_claim names {bad}, which are not `requires_operands` "
+                         f"members; an intent carries the ids its act's operands bind")
+
+
+_check_intent_claim(INTENT_STEM, INTENT_NAMES, REQUIRES_STEMS, REQUIRES_OPERANDS,
+                    {SEEN_PREDICATE, RECORD_CONTENT.get("predicate")} | set(_verbs.EMITTED_KINDS))
+
+
+def intent_said(actor: str, verb: str, operands, confidence: int) -> Said:
+    """WHAT A TELLER SAYS WHEN THEY DECLARE AN INTENT: `actor` will do `verb`, on the ids `operands`
+    binds under `INTENT_NAMES` (a non-string operand -- a list of addressees -- is not carried). A
+    `Said` with an empty chain: the actor's own intent is no hearsay. Person-side; reads no ledger."""
+    ops = operands if isinstance(operands, dict) else {}
+    value = tuple((n, ops[n]) for n in INTENT_NAMES if isinstance(ops.get(n), str))
+    return Said(actor, f"{INTENT_STEM}:{verb}", value, confidence, ())
+
+
+def intent_named(c) -> tuple:
+    """The ids a declared-intent claim (or `Said`) names -- `intent_said`'s value read back; `()` for
+    any other predicate. `queries/world_q.py::named`'s intent branch."""
+    stem, sep, _ = str(c.predicate).partition(":")
+    if not sep or stem != INTENT_STEM or not isinstance(c.value, tuple):
+        return ()
+    return tuple(v for _n, v in c.value)
+
+
+def known_persons(claims, actor) -> tuple:
     """THE PERSONS THIS HOLDER KNOWS OF, from their OWN claims only -- sorted ids, never `actor`
-    and never `topic` (telling workplan `T4`, `ED-IN-0282`). Three sources, and no other:
+    (telling workplan `T4`, `ED-IN-0282`). Three sources, and no other:
 
       * a truthy existence reading of a person -- `rosters.yaml: known_person_operands.claim.
         predicate`, deposited where a fold asked whether somebody exists;
@@ -471,10 +624,11 @@ def known_persons(claims, actor, topic) -> tuple:
     WHETHER the person is present to hear is the fold's question (`tell`'s `hearer` conjunct, the
     `with` stem), so a known person who has walked away is still named and the telling is refused
     -- and the person does NOT learn it from the refusal (`news.untold` is one kind for both
-    conjuncts and the `with` read is never deposited, `witness.py`). `topic` is excluded because a telling
-    names its topic on `subject` and its hearer on `to`, and the two are different people by
-    construction; the actor because a person does not tell themselves (`opening_set`'s
-    counterparty rule declines it too).
+    conjuncts and the `with` read is never deposited, `witness.py`). The actor is excluded because a
+    person does not tell themselves (`opening_set`'s counterparty rule declines it too).
+    ⚠ THE TOPIC IS NOT EXCLUDED (v9 IN-18 step 2a, #453): a telling names its topic on `subject`
+    and its hearer on `to`, and they MAY be one person -- B, knowing C and holding `(C, x)`, may tell
+    C what B holds about C. Until step 2a the topic was discarded here, so that telling never formed.
 
     ⚠ `exists:Person` DEPOSITS ARE RARE AND `Seen.who` CARRIES THE LOAD: measured at T0 (scratch
     `t0/m0_summary.md`, M0d), every realm hit came from `seen`. The told source is empty until a
@@ -492,6 +646,5 @@ def known_persons(claims, actor, topic) -> tuple:
         if c.chain:
             out.add(c.chain[-1])
     out.discard(actor)
-    out.discard(topic)
     out.discard(None)
     return tuple(sorted(out))

@@ -90,7 +90,7 @@ def _contests_of(a: Act, row: "VerbRow | None") -> list:
 def _eligible(self, w: "World", a: Act, row: "VerbRow") -> bool:
     """§E4: eligibility admits `own`, `remit:<act>`, `hold:<object>`, `presence:<rung>` -- and
     NEVER `capability`, which the table loader already refuses. The kinds are a DISJUNCTION:
-    `transfer` is eligible by `own` OR `hold:<store>`."""
+    `transfer` is eligible by `remit:issue` OR `own` OR `hold:<store>`."""
     for alt in row.eligibility:
         kind, _, raw = alt.partition(":")
         kind, raw = kind.strip(), raw.strip()

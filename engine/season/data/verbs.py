@@ -96,7 +96,8 @@ _OPERAND_BENEFICIARIES = tuple(
 class VerbRow:
     verb: str
     stratum: str
-    eligibility: tuple        # a DISJUNCTION -- `transfer` is eligible by `own` OR `hold:<store>`
+    eligibility: tuple        # a DISJUNCTION -- `transfer` is eligible by `remit:issue` OR `own`
+    #                           OR `hold:<store>`
     requires: str
     writes: tuple          # ("Kind.field", ...) -- each MUST be a Part D row
     emits: tuple
@@ -1066,6 +1067,14 @@ def _derive_kind_verb() -> tuple:
 
 KIND_VERB, EMITTED_KINDS = _derive_kind_verb()
 
+# Every kind some row emits ON REFUSAL (`emits_on_refusal:`), read off the table as `EMITTED_KINDS`
+# is. A refusal reports an act that did not happen, so its claim is no deed
+# (`queries/person_q.py::is_deed`).
+REFUSAL_KINDS = frozenset(k for r in VERB_TABLE.values() for k in r.emits_on_refusal)
+
+# Every kind a DEED claim can carry: emitted, and by no row on refusal (`is_deed`'s set).
+DEED_KINDS = EMITTED_KINDS - REFUSAL_KINDS
+
 # An authored alignment cell for an EVENT KIND rather than a verb is keyed `deed:<kind>` in the same
 # axis row. Admitted only where `<kind>` is in `EMITTED_KINDS` (`_load_alignment`): a deed key for a
 # kind no verb emits is a weight on an event nobody can see. None is authored today.
@@ -1194,13 +1203,8 @@ def align_kind(kind: str, axis: str) -> float:
     """The alignment of an EVENT KIND on an axis: an authored `deed:<kind>` cell if one exists, else
     the alignment of the one verb that emits the kind (`KIND_VERB`), else 0.
 
-    ⚠ NOTHING CALLS THIS YET. It is the regard function's primitive (the telling workplan's G1),
-    placed beside `align` so the verb-keyed and kind-keyed readers share one table and one rebind.
-
-    ⚠ ITS FIRST CALLER MUST HANDLE THE `uniform` ARM. `alignment_at("uniform")` builds cells for
-    `VERB_TABLE` verbs only, so under it a `deed:` cell is dropped and a kind several rows emit (no
-    `KIND_VERB` entry) reads 0.0 while `align(v, axis)` reads 1.0 for every verb: the H-66 control
-    arm is not uniform for kinds until the caller (G1) closes that gap."""
+    Read by `deeds_judged`/`deed_valence`; under `uniform` every deed key is celled 1.0. Placed
+    beside `align` so the verb-keyed and kind-keyed readers share one table and one rebind."""
     cell = ALIGNMENT.get(axis, {}).get(DEED_PREFIX + kind)
     if cell is not None:
         return float(cell)
@@ -1271,7 +1275,10 @@ def alignment_at(point: str) -> dict:
         # scored differently from one present on it, convictions could still discriminate, and
         # `P31` passed under the "control". The test's own observability check caught it: a
         # control that the probe survives is not a control (§0.1 point 2).
-        return {ax: {v: 1.0 for v in VERB_TABLE} for ax in PURSUIT_AXES}
+        # The deed keys too: `align_kind` reads a `deed:<kind>` cell first, so under the control a
+        # kind several rows emit (no `KIND_VERB`) reads 1.0 like every verb, not 0.0.
+        return {ax: {**{v: 1.0 for v in VERB_TABLE},
+                     **{DEED_PREFIX + k: 1.0 for k in EMITTED_KINDS}} for ax in PURSUIT_AXES}
     return {ax: {v: (1.0 if w > 0 else -1.0 if w < 0 else 0.0) for v, w in row.items()}
             for ax, row in ALIGNMENT_DECLARED.items()}
 

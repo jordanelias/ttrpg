@@ -37,6 +37,9 @@ from ..data.rosters import (
     TENURE_KINDS,
 )
 from ..gaps import Forbidden, Unspecified
+# Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
+# the asker-first module (which may not import this one; this edge runs the other way).
+from .person_q import intent_named
 from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE (G3, plan position 6). The
 # write gate's F3 clause needs both -- ruling (3)'s parent rung and ruling (4)'s purview subtree --
@@ -470,6 +473,31 @@ def reach(w: World, p: Person) -> set[str]:
     return R
 
 
+def governors_of(w: World, rung_id: Optional[str]) -> list[str]:
+    """v9 IN-22 (#457 `CARRY-SHORTFALL`, `H-160` limit 2) -- THE PERSONS WHOSE SEAT'S PURVIEW REACHES
+    `rung_id`: every live `hold` on an Office for which `state/gate.py::purview_reaches` answers
+    True, by its holder, sorted. `[]` for a rung no seat reaches, for `None`, and for a rungless
+    seat's holder (`purview_reaches`' own *a seat with no rung reaches nothing*).
+
+    ⚠ THE SAME RELATION AS `reach`'s LIMB 4, ASKED FROM THE RUNG'S SIDE. Limb 4 unions
+    `{seat.rung} | descendants(seat.rung)` over the person's own holds, and `purview_reaches` is
+    `rung == seat.rung or rung in descendants(seat.rung)` -- one walk (`descendants`), so a person
+    this lists has `rung_id` in `reach(w, p)`, and a claim about `rung_id` deposited into his ledger
+    is admitted by `questions_for`'s clause 1. That is what makes the WITNESS route that calls this
+    (`loop/witness.py`, the purview deposit) end in a question rather than in a silent ledger slot.
+
+    ⚠ A WORLD READ, AND NOT A FAN BY ITSELF. It reads `w.tenures`/`w.offices`/the containment tree
+    and no ledger (`AX-2`). WHO RECEIVES WHAT is `loop/witness.py`'s rule, which narrows this to an
+    actorless Event's reads; `reach` stays a filter over what a deposit already put in a ledger
+    (`01` §A.4.4) and is not called from WITNESS."""
+    if rung_id is None:
+        return []
+    return sorted({t.subject for t in w.tenures
+                   if t.kind == "hold" and t.live and t.subject in w.persons
+                   and t.object in w.offices
+                   and purview_reaches(w, w.offices[t.object], rung_id)})
+
+
 def named(c) -> tuple:
     """CLAUSE 3's `named(c)` -- position `15c`, r2 `01_ATTENTION_AND_REACH.md` §A.5.3/§A.5.4 and
     `02_THE_WRIT_AND_THE_WORD.md` §A.9.1. The id set inside a `content:<kind>` claim's value, so
@@ -487,7 +515,17 @@ def named(c) -> tuple:
     `()` -- never `None`, so a bare caller need not guard -- for a claim whose `predicate` does
     not start `content:`, or whose `value` names nobody. Takes a `Claim`, not a `World`: it reads
     one object already in hand, the same shape as `place_of(w, c.subject)` beside it in `Q2`, and
-    is not a second read of `p.ledger` (`AX-2` stays satisfied by the caller's own loop)."""
+    is not a second read of `p.ledger` (`AX-2` stays satisfied by the caller's own loop).
+
+    ⚠ A SECOND KIND OF CONTENT NAMES SOMEBODY: A DECLARED INTENT (telling `T7`, G9; v9 IN-16). A
+    hearer told that the teller will do an act holds `(teller, intent:<verb>, ((name, id), ...))`
+    (`rosters.yaml: intent_claim`), and the ids it carries are whom the intent is aimed at. Read
+    through `person_q.intent_named`, the one owner of that value's shape, so a hearer whose reach
+    covers the act's target is asked about the teller -- *the realm hears what A means to do to B*.
+    No intent claim exists while `intent_disclosure` is 0, so the branch reads nothing there."""
+    got = intent_named(c)            # `()` unless the stem is the intent's, which is never `content:`
+    if got:                          # (`person_q._check_intent_claim`'s `taken` refuses that at import)
+        return got
     stem, sep, _ = str(c.predicate).partition(":")
     if not sep or stem != RECORD_CONTENT.get("predicate") or c.value is None:
         return ()

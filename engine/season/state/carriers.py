@@ -110,7 +110,8 @@ class Tenure:
         ⚠ `payload` HAD ZERO WRITERS AND ZERO READERS UNTIL THIS LANDED, which by the same test
         the deleted `conferrer` field failed (above) made it a field that *"does not exist, wearing
         a schema's clothes"*. This property and `World._grant_remit` are its first reader and its
-        first writer, and they are deliberately the ONLY two: §8 -- the shape of a payload is a
+        first writer; `World._grant_remit` is the payload's ONLY writer; its readers are this
+        property and `seat_rung` below: §8 -- the shape of a payload is a
         rule, so it lives once. A caller that reaches into `payload["remit_acts"]` itself has
         re-implemented it and will drift.
 
@@ -141,6 +142,25 @@ class Tenure:
         if acts is None:
             return ()
         return acts if isinstance(acts, tuple) else tuple(acts)
+
+    @property
+    def seat_rung(self) -> Optional[str]:
+        """THE SEAT'S RUNG AS GRANTED -- where the seat's TREASURY is (the retirement plan's G2,
+        *"treasury = `Rung.stores` at the office's own rung"*), read off the grant the holder owns.
+        `H-160` limit 1 / `H-158`: a holder paying out of his seat's rung gives FROM it
+        (`decision/options.py::treasury_of`), and the person-side reader has no `World` (`AX-2`),
+        so the rung rides on the Tenure beside `remit_acts`, `H-71` arm 2's own shape and writer
+        (`World._grant_remit`). The same SNAPSHOT semantics: as at seating, re-stamped by `establish`.
+        It extends `H-71` arm 2's precedent (the grant rides on the Tenure) to the seat's rung, which
+        no act can change: `_req_establish` refuses a rung difference on an existing id
+        (`loop/predicates.py`; MECHANICAL for `establish`). Layer-1 grade of the stamp itself
+        (`04` §B.8's `Tenure :=` lists no payload field; it is a second home for `Office.rung`):
+        CONVENTION, an untyped dict key with no per-property guard; ruled defensible at B-E close.
+
+        `None` for every Tenure carrying no grant, and for the grant of a rungless seat -- which has
+        no treasury, so a payment through it is not formed."""
+        p = self.payload
+        return p.get("seat_rung") if isinstance(p, dict) else None
 
 
 
@@ -308,6 +328,12 @@ class Claim:
     def hops(self) -> int:
         """How many tellings stand between the origin and this holder: `len(chain)`, `0` firsthand."""
         return len(self.chain)
+
+    @property
+    def firsthand(self) -> bool:
+        """The holder's OWN observation: nobody told it (`not chain`) and it was deposited
+        `firsthand`. A derived reading, not a field."""
+        return not self.chain and self.source == "firsthand"
 
 
 class Said(NamedTuple):

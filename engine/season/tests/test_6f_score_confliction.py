@@ -67,7 +67,11 @@ def _ranking(p: Person, k: float, monkeypatch) -> list:
         seen["ranked"] = [c.verb for c in ranked]
         return []
     monkeypatch.setattr(CH, "pack_scenes", spy)
-    fx = DEFAULT_FIXTURES.sweep("choice_temperature", 0).sweep("confliction_weight", k)
+    # `stance_gain` (H-202) at its CONTROL 0, explicitly: the 3/4 share above is calibrated against
+    # §F2's stance weight 1, and the gain ships live (Jordan, 2026-10-09), which would double the
+    # stance term and flip the control arm by the stance's weight rather than by the strain's.
+    fx = (DEFAULT_FIXTURES.sweep("choice_temperature", 0).sweep("stance_gain", 0.0)
+          .sweep("confliction_weight", k))
     choose = CH.make_chooser(fx, lambda *a: "act")
     choose(p, SimpleNamespace(question=object()), SimpleNamespace(subsistence=0), lambda: 1)
     assert "ranked" in seen, "the chooser never ranked: the falsifier did not run"

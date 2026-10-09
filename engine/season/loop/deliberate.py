@@ -488,7 +488,9 @@ def _inputs_fingerprint(p: Person, qs: list, s: Sensation) -> tuple:
                        silently shrink a queue they chose against a larger number.
 
     ⚠ `said_of` and `known_persons` read `seen` and event-kind claims OUTSIDE the `ledger` term above;
-    `q_ids` covers them only through Q2's reach.
+    `q_ids` covers them only through Q2's reach. `regard`'s deed half does too, read through
+    `teller_weight`'s `relation` by `ledger_weigh`: an event-kind claim about a teller can re-rank
+    beliefs with this fingerprint unmoved -- left out for the whole-ledger reason above.
 
     ⚠ WHAT IS NOT HERE, AND WHY THAT IS SAFE: `w.fixtures` is constant within a season (the sweep
     arms are chosen at `build_world`), and `self.round` is not an input to any of the five readers

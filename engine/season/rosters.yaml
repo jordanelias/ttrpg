@@ -914,7 +914,7 @@ rosters:
       co_located:    "the person shares a live `contain` Tenure with the Event's place -- the presence index S28 already builds and the fan-out never read"
       document_key:  "the person holds a live `hold` Tenure over something THIS EVENT CHANGED -- a subject named in `changes[]` (a Record, a store). ⚠ THIS ROW READ *the Event's SUBJECT* until `R8.4`, and that clause is why the channel could not fire on a single act: every fold-emitted Event sets `subject = a.actor` and no `hold` takes a PERSON as object, so the equality held only on `MATTER`/`CALENDAR` kinds, which carry no verb and no actor. The parenthetical was always right and the clause it qualified was wrong. Corrected here in the same change as the predicate, because this row is where the meaning lives (see the note above) and `R5` quotes it verbatim as the channel's definition"
       witness_key:   "the person IS the Event's anchor (`state/attribution.py::anchor_of` -- the actor where one acted, the written thing otherwise; it read the deleted `Event.subject` until G1b), or shares a live `knot` Tenure with it -- S28's knot deposit, which already reuses the Event id"
-      post_remit:    "the person is an OBLIGEE of the seat the Event's act was exercised through (`Act.via`) -- a live `oblige` Tenure to it, read through `queries/world_q.py::establishment_of`, the one owner of that set -- AND stands AT that seat: the seat's rung is where they are or above it (`state/gate.py::purview_reaches`). Plan position `17a`, r2 item 9. ⚠ THIS ROW READ *the person holds a live office Tenure whose remit covers the verb that emitted this kind* until `17a` -- a remit-holder learning of every covered act anywhere in the realm, the place-blind broadcast r2 `02` §A.7 and `01` both delete. An Event no act caused, or an act exercised through no seat, admits nobody here"
+      post_remit:    "the person is an OBLIGEE of the seat the Event's act was exercised through (`Act.via`) -- a live `oblige` Tenure to it, read through `queries/world_q.py::establishment_of`, the one owner of that set -- AND stands AT that seat: the seat's rung is where they are or above it (`state/gate.py::purview_reaches`). Plan position `17a`, r2 item 9. ⚠ THIS ROW READ *the person holds a live office Tenure whose remit covers the verb that emitted this kind* until `17a` -- a remit-holder learning of every covered act anywhere in the realm, the place-blind broadcast r2 `02` §A.7 and `01` both delete. An Event no act caused, or an act exercised through no seat, admits nobody through this predicate. ONE other admission rides this channel's source (`inferred`) and its live/off switch, in `loop/witness.py` (v9 IN-22): an ACTORLESS Event's observation READS (MATTER's recorded shortfall) go to the holders of a live seat whose purview reaches the read rung (`queries/world_q.py::governors_of`) -- reads only, never an event-kind, `seen` or `content:` claim"
       chronicle:     "the kind is emitted by a `binding_decision` verb -- a matter of record, and public because the decision is institutional"
 
   observation_terms:
@@ -1642,6 +1642,59 @@ rosters:
       predicate: "exists:Person"
       seen_term: who
     values: [to]
+
+  intent_claim:
+    source: >-
+      v9 IN-16, telling `T7` (G9, declared intent; `workplans/valoria_master_workplan_v9_part4.md`,
+      `ED-IN-0282`): *"a teller may tell a hearer an act they have CHOSEN-AND-NOT-YET-DONE, as a
+      position and a claim kind"*.
+    note: >-
+      THE CLAIM KIND A DECLARED INTENT IS. `decision/choose.py::declare_intents` mints it at CHOOSE,
+      through `queries/person_q.py::intent_said`, onto a telling's `said`, so the told deposit lands
+      it in each hearer's ledger as `(teller, <stem>:<verb>, ((name, id), ...))`: `claim.predicate`
+      is the STEM, the intended act's verb its argument, and `values` are the operand names of the
+      intended act whose ids the value carries, in this order. `queries/world_q.py::named` reads
+      those ids back (through `person_q.intent_named`), so a hearer whose reach covers a person or
+      place the intent names is raised a `claim_landed` question about the teller. ⚠ NOT A CELL:
+      the stem is refused at import if it is a `requires` grammar stem (it would read as a world
+      fact and `record` would pair it), the `seen` predicate, the `content:` predicate or an emitted
+      event kind (`person_q._check_intent_claim`). Whether the act was later done is not read by
+      anything (`hole_register.yaml` `H-191`).
+    claim:
+      predicate: intent
+    values: [subject, to]
+
+  stance_polarities:
+    source: >-
+      v9 IN-18 `G2` (telling workplan §5, `ED-IN-0282`): *"polarity in §F2 term 2"* -- the score's
+      regard term read by the ROLE the regarded party plays in the act, with `declared` against
+      `legacy` as the falsifier's two arms.
+    note: >-
+      THE ARMS OF `Fixtures.stance_polarity` (`H-194`), read by `decision/choose.py::stance_term`
+      (its `_stance_arm`), score term 2. `legacy` is the pre-G2 term, `+ stance_toward(p, c.subject)` for every row --
+      the CONTROL, shipped: an act against a disliked opponent then scores LOWER, the sign §F2's
+      term never distinguished. `declared` reads `regard(p, c.subject)` (G1's, so its judged and
+      told halves enter at their own gains) and NEGATES it where the subject is the act's OPPONENT
+      (`decision/options.py::subject_is_opponent`: the row contests and names no counterparty), so
+      fighting the disliked scores higher. A Rung subject reads 0 at G1's control; at live gains it
+      reads the deed claims held about it (`transfer.made` on a changed rung, under
+      `claim_subject_rule: both`). Its regarded party under the ROLE reading would be its HOLDER,
+      and no ledger holds a `held_by` claim (M0g, `H-195`). `regard` is the
+      midpoint: G1's regard with `+` on every row, so the sweep separates what regard adds from
+      what the sign adds.
+    values: [legacy, regard, declared]
+
+  said_slants:
+    source: >-
+      v9 IN-18 `G3` (telling workplan §5, `ED-IN-0282`): *"slant -- the strongly valenced older
+      claim is told under `valence`, the newer neutral one at control"*.
+    note: >-
+      THE ARMS OF `Fixtures.said_slant` (`H-196`), read by `queries/person_q.py::said_of`. `newest`
+      is the pre-G3 pick -- the newest non-`seen` claim about the subject, then the most confident
+      -- the CONTROL, shipped. `valence` first narrows the teller's claims about the subject to
+      those THEY judge most strongly (the largest `|deed_valence|` by their own pursuits) and picks
+      among those by the same comparator; with no valenced claim it is `newest` exactly.
+    values: [newest, valence]
 
   beneficiary_kinds:
     source: >-

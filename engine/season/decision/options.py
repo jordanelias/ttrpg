@@ -29,7 +29,10 @@ from ..data.pursuits import to_axes
 from ..data.requires import (
     CELL_STEMS, SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS, WRIT_SOURCED_OPERANDS,
 )
-from ..data.rosters import PERSON_PREDICATES, PURSUIT_AXES, RECORD_CONTENT, require_member
+from ..data.rosters import (
+    CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, RECORD_CONTENT, WITNESS_CHANNELS,
+    require_member,
+)
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import ELIGIBILITY_KINDS, VERB_TABLE, align
@@ -102,9 +105,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     out: list[Candidate] = []
     axis = fx.get("refusal_axis")
     tolerance = refusal_tolerance(p, axis)
-    # `T3a`: clause 4's reader grades hearsay by its teller. A ledger holding no told claim weighs
-    # 1.0 everywhere, which is the unweighted order exactly (tested), so it takes the plain reader.
-    weigh = teller_weight(p, fx) if any(c.chain for c in p.ledger) else None
+    weigh = ledger_weigh(p, fx)
     for verb, row in sorted(VERB_TABLE.items()):
         if not person_side_eligible(p, row):
             continue
@@ -118,6 +119,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # `T4`: only a NAMED own-ledger conjunct carries `said` (`tell`'s `holds`); `survey` and
         # `reconstruct` share the form unnamed and carry nothing (telling workplan, "From Batch 1").
         ledger_of = row.requires_typed.named_own_ledger_operands() if row.requires_typed else ()
+        opposes_subject = subject_is_opponent(row)
         said_of_entity: dict = {}           # entity -> `said_of` (this row's own-ledger read, per entity)
         for subject in q.referents:
             # ⚠⚠ A CONTEST NEEDS TWO CLAIMANTS, AND A PERSON IS NOT THEIR OWN ADVERSARY.
@@ -142,7 +144,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             # that names its second side on its own operand contests against THAT (`tell`'s `to`),
             # so its `subject` is a topic and a person may tell somebody about themselves; the
             # counterparty rule below still declines the person as their own second side.
-            if row.contests and not row.counterparty and subject == p.id:
+            if opposes_subject and subject == p.id:
                 continue
             # ⚠ OPERANDS BEFORE THE BELIEF TEST, AND THE ORDER IS THE POINT. Clause 4 asks
             # whether the requirement is known-false ABOUT THIS BINDING, so the binding has to
@@ -195,13 +197,23 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                     # one telling is read once however many hearers it fans to.
                     entity = ops.get(ledger_of[0])
                     if entity not in said_of_entity:
-                        said_of_entity[entity] = said_of(p.ledger, entity, fx)
+                        said_of_entity[entity] = said_of(p.ledger, entity, fx, teller=p)
                     said = said_of_entity[entity]
                     if said is None:
                         continue
                     ops = {**ops, "said": said}
                 out.append(Candidate(verb, subject, operands=ops))
     return out
+
+
+def subject_is_opponent(row: "VerbRow") -> bool:
+    """WHETHER AN ACT OF `row` IS CONTESTED AGAINST ITS `subject` -- the row declares a prize
+    (`contests:`) and names no `counterparty:`, so its second side IS its subject (`loop/sides.py`
+    contests against `payload[row.counterparty or "subject"]`). Read off the row's own columns,
+    never a verb name. One owner for two readers: `opening_set`'s self-subject decline (a person is
+    not their own adversary) and `decision/choose.py`'s score term 2 under `stance_polarity:
+    declared` (v9 IN-18 `G2`: an act against a disliked opponent scores higher, not lower)."""
+    return bool(row.contests) and not row.counterparty
 
 
 # ⚠ `project` LIVES HERE, NOT IN `choose.py`, AND THE REASON IS AN IMPORT CYCLE THAT EXECUTED.
@@ -299,8 +311,8 @@ def refuses(verb: str, axis: str, tolerance: float) -> bool:
 def person_side_eligible(p: Person, row: "VerbRow") -> bool:
     """§F1 clause 2, PERSON-SIDE. `own | remit | hold | presence`, NEVER `capability`.
 
-    A DISJUNCTION: `transfer` is eligible by `own` OR `hold:<store>`, so one alternative admitting
-    is enough and one alternative declining decides nothing.
+    A DISJUNCTION: `transfer` is eligible by `remit:issue` OR `own` OR `hold:<store>`, so one
+    alternative admitting is enough and one alternative declining decides nothing.
 
     ⚠ **ONE OF THE FOUR KINDS DECLINES HERE — `remit:` NO LONGER DOES, AS OF 2026-09-18 (`13b`,
     `H-71`).** The bullet below is kept because it states WHY the hole existed and what closed it,
@@ -336,16 +348,18 @@ def person_side_eligible(p: Person, row: "VerbRow") -> bool:
 def exercised_seat(p: Person, row: "Optional[VerbRow]") -> Optional[str]:
     """G3 -- THE SEAT A COMPUTED ACT EXERCISES: the office id its `Act.via` carries, or `None`.
 
-    `04 §B.9` gives `Act` a `via : SeatId?` and `04:332` asks purview of the seat exercised, so
+    `04 §B.9` gives `Act` a `via : SeatId?` and `04:350` asks purview of the seat exercised, so
     the act a person mints has to say which seat it is exercised through -- and only the person can
     say, because only the person's own Tenures are in scope here (AX-2). It is the seat through
     which `person_side_eligible` ADMITTED the verb, read by the SAME walk (`_admitted_through`) so
     the two cannot disagree: a `remit:` alternative admits through the first live `hold` whose grant
     carries the act, and that hold's object is the seat. An `own` or `hold` alternative admits the
-    person AS THEMSELVES, and no seat is exercised -- `kill / wound`, `transfer`, `release` all mint
-    with `via=None`. The fold's `_eligible` then admits the same act through the same seat, so
-    making `via` required there moves no computed act (measured: `build_realm(0)`'s content hash
-    over one season is unchanged by G3).
+    person AS THEMSELVES, and no seat is exercised -- `kill / wound`, `release` mint with `via=None`,
+    and so does `transfer` for a person whose seats grant no `issue` (its first alternative is
+    `remit:issue` since `H-160` limit 1, so a holder of a seat granting `issue` WITH A RUNG gives
+    THROUGH it, from its rung). The fold's `_eligible` then admits the same act through the same
+    seat, so making `via` required there moves no computed act (measured: `build_realm(0)`'s
+    content hash over one season is unchanged by G3).
 
     ⚠ WHICH SEAT, WHEN SEVERAL GRANT THE ACT, IS THE FIRST IN THE PERSON'S OWN TENURE ORDER -- a
     fixed rule, not a choice, and a LIMIT stated rather than hidden: a person holding two seats that
@@ -371,18 +385,27 @@ def exercised_seat(p: Person, row: "Optional[VerbRow]") -> Optional[str]:
     return _admitted_through(p, row, trace=False)[1]
 
 
-def _granting_hold(p: Person, act: str):
+def _granting_hold(p: Person, act: str, need_treasury: bool = False):
     """The first live `hold` in the person's OWN store whose grant carries `act`, or `None` -- the
-    one person-side reading of *which seat grants this* (`H-71` arm 2's snapshot)."""
-    return next((t for t in p.tenures if t.kind == "hold" and t.live and act in t.granted_acts),
-                None)
+    one person-side reading of *which seat grants this* (`H-71` arm 2's snapshot).
+
+    `need_treasury` is set for a row whose cell binds `from`: an act exercised through a seat gives
+    from the seat's rung (`treasury_of`), so a seat whose grant carries no rung grants nothing such
+    an act can be exercised through, and is passed over. Every reader of the seat (`opening_set`'s
+    belief seat, `_operands`, `pack_scenes`' `via`) goes through here, so `via` and `from` agree."""
+    return next((t for t in p.tenures if t.kind == "hold" and t.live and act in t.granted_acts
+                 and (not need_treasury or t.seat_rung is not None)), None)
 
 
 def _admitted_through(p: Person, row: "VerbRow", trace: bool) -> tuple:
     """`(admitted, seat)`: `person_side_eligible`'s walk over the row's DISJUNCTION, once, for both
     of its readers -- the FIRST alternative that admits decides, and `seat` is the office it admitted
     through (`None` unless that alternative was `remit:`). `trace=False` is `exercised_seat`'s
-    reading of a verb the first reading already traced, so the trace records each decline once."""
+    reading of a verb the first reading already traced, so the trace records each decline once.
+    The declines are held and traced only when NO alternative admits, so a person a later
+    alternative admits leaves no note that the verb declined."""
+    need_treasury = None                    # read only by the `remit` branch; computed there, once
+    pending: list = []                      # this walk's decline notes, traced only on (False, None)
     for alt in row.eligibility:
         kind, _, raw = alt.partition(":")
         kind, raw = kind.strip(), raw.strip()
@@ -412,8 +435,8 @@ def _admitted_through(p: Person, row: "VerbRow", trace: bool) -> tuple:
                 if any(t.kind == "hold" and t.live and t.object == arg for t in p.tenures):
                     return (True, None)
             elif trace:
-                TRACE.note(f"`hold:<{arg}>` names an object KIND, not an id (H-75); "
-                           f"{row.verb!r} declines rather than admitting on any held object")
+                pending.append(f"`hold:<{arg}>` names an object KIND, not an id (H-75); "
+                               f"{row.verb!r} declines rather than admitting on any held object")
         # `remit` and `presence` decline: see the docstring. TRACE records the decline so the
         # count is measurable rather than inferred from a verb's absence.
         elif kind == "remit":
@@ -426,22 +449,30 @@ def _admitted_through(p: Person, row: "VerbRow", trace: bool) -> tuple:
             # weighs equally with an over-refusal. Every live `remit:` cell in `verb_table.yaml`
             # is a literal (`remit:issue`, `remit:confer`), so this refuses nothing that exists.
             # G3: the hold that grants it IS the seat exercised -- returned, not just found.
-            seat = _granting_hold(p, arg) if arg and not placeholder else None
+            # A row binding `from` gives from the seat's rung when exercised through one
+            # (`_granting_hold`).
+            if need_treasury is None:
+                need_treasury = (row.requires_typed is not None
+                                 and "from" in row.requires_typed.operands())
+            seat = (_granting_hold(p, arg, need_treasury)
+                    if arg and not placeholder else None)
             if seat is not None:
                 return (True, seat.object)
             if not trace:
                 continue
             if placeholder:
-                TRACE.note(f"`remit:<{arg}>` names an ACT KIND, not an act (H-75); "
-                           f"{row.verb!r} declines rather than admitting on any granted remit")
+                pending.append(f"`remit:<{arg}>` names an ACT KIND, not an act (H-75); "
+                               f"{row.verb!r} declines rather than admitting on any granted remit")
             elif not arg:
-                TRACE.note(f"bare `remit` names no act; {row.verb!r} declines")
+                pending.append(f"bare `remit` names no act; {row.verb!r} declines")
             else:
-                TRACE.note(f"`remit:{arg}` not granted on any live `hold` this person holds; "
-                           f"{row.verb!r} declines")
+                pending.append(f"`remit:{arg}` not granted on any live `hold` this person holds; "
+                               f"{row.verb!r} declines")
         elif kind == "presence" and trace:
-            TRACE.note(f"`presence:` eligibility is unevaluable person-side (H-33, the presence "
-                       f"index); {row.verb!r} declines rather than admitting")
+            pending.append(f"`presence:` eligibility is unevaluable person-side (H-33, the "
+                           f"presence index); {row.verb!r} declines rather than admitting")
+    for note in pending:
+        TRACE.note(note)
     return (False, None)
 
 
@@ -505,6 +536,24 @@ def containing_rung_of(p: Person) -> Optional[str]:
     the Candidate is not formed. That is a REFUSAL and not a hole in the design: #353 seats every
     person on the ladder, so a person off it is a WORLD the case failed to build."""
     return next((t.object for t in p.tenures if t.kind == "contain" and t.live), None)
+
+
+def treasury_of(p: Person, seat: str) -> Optional[str]:
+    """WHERE A HOLDER GIVES FROM WHEN HE GIVES THROUGH HIS SEAT: the seat's rung, its TREASURY (the
+    retirement plan's G2, *"treasury = `Rung.stores` at the office's own rung"*), read off the
+    person's OWN live `hold` on `seat` (`Tenure.seat_rung`, the grant's snapshot, `H-71` arm 2's
+    shape). `None` for a seat he does not hold or a rungless seat, which has no treasury -- and the
+    computed path never asks it of a rungless seat when the row binds `from` (`_granting_hold`'s
+    `need_treasury` passes such a seat over, so the act is exercised as himself).
+
+    `H-160` limit 1 / `H-158` [ASSUMPTION; medium; Jordan to correct; revert: a ruling that an `own`
+    verb may be exercised through a seat]: `containing_rung_of`'s *where the actor is* stays the
+    answer for an act exercised AS HIMSELF; an act exercised THROUGH A SEAT (`exercised_seat`, the
+    same walk `Act.via` is named by) gives from the seat's rung, because that is where the seat's
+    matter is, and `loop/effects_economy.py::_renewals` already reads a payment of upkeep as exactly
+    that (`seat.rung == from`). One rule for both positions of the actor, no verb named."""
+    return next((t.seat_rung for t in p.tenures
+                 if t.kind == "hold" and t.live and t.object == seat), None)
 
 
 def _claim_by_id(p: Person, claim_id) -> Optional["Claim"]:
@@ -603,8 +652,9 @@ def _from_shortfall_claim(p: Person, q: "Question", name: str):
     ⚠ `to` IS NOT READ HERE. For a `claim_landed` question the referent IS the claim's subject, so
     the referent rule already binds `to` to the drained rung (`rosters.yaml:
     shortfall_sourced_operands`' note). ⚠ `from` IS NOT READ HERE EITHER. The giver gives from where
-    they stand (`containing_rung_of`), for r2 §A.13's reason: a claim about somewhere else must not
-    reach into a larder the actor is not standing in.
+    they stand (`containing_rung_of`), or through a seat from the seat's own rung (`treasury_of`,
+    `H-160` limit 1), for r2 §A.13's reason: a claim about somewhere else must not reach into a
+    larder the actor neither stands in nor holds the seat of.
 
     ⚠ `None` IS SILENT BY DESIGN. It means no claim by `q.about` in `p`'s own ledger, a predicate
     that is not `shortfall:<kind>`, or an amount that is not a positive whole number, and the caller
@@ -643,8 +693,13 @@ def _from_shortfall_claim(p: Person, q: "Question", name: str):
     return None
 
 
-def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"):
+def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures",
+                    seat: Optional[str] = None):
     """ONE OPERAND, FROM THE PERSON'S OWN STATE. `None` means THIS PERSON CANNOT SUPPLY IT.
+
+    `seat` is the seat the act will be exercised through (`exercised_seat`), `None` for an act the
+    person performs as himself. It moves ONE operand, `from`: through a seat, the giver gives from
+    the seat's rung (`treasury_of`, `H-160` limit 1); as himself, from where he stands.
 
     ⚠ THE CHAIN IS NOT THE ROUTER `G2` FORBIDS, on `WorldReader.read`'s own precedent. It
     enumerates the CLOSED OPERAND VOCABULARY -- `rosters.yaml: requires_operands`, eight names,
@@ -752,9 +807,10 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
         return subject
     # Where the ACTOR is. §54 item 7's `hearth(giver)`, READ AS the actor's containing rung of
     # any kind -- a declared assumption with a named alternative and a measurement, not a reading
-    # the document supplies. See `containing_rung_of`, and register row `H-94`.
+    # the document supplies. See `containing_rung_of`, and register row `H-94`. THROUGH A SEAT the
+    # actor's position is the seat's, so `from` is its rung (`treasury_of`, `H-160` limit 1).
     if name == "from":
-        return containing_rung_of(p)
+        return treasury_of(p, seat) if seat is not None else containing_rung_of(p)
     # Values the design states no number for. `H-94`, declared / defaulted / swept.
     if name == "kind":
         return store_kind_of(p, q) or fx.get("default_store_kind")
@@ -838,7 +894,7 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
     `subject` (`TypedRequires.known_person_operands`: `tell`'s `to`, and since plan position `14`
     `give`'s -- `petition` and `issue` bind `to` without `subject`, so `to` is what they are about
     and keeps the referent rule in `_derive_operand`), one bag PER PERSON `p` KNOWS (`queries/person_q.py::known_persons`, from `p`'s own claims,
-    never the actor and never the topic), in that function's sorted order. Nobody known is no bag:
+    never the actor; since IN-18 step 2a the topic may be the hearer), in that function's sorted order. Nobody known is no bag:
     a telling to nobody is an act with a hole (`operands_for`'s `None`), traced and not formed.
 
     ⚠ PERSON-SIDE AND WORLD-FREE, like `operands_for` -- `p` first for the AST guard's reason
@@ -853,10 +909,10 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
     if not fan:
         ops = _operands(p, row, q, subject, fx, {})
         return [] if ops is None else [ops]
-    people = known_persons(p.ledger, p.id, subject)
+    people = known_persons(p.ledger, p.id)
     if not people:
         TRACE.note(f"{row.verb!r} needs {list(fan)} from a person {p.id} knows, and they know "
-                   f"nobody but {subject!r}; NO Candidate is formed (T4)", "§F1/H-94")
+                   f"nobody; NO Candidate is formed (T4)", "§F1/H-94")
         return []
     out = []
     for who in people:
@@ -876,13 +932,18 @@ def _operands(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixtures",
         return {}
     bound = tuple(req.operands())
     admitted = req.needs()
+    names = bound + tuple(n for n in _REFERENT_OPERANDS if n in admitted and n not in bound)
+    # The seat the act will be exercised through -- the walk `pack_scenes` names `Act.via` by -- so
+    # the operands and the act's `via` cannot disagree about whether the actor acts as a seat.
+    # `_derive_operand` reads it for `from` alone, so the (untraced) walk runs only for a bag
+    # carrying `from`.
+    seat = exercised_seat(p, row) if "from" in names else None
     out: dict = {}
-    for name in bound + tuple(n for n in _REFERENT_OPERANDS
-                              if n in admitted and n not in bound):
+    for name in names:
         # `actor` is structural on both sides and is never carried; see `binding_of`.
         if name == "actor":
             continue
-        v = given[name] if name in given else _derive_operand(p, name, q, subject, fx)
+        v = given[name] if name in given else _derive_operand(p, name, q, subject, fx, seat)
         if v is None:
             if name not in bound:
                 # An operand the CELL does not read cannot make the act malformed -- it is simply
@@ -981,6 +1042,119 @@ def standing_of(p: Person, fx: "Fixtures") -> int:
     return scale if paired == 0 else (dis * scale) // paired
 
 
+# Built once: `channel_remove` runs per deposit, and the roster it reads does not change at runtime.
+_REMOVE_ORDINAL = tuple(dict.fromkeys(CHANNEL_CLAIM_SOURCE[ch] for ch in WITNESS_CHANNELS))
+
+
+def channel_remove(channel: str) -> float:
+    """HOW FAR FROM THE THING ITSELF A CHANNEL PUTS ITS WITNESS, in `[0, 1]`: `0` for presence, `1`
+    for the most removed channel. REFRACTION's channel term (`refracted_confidence`, v9 IN-15).
+
+        remove(ch) = k / (K - 1),   k = the place of `claim_source[ch]` in the ordinal of remove,
+                                    K = how many distinct sources that ordinal holds
+
+    ⚠ THE ORDINAL IS READ OFF THE ROSTER, NOT WRITTEN HERE. `rosters.yaml: witness_channels` is
+    ordered strongest first and its note says the order follows `19_PLAN.md`'s ordinal of remove
+    (*firsthand > knot-sourced > told > inferred*); the distinct `claim_source:` values in that order
+    ARE the ordinal, so a channel's remove is its SOURCE's place. Two channels with one source
+    (`document_key`, `chronicle`: both `told_by`) are equally removed, which keeps that note's
+    *"the order decides only which channel is reported, never the source"* true of this term too.
+    EQUAL SPACING between the ranks is the [ASSUMPTION] (`H-199`): the ordinal is ruled, the
+    distances are not."""
+    return _REMOVE_ORDINAL.index(CHANNEL_CLAIM_SOURCE[channel]) / (len(_REMOVE_ORDINAL) - 1)
+
+
+def ledger_weigh(p: Person, fx: "Fixtures"):
+    """THE `weigh` `p` READS THEIR OWN LEDGER BY when asking `belief_contradicts` -- `teller_weight`,
+    or `None` for a ledger holding no told claim (`T3a`: such a ledger weighs 1.0 everywhere, which is
+    the unweighted order exactly, tested, so it takes the plain reader). One owner for both askers:
+    `opening_set` (*may I do this*) and `dissents`' act-level term (*could the actor have done this*,
+    `H-201`), so a person reads one ledger one way whichever question they put to it."""
+    return teller_weight(p, fx) if any(c.chain for c in p.ledger) else None
+
+
+def dissents(p: Person, c: Claim, act=None, weigh=None) -> bool:
+    """DOES WHAT `p` ALREADY HOLDS DISAGREE WITH `c`? REFRACTION's prior-belief term.
+
+    `c` is a claim about to land in `p`'s ledger and not yet in it. Two priors, either of which
+    dissents:
+
+    1. ON THE CLAIM'S OWN KEY. The pairing is the tree's one pairing step, `_pair`, on the key the
+       tree already pairs that kind of claim on -- no third key:
+         * a claim ABOUT `p` on a `person_predicates` member: `agreement` -- §18.2's comparison of
+           what others read off you against what you hold true of yourself, which is `AX-7`'s
+           *"(2) IS REVISABLE BY (3)"* seen from the receiving end;
+         * a claim on a CELL (`_is_cell`): `record`'s pairing, `(subject, predicate)`;
+         * anything else -- an event-kind claim (always `True`), a `seen` struct (each sighting a
+           new value, so it would "disagree" with the sighting it reports), a `content:` claim --
+           nothing, for the reason `record`'s docstring gives for not scoring those.
+       FIRSTHAND only (empty chain, source `firsthand`), as in `agreement` and `record`: what you
+       saw resists what you hear, and hearsay does not resist hearsay here.
+    2. ON THE ACT IT REPORTS (`H-201`), when the caller passes `act` -- the act `c` says HAPPENED
+       (`loop/witness.py` passes it for the event-kind and `seen` deposits of an act's own emission,
+       never a refusal's). `p` dissents when their own ledger makes that act's `requires`
+       KNOWN-FALSE FOR ITS ACTOR: `belief_contradicts` with `actor=act.actor`, on the act's own
+       verb row, operands (its payload, as `binding_from_act` reads it) and seat (`act.via`) --
+       the question `opening_set` asks of a Candidate, asked of somebody else's act, and never a
+       second evaluation of `requires` against a ledger. The actor is BOUND, not defaulted: the
+       default binds `p`, which asks *could I have done this* (a witness whose own granary is
+       empty would doubt every transfer they saw). `weigh` is the reader's, `ledger_weigh`'s, as
+       `opening_set` passes it -- so this prior reads the whole ledger, hearsay graded, unlike
+       (1): it is the person's belief about the world, the one they choose by. [ASSUMPTION, `H-201`]"""
+    own = [x for x in p.ledger if x.firsthand]
+    if c.subject == p.id and c.predicate in PERSON_PREDICATES:
+        if agreement([c], [x for x in own if x.subject == p.id])[1] > 0:
+            return True
+    elif _is_cell(c):
+        if _pair([c], [x for x in own if _is_cell(x)], lambda x: (x.subject, x.predicate))[1] > 0:
+            return True
+    if act is None:
+        return False
+    row = VERB_TABLE.get(act.verb)
+    if row is None:
+        return False
+    pay = act.payload if isinstance(act.payload, dict) else {}
+    return belief_contradicts(p, row, pay.get("subject"), pay, act.via, weigh=weigh,
+                              actor=act.actor)
+
+
+def refracted_confidence(p: Person, c: Claim, channel: str, gain: float,
+                         act=None, weigh=None) -> int:
+    """REFRACTION -- `AX-7`'s divergence formula (v9 IN-15; `H-36`'s shape, `H-199`'s magnitude).
+    How much `p` credits a claim landing in their ledger, from the channel it reached them by and
+    what they already held:
+
+        confidence' = floor( c.confidence * (1 - g * remove(channel))
+                                          * (1 - g * dissent(p, c)) * competence + 1/2 )
+
+    `g` is `refraction_gain`, in `[0, 1]`; `remove` is `channel_remove`; `dissent` is `dissents`, 0
+    or 1 -- with `act` (the act `c` reports happening) and `weigh` passed through to its act-level
+    term (`H-201`); `competence` is 1, unbuilt (`H-200`). Each factor is in `[0, 1]`, so refraction only
+    ever LOWERS a confidence, and at `g = 0` every factor is exactly 1: THE CONTROL, and the deposit
+    is today's.
+
+    ⚠ `H-36`'s SHAPE, KEPT: RECEIVER-SIDE, PER RECEIVER, AND NEVER THE EMISSION. Nothing here writes
+    an Event or an Act; `act` is read only for `dissents`' act-level prior (H-201). It grades one
+    person's copy as it lands, so two witnesses of one act hold it with different confidence and
+    the act is untouched (`AX-7` layer (1)).
+    ⚠ CONFIDENCE, NOT VALUE. `AX-7` allows either; what a copy may LOSE in its value is already
+    owned (`loop/witness.py::_told_value`, r2 `02` §A.10), and a second value rule here would be a
+    second owner of it. This is the axis no rule moved: every deposit took `confidence_default`, or
+    the teller's own.
+    ⚠ FROZEN AT DEPOSIT, UNLIKE `teller_weight`. CAT-3 grades a told claim WHEN READ because the
+    hearer's relation to the teller can change later; the channel and the prior are facts of the
+    moment the claim lands, and the carrier stores neither, so they are applied here, once. The two
+    multiply into nothing shared: `teller_weight` never reads `confidence`.
+    ⚠ THE PRODUCT IS THE SIBLINGS' METHOD (`teller_weight`'s `told_weight ** hops * relation *
+    record`): the three inputs `AX-7` rules *"together"* each scale the credit independently."""
+    if not 0.0 <= gain <= 1.0:
+        raise ValueError(f"refraction_gain {gain!r} is outside [0, 1] (H-199): a factor below 0 "
+                         "would turn a deposit's confidence negative")
+    # ABSENT: H-200 competence  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
+    factor = (1.0 - gain * channel_remove(channel)) * (1.0 - gain * dissents(p, c, act, weigh))
+    return int(c.confidence * factor + 0.5)
+
+
 def _clamp(x: float, lo: float, hi: float) -> float:
     return lo if x < lo else hi if x > hi else x
 
@@ -1039,8 +1213,9 @@ def record(p: Person, teller: str, fx: "Fixtures") -> float:
     which a told claim's weight is independent of the firsthand claims it contradicts."""
     gain = fx.get("record_gain")
     told = [c for c in p.ledger if c.teller == teller and _is_cell(c)]
-    own = [c for c in p.ledger if not c.chain and c.source == "firsthand" and _is_cell(c)]
+    own = [c for c in p.ledger if c.firsthand and _is_cell(c)]
     agree, dis = _pair(told, own, lambda c: (c.subject, c.predicate))
+    # ABSENT: H-191 intent reconciliation  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
     if agree + dis == 0:
         return 1.0
     return 1.0 + gain * (agree - dis) / (agree + dis)
@@ -1054,7 +1229,8 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
                  = clamp01(told_weight ** hops * relation * record)   otherwise
         hops     = len(c.chain)         teller = c.chain[-1]           (origin = c.chain[0])
         relation = 1 + rank_gain * rank(p, teller)
-                     + regard_gain * clamp(regard(p, teller) / STANCE_MAX, -1, 1)
+                     + regard_gain * clamp(regard(p, teller, fx) / STANCE_MAX, -1, 1)
+                   (`regard` is G1's: stored stance plus the judged and told halves at their gains)
         record   = `record(p, teller, fx)`: 1.0 with no pair; else 1 + record_gain * balance (`T6`)
 
     `RULINGS.yaml` CAT-3, closed: store the teller and grade the claim WHEN READ, by the hearer's
@@ -1076,7 +1252,9 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
     can therefore tie a firsthand claim on support and win on `when`; `rank` reads 0 (`H-181`) so it
     adds nothing yet. `record` is not independent of what it weighs: see `record`'s last warning.
     ⚠ `relation` AND `record` EACH DEPEND ON THE TELLER ALONE AND ON `p`'s LEDGER, WHICH DOES NOT
-    CHANGE INSIDE ONE `opening_set`, so each is computed ONCE PER TELLER."""
+    CHANGE INSIDE ONE `opening_set`, so each is computed ONCE PER TELLER (except under `loop/witness.py`'s
+    `ledger_weigh`, whose closure outlives deposits within one (witness, Event): its memo is the
+    first-use ledger's)."""
     gains: list = []
     relation_of: dict = {}      # `relation` depends on the teller alone: one stance scan per teller
     record_of: dict = {}        # `record` too: one ledger scan per teller
@@ -1093,7 +1271,7 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
             relation = relation_of[teller] = (
                 1.0
                 + rank_gain * rank(p, teller)
-                + regard_gain * _clamp(regard(p, teller) / STANCE_MAX, -1.0, 1.0))
+                + regard_gain * _clamp(regard(p, teller, fx) / STANCE_MAX, -1.0, 1.0))
         # ABSENT: H-180 stake  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
         rec = record_of.get(teller)
         if rec is None:

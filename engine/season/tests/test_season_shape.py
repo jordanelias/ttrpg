@@ -6175,8 +6175,12 @@ def test_the_generic_remit_seats_every_office_and_unblocks_the_nine():
     # [GROUNDED: measured 2026-09-18 over `VERB_TABLE` -- nine rows carry a `remit:` alternative (confer, convene, determine, dispatch, establish, issue, levy, open_case, revoke), which is the same nine `H-71`'s `unblocks:` field names.
     #  M4 (`ED-IN-0279` clause (a)) added a tenth: `march`'s eligibility is `["remit:dispatch"]`,
     #  the same `dispatch` act the existing `dispatch` verb already carries -- co-existing on one
-    #  remit, not a new act. H-71's own nine is unmoved; this count is wider than H-71's set.]
-    assert len(gov) == 10, f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine plus march"
+    #  remit, not a new act. H-71's own nine is unmoved; this count is wider than H-71's set.
+    #  `H-160` limit 1 (IN-22's paying half) added an eleventh: `transfer`'s FIRST alternative is
+    #  `remit:issue` (`levy`'s substitution, one verb over), so a seated holder gives through his
+    #  seat; `own` still follows it. Re-recorded by outcome: 10 -> 11, the one row that moved.]
+    assert len(gov) == 11, (f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine "
+                            "plus march plus transfer")
     formable = set()
     for t in held:
         p = w.persons.get(t.subject)
@@ -8172,7 +8176,16 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
         # cannot yet ask for a standing challenge (`verb_table.yaml`'s `accept.requires_note`). THE SAME-BREATH CHECK: the
         # universal set is empty on both sides (asserted below) and the status census is identical (102 RUNS-UNDECLARED · 40
         # SPAN-UNAUTHORED · 1 RUNS-ALONE-UNDECLARED).
-    assert len(by_sig) == 135, (
+        # ⚠⚠ **135 -> 134, v9 IN-18 STEP 2a (#453: `known_persons` stops discarding the topic, so a teller may tell C
+        # what they hold about C), 2026-10-09, MEASURED AGAINST A CLEAN `git worktree` AT IN-18's BASE `a467126a` (IN-17's commit) (135 there;
+        # same 143 live worlds, seed 0), AND ATTRIBUTED: the same tree with ONLY 2a undone (every operand bag whose `to` is
+        # its subject filtered out) reads `corpus_run 0` byte-identical to the base, so G1-G3 at their controls move
+        # nothing.** THE UNIT AND THE DIRECTION: variety FELL by one, `live` did not move; a telling to its own topic now
+        # forms and takes a scene. Per-verb world counts executed, before -> after: `create_record` 131 -> 130, `examine`
+        # 21 -> 20, `fight` 9 -> 11, `give` 6 -> 5, `research` 73 -> 72, `speak` 79 -> 77, `transfer` 81 -> 80; every
+        # other verb unmoved (`tell` 113 -> 113). THE SAME-BREATH CHECK: the universal set is empty on both sides and the
+        # status census is identical (102 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED · 1 RUNS-ALONE-UNDECLARED).
+    assert len(by_sig) == 134, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -11108,9 +11121,11 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     def drops(fx):
         hits = []
         original = decision.options.belief_contradicts
-        def counted(p_, row, subject, operands, seat=None, weigh=None):
-            out = original(p_, row, subject, operands, seat, weigh=weigh)
-            if out:
+        def counted(p_, row, subject, operands, seat=None, weigh=None, actor=None):
+            out = original(p_, row, subject, operands, seat, weigh=weigh, actor=actor)
+            # a WITNESS's act-level prior (`dissents`, H-201) passes `actor=`; only the chooser's own
+            # clause-4 drop (`opening_set`, no actor) is what this counts
+            if out and actor is None:
                 hits.append((row.verb, subject))
             return out
         decision.options.belief_contradicts = counted
@@ -11137,9 +11152,11 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     def hl_drops(fx):
         hits = []
         original = decision.options.belief_contradicts
-        def counted(p_, row, subject, operands, seat=None, weigh=None):
-            out = original(p_, row, subject, operands, seat, weigh=weigh)
-            if out:
+        def counted(p_, row, subject, operands, seat=None, weigh=None, actor=None):
+            out = original(p_, row, subject, operands, seat, weigh=weigh, actor=actor)
+            # a WITNESS's act-level prior (`dissents`, H-201) passes `actor=`; only the chooser's own
+            # clause-4 drop (`opening_set`, no actor) is what this counts
+            if out and actor is None:
                 hits.append((row.verb, subject))
             return out
         decision.options.belief_contradicts = counted
@@ -15010,12 +15027,16 @@ def test_t4_one_candidate_per_known_hearer():
     assert all(c.operands.get("said") is not None for c in tells), "a formed telling carries nothing to say"
     w, p = _t4_person(knows=())
     assert _t4_offered(w, p, ("Hh",), "tell") == [], "a telling formed with nobody known to tell it to"
-    # The TOPIC is never the hearer: asked about `p_mid`, a teller who knows only `p_mid` has nobody
-    # to tell, and one who also knows `p_high` tells `p_high`.
+    # RE-PINNED AT v9 IN-18 STEP 2a (#453): the TOPIC MAY BE THE HEARER. Asked about `p_mid`, a
+    # teller who knows only `p_mid` and holds `(p_mid, x)` tells `p_mid` what they hold about
+    # `p_mid`; one who also knows `p_high` tells both. Before 2a `known_persons` discarded the topic,
+    # so the first formed nothing and the second only `["p_high"]` -- both lines go red against it.
     w, p = _t4_person(knows=("p_mid",), holds=("p_mid",))
-    assert _t4_offered(w, p, ("p_mid",), "tell") == []
+    tells = _t4_offered(w, p, ("p_mid",), "tell")
+    assert [(c.subject, c.operands["to"]) for c in tells] == [("p_mid", "p_mid")]
+    assert tells[0].operands["said"].subject == "p_mid"
     w, p = _t4_person(knows=("p_mid", "p_high"), holds=("p_mid",))
-    assert [c.operands["to"] for c in _t4_offered(w, p, ("p_mid",), "tell")] == ["p_high"]
+    assert [c.operands["to"] for c in _t4_offered(w, p, ("p_mid",), "tell")] == ["p_high", "p_mid"]
 
 
 def test_t4_nothing_to_say_forms_no_telling_and_survey_is_untouched():

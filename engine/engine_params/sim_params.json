@@ -3,14 +3,14 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 116,
-    "total": 273,
-    "uncited": 157,
+    "total": 274,
+    "uncited": 158,
     "of_which_assumption_grade": 3
   },
-  "count": 273,
+  "count": 274,
   "by_module": {
     "engine.dice_engine": 6,
-    "engine.season": 12,
+    "engine.season": 13,
     "characters": 5,
     "combat": 12,
     "fieldwork": 15,
@@ -183,6 +183,20 @@
       "value": {
         "grain": 5,
         "salt": 2
+      },
+      "kind": "table",
+      "module": "engine.season",
+      "file": "engine/season/harness/scarce.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.MARCH_TREASURY",
+      "name": "MARCH_TREASURY",
+      "value": {
+        "grain": 60,
+        "salt": 30
       },
       "kind": "table",
       "module": "engine.season",

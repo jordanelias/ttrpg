@@ -281,11 +281,13 @@ def _renewals(w: "World", a: "Act", src: str, dst: str, amount) -> list:
     would make "how far ahead may a seat prepay" a second quantity with no row.
 
     ⚠ WHAT NO COMPUTED ACT CAN REACH TODAY, STATED RATHER THAN IMPLIED. Clause 1 needs `Act.via` on a
-    `transfer`, and `decision/options.py::exercised_seat` sets `via` only for a `remit:` alternative
-    -- `transfer` is `own | hold:<store>`, so every computed transfer carries `via=None` and renews
-    nothing. And no computed act forms an `oblige` (its row is untyped, `17a`). So the mechanism is
-    EXECUTED by hand-built acts (`tests/test_term_upkeep.py`) and by MATTER's maturation, which needs
-    no act at all; a person CHOOSING to pay upkeep is `H-158`'s `unblocks:`, not this body's.
+    `transfer`, and `decision/options.py::exercised_seat` sets `via` only for a `remit:` alternative.
+    ~~`transfer` is `own | hold:<store>`, so every computed transfer carries `via=None`~~ -- SINCE
+    `H-160` LIMIT 1 its first alternative is `remit:issue`, so a holder of a seat granting `issue`
+    gives through it, out of its rung (clauses 1 and 2 met by a computed act). But no computed act
+    forms an `oblige` (its row is untyped, `17a`), so there is still no term for one to renew: the
+    renewal is EXECUTED by hand-built acts (`tests/test_term_upkeep.py`) and MATTER's maturation
+    needs no act at all; a person CHOOSING to pay upkeep is `H-158`'s `unblocks:`, not this body's.
 
     The cheap refusals come first, so an ordinary transfer (no `via`) reaches no Query and moves no
     trace line."""

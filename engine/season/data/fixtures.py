@@ -683,6 +683,70 @@ DEFAULT_FIXTURES = Fixtures(
     # a stranger, one who was always wrong half as much.
     # [JUSTIFIED: engine/season/hole_register.yaml H-183 -- record's gain on a teller's weight; no document gives the gain, so it is injected and swept 0 / 0.5 / 1.0]
     record_gain=0.5,                   # `H-183`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
+    # `H-190` (telling `T7`, G9 declared intent; v9 IN-16, `ED-IN-0282`). HOW OFTEN A TELLER DECLARES
+    # AN INTENT: the chance that a telling whose teller has CHOSEN a later act naming the telling's
+    # topic (in a later scene of the same `choose` return) passes on that intent instead of what the
+    # teller holds about the topic (`decision/choose.py::declare_intents`, one keyed draw per telling).
+    # `0` is the CONTROL and is SHIPPED [ASSUMPTION], on `H-187`/`H-188`'s precedent: the plan names
+    # "control 0" and is silent on shipping it on, and a non-zero value moves the realm's outcome.
+    # At 0 no draw is taken and no `said` is touched, so the season is the pre-`T7` tree exactly.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-190 -- the disclosure rate; no document gives how often a person tells what they mean to do, so it is injected and swept 0 / 0.5 / 1.0]
+    intent_disclosure=0.0,             # `H-190`, swept 0 (control, SHIPPED) / 0.5 / 1.0
+    # `H-192`, `H-193` (v9 IN-18 `G1`, judged regard; `ED-IN-0282`). HOW FAR WHAT A PERSON MAKES OF
+    # ANOTHER'S DEEDS MOVES THEIR REGARD FOR THEM: `queries/person_q.py::regard` = stored stance +
+    # `judged_gain` x the deeds they hold firsthand + `told_valence_gain` x the deeds they were
+    # told, each deed scored by the holder's own pursuits against the deed's alignment
+    # (`deeds_judged`). `0` is the CONTROL. SHIPPED LIVE at the sweep's midpoint 0.5 for both, per
+    # Jordan's ruling of 2026-10-09 (B-E): *"Gains are improvements and therefore ship."* [ASSUMPTION;
+    # medium; Jordan to correct; revert: set both back to 0.0 (the control)] -- the ruling ships the
+    # gain and names no magnitude. A live gain can move the realm (`teller_weight`'s `relation` reads
+    # regard; seed 0 measured unmoved, H-192). At 0 `regard` reads no ledger and is the stored half exactly. Separate from
+    # `regard_gain` (`H-179`): see `regard`'s docstring.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-192 -- the judged half's gain; no document gives how much a witnessed deed moves regard, so it is injected and swept 0 / 0.5 / 1.0; shipped live at 0.5 per Jordan's 2026-10-09 ruling]
+    judged_gain=0.5,                   # `H-192`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
+    # [JUSTIFIED: engine/season/hole_register.yaml H-193 -- the told half's gain; no document gives how much a deed one was told of moves regard, so it is injected and swept 0 / 0.5 / 1.0; shipped live at 0.5 per Jordan's 2026-10-09 ruling]
+    told_valence_gain=0.5,             # `H-193`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
+    # `H-194` (v9 IN-18 `G2`, polarity in §F2 term 2). WHICH WAY REGARD FOR AN ACT'S SUBJECT PULLS
+    # ON IT: `legacy` adds `stance_toward(p, subject)` to every candidate (the pre-G2 term);
+    # `declared` adds G1's `regard` and negates it where the subject is the act's OPPONENT, so a
+    # grudge makes `fight` on its object score higher (`decision/choose.py::stance_term`;
+    # `rosters.yaml: stance_polarities`). `legacy` is the CONTROL and is SHIPPED [ASSUMPTION], on
+    # `H-190`'s precedent: the plan names `declared` against `legacy` as the falsifier and is silent
+    # on which ships, and `declared` moves the realm.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-194 -- the polarity arm; §F2 gives the term and no sign by role, so the readings are declared and swept legacy / regard / declared]
+    stance_polarity="legacy",          # `H-194`, swept legacy (control, SHIPPED) / regard / declared
+    # `H-202` (v9 IN-25, BOUND-STAKES). HOW HARD §F2's STANCE TERM PULLS ON A CHOICE: the term
+    # `stance_polarity` signs is read at `1 + this` (`decision/choose.py::stance_term`), so a grudge
+    # or a judged deed outweighs a person's pursuits sooner as it rises. §F2 weights the term 1 and
+    # states no gain, so this is the weight above §F2's; swept beside `field_morale_weight`/
+    # `field_grudge_weight` (`H-148`), which set how much stance a lost field WRITES while this sets
+    # how much the written stance WEIGHS. `0` is the CONTROL: the term is the pre-IN-25 one exactly.
+    # SHIPPED LIVE at the sweep's middle arm 1 (the term at twice §F2's weight), per Jordan's ruling
+    # of 2026-10-09 (B-E): *"Gains are improvements and therefore ship."* [ASSUMPTION; medium; Jordan
+    # to correct; revert: set this back to 0.0 (the control)]. ⚠ At the shipped `stance_polarity`
+    # `legacy` the term is constant within every realm deliberation that carries one (`H-202`'s
+    # measurement), so this gain moves no realm outcome there until a stance row meets one
+    # candidate's subject and not another's. Must be >= 0.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-202 -- the stance term's gain; §F2 gives the term and no gain, and the dukes' and Church's rising stakes have no rate, so it is injected and swept 0 / 1 / 3; shipped live at 1 per Jordan's 2026-10-09 ruling]
+    stance_gain=1.0,                   # `H-202`, swept 0 (control) / 1 (SHIPPED) / 3
+    # `H-196` (v9 IN-18 `G3`, slant). WHAT A TELLER PASSES ON ABOUT A SUBJECT: `newest` is the
+    # pre-G3 pick; `valence` passes on the deed the teller judges most strongly by their own
+    # pursuits, however old (`queries/person_q.py::said_of`; `rosters.yaml: said_slants`). `newest`
+    # is the CONTROL and is SHIPPED [ASSUMPTION], on `H-190`'s precedent: the plan names the control
+    # and is silent on shipping `valence`, and `valence` moves what tellings carry.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-196 -- the slant arm; no document says which claim a teller chooses to pass on, so both readings are declared and swept newest / valence]
+    said_slant="newest",               # `H-196`, swept newest (control, SHIPPED) / valence
+    # `H-199` (v9 IN-15, `AX-7`'s divergence formula; `H-36` rules its shape). HOW FAR THE CHANNEL A
+    # CLAIM ARRIVED ON AND WHAT ITS RECEIVER ALREADY HELD LOWER THE CONFIDENCE IT LANDS AT:
+    # `decision/options.py::refracted_confidence` = `confidence * (1 - g*remove(channel)) *
+    # (1 - g*dissent)`, applied by `loop/witness.py::_refract` to every deposit a person receives of
+    # an act not their own. `0` is the CONTROL: nothing is refracted and every deposit is the
+    # pre-IN-15 one. SHIPPED LIVE at the sweep's midpoint 0.5, per Jordan's ruling of 2026-10-09
+    # (B-E): *"Gains are improvements and therefore ship."* [ASSUMPTION; medium; Jordan to correct;
+    # revert: set this back to 0.0 (the control)]. Must lie in [0, 1] (`refracted_confidence` raises
+    # outside it).
+    # [JUSTIFIED: engine/season/hole_register.yaml H-199 -- the refraction gain; AX-7 rules THAT channel, competence and prior belief govern divergence and H-36 that it is receiver-side, and no document gives how much, so it is injected and swept 0 / 0.5 / 1.0; shipped live at 0.5 per Jordan's 2026-10-09 ruling]
+    refraction_gain=0.5,               # `H-199`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
     # `H-159` (plan position `17b`, `04 §B.8`'s `term?`; `T-n`, `architecture/meta/01_AXIOMS.md`:
     # *"the opening act declares the terms"*). HOW MANY SEASONS AN `oblige` RUNS BEFORE IT MATURES
     # UNPAID -- the term `_eff_oblige` declares on the edge it opens (`matures_at = tick + this`),

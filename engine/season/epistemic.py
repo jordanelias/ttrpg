@@ -69,7 +69,8 @@ from .state.world import World
 
 
 def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
-                       via: "str | None" = None, weigh=None) -> bool:
+                       via: "str | None" = None, weigh=None,
+                       actor: "str | None" = None) -> bool:
     """§F1 clause 4 -- is `requires(verb)` KNOWN-FALSE from `p`'s OWN claims?
 
     ⚠ THE ASYMMETRY IS THE WHOLE POINT AND MUST NOT BE SOFTENED TO "requires holds". This returns
@@ -117,11 +118,19 @@ def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
     passes `decision/options.py::teller_weight(p, fx)`, so a newer claim a teller passed on no
     longer beats the person's own firsthand claim merely by being newer. The CLOSURE is passed in,
     not built here, because `decision.options` imports this module and a deferred import back
-    would hide that cycle rather than remove it. Omitted (`None`), the reader orders as before."""
+    would hide that cycle rather than remove it. Omitted (`None`), the reader orders as before.
+
+    ⚠ v9 IN-15 / `H-201`: `actor` IS WHO THE CELL'S `actor` OPERAND BINDS TO, AND IT DEFAULTS TO `p`.
+    The person choosing an act is its actor, so `opening_set` passes nothing and the binding is
+    byte-for-byte what it was. A WITNESS asking whether an act they saw could have happened is a
+    different question -- *could THE ACTOR have done this, on what I hold* -- and answering it with
+    `p.id` bound reads the witness's own granary instead of the actor's. The ledger stays `p`'s
+    (the belief is the witness's); only the operand moves. `actor=None` is `p.id`, never "no
+    actor": an empty binding would make every actor-bound form UNKNOWN, i.e. contradict nothing."""
     if (row.requires or "").strip() in NO_PRECONDITION:
         return False
     return evaluate(row.requires_typed, LedgerReader(p.ledger, weigh),
-                    binding_of(p.id, operands, via)).value is False
+                    binding_of(p.id if actor is None else actor, operands, via)).value is False
 
 
 def act_refs(a) -> list:
@@ -452,7 +461,7 @@ def _ch_post_remit(w: "World", e, pid) -> bool:
       1. THE SEAT is `Act.via` of the act that caused the Event (`state/attribution.causing_act`,
          `actor_of`'s own first-match rule) -- `04:120` (AX-1): *"only a person acts ... a seat
          enters through `Act.via`"*. An Event no act caused, or an act exercised through no seat
-         (every `own` verb), admits nobody here. The retired predicate's EVENT side -- kinds a
+         (every `own` verb), admits nobody THROUGH THIS PREDICATE (`loop/witness.py`'s IN-22 purview limb is the one other admission under this channel: reads only, to seat holders, `rosters.yaml` states it). The retired predicate's EVENT side -- kinds a
          `remit:` verb emits -- is what `via` now says exactly: the acts a post did under its remit.
       2. THE OBLIGEES are `world_q.establishment_of(w, seat)`, a Query over live `oblige` Tenures,
          and this channel is its caller -- r2 `05` §A.1.5 RULED (d): *"`establishment_of` becomes the
@@ -490,6 +499,9 @@ def _ch_post_remit(w: "World", e, pid) -> bool:
     `13e`'s snapshot consolidation is unaffected where it still reads -- `loop/resolve.py`'s
     `_eligible` and `decision/options.py` -- and this site is simply no longer one of them.
 
+    ⚠ (B-E, v9 IN-22: a computed `transfer` through a seat now carries `Act.via`, so seat-borne transfers
+    reach this predicate, and the IN-22 purview limb in `loop/witness.py` mints `inferred` claims for
+    seat holders; the paragraph below predates both.)
     ⚠ WHO CAN REACH IT TODAY: nobody the chooser drives. `oblige`'s row is untyped and declares
     `counterparty: subject`, so `opening_set` forms no `oblige` Candidate (plan position 16's
     precedent -- and no Question's referent is ever a seat anyway), and AT `17a` no world builder
