@@ -95,7 +95,7 @@ lane_ids:
     # 0288 = #453 as intent, its kill/wound reading adopted; 0289 = the Gather's dispositions applied; 0290 = #445 as intent;
     # 0291 = Jordan's RS-1..RS-4 rulings on the cells and the ten RS-21 adopted recommendations). Entries: registers/editorial_ledger_in.jsonl.
     # [ED-IN-0064 DUP-KEY REPAIR] A stale duplicate `IN:` mapping once shadowed the authoritative one above (YAML last-key-wins). Neutralized; full incident write-up, including why a duplicate key is silent rather than an error: id_reservations_history.md#dup-key
-    GO: { name: "Godot",               next_free: 2 }   # LANE ACTIVATED 2026-08-14 (Jordan ruling; ED-GO-0001 = the activation). Was next_free 1 with no ED ever allocated, which read as neglect rather than dormancy. Detail: registers/handoffs/HANDOFF_GO.md
+    GO: { name: "Godot",               next_free: 3 }   # ED-GO-0002 = Jordan's 2026-10-09 engine-version ruling. LANE ACTIVATED 2026-08-14 (Jordan ruling; ED-GO-0001 = the activation). Was next_free 1 with no ED ever allocated, which read as neglect rather than dormancy. Detail: registers/handoffs/HANDOFF_GO.md
     SE: { name: "Settlements",         next_free: 56 }  # ED-SE-0055 allocated 2026-09-25 (the 24d dwelling-Site substrate ruling), ED-SE-0054 allocated 2026-09-19 (Jordan accepts P1/P3/P4 for build). Narrative: id_reservations_history.md#se
 
 wiring_status:

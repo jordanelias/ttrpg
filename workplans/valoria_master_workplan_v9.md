@@ -174,12 +174,11 @@ answered as the plan's recommendation, RS-21 item 3) (`_part3` §A(2)).
 
 ### M3 — GODOT VERTICAL SLICE
 
-Last, unchanged in substance: GO-01 (`26`). **The Godot engine version is UNRESOLVED and nothing here asserts one**
-(`_part5` §J, J-9). `godot/godot_conversion_strategy_v1.md` is PROPOSED and HELD (§K); its version string was struck and its
+Last, unchanged in substance: GO-01 (`26`). **The Godot engine version is RULED (J-9, Jordan 2026-10-09, `ED-GO-0002`); this plan restates none, and that row is the one owner until GO-01 gives code one.** `godot/godot_conversion_strategy_v1.md` is PROPOSED and HELD (§K); its version string was struck and its
 Key-runtime rows marked RETIRED at B-C (GO-03, landed). `references/module_contracts.yaml`'s `engine_clock` row got its `doc:`
 (the propagation spec) at B-C (IN-42 = GO-02, landed). `engine/autoload/engine_clock.py` is deleted (`28-iii`, PR #450); the temporal spine is `engine/season/loop/driver.py` +
 `loop/calendar.py`, which that row describes, so `CLAUDE.md` §6's "starting with `engine_clock`" means the season calendar
-(Layer 0: listed at IN-44, not edited here). `godot/skeleton/` is not a head start. Path: GO-04 (B-L's tail; its gate landed at B-C) · GO-01 (J-9) → (IN-05 → GO-05)
+(Layer 0: listed at IN-44, not edited here). `godot/skeleton/` is not a head start. Path: GO-04 (B-L's tail; its gate landed at B-C) · GO-01 → (IN-05 → GO-05)
 (`_part3` §A(2)).
 
 ## 2. ⭐ START HERE — the first commands the next session runs
@@ -284,7 +283,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | FI-05 | = IN-32 | — | — | — | — | B-S | `_part5` |
 | WR-01 | `27` remainder: the R-14 term, the `engine/season/` reach | WR | BLK | IN-06 | — | B-S | `_part7` |
 | WR-05 | = IN-35 | — | — | — | — | B-S | `_part5` |
-| GO-01 | `26`; D2 tenth attribute | GO | J | J-9 | — | B-Z | `_part7` |
+| GO-01 | `26`; D2 (the tenth attribute's name) stays held | GO | B | J-9 ruled, `ED-GO-0002` | — | B-Z (slots by R8) | `_part7` |
 | GO-04 | ED-IN-0017 seam audit | GO | B | — | — | B-L | `_part7` |
 | GO-05 | SM-13; ED-PC-0013 (1) | GO | BLK | IN-05, GO-01 | — | B-Z | `_part7` |
 | GO-06 | `valoria-game` parity | GO | BLK | `valoria-game` checkout | — | B-Z | `_part7` |

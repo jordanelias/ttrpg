@@ -35,6 +35,6 @@ A row naming a quarantined `.designs/` document gives its **bare filename only**
 | **Narrative engine** | `narrative_engine_design_v2_churn.md` — ED-IN-0011 | — |
 | **Dice / resolution** | in code: `engine/dice_engine/dice_engine.py` (`degree_from_net`) | prose tables EVACUATED to the frozen capture `engine/engine_params/params_tables.yaml` (fork ref `c451bcb`) — reference, not the formula |
 | **Board game** | EVACUATED to `engine/engine_params/params_tables.yaml` (fork ref `c451bcb`) | — |
-| **Godot conversion** | `godot/godot_conversion_strategy_v1.md` — PROPOSED | ED-GO-0001; Gate-0 waits on ED-1051; `registers/handoffs/HANDOFF_GO.md` |
+| **Godot conversion** | `godot/godot_conversion_strategy_v1.md` — PROPOSED | ED-GO-0001; ED-GO-0002 (engine version, ruled); Gate-0 waits on ED-1051; `registers/handoffs/HANDOFF_GO.md` |
 | **Campaign driver** | ⛔ RETIRED — `FORK:5c5d8ec6` (`engine/mc_v18.py`, deleted at plan position `28-iii`); the head is `engine/season/` | ED-IN-0226, ED-IN-0227 |
 | **Decision policy** | `decision_policy_v1.md` — DRAFT FOR RULING | ED-IN-0113 |

@@ -5,6 +5,7 @@
 ## Open
 | item | where it lives | next step |
 |---|---|---|
+| Engine version RULED (`ED-GO-0002`, Jordan 2026-10-09) | `registers/editorial_ledger_go.jsonl` (`ED-GO-0002`); `workplans/valoria_master_workplan_v9_part7.md` (GO-01) | GO-01 builds the machine-read owner and the `--check` round trip; `valoria-game`'s `project.godot` and CI pin are not checkable from this repository (GO-06); D2, the tenth attribute's name, is still Jordan's |
 | port-seam audit (GO-04) — its trigger, `ED-1051`'s resolution, is met | `registers/editorial_ledger_in_archive.jsonl` (`ED-IN-0017`); `registers/editorial_ledger.jsonl` (`ED-1051`, its last row) | Run the scoped audit as a B-L tail lane, reading each seam after the move (v9 GO-04, `workplans/valoria_master_workplan_v9_part7.md`) |
 
 ## Standing orders — do not re-raise, do not do
