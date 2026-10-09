@@ -69,7 +69,8 @@ from .state.world import World
 
 
 def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
-                       via: "str | None" = None, weigh=None) -> bool:
+                       via: "str | None" = None, weigh=None,
+                       actor: "str | None" = None) -> bool:
     """§F1 clause 4 -- is `requires(verb)` KNOWN-FALSE from `p`'s OWN claims?
 
     ⚠ THE ASYMMETRY IS THE WHOLE POINT AND MUST NOT BE SOFTENED TO "requires holds". This returns
@@ -117,11 +118,19 @@ def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
     passes `decision/options.py::teller_weight(p, fx)`, so a newer claim a teller passed on no
     longer beats the person's own firsthand claim merely by being newer. The CLOSURE is passed in,
     not built here, because `decision.options` imports this module and a deferred import back
-    would hide that cycle rather than remove it. Omitted (`None`), the reader orders as before."""
+    would hide that cycle rather than remove it. Omitted (`None`), the reader orders as before.
+
+    ⚠ v9 IN-15 / `H-201`: `actor` IS WHO THE CELL'S `actor` OPERAND BINDS TO, AND IT DEFAULTS TO `p`.
+    The person choosing an act is its actor, so `opening_set` passes nothing and the binding is
+    byte-for-byte what it was. A WITNESS asking whether an act they saw could have happened is a
+    different question -- *could THE ACTOR have done this, on what I hold* -- and answering it with
+    `p.id` bound reads the witness's own granary instead of the actor's. The ledger stays `p`'s
+    (the belief is the witness's); only the operand moves. `actor=None` is `p.id`, never "no
+    actor": an empty binding would make every actor-bound form UNKNOWN, i.e. contradict nothing."""
     if (row.requires or "").strip() in NO_PRECONDITION:
         return False
     return evaluate(row.requires_typed, LedgerReader(p.ledger, weigh),
-                    binding_of(p.id, operands, via)).value is False
+                    binding_of(p.id if actor is None else actor, operands, via)).value is False
 
 
 def act_refs(a) -> list:
