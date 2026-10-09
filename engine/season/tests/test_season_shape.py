@@ -7625,8 +7625,18 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # executes in 1 world (and is refused in 1) -- a `remit:issue`/`presence` act the re-scored
     # ranking now reaches once.
     # [GROUNDED: measured at IN-08's cells commit through `corpus_run.run_case` over the same 143 live worlds, seed 0 -- executed-world counts accept 91, challenge 77, levy 1; the other 17 verbs still execute]
+    # ⚠⚠ PLAN POSITION IN-10 (#453 §10.1): 20 -> 19, `levy` LEAVES, BACK INTO THE ALWAYS-REFUSED SET.
+    # A RE-RECORD WITH ITS REASON, AND IT IS A TRAJECTORY, NOT A CROWDING. `levy`'s one corpus
+    # execution was NPC-083 (settlement, 2 seasons): `p_b`'s levy of his own person-rung `p_b`, late
+    # in season 2. IN-10 put `issue` in the known-person fan, so `p_b`'s season-1 writ about `p_c`
+    # is addressed to `p_a` (his first known person) instead of to `p_c` -- both execute, the issue
+    # count is unchanged -- and the claims that writ deposits move every later question `p_b` is
+    # asked: his season-2 referents become `r_settlement` (levied, refused on `stores`) where they
+    # were `p_b`. No other corpus world attempts `levy` or `issue` at all, before or after.
+    # [GROUNDED: measured at IN-10 through `corpus_run.run_case` over the 143 live worlds, seed 0, against
+    # a copy of the parent tree -- NPC-083 the only world naming either verb; levy executed there 1 -> 0, issue 1 -> 1]
     assert ever == {"accept", "challenge", "create_record", "examine", "interview", "fight", "give",
-                    "issue", "levy", "move", "petition", "reconstruct", "release", "research",
+                    "issue", "move", "petition", "reconstruct", "release", "research",
                     "restore", "speak", "surveil", "tell", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
@@ -7714,8 +7724,9 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠ SEVEN -> SIX, IN-08's CELLS COMMIT (B-G): `levy` LEAVES, INTO THE EXECUTED SET (executes in
     # 1 world, the `ever` note above). The new rows do not form here: `challenge` executes in 77
     # worlds and `accept` in 91. A re-record, said so.
+    # ⚠ SIX -> SEVEN, PLAN POSITION IN-10: `levy` RETURNS (NPC-083's trajectory, the `ever` note).
     assert refused_only == {"build", "commit", "found", "migrate", "work",
-                            "survey"}, (
+                            "survey", "levy"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -8367,8 +8378,9 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠⚠ IN-08's CELLS COMMIT (B-G): `accept`, `challenge` AND `levy` JOIN -- the `ever` and `by_sig`
     # notes above (91, 77 and 1 worlds of 143). Every executed verb still varies; `universal` is
     # empty on both sides.
+    # ⚠⚠ PLAN POSITION IN-10: `levy` LEAVES (it executes nowhere; the `ever` note).
     assert varying == {"accept", "challenge", "create_record", "examine", "fight", "give",
-                       "interview", "issue", "levy", "move",
+                       "interview", "issue", "move",
                        "petition", "reconstruct", "release", "research", "restore", "speak",
                        "surveil", "tell", "transfer", "utter"}, (
         sorted(varying))
@@ -9645,8 +9657,10 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # ⚠⚠ IN-08's CELLS COMMIT (B-G): `challenge`, `accept` AND `levy` JOIN (17 -> 20); nothing
     # leaves. The measurement and the per-verb world counts are at
     # `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s `ever` note.
+    # ⚠⚠ PLAN POSITION IN-10: `levy` LEAVES (20 -> 19) -- NPC-083's trajectory, measured at the same
+    # `ever` note; `issue` stays.
     assert set(executed) == {"accept", "challenge", "create_record", "examine", "interview",
-                             "fight", "give", "issue", "levy",
+                             "fight", "give", "issue",
                              "move", "petition", "reconstruct", "release", "research", "restore",
                              "speak", "surveil", "tell", "transfer", "utter"}, (
         f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
@@ -9660,7 +9674,8 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
         "14 -> 15 is `24f`'s (`restore` back once the corpus stopped eating, see above), 15 -> 16 "
         "is `20-ii`'s (`release` back in one of 54 newly-representable worlds, see above), 16 -> 17 "
         "is `14`'s (`give` in, see above), 17 -> 20 is IN-08's cells commit's (`challenge`, "
-        "`accept`, `levy` in, see above), and any further movement is a fresh one")
+        "`accept`, `levy` in, see above), 20 -> 19 is IN-10's (`levy` out of NPC-083's trajectory, "
+        "see above), and any further movement is a fresh one")
     # ⚠ `dispatch` JOINED `work` UNDER `R8.1` FOR A DIFFERENT REASON, stated above the executed-set
     # assertion: its precondition needs a PERSON referent, and the question that used to supply
     # one in NPC-033 is now outranked (hash order, `H-54`) by a `seen` claim about a rung. It is
@@ -9711,8 +9726,9 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # that one world before -- is attempted nowhere. It is not executed either.
     # ⚠⚠ `levy` LEAVES, IN-08's CELLS COMMIT (B-G): it executes in 1 world under the re-scored
     # chooser (`test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s `ever` note). A re-record.
+    # ⚠⚠ `levy` RETURNS, PLAN POSITION IN-10: NPC-083's trajectory (the same `ever` note). A re-record.
     assert set(refused) - set(executed) == {"work", "commit", "found",
-                                            "build", "migrate", "survey"}, (
+                                            "build", "migrate", "survey", "levy"}, (
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
         "condition never clears the floor in this corpus; `dispatch` LEFT at `17-cast` (see above; it "
@@ -10069,6 +10085,13 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # through the seated `p_high`, and not vacuously: the seat is present on both sides.
     from ..decision.options import exercised_seat
     duke = w.persons["p_high"]
+    # ⚠ RE-RECORDED AT PLAN POSITION IN-10: `issue` fans `to` over the persons the issuer KNOWS and
+    # its `terms` conjunct asks that he hold a claim on the referent (`verb_table.yaml`), so a Duke
+    # with an empty ledger forms no `issue`. He is given both -- an existence reading of `p_mid` and
+    # of `S` -- the two facts the row now needs, and nothing the other three remit verbs read.
+    duke.ledger.append(Claim("c_wc_knows", duke.id, "p_mid", "exists:Person", 1, 0, "firsthand",
+                             100, "own"))
+    duke.ledger.append(Claim("c_wc_s", duke.id, "S", "exists:Rung", 1, 0, "firsthand", 100, "own"))
     remit = [c for c in decision.opening_set(duke, View(duke.id, [], w.fixtures.get("view_k"), q),
                                              q, w.fixtures) if c.verb in WALK_REMIT]
     assert {c.verb for c in remit} == WALK_REMIT, sorted({c.verb for c in remit})
@@ -15067,7 +15090,8 @@ def test_t4_a_person_may_tell_about_themselves_and_still_not_fight_themselves():
 
 
 def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
-    """DECISION 4's CONTROL. The known-person fan applies only to a row whose cell binds `subject`
+    """DECISION 4's CONTROL (⚠ since plan position IN-10 `issue` binds `subject` and FANS -- the
+    re-record note below; the name is kept for history). The known-person fan applies only to a row whose cell binds `subject`
     SEPARATELY from `to` -- `tell` alone. `petition` and `issue` bind `to` without `subject`, so `to`
     is still what they are about (the referent rule, `_derive_operand`): one bag, whatever the person
     knows, its `to` the pre-T4 derivation. Their opponent is unchanged too: neither contests, and the
@@ -15078,13 +15102,15 @@ def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
     fanned = {v for v, r in VERB_TABLE.items()
               if r.requires_typed is not None and r.requires_typed.known_person_operands()}
     # ⚠ PLAN POSITION `14` (U7-own): `give` JOINS -- its cell is typed now and binds `to` BESIDE
-    # `subject` (the Record), so its receiver is a known person and never the referent. `petition`
-    # and `issue` are unchanged, which is what the rest of this control asserts.
-    assert fanned == {"give", "tell"}, sorted(fanned)
+    # `subject` (the Record), so its receiver is a known person and never the referent.
+    # ⚠ RE-RECORDED AT PLAN POSITION IN-10 (#453 §10.1): `issue` JOINS -- its `terms` conjunct binds
+    # `subject`, so its executor is a known person and its `terms` the referent (one bag per person
+    # known, the referent in each). `petition` is unchanged, which the single-bag arm asserts.
+    assert fanned == {"give", "issue", "tell"}, sorted(fanned)
     w, p = _t4_person(knows=("p_mid", "p_high", "p_king"))
     q = Question("q:t4c", "need", ("p_mid",))
     checked = 0
-    for verb in ("petition", "issue"):
+    for verb in ("petition",):
         row = VERB_TABLE[verb]
         bags = operand_bags(p, row, q, "p_mid", w.fixtures)
         assert len(bags) == 1, (verb, bags)
@@ -15092,5 +15118,14 @@ def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
         assert operands_for(p, row, q, "p_mid", w.fixtures) == bags[0]
         assert row.counterparty == "to" and not row.contests, verb
         checked += 1
+    from ..queries.person_q import known_persons
+    known = known_persons(p.ledger, p.id)
+    issue = VERB_TABLE["issue"]
+    bags = operand_bags(p, issue, q, "p_mid", w.fixtures)
+    assert len(bags) == len(known) >= 2, bags
+    assert sorted(b["to"] for b in bags) == sorted(known)
+    assert all(b["subject"] == "p_mid" for b in bags), bags
+    assert issue.counterparty == "to" and not issue.contests
+    checked += 1
     assert checked == 2
     assert {v for v, r in VERB_TABLE.items() if r.contests and r.counterparty} == {"tell"}

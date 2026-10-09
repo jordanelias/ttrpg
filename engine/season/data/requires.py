@@ -39,21 +39,21 @@ from dataclasses import dataclass
 from typing import Any, Optional
 
 from ..gaps import Unspecified
-from .rosters import OBSERVATION_TERMS, RECORD_CONTENT, roster, roster_map
+from .rosters import OBSERVATION_TERMS, RECORD_CONTENT, RECORD_KIND_KEYS, roster, roster_map
 
 REQUIRES_FORMS = roster("requires_forms")
 REQUIRES_OPERANDS = roster("requires_operands")
 REQUIRES_FORM_NEEDS = roster_map("requires_forms", "needs")
 
-def _check_writ_sourced_subset(writ_sourced: frozenset, operands: frozenset,
-                               name: str = "writ_sourced_operands") -> None:
+def _check_writ_sourced_subset(writ_sourced: frozenset, operands: frozenset, name: str) -> None:
     """Plan position `15c`. `writ_sourced` is a SUBSET of `operands`, never a second vocabulary --
     refused if it names anything the closed operand roster does not, the same discipline
     `record_kinds` and `tenure_kinds` are cross-validated against each other by in
     `data/rosters.py`. Factored into a function -- BATCH-CLOSE FINDING, methodology-close Phase 1
     antagonist -- so a test can call it with a planted mismatch rather than only exercising the
     branch that never fires on today's data (§0.1 pt 3: a refusal that nothing can observe fail).
-    `name` is the claim-sourced roster being checked: `writ_sourced_operands` since `15c`, and
+    `name` is the claim-sourced roster being checked: `writ_sourced_operands` from `15c` until IN-10
+    replaced it with the per-kind `record_sourced_operands` (checked per kind through here), and
     `shortfall_sourced_operands` since `19d` uses the same rule rather than a second copy of it."""
     if not writ_sourced <= operands:
         raise Unspecified(
@@ -64,8 +64,45 @@ def _check_writ_sourced_subset(writ_sourced: frozenset, operands: frozenset,
             law="a claim answers FOR an existing operand name; it does not coin a new one")
 
 
-WRIT_SOURCED_OPERANDS = roster("writ_sourced_operands")
-_check_writ_sourced_subset(frozenset(WRIT_SOURCED_OPERANDS), frozenset(REQUIRES_OPERANDS))
+def _check_record_sourced(by_kind, operands: frozenset, kind_keys: dict) -> None:
+    """Plan position IN-10 (#453 §10.1). `record_sourced_operands` -- `{record kind: {operand:
+    content key}}` -- refused at import unless every kind is a `record_kinds` member, every operand
+    one of the closed eight, every content key one of THAT KIND's own keys, and no kind maps `from`
+    (r2's ruling: *where the actor stands* stays off a document). `15c`'s subset rule, tightened to
+    the kind's keys. A function, so a test can plant each mismatch (`_check_writ_sourced_subset`'s
+    reason, §0.1 pt 3)."""
+    name = "record_sourced_operands"
+    for kind, m in (by_kind or {}).items():
+        if kind not in kind_keys:
+            raise Unspecified(
+                f"rosters.yaml: {name} maps kind {kind!r}, not a record_kinds member",
+                f"rosters.yaml -- {name}",
+                needs="a kind `record_kinds` declares", law="a document of no kind answers nothing")
+        if not isinstance(m, dict) or not m:
+            raise Unspecified(
+                f"rosters.yaml: {name}.{kind} is {m!r}, not a non-empty operand: content-key map",
+                f"rosters.yaml -- {name}", needs="`{operand: content key}`",
+                law="an empty entry is a kind that answers nothing: delete it instead")
+        _check_writ_sourced_subset(frozenset(m), operands, name)
+        if "from" in m:
+            raise Unspecified(
+                f"rosters.yaml: {name}.{kind} maps `from`", f"rosters.yaml -- {name}",
+                needs="drop it", law="r2 `02` §A.13 -- a document naming `from` would let a writ "
+                                     "reach into a larder the executor is not standing in")
+        bad = sorted(set(m.values()) - set(kind_keys[kind]))
+        if bad:
+            raise Unspecified(
+                f"rosters.yaml: {name}.{kind} reads {bad}, not keys of {kind!r} "
+                f"({list(kind_keys[kind])})", f"rosters.yaml -- {name}",
+                needs="a content key the kind declares (`record_kinds.values`)",
+                law="a key the kind does not carry declines every time -- `15c`'s `kind`/`amount`")
+
+
+# `{record kind: {operand: content key}}`. Read by `decision/options.py` (`_from_content_claim`,
+# `held_record_claims`); see `rosters.yaml: record_sourced_operands` for the two readings.
+RECORD_SOURCED_OPERANDS = {k: dict(v) for k, v in
+                           roster_map("record_sourced_operands", "values").items()}
+_check_record_sourced(RECORD_SOURCED_OPERANDS, frozenset(REQUIRES_OPERANDS), RECORD_KIND_KEYS)
 # Plan position `19d`. The operand names a SHORTFALL claim answers (`kind`, `amount`), and the
 # predicate stem it is recorded under: `(rung, "<stem>:<kind>", units)`. MATTER writes the claim
 # (`loop/matter.py`) and `decision/options.py::_from_shortfall_claim` reads it, so the stem
@@ -542,9 +579,10 @@ class TypedRequires:
 
     def known_person_operands(self) -> tuple:
         """The `known_person_operands` members this cell BINDS, where it binds `subject` too, so the
-        topic and the person addressed are different operands (telling workplan `T4`). Empty for a
-        cell binding `to` without `subject` (`petition`, `issue`): there `to` is what the act is
-        about, the referent. `decision/options.py::operand_bags` fans these over known persons;
+        topic and the person addressed are different operands (telling workplan `T4`; `issue` since
+        plan position IN-10, whose `terms` conjunct binds `subject`). Empty for a cell binding `to`
+        without `subject` (`petition`): there `to` is what the act is about, the referent.
+        `decision/options.py::operand_bags` fans these over known persons;
         `data/verbs.py::act_key` puts them in the act's id, since one topic now forms several acts."""
         bound = self.operands()
         if "subject" not in bound:

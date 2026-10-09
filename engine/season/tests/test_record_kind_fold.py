@@ -39,7 +39,7 @@ from engine.season.loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from engine.season.loop.effects import EFFECTS
 from engine.season.loop.witness import content_value
 from engine.season.queries.world_q import WorldReader, hold_force
-from engine.season.state.carriers import Question, Record, View
+from engine.season.state.carriers import Claim, Question, Record, View
 from engine.season.state.world import World
 
 _CONTENT = RECORD_CONTENT["predicate"]
@@ -210,6 +210,11 @@ def test_the_dispensation_artifact_runs_through_the_real_precondition(monkeypatc
     assert not [r for r in w.records.values() if r.kind == "dispensation"]
 
     w = P.tiny_world()
+    # ⚠ RE-RECORDED AT PLAN POSITION IN-10: `issue`'s cell gained a `terms` conjunct (`own_ledger` of
+    # `subject` -- the issuer holds a claim on what the writ is about; `verb_table.yaml`), so the
+    # issuer is given one on `prop_x` before he issues. Without it the writ refuses `issue.refused`.
+    w.persons["p_high"].ledger.append(
+        Claim("c_prop_x", "p_high", "prop_x", "exists:Proposition", 1, 0, "firsthand", 100, "own"))
     P._run_d(w, choose_for(w))
     assert "dispensation.issued" in [e.kind for e in w.log]
     writs = [r for r in w.records.values() if r.kind == "dispensation"]

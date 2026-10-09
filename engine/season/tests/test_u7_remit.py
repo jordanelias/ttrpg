@@ -62,6 +62,12 @@ def _world(**fx):
     for name, value in fx.items():
         fixtures = fixtures.sweep(name, value)
     w = P.tiny_world(fixtures)
+    # ⚠ RE-RECORDED AT PLAN POSITION IN-10: `issue`'s cell gained a `terms` conjunct -- the issuer
+    # holds a claim on what the writ is about (`own_ledger` of `subject`, `verb_table.yaml`) -- so the
+    # Duke knows the two parties these writs name. Nothing else here reads an `exists:Person` claim.
+    for who in (PARTY, OUTSIDER):
+        w.persons[DUKE].ledger.append(Claim(f"c_knows_{who}", DUKE, who, "exists:Person", 1, 0,
+                                            "firsthand", 100, "own"))
     d = SeasonDriver(w)
     d.matter(mint_token(w, WriteClass.MATTER), [])
     return w, d

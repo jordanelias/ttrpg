@@ -2389,9 +2389,16 @@ def _season13():
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                       draw=draw_factory(w.world_seed, lambda: w.tick))
-    d.season(ch, question=None, subsistence=P.SUBSIST,
-             contest_max_depth=w.fixtures.get("contest_max_depth"))
-    return w, attribute(w, d, 1)
+    # ⚠ RE-RECORDED AT PLAN POSITION IN-10: TWO SEASONS, WAS ONE. `issue` joined the known-person
+    # fan (#453 §10.1), so an issuer forms one `issue` per person he knows and season 1's issues went
+    # 1 -> 4 executed of 5 attempted -- and the Cardinal of Temperance's one levy of the cathedral
+    # (refused on `stores`, authority PASSED) gave its scene to a writ about it, leaving season 1
+    # one levy, refused on `authority` (`p_npc_021`'s, of a dwelling). The share below then had
+    # one sample. Over two seasons the realm attempts 3 levies, 2 refused past `authority`.
+    for _ in range(2):
+        d.season(ch, question=None, subsistence=P.SUBSIST,
+                 contest_max_depth=w.fixtures.get("contest_max_depth"))
+    return w, attribute(w, d, 2)
 
 
 def test_13d_iii_a_season_executes_an_issue_or_levy_through_a_seat_with_a_rung(_season13):

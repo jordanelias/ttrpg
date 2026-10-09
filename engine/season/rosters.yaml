@@ -1577,20 +1577,33 @@ rosters:
       predicates did.
     values: [actor, subject, from, to, site, kind, amount, floor]
 
-  writ_sourced_operands:
+  record_sourced_operands:
     source: >-
-      r2 `02_THE_WRIT_AND_THE_WORD.md` §A.13 -- *"the executor's act is `transfer`, whose operands --
-      `from`, `to`, `kind`, `amount` -- are all in the closed eight"*; plan position `15c`.
+      #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §10.1, *the shared enabler*, plan
+      position IN-10 (`workplans/valoria_master_workplan_v9_part5.md`); it replaces plan position
+      `15c`'s flat `writ_sourced_operands` (`to, kind, amount`), whose source was r2
+      `02_THE_WRIT_AND_THE_WORD.md` §A.13.
     note: >-
-      ⚠ A SUBSET OF `requires_operands`, NEVER A SECOND VOCABULARY -- `data/requires.py` refuses at
-      import if a member here is not also a `requires_operands` member. THE THREE NAMES A HELD WRIT
-      MAY ANSWER FOR, before `decision/options.py::_derive_operand` falls through to the referent or
-      the fixture. `from` IS DELIBERATELY EXCLUDED: r2's own ruling keeps *where the actor stands* off
-      the writ -- a document naming `from` would let a Duke's writ reach into a larder the executor is
-      not standing in. `at` stays off this roster too, but for a different reason: it is not (and per
-      r2 must not become, *"I do not coin a ninth operand"*) a `requires_operands` member at all, so
-      no typed cell can ever pass `name == "at"` to `_derive_operand` in the first place.
-    values: [to, kind, amount]
+      PER RECORD KIND, WHICH OF THE CLOSED EIGHT OPERANDS (`requires_operands`) A RECORD OF THAT KIND
+      ANSWERS, AND FROM WHICH OF ITS OWN CONTENT KEYS -- `operand: content key`. `data/requires.py`
+      refuses at import a kind that is not a `record_kinds` member, an operand that is not one of the
+      eight, a content key that is not one of THAT KIND's keys (`record_kinds.values`), and `from` on
+      any kind. ⚠ `from` IS ON NO KIND, r2's own ruling: a document naming *where the actor stands*
+      would let a Duke's writ reach into a larder the executor is not standing in. `at` is no operand
+      (r2: *"I do not coin a ninth operand"*), so no kind maps it. ⚠ `kind` AND `amount` LEFT WITH
+      THE FLAT LIST: no live kind carries either key, so they declined every time and dropping them
+      moves nothing; a later kind that carries them (the deferred `debt`) adds them here.
+      ⚠ TWO READERS, `decision/options.py`. (1) A QUESTION ABOUT A DOCUMENT (`q.about` names a
+      `content:<kind>` claim in the asker's own ledger, `_from_content_claim`): the document answers
+      every name it maps BUT `subject`, which stays the question's referent -- the act is about the
+      document itself (`give` it, burn it, answer it). This is `15c`'s channel and moves nothing.
+      (2) A HELD RECORD (`held_record_claims`, the asker's own live `hold` on a Record whose content
+      he holds): the document answers every name it maps, `subject` included -- the act is about
+      what the document SAYS, so a held dispensation's `terms` answers `subject`
+      (`_derive_operand`'s `held=`). No faction actor, no new form, no ninth operand.
+    values:
+      dispensation: {to: to, subject: terms}
+      petition:     {to: to, subject: terms}
 
   shortfall_sourced_operands:
     source: >-
@@ -1598,7 +1611,7 @@ rosters:
       §3.2 row 11, and the driver-retirement plan's G3: *"wiring the existing `transfer` verb's
       operands from a shortfall claim"*.
     note: >-
-      ⚠ `writ_sourced_operands`' SHAPE, ONE ROW DOWN, FOR A SECOND KIND OF CLAIM: the operand names a
+      ⚠ `record_sourced_operands`' CLAIM-SOURCED SHAPE, ONE ROW DOWN, FOR A SECOND KIND OF CLAIM: the operand names a
       SHORTFALL CLAIM may answer, before `decision/options.py::_derive_operand` falls through to the
       referent or the fixture. A subset of `requires_operands`, refused at import otherwise
       (`data/requires.py`). The claim is `(rung, "<predicate>:<kind>", units)`: MATTER records it
@@ -1609,7 +1622,7 @@ rosters:
       referent IS the claim's subject (`questions_for` builds `(c.subject,)`), so `to` already binds
       the drained rung through the referent rule. A claim branch for it would always return the same
       value as the fallback beneath it, and a branch that can never change an outcome is `ID-13`.
-      The writ lists `to` because a writ's addressee is NOT its subject (the Record). `from` stays
+      A document maps `to` because a writ's addressee is NOT its subject (the Record). `from` stays
       the actor's own rung for r2 §A.13's reason: a claim about somewhere else must not reach into a
       larder the actor is not standing in.
       ⚠ THE PREDICATE STEM IS DATA, AND IT MAY NOT BE A WORD THE `requires` GRAMMAR READS: a claim
@@ -1629,10 +1642,12 @@ rosters:
       SOMEBODY THEY KNOW rather than with the question's referent. A subset of `requires_operands`,
       refused at import otherwise (`data/requires.py`). `decision/options.py::operand_bags` forms one
       operand bag per known person, and only for a row whose typed cell binds `subject` SEPARATELY
-      from the name -- `tell`, whose topic is `subject` and whose hearer is `to`, and since plan
-      position `14` `give`, whose Record is `subject` and whose receiver is `to`. A row binding `to`
-      without `subject` (`petition`, `issue`) keeps the referent rule: what it is addressed to IS what
-      it is about there, `H-94`'s single referent.
+      from the name -- `tell`, whose topic is `subject` and whose hearer is `to`, since plan
+      position `14` `give`, whose Record is `subject` and whose receiver is `to`, and since plan
+      position IN-10 (#453 §10.1) `issue`, whose `terms` is `subject` and whose executor is `to`, so a
+      writ is no longer addressed to what it is about. A row binding `to` without `subject`
+      (`petition`) keeps the referent rule: what it is addressed to IS what it is about there,
+      `H-94`'s single referent.
       ⚠ `claim` IS WHERE A PERSON BECOMES KNOWN, and `queries/person_q.py::known_persons` reads it:
       `predicate` -- a truthy existence reading of a person (deposited by the `existence` form's
       fold); `seen_term` -- the `seen` claim's term naming who was seen doing something. The third

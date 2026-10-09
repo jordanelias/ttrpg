@@ -27,7 +27,7 @@ from typing import Any, Callable, Optional
 from ..data.cast import STANCE_MAX
 from ..data.pursuits import to_axes
 from ..data.requires import (
-    CELL_STEMS, SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS, WRIT_SOURCED_OPERANDS,
+    CELL_STEMS, RECORD_SOURCED_OPERANDS, SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS,
 )
 from ..data.rosters import (
     CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, RECORD_CONTENT, WITNESS_CHANNELS,
@@ -116,7 +116,8 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # `19`: the seat this row's act would exercise -- `exercised_seat`, the same untraced walk
         # `pack_scenes` names `Act.via` by -- for the belief test's `basis` conjunct below.
         seat = exercised_seat(p, row)
-        # `T4`: only a NAMED own-ledger conjunct carries `said` (`tell`'s `holds`); `survey` and
+        # `T4`: only a NAMED own-ledger conjunct carries `said` (`tell`'s `holds`, and since IN-10
+        # `issue`'s `terms`, which nothing reads `said` off -- the row's note); `survey` and
         # `reconstruct` share the form unnamed and carry nothing (telling workplan, "From Batch 1").
         ledger_of = row.requires_typed.named_own_ledger_operands() if row.requires_typed else ()
         opposes_subject = subject_is_opponent(row)
@@ -601,14 +602,13 @@ def _from_content_claim(p: Person, q: "Question", name: str):
     stays on its own branch below.
 
     `None` when `q.about` names no claim in `p`'s own ledger, the claim's predicate does not
-    start `content:`, or its value has no key `name`. ⚠ THAT LAST CASE IS THE LIVE ONE FOR TWO
-    OF THE THREE CALLERS. `record_kinds`'s two schemas actually built (`15`) are
-    `dispensation: [terms, to, at]` and `petition: [terms, to, from]` -- so a call for `to`
-    resolves (both kinds address someone), and a call for `kind`/`amount` declines EVERY TIME
-    today, because neither schema carries either key; the caller's existing fixture/referent
-    fallback runs exactly as it does for a person naming no writ at all. That is a fact about
-    today's two live schemas, not a limit of this function -- a later kind that does carry
-    `kind`/`amount` needs no change here.
+    start `content:`, or its kind maps nothing for `name` (`_content_answer`). ⚠ PLAN POSITION
+    IN-10 MADE THE MAP PER KIND (`rosters.yaml: record_sourced_operands`): `15c`'s flat list asked
+    `kind`/`amount` too and they declined EVERY TIME, since neither live schema carries either key;
+    they left the map with no behaviour moved. ⚠ AND `subject` IS NEVER ASKED HERE, though both
+    kinds map it: on a question about a document the act is about the document itself, so
+    `_derive_operand` answers `subject` with the referent before it reaches this reader. A HELD
+    Record answers `subject` too, through `held_record_claims` (`_derive_operand`'s `held=`).
 
     ⚠ A SINGLETON LIST COLLAPSES TO ITS ONE ID; ANY OTHER COUNT DECLINES. `to`'s writ-side type
     is `[PersonId|OfficeId]` (r2 §A.3) -- a LIST, because a document may address several people
@@ -625,16 +625,67 @@ def _from_content_claim(p: Person, q: "Question", name: str):
     floor does; exactly one is not a choice at all, so it is not held back."""
     if q is None or not q.about:
         return None
-    c = _claim_by_id(p, q.about)
-    if c is None:
+    return _content_answer(_claim_by_id(p, q.about), name)
+
+
+def _content_kind(c: Optional["Claim"]) -> Optional[str]:
+    """The Record kind a `content:<kind>` claim is OF, or `None` for any other claim (or none)."""
+    if c is None or c.value is None:
         return None
-    stem, sep, _ = str(c.predicate).partition(":")
-    if not sep or stem != RECORD_CONTENT.get("predicate") or c.value is None:
+    stem, sep, kind = str(c.predicate).partition(":")
+    return kind if sep and kind and stem == RECORD_CONTENT.get("predicate") else None
+
+
+def _content_answer(c: Optional["Claim"], name: str):
+    """WHAT A DOCUMENT'S CONTENT CLAIM ANSWERS FOR OPERAND `name`, or `None` -- plan position IN-10
+    (#453 §10.1). Read through `rosters.yaml: record_sourced_operands`, PER KIND: the claim's kind
+    (`content:<kind>`) maps `name` to one of its own content keys, and that key's value is the
+    answer. `None` when the claim is no content claim, its kind maps nothing for `name`, or the key
+    is absent. A singleton id list collapses to its one id and any other count declines
+    (`_from_content_claim`'s docstring, measured at `15c`)."""
+    key = RECORD_SOURCED_OPERANDS.get(_content_kind(c) or "", {}).get(name)
+    if key is None:
         return None
-    v = dict(c.value).get(name)
+    v = dict(c.value).get(key)
     if isinstance(v, tuple):
         return v[0] if len(v) == 1 else None
     return v
+
+
+# Every operand name SOME record kind answers -- derived from the roster, never listed (the
+# `test_jordan_no_definition_is_hardcoded_in_a_body` finding above `_derive_operand`'s writ branch).
+_RECORD_ANSWERABLE = frozenset(n for m in RECORD_SOURCED_OPERANDS.values() for n in m)
+
+
+def held_record_claims(p: Person) -> list:
+    """THE CONTENT CLAIMS OF THE RECORDS `p` HOLDS -- plan position IN-10, #453 §10.1's *"held
+    Records"*: for each of `p`'s OWN live `hold` Tenures, the `content:<kind>` claim on its object in
+    `p`'s OWN ledger, where `record_sourced_operands` maps that kind. In tenure order, one per held
+    Record (a Record held is learned at once -- r2 §A.9's deposit rule -- so its one content claim is
+    there; the most recent is taken if several are). Person-side and World-free (`AX-2`): the
+    person's own Tenures and own ledger, never the Record itself.
+
+    WHAT IT IS FOR: `_derive_operand(..., held=c)` answers an operand off one of these, `subject`
+    included -- the act is about what the document SAYS (a dispensation's `terms`), which is the
+    channel `confer`/`revoke`/`establish` (a writ naming an office) and `oblige` (IN-10 (a)) are
+    specified to read. ⚠ NO ROW FANS OVER IT YET, AND THAT IS MEASURED, NOT DEFERRED: no Record in
+    either shipped world names an office -- over `populated.build_realm(0)` and
+    `governance_spine.build(0)` no question's referent is an office and no ledger holds a claim
+    about one, so a writ's `terms` (the issuer's referent) never names a seat -- and forming
+    `confer`/`revoke`/`establish` over held writs would re-aim candidates that are refused every
+    time. The seat-claim source the rows need first is #453's K-25 (`tenure.opened` deposit)."""
+    out = []
+    for t in p.tenures:
+        if t.kind != "hold" or not t.live:
+            continue
+        best = None
+        for c in p.ledger:
+            if c.subject == t.object and _content_kind(c) in RECORD_SOURCED_OPERANDS:
+                if best is None or c.when >= best.when:
+                    best = c
+        if best is not None:
+            out.append(best)
+    return out
 
 
 def _from_shortfall_claim(p: Person, q: "Question", name: str):
@@ -694,8 +745,13 @@ def _from_shortfall_claim(p: Person, q: "Question", name: str):
 
 
 def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures",
-                    seat: Optional[str] = None):
+                    seat: Optional[str] = None, held: Optional["Claim"] = None):
     """ONE OPERAND, FROM THE PERSON'S OWN STATE. `None` means THIS PERSON CANNOT SUPPLY IT.
+
+    `held` (plan position IN-10, #453 §10.1) is the content claim of a Record the person HOLDS
+    (`held_record_claims`), or `None`. When given it answers FIRST, for every name its kind maps in
+    `rosters.yaml: record_sourced_operands` -- `subject` included: a held dispensation's `terms`
+    answers `subject`, the act being about what the document says. Without it nothing below moves.
 
     `seat` is the seat the act will be exercised through (`exercised_seat`), `None` for an act the
     person performs as himself. It moves ONE operand, `from`: through a seat, the giver gives from
@@ -714,11 +770,12 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     not one name -- the cells name them differently because they mean different things TO THE
     VERB, and the person answers all three the same way, with the thing they were asked about.
 
-    ⚠ POSITION `15c` ADDS A FOURTH READING, CHECKED FIRST FOR THREE OF THE EIGHT NAMES: AN OPERAND
-    THE PERSON'S OWN HELD WRIT ANSWERS BINDS THE WRIT, not the referent and not the fixture.
-    `to`/`kind`/`amount` -- the three of `transfer`'s own operands not already `from` (r2 §A.13:
-    *"the executor's act is `transfer`, whose operands -- `from`, `to`, `kind`, `amount` -- are
-    all in the closed eight"*) -- ask `_from_content_claim` first. `from` is DELIBERATELY EXCLUDED
+    ⚠ POSITION `15c` ADDS A FOURTH READING: AN OPERAND THE DOCUMENT THE QUESTION IS ABOUT ANSWERS
+    BINDS THE DOCUMENT, not the referent and not the fixture. `15c` asked it for `to`/`kind`/`amount`
+    (r2 §A.13: *"the executor's act is `transfer`, whose operands -- `from`, `to`, `kind`, `amount`
+    -- are all in the closed eight"*); since IN-10 the names are the document's kind's, per
+    `rosters.yaml: record_sourced_operands`, and only `to` resolves on a question (`subject` stays
+    the referent; a HELD Record answers it, through `held=`). `from` is DELIBERATELY EXCLUDED
     from this check: r2's own ruling keeps *where you are* off the writ (*"a writ that could name
     `from` would let a Duke's document reach into a larder the executor is not standing in"*), so
     it stays on `containing_rung_of` alone, below. `at` -- the writ's OWN place of discharge -- is
@@ -775,16 +832,24 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     alternative, `min` over every kind's floors, is a number nobody chose."""
     if name == "actor":
         return p.id
-    # THE WRIT ANSWERS FIRST, for the names `rosters.yaml: writ_sourced_operands` declares (see
-    # this function's own docstring for why `from`/`at` are not among them). A person naming no
-    # writ at all, or one whose kind has no such key, falls straight through to the referent/
-    # fixture below -- `_from_content_claim` returning `None` is silent by design, not a special
-    # case of this one. BATCH-CLOSE FINDING (methodology-close Phase 1, CODE ARCHITECTURE lens):
-    # this was a literal `("to", "kind", "amount")` tuple, caught by
-    # `test_jordan_no_definition_is_hardcoded_in_a_body` -- moved to the roster rather than
-    # exempted, since it names a real design fact (which operand names a writ may answer) with a
-    # cited source, not a mechanism.
-    if name in WRIT_SOURCED_OPERANDS:
+    # A HELD RECORD ANSWERS FIRST (IN-10), for every name its kind maps, `subject` included.
+    if held is not None:
+        v = _content_answer(held, name)
+        if v is not None:
+            return v
+    # What the act is ABOUT, on a question: the referent, even when the question is about a
+    # document -- the act is then about the document itself (`give` it, burn it, answer it), so
+    # the document's own `terms` never re-aims it here. Only a HELD Record does, above.
+    if name == "subject":
+        return subject
+    # THE DOCUMENT THE QUESTION IS ABOUT ANSWERS NEXT, for the names its kind maps in
+    # `rosters.yaml: record_sourced_operands` (`to`; `from`/`at` are on no kind -- see this
+    # function's docstring). A question naming no document, or one whose kind maps no such name,
+    # falls straight through to the referent/fixture below -- `None` is silent by design.
+    # BATCH-CLOSE FINDING (methodology-close Phase 1, CODE ARCHITECTURE lens): this was a literal
+    # `("to", "kind", "amount")` tuple, caught by `test_jordan_no_definition_is_hardcoded_in_a_body`
+    # -- moved to the roster rather than exempted; IN-10 made the roster per kind.
+    if name in _RECORD_ANSWERABLE:
         v = _from_content_claim(p, q, name)
         if v is not None:
             return v
@@ -798,9 +863,8 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
         v = _from_shortfall_claim(p, q, name)
         if v is not None:
             return v
-    # What the act is ABOUT -- three cell-side names for the one thing the person was asked about.
-    if name == "subject":
-        return subject
+    # What the act is ABOUT -- three cell-side names for the one thing the person was asked about
+    # (`subject` answered above, before the document the question is about could re-aim it).
     if name == "to":
         return subject
     if name == "site":
@@ -891,9 +955,10 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
     """EVERY OPERAND BAG `p` CAN FORM FOR `row` ON `subject` -- `[]` when none (telling workplan
     `T4`, `ED-IN-0282`). One bag for every row whose operands all come from `_derive_operand`
     (`operands_for`'s rule, unchanged); for a row whose cell binds a known-person operand beside
-    `subject` (`TypedRequires.known_person_operands`: `tell`'s `to`, and since plan position `14`
-    `give`'s -- `petition` and `issue` bind `to` without `subject`, so `to` is what they are about
-    and keeps the referent rule in `_derive_operand`), one bag PER PERSON `p` KNOWS (`queries/person_q.py::known_persons`, from `p`'s own claims,
+    `subject` (`TypedRequires.known_person_operands`: `tell`'s `to`, since plan position `14`
+    `give`'s, and since plan position IN-10 `issue`'s, so a writ's `terms` and its executor separate
+    -- `petition` binds `to` without `subject`, so `to` is what it is about and keeps the referent
+    rule in `_derive_operand`), one bag PER PERSON `p` KNOWS (`queries/person_q.py::known_persons`, from `p`'s own claims,
     never the actor; since IN-18 step 2a the topic may be the hearer), in that function's sorted order. Nobody known is no bag:
     a telling to nobody is an act with a hole (`operands_for`'s `None`), traced and not formed.
 
