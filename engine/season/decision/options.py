@@ -310,8 +310,8 @@ def refuses(verb: str, axis: str, tolerance: float) -> bool:
 def person_side_eligible(p: Person, row: "VerbRow") -> bool:
     """§F1 clause 2, PERSON-SIDE. `own | remit | hold | presence`, NEVER `capability`.
 
-    A DISJUNCTION: `transfer` is eligible by `own` OR `hold:<store>`, so one alternative admitting
-    is enough and one alternative declining decides nothing.
+    A DISJUNCTION: `transfer` is eligible by `remit:issue` OR `own` OR `hold:<store>`, so one
+    alternative admitting is enough and one alternative declining decides nothing.
 
     ⚠ **ONE OF THE FOUR KINDS DECLINES HERE — `remit:` NO LONGER DOES, AS OF 2026-09-18 (`13b`,
     `H-71`).** The bullet below is kept because it states WHY the hole existed and what closed it,
@@ -355,9 +355,10 @@ def exercised_seat(p: Person, row: "Optional[VerbRow]") -> Optional[str]:
     carries the act, and that hold's object is the seat. An `own` or `hold` alternative admits the
     person AS THEMSELVES, and no seat is exercised -- `kill / wound`, `release` mint with `via=None`,
     and so does `transfer` for a person whose seats grant no `issue` (its first alternative is
-    `remit:issue` since `H-160` limit 1, so a holder of such a seat gives THROUGH it, from its rung). The fold's `_eligible` then admits the same act through the same seat, so
-    making `via` required there moves no computed act (measured: `build_realm(0)`'s content hash
-    over one season is unchanged by G3).
+    `remit:issue` since `H-160` limit 1, so a holder of a seat granting `issue` WITH A RUNG gives
+    THROUGH it, from its rung). The fold's `_eligible` then admits the same act through the same
+    seat, so making `via` required there moves no computed act (measured: `build_realm(0)`'s
+    content hash over one season is unchanged by G3).
 
     ⚠ WHICH SEAT, WHEN SEVERAL GRANT THE ACT, IS THE FIRST IN THE PERSON'S OWN TENURE ORDER -- a
     fixed rule, not a choice, and a LIMIT stated rather than hidden: a person holding two seats that
@@ -383,18 +384,28 @@ def exercised_seat(p: Person, row: "Optional[VerbRow]") -> Optional[str]:
     return _admitted_through(p, row, trace=False)[1]
 
 
-def _granting_hold(p: Person, act: str):
+def _granting_hold(p: Person, act: str, need_treasury: bool = False):
     """The first live `hold` in the person's OWN store whose grant carries `act`, or `None` -- the
-    one person-side reading of *which seat grants this* (`H-71` arm 2's snapshot)."""
-    return next((t for t in p.tenures if t.kind == "hold" and t.live and act in t.granted_acts),
-                None)
+    one person-side reading of *which seat grants this* (`H-71` arm 2's snapshot).
+
+    `need_treasury` is set for a row whose cell binds `from`: an act exercised through a seat gives
+    from the seat's rung (`treasury_of`), so a seat whose grant carries no rung grants nothing such
+    an act can be exercised through, and is passed over. Every reader of the seat (`opening_set`'s
+    belief seat, `_operands`, `pack_scenes`' `via`) goes through here, so `via` and `from` agree."""
+    return next((t for t in p.tenures if t.kind == "hold" and t.live and act in t.granted_acts
+                 and (not need_treasury or t.seat_rung is not None)), None)
 
 
 def _admitted_through(p: Person, row: "VerbRow", trace: bool) -> tuple:
     """`(admitted, seat)`: `person_side_eligible`'s walk over the row's DISJUNCTION, once, for both
     of its readers -- the FIRST alternative that admits decides, and `seat` is the office it admitted
     through (`None` unless that alternative was `remit:`). `trace=False` is `exercised_seat`'s
-    reading of a verb the first reading already traced, so the trace records each decline once."""
+    reading of a verb the first reading already traced, so the trace records each decline once.
+    The declines are held and traced only when NO alternative admits, so a person a later
+    alternative admits leaves no note that the verb declined."""
+    # A row binding `from` gives from the seat's rung when exercised through one (`_granting_hold`).
+    need_treasury = row.requires_typed is not None and "from" in row.requires_typed.operands()
+    pending: list = []                      # this walk's decline notes, traced only on (False, None)
     for alt in row.eligibility:
         kind, _, raw = alt.partition(":")
         kind, raw = kind.strip(), raw.strip()
@@ -424,8 +435,8 @@ def _admitted_through(p: Person, row: "VerbRow", trace: bool) -> tuple:
                 if any(t.kind == "hold" and t.live and t.object == arg for t in p.tenures):
                     return (True, None)
             elif trace:
-                TRACE.note(f"`hold:<{arg}>` names an object KIND, not an id (H-75); "
-                           f"{row.verb!r} declines rather than admitting on any held object")
+                pending.append(f"`hold:<{arg}>` names an object KIND, not an id (H-75); "
+                               f"{row.verb!r} declines rather than admitting on any held object")
         # `remit` and `presence` decline: see the docstring. TRACE records the decline so the
         # count is measurable rather than inferred from a verb's absence.
         elif kind == "remit":
@@ -438,22 +449,25 @@ def _admitted_through(p: Person, row: "VerbRow", trace: bool) -> tuple:
             # weighs equally with an over-refusal. Every live `remit:` cell in `verb_table.yaml`
             # is a literal (`remit:issue`, `remit:confer`), so this refuses nothing that exists.
             # G3: the hold that grants it IS the seat exercised -- returned, not just found.
-            seat = _granting_hold(p, arg) if arg and not placeholder else None
+            seat = (_granting_hold(p, arg, need_treasury)
+                    if arg and not placeholder else None)
             if seat is not None:
                 return (True, seat.object)
             if not trace:
                 continue
             if placeholder:
-                TRACE.note(f"`remit:<{arg}>` names an ACT KIND, not an act (H-75); "
-                           f"{row.verb!r} declines rather than admitting on any granted remit")
+                pending.append(f"`remit:<{arg}>` names an ACT KIND, not an act (H-75); "
+                               f"{row.verb!r} declines rather than admitting on any granted remit")
             elif not arg:
-                TRACE.note(f"bare `remit` names no act; {row.verb!r} declines")
+                pending.append(f"bare `remit` names no act; {row.verb!r} declines")
             else:
-                TRACE.note(f"`remit:{arg}` not granted on any live `hold` this person holds; "
-                           f"{row.verb!r} declines")
+                pending.append(f"`remit:{arg}` not granted on any live `hold` this person holds; "
+                               f"{row.verb!r} declines")
         elif kind == "presence" and trace:
-            TRACE.note(f"`presence:` eligibility is unevaluable person-side (H-33, the presence "
-                       f"index); {row.verb!r} declines rather than admitting")
+            pending.append(f"`presence:` eligibility is unevaluable person-side (H-33, the "
+                           f"presence index); {row.verb!r} declines rather than admitting")
+    for note in pending:
+        TRACE.note(note)
     return (False, None)
 
 
@@ -523,8 +537,9 @@ def treasury_of(p: Person, seat: str) -> Optional[str]:
     """WHERE A HOLDER GIVES FROM WHEN HE GIVES THROUGH HIS SEAT: the seat's rung, its TREASURY (the
     retirement plan's G2, *"treasury = `Rung.stores` at the office's own rung"*), read off the
     person's OWN live `hold` on `seat` (`Tenure.seat_rung`, the grant's snapshot, `H-71` arm 2's
-    shape). `None` for a seat he does not hold or a rungless seat, which has no treasury -- and then
-    the Candidate is not formed (`_operands`), as for a person nowhere (`containing_rung_of`).
+    shape). `None` for a seat he does not hold or a rungless seat, which has no treasury -- and the
+    computed path never asks it of a rungless seat when the row binds `from` (`_granting_hold`'s
+    `need_treasury` passes such a seat over, so the act is exercised as himself).
 
     `H-160` limit 1 / `H-158` [ASSUMPTION; medium; Jordan to correct; revert: a ruling that an `own`
     verb may be exercised through a seat]: `containing_rung_of`'s *where the actor is* stays the
@@ -892,7 +907,7 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
     people = known_persons(p.ledger, p.id)
     if not people:
         TRACE.note(f"{row.verb!r} needs {list(fan)} from a person {p.id} knows, and they know "
-                   f"nobody but {subject!r}; NO Candidate is formed (T4)", "§F1/H-94")
+                   f"nobody; NO Candidate is formed (T4)", "§F1/H-94")
         return []
     out = []
     for who in people:
@@ -1108,9 +1123,10 @@ def refracted_confidence(p: Person, c: Claim, channel: str, gain: float,
     ever LOWERS a confidence, and at `g = 0` every factor is exactly 1: THE CONTROL, and the deposit
     is today's.
 
-    ⚠ `H-36`'s SHAPE, KEPT: RECEIVER-SIDE, PER RECEIVER, AND NEVER THE EMISSION. Nothing here reads
-    or writes an Event or an Act; it grades one person's copy as it lands, so two witnesses of one
-    act hold it with different confidence and the act is untouched (`AX-7` layer (1)).
+    ⚠ `H-36`'s SHAPE, KEPT: RECEIVER-SIDE, PER RECEIVER, AND NEVER THE EMISSION. Nothing here writes
+    an Event or an Act; `act` is read only for `dissents`' act-level prior (H-201). It grades one
+    person's copy as it lands, so two witnesses of one act hold it with different confidence and
+    the act is untouched (`AX-7` layer (1)).
     ⚠ CONFIDENCE, NOT VALUE. `AX-7` allows either; what a copy may LOSE in its value is already
     owned (`loop/witness.py::_told_value`, r2 `02` §A.10), and a second value rule here would be a
     second owner of it. This is the axis no rule moved: every deposit took `confidence_default`, or

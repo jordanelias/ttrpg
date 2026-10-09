@@ -39,7 +39,7 @@ from ..data.rosters import PURSUIT_AXES, SCENE_PACKING_RULES, require_member, ro
 from ..data.verbs import VERB_TABLE, act_key, align
 from ..gaps import Unspecified
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
-# imports `person_q` and `data/`); `make_chooser`'s score calls it, and `confliction` (IN-08 6f,
+# imports `person_q` and `data/`); `_stance_arm` calls it, and `confliction` (IN-08 6f,
 # the derived Query's caller, ID-13).
 from ..queries.person_q import confliction, intent_named, intent_said, regard, stance_toward
 from ..state.carriers import Act, Candidate, Person, Question, Scene, Sensation, View
@@ -60,19 +60,22 @@ def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = 
       * `declared`: `regard(p, c.subject, fx)`, NEGATED where the subject is the act's opponent
         (`options.subject_is_opponent`): a grudge makes `fight` on its object score higher, where
         `legacy` scored it lower. Every other row keeps `+`, so the arms differ on contested rows
-        only. `regard` is G1's, so its judged and told halves enter at their own gains (0 shipped).
+        only. `regard` is G1's, so its judged and told halves enter at their own gains
+        (0.5 each, shipped).
 
-    A Rung subject reads 0 on every arm -- nobody holds stance about a rung -- where the ROLE reading
-    would regard its HOLDER; that operand needs a `held_by` claim, and M0g measured none (`H-195`).
+    A Rung subject reads 0 at G1's control; at live gains it reads the deed claims held about it
+    (`transfer.made` on a changed rung, under `claim_subject_rule: both`) -- nobody holds stance
+    about a rung -- where the ROLE reading would regard its HOLDER; that operand needs a `held_by`
+    claim, and M0g measured none (`H-195`).
 
     `memo` caches `regard` per subject for one deliberation: it depends on the subject and `p`'s
     ledger alone, which do not change inside one `choose` call.
 
     THE GAIN (v9 IN-25, BOUND-STAKES, `H-202`): whatever the arm returns is read at `1 + g`, `g` the
     swept `Fixtures.stance_gain`. §F2 gives the term weight 1 and no gain, so `g` is the weight the
-    term carries ABOVE §F2's, and `0` -- the CONTROL, SHIPPED -- returns the arm's value untouched.
-    It scales the SIGNED term, so under `declared` a grudge pulls `fight` on its object up and
-    `tell` about it down, both harder. A negative or NaN `g` raises: below 0 the term is damped
+    term carries ABOVE §F2's, and `0` -- the CONTROL (`1` ships, H-202) -- returns the arm's value
+    untouched. It scales the SIGNED term, so under `declared` a grudge pulls `fight` on its object
+    up and `tell` about it down, both harder. A negative or NaN `g` raises: below 0 the term is damped
     towards nothing and below -1 its sign flips, which is G2's polarity and not this gain."""
     # ABSENT: H-195 holder  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
     g = fx.get("stance_gain")
@@ -84,7 +87,7 @@ def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = 
 
 
 def _stance_arm(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict]) -> float:
-    """`stance_term`'s value at gain 1: the arm `Fixtures.stance_polarity` names (H-194)."""
+    """`stance_term`'s value at §F2's weight (gain 0): the arm `Fixtures.stance_polarity` names (H-194)."""
     subject = c.subject or ""
     arm = fx.get("stance_polarity")
     if arm == "legacy":
@@ -456,7 +459,10 @@ def declare_intents(p: Person, scenes: list, fx: "Fixtures", draw=None) -> list:
     one the driver drops as already realised this season (`loop/deliberate.py::
     _drop_what_was_already_done`, which this person-side function cannot see, AX-2). Reconciling a
     declared intent against what was done is `H-191`, absent. A missing `draw` at a non-zero rate
-    RAISES rather than declaring every intent or none (`_sample_order`'s precedent)."""
+    RAISES rather than declaring every intent or none (`_sample_order`'s precedent).
+
+    ⚠ *not yet done* holds at `scenes_per_round` 1 (shipped, H-124); at 2 or 5 a later scene can
+    release in the telling's own round."""
     rate = float(fx.get("intent_disclosure"))
     if not 0 <= rate <= 1:           # `not ... <=`, so a NaN is refused too
         raise ValueError(f"intent_disclosure {rate} is not a chance in [0, 1] (H-190)")

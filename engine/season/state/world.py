@@ -554,7 +554,8 @@ class World:
         # a public constructor field: `Tenure(..., "hold", 0, payload={"note": "x"})` produced a
         # seated holder whose `granted_acts` was `()`, indistinguishable from an office that grants
         # nothing. The payload is a dict of independent keys, so only the grant's two keys are this
-        # method's to own and they are left alone when already set -- unless `force`.
+        # method's to own; a payload already carrying `remit_acts` is left alone, both keys, unless
+        # `force`.
         if t.payload is None:
             t.payload = dict(stamp)
             return True

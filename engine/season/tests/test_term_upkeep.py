@@ -283,7 +283,7 @@ def test_17b_a_declared_upkeep_is_what_a_payment_is_counted_against():
 # MATTER (`transfer.made`) -- the payment happens and buys nothing -- so a refusal here is the
 # renewal's, never the transfer's.
 _ONE_CLAUSE_BROKEN = {
-    "no seat exercised (every computed transfer)": dict(via=None),
+    "no seat exercised (a transfer made as himself)": dict(via=None),
     "a seat the actor does not sit in": dict(actor="p_king"),
     "not out of the seat's own rung (a gift from the settlement store)": dict(frm="S"),
     "not to an obligee's home": dict(to=DUKES_HEARTH),

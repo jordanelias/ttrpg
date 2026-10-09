@@ -110,7 +110,8 @@ class Tenure:
         ⚠ `payload` HAD ZERO WRITERS AND ZERO READERS UNTIL THIS LANDED, which by the same test
         the deleted `conferrer` field failed (above) made it a field that *"does not exist, wearing
         a schema's clothes"*. This property and `World._grant_remit` are its first reader and its
-        first writer, and they are deliberately the ONLY two: §8 -- the shape of a payload is a
+        first writer; `World._grant_remit` is the payload's ONLY writer; its readers are this
+        property and `seat_rung` below: §8 -- the shape of a payload is a
         rule, so it lives once. A caller that reaches into `payload["remit_acts"]` itself has
         re-implemented it and will drift.
 
@@ -150,6 +151,9 @@ class Tenure:
         (`decision/options.py::treasury_of`), and the person-side reader has no `World` (`AX-2`),
         so the rung rides on the Tenure beside `remit_acts`, `H-71` arm 2's own shape and writer
         (`World._grant_remit`). The same SNAPSHOT semantics: as at seating, re-stamped by `establish`.
+        It extends `H-71` arm 2's precedent (the grant rides on the Tenure) to the seat's rung, which
+        no act can change: `_req_establish` refuses a rung difference on an existing id
+        (`loop/predicates.py`).
 
         `None` for every Tenure carrying no grant, and for the grant of a rungless seat -- which has
         no treasury, so a payment through it is not formed."""

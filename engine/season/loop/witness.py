@@ -38,8 +38,9 @@ from ..state import ledgers
 from ..state.ids import H
 from ..trace_log import TRACE
 
-# v9 IN-22: THE SEAT CHANNEL -- the `witness_channels` member whose predicate asks a SEAT's ground
-# (`epistemic._ch_post_remit`, through `purview_reaches`). The purview deposit in `witness` below
+# v9 IN-22: THE SEAT CHANNEL -- the obligee channel (`epistemic._ch_post_remit`), borrowed for its
+# `inferred` source and its live/off switch; this route's recipients are seat holders
+# (`world_q.governors_of`), not obligees. The purview deposit in `witness` below
 # rides it: its claim source is this channel's roster `claim_source:`, and it is live exactly when
 # this channel is. Named once here and refused at import if the roster stops carrying it, so a
 # renamed channel cannot leave the route silently dead (`RESIDE_KIND`'s shape, `world_q`).
@@ -267,8 +268,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
     conf = w.fixtures.get("confidence_default")
     claim_rule = w.fixtures.get("claim_subject_rule")
     # v9 IN-15 / `H-199`: REFRACTION'S GAIN, read once per barrier for the reason `obs_mode` below
-    # is. `0` is the control and is SHIPPED: no deposit is refracted and the barrier is the pre-IN-15
-    # one exactly (no `actor_of` call, no ledger scan).
+    # is. `0` is the control (0.5 ships, H-199): no deposit is refracted and the barrier is the
+    # pre-IN-15 one exactly (no `actor_of` call, no ledger scan).
     gain = w.fixtures.get("refraction_gain")
     # `W-B` / `H-122`. WHO RECEIVES A CLAIM MINTED FROM WHAT THE FOLD READ. `none` is the
     # CONTROL -- the behaviour before `W-B`, so every measurement of this item has a baseline
@@ -678,8 +679,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
         #
         # ⚠ CONFIDENCE IS THE TELLER'S OWN, THEN REFRACTED (v9 IN-15): the hearer's copy starts at
         # what the teller held and `_refract` lowers it by the channel the hearer heard the speech
-        # through and by what they already held firsthand -- at `refraction_gain` 0, the shipped
-        # control, it is the teller's own exactly. The hop itself is still graded at READ
+        # through and by what they already held firsthand -- at `refraction_gain` 0 it is the
+        # teller's own exactly. The hop itself is still graded at READ
         # (`teller_weight`), never here. The text below is why the start point is the teller's own:
         # Nothing in the chain states how much a hearing costs a belief, and
         # `probes.py` builds every hand-written `told_by` claim at full confidence (`:380`,

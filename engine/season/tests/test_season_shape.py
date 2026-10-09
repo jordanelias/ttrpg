@@ -8177,7 +8177,7 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
         # universal set is empty on both sides (asserted below) and the status census is identical (102 RUNS-UNDECLARED · 40
         # SPAN-UNAUTHORED · 1 RUNS-ALONE-UNDECLARED).
         # ⚠⚠ **135 -> 134, v9 IN-18 STEP 2a (#453: `known_persons` stops discarding the topic, so a teller may tell C
-        # what they hold about C), 2026-10-09, MEASURED AGAINST A CLEAN `git worktree` AT B-E's BASE `a467126a` (135 there;
+        # what they hold about C), 2026-10-09, MEASURED AGAINST A CLEAN `git worktree` AT IN-18's BASE `a467126a` (IN-17's commit) (135 there;
         # same 143 live worlds, seed 0), AND ATTRIBUTED: the same tree with ONLY 2a undone (every operand bag whose `to` is
         # its subject filtered out) reads `corpus_run 0` byte-identical to the base, so G1-G3 at their controls move
         # nothing.** THE UNIT AND THE DIRECTION: variety FELL by one, `live` did not move; a telling to its own topic now

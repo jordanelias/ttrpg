@@ -35,7 +35,8 @@ from ..data.requires import SHORTFALL_PREDICATE
 from ..data.rosters import CHANNEL_CLAIM_SOURCE
 from ..data.verbs import VERB_TABLE
 from ..decision import make_chooser
-from ..decision.options import exercised_seat, opening_set, treasury_of
+from ..decision.options import (containing_rung_of, exercised_seat, opening_set, operands_for,
+                                treasury_of)
 from ..harness import probes as P
 from ..harness import scarce as S
 from ..loop.driver import SeasonDriver, resolvable_verbs
@@ -175,7 +176,7 @@ def test_in22_an_acts_reads_do_not_reach_a_governor():
 # ======================================================================================
 
 
-def _paying_run(acting=(S.REEVE,)):
+def _paying_run(acting=(S.REEVE,), between=None):
     """Season 1 with nobody choosing: MATTER drains the hungry larder and the reeve's seat receives
     the record. Season 2 with the REAL chooser and fold serving only `acting`, with TWO instrument
     choices, each the driver's or the chooser's own probe seam and each stated: every deliberation
@@ -185,12 +186,15 @@ def _paying_run(acting=(S.REEVE,)):
     `transfer` (from `terr_march`, the claim's kind and amount) is outscored in that season by
     `levy`, `work`, `examine` and others -- which verb a person prefers is the chooser's score, not
     this position's, and the falsifier is that the candidate EXECUTES once chosen. `acting=()` is
-    the CONTROL twin: the same world and the same two barriers, nobody acting. Returns `(world,
-    question, season-2 acts, season-2 Events)`."""
+    the CONTROL twin: the same world and the same two barriers, nobody acting. `between(w)`, if
+    given, runs after the question is read and before season 2. Returns `(world, question,
+    season-2 acts, season-2 Events)`."""
     w = S.governed(steward_holds=False)
     d = _season(w)
     q = S.shortfall_question(w, S.REEVE)
     assert q is not None, "the reeve holds no shortfall question; nothing below is observed"
+    if between is not None:
+        between(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     real = make_chooser(w.fixtures, mint, verbs=resolvable_verbs() & {"transfer"},
                         draw=draw_factory(w.world_seed, lambda: w.tick))
@@ -280,3 +284,87 @@ def test_in22_a_seat_granting_no_issue_exercises_nothing_and_its_holder_gives_as
     (cand,) = [c for c in opening_set(reeve, View(reeve.id, [], 99, q), q, w.fixtures)
                if c.verb == "transfer"]
     assert cand.operands["from"] == S.REEVE_HEARTH, cand.operands
+
+
+def _seat_hold(w, pid, seat):
+    (t,) = [t for t in w.persons[pid].tenures if t.kind == "hold" and t.live and t.object == seat]
+    return t
+
+
+def _rungless(w):
+    """The reeve's seat loses its rung and the grant's one writer re-stamps the sitting holder
+    (`World._grant_remit(force=True)`, `establish`'s path): the grant still carries `issue`, and no
+    treasury."""
+    w.offices[S.REEVE_SEAT].rung = None
+    t = _seat_hold(w, S.REEVE, S.REEVE_SEAT)
+    assert w._grant_remit(t, force=True)
+    assert "issue" in t.granted_acts and t.seat_rung is None
+
+
+def _partial_grant(w):
+    """A HAND-BUILT partial grant: the hold carries `remit_acts` and no `seat_rung` key at all."""
+    t = _seat_hold(w, S.REEVE, S.REEVE_SEAT)
+    del t.payload["seat_rung"]
+    assert "issue" in t.granted_acts and t.seat_rung is None
+
+
+def _gives_as_himself(w, q):
+    """The three readers of the seat agree for a holder whose `issue` seat has no treasury:
+    `exercised_seat` names none, `operands_for`'s `from` is where he stands, and the formed
+    Candidate's `from` is the same. A row that binds no `from` (`issue`, `levy`) still goes
+    through the seat -- the filter is the treasury's, not the grant's."""
+    reeve = w.persons[S.REEVE]
+    row = VERB_TABLE["transfer"]
+    assert exercised_seat(reeve, row) is None
+    ops = operands_for(reeve, row, q, S.HUNGRY, w.fixtures)
+    assert ops is not None and ops["from"] == containing_rung_of(reeve) == S.REEVE_HEARTH, ops
+    (cand,) = [c for c in opening_set(reeve, View(reeve.id, [], 99, q), q, w.fixtures)
+               if c.verb == "transfer"]
+    assert cand.operands["from"] == S.REEVE_HEARTH, cand.operands
+    checked = 0
+    for verb in ("issue", "levy"):
+        assert "from" not in VERB_TABLE[verb].requires_typed.operands()
+        assert exercised_seat(reeve, VERB_TABLE[verb]) == S.REEVE_SEAT, verb
+        checked += 1
+    assert checked == 2
+
+
+def test_in22_a_rungless_issue_seat_is_passed_over_and_via_and_from_agree():
+    """A SEAT WITH NO TREASURY EXERCISES NO `transfer`: its holder falls through to `own`, so the
+    act mints `via=None` from his own home -- the seat, `from` and `via` all agree. CONTROL: the
+    same holder with the rung intact exercises the seat (the paying-half tests above)."""
+    w = _one_season()
+    q = S.shortfall_question(w, S.REEVE)
+    assert q is not None
+    assert exercised_seat(w.persons[S.REEVE], VERB_TABLE["transfer"]) == S.REEVE_SEAT
+    _rungless(w)
+    _gives_as_himself(w, q)
+    # THE ACT `pack_scenes` MINTS, in the seeded run of the shipped chooser and fold.
+    w2, _, acts, _ = _paying_run(between=_rungless)
+    mine = [a for a in acts if a.actor == S.REEVE and a.verb == "transfer"]
+    assert mine, "the reeve minted no transfer; nothing is observed"
+    for a in mine:
+        assert a.via is None and dict(a.payload)["from"] == S.REEVE_HEARTH, (a.via, a.payload)
+
+
+def test_in22_a_partial_grant_without_a_seat_rung_is_passed_over_too():
+    w = _one_season()
+    q = S.shortfall_question(w, S.REEVE)
+    assert q is not None
+    _partial_grant(w)
+    _gives_as_himself(w, q)
+
+
+def test_in22_the_governors_shortfall_claim_is_refracted_by_the_gain():
+    """THE PURVIEW DEPOSIT PASSES THROUGH REFRACTION (`loop/witness.py::_refract`, `H-199`): the
+    reeve's shortfall claim is sourced `inferred`, one remove, so its confidence is 100 at the
+    control gain 0 and 50 at the shipped 0.5. Asserted per held claim, and that one was held."""
+    got = {}
+    for gain in (0.0, 0.5):
+        w = _one_season(DEFAULT_FIXTURES.sweep("refraction_gain", gain))
+        held = [c for c in w.persons[S.REEVE].ledger if c.subject == S.HUNGRY
+                and str(c.predicate).partition(":")[0] == SHORTFALL_PREDICATE]
+        assert held, f"the reeve holds no shortfall claim at gain {gain}; nothing is observed"
+        assert {c.source for c in held} == {CHANNEL_CLAIM_SOURCE[SEAT_CHANNEL]} == {"inferred"}
+        got[gain] = {c.confidence for c in held}
+    assert got == {0.0: {100}, 0.5: {50}}, got

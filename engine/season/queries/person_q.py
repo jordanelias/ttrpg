@@ -75,8 +75,8 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
     `<kind>` in `data/verbs.py::EMITTED_KINDS`. Each is scored as `choose`'s score term 1 scores a
     verb, one owner per factor: `Σ_axis to_axes(crisis_weights(p, scar_shift))[axis] ·
     align_kind(kind, axis)`, so a deed that leans the way `p`'s pursuits point reads positive and
-    one that leans against them negative. `judged` sums the claims nobody told `p` (an empty
-    `chain`); `told` sums the claims somebody did -- the told valence. Neither weighs the teller
+    one that leans against them negative. `judged` sums the deed claims `p` holds FIRSTHAND
+    (an empty `chain`, source `firsthand`); `told` sums every other deed claim -- the told valence. Neither weighs the teller
     (§3: *"`judged` has no relation factor, so regard never calls weigh"*), so `regard` cannot
     recurse through `teller_weight`.
 
@@ -94,17 +94,21 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
         if axis_w is None:
             axis_w = to_axes(crisis_weights(p, scar_shift))
         v = deed_valence(axis_w, c)
-        if c.chain:
-            told += v
-        else:
+        # FIRSTHAND only is judged (`dissents`' and `record`'s precedent, `decision/options.py`):
+        # a `told_by` claim whose chain is empty is still hearsay, and lands in `told`.
+        if not c.chain and c.source == "firsthand":
             judged += v
+        else:
+            told += v
     return judged, told
 
 
 def is_deed(c) -> bool:
     """A DEED CLAIM: an event-kind claim `(x, <kind>, True)`, `<kind>` in `EMITTED_KINDS` -- what
-    WITNESS's first deposit writes, or a told copy of it (a `Claim` or a `Said`)."""
-    return c.value is True and c.predicate in _verbs.EMITTED_KINDS
+    WITNESS's first deposit writes, or a told copy of it (a `Claim` or a `Said`). A kind some row
+    emits on refusal (`REFUSAL_KINDS`) is no deed: it reports an act that did not happen."""
+    return (c.value is True and c.predicate in _verbs.EMITTED_KINDS
+            and c.predicate not in _verbs.REFUSAL_KINDS)
 
 
 def deed_valence(axis_w: dict, c) -> float:
@@ -123,8 +127,8 @@ def regard(p: Person, referent: str, fx=None) -> float:
         regard = stance_toward(p, x) + judged_gain · judged + told_valence_gain · told
 
     the stored half (`stance_toward`, the person's own stance rows) plus `deeds_judged`'s two
-    halves (v9 IN-18 `G1`). With no `fx`, or with both gains 0 -- the CONTROL, shipped (`H-192`,
-    `H-193`) -- it is the stored half exactly and reads no ledger. ⚠ `judged_gain` IS NOT
+    halves (v9 IN-18 `G1`). With no `fx`, or with both gains 0 -- the CONTROL (both ship live at 0.5,
+    `H-192`/`H-193`) -- it is the stored half exactly and reads no ledger. ⚠ `judged_gain` IS NOT
     `regard_gain`: the shape row spells `regard_gain · judged`, but `regard_gain` is `teller_weight`'s
     relation gain (`H-179`, shipped 0.5), and zeroing it for G1's control would move every told
     claim's weight -- two decisions on one fixture, `H-121`'s defect. A second name for one sum is

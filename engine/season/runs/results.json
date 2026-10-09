@@ -11201,7 +11201,7 @@
   "ACT": 97,
   "CLAIM": 1701,
   "GAP": 85,
-  "NOTE": 163
+  "NOTE": 153
  },
  "_corpus_defects": [
   "ARC1.yaml: committed inside a markdown fence with transcript preamble",

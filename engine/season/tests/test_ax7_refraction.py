@@ -192,6 +192,29 @@ def test_in15_the_actor_is_never_refracted():
     assert checked == 2
 
 
+def test_in15_a_non_actors_observation_claim_is_refracted():
+    """THE OBSERVATION DEPOSIT (`oc`, `loop/witness.py`) REFRACTS LIKE THE OTHER FOUR. Under
+    `observation_deposit_mode: total` a non-actor receives the fold's reads too: `p_king`, through
+    `document_key`, holds them at 100 at the control gain 0 and at the refracted 67 at 0.5 -- the
+    value his event-kind claim carries through the same channel. The shipped `actor` mode never
+    hands a non-actor a read, which is why this arm sets `total`.
+
+    MUTATION (run 2026-10-09): `oc = _refract(oc, p, channel, gain)` deleted -- RED (100 at 0.5).
+    Restored, GREEN."""
+    checked = 0
+    for gain, want in ((0.0, 100), (0.5, 67)):
+        w, d, out, e = _transfer_into_hh("p_king")
+        w.fixtures = (w.fixtures.sweep("refraction_gain", gain)
+                      .sweep("observation_deposit_mode", "total"))
+        d.witness(mint_token(w, WriteClass.INTERIOR), out)
+        obs = [c for c in w.persons["p_king"].ledger if str(c.predicate).startswith("stores:")]
+        assert obs, f"p_king received no observation claim at gain {gain}: vacuous"
+        assert {c.confidence for c in obs} == {want}, (
+            gain, [(c.subject, c.predicate, c.confidence) for c in obs])
+        checked += 1
+    assert checked == 2
+
+
 def _kinds_and_seen(w, pid, e):
     """`pid`'s event-kind and `seen` claims of `e`, as `{predicate: [confidence, ...]}` -- the two
     deposits `H-201`'s act-level prior reaches. Ledgers start empty in `tiny_world`, so a planted

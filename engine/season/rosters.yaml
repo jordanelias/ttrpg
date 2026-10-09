@@ -1676,8 +1676,10 @@ rosters:
       term never distinguished. `declared` reads `regard(p, c.subject)` (G1's, so its judged and
       told halves enter at their own gains) and NEGATES it where the subject is the act's OPPONENT
       (`decision/options.py::subject_is_opponent`: the row contests and names no counterparty), so
-      fighting the disliked scores higher. A Rung subject reads 0 on every arm: its regarded party
-      would be its HOLDER, and no ledger holds a `held_by` claim (M0g, `H-195`). `regard` is the
+      fighting the disliked scores higher. A Rung subject reads 0 at G1's control; at live gains it
+      reads the deed claims held about it (`transfer.made` on a changed rung, under
+      `claim_subject_rule: both`). Its regarded party under the ROLE reading would be its HOLDER,
+      and no ledger holds a `held_by` claim (M0g, `H-195`). `regard` is the
       midpoint: G1's regard with `+` on every row, so the sweep separates what regard adds from
       what the sign adds.
     values: [legacy, regard, declared]

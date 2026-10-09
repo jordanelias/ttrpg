@@ -1717,7 +1717,8 @@ def test_t7_intent_disclosure_zero_is_the_control_on_the_realm(monkeypatch):
     payload is not hashed (`T1`), and in the realm's first season every telling that carries an
     intent is refused (`news.untold`), so a leak at 0 moves the said and not the hash (scratch
     `t7_arms.py`: the one-season hash is d0015936 at 0, 0.5 and 1.0; at three seasons 0.5 moves it).
-    [GROUNDED: measured 2026-10-09 on B-E's base commit a59d52f9, BEFORE T7's first edit:
+    [GROUNDED: measured 2026-10-09 on the pre-rebase base a59d52f9 (off HEAD's first-parent line,
+    reachable only through the merge 48991c37), BEFORE T7's first edit:
     `build_realm(0)` 5b8618f2..., one season d0015936..., three seasons 43b1fac8...; after T7, at
     `intent_disclosure` 0, d0015936 and 43b1fac8 again -- scratch, not re-read here.]
     The control is NOT VACUOUS: the shipped arm's `declare_intents` is spied, and on a COPY of each
@@ -1769,8 +1770,9 @@ def test_t7_intent_disclosure_zero_is_the_control_on_the_realm(monkeypatch):
 
 def _g1_split():
     """A DEED KIND AND TWO PURSUITS THAT JUDGE IT OPPOSITELY, read off the shipped tables -- nothing
-    planted: the first `EMITTED_KINDS` member (sorted) on which some pursuit's projection, dotted with
-    `align_kind`, is positive and another's negative. Returns `(kind, pursuit_for, pursuit_against)`."""
+    planted: the first DEED kind (sorted; an `EMITTED_KINDS` member no row emits on refusal, as
+    `person_q.is_deed` reads it) on which some pursuit's projection, dotted with `align_kind`, is
+    positive and another's negative. Returns `(kind, pursuit_for, pursuit_against)`."""
     from ..data import verbs as V
     from ..data.pursuits import to_axes
     from ..data.rosters import PURSUIT_AXES, PURSUITS
@@ -1779,7 +1781,7 @@ def _g1_split():
         ax = to_axes({e: 1.0})
         return sum(ax[a] * V.align_kind(k, a) for a in PURSUIT_AXES)
 
-    for k in sorted(V.EMITTED_KINDS):
+    for k in sorted(V.EMITTED_KINDS - V.REFUSAL_KINDS):
         d = {e: dot(e, k) for e in sorted(PURSUITS)}
         pos = [e for e in d if d[e] > 0]
         neg = [e for e in d if d[e] < 0]
@@ -1856,6 +1858,44 @@ def test_g1_regard_at_control_reads_no_ledger_and_a_victims_kind_judges_nothing(
     a.ledger.pop()
     j_without, _ = PQ.deeds_judged(a, "p_other")
     assert j_with == j_without > 0, (j_with, j_without)
+
+
+def test_g1_a_told_by_deed_with_an_empty_chain_is_told_not_judged():
+    """`judged` IS FIRSTHAND ONLY (`H-193`): a deed claim sourced `told_by` with an empty `chain` is
+    hearsay, and lands in `told`. CONTROL: the same claim sourced `firsthand` lands in `judged`."""
+    from dataclasses import replace
+    from ..queries import person_q as PQ
+    kind, pro, con = _g1_split()
+    w, a, _b = _g1_hearers(kind, pro, con)
+    (c,) = [c for c in a.ledger if c.subject == "p_other" and c.predicate == kind]
+    j_first, t_first = PQ.deeds_judged(a, "p_other")
+    assert j_first != 0.0 and t_first == 0.0, (j_first, t_first)
+    a.ledger = [x for x in a.ledger if x is not c] + [replace(c, source="told_by", chain=())]
+    assert PQ.deeds_judged(a, "p_other") == (0.0, j_first)
+
+
+def test_g1_a_refusal_is_no_deed():
+    """A REFUSAL REPORTS AN ACT THAT DID NOT HAPPEN (`data/verbs.py::REFUSAL_KINDS`): a firsthand
+    `kill.refused` about V judges nothing. `kill.refused` has a `KIND_VERB` (one row emits it), so
+    without the exclusion it would be scored as that verb's deed. `news.untold`, which `tell` emits
+    on success AND refusal, is no deed either."""
+    from ..data import verbs as V
+    from ..data.pursuits import to_axes
+    from ..data.rosters import PURSUIT_AXES, PURSUITS
+    from ..queries import person_q as PQ
+    kind = "kill.refused"
+    assert kind in V.REFUSAL_KINDS and V.KIND_VERB.get(kind), "the falsifier needs a scored kind"
+    w = P.tiny_world()
+    a = w.persons["p_low"]
+    # CONTROL that the claim WOULD score: a pursuit under which the refusal's verb leans non-zero.
+    e = next(e for e in sorted(PURSUITS)
+             if sum(to_axes({e: 1.0})[x] * V.align_kind(kind, x) for x in PURSUIT_AXES))
+    a.pursuits = {e: 1.0}
+    a.ledger = [x for x in a.ledger if x.subject != "p_other"] + [
+        Claim("c_g1_ref", a.id, "p_other", kind, True, 0, "firsthand", 100, "own")]
+    assert PQ.deeds_judged(a, "p_other") == (0.0, 0.0)
+    assert not PQ.is_deed(Claim("c_untold", a.id, "p_other", "news.untold", True, 0, "firsthand",
+                                100, "own"))
 
 
 def _r07_pairs(w, fx):
