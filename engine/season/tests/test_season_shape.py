@@ -1184,9 +1184,18 @@ def test_a_blocker_outranks_an_unaimed_row():
 
     ⚠ REWRITTEN FOR `W10`. It used to plant two needs and rely on the regex router to reach a
     probe for one of them — so it tested the router as much as the grading rule. The rule is now
-    stated over declarations, which is where it belongs and where it can be read."""
+    stated over declarations, which is where it belongs and where it can be read.
+
+    ⚠ RE-RECORDED AT PLAN POSITION IN-09: THE GAPPING VERB WAS `comply`, and IN-09 typed its cell,
+    so `comply` executes and no longer gaps. `exchange` replaces it -- the other row that carried
+    `requires_typed: none` for want of an operand name (`rosters.yaml: requires_operands`' note), so
+    it gaps for the reason `comply` did. The assertion it feeds is unchanged; only the planted verb
+    moved, and the guard below fails loudly if `exchange` is ever made resolvable too."""
+    from engine.season.loop.driver import resolvable_verbs
+    assert "exchange" not in resolvable_verbs(), (
+        "`exchange` became resolvable: pick another verb `resolvable_verbs()` excludes")
     planted = {"T": {EX.need_sha("a declared row that gaps"): {
-        "need": "a declared row that gaps", "exercises": ["comply"]}}}
+        "need": "a declared row that gaps", "exercises": ["exchange"]}}}
     saved, R.OVERLAY = R.OVERLAY, planted
     try:
         got = R.grade({"id": "T", "season_requires": [
@@ -1197,7 +1206,7 @@ def test_a_blocker_outranks_an_unaimed_row():
         R.OVERLAY = saved
     assert got["verdict"] == "BLOCKED", got
     assert got["core_unmapped"] == 1, got          # the undeclared row is still reported
-    assert got["blockers"] == ["comply"], got["blockers"]
+    assert got["blockers"] == ["exchange"], got["blockers"]
 
 
 def test_no_playable_case_has_an_unmapped_core_row():

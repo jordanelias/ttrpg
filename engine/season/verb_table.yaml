@@ -140,16 +140,21 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "none"
-    beneficiary_note: "the obliger is who compliance is FOR, and `comply` is one of the two rows that carry `requires_typed: none` because the dispensation it answers has no name in `requires_operands`. `H-94`, not a table edit."
+    beneficiary_note: "the obliger is who compliance is FOR, and no Candidate carries him: the writ's issuer is its maker, not an operand of the act that answers it."
     requires:    "a claim of the dispensation's terms is in the actor's own ledger"
-    requires_typed: none
-    requires_typed_note: "§E3 `:430` — *a claim of the dispensation's terms is in the actor's **own** ledger*. §F.24a form 6, and the FORM is not the problem — `tell` is typed on it. THE OPERAND IS: the entity is a DISPENSATION, and `rosters.yaml: requires_operands` is closed on (actor, subject, from, to, site, kind, amount, floor) with no name for one. Typing it as `of: subject` would assert that an act's subject IS the dispensation whose terms are sought, which no in-chain document says; coining `dispensation` would be filling `H-94` by keyword argument. Stays on REQUIRES_PREDICATES, where it has no predicate, so the fold refuses and names what is missing — today's behaviour exactly."
-    requires_decline_note: "PLAN POSITION IN-41 (`SM-11`) RECORDS WHAT `resolvable_verbs()` ALREADY DID WITHOUT A WORD. Nothing evaluates this precondition: the cell is untyped for the reason `requires_typed_note:` gives -- a Dispensation operand the closed `requires_operands` roster has no name for (`H-94`) -- and no `REQUIRES_PREDICATES` entry exists, so the fold would raise `Unspecified` (E2) on any act of it and the verb stays out of the game. A hand-written predicate would have to read the same unnamed operand; naming it is `H-94`'s."
+    requires_typed:
+      all:
+        - form:      existence
+          of:        subject
+          kind:      dispensation
+        - form:      own_ledger
+          of:        subject
+    requires_typed_note: "PLAN POSITION IN-09 (`19b`, J-2 arm A, J-10) TYPES THIS CELL. §E3 `:430` — *a claim of the dispensation's terms is in the actor's **own** ledger*. §F.24a form 6, `tell`'s form, and the OPERAND IS THE ACT'S `subject`, READ AS THE WRIT: after plan positions `15`/`15c` a dispensation is a `Record` of kind `dispensation` (`rosters.yaml: record_kinds`), and its holder holds `(writ, content:dispensation, <terms>)` by the content deposit (`loop/witness.py`), so the act's subject IS the dispensation whose terms are sought and no operand is coined (`H-94` is not filled by keyword argument). TWO CONJUNCTS, UNNAMED (`survey`'s precedent: an unnamed own-ledger clause carries no `said`, which is `tell`'s alone): `existence` of `subject` kind `dispensation` -- the act answers a WRIT, so a referent that is a person, a rung or a non-dispensation document is refused (`exists:<record kind>`, `queries/world_q.py::WorldReader.read`); `own_ledger` of `subject` -- the actor's own ledger holds a claim on that writ, through the `F8` carve-out (`claim.held`, the ACTOR's ledger and no other). ⚠ `claim.held` ACCEPTS ANY CLAIM ON THE WRIT, not only its `content:` claim: a witness of `dispensation.issued` holds the event-kind claim on it and passes. A predicate-typed ledger read is a grammar change (`REQUIRES_STEMS` is closed), not this position's. ⚠ ARM (A)'s `dispatch`ed ORDER IS NOT ANSWERED BY THIS CELL: an order mints no Record, so there is no writ to bind as `subject`; the dispatch half waits on an order becoming a document. Was `requires_typed: none` with a `requires_decline_note:` (IN-41) until IN-09."
     writes:      []
     emits:       ["compliance.given"]
     emits_on_refusal: ["compliance.impossible"]
     grade:       "ruled"
-    writes_note: "per the term's own row"
+    writes_note: "per the term's own row. ⚠ PLAN POSITION IN-09: EMISSION-ONLY, AND THAT IS #453's HOOK (`proposals/2026-10-03-verb-coverage-and-gap-fill.md:502`): `comply` writes nothing itself and emits `compliance.given`; what compliance PERFORMS is the separate `transfer` the writ names. `effect_carried` answers a row that writes nothing without an `EFFECTS` entry, and the fold never calls one (`loop/resolve.py::_fold` runs an effect only for a declared write), so no `_eff_comply` exists: it would be a body nothing calls (`ID-13`). Which acts a dispensation's `terms` may name stays `H-44`'s."
     refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: no claim of the dispensation's terms is in the actor's own ledger"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "confer"
@@ -278,14 +283,19 @@ verbs:
     eligibility: ["own"]
     beneficiary: "actor"
     requires:    "as comply"
-    requires_typed: none
-    requires_typed_note: "§E3 `:431` — *as `comply`*, and it inherits `comply`'s reason unchanged: the operand is a Dispensation and the closed operand roster has no name for one."
-    requires_decline_note: "PLAN POSITION IN-41 (`SM-11`): as `comply`, for `comply`'s reason -- untyped for want of a Dispensation operand (`H-94`), no `REQUIRES_PREDICATES` entry, so nothing evaluates the precondition and `resolvable_verbs()` leaves the verb out."
+    requires_typed:
+      all:
+        - form:      existence
+          of:        subject
+          kind:      dispensation
+        - form:      own_ledger
+          of:        subject
+    requires_typed_note: "PLAN POSITION IN-09 (`19b`): §E3 `:431` — *as `comply`*, so `comply`'s cell, VERBATIM: the act's `subject` is a writ (`existence`, kind `dispensation`) and the actor's own ledger holds a claim on it (`own_ledger`). See `comply`'s note for the reading and its two limits (`claim.held` accepts any claim on the writ; a `dispatch`ed order mints no writ). ONE ROW, NOT TWO -- J-2 arm (A), ruled by Jordan 2026-09-18 (`workplans/valoria_master_workplan_v9_part5.md` IN-09): #453's K-24 split (`evade` = no transfer before the term matures, `defy` = a public refusal) is not built. Was `requires_typed: none` with a `requires_decline_note:` (IN-41) until IN-09."
     writes:      []
     emits:       ["compliance.withheld"]
     emits_on_refusal: ["compliance.impossible"]
     grade:       "ruled"
-    writes_note: "per the term's own row"
+    writes_note: "per the term's own row. ⚠ PLAN POSITION IN-09: EMISSION-ONLY, as `comply` -- `compliance.withheld` is the whole act (#453 `:511`, *'disobedience others see or miss'*), no `_eff_evade_defy` exists because the fold calls no effect for a row that writes nothing. ⚠ NO CONSEQUENCE IS BUILT: `ED-FA-0021`'s D6 (cumulative per-Defy-season suspicion accrual, `ED-IN-0047`) is the intent behind defiance's cost and is conditioned on a suspicion carrier `engine/season/` does not have; IN-09 builds none."
     refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: as `comply`"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "exchange"
@@ -788,15 +798,24 @@ verbs:
     eligibility: ["own"]
     beneficiary: "actor"
     requires:    "as comply — ⚠ emitter- or receiver-side is absent, D18"
-    requires_typed: none
-    requires_typed_note: "§E3 `:432` — *as `comply` — ⚠ **emitter- or receiver-side is `absent`, D18***. Grade `absent`. Even setting aside `comply`'s operand problem, WHOSE ledger is read is the thing `D18` records as missing, and a typed cell would have to pick one. §42.2.1: the honest behaviour is to refuse, not to pick."
-    requires_decline_note: "PLAN POSITION IN-41 (`SM-11`): as `comply` (`H-94`), and the grade is `absent` besides -- whose ledger is read is the thing `D18` records as missing, so a predicate would have to pick one, and §42.2.1's honest behaviour is to refuse rather than pick. Nothing evaluates the precondition; `resolvable_verbs()` leaves the verb out."
+    requires_typed:
+      all:
+        - form:      existence
+          of:        subject
+          kind:      dispensation
+        - form:      relation
+          of:        subject
+          relation:  held_by
+        - form:      own_ledger
+          of:        subject
+    requires_typed_note: "PLAN POSITION IN-09 (`19b`) TYPES THIS CELL ON A DECLARED READING [ASSUMPTION; medium; Jordan to correct]. §E3 `:432` — *as `comply` — ⚠ emitter- or receiver-side is `absent`, D18*. #453 places construal WITNESS-side (`proposals/2026-10-03-verb-coverage-and-gap-fill.md:504`, *'not an act: the content deposit already reads per holder'*); Jordan kept it as a verb (J-2), so it is built as an act whose one effect is THE CONSTRUER'S OWN READING OF A WRIT HE HOLDS -- RECEIVER-side, which answers `D18` the way Jordan's 2026-09-02 refraction ruling already does (*'the PREMISES AND RATIONALE, minted per receiver'*). So `comply`'s two conjuncts plus `relation` `held_by` (`give`'s and `destroy_record`'s stem): the construer HOLDS the writ (a live `hold` on it), not merely heard of it. Revert: Jordan states `construe` is witness-side only; the row then leaves the act vocabulary's executed set and R-05 counts it witness-side. Was `requires_typed: none` with a `requires_decline_note:` (IN-41) until IN-09."
     writes:      []
     emits:       ["terms.distorted"]
     emits_on_refusal: ["construal.impossible"]
     naming_note: "⚠ RENAMED `refract` -> `construe` 2026-09-18 ON JORDAN'S RULING: *\"refract is the wrong word to use for whatever it is tho\"*, then *\"construe\"*. `CLAUDE.md` §4 -- coin nothing a plain word already covers, and a reader with no memory of this repo must land on the meaning. `refract` was a physics metaphor for interpreting an order's terms; `construe` is the ordinary legal-administrative word for reading an instrument, so the triple is now **comply / evade|defy / construe**. ⚠ AND HIS OWN 2026-09-02 RULING WAS ALREADY REACHING FOR IT (`hole_register.yaml`, the refraction row): *\"people's actions are objectively the case but the meaning of those actions are subject to interpretation - signified vs signifier\"*. That mechanism IS construal. ⚠ `refraction` SURVIVES AS THE PHENOMENON AND THAT IS DELIBERATE, not a missed rename: the same ruling holds that what is distorted is *\"the PREMISES AND RATIONALE, minted per receiver as a Claim\"*, receiver-side. The premise is refracted BY the act of construing -- cause and effect, two names for two things. So `terms.distorted` is UNCHANGED (it never carried the rejected word and reads correctly), and only the verb and its refusal emit move. The refusal follows the sibling convention: `comply` -> `compliance.impossible`, so `construe` -> `construal.impossible`."
-    grade:       "absent"
-    writes_note: "—"
+    grade:       "assumption"
+    grade_note:  "PLAN POSITION IN-09: `absent` -> `assumption`. `D18` (emitter- or receiver-side) is answered by a DECLARED reading (receiver-side, the holder's own reading), not by a ruling; see `requires_typed_note:`."
+    writes_note: "— ⚠ PLAN POSITION IN-09: EMISSION-ONLY. The construer's reading is a BELIEF, and `(Person, claim_ledger)` is written at WITNESS only (`write_matrix.yaml`, `MATRIX_REFUSAL_LAW`'s `S20`), so the act writes no cell and no `_eff_construe` exists (the fold calls none for a row that writes nothing). What the act puts in the world is `terms.distorted` about the writ, which WITNESS deposits per holder like any event -- the construer among them. ⚠ NOT BUILT: #453's falsifier for construal, *two holders of one writ holding different `content:dispensation` values*, needs a per-holder distortion of the content claim (`H-36`'s magnitude half), which this position does not author."
     refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: as `comply`"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "release"

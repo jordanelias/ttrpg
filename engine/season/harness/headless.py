@@ -148,9 +148,10 @@ def run(seasons: int = 2, seed: int = 0) -> dict:
         # ⚠ NARROWED TO WHAT THE FOLD CAN EXECUTE, AND THE NARROWING IS COMPUTED, NOT AUTHORED.
         # `resolvable_verbs()` asks the fold which verbs it can carry through RESOLVE -- a verb
         # needs both a `requires:` predicate and, if it writes, an effect. Without this the season
-        # HALTS on the first verb whose precondition is prose (`comply`: "a claim of the
-        # dispensation's terms is in the actor's own ledger"), which is a true finding about the
-        # specification and a different one from whether her season runs.
+        # HALTS on the first verb whose precondition is prose (`exchange`: the counterparty's side
+        # of a trade has no operand name; `comply` was the example until plan position IN-09 typed
+        # its cell), which is a true finding about the specification and a different one from
+        # whether her season runs.
         #
         # ⚠ THIS IS THE HONEST CEILING ON ARTIFACT 2 AND IT IS REPORTED RATHER THAN HIDDEN:
         # Carin chooses from the resolvable subset, not from all 32. Which verbs those are moves
