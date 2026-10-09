@@ -517,17 +517,18 @@ def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
     first act of the round was folded. (`presence` is the one barrier-cache key in the tree, and
     nothing else at RESOLVE reads it.)
 
-    ⚠ THE VIOLATION PREDICATE IS A CANDIDATE READING, NOT A RULING: `person_q.violated_pursuits`
-    (a sign test of the pursuit's projection against the verb's alignment). WHETHER THE ACTOR
+    ⚠ THE VIOLATION PREDICATE IS A CANDIDATE READING, NOT A RULING: `person_q.elements_violated_by`
+    (a sign test of the pursuit's projection against the verb's alignment, asked once per act and
+    intersected with each person's holdings by `person_q.broken_by`). WHETHER THE ACTOR
     COUNTS is `scar_excludes_actor`, a swept `Fixtures` arm. Nothing is emitted: `scar.taken` is
     declared on the row and no reader consumes it, and putting the receipts on the act's Event
     would deposit claims about every scarred observer at WITNESS -- a propagation change H3 does
     not license. Its readers are listed once, on the field (`state/carriers.py`, `Person.scar`).
 
     IN-08 H11 -- THE SAME MECHANISM OVER THE AFFILIATION TABLE (J-5's C4). An element is a pursuit
-    OR a held religious affiliation: `person_q.violated_affiliations` (the verb's cell for that
-    affiliation in `rosters.yaml: tables.affiliation_engagement` is negative) is asked beside
-    `violated_pursuits`, and the two answers are one list of elements written by this one write --
+    OR a held religious affiliation: the affiliation half of `person_q.elements_violated_by` (the
+    verb's cell for that affiliation in `rosters.yaml: tables.affiliation_engagement` is negative)
+    is asked beside the pursuit half, and the two answers are one list of elements written by this one write --
     same observers, same actor arm, same `changed` gate, same token. The two rosters cannot share a
     name (`data/affiliations.py::_load_engagement` refuses it), so a count is never merged across
     them. Its reader is the crisis at threshold 3 (H13, `_conviction_crisis` below, called after

@@ -2,8 +2,13 @@
 a person whose scar count on a pursuit has reached 2 gives that pursuit's weight up to the others,
 as the swept `Fixtures` arm `scar_weight_shift` (control `0`, shipped), read where `choose` scores.
 
-THE PLAN'S FALSIFIER: fork divergence at the `total` arm rises above the ED-IN-0261 baseline while
-the control arm is unmoved. Each clause is an executed test below that can fail:
+THE PLAN'S FALSIFIER: fork divergence at the `total` arm rises above the baseline while the control
+arm is unmoved. ⚠ THE BASELINE IS A PROXY, NOT ED-IN-0261'S. It is the W-D NPC-088 slice, one seed
+(29 genuine / 6 diverged at `observation_deposit_mode=total`; the arm at 1 reads 32/10). ED-IN-0261's
+own figure (2,403 forks reconverge 100%, later-decision divergence ~4%) is a corpus figure and was
+NOT re-taken here, so this test does not say the arm closes that loop. And 6 -> 10 is not a rate over
+the same forks: the genuine population moves too (29 -> 32), so read diverged/genuine as a pair or a
+rate (6/29 -> 10/32). Each clause is an executed test below that can fail:
   * the control (`0`) is the unmodified read -- `crisis_weights` returns `Person.pursuits` ITSELF, and
     the `W-D` slice at `total` reads the baseline pair `test_season_shape.py` pins (29 genuine, 6
     diverged) when the arm is `0`;
@@ -29,7 +34,8 @@ from .test_season_shape import _wd_arm9
 
 # `W-D`'s `total` arm at the control, as `test_season_shape.py::test_wd_a_fork_changes_a_later_
 # decision_...` pins it: [GROUNDED: measured at IN-08 H3's base (bf3c3810), NPC-088 slice, seed 0,
-# 4 seasons at 2 slots -- genuine/diverged `total` 29/6, `none` 37/4, `actor` 35/9].
+# 4 seasons at 2 slots -- genuine/diverged `total` 29/6, `none` 37/4, `actor` 35/9]. A one-slice,
+# one-seed PROXY for ED-IN-0261's corpus figure, which was not re-taken.
 _BASELINE_TOTAL = (29, 6)
 
 
@@ -84,7 +90,10 @@ def test_h9_fork_divergence_at_total_rises_above_baseline_and_the_control_arm_is
     """THE PLAN'S FALSIFIER. [GROUNDED: measured on this tree (H9), NPC-088 slice, seed 0, 4 seasons
     at 2 slots, `total` deposit arm -- genuine/diverged `scar_weight_shift` 0 -> 29/6 (the baseline,
     UNMOVED), 0.5 -> 29/6, 1 -> 32/10. At 0.5 the `total` arm does not move on this slice; the
-    arm is swept at {0, 0.5, 1}, and the verdict that flips across the sweep is the finding.]"""
+    arm is swept at {0, 0.5, 1}, and the verdict that flips across the sweep is the finding.]
+    A PROXY for ED-IN-0261's corpus figure (2,403 forks, 100% reconverge, ~4% later-decision
+    divergence), which this test did not re-take; and 6 -> 10 is not a rate over the same forks,
+    since the genuine count moves as well (29 -> 32): the pair is 6/29 -> 10/32, about 21% -> 31%."""
     control = _wd_total(0)
     assert control == _BASELINE_TOTAL, (
         f"the control arm moved the `total` fork pair: {control} != {_BASELINE_TOTAL}")

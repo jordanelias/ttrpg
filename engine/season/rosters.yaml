@@ -2017,7 +2017,7 @@ tables:
   # IN-08 H11 -- WHAT AN ACT DOES TO A HELD AFFILIATION: the verb x affiliation table (J-5's C4, the
   # draft's rule R-C4, folded into the build by Jordan 2026-10-06, RS-1, ED-IN-0291). Read by
   # `data/affiliations.py::engagement`; its one reader today is the scar (`queries/person_q.py::
-  # violated_affiliations`, called by `loop/resolve.py::_scar_witnesses` beside the pursuit sign
+  # elements_violated_by`, called by `loop/resolve.py::_scar_witnesses` beside the pursuit sign
   # test): an observer holding affiliation `a` takes one count on `a` per act he saw whose cell for
   # `a` is NEGATIVE. The magnitudes are not read by the scar; only the sign is.
   affiliation_engagement:

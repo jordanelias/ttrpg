@@ -22,7 +22,7 @@ was in `shape.py`, then `decision.py`, then `decision/options.py`; each move car
 address with it, and the last one left a reader in `options.py` and the table here. Now the
 `ALIGNMENT` binding and its only reader share this module, so the rebind that moves one moves
 the other: the `H-66` sweep and the `H-146` tests rebind `data.verbs.ALIGNMENT`, and nothing
-else binds the name. Every reader (`choose`'s score, `refuses`, `person_q.violated_pursuits`, `corpus_run`) calls
+else binds the name. Every reader (`choose`'s score, `refuses`, `person_q._pursuits_violated_by`, `corpus_run`) calls
 `align`; tests that import `ALIGNMENT` do so function-locally and read it live -- a copy imported
 by name at module scope would be a stale snapshot.
 
@@ -1171,7 +1171,7 @@ def align(verb: str, axis: str) -> float:
 
     ⚠ IT READS THIS MODULE'S `ALIGNMENT`, THE ONE BINDING. `alignment_at()`'s sweep rebinds
     `data.verbs.ALIGNMENT`, and `choose`'s score, the `H-146` refusal gate and the scar's
-    `person_q.violated_pursuits` all call
+    `person_q._pursuits_violated_by` (via `elements_violated_by`) all call
     this function, so one rebind moves every reader. A second binding anywhere (a `from .verbs
     import ALIGNMENT` in a reader module) would be a stale snapshot the rebind never reaches."""
     return float(ALIGNMENT.get(axis, {}).get(verb, ALIGNMENT_DEFAULT_CELL))

@@ -288,7 +288,7 @@ def refuses(verb: str, axis: str, tolerance: float) -> bool:
     `deontological/instrumental`), so a verb is refused when its alignment sits further toward the
     POS pole than the person's own weight. Only a verb the axis ENGAGES can be refused -- a zero
     cell, including the sparse default, is not one of the *"certain actions"* the ruling gates;
-    the scar's `person_q.violated_pursuits` reads engagement the same way.
+    the scar's `person_q.elements_violated_by` reads engagement the same way.
 
     Reads `data.verbs.align`, the one `choose`'s score reads too, so a rebind of
     `data.verbs.ALIGNMENT` moves the gate and the ranking together."""

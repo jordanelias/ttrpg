@@ -38,7 +38,8 @@ does: `choose` and `options` read `stance_toward` and `said_of` from here. The A
 from __future__ import annotations
 
 from ..data import verbs as _verbs
-from ..data.affiliations import AFFILIATION_CEILING, INCOMPATIBLE, conviction_map, engagement
+from ..data import affiliations as _aff
+from ..data.affiliations import AFFILIATION_CEILING, conviction_map, engagement
 from ..data.pursuits import to_axes
 from ..data.requires import KNOWN_PERSON_CLAIM, UNKNOWN, WORLD_ONLY_STEMS
 from ..data.rosters import AFFILIATIONS, PURSUIT_AXES, SEEN_PREDICATE
@@ -83,7 +84,12 @@ def violated_pursuits(p: Person, verb: str) -> tuple:
     tables admit. It composes on the two owners and copies neither: `data/pursuits.py::to_axes`
     (pursuit -> axes, one owner) and `data/verbs.py::align` (the one binding the alignment sweep
     rebinds). A verb with no celled axis violates nothing, by construction. Person-side, no World
-    (AX-2). Sorted, so a caller writing counts in this order writes a canonical dict."""
+    (AX-2). Sorted, so a caller writing counts in this order writes a canonical dict.
+
+    NO PRODUCTION CALLER: `loop/resolve.py::_scar_witnesses` asks `elements_violated_by` once per act
+    and `broken_by` per person, which compose the same `_pursuits_violated_by` below. This wrapper
+    is the per-person reading kept for tests (`test_h11_affiliation_scar.py` asserts it equals
+    the production scar; `test_h3_scar_by_observation.py` computes its own), so a change to the sign test is made in `_pursuits_violated_by`."""
     return _held(p.pursuits, _pursuits_violated_by(verb))
 
 
@@ -96,8 +102,10 @@ def violated_affiliations(p: Person, verb: str) -> tuple:
     cell when the affiliation has none of its own (R-C4.1: the vow-shaped verbs engage every creed
     alike). A sign test, as `violated_pursuits` is; the intensity does not enter it, because the
     scar is a COUNT per element and an act is witnessed or not. It is `violated_pursuits`'
-    sibling and not a second scar path: `loop/resolve.py::_scar_witnesses` asks both and writes
-    once. Person-side, no World (AX-2). Sorted, as `violated_pursuits` is."""
+    sibling and not a second scar path: `loop/resolve.py::_scar_witnesses` asks for both through
+    `elements_violated_by` + `broken_by` and writes once, so this wrapper has no production caller
+    (it is a test oracle, as `violated_pursuits` is). Person-side, no World (AX-2). Sorted, as
+    `violated_pursuits` is."""
     return _held(p.conviction, _affiliations_violated_by(verb))
 
 
@@ -164,7 +172,7 @@ def confliction(p: Person) -> int:
     Its caller is IN-08 6f: `decision/choose.py`'s `make_chooser` damps the pursuit dot by it, at
     the swept `confliction_weight` arm (H-188; control 0, shipped)."""
     held = p.conviction or {}
-    return sum(min(held.get(a, 0), held.get(b, 0)) for a, b in INCOMPATIBLE)
+    return sum(min(held.get(a, 0), held.get(b, 0)) for a, b in _aff.INCOMPATIBLE)
 
 
 # `ED-IN-0261`'s scar thresholds are 1 (destabilise), 2 (weight shifts, the others gain
@@ -275,7 +283,7 @@ def conviction_after_crisis(p: Person, among: frozenset | None = None) -> dict:
     # `crisis` and `heirs` are in name order and `max` keeps the FIRST of equal keys, so a tie on
     # intensity goes to the lowest name.
     x = max(crisis, key=held.__getitem__)
-    heirs = [y for y in sorted(held) if y != x and frozenset((x, y)) in INCOMPATIBLE]
+    heirs = [y for y in sorted(held) if y != x and frozenset((x, y)) in _aff.INCOMPATIBLE]
     if heirs:
         y = max(heirs, key=held.__getitem__)
         held[y] = min(AFFILIATION_CEILING, held[y] + held[x])

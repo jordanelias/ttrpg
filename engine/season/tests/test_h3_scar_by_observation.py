@@ -21,17 +21,28 @@ import pytest
 
 from engine.season.data import verbs as _verbs
 from engine.season.data.matrix import Step, WriteClass
-from engine.season.data.rosters import FAN_OUT_MODES, PURSUITS
+from engine.season.data.pursuits import to_axes
+from engine.season.data.rosters import FAN_OUT_MODES, PURSUIT_AXES, PURSUITS
 from engine.season.epistemic import observers_for
 from engine.season.gaps import Forbidden
 from engine.season.harness import probes as P
 from engine.season.loop.driver import SeasonDriver, mint_token
-from engine.season.queries.person_q import said_of, violated_pursuits
+from engine.season.queries.person_q import said_of
 from engine.season.seam import Resolution
 from engine.season.state.carriers import Act, Claim, Tenure
 
 from ._scar_helpers import fight
 from ._scar_helpers import scars as _scars
+
+
+def _violated(p, verb: str) -> set:
+    """The pursuits `p` holds that an act of `verb` violates, computed DIRECTLY from the two owned
+    tables (`data.pursuits.to_axes`, `data.verbs.align`) and independent of `person_q`'s helpers,
+    so a flipped sign in `_pursuits_violated_by` reddens the comparison against the production
+    scar rather than agreeing with it. `align` is read live, so a rebound `ALIGNMENT` is honoured."""
+    held = {e for e, wt in (p.pursuits or {}).items() if float(wt) > 0}
+    return {e for e in held
+            if sum(to_axes({e: 1.0})[ax] * _verbs.align(verb, ax) for ax in PURSUIT_AXES) < 0}
 
 
 def _world(mode: str = "all_five", exclude_actor: bool = False):
@@ -78,10 +89,10 @@ def test_h3_no_scar_on_a_person_who_did_not_observe_the_act(mode):
     stray = set(scars) - seen
     assert not stray, f"{mode}: scarred {sorted(stray)}, who did not observe the act"
     for pid in seen:
-        want = violated_pursuits(w.persons[pid], "fight")
+        want = _violated(w.persons[pid], "fight")
         assert scars.get(pid, {}) == {e: 1 for e in want}, (pid, scars.get(pid), want)
     unseen = [pid for pid in w.persons if pid not in seen
-              and violated_pursuits(w.persons[pid], "fight")]
+              and _violated(w.persons[pid], "fight")]
     if mode != "total":
         assert unseen, f"{mode}: everyone observed, so nobody here tests the non-observer"
     assert not any(pid in scars for pid in unseen), (unseen, scars)
@@ -120,7 +131,7 @@ def test_h3_a_failure_band_and_a_refusal_scar_nobody(monkeypatch):
                for ax, row in _verbs.ALIGNMENT.items()}
     monkeypatch.setattr(_verbs, "ALIGNMENT", rebound)
     w = _world()
-    assert violated_pursuits(w.persons["p_mid"], "tell"), "the rebind did not cell `tell`"
+    assert _violated(w.persons["p_mid"], "tell"), "the rebind did not cell `tell`"
 
     w.persons["p_low"].ledger.append(
         Claim("c_h3", "p_low", "Hh", "stores:grain", 8, 0, "firsthand", 37, "own"))

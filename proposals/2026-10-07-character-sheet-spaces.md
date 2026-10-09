@@ -33,7 +33,7 @@ spaces do"* (`:389-391`). In code that is five sites:
 | DELIBERATE | `engine/season/loop/deliberate.py:1` (*"owns **nothing** … **token: none**"*), `:68` (`deliberate(self, choose, …) -> list[Act]`); it calls `choose(p, v, s, ask_budget)` once per person (`:169`) | a space runs inside a map that holds no token, so it **cannot** write; it returns `Act`s |
 | the inputs | `View`, `engine/season/state/carriers.py:379-409` (ids only; any world reach raises `Forbidden`, `:404-409`); `Question`, `:412-431`; `Candidate`, `:434-460`; the opening set, `decision/options.py:43` (`opening_set(p, v, q, fx) -> list[Candidate]`) | a space reads the player's own claims and the candidates the opening set already formed |
 | the output | `Act`, `engine/season/state/carriers.py:508-550` | the only thing a space hands back |
-| the fold | `resolve`, `engine/season/loop/resolve.py:798`; `_fold`, `:297`; `_apply_write`, `:727`; under an ACTS token minted at `loop/driver.py:452`; the write itself through `World.write`, `engine/season/state/world.py:791` | every carrier change a space causes happens **here**, under RESOLVE's token, against a `write_matrix.yaml` row |
+| the fold | `resolve`, `engine/season/loop/resolve.py:815`; `_fold`, `:296`; `_apply_write`, `:744`; under an ACTS token minted at `loop/driver.py:452`; the write itself through `World.write`, `engine/season/state/world.py:791` | every carrier change a space causes happens **here**, under RESOLVE's token, against a `write_matrix.yaml` row |
 
 Layer 1 states the discipline once: **"A module with no token cannot write, and that is the whole of the
 write discipline"** (`architecture/meta/04_CODE_ARCHITECTURE.md:158`).
@@ -47,8 +47,8 @@ write discipline"** (`architecture/meta/04_CODE_ARCHITECTURE.md:158`).
    candidate set, so they emit the same act shapes.
 2. **A space owns no writer.** Every Person write below is an effect body's, a step's, or one of the
    fold's two post-outcome writes — `_scar_witnesses` and `_conviction_crisis`
-   (`loop/resolve.py:501`, `:569`), which are neither an effect body nor a step: they run inside `_fold`
-   (`:497`) after any act whose outcome moved state, under that act's ACTS token, through `World.write`
+   (`loop/resolve.py:503`, `:579`), which are neither an effect body nor a step: they run inside `_fold`
+   (`:499`) after any act whose outcome moved state, under that act's ACTS token, through `World.write`
    with a `Change`, each against a `write_matrix.yaml` row. **A player's act therefore writes OTHER
    persons' `scar` and `conviction`** (its observers', the actor included at the shipped
    `scar_excludes_actor=False`, `data/fixtures.py:589`), not only its own person's fields. The space
@@ -65,11 +65,11 @@ write discipline"** (`architecture/meta/04_CODE_ARCHITECTURE.md:158`).
 | `pursuits` | `:567` | `:179-189`, [RES], `pursuit.moved`, **`unproduced:` (H-62)** | world-gen only: `seed_pursuits` (`engine/season/harness/run_cases.py:44`) via `corpus_run.py:525` and, for the realm, `harness/populated.py:699-700` (the cast row's authored pursuits first, the draw as fallback) |
 | `ledger` | `:571` | `claim_ledger`, `:164-170`, [WIT], INTERIOR — *"`witness` the only minter, and it is not an act"* | WITNESS |
 | `body` | `:581` | `:154-163`, [MAT, RES, ENC] | the `fight` effect `_eff_kill` (`effects_combat.py:33`, body written at `:156`), `march` (`:257-259`), MATTER |
-| `scar` | `:592` | `:208-218`, [RES, ENC], `scar.taken` | the fold's `_scar_witnesses` (`loop/resolve.py:501`, called from `_fold` at `:497`) after any act whose outcome moved state: **one count per observer** (the actor included at the shipped `scar_excludes_actor=False`) **per violated pursuit or held affiliation**, ACTS token, [RES, ENC]. `{element: count}` over **two rosters** — the pursuits and the affiliations, refused a shared name. `_scar` and `scar_step` are retired (H3) |
-| `conviction` | `:600` | `:190-200`, [RES, ENC], ACTS, social, `conviction.moved`, **`unproduced:`** (no verb declares it) | `_conviction_crisis` (`loop/resolve.py:569`), called by `_scar_witnesses` (`:566`): see §5. `{affiliation: intensity}`, ints 0-5, absent = not held. **Inert on shipped data:** filled at realm build from the cast row's `affiliations:` (`harness/populated.py:703`, `data/cast.py:216` `conviction_of`), no row authors any, so every shipped person holds `{}` |
+| `scar` | `:592` | `:208-218`, [RES, ENC], `scar.taken` | the fold's `_scar_witnesses` (`loop/resolve.py:503`, called from `_fold` at `:499`) after any act whose outcome moved state: **one count per observer** (the actor included at the shipped `scar_excludes_actor=False`) **per violated pursuit or held affiliation**, ACTS token, [RES, ENC]. `{element: count}` over **two rosters** — the pursuits and the affiliations, refused a shared name. `_scar` and `scar_step` are retired (H3) |
+| `conviction` | `:600` | `:190-200`, [RES, ENC], ACTS, social, `conviction.moved`, **`unproduced:`** (no verb declares it) | `_conviction_crisis` (`loop/resolve.py:579`), called by `_scar_witnesses` (`:576`): see §5. `{affiliation: intensity}`, ints 0-5, absent = not held. **Inert on shipped data:** filled at realm build from the cast row's `affiliations:` (`harness/populated.py:703`, `data/cast.py:216` `conviction_of`), no row authors any, so every shipped person holds `{}` |
 | `exists` | — | `:201-207`, [MAT, RES, CEN], `person.individuated` | CENSUS, which writes nothing (`engine/season/loop/census.py:30-40`) |
 
-`confliction` is **derived** (`engine/season/queries/person_q.py:116`) from `conviction` and the loaded
+`confliction` is **derived** (`engine/season/queries/person_q.py:160`) from `conviction` and the loaded
 `incompatible` relation, and never stored.
 
 ---
@@ -121,10 +121,10 @@ individuation's demand is H-51, and a space that minted persons would be the gen
 the two Sensation scalars. No World.
 
 **Acts emitted.** `Act`s (`carriers.py:508-550`) selected from those candidates, packed into scenes as
-the automated chooser packs them (`decision/choose.py:388`, `pack_scenes`). The space **does not own
+the automated chooser packs them (`decision/choose.py:389`, `pack_scenes`). The space **does not own
 any verb below**; it reads what each writer did.
 
-| field | the act that reaches it (through RESOLVE, `loop/resolve.py:798`) | exists at `867c1c3f`? |
+| field | the act that reaches it (through RESOLVE, `loop/resolve.py:815`) | exists at `867c1c3f`? |
 |---|---|---|
 | `capability` | `train` — IN-12 step 9, batch B-Q (`workplans/valoria_master_workplan_v9_part5.md:123`): it *"forms and writes `Person.capability` only where a case names a vocation"*, and un-retires `Person.capability` | **no.** `engine/season/verb_table.yaml` has no `train` row, and the field sits on `retired:` (`write_matrix.yaml:393-394`) |
 | `pursuits` | `argue` (IN-12 step 9, same row, `:123`), after SC-02 `22b` step 24, the field's first producer | **no** — the row carries `unproduced:` (`write_matrix.yaml:186`); `argue` has no `verb_table.yaml` row |
@@ -146,7 +146,7 @@ of them. Four facts about `scar` and `conviction` the display must account for:
   `scar` count against a held affiliation as live and against an unheld one as history.
 - **(c) A fold's direction is the intensity's, not the content's.** Under the shared engagement column
   co-held creeds reach 3 in the same act, and the fold moves the higher-held creed into the lower — a
-  coded `[ASSUMPTION; Jordan to correct]` (`queries/person_q.py:176`, `conviction_after_crisis`). A
+  coded `[ASSUMPTION; Jordan to correct]` (`queries/person_q.py:226`, `conviction_after_crisis`). A
   render must not narrate it as a judgment on a creed's content.
 - **(d) A shifted weight is a derived line.** At a non-zero `scar_weight_shift` (shipped 0,
   `data/fixtures.py:601`) the chooser acts on `crisis_weights`' shifted weights, not on `Person.pursuits`.
@@ -165,7 +165,7 @@ which is IN-46's falsifier applied here (`_part4:36`).
 
 - **In the simulation:** the person's own `ledger` (`carriers.py:571`) of `Claim`s (`:257-310`),
   deposited only at WITNESS (`write_matrix.yaml:164-170`) and read through `LedgerReader`
-  (`engine/season/queries/person_q.py:259`), whose order is recency then confidence (#445 §1.4).
+  (`engine/season/queries/person_q.py:315`), whose order is recency then confidence (#445 §1.4).
   Eviction ranks on confidence and recency **and nothing else** — salience is excluded by signature
   (`architecture/meta/04_CODE_ARCHITECTURE.md:1057`, row 39; `architecture/meta/07_DYNAMICS.md:174`).
 - **Outside the simulation:** the cause graph — `Event`s (`carriers.py:197-198`) and their `causes[]`,
@@ -182,7 +182,7 @@ believed — #445 §1.4), and the out-of-sim render over `causes[]`, which may r
 simulation.
 
 **What neither input records: a scar or a conviction crisis.** Both writers call `World.write` **without
-`emits`** (`loop/resolve.py:562`, `:597`; both docstrings say *"Nothing is emitted"*, `:520`, `:582`;
+`emits`** (`loop/resolve.py:572`, `:614`; both docstrings say *"Nothing is emitted"*, `:523`, `:591`;
 `scar.taken` and `conviction.moved` are declared on their rows and no code emits them). So no `Event`, no
 `causes[]` edge and no WITNESS deposit exists for a scar count moving, or for an affiliation's fold or
 destruction. The ledger and the `causes[]` render **record neither**; chronicling can show only the
@@ -208,10 +208,10 @@ The `### IN-47` entry (`_part4:39-44`) has the review read the carriers IN-08 cr
   [RES, ENC], ACTS, social, `unproduced:` because no verb declares it. `{affiliation: intensity}`, ints 0-5
   on `affiliation_roster.scale`, **absent = not held, never 0**. Filled at realm build from the cast row's
   `affiliations:` (`harness/populated.py:703`, `data/cast.py:216` `conviction_of`); no row authors any,
-  so every shipped person holds `{}`. Moved only by `_conviction_crisis` (`loop/resolve.py:569`) when an
+  so every shipped person holds `{}`. Moved only by `_conviction_crisis` (`loop/resolve.py:579`) when an
   observed act takes a held affiliation's scar to 3: the creed folds into the **highest-held
   incompatible co-holding** (clamped at 5), or is **destroyed** if it is the sole holding; the
-  *restabilise* branch is **not built**. `confliction` is derived (`queries/person_q.py:116`), never
+  *restabilise* branch is **not built**. `confliction` is derived (`queries/person_q.py:160`), never
   stored. The review's answer to §3's old open line: development **displays** `conviction` and the
   derived `confliction`; it has no act of its own that reaches it.
 - **`Person.scar`** — `carriers.py:592`; row `:208-218`, [RES, ENC]. Not "a bare per-axis dict" any
@@ -219,8 +219,8 @@ The `### IN-47` entry (`_part4:39-44`) has the review read the carriers IN-08 cr
   written by the fold's `_scar_witnesses` after any act whose outcome moved state. **"Subject or actor"
   is answered: the act's observers**, the actor among them at the shipped `scar_excludes_actor=False`
   (`data/fixtures.py:589`). `_scar` and `scar_step` are retired. It **has readers**: `crisis_weights`
-  (threshold 2, `queries/person_q.py:144`, dark at the shipped `scar_weight_shift=0`) and
-  `conviction_after_crisis` (threshold 3, `:176`); `make_chooser` reads `pursuits` through
+  (threshold 2, `queries/person_q.py:186`, dark at the shipped `scar_weight_shift=0`) and
+  `conviction_after_crisis` (threshold 3, `:226`); `make_chooser` reads `pursuits` through
   `crisis_weights`, `stance`, and `conviction` through `confliction` (control `confliction_weight=0`,
   `data/fixtures.py:609`).
 
@@ -292,6 +292,8 @@ picks a person the world builder already seated*, and the playable `choose` disp
 7. Preamble: the framing no longer "names" three spaces; A-25 places one management space.
 8. Every `file:line` re-derived at `867c1c3f`; the cites to `_scar`/`scar_step` (`effects_combat.py:39-106`,
    `:245`; `fixtures.py:599`) are deleted, and the plan cites now name the `### IN-46`/`### IN-47` entries.
+   The `loop/resolve.py`, `queries/person_q.py` and `decision/choose.py` cites were re-derived again, by
+   symbol, at the batch's close commit.
 
 **Not decided here.** The review is done. Status stays **PROPOSED** and **HELD BACK**; whether the hold
 lapses is not this review's call and is Jordan's, per the plan entry.
