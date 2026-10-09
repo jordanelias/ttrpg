@@ -491,6 +491,28 @@ this spelling.
 
 ---
 
+## CHECKPOINTS AND BASELINES — Jordan's directive, 2026-10-09 (a container restart killed a running producer)
+
+**Checkpoints.** Work that exists only in the working tree is one restart from lost. Commit and push a
+checkpoint at every producer hand-back *before* verifying it, and before any long instrument run:
+subject `WIP checkpoint: <handle> (unreviewed)`, **no `Item:` trailer** (so the in-flight row never lists
+it; the item's own commit follows on top), trailers as any commit. Producers still never commit — the
+orchestrator checkpoints. A checkpoint is recovery, not review: BATCH-CLOSE reviews the whole range. A
+position its own falsifier rejects is committed, then `git revert`ed, and the hole row cites both SHAs
+(the live plan's stopping rule), so the attempt stays retrievable. Dispatch a
+long build in bounded pieces that return in tens of minutes, not one that returns in an hour. A resumed
+partial build is continued from its checkpoint, not stashed and rebuilt.
+
+**Baselines.** A reading is reusable when it was taken on the tree being built on. So **chain them**: an
+item records its after-readings in its commit body (hashes, executed counts, corpus lines); the next
+item's before-reading is that body, confirmed by one cheap spot check on the current tree (a hash). Re-run
+a heavy instrument only when an output-moving commit has landed since the last reading, or when the
+reading came from an unverified tree. Producers are *given* their before-readings in the brief and are
+not asked to re-derive them. The slow instruments (`aperture 4 0`, `storybar`, `corpus_run`) run in a
+separate `git worktree` at the checkpoint SHA, in parallel with the next producer, never inside a
+producer's critical path; a producer iterates with the fast probe (`aperture 1 0`) and a constructed-input
+test. No new document holds the readings (CLAUDE.md §1, §0.1 pt 5): the commit body is their record.
+
 ## GUARDRAILS
 
 - **Phase 0 is additive, never a substitute** (see above). Reporting a batch as "built and closed"
