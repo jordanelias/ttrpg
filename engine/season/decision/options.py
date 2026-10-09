@@ -1041,6 +1041,7 @@ def record(p: Person, teller: str, fx: "Fixtures") -> float:
     told = [c for c in p.ledger if c.teller == teller and _is_cell(c)]
     own = [c for c in p.ledger if not c.chain and c.source == "firsthand" and _is_cell(c)]
     agree, dis = _pair(told, own, lambda c: (c.subject, c.predicate))
+    # ABSENT: H-191 intent reconciliation  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
     if agree + dis == 0:
         return 1.0
     return 1.0 + gain * (agree - dis) / (agree + dis)

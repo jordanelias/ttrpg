@@ -683,6 +683,15 @@ DEFAULT_FIXTURES = Fixtures(
     # a stranger, one who was always wrong half as much.
     # [JUSTIFIED: engine/season/hole_register.yaml H-183 -- record's gain on a teller's weight; no document gives the gain, so it is injected and swept 0 / 0.5 / 1.0]
     record_gain=0.5,                   # `H-183`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
+    # `H-190` (telling `T7`, G9 declared intent; v9 IN-16, `ED-IN-0282`). HOW OFTEN A TELLER DECLARES
+    # AN INTENT: the chance that a telling whose teller has CHOSEN a later act naming the telling's
+    # topic (in a later scene of the same `choose` return) passes on that intent instead of what the
+    # teller holds about the topic (`decision/choose.py::declare_intents`, one keyed draw per telling).
+    # `0` is the CONTROL and is SHIPPED [ASSUMPTION], on `H-187`/`H-188`'s precedent: the plan names
+    # "control 0" and is silent on shipping it on, and a non-zero value moves the realm's outcome.
+    # At 0 no draw is taken and no `said` is touched, so the season is the pre-`T7` tree exactly.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-190 -- the disclosure rate; no document gives how often a person tells what they mean to do, so it is injected and swept 0 / 0.5 / 1.0]
+    intent_disclosure=0.0,             # `H-190`, swept 0 (control, SHIPPED) / 0.5 / 1.0
     # `H-159` (plan position `17b`, `04 §B.8`'s `term?`; `T-n`, `architecture/meta/01_AXIOMS.md`:
     # *"the opening act declares the terms"*). HOW MANY SEASONS AN `oblige` RUNS BEFORE IT MATURES
     # UNPAID -- the term `_eff_oblige` declares on the edge it opens (`matures_at = tick + this`),

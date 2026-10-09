@@ -41,8 +41,12 @@ from ..data import verbs as _verbs
 from ..data import affiliations as _aff
 from ..data.affiliations import AFFILIATION_CEILING, conviction_map, engagement
 from ..data.pursuits import to_axes
-from ..data.requires import KNOWN_PERSON_CLAIM, UNKNOWN, WORLD_ONLY_STEMS
-from ..data.rosters import AFFILIATIONS, PURSUIT_AXES, SEEN_PREDICATE
+from ..data.requires import (
+    KNOWN_PERSON_CLAIM, REQUIRES_OPERANDS, REQUIRES_STEMS, UNKNOWN, WORLD_ONLY_STEMS,
+)
+from ..data.rosters import (
+    AFFILIATIONS, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, roster, roster_map,
+)
 from ..state.carriers import Person, Said
 from ..trace_log import TRACE
 
@@ -456,6 +460,58 @@ def said_of(claims, subject, fx) -> "Said | None":
     if c is None:
         return None
     return Said(c.subject, c.predicate, c.value, c.confidence, c.chain)
+
+
+# ---------------------------------------------------------------------------
+# A DECLARED INTENT -- telling `T7` (G9; v9 IN-16, `ED-IN-0282`). The claim kind
+# `rosters.yaml: intent_claim` declares: `(actor, <stem>:<verb>, ((name, id), ...))`, an act the actor
+# has CHOSEN and not yet done. Minted at CHOOSE by `decision/choose.py::declare_intents` onto a
+# telling's `said`, so the told deposit (`loop/witness.py`) lands it in each hearer's ledger with the
+# teller as the chain; read back by `queries/world_q.py::named` (`intent_named`). Both halves of the
+# value's shape live here, once.
+# ---------------------------------------------------------------------------
+INTENT_STEM = roster_map("intent_claim", "claim").get("predicate")
+INTENT_NAMES = roster("intent_claim", ordered=True)
+
+
+def _check_intent_claim(stem, names, requires_stems, requires_operands, taken) -> None:
+    """Refuse, at import, an intent stem that another reader already answers, and a carried name
+    that is no operand. A `requires` grammar stem would read the intent as a WORLD FACT
+    (`WorldReader.read`) and make it a cell `record` pairs; the `seen` or `content:` predicate, or an
+    emitted event kind, would give one predicate two meanings. `ValueError`, not `gaps.Unspecified`:
+    this module may reach `data/`, the carriers and the trace sink only (the AX-2 allow-list)."""
+    if not stem or ":" in str(stem):
+        raise ValueError(f"rosters.yaml: intent_claim.claim.predicate is {stem!r}; it is a bare stem "
+                         f"and the intended verb is its argument")
+    if stem in requires_stems or stem in taken:
+        raise ValueError(f"rosters.yaml: intent_claim.claim.predicate {stem!r} is already a "
+                         f"predicate another reader answers; an intent is not a world fact or an event")
+    bad = [n for n in names if n not in requires_operands]
+    if bad:
+        raise ValueError(f"rosters.yaml: intent_claim names {bad}, which are not `requires_operands` "
+                         f"members; an intent carries the ids its act's operands bind")
+
+
+_check_intent_claim(INTENT_STEM, INTENT_NAMES, REQUIRES_STEMS, REQUIRES_OPERANDS,
+                    {SEEN_PREDICATE, RECORD_CONTENT.get("predicate")} | set(_verbs.EMITTED_KINDS))
+
+
+def intent_said(actor: str, verb: str, operands, confidence: int) -> Said:
+    """WHAT A TELLER SAYS WHEN THEY DECLARE AN INTENT: `actor` will do `verb`, on the ids `operands`
+    binds under `INTENT_NAMES` (a non-string operand -- a list of addressees -- is not carried). A
+    `Said` with an empty chain: the actor's own intent is no hearsay. Person-side; reads no ledger."""
+    ops = operands if isinstance(operands, dict) else {}
+    value = tuple((n, ops[n]) for n in INTENT_NAMES if isinstance(ops.get(n), str))
+    return Said(actor, f"{INTENT_STEM}:{verb}", value, confidence, ())
+
+
+def intent_named(c) -> tuple:
+    """The ids a declared-intent claim (or `Said`) names -- `intent_said`'s value read back; `()` for
+    any other predicate. `queries/world_q.py::named`'s intent branch."""
+    stem, sep, _ = str(c.predicate).partition(":")
+    if not sep or stem != INTENT_STEM or not isinstance(c.value, tuple):
+        return ()
+    return tuple(v for _n, v in c.value)
 
 
 def known_persons(claims, actor, topic) -> tuple:

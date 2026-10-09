@@ -41,7 +41,7 @@ from ..gaps import Unspecified
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
 # imports `person_q` and `data/`); `make_chooser`'s score calls it, and `confliction` (IN-08 6f,
 # the derived Query's caller, ID-13).
-from ..queries.person_q import confliction, stance_toward
+from ..queries.person_q import confliction, intent_named, intent_said, stance_toward
 from ..state.carriers import Act, Candidate, Person, Question, Scene, Sensation, View
 # `project` is DEFINED in `options.py` (see this module's docstring) and imported here because
 # `make_chooser`'s score calls it; `options` never imports this module.
@@ -368,8 +368,67 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         # releases `scenes_per_round` of it per round (`H-124`). Nothing is discarded, so S26.3's
         # *the engine never truncates* is untouched -- what the round bounds is WHEN a chosen scene
         # runs, not WHETHER.
-        return pack_scenes(p, ranked, ask_budget(), fx, mint, occasion=q)
+        # Telling `T7` (G9): what the person has chosen is known HERE, whole, before any of it runs,
+        # so this is where a telling may declare a later chosen act. `intent_disclosure` 0 returns
+        # the scenes untouched.
+        return declare_intents(p, pack_scenes(p, ranked, ask_budget(), fx, mint, occasion=q),
+                               fx, draw)
     return choose
+
+
+def declare_intents(p: Person, scenes: list, fx: "Fixtures", draw=None) -> list:
+    """TELLING `T7` (G9, declared intent; v9 IN-16, `ED-IN-0282`): A TELLER MAY TELL A HEARER AN ACT
+    THEY HAVE CHOSEN AND NOT YET DONE.
+
+    `scenes` is the person's own triage, in the order the driver releases it (`pack_scenes`; the
+    driver runs at most `scenes_per_round` of it per round and queues the rest). An act in a LATER
+    scene than a telling is one the person has chosen and that has not run when the telling does.
+    For each act carrying a `said` (a telling: the payload key `opening_set` sets on a NAMED
+    own-ledger conjunct, never a verb name), the first act in a later scene that NAMES THE TELLING'S
+    TOPIC -- the topic is the teller (a self-telling, Decision 3), or one of the ids the act binds
+    under `rosters.yaml: intent_claim` -- is the intent it may declare. With chance
+    `intent_disclosure` (`H-190`; one draw keyed by the telling's own id, so no other stream moves)
+    the telling's `said` becomes `person_q.intent_said(...)`, and the told deposit lands
+    `(teller, intent:<verb>, ((name, id), ...))` in each hearer's ledger. What the teller held about
+    the topic is not told by THAT telling; nothing is deleted from anybody's ledger.
+
+    ⚠ `0` RETURNS `scenes` UNTOUCHED AND TAKES NO DRAW: the control is the pre-`T7` chooser by
+    construction, and the realm test observes it. ⚠ NOTHING CHECKS THAT THE ACT IS LATER DONE: the
+    driver may re-deliberate and replace the queue, the fold may refuse the act, or the act may be
+    one the driver drops as already realised this season (`loop/deliberate.py::
+    _drop_what_was_already_done`, which this person-side function cannot see, AX-2). Reconciling a
+    declared intent against what was done is `H-191`, absent. A missing `draw` at a non-zero rate
+    RAISES rather than declaring every intent or none (`_sample_order`'s precedent)."""
+    rate = float(fx.get("intent_disclosure"))
+    if not 0 <= rate <= 1:           # `not ... <=`, so a NaN is refused too
+        raise ValueError(f"intent_disclosure {rate} is not a chance in [0, 1] (H-190)")
+    if rate == 0:
+        return scenes
+    conf = fx.get("confidence_default")
+    for i, sc in enumerate(scenes):
+        for a in sc.acts:
+            pay = a.payload if isinstance(a.payload, dict) else None
+            if pay is None or pay.get("said") is None:
+                continue
+            topic = pay.get("subject")
+            intent = None
+            for later in (b for s in scenes[i + 1:] for b in s.acts):
+                said = intent_said(p.id, later.verb, later.payload, conf)
+                if topic == p.id or topic in intent_named(said):
+                    intent = said
+                    break
+            if intent is None:
+                continue
+            if draw is None:
+                raise Unspecified(
+                    "the intent-disclosure draw", "H-190",
+                    needs=f"`make_chooser(fx, mint, verbs, draw)` with a draw at "
+                          f"intent_disclosure={rate}",
+                    law="T7/H-190 -- whether a telling declares an intent is a CHANCE; a chooser "
+                        "with no draw would answer every telling alike")
+            if draw(p.id, f"intent:{a.id}").random() < rate:
+                a.payload = {**pay, "said": intent}
+    return scenes
 
 
 def _payload_of(c: "Candidate") -> Optional[dict]:
