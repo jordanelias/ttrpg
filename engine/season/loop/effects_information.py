@@ -173,11 +173,10 @@ def _eff_issue(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     This body is UNCHANGED by `19` but for the rung, factored into `_seat_rung` (`_eff_open_case`
     draws up the same way): the thing `15` built it to mint is what the precondition now admits.
 
-    ⚠ A COMPUTED `issue` WAS ADDRESSED TO WHAT IT IS ABOUT -- `terms` and `to` both bound the
-    question's one referent (`H-94`'s single-referent limit), so its `terms` named the executor
-    himself. Since plan position IN-10 `to` fans over the persons the issuer knows (the row's
-    `terms` conjunct binds `subject`, #453 §10.1), so `terms` is the referent and `to` an executor.
-    `petition`'s row keeps the single-referent limit."""
+    ⚠ A COMPUTED `issue` IS ADDRESSED TO WHAT IT IS ABOUT -- `terms` and `to` both bind the
+    question's one referent (`H-94`'s single-referent limit), so its `terms` names the executor
+    himself: a writ to a man about that man. `petition`'s row records the identical limit for the
+    identical reason, and `15c`'s held-writ `to` is what separates the two when a person holds one."""
     return _mint_document(w, a, "dispensation", _content_of(a, "dispensation"), _seat_rung(w, a))
 
 

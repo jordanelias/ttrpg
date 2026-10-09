@@ -894,8 +894,8 @@ VERB_TABLE = _load_verb_table()
 def act_key(verb: str, subject, operands) -> str:
     """WHAT AN ACT'S ID IS OF, AFTER ITS VERB: `H(seed, tick, actor, f"act:{verb}:{act_key}")`.
     The subject, and -- for a row whose cell binds a known-person operand beside `subject`
-    (`TypedRequires.known_person_operands`: `tell`'s `to`, since plan position `14` `give`'s, and
-    since plan position IN-10 `issue`'s) -- that operand too, as `subject>to`.
+    (`TypedRequires.known_person_operands`: `tell`'s `to`, and since plan position `14` `give`'s) --
+    that operand too, as `subject>to`.
 
     ⚠ TELLING WORKPLAN `T4`, AND IT IS MEASURED NECESSITY: one topic now forms one `tell` per person
     the teller knows, so two acts in one deliberation shared `(actor, verb, subject)` and therefore
@@ -926,9 +926,8 @@ def opportunity_key(verb: str, subject, operands) -> Optional[tuple]:
     rule for a row that names a `counterparty:`, read off the ROW'S COLUMN and never a verb name; `tell`
     and, since plan position `14`, `give` are the rows where it changes anything TODAY (`give` is typed
     and formable, its subject the Record and its counterparty `to` the receiver, one Candidate per
-    person the giver knows: `decision/options.py::operand_bags`), and since plan position IN-10
-    `issue` (one writ about a referent per executor the issuer knows). `petition` always has
-    `to` == `subject` (a computed Candidate's one referent), so its key is unchanged. Where the
+    person the giver knows: `decision/options.py::operand_bags`). `petition` and `issue` always have
+    `to` == `subject` (a computed Candidate's one referent), so their key is unchanged. Where the
     counterparty IS the subject (`determine`, `oblige`) it adds nothing and is left out, so those
     keys are byte-identical to before.
 

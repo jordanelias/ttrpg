@@ -36,7 +36,7 @@ from __future__ import annotations
 
 import pytest
 
-from ..data.requires import REQUIRES_OPERANDS, RECORD_SOURCED_OPERANDS, _check_record_sourced
+from ..data.requires import REQUIRES_OPERANDS, WRIT_SOURCED_OPERANDS, _check_writ_sourced_subset
 from ..data.rosters import QUESTION_SOURCES, RECORD_CONTENT, RECORD_KIND_KEYS
 from ..data.verbs import VERB_TABLE
 from ..decision.options import _derive_operand, _from_content_claim, opening_set
@@ -177,16 +177,11 @@ def test_from_is_never_read_off_the_writ_even_though_petition_declares_one():
     p = w.persons["p_mid"]
     sm = {"terms": "prop_x", "to": ["p_low"], "from": "D"}   # a rung the actor is NOT standing in
     rec, q = _held_writ_question(w, p, "petition", sm)
-    # RE-RECORDED AT PLAN POSITION IN-10: the reader is per kind now (`record_sourced_operands`),
-    # and no kind maps `from` -- refused at import (`_check_record_sourced`) -- so the petition's own
-    # `from` key is unreadable as an operand even through the generic reader (it read `"D"` here
-    # under `15c`'s generic reader, and `_derive_operand` skipped it by name)...
-    assert _from_content_claim(p, q, "from") is None
-    # ...and `_derive_operand` answers with the actor's OWN containing rung, which for `p_mid` in
-    # `tiny_world` is `Hh`, not the writ's `D` -- the held-Record channel (`held=`) included.
+    # The writ's own `from` key resolves fine through the generic reader...
+    assert _from_content_claim(p, q, "from") == "D"
+    # ...but `_derive_operand` never reaches it for that name: the actor's OWN containing rung
+    # answers instead, which for `p_mid` in `tiny_world` is `Hh`, not the writ's `D`.
     assert _derive_operand(p, "from", q, rec.id, w.fixtures) == "Hh"
-    held = p.ledger[-1]
-    assert _derive_operand(p, "from", q, rec.id, w.fixtures, held=held) == "Hh"
 
 
 def test_at_is_not_a_requires_operands_member_and_derive_operand_is_never_asked_for_it():
@@ -301,25 +296,17 @@ def test_a_bad_source_still_raises_named_did_not_smuggle_one_in():
         Question("q:bad", "named", ("p_x",), "c1")
 
 
-def test_record_sourced_operands_refuses_each_planted_mismatch():
-    """BATCH-CLOSE FINDING (methodology-close Phase 1, antagonist), carried from `15c`'s flat
-    `writ_sourced_operands` to IN-10's per-kind `record_sourced_operands`. The load-time check never
-    fires on today's data, so nothing observed whether it could raise; it once could not (it named
-    `Unspecified` without importing it). Each planted mismatch is called directly: an operand
-    outside the closed eight, a content key the kind does not carry, a kind that is no
-    `record_kinds` member, and `from` (r2's ruling) on a kind that does carry a `from` key."""
-    ops = frozenset(REQUIRES_OPERANDS)
-    with pytest.raises(Unspecified, match="record_sourced_operands"):
-        _check_record_sourced({"dispensation": {"at": "at"}}, ops, RECORD_KIND_KEYS)
-    with pytest.raises(Unspecified, match="not keys of"):
-        _check_record_sourced({"dispensation": {"kind": "kind"}}, ops, RECORD_KIND_KEYS)
-    with pytest.raises(Unspecified, match="not a record_kinds member"):
-        _check_record_sourced({"debt": {"to": "to"}}, ops, RECORD_KIND_KEYS)
-    assert "from" in RECORD_KIND_KEYS["petition"], "the planted `from` must be a real petition key"
-    with pytest.raises(Unspecified, match="maps `from`"):
-        _check_record_sourced({"petition": {"from": "from"}}, ops, RECORD_KIND_KEYS)
+def test_writ_sourced_operands_refuses_a_member_outside_requires_operands():
+    """BATCH-CLOSE FINDING (methodology-close Phase 1, antagonist). The load-time cross-
+    validation between `writ_sourced_operands` and `requires_operands` shipped with no falsifier
+    -- it never fires on today's data, so nothing observed whether it could actually raise. It
+    could not: it named `Unspecified` without importing it, so a real mismatch died with
+    `NameError` instead. Call the check directly with a planted mismatch, the way `data/rosters.py`
+    has no equivalent test for its own sibling cross-validations either, but this one is new."""
+    with pytest.raises(Unspecified, match="writ_sourced_operands"):
+        _check_writ_sourced_subset(frozenset({"to", "at"}), frozenset(REQUIRES_OPERANDS))
     # THE CONTROL -- the real roster, read back through its own binding, never re-typed: a second
     # literal here would be exactly the "roster duplicated from the data file" defect this whole
     # position exists to fix (`test_jordan_no_definition_is_hardcoded_in_a_body` caught the first
     # draft doing precisely this).
-    _check_record_sourced(RECORD_SOURCED_OPERANDS, ops, RECORD_KIND_KEYS)
+    _check_writ_sourced_subset(frozenset(WRIT_SOURCED_OPERANDS), frozenset(REQUIRES_OPERANDS))
