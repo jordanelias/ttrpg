@@ -270,7 +270,19 @@ def test_15d_falsifier_the_realm_holds_hearsay_no_telling_minted(monkeypatch):
     #   chained, after      0   0   0   0   4   0   0   0    7   0
     # Seed 4 is the lowest seed with more than one; the mechanism by which the count moved per seed
     # is NOT isolated, as before. The assertions below are unmoved.
-    SEED = 4
+    # ⚠ RE-PINNED SEED 4 -> 18 AT `H-160` LIMIT 1 (IN-22's paying half), BY THE SAME RULE. THIS TIME
+    # THE MECHANISM IS ISOLATED: seed 4's four chained claims were all one telling of
+    # `(b_s_036_cathedral, stores:grain, 0)` by `p_npc_037`, a read he held from his OWN REFUSED
+    # `transfer` out of that hearth. `transfer`'s first alternative is now `remit:issue`, so a seated
+    # holder gives through his seat out of its rung -- his refused transfer reads `terr_T1` instead,
+    # and the hearth-stores telling is gone. Seed 4's acts are otherwise the same list (604 resolved,
+    # 7 rows differ, every one a seated holder's `transfer`, still refused). The same quantity, the
+    # same script, on the tree after:
+    #   seed                0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17  18
+    #   chained, after      0  0  0  0  0  0  0  0  0  0   0  0  0  0  0  0  0  0   9
+    # Seed 18 is the lowest seed with more than one, and reads 9 on the tree before too. Unchained
+    # `told_by` is unchanged at seeds 0-9. The assertions below are unmoved.
+    SEED = 18
 
     def told_by_count() -> tuple:
         w = populated.build_realm(SEED)

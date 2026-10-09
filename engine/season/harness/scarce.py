@@ -118,31 +118,50 @@ def build(seed: int = 0, fixtures=DEFAULT_FIXTURES, steward_holds: bool = True) 
 # v9 IN-22: THE TWO GOVERNORS AND WHAT THEY SIT OVER. Test-fixture ids, not definitions.
 REEVE, FAR_REEVE = "p_reeve", "p_far_reeve"
 REEVE_SEAT, FAR_SEAT = "off_march_reeve", "off_far_reeve"
-FAR_TERRITORY = "terr_far"
+MARCH, FAR_TERRITORY = "terr_march", "terr_far"
+# Each reeve's HOME: a hearth under his own territory, so where he lives is not where his seat is --
+# the populated realm's shape (persons in hearths, seats at rungs above them). It is what lets the
+# paying half tell a transfer out of the SEAT'S rung from one out of the reeve's own home.
+REEVE_HEARTH, FAR_HEARTH = "hh_reeve", "hh_far_reeve"
 # Every office names its faction (`H-99`); `probes.tiny_world`'s generic Duke is the Crown's, and a
 # generic reeve is too. Test data, not a claim about who governs a march.
 GOVERNING_FACTION = "Crown"
+# What each reeve's seat grants. `issue` is the act `transfer`'s seat alternative names
+# (`verb_table.yaml`, `remit:issue`, `levy`'s precedent), so a seat granting nothing could pay
+# nobody. Test data, not a claim about what a reeve may do.
+REEVE_REMIT = ["issue"]
+# [JUSTIFIED: a test-fixture stock, not a game value -- the march's TREASURY (G2: Rung.stores at the seat's own rung), sized only so it still covers either recorded shortfall after the hungry cohort's next draw walks up to it]
+MARCH_TREASURY = {"grain": 60, "salt": 30}
 
 
 def governed(seed: int = 0, fixtures=DEFAULT_FIXTURES, steward_holds: bool = True) -> World:
-    """v9 IN-22 (#457 `CARRY-SHORTFALL`, `H-160` limit 2): `build`'s world plus TWO GOVERNORS, each
-    seated on a territory and living there -- so neither stands at `set_hungry` nor holds it, and
-    the only thing that differs between them is whether his seat's purview contains it.
+    """v9 IN-22 (#457 `CARRY-SHORTFALL`, `H-160` limits 2 and 1): `build`'s world plus TWO
+    GOVERNORS, each seated on a territory and living in a hearth under it -- so neither stands at
+    `set_hungry` nor holds it, and the only thing that differs between them is whether his seat's
+    purview contains it.
       * `p_reeve` holds `off_march_reeve`, whose rung is `terr_march`: `set_hungry` lies inside it.
       * `p_far_reeve` holds `off_far_reeve`, whose rung is `terr_far`, a SIBLING territory under the
         same realm: `set_hungry` does not. He is the CONTROL -- same channel, same mode, same kind of
         seat, a different ground.
-    Both weigh 1, so neither eats from a larder (`world_q.subsistence_draw`) and neither changes the
-    draw `build` sets up. A SEPARATE BUILDER, NOT A FLAG ON `build`, on this module's own reason: the
-    shipped `build` answers `19d`'s question and its measurements stay its own."""
+    Both weigh 1, so neither eats from a larder (`world_q.subsistence_draw`). THE PAYING HALF (limit
+    1): both seats grant `issue`, and `terr_march` holds a treasury, so the reeve can pay a shortfall
+    OUT OF HIS SEAT'S RUNG through his seat. ⚠ The treasury is on the hungry cohort's ladder, so from
+    the season after `set_hungry` runs dry the cohort's draw walks up to it (`nearest_store`); the
+    first season's draw is unchanged, because `set_hungry` holds some of each kind and the walk stops
+    at the nearest rung holding any. A SEPARATE BUILDER, NOT A FLAG ON `build`, on this module's own
+    reason: the shipped `build` answers `19d`'s question and its measurements stay its own."""
     w = build(seed, fixtures, steward_holds)
+    w.rungs[MARCH].stores = dict(MARCH_TREASURY)
     w.rungs[FAR_TERRITORY] = Rung(FAR_TERRITORY, "territory")
     w.add_tenure(Tenure("t_in_far", FAR_TERRITORY, "r_realm", "contain", 0))
-    for seat, post, rung in ((REEVE_SEAT, "Reeve of the March", "terr_march"),
+    for hearth, territory in ((REEVE_HEARTH, MARCH), (FAR_HEARTH, FAR_TERRITORY)):
+        w.rungs[hearth] = Rung(hearth, "hearth")
+        w.add_tenure(Tenure(f"t_in_{hearth}", hearth, territory, "contain", 0))
+    for seat, post, rung in ((REEVE_SEAT, "Reeve of the March", MARCH),
                              (FAR_SEAT, "Reeve of the Far Territory", FAR_TERRITORY)):
-        w.offices[seat] = Office(seat, post, rung, [], faction=GOVERNING_FACTION)
-    for pid, name, home, seat in ((REEVE, "the reeve of the march", "terr_march", REEVE_SEAT),
-                                  (FAR_REEVE, "the far reeve", FAR_TERRITORY, FAR_SEAT)):
+        w.offices[seat] = Office(seat, post, rung, list(REEVE_REMIT), faction=GOVERNING_FACTION)
+    for pid, name, home, seat in ((REEVE, "the reeve of the march", REEVE_HEARTH, REEVE_SEAT),
+                                  (FAR_REEVE, "the far reeve", FAR_HEARTH, FAR_SEAT)):
         w.persons[pid] = Person(pid, name)
         w.rungs[pid] = Rung(pid, "person")
         w.add_tenure(Tenure(f"t_{pid}_in", pid, home, "contain", 0))

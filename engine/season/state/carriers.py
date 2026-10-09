@@ -142,6 +142,20 @@ class Tenure:
             return ()
         return acts if isinstance(acts, tuple) else tuple(acts)
 
+    @property
+    def seat_rung(self) -> Optional[str]:
+        """THE SEAT'S RUNG AS GRANTED -- where the seat's TREASURY is (the retirement plan's G2,
+        *"treasury = `Rung.stores` at the office's own rung"*), read off the grant the holder owns.
+        `H-160` limit 1 / `H-158`: a holder paying out of his seat's rung gives FROM it
+        (`decision/options.py::treasury_of`), and the person-side reader has no `World` (`AX-2`),
+        so the rung rides on the Tenure beside `remit_acts`, `H-71` arm 2's own shape and writer
+        (`World._grant_remit`). The same SNAPSHOT semantics: as at seating, re-stamped by `establish`.
+
+        `None` for every Tenure carrying no grant, and for the grant of a rungless seat -- which has
+        no treasury, so a payment through it is not formed."""
+        p = self.payload
+        return p.get("seat_rung") if isinstance(p, dict) else None
+
 
 
 

@@ -15,9 +15,17 @@ Each assertion below is paired with the arm that would show it wrong: the far re
 `observation_deposit_mode: none`, `fan_out_mode: presence_only` (the seat channel off), and an ACT's
 reads (which stay the actor's). Every loop that asserts per item asserts that it asserted.
 
-WHAT THIS DOES NOT CLAIM: the candidate's `from` is the reeve's own containing rung (`H-160` limit 1,
-`containing_rung_of`), a territory with no larder, so the fold would refuse it. Paying out of a seat's
-own rung needs `Act.via` on a computed `transfer` (`H-158`), which is not this half's.
+THE PAYING HALF (`H-160` limit 1, through `H-158`'s seat alternative) is the last block: `transfer`'s
+first eligibility alternative is `remit:issue`, so a holder of a seat granting `issue` exercises it
+(`Act.via`) and gives from the SEAT'S rung, its treasury (`decision/options.py::treasury_of`, the
+snapshot the hold carries) rather than from his own home. In `scarce.governed` the reeve lives in a
+hearth with no larder and his seat's rung, `terr_march`, holds the treasury, so the two readings of
+`from` lead to different outcomes. FALSIFIER: the reeve's computed `transfer` EXECUTES out of
+`terr_march` to the hungry town, `via` his seat, carrying the claim's kind and amount, with matter
+conserved against a twin whose reeve does not act. CONTROLS: the far reeve forms no transfer to the
+town; an unseated giver (the steward) still mints `via=None` from his own containing rung.
+[ASSUMPTION; medium; Jordan to correct; revert: a ruling that an `own` verb may be exercised through a
+seat] -- `H-158`'s two remedies, and this is the eligibility one.
 """
 
 from __future__ import annotations
@@ -25,8 +33,9 @@ from __future__ import annotations
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.requires import SHORTFALL_PREDICATE
 from ..data.rosters import CHANNEL_CLAIM_SOURCE
+from ..data.verbs import VERB_TABLE
 from ..decision import make_chooser
-from ..decision.options import opening_set
+from ..decision.options import exercised_seat, opening_set, treasury_of
 from ..harness import probes as P
 from ..harness import scarce as S
 from ..loop.driver import SeasonDriver, resolvable_verbs
@@ -159,3 +168,115 @@ def test_in22_an_acts_reads_do_not_reach_a_governor():
     reeve = [c for c in w.persons[S.REEVE].ledger
              if c.subject == S.GRANARY and str(c.predicate).startswith("stores:")]
     assert steward and not reeve, (len(steward), [(c.predicate, c.source) for c in reeve])
+
+
+# ======================================================================================
+# THE PAYING HALF -- `H-160` limit 1, through `H-158`'s seat alternative
+# ======================================================================================
+
+
+def _paying_run(acting=(S.REEVE,)):
+    """Season 1 with nobody choosing: MATTER drains the hungry larder and the reeve's seat receives
+    the record. Season 2 with the REAL chooser and fold serving only `acting`, with TWO instrument
+    choices, each the driver's or the chooser's own probe seam and each stated: every deliberation
+    is on the reeve's shortfall question (the driver's override -- `scarce.run`'s `H-54` reason:
+    which landed question a person answers is not this position's), and the chooser's `verbs=` is
+    narrowed to `transfer`. MEASURED without the second: under the full roster the reeve's formed
+    `transfer` (from `terr_march`, the claim's kind and amount) is outscored in that season by
+    `levy`, `work`, `examine` and others -- which verb a person prefers is the chooser's score, not
+    this position's, and the falsifier is that the candidate EXECUTES once chosen. `acting=()` is
+    the CONTROL twin: the same world and the same two barriers, nobody acting. Returns `(world,
+    question, season-2 acts, season-2 Events)`."""
+    w = S.governed(steward_holds=False)
+    d = _season(w)
+    q = S.shortfall_question(w, S.REEVE)
+    assert q is not None, "the reeve holds no shortfall question; nothing below is observed"
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    real = make_chooser(w.fixtures, mint, verbs=resolvable_verbs() & {"transfer"},
+                        draw=draw_factory(w.world_seed, lambda: w.tick))
+    only = lambda p, v, s, b: real(p, v, s, b) if p.id in acting else []
+    n, n_log = len(d.resolved), len(w.log)
+    _season(w, only, q, d)
+    return w, q, d.resolved[n:], w.log[n_log:]
+
+
+def test_in22_the_governor_pays_the_shortfall_out_of_his_seats_rung_through_his_seat():
+    """THE FALSIFIER OF THE PAYING HALF, in a seeded run of the shipped chooser and fold: the reeve's
+    computed `transfer` EXECUTES (`transfer.made`), exercised through his seat (`Act.via`), out of the
+    seat's rung -- NOT his home, which holds nothing -- to the hungry town, carrying the claim's own
+    kind and amount; and the matter it moved is exactly the difference against the control twin."""
+    w, q, acts, events = _paying_run()
+    claim = next(c for c in w.persons[S.REEVE].ledger if c.id == q.about)
+    made = {e.causes[0] for e in events if e.kind == "transfer.made" and e.causes}
+    paid = [a for a in acts if a.actor == S.REEVE and a.verb == "transfer" and a.id in made]
+    assert len(paid) == 1, [(a.verb, a.via, a.payload, a.id in made) for a in acts]
+    (a,) = paid
+    op = dict(a.payload)
+    seat_rung = w.offices[S.REEVE_SEAT].rung
+    assert a.via == S.REEVE_SEAT, a.via
+    assert op["from"] == seat_rung == S.MARCH, op
+    assert op["from"] != world_q.place_of(w, S.REEVE) == S.REEVE_HEARTH
+    assert op["to"] == S.HUNGRY
+    assert (f"{SHORTFALL_PREDICATE}:{op['kind']}", op["amount"]) == (claim.predicate, claim.value)
+    # CONSERVED, AGAINST THE TWIN: the same two barriers with nobody acting. Every other draw is
+    # identical between the two, so the only difference is the payment.
+    c, _, _, _ = _paying_run(acting=())
+    kind, amount = op["kind"], op["amount"]
+    moved = {r: w.rungs[r].stores.get(kind, 0) - c.rungs[r].stores.get(kind, 0)
+             for r in (S.MARCH, S.HUNGRY)}
+    assert moved == {S.MARCH: -amount, S.HUNGRY: amount}, moved
+
+
+def test_in22_the_governor_outside_purview_forms_no_transfer_to_the_town():
+    """CONTROL: the far reeve's seat is the same kind of seat with the same grant (so his `transfer`
+    would go through it too), and its purview does not contain the town -- so no question he holds
+    forms a `transfer` to it. The same sweep over the reeve's questions DOES form one, which is what
+    keeps the far reeve's empty result from being vacuous."""
+    w = _one_season()
+
+    def to_town(pid):
+        p = w.persons[pid]
+        return [(q.about, c.operands) for q in world_q.questions_for(w, p)
+                for c in opening_set(p, View(p.id, [], 99, q), q, w.fixtures)
+                if c.verb == "transfer" and c.operands.get("to") == S.HUNGRY]
+
+    assert exercised_seat(w.persons[S.FAR_REEVE], VERB_TABLE["transfer"]) == S.FAR_SEAT
+    assert to_town(S.FAR_REEVE) == []
+    assert to_town(S.REEVE), "the reeve forms no transfer to the town either; the control is vacuous"
+
+
+def test_in22_control_an_unseated_giver_still_gives_from_where_he_stands_with_no_seat():
+    """CONTROL: the alternative names a seat, so a person holding none falls through to `own` exactly as
+    before -- `exercised_seat` is `None` and `from` is his own containing rung. The steward (no seat)
+    in `scarce.build`, against the reeve (seated) in `scarce.governed`, on the same verb row."""
+    row = VERB_TABLE["transfer"]
+    w = S.build()
+    steward = w.persons[S.STEWARD]
+    assert exercised_seat(steward, row) is None
+    _season(w)
+    q = S.shortfall_question(w, S.STEWARD)
+    assert q is not None
+    (cand,) = [c for c in opening_set(steward, View(steward.id, [], 99, q), q, w.fixtures)
+               if c.verb == "transfer"]
+    assert cand.operands["from"] == S.GRANARY, cand.operands
+    g = S.governed()
+    reeve = g.persons[S.REEVE]
+    assert exercised_seat(reeve, row) == S.REEVE_SEAT
+    assert treasury_of(reeve, S.REEVE_SEAT) == g.offices[S.REEVE_SEAT].rung == S.MARCH
+
+
+def test_in22_a_seat_granting_no_issue_exercises_nothing_and_its_holder_gives_as_himself(monkeypatch):
+    """CONTROL ON THE GRANT: the alternative is `remit:issue`, read off the hold's own grant, so a seat
+    whose remit lacks `issue` admits nothing through it, and its holder's transfer mints `via=None`
+    from his own home. Built by removing the cause -- the builder's remit, before seating stamps the
+    grant -- not by editing the result."""
+    monkeypatch.setattr(S, "REEVE_REMIT", [])
+    w = S.governed(steward_holds=False)
+    reeve = w.persons[S.REEVE]
+    assert exercised_seat(reeve, VERB_TABLE["transfer"]) is None
+    _season(w)
+    q = S.shortfall_question(w, S.REEVE)
+    assert q is not None, "the seat channel no longer reaches him; the control observes nothing"
+    (cand,) = [c for c in opening_set(reeve, View(reeve.id, [], 99, q), q, w.fixtures)
+               if c.verb == "transfer"]
+    assert cand.operands["from"] == S.REEVE_HEARTH, cand.operands

@@ -542,20 +542,28 @@ class World:
                            f"hold yet -- no remit granted until an `establish` founds it")
             return False
         grant = tuple(off.remit_acts)
+        # `H-160` limit 1 / `H-158`: THE GRANT ALSO SAYS WHERE THE SEAT'S TREASURY IS -- the seat's
+        # rung, read person-side by `Tenure.seat_rung` (its one reader of the key), so a holder paying
+        # through his seat can name the rung he pays out of without a `World`. Written with the acts,
+        # as one grant: the same snapshot, the same `force` re-stamp. ⚠ `repr(Tenure)` folds into
+        # `World.content_hash`, so this key alone moves the digest of every world holding a seat -- a
+        # declared, structural hash move, the `Office.establishment` deletion's shape.
+        stamp = {"remit_acts": grant, "seat_rung": off.rung}
         # ⚠ KEY-SCOPED, NOT WHOLE-FIELD, and `/code-review` found the defect this fixes. The first
         # writing was `if t.payload is not None: return`, which made the grant FIRST-WRITER-WINS on
         # a public constructor field: `Tenure(..., "hold", 0, payload={"note": "x"})` produced a
         # seated holder whose `granted_acts` was `()`, indistinguishable from an office that grants
-        # nothing. The payload is a dict of independent keys, so only `remit_acts` is this
-        # method's to own and only that key is left alone when already set -- unless `force`.
+        # nothing. The payload is a dict of independent keys, so only the grant's two keys are this
+        # method's to own and they are left alone when already set -- unless `force`.
         if t.payload is None:
-            t.payload = {"remit_acts": grant}
+            t.payload = dict(stamp)
             return True
         if not isinstance(t.payload, dict):
             return False
-        if "remit_acts" in t.payload and (not force or t.granted_acts == grant):
+        if "remit_acts" in t.payload and (
+                not force or (t.granted_acts, t.seat_rung) == (grant, off.rung)):
             return False
-        t.payload["remit_acts"] = grant
+        t.payload.update(stamp)
         return True
 
     def _refuse_bad_hold(self, t: Tenure) -> None:

@@ -6175,8 +6175,12 @@ def test_the_generic_remit_seats_every_office_and_unblocks_the_nine():
     # [GROUNDED: measured 2026-09-18 over `VERB_TABLE` -- nine rows carry a `remit:` alternative (confer, convene, determine, dispatch, establish, issue, levy, open_case, revoke), which is the same nine `H-71`'s `unblocks:` field names.
     #  M4 (`ED-IN-0279` clause (a)) added a tenth: `march`'s eligibility is `["remit:dispatch"]`,
     #  the same `dispatch` act the existing `dispatch` verb already carries -- co-existing on one
-    #  remit, not a new act. H-71's own nine is unmoved; this count is wider than H-71's set.]
-    assert len(gov) == 10, f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine plus march"
+    #  remit, not a new act. H-71's own nine is unmoved; this count is wider than H-71's set.
+    #  `H-160` limit 1 (IN-22's paying half) added an eleventh: `transfer`'s FIRST alternative is
+    #  `remit:issue` (`levy`'s substitution, one verb over), so a seated holder gives through his
+    #  seat; `own` still follows it. Re-recorded by outcome: 10 -> 11, the one row that moved.]
+    assert len(gov) == 11, (f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine "
+                            "plus march plus transfer")
     formable = set()
     for t in held:
         p = w.persons.get(t.subject)

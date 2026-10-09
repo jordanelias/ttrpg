@@ -353,8 +353,9 @@ def exercised_seat(p: Person, row: "Optional[VerbRow]") -> Optional[str]:
     which `person_side_eligible` ADMITTED the verb, read by the SAME walk (`_admitted_through`) so
     the two cannot disagree: a `remit:` alternative admits through the first live `hold` whose grant
     carries the act, and that hold's object is the seat. An `own` or `hold` alternative admits the
-    person AS THEMSELVES, and no seat is exercised -- `kill / wound`, `transfer`, `release` all mint
-    with `via=None`. The fold's `_eligible` then admits the same act through the same seat, so
+    person AS THEMSELVES, and no seat is exercised -- `kill / wound`, `release` mint with `via=None`,
+    and so does `transfer` for a person whose seats grant no `issue` (its first alternative is
+    `remit:issue` since `H-160` limit 1, so a holder of such a seat gives THROUGH it, from its rung). The fold's `_eligible` then admits the same act through the same seat, so
     making `via` required there moves no computed act (measured: `build_realm(0)`'s content hash
     over one season is unchanged by G3).
 
@@ -518,6 +519,23 @@ def containing_rung_of(p: Person) -> Optional[str]:
     return next((t.object for t in p.tenures if t.kind == "contain" and t.live), None)
 
 
+def treasury_of(p: Person, seat: str) -> Optional[str]:
+    """WHERE A HOLDER GIVES FROM WHEN HE GIVES THROUGH HIS SEAT: the seat's rung, its TREASURY (the
+    retirement plan's G2, *"treasury = `Rung.stores` at the office's own rung"*), read off the
+    person's OWN live `hold` on `seat` (`Tenure.seat_rung`, the grant's snapshot, `H-71` arm 2's
+    shape). `None` for a seat he does not hold or a rungless seat, which has no treasury -- and then
+    the Candidate is not formed (`_operands`), as for a person nowhere (`containing_rung_of`).
+
+    `H-160` limit 1 / `H-158` [ASSUMPTION; medium; Jordan to correct; revert: a ruling that an `own`
+    verb may be exercised through a seat]: `containing_rung_of`'s *where the actor is* stays the
+    answer for an act exercised AS HIMSELF; an act exercised THROUGH A SEAT (`exercised_seat`, the
+    same walk `Act.via` is named by) gives from the seat's rung, because that is where the seat's
+    matter is, and `loop/effects_economy.py::_renewals` already reads a payment of upkeep as exactly
+    that (`seat.rung == from`). One rule for both positions of the actor, no verb named."""
+    return next((t.seat_rung for t in p.tenures
+                 if t.kind == "hold" and t.live and t.object == seat), None)
+
+
 def _claim_by_id(p: Person, claim_id) -> Optional["Claim"]:
     """THE ONE CLAIM IN `p`'S OWN LEDGER WITH THIS ID, or `None`. `store_kind_of` and
     `_from_content_claim` (both below) each look a claim up by `q.about` before reading its
@@ -614,8 +632,9 @@ def _from_shortfall_claim(p: Person, q: "Question", name: str):
     ⚠ `to` IS NOT READ HERE. For a `claim_landed` question the referent IS the claim's subject, so
     the referent rule already binds `to` to the drained rung (`rosters.yaml:
     shortfall_sourced_operands`' note). ⚠ `from` IS NOT READ HERE EITHER. The giver gives from where
-    they stand (`containing_rung_of`), for r2 §A.13's reason: a claim about somewhere else must not
-    reach into a larder the actor is not standing in.
+    they stand (`containing_rung_of`), or through a seat from the seat's own rung (`treasury_of`,
+    `H-160` limit 1), for r2 §A.13's reason: a claim about somewhere else must not reach into a
+    larder the actor neither stands in nor holds the seat of.
 
     ⚠ `None` IS SILENT BY DESIGN. It means no claim by `q.about` in `p`'s own ledger, a predicate
     that is not `shortfall:<kind>`, or an amount that is not a positive whole number, and the caller
@@ -654,8 +673,13 @@ def _from_shortfall_claim(p: Person, q: "Question", name: str):
     return None
 
 
-def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"):
+def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures",
+                    seat: Optional[str] = None):
     """ONE OPERAND, FROM THE PERSON'S OWN STATE. `None` means THIS PERSON CANNOT SUPPLY IT.
+
+    `seat` is the seat the act will be exercised through (`exercised_seat`), `None` for an act the
+    person performs as himself. It moves ONE operand, `from`: through a seat, the giver gives from
+    the seat's rung (`treasury_of`, `H-160` limit 1); as himself, from where he stands.
 
     ⚠ THE CHAIN IS NOT THE ROUTER `G2` FORBIDS, on `WorldReader.read`'s own precedent. It
     enumerates the CLOSED OPERAND VOCABULARY -- `rosters.yaml: requires_operands`, eight names,
@@ -763,9 +787,10 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
         return subject
     # Where the ACTOR is. §54 item 7's `hearth(giver)`, READ AS the actor's containing rung of
     # any kind -- a declared assumption with a named alternative and a measurement, not a reading
-    # the document supplies. See `containing_rung_of`, and register row `H-94`.
+    # the document supplies. See `containing_rung_of`, and register row `H-94`. THROUGH A SEAT the
+    # actor's position is the seat's, so `from` is its rung (`treasury_of`, `H-160` limit 1).
     if name == "from":
-        return containing_rung_of(p)
+        return treasury_of(p, seat) if seat is not None else containing_rung_of(p)
     # Values the design states no number for. `H-94`, declared / defaulted / swept.
     if name == "kind":
         return store_kind_of(p, q) or fx.get("default_store_kind")
@@ -887,13 +912,16 @@ def _operands(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixtures",
         return {}
     bound = tuple(req.operands())
     admitted = req.needs()
+    # The seat the act will be exercised through -- the walk `pack_scenes` names `Act.via` by -- so
+    # the operands and the act's `via` cannot disagree about whether the actor acts as a seat.
+    seat = exercised_seat(p, row)
     out: dict = {}
     for name in bound + tuple(n for n in _REFERENT_OPERANDS
                               if n in admitted and n not in bound):
         # `actor` is structural on both sides and is never carried; see `binding_of`.
         if name == "actor":
             continue
-        v = given[name] if name in given else _derive_operand(p, name, q, subject, fx)
+        v = given[name] if name in given else _derive_operand(p, name, q, subject, fx, seat)
         if v is None:
             if name not in bound:
                 # An operand the CELL does not read cannot make the act malformed -- it is simply
