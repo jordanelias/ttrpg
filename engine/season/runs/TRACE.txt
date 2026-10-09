@@ -2860,8 +2860,8 @@
   2860  probe:P36            STEP      leave RESOLVE  @S23
   2861  probe:P36            STEP      enter ENCOUNTER  @S23
   2862  probe:P36            STEP      leave ENCOUNTER  @S23
-  2863  probe:P36            EVENT     kill.refused [17c4eada61f23113]  @S19  causes=["0d8e3d7ace033a2d"]
-  2864  probe:P36            EVENT     work.unavailable [c793734e1ccaec8c]  @S19  causes=["745accd1d78b469b"]
+  2863  probe:P36            EVENT     kill.refused [17c4eada61f23113]  @S19  causes=["0d8e3d7ace033a2d", "59a09381522096a6"]
+  2864  probe:P36            EVENT     work.unavailable [c793734e1ccaec8c]  @S19  causes=["745accd1d78b469b", "59a09381522096a6"]
   2865  probe:P36            EVENT     proposition.uttered [1545bca886e2792e]  @S19  causes=["c6253b5f52e6b9a0", "59a09381522096a6"]
   2866  probe:P36            STEP      enter WITNESS  @S23
   2867  probe:P36            BARRIER   barrier 4 - WITNESS  @S23
@@ -25243,7 +25243,7 @@
  25243  probe:A38            STEP      leave RESOLVE  @S23
  25244  probe:A38            STEP      enter ENCOUNTER  @S23
  25245  probe:A38            STEP      leave ENCOUNTER  @S23
- 25246  probe:A38            EVENT     attempt.refused [568e70722a847be5]  @S19  causes=["41884cc6c78cea6d"]
+ 25246  probe:A38            EVENT     attempt.refused [89a6d3917f638ee4]  @S19  causes=["41884cc6c78cea6d"]
  25247  probe:A38            EVENT     speech.made [02b025a9635d44d5]  @S19  causes=["01887299d4a337d6"]
  25248  probe:A38            STEP      enter WITNESS  @S23
  25249  probe:A38            BARRIER   barrier 4 - WITNESS  @S23
@@ -25304,23 +25304,23 @@
  25304  probe:A38            EVENT     claim.deposited [eb1fb6579ebfc720]  @S19  causes=["ceac8f173527c9cf"]
  25305  probe:A38            CLAIM     p_high <- ceac8f173527c9cf  @S20  source="firsthand"
  25306  probe:A38            WRITE     claim_ledger  @S30  write_class="INTERIOR" step="WITNESS" admitted=true
- 25307  probe:A38            EVENT     claim.deposited [814443d2c6969259]  @S19  causes=["568e70722a847be5"]
- 25308  probe:A38            CLAIM     p_low <- 568e70722a847be5  @S20  source="firsthand"
+ 25307  probe:A38            EVENT     claim.deposited [f609a405ced9546b]  @S19  causes=["89a6d3917f638ee4"]
+ 25308  probe:A38            CLAIM     p_low <- 89a6d3917f638ee4  @S20  source="firsthand"
  25309  probe:A38            WRITE     claim_ledger  @S30  write_class="INTERIOR" step="WITNESS" admitted=true
- 25310  probe:A38            EVENT     claim.deposited [c053ef6e50b968d7]  @S19  causes=["568e70722a847be5"]
- 25311  probe:A38            CLAIM     p_low <- 568e70722a847be5  @S20  source="firsthand"
+ 25310  probe:A38            EVENT     claim.deposited [9c7b27ca1dc1f447]  @S19  causes=["89a6d3917f638ee4"]
+ 25311  probe:A38            CLAIM     p_low <- 89a6d3917f638ee4  @S20  source="firsthand"
  25312  probe:A38            WRITE     claim_ledger  @S30  write_class="INTERIOR" step="WITNESS" admitted=true
- 25313  probe:A38            EVENT     claim.deposited [f3046bbc0137ffd5]  @S19  causes=["568e70722a847be5"]
- 25314  probe:A38            CLAIM     p_mid <- 568e70722a847be5  @S20  source="firsthand"
+ 25313  probe:A38            EVENT     claim.deposited [0ceab5e356c600a3]  @S19  causes=["89a6d3917f638ee4"]
+ 25314  probe:A38            CLAIM     p_mid <- 89a6d3917f638ee4  @S20  source="firsthand"
  25315  probe:A38            WRITE     claim_ledger  @S30  write_class="INTERIOR" step="WITNESS" admitted=true
- 25316  probe:A38            EVENT     claim.deposited [0c84e7086c7b2602]  @S19  causes=["568e70722a847be5"]
- 25317  probe:A38            CLAIM     p_mid <- 568e70722a847be5  @S20  source="firsthand"
+ 25316  probe:A38            EVENT     claim.deposited [46095fc7c08a7300]  @S19  causes=["89a6d3917f638ee4"]
+ 25317  probe:A38            CLAIM     p_mid <- 89a6d3917f638ee4  @S20  source="firsthand"
  25318  probe:A38            WRITE     claim_ledger  @S30  write_class="INTERIOR" step="WITNESS" admitted=true
- 25319  probe:A38            EVENT     claim.deposited [32066da464efc0e7]  @S19  causes=["568e70722a847be5"]
- 25320  probe:A38            CLAIM     p_other <- 568e70722a847be5  @S20  source="firsthand"
+ 25319  probe:A38            EVENT     claim.deposited [9b3b3dfd91b28016]  @S19  causes=["89a6d3917f638ee4"]
+ 25320  probe:A38            CLAIM     p_other <- 89a6d3917f638ee4  @S20  source="firsthand"
  25321  probe:A38            WRITE     claim_ledger  @S30  write_class="INTERIOR" step="WITNESS" admitted=true
- 25322  probe:A38            EVENT     claim.deposited [8393fc787f6446e4]  @S19  causes=["568e70722a847be5"]
- 25323  probe:A38            CLAIM     p_other <- 568e70722a847be5  @S20  source="firsthand"
+ 25322  probe:A38            EVENT     claim.deposited [27d50f63ccdd7cb7]  @S19  causes=["89a6d3917f638ee4"]
+ 25323  probe:A38            CLAIM     p_other <- 89a6d3917f638ee4  @S20  source="firsthand"
  25324  probe:A38            WRITE     claim_ledger  @S30  write_class="INTERIOR" step="WITNESS" admitted=true
  25325  probe:A38            EVENT     claim.deposited [3018ce21339c81f4]  @S19  causes=["02b025a9635d44d5"]
  25326  probe:A38            CLAIM     p_low <- 02b025a9635d44d5  @S20  source="firsthand"

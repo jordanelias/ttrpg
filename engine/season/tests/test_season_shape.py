@@ -4014,10 +4014,19 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
     # finding.made(bailiff) <- claim.deposited <- claim.decayed`: one investigate round fewer.
     # `redeposits` is still 1 (asserted above) and the four-season depth clause (>= 4) still holds.
     # [GROUNDED: measured at IN-08's cells commit by printing the published chain on this tree and on a `git worktree` at its base `13715804` -- depth 5 here, 7 there]
-    assert d_pub == 5, (
-        f"the published two-season run reaches {d_pub}, not the 5 that `scene_budget` rounds of "
+    # ⚠⚠ **5 -> 10, IN-50, A RE-RECORD, SAID SO: A REFUSED ACT NOW CITES ITS OCCASION.** `_act_events`
+    # appends the scene's occasion ids on every emission, so a refusal chosen from a scene another
+    # person's Event occasioned no longer ends the walk at the refusal. The printed published chain
+    # now runs THROUGH refusals -- `travel.blocked`, `commitment.refused`, `work.unavailable` and
+    # `finding.none` sit between the `record.created`/`finding.made` links -- which is the chain
+    # that stopped at them before. `redeposits` is still 1 (asserted above), so the echo-model
+    # exclusion is untouched; the extra depth is acts citing the Event that occasioned them.
+    # [GROUNDED: measured at IN-50 by printing the published chain on this tree and at its base `2a2ed152` -- depth 10 here, 5 there]
+    assert d_pub == 10, (
+        f"the published two-season run reaches {d_pub}, not the 10 that `scene_budget` rounds of "
         "deposit-and-decay produce over two seasons with `11a`'s repeated investigate-and-record "
-        "chaining (7 before IN-08 re-scored the chooser; 10 before T4's tellings took two of its "
+        "chaining and refusals that cite their occasion (5 before IN-50; 7 before IN-08 "
+        "re-scored the chooser; 10 before T4's tellings took two of its "
         "scenes). With `redeposits == 1` still "
         "holding, a different number means the ROUND COUNT "
         "changed, a clock started chaining, or `reach` stopped admitting this second-person claim; "
@@ -6652,7 +6661,12 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # COUNT still discriminates (41 maturations at 3 stages against 58 at 6, and the arms asserted
     # below).
     # [GROUNDED: measured at IN-08's cells commit -- depths {0: 0, 3: 9, 6: 10}; chains walked as above]
-    assert (depths[3], depths[6]) == (9, 10), (
+    # ⚠⚠ RE-PINNED, IN-50: (9, 10) -> (12, 13), A RE-RECORD, SAID SO. A refused act now cites the
+    # occasion of its scene (`_act_events`), so the maturation chain no longer stops at a refusal and
+    # the act-driven ceiling rises by three in BOTH arms; `depths[6]` still exceeds `depths[3]` by
+    # one, as at the pin above, and the COUNT discriminates as before (asserted above).
+    # [GROUNDED: measured at IN-50 -- depths {0: 0, 3: 12, 6: 13} here, {0: 0, 3: 9, 6: 10} at its base `2a2ed152`; the chains of these two arms were not walked, the published chain of `test_w9_check2_...` was]
+    assert (depths[3], depths[6]) == (12, 13), (
         f"the maturation depth ceiling moved: {depths}. This is a MEASUREMENT of a mixed chain "
         "whose length the act mix sets, not a discriminator — `H-80`'s discriminator is the COUNT, "
         "asserted below and still live. Re-pin these two numbers with the unit that moved them. "

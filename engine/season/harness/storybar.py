@@ -18,11 +18,9 @@ it). For each Event in the log its act is `act_of[e.id]`; an act's antecedents a
   * `act_of[c]`, when `c` is an Event some OTHER act emitted -- an ANTECEDENT ACT, cross-person when
     its actor differs from this act's actor and own when it does not;
   * a WORLD EVENT, when `c` is an Event in the log that no act emitted (MATTER, CALENDAR);
-  * nothing, when `c` is this act's own id (`loop/resolve.py` stamps `[a.id] + occasion ids` on a
-    successful act's Events (`resolve.py:487`) and `[a.id]` alone on every refusal (position IN-50),
-    so the cross-person share is a FLOOR of what the log can express until that repair lands:
-    `resolve.py`'s refusal returns at `:73`, `:372`, `:448`, `:554`, `:577`, `:747`, `:777` and
-    `:912` omit the occasion -- and an act is not its own antecedent) or `ROOT`.
+  * nothing, when `c` is this act's own id (`loop/resolve.py::_act_events` stamps `[a.id] + occasion
+    ids` on every Event an act emits, refusal or success (position IN-50) -- and an act is not its
+    own antecedent) or `ROOT`.
   A cause that is none of these (an id the log admits but that is neither a logged Event nor this
   act's own id) is counted in `unread` rather than dropped silently.
 Each act takes ONE class, by precedence `cross` > `own` > `world` > `none` [ASSUMPTION: the source

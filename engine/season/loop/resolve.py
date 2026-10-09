@@ -71,8 +71,7 @@ def _survives(self, w: "World", a: Act) -> list:
                    chose="emit `act.ineligible`; a predecessor removed the actor",
                    alternatives=["fold it anyway (the seam then sees a dead claimant)",
                                  "drop it silently (its act id never resolves)"])
-    gone = [Event(H(w.world_seed, w.tick, a.actor, f"act.ineligible:{a.id}"),
-                  "act.ineligible", [], [a.id], w.tick)]
+    gone = _act_events(self, w, a, ("act.ineligible",), [a.id])
     for _e in gone:
         self.act_of[_e.id] = a
     return gone
@@ -361,7 +360,7 @@ def _fold(self, w: "World", token: Token, a: Act,
     _degree = resolution.degree if resolution is not None else None
 
     def ev(kinds, causes, changes=None):
-        return _act_events(w, a, kinds, causes, changes, _degree, verdict.observed)
+        return _act_events(self, w, a, kinds, causes, changes, _degree, verdict.observed)
 
     # §E2's first two steps, THROUGH THE ONE OWNER (`_admits`). They used to be written out
     # here, and writing them here is exactly what let `resolve()`'s contest branch skip them:
@@ -484,9 +483,9 @@ def _fold(self, w: "World", token: Token, a: Act,
     # nothing named what occasioned the act, so the walk stopped dead at every decision and
     # `R3` — the only check the corpus failed — could never fire from a real run. The
     # occasion is on the Scene the act belongs to; `occasioned_by` turns it into the
-    # antecedent Event ids. Adding them here rather than at the twelve `ev(...)` call sites
-    # is `§8`: the rule lives once, on the one path every act-emission takes.
-    out = ev(kinds, [a.id] + self._occasion_ids(w, a), list(a.changes) + changed)
+    # antecedent Event ids. IN-50: `_act_events` appends them on EVERY emission, refusal or
+    # success, so this return names the act alone and the rule still lives once (`§8`).
+    out = ev(kinds, [a.id], list(a.changes) + changed)
     # IN-08 H3: THE SCAR, AFTER THE ACT'S EVENTS ARE FORMED, BY THE OUTCOME. `changed` is the
     # gate's own receipts for this act's writes, so it is empty on every path that is not a deed:
     # each refusal above returned early, and a band that declares no writes (`tell`'s `Failure`,
@@ -681,7 +680,7 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
         # path in this module already falls back.
         row = VERB_TABLE.get(a.verb)
         kinds = (row.emits_on_refusal if row is not None else ()) or ("act.refused",)
-        produced = _act_events(w, a, kinds, [a.id])  # `_act_events` owns the id scheme (§8)
+        produced = _act_events(self, w, a, kinds, [a.id])  # `_act_events` owns the id scheme (§8)
         for _e in produced:
             self.act_of[_e.id] = a
         return produced
@@ -873,8 +872,7 @@ def resolve(self, token: Token, acts: list[Act],
             # clock's genuine first emission"* — FALSE OF THE DESIGN while true of the fixture,
             # because `Act.obstacle` defaults to `None` and the computed chooser never sets
             # one, so no test could reach it. Found by the `W4` adversarial pass.
-            out.append(Event(H(w.world_seed, w.tick, a.actor, f"refused:{a.id}"),
-                             "attempt.refused", [], [a.id], w.tick))
+            out.extend(_act_events(self, w, a, ("attempt.refused",), [a.id]))
             TRACE.decision(f"{a.actor} attempted Ob={a.obstacle} against Pool={a.pool}",
                            "S27.4", chose="refuse; the season is spent",
                            alternatives=["roll it anyway", "route to an Ob=0 roll"])
@@ -903,10 +901,8 @@ def resolve(self, token: Token, acts: list[Act],
             # resolvable exactly as the two refusal branches in `_fold` do.
             _ok, _refusal_kinds, _verdict = self._admits(w, a, _row) if _row else (True, (), None)
             if not _ok:
-                produced = [Event(H(w.world_seed, w.tick, a.actor, f"{k}:{a.id}"),
-                                  k, [], [a.id], w.tick,
-                                  observed=_verdict.observed if _verdict else ())
-                            for k in _refusal_kinds]
+                produced = _act_events(self, w, a, _refusal_kinds, [a.id],
+                                       observed=_verdict.observed if _verdict else ())
                 for _e in produced:
                     self.act_of[_e.id] = a
                 out.extend(produced)
@@ -1001,15 +997,24 @@ def resolve(self, token: Token, acts: list[Act],
     return out
 
 
-def _act_events(w: "World", a: Act, kinds, causes, changes=None, degree=None,
+def _act_events(self, w: "World", a: Act, kinds, causes, changes=None, degree=None,
                 observed=()) -> list:
     """THE ONE SHAPE OF AN ACT'S EMISSION: one Event per kind, its id `H(seed, tick, actor,
     "<kind>:<act id>")`. `_fold`'s `ev` is this with the act's degree and verdict bound; the
     accumulator's after-the-fact refusal (G4) is this with the success Event's, so a `work`
     refused at the accumulator is byte-for-byte the Event it would have been refused as at its
-    own write. Extracted rather than copied: two constructions of one id scheme is §8's defect."""
+    own write. Extracted rather than copied: two constructions of one id scheme is §8's defect.
+
+    ⚠ **THE OCCASION IS APPENDED HERE, FOR EVERY EVENT THE ACT EMITS, REFUSAL OR SUCCESS** (IN-50).
+    `causes` is the caller's own list (`[a.id]`, the act's own id) and `_occasion_ids` adds the
+    antecedent Events of the Scene that carried the act, de-duplicated and in that order; the
+    caller's list is not mutated. Only `_fold`'s success return added the occasion, so a REFUSED
+    act chosen from a scene another person's act-Event occasioned dropped the edge to that person,
+    on every one of the refusal returns that built an Event on its own. `self` is the driver, for
+    `scenes`; an act with no scene has no occasion and keeps `causes` as given."""
+    cited = list(dict.fromkeys(list(causes) + self._occasion_ids(w, a)))
     return [Event(H(w.world_seed, w.tick, a.actor, f"{k}:{a.id}"),
-                  k, list(changes or []), list(causes), w.tick,
+                  k, list(changes or []), list(cited), w.tick,
                   degree=degree, observed=observed)
             for k in kinds]
 
@@ -1039,7 +1044,7 @@ def _refuse_after_the_fact(self, w: "World", out: list, act_ids: list) -> None:
         first = out[at[0]]
         # `WRITE_CLAUSE` (plan position `19`): the accumulator's write moved nothing, which is F9's
         # refusal one step later -- the same clause a declining effect refuses at.
-        refusal = _act_events(w, a, row.refusal_for(WRITE_CLAUSE) or ("act.refused",), [a.id],
+        refusal = _act_events(self, w, a, row.refusal_for(WRITE_CLAUSE) or ("act.refused",), [a.id],
                               degree=first.degree, observed=first.observed)
         for i in at:
             self.act_of.pop(out[i].id, None)
