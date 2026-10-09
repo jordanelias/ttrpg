@@ -1781,7 +1781,7 @@ def _g1_split():
         ax = to_axes({e: 1.0})
         return sum(ax[a] * V.align_kind(k, a) for a in PURSUIT_AXES)
 
-    for k in sorted(V.EMITTED_KINDS - V.REFUSAL_KINDS):
+    for k in sorted(V.DEED_KINDS):
         d = {e: dot(e, k) for e in sorted(PURSUITS)}
         pos = [e for e in d if d[e] > 0]
         neg = [e for e in d if d[e] < 0]
@@ -2072,3 +2072,10 @@ def test_g3_an_unknown_slant_refuses():
     p.ledger.append(Claim("c_g3", p.id, "Hh", "exists:Rung", 1, 0, "firsthand", 100, "own"))
     with pytest.raises(ValueError, match="said_slant"):
         said_of(p.ledger, "Hh", DEFAULT_FIXTURES.sweep("said_slant", "loudest"), teller=p)
+
+
+def test_claim_firsthand_needs_an_empty_chain_and_the_firsthand_source():
+    def c(chain, source):
+        return Claim("c", "p", "Hh", "stores:grain", 8, 0, source, 100, "own", chain=chain)
+    assert [c((), "firsthand").firsthand, c((), "told_by").firsthand,
+            c(("x",), "firsthand").firsthand] == [True, False, False]

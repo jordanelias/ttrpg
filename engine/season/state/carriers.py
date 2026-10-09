@@ -327,6 +327,12 @@ class Claim:
         """How many tellings stand between the origin and this holder: `len(chain)`, `0` firsthand."""
         return len(self.chain)
 
+    @property
+    def firsthand(self) -> bool:
+        """The holder's OWN observation: nobody told it (`not chain`) and it was deposited
+        `firsthand`. A derived reading, not a field."""
+        return not self.chain and self.source == "firsthand"
+
 
 class Said(NamedTuple):
     """WHAT A TELLING PASSES ON, fixed at CHOOSE: the teller's own claim about the act's subject,

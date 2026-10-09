@@ -96,7 +96,7 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
         v = deed_valence(axis_w, c)
         # FIRSTHAND only is judged (`dissents`' and `record`'s precedent, `decision/options.py`):
         # a `told_by` claim whose chain is empty is still hearsay, and lands in `told`.
-        if not c.chain and c.source == "firsthand":
+        if c.firsthand:
             judged += v
         else:
             told += v
@@ -107,8 +107,7 @@ def is_deed(c) -> bool:
     """A DEED CLAIM: an event-kind claim `(x, <kind>, True)`, `<kind>` in `EMITTED_KINDS` -- what
     WITNESS's first deposit writes, or a told copy of it (a `Claim` or a `Said`). A kind some row
     emits on refusal (`REFUSAL_KINDS`) is no deed: it reports an act that did not happen."""
-    return (c.value is True and c.predicate in _verbs.EMITTED_KINDS
-            and c.predicate not in _verbs.REFUSAL_KINDS)
+    return c.value is True and c.predicate in _verbs.DEED_KINDS
 
 
 def deed_valence(axis_w: dict, c) -> float:

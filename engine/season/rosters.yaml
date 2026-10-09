@@ -1670,8 +1670,8 @@ rosters:
       regard term read by the ROLE the regarded party plays in the act, with `declared` against
       `legacy` as the falsifier's two arms.
     note: >-
-      THE ARMS OF `Fixtures.stance_polarity` (`H-194`), read by `decision/choose.py::make_chooser`'s
-      score term 2. `legacy` is the pre-G2 term, `+ stance_toward(p, c.subject)` for every row --
+      THE ARMS OF `Fixtures.stance_polarity` (`H-194`), read by `decision/choose.py::stance_term`
+      (its `_stance_arm`), score term 2. `legacy` is the pre-G2 term, `+ stance_toward(p, c.subject)` for every row --
       the CONTROL, shipped: an act against a disliked opponent then scores LOWER, the sign §F2's
       term never distinguished. `declared` reads `regard(p, c.subject)` (G1's, so its judged and
       told halves enter at their own gains) and NEGATES it where the subject is the act's OPPONENT

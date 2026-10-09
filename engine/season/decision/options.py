@@ -119,6 +119,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # `T4`: only a NAMED own-ledger conjunct carries `said` (`tell`'s `holds`); `survey` and
         # `reconstruct` share the form unnamed and carry nothing (telling workplan, "From Batch 1").
         ledger_of = row.requires_typed.named_own_ledger_operands() if row.requires_typed else ()
+        opposes_subject = subject_is_opponent(row)
         said_of_entity: dict = {}           # entity -> `said_of` (this row's own-ledger read, per entity)
         for subject in q.referents:
             # ⚠⚠ A CONTEST NEEDS TWO CLAIMANTS, AND A PERSON IS NOT THEIR OWN ADVERSARY.
@@ -143,7 +144,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             # that names its second side on its own operand contests against THAT (`tell`'s `to`),
             # so its `subject` is a topic and a person may tell somebody about themselves; the
             # counterparty rule below still declines the person as their own second side.
-            if subject_is_opponent(row) and subject == p.id:
+            if opposes_subject and subject == p.id:
                 continue
             # ⚠ OPERANDS BEFORE THE BELIEF TEST, AND THE ORDER IS THE POINT. Clause 4 asks
             # whether the requirement is known-false ABOUT THIS BINDING, so the binding has to
@@ -403,8 +404,7 @@ def _admitted_through(p: Person, row: "VerbRow", trace: bool) -> tuple:
     reading of a verb the first reading already traced, so the trace records each decline once.
     The declines are held and traced only when NO alternative admits, so a person a later
     alternative admits leaves no note that the verb declined."""
-    # A row binding `from` gives from the seat's rung when exercised through one (`_granting_hold`).
-    need_treasury = row.requires_typed is not None and "from" in row.requires_typed.operands()
+    need_treasury = None                    # read only by the `remit` branch; computed there, once
     pending: list = []                      # this walk's decline notes, traced only on (False, None)
     for alt in row.eligibility:
         kind, _, raw = alt.partition(":")
@@ -449,6 +449,11 @@ def _admitted_through(p: Person, row: "VerbRow", trace: bool) -> tuple:
             # weighs equally with an over-refusal. Every live `remit:` cell in `verb_table.yaml`
             # is a literal (`remit:issue`, `remit:confer`), so this refuses nothing that exists.
             # G3: the hold that grants it IS the seat exercised -- returned, not just found.
+            # A row binding `from` gives from the seat's rung when exercised through one
+            # (`_granting_hold`).
+            if need_treasury is None:
+                need_treasury = (row.requires_typed is not None
+                                 and "from" in row.requires_typed.operands())
             seat = (_granting_hold(p, arg, need_treasury)
                     if arg and not placeholder else None)
             if seat is not None:
@@ -927,12 +932,14 @@ def _operands(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixtures",
         return {}
     bound = tuple(req.operands())
     admitted = req.needs()
+    names = bound + tuple(n for n in _REFERENT_OPERANDS if n in admitted and n not in bound)
     # The seat the act will be exercised through -- the walk `pack_scenes` names `Act.via` by -- so
     # the operands and the act's `via` cannot disagree about whether the actor acts as a seat.
-    seat = exercised_seat(p, row)
+    # `_derive_operand` reads it for `from` alone, so the (untraced) walk runs only for a bag
+    # carrying `from`.
+    seat = exercised_seat(p, row) if "from" in names else None
     out: dict = {}
-    for name in bound + tuple(n for n in _REFERENT_OPERANDS
-                              if n in admitted and n not in bound):
+    for name in names:
         # `actor` is structural on both sides and is never carried; see `binding_of`.
         if name == "actor":
             continue
@@ -1094,7 +1101,7 @@ def dissents(p: Person, c: Claim, act=None, weigh=None) -> bool:
        empty would doubt every transfer they saw). `weigh` is the reader's, `ledger_weigh`'s, as
        `opening_set` passes it -- so this prior reads the whole ledger, hearsay graded, unlike
        (1): it is the person's belief about the world, the one they choose by. [ASSUMPTION, `H-201`]"""
-    own = [x for x in p.ledger if not x.chain and x.source == "firsthand"]
+    own = [x for x in p.ledger if x.firsthand]
     if c.subject == p.id and c.predicate in PERSON_PREDICATES:
         if agreement([c], [x for x in own if x.subject == p.id])[1] > 0:
             return True
@@ -1206,7 +1213,7 @@ def record(p: Person, teller: str, fx: "Fixtures") -> float:
     which a told claim's weight is independent of the firsthand claims it contradicts."""
     gain = fx.get("record_gain")
     told = [c for c in p.ledger if c.teller == teller and _is_cell(c)]
-    own = [c for c in p.ledger if not c.chain and c.source == "firsthand" and _is_cell(c)]
+    own = [c for c in p.ledger if c.firsthand and _is_cell(c)]
     agree, dis = _pair(told, own, lambda c: (c.subject, c.predicate))
     # ABSENT: H-191 intent reconciliation  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
     if agree + dis == 0:

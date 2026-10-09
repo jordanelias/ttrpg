@@ -37,22 +37,15 @@ from ..data.verbs import VERB_TABLE
 from ..decision import make_chooser
 from ..decision.options import (containing_rung_of, exercised_seat, opening_set, operands_for,
                                 treasury_of)
-from ..harness import probes as P
 from ..harness import scarce as S
-from ..loop.driver import SeasonDriver, resolvable_verbs
+from ..loop.driver import resolvable_verbs
 from ..loop.witness import SEAT_CHANNEL
 from ..queries import world_q
 from ..state.carriers import View
 from ..state.ids import H, draw_factory
+from .test_demand_delivery import _season
 
 GOVERNORS = (S.REEVE, S.FAR_REEVE)
-
-
-def _season(w, choose=P.NOCHOOSE, question=None, d=None):
-    d = d or SeasonDriver(w)
-    d.season(choose, question=question, subsistence=P.SUBSIST,
-             contest_max_depth=w.fixtures.get("contest_max_depth"))
-    return d
 
 
 def _recorded(w) -> dict:

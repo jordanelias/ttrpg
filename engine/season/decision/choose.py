@@ -83,7 +83,7 @@ def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = 
         raise ValueError(f"stance_gain {g} is not >= 0: it would damp or invert §F2's stance "
                          f"term, and inverting it is G2's polarity, not this gain (H-202)")
     t = _stance_arm(p, c, fx, memo)
-    return t if g == 0 else (1.0 + g) * t
+    return (1.0 + g) * t             # at g == 0 this is 1.0 * t: exact for every float
 
 
 def _stance_arm(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict]) -> float:
@@ -95,11 +95,10 @@ def _stance_arm(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict]) -
     require_member(arm, STANCE_POLARITIES, f"stance polarity {arm!r} is not in the roster", "H-194",
                    law="§G -- declare it, default it, sweep it; an unknown arm silently reading "
                        "`legacy` would make the sweep report the control twice")
-    if memo is None or subject not in memo:
-        r = regard(p, subject, fx)
-        if memo is None:
-            memo = {}
-        memo[subject] = r
+    if memo is None:
+        memo = {}
+    if subject not in memo:
+        memo[subject] = regard(p, subject, fx)
     r = memo[subject]
     if arm == "regard":
         return r

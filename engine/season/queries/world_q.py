@@ -39,7 +39,7 @@ from ..data.rosters import (
 from ..gaps import Forbidden, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
-from .person_q import INTENT_STEM, intent_named
+from .person_q import intent_named
 from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE (G3, plan position 6). The
 # write gate's F3 clause needs both -- ruling (3)'s parent rung and ruling (4)'s purview subtree --
@@ -523,9 +523,10 @@ def named(c) -> tuple:
     through `person_q.intent_named`, the one owner of that value's shape, so a hearer whose reach
     covers the act's target is asked about the teller -- *the realm hears what A means to do to B*.
     No intent claim exists while `intent_disclosure` is 0, so the branch reads nothing there."""
+    got = intent_named(c)            # `()` unless the stem is the intent's, which is never `content:`
+    if got:                          # (`person_q._check_intent_claim`'s `taken` refuses that at import)
+        return got
     stem, sep, _ = str(c.predicate).partition(":")
-    if sep and stem == INTENT_STEM:
-        return intent_named(c)
     if not sep or stem != RECORD_CONTENT.get("predicate") or c.value is None:
         return ()
     ids = dict(c.value).get(RECORD_CONTENT.get("addressee"))

@@ -1072,6 +1072,9 @@ KIND_VERB, EMITTED_KINDS = _derive_kind_verb()
 # (`queries/person_q.py::is_deed`).
 REFUSAL_KINDS = frozenset(k for r in VERB_TABLE.values() for k in r.emits_on_refusal)
 
+# Every kind a DEED claim can carry: emitted, and by no row on refusal (`is_deed`'s set).
+DEED_KINDS = EMITTED_KINDS - REFUSAL_KINDS
+
 # An authored alignment cell for an EVENT KIND rather than a verb is keyed `deed:<kind>` in the same
 # axis row. Admitted only where `<kind>` is in `EMITTED_KINDS` (`_load_alignment`): a deed key for a
 # kind no verb emits is a weight on an event nobody can see. None is authored today.
