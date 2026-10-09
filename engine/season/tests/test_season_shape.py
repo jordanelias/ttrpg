@@ -11117,9 +11117,11 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     def drops(fx):
         hits = []
         original = decision.options.belief_contradicts
-        def counted(p_, row, subject, operands, seat=None, weigh=None):
-            out = original(p_, row, subject, operands, seat, weigh=weigh)
-            if out:
+        def counted(p_, row, subject, operands, seat=None, weigh=None, actor=None):
+            out = original(p_, row, subject, operands, seat, weigh=weigh, actor=actor)
+            # a WITNESS's act-level prior (`dissents`, H-201) passes `actor=`; only the chooser's own
+            # clause-4 drop (`opening_set`, no actor) is what this counts
+            if out and actor is None:
                 hits.append((row.verb, subject))
             return out
         decision.options.belief_contradicts = counted
@@ -11146,9 +11148,11 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     def hl_drops(fx):
         hits = []
         original = decision.options.belief_contradicts
-        def counted(p_, row, subject, operands, seat=None, weigh=None):
-            out = original(p_, row, subject, operands, seat, weigh=weigh)
-            if out:
+        def counted(p_, row, subject, operands, seat=None, weigh=None, actor=None):
+            out = original(p_, row, subject, operands, seat, weigh=weigh, actor=actor)
+            # a WITNESS's act-level prior (`dissents`, H-201) passes `actor=`; only the chooser's own
+            # clause-4 drop (`opening_set`, no actor) is what this counts
+            if out and actor is None:
                 hits.append((row.verb, subject))
             return out
         decision.options.belief_contradicts = counted

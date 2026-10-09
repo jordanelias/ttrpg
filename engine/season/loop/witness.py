@@ -26,7 +26,8 @@ from ..data.rosters import (
     CHANNEL_CLAIM_SOURCE, OBSERVATION_DEPOSIT_MODES, RECORD_CONTENT, WITNESS_CHANNELS,
     require_member,
 )
-from ..decision.options import refracted_confidence
+from ..data.verbs import VERB_TABLE
+from ..decision.options import ledger_weigh, refracted_confidence
 from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, claim_subjects,
                          live_channels, observers_for, seen_of, seen_subject)
 from ..queries import cache, world_q
@@ -187,13 +188,28 @@ def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = 
     return held.value  # nothing either mechanism can act on -- deposited verbatim, honestly
 
 
-def _refract(c: Claim, p, channel: str, gain: float) -> Claim:
+def _refract(c: Claim, p, channel: str, gain: float, act=None, weigh=None) -> Claim:
     """`c` AS THIS WITNESS RECEIVES IT: `c` with `decision/options.py::refracted_confidence`'s
     confidence (v9 IN-15, `AX-7`'s divergence formula; `H-199`). The one place every deposit below
     passes through, so the five `Claim` constructions share one rule rather than five. The caller
     decides WHETHER to refract (the gain is live and the witness is not the act's own actor); this
-    decides HOW MUCH, and only the confidence moves -- id, value, source and chain are `c`'s."""
-    return replace(c, confidence=refracted_confidence(p, c, channel, gain))
+    decides HOW MUCH, and only the confidence moves -- id, value, source and chain are `c`'s.
+    `act`/`weigh` reach `dissents`' act-level term (`H-201`): passed by the two deposits that report
+    an act happening (event-kind and `seen`), `None` from the other three."""
+    return replace(c, confidence=refracted_confidence(p, c, channel, gain, act, weigh))
+
+
+def _happened(act, e: Event):
+    """THE ACT `e` REPORTS HAPPENING, or `None` -- what `dissents`' act-level prior (`H-201`) is asked
+    of. `e` must be one of the act's verb row's `emits:` and none of its `emits_on_refusal:` (the
+    union of every refusal kind; `loop/driver.py`'s test for *this Event is a refusal*): a witness
+    who believed the act could not happen and saw it refused has nothing to doubt. A kind on both
+    columns (`tell`'s `news.untold`) cannot say which, and takes no prior. An Event no act caused
+    (MATTER, CALENDAR) and an act whose verb has no row report no act."""
+    row = VERB_TABLE.get(getattr(act, "verb", None)) if act is not None else None
+    if row is None or e.kind not in (row.emits or ()) or e.kind in (row.emits_on_refusal or ()):
+        return None
+    return act
 
 
 # -- WITNESS -- barrier 4 -- THE JOIN (S28) -----------------------------
@@ -425,6 +441,16 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # and this formula is layer (3)'s. An Event no person acted (`actor_of` is `None`) has no
         # performer, so every witness of it refracts.
         refracting = bool(gain) and actor_of(w, e) != pid
+        # `H-201`: THE ACT THE EVENT-KIND AND `seen` DEPOSITS REPORT, AND HOW THIS WITNESS WEIGHS
+        # THEIR OWN LEDGER -- `dissents`' act-level prior, *could the actor have done this, on what
+        # I hold*. Read once per (witness, Event), only when refracting, so the control reads
+        # neither. `weigh` is taken before this Event's own deposits land: the ones between it and
+        # the `seen` deposit (the observation reads) carry no chain and weigh 1.0 under any closure.
+        prior_act = prior_weigh = None
+        if refracting:
+            prior_act = _happened(self.act_of.get(e.id), e)
+            if prior_act is not None:
+                prior_weigh = ledger_weigh(p, w.fixtures)
         # v9 IN-22: a governor reached by purview (above) receives only the reads about the rungs
         # his seat contains, and none of the other deposits. `None` for every fan witness.
         only = reported.get((pid, e.id)) if channel == SEAT_CHANNEL else None
@@ -451,7 +477,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
             # the exact shape of the bug that kept Q2 dead across seasons before the `tick - 1` fix.
             c = Claim(cid, pid, subj, e.kind, True, w.tick, src, conf, "own", self.round)
             if refracting:
-                c = _refract(c, p, channel, gain)
+                c = _refract(c, p, channel, gain, prior_act, prior_weigh)
             # `W4`. THE DEPOSIT EMITS, AND THAT IS WHAT GIVES A DECAY AN ANTECEDENT.
             # Part D declares `claim.deposited` on this row and NOTHING EMITTED IT, so a
             # claim entered the world uncaused — and every later `claim.decayed` would have
@@ -592,7 +618,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                        pid, _seen[0], SEEN_PREDICATE, _seen[1], w.tick, src, conf, "own",
                        self.round)   # `U2`: see the first deposit
             if refracting:
-                sc = _refract(sc, p, channel, gain)
+                sc = _refract(sc, p, channel, gain, prior_act, prior_weigh)
             w.write("claim_ledger", token,
                     lambda p=p, c=sc: p.ledger.append(c),
                     record_kind="Person", fieldname="claim_ledger", driver="Event",

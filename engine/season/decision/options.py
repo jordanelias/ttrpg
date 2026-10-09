@@ -105,9 +105,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     out: list[Candidate] = []
     axis = fx.get("refusal_axis")
     tolerance = refusal_tolerance(p, axis)
-    # `T3a`: clause 4's reader grades hearsay by its teller. A ledger holding no told claim weighs
-    # 1.0 everywhere, which is the unweighted order exactly (tested), so it takes the plain reader.
-    weigh = teller_weight(p, fx) if any(c.chain for c in p.ledger) else None
+    weigh = ledger_weigh(p, fx)
     for verb, row in sorted(VERB_TABLE.items()):
         if not person_side_eligible(p, row):
             continue
@@ -1013,33 +1011,62 @@ def channel_remove(channel: str) -> float:
     return ordinal.index(CHANNEL_CLAIM_SOURCE[channel]) / (len(ordinal) - 1)
 
 
-def dissents(p: Person, c: Claim) -> bool:
-    """DOES WHAT `p` ALREADY HOLDS FIRSTHAND DISAGREE WITH `c`? REFRACTION's prior-belief term.
+def ledger_weigh(p: Person, fx: "Fixtures"):
+    """THE `weigh` `p` READS THEIR OWN LEDGER BY when asking `belief_contradicts` -- `teller_weight`,
+    or `None` for a ledger holding no told claim (`T3a`: such a ledger weighs 1.0 everywhere, which is
+    the unweighted order exactly, tested, so it takes the plain reader). One owner for both askers:
+    `opening_set` (*may I do this*) and `dissents`' act-level term (*could the actor have done this*,
+    `H-201`), so a person reads one ledger one way whichever question they put to it."""
+    return teller_weight(p, fx) if any(c.chain for c in p.ledger) else None
 
-    `c` is a claim about to land in `p`'s ledger and not yet in it. The pairing is the tree's one
-    pairing step, `_pair`, on the key the tree already pairs that kind of claim on -- no third key:
-      * a claim ABOUT `p` on a `person_predicates` member: `agreement` -- §18.2's comparison of what
-        others read off you against what you hold true of yourself, which is `AX-7`'s *"(2) IS
-        REVISABLE BY (3)"* seen from the receiving end;
-      * a claim on a CELL (`_is_cell`): `record`'s pairing, `(subject, predicate)`;
-      * anything else -- an event-kind claim (always `True`), a `seen` struct (each sighting a new
-        value, so it would "disagree" with the sighting it reports), a `content:` claim -- `False`,
-        for the reason `record`'s docstring gives for not scoring those.
-    The prior is FIRSTHAND only (empty chain, source `firsthand`), as in `agreement` and `record`:
-    what you saw resists what you hear, and hearsay does not resist hearsay here.
-    ⚠ WHETHER A WITNESS BELIEVED THE WITNESSED ACT COULD NOT HAPPEN -- `belief_contradicts` over the
-    act's own `requires` -- IS NOT A TERM YET: that function binds the actor to `p.id`, and a witness
-    asks about somebody else's act (`H-201`)."""
+
+def dissents(p: Person, c: Claim, act=None, weigh=None) -> bool:
+    """DOES WHAT `p` ALREADY HOLDS DISAGREE WITH `c`? REFRACTION's prior-belief term.
+
+    `c` is a claim about to land in `p`'s ledger and not yet in it. Two priors, either of which
+    dissents:
+
+    1. ON THE CLAIM'S OWN KEY. The pairing is the tree's one pairing step, `_pair`, on the key the
+       tree already pairs that kind of claim on -- no third key:
+         * a claim ABOUT `p` on a `person_predicates` member: `agreement` -- §18.2's comparison of
+           what others read off you against what you hold true of yourself, which is `AX-7`'s
+           *"(2) IS REVISABLE BY (3)"* seen from the receiving end;
+         * a claim on a CELL (`_is_cell`): `record`'s pairing, `(subject, predicate)`;
+         * anything else -- an event-kind claim (always `True`), a `seen` struct (each sighting a
+           new value, so it would "disagree" with the sighting it reports), a `content:` claim --
+           nothing, for the reason `record`'s docstring gives for not scoring those.
+       FIRSTHAND only (empty chain, source `firsthand`), as in `agreement` and `record`: what you
+       saw resists what you hear, and hearsay does not resist hearsay here.
+    2. ON THE ACT IT REPORTS (`H-201`), when the caller passes `act` -- the act `c` says HAPPENED
+       (`loop/witness.py` passes it for the event-kind and `seen` deposits of an act's own emission,
+       never a refusal's). `p` dissents when their own ledger makes that act's `requires`
+       KNOWN-FALSE FOR ITS ACTOR: `belief_contradicts` with `actor=act.actor`, on the act's own
+       verb row, operands (its payload, as `binding_from_act` reads it) and seat (`act.via`) --
+       the question `opening_set` asks of a Candidate, asked of somebody else's act, and never a
+       second evaluation of `requires` against a ledger. The actor is BOUND, not defaulted: the
+       default binds `p`, which asks *could I have done this* (a witness whose own granary is
+       empty would doubt every transfer they saw). `weigh` is the reader's, `ledger_weigh`'s, as
+       `opening_set` passes it -- so this prior reads the whole ledger, hearsay graded, unlike
+       (1): it is the person's belief about the world, the one they choose by. [ASSUMPTION, `H-201`]"""
     own = [x for x in p.ledger if not x.chain and x.source == "firsthand"]
     if c.subject == p.id and c.predicate in PERSON_PREDICATES:
-        return agreement([c], [x for x in own if x.subject == p.id])[1] > 0
-    if _is_cell(c):
-        return _pair([c], [x for x in own if _is_cell(x)], lambda x: (x.subject, x.predicate))[1] > 0
-    # ABSENT: H-201 act-level prior  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
-    return False
+        if agreement([c], [x for x in own if x.subject == p.id])[1] > 0:
+            return True
+    elif _is_cell(c):
+        if _pair([c], [x for x in own if _is_cell(x)], lambda x: (x.subject, x.predicate))[1] > 0:
+            return True
+    if act is None:
+        return False
+    row = VERB_TABLE.get(act.verb)
+    if row is None:
+        return False
+    pay = act.payload if isinstance(act.payload, dict) else {}
+    return belief_contradicts(p, row, pay.get("subject"), pay, act.via, weigh=weigh,
+                              actor=act.actor)
 
 
-def refracted_confidence(p: Person, c: Claim, channel: str, gain: float) -> int:
+def refracted_confidence(p: Person, c: Claim, channel: str, gain: float,
+                         act=None, weigh=None) -> int:
     """REFRACTION -- `AX-7`'s divergence formula (v9 IN-15; `H-36`'s shape, `H-199`'s magnitude).
     How much `p` credits a claim landing in their ledger, from the channel it reached them by and
     what they already held:
@@ -1048,7 +1075,8 @@ def refracted_confidence(p: Person, c: Claim, channel: str, gain: float) -> int:
                                           * (1 - g * dissent(p, c)) * competence + 1/2 )
 
     `g` is `refraction_gain`, in `[0, 1]`; `remove` is `channel_remove`; `dissent` is `dissents`, 0
-    or 1; `competence` is 1, unbuilt (`H-200`). Each factor is in `[0, 1]`, so refraction only
+    or 1 -- with `act` (the act `c` reports happening) and `weigh` passed through to its act-level
+    term (`H-201`); `competence` is 1, unbuilt (`H-200`). Each factor is in `[0, 1]`, so refraction only
     ever LOWERS a confidence, and at `g = 0` every factor is exactly 1: THE CONTROL, and the deposit
     is today's.
 
@@ -1069,7 +1097,7 @@ def refracted_confidence(p: Person, c: Claim, channel: str, gain: float) -> int:
         raise ValueError(f"refraction_gain {gain!r} is outside [0, 1] (H-199): a factor below 0 "
                          "would turn a deposit's confidence negative")
     # ABSENT: H-200 competence  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
-    factor = (1.0 - gain * channel_remove(channel)) * (1.0 - gain * dissents(p, c))
+    factor = (1.0 - gain * channel_remove(channel)) * (1.0 - gain * dissents(p, c, act, weigh))
     return int(c.confidence * factor + 0.5)
 
 
