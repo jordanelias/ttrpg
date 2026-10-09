@@ -473,6 +473,31 @@ def reach(w: World, p: Person) -> set[str]:
     return R
 
 
+def governors_of(w: World, rung_id: Optional[str]) -> list[str]:
+    """v9 IN-22 (#457 `CARRY-SHORTFALL`, `H-160` limit 2) -- THE PERSONS WHOSE SEAT'S PURVIEW REACHES
+    `rung_id`: every live `hold` on an Office for which `state/gate.py::purview_reaches` answers
+    True, by its holder, sorted. `[]` for a rung no seat reaches, for `None`, and for a rungless
+    seat's holder (`purview_reaches`' own *a seat with no rung reaches nothing*).
+
+    ⚠ THE SAME RELATION AS `reach`'s LIMB 4, ASKED FROM THE RUNG'S SIDE. Limb 4 unions
+    `{seat.rung} | descendants(seat.rung)` over the person's own holds, and `purview_reaches` is
+    `rung == seat.rung or rung in descendants(seat.rung)` -- one walk (`descendants`), so a person
+    this lists has `rung_id` in `reach(w, p)`, and a claim about `rung_id` deposited into his ledger
+    is admitted by `questions_for`'s clause 1. That is what makes the WITNESS route that calls this
+    (`loop/witness.py`, the purview deposit) end in a question rather than in a silent ledger slot.
+
+    ⚠ A WORLD READ, AND NOT A FAN BY ITSELF. It reads `w.tenures`/`w.offices`/the containment tree
+    and no ledger (`AX-2`). WHO RECEIVES WHAT is `loop/witness.py`'s rule, which narrows this to an
+    actorless Event's reads; `reach` stays a filter over what a deposit already put in a ledger
+    (`01` §A.4.4) and is not called from WITNESS."""
+    if rung_id is None:
+        return []
+    return sorted({t.subject for t in w.tenures
+                   if t.kind == "hold" and t.live and t.subject in w.persons
+                   and t.object in w.offices
+                   and purview_reaches(w, w.offices[t.object], rung_id)})
+
+
 def named(c) -> tuple:
     """CLAUSE 3's `named(c)` -- position `15c`, r2 `01_ATTENTION_AND_REACH.md` §A.5.3/§A.5.4 and
     `02_THE_WRIT_AND_THE_WORD.md` §A.9.1. The id set inside a `content:<kind>` claim's value, so

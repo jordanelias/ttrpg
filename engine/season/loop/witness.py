@@ -28,8 +28,8 @@ from ..data.rosters import (
 )
 from ..decision.options import refracted_confidence
 from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, claim_subjects,
-                         observers_for, seen_of, seen_subject)
-from ..queries import cache
+                         live_channels, observers_for, seen_of, seen_subject)
+from ..queries import cache, world_q
 from ..queries.world_q import hold_force
 from ..state.attribution import actor_of
 from ..state.carriers import Claim, Event
@@ -37,6 +37,17 @@ from ..state import ledgers
 from ..state.ids import H
 from ..trace_log import TRACE
 
+# v9 IN-22: THE SEAT CHANNEL -- the `witness_channels` member whose predicate asks a SEAT's ground
+# (`epistemic._ch_post_remit`, through `purview_reaches`). The purview deposit in `witness` below
+# rides it: its claim source is this channel's roster `claim_source:`, and it is live exactly when
+# this channel is. Named once here and refused at import if the roster stops carrying it, so a
+# renamed channel cannot leave the route silently dead (`RESIDE_KIND`'s shape, `world_q`).
+SEAT_CHANNEL = "post_remit"
+require_member(SEAT_CHANNEL, WITNESS_CHANNELS,
+               f"seat channel {SEAT_CHANNEL!r} is not a `witness_channels` member",
+               "rosters.yaml -- witness_channels",
+               law="v9 IN-22 -- the purview deposit takes the seat channel's source and switch; a "
+                   "name the roster does not carry would leave it dead or unsourced")
 
 
 def content_value(subject_matter):
@@ -341,6 +352,41 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 h = hold_force(w, rec.id)
                 if h is not None and h.since == w.tick:
                     newly_held.setdefault(e.id, {})[rec.id] = (h.subject, rec)
+    # v9 IN-22 (#457 `CARRY-SHORTFALL`, `H-160` limit 2): AN ACTORLESS EVENT'S READS REACH THE SEATS
+    # WHOSE PURVIEW CONTAINS WHAT WAS READ. MATTER's larder pass is the one actorless writer of
+    # `observed` (`loop/matter.py`, `19d`): a drained larder's `(rung, "shortfall:<kind>", units)`.
+    # Before this, that record reached only those standing at the rung or holding it, so a lord
+    # whose seat covers the town but who neither holds it nor stands in it never learned -- `reach`'s
+    # purview limb admits a claim about the town, and there was never a claim to admit.
+    # ⚠ THE READS, NOT THE EVENT. A governor here gets the OBSERVATION deposit only: no event-kind
+    # claim, no `seen` claim, no document content -- he did not witness the write, he learns what
+    # MATTER recorded about a place under his seat. So no `stores.changed` of any larder anywhere
+    # becomes a seat-holder's news; only a read that MATTER actually recorded does.
+    # ⚠ PLACE-BOUND, NOT THE BROADCAST r2 `01`/`02` §A.7 RETIRED. The recipients are
+    # `world_q.governors_of` -- `state/gate.py::purview_reaches`, the one owner of *is this rung
+    # within this seat*, the relation `reach`'s limb 4 is -- per observation subject, so a seat whose
+    # rung does not contain the read rung (a sibling territory, a rungless cluster seat) receives
+    # nothing. `reach` itself is still not called from here (`01` §A.4.4).
+    # ⚠ IT RIDES THE SEAT CHANNEL, AND THAT IS ITS SOURCE AND ITS SWITCH. `SEAT_CHANNEL`'s claim
+    # source is the roster's (`inferred`, `ARCH §C.6`: known from the business of the office, not
+    # seen), and the route is live exactly when that channel is (`live_channels`): `all_five` (the
+    # shipped mode) yes, `presence_only` no; under `total` everyone is already in the fan. Under
+    # `observation_deposit_mode: none` nothing is deposited, as for every other witness.
+    # ⚠ APPENDED AFTER THE FAN, so every deposit the fan makes lands in the same order as before and
+    # a world with no actorless read deposits exactly what it did (a person the fan already admitted
+    # to the Event is skipped: the fan's deposit is the stronger source).
+    reported: dict = {}
+    if obs_mode != "none" and SEAT_CHANNEL in live_channels(mode):
+        admitted = {(pid, e.id) for pid, e, _ch in fan}
+        for e in events:
+            if not e.observed or actor_of(w, e) is not None:
+                continue
+            for o in e.observed:
+                for pid in world_q.governors_of(w, o.subject):
+                    if (pid, e.id) not in admitted:
+                        reported.setdefault((pid, e.id), set()).add(o.subject)
+        by_id = {e.id: e for e in events}
+        fan = fan + [(pid, by_id[eid], SEAT_CHANNEL) for pid, eid in sorted(reported)]
     w._in_parallel_map = True
     for pid, e, channel in fan:
         p = w.persons.get(pid)
@@ -379,6 +425,9 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # and this formula is layer (3)'s. An Event no person acted (`actor_of` is `None`) has no
         # performer, so every witness of it refracts.
         refracting = bool(gain) and actor_of(w, e) != pid
+        # v9 IN-22: a governor reached by purview (above) receives only the reads about the rungs
+        # his seat contains, and none of the other deposits. `None` for every fan witness.
+        only = reported.get((pid, e.id)) if channel == SEAT_CHANNEL else None
         # S28: A KNOT DEPOSIT REUSES THE EVENT ID. Rev 1 wrote the rule and switched it off
         # with `if False`. This is the rule, on -- keyed on the knot SOURCE, i.e. on `witness_key`
         # being the strongest channel, as `rosters.yaml: witness_channel_predicates` defines it.
@@ -388,7 +437,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # §F1's Q2 clause "a claim whose subject is SOMETHING THEY HOLD" unreachable and left
         # the narrative substrate empty. `changes[]` already names what an act touched, so
         # this reads the Event the design has rather than adding a field to it (§8.1).
-        for n, subj in enumerate(claim_subjects(w, e, claim_rule,
+        for n, subj in enumerate(() if only is not None else
+                                 claim_subjects(w, e, claim_rule,
                                                 act_refs(self.act_of.get(e.id)))):
             cid = (e.id if via_knot and n == 0
                    else H(w.world_seed, w.tick, pid, f"claim:{e.id}:{n}"))
@@ -483,6 +533,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
             for o in e.observed:
                 if o.value is UNKNOWN or o.value is None:
                     continue
+                if only is not None and o.subject not in only:
+                    continue      # v9 IN-22: a read about a rung outside this governor's seat
                 # ⚠ AND A READ COMPUTED FROM THE LEDGER IS NEVER DEPOSITED INTO IT. See
                 # `LEDGER_DERIVED_STEMS` for the measurement and for the alternative that was
                 # rejected. In one line: `WorldReader.read(X, "claim.held")` answers from
@@ -557,7 +609,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # carries NO attribution: it says *this document says X*, never *the Duke wrote X* (r2 `02`
         # §A.9 -- the separation is what makes a forgery playable). The exact-triple guard is the
         # told channel's, for its reason: one belief is stored once.
-        for holder, rec in (newly_held.get(e.id) or {}).values():
+        for holder, rec in ((newly_held.get(e.id) or {}) if only is None else {}).values():
             if holder != pid:
                 continue
             pred = f"{content_stem}:{rec.kind}"
@@ -614,7 +666,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # observation block gives one screen up: `claim.held` answers from ledger MEMBERSHIP,
         # so storing it makes its own content true.
         _act = self.act_of.get(e.id)
-        if e.kind == "news.told" and _act is not None and pid != _act.actor:
+        if e.kind == "news.told" and _act is not None and pid != _act.actor and only is None:
             # A `_teller = w.persons.get(_act.actor)` stood here until 2026-09-16 and was never
             # read -- a per-(hearer, telling) dict lookup left from the draft that scanned the
             # teller's ledger inline, before `_told_content` became its one owner. Removed rather
