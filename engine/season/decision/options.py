@@ -1035,6 +1035,10 @@ def standing_of(p: Person, fx: "Fixtures") -> int:
     return scale if paired == 0 else (dis * scale) // paired
 
 
+# Built once: `channel_remove` runs per deposit, and the roster it reads does not change at runtime.
+_REMOVE_ORDINAL = tuple(dict.fromkeys(CHANNEL_CLAIM_SOURCE[ch] for ch in WITNESS_CHANNELS))
+
+
 def channel_remove(channel: str) -> float:
     """HOW FAR FROM THE THING ITSELF A CHANNEL PUTS ITS WITNESS, in `[0, 1]`: `0` for presence, `1`
     for the most removed channel. REFRACTION's channel term (`refracted_confidence`, v9 IN-15).
@@ -1050,8 +1054,7 @@ def channel_remove(channel: str) -> float:
     *"the order decides only which channel is reported, never the source"* true of this term too.
     EQUAL SPACING between the ranks is the [ASSUMPTION] (`H-199`): the ordinal is ruled, the
     distances are not."""
-    ordinal = tuple(dict.fromkeys(CHANNEL_CLAIM_SOURCE[ch] for ch in WITNESS_CHANNELS))
-    return ordinal.index(CHANNEL_CLAIM_SOURCE[channel]) / (len(ordinal) - 1)
+    return _REMOVE_ORDINAL.index(CHANNEL_CLAIM_SOURCE[channel]) / (len(_REMOVE_ORDINAL) - 1)
 
 
 def ledger_weigh(p: Person, fx: "Fixtures"):
