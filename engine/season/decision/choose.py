@@ -39,8 +39,9 @@ from ..data.rosters import PURSUIT_AXES, SCENE_PACKING_RULES, require_member
 from ..data.verbs import VERB_TABLE, act_key, align
 from ..gaps import Unspecified
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
-# imports `person_q` and `data/`); `make_chooser`'s score calls it.
-from ..queries.person_q import stance_toward
+# imports `person_q` and `data/`); `make_chooser`'s score calls it, and `confliction` (IN-08 6f,
+# the derived Query's caller, ID-13).
+from ..queries.person_q import confliction, stance_toward
 from ..state.carriers import Act, Candidate, Person, Question, Scene, Sensation, View
 # `project` is DEFINED in `options.py` (see this module's docstring) and imported here because
 # `make_chooser`'s score calls it; `options` never imports this module.
@@ -100,10 +101,11 @@ def benefits_me(p: Person, c: Candidate) -> float:
     `references/npc_registry.yaml` at `harness/populated.py:462-463`. Applied evenly, the old reason
     un-wires the score's first term. What is actually missing is the STATE: `Person` has no `orient`
     field, and the 28 authored `self_other_initial` values in that same registry are the one cell
-    `data/cast.py::pursuits_of` skips (its `continue` past non-list entries). The wiring waits on
-    `6f`: `ARCHITECTURE_V2.md` §F2 is a RATIFIED three-term shape, `STR-3` asks a new term to declare
-    its range against the 0.294 decisive floor (authored range [-0.40, +0.10], cleared by 4 of 46),
-    and `STR-2`'s `selfish` axis decides whether self-interest would enter the score twice.
+    `data/cast.py::pursuits_of` skips (its `continue` past non-list entries).
+    ⚠ STILL UNWIRED AFTER IN-08 6f, AND DELIBERATELY (`DONE·UNWIRED`): `Person.orient` is DROPPED
+    (`ED-IN-0261`), so the `orient ·` multiplier has no producer and 6f wires only the confliction
+    read. `ED-IN-0261` names the `selfish_selfless` axis score as the disposition this would be
+    weighed by; no position builds that term, and `STR-3`'s range floor would bind it when one does.
 
     ⚠ IT IS A FLOAT AND NOT A BOOL BECAUSE IT IS A SCORE TERM. `beneficiary_of` carries the
     identity for anything that needs to know WHO; this answers only *is it me*."""
@@ -296,8 +298,10 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
     is open", so §G's discipline applies to the weights and not to this structure.
 
     Four properties, and each is checked by a test rather than asserted here:
-      1. EVERY INPUT IS PERSON-SIDE -- `pursuits`, `stance`, the View, the two Sensation
-         scalars. No World, no resolver-side Query. L2 by parameter list.
+      1. EVERY INPUT IS PERSON-SIDE -- `pursuits` (read through `person_q.crisis_weights`,
+         which also reads `scar`), `stance`, `conviction` (read through `person_q.confliction`),
+         the View, the two Sensation scalars. No World, no resolver-side Query. L2 by
+         parameter list.
       2. It CONSUMES `pursuits` and `stance`, which #353 declares as fields and no formula in
          the chain reads -- a carrier nothing consumes is dead state (§22.1's own complaint).
       3. THE PERSON TRIAGES. `ask_budget()` is asked, not imposed; the engine never truncates.
@@ -322,9 +326,22 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         # into the four-axis basis once per deliberation rather than looked up per candidate.
         # Hoisted out of `score` deliberately: it does not depend on `c`, and computing it inside
         # would run it once per candidate for an identical answer.
-        axis_w = project(p)
+        # IN-08 H9: a pursuit whose scar count has reached threshold 2 is read at a shifted weight
+        # (`person_q.crisis_weights`), by the swept `scar_weight_shift` arm; 0 is the control.
+        axis_w = project(p, fx.get("scar_weight_shift"))
+        # IN-08 6f: the derived `confliction` Query's caller (ID-13). A person whose religious
+        # affiliations strain against each other reads the pursuit dot at `1 / (1 + k * strain)`,
+        # `k` the swept `confliction_weight` arm (H-188) [ASSUMPTION: no source states how strain
+        # enters the score; damping the pursuit pull, never inverting it, is the narrowest form
+        # that names no entity]. At the shipped control `k = 0` the factor is exactly 1.0, so the
+        # dot is the unmodified one. Hoisted like `axis_w`: it does not depend on `c`.
+        k = float(fx.get("confliction_weight"))
+        if not k >= 0:               # `not >=`, so a NaN is refused too
+            raise ValueError(f"confliction_weight {k} is not >= 0: it would invert, divide by zero "
+                             f"or poison the score (H-188)")
+        damp = 1.0 if k == 0 else 1.0 / (1.0 + k * confliction(p))
         def score(c: Candidate) -> float:
-            return (sum(axis_w[ax] * align(c.verb, ax) for ax in PURSUIT_AXES)
+            return (damp * sum(axis_w[ax] * align(c.verb, ax) for ax in PURSUIT_AXES)
                     + stance_toward(p, c.subject or "")
                     + u)
         # ⚠ SCORED ONCE, NOT TWICE. `score` was passed to `_sample_order` and re-invoked there for

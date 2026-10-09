@@ -4,16 +4,16 @@ the duel's `accept`, march.
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the two effects that read a
 severity off a scene the seam already resolved rather than choosing one (Jordan, 2026-09-04: *"the
 combat engine determines the result there. your code just has to accept the result."*) -- personal
-combat's `fight` and mass battle's `march` -- and `_scar`, the moral-layer write both can trigger,
-which stays local since no effect outside this file calls it. `_SCAR_DP`, the scar accumulator's
-order-independence precision, moves here with its one reader rather than to `effects_shared.py`. See
-`effects_shared.py` for `effect_for` and `_operand`, the one cross-file helper `march` calls.
+combat's `fight` and mass battle's `march`. `_scar` and `_SCAR_DP` (the moral-layer write on the
+wounded person) are RETIRED at IN-08 H3: the scar is now written by the fold on the act's OBSERVERS
+(`loop/resolve.py::_scar_witnesses`), not by an effect. See `effects_shared.py` for `effect_for`
+and `_operand`, the one cross-file helper `march` calls.
 """
 
 from __future__ import annotations
 
 from ..data.rosters import (
-    DECLARED, FELLED, FIELD_CASUALTY_MODELS, LOST, PURSUIT_AXES, UNOPPOSED, WOUND_HARM_MODELS,
+    DECLARED, FELLED, FIELD_CASUALTY_MODELS, LOST, UNOPPOSED, WOUND_HARM_MODELS,
     faction_prop_id, require_member,
 )
 from ..gaps import Unspecified
@@ -23,91 +23,9 @@ from ..state.gate import NO_CHANGE, Change, Subject
 from .effects_shared import _operand, effect_for
 
 
-# ⚠ THE SCAR ACCUMULATOR'S PRECISION, AND IT EXISTS TO MAKE THE FOLD ORDER-INDEPENDENT.
-# `scar` accumulates across acts, and incremental IEEE addition is NON-ASSOCIATIVE -- the control
-# `results.json`'s A5 row already records on this tree is exactly it (five float deltas summed in
-# two orders give 0.30000000000000004 vs 0.3; the same five as integers are identical), and A5's
-# own conclusion is that *"a one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE
-# ORDERING AND NOT ANOTHER"*. Because `scar` reaches `repr(Person)` -> `_entity_digest` ->
-# `content_hash`, a one-ulp divergence moves the hash too. `S27.3`'s answer elsewhere is
-# sum-then-clamp-once, which needs the whole set at once and this write does not have it;
-# rounding each accumulation to a fixed place buys the same property -- `round(a+b) == round(b+a)`
-# -- for a per-act writer.
-# [JUSTIFIED: a PRECISION, not a game value -- six places is far below any magnitude `scar_step` can take and exists only to keep accumulation associative; nothing in the model reads it as a quantity]
-_SCAR_DP = 6  # ED-IN-0249 / H-128 -- the scar accumulator's precision, order-independence only
-
-
-def _scar(w: "World", p, verb: str) -> None:
-    """`(Person, scar[axis])` -- THE MORAL LAYER'S MISSING MOTION, §54 item 21.
-
-    ⚠ THE FORM IS THE CHAIN'S OWN AMENDMENT, NOT THE SOURCE DOCUMENT'S, AND THE DIFFERENCE IS THE
-    WHOLE REASON THIS SITS AT RESOLVE. `conviction_track_v1.md` §2 -- the mechanic's design home,
-    quarantined and REFERENCE under §0.05 -- has an NPC *"accumulate Conviction Scars from
-    WITNESSING morally-loading events"*. `holonic_ARCHITECTURE.md:1911` folds that in AMENDED and
-    says why in as many words: *"the source says written at WITNESS, which breaks two things --
-    the moral layer's WITNESS row is nothing, and a scar written there is an Event writing a
-    `(Person, ...)` social row, which is L4. Lawful form: a `(Person, scar[axis])` row,
-    `social: true`, written at RESOLVE in the ACTS class BY THE OUTCOME THAT NAMES THE PERSON."*
-    S9.3 is the law underneath (*"WITNESS NEVER TOUCHES A BELIEF"*), so the design document's own
-    trigger table is the one part of it that may not be implemented.
-
-    ⚠ THE AXES COME FROM `ALIGNMENT`, WHICH ALREADY OWNS *which axes a verb engages*. §8: find the
-    single-owner primitive and compose on it. A second table mapping outcome -> axis would be a
-    second owner of the same claim, free to disagree with the one `choose` scores against -- and
-    it would have to be AUTHORED, on a basis `STR-2` is about to replace. Reading `ALIGNMENT`
-    keyed by the live axis roster means this survives that rename by never having known the old
-    names. `axis` on L3's closed registry, as item 21 requires.
-
-    ⚠ WHAT IS ASSUMED HERE AND IS NOT THE CHAIN'S, STATED SO IT CAN BE ATTACKED: that the depth of
-    the moral wound is PROPORTIONAL to how strongly the verb engages the axis. Item 21 gives the
-    row, the step, the class and the keying; it does not give a formula. The alternative -- a flat
-    scar on every engaged axis -- is the arm a sweep would compare, and `scar_step` is where it
-    would be run from.
-
-    ⚠ AND WHO IS SCARRED IS THE SUBJECT, WHICH IS A READING OF *"the outcome that names the
-    person"* AND NOT A CERTAINTY. The outcome of `kill / wound` names the person wounded, so the
-    wound is theirs. The competing reading -- that the ACTOR carries the moral wound of having
-    done it -- is at least as defensible on the mechanic's own *moral wound* framing, and nothing
-    in item 21 settles it. Left as the open question rather than decided in silence."""
-    step = w.fixtures.get("scar_step")
-    if not step:
-        # THE CONTROL ARM, AND IT RETURNS BEFORE TOUCHING THE CARRIER. A zero-depth scar written
-        # as a 0.0 cell would still put a key on the field, and `_entity_digest` reprs every
-        # field -- which is the difference between an arm that is inert and one that looks it.
-        return None
-    # ⚠⚠ `data.verbs.align`, NOT A LOCAL `ALIGNMENT` READ, AND THE LOCAL READ WAS A REAL DEFECT
-    # RATHER THAN A STYLE SLIP. This computed the cell inline off THIS module's own `ALIGNMENT`
-    # binding. `align()` reads the binding in `data/verbs.py`, which is the one the `H-66`
-    # alignment sweep REBINDS (`data.verbs.ALIGNMENT = alignment_at(point)`) -- so the
-    # sweep moved `choose`'s scoring and could not move the scar at all. MEASURED before the
-    # fix: under the `uniform` arm `align('kill / wound','sacred')` read 1.0 while `_scar`
-    # still wrote 3.0 off the unrebound 0.3. The docstring above promises exactly what the inline read broke: no
-    # second table free to disagree with the one `choose` scores against. One owner, §8, and the
-    # sweep now reaches both readers.
-    from ..data.verbs import align
-    # ⚠ SIGNED, AND THE `abs()` THAT STOOD HERE COLLAPSED A DISTINCTION THE READER NEEDS.
-    # Cells are signed, so a verb that VIOLATES an axis and one that UPHOLDS it cut an identical
-    # wound under `abs()`; `fight` carries negative cells, and the scar's named reader -- the Conviction crisis -- is about the DIRECTION of
-    # the wound. The magnitude keeps the cell's sign and `scar` is a signed accumulator.
-    for axis in PURSUIT_AXES:
-        weight = float(align(verb, axis))
-        if weight:
-            p.scar[axis] = round(p.scar.get(axis, 0.0) + step * weight, _SCAR_DP)
-    # ⚠ SORTED ON WRITE, BECAUSE A DICT'S INSERTION ORDER REACHES `World.content_hash()`.
-    # `_entity_digest` digests a dataclass as `repr(obj)`, and `repr` of a dict is
-    # insertion-ordered -- so two people scarred by the same verbs in opposite ORDERS held equal
-    # values and produced different digests. `_entity_digest` already `sorted()`s PLAIN dicts for
-    # this exact reason (`world.py:141`), but a dict FIELD inside a dataclass never reaches that
-    # branch. `A5`/`S32` assert the content hash is order-independent; that survived only while
-    # this dict could hold one key. Re-inserting in sorted order makes the field carry its own
-    # canonical form rather than relying on nobody scarring twice.
-    if len(p.scar) > 1:
-        p.scar = {k: p.scar[k] for k in sorted(p.scar)}
-
-
 # `accept` (the duel pair's second half) is the same contest over the same prize, `contests: "the
 # body"`, with the same degree-keyed writes read off the same scene: one effect registered twice.
-# `_scar` reads `a.verb`, so a duel's moral layer reads `accept`'s own alignment cells. (`challenge`
+# The fold's scar reads `a.verb`, so a duel's moral layer reads `accept`'s own alignment cells. (`challenge`
 # writes nothing and needs no effect: `VerbRow.effect_carried`.) `fight` was RENAMED from
 # "kill / wound" (plan `FIGHT-RENAME`); only the `EFFECTS` key and its row moved.
 @effect_for("fight")
@@ -117,16 +35,10 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
     ⚠⚠ G4 -- WHAT IT NAMES, AND THE ONE EFFECT THAT NARROWS ITS SUBJECT TO A FIELD. The subject is
     the person wounded, read as PRESENCE and `body` (`fields=("body",)`) -- the two cells the
-    band's own kinds name (`person.died` is existence, `body.changed` is body). THREE THINGS THE
-    SAME WRITE DOES ARE DELIBERATELY NOT PART OF WHAT THE GATE JUDGES:
-      * `scar`. It is written by the OUTCOME, whatever the body did -- the comment at `_scar`'s
-        call below says why it was moved ahead of the magnitude model: so that sweeping `H-123`
-        (`wound_harm_model`) does not also sweep whether `H-128`'s scar runs. Judging the whole
-        Person would re-couple them the other way: at `scar_step > 0` the `none` arm -- `H-123`'s
-        control, whose whole job is to emit the REFUSAL -- would start emitting `body.changed`
-        for a body nothing touched, and the control would measure `scar_step`. So a wound that
-        moves only the scar is refused, and the scar stands, exactly as the `none` arm always
-        behaved. At the shipped `scar_step = 0` the two readings cannot differ.
+    band's own kinds name (`person.died` is existence, `body.changed` is body). TWO THINGS THE
+    SAME WRITE DOES ARE DELIBERATELY NOT PART OF WHAT THE GATE JUDGES (a third, `scar`, left this
+    effect at IN-08 H3: the fold writes it on the act's observers AFTER the outcome, as its own
+    gated write, so a wound the gate refuses scars nobody):
       * the CASCADE (`remove_person`'s closures). A consequence of the existence change, which IS
         judged; F3 admits each closure as `destroy's cascade`; never reported, so never named. If
         existence did not move the cascade did not run.
@@ -137,10 +49,8 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     `kill.refused`. MEASURED BEFORE THIS POSITION on `build_realm(0)`, four seasons: every
     `kill / wound` that reached this effect moved its subject, so no run moves.
 
-    ⚠ AND THE TWO `Unspecified` RAISES NOW COME BEFORE ANYTHING IS WRITTEN. The no-scene raise
-    always did; the no-health-scale raise came AFTER `_scar` had written, so a season that died on
-    it died with the scar already moved. Both are read while the `Change` is built, which touches
-    nothing.
+    ⚠ AND THE TWO `Unspecified` RAISES COME BEFORE ANYTHING IS WRITTEN: both are read while the
+    `Change` is built, which touches nothing.
 
     ⚠ THE TENURE ENDS THROUGH THE DEATH, which is §15.3's rule and the reason this is ONE effect
     rather than three writes a caller sequences: "a plague that kills the praefect ends his
@@ -216,16 +126,6 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         "H-123",
         law="`observers_for`'s precedent and its reason -- *an unrecognised mode silently "
             "falling back would make every measurement of this sweep read the control*")
-    # ⚠⚠ THE SCAR RUNS BEFORE THE HARM-MODEL BRANCH, AND IT USED TO RUN AFTER IT -- WHICH
-    # CONFOUNDED TWO INDEPENDENT SWEEPS. `wound_harm_model == "none"` returns early (it is
-    # `H-123`'s control, the arm that isolates *the band selected a different write set* from
-    # *the band changed a value*), so with the call below that `return` a `Wounded` outcome at
-    # `scar_step=10` silently wrote NO scar while `verb_table.yaml` declared `Person.scar` for
-    # that band unconditionally. Sweeping `H-123` therefore also swept whether `H-128`'s
-    # mechanism ran at all, so neither row measured what it says it measures. The moral wound
-    # is a consequence of the OUTCOME, not of how much body the scene took, so it belongs
-    # ahead of the magnitude model entirely. (G4: it is still the first thing `perform` writes;
-    # the magnitude below is COMPUTED first only because computing it writes nothing.)
     if res.degree == FELLED:
         # The scene says this person went down, and the table says that is the kill. The body
         # goes to 0 on every arm: the arms grade a WOUND, and a felling is not one.
@@ -246,7 +146,6 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         body = max(1, p.body * max(0, left) // full)
 
     def perform() -> None:
-        _scar(w, p, a.verb)
         if body is None:
             return
         p.body = body

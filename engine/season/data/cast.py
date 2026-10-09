@@ -213,6 +213,20 @@ def pursuits_of(r: dict) -> dict:
     return out
 
 
+def conviction_of(r: dict) -> dict:
+    """`{affiliation: intensity}` from the row's `affiliations:` mapping -- `Person.conviction`'s
+    authored source (IN-08 H10), validated through `data/affiliations.py::conviction_map`, the one
+    owner of both checks (a rostered name, an int on the 0-5 spine). `{}` for a row with none.
+
+    ⚠ NOT THE ROW'S `convictions:` BLOCK. That key predates the rename and holds PURSUITS
+    (`pursuits_of` above); a religious affiliation is a different object, and reading it out of the
+    pursuit `doctrine` would invent which side a person is on. [ASSUMPTION] No row in
+    `references/npc_registry.yaml` carries `affiliations:` yet -- the per-person content is
+    unauthored -- so every cast person is filled with `{}`, the zero vector (no affiliation held)."""
+    from .affiliations import conviction_map
+    return conviction_map(r.get("affiliations"), where=f"{r.get('id', '?')}: affiliations")
+
+
 def title_of(r: dict) -> Optional[str]:
     """The row's `title`, present on seven of the 46. Not normalised against `titles.domains` —
     `Doux`, `Confessor`, `Father` and `Prince` are real titles that govern no rung, and forcing

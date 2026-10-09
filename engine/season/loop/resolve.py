@@ -32,6 +32,8 @@ from ..loop.effects import EFFECTS
 from ..loop.predicates import REQUIRES_PREDICATES
 from ..loop.sides import sides_of
 from .. import manifest
+from ..epistemic import observers_for
+from ..queries.person_q import broken_by, conviction_after_crisis, elements_violated_by
 from ..queries.world_q import WorldReader, ceiling, occasioned_by
 from ..seam import ContestError, Resolution, contest, degree_of
 from ..state.carriers import Act, Event, StateChange
@@ -484,7 +486,135 @@ def _fold(self, w: "World", token: Token, a: Act,
     # occasion is on the Scene the act belongs to; `occasioned_by` turns it into the
     # antecedent Event ids. Adding them here rather than at the twelve `ev(...)` call sites
     # is `§8`: the rule lives once, on the one path every act-emission takes.
-    return ev(kinds, [a.id] + self._occasion_ids(w, a), list(a.changes) + changed)
+    out = ev(kinds, [a.id] + self._occasion_ids(w, a), list(a.changes) + changed)
+    # IN-08 H3: THE SCAR, AFTER THE ACT'S EVENTS ARE FORMED, BY THE OUTCOME. `changed` is the
+    # gate's own receipts for this act's writes, so it is empty on every path that is not a deed:
+    # each refusal above returned early, and a band that declares no writes (`tell`'s `Failure`,
+    # `fight`'s `Untouched`, `march`'s `Declared`) moved nothing. The scar is earned by an outcome
+    # that MOVED, as a success kind is (G4's `earned`), and never by a band's name. A STAGED write
+    # (`work`, `restore`) counts as moved at fold time; if the accumulator's clamp later replaces
+    # the success Event (`_refuse_after_the_fact`), the scar already written stands -- a candidate
+    # reading, rare in computed play, not a Jordan question.
+    if changed:
+        _scar_witnesses(w, token, a, out)
+    return out
+
+
+def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
+    """IN-08 H3 -- `(Person, scar)` as `{pursuit: count}`: ONE COUNT PER OBSERVER PER VIOLATED
+    PURSUIT, written AT RESOLVE BY THE ACT (`ED-IN-0261`'s scar model).
+
+    ⚠ WHY HERE AND NOT AT WITNESS. L4 constrains WHO writes a `social: true` row -- only an act --
+    and S9.3 forbids WITNESS to touch a belief (`state/world.py`'s `MATRIX_REFUSAL_LAW` refuses
+    `(Person, scar)` at WITNESS). So the ACT writes it, here, through the gate, with the driver's
+    ACTS token. WHO saw it is not private to WITNESS: `epistemic.observers_for` is the one owner of
+    perception and is called here exactly as WITNESS calls it (`fan_out_mode`, everyone alive), so
+    the scar follows the same channels the deposit does.
+
+    ⚠ DECLARED DIVERGENCE (`ED-IN-0261`): RESOLVE's call can differ from WITNESS's on `co_located`,
+    since a later act can move someone. The presence cache is a barrier cache, so it is DISCARDED
+    before the call -- the scar reflects who stood there when THIS act happened, not when the
+    first act of the round was folded. (`presence` is the one barrier-cache key in the tree, and
+    nothing else at RESOLVE reads it.)
+
+    ⚠ THE VIOLATION PREDICATE IS A CANDIDATE READING, NOT A RULING: `person_q.elements_violated_by`
+    (a sign test of the pursuit's projection against the verb's alignment, asked once per act and
+    intersected with each person's holdings by `person_q.broken_by`). WHETHER THE ACTOR
+    COUNTS is `scar_excludes_actor`, a swept `Fixtures` arm. Nothing is emitted: `scar.taken` is
+    declared on the row and no reader consumes it, and putting the receipts on the act's Event
+    would deposit claims about every scarred observer at WITNESS -- a propagation change H3 does
+    not license. Its readers are listed once, on the field (`state/carriers.py`, `Person.scar`).
+
+    IN-08 H11 -- THE SAME MECHANISM OVER THE AFFILIATION TABLE (J-5's C4). An element is a pursuit
+    OR a held religious affiliation: the affiliation half of `person_q.elements_violated_by` (the
+    verb's cell for that affiliation in `rosters.yaml: tables.affiliation_engagement` is negative)
+    is asked beside the pursuit half, and the two answers are one list of elements written by this one write --
+    same observers, same actor arm, same `changed` gate, same token. The two rosters cannot share a
+    name (`data/affiliations.py::_load_engagement` refuses it), so a count is never merged across
+    them. Its reader is the crisis at threshold 3 (H13, `_conviction_crisis` below, called after
+    this write); H9's reader counts held pursuits only."""
+    if not events:
+        return
+    # Which elements this verb violates is a property of the verb alone, asked once per act; whose
+    # holdings it breaks is person-side and known before anyone is asked whether they saw it. When
+    # it is nobody (a verb with no celled axis and no affiliation cell, or no one holding an element
+    # it leans against) the presence index is not rebuilt for nothing.
+    violated = elements_violated_by(a.verb)
+    if not any(violated):
+        return
+    everyone = list(w.persons)
+    broken_of = {pid: broken_by(w.persons[pid], violated) for pid in everyone}
+    if not any(broken_of.values()):
+        return
+    mode = w.fixtures.get("fan_out_mode")
+    exclude_actor = bool(w.fixtures.get("scar_excludes_actor"))
+    w.discard_caches()
+    # Only a person with something broken can be scarred, so only they are asked whether they saw
+    # it: `observers_for` judges each person alone and answers in the order it is given, so the
+    # filtered list yields the same persons, in `everyone`'s order, as WITNESS's call would.
+    candidates = [pid for pid in everyone
+                  if broken_of[pid] and not (exclude_actor and pid == a.actor)]
+    seen = {pid for e in events for pid, _ch in observers_for(w, e, mode, candidates)}
+    hits = [(pid, broken_of[pid]) for pid in candidates if pid in seen]
+    if not hits:
+        return
+
+    def perform() -> None:
+        for pid, broken in hits:
+            p = w.persons[pid]
+            counts = dict(p.scar)
+            for e in broken:
+                counts[e] = counts.get(e, 0) + 1
+            # SORTED ON WRITE: `repr` of a dict field is insertion-ordered and reaches
+            # `World.content_hash()`; the retired `_scar` found this the hard way.
+            p.scar = {k: counts[k] for k in sorted(counts)}
+
+    w.write("scar", token, None, record_kind="Person", fieldname="scar", driver="Act",
+            actor=a.actor, via=a.via,
+            change=Change(tuple(Subject.entity("persons", pid, fields=("scar",))
+                                for pid, _b in hits), perform))
+    _conviction_crisis(w, token, a, dict(hits))
+
+
+def _conviction_crisis(w: "World", token: Token, a: Act, broken_of: dict) -> None:
+    """IN-08 `12e` H13 -- THE CRISIS AT SCAR THRESHOLD 3 (G-Q6), the first writer of `(Person,
+    conviction)`. Called only by `_scar_witnesses`, after its write, with the persons that write
+    just counted: a crisis is reached only by a scar count moving, and a scar count moves only by an
+    act's outcome that moved state (`_fold`'s `changed` gate). So the conviction write inherits every
+    bound the scar has -- never from a refused act or a band that wrote nothing (`tell`'s `Failure`),
+    and at RESOLVE (or ENCOUNTER, where `march` folds) with the driver's ACTS token; WITNESS's token
+    is refused at the row (S9.3, `state/world.py`'s `MATRIX_REFUSAL_LAW`).
+
+    WHAT THE CRISIS DOES is `queries/person_q.py::conviction_after_crisis` (fold, restabilise --
+    not built -- or destroyed, rolling nothing); this function only asks it of each scarred person
+    and writes the answers, once, through the gate. A person whose vector it leaves as it was is not
+    named, so the gate's no-op refusal (F9) cannot fire on a crisis that changed nothing. Nothing is
+    emitted, on the scar's precedent: `conviction.moved` is declared on the row and no reader
+    consumes it, and an Event here would deposit claims about every observer at WITNESS.
+
+    `broken_of` maps each scarred person, in the scar write's order, to the elements this act just
+    scarred them on, and the crisis is asked only among those (`conviction_after_crisis(p,
+    among=...)`): a person already at the threshold on one affiliation and scarred on a pursuit
+    alone has no affiliation count that moved, so no crisis."""
+    moved = []
+    for pid, broken in broken_of.items():
+        p = w.persons[pid]
+        if not p.conviction:         # no affiliation held, so none can be in crisis
+            continue
+        after = conviction_after_crisis(p, among=frozenset(broken))
+        if after != p.conviction:
+            moved.append((pid, after))
+    if not moved:
+        return
+
+    def perform() -> None:
+        for pid, after in moved:
+            w.persons[pid].conviction = after
+
+    w.write("conviction", token, None, record_kind="Person", fieldname="conviction",
+            driver="Act", actor=a.actor, via=a.via,
+            change=Change(tuple(Subject.entity("persons", pid, fields=("conviction",))
+                                for pid, _a in moved), perform))
 
 
 def _contest(self, w: "World", token: Token, a: Act, contests: list,

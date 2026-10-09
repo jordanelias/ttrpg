@@ -37,8 +37,12 @@ does: `choose` and `options` read `stance_toward` and `said_of` from here. The A
 
 from __future__ import annotations
 
+from ..data import verbs as _verbs
+from ..data import affiliations as _aff
+from ..data.affiliations import AFFILIATION_CEILING, conviction_map, engagement
+from ..data.pursuits import to_axes
 from ..data.requires import KNOWN_PERSON_CLAIM, UNKNOWN, WORLD_ONLY_STEMS
-from ..data.rosters import SEEN_PREDICATE
+from ..data.rosters import AFFILIATIONS, PURSUIT_AXES, SEEN_PREDICATE
 from ..state.carriers import Person, Said
 from ..trace_log import TRACE
 
@@ -67,6 +71,228 @@ def regard(p: Person, referent: str) -> float:
     stands in for them. A second name for one sum is deliberate: `decision/options.py::
     teller_weight` asks for REGARD, and when `G1` widens what regard is, the reader does not move."""
     return stance_toward(p, referent)
+
+
+def violated_pursuits(p: Person, verb: str) -> tuple:
+    """WHICH OF `p`'s OWN PURSUITS AN ACT OF `verb` VIOLATES -- the per-element half of the scar
+    (IN-08 H3, `ED-IN-0261`'s scar model: a COUNT per element, accrued by WITNESSING).
+
+    A pursuit `e` that `p` holds (weight > 0) is violated when `Σ_axis projection[e][axis] ·
+    alignment(verb, axis) < 0` -- the verb leans against where the pursuit points. ⚠ THAT SIGN TEST
+    IS A CANDIDATE READING RECORDED FOR REVIEW, NOT A RULING (`workplans/valoria_master_workplan_v9_part5.md`,
+    IN-08 H3): no source states the violation predicate; this is the plainest one the two owned
+    tables admit. It composes on the two owners and copies neither: `data/pursuits.py::to_axes`
+    (pursuit -> axes, one owner) and `data/verbs.py::align` (the one binding the alignment sweep
+    rebinds). A verb with no celled axis violates nothing, by construction. Person-side, no World
+    (AX-2). Sorted, so a caller writing counts in this order writes a canonical dict.
+
+    NO PRODUCTION CALLER: `loop/resolve.py::_scar_witnesses` asks `elements_violated_by` once per act
+    and `broken_by` per person, which compose the same `_pursuits_violated_by` below. This wrapper
+    is the per-person reading kept for tests (`test_h11_affiliation_scar.py` asserts it equals
+    the production scar; `test_h3_scar_by_observation.py` computes its own), so a change to the sign test is made in `_pursuits_violated_by`."""
+    return _held(p.pursuits, _pursuits_violated_by(verb))
+
+
+def violated_affiliations(p: Person, verb: str) -> tuple:
+    """WHICH OF `p`'s OWN RELIGIOUS AFFILIATIONS AN ACT OF `verb` VIOLATES -- IN-08 H11, H3's
+    mechanism over the affiliation table (J-5's C4).
+
+    An affiliation `a` that `p` holds (intensity > 0) is violated when `data/affiliations.py::
+    engagement(verb, a) < 0`: the verb's cell for that affiliation, which is the shared column's
+    cell when the affiliation has none of its own (R-C4.1: the vow-shaped verbs engage every creed
+    alike). A sign test, as `violated_pursuits` is; the intensity does not enter it, because the
+    scar is a COUNT per element and an act is witnessed or not. It is `violated_pursuits`'
+    sibling and not a second scar path: `loop/resolve.py::_scar_witnesses` asks for both through
+    `elements_violated_by` + `broken_by` and writes once, so this wrapper has no production caller
+    (it is a test oracle, as `violated_pursuits` is). Person-side, no World (AX-2). Sorted, as
+    `violated_pursuits` is."""
+    return _held(p.conviction, _affiliations_violated_by(verb))
+
+
+def _pursuits_violated_by(verb: str) -> frozenset:
+    """The pursuits an act of `verb` violates, whoever holds them: `violated_pursuits`' sign test,
+    which reads only `(verb, element)`. The candidates are `data/verbs.py::PURSUIT_PROJECTION`'s
+    keys, read through the module at call time so a rebound projection is what is asked; a pursuit
+    the projection does not list projects to the zero vector and violates nothing."""
+    lean = {ax: _verbs.align(verb, ax) for ax in PURSUIT_AXES}
+    if not any(lean.values()):
+        return frozenset()
+    out = set()
+    for e in _verbs.PURSUIT_PROJECTION:
+        proj = to_axes({e: 1.0})
+        if sum(proj[ax] * lean[ax] for ax in PURSUIT_AXES) < 0:
+            out.add(e)
+    return frozenset(out)
+
+
+def _affiliations_violated_by(verb: str) -> frozenset:
+    """The rostered affiliations an act of `verb` violates, whoever holds them:
+    `violated_affiliations`' sign test, `engagement(verb, a) < 0`. The candidates are
+    `rosters.AFFILIATIONS`, the roster `data/affiliations.py::conviction_map` holds every
+    `Person.conviction` key to."""
+    return frozenset(a for a in AFFILIATIONS if engagement(verb, a) < 0)
+
+
+def elements_violated_by(verb: str) -> tuple:
+    """`(pursuits, affiliations)` an act of `verb` violates, as two frozensets -- the person-free
+    half of `violated_pursuits` and `violated_affiliations`. Whether an element is violated is a
+    property of `(verb, element)` alone, so `loop/resolve.py::_scar_witnesses` asks this once per
+    act and intersects each person's holdings with it (`broken_by`) instead of re-deriving the sign
+    test per person. Reads `ALIGNMENT` and `PURSUIT_PROJECTION` at call time: never cache it
+    across a sweep's rebind."""
+    return _pursuits_violated_by(verb), _affiliations_violated_by(verb)
+
+
+def _held(weights, violated: frozenset) -> tuple:
+    """The elements of `weights` held above zero and in `violated`, sorted by name."""
+    weights = weights or {}
+    return tuple(e for e in sorted(weights) if float(weights[e]) > 0 and e in violated)
+
+
+def broken_by(p: Person, violated: tuple) -> tuple:
+    """The elements `p` holds that `violated` (an `elements_violated_by` answer) names: the held
+    pursuits, then the held affiliations, each sorted -- `violated_pursuits(p, verb) +
+    violated_affiliations(p, verb)` without re-asking the sign test."""
+    pursuits, affiliations = violated
+    return _held(p.pursuits, pursuits) + _held(p.conviction, affiliations)
+
+
+def confliction(p: Person) -> int:
+    """HOW FAR `p`'s RELIGIOUS AFFILIATIONS STRAIN AGAINST EACH OTHER -- IN-08 H10, `12b`'s derived
+    Query (ED-IN-0251 R1: *confliction is DERIVED from an `incompatible` relation and never stored*).
+
+    `Σ over the incompatible pairs {a, b} of min(conviction[a], conviction[b])`: a pair strains as
+    far as the WEAKER of its two holdings, so it is 0 unless both are held, and a person holding
+    both at full intensity is in confliction at the ceiling. [ASSUMPTION; Jordan to correct] No source
+    states the magnitude -- the draft gives only *"holding BOTH at high intensity"*; `min` is chosen
+    because it stays an int on the intensity's own 0-5 spine (the alternative the draft names, a
+    product of the two, leaves the scale). Composes on `data/affiliations.py::INCOMPATIBLE`, the one
+    loaded relation. Person-side, no World (AX-2).
+
+    Its caller is IN-08 6f: `decision/choose.py`'s `make_chooser` damps the pursuit dot by it, at
+    the swept `confliction_weight` arm (H-188; control 0, shipped)."""
+    held = p.conviction or {}
+    return sum(min(held.get(a, 0), held.get(b, 0)) for a, b in _aff.INCOMPATIBLE)
+
+
+# `ED-IN-0261`'s scar thresholds are 1 (destabilise), 2 (weight shifts, the others gain
+# proportionally) and 3+ (crisis, terminal). IN-08 H9 reads THRESHOLD 2 ONLY: threshold 1 has no
+# mechanism anywhere, and 3 is H13's (G-Q6, `conviction_after_crisis` below). Each count is the
+# ruled threshold, not a swept value.
+SCAR_WEIGHT_SHIFT_AT = 2  # [JUSTIFIED: the ruled threshold, not a swept value -- `ED-IN-0261` rules 2 as the weight shift; the fraction shifted is the swept `scar_weight_shift`]
+SCAR_CRISIS_AT = 3  # [JUSTIFIED: the ruled threshold, not a swept value -- `ED-IN-0261` rules 3+ as the terminal crisis; the draft's G-Q6 gives the mechanism]
+
+
+def crisis_weights(p: Person, shift: float = 0.0) -> dict:
+    """`p`'s pursuit weights as the chooser should read them once scars have reached threshold 2
+    (IN-08 H9, `ED-IN-0261`: *"WEIGHT SHIFTS, others gain proportionally"*) -- A READER, it writes
+    nothing and `Person.pursuits` is untouched.
+
+    A held pursuit `e` with `p.scar[e] >= SCAR_WEIGHT_SHIFT_AT` gives up the fraction `shift` of
+    its weight (downward: `conviction_track_v1.md` §2, reference for intent), and the mass given up
+    is shared among the held pursuits that have NOT reached the threshold in proportion to their
+    own weights, so a person's total weight is conserved. Where every held pursuit is at the
+    threshold there is nobody to gain and the weights are returned unshifted rather than lose mass.
+    `shift` is `Fixtures.scar_weight_shift`; `0` -- the shipped control -- returns `p.pursuits`
+    itself, so the arm at its control is the unmodified read by construction.
+
+    Person-side, no World (AX-2). Keys keep `p.pursuits`' own order, which `to_axes` sums in."""
+    # `shift` is a FRACTION of a weight: past 1 a crisis pursuit's weight goes negative and the
+    # heirs gain more than was given up. `not 0 <= shift <= 1` also refuses a NaN (cf. the
+    # `confliction_weight` check in `decision/choose.py::make_chooser`).
+    if not 0 <= shift <= 1:
+        raise ValueError(f"scar_weight_shift {shift} is not in [0, 1]: it is the fraction of a "
+                         f"weight given up, and outside that range a weight goes negative (H-187)")
+    base = p.pursuits or {}
+    if not shift or not p.scar:
+        return base
+    held = {e: float(w) for e, w in base.items() if float(w) > 0}
+    # A LIST IN `held`'s ORDER, not a set: `given` sums over it, and a set's order is
+    # PYTHONHASHSEED's, so the float sum would not be reproducible across processes.
+    crisis = [e for e in held if p.scar.get(e, 0) >= SCAR_WEIGHT_SHIFT_AT]
+    heirs = {e: w for e, w in held.items() if e not in crisis}
+    if not crisis or not heirs:
+        return base
+    given = sum(held[e] * shift for e in crisis)
+    pool = sum(heirs.values())
+    out = dict(base)
+    for e in crisis:
+        out[e] = held[e] * (1.0 - shift)
+    for e, w in heirs.items():
+        out[e] = w + given * w / pool
+    return out
+
+
+def conviction_after_crisis(p: Person, among: frozenset | None = None) -> dict:
+    """`p.conviction` as the crisis at scar threshold 3 leaves it -- IN-08 `12e` H13, G-Q6 as the
+    affiliation draft recommends (folded into the build by Jordan's 2026-10-06 ruling, `ED-IN-0261`'s
+    superseding row): THE ENGINE CHOOSES PER CASE, BY A RULE OVER STATE THE CRISIS ALREADY READS, AND
+    ROLLS NOTHING (the crisis rewrites the vector, never an outcome). A READER: it returns a new
+    vector and writes nothing; the write is `loop/resolve.py::_conviction_crisis`'s, by an act.
+
+    A held affiliation is IN CRISIS when `p.scar` for it is `>= SCAR_CRISIS_AT`. ONE CRISIS AT A
+    TIME: where several are, the one taken is the highest-held, ties to the first by name -- the
+    design's own multi-crisis rule (`conviction_track_v1.md` §2 `:62`, quarantined, reference for
+    intent: *"the most recent Scar event ... ties resolve to highest-weighted primary"*) with its
+    first key dropped, because a count carries no time and one act scars every holding it violates
+    at once [ASSUMPTION; Jordan to correct]. For that one, `x`, the first branch that applies:
+      * FOLD -- `x` is co-held with an affiliation `y` it is `incompatible` with
+        (`data/affiliations.py::INCOMPATIBLE`, the one loaded relation): `x`'s intensity transfers
+        to `y` and `x` drops. With several such `y`, the highest-held takes it, ties to the first
+        by name (the draft's *"highest-weighted other element"*; the name order is only the tie
+        rule). The sum is clamped to the intensity's ceiling [ASSUMPTION: the spine is closed,
+        `conviction_map` refuses past it].
+      * RESTABILISE -- `x` is co-held with nothing it is incompatible with, and something else is
+        held: the draft's branch is "the threshold-2 mechanism continuing". NOT BUILT -- the vector
+        is left as it is. The threshold-2 mechanism is a reader over PURSUIT weights (H9's
+        `crisis_weights`, a float fraction); `conviction` is an int on the 0-5 spine, so moving it
+        by that fraction needs a rounding rule nobody has chosen.
+      * DESTROYED -- nothing else is held: `x` drops, leaving the zero vector (no affiliation
+        held, a real state).
+    "Held" is a present key: `conviction_map` drops a zero, so every key is held at 1 or more
+    [ASSUMPTION: the draft's "held above threshold" is read as held at all].
+
+    ⚠ UNDER THE SHARED COLUMN THE FOLD'S DIRECTION IS INTENSITY'S, NOT CONTENT'S. The draft gives
+    the direction as *"which affiliation was scarred"*, but `affiliation_engagement`'s shared column
+    (R-C4.1) violates every held creed alike, so co-held creeds accrue equal counts and reach the
+    threshold in the same act; the selector above then folds the HIGHER-held creed into the lower.
+    Only a per-affiliation cell (R-C4.2) scars one creed alone, and of those only `thread_read`'s
+    exists, which writes nothing at RESOLVE. The heir keeps its own count, already at the
+    threshold, so the heir's next scar ON THAT AFFILIATION breaks it.
+
+    `among` is the set of elements the calling act has just scarred `p` on: only an affiliation in
+    it can be in crisis, because a crisis follows THAT affiliation's count moving -- a person held
+    at the threshold on one creed and scarred on a pursuit alone is not in crisis.
+    `loop/resolve.py::_conviction_crisis` passes it; `None` (a direct caller) considers every held
+    affiliation at the threshold.
+
+    Re-evaluated at every count at or over the threshold, not only the one that reaches it: a
+    folded or destroyed affiliation is no longer held, so it is never violated (hence never
+    counted) again, and a restabilised one is left unwritten. CONVICTION TRACK ONLY: the pursuit
+    track has no `incompatible` relation to fold along and `Person.pursuits` has no writer (H-62;
+    its first is SC-02 `22b`). Person-side, no World (AX-2). With no held affiliation in crisis it
+    returns `p.conviction` unchanged."""
+    if not p.conviction:
+        return p.conviction
+    held = dict(p.conviction)
+    scar = p.scar or {}
+    crisis = [x for x in sorted(held) if scar.get(x, 0) >= SCAR_CRISIS_AT
+              and (among is None or x in among)]
+    if not crisis:
+        return p.conviction
+    # `crisis` and `heirs` are in name order and `max` keeps the FIRST of equal keys, so a tie on
+    # intensity goes to the lowest name.
+    x = max(crisis, key=held.__getitem__)
+    heirs = [y for y in sorted(held) if y != x and frozenset((x, y)) in _aff.INCOMPATIBLE]
+    if heirs:
+        y = max(heirs, key=held.__getitem__)
+        held[y] = min(AFFILIATION_CEILING, held[y] + held[x])
+        del held[x]
+    elif len(held) == 1:
+        del held[x]
+    else:                            # RESTABILISE -- not built (above)
+        return p.conviction
+    return conviction_map(held, where=f"{p.id}: conviction after crisis")
 
 
 # ---------------------------------------------------------------------------

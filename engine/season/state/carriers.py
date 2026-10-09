@@ -579,27 +579,26 @@ class Person:
     # is the model" MEANS. A bare 1000 here would be a second, silent copy of that scale — the
     # defect `G1` names — and it would drift the moment the fixture moved.
     body: int = field(default_factory=lambda: DEFAULT_FIXTURES.get("condition_scale"))
-    # ⚠ `scar` IS KEYED PER AXIS AND THE KEYS ARE NEVER LITERALS HERE. Part D carries
-    # `(Person, scar)` at `[RES] ACTS`, `social: true`, and its `by:` reads *"ONE ROW PER AXIS (V2
-    # writes it `scar[axis]`)"* -- the matrix header states that the `[axis]` says one row per
-    # axis and is not part of the field name. So the field is a MAPPING and its key set is
-    # whatever the axis roster holds at read time.
-    #
-    # ⚠⚠ THIS IS WHY THE FIELD IS A BARE DICT AND NOT PRE-SEEDED WITH THE FOUR AXES. The axis
-    # roster is `references/descriptor_registry.yaml`'s `axis_roster` leaf, and its members are
-    # RULED TO CHANGE -- `ED-IN-0261` (Jordan, 2026-09-20, superseding `STR-2`'s four) makes the
-    # basis seven bipolar axes: `hierarchical↔equal · precedent↔substantive · partisan↔equitable ·
-    # selfish↔selfless · rigid↔flexible · grandiose↔humble · deontological↔instrumental`.
-    # Seeding the four current names here would put a
-    # copy of a roster that is about to be replaced into a carrier, which is §0.05 clause 3's
-    # *never keep a second copy* on the one field most likely to be migrated. An empty dict
-    # inherits the new basis by not knowing about the old one.
-    #
-    # `matrix_rows_without_a_field()['absent']` listed this row until 2026-09-18 (`ED-IN-0249`);
-    # `formal_analysis.md` C3 is the measurement. NOTHING READS IT YET, and that is stated rather
-    # than hidden: the reader §54 item 21 names is the Conviction CRISIS, *"an L5 edge that
-    # rewrites an option set and never rolls an outcome"*, which is not this item.
+    # ⚠ `scar` IS `{element: count}` -- IN-08 H3, `ED-IN-0261`'s scar model (*"counted PER
+    # ELEMENT ... the unit is a COUNT, thresholds 1/2/3"*). An element is a PURSUIT name (the
+    # fifteen of `references/descriptor_registry.yaml`'s `pursuit_roster`) or, since IN-08 H11, an
+    # AFFILIATION name (`affiliation_roster`, the keys of `conviction` below; the two rosters are
+    # refused a shared name). One count per act this person OBSERVED that violated that element,
+    # written at RESOLVE by the act (`loop/resolve.py::_scar_witnesses`), never at WITNESS (S9.3).
+    # The pre-H3 shape -- a signed float per AXIS, written on the wounded person by `_eff_kill` --
+    # is retired with `_scar` and `scar_step`. Keys are never literals here and the dict is never
+    # pre-seeded: a pursuit nobody has been scarred on is absent, not 0, so an unscarred person's
+    # `repr` is unchanged. READERS: `person_q.crisis_weights` (threshold 2, H9), `conviction_after_crisis` (3, H13).
     scar: dict = field(default_factory=dict)
+    # IN-08 H10 -- `conviction` IS `{affiliation: intensity}` (ED-IN-0251 R1/R2): which religious
+    # affiliations this person holds, each an int on `affiliation_roster.scale` (0-5; 5 is full
+    # intensity), validated by `data/affiliations.py::conviction_map` -- not the pursuit `doctrine`,
+    # which is the magnitude of religious concern, not its side. Absent = not held, never 0. Filled at
+    # world build from the cast's authored `affiliations:` (`data/cast.py::conviction_of`); its
+    # `write_matrix.yaml` row admits a RESOLVE/ENCOUNTER write, made only by the crisis at scar
+    # threshold 3 (`loop/resolve.py::_conviction_crisis`, IN-08 H13). Confliction is DERIVED
+    # from it (`queries/person_q.py::confliction`), never stored here.
+    conviction: dict = field(default_factory=dict)
     travel_leg: list[str] = field(default_factory=list)
     # ⚠ W5 MOVED THE TENURE STORE HERE, and `Tenure`'s OWN DOCSTRING already said this: "S15 --
     # THE ONE EDGE. Owned by its SUBJECT (S15.1)." The class asserted the ownership and the

@@ -698,6 +698,9 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         # rather than copied. What changed is which source is consulted first.
         authored = cast.pursuits_of(cast.row(cid) or {})
         w.persons[pid].pursuits = authored or seed_pursuits(seed, cid, pid)
+        # IN-08 H10: the religious affiliations, from the same row and NEVER drawn -- a drawn creed
+        # is an invented one. No fallback: a row without `affiliations:` holds none (`{}`).
+        w.persons[pid].conviction = cast.conviction_of(cast.row(cid) or {})
 
     # -- WHO BELONGS TO WHAT ----------------------------------------------------
     #

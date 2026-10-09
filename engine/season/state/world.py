@@ -85,8 +85,9 @@ MATRIX_REFUSAL_LAW: dict[tuple[tuple[str, str], Step], tuple[str, str]] = {
 # its own entry. Which rows these are is derivable from the matrix (`social: true`, Person);
 # the list is a loop over a fix, not a definition.
 # (`beliefs` left this loop 2026-09-25 with its row and its carrier field; a write to it now
-# refuses as RETIRED through `matrix_row`.)
-for _pk_field in ("pursuits", "scar", "axis_count"):
+# refuses as RETIRED through `matrix_row`; `axis_count` left it at IN-08 H3 the same way.
+# `conviction` joined it at IN-08 H10 with its row: a religious affiliation is a belief.)
+for _pk_field in ("pursuits", "scar", "conviction"):
     MATRIX_REFUSAL_LAW[(("Person", _pk_field), Step.MATTER)] = (
         "S3-L4",
         "L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY "

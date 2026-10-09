@@ -59,6 +59,21 @@
       "deontological_instrumental"
     ]
   },
+  "affiliation_roster": {
+    "source": "ED-IN-0251 R1/R2; content from candidate_affiliation_content.md \u00a71.3, \u00a73.2, folded in by RS-1 (ED-IN-0291)",
+    "count": 4,
+    "scale": {
+      "floor": 0,
+      "ceiling": 5
+    },
+    "player_sees": "bands",
+    "names": [
+      "solmund_orthodoxy",
+      "inner_tradition",
+      "thread_truth",
+      "einhir_restoration"
+    ]
+  },
   "settlement_stats": {
     "set.legitimacy": {
       "name": "Legitimacy",

@@ -574,29 +574,39 @@ DEFAULT_FIXTURES = Fixtures(
     # difference between a walled and an open field removed), `1` the middle arm. Injection site: this
     # line, read by `seam/wrappers/mass_battle.py::resolve()` and handed to `resolve_field(walls_dr=)`.
     field_walls_dr=None,     # `H-150`, swept 3 (A.9, = the default) / 0 (control) / 1
-    # `H-128` / §54 item 21. HOW DEEP A MORAL WOUND THE OUTCOME CUTS, per unit of the verb's own
-    # alignment with an axis. Part D carries `(Person, scar[axis])` at `[RES] ACTS` and names NO
-    # magnitude; no in-chain document supplies one either, so it is declared, defaulted and swept
-    # rather than chosen in a body. Injection site: this line, read by `_eff_kill`.
-    #
-    # ⚠⚠ SHIPPED AT `0`, THE CONTROL ARM, AND THE REASON IS NOT TIMIDITY. At `0` the scar write
-    # is a no-op, so `runs/TRACE.txt` comes back BYTE-IDENTICAL: NO BEHAVIOUR CHANGES.
-    # ⚠ AND THE ARTIFACTS ARE *NOT* ALL BYTE-IDENTICAL, WHICH THE FIRST WRITING OF THIS COMMENT
-    # CLAIMED AND A CONTROL DISPROVED THE SAME HOUR. `World.content_hash` digests a dataclass as
-    # `repr(obj)`, which lists EVERY DECLARED FIELD, so `Person` GAINING A FIELD moves every
-    # person's digest whatever its value -- measured against a clean `origin/main` worktree,
-    # `ff5c5765f4d2` -> `ab77c30d273b` at this arm. The move is STRUCTURAL, not behavioural, and
-    # the re-record is two lines: `ASSUMPTIONS.md` gains this fixture, and `results.json`'s A5 row
-    # carries a new log hash with its verdict still PASS. Stated because "byte-identical" was the
-    # claim, the claim was wrong, and a re-record nobody can account for is what §7 forbids.
-    # The arm is what makes that checkable: the mechanism is built and
-    # exercised at a nonzero arm by its own falsifiers, while the magnitude waits on the one
-    # thing that cannot be measured yet -- NOTHING READS `scar`. Its reader is the Conviction
-    # crisis, which §54 item 21 puts at L5 (*"an L5 edge that rewrites an option set and never
-    # rolls an outcome"*) and which this item does not build. A magnitude tuned against no reader
-    # is tuned against nothing.
-    # [JUSTIFIED: engine/season/hole_register.yaml H-128 -- the moral-wound depth; Part D names the cell and never the value, and the sweep brackets *does a wound scar at all* rather than a magnitude]
-    scar_step=0,                       # `H-128`, swept 0 (control, SHIPPED) / 1 / 10
+    # IN-08 H3 (`ED-IN-0261`'s scar model). `scar_step` -- a float magnitude per unit of alignment,
+    # written on the wounded person by `_eff_kill` -- RETIRED with that mechanism: the scar is a
+    # COUNT per pursuit, one per observer per violated pursuit (`loop/resolve.py::_scar_witnesses`),
+    # so it has no magnitude to sweep. What IS open is WHETHER THE ACTOR COUNTS AS AN OBSERVER OF
+    # HIS OWN ACT, and that is this arm. Injection site: this line, read by `_scar_witnesses`.
+    # `False` -- the actor is scarred exactly when `epistemic.observers_for` admits him, like anyone
+    # else (no actor rule at all; under `all_five` the witness-key channel admits the actor, under
+    # `presence_only` only if he stands where the act happened). `True` -- the actor is never
+    # scarred by his own act. ⚠ THE CONTROL IS NOT "TODAY'S BEHAVIOUR": the mechanism changed shape
+    # at H3 (participant float -> observer count), so no arm reproduces the pre-H3 tree. `False`
+    # is shipped as the arm that ADDS NO RULE to `observers_for`'s answer.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-128 -- the moral-wound row; ED-IN-0261 rules the unit (a count) and the trigger (witnessing) and leaves the actor's own standing as a witness unstated, so it is swept]
+    scar_excludes_actor=False,         # `H-128`, swept False (SHIPPED, no actor rule) / True
+    # IN-08 H9 / `ED-IN-0261`'s threshold 2 (*"WEIGHT SHIFTS, others gain proportionally"*): THE
+    # FRACTION OF A PURSUIT'S WEIGHT A PERSON GIVES UP ONCE THEIR SCAR COUNT ON IT REACHES 2, shared
+    # among their other held pursuits in proportion to those weights (total weight conserved).
+    # Injection site: this line, read by `decision/choose.py`'s `make_chooser` -> `options.project`
+    # -> `queries/person_q.py::crisis_weights`. A READER: it writes nothing and `Person.pursuits`
+    # is untouched. `0` is the CONTROL and is SHIPPED [ASSUMPTION]: the plan names the arm "control
+    # `0`, swept" and is silent on shipping it ON, and a non-zero value moves every outcome, so
+    # arming it is a design choice (the sign test that feeds the counts is itself a candidate
+    # reading; see `H-128`). At `0` the chooser reads `p.pursuits` itself, so the hash and the
+    # fork divergence are those of the tree without the arm.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-187 -- the threshold-2 weight shift; ED-IN-0261 rules THAT the weight shifts and the others gain proportionally, and states no magnitude]
+    scar_weight_shift=0,               # `H-187`, swept 0 (control, SHIPPED) / 0.5 / 1
+    # IN-08 6f: HOW HARD RELIGIOUS STRAIN DAMPS A PERSON'S PURSUIT PULL. `make_chooser` reads the
+    # pursuit dot at `1 / (1 + k * confliction(p))` (`queries/person_q.py::confliction`, the derived
+    # Query 6f is the caller of). Injection site: this line, read by `decision/choose.py`'s
+    # `make_chooser`. `0` is the CONTROL and is SHIPPED [ASSUMPTION]: the plan names 6f as the
+    # Query's caller and states neither the form nor shipping it on; at `0` the factor is exactly
+    # 1.0. Must be >= 0 (a negative `k` could invert the pull or divide by zero; `make_chooser` raises).
+    # [JUSTIFIED: engine/season/hole_register.yaml H-188 -- the confliction term; ED-IN-0251 R1 rules confliction derived and states no effect on the score]
+    confliction_weight=0,              # `H-188`, swept 0 (control, SHIPPED) / 0.2 / 1
     # `H-146` / `ED-IN-0261`. WHICH `pursuit_axes` MEMBER GATES `opening_set` -- deontology as a
     # REFUSAL, read by `decision/options.py::opening_set`. The axis NAME is ruled (`deontological`, the
     # NEG pole of `deontological/instrumental`) and the THRESHOLD is the person's own projected

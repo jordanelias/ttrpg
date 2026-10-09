@@ -527,6 +527,19 @@ rosters:
       `axis_roster.names` — and both readers see it.
     from_descriptor: axis_roster
 
+  # IN-08 H10: the religious affiliations `Person.conviction` is keyed on (ED-IN-0251 R1/R2), read
+  # from the single owner like the two rows above. `tables.incompatible` is keyed on these.
+  affiliations:
+    source: >-
+      references/descriptor_registry.yaml `affiliation_roster` (count 4, scale 0-5), exported to
+      engine/engine_params/descriptors.json behind a BLOCKING --check (tools/export_descriptors.py).
+    open: true
+    note: >-
+      AN AFFILIATION IS A SIDE, NOT A PURSUIT. The pursuit `doctrine` is how much of a person's
+      action concerns religious matters at all; `Person.conviction` says which affiliations they
+      hold and how intensely. Neither is the faction `Church of Solmund`.
+    from_descriptor: affiliation_roster
+
   question_sources:
     source: "ARCHITECTURE_V2.md §F1 (Q1–Q3) · PLAN.md `W5` (Q4 `need`) · folded to two at position `11a`, r2 `01_ATTENTION_AND_REACH.md` §A.2"
     open: true
@@ -1254,10 +1267,9 @@ rosters:
       declaration in two files"*) is answered by the fixture reading the data rather than
       restating it.
       ⚠ `dwelling: 0` IS THE CONTROL ARM, SHIPPED DELIBERATELY (`24d-i`), and it is `H-07`'s own
-      *"no wear at all"* sweep point applied to one kind. ⚠ **NOT THE SAME SHAPE AS `body_step = 0`
-      AND `scar_step = 0`** (corrected 2026-09-26 — a prior version of this note claimed it was):
-      those two `continue` past the write itself (`loop/matter.py:305`), so nothing is emitted at
-      their control arm. `wear_per_season` carries no such skip — MATTER writes every Site every
+      *"no wear at all"* sweep point applied to one kind. ⚠ **NOT THE SAME SHAPE AS `body_step = 0`**
+      (corrected 2026-09-26 — a prior version of this note claimed it was): that arm `continue`s
+      past the write itself (`loop/matter.py`), so nothing is emitted at its control arm. `wear_per_season` carries no such skip — MATTER writes every Site every
       season whatever its rate, so `dwelling: 0` still emits (see below). A dwelling sits AT a
       hearth and persons live in hearths. A non-zero rate
       together with any floor in `band_floors.dwelling` would let a dwelling's condition cross it;
@@ -1972,6 +1984,106 @@ tables:
         withdrawal_only: 100
       dwelling: {}
       garrison: {}
+
+  # IN-08 H10 -- WHICH AFFILIATIONS STRAIN WHEN HELD TOGETHER (ED-IN-0251 R1: confliction is DERIVED
+  # from this relation and never stored; `queries/person_q.py::confliction`). A HALF-MATRIX: each
+  # unordered pair is keyed ONCE, under either order, and `data/affiliations.py::_load_incompatible`
+  # refuses an unrostered name, a self-pair and a pair keyed twice. `true` = holding both puts the
+  # person in confliction; `false` = compatible; `null` = considered, no source either way (read as
+  # not incompatible).
+  incompatible:
+    source: >-
+      proposals/2026-09-26-decision-layer-execution-plan/candidate_affiliation_content.md §2 (pairs
+      1, 2, 3, 5, 6, 8 under the §1.3 roster and its renames), FOLDED INTO THE BUILD by Jordan
+      2026-10-06 (RS-1, ED-IN-0291). Pair 2 is Jordan's own worked example ("devoutly Solmund but
+      also believes in Threadwork and therefore experiences religious confliction").
+    default_cell: null
+    keys: [affiliations, affiliations]
+    note: >-
+      Six pairs over four affiliations; five filled (one cited, four derived) and one null. The
+      draft's four `altonian_theocracy` pairs died with that struck candidate. The per-pair argument
+      is the draft's §2 table; the values here are the build's (`CLAUDE.md` §0.05).
+    cells:
+      solmund_orthodoxy:
+        inner_tradition: true      # pair 1, derived: "do not share a referent"; held together at strain
+        thread_truth: true         # pair 2, cited: Jordan's worked example
+        einhir_restoration: true   # pair 3, derived: the two poles of the absorbed Truth / PT tracks
+      inner_tradition:
+        thread_truth: false        # pair 5, derived: the inner tradition is the tradition of thread practice
+        einhir_restoration: null   # pair 6, null: no source either way (the knife-edge is Jordan's to promote)
+      thread_truth:
+        einhir_restoration: false  # pair 8, derived: the same pole of both tracks
+
+  # IN-08 H11 -- WHAT AN ACT DOES TO A HELD AFFILIATION: the verb x affiliation table (J-5's C4, the
+  # draft's rule R-C4, folded into the build by Jordan 2026-10-06, RS-1, ED-IN-0291). Read by
+  # `data/affiliations.py::engagement`; its one reader today is the scar (`queries/person_q.py::
+  # elements_violated_by`, called by `loop/resolve.py::_scar_witnesses` beside the pursuit sign
+  # test): an observer holding affiliation `a` takes one count on `a` per act he saw whose cell for
+  # `a` is NEGATIVE. The magnitudes are not read by the scar; only the sign is.
+  affiliation_engagement:
+    source: >-
+      proposals/2026-09-26-decision-layer-execution-plan/candidate_affiliation_content.md §4.2
+      (R-C4.1, R-C4.2, R-C4.3) and §4.3 (the sketch), FOLDED INTO THE BUILD by Jordan 2026-10-06
+      (RS-1, ED-IN-0291). The shared column's ten cells and their reasons are the old `sacred`
+      alignment row as it stood before IN-08's cells work removed it (`git show 16faff76:engine/season/
+      rosters.yaml`, the `sacred:` block of `alignment`), carried as R-C4.1 says.
+    default_cell: null
+    # The outer key is a COLUMN: the one shared column (named by `shared_column:`, read by the
+    # loader rather than spelled in code) or a rostered affiliation. The inner key is a verb, spelled
+    # as `verb_table.yaml` spells it; the loader refuses one that names no verb.
+    keys: [affiliation_columns, verb_table]
+    shared_column: sacred
+    note: >-
+      THREE CLAUSES, ONE TABLE. (R-C4.1) THE SHARED COLUMN `sacred`: the vow-shaped verbs engage
+      EVERY affiliation identically -- a vow is a vow under every creed on the roster -- so the
+      column is not per affiliation; a verb's cell here is its cell for every affiliation a person
+      holds. (R-C4.2) THE PER-AFFILIATION CELLS: a verb violates a NAMED affiliation only where
+      canon says that affiliation condemns the act's kind. They are graded `derived, sign only`, so
+      each is `-1` or `1` and the loader refuses any other value: the 1 is a unit, not a weight, and
+      a reader that wants a magnitude must be given authored values first. A verb carries a shared
+      cell or per-affiliation cells, never both: no source says how the two would compose, so the
+      loader refuses the overlap rather than choose a rule. (R-C4.3) CONTENT-KEYED VIOLATIONS ARE
+      NOT CELLS: `utter`, `speak`, `tell`, `create_record` and `destroy_record` violate an
+      affiliation by WHAT is said or recorded (forbidden vocabulary, an Einhir record destroyed),
+      which needs a tag on the Proposition or Record read at RESOLVE by the same scar writer. No such
+      tag exists; nothing here stands in for it, and `destroy_record`'s shared cell is the vow-shaped
+      half only.
+      ⚠ TWO OF THE DRAFT'S CELLS ARE NOT CARRIED, BOTH NARROWER READINGS [ASSUMPTION; Jordan to
+      correct]. (i) `restore` "as Mending" (draft §4.3: `-` under `solmund_orthodoxy`, `+` under
+      `einhir_restoration`): the draft read `restore` as Mending's nearest verb on the premise that
+      it is unresolvable; that premise is stale -- `restore` executes, and what it does is raise a
+      Site's `condition` (`loop/effects_economy.py::_eff_restore`), a repair of fabric, not a thread
+      operation. With no way to tell a Mending from mending a wall, carrying the cell would scar every
+      orthodox witness of a house repair. Revert: a thread-operation verb or a restore kind exists,
+      and the two cells land on it. (ii) The shared column's `fight` (was `kill / wound`) and
+      `surveil` cells are `null`, as R-C4.1 strikes them: the first reason was self-flagged as
+      unsourced inference, the second is a cost rather than a creed.
+      ⚠ INERT IN PLAY TODAY, TWICE OVER, AND SAID RATHER THAN HIDDEN. No cast row carries affiliation
+      content (IN-08 H10), so every shipped `Person.conviction` is `{}` and nobody can be scarred on
+      an affiliation. And of the verbs carrying a negative cell, only `destroy_record` is in
+      `resolvable_verbs()`, and it refuses through the fold (`H-75`); `thread_read` writes nothing at
+      RESOLVE, and the scar is earned only by an outcome that MOVED state (`_fold`'s `changed`), so
+      its cell cannot fire even when it becomes resolvable unless it gains a RESOLVE write.
+    cells:
+      sacred:
+        utter:           0.8    # carried: the word once spoken becomes an immutable Proposition -- a vow's shape, not mere speech
+        tie / knot:      0.7    # carried: a bound tie is the marriage-and-fealty shape, the consecrated bond of the six kinds
+        commit:          0.7    # carried: a standing obligation is the vow's own form
+        confer:          0.5    # carried: investiture into office carries the anointing/oath-of-office residue
+        oblige:          0.4    # carried: duty-taken has the same vow-shape as `commit`, without the immutable Proposition behind it
+        establish:       0.3    # carried: founding a new office-seat is a small consecration of a place that had none
+        fight:           null   # struck by R-C4.1: the old reason was self-flagged inference; nothing in canon puts a body-contest under any creed
+        evade / defy:   -0.3    # carried: refusing what a vow or office asked undercuts the oath behind the demand, not just the demand
+        destroy_record: -0.3    # carried: erasing what a ruling produced is a desecration (the vow-shaped half; the content half is R-C4.3)
+        forge:          -0.5    # carried: counterfeiting a record for advantage is the false-witness shape, dressed as evidence
+        surveil:         null   # struck by R-C4.1: covert watching is worldly craft, a cost and not a creed
+        repudiate:      -0.6    # carried: breaking a live commit breaks the vow itself -- the anti-sacred act, not just the anti-social one
+      solmund_orthodoxy:
+        thread_read:    -1      # derived, sign only: witnessed threadwork violates orthodoxy -- the Church's theology is "an anti-threadwork formation" (canon/philosophy/08_history.md §8.8, §8.10)
+      inner_tradition:
+        thread_read:     1      # derived, sign only: the inner tradition IS practised technique (canon/philosophy/05_confrontation_and_sensitivity.md §5.7)
+      thread_truth:
+        thread_read:     1      # derived, sign only: the pole that holds the Thread as the ground of being
 
   # ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): this table was
   # `role_template_convictions:`; cells, `row:` and `default_cell:` are byte-identical.

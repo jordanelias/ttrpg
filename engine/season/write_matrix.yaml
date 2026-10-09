@@ -66,12 +66,13 @@
 #   row and carrier field together (see `retired:`), and each of the EIGHT remaining RES rows with
 #   no producing verb carries an `unproduced:` cell naming its hole. The loader refuses an orphan
 #   without one, and refuses the cell on a row a verb now writes. Re-running the command above
-#   lists exactly the eight.
+#   lists exactly the eight. (IN-08 H10 adds `(Person, conviction)` with its own `unproduced:`
+#   cell; later rows have moved the count since, so re-run the command rather than trust a figure.)
 #
 # ⚠ THE SIX `Person` ROWS ARE THE FINDING, AND THEY ARE ONE HOLE, NOT SIX.
-# NO VERB IN THE 32-ROW TABLE WRITES ANY `Person` INTERIOR FIELD. That is tier-0 `H-62`, and it
-# means every interior consequence is inert: convictions cannot move, so `choose` scores against a
-# constant and `standing` has nothing to diverge from. #358 rev.2 §C.4 supplies the SHAPE of the
+# No verb row DECLARES a Person interior write; `scar` and `conviction` are written by the fold
+# (loop/resolve.py), not by a band. That is tier-0 `H-62`: the rest of the interior has no writer,
+# so `pursuits` cannot move and `standing` has nothing to diverge from. #358 rev.2 §C.4 supplies the SHAPE of the
 # answer -- an interior write is a CONSEQUENCE OF AN OUTCOME, which is what the new `Degree`-keyed
 # `writes` column declares. The verbs are still unwritten; what changed is that there is now a
 # column to write them in.
@@ -151,14 +152,6 @@ rows:
     by:      "DR-2 -- `establish` is an act. ⚠ RETIRED BY W2, RETURNED BY W3 WITH its producer. V2 named `establish` in THIS ROW while giving it no verb row, which is how the row came to look dead"
     emits:   "`remit.changed`"
   - kind:    "Person"
-    field:   "axis_count"
-    steps:   [RES]
-    class:   "ACTS"
-    social:  "true"
-    by:      "ONE ROW PER AXIS (V2 writes it `axis_count[axis]`). D6. L3 clause 1's counter. `axis` on D6's registry"
-    emits:   "`axis.incremented`"
-    unproduced: "H-62: an interior write is a consequence of an outcome and no verb writes one yet -- no trigger for the axis counter is specified anywhere (its axis registry is H-20)"
-  - kind:    "Person"
     field:   "body"
     steps:   [MAT, RES, ENC]
     class:   "MATTER/ACTS"
@@ -195,6 +188,17 @@ rows:
     # `field: "convictions"` / `emits: "\`conviction.moved\`"`. No producer exists for either
     # name (grep-confirmed), so this is a pure rename, not a behaviour change.
   - kind:    "Person"
+    field:   "conviction"
+    steps:   [RES, ENC]
+    class:   "ACTS"
+    social:  "true"
+    by:      "IN-08 H10 (`12b`'s carrier; ED-IN-0251 R1/R2): `{affiliation: intensity}` over `affiliation_roster`, filled at world build from the cast; moved only by argument and consequence, never by evidence (§9.3), on `(Person, pursuits)`'s precedent. From IN-08 `12e` H13 written by the crisis at scar threshold 3 (G-Q6: fold or destroyed; restabilise not built), through `loop/resolve.py::_conviction_crisis`, after the act's scar write"
+    emits:   "`conviction.moved`"
+    unproduced: "H-62 (invariant 2 counts verb `writes:` cells only): no verb row DECLARES this field. Its one writer, IN-08 H13's crisis at scar threshold 3, is reached by ANY act whose outcome scars an observer on a held affiliation (`tables.affiliation_engagement`), so it is not one verb's band; it is inert in the shipped world, where no cast row holds an affiliation"
+    # ⚠ `ENC` ADDED AT IN-08 H13 ON `(Person, scar)`'s PRECEDENT just below: the crisis is written
+    # by the same fold, immediately after the scar count that reaches it, and that fold also runs
+    # at ENCOUNTER (`march`). `class:` is unchanged (ENCOUNTER shares RESOLVE's write class).
+  - kind:    "Person"
     field:   "exists"
     steps:   [MAT, RES, CEN]
     class:   "MATTER/ACTS"
@@ -203,11 +207,16 @@ rows:
     emits:   "`person.died` · `person.individuated`"
   - kind:    "Person"
     field:   "scar"
-    steps:   [RES]
+    steps:   [RES, ENC]
     class:   "ACTS"
     social:  "true"
-    by:      "ONE ROW PER AXIS (V2 writes it `scar[axis]`). stated in chain — §54 item 21"
+    by:      "IN-08 H3 (`ED-IN-0261`'s scar model): `{element: count}`, one count per OBSERVER per violated pursuit -- and, from IN-08 H11, per violated held affiliation (`rosters.yaml: tables.affiliation_engagement`) -- written by the act's outcome through `loop/resolve.py::_scar_witnesses` (was V2's `scar[axis]` on the wounded person, §54 item 21)"
     emits:   "`scar.taken`"
+    unproduced: "H-62 (loader invariant 2 counts verb writes only): no verb row declares it; written by loop/resolve.py::_scar_witnesses after any outcome that moved state"
+    # ⚠ `ENC` ADDED AT IN-08 H3 ON M4's PRECEDENT for `(Person, stance)` above: `march`'s outcome
+    # folds at ENCOUNTER, which shares RESOLVE's write class (`data/matrix.py`), and the scar is
+    # written by every fold whose outcome moved state, so a lost field battle's observers are
+    # scarred where it is decided. `class:` is unchanged.
   - kind:    "Person"
     field:   "stance"
     steps:   [RES, ENC]
@@ -385,6 +394,17 @@ rows:
 retired:
   - "Person.capability"
   - "Person.marks"
+  - name: "Person.axis_count"
+    reason: >-
+      RETIRED AT IN-08 H3 (`workplans/valoria_master_workplan_v9_part5.md`: *"Retire the `(Person,
+      axis_count)` row or give it the field -- never both"*). The row never had a carrier field,
+      producer or reader (`unproduced:` H-62), and the count it named -- L3 clause 1's per-AXIS
+      counter -- is the per-element COUNT `(Person, scar)` now carries per pursuit (`ED-IN-0261`'s
+      scar model: *"key per-element ... type COUNT"*). A per-axis count beside it would be a second
+      home for the same tally, projected.
+    needs: >-
+      nothing -- a per-axis reading of the scar is `data/pursuits.py::to_axes` over `Person.scar`
+      when a reader wants one; do not re-add this row or a carrier field for it
   - name: "Rung.stake"
     reason: >-
       ROW RETIRED BY W2 (no verb produces its `emits:` kind), AND ITS CARRIER FIELD DELETED

@@ -17,7 +17,11 @@
 
 schema:
   required: [id, first_name, last_name, faction, role, status]
-  optional: [age, birthplace, territory, ts, coherence, stats, convictions, goals, arc_trajectory, notes]
+  optional: [age, birthplace, territory, ts, coherence, stats, convictions, affiliations, goals, arc_trajectory, notes]
+  # `affiliations:` (IN-08 H10) is `{<affiliation>: <int 0-5>}` over
+  # `references/descriptor_registry.yaml: affiliation_roster` -- the person's RELIGIOUS affiliations,
+  # read by `engine/season/data/cast.py::conviction_of` into `Person.conviction`. NOT `convictions:`,
+  # which holds pursuits. No row carries it yet.
 
 # ═══════════════════════════════════════════════════════════════
 # ROSTER NPCs (systems/npcs/reference/npc_roster_v30.md)

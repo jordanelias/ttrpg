@@ -198,7 +198,7 @@ commit and the run stops for a cleared window (`methodology-execute`, `CLAUDE.md
 has read §K's still-held list and `_part5` §J. `main` was red from PR #456 on one test
 (`test_flow_skeletons.py::test_contract_names_resolve_in_the_generated_index[combat]`); the one-line fix (`personal_combat`
 joins `RETIRED_CONTRACTS`) is built and rides the adoption branch (`7b619328`), so it is not a position — read `All Gates
-Green` on `main` once the branch merges. B-C is closed. B-D is closed: D1 (`9054df80`), D2 (`b31d2c31`), D3 (`0a690b30`). B-G is closed (`0f998f64`). Then B-H → B-E → {B-F ∥ B-I} → B-J → … the spine `_part3` §B names. Every batch runs
+Green` on `main` once the branch merges. B-C is closed. B-D is closed: D1 (`9054df80`), D2 (`b31d2c31`), D3 (`0a690b30`). B-G is closed (`0f998f64`). B-H is closed (`c13144b9`). Then B-E → {B-F ∥ B-I} → B-J → … the spine `_part3` §B names. Every batch runs
 through `methodology-execute` (`CLAUDE.md` §9), and a batch's READ-FIRST list names the sites to read (the pins file is far too
 large to read whole: grep the assertion).
 
@@ -216,9 +216,8 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-03 | `31a` | IN/SC | B | — | — | B-L | `_part4` |
 | IN-04 | `31b`; #457 SEAM-LADDER | IN/PC | BLK | IN-03 (PC-02, PC-03, PC-04 landed, `9054df80`) | — | B-L | `_part4` |
 | IN-05 | `31c`; SM-7 | IN/MB | BLK | IN-04 | — | B-L | `_part4` |
-| IN-06 | `33`; #457 D5; A-24's threadwork; H-47 | IN/WR/FI | B | build (design landed at B-C; re-reviewed after B-H) | — | B-S | `_part4` |
+| IN-06 | `33`; #457 D5; A-24's threadwork; H-47 | IN/WR/FI | B | build (design landed at B-C; re-reviewed after B-H, closed `c13144b9`) | — | B-S | `_part4` |
 | IN-07 | `36` | IN/SE | B | build (design landed at B-C) | — | B-T | `_part4` |
-| IN-08 | `12b`'s schema half (H10), H7, H9–H11, `12`, `12e`, 6f; #457 CARRY-INTERIOR; #445 P-1 | IN | B | B-G closed (`0f998f64`) | R-05, R-06, R-08 | B-H | `_part5` |
 | IN-09 | `19b` | IN | B | B-G closed (`0f998f64`) | R-05 | B-I | `_part5` |
 | IN-10 | #453 step 1 | IN/SC | B | B-G closed (`0f998f64`) | R-04, R-05 | B-I | `_part5` |
 | IN-11 | #453 step 2 | IN/SE | B | B-G closed (`0f998f64`) | R-05, R-06 | B-I | `_part5` |
@@ -249,10 +248,10 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-44 | SM-10, SM-12; A-24's wording | IN | J | Layer 0/1: Jordan's files | — | — | `_part8` (table, not an entry) |
 | IN-45 | `forge` `carry` `work` `migrate` | IN/SC/SE | BLK | IN-10, SC-03a, IN-22 | R-05 | B-K | `_part5` |
 | IN-46 | = SM-6 | IN/PC | B | review (design landed at B-C); no build batch | R-04 | B-L (re-read) | `_part4` |
-| IN-47 | #445 (character sheet) | IN/PC/WR | B | review (design landed at B-C); no build batch | R-04 | B-H (review) | `_part4` |
+| IN-47 | #445 (character sheet) | IN/PC/WR | B | review (design landed at B-C); no build batch | R-04 | none (reviewed at B-H, `c13144b9`) | `_part4` |
 | IN-48 | H-108 (delegation half) | IN/FA/SE | BLK | IN-10, IN-11 | R-04 | B-J | `_part5` |
 | IN-49 | H-163 limit 3 | SE/IN | BLK | IN-10 | R-04, R-05 | B-K | `_part5` |
-| IN-50 | ARC-23's R3 repair (diagnosed at B-C) | IN | B | — | R-01 | B-H | `_part4` |
+| IN-50 | the failing R3 case's repair (diagnosed at B-C) | IN | B | — | R-01 | B-I | `_part4` |
 | IN-51 | #453 R-5 (b) | IN/FA/SE | BLK | IN-12 | R-05 | B-R | `_part5` |
 | IN-52 | the levy-to-field feed (from IN-07's design); LF-1..LF-3 | IN/SE/MB | BLK | IN-49, IN-07's extractions | — | B-T | `_part4` |
 | SC-01 | `22` steps 11–16 | SC | BLK | IN-03 | R-04, R-05, R-08, R-09, M2 | B-N | `_part6` |
@@ -299,7 +298,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | v8 position · telling · §SM | v9 |
 |---|---|
 | `B0-CI` · `30` · `31a` · `31b` · `31c` · `33` · `36` | built (`7b619328`; not a position) · IN-02 · IN-03 · IN-04 (= PC-09) · IN-05 (= MB-09) · IN-06 · IN-07 (= SE-02; its levy feed split to IN-52 at B-C) |
-| cells commit, `12b`/`12c`/`12d`, H6–H11, `12`, `12e`, Phase 6f | IN-08 (the chain; the cells commit landed, `0f998f64`) |
+| cells commit, `12b`/`12c`/`12d`, H6–H11, `12`, `12e`, Phase 6f | IN-08 (landed: the cells commit `0f998f64`, the chain `c13144b9`) |
 | `19b` · `13`-rest · pre-flight P-4, P-6 | IN-09 · IN-38 · read at B-C (IN-39, landed; `_part3` §P) |
 | `22` · `22a` → `23` → `22b` · `2-ii` | SC-01 · SC-02 · SC-05 |
 | `24g` · `24h` P5 · `24` (umbrella) | SE-01 · IN-30 (= SE-05, FA-02) · not carried — its letters are the rows |
