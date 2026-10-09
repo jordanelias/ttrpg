@@ -391,12 +391,16 @@ rows:
       committed): in-process, every `_act_events` call appends the act's occasion ids. ARC-23
       then reads True, and so do all 143 cases (97 of 97 ARC, 46 of 46 NPC, none flips to
       False). The repair is a RULE in `loop/resolve.py`: the occasion goes on every
-      act-emission, at the one emission owner and not at the call sites. ⚠ Three refusals do not pass through that owner (`loop/resolve.py:72-73`, `:746-747` and `:776-779` construct `Event` directly), and the scratch counterfactual patched `_act_events` only, so it never touched them: the B-H repair routes them through `_act_events` first and commits the counterfactual as its falsifier test. It moves
+      act-emission, at the one emission owner and not at the call sites. ⚠ Three refusals do not pass through that owner (`loop/resolve.py:72-73`, `:746-747` and `:776-779` construct `Event` directly), and the scratch counterfactual patched `_act_events` only, so it never touched them: the repair routes them through `_act_events` first and commits the counterfactual as its falsifier test. It moves
       `World.content_hash()` wherever an occasioned act is refused. NOT REPAIRED HERE: a loop
-      edit is not R5. It slots to **B-H** (`workplans/valoria_master_workplan_v9_part3.md` §B.1, the B-H row,
-      the batch whose files already include `loop/resolve.py`'s fold), or to the earliest V
-      batch by §B.0 R1 if the hash move re-records a count or set pin. IN-10, IN-11 and IN-13's
-      new edges do not close it; they could only route ARC-23 around it.
+      edit is not R5. **RE-MEASURED AT B-H (HEAD `bd064a51`; the same at B-H's base `4cb6efe8`):
+      ARC `check R3: 97 of 97 pass`, NPC `check R3: 45 of 46 pass`, the failing R3 case is now
+      `NPC-090`, control `False -> True`;** ARC-23 no longer fails (B-G's cells commit lies between
+      this diagnosis and B-H). The repair as specified was built and measured at B-H (NPC 46 of
+      46, ARC 97 of 97, only NPC-090 flips, none to False), then reverted: it re-records two
+      chain-depth pins, so §B.0 R1 slots it to **B-I** (`workplans/valoria_master_workplan_v9_part3.md`
+      §B.1, the B-I row; `workplans/valoria_master_workplan_v9_part4.md` IN-50). IN-10, IN-11 and
+      IN-13's new edges do not close it; they could only route the failing case around it.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [IN-10, IN-11, IN-13, FI-01, H-116, IN-50]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1: regard is computed at read; the cross-person half is IN-10's, IN-11's, IN-13's); H-111 is FI-01's deposit half
