@@ -1664,6 +1664,36 @@ rosters:
       predicate: intent
     values: [subject, to]
 
+  stance_polarities:
+    source: >-
+      v9 IN-18 `G2` (telling workplan §5, `ED-IN-0282`): *"polarity in §F2 term 2"* -- the score's
+      regard term read by the ROLE the regarded party plays in the act, with `declared` against
+      `legacy` as the falsifier's two arms.
+    note: >-
+      THE ARMS OF `Fixtures.stance_polarity` (`H-194`), read by `decision/choose.py::make_chooser`'s
+      score term 2. `legacy` is the pre-G2 term, `+ stance_toward(p, c.subject)` for every row --
+      the CONTROL, shipped: an act against a disliked opponent then scores LOWER, the sign §F2's
+      term never distinguished. `declared` reads `regard(p, c.subject)` (G1's, so its judged and
+      told halves enter at their own gains) and NEGATES it where the subject is the act's OPPONENT
+      (`decision/options.py::subject_is_opponent`: the row contests and names no counterparty), so
+      fighting the disliked scores higher. A Rung subject reads 0 on every arm: its regarded party
+      would be its HOLDER, and no ledger holds a `held_by` claim (M0g, `H-195`). `regard` is the
+      midpoint: G1's regard with `+` on every row, so the sweep separates what regard adds from
+      what the sign adds.
+    values: [legacy, regard, declared]
+
+  said_slants:
+    source: >-
+      v9 IN-18 `G3` (telling workplan §5, `ED-IN-0282`): *"slant -- the strongly valenced older
+      claim is told under `valence`, the newer neutral one at control"*.
+    note: >-
+      THE ARMS OF `Fixtures.said_slant` (`H-196`), read by `queries/person_q.py::said_of`. `newest`
+      is the pre-G3 pick -- the newest non-`seen` claim about the subject, then the most confident
+      -- the CONTROL, shipped. `valence` first narrows the teller's claims about the subject to
+      those THEY judge most strongly (the largest `|deed_valence|` by their own pursuits) and picks
+      among those by the same comparator; with no valenced claim it is `newest` exactly.
+    values: [newest, valence]
+
   beneficiary_kinds:
     source: >-
       `CAT-2`, closed at step 5 (`proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml`).

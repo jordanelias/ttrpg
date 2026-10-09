@@ -32,7 +32,7 @@ from __future__ import annotations
 
 import math as _math
 from typing import Any, Callable, Optional
-from ..data.rosters import PURSUIT_AXES, SCENE_PACKING_RULES, require_member
+from ..data.rosters import PURSUIT_AXES, SCENE_PACKING_RULES, require_member, roster
 # `PURSUIT_PROJECTION` / `PROJECTION_DEFAULT_CELL` were imported here until 2026-09-16 and
 # are not any more: the loop that read the 13x4 moved into `data/pursuits.to_axes`, its
 # single owner. Keeping the imports declared a dependency this module no longer has.
@@ -41,12 +41,50 @@ from ..gaps import Unspecified
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
 # imports `person_q` and `data/`); `make_chooser`'s score calls it, and `confliction` (IN-08 6f,
 # the derived Query's caller, ID-13).
-from ..queries.person_q import confliction, intent_named, intent_said, stance_toward
+from ..queries.person_q import confliction, intent_named, intent_said, regard, stance_toward
 from ..state.carriers import Act, Candidate, Person, Question, Scene, Sensation, View
 # `project` is DEFINED in `options.py` (see this module's docstring) and imported here because
 # `make_chooser`'s score calls it; `options` never imports this module.
 # `exercised_seat` is `options.py`'s own G3 helper (`via=exercised_seat(...)`, below).
-from .options import exercised_seat, opening_set, project
+from .options import exercised_seat, opening_set, project, subject_is_opponent
+
+STANCE_POLARITIES = roster("stance_polarities")
+
+
+def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = None) -> float:
+    """§F2's SECOND TERM, by `Fixtures.stance_polarity` (v9 IN-18 `G2`, `H-194`).
+
+      * `legacy` (CONTROL, shipped): `stance_toward(p, c.subject)` -- the pre-G2 term, verbatim.
+      * `regard`: `regard(p, c.subject, fx)` with `+` on every row -- G1's regard and no polarity,
+        the midpoint that separates what regard adds from what the sign adds.
+      * `declared`: `regard(p, c.subject, fx)`, NEGATED where the subject is the act's opponent
+        (`options.subject_is_opponent`): a grudge makes `fight` on its object score higher, where
+        `legacy` scored it lower. Every other row keeps `+`, so the arms differ on contested rows
+        only. `regard` is G1's, so its judged and told halves enter at their own gains (0 shipped).
+
+    A Rung subject reads 0 on every arm -- nobody holds stance about a rung -- where the ROLE reading
+    would regard its HOLDER; that operand needs a `held_by` claim, and M0g measured none (`H-195`).
+
+    `memo` caches `regard` per subject for one deliberation: it depends on the subject and `p`'s
+    ledger alone, which do not change inside one `choose` call."""
+    # ABSENT: H-195 holder  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
+    subject = c.subject or ""
+    arm = fx.get("stance_polarity")
+    if arm == "legacy":
+        return stance_toward(p, subject)
+    require_member(arm, STANCE_POLARITIES, f"stance polarity {arm!r} is not in the roster", "H-194",
+                   law="§G -- declare it, default it, sweep it; an unknown arm silently reading "
+                       "`legacy` would make the sweep report the control twice")
+    if memo is None or subject not in memo:
+        r = regard(p, subject, fx)
+        if memo is None:
+            memo = {}
+        memo[subject] = r
+    r = memo[subject]
+    if arm == "regard":
+        return r
+    row = VERB_TABLE.get(c.verb)
+    return -r if row is not None and subject_is_opponent(row) else r
 
 
 def beneficiary_of(p: Person, c: Candidate) -> Optional[str]:
@@ -340,9 +378,12 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
             raise ValueError(f"confliction_weight {k} is not >= 0: it would invert, divide by zero "
                              f"or poison the score (H-188)")
         damp = 1.0 if k == 0 else 1.0 / (1.0 + k * confliction(p))
+        # v9 IN-18 `G2`: term 2 by the role the subject plays (`stance_term`; `legacy` is the
+        # pre-G2 `stance_toward(p, c.subject)`). `memo` holds one regard per subject per call.
+        memo: dict = {}
         def score(c: Candidate) -> float:
             return (damp * sum(axis_w[ax] * align(c.verb, ax) for ax in PURSUIT_AXES)
-                    + stance_toward(p, c.subject or "")
+                    + stance_term(p, c, fx, memo)
                     + u)
         # ⚠ SCORED ONCE, NOT TWICE. `score` was passed to `_sample_order` and re-invoked there for
         # every candidate it had just been invoked for in this sort key — measured by a `/simplify`

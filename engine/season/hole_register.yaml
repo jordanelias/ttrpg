@@ -4228,6 +4228,97 @@ rows:
     cite:      "LADDER RUN at `T7`, 2026-10-09: not superseded; not irrelevant -- MEASURED (scratch `t7_arms.py`, `build_realm(0)`, three seasons, `intent_disclosure` 1.0): of 32 released tellings carrying an intent, the teller resolved a later act with the intended verb on a named id in 16 and not in 16 (0.5: 12 of 17), so kept and unkept intents both occur; the match is by verb and subject, an approximation; no design document says what a kept or broken intent does to a teller's credit or when an intent lapses; precedent: `record` (`H-183`) pairs told against firsthand on one cell, and an intent pairs against an EVENT of a different kind, a shape nothing in the tree pairs; the architecture does not make one option clearly right (the event-to-intent match and the lapse rule are both open), so nothing is built and the marker sits beside `record`'s pairing step, where a reconciliation that reuses `_pair` would go"
     source:    "v9 IN-16, telling `T7` (G9; `workplans/valoria_master_workplan_v9_part4.md`), `ED-IN-0282`, 2026-10-09"
 
+  - id:        H-192
+    tier:      1
+    hole:      "HOW FAR WHAT A PERSON MAKES OF ANOTHER'S DEEDS MOVES THEIR REGARD FOR THEM (telling `G1`, judged regard). `regard = stance_toward + judged_gain * judged + told_valence_gain * told`; `judged` sums, over the deed claims the holder holds FIRSTHAND about the referent (an event-kind claim `(x, <kind>, True)`, empty `chain`), the holder's own projected pursuits dotted with `align_kind(kind, axis)` -- `choose`'s score term 1, asked of a deed instead of a verb. Nothing says how much a witnessed deed moves regard; `judged_gain` is that magnitude [ASSUMPTION]. Also assumed with the shape, none of it a swept value: (a) a deed claim's SUBJECT is read as its doer -- WITNESS's `both` rule also deposits one per changed subject, so a patient holds the same claim, but every kind with a patient this reads (`person.died`, `body.changed`, `contest.undecided`, `tenure.closed`) is emitted by several rows, has no `KIND_VERB` and reads 0, and no `deed:` cell is authored (M0b at `declared` is above 5 %, so §6's branch authors none); (b) the sum is unnormalised -- a person who saw more deeds judges harder; (c) `judged_gain` is NOT `regard_gain` (`H-179`): the shape row spells `regard_gain * judged`, but `regard_gain` is `teller_weight`'s relation gain, shipped 0.5, and zeroing it for this control would move every told claim's weight"
+    kind:      "NUMBER"
+    owner:     "`queries/person_q.py::regard` and `deeds_judged`; read by `decision/options.py::teller_weight`'s `relation`"
+    grade:     "assumption"
+    default:   "0 -- THE CONTROL ARM, SHIPPED [ASSUMPTION], on `H-187`/`H-190`'s precedent: the plan names the control ('both 0 at control') and is silent on shipping it on, and a live gain moves the realm through `teller_weight`. At 0 (with `told_valence_gain` 0) `regard` reads no ledger and is `stance_toward` exactly, so the realm is the pre-G1 tree"
+    site:      "Fixtures judged_gain, read by `engine/season/queries/person_q.py::regard` (with told_valence_gain), multiplying `deeds_judged`'s firsthand half"
+    sweep:     ["0 (control, SHIPPED -- the stored half)", "0.5", "1.0"]
+    unblocks:  "regard that moves on what a person has SEEN another do, by their own pursuits (two witnesses of one deed regard its doer oppositely); R-07's regard conjunct; G2's polarity reads it in score term 2; G3's slant and G6's circle read it"
+    cite:      "M0b RE-MEASURED 2026-10-09 on B-E's base a467126a, before G1's first edit (scratch `m0b.py`, `build_realm(0)`, one season, `intent_disclosure` 0): 163 of 448 (holder, person) pairs holding a deed claim judge it non-zero at `declared` (36.4 %), 189 of 448 at `uniform` (42.2 %) -- above §6's 5 %, so G1 lands with no `deed:` cell. FALSIFIERS: `engine/season/tests/test_told_by_channel.py -k g1`. THE LADDER (`CLAUDE.md` section 0): not superseded; not irrelevant (the plan's G1); no design document gives the gain; precedent `H-187`/`H-190` for shipping the control; so it is injected and swept"
+    source:    "v9 IN-18 G1 (`workplans/valoria_master_workplan_v9_part4.md`), telling workplan §3/§5, `ED-IN-0282`, 2026-10-09"
+
+  - id:        H-193
+    tier:      1
+    hole:      "HOW FAR A DEED ONE WAS TOLD OF MOVES REGARD (telling `G1`, the told half). `told` is `deeds_judged`'s sum over the deed claims somebody TOLD the holder (a non-empty `chain`), scored exactly as the judged half; `told_valence_gain` is its magnitude [ASSUMPTION]. The told half does not weigh the teller (§3: 'judged has no relation factor, so regard never calls weigh'); a hearsay deed and a witnessed one are told apart by this gain alone, and `regard` cannot recurse through `teller_weight`"
+    kind:      "NUMBER"
+    owner:     "`queries/person_q.py::regard` and `deeds_judged`"
+    grade:     "assumption"
+    default:   "0 -- THE CONTROL ARM, SHIPPED [ASSUMPTION], as `H-192`"
+    site:      "Fixtures told_valence_gain, read by `engine/season/queries/person_q.py::regard` (with judged_gain), multiplying `deeds_judged`'s told half"
+    sweep:     ["0 (control, SHIPPED -- the stored half)", "0.5", "1.0"]
+    unblocks:  "regard moved by hearsay about a person's deeds -- the telling's effect on how the hearer regards its subject"
+    cite:      "As `H-192`. FALSIFIER: `test_g1_opposite_pursuits_judge_one_deed_with_opposite_regard`'s told arm. THE LADDER: as `H-192`"
+    source:    "v9 IN-18 G1 (`workplans/valoria_master_workplan_v9_part4.md`), telling workplan §3/§5, `ED-IN-0282`, 2026-10-09"
+
+  - id:        H-194
+    tier:      1
+    hole:      "WHICH WAY REGARD FOR AN ACT'S SUBJECT PULLS ON IT (telling `G2`, polarity in §F2 term 2). §F2's term 2 is `stance_toward(c.subject)`, added with one sign to every candidate, so a grudge makes `fight` on its object score LOWER. `declared` reads G1's `regard` and negates it where the subject is the act's opponent -- the row contests and names no counterparty (`decision/options.py::subject_is_opponent`, the rule `opening_set`'s self-subject decline already reads), so the polarity is derived from the row's own columns and no per-verb sign is authored [ASSUMPTION: the role is read as opponent / not-opponent only; a beneficiary or a counterparty role is not read]. Which arm ships is the open choice"
+    kind:      "RULING"
+    owner:     "`decision/choose.py::stance_term`, called by `make_chooser`'s `score`; arms in `rosters.yaml: stance_polarities`"
+    grade:     "assumption"
+    default:   "`legacy` -- THE CONTROL ARM, SHIPPED [ASSUMPTION], on `H-190`'s precedent: the plan names `declared` against `legacy` as the falsifier's two arms and is silent on which ships, and `declared` moves the realm. At `legacy` the term is the pre-G2 `stance_toward(p, c.subject)` verbatim"
+    site:      "Fixtures stance_polarity, read by `engine/season/decision/choose.py::stance_term` once per candidate; an arm outside `rosters.yaml: stance_polarities` raises"
+    sweep:     ["legacy (control, SHIPPED -- the pre-G2 term)", "regard (G1 regard, `+` on every row -- what regard adds without the sign)", "declared"]
+    unblocks:  "a grudge or a judged deed that makes a person MORE ready to fight its object; IN-25's stance-term gain (it tunes the term this arm signs); G4 reads it"
+    cite:      "FALSIFIER: `engine/season/tests/test_told_by_channel.py -k g2` -- a person holding `march`'s grudge-row shape toward `p_x` ranks `fight` on `p_x` below `fight` on `p_y` at `legacy` and above it at `declared`, through `make_chooser`'s real ranking; `tell` about `p_x` keeps its sign. The `march` half of §5's falsifier is not observable while `H-195` holds. THE LADDER (`CLAUDE.md` section 0): not superseded; not irrelevant (§6: G2 'lands regardless'); no design document gives a sign by role; precedent `H-190` for shipping the control; architecture (5): derive the role from the row's `contests:`/`counterparty:` columns rather than author a sign per verb"
+    source:    "v9 IN-18 G2 (`workplans/valoria_master_workplan_v9_part4.md`), telling workplan §5, `ED-IN-0282`, 2026-10-09"
+
+  - id:        H-195
+    tier:      1
+    hole:      "THE `holder` OPERAND -- WHO A RUNG'S REGARDED PARTY IS, PERSON-SIDE. Under `stance_polarity: declared` a rung subject (`march`'s) reads 0, because nobody holds stance about a rung; the role reading would regard the rung's HOLDER, and a person can know the holder only from their own `held_by` claim, which no ledger holds. So a grudge on faction F does not make F's enemies march on F-held rungs"
+    kind:      "WIRING"
+    owner:     "`decision/choose.py::stance_term`, at the field-less `ABSENT: H-195 holder` marker"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "§5's G2 falsifier's `march` half: members of a faction holding a grudge choose `march` on F-held rungs more under `declared` than `legacy`. Trigger: M0g -- the share of persons holding a `held_by` claim -- at or above 5 %"
+    cite:      "MEASURED 2026-10-09 on B-E's base a467126a (scratch `m0g.py`, `build_realm(0)`, one season): 0 of 80 persons hold a claim on the `held_by` stem (0.0 %), below §5's 5 %, so the operand reads 0 as §5's marker cell says. LADDER: not superseded; not irrelevant (the plan's marker); no document says how a person learns who holds a rung; precedent: `known_persons` reads acquaintance from the holder's own claims only (AX-2); architecture (5): reading the world's `holder_faction_of` from `decision/` is barred by AX-2, so nothing is built"
+    source:    "v9 IN-18 G2 (`workplans/valoria_master_workplan_v9_part4.md`), telling workplan §5, `ED-IN-0282`, 2026-10-09"
+
+  - id:        H-196
+    tier:      1
+    hole:      "WHICH CLAIM A TELLER PASSES ON ABOUT A SUBJECT (telling `G3`, slant). `said_of`'s pick is the newest non-`seen` claim, then the most confident; under `valence` the teller's claims about the subject are first narrowed to those the teller judges most strongly -- the largest `|deed_valence|` (G1's scoring of one deed by the teller's own projected pursuits) -- and the same comparator picks among them [ASSUMPTION: strength is the magnitude, so a teller slants toward what they most approve OR most condemn; a non-deed claim has valence 0, so a slanted teller never prefers it over a valenced deed]. Which arm ships is the open choice"
+    kind:      "RULING"
+    owner:     "`queries/person_q.py::said_of` (its `teller` argument, passed by `decision/options.py::opening_set`); arms in `rosters.yaml: said_slants`"
+    grade:     "assumption"
+    default:   "`newest` -- THE CONTROL ARM, SHIPPED [ASSUMPTION], on `H-190`'s precedent: the plan names the control and is silent on shipping `valence`, and `valence` moves what tellings carry. At `newest` the pick is the pre-G3 one and no pursuits are read"
+    site:      "Fixtures said_slant, read by `engine/season/queries/person_q.py::said_of` (through `_slant`) when a `teller` is given; an arm outside `rosters.yaml: said_slants` raises"
+    sweep:     ["newest (control, SHIPPED -- the pre-G3 pick)", "valence"]
+    unblocks:  "a teller who passes on what matters to them -- the old outrage over the recent trivia -- so hearsay drifts toward the tellers' own values; G7's deception reads what was said"
+    cite:      "TRIGGER MET: M0a > 0 after T4 (realm person-subject executed 2 of 3, telling workplan §6). FALSIFIER: `engine/season/tests/test_told_by_channel.py -k g3` -- an older strongly-judged deed against a newer unjudged claim: the newer is said at `newest`, the older at `valence`, the newer again when the teller judges nothing. THE LADDER (`CLAUDE.md` section 0): not superseded; not irrelevant (the plan's G3); no design document says which claim a teller chooses; precedent `H-190`; architecture (5): reuse G1's deed scoring (`deed_valence`) rather than a second valence. TWO SWEEP POINTS, NOT THREE (R2 reports it): the choice is binary -- which claim, not how much -- on `H-154`'s precedent (`displayed_anger_extracts_concessions: [False, True]`); a third arm would be an invented slant rule"
+    source:    "v9 IN-18 G3 (`workplans/valoria_master_workplan_v9_part4.md`), telling workplan §5, `ED-IN-0282`, 2026-10-09"
+
+  - id:        H-197
+    tier:      1
+    hole:      "CONFIDENCES (telling `G6`) -- A TELLING CANNOT BE MADE IN CONFIDENCE. Every told claim is deposited `visibility: own` with no circle, `Said` carries no `circle`, and a hearer who passes a confided claim on to someone outside it is not distinguished from any other teller. §5's falsifier needs two things this tree does not have: (1) a rule for WHEN a telling is private -- no document gives one (the shape row names only the field); (2) an EMITTED `confidence.broken` kind -- an event kind is declared on a verb row's `emits:` (`verb_table.yaml`) or a matrix row (`write_matrix.yaml`, which `World.write` refuses to emit an undeclared kind against) and is minted by the fold (`loop/resolve.py`), none of which IN-18's lane may edit. NOT private whispers (§10 decision 1, not built): recipiency stays WITNESS's, a confidence binds what the hearer may RETELL, never who hears"
+    kind:      "WIRING"
+    owner:     "`loop/witness.py`'s told deposit, at the field-less `ABSENT: H-197 confidences` marker (the circle line), with `Claim.visibility` (`state/carriers.py`) as the field"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a confided claim deposited `visibility == (A, B)`, and a retelling outside the circle emitting `confidence.broken` -- betrayal as an event the world can react to. SC-02 `22a` re-greps `Claim.visibility`'s readers at B-P and keeps the field only if this lands"
+    cite:      "TRIGGER MET (M0a > 0 after T4, telling workplan §6). NOT BUILT AT v9 IN-18 (2026-10-09) BECAUSE THE FALSIFIER'S EMISSION NEEDS FILES OUTSIDE THE LANE: `verb_table.yaml` (the `tell` row's `emits:`) or `write_matrix.yaml` (the `claim_ledger` row's `emits:`), and the fold. THE LADDER (`CLAUDE.md` section 0): not superseded; not irrelevant (§5 G6, trigger met); no design document gives the privacy rule; no precedent in the tree marks a telling private; architecture (5) cannot choose between a regard threshold (G1) and a rate fixture (`H-190`'s shape) without a ruling on what makes a telling confidential -- the escalation is the orchestrator's: an IN lane edit to the verb table, plus the rule"
+    source:    "v9 IN-18 G6 (`workplans/valoria_master_workplan_v9_part4.md`), telling workplan §5, `ED-IN-0282`, 2026-10-09"
+
+  - id:        H-198
+    tier:      1
+    hole:      "DECEPTION (telling `G7`) -- A TELLER NEVER LIES. `said_of` always passes on a claim the teller holds, unaltered (`told_drift_band`'s drift at `Partial` is loss in the channel, not intent). Nothing says WHEN a person lies or WHAT the lie says: a deed claim is `(x, <kind>, True)` and no deposit ever holds it False, so a lie about a deed can never be caught; a lie on a cell value needs a rule for the false value"
+    kind:      "RULING"
+    owner:     "`queries/person_q.py::said_of`, at the field-less `ABSENT: H-198 deception` marker"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a liar whose caught lies cost them credit -- `record` (`H-183`) already prices it: `test_t6_a_teller_contradicted_twice_weighs_less_than_one_confirmed_twice` is §5's G7 falsifier ('after two caught lies, the liar's record is below an honest teller's') and passes with no lie mechanism, so that falsifier cannot observe a lie rule's failure"
+    cite:      "TRIGGER MET (M0a > 0; G2 and G3 built at v9 IN-18, 2026-10-09). NOT BUILT: §5's falsifier observes `record`, which T6 built and which passes today, so a lie rule built here would land with no falsifier able to fail on it -- the gate rule ('a field lands only with its reader and its falsifier'). THE LADDER (`CLAUDE.md` section 0): not superseded; not irrelevant; no design document gives when or what a person lies; no precedent; architecture (5): two defensible lie rules (alter a held cell value vs. assert an unheld deed) lead to different games and the second can never be caught by the shipped deposits, so nothing is chosen here"
+    source:    "v9 IN-18 G7 (`workplans/valoria_master_workplan_v9_part4.md`), telling workplan §5, `ED-IN-0282`, 2026-10-09"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

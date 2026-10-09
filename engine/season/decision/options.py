@@ -142,7 +142,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             # that names its second side on its own operand contests against THAT (`tell`'s `to`),
             # so its `subject` is a topic and a person may tell somebody about themselves; the
             # counterparty rule below still declines the person as their own second side.
-            if row.contests and not row.counterparty and subject == p.id:
+            if subject_is_opponent(row) and subject == p.id:
                 continue
             # ⚠ OPERANDS BEFORE THE BELIEF TEST, AND THE ORDER IS THE POINT. Clause 4 asks
             # whether the requirement is known-false ABOUT THIS BINDING, so the binding has to
@@ -195,13 +195,23 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                     # one telling is read once however many hearers it fans to.
                     entity = ops.get(ledger_of[0])
                     if entity not in said_of_entity:
-                        said_of_entity[entity] = said_of(p.ledger, entity, fx)
+                        said_of_entity[entity] = said_of(p.ledger, entity, fx, teller=p)
                     said = said_of_entity[entity]
                     if said is None:
                         continue
                     ops = {**ops, "said": said}
                 out.append(Candidate(verb, subject, operands=ops))
     return out
+
+
+def subject_is_opponent(row: "VerbRow") -> bool:
+    """WHETHER AN ACT OF `row` IS CONTESTED AGAINST ITS `subject` -- the row declares a prize
+    (`contests:`) and names no `counterparty:`, so its second side IS its subject (`loop/sides.py`
+    contests against `payload[row.counterparty or "subject"]`). Read off the row's own columns,
+    never a verb name. One owner for two readers: `opening_set`'s self-subject decline (a person is
+    not their own adversary) and `decision/choose.py`'s score term 2 under `stance_polarity:
+    declared` (v9 IN-18 `G2`: an act against a disliked opponent scores higher, not lower)."""
+    return bool(row.contests) and not row.counterparty
 
 
 # ⚠ `project` LIVES HERE, NOT IN `choose.py`, AND THE REASON IS AN IMPORT CYCLE THAT EXECUTED.
@@ -838,7 +848,7 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
     `subject` (`TypedRequires.known_person_operands`: `tell`'s `to`, and since plan position `14`
     `give`'s -- `petition` and `issue` bind `to` without `subject`, so `to` is what they are about
     and keeps the referent rule in `_derive_operand`), one bag PER PERSON `p` KNOWS (`queries/person_q.py::known_persons`, from `p`'s own claims,
-    never the actor and never the topic), in that function's sorted order. Nobody known is no bag:
+    never the actor; since IN-18 step 2a the topic may be the hearer), in that function's sorted order. Nobody known is no bag:
     a telling to nobody is an act with a hole (`operands_for`'s `None`), traced and not formed.
 
     ⚠ PERSON-SIDE AND WORLD-FREE, like `operands_for` -- `p` first for the AST guard's reason
@@ -853,7 +863,7 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
     if not fan:
         ops = _operands(p, row, q, subject, fx, {})
         return [] if ops is None else [ops]
-    people = known_persons(p.ledger, p.id, subject)
+    people = known_persons(p.ledger, p.id)
     if not people:
         TRACE.note(f"{row.verb!r} needs {list(fan)} from a person {p.id} knows, and they know "
                    f"nobody but {subject!r}; NO Candidate is formed (T4)", "§F1/H-94")
@@ -1055,7 +1065,8 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
                  = clamp01(told_weight ** hops * relation * record)   otherwise
         hops     = len(c.chain)         teller = c.chain[-1]           (origin = c.chain[0])
         relation = 1 + rank_gain * rank(p, teller)
-                     + regard_gain * clamp(regard(p, teller) / STANCE_MAX, -1, 1)
+                     + regard_gain * clamp(regard(p, teller, fx) / STANCE_MAX, -1, 1)
+                   (`regard` is G1's: stored stance plus the judged and told halves at their gains)
         record   = `record(p, teller, fx)`: 1.0 with no pair; else 1 + record_gain * balance (`T6`)
 
     `RULINGS.yaml` CAT-3, closed: store the teller and grade the claim WHEN READ, by the hearer's
@@ -1094,7 +1105,7 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
             relation = relation_of[teller] = (
                 1.0
                 + rank_gain * rank(p, teller)
-                + regard_gain * _clamp(regard(p, teller) / STANCE_MAX, -1.0, 1.0))
+                + regard_gain * _clamp(regard(p, teller, fx) / STANCE_MAX, -1.0, 1.0))
         # ABSENT: H-180 stake  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
         rec = record_of.get(teller)
         if rec is None:

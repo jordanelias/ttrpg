@@ -679,6 +679,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                     # its last element, derived. A KEYWORD, never a positional: `chain` sits where
                     # the removed `teller` field did, so a stray string in that slot would be
                     # read as a chain of one-character hops.
+                    # ABSENT: H-197 confidences  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
                     tc = Claim(_told_hash or H(w.world_seed, w.tick, pid, f"told:{e.id}"),
                                pid, _held.subject, _held.predicate, _told_val, w.tick,
                                "told_by", _held.confidence, "own", self.round,
