@@ -388,7 +388,7 @@ def test_a_giver_forms_one_give_per_person_known_and_none_to_himself(monkeypatch
     # a referent of his own knowing AND clear the column, to show the column is a second guard.
     monkeypatch.setitem(VERB_TABLE, "give", dataclasses.replace(VERB_TABLE["give"], counterparty=""))
     from engine.season.decision import options as _opts
-    monkeypatch.setattr(_opts, "known_persons", lambda claims, actor, topic: (actor, RECEIVER))
+    monkeypatch.setattr(_opts, "known_persons", lambda claims, actor: (actor, RECEIVER))
     got = _give_candidates(w, GIVER, (rid,))
     assert GIVER in {c.operands.get("to") for c in got}, got
     monkeypatch.setitem(VERB_TABLE, "give", dataclasses.replace(VERB_TABLE["give"], counterparty="to"))
