@@ -138,6 +138,8 @@ def regard(p: Person, referent: str, fx=None) -> float:
         return stored
     jg = float(fx.get("judged_gain"))
     tg = float(fx.get("told_valence_gain"))
+    if not (jg >= 0 and tg >= 0):
+        raise ValueError(f"judged_gain {jg} / told_valence_gain {tg} must be >= 0 (H-192/H-193)")
     if not jg and not tg:
         return stored
     judged, told = deeds_judged(p, referent, fx.get("scar_weight_shift"))

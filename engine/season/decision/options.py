@@ -1252,7 +1252,9 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
     can therefore tie a firsthand claim on support and win on `when`; `rank` reads 0 (`H-181`) so it
     adds nothing yet. `record` is not independent of what it weighs: see `record`'s last warning.
     ⚠ `relation` AND `record` EACH DEPEND ON THE TELLER ALONE AND ON `p`'s LEDGER, WHICH DOES NOT
-    CHANGE INSIDE ONE `opening_set`, so each is computed ONCE PER TELLER."""
+    CHANGE INSIDE ONE `opening_set`, so each is computed ONCE PER TELLER (except under `loop/witness.py`'s
+    `ledger_weigh`, whose closure outlives deposits within one (witness, Event): its memo is the
+    first-use ledger's)."""
     gains: list = []
     relation_of: dict = {}      # `relation` depends on the teller alone: one stance scan per teller
     record_of: dict = {}        # `record` too: one ledger scan per teller

@@ -499,6 +499,9 @@ def _ch_post_remit(w: "World", e, pid) -> bool:
     `13e`'s snapshot consolidation is unaffected where it still reads -- `loop/resolve.py`'s
     `_eligible` and `decision/options.py` -- and this site is simply no longer one of them.
 
+    ⚠ (B-E, v9 IN-22: a computed `transfer` through a seat now carries `Act.via`, so seat-borne transfers
+    reach this predicate, and the IN-22 purview limb in `loop/witness.py` mints `inferred` claims for
+    seat holders; the paragraph below predates both.)
     ⚠ WHO CAN REACH IT TODAY: nobody the chooser drives. `oblige`'s row is untyped and declares
     `counterparty: subject`, so `opening_set` forms no `oblige` Candidate (plan position 16's
     precedent -- and no Question's referent is ever a seat anyway), and AT `17a` no world builder

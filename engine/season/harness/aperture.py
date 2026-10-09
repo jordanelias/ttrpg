@@ -71,7 +71,8 @@ def seat_gated(row) -> bool:
     """Does this row's formability depend on a SEAT? True when one of its `eligibility:`
     alternatives is `remit:` — the one kind `person_side_eligible` admits on a holder's grant
     (`decision/options.py::_admitted_through`). Parsed exactly as that walk parses it."""
-    return any(alt.partition(":")[0].strip() == "remit" for alt in row.eligibility)
+    kinds = [alt.partition(":")[0].strip() for alt in row.eligibility]
+    return "remit" in kinds and "own" not in kinds
 
 
 def seats(w) -> dict:

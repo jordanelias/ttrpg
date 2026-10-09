@@ -699,8 +699,8 @@ DEFAULT_FIXTURES = Fixtures(
     # (`deeds_judged`). `0` is the CONTROL. SHIPPED LIVE at the sweep's midpoint 0.5 for both, per
     # Jordan's ruling of 2026-10-09 (B-E): *"Gains are improvements and therefore ship."* [ASSUMPTION;
     # medium; Jordan to correct; revert: set both back to 0.0 (the control)] -- the ruling ships the
-    # gain and names no magnitude. A live gain moves the realm (`teller_weight`'s `relation` reads
-    # regard). At 0 `regard` reads no ledger and is the stored half exactly. Separate from
+    # gain and names no magnitude. A live gain can move the realm (`teller_weight`'s `relation` reads
+    # regard; seed 0 measured unmoved, H-192). At 0 `regard` reads no ledger and is the stored half exactly. Separate from
     # `regard_gain` (`H-179`): see `regard`'s docstring.
     # [JUSTIFIED: engine/season/hole_register.yaml H-192 -- the judged half's gain; no document gives how much a witnessed deed moves regard, so it is injected and swept 0 / 0.5 / 1.0; shipped live at 0.5 per Jordan's 2026-10-09 ruling]
     judged_gain=0.5,                   # `H-192`, swept 0 (control) / 0.5 (SHIPPED) / 1.0

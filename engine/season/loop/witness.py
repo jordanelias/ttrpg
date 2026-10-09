@@ -262,6 +262,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # `WITNESS_CHANNELS`' declared precedence -- and no longer the mode, which is `mode` above.
     fan: list[tuple[str, Event, str]] = [
         (pid, e, ch) for e in events for pid, ch in observers_for(w, e, mode, everyone)]
+    # (this count is the FAN alone: IN-22's purview extension below appends after it)
     TRACE.decision(f"fan-out over {len(events)} events -> {len(fan)} deposits", "S28/S61",
                    chose=f"mode={mode} over {len(everyone)} persons "
                          f"({'#353 S61 as specified, and H-33 control' if mode == 'total' else 'H-33 arm; `all_five` is the ruled default since 2026-09-07, R7'})",
