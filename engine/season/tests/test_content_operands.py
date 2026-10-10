@@ -284,11 +284,12 @@ def test_no_writ_derived_operand_is_ever_a_raw_tuple():
 # 6 -- NOTHING WIDENS THAT DID NOT NEED TO
 # ======================================================================================
 
-def test_question_sources_stays_at_two_clause_3_is_not_a_fourth_source():
+def test_clause_3_is_not_a_question_source_of_its_own():
     """r2 `01` §A.5.4, RULED: *"Not a fourth source. One `Question` shape, one `source` string,
     one `occasioned_by` route."* Clause 3 widens Q2's ADMISSION test in place; it mints no new
-    `Question.source` value."""
-    assert set(QUESTION_SOURCES) == {"claim_landed", "need"}
+    `Question.source` value. (Renamed from `..._stays_at_two_...` at IN-53, which adds `seat` --
+    a standing source with its own branch in `questions_for`, not clause 3's.)"""
+    assert set(QUESTION_SOURCES) == {"claim_landed", "need", "seat"}
 
 
 def test_a_bad_source_still_raises_named_did_not_smuggle_one_in():
