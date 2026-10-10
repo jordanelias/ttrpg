@@ -35,11 +35,6 @@ def census(self, token: Token) -> None:
     w = self.w
     w.step = Step.CENSUS
     TRACE.step("CENSUS", "enter")
-    TRACE.decision("individuation", "S29",
-                   chose="demand-driven only: individuate the id each of this season's "
-                         "`person.demanded` Events names, and nobody else",
-                   alternatives=["a clock that generates (forbidden)",
-                                 "a world-gen roster (S54 item 18 -- not a clock, not folded in)"])
     # S29: DEMAND-DRIVEN ONLY. Nothing generates without a demand and NO CLOCK GENERATES
     # ANYTHING. Rev 1 called the gate with an `apply` that mutated nothing, which S30.2 calls
     # "worse than no gate"; every write below individuates a person a demand named, or is not made.
@@ -48,6 +43,16 @@ def census(self, token: Token) -> None:
     # already answered is not re-read next season, and a second demand for the same id in one
     # season finds it held (`demanded_person` returns `None`) and individuates nobody twice.
     demands = [e for e in w.log if e.kind == PERSON_DEMANDED and e.emitted_at == w.tick]
+    # ⚠ A SEASON WITH NO DEMAND TRACES EXACTLY WHAT IT TRACED BEFORE SE-01, AND THE LINE IS STILL
+    # TRUE OF IT. The committed run artifacts (`runs/DECISIONS.md`, `runs/TRACE.txt`, reproduced
+    # byte for byte by `test_w15_report_py_...`) carry this decision every season, and no run they
+    # record demands anyone; a season that does says so instead.
+    TRACE.decision("individuation", "S29",
+                   chose=("demand-driven only; generated nobody" if not demands else
+                          f"demand-driven only; {len(demands)} `person.demanded` Event(s) this "
+                          "season, each individuating the id it names if the world still lacks it"),
+                   alternatives=["a clock that generates (forbidden)",
+                                 "a world-gen roster (S54 item 18 -- not a clock, not folded in)"])
     for e in demands:
         a = causing_act(w, e)
         pid = world_q.demanded_person(w, a) if a is not None else None

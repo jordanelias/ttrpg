@@ -56,6 +56,7 @@ from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..state.attribution import anchor_of
 from ..state.carriers import Person, Rung, Site, Tenure
+from ..state.ids import ROOT
 
 WEIGHTS = P.DEFAULT_FIXTURES.get("subsistence_weight")
 # v9 SE-01 (`24g`): THE LIVE ARMS ARE READ OFF `H-125`'s OWN `sweep:` ROW, NOT COPIED. The register is
@@ -472,7 +473,12 @@ def test_se01_control_a_dispatch_that_asks_for_no_absent_person_demands_nobody(s
 
 _SEASON = Path(__file__).resolve().parents[1]
 _OWNED = {"weight": {"loop/census.py", "loop/matter.py"},
-          "envelope": {"loop/census.py", "loop/matter.py"}}
+          "envelope": {"loop/census.py", "loop/matter.py",
+                       # WORLD-GEN, NOT A STEP: probe `W9` seeds its `tiny_world`'s envelope before
+                       # any season runs, and then moves it through the gate at MATTER. Seeding a
+                       # fixture world is the builder's (as `seat_cohorts` passes `weight=`).
+                       # Shrink-only.
+                       "harness/probes.py"}}
 
 
 def _bare_writes(src: str, rel: str) -> list:
@@ -536,7 +542,8 @@ def test_se01_falsifier_the_gate_refuses_weight_and_the_envelope_at_resolve(kind
     assert getattr(rec, field) == was, "a refused write moved the carrier"
     w.step = Step.CENSUS
     w.write(field, mint_token(w, WriteClass.MATTER), lambda: setattr(rec, field, value),
-            record_kind=kind, fieldname=field, driver="Event")
+            record_kind=kind, fieldname=field, driver="Event",
+            emits=f"{field}.changed", subject=rec.id, causes=[ROOT])
     assert getattr(rec, field) == value
 
 

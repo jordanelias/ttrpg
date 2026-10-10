@@ -523,6 +523,10 @@ DEFAULT_FIXTURES = Fixtures(
     # `LB-3b` falsifiers set the fixture explicitly, so the behaviour is EXERCISED rather than
     # merely present (§0.2). Choosing the number needs a world that stocks a larder — which is
     # what makes this a design call rather than a default nobody looked at.
+    # ⚠ v9 SE-01 (`24g`): THE LIVE ARM IS BUILT AND EXERCISED, AND THIS VALUE IS STILL NOT CHOSEN.
+    # J-6 settles the SHAPE -- a fixture, the control kept for the corpus, a one-line revert -- not
+    # the number. `tests/test_territorial_subsistence.py` reads `H-125`'s `sweep:` off the register
+    # and runs every non-control arm on the built realm; flipping the live default is THIS line.
     body_step=0,                       # `H-125`, swept 0 (control, SHIPPED) / 10 / 67
     # `W-E` / `H-123`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
     # NOT GO DOWN. Part E's `writes:` names the CELL and never the VALUE, and no in-chain document
