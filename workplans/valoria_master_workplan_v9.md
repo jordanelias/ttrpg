@@ -201,7 +201,7 @@ commit and the run stops for a cleared window (`methodology-execute`, `CLAUDE.md
 has read §K's still-held list and `_part5` §J. `main` was red from PR #456 on one test
 (`test_flow_skeletons.py::test_contract_names_resolve_in_the_generated_index[combat]`); the one-line fix (`personal_combat`
 joins `RETIRED_CONTRACTS`) is built and rides the adoption branch (`7b619328`), so it is not a position — read `All Gates
-Green` on `main` once the branch merges. B-C is closed. B-D is closed: D1 (`9054df80`), D2 (`b31d2c31`), D3 (`0a690b30`). B-G is closed (`0f998f64`). B-H is closed (`c13144b9`). B-E is closed (`ac9724fc`). B-I is PARTIAL (`c3a698ce..627e4bc6`): IN-11 (`2a2ed152`), IN-50 (`5fa6ac16`) and IN-18 G6 (`66bf51f9`) landed; IN-09 and IN-10 were falsified and reverted (H-203), so B-I's remainder is IN-53 → IN-10 → IN-33, then IN-18 G5, and IN-53 is gate-free; IN-09 stays in B-I, BLK on a writ reaching its executor (H-203's second half; no position schedules it). Next is B-I, starting at IN-53; B-J waits on IN-10 (SC-03a needs it); then … the spine `_part3` §B names. Every batch runs
+Green` on `main` once the branch merges. B-C is closed. B-D is closed: D1 (`9054df80`), D2 (`b31d2c31`), D3 (`0a690b30`). B-G is closed (`0f998f64`). B-H is closed (`c13144b9`). B-E is closed (`ac9724fc`). B-I is PARTIAL (`c3a698ce..627e4bc6`): IN-11 (`2a2ed152`), IN-50 (`5fa6ac16`) and IN-18 G6 (`66bf51f9`) landed; IN-09 and IN-10 were falsified and reverted (H-203), so B-I's remainder is IN-53 → IN-10 → IN-33, then IN-18 G5; IN-53 was then built and falsified and reverted, and is itself blocked on H-207 (the fix lies outside its EDITS; unscheduled), so the remainder is blocked again; IN-09 stays in B-I, BLK on a writ reaching its executor (H-203's second half; no position schedules it). No batch is gate-free (`_part3` §B's header lists the gates); B-J waits on IN-10 (SC-03a needs it); then … the spine `_part3` §B names. Every batch runs
 through `methodology-execute` (`CLAUDE.md` §9), and a batch's READ-FIRST list names the sites to read (the pins file is far too
 large to read whole: grep the assertion).
 
@@ -250,7 +250,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-49 | H-163 limit 3 | SE/IN | BLK | IN-10 | R-04, R-05 | B-K | `_part5` |
 | IN-51 | #453 R-5 (b) | IN/FA/SE | BLK | IN-12 | R-05 | B-R | `_part5` |
 | IN-52 | the levy-to-field feed (from IN-07's design); LF-1..LF-3 | IN/SE/MB | BLK | IN-49, IN-07's extractions | — | B-T | `_part4` |
-| IN-53 | H-203 | IN/SC | B | — | R-04, R-05 | B-I | `_part5` |
+| IN-53 | H-203 | IN/SC | BLK | H-207 (unscheduled) | R-04, R-05 | B-I | `_part5` |
 | SC-01 | `22` steps 11–16 | SC | BLK | IN-03 | R-04, R-05, R-08, R-09, M2 | B-N | `_part6` |
 | SC-02 | `22a` → `23` → `22b` | SC | BLK | SC-01 | — | B-P | `_part6` |
 | SC-03a | #453 steps 2b, 3 | SC | BLK | IN-10 (IN-11 landed `2a2ed152`) | R-05 | B-J | `_part6` |
