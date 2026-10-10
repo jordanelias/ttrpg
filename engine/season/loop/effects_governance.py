@@ -188,9 +188,10 @@ def _eff_release(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     v9 IN-11 (#453 §10.4 step 2, R-3 (b)) -- A CLOSED `commit` EARNS `commitment.ended`, AND
     `repudiate` IS CUT. `release` was already the second closer of a `commit` (its domain), so the
     row that did nothing else is deleted and the vow-break stays witnessable here: WHOLE-ACT
-    earning -- when any edge it closes is a `commit`, every edge earns every kind. A release that closes no `commit` names each edge earning
-    `tenure.closed` only, exactly as before; one that closes a `commit` names every edge it closes
-    earning the row's whole `emits:` (`earns=None`), because the fold unions only NAMED kinds
+    earning -- when any edge it closes is a `commit`, every edge earns every kind. A release that
+    closes no `commit` names each edge earning `tenure.closed` only, exactly as before; one that
+    closes a `commit` names every edge it closes earning the row's whole `emits:` (`earns=None`),
+    because the fold unions only NAMED kinds
     (`loop/resolve.py::_apply_write`) -- a `commit` edge earning `None` beside a `hold` edge
     earning `tenure.closed` would publish `tenure.closed` alone and drop the vow-break, and an
     utterer who committed to his own Proposition holds both edges on it."""

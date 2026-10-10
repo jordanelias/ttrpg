@@ -439,7 +439,8 @@ def _fold(self, w: "World", token: Token, a: Act,
         # old falsy-return case lands here too, through one channel instead of two. The Event was
         # unchanged by G4 -- same kinds, same cause, no changes -- so every refusal the old check
         # produced stayed byte-identical then; since IN-50 its cause is `[a.id]` PLUS the act's
-        # occasion ids, appended by `_act_events` like every Event an act emits. What moved is that the WRITE is refused too: the trace
+        # occasion ids, appended by `_act_events` like every Event an act emits. What moved is
+        # that the WRITE is refused too: the trace
         # records it as refused (`F9`), where it used to record a write that changed nothing as
         # admitted. A refused first pair leaves the later pairs unchecked: a refused write
         # authorizes nothing after it.

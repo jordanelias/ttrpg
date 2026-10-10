@@ -13,8 +13,9 @@ What each block proves, and the control that stops it passing vacuously:
      commit-only release (no `hold`, the faction-member shape) earns the vow-break too; and a
      witnessed mixed release names the Proposition to non-actor witnesses (A2, accepted as inert).
   3. COMPUTED PLAY: one seeded `build_realm(0)` season through the real chooser executes `commit`
-     at least once, and every Proposition an executed `commit` names is one its committer holds
-     (the utter -> hold -> question -> commit chain, not a hand-built act). Before IN-11 the same
+     at least once, and every Proposition an executed `commit` names was uttered by an act this
+     season and was held by its committer at some point up to the commit's tick (tick-granular: the
+     test does NOT show the hold was what routed the commit, see the comment at the assertion). Before IN-11 the same
      season attempted `commit` and refused every attempt (`aperture 1 0`: 35 of 35).
   4. THE CUT IS COMPLETE AND THE LOADER POLICES IT: `repudiate` is not a verb, and a planted
      `repudiate` cell in the alignment table or in `affiliation_engagement`'s shared column is
@@ -148,7 +149,9 @@ def test_in11_commit_executes_in_a_computed_realm_season_on_a_proposition_its_co
         f"`commit` executed {kinds['commitment.made']} times in a computed realm season "
         f"(refused {kinds['commitment.refused']}) -- IN-11 is not built")
     # The acts behind each `commitment.made`: computed (the chooser's), on a Proposition uttered by
-    # an act this season, which the committer holds -- the utter -> hold -> question -> commit chain.
+    # an act this season, and the committer held it up to this tick. This shows the computed commit is
+    # on a Proposition the season uttered and that a hold existed; it does not show the hold was the
+    # route to the commit (one committer had already released it, below).
     uttered = {f"prop:{a.id}" for a in w.acts if a.verb == "utter"}
     checked = 0
     for e in (e for e in w.log if e.kind == "commitment.made"):
@@ -167,7 +170,7 @@ def test_in11_commit_executes_in_a_computed_realm_season_on_a_proposition_its_co
                    and (h.until is None or h.until >= at)
                    for h in w.persons[a.actor].tenures), (
             f"{a.actor} committed to {prop} at tick {at} without a hold live at that tick -- "
-            "not the utter -> hold chain")
+            "-- the hold the test expects to exist is absent")
         checked += 1
     assert checked == kinds["commitment.made"] >= 1
 

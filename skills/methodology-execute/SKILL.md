@@ -501,7 +501,7 @@ this spelling.
 
 **Checkpoints.** Work that exists only in the working tree is one restart from lost. Commit and push a
 checkpoint at every producer hand-back *before* verifying it, and before any long instrument run:
-subject `WIP checkpoint: <handle> (unreviewed)`, **no `Item:` trailer** (so the in-flight row never lists
+subject `WIP checkpoint: <handle>` (72 characters at most, so keep the handle short; "unreviewed" goes in the body), **no `Item:` trailer** (so the in-flight row never lists
 it; the item's own commit follows on top), trailers as any commit. Producers still never commit — the
 orchestrator checkpoints. A checkpoint is recovery, not review: BATCH-CLOSE reviews the whole range, and a
 falsified attempt and its revert net to zero in that range (nothing to review; the hole row is the record).
