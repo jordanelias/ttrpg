@@ -54,7 +54,7 @@ from ..state.containment import ancestry, home_of  # noqa: F401 -- re-exported
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
 from ..state.gate import BENCH_BASIS, may_determine, purview_reaches, sits_over
-from ..state.ids import H, ROOT
+from ..state.ids import ROOT, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
 
@@ -445,6 +445,16 @@ def place_of(w: World, x: Optional[str]) -> Optional[str]:
 # executes it under a non-zero `body_step`; the plan position is stale on this half, not open.
 
 
+def ever_named(w: World, eid: str) -> bool:
+    """Has the world held or recorded this id? `class_of` has no `dates` and forgets the dead, so
+    "unheld" is not "never was": a date is held (`place_of` admits it as a referent), and a recorded
+    id is one a logged Event's change already names -- the death names the dead (`person.died`), the
+    convening names the date. (A log scan: the cost a tombstone set on `World` would remove, and a
+    carrier change, so not here.)"""
+    return (w.class_of(eid) is not None or eid in w.dates
+            or any(c.subject == eid for e in w.log for c in e.changes))
+
+
 def demanded_person(w: World, a) -> Optional[str]:
     """v9 SE-01 (`24g`) / `H-51` -- P3: THE PERSON AN ACT DEMANDS, or `None`.
 
@@ -461,17 +471,7 @@ def demanded_person(w: World, a) -> Optional[str]:
     of a row that declares it (`loop/resolve.py`), and by CENSUS, which individuates the id it names
     (`loop/census.py`) -- one owner, so the two cannot disagree about who was asked for."""
     s = binding_from_act(a).get("subject")
-    if not isinstance(s, str) or not s or w.class_of(s) is not None:
-        return None
-    # ⚠ `class_of` HAS NO `dates` AND FORGETS THE DEAD, SO "UNHELD" IS NOT YET "NEVER WAS" (B-F close:
-    # a `convene`d date id, or a person `remove_person` took out earlier this round, passes the test
-    # above and would be minted as a Person under an id the world already used). A date is held
-    # (`place_of` admits it as a referent); a recorded id is one a logged Event's change already
-    # names -- the death names the dead (`person.died`), the convening names the date. A demand
-    # is for an id the world has NEVER spoken of.
-    if s in w.dates or any(c.subject == s for e in w.log for c in e.changes):
-        return None
-    return s
+    return s if isinstance(s, str) and s and not ever_named(w, s) else None
 
 
 def reach(w: World, p: Person) -> set[str]:
@@ -638,7 +638,7 @@ def season_factor_of(w: World) -> float:
 
     `season_factor` is the constant (swept 0.5 / 1 / 2). When `season_factor_draw` declares a table
     the factor is that constant times ONE outcome drawn from the current season of the year's entry,
-    the outcomes equally likely. The draw is KEYED, not random: `H(world_seed, tick, ...)` is the
+    the outcomes equally likely. The draw is KEYED, not random: `ids.draw_factory`, seeded from `(world_seed, tick, ...)`, is the
     same mint every id uses, so the same seed twice gives one hash and two seeds differ. An EMPTY
     table is the control arm and returns the bare constant, so the default world's arithmetic is
     untouched (`test_season_weather.py` holds the three-hash equality)."""
@@ -648,15 +648,13 @@ def season_factor_of(w: World) -> float:
         return base
     outcomes = w.fixtures.get("season_factor_draw")[s]
     if not outcomes:
-        # An empty season entry has nothing to draw from; without this the modulus below is
-        # `% 0` and MATTER dies with a bare ZeroDivisionError naming neither the fixture nor the season.
+        # An empty season entry has nothing to draw from; without this `choose` below dies with a
+        # bare IndexError naming neither the fixture nor the season.
         raise Unspecified(f"`season_factor_draw` season {s} declares no outcomes", "H-26",
                           needs="at least one multiplier per season, or `()` for the control",
                           law="IN-21: each season of the year holds the equally likely multipliers it draws from")
-    pick = int(H(w.world_seed, w.tick, "world", "season_factor"),
-               # [JUSTIFIED: a RADIX, not a game value -- `H` returns a hexdigest, 16 reads it back as an integer (`ids.draw_factory`'s same non-quantity)]
-               16) % len(outcomes)
-    return base * outcomes[pick]
+    draw = draw_factory(w.world_seed, lambda: w.tick)("world", "season_factor")
+    return base * draw.choice(outcomes)
 
 
 def subsistence_draw(w: World) -> dict:

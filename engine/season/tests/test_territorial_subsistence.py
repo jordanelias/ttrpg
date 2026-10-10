@@ -586,11 +586,12 @@ def test_se01_falsifier_the_gate_refuses_weight_and_the_envelope_at_resolve(kind
     assert getattr(rec, field) == value
 
 
-def test_se01_falsifier_a_stored_aggregate_on_a_rung_is_refused():
+def test_se01_falsifier_a_stored_aggregate_on_a_rung_is_refused(realm):
     """*"A stored aggregate where a Query is required fails"*: a settlement's population is
     `world_q.population`, a Query, and storing it on the Rung raises (S10.1 / L3) rather than
-    standing beside the Query as a second answer that can go stale."""
-    w = POP.build_realm(0)
+    standing beside the Query as a second answer that can go stale. (A refused write mutates
+    nothing, so the module's shared read-only realm serves.)"""
+    w = realm
     rung = world_q.parent_of(w, sorted(_cohorts(w))[0])
     assert world_q.population(w, rung) >= 1
     with pytest.raises(ShapeGap):

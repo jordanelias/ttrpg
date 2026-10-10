@@ -17,8 +17,6 @@ THE FALSIFIERS, each with the failure it would show:
 
 from __future__ import annotations
 
-import pytest
-
 from ..data.matrix import Step, WriteClass
 from ..data.requires import SHORTFALL_PREDICATE
 from ..harness import populated as POP
@@ -97,16 +95,18 @@ def test_in21_control_draw_off_and_draw_at_one_reproduce_the_base_hashes():
     h[0] = w.content_hash()
     POP.run(seasons=1, seed=0, w=w)
     h[1] = w.content_hash()
-    w2 = POP.build_realm(0)
-    POP.run(seasons=2, seed=0, w=w2)
-    h[2] = w2.content_hash()
+    POP.run(seasons=1, seed=0, w=w)       # continuing one world reads the fresh two-season hash
+    h[2] = w.content_hash()
     assert w.fixtures.get("season_factor_draw") == (), "the shipped default is not the control arm"
     assert h == BASE_HASHES, f"draw off moved a hash: {h}"
-    # The draw ON but degenerate at 1.0: base * 1.0 is the bare constant, so it reads the same.
-    w3 = POP.build_realm(0)
-    w3.fixtures = DEFAULT.sweep("season_factor_draw", UNIT)
-    POP.run(seasons=1, seed=0, w=w3)
-    assert w3.content_hash() == BASE_HASHES[1], "a table of 1.0 moved the one-season hash"
+
+
+def test_in21_a_table_of_ones_reads_the_same_as_no_table():
+    """The draw ON but degenerate at 1.0: base * 1.0 is the bare constant. Compared on the one-town
+    world (`content_hash` folds state and the log, not fixtures), over two seasons, exactly."""
+    off, unit = _town(()), _town(UNIT)
+    assert _seasons(off, 2) == _seasons(unit, 2)
+    assert off.content_hash() == unit.content_hash(), "a table of 1.0 moved the hash"
 
 
 def test_in21_drought_leaves_stores_below_control_and_a_drained_larder_reports_shortfall():
@@ -132,7 +132,8 @@ def test_in21_drought_leaves_stores_below_control_and_a_drained_larder_reports_s
 
 def test_in21_same_seed_twice_one_hash_and_the_draw_moves_it_off_control():
     a, b = _town(SPREAD, seed=7), _town(SPREAD, seed=7)
-    _seasons(a, 6), _seasons(b, 6)
+    _seasons(a, 6)
+    _seasons(b, 6)
     assert a.content_hash() == b.content_hash(), "the same seed twice gave two hashes"
     off = _town((), seed=7)
     _seasons(off, 6)
