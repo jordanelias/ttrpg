@@ -106,6 +106,23 @@ def _addressed(content):
     return {**content, addr: list(v) if isinstance(v, (list, tuple)) else [v]}
 
 
+def _makers_hold(w: "World", actor: str, obj: str) -> Tenure:
+    """THE MAKER'S `hold`: the edge a maker keeps on what they made (S13 -- possession is a `hold`
+    Tenure owned by the holder, never a field on the thing held), opened `since` this tick. The one
+    owner of its construction: `_mint_document`'s Record and `_eff_utter`'s Proposition both mint it
+    here. The id is `H(seed, tick, actor, f"hold:{obj}")`, unsalted by the act (a maker makes one
+    thing per id). ⚠ `"hold"` STAYS A STRING LITERAL IN THIS FILE: `data/verbs.py::OPENERS-DERIVE`
+    walks a decorated effect into the same-file helpers it calls and reads the kind off the literal,
+    so the six minters reaching this call -- `create_record`, `issue`, `open_case`, `petition`, `survey`
+    (through `_mint_document`) and `utter` (through `_eff_utter`) -- remain `hold`'s openers.
+
+    ⚠ NONE OF THE SIX DECLARES `Tenure.since` IN ITS `writes:`. The hold opens inside the declared
+    `Proposition.exists` / `Record.exists` write, and only the authority check (`refuse_unauthored`)
+    sees it. CONVENTION against `04` §C.2/§C.4 and PART D's rows on matrix and step: no scan sees it.
+    Declaring it would add a gated write and move the hash, so it is not done."""
+    return Tenure(H(w.world_seed, w.tick, actor, f"hold:{obj}"), actor, obj, "hold", since=w.tick)
+
+
 def _mint_document(w: "World", a: "Act", kind: str, content, rung: str) -> Change:
     """THE ONE MINT: a `Record` of `kind` saying `content`, drawn up at `rung`, and the maker's
     `hold` on it -- `create_record`, `issue` and `petition` are three readings of an act onto this
@@ -131,10 +148,7 @@ def _mint_document(w: "World", a: "Act", kind: str, content, rung: str) -> Chang
         term = w.fixtures.get("record_stage_term")
         stages = [(w.tick + (i + 1) * term, f"stage{i + 1}", a.id) for i in range(n)]
     rec = Record(rid, rung, kind, subject_matter=content, stages=stages)
-    # S13: possession is a `hold` Tenure owned by the holder, never a field on the Record. The
-    # maker holds what they made until they part with it.
-    held = Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{rid}"),
-                  a.actor, rid, "hold", since=w.tick)
+    held = _makers_hold(w, a.actor, rid)
 
     def perform() -> None:
         w.records[rid] = rec
@@ -459,15 +473,34 @@ def _eff_utter(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
     G4 -- WHAT IT NAMES: THE PROPOSITION, whole; it always moves (absent -> present), because an
     id already uttered is declined before anything is built (`NO_CHANGE` -> `act.refused`, the
-    fold's own kind, since the row declares no refusal -- as the old `None` produced)."""
+    fold's own kind, since the row declares no refusal -- as the old `None` produced).
+
+    v9 IN-11 (#453 §10.4 step 2) -- THE UTTERER HOLDS WHAT HE UTTERED. Beside the Proposition the
+    effect opens a `hold` Tenure owned by the actor whose object is the new Proposition, the
+    maker's-hold shape `_mint_document` already gives a Record (S13: possession is a `hold`, never
+    a field; `rosters.yaml: hold_object_kinds` admits a Proposition). It is what makes `commit`
+    reachable from computed play: a Proposition has no place (`world_q.place_of` answers `None`),
+    so until it is somebody's own edge no question can be ABOUT it -- `reach`'s limb 2 (every live
+    Tenure's object) is the one route, and Q2 then raises the utterer's own claim about the
+    Proposition as a question whose referent `commit`'s cell (`existence` of `subject` kind
+    `Proposition`) admits. The edge is the actor's own (`T-m`), like the Record maker's. NOT
+    NAMED as a subject, on `_mint_document`'s precedent: the receipt this write mints is the
+    Proposition's (`Proposition.exists`, the row's first pair), and naming the edge would mint a
+    `(tenure, Proposition.exists)` receipt for a write that pair never made (`_eff_confer`'s
+    ID-9 note); G3's tenure observation still judges it. What a hold costs is `H-92`'s (it buys
+    budget, `decision/budget.py`) -- registered, not decided here."""
     d = a.payload if isinstance(a.payload, dict) else {}
     pid = d.get("proposition") or f"prop:{a.id}"
     if pid in w.propositions:
         return NO_CHANGE                  # immutable: an utterance never overwrites one
     prop = Proposition(pid, d.get("mood") or "OUGHT", d.get("subject") or a.actor,
                        d.get("predicate") or "", d.get("value"), w.tick)
-    return Change((Subject.entity("propositions", pid),),
-                  lambda: w.propositions.__setitem__(pid, prop))
+    held = _makers_hold(w, a.actor, pid)
+
+    def perform() -> None:
+        w.propositions[pid] = prop
+        w.add_tenure(held)
+    return Change((Subject.entity("propositions", pid),), perform)
 
 
 @effect_for("commit")
@@ -500,9 +533,10 @@ def _eff_commit(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     Proposition already minted distinct ids (each one's `subject_id` is its own actor), but an
     actor who releases a `commit` and re-commits to the SAME Proposition within the same tick
     would otherwise mint the identical id as the now-closed one -- the same collision `_eff_give`'s
-    own docstring names and salts against. `commit` has no `release`-then-reopen path reachable
-    today (`commit` never executes in computed play -- H-156 -- so no edge exists to release and
-    re-open), but the fix is one token and costs nothing to carry.
+    own docstring names and salts against. When this salt landed `commit` never executed in computed
+    play (H-156), so no release-then-reopen path was reachable; since v9 IN-11 `commit` EXECUTES
+    (utter mints the utterer's hold, Q2 raises the Proposition as a referent) and `release` closes
+    it, so the path is reachable and the salt is load-bearing, not merely free.
 
     ⚠ BUILD-ORDER BO-9/BO-10 (`proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md`
     §7.2): the first build of this effect, before any question source offered a Proposition

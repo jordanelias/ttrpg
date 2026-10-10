@@ -256,7 +256,9 @@ def test_every_logged_event_in_the_probe_corpus_anchors(monkeypatch):
 
 # -- FALSIFIER 3: live runs, against records the accessors do not read ---------------------
 
-_FOLD_PURPOSES = ("{kind}:{act}", "act.ineligible:{act}", "refused:{act}")
+# `refused:{act}` (the S27.4 refusal's old purpose) is gone: since IN-50 that refusal is minted
+# through `loop/resolve.py::_act_events` as `attempt.refused:{act}`, which `{kind}:{act}` covers.
+_FOLD_PURPOSES = ("{kind}:{act}", "act.ineligible:{act}")
 
 
 # Four (seed, seasons) pairs, the same sample the field-equivalence control ran on. Nothing in

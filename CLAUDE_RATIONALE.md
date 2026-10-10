@@ -334,6 +334,13 @@ condition) and `watch_url` (arms an inbound webhook that wakes the session when 
 the session's actual tool surface rather than re-reading the list. The roster had not been re-swept
 since 2026-07-28.
 
+**2026-10-10: `Monitor` was taken off the deny list and §11 scoped to external services (RULED,
+Jordan: "yes, amend §11 and allow Monitor").** The 2026-09-18 sweep denied it as "an in-session polling
+loop", reading §11's "no polling loops — by any mechanism" literally. The waste §11 was written against
+(116 `send_later` wake-ups re-confirming green PRs) was re-asking GitHub; waiting on our own subagents and
+background jobs re-sends nothing and asks no outside service. A session that cannot watch a long-running
+local job by CPU time can only guess, or kill it on a wall-clock limit that proves nothing.
+
 **A known limit of the `Skill(loop)` entry**, stated rather than assumed: the MCP entries match a
 fully-qualified tool name, a format this repo has seen enforced. `Skill(loop)` uses Claude Code's
 skill-permission syntax, which the test pins as an ARTIFACT but cannot execute. If the runtime spelling

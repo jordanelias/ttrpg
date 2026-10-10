@@ -123,7 +123,7 @@ def test_lb1_removing_the_effects_body_mints_no_tenure(monkeypatch):
         "a stubbed-out effect still minted a Tenure -- something else is opening it")
 
 
-def test_lb1_bo10_gate_still_open_after_15_15c_15b_report_not_repair():
+def test_lb1_bo10_gate_closed_by_in11_the_utterers_hold_report_not_repair():
     """**LB-1, half two — BO-9/BO-10's OWN RE-MEASUREMENT, HONEST RATHER THAN REPAIRED.**
     `01_THE_BUILD_ORDER.md` §7.2 measured `commitment.made: 0 / commitment.refused: 42` on one
     populated season before this effect shipped, diagnosed as structural: no source in
@@ -131,17 +131,28 @@ def test_lb1_bo10_gate_still_open_after_15_15c_15b_report_not_repair():
     binds `commit`'s `subject` to the question's referent, and every live referent today is a
     person id), and BO-10 named items 5/7/8 (`15`/`15c`/`15b`) as what would open that channel.
 
-    ⚠ THEY ARE ALL DONE, AND THE GATE IS STILL SHUT. `15c`'s operand-widening
+    ⚠ HISTORY, SUPERSEDED BY THE v9 IN-11 PARAGRAPH BELOW -- this paragraph records the state
+    BEFORE IN-11 and no longer describes what the test asserts. THEY WERE ALL DONE, AND THE GATE WAS
+    STILL SHUT. `15c`'s operand-widening
     (`decision/options.py::_derive_operand`) answers `to`/`kind`/`amount` from a held writ's
     content; `15b`/`15`'s content-claim/deposit machinery widens which `claim_landed` questions
     REACH a person (`world_q.questions_for`'s clause 3, `named(c)`). Neither touches `subject`,
     which stays a bare `_REFERENT_OPERANDS` bind to the question's own referent. So `commit`'s
     typed cell (`existence(of: subject, kind: Proposition)`) still asks about a person id and
-    still refuses, every time, on this corpus. **This test asserts that gap is still open, on
+    still refused, every time, on this corpus. **This test then asserted that gap was still open, on
     purpose** — the falsifier this position's brief named explicitly refuses to invent a repair
     (widening Q4 was tried and refused in §7.2, with its own measurement: 1 made / 57 refused,
     because a standing question cannot be the producer of the commitment that raises it). The one
-    thing that DID move is `resolvable_verbs()`, which is asserted moving the other way."""
+    thing that DID move is `resolvable_verbs()`, which is asserted moving the other way.
+
+    ⚠⚠ v9 IN-11 (#453 §10.4 step 2) CLOSED THE GATE, AND THIS TEST NOW ASSERTS THE CLOSURE -- UPDATED
+    AS ITS OWN MESSAGE ASKED, NOT RE-PINNED SILENTLY. The producer is not a widened Q4 (the refused
+    repair above) and not a new operand: `_eff_utter` opens the utterer's `hold` on the Proposition,
+    so it is in his `reach` (limb 2) and Q2 raises his own claim about it as a question whose
+    referent IS the Proposition -- `subject` still binds to the referent, unchanged. MEASURED, this
+    season: `commitment.made` 2 where it was 0, `commitment.refused` 38 where it was 35 (the old
+    person-id referents still form and refuse; `H-156`'s (a)/(b) stays registered). The full
+    falsifier is `test_in11_utter_hold_commit.py`."""
     from collections import Counter
     from ..decision import make_chooser
     from ..state.ids import H, draw_factory
@@ -159,13 +170,12 @@ def test_lb1_bo10_gate_still_open_after_15_15c_15b_report_not_repair():
     commit_acts = [a for a in d.resolved if a.verb == "commit"]
     assert commit_acts, "no `commit` act formed at all on this corpus -- the gate moved further"
     referents_seen = {(a.payload or {}).get("subject") for a in commit_acts}
-    assert referents_seen and not (referents_seen & set(w.propositions)), (
-        f"a `commit` act named a real Proposition as its subject -- BO-9/BO-10's diagnosis no "
-        f"longer holds and this position's own claim should be revisited: {referents_seen}")
-    assert kinds.get("commitment.made", 0) == 0, (
-        f"commitment.made is {kinds.get('commitment.made', 0)}, not 0 -- BO-10's gate has closed "
-        "since this test was written; update this test AND this position's own report rather "
-        "than re-pinning the number silently")
+    assert referents_seen & set(w.propositions), (
+        f"no `commit` act named a real Proposition as its subject -- IN-11's utterer's hold no "
+        f"longer reaches a question: {referents_seen}")
+    assert kinds.get("commitment.made", 0) >= 1, (
+        f"commitment.made is {kinds.get('commitment.made', 0)} -- BO-10's gate re-opened; IN-11's "
+        "closure regressed")
     assert kinds.get("commitment.refused", 0) > 0, (
         "no `commit` refusals at all -- the verb stopped being attempted, which is a different "
         "regression from the one this test documents")
@@ -814,9 +824,10 @@ def test_lb6d_every_verb_declares_a_rostered_beneficiary():
     # 43 -> 44, `survey` (plan position `20-iii`), 2026-09-30 -- `beneficiary: actor`, the
     # investigation acts' (the sheet and its content land in the surveyor's hand and ledger);
     # 44 -> 46, `challenge` and `accept` (IN-08's cells commit, the duel pair) -- both
-    # `beneficiary: actor`, `fight`'s (a re-record, said so here).
+    # `beneficiary: actor`, `fight`'s (a re-record, said so here); 46 -> 45, `repudiate` CUT
+    # (v9 IN-11, #453 R-3 (b)) -- `beneficiary: actor`, so `kinds["actor"]` shrinks by one.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops this census passing over a loader that returned a subset]
-    assert len(VERB_TABLE) == 46, "the verb count moved; this row's census is stale"
+    assert len(VERB_TABLE) == 45, "the verb count moved; this row's census is stale"
     undeclared = [v for v, r in VERB_TABLE.items() if not r.beneficiary]
     assert not undeclared, f"verbs with no `beneficiary:`: {undeclared}"
     off_roster = [(v, r.beneficiary) for v, r in VERB_TABLE.items()

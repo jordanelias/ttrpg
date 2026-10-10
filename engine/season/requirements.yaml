@@ -106,7 +106,7 @@ scales:
       sentence used to add "`parliamentary_vote.py` calls `roll_pool`"; that module and
       `parliamentary_stay.py` were deleted at `29b` (their `FORK:5c5d8ec6` rows), and nothing under
       `systems/social_contest` calls `roll_pool` now.
-      4 of 46 verb rows declare `contests:` — `fight` and `accept` (the body, the combat seam), `march` (a
+      4 of 45 verb rows (46 before IN-11 cut `repudiate`) declare `contests:` — `fight` and `accept` (the body, the combat seam), `march` (a
       field, the mass-battle seam, `ecacb57`) and `tell` (a standing, resolved on the season side
       by `seam/wrappers/sigma.py`, not by this kernel). The kernel retires at plan position `2-ii`
       (`workplans/valoria_master_workplan_v9.md`).
@@ -188,9 +188,10 @@ rows:
 
   - id: R-01
     statement: "decisions must propagate"
-    status: not_met
+    status: met
     measured: >-
-      R3 (cross-person propagation) passes **46/46 NPC and 96/97 ARC** over the full 143-case
+      [SUPERSEDED by the IN-50 (B-I) paragraph at the end of this block: R3 now reads ARC 97/97,
+      NPC 46/46.] R3 (cross-person propagation) passes **46/46 NPC and 96/97 ARC** over the full 143-case
       corpus (`corpus_run`'s `check R3` rows, a fresh run 2026-10-02, tree `444a00e1`; this sentence
       read 22/30 and 34/59, over the 89-case live set, until then), and the planted-edge control
       fires — so the DETECTOR works. But the
@@ -368,39 +369,46 @@ rows:
       of a cross-person edge, which is all R3 asks. **THE RISE FROM THE OLD OPENING FIGURES IS PARTLY
       A DENOMINATOR CHANGE** (89 live cases then, all 143 now, as the 2026-09-30 paragraph says), not
       a re-measured gain. No contradiction with this row's status: `not_met` on clause 1 (96/97),
-      unchanged.
-      ⚠⚠ **IN-50 (B-C), 2026-10-08: THE ONE FAILING ARC CASE IS `ARC-23` ("The General Falls",
-      `cases/chain/ARC2.yaml`, `span_seasons: 1`), AND THE DEFECT IS A LOOP GAP, NOT THE CASE OR
-      THE INSTRUMENT.** Tree `395094b`. THIS RUN: `python -m engine.season.harness.corpus_run`,
-      exit 0: `check R3: 46 of 46 pass` (NPC), `check R3: 96 of 97 pass` (ARC), `check R3 not
-      True: ARC-23`, control `False -> True`. `_r3_propagates` fails on its SECOND branch
-      (`harness/corpus_run.py:720-727`), not the first: 27 resolved acts by three actors (`p_a`
-      11, `p_b` 9, `p_c` 7), 267 Events, and no act-emitted Event cites another actor's
-      act-Event. A walk through the un-acted Events (deposits, world Events) finds none either,
-      so the check misses no edge in the log. **THE EDGE EXISTS ONE STEP EARLIER AND IS DROPPED
-      AT EMISSION.** Five acts were chosen from a scene whose occasion is ANOTHER person's
-      act-Event: four `p_c` acts (`move`, `research`, `survey`, `restore`) occasioned by
-      `p_b`'s `record.created`, and one `p_a` `research` occasioned by `p_b`'s `finding.none`.
-      All five were REFUSED (`travel.blocked`, `finding.none`, `survey.refused`,
-      `restore.refused`), and every refusal return in `loop/resolve.py` emits `causes=[a.id]`
-      without the occasion: `_fold`'s `_admits` refusal (`:372`) and no-op-write refusal
-      (`:448`), `_party_gap_refusal` (`:554`) and `_refuse_after_the_fact` (`:912`). Only
-      `_fold`'s success return appends `self._occasion_ids(w, a)` (`:487`), and the comment
-      there calls it "the one path every act-emission takes", which it is not; the contest
-      branch (`:577`) passes `[a.id]` as well. THE FALSIFIER, a scratch counterfactual (not
-      committed): in-process, every `_act_events` call appends the act's occasion ids. ARC-23
-      then reads True, and so do all 143 cases (97 of 97 ARC, 46 of 46 NPC, none flips to
-      False). The repair is a RULE in `loop/resolve.py`: the occasion goes on every
-      act-emission, at the one emission owner and not at the call sites. ⚠ Three refusals do not pass through that owner (`loop/resolve.py:72-73`, `:746-747` and `:776-779` construct `Event` directly), and the scratch counterfactual patched `_act_events` only, so it never touched them: the repair routes them through `_act_events` first and commits the counterfactual as its falsifier test. It moves
-      `World.content_hash()` wherever an occasioned act is refused. NOT REPAIRED HERE: a loop
-      edit is not R5. **RE-MEASURED AT B-H (HEAD `bd064a51`; the same at B-H's base `4cb6efe8`):
-      ARC `check R3: 97 of 97 pass`, NPC `check R3: 45 of 46 pass`, the failing R3 case is now
-      `NPC-090`, control `False -> True`;** ARC-23 no longer fails (B-G's cells commit lies between
-      this diagnosis and B-H). The repair as specified was built and measured at B-H (NPC 46 of
-      46, ARC 97 of 97, only NPC-090 flips, none to False), then reverted: it re-records two
-      chain-depth pins, so §B.0 R1 slots it to **B-I** (`workplans/valoria_master_workplan_v9_part3.md`
-      §B.1, the B-I row; `workplans/valoria_master_workplan_v9_part4.md` IN-50). IN-10, IN-11 and
-      IN-13's new edges do not close it; they could only route the failing case around it.
+      unchanged. [True at `444a00e1`; at IN-50 clause 1 passes, and the status's ground is the
+      IN-50 paragraph below.]
+      ⚠⚠ **IN-50 (B-I): A REFUSED ACT NOW CITES ITS OCCASION; R3 READS 97 OF 97 (ARC) AND 46 OF 46
+      (NPC).** THIS RUN: `python -m engine.season.harness.corpus_run`, exit 0: `check R3: 46 of 46 pass`,
+      `check R3 not True: none` (NPC); `check R3: 97 of 97 pass`, `check R3 not True: none` (ARC);
+      control `False -> True`; `DISTINCT WORLDS RUN 143`. The failing case `NPC-090` already read True
+      before this change (IN-11, `2a2ed152`: ARC 97 of 97, NPC 46 of 46), so the case no longer
+      discriminates the repair; the falsifier is `engine/season/tests/test_in50_refusals_carry_the_occasion.py`
+      (8 tests; with the append neutered 7 fail, the no-scene control stays green). The rule:
+      `loop/resolve.py::_act_events(self, w, a, kinds, ...)` appends `self._occasion_ids(w, a)`
+      to `causes`, de-duplicated, the caller's list unmutated, on every Event an act emits; the three
+      refusals that built `Event` directly (`act.ineligible`, S27.4 `attempt.refused`, the contest
+      branch's `_admits` refusal) go through it, and `_fold`'s success return names `[a.id]` alone.
+      `World.content_hash()` moves wherever an occasioned act is refused -- and, because the S27.4 refusal's
+      Event id changed from `H(.., "refused:{a.id}")` to `H(.., "attempt.refused:{a.id}")` (`content_hash` folds
+      event ids), at EVERY S27.4 refusal, occasioned or not (reachable only by hand-built Acts). Re-pinned in
+      `tests/test_season_shape.py`: `d_pub` 5 -> 10; `(depths[3], depths[6])` (9, 10) -> (12, 13);
+      the five-season maturation chain 8 -> 11. KEEPS: no case's R3 went False, the control still flips.
+      THE STORYBAR READING IS PARTLY BY CONSTRUCTION (cross-person share of acts, seeds 0-2, 2 seasons,
+      `2a2ed152` -> `5fa6ac16`: 370 of 4278 = 8.6% -> 915 of 4278 = 21.4%; max chain depth 5/4/3 -> 7/7/7;
+      act counts identical per seed): IN-50 adds exactly the edge class the storybar counts as 'cross' (a
+      refusal now cites its occasion), and there is no refused/executed split, so do not cite it as a
+      propagation gain without one.
+      THIS PARAGRAPH SUPERSEDES THE OPENING R3 FIGURES (46/46 NPC, 96/97 ARC).
+      **THE STATUS READS `met` AT B-I, BY THE PLAN'S VERBATIM DEFINITION (`workplans/valoria_master_workplan_v9_part2.md`
+      R-01 `met` =), BOTH CONJUNCTS ON ONE TREE.** Conjunct 1 (`corpus_run`, HEAD 4bb57351, seed 0, 143 cases,
+      PYTHONHASHSEED=0): `check R3: 46 of 46 pass` (NPC) and `97 of 97 pass` (ARC), `not True: none`, planted
+      control `False -> True`. Conjunct 2 (`python proposals/2026-09-04-degree-sweep/wd_collect.py` after `wd_chunk.py` x4
+      slices x3 arms x3 fixture points over all 143 cases, tree 66bf51f9, hash-identical to HEAD 4bb57351 by the
+      four-hash check; exit 0; every arm `cases 143/143 ok, 0 failed, 0 fork rows failed`): reconvergence at the
+      acceptance point `2x3` reads none 1597/2131 = 74.94 % · actor 890/2087 = 42.64 % · total 869/2091 = 41.56 %, BELOW
+      the 96 % bar; at `default` 68.90 / 50.76 / 50.33 % and at `narrow` 91.33 / 70.39 / 70.61 %; the control is printed
+      (`none >= actor: True` at `2x3`, and at `narrow`). Against B-G's control re-take (0f998f64, 2x3: 74.90 / 43.94 /
+      42.40 %) the arms moved +0.04 / -1.30 / -0.84 pp. **WHAT THIS DOES NOT SHOW:** one run per arm, noise unmeasured;
+      the wd_collect POSITIVE-plant line reads `detected OVER THE BASELINE on ALL 4 plants: False` (the instrument's own
+      caveat, present on every reading since its repair, not part of `met`); the plan's annotation to R-01 timed the first
+      reading taken after IN-13 (B-M) as the meaningful one, and the B-M re-take will be read against this one; IN-09 and IN-10
+      were built, falsified and reverted at B-I (`hole_register.yaml` H-203), so the cross-person edges they would add are
+      NOT in this reading. **TO REVERT:** set `status: not_met` and restore the previous paragraph; the instrument, not
+      this sentence, decides.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [IN-10, IN-11, IN-13, FI-01, H-116, IN-50]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1: regard is computed at read; the cross-person half is IN-10's, IN-11's, IN-13's); H-111 is FI-01's deposit half
@@ -536,7 +544,8 @@ rows:
       1549/2068 = 74.90% · `actor` 896/2039 = 43.94% · `total` 868/2047 = 42.40%, 0 failed cases. Against
       the previous re-take: `none` -2.32 points, `actor` +1.35, `total` +3.82 -- the re-celled chooser
       moves the arms by more than half a point, and none is near 96%, so the status stays `met`. The
-      instrument's run-to-run noise is still not measured. B-I's re-take reads against THESE figures.
+      instrument's run-to-run noise is still not measured. B-I's re-take (HEAD 66bf51f9, full `wd_collect.py`, see R-01's last paragraph)
+      reads none 74.94 / actor 42.64 / total 41.56 % at `2x3` against THESE figures: +0.04 / -1.30 / -0.84 pp, still far below 96%, status stays `met`.
     measure: "python proposals/2026-09-04-degree-sweep/wd_collect.py  # after wd_chunk.py x4 per arm per cell over the 143-case corpus (slices 0 36/36 72/72 108/108 143) -- U6's command, workplans/valoria_master_workplan_v9_part2.md §`11`"
     blocks: [FI-01]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); H-111 is FI-01's deposit half
@@ -842,7 +851,7 @@ rows:
       44 executing (36%) is proportionally close to the 13-of-38 (34%) reading it replaces — the
       table grew faster than it was built out, not the reverse. ⚠ THE SIX NEW ROWS ARE NOT
       RE-DERIVED HERE, PER U10'S OWN SCOPE (bookkeeping against the fresh instrument, not verb
-      archaeology) — the always-refused eight still omit `repudiate`, `tie / knot`, `forge`,
+      archaeology) — the always-refused eight still omit `repudiate` (cut at B-I by IN-11), `tie / knot`, `forge`,
       `carry`, `succeed`, `exchange`, `comply`, `evade / defy` and `construe`
       (U7's own group 1/3 list, `workplans/2026-09-09-r-execution-plan.md:1497-1502`), verified by
       `grep` to have no `@effect_for(...)` registration anywhere in `loop/effects_*.py` — U7 is
@@ -855,7 +864,7 @@ rows:
       it and fans its counterparty over the persons the giver knows; it executes in one corpus world and is refused in 63, so
       it leaves the always-refused set on one execution, not on a changed share: `H-84`), and `dispatch` moved from
       always-refused to never-attempted (the `17-cast` pilot's fourth seat in NPC-038; stable across seven hash seeds, the
-      mechanism not traced). **POSITION `14` BUILT NO OTHER ROW**: `repudiate`, `succeed`, `tie / knot`, `forge`, `exchange`,
+      mechanism not traced). **POSITION `14` BUILT NO OTHER ROW**: `repudiate` (cut at B-I by IN-11), `succeed`, `tie / knot`, `forge`, `exchange`,
       `carry` and `thread_read` were declined or stopped, each with an `effect_decline_note` or `requires_decline_note` on its verb row (IN-41 split the old `decline_note`); `succeed` and `tie`
       rest on ID-13 (nothing reads the edge) and on an operand their rows do not bind, NOT on holonic §15 (`04 §A.3` rows 8-9
       make them directed edges the holder owns and `release` ends, `H-182`). `knot` is NOT an ID-13 case -- it has a reader
@@ -868,6 +877,14 @@ rows:
       `VERBS THAT EXECUTED : 20 of 46` (17 of 44 on the base commit 13715804) -- `challenge` and `accept` (the
       duel pair's new rows) and `levy` join, nothing leaves. `WHERE THE 46 GO`: 10 no predicate/effect, 10
       foldable but never attempted, 6 attempted and always refused (7 before; `levy` left it), 20 executed. `accept` is among the 20 WITHOUT its challenge: no carrier holds one, so it executes as a second `fight` (`verb_table.yaml`, `accept`'s `requires_note`).
+      21 of 45 AS OF B-I (HEAD 4bb57351, `corpus_run`, seed 0, 143 cases, PYTHONHASHSEED=0); THE ROW STAYS `not_met`.
+      `VERBS THAT EXECUTED : 21 of 45` (20 of 46 at B-G): `commit` joins (IN-11), `repudiate` is cut (46 -> 45 rows),
+      nothing leaves. `WHERE THE 45 GO`: 9 no predicate/effect, 10 foldable but never attempted (`confer`, `convene`,
+      `destroy_record`, `determine`, `dispatch`, `establish`, `march`, `oblige`, `open_case`, `revoke`), 5 attempted and
+      always refused, 21 executed. IN-09's family (`comply`, `evade / defy`, `construe`) and IN-10's (`confer`,
+      `establish`, `revoke`, `oblige`) are still at 0: both positions were built, falsified and reverted at B-I
+      (`hole_register.yaml` H-203), as were IN-33 and IN-18 G5 by dependency. `aperture 4 0` at 66bf51f9, realm
+      attempted/executed: `commit` 145/8, `utter` 123/123, `issue` 11/2, `levy` 8/0.
     measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE) -- 44 today; it was '38' as of ED-IN-0261, '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
     blocks: [H-65, IN-09, IN-10, IN-33, IN-45]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W10-core removed (it gates corpus_run's R2 check, not this row's WHERE THE <n> GO); H-94 is carried by its owners IN-10, IN-09, IN-45, IN-33
@@ -939,15 +956,18 @@ rows:
       satisfaction reader. An OUGHT is an uttered Belief, immutable
       (`architecture/holonic_ARCHITECTURE.md` §14), and Q4 is *a STANDING question, regenerated
       every season until the commitment ends* (`architecture/ARCHITECTURE_V2.md:479-480`): the
-      architecture gives the commitment an END -- `release`; `repudiate`, by which a belief
+      architecture gives the commitment an END -- `release`; `repudiate` (cut at B-I by IN-11), by which a belief
       *becomes abandonable* (`architecture/meta/01_AXIOMS.md`); and the holder's death
       (`architecture/holonic_ARCHITECTURE.md` §15.3) -- and gives the OUGHT no condition under
       which it comes TRUE (`grep -rn OUGHT architecture/` finds none), so there is nothing for a
       reader to evaluate; `CLAUDE.md` §0's ladder closes the question at test 3. What the realm
-      does show is that the one built VOLUNTARY ender is rarely reached: `release` is attempted
+      does show is that the one built VOLUNTARY ender is rarely reached: `release` was attempted
       130 times and refused 124 (95%, against R-05's 96.3% on the corpus's rung cases, and for
-      R-05's reason -- an untyped cell §F1 clause 4 can never fire on), and `repudiate` has a row
-      and no effect (R-05's U10 paragraph). **Neither reason this row stays `partial` moves**:
+      R-05's reason -- an untyped cell §F1 clause 4 can never fire on); at B-I (`aperture 4 0` @66bf51f9, realm) it
+      reads 136 attempted, 12 executed, 124 refused (91%). Those 12 mix hold-only releases of the maker's hold IN-11
+      opens with vow-ending releases of a `commit`, so release counts cannot credit "`release` ends an ambition"
+      (v9 `_part3` R-06 row) without a split by `commitment.ended`, and `repudiate` had a row
+      and no effect (R-05's U10 paragraph; the row was cut at B-I by IN-11). **Neither reason this row stays `partial` moves**:
       `ambitions(p)` is still absent, and the correlated-convictions finding is a property of
       `PURSUIT_PROJECTION` (`data/verbs.py`; measured under its pre-rename name
       `CONVICTION_PROJECTION`, ED-IN-0261 item 1) that no run moves. WHAT WOULD OVERTURN THIS

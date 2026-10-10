@@ -736,6 +736,15 @@ DEFAULT_FIXTURES = Fixtures(
     # and is silent on shipping `valence`, and `valence` moves what tellings carry.
     # [JUSTIFIED: engine/season/hole_register.yaml H-196 -- the slant arm; no document says which claim a teller chooses to pass on, so both readings are declared and swept newest / valence]
     said_slant="newest",               # `H-196`, swept newest (control, SHIPPED) / valence
+    # `H-197` (v9 IN-18 `G6`, confidences). HOW OFTEN A TELLING IS MADE IN CONFIDENCE: the chance
+    # `loop/witness.py::_circle_of` draws once per telling (its docstring says what a circle is and does).
+    # `0` is the CONTROL and is SHIPPED [ASSUMPTION; medium; Jordan to
+    # correct; revert: none needed while it ships at 0 -- shipping it on is this one value], on
+    # `H-190`'s precedent: the plan names the shape (a swept chance at control 0) and is silent on
+    # shipping it on. At 0 no draw is taken, every deposit is `own`, and no circle exists for a
+    # retelling to break. Must lie in [0, 1].
+    # [JUSTIFIED: engine/season/hole_register.yaml H-197 -- the privacy chance; no document gives how often a telling is made in confidence, so it is injected and swept 0 / 0.5 / 1.0]
+    telling_privacy=0.0,               # `H-197`, swept 0 (control, SHIPPED) / 0.5 / 1.0
     # `H-199` (v9 IN-15, `AX-7`'s divergence formula; `H-36` rules its shape). HOW FAR THE CHANNEL A
     # CLAIM ARRIVED ON AND WHAT ITS RECEIVER ALREADY HELD LOWER THE CONFIDENCE IT LANDS AT:
     # `decision/options.py::refracted_confidence` = `confidence * (1 - g*remove(channel)) *

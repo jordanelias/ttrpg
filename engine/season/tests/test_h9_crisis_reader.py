@@ -36,7 +36,12 @@ from .test_season_shape import _wd_arm9
 # decision_...` pins it: [GROUNDED: measured at IN-08 H3's base (bf3c3810), NPC-088 slice, seed 0,
 # 4 seasons at 2 slots -- genuine/diverged `total` 29/6, `none` 37/4, `actor` 35/9]. A one-slice,
 # one-seed PROXY for ED-IN-0261's corpus figure, which was not re-taken.
-_BASELINE_TOTAL = (29, 6)
+# ⚠ 29/6 -> 26/6, v9 IN-11 (#453 §10.4 step 2), the same move `test_season_shape.py`'s W-D pins
+# record: `_eff_utter` opens the utterer's `hold`, and the fork population moved while the divergence
+# count did not. A re-record of the control, read off this test's own failing assertion. The
+# base-vs-HEAD delta is measured; which consequence of the hold moves the population (a new referent
+# in `reach`, or the `budget_office_bonus` scene a live hold buys) is a candidate mechanism, unmeasured.
+_BASELINE_TOTAL = (26, 6)
 
 
 def _person(pursuits: dict, scar: dict) -> Person:
@@ -93,7 +98,10 @@ def test_h9_fork_divergence_at_total_rises_above_baseline_and_the_control_arm_is
     arm is swept at {0, 0.5, 1}, and the verdict that flips across the sweep is the finding.]
     A PROXY for ED-IN-0261's corpus figure (2,403 forks, 100% reconverge, ~4% later-decision
     divergence), which this test did not re-take; and 6 -> 10 is not a rate over the same forks,
-    since the genuine count moves as well (29 -> 32): the pair is 6/29 -> 10/32, about 21% -> 31%."""
+    since the genuine count moves as well: BEFORE v9 IN-11 the pair was 6/29 -> 10/32 (genuine
+    29 -> 32), about 21% -> 31%; AT IN-11 it is 6/26 -> 10/32 (genuine 26 -> 32), about 23% -> 31%.
+    [GROUNDED: re-measured at v9 IN-11 -- `scar_weight_shift` 0 -> 26/6 (the re-recorded baseline),
+    0.5 -> 28/6, 1 -> 32/10: the shifted arm is unmoved and still rises above the control.]"""
     control = _wd_total(0)
     assert control == _BASELINE_TOTAL, (
         f"the control arm moved the `total` fork pair: {control} != {_BASELINE_TOTAL}")

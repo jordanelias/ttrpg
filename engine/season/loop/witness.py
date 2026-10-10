@@ -21,7 +21,7 @@ from dataclasses import replace
 
 from ..data.matrix import Step
 from ..state.gate import Token
-from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN, WORLD_ONLY_STEMS
+from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN, WORLD_ONLY_STEMS, binding_from_act
 from ..data.rosters import (
     CHANNEL_CLAIM_SOURCE, OBSERVATION_DEPOSIT_MODES, RECORD_CONTENT, WITNESS_CHANNELS,
     require_member,
@@ -42,7 +42,7 @@ from ..queries.world_q import hold_force
 from ..state.attribution import actor_of
 from ..state.carriers import Claim, Event
 from ..state import ledgers
-from ..state.ids import H
+from ..state.ids import H, draw_factory
 from ..trace_log import TRACE
 
 # v9 IN-22: THE SEAT CHANNEL -- the obligee channel (`epistemic._ch_post_remit`), borrowed for its
@@ -97,6 +97,34 @@ def _told_content(act):
     test. `act_refs` still owns *what is this act about* (§8); this reads the one other key."""
     pay = getattr(act, "payload", None)
     return pay.get("said") if isinstance(pay, dict) else None
+
+
+def _circle_of(w, act, rate: float):
+    """v9 IN-18 `G6` (`H-197`, confidences): THE CIRCLE A TELLING IS MADE IN, or `None` when it is
+    not made in confidence. With chance `telling_privacy` (one draw keyed by the telling's own id, so
+    every hearer of one telling agrees and no other stream moves) the circle is `(teller, addressee)`
+    -- the act's actor and the operand its row's `counterparty:` column names (`binding_from_act`) --
+    and the told deposit stores it as `Claim.visibility` in place of `own`.
+
+    ⚠ IT BINDS WHAT A HEARER MAY RETELL, NEVER WHO HEARS (§10 decision 1: private whispers are not
+    built). WITNESS still decides recipiency by presence, so a bystander who overhears a confided
+    telling holds the claim under the same circle, and is outside it. Who BREAKS a confidence is
+    read at the fold (`loop/resolve.py::_confidence_broken`), off the retelling actor's own ledger.
+
+    ⚠ `0` (the control, shipped) RETURNS `None` AND TAKES NO DRAW, so every deposit is `own` exactly
+    as before `G6`. A telling that names no addressee (a hand-built act; a row with no counterparty)
+    has no circle of two and is never private. `rate` is `telling_privacy`, read and range-checked
+    ONCE PER BARRIER by `witness`, beside `gain` (a value outside [0, 1] raises there, `H-190`'s
+    rule, whether or not any telling is deposited)."""
+    if rate == 0:
+        return None
+    row = VERB_TABLE.get(getattr(act, "verb", None))
+    hearer = binding_from_act(act).get(row.counterparty) if row is not None else None
+    if not isinstance(hearer, str) or hearer == act.actor:
+        return None
+    if draw_factory(w.world_seed, lambda: w.tick)(act.actor, f"confide:{act.id}").random() < rate:
+        return (act.actor, hearer)
+    return None
 
 
 def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = None) -> object:
@@ -280,6 +308,11 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # is. `0` is the control (0.5 ships, H-199): no deposit is refracted and the barrier is the
     # pre-IN-15 one exactly (no `actor_of` call, no ledger scan).
     gain = w.fixtures.get("refraction_gain")
+    # v9 IN-18 `G6` / `H-197`: THE CONFIDENCE CHANCE, read and range-checked once per barrier,
+    # beside `gain`, for the same reason; `_circle_of` (its docstring) owns what it does.
+    privacy = float(w.fixtures.get("telling_privacy"))
+    if not 0 <= privacy <= 1:        # `not ... <=`, so a NaN is refused too
+        raise ValueError(f"telling_privacy {privacy} is not a chance in [0, 1] (H-197)")
     # `W-B` / `H-122`. WHO RECEIVES A CLAIM MINTED FROM WHAT THE FOLD READ. `none` is the
     # CONTROL -- the behaviour before `W-B`, so every measurement of this item has a baseline
     # (§0.1 point 4). Read here rather than inside the loop so the fixture is consulted once
@@ -801,10 +834,11 @@ def witness(self, token: Token, events: list[Event]) -> int:
                     # its last element, derived. A KEYWORD, never a positional: `chain` sits where
                     # the removed `teller` field did, so a stray string in that slot would be
                     # read as a chain of one-character hops.
-                    # ABSENT: H-197 confidences  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
+                    # `G6` (`H-197`): the circle line -- `_circle_of` owns it.
+                    _circle = _circle_of(w, _act, privacy)
                     tc = Claim(_told_hash or H(w.world_seed, w.tick, pid, f"told:{e.id}"),
                                pid, _held.subject, _held.predicate, _told_val, w.tick,
-                               "told_by", _held.confidence, "own", self.round,
+                               "told_by", _held.confidence, _circle or "own", self.round,
                                chain=_held.chain + (_act.actor,))
                     if refracting:
                         tc = _refract(tc, p, channel, gain)

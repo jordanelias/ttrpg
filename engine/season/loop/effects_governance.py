@@ -183,12 +183,26 @@ def _eff_release(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     whose `subject` is the actor, so every write it makes is the owner's own and the gate admits it
     with no seat (`via=None`). `test_g3_release_is_the_owners_discretion_and_the_owners_only`
     observes both halves: the release admitted, and a write by the same actor on another's edge
-    refused."""
+    refused.
+
+    v9 IN-11 (#453 §10.4 step 2, R-3 (b)) -- A CLOSED `commit` EARNS `commitment.ended`, AND
+    `repudiate` IS CUT. `release` was already the second closer of a `commit` (its domain), so the
+    row that did nothing else is deleted and the vow-break stays witnessable here: WHOLE-ACT
+    earning -- when any edge it closes is a `commit`, every edge earns every kind. A release that
+    closes no `commit` names each edge earning `tenure.closed` only, exactly as before; one that
+    closes a `commit` names every edge it closes earning the row's whole `emits:` (`earns=None`),
+    because the fold unions only NAMED kinds
+    (`loop/resolve.py::_apply_write`) -- a `commit` edge earning `None` beside a `hold` edge
+    earning `tenure.closed` would publish `tenure.closed` alone and drop the vow-break, and an
+    utterer who committed to his own Proposition holds both edges on it."""
     subj = _operand(a, "subject")
     edges = [t for t in w.tenures
              if (t.subject == a.actor and t.object == subj
                  and t.kind in RELEASABLE_KINDS and t.live)]
-    return _closing(w, edges)
+    # Whole-act earning keyed on a tenure-kind literal: the data-driven form is a conditional-emission
+    # column, which `04 §A.3` allows no seventh of; the same forced choice as `_fold`'s `CONFIDENCE_BROKEN`.
+    earns = None if any(t.kind == "commit" for t in edges) else "tenure.closed"
+    return _closing(w, edges, earns)
 
 
 @effect_for("revoke")
@@ -211,14 +225,16 @@ def _eff_revoke(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     return _closing(w, [t for t in w.tenures if t.kind == "hold" and t.object == obj and t.live])
 
 
-def _closing(w: "World", edges: list) -> Change:
+def _closing(w: "World", edges: list, earns: "str | None" = None) -> Change:
     """`release` and `revoke`'s one write: close these edges at this tick, each named as an `edge`
-    subject earning every kind the row declares (`tenure.closed`, on both rows). One body because
-    it is one write; the two effects differ only in WHICH edges, which is the whole of each."""
+    subject earning `earns` -- `None`, every kind the row declares (`revoke`'s one,
+    `tenure.closed`), unless the caller narrows it (`_eff_release`: `tenure.closed` alone when no
+    `commit` closes). One body because it is one write; the two effects differ only in WHICH
+    edges, which is the whole of each."""
     def perform() -> None:
         for t in edges:
             t.until = w.tick
-    return Change(tuple(Subject.edge(t) for t in edges), perform)
+    return Change(tuple(Subject.edge(t, earns) for t in edges), perform)
 
 
 @effect_for("convene")

@@ -55,11 +55,8 @@ REQUIRED_DENY = (
     'update_trigger',  # re-arms an EXISTING Routine — reachable without create_trigger
     'fire_trigger',    # fires a Routine now; its prompt can re-arm, so it re-enters the chain
     'Skill(loop)',     # /loop's entry point: a prompt re-run on an interval, in-session
-    # WIDENED 2026-09-18. Both were reachable in a live session while all seven above passed —
-    # the roster-incompleteness this file's own NOTE predicted, found by enumerating the session's
-    # actual tool surface rather than re-reading the list.
-    'Monitor',         # documented as "use Monitor with an until-loop to wait on a condition":
-                       # an in-session polling loop, which §11 forbids "by any mechanism"
+    # WIDENED 2026-09-18, from a live enumeration of the session's tool surface. (`Monitor` was
+    # listed with it and was REMOVED 2026-10-10: see "DELIBERATELY NOT DENIED" below.)
     'watch_url',       # arms an inbound webhook that "wakes the session if idle" — a session
                        # arming its own wake-up, which is the rule verbatim
     # WIDENED 2026-09-23 (ED-IN-0266, RULED by Jordan on being shown the cost): every PR event
@@ -74,6 +71,11 @@ REQUIRED_DENY = (
 #     A child that polls is a prompt defect, not a reachable primitive to block.
 #   * `list_triggers` / `delete_trigger` / `CronList` / `CronDelete` — read and teardown. Blocking
 #     teardown would strand a Routine that someone else armed.
+#   * `Monitor` — ALLOWED 2026-10-10 (Jordan: "yes, amend §11 and allow Monitor"). The waste class
+#     §11 exists for is re-asking an EXTERNAL service whether something changed (GitHub merge or CI
+#     state), which re-sends the whole conversation for no new local state. Waiting on our own
+#     agents and local processes (a background job's log or CPU time) does neither. Do not re-add
+#     it to REQUIRED_DENY because it "is a polling loop": §11 now scopes the ban to external services.
 
 # LIMIT OF THE Skill(loop) ENTRY, stated rather than assumed (CLAUDE.md §0.1 point 3):
 # the MCP entries match a fully-qualified tool name, a format this repo has already seen

@@ -400,7 +400,8 @@ def _derive_openers_from_effects() -> dict:
     function defined at the top of the SAME FILE is walked as if inlined (transitively, each helper
     once); anything imported -- including a cross-file helper in a SIBLING `effects_*.py` -- is not
     this file's and is not walked. MEASURED after the change: `hold: [confer, create_record, issue,
-    petition]`, every other kind unchanged.
+    petition]`, every other kind unchanged. (LIVE since: `hold: [confer, create_record, give, issue,
+    open_case, petition, survey, utter]`; run this function for the current set.)
 
     ⚠⚠ SEVEN FILES, NOT ONE, SINCE THE PHASE-4 PER-SUBSYSTEM SPLIT (2026-09-30). `effects.py` itself
     is now a thin aggregator -- no `@effect_for`, no `Tenure(...)` -- and every decorated function
