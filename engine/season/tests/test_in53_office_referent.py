@@ -13,10 +13,9 @@ office an act names (`loop/predicates.py::office_named_by`). Each block can fail
   (c) the loader refuses a verb row naming a referent class no source yields.
   (d) `_req_revoke`/`_eff_revoke` (and `_req_confer`/`_eff_confer`) read the office from `subject`;
       a hand-built act's `office` still works.
-
-NOT HELD HERE: the position's EXIT (`revoke` executing on `build_realm(0)`). Measured at piece B,
-it does not execute under `first`, under H-54's swept arms, or with the question named -- the
-plan's stopping rule bars holding it as an xfail.
+  (e) on `build_realm(0)`, one season with the question NAMED (the driver's override): `revoke`
+      EXECUTES through `p_npc_020`'s seat and the hold closes. ⚠ Evidence under the override, not
+      under the shipped `question_aggregation_rule: first` -- see the receipt for that measurement.
 """
 from pathlib import Path
 
@@ -178,3 +177,53 @@ def test_in53_d_office_wins_over_subject_and_neither_names_nothing():
     a = Act(id="x", actor="p_king", verb="revoke", payload={"office": "off_duke", "subject": "D"})
     assert _preds.office_named_by(a) == "off_duke"
     assert _preds.office_named_by(Act(id="y", actor="p_king", verb="revoke", payload={})) is None
+
+
+# ======================================================================================
+# (e) `revoke` EXECUTES IN A SEASON ON THE REALM, THROUGH THE SEAT, WITH THE QUESTION NAMED
+# ======================================================================================
+
+@pytest.mark.xfail(strict=True, raises=AssertionError, reason=(
+    "MEASURED at IN-53 piece B: `p_npc_020` forms `revoke` on `off_npc_033` and the chooser takes "
+    "it, but `exercised_seat` (decision/options.py, the H-134 limit its docstring records) mints "
+    "`via=off_npc_020`, the first seat in his tenure order, through which `may_revoke` fails; only "
+    "`off_duke_valorsmark` reaches. Strict: it XPASSes, and must be un-marked, when a revoke is "
+    "exercised through a seat that reaches its target."))
+def test_in53_e_revoke_executes_through_p_npc_020s_seat_with_the_question_named():
+    """The driver's override names one `seat` question -- `off_npc_033`'s -- for every person, for
+    one season on `build_realm(0)`. `p_npc_020` is the one person whose seat (`off_duke_valorsmark`)
+    passes `may_revoke` over it at tick 0 (IN-53 piece A). ⚠ THIS IS THE OVERRIDE, NOT THE
+    SHIPPED `first`: under `first` his first question is a `need`, measured at piece B.
+
+    ⚠ `confer` IS LEFT OUT OF THE CHOOSER'S VERBS, AND THAT IS A RECORDED HOLE, NOT A FIX. With the
+    question named for everyone, a `remit:confer` holder forms `confer` on the seat the revoke has
+    just vacated; the row is untyped and carries no conferee, `_req_confer` admits a vacant seat,
+    and `_eff_confer`'s `_operand(a, "to")` raises `InstrumentDefect` -- measured here before the
+    exclusion. The conferee is IN-53 step (4) / IN-10 (b); this test is about `revoke` alone."""
+    from engine.season.decision import make_chooser
+    from engine.season.harness import probes as P
+    from engine.season.harness.populated import build_realm
+    from engine.season.loop.driver import SeasonDriver, resolvable_verbs
+    from engine.season.state.ids import H, draw_factory
+
+    w = build_realm(0)
+    target = "off_npc_033"
+    held = _hold(w, target)
+    assert held is not None
+    d = SeasonDriver(w)
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs() - {"confer"},
+                      draw=draw_factory(w.world_seed, lambda: w.tick))
+    q = Question(f"q:seat:{target}", "seat", (target,))
+    d.season(ch, question=q, subsistence=P.SUBSIST,
+             contest_max_depth=w.fixtures.get("contest_max_depth"))
+    revokes = [a for a in d.resolved if a.verb == "revoke"]
+    assert revokes, "no revoke was even attempted"
+    done = [a for a in revokes if a.actor == "p_npc_020" and a.via == "off_duke_valorsmark"
+            and (a.payload or {}).get("subject") == target]
+    assert done, [(a.actor, a.via, a.payload) for a in revokes]
+    ids = {a.id for a in done}
+    closed = [e for e in w.log if e.kind == "tenure.closed" and ids & set(e.causes or ())]
+    assert closed, ("the revoke resolved and emitted no tenure.closed",
+                    sorted({e.kind for e in w.log if ids & set(e.causes or ())}))
+    assert not held.live, "the incumbent's hold is still live"

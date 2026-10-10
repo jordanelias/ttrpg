@@ -2656,13 +2656,9 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     assert sorted(q.id for q in qs) != sorted(q.id for q in cqs), (
         "the two arms' Question sets are identical again -- dwellings are DONE·INERT once more; "
         "either relabel this test back to `24d-i`'s or find what silently narrowed `reach`")
-    # ⚠ IN-53: THE COUNT ALONE STOPPED SEPARATING THE ARMS -- both resolve 658 acts after the `seat`
-    # source, while the act-subject distribution still differs (511/101/46 vs 516/91/51, `not a
-    # person`/`another person`/`self`). The docstring's measurement named both; both are compared.
-    assert (out["acts"], out["act_subjects"]) != (cout["acts"], cout["act_subjects"]), (
-        f"both arms resolved {out['acts']} acts with the same subjects -- dwellings no longer "
-        "move what is done, which is the same regression the Question-id check above would also "
-        "have caught")
+    assert out["acts"] != cout["acts"], (
+        f"both arms resolved {out['acts']} acts -- dwellings no longer move the act count, which "
+        "is the same regression the Question-id check above would also have caught")
 # H2 -- `ED-IN-0261`'s DEONTOLOGICAL GATE, `H-146`. A refusal at `opening_set`, not a score term:
 # the person's projected weight on the gating axis IS the threshold, and a verb that axis engages
 # past it never forms a Candidate. Roster-generic: the axis is whatever `Fixtures refusal_axis`
