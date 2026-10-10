@@ -1758,6 +1758,10 @@ rosters:
       exists*) fit no other form -- so the closure claim is only true if `existence` covers an
       OBJECT of a named class as well as an EDGE of a named kind. It is read that way here, and
       the widening is stated rather than left for a reader to infer from a passing test.
+      DORMANT BRANCH (ID-13 shape): v9 IN-11 cut `repudiate`, and no `requires_typed` cell in
+      `verb_table.yaml` names a tenure kind now (the `existence` cells name Person, Proposition,
+      petition, Record, works, Rung, Site and DocketItem), so `queries/world_q.py`'s
+      `exists:<edge kind>` branch is reached by no cell; it stays, unchanged.
       ⚠ CONJUNCTION IS NOT AN EIGHTH FORM. `restore` (*the site exists AND the actor is present at
       it*), `confer` and `revoke` all carry an `and` IN THE PROSE, so a cell may be written as
       `all: [<form>, <form>]`. §F.24a enumerated the ATOMS; the `and` was already in the cells it

@@ -106,7 +106,7 @@ scales:
       sentence used to add "`parliamentary_vote.py` calls `roll_pool`"; that module and
       `parliamentary_stay.py` were deleted at `29b` (their `FORK:5c5d8ec6` rows), and nothing under
       `systems/social_contest` calls `roll_pool` now.
-      4 of 46 verb rows declare `contests:` — `fight` and `accept` (the body, the combat seam), `march` (a
+      4 of 45 verb rows (46 before IN-11 cut `repudiate`) declare `contests:` — `fight` and `accept` (the body, the combat seam), `march` (a
       field, the mass-battle seam, `ecacb57`) and `tell` (a standing, resolved on the season side
       by `seam/wrappers/sigma.py`, not by this kernel). The kernel retires at plan position `2-ii`
       (`workplans/valoria_master_workplan_v9.md`).
@@ -387,13 +387,17 @@ rows:
       event ids), at EVERY S27.4 refusal, occasioned or not (reachable only by hand-built Acts). Re-pinned in
       `tests/test_season_shape.py`: `d_pub` 5 -> 10; `(depths[3], depths[6])` (9, 10) -> (12, 13);
       the five-season maturation chain 8 -> 11. KEEPS: no case's R3 went False, the control still flips.
+      THE STORYBAR READING IS PARTLY BY CONSTRUCTION (cross-person share of acts, seeds 0-2, 2 seasons,
+      `2a2ed152` -> `5fa6ac16`: 370 of 4278 = 8.6% -> 915 of 4278 = 21.4%; max chain depth 5/4/3 -> 7/7/7;
+      act counts identical per seed): IN-50 adds exactly the edge class the storybar counts as 'cross' (a
+      refusal now cites its occasion), and there is no refused/executed split, so do not cite it as a
+      propagation gain without one.
       THIS PARAGRAPH SUPERSEDES THE OPENING R3 FIGURES (46/46 NPC, 96/97 ARC). **WHY THE STATUS STAYS
       `not_met`, PRECISELY:** clause 1 (`corpus_run`, n of n on both lanes) now PASSES; clause 2 (the
       `wd_collect.py` reconvergence rate at `2x3`, OBSERVABLE < 96%) last read below the bar at the B-G
       control re-take (R-02's paragraph), on a tree before IN-10/IN-11/IN-50 changed what a fork can
       reach, and the plan reads `met` only off a `11` re-take on this tree. What is left is that re-take:
       re-taken at B-I (HEAD 66bf51f9, `2x3`, 143 cases, PYTHONHASHSEED=0, one run per arm, noise unmeasured): none 74.94 % · actor 42.64 % · total 41.56 %, against B-G's control (0f998f64) 74.90 / 43.94 / 42.40 (+0.04 / -1.30 / -0.84 pp); far below the 96 % bar, so the status stays not_met. Rates are reconverged / genuine summed over the four chunks per arm (the formula reproduces B-G's numbers exactly from its local chunks); `wd_collect.py` was not run, it requires all three fixture points.
-      IN-10, IN-11 and IN-13's new edges are independent of this one.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [IN-10, IN-11, IN-13, FI-01, H-116, IN-50]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1: regard is computed at read; the cross-person half is IN-10's, IN-11's, IN-13's); H-111 is FI-01's deposit half

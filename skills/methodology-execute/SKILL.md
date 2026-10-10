@@ -351,8 +351,8 @@ the row against the tree before trusting it:** every `built` handle must have a 
 `open..HEAD` carrying `Item: <handle>`, and every such trailer there must be in the row; where
 they disagree, the commits win — correct the row and say so; if they cannot be reconciled, ask.
 **Then look at the tree:** a killed run leaves residue. If `git status` is dirty, it is the killed
-item's unsaved build. Find the item's latest `WIP checkpoint: <handle>` commit (`git log --grep='^WIP
-checkpoint:' open..HEAD`): where one exists, `git stash push -u` the residue (reversible) and CONTINUE from
+item's unsaved build. Find the item's latest `[<scope>] WIP checkpoint: <handle>` commit (`git log --grep='WIP checkpoint:'
+open..HEAD`; unanchored, since the subject opens with the `[scope]` tag): where one exists, `git stash push -u` the residue (reversible) and CONTINUE from
 that checkpoint, naming its SHA in the producer's brief; where none exists, stash it and rebuild. A handle
 with a checkpoint but no `Item:` commit is "continue", not "build whole". A `Falsified: <handle>` trailer
 marks an attempt its own falsifier rejected and a revert undid: it is not rebuilt, and the hole row it
@@ -501,7 +501,7 @@ this spelling.
 
 **Checkpoints.** Work that exists only in the working tree is one restart from lost. Commit and push a
 checkpoint at every producer hand-back *before* verifying it, and before any long instrument run:
-subject `WIP checkpoint: <handle>` (72 characters at most, so keep the handle short; "unreviewed" goes in the body), **no `Item:` trailer** (so the in-flight row never lists
+subject `[<scope>] WIP checkpoint: <handle>` (CLAUDE.md §2's `[scope]` format, 72 characters at most, so keep the handle short; "unreviewed" goes in the body; recover with the unanchored `git log --grep='WIP checkpoint:'`), **no `Item:` trailer** (so the in-flight row never lists
 it; the item's own commit follows on top), trailers as any commit. Producers still never commit — the
 orchestrator checkpoints. A checkpoint is recovery, not review: BATCH-CLOSE reviews the whole range, and a
 falsified attempt and its revert net to zero in that range (nothing to review; the hole row is the record).

@@ -126,8 +126,9 @@ def test_in11_a_witnessed_mixed_release_names_the_proposition_to_every_witness()
                                         (pid, "commitment.ended", True)
                                         for c in w.persons[q].ledger)]
     assert holders, "no non-actor witness holds the vow-break on the Proposition"
-    assert pid not in reach(w, w.persons[holders[0]]), (
-        "the leaked claim is no longer inert: the Proposition is in a non-maker's reach")
+    in_reach = [q for q in holders if pid in reach(w, w.persons[q])]
+    assert not in_reach, (
+        f"the leaked claim is no longer inert: the Proposition is in the reach of {in_reach}")
 
 
 # ======================================================================================

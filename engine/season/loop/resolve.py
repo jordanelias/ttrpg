@@ -886,7 +886,7 @@ def resolve(self, token: Token, acts: list[Act],
     w.take_staged()
     for a in ordered:
         # G1a. THE ACT ENTERS THE STORE BEFORE IT IS FOLDED, and the order is the whole point:
-        # every branch below emits `causes=[a.id]`, INCLUDING the two refusal branches, so an
+        # every branch below emits `causes=[a.id]` plus the occasion ids (`_act_events`), INCLUDING the two refusal branches, so an
         # act recorded only on success would leave every refusal chain unresolvable -- which is
         # the case the act store's own header names. Appended once per act, here, rather than at
         # each of the five emission sites: `CLAUDE.md` §8, and five sites is five chances to
@@ -908,7 +908,7 @@ def resolve(self, token: Token, acts: list[Act],
         if a.obstacle is not None and a.obstacle > mult * max(a.pool or 0, 0):
             # ⚠ `[a.id]`, NOT `[ROOT]`. A REFUSED ATTEMPT HAS AN ANTECEDENT — THE ATTEMPT.
             # This read `[ROOT]`, and the rule against it is stated TWICE in this file within
-            # sixteen lines: the contest branch below passes `causes=[a.id]`, and `_fold`
+            # sixteen lines: the contest branch below passes `[a.id]` plus the occasion ids (`_act_events`), and `_fold`
             # carries a paragraph saying `[ROOT]` in an act-caused emission is "`[]` wearing a
             # marker". The rule was written on both sides of this line and violated between
             # them. It made `W4`'s headline claim — *"`[ROOT]` only for the seed and a licensed
@@ -943,7 +943,7 @@ def resolve(self, token: Token, acts: list[Act],
             #
             # ⚠ A REFUSAL HERE IS AN EVENT, NOT A RAISE. The act happened and was witnessed; what
             # did not happen is the contest. `emits_on_refusal` -- `kill.refused` on the one row
-            # that reaches this today -- is the kind, and `causes=[a.id]` keeps the chain
+            # that reaches this today -- is the kind, and `[a.id]` plus the occasion ids (`_act_events`) keeps the chain
             # resolvable exactly as the two refusal branches in `_fold` do.
             _ok, _refusal_kinds, _verdict = self._admits(w, a, _row) if _row else (True, (), None)
             if not _ok:
