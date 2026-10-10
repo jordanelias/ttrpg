@@ -397,6 +397,12 @@ DEFAULT_FIXTURES = Fixtures(
     # what is injected here is a degenerate one. The sweep is on its value, which is the only axis
     # a constant has; a real distribution is a different hole and is not invented here.
     season_factor=1.0,                # `H-26`, swept 0.5 / 1 / 2
+    # v9 IN-21 / `H-26`'s DISTRIBUTION: one tuple per season of the year (so the year's length is the
+    # table's), each holding the equally likely multipliers on `season_factor` that season. `()` is
+    # the CONTROL: no year, no draw, the bare constant above. The on arm is the declared sweep
+    # `((0.5, 1.0, 2.0),) * 4`; a drought-only arm is `((0.5,),) * 4`. Drawn by
+    # `world_q.season_factor_of`, keyed on (world_seed, tick).
+    season_factor_draw=(),            # `H-26`, swept () / ((0.5,),)*4 / ((0.5, 1.0, 2.0),)*4
     # ⚠ `W8` / `H-11`. #353 §10.4 makes `MatterKind` open and V2 gives the draw's SHAPE -- *from
     # the containing rung's stores, scaled by weight* -- and no weights. Registry row, not literal.
     subsistence_weight=SUBSISTENCE_WEIGHTS,

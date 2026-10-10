@@ -54,7 +54,7 @@ from ..state.containment import ancestry, home_of  # noqa: F401 -- re-exported
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
 from ..state.gate import BENCH_BASIS, may_determine, purview_reaches, sits_over
-from ..state.ids import ROOT
+from ..state.ids import H, ROOT
 from ..state.world import World
 from ..trace_log import TRACE
 
@@ -580,6 +580,36 @@ def nearest_store(w: World, rung_id: Optional[str], kind: str,
             return cur
         cur = parent_of(w, cur)
     return None
+
+
+def season_of_year(w: World) -> Optional[int]:
+    """v9 IN-21: which season of the year `w.tick` falls in, or `None` when no year is declared. The
+    year is the length of `season_factor_draw`'s table (one entry per season, in order), so the
+    calendar position is READ OFF `tick` and no field stores it. A world declaring no table has no
+    year to be in, which is the control (`season_factor` alone)."""
+    table = w.fixtures.get("season_factor_draw")
+    return w.tick % len(table) if table else None
+
+
+def season_factor_of(w: World) -> float:
+    """v9 IN-21 / `H-26`: the multiplier on this season's `yield`. THE ONE OWNER of the term MATTER's
+    yield step scales by.
+
+    `season_factor` is the constant (swept 0.5 / 1 / 2). When `season_factor_draw` declares a table
+    the factor is that constant times ONE outcome drawn from the current season of the year's entry,
+    the outcomes equally likely. The draw is KEYED, not random: `H(world_seed, tick, ...)` is the
+    same mint every id uses, so the same seed twice gives one hash and two seeds differ. An EMPTY
+    table is the control arm and returns the bare constant, so the default world's arithmetic is
+    untouched (`test_season_weather.py` holds the three-hash equality)."""
+    base = w.fixtures.get("season_factor")
+    s = season_of_year(w)
+    if s is None:
+        return base
+    outcomes = w.fixtures.get("season_factor_draw")[s]
+    pick = int(H(w.world_seed, w.tick, "world", "season_factor"),
+               # [JUSTIFIED: a RADIX, not a game value -- `H` returns a hexdigest, 16 reads it back as an integer (`ids.draw_factory`'s same non-quantity)]
+               16) % len(outcomes)
+    return base * outcomes[pick]
 
 
 def subsistence_draw(w: World) -> dict:

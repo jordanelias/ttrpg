@@ -277,8 +277,8 @@ rows:
     kind:      "SCHEMA_ROW"
     owner:     "params"
     grade:     "assumption"
-    default:   "constant `1`, swept"
-    site:      "matter.season_factor -- DEFAULT_FIXTURES `season_factor`, read by SeasonDriver.matter's yield step"
+    default:   "constant `1`, swept; the keyed draw (`season_factor_draw`) is declared and OFF (`()`), the control arm (v9 IN-21)"
+    site:      "matter.season_factor -- DEFAULT_FIXTURES `season_factor` and `season_factor_draw`, read through world_q.season_factor_of by SeasonDriver.matter's yield step"
     sweep:     [0.5, 1, 2]
     unblocks:  "1"
     cite:      "PLAN §3.2, AND IT MOVES TO TIER 0. NUMBER/FORMULA-shaped, so a default is injectable. Tier 0 because `yield` is the matter economy's ONLY source -- #353 :856 VERBATIM: \"`yield` | **only here.** Blocked on `season_factor`'s distribution (§22.3)\" -- and H-11 draws subsistence from stores, so EVERY MULTI-SEASON RUN STARVES without it. ⚠ PLAN §3.2 cites :855 for that line; it is at :856. Verified by hand 2026-09-02."
