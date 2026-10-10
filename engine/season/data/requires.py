@@ -164,7 +164,9 @@ COMPARATORS = {">=": lambda a, b: a >= b, "<=": lambda a, b: a <= b}
 # among several seats names its seat under this key in its operands, so the payload of its act repeats
 # `Act.via` as a DISCRIMINATOR for `data/verbs.py::act_key`; `binding_of` drops it like any key
 # outside `requires_operands` and `Act.via` is what the fold reads.) One spelling for the writer
-# (`binding_of`) and the one reader (`Basis.check`).
+# (`binding_of`) and the one reader (`Basis.check`); `H-134` adds three more spellings that are not
+# bindings: `decision/options.py` writes it onto a multi-seat Candidate's operands and reads it back
+# (`seat_of`), and `data/verbs.py::act_key` appends it to the id.
 VIA = "via"
 
 REQUIREMENT_TYPES: dict = {}
@@ -423,7 +425,9 @@ class Basis(Requirement):
     THE SEAT IS STRUCTURAL, NOT AN OPERAND -- the correction `04_VERBS.md`'s own determine row
     records (⑵: *"the conjunct binds `subject`; the actor is the acting person by construction and
     needs no operand"*). `Act.via` is to the binding what `Act.actor` is: carried by the Act itself,
-    never by the payload, and put into the binding by `binding_of`'s `via=` (`04:120` AX-1, *"a seat
+    never by the payload as a binding (`H-134`: a Candidate formed among several seats repeats it
+    on the payload as an id discriminator, which `binding_of` drops; see `VIA`), and put into the
+    binding by `binding_of`'s `via=` (`04:120` AX-1, *"a seat
     enters through `Act.via`"*). `via` is NOT a `requires_operands` member and this form does not
     make it one -- coining it would be *"filling `H-94` by keyword argument"*. An act exercising NO
     seat binds no `via`, and the clause is UNKNOWN, which the fold refuses (§42.2): that is the

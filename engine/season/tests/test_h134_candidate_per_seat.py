@@ -25,7 +25,9 @@ import pytest
 
 from ..data.verbs import VERB_TABLE, opportunity_key
 from ..decision.choose import pack_scenes
+from ..decision import options as _options
 from ..decision.options import exercisable_seats, exercised_seat, opening_set
+from ..loop.deliberate import _qualify_by_round
 from ..gaps import Unspecified
 from ..harness import probes as P
 from ..loop import predicates as _preds
@@ -99,6 +101,8 @@ def test_h134_the_second_seat_forms_a_candidate_is_packed_via_it_and_the_fold_ad
     acts = _acts(w, TWO, revokes)
     assert sorted(a.via for a in acts) == ["off_crown", "off_mayor"]
     assert len({a.id for a in acts}) == 2, "two seats, one act id"
+    # The payload copy is a discriminator, never a second answer: it must equal `Act.via`.
+    assert [a.payload["via"] for a in acts] == [a.via for a in acts]
     admitted = [a.via for a in acts if _preds._req_revoke(w, _with_office(a))]
     assert admitted == ["off_crown"], admitted          # the SECOND seat, and only it
     by_seat = {a.via: a for a in acts}
@@ -179,3 +183,41 @@ def test_h134_control_one_seat_forms_the_same_candidates_and_ids_as_before():
         checked += 1
     assert checked >= 20 and any(a.via == "off_mayor2" for a in acts), checked
     assert _control_reading() == _CONTROL
+
+
+def test_h134_the_belief_test_is_asked_of_the_seat_each_candidate_is_formed_for(monkeypatch):
+    """`opening_set` hands `belief_contradicts` the seat the Candidate is formed for, the same one
+    that rides to `Act.via`. The fixture's ledger is empty, so the real test cannot contradict
+    whichever seat it receives; a recorder (returning False, so every Candidate forms) observes the
+    seat instead. A first-seat slip at that call reddens this and nothing else in the file."""
+    rec = []
+
+    def fake(p, row, subject, ops, seat, weigh=None):
+        rec.append((row.verb, seat))
+        return False
+
+    monkeypatch.setattr(_options, "belief_contradicts", fake)
+    w = _world()
+    cands = _candidates(w, TWO)
+    checked = 0
+    for verb in {c.verb for c in cands if "via" in c.operands}:
+        asked = [s for v, s in rec if v == verb]
+        formed = [c.operands["via"] for c in cands if c.verb == verb and "via" in c.operands]
+        assert asked == formed, (verb, asked, formed)
+        assert set(asked) == {"off_mayor", "off_crown"}, (verb, asked)
+        checked += 1
+    assert checked >= 3, checked
+
+
+def test_h134_two_seats_stay_two_act_ids_after_the_round_requalifies_them():
+    """`_qualify_by_round` re-mints every id from the PAYLOAD on a re-deliberation (round >= 1), where
+    no Candidate is in sight; the seat in the payload is what keeps the two seats' ids apart there."""
+    w = _world()
+    revokes = [c for c in _candidates(w, TWO) if c.verb == "revoke" and c.subject == TARGET]
+    mint = lambda who, verb, subj: H(w.world_seed, w.tick, who, f"act:{verb}:{subj}")
+    scenes = pack_scenes(w.persons[TWO], revokes, 99, w.fixtures, mint)
+    before = {a.id for s in scenes for a in s.acts}
+    assert len(before) == 2
+    _qualify_by_round(scenes, w, 1)
+    after = {a.id for s in scenes for a in s.acts}
+    assert len(after) == 2 and not (after & before), (before, after)

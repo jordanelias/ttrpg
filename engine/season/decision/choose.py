@@ -505,8 +505,9 @@ def _payload_of(c: "Candidate") -> Optional[dict]:
 
     ⚠ `H-134`: A Candidate formed among several seats carries `VIA` in its operands, and it STAYS on
     the payload -- not as a binding (`binding_of` drops it; `Act.via` is what the fold reads) but
-    because `act_key` and `opportunity_key` read the payload, at three sites that see no Candidate,
-    and two acts of one person through two seats must not share an id or an opportunity."""
+    because `loop/deliberate.py::_qualify_by_round` re-mints the id with `act_key` from the payload,
+    seeing no Candidate, and two acts of one person through two seats must not share an id.
+    `opportunity_key` reads the same payload and deliberately ignores the seat (`data/verbs.py`)."""
     d = dict(c.operands or {})
     if c.subject:
         d.setdefault("subject", c.subject)
