@@ -4403,6 +4403,19 @@ rows:
     cite:      "The IN-11 plan entry (v9 `_part5` `### IN-11`) said its pricing becomes a `deed:commitment.ended` cell (IN-08); none was authored. A value choice: attach it to Jordan's CELL-VALUE AND COSINE PASS, `workplans/valoria_master_workplan_v9_part5.md` section J.2"
     source:    "v9 IN-11, B-I close Phase 3, 2026-10-10"
 
+  - id:        H-206
+    tier:      1
+    hole:      "A DEATH EMITTED AT MATTER REACHES NO LEDGER, SO NO CLAIM NAMES A DEAD SEAT-HOLDER, HIS OFFICE OR HIS CLOSED `hold` (v9 IN-34; MEASURED at B-F, base a1617930). A `person.died` written at MATTER is anchored on the dead person, whom `World.remove_person` has already removed by the time WITNESS runs, so `place_of` returns None and the event finds no observer under the shipped `fan_out_mode: all_five` (82 under `total`). The `hold` does close and the office falls vacant in the world; nothing tells anyone. SE-01's hunger death takes the same path. IN-34's second falsifier (*a seat-holder's death by age raises vacancy claims for those in reach*) therefore fails."
+    kind:      "WIRING"
+    owner:     "WITNESS: either give an actorless death a place (the removed person's last container), or list the cascade's closed tenures among the Event's changes so a fan-out can anchor on the office"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "IN-34 (ageing and illness through the bodies motion) and any death at MATTER being witnessed"
+    cite:      "MEASURED 2026-10-10 (B-F). ATTEMPT BUILT, FALSIFIED AND REVERTED, kept in history: b4f7a917 (with WIP checkpoint c4915e1a), reverted e5700593 and a942abd9. It built `Person.born` (age is a Query over the clock), fixtures `age_step`/`illness_rate`/`age_at_build` at control 0, and one MATTER bodies write through `remove_person`; control equal to the base at the event level (ordered (kind, id) sequence, 7526 events after 1 season, 21508 after 2; `build_realm(0)` moved by schema only, 2d0d1200 -> 919b9556), 4 of 4 mutations red. Reproduced by the orchestrator: with one seat-holder made old enough and one full season run, a control world holds `tenure.closed` claims naming the holder or his hold on other persons; the killed world holds none naming the holder, the office or the hold. The fix is on the WITNESS side, outside IN-34's EDITS (`loop/matter.py`, `state/carriers.py`), so nothing was widened. Also seen: `loop/census.py:83` mints individuated people with the build-time `born` default (one line); `age_at_build` and the rates are Jordan's to set (#457 D2's gate; `references/npc_registry.yaml` has `age: null [GAP]` on all 29 rows)."
+    source:    "v9 IN-34 (`workplans/valoria_master_workplan_v9_part5.md`), #457 D2, 2026-10-10"
+
 
 discharges:
   D1:   "row:H-01"
