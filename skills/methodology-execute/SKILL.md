@@ -351,8 +351,14 @@ the row against the tree before trusting it:** every `built` handle must have a 
 `open..HEAD` carrying `Item: <handle>`, and every such trailer there must be in the row; where
 they disagree, the commits win — correct the row and say so; if they cannot be reconciled, ask.
 **Then look at the tree:** a killed run leaves residue. If `git status` is dirty, it is the killed
-item's partial build — report its paths, `git stash push -u` it (reversible) and rebuild the
-item; never commit it unreviewed. `git worktree list` shows fan lanes left behind: integrate or
+item's unsaved build. Find the item's latest `WIP checkpoint: <handle>` commit (`git log --grep='^WIP
+checkpoint:' open..HEAD`): where one exists, `git stash push -u` the residue (reversible) and CONTINUE from
+that checkpoint, naming its SHA in the producer's brief; where none exists, stash it and rebuild. A handle
+with a checkpoint but no `Item:` commit is "continue", not "build whole". A `Falsified: <handle>` trailer
+marks an attempt its own falsifier rejected and a revert undid: it is not rebuilt, and the hole row it
+cites is its record. Never commit residue as an `Item:`; a checkpoint is the only unreviewed commit.
+Instrument worktrees (detached, named for their instrument) are removed and the instrument re-run; they are
+not integrated. `git worktree list` shows fan lanes left behind: integrate or
 remove each. **A position the plan or handoff already records as BUILT with its close not run** enters at
 BATCH-CLOSE: write the row with `built` filled and `open` the range start that record names; if it
 names none, ask. An invocation whose text does not match an in-flight batch stops and reports
@@ -497,30 +503,44 @@ this spelling.
 checkpoint at every producer hand-back *before* verifying it, and before any long instrument run:
 subject `WIP checkpoint: <handle> (unreviewed)`, **no `Item:` trailer** (so the in-flight row never lists
 it; the item's own commit follows on top), trailers as any commit. Producers still never commit — the
-orchestrator checkpoints. A checkpoint is recovery, not review: BATCH-CLOSE reviews the whole range. A
-position its own falsifier rejects is committed, then `git revert`ed, and the hole row cites both SHAs
-(the live plan's stopping rule), so the attempt stays retrievable. Dispatch a
-long build in bounded pieces that return in tens of minutes, not one that returns in an hour. A resumed
-partial build is continued from its checkpoint, not stashed and rebuilt.
+orchestrator checkpoints. A checkpoint is recovery, not review: BATCH-CLOSE reviews the whole range, and a
+falsified attempt and its revert net to zero in that range (nothing to review; the hole row is the record).
+A position its own falsifier rejects is committed with a `Falsified: <handle>` trailer, then `git revert`ed,
+and the hole row cites both SHAs (the live plan's stopping rule). Dispatch a long build in bounded pieces
+that return in tens of minutes, not one that returns in an hour. A pre-commit validator that fails a
+checkpoint is fixed or reported, never bypassed with `--no-verify`. Every push runs CI (CLAUDE.md §0.4), so
+push checkpoints at hand-backs, not on a timer.
 
-**Baselines.** A reading is reusable when it was taken on the tree being built on. So **chain them**: an
-item records its after-readings in its commit body (hashes, executed counts, corpus lines); the next
-item's before-reading is that body, confirmed by one cheap spot check on the current tree (a hash). Re-run
-a heavy instrument only when an output-moving commit has landed since the last reading, or when the
-reading came from an unverified tree. Producers are *given* their before-readings in the brief and are
-not asked to re-derive them. The slow instruments (`aperture 4 0`, `storybar`, `corpus_run`) run in a
-separate `git worktree` at the checkpoint SHA, in parallel with the next producer, never inside a
-producer's critical path; a producer iterates with the fast probe (`aperture 1 0`) and a constructed-input
-test. No new document holds the readings (CLAUDE.md §1, §0.1 pt 5): the commit body is their record.
+**Baselines.** A reading is reusable only on the tree it was taken on. Every reading names its SHA
+(`reading @<sha>`) and is recorded in the first commit made after it completes; it is reusable only if
+`git diff <sha>..HEAD` touches nothing the instrument can reach. **Chain them:** an item records the
+readings it has in its commit body; the next item's before-reading is that record. The spot check must run
+at the same season count as the reading it vouches for (a 1-season hash is necessary, not sufficient: an
+effect that first shows in season 2 leaves it unchanged). Producers are *given* their before-readings and
+are not asked to re-derive them. No new document holds the readings (CLAUDE.md §1, §0.1 pt 5).
 
-**Running a slow instrument.** (1) Time the unit first — one realm, one season — and size the limit from
-that, never from a guess; an unmeasured instrument gets the tool's maximum limit, not a round number.
-(2) Run it in the background to a log, and only independent runs in parallel: they are CPU-bound and
-single-threaded, so up to the core count (`nproc`) costs nothing, while a before/after pair run one after
-the other costs twice the wait. (3) Say its measured runtime in the producer brief, so no one polls blind.
-(4) Never `pkill -f <pattern>` from the shell that names the pattern — it kills itself; keep the PID from
-`$!` or use `pgrep -f '[p]attern'`. (5) Do not assume a utility exists (`/usr/bin/time` does not): use the
-shell's `time`. (6) A limit that kills a run is a measurement failure to be stated, never read as a result.
+**Running a slow instrument** (measured here: `aperture 1 0` 36 s, `aperture 4 0` 20 min, ~30x for 4x the
+seasons, so cost is superlinear in seasons and the unit is not "one realm, one season").
+1. *Size it.* Time two sizes on the axis that will scale (1 and 2 seasons), fit the growth, extrapolate
+   with a margin, and divide the CPU estimate by the CPU share the machine will give it. If the estimate
+   exceeds the tool's background maximum, split the run (storybar by seed; re-merge the pooled rows only
+   after checking the merge) or cap it: Jordan 2026-10-10, storybar at 3 realms.
+2. *Launch.* `exec python -u … > log 2>&1`, so `$!` is python and not a wrapper shell; in the same call
+   write `$!` and `ps -o lstart= -p $!` to a pid file; a reading counts only if the log ends with an
+   `EXIT 0` line a wrapper appends. Export the same `PYTHONHASHSEED` to every process of a comparison.
+   Parallel budget: `max(1, nproc - round(load average))`; the instruments are single-threaded, and
+   producers' `pytest -n auto` already holds every core.
+3. *Judge it.* CPU time (`ps -o cputime`) advancing separates a working process from a blocked one; it
+   cannot separate a long run from a livelock, and these instruments print only at the end. The
+   backstop is the size estimate, not the clock alone: a process past 3x its estimate is examined, not
+   assumed dead. Before trusting a PID, check `/proc/<pid>/cmdline` and the start time still match.
+   `Monitor` (CLAUDE.md §11, allowed for local jobs) may watch the log and CPU time; without it, liveness
+   is read at each hand-back and notification.
+4. *Find it.* `pgrep -f '^python -m engine.season.harness.<name>'`, anchored: an unanchored or bracketed
+   pattern matches the `bash -c` wrappers too. Never `pkill -f` from a shell whose own command line names
+   the pattern.
+5. *Say so.* State the measured runtime in the producer brief. Use the shell's `time`; `/usr/bin/time` is
+   absent. A limit that kills a run is a measurement failure, reported as one, never read as a result.
 
 ## GUARDRAILS
 
