@@ -2079,3 +2079,149 @@ def test_claim_firsthand_needs_an_empty_chain_and_the_firsthand_source():
         return Claim("c", "p", "Hh", "stores:grain", 8, 0, source, 100, "own", chain=chain)
     assert [c((), "firsthand").firsthand, c((), "told_by").firsthand,
             c(("x",), "firsthand").firsthand] == [True, False, False]
+
+
+# ---------------------------------------------------------------------------------------------------
+# v9 IN-18 `G6` -- CONFIDENCES (`loop/witness.py::_circle_of`, `loop/resolve.py::_confidence_broken`;
+# H-197). §5 row G6's falsifier: *"a private telling deposits `visibility == (A, B)`; retelling outside
+# it emits `confidence.broken`"*. Driven through the REAL fold (`_fold` at a told band, as `resolve()`'s
+# seam branch calls it) and the REAL WITNESS barrier, `test_t4_a_telling_to_an_absent_hearer_...`'s drive.
+# `tiny_world`: `p_low`, `p_mid`, `p_other` stand in `Hh`, so each hears every telling made there.
+# ---------------------------------------------------------------------------------------------------
+
+_G6_SUBJECT, _G6_PRED, _G6_VALUE = "Hh", "stores:grain", 8
+
+
+def _g6_world(rate):
+    """`tiny_world` at `telling_privacy` `rate` (`None`: the shipped fixtures, untouched), `p_low`
+    holding `(Hh, stores:grain, 8)` firsthand. Returns `(w, tell, told)`: `tell(teller, to)` folds a
+    `tell` about `Hh` carrying `said_of(teller's own ledger)` at `Success` and runs WITNESS on what it
+    emitted, returning the kinds; `told(pid)` is `pid`'s told copies of the cell."""
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..data.matrix import Step
+    from ..seam import Resolution
+    fx = DEFAULT_FIXTURES if rate is None else DEFAULT_FIXTURES.sweep("telling_privacy", rate)
+    w = P.tiny_world(fx)
+    w.persons["p_low"].ledger.append(Claim("c_g6_held", "p_low", _G6_SUBJECT, _G6_PRED, _G6_VALUE,
+                                           0, "firsthand", 37, "own"))
+    d = SeasonDriver(w)
+    n = [0]
+
+    def tell(teller, to):
+        n[0] += 1
+        w.tick += 1
+        # What `said_of` copies out of a claim, from the teller's copy of THE CELL: a hearer also
+        # holds `(Hh, news.told, True)` firsthand from having heard, and `said_of`'s newest-first pick
+        # would pass that on instead (G3's `newest`), which is not the retelling under test.
+        mine = [c for c in w.persons[teller].ledger
+                if (c.subject, c.predicate, c.value) == (_G6_SUBJECT, _G6_PRED, _G6_VALUE)]
+        assert len(mine) == 1, f"{teller} holds {len(mine)} copies of the cell"
+        c = mine[0]
+        said = Said(c.subject, c.predicate, c.value, c.confidence, c.chain)
+        if n[0] == 1:              # the first telling: the pick `opening_set` makes, observed equal
+            assert said_of(w.persons[teller].ledger, _G6_SUBJECT, w.fixtures) == said
+        act = Act(id=f"a_g6_{n[0]}", actor=teller, verb="tell",
+                  payload={"subject": _G6_SUBJECT, "to": to, "said": said})
+        w.step = Step.RESOLVE
+        ok, kinds, _ = d._admits(w, act, _tell_row())
+        assert ok, f"the telling {teller} -> {to} was refused ({kinds}); the fold never ran"
+        w.acts.append(act)
+        out = d._fold(w, mint_token(w, WriteClass.ACTS), act, Resolution("Success", {}))
+        w.log.extend(out)
+        for e in out:
+            d.act_of[e.id] = act
+        w.step = Step.WITNESS
+        d.witness(mint_token(w, WriteClass.INTERIOR), out)
+        return [e.kind for e in out]
+
+    def told(pid):
+        return [c for c in w.persons[pid].ledger if c.source == "told_by"
+                and (c.subject, c.predicate, c.value) == (_G6_SUBJECT, _G6_PRED, _G6_VALUE)]
+
+    return w, tell, told
+
+
+def _tell_row():
+    from ..data.verbs import VERB_TABLE
+    return VERB_TABLE["tell"]
+
+
+def test_g6_a_private_telling_deposits_the_circle_teller_and_addressee():
+    """FALSIFIER (1). At `telling_privacy` 1.0 `p_low` tells `p_mid`: `p_mid` holds the told claim
+    `visibility == ("p_low", "p_mid")` -- the circle is the teller and the ADDRESSEE. `p_other`, a
+    bystander nobody addressed, still hears (§10 decision 1: recipiency stays WITNESS's) and holds the
+    same circle, outside it. The original telling breaks nothing: `p_low`'s own copy is `own`.
+
+    MUTATION (run once at G6, 2026-10-10): `_circle_of` returning `None` (the pre-G6 line) reddens the
+    visibility assertion; restored, GREEN."""
+    w, tell, told = _g6_world(1.0)
+    assert tell("p_low", "p_mid") == ["news.told"]
+    checked = 0
+    for pid in ("p_mid", "p_other"):
+        got = told(pid)
+        assert len(got) == 1 and got[0].chain == ("p_low",), [(c.chain, c.visibility) for c in got]
+        assert got[0].visibility == ("p_low", "p_mid"), (
+            f"{pid} holds the private telling as {got[0].visibility!r}, not the circle (p_low, p_mid)")
+        checked += 1
+    assert checked == 2
+    assert [c.visibility for c in w.persons["p_low"].ledger if c.id == "c_g6_held"] == ["own"]
+
+
+def test_g6_a_retelling_outside_the_circle_emits_confidence_broken():
+    """FALSIFIER (2). `p_mid`, holding `p_low`'s confidence `(p_low, p_mid)`, tells it to `p_other`
+    -- outside the circle: the fold emits `news.told` AND `confidence.broken`, and the betrayal is an
+    Event WITNESS carries to the people present (an event-kind claim on the broken kind).
+
+    MUTATION (run once at G6, 2026-10-10): `_confidence_broken` returning False reddens the kinds
+    assertion; dropping the `hearer not in c.visibility` clause reddens
+    `test_g6_a_retelling_inside_the_circle_breaks_nothing`; restored, GREEN."""
+    w, tell, told = _g6_world(1.0)
+    tell("p_low", "p_mid")
+    assert told("p_mid")[0].visibility == ("p_low", "p_mid")
+    kinds = tell("p_mid", "p_other")
+    assert kinds == ["news.told", "confidence.broken"], kinds
+    heard = [c for pid in ("p_low", "p_other") for c in w.persons[pid].ledger
+             if c.predicate == "confidence.broken"]
+    assert heard, "the broken confidence reached nobody's ledger at WITNESS"
+
+
+def test_g6_a_retelling_inside_the_circle_breaks_nothing():
+    """FALSIFIER (3). `p_mid` tells the confided claim back to `p_low`, the confider -- INSIDE the
+    circle: `news.told` alone. And `p_low`, the confider, telling their own claim to `p_other` breaks
+    nothing either: their copy is `own` (a confidence binds the hearer, never the teller)."""
+    w, tell, told = _g6_world(1.0)
+    tell("p_low", "p_mid")
+    assert tell("p_mid", "p_low") == ["news.told"]
+    assert tell("p_low", "p_other") == ["news.told"]
+
+
+def test_g6_the_shipped_control_deposits_own_and_breaks_nothing(monkeypatch):
+    """FALSIFIER (4). The SHIPPED `telling_privacy` is 0 (the control). At it the deposit is `own`
+    and EQUAL to the 1.0 arm's deposit in every other field (so G6 moves `visibility` alone), no draw
+    is taken (`draw_factory` replaced by a raiser), and a retelling outside what would have been the
+    circle emits `news.told` alone. Hash equality of `build_realm(0)` against the pre-G6 tree holds by
+    construction at 0 (no draw, no circle, nothing filtered differently); this observes the deposit."""
+    from dataclasses import replace
+    from ..data.fixtures import DEFAULT_FIXTURES
+    assert DEFAULT_FIXTURES.get("telling_privacy") == 0, "the shipped chance moved: restate this test"
+    live_w, live_tell, live_told = _g6_world(1.0)
+    live_tell("p_low", "p_mid")
+
+    def _no_draw(*_a, **_k):
+        raise AssertionError("a draw was taken at telling_privacy 0")
+    monkeypatch.setattr(WITNESS_MODULE, "draw_factory", _no_draw)
+    w, tell, told = _g6_world(None)
+    assert tell("p_low", "p_mid") == ["news.told"]
+    got, live = told("p_mid"), live_told("p_mid")
+    assert len(got) == 1 and got[0].visibility == "own", [c.visibility for c in got]
+    assert got[0] == replace(live[0], visibility="own"), (got[0], live[0])
+    assert all(c.visibility == "own" for pid in w.persons for c in w.persons[pid].ledger)
+    assert tell("p_mid", "p_other") == ["news.told"]
+
+
+def test_g6_the_privacy_chance_refuses_what_is_not_a_chance():
+    import pytest
+    for bad in (-0.1, 1.5, float("nan")):
+        w, tell, _ = _g6_world(bad)
+        with pytest.raises(ValueError, match="telling_privacy"):
+            tell("p_low", "p_mid")

@@ -478,6 +478,10 @@ def _fold(self, w: "World", token: Token, a: Act,
     # intersects against the band's own kinds now instead of against all of them.
     _declared = row.emits_at(_degree)
     kinds = tuple(k for k in _declared if k in earned) if earned else _declared
+    # v9 IN-18 `G6` (`H-197`): `confidence.broken` IS EARNED BY THE ACT, NOT BY THE BAND -- declared on
+    # `tell`'s told bands, emitted only when the act breaks a circle (`_confidence_broken`).
+    if CONFIDENCE_BROKEN in kinds and not _confidence_broken(w, a, row):
+        kinds = tuple(k for k in kinds if k != CONFIDENCE_BROKEN)
     # ⚠ `[a.id]` ALONE WAS `N3`. §39.2 line 2 says `causes[]` NAMES THE ACTS, and that is
     # necessary and was treated as sufficient: an Event named the act that emitted it and
     # nothing named what occasioned the act, so the walk stopped dead at every decision and
@@ -497,6 +501,43 @@ def _fold(self, w: "World", token: Token, a: Act,
     if changed:
         _scar_witnesses(w, token, a, out)
     return out
+
+
+# v9 IN-18 `G6` (`H-197`): BETRAYAL AS AN EVENT THE WORLD CAN REACT TO. Declared on a row's `emits:`
+# like every kind (`tell`'s told bands, `verb_table.yaml`), and kept on the fold's output only when
+# `_confidence_broken` says the act broke a circle -- the one conditional kind the fold earns from the
+# act's own payload rather than from an effect's receipts (`tell` writes nothing, so no effect runs).
+CONFIDENCE_BROKEN = "confidence.broken"
+
+
+def _confidence_broken(w: "World", a: Act, row: "VerbRow") -> bool:
+    """`G6`: DOES THIS ACT TELL A CONFIDED CLAIM TO SOMEBODY OUTSIDE ITS CIRCLE?
+
+    The act carries what it says (`payload["said"]`, fixed at CHOOSE by `said_of`) and its row names
+    who it is said to (`counterparty:`, read on the payload). The circle is on the actor's own copy of
+    the said claim, `Claim.visibility` -- a tuple when the claim reached the actor through a telling
+    made in confidence (`loop/witness.py::_circle_of`), `"own"` otherwise. The copy is the claim in
+    the actor's ledger with the said `(subject, predicate, value, chain)`, the four fields `said_of`
+    copies out of it. True when such a copy holds a circle the addressee is not in.
+
+    ⚠ THE ACTOR'S OWN LEDGER AND NO OTHER (`F8`'s carve-out, `04 §B.2`: *"the fold may ask the
+    ACTOR'S OWN ledger ... and no other"*) -- the read `tell`'s own `holds` conjunct already makes at
+    this fold through `WorldReader(w, a.actor)`. ⚠ READ AT RESOLVE, NOT CARRIED FROM CHOOSE: a copy
+    evicted between the two is not found, and the retelling breaks nothing [ASSUMPTION; `Said` carries
+    no circle]. ⚠ A retelling INSIDE the circle (back to the confider, or to the other party) breaks
+    nothing; the original teller holds their own copy `own` and can never break their own confidence;
+    a self-disclosure (§10 decision 3) is an ordinary telling. At the shipped `telling_privacy` 0 no
+    claim holds a circle, so this is False for every act."""
+    pay = a.payload if isinstance(a.payload, dict) else None
+    said = pay.get("said") if pay is not None else None
+    hearer = pay.get(row.counterparty) if (pay is not None and row.counterparty) else None
+    p = w.persons.get(a.actor)
+    if said is None or hearer is None or p is None:
+        return False
+    key = (said.subject, said.predicate, said.value, tuple(said.chain))
+    return any(isinstance(c.visibility, tuple) and hearer not in c.visibility
+               and (c.subject, c.predicate, c.value, c.chain) == key
+               for c in p.ledger)
 
 
 def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:

@@ -937,10 +937,11 @@ verbs:
       Partial:      []
       Failure:      []
     emits:
-      Overwhelming: ["news.told"]
-      Success:      ["news.told"]
-      Partial:      ["news.told"]
+      Overwhelming: ["news.told", "confidence.broken"]
+      Success:      ["news.told", "confidence.broken"]
+      Partial:      ["news.told", "confidence.broken"]
       Failure:      ["news.untold"]
+    emits_note: "v9 IN-18 `G6` (`H-197`, confidences): `confidence.broken` is DECLARED on every band that tells and EMITTED only when the act breaks a circle -- the teller holds the said claim under a `Claim.visibility` circle (a confided telling's deposit, `loop/witness.py::_circle_of`) and the addressee `to` is outside it (`loop/resolve.py::_confidence_broken`, the fold's one act-earned kind; `tell` writes nothing, so no effect earns it). Not on `Failure`: a telling the hearer did not take in told nothing. It adds no refusal route. At the shipped `telling_privacy` 0 no circle exists and the kind is never emitted."
     contests_note: >-
       ⚠ `U1` / R-09. THE PRIZE IS `a standing`, WHICH IS ALREADY ROSTERED -- loader invariant 9
       (`04:467`) requires a verb's prize to be in the subsystem roster, and inventing a prize to

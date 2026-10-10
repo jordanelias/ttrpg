@@ -300,7 +300,13 @@ class Claim:
     when: int
     source: str
     confidence: int
-    visibility: str
+    # `visibility` -- `"own"`, or a CIRCLE: the tuple of ids the claim was confided among (v9 IN-18
+    # `G6`, `H-197`). Only the told deposit writes a circle (`loop/witness.py`, `(teller, addressee)`
+    # when `_circle_of`'s chance says the telling was private; never at the shipped control 0), and
+    # the fold reads it (`loop/resolve.py::_confidence_broken`): a holder who tells a claim held under
+    # a circle to someone outside it emits `confidence.broken`. It binds what a holder may RETELL,
+    # never who hears (§10 decision 1). Every other deposit is `"own"`.
+    visibility: str | tuple
     round: int = 0
     # ⚠ `chain` -- WHO PASSED THIS CLAIM ON, ORIGIN FIRST, AS IT WAS PRESENTED (telling workplan `T3b`,
     # `ED-IN-0282`; closes `RULINGS.yaml` CAT-3, *"STORE THE TELLER... The edit is one argument, not a
@@ -345,8 +351,10 @@ class Said(NamedTuple):
     A NamedTuple, not a Claim: it has no id, holder, `when` or source, because it is not a belief
     anyone holds -- it is a thing said. `chain` is the chain of the claim the teller picked
     (`said_of` copies `Claim.chain`; `()` for a claim the teller holds firsthand), and the told
-    deposit extends it by the teller. Who may hear it (a confidence's circle) is gated position
-    G6 of `workplans/2026-10-01-telling-workplan.md` and lands with its reader, never before."""
+    deposit extends it by the teller. A confidence's circle is NOT carried here (v9 IN-18 `G6`,
+    `H-197`): whether THIS telling is private is drawn at WITNESS (`loop/witness.py::_circle_of`) and
+    lands on the hearer's `Claim.visibility`; whether it BREAKS a circle the teller holds the claim
+    under is read at the fold, off the teller's own ledger (`loop/resolve.py::_confidence_broken`)."""
     subject: str
     predicate: str
     value: Any
