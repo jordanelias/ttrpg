@@ -188,7 +188,7 @@ rows:
 
   - id: R-01
     statement: "decisions must propagate"
-    status: not_met
+    status: met
     measured: >-
       [SUPERSEDED by the IN-50 (B-I) paragraph at the end of this block: R3 now reads ARC 97/97,
       NPC 46/46.] R3 (cross-person propagation) passes **46/46 NPC and 96/97 ARC** over the full 143-case
@@ -392,12 +392,23 @@ rows:
       act counts identical per seed): IN-50 adds exactly the edge class the storybar counts as 'cross' (a
       refusal now cites its occasion), and there is no refused/executed split, so do not cite it as a
       propagation gain without one.
-      THIS PARAGRAPH SUPERSEDES THE OPENING R3 FIGURES (46/46 NPC, 96/97 ARC). **WHY THE STATUS STAYS
-      `not_met`, PRECISELY:** clause 1 (`corpus_run`, n of n on both lanes) now PASSES; clause 2 (the
-      `wd_collect.py` reconvergence rate at `2x3`, OBSERVABLE < 96%) last read below the bar at the B-G
-      control re-take (R-02's paragraph), on a tree before IN-10/IN-11/IN-50 changed what a fork can
-      reach, and the plan reads `met` only off a `11` re-take on this tree. What is left is that re-take:
-      re-taken at B-I (HEAD 66bf51f9, `2x3`, 143 cases, PYTHONHASHSEED=0, one run per arm, noise unmeasured): none 74.94 % · actor 42.64 % · total 41.56 %, against B-G's control (0f998f64) 74.90 / 43.94 / 42.40 (+0.04 / -1.30 / -0.84 pp); far below the 96 % bar, so the status stays not_met. Rates are reconverged / genuine summed over the four chunks per arm (the formula reproduces B-G's numbers exactly from its local chunks); `wd_collect.py` was not run, it requires all three fixture points.
+      THIS PARAGRAPH SUPERSEDES THE OPENING R3 FIGURES (46/46 NPC, 96/97 ARC).
+      **THE STATUS READS `met` AT B-I, BY THE PLAN'S VERBATIM DEFINITION (`workplans/valoria_master_workplan_v9_part2.md`
+      R-01 `met` =), BOTH CONJUNCTS ON ONE TREE.** Conjunct 1 (`corpus_run`, HEAD 4bb57351, seed 0, 143 cases,
+      PYTHONHASHSEED=0): `check R3: 46 of 46 pass` (NPC) and `97 of 97 pass` (ARC), `not True: none`, planted
+      control `False -> True`. Conjunct 2 (`python proposals/2026-09-04-degree-sweep/wd_collect.py` after `wd_chunk.py` x4
+      slices x3 arms x3 fixture points over all 143 cases, tree 66bf51f9, hash-identical to HEAD 4bb57351 by the
+      four-hash check; exit 0; every arm `cases 143/143 ok, 0 failed, 0 fork rows failed`): reconvergence at the
+      acceptance point `2x3` reads none 1597/2131 = 74.94 % · actor 890/2087 = 42.64 % · total 869/2091 = 41.56 %, BELOW
+      the 96 % bar; at `default` 68.90 / 50.76 / 50.33 % and at `narrow` 91.33 / 70.39 / 70.61 %; the control is printed
+      (`none >= actor: True` at `2x3`, and at `narrow`). Against B-G's control re-take (0f998f64, 2x3: 74.90 / 43.94 /
+      42.40 %) the arms moved +0.04 / -1.30 / -0.84 pp. **WHAT THIS DOES NOT SHOW:** one run per arm, noise unmeasured;
+      the wd_collect POSITIVE-plant line reads `detected OVER THE BASELINE on ALL 4 plants: False` (the instrument's own
+      caveat, present on every reading since its repair, not part of `met`); the plan's annotation to R-01 timed the first
+      reading taken after IN-13 (B-M) as the meaningful one, and the B-M re-take will be read against this one; IN-09 and IN-10
+      were built, falsified and reverted at B-I (`hole_register.yaml` H-203), so the cross-person edges they would add are
+      NOT in this reading. **TO REVERT:** set `status: not_met` and restore the previous paragraph; the instrument, not
+      this sentence, decides.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [IN-10, IN-11, IN-13, FI-01, H-116, IN-50]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1: regard is computed at read; the cross-person half is IN-10's, IN-11's, IN-13's); H-111 is FI-01's deposit half
@@ -533,7 +544,8 @@ rows:
       1549/2068 = 74.90% · `actor` 896/2039 = 43.94% · `total` 868/2047 = 42.40%, 0 failed cases. Against
       the previous re-take: `none` -2.32 points, `actor` +1.35, `total` +3.82 -- the re-celled chooser
       moves the arms by more than half a point, and none is near 96%, so the status stays `met`. The
-      instrument's run-to-run noise is still not measured. B-I's re-take reads against THESE figures.
+      instrument's run-to-run noise is still not measured. B-I's re-take (HEAD 66bf51f9, full `wd_collect.py`, see R-01's last paragraph)
+      reads none 74.94 / actor 42.64 / total 41.56 % at `2x3` against THESE figures: +0.04 / -1.30 / -0.84 pp, still far below 96%, status stays `met`.
     measure: "python proposals/2026-09-04-degree-sweep/wd_collect.py  # after wd_chunk.py x4 per arm per cell over the 143-case corpus (slices 0 36/36 72/72 108/108 143) -- U6's command, workplans/valoria_master_workplan_v9_part2.md §`11`"
     blocks: [FI-01]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); H-111 is FI-01's deposit half
