@@ -614,13 +614,15 @@ for the READS.
 
 ## 11. This repo does not self-schedule (ED-IN-0084)
 
-**A session must never arm its own wake-up.** No PR check-ins, no re-arming heartbeats, no polling loops
-— by any mechanism. Enforced: `.claude/settings.json`'s `permissions.deny` blocks `send_later`,
-`create_trigger`, `ScheduleWakeup`, `CronCreate`, `update_trigger`, `fire_trigger`, `Skill(loop)`,
-`Monitor`, `watch_url` and `subscribe_pr_activity` (RULED). **The deny-list is the single owner of
-the rule**; `tests/valoria/test_no_polling_triggers.py` fails on recurrence — it asserts every
-primitive in its own `REQUIRED_DENY` tuple and that this section survives. **Deliberately NOT
-denied:** `create_session`.
+**A session must never arm its own wake-up.** No PR check-ins, no re-arming heartbeats, and no polling
+of an EXTERNAL service (GitHub merge or CI state, a URL) — by any mechanism. **Polling our own agents
+and local processes is permitted** (RULED, Jordan 2026-10-10: `Monitor` on a background job's log or
+CPU time; the waste class is re-asking an outside service, not watching our own work). Enforced:
+`.claude/settings.json`'s `permissions.deny` blocks `send_later`, `create_trigger`, `ScheduleWakeup`,
+`CronCreate`, `update_trigger`, `fire_trigger`, `Skill(loop)`, `watch_url` and `subscribe_pr_activity`
+(RULED). **The deny-list is the single owner of the rule**; `tests/valoria/test_no_polling_triggers.py`
+fails on recurrence — it asserts every primitive in its own `REQUIRED_DENY` tuple and that this section
+survives. **Deliberately NOT denied:** `create_session`, `Monitor`.
 
 **The falsifier:** delete a deny entry and that test fails. If it ever passes while a session is still
 arming wake-ups, the mechanism has moved — find the new primitive and add it to `REQUIRED_DENY`.
