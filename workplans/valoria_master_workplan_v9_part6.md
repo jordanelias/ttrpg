@@ -8,8 +8,8 @@
 
 ## §0 What this part holds
 
-Entries (each lives only here): SC-01, 02, 03a, 03b, 04, 05, 06, 07, 08 · SE-01, 03, 04 · FI-01, 02, 03 (FI-04 landed at B-C: ED-914's last row). Alias pointers: SE-02, SE-05, FI-05 (end of §SE, §FI). §C records what v9 retired from these lanes' open lists.
-Batches (`_part3` §B; each entry's `BATCH:` names its own): SE-01 B-F · SC-03a B-J · SE-03 B-K (rides IN-28) · SC-01 B-N (with the `open_case` fired-slot → `convene` step and H-163 limit 2's question source), SC-07 attached to B-N, SC-05 and SC-06 asked at B-N and held in B-Z · SC-08, SC-03b, FI-01, FI-02 B-O · SC-02, SC-04 B-P · FI-03 B-S · SE-04 (a)(b) B-T, (c) B-Z. The aliases take their target's batch (`_part4`, `_part5`).
+Entries (each lives only here): SC-01, 02, 03a, 03b, 04, 05, 06, 07, 08 · SE-03, 04 · FI-01, 02, 03 (FI-04 landed at B-C: ED-914's last row). Alias pointers: SE-02, SE-05, FI-05 (end of §SE, §FI). §C records what v9 retired from these lanes' open lists.
+Batches (`_part3` §B; each entry's `BATCH:` names its own): SC-03a B-J · SE-03 B-K (rides IN-28) · SC-01 B-N (with the `open_case` fired-slot → `convene` step and H-163 limit 2's question source), SC-07 attached to B-N, SC-05 and SC-06 asked at B-N and held in B-Z · SC-08, SC-03b, FI-01, FI-02 B-O · SC-02, SC-04 B-P · FI-03 B-S · SE-04 (a)(b) B-T, (c) B-Z. The aliases take their target's batch (`_part4`, `_part5`).
 Blocks marked **CARRIED** are extracted by `sed` from the retired v8 parts and edited only for (a) position numbers, kept as ALIAS, (b) a retired-plan citation re-pointed to a v9 handle or `FORK:`, (c) a spent edge. Everything after a block's last carried line is v9's. Retired files are cited as history only: v8's parts and the telling workplan at `FORK:<sha>` (the adoption commit's parent, written when the FORK rows are), the plans v8 itself retired at `FORK:0671283`.
 The proceedings design (`proposals/2026-09-05-proceedings-subsystem/`) is ratified AS INTENT (ED-SC-0039): it is never the reason a behaviour is correct; the code and its test are.
 
@@ -207,25 +207,6 @@ demoted, at a pool where it would otherwise read its top band — red before the
 ---
 
 ## §SE SETTLEMENTS
-
-### SE-01 · `24g` · the bodies clock live arm, P3 individuation on demand, the PERSON-keyed crossing repair
-- STATE: BLK:IN-21 (F: both edit `loop/matter.py`; serial inside one lane). J-6 is answered at ladder step 4, `_part5` §A: a fixture with a declared default from H-125's sweep, control `0` kept for the corpus, one-line revert; ageing and illness are NOT in this entry — IN-34 (#457 D2, ANSWERED [medium; Jordan to correct] by RS-21 item 5, `_part5` §J; B-F, after this entry)      LANE: SE      BATCH: B-F (serial inside the IN-21 → SE-01 lane; entry gate: B-C closed and B-E closed (`ac9724fc`); may run beside B-I and merge after it, re-running its hash controls on the merged tree)      R: R-07
-- WHAT: the CARRIED `24g` block below. H-51 (nothing demands an individuation) merges here as its P3. The carrier is settled: since `24f` only a cohort eats (`world_q.subsistence_draw`), so the live arm moves cohort bodies, never a named person's (`loop/matter.py:296-304`). J-6 is CONFIRMED by Jordan's own words: 2026-09-17, session gboNy7Ap, event 757da223-37d3-47b4-b212-c2d99da7d0ef, "Starvation is a season"; and 2026-09-18, session 9o659fDb, event 1d5e61c2-604e-4022-9d43-81709994fd1b, subsistence "should largely be an abstract/governance issue ... a territorial issue". H-125's `cite:` frames its arms as "IS STARVATION A SEASON OR A CAMPAIGN" (`hole_register.yaml:921`); which arm of 0 / 10 / 67 becomes the live default is not stated by those words, and the plan does not choose it.
-- DEPS: IN-21 → SE-01 (F: both edit `loop/matter.py`; IN-35 does too, in B-S); SE-01 → IN-22's live arm (D: IN-22's hunger arm IS this entry's live `body_step` arm, `_part5` IN-22; it follows this entry in B-F, after the IN-21 → SE-01 merge, and IN-22's reach half landed in B-E, `ac9724fc`); IN-34 is a separate entry later in B-F (it reads the same fixture and edits `loop/matter.py` after this one); IN-49 (`levy`), IN-28 and SE-03 are B-K, not here      EDITS: `loop/matter.py` (`:425-432` reads `body_step`), `loop/census.py`, `queries/world_q.py`, `data/fixtures.py:520`, the shape pins
-- EXIT: `python -m pytest engine/season/tests/test_territorial_subsistence.py -q` with a non-zero `body_step` arm added (its docstring-pinned case: an office-holder under a settlement in dearth keeps his body while the cohort's falls, `loop/matter.py:303-304`); the control arm `body_step = 0` reproduces today's realm hash (`python -m engine.season.harness.aperture`, control hash EQUAL); a `dispatch` to a non-existent clerk emits `person.demanded` and, next season, a Person exists whose `person.individuated` cites it
-- FALSIFIER: the CARRIED one (`Person.weight` or the envelope written by anything but CENSUS/MATTER fails; a stored aggregate where a Query is required fails), made executable by planting a write to `Person.weight` from a third module and expecting the failure; plus the control arm: a sweep point that changes nothing at `0` must emit nothing (the fabricating-sweep defect `loop/matter.py:255-258` records)
-- SOURCE: `v8_part5.md:102-109` (CARRIED, below); `engine/season/hole_register.yaml:911-922` (H-125), `:3700-3712` (H-170) (opened); `engine/season/data/fixtures.py:520`, `loop/matter.py:296-312, :425-432` (opened); `person.demanded` appears nowhere under `engine/season` on 2026-10-06 (`grep -rn person.demanded engine/season --include=*.py --include=*.yaml` returns nothing)
-
-**CARRIED** from `v8_part5.md:102-109` (heading and gate line replaced by the fields above):
-
-The live arm of `body_step` (shipped at the control arm `0`; `H-125` swept 0 / 10 / 67). The carrier is
-settled (`24f`: cohorts eat, `Person.weight`). P3: CENSUS individuates on a demand kind — a `dispatch` to
-a non-existent clerk emits `person.demanded`, and next season a Person exists whose `person.individuated`
-cites it. P1's other half — a PERSON-keyed crossing cannot fire the `presence` branch because
-`world_q` derives `at` from `w.sites.get(who)`; the repair is `at = parent_of(w, who)` when `who` names a
-person. **FALSIFIER:** `Person.weight` or the envelope written by anything but CENSUS/MATTER → fail; a
-stored aggregate where a Query is required → fail. **`/code-review` + `/simplify` only** (one number,
-with its control arm).
 
 ALIAS SE-02 = IN-07 (`valoria_master_workplan_v9_part4.md`) — the loop-resident settlements module (`36`; design landed at B-C, build B-T); its full entry lives only there.
 
