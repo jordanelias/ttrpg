@@ -469,7 +469,11 @@ def demanded_person(w: World, a) -> Optional[str]:
     Read through `binding_from_act`, the one reader of an act's operands, so this and the fold's
     `subject` are one value. Read twice: by the fold, which earns `person.demanded` on the refusal
     of a row that declares it (`loop/resolve.py`), and by CENSUS, which individuates the id it names
-    (`loop/census.py`) -- one owner, so the two cannot disagree about who was asked for."""
+    (`loop/census.py`) -- one owner of the PREDICATE. They agree because of stratum order, not
+    because there is one owner: the fold reads the log before this RESOLVE's Events are appended,
+    CENSUS after, so a death folded earlier in the same RESOLVE pass would be invisible to the first
+    and visible to the second (unreachable today: `dispatch` is a binding decision and resolves
+    before the contested physical acts that kill)."""
     s = binding_from_act(a).get("subject")
     return s if isinstance(s, str) and s and not ever_named(w, s) else None
 

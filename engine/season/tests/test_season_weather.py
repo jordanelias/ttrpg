@@ -6,8 +6,9 @@ the `season_factor_draw` fixture (one tuple of equally likely multipliers per se
 
 THE FALSIFIERS, each with the failure it would show:
   * CONTROL: with the draw off, `build_realm(0)`'s content hash is the pre-change reading at build, after
-    one season and after two, and a declared all-1.0 table (the draw ON but degenerate) reads the same
-    after one -- a draw that perturbed the arithmetic when it multiplies by 1.0 would move it;
+    one season and after two; and, on the one-town world, a declared all-1.0 table (the draw ON but
+    degenerate) reads the same as no table over two seasons -- a draw that perturbed the arithmetic
+    when it multiplies by 1.0 would move it;
   * DROUGHT: a drought-only table leaves the larder below the control arm's after the same barriers,
     and the control arm emits no `shortfall:` observation where the drought arm does;
   * KEYED: the same seed twice gives one hash; a different seed reads a different factor sequence; the

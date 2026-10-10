@@ -24,6 +24,7 @@ from ..queries import world_q
 from ..state.attribution import anchor_of, causing_act
 from ..state.carriers import Person, Rung, Tenure
 from ..state.gate import Token
+from ..state.world import rung_kind_ascends
 from ..trace_log import TRACE
 # The refusal kind a demand rides on: declared on `dispatch`'s row (`verb_table.yaml`), earned at
 # the fold, and spelled once there.
@@ -77,10 +78,19 @@ def census(self, token: Token) -> None:
         # `04` §A.2's CENSUS may-read column is *"post-eviction ledgers once; the log for demand
         # kinds"*, while the demanded id is not on the refusal Event (PART D row 9: an Event has no
         # target field), so this also reads the act store, the tenures and `world_q.ever_named`.
+        # A SECOND ONE: the person `Rung` minted here is a `(Rung, exists)` write, licensed at `[RES]`
+        # only, under the declared `(Person, exists)` pair, which is all the gate checks; F.30 requires it.
         # Picked: F.30 governs; the edge is admitted by the gate's `founding` basis (its subject is
         # born in this same write).
         # ⚠ NO ENVELOPE IS DRAWN: P3 mints *out of the envelope*, and P2's grown band is not built,
         # so this individuates from no residual (`H-51`'s row says so).
+        # THE LADDER RULE, ASKED BEFORE THE WRITE (`effects_founding` does the same): `add_tenure` raises
+        # inside the closure, and a raise there leaves a Person with no `contain` edge, which is F.30's
+        # "nowhere". A `person` rung is the lowest rank, so this only fails under another person's rung.
+        if not rung_kind_ascends("person", w.rungs[at].kind):
+            TRACE.note(f"{e.id} demanded {pid!r} at {at!r}, a {w.rungs[at].kind} that cannot contain a "
+                       "person; individuated nobody")
+            continue
         w.write("exists", token,
                 lambda pid=pid, at=at: _individuate(w, pid, at),
                 record_kind="Person", fieldname="exists", driver="Event",
