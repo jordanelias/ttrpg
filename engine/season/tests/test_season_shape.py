@@ -2678,11 +2678,8 @@ def test_w5_opening_set_has_no_roster_and_is_computed_from_the_table():
         f"{victim!r} survived being removed from the verb table — the set is not computed from it")
 
 
-def test_w5_q_has_a_producer_across_every_source():
-    """IN-53 added the third, `seat` (renamed from `..._across_both_sources`): `tiny_world`'s
-    `off_duke` sits on `D`, on the ladder above `p_mid`'s home, so it fires with nothing planted.
-
-    PLAN `W5` / `H-04` / §61, folded to two sources at position `11a` (LB-2d,
+def test_w5_q_has_a_producer_across_both_sources():
+    """PLAN `W5` / `H-04` / §61, folded to two sources at position `11a` (LB-2d,
     `05_LEDGER_AND_BUILD.md` §A.3.1). Each of the two sources produces a question ON ITS OWN,
     tested one at a time so a source that never fires cannot hide behind one that does — §0.1
     point 2.
@@ -2710,14 +2707,12 @@ def test_w5_q_has_a_producer_across_every_source():
             pr = Proposition("pr_t", "OUGHT", "rec_writ", "it should stand", True, 0)
             w.propositions[pr.id] = pr
             w.add_tenure(Tenure("t_t", p.id, pr.id, "commit", since=0))
-        elif src == "seat":
-            assert w.offices["off_duke"].rung == "D"     # in reach: the ladder above `Hh`
         else:
             pytest.fail(f"the roster grew a source this test does not exercise: {src!r}")
         qs = questions_for(w, p)
         seen[src] = [q.source for q in qs]
         assert src in seen[src], f"source {src!r} produced no question: {seen}"
-    assert len(seen) == 3, seen
+    assert len(seen) == 2, seen
 
 
 def test_w5_f2s_third_term_cannot_change_any_decision():

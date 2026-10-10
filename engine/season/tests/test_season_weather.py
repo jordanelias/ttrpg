@@ -30,13 +30,10 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 
 # `build_realm(0)`'s content hash on the base commit (068ec322), taken before this position changed
 # anything: at build, after one season, after two. With `season_factor_draw` at its shipped `()` all
-# three must still read these. ⚠ RE-PINNED AT IN-53 (the `seat` question source), a declared move BY
-# OUTCOME, with the build unmoved: one season a53cceff -> dbceb21f, two 286fd568 -> 7e3bd276 (the
-# always-refused `confer`/`revoke` Candidates stop forming, and persons whose only question is a
-# `seat` one now deliberate).
+# three must still read these.
 BASE_HASHES = {0: "2d0d12003675b31aa55e974ae095991e",
-               1: "dbceb21fef357769d91a754ed1e0e023",
-               2: "7e3bd2769fba4f3491c188ae170f9375"}
+               1: "a53cceff439d6b61171eaa6a891471ee",
+               2: "286fd568b5294eadc7e164ab4f4eaef4"}
 
 # H-26's declared sweep, as tables: a year of four seasons each time.
 YEAR = 4
