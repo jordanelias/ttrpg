@@ -15,7 +15,8 @@ What each test observes, and the control that stops it passing vacuously:
   5.   THE FOLD'S OWN REFUSAL (`_fold`'s `ev` through `_admits`) -- the route that already went
        through `_act_events` and so already named the occasion only on success.
   6.   THE NO-SCENE CONTROL: an act with no scene has no occasion and keeps `[a.id]` alone on every
-       route, so the append is not padding every `causes[]` (over-citation scores R3 for free).
+       route -- and so does an act whose scene carries `occasion=None` or a `need` question -- so
+       the append is not padding every `causes[]` (over-citation scores R3 for free).
   7.   `_act_events` ASKED DIRECTLY: order, de-duplication, the caller's list unmutated, and one
        independent list per Event.
   8.   A REAL RUN over two corpus cases: refusals in a played-out case carry an edge to ANOTHER
@@ -133,14 +134,23 @@ def test_in50_control_an_act_with_no_scene_keeps_its_own_id_alone():
     unknown = Act(id="a_unknown", actor="p_removed", verb="work", scene="sc_nowhere")
     over = Act(id="a_bare_over", actor=ACTOR, verb="work")
     over.obstacle, over.pool = w.fixtures.get("obstacle_refusal_multiple") * 10 + 1, 1
+    # A SCENE THAT EXISTS AND CARRIES NO OCCASION (`occasion=None`), and one whose occasion is a
+    # `need` Question about the same claim the occasioned fixture's question names: `occasioned_by`
+    # returns nothing for either, so the act keeps `[a.id]` -- the scene's presence alone adds nothing.
+    d.scenes["sc_in50_none"] = Scene("sc_in50_none", ACTOR, [], occasion=None)
+    d.scenes["sc_in50_need"] = Scene("sc_in50_need", ACTOR, [],
+                                     occasion=Question("q_in50_need", "need", (), about="claim_in50"))
+    no_occ = Act(id="a_no_occ", actor="p_removed", verb="work", scene="sc_in50_none")
+    need = Act(id="a_need", actor="p_removed", verb="work", scene="sc_in50_need")
     checked = 0
     for a, out in ((bare, d._survives(w, bare)), (unknown, d._survives(w, unknown)),
-                   (over, [e for e in _resolve(w, d, over) if e.kind == "attempt.refused"])):
+                   (over, [e for e in _resolve(w, d, over) if e.kind == "attempt.refused"]),
+                   (no_occ, d._survives(w, no_occ)), (need, d._survives(w, need))):
         assert out, a.id
         for e in out:
             assert e.causes == [a.id], f"{e.kind} cites {e.causes}: an act with no occasion got one"
             checked += 1
-    assert checked >= 3
+    assert checked >= 5
 
 
 # -- 7 ---------------------------------------------------------------------------------------------
@@ -173,11 +183,17 @@ def _play(case):
 
 
 def _cross_person_refusals(w, d):
+    """Refusals only: a kind on the row's `emits_on_refusal:` and NOT on its `emits:` (the test
+    `loop/witness.py::_happened` applies), so a graded loss on both columns (`tell`'s
+    `news.untold`) is not counted and restoring the occasion on the success path alone fails here."""
     n = 0
     for e in w.log:
         a = d.act_of.get(e.id)
         row = VERB_TABLE.get(a.verb) if a is not None else None
-        if row is None or e.kind not in (set(row.emits_on_refusal or ()) | {"act.refused"}):
+        if row is None:
+            continue
+        refusal = (set(row.emits_on_refusal or ()) | {"act.refused"}) - set(row.emits or ())
+        if e.kind not in refusal:
             continue
         n += any(d.act_of.get(c) is not None and d.act_of[c].actor != a.actor
                  for c in e.causes if c != a.id)

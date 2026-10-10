@@ -131,13 +131,15 @@ def test_lb1_bo10_gate_closed_by_in11_the_utterers_hold_report_not_repair():
     binds `commit`'s `subject` to the question's referent, and every live referent today is a
     person id), and BO-10 named items 5/7/8 (`15`/`15c`/`15b`) as what would open that channel.
 
-    ⚠ THEY ARE ALL DONE, AND THE GATE IS STILL SHUT. `15c`'s operand-widening
+    ⚠ HISTORY, SUPERSEDED BY THE v9 IN-11 PARAGRAPH BELOW -- this paragraph records the state
+    BEFORE IN-11 and no longer describes what the test asserts. THEY WERE ALL DONE, AND THE GATE WAS
+    STILL SHUT. `15c`'s operand-widening
     (`decision/options.py::_derive_operand`) answers `to`/`kind`/`amount` from a held writ's
     content; `15b`/`15`'s content-claim/deposit machinery widens which `claim_landed` questions
     REACH a person (`world_q.questions_for`'s clause 3, `named(c)`). Neither touches `subject`,
     which stays a bare `_REFERENT_OPERANDS` bind to the question's own referent. So `commit`'s
     typed cell (`existence(of: subject, kind: Proposition)`) still asks about a person id and
-    still refuses, every time, on this corpus. **This test asserts that gap is still open, on
+    still refused, every time, on this corpus. **This test then asserted that gap was still open, on
     purpose** — the falsifier this position's brief named explicitly refuses to invent a repair
     (widening Q4 was tried and refused in §7.2, with its own measurement: 1 made / 57 refused,
     because a standing question cannot be the producer of the commitment that raises it). The one

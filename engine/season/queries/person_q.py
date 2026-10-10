@@ -559,6 +559,19 @@ def said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | None
     return Said(c.subject, c.predicate, c.value, c.confidence, c.chain)
 
 
+def confided_outside(claims, said: "Said", hearer: str) -> bool:
+    """v9 IN-18 `G6`: DOES A COPY OF `said` IN `claims` HOLD A CONFIDENCE CIRCLE `hearer` IS OUTSIDE?
+    The copy is the claim with the said `(subject, predicate, value, chain)` -- the four fields
+    `said_of` copies out of it above, so the match lives beside the copy it inverts. A circle is a
+    tuple `Claim.visibility` (a confided telling's deposit, `loop/witness.py::_circle_of`); `"own"`
+    is none. `claims` is the TELLER'S OWN ledger, passed by the fold (`loop/resolve.py::
+    _confidence_broken`); this reads nothing else."""
+    key = (said.subject, said.predicate, said.value, tuple(said.chain))
+    return any(isinstance(c.visibility, tuple) and hearer not in c.visibility
+               and (c.subject, c.predicate, c.value, c.chain) == key
+               for c in claims)
+
+
 # ---------------------------------------------------------------------------
 # A DECLARED INTENT -- telling `T7` (G9; v9 IN-16, `ED-IN-0282`). The claim kind
 # `rosters.yaml: intent_claim` declares: `(actor, <stem>:<verb>, ((name, id), ...))`, an act the actor

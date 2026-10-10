@@ -2107,7 +2107,7 @@ def _g6_world(rate):
     d = SeasonDriver(w)
     n = [0]
 
-    def tell(teller, to):
+    def tell(teller, to, band="Success"):
         n[0] += 1
         w.tick += 1
         # What `said_of` copies out of a claim, from the teller's copy of THE CELL: a hearer also
@@ -2126,7 +2126,7 @@ def _g6_world(rate):
         ok, kinds, _ = d._admits(w, act, _tell_row())
         assert ok, f"the telling {teller} -> {to} was refused ({kinds}); the fold never ran"
         w.acts.append(act)
-        out = d._fold(w, mint_token(w, WriteClass.ACTS), act, Resolution("Success", {}))
+        out = d._fold(w, mint_token(w, WriteClass.ACTS), act, Resolution(band, {}))
         w.log.extend(out)
         for e in out:
             d.act_of[e.id] = act
@@ -2183,6 +2183,51 @@ def test_g6_a_retelling_outside_the_circle_emits_confidence_broken():
     heard = [c for pid in ("p_low", "p_other") for c in w.persons[pid].ledger
              if c.predicate == "confidence.broken"]
     assert heard, "the broken confidence reached nobody's ledger at WITNESS"
+    # The betrayal lands on the TELLING'S TOPIC (`H-197` (d), `epistemic.py`'s claim subjects).
+    assert {c.subject for c in heard} == {_G6_SUBJECT}, [(c.subject, c.predicate) for c in heard]
+
+
+def test_g6_limit_the_production_said_pick_shadows_the_confided_copy():
+    """A DOCUMENTED LIMIT, MEASURED (C1 (i), `H-197`): THE BREAK PATH IS NOT REACHED BY THE PRODUCTION
+    `said` PICK. Having heard `p_low`'s confided telling, `p_mid` holds the told cell `(Hh,
+    stores:grain, 8)` at the TELLER'S confidence under the circle, AND the hearing's own event-kind
+    claim `(Hh, news.told, True)` firsthand at confidence 100, deposited the same tick
+    (`loop/witness.py`'s event-kind deposit). `said_of` (`newest`, shipped) picks by `(when,
+    confidence)` (`LedgerReader._best`), so the hearer's next telling about `Hh` passes `news.told`,
+    whose copy is `own` -- and `confided_outside` cannot match it. The confided copy breaks only when
+    a `Said` names it (the tests above build that `Said` by hand). The repair -- `said_of` excluding the
+    hearing's own `news.told` claim when a told copy is held, `R8.1`'s `seen` exclusion as precedent --
+    moves the shipped told channel and the hashes, and is not built here."""
+    from ..queries.person_q import confided_outside
+    w, tell, told = _g6_world(1.0)
+    tell("p_low", "p_mid")
+    ledger = w.persons["p_mid"].ledger
+    confided = told("p_mid")
+    assert len(confided) == 1 and confided[0].visibility == ("p_low", "p_mid")
+    picked = said_of(ledger, _G6_SUBJECT, w.fixtures)
+    assert picked is not None and picked.predicate == "news.told", picked
+    assert not confided_outside(ledger, picked, "p_other"), "the production pick now breaks"
+    # CONTROL: the confided cell, named by hand, does break -- the matcher is not what fails.
+    c = confided[0]
+    assert confided_outside(ledger, Said(c.subject, c.predicate, c.value, c.confidence, c.chain),
+                            "p_other")
+
+
+def test_g6_the_partial_and_overwhelming_bands_break_a_confidence_too():
+    """FALSIFIER (2b). `confidence.broken` is DECLARED on `Overwhelming`, `Success` AND `Partial`
+    (`verb_table.yaml` `tell`'s `emits:`) and the fold keeps it only on a breach: a retelling outside
+    the circle at `Partial` and at `Overwhelming` breaks it exactly as at `Success`, so deleting the kind
+    from either band turns this red. The first telling is at `Success` (a `Partial` copy may be lossy,
+    `_told_value`, and the retold cell must be the confided one)."""
+    checked = 0
+    for band in ("Partial", "Overwhelming"):
+        w, tell, told = _g6_world(1.0)
+        tell("p_low", "p_mid")
+        assert told("p_mid")[0].visibility == ("p_low", "p_mid")
+        kinds = tell("p_mid", "p_other", band)
+        assert kinds == ["news.told", "confidence.broken"], (band, kinds)
+        checked += 1
+    assert checked == 2
 
 
 def test_g6_a_retelling_inside_the_circle_breaks_nothing():

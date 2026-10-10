@@ -33,7 +33,8 @@ from ..loop.predicates import REQUIRES_PREDICATES
 from ..loop.sides import sides_of
 from .. import manifest
 from ..epistemic import observers_for
-from ..queries.person_q import broken_by, conviction_after_crisis, elements_violated_by
+from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
+                                 elements_violated_by)
 from ..queries.world_q import WorldReader, ceiling, occasioned_by
 from ..seam import ContestError, Resolution, contest, degree_of
 from ..state.carriers import Act, Event, StateChange
@@ -435,9 +436,10 @@ def _fold(self, w: "World", token: Token, a: Act,
         # site and changed nothing, so the check passed and `site.worked` shipped (F9). The gate
         # now reads every subject the effect names before and after the write and raises
         # `NoOpReceipt` when none moved; an effect that declines (`NO_CHANGE`) names none, so the
-        # old falsy-return case lands here too, through one channel instead of two. The Event is
-        # unchanged -- same kinds, same `[a.id]` cause, no changes -- so every refusal the old
-        # check produced is byte-identical. What moved is that the WRITE is refused too: the trace
+        # old falsy-return case lands here too, through one channel instead of two. The Event was
+        # unchanged by G4 -- same kinds, same cause, no changes -- so every refusal the old check
+        # produced stayed byte-identical then; since IN-50 its cause is `[a.id]` PLUS the act's
+        # occasion ids, appended by `_act_events` like every Event an act emits. What moved is that the WRITE is refused too: the trace
         # records it as refused (`F9`), where it used to record a write that changed nothing as
         # admitted. A refused first pair leaves the later pairs unchecked: a refused write
         # authorizes nothing after it.
@@ -521,8 +523,10 @@ def _confidence_broken(w: "World", a: Act, row: "VerbRow") -> bool:
     copies out of it. True when such a copy holds a circle the addressee is not in.
 
     ⚠ THE ACTOR'S OWN LEDGER AND NO OTHER (`F8`'s carve-out, `04 §B.2`: *"the fold may ask the
-    ACTOR'S OWN ledger ... and no other"*) -- the read `tell`'s own `holds` conjunct already makes at
-    this fold through `WorldReader(w, a.actor)`. ⚠ READ AT RESOLVE, NOT CARRIED FROM CHOOSE: a copy
+    ACTOR'S OWN ledger ... and no other"*) -- read DIRECTLY as `w.persons[a.actor].ledger`, the same
+    own-ledger read `WorldReader`'s `claim.held` stem makes for `tell`'s `holds` conjunct (not through
+    `WorldReader`, which has no stem for this), and handed to `queries/person_q.py::confided_outside`,
+    the match's one owner beside `said_of`. ⚠ READ AT RESOLVE, NOT CARRIED FROM CHOOSE: a copy
     evicted between the two is not found, and the retelling breaks nothing [ASSUMPTION; `Said` carries
     no circle]. ⚠ A retelling INSIDE the circle (back to the confider, or to the other party) breaks
     nothing; the original teller holds their own copy `own` and can never break their own confidence;
@@ -534,10 +538,7 @@ def _confidence_broken(w: "World", a: Act, row: "VerbRow") -> bool:
     p = w.persons.get(a.actor)
     if said is None or hearer is None or p is None:
         return False
-    key = (said.subject, said.predicate, said.value, tuple(said.chain))
-    return any(isinstance(c.visibility, tuple) and hearer not in c.visibility
-               and (c.subject, c.predicate, c.value, c.chain) == key
-               for c in p.ledger)
+    return confided_outside(p.ledger, said, hearer)
 
 
 def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
@@ -913,7 +914,10 @@ def resolve(self, token: Token, acts: list[Act],
             # clock's genuine first emission"* — FALSE OF THE DESIGN while true of the fixture,
             # because `Act.obstacle` defaults to `None` and the computed chooser never sets
             # one, so no test could reach it. Found by the `W4` adversarial pass.
-            out.extend(_act_events(self, w, a, ("attempt.refused",), [a.id]))
+            refused = _act_events(self, w, a, ("attempt.refused",), [a.id])
+            for _e in refused:
+                self.act_of[_e.id] = a
+            out.extend(refused)
             TRACE.decision(f"{a.actor} attempted Ob={a.obstacle} against Pool={a.pool}",
                            "S27.4", chose="refuse; the season is spent",
                            alternatives=["roll it anyway", "route to an Ob=0 roll"])
@@ -1068,8 +1072,8 @@ def _refuse_after_the_fact(self, w: "World", out: list, act_ids: list) -> None:
     non-zero delta, and only `resolve()`'s summed write says whether the site moved. When it did
     not, each staging act's Events -- contiguous in `out`, because `resolve` extends one act's
     at once -- are replaced where they stand by `emits_on_refusal`, carrying what a refusal at
-    the act's own write would carry: `[a.id]` alone as cause, no changes, the same degree and the
-    same precondition reads. `act_of` follows the replacement, so WITNESS attributes the refusal
+    the act's own write would carry: `[a.id]` plus the act's occasion ids as cause (both through
+    `_act_events`, IN-50), no changes, the same degree and the same precondition reads. `act_of` follows the replacement, so WITNESS attributes the refusal
     to the act and nothing keeps pointing at an Event that never entered the log."""
     for aid in dict.fromkeys(act_ids):
         at = [i for i, e in enumerate(out)

@@ -6419,7 +6419,19 @@ def test_h71_others_half_a_non_hold_tenure_release_stays_opaque():
     restriction `_ch_document_key` already applies when reading a live Tenure by its two ends.
 
     This test releases a `commit` Tenure (not a `hold`) and asserts the witnessed claim still
-    names the Tenure's own opaque id, unexpanded -- proving the guard, not merely its absence."""
+    names the Tenure's own opaque id, unexpanded -- proving the guard, not merely its absence.
+
+    ⚠ v9 IN-11 (A2, MEASURED): THIS PASSES BECAUSE ITS FIXTURE HAS A `commit` AND NO `hold`. The
+    computed shape is utter -> commit -> release, and there the release closes the utterer's maker's
+    `hold` beside the `commit`; the hold's receipt expands (`epistemic._hold_tenure_ends`,
+    `claim_subject_rule: both`), so every non-actor witness DOES hold `(Proposition,
+    commitment.ended, True)` -- observed by `test_in11_utter_hold_commit.py::test_in11_a_witnessed_
+    mixed_release_names_the_proposition_to_every_witness`. ACCEPTED AS INERT while a Proposition is
+    outside every non-maker's `reach` (that test asserts it is). Scoping `_hold_tenure_ends` to
+    Office/Record objects would restore this guardrail for the mixed shape, but it moves the
+    witnessed claims and the hashes and nothing reads the leaked claim today: in this reader's
+    judgment it is warranted the day a Proposition enters a non-maker's reach, not before -- not
+    changed here."""
     w = P.tiny_world()
     w.propositions["prop_test"] = Proposition(
         "prop_test", "OUGHT", "p_mid", "ambition", True, w.tick)
@@ -12540,9 +12552,11 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # [GROUNDED: 32/7 -> 35/9 at IN-08's cells commit (B-G) -- the re-scored ranking and the duel pair; mechanism and both trees' figures in the `none`-arm IN-08 block above]
     # [GROUNDED: 35/9 -> 32/9 at v9 IN-11 (#453 §10.4 step 2), and `total` 29/6 -> 26/6, `none` 37/4 UNMOVED -- the
     # fork POPULATION moved and the divergence count did not, read off the failing assertion's own `got` (NPC-088 slice,
-    # seed 0, 4 seasons at 2 slots). The cause is the change, not isolated further: `_eff_utter` now opens the
-    # utterer's `hold` on the Proposition -- a new referent in his `reach` and, as every live `hold` does, a
-    # `budget_office_bonus` scene (`decision/budget.py`) -- so which deliberations have an off-budget alternative moves.]
+    # seed 0, 4 seasons at 2 slots). The base-vs-HEAD delta is MEASURED and attributable to IN-11 (`_eff_utter` now
+    # opens the utterer's `hold` on the Proposition); WHICH consequence of that hold moves the population is a
+    # CANDIDATE MECHANISM, UNMEASURED -- a new referent in his `reach`, or the `budget_office_bonus` scene every live
+    # `hold` buys (`decision/budget.py`); no arm isolates either, and h9's three `scar_weight_shift` arms moving
+    # -3/-1/0 (`test_h9_crisis_reader.py`) is not what one budget mechanism alone would predict.]
     assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (32, 9), (
         f"the shipped default diverged {got['actor']['diverged']} times of "
         f"{got['actor']['genuine']}: {got}. `W-D`'s acceptance was lost at `all_five` on "
@@ -12713,7 +12727,8 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
         # ⚠⚠ **RE-PINNED AT v9 IN-11 (#453 §10.4 step 2), DELIBERATELY: ONLY THE DENOMINATORS MOVED.**
         # `_eff_utter` opens the utterer's `hold` on the Proposition -- the genuine-fork population
         # move the `diverged` pins above record (`actor` 35 -> 32, `total` 29 -> 26, `none` 37
-        # unmoved) -- and `acts_differ` is unmoved in every arm, so the shipped arm and `total` give
+        # unmoved; the base-vs-HEAD delta is measured, the mechanism through which the hold moves
+        # it a candidate, unmeasured -- see the `diverged` block) -- and `acts_differ` is unmoved in every arm, so the shipped arm and `total` give
         # back MORE of a fork: `actor` 12/35 -> 12/32 (34% -> 38%), `total` 9/29 -> 9/26 (31% ->
         # 35%). The floor above (`4 * acts_differ > genuine`) holds in all three: 60 > 37, 48 > 32,
         # 36 > 26.

@@ -106,6 +106,17 @@ def _addressed(content):
     return {**content, addr: list(v) if isinstance(v, (list, tuple)) else [v]}
 
 
+def _makers_hold(w: "World", actor: str, obj: str) -> Tenure:
+    """THE MAKER'S `hold`: the edge a maker keeps on what they made (S13 -- possession is a `hold`
+    Tenure owned by the holder, never a field on the thing held), opened `since` this tick. The one
+    owner of its construction: `_mint_document`'s Record and `_eff_utter`'s Proposition both mint it
+    here. The id is `H(seed, tick, actor, f"hold:{obj}")`, unsalted by the act (a maker makes one
+    thing per id). ⚠ `"hold"` STAYS A STRING LITERAL IN THIS FILE: `data/verbs.py::OPENERS-DERIVE`
+    walks a decorated effect into the same-file helpers it calls and reads the kind off the literal,
+    so `create_record`, `issue`, `petition` and `utter` remain `hold`'s openers through this call."""
+    return Tenure(H(w.world_seed, w.tick, actor, f"hold:{obj}"), actor, obj, "hold", since=w.tick)
+
+
 def _mint_document(w: "World", a: "Act", kind: str, content, rung: str) -> Change:
     """THE ONE MINT: a `Record` of `kind` saying `content`, drawn up at `rung`, and the maker's
     `hold` on it -- `create_record`, `issue` and `petition` are three readings of an act onto this
@@ -133,8 +144,7 @@ def _mint_document(w: "World", a: "Act", kind: str, content, rung: str) -> Chang
     rec = Record(rid, rung, kind, subject_matter=content, stages=stages)
     # S13: possession is a `hold` Tenure owned by the holder, never a field on the Record. The
     # maker holds what they made until they part with it.
-    held = Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{rid}"),
-                  a.actor, rid, "hold", since=w.tick)
+    held = _makers_hold(w, a.actor, rid)
 
     def perform() -> None:
         w.records[rid] = rec
@@ -481,8 +491,7 @@ def _eff_utter(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         return NO_CHANGE                  # immutable: an utterance never overwrites one
     prop = Proposition(pid, d.get("mood") or "OUGHT", d.get("subject") or a.actor,
                        d.get("predicate") or "", d.get("value"), w.tick)
-    held = Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{pid}"),
-                  a.actor, pid, "hold", since=w.tick)
+    held = _makers_hold(w, a.actor, pid)
 
     def perform() -> None:
         w.propositions[pid] = prop
@@ -520,9 +529,10 @@ def _eff_commit(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     Proposition already minted distinct ids (each one's `subject_id` is its own actor), but an
     actor who releases a `commit` and re-commits to the SAME Proposition within the same tick
     would otherwise mint the identical id as the now-closed one -- the same collision `_eff_give`'s
-    own docstring names and salts against. `commit` has no `release`-then-reopen path reachable
-    today (`commit` never executes in computed play -- H-156 -- so no edge exists to release and
-    re-open), but the fix is one token and costs nothing to carry.
+    own docstring names and salts against. When this salt landed `commit` never executed in computed
+    play (H-156), so no release-then-reopen path was reachable; since v9 IN-11 `commit` EXECUTES
+    (utter mints the utterer's hold, Q2 raises the Proposition as a referent) and `release` closes
+    it, so the path is reachable and the salt is load-bearing, not merely free.
 
     ⚠ BUILD-ORDER BO-9/BO-10 (`proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md`
     §7.2): the first build of this effect, before any question source offered a Proposition

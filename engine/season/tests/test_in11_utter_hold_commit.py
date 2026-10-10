@@ -9,7 +9,9 @@ What each block proves, and the control that stops it passing vacuously:
      a Proposition the person did NOT utter is outside his `reach`, so the route is the hold and
      not something else.
   2. R-3 (b): A `release` that closes a `commit` earns `commitment.ended` beside `tenure.closed`.
-     Control: a `release` that closes only the maker's `hold` earns `tenure.closed` alone.
+     Control: a `release` that closes only the maker's `hold` earns `tenure.closed` alone. A
+     commit-only release (no `hold`, the faction-member shape) earns the vow-break too; and a
+     witnessed mixed release names the Proposition to non-actor witnesses (A2, accepted as inert).
   3. COMPUTED PLAY: one seeded `build_realm(0)` season through the real chooser executes `commit`
      at least once, and every Proposition an executed `commit` names is one its committer holds
      (the utter -> hold -> question -> commit chain, not a hand-built act). Before IN-11 the same
@@ -32,7 +34,8 @@ from engine.season.harness import probes as P
 from engine.season.harness.populated import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from engine.season.queries.world_q import reach
-from engine.season.state.carriers import Act
+from engine.season.state.carriers import Act, Proposition, Tenure
+from engine.season.state.ids import H
 
 
 def _fold(w, d, act):
@@ -75,6 +78,57 @@ def test_in11_utter_opens_the_utterers_hold_so_commit_executes_and_release_ends_
     assert _live(w, "p_mid", "prop:in11_m") == []
 
 
+def test_in11_a_commit_only_release_also_earns_the_vow_break():
+    """THE FACTION-MEMBER SHAPE: a `commit` with no `hold` beside it (planted the way
+    `test_season_shape.py::test_h71_others_half_a_non_hold_tenure_release_stays_opaque` plants
+    one -- the committer never uttered the Proposition). Since IN-11 its release earns
+    `commitment.ended` too, so every such release is a vow-break deed, not only the utterer's.
+
+    ⚠ AND THE MIXED SHAPE IS TIED: `_eff_release` closes every releasable edge the actor owns on
+    the subject, so an utterer who committed to his own Proposition cannot end the vow without
+    releasing his maker's hold (and the budget it buys, `H-92`) -- test 1's first release."""
+    w = P.tiny_world()
+    w.propositions["prop_fm"] = Proposition("prop_fm", "OUGHT", "p_mid", "ambition", True, w.tick)
+    w.add_tenure(Tenure(H(w.world_seed, w.tick, "p_mid", "commit:prop_fm"),
+                        "p_mid", "prop_fm", "commit", since=w.tick))
+    d = SeasonDriver(w)
+    assert _live(w, "p_mid", "prop_fm") == ["commit"]
+    assert _fold(w, d, Act(id="in11_fm", actor="p_mid", verb="release",
+                           payload={"subject": "prop_fm"})) == ["tenure.closed", "commitment.ended"]
+    assert _live(w, "p_mid", "prop_fm") == []
+
+
+def test_in11_a_witnessed_mixed_release_names_the_proposition_to_every_witness():
+    """A2, MEASURED AND ACCEPTED: utter -> commit -> release -> WITNESS. The release closes the
+    maker's `hold` and the `commit` together, and the `hold`'s receipt expands to its two ends
+    (`epistemic._hold_tenure_ends`, `claim_subject_rule: both`), so a NON-ACTOR witness holds
+    `(Proposition, commitment.ended, True)` -- the claim `test_h71_others_half_a_non_hold_tenure_
+    release_stays_opaque` forbids for a commit released alone, reached here through the hold that
+    rides beside it. Accepted as INERT while a Proposition is outside a witness's `reach` (only its
+    maker's hold puts it there); this test pins the outcome so a change to it is seen."""
+    w = P.tiny_world()
+    d = SeasonDriver(w)
+    d.matter(mint_token(d.w, WriteClass.MATTER), [])
+    _fold(w, d, Act(id="a2_u", actor="p_low", verb="utter"))
+    pid = "prop:a2_u"
+    _fold(w, d, Act(id="a2_c", actor="p_low", verb="commit", payload={"subject": pid}))
+    out = d.resolve(mint_token(w, WriteClass.ACTS),
+                    [Act(id="a2_r", actor="p_low", verb="release", payload={"subject": pid})],
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert [e.kind for e in out] == ["tenure.closed", "commitment.ended"]
+    for x in out:
+        w.log.append(x)
+    d.witness(mint_token(d.w, WriteClass.INTERIOR), out)
+    others = [q for q in w.persons if q != "p_low"]
+    assert others
+    holders = [q for q in others if any((c.subject, c.predicate, c.value) ==
+                                        (pid, "commitment.ended", True)
+                                        for c in w.persons[q].ledger)]
+    assert holders, "no non-actor witness holds the vow-break on the Proposition"
+    assert pid not in reach(w, w.persons[holders[0]]), (
+        "the leaked claim is no longer inert: the Proposition is in a non-maker's reach")
+
+
 # ======================================================================================
 # 3 -- COMPUTED PLAY
 # ======================================================================================
@@ -102,8 +156,18 @@ def test_in11_commit_executes_in_a_computed_realm_season_on_a_proposition_its_co
         assert a is not None and a.verb == "commit", (e.causes, a)
         prop = (a.payload or {}).get("subject")
         assert prop in uttered, f"{a.actor} committed to {prop!r}, which no act uttered this season"
-        assert any(h.kind == "hold" and h.object == prop for h in w.persons[a.actor].tenures), (
-            f"{a.actor} committed to {prop} without holding it -- not the utter -> hold chain")
+        # LIVE AT THE COMMIT TICK: opened no later than it, not closed before it. ⚠ TICK-GRANULAR,
+        # AND THAT IS ALL A ONE-TICK SEASON CAN SAY: measured on this season (seed 0), one of the
+        # two committers (`cohort_set_s_012`) RELEASED his hold in an earlier round of the same
+        # tick, before the `commit` resolved (log order: `tenure.closed` then `commitment.made`),
+        # so `until == at`. `commit`'s precondition is only that the Proposition exists; the hold
+        # is the ROUTE to the question (reach, limb 2), not a condition of the act.
+        at = e.emitted_at
+        assert any(h.kind == "hold" and h.object == prop and h.since <= at
+                   and (h.until is None or h.until >= at)
+                   for h in w.persons[a.actor].tenures), (
+            f"{a.actor} committed to {prop} at tick {at} without a hold live at that tick -- "
+            "not the utter -> hold chain")
         checked += 1
     assert checked == kinds["commitment.made"] >= 1
 

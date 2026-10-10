@@ -99,7 +99,7 @@ def _told_content(act):
     return pay.get("said") if isinstance(pay, dict) else None
 
 
-def _circle_of(w, act):
+def _circle_of(w, act, rate: float):
     """v9 IN-18 `G6` (`H-197`, confidences): THE CIRCLE A TELLING IS MADE IN, or `None` when it is
     not made in confidence. With chance `telling_privacy` (one draw keyed by the telling's own id, so
     every hearer of one telling agrees and no other stream moves) the circle is `(teller, addressee)`
@@ -113,10 +113,9 @@ def _circle_of(w, act):
 
     ⚠ `0` (the control, shipped) RETURNS `None` AND TAKES NO DRAW, so every deposit is `own` exactly
     as before `G6`. A telling that names no addressee (a hand-built act; a row with no counterparty)
-    has no circle of two and is never private. A value outside [0, 1] raises (`H-190`'s rule)."""
-    rate = float(w.fixtures.get("telling_privacy"))
-    if not 0 <= rate <= 1:           # `not ... <=`, so a NaN is refused too
-        raise ValueError(f"telling_privacy {rate} is not a chance in [0, 1] (H-197)")
+    has no circle of two and is never private. `rate` is `telling_privacy`, read and range-checked
+    ONCE PER BARRIER by `witness` beside `refraction_gain` (a value outside [0, 1] raises there,
+    `H-190`'s rule, whether or not any telling is deposited)."""
     if rate == 0:
         return None
     row = VERB_TABLE.get(getattr(act, "verb", None))
@@ -311,6 +310,12 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # is. `0` is the control (0.5 ships, H-199): no deposit is refracted and the barrier is the
     # pre-IN-15 one exactly (no `actor_of` call, no ledger scan).
     gain = w.fixtures.get("refraction_gain")
+    # v9 IN-18 `G6` / `H-197`: THE CONFIDENCE CHANCE, read and range-checked once per barrier
+    # beside `gain`, for the same reason, and handed to `_circle_of` at each told deposit. `0` is
+    # the control (shipped): `_circle_of` takes no draw and every told deposit is `own`.
+    privacy = float(w.fixtures.get("telling_privacy"))
+    if not 0 <= privacy <= 1:        # `not ... <=`, so a NaN is refused too
+        raise ValueError(f"telling_privacy {privacy} is not a chance in [0, 1] (H-197)")
     # `W-B` / `H-122`. WHO RECEIVES A CLAIM MINTED FROM WHAT THE FOLD READ. `none` is the
     # CONTROL -- the behaviour before `W-B`, so every measurement of this item has a baseline
     # (§0.1 point 4). Read here rather than inside the loop so the fixture is consulted once
@@ -836,7 +841,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                     # `visibility == (teller, addressee)` instead of `own`; `_circle_of` owns the
                     # chance (control 0, shipped: `own`, no draw) and the fold reads the circle back
                     # when this holder retells the claim (`loop/resolve.py::_confidence_broken`).
-                    _circle = _circle_of(w, _act)
+                    _circle = _circle_of(w, _act, privacy)
                     tc = Claim(_told_hash or H(w.world_seed, w.tick, pid, f"told:{e.id}"),
                                pid, _held.subject, _held.predicate, _told_val, w.tick,
                                "told_by", _held.confidence, _circle or "own", self.round,

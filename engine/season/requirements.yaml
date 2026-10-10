@@ -190,7 +190,8 @@ rows:
     statement: "decisions must propagate"
     status: not_met
     measured: >-
-      R3 (cross-person propagation) passes **46/46 NPC and 96/97 ARC** over the full 143-case
+      [SUPERSEDED by the IN-50 (B-I) paragraph at the end of this block: R3 now reads ARC 97/97,
+      NPC 46/46.] R3 (cross-person propagation) passes **46/46 NPC and 96/97 ARC** over the full 143-case
       corpus (`corpus_run`'s `check R3` rows, a fresh run 2026-10-02, tree `444a00e1`; this sentence
       read 22/30 and 34/59, over the 89-case live set, until then), and the planted-edge control
       fires — so the DETECTOR works. But the
@@ -368,7 +369,8 @@ rows:
       of a cross-person edge, which is all R3 asks. **THE RISE FROM THE OLD OPENING FIGURES IS PARTLY
       A DENOMINATOR CHANGE** (89 live cases then, all 143 now, as the 2026-09-30 paragraph says), not
       a re-measured gain. No contradiction with this row's status: `not_met` on clause 1 (96/97),
-      unchanged.
+      unchanged. [True at `444a00e1`; at IN-50 clause 1 passes, and the status's ground is the
+      IN-50 paragraph below.]
       ⚠⚠ **IN-50 (B-I): A REFUSED ACT NOW CITES ITS OCCASION; R3 READS 97 OF 97 (ARC) AND 46 OF 46
       (NPC).** THIS RUN: `python -m engine.season.harness.corpus_run`, exit 0: `check R3: 46 of 46 pass`,
       `check R3 not True: none` (NPC); `check R3: 97 of 97 pass`, `check R3 not True: none` (ARC);
@@ -380,9 +382,17 @@ rows:
       to `causes`, de-duplicated, the caller's list unmutated, on every Event an act emits; the three
       refusals that built `Event` directly (`act.ineligible`, S27.4 `attempt.refused`, the contest
       branch's `_admits` refusal) go through it, and `_fold`'s success return names `[a.id]` alone.
-      `World.content_hash()` moves wherever an occasioned act is refused. Re-pinned in
+      `World.content_hash()` moves wherever an occasioned act is refused -- and, because the S27.4 refusal's
+      Event id changed from `H(.., "refused:{a.id}")` to `H(.., "attempt.refused:{a.id}")` (`content_hash` folds
+      event ids), at EVERY S27.4 refusal, occasioned or not (reachable only by hand-built Acts). Re-pinned in
       `tests/test_season_shape.py`: `d_pub` 5 -> 10; `(depths[3], depths[6])` (9, 10) -> (12, 13);
       the five-season maturation chain 8 -> 11. KEEPS: no case's R3 went False, the control still flips.
+      THIS PARAGRAPH SUPERSEDES THE OPENING R3 FIGURES (46/46 NPC, 96/97 ARC). **WHY THE STATUS STAYS
+      `not_met`, PRECISELY:** clause 1 (`corpus_run`, n of n on both lanes) now PASSES; clause 2 (the
+      `wd_collect.py` reconvergence rate at `2x3`, OBSERVABLE < 96%) last read below the bar at the B-G
+      control re-take (R-02's paragraph), on a tree before IN-10/IN-11/IN-50 changed what a fork can
+      reach, and the plan reads `met` only off a `11` re-take on this tree. What is left is that re-take:
+      re-taken at B-I, see the commit.
       IN-10, IN-11 and IN-13's new edges are independent of this one.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [IN-10, IN-11, IN-13, FI-01, H-116, IN-50]
