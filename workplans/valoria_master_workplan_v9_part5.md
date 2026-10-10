@@ -168,7 +168,7 @@ H-71's record names). **R:** R-04, R-05.
 - *Builds:* one field (a birth tick) with the hazard as its reader (ID-13); one bodies write at MATTER
   emitting `person.died`, chained to its own prior emission.
 - Rates swept, per the adopted answer; population's own bound is E-1's answer as recorded, matter plus hearth capacity (§A v9, [medium]). **Revert:** Jordan rules ageing and illness out of scope → this position reverts.
-- DEPS: #457 D2 (answered); SE-01 and IN-21 share `loop/matter.py` (F, both landed: `d12c8db9`, `3544d568`)      EDITS: `loop/matter.py`, `state/carriers.py` (a `Person` birth-tick field)
+- DEPS: #457 D2 (answered); SE-01 and IN-21 share `loop/matter.py` (F, both landed: `d12c8db9`, `3544d568`); IN-34 ↔ IN-35 (F: `loop/matter.py`)      EDITS: `loop/matter.py`, `state/carriers.py` (a `Person` birth-tick field)
 - EXIT · FALSIFIER (#457, verbatim, with the control restated):
 - *Control and falsifier:* an age step of 0 reproduces today; a seat-holder's death by age raises vacancy
   claims for those in reach.

@@ -227,7 +227,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-13 | #453 step 8 | IN/MB | BLK | IN-05 | R-07, R-05, R-01 | B-M | `_part5` |
 | IN-14 | #457 BOUND-ATTENTION; H-92, H-10 | IN | ask-then | — | — | B-Z | `_part4` |
 | IN-18 | telling G5, G8 (step 2a, G1–G3 landed `ac9724fc`; G6 landed `66bf51f9`) | IN | BLK | IN-10's `oblige` (G5) | — | B-I | `_part4` |
-| IN-22 | #457 CARRY-SHORTFALL's live arm (reach and paying halves landed at B-E, `ac9724fc`); #445 P-2 | IN/SE | BLK | H-160 limit (3), unscheduled (SE-01 landed `d12c8db9`) | — | B-F (partial) | `_part5` |
+| IN-22 | #457 CARRY-SHORTFALL's live arm (reach and paying halves landed at B-E, `ac9724fc`); #445 P-2 | IN/SE | BLK | H-160 limit (3), unscheduled (SE-01 landed `d12c8db9`) | — | B-F | `_part5` |
 | IN-23 | #457 CARRY-STABILITY | IN | B | — | — | B-U | `_part5` |
 | IN-26 | #457 BOUND-PAPER; H-156 (a)/(b); `Record.ttl` | IN/SC | BLK | SC-01, FI-01 | R-05 | B-Q | `_part5` |
 | IN-27 | #457 END-VICTORY; H-176 (GD-1) | IN/FA | BLK | IN-37 | — | B-U | `_part5` |
@@ -236,7 +236,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-31 | H-100 | IN/SE | BLK | SC-03a | — | B-J · B-Q | `_part5` |
 | IN-32 | H-182 ties | IN/FI | BLK | IN-06 | R-05 | B-S | `_part5` |
 | IN-33 | H-58 `exchange` | IN | BLK | source of claims about seats (H-203; unscheduled) | R-05 | B-I | `_part5` |
-| IN-34 | #457 FORCE-BODIES | IN/SE | BLK | H-206's WITNESS fix, unscheduled (SE-01 `d12c8db9`, IN-21 `3544d568` landed) | — | B-F (partial) | `_part5` |
+| IN-34 | #457 FORCE-BODIES | IN/SE | BLK | H-206's WITNESS fix, unscheduled (SE-01 `d12c8db9`, IN-21 `3544d568` landed) | — | B-F | `_part5` |
 | IN-35 | #457 FORCE-HAZARD; SEAM-CLOCK | IN/WR/SE | BLK | IN-06 | — | B-S | `_part5` |
 | IN-36 | #457 FORCE-FOREIGN | IN/FA/MB | BLK | IN-13 | — | B-V | `_part5` |
 | IN-37 | #457 STORY-READ | IN | BLK | SC-01 step 16 | — | B-U | `_part5` |
