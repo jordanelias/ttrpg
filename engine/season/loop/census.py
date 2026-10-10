@@ -67,9 +67,18 @@ def census(self, token: Token) -> None:
                        "(F.30: a Person with no `contain` edge is nowhere)")
             continue
         # F.30: *"an individuated Person needs a new person-rung and `contain` edge in the same
-        # CENSUS write, or the new Person is nowhere"* -- what every builder mints for a person
-        # (`harness/populated.py::seat_cohorts`), at weight 1, and nothing else. The `contain` edge
-        # is admitted by the gate's `founding` basis (its subject is born in this same write).
+        # CENSUS write, or the new Person is nowhere"* -- the person, its rung and its first `contain`
+        # edge, at weight 1. ⚠ NOT WHAT EVERY BUILDER MINTS: they add a `reside` edge beside the first
+        # `contain` (`harness/populated.py::seat_cohorts`), the `founding` basis admits only `contain`,
+        # so this person is ABSENT FROM THE MAP and counts in no rung's `population` (`world_q`'s
+        # residence reader; recorded on `H-51`).
+        # ⚠ TWO ROWS OF 04 THAT DO NOT AGREE, NAMED RATHER THAN HIDDEN (B-F close, `layer-conformance`
+        # B4): F.30 requires the edge at CENSUS, but the write matrix has no Tenure cell at CEN and
+        # `04` §A.2's CENSUS may-read column is *"post-eviction ledgers once; the log for demand
+        # kinds"*, while the demanded id is not on the refusal Event (PART D row 9: an Event has no
+        # target field), so this also reads the act store, the tenures and `world_q.ever_named`.
+        # Picked: F.30 governs; the edge is admitted by the gate's `founding` basis (its subject is
+        # born in this same write).
         # ⚠ NO ENVELOPE IS DRAWN: P3 mints *out of the envelope*, and P2's grown band is not built,
         # so this individuates from no residual (`H-51`'s row says so).
         w.write("exists", token,

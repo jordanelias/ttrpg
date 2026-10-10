@@ -212,7 +212,7 @@ DETERMINATION = "determination"
 # in its parent, but the TEST ITSELF is not Rung-typed (`born` spans every store, `world.py`'s
 # existence diff; ⚠ NOTED, terminal Phase-2-close critique, 2026-09-30 -- a future producer minting
 # some OTHER newborn kind with a `contain` edge would be admitted the same way, and no ruling has
-# considered that case). Named, like `conferral` and `determination`, for the act it licenses (found
+# considered that case; CENSUS's `person.individuated` birth is now one such producer -- SE-01, B-F, `loop/census.py::_individuate`, a `contain` edge only). Named, like `conferral` and `determination`, for the act it licenses (found
 # is to founding as confer is to conferral) and in the ordinary word for bringing a place into being.
 # CAUSATION-BOUND, the mirror of `cascade`: a Tenure lives and dies THROUGH its object
 # (`holonic §15.3`), so what closes an edge through a death may also open one through a birth -- and
