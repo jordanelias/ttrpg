@@ -113,6 +113,12 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             TRACE.note(f"{p.id} refuses {verb!r}: its `{axis}` alignment exceeds their own "
                        f"projected weight {tolerance:+.3f} (ED-IN-0261)", "H-146")
             continue
+        # IN-53: A ROW THAT DECLARES A REFERENT CLASS IS FORMED ONLY FROM A QUESTION WHOSE SOURCE
+        # DECLARES THAT CLASS (`VerbRow.formed_from`). Two declarations compared through `q.source`
+        # -- no World, no id test, no verb name -- because this function cannot ask what kind of
+        # thing a referent is (L2). Placed after the two refusal gates so their traces are unchanged.
+        if not row.formed_from(q.source):
+            continue
         # `19`: the seat this row's act would exercise -- `exercised_seat`, the same untraced walk
         # `pack_scenes` names `Act.via` by -- for the belief test's `basis` conjunct below.
         seat = exercised_seat(p, row)

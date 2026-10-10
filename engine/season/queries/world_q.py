@@ -1557,6 +1557,17 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     for pid in ambitions(w, p):
         out.append(Question(f"q:need:{pid}", "need", (w.propositions[pid].subject,), pid))
 
+    # `seat` (IN-53, H-203 form B) -- a STANDING question per Office whose rung `reach` covers: the
+    # office id as the referent, so a person can form an act ABOUT a seat (`confer`, `revoke`:
+    # `verb_table.yaml: referent_class`). Like `need`, no claim and no Event stands behind it, and
+    # `about` is empty: nothing occasioned it (`occasioned_by` returns `[]`, the `[ROOT]` case).
+    # It supplies the id only -- never who holds the seat or whether it is vacant (AX-2: the person
+    # decides from what they hold; the fold reads the world). A rungless office is in no one's
+    # reach. Sorted by id below with the rest.
+    for o in w.offices.values():
+        if o.rung is not None and o.rung in R:
+            out.append(Question(f"q:seat:{o.id}", "seat", (o.id,)))
+
     # ⚠ TWO ORDERINGS LIVE IN THIS ONE LINE AND ONLY THE FIRST IS DECLARED ANYWHERE.
     # `order[q.source]` is `rosters.yaml: question_sources`, whose own note says ORDER IS SEMANTIC
     # and that editing it "changes which question a budget-bounded person answers first". That is
@@ -1603,6 +1614,8 @@ def occasioned_by(w: "World", q: Optional["Question"]) -> list:
         caused it this season, and `ID-5`'s polarity says absence maps to the refusal rather than
         to a plausible default. An act taken out of a standing ambition genuinely has no
         antecedent but the actor, and `[ROOT]` is what the design already has for that.
+      * `seat` (IN-53) — **empty, for `need`'s reason.** An office in reach is a standing
+        referent, not news; no Event raised it.
 
     ⚠ **WHAT THIS DELETES IS A GUARD AND AN UNREACHABLE SEARCH, NOT TWO BRANCHES.** `date_due` and
     `band_crossed` never had a branch of their own here — `05` §A.3.1's correction to an earlier
@@ -1626,7 +1639,8 @@ def occasioned_by(w: "World", q: Optional["Question"]) -> list:
     if q is None:
         return []
     about = str(getattr(q, "about", "") or "")
-    if not about or q.source == "need":
+    # `seat` (IN-53) is `need`'s case: a standing question no Event caused, so `[ROOT]`.
+    if not about or q.source in ("need", "seat"):
         return []
     if q.source == "claim_landed":
         for e in reversed(w.log):

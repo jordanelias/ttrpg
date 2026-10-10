@@ -571,7 +571,27 @@ rosters:
       **801 of 1,068 deliberations**, so three quarters of the time this roster's order does not
       decide the answer and a hash does. Recorded 2026-09-04 by the `W-D` adversarial pass;
       disposition on `H-54`, no rule changed.
-    values: [claim_landed, need]
+      `seat` (IN-53, H-203, form B ruled by Jordan 2026-10-10): one standing Question per Office
+      whose rung is in the person's `reach` (`queries/world_q.py::questions_for`), referent the
+      office id, occasion `[ROOT]` as `need`'s. No ledger claim and no Event stand behind it --
+      `need` is the precedent for a claim-free source. It supplies office IDS and nothing else:
+      never who holds the seat, its terms or whether it is vacant. Placed LAST so that every
+      existing person's first question is unchanged under `question_aggregation: first` (`H-54`).
+      `referent_class:` -- THE REFERENT CLASS EACH SOURCE YIELDS. A referent class is the carrier
+      type every referent of the source's questions is (`Office`); `null` declares that the source
+      yields referents of no ONE class (a claim's subject is a rung, a person, a Record, a Site, an
+      Office ...; a `need` question's referent is whatever the OUGHT is about). A verb row's
+      `referent_class:` column (`verb_table.yaml`, validated by `data/verbs.py`) names the class
+      it acts on, and `decision/options.py::opening_set` forms that verb's Candidate only from a
+      question whose source DECLARES that same class -- a `null` source satisfies only a verb
+      that declares none. Person-side and World-free (L2): the comparison is `q.source` against
+      two declarations, never an id test. Keyed on exactly `values:` (refused at import,
+      `data/rosters.py`).
+    values: [claim_landed, need, seat]
+    referent_class:
+      claim_landed: null
+      need: null
+      seat: Office
 
   person_predicates:
     source: "#353 §14 `:331` — `marks[]` … \"heritage · grade · Church standing · office · residence\""

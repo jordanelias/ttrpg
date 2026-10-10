@@ -13,6 +13,12 @@ alignment table in full: its loader (`_load_alignment`/`ALIGNMENT`), its immutab
 World) -> Event[]` and never says what any verb DOES... with no table, every act needed a
 hand-written `effect` lambda, and A LAMBDA PER ACT IS A SECOND RESOLVER."*
 
+A row's `referent_class:` column (IN-53) names the REFERENT CLASS a Candidate of the verb must be
+about -- the carrier type of the question's referent (`Office` for `confer` and `revoke`). Each
+question source declares the class it yields (`rosters.yaml: question_sources.referent_class`); the
+loader refuses a column naming a class no source yields, and `VerbRow.formed_from` is the one
+comparison `opening_set` makes.
+
 `_load_verb_table` calls `season.data.requires.build_typed_requires` once per row -- see that
 module's docstring for the ordering constraint this creates and how it is satisfied structurally
 by THIS module's own import of `requires`, below, rather than by file position.
@@ -49,8 +55,8 @@ from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .matrix import MATRIX, Step
 from .requires import REQUIRES_OPERANDS, TypedRequires, build_typed_requires
 from .rosters import (
-    PURSUIT_AXES, PURSUITS, RELEASABLE_KINDS, RUNG_KINDS, STRATA, TENURE_KINDS, load_yaml,
-    require_member, roster, roster_map,
+    PURSUIT_AXES, PURSUITS, REFERENT_CLASSES, RELEASABLE_KINDS, RUNG_KINDS, SOURCE_REFERENT_CLASS,
+    STRATA, TENURE_KINDS, load_yaml, require_member, roster, roster_map,
     table,
     table_meta,
 )
@@ -198,6 +204,15 @@ class VerbRow:
     # cannot yet name. Plan position `14` asks the same column again IN THE FOLD
     # (`loop/resolve.py::_admits`, `COUNTERPARTY_CLAUSE`), for the hand-built act no person forms.
     counterparty: str = ""
+    # IN-53 (H-203): THE REFERENT CLASS -- the carrier type (`Office`) a Candidate of this verb must
+    # be ABOUT. `""` is the declared absence: the verb is formed from a question of any source, as
+    # every row was before. A named class must be one some question source yields
+    # (`rosters.yaml: question_sources.referent_class`, read as `rosters.REFERENT_CLASSES`) or the
+    # load refuses; `opening_set` then forms the verb only from a question whose SOURCE declares
+    # that class (`formed_from`). It exists because `opening_set` has no World (L2) and so cannot
+    # ask what kind of thing a referent is: `confer` and `revoke` formed on every rung, person,
+    # Record and Site a question named and were refused by the fold on every one (`30d38a12`).
+    referent_class: str = ""
     # ⚠ THE TENTH COLUMN'S SECOND SHAPE, ADDED AT PLAN POSITION `19` -- `04 §B.13` INVARIANT 4'S
     # PER-CONJUNCT HALF (F7): *"every failable clause has a refusal kind -- not only a verb with a
     # `requires`, but each CONJUNCT of it, and any eligibility alternative that can decline."* §C.4's
@@ -227,6 +242,14 @@ class VerbRow:
     # split. NOT `requires_typed_note`, which says why the cell is untyped and stands on rows a
     # registered predicate DOES evaluate (`oblige`, `release`).
     requires_decline_note: str = ""
+
+    def formed_from(self, source: str) -> bool:
+        """MAY A CANDIDATE OF THIS VERB BE FORMED FROM A QUESTION OF `source`? Yes when the row
+        declares no `referent_class:`; otherwise only when the source declares that same class
+        (`rosters.SOURCE_REFERENT_CLASS`). A source declaring no one class (`None`) satisfies no
+        classed verb: its referents may be of any class, and nothing person-side can tell which
+        (IN-53). The one owner of the comparison; `opening_set` calls it."""
+        return not self.referent_class or SOURCE_REFERENT_CLASS.get(source) == self.referent_class
 
     def precondition_evaluable(self, predicates) -> bool:
         """Can the fold evaluate this row's precondition: none at all, a typed cell, or a
@@ -535,6 +558,7 @@ def _load_verb_table() -> dict:
                       str(r.get("requires_typed_note") or "").strip(),
                       str(r.get("beneficiary") or "").strip(),
                       str(r.get("counterparty") or "").strip(),
+                      str(r.get("referent_class") or "").strip(),
                       refusals_by_clause=by_clause,
                       effect_decline_note=str(r.get("effect_decline_note") or "").strip(),
                       requires_decline_note=str(r.get("requires_decline_note") or "").strip())
@@ -556,6 +580,18 @@ def _load_verb_table() -> dict:
                 "`requires_typed:` cell does not bind (or, on an untyped row, which is no "
                 "`requires_operands` member). A counterparty is compared with the person forming "
                 "the Candidate, and only a bound operand is always carried.")
+        # IN-53: A REFERENT CLASS IS ONE SOME QUESTION SOURCE YIELDS, OR THE LOAD REFUSES. A class
+        # no source declares (a typo, or a class whose source was never built) would make the verb
+        # unformable from every question, silently -- the always-false membership test
+        # `rosters.yaml`'s header refuses.
+        if row.referent_class and row.referent_class not in REFERENT_CLASSES:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares referent_class {row.referent_class!r}, which "
+                f"no question source yields (the classes are {sorted(REFERENT_CLASSES)}, from "
+                "`rosters.yaml: question_sources.referent_class`). A referent class is the carrier "
+                "type a Candidate of the verb must be about; `opening_set` forms the verb only "
+                "from a question whose source declares that class, so an undeclared one would "
+                "never be formed.")
         # A row that declares `requires_typed: none` must SAY WHY. The three admissible reasons
         # are a well-formedness constraint on the Act (§F.24a: `issue`, `open_case` -- *"they
         # belong in the `Act` schema and are refused at construction"*), a `per act` cell, and an
