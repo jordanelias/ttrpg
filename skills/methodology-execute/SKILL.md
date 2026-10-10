@@ -513,6 +513,15 @@ separate `git worktree` at the checkpoint SHA, in parallel with the next produce
 producer's critical path; a producer iterates with the fast probe (`aperture 1 0`) and a constructed-input
 test. No new document holds the readings (CLAUDE.md §1, §0.1 pt 5): the commit body is their record.
 
+**Running a slow instrument.** (1) Time the unit first — one realm, one season — and size the limit from
+that, never from a guess; an unmeasured instrument gets the tool's maximum limit, not a round number.
+(2) Run it in the background to a log, and only independent runs in parallel: they are CPU-bound and
+single-threaded, so up to the core count (`nproc`) costs nothing, while a before/after pair run one after
+the other costs twice the wait. (3) Say its measured runtime in the producer brief, so no one polls blind.
+(4) Never `pkill -f <pattern>` from the shell that names the pattern — it kills itself; keep the PID from
+`$!` or use `pgrep -f '[p]attern'`. (5) Do not assume a utility exists (`/usr/bin/time` does not): use the
+shell's `time`. (6) A limit that kills a run is a measurement failure to be stated, never read as a result.
+
 ## GUARDRAILS
 
 - **Phase 0 is additive, never a substitute** (see above). Reporting a batch as "built and closed"
