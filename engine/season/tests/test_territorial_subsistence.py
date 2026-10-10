@@ -39,24 +39,32 @@ ORDER that guarantees it is argued at `build_realm`'s call site, not observed.
 
 from __future__ import annotations
 
+import ast
+from pathlib import Path
+
 import pytest
 
 from ..data.matrix import Step, WriteClass
 from ..data.requires import SHORTFALL_PREDICATE
-from ..gaps import ShapeGap
+from ..epistemic import _ch_co_located
+from ..gaps import Forbidden, ShapeGap
 from ..harness import populated as POP
 from ..harness import probes as P
+from ..harness import register as REG
 from ..harness.run_cases import load_cases
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
-from ..state.carriers import Site
+from ..state.attribution import anchor_of
+from ..state.carriers import Person, Rung, Site, Tenure
 
 WEIGHTS = P.DEFAULT_FIXTURES.get("subsistence_weight")
-# `H-125`'s sweep arms are `[0, 10, 67]` and `0` is the shipped control. The falsifier needs a body
-# that CAN move, so it runs at the middle arm, the one `test_governance_build.py`'s starving world
-# already uses -- never a new magnitude.
-# [JUSTIFIED: an existing sweep arm of `H-125` (`body_step`), chosen so a body can move; not a new game value]
-BODY_STEP_ARM = 10
+# v9 SE-01 (`24g`): THE LIVE ARMS ARE READ OFF `H-125`'s OWN `sweep:` ROW, NOT COPIED. The register is
+# where the sweep is declared and `harness/register.py` is its one reader, so a re-swept row moves
+# these tests with it. The shipped default is the CONTROL arm (`0`); every OTHER arm is a live arm,
+# and the falsifier below runs at each of them -- never a new magnitude.
+H125 = next(r for r in REG.load()["rows"] if r["id"] == "H-125")
+CONTROL_ARM = P.DEFAULT_FIXTURES.get("body_step")
+LIVE_ARMS = [arm for arm in H125["sweep"] if arm != CONTROL_ARM]
 
 
 def _cohorts(w) -> dict:
@@ -225,17 +233,28 @@ def _holder_and_cohort_pairs(w) -> list:
     return out
 
 
-def test_24f_falsifier_in_dearth_the_office_holder_keeps_his_body_and_the_cohort_does_not():
+def test_se01_the_sweep_has_a_control_and_at_least_one_live_arm():
+    """THE PARAMETRIZATION BELOW CANNOT BE VACUOUS: `H-125` declares a control (the shipped default,
+    `0`) and at least one live arm, and the shipped default IS one of the declared arms."""
+    assert CONTROL_ARM == 0, "the shipped `body_step` is no longer the control; `H-125` disagrees"
+    assert CONTROL_ARM in H125["sweep"], f"the shipped arm is not on `H-125`'s sweep {H125['sweep']}"
+    assert LIVE_ARMS and all(isinstance(a, int) and a > 0 for a in LIVE_ARMS), LIVE_ARMS
+
+
+@pytest.mark.parametrize("arm", LIVE_ARMS)
+def test_24f_falsifier_in_dearth_the_office_holder_keeps_his_body_and_the_cohort_does_not(arm):
     """`_part2` 24f's FALSIFIER, verbatim: *"Under a non-zero `body_step` arm: a `weight == 1`
     office-holder at a rung in dearth keeps their body; a `weight > 1` cohort at the same rung draws
     and its body moves."* On the BUILT realm -- *"a guard that passes only on `probes.py:744` is the
-    dead-on-arrival case above, passing"*.
+    dead-on-arrival case above, passing"*. v9 SE-01 (`24g`) runs it at EVERY live arm of `H-125`'s
+    sweep (read off the register), and asserts the fall is exactly `arm x shortfall` -- the live
+    arm's whole arithmetic, `loop/matter.py`'s `lost = step * sum(short)`.
 
     THE DEARTH IS THE REALM'S OWN, NOT PLANTED. At build every larder is empty and MATTER draws
     before it takes the first yield (#353 §25's order), so the first draw finds no stock anywhere:
     every settlement's `demanded` exceeds its `delivered`. Nothing here empties a store."""
     w = POP.build_realm(0)
-    w.fixtures = w.fixtures.sweep("body_step", BODY_STEP_ARM)
+    w.fixtures = w.fixtures.sweep("body_step", arm)
     pairs = _holder_and_cohort_pairs(w)
     assert pairs, "no office-holder lives under a settlement with a cohort; the falsifier is vacuous"
     for _holder, _cohort, rung in pairs:
@@ -256,6 +275,10 @@ def test_24f_falsifier_in_dearth_the_office_holder_keeps_his_body_and_the_cohort
             f"{cohort}, the population of {rung}, is in the same dearth and its body did not move")
         assert w._subsistence_shortfall[cohort] == _want(w.persons[cohort].weight), (
             "the cohort's shortfall is not its whole weighted want on an empty ladder")
+        lost = arm * sum(w._subsistence_shortfall[cohort].values())
+        assert w.persons[cohort].body == max(0, before[cohort] - lost), (
+            f"{cohort} fell {before[cohort]} -> {w.persons[cohort].body} at arm {arm}; the live "
+            f"arm's arithmetic says {max(0, before[cohort] - lost)}")
     # NOT ONE INDIVIDUAL'S BODY MOVED, ANYWHERE; AND EVERY BODY THAT MOVED IS A COHORT'S.
     assert fell and fell <= set(_cohorts(w)), f"a body.changed about a non-cohort: {fell}"
     assert all(w.persons[pid].body == before[pid] for pid in w.persons if pid not in _cohorts(w))
@@ -270,7 +293,12 @@ def test_24f_control_at_the_shipped_body_step_no_body_moves_in_the_same_dearth()
     evs = _matter(w)
     assert set(w._subsistence_shortfall) == set(_cohorts(w)), "the dearth is not the same dearth"
     assert {pid: p.body for pid, p in w.persons.items()} == before
+    # v9 SE-01: THE CONTROL ARM EMITS NOTHING (`loop/matter.py:255-258`'s fabricating-sweep defect,
+    # one clock over): no body write, no death, and no band crossing anchored on any person.
     assert not [e for e in evs if e.kind in ("body.changed", "person.died")]
+    crossed = [e for e in w.log if e.kind == "condition.band_crossed"
+               and anchor_of(w, e) in w.persons]
+    assert not crossed, f"the control arm published {len(crossed)} body crossing(s)"
 
 
 # ======================================================================================
@@ -330,3 +358,195 @@ def test_24f_drain_guard_a_cohort_draws_stock_on_the_built_realm_and_matter_is_c
         "a cohort went short on the realm's second draw -- the realm is no longer in surplus")
     assert not [o for e in evs for o in e.observed
                 if str(o.predicate).partition(":")[0] == SHORTFALL_PREDICATE]
+
+
+# ======================================================================================
+# 4 -- v9 SE-01 (`24g`): the person-keyed crossing, P3's demand, and the carrier's owners
+# ======================================================================================
+
+def test_se01_a_person_keyed_crossing_is_placed_at_the_person_s_parent():
+    """P1's OTHER HALF, EXECUTED. A cohort's body crossing is anchored on the cohort (tier 3, through
+    its own `body.changed`), and `place_of` -- the one owner `_ch_co_located` reads -- answers the
+    cohort's `contain` PARENT, `parent_of(w, who)`, never the cohort's own same-id `person` rung
+    (where `presence` is *nobody*). So a bystander standing in the same settlement is co-located
+    with the crossing and a person standing elsewhere is not. Run at the live arm that crosses the
+    first floor in one season (`H-125`'s cite: *"`67` crosses it in one"*), found rather than named.
+
+    The bystander is PLANTED, because on the realm as built no named person's `contain` parent is
+    a settlement that seats a cohort; a test-built person standing there is the observer the
+    channel needs, and it eats nothing (weight 1)."""
+    w = POP.build_realm(0)
+    cohort = sorted(_cohorts(w))[0]
+    at = world_q.parent_of(w, cohort)
+    assert at is not None and at != cohort and at in w.rungs
+    w.persons["p_se01_bystander"] = Person("p_se01_bystander", "a bystander")
+    w.rungs["p_se01_bystander"] = Rung("p_se01_bystander", "person")
+    w.add_tenure(Tenure("t_se01_bystander_in", "p_se01_bystander", at, "contain", 0))
+    elsewhere = next(pid for pid in sorted(w.persons)
+                     if not w.persons[pid].is_cohort and world_q.place_of(w, pid) not in (None, at))
+    arm = next((a for a in sorted(LIVE_ARMS)
+                if 1000 - a * sum(_want(w.persons[cohort].weight).values()) < 800), None)
+    assert arm is not None, f"no live arm of {LIVE_ARMS} crosses a floor in one season"
+    w.fixtures = w.fixtures.sweep("body_step", arm)
+
+    _matter(w)
+
+    mine = [e for e in w.log if e.kind == "condition.band_crossed" and anchor_of(w, e) == cohort]
+    assert mine, f"{cohort} crossed no band at arm {arm}; the test observes nothing"
+    for e in mine:
+        assert world_q.place_of(w, anchor_of(w, e)) == at, "the crossing is not at the parent"
+        assert _ch_co_located(w, e, "p_se01_bystander"), (
+            "a person standing where the cohort stands did not see its crossing -- the `presence` "
+            "branch is closed for a PERSON-keyed crossing")
+        assert not _ch_co_located(w, e, elsewhere), f"{elsewhere}, elsewhere, saw it"
+
+
+def _dispatching(w, subject, actor="p_high", via="off_duke"):
+    """A chooser that issues ONE `dispatch` naming `subject`, in the first season only."""
+    sent: list = []
+
+    def choose(p, v, s, ask_budget):
+        if p.id == actor and not sent:
+            a = P.Act_(w, p, "dispatch", payload=subject if not isinstance(subject, str)
+                       else {"subject": subject}, via=via)
+            sent.append(a)
+            return [a]
+        return []
+    return choose, sent
+
+
+def test_se01_a_dispatch_to_a_clerk_nobody_individuated_demands_him_and_census_mints_him():
+    """THE EXIT, VERBATIM: *"a `dispatch` to a non-existent clerk emits `person.demanded` and,
+    next season, a Person exists whose `person.individuated` cites it"*. The demand is the act's
+    own refusal (it cites the act); the individuation cites the demand; the Person stands where
+    the order was given (`place_of` of the dispatcher), with its `person` rung, at weight 1; a
+    second season individuates nobody again."""
+    w = P.tiny_world()
+    assert "p_clerk" not in w.persons and w.class_of("p_clerk") is None
+    choose, sent = _dispatching(w, "p_clerk")
+    P._run(w, choose)
+    (act,) = sent
+    demanded = [e for e in w.log if e.kind == "person.demanded"]
+    assert len(demanded) == 1, f"{len(demanded)} demands for one dispatch"
+    (dem,) = demanded
+    assert dem.causes[0] == act.id, "the demand does not cite the act that made it"
+    assert [e.kind for e in w.log if act.id in e.causes[:1]] == ["dispatch.refused",
+                                                                 "person.demanded"]
+    born = [e for e in w.log if e.kind == "person.individuated"]
+    assert len(born) == 1 and born[0].causes == [dem.id], (
+        f"the individuation does not cite the demand: {[(e.kind, e.causes) for e in born]}")
+    # NEXT SEASON, A PERSON EXISTS.
+    assert "p_clerk" in w.persons and w.persons["p_clerk"].weight == 1
+    assert w.rungs["p_clerk"].kind == "person"
+    assert world_q.place_of(w, "p_clerk") == world_q.place_of(w, "p_high") == "S"
+    P._run(w, choose)
+    assert "p_clerk" in w.persons, "the individuated clerk did not survive his first season"
+    assert len([e for e in w.log if e.kind == "person.individuated"]) == 1
+
+
+@pytest.mark.parametrize("subject, actor, via", [
+    ("site_harbour", "p_high", "off_duke"),   # an id the world holds as a SITE: not a person
+    ("S", "p_high", "off_duke"),              # an id the world holds as a RUNG
+    ("p_mid", "p_high", "off_duke"),          # a person who exists: the order is GIVEN
+    ("p_clerk", "p_low", None),               # an unheld id, but the actor holds no remit
+    ({}, "p_high", "off_duke"),               # an order naming nobody (probe P9's payload shape)
+])
+def test_se01_control_a_dispatch_that_asks_for_no_absent_person_demands_nobody(subject, actor, via):
+    """THE CONTROL ARMS OF THE DEMAND: every other way a dispatch ends emits no `person.demanded`
+    and individuates nobody. The 14 refusals measured on the shipped realm (a dispatch naming a
+    building, a site or a record) are the first two rows' case; an ineligible actor is refused
+    before he asks the world anything."""
+    w = P.tiny_world()
+    persons = set(w.persons)
+    choose, sent = _dispatching(w, subject, actor=actor, via=via)
+    P._run(w, choose)
+    assert sent, "the dispatch was never issued; the control observes nothing"
+    assert not [e for e in w.log if e.kind in ("person.demanded", "person.individuated")]
+    assert set(w.persons) == persons
+
+
+# --------------------------------------------------------------------------------------
+# THE CARRIED FALSIFIER: `Person.weight` / the envelope written by anything but CENSUS/MATTER
+# fails; a stored aggregate where a Query is required fails.
+# --------------------------------------------------------------------------------------
+
+_SEASON = Path(__file__).resolve().parents[1]
+_OWNED = {"weight": {"loop/census.py", "loop/matter.py"},
+          "envelope": {"loop/census.py", "loop/matter.py"}}
+
+
+def _bare_writes(src: str, rel: str) -> list:
+    """Every assignment to `.weight`/`.envelope`, and every `setattr`/`__setattr__` naming one, in
+    `src` -- the read/write asymmetry's WRITE side (`CLAUDE.md` §0.1 pt 1): a writer outside the
+    owners would move the carrier the Queries read without passing the step that owns it."""
+    out = []
+    for n in ast.walk(ast.parse(src, rel)):
+        targets = (n.targets if isinstance(n, ast.Assign)
+                   else [n.target] if isinstance(n, (ast.AugAssign, ast.AnnAssign)) else [])
+        for t in targets:
+            if isinstance(t, ast.Attribute) and t.attr in _OWNED:
+                out.append((rel, n.lineno, t.attr))
+        if isinstance(n, ast.Call) and len(n.args) >= 2:
+            f = n.func
+            name = f.id if isinstance(f, ast.Name) else f.attr if isinstance(f, ast.Attribute) else ""
+            a1 = n.args[1]
+            if (name in ("setattr", "__setattr__") and isinstance(a1, ast.Constant)
+                    and a1.value in _OWNED):
+                out.append((rel, n.lineno, a1.value))
+    return [x for x in out if x[0] not in _OWNED[x[2]]]
+
+
+def test_se01_falsifier_no_module_but_census_or_matter_writes_weight_or_the_envelope():
+    """THE SWEEP, AND ITS PLANTED FAILURE. Over every non-test module under `engine/season`, no
+    bare write to `Person.weight` or `Rung.envelope` stands outside `loop/census.py` and
+    `loop/matter.py`. A write planted in a THIRD module (`loop/resolve.py`) must be found, in both
+    spellings -- otherwise the clean sweep would be the sweep that cannot see."""
+    scanned = 0
+    found = []
+    for path in sorted(_SEASON.rglob("*.py")):
+        rel = path.relative_to(_SEASON).as_posix()
+        if rel.startswith("tests/"):
+            continue
+        scanned += 1
+        found += _bare_writes(path.read_text(), rel)
+    assert scanned >= 50, f"the sweep read {scanned} modules; it is not reading the tree"
+    assert not found, f"a bare write outside CENSUS/MATTER: {found}"
+    planted = ("def _eff(w, p, r):\n    p.weight = 40\n"
+               "    setattr(r, 'envelope', [1])\n")
+    assert _bare_writes(planted, "loop/resolve.py") == [
+        ("loop/resolve.py", 2, "weight"), ("loop/resolve.py", 3, "envelope")]
+    assert _bare_writes(planted, "loop/census.py") == [], "an owner's write was flagged"
+
+
+@pytest.mark.parametrize("kind, field, value", [("Person", "weight", 40),
+                                                ("Rung", "envelope", [1])])
+def test_se01_falsifier_the_gate_refuses_weight_and_the_envelope_at_resolve(kind, field, value):
+    """THE GATE HALF: a write of `(Person, weight)` or `(Rung, envelope)` at RESOLVE, with the ACTS
+    token RESOLVE is handed, is FORBIDDEN by the write matrix (`weight` is `[CEN]`, `envelope`
+    `[MAT, CEN]`), and the carrier is untouched. The same write at CENSUS is admitted -- so the
+    refusal is the step's, not the row's absence."""
+    w = P.tiny_world()
+    rec = w.persons["p_mid"] if kind == "Person" else w.rungs["S"]
+    was = getattr(rec, field)
+    w.step = Step.RESOLVE
+    with pytest.raises(Forbidden):
+        w.write(field, mint_token(w, WriteClass.ACTS),
+                lambda: setattr(rec, field, value),
+                record_kind=kind, fieldname=field, driver="Act")
+    assert getattr(rec, field) == was, "a refused write moved the carrier"
+    w.step = Step.CENSUS
+    w.write(field, mint_token(w, WriteClass.MATTER), lambda: setattr(rec, field, value),
+            record_kind=kind, fieldname=field, driver="Event")
+    assert getattr(rec, field) == value
+
+
+def test_se01_falsifier_a_stored_aggregate_on_a_rung_is_refused():
+    """*"A stored aggregate where a Query is required fails"*: a settlement's population is
+    `world_q.population`, a Query, and storing it on the Rung raises (S10.1 / L3) rather than
+    standing beside the Query as a second answer that can go stale."""
+    w = POP.build_realm(0)
+    rung = world_q.parent_of(w, sorted(_cohorts(w))[0])
+    assert world_q.population(w, rung) >= 1
+    with pytest.raises(ShapeGap):
+        w.rungs[rung].population = world_q.population(w, rung)
+    assert not hasattr(w.rungs[rung], "population")

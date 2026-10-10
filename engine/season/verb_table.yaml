@@ -255,7 +255,8 @@ verbs:
     requires:    "the named person exists"
     writes:      []
     emits:       ["order.given"]
-    emits_on_refusal: ["dispatch.refused"]
+    emits_on_refusal: ["dispatch.refused", "person.demanded"]
+    refusal_note: "v9 SE-01 (`24g`) / `H-51` -- P3, INDIVIDUATION IS A REFUSAL (`04_CODE_ARCHITECTURE.md` F.1's default: *a refusal Event kind `person.demanded`*). `person.demanded` is DECLARED here and EARNED only by the precondition refusal of an act whose `subject` names an id the world does not hold (`queries/world_q.py::demanded_person`), kept or dropped in `loop/resolve.py::_admits` -- `confidence.broken`'s shape on `tell`, applied to a refusal (declared on the row, emitted only when the act earns it). Every other refusal of this row -- ineligible, or naming a person, building or record that exists -- emits `dispatch.refused` alone, byte for byte as before. CENSUS reads the season's `person.demanded` Events and individuates the id each names (`loop/census.py`), citing it."
     grade:       "ruled"
     writes_note: "— (§11.1: it names a person; their own choose decides)"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"

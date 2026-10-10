@@ -31,7 +31,7 @@ from __future__ import annotations
 
 from typing import Callable, Optional
 
-from ..data.requires import UNKNOWN
+from ..data.requires import UNKNOWN, binding_from_act
 from ..data.rosters import (
     FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, RUNG_KINDS, SITE_KINDS,
     TENURE_KINDS,
@@ -431,6 +431,39 @@ def place_of(w: World, x: Optional[str]) -> Optional[str]:
     if x in w.rungs:
         return x
     return None
+
+
+# ⚠ v9 SE-01 (`24g`), P1's OTHER HALF -- THE PERSON-KEYED CROSSING REPAIR IS THE PERSON LIMB ABOVE,
+# AND NO NEW CODE WAS NEEDED FOR IT. The plan's instruction (*"`world_q` derives `at` from
+# `w.sites.get(who)`; the repair is `at = parent_of(w, who)` when `who` names a person"*) was written
+# against Q3's old `w.crossings` tuple read, which position `11a` deleted: a crossing now reaches a
+# witness through `epistemic._ch_co_located` as `place_of(w, anchor_of(w, e))`, and for a person that
+# is `home_of(w)[who]` -- the person's one live `contain` parent, which is `parent_of(w, who)`. So a
+# cohort's `condition.band_crossed` (anchored, tier 3, on its own `body.changed`) is placed at the
+# settlement the cohort stands in, and everyone standing there is `co_located` with it.
+# `tests/test_territorial_subsistence.py::test_se01_a_person_keyed_crossing_is_placed_at_the_person_s_parent`
+# executes it under a non-zero `body_step`; the plan position is stale on this half, not open.
+
+
+def demanded_person(w: World, a) -> Optional[str]:
+    """v9 SE-01 (`24g`) / `H-51` -- P3: THE PERSON AN ACT DEMANDS, or `None`.
+
+    An act DEMANDS a person when its `subject` operand names an id THE WORLD DOES NOT HOLD -- the
+    order to a clerk nobody has individuated. `World.class_of` is the one resolver of *which
+    collection holds this id*, and its `None` is documented as *"NOT YET, NOT NOT A THING"*, which is
+    exactly what a demand is: a person not yet individuated. ⚠ AN ID THE WORLD HOLDS AS SOMETHING
+    ELSE IS NOT A DEMAND: a `dispatch` naming a building (measured on `build_realm(0)`, 2 seasons:
+    14 of 15 `dispatch` acts name a rung, site or record and are refused) asks for no person, so it
+    individuates nobody. An act naming no subject at all demands nobody either.
+
+    Read through `binding_from_act`, the one reader of an act's operands, so this and the fold's
+    `subject` are one value. Read twice: by the fold, which earns `person.demanded` on the refusal
+    of a row that declares it (`loop/resolve.py`), and by CENSUS, which individuates the id it names
+    (`loop/census.py`) -- one owner, so the two cannot disagree about who was asked for."""
+    s = binding_from_act(a).get("subject")
+    if not isinstance(s, str) or not s or w.class_of(s) is not None:
+        return None
+    return s
 
 
 def reach(w: World, p: Person) -> set[str]:
