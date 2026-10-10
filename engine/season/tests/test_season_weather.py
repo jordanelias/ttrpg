@@ -32,13 +32,9 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # `build_realm(0)`'s content hash on the base commit (068ec322), taken before this position changed
 # anything: at build, after one season, after two. With `season_factor_draw` at its shipped `()` all
 # three must still read these.
-# ⚠ RE-RECORDED AT v9 IN-34, A SCHEMA MOVE DECLARED: `Person.born` adds a field to every person's
-# `repr`, which `content_hash` folds, so all three move with the bodies clock at its control (both
-# rates 0). Was `2d0d1200` / `a53cceff` / `286fd568`; at the control, event kinds and counts over one
-# and two seasons equal the pre-IN-34 base's (`hole_register.yaml` `H-206`'s cite).
-BASE_HASHES = {0: "919b9556b0349897aaad1e0736fedf84",
-               1: "aac62e8015f0c0a66c6c3e116c183f81",
-               2: "de9cf30625e0ab12a3ad42c3bb8f8d54"}
+BASE_HASHES = {0: "2d0d12003675b31aa55e974ae095991e",
+               1: "a53cceff439d6b61171eaa6a891471ee",
+               2: "286fd568b5294eadc7e164ab4f4eaef4"}
 
 # H-26's declared sweep, as tables: a year of four seasons each time.
 YEAR = 4
