@@ -559,17 +559,19 @@ def said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | None
     return Said(c.subject, c.predicate, c.value, c.confidence, c.chain)
 
 
-def confided_outside(claims, said: "Said", hearer: str) -> bool:
-    """v9 IN-18 `G6`: DOES A COPY OF `said` IN `claims` HOLD A CONFIDENCE CIRCLE `hearer` IS OUTSIDE?
-    The copy is the claim with the said `(subject, predicate, value, chain)` -- the four fields
-    `said_of` copies out of it above, so the match lives beside the copy it inverts. A circle is a
-    tuple `Claim.visibility` (a confided telling's deposit, `loop/witness.py::_circle_of`); `"own"`
-    is none. `claims` is the TELLER'S OWN ledger, passed by the fold (`loop/resolve.py::
-    _confidence_broken`); this reads nothing else."""
+def confided_outside(p: Person, said: "Said", hearer: str) -> bool:
+    """v9 IN-18 `G6`: DOES `p`'S OWN COPY OF `said` HOLD A CONFIDENCE CIRCLE `hearer` IS OUTSIDE?
+    The copy is the claim in `p.ledger` with the said `(subject, predicate, value, chain)` -- the
+    four fields `said_of` copies out of it above, so the match lives beside the copy it inverts. A
+    circle is a tuple `Claim.visibility` (a confided telling's deposit,
+    `loop/witness.py::_circle_of`); `"own"` is none. `p` is THE ASKER, the teller, passed by the
+    fold (`loop/resolve.py::_confidence_broken`), and this reads `p`'s own ledger and nothing else
+    -- asker first, as `04` §B.10-12 types `person_q.<n>(p : PersonInterior, ...)` and §B.2's F8
+    row says (*"`person_q` takes the asker"*), on `deeds_judged`'s precedent."""
     key = (said.subject, said.predicate, said.value, tuple(said.chain))
     return any(isinstance(c.visibility, tuple) and hearer not in c.visibility
                and (c.subject, c.predicate, c.value, c.chain) == key
-               for c in claims)
+               for c in p.ledger)
 
 
 # ---------------------------------------------------------------------------

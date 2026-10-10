@@ -512,11 +512,15 @@ def _confidence_broken(w: "World", a: Act, row: "VerbRow") -> bool:
     the actor's ledger with the said `(subject, predicate, value, chain)`, the four fields `said_of`
     copies out of it. True when such a copy holds a circle the addressee is not in.
 
-    ⚠ THE ACTOR'S OWN LEDGER AND NO OTHER (`F8`'s carve-out, `04 §B.2`: *"the fold may ask the
-    ACTOR'S OWN ledger ... and no other"*) -- read DIRECTLY as `w.persons[a.actor].ledger`, the same
-    own-ledger read `WorldReader`'s `claim.held` stem makes for `tell`'s `holds` conjunct (not through
-    `WorldReader`, which has no stem for this), and handed to `queries/person_q.py::confided_outside`,
-    the match's one owner beside `said_of`. ⚠ READ AT RESOLVE, NOT CARRIED FROM CHOOSE: a copy
+    ⚠ THE ACTOR'S OWN LEDGER AND NO OTHER (`F8`'s carve-out, `04 §B.2:250`: *"the fold may ask the
+    ACTOR'S OWN ledger, through the `PersonInterior` snapshot the act carries, and no other"*). The
+    PROPERTY holds here and the CONSTRUCTION does not: no `Act` carries a `PersonInterior` snapshot
+    (`state/carriers.py::Act` has no such field), so the actor's live `Person` is looked up as
+    `w.persons[a.actor]` -- the same own-ledger read `WorldReader`'s `claim.held` stem makes for
+    `tell`'s `holds` conjunct (not through `WorldReader`, which has no stem for this) -- and handed,
+    as the asker, to `queries/person_q.py::confided_outside`, the match's one owner beside
+    `said_of`. "No other" is CONVENTION here: this function holds `w`, and no scan reads which
+    person a fold-side ledger read names. ⚠ READ AT RESOLVE, NOT CARRIED FROM CHOOSE: a copy
     evicted between the two is not found, and the retelling breaks nothing [ASSUMPTION; `Said` carries
     no circle]. ⚠ A retelling INSIDE the circle (back to the confider, or to the other party) breaks
     nothing; the original teller holds their own copy `own` and can never break their own confidence;
@@ -528,7 +532,7 @@ def _confidence_broken(w: "World", a: Act, row: "VerbRow") -> bool:
     p = w.persons.get(a.actor)
     if said is None or hearer is None or p is None:
         return False
-    return confided_outside(p.ledger, said, hearer)
+    return confided_outside(p, said, hearer)
 
 
 def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
