@@ -865,6 +865,14 @@ rows:
       `VERBS THAT EXECUTED : 20 of 46` (17 of 44 on the base commit 13715804) -- `challenge` and `accept` (the
       duel pair's new rows) and `levy` join, nothing leaves. `WHERE THE 46 GO`: 10 no predicate/effect, 10
       foldable but never attempted, 6 attempted and always refused (7 before; `levy` left it), 20 executed. `accept` is among the 20 WITHOUT its challenge: no carrier holds one, so it executes as a second `fight` (`verb_table.yaml`, `accept`'s `requires_note`).
+      21 of 45 AS OF B-I (HEAD 4bb57351, `corpus_run`, seed 0, 143 cases, PYTHONHASHSEED=0); THE ROW STAYS `not_met`.
+      `VERBS THAT EXECUTED : 21 of 45` (20 of 46 at B-G): `commit` joins (IN-11), `repudiate` is cut (46 -> 45 rows),
+      nothing leaves. `WHERE THE 45 GO`: 9 no predicate/effect, 10 foldable but never attempted (`confer`, `convene`,
+      `destroy_record`, `determine`, `dispatch`, `establish`, `march`, `oblige`, `open_case`, `revoke`), 5 attempted and
+      always refused, 21 executed. IN-09's family (`comply`, `evade / defy`, `construe`) and IN-10's (`confer`,
+      `establish`, `revoke`, `oblige`) are still at 0: both positions were built, falsified and reverted at B-I
+      (`hole_register.yaml` H-203), as were IN-33 and IN-18 G5 by dependency. `aperture 4 0` at 66bf51f9, realm
+      attempted/executed: `commit` 145/8, `utter` 123/123, `issue` 11/2, `levy` 8/0.
     measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE) -- 44 today; it was '38' as of ED-IN-0261, '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
     blocks: [H-65, IN-09, IN-10, IN-33, IN-45]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W10-core removed (it gates corpus_run's R2 check, not this row's WHERE THE <n> GO); H-94 is carried by its owners IN-10, IN-09, IN-45, IN-33
@@ -941,9 +949,12 @@ rows:
       (`architecture/holonic_ARCHITECTURE.md` §15.3) -- and gives the OUGHT no condition under
       which it comes TRUE (`grep -rn OUGHT architecture/` finds none), so there is nothing for a
       reader to evaluate; `CLAUDE.md` §0's ladder closes the question at test 3. What the realm
-      does show is that the one built VOLUNTARY ender is rarely reached: `release` is attempted
+      does show is that the one built VOLUNTARY ender is rarely reached: `release` was attempted
       130 times and refused 124 (95%, against R-05's 96.3% on the corpus's rung cases, and for
-      R-05's reason -- an untyped cell §F1 clause 4 can never fire on), and `repudiate` had a row
+      R-05's reason -- an untyped cell §F1 clause 4 can never fire on); at B-I (`aperture 4 0` @66bf51f9, realm) it
+      reads 136 attempted, 12 executed, 124 refused (91%). Those 12 mix hold-only releases of the maker's hold IN-11
+      opens with vow-ending releases of a `commit`, so release counts cannot credit "`release` ends an ambition"
+      (v9 `_part3` R-06 row) without a split by `commitment.ended`, and `repudiate` had a row
       and no effect (R-05's U10 paragraph; the row was cut at B-I by IN-11). **Neither reason this row stays `partial` moves**:
       `ambitions(p)` is still absent, and the correlated-convictions finding is a property of
       `PURSUIT_PROJECTION` (`data/verbs.py`; measured under its pre-rename name
