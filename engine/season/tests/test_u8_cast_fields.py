@@ -84,8 +84,8 @@ def test_the_case_level_office_still_goes_through_the_same_seater(monkeypatch):
 
 def test_the_first_cast_entry_may_not_carry_an_office_beside_a_case_level_one(monkeypatch):
     """The case-level `scale: office:` is held by `p_a`, who is the first SEATED entry, so an
-    `office:` on that entry seats `p_a` twice -- and `exercised_seat` takes the first, so the second
-    is inert while looking authored. Only a comment in `NPC-038.yaml` guarded it. The hand-built
+    `office:` on that entry seats `p_a` twice -- the same seat authored twice, or a second seat the
+    overlay cannot tell apart from it. Only a comment in `NPC-038.yaml` guarded it. The hand-built
     case below carries both; it must refuse, naming the case and the seat. CONTROLS, so a builder
     that refused every office-bearing cast cannot pass: the same entry with no case-level office
     seats it; and the case-level office with the entry's office on a LATER entry seats both."""

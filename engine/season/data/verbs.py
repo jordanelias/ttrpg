@@ -951,13 +951,12 @@ def opportunity_key(verb: str, subject, operands) -> Optional[tuple]:
     other = ops.get(row.counterparty) if row is not None and row.counterparty else None
     if other == subject:
         other = None
-    # ⚠ `H-134`: AND THE SEAT, WHERE THE ACT WAS FORMED AMONG SEVERAL (`VIA` in the operands, `act_key`'s
-    # own condition). The same verb on the same subject through a different seat is a distinct
-    # opportunity -- the seat is who is acting -- so a revoke through the Duke seat that was refused
-    # or done does not bar the one through the King seat. A FOUR-part key, so it can never equal the
-    # two- or three-part key of a person with one seat, which is unchanged.
-    if ops.get(VIA) is not None:
-        return (verb, subject, other, ops[VIA])
+    # ⚠ `H-134`: THE SEAT IS NOT IN THIS KEY, and that is chosen, not forgotten. `act_key` carries it
+    # (ids must stay distinct), but an opportunity is the verb on the subject (and counterparty) for
+    # the ACTOR, however many seats could have done it: the key's shape must not depend on how many
+    # seats the person holds at the moment, or a seat gained or lost mid-season would let one
+    # realised act be realised again. A refused act through the wrong seat is never recorded (the
+    # driver records REALISED acts only), so it does not bar the same act through the right seat.
     return (verb, subject) if other is None else (verb, subject, other)
 
 

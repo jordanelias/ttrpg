@@ -117,12 +117,12 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # `pack_scenes` names `Act.via` by -- for the belief test's `basis` conjunct below.
         # `H-134`: WHERE THE ADMITTING `remit:` ALTERNATIVE IS GRANTED BY SEVERAL OF THE PERSON'S
         # SEATS, EACH IS A SEAT THE ACT CAN BE EXERCISED THROUGH, and the Candidate is formed once
-        # per seat (below) -- the fold's gate asks the one seat the act names, so which seat is a
-        # choice the person makes, not a first-in-tenure-order accident. One seat (or none) leaves
-        # `seats` a single value that is `exercised_seat` exactly, and nothing below differs.
+        # per seat (below) -- the fold's gate asks the one seat the act names. No seat is picked FOR
+        # the person: the seat-Candidates score and draw alike (`choose.py` keys both on
+        # `(verb, subject)`), so Tenure order still orders them in the ranking. One seat (or none)
+        # leaves `seats` a single value that is `exercised_seat` exactly, and nothing below differs.
         seats = exercisable_seats(p, row)
         several = len(seats) > 1
-        seat = seats[0] if seats else None
         # `T4`: only a NAMED own-ledger conjunct carries `said` (`tell`'s `holds`); `survey` and
         # `reconstruct` share the form unnamed and carry nothing (telling workplan, "From Batch 1").
         ledger_of = row.requires_typed.named_own_ledger_operands() if row.requires_typed else ()
@@ -161,7 +161,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             # PERSON (`operand_bags`), which forms one per person the teller knows.
             # `H-134`: seat-major, each seat's own bags (`from` is that seat's rung). One seat: the
             # one pass `operand_bags` made before.
-            bagged = [(st, ops) for st in (seats if several else (seat,))
+            bagged = [(st, ops) for st in (seats or (None,))
                       for ops in operand_bags(p, row, q, subject, fx, seat=st)]
             for st, ops in bagged:
                 # ⚠ AND A TWO-SIDED ACT NEEDS A SECOND SIDE (plan position `15`, `ED-IN-0210` ruling
@@ -394,6 +394,10 @@ def exercised_seat(p: Person, row: "Optional[VerbRow]") -> Optional[str]:
     (`exercisable_seats`), the seat riding on the Candidate (`VIA` in its operands) to `Act.via`
     (`seat_of`), and the fold's gate asks the seat the Candidate was formed for. A seat that does
     not reach the target is refused there, as any act the person cannot know to be unlawful is.
+    ⚠ STILL MASKED for `revoke` and `confer`: a computed act of either carries no `office` operand,
+    so `loop/predicates.py`'s `_req_revoke` / `_req_confer` refuse before the seat is asked
+    (`H-207` causes 1, 2, 4); the Candidate per seat is what lets the right seat be asked once one
+    does.
     Traces nothing: the admission it mirrors already traced. A verb on no row (`row is None` -- a
     hand-ranked candidate naming an invented verb) exercises nothing; the fold refuses the verb
     itself, and inventing a seat for it here would be a second answer."""

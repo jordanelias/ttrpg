@@ -556,10 +556,12 @@ def build_at(case: dict, seed: int = 0) -> World:
     # it cannot collide with the case-level office above. An entry with no `office:` seats nothing.
     #
     # ⚠ THE CASE-LEVEL OFFICE IS `p_a`'S, SO THE FIRST SEATED ENTRY (`p_a`) MAY NOT CARRY ONE TOO:
-    # it would seat `p_a` twice and `decision/options.py::exercised_seat` takes the first seat, so
-    # the second would be inert while looking authored. REFUSED, not skipped -- the author put the
-    # entry's own office there to be held (`NPC-038.yaml` leaves it off its first entry for this
-    # reason, in a comment nothing read).
+    # it would seat `p_a` twice -- the case-level office IS `p_a`'s seat, so an entry office on `p_a`
+    # is either that seat authored twice or a second seat no case sentence tells apart from it (since
+    # `H-134` a second seat forms its own Candidate, so it is no longer inert; the overlay still
+    # cannot say which was meant). REFUSED, not skipped -- the author put the entry's own office
+    # there to be held (`NPC-038.yaml` leaves it off its first entry for this reason, in a comment
+    # nothing read).
     for pid, entry in by_pid.items():
         entry_office = entry.get("office")
         if not isinstance(entry_office, dict):
@@ -569,10 +571,10 @@ def build_at(case: dict, seed: int = 0) -> World:
                 f"case {case.get('id')!r}: the cast entry {entry['who']!r} is seated as `p_a`, "
                 "who already holds the case-level `scale: office:`, and carries an `office:` of "
                 "its own", "harness/corpus_run.py -- overlay offices",
-                needs="the entry's office on a different entry, or the case-level office dropped "
-                      "(one seat per person here: the second is never the one exercised)",
-                law="`exercised_seat` takes the first seat a person holds, so a second office on "
-                    "the same person is inert")
+                needs="the entry's office on a different entry, or the case-level office dropped",
+                law="the case-level `scale: office:` IS `p_a`'s seat, so an `office:` on `p_a`'s cast "
+                    "entry is that seat authored twice, or a second seat no case sentence tells "
+                    "apart from it")
         _seat_office(w, f"off_{case.get('id', 'x')}_{pid}", pid, ids[chain[0]], entry_office)
     # ⚠⚠ **THE OUGHT NAMES A PERSON, AND THE WANT IS THE CASE'S OWN.** Until 2026-09-13 this was
     # ONE Proposition for all three people -- `Proposition("prop_x", "OUGHT", ids[chain[0]],

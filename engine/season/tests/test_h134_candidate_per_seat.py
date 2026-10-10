@@ -124,7 +124,9 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
     assert a1.id != a2.id
     k1 = opportunity_key(a1.verb, TARGET, a1.payload)
     k2 = opportunity_key(a2.verb, TARGET, a2.payload)
-    assert k1 != k2 and len(k1) == 4 and len(k2) == 4, (k1, k2)
+    # The opportunity is the verb on the subject for the actor, whichever seat did it: the seat is in
+    # the id and not in this key, so its shape cannot depend on how many seats the person holds.
+    assert k1 == k2 == ("revoke", TARGET), (k1, k2)
     store = ActStore()
     store.append(a1)
     store.append(a2)                                    # no duplicate-id refusal
