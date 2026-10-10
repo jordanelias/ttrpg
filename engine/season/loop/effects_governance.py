@@ -199,6 +199,8 @@ def _eff_release(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     edges = [t for t in w.tenures
              if (t.subject == a.actor and t.object == subj
                  and t.kind in RELEASABLE_KINDS and t.live)]
+    # Whole-act earning keyed on a tenure-kind literal: the data-driven form is a conditional-emission
+    # column, which `04 §A.3` allows no seventh of; the same forced choice as `_fold`'s `CONFIDENCE_BROKEN`.
     earns = None if any(t.kind == "commit" for t in edges) else "tenure.closed"
     return _closing(w, edges, earns)
 

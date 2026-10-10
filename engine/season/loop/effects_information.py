@@ -113,7 +113,13 @@ def _makers_hold(w: "World", actor: str, obj: str) -> Tenure:
     here. The id is `H(seed, tick, actor, f"hold:{obj}")`, unsalted by the act (a maker makes one
     thing per id). ⚠ `"hold"` STAYS A STRING LITERAL IN THIS FILE: `data/verbs.py::OPENERS-DERIVE`
     walks a decorated effect into the same-file helpers it calls and reads the kind off the literal,
-    so `create_record`, `issue`, `petition` and `utter` remain `hold`'s openers through this call."""
+    so the six minters reaching this call -- `create_record`, `issue`, `open_case`, `petition`, `survey`
+    (through `_mint_document`) and `utter` (through `_eff_utter`) -- remain `hold`'s openers.
+
+    ⚠ NONE OF THE SIX DECLARES `Tenure.since` IN ITS `writes:`. The hold opens inside the declared
+    `Proposition.exists` / `Record.exists` write, and only the authority check (`refuse_unauthored`)
+    sees it. CONVENTION against `04` §C.2/§C.4 and PART D's rows on matrix and step: no scan sees it.
+    Declaring it would add a gated write and move the hash, so it is not done."""
     return Tenure(H(w.world_seed, w.tick, actor, f"hold:{obj}"), actor, obj, "hold", since=w.tick)
 
 

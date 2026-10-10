@@ -486,6 +486,10 @@ def _fold(self, w: "World", token: Token, a: Act,
     kinds = tuple(k for k in _declared if k in earned) if earned else _declared
     # v9 IN-18 `G6` (`H-197`): `confidence.broken` IS EARNED BY THE ACT, NOT BY THE BAND -- declared on
     # `tell`'s told bands, emitted only when the act breaks a circle (`_confidence_broken`).
+    # Outcome-specific earning in the generic fold is the FORCED choice: the data-driven alternative is a
+    # conditional-emission column, and `04 §A.3` says of one more column "A seventh column has no such
+    # argument available"; `tell` writes nothing, so no effect runs to earn the kind through `earned`.
+    # Kind literals already live in `loop/` (this module's `act.refused`, `attempt.refused`).
     kinds = tuple(k for k in kinds if k != CONFIDENCE_BROKEN or _confidence_broken(w, a, row))
     # Causes: the act and its occasion, both stamped by `_act_events` (IN-50).
     out = ev(kinds, list(a.changes) + changed)
@@ -512,17 +516,20 @@ def _confidence_broken(w: "World", a: Act, row: "VerbRow") -> bool:
     the actor's ledger with the said `(subject, predicate, value, chain)`, the four fields `said_of`
     copies out of it. True when such a copy holds a circle the addressee is not in.
 
-    ⚠ THE ACTOR'S OWN LEDGER AND NO OTHER (`F8`'s carve-out, `04 §B.2:250`: *"the fold may ask the
-    ACTOR'S OWN ledger, through the `PersonInterior` snapshot the act carries, and no other"*). The
-    PROPERTY holds here and the CONSTRUCTION does not: no `Act` carries a `PersonInterior` snapshot
-    (`state/carriers.py::Act` has no such field), so the actor's live `Person` is looked up as
-    `w.persons[a.actor]` -- the same own-ledger read `WorldReader`'s `claim.held` stem makes for
-    `tell`'s `holds` conjunct (not through `WorldReader`, which has no stem for this) -- and handed,
-    as the asker, to `queries/person_q.py::confided_outside`, the match's one owner beside
-    `said_of`. "No other" is CONVENTION here: this function holds `w`, and no scan reads which
-    person a fold-side ledger read names. ⚠ READ AT RESOLVE, NOT CARRIED FROM CHOOSE: a copy
-    evicted between the two is not found, and the retelling breaks nothing [ASSUMPTION; `Said` carries
-    no circle]. ⚠ A retelling INSIDE the circle (back to the confider, or to the other party) breaks
+    ⚠ THE ACTOR'S OWN LEDGER AND NO OTHER. `04 §B.2:250` says: *"The carve-out is exact and it is not
+    a widening: the fold may ask the ACTOR'S OWN ledger, through the `PersonInterior` snapshot the act
+    carries, and no other."* `04 §B.9:423` types the act `Act := ( id, actor, via?, verb, refs,
+    payload, terms?, scene )`, which has no slot for a snapshot, and no `PersonInterior` class exists
+    in `engine/`: the spec is AMBIGUOUS between the two sections. PICKED: the live read of the
+    ACTOR'S OWN ledger, `w.persons[a.actor].ledger`, the precedent `queries/world_q.py`'s `claim.held`
+    stem sets for `tell`'s `holds` conjunct (`WorldReader` has no stem for this match), handed bare to
+    `queries/person_q.py::confided_outside`, the match's one owner beside `said_of`. REASON: carrying
+    the circle on `Said` from CHOOSE would change which copy is found when it is evicted between
+    CHOOSE and RESOLVE, which is a behaviour change, so it is not done here. GRADE: CONVENTION -- a
+    one-token swap to another person compiles and no scan sees it, so the graded property *"the ledger
+    is never read by ANOTHER person"* is not STRUCTURAL by signature (`04 §0` F9). ⚠ READ AT RESOLVE,
+    NOT CARRIED FROM CHOOSE: a copy evicted between the two is not found, and the retelling breaks
+    nothing [ASSUMPTION; `Said` carries no circle]. ⚠ A retelling INSIDE the circle (back to the confider, or to the other party) breaks
     nothing; the original teller holds their own copy `own` and can never break their own confidence;
     a self-disclosure (§10 decision 3) is an ordinary telling. At the shipped `telling_privacy` 0 no
     claim holds a circle, so this is False for every act."""
@@ -532,7 +539,7 @@ def _confidence_broken(w: "World", a: Act, row: "VerbRow") -> bool:
     p = w.persons.get(a.actor)
     if said is None or hearer is None or p is None:
         return False
-    return confided_outside(p, said, hearer)
+    return confided_outside(p.ledger, said, hearer)
 
 
 def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:

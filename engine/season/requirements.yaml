@@ -835,7 +835,7 @@ rows:
       44 executing (36%) is proportionally close to the 13-of-38 (34%) reading it replaces — the
       table grew faster than it was built out, not the reverse. ⚠ THE SIX NEW ROWS ARE NOT
       RE-DERIVED HERE, PER U10'S OWN SCOPE (bookkeeping against the fresh instrument, not verb
-      archaeology) — the always-refused eight still omit `repudiate`, `tie / knot`, `forge`,
+      archaeology) — the always-refused eight still omit `repudiate` (cut at B-I by IN-11), `tie / knot`, `forge`,
       `carry`, `succeed`, `exchange`, `comply`, `evade / defy` and `construe`
       (U7's own group 1/3 list, `workplans/2026-09-09-r-execution-plan.md:1497-1502`), verified by
       `grep` to have no `@effect_for(...)` registration anywhere in `loop/effects_*.py` — U7 is
@@ -848,7 +848,7 @@ rows:
       it and fans its counterparty over the persons the giver knows; it executes in one corpus world and is refused in 63, so
       it leaves the always-refused set on one execution, not on a changed share: `H-84`), and `dispatch` moved from
       always-refused to never-attempted (the `17-cast` pilot's fourth seat in NPC-038; stable across seven hash seeds, the
-      mechanism not traced). **POSITION `14` BUILT NO OTHER ROW**: `repudiate`, `succeed`, `tie / knot`, `forge`, `exchange`,
+      mechanism not traced). **POSITION `14` BUILT NO OTHER ROW**: `repudiate` (cut at B-I by IN-11), `succeed`, `tie / knot`, `forge`, `exchange`,
       `carry` and `thread_read` were declined or stopped, each with an `effect_decline_note` or `requires_decline_note` on its verb row (IN-41 split the old `decline_note`); `succeed` and `tie`
       rest on ID-13 (nothing reads the edge) and on an operand their rows do not bind, NOT on holonic §15 (`04 §A.3` rows 8-9
       make them directed edges the holder owns and `release` ends, `H-182`). `knot` is NOT an ID-13 case -- it has a reader
@@ -932,15 +932,15 @@ rows:
       satisfaction reader. An OUGHT is an uttered Belief, immutable
       (`architecture/holonic_ARCHITECTURE.md` §14), and Q4 is *a STANDING question, regenerated
       every season until the commitment ends* (`architecture/ARCHITECTURE_V2.md:479-480`): the
-      architecture gives the commitment an END -- `release`; `repudiate`, by which a belief
+      architecture gives the commitment an END -- `release`; `repudiate` (cut at B-I by IN-11), by which a belief
       *becomes abandonable* (`architecture/meta/01_AXIOMS.md`); and the holder's death
       (`architecture/holonic_ARCHITECTURE.md` §15.3) -- and gives the OUGHT no condition under
       which it comes TRUE (`grep -rn OUGHT architecture/` finds none), so there is nothing for a
       reader to evaluate; `CLAUDE.md` §0's ladder closes the question at test 3. What the realm
       does show is that the one built VOLUNTARY ender is rarely reached: `release` is attempted
       130 times and refused 124 (95%, against R-05's 96.3% on the corpus's rung cases, and for
-      R-05's reason -- an untyped cell §F1 clause 4 can never fire on), and `repudiate` has a row
-      and no effect (R-05's U10 paragraph). **Neither reason this row stays `partial` moves**:
+      R-05's reason -- an untyped cell §F1 clause 4 can never fire on), and `repudiate` had a row
+      and no effect (R-05's U10 paragraph; the row was cut at B-I by IN-11). **Neither reason this row stays `partial` moves**:
       `ambitions(p)` is still absent, and the correlated-convictions finding is a property of
       `PURSUIT_PROJECTION` (`data/verbs.py`; measured under its pre-rename name
       `CONVICTION_PROJECTION`, ED-IN-0261 item 1) that no run moves. WHAT WOULD OVERTURN THIS

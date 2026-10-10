@@ -2202,11 +2202,10 @@ def test_g6_limit_the_production_said_pick_shadows_the_confided_copy():
     assert len(confided) == 1 and confided[0].visibility == ("p_low", "p_mid")
     picked = said_of(ledger, _G6_SUBJECT, w.fixtures)
     assert picked is not None and picked.predicate == "news.told", picked
-    hearer = w.persons["p_mid"]
-    assert not confided_outside(hearer, picked, "p_other"), "the production pick now breaks"
+    assert not confided_outside(ledger, picked, "p_other"), "the production pick now breaks"
     # CONTROL: the confided cell, named by hand, does break -- the matcher is not what fails.
     c = confided[0]
-    assert confided_outside(hearer, Said(c.subject, c.predicate, c.value, c.confidence, c.chain),
+    assert confided_outside(ledger, Said(c.subject, c.predicate, c.value, c.confidence, c.chain),
                             "p_other")
 
 
