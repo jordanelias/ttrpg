@@ -955,6 +955,10 @@ def opportunity_key(verb: str, subject, operands) -> Optional[tuple]:
     # seats the person holds at the moment, or a seat gained or lost mid-season would let one
     # realised act be realised again. A refused act through the wrong seat is never recorded (the
     # driver records REALISED acts only), so it does not bar the same act through the right seat.
+    # Two seat-acts formed in ONE deliberation share this key and BOTH survive: `loop/deliberate.py`
+    # filters only against what EARLIER rounds realised (`_drop_what_was_already_done`, one call
+    # site) and a queued scene is released without re-filtering, so the key bars a twin only across
+    # a re-deliberation.
     if other is None or other == subject:
         return (verb, subject)
     return (verb, subject, other)

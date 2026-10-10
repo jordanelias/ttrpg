@@ -580,8 +580,8 @@ def treasury_of(p: Person, seat: str) -> Optional[str]:
 
     `H-160` limit 1 / `H-158` [ASSUMPTION; medium; Jordan to correct; revert: a ruling that an `own`
     verb may be exercised through a seat]: `containing_rung_of`'s *where the actor is* stays the
-    answer for an act exercised AS HIMSELF; an act exercised THROUGH A SEAT (`exercised_seat`, the
-    same walk `Act.via` is named by) gives from the seat's rung, because that is where the seat's
+    answer for an act exercised AS HIMSELF; an act exercised THROUGH A SEAT (`seat_of`: the seat
+    `opening_set` formed the Candidate for, `exercised_seat`'s for one seat) gives from the seat's rung, because that is where the seat's
     matter is, and `loop/effects_economy.py::_renewals` already reads a payment of upkeep as exactly
     that (`seat.rung == from`). One rule for both positions of the actor, no verb named."""
     return next((t.seat_rung for t in p.tenures
@@ -729,7 +729,7 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
                     seat: Optional[str] = None):
     """ONE OPERAND, FROM THE PERSON'S OWN STATE. `None` means THIS PERSON CANNOT SUPPLY IT.
 
-    `seat` is the seat the act will be exercised through (`exercised_seat`), `None` for an act the
+    `seat` is the seat the act will be exercised through (`seat_of`), `None` for an act the
     person performs as himself. It moves ONE operand, `from`: through a seat, the giver gives from
     the seat's rung (`treasury_of`, `H-160` limit 1); as himself, from where he stands.
 

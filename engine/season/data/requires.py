@@ -656,8 +656,9 @@ def binding_of(actor: str, operands: dict, via: Optional[str] = None) -> dict:
     ride, and the grammar's vocabulary is closed -- `said` is a non-scalar the grammar never reads.
 
     ⚠ `via=` (plan position `19`) -- THE SEAT THE ACT EXERCISES, STRUCTURAL ON BOTH SIDES FOR THE
-    REASON `actor` IS: `Act.via` for the fold (`binding_from_act`), `seat_of(p, c)` for the
-    person (`epistemic.belief_contradicts`). It is read by one form, `Basis` (§F.24a form 7), and
+    REASON `actor` IS: `Act.via` for the fold (`binding_from_act`), `st` (the seat `opening_set` formed
+    the Candidate for, which `seat_of` reads back onto `Act.via`) for the person
+    (`epistemic.belief_contradicts`). It is read by one form, `Basis` (§F.24a form 7), and
     is added only when there is one, so a seatless act's binding is byte-for-byte what it was and a
     `basis` clause over it reads UNKNOWN. It is never taken from the payload: `via` is not an
     operand, and a payload key of that name would be dropped by the filter above like any other."""

@@ -281,7 +281,7 @@ def _renewals(w: "World", a: "Act", src: str, dst: str, amount) -> list:
     would make "how far ahead may a seat prepay" a second quantity with no row.
 
     ⚠ WHAT NO COMPUTED ACT CAN REACH TODAY, STATED RATHER THAN IMPLIED. Clause 1 needs `Act.via` on a
-    `transfer`, and `decision/options.py::exercised_seat` sets `via` only for a `remit:` alternative.
+    `transfer`, and `decision/options.py::seat_of` sets `via` only for a `remit:` alternative.
     ~~`transfer` is `own | hold:<store>`, so every computed transfer carries `via=None`~~ -- SINCE
     `H-160` LIMIT 1 its first alternative is `remit:issue`, so a holder of a seat granting `issue`
     gives through it, out of its rung (clauses 1 and 2 met by a computed act). But no computed act
