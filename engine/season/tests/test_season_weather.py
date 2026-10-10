@@ -150,6 +150,9 @@ def test_in21_the_factor_is_keyed_on_the_seed_and_the_season_of_the_year_is_read
 
     seq = {s: factors(s) for s in range(4)}
     assert all(set(f) <= {0.5, 1.0, 2.0} for f in seq.values())
+    # FULL SUPPORT, not only a subset: a modulus that never reaches the last outcome (`% (n - 1)`)
+    # draws only members of the set and would pass the line above.
+    assert set().union(*(set(f) for f in seq.values())) == {0.5, 1.0, 2.0}
     assert len({tuple(f) for f in seq.values()}) > 1, "four seeds drew one sequence; the key ignores the seed"
     assert len(set(seq[0])) > 1, "one seed drew one value for 24 seasons; the key ignores the tick"
     assert factors(0) == seq[0], "the same seed read a different sequence the second time"

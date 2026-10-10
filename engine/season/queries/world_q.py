@@ -463,6 +463,14 @@ def demanded_person(w: World, a) -> Optional[str]:
     s = binding_from_act(a).get("subject")
     if not isinstance(s, str) or not s or w.class_of(s) is not None:
         return None
+    # ⚠ `class_of` HAS NO `dates` AND FORGETS THE DEAD, SO "UNHELD" IS NOT YET "NEVER WAS" (B-F close:
+    # a `convene`d date id, or a person `remove_person` took out earlier this round, passes the test
+    # above and would be minted as a Person under an id the world already used). A date is held
+    # (`place_of` admits it as a referent); a recorded id is one a logged Event's change already
+    # names -- the death names the dead (`person.died`), the convening names the date. A demand
+    # is for an id the world has NEVER spoken of.
+    if s in w.dates or any(c.subject == s for e in w.log for c in e.changes):
+        return None
     return s
 
 
@@ -888,7 +896,7 @@ def population(w: World, rung_id: str, residence: Optional[dict] = None) -> int:
     ⚠ AN R-1 AGGREGATE AND §22.4 DOES NOT BAR IT, on `density`'s and `demanded`'s ground: a weighted
     headcount over live `reside` edges, not a per-person tally summed across holders (clause 2), and
     no ended edge is read (clause 3). ⚠ `Rung.envelope` -- the population not individuated as persons
-    -- is NOT counted: it has no producer anywhere (`loop/census.py` writes nothing), so a term for
+    -- is NOT counted: it has no producer anywhere (`loop/census.py` writes no envelope), so a term for
     it would be a read of a dead carrier (`ID-13`). `24f` did not give it one: the territorial
     population it builds is carried by authored cohort PERSONS (`cohorts.yaml`, S9's one class), so
     it is counted above through `weight`, and `envelope` stays the ratified-but-unwritten field

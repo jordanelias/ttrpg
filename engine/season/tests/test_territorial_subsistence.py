@@ -385,8 +385,10 @@ def test_se01_a_person_keyed_crossing_is_placed_at_the_person_s_parent():
     w.add_tenure(Tenure("t_se01_bystander_in", "p_se01_bystander", at, "contain", 0))
     elsewhere = next(pid for pid in sorted(w.persons)
                      if not w.persons[pid].is_cohort and world_q.place_of(w, pid) not in (None, at))
+    scale = w.fixtures.get("condition_scale")
+    floor = w.fixtures.get("band_floors")["body"]["full_operations"]
     arm = next((a for a in sorted(LIVE_ARMS)
-                if 1000 - a * sum(_want(w.persons[cohort].weight).values()) < 800), None)
+                if scale - a * sum(_want(w.persons[cohort].weight).values()) < floor), None)
     assert arm is not None, f"no live arm of {LIVE_ARMS} crosses a floor in one season"
     w.fixtures = w.fixtures.sweep("body_step", arm)
 
@@ -420,8 +422,8 @@ def test_se01_a_dispatch_to_a_clerk_nobody_individuated_demands_him_and_census_m
     """THE EXIT, VERBATIM: *"a `dispatch` to a non-existent clerk emits `person.demanded` and,
     next season, a Person exists whose `person.individuated` cites it"*. The demand is the act's
     own refusal (it cites the act); the individuation cites the demand; the Person stands where
-    the order was given (`place_of` of the dispatcher), with its `person` rung, at weight 1; a
-    second season individuates nobody again."""
+    the order was given (`place_of` of the dispatcher), with its `person` rung, at weight 1, and he
+    is still there a season later. (A repeated order is not run here: the chooser sends once.)"""
     w = P.tiny_world()
     assert "p_clerk" not in w.persons and w.class_of("p_clerk") is None
     choose, sent = _dispatching(w, "p_clerk")
@@ -466,13 +468,47 @@ def test_se01_control_a_dispatch_that_asks_for_no_absent_person_demands_nobody(s
     assert set(w.persons) == persons
 
 
+def test_se01_control_a_date_the_world_already_holds_is_not_a_clerk_to_individuate():
+    """B-F CLOSE: `class_of` has no `dates`, so a dispatch naming a convened date's id passed
+    "unheld" and CENSUS would have minted a Person under it (and `place_of`, which checks persons
+    first, would then have placed the date at the dispatcher's hearth)."""
+    w = P.tiny_world()
+    w.dates["d_se01_assembly"] = {"venue": "S"}
+    assert w.class_of("d_se01_assembly") is None, "the control needs an id class_of cannot see"
+    persons = set(w.persons)
+    choose, sent = _dispatching(w, "d_se01_assembly")
+    P._run(w, choose)
+    assert sent, "the dispatch was never issued; the control observes nothing"
+    assert not [e for e in w.log if e.kind in ("person.demanded", "person.individuated")]
+    assert set(w.persons) == persons and "d_se01_assembly" not in w.rungs
+
+
+def test_se01_control_a_person_who_died_is_not_a_clerk_to_individuate_again():
+    """B-F CLOSE: `remove_person` pops the Person and its rung, so a dispatch to the dead id passed
+    "unheld" and CENSUS would have re-minted him at full body with `person.died` already logged
+    (the defect `World.remove_person` records as *the dead stayed referenceable*). The death is
+    written through the real MATTER gate, as `loop/matter.py` writes it."""
+    w = P.tiny_world()
+    w.step = Step.MATTER
+    w.write("exists", mint_token(w, WriteClass.MATTER), lambda: w.remove_person("p_other"),
+            record_kind="Person", fieldname="exists", driver="Event", emits="person.died",
+            subject="p_other", causes=[ROOT])
+    assert "p_other" not in w.persons and w.class_of("p_other") is None
+    assert [e.kind for e in w.log if e.kind == "person.died"], "the death was never logged"
+    choose, sent = _dispatching(w, "p_other")
+    P._run(w, choose)
+    assert sent, "the dispatch was never issued; the control observes nothing"
+    assert not [e for e in w.log if e.kind in ("person.demanded", "person.individuated")]
+    assert "p_other" not in w.persons
+
+
 # --------------------------------------------------------------------------------------
 # THE CARRIED FALSIFIER: `Person.weight` / the envelope written by anything but CENSUS/MATTER
 # fails; a stored aggregate where a Query is required fails.
 # --------------------------------------------------------------------------------------
 
 _SEASON = Path(__file__).resolve().parents[1]
-_OWNED = {"weight": {"loop/census.py", "loop/matter.py"},
+_OWNED = {"weight": {"loop/census.py"},               # write_matrix.yaml: `weight` steps [CEN] only
           "envelope": {"loop/census.py", "loop/matter.py",
                        # WORLD-GEN, NOT A STEP: probe `W9` seeds its `tiny_world`'s envelope before
                        # any season runs, and then moves it through the gate at MATTER. Seeding a
@@ -527,23 +563,26 @@ def test_se01_falsifier_no_module_but_census_or_matter_writes_weight_or_the_enve
 @pytest.mark.parametrize("kind, field, value", [("Person", "weight", 40),
                                                 ("Rung", "envelope", [1])])
 def test_se01_falsifier_the_gate_refuses_weight_and_the_envelope_at_resolve(kind, field, value):
-    """THE GATE HALF: a write of `(Person, weight)` or `(Rung, envelope)` at RESOLVE, with the ACTS
-    token RESOLVE is handed, is FORBIDDEN by the write matrix (`weight` is `[CEN]`, `envelope`
-    `[MAT, CEN]`), and the carrier is untouched. The same write at CENSUS is admitted -- so the
-    refusal is the step's, not the row's absence."""
+    """THE GATE HALF: a write of `(Person, weight)` or `(Rung, envelope)` at RESOLVE is FORBIDDEN by
+    the write matrix (`weight` is `[CEN]`, `envelope` `[MAT, CEN]`), and the carrier is untouched.
+    ⚠ THE TWO ARMS DIFFER IN THE STEP ALONE: the same MATTER token, driver, emission and subject, so
+    only the matrix's step check can have refused the first (an ACTS token at RESOLVE would also be
+    refused by the class check, and deleting the step check would leave that test green)."""
     w = P.tiny_world()
     rec = w.persons["p_mid"] if kind == "Person" else w.rungs["S"]
     was = getattr(rec, field)
+
+    def write():
+        w.write(field, mint_token(w, WriteClass.MATTER), lambda: setattr(rec, field, value),
+                record_kind=kind, fieldname=field, driver="Event",
+                emits=f"{field}.changed", subject=rec.id, causes=[ROOT])
+
     w.step = Step.RESOLVE
     with pytest.raises(Forbidden):
-        w.write(field, mint_token(w, WriteClass.ACTS),
-                lambda: setattr(rec, field, value),
-                record_kind=kind, fieldname=field, driver="Act")
+        write()
     assert getattr(rec, field) == was, "a refused write moved the carrier"
     w.step = Step.CENSUS
-    w.write(field, mint_token(w, WriteClass.MATTER), lambda: setattr(rec, field, value),
-            record_kind=kind, fieldname=field, driver="Event",
-            emits=f"{field}.changed", subject=rec.id, causes=[ROOT])
+    write()
     assert getattr(rec, field) == value
 
 
