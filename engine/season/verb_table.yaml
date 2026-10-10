@@ -157,8 +157,6 @@ verbs:
     scale_note: "conferral seats an office, and an office sits at a rung"
     stratum:     "binding_decision"
     eligibility: ["remit:confer"]
-    referent_class: Office
-    referent_class_note: "IN-53 (H-203). THE REFERENT CLASS: the carrier type a Candidate of this verb must be about -- the office conferred. `decision/options.py::opening_set` forms a `confer` only from a question whose source declares `Office` (`rosters.yaml: question_sources.referent_class`; today `seat` alone), because a person-side reader has no World and cannot tell an office id from a rung, person, Record or Site id; `data/verbs.py` refuses at load a class no source yields. MEASURED at B-I before this column (`30d38a12`): formed on every referent a question named, refused by the fold on every one, and crowding `issue`/`levy`/`transfer` out of their scenes. The office the act names is read by `loop/predicates.py::office_named_by` (`subject`, or a hand-built act's `office`)."
     beneficiary: "subject"
     requires:    "the office's conferral basis, and 1-per-object: no live hold on the object, or the holder-Proposition has zero live commit (§54 it. 20)"
     writes:      ["Tenure.until", "Tenure.since"]
@@ -846,8 +844,6 @@ verbs:
     scale_note: "as `confer` -- it unseats the same office"
     stratum:     "binding_decision"
     eligibility: ["remit:revoke"]
-    referent_class: Office
-    referent_class_note: "IN-53 (H-203), as `confer`'s: formed only from a question whose source declares `Office` (today `seat`), the office unseated being the act's `subject` (`loop/predicates.py::office_named_by`)."
     beneficiary: "none"
     beneficiary_note: "revocation is taken AGAINST the holder and FOR the revoking remit -- an Office, which no Candidate carries. Same shape as `dispatch`."
     requires:    "the office's revocation basis, and a live hold exists"

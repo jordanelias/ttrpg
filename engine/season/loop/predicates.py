@@ -27,7 +27,6 @@ from __future__ import annotations
 
 from typing import Optional
 
-from ..data.requires import binding_from_act
 from ..data.rosters import BINDS_BASES, RELEASABLE_KINDS, RUNG_KINDS
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..state.carriers import Office, subject_of
@@ -170,7 +169,8 @@ def _req_confer(w: "World", a: "Act") -> bool:
     `04 §C.2`'s own F3 note names `confer` beside `revoke` as *"writing `Tenure.until` on an edge
     whose subject is somebody else"*, which is why the displacement is T-o and not a second reading
     of the conferral basis."""
-    obj = office_named_by(a)
+    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
+    obj = d.get("office")
     if not obj or obj not in w.offices:
         return False
     off = w.offices[obj]
@@ -189,22 +189,6 @@ def _req_confer(w: "World", a: "Act") -> bool:
         return False
     # G3: displacing the holder CLOSES HIS EDGE -- T-o, through the seat exercised.
     return holder == a.actor or may_revoke(w, a.actor, a.via, off)
-
-
-def office_named_by(a: "Act") -> "Optional[str]":
-    """THE OFFICE A `confer` OR `revoke` ACT NAMES -- the one reader `_req_confer`, `_req_revoke`,
-    `_eff_confer` and `_eff_revoke` share (IN-53 step 2).
-
-    A hand-built act supplies it on the payload's `office` key (the corpus overlays,
-    `corpus_run._check_office`); a COMPUTED act carries it as its `subject`, the referent of the
-    `seat` question it was formed from (`rosters.yaml: question_sources`), through
-    `binding_from_act`, the fold's own binding. `office` wins where both are present, so no
-    hand-built act changes meaning. `None` when the act names neither. Before this the four read
-    `office` alone, so a computed act passed nothing to the precondition and the effect wrote
-    nothing. `establish` is not a caller: the office it names does not exist yet
-    (`office_described_by`)."""
-    d = a.payload if isinstance(getattr(a, "payload", None), dict) else {}
-    return d.get("office") or binding_from_act(a).get("subject")
 
 
 def office_described_by(a: "Act") -> "Optional[Office]":
@@ -445,7 +429,8 @@ def _req_revoke(w: "World", a: "Act") -> bool:
     *"so long as"* made PURVIEW sufficient while Part E kept the remit necessary. Ruling (3) is
     silent on the remit, so the same question now reads *is the seat above sufficient?* -- still
     `H-91`'s, still not resolved by editing the transcribed `eligibility:` column."""
-    obj = office_named_by(a)
+    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
+    obj = d.get("office")
     if not obj or obj not in w.offices:
         return False
     off = w.offices[obj]
