@@ -647,6 +647,12 @@ def season_factor_of(w: World) -> float:
     if s is None:
         return base
     outcomes = w.fixtures.get("season_factor_draw")[s]
+    if not outcomes:
+        # An empty season entry has nothing to draw from; without this the modulus below is
+        # `% 0` and MATTER dies with a bare ZeroDivisionError naming neither the fixture nor the season.
+        raise Unspecified(f"`season_factor_draw` season {s} declares no outcomes", "H-26",
+                          needs="at least one multiplier per season, or `()` for the control",
+                          law="IN-21: each season of the year holds the equally likely multipliers it draws from")
     pick = int(H(w.world_seed, w.tick, "world", "season_factor"),
                # [JUSTIFIED: a RADIX, not a game value -- `H` returns a hexdigest, 16 reads it back as an integer (`ids.draw_factory`'s same non-quantity)]
                16) % len(outcomes)
