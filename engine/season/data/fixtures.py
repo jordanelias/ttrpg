@@ -528,6 +528,17 @@ DEFAULT_FIXTURES = Fixtures(
     # the number. `tests/test_territorial_subsistence.py` reads `H-125`'s `sweep:` off the register
     # and runs every non-control arm on the built realm; flipping the live default is THIS line.
     body_step=0,                       # `H-125`, swept 0 (control, SHIPPED) / 10 / 67
+    # v9 IN-34 FORCE-BODIES (#457 D2, answered [medium; Jordan to correct]: ageing and illness are in
+    # scope, a HAZARD READER only, rates swept). The hazard is `world_q.body_hazard`, a Query over
+    # `Person.born` (ID-13: never a stored value); MATTER's bodies pass draws against it.
+    # `age_step` is the chance of death added per season of age, `illness_rate` the age-free chance
+    # a season. Both ship at 0, THE CONTROL: no draw is taken and no body is written, so the season
+    # is today's. `age_at_build` is the birth-tick source -- every person the realm builds is this
+    # many seasons old at tick 0 (`Person.born = -age_at_build`), because no source authors an age:
+    # `references/npc_registry.yaml` carries `age: null  # [GAP: no age in canon]` on every row.
+    age_step=0.0,                      # `H-206`, swept 0 (control, SHIPPED) / 0.0005 / 0.005
+    illness_rate=0.0,                  # `H-207`, swept 0 (control, SHIPPED) / 0.005 / 0.05
+    age_at_build=0,                    # `H-206`'s site: declared, not swept (the rates are)
     # `W-E` / `H-123`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
     # NOT GO DOWN. Part E's `writes:` names the CELL and never the VALUE, and no in-chain document
     # supplies this one -- so it is declared, defaulted and swept rather than chosen in a body,

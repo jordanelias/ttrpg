@@ -645,6 +645,36 @@ def season_factor_of(w: World) -> float:
     return base * outcomes[pick]
 
 
+def age_of(w: World, pid: str) -> int:
+    """v9 IN-34: how many seasons old `pid` is -- `w.tick - Person.born`. READ OFF THE CLOCK, never
+    stored (IN-21's `season_of_year` precedent), so no write is needed for anyone to age."""
+    return w.tick - w.persons[pid].born
+
+
+def body_hazard(w: World, pid: str) -> float:
+    """v9 IN-34 FORCE-BODIES: THE CHANCE `pid` DIES OF AGE OR ILLNESS THIS SEASON. The one owner of
+    the term MATTER's bodies pass draws against; a Query over `Person.born` (ID-13: a hazard is a
+    reader over a field, never a stored value).
+
+    `illness_rate + age_step * age`, capped at 1 (`H-207`, `H-206`; both ship at 0, the control,
+    so this returns 0 and MATTER takes no draw). A rate outside [0, 1] raises (`telling_privacy`'s
+    rule, `H-190`): a NaN or a negative chance must refuse, not answer.
+
+    ⚠ A COHORT HAS NO HAZARD, AND THAT IS THE RECORDED POPULATION BOUND, NOT A SPECIAL CASE. A
+    cohort is a population (S9, `Person.is_cohort`; `ED-IN-0255`), and what bounds a population is
+    E-1's answer as recorded -- matter plus hearth capacity (`ED-SE-0051`, RR-2) -- not one
+    person's old age. Ageing is an individual's (`weight == 1`)."""
+    age_step = float(w.fixtures.get("age_step"))
+    illness = float(w.fixtures.get("illness_rate"))
+    for name, rate in (("age_step", age_step), ("illness_rate", illness)):
+        if not 0 <= rate <= 1:        # `not ... <=`, so a NaN is refused too
+            raise ValueError(f"{name} {rate} is not a chance in [0, 1] (H-206 / H-207)")
+    p = w.persons[pid]
+    if p.is_cohort or (age_step == 0 and illness == 0):
+        return 0.0
+    return min(1.0, illness + age_step * max(0, age_of(w, pid)))
+
+
 def subsistence_draw(w: World) -> dict:
     """THE LARDER DRAW, AS A RECORD: `{person id: (home rung, {kind: (want, take, source)})}` -- what
     every housed eater asks of the larder ladder this season, what the ladder gives them, and from

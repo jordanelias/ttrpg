@@ -611,6 +611,11 @@ class Person:
     # is the model" MEANS. A bare 1000 here would be a second, silent copy of that scale — the
     # defect `G1` names — and it would drift the moment the fixture moved.
     body: int = field(default_factory=lambda: DEFAULT_FIXTURES.get("condition_scale"))
+    # v9 IN-34: THE BIRTH TICK, the one field the bodies clock adds. Age is NOT stored -- it is
+    # `w.tick - born`, read by `queries/world_q.py::age_of`, and the hazard is a Query over it
+    # (`world_q.body_hazard`, ID-13). Default: `-age_at_build` (`H-206`), the fixture, because no
+    # source authors a person's age; a literal here would be a second, silent copy of it.
+    born: int = field(default_factory=lambda: -DEFAULT_FIXTURES.get("age_at_build"))
     # ⚠ `scar` IS `{element: count}` -- IN-08 H3, `ED-IN-0261`'s scar model (*"counted PER
     # ELEMENT ... the unit is a COUNT, thresholds 1/2/3"*). An element is a PURSUIT name (the
     # fifteen of `references/descriptor_registry.yaml`'s `pursuit_roster`) or, since IN-08 H11, an

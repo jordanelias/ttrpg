@@ -4402,6 +4402,30 @@ rows:
     unblocks:  "a witnessed vow-break reading as a deed with its own sign"
     cite:      "The IN-11 plan entry (v9 `_part5` `### IN-11`) said its pricing becomes a `deed:commitment.ended` cell (IN-08); none was authored. A value choice: attach it to Jordan's CELL-VALUE AND COSINE PASS, `workplans/valoria_master_workplan_v9_part5.md` section J.2"
     source:    "v9 IN-11, B-I close Phase 3, 2026-10-10"
+  - id:        H-206
+    tier:      1
+    hole:      "THE AGEING RATE: how much a season of age adds to an individual's chance of dying that season. `AX-5` motion 2 (bodies) had hunger as its only writer; #457 D2 (answered [medium; Jordan to correct]: ageing and illness in scope, a hazard reader only, rates swept) gives it a second, and no source states the rate. Nor does any source state an AGE: `references/npc_registry.yaml` carries `age: null  # [GAP: no age in canon]` on every row, so the birth tick is declared once, not authored per person"
+    kind:      "NUMBER"
+    owner:     "the bodies clock (`queries/world_q.py::body_hazard`, read by `loop/matter.py`'s bodies pass)"
+    grade:     "assumption"
+    default:   "0 -- THE CONTROL ARM, SHIPPED: no draw is taken and no body is written, so the season is the pre-IN-34 season. `age_at_build` 0 (declared, not swept): every person the realm builds is counted from the world's first season"
+    site:      "Fixtures age_step and age_at_build. `age_at_build` is read by `state/carriers.py`'s `Person.born` default (`-age_at_build`); `age_step` by `world_q.body_hazard` (`illness_rate + age_step * age_of`, capped at 1; a cohort has none), which `engine/season/loop/matter.py`'s bodies pass draws against once per living person per season (`draw_factory`, keyed (world_seed, tick, pid, `body_hazard`)); a hit is `(Person, exists)` at MAT through `World.remove_person`, emitting `person.died` chained to that person's prior `person.died`"
+    sweep:     [0, 0.0005, 0.005]
+    unblocks:  "#457 FORCE-BODIES' N-line -- natural vacancy and finite tenure; without it succession crises arise only through violence"
+    cite:      "v9 IN-34 (B-F). THE ARMS BRACKET A LIFETIME: at `0` nobody ages; at `0.0005` a person 40 seasons into play dies with chance 2% a season; at `0.005`, 20%. Which arm ships is Jordan's (the rate is #457 D2's gate). A COHORT IS EXEMPT BY THE RECORDED POPULATION BOUND, not by special case: what bounds a population is E-1's answer as recorded (`ED-SE-0051`, RR-2: matter plus hearth capacity), so the hazard is an individual's (`Person.is_cohort`, S9). CONTROL, MEASURED on `build_realm(0)` against B-F's base commit (`a1617930`, a `git worktree`): the new `Person.born` field moves `content_hash` BY SCHEMA ALONE (`repr` folds every field) -- build `2d0d1200` -> `919b9556`, one season `a53cceff` -> `aac62e80`, two seasons `286fd568` -> `de9cf306` -- and at the control every event kind and count over one season (7,526 events) and two (21,508) equals the base's, as does the ordered `(kind, id)` sequence of the two-season log. Executed: `engine/season/tests/test_in34_bodies_clock.py`. ⚠ THE FALSIFIER'S SECOND HALF IS NOT MET, MEASURED, AND NOT BUILT HERE: a seat-holder's death by age closes his `hold` (the office is vacant in the world, through the one cascade), but a MATTER-emitted `person.died` reaches NO ledger under the shipped `fan_out_mode` (`all_five`): its anchor is the dead person, `World.remove_person` has already removed him when WITNESS runs, so `place_of` answers `None` and no channel admits anyone (0 observers; 82 under `total`, the control mode). No claim names the dead holder, the office or the closed `hold`, so no vacancy claim is raised for anyone in reach. The same holds for SE-01's hunger death, which shares the path. Lifting it is a WITNESS-side change (a place for an actorless death's anchor, or the cascade's closed tenures named in the Event's changes), outside IN-34's EDITS (`loop/matter.py`, `state/carriers.py`)"
+    source:    "v9 IN-34 FORCE-BODIES (`workplans/valoria_master_workplan_v9_part5.md`), #457 D2"
+  - id:        H-207
+    tier:      1
+    hole:      "THE ILLNESS RATE: an individual's age-free chance of dying in a season. #457 D2 puts illness in scope beside ageing, as the same hazard reader, and states no rate"
+    kind:      "NUMBER"
+    owner:     "the bodies clock (`queries/world_q.py::body_hazard`)"
+    grade:     "assumption"
+    default:   "0 -- THE CONTROL ARM, SHIPPED (no draw, no write; see `H-206`)"
+    site:      "Fixtures illness_rate, read by `world_q.body_hazard` beside `age_step` (`H-206`), which `engine/season/loop/matter.py`'s bodies pass draws against"
+    sweep:     [0, 0.005, 0.05]
+    unblocks:  "deaths that do not wait on age -- vacancy early in a campaign, when every built person is age 0 (`H-206`'s `age_at_build`)"
+    cite:      "v9 IN-34 (B-F). THE ARMS: `0` none; `0.005` a season (about 2% a year over four seasons -- a background mortality); `0.05` a season (a plague arm, about one individual in twenty a season). Which ships is Jordan's. Executed, and the control measured, with `H-206` (`engine/season/tests/test_in34_bodies_clock.py`)"
+    source:    "v9 IN-34 FORCE-BODIES (`workplans/valoria_master_workplan_v9_part5.md`), #457 D2"
 
 
 discharges:

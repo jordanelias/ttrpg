@@ -26,7 +26,7 @@ from ..data.requires import SHORTFALL_PREDICATE, Observation
 from ..queries import world_q
 from ..state.carriers import Event
 from ..state.gate import Token
-from ..state.ids import H, ROOT
+from ..state.ids import H, ROOT, draw_factory
 from ..trace_log import TRACE
 
 
@@ -453,6 +453,34 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                     record_kind="Person", fieldname="exists", driver="Event",
                     emits="person.died", subject=pid,
                     causes=[prior_d] if prior_d else [ROOT])
+
+    # -- THE BODIES CLOCK: AGEING AND ILLNESS (v9 IN-34, FORCE-BODIES) ------------
+    #
+    # #457 D2 answered [medium; Jordan to correct]: ageing and illness are in scope, a HAZARD READER
+    # only, rates swept. The hazard is `world_q.body_hazard` -- a Query over `Person.born` -- and
+    # this pass is its one writer: ONE KEYED DRAW per living person (`draw_factory`, keyed on
+    # (world_seed, tick, pid), so the same seed gives one death and no other stream moves), and a
+    # death through `World.remove_person`, the one cascade hunger and `fight` already route through.
+    # So a seat-holder dying here closes his `hold` exactly as a killing would, and the vacancy is
+    # the same vacancy. It is `(Person, exists)` at MAT, emitting `person.died`, chained to its own
+    # prior emission -- the hunger death's write above, reused rather than re-derived.
+    # ⚠ THE CONTROL TAKES NO DRAW: both rates ship at 0 (`H-206`, `H-207`), `body_hazard` returns 0
+    # and nothing is written, so the season is today's. Read AFTER the hunger pass, so a person who
+    # starved this barrier is already gone and cannot die twice.
+    draw = None
+    for pid in sorted(w.persons):
+        hazard = world_q.body_hazard(w, pid)
+        if hazard <= 0:
+            continue
+        draw = draw or draw_factory(w.world_seed, lambda: w.tick)
+        if draw(pid, "body_hazard").random() >= hazard:
+            continue
+        prior_d = w.last_emission_of("person.died", pid)
+        w.write("exists", token,
+                lambda pid=pid: w.remove_person(pid),
+                record_kind="Person", fieldname="exists", driver="Event",
+                emits="person.died", subject=pid,
+                causes=[prior_d] if prior_d else [ROOT])
 
     for rid in sorted(w.rungs):
         r = w.rungs[rid]
