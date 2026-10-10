@@ -983,10 +983,10 @@ def _operands(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixtures",
     # carrying `from`. `H-134`: a `seat` the caller names (`opening_set`, forming one Candidate per
     # seat) is the one the act will be exercised through and is used as given; `None` is the walk's
     # first seat, as before.
-    if seat is None and "from" in names:
-        seat = exercised_seat(p, row)
     if "from" not in names:
         seat = None
+    elif seat is None:
+        seat = exercised_seat(p, row)
     out: dict = {}
     for name in names:
         # `actor` is structural on both sides and is never carried; see `binding_of`.
