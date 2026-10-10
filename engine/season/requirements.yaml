@@ -392,7 +392,7 @@ rows:
       `wd_collect.py` reconvergence rate at `2x3`, OBSERVABLE < 96%) last read below the bar at the B-G
       control re-take (R-02's paragraph), on a tree before IN-10/IN-11/IN-50 changed what a fork can
       reach, and the plan reads `met` only off a `11` re-take on this tree. What is left is that re-take:
-      re-taken at B-I, see the commit.
+      re-taken at B-I (HEAD 66bf51f9, `2x3`, 143 cases, PYTHONHASHSEED=0, one run per arm, noise unmeasured): none 74.94 % · actor 42.64 % · total 41.56 %, against B-G's control (0f998f64) 74.90 / 43.94 / 42.40 (+0.04 / -1.30 / -0.84 pp); far below the 96 % bar, so the status stays not_met. Rates are reconverged / genuine summed over the four chunks per arm (the formula reproduces B-G's numbers exactly from its local chunks); `wd_collect.py` was not run, it requires all three fixture points.
       IN-10, IN-11 and IN-13's new edges are independent of this one.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [IN-10, IN-11, IN-13, FI-01, H-116, IN-50]

@@ -6677,7 +6677,16 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # occasion of its scene (`_act_events`), so the maturation chain no longer stops at a refusal and
     # the act-driven ceiling rises by three in BOTH arms; `depths[6]` still exceeds `depths[3]` by
     # one, as at the pin above, and the COUNT discriminates as before (asserted above).
-    # [GROUNDED: measured at IN-50 -- depths {0: 0, 3: 12, 6: 13} here, {0: 0, 3: 9, 6: 10} at its base `2a2ed152`; the chains of these two arms were not walked, the published chain of `test_w9_check2_...` was]
+    # [GROUNDED: measured at IN-50 -- depths {0: 0, 3: 12, 6: 13} here, {0: 0, 3: 9, 6: 10} at its base `2a2ed152`]
+    # THE WALK, AS THE MESSAGE BELOW DEMANDS (B-I close, scratch walk with this test's own `depth`,
+    # `none` deposit mode, 7 seasons, deepest maturation chain, oldest first):
+    # n=3 (12 links) `record.created, restore.refused, kill.refused, record.created, term.matured,
+    # record.created, finding.none, record.created, record.created, term.matured, term.matured,
+    # term.matured`; n=6 (13 links) the SAME chain with a fourth trailing `term.matured`. Both run
+    # through `record.created` (not `proposition.uttered`) and are act-mixed, actors `p_carin` and
+    # `p_bailiff`; the two refusals `restore.refused` and `kill.refused` are IN-50's new links (a
+    # refusal now cites its scene's occasion). So the depth is still set by the act mix: the one-link
+    # gap is a trailing stage on an otherwise identical chain, not the depth clause discriminating.
     assert (depths[3], depths[6]) == (12, 13), (
         f"the maturation depth ceiling moved: {depths}. This is a MEASUREMENT of a mixed chain "
         "whose length the act mix sets, not a discriminator — `H-80`'s discriminator is the COUNT, "
@@ -6735,7 +6744,7 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # [GROUNDED: re-measured at the `R8.1` commit (`seen` claims) -- the five-season chain reads 11 against the seven-season arm's 13; the act mix moved (the `seen` claim's rung subject raises Q2 for everyone standing there) and the RELATION this clause tests still holds]
     # [GROUNDED: re-measured at plan position `19c`, 2026-09-30 -- the five-season chain reads 10 against the seven-season arm's 12, moved by the same unit as the pin above (`migrate` formed and refused, spending scenes); the RELATION still holds, and with `migrate` unresolvable the pin reads 11 again]
     # [GROUNDED: re-measured at IN-08's cells commit (B-G) -- the five-season chain reads 8 against the seven-season arm's 9 (`depths[3]`, re-pinned above), moved by the same unit as that pin (the chooser re-scored on the 15x7 basis, the three persons' pursuits migrated, `challenge`/`accept` forming); the RELATION still holds]
-    # [GROUNDED: re-measured at IN-50 -- the five-season chain reads 11 against the seven-season arm's 12 (`depths[3]`, re-pinned above), 8 and 9 at its base `2a2ed152`; refusals now cite their occasion (`_act_events`), so both chains lengthen, and the RELATION still holds]
+    # [GROUNDED: re-measured at IN-50 -- the five-season chain reads 11 against the seven-season arm's 12 (`depths[3]`, re-pinned above), 8 and 9 at its base `2a2ed152`; refusals now cite their occasion (`_act_events`), so both chains lengthen, and the RELATION still holds. WALKED at the B-I close: the five-season chain is the seven-season 3-stage chain above less its last `term.matured` (`record.created, restore.refused, kill.refused, record.created, term.matured, record.created, finding.none, record.created, record.created, term.matured, term.matured`), through `record.created` and the two IN-50 refusal links]
     assert max(depth5(e) for e in mats5) == 11 < depths[3], (
         f"the longest maturation chain over FIVE seasons is {max(depth5(e) for e in mats5)}, not "
         "the 9 measured under `U2`, or it is not below the seven-season figure above. The ceiling "
