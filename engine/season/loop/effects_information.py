@@ -142,8 +142,6 @@ def _mint_document(w: "World", a: "Act", kind: str, content, rung: str) -> Chang
         term = w.fixtures.get("record_stage_term")
         stages = [(w.tick + (i + 1) * term, f"stage{i + 1}", a.id) for i in range(n)]
     rec = Record(rid, rung, kind, subject_matter=content, stages=stages)
-    # S13: possession is a `hold` Tenure owned by the holder, never a field on the Record. The
-    # maker holds what they made until they part with it.
     held = _makers_hold(w, a.actor, rid)
 
     def perform() -> None:

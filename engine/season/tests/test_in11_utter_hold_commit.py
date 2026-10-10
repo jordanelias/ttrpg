@@ -14,8 +14,8 @@ What each block proves, and the control that stops it passing vacuously:
      witnessed mixed release names the Proposition to non-actor witnesses (A2, accepted as inert).
   3. COMPUTED PLAY: one seeded `build_realm(0)` season through the real chooser executes `commit`
      at least once, and every Proposition an executed `commit` names was uttered by an act this
-     season and was held by its committer at some point up to the commit's tick (tick-granular: the
-     test does NOT show the hold was what routed the commit, see the comment at the assertion). Before IN-11 the same
+     season and was held by its committer at some point up to the commit's tick (tick-granular; see
+     the comment at the assertion for what that does not show). Before IN-11 the same
      season attempted `commit` and refused every attempt (`aperture 1 0`: 35 of 35).
   4. THE CUT IS COMPLETE AND THE LOADER POLICES IT: `repudiate` is not a verb, and a planted
      `repudiate` cell in the alignment table or in `affiliation_engagement`'s shared column is
@@ -136,7 +136,7 @@ def test_in11_a_witnessed_mixed_release_names_the_proposition_to_every_witness()
 
 def test_in11_commit_executes_in_a_computed_realm_season_on_a_proposition_its_committer_holds():
     from engine.season.decision import make_chooser
-    from engine.season.state.ids import H, draw_factory
+    from engine.season.state.ids import draw_factory
     w = build_realm(seed=0)
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
@@ -149,9 +149,7 @@ def test_in11_commit_executes_in_a_computed_realm_season_on_a_proposition_its_co
         f"`commit` executed {kinds['commitment.made']} times in a computed realm season "
         f"(refused {kinds['commitment.refused']}) -- IN-11 is not built")
     # The acts behind each `commitment.made`: computed (the chooser's), on a Proposition uttered by
-    # an act this season, and the committer held it up to this tick. This shows the computed commit is
-    # on a Proposition the season uttered and that a hold existed; it does not show the hold was the
-    # route to the commit (one committer had already released it, below).
+    # an act this season, and the committer held it up to this tick (caveat at the assertion below).
     uttered = {f"prop:{a.id}" for a in w.acts if a.verb == "utter"}
     checked = 0
     for e in (e for e in w.log if e.kind == "commitment.made"):

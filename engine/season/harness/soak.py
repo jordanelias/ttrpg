@@ -152,7 +152,7 @@ def _act_row(seed: int, arm: str, batch: int, season: int, tick: int, a, new_ev:
     events = [{"id": e.id, "kind": e.kind, "degree": e.degree, "causes": list(e.causes)}
               for e in new_ev if d.act_of.get(e.id) is a]
     # `occasioned_by`: the FIRST act-Event's own `causes`, minus the act's own id -- the fold
-    # already stamped its answer there (`[a.id] + self._occasion_ids(w, a)`, `loop/resolve.py`),
+    # already stamped its answer there (`_act_events` in `loop/resolve.py`: `[a.id]` then the occasion),
     # so this reads it rather than re-deriving it through `world_q.occasioned_by`, which would be
     # a second route to one fact and a full reverse log scan per call (CLAUDE.md §8).
     first_ev = next((e for e in new_ev if d.act_of.get(e.id) is a), None)

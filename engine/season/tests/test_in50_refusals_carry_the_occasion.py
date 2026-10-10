@@ -3,7 +3,7 @@
 `loop/resolve.py::_fold`'s success return added `self._occasion_ids(w, a)` to `causes[]` and every
 refusal return stamped `[a.id]` alone, so an act chosen from a scene another person's act-Event
 occasioned dropped that edge the moment it was refused. The rule now lives once, in
-`_act_events(self, w, a, kinds, causes, ...)`, and the three refusals that built `Event` directly
+`_act_events(self, w, a, kinds, ...)`, and the three refusals that built `Event` directly
 go through it. This file is the counterfactual: each refusal route is driven with an occasion
 present, and the same route with the append neutered fails (run once, 2026-10-09, IN-50: the
 count is in the commit and in `engine/season/requirements.yaml` R-01's `measured:`).
@@ -17,8 +17,7 @@ What each test observes, and the control that stops it passing vacuously:
   6.   THE NO-SCENE CONTROL: an act with no scene has no occasion and keeps `[a.id]` alone on every
        route -- and so does an act whose scene carries `occasion=None` or a `need` question -- so
        the append is not padding every `causes[]` (over-citation scores R3 for free).
-  7.   `_act_events` ASKED DIRECTLY: order, de-duplication, the caller's list unmutated, and one
-       independent list per Event.
+  7.   `_act_events` ASKED DIRECTLY: the act then the occasion, and one independent list per Event.
   8.   A REAL RUN over two corpus cases: refusals in a played-out case carry an edge to ANOTHER
        person's act-Event, and `_r3_propagates` reads True.
 """
@@ -61,6 +60,13 @@ def _resolve(w, d, act, depth=2):
     return d.resolve(mint_token(w, WriteClass.ACTS), [act], depth)
 
 
+def _over_attempt(w, act_id, **kw):
+    """A `work` whose obstacle is past the refusal multiple of its pool: the S27.4 `attempt.refused`."""
+    a = Act(id=act_id, actor=ACTOR, verb="work", **kw)
+    a.obstacle, a.pool = w.fixtures.get("obstacle_refusal_multiple") * 10 + 1, 1
+    return a
+
+
 def _check_route(events, act, occasion, kinds):
     """Every Event the route emitted names the act FIRST and then the occasion, once each."""
     assert events, "the route emitted nothing; the fixture no longer reaches it"
@@ -83,8 +89,7 @@ def test_in50_route_1_act_ineligible_cites_the_occasion():
 # -- 2 ---------------------------------------------------------------------------------------------
 def test_in50_route_2_attempt_refused_cites_the_occasion():
     w, d, occ = _world_with_occasion()
-    a = Act(id="a_over", actor=ACTOR, verb="work", scene=SCENE)
-    a.obstacle, a.pool = w.fixtures.get("obstacle_refusal_multiple") * 10 + 1, 1
+    a = _over_attempt(w, "a_over", scene=SCENE)
     out = _resolve(w, d, a)
     _check_route([e for e in out if e.kind == "attempt.refused"], a, occ, ("attempt.refused",))
 
@@ -132,8 +137,7 @@ def test_in50_control_an_act_with_no_scene_keeps_its_own_id_alone():
     w, d, _occ = _world_with_occasion()
     bare = Act(id="a_bare", actor="p_removed", verb="work")                  # no scene at all
     unknown = Act(id="a_unknown", actor="p_removed", verb="work", scene="sc_nowhere")
-    over = Act(id="a_bare_over", actor=ACTOR, verb="work")
-    over.obstacle, over.pool = w.fixtures.get("obstacle_refusal_multiple") * 10 + 1, 1
+    over = _over_attempt(w, "a_bare_over")
     # A SCENE THAT EXISTS AND CARRIES NO OCCASION (`occasion=None`), and one whose occasion is a
     # `need` Question about the same claim the occasioned fixture's question names: `occasioned_by`
     # returns nothing for either, so the act keeps `[a.id]` -- the scene's presence alone adds nothing.
@@ -154,18 +158,14 @@ def test_in50_control_an_act_with_no_scene_keeps_its_own_id_alone():
 
 
 # -- 7 ---------------------------------------------------------------------------------------------
-def test_in50_act_events_appends_dedupes_and_leaves_the_callers_list_alone():
+def test_in50_act_events_cites_the_act_then_the_occasion_one_list_per_event():
     w, d, occ = _world_with_occasion()
     a = Act(id="a_direct", actor=ACTOR, verb="work", scene=SCENE)
-    given = [a.id, occ, a.id]                       # the occasion already present, the act twice
-    out = _act_events(d, w, a, ("k.one", "k.two"), given)
-    assert given == [a.id, occ, a.id], "the caller's causes list was mutated"
+    out = _act_events(d, w, a, ("k.one", "k.two"))
     assert [e.kind for e in out] == ["k.one", "k.two"]
     assert [e.causes for e in out] == [[a.id, occ]] * 2, [e.causes for e in out]
     assert out[0].causes is not out[1].causes, "two Events share one causes list"
     assert out[0].id == H(w.world_seed, w.tick, a.actor, f"k.one:{a.id}"), "the id scheme moved"
-    again = _act_events(d, w, a, ("k.one",), [a.id])
-    assert again[0].causes == [a.id, occ], "the occasion was not appended to a bare [a.id]"
 
 
 # -- 8 ---------------------------------------------------------------------------------------------

@@ -351,10 +351,8 @@ class Said(NamedTuple):
     A NamedTuple, not a Claim: it has no id, holder, `when` or source, because it is not a belief
     anyone holds -- it is a thing said. `chain` is the chain of the claim the teller picked
     (`said_of` copies `Claim.chain`; `()` for a claim the teller holds firsthand), and the told
-    deposit extends it by the teller. A confidence's circle is NOT carried here (v9 IN-18 `G6`,
-    `H-197`): whether THIS telling is private is drawn at WITNESS (`loop/witness.py::_circle_of`) and
-    lands on the hearer's `Claim.visibility`; whether it BREAKS a circle the teller holds the claim
-    under is read at the fold, off the teller's own ledger (`loop/resolve.py::_confidence_broken`)."""
+    deposit extends it by the teller. A confidence's circle is NOT carried here (see
+    `Claim.visibility`)."""
     subject: str
     predicate: str
     value: Any

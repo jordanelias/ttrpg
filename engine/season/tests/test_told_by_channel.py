@@ -2099,6 +2099,7 @@ def _g6_world(rate):
     emitted, returning the kinds; `told(pid)` is `pid`'s told copies of the cell."""
     from ..data.fixtures import DEFAULT_FIXTURES
     from ..data.matrix import Step
+    from ..data.verbs import VERB_TABLE
     from ..seam import Resolution
     fx = DEFAULT_FIXTURES if rate is None else DEFAULT_FIXTURES.sweep("telling_privacy", rate)
     w = P.tiny_world(fx)
@@ -2123,7 +2124,7 @@ def _g6_world(rate):
         act = Act(id=f"a_g6_{n[0]}", actor=teller, verb="tell",
                   payload={"subject": _G6_SUBJECT, "to": to, "said": said})
         w.step = Step.RESOLVE
-        ok, kinds, _ = d._admits(w, act, _tell_row())
+        ok, kinds, _ = d._admits(w, act, VERB_TABLE["tell"])
         assert ok, f"the telling {teller} -> {to} was refused ({kinds}); the fold never ran"
         w.acts.append(act)
         out = d._fold(w, mint_token(w, WriteClass.ACTS), act, Resolution(band, {}))
@@ -2139,11 +2140,6 @@ def _g6_world(rate):
                 and (c.subject, c.predicate, c.value) == (_G6_SUBJECT, _G6_PRED, _G6_VALUE)]
 
     return w, tell, told
-
-
-def _tell_row():
-    from ..data.verbs import VERB_TABLE
-    return VERB_TABLE["tell"]
 
 
 def test_g6_a_private_telling_deposits_the_circle_teller_and_addressee():

@@ -378,7 +378,7 @@ rows:
       before this change (IN-11, `2a2ed152`: ARC 97 of 97, NPC 46 of 46), so the case no longer
       discriminates the repair; the falsifier is `engine/season/tests/test_in50_refusals_carry_the_occasion.py`
       (8 tests; with the append neutered 7 fail, the no-scene control stays green). The rule:
-      `loop/resolve.py::_act_events(self, w, a, kinds, causes, ...)` appends `self._occasion_ids(w, a)`
+      `loop/resolve.py::_act_events(self, w, a, kinds, ...)` appends `self._occasion_ids(w, a)`
       to `causes`, de-duplicated, the caller's list unmutated, on every Event an act emits; the three
       refusals that built `Event` directly (`act.ineligible`, S27.4 `attempt.refused`, the contest
       branch's `_admits` refusal) go through it, and `_fold`'s success return names `[a.id]` alone.

@@ -736,12 +736,9 @@ DEFAULT_FIXTURES = Fixtures(
     # and is silent on shipping `valence`, and `valence` moves what tellings carry.
     # [JUSTIFIED: engine/season/hole_register.yaml H-196 -- the slant arm; no document says which claim a teller chooses to pass on, so both readings are declared and swept newest / valence]
     said_slant="newest",               # `H-196`, swept newest (control, SHIPPED) / valence
-    # `H-197` (v9 IN-18 `G6`, confidences). HOW OFTEN A TELLING IS MADE IN CONFIDENCE: the chance,
-    # one keyed draw per telling (`loop/witness.py::_circle_of`), that every hearer of it holds the
-    # told claim under the circle `(teller, addressee)` instead of `own`; a holder who later tells
-    # that claim to somebody outside its circle emits `confidence.broken` (`loop/resolve.py::
-    # _confidence_broken`). Recipiency is unchanged -- WITNESS still decides who hears (§10 decision 1,
-    # private whispers not built). `0` is the CONTROL and is SHIPPED [ASSUMPTION; medium; Jordan to
+    # `H-197` (v9 IN-18 `G6`, confidences). HOW OFTEN A TELLING IS MADE IN CONFIDENCE: the chance
+    # `loop/witness.py::_circle_of` draws once per telling (its docstring says what a circle is and does).
+    # `0` is the CONTROL and is SHIPPED [ASSUMPTION; medium; Jordan to
     # correct; revert: none needed while it ships at 0 -- shipping it on is this one value], on
     # `H-190`'s precedent: the plan names the shape (a swept chance at control 0) and is silent on
     # shipping it on. At 0 no draw is taken, every deposit is `own`, and no circle exists for a
