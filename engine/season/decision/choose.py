@@ -45,8 +45,8 @@ from ..queries.person_q import confliction, intent_named, intent_said, regard, s
 from ..state.carriers import Act, Candidate, Person, Question, Scene, Sensation, View
 # `project` is DEFINED in `options.py` (see this module's docstring) and imported here because
 # `make_chooser`'s score calls it; `options` never imports this module.
-# `exercised_seat` is `options.py`'s own G3 helper (`via=exercised_seat(...)`, below).
-from .options import exercised_seat, opening_set, project, subject_is_opponent
+# `seat_of` is `options.py`'s own G3 helper (`via=seat_of(...)`, below).
+from .options import opening_set, project, seat_of, subject_is_opponent
 
 STANCE_POLARITIES = roster("stance_polarities")
 
@@ -501,7 +501,12 @@ def _payload_of(c: "Candidate") -> Optional[dict]:
     reads it to say what an act NAMES, `claim_subjects` reads it to say what a deposit is ABOUT,
     and `tell` -- whose `writes:` is empty by design -- has nothing else that knows what was told.
     Dropping it for a verb whose requirement happens not to mention `subject` would break the
-    causal graph for the one verb the corpus most relies on."""
+    causal graph for the one verb the corpus most relies on.
+
+    ⚠ `H-134`: A Candidate formed among several seats carries `VIA` in its operands, and it STAYS on
+    the payload -- not as a binding (`binding_of` drops it; `Act.via` is what the fold reads) but
+    because `act_key` and `opportunity_key` read the payload, at three sites that see no Candidate,
+    and two acts of one person through two seats must not share an id or an opportunity."""
     d = dict(c.operands or {})
     if c.subject:
         d.setdefault("subject", c.subject)
@@ -567,10 +572,13 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
                      # the same walk), so a remit act names the seat whose remit it is and an
                      # `own` act names none. The fold's eligibility, `_req_revoke`/`_req_confer`
                      # and the write gate ask THIS seat and no other (`04:332`).
-                     # `T4`: the id is of `act_key` -- the subject, plus `tell`'s hearer (`data/verbs.py`).
+                     # `H-134`: `seat_of` -- the seat `opening_set` formed the Candidate for where
+                     # the person holds several that grant the act, else `exercised_seat`'s one.
+                     # `T4`: the id is of `act_key` -- the subject, plus `tell`'s hearer (`data/verbs.py`);
+                     # `H-134`: plus the seat, for a Candidate formed among several.
                      [Act(mint(p.id, c.verb, act_key(c.verb, c.subject, c.operands)), p.id, c.verb,
                           payload=_payload_of(c),
-                          via=exercised_seat(p, VERB_TABLE.get(c.verb))) for c in chunk],
+                          via=seat_of(p, c)) for c in chunk],
                      # `H-77`: a scene carrying more than one interaction is the EXTENDED one.
                      # This is what `extended` MEANS, and until W17's adversarial pass nothing
                      # ever set it -- so `Scene.cost` returned 1 unconditionally, H-77's sweep

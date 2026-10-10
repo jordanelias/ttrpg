@@ -159,8 +159,11 @@ def _bound(binding: dict, name: str):
 COMPARATORS = {">=": lambda a, b: a >= b, "<=": lambda a, b: a <= b}
 
 # THE SEAT AN ACT EXERCISES, AS A BINDING KEY (plan position `19`). Structural like `actor` -- the
-# Act carries it (`Act.via`), the payload never does -- so it is NOT a `requires_operands` member and
-# `binding_of` adds it beside the actor. One spelling for the writer (`binding_of`) and the one
+# Act carries it (`Act.via`), the payload does not -- so it is NOT a `requires_operands` member and
+# `binding_of` adds it beside the actor. (`H-134`: ONE exception, and not a binding: a Candidate formed
+# among several seats names its seat under this key in its operands, so the payload of its act repeats
+# `Act.via` as a DISCRIMINATOR for `data/verbs.py::act_key` and `opportunity_key`; `binding_of` drops
+# it like any key outside `requires_operands` and `Act.via` is what the fold reads.) One spelling for the writer (`binding_of`) and the one
 # reader (`Basis.check`).
 VIA = "via"
 

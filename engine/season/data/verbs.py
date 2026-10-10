@@ -47,7 +47,7 @@ from typing import Optional
 from . import files
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .matrix import MATRIX, Step
-from .requires import REQUIRES_OPERANDS, TypedRequires, build_typed_requires
+from .requires import REQUIRES_OPERANDS, VIA, TypedRequires, build_typed_requires
 from .rosters import (
     PURSUIT_AXES, PURSUITS, RELEASABLE_KINDS, RUNG_KINDS, STRATA, TENURE_KINDS, load_yaml,
     require_member, roster, roster_map,
@@ -902,7 +902,14 @@ def act_key(verb: str, subject, operands) -> str:
     the teller knows, so two acts in one deliberation shared `(actor, verb, subject)` and therefore
     one id, and `state/acts.py` refused the second (`act id ... is already in the store`) on the
     first realm season. Every row that binds no such operand answers its subject alone, so its ids
-    are byte-identical to before. ONE OWNER for both minting sites: `decision/choose.py::pack_scenes` and
+    are byte-identical to before.
+
+    ⚠ `H-134`: AND THE SEAT, WHEN THE CANDIDATE WAS FORMED AMONG SEVERAL. A person holding two seats
+    that grant the same act forms one Candidate per seat (`decision/options.py::opening_set`), the
+    seat riding in the operands under `VIA`; two of them share `(actor, verb, subject)`, so without it
+    they would share an id and `state/acts.py` would refuse the second. Present only for such a
+    Candidate -- a person with one seat carries no `VIA`, so every id is byte-identical to before.
+    ONE OWNER for both minting sites: `decision/choose.py::pack_scenes` and
     `loop/deliberate.py::_qualify_by_round` (`04 PART D row 35`: purpose uniqueness is a
     convention, and this is where it is kept)."""
     key = "" if subject is None else str(subject)
@@ -912,6 +919,8 @@ def act_key(verb: str, subject, operands) -> str:
         for n in row.requires_typed.known_person_operands():
             if ops.get(n) is not None:
                 key += f">{ops[n]}"
+    if ops.get(VIA) is not None:
+        key += f"@{ops[VIA]}"
     return key
 
 
@@ -940,9 +949,16 @@ def opportunity_key(verb: str, subject, operands) -> Optional[tuple]:
     row = VERB_TABLE.get(verb)
     ops = operands if isinstance(operands, dict) else {}
     other = ops.get(row.counterparty) if row is not None and row.counterparty else None
-    if other is None or other == subject:
-        return (verb, subject)
-    return (verb, subject, other)
+    if other == subject:
+        other = None
+    # ⚠ `H-134`: AND THE SEAT, WHERE THE ACT WAS FORMED AMONG SEVERAL (`VIA` in the operands, `act_key`'s
+    # own condition). The same verb on the same subject through a different seat is a distinct
+    # opportunity -- the seat is who is acting -- so a revoke through the Duke seat that was refused
+    # or done does not bar the one through the King seat. A FOUR-part key, so it can never equal the
+    # two- or three-part key of a person with one seat, which is unchanged.
+    if ops.get(VIA) is not None:
+        return (verb, subject, other, ops[VIA])
+    return (verb, subject) if other is None else (verb, subject, other)
 
 
 def _check_sparse_table(name: str, cells: dict, rows: "set|tuple", row_what: str,
