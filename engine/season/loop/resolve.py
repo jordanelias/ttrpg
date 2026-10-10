@@ -35,7 +35,7 @@ from .. import manifest
 from ..epistemic import observers_for
 from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
                                  elements_violated_by)
-from ..queries.world_q import WorldReader, ceiling, occasioned_by
+from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_by
 from ..seam import ContestError, Resolution, contest, degree_of
 from ..state.carriers import Act, Event, StateChange
 from ..state.gate import Change, NoOpReceipt, Subject, Token, seat_hold
@@ -201,8 +201,8 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
     if not self._eligible(w, a, row):
         TRACE.decision(f"{a.actor} is not eligible for {a.verb}", "E4",
                        chose="emit the refusal", alternatives=["raise", "silently drop"])
-        return (False, row.refusal_for(ELIGIBILITY_CLAUSE) or ("act.ineligible",),
-                Verdict(UNKNOWN, ()))
+        return (False, _demand_earned(w, a, row.refusal_for(ELIGIBILITY_CLAUSE), False)
+                or ("act.ineligible",), Verdict(UNKNOWN, ()))
     verdict = Verdict(UNKNOWN, ())
     if row.has_precondition:
         if row.requires_typed is not None:
@@ -274,7 +274,8 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
                            alternatives=["raise (no Event, no witness, no arc)"])
             # `verdict.failed` is the conjunct that decided it (`data/requires.py::evaluate`); a
             # predicate row and an unnamed cell carry `None`, which only a flat row reaches.
-            return (False, row.refusal_for(verdict.failed) or ("act.refused",), verdict)
+            return (False, _demand_earned(w, a, row.refusal_for(verdict.failed), True)
+                    or ("act.refused",), verdict)
     # ⚠ PLAN POSITION `14` (U7-own): THE SECOND PARTY, ASKED HERE AND NOWHERE ELSE. `ED-IN-0210`
     # ruling 1 -- *a real interaction has a COUNTERPARTY*; a row naming its `counterparty:` operand
     # is refused when the act names nobody there, or names the actor (the `Tenure(X, X)` fiat). The
@@ -289,12 +290,36 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
             TRACE.decision(f"{a.verb} by {a.actor}: no second party on `{row.counterparty}`",
                            "ED-IN-0210", chose="emit the refusal",
                            alternatives=["admit a self-relation (a fiat)"])
-            return (False, row.refusal_for(COUNTERPARTY_CLAUSE) or ("act.refused",), verdict)
+            return (False, _demand_earned(w, a, row.refusal_for(COUNTERPARTY_CLAUSE), False)
+                    or ("act.refused",), verdict)
     return (True, (), verdict)
 
 
 # `G6` (`H-197`): declared on `tell`'s told bands; kept only when `_confidence_broken` says so.
 CONFIDENCE_BROKEN = "confidence.broken"
+
+# v9 SE-01 (`24g`) / `H-51`: declared on `dispatch`'s refusal; kept only when `_demand_earned` says so.
+PERSON_DEMANDED = "person.demanded"
+
+
+def _demand_earned(w: "World", a: Act, kinds: tuple, at_precondition: bool) -> tuple:
+    """P3 -- `person.demanded` IS EARNED BY THE ACT, NOT BY THE ROW: `CONFIDENCE_BROKEN`'s shape,
+    applied to a refusal. A row that declares the kind (`dispatch`, `verb_table.yaml`'s
+    `refusal_note:`) emits it only from its PRECONDITION refusal and only when the act's subject is
+    an id the world does not hold (`world_q.demanded_person`, the one owner). An ineligible act
+    demands nobody: it was refused before it asked anything of the world. Every other kind passes
+    untouched, so a row that does not declare it moves by no byte.
+
+    ⚠ THE FORCED CHOICE, AS AT `G6`: a keyed `emits_on_refusal:` would say WHICH clause refused, but
+    keying needs a typed precondition (`data/verbs.py`, invariant 4's per-conjunct half), and typing
+    `dispatch` would also hand its cell to the person side (`belief_contradicts`, `operands_for`), a
+    formation change this position neither needs nor measured. And even keyed, `existence` of a
+    `Person` cannot tell *names nothing* (a demand) from *names a building* (14 of the shipped
+    realm's 15 dispatches) -- one conjunct, two meanings."""
+    if PERSON_DEMANDED not in kinds:
+        return kinds
+    keep = at_precondition and demanded_person(w, a) is not None
+    return tuple(k for k in kinds if k != PERSON_DEMANDED or keep)
 
 
 def _fold(self, w: "World", token: Token, a: Act,

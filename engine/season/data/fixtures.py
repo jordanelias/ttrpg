@@ -397,6 +397,12 @@ DEFAULT_FIXTURES = Fixtures(
     # what is injected here is a degenerate one. The sweep is on its value, which is the only axis
     # a constant has; a real distribution is a different hole and is not invented here.
     season_factor=1.0,                # `H-26`, swept 0.5 / 1 / 2
+    # v9 IN-21 / `H-26`'s DISTRIBUTION: one tuple per season of the year (so the year's length is the
+    # table's), each holding the equally likely multipliers on `season_factor` that season. `()` is
+    # the CONTROL: no year, no draw, the bare constant above. The on arm is the declared sweep
+    # `((0.5, 1.0, 2.0),) * 4`; a drought-only arm is `((0.5,),) * 4`. Drawn by
+    # `world_q.season_factor_of`, keyed on (world_seed, tick).
+    season_factor_draw=(),            # `H-26`, swept () / ((0.5,),)*4 / ((0.5, 1.0, 2.0),)*4
     # ⚠ `W8` / `H-11`. #353 §10.4 makes `MatterKind` open and V2 gives the draw's SHAPE -- *from
     # the containing rung's stores, scaled by weight* -- and no weights. Registry row, not literal.
     subsistence_weight=SUBSISTENCE_WEIGHTS,
@@ -517,6 +523,10 @@ DEFAULT_FIXTURES = Fixtures(
     # `LB-3b` falsifiers set the fixture explicitly, so the behaviour is EXERCISED rather than
     # merely present (§0.2). Choosing the number needs a world that stocks a larder — which is
     # what makes this a design call rather than a default nobody looked at.
+    # ⚠ v9 SE-01 (`24g`): THE LIVE ARM IS BUILT AND EXERCISED, AND THIS VALUE IS STILL NOT CHOSEN.
+    # J-6 settles the SHAPE -- a fixture, the control kept for the corpus, a one-line revert -- not
+    # the number. `tests/test_territorial_subsistence.py` reads `H-125`'s `sweep:` off the register
+    # and runs every non-control arm on the built realm; flipping the live default is THIS line.
     body_step=0,                       # `H-125`, swept 0 (control, SHIPPED) / 10 / 67
     # `W-E` / `H-123`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
     # NOT GO DOWN. Part E's `writes:` names the CELL and never the VALUE, and no in-chain document
