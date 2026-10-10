@@ -96,7 +96,7 @@ def test_h134_the_second_seat_forms_a_candidate_is_packed_via_it_and_the_fold_ad
     revokes = [c for c in _candidates(w, TWO) if c.verb == "revoke" and c.subject == TARGET]
     assert sorted(c.operands["via"] for c in revokes) == ["off_crown", "off_mayor"], revokes
 
-    acts = [a for a in _acts(w, TWO, revokes)]
+    acts = _acts(w, TWO, revokes)
     assert sorted(a.via for a in acts) == ["off_crown", "off_mayor"]
     assert len({a.id for a in acts}) == 2, "two seats, one act id"
     admitted = [a.via for a in acts if _preds._req_revoke(w, _with_office(a))]
@@ -174,8 +174,8 @@ def test_h134_control_one_seat_forms_the_same_candidates_and_ids_as_before():
         assert a.via == exercised_seat(p, VERB_TABLE[a.verb])
         assert a.id == mint(ONE, a.verb, a.payload["subject"]), a.verb
         assert "via" not in a.payload
-        assert opportunity_key(a.verb, a.payload["subject"], a.payload) in {
-            (a.verb, a.payload["subject"])}
+        assert opportunity_key(a.verb, a.payload["subject"], a.payload) == (
+            a.verb, a.payload["subject"])
         checked += 1
     assert checked >= 20 and any(a.via == "off_mayor2" for a in acts), checked
     assert _control_reading() == _CONTROL

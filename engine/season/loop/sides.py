@@ -49,7 +49,7 @@ def sides_of(w: World, a: Act, target: Optional[str],
 
     - `mass_battle` (`a field`, `march`'s prize): `claimants` is the MUSTERED ARMY at the actor's
       own nearest settlement, under the FACTION OF THE OFFICE THE ACT WAS EXERCISED THROUGH --
-      `a.via`, `exercised_seat`'s own field (`decision/options.py`), read here rather than
+      `a.via`, `seat_of`'s own field (`decision/options.py`), read here rather than
       re-derived, because the chooser already computed which seat granted the act and the fold
       trusts the same value everywhere else it appears (`_eligible`'s `remit:` branch,
       `loop/resolve.py`). `subject` is the DEFENDING faction -- `world_q.holder_faction_of(w,

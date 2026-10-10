@@ -108,7 +108,7 @@ def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
     that is supposed to be there.
 
     ⚠ PLAN POSITION `19`: AND THE SEAT, FOR THE SAME REASON. `via` is the seat the Candidate's act
-    will be exercised through -- `decision/options.py::exercised_seat`, the value `pack_scenes` puts
+    will be exercised through -- `decision/options.py::seat_of`, the value `pack_scenes` puts
     on `Act.via` -- and `binding_of` carries it exactly as `binding_from_act` does for the fold, so a
     `basis` conjunct (§F.24a form 7, `data/requires.py::Basis`) asks the person's ledger about THE
     SAME seat the fold will ask the world about. Omitted (`None`), the conjunct is UNKNOWN, which

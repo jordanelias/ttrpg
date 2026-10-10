@@ -113,8 +113,8 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             TRACE.note(f"{p.id} refuses {verb!r}: its `{axis}` alignment exceeds their own "
                        f"projected weight {tolerance:+.3f} (ED-IN-0261)", "H-146")
             continue
-        # `19`: the seat this row's act would exercise -- `exercised_seat`, the same untraced walk
-        # `pack_scenes` names `Act.via` by -- for the belief test's `basis` conjunct below.
+        # `19`: the seat(s) this row's act would exercise -- the untraced walk `pack_scenes` names
+        # `Act.via` by (`seat_of`) -- for the belief test's `basis` conjunct below.
         # `H-134`: WHERE THE ADMITTING `remit:` ALTERNATIVE IS GRANTED BY SEVERAL OF THE PERSON'S
         # SEATS, EACH IS A SEAT THE ACT CAN BE EXERCISED THROUGH, and the Candidate is formed once
         # per seat (below) -- the fold's gate asks the one seat the act names. No seat is picked FOR
@@ -122,7 +122,6 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # `(verb, subject)`), so Tenure order still orders them in the ranking. One seat (or none)
         # leaves `seats` a single value that is `exercised_seat` exactly, and nothing below differs.
         seats = exercisable_seats(p, row)
-        several = len(seats) > 1
         # `T4`: only a NAMED own-ledger conjunct carries `said` (`tell`'s `holds`); `survey` and
         # `reconstruct` share the form unnamed and carry nothing (telling workplan, "From Batch 1").
         ledger_of = row.requires_typed.named_own_ledger_operands() if row.requires_typed else ()
@@ -186,8 +185,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                     continue
                 # `19`: THE SEAT THE ACT WILL BE EXERCISED THROUGH rides into the belief test as it rides
                 # onto `Act.via` (`pack_scenes`), so a `basis` conjunct is asked of the same seat both
-                # sides. `st` is the seat this Candidate is formed for (`exercisable_seats`, read once per
-                # row above): the row's one seat, or each of several (`H-134`).
+                # sides. `st` is the seat this Candidate is formed for.
                 # `T3a`: and the person reads their own ledger WEIGHING hearsay by its teller.
                 if belief_contradicts(p, row, subject, ops, st, weigh=weigh):
                     continue
@@ -218,7 +216,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 # under `VIA` -- not a cell operand, so `binding_of` drops it (the seat reaches the
                 # binding as `via=`), exactly as `said` is dropped; `pack_scenes` reads it onto
                 # `Act.via`. A single-seat Candidate carries nothing extra: byte-identical.
-                if several:
+                if len(seats) > 1:
                     ops = {**ops, VIA: st}
                 out.append(Candidate(verb, subject, operands=ops))
     return out
@@ -381,23 +379,13 @@ def exercised_seat(p: Person, row: "Optional[VerbRow]") -> Optional[str]:
     seat, so making `via` required there moves no computed act (measured: `build_realm(0)`'s
     content hash over one season is unchanged by G3).
 
-    ⚠ WHICH SEAT, WHEN SEVERAL GRANT THE ACT, IS NO LONGER A FIXED RULE -- `H-134` (lifted). This
-    used to take the first in the person's own Tenure order, so a holder of two seats that both
-    grant `confer` always exercised the first even where only the second had purview over the
-    target, and for `revoke` it was the WRONG SEAT outright: `revoke` asks the PARENT RUNG
-    (`state/gate.py::seated_on_the_rung_above`, `via`'s rung directly above the target seat's, same
-    faction, no purview), and `build_realm` seats NPC-020 on `off_npc_020` (the realm) and the
-    minted `off_duke_valorsmark`, both granting issue/confer/revoke/convene, the six Crown seats
-    marked `rung_above_same_faction` (`offices.yaml`) being strippable only through the Duke seat.
-    The person cannot say which seat reaches a target (that needs the containment tree, which is
-    not the person's state), so it does not: `opening_set` forms ONE Candidate per seat
-    (`exercisable_seats`), the seat riding on the Candidate (`VIA` in its operands) to `Act.via`
-    (`seat_of`), and the fold's gate asks the seat the Candidate was formed for. A seat that does
-    not reach the target is refused there, as any act the person cannot know to be unlawful is.
-    ⚠ STILL MASKED for `revoke` and `confer`: a computed act of either carries no `office` operand,
-    so `loop/predicates.py`'s `_req_revoke` / `_req_confer` refuse before the seat is asked
-    (`H-207` causes 1, 2, 4); the Candidate per seat is what lets the right seat be asked once one
-    does.
+    ⚠ WHEN SEVERAL SEATS GRANT THE ACT (`H-134`) THIS IS ONLY THE FIRST: `opening_set` forms ONE
+    Candidate per seat (`exercisable_seats`), the seat riding on it (`VIA` in its operands) to
+    `Act.via` (`seat_of`), and the fold's gate asks that seat. The person cannot say which seat
+    reaches a target (that needs the containment tree, which is not the person's state), so a seat
+    that does not reach it is refused there. ⚠ STILL MASKED for `revoke` and `confer`: a computed
+    act of either carries no `office` operand, so `loop/predicates.py`'s `_req_revoke` /
+    `_req_confer` refuse before the seat is asked (`H-207` causes 1, 2, 4).
     Traces nothing: the admission it mirrors already traced. A verb on no row (`row is None` -- a
     hand-ranked candidate naming an invented verb) exercises nothing; the fold refuses the verb
     itself, and inventing a seat for it here would be a second answer."""
@@ -983,9 +971,7 @@ def _operands(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixtures",
     # carrying `from`. `H-134`: a `seat` the caller names (`opening_set`, forming one Candidate per
     # seat) is the one the act will be exercised through and is used as given; `None` is the walk's
     # first seat, as before.
-    if "from" not in names:
-        seat = None
-    elif seat is None:
+    if seat is None and "from" in names:
         seat = exercised_seat(p, row)
     out: dict = {}
     for name in names:

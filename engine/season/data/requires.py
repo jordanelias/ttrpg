@@ -447,7 +447,8 @@ class Basis(Requirement):
     `purview` read would have to ask `seat_hold` too, and this sentence is where that is written.
     `bench` does ask it, because `may_determine` is the gate's whole test and is taken whole.
 
-    ⚠ PERSON-SIDE the seat is the one `decision/options.py::exercised_seat` names, passed to the same
+    ⚠ PERSON-SIDE the seat is the one `decision/options.py::seat_of` names (`exercised_seat` for a
+    one-seat Candidate), passed to the same
     `binding_of` (`epistemic.belief_contradicts`), so §F1 clause 4 asks the cell the fold asks: a
     person who has watched `off_duke`'s levy of `R` refused holds `(R, purview:off_duke, False)` and
     stops forming it -- a belief, not a world read (`LedgerReader`)."""
@@ -651,7 +652,7 @@ def binding_of(actor: str, operands: dict, via: Optional[str] = None) -> dict:
     ride, and the grammar's vocabulary is closed -- `said` is a non-scalar the grammar never reads.
 
     ⚠ `via=` (plan position `19`) -- THE SEAT THE ACT EXERCISES, STRUCTURAL ON BOTH SIDES FOR THE
-    REASON `actor` IS: `Act.via` for the fold (`binding_from_act`), `exercised_seat(p, row)` for the
+    REASON `actor` IS: `Act.via` for the fold (`binding_from_act`), `seat_of(p, c)` for the
     person (`epistemic.belief_contradicts`). It is read by one form, `Basis` (§F.24a form 7), and
     is added only when there is one, so a seatless act's binding is byte-for-byte what it was and a
     `basis` clause over it reads UNKNOWN. It is never taken from the payload: `via` is not an

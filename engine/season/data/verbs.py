@@ -949,15 +949,15 @@ def opportunity_key(verb: str, subject, operands) -> Optional[tuple]:
     row = VERB_TABLE.get(verb)
     ops = operands if isinstance(operands, dict) else {}
     other = ops.get(row.counterparty) if row is not None and row.counterparty else None
-    if other == subject:
-        other = None
     # ⚠ `H-134`: THE SEAT IS NOT IN THIS KEY, and that is chosen, not forgotten. `act_key` carries it
     # (ids must stay distinct), but an opportunity is the verb on the subject (and counterparty) for
     # the ACTOR, however many seats could have done it: the key's shape must not depend on how many
     # seats the person holds at the moment, or a seat gained or lost mid-season would let one
     # realised act be realised again. A refused act through the wrong seat is never recorded (the
     # driver records REALISED acts only), so it does not bar the same act through the right seat.
-    return (verb, subject) if other is None else (verb, subject, other)
+    if other is None or other == subject:
+        return (verb, subject)
+    return (verb, subject, other)
 
 
 def _check_sparse_table(name: str, cells: dict, rows: "set|tuple", row_what: str,
