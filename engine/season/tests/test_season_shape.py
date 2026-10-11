@@ -843,9 +843,12 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
+    # 66 -> 67 at IN-53 (`verbs.py` 27 -> 28): ONE NEW LOAD-TIME REFUSAL, the `referent_class:` column's
+    # loader check (a class no question source yields is refused at load); falsifier
+    # `test_in53_office_referent.py::test_in53_c_the_loader_refuses_a_referent_class_no_source_yields`.
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 66, (
-        f"{total} load-time exits across the model set, expected 66. Per file: "
+    assert total == 67, (
+        f"{total} load-time exits across the model set, expected 67. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 

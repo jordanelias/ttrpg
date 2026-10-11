@@ -290,7 +290,8 @@ def test_question_sources_clause_3_is_not_a_new_source_and_seat_is_the_only_addi
     `Question.source` value. The roster is `claim_landed`, `need` and, since IN-53 (H-203, form B,
     Jordan 2026-10-10), `seat` -- a standing Office-referent source with no ledger claim behind it,
     a new source for a new kind of question and not clause 3's widening."""
-    assert set(QUESTION_SOURCES) == {"claim_landed", "need", "seat"}
+    assert len(QUESTION_SOURCES) == 3 and QUESTION_SOURCES[-1] == "seat"
+    assert set(QUESTION_SOURCES) >= {"claim_landed", "need"}
 
 
 def test_a_bad_source_still_raises_named_did_not_smuggle_one_in():

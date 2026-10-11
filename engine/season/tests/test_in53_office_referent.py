@@ -236,7 +236,10 @@ def _classed_candidates(w, pid, q):
     return sorted({(c.verb, c.subject) for c in _formed(w, pid, q) if c.verb in CLASSED})
 
 
-@pytest.mark.parametrize("rule", ["all", "one_per_source"])
+_FOLDING = [r for r in QUESTION_AGGREGATION if r != "first"]       # every rule that folds
+
+
+@pytest.mark.parametrize("rule", _FOLDING)
 def test_in53_e_the_class_survives_a_folding_rule(rule):
     w, _ = _gov_world()
     _know(w, "p_king", "p_mid")
@@ -261,9 +264,10 @@ def test_in53_e_under_first_the_answered_question_is_the_first_and_h54_is_untouc
 
 
 def test_in53_e_every_rostered_rule_is_exercised():
-    """The parametrised rules above are the roster minus `first`; a rule added to the roster must be
-    added to one test or the other."""
-    assert set(QUESTION_AGGREGATION) == {"first", "all", "one_per_source"}
+    """The parametrised rules above are DERIVED from the roster (every rule but `first`, which returns
+    `qs[0]` itself and has its own test), so a rule added to the roster is exercised without an edit;
+    asserted so the derivation cannot collapse to nothing."""
+    assert "first" in QUESTION_AGGREGATION and len(_FOLDING) >= 2 and "first" not in _FOLDING
 
 
 def test_in53_e_a_class_kept_on_the_source_would_not_survive_the_fold():

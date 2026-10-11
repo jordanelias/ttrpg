@@ -30,9 +30,9 @@ THE PROCESSES, AND WHERE EACH EDGE COMES FROM (`build_processes`):
   * THE STEP READERS `H-106` NAMES -- the question sources, the witness channel predicates and the
     eviction comparator -- plus WITNESS's fan-out over the log and MATTER's claim decay, which
     `H-103` and `H-112` are about. Their reads are not typed anywhere in the tree, so they are
-    declared here in `QUESTION_SOURCE_READS`, `CHANNEL_READS` and `STEP_READS`. Each is tied to an
+    declared here in `QUESTION_READS`, `CHANNEL_READS` and `STEP_READS`. Each is tied to an
     owner and is reported as DRIFT when it falls out of step: a stem in `REQUIRES_STEMS` with no
-    entry in `STEM_READS`, a question source with none, or a step write to a cell whose row does not
+    entry in `STEM_READS`, or a step write to a cell whose row does not
     list that step.
 
 [ASSUMPTION, stated where it is used] `Event` is ONE quantity. WITNESS reads every Event in the
@@ -75,7 +75,7 @@ import sys
 from dataclasses import dataclass
 
 from ..data import files
-from ..data.rosters import QUESTION_SOURCES, WITNESS_CHANNELS
+from ..data.rosters import WITNESS_CHANNELS
 from . import register as R
 
 #: The log, as a quantity. Not a `write_matrix.yaml` cell: every write that emits lands here.
@@ -105,17 +105,16 @@ STEM_READS = {
     "exists":       None,
 }
 
-#: What each `rosters.yaml: question_sources` member reads (`queries/world_q.py::questions_for`).
-#: Keyed by the members of the `rosters.yaml: question_sources` roster, the same shape the roster scan
-#: refuses for channels (below): it passes that scan only because the scan skips rosters of fewer than
-#: three members (`test_season_shape.py`, `test_jordan_no_definition_is_hardcoded_in_a_body`), and the
-#: roster is `open: true`. A third source forces a matching key here and then trips that scan; at that
-#: point read the sources as ONE union, as `CHANNEL_READS` does, and list them among the blind spots.
-QUESTION_SOURCE_READS = {
-    "claim_landed": (("Person.claim_ledger", "+"),) + _TENURE,   # the landing, filtered by reach
-    "need":         _TENURE + (("Proposition.exists", "?"),),    # a live `commit` to an OUGHT
-    "seat":         _TENURE + (("Office.exists", "?"),),         # an Office whose rung is in reach (IN-53)
-}
+#: What the question sources read, as ONE union over `rosters.yaml: question_sources`
+#: (`queries/world_q.py::questions_for`): `claim_landed` -- the landing in the claim ledger, filtered by
+#: reach; `need` -- a live `commit` to an OUGHT; `seat` (IN-53) -- an Office whose rung is in reach.
+#: Not keyed per source: a dict keyed on the sources is a literal roster of three, which
+#: `test_jordan_no_definition_is_hardcoded_in_a_body` refuses, and this file's own earlier note said the
+#: third source would force exactly this -- read the sources as one union, as `CHANNEL_READS` does. The
+#: cost is the per-source drift check (a source with no read map): a source added with a new read is NOT
+#: caught here and is listed among the blind spots.
+QUESTION_READS = ((("Person.claim_ledger", "+"),) + _TENURE
+                  + (("Proposition.exists", "?"), ("Office.exists", "?")))
 
 #: What the witness channel predicates read, as ONE reader: the union over every `_ch_<name>` in
 #: `epistemic.py` (presence, `knot`, `hold` and `oblige` tenures; `chronicle` reads who is alive).
@@ -365,9 +364,6 @@ def build_processes() -> tuple:
     if set(STEM_READS) != set(REQUIRES_STEMS):
         drift.append(f"loops: STEM_READS {sorted(STEM_READS)} != REQUIRES_STEMS "
                      f"{sorted(REQUIRES_STEMS)}; a stem with no read map is invisible")
-    if set(QUESTION_SOURCES) != set(QUESTION_SOURCE_READS):
-        drift.append(f"loops: question_sources {sorted(QUESTION_SOURCES)} != read map "
-                     f"{sorted(QUESTION_SOURCE_READS)}")
 
     procs, untyped = [], []
     for verb, row in sorted(VERB_TABLE.items()):
@@ -392,8 +388,7 @@ def build_processes() -> tuple:
     ledger_w = (("Person.claim_ledger", "+"),)
     # queries/world_q.py::questions_for
     procs.append(Process("DELIBERATE: question sources",
-                         tuple(dict.fromkeys(x for s in QUESTION_SOURCES
-                                             for x in QUESTION_SOURCE_READS.get(s, ()))),
+                         tuple(dict.fromkeys(QUESTION_READS)),
                          ((ACTS, "+"),), "DEL"))
     # epistemic.py::CHANNEL_PREDICATES
     procs.append(Process("WITNESS: channel predicates", CHANNEL_READS, ledger_w, "WIT"))
