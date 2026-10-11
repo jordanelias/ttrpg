@@ -19,8 +19,11 @@ where `remove_person` took him out, if that was the Event's own tick.
     `event_place` put back to `place_of(w, anchor_of(w, e))`.
   * NARROW -- the dead man is still nowhere for `place_of` (a claim ABOUT him read by `reach` is not
     moved), and an Event of any other tick has no place for him.
+  * H-129 -- a killer's later MATTER death chains to his own death, not his victim's.
 """
 from __future__ import annotations
+
+import functools
 
 import pytest
 
@@ -30,10 +33,11 @@ from ..loop import census
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..state.attribution import anchor_of
-from ..state.carriers import Act, Person, Rung, Tenure
+from ..state.carriers import Act, Event, Person, Rung, Tenure
 from ..state.ids import ROOT
 
 HOLDER, OFFICE = "p_high", "off_duke"
+_OLD_PLACE = lambda w, e: world_q.place_of(w, anchor_of(w, e))       # `event_place` before H-206
 NEAR, FAR = ("p_near",), ("p_low", "p_mid", "p_other", "p_king")     # S is where p_high stands
 
 
@@ -92,7 +96,7 @@ def test_h206_a_matter_death_is_witnessed_by_those_who_stood_there_and_nobody_el
 def test_h206_mutation_with_the_place_put_back_the_matter_death_reaches_nobody(monkeypatch):
     """THE MUTATION, run as a test: `event_place` as it was (`place_of(w, anchor_of(w, e))`). The
     positive half of the falsifier must go red, which is what makes it an observation."""
-    monkeypatch.setattr(world_q, "event_place", lambda w, e: world_q.place_of(w, anchor_of(w, e)))
+    monkeypatch.setattr(world_q, "event_place", _OLD_PLACE)
     w = _world()
     _witness(w, [_die_at_matter(w)])
     assert sum(len(_names_him(w, p)) for p in NEAR) == 0, (
@@ -105,8 +109,8 @@ def test_h206_the_dead_man_is_still_nowhere_for_place_of_and_an_event_of_another
     assert world_q.place_of(w, HOLDER) is None, "`place_of` was widened; `reach` reads it about the dead"
     w.tick += 1
     assert world_q.event_place(w, ev) == "S", "the Event's own tick is the key, not the world's"
-    later = type(ev)(id="later", kind="body.changed", changes=ev.changes, causes=[ROOT],
-                     emitted_at=ev.emitted_at + 1)
+    later = Event(id="later", kind="body.changed", changes=ev.changes, causes=[ROOT],
+                  emitted_at=ev.emitted_at + 1)
     assert world_q.event_place(w, later) is None, "an Event of another tick was placed"
     # THE GUARD `who not in self.persons`: the same id walks back in, and his old departure at that
     # tick is no longer an answer. (A person who never left, `p_near`, has no row to test it with.)
@@ -119,37 +123,47 @@ def test_h206_the_dead_man_is_still_nowhere_for_place_of_and_an_event_of_another
 
 def test_h206_an_act_caused_event_of_the_dead_actor_in_the_dying_tick_is_not_placed():
     """THE NARROWING, from a measured move: without the actorless clause, the refusals of a victim's
-    own acts later in the killing tick (anchored on him as ACTOR, tier 1) were placed and witnessed, and
-    `build_realm(0)`'s 2-season hash moved on 56 events no MATTER death caused."""
+    own acts later in the killing tick (anchored on him as ACTOR, tier 1) were placed and witnessed."""
     w = _world()
     _die_at_matter(w)
     act = Act(id="h206_ghost", actor=HOLDER, verb="speak", payload={})
     w.acts.append(act)
-    ghost = type(w.log[-1])(id="ghost_ev", kind="act.ineligible", changes=[], causes=[act.id],
-                            emitted_at=w.tick)
+    ghost = Event(id="ghost_ev", kind="act.ineligible", changes=[], causes=[act.id],
+                  emitted_at=w.tick)
     assert anchor_of(w, ghost) == HOLDER and w.departed_from(HOLDER, w.tick) == "S"
     assert world_q.event_place(w, ghost) is None, "an act-caused Event was placed at the death"
 
 
-def _fight_until_he_dies(model_ids=range(40)):
+def _fight(i):
     """The real fold, the real `fight`: p_near fights p_high under `wound_harm_model = total` (a
-    wound kills) until one act id kills him. Returns the world and the Events, or None if no id did."""
+    wound kills) as act `h206_<i>`. Returns the world and the Events if that act killed him, else None."""
+    w = _world()
+    w.step = Step.RESOLVE
+    w.fixtures = w.fixtures.sweep("wound_harm_model", "total")
+    d = SeasonDriver(w)
+    evs = d.resolve(mint_token(w, WriteClass.ACTS),
+                    [Act(id=f"h206_{i}", actor="p_near", verb="fight", payload={"subject": HOLDER})],
+                    w.fixtures.get("contest_max_depth"))
+    if HOLDER in w.persons:
+        return None
+    for ev in evs:                      # `resolve` returns the Events; the caller logs them (as a barrier does)
+        w.log.append(ev)
+    return w, evs
+
+
+@functools.lru_cache(maxsize=None)
+def _killing_act_index(model_ids=range(40)):
+    """The first act id that kills p_high, or None -- searched once per process, not once per test."""
     from ..seam.wrappers import combat as C
     if C.engine() is None:
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
-    for i in model_ids:
-        w = _world()
-        w.step = Step.RESOLVE
-        w.fixtures = w.fixtures.sweep("wound_harm_model", "total")
-        d = SeasonDriver(w)
-        evs = d.resolve(mint_token(w, WriteClass.ACTS),
-                        [Act(id=f"h206_{i}", actor="p_near", verb="fight", payload={"subject": HOLDER})],
-                        w.fixtures.get("contest_max_depth"))
-        if HOLDER not in w.persons:
-            for ev in evs:              # `resolve` returns the Events; the caller logs them (as a barrier does)
-                w.log.append(ev)
-            return w, evs
-    return None
+    return next((i for i in model_ids if _fight(i) is not None), None)
+
+
+def _fight_until_he_dies():
+    """A fresh world and the Events of the first act id that kills him, or None if no id did."""
+    i = _killing_act_index()
+    return None if i is None else _fight(i)
 
 
 def _ledgers(w):
@@ -169,7 +183,7 @@ def test_h206_control_a_death_at_resolve_by_a_killer_deposits_what_it_deposited_
     deposited = sum(len(v) for v in after.values())
     assert deposited >= 1, "the RESOLVE death deposited nothing; the equality below would be empty"
 
-    monkeypatch.setattr(world_q, "event_place", lambda w, e: world_q.place_of(w, anchor_of(w, e)))
+    monkeypatch.setattr(world_q, "event_place", _OLD_PLACE)
     w2, evs2 = _fight_until_he_dies()
     w2.step = Step.WITNESS
     _witness(w2, evs2)

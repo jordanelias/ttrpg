@@ -1244,13 +1244,12 @@ class World:
         a.actor, ...)`), so `last_emission_of("body.changed", <victim>)` already missed a
         combat-caused wound before this deletion -- this docstring's overclaim is new, the gap it
         describes is not. LATENT AT SHIPPED DEFAULTS: `body_step = 0` skips the caller
-        (`loop/matter.py`) entirely, so nothing reaches it on a built world today. The bodies pass
-        (IN-34) is a second `person.died` caller beside hunger; both go through `matter._die` with
-        `written=True`, which reads `changes[]` for that kind alone. `body.changed` still reads the
-        anchor, so its half of H-129 stands. Registered
-        rather than fixed here: `hole_register.yaml` H-129 -- a fix (reading the first minted
-        receipt in `changes[]` instead of `anchor_of`) would move outputs in a `body_step > 0`
-        sweep arm and needs its own decision, not a side effect of this position's field deletion.
+        (`loop/matter.py`) entirely, so nothing reaches it on a built world today. The
+        `person.died` half is FIXED via `written=True`; `body.changed` still reads the anchor, so
+        that half of H-129 stands. Registered rather than fixed for `body.changed` only:
+        `hole_register.yaml` H-129 -- a fix (reading the first minted receipt in `changes[]`
+        instead of `anchor_of`) would move outputs in a `body_step > 0` sweep arm and needs its
+        own decision, not a side effect of this position's field deletion.
         Every OTHER caller of this method (the six kinds above) is unaffected: each names a kind
         with exactly one emitter, MATTER's own auto-emission block, so tier 2 still returns `subj`
         by construction for all of them. ⚠ "SIX", NOT SEVEN, AND "MATTER'S OWN" NO LONGER COVERS

@@ -40,6 +40,7 @@ from ..gaps import Forbidden, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
 from .person_q import intent_named
+from ..state.attribution import anchor_of, causing_act
 from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE (G3, plan position 6). The
 # write gate's F3 clause needs both -- ruling (3)'s parent rung and ruling (4)'s purview subtree --
@@ -54,7 +55,6 @@ from ..state.containment import ancestry, home_of  # noqa: F401 -- re-exported
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
 from ..state.gate import BENCH_BASIS, may_determine, purview_reaches, sits_over
-from ..state.attribution import anchor_of, causing_act
 from ..state.ids import ROOT, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
@@ -393,7 +393,7 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
 def place_of(w: World, x: Optional[str]) -> Optional[str]:
     """`ARCH §F.14`'s OWN NAME, PROMOTED (position `11a`, r2 `01_ATTENTION_AND_REACH.md` §A.3).
     The rung a THING is at, for ANY id -- moved in from `epistemic._event_place`, which took only
-    an Event. That caller becomes `place_of(w, anchor_of(w, e))` (`epistemic.py`'s two sites).
+    an Event. That caller becomes `event_place(w, e)`, below (`epistemic.py`'s two sites).
 
     ⚠ PERSON BEFORE RUNG, AND THE ORDER IS THE WHOLE OF THIS FUNCTION'S CORRECTNESS -- carried
     over from `_event_place`'s own docstring rather than restated: testing `x in w.rungs` FIRST
@@ -455,20 +455,25 @@ def event_place(w: World, e) -> Optional[str]:
     `reach` (a claim about a dead man), and answering there would move every reader of an old
     claim; only an EVENT's own tick has a place for him. ⚠ ACTORLESS ONLY, MEASURED: without that clause
     the limb also placed the refusals of a victim's own acts later in the killing tick (`act.ineligible`,
-    `travel.blocked`, ... anchored on the dead ACTOR, tier 1) and `build_realm(0)`'s 2-season hash
-    moved on 56 events no death at MATTER caused. `None` otherwise, exactly as before."""
+    `travel.blocked`, ... anchored on the dead ACTOR, tier 1); the class is reproduced by
+    `test_h206_an_act_caused_event_of_the_dead_actor...`. `None` otherwise, exactly as before.
+
+    The limb places every ACTORLESS Event anchored on a person removed in that Event's own tick, so
+    at MATTER also the same dying cohort's `body.changed` and its tier-3 `condition.band_crossed`
+    (reachable only at `body_step > 0`, unmeasured; H-206)."""
     who = anchor_of(w, e)
     here = place_of(w, who)
-    if here is not None or who is None or causing_act(w, e) is not None:
+    if here is not None:
         return here
-    return w.departed_from(who, e.emitted_at)
+    at = w.departed_from(who, e.emitted_at)       # `departed_from(None, t)` is None
+    return at if at is not None and causing_act(w, e) is None else None
 
 
 # ⚠ v9 SE-01 (`24g`), P1's OTHER HALF -- THE PERSON-KEYED CROSSING REPAIR IS THE PERSON LIMB ABOVE,
 # AND NO NEW CODE WAS NEEDED FOR IT. The plan's instruction (*"`world_q` derives `at` from
 # `w.sites.get(who)`; the repair is `at = parent_of(w, who)` when `who` names a person"*) was written
 # against Q3's old `w.crossings` tuple read, which position `11a` deleted: a crossing now reaches a
-# witness through `epistemic._ch_co_located` as `place_of(w, anchor_of(w, e))`, and for a person that
+# witness through `epistemic._ch_co_located` as `event_place(w, e)` (`place_of` of its anchor), and for a person that
 # is `home_of(w)[who]` -- the person's one live `contain` parent, which is `parent_of(w, who)`. So a
 # cohort's `condition.band_crossed` (anchored, tier 3, on its own `body.changed`) is placed at the
 # settlement the cohort stands in, and everyone standing there is `co_located` with it.

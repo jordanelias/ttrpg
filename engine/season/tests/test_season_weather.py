@@ -18,6 +18,8 @@ THE FALSIFIERS, each with the failure it would show:
 
 from __future__ import annotations
 
+import hashlib
+
 from ..data.matrix import Step, WriteClass
 from ..data.requires import SHORTFALL_PREDICATE
 from ..harness import populated as POP
@@ -38,11 +40,23 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # RE-PINNED at v9 IN-34, A SCHEMA MOVE DECLARED: `Person.born` adds a field to every person's `repr`,
 # which `content_hash` folds, so all three move with the bodies clock at its control (both rates 0).
 # Was 5812a959... / 0d4f7ae4... / 6bc6123e.... The ordered (kind, id) event sequence over one and two
-# seasons is identical to the pre-IN-34 base's (`test_in34_bodies_clock.py` pins its count and digest),
-# so the move is the field alone.
+# seasons is identical to the pre-IN-34 base's (`BASE_EVENTS`, below), so the move is the field alone.
 BASE_HASHES = {0: "0a7e27c4c149fe05ecb9eaa64e7579e1",
                1: "d188461a395714497d81f72175a0c8c3",
                2: "33b1ae3b5cbeb212f6560fafea9798af"}
+
+# The pre-IN-34 base (d47077d5), `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event
+# count and the sha256 of its ordered `kind|id` lines after one season and after two. A ONE-TIME PROOF
+# that the schema re-pin of `BASE_HASHES` moved nothing at the event level (the hash folds
+# `repr(Person)`, which gained a field; the events did not move); re-recorded together with
+# `BASE_HASHES`, never alone. A hazard that fired at the control would change the sequence.
+BASE_EVENTS = {1: (7526, "e56f8652be7f7cd52352bdf07ef17dcc555daf83e267a37b0eecafc096ec82e7"),
+               2: (21508, "dc3c440ad533b0548d69bfdc8b092e3ccc03ff622baa9a5167a92c839c2b42f4")}
+
+
+def _digest(w) -> tuple:
+    seq = [f"{e.kind}|{e.id}" for e in w.log]
+    return len(seq), hashlib.sha256("\n".join(seq).encode()).hexdigest()
 
 # H-26's declared sweep, as tables: a year of four seasons each time.
 YEAR = 4
@@ -100,15 +114,18 @@ def _seasons(w, n: int):
 
 
 def test_in21_control_draw_off_and_draw_at_one_reproduce_the_base_hashes():
-    h = {}
+    h, events = {}, {}
     w = POP.build_realm(0)
     h[0] = w.content_hash()
-    POP.run(seasons=1, seed=0, w=w)
-    h[1] = w.content_hash()
-    POP.run(seasons=1, seed=0, w=w)       # continuing one world reads the fresh two-season hash
-    h[2] = w.content_hash()
+    assert w.fixtures.get("age_step") == 0 and w.fixtures.get("illness_rate") == 0
+    for n in (1, 2):
+        POP.run(seasons=1, seed=0, w=w)   # continuing one world reads the fresh two-season hash
+        h[n] = w.content_hash()
+        events[n] = _digest(w)
     assert w.fixtures.get("season_factor_draw") == (), "the shipped default is not the control arm"
     assert h == BASE_HASHES, f"draw off moved a hash: {h}"
+    assert events[1][0] >= 5000 and events[2][0] >= 15000, f"the seasons emitted too little: {events}"
+    assert events == BASE_EVENTS, f"the bodies clock at its control moved the event sequence: {events}"
 
 
 def test_in21_a_table_of_ones_reads_the_same_as_no_table():

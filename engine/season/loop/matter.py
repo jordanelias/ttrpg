@@ -457,9 +457,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
         emitted.extend(_crossings(w, pid, floors_body, was, person.body,
                                   fell.id if fell else None))
         if person.body <= 0:
-            # DEATH THROUGH THE ONE OWNER. `World.remove_person` is `_eff_kill`'s cascade,
-            # factored — the same `w.tenures` scan, so an edge another person owns that NAMES the
-            # dead one closes here too (§15.3, and `W-E`'s measured dangling `tie`).
+            # death through the one owner: see _die
             _die(w, token, pid)
 
     # -- THE BODIES CLOCK: AGEING AND ILLNESS (v9 IN-34, FORCE-BODIES) ------------
@@ -467,27 +465,20 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # #457 D2 answered [medium; Jordan to correct]: ageing and illness are in scope, a HAZARD READER
     # only, rates swept. The hazard is `world_q.body_hazard` -- a Query over `Person.born` -- and
     # this pass is its one writer: ONE KEYED DRAW per living person (`draw_factory`, keyed on
-    # (world_seed, tick, pid, purpose), so the same seed gives one death and no other stream moves),
-    # and a death through `World.remove_person`, the one cascade hunger and `fight` already route
-    # through. So a seat-holder dying here closes his `hold` exactly as a killing would. It is
-    # `(Person, exists)` at MAT, emitting `person.died`, chained through `_die` -- the same write as
-    # the hunger death above -- to the death WRITTEN about the person (H-129), not the last one
-    # anchored on him.
-    # ⚠ THE CONTROL TAKES NO DRAW: both rates ship at 0, `body_hazard` returns 0 and nothing is
-    # written, so the season is today's. Read AFTER the hunger pass, so a person who starved this
-    # barrier is already gone and cannot die twice.
+    # (world_seed, tick, pid, purpose), so the same seed gives one death and no other stream moves).
+    # Read AFTER the hunger pass, so a person who starved this barrier is already gone and cannot
+    # die twice.
+    # ⚠ THE CONTROL TAKES NO DRAW: both rates ship at 0 and the pass is skipped at the `if` below, so
+    # the season is today's. A NaN or negative rate is truthy, enters, and `body_hazard` refuses it.
     # ⚠ WHAT THE DEATH REACHES: an actorless `person.died` is placed where `remove_person` took him
     # out (`world_q.event_place`, H-206), so persons standing there hold claims naming the dead
     # holder. NOT BUILT: claims naming his OFFICE or closed HOLD (H-206's NOT DONE).
-    keyed = None
-    for pid in sorted(w.persons):
-        hazard = world_q.body_hazard(w, pid)
-        if hazard <= 0:
-            continue
-        keyed = keyed or draw_factory(w.world_seed, lambda: w.tick)
-        if keyed(pid, "body_hazard").random() >= hazard:
-            continue
-        _die(w, token, pid)
+    if w.fixtures.get("age_step") or w.fixtures.get("illness_rate"):
+        keyed = draw_factory(w.world_seed, lambda: w.tick)
+        for pid in sorted(w.persons):
+            hazard = world_q.body_hazard(w, pid)
+            if hazard > 0 and keyed(pid, "body_hazard").random() < hazard:
+                _die(w, token, pid)
 
     for rid in sorted(w.rungs):
         r = w.rungs[rid]
