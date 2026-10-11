@@ -26,6 +26,7 @@ import pytest
 
 from ..data.matrix import Step, WriteClass
 from ..harness import probes as P
+from ..loop import census
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..state.attribution import anchor_of
@@ -107,7 +108,13 @@ def test_h206_the_dead_man_is_still_nowhere_for_place_of_and_an_event_of_another
     later = type(ev)(id="later", kind="body.changed", changes=ev.changes, causes=[ROOT],
                      emitted_at=ev.emitted_at + 1)
     assert world_q.event_place(w, later) is None, "an Event of another tick was placed"
-    assert w.departed_from("p_near", 0) is None, "a person still here has no departure"
+    # THE GUARD `who not in self.persons`: the same id walks back in, and his old departure at that
+    # tick is no longer an answer. (A person who never left, `p_near`, has no row to test it with.)
+    assert w.departed_from(HOLDER, ev.emitted_at) == "S", "fixture: no departure recorded for the dead holder"
+    census._individuate(w, HOLDER, "R")
+    assert HOLDER in w.persons
+    assert w.departed_from(HOLDER, ev.emitted_at) is None, (
+        "a person back in the world was still reported as departed")
 
 
 def test_h206_an_act_caused_event_of_the_dead_actor_in_the_dying_tick_is_not_placed():
@@ -167,3 +174,22 @@ def test_h206_control_a_death_at_resolve_by_a_killer_deposits_what_it_deposited_
     w2.step = Step.WITNESS
     _witness(w2, evs2)
     assert _ledgers(w2) == after, "the fix moved what a RESOLVE-written death deposits"
+
+
+def test_h129_a_killer_who_later_dies_at_matter_chains_to_his_own_death_not_his_victims():
+    """`last_emission_of("person.died", pid)` reads `anchor_of`, and a RESOLVE `person.died` anchors on
+    the KILLER, so the killer's own later death at MATTER cited his victim's death as its cause. The
+    death WRITTEN about him is the one to chain to, and he has none: `[ROOT]`."""
+    got = _fight_until_he_dies()
+    assert got is not None, "no act id in range killed p_high; the chain would be vacuous"
+    w, evs = got
+    victim_death = [e for e in evs if e.kind == "person.died"]
+    assert victim_death and anchor_of(w, victim_death[0]) == "p_near", (
+        "fixture: the victim's death is not anchored on the killer")
+    w.step = Step.MATTER
+    w.fixtures = w.fixtures.sweep("illness_rate", 1.0)
+    out = SeasonDriver(w).matter(mint_token(w, WriteClass.MATTER), [])
+    mine = [e for e in out if e.kind == "person.died" and any(c.subject == "p_near" for c in e.changes)]
+    assert len(mine) == 1 and "p_near" not in w.persons, "the killer did not die of illness at MATTER"
+    assert mine[0].causes == [ROOT], (
+        f"the killer's death cites {mine[0].causes}; his victim's death is {victim_death[0].id}")
