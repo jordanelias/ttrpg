@@ -511,7 +511,7 @@ def test_h118_content_hash_folds_every_game_state_collection():
     ⚠ THE EXCLUSIONS ARE INFRASTRUCTURE, NOT STATE, and each is named rather than pattern-matched
     so that adding one is a deliberate act: the log is folded separately; `writes`/
     `_emitted_by_write` are the write-gate's own audit channels; `manifest` is S43's boot
-    resolution; `fixtures` is configuration, not world state; the underscored ones are caches.
+    resolution; `fixtures` is configuration, not world state; the underscored ones are caches or per-tick scratch.
     ⚠ `crossings` LEFT THIS SET AT POSITION `11a` -- the attribute itself was deleted (`AX-4`: one
     owner of a band crossing, the Event `_crossings` (`loop/matter.py`) already logs), not merely
     reclassified, so there is no longer a name here for it to occupy."""

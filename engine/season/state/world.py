@@ -1311,7 +1311,7 @@ class World:
     def content_hash(self) -> str:
         """`H-118`: REV 1 hashed the log alone. Demonstrated there -- delete a person from one of
         two identical worlds with no Event appended, and the hashes still matched. It now folds
-        EVERY game-state collection (`_STATE_COLLECTIONS` + `_STATE_SEQUENCES` + `tenures`) --
+        EVERY game-state collection (`_STATE_COLLECTIONS` + `_STATE_SEQUENCES` + `tenures`; `_departed` is the one per-tick exception, cleared at each season and read only for its own tick) --
         IN ID ORDER -- ahead of the log, so a state divergence that never reaches the log is no
         longer invisible to it.
 
