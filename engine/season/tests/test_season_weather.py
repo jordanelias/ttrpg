@@ -28,7 +28,7 @@ from ..state.world import World
 
 DEFAULT = POP.P.DEFAULT_FIXTURES
 
-# `build_realm(0)`'s content hash on the base commit (068ec322), taken before this position changed
+# `build_realm(0)`'s content hash, originally on the base commit (068ec322, re-pinned below), taken before this position changed
 # anything: at build, after one season, after two. With `season_factor_draw` at its shipped `()` all
 # three must still read these.
 # RE-PINNED 2026-10-11 (Jordan's ruling "null" on seven `offices.yaml` seats): `Office.revocation` is in

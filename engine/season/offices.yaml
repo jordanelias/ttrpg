@@ -52,10 +52,12 @@
 #        -- outside `Office.conferral`'s ruled roster, not silently folded into it.
 #      * `purview`/`holdings` (old: purview alone for an office, purview+holdings+rank for a title)
 #        -> `rung_above_same_faction` wherever a rung above could in principle hold a same-faction
-#        seat (15 of 29 rows) -- the two old bases collapse to ED-IN-0256's one structural rule,
+#        seat (15 of 29 rows; at build only the six Crown T1 seats are satisfiable, H-207) -- the
+#        two old bases collapse to ED-IN-0256's one structural rule,
 #        which is dispatched dynamically at revoke-time by `state/gate.py::seated_on_the_rung_above`
 #        against WHOEVER actually holds that seat, not precomputed here.
-#      * `none` (a seat with no revoker at all -- realm-scale seats with no rung above them, and
+#      * `none` (a seat with no revoker at all -- realm-scale seats with no rung above them, the
+#        Crown's own duchy seat (held by the King), and
 #        the two Church/Restoration seats canon calls sovereign or informal) -> `null`, 7 of
 #        29 rows, preserving `03`'s own judgment about WHICH seats are protected rather than
 #        re-deriving it.
@@ -64,14 +66,19 @@
 #        `off_cardinal_prudence`, `off_senior_inquisitor` (Church of Solmund, T9, parent rung
 #        `r_valoria`), `off_archbishops_rep` (Church of Solmund, T1) and `off_grand_master`
 #        (Löwenritter, T1), the last two with the Crown duchy `duchy_valorsmark` as parent rung.
-#        They declared `rung_above_same_faction` but could never be stripped: `seated_on_the_rung_above`
-#        needs a seat on the PARENT rung of the target's own faction, and every seat on those parent
-#        rungs is Crown -- they failed on faction, not rung. `null` (strippable by nobody) is what
-#        they already did; the ruling writes it down, and the rationale above for the two
-#        Church/Restoration seats (canon treats those as sovereign or informal) is the same.
+#        They declared `rung_above_same_faction` but could not be stripped in the built realm:
+#        `seated_on_the_rung_above` needs a seat on the PARENT rung of the target's own faction, and
+#        every seat on those parent rungs is Crown -- they failed on faction, not rung. Only an
+#        `establish` founding a same-faction seat on the parent rung could have changed that
+#        (`_req_establish` checks no purview on a founding; a computed `establish` carries no
+#        operands today). `null` (strippable by nobody) is what they already did; the ruling
+#        writes it down and closes that route, and `_req_establish` refuses changing `revocation`
+#        at runtime.
 #        (Loop-built, those rows' seats are `off_npc_038`, `off_npc_013`, `off_npc_034`, `off_npc_070`;
-#        the other three are minted under the row id.) The nine duchy-rung council seats are NOT in
-#        this ruling and stay `rung_above_same_faction`.
+#        the other three are minted under the row id.) The nine duchy-rung seats (the two duchy heads and
+#        seven council/guild seats) are NOT in this ruling and stay `rung_above_same_faction`,
+#        though at build they fail the same way: their parent rung is `r_valoria`, Crown only
+#        (H-207 cause 1).
 #
 # ⚠⚠ HOW `harness/populated.py::build_realm` READS THIS FILE (`8a`, 2026-09-29, then `13d-iii`,
 # 2026-10-01). EVERY ROW IS ONE SEAT, AND ONE PASS OVER THE ROWS GIVES EACH ITS RUNG, ITS REMIT,
