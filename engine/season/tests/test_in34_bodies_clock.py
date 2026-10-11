@@ -16,11 +16,9 @@ chosen here -- they are Jordan's (#457 D2's gate) -- so every arm below is a TES
 nothing.
 
 THE FALSIFIERS, each with the failure it would show:
-  * CONTROL (event level): at the shipped rates the ordered (kind, id) sequence of `build_realm(0)`'s
-    log after one season and after two EQUALS the pre-IN-34 base's (pinned below: count and digest, taken
-    on d47077d5 before the field existed). `test_season_weather.py`'s three hash pins are re-recorded for
-    the schema move this field causes, and THIS is the proof that the move is schema alone: the hash
-    folds `repr(Person)`, which gained a field; the events did not move. A hazard that fired at step 0
+  * CONTROL (event level): lives in `test_season_weather.py` (`BASE_EVENTS`, beside the hash pins it
+    proves a schema move for): at the shipped rates the ordered (kind, id) sequence of `build_realm(0)`'s
+    log after one season and after two EQUALS the pre-IN-34 base's. A hazard that fired at step 0
     changes the sequence;
   * SECOND FALSIFIER, stated as what the tree delivers: a seat-holder's death by age deposits CLAIMS
     NAMING THE DEAD HOLDER on the persons at his place and none on persons out of reach, and the same
@@ -33,7 +31,6 @@ THE FALSIFIERS, each with the failure it would show:
 
 from __future__ import annotations
 
-import hashlib
 import math
 
 import pytest
@@ -44,6 +41,7 @@ from ..harness import probes as P
 from ..loop import census
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
+from ..state.attribution import causing_act
 from ..state.ids import ROOT
 
 # TEST ARMS, not game values: nothing here is the number the game ships (those are Jordan's). Each is
@@ -52,11 +50,6 @@ from ..state.ids import ROOT
 AGE_ARMS = (0.01, 0.25)
 # [JUSTIFIED: test arms -- an age-free chance a draw misses about half the time, and certainty]
 ILL_ARMS = (0.5, 1.0)
-
-# The pre-IN-34 base (d47077d5), `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event
-# count and the sha256 of its ordered `kind|id` lines after one season and after two.
-BASE_EVENTS = {1: (7526, "e56f8652be7f7cd52352bdf07ef17dcc555daf83e267a37b0eecafc096ec82e7"),
-               2: (21508, "dc3c440ad533b0548d69bfdc8b092e3ccc03ff622baa9a5167a92c839c2b42f4")}
 
 
 def _matter(w):
@@ -80,9 +73,29 @@ def _died(evs) -> list:
     return [c.subject for e in evs if e.kind == "person.died" for c in e.changes]
 
 
-def _digest(w) -> tuple:
-    seq = [f"{e.kind}|{e.id}" for e in w.log]
-    return len(seq), hashlib.sha256("\n".join(seq).encode()).hexdigest()
+def _age_to_certain(w, pid, arm):
+    """Age `pid` to a hazard of exactly 1 at `age_step = arm` -- a season past where it reaches 1, so
+    float rounding cannot leave it short. Only `born` moves; the world's own rates are left as they are."""
+    w.persons[pid].born = w.tick - (math.ceil(1 / arm) + 1)
+    fixtures = w.fixtures
+    w.fixtures = fixtures.sweep("age_step", arm)
+    try:
+        assert world_q.body_hazard(w, pid) == 1.0
+    finally:
+        w.fixtures = fixtures
+
+
+def _realm_with_an_old_holder(arm):
+    """`build_realm(0)` with its first seat-holder who has company (found by the realm, not named) aged
+    to certain death at `age_step = arm`; the world's `age_step` is left at the shipped control."""
+    w = POP.build_realm(0)
+    seats = _seats(w)
+    assert seats, "nobody is seated on the realm; the falsifier is vacuous"
+    home = world_q.home_of(w)
+    holder, office = next((h, o) for h, o in seats
+                          if sum(1 for p in w.persons if p != h and home.get(p) == home.get(h)) >= 2)
+    _age_to_certain(w, holder, arm)
+    return w, holder, office, home.get(holder), home
 
 
 def test_in34_the_shipped_rates_are_the_control_and_the_test_arms_are_live():
@@ -149,49 +162,21 @@ def test_in34_control_at_the_shipped_rates_nobody_dies_however_old():
     assert not [e for e in got if e[0] == "person.died"]
 
 
-def test_in34_control_the_event_sequence_over_one_and_two_seasons_equals_the_base():
-    """THE EVENT-LEVEL CONTROL (the plan's restated control): `age_step` 0 reproduces the base's ordered
-    (kind, id) sequence after one season and after two -- the proof that the re-pinned
-    `test_season_weather.BASE_HASHES` moved by the `Person` schema alone. ~2 minutes (the realm, two
-    real seasons)."""
-    w = POP.build_realm(0)
-    assert w.fixtures.get("age_step") == 0 and w.fixtures.get("illness_rate") == 0
-    got = {}
-    for n in (1, 2):
-        POP.run(seasons=1, seed=0, w=w)
-        got[n] = _digest(w)
-    assert got[1][0] >= 5000 and got[2][0] >= 15000, f"the seasons emitted too little to observe: {got}"
-    assert got == BASE_EVENTS, f"age_step 0 moved the event sequence: {got}"
-
-
-@pytest.mark.parametrize("arm", AGE_ARMS)
+@pytest.mark.parametrize("arm", AGE_ARMS[1:])    # `AGE_ARMS[0]` sets the same hazard (1.0) for the holder
 def test_in34_a_seat_holders_death_by_age_deposits_claims_naming_him_where_he_stood(arm):
     """THE SECOND FALSIFIER, as the tree delivers it (H-206's holder half): one seat-holder is made
     exactly old enough that the hazard is 1, one FULL season runs on the built realm.
       * MATTER writes `person.died` for him alone, chained to ROOT (no prior), placed where he stood;
       * the persons at his place hold claims `person.died` naming him (floor >= 1 such persons);
-      * no person elsewhere holds any claim naming him (floor >= 1 such persons checked);
-      * the same arm at step 0, the same holder just as old: no `person.died` for him and no
-        `person.died` claim anywhere.
-    NOT CLAIMED: vacancy claims about his OFFICE or the closed HOLD -- H-206's NOT DONE, a different
-    fan-out. The holder is the first seat-holder with company, found by the realm and not named."""
-    def build():
-        w = POP.build_realm(0)
-        seats = _seats(w)
-        assert seats, "nobody is seated on the realm; the falsifier is vacuous"
-        home = world_q.home_of(w)
-        holder, office = next((h, o) for h, o in seats
-                              if sum(1 for p in w.persons if p != h and home.get(p) == home.get(h)) >= 2)
-        # a season past where the hazard reaches 1, so float rounding cannot leave it short
-        w.persons[holder].born = w.tick - (math.ceil(1 / arm) + 1)
-        return w, holder, office, home.get(holder), home
-
+      * no person elsewhere holds any claim naming him (floor >= 1 such persons checked).
+    The step-0 control is the next test. NOT CLAIMED: vacancy claims about his OFFICE or the closed
+    HOLD -- H-206's NOT DONE, a different fan-out. The holder is the first seat-holder with company,
+    found by the realm and not named."""
     def named(w, holder, who, only=None):
         return {p: [c for c in w.persons[p].ledger if c.subject == holder
                     and (only is None or c.predicate == only)] for p in who if p in w.persons}
 
-    # -- the killed arm ----------------------------------------------------------------------
-    w, holder, office, place, home = build()
+    w, holder, office, place, home = _realm_with_an_old_holder(arm)
     w.fixtures = w.fixtures.sweep("age_step", arm)
     here = {p for p in w.persons if p != holder and home.get(p) == place}
     away = {p for p in w.persons if p != holder and home.get(p) != place}
@@ -204,7 +189,7 @@ def test_in34_a_seat_holders_death_by_age_deposits_claims_naming_him_where_he_st
 
     died = [e for e in w.log if e.kind == "person.died" and any(c.subject == holder for c in e.changes)]
     assert len(died) == 1, f"{len(died)} `person.died` events name the holder"
-    assert died[0].causes == [ROOT] and world_q.causing_act(w, died[0]) is None
+    assert died[0].causes == [ROOT] and causing_act(w, died[0]) is None
     assert holder not in w.persons
     on_here = {p: cs for p, cs in named(w, holder, here, "person.died").items() if cs}
     assert len(on_here) >= 1, (
@@ -214,9 +199,12 @@ def test_in34_a_seat_holders_death_by_age_deposits_claims_naming_him_where_he_st
     assert not on_away, f"{len(on_away)} persons out of reach hold a claim naming him: {sorted(on_away)}"
     assert world_q.event_place(w, died[0]) == place, "the death is not placed where he stood"
 
-    # -- the control arm: the same holder, as old, step 0 ------------------------------------------
-    c, holder_c, _o, _p, _h = build()
-    assert holder_c == holder and c.fixtures.get("age_step") == 0
+
+def test_in34_control_the_same_holder_as_old_at_step_0_lives_and_deposits_no_death_claim():
+    """THE CONTROL ARM of the test above, run once: the holder aged to certain death at an `age_step`
+    arm, but the world's rates left at the shipped 0. No `person.died` for him, no `person.died` claim."""
+    c, holder, _office, _place, _home = _realm_with_an_old_holder(AGE_ARMS[1])
+    assert c.fixtures.get("age_step") == 0 and c.fixtures.get("illness_rate") == 0
     POP.run(seasons=1, seed=0, w=c)
     assert holder in c.persons
     assert not [e for e in c.log if e.kind == "person.died"
@@ -226,7 +214,7 @@ def test_in34_a_seat_holders_death_by_age_deposits_claims_naming_him_where_he_st
         "the control deposited a death claim about a man who lives")
 
 
-@pytest.mark.parametrize("arm", AGE_ARMS)
+@pytest.mark.parametrize("arm", AGE_ARMS[1:])    # `AGE_ARMS[0]` sets the same hazard (1.0) for the holder
 def test_in34_a_seat_holder_old_enough_dies_at_matter_and_his_seat_falls_vacant(arm):
     """THE CASCADE, at each live `age_step` arm, on the BUILT realm: MATTER kills the one old
     seat-holder and only him, once, and the death goes through the one cascade -- his `hold` closes, so
@@ -240,8 +228,7 @@ def test_in34_a_seat_holder_old_enough_dies_at_matter_and_his_seat_falls_vacant(
     (hold,) = [t for t in w.tenures if t.kind == "hold" and t.live
                and t.subject == holder and t.object == office]
     assert world_q.body_hazard(w, holder) == 0.0
-    w.persons[holder].born = w.tick - (math.ceil(1 / arm) + 1)
-    assert world_q.body_hazard(w, holder) == 1.0
+    _age_to_certain(w, holder, arm)
     others = set(w.persons) - {holder}
 
     evs = _matter(w)
@@ -276,7 +263,7 @@ def test_in34_a_second_person_died_at_matter_cites_the_first_it_chains_to():
     first death has no antecedent and cites ROOT."""
     w = POP.build_realm(0)
     w.fixtures = w.fixtures.sweep("illness_rate", 1.0)
-    (pid,) = [_individuals(w)[0]]
+    pid = _individuals(w)[0]
     first = [e for e in _matter(w) if e.kind == "person.died"
              and any(c.subject == pid for c in e.changes)]
     assert len(first) == 1 and first[0].causes == [ROOT]
