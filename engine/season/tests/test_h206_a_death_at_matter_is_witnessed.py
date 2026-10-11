@@ -110,6 +110,20 @@ def test_h206_the_dead_man_is_still_nowhere_for_place_of_and_an_event_of_another
     assert w.departed_from("p_near", 0) is None, "a person still here has no departure"
 
 
+def test_h206_an_act_caused_event_of_the_dead_actor_in_the_dying_tick_is_not_placed():
+    """THE NARROWING, from a measured move: without the actorless clause, the refusals of a victim's
+    own acts later in the killing tick (anchored on him as ACTOR, tier 1) were placed and witnessed, and
+    `build_realm(0)`'s 2-season hash moved on 56 events no MATTER death caused."""
+    w = _world()
+    _die_at_matter(w)
+    act = Act(id="h206_ghost", actor=HOLDER, verb="speak", payload={})
+    w.acts.append(act)
+    ghost = type(w.log[-1])(id="ghost_ev", kind="act.ineligible", changes=[], causes=[act.id],
+                            emitted_at=w.tick)
+    assert anchor_of(w, ghost) == HOLDER and w.departed_from(HOLDER, w.tick) == "S"
+    assert world_q.event_place(w, ghost) is None, "an act-caused Event was placed at the death"
+
+
 def _fight_until_he_dies(model_ids=range(40)):
     """The real fold, the real `fight`: p_near fights p_high under `wound_harm_model = total` (a
     wound kills) until one act id kills him. Returns the world and the Events, or None if no id did."""

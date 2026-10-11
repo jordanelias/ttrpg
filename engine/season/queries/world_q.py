@@ -54,7 +54,7 @@ from ..state.containment import ancestry, home_of  # noqa: F401 -- re-exported
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
 from ..state.gate import BENCH_BASIS, may_determine, purview_reaches, sits_over
-from ..state.attribution import anchor_of
+from ..state.attribution import anchor_of, causing_act
 from ..state.ids import ROOT, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
@@ -447,16 +447,20 @@ def event_place(w: World, e) -> Optional[str]:
     that needs a place, and a dead seat-holder was reported to nobody. A death at RESOLVE anchors on
     the killer, who is alive, which is why only the MATTER-written one was lost.
 
-    The limb: when the anchor is a person the world NO LONGER HOLDS, his place is where he stood when
+    The limb, for an ACTORLESS Event only (no act among its causes): when the anchor is a person the
+    world NO LONGER HOLDS, his place is where he stood when
     `remove_person` took him out, if that was this Event's own tick (`World.departed_from`) -- the
     container of the `contain` edge the cascade closed. It cannot be read off `w.tenures`: a Tenure is
     owned by its subject, so his own edge left the store with him (probed on `build_realm(0)`).
     It is NOT `place_of`'s person limb, deliberately: `place_of` is also asked about the dead by
     `reach` (a claim about a dead man), and answering there would move every reader of an old
-    claim; only an EVENT's own tick has a place for him. `None` otherwise, exactly as before."""
+    claim; only an EVENT's own tick has a place for him. ⚠ ACTORLESS ONLY, MEASURED: without that clause
+    the limb also placed the refusals of a victim's own acts later in the killing tick (`act.ineligible`,
+    `travel.blocked`, ... anchored on the dead ACTOR, tier 1) and `build_realm(0)`'s 2-season hash
+    moved on 56 events no death at MATTER caused. `None` otherwise, exactly as before."""
     who = anchor_of(w, e)
     here = place_of(w, who)
-    if here is not None or who is None:
+    if here is not None or who is None or causing_act(w, e) is not None:
         return here
     return w.departed_from(who, e.emitted_at)
 
