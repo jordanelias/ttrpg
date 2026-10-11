@@ -70,7 +70,12 @@ def aggregate_questions(qs: list, rule: str):
     # `all` and `one_per_source` widen the REFERENTS rather than the question count, because
     # `assemble` takes one question. The person brings everything they are being asked about.
     refs = tuple(sorted({r for q in qs for r in q.referents}))
-    return Question(f"q:agg:{rule}:{qs[0].id}", qs[0].source, refs, qs[0].about)
+    # IN-53: the folded question is stamped with `qs[0]`'s source, so anything a LATER question's
+    # source declared would be lost with it. A referent's class is a fact about the referent, kept on
+    # the question per referent (`Question.classes`), so the fold UNIONS it -- whichever rule folded,
+    # a referent offered as an Office is still an Office. `first` returns `qs[0]` itself, untouched.
+    classes = tuple(sorted({rc for q in qs for rc in q.classes}))
+    return Question(f"q:agg:{rule}:{qs[0].id}", qs[0].source, refs, qs[0].about, classes)
 
 
 def view_ids(p: Person, q: Any, k: int, rule: str) -> list:

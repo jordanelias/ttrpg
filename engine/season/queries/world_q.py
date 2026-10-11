@@ -29,12 +29,13 @@ step adds without anyone remembering to say so.
 
 from __future__ import annotations
 
+from dataclasses import replace
 from typing import Callable, Optional
 
 from ..data.requires import UNKNOWN, binding_from_act
 from ..data.rosters import (
     FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, RUNG_KINDS, SITE_KINDS,
-    TENURE_KINDS,
+    SOURCE_REFERENT_CLASS, TENURE_KINDS,
 )
 from ..gaps import Forbidden, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
@@ -1461,6 +1462,16 @@ def ambitions(w: World, p: Person) -> list:
     return out
 
 
+def _stamped(q: Question) -> Question:
+    """`q` WITH ITS REFERENTS' CLASS STAMPED FROM ITS SOURCE'S DECLARATION (IN-53). The one place a
+    Question gets `classes`: `rosters.yaml: question_sources.referent_class` names the class every
+    referent of a source's questions is (`null`: no one class, nothing stamped), and the resolver
+    applies it here, where a `World` exists, so that `opening_set` -- which has none -- can ask the
+    question the referent carries. Read off the source's declaration, never off an id or a verb."""
+    cls = SOURCE_REFERENT_CLASS[q.source]
+    return q if cls is None else replace(q, classes=tuple((r, cls) for r in q.referents))
+
+
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
     """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier.
 
@@ -1547,7 +1558,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
         if (c.subject in R                                       # clause 1 -- the thing itself
                 or ((pl := place_of(w, c.subject)) is not None and pl in R)   # clause 2 -- where it is
                 or any(x in R for x in named(c))):                # clause 3 -- whom the CONTENT names
-            out.append(Question(f"q:claim:{c.id}", "claim_landed", (c.subject,), c.id))
+            out.append(_stamped(Question(f"q:claim:{c.id}", "claim_landed", (c.subject,), c.id)))
 
     # Q4 -- `need`. A live `commit` Tenure whose object is an OUGHT Proposition is a STANDING
     # question: it recurs every season until the commitment ends, which is what makes an NPC with
@@ -1555,7 +1566,18 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # `17`: the live-`commit`-to-an-OUGHT rule is `ambitions`' alone (above; R-06's READ), so this
     # asks it rather than restating it; one Question per ambition, in edge order, as before.
     for pid in ambitions(w, p):
-        out.append(Question(f"q:need:{pid}", "need", (w.propositions[pid].subject,), pid))
+        out.append(_stamped(Question(f"q:need:{pid}", "need", (w.propositions[pid].subject,), pid)))
+
+    # `seat` (IN-53, H-203 form B) -- a STANDING question per Office whose rung `reach` covers: the
+    # office id as the referent, so a person can form an act ABOUT a seat (`confer`, `revoke`:
+    # `verb_table.yaml: referent_class`). Like `need`, no claim and no Event stands behind it, and
+    # `about` is empty: nothing occasioned it (`occasioned_by` returns `[]`, the `[ROOT]` case).
+    # It supplies the id only -- never who holds the seat or whether it is vacant (AX-2: the person
+    # decides from what they hold; the fold reads the world). A rungless office is in no one's
+    # reach. Sorted by id below with the rest.
+    for o in w.offices.values():
+        if o.rung is not None and o.rung in R:
+            out.append(_stamped(Question(f"q:seat:{o.id}", "seat", (o.id,))))
 
     # ⚠ TWO ORDERINGS LIVE IN THIS ONE LINE AND ONLY THE FIRST IS DECLARED ANYWHERE.
     # `order[q.source]` is `rosters.yaml: question_sources`, whose own note says ORDER IS SEMANTIC
@@ -1603,6 +1625,8 @@ def occasioned_by(w: "World", q: Optional["Question"]) -> list:
         caused it this season, and `ID-5`'s polarity says absence maps to the refusal rather than
         to a plausible default. An act taken out of a standing ambition genuinely has no
         antecedent but the actor, and `[ROOT]` is what the design already has for that.
+      * `seat` (IN-53) — **empty, for `need`'s reason.** An office in reach is a standing
+        referent, not news; no Event raised it.
 
     ⚠ **WHAT THIS DELETES IS A GUARD AND AN UNREACHABLE SEARCH, NOT TWO BRANCHES.** `date_due` and
     `band_crossed` never had a branch of their own here — `05` §A.3.1's correction to an earlier
@@ -1626,7 +1650,8 @@ def occasioned_by(w: "World", q: Optional["Question"]) -> list:
     if q is None:
         return []
     about = str(getattr(q, "about", "") or "")
-    if not about or q.source == "need":
+    # `seat` (IN-53) is `need`'s case: a standing question no Event caused, so `[ROOT]`.
+    if not about or q.source in ("need", "seat"):
         return []
     if q.source == "claim_landed":
         for e in reversed(w.log):
