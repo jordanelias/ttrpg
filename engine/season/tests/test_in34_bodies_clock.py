@@ -206,13 +206,13 @@ def test_in34_a_seat_holders_death_by_age_deposits_claims_naming_him_where_he_st
     assert len(died) == 1, f"{len(died)} `person.died` events name the holder"
     assert died[0].causes == [ROOT] and world_q.causing_act(w, died[0]) is None
     assert holder not in w.persons
-    assert world_q.event_place(w, died[0]) == place, "the death is not placed where he stood"
     on_here = {p: cs for p, cs in named(w, holder, here, "person.died").items() if cs}
     assert len(on_here) >= 1, (
         f"no one at {place} holds a `person.died` claim naming the dead holder: the death reached "
         "nobody (H-206 not holding)")
     on_away = {p: cs for p, cs in named(w, holder, away).items() if cs}
     assert not on_away, f"{len(on_away)} persons out of reach hold a claim naming him: {sorted(on_away)}"
+    assert world_q.event_place(w, died[0]) == place, "the death is not placed where he stood"
 
     # -- the control arm: the same holder, as old, step 0 ------------------------------------------
     c, holder_c, _o, _p, _h = build()
