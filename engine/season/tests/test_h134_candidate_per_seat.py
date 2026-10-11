@@ -15,10 +15,9 @@ THE CONTROL. A holder of ONE seat forms Candidates carrying no seat key, mints t
 from the PRE-CHANGE function at f9ce11b0 (`_CONTROL`), and counted (`checked >= N`, §0.1 pt 2) so a
 loop that asserted nothing cannot pass.
 
-NOT HERE, AND SAID: this file does not claim the computed `revoke` executes. Since IN-53 a computed
-`revoke` names its office on `subject` (`loop/predicates.py::office_named_by`) and only an Office-class
-referent forms it (`Question.classes`), so the question below stamps the target as one; the helper
-`_with_office` still adds the hand-built `office` key, which `office_named_by` reads first.
+NOT HERE, AND SAID: a computed `revoke` still carries no `office` operand (`H-207` causes 1/2/4), so
+the fold's `_req_revoke` refuses it before the seat is asked; this file asks the seat test by
+adding the `office` a computed act lacks, and does not claim the computed `revoke` executes.
 """
 import hashlib
 
@@ -68,9 +67,7 @@ def _world():
 
 
 def _candidates(w, pid):
-    # IN-53: `revoke` forms only on a referent the question carries as an Office (a folded `seat`
-    # question keeps the class on the referent while its source reads `need`); `Hh` is a rung.
-    q = Question("q_h134", "need", (TARGET, "Hh"), "Hh", ((TARGET, "Office"),))
+    q = Question("q_h134", "need", (TARGET, "Hh"), "Hh")
     p = w.persons[pid]
     return opening_set(p, View(p.id, [], 99, q), q, w.fixtures)
 
@@ -152,12 +149,7 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 
 # `(n candidates, n acts, sha256 of the repr of (candidates, acts))` for `p_one` -- captured by
 # running `_control_reading` on the tree at f9ce11b0, BEFORE this change.
-# RE-PINNED AT IN-53 (70 -> 67, declared): the three Candidates that left are exactly `revoke` on the
-# rung `Hh` (not an Office, so the verb's `referent_class` bars it) and `confer` on `Hh` and on
-# `off_duke` (`confer` now carries a conferee, a person `p_one` knows, and `p_one` knows nobody).
-# Checked by diffing the two readings: nothing else was added, removed or re-ided. Previous digest:
-# (70, 70, "d9bebd8cdece6a438939510e295bb1bdb8062fd72bbac75821f76de7ec8d5484").
-_CONTROL = (67, 67, "f13e4919929a90bcf35688865a2a78ab8fcd656afbb87ffed85c4f5b0118677c")
+_CONTROL = (70, 70, "d9bebd8cdece6a438939510e295bb1bdb8062fd72bbac75821f76de7ec8d5484")
 
 
 def _control_reading():

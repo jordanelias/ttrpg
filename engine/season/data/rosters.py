@@ -633,27 +633,6 @@ PURSUIT_AXES = roster("pursuit_axes")
 # (`from_descriptor: affiliation_roster`); its intensity bounds are the leaf's.
 AFFILIATIONS = roster("affiliations")
 QUESTION_SOURCES = roster("question_sources", ordered=True)
-# IN-53: THE REFERENT CLASS EACH QUESTION SOURCE YIELDS (`rosters.yaml: question_sources.
-# referent_class`) -- the carrier type every referent of that source's questions is, or `None` for a
-# source whose referents are of no one class. `queries/world_q.py::questions_for` (which has the
-# World) stamps it on each referent of the Question it builds (`Question.classes`), the fold in
-# `decision/questions.py` unions it, and `decision/options.py::opening_set` compares what the question
-# carries with a verb row's `referent_class:` column (`data/verbs.py`, which validates the column
-# against `REFERENT_CLASSES` at load). Keyed on exactly the sources, refused at import on
-# `witness_channels.claim_source`'s precedent below: a source with no declaration would make
-# `questions_for` read an absent key, and a declaration for no source is a column nothing reads.
-SOURCE_REFERENT_CLASS = roster_map("question_sources", "referent_class")
-if set(SOURCE_REFERENT_CLASS) != set(QUESTION_SOURCES):
-    raise Unspecified(
-        f"`question_sources.referent_class` keys {sorted(SOURCE_REFERENT_CLASS)}; it must key "
-        f"exactly the sources {list(QUESTION_SOURCES)}", "rosters.yaml",
-        needs="declare one referent class (or `null`, no one class) per question source",
-        law="IN-53 -- a verb that declares a referent class is formed only from a question whose "
-            "source declares the same class, so every source must say which it yields")
-#: The referent classes some question source yields: the closed set a verb row's `referent_class:`
-#: may name. Derived from the map, so a class no source yields cannot be declared by a verb -- such
-#: a verb could never be formed, which is a typo or a missing source, never a declaration.
-REFERENT_CLASSES = frozenset(c for c in SOURCE_REFERENT_CLASS.values() if c is not None)
 PERSON_PREDICATES = roster("person_predicates")
 VIEW_BUILDER_RULES = roster("view_builder_rules")
 QUESTION_AGGREGATION = roster("question_aggregation", ordered=True)

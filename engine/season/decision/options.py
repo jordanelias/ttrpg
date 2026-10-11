@@ -128,14 +128,6 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         opposes_subject = subject_is_opponent(row)
         said_of_entity: dict = {}           # entity -> `said_of` (this row's own-ledger read, per entity)
         for subject in q.referents:
-            # IN-53: A ROW THAT DECLARES A REFERENT CLASS IS FORMED ONLY ON A REFERENT OF THAT CLASS
-            # (`VerbRow.formed_from`). The class is read off the QUESTION (`Question.class_of`),
-            # stamped resolver-side from the producing source's declaration and unioned by the fold
-            # -- no World, no id test, no verb name -- because this function cannot ask what kind of
-            # thing an id is (L2). Placed first so nothing below is paid for a referent the row
-            # could never be about; a row declaring no class passes every referent, as before.
-            if not row.formed_from(q.class_of(subject)):
-                continue
             # ⚠⚠ A CONTEST NEEDS TWO CLAIMANTS, AND A PERSON IS NOT THEIR OWN ADVERSARY.
             # `move`'s `contain_path` cell keeps the same shape of rule -- *"a node is not a path
             # to itself"* -- as the reader's own, and this is that rule one seam over. It reads
@@ -945,7 +937,7 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
     re-deliberates -- a scene tax with nothing behind it. Recorded, with the measurement owed, at
     the telling workplan's T4b *As built* line. `give` (plan position `14`) shares the shape: its
     receiver is a known person and its `with` conjunct the fold's."""
-    fan = row.known_person_operands()
+    fan = row.requires_typed.known_person_operands() if row.requires_typed is not None else ()
     if not fan:
         ops = _operands(p, row, q, subject, fx, {}, seat)
         return [] if ops is None else [ops]
@@ -969,9 +961,7 @@ def _operands(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixtures",
     `None` for a bound operand nobody can supply. The rules are `operands_for`'s docstring's."""
     req = row.requires_typed
     if req is None:
-        # An UNTYPED row carries nothing but what a known person fills for its named counterparty
-        # (`VerbRow.known_person_operands`: `confer`'s `to`); `given` is empty for every other.
-        return dict(given)
+        return {}
     bound = tuple(req.operands())
     admitted = req.needs()
     names = bound + tuple(n for n in _REFERENT_OPERANDS if n in admitted and n not in bound)
