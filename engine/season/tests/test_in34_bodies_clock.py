@@ -50,8 +50,8 @@ from ..state.ids import ROOT
 # chosen so the test can reach a certainty or a visible fraction, nothing more.
 # [JUSTIFIED: test arms -- an `age_step` where a person is certain to die within a century of seasons, and one where a few seasons of age do it]
 AGE_ARMS = (0.01, 0.25)
-# [JUSTIFIED: test arms -- an age-free chance a draw can miss, and certainty]
-ILL_ARMS = (0.05, 1.0)
+# [JUSTIFIED: test arms -- an age-free chance a draw misses about half the time, and certainty]
+ILL_ARMS = (0.5, 1.0)
 
 # The pre-IN-34 base (d47077d5), `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event
 # count and the sha256 of its ordered `kind|id` lines after one season and after two.
@@ -309,3 +309,30 @@ def test_in34_at_certain_illness_every_individual_dies_no_cohort_does_and_it_is_
     people, once, _w = run(arm)
     assert 0 < len(once) < len(people), f"{len(once)} of {len(people)} died at {arm}; no draw is observed"
     assert run(arm)[1] == once, "the same seed gave two sets of deaths"
+
+
+def test_in34_one_persons_missing_draw_moves_nobody_elses_the_draws_are_keyed_not_a_shared_stream():
+    """THE FALSIFIER FOR "ONE KEYED DRAW PER PERSON, NO OTHER STREAM MOVES". Every individual has a
+    hazard of one half at `age_step` 0.05 and age ten, so the draws are live. The same one-season arm
+    is run twice; the second time ONE individual is aged 0 (`born = w.tick`, hazard 0), so no draw is
+    taken for him. The deaths must equal the base deaths minus him. A pass that consumed one shared
+    stream in sorted-pid order would hand every later person the draw of the one before, and the sets
+    would differ. He is chosen so that a death in the base sorts after him -- the one the shift reaches."""
+    def run(skip):
+        w = POP.build_realm(0)
+        w.fixtures = w.fixtures.sweep("age_step", 0.05)
+        for pid in _individuals(w):
+            w.persons[pid].born = w.tick - 10
+        if skip is not None:
+            w.persons[skip].born = w.tick
+            assert world_q.body_hazard(w, skip) == 0.0
+        return _individuals(w), _died(_matter(w))
+
+    people, base = run(None)
+    assert 0 < len(base) < len(people), f"{len(base)} of {len(people)} died; the draws are not observed"
+    after_him = [p for p in people if any(d > p for d in base)]
+    assert after_him, "no death in the base arm sorts after any individual; the shift cannot be seen"
+    skipped = after_him[0]
+    _people, without = run(skipped)
+    assert without == [d for d in base if d != skipped], (
+        f"skipping {skipped}'s draw moved other people's: base {base}, without {without}")
