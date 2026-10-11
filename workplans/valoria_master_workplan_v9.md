@@ -236,7 +236,6 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-31 | H-100 | IN/SE | BLK | SC-03a | — | B-J · B-Q | `_part5` |
 | IN-32 | H-182 ties | IN/FI | BLK | IN-06 | R-05 | B-S | `_part5` |
 | IN-33 | H-58 `exchange` | IN | BLK | IN-10 | R-05 | B-I | `_part5` |
-| IN-34 | #457 FORCE-BODIES | IN/SE | BLK | H-206's WITNESS fix, unscheduled (SE-01 `d12c8db9`, IN-21 `3544d568` landed) | — | B-F | `_part5` |
 | IN-35 | #457 FORCE-HAZARD; SEAM-CLOCK | IN/WR/SE | BLK | IN-06 | — | B-S | `_part5` |
 | IN-36 | #457 FORCE-FOREIGN | IN/FA/MB | BLK | IN-13 | — | B-V | `_part5` |
 | IN-37 | #457 STORY-READ | IN | BLK | SC-01 step 16 | — | B-U | `_part5` |
@@ -314,12 +313,12 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | #457 — `proposals/2026-10-04-forcing-churn-and-the-story-bar.md` | v9 |
 |---|---|
 | STORY-BAR · STORY-SOAK · STORY-READ | landed at B-C (IN-19, `harness/storybar.py`) · landed at B-C (IN-20, `harness/soak.py`'s grades) · IN-37 |
-| FORCE-WEATHER · FORCE-BODIES · FORCE-HAZARD (+ SEAM-CLOCK) · FORCE-FOREIGN | landed, `3544d568` · IN-34 · IN-35 · IN-36 (+ FA-01's cast) |
+| FORCE-WEATHER · FORCE-BODIES · FORCE-HAZARD (+ SEAM-CLOCK) · FORCE-FOREIGN | landed, `3544d568` · IN-34 (landed `44fdb4df`) · IN-35 · IN-36 (+ FA-01's cast) |
 | CARRY-INTERIOR · CARRY-SHORTFALL · CARRY-STABILITY | merged into IN-08 · IN-22 · IN-23 |
 | BOUND-LOOPS · BOUND-STAKES · BOUND-ATTENTION · BOUND-PAPER | instrument landed at B-C (IN-24, `harness/loops.py`; the church ratchet's bound is read at IN-10) · IN-25 (landed `ac9724fc`) · IN-14 · IN-26 |
 | CAST-POPULACE · CAST-DISPOSITION | SE-04 · merged into IN-08 + IN-12 step 9 (J-13 (iii) the adopted interim; `tell` stays uncelled, G-1) |
 | SEAM-LADDER · END-VICTORY | merged into IN-04 · IN-27 |
-| §7 D1 · D2 · D3 · D4 · D5 · D6 | IN-35 · IN-34 · answered: no dated pins (T-c) · IN-36, FA-01 · A-24 → IN-06 · IN-27 (D2, D4, D6 answered as the plan's recommendation, RS-21) |
+| §7 D1 · D2 · D3 · D4 · D5 · D6 | IN-35 · IN-34 (landed `44fdb4df`) · answered: no dated pins (T-c) · IN-36, FA-01 · A-24 → IN-06 · IN-27 (D2, D4, D6 answered as the plan's recommendation, RS-21) |
 
 **#445** (`proposals/2026-09-30-character-and-play-surface/`): S-1 → landed at B-E (`ac9724fc`) · M-1/S-4, S-2/L-1, K-1/K-5, K-3 → PC-06 · U-3 → landed at B-D2 (`b31d2c31`)
 · U-1/U-2/U-6 → MB-08 · P-1 → IN-08 · P-2 → IN-22 · P-3 → FA-01 · P-4, V-4, V-5 → SC-07 · S-6 → FI-01 · V-1 → J-2

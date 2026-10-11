@@ -67,7 +67,7 @@ previous stage's falsifiers being OBSERVED, not on its commit existing; a falsif
 
 **THE CONTROL EVERY STAGE KEEPS.** `build_realm(0)`'s `content_hash()` and its one-season hash byte-identical across
 the stage (`a918cd1f…` and `05f022e2…` were the readings at `52ec9a54`; the batches before B-L move them — declared movers
-include IN-08, IN-34 and SC-03a's docket items, and PC-02..04 moved them at `9054df80` — so each stage's control is the reading on ITS OWN base
+include IN-08, IN-34 (landed `44fdb4df`) and SC-03a's docket items, and PC-02..04 moved them at `9054df80` — so each stage's control is the reading on ITS OWN base
 commit, taken before the first edit); `python -m engine.season.harness.aperture 4 0` reads the same per-verb funnel with the
 control hash EQUAL; `resolvable_verbs()` returns the same set (compare the two sets at the build — no number is
 written here); `python tools/export_composition.py --check` OK. The two readings above were taken (v8 `_part6` §H.1, at its `FORK:` ref)
