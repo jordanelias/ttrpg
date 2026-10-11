@@ -99,6 +99,8 @@ def census(self, token: Token) -> None:
 
 
 def _individuate(w, pid: str, at: str) -> None:
-    w.persons[pid] = Person(pid, pid)
+    # `born`: a person minted now is `age_at_build` old NOW (v9 IN-34); the bare default would be
+    # `-age_at_build`, i.e. that old at tick 0, and so older by every season the realm has run.
+    w.persons[pid] = Person(pid, pid, born=w.tick - w.fixtures.get("age_at_build"))
     w.rungs[pid] = Rung(pid, "person")
     w.add_tenure(Tenure(f"t_{pid}_in", pid, at, "contain", w.tick))

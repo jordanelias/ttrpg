@@ -35,9 +35,14 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # the content hash, and seven seats moved from `rung_above_same_faction` to `null`. Restoring those seven
 # values on the built world reproduces the old three hashes (2d0d1200..., a53cceff..., 286fd568...)
 # exactly, so the move is that data change alone.
-BASE_HASHES = {0: "5812a959c688bb3711f35ee0fc4cb966",
-               1: "0d4f7ae4c920420af938080b48372a9a",
-               2: "6bc6123e6ec9ada1a654474e401b2cf5"}
+# RE-PINNED at v9 IN-34, A SCHEMA MOVE DECLARED: `Person.born` adds a field to every person's `repr`,
+# which `content_hash` folds, so all three move with the bodies clock at its control (both rates 0).
+# Was 5812a959... / 0d4f7ae4... / 6bc6123e.... The ordered (kind, id) event sequence over one and two
+# seasons is identical to the pre-IN-34 base's (`test_in34_bodies_clock.py` pins its count and digest),
+# so the move is the field alone.
+BASE_HASHES = {0: "0a7e27c4c149fe05ecb9eaa64e7579e1",
+               1: "d188461a395714497d81f72175a0c8c3",
+               2: "33b1ae3b5cbeb212f6560fafea9798af"}
 
 # H-26's declared sweep, as tables: a year of four seasons each time.
 YEAR = 4
