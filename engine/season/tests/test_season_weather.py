@@ -31,9 +31,13 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # `build_realm(0)`'s content hash on the base commit (068ec322), taken before this position changed
 # anything: at build, after one season, after two. With `season_factor_draw` at its shipped `()` all
 # three must still read these.
-BASE_HASHES = {0: "2d0d12003675b31aa55e974ae095991e",
-               1: "a53cceff439d6b61171eaa6a891471ee",
-               2: "286fd568b5294eadc7e164ab4f4eaef4"}
+# RE-PINNED 2026-10-11 (Jordan's ruling "null" on seven `offices.yaml` seats): `Office.revocation` is in
+# the content hash, and seven seats moved from `rung_above_same_faction` to `null`. Restoring those seven
+# values on the built world reproduces the old three hashes (2d0d1200..., a53cceff..., 286fd568...)
+# exactly, so the move is that data change alone.
+BASE_HASHES = {0: "5812a959c688bb3711f35ee0fc4cb966",
+               1: "0d4f7ae4c920420af938080b48372a9a",
+               2: "6bc6123e6ec9ada1a654474e401b2cf5"}
 
 # H-26's declared sweep, as tables: a year of four seasons each time.
 YEAR = 4

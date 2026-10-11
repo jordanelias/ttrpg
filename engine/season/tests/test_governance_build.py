@@ -1892,7 +1892,7 @@ def test_8a_every_authored_seat_constructs_against_the_live_rosters():
     rvk = Counter(s["revocation"] for s in seats)
     assert sum(cnf.values()) == 29 and sum(rvk.values()) == 29
     assert cnf == Counter({"appointed": 15, "elected": 8, None: 6}), cnf
-    assert rvk == Counter({"rung_above_same_faction": 22, None: 7}), rvk
+    assert rvk == Counter({"rung_above_same_faction": 15, None: 14}), rvk
 
 
 def test_8a_a_repeated_row_id_refuses_at_load_instead_of_being_collapsed(tmp_path, monkeypatch):
