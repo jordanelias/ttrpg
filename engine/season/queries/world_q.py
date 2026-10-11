@@ -437,8 +437,7 @@ def place_of(w: World, x: Optional[str]) -> Optional[str]:
 def event_place(w: World, e) -> Optional[str]:
     """WHERE AN EVENT HAPPENED -- `place_of(w, anchor_of(w, e))`, the one expression the tree used for
     it at WITNESS (`epistemic._ch_co_located` and `epistemic.seen_subject`), now owned once, plus one
-    limb `place_of` cannot carry: A DEATH HAS A PLACE (H-206). (`loop/census.py` keeps its own
-    `place_of(w, anchor_of(w, e))`: it places a demand made by a living actor, and is not widened.)
+    limb `place_of` cannot carry: A DEATH HAS A PLACE (H-206).
 
     `World.remove_person` takes the dead out of `w.persons` and closes every edge naming him in the
     write that kills him, and WITNESS runs after. An Event no act caused (a death at MATTER) anchors
@@ -718,7 +717,7 @@ def body_hazard(w: World, pid: str) -> float:
     illness = float(w.fixtures.get("illness_rate"))
     for name, rate in (("age_step", age_step), ("illness_rate", illness)):
         if not 0 <= rate <= 1:        # `not ... <=`, so a NaN is refused too
-            raise ValueError(f"{name} {rate} is not a chance in [0, 1]")
+            raise ValueError(f"{name} {rate} is not a chance in [0, 1] (H-208)")
     p = w.persons[pid]
     if p.is_cohort or (age_step == 0 and illness == 0):
         return 0.0

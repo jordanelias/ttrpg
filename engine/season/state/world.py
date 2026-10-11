@@ -227,9 +227,12 @@ class World:
         # H-206. WHERE EACH REMOVED PERSON LAST STOOD, `{pid: (container, tick)}`, written by
         # `remove_person` -- the one death cascade -- and read by `world_q.event_place`. It exists
         # because the cascade leaves NOTHING to read the place from: a Tenure is owned by its subject
-        # (S15.1), so the dead man's own `contain` edge leaves `w.tenures` with him. Derived
-        # bookkeeping of that one write, not game state, so the content hash does not fold it
-        # (`test_h118`'s underscore exclusion, like `_emitted_by_write` above).
+        # (S15.1), so the dead man's own `contain` edge leaves `w.tenures` with him. Game state the
+        # content hash does not fold: the only surviving copy of an ended `contain` edge's object,
+        # because the dead man's own edges are deleted with him (the `tenures` view; against
+        # 04_CODE_ARCHITECTURE.md:360's NEVER-deletion). Read only for an Event of the removal's own
+        # tick, so everything it decides reaches the hashed log as `claim.deposited` that same tick.
+        # Unhashed for that reason, not because it is derived (`test_h118`'s underscore exclusion).
         self._departed: dict[str, tuple] = {}
         # G4 -- S27.3's SUM-THEN-CLAMP-ONCE ACCUMULATOR, `(record_kind, id, field) -> [(act id,
         # delta)]`. It lived as a local of `loop/resolve.py::resolve` and was fed off the success
@@ -1219,8 +1222,11 @@ class World:
             self._barrier_cache[key] = build()
         return self._barrier_cache[key]
 
-    def last_emission_of(self, kind: str, subject: str) -> Optional[str]:
+    def last_emission_of(self, kind: str, subject: str, *, written: bool = False) -> Optional[str]:
         """The id of the most recent Event of `kind` about `subject`, or None.
+
+        `written=True`: the Event that WROTE `subject` (H-129's fix shape), taken for `person.died`,
+        whose fold emission anchors on the killer.
 
         `W4`'s chaining primitive: a licensed clock's next tick names its previous one, so
         `[ROOT]` stops appearing after the clock's genuine first emission.
@@ -1238,7 +1244,10 @@ class World:
         a.actor, ...)`), so `last_emission_of("body.changed", <victim>)` already missed a
         combat-caused wound before this deletion -- this docstring's overclaim is new, the gap it
         describes is not. LATENT AT SHIPPED DEFAULTS: `body_step = 0` skips the caller
-        (`loop/matter.py`) entirely, so nothing reaches it on a built world today. Registered
+        (`loop/matter.py`) entirely, so nothing reaches it on a built world today. The bodies pass
+        (IN-34) is a second `person.died` caller beside hunger; both go through `matter._die` with
+        `written=True`, which reads `changes[]` for that kind alone. `body.changed` still reads the
+        anchor, so its half of H-129 stands. Registered
         rather than fixed here: `hole_register.yaml` H-129 -- a fix (reading the first minted
         receipt in `changes[]` instead of `anchor_of`) would move outputs in a `body_step > 0`
         sweep arm and needs its own decision, not a side effect of this position's field deletion.
@@ -1253,7 +1262,10 @@ class World:
         the reason this sentence states. Not corrected further here: the count is cosmetic and
         the property this paragraph defends is unaffected."""
         for e in reversed(self.log):
-            if e.kind == kind and anchor_of(self, e) == subject:
+            if e.kind != kind:
+                continue
+            if (any(c.subject == subject for c in e.changes) if written
+                    else anchor_of(self, e) == subject):
                 return e.id
         return None
 

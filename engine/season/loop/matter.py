@@ -82,6 +82,19 @@ def _crossings(w: "World", subject_id: str, floors: dict, before, after,
     return out
 
 
+def _die(w: "World", token: Token, pid: str) -> None:
+    """DEATH THROUGH THE ONE OWNER, written once for both MATTER callers (hunger, the bodies pass).
+    `World.remove_person` is `_eff_kill`'s cascade, factored. Chained to the death WRITTEN about
+    `pid` (`written=True`, H-129): a RESOLVE `person.died` anchors on the killer, so the anchor read
+    would hand a killer who later dies here his victim's death as his cause."""
+    prior_d = w.last_emission_of("person.died", pid, written=True)
+    w.write("exists", token,
+            lambda pid=pid: w.remove_person(pid),
+            record_kind="Person", fieldname="exists", driver="Event",
+            emits="person.died", subject=pid,
+            causes=[prior_d] if prior_d else [ROOT])
+
+
 def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[Event]:
     w = self.w
     w.step = Step.MATTER
@@ -447,12 +460,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
             # DEATH THROUGH THE ONE OWNER. `World.remove_person` is `_eff_kill`'s cascade,
             # factored — the same `w.tenures` scan, so an edge another person owns that NAMES the
             # dead one closes here too (§15.3, and `W-E`'s measured dangling `tie`).
-            prior_d = w.last_emission_of("person.died", pid)
-            w.write("exists", token,
-                    lambda pid=pid: w.remove_person(pid),
-                    record_kind="Person", fieldname="exists", driver="Event",
-                    emits="person.died", subject=pid,
-                    causes=[prior_d] if prior_d else [ROOT])
+            _die(w, token, pid)
 
     # -- THE BODIES CLOCK: AGEING AND ILLNESS (v9 IN-34, FORCE-BODIES) ------------
     #
@@ -462,8 +470,9 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # (world_seed, tick, pid, purpose), so the same seed gives one death and no other stream moves),
     # and a death through `World.remove_person`, the one cascade hunger and `fight` already route
     # through. So a seat-holder dying here closes his `hold` exactly as a killing would. It is
-    # `(Person, exists)` at MAT, emitting `person.died`, chained to its own prior emission -- the
-    # hunger death's write above, reused rather than re-derived.
+    # `(Person, exists)` at MAT, emitting `person.died`, chained through `_die` -- the same write as
+    # the hunger death above -- to the death WRITTEN about the person (H-129), not the last one
+    # anchored on him.
     # ⚠ THE CONTROL TAKES NO DRAW: both rates ship at 0, `body_hazard` returns 0 and nothing is
     # written, so the season is today's. Read AFTER the hunger pass, so a person who starved this
     # barrier is already gone and cannot die twice.
@@ -478,12 +487,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
         keyed = keyed or draw_factory(w.world_seed, lambda: w.tick)
         if keyed(pid, "body_hazard").random() >= hazard:
             continue
-        prior_d = w.last_emission_of("person.died", pid)
-        w.write("exists", token,
-                lambda pid=pid: w.remove_person(pid),
-                record_kind="Person", fieldname="exists", driver="Event",
-                emits="person.died", subject=pid,
-                causes=[prior_d] if prior_d else [ROOT])
+        _die(w, token, pid)
 
     for rid in sorted(w.rungs):
         r = w.rungs[rid]

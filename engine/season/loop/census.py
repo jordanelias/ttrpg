@@ -21,7 +21,7 @@ from __future__ import annotations
 
 from ..data.matrix import Step
 from ..queries import world_q
-from ..state.attribution import anchor_of, causing_act
+from ..state.attribution import causing_act
 from ..state.carriers import Person, Rung, Tenure
 from ..state.gate import Token
 from ..state.world import rung_kind_ascends
@@ -59,10 +59,11 @@ def census(self, token: Token) -> None:
         pid = world_q.demanded_person(w, a) if a is not None else None
         if pid is None:
             continue
-        # WHERE THE DEMAND WAS MADE -- `place_of(w, anchor_of(w, e))`, the one expression the tree
-        # uses for *where an Event happened* (`epistemic._ch_co_located`). A refusal's anchor is
-        # its actor, so the person is individuated where the order was given.
-        at = world_q.place_of(w, anchor_of(w, e))
+        # WHERE THE DEMAND WAS MADE -- `world_q.event_place`, the one owner of *where an Event
+        # happened* (`epistemic._ch_co_located`). Census reads only act-caused Events, for which
+        # `event_place` is `place_of(w, anchor_of(w, e))`; a refusal's anchor is its actor, so the
+        # person is individuated where the order was given.
+        at = world_q.event_place(w, e)
         if at is None:
             TRACE.note(f"{e.id} demanded {pid!r} at no place; individuated nobody "
                        "(F.30: a Person with no `contain` edge is nowhere)")

@@ -534,7 +534,7 @@ DEFAULT_FIXTURES = Fixtures(
     # `age_step` is the chance of death added per season of age, `illness_rate` the age-free chance
     # a season. SHIPPED DARK: both ship at 0, THE CONTROL -- no draw is taken and no body is written,
     # so the season is today's (like `body_step` above and IN-21's `season_factor_draw ()`).
-    # ⚠ NONE OF THE THREE NUMBERS IS CHOSEN HERE; ALL ARE JORDAN'S TO SET (#457 D2's gate). A realm
+    # ⚠ NONE OF THE THREE NUMBERS IS CHOSEN HERE; ALL ARE JORDAN'S TO SET (#457 D2's gate).
     # No source authors an age: `references/npc_registry.yaml` carries `age: null [GAP]`
     # on 29 of its 46 rows and no age key on 17, so `age_at_build` -- the age every person the
     # realm builds has at tick 0 (`Person.born = -age_at_build`) -- is a declared control default,

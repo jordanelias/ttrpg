@@ -10,7 +10,7 @@ halves that belong together because they are the two ends of one channel:
     table built from the roster, `live_channels` and `observers_for`. ⚠ **`_event_place` MOVED OUT
     AT POSITION `11a`**, promoted to `queries.world_q.place_of` (`ARCH §F.14`'s own name, taking
     any id rather than only an Event); its two callers here, `_ch_co_located` and `seen_subject`,
-    now read `world_q.place_of(w, anchor_of(w, e))`.
+    now read `world_q.event_place(w, e)`, which is `place_of(w, anchor_of(w, e))` plus H-206's limb.
   * **what they saw** — `R8.1`'s `Seen` struct, its `_term_*` readers and `seen_of` /
     `seen_subject`, which `loop/witness.py` deposits as the `seen` claim.
 
@@ -338,7 +338,7 @@ def _ch_co_located(w: "World", e, pid) -> bool:
     went. `cache_at_barrier` is safe here because the fan is built BEFORE `witness` enters its
     parallel map. Found by the `W6` adversarial pass.
 
-    ⚠ **`world_q.place_of(w, anchor_of(w, e))`, NOT A LOCAL LOOKUP -- MOVED AT POSITION `11a`.**
+    ⚠ **`world_q.event_place(w, e)`, NOT A LOCAL LOOKUP -- MOVED AT POSITION `11a`.**
     This site's own private `_event_place` used to answer it, testing person-before-rung in an
     order its docstring called *"the whole of this function's correctness"*: the first version
     tested `e.subject in w.rungs` FIRST, and `probes.py` gives every person a same-id `person`-kind
@@ -855,7 +855,7 @@ def seen_subject(w: "World", e: "Event", pid: str, mode: str) -> Optional[str]:
     claim about nothing raises no question and occupies a ledger slot the cap evicts somebody
     else for.
 
-    ⚠ `world_q.place_of(w, anchor_of(w, e))`, NOT `_event_place` -- MOVED AT POSITION `11a`, same
+    ⚠ `world_q.event_place(w, e)`, NOT `_event_place` -- MOVED AT POSITION `11a`, same
     reasoning as `_ch_co_located` above."""
     changed = []
     for c in e.changes:
