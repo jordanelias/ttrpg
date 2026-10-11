@@ -5661,9 +5661,25 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     # ten seasons, computed chooser -- `Hh` grain 8 x 10, `S` monotone up]
     assert world_q.subsistence_draw(w) == {}, (
         "`tiny_world` has an eater again; re-measure the hearth rather than reading this note")
-    assert hearth == [hearth[0]] * len(hearth), (
-        f"the hearth moved with nobody drawing on it: {hearth}. Something other than the draw now "
-        "writes `Hh`'s larder -- re-attribute it before re-pinning")
+    # ⚠ RE-ATTRIBUTED AT IN-53, NOT RE-PINNED. The `seat` question source gives persons who had no
+    # question one (an Office id in reach), and `transfer` forms on that referent like any unclassed
+    # verb: three `transfer`s out of `Hh` to `off_duke` (a seat's treasury) now EXECUTE and the hearth
+    # steps 8 -> 5. Nobody DRAWS on it still (asserted above); what writes it is `transfer`, and
+    # every grain it loses is a granted `transfer` from `Hh` -- the same attribution the settlement's
+    # larder gets below. Falsifier: any other writer leaves the equality unbalanced; control: the
+    # base arm drains nothing and the hearth is flat (0 == 0, and the `>= 0` count is asserted).
+    ids = {e.id for e in w.log}
+    hearth_drained = sum(int((a.payload or {}).get("amount", 0))
+                         for a in d.resolved
+                         if a.verb == "transfer"
+                         and (a.payload or {}).get("from") == "Hh"
+                         and (a.payload or {}).get("to") != "Hh"
+                         and any(H(w.world_seed, t, a.actor, f"transfer.made:{a.id}") in ids
+                                 for t in range(len(hist) + 1)))
+    assert hearth == sorted(hearth, reverse=True) and hearth[0] - hearth[-1] == hearth_drained, (
+        f"the hearth moved with nobody drawing on it: {hearth}, against {hearth_drained} granted "
+        "out of it. Something other than the draw and a granted `transfer` now writes `Hh`'s "
+        "larder -- re-attribute it before re-pinning")
     assert settle == sorted(settle) and settle[-1] > settle[0], (
         f"the settlement no longer overflows: {settle}")
     assert minted, "the chooser minted nothing; this test cannot observe H-94"
@@ -5776,15 +5792,37 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
                 for c in e.changes if c.subject in eaters_at_build}
         return sum((len(hist) - 1 - k) * eaters_at_build[pid] for pid, k in died.items())
     lost, nt_lost = _lost_draws_on_s(d), _lost_draws_on_s(no_transfer_d)
-    gap = ((no_transfer[-1]["S"].get("grain", 0) + nt_levied - grain_draw * nt_lost)
-           - (settle[-1] + levied - grain_draw * lost))
-    assert gap == drained, (
-        f"the settlement ends at {settle[-1]} (levied {levied}, {lost} lost draws) and at "
-        f"{no_transfer[-1]['S'].get('grain', 0)} (levied {nt_levied}, {nt_lost} lost draws) with "
-        f"`transfer` suppressed, a gap of {gap} once each arm's levy and dead eaters are accounted "
-        f"for, against {drained} grain actually carried out of `S` by granted transfers. Something "
-        "OTHER than `transfer`, `levy` and the population channel is moving the settlement's "
-        "larder and the docstring's attribution is confounded again")
+    # ⚠⚠ IN-53: `restore` IS A THIRD ACT THAT MOVES `S`'s LARDER, THROUGH THE YIELD, AND THE `seat`
+    # SOURCE LET IT IN. Persons who had no question now hold one (an Office id in reach), which moves
+    # scene competition again: in the full arm ONE `restore` now executes (`site.restored` 1 vs 0,
+    # `site_harbour` condition 940 vs 800), the yield it raises accrues to `S` for the rest of the
+    # run, and the arms end 411 vs 377 -- a gap of -34 against 0 carried out by `transfer`. MEASURED
+    # (scratch `w8c.py`, `tiny_world`, ten seasons): with `restore` suppressed in BOTH arms the two end
+    # at 377 and 377, the gap is 0 and `drained` is 0, so `restore` is the whole of the difference.
+    # The equality is therefore taken over arms with `restore` suppressed -- the confound removed by
+    # the same means the `transfer` suppression removes its own, and not by editing the result. The
+    # full-verb arms above stay as they were for the assertions that read them.
+    no_restore = resolvable_verbs() - {"restore"}
+    eq_full, _, eq_full_d = _ten_seasons(P.tiny_world(), verbs=no_restore)
+    eq_nt, _, eq_nt_d = _ten_seasons(P.tiny_world(), verbs=no_restore - {"transfer"})
+    eq_ids = {e.id for e in eq_full_d.w.log}
+    eq_drained = sum(int((a.payload or {}).get("amount", 0))
+                     for a in eq_full_d.resolved
+                     if a.verb == "transfer"
+                     and (a.payload or {}).get("from") == "S"
+                     and (a.payload or {}).get("to") != "S"
+                     and any(H(eq_full_d.w.world_seed, t, a.actor, f"transfer.made:{a.id}") in eq_ids
+                             for t in range(len(hist) + 1)))
+    eq_lost, eq_nt_lost = _lost_draws_on_s(eq_full_d), _lost_draws_on_s(eq_nt_d)
+    gap = ((eq_nt[-1]["S"].get("grain", 0) + _levied_from_s(eq_nt_d) - grain_draw * eq_nt_lost)
+           - (eq_full[-1]["S"].get("grain", 0) + _levied_from_s(eq_full_d) - grain_draw * eq_lost))
+    assert gap == eq_drained, (
+        f"with `restore` suppressed the settlement ends at {eq_full[-1]['S'].get('grain', 0)} and at "
+        f"{eq_nt[-1]['S'].get('grain', 0)} with `transfer` suppressed, a gap of {gap} once each arm's "
+        f"levy and dead eaters are accounted for, against {eq_drained} grain actually carried out of "
+        "`S` by granted transfers. Something OTHER than `transfer`, `levy`, `restore` and the "
+        "population channel is moving the settlement's larder and the docstring's attribution is "
+        "confounded again")
     # ⚠ THIS ASSERTED `no_move[-1] == settle[-1]` AND FIRED ON THE `R7` FAN-OUT FLIP (2026-09-07),
     # and the re-attribution its message demanded was RUN rather than reasoned. What it found is
     # that the docstring's conclusion survives and its scope does not:

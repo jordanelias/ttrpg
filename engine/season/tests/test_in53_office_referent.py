@@ -326,3 +326,39 @@ def test_in53_f_the_untyped_counterparty_is_still_no_candidate_where_it_is_not_a
     assert VERB_TABLE["confer"].known_person_operands() == ("to",)
     assert VERB_TABLE["tell"].known_person_operands() == ("to",)
     assert VERB_TABLE["revoke"].known_person_operands() == ()
+
+
+# ======================================================================================
+# (g) END TO END: A COMPUTED `revoke`, THEN A COMPUTED `confer` INTO THE SEAT IT VACATED
+# ======================================================================================
+
+def test_in53_g_a_computed_revoke_then_a_computed_confer_execute():
+    """The whole computed path with nothing hand-built but the pick: `opening_set` forms the
+    Candidate from a `seat` question, `pack_scenes` mints the act (`Act.via` the seat it was formed
+    for), the fold admits it from `subject` alone and the effect writes. Then the SAME path confers
+    the seat it vacated on a person the conferrer knows -- `to` carried, not defaulted, not raised.
+    (What this does not claim: that a person CHOOSES either; `aperture`'s reading is that.)"""
+    from engine.season.decision.choose import pack_scenes
+    from engine.season.state.ids import H
+    w, d = _gov_world()
+    _know(w, "p_king", "p_mid")
+    p, q = w.persons["p_king"], _office_q(w, "off_duke")
+    mint = lambda who, verb, subj: H(w.world_seed, w.tick, who, f"act:{verb}:{subj}")
+
+    def act_for(verb):
+        cands = [c for c in _formed(w, "p_king", q) if c.verb == verb and c.operands["via"] == "off_crown"]
+        assert len(cands) == 1, (verb, cands)
+        scenes = pack_scenes(p, cands, 99, w.fixtures, mint, occasion=q)
+        (a,) = [a for s in scenes for a in s.acts]
+        return a
+
+    rv = act_for("revoke")
+    assert rv.via == "off_crown" and "office" not in rv.payload and rv.payload["subject"] == "off_duke"
+    assert _hold(w, "off_duke") is not None
+    assert "tenure.closed" in _resolve(w, d, rv), "the computed revoke did not execute"
+    assert _hold(w, "off_duke") is None
+
+    cf = act_for("confer")
+    assert cf.payload["to"] == "p_mid" and cf.payload["subject"] == "off_duke"
+    assert "tenure.opened" in _resolve(w, d, cf), "the computed confer did not execute"
+    assert _hold(w, "off_duke").subject == "p_mid"

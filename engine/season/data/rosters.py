@@ -635,11 +635,13 @@ AFFILIATIONS = roster("affiliations")
 QUESTION_SOURCES = roster("question_sources", ordered=True)
 # IN-53: THE REFERENT CLASS EACH QUESTION SOURCE YIELDS (`rosters.yaml: question_sources.
 # referent_class`) -- the carrier type every referent of that source's questions is, or `None` for a
-# source whose referents are of no one class. `decision/options.py::opening_set` compares it with a
-# verb row's `referent_class:` column (`data/verbs.py`, which validates the column against
-# `REFERENT_CLASSES` at load). Keyed on exactly the sources, refused at import on
+# source whose referents are of no one class. `queries/world_q.py::questions_for` (which has the
+# World) stamps it on each referent of the Question it builds (`Question.classes`), the fold in
+# `decision/questions.py` unions it, and `decision/options.py::opening_set` compares what the question
+# carries with a verb row's `referent_class:` column (`data/verbs.py`, which validates the column
+# against `REFERENT_CLASSES` at load). Keyed on exactly the sources, refused at import on
 # `witness_channels.claim_source`'s precedent below: a source with no declaration would make
-# `opening_set` read an absent key, and a declaration for no source is a column nothing reads.
+# `questions_for` read an absent key, and a declaration for no source is a column nothing reads.
 SOURCE_REFERENT_CLASS = roster_map("question_sources", "referent_class")
 if set(SOURCE_REFERENT_CLASS) != set(QUESTION_SOURCES):
     raise Unspecified(

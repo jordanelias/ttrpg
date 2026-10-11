@@ -35,9 +35,13 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # the content hash, and seven seats moved from `rung_above_same_faction` to `null`. Restoring those seven
 # values on the built world reproduces the old three hashes (2d0d1200..., a53cceff..., 286fd568...)
 # exactly, so the move is that data change alone.
+# RE-PINNED AT IN-53 (the `seat` question source, the per-referent class, the conferee), a declared
+# move BY OUTCOME with the build unmoved (Question is not hashed): one season 0d4f7ae4 -> 8cc97dcf, two
+# 6bc6123e -> 5c9048b1. The always-refused `confer`/`revoke` Candidates stop forming (formed 6 -> 0 and
+# 6 -> 0 at `aperture 1 0`), and persons whose only question is a `seat` one now deliberate.
 BASE_HASHES = {0: "5812a959c688bb3711f35ee0fc4cb966",
-               1: "0d4f7ae4c920420af938080b48372a9a",
-               2: "6bc6123e6ec9ada1a654474e401b2cf5"}
+               1: "8cc97dcfed01a0c54c71eb32e2dcdc79",
+               2: "5c9048b196cdc8260571ffefe283e116"}
 
 # H-26's declared sweep, as tables: a year of four seasons each time.
 YEAR = 4
