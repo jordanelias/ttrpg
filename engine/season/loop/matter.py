@@ -473,7 +473,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # ⚠ WHAT THE DEATH REACHES: an actorless `person.died` is placed where `remove_person` took him
     # out (`world_q.event_place`, H-206), so persons standing there hold claims naming the dead
     # holder. NOT BUILT: claims naming his OFFICE or closed HOLD (H-206's NOT DONE).
-    if w.fixtures.get("age_step") or w.fixtures.get("illness_rate"):
+    if float(w.fixtures.get("age_step")) or float(w.fixtures.get("illness_rate")):
         keyed = draw_factory(w.world_seed, lambda: w.tick)
         for pid in sorted(w.persons):
             hazard = world_q.body_hazard(w, pid)

@@ -460,7 +460,9 @@ def event_place(w: World, e) -> Optional[str]:
 
     The limb places every ACTORLESS Event anchored on a person removed in that Event's own tick, so
     at MATTER also the same dying cohort's `body.changed` and its tier-3 `condition.band_crossed`
-    (reachable only at `body_step > 0`, unmeasured; H-206)."""
+    (reachable only at `body_step > 0`, unmeasured; H-206), and an actorless MATTER Event about a
+    person killed at RESOLVE later in the same tick, e.g. `travel.ended` (`loop/matter.py`'s travel
+    pass), which is reachable at shipped defaults and unmeasured (H-206)."""
     who = anchor_of(w, e)
     here = place_of(w, who)
     if here is not None:
