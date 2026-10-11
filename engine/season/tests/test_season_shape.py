@@ -5919,15 +5919,29 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     # levies), no_move 377/0/1 -> 378. No arm grants a transfer out of `S` now, so both drains are
     # 0 and the equalities are exclusions at zero, as this block's own note allows.
     # [GROUNDED: measured 2026-09-30 at plan position `24f`, scratch script over `_ten_seasons`]
-    nm_levied, nm_lost = _levied_from_s(no_move_d), _lost_draws_on_s(no_move_d)
-    undrained_nm = (no_move[-1]["S"].get("grain", 0) + nm_levied + nm_drained
+    # IN-53: over the `restore`-suppressed arms, as the `gap` above (the one `restore` that executes in
+    # the unsuppressed arms raises the yield by the same 34 in whichever arm it lands in).
+    eq_nm, _, eq_nm_d = _ten_seasons(P.tiny_world(), verbs=no_restore - {"move"})
+    nm_ids2 = {e.id for e in eq_nm_d.w.log}
+    nm_drained = sum(int((a.payload or {}).get("amount", 0))
+                     for a in eq_nm_d.resolved
+                     if a.verb == "transfer"
+                     and (a.payload or {}).get("from") == "S"
+                     and (a.payload or {}).get("to") != "S"
+                     and any(H(eq_nm_d.w.world_seed, t, a.actor, f"transfer.made:{a.id}")
+                             in nm_ids2 for t in range(len(hist) + 1)))
+    nm_levied, nm_lost = _levied_from_s(eq_nm_d), _lost_draws_on_s(eq_nm_d)
+    no_move_survivors = sum(1 for pid in ("p_low", "p_mid", "p_other") if pid in eq_nm_d.w.persons)
+    no_transfer_survivors = sum(1 for pid in ("p_low", "p_mid", "p_other") if pid in eq_nt_d.w.persons)
+    nt_levied, nt_lost = _levied_from_s(eq_nt_d), _lost_draws_on_s(eq_nt_d)
+    undrained_nm = (eq_nm[-1]["S"].get("grain", 0) + nm_levied + nm_drained
                     - grain_draw * nm_lost)
-    undrained_nt = no_transfer[-1]["S"].get("grain", 0) + nt_levied - grain_draw * nt_lost
+    undrained_nt = eq_nt[-1]["S"].get("grain", 0) + nt_levied - grain_draw * nt_lost
     assert undrained_nm == undrained_nt, (
-        f"`S` ends at {no_move[-1]['S'].get('grain', 0)} (levied {nm_levied}, transferred out "
+        f"`S` ends at {eq_nm[-1]['S'].get('grain', 0)} (levied {nm_levied}, transferred out "
         f"{nm_drained}, {nm_lost} lost draws, "
         f"survivors {no_move_survivors} of 3) with `move` suppressed against "
-        f"{no_transfer[-1]['S'].get('grain', 0)} (levied {nt_levied}, {nt_lost} lost draws, "
+        f"{eq_nt[-1]['S'].get('grain', 0)} (levied {nt_levied}, {nt_lost} lost draws, "
         f"survivors {no_transfer_survivors} of 3) with `transfer` suppressed — undrained, "
         f"{undrained_nm} against {undrained_nt}. They should match; if they differ, something other "
         "than the population channel and `levy` is moving `S` again")
