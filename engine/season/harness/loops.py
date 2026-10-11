@@ -114,6 +114,7 @@ STEM_READS = {
 QUESTION_SOURCE_READS = {
     "claim_landed": (("Person.claim_ledger", "+"),) + _TENURE,   # the landing, filtered by reach
     "need":         _TENURE + (("Proposition.exists", "?"),),    # a live `commit` to an OUGHT
+    "seat":         _TENURE + (("Office.exists", "?"),),         # an Office whose rung is in reach (IN-53)
 }
 
 #: What the witness channel predicates read, as ONE reader: the union over every `_ch_<name>` in
