@@ -54,6 +54,7 @@ from ..state.containment import ancestry, home_of  # noqa: F401 -- re-exported
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
 from ..state.gate import BENCH_BASIS, may_determine, purview_reaches, sits_over
+from ..state.attribution import anchor_of
 from ..state.ids import ROOT, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
@@ -431,6 +432,33 @@ def place_of(w: World, x: Optional[str]) -> Optional[str]:
     if x in w.rungs:
         return x
     return None
+
+
+def event_place(w: World, e) -> Optional[str]:
+    """WHERE AN EVENT HAPPENED -- `place_of(w, anchor_of(w, e))`, the one expression the tree used for
+    it at WITNESS (`epistemic._ch_co_located` and `epistemic.seen_subject`), now owned once, plus one
+    limb `place_of` cannot carry: A DEATH HAS A PLACE (H-206). (`loop/census.py` keeps its own
+    `place_of(w, anchor_of(w, e))`: it places a demand made by a living actor, and is not widened.)
+
+    `World.remove_person` takes the dead out of `w.persons` and closes every edge naming him in the
+    write that kills him, and WITNESS runs after. An Event no act caused (a death at MATTER) anchors
+    on the removed person (`state/attribution.py`, tier 2), `place_of` of a person is `home_of(w)`'s
+    LIVE `contain` edge, and so it answered `None` -- the event found no observer under any channel
+    that needs a place, and a dead seat-holder was reported to nobody. A death at RESOLVE anchors on
+    the killer, who is alive, which is why only the MATTER-written one was lost.
+
+    The limb: when the anchor is a person the world NO LONGER HOLDS, his place is where he stood when
+    `remove_person` took him out, if that was this Event's own tick (`World.departed_from`) -- the
+    container of the `contain` edge the cascade closed. It cannot be read off `w.tenures`: a Tenure is
+    owned by its subject, so his own edge left the store with him (probed on `build_realm(0)`).
+    It is NOT `place_of`'s person limb, deliberately: `place_of` is also asked about the dead by
+    `reach` (a claim about a dead man), and answering there would move every reader of an old
+    claim; only an EVENT's own tick has a place for him. `None` otherwise, exactly as before."""
+    who = anchor_of(w, e)
+    here = place_of(w, who)
+    if here is not None or who is None:
+        return here
+    return w.departed_from(who, e.emitted_at)
 
 
 # ⚠ v9 SE-01 (`24g`), P1's OTHER HALF -- THE PERSON-KEYED CROSSING REPAIR IS THE PERSON LIMB ABOVE,

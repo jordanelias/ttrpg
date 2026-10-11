@@ -224,6 +224,13 @@ class World:
         # ANTECEDENT can name the emission its own write just produced -- which is how a band
         # crossing's `causes[]` reaches the wear that crossed the floor.
         self._emitted_by_write: list[Event] = []
+        # H-206. WHERE EACH REMOVED PERSON LAST STOOD, `{pid: (container, tick)}`, written by
+        # `remove_person` -- the one death cascade -- and read by `world_q.event_place`. It exists
+        # because the cascade leaves NOTHING to read the place from: a Tenure is owned by its subject
+        # (S15.1), so the dead man's own `contain` edge leaves `w.tenures` with him. Derived
+        # bookkeeping of that one write, not game state, so the content hash does not fold it
+        # (`test_h118`'s underscore exclusion, like `_emitted_by_write` above).
+        self._departed: dict[str, tuple] = {}
         # G4 -- S27.3's SUM-THEN-CLAMP-ONCE ACCUMULATOR, `(record_kind, id, field) -> [(act id,
         # delta)]`. It lived as a local of `loop/resolve.py::resolve` and was fed off the success
         # EVENTS; it is a store now because an act's `work` WRITES to it, through the gate, and the
@@ -716,6 +723,8 @@ class World:
                 "this was never handed an open write to mutate inside of.")
         for t in list(self.tenures):
             if (t.subject == who or t.object == who) and t.live:
+                if t.kind == "contain" and t.subject == who:
+                    self._departed[who] = (t.object, self.tick)        # H-206: where he stood
                 t.until = self.tick
         self.persons.pop(who, None)
         # ⚠⚠ THE PERSON'S OWN `person`-KIND RUNG DIES WITH THEM, and leaving it behind was a
@@ -741,6 +750,13 @@ class World:
         if _node is not None and _node.kind == "person":
             self.rungs.pop(who, None)
         return [who]
+
+    def departed_from(self, who: str, tick: int) -> Optional[str]:
+        """The rung `who` stood in when `remove_person` took him out at `tick`, else `None` -- a
+        person still here, or one who left at another tick, has no answer. The reader of
+        `_departed` (H-206); `world_q.event_place` is its caller."""
+        at = self._departed.get(who)
+        return at[0] if at is not None and at[1] == tick and who not in self.persons else None
 
     def _rehome(self) -> None:
         """A Tenure added BEFORE its subject existed landed in `_unowned`; move it now.
