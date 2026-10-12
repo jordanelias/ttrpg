@@ -1646,8 +1646,24 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # an ambition act in a quiet season.
     # `17`: the live-`commit`-to-an-OUGHT rule is `ambitions`' alone (above; R-06's READ), so this
     # asks it rather than restating it; one Question per ambition, in edge order, as before.
-    for pid in ambitions(w, p):
-        out.append(Question(f"q:need:{pid}", "need", (w.propositions[pid].subject,), pid))
+    # IN-53 (H-207 'VACANCY AS NEED'): A VACANT SEAT THE PERSON MAY FILL IS A NEED. Its id WIDENS
+    # the referents of every `need` question, `(subject, *vacant)`, stamped with the class `need`
+    # declares (`rosters.yaml: question_sources.referent_class`) so only a row declaring that class
+    # (`confer`, `revoke`) forms on it; a person with vacancies and no ambition gets one `need`
+    # question per vacancy. No source is added and no question displaced, so `qs[0]` keeps its id
+    # and source under `first` (`H-54`); with no vacancy the output is byte-identical.
+    vacant = vacancies(w, p)
+    cls = SOURCE_REFERENT_CLASS["need"]
+    mine = ambitions(w, p)
+    for pid in mine:
+        subj = w.propositions[pid].subject
+        refs = (subj,) + tuple(o for o in vacant if o != subj)
+        out.append(Question(f"q:need:{pid}", "need", refs, pid,
+                            tuple((o, cls) for o in vacant) if cls is not None else ()))
+    if not mine:
+        for o in vacant:
+            out.append(Question(f"q:need:{o}", "need", (o,), o,
+                                ((o, cls),) if cls is not None else ()))
 
     # ⚠ TWO ORDERINGS LIVE IN THIS ONE LINE AND ONLY THE FIRST IS DECLARED ANYWHERE.
     # `order[q.source]` is `rosters.yaml: question_sources`, whose own note says ORDER IS SEMANTIC

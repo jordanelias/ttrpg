@@ -130,6 +130,16 @@ def _req_confer(w: "World", a: "Act") -> bool:
         return True                        # 1-per-object satisfied
     # THE `or` DISJUNCT: a held office is still conferrable when the holder-Proposition carries
     # no live `commit`. §54 item 20.
+    # ⚠ READ AGAINST THE ROW AT IN-53 step (4) AND KEPT, WITH THE REASON. §54 item 20 (*"a
+    # memberless faction's `hold`"*) counts the live `commit` edges TO a Proposition that HOLDS; this
+    # counts any live `commit` BY the holder. The literal reading is unreachable as built: a `hold`
+    # is a PERSON's edge (`holonic §15`; `World._refuse_bad_hold`), so no Proposition holds a seat,
+    # and the tree already migrated the row to the holder (`harness/probes.py` F2: *"~~holder-
+    # Proposition~~ -> holder, per `holonic §15`"*). Taking the literal reading would make this
+    # disjunct, and with it `confer`'s displacement under T-o, dead code
+    # (`test_g3_not_yours.py::test_g3_confer_refuses_at_the_precondition_what_the_gate_would_refuse`
+    # arm `c3` reddens, measured); F2's *"zero commits to the cause he held it for"* needs a
+    # seat -> cause map nothing declares. Neither is this position's to invent; left as it is.
     holder = next((t.subject for t in w.tenures
                    if t.kind == "hold" and t.object == obj and t.live), None)
     if holder is None or any(t.kind == "commit" and t.subject == holder and t.live
