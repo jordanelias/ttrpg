@@ -59,9 +59,12 @@ from ..gaps import Unspecified
 #      PRE-RULING bands). The falsifier that this is a call and not a copy is
 #      `test_we_the_ladder_is_the_trees_and_not_a_copy_of_it`, which monkeypatches
 #      `degree_from_net` and requires every margin here to follow it.
-#      ⚠ SUPERSEDED (plan position `8`'s record sweep): `seam/wrappers/sigma.py` now produces a `net`
-#      for `fight`, `tell` and `march` (`test_we_only_a_verb_that_declares_contests_can_be_graded_today`
-#      pins the producer set to {sigma.py}); what follows is the original rationale.
+#      ⚠ SUPERSEDED (plan position `8`'s record sweep; `31a` moved the roll): a `net` is produced for
+#      `fight`, `tell` and `march` by the MODULES (`modules/social_contest/roll.py`), not by
+#      `seam/wrappers/sigma.py`, which only builds the record and calls the entry.
+#      `test_we_only_a_verb_that_declares_contests_can_be_graded_today` asserts the season package's
+#      producer set is EMPTY and that a scan of the module code roots finds `roll.py` (a superset
+#      check); what follows is the original rationale.
 #      ⚠ AND ITS OPERAND DOES NOT EXIST YET, WHICH IS SAID HERE RATHER THAN DISCOVERED LATER.
 #      `degree_from_net` reads `net - ob`. NOTHING IN THIS TRACER PRODUCES A `net`: there is no
 #      roll anywhere in `shape.py`, `Act.pool` / `Act.obstacle` are read only by `S27.4`'s

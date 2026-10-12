@@ -803,7 +803,7 @@ rosters:
       own write-nothing guard emits the REFUSAL instead of the success, and what is left is only
       the difference the SELECTED WRITE SET makes.
       ⚠ A WOUND CANNOT KILL ON ANY ARM EXCEPT `total`. The band means the engine did not fell this
-      person, so the body floors at 1 — `combat_seam.derive_party`'s own floor (*a dying person
+      person, so the body floors at 1 — `seam/wrappers/combat.py::party_end`'s own floor (*a dying person
       still fights*), followed rather than reinvented.
     values: [scene_fraction, total, none]
 

@@ -27,12 +27,12 @@ The call chain, each link opened:
 | ENCOUNTER fights each declared act in canonical order | `loop/encounter.py:65`, `:72` (`self._contest(...)`) |
 | `_contest` takes the dispatch branch because `w.step` is now the declared step | `loop/resolve.py:711-713`, `:773-775` (`contest(...)`) |
 | the seam calls the provider the prize row names | `seam/contest.py:163` (`_run(...)`) |
-| the host adapter builds the typed record and the seed, then calls the module entry | `seam/wrappers/combat.py:195` (`combat_input`), `:200` (seed), `:207` (`entry.fn(inp, random.Random(seed))`) |
+| the host adapter builds the typed record and the seed, then calls the module entry | `seam/wrappers/combat.py:217` (`combat_input`), `:222` (seed), `:226` (`entry.fn(inp, random.Random(seed))`) |
 | the module entry builds both parties, then calls the engine | `modules/combat/fight.py:45`, **`:52`** (`wrapper.fight(A, B, rng=rng)`) |
 
 **The suspension replaces the call at `fight.py:52` and nothing else.** AUTOMATED keeps that call.
 PLAYABLE hands the same arguments to the scene (§3). Since IN-04 that call is inside the module, not the
-host adapter; the adapter's `combat.py:207` is where the host hands over (`## Re-read at B-L`).
+host adapter; the adapter's `combat.py:226` is where the host hands over (`## Re-read at B-L`).
 
 **Precondition the build must meet: every fight is deferred to ENCOUNTER, in both modes.** Today the
 `the body` prize has no `step:` (`rosters.yaml:1116-1120`), so a `fight` is fought at RESOLVE,
@@ -65,7 +65,7 @@ driver stays on the stack below it. Nothing is serialized, and no carrier, field
 | the ENCOUNTER token, minted **once**, as an argument expression | `loop/driver.py:460` |
 | `w.step == ENCOUNTER`, set at entry | `loop/encounter.py:49` |
 | `declared`, `out`, and the position in `_canonical_order` | `loop/encounter.py:55-65` |
-| the typed record `inp` and `seed` (the host adapter's frame) | `seam/wrappers/combat.py:195`, `:200` |
+| the typed record `inp` and `seed` (the host adapter's frame) | `seam/wrappers/combat.py:217`, `:222` |
 | `A`, `B`, the trace list, the previous `_TRACE` hook (the module entry's frame) | `modules/combat/fight.py:45-47` |
 
 **No token is minted twice.** `Token` is a frozen `(write_class, tick)` value (`state/gate.py:58-84`).
@@ -79,7 +79,7 @@ consumer is `World.new_draw()` (`state/world.py:1276-1279`), which `World.write`
 emission's id (`:1161`). The scene holds no `World` and no token, so it cannot reach `World.write`.
 An act's own Events use a non-ordinal id (`loop/resolve.py:1090`, `_act_events`). The fight's randomness is a separate
 stream, `random.Random(seed)` with `seed = H(world_seed, tick, a_id, "contest:…")`
-(`seam/wrappers/combat.py:200`, `:207`). **The scene draws from that stream only, and in the engine's
+(`seam/wrappers/combat.py:222`, `:226`). **The scene draws from that stream only, and in the engine's
 order** (§4 c). It never uses its own entropy.
 
 **What resumes it:** the scene returning the typed output of §3. That return is the only resume.
@@ -93,14 +93,14 @@ The pair is the one AUTOMATED already uses at `modules/combat/fight.py:52`. The 
 adds no field to the typed record.
 
 - **Input:** the host's `PersonalCombatInput` (`queries/inputs.py:44-59`: the claimants, each one's
-  derived `end`, the wound quantities to lift), built by `combat_input` (`seam/wrappers/combat.py:144-154`,
-  from `party_end`, `:133-141`; called at `:195`), and an `rng` seeded from the seed at `:200`
-  (`random.Random(seed)` is built inline at `:207`). The entry turns the record into `Combatant`s `A`
+  derived `end`, the wound quantities to lift), built by `combat_input` (`seam/wrappers/combat.py:141-151`,
+  from `party_end`, `:130-138`; called at `:217`), and an `rng` seeded from the seed at `:222`
+  (`random.Random(seed)` is built inline at `:226`). The entry turns the record into `Combatant`s `A`
   and `B` (`modules/combat/fight.py:45`) and calls `wrapper.fight(A, B, rng=rng)` (`:52`).
 - **Output:** the engine's `int` (`+1`/`-1`/`0`, `wrapper.fight`, `modules/combat/wrapper.py:487-532`).
   The other part is the post-fight `WoundTracker` state on `A` and `B`, which the entry lifts
   (`modules/combat/fight.py:56-69`) and the adapter refuses-by-name and returns as the `RESOLVED` dict
-  (`seam/wrappers/combat.py:215-249`). `_contest` folds that dict through `degree_of`
+  (`seam/wrappers/combat.py:217-253`). `_contest` folds that dict through `degree_of`
   (`loop/resolve.py:800`).
 
 Everything before and after `fight.py:52` is shared code. The output's shape cannot diverge between modes,
@@ -122,11 +122,11 @@ The decider's contract:
   (`wrapper.py:9-19`; `modules/combat/fight.py:47-54`).
 
 **The mode is chosen by a party test at the seam** (A-25, `_part5:317`): does either claimant
-(`seam/wrappers/combat.py:190-194`) belong to a person the host plays? The host is one optional argument.
+(`seam/wrappers/combat.py:212-216`) belong to a person the host plays? The host is one optional argument.
 It is threaded along the path `contest_max_depth` and `rng` already take: `season`
 (`loop/driver.py:355-357`), then `encounter` (`:460-461`; `loop/encounter.py:72`), then `contest`
-(`loop/resolve.py:773-775`; `seam/contest.py:163`), then the provider (`seam/wrappers/combat.py:157-160`),
-then the module entry (`:207`; `modules/combat/fight.py:32`). If the argument is
+(`loop/resolve.py:773-775`; `seam/contest.py:163`), then the provider (`seam/wrappers/combat.py:179-182`),
+then the module entry (`:226`; `modules/combat/fight.py:32`). If the argument is
 absent, every fight is AUTOMATED, which is today's behaviour. The world surface's player mode uses the
 same shape, a host-supplied `choose` passed into `season` (`loop/driver.py:355`).
 
@@ -137,9 +137,9 @@ Six conditions together make the two arms the same computation. Each one names i
 | | condition | site |
 |---|---|---|
 | a | **Same step.** The deferral does not depend on mode. | §1; `rosters.yaml:1116-1126` |
-| b | **Same input.** It is built by shared lines. The mode enters neither the provider's seed purpose nor `_contest`'s generator purpose. | `seam/wrappers/combat.py:195`, `:200`; `loop/resolve.py:760` |
+| b | **Same input.** It is built by shared lines. The mode enters neither the provider's seed purpose nor `_contest`'s generator purpose. | `seam/wrappers/combat.py:217`, `:222`; `loop/resolve.py:760` |
 | c | **Same stream.** The decider draws nothing, so equal choices produce the identical sequence of `rng.random()` calls: `first`, each engagement, then the upset floor. | `modules/combat/wrapper.py:514`, `:516`, `:529` |
-| d | **Same output, mode unrecorded.** The `RESOLVED` dict gains no mode field. No Event, id purpose or carrier names the mode. | `seam/wrappers/combat.py:236-249` |
+| d | **Same output, mode unrecorded.** The `RESOLVED` dict gains no mode field. No Event, id purpose or carrier names the mode. | `seam/wrappers/combat.py:232-253` |
 | e | **Same order.** The scene runs where its act falls in canonical order. The host never reorders, for example by putting the player's fights last. | `loop/encounter.py:65` |
 | f | **No write, no mint, no draw during the suspension.** | §2 |
 
@@ -182,7 +182,7 @@ through the scene path, and the test asserts the suspension ran.
 
 A terminal record, kept where its subject lives (`CLAUDE.md` §0); it dies with this document.
 
-**Date:** 2026-10-12, at HEAD `36b40ee2` (the seam files are unchanged since `5422ed1e`, IN-05's close).
+**Date:** 2026-10-12, at HEAD `36b40ee2` (the seam files are unchanged since `5422ed1e`, IN-05's close). Every `combat.py` line cited in this document was re-derived by symbol again at HEAD `175384fc`, after later B-L commits (the `/simplify` pass among them) moved the adapter's lines; the cites below carry the HEAD `175384fc` numbers.
 **Verdict: HOLDS WITH CORRECTIONS.** The design was re-read against the moved `combat` container
 (IN-04, plan position `31b`): the host adapter `seam/wrappers/combat.py` is now an input builder
 (`combat_input`) plus an adapter (`resolve`), and the fight is the module entry `modules/combat/fight.py`,
@@ -199,7 +199,7 @@ reached by string through `MODULE_ENTRIES`. Every site was re-derived by symbol 
    structural where it was observed.
 3. *The typed pair:* **holds, corrected.** The pair is no longer `(A, B, rng) -> int`. It is
    `PersonalCombatInput` plus `rng` into the entry, and the entry's dict (`fight.py:67-69`) that the
-   adapter turns into the `RESOLVED` dict. That dict now also carries `surrender` (`combat.py:247`; §11.4
+   adapter turns into the `RESOLVED` dict. That dict now also carries `surrender` (`combat.py:243`; §11.4
    yield, PC-01). No field is added for the mode, and the record gains no field.
 4. *Replay equality:* **holds.** All six conditions re-sited. (c) survives the new §11.4 yield path:
    a declared yield fires before every draw of its turn and draws nothing (`wrapper.py:505-513`), and
@@ -230,10 +230,10 @@ reached by string through `MODULE_ENTRIES`. Every site was re-derived by symbol 
 **Corrected cites (old -> new, all re-opened):** `driver.py:459-460` -> `:460-461`; `:459` -> `:460`;
 `:440-452` -> `:440-453`; `:428-430` -> `:429-431`; `resolve.py:514-516` -> `:711-713`; `:576-578` ->
 `:773-775`; `:563` -> `:760`; `:603` -> `:800`; `:784` -> `:912`; `:881` -> `:1090`; `combat.py:177` ->
-`fight.py:52` (adapter hand-over `combat.py:207`); `combat.py:165` -> `:195` (`combat_input`); `:170` ->
-`:200`; `:108-120` (`derive_party`, retired) -> `:133-154` (`party_end`, `combat_input`) and `fight.py:45`;
-`:186-206` -> `fight.py:56-69` and `combat.py:215-234`; `:208-219` -> `:236-249`; `:174-176` ->
-`fight.py:47-54`; `:160` -> `:190-194`; `:124-126` -> `:157-160`; `:165-176` (held state) -> `combat.py:195,200`
+`fight.py:52` (adapter hand-over `combat.py:226`); `combat.py:165` -> `:217` (`combat_input`); `:170` ->
+`:222`; `:108-120` (`derive_party`, retired) -> `:130-151` (`party_end`, `combat_input`) and `fight.py:45`;
+`:186-206` -> `fight.py:56-69` and `combat.py:158-176`, `:230`; `:208-219` -> `:232-253`; `:174-176` ->
+`fight.py:47-54`; `:160` -> `:212-216`; `:124-126` -> `:179-182`; `:165-176` (held state) -> `combat.py:217,222`
 and `fight.py:45-47`; `systems/combat/combat_engine_v1/wrapper.py:465-496` -> `modules/combat/wrapper.py:487-532`;
 `wrapper.py:477-484` -> `:504-523`; `:478`/`:480`/`:493` -> `:514`/`:516`/`:529`; `:16-19` -> `:9-19`;
 `rosters.yaml:1107-1110` -> `:1116-1120`; `:1111-1115` -> `:1121-1126`; `:1122-1131` -> `:1127-1141`;
@@ -243,5 +243,6 @@ and `fight.py:45-47`; `systems/combat/combat_engine_v1/wrapper.py:465-496` -> `m
 `encounter.py:49`, `:55-65`, `:65`, `:72`; `state/gate.py:58-84`; `04_CODE_ARCHITECTURE.md:177`;
 `requirements.yaml:146-153`; `05_two_modes_of_one_bout.md:8-11`.
 
-**Not decided here.** The re-read is done. Status stays **PROPOSED** and **HELD BACK**. Whether the hold
-lapses is not this re-read's call; it is Jordan's, per the plan entry.
+**Not decided here.** The re-read is done. Status stays **PROPOSED**. The hold on ratification-on-merge
+was set "until the B-L re-read" (`workplans/valoria_master_workplan_v9_part4.md:34`, IN-46), so it lapsed
+at this re-read; "released only by Jordan" is IN-47's rule (`part4:41`), not IN-46's.
