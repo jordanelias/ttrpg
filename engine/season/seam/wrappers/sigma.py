@@ -129,14 +129,40 @@ def _obstacle_of(w: Any, subject: Optional[str], verb: str, fx: Any) -> float:
     return float(fx.get("obstacle_default"))
 
 
+def contest_input(w: Any, claimants: list, *, verb: str = "",
+                  subject: Optional[str] = None) -> SocialContestInput:
+    """THE HOST INPUT BUILDER (plan position `31a`, A-25): `World` -> the frozen record the roll reads.
+
+    Reads `w.persons` (the actor, `claimants[0]`, and a person subject) and `w.fixtures`, and nothing
+    else; the module that consumes the record never sees `World`. Its precondition is the adapter's
+    PARTY-GAP checks (`resolve`, below): at least one claimant, and the first a person.
+    `leverage` is zero until something supplies leverage -- an `assumption` reading with no
+    producer, and stating it as zero is the honest form: a fabricated leverage would be a number
+    nobody chose."""
+    fx = w.fixtures
+    return SocialContestInput(
+        claimants=tuple(claimants),
+        pool=_pool_of(w.persons[claimants[0]], verb, fx),
+        ob=_obstacle_of(w, subject, verb, fx),
+        obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
+        leverage=0.0)
+
+
 @provider("contest", "sigma_leverage")
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
             rng: Optional[random.Random] = None, rung: str = "") -> dict:
-    """Roll for one contested act. Returns a net/ob pair, NEVER a band.
+    """Roll for one contested act: build the record, refuse S27.4, call the module entry. Returns a
+    net/ob pair, NEVER a band.
 
-    RESOLVED -> dict(status, module, resolver, pool, ob, net, leverage)
+    RESOLVED -> dict(status, module, resolver, pool, ob, net, leverage)   # the entry's own return
     REFUSED  -> dict(status, why, pool, ob)   # S27.4: ob > obstacle_refusal_multiple x pool
+
+    ⚠ THE ENTRY IS LOOKED UP BY THE ROLE THE PRIZE ROW NAMES (`module_entry:`), IN `MODULE_ENTRIES`.
+    The registrar fills that table at driver construction from the composition row, and
+    `manifest.check_contest_prizes` refuses construction when the two rows disagree; a call reaching
+    here with the role unregistered (no driver constructed in the process) is `ENGINE-UNAVAILABLE`,
+    `combat.py`'s typed refusal, never a direct import of the module.
 
     ⚠ `rung` IS ACCEPTED AND NOT USED HERE, THE SAME DELIBERATE NON-CHANGE AS IN `combat.py`
     (M4, `ED-IN-0279` clause (a)). A leverage roll derives its obstacle from the parties
@@ -162,18 +188,14 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     if actor is None:
         return dict(status="PARTY-GAP", why=f"claimant is not a person: {claimants[0]!r}",
                     module="sigma_leverage")
-    fx = w.fixtures
-    pool = _pool_of(actor, verb, fx)
-    ob = _obstacle_of(w, subject, verb, fx)
-    mult = fx.get("obstacle_refusal_multiple")
-    if ob > mult * max(pool, 0):
+    inp = contest_input(w, claimants, verb=verb, subject=subject)
+    if inp.ob > inp.obstacle_refusal_multiple * max(inp.pool, 0):
         return dict(status="REFUSED", why="S27.4", module="sigma_leverage",
-                    resolver="d10_sigma", pool=pool, ob=ob)
-    # THE COMPOSITION IS THE TREE'S OWN. `roll_net` is the discrete d10 engine; `net_boost` is the
-    # μ-shift that makes this σ-leverage rather than a pool roll. `lev` is zero until something
-    # supplies leverage — an `assumption` reading with no producer, and stating it as zero is the
-    # honest form: a fabricated leverage would be a number nobody chose.
-    lev = 0.0
-    net = roll_net(pool, rng=rng) + net_boost(lev, pool)
-    return dict(status="RESOLVED", module="sigma_leverage", resolver="d10_sigma",
-                pool=pool, ob=ob, net=net, leverage=lev)
+                    resolver="d10_sigma", pool=inp.pool, ob=inp.ob)
+    role = (prize_row("contest", prize) or {}).get("module_entry")
+    entry = MODULE_ENTRIES.get(role)
+    if entry is None:
+        return dict(status="ENGINE-UNAVAILABLE", module="sigma_leverage",
+                    why=f"prize {prize!r} names module entry {role!r}, which MODULE_ENTRIES does not "
+                        f"hold -- the registrar fills it at SeasonDriver construction")
+    return entry.fn(inp, rng)
