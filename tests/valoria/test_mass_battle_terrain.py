@@ -4,7 +4,7 @@
 extension says a battle's terrain should be found by "querying the geography at battle coordinates
 ... no separate declaration required". The engagement's own province tid IS that query key —
 `modules.mass_battle.terrain.terrain_row_for_territory` reads
-`systems/settlements/valoria_geography_v30.yaml` directly (its `provinces:` and `terrain:` keys;
+`systems/settlements/valoria_geography_v30.yaml`, parsed and passed in by its caller (its `provinces:` and `terrain:` keys;
 canon's own citation, `designs/territory/...::terrain_polygons`, is stale in both path and key).
 
 Two things this file does NOT claim: (1) "dominant polygon by area weight" (ED-780's own wording) —
@@ -25,8 +25,11 @@ cares about fortification now passes `fort_level` explicitly rather than reading
 """
 import pytest
 
+# The geography file, as the season hands it to the module (`MassBattleInput.geography`): the HOST's one
+# read (`engine/season/data/geography.py`). The module opens no file, so every lookup below passes it.
+from engine.season.data.geography import geography as _geography
 from modules.mass_battle.terrain import (
-    terrain_row_for_territory, river_crossed, _point_in_polygon, _load_geography, _TYPE_TO_ROW,
+    terrain_row_for_territory, river_crossed, _point_in_polygon, _TYPE_TO_ROW,
     NARROW_PASS, UPHILL, FOREST_BROKEN, WALLS, OPEN_FLAT, RIVER_CROSSING,
 )
 
@@ -42,7 +45,7 @@ def test_point_in_polygon_basic_square():
 
 def test_point_in_polygon_against_a_real_geography_entry():
     """Not a synthetic square — one of the actual polygons this lookup will be tested against."""
-    geo = _load_geography()
+    geo = _geography()
     entry = next(e for e in geo['terrain'] if e['id'] == 'terrain-pass-lowenskyst')
     xs = [p[0] for p in entry['polygon']]
     ys = [p[1] for p in entry['polygon']]
@@ -60,12 +63,12 @@ def test_every_real_province_resolves_to_one_of_the_six_rows():
     not a claim that every row actually occurs (RIVER_CROSSING never does: it comes from a caller's `river_crossing` fact, not from the polygon lookup; see terrain.py). Called at
     fort_level=0 uniformly: fortification is a separate, already-isolated concern (the tests below),
     and this test is specifically about the polygon lookup's own closed-set property."""
-    geo = _load_geography()
+    geo = _geography()
     valid = {NARROW_PASS, UPHILL, FOREST_BROKEN, WALLS, OPEN_FLAT,
              'river_crossing'}  # a valid A.9 row name; this polygon-only call (river_crossing=False) never returns it
     seen = set()
     for tid in geo['provinces']:
-        row = terrain_row_for_territory(tid, fort_level=0)
+        row = terrain_row_for_territory(tid, fort_level=0, geography=_geography())
         assert row in valid, f"{tid} resolved to {row!r}, outside A.9's six rows"
         seen.add(row)
     assert len(seen) >= 2, "a lookup that always returns the same row for every province is not measuring anything"
@@ -77,7 +80,7 @@ def test_every_geography_terrain_type_has_a_row_mapping():
     result. If the geography file ever gains a terrain type this module has not been told about, that
     silent fallback is a real, unflagged mechanical error, not a documented gap like RIVER_CROSSING is
     (which is not a file type at all: the caller supplies it)."""
-    geo = _load_geography()
+    geo = _geography()
     real_types = {entry['type'] for entry in geo['terrain']}
     uncovered = real_types - set(_TYPE_TO_ROW)
     assert not uncovered, f"geography terrain type(s) {uncovered} have no _TYPE_TO_ROW entry"
@@ -93,18 +96,18 @@ def test_a_positive_fort_level_resolves_to_walls_regardless_of_terrain(tid):
     province-existence check runs first and returns OPEN_FLAT before `fort_level` is even looked at
     (see `test_unknown_territory_falls_back_to_open_flat`), which is fine since every real caller's
     `tid` already names a `world.territories` entry by construction."""
-    assert terrain_row_for_territory(tid, fort_level=2) == WALLS
+    assert terrain_row_for_territory(tid, fort_level=2, geography=_geography()) == WALLS
 
 
 def test_zero_fort_level_falls_through_to_the_polygon_lookup():
     """Companion boundary to the test above: fort_level=0 must NOT force WALLS -- confirms the
     dominance check is a real `> 0` gate, not e.g. a falsy/None check that WALLS-locks a passed-but-
     zero value too."""
-    assert terrain_row_for_territory('T4', fort_level=0) == UPHILL
+    assert terrain_row_for_territory('T4', fort_level=0, geography=_geography()) == UPHILL
 
 
 def test_unknown_territory_falls_back_to_open_flat():
-    assert terrain_row_for_territory('T-does-not-exist', fort_level=0) == OPEN_FLAT
+    assert terrain_row_for_territory('T-does-not-exist', fort_level=0, geography=_geography()) == OPEN_FLAT
 
 
 def test_river_crossing_comes_only_from_the_callers_signal_and_walls_outrank_it():
@@ -113,15 +116,15 @@ def test_river_crossing_comes_only_from_the_callers_signal_and_walls_outrank_it(
     still wins (the module's WALLS > RIVER_CROSSING > polygon assumption), an unknown territory stays the
     no-modifier fallback, and the default (`False`) leaves every territory's polygon row unchanged --
     the half that keeps every season field, none of which passes the signal, where it was."""
-    assert terrain_row_for_territory('T1', fort_level=0) == OPEN_FLAT, "T1's polygon row moved"
-    assert terrain_row_for_territory('T1', fort_level=0, river_crossing=True) == RIVER_CROSSING
-    assert terrain_row_for_territory('T4', fort_level=0, river_crossing=True) == RIVER_CROSSING
-    assert terrain_row_for_territory('T1', fort_level=1.0, river_crossing=True) == WALLS
-    assert terrain_row_for_territory('T-does-not-exist', fort_level=0, river_crossing=True) == OPEN_FLAT
-    geo = _load_geography()
+    assert terrain_row_for_territory('T1', fort_level=0, geography=_geography()) == OPEN_FLAT, "T1's polygon row moved"
+    assert terrain_row_for_territory('T1', fort_level=0, river_crossing=True, geography=_geography()) == RIVER_CROSSING
+    assert terrain_row_for_territory('T4', fort_level=0, river_crossing=True, geography=_geography()) == RIVER_CROSSING
+    assert terrain_row_for_territory('T1', fort_level=1.0, river_crossing=True, geography=_geography()) == WALLS
+    assert terrain_row_for_territory('T-does-not-exist', fort_level=0, river_crossing=True, geography=_geography()) == OPEN_FLAT
+    geo = _geography()
     for tid in geo['provinces']:
-        assert (terrain_row_for_territory(tid, fort_level=0, river_crossing=False)
-                == terrain_row_for_territory(tid, fort_level=0)), f"{tid}: the default signal moved the row"
+        assert (terrain_row_for_territory(tid, fort_level=0, river_crossing=False, geography=_geography())
+                == terrain_row_for_territory(tid, fort_level=0, geography=_geography())), f"{tid}: the default signal moved the row"
 
 
 def test_a_river_crossing_outranks_an_uphill_field():
@@ -129,8 +132,8 @@ def test_a_river_crossing_outranks_an_uphill_field():
     UPHILL by polygon, and a crossing makes each RIVER_CROSSING -- the field loses UPHILL's dice rather
     than stacking them. Jordan stating the other option fails this test, which is the point of it."""
     for tid in ('T9', 'T4'):
-        assert terrain_row_for_territory(tid, fort_level=0) == UPHILL, f"{tid}'s polygon row moved"
-        assert terrain_row_for_territory(tid, fort_level=0, river_crossing=True) == RIVER_CROSSING
+        assert terrain_row_for_territory(tid, fort_level=0, geography=_geography()) == UPHILL, f"{tid}'s polygon row moved"
+        assert terrain_row_for_territory(tid, fort_level=0, river_crossing=True, geography=_geography()) == RIVER_CROSSING
 
 
 # ─── MB-05r: the crossing, derived from the march's origin ──────────────────────────────────────
@@ -151,7 +154,7 @@ def test_a_river_crossing_outranks_an_uphill_field():
     ('T-does-not-exist', 'T3', False),
 ])
 def test_river_crossed_reads_the_line_between_the_two_anchors(origin, tid, crossed):
-    assert river_crossed(origin, tid) is crossed
+    assert river_crossed(origin, tid, geography=_geography()) is crossed
 
 
 @pytest.mark.parametrize('vertices, crossed', [
@@ -194,7 +197,7 @@ def test_a_bridge_does_not_cancel_the_crossing():
            'water': {'rivers': [{'id': 'r', 'vertices': [[0, -10], [0, 10]]}]},
            'bridges': [{'id': 'b', 'coords': [0, 0], 'crosses': 'r'}]}
     assert river_crossed('W', 'E', geography=geo) is True
-    real = _load_geography()
+    real = _geography()
     assert real.get('bridges'), "the geography file no longer authors bridges; the ruling has no subject"
     bare = {k: v for k, v in real.items() if k != 'bridges'}
     checked = crossings = 0
@@ -221,7 +224,7 @@ def test_a_bridge_does_not_cancel_the_crossing():
     ('T9', UPHILL),
 ])
 def test_real_unfortified_provinces_pin_to_their_actual_terrain_row(tid, expected):
-    assert terrain_row_for_territory(tid, fort_level=0) == expected
+    assert terrain_row_for_territory(tid, fort_level=0, geography=_geography()) == expected
 
 
 def test_mountain_pass_polygon_maps_to_narrow_pass_directly(monkeypatch):
@@ -235,7 +238,7 @@ def test_mountain_pass_polygon_maps_to_narrow_pass_directly(monkeypatch):
     a near-miss inside the pass -- it is entirely outside its y-range. So this pins the polygon->row
     mapping directly with a synthetic province placed at the pass polygon's own centroid, isolating
     the claim in question from that unrelated (and, for T3/T10, unrelated-twice-over) gap."""
-    geo = _load_geography()
+    geo = _geography()
     pass_entry = next(e for e in geo['terrain'] if e['type'] == 'mountain_pass')
     xs = [p[0] for p in pass_entry['polygon']]
     ys = [p[1] for p in pass_entry['polygon']]
@@ -246,13 +249,13 @@ def test_mountain_pass_polygon_maps_to_narrow_pass_directly(monkeypatch):
     }
     # Plan position `31c`: the geography is a parameter, not a module cache the test swaps.
     assert terrain_row_for_territory('T-synthetic-pass', fort_level=0, geography=synthetic) == NARROW_PASS
-    assert terrain_row_for_territory('T-synthetic-pass', fort_level=0) == OPEN_FLAT, (
+    assert terrain_row_for_territory('T-synthetic-pass', fort_level=0, geography=_geography()) == OPEN_FLAT, (
         "the synthetic province leaked past the one call it was passed to")
 
 
 def test_open_ground_resolves_unmodified(monkeypatch):
     """The other half of the 'Done when' criterion: open ground resolves unmodified (OPEN_FLAT)."""
-    geo = _load_geography()
+    geo = _geography()
     plains_entry = next(e for e in geo['terrain'] if e['type'] == 'plains')
     xs = [p[0] for p in plains_entry['polygon']]
     ys = [p[1] for p in plains_entry['polygon']]
@@ -263,7 +266,7 @@ def test_open_ground_resolves_unmodified(monkeypatch):
     }
     # Plan position `31c`: the geography is a parameter, not a module cache the test swaps.
     assert terrain_row_for_territory('T-synthetic-plains', fort_level=0, geography=synthetic) == OPEN_FLAT
-    assert terrain_row_for_territory('T-synthetic-plains', fort_level=0) == OPEN_FLAT, (
+    assert terrain_row_for_territory('T-synthetic-plains', fort_level=0, geography=_geography()) == OPEN_FLAT, (
         "the synthetic province leaked past the one call it was passed to")
 
 
@@ -459,7 +462,7 @@ def test_resolve_field_carries_the_river_crossing_signal_to_the_engine():
     att = world_q.mustered(w, 'set_s_014', 'fac_crown')
     dfn = world_q.mustered(w, 'set_s_036', 'fac_church_of_solmund')
     assert att and dfn, "the provider's fixture sides no longer muster"
-    assert terrain_row_for_territory('T3', fort_level=0) == OPEN_FLAT, "T3's polygon row moved"
+    assert terrain_row_for_territory('T3', fort_level=0, geography=_geography()) == OPEN_FLAT, "T3's polygon row moved"
     checked = differs = 0
     for seed in range(16):
         crossed = resolve_field(record(origin='T9'), rng=random.Random(seed))

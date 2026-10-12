@@ -136,6 +136,11 @@ DEGREE_SWEEP_DIR = ENGINE_DIR / "reference" / "degree-sweep"
 # one path seam, engine/substrate/pc_engine.py (2026-09-25), which seam/wrappers/combat.py calls.
 # ---------------------------------------------------------------------------
 SYSTEMS_DIR = REPO_ROOT / "systems"
+# The world map: `provinces:` (territories, their `anchor`s), `terrain:` polygons and `water:`.
+# CANON, not this package's own. Read at world-gen by `harness/populated.py` and, for the battle
+# field, by `data/geography.py`, which hands it to the `mass_battle` module on its input record --
+# the module no longer names the file (it was `terrain.py`'s `_GEOGRAPHY_YAML` until the host took it).
+GEOGRAPHY_YAML = SYSTEMS_DIR / "settlements" / "valoria_geography_v30.yaml"
 REFERENCES_DIR = REPO_ROOT / "references"
 MODULE_CONTRACTS_YAML = REFERENCES_DIR / "module_contracts.yaml"
 CLAUDE_MD = REPO_ROOT / "CLAUDE.md"

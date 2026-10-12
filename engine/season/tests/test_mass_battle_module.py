@@ -17,16 +17,35 @@ buffer -- the three `31c` shed) makes the second differ. Three more observations
 determinism alone leaves open: the stdlib `random` stream is untouched by every call (the battle draws
 only from the seeded `rng` its call scoped), no draw source is still scoped after a call returns, and the
 seeds do not all give one result (else the comparison could not tell two calls apart).
+
+AND THE MODULE OPENS NO FILE: `builtins.open`, `io.open` and `os.open` are watched from before the import
+to the last call, and the set they saw must be empty -- the geography arrives on the record
+(`MassBattleInput.geography`), read once per process by the host (`data/geography.py`); until it did,
+`terrain.py` parsed the file on every fought field. The record's geography must also come back unwritten:
+the host shares one mapping across every field.
 """
 from __future__ import annotations
 
+from ..data import files
 from ._fresh_process import entry_target, probe
 
 _PRIZE = "a field"
 
 _PROBE = """
-import sys, os, importlib, random
+import sys, os, io, builtins, copy, importlib, random, yaml
 sys.path.insert(0, {root!r})
+# The geography the host hands the module on the record, read HERE, before anything is watched: the
+# module takes it on `MassBattleInput.geography` and opens no file of its own.
+with open(__GEOGRAPHY_YAML__, encoding="utf-8") as f:
+    GEO = yaml.safe_load(f)
+GEO_BEFORE = copy.deepcopy(GEO)
+opened = []
+def _watching(real):
+    def watched(file, *a, **k):
+        opened.append(str(file))
+        return real(file, *a, **k)
+    return watched
+builtins.open, io.open, os.open = _watching(builtins.open), _watching(io.open), _watching(os.open)
 before = set(sys.modules)
 mod_name, attr = {target!r}.split(":", 1)
 entry = getattr(importlib.import_module(mod_name), attr)
@@ -38,11 +57,11 @@ from engine.season.queries.inputs import MassBattleInput
 # morale moved off the base by the stances.
 FIELD = MassBattleInput(weights=((180.0, 120.0), (240.0,)), territory="T9", fort_level=1.0,
                         stances=(-1.0, 0.5), walls_dr=None, origin=None,
-                        loyalties=(1.5, -0.5), loyalty_gain=0.4)
+                        loyalties=(1.5, -0.5), loyalty_gain=0.4, geography=GEO)
 # A RIVER_CROSSING field (MB-05r): a march from T9 onto T3's open ground crosses the Valoris.
 OTHER = MassBattleInput(weights=((90.0,), (60.0, 30.0)), territory="T3", fort_level=0.0,
                         stances=(0.0, 0.0), walls_dr=1, origin="T9",
-                        loyalties=(0.0, 0.0), loyalty_gain=0)
+                        loyalties=(0.0, 0.0), loyalty_gain=0, geography=GEO)
 stdlib_before = random.getstate()
 out = []
 for seed in (1, 2, 3, 4, 5, 6):
@@ -54,13 +73,14 @@ stdlib_untouched = random.getstate() == stdlib_before
 loaded = sorted(os.path.relpath(m.__file__, {root!r}) for n, m in list(sys.modules.items())
                 if n not in before and getattr(m, "__file__", None)
                 and os.path.abspath(m.__file__).startswith({root!r} + os.sep))
-print(repr((loaded, out, stdlib_untouched)))
+print(repr((loaded, out, stdlib_untouched, opened, GEO == GEO_BEFORE)))
 """
 
 
 def test_one_march_resolved_twice_in_one_process_gives_one_result_and_loads_nothing_of_the_host():
     role, target = entry_target(_PRIZE)
-    loaded, out, stdlib_untouched = probe(_PROBE, target, 600)
+    loaded, out, stdlib_untouched, opened, geo_untouched = probe(
+        _PROBE.replace("__GEOGRAPHY_YAML__", repr(str(files.GEOGRAPHY_YAML))), target, 600)
     module_dir = target.split(":", 1)[0].rsplit(".", 1)[0].replace(".", "/")
     allowed = {"engine/__init__.py", "engine/season/__init__.py", "engine/season/queries/__init__.py",
                "engine/season/queries/inputs.py", module_dir.split("/", 1)[0] + "/__init__.py"}
@@ -80,3 +100,7 @@ def test_one_march_resolved_twice_in_one_process_gives_one_result_and_loads_noth
     assert len({repr(got) for _, got, _, _ in out}) > 1, (
         "every seed fought the same field to the same result; the twice-in-one-process comparison cannot "
         "tell two calls apart")
+    assert not opened, (
+        f"{role} ({target}) opened {opened} while importing or fighting: the geography (and any other "
+        "data) arrives on the record (`MassBattleInput.geography`, the host's one read), never by path")
+    assert geo_untouched, f"{role} wrote into the record's geography, a mapping the host shares across fields"

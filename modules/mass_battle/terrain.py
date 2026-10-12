@@ -12,10 +12,10 @@ not point at its `.designs/` path.]
 proposals/2026-09-25-squad-engagement-synthesis.md (A7): the data lives at
 `systems/settlements/valoria_geography_v30.yaml`, key `terrain:` (typed polygons) — NOT
 `designs/territory/...::terrain_polygons`, stale in both path and key. This module reads the file's
-`provinces:` and `terrain:` keys directly through its own `_GEOGRAPHY_YAML`; it shares that loader with
-no other module since plan position `29c` deleted `systems/settlements/sim/registry.py` (the settlement
-population loader, which had a second `_GEOGRAPHY_YAML` for the same file). `engine/season/harness/
-populated.py` reads the same file by its own path (`GEOGRAPHY`).
+`provinces:`, `terrain:` and `water:` keys off the PARSED file its caller passes (`geography=`, required)
+and OPENS NO FILE: the season's caller, `massbattle.resolve_field`, passes the input record's
+`geography`, which the host reads once per process (`engine/season/data/geography.py`; the path's one
+owner is `engine/season/data/files.py::GEOGRAPHY_YAML`).
 **Fortification is NOT read from this file** — see `terrain_row_for_territory`'s own docstring for why.
 
 SIMPLIFICATION, disclosed rather than hidden: "dominant polygon by area weight" would need true
@@ -40,12 +40,6 @@ sets from `river_crossed` below (MB-05r): the line between the march's origin an
 anchors crosses a `water: rivers:` polyline. `bridges:` is NOT read [ASSUMPTION; medium; Jordan to
 correct] — a bridge does not cancel the crossing; `river_crossed`'s docstring says why, and the revert.
 """
-import os
-
-import yaml
-
-_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # modules/mass_battle/ since `31c`
-_GEOGRAPHY_YAML = os.path.join(_REPO_ROOT, 'systems', 'settlements', 'valoria_geography_v30.yaml')
 
 # A.9's six canonical rows (mass_battle_v30.md §A.9, a closed table — this module invents no seventh).
 NARROW_PASS = 'narrow_pass'
@@ -80,16 +74,6 @@ _TYPE_TO_ROW = {
     'plains': OPEN_FLAT,
 }
 
-def _load_geography():
-    """The geography file, READ PER CALL (plan position `31c`, AX-4): no state survives between lookups.
-    A caller wanting one read across several lookups passes the result in (`terrain_row_for_territory`'s
-    `geography=`), and the season's one lookup per field reads it once."""
-    with open(_GEOGRAPHY_YAML, 'r', encoding='utf-8') as f:
-        return yaml.load(f, Loader=getattr(yaml, 'CSafeLoader', yaml.SafeLoader))
-
-
-
-
 def _point_in_polygon(pt, polygon):
     """Standard ray-casting point-in-polygon test. `polygon`: a list of [x, y] pairs. A point exactly
     on a polygon edge is treated inconsistently (a known limitation of the raw algorithm) — not
@@ -122,7 +106,7 @@ def _polygon_area(polygon):
     return abs(total) / 2.0
 
 
-def terrain_row_for_territory(tid, fort_level=0, river_crossing=False, geography=None):
+def terrain_row_for_territory(tid, fort_level=0, river_crossing=False, *, geography):
     """The A.9 row (one of this module's six constants) for a battle fought over province `tid`.
 
     `river_crossing` (MB-05): the CALLER's fact that the attacker fights its way across a river to
@@ -184,10 +168,10 @@ def terrain_row_for_territory(tid, fort_level=0, river_crossing=False, geography
     Falls back to OPEN_FLAT — the safe, no-modifier default — if `tid` is unknown to the geography
     file, its `anchor` is missing, or the anchor lands inside no terrain polygon at all.
 
-    `geography` (plan position `31c`): the parsed geography file, a PARAMETER in place of the module
-    cache it replaced; `None` (the default) reads the file for this call (`_load_geography`)."""
-    geo = geography if geography is not None else _load_geography()
-    province = geo.get('provinces', {}).get(tid)
+    `geography` (plan position `31c`): the parsed geography file, REQUIRED -- this module opens no file;
+    the season's caller passes the input record's (`MassBattleInput.geography`, the host's one read).
+    Read, never written."""
+    province = geography.get('provinces', {}).get(tid)
     if province is None:
         return OPEN_FLAT
     if fort_level > 0:
@@ -198,7 +182,7 @@ def terrain_row_for_territory(tid, fort_level=0, river_crossing=False, geography
     if anchor is None:
         return OPEN_FLAT
     best_type, best_area = None, None
-    for entry in geo.get('terrain', []):
+    for entry in geography.get('terrain', []):
         if not _point_in_polygon(anchor, entry['polygon']):
             continue
         area = _polygon_area(entry['polygon'])
@@ -222,7 +206,7 @@ def _on_segment(p, q1, q2):
             and min(q1[1], q2[1]) <= p[1] <= max(q1[1], q2[1]))
 
 
-def river_crossed(origin, tid, geography=None):
+def river_crossed(origin, tid, *, geography):
     """Did a march from territory `origin` to the field at territory `tid` cross a river? (MB-05r)
 
     THE TEST: the straight line between the two territories' `anchor`s crosses any `water: rivers:`
@@ -257,16 +241,15 @@ def river_crossed(origin, tid, geography=None):
     distance no source states -- an invented number. THE REVERT, if Jordan states the other option: read `bridges:` here and answer `False` for a
     crossing of the river a bridge `crosses`, under whichever route rule he names.
 
-    `geography`: the parsed file, as `terrain_row_for_territory` takes it; `None` reads it for this call."""
+    `geography`: the parsed file, REQUIRED, as `terrain_row_for_territory` takes it."""
     if origin is None or tid is None or origin == tid:
         return False
-    geo = geography if geography is not None else _load_geography()
-    provinces = geo.get('provinces', {})
+    provinces = geography.get('provinces', {})
     a = (provinces.get(origin) or {}).get('anchor')
     b = (provinces.get(tid) or {}).get('anchor')
     if a is None or b is None:
         return False
-    for river in (geo.get('water') or {}).get('rivers', []):
+    for river in (geography.get('water') or {}).get('rivers', []):
         v = river.get('vertices') or []
         segments = range(len(v) - 1)
         if any(_on_segment(a, v[i], v[i + 1]) or _on_segment(b, v[i], v[i + 1]) for i in segments):

@@ -29,9 +29,11 @@ to no standard-library or installed module is a file the set needs and does not 
 from wherever `sys.path` happens to find it, or raise) -- reported beside the files left behind. The
 directories checked, of each shape, are printed (`-s`).
 
-NOT CHECKED, RECORDED: DATA a module reads by path. `modules/mass_battle/terrain.py` (`_GEOGRAPHY_YAML`)
-reads `systems/settlements/valoria_geography_v30.yaml` -- an input outside `modules/**` the port would
-need and this import walk cannot see. Recorded here, not fixed.
+NOT CHECKED HERE: DATA a module reads by path, which an import walk cannot see. The one such read
+(`modules/mass_battle/terrain.py` opening the geography file) is gone: the host reads the file
+(`engine/season/data/geography.py`) and hands it on the input record (`MassBattleInput.geography`), and
+`engine/season/tests/test_mass_battle_module.py` observes, in a fresh process, that the module opens no
+file while importing or fighting.
 """
 from __future__ import annotations
 

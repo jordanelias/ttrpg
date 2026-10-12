@@ -68,8 +68,7 @@ from modules.mass_battle.orchestration import run_battle
 from modules.mass_battle.terrain import (FOREST_BROKEN, RIVER_CROSSING, RIVER_CROSSING_OFF_D,
                                              SPEED_TIERS, UPHILL, UPHILL_ATTACKER_OFF_D,
                                              UPHILL_DEFENDER_DEF_D, WALLS, WALLS_DEFENDER_DR,
-                                             _load_geography, river_crossed,
-                                             terrain_row_for_territory)
+                                             river_crossed, terrain_row_for_territory)
 
 #: Size-ratio -> degree thresholds. CARRIED OVER VERBATIM from the pre-port adapter so that the
 #: golden movement this commit causes is attributable to the engine swap and nothing else. These are
@@ -317,7 +316,7 @@ def resolve_field(inp, rng=None):
     (`engine/season/queries/inputs.py::MassBattleInput`) and the seeded `rng`. It never reads or writes
     `World` (until `31c` it took `w` and summed `w.persons[pid].weight` itself), holds no token, and keeps
     no state between calls: the draws are scoped to this call by `rngsource.using` (`_run_and_grade`), the
-    geography is read for it (`terrain.py`), and no trace block is opened.
+    geography arrives on the record (`inp.geography`, the host's read), and no trace block is opened.
 
     §C.5.1: *"units = PersonId[] at weight — one type. There is NO unit class, at any scale."* The
     record's `weights` are each side's `Person.weight`s (`state/carriers.py`: "A COHORT IS A PERSON AT
@@ -357,7 +356,9 @@ def resolve_field(inp, rng=None):
       `loyalties`, `loyalty_gain` -- MB-03: `(attacker, defender)` build-time loyalty rows and the
           gain `_morale_start` adds them at; gain `0` is the control, battle history only.
     The row is derived here from the facts that decide it (`territory`, `fort_level`, `origin`), so
-    no caller can hand in a row that disagrees; the geography is read ONCE for both lookups.
+    no caller can hand in a row that disagrees.
+      `geography` -- the parsed geography file both lookups read, the HOST's (read once per process by
+          `engine/season/data/geography.py`). This module opens no file and never writes into it.
 
     Returns exactly what `_run_and_grade` returns."""
     weight_a, weight_b = (sum(side) for side in inp.weights)
@@ -365,11 +366,10 @@ def resolve_field(inp, rng=None):
     loyalty_a, loyalty_b = inp.loyalties
     unit_a = _weighted_unit("side_a", weight_a, _morale_start(stance_a, loyalty_a, inp.loyalty_gain))
     unit_b = _weighted_unit("side_b", weight_b, _morale_start(stance_b, loyalty_b, inp.loyalty_gain))
-    # No territory: `river_crossed` answers False and the lookup OPEN_FLAT from the id alone, so the
-    # file is not read. WALLS outranks a crossing (`terrain_row_for_territory`), so a fortified field
-    # does not derive one.
-    geo = _load_geography() if inp.territory is not None else {}
-    crossing = inp.fort_level <= 0 and river_crossed(inp.origin, inp.territory, geography=geo)
+    # No territory: `river_crossed` answers False and the lookup OPEN_FLAT. WALLS outranks a crossing
+    # (`terrain_row_for_territory`), so a fortified field does not derive one.
+    crossing = inp.fort_level <= 0 and river_crossed(inp.origin, inp.territory, geography=inp.geography)
     return _run_and_grade(unit_a, unit_b,
-                          terrain_row_for_territory(inp.territory, inp.fort_level, crossing, geography=geo),
+                          terrain_row_for_territory(inp.territory, inp.fort_level, crossing,
+                                                    geography=inp.geography),
                           rng, walls_dr=inp.walls_dr)

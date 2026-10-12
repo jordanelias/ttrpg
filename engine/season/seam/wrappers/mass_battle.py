@@ -85,6 +85,7 @@ from typing import Any, Optional
 # `providers` is imported by module, as combat.py and sigma.py do (see their notes on the manifest
 # import order); the entry lookup is `_entry.py`'s, which imports `registrar` and `registry` the same way.
 from ...manifest.providers import provider
+from ...data.geography import geography
 from ...data.rosters import territory_id_of
 from ...queries.inputs import MassBattleInput
 from ...queries.person_q import stance_toward
@@ -182,7 +183,8 @@ def field_input(w: Any, claimants: list, other: list, rung: str) -> MassBattleIn
     hold contributes no weight, as `resolve_field` read it before the split.
 
     MB-05r: `origin` is the World half of the river-crossing fact; whether the line from it to the
-    target crosses a river is the geography's, which the module reads (`terrain.py::river_crossed`).
+    target crosses a river is the geography's, which the module reads (`terrain.py::river_crossed`) off
+    the record's `geography` -- the file `data/geography.py` reads once per process; the module opens none.
     MB-03: `loyalties` and `loyalty_gain` are the build-time loyalty rows and the fixture gain; what
     they do to the morale-start is `massbattle._morale_start`'s."""
     def weights(side: list) -> tuple:
@@ -195,7 +197,8 @@ def field_input(w: Any, claimants: list, other: list, rung: str) -> MassBattleIn
         walls_dr=w.fixtures.get("field_walls_dr"),
         origin=_origin_of(w, claimants),
         loyalties=(_side_stance(w, claimants, _creed_referent), _side_stance(w, other, _creed_referent)),
-        loyalty_gain=w.fixtures.get("field_morale_loyalty_gain"))
+        loyalty_gain=w.fixtures.get("field_morale_loyalty_gain"),
+        geography=geography())
 
 
 @provider("contest", _PROVIDER)

@@ -20,8 +20,8 @@ return shapes (`seam/wrappers/sigma.py`'s docstring, the placement question).
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Optional
+from dataclasses import dataclass, field
+from typing import Mapping, Optional
 
 
 @dataclass(frozen=True)
@@ -83,7 +83,11 @@ class MassBattleInput:
                        `_creed_referent`, MB-03), which the module adds to the morale-start at
                        `loyalty_gain`;
       * `loyalty_gain` -- the `field_morale_loyalty_gain` fixture (`H-148`'s site); `0` is the control,
-                       battle history only."""
+                       battle history only;
+      * `geography` -- the parsed geography file (`data/geography.py::geography`, read once per process
+                       and SHARED by every record: read-only). The module's terrain lookup and river test
+                       read it here and open no file. `repr=False`: a record in an assertion message
+                       prints its facts, not a 37 KB map."""
     weights: tuple
     territory: Optional[str]
     fort_level: float
@@ -92,3 +96,4 @@ class MassBattleInput:
     origin: Optional[str]
     loyalties: tuple
     loyalty_gain: float
+    geography: Mapping = field(repr=False)

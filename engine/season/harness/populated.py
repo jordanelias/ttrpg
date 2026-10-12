@@ -83,7 +83,7 @@ from ..state.world import World
 from . import probes as P
 from .run_cases import load_cases, seed_pursuits, wants_of
 
-GEOGRAPHY = "systems/settlements/valoria_geography_v30.yaml"
+GEOGRAPHY = files.GEOGRAPHY_YAML.relative_to(files.REPO_ROOT).as_posix()  # the path's one owner is `data/files.py`
 VENUES = "engine/season/venues.yaml"
 ROSTER = "engine/season/npcs.yaml"
 
