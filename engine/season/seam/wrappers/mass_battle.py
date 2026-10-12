@@ -82,9 +82,8 @@ from __future__ import annotations
 import random
 from typing import Any, Optional
 
-# ⚠ THE LEAF, NOT THE PACKAGE. See combat.py/sigma.py's own note: importing `...manifest` (which
-# re-exports from `registry.py`, which imports `seam/wrappers/*` to register them) would close the
-# import cycle `manifest/providers.py` exists to break.
+# `providers` and `registrar` are imported by module, as combat.py and sigma.py do (see their notes
+# on the manifest import order).
 from ...manifest.providers import provider
 from ...manifest.registrar import MODULE_ENTRIES
 from ...manifest.registry import resolve as prize_row

@@ -149,9 +149,11 @@ def _morale_start(stance, loyalty=0.0, gain=0):
     loyalty row names the faction's LEADER, a person, and the morale row names the faction, so the host
     reads and hands on the two referents apart and only their sum on the ladder is shared. AT `gain` 0
     THE TERM IS ZERO and the result is the shipped option (a), battle history only, exactly (the
-    control, swept 0 / 0.4 / 1; `data/fixtures.py` says how each arm is derived). The 1:1 arm saturates
-    every creed-holding faction at `build_realm(0)` -- the row's own finding -- which is why the
-    magnitude is the gain's and is swept rather than chosen here."""
+    control, swept 0 / 0.4 / 1; `data/fixtures.py` says how each arm is derived). At 0.4 a side with
+    loyalty >= 3.75 already reaches the ceiling, and the 1:1 arm saturates most creed-holding
+    factions at `build_realm(0)` (the row's own finding, with the per-side starts pinned in
+    `tests/valoria/test_mass_battle_d1_morale_baseline.py`), which is why the magnitude is the gain's
+    and is swept rather than chosen here."""
     return max(_MORALE_FLOOR, min(_MORALE_CEIL, _round_half_up(
         _MORALE_START_BASE + float(stance) + float(gain) * float(loyalty))))
 
