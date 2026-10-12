@@ -4,6 +4,14 @@ Settled entries (dated 2026-07-25 and earlier) are in `tests/coverage_matrix_arc
 which was restored 2026-08-23 after the evacuation deleted it — see that file for why this
 one had drifted to 94% of a blocking cap with no working relief valve.
 
+## 2026-10-12 — IN-05 (`31c`): the mass-battle sim moves to `modules/mass_battle/`; `gauge_mb.py` is re-pointed, not re-run
+
+The reachable closure of `massbattle.py::resolve_field` left `systems/mass_battle/sim/` for `modules/mass_battle/`
+(plan position IN-05, `references/restructure_ledger.md`'s MOVE rows). `tests/sim/gauge_mb.py` changed only in its
+imports of `config` (three lines: two `import` statements and one comment). No gauge constant, test row or
+sampling default changed, and the gauge was NOT re-run for this move; the move's observers are the mass-battle
+provider tests and the golden digests, which are byte-identical to the base in all three modes.
+
 ## 2026-09-04 — the pool floor reaches the MEAN, not just the VARIANCE (Jordan: "1D is floor")
 
 **`p_success` floored the spread and not the location.** It computed `mu * pool` against
