@@ -384,8 +384,9 @@ def test_in22_live_arm_the_hunger_bites_and_the_claim_still_reaches_the_governor
     the shortfall MATTER recorded (so the test is not passable with the arm off: the body is
     asserted to have fallen, to the unit), and the reeve whose seat's purview holds the town holds
     the very claims MATTER recorded, at the recorded units. The far reeve holds none. At `67` the
-    cohort dies in the barrier that records its shortfall, and the claim has still been deposited:
-    the record is made at the drained write, before the bodies pass reads it."""
+    cohort dies in the barrier that records its shortfall, and the claim is still deposited: the
+    bodies pass removes the cohort (`loop/matter.py`) BEFORE the drained larder's write carries the
+    record, and the seat channel keys on `governors_of` the larder, not on the dead cohort."""
     control = _one_season()
     assert control.persons[S.POPULACE].body == DEFAULT_FIXTURES.get("condition_scale")
     checked = 0
@@ -425,6 +426,9 @@ def test_in22_live_arm_the_governors_question_forms_a_transfer_from_the_claim_wi
         assert (f"{SHORTFALL_PREDICATE}:{cand.operands['kind']}", cand.operands["amount"]) == (
             claim.predicate, claim.value)
         assert S.shortfall_question(w, S.FAR_REEVE) is None, step
+        # The arm is engaged: without this the test is the control's twin (`H-160` live arm falsifier).
+        body = w.persons[S.POPULACE].body if S.POPULACE in w.persons else 0
+        assert body < DEFAULT_FIXTURES.get("condition_scale"), step
 
 
 def test_in22_live_arm_control_the_zero_arm_is_the_unarmed_season_and_the_arm_alone_moves_bodies():
@@ -435,6 +439,10 @@ def test_in22_live_arm_control_the_zero_arm_is_the_unarmed_season_and_the_arm_al
     control = _one_season()
     zero = _armed(0)
     assert zero.content_hash() == control.content_hash()
+    # The shipped default IS 0, so the line above cannot fail alone; these observe MATTER's bodies
+    # pass writing nothing at the control, whatever the default is.
+    assert not [e for e in zero.log if e.kind in ("body.changed", "person.died")]
+    assert [e for e in _armed(LIVE_ARMS[0]).log if e.kind == "body.changed"]
     assert zero.persons[S.POPULACE].body == control.persons[S.POPULACE].body
     held = {a: _held(_armed(a), S.REEVE) for a in LIVE_ARMS}
     assert all(h == _held(control, S.REEVE) != {} for h in held.values()), held
