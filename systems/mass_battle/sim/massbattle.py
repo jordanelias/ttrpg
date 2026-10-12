@@ -294,23 +294,32 @@ def _run_and_grade(unit_a, unit_b, terrain, rng, walls_dr=None):
     }
 
 
-def resolve_field(w, side_a, side_b, *, territory=None, fort_level=0.0, stance_a=0.0, stance_b=0.0,
-                  walls_dr=None, river_crossing=False, rng=None):
-    """THE SEASON-FACING ENTRY POINT — `04 §C.5.1`'s roster contract, reconciled with this module's
-    OWN requirement for a `Unit` to hand `run_battle`.
+def resolve_field(inp, rng=None):
+    """THE SEASON-FACING ENTRY POINT, AND THE `mass_battle` MODULE'S ENTRY (A-25, plan position `31c`) --
+    `04 §C.5.1`'s roster contract, reconciled with this module's OWN requirement for a `Unit` to hand
+    `run_battle`.
 
-    §C.5.1: *"units = PersonId[] at weight — one type. There is NO unit class, at any scale."*
-    `side_a`/`side_b` are `PersonId[]`, weighed by `w.persons[pid].weight` (`state/carriers.py`:
-    "A COHORT IS A PERSON AT weight > 1"); no `Unit`/`Faction`-shaped object crosses this boundary.
-    Internally, `run_battle` still needs a `Unit` -- that requirement does not go away because the
-    caller's contract changed -- and `_faction_to_unit` (deleted at `29b`) was not reused here: it read
-    `faction.Mil` into `Unit.power`, a QUALITY stat, and headcount is a SIZE fact, not a quality
-    one (see `_weighted_unit`, and `_SEASON_FORCE_POWER`'s note on the mistake this corrects).
-    "No unit class, at any scale" is honoured at the SEAM this function's signature draws; it does
-    not reach inside an adapter whose whole job has always been "become a `Unit` for the engine
-    that only speaks one".
+    THE ENTRY. The composition row `mass_battle.resolve_field` (`references/module_contracts.yaml`,
+    `entry: verb_call`, `verb: march`) targets this function; the registrar resolves it by string into
+    `manifest.MODULE_ENTRIES` at driver construction, and the host adapter
+    `engine/season/seam/wrappers/mass_battle.py::resolve` -- the `@provider("contest", "mass_battle")` the
+    prize row `a field` names -- calls it with the typed input record its builder `field_input` made
+    (`engine/season/queries/inputs.py::MassBattleInput`) and the seeded `rng`. It never reads or writes
+    `World` (until `31c` it took `w` and summed `w.persons[pid].weight` itself), holds no token, and keeps
+    no state between calls: the draws are scoped to this call by `rngsource.using` (`_run_and_grade`), the
+    geography is read for it (`terrain.py`), and no trace block is opened.
 
-    ⚠ **AN EMPTY `side_b` gets `_MIN_TROOPS`' crash-avoidance floor, not an invented auto-win.**
+    §C.5.1: *"units = PersonId[] at weight — one type. There is NO unit class, at any scale."* The
+    record's `weights` are each side's `Person.weight`s (`state/carriers.py`: "A COHORT IS A PERSON AT
+    weight > 1"); no `Unit`/`Faction`-shaped object crosses this boundary. Internally, `run_battle` still
+    needs a `Unit` -- that requirement does not go away because the caller's contract changed -- and
+    `_faction_to_unit` (deleted at `29b`) was not reused here: it read `faction.Mil` into `Unit.power`, a
+    QUALITY stat, and headcount is a SIZE fact, not a quality one (see `_weighted_unit`, and
+    `_SEASON_FORCE_POWER`'s note on the mistake this corrects). "No unit class, at any scale" is honoured
+    at the SEAM this function's signature draws; it does not reach inside an adapter whose whole job has
+    always been "become a `Unit` for the engine that only speaks one".
+
+    ⚠ **AN EMPTY DEFENDING SIDE gets `_MIN_TROOPS`' crash-avoidance floor, not an invented auto-win.**
     What an empty defending force MEANS is eligibility policy for whichever verb calls this (open,
     per `ED-IN-0279` clause (a)'s live design fork on the season-side spatial join -- NOT yet
     Jordan's ruling on an auto-win specifically, which this function does not attribute to that row)
@@ -319,31 +328,30 @@ def resolve_field(w, side_a, side_b, *, territory=None, fort_level=0.0, stance_a
     either -- a real corpus side's weight sum is nowhere near this engine's calibrated battle size,
     and this function does not invent the missing conversion.
 
-    THE SEASON INPUTS (plan position `20-iv`), each a plain value the provider read off the world --
-    this module imports nothing from `engine/` and reads no carrier but `Person.weight`:
+    THE RECORD'S FIELDS (plan position `20-iv` and after), each a plain value the host read off the world:
+      `weights` -- `(attacker, defender)`, each side's member weights, SUMMED here into its Unit's troops.
       `territory`, `fort_level` -- the geography territory id of the place fought over and its
           fortification (`world_q.fortification_of`, `[0.0, 1.0]`), turned into ONE A.9 row by
-          `terrain_row_for_territory` and applied in `_run_and_grade`. `side_b` is the DEFENDER, so
-          walls stiffen it. `None` territory is the lookup's own no-modifier fallback, whatever the
+          `terrain_row_for_territory` and applied in `_run_and_grade`. The second side is the DEFENDER,
+          so walls stiffen it. `None` territory is the lookup's own no-modifier fallback, whatever the
           fortification, because that function asks "is this a known territory" first.
-      `stance_a`, `stance_b` -- each side's weight-mean stance toward its own faction, which
-          `_morale_start` turns into a morale-start. `0.0` (the default) is the base: the pre-`20-iv`
-          flat 5.
+      `stances` -- `(attacker, defender)`: each side's weight-mean stance toward its own faction, which
+          `_morale_start` turns into a morale-start. `0.0` is the base: the pre-`20-iv` flat 5.
       `walls_dr` -- plan position `20-v` (`H-150`): the defender DR a WALLS field adds, handed to
-          `_run_and_grade` unchanged. `None` (the default) is A.9's number, `terrain.WALLS_DEFENDER_DR`;
-          an int overrides it. Inert on a field `terrain_row_for_territory` does not call WALLS.
+          `_run_and_grade` unchanged. `None` is A.9's number, `terrain.WALLS_DEFENDER_DR`; an int
+          overrides it. Inert on a field `terrain_row_for_territory` does not call WALLS.
       `river_crossing` -- MB-05: the caller's fact that the attacker crossed a river to reach the
           field, handed to `terrain_row_for_territory`, the one place RIVER_CROSSING can come from.
-          `False` (the default) is what the season provider passes today, by omission: it holds the
-          target rung but not the march's origin, so it cannot derive the fact (see `terrain.py`).
-    The old `terrain=` keyword, which the one caller always passed as `None`, is gone: the row is
-    derived here from the three facts that decide it (`territory`, `fort_level`, `river_crossing`), so no caller can hand in a row that disagrees.
+          The season host passes `False`: it holds the target rung but not the march's origin, so it
+          cannot derive the fact (see `terrain.py`).
+    The row is derived here from the three facts that decide it (`territory`, `fort_level`,
+    `river_crossing`), so no caller can hand in a row that disagrees.
 
     Returns exactly what `_run_and_grade` returns."""
-    weight_a = sum(w.persons[pid].weight for pid in side_a if pid in w.persons)
-    weight_b = sum(w.persons[pid].weight for pid in side_b if pid in w.persons)
+    weight_a, weight_b = (sum(side) for side in inp.weights)
+    stance_a, stance_b = inp.stances
     unit_a = _weighted_unit("side_a", weight_a, _morale_start(stance_a))
     unit_b = _weighted_unit("side_b", weight_b, _morale_start(stance_b))
     return _run_and_grade(unit_a, unit_b,
-                          terrain_row_for_territory(territory, fort_level, river_crossing), rng,
-                          walls_dr=walls_dr)
+                          terrain_row_for_territory(inp.territory, inp.fort_level, inp.river_crossing), rng,
+                          walls_dr=inp.walls_dr)

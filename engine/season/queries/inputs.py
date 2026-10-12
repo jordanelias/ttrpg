@@ -12,13 +12,14 @@ imports a record type must pull in nothing else of the host
 (`engine/season/tests/test_social_contest_module.py` observes it in a fresh process); a record type
 placed beside a builder that reads `data/` would drag the registries into every module.
 
-TWO RECORDS (plan positions `31a`, `31b`). No OUTPUT type is minted: the providers return a `dict`,
+THREE RECORDS (plan positions `31a`, `31b`, `31c`). No OUTPUT type is minted: the providers return a `dict`,
 and typing a `Margin` for one provider while the others return a dict would give the seam two
 return shapes (`seam/wrappers/sigma.py`'s docstring, the placement question).
 """
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass(frozen=True)
@@ -56,3 +57,29 @@ class PersonalCombatInput:
     claimants: tuple
     ends: tuple
     wound_quantities: tuple
+
+
+@dataclass(frozen=True)
+class MassBattleInput:
+    """What the `mass_battle` module's field reads, and nothing else (plan position `31c`).
+
+    Built by `seam/wrappers/mass_battle.py::field_input` (the host input builder) from `World`, after
+    the adapter's PARTY-GAP checks and its `Unopposed` branch (an empty defending side is never fought):
+      * `weights`   -- `(attacker, defender)`, each a tuple of `Person.weight`, one per side member
+                       `World` holds, in side order: the claimants, then the subject's members mustered
+                       at the rung. The module sums each into its side's troops;
+      * `territory` -- the geography territory id of the place fought over, or `None`
+                       (`mass_battle.py::_territory_of`);
+      * `fort_level` -- its fortification, `world_q.fortification_of`, in `[0.0, 1.0]`;
+      * `stances`   -- `(attacker, defender)`: each side's weight-mean stance toward its own faction
+                       (`mass_battle.py::_side_stance`), which the module turns into a morale-start;
+      * `walls_dr`  -- the `field_walls_dr` fixture (`H-150`); `None` is A.9's own number, which the
+                       module reads from its terrain table;
+      * `river_crossing` -- the attacker crossed a river to reach the field (MB-05). The host holds the
+                       target rung and not the march's origin, so it cannot derive this, and passes `False`."""
+    weights: tuple
+    territory: Optional[str]
+    fort_level: float
+    stances: tuple
+    walls_dr: Optional[int]
+    river_crossing: bool

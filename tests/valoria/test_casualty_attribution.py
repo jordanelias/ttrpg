@@ -32,7 +32,7 @@ if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
 import systems.mass_battle.sim.orchestration as O                                   # noqa: E402
-from systems.mass_battle.sim.resolution import start_trace, get_trace               # noqa: E402
+from systems.mass_battle.sim.resolution import tracing, tracing_on                # noqa: E402
 from systems.mass_battle.sim.engine import build_unit, run_battle                   # noqa: E402
 
 _ANCHOR = 9
@@ -44,12 +44,9 @@ def _battle(seed, a_kw=None, b_kw=None):
     ua = build_unit('Line', 3, 'A', 'A', _ANCHOR, **(a_kw or {}))
     ub = build_unit('Line', 3, 'B', 'B', _ANCHOR, **(b_kw or {}))
     a0, b0 = ua.hp, ub.hp
-    start_trace(True)
-    try:
+    with tracing() as recorded:
         run_battle(ua, ub)
-        events = [e for e in get_trace() if e.get('cat') == 'casualty']
-    finally:
-        start_trace(False)
+        events = [e for e in recorded if e.get('cat') == 'casualty']
     return events, {'A': a0 - ua.hp, 'B': b0 - ub.hp}
 
 
@@ -123,9 +120,13 @@ def test_attribution_is_inert_when_tracing_is_off():
     random.seed(77)
     ua = build_unit('Line', 3, 'A', 'A', _ANCHOR)
     ub = build_unit('Line', 3, 'B', 'B', _ANCHOR)
-    start_trace(False)
+    # Plan position `31c`: the buffer is the list a `tracing()` block yields, for that block's extent only.
+    # A block closed BEFORE the battle must see nothing of it, and no block is open while it runs.
+    with tracing() as recorded:
+        pass
+    assert not tracing_on()
     run_battle(ua, ub)
-    assert [e for e in get_trace() if e.get('cat') == 'casualty'] == []
+    assert [e for e in recorded if e.get('cat') == 'casualty'] == []
 
 
 def test_conservation_fails_when_one_path_is_untagged(monkeypatch):

@@ -80,15 +80,15 @@ _TYPE_TO_ROW = {
     'plains': OPEN_FLAT,
 }
 
-_cache = None
-
-
 def _load_geography():
-    global _cache
-    if _cache is None:
-        with open(_GEOGRAPHY_YAML, 'r', encoding='utf-8') as f:
-            _cache = yaml.safe_load(f)
-    return _cache
+    """The geography file, READ PER CALL (plan position `31c`, AX-4). It was a module-level `_cache`
+    that every later lookup in the process shared, so swapping it moved every later lookup; a caller
+    wanting one read across several lookups passes the result in (`terrain_row_for_territory`'s
+    `geography=`), and the season's one lookup per field reads it once."""
+    with open(_GEOGRAPHY_YAML, 'r', encoding='utf-8') as f:
+        return yaml.safe_load(f)
+
+
 
 
 def _point_in_polygon(pt, polygon):
@@ -123,7 +123,7 @@ def _polygon_area(polygon):
     return abs(total) / 2.0
 
 
-def terrain_row_for_territory(tid, fort_level=0, river_crossing=False):
+def terrain_row_for_territory(tid, fort_level=0, river_crossing=False, geography=None):
     """The A.9 row (one of this module's six constants) for a battle fought over province `tid`.
 
     `river_crossing` (MB-05): the CALLER's fact that the attacker fights its way across a river to
@@ -175,8 +175,11 @@ def terrain_row_for_territory(tid, fort_level=0, river_crossing=False):
     against special-casing an entity or outcome).
 
     Falls back to OPEN_FLAT — the safe, no-modifier default — if `tid` is unknown to the geography
-    file, its `anchor` is missing, or the anchor lands inside no terrain polygon at all."""
-    geo = _load_geography()
+    file, its `anchor` is missing, or the anchor lands inside no terrain polygon at all.
+
+    `geography` (plan position `31c`): the parsed geography file, a PARAMETER in place of the module
+    cache it replaced; `None` (the default) reads the file for this call (`_load_geography`)."""
+    geo = geography if geography is not None else _load_geography()
     province = geo.get('provinces', {}).get(tid)
     if province is None:
         return OPEN_FLAT

@@ -1,37 +1,37 @@
 """systems.mass_battle.sim.resolution — sigma-leverage head: pool roll, degree, morale/charge-shock
 sigma, softcap, net-boost. Behaviour-frozen P-A extract. Depends on config + percell."""
-import math, random
+import contextlib, contextvars, math, random
 from systems.mass_battle.sim import rngsource  # single owner of engine randomness (see rngsource.py)
 from systems.mass_battle.sim.config import *
 from systems.mass_battle.sim.percell import *
 
-__all__ = ['roll_pool', 'roll_pool_fractional', 'compute_degree', '_morale_sigma', '_charge_shock_sigma', '_sigma_softcap', '_sigma_net_boost', '_unit_braced', '_subunit_braced', '_wall_prep', '_disc_prep', '_depth_prep', 'trace_event', 'start_trace', 'get_trace', 'tracing_on']
+__all__ = ['roll_pool', 'roll_pool_fractional', 'compute_degree', '_morale_sigma', '_charge_shock_sigma', '_sigma_softcap', '_sigma_net_boost', '_unit_braced', '_subunit_braced', '_wall_prep', '_disc_prep', '_depth_prep', 'trace_event', 'tracing', 'tracing_on']
 
 # ─── passive mechanical-trace collector ─────────────────────────────────────
-# Observe-only. Records per-mechanic internals (melee contest, volley, per-tick markers) when ON.
-# Default OFF -> trace_event is a no-op -> ENGINE BYTE-EXACT. The trace never feeds back into any
-# mechanic, so ON and OFF produce identical outcomes; it only makes a run auditable down to the
-# mechanic that produced each value.
-_battle_trace = []
-_trace_on = False
-def start_trace(on=True):
-    """Clear the buffer and enable/disable mechanical tracing for the next run."""
-    global _battle_trace, _trace_on
-    _battle_trace = []
-    _trace_on = bool(on)
+# Observe-only. Records per-mechanic internals (melee contest, volley, per-tick markers) inside a
+# `tracing()` block. Outside one, trace_event is a no-op -> ENGINE BYTE-EXACT. The trace never feeds
+# back into any mechanic, so ON and OFF produce identical outcomes. PER-CALL STATE (plan position `31c`,
+# AX-4): the buffer was a module global a `start_trace()` reset and nothing scoped; it is now the list a
+# `tracing()` block opens and yields, held in a context variable for the block's extent only.
+_SCOPED_TRACE = contextvars.ContextVar('mass_battle_trace', default=None)
+@contextlib.contextmanager
+def tracing():
+    """Record mechanical events for the extent of the block; yields the list they land in."""
+    token = _SCOPED_TRACE.set([])
+    try:
+        yield _SCOPED_TRACE.get()
+    finally:
+        _SCOPED_TRACE.reset(token)
 def trace_event(cat, **kw):
-    """Append one mechanical event. No-op unless tracing is ON (byte-exact when off)."""
-    if _trace_on:
+    """Append one mechanical event. No-op outside a `tracing()` block (byte-exact when off)."""
+    events = _SCOPED_TRACE.get()
+    if events is not None:
         kw['cat'] = cat
-        _battle_trace.append(kw)
-def get_trace():
-    """Return a copy of the recorded events."""
-    return list(_battle_trace)
+        events.append(kw)
 def tracing_on():
-    """True iff mechanical tracing is currently enabled. Lets a caller (e.g. an expensive per-tick
-    snapshot builder in orchestration.py) skip its work entirely when tracing is off, instead of
-    computing-then-discarding via trace_event's own no-op branch. Query-only; no engine effect."""
-    return _trace_on
+    """True iff a `tracing()` block is open. Lets a caller (e.g. an expensive per-tick snapshot
+    builder in orchestration.py) skip its work entirely when tracing is off. Query-only; no engine effect."""
+    return _SCOPED_TRACE.get() is not None
 
 # [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
 def roll_pool(n, tn=7):

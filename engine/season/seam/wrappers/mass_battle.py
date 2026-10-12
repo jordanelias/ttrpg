@@ -1,5 +1,17 @@
-"""THE MASS-BATTLE PROVIDER -- the seam's wrapper around `systems/mass_battle/sim/massbattle.py`'s
-season-facing entry point, `resolve_field`. Wired M3 of the driver-retirement plan
+"""THE MASS-BATTLE PROVIDER -- the host adapter and the host INPUT BUILDER for the `mass_battle` module's
+entry, `modules/mass_battle/massbattle.py::resolve_field` (plan position `31c`, A-25).
+
+PLAN POSITION `31c` SPLIT THIS MODULE AS `31a` SPLIT `sigma.py`. What stays here is the HOST: the input
+builder `field_input` (`World` -> `queries/inputs.py::MassBattleInput`: each side's member weights, the
+place, its fortification, each side's stance, the walls fixture) and the adapter `resolve`, which keeps
+the PARTY-GAP refusals and the `Unopposed` branch, calls the module entry the prize row names
+(`module_entry:`, registered in `manifest.MODULE_ENTRIES` from its composition row, `entry: verb_call`,
+`verb: march`) and lifts what comes back. The fight itself -- the Units, the terrain row, the battle and
+its survivor-ratio grade -- is the module's, reached by string. `loop/sides.py` stays host too: it builds
+the claimants the record's weights are read for. Below, `massbattle`'s functions are the ENTRY's
+module's since `31c`.
+
+Wired M3 of the driver-retirement plan
 (`ED-IN-0279`); `rosters.yaml`'s "a field" row previously had a `module:` and NO `provider:`,
 whose own comment said the absence WAS the row -- *"sides need `faction_q.resolve` (04 §C.5.1)"*.
 M2 built `faction_q.resolve`; this is the call that reads it.
@@ -55,14 +67,12 @@ onto the three bands `march` writes on (`seam/ladder.py::field_degree`). Manufac
 from the survivor-ratio classification would have been the second resolver S27.2 refuses; reading
 a marker this function already derives is not that.
 
-⚠ **NO NEW `sys.path` SEAM.** `resolve_field` is reached through `composition.require`
-(`references/module_contracts.yaml`'s `mass_battle.resolve_field` role), not a direct
-`systems.mass_battle...` import -- `tests/valoria/test_engine_does_not_import_systems.py`'s
-`BASELINE_TOTAL` ratchet is zero dotted `systems.*` imports anywhere under `engine/`, and
-`PATH_SEAM_ALLOWED` is one entry (`substrate/pc_engine.py`, needed only because
-`combat_engine_v1/` bare-imports its own siblings). `massbattle.py`'s own imports are already
-proper dotted `systems.mass_battle.sim.*`, so it has no such problem and needs no second entry --
-the composition-role indirection is the correct-fit channel, not a workaround.
+⚠ **NO NEW `sys.path` SEAM, AND NO IMPORT OF THE MODULE.** `resolve_field` is reached by STRING: the
+composition row `mass_battle.resolve_field` (`references/module_contracts.yaml`) names it, the registrar
+resolves it at driver construction into `MODULE_ENTRIES`, and `resolve` below looks it up there by the
+role its prize row names -- `engine/` never imports module code. `PATH_SEAM_ALLOWED`
+(`tests/valoria/test_engine_does_not_import_systems.py`) keeps its one entry: the moved closure's own
+imports are dotted `modules.mass_battle.*`, a package, so it needs no path seam.
 """
 from __future__ import annotations
 
@@ -73,7 +83,10 @@ from typing import Any, Optional
 # re-exports from `registry.py`, which imports `seam/wrappers/*` to register them) would close the
 # import cycle `manifest/providers.py` exists to break.
 from ...manifest.providers import provider
+from ...manifest.registrar import MODULE_ENTRIES
+from ...manifest.registry import resolve as prize_row
 from ...data.rosters import territory_id_of
+from ...queries.inputs import MassBattleInput
 from ...queries.person_q import stance_toward
 from ...queries import world_q
 
@@ -114,12 +127,23 @@ def _side_stance(w: Any, pids: list) -> float:
     return acc / total if total else 0.0
 
 
-def _resolver():
-    """`resolve_field`, by composition role. Deferred: a module-level import here would put
-    `engine.substrate.composition` — and, transitively, `systems.mass_battle...` — on every
-    caller's import path merely for importing this wrapper, not for calling it."""
-    from engine.substrate import composition
-    return composition.require("mass_battle.resolve_field")
+def field_input(w: Any, claimants: list, other: list, rung: str) -> MassBattleInput:
+    """THE HOST INPUT BUILDER (plan position `31c`, A-25): `World` -> the frozen record the field reads.
+
+    Reads `w.persons` (each side member's `weight`, and the stances `_side_stance` reads), the rung
+    ancestry (`_territory_of`), the target's fortification and `w.fixtures`, and nothing else; the
+    module that consumes the record never sees `World`. Its precondition is the adapter's PARTY-GAP
+    checks and a non-empty defending side (`resolve`, below). A member id `World` does not hold
+    contributes no weight, as `resolve_field` read it before the split."""
+    def weights(side: list) -> tuple:
+        return tuple(w.persons[pid].weight for pid in side if pid in w.persons)
+    return MassBattleInput(
+        weights=(weights(claimants), weights(other)),
+        territory=_territory_of(w, rung),
+        fort_level=world_q.fortification_of(w, rung),
+        stances=(_side_stance(w, claimants), _side_stance(w, other)),
+        walls_dr=w.fixtures.get("field_walls_dr"),
+        river_crossing=False)
 
 
 @provider("contest", "mass_battle")
@@ -167,20 +191,20 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
                                 attacker_size_pct=1.0, defender_size_pct=0.0),
                     winner=claimants,
                     parties={"claimants": claimants, "subject_members": other})
-    try:
-        engine_resolve_field = _resolver()
-    except Exception as e:
-        return dict(status="ENGINE-UNAVAILABLE", why=f"{type(e).__name__}: {e}", module="mass_battle")
-    # PLAN POSITION `20-iv`: the place and the two sides' morale, read here and decided there
-    # (`H-150` -- `fortification_of`'s caller on the battle path).
+    # ⚠ THE ENTRY IS LOOKED UP BY THE ROLE THE PRIZE ROW NAMES (`module_entry:`), IN `MODULE_ENTRIES`,
+    # as `sigma.py` and `combat.py` look theirs up (`31a`, `31b`): a call reaching here with the role
+    # unregistered (no driver constructed in the process) is the typed `ENGINE-UNAVAILABLE`.
+    role = (prize_row("contest", prize) or {}).get("module_entry")
+    entry = MODULE_ENTRIES.get(role)
+    if entry is None:
+        return dict(status="ENGINE-UNAVAILABLE", module="mass_battle",
+                    why=f"prize {prize!r} names module entry {role!r}, which MODULE_ENTRIES does not "
+                        f"hold -- the registrar fills it at SeasonDriver construction")
+    # PLAN POSITION `20-iv`: the place and the two sides' morale, read here (`field_input`) and decided
+    # there (`H-150` -- `fortification_of`'s caller on the battle path).
     # PLAN POSITION `20-v`: the walls' DR is the `field_walls_dr` fixture (`H-150`), `None` = A.9's
-    # own number, which `massbattle` reads from `terrain.py` -- this wrapper decides none of it.
-    result = engine_resolve_field(w, claimants, other,
-                                  territory=_territory_of(w, rung),
-                                  fort_level=world_q.fortification_of(w, rung),
-                                  stance_a=_side_stance(w, claimants),
-                                  stance_b=_side_stance(w, other),
-                                  walls_dr=w.fixtures.get("field_walls_dr"), rng=rng)
+    # own number, which the module reads from its terrain table -- this adapter decides none of it.
+    result = entry.fn(field_input(w, claimants, other, rung), rng)
     return dict(status="RESOLVED", module="mass_battle", resolver="dice_pool",
                 # ⚠ LIFTED TO TOP LEVEL, NOT LEFT NESTED UNDER `result` (M4). `degree_of`
                 # (`seam/ladder.py`) reads a provider's return directly -- `wound_state` and

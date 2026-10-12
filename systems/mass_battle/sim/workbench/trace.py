@@ -2,8 +2,8 @@
 event stream (Jordan directive 2026-07-01: a visual tool to confirm engine results, especially for
 the coordinate-field migration).
 
-Uses the engine's existing observe-only trace seam (resolution.start_trace/trace_event/get_trace,
-"no-op unless ON -> byte-exact") plus the tick-by-tick 'positions' snapshots orchestration.py now
+Uses the engine's existing observe-only trace seam (resolution.tracing/trace_event, "no-op outside
+a `tracing()` block -> byte-exact") plus the tick-by-tick 'positions' snapshots orchestration.py now
 emits when tracing is on. Builds units via the wrapper's engine.build_unit adapter and runs via
 engine.resolve_battle — the same public surface bat.py dogfoods, so this workbench never reaches
 past the wrapper. Read-only: a traced run mutates no engine state beyond the battle it itself runs.
@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'
 from systems.mass_battle.sim.engine import (  # noqa: E402
     build_unit, build_army, build_envelopment, build_refused_flank, resolve_battle,
     SIDE_A_START_ROW, SIDE_B_START_ROW)
-from systems.mass_battle.sim.resolution import start_trace, get_trace  # noqa: E402
+from systems.mass_battle.sim.resolution import tracing  # noqa: E402
 import random  # noqa: E402
 
 # Deployment anchor columns per (shape, tier) — mirrors bat.py's own table (workbench owns its own
@@ -76,24 +76,21 @@ def run_traced_battle(spec_a, spec_b, *, seed=0, max_battle_turns=8, kind='multi
     so the trace is always readable the same way.
 
     Returns {'winner', 'events': [...], 'a': {summary}, 'b': {summary}}. `events` is the ordered
-    trace — 'tick'/'melee'/'volley'/'positions' category dicts, exactly as resolution.get_trace()
-    returns them (no re-shaping), so the frontend consumes the engine's own event vocabulary."""
+    trace — 'tick'/'melee'/'volley'/'positions' category dicts, exactly as a resolution.tracing()
+    block records them (no re-shaping), so the frontend consumes the engine's own event vocabulary."""
     random.seed(seed)
     ua, shape_a, tier_a, anchor_a = _build_side(spec_a, 'A')
     ub, shape_b, tier_b, anchor_b = _build_side(spec_b, 'B')
     a0, b0 = ua.hp_max, ub.hp_max
 
-    start_trace(True)
-    try:
+    with tracing() as recorded:
         if kind == 'single':
             r = resolve_battle(ua, ub, kind='single', max_turns=18)  # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6), same default as orchestration.run_battle]
         else:
             anchor_map = {(shape_a, tier_a): anchor_a, (shape_b, tier_b): anchor_b}
             r = resolve_battle(ua, ub, shape_a, shape_b, anchor_map,
                                 kind='multi', max_battle_turns=max_battle_turns)
-        events = get_trace()
-    finally:
-        start_trace(False)
+    events = list(recorded)
 
     return {
         'winner': r.get('winner'), 'events': events,

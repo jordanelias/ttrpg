@@ -160,9 +160,10 @@ def test_mountain_pass_polygon_maps_to_narrow_pass_directly(monkeypatch):
     synthetic['provinces']['T-synthetic-pass'] = {
         'anchor': [sum(xs) / len(xs), sum(ys) / len(ys)],
     }
-    import systems.mass_battle.sim.terrain as T
-    monkeypatch.setattr(T, '_cache', synthetic)
-    assert terrain_row_for_territory('T-synthetic-pass', fort_level=0) == NARROW_PASS
+    # Plan position `31c`: the geography is a parameter, not a module cache the test swaps.
+    assert terrain_row_for_territory('T-synthetic-pass', fort_level=0, geography=synthetic) == NARROW_PASS
+    assert terrain_row_for_territory('T-synthetic-pass', fort_level=0) == OPEN_FLAT, (
+        "the synthetic province leaked past the one call it was passed to")
 
 
 def test_open_ground_resolves_unmodified(monkeypatch):
@@ -176,9 +177,10 @@ def test_open_ground_resolves_unmodified(monkeypatch):
     synthetic['provinces']['T-synthetic-plains'] = {
         'anchor': [sum(xs) / len(xs), sum(ys) / len(ys)],
     }
-    import systems.mass_battle.sim.terrain as T
-    monkeypatch.setattr(T, '_cache', synthetic)
-    assert terrain_row_for_territory('T-synthetic-plains', fort_level=0) == OPEN_FLAT
+    # Plan position `31c`: the geography is a parameter, not a module cache the test swaps.
+    assert terrain_row_for_territory('T-synthetic-plains', fort_level=0, geography=synthetic) == OPEN_FLAT
+    assert terrain_row_for_territory('T-synthetic-plains', fort_level=0) == OPEN_FLAT, (
+        "the synthetic province leaked past the one call it was passed to")
 
 
 # ─── the mechanical effects wired so far: forest -> cavalry Standard speed; walls -> defender DR ─
