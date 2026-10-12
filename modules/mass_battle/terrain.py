@@ -134,8 +134,8 @@ def terrain_row_for_territory(tid, fort_level=0, river_crossing=False, geography
     `[ASSUMPTION: priority WALLS > RIVER_CROSSING > polygon -- the same one-row-of-six shape that forced
     the fortification rule below forces one here; a crossing outranks the surrounding polygon because it
     is what happens AT the engagement, and walls outrank the crossing by that rule's own reasoning.]`
-    ⚠ RULED AT MB-05r, ON THAT ASSUMPTION: WHEN A CROSSING AND AN UPHILL POLYGON BOTH APPLY, RIVER_CROSSING
-    WINS and the field loses UPHILL's dice. A.9 is a table of six rows and its ED-780 extension says
+    ⚠ DECIDED AT MB-05r [ASSUMPTION; medium; Jordan to correct], ON THAT ASSUMPTION: WHEN A CROSSING
+    AND AN UPHILL POLYGON BOTH APPLY, RIVER_CROSSING WINS and the field loses UPHILL's dice. A.9 is a table of six rows and its ED-780 extension says
     "the Terrain row is determined" -- one row, never combined -- and `_run_and_grade` applies one row
     (`if`/`elif`). The crossing is the engagement's own feature (`settlement_adjacency_v30.md`'s river
     edge: the penalty applies "if defender holds far bank"); the hill is the surrounding polygon. The
@@ -210,21 +210,30 @@ def terrain_row_for_territory(tid, fort_level=0, river_crossing=False, geography
     return _TYPE_TO_ROW.get(best_type, OPEN_FLAT)
 
 
-def _segments_cross(p1, p2, q1, q2):
-    """True when segment `p1-p2` and segment `q1-q2` cross at a point interior to both -- the standard
-    orientation test. An endpoint lying ON the other segment, or a collinear overlap, is NOT a crossing
-    (strict signs): a march that starts or ends on the river's own line has not crossed it."""
-    def orient(a, b, c):
-        return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])
-    return (orient(q1, q2, p1) * orient(q1, q2, p2) < 0
-            and orient(p1, p2, q1) * orient(p1, p2, q2) < 0)
+def _orient(a, b, c):
+    """Twice the signed area of triangle `a-b-c`: positive when `c` lies left of `a -> b`, negative
+    right of it, 0 when the three are collinear."""
+    return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])
+
+
+def _on_segment(p, q1, q2):
+    """True when point `p` lies on the closed segment `q1-q2` (collinear, and inside its bounding box)."""
+    return (_orient(q1, q2, p) == 0
+            and min(q1[0], q2[0]) <= p[0] <= max(q1[0], q2[0])
+            and min(q1[1], q2[1]) <= p[1] <= max(q1[1], q2[1]))
 
 
 def river_crossed(origin, tid, geography=None):
     """Did a march from territory `origin` to the field at territory `tid` cross a river? (MB-05r)
 
-    THE TEST: the straight line between the two territories' `anchor`s crosses a segment of any
-    `water: rivers:` polyline of the geography file. The anchor is the engagement point the polygon
+    THE TEST: the straight line between the two territories' `anchor`s crosses any `water: rivers:`
+    polyline of the geography file an ODD number of times -- the two anchors are on opposite banks.
+    A crossing is counted where the river changes sides of the march line (a river vertex lying ON
+    the line counts to one fixed side) at a point between the two anchors. Counting side changes,
+    not segments crossed strictly, is what reads a river that touches the line and turns back (two
+    changes: no crossing) and one that runs ALONG the line and leaves it on the other side (one
+    change: a crossing -- T3 -> T5 follows `river-valoris` from Kronmark to Valorsplatz and arrives
+    east of it). The anchor is the engagement point the polygon
     lookup above already uses for the field, so the two reads share one convention (A.9's row and the
     crossing are decided at the same point). `False` -- no crossing, the polygon row stands -- for a
     `None` origin (the host found no one origin), the same territory at both ends, an unknown
@@ -235,16 +244,18 @@ def river_crossed(origin, tid, geography=None):
     §2.4") and nothing in the engine computes that path, so the line between anchors is the only route
     there is to test. (2) TERRITORY RESOLUTION: a march inside one territory crosses nothing, whatever
     its settlements' sides of a river; and an anchor lying ON a river -- T1's is a vertex of
-    `river-valoris` -- touches it and crosses nothing (`_segments_cross`). (3) LAKES ARE NOT READ: A.9's
+    `river-valoris` -- is on neither bank, so that river is not read for the march (`_on_segment`):
+    it crosses nothing. (3) LAKES ARE NOT READ: A.9's
     row is a river crossing, and `water: lakes:` are ellipses no march is modelled as fording.
 
     ⚠ A BRIDGE DOES NOT CANCEL THE CROSSING [ASSUMPTION; medium; Jordan to correct]. The data exists
     (`bridges:`, point features on `river-valoris`'s own vertices, each naming the river it `crosses`)
     and nothing reads it. The design intent does say a bridged route escapes the penalty
     (`march_layer_v30.md` §4.2: "river | Per `bridges` table; crossing penalty without bridge"), but a
-    straight line between anchors passes through a point-feature bridge only by coincidence, so honouring
-    it needs either a route model (unbuilt, above) or a snapping distance no source states -- an invented
-    number. THE REVERT, if Jordan states the other option: read `bridges:` here and answer `False` for a
+    straight line between anchors meets a point-feature bridge only where the geometry happens to put
+    one on it: T3 -> T5's line passes through both bridges because it runs along the river, not because
+    a route took them. Honouring bridges needs either a route model (unbuilt, above) or a snapping
+    distance no source states -- an invented number. THE REVERT, if Jordan states the other option: read `bridges:` here and answer `False` for a
     crossing of the river a bridge `crosses`, under whichever route rule he names.
 
     `geography`: the parsed file, as `terrain_row_for_territory` takes it; `None` reads it for this call."""
@@ -258,7 +269,13 @@ def river_crossed(origin, tid, geography=None):
         return False
     for river in (geo.get('water') or {}).get('rivers', []):
         v = river.get('vertices') or []
-        if any(_segments_cross(a, b, v[i], v[i + 1]) for i in range(len(v) - 1)):
+        segments = range(len(v) - 1)
+        if any(_on_segment(a, v[i], v[i + 1]) or _on_segment(b, v[i], v[i + 1]) for i in segments):
+            continue
+        side = [1 if _orient(a, b, p) >= 0 else -1 for p in v]
+        hits = sum(1 for i in segments
+                   if side[i] != side[i + 1] and _orient(v[i], v[i + 1], a) * _orient(v[i], v[i + 1], b) < 0)
+        if hits % 2:
             return True
     return False
 

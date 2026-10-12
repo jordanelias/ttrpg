@@ -26,7 +26,7 @@ cares about fortification now passes `fort_level` explicitly rather than reading
 import pytest
 
 from modules.mass_battle.terrain import (
-    terrain_row_for_territory, river_crossed, _segments_cross, _point_in_polygon, _load_geography, _TYPE_TO_ROW,
+    terrain_row_for_territory, river_crossed, _point_in_polygon, _load_geography, _TYPE_TO_ROW,
     NARROW_PASS, UPHILL, FOREST_BROKEN, WALLS, OPEN_FLAT, RIVER_CROSSING,
 )
 
@@ -140,6 +140,10 @@ def test_a_river_crossing_outranks_an_uphill_field():
     ('T3', 'T9', True),    # the same line walked the other way
     ('T14', 'T9', False),  # both west of the river
     ('T16', 'T3', False),  # both east of it
+    # x=1380 from [1380,380] to [1380,1700]: touches V2, runs ALONG V2-V3 and leaves at V3 where the river
+    # turns east -- west of it at the north end, east of it at the south. No segment is crossed strictly.
+    ('T3', 'T5', True),
+    ('T5', 'T3', True),
     ('T2', 'T1', False),   # T1's anchor IS a vertex of river-valoris: touching is not crossing
     ('T9', 'T9', False),   # a march inside one territory crosses nothing at this resolution
     (None, 'T3', False),   # no origin: the host found none -- the default
@@ -150,14 +154,35 @@ def test_river_crossed_reads_the_line_between_the_two_anchors(origin, tid, cross
     assert river_crossed(origin, tid) is crossed
 
 
-def test_segments_cross_is_strict():
-    """The orientation test counts a crossing interior to both segments only: an endpoint on the other
-    segment, or a collinear overlap, is not one -- so a field or an origin whose anchor lies on a river
-    has not crossed it."""
-    assert _segments_cross((0, -5), (0, 5), (-5, 0), (5, 0))
-    assert not _segments_cross((0, 0), (0, 5), (-5, 0), (5, 0))     # endpoint on the river
-    assert not _segments_cross((-9, 0), (-6, 0), (-5, 0), (5, 0))   # collinear, apart
-    assert not _segments_cross((-3, 0), (3, 0), (-5, 0), (5, 0))    # collinear overlap
+@pytest.mark.parametrize('vertices, crossed', [
+    ([[-5, 5], [0, 0], [5, 5]], False),               # touches the line from the north and turns back
+    ([[-5, -5], [0, 0], [5, -5]], False),             # the same from the south: two side changes, even
+    ([[-5, 5], [-1, 0], [1, 0], [5, -5]], True),      # runs ALONG the line, leaves it on the other side
+    ([[-5, -5], [-1, 0], [1, 0], [5, 5]], True),      # the same, south to north
+    ([[-5, 5], [-1, 0], [1, 0], [5, 5]], False),      # runs along it and returns to the side it came from
+    ([[0, -10], [0, 10]], True),                      # the plain crossing
+])
+def test_river_crossed_counts_bank_changes_not_strict_segment_crossings(vertices, crossed):
+    """MB-05r: a crossing is the river changing sides of the march line between the two anchors, an odd
+    number of times. A strict segment-crossing test reads a touch and a run-along alike (no segment is
+    crossed strictly in either), so it answered `False` for T3 -> T5, whose line follows the Valoris and
+    arrives on the other bank."""
+    geo = {'provinces': {'W': {'anchor': [-5, 0]}, 'E': {'anchor': [5, 0]}},
+           'water': {'rivers': [{'id': 'r', 'vertices': vertices}]}}
+    assert river_crossed('W', 'E', geography=geo) is crossed
+    assert river_crossed('E', 'W', geography=geo) is crossed
+
+
+def test_an_anchor_on_a_river_is_on_neither_bank_of_it():
+    """T1's rule (`river_crossed`'s SIMPLIFICATIONS (2)): an anchor lying ON a river is on neither bank,
+    so that river is not read for the march -- even where it crosses the march line further along. The
+    control is the same river moved one unit off the anchor, which crosses."""
+    def crossed(vertices):
+        geo = {'provinces': {'W': {'anchor': [-5, 0]}, 'E': {'anchor': [5, 0]}},
+               'water': {'rivers': [{'id': 'r', 'vertices': vertices}]}}
+        return river_crossed('W', 'E', geography=geo), river_crossed('E', 'W', geography=geo)
+    assert crossed([[-5, 0], [0, 5], [0, -5]]) == (False, False)
+    assert crossed([[-6, 0], [0, 5], [0, -5]]) == (True, True)
 
 
 def test_a_bridge_does_not_cancel_the_crossing():

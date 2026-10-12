@@ -86,8 +86,8 @@ def test_the_scan_list_is_derived_and_cannot_silently_shrink(monkeypatch):
 
 
 def test_the_sim_reference_roots_owner_reads_modules_and_skips_pycache(tmp_path):
-    """A-25, the owner's own falsifier: `modules/` does not exist in the repo, so
-    a temporary tree plants one. `modules/<name>/` must join the roots after `systems/*/sim`;
+    """A-25, the owner's own falsifier: the live `modules/` tree cannot show the
+    row is what finds it, so a temporary tree plants one. `modules/<name>/` must join the roots after `systems/*/sim`;
     `modules/__pycache__` and a plain file under `modules/` must not. Without the `('modules', '*')`
     row this fails, which the live-tree test above cannot show."""
     for d in ('engine', 'systems/s/sim', 'modules/m', 'modules/__pycache__'):

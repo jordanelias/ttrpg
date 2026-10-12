@@ -96,7 +96,7 @@ pair; output P(full success). Standard reference, generated once and cached to
 **Input:** pool sizes, TN, Ob values (fractional allowed). Run `continuous_outcome_probs(n, tn, ob)`
 per pair; output `Pool | Overwhelm | Success | Partial | Failure` labelled
 "[continuous/Godot-canonical]". Use for the videogame's resolver, e.g. balance that lands in
-`engine/engine_params/*.json` or `systems/combat/combat_engine_v1/`.
+`engine/engine_params/*.json` or `modules/combat/`.
 
 ## Output Format
 

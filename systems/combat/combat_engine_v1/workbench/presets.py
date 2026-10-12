@@ -98,7 +98,7 @@ def promote_diff(overrides):
     body = "\n".join(rows) if rows else "  (no changes vs current config.CFG)"
     ledger_stub = {
         "kind": "combat-tuning-promotion",
-        "target": "systems/combat/combat_engine_v1/config.py (CFG)",
+        "target": "modules/combat/config.py (CFG)",
         "overrides": {k: overrides[k] for k in sorted(overrides) if k in base},
         "note": "PROPOSED via workbench scratch preset; ratify before writing to config.py (Class-C seeds).",
     }

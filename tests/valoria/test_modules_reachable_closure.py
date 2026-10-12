@@ -17,17 +17,26 @@ reached module is reached too. The two directions:
   2. NOTHING the closure reaches lies under `systems/` (the closure moved whole). The host (`engine/`) is
      not module code and is not walked: a module imports its record type and the dice engine from there.
 
-SCOPE, AND THE ONE EXCLUSION, BY SHAPE AND NOT BY NAME. A module directory WITH an `__init__.py` is a
-package whose files import each other by dotted name, which this walk follows (`social_contest`,
-`mass_battle`). A directory WITHOUT one is a FLAT script set loaded through a declared path seam
-(`modules/combat/`, loaded by `engine/substrate/pc_engine.py` with `importlib.import_module('wrapper')`):
-its entry reaches the engine by a string this walk cannot follow, so the walk would report the whole engine
-unreached. Such a directory is listed in the test's output, not checked; checking it is a walk that follows
-the path seam, which is not this position's.
+TWO SHAPES, TOLD APART BY SHAPE AND NOT BY NAME. A module directory WITH an `__init__.py` is a package
+whose files import each other by dotted name, which this walk follows (`social_contest`, `mass_battle`).
+A directory WITHOUT one is a FLAT script set loaded through a declared path seam (`modules/combat/`,
+loaded by `engine/substrate/pc_engine.py`, which puts the directory on `sys.path` and imports its
+`PCEngine._fields` by bare name): its entry reaches the engine by strings, so its roots are the entry
+PLUS the names the seam itself declares, and a dot-free import resolves to `<directory>/<name>.py` first,
+as it does at load. A flat directory with no seam declaring its names fails rather than going unchecked.
+In a flat set one more failure is observable: a bare name that resolves to no file in the directory and
+to no standard-library or installed module is a file the set needs and does not hold (it would load
+from wherever `sys.path` happens to find it, or raise) -- reported beside the files left behind. The
+directories checked, of each shape, are printed (`-s`).
+
+NOT CHECKED, RECORDED: DATA a module reads by path. `modules/mass_battle/terrain.py` (`_GEOGRAPHY_YAML`)
+reads `systems/settlements/valoria_geography_v30.yaml` -- an input outside `modules/**` the port would
+need and this import walk cannot see. Recorded here, not fixed.
 """
 from __future__ import annotations
 
 import ast
+import importlib.util
 import os
 import sys
 
@@ -39,8 +48,11 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 MODULES = "modules"
 
 
-def _file_of(dotted: str):
-    """The repository file a dotted module name loads from, or None (stdlib, third-party, absent)."""
+def _file_of(dotted: str, flat_dir: str | None = None):
+    """The repository file a dotted module name loads from, or None (stdlib, third-party, absent). In a
+    flat set (`flat_dir`) a dot-free name is the directory's own `<name>.py` first, as at load."""
+    if flat_dir and "." not in dotted and os.path.isfile(os.path.join(flat_dir, dotted + ".py")):
+        return os.path.join(flat_dir, dotted + ".py")
     base = os.path.join(ROOT, *dotted.split("."))
     for cand in (base + ".py", os.path.join(base, "__init__.py")):
         if os.path.isfile(cand):
@@ -68,14 +80,28 @@ def _imports(path: str, dotted: str) -> list:
     return names
 
 
-def closure(roots: list) -> set:
+def _external(name: str) -> bool:
+    """A dot-free name the standard library or an installed distribution provides (not this repo)."""
+    if name in sys.stdlib_module_names:
+        return True
+    spec = importlib.util.find_spec(name)
+    origin = getattr(spec, "origin", None) or ""
+    return spec is not None and not os.path.abspath(origin).startswith(ROOT + os.sep)
+
+
+def closure(roots: list, flat_dir: str | None = None, unresolved: set | None = None) -> set:
     """Repository files reached from `roots` (dotted module names), walking only module code: a file
-    under `engine/` is recorded as reached and not walked further (the host is not module code)."""
+    under `engine/` is recorded as reached and not walked further (the host is not module code). With
+    `flat_dir`, every dot-free name that resolves nowhere and is not `_external` goes into `unresolved`."""
     seen, stack = set(), list(roots)
     while stack:
         dotted = stack.pop()
-        path = _file_of(dotted)
-        if path is None or path in seen:
+        path = _file_of(dotted, flat_dir)
+        if path is None:
+            if flat_dir and unresolved is not None and "." not in dotted and not _external(dotted):
+                unresolved.add(dotted)
+            continue
+        if path in seen:
             continue
         seen.add(path)
         parts = dotted.split(".")
@@ -108,33 +134,54 @@ def _rel(paths) -> list:
     return sorted(os.path.relpath(p, ROOT) for p in paths)
 
 
-def check(module_dir: str, roots: list) -> tuple:
-    """`(unreached, left_behind)` for one package module: files under `module_dir` the walk from `roots`
-    does not reach, and files the walk reaches under `systems/`."""
-    reached = closure(roots)
+def _seam_roots() -> dict:
+    """{flat directory: [bare name, ...]} as each path seam declares them -- `pc_engine` puts
+    `PC_ENGINE_DIR` on `sys.path` and loads `PCEngine._fields` by name. Importing it mutates nothing."""
+    from engine.substrate import pc_engine
+    return {os.path.normpath(pc_engine.PC_ENGINE_DIR): list(pc_engine.PCEngine._fields)}
+
+
+def check(module_dir: str, roots: list, flat: bool = False) -> tuple:
+    """`(unreached, left_behind, unresolved)` for one module: files under `module_dir` the walk from
+    `roots` does not reach, files the walk reaches under `systems/`, and (flat sets only) bare names the
+    set imports and does not hold."""
+    unresolved: set = set()
+    reached = closure(roots, module_dir if flat else None, unresolved)
     unreached = _module_files(module_dir) - reached
     left_behind = {p for p in reached if os.path.relpath(p, ROOT).split(os.sep)[0] == "systems"}
-    return unreached, left_behind
+    return unreached, left_behind, unresolved
 
 
-def test_every_package_module_is_exactly_its_entries_reachable_closure():
+def test_every_module_is_exactly_its_entries_reachable_closure():
     roots = _entry_roots()
-    packages = {d: r for d, r in roots.items() if os.path.isfile(os.path.join(d, "__init__.py"))}
-    flat = sorted(set(roots) - set(packages))
-    checked = []
-    for module_dir, entry_modules in sorted(packages.items()):
-        unreached, left_behind = check(module_dir, entry_modules)
+    seams = _seam_roots()
+    checked = {"package": [], "flat": []}
+    for module_dir, entry_modules in sorted(roots.items()):
+        flat = not os.path.isfile(os.path.join(module_dir, "__init__.py"))
+        rel = os.path.relpath(module_dir, ROOT)
+        if flat:
+            assert os.path.normpath(module_dir) in seams, (
+                f"{rel} is a flat module set and no path seam this walk knows declares its names: "
+                f"{sorted(seams)}")
+            entry_modules = entry_modules + seams[os.path.normpath(module_dir)]
+        unreached, left_behind, unresolved = check(module_dir, entry_modules, flat)
         assert not unreached, (
-            f"{os.path.relpath(module_dir, ROOT)}: files no entry reaches ({entry_modules}): "
+            f"{rel}: files no entry reaches ({entry_modules}): "
             f"{_rel(unreached)}. `modules/` holds the reachable closure only (A-25); an unreached file goes "
             "back to `systems/` or is deleted")
         assert not left_behind, (
-            f"{os.path.relpath(module_dir, ROOT)}: its closure reaches files left in `systems/`: "
+            f"{rel}: its closure reaches files left in `systems/`: "
             f"{_rel(left_behind)}. The closure moves whole")
-        checked.append(os.path.relpath(module_dir, ROOT))
-    assert os.path.join(MODULES, "mass_battle") in checked, (
+        assert not unresolved, (
+            f"{rel}: the flat set imports {sorted(unresolved)}, which it does not hold and nothing "
+            "installed provides. The closure moves whole")
+        checked["flat" if flat else "package"].append(rel)
+    print(f"SM-7 checked: {checked}")
+    assert os.path.join(MODULES, "mass_battle") in checked["package"], (
         f"the walk checked {checked} and not `modules/mass_battle`, the package `31c` moved; the roots "
-        f"are read from the composition rows -- has its entry row lost `entry:`? (flat, not walked: {flat})")
+        f"are read from the composition rows -- has its entry row lost `entry:`?")
+    assert os.path.join(MODULES, "combat") in checked["flat"], (
+        f"the walk checked {checked} and not `modules/combat`, the flat set `31b` moved")
 
 
 def test_the_walk_sees_a_planted_unreached_file_and_a_closure_left_behind(tmp_path, monkeypatch):
@@ -154,9 +201,17 @@ def test_the_walk_sees_a_planted_unreached_file_and_a_closure_left_behind(tmp_pa
     write("systems/s/sim/__init__.py")
     write("systems/s/sim/old.py")
     monkeypatch.setattr(sys.modules[__name__], "ROOT", str(tmp_path))
-    unreached, left_behind = check(str(tmp_path / "modules" / "m"), ["modules.m.entry"])
+    unreached, left_behind, _ = check(str(tmp_path / "modules" / "m"), ["modules.m.entry"])
     assert _rel(unreached) == [os.path.join("modules", "m", "orphan.py")], _rel(unreached)
     assert os.path.join("systems", "s", "sim", "old.py") in _rel(left_behind), _rel(left_behind)
+    # A FLAT set (no `__init__.py`): roots by bare name, a sibling found in the directory first, a bare
+    # name the set does not hold reported, an unimported file unreached; stdlib names pass.
+    write("modules/f/entry.py", "import os, used\n\ndef run():\n    import zz_not_in_the_set\n")
+    write("modules/f/used.py", "from math import tanh\n")
+    write("modules/f/orphan.py")
+    unreached, left_behind, unresolved = check(str(tmp_path / "modules" / "f"), ["entry"], flat=True)
+    assert _rel(unreached) == [os.path.join("modules", "f", "orphan.py")], _rel(unreached)
+    assert unresolved == {"zz_not_in_the_set"} and not left_behind, (unresolved, _rel(left_behind))
 
 
 if __name__ == "__main__":   # pragma: no cover

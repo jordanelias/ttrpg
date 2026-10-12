@@ -76,7 +76,7 @@ from modules.mass_battle.terrain import (FOREST_BROKEN, RIVER_CROSSING, RIVER_CR
 #: NOT the canonical degree ladder (`engine/dice_engine/dice_engine.degree_from_net`, margin-based);
 #: they are a bespoke post-hoc classification of a finished battle's survivor ratios, and
 #: reconciling the two is open MB-lane work, not a port concern.
-# [canonical: carried over unchanged from the pre-port adapter, modules/mass_battle/massbattle.py
+# [canonical: carried over unchanged from the pre-port adapter, systems/mass_battle/sim/massbattle.py
 #  @ FORK ref e4070d4^ — see this module's header. NOT independently derived: they are the same three
 #  survivor-ratio thresholds the campaign has used since Phase 7, preserved verbatim so the engine
 #  swap is a single-variable experiment. Their GROUNDING is open MB-lane work — no canon states them.]

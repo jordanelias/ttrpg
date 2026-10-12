@@ -11,8 +11,8 @@ the two modules in OPPOSITE tuple orders. One spelling, one insert, named fields
 
 FAILURE MODE: RAISES, on first use. A loader that swallows an import error is the silent-green
 failure engine/season/data/files.py names; composition.require raises on a missing role for the same
-reason. A caller whose own contract is a typed refusal (04 §A.2 seam/contest: "returns Events +
-degree, or a typed refusal") translates the raise at the seam — see seam/wrappers/combat.py::engine.
+reason. The module entry (modules/combat/fight.py) lets the raise through raw; only the availability
+probe, seam/wrappers/combat.py::engine(), translates it (into a named reason, for the tests that skip).
 The path is hand-transcribed from references/module_contracts.yaml combat.sim_module (the contract
 was named personal_combat until plan position 30)
 (CLAUDE.md §5's live drift risk, now in one place instead of two). IT IS A LEAF: stdlib only;

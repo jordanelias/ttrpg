@@ -88,10 +88,8 @@ outcomes back up. No session boundaries, no GM adjudication, no `GameMode` enum.
 - σ-leverage (`sigma_leverage.py`): named advantage levels (minor .25 → major 1.0) become a μ-shift,
   soft-capped at `1.5·tanh(x/1.5)`.
 - **One ladder for every scale.** A subsystem varies it only through a `BandExtension` injected by its
-  wrapper, whose sole power is to **veto an Overwhelming** — structurally, not by convention. One
-  declared holdout remains: `systems/combat/combat_engine_v1/core.py`, held until Ob is derived from
-  the defender, and `tests/valoria/test_degree_ladder_single_owner.py` asserts it *still diverges* so
-  the exemption cannot outlive its reason.
+  wrapper, whose sole power is to **veto an Overwhelming** — structurally, not by convention. No
+  holdout remains (`tests/valoria/test_degree_ladder_single_owner.py` holds an empty `HELD`).
 
 ---
 

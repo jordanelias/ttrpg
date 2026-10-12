@@ -593,12 +593,17 @@ DEFAULT_FIXTURES = Fixtures(
     # stance toward its faction creed's utterer (`data/cast.py::stance_from_loyalty`'s row, -5..+5,
     # read by `seam/wrappers/mass_battle.py`) is added to `massbattle._morale_start` at this gain. `0`
     # IS THE CONTROL AND IS SHIPPED: battle history only, option (a), the field as it was. The arms,
-    # each derived and none tuned: `0.4` = (Morale ceiling 7 - base 5) / the row's bound 5, the
-    # largest gain at which no side of any loyalty reaches the ceiling from loyalty alone; `1` = the
-    # 1:1 unit `_morale_start` already gives the morale row (and the row's own reading, 2026-10-01).
-    # At `build_realm(0)` the 1:1 arm saturates every faction holding a creed (measured 2026-10-12,
-    # whole-membership weight-means: Church 4.0, Loewenritter 4.0, Restoration 2.75, Hafenmark 2.25, Varfell 2.0, Crown
-    # 1.64; Guilds and Schoenland have no creed and read 0). Injection site: this line, read by
+    # each derived and none tuned: `0.4` = (Morale ceiling 7 - base 5) / the row's bound 5, the gain
+    # at which the bound lands exactly ON the ceiling -- and since `massbattle._morale_start` rounds
+    # half-up, a side of loyalty >= 3.75 already starts at 7 at 0.4 (5 + 0.4 * 4.0 = 6.6 -> 7; at
+    # `build_realm(0)` every creed-holding faction fields at least one such side); `1` = the 1:1 unit
+    # `_morale_start` already gives the morale row (and the row's own reading, 2026-10-01). Every
+    # creed-holding faction's WHOLE-MEMBERSHIP weight-mean rounds to the ceiling at 1 (measured
+    # 2026-10-12: Church 4.0, Loewenritter 4.0, Restoration 2.75, Hafenmark 2.25, Varfell 2.0, Crown
+    # 1.64 -> 6.64 -> 7; Guilds and Schoenland have no creed and read 0), but a fielded SIDE reads its
+    # own members' mean, and a low-loyalty side does not saturate: the Crown's two at `set_s_014` (0.5)
+    # start at 5 at 0.4 and 6 at 1, the Church's six at `set_s_036` (4.0) at 7 at both
+    # (`test_mass_battle_d1_morale_baseline.py`'s pinned rows). Injection site: this line, read by
     # `seam/wrappers/mass_battle.py::field_input` into the record's `loyalty_gain`.
     field_morale_loyalty_gain=0,  # `H-148`, swept 0 (control, SHIPPED) / 0.4 / 1
     # `H-150` (plan position `20-v`). THE DEFENDER DR A WALLED FIELD ADDS -- A.9's one Walls number,

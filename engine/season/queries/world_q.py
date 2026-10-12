@@ -30,7 +30,7 @@ step adds without anyone remembering to say so.
 from __future__ import annotations
 
 import copy
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Callable, Optional
 
 from ..data.requires import UNKNOWN, binding_from_act
@@ -1766,23 +1766,30 @@ class PersonProjection:
       * `holder`    -- the person's id;
       * `claims`    -- the person's OWN ledger, in ledger order (S20: a claim lives in its holder's
                        ledger and no other, so no other person's claim can be here);
-      * `witnessed` -- `witnessed(w, holder)`, L-1's read, in log order.
+      * `witnessed` -- `witnessed(w, holder)`, L-1's read, in log order: cumulative over the whole
+                       log, every season so far, not this season's alone.
 
     Both are COPIES. A projection holding the live `Claim`s and `Event`s would hand a client a write
     path around the gate (AX-4: the gate applies every write); a copy is the read-side equivalent of
     `View`'s *"holds IDS, NEVER REFERENCES"* (S18.1) for a reader that has no `World` to resolve ids
-    against. The person's View and candidates are not here: DELIBERATE builds them and hands them
-    to `choose` (S-1's callback receives them, `harness/play_surface.py`)."""
+    against. Each witnessed Event's copy carries `observed == ()`: an Event's `observed` is what the
+    fold READ, and which of those reads a person receives is WITNESS's decision, delivered as that
+    person's claims (above) -- the Event's own copy would hand every witness all of them.
+    The person's View and candidates are not here: DELIBERATE passes `choose` the person, View,
+    Sensation and budget query `(p, v, s, ask_budget)`, and `choose` builds the candidates itself
+    (`decision/choose.py`, `opening_set`); S-1's callback receives the same four plus `auto`, the
+    delegate chooser (`harness/play_surface.py`)."""
     holder: str
     claims: tuple
     witnessed: tuple
 
 
 def projection(w: World, pid: str) -> PersonProjection:
-    """S-2: `pid`'s own claims and the Events `pid` witnessed, as copies. Read-only."""
+    """S-2: `pid`'s own claims and the Events `pid` witnessed, as copies, each Event's `observed`
+    emptied (`PersonProjection` says why). Read-only."""
     p = _person_or_refuse(w, pid)
     return PersonProjection(pid, tuple(copy.deepcopy(c) for c in p.ledger),
-                            tuple(copy.deepcopy(e) for e in witnessed(w, pid)))
+                            tuple(copy.deepcopy(replace(e, observed=())) for e in witnessed(w, pid)))
 
 
 # ---------------------------------------------------------------------------

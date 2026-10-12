@@ -91,6 +91,24 @@ def test_s2_the_projection_is_a_read_and_a_copy(run):
     assert w.content_hash() == before, "a client's edit to its projection reached the World"
 
 
+def test_s2_a_witnessed_event_carries_none_of_the_folds_reads(run):
+    """S-2's projection holds what the PERSON is entitled to. An Event's `observed` is what the fold
+    read; under `observation_deposit_mode` 'actor' WITNESS deposits an act's reads to its actor alone
+    (`loop/witness.py`), so a witness who is not the actor never receives them. The projection's copies
+    therefore carry `observed == ()`: the reads a person is entitled to already arrive as its claims."""
+    w, _ = run
+    assert any(e.observed for pid in w.persons for e in witnessed(w, pid)), (
+        "no witnessed Event carries a read; the assertion below would be vacuous")
+    checked = 0
+    for pid in w.persons:
+        mine = projection(w, pid)
+        assert [e.id for e in mine.witnessed] == [e.id for e in witnessed(w, pid)]
+        for e in mine.witnessed:
+            assert e.observed == (), (pid, e.id, e.observed)
+            checked += 1
+    assert checked >= 1
+
+
 def test_s2_an_unknown_person_refuses():
     w = headless.build_world(SEED)
     with pytest.raises(Unspecified):

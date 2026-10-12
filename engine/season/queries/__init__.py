@@ -25,7 +25,8 @@
 (asker first) · cache (barrier-built) · faction_q (§B.6.1's VIEW, §B.10-12's `resolve`/`at_war`)"*
 -- FOUR members as of `20-ii`, and the table below it gives every function here the token column
 `—`: **no function in this package takes a write token, so none of them can write.** **All four
-of the enumerated modules exist**, and the package is no longer a superset of the roster.
+of the enumerated modules exist**; the package is still a superset of the roster by exactly `inputs`
+(above), which holds records rather than functions.
 
 ⚠ **THIS IS THE SAME AMBIGUITY `world_q.py` AND THIS FILE ALREADY RESOLVED ONCE, THE OTHER WAY --
 NAMED, NOT SILENTLY CONTRADICTED.** `world_q.py`'s own docstring argues against a `polity_q.py`

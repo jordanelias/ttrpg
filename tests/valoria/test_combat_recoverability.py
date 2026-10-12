@@ -33,7 +33,7 @@ def test_anchor_is_near_one():
     Phase B's real per-part longsword MoI had pushed this anchor to ~1.29 and that REC_I_REF/REC_S_REF needed a
     Phase-C re-tune. U1's PoB recalibration closed it from the DATA side instead of the constants: the longsword's
     blade/pommel masses were re-split 0.87->0.755 kg and 0.3->0.415 kg at the same 1.408 kg total, chosen so this
-    anchor lands inside the existing 0.03 tolerance (see systems/combat/combat_engine_v1/weapons.py:107-115).
+    anchor lands inside the existing 0.03 tolerance (see modules/combat/weapons.py:108-114).
     Measured 2026-07-29: 0.984. REC_I_REF/REC_S_REF are UNCHANGED and no Phase-C item remains for this anchor —
     the docstring had been claiming a ~1.29 reading its own assertion would have failed on."""
     assert abs(_r('longsword') - 1.0) < 0.03

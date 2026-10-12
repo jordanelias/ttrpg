@@ -85,8 +85,8 @@ COLLISIONS = {
         'python_name': 'combat.core.POOL_FLOOR',
         'python_value': 5,
         'gd_value': 1,
-        'reason': "Different quantities sharing a word. combat_engine_v1/core.py:47 POOL_FLOOR is the "
-                  "COMBAT POOL minimum, used as max(POOL_FLOOR, history + BASE_POOL) at :52 — the game "
+        'reason': "Different quantities sharing a word. modules/combat/core.py:51 POOL_FLOOR is the "
+                  "COMBAT POOL minimum, used as max(POOL_FLOOR, history + BASE_POOL) at :56 — the game "
                   "calls that COMBAT_POOL_MINIMUM and it AGREES at 5. The game's POOL_FLOOR is the "
                   "universal dice-pool floor applied by RollContext.effective_pool() (RollContext.gd:26). "
                   "Not a divergence.",

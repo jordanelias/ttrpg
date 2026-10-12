@@ -1,7 +1,7 @@
 """THE σ-LEVERAGE PROVIDER — the host adapter and the host INPUT BUILDER for the `social_contest`
 module's roll (plan position `31a`, A-25).
 
-`04_CODE_ARCHITECTURE.md` §A.2:164 types `seam/wrappers/*` as writing *"nothing, ever"*, reading
+`04_CODE_ARCHITECTURE.md` §A.2:182 types `seam/wrappers/*` as writing *"nothing, ever"*, reading
 *"the projection"*, returning *"a `Margin`"*, holding token *"none"*. This module is that row. It
 DECIDES NOTHING: `contest_input` (the host input builder) derives a pool and an obstacle from what
 the actor and the subject genuinely have and freezes them into `queries/inputs.py::SocialContestInput`;
@@ -40,10 +40,10 @@ ED-SC-0037's cost 1 — *"the interim provider derives its own obstacle in-seam,
 obstacle site"* — is UNCHANGED, not answered, and `interim: true` on the prize row is what carries
 it. ED-SC-0033 clause (3)'s single owner is the PROCEEDINGS SUBSYSTEM, not this module.
 
-⚠ **THE PLACEMENT QUESTION, ADJUDICATED AT THE SITE RATHER THAN ASSUMED.** `04 §A.2:135` reads
-*"one wrapper per **deferred subsystem**"*, and `sigma_leverage` is not a deferred subsystem — it is
+⚠ **THE PLACEMENT QUESTION, ADJUDICATED AT THE SITE RATHER THAN ASSUMED.** `04 §A.2` read
+*"one wrapper per **deferred subsystem**"* (that line was since amended, ED-IN-0284 and ED-IN-0285; see 04:147-151), and `sigma_leverage` is not a deferred subsystem — it is
 an in-engine resolver under `engine/dice_engine/`. Two readings were available: **(i)** it is a wrapper
-BY ROLE — it writes nothing, returns a margin, holds no token, which is exactly the `04:164` row, and
+BY ROLE — it writes nothing, returns a margin, holds no token, which is exactly the `04:182` row, and
 a module satisfying that contract IS that row whatever supplies the margin; **(ii)** §A.2's
 enumeration is short by one and the finding goes on the ledger. **This unit takes (i).**
 ⚠ AND IT SATISFIES THREE OF THAT ROW'S FOUR COLUMNS, NOT FOUR. Column 3 is *"a `Margin`"* and this

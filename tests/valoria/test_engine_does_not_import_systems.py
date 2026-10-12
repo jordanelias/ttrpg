@@ -553,8 +553,8 @@ def test_the_import_probe_can_observe_both_kinds_of_leak():
 
 
 def test_every_scan_here_reads_modules_as_well_as_systems(tmp_path):
-    """A-25, the hermetic half of its falsifier. `modules/` does not exist in the
-    repo yet, so the real tree cannot show that these scans would SEE a module — this plants one in a
+    """A-25, the hermetic half of its falsifier. The real `modules/` tree cannot
+    show that these scans would SEE a module (they would pass on it were it empty) — this plants one in a
     temporary tree and asserts each instrument fires, for BOTH roots. (The other half, a plant under
     a real `modules/_plant/`, was run when the position landed and is recorded in its commit.)
 

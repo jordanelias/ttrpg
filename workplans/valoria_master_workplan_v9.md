@@ -201,7 +201,7 @@ commit and the run stops for a cleared window (`methodology-execute`, `CLAUDE.md
 has read §K's still-held list and `_part5` §J. `main` was red from PR #456 on one test
 (`test_flow_skeletons.py::test_contract_names_resolve_in_the_generated_index[combat]`); the one-line fix (`personal_combat`
 joins `RETIRED_CONTRACTS`) is built and rides the adoption branch (`7b619328`), so it is not a position — read `All Gates
-Green` on `main` once the branch merges. B-C is closed. B-D is closed: D1 (`9054df80`), D2 (`b31d2c31`), D3 (`0a690b30`). B-G is closed (`0f998f64`). B-H is closed (`c13144b9`). B-E is closed (`ac9724fc`). B-I is PARTIAL (`c3a698ce..627e4bc6`): IN-11 (`2a2ed152`), IN-50 (`5fa6ac16`) and IN-18 G6 (`66bf51f9`) landed; IN-09 and IN-10 were falsified and reverted (H-203), so B-I's remainder is IN-53 → IN-10 → IN-33, then IN-18 G5; IN-53 was then built and falsified and reverted, and is itself blocked on H-207 (the fix lies outside its EDITS; unscheduled), so the remainder is blocked again; IN-09 stays in B-I, BLK on a writ reaching its executor (H-203's second half; no position schedules it). No batch is gate-free (`_part3` §B's header lists the gates); B-J waits on IN-10 (SC-03a needs it); then … the spine `_part3` §B names. Every batch runs
+Green` on `main` once the branch merges. B-C is closed. B-D is closed: D1 (`9054df80`), D2 (`b31d2c31`), D3 (`0a690b30`). B-G is closed (`0f998f64`). B-H is closed (`c13144b9`). B-E is closed (`ac9724fc`). B-I is PARTIAL (`c3a698ce..627e4bc6`): IN-11 (`2a2ed152`), IN-50 (`5fa6ac16`) and IN-18 G6 (`66bf51f9`) landed; IN-09 and IN-10 were falsified and reverted (H-203), so B-I's remainder is IN-53 → IN-10 → IN-33, then IN-18 G5; IN-53 was then built and falsified and reverted, and is itself blocked on H-207 (the fix lies outside its EDITS; unscheduled), so the remainder is blocked again; IN-09 stays in B-I, BLK on a writ reaching its executor (H-203's second half; scheduled as IN-10 (c), delegated 2026-10-12). No batch is gate-free (`_part3` §B's header lists the gates); B-J waits on IN-10 (SC-03a needs it); then … the spine `_part3` §B names. Every batch runs
 through `methodology-execute` (`CLAUDE.md` §9), and a batch's READ-FIRST list names the sites to read (the pins file is far too
 large to read whole: grep the assertion).
 
@@ -221,7 +221,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-05 | `31c`; SM-7 | IN/MB | BLK | IN-04 | — | B-L | `_part4` |
 | IN-06 | `33`; #457 D5; A-24's threadwork; H-47 | IN/WR/FI | B | build (design landed at B-C; re-reviewed after B-H, closed `c13144b9`) | — | B-S | `_part4` |
 | IN-07 | `36` | IN/SE | B | build (design landed at B-C) | — | B-T | `_part4` |
-| IN-09 | `19b` | IN | BLK | a writ reaching its executor (H-203's second half; unscheduled) | R-05 | B-I | `_part5` |
+| IN-09 | `19b` | IN | BLK | a writ reaching its executor (H-203's second half; scheduled as IN-10 (c), delegated 2026-10-12) | R-05 | B-I | `_part5` |
 | IN-10 | #453 step 1 | IN/SC | BLK | IN-53 | R-04, R-05 | B-I | `_part5` |
 | IN-12 | #453 steps 5, 5a, 6, 7, 9, 10, 11, 13 | IN/SC/SE/MB | BLK | per step | R-04, R-05, R-09 | B-K · B-M · B-Q · B-R | `_part5` |
 | IN-13 | #453 step 8 | IN/MB | BLK | IN-05 | R-07, R-05, R-01 | B-M | `_part5` |

@@ -1707,7 +1707,7 @@ def volley_phase(unit_a, unit_b):
 
 # ─── WORKBENCH TRACE SNAPSHOTS (read-only; gated by tracing_on(), zero cost when tracing is off) ──
 # [tick-by-tick visualizer, Jordan directive 2026-07-01] Extends the existing observe-only trace seam
-# (resolution.start_trace/trace_event/get_trace) with a spatial 'positions' event per tick. Uses
+# (resolution.tracing()/trace_event, a scoped buffer) with a spatial 'positions' event per tick. Uses
 # atom.cells() (NOT iter_cells(), which reads legacy cell_offsets unconditionally and is NOT
 # field-aware) zipped against _oriented(atom)'s stable (orig_r,orig_c) ids — both iterate in the
 # SAME order (cells()/_node_cells() are themselves built by iterating _oriented(self)), so this is a

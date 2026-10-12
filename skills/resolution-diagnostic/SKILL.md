@@ -81,7 +81,7 @@ pool.
    finding, not a P-ii one. Legitimate only in the parity goldens and the frozen oracle.
 3. **An inline re-derivation.** `soft_cap(σ) · sigma_n(pool)` at a call site passes every scaling
    test and is a **second owner of one operation** — an S *calculations consistent in
-   methodology* defect. Live instance: `systems/combat/combat_engine_v1/core.py`'s `resolve`.
+   methodology* defect. Live instance: `modules/combat/core.py`'s `resolve`.
    Check for the formula, not only the answer.
 
 ## §3 · FRACTIONAL POOLS AND FRACTIONAL OBSTACLES
@@ -173,9 +173,6 @@ A property with no finding is reported as a **named attack that failed**, not as
   `sigma_leverage` raises `KeyError` (one-key `PER_DIE`); `dice_engine` raises `ValueError`
   (`_require_tn7`); `modules/mass_battle/resolution.py` uses a bare `assert`, stripped by
   `python -O`.
-- **`systems/combat/combat_engine_v1/core.py`'s second, `2·Ob`-keyed ladder** is a declared HELD
-  exception (`tests/valoria/test_degree_ladder_single_owner.py`): name it as a live S instance; do
-  not re-file it.
 
 ## §8 · GUARDRAILS
 

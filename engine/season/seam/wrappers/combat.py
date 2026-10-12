@@ -81,9 +81,9 @@ from typing import Any, Optional
 from ...data.rosters import WOUND_QUANTITIES
 from ...decision import body_band_penalty
 from ...gaps import Unspecified
-# ⚠ THE LEAF, NOT THE PACKAGE. `...manifest` re-exports from `registry.py`, which imports
-# THIS module to register it — importing the package here closes that loop and the cycle
-# guard counts it. `manifest/providers.py` imports nothing and is safe to reach from here.
+# ⚠ THE LEAVES, NOT THE PACKAGE'S RE-EXPORTS. `manifest/providers.py` imports nothing;
+# `registrar.py` imports only `gaps`; `registry.py` imports `data/` and `gaps`. None of them
+# imports `seam/`, so no import here closes a loop back into this package.
 from ...manifest.providers import provider
 from ...manifest.registrar import MODULE_ENTRIES
 from ...manifest.registry import resolve as prize_row
