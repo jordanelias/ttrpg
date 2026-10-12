@@ -596,7 +596,7 @@ DEFAULT_FIXTURES = Fixtures(
     # re-ruled. An int overrides it for the season: `3` spells A.9's number out (it reproduces `None`
     # exactly, which `test_mass_battle_provider.py` asserts), `0` is the CONTROL (the only live
     # difference between a walled and an open field removed), `1` the middle arm. Injection site: this
-    # line, read by `seam/wrappers/mass_battle.py::resolve()` and handed to `resolve_field(walls_dr=)`.
+    # line, read by `seam/wrappers/mass_battle.py::field_input` into the record's `walls_dr` (`31c`).
     field_walls_dr=None,     # `H-150`, swept 3 (A.9, = the default) / 0 (control) / 1
     # IN-08 H3 (`ED-IN-0261`'s scar model). `scar_step` -- a float magnitude per unit of alignment,
     # written on the wounded person by `_eff_kill` -- RETIRED with that mechanism: the scar is a
