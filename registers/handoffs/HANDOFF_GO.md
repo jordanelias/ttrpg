@@ -5,7 +5,6 @@
 ## Open
 | item | where it lives | next step |
 |---|---|---|
-| port-seam audit (GO-04) — its trigger, `ED-1051`'s resolution, is met | `registers/editorial_ledger_in_archive.jsonl` (`ED-IN-0017`); `registers/editorial_ledger.jsonl` (`ED-1051`, its last row) | Run the scoped audit as a B-L tail lane, reading each seam after the move (v9 GO-04, `workplans/valoria_master_workplan_v9_part7.md`) |
 
 ## Standing orders — do not re-raise, do not do
 | order | source |
