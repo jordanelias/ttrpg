@@ -308,21 +308,103 @@ def seated_on_the_rung_above(w: "World", seat: Office, off: Office) -> bool:
     anyone; a seat on a TOP rung is strippable by nobody. Two readings REJECTED at `13d-i` stay
     rejected: LAND (`in_holdings` -- who owns the parent rung) and THE NEAREST SAME-FACTION SEAT
     ABOVE (a walk, which is ruling (4)'s verb, `purview_reaches`, not ruling (3)'s)."""
+    # `Office.faction` is the RESOLVED faction -- `__post_init__` writes `office_faction`'s answer
+    # back, deriving it from `body` where there is one -- so it is compared as held.
+    return seated_on_the_rung_above_structure(w, seat, off) and seat.faction == off.faction
+
+
+def seated_on_the_rung_above_structure(w: "World", seat: Office, off: Office) -> bool:
+    """THE STRUCTURAL CONJUNCT BOTH REVOCATION BASES SHARE, ONCE: `seat` is on the rung DIRECTLY above
+    `off`'s rung (`parent_of`). A rungless seat has no rung above it; a seat on a top rung has none."""
     if off.rung is None or off.rung not in w.rungs or seat.rung is None:
         return False
     above = parent_of(w, off.rung)
-    if above is None:
+    return above is not None and seat.rung == above
+
+
+# ⚠ MOVED HERE FROM `loop/predicates.py` (2026-10-12): the write gate's T-o clause evaluates the
+# `rung_above_in_holdings` basis below and the gate may not import the loop -- `seated_on_the_rung_above`'s
+# own reason for living here. `predicates` re-exports it; every caller is unchanged.
+def in_holdings(w: "World", actor: str, rung: Optional[str]) -> bool:
+    """Is this rung one of the actor's HOLDINGS? A `hold` Tenure whose object is a RUNG.
+
+    ⚠ HOLDINGS ARE NOT GOVERNING AUTHORITY, AND JORDAN RULED THE DIFFERENCE OPERATIONAL:
+    *"King/Queen cannot revoke title of Duke/Duchess if they do not have duchy is in their
+    holdings. King/Queen can revoke title of Duke/Duchess if the duchy is one of their
+    holdings."* So a king with governing authority over the whole realm still cannot unmake a
+    duke whose duchy he does not hold — which is the same ruling as *"they do not necessarily
+    have all territories/provinces/duchies in their holdings"*, made mechanical.
+
+    ⚠ NO NEW TENURE KIND, AND NOT EVEN A NEW OBJECT CLASS. `hold` is already polymorphic over an
+    office and over a Record (§13) — and a `hold` WHOSE OBJECT IS A RUNG ALREADY EXISTED in the
+    corpus before this function did: probe `F2` writes one at `probes.py:978` and `:985`, holding
+    the settlement `S`. So this names a shape the tree was already using rather than adding one,
+    and `tenure_kinds` does not move (§8).
+
+    ⚠ THE ORIGINAL WORDING ALSO CITED *"a store"* AS AN EXISTING INSTANCE, AND THAT WAS
+    UNSUPPORTED — no `hold` Tenure over a store is constructed anywhere in the instrument.
+    Corrected rather than kept, because the sentence's whole job is to say what the tree already
+    does. Found by the governance-canon adversarial pass. ⚠ **AND IT IS TRUE NO LONGER, AS OF
+    `R8.4` (2026-09-07):** `test_r8_4_document_key_reaches_a_non_author_through_a_store` constructs
+    a `hold` over the hearth `Hh`, a rung carrying `stores`, precisely to exercise Part E's own
+    `hold:<store>` cell. The sentence is kept with its retraction attached rather than deleted,
+    because it is the argument that produced the paragraph.
+
+    ⚠ AND THE NARROW CLAIM WAS THE WRONG THING TO CHECK. *`tenure_kinds` does not move* is true
+    and proves nothing about the READERS: `Query.budget` counts every live `hold` as an office, so
+    a landholding buys scene actions, and `_ch_document_key` makes a landholder a witness. Both
+    pre-date this function; registered as `H-92`.
+
+    ⚠ **THAT SECOND READER MOVED UNDER `R8.4` AND THIS SENTENCE SAID THE OLD THING.** It read
+    *"a witness of every Event whose subject is their rung"*, which was the pre-repair predicate —
+    and that predicate could not fire on an act at all, because a fold Event's subject is the
+    ACTOR. `_ch_document_key` now reads `changes[]`, so a landholder witnesses every Event that
+    **changed** their rung, which is strictly wider and is the first form in which `H-92`'s concern
+    is actually reachable: a `transfer` into a hearth now makes its holder a witness of an act they
+    took no part in. `H-92` is not re-graded here — it is an `FI`/`IN` register row with its own
+    owner, and this note exists so the next reader of it is not working from the retracted
+    mechanism. Found by the `R8.4` adversarial pass.
+
+    ⚠ **(`13d-i`, 2026-09-26) `_req_revoke` NO LONGER CALLS THIS.** The ruling quoted at the top
+    is superseded for revocation by `ED-IN-0256` ruling (3), *"rung above of same faction"*, which
+    is neither holdings nor purview (`seated_on_the_rung_above`, below). Kept, not deleted: the
+    `hold`-on-a-rung relation it names is live (item 16's re-homing, whose falsifiers read it), and
+    `ED-IN-0256` ruling (4) defines purview as *"owner of highest rung in chain of ownership"* --
+    an ownership walk, BUILT BY G3 as `state/gate.py::purview_reaches`, asked of the seat an act
+    exercises (`Act.via`) and not of anything the actor holds, this relation included."""
+    if rung is None or rung not in w.rungs:
         return False
-    # `Office.faction` is the RESOLVED faction -- `__post_init__` writes `office_faction`'s answer
-    # back, deriving it from `body` where there is one -- so it is compared as held.
-    return seat.rung == above and seat.faction == off.faction
+    return any(t.kind == "hold" and t.subject == actor and t.object == rung and t.live
+               for t in w.tenures)
 
 
 # THE REVOCATION BASES, DISPATCHED BY VALUE -- `H-109`'s shape: *"two VALUES of a seat's declared
 # `revocation` basis instead of two code paths"*. The members are DATA (`rosters.yaml:
 # revocation_bases`); the rule each names is BEHAVIOUR and lives here, the `fan_out_modes` split.
 # Moved from `loop/predicates.py` with `seated_on_the_rung_above` (G3); `predicates` imports it.
-REVOCATION_RULES = {"rung_above_same_faction": seated_on_the_rung_above}
+def seated_on_the_rung_above_in_holdings(w: "World", actor: Optional[str], seat: Office,
+                                          off: Office) -> bool:
+    """Jordan, 2026-10-12: *"it's basically a flag as to whether that office is in the holdings of the
+    monarch"*; *"if a duchy is a holding for a monarch, then it is subservient and the title/office can
+    be stripped"*; *"if a duchy is not a holding for a monarch, then the Duke/Duchess is the highest
+    authority and would need to resign/strip themselves of office/title"*; *"so it's not ONLY based on
+    hierarchy of rungs, but also where it is placed in holdings"*.
+
+    TWO CONJUNCTS: `seat` is on the rung DIRECTLY above `off`'s rung (the structure ruling (3) reads,
+    `parent_of`), AND `off`'s rung is one of the ACTOR'S HOLDINGS (`in_holdings`: a live `hold` Tenure
+    the actor owns, whose object is that rung). Neither is enough alone: a King who holds a rung two
+    below him is not on the rung above it, and a seat on the rung above a rung its holder does not
+    hold is the highest authority of nothing here. THE FACTION CLAUSE IS NOT ASKED --
+    [ASSUMPTION; medium; Jordan to correct; revert: add `seat.faction == off.faction` below]: a
+    subservient duchy's Duke may be of another faction than the monarch who holds the duchy, and the
+    ruling says a holding's title *can be stripped* without that condition. Not ruled either way."""
+    if not seated_on_the_rung_above_structure(w, seat, off):
+        return False
+    return in_holdings(w, actor, off.rung)
+
+
+REVOCATION_RULES = {"rung_above_same_faction": lambda w, actor, seat, off: seated_on_the_rung_above(w, seat, off),
+                    "rung_above_in_holdings": seated_on_the_rung_above_in_holdings}
 # ⚠ REFUSED AT IMPORT, NOT IN THE FOLD. A member with no rule, or a rule for no member, is drift
 # between data and code; raised from inside `_req_revoke` it would escape the fold (the `13f`
 # lesson), and dispatched by fall-through it would run a new basis as some other one.
@@ -365,7 +447,7 @@ def may_revoke(w: "World", actor: Optional[str], via: Optional[str], off: Office
         return False
     if off.revocation not in REVOCATION_BASES:
         return False
-    return REVOCATION_RULES[off.revocation](w, w.offices[via], off)
+    return REVOCATION_RULES[off.revocation](w, actor, w.offices[via], off)
 
 
 def may_fill(w: "World", actor: Optional[str], via: Optional[str], off: Office) -> bool:

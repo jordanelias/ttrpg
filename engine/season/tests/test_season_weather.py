@@ -41,9 +41,13 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # which `content_hash` folds, so all three move with the bodies clock at its control (both rates 0).
 # Was 5812a959... / 0d4f7ae4... / 6bc6123e.... The ordered (kind, id) event sequence over one and two
 # seasons is identical to the pre-IN-34 base's (`BASE_EVENTS`, below), so the move is the field alone.
-BASE_HASHES = {0: "0a7e27c4c149fe05ecb9eaa64e7579e1",
-               1: "d188461a395714497d81f72175a0c8c3",
-               2: "33b1ae3b5cbeb212f6560fafea9798af"}
+# RE-PINNED 2026-10-12 (`rung_above_in_holdings`, Jordan's holdings ruling): `off_duchess_hafenmark` and
+# `off_duke_varfell` moved from `rung_above_same_faction` to the new basis, a data change alone
+# (`Office.revocation` is hashed). Was 0a7e27c4... / d188461a... / 33b1ae3b.... `BASE_EVENTS` below is
+# unchanged, which is the proof that no event moved.
+BASE_HASHES = {0: "11989dcf5e1c25afab556bf3f234a200",
+               1: "c2230a36c97b14ce64dbd0e6cb8fa131",
+               2: "88f6f2436eff40f8b52db1b18d5d49c8"}
 
 # The pre-IN-34 base (d47077d5), `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event
 # count and the sha256 of its ordered `kind|id` lines after one season and after two. A ONE-TIME PROOF

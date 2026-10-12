@@ -37,8 +37,9 @@ from ..state.carriers import Office, subject_of
 # exercised instead of the actor (`04:332`). The names are imported, not copied, so a precondition
 # here and the gate there cannot disagree (`CLAUDE.md` §8) -- and a `monkeypatch` of this module's
 # `has_conferral_basis` still reaches both preconditions that call it by that name.
-from ..state.gate import (  # noqa: F401 -- `REVOCATION_RULES`, `seated_on_the_rung_above` re-exported
-    REVOCATION_RULES, has_conferral_basis, may_fill, may_revoke, seated_on_the_rung_above)
+from ..state.gate import (  # noqa: F401 -- `REVOCATION_RULES`, `in_holdings`, `seated_on_the_rung_above` re-exported
+    REVOCATION_RULES, has_conferral_basis, in_holdings, may_fill, may_revoke,
+    seated_on_the_rung_above)
 
 
 # A `requires:` predicate. The table states preconditions in PROSE, which the fold cannot read --
@@ -67,59 +68,6 @@ def requires_predicate(verb: str):
 # the person is A PERSON HOLDING AN OFFICE acting at a rung, which is what these four do.
 # ---------------------------------------------------------------------------
 
-
-
-def in_holdings(w: "World", actor: str, rung: Optional[str]) -> bool:
-    """Is this rung one of the actor's HOLDINGS? A `hold` Tenure whose object is a RUNG.
-
-    ⚠ HOLDINGS ARE NOT GOVERNING AUTHORITY, AND JORDAN RULED THE DIFFERENCE OPERATIONAL:
-    *"King/Queen cannot revoke title of Duke/Duchess if they do not have duchy is in their
-    holdings. King/Queen can revoke title of Duke/Duchess if the duchy is one of their
-    holdings."* So a king with governing authority over the whole realm still cannot unmake a
-    duke whose duchy he does not hold — which is the same ruling as *"they do not necessarily
-    have all territories/provinces/duchies in their holdings"*, made mechanical.
-
-    ⚠ NO NEW TENURE KIND, AND NOT EVEN A NEW OBJECT CLASS. `hold` is already polymorphic over an
-    office and over a Record (§13) — and a `hold` WHOSE OBJECT IS A RUNG ALREADY EXISTED in the
-    corpus before this function did: probe `F2` writes one at `probes.py:978` and `:985`, holding
-    the settlement `S`. So this names a shape the tree was already using rather than adding one,
-    and `tenure_kinds` does not move (§8).
-
-    ⚠ THE ORIGINAL WORDING ALSO CITED *"a store"* AS AN EXISTING INSTANCE, AND THAT WAS
-    UNSUPPORTED — no `hold` Tenure over a store is constructed anywhere in the instrument.
-    Corrected rather than kept, because the sentence's whole job is to say what the tree already
-    does. Found by the governance-canon adversarial pass. ⚠ **AND IT IS TRUE NO LONGER, AS OF
-    `R8.4` (2026-09-07):** `test_r8_4_document_key_reaches_a_non_author_through_a_store` constructs
-    a `hold` over the hearth `Hh`, a rung carrying `stores`, precisely to exercise Part E's own
-    `hold:<store>` cell. The sentence is kept with its retraction attached rather than deleted,
-    because it is the argument that produced the paragraph.
-
-    ⚠ AND THE NARROW CLAIM WAS THE WRONG THING TO CHECK. *`tenure_kinds` does not move* is true
-    and proves nothing about the READERS: `Query.budget` counts every live `hold` as an office, so
-    a landholding buys scene actions, and `_ch_document_key` makes a landholder a witness. Both
-    pre-date this function; registered as `H-92`.
-
-    ⚠ **THAT SECOND READER MOVED UNDER `R8.4` AND THIS SENTENCE SAID THE OLD THING.** It read
-    *"a witness of every Event whose subject is their rung"*, which was the pre-repair predicate —
-    and that predicate could not fire on an act at all, because a fold Event's subject is the
-    ACTOR. `_ch_document_key` now reads `changes[]`, so a landholder witnesses every Event that
-    **changed** their rung, which is strictly wider and is the first form in which `H-92`'s concern
-    is actually reachable: a `transfer` into a hearth now makes its holder a witness of an act they
-    took no part in. `H-92` is not re-graded here — it is an `FI`/`IN` register row with its own
-    owner, and this note exists so the next reader of it is not working from the retracted
-    mechanism. Found by the `R8.4` adversarial pass.
-
-    ⚠ **(`13d-i`, 2026-09-26) `_req_revoke` NO LONGER CALLS THIS.** The ruling quoted at the top
-    is superseded for revocation by `ED-IN-0256` ruling (3), *"rung above of same faction"*, which
-    is neither holdings nor purview (`seated_on_the_rung_above`, below). Kept, not deleted: the
-    `hold`-on-a-rung relation it names is live (item 16's re-homing, whose falsifiers read it), and
-    `ED-IN-0256` ruling (4) defines purview as *"owner of highest rung in chain of ownership"* --
-    an ownership walk, BUILT BY G3 as `state/gate.py::purview_reaches`, asked of the seat an act
-    exercises (`Act.via`) and not of anything the actor holds, this relation included."""
-    if rung is None or rung not in w.rungs:
-        return False
-    return any(t.kind == "hold" and t.subject == actor and t.object == rung and t.live
-               for t in w.tenures)
 
 
 # ---------------------------------------------------------------------------
