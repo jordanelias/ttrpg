@@ -35,7 +35,7 @@ TOLERANCE = 0.15
 
 
 def _instrument():
-    sys.path.insert(0, os.path.join(ENGINE, 'workbench'))
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1', 'workbench'))   # the workbench stayed at plan position `31b`
     import armour_participation
     return armour_participation
 

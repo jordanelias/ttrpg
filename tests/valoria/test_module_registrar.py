@@ -33,6 +33,9 @@ row by `manifest/registry.py::check_contest_prizes`. Its falsifier (3), the fres
 `30`'s (2): `test_a_production_entry_row_deleted_in_a_fresh_process_refuses_naming_it`, with the two
 disagreement arms after it.
 
+Plan position `31b` (IN-04) landed the second production entry row, `combat.fight` (the prize row `the
+body`); the fresh-process deletion test now runs once per prize-named role.
+
 Plan position IN-41 (`SM-11` + `SM-9`; it left the plan at B-B's close, `4a2e4494`), which split the retired `decline_note:` column into
 `effect_decline_note:`, `formation_decline_note:` and `requires_decline_note:`: falsifier (1)
 `test_a_row_with_an_untyped_precondition_nothing_evaluates_refuses_naming_the_verb`, with its converse
@@ -175,19 +178,26 @@ def test_a_production_entry_row_deleted_in_a_fresh_process_refuses_naming_it():
     The registrar alone cannot see this (its table is empty in a fresh process, so it holds nothing
     to miss); the declaration that the row must exist is the prize row's `module_entry:`, and
     `manifest/registry.py::check_contest_prizes` refuses its absence. `before == []` is what makes this
-    the fresh-process form: the refusal cannot be the registrar's unbacked-entry one."""
-    got = _run(_PRIZE_ENTRIES + """
-role = named[0] if named else None
+    the fresh-process form: the refusal cannot be the registrar's unbacked-entry one.
+
+    EVERY named role, one fresh process each (plan position `31b` added `combat.fight` beside `31a`'s
+    `social_contest.roll`; a test of `named[0]` alone would have stopped covering the first row the day a
+    second sorted ahead of it)."""
+    named = _run(_PRIZE_ENTRIES + "print(repr(named))\n")
+    assert len(named) >= 2, f"fewer prize-named entry rows than `31a` + `31b` landed: {named}"
+    for i in range(len(named)):
+        got = _run(_PRIZE_ENTRIES + f"""
+role = named[{i}]
 in_rows = role in composition.ROLES
 before = sorted(MODULE_ENTRIES)
 if in_rows:
     del composition.ROLES[role]
-print(repr((named, in_rows, before, construct())))
+print(repr((role, in_rows, before, construct())))
 """)
-    named, in_rows, before, refusal = got
-    assert named and in_rows, f"no prize row names a composition row that exists: {named}"
-    assert before == [], f"MODULE_ENTRIES was filled before construction: {before}"
-    _assert_refused(refusal, repr(named[0]), "module_entry", "no composition row declares")
+        role, in_rows, before, refusal = got
+        assert in_rows, f"the prize rows name {role!r}, which no composition row declares"
+        assert before == [], f"MODULE_ENTRIES was filled before construction: {before}"
+        _assert_refused(refusal, repr(role), "module_entry", "no composition row declares")
 
 
 def test_a_prize_entry_whose_composition_row_targets_another_module_refuses_naming_it():

@@ -1012,7 +1012,7 @@ rosters:
   #
   # | mode of play        | attaches at        | in | out | state |
   # |---------------------|--------------------|----|-----|-------|
-  # | personal combat     | RESOLVE (S39)      | claimants, prize, causes | a degree | BUILT — `seam/wrappers/combat.py`. Jordan: "combat engine isn't done" |
+  # | personal combat     | RESOLVE (S39)      | claimants, prize, causes | a degree | BUILT — `modules/combat/fight.py`, called by `seam/wrappers/combat.py`. Jordan: "combat engine isn't done" |
   # | social contest      | RESOLVE (S39)      | claimants, prize, causes | a degree | INTERIM — `a standing` is rolled by `modules/social_contest/roll.py`, called by `seam/wrappers/sigma.py` (`contest_subsystems`' `interim: true`) |
   # | mass battle         | ENCOUNTER (`a field`) | claimants, prize, causes | a degree | BUILT — `seam/wrappers/mass_battle.py` (the `contest_subsystems` row `a field`) |
   # | investigation       | UNRULED            | UNRULED | UNRULED | ITS OWN KIND — not a contest |
@@ -1109,14 +1109,14 @@ rosters:
     # resolver stands in for a subsystem that has not been built. Collapsing them, as the string
     # form did, makes *this prize belongs to social_contest* and *this prize is rolled by
     # sigma_leverage* the same sentence — and they are not.
-    # ⚠ `interim: true` IS WHAT CARRIES ED-SC-0033 CLAUSE (2), which rules that the two prizes
-    # mapping to `social_contest` REPOINT to the proceedings provider when it lands. With the two
+    # ⚠ `interim: true` IS WHAT CARRIES ED-SC-0033 CLAUSE (2), which rules that the two prizes mapping to `social_contest` REPOINT to the proceedings provider when it lands. With the two
     # fields split, that repoint is ONE FIELD ON A ROW rather than a code change (`02 §D.4`), which
     # is what a manifest is for.
     prizes:
       "the body":
         module:   "combat"
         provider: "personal_combat"
+        module_entry: "combat.fight"   # `31b`, as `a standing`'s: the composition role `seam/wrappers/combat.py` calls through `MODULE_ENTRIES`, for EVERY verb contesting this prize (`fight` and `accept`); the composition row's `verb:` names one of them (`fight`), the registrar's one-verb shape. Line-neutral: the comment block above lost a line for this one.
         cite:     "H-88; the seam already calls it (seam/wrappers/combat.py)"
       "a field":
         module:   "mass_battle"

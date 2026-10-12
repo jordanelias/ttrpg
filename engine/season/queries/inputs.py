@@ -12,7 +12,7 @@ imports a record type must pull in nothing else of the host
 (`engine/season/tests/test_social_contest_module.py` observes it in a fresh process); a record type
 placed beside a builder that reads `data/` would drag the registries into every module.
 
-ONE RECORD TODAY (plan position `31a`). No OUTPUT type is minted: the providers return a `dict`,
+TWO RECORDS (plan positions `31a`, `31b`). No OUTPUT type is minted: the providers return a `dict`,
 and typing a `Margin` for one provider while the others return a dict would give the seam two
 return shapes (`seam/wrappers/sigma.py`'s docstring, the placement question).
 """
@@ -38,3 +38,21 @@ class SocialContestInput:
     ob: float
     obstacle_refusal_multiple: float
     leverage: float
+
+
+@dataclass(frozen=True)
+class PersonalCombatInput:
+    """What the `combat` module's fight reads, and nothing else (plan position `31b`).
+
+    Built by `seam/wrappers/combat.py::combat_input` (the host input builder) from `World`:
+      * `claimants` -- the two parties' ids, `(A, B)`: each is a `Combatant` label, and the engine's
+                       result is `+1` when A wins, `-1` when B does, `0` UNRESOLVED (a ruled outcome);
+      * `ends`      -- each party's one derived field, `end`, in `claimants` order
+                       (`combat.py::party_end`, `H-97`); every other field is the class's own default;
+      * `wound_quantities` -- the `WoundTracker` fields the host lifts per party after the fight
+                       (`rosters.yaml: wound_quantities`, in roster order). The module reads them off the
+                       trackers and returns what it found; the refusal for one the tracker does not carry
+                       is the host's (`combat.py::_state`)."""
+    claimants: tuple
+    ends: tuple
+    wound_quantities: tuple

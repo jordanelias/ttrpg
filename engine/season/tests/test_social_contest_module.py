@@ -25,9 +25,11 @@ from engine.substrate import composition
 
 
 def _entry_targets() -> list:
-    """`(role, target)` for each composition row a prize row names in `module_entry:`."""
+    """`(role, target)` for each composition row a `social_contest` prize row names in `module_entry:`
+    (since `31b` another module's prize names one too; `test_combat_module.py` probes that one)."""
     roles = sorted({row["module_entry"] for row in roster_map("contest_subsystems", "prizes").values()
-                    if isinstance(row, dict) and row.get("module_entry")})
+                    if isinstance(row, dict) and row.get("module_entry")
+                    and row.get("module") == "social_contest"})
     return [(r, composition.ROLES[r]["target"]) for r in roles]
 
 

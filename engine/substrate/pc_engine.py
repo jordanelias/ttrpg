@@ -2,13 +2,10 @@
 
 Status: [live, 2026-09-25]. Declared in
 tests/valoria/test_engine_does_not_import_systems.py::PATH_SEAM_ALLOWED (shrink-only); this file is
-its single entry. Plan position `31b` moved the engine's reachable set (the import closure of `wrapper`
-and `combatant`) from systems/combat/combat_engine_v1/ to modules/combat/, flat names kept
-(references/restructure_ledger.md); workbench/ and the unreached files stayed. It is a FLAT module
-set whose modules bare-import each other (wrapper.py:4), so it cannot be imported as
-`modules.combat.wrapper` without giving `wrapper`/`combatant`
-a second identity in any process that also loads them flat (the balance workbench does). Its two
-former loaders — engine/cross_scale/combat_bridge.py::_load_engine and
+its single entry. Plan position `31b` moved the import closure of `wrapper`/`combatant` here from systems/combat/combat_engine_v1/
+(the ledger's MOVE rows). It is a FLAT module set whose modules bare-import each other (wrapper.py:4), so it cannot be imported
+as `modules.combat.wrapper` without giving `wrapper`/`combatant` a second identity in any process that also loads them flat (the
+balance workbench does). Its two former loaders — engine/cross_scale/combat_bridge.py::_load_engine and
 engine/season/seam/wrappers/combat.py::engine — each spelled this path and this insert, and returned
 the two modules in OPPOSITE tuple orders. One spelling, one insert, named fields.
 

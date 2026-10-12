@@ -12,6 +12,15 @@ in the package namespace that is permanently stale the moment the first call fir
 established this and it holds one directory down: a test that swaps the ladder must name
 `seam.ladder._LADDER`, not `seam._LADDER`.
 
+⚠ **`04`'s T-k IS READ NARROWLY HERE, AND THIS IS WHERE THE READING IS RECORDED (plan position `31b`).**
+T-k (`04:122`) says *"the ladder lives once, in the seam"*. Read narrowly: `degree_from_net`
+(`engine/dice_engine/dice_engine.py`) is the ONE margin ladder and `degree_of` (below) its ONE dispatcher.
+`combat_degree` and `field_degree` STAY in the seam and are not ladders in that sense: each grades a
+provider's own result against roster edges (`combat_band_edges` over `wound_quantities`;
+`field_degree_bands`) and holds no band table of its own. So when `31b` and `31c` move the personal-combat
+and mass-battle engines into `modules/`, these two reads do not travel with them, and neither position
+touches the deferred dice-engine import (`degree_ladder()`, below).
+
 Moved whole from the flat `seam.py` by unit L2 of
 `workplans/2026-09-09-layer1-conformance-plan.md` (ED-IN-0206).
 """

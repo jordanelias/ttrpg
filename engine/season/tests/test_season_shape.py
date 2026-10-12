@@ -8607,6 +8607,7 @@ def test_the_seam_calls_personal_combat_rather_than_naming_it():
     if C.engine() is None:                     # a NAMED gap, never a silent skip
         assert C.load_error(), "the engine is unavailable and the seam reports no reason"
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+    SeasonDriver(P.tiny_world())   # `31b`: registers the module entries a direct `contest()` calls
 
     out = contest(w, "S", "the body", ["p_low", "p_mid"], 0, 2, ["act1"])
     assert out["status"] == "RESOLVED" and out["module"] == "personal_combat", out
@@ -8655,11 +8656,12 @@ def test_the_combat_seam_derives_one_field_and_it_decides_something():
     w = P.tiny_world()
     if C.engine() is None:
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+    SeasonDriver(P.tiny_world())   # `31b`: registers the module entries a direct `contest()` calls
     scale = w.fixtures.get("condition_scale")
     ends = {}
     for body in (scale, 700, 400, 50):
         w.persons["p_low"].body = body
-        ends[body] = C.derive_party(w.persons["p_low"], w.fixtures, "x").end
+        ends[body] = C.party_end(w.persons["p_low"], w.fixtures)   # `derive_party(...).end` until `31b`
     assert ends[scale] > ends[700] > ends[400] > ends[50] >= 1, (
         f"the derived `end` is not monotone in body condition: {ends}. A dying fighter must not "
         "be as durable as a healthy one, and the floor of 1 is why a dying one still fights")
@@ -13584,6 +13586,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
     from ..seam.wrappers import combat as C
     if C.engine() is None:
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+    SeasonDriver(P.tiny_world())   # `31b`: registers the module entries a direct `contest()` calls
     w = _w(); w.step = Step.RESOLVE
     raw = contest(w, "R", "the body", ["p_low", "p_mid"], 0, 2, ["we0"])
     assert raw["wound_state"]["p_low"]["felled"] is True, raw["wound_state"]

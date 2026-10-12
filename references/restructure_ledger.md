@@ -2894,7 +2894,9 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
      directory-prefix row below never answers for them: `pathres.resolve` returns LIVE for a path that exists before it
      reads any row, and a name under the old directory that exists in neither place stays DEAD. The 13 exact rows are
      for `tools/ci_claim_provenance_check.py`, which asks `load_alias_map()` for an EXACT row (see the 2026-10-03
-     section's note). -->
+     section's note). The `designs/scene/combat_engine_v1/` rows re-point the 2026-07-17 aliases into the moved files
+     for `tools/broken_dependency_checker.py`, which resolves ONE hop and does not chain (a live ED-1080 citation of
+     `designs/scene/combat_engine_v1/weapon_physics.py` read as broken without its row); a later row wins. -->
 
 | old path | new path |
 |---|---|
@@ -2912,3 +2914,17 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 | `systems/combat/combat_engine_v1/weapon_physics.py` | `modules/combat/weapon_physics.py` |
 | `systems/combat/combat_engine_v1/weapons.py` | `modules/combat/weapons.py` |
 | `systems/combat/combat_engine_v1/wrapper.py` | `modules/combat/wrapper.py` |
+| `designs/scene/combat_engine_v1/ability_primitives.py` | `modules/combat/ability_primitives.py` |
+| `designs/scene/combat_engine_v1/combat_systems.py` | `modules/combat/combat_systems.py` |
+| `designs/scene/combat_engine_v1/combatant.py` | `modules/combat/combatant.py` |
+| `designs/scene/combat_engine_v1/config.py` | `modules/combat/config.py` |
+| `designs/scene/combat_engine_v1/contact.py` | `modules/combat/contact.py` |
+| `designs/scene/combat_engine_v1/core.py` | `modules/combat/core.py` |
+| `designs/scene/combat_engine_v1/geometry.py` | `modules/combat/geometry.py` |
+| `designs/scene/combat_engine_v1/tradition.py` | `modules/combat/tradition.py` |
+| `designs/scene/combat_engine_v1/traditions.py` | `modules/combat/traditions.py` |
+| `designs/scene/combat_engine_v1/vocabulary.py` | `modules/combat/vocabulary.py` |
+| `designs/scene/combat_engine_v1/weapon_physics.py` | `modules/combat/weapon_physics.py` |
+| `designs/scene/combat_engine_v1/weapons.py` | `modules/combat/weapons.py` |
+| `designs/scene/combat_engine_v1/wrapper.py` | `modules/combat/wrapper.py` |
+| `designs/scene/combat_engine_v1/systems.py` | `modules/combat/combat_systems.py` |

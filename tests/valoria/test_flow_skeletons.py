@@ -458,7 +458,14 @@ def _anchor_failures(relpath):
             candidate = os.path.join(ROOT, archived(filepath))
             if os.path.isfile(candidate):
                 target = candidate
-        where = f"{relpath} -> `{filepath}:{start_s}{'-' + end_s if end_s else ''}"
+        if not os.path.isfile(target):
+            # A MOVED path resolves through the ledger to where the file lives now, and the anchor is
+            # checked there (plan position `31b` moved the personal-combat engine to `modules/combat/`
+            # by `git mv`, so the cited lines are the same lines). `pathres.resolve` owns the answer.
+            moved = pathres.resolve(filepath)
+            if moved.status == pathres.ALIASED:
+                target = os.path.join(ROOT, moved.live_path)
+        where =f"{relpath} -> `{filepath}:{start_s}{'-' + end_s if end_s else ''}"
         where += f" {symbol}`" if symbol else "`"
 
         if not os.path.isfile(target) and filepath in RETIRED_GENERATED:

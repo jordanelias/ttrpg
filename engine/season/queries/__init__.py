@@ -19,7 +19,7 @@
     value `at_war` reads -- and refuses at import if `SHEET_KIND`'s roster row stops being
     `Faction`'s fields. Still no function here writes.
   * `inputs`    -- not a query module: the typed INPUT records the host builds for a module entry
-    (A-25, plan position `31a`), a stdlib-only leaf a module may import. No function, no state.
+    (A-25, plan positions `31a`, `31b`), a stdlib-only leaf a module may import. No function, no state.
 
 `04_CODE_ARCHITECTURE.md` §A.2: *"queries/ ownerless functions: world_q (World first) · person_q
 (asker first) · cache (barrier-built) · faction_q (§B.6.1's VIEW, §B.10-12's `resolve`/`at_war`)"*

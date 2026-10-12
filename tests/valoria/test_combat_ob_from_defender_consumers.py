@@ -28,7 +28,7 @@ import pytest
 
 ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
 sys.path.insert(0, ENGINE)
-sys.path.insert(0, os.path.join(ENGINE, 'workbench'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1', 'workbench'))   # the workbench stayed at plan position `31b`
 
 import combatant as C          # noqa: E402
 import combat_systems as S     # noqa: E402

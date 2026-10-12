@@ -1,5 +1,14 @@
 """THE IN-SIDE OF THE PERSONAL-COMBAT SEAM — the seam CALLS the engine that owns the prize.
 
+PLAN POSITION `31b` (A-25) SPLIT THIS MODULE AS `31a` SPLIT `sigma.py`. What stays here is the HOST: the
+input builder `combat_input` (`World` -> `queries/inputs.py::PersonalCombatInput`: the two parties, each
+one's derived `end`, the wound quantities to lift) and the adapter `resolve`, which keeps the PARTY-GAP
+refusals and the seed, calls the module entry the prize row names (`module_entry:`, registered in
+`manifest.MODULE_ENTRIES` from its composition row) and interprets what comes back -- the winner, the
+surrender, the bouts, the wound-state refusal. The fight itself is `modules/combat/fight.py`, reached by
+string; it, not this module, constructs the `Combatant`s and calls `wrapper.fight`. Below, "this module
+constructs" and "the seam holds the Combatants" read as THE ENTRY's since `31b`.
+
 ⚠ JORDAN, 2026-09-02: *"kill / wound points towards a seam that should be calling in the personal
 combat system."* That is a ruling, and it overrides the scope note that stood in `contest()` —
 *"wiring those engines is out of this chain's scope"* — which made the seam resolve the subsystem
@@ -8,8 +17,7 @@ by name and then refuse. Resolving and refusing is a pointer; this is the call.
 WHAT THIS IS, AND WHAT IT DELIBERATELY IS NOT
 ---------------------------------------------
 `references/module_contracts.yaml` declares `combat` (plan position `30`; the PROVIDER this module
-registers keeps the name `personal_combat`) with `sim_module:
-systems/combat/combat_engine_v1/` and `resolver: d_sigma`. Its public entry point is
+registers keeps the name `personal_combat`) with `sim_module: modules/combat/` and `resolver: d_sigma`. Its public entry point is
 `wrapper.fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None) -> int` — `+1` A wins, `-1` B wins, and
 **`0` UNRESOLVED, which is a RULING and not a failure**: *"NO automatic tiebreak (Jordan
 2026-06-02): if neither fighter is felled, the round ends UNRESOLVED... an undecided fight is a
@@ -17,11 +25,12 @@ legitimate outcome."*
 
 This module does not decide anything about combat. It derives two parties, hands them to that
 engine with a deterministic RNG, and returns what the engine says. Every combat rule stays in
-`systems/combat/`, which this chain may read and may not edit.
+the engine (`modules/combat/` since `31b`), which this chain may read and may not edit.
 
-⚠ THE LOADER IS SHARED: `engine/substrate/pc_engine.py`, the one path seam into
-`combat_engine_v1/`, which `engine/cross_scale/combat_bridge.py` (the same seam from the campaign
-side) also calls. This module translates that leaf's raise into its typed refusal, `ENGINE-UNAVAILABLE`.
+⚠ THE LOADER: `engine/substrate/pc_engine.py`, the one path seam into the engine, which the module
+entry calls. This module reads it only for `engine()`, the availability probe its tests skip on; it translates that
+leaf's raise into a named reason, and the adapter's typed refusal `ENGINE-UNAVAILABLE` is now the
+unregistered entry's (no driver constructed in the process), as in `sigma.py`.
 ⚠ THE PARTY DISCIPLINE FOLLOWS `combat_bridge.py` AS PRECEDENT RATHER THAN REINVENTING IT (§0:
 *answered by precedent — the tree has already decided this shape somewhere else*). Its discipline is the part worth copying:
 derive EXACTLY ONE field from something the actor genuinely has, leave every other field at the
@@ -76,18 +85,20 @@ from ...gaps import Unspecified
 # THIS module to register it — importing the package here closes that loop and the cycle
 # guard counts it. `manifest/providers.py` imports nothing and is safe to reach from here.
 from ...manifest.providers import provider
+from ...manifest.registrar import MODULE_ENTRIES
+from ...manifest.registry import resolve as prize_row
+from ...queries.inputs import PersonalCombatInput
 from ...state.ids import H
-
-_MISSING = object()   # `getattr`'s default for a tracker field the engine does not carry (None is a value)
 
 _LOADED: Optional[tuple] = None
 _LOAD_ERROR: str = ""
 
 
 def engine() -> Optional[tuple]:
-    """`(wrapper, combatant)` or `None`: the substrate leaf's RAISE, translated to this seam's typed
-    refusal (04 §A.2:162). Loaded on FIRST USE by the one path seam, engine/substrate/pc_engine.py;
-    the import is deferred so the tracer still imports where the engine tree is absent."""
+    """`(wrapper, combatant)` or `None`: the substrate leaf's RAISE, translated to a named reason
+    (`load_error()`). Loaded on FIRST USE by the one path seam, engine/substrate/pc_engine.py; the
+    import is deferred so the tracer still imports where the engine tree is absent. Since `31b` it is
+    an AVAILABILITY PROBE only -- the adapter below never calls the engine through it."""
     global _LOADED, _LOAD_ERROR
     if _LOADED is not None or _LOAD_ERROR:
         return _LOADED
@@ -119,19 +130,28 @@ def surrender_of(trace: list) -> Optional[dict]:
     return None
 
 
-def derive_party(person: Any, fx: Any, label: str) -> Any:
-    """One `Combatant` from one tracer `Person`. ONE derived field; the rest are the class's.
-
-    Returns `None` when the engine is unavailable, never a stand-in."""
-    eng = engine()
-    if eng is None:
-        return None
-    _, combatant = eng
+def party_end(person: Any, fx: Any) -> int:
+    """A tracer `Person`'s ONE derived `Combatant` field, `end` (`H-97`); every other field is the
+    class's own. Was `derive_party`, which built the `Combatant` too; since `31b` the module entry
+    builds it from this number (`modules/combat/fight.py`)."""
     bands = body_band_penalty(person, fx)
     # `end`'s class default is 4 (combatant.py). One band = one point, floored at 1: a dying
     # person still fights, which is the same floor `decision.budget` applies for the same reason.
     default_end = 4
-    return combatant.Combatant(label, end=max(1, default_end - bands))
+    return max(1, default_end - bands)
+
+
+def combat_input(w: Any, claimants: list) -> PersonalCombatInput:
+    """THE HOST INPUT BUILDER (plan position `31b`, A-25): `World` -> the frozen record the fight reads.
+
+    Reads `w.persons` (the two claimants) and `w.fixtures`, and nothing else; the module that consumes
+    the record never sees `World`. Its precondition is the adapter's PARTY-GAP checks (`resolve`,
+    below): two claimants, both persons."""
+    a_id, b_id = claimants[0], claimants[1]
+    return PersonalCombatInput(
+        claimants=(a_id, b_id),
+        ends=(party_end(w.persons[a_id], w.fixtures), party_end(w.persons[b_id], w.fixtures)),
+        wound_quantities=tuple(WOUND_QUANTITIES))
 
 
 @provider("contest", "personal_combat")
@@ -162,10 +182,6 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     for nothing. The parameter is in the signature because the SEAM's call is uniform; whose seed a
     provider uses is the provider's.
     """
-    eng = engine()
-    if eng is None:
-        return dict(status="ENGINE-UNAVAILABLE", why=load_error(), module="personal_combat")
-    wrapper, _ = eng
     if len(claimants) < 2:
         # `combat_bridge.derive_parties` returns None on a derivation gap rather than faking a
         # side; the same rule, stated once more because the shape of the gap is different here.
@@ -176,30 +192,28 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     if pa is None or pb is None:
         return dict(status="PARTY-GAP", why=f"claimant not a person: {a_id!r} / {b_id!r}",
                     module="personal_combat")
-    A, B = derive_party(pa, w.fixtures, a_id), derive_party(pb, w.fixtures, b_id)
+    inp = combat_input(w, claimants)
     # `H` returns a blake2b hexdigest (`state/ids.py`), so 16 is the RADIX that parses it back to
     # an int for the RNG -- structural, not a game value. Pre-existing; surfaced because step 8's
     # `S.H(...)` -> `H(...)` lift rewrote the line and the gate scores added lines.
     # [JUSTIFIED: radix for parsing H()'s hex digest, not a mechanical constant]
     seed = int(H(w.world_seed, w.tick, a_id, f"contest:{prize}:{causes[0] if causes else ''}"), 16)
-    trace: list = []
-    prev = getattr(wrapper, "_TRACE", None)
-    try:
-        # The engine's own note: `_TRACE` adds no rng draw and no state mutation, so capturing it
-        # CANNOT change the result. That is why the seam may record without perturbing.
-        wrapper._TRACE = trace.append
-        result = wrapper.fight(A, B, rng=random.Random(seed))
-    finally:
-        wrapper._TRACE = prev
+    role = (prize_row("contest", prize) or {}).get("module_entry")
+    entry = MODULE_ENTRIES.get(role)
+    if entry is None:
+        return dict(status="ENGINE-UNAVAILABLE", module="personal_combat",
+                    why=f"prize {prize!r} names module entry {role!r}, which MODULE_ENTRIES does not "
+                        f"hold -- the registrar fills it at SeasonDriver construction")
+    got = entry.fn(inp, random.Random(seed))
+    result, trace = got["result"], got["trace"]
     winner = a_id if result == 1 else (b_id if result == -1 else None)
 
     # ⚠ THE OUTCOME'S SEVERITY, READ OFF THE COMBATANTS THE SCENE JUST FOUGHT WITH (Jordan
     # 2026-09-03). No number is invented and no rule is re-implemented: every field below is a
-    # property the engine's own `WoundTracker` computes, on objects this module constructed.
-    # `fight()` collapses all of it to an int at the return; this reads it before it is lost.
-    def _state(c) -> dict:
-        wt = getattr(c, "wt", None)
-        if wt is None:                      # ID-5 polarity: absence REFUSES, it does not default
+    # property the engine's own `WoundTracker` computes, on the objects the module entry constructed
+    # and lifted before `fight()` collapsed the scene to an int (`modules/combat/fight.py`).
+    def _state(lifted: Optional[dict]) -> dict:
+        if lifted is None:                  # ID-5 polarity: absence REFUSES, it does not default
             return dict(available=False)
         # ⚠ THE FIELD LIST IS `rosters.yaml: wound_quantities`, NOT A LITERAL HERE (`H-98`, plan
         # position `8`) -- the same list `combat_band_edges` is validated against at load, so an
@@ -207,17 +221,17 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         # REFUSES by name; skipping it would hand `combat_degree` a dict that lacks it.
         out = dict(available=True)
         for q in WOUND_QUANTITIES:
-            v = getattr(wt, q, _MISSING)
-            if v is _MISSING:
+            if q not in lifted:
                 raise Unspecified(
                     f"`wound_quantities` lists {q!r} and the engine's WoundTracker has no such "
                     f"field", "S39.4/H-98", needs=f"a `WoundTracker.{q}`, or delete it from "
                     "rosters.yaml: wound_quantities and from every edge that reads it",
                     law="Jordan 2026-09-03 -- the degree is READ OFF THE SCENE; a quantity the "
                         "scene does not carry cannot be lifted")
+            v = lifted[q]
             out[q] = v if isinstance(v, bool) else int(v)
         return out
-    _wounds = {a_id: _state(A), b_id: _state(B)}
+    _wounds = {a_id: _state(got["wound_state"][a_id]), b_id: _state(got["wound_state"][b_id])}
 
     return dict(status="RESOLVED", module="personal_combat", resolver="d_sigma",
                 result=result, winner=winner,
@@ -232,4 +246,4 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
                 # §11.4: `None` unless a yield ended the scene; then a non-zero `result` with nobody felled.
                 surrender=surrender_of(trace),
                 bouts=sum(1 for e in trace if e.get("kind") == "turn_start"),
-                parties={a_id: A.end, b_id: B.end}, seed=seed)
+                parties=got["ends"], seed=seed)
