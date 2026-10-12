@@ -29,6 +29,8 @@ step adds without anyone remembering to say so.
 
 from __future__ import annotations
 
+import copy
+from dataclasses import dataclass
 from typing import Callable, Optional
 
 from ..data.requires import UNKNOWN, binding_from_act
@@ -1714,6 +1716,73 @@ def occasioned_by(w: "World", q: Optional["Question"]) -> list:
         needs=f"a route here, or one of {sorted(QUESTION_SOURCES)}",
         law="ID-5 -- refuse, don't default. A new question source silently taking a plausible "
             "default would answer wrongly for every question it raised")
+
+
+# ---------------------------------------------------------------------------
+# v9 PC-06 `S-2` / `L-1` (#445 `03` S-2, `01` L-1): ONE PERSON'S PROJECTION -- what a client reads
+# for that person, so an interface need not reach into `World` or the driver.
+# ---------------------------------------------------------------------------
+
+def _person_or_refuse(w: World, pid: str) -> Person:
+    p = w.persons.get(pid)
+    if p is None:
+        raise Unspecified(f"no person {pid!r} in this world", "S20",
+                          needs="the id of a person `w.persons` holds",
+                          law="ID-5 -- refuse, don't default: an empty projection for an unknown id "
+                              "would read as a person who knows nothing")
+    return p
+
+
+def witnessed(w: World, pid: str) -> list:
+    """L-1: THE EVENTS IN `w.log` THIS PERSON WITNESSED, IN LOG ORDER -- `w.log` filtered by witness.
+
+    A witness is a deposit (S28 stage 2: *"DEPOSIT IS PER-PERSON, into that person's OWN ledger and no
+    other"*): every claim WITNESS puts in a ledger is written with `emits="claim.deposited"` and
+    `causes=[e.id]`, the Event it is about (`loop/witness.py`, all five deposit sites). So the
+    Events `pid` witnessed are the causes of the `claim.deposited` Events naming a claim `pid` holds.
+    The ORIGINATING Event is returned, not the deposit -- `occasioned_by`'s rule, for its reason (the
+    deposit is the transport). Each once, in the order the log holds them.
+
+    ⚠ A FORGOTTEN WITNESSING IS NOT HERE. A claim the `ledger_cap` eviction removed leaves no trace
+    on the person: eviction emits nothing (`loop/witness.py`, *"nobody can witness a forgetting"*),
+    and a claim id cannot be traced back to its holder. So this is what the person still holds
+    evidence of having witnessed, which is the epistemic contract S-2 asks for; it equals every
+    deposit made for `pid` only while nothing was evicted from `pid`'s ledger.
+
+    Read-only over `w.log` and `p.ledger`; no TRACE row (`ambitions`' reason: `TRACE.query` rows are
+    folded into the committed `runs/TRACE.txt`)."""
+    held = {c.id for c in _person_or_refuse(w, pid).ledger}
+    seen: set = set()
+    for e in w.log:
+        if e.kind == "claim.deposited" and any(c.subject in held for c in e.changes):
+            seen.update(x for x in (e.causes or []) if x != ROOT)
+    return [e for e in w.log if e.id in seen]
+
+
+@dataclass(frozen=True)
+class PersonProjection:
+    """S-2: what a client reads for ONE person, and nothing else -- never a `World`.
+
+      * `holder`    -- the person's id;
+      * `claims`    -- the person's OWN ledger, in ledger order (S20: a claim lives in its holder's
+                       ledger and no other, so no other person's claim can be here);
+      * `witnessed` -- `witnessed(w, holder)`, L-1's read, in log order.
+
+    Both are COPIES. A projection holding the live `Claim`s and `Event`s would hand a client a write
+    path around the gate (AX-4: the gate applies every write); a copy is the read-side equivalent of
+    `View`'s *"holds IDS, NEVER REFERENCES"* (S18.1) for a reader that has no `World` to resolve ids
+    against. The person's View and candidates are not here: DELIBERATE builds them and hands them
+    to `choose` (S-1's callback receives them, `harness/play_surface.py`)."""
+    holder: str
+    claims: tuple
+    witnessed: tuple
+
+
+def projection(w: World, pid: str) -> PersonProjection:
+    """S-2: `pid`'s own claims and the Events `pid` witnessed, as copies. Read-only."""
+    p = _person_or_refuse(w, pid)
+    return PersonProjection(pid, tuple(copy.deepcopy(c) for c in p.ledger),
+                            tuple(copy.deepcopy(e) for e in witnessed(w, pid)))
 
 
 # ---------------------------------------------------------------------------

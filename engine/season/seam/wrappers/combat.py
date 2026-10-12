@@ -5,7 +5,7 @@ input builder `combat_input` (`World` -> `queries/inputs.py::PersonalCombatInput
 one's derived `end`, the wound quantities to lift) and the adapter `resolve`, which keeps the PARTY-GAP
 refusals and the seed, calls the module entry the prize row names (`module_entry:`, registered in
 `manifest.MODULE_ENTRIES` from its composition row) and interprets what comes back -- the winner, the
-surrender, the bouts, the wound-state refusal. The fight itself is `modules/combat/fight.py`, reached by
+surrender, the bouts, the wound-state refusal -- and returns the scene's trace beside them (PC-06 M-1). The fight itself is `modules/combat/fight.py`, reached by
 string; it, not this module, constructs the `Combatant`s and calls `wrapper.fight`. Below, "this module
 constructs" and "the seam holds the Combatants" read as THE ENTRY's since `31b`.
 
@@ -246,4 +246,12 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
                 # §11.4: `None` unless a yield ended the scene; then a non-zero `result` with nobody felled.
                 surrender=surrender_of(trace),
                 bouts=sum(1 for e in trace if e.get("kind") == "turn_start"),
+                # v9 PC-06 M-1 (#445 `05` M-1 / `03` S-4): THE SCENE'S OWN TRACE, AS THE MODULE ENTRY
+                # CAPTURED IT, returned rather than reduced to `bouts` alone -- the read a grid display
+                # or B-3's per-event measure plays the bout from. `bouts` above is its `turn_start`
+                # count. Nothing here or downstream folds it into `World`: `contest()` hands this dict
+                # to `_fold` as `Resolution.result`, whose effects read `result`/`wound_state`/
+                # `parties` only, so `content_hash()` is unchanged
+                # (`engine/season/tests/test_combat_trace_returned.py`).
+                trace=trace,
                 parties=got["ends"], seed=seed)
