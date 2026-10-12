@@ -27,6 +27,12 @@ on, since no data at `30` declares that a row must exist, so the fresh-process f
 (8) `test_the_composition_export_round_trips`, with
 `test_engine_does_not_import_systems.py::test_importing_every_engine_module_pulls_in_no_subsystem`.
 
+Plan position `31a` (IN-03) landed the first production entry row (`ID-13` above is history) and
+places the declaration that a row must exist: a prize row's `module_entry:`, held to its composition
+row by `manifest/registry.py::check_contest_prizes`. Its falsifier (3), the fresh-process form of
+`30`'s (2): `test_a_production_entry_row_deleted_in_a_fresh_process_refuses_naming_it`, with the two
+disagreement arms after it.
+
 Plan position IN-41 (`SM-11` + `SM-9`; it left the plan at B-B's close, `4a2e4494`), which split the retired `decline_note:` column into
 `effect_decline_note:`, `formation_decline_note:` and `requires_decline_note:`: falsifier (1)
 `test_a_row_with_an_untyped_precondition_nothing_evaluates_refuses_naming_the_verb`, with its converse
