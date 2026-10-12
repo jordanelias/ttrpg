@@ -13,9 +13,9 @@
     "mass_battle.resolve_field": {
       "target": "modules.mass_battle.massbattle:resolve_field",
       "kind": "callable",
-      "entry": null,
-      "verb": null,
-      "needed_by": "engine/season/seam/wrappers/mass_battle.py \u2014 the `a field` prize's provider (ED-IN-0279, M3). This is the sanctioned route into systems/mass_battle/sim/ from engine/season/: massbattle.py's own internal imports are already proper dotted `systems.mass_battle.sim.*` (no flat/bare-import problem the way combat_engine_v1 has), so this goes through composition_roles rather than adding a second PATH_SEAM_ALLOWED entry that this subsystem's shape does not need."
+      "entry": "verb_call",
+      "verb": "march",
+      "needed_by": "engine/season/seam/wrappers/mass_battle.py \u2014 the host adapter `@provider(\"contest\", \"mass_battle\")` builds the typed input record (`field_input`) and calls this entry through `manifest.MODULE_ENTRIES` (plan position `31c`, A-25; the `a field` prize's provider since ED-IN-0279, M3). The prize row `a field` (`engine/season/rosters.yaml` `contest_subsystems`) names it in `module_entry:`, and `manifest/registry.py::check_contest_prizes` refuses at driver construction a prize row whose `module_entry:` no composition row declares, or one that disagrees with it. The target moved from `systems/mass_battle/sim/` with the import closure of `massbattle.py` at `31c` (a package: its imports are dotted, so no `PATH_SEAM_ALLOWED` entry)."
     },
     "social_contest.roll": {
       "target": "modules.social_contest.roll:roll",

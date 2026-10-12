@@ -29,8 +29,10 @@ import pytest
 # sys.path to import itself as top-level `mass_battle.*`; Jordan's port made it a real dotted
 # package at `systems/mass_battle/sim/`, so the path seam is gone and the imports below resolve
 # natively. `_ENGINE_ROOT` is what the write-sweep at the bottom of this file walks.
-_ENGINE_ROOT = os.path.abspath(os.path.join(
-    os.path.dirname(__file__), '..', '..', 'systems', 'mass_battle', 'sim'))
+# PLAN POSITION `31c` moved the engine path (`massbattle.py`'s import closure) to `modules/mass_battle/`; the
+# harness `lanchester_signature.py` stayed in `systems/mass_battle/sim/`. `_ENGINE_FILES` are relative to
+# the repository root since then, so one list names both halves.
+_ENGINE_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 import modules.mass_battle.orchestration as O  # noqa: E402
 from systems.mass_battle.sim.engine import build_army  # noqa: E402
@@ -134,15 +136,16 @@ def test_subunit_absolute_write_reaches_the_cells(unit_and_atom):
 
 # ── the guard that makes the sweep durable ──────────────────────────────────────────────────────
 
-_ENGINE_FILES = ['orchestration.py', 'core/state.py', 'core/exchange.py', 'hierarchy/units.py',
-                 'percell.py', 'resolution.py',
+_ENGINE_FILES = ['modules/mass_battle/orchestration.py', 'modules/mass_battle/core/state.py',
+                 'modules/mass_battle/core/exchange.py', 'modules/mass_battle/hierarchy/units.py',
+                 'modules/mass_battle/percell.py', 'modules/mass_battle/resolution.py',
                  # [ED-MB-0049 / plan-v2 A5a, 2026-07-29] `lanchester_signature.py` joins the scanned
                  # set. It is a measurement HARNESS rather than the engine path, but it is the one
                  # harness that gates a MEASUREMENT this lane depends on: it pins morale high
                  # specifically to DISABLE rout, so a silent no-op there fits the Lanchester exponent
                  # on truncated battles — and that exponent is what DG-6's whole root-cause analysis
                  # rests on. Its bare write is now routed through `Unit.set_morale`.
-                 'lanchester_signature.py']
+                 'systems/mass_battle/sim/lanchester_signature.py']
 
 # STILL OUT OF SCOPE, and the reason is a rule rather than an oversight. `test_persubunit_stress.py`
 # is a measurement harness holding one bare morale write, and it was swept in a first pass and then

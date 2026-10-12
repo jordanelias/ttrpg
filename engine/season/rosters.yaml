@@ -1014,7 +1014,7 @@ rosters:
   # |---------------------|--------------------|----|-----|-------|
   # | personal combat     | RESOLVE (S39)      | claimants, prize, causes | a degree | BUILT — `modules/combat/fight.py`, called by `seam/wrappers/combat.py`. Jordan: "combat engine isn't done" |
   # | social contest      | RESOLVE (S39)      | claimants, prize, causes | a degree | INTERIM — `a standing` is rolled by `modules/social_contest/roll.py`, called by `seam/wrappers/sigma.py` (`contest_subsystems`' `interim: true`) |
-  # | mass battle         | ENCOUNTER (`a field`) | claimants, prize, causes | a degree | BUILT — `seam/wrappers/mass_battle.py` (the `contest_subsystems` row `a field`) |
+  # | mass battle         | ENCOUNTER (`a field`) | claimants, prize, causes | a degree | BUILT — `modules/mass_battle/massbattle.py`, called by `seam/wrappers/mass_battle.py` (the `contest_subsystems` row `a field`) |
   # | investigation       | UNRULED            | UNRULED | UNRULED | ITS OWN KIND — not a contest |
   # | settlement mgmt     | UNRULED (see below)| UNRULED | UNRULED | ⚠ NOT CALLED — done INLINE (see below) |
   # | faction mgmt        | UNRULED            | UNRULED | UNRULED | absent from the loop entirely |
@@ -1121,13 +1121,14 @@ rosters:
       "a field":
         module:   "mass_battle"
         provider: "mass_battle"
+        module_entry: "mass_battle.resolve_field"   # `31c`, as `the body`'s and `a standing`'s: the composition role `seam/wrappers/mass_battle.py` calls through `MODULE_ENTRIES`
         step:     "ENCOUNTER"
         declares: "Declared"
         cite: >-
           M3 of the driver-retirement plan (ED-IN-0279): the row had a `module:` and no `provider:`
           because sides needed `faction_q.resolve` (`04 §C.5.1`), which M2 built. `provider:` now
-          names `seam/wrappers/mass_battle.py`, which resolves the `subject` side by proposition id
-          and calls `modules.mass_battle.massbattle:resolve_field` through the
+          names `seam/wrappers/mass_battle.py`, which resolves the `subject` side by proposition id,
+          builds the record and calls `modules.mass_battle.massbattle:resolve_field` (`31c`) through the
           `mass_battle.resolve_field` composition role.
           ⚠ `step:`/`declares:` ARE M4'S OWN FIELDS (ED-IN-0279 clause (a), 2026-09-28), read by
           `manifest.resolve()` and validated at `check_rows()`. `step: ENCOUNTER` says this prize

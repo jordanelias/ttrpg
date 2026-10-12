@@ -115,7 +115,7 @@ def _threadwork_operations():
 def _massbattle_canon():
     """The mass-battle ladder. THERE IS NOW ONE OF THEM, WHICH IS THE POINT.
 
-    Until 2026-08-24 this file enrolled TWO: `modules/mass_battle/massbattle.py`'s
+    Until 2026-08-24 this file enrolled TWO: `systems/mass_battle/sim/massbattle.py`'s
     `compute_degree` (the engine the campaign ran) and `tests/sim/mass_battle/resolution.py`'s
     (the canon engine's). Jordan's port of the canon engine over `systems/mass_battle/sim/`
     dissolved the twin — `massbattle.py` is now a thin strategic adapter with no ladder of its own,

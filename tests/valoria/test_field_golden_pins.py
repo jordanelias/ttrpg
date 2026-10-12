@@ -31,6 +31,10 @@ _ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__
 # what those clauses are for — without them this file would have gone green over an empty
 # directory, which is the exact failure it was written to prevent.
 _MB = os.path.join(_ROOT, 'systems', 'mass_battle', 'sim')
+# PLAN POSITION `31c` split the engine in two: the reachable closure of `massbattle.py` moved to
+# `modules/mass_battle/`, and `bat.py`, `engine.py` and the harnesses stayed here. Every walk below reads
+# BOTH roots (`_MB_ROOTS`), or the env reads the closure owns would fall out of the scan.
+_MB_ROOTS = (os.path.join(_ROOT, 'modules', 'mass_battle'), _MB)
 
 import importlib.util
 
@@ -106,7 +110,7 @@ def _source_defaults():
     excluding standalone harnesses that bat.py never imports."""
     skip = {'lanchester_signature.py', 'test_persubunit_stress.py'}
     out = {}
-    for dirpath, _dirs, files in os.walk(_MB):
+    for dirpath, _dirs, files in (step for root in _MB_ROOTS for step in os.walk(root)):
         for f in files:
             if not f.endswith('.py') or f in skip:
                 continue
@@ -204,7 +208,7 @@ def test_no_unclassified_env_reads():
     # invisible to the regex — verify those by raw-text presence instead of dropping them
     for n in sorted(ghost):
         found = False
-        for dirpath, _dirs, files in os.walk(_MB):
+        for dirpath, _dirs, files in (step for root in _MB_ROOTS for step in os.walk(root)):
             for f in files:
                 if f.endswith('.py') and n in open(os.path.join(dirpath, f), encoding='utf-8').read():
                     found = True
