@@ -37,7 +37,6 @@ from ..data.verbs import VERB_TABLE
 from ..decision import make_chooser
 from ..decision.options import (containing_rung_of, exercised_seat, opening_set, operands_for,
                                 treasury_of)
-from ..harness import register as REG
 from ..harness import scarce as S
 from ..loop.driver import resolvable_verbs
 from ..loop.witness import SEAT_CHANNEL
@@ -45,6 +44,7 @@ from ..queries import world_q
 from ..state.carriers import View
 from ..state.ids import H, draw_factory
 from .test_demand_delivery import _season
+from .test_territorial_subsistence import CONTROL_ARM, LIVE_ARMS
 
 GOVERNORS = (S.REEVE, S.FAR_REEVE)
 
@@ -368,11 +368,9 @@ def test_in22_the_governors_shortfall_claim_is_refracted_by_the_gain():
 # THE LIVE ARM (v9 IN-22, B-F; `H-160` limit (3) RULED a balance number, not a blocker,
 # 2026-10-12): SE-01's hunger arm on, in `scarce.governed`, where the shortfall is recorded.
 # ======================================================================================
-# `H-125`'s live arms, read off the register's own `sweep:` row rather than copied (the derivation
-# `test_territorial_subsistence.py` uses): `body_step` 0 is the control, SHIPPED; every other arm is
-# one SE-01 built and exercised.
-LIVE_ARMS = [arm for arm in next(r for r in REG.load()["rows"] if r["id"] == "H-125")["sweep"]
-             if arm != DEFAULT_FIXTURES.get("body_step")]
+# `H-125`'s live arms, imported from the one derivation that reads them off the register's own
+# `sweep:` row (`test_territorial_subsistence.py`): `body_step` 0 is the control, SHIPPED; every other
+# arm is one SE-01 built and exercised.
 
 
 def _armed(step):
@@ -388,8 +386,9 @@ def test_in22_live_arm_the_hunger_bites_and_the_claim_still_reaches_the_governor
     bodies pass removes the cohort (`loop/matter.py`) BEFORE the drained larder's write carries the
     record, and the seat channel keys on `governors_of` the larder, not on the dead cohort."""
     control = _one_season()
+    assert CONTROL_ARM == 0, "the shipped `body_step` is no longer the control; `H-125` disagrees"
     assert control.persons[S.POPULACE].body == DEFAULT_FIXTURES.get("condition_scale")
-    checked = 0
+    checked, fell, died = 0, 0, 0
     for step in LIVE_ARMS:
         w = _armed(step)
         recorded = _recorded(w)
@@ -400,14 +399,19 @@ def test_in22_live_arm_the_hunger_bites_and_the_claim_still_reaches_the_governor
         was = control.persons[S.POPULACE].body
         if was - lost > 0:
             assert cohort is not None and cohort.body == was - lost, (step, lost)
+            fell += 1
         else:
             assert cohort is None, (step, "a body at 0 routes to remove_person")
+            died += 1
         inside = _held(w, S.REEVE)
         for pred, units in sorted(recorded.items()):
             assert inside.get(pred) == (units, CHANNEL_CLAIM_SOURCE[SEAT_CHANNEL]), (step, pred, inside)
             checked += 1
         assert _held(w, S.FAR_REEVE) == {}, "a governor outside the shortfall's purview holds it"
     assert LIVE_ARMS and checked >= 2 * len(LIVE_ARMS)
+    # BOTH BRANCHES OBSERVED: the docstring's `67` claim (dies, claim still deposited) and the
+    # body-falls claim are each exercised by at least one arm, or a re-swept `H-125` drops one silently.
+    assert fell >= 1 and died >= 1, (fell, died)
 
 
 def test_in22_live_arm_the_governors_question_forms_a_transfer_from_the_claim_with_the_arm_on():
@@ -437,13 +441,15 @@ def test_in22_live_arm_control_the_zero_arm_is_the_unarmed_season_and_the_arm_al
     not merely present. The arm's only effect on the shortfall chain is the bodies, so the claims
     the reeve holds are identical at every arm."""
     control = _one_season()
+    assert CONTROL_ARM == 0, "the shipped `body_step` is no longer the control; `H-125` disagrees"
     zero = _armed(0)
     assert zero.content_hash() == control.content_hash()
     # The shipped default IS 0, so the line above cannot fail alone; these observe MATTER's bodies
     # pass writing nothing at the control, whatever the default is.
     assert not [e for e in zero.log if e.kind in ("body.changed", "person.died")]
-    assert [e for e in _armed(LIVE_ARMS[0]).log if e.kind == "body.changed"]
+    armed = {a: _armed(a) for a in LIVE_ARMS}
+    assert LIVE_ARMS and all([e for e in w.log if e.kind == "body.changed"] for w in armed.values())
     assert zero.persons[S.POPULACE].body == control.persons[S.POPULACE].body
-    held = {a: _held(_armed(a), S.REEVE) for a in LIVE_ARMS}
+    held = {a: _held(w, S.REEVE) for a, w in armed.items()}
     assert all(h == _held(control, S.REEVE) != {} for h in held.values()), held
-    assert all(_armed(a).content_hash() != control.content_hash() for a in LIVE_ARMS)
+    assert all(w.content_hash() != control.content_hash() for w in armed.values())
