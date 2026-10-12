@@ -37,6 +37,7 @@ from ..data.verbs import VERB_TABLE
 from ..decision import make_chooser
 from ..decision.options import (containing_rung_of, exercised_seat, opening_set, operands_for,
                                 treasury_of)
+from ..harness import register as REG
 from ..harness import scarce as S
 from ..loop.driver import resolvable_verbs
 from ..loop.witness import SEAT_CHANNEL
@@ -361,3 +362,80 @@ def test_in22_the_governors_shortfall_claim_is_refracted_by_the_gain():
         assert {c.source for c in held} == {CHANNEL_CLAIM_SOURCE[SEAT_CHANNEL]} == {"inferred"}
         got[gain] = {c.confidence for c in held}
     assert got == {0.0: {100}, 0.5: {50}}, got
+
+
+# ======================================================================================
+# THE LIVE ARM (v9 IN-22, B-F; `H-160` limit (3) RULED a balance number, not a blocker,
+# 2026-10-12): SE-01's hunger arm on, in `scarce.governed`, where the shortfall is recorded.
+# ======================================================================================
+# `H-125`'s live arms, read off the register's own `sweep:` row rather than copied (the derivation
+# `test_territorial_subsistence.py` uses): `body_step` 0 is the control, SHIPPED; every other arm is
+# one SE-01 built and exercised.
+LIVE_ARMS = [arm for arm in next(r for r in REG.load()["rows"] if r["id"] == "H-125")["sweep"]
+             if arm != DEFAULT_FIXTURES.get("body_step")]
+
+
+def _armed(step):
+    return _one_season(DEFAULT_FIXTURES.sweep("body_step", step))
+
+
+def test_in22_live_arm_the_hunger_bites_and_the_claim_still_reaches_the_governor_in_purview():
+    """THE EXIT, with the arm ON: SE-01's `body_step` falls the hungry cohort's body by `step` times
+    the shortfall MATTER recorded (so the test is not passable with the arm off: the body is
+    asserted to have fallen, to the unit), and the reeve whose seat's purview holds the town holds
+    the very claims MATTER recorded, at the recorded units. The far reeve holds none. At `67` the
+    cohort dies in the barrier that records its shortfall, and the claim has still been deposited:
+    the record is made at the drained write, before the bodies pass reads it."""
+    control = _one_season()
+    assert control.persons[S.POPULACE].body == DEFAULT_FIXTURES.get("condition_scale")
+    checked = 0
+    for step in LIVE_ARMS:
+        w = _armed(step)
+        recorded = _recorded(w)
+        assert recorded == _recorded(control), "the arm moved what MATTER records; it should move bodies"
+        assert recorded, "MATTER recorded no shortfall; nothing below is observed"
+        lost = step * sum(recorded.values())
+        cohort = w.persons.get(S.POPULACE)
+        was = control.persons[S.POPULACE].body
+        if was - lost > 0:
+            assert cohort is not None and cohort.body == was - lost, (step, lost)
+        else:
+            assert cohort is None, (step, "a body at 0 routes to remove_person")
+        inside = _held(w, S.REEVE)
+        for pred, units in sorted(recorded.items()):
+            assert inside.get(pred) == (units, CHANNEL_CLAIM_SOURCE[SEAT_CHANNEL]), (step, pred, inside)
+            checked += 1
+        assert _held(w, S.FAR_REEVE) == {}, "a governor outside the shortfall's purview holds it"
+    assert LIVE_ARMS and checked >= 2 * len(LIVE_ARMS)
+
+
+def test_in22_live_arm_the_governors_question_forms_a_transfer_from_the_claim_with_the_arm_on():
+    """THE CHAIN PAST THE DEPOSIT, with the arm on: at each live arm the reeve's `questions_for`
+    holds the `claim_landed` question and `opening_set` forms the `transfer` to the hungry town
+    carrying the claim's own kind and amount; the far reeve forms none."""
+    for step in LIVE_ARMS:
+        w = _armed(step)
+        reeve = w.persons[S.REEVE]
+        q = S.shortfall_question(w, S.REEVE)
+        assert q is not None and q.source == "claim_landed", (step, q)
+        claim = next(c for c in reeve.ledger if c.id == q.about)
+        (cand,) = [c for c in opening_set(reeve, View(reeve.id, [], 99, q), q, w.fixtures)
+                   if c.verb == "transfer"]
+        assert cand.operands["to"] == S.HUNGRY
+        assert (f"{SHORTFALL_PREDICATE}:{cand.operands['kind']}", cand.operands["amount"]) == (
+            claim.predicate, claim.value)
+        assert S.shortfall_question(w, S.FAR_REEVE) is None, step
+
+
+def test_in22_live_arm_control_the_zero_arm_is_the_unarmed_season_and_the_arm_alone_moves_bodies():
+    """THE CONTROL: `body_step` swept to its control 0 reproduces the shipped fixtures' season
+    (same content hash, no body falls), and each live arm moves the hash off it -- the arm is read,
+    not merely present. The arm's only effect on the shortfall chain is the bodies, so the claims
+    the reeve holds are identical at every arm."""
+    control = _one_season()
+    zero = _armed(0)
+    assert zero.content_hash() == control.content_hash()
+    assert zero.persons[S.POPULACE].body == control.persons[S.POPULACE].body
+    held = {a: _held(_armed(a), S.REEVE) for a in LIVE_ARMS}
+    assert all(h == _held(control, S.REEVE) != {} for h in held.values()), held
+    assert all(_armed(a).content_hash() != control.content_hash() for a in LIVE_ARMS)
