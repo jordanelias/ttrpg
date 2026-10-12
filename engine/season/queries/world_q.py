@@ -1752,10 +1752,14 @@ def witnessed(w: World, pid: str) -> list:
     Read-only over `w.log` and `p.ledger`; no TRACE row (`ambitions`' reason: `TRACE.query` rows are
     folded into the committed `runs/TRACE.txt`)."""
     held = {c.id for c in _person_or_refuse(w, pid).ledger}
+    if not held:
+        return []
     seen: set = set()
     for e in w.log:
         if e.kind == "claim.deposited" and any(c.subject in held for c in e.changes):
             seen.update(x for x in (e.causes or []) if x != ROOT)
+    if not seen:
+        return []
     return [e for e in w.log if e.id in seen]
 
 

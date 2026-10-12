@@ -365,8 +365,11 @@ def resolve_field(inp, rng=None):
     loyalty_a, loyalty_b = inp.loyalties
     unit_a = _weighted_unit("side_a", weight_a, _morale_start(stance_a, loyalty_a, inp.loyalty_gain))
     unit_b = _weighted_unit("side_b", weight_b, _morale_start(stance_b, loyalty_b, inp.loyalty_gain))
-    geo = _load_geography()
-    crossing = river_crossed(inp.origin, inp.territory, geography=geo)
+    # No territory: `river_crossed` answers False and the lookup OPEN_FLAT from the id alone, so the
+    # file is not read. WALLS outranks a crossing (`terrain_row_for_territory`), so a fortified field
+    # does not derive one.
+    geo = _load_geography() if inp.territory is not None else {}
+    crossing = inp.fort_level <= 0 and river_crossed(inp.origin, inp.territory, geography=geo)
     return _run_and_grade(unit_a, unit_b,
                           terrain_row_for_territory(inp.territory, inp.fort_level, crossing, geography=geo),
                           rng, walls_dr=inp.walls_dr)

@@ -27,14 +27,12 @@ class SocialContestInput:
     """What the `social_contest` module's σ-leverage roll reads, and nothing else.
 
     Built by `seam/wrappers/sigma.py::contest_input` (the host input builder) from `World`:
-      * `claimants` -- the contest's claimant ids, the first the actor (S39.1: persons, always);
       * `pool`      -- dice, from what the actor genuinely has (`sigma.py::_pool_of`);
       * `ob`        -- what stands against it (`sigma.py::_obstacle_of`);
       * `obstacle_refusal_multiple` -- S27.4's multiple, the fixture the host adapter refuses on
                        before the entry is called (the module never sees a refused pair);
       * `leverage`  -- the σ-layer μ-shift. Zero until something supplies leverage: an `assumption`
                        reading with no producer, stated as zero rather than fabricated."""
-    claimants: tuple
     pool: int
     ob: float
     obstacle_refusal_multiple: float
@@ -53,7 +51,7 @@ class PersonalCombatInput:
       * `wound_quantities` -- the `WoundTracker` fields the host lifts per party after the fight
                        (`rosters.yaml: wound_quantities`, in roster order). The module reads them off the
                        trackers and returns what it found; the refusal for one the tracker does not carry
-                       is the host's (`combat.py::_state`)."""
+                       is the host's (`combat.py::_wound_state`)."""
     claimants: tuple
     ends: tuple
     wound_quantities: tuple

@@ -20,12 +20,7 @@ seeds do not all give one result (else the comparison could not tell two calls a
 """
 from __future__ import annotations
 
-import subprocess
-import sys
-
-from ..data import files
-from ..manifest.registry import resolve
-from engine.substrate import composition
+from ._fresh_process import entry_target, probe
 
 _PRIZE = "a field"
 
@@ -63,23 +58,9 @@ print(repr((loaded, out, stdlib_untouched)))
 """
 
 
-def _entry_target() -> tuple:
-    role = (resolve("contest", _PRIZE) or {}).get("module_entry")
-    assert role, f"the prize row {_PRIZE!r} names no `module_entry:`; the entry this test is about is gone"
-    return role, composition.ROLES[role]["target"]
-
-
-def _probe(target: str):
-    root = str(files.REPO_ROOT)
-    proc = subprocess.run([sys.executable, "-c", _PROBE.format(root=root, target=target)],
-                          capture_output=True, text=True, timeout=600, cwd=root)
-    assert proc.returncode == 0, proc.stderr[-3000:]
-    return eval(proc.stdout.strip().splitlines()[-1])     # our own probe's repr
-
-
 def test_one_march_resolved_twice_in_one_process_gives_one_result_and_loads_nothing_of_the_host():
-    role, target = _entry_target()
-    loaded, out, stdlib_untouched = _probe(target)
+    role, target = entry_target(_PRIZE)
+    loaded, out, stdlib_untouched = probe(_PROBE, target, 600)
     module_dir = target.split(":", 1)[0].rsplit(".", 1)[0].replace(".", "/")
     allowed = {"engine/__init__.py", "engine/season/__init__.py", "engine/season/queries/__init__.py",
                "engine/season/queries/inputs.py", module_dir.split("/", 1)[0] + "/__init__.py"}

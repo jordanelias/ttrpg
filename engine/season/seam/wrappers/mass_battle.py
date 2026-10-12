@@ -82,15 +82,16 @@ from __future__ import annotations
 import random
 from typing import Any, Optional
 
-# `providers` and `registrar` are imported by module, as combat.py and sigma.py do (see their notes
-# on the manifest import order).
+# `providers` is imported by module, as combat.py and sigma.py do (see their notes on the manifest
+# import order); the entry lookup is `_entry.py`'s, which imports `registrar` and `registry` the same way.
 from ...manifest.providers import provider
-from ...manifest.registrar import MODULE_ENTRIES
-from ...manifest.registry import resolve as prize_row
 from ...data.rosters import territory_id_of
 from ...queries.inputs import MassBattleInput
 from ...queries.person_q import stance_toward
 from ...queries import world_q
+from ._entry import entry_for
+
+_PROVIDER = "mass_battle"
 
 
 def _territory_of(w: Any, rung: str) -> Optional[str]:
@@ -157,7 +158,16 @@ def _origin_of(w: Any, pids: list) -> Optional[str]:
     faction's whole membership), has no one origin and reads `None` -- the default, under which no
     crossing is derived and the field is what it was before MB-05r."""
     homes = world_q.home_of(w)
-    found = {_territory_of(w, homes[pid]) if pid in homes else None for pid in pids}
+    by_home: dict = {}                      # one `_territory_of` walk per distinct home, this call only
+    found = set()
+    for pid in pids:
+        if pid not in homes:
+            found.add(None)
+            continue
+        home = homes[pid]
+        if home not in by_home:
+            by_home[home] = _territory_of(w, home)
+        found.add(by_home[home])
     return found.pop() if len(found) == 1 else None
 
 
@@ -188,7 +198,7 @@ def field_input(w: Any, claimants: list, other: list, rung: str) -> MassBattleIn
         loyalty_gain=w.fixtures.get("field_morale_loyalty_gain"))
 
 
-@provider("contest", "mass_battle")
+@provider("contest", _PROVIDER)
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
             rng: Optional[random.Random] = None, rung: str = "") -> dict:
@@ -210,14 +220,15 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     this module's docstring) and callers should not read it as one."""
     if not claimants:
         return dict(status="PARTY-GAP", why="a field battle needs at least one claimant",
-                    module="mass_battle")
+                    module=_PROVIDER)
     if subject is None:
         return dict(status="PARTY-GAP", why="a field battle needs a named opposing faction "
-                    "(subject); none given", module="mass_battle")
+                    "(subject); none given", module=_PROVIDER)
     if not rung:
         return dict(status="PARTY-GAP", why="a field battle needs a place to scope the "
-                    "defending side to (rung); none given", module="mass_battle")
+                    "defending side to (rung); none given", module=_PROVIDER)
     other = world_q.mustered(w, rung, subject)
+    parties = {"claimants": claimants, "subject_members": other}
     if not other:
         # ⚠ AN EMPTY DEFENDING SIDE IS `Unopposed`, NOT A CALL TO `resolve_field` (M4,
         # `ED-IN-0279` clause (a)). `resolve_field`'s own docstring: *"AN EMPTY `side_b` gets
@@ -227,27 +238,23 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         # means for the game, but it does not launder "nobody mustered" into a fabricated fight
         # against a floor-sized phantom unit either. `attacker_wins`/`unopposed` are top-level so
         # `seam/ladder.py::field_degree` can grade this without opening `result`.
-        return dict(status="RESOLVED", module="mass_battle", resolver="dice_pool",
+        return dict(status="RESOLVED", module=_PROVIDER, resolver="dice_pool",
                     attacker_wins=True, unopposed=True,
                     result=dict(attacker_wins=True, degree="Unopposed",
                                 attacker_size_pct=1.0, defender_size_pct=0.0),
-                    winner=claimants,
-                    parties={"claimants": claimants, "subject_members": other})
+                    winner=claimants, parties=parties)
     # ⚠ THE ENTRY IS LOOKED UP BY THE ROLE THE PRIZE ROW NAMES (`module_entry:`), IN `MODULE_ENTRIES`,
     # as `sigma.py` and `combat.py` look theirs up (`31a`, `31b`): a call reaching here with the role
     # unregistered (no driver constructed in the process) is the typed `ENGINE-UNAVAILABLE`.
-    role = (prize_row("contest", prize) or {}).get("module_entry")
-    entry = MODULE_ENTRIES.get(role)
+    entry, refusal = entry_for(prize, _PROVIDER)
     if entry is None:
-        return dict(status="ENGINE-UNAVAILABLE", module="mass_battle",
-                    why=f"prize {prize!r} names module entry {role!r}, which MODULE_ENTRIES does not "
-                        f"hold -- the registrar fills it at SeasonDriver construction")
+        return refusal
     # PLAN POSITION `20-iv`: the place and the two sides' morale, read here (`field_input`) and decided
     # there (`H-150` -- `fortification_of`'s caller on the battle path).
     # PLAN POSITION `20-v`: the walls' DR is the `field_walls_dr` fixture (`H-150`), `None` = A.9's
     # own number, which the module reads from its terrain table -- this adapter decides none of it.
     result = entry.fn(field_input(w, claimants, other, rung), rng)
-    return dict(status="RESOLVED", module="mass_battle", resolver="dice_pool",
+    return dict(status="RESOLVED", module=_PROVIDER, resolver="dice_pool",
                 # ⚠ LIFTED TO TOP LEVEL, NOT LEFT NESTED UNDER `result` (M4). `degree_of`
                 # (`seam/ladder.py`) reads a provider's return directly -- `wound_state` and
                 # `net`/`ob` are already top-level for the other two providers -- so a third,
@@ -257,4 +264,4 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
                 attacker_wins=result.get("attacker_wins"), unopposed=False,
                 result=result,
                 winner=(claimants if result.get("attacker_wins") else other),
-                parties={"claimants": claimants, "subject_members": other})
+                parties=parties)

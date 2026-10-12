@@ -292,10 +292,15 @@ def unclaimed_contest_prizes(verb_table: dict) -> list:
         prizes = getattr(row, "contests", None)
         if not prizes:
             continue
-        for p in ([prizes] if isinstance(prizes, str) else list(prizes)):
+        for p in _as_list(prizes):
             if str(p) not in claimed:
                 out.append((verb, str(p)))
     return out
+
+
+def _as_list(x: Any) -> list:
+    """A verb's `contests:` is one prize name or a list of them; either way, a list."""
+    return [x] if isinstance(x, str) else list(x)
 
 
 def check_contest_prizes(verb_table: dict) -> list:
@@ -383,7 +388,7 @@ def _check_module_entry(role: str, key: Any, row: dict, verb_table: dict) -> Non
             law=law)
     verb = comp.get("verb")
     contests = getattr(verb_table.get(verb), "contests", None) or []
-    prizes = [contests] if isinstance(contests, str) else list(contests)
+    prizes = _as_list(contests)
     if not any((resolve(role, p) or {}).get("module_entry") == entry_role for p in prizes):
         raise Unspecified(
             f"composition row {entry_role!r} binds `verb: {verb!r}`, which contests {prizes!r}; no "

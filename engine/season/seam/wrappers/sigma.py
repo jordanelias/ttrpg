@@ -70,13 +70,13 @@ import random
 from typing import Any, Optional
 
 from ...data.rosters import VERB_CAPABILITY
-# ⚠ THE LEAVES, NOT THE PACKAGE'S RE-EXPORTS. `manifest/providers.py` imports nothing;
-# `registrar.py` imports only `gaps`; `registry.py` imports `data/` and `gaps`. None of them
-# imports `seam/`, so no import here closes a loop back into this package.
+# ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
+# here closes a loop back into this package (`_entry.py` says the same of the entry lookup).
 from ...manifest.providers import provider
-from ...manifest.registrar import MODULE_ENTRIES
-from ...manifest.registry import resolve as prize_row
 from ...queries.inputs import SocialContestInput
+from ._entry import entry_for
+
+_PROVIDER = "sigma_leverage"
 
 
 def _capability(entity: Any, verb: str):
@@ -122,7 +122,7 @@ def _obstacle_of(w: Any, subject: Optional[str], verb: str, fx: Any) -> float:
     ⚠ AND THIS IS REGISTERED AS AN nth SITE IN A FAMILY THE TREE RECORDS AS DISAGREEING, not as a
     single owner arriving: `H-127` carries that, and ED-SC-0033 clause (3) names the proceedings
     subsystem as the owner this defers to."""
-    if subject and subject in getattr(w, "persons", {}):
+    if subject and subject in w.persons:
         have = _capability(w.persons[subject], verb)
         if have is not None:
             return float(have) / 2.0
@@ -141,14 +141,13 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
     nobody chose."""
     fx = w.fixtures
     return SocialContestInput(
-        claimants=tuple(claimants),
         pool=_pool_of(w.persons[claimants[0]], verb, fx),
         ob=_obstacle_of(w, subject, verb, fx),
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
         leverage=0.0)
 
 
-@provider("contest", "sigma_leverage")
+@provider("contest", _PROVIDER)
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
             rng: Optional[random.Random] = None, rung: str = "") -> dict:
@@ -183,19 +182,15 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     which is §8's *the rule lives once* stated for a rule with two legitimate operands."""
     if not claimants:
         return dict(status="PARTY-GAP", why="a contest needs at least one claimant",
-                    module="sigma_leverage")
-    actor = w.persons.get(claimants[0]) if hasattr(w, "persons") else None
-    if actor is None:
+                    module=_PROVIDER)
+    if w.persons.get(claimants[0]) is None:
         return dict(status="PARTY-GAP", why=f"claimant is not a person: {claimants[0]!r}",
-                    module="sigma_leverage")
+                    module=_PROVIDER)
     inp = contest_input(w, claimants, verb=verb, subject=subject)
     if inp.ob > inp.obstacle_refusal_multiple * max(inp.pool, 0):
-        return dict(status="REFUSED", why="S27.4", module="sigma_leverage",
+        return dict(status="REFUSED", why="S27.4", module=_PROVIDER,
                     resolver="d10_sigma", pool=inp.pool, ob=inp.ob)
-    role = (prize_row("contest", prize) or {}).get("module_entry")
-    entry = MODULE_ENTRIES.get(role)
+    entry, refusal = entry_for(prize, _PROVIDER)
     if entry is None:
-        return dict(status="ENGINE-UNAVAILABLE", module="sigma_leverage",
-                    why=f"prize {prize!r} names module entry {role!r}, which MODULE_ENTRIES does not "
-                        f"hold -- the registrar fills it at SeasonDriver construction")
+        return refusal
     return entry.fn(inp, rng)

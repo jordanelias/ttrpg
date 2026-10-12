@@ -19,20 +19,9 @@ process, give one result (module-level state surviving between calls makes the s
 """
 from __future__ import annotations
 
-import subprocess
-import sys
-
-from ..data import files
-from ..manifest.registry import resolve
-from engine.substrate import composition
+from ._fresh_process import entry_target, probe
 
 _PRIZE = "the body"
-
-
-def _entry_target() -> tuple:
-    role = (resolve("contest", _PRIZE) or {}).get("module_entry")
-    assert role, f"the prize row {_PRIZE!r} names no `module_entry:`; the entry this test is about is gone"
-    return role, composition.ROLES[role]["target"]
 
 
 _PROBE = """
@@ -64,17 +53,9 @@ print(repr((loaded, out, oracle)))
 """
 
 
-def _probe(target: str):
-    root = str(files.REPO_ROOT)
-    proc = subprocess.run([sys.executable, "-c", _PROBE.format(root=root, target=target)],
-                          capture_output=True, text=True, timeout=300, cwd=root)
-    assert proc.returncode == 0, proc.stderr[-3000:]
-    return eval(proc.stdout.strip().splitlines()[-1])     # our own probe's repr
-
-
 def test_the_combat_entry_fights_a_hand_built_record_as_the_engine_does_and_loads_nothing_of_the_host():
-    role, target = _entry_target()
-    loaded, out, oracle = _probe(target)
+    role, target = entry_target(_PRIZE)
+    loaded, out, oracle = probe(_PROBE, target, 300)
     module_dir = target.split(":", 1)[0].rsplit(".", 1)[0].replace(".", "/")
     allowed = {"engine/__init__.py", "engine/season/__init__.py", "engine/season/queries/__init__.py",
                "engine/season/queries/inputs.py", "engine/substrate/__init__.py",

@@ -1,13 +1,13 @@
 """THE IN-SIDE OF THE PERSONAL-COMBAT SEAM — the seam CALLS the engine that owns the prize.
 
-PLAN POSITION `31b` (A-25) SPLIT THIS MODULE AS `31a` SPLIT `sigma.py`. What stays here is the HOST: the
-input builder `combat_input` (`World` -> `queries/inputs.py::PersonalCombatInput`: the two parties, each
-one's derived `end`, the wound quantities to lift) and the adapter `resolve`, which keeps the PARTY-GAP
-refusals and the seed, calls the module entry the prize row names (`module_entry:`, registered in
-`manifest.MODULE_ENTRIES` from its composition row) and interprets what comes back -- the winner, the
-surrender, the bouts, the wound-state refusal -- and returns the scene's trace beside them (PC-06 M-1). The fight itself is `modules/combat/fight.py`, reached by
-string; it, not this module, constructs the `Combatant`s and calls `wrapper.fight`. Below, "this module
-constructs" and "the seam holds the Combatants" read as THE ENTRY's since `31b`.
+This module is the HOST (plan position `31b`, A-25): the input builder `combat_input` (`World` ->
+`queries/inputs.py::PersonalCombatInput`: the two parties, each one's derived `end`, the wound
+quantities to lift) and the adapter `resolve`, which keeps the PARTY-GAP refusals and the seed, calls
+the module entry the prize row names (`module_entry:`, registered in `manifest.MODULE_ENTRIES` from its
+composition row) and interprets what comes back -- the winner, the surrender, the bouts, the wound-state
+refusal -- and returns the scene's trace beside them (PC-06 M-1). The fight itself is
+`modules/combat/fight.py`, reached by string; it, not this module, constructs the `Combatant`s and calls
+`wrapper.fight`. Below, "this module constructs" and "the seam holds the Combatants" mean THE ENTRY's.
 
 ⚠ JORDAN, 2026-09-02: *"kill / wound points towards a seam that should be calling in the personal
 combat system."* That is a ruling, and it overrides the scope note that stood in `contest()` —
@@ -28,9 +28,9 @@ engine with a deterministic RNG, and returns what the engine says. Every combat 
 the engine (`modules/combat/` since `31b`), which this chain may read and may not edit.
 
 ⚠ THE LOADER: `engine/substrate/pc_engine.py`, the one path seam into the engine, which the module
-entry calls. This module reads it only for `engine()`, the availability probe its tests skip on; it translates that
-leaf's raise into a named reason, and the adapter's typed refusal `ENGINE-UNAVAILABLE` is now the
-unregistered entry's (no driver constructed in the process), as in `sigma.py`.
+entry calls. This module reads it only for `engine()`, the availability probe its tests skip on, and
+`load_error()`, the leaf's raise translated into a named reason. The adapter's typed refusal
+`ENGINE-UNAVAILABLE` is the unregistered entry's (no driver constructed in the process), as in `sigma.py`.
 ⚠ THE PARTY DISCIPLINE FOLLOWS `combat_bridge.py` AS PRECEDENT RATHER THAN REINVENTING IT (§0:
 *answered by precedent — the tree has already decided this shape somewhere else*). Its discipline is the part worth copying:
 derive EXACTLY ONE field from something the actor genuinely has, leave every other field at the
@@ -81,39 +81,36 @@ from typing import Any, Optional
 from ...data.rosters import WOUND_QUANTITIES
 from ...decision import body_band_penalty
 from ...gaps import Unspecified
-# ⚠ THE LEAVES, NOT THE PACKAGE'S RE-EXPORTS. `manifest/providers.py` imports nothing;
-# `registrar.py` imports only `gaps`; `registry.py` imports `data/` and `gaps`. None of them
-# imports `seam/`, so no import here closes a loop back into this package.
+# ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
+# here closes a loop back into this package (`_entry.py` says the same of the entry lookup).
 from ...manifest.providers import provider
-from ...manifest.registrar import MODULE_ENTRIES
-from ...manifest.registry import resolve as prize_row
 from ...queries.inputs import PersonalCombatInput
 from ...state.ids import H
+from ._entry import entry_for
 
-_LOADED: Optional[tuple] = None
-_LOAD_ERROR: str = ""
+_PROVIDER = "personal_combat"
+
+
+def _probe() -> tuple:
+    """`(PCEngine, "")` or `(None, reason)`: the substrate leaf's RAISE, translated to a named reason.
+    `pc_engine.load()` caches a success itself; the import is deferred so the tracer still imports
+    where the engine tree is absent."""
+    try:
+        from engine.substrate import pc_engine
+        return pc_engine.load(), ""         # a PCEngine: (wrapper, combatant) BY NAME
+    except Exception as e:                  # a real load failure is a NAMED gap
+        return None, f"{type(e).__name__}: {e}"
 
 
 def engine() -> Optional[tuple]:
-    """`(wrapper, combatant)` or `None`: the substrate leaf's RAISE, translated to a named reason
-    (`load_error()`). Loaded on FIRST USE by the one path seam, engine/substrate/pc_engine.py; the
-    import is deferred so the tracer still imports where the engine tree is absent. Since `31b` it is
-    an AVAILABILITY PROBE only -- the adapter below never calls the engine through it."""
-    global _LOADED, _LOAD_ERROR
-    if _LOADED is not None or _LOAD_ERROR:
-        return _LOADED
-    try:
-        from engine.substrate import pc_engine
-        _LOADED = pc_engine.load()          # a PCEngine: (wrapper, combatant) BY NAME — the order this seam always used
-        return _LOADED
-    except Exception as e:                  # a real load failure is a NAMED gap
-        _LOAD_ERROR = f"{type(e).__name__}: {e}"
-        return None
+    """`(wrapper, combatant)` or `None` when the engine cannot load (`load_error()` says why). An
+    AVAILABILITY PROBE only -- the adapter below never calls the engine through it."""
+    return _probe()[0]
 
 
 def load_error() -> str:
-    engine()
-    return _LOAD_ERROR
+    """Why `engine()` is `None`, as `ExceptionType: message`; `""` when it loads."""
+    return _probe()[1]
 
 
 def surrender_of(trace: list) -> Optional[dict]:
@@ -154,7 +151,32 @@ def combat_input(w: Any, claimants: list) -> PersonalCombatInput:
         wound_quantities=tuple(WOUND_QUANTITIES))
 
 
-@provider("contest", "personal_combat")
+# ⚠ THE OUTCOME'S SEVERITY, READ OFF THE COMBATANTS THE SCENE JUST FOUGHT WITH (Jordan
+# 2026-09-03). No number is invented and no rule is re-implemented: every field below is a
+# property the engine's own `WoundTracker` computes, on the objects the module entry constructed
+# and lifted before `fight()` collapsed the scene to an int (`modules/combat/fight.py`).
+def _wound_state(lifted: Optional[dict]) -> dict:
+    if lifted is None:                  # ID-5 polarity: absence REFUSES, it does not default
+        return dict(available=False)
+    # ⚠ THE FIELD LIST IS `rosters.yaml: wound_quantities`, NOT A LITERAL HERE (`H-98`, plan
+    # position `8`) -- the same list `combat_band_edges` is validated against at load, so an
+    # edge cannot name a quantity this does not lift. A member the tracker does not carry
+    # REFUSES by name; skipping it would hand `combat_degree` a dict that lacks it.
+    out = dict(available=True)
+    for q in WOUND_QUANTITIES:
+        if q not in lifted:
+            raise Unspecified(
+                f"`wound_quantities` lists {q!r} and the engine's WoundTracker has no such "
+                f"field", "S39.4/H-98", needs=f"a `WoundTracker.{q}`, or delete it from "
+                "rosters.yaml: wound_quantities and from every edge that reads it",
+                law="Jordan 2026-09-03 -- the degree is READ OFF THE SCENE; a quantity the "
+                    "scene does not carry cannot be lifted")
+        v = lifted[q]
+        out[q] = v if isinstance(v, bool) else int(v)
+    return out
+
+
+@provider("contest", _PROVIDER)
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
             rng: Optional[random.Random] = None, rung: str = "") -> dict:
@@ -186,54 +208,28 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         # `combat_bridge.derive_parties` returns None on a derivation gap rather than faking a
         # side; the same rule, stated once more because the shape of the gap is different here.
         return dict(status="PARTY-GAP", why=f"personal combat needs two parties; got {len(claimants)}",
-                    module="personal_combat")
+                    module=_PROVIDER)
     a_id, b_id = claimants[0], claimants[1]
     pa, pb = w.persons.get(a_id), w.persons.get(b_id)
     if pa is None or pb is None:
         return dict(status="PARTY-GAP", why=f"claimant not a person: {a_id!r} / {b_id!r}",
-                    module="personal_combat")
+                    module=_PROVIDER)
     inp = combat_input(w, claimants)
     # `H` returns a blake2b hexdigest (`state/ids.py`), so 16 is the RADIX that parses it back to
     # an int for the RNG -- structural, not a game value. Pre-existing; surfaced because step 8's
     # `S.H(...)` -> `H(...)` lift rewrote the line and the gate scores added lines.
     # [JUSTIFIED: radix for parsing H()'s hex digest, not a mechanical constant]
     seed = int(H(w.world_seed, w.tick, a_id, f"contest:{prize}:{causes[0] if causes else ''}"), 16)
-    role = (prize_row("contest", prize) or {}).get("module_entry")
-    entry = MODULE_ENTRIES.get(role)
+    entry, refusal = entry_for(prize, _PROVIDER)
     if entry is None:
-        return dict(status="ENGINE-UNAVAILABLE", module="personal_combat",
-                    why=f"prize {prize!r} names module entry {role!r}, which MODULE_ENTRIES does not "
-                        f"hold -- the registrar fills it at SeasonDriver construction")
+        return refusal
     got = entry.fn(inp, random.Random(seed))
     result, trace = got["result"], got["trace"]
     winner = a_id if result == 1 else (b_id if result == -1 else None)
 
-    # ⚠ THE OUTCOME'S SEVERITY, READ OFF THE COMBATANTS THE SCENE JUST FOUGHT WITH (Jordan
-    # 2026-09-03). No number is invented and no rule is re-implemented: every field below is a
-    # property the engine's own `WoundTracker` computes, on the objects the module entry constructed
-    # and lifted before `fight()` collapsed the scene to an int (`modules/combat/fight.py`).
-    def _state(lifted: Optional[dict]) -> dict:
-        if lifted is None:                  # ID-5 polarity: absence REFUSES, it does not default
-            return dict(available=False)
-        # ⚠ THE FIELD LIST IS `rosters.yaml: wound_quantities`, NOT A LITERAL HERE (`H-98`, plan
-        # position `8`) -- the same list `combat_band_edges` is validated against at load, so an
-        # edge cannot name a quantity this does not lift. A member the tracker does not carry
-        # REFUSES by name; skipping it would hand `combat_degree` a dict that lacks it.
-        out = dict(available=True)
-        for q in WOUND_QUANTITIES:
-            if q not in lifted:
-                raise Unspecified(
-                    f"`wound_quantities` lists {q!r} and the engine's WoundTracker has no such "
-                    f"field", "S39.4/H-98", needs=f"a `WoundTracker.{q}`, or delete it from "
-                    "rosters.yaml: wound_quantities and from every edge that reads it",
-                    law="Jordan 2026-09-03 -- the degree is READ OFF THE SCENE; a quantity the "
-                        "scene does not carry cannot be lifted")
-            v = lifted[q]
-            out[q] = v if isinstance(v, bool) else int(v)
-        return out
-    _wounds = {a_id: _state(got["wound_state"][a_id]), b_id: _state(got["wound_state"][b_id])}
+    _wounds = {a_id: _wound_state(got["wound_state"][a_id]), b_id: _wound_state(got["wound_state"][b_id])}
 
-    return dict(status="RESOLVED", module="personal_combat", resolver="d_sigma",
+    return dict(status="RESOLVED", module=_PROVIDER, resolver="d_sigma",
                 result=result, winner=winner,
                 # THE DEGREE SOURCE. A caller reads severity from here; it does not map it from
                 # `winner`, which carries none. `H-98`'s remaining half is which wound counts sit

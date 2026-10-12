@@ -81,12 +81,11 @@ _TYPE_TO_ROW = {
 }
 
 def _load_geography():
-    """The geography file, READ PER CALL (plan position `31c`, AX-4). It was a module-level `_cache`
-    that every later lookup in the process shared, so swapping it moved every later lookup; a caller
-    wanting one read across several lookups passes the result in (`terrain_row_for_territory`'s
+    """The geography file, READ PER CALL (plan position `31c`, AX-4): no state survives between lookups.
+    A caller wanting one read across several lookups passes the result in (`terrain_row_for_territory`'s
     `geography=`), and the season's one lookup per field reads it once."""
     with open(_GEOGRAPHY_YAML, 'r', encoding='utf-8') as f:
-        return yaml.safe_load(f)
+        return yaml.load(f, Loader=getattr(yaml, 'CSafeLoader', yaml.SafeLoader))
 
 
 

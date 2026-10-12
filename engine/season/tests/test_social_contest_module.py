@@ -16,12 +16,9 @@ imports the module by name -- `engine/` never imports module code
 """
 from __future__ import annotations
 
-import subprocess
-import sys
-
-from ..data import files
 from ..manifest.registry import roster_map
 from engine.substrate import composition
+from ._fresh_process import probe
 
 
 def _entry_targets() -> list:
@@ -46,8 +43,7 @@ from engine.season.queries.inputs import SocialContestInput
 from engine.dice_engine.sigma_leverage import net_boost, roll_net
 out = []
 for lev in (0.0, 1.5):
-    inp = SocialContestInput(claimants=("p_a", "p_b"), pool=4, ob=2.0,
-                             obstacle_refusal_multiple=3.0, leverage=lev)
+    inp = SocialContestInput(pool=4, ob=2.0, obstacle_refusal_multiple=3.0, leverage=lev)
     got = entry(inp, random.Random(7))
     again = entry(inp, random.Random(7))
     want = roll_net(4, rng=random.Random(7)) + net_boost(lev, 4)
@@ -56,20 +52,12 @@ print(repr((loaded, out)))
 """
 
 
-def _probe(target: str):
-    root = str(files.REPO_ROOT)
-    proc = subprocess.run([sys.executable, "-c", _PROBE.format(root=root, target=target)],
-                          capture_output=True, text=True, timeout=300, cwd=root)
-    assert proc.returncode == 0, proc.stderr[-3000:]
-    return eval(proc.stdout.strip().splitlines()[-1])     # our own probe's repr
-
-
 def test_the_social_contest_entry_resolves_a_hand_built_record_importing_only_the_dice_engine_and_the_record():
     targets = _entry_targets()
     assert targets, "no prize row names a `module_entry:`; the module entry this test is about is gone"
     checked = 0
     for role, target in targets:
-        loaded, out = _probe(target)
+        loaded, out = probe(_PROBE, target, 300)
         module_dir = target.split(":", 1)[0].rsplit(".", 1)[0].replace(".", "/")
         allowed_files = {"engine/__init__.py", "engine/season/__init__.py",
                          "engine/season/queries/__init__.py", "engine/season/queries/inputs.py"}

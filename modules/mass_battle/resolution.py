@@ -11,8 +11,8 @@ __all__ = ['roll_pool', 'roll_pool_fractional', 'compute_degree', '_morale_sigma
 # Observe-only. Records per-mechanic internals (melee contest, volley, per-tick markers) inside a
 # `tracing()` block. Outside one, trace_event is a no-op -> ENGINE BYTE-EXACT. The trace never feeds
 # back into any mechanic, so ON and OFF produce identical outcomes. PER-CALL STATE (plan position `31c`,
-# AX-4): the buffer was a module global a `start_trace()` reset and nothing scoped; it is now the list a
-# `tracing()` block opens and yields, held in a context variable for the block's extent only.
+# AX-4): the buffer is the list a `tracing()` block opens and yields, held in a context variable for
+# the block's extent only.
 _SCOPED_TRACE = contextvars.ContextVar('mass_battle_trace', default=None)
 @contextlib.contextmanager
 def tracing():

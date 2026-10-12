@@ -105,7 +105,7 @@ _LADDER_ERROR: str = ""
 def degree_ladder() -> Optional[tuple]:
     """`(degree_from_net, DEGREE_LABEL)` from the tree's owner, or `None` with a NAMED reason.
 
-    Deferred and by path, which is `combat_seam.engine()`'s shape and for its reason: the tracer
+    Deferred and by path, which is `seam/wrappers/combat.py::engine()`'s shape and for its reason: the tracer
     still runs where the engine tree is absent, degrading to a named gap rather than an
     ImportError at import. The repo root carries no top-level modules, so putting it on
     `sys.path` shadows none of this directory's bare-name imports."""

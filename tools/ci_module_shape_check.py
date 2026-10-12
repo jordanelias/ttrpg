@@ -53,8 +53,10 @@ RUNTIME_ROOTS = (
     *(top for top, under in ci_common.MODULE_CODE_ROOTS if under == '*'),
 )
 
-# The INFO tier's scope: the combat engine, both halves of the `31b` split.
-COMBAT_ENGINE_PREFIXES = ('systems/combat/combat_engine_v1/', 'modules/combat/')
+# The INFO tier's scope: the combat engine, both halves of the `31b` split (the `modules/` half is
+# read from the owner of which modules ship their own export).
+COMBAT_ENGINE_PREFIXES = ('systems/combat/combat_engine_v1/',
+                          *(f'modules/{n}/' for n in ci_common.MODULES_WITH_OWN_EXPORT))
 
 EXCLUDE_PARTS = ('tests', 'workbench', 'archives', 'deprecated', '__pycache__')
 
