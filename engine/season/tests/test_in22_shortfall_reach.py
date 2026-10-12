@@ -388,6 +388,7 @@ def test_in22_live_arm_the_hunger_bites_and_the_claim_still_reaches_the_governor
     control = _one_season()
     assert CONTROL_ARM == 0, "the shipped `body_step` is no longer the control; `H-125` disagrees"
     assert control.persons[S.POPULACE].body == DEFAULT_FIXTURES.get("condition_scale")
+    was = control.persons[S.POPULACE].body
     checked, fell, died = 0, 0, 0
     for step in LIVE_ARMS:
         w = _armed(step)
@@ -396,7 +397,6 @@ def test_in22_live_arm_the_hunger_bites_and_the_claim_still_reaches_the_governor
         assert recorded, "MATTER recorded no shortfall; nothing below is observed"
         lost = step * sum(recorded.values())
         cohort = w.persons.get(S.POPULACE)
-        was = control.persons[S.POPULACE].body
         if was - lost > 0:
             assert cohort is not None and cohort.body == was - lost, (step, lost)
             fell += 1
@@ -444,8 +444,8 @@ def test_in22_live_arm_control_the_zero_arm_is_the_unarmed_season_and_the_arm_al
     assert CONTROL_ARM == 0, "the shipped `body_step` is no longer the control; `H-125` disagrees"
     zero = _armed(0)
     assert zero.content_hash() == control.content_hash()
-    # The shipped default IS 0, so the line above cannot fail alone; these observe MATTER's bodies
-    # pass writing nothing at the control, whatever the default is.
+    # The shipped default is 0, so the line above cannot fail alone; this observes MATTER's bodies
+    # pass writing nothing at the control.
     assert not [e for e in zero.log if e.kind in ("body.changed", "person.died")]
     armed = {a: _armed(a) for a in LIVE_ARMS}
     assert LIVE_ARMS and all([e for e in w.log if e.kind == "body.changed"] for w in armed.values())
