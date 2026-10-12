@@ -217,16 +217,28 @@ print(repr((role, construct())))
 def test_a_prize_entry_bound_to_a_verb_whose_prize_does_not_name_it_refuses_naming_it():
     """`31a`, agreement fact 3: the composition row's `verb:` contests a prize whose row does not
     name the entry, so the verb the entry is bound to can never reach it. The verb is chosen from the
-    tables -- a contested verb whose prize row names another entry or none -- not named."""
+    tables -- a contested verb whose prize row names another entry or none -- not named.
+
+    Since `31c` every contested verb is some entry row's `verb:`, so the chosen verb is already bound;
+    rebinding the role to it alone would trip the registrar's one-entry-per-verb refusal first and test
+    that instead. So the two rows SWAP verbs: each is then bound to a verb whose prize names the other,
+    and construction refuses fact 3 for whichever prize row it checks first -- naming that pair."""
     got = _run(_PRIZE_ENTRIES + """
 role = named[0]
 verb = sorted(v for v, r in VERB_TABLE.items() if r.contests
               and (R.resolve("contest", r.contests) or {}).get("module_entry") != role)[0]
+own = composition.ROLES[role].get("verb")
+other = [k for k, row in composition.ROLES.items() if k != role and row.get("verb") == verb]
+for k in other:
+    composition.ROLES[k] = dict(composition.ROLES[k], verb=own)
 composition.ROLES[role] = dict(composition.ROLES[role], verb=verb)
-print(repr((role, verb, construct())))
+print(repr((role, verb, other, own, construct())))
 """)
-    role, verb, refusal = got
-    _assert_refused(refusal, repr(role), repr(verb), "no prize row among them")
+    role, verb, other, own, refusal = got
+    assert refusal is not None and "no prize row among them" in refusal[1], refusal
+    pairs = [(role, verb)] + [(k, own) for k in other]
+    assert any(repr(r) in refusal[1] and repr(v) in refusal[1] for r, v in pairs), (
+        f"the refusal names none of the swapped pairs {pairs}: {refusal}")
 
 
 def test_a_verb_call_row_naming_no_verb_refuses_naming_it():
