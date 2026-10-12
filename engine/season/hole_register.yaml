@@ -2357,7 +2357,7 @@ rows:
     unblocks:  "`H-98` being answered off a surface that does not contradict the scene it describes"
     cite: >-
       MEASURED 2026-09-04. A FIRST STATEMENT SAID THE DESYNCHRONISATION WAS UNDECLARED ANYWHERE
-      AND IS RETRACTED - `systems/combat/combat_engine_v1/config.py (line 295)`, at the constant's own definition site, declares it -
+      AND IS RETRACTED - `modules/combat/config.py (line 295)` (`systems/combat/combat_engine_v1/` until `31b`), at the constant's own definition site, declares it -
       "with no in-model event corresponding to the reversal". The narrowed claim that survives - the SEAM
       repeats none of that warning while naming `wound_state` the degree source and returning
       `winner` beside it.
