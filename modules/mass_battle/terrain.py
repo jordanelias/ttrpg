@@ -210,6 +210,59 @@ def terrain_row_for_territory(tid, fort_level=0, river_crossing=False, geography
     return _TYPE_TO_ROW.get(best_type, OPEN_FLAT)
 
 
+def _segments_cross(p1, p2, q1, q2):
+    """True when segment `p1-p2` and segment `q1-q2` cross at a point interior to both -- the standard
+    orientation test. An endpoint lying ON the other segment, or a collinear overlap, is NOT a crossing
+    (strict signs): a march that starts or ends on the river's own line has not crossed it."""
+    def orient(a, b, c):
+        return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])
+    return (orient(q1, q2, p1) * orient(q1, q2, p2) < 0
+            and orient(p1, p2, q1) * orient(p1, p2, q2) < 0)
+
+
+def river_crossed(origin, tid, geography=None):
+    """Did a march from territory `origin` to the field at territory `tid` cross a river? (MB-05r)
+
+    THE TEST: the straight line between the two territories' `anchor`s crosses a segment of any
+    `water: rivers:` polyline of the geography file. The anchor is the engagement point the polygon
+    lookup above already uses for the field, so the two reads share one convention (A.9's row and the
+    crossing are decided at the same point). `False` -- no crossing, the polygon row stands -- for a
+    `None` origin (the host found no one origin), the same territory at both ends, an unknown
+    territory or one with no anchor.
+
+    SIMPLIFICATIONS, disclosed rather than hidden. (1) THE ROUTE IS THE STRAIGHT LINE: the geography
+    file authors no roads ("Roads are NOT authored: A*-cached over terrain-cost field per PP-709
+    §2.4") and nothing in the engine computes that path, so the line between anchors is the only route
+    there is to test. (2) TERRITORY RESOLUTION: a march inside one territory crosses nothing, whatever
+    its settlements' sides of a river; and an anchor lying ON a river -- T1's is a vertex of
+    `river-valoris` -- touches it and crosses nothing (`_segments_cross`). (3) LAKES ARE NOT READ: A.9's
+    row is a river crossing, and `water: lakes:` are ellipses no march is modelled as fording.
+
+    ⚠ A BRIDGE DOES NOT CANCEL THE CROSSING [ASSUMPTION; medium; Jordan to correct]. The data exists
+    (`bridges:`, point features on `river-valoris`'s own vertices, each naming the river it `crosses`)
+    and nothing reads it. The design intent does say a bridged route escapes the penalty
+    (`march_layer_v30.md` §4.2: "river | Per `bridges` table; crossing penalty without bridge"), but a
+    straight line between anchors passes through a point-feature bridge only by coincidence, so honouring
+    it needs either a route model (unbuilt, above) or a snapping distance no source states -- an invented
+    number. THE REVERT, if Jordan states the other option: read `bridges:` here and answer `False` for a
+    crossing of the river a bridge `crosses`, under whichever route rule he names.
+
+    `geography`: the parsed file, as `terrain_row_for_territory` takes it; `None` reads it for this call."""
+    if origin is None or tid is None or origin == tid:
+        return False
+    geo = geography if geography is not None else _load_geography()
+    provinces = geo.get('provinces', {})
+    a = (provinces.get(origin) or {}).get('anchor')
+    b = (provinces.get(tid) or {}).get('anchor')
+    if a is None or b is None:
+        return False
+    for river in (geo.get('water') or {}).get('rivers', []):
+        v = river.get('vertices') or []
+        if any(_segments_cross(a, b, v[i], v[i + 1]) for i in range(len(v) - 1)):
+            return True
+    return False
+
+
 #: A.9's Walls row, the one number it gives: the DEFENDER's damage reduction rises by this much. It
 #: lands on the engine's own `Unit.dr`, the quantity melee already subtracts from damage
 #: (`orchestration.py`: `DAMAGE_BY_DEGREE[deg](power) - eff_dr`). Applying A.9's +3 1:1 to that unit

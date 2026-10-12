@@ -14,7 +14,8 @@ computing true intersection area; disclosed in `terrain.py`'s own docstring, not
 ("Cavalry -> Standard"), WALLS' defender DR (plan position `20-iv`), and, since MB-05, UPHILL's and
 RIVER_CROSSING's dice (plus the crossing's speed step); NARROW_PASS is identified and not applied, and
 `_run_and_grade`'s own docstring says why that changes nothing on a one-subunit field. RIVER_CROSSING
-comes only from the caller's `river_crossing` signal, which no season caller derives yet.
+comes only from the caller's `river_crossing` signal, which `resolve_field` derives since MB-05r
+(`river_crossed`, from the record's `origin`).
 
 [CORRECTED, adversarial review 2026-09-27] `terrain_row_for_territory` no longer reads fortification
 from the geography YAML — it takes the live `fort_level` as a caller-supplied argument (see its own
@@ -25,7 +26,7 @@ cares about fortification now passes `fort_level` explicitly rather than reading
 import pytest
 
 from modules.mass_battle.terrain import (
-    terrain_row_for_territory, _point_in_polygon, _load_geography, _TYPE_TO_ROW,
+    terrain_row_for_territory, river_crossed, _segments_cross, _point_in_polygon, _load_geography, _TYPE_TO_ROW,
     NARROW_PASS, UPHILL, FOREST_BROKEN, WALLS, OPEN_FLAT, RIVER_CROSSING,
 )
 
@@ -121,6 +122,64 @@ def test_river_crossing_comes_only_from_the_callers_signal_and_walls_outrank_it(
     for tid in geo['provinces']:
         assert (terrain_row_for_territory(tid, fort_level=0, river_crossing=False)
                 == terrain_row_for_territory(tid, fort_level=0)), f"{tid}: the default signal moved the row"
+
+
+def test_a_river_crossing_outranks_an_uphill_field():
+    """MB-05r's ruling on the one-row table (`terrain_row_for_territory`'s docstring): T9 and T4 are
+    UPHILL by polygon, and a crossing makes each RIVER_CROSSING -- the field loses UPHILL's dice rather
+    than stacking them. Jordan stating the other option fails this test, which is the point of it."""
+    for tid in ('T9', 'T4'):
+        assert terrain_row_for_territory(tid, fort_level=0) == UPHILL, f"{tid}'s polygon row moved"
+        assert terrain_row_for_territory(tid, fort_level=0, river_crossing=True) == RIVER_CROSSING
+
+
+# ─── MB-05r: the crossing, derived from the march's origin ──────────────────────────────────────
+
+@pytest.mark.parametrize('origin, tid, crossed', [
+    ('T9', 'T3', True),    # west of the Valoris to east of it (anchors [1100,580] -> [1380,380])
+    ('T3', 'T9', True),    # the same line walked the other way
+    ('T14', 'T9', False),  # both west of the river
+    ('T16', 'T3', False),  # both east of it
+    ('T2', 'T1', False),   # T1's anchor IS a vertex of river-valoris: touching is not crossing
+    ('T9', 'T9', False),   # a march inside one territory crosses nothing at this resolution
+    (None, 'T3', False),   # no origin: the host found none -- the default
+    ('T9', None, False),
+    ('T-does-not-exist', 'T3', False),
+])
+def test_river_crossed_reads_the_line_between_the_two_anchors(origin, tid, crossed):
+    assert river_crossed(origin, tid) is crossed
+
+
+def test_segments_cross_is_strict():
+    """The orientation test counts a crossing interior to both segments only: an endpoint on the other
+    segment, or a collinear overlap, is not one -- so a field or an origin whose anchor lies on a river
+    has not crossed it."""
+    assert _segments_cross((0, -5), (0, 5), (-5, 0), (5, 0))
+    assert not _segments_cross((0, 0), (0, 5), (-5, 0), (5, 0))     # endpoint on the river
+    assert not _segments_cross((-9, 0), (-6, 0), (-5, 0), (5, 0))   # collinear, apart
+    assert not _segments_cross((-3, 0), (3, 0), (-5, 0), (5, 0))    # collinear overlap
+
+
+def test_a_bridge_does_not_cancel_the_crossing():
+    """MB-05r's bridge ruling, [ASSUMPTION; medium; Jordan to correct] (`river_crossed`'s docstring):
+    `bridges:` is not read. A synthetic map whose march line passes EXACTLY through a bridge on the
+    river it crosses still crosses it, and removing every bridge changes no answer over the real
+    map's 17 x 17 territory pairs. The revert -- read `bridges:` -- fails the first assertion."""
+    geo = {'provinces': {'W': {'anchor': [-5, 0]}, 'E': {'anchor': [5, 0]}},
+           'water': {'rivers': [{'id': 'r', 'vertices': [[0, -10], [0, 10]]}]},
+           'bridges': [{'id': 'b', 'coords': [0, 0], 'crosses': 'r'}]}
+    assert river_crossed('W', 'E', geography=geo) is True
+    real = _load_geography()
+    assert real.get('bridges'), "the geography file no longer authors bridges; the ruling has no subject"
+    bare = {k: v for k, v in real.items() if k != 'bridges'}
+    checked = crossings = 0
+    for a in real['provinces']:
+        for b in real['provinces']:
+            got = river_crossed(a, b, geography=real)
+            assert got == river_crossed(a, b, geography=bare), f"{a}->{b}: a bridge changed the answer"
+            crossings += got
+            checked += 1
+    assert checked == 17 * 17 and crossings >= 1, (checked, crossings)
 
 
 # ─── real committed provinces, pinned to their actual row (not just "some valid row") ────────────
@@ -351,12 +410,13 @@ def test_a_dice_row_resolves_differently_from_open_flat_and_identically_with_its
 
 
 def test_resolve_field_carries_the_river_crossing_signal_to_the_engine():
-    """MB-05: RIVER_CROSSING's season-side test, at `resolve_field` -- the season provider cannot pass
-    the signal (it is handed the target rung, not the march's origin), so a provider test could only
-    observe `False`. The provider's own fixture sides (the 2-man Crown army mustered at `set_s_014`
-    against the Church at `set_s_036`), fought over T1 (OPEN_FLAT by polygon) with and without the
-    signal: they differ on at least one of 16 seeds (3, measured 2026-10-08, not asserted), and the
-    defenders never end with fewer survivors."""
+    """MB-05, re-pinned at MB-05r: RIVER_CROSSING at `resolve_field`, now DERIVED from the record's
+    `origin`. The provider's own fixture sides (the 2-man Crown army mustered at `set_s_014` against
+    the Church at `set_s_036`), fought over T3 (OPEN_FLAT by polygon) marched on from T9, across the
+    Valoris, and with no origin: they differ on at least one of 16 seeds, and the defenders never end
+    with fewer survivors. (Before MB-05r the same pair was fought over T1 with the old boolean set and
+    unset -- 3 seeds of 16 differed, 2026-10-08; T1's anchor lies on the river, so no origin crosses
+    to it, and the field moved to T3, the same OPEN_FLAT row.)"""
     import random
     from engine.season.harness.populated import build_realm
     from dataclasses import replace
@@ -367,17 +427,18 @@ def test_resolve_field_carries_the_river_crossing_signal_to_the_engine():
     def record(**facts):
         # `resolve_field` takes the host's record since plan position `31c`; the two sides are the
         # host builder's (`field_input`), the place is this test's.
-        return replace(field_input(w, att, dfn, 'r_valoria'), territory='T1', fort_level=0.0,
+        return replace(field_input(w, att, dfn, 'r_valoria'), territory='T3', fort_level=0.0,
                        stances=(0.0, 0.0), walls_dr=None, **facts)
 
     w = build_realm(0)
     att = world_q.mustered(w, 'set_s_014', 'fac_crown')
     dfn = world_q.mustered(w, 'set_s_036', 'fac_church_of_solmund')
     assert att and dfn, "the provider's fixture sides no longer muster"
+    assert terrain_row_for_territory('T3', fort_level=0) == OPEN_FLAT, "T3's polygon row moved"
     checked = differs = 0
     for seed in range(16):
-        crossed = resolve_field(record(river_crossing=True), rng=random.Random(seed))
-        dry = resolve_field(record(river_crossing=False), rng=random.Random(seed))
+        crossed = resolve_field(record(origin='T9'), rng=random.Random(seed))
+        dry = resolve_field(record(origin=None), rng=random.Random(seed))
         assert crossed['defender_size_pct'] >= dry['defender_size_pct'], (seed, crossed, dry)
         differs += crossed != dry
         checked += 1

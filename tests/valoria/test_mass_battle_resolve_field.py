@@ -27,12 +27,13 @@ from engine.season.seam.wrappers.mass_battle import field_input
 
 
 def _record(w, side_a, side_b, *, territory=None, fort_level=0.0, stance_a=0.0, stance_b=0.0,
-            walls_dr=None, river_crossing=False):
+            walls_dr=None, origin=None):
     """The record `resolve_field` takes since plan position `31c`: the host builder's (`field_input`) for
     the two sides -- the weight projection is the host's -- with the fight's facts set as this test
-    states them. The keyword defaults are `resolve_field`'s own before the split."""
+    states them. The keyword defaults are `resolve_field`'s own before the split (`origin` `None`, no
+    crossing, since MB-05r replaced the always-`False` `river_crossing`)."""
     return replace(field_input(w, side_a, side_b, "r_valoria"), territory=territory, fort_level=fort_level,
-                   stances=(stance_a, stance_b), walls_dr=walls_dr, river_crossing=river_crossing)
+                   stances=(stance_a, stance_b), walls_dr=walls_dr, origin=origin)
 
 
 def test_resolve_field_sums_weight_per_side_into_troops_not_power(monkeypatch):

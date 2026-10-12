@@ -68,6 +68,7 @@ from modules.mass_battle.orchestration import run_battle
 from modules.mass_battle.terrain import (FOREST_BROKEN, RIVER_CROSSING, RIVER_CROSSING_OFF_D,
                                              SPEED_TIERS, UPHILL, UPHILL_ATTACKER_OFF_D,
                                              UPHILL_DEFENDER_DEF_D, WALLS, WALLS_DEFENDER_DR,
+                                             _load_geography, river_crossed,
                                              terrain_row_for_territory)
 
 #: Size-ratio -> degree thresholds. CARRIED OVER VERBATIM from the pre-port adapter so that the
@@ -116,7 +117,7 @@ def _round_half_up(x):
     return math.floor(x + 0.5)
 
 
-def _morale_start(stance):
+def _morale_start(stance, loyalty=0.0, gain=0):
     """A side's starting morale from its members' mean stance toward their own faction -- plan
     position `20-iv`, d.1 (`ED-MB-0067`: *faction state sets the morale baseline*) carried onto the
     season path after `29b` deleted the `Faction.Sta` it read.
@@ -141,11 +142,18 @@ def _morale_start(stance):
     morale-start is `5 - (morale_w + grudge_w)` (3 at the defaults 1/1), and at weight 0 the grudge still
     moves it. The control above holds for a cross-faction field only.
 
-    NOT TAKEN: the build-time loyalty rows (`data/cast.py::stance_from_loyalty`). They name the
-    faction's LEADER, a person, not the faction, so reading them would merge two referents the
-    morale writer keeps apart; whether ideology should also stiffen an army is a separate question
-    this function does not answer."""
-    return max(_MORALE_FLOOR, min(_MORALE_CEIL, _round_half_up(_MORALE_START_BASE + float(stance))))
+    THE BUILD-TIME LOYALTY ROW, BEHIND A GAIN (MB-03, `ED-MB-0078`'s superseding row, option (b)).
+    `loyalty` is the side's weight-mean stance toward its faction creed's UTTERER -- the row
+    `data/cast.py::stance_from_loyalty` seeds at build, `-5..+5` -- and it is added at `gain`, the
+    season's `field_morale_loyalty_gain` fixture. It is a SECOND TERM, not merged into `stance`: the
+    loyalty row names the faction's LEADER, a person, and the morale row names the faction, so the host
+    reads and hands on the two referents apart and only their sum on the ladder is shared. AT `gain` 0
+    THE TERM IS ZERO and the result is the shipped option (a), battle history only, exactly (the
+    control, swept 0 / 0.4 / 1; `data/fixtures.py` says how each arm is derived). The 1:1 arm saturates
+    every creed-holding faction at `build_realm(0)` -- the row's own finding -- which is why the
+    magnitude is the gain's and is swept rather than chosen here."""
+    return max(_MORALE_FLOOR, min(_MORALE_CEIL, _round_half_up(
+        _MORALE_START_BASE + float(stance) + float(gain) * float(loyalty))))
 
 
 #: [canonical: mass_battle_integration_v30.md §4.10 sub-step 3 — the strategic entry point. ⚠ THE
@@ -340,18 +348,23 @@ def resolve_field(inp, rng=None):
       `walls_dr` -- plan position `20-v` (`H-150`): the defender DR a WALLS field adds, handed to
           `_run_and_grade` unchanged. `None` is A.9's number, `terrain.WALLS_DEFENDER_DR`; an int
           overrides it. Inert on a field `terrain_row_for_territory` does not call WALLS.
-      `river_crossing` -- MB-05: the caller's fact that the attacker crossed a river to reach the
-          field, handed to `terrain_row_for_territory`, the one place RIVER_CROSSING can come from.
-          The season host passes `False`: it holds the target rung but not the march's origin, so it
-          cannot derive the fact (see `terrain.py`).
-    The row is derived here from the three facts that decide it (`territory`, `fort_level`,
-    `river_crossing`), so no caller can hand in a row that disagrees.
+      `origin` -- MB-05r: the territory the attacking side marched from, or `None`. Whether the march
+          crossed a river is `terrain.river_crossed(origin, territory)` (the geography's water, which
+          the host never reads), handed to `terrain_row_for_territory` as its `river_crossing`, the
+          one place RIVER_CROSSING can come from. `None` crosses nothing: the field as before MB-05r.
+      `loyalties`, `loyalty_gain` -- MB-03: `(attacker, defender)` build-time loyalty rows and the
+          gain `_morale_start` adds them at; gain `0` is the control, battle history only.
+    The row is derived here from the facts that decide it (`territory`, `fort_level`, `origin`), so
+    no caller can hand in a row that disagrees; the geography is read ONCE for both lookups.
 
     Returns exactly what `_run_and_grade` returns."""
     weight_a, weight_b = (sum(side) for side in inp.weights)
     stance_a, stance_b = inp.stances
-    unit_a = _weighted_unit("side_a", weight_a, _morale_start(stance_a))
-    unit_b = _weighted_unit("side_b", weight_b, _morale_start(stance_b))
+    loyalty_a, loyalty_b = inp.loyalties
+    unit_a = _weighted_unit("side_a", weight_a, _morale_start(stance_a, loyalty_a, inp.loyalty_gain))
+    unit_b = _weighted_unit("side_b", weight_b, _morale_start(stance_b, loyalty_b, inp.loyalty_gain))
+    geo = _load_geography()
+    crossing = river_crossed(inp.origin, inp.territory, geography=geo)
     return _run_and_grade(unit_a, unit_b,
-                          terrain_row_for_territory(inp.territory, inp.fort_level, inp.river_crossing), rng,
-                          walls_dr=inp.walls_dr)
+                          terrain_row_for_territory(inp.territory, inp.fort_level, crossing, geography=geo),
+                          rng, walls_dr=inp.walls_dr)

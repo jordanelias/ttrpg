@@ -45,12 +45,13 @@ from engine.season.state.carriers import Act
 
 
 def _record(w, side_a, side_b, *, territory=None, fort_level=0.0, stance_a=0.0, stance_b=0.0,
-            walls_dr=None, river_crossing=False):
+            walls_dr=None, origin=None):
     """The record `resolve_field` takes since plan position `31c`: the host builder's (`field_input`) for
     the two sides -- the weight projection is the host's -- with the fight's facts set as this test
-    states them. The keyword defaults are `resolve_field`'s own before the split."""
+    states them. The keyword defaults are `resolve_field`'s own before the split (`origin` `None`, no
+    crossing, since MB-05r replaced the always-`False` `river_crossing`)."""
     return replace(field_input(w, side_a, side_b, "r_valoria"), territory=territory, fort_level=fort_level,
-                   stances=(stance_a, stance_b), walls_dr=walls_dr, river_crossing=river_crossing)
+                   stances=(stance_a, stance_b), walls_dr=walls_dr, origin=origin)
 
 
 def _captured_units(monkeypatch, **kwargs):
@@ -189,3 +190,71 @@ def test_a_lost_field_lowers_the_next_fields_morale_start_end_to_end(monkeypatch
     assert captured["a"] == 5 - morale_w, (
         f"the beaten side starts the next field at morale {captured['a']}, not {5 - morale_w}")
     assert captured["b"] == 5, f"the winners started at {captured['b']}, not the untouched 5"
+
+
+def _starts_at_gain(monkeypatch, gain):
+    """MB-03's observer: every faction's mustered side at every settlement of `build_realm(0)`, fought as
+    the attacker against the Church's six at `set_s_036` through the host builder and the module entry
+    (`field_input` -> `resolve_field`) with the `field_morale_loyalty_gain` fixture swept to `gain`.
+    Returns `({(settlement, faction): (attacker loyalty, attacker morale_start)}, defender morale_start)`,
+    read off the constructed Units (`_run_and_grade` intercepted, as `_captured_units` does)."""
+    captured = {}
+
+    def fake(unit_a, unit_b, terrain, rng, walls_dr=None):
+        captured["a"], captured["b"] = unit_a.morale_start, unit_b.morale_start
+        return {"attacker_wins": True, "degree": "Success",
+                "attacker_size_pct": 1.0, "defender_size_pct": 0.0}
+
+    monkeypatch.setattr(MB, "_run_and_grade", fake)
+    w = build_realm(0)
+    w.fixtures = w.fixtures.sweep("field_morale_loyalty_gain", gain)
+    defenders = world_q.mustered(w, "set_s_036", "fac_church_of_solmund")
+    factions = sorted({world_q.faction_holding(w, pid) for pid in w.persons} - {None})
+    out, defender = {}, set()
+    for rung in sorted(r for r, v in w.rungs.items() if v.kind == "settlement"):
+        for fac in factions:
+            side = world_q.mustered(w, rung, fac)
+            if not side:
+                continue
+            rec = field_input(w, side, defenders, "set_s_036")
+            assert rec.loyalty_gain == gain, f"the swept gain did not reach the record: {rec.loyalty_gain}"
+            MB.resolve_field(rec)
+            out[(rung, fac)] = (rec.loyalties[0], captured["a"])
+            defender.add(captured["b"])
+    assert len(defender) == 1, f"one defending side started at several values: {defender}"
+    return out, defender.pop()
+
+
+def test_at_loyalty_gain_zero_every_side_starts_at_five(monkeypatch):
+    """MB-03 (`ED-MB-0078`'s superseding row), THE CONTROL: at `field_morale_loyalty_gain` 0 -- the
+    shipped default -- every side of the built realm starts at the flat 5, whatever its build-time
+    loyalty row, because no field has been lost (option (a), battle history only). The loyalty is
+    READ (the sides' means differ, asserted) and multiplied away, so this observes the gain, not an
+    unread input."""
+    assert build_realm(0).fixtures.get("field_morale_loyalty_gain") == 0, "the shipped gain moved off 0"
+    starts, defender = _starts_at_gain(monkeypatch, 0)
+    assert len(starts) >= 20, f"only {len(starts)} sides were fought -- the sweep did not run"
+    assert len({loyalty for loyalty, _ in starts.values()}) >= 2, "every side read one loyalty"
+    assert defender == 5, f"the defenders started at {defender} at gain 0"
+    moved = {k: v for k, v in starts.items() if v[1] != 5}
+    assert not moved, f"sides moved off 5 at gain 0: {moved}"
+
+
+@pytest.mark.parametrize("gain, crown, church", [(0.4, 5, 7), (1, 6, 7)])
+def test_a_positive_loyalty_gain_starts_factions_with_different_rows_apart(monkeypatch, gain, crown, church):
+    """MB-03, THE FALSIFIER'S OTHER HALF: at each non-control arm, two factions whose loyalty rows
+    differ start apart. The Crown's two at `set_s_014` hold a side mean of 0.5 toward their creed's
+    utterer, the Church's six at `set_s_036` 4.0 (measured 2026-10-12): at 0.4, 5 + 0.2 -> 5 against
+    5 + 1.6 -> 7; at 1, 5.5 -> 6 (half-up) against 9 -> 7 (the ceiling). Across every side of the realm
+    the start never falls as loyalty rises (no battle history at build, so loyalty is the only term)."""
+    starts, defender = _starts_at_gain(monkeypatch, gain)
+    loyalty, start = starts[("set_s_014", "fac_crown")]
+    assert loyalty == 0.5, f"the Crown side's loyalty moved ({loyalty}); re-derive the pinned starts"
+    assert (start, defender) == (crown, church), (
+        f"gain {gain}: Crown and Church started at {(start, defender)}, not {(crown, church)}")
+    ordered = sorted(starts.values())
+    checked = 0
+    for (l0, m0), (l1, m1) in zip(ordered, ordered[1:]):
+        assert m0 <= m1, f"gain {gain}: loyalty {l0} -> {l1} lowered the start {m0} -> {m1}"
+        checked += 1
+    assert checked >= 19, f"only {checked} side pairs were compared"

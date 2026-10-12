@@ -37,10 +37,12 @@
      is a live UPHILL field, so "no garrison" alone is no longer "open ground".
   7. AN UPHILL FIELD RESOLVES DIFFERENTLY FROM THE SAME FIELD ON OPEN GROUND (MB-05, A.9's Uphill row):
      block 5's bare fixture as found (T9 -> UPHILL) against itself with the territory read made `None`
-     (OPEN_FLAT). The other two MB-05 rows have no provider test, and why is a finding, not an
-     omission: RIVER_CROSSING needs a signal this provider cannot derive (it holds the target rung,
-     not the march's origin) -- `resolve_field`'s own test is in `tests/valoria/test_mass_battle_terrain.py`;
-     NARROW_PASS is not applied (`massbattle._run_and_grade`'s docstring says why it would change nothing).
+     (OPEN_FLAT). NARROW_PASS has no provider test: it is not applied (`massbattle._run_and_grade`'s
+     docstring says why it would change nothing).
+  8. A MARCH ACROSS THE RIVER RESOLVES DIFFERENTLY FROM THE SAME MARCH DRY (MB-05r): the host derives the
+     march's origin from the attacking side (`_origin_of`) and the module decides the crossing from it;
+     with no origin, or one on the target's own bank, the field is exactly what it was.
+  9. THE LOYALTY GAIN (MB-03) reaches the record, and its `0` arm is the shipped field.
 
 Block 6 (`resolve_field` sums `Person.weight` per side into army SIZE, not quality) lives in
 `tests/valoria/test_mass_battle_resolve_field.py`, not here: it needs `from systems.mass_battle...`
@@ -318,23 +320,22 @@ def _fight_from(monkeypatch, w, attackers, target, subject, seed, *, dry):
 
 
 def test_a_march_across_the_river_resolves_differently_from_the_same_march_dry(monkeypatch):
-    """MB-05r -- A.9's River-crossing row, DERIVED BY THE HOST. `set_s_008` (T3, east of the Valoris)
-    musters one Varfell man, who marches on the bare `set_s_036` (T9, west of it): the straight line
-    between the two territories' anchors crosses `river-valoris`, so the field is RIVER_CROSSING. The
-    SAME march with the origin read made `None` (`dry`) is the field as it was before MB-05r -- T9's
-    UPHILL. ⚠ So the two arms differ by UPHILL's defender die as well as by the crossing's speed step:
-    RIVER_CROSSING OUTRANKS UPHILL (`terrain_row_for_territory`'s one-row rule), and that ruling is
-    what this comparison observes on a real field.
+    """MB-05r -- A.9's River-crossing row, DERIVED BY THE HOST. `set_s_004` (T2, west of the Valoris)
+    musters one Crown man, who marches on the bare `set_s_008` (T3, east of it), held there by one
+    Varfell man: the straight line between the two territories' anchors crosses `river-valoris`, so the
+    field is RIVER_CROSSING. The SAME march with the origin read made `None` (`dry`) is the field as it
+    was before MB-05r -- T3's polygon row, OPEN_FLAT -- so the crossing is the only difference.
 
     THE FALSIFIER, BOTH WAYS. Before MB-05r the host passed `river_crossing=False` on every field and
-    the two arms were EQUAL on all 16 seeds (run 2026-10-12 against `5422ed1e`, this test's loop with
-    `_origin_of` absent); after, they differ on at least one (`>= 1` asserted, `checked` keeps it
-    honest). The record assertion closes the loop on the signal itself rather than its effect."""
+    the crossing and dry arms were EQUAL on all 16 seeds (run 2026-10-12 against `5422ed1e`, this
+    test's loop with `_origin_of` absent, on its first fixture, a T3 army marching on T9); after, they
+    differ on at least one (3 of 16 on this fixture, measured 2026-10-12, not asserted -- `>= 1` is,
+    and `checked` keeps it honest). The record assertion closes the loop on the signal itself."""
     from engine.season.seam.wrappers.mass_battle import field_input
-    target, subject = "set_s_036", "fac_church_of_solmund"
+    target, subject = "set_s_008", "fac_varfell"
     w = _bare(target)
-    attackers = world_q.mustered(w, "set_s_008", "fac_varfell")
-    assert attackers, "the fixture no longer musters a Varfell army at set_s_008 (T3)"
+    attackers = world_q.mustered(w, "set_s_004", "fac_crown")
+    assert attackers, "the fixture no longer musters a Crown army at set_s_004 (T2)"
     checked = differs = 0
     for seed in range(16):
         crossed = _fight_from(monkeypatch, w, attackers, target, subject, seed, dry=False)
@@ -344,7 +345,7 @@ def test_a_march_across_the_river_resolves_differently_from_the_same_march_dry(m
     assert checked == 16
     assert differs >= 1, "a march across the river fought identically to the same march dry (MB-05r)"
     rec = field_input(w, attackers, world_q.mustered(w, target, subject), target)
-    assert (rec.origin, rec.territory) == ("T3", "T9"), f"the march's origin was not derived: {rec}"
+    assert (rec.origin, rec.territory) == ("T2", "T3"), f"the march's origin was not derived: {rec}"
 
 
 def test_no_origin_and_a_same_bank_origin_leave_the_field_as_it_was(monkeypatch):
@@ -383,9 +384,15 @@ def test_the_loyalty_gain_reaches_the_record_and_its_zero_arm_is_the_shipped_fie
         is the fixture's, swept.
       * `0` IS THE CONTROL AND THE SHIPPED DEFAULT: at gain 0 every seed resolves IDENTICALLY to the
         unset default (`==`).
-      * A NON-ZERO ARM MOVES THE FIELD: at the 1:1 arm at least one of 16 seeds resolves differently
-        from the control. Which morale each side starts at is pinned in
-        `tests/valoria/test_mass_battle_d1_morale_baseline.py`, which may read the Units."""
+
+    ⚠ THE OUTCOME DOES NOT MOVE AT THIS SCALE, AND THAT IS A MEASUREMENT, NOT A GAP IN THIS TEST. Run
+    2026-10-12: 25 realm march pairs (every Crown side at `set_s_001` against every other faction's
+    mustered side, and three more) at gain 1 against gain 0 over 16 seeds each -- 0 results moved. A
+    season side's troops are its raw weight sum (single digits), and it routs on the engine's troop
+    floor before morale is read (`massbattle._MIN_TROOPS`'s disclosed scale gap). So the morale-start
+    itself is the observer, read off the constructed Units in
+    `tests/valoria/test_mass_battle_d1_morale_baseline.py` (which may import the module); this test
+    observes the wiring up to the record. The 0-of-25 figure is a one-off reading, not asserted."""
     from engine.season.seam.wrappers.mass_battle import field_input, resolve as provider_resolve
     target, subject = "set_s_036", "fac_church_of_solmund"
     default = build_realm(0)
@@ -406,11 +413,8 @@ def test_the_loyalty_gain_reaches_the_record_and_its_zero_arm_is_the_shipped_fie
         assert r["status"] == "RESOLVED" and r["unopposed"] is False, f"seed {seed}: not fought: {r}"
         return r["result"]
 
-    checked = differs = 0
+    checked = 0
     for seed in range(16):
-        control = fight(default, seed)
-        assert fight(arms[0], seed) == control, f"seed {seed}: gain 0 is not the shipped field"
-        differs += fight(arms[1], seed) != control
+        assert fight(arms[0], seed) == fight(default, seed), f"seed {seed}: gain 0 is not the shipped field"
         checked += 1
     assert checked == 16
-    assert differs >= 1, "the 1:1 loyalty arm resolved identically to the control on every seed"

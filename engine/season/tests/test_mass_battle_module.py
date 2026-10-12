@@ -42,9 +42,12 @@ from engine.season.queries.inputs import MassBattleInput
 # territory (T9) with a fortification (so the WALLS row and its DR are inside the replayed battle) and
 # morale moved off the base by the stances.
 FIELD = MassBattleInput(weights=((180.0, 120.0), (240.0,)), territory="T9", fort_level=1.0,
-                        stances=(-1.0, 0.5), walls_dr=None, river_crossing=False)
-OTHER = MassBattleInput(weights=((90.0,), (60.0, 30.0)), territory="T1", fort_level=0.0,
-                        stances=(0.0, 0.0), walls_dr=1, river_crossing=True)
+                        stances=(-1.0, 0.5), walls_dr=None, origin=None,
+                        loyalties=(1.5, -0.5), loyalty_gain=0.4)
+# A RIVER_CROSSING field (MB-05r): a march from T9 onto T3's open ground crosses the Valoris.
+OTHER = MassBattleInput(weights=((90.0,), (60.0, 30.0)), territory="T3", fort_level=0.0,
+                        stances=(0.0, 0.0), walls_dr=1, origin="T9",
+                        loyalties=(0.0, 0.0), loyalty_gain=0)
 stdlib_before = random.getstate()
 out = []
 for seed in (1, 2, 3, 4, 5, 6):

@@ -3099,7 +3099,12 @@ rows:
       morale `5 - field_morale_weight` (`massbattle._morale_start`, one stance unit = one morale
       point, fed by `seam/wrappers/mass_battle.py::_side_stance`), so this sweep now also sweeps the
       next fight's morale-start, and its `0` point is that reader's control for a CROSS-faction field only (in a
-      same-faction march, `H-151`, the grudge row names the same faction and also moves morale-start)."
+      same-faction march, `H-151`, the grudge row names the same faction and also moves morale-start).
+      ⚠ MB-03 (`ED-MB-0078`'s superseding row), DEFERRED TO THIS ROW ON THE SAME PRECEDENT: the
+      morale-start's SECOND TERM, `DEFAULT_FIXTURES.field_morale_loyalty_gain` (swept 0 (the control,
+      SHIPPED: battle history only) / 0.4 / 1), the gain at which each side's build-time loyalty row
+      (the stance toward its creed's utterer, `data/cast.py::stance_from_loyalty`) is added to
+      `massbattle._morale_start`, read by `seam/wrappers/mass_battle.py::field_input` into the record."
     sweep:     ["scaled_by_degree (the default)", "total (THE CONTROL: every loser's body to 0 --
       re-running \"losing a field costs everything\" deliberately, `wound_harm_model`'s own first
       control re-applied)", "none (the SECOND control: the body is not written at all, isolating
