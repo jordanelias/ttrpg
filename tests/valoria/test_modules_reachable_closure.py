@@ -156,6 +156,19 @@ def test_every_module_is_exactly_its_entries_reachable_closure():
     roots = _entry_roots()
     seams = _seam_roots()
     checked = {"package": [], "flat": []}
+    # What the walk below cannot see on its own: an entry row aimed outside `modules/`, a directory under
+    # `modules/` that no entry row names, and a loose top-level file. Each would sit outside every closure.
+    stray_targets = sorted(r for r, row in composition.ROLES.items() if row.get("entry")
+                           and str(row.get("target", "")).split(".")[0] != MODULES)
+    assert not stray_targets, f"entry rows whose target is not under `{MODULES}/`: {stray_targets}"
+    top = os.path.join(ROOT, MODULES)
+    unnamed = sorted(d for d in os.listdir(top) if d != "__pycache__"
+                     and os.path.isdir(os.path.join(top, d))
+                     and os.path.join(top, d) not in roots)
+    loose = sorted(f for f in os.listdir(top) if f.endswith(".py") and f != "__init__.py")
+    assert not unnamed and not loose, (
+        f"`{MODULES}/` holds directories no entry row names {unnamed} or loose files {loose}; "
+        "it holds the reachable closure of the entries only")
     for module_dir, entry_modules in sorted(roots.items()):
         flat = not os.path.isfile(os.path.join(module_dir, "__init__.py"))
         rel = os.path.relpath(module_dir, ROOT)

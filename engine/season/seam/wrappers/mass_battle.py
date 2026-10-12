@@ -37,7 +37,7 @@ branch, which is what "generalizing without changing their behaviour" meant.
 
 ⚠ **WHO ATTACKS, WHO DEFENDS, AND WHAT AN EMPTY DEFENDING SIDE MEANS ARE `march`'s OWN eligibility
 and effects, RULED AND BUILT (M4, `ED-IN-0279` clause (b), 2026-09-28)** -- an empty defending side
-is `Unopposed` (the branch at line ~99 below), never an auto-win manufactured here.
+is `Unopposed` (the `Unopposed` branch in `resolve` below), never an auto-win manufactured here.
 
 ⚠⚠ **WHAT A GARRISON DOES TO THIS FIGHT IS NOW READ, AND THE READ IS ALL THIS MODULE ADDS (plan
 position `20-iv`, `H-150`).** Jordan's ruling (planning round 2) fixed garrison STRENGTH as a Site's
@@ -205,7 +205,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     """CALL the mass-battle engine. Returns what it said; decides nothing itself.
 
     `claimants`: one side's `PersonId[]`, expected already resolved (§C.5.1) by whoever called
-    `contest()` -- see this module's docstring for why nothing does that yet.
+    `contest()`: `loop/sides.py::sides_of` builds them for a `march`.
     `subject`: the OTHER side's faction Proposition id.
     `rung`: where the defence is scoped (M4, `ED-IN-0279` clause (a)) -- `subject`'s faction is
     resolved to its `members` (`faction_q.resolve`, the same function M2 built) and THEN

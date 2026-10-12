@@ -5,7 +5,9 @@ INPUT record from what `World` holds, calls the module ENTRY (a composition row 
 registered in `manifest.MODULE_ENTRIES`) and interprets what comes back. A module never reads or
 writes `World`; it reads the record. The record types live HOST-side, here, where projections are
 built, and a module imports them -- it depends upward on `engine/`, and the host reaches the module
-only by string.
+only by string. (`architecture/holonic_ARCHITECTURE.md` §45 puts a module's records inside the module;
+in Python that would make `engine/` import module code, which
+`test_importing_every_engine_module_pulls_in_no_subsystem` refuses, so the records stay here.)
 
 ⚠ THIS FILE IS A LEAF: stdlib only, and it imports nothing from the season package. A module that
 imports a record type must pull in nothing else of the host
