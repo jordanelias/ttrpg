@@ -27,7 +27,7 @@ from typing import Any, Callable, Optional
 from ..data.cast import STANCE_MAX
 from ..data.pursuits import to_axes
 from ..data.requires import (
-    CELL_STEMS, SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS, WRIT_SOURCED_OPERANDS,
+    CELL_STEMS, SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS, VIA, WRIT_SOURCED_OPERANDS,
 )
 from ..data.rosters import (
     CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, RECORD_CONTENT, WITNESS_CHANNELS,
@@ -113,9 +113,15 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             TRACE.note(f"{p.id} refuses {verb!r}: its `{axis}` alignment exceeds their own "
                        f"projected weight {tolerance:+.3f} (ED-IN-0261)", "H-146")
             continue
-        # `19`: the seat this row's act would exercise -- `exercised_seat`, the same untraced walk
-        # `pack_scenes` names `Act.via` by -- for the belief test's `basis` conjunct below.
-        seat = exercised_seat(p, row)
+        # `19`: the seat(s) this row's act would exercise -- the untraced walk `pack_scenes` names
+        # `Act.via` by (`seat_of`) -- for the belief test's `basis` conjunct below.
+        # `H-134`: WHERE THE ADMITTING `remit:` ALTERNATIVE IS GRANTED BY SEVERAL OF THE PERSON'S
+        # SEATS, EACH IS A SEAT THE ACT CAN BE EXERCISED THROUGH, and the Candidate is formed once
+        # per seat (below) -- the fold's gate asks the one seat the act names. No seat is picked FOR
+        # the person: the seat-Candidates score and draw alike (`choose.py` keys both on
+        # `(verb, subject)`), so Tenure order still orders them in the ranking. One seat (or none)
+        # leaves `seats` a single value that is `exercised_seat` exactly, and nothing below differs.
+        seats = exercisable_seats(p, row)
         # `T4`: only a NAMED own-ledger conjunct carries `said` (`tell`'s `holds`); `survey` and
         # `reconstruct` share the form unnamed and carry nothing (telling workplan, "From Batch 1").
         ledger_of = row.requires_typed.named_own_ledger_operands() if row.requires_typed else ()
@@ -152,7 +158,11 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             # different granary from the fold.
             # `T4`: ONE CANDIDATE PER BAG -- one bag for every row but one whose `to` is a KNOWN
             # PERSON (`operand_bags`), which forms one per person the teller knows.
-            for ops in operand_bags(p, row, q, subject, fx):
+            # `H-134`: seat-major, each seat's own bags (`from` is that seat's rung). One seat: the
+            # one pass `operand_bags` made before.
+            bagged = [(st, ops) for st in (seats or (None,))
+                      for ops in operand_bags(p, row, q, subject, fx, seat=st)]
+            for st, ops in bagged:
                 # ⚠ AND A TWO-SIDED ACT NEEDS A SECOND SIDE (plan position `15`, `ED-IN-0210` ruling
                 # 2). The rule above, one column over: a row naming its `counterparty:` operand forms
                 # no Candidate whose counterparty is the person -- a petition to oneself is the
@@ -175,9 +185,9 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                     continue
                 # `19`: THE SEAT THE ACT WILL BE EXERCISED THROUGH rides into the belief test as it rides
                 # onto `Act.via` (`pack_scenes`), so a `basis` conjunct is asked of the same seat both
-                # sides. `seat` is `exercised_seat`, read once per row above.
+                # sides. `st` is the seat this Candidate is formed for.
                 # `T3a`: and the person reads their own ledger WEIGHING hearsay by its teller.
-                if belief_contradicts(p, row, subject, ops, seat, weigh=weigh):
+                if belief_contradicts(p, row, subject, ops, st, weigh=weigh):
                     continue
                 # WHAT THE TELLER WILL SAY IS DECIDED HERE, AT CHOOSE, AND RIDES THE ACT (`T1`,
                 # `workplans/2026-10-01-telling-workplan.md`): a row whose typed cell holds a NAMED
@@ -202,6 +212,12 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                     if said is None:
                         continue
                     ops = {**ops, "said": said}
+                # `H-134`: the seat rides on the Candidate ONLY where it was chosen among several,
+                # under `VIA` -- not a cell operand, so `binding_of` drops it (the seat reaches the
+                # binding as `via=`), exactly as `said` is dropped; `pack_scenes` reads it onto
+                # `Act.via`. A single-seat Candidate carries nothing extra: byte-identical.
+                if len(seats) > 1:
+                    ops = {**ops, VIA: st}
                 out.append(Candidate(verb, subject, operands=ops))
     return out
 
@@ -346,13 +362,15 @@ def person_side_eligible(p: Person, row: "VerbRow") -> bool:
 
 
 def exercised_seat(p: Person, row: "Optional[VerbRow]") -> Optional[str]:
-    """G3 -- THE SEAT A COMPUTED ACT EXERCISES: the office id its `Act.via` carries, or `None`.
+    """G3 -- THE SEAT A COMPUTED ACT EXERCISES, BY DEFAULT: the office id its
+    `Act.via` carries, or `None`. The FIRST of `exercisable_seats`; `opening_set` forms the
+    Candidate per seat where there are several, so this is the answer only for a person with one.
 
     `04 §B.9` gives `Act` a `via : SeatId?` and `04:350` asks purview of the seat exercised, so
     the act a person mints has to say which seat it is exercised through -- and only the person can
     say, because only the person's own Tenures are in scope here (AX-2). It is the seat through
     which `person_side_eligible` ADMITTED the verb, read by the SAME walk (`_admitted_through`) so
-    the two cannot disagree: a `remit:` alternative admits through the first live `hold` whose grant
+    the two cannot disagree: a `remit:` alternative admits through a live `hold` whose grant
     carries the act, and that hold's object is the seat. An `own` or `hold` alternative admits the
     person AS THEMSELVES, and no seat is exercised -- `kill / wound`, `release` mint with `via=None`,
     and so does `transfer` for a person whose seats grant no `issue` (its first alternative is
@@ -361,51 +379,65 @@ def exercised_seat(p: Person, row: "Optional[VerbRow]") -> Optional[str]:
     seat, so making `via` required there moves no computed act (measured: `build_realm(0)`'s
     content hash over one season is unchanged by G3).
 
-    ⚠ WHICH SEAT, WHEN SEVERAL GRANT THE ACT, IS THE FIRST IN THE PERSON'S OWN TENURE ORDER -- a
-    fixed rule, not a choice, and a LIMIT stated rather than hidden: a person holding two seats that
-    both grant `confer` always exercises the first, even where only the second has purview over
-    the target. Choosing by purview would need the containment tree, which is not the person's
-    state. ⚠ PURVIEW IS `confer`'S TEST AND NOT EVERY ACT'S: `revoke` asks the PARENT RUNG
-    (`state/gate.py::seated_on_the_rung_above` -- `via`'s rung is the one directly above the
-    target seat's, same faction), and asks no purview. ONE WORLD BUILDER SEATS SOMEONE TWICE TODAY
-    (`H-134`): `build_realm` gives NPC-020 `off_npc_020` (the realm, built by the per-case loop) and
-    the minted `off_duke_valorsmark`, both granting issue/confer/revoke/convene, and the loop's hold
-    precedes the minted one in his tenure order, so all his computed acts go via the King seat and
-    the Duke seat is never exercised. For `confer` that costs nothing while the realm seat's purview
-    reaches. For `revoke` it is the WRONG SEAT outright: the six Crown seats at T1 marked
-    `rung_above_same_faction` (`offices.yaml`) can be stripped only through `off_duke_valorsmark`,
-    and `_granting_hold` below always picks `off_npc_020`. The refusal that follows is silent and is
-    masked only because a computed `revoke` carries no `office` operand, so `_req_revoke`
-    (`loop/predicates.py`) refuses before the seat is ever asked. Where that choice ever matters, it
-    becomes a candidate per seat. Traces nothing: the admission it mirrors already traced. A verb
-    on no row (`row is None` -- a hand-ranked candidate naming an invented verb) exercises nothing;
-    the fold refuses the verb itself, and inventing a seat for it here would be a second answer."""
+    ⚠ WHEN SEVERAL SEATS GRANT THE ACT (`H-134`) THIS IS ONLY THE FIRST: `opening_set` forms ONE
+    Candidate per seat (`exercisable_seats`), the seat riding on it (`VIA` in its operands) to
+    `Act.via` (`seat_of`), and the fold's gate asks that seat. The person cannot say which seat
+    reaches a target (that needs the containment tree, which is not the person's state), so a seat
+    that does not reach it is refused there. ⚠ STILL MASKED for `revoke` and `confer`: a computed
+    act of either carries no `office` operand, so `loop/predicates.py`'s `_req_revoke` /
+    `_req_confer` refuse before the seat is asked (`H-207` causes 1, 2, 4).
+    Traces nothing: the admission it mirrors already traced. A verb on no row (`row is None` -- a
+    hand-ranked candidate naming an invented verb) exercises nothing; the fold refuses the verb
+    itself, and inventing a seat for it here would be a second answer."""
+    seats = exercisable_seats(p, row)
+    return seats[0] if seats else None
+
+
+def exercisable_seats(p: Person, row: "Optional[VerbRow]") -> tuple:
+    """EVERY SEAT THE ACT OF `row` CAN BE EXERCISED THROUGH, in the person's own Tenure order -- the
+    live `hold`s granting the act of the `remit:` alternative that admitted the verb
+    (`_admitted_through`), distinct by seat. `()` for an act exercised as oneself (an `own` or
+    `hold` alternative admitted it, or nothing did) and for `row is None`; one seat for nearly
+    everyone. `exercised_seat` is the first; `opening_set` forms a Candidate per seat when there are
+    several (`H-134`). Traces nothing: the admission it mirrors already traced."""
     if row is None:
-        return None
+        return ()
     return _admitted_through(p, row, trace=False)[1]
 
 
-def _granting_hold(p: Person, act: str, need_treasury: bool = False):
-    """The first live `hold` in the person's OWN store whose grant carries `act`, or `None` -- the
-    one person-side reading of *which seat grants this* (`H-71` arm 2's snapshot).
+def seat_of(p: Person, c: Candidate) -> Optional[str]:
+    """THE SEAT A CANDIDATE'S ACT IS EXERCISED THROUGH -- the one `pack_scenes` puts on `Act.via`.
+    The seat `opening_set` formed it for where it chose among several (`VIA` in its operands); else
+    `exercised_seat`'s, which is the only seat there is. One reader, so a Candidate and the act
+    minted from it cannot name two seats."""
+    seat = (c.operands or {}).get(VIA)
+    return seat if seat is not None else exercised_seat(p, VERB_TABLE.get(c.verb))
+
+
+def _granting_holds(p: Person, act: str, need_treasury: bool = False) -> tuple:
+    """The seats of the person's OWN live `hold`s whose grant carries `act`, in Tenure order and
+    distinct by seat (a person seated on one office twice is one seat) -- the one person-side
+    reading of *which seats grant this* (`H-71` arm 2's snapshot). `()` for none.
 
     `need_treasury` is set for a row whose cell binds `from`: an act exercised through a seat gives
     from the seat's rung (`treasury_of`), so a seat whose grant carries no rung grants nothing such
     an act can be exercised through, and is passed over. Every reader of the seat (`opening_set`'s
     belief seat, `_operands`, `pack_scenes`' `via`) goes through here, so `via` and `from` agree."""
-    return next((t for t in p.tenures if t.kind == "hold" and t.live and act in t.granted_acts
-                 and (not need_treasury or t.seat_rung is not None)), None)
+    return tuple(dict.fromkeys(
+        t.object for t in p.tenures if t.kind == "hold" and t.live and act in t.granted_acts
+        and (not need_treasury or t.seat_rung is not None)))
 
 
 def _admitted_through(p: Person, row: "VerbRow", trace: bool) -> tuple:
-    """`(admitted, seat)`: `person_side_eligible`'s walk over the row's DISJUNCTION, once, for both
-    of its readers -- the FIRST alternative that admits decides, and `seat` is the office it admitted
-    through (`None` unless that alternative was `remit:`). `trace=False` is `exercised_seat`'s
-    reading of a verb the first reading already traced, so the trace records each decline once.
+    """`(admitted, seats)`: `person_side_eligible`'s walk over the row's DISJUNCTION, once, for both
+    of its readers -- the FIRST alternative that admits decides, and `seats` are the offices it
+    admitted through (`()` unless that alternative was `remit:`; every seat granting the act, in
+    Tenure order). `trace=False` is `exercisable_seats`' reading of a verb the first reading already
+    traced, so the trace records each decline once.
     The declines are held and traced only when NO alternative admits, so a person a later
     alternative admits leaves no note that the verb declined."""
     need_treasury = None                    # read only by the `remit` branch; computed there, once
-    pending: list = []                      # this walk's decline notes, traced only on (False, None)
+    pending: list = []                      # this walk's decline notes, traced only on (False, ())
     for alt in row.eligibility:
         kind, _, raw = alt.partition(":")
         kind, raw = kind.strip(), raw.strip()
@@ -420,7 +452,7 @@ def _admitted_through(p: Person, row: "VerbRow", trace: bool) -> tuple:
                 law="#353 §9.2 -- 'capability supplies dice and GATES NOTHING'. A fifth kind is a "
                     "new way to make a verb unavailable and needs a ruling, not a table edit")
         if kind == "own":
-            return (True, None)
+            return (True, ())
         if kind == "hold":
             # ⚠ THE ARGUMENT IS COMPARED. It was parsed and thrown away, so `transfer`'s
             # `hold:<store>` and `destroy_record`'s `hold:<record>` admitted anyone holding ANY
@@ -430,10 +462,10 @@ def _admitted_through(p: Person, row: "VerbRow", trace: bool) -> tuple:
             # DECLINES rather than guessing which store the act meant: that binding is `H-75`.
             if not raw:                       # bare `hold` -- holding anything admits
                 if any(t.kind == "hold" and t.live for t in p.tenures):
-                    return (True, None)
+                    return (True, ())
             elif not placeholder:             # a literal object id
                 if any(t.kind == "hold" and t.live and t.object == arg for t in p.tenures):
-                    return (True, None)
+                    return (True, ())
             elif trace:
                 pending.append(f"`hold:<{arg}>` names an object KIND, not an id (H-75); "
                                f"{row.verb!r} declines rather than admitting on any held object")
@@ -449,15 +481,15 @@ def _admitted_through(p: Person, row: "VerbRow", trace: bool) -> tuple:
             # weighs equally with an over-refusal. Every live `remit:` cell in `verb_table.yaml`
             # is a literal (`remit:issue`, `remit:confer`), so this refuses nothing that exists.
             # G3: the hold that grants it IS the seat exercised -- returned, not just found.
+            # `H-134`: ALL of them, so `opening_set` can form the Candidate per seat.
             # A row binding `from` gives from the seat's rung when exercised through one
-            # (`_granting_hold`).
+            # (`_granting_holds`).
             if need_treasury is None:
                 need_treasury = (row.requires_typed is not None
                                  and "from" in row.requires_typed.operands())
-            seat = (_granting_hold(p, arg, need_treasury)
-                    if arg and not placeholder else None)
-            if seat is not None:
-                return (True, seat.object)
+            seats = _granting_holds(p, arg, need_treasury) if arg and not placeholder else ()
+            if seats:
+                return (True, seats)
             if not trace:
                 continue
             if placeholder:
@@ -473,7 +505,7 @@ def _admitted_through(p: Person, row: "VerbRow", trace: bool) -> tuple:
                            f"presence index); {row.verb!r} declines rather than admitting")
     for note in pending:
         TRACE.note(note)
-    return (False, None)
+    return (False, ())
 
 
 def containing_rung_of(p: Person) -> Optional[str]:
@@ -543,13 +575,13 @@ def treasury_of(p: Person, seat: str) -> Optional[str]:
     retirement plan's G2, *"treasury = `Rung.stores` at the office's own rung"*), read off the
     person's OWN live `hold` on `seat` (`Tenure.seat_rung`, the grant's snapshot, `H-71` arm 2's
     shape). `None` for a seat he does not hold or a rungless seat, which has no treasury -- and the
-    computed path never asks it of a rungless seat when the row binds `from` (`_granting_hold`'s
+    computed path never asks it of a rungless seat when the row binds `from` (`_granting_holds`'s
     `need_treasury` passes such a seat over, so the act is exercised as himself).
 
     `H-160` limit 1 / `H-158` [ASSUMPTION; medium; Jordan to correct; revert: a ruling that an `own`
     verb may be exercised through a seat]: `containing_rung_of`'s *where the actor is* stays the
-    answer for an act exercised AS HIMSELF; an act exercised THROUGH A SEAT (`exercised_seat`, the
-    same walk `Act.via` is named by) gives from the seat's rung, because that is where the seat's
+    answer for an act exercised AS HIMSELF; an act exercised THROUGH A SEAT (`seat_of`: the seat
+    `opening_set` formed the Candidate for, `exercised_seat`'s for one seat) gives from the seat's rung, because that is where the seat's
     matter is, and `loop/effects_economy.py::_renewals` already reads a payment of upkeep as exactly
     that (`seat.rung == from`). One rule for both positions of the actor, no verb named."""
     return next((t.seat_rung for t in p.tenures
@@ -697,7 +729,7 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
                     seat: Optional[str] = None):
     """ONE OPERAND, FROM THE PERSON'S OWN STATE. `None` means THIS PERSON CANNOT SUPPLY IT.
 
-    `seat` is the seat the act will be exercised through (`exercised_seat`), `None` for an act the
+    `seat` is the seat the act will be exercised through (`seat_of`), `None` for an act the
     person performs as himself. It moves ONE operand, `from`: through a seat, the giver gives from
     the seat's rung (`treasury_of`, `H-160` limit 1); as himself, from where he stands.
 
@@ -887,7 +919,7 @@ def operands_for(p: Person, row: "VerbRow", q: "Question", subject,
 
 
 def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
-                 fx: "Fixtures") -> list[dict]:
+                 fx: "Fixtures", seat: Optional[str] = None) -> list[dict]:
     """EVERY OPERAND BAG `p` CAN FORM FOR `row` ON `subject` -- `[]` when none (telling workplan
     `T4`, `ED-IN-0282`). One bag for every row whose operands all come from `_derive_operand`
     (`operands_for`'s rule, unchanged); for a row whose cell binds a known-person operand beside
@@ -907,7 +939,7 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
     receiver is a known person and its `with` conjunct the fold's."""
     fan = row.requires_typed.known_person_operands() if row.requires_typed is not None else ()
     if not fan:
-        ops = _operands(p, row, q, subject, fx, {})
+        ops = _operands(p, row, q, subject, fx, {}, seat)
         return [] if ops is None else [ops]
     people = known_persons(p.ledger, p.id)
     if not people:
@@ -916,14 +948,14 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
         return []
     out = []
     for who in people:
-        ops = _operands(p, row, q, subject, fx, {n: who for n in fan})
+        ops = _operands(p, row, q, subject, fx, {n: who for n in fan}, seat)
         if ops is not None:
             out.append(ops)
     return out
 
 
 def _operands(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixtures",
-              given: dict) -> Optional[dict]:
+              given: dict, seat: Optional[str] = None) -> Optional[dict]:
     """`operands_for`'s body: the cell's own operands plus `subject`/`to` where the form admits
     them, each from `given` if it names it (`operand_bags`' known person) else `_derive_operand`;
     `None` for a bound operand nobody can supply. The rules are `operands_for`'s docstring's."""
@@ -936,8 +968,11 @@ def _operands(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixtures",
     # The seat the act will be exercised through -- the walk `pack_scenes` names `Act.via` by -- so
     # the operands and the act's `via` cannot disagree about whether the actor acts as a seat.
     # `_derive_operand` reads it for `from` alone, so the (untraced) walk runs only for a bag
-    # carrying `from`.
-    seat = exercised_seat(p, row) if "from" in names else None
+    # carrying `from`. `H-134`: a `seat` the caller names (`opening_set`, forming one Candidate per
+    # seat) is the one the act will be exercised through and is used as given; `None` is the walk's
+    # first seat, as before.
+    if seat is None and "from" in names:
+        seat = exercised_seat(p, row)
     out: dict = {}
     for name in names:
         # `actor` is structural on both sides and is never carried; see `binding_of`.

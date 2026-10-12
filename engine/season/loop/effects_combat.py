@@ -205,7 +205,7 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     not swept) and a WEIGHT that is (`field_morale_weight`/`field_grudge_weight`, `H-148`,
     swept `0`/`1`/`3`). The grudge targets the WINNING faction; the morale hit targets the
     LOSER'S OWN faction -- both re-derived from `a.via` (the office the act was exercised
-    through, `exercised_seat`'s own field) and `world_q.holder_faction_of` on the target rung,
+    through, `seat_of`'s own field) and `world_q.holder_faction_of` on the target rung,
     exactly as `loop/sides.py::sides_of` derives them, because both are facts about the ACT and
     re-deriving them here is cheaper and safer than threading a third value through `Resolution`
     for one reader."""

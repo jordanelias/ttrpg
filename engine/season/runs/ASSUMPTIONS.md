@@ -39,6 +39,7 @@ exercised by this run.**
 | `band_floors` | `{'harbour': {'bulk_shipping': 800, 'fishing': 100}, 'seam': {'deep_mining': 700, 'surface_gleaning': 50}, 'body': {'full_operations': 800, 'limited': 500, 'withdrawal_only': 100}, 'dwelling': {}, 'garrison': {}}` | no — a harness fixture |
 | `capacity_floor` | `{'harbour': 0, 'seam': 0, 'body': 0, 'dwelling': 1, 'garrison': 0}` | no — a harness fixture |
 | `season_factor` | `1.0` | no — a harness fixture |
+| `season_factor_draw` | `()` | no — a harness fixture |
 | `subsistence_weight` | `{'grain': 2, 'salt': 1}` | no — a harness fixture |
 | `question_aggregation_rule` | `first` | no — a harness fixture |
 | `interactions_per_scene` | `3` | no — a harness fixture |
@@ -54,6 +55,9 @@ exercised by this run.**
 | `default_store_kind` | `grain` | no — a harness fixture |
 | `default_transfer_amount` | `1` | no — a harness fixture |
 | `body_step` | `0` | no — a harness fixture |
+| `age_step` | `0.0` | no — a harness fixture |
+| `illness_rate` | `0.0` | no — a harness fixture |
+| `age_at_build` | `0` | no — a harness fixture |
 | `wound_harm_model` | `scene_fraction` | no — a harness fixture |
 | `combat_wounded_above` | `None` | no — a harness fixture |
 | `field_casualty_model` | `scaled_by_degree` | no — a harness fixture |

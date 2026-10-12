@@ -1719,7 +1719,7 @@ def test_13d_i_the_revocation_basis_is_a_rostered_value_and_gates_the_rule():
         seen.append(_may_revoke(w, "c_king", "off_duke"))
         assert seen[-1] is expected, (basis, seen[-1])
     assert seen == [False, False, True], seen
-    assert set(REVOCATION_BASES) == {_RUNG_ABOVE}, sorted(REVOCATION_BASES)
+    assert set(REVOCATION_BASES) == {_RUNG_ABOVE, "rung_above_in_holdings"}, sorted(REVOCATION_BASES)
     with pytest.raises(Unspecified):
         Office("off_x", "Reeve", "S", [], faction="Crown", revocation="purview")
     assert Office("off_y", "Reeve", "S", [], faction="Crown", revocation=_RUNG_ABOVE).revocation
@@ -1892,7 +1892,7 @@ def test_8a_every_authored_seat_constructs_against_the_live_rosters():
     rvk = Counter(s["revocation"] for s in seats)
     assert sum(cnf.values()) == 29 and sum(rvk.values()) == 29
     assert cnf == Counter({"appointed": 15, "elected": 8, None: 6}), cnf
-    assert rvk == Counter({"rung_above_same_faction": 22, None: 7}), rvk
+    assert rvk == Counter({"rung_above_same_faction": 13, "rung_above_in_holdings": 2, None: 14}), rvk
 
 
 def test_8a_a_repeated_row_id_refuses_at_load_instead_of_being_collapsed(tmp_path, monkeypatch):

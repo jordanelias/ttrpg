@@ -224,6 +224,16 @@ class World:
         # ANTECEDENT can name the emission its own write just produced -- which is how a band
         # crossing's `causes[]` reaches the wear that crossed the floor.
         self._emitted_by_write: list[Event] = []
+        # H-206. WHERE EACH REMOVED PERSON LAST STOOD, `{pid: (container, tick)}`, written by
+        # `remove_person` -- the one death cascade -- and read by `world_q.event_place`. It exists
+        # because the cascade leaves NOTHING to read the place from: a Tenure is owned by its subject
+        # (S15.1), so the dead man's own `contain` edge leaves `w.tenures` with him. Game state the
+        # content hash does not fold: the only surviving copy of an ended `contain` edge's object,
+        # because the dead man's own edges are deleted with him (the `tenures` view; against
+        # 04_CODE_ARCHITECTURE.md:360's NEVER-deletion). Read only for an Event of the removal's own
+        # tick, so everything it decides reaches the hashed log as `claim.deposited` that same tick.
+        # Unhashed for that reason, not because it is derived (`test_h118`'s underscore exclusion).
+        self._departed: dict[str, tuple] = {}
         # G4 -- S27.3's SUM-THEN-CLAMP-ONCE ACCUMULATOR, `(record_kind, id, field) -> [(act id,
         # delta)]`. It lived as a local of `loop/resolve.py::resolve` and was fed off the success
         # EVENTS; it is a store now because an act's `work` WRITES to it, through the gate, and the
@@ -716,6 +726,8 @@ class World:
                 "this was never handed an open write to mutate inside of.")
         for t in list(self.tenures):
             if (t.subject == who or t.object == who) and t.live:
+                if t.kind == "contain" and t.subject == who:
+                    self._departed[who] = (t.object, self.tick)        # H-206: where he stood
                 t.until = self.tick
         self.persons.pop(who, None)
         # ⚠⚠ THE PERSON'S OWN `person`-KIND RUNG DIES WITH THEM, and leaving it behind was a
@@ -741,6 +753,13 @@ class World:
         if _node is not None and _node.kind == "person":
             self.rungs.pop(who, None)
         return [who]
+
+    def departed_from(self, who: str, tick: int) -> Optional[str]:
+        """The rung `who` stood in when `remove_person` took him out at `tick`, else `None` -- a
+        person still here, or one who left at another tick, has no answer. The reader of
+        `_departed` (H-206); `world_q.event_place` is its caller."""
+        at = self._departed.get(who)
+        return at[0] if at is not None and at[1] == tick and who not in self.persons else None
 
     def _rehome(self) -> None:
         """A Tenure added BEFORE its subject existed landed in `_unowned`; move it now.
@@ -1203,8 +1222,11 @@ class World:
             self._barrier_cache[key] = build()
         return self._barrier_cache[key]
 
-    def last_emission_of(self, kind: str, subject: str) -> Optional[str]:
+    def last_emission_of(self, kind: str, subject: str, *, written: bool = False) -> Optional[str]:
         """The id of the most recent Event of `kind` about `subject`, or None.
+
+        `written=True`: the Event that WROTE `subject` (H-129's fix shape), taken for `person.died`,
+        whose fold emission anchors on the killer.
 
         `W4`'s chaining primitive: a licensed clock's next tick names its previous one, so
         `[ROOT]` stops appearing after the clock's genuine first emission.
@@ -1222,10 +1244,12 @@ class World:
         a.actor, ...)`), so `last_emission_of("body.changed", <victim>)` already missed a
         combat-caused wound before this deletion -- this docstring's overclaim is new, the gap it
         describes is not. LATENT AT SHIPPED DEFAULTS: `body_step = 0` skips the caller
-        (`loop/matter.py`) entirely, so nothing reaches it on a built world today. Registered
-        rather than fixed here: `hole_register.yaml` H-129 -- a fix (reading the first minted
-        receipt in `changes[]` instead of `anchor_of`) would move outputs in a `body_step > 0`
-        sweep arm and needs its own decision, not a side effect of this position's field deletion.
+        (`loop/matter.py`) entirely, so nothing reaches it on a built world today. The
+        `person.died` half is FIXED via `written=True`; `body.changed` still reads the anchor, so
+        that half of H-129 stands. Registered rather than fixed for `body.changed` only:
+        `hole_register.yaml` H-129 -- a fix (reading the first minted receipt in `changes[]`
+        instead of `anchor_of`) would move outputs in a `body_step > 0` sweep arm and needs its
+        own decision, not a side effect of this position's field deletion.
         Every OTHER caller of this method (the six kinds above) is unaffected: each names a kind
         with exactly one emitter, MATTER's own auto-emission block, so tier 2 still returns `subj`
         by construction for all of them. ⚠ "SIX", NOT SEVEN, AND "MATTER'S OWN" NO LONGER COVERS
@@ -1237,7 +1261,10 @@ class World:
         the reason this sentence states. Not corrected further here: the count is cosmetic and
         the property this paragraph defends is unaffected."""
         for e in reversed(self.log):
-            if e.kind == kind and anchor_of(self, e) == subject:
+            if e.kind != kind:
+                continue
+            if (any(c.subject == subject for c in e.changes) if written
+                    else anchor_of(self, e) == subject):
                 return e.id
         return None
 
@@ -1284,7 +1311,7 @@ class World:
     def content_hash(self) -> str:
         """`H-118`: REV 1 hashed the log alone. Demonstrated there -- delete a person from one of
         two identical worlds with no Event appended, and the hashes still matched. It now folds
-        EVERY game-state collection (`_STATE_COLLECTIONS` + `_STATE_SEQUENCES` + `tenures`) --
+        EVERY game-state collection (`_STATE_COLLECTIONS` + `_STATE_SEQUENCES` + `tenures`; `_departed` is the one per-tick exception, cleared at each season and read only for its own tick) --
         IN ID ORDER -- ahead of the log, so a state divergence that never reaches the log is no
         longer invisible to it.
 

@@ -1824,7 +1824,10 @@ rosters:
     source: "JORDAN, ED-IN-0256 ruling (3), 2026-09-18, VERBATIM: *\"rung above of same faction\"* -- WHO MAY STRIP A SEAT. Plan position `13d-i`; closes the `is_title` branch (`H-109`)."
     open: false
     note: >-
-      ⚠ ONE VALUE, BECAUSE ONE RULE WAS RULED. The holder of a seat on the rung DIRECTLY ABOVE the
+      ⚠ TWO VALUES. `rung_above_in_holdings` (JORDAN, 2026-10-12: *"it's not ONLY based on hierarchy of rungs,
+      but also where it is placed in holdings"*): the seat's rung is one of the revoker's HOLDINGS and the
+      revoker sits on the rung directly above; a seat whose rung nobody holds is stripped by nobody, its
+      holder resigns. `rung_above_same_faction`, the one value ED-IN-0256 ruled: the holder of a seat on the rung DIRECTLY ABOVE the
       seat's own rung, in the SAME faction -- structural, NOT a rank comparison, and applied to
       every seat alike. It replaces both of the 2026-09-02 rules the `titles` note above records
       (purview for an office; purview + holdings + higher rank for a title) and r2's
@@ -1835,7 +1838,7 @@ rosters:
       by G3 for the same reason as `has_conferral_basis` above -- CORRECTED, antagonist pass,
       2026-09-27), which refuses at IMPORT if a member here has no rule there or the reverse, so
       the roster cannot grow a value the resolver silently treats as another.
-    values: [rung_above_same_faction]
+    values: [rung_above_same_faction, rung_above_in_holdings]
 
   binds_bases:
     source: "`ARCH §B.7`'s ratified `Seat :=` line, `remit(acts[], binds)`, and `ARCH F.17`'s own resolution of *how a person joins an establishment* -- *\"`oblige`'s `requires` reads the seat's `binds`\"*. r2 `05_LEDGER_AND_BUILD.md` §A.1.5 RULED (b). Plan position `17a`."

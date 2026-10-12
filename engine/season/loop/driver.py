@@ -421,6 +421,7 @@ class SeasonDriver:
         # Each now passes `contest_max_depth=<world>.fixtures.get("contest_max_depth")`, which is
         # exactly the shape `H-87`'s `site:` describes.
         w.draw = 0                 # S33: the draw ordinal is per-TICK, so replay is exact
+        w._departed.clear()        # H-206: per-tick scratch (`departed_from` answers only for its own tick)
         # `U2`: season-local. See `__init__` for why these four reset and the three above it do not.
         self.round = 0
         self._queued, self._spent, self._deliberated_at = {}, {}, {}

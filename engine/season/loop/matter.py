@@ -26,7 +26,7 @@ from ..data.requires import SHORTFALL_PREDICATE, Observation
 from ..queries import world_q
 from ..state.carriers import Event
 from ..state.gate import Token
-from ..state.ids import H, ROOT
+from ..state.ids import H, ROOT, draw_factory
 from ..trace_log import TRACE
 
 
@@ -80,6 +80,19 @@ def _crossings(w: "World", subject_id: str, floors: dict, before, after,
                            alternatives=["write the consequence directly (L5 forbids: a crossing MAY NEVER PRODUCE AN OUTCOME)",
                                          "silently drop the verb from the set (then nobody can witness it)"])
     return out
+
+
+def _die(w: "World", token: Token, pid: str) -> None:
+    """DEATH THROUGH THE ONE OWNER, written once for both MATTER callers (hunger, the bodies pass).
+    `World.remove_person` is `_eff_kill`'s cascade, factored. Chained to the death WRITTEN about
+    `pid` (`written=True`, H-129): a RESOLVE `person.died` anchors on the killer, so the anchor read
+    would hand a killer who later dies here his victim's death as his cause."""
+    prior_d = w.last_emission_of("person.died", pid, written=True)
+    w.write("exists", token,
+            lambda pid=pid: w.remove_person(pid),
+            record_kind="Person", fieldname="exists", driver="Event",
+            emits="person.died", subject=pid,
+            causes=[prior_d] if prior_d else [ROOT])
 
 
 def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[Event]:
@@ -273,7 +286,9 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     #
     # ⚠ BODIES AND TRAVEL WERE NOT BUILT WHEN THIS WAS WRITTEN; BOTH ARE NOW (item 3b below, and
     # the travel pass after the yield loop, plan position `19c`), each in #353's order.
-    factor = w.fixtures.get("season_factor")
+    # v9 IN-21 / `H-26`: ONE draw per season, keyed on the clock, owned by `world_q.season_factor_of`.
+    # With `season_factor_draw` empty (the shipped control) this is the bare `season_factor`.
+    factor = world_q.season_factor_of(w)
     scale_ = w.fixtures.get("condition_scale")
 
     # -- THE DRAW IS PER EATER, UP THE LARDER LADDER (item 3a) -------------------
@@ -442,15 +457,28 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
         emitted.extend(_crossings(w, pid, floors_body, was, person.body,
                                   fell.id if fell else None))
         if person.body <= 0:
-            # DEATH THROUGH THE ONE OWNER. `World.remove_person` is `_eff_kill`'s cascade,
-            # factored — the same `w.tenures` scan, so an edge another person owns that NAMES the
-            # dead one closes here too (§15.3, and `W-E`'s measured dangling `tie`).
-            prior_d = w.last_emission_of("person.died", pid)
-            w.write("exists", token,
-                    lambda pid=pid: w.remove_person(pid),
-                    record_kind="Person", fieldname="exists", driver="Event",
-                    emits="person.died", subject=pid,
-                    causes=[prior_d] if prior_d else [ROOT])
+            # death through the one owner: see _die
+            _die(w, token, pid)
+
+    # -- THE BODIES CLOCK: AGEING AND ILLNESS (v9 IN-34, FORCE-BODIES) ------------
+    #
+    # #457 D2 answered [medium; Jordan to correct]: ageing and illness are in scope, a HAZARD READER
+    # only, rates swept. The hazard is `world_q.body_hazard` -- a Query over `Person.born` -- and
+    # this pass is its one writer: ONE KEYED DRAW per living person (`draw_factory`, keyed on
+    # (world_seed, tick, pid, purpose), so the same seed gives one death and no other stream moves).
+    # Read AFTER the hunger pass, so a person who starved this barrier is already gone and cannot
+    # die twice.
+    # ⚠ THE CONTROL TAKES NO DRAW: both rates ship at 0 and the pass is skipped at the `if` below, so
+    # the season is today's. A NaN or negative rate is truthy, enters, and `body_hazard` refuses it.
+    # ⚠ WHAT THE DEATH REACHES: an actorless `person.died` is placed where `remove_person` took him
+    # out (`world_q.event_place`, H-206), so persons standing there hold claims naming the dead
+    # holder. NOT BUILT: claims naming his OFFICE or closed HOLD (H-206's NOT DONE).
+    if float(w.fixtures.get("age_step")) or float(w.fixtures.get("illness_rate")):
+        keyed = draw_factory(w.world_seed, lambda: w.tick)
+        for pid in sorted(w.persons):
+            hazard = world_q.body_hazard(w, pid)
+            if hazard > 0 and keyed(pid, "body_hazard").random() < hazard:
+                _die(w, token, pid)
 
     for rid in sorted(w.rungs):
         r = w.rungs[rid]

@@ -397,6 +397,12 @@ DEFAULT_FIXTURES = Fixtures(
     # what is injected here is a degenerate one. The sweep is on its value, which is the only axis
     # a constant has; a real distribution is a different hole and is not invented here.
     season_factor=1.0,                # `H-26`, swept 0.5 / 1 / 2
+    # v9 IN-21 / `H-26`'s DISTRIBUTION: one tuple per season of the year (so the year's length is the
+    # table's), each holding the equally likely multipliers on `season_factor` that season. `()` is
+    # the CONTROL: no year, no draw, the bare constant above. The on arm is the declared sweep
+    # `((0.5, 1.0, 2.0),) * 4`; a drought-only arm is `((0.5,),) * 4`. Drawn by
+    # `world_q.season_factor_of`, keyed on (world_seed, tick).
+    season_factor_draw=(),            # `H-26`, swept () / ((0.5,),)*4 / ((0.5, 1.0, 2.0),)*4
     # ⚠ `W8` / `H-11`. #353 §10.4 makes `MatterKind` open and V2 gives the draw's SHAPE -- *from
     # the containing rung's stores, scaled by weight* -- and no weights. Registry row, not literal.
     subsistence_weight=SUBSISTENCE_WEIGHTS,
@@ -517,7 +523,25 @@ DEFAULT_FIXTURES = Fixtures(
     # `LB-3b` falsifiers set the fixture explicitly, so the behaviour is EXERCISED rather than
     # merely present (§0.2). Choosing the number needs a world that stocks a larder — which is
     # what makes this a design call rather than a default nobody looked at.
+    # ⚠ v9 SE-01 (`24g`): THE LIVE ARM IS BUILT AND EXERCISED, AND THIS VALUE IS STILL NOT CHOSEN.
+    # J-6 settles the SHAPE -- a fixture, the control kept for the corpus, a one-line revert -- not
+    # the number. `tests/test_territorial_subsistence.py` reads `H-125`'s `sweep:` off the register
+    # and runs every non-control arm on the built realm; flipping the live default is THIS line.
     body_step=0,                       # `H-125`, swept 0 (control, SHIPPED) / 10 / 67
+    # v9 IN-34 FORCE-BODIES (#457 D2, answered [medium; Jordan to correct]: ageing and illness are in
+    # scope, a HAZARD READER only, rates swept). The hazard is `world_q.body_hazard`, a Query over
+    # `Person.born` (ID-13: never a stored value); MATTER's bodies pass draws against it.
+    # `age_step` is the chance of death added per season of age, `illness_rate` the age-free chance
+    # a season. SHIPPED DARK: both ship at 0, THE CONTROL -- no draw is taken and no body is written,
+    # so the season is today's (like `body_step` above and IN-21's `season_factor_draw ()`).
+    # ⚠ NONE OF THE THREE NUMBERS IS CHOSEN HERE; ALL ARE JORDAN'S TO SET (#457 D2's gate).
+    # No source authors an age: `references/npc_registry.yaml` carries `age: null [GAP]`
+    # on 29 of its 46 rows and no age key on 17, so `age_at_build` -- the age every person the
+    # realm builds has at tick 0 (`Person.born = -age_at_build`) -- is a declared control default,
+    # not a reading of any source. The tests sweep their own arms and rule on none of them.
+    age_step=0.0,                      # v9 IN-34, swept 0 (control, SHIPPED) / test arms only
+    illness_rate=0.0,                  # v9 IN-34, swept 0 (control, SHIPPED) / test arms only
+    age_at_build=0,                    # v9 IN-34, a declared default (seasons old at tick 0)
     # `W-E` / `H-123`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
     # NOT GO DOWN. Part E's `writes:` names the CELL and never the VALUE, and no in-chain document
     # supplies this one -- so it is declared, defaulted and swept rather than chosen in a body,

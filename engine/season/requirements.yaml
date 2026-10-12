@@ -1119,8 +1119,8 @@ rows:
       `engine/season/tests/test_told_by_channel.py::test_r07_realm_regard_differs_between_hearers_by_claim_not_stance_alone`
       (`build_realm(0)`, two seasons) printed control (both gains 0) 0 of 11449 pairs differing
       beyond stance, shipped arm 3270 of 11449. Regard is computed at read and writes no `stance`,
-      so the paragraph above stands (W-F spent, A-12). The status stays `partial`: SE-01 (B-F) and a
-      fought field (IN-13, B-M) remain on the row's path (v9 `_part2` R-07).
+      so the paragraph above stands (W-F spent, A-12). The status stays `partial`: SE-01 (landed `d12c8db9`) is on the row's path and a
+      fought field (IN-13, B-M) remains (v9 `_part2` R-07).
     measure: "python -m pytest engine/season/tests -k 'choose_receives_no_world or a_view or r7_two_persons'"
     blocks: [IN-38]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); W27: `17` landed, IN-38 remains

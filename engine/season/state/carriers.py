@@ -611,6 +611,14 @@ class Person:
     # is the model" MEANS. A bare 1000 here would be a second, silent copy of that scale — the
     # defect `G1` names — and it would drift the moment the fixture moved.
     body: int = field(default_factory=lambda: DEFAULT_FIXTURES.get("condition_scale"))
+    # v9 IN-34 FORCE-BODIES: THE BIRTH TICK, the one field the bodies clock adds, and its ONLY READER
+    # is `queries/world_q.py::age_of` -> `body_hazard` (ID-13: no field without a reader). Age is NOT
+    # stored; it is `w.tick - born`, a Query over the clock (IN-21's `season_of_year` precedent), so
+    # nothing writes to age anyone. Default `-age_at_build`, the fixture: no source authors a person's
+    # age (`references/npc_registry.yaml`: `age: null [GAP]` on most rows, no key on the rest), and a
+    # literal here would be a second, silent copy of a number Jordan sets. `loop/census.py::_individuate`
+    # passes its own (a person minted at tick t is `age_at_build` old at t, not at 0).
+    born: int = field(default_factory=lambda: -DEFAULT_FIXTURES.get("age_at_build"))
     # ⚠ `scar` IS `{element: count}` -- IN-08 H3, `ED-IN-0261`'s scar model (*"counted PER
     # ELEMENT ... the unit is a COUNT, thresholds 1/2/3"*). An element is a PURSUIT name (the
     # fifteen of `references/descriptor_registry.yaml`'s `pursuit_roster`) or, since IN-08 H11, an

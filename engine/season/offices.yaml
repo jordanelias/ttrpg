@@ -52,13 +52,37 @@
 #        -- outside `Office.conferral`'s ruled roster, not silently folded into it.
 #      * `purview`/`holdings` (old: purview alone for an office, purview+holdings+rank for a title)
 #        -> `rung_above_same_faction` wherever a rung above could in principle hold a same-faction
-#        seat (22 of 29 rows) -- the two old bases collapse to ED-IN-0256's one structural rule,
+#        seat (15 of 29 rows; at build only the six Crown T1 seats are satisfiable, H-207) -- the
+#        two old bases collapse to ED-IN-0256's one structural rule,
 #        which is dispatched dynamically at revoke-time by `state/gate.py::seated_on_the_rung_above`
 #        against WHOEVER actually holds that seat, not precomputed here.
-#      * `none` (a seat with no revoker at all -- realm-scale seats with no rung above them, and
-#        the two Church/Restoration seats canon calls sovereign or informal) -> stays `null`, 7 of
+#      * `none` (a seat with no revoker at all -- realm-scale seats with no rung above them, the
+#        Crown's own duchy seat (held by the King), and
+#        the two Church/Restoration seats canon calls sovereign or informal) -> `null`, 7 of
 #        29 rows, preserving `03`'s own judgment about WHICH seats are protected rather than
 #        re-deriving it.
+#      * SEVEN MORE ROWS ARE `null` BY RULING, 14 of 29 in all (Jordan, 2026-10-11, VERBATIM
+#        *"null"*): `off_cardinal_fortitude`, `off_cardinal_temperance`, `off_cardinal_justice`,
+#        `off_cardinal_prudence`, `off_senior_inquisitor` (Church of Solmund, T9, parent rung
+#        `r_valoria`), `off_archbishops_rep` (Church of Solmund, T1) and `off_grand_master`
+#        (Löwenritter, T1), the last two with the Crown duchy `duchy_valorsmark` as parent rung.
+#        They declared `rung_above_same_faction` but could not be stripped in the built realm:
+#        `seated_on_the_rung_above` needs a seat on the PARENT rung of the target's own faction, and
+#        every seat on those parent rungs is Crown -- they failed on faction, not rung. Only an
+#        `establish` founding a same-faction seat on the parent rung could have changed that
+#        (`_req_establish` checks no purview on a founding; a computed `establish` carries no
+#        operands today). `null` (strippable by nobody) is what they already did; the ruling
+#        writes it down and closes that route, and `_req_establish` refuses changing `revocation`
+#        at runtime.
+#        (Loop-built, those rows' seats are `off_npc_038`, `off_npc_013`, `off_npc_034`, `off_npc_070`;
+#        the other three are minted under the row id.) The seven duchy-rung council/guild seats are NOT in
+#        this ruling and stay `rung_above_same_faction`, though at build they fail the same way: their
+#        parent rung is `r_valoria`, Crown only (H-207 cause 1). THE TWO DUCHY HEADS (`off_duchess_
+#        hafenmark`, `off_duke_varfell`) declare `rung_above_in_holdings` (Jordan, 2026-10-12, H-207
+#        `cite:`): strippable by the seat on the rung above only where their duchy is one of that
+#        holder's holdings; no duchy is, as built (`in_holdings` is False over every duchy rung for
+#        every holder, MEASURED), so nobody strips them until content places one. 15/14 become
+#        13 `rung_above_same_faction`, 2 `rung_above_in_holdings`, 14 `null`.
 #
 # ⚠⚠ HOW `harness/populated.py::build_realm` READS THIS FILE (`8a`, 2026-09-29, then `13d-iii`,
 # 2026-10-01). EVERY ROW IS ONE SEAT, AND ONE PASS OVER THE ROWS GIVES EACH ITS RUNG, ITS REMIT,
@@ -188,7 +212,7 @@ seats:
     faction:    "Hafenmark"
     remit_acts: [issue, confer, revoke, convene]
     conferral:  null
-    revocation: rung_above_same_faction
+    revocation: rung_above_in_holdings   # Jordan 2026-10-12: strippable by the monarch only if the duchy is in their holdings
     holder:     "NPC-050"
     obligees:   []
     source:     "systems/world/reference/worldbuilding_v30.md:26"
@@ -201,7 +225,7 @@ seats:
     faction:    "Varfell"
     remit_acts: [issue, confer, revoke, convene]
     conferral:  elected
-    revocation: rung_above_same_faction
+    revocation: rung_above_in_holdings   # Jordan 2026-10-12: strippable by the monarch only if the duchy is in their holdings
     holder:     "NPC-052"
     obligees:   []
     source:     "systems/world/reference/worldbuilding_v30.md:25; faction_politics_v30.md:246 (\"first among the Jarls, not a monarch\")"
@@ -331,7 +355,7 @@ seats:
     faction:    "Church of Solmund"
     remit_acts: []
     conferral:  appointed
-    revocation: rung_above_same_faction
+    revocation: null   # Jordan 2026-10-11, "null": no same-faction seat on the parent rung
     holder:     "NPC-034"
     obligees:   []
     source:     "systems/factions/reference/faction_politics_v30.md:197"
@@ -357,7 +381,7 @@ seats:
     faction:    null
     remit_acts: [issue, convene]
     conferral:  appointed
-    revocation: rung_above_same_faction
+    revocation: null   # Jordan 2026-10-11, "null": no same-faction seat on the parent rung
     holder:     "NPC-040"
     obligees:   []
     source:     "systems/world/reference/worldbuilding_v30.md:39"
@@ -370,7 +394,7 @@ seats:
     faction:    null
     remit_acts: [issue, determine, convene]
     conferral:  appointed
-    revocation: rung_above_same_faction
+    revocation: null   # Jordan 2026-10-11, "null": no same-faction seat on the parent rung
     holder:     "NPC-038"
     obligees:   []
     source:     "systems/world/reference/worldbuilding_v30.md:40; cases/exercises/NPC-038.yaml (authored office overlay)"
@@ -383,7 +407,7 @@ seats:
     faction:    null
     remit_acts: [issue]
     conferral:  appointed
-    revocation: rung_above_same_faction
+    revocation: null   # Jordan 2026-10-11, "null": no same-faction seat on the parent rung
     holder:     "NPC-013"
     obligees:   []
     source:     "systems/world/reference/worldbuilding_v30.md:41"
@@ -396,7 +420,7 @@ seats:
     faction:    null
     remit_acts: [issue]
     conferral:  appointed
-    revocation: rung_above_same_faction
+    revocation: null   # Jordan 2026-10-11, "null": no same-faction seat on the parent rung
     holder:     "NPC-039"
     obligees:   []
     source:     "systems/world/reference/worldbuilding_v30.md:42"
@@ -409,7 +433,7 @@ seats:
     faction:    null
     remit_acts: [determine]
     conferral:  appointed
-    revocation: rung_above_same_faction
+    revocation: null   # Jordan 2026-10-11, "null": no same-faction seat on the parent rung
     holder:     "NPC-004"
     obligees:   []
     source:     "faction_politics_v30.md -- \"Cardinal Justice (alternate) / Senior Inquisitor\""
@@ -513,7 +537,7 @@ seats:
     faction:    null
     remit_acts: [convene]
     conferral:  appointed
-    revocation: rung_above_same_faction
+    revocation: null   # Jordan 2026-10-11, "null": no same-faction seat on the parent rung
     holder:     "NPC-070"
     obligees:   []
     source:     "systems/world/reference/worldbuilding_v30.md:109"

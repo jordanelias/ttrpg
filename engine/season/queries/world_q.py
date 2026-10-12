@@ -31,7 +31,7 @@ from __future__ import annotations
 
 from typing import Callable, Optional
 
-from ..data.requires import UNKNOWN
+from ..data.requires import UNKNOWN, binding_from_act
 from ..data.rosters import (
     FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, RUNG_KINDS, SITE_KINDS,
     TENURE_KINDS,
@@ -40,6 +40,7 @@ from ..gaps import Forbidden, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
 from .person_q import intent_named
+from ..state.attribution import anchor_of, causing_act
 from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE (G3, plan position 6). The
 # write gate's F3 clause needs both -- ruling (3)'s parent rung and ruling (4)'s purview subtree --
@@ -54,7 +55,7 @@ from ..state.containment import ancestry, home_of  # noqa: F401 -- re-exported
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
 from ..state.gate import BENCH_BASIS, may_determine, purview_reaches, sits_over
-from ..state.ids import ROOT
+from ..state.ids import ROOT, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
 
@@ -392,7 +393,7 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
 def place_of(w: World, x: Optional[str]) -> Optional[str]:
     """`ARCH §F.14`'s OWN NAME, PROMOTED (position `11a`, r2 `01_ATTENTION_AND_REACH.md` §A.3).
     The rung a THING is at, for ANY id -- moved in from `epistemic._event_place`, which took only
-    an Event. That caller becomes `place_of(w, anchor_of(w, e))` (`epistemic.py`'s two sites).
+    an Event. That caller becomes `event_place(w, e)`, below (`epistemic.py`'s two sites).
 
     ⚠ PERSON BEFORE RUNG, AND THE ORDER IS THE WHOLE OF THIS FUNCTION'S CORRECTNESS -- carried
     over from `_event_place`'s own docstring rather than restated: testing `x in w.rungs` FIRST
@@ -431,6 +432,88 @@ def place_of(w: World, x: Optional[str]) -> Optional[str]:
     if x in w.rungs:
         return x
     return None
+
+
+def event_place(w: World, e) -> Optional[str]:
+    """WHERE AN EVENT HAPPENED -- `place_of(w, anchor_of(w, e))`, the one expression the tree used for
+    it at WITNESS (`epistemic._ch_co_located` and `epistemic.seen_subject`), now owned once, plus one
+    limb `place_of` cannot carry: A DEATH HAS A PLACE (H-206).
+
+    `World.remove_person` takes the dead out of `w.persons` and closes every edge naming him in the
+    write that kills him, and WITNESS runs after. An Event no act caused (a death at MATTER) anchors
+    on the removed person (`state/attribution.py`, tier 2), `place_of` of a person is `home_of(w)`'s
+    LIVE `contain` edge, and so it answered `None` -- the event found no observer under any channel
+    that needs a place, and a dead seat-holder was reported to nobody. A death at RESOLVE anchors on
+    the killer, who is alive, which is why only the MATTER-written one was lost.
+
+    The limb, for an ACTORLESS Event only (no act among its causes): when the anchor is a person the
+    world NO LONGER HOLDS, his place is where he stood when
+    `remove_person` took him out, if that was this Event's own tick (`World.departed_from`) -- the
+    container of the `contain` edge the cascade closed. It cannot be read off `w.tenures`: a Tenure is
+    owned by its subject, so his own edge left the store with him (probed on `build_realm(0)`).
+    It is NOT `place_of`'s person limb, deliberately: `place_of` is also asked about the dead by
+    `reach` (a claim about a dead man), and answering there would move every reader of an old
+    claim; only an EVENT's own tick has a place for him. ⚠ ACTORLESS ONLY, MEASURED: without that clause
+    the limb also placed the refusals of a victim's own acts later in the killing tick (`act.ineligible`,
+    `travel.blocked`, ... anchored on the dead ACTOR, tier 1); the class is reproduced by
+    `test_h206_an_act_caused_event_of_the_dead_actor...`. `None` otherwise, exactly as before.
+
+    The limb places every ACTORLESS Event anchored on a person removed in that Event's own tick, so
+    at MATTER also the same dying cohort's `body.changed` and its tier-3 `condition.band_crossed`
+    (reachable only at `body_step > 0`, unmeasured; H-206), and an actorless MATTER Event about a
+    person killed at RESOLVE later in the same tick, e.g. `travel.ended` (`loop/matter.py`'s travel
+    pass), which is reachable at shipped defaults and unmeasured (H-206)."""
+    who = anchor_of(w, e)
+    here = place_of(w, who)
+    if here is not None:
+        return here
+    at = w.departed_from(who, e.emitted_at)       # `departed_from(None, t)` is None
+    return at if at is not None and causing_act(w, e) is None else None
+
+
+# ⚠ v9 SE-01 (`24g`), P1's OTHER HALF -- THE PERSON-KEYED CROSSING REPAIR IS THE PERSON LIMB ABOVE,
+# AND NO NEW CODE WAS NEEDED FOR IT. The plan's instruction (*"`world_q` derives `at` from
+# `w.sites.get(who)`; the repair is `at = parent_of(w, who)` when `who` names a person"*) was written
+# against Q3's old `w.crossings` tuple read, which position `11a` deleted: a crossing now reaches a
+# witness through `epistemic._ch_co_located` as `event_place(w, e)` (`place_of` of its anchor), and for a person that
+# is `home_of(w)[who]` -- the person's one live `contain` parent, which is `parent_of(w, who)`. So a
+# cohort's `condition.band_crossed` (anchored, tier 3, on its own `body.changed`) is placed at the
+# settlement the cohort stands in, and everyone standing there is `co_located` with it.
+# `tests/test_territorial_subsistence.py::test_se01_a_person_keyed_crossing_is_placed_at_the_person_s_parent`
+# executes it under a non-zero `body_step`; the plan position is stale on this half, not open.
+
+
+def ever_named(w: World, eid: str) -> bool:
+    """Has the world held or recorded this id? `class_of` has no `dates` and forgets the dead, so
+    "unheld" is not "never was": a date is held (`place_of` admits it as a referent), and a recorded
+    id is one a logged Event's change already names -- the death names the dead (`person.died`), the
+    convening names the date. (A log scan: the cost a tombstone set on `World` would remove, and a
+    carrier change, so not here.)"""
+    return (w.class_of(eid) is not None or eid in w.dates
+            or any(c.subject == eid for e in w.log for c in e.changes))
+
+
+def demanded_person(w: World, a) -> Optional[str]:
+    """v9 SE-01 (`24g`) / `H-51` -- P3: THE PERSON AN ACT DEMANDS, or `None`.
+
+    An act DEMANDS a person when its `subject` operand names an id THE WORLD DOES NOT HOLD -- the
+    order to a clerk nobody has individuated. `World.class_of` is the one resolver of *which
+    collection holds this id*, and its `None` is documented as *"NOT YET, NOT NOT A THING"*, which is
+    exactly what a demand is: a person not yet individuated. ⚠ AN ID THE WORLD HOLDS AS SOMETHING
+    ELSE IS NOT A DEMAND: a `dispatch` naming a building (measured on `build_realm(0)`, 2 seasons:
+    14 of 15 `dispatch` acts name a rung, site or record and are refused) asks for no person, so it
+    individuates nobody. An act naming no subject at all demands nobody either.
+
+    Read through `binding_from_act`, the one reader of an act's operands, so this and the fold's
+    `subject` are one value. Read twice: by the fold, which earns `person.demanded` on the refusal
+    of a row that declares it (`loop/resolve.py`), and by CENSUS, which individuates the id it names
+    (`loop/census.py`) -- one owner of the PREDICATE. They agree because of stratum order, not
+    because there is one owner: the fold reads the log before this RESOLVE's Events are appended,
+    CENSUS after, so a death folded earlier in the same RESOLVE pass would be invisible to the first
+    and visible to the second (unreachable today: `dispatch` is a binding decision and resolves
+    before the contested physical acts that kill)."""
+    s = binding_from_act(a).get("subject")
+    return s if isinstance(s, str) and s and not ever_named(w, s) else None
 
 
 def reach(w: World, p: Person) -> set[str]:
@@ -580,6 +663,72 @@ def nearest_store(w: World, rung_id: Optional[str], kind: str,
             return cur
         cur = parent_of(w, cur)
     return None
+
+
+def season_of_year(w: World) -> Optional[int]:
+    """v9 IN-21: which season of the year `w.tick` falls in, or `None` when no year is declared. The
+    year is the length of `season_factor_draw`'s table (one entry per season, in order), so the
+    calendar position is READ OFF `tick` and no field stores it. A world declaring no table has no
+    year to be in, which is the control (`season_factor` alone)."""
+    table = w.fixtures.get("season_factor_draw")
+    return w.tick % len(table) if table else None
+
+
+def season_factor_of(w: World) -> float:
+    """v9 IN-21 / `H-26`: the multiplier on this season's `yield`. THE ONE OWNER of the term MATTER's
+    yield step scales by.
+
+    `season_factor` is the constant (swept 0.5 / 1 / 2). When `season_factor_draw` declares a table
+    the factor is that constant times ONE outcome drawn from the current season of the year's entry,
+    the outcomes equally likely. The draw is KEYED, not random: `ids.draw_factory`, seeded from `(world_seed, tick, ...)`, is the
+    same mint every id uses, so the same seed twice gives one hash and two seeds differ. An EMPTY
+    table is the control arm and returns the bare constant, so the default world's arithmetic is
+    untouched (`test_season_weather.py` holds the three-hash equality)."""
+    base = w.fixtures.get("season_factor")
+    s = season_of_year(w)
+    if s is None:
+        return base
+    outcomes = w.fixtures.get("season_factor_draw")[s]
+    if not outcomes:
+        # An empty season entry has nothing to draw from; without this `choose` below dies with a
+        # bare IndexError naming neither the fixture nor the season.
+        raise Unspecified(f"`season_factor_draw` season {s} declares no outcomes", "H-26",
+                          needs="at least one multiplier per season, or `()` for the control",
+                          law="IN-21: each season of the year holds the equally likely multipliers it draws from")
+    draw = draw_factory(w.world_seed, lambda: w.tick)("world", "season_factor")
+    return base * draw.choice(outcomes)
+
+
+def age_of(w: World, pid: str) -> int:
+    """v9 IN-34: how many seasons old `pid` is -- `w.tick - Person.born`. READ OFF THE CLOCK, never
+    stored (IN-21's `season_of_year` precedent), so no write is needed for anyone to age. This and
+    `body_hazard` are the only readers of `Person.born` (ID-13)."""
+    return w.tick - w.persons[pid].born
+
+
+def body_hazard(w: World, pid: str) -> float:
+    """v9 IN-34 FORCE-BODIES: THE CHANCE `pid` DIES OF AGE OR ILLNESS THIS SEASON. The one owner of
+    the term MATTER's bodies pass draws against; a Query over `Person.born` (ID-13: a hazard is a
+    reader over a field, never a stored value).
+
+    `illness_rate + age_step * age`, capped at 1. Both rates ship at 0, the control, so this returns
+    0 and MATTER takes no draw. A rate outside [0, 1] raises (`telling_privacy`'s rule, `H-190`): a
+    NaN or a negative chance must refuse, not answer.
+
+    ⚠ A COHORT HAS NO HAZARD, AND THAT IS THE RECORDED POPULATION BOUND, NOT A SPECIAL CASE. A
+    cohort is a population (S9, `Person.is_cohort`; `ED-IN-0255`), and what bounds a population is
+    E-1's answer as recorded -- matter plus hearth capacity (`ED-SE-0051`, RR-2) -- not one
+    person's old age. It is `SE-01`'s split from the other side: only a cohort goes hungry, only an
+    individual ages."""
+    age_step = float(w.fixtures.get("age_step"))
+    illness = float(w.fixtures.get("illness_rate"))
+    for name, rate in (("age_step", age_step), ("illness_rate", illness)):
+        if not 0 <= rate <= 1:        # `not ... <=`, so a NaN is refused too
+            raise ValueError(f"{name} {rate} is not a chance in [0, 1] (H-208)")
+    p = w.persons[pid]
+    if p.is_cohort or (age_step == 0 and illness == 0):
+        return 0.0
+    return min(1.0, illness + age_step * max(0, age_of(w, pid)))
 
 
 def subsistence_draw(w: World) -> dict:
@@ -825,7 +974,7 @@ def population(w: World, rung_id: str, residence: Optional[dict] = None) -> int:
     ⚠ AN R-1 AGGREGATE AND §22.4 DOES NOT BAR IT, on `density`'s and `demanded`'s ground: a weighted
     headcount over live `reside` edges, not a per-person tally summed across holders (clause 2), and
     no ended edge is read (clause 3). ⚠ `Rung.envelope` -- the population not individuated as persons
-    -- is NOT counted: it has no producer anywhere (`loop/census.py` writes nothing), so a term for
+    -- is NOT counted: it has no producer anywhere (`loop/census.py` writes no envelope), so a term for
     it would be a read of a dead carrier (`ID-13`). `24f` did not give it one: the territorial
     population it builds is carried by authored cohort PERSONS (`cohorts.yaml`, S9's one class), so
     it is counted above through `weight`, and `envelope` stays the ratified-but-unwritten field

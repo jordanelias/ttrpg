@@ -159,9 +159,14 @@ def _bound(binding: dict, name: str):
 COMPARATORS = {">=": lambda a, b: a >= b, "<=": lambda a, b: a <= b}
 
 # THE SEAT AN ACT EXERCISES, AS A BINDING KEY (plan position `19`). Structural like `actor` -- the
-# Act carries it (`Act.via`), the payload never does -- so it is NOT a `requires_operands` member and
-# `binding_of` adds it beside the actor. One spelling for the writer (`binding_of`) and the one
-# reader (`Basis.check`).
+# Act carries it (`Act.via`), the payload does not -- so it is NOT a `requires_operands` member and
+# `binding_of` adds it beside the actor. (`H-134`: ONE exception, and not a binding: a Candidate formed
+# among several seats names its seat under this key in its operands, so the payload of its act repeats
+# `Act.via` as a DISCRIMINATOR for `data/verbs.py::act_key`; `binding_of` drops it like any key
+# outside `requires_operands` and `Act.via` is what the fold reads.) One spelling for the writer
+# (`binding_of`) and the one reader (`Basis.check`); `H-134` adds three more spellings that are not
+# bindings: `decision/options.py` writes it onto a multi-seat Candidate's operands and reads it back
+# (`seat_of`), and `data/verbs.py::act_key` appends it to the id.
 VIA = "via"
 
 REQUIREMENT_TYPES: dict = {}
@@ -420,7 +425,9 @@ class Basis(Requirement):
     THE SEAT IS STRUCTURAL, NOT AN OPERAND -- the correction `04_VERBS.md`'s own determine row
     records (⑵: *"the conjunct binds `subject`; the actor is the acting person by construction and
     needs no operand"*). `Act.via` is to the binding what `Act.actor` is: carried by the Act itself,
-    never by the payload, and put into the binding by `binding_of`'s `via=` (`04:120` AX-1, *"a seat
+    never by the payload as a binding (`H-134`: a Candidate formed among several seats repeats it
+    on the payload as an id discriminator, which `binding_of` drops; see `VIA`), and put into the
+    binding by `binding_of`'s `via=` (`04:120` AX-1, *"a seat
     enters through `Act.via`"*). `via` is NOT a `requires_operands` member and this form does not
     make it one -- coining it would be *"filling `H-94` by keyword argument"*. An act exercising NO
     seat binds no `via`, and the clause is UNKNOWN, which the fold refuses (§42.2): that is the
@@ -444,7 +451,8 @@ class Basis(Requirement):
     `purview` read would have to ask `seat_hold` too, and this sentence is where that is written.
     `bench` does ask it, because `may_determine` is the gate's whole test and is taken whole.
 
-    ⚠ PERSON-SIDE the seat is the one `decision/options.py::exercised_seat` names, passed to the same
+    ⚠ PERSON-SIDE the seat is the one `decision/options.py::seat_of` names (`exercised_seat` for a
+    one-seat Candidate), passed to the same
     `binding_of` (`epistemic.belief_contradicts`), so §F1 clause 4 asks the cell the fold asks: a
     person who has watched `off_duke`'s levy of `R` refused holds `(R, purview:off_duke, False)` and
     stops forming it -- a belief, not a world read (`LedgerReader`)."""
@@ -648,8 +656,9 @@ def binding_of(actor: str, operands: dict, via: Optional[str] = None) -> dict:
     ride, and the grammar's vocabulary is closed -- `said` is a non-scalar the grammar never reads.
 
     ⚠ `via=` (plan position `19`) -- THE SEAT THE ACT EXERCISES, STRUCTURAL ON BOTH SIDES FOR THE
-    REASON `actor` IS: `Act.via` for the fold (`binding_from_act`), `exercised_seat(p, row)` for the
-    person (`epistemic.belief_contradicts`). It is read by one form, `Basis` (§F.24a form 7), and
+    REASON `actor` IS: `Act.via` for the fold (`binding_from_act`), `st` (the seat `opening_set` formed
+    the Candidate for, which `seat_of` reads back onto `Act.via`) for the person
+    (`epistemic.belief_contradicts`). It is read by one form, `Basis` (§F.24a form 7), and
     is added only when there is one, so a seatless act's binding is byte-for-byte what it was and a
     `basis` clause over it reads UNKNOWN. It is never taken from the payload: `via` is not an
     operand, and a payload key of that name would be dropped by the filter above like any other."""
