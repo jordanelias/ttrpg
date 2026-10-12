@@ -1553,6 +1553,16 @@ def vacancies(w: World, p: Person) -> tuple:
                  if o.id not in held and any(may_fill(w, p.id, s, o) for s in seats))
 
 
+def _stamped(q: Question, added: tuple) -> Question:
+    """`q` with the class its source declares (`rosters.yaml: question_sources.referent_class`)
+    stamped on the referents in `added` -- the ones the source WIDENED it with (IN-53). `q` itself
+    when the source declares none or nothing was added, so an unwidened question is unchanged."""
+    cls = SOURCE_REFERENT_CLASS[q.source]
+    if cls is None or not added:
+        return q
+    return replace(q, classes=tuple((o, cls) for o in added))
+
+
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
     """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier.
 
@@ -1653,17 +1663,14 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # question per vacancy. No source is added and no question displaced, so `qs[0]` keeps its id
     # and source under `first` (`H-54`); with no vacancy the output is byte-identical.
     vacant = vacancies(w, p)
-    cls = SOURCE_REFERENT_CLASS["need"]
     mine = ambitions(w, p)
     for pid in mine:
         subj = w.propositions[pid].subject
         refs = (subj,) + tuple(o for o in vacant if o != subj)
-        out.append(Question(f"q:need:{pid}", "need", refs, pid,
-                            tuple((o, cls) for o in vacant) if cls is not None else ()))
+        out.append(_stamped(Question(f"q:need:{pid}", "need", refs, pid), vacant))
     if not mine:
         for o in vacant:
-            out.append(Question(f"q:need:{o}", "need", (o,), o,
-                                ((o, cls),) if cls is not None else ()))
+            out.append(_stamped(Question(f"q:need:{o}", "need", (o,), o), (o,)))
 
     # ⚠ TWO ORDERINGS LIVE IN THIS ONE LINE AND ONLY THE FIRST IS DECLARED ANYWHERE.
     # `order[q.source]` is `rosters.yaml: question_sources`, whose own note says ORDER IS SEMANTIC
