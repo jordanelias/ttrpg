@@ -1,11 +1,15 @@
-"""THE σ-LEVERAGE PROVIDER — the seam's wrapper around the resolver Jordan named.
+"""THE σ-LEVERAGE PROVIDER — the host adapter and the host INPUT BUILDER for the `social_contest`
+module's roll (plan position `31a`, A-25).
 
 `04_CODE_ARCHITECTURE.md` §A.2:164 types `seam/wrappers/*` as writing *"nothing, ever"*, reading
 *"the projection"*, returning *"a `Margin`"*, holding token *"none"*. This module is that row. It
-DECIDES NOTHING: it derives a pool and an obstacle from what the actor and the subject genuinely
-have, calls the σ layer, and returns the net/ob pair as a dict — the shape `combat_seam` already
-returns and `degree_of` already grades. It NEVER returns a band; `seam/ladder.py` reads one by
-calling `degree_from_net`, which is the single owner.
+DECIDES NOTHING: `contest_input` (the host input builder) derives a pool and an obstacle from what
+the actor and the subject genuinely have and freezes them into `queries/inputs.py::SocialContestInput`;
+`resolve` (the adapter) keeps S27.4's refusal, then calls the module entry the prize row names
+(`module_entry:`, registered in `manifest.MODULE_ENTRIES` from its composition row) and returns what
+it returned -- the net/ob pair as a dict, the shape `combat_seam` already returns and `degree_of`
+already grades. It NEVER returns a band; `seam/ladder.py` reads one by calling `degree_from_net`,
+which is the single owner. The roll itself is `modules/social_contest/roll.py`, reached by string.
 
 ⚠ THIS DOCSTRING NAMES NO BAND, ON PURPOSE AND UNDER A MEASURED CONSTRAINT.
 `tests/valoria/test_degree_ladder_single_owner.py`'s `_PRODUCES_BAND` scan reads raw file TEXT
@@ -16,7 +20,8 @@ Keep it band-free.
 RULED, ED-SC-0037. JORDAN, 2026-09-09, VERBATIM: *"we have the sigma leverage d10 resolver in
 engine to use."* A third option neither of that row's two costed.
 
-⚠⚠ **BOTH IMPORTS, AND THE SECOND ONE IS THE POINT.** `roll_net` ALONE APPLIES ZERO σ-LEVERAGE:
+⚠⚠ **BOTH IMPORTS, AND THE SECOND ONE IS THE POINT** -- they are the module's now
+(`modules/social_contest/roll.py`), carried there with this reasoning. `roll_net` ALONE APPLIES ZERO σ-LEVERAGE:
 `sigma_leverage.py::roll_net` is a back-compat shim — *"The authoritative implementation is
 dice_engine.roll_pool"* — that floors the pool, delegates, and **drops `roll_pool`'s `ob`
 parameter**, which `roll_pool` accepts and grades on. Importing it alone is strictly `roll_pool`
@@ -27,7 +32,7 @@ own, at `systems/social_contest/sim/contest/resolver.py:302`:
 
     net = roll_net(pool) + net_boost(lev, pool)
 
-⚠ **THE SEAM STILL DERIVES AN OBSTACLE, AND AN EARLIER READING OF ED-SC-0037 CLAIMED IT DID NOT.**
+⚠ **THE HOST STILL DERIVES AN OBSTACLE (`contest_input`), AND AN EARLIER READING OF ED-SC-0037 CLAIMED IT DID NOT.**
 `sigma_leverage.eff_ob` CONSUMES `base_ob` and is *"DISPLAY ONLY (not the resolution value)"* by its
 own docstring; `effective_ob` is a pure arg-order alias of it; `sigma_space_ob_shift` takes no
 `base_ob` at all and returns a shift. The live composition has the CALLER supply `base_ob`. So
@@ -42,7 +47,8 @@ BY ROLE — it writes nothing, returns a margin, holds no token, which is exactl
 a module satisfying that contract IS that row whatever supplies the margin; **(ii)** §A.2's
 enumeration is short by one and the finding goes on the ledger. **This unit takes (i).**
 ⚠ AND IT SATISFIES THREE OF THAT ROW'S FOUR COLUMNS, NOT FOUR. Column 3 is *"a `Margin`"* and this
-returns a **dict**; column 2 is *"the projection"* and the signature takes `w`, a World.
+returns a **dict**; column 2 is *"the projection"* and the signature takes `w`, a World -- the
+ADAPTER's does; since `31a` the MODULE reads only the typed record `contest_input` builds.
 `combat.resolve(w, …)` is the precedent for both — **and it is a precedent for the deviation, not
 for conformance.** Typing `Margin` across both providers is a `seam/` item of its own; minting the
 type for one provider while the other returns a dict would give the seam two return shapes, which
@@ -52,9 +58,10 @@ is worse than either.
 the actor genuinely has, leave every other operand at its registered fixture, and return a typed gap
 rather than fabricate a party.
 
-⚠ THIS MODULE IMPORTS NOTHING FROM `systems/` AND INSERTS NO `sys.path`. It reaches
-`engine.dice_engine.sigma_leverage` by dotted path, which the package already does for
-`engine.dice_engine.dice_engine`, so NO entry is added to
+⚠ THIS MODULE IMPORTS NOTHING FROM `systems/` OR `modules/` AND INSERTS NO `sys.path`. The roll is
+reached by STRING: the composition row `social_contest.roll` names it, the registrar resolves it at
+driver construction into `MODULE_ENTRIES`, and `resolve` below looks it up there by the role its
+prize row names. NO entry is added to
 `tests/valoria/test_engine_does_not_import_systems.py::PATH_SEAM_ALLOWED`. That set is shrink-only.
 """
 from __future__ import annotations
@@ -63,13 +70,13 @@ import random
 from typing import Any, Optional
 
 from ...data.rosters import VERB_CAPABILITY
-# ⚠ THE LEAF, NOT THE PACKAGE. `...manifest` re-exports from `registry.py`, which imports
-# THIS module to register it — importing the package here closes that loop and the cycle
-# guard counts it. `manifest/providers.py` imports nothing and is safe to reach from here.
+# ⚠ THE LEAVES, NOT THE PACKAGE'S RE-EXPORTS. `manifest/providers.py` imports nothing;
+# `registrar.py` imports only `gaps`; `registry.py` imports `data/` and `gaps`. None of them
+# imports `seam/`, so no import here closes a loop back into this package.
 from ...manifest.providers import provider
-
-# RULED, ED-SC-0037. Both names; see the docstring for why `roll_net` alone is the bare pool roll.
-from engine.dice_engine.sigma_leverage import net_boost, roll_net
+from ...manifest.registrar import MODULE_ENTRIES
+from ...manifest.registry import resolve as prize_row
+from ...queries.inputs import SocialContestInput
 
 
 def _capability(entity: Any, verb: str):

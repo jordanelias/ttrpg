@@ -9,6 +9,13 @@
       "entry": null,
       "verb": null,
       "needed_by": "engine/season/seam/wrappers/mass_battle.py \u2014 the `a field` prize's provider (ED-IN-0279, M3). This is the sanctioned route into systems/mass_battle/sim/ from engine/season/: massbattle.py's own internal imports are already proper dotted `systems.mass_battle.sim.*` (no flat/bare-import problem the way combat_engine_v1 has), so this goes through composition_roles rather than adding a second PATH_SEAM_ALLOWED entry that this subsystem's shape does not need."
+    },
+    "social_contest.roll": {
+      "target": "modules.social_contest.roll:roll",
+      "kind": "callable",
+      "entry": "verb_call",
+      "verb": "tell",
+      "needed_by": "engine/season/seam/wrappers/sigma.py \u2014 the host adapter `@provider(\"contest\", \"sigma_leverage\")` builds the typed input record and calls this entry through `manifest.MODULE_ENTRIES` (plan position `31a`, A-25). The registrar's first production row. The prize rows `a standing` and `a proposition` (`engine/season/rosters.yaml` `contest_subsystems`) name it in `module_entry:`, and `manifest/registry.py::check_contest_prizes` refuses at driver construction a prize row whose `module_entry:` no composition row declares, or one that disagrees with it."
     }
   }
 }

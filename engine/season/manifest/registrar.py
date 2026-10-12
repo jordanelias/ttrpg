@@ -36,10 +36,12 @@ boot naming the row"*):
   rules out import-time self-registration, the measured silent drop (`seam/__init__.py`'s own
   account of a missing import leaving the table empty).
 
-`ID-13`, READ EXACTLY: no production composition row carries `entry:` at `30`, so the pass over
-production rows registers nothing until `31a` lands the first; `tests/valoria/test_module_registrar.py`
-plants one, each case in a fresh subprocess, because `MODULE_ENTRIES` is a process global another
-test's imports could fill.
+`ID-13`, READ EXACTLY: no production composition row carried `entry:` at `30`; `31a` landed the first
+(`social_contest.roll`, called by `seam/wrappers/sigma.py`). `tests/valoria/test_module_registrar.py`
+plants rows, each case in a fresh subprocess, because `MODULE_ENTRIES` is a process global another
+test's imports could fill. A row that must EXIST is declared by the prize row naming it
+(`module_entry:`), and `registry.check_contest_prizes` refuses its absence; this module refuses
+only a role it already holds.
 """
 
 from __future__ import annotations
