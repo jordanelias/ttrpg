@@ -50,7 +50,10 @@ hands them on as plain values -- it decides none of what they do:
     (the one owner of that id relation, which `harness/populated.py` mints through);
   * its FORTIFICATION, `world_q.fortification_of` at the target;
   * each side's MORALE source, `_side_stance` below;
-and, since plan position `20-v`, one injected value: the `field_walls_dr` fixture (`H-150`).
+and, since plan position `20-v`, one injected value: the `field_walls_dr` fixture (`H-150`). Since MB-05r
+and MB-03, two more facts and one more value: the attacking side's ORIGIN territory (`_origin_of`), each
+side's build-time LOYALTY row (`_side_stance` with `_creed_referent`), and the
+`field_morale_loyalty_gain` fixture.
 What a fortification DOES is `massbattle.resolve_field`'s and `terrain.py`'s: any positive value
 makes the field A.9's `WALLS` row, whose one number (defender +3 DR) the engine applies to `Unit.dr`
 1:1 (an ASSUMPTION about the unit, `H-150`). The number is canon's, not invented here -- `None` in the
@@ -105,16 +108,32 @@ def _territory_of(w: Any, rung: str) -> Optional[str]:
     return None
 
 
-def _side_stance(w: Any, pids: list) -> float:
-    """A side's weight-mean stance toward each member's OWN faction -- the season's morale carrier
-    (`massbattle._morale_start`'s docstring says why it is this one).
+def _creed_referent(w: Any, fac: str) -> Optional[str]:
+    """Whom a member of faction `fac` holds their build-time LOYALTY row toward: the subject of the
+    faction's creed Proposition when its mood is OUGHT (its authored leader), else `None` (MB-03).
+
+    This is the writer's own rule read back, not a second one: `harness/populated.py` appends the
+    row `(prop.subject, *cast.stance_from_loyalty(...))` exactly when the creed's mood is OUGHT, and a
+    HOLDS faction (`Guilds`, `Schoenland`: no leader or template in canon) gets no row and reads `None`
+    here -- `cast.loyalty`'s *"`None` FOR A FACTION WITH NO TEMPLATE, NEVER A DEFAULT"*. ⚠ The row
+    names a PERSON, the creed's utterer, not the faction: that is why the morale row (`_eff_march`,
+    on the faction id) and this one are two referents and are read and handed on separately."""
+    prop = w.propositions.get(fac)
+    return prop.subject if prop is not None and str(prop.mood).upper() == "OUGHT" else None
+
+
+def _side_stance(w: Any, pids: list, referent=lambda w, fac: fac) -> float:
+    """A side's weight-mean stance toward a referent its members' OWN faction names -- by default the
+    faction itself, the season's morale carrier (`massbattle._morale_start`'s docstring says why it is
+    this one); with `referent=_creed_referent`, the creed's utterer, the build-time loyalty row (MB-03).
 
     Each member's faction is `world_q.faction_holding`, the one owner of *which faction a person
     coheres under*, and the stance is `queries.person_q.stance_toward`, the one reader of a stance row
     (valence x weight, summed over the rows naming that referent). A member committed to no faction
     or to two reads `None` there and contributes zero -- `faction_holding`'s own *"NONE AND MANY BOTH
-    RETURN None, AND NEITHER IS A DEFAULT"*. Weighted by `Person.weight` because `resolve_field` sizes
-    the side by the same weights: a cohort of ten carries ten men's morale. An empty side reads 0."""
+    RETURN None, AND NEITHER IS A DEFAULT"* -- and so does a member whose faction names no referent.
+    Weighted by `Person.weight` because `resolve_field` sizes the side by the same weights: a cohort
+    of ten carries ten men's morale. An empty side reads 0."""
     total = 0
     acc = 0.0
     for pid in pids:
@@ -122,19 +141,41 @@ def _side_stance(w: Any, pids: list) -> float:
         if p is None:
             continue
         fac = world_q.faction_holding(w, pid)
-        acc += p.weight * (stance_toward(p, fac) if fac is not None else 0.0)
+        ref = referent(w, fac) if fac is not None else None
+        acc += p.weight * (stance_toward(p, ref) if ref is not None else 0.0)
         total += p.weight
     return acc / total if total else 0.0
+
+
+def _origin_of(w: Any, pids: list) -> Optional[str]:
+    """The geography territory id the attacking side marched FROM, or `None` (MB-05r).
+
+    `contest()` hands this provider the target rung and never the origin, and no seam parameter is
+    added for it: on the season path `loop/sides.py::sides_of` musters `claimants` at the actor's
+    origin settlement (`world_q.mustered`, the settlement's subtree), so every claimant's home
+    (`world_q.home_of`, read once) sits under that settlement and `_territory_of` reads the same
+    territory for each. A side whose homes name no territory, or more than one (a caller passing a
+    faction's whole membership), has no one origin and reads `None` -- the default, under which no
+    crossing is derived and the field is what it was before MB-05r."""
+    homes = world_q.home_of(w)
+    found = {_territory_of(w, homes[pid]) if pid in homes else None for pid in pids}
+    return found.pop() if len(found) == 1 else None
 
 
 def field_input(w: Any, claimants: list, other: list, rung: str) -> MassBattleInput:
     """THE HOST INPUT BUILDER (plan position `31c`, A-25): `World` -> the frozen record the field reads.
 
     Reads `w.persons` (each side member's `weight`, and the stances `_side_stance` reads), the rung
-    ancestry (`_territory_of`), the target's fortification and `w.fixtures`, and nothing else; the
-    module that consumes the record never sees `World`. Its precondition is the adapter's PARTY-GAP
-    checks and a non-empty defending side (`resolve`, below). A member id `World` does not hold
-    contributes no weight, as `resolve_field` read it before the split."""
+    ancestry (`_territory_of`, at the target and at the claimants' homes for `_origin_of`), the
+    target's fortification, the creeds' Propositions (`_creed_referent`) and `w.fixtures`, and nothing
+    else; the module that consumes the record never sees `World`. Its precondition is the adapter's
+    PARTY-GAP checks and a non-empty defending side (`resolve`, below). A member id `World` does not
+    hold contributes no weight, as `resolve_field` read it before the split.
+
+    MB-05r: `origin` is the World half of the river-crossing fact; whether the line from it to the
+    target crosses a river is the geography's, which the module reads (`terrain.py::river_crossed`).
+    MB-03: `loyalties` and `loyalty_gain` are the build-time loyalty rows and the fixture gain; what
+    they do to the morale-start is `massbattle._morale_start`'s."""
     def weights(side: list) -> tuple:
         return tuple(w.persons[pid].weight for pid in side if pid in w.persons)
     return MassBattleInput(
@@ -143,7 +184,9 @@ def field_input(w: Any, claimants: list, other: list, rung: str) -> MassBattleIn
         fort_level=world_q.fortification_of(w, rung),
         stances=(_side_stance(w, claimants), _side_stance(w, other)),
         walls_dr=w.fixtures.get("field_walls_dr"),
-        river_crossing=False)
+        origin=_origin_of(w, claimants),
+        loyalties=(_side_stance(w, claimants, _creed_referent), _side_stance(w, other, _creed_referent)),
+        loyalty_gain=w.fixtures.get("field_morale_loyalty_gain"))
 
 
 @provider("contest", "mass_battle")

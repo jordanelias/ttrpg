@@ -34,11 +34,11 @@ not a near-miss, a disjoint region — so neither can resolve to NARROW_PASS via
 regardless of fortification. `test_mass_battle_terrain.py` covers the "Done when" criterion with a
 synthetic province rather than a real one for exactly this reason.
 
-RIVER_CROSSING is not reachable from the polygon lookup: `_TYPE_TO_ROW` has no entry producing it and
-nothing here reads the geography file's `water:`/`bridges:` keys. It is reached only through the
-CALLER'S signal, `terrain_row_for_territory(..., river_crossing=True)` (MB-05); no season caller
-derives that signal yet (the provider is handed the target rung, not the march's origin, and whether a
-bridge on the route cancels the crossing is unruled) — see that function's own docstring.
+RIVER_CROSSING is not reachable from the polygon lookup: `_TYPE_TO_ROW` has no entry producing it. It is
+reached through `terrain_row_for_territory(..., river_crossing=True)`, which `massbattle.resolve_field`
+sets from `river_crossed` below (MB-05r): the line between the march's origin and the field's territory
+anchors crosses a `water: rivers:` polyline. `bridges:` is NOT read [ASSUMPTION; medium; Jordan to
+correct] — a bridge does not cancel the crossing; `river_crossed`'s docstring says why, and the revert.
 """
 import os
 
@@ -128,10 +128,18 @@ def terrain_row_for_territory(tid, fort_level=0, river_crossing=False, geography
 
     `river_crossing` (MB-05): the CALLER's fact that the attacker fights its way across a river to
     reach the field -- the only way RIVER_CROSSING is ever returned (the module docstring says why the
-    polygon lookup cannot produce it). Default `False` is every caller today, so no live field moves.
+    polygon lookup cannot produce it). Since MB-05r the season's caller, `massbattle.resolve_field`,
+    derives it with `river_crossed` (below) from the record's `origin`; `False` -- the default, and
+    every field with no origin -- leaves the polygon row where it was.
     `[ASSUMPTION: priority WALLS > RIVER_CROSSING > polygon -- the same one-row-of-six shape that forced
     the fortification rule below forces one here; a crossing outranks the surrounding polygon because it
     is what happens AT the engagement, and walls outrank the crossing by that rule's own reasoning.]`
+    ⚠ RULED AT MB-05r, ON THAT ASSUMPTION: WHEN A CROSSING AND AN UPHILL POLYGON BOTH APPLY, RIVER_CROSSING
+    WINS and the field loses UPHILL's dice. A.9 is a table of six rows and its ED-780 extension says
+    "the Terrain row is determined" -- one row, never combined -- and `_run_and_grade` applies one row
+    (`if`/`elif`). The crossing is the engagement's own feature (`settlement_adjacency_v30.md`'s river
+    edge: the penalty applies "if defender holds far bank"); the hill is the surrounding polygon. The
+    other option -- UPHILL wins, or both rows' dice stack -- is Jordan's to state.
     Like fortification, it is read only for a KNOWN `tid`.
 
     `fort_level`: the LIVE fortification of the place fought over — pass it, do not omit it, for any

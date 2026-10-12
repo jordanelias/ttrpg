@@ -75,11 +75,20 @@ class MassBattleInput:
                        (`mass_battle.py::_side_stance`), which the module turns into a morale-start;
       * `walls_dr`  -- the `field_walls_dr` fixture (`H-150`); `None` is A.9's own number, which the
                        module reads from its terrain table;
-      * `river_crossing` -- the attacker crossed a river to reach the field (MB-05). The host holds the
-                       target rung and not the march's origin, so it cannot derive this, and passes `False`."""
+      * `origin`    -- the geography territory id the attacking side marched from, or `None` where it
+                       has no one origin (`mass_battle.py::_origin_of`, MB-05r). The module decides from
+                       it and `territory` whether the march crossed a river (`terrain.py::river_crossed`);
+      * `loyalties` -- `(attacker, defender)`: each side's weight-mean build-time loyalty row, the
+                       stance toward its faction creed's utterer (`mass_battle.py::_side_stance` with
+                       `_creed_referent`, MB-03), which the module adds to the morale-start at
+                       `loyalty_gain`;
+      * `loyalty_gain` -- the `field_morale_loyalty_gain` fixture (`H-148`'s site); `0` is the control,
+                       battle history only."""
     weights: tuple
     territory: Optional[str]
     fort_level: float
     stances: tuple
     walls_dr: Optional[int]
-    river_crossing: bool
+    origin: Optional[str]
+    loyalties: tuple
+    loyalty_gain: float

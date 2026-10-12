@@ -302,3 +302,115 @@ def test_an_uphill_field_resolves_differently_from_the_same_field_on_open_ground
         differs += uphill["result"] != open_["result"]
     assert checked == 16
     assert differs >= 1, "an uphill field fought identically to open ground on every seed (MB-05)"
+
+
+def _fight_from(monkeypatch, w, attackers, target, subject, seed, *, dry):
+    """The provider's fight, with the march's origin read as found or -- `dry` -- made `None`, the
+    no-origin default (`_origin_of`, MB-05r). Patched for this one call only."""
+    from engine.season.seam.wrappers import mass_battle as wrapper
+    with monkeypatch.context() as m:
+        if dry:
+            m.setattr(wrapper, "_origin_of", lambda _w, _pids: None, raising=False)
+        r = wrapper.resolve(w, attackers, ["c"], "a field", subject=subject, rung=target,
+                            rng=random.Random(seed))
+    assert r["status"] == "RESOLVED" and r["unopposed"] is False, f"seed {seed}: not fought: {r}"
+    return r["result"]
+
+
+def test_a_march_across_the_river_resolves_differently_from_the_same_march_dry(monkeypatch):
+    """MB-05r -- A.9's River-crossing row, DERIVED BY THE HOST. `set_s_008` (T3, east of the Valoris)
+    musters one Varfell man, who marches on the bare `set_s_036` (T9, west of it): the straight line
+    between the two territories' anchors crosses `river-valoris`, so the field is RIVER_CROSSING. The
+    SAME march with the origin read made `None` (`dry`) is the field as it was before MB-05r -- T9's
+    UPHILL. ⚠ So the two arms differ by UPHILL's defender die as well as by the crossing's speed step:
+    RIVER_CROSSING OUTRANKS UPHILL (`terrain_row_for_territory`'s one-row rule), and that ruling is
+    what this comparison observes on a real field.
+
+    THE FALSIFIER, BOTH WAYS. Before MB-05r the host passed `river_crossing=False` on every field and
+    the two arms were EQUAL on all 16 seeds (run 2026-10-12 against `5422ed1e`, this test's loop with
+    `_origin_of` absent); after, they differ on at least one (`>= 1` asserted, `checked` keeps it
+    honest). The record assertion closes the loop on the signal itself rather than its effect."""
+    from engine.season.seam.wrappers.mass_battle import field_input
+    target, subject = "set_s_036", "fac_church_of_solmund"
+    w = _bare(target)
+    attackers = world_q.mustered(w, "set_s_008", "fac_varfell")
+    assert attackers, "the fixture no longer musters a Varfell army at set_s_008 (T3)"
+    checked = differs = 0
+    for seed in range(16):
+        crossed = _fight_from(monkeypatch, w, attackers, target, subject, seed, dry=False)
+        dry = _fight_from(monkeypatch, w, attackers, target, subject, seed, dry=True)
+        checked += 1
+        differs += crossed != dry
+    assert checked == 16
+    assert differs >= 1, "a march across the river fought identically to the same march dry (MB-05r)"
+    rec = field_input(w, attackers, world_q.mustered(w, target, subject), target)
+    assert (rec.origin, rec.territory) == ("T3", "T9"), f"the march's origin was not derived: {rec}"
+
+
+def test_no_origin_and_a_same_bank_origin_leave_the_field_as_it_was(monkeypatch):
+    """MB-05r's DEFAULT, UNCHANGED. (1) A side spread over several territories has no one origin:
+    `fac_crown`'s whole membership read at `r_valoria` gets `origin` `None`, so no crossing can be
+    derived for it. (2) An origin on the target's own bank crosses nothing: the 2-man Crown army of
+    blocks 5-7 (T14) marches on `set_s_036` (T9) and resolves IDENTICALLY with its origin read and
+    with it made `None` on all 16 seeds (`==`, not `approx`) -- the pre-MB-05r field, since `None` is
+    what the host passed before."""
+    from engine.season.seam.wrappers.mass_battle import field_input
+    w = build_realm(0)
+    crown = faction_q.resolve(w, "fac_crown")
+    spread = field_input(w, crown.members, world_q.mustered(w, "r_valoria", "fac_guilds"), "r_valoria")
+    assert spread.origin is None, f"a side spanning territories was given one origin: {spread.origin}"
+    target, subject = "set_s_036", "fac_church_of_solmund"
+    w = _bare(target)
+    attackers = world_q.mustered(w, "set_s_014", "fac_crown")
+    rec = field_input(w, attackers, world_q.mustered(w, target, subject), target)
+    assert rec.origin == "T14", f"the same-bank army's origin moved: {rec.origin}"
+    checked = 0
+    for seed in range(16):
+        assert (_fight_from(monkeypatch, w, attackers, target, subject, seed, dry=False)
+                == _fight_from(monkeypatch, w, attackers, target, subject, seed, dry=True)), (
+            f"seed {seed}: a same-bank origin moved the field")
+        checked += 1
+    assert checked == 16
+
+
+def test_the_loyalty_gain_reaches_the_record_and_its_zero_arm_is_the_shipped_field():
+    """MB-03 (`ED-MB-0078`'s superseding row) -- each side's build-time loyalty row, behind the
+    `field_morale_loyalty_gain` fixture, on the provider's own fixture (the 2-man Crown army of
+    `set_s_014` against the Church's six at the garrisoned `set_s_036`).
+
+      * THE RECORD CARRIES BOTH SIDES' LOYALTY AND THE GAIN: the two sides' loyalty means differ (Crown
+        and Church members hold different rows toward their creeds' utterers), and the record's gain
+        is the fixture's, swept.
+      * `0` IS THE CONTROL AND THE SHIPPED DEFAULT: at gain 0 every seed resolves IDENTICALLY to the
+        unset default (`==`).
+      * A NON-ZERO ARM MOVES THE FIELD: at the 1:1 arm at least one of 16 seeds resolves differently
+        from the control. Which morale each side starts at is pinned in
+        `tests/valoria/test_mass_battle_d1_morale_baseline.py`, which may read the Units."""
+    from engine.season.seam.wrappers.mass_battle import field_input, resolve as provider_resolve
+    target, subject = "set_s_036", "fac_church_of_solmund"
+    default = build_realm(0)
+    assert default.fixtures.get("field_morale_loyalty_gain") == 0, "the shipped gain moved off the control"
+    arms = {}
+    for gain in (0, 0.4, 1):
+        arms[gain] = build_realm(0)
+        arms[gain].fixtures = arms[gain].fixtures.sweep("field_morale_loyalty_gain", gain)
+    attackers = world_q.mustered(default, "set_s_014", "fac_crown")
+    defenders = world_q.mustered(default, target, subject)
+    rec = field_input(arms[1], attackers, defenders, target)
+    assert rec.loyalty_gain == 1, f"the swept gain did not reach the record: {rec.loyalty_gain}"
+    assert rec.loyalties[0] != rec.loyalties[1], f"the two sides' loyalty did not differ: {rec.loyalties}"
+
+    def fight(w, seed):
+        r = provider_resolve(w, attackers, ["c"], "a field", subject=subject, rung=target,
+                             rng=random.Random(seed))
+        assert r["status"] == "RESOLVED" and r["unopposed"] is False, f"seed {seed}: not fought: {r}"
+        return r["result"]
+
+    checked = differs = 0
+    for seed in range(16):
+        control = fight(default, seed)
+        assert fight(arms[0], seed) == control, f"seed {seed}: gain 0 is not the shipped field"
+        differs += fight(arms[1], seed) != control
+        checked += 1
+    assert checked == 16
+    assert differs >= 1, "the 1:1 loyalty arm resolved identically to the control on every seed"
