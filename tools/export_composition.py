@@ -77,7 +77,7 @@ _KINDS = ('callable', 'value')
 #:   `step_call`  -- a loop step calls it (MATTER, for instance).
 #:   `query`      -- a projection consumer calls it.
 #: A row with no `entry:` is not a module entry and keeps whatever caller already `require()`s it
-#: (`mass_battle.resolve_field` today, re-keyed at `31c`). Validated here, at export, beside `kind:`;
+#: (`mass_battle.resolve_field` was the last such row until `31c` re-keyed it). Validated here, at export, beside `kind:`;
 #: `entry:` and `verb:` are cooked into every row, `None` where absent, so the artifact has one shape.
 _ENTRIES = ('verb_call', 'step_call', 'query')
 _VERB_ENTRY = _ENTRIES[0]

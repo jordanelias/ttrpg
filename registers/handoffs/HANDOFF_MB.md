@@ -14,5 +14,5 @@
 ## Standing orders — do not re-raise, do not do
 | order | source |
 |---|---|
-| Two-trees fork is CLOSED — canon is `systems/mass_battle/sim/`; do not re-open which tree is oracle | `references/module_contracts.yaml` (the `mass_battle` row's note), `ED-MB-0043`/`ED-IN-0127`/`ED-IN-0128` |
-| `MB_STOCHASTIC_ROUT` default is ON (ratified) — do not treat as an open flag | `systems/mass_battle/sim/config.py:175` |
+| Two-trees fork is CLOSED — canon is `modules/mass_battle/` (the reachable closure, since `31c`) with its harnesses and workbench in `systems/mass_battle/sim/`; do not re-open which tree is oracle | `references/module_contracts.yaml` (the `mass_battle` row's note), `ED-MB-0043`/`ED-IN-0127`/`ED-IN-0128` |
+| `MB_STOCHASTIC_ROUT` default is ON (ratified) — do not treat as an open flag | `modules/mass_battle/config.py:185` |

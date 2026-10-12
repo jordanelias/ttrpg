@@ -496,7 +496,7 @@ mechanics:
       - "systems/mass_battle/mass_battle_v30.md"
       - "systems/_architecture/complete_systems_reference.md#part-6"
     params: "engine/params/mass_combat.md"
-    sim_module: systems/mass_battle/sim/massbattle.py
+    sim_module: modules/mass_battle/massbattle.py   # systems/mass_battle/sim/ until plan position `31c`
     test_status: not_implemented
     gd_applicable: [GD-1]
     v22_features_pending:
