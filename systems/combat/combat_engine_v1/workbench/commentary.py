@@ -198,6 +198,7 @@ if __name__ == '__main__':
     except Exception:
         pass
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
     import config
     from combatant import Combatant
     from trace import run_traced_fight

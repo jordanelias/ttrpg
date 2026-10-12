@@ -2885,3 +2885,30 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 | `proposals/2026-09-16-term-ownership/` | `FORK:a7e2c666` | FORKED (2026-10-06, every file in the directory retired in the same commit; the directory-prefix row for documents that cite it as a directory. unratified drafts: `offices_draft.yaml` is `engine/season/offices.yaml`, `key_type_registry.yaml` belongs to the retired Key substrate (`ED-IN-0232`); the Gather's disposition applied (`ED-IN-0289`)) |
 | `tests/valoria/test_friction_cev.py` | `tests/valoria/test_friction.py` | MOVED (2026-10-08, B-D2 MB-01: the CEV flag takes the ordinary word, ED-MB-0045) |
 | `systems/mass_battle/sim/provenance.py` | `FORK:54b6278a` | FORKED (2026-10-08, B-D2 MB-02, ED-MB-0057: a data-only primitive-provenance registry with no reader anywhere in the tree; the ref is main's B-C squash commit, which still carries the file) |
+
+## 2026-10-12 — the personal-combat engine's reachable set → `modules/combat/` (plan position `31b`, A-25)
+
+<!-- The import walk from `wrapper` and `combatant` (the two names `engine/substrate/pc_engine.py` loads) reached 13 of
+     the directory's 15 modules; those moved, FLAT names kept (they bare-import each other). `capabilities.py`,
+     `state_graph.py` and `workbench/` were not reached and STAYED at `systems/combat/combat_engine_v1/`, so the
+     directory-prefix row below never answers for them: `pathres.resolve` returns LIVE for a path that exists before it
+     reads any row, and a name under the old directory that exists in neither place stays DEAD. The 13 exact rows are
+     for `tools/ci_claim_provenance_check.py`, which asks `load_alias_map()` for an EXACT row (see the 2026-10-03
+     section's note). -->
+
+| old path | new path |
+|---|---|
+| `systems/combat/combat_engine_v1/` | `modules/combat/` |
+| `systems/combat/combat_engine_v1/ability_primitives.py` | `modules/combat/ability_primitives.py` |
+| `systems/combat/combat_engine_v1/combat_systems.py` | `modules/combat/combat_systems.py` |
+| `systems/combat/combat_engine_v1/combatant.py` | `modules/combat/combatant.py` |
+| `systems/combat/combat_engine_v1/config.py` | `modules/combat/config.py` |
+| `systems/combat/combat_engine_v1/contact.py` | `modules/combat/contact.py` |
+| `systems/combat/combat_engine_v1/core.py` | `modules/combat/core.py` |
+| `systems/combat/combat_engine_v1/geometry.py` | `modules/combat/geometry.py` |
+| `systems/combat/combat_engine_v1/tradition.py` | `modules/combat/tradition.py` |
+| `systems/combat/combat_engine_v1/traditions.py` | `modules/combat/traditions.py` |
+| `systems/combat/combat_engine_v1/vocabulary.py` | `modules/combat/vocabulary.py` |
+| `systems/combat/combat_engine_v1/weapon_physics.py` | `modules/combat/weapon_physics.py` |
+| `systems/combat/combat_engine_v1/weapons.py` | `modules/combat/weapons.py` |
+| `systems/combat/combat_engine_v1/wrapper.py` | `modules/combat/wrapper.py` |

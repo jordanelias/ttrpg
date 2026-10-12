@@ -22,8 +22,16 @@ import sys
 
 import pytest
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
+# What the import walk from `wrapper`/`combatant` did not reach (`capabilities.py`, `state_graph.py`) and the
+# workbench stayed where the engine was (plan position `31b`); `_engine_file` finds a module in either.
+LEFT = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
+
+
+def _engine_file(name):
+    moved = os.path.join(ENGINE, name)
+    return moved if os.path.exists(moved) else os.path.join(LEFT, name)
 
 
 def _mods():
@@ -43,7 +51,7 @@ def _instrument():
     not just its base form — and (b) the position-swapped duel harness. A guard that re-derived either would be free
     to drift from the tool whose output justified the guard's own bands, which is precisely how ED-PC-0039 shipped a
     participation guard whose comment contradicted its own commit's measurements."""
-    sys.path.insert(0, os.path.join(ENGINE, 'workbench'))
+    sys.path.insert(0, os.path.join(LEFT, 'workbench'))
     import armour_participation
     return armour_participation
 
@@ -53,7 +61,7 @@ def _structure_scan():
     re-implemented, for the same reason `_instrument()` is. Its [H] section owns the dead-exported-param
     derivation (which export keys have no live engine reader); a guard carrying its own second copy would
     be free to grade the engine by a rule the tool no longer applies."""
-    sys.path.insert(0, os.path.join(ENGINE, 'workbench'))
+    sys.path.insert(0, os.path.join(LEFT, 'workbench'))
     import structure_scan
     return structure_scan
 
@@ -446,7 +454,8 @@ def test_no_weapon_name_literal_in_resolution():
 # table in resolution code; this one forbids the domain ALPHABET being re-spelled per module. Both are
 # AST-based and both allow docstrings/comments (prose may name a token freely).
 VOCAB_OWNERS = ('vocabulary.py', 'core.py')
-VOCAB_CONSUMERS = ('combat_systems.py', 'weapon_physics.py', 'capabilities.py', 'wrapper.py', 'contact.py')
+VOCAB_CONSUMERS = ('combat_systems.py', 'weapon_physics.py', 'capabilities.py', 'wrapper.py', 'contact.py',
+                   'fight.py')   # `31b`: the module entry the host calls; it spells no token and must not
 
 
 def test_vocabulary_owner_tables_agree():
@@ -488,7 +497,7 @@ def test_no_bare_vocabulary_literal_in_consumers():
     import vocabulary as V
     offenders = {}
     for mod in VOCAB_CONSUMERS:
-        hits = collections.Counter(s for s in _string_literals_excluding_docstrings(os.path.join(ENGINE, mod))
+        hits = collections.Counter(s for s in _string_literals_excluding_docstrings(_engine_file(mod))
                                    if s in V.GUARDED_TOKENS)
         if hits:
             offenders[mod] = dict(sorted(hits.items()))
@@ -506,7 +515,7 @@ def test_vocabulary_guard_scope_is_the_whole_resolution_surface():
     reviewable exemption rather than left as an unstated gap."""
     NON_RESOLUTION = {'weapons.py', 'combatant.py', 'geometry.py', 'traditions.py', 'tradition.py',
                       'ability_primitives.py', 'state_graph.py', 'config.py'}
-    on_disk = {f for f in os.listdir(ENGINE) if f.endswith('.py')}
+    on_disk = {f for d in (ENGINE, LEFT) for f in os.listdir(d) if f.endswith('.py')}
     unaccounted = on_disk - set(VOCAB_OWNERS) - set(VOCAB_CONSUMERS) - NON_RESOLUTION
     assert not unaccounted, (
         f"engine module(s) accounted for by neither the vocabulary guard nor its declared data-module "

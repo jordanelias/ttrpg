@@ -98,6 +98,25 @@ def test_the_sim_reference_roots_owner_reads_modules_and_skips_pycache(tmp_path)
     assert got == ['engine', 'systems/s/sim', 'modules/m'], got
 
 
+def test_a_module_with_its_own_export_is_not_a_sim_reference_root(tmp_path):
+    """Plan position `31b`: `modules/combat/` ships its constants through `tools/export_engine_params.py`
+    (`combat_engine_v1.json`), so the owner skips it (`ci_common.MODULES_WITH_OWN_EXPORT`) and
+    `sim_params.json`, the game-constants export and the fabrication check's scope read the tree as they did
+    before the move. Without the skip the planted tree returns the listed module too, and on the live tree
+    `export_sim_params.py --check` drifts by every module-scope constant of the combat engine."""
+    listed = ci_common.MODULES_WITH_OWN_EXPORT
+    assert listed, "no module is listed; this test has nothing to observe"
+    for d in ('engine', 'modules/m', *(f'modules/{n}' for n in listed)):
+        (tmp_path / d).mkdir(parents=True)
+    got = [os.path.relpath(p, tmp_path).replace(os.sep, '/')
+           for p in ci_common.sim_reference_roots(str(tmp_path))]
+    assert got == ['engine', 'modules/m'], got
+    live = {os.path.relpath(p, ROOT).replace(os.sep, '/') for p in ci_common.sim_reference_roots(ROOT)}
+    for name in listed:
+        assert os.path.isdir(os.path.join(ROOT, 'modules', name)), f'modules/{name} is listed and does not exist'
+        assert f'modules/{name}' not in live, live
+
+
 def test_count_matches_records():
     d = json.load(open(os.path.join(ROOT, 'engine', 'engine_params', 'sim_params.json')))
     assert d["count"] == len(d["params"])

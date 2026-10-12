@@ -15,6 +15,7 @@ retired fixed `DECISIVE_OB`, which went stale silently at ED-PC-0058; its falsif
 tests/valoria/test_combat_ob_from_defender_consumers.py (workbench bands vs `core.resolve` frequencies)."""
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../../tests/sim/v32-combat-balance'))  # measurement harness reaches into the FROZEN v32 validation station BY DESIGN (dev tooling; doctrine container-hygiene exclusion, ED-1085)
 from math import erf, sqrt, exp
 import core                      # engine kernel (numpy-free since ED-1085)

@@ -7,6 +7,7 @@ it is also runnable standalone:  python -m workbench.narrate  (from the engine d
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
 import probabilities as P
 
 BANNER = "n = 1  —  ONE OUTCOME, NOT A PROBABILITY"

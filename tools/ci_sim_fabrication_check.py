@@ -161,10 +161,11 @@ def is_sim_file(path: str) -> bool:
     NOTE `tests/sim/` is kept, but it is NOT the sim reference (CLAUDE.md §3 disambiguates the
     three similarly-named trees); it is a frozen tree that was already gated.
 
-    KNOWN GAP, recorded not fixed: `systems/combat/combat_engine_v1/` is a canonical Python oracle
+    KNOWN GAP, recorded not fixed: `modules/combat/` (until plan position `31b`,
+    `systems/combat/combat_engine_v1/`) is a canonical Python oracle
     (CLAUDE.md §6, ED-1050 — the typed Godot export is generated from its `config.py`) and is NOT
-    in scope: it is not under `systems/combat/sim/`, and `ci_common.sim_reference_roots()` does not
-    list it. The old basename proxy missed it too, so this is not a regression. Closing it means a
+    in scope: `ci_common.sim_reference_roots()` does not list it (`ci_common.MODULES_WITH_OWN_EXPORT`,
+    which keeps the move from widening this gate). The old basename proxy missed it too, so this is not a regression. Closing it means a
     PC-lane call about their own oracle plus an edit to ci_common's root list — not something to
     take unilaterally inside an IN-lane repair. Filed in ED-IN-0119.
     """

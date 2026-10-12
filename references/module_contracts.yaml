@@ -821,8 +821,8 @@ modules:
 
   - module: combat   # one identity per module, its directory name; the prize row `the body` (`engine/season/rosters.yaml` `contest_subsystems`) names it by this key. Its PROVIDER keeps the name `personal_combat` -- a provider name says what runs, not whose module it is
     registry_system: "personal_combat"   # Key Type Registry vocabulary
-    doc: systems/combat/combat_engine_v1/   # CANONICAL (ED-900/904; docket ED-1029)
-    sim_module: systems/combat/combat_engine_v1/
+    doc: modules/combat/   # CANONICAL (ED-900/904; docket ED-1029); systems/combat/combat_engine_v1/ until plan position `31b`
+    sim_module: modules/combat/
     godot_home: godot/skeleton/engines/combat/   # CombatEngine (BaseEngine) + Strike/Wound modules (slice)
     typed_params: engine/engine_params/combat_engine_v1.json   # GENERATED from config.py + core.py (tools/export_engine_params.py, schema v2 — OPT-AV-17 added the core-constants section); round-trip-checked blocking in CI; the port regenerates from THIS, never hand-edits (ED-1050 discipline; ED-1052 seed)
     scales: [personal]

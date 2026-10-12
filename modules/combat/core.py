@@ -12,7 +12,7 @@ Generator (rng.normal). The continuous engine's distribution is unchanged
 (Normal(mu*N, sigma*sqrt(N)), same per-die TN table)."""
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
-_REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..'))
+_REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))   # modules/combat/ (plan position `31b`)
 if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)          # resolve the sim.* shared-service layer (autoload)
 import functools

@@ -49,7 +49,7 @@ import sys
 import pytest
 
 ENGINE = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-                      'systems', 'combat', 'combat_engine_v1')
+                      'modules', 'combat')
 sys.path.insert(0, ENGINE)
 
 import combat_systems as S  # noqa: E402
@@ -73,6 +73,8 @@ _PASSTHROUGH_KEYS = ('curvature', 'point_concentration', 'cross_section', 'edge_
 
 def _tree(fname):
     path = os.path.join(ENGINE, fname)
+    if not os.path.exists(path):   # `capabilities.py` was not reached from `wrapper` and stayed (plan position `31b`)
+        path = os.path.join(os.path.dirname(ENGINE), '..', 'systems', 'combat', 'combat_engine_v1', fname)
     with open(path, encoding='utf-8') as fh:
         src = fh.read()
     return ast.parse(src, filename=path), src

@@ -13,6 +13,8 @@ state-graph node it gates, so the table reads as "which technique each weapon ca
 """
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
+_ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'modules', 'combat')   # the engine, moved at plan position `31b`
+sys.path.insert(0, _ENGINE)
 import vocabulary as V   # the token ALPHABET (ED-PC-0042) — a zero-import leaf, so own-sourcing the head/mode
                          # tokens here does NOT breach this module's no-systems/core-at-module-scope discipline.
 from combatant import WEAPONS, HALFSWORD_FORM, HALFSWORD_BASE   # pure data; no systems/core at module scope (cycle-free)
@@ -158,7 +160,7 @@ if __name__ == '__main__':
 
     # (f) no hollow pull_capable/hook data boolean was introduced anywhere in weapons.py (the explicit guard
     # against the D9/JD-7 workaround the plan forbids — invisible to test_no_weapon_name_literal_in_resolution).
-    weapons_src = open(os.path.join(os.path.dirname(__file__), 'weapons.py'), encoding='utf-8').read()
+    weapons_src = open(os.path.join(_ENGINE, 'weapons.py'), encoding='utf-8').read()
     f_ok = ('pull_capable' not in weapons_src) and ('hook_affordance' not in weapons_src) and ('clinch=' not in weapons_src)
     checks.append(f_ok)
     print(f"(f) no pull_capable/hook_affordance/clinch data field in weapons.py: {'OK' if f_ok else 'FAIL'}")

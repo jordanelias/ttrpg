@@ -76,8 +76,8 @@ systems:
   core_engine:
     archived: ".designs/ — design doc quarantined 2026-09-16; see references/restructure_ledger.md. Canon for this system is the code (CLAUDE.md §0.05)."
   combat:
-    # systems/combat/combat_engine_v1/ is the CANONICAL personal-combat resolver (config.py = live Class-C parameter source). SHA-track via freshness_gate.py --update.
-    resolution_engine: "systems/combat/combat_engine_v1/"
+    # modules/combat/ (systems/combat/combat_engine_v1/ until plan position `31b`) is the CANONICAL personal-combat resolver (config.py = live Class-C parameter source). SHA-track via freshness_gate.py --update.
+    resolution_engine: "modules/combat/"
     resolution_engine_canonical_status: "CANONICAL combat_engine_v1 (ratified ED-900; ALL 2026-06 work re-ratified+approved ED-904, Jordan); supersedes combat_v30 RESOLUTION layer; config.py is the live parameter source"
   threadwork:
     archived: ".designs/ — design doc quarantined 2026-09-16; see references/restructure_ledger.md. Canon for this system is the code (CLAUDE.md §0.05)."

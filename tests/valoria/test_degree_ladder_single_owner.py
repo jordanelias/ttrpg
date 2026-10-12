@@ -130,8 +130,8 @@ def _massbattle_canon():
 
 
 def _combat_engine():
-    sys.path.insert(0, str(REPO / 'systems' / 'combat' / 'combat_engine_v1'))
-    m = _load('systems/combat/combat_engine_v1/core.py', 'combat_core_probe')
+    sys.path.insert(0, str(REPO / 'modules' / 'combat'))
+    m = _load('modules/combat/core.py', 'combat_core_probe')
     return lambda net, ob: band(m.degree(net, ob))
 
 
@@ -167,7 +167,7 @@ LADDERS = {
     # returns `degree_from_net`'s bands relabelled to combat's lower-case spelling, with no local
     # re-banding (the ER-2 continuity shift went with the old ladder). Ob is the defender's
     # (`ob_from_defender`, ED-PC-0058), the order the 2026-08-15 ruling set.
-    'systems/combat/combat_engine_v1/core.py': _combat_engine,
+    'modules/combat/core.py': _combat_engine,   # `systems/combat/combat_engine_v1/core.py` until plan position `31b`
 }
 
 # ── THE RULINGS THIS FILE ENFORCES, kept verbatim ──────────────────────────────────────────────

@@ -13,6 +13,7 @@ single source) — not re-declared. CLI:  python workbench/balance.py [weapon|at
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
 import numpy as np
 import random
 import zlib

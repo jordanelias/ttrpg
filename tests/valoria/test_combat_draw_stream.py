@@ -78,7 +78,7 @@ import sys
 import pytest
 
 _ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-_ENGINE = os.path.join(_ROOT, 'systems', 'combat', 'combat_engine_v1')
+_ENGINE = os.path.join(_ROOT, 'modules', 'combat')
 for _p in (_ROOT, _ENGINE):
     if _p not in sys.path:
         sys.path.insert(0, _p)
