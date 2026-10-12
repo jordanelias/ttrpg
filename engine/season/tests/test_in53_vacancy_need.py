@@ -31,6 +31,12 @@ from collections import Counter
 
 import pytest
 
+from engine.season.harness import populated as POP
+from engine.season.harness.corpus_run import attribute
+from engine.season.loop.driver import SeasonDriver, resolvable_verbs
+from engine.season.decision import make_chooser
+from engine.season.state.ids import H, draw_factory
+
 from engine.season.data import verbs as _verbs
 from engine.season.data.matrix import WriteClass
 from engine.season.data.rosters import SOURCE_REFERENT_CLASS
@@ -252,3 +258,47 @@ def test_in53v_d_a_computed_confer_fills_the_vacant_seat():
         [Act(id="cf", actor="p_king", verb="confer", payload={"subject": "off_reeve"},
              via="off_crown")], contest_max_depth=w2.fixtures.get("contest_max_depth"))]
     assert kinds == ["confer.refused"] and _hold(w2, "off_reeve") is None, kinds
+
+
+# ======================================================================================
+# (e) THE EXIT, ON `build_realm(0)`: 3 SEASONS THROUGH THE REAL CHOOSER, NOTHING FORCED
+# ======================================================================================
+
+#: Executed acts per verb on the base commit (e716f10b), `build_realm(0)`, 3 seasons, seed 0,
+#: `corpus_run.attribute`'s `made` -- the crowd-out control's floor.
+_BASE_EXECUTED = {"issue": 2, "levy": 0, "transfer": 4}
+SEASONS = 3
+
+
+@pytest.fixture(scope="module")
+def realm3():
+    """`populated.run`'s construction, line for line, over `SEASONS` seasons."""
+    w = POP.build_realm(0)
+    d = SeasonDriver(w)
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                      draw=draw_factory(w.world_seed, lambda: w.tick))
+    for _ in range(SEASONS):
+        d.season(ch, question=None, subsistence=POP.P.SUBSIST,
+                 contest_max_depth=w.fixtures.get("contest_max_depth"))
+    return w, d, attribute(w, d, SEASONS)
+
+
+def test_in53v_e_confer_executes_into_a_seat_nobody_held(realm3):
+    """At least one computed `confer` executes, through a seat (`via`), opening a hold and closing
+    none -- the seat had no live hold when the act resolved (`_eff_confer` names a closure for every
+    live hold it displaces, G4)."""
+    w, _, rows = realm3
+    into_vacant = [a for a, made, _ in rows
+                   if a.verb == "confer" and made and a.via in w.offices
+                   and "tenure.opened" in made and "tenure.closed" not in made]
+    assert into_vacant, sorted(Counter(a.verb for a, made, _ in rows if made).items())
+
+
+def test_in53v_e_the_crowd_out_control_and_the_seats_formed_on(realm3):
+    w, _, rows = realm3
+    ex = Counter(a.verb for a, made, _ in rows if made)
+    for verb, floor in _BASE_EXECUTED.items():
+        assert ex[verb] >= floor, (verb, ex[verb], floor)
+    attempted = [a for a, _, _ in rows if a.verb in CLASSED]
+    assert all(_preds.office_named_by(a) in w.offices for a in attempted), attempted
