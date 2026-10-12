@@ -23,14 +23,14 @@ import math
 
 import pytest
 
-import systems.mass_battle.sim.hierarchy.units as _hu
-import systems.mass_battle.sim.orchestration as _orch
-from systems.mass_battle.sim.config import (SIDE_A_START_ROW, SIDE_B_START_ROW, TICKS_PER_PHASE,
+import modules.mass_battle.hierarchy.units as _hu
+import modules.mass_battle.orchestration as _orch
+from modules.mass_battle.config import (SIDE_A_START_ROW, SIDE_B_START_ROW, TICKS_PER_PHASE,
                                              MB_CAVALRY_SPEED_MULT, ROUTE_BUDGET_TICKS)
-from systems.mass_battle.sim.core.contact import check_orders
-from systems.mass_battle.sim.hierarchy.units import Order, Subunit, Unit
-from systems.mass_battle.sim.orchestration import run_battle
-from systems.mass_battle.sim.resolution import tracing
+from modules.mass_battle.core.contact import check_orders
+from modules.mass_battle.hierarchy.units import Order, Subunit, Unit
+from modules.mass_battle.orchestration import run_battle
+from modules.mass_battle.resolution import tracing
 
 
 def _bare_subunit(faction='A', col=25, troop_type='infantry', target_condition=None):

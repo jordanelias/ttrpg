@@ -34,13 +34,13 @@ import pytest  # noqa: E402
 
 def _reload(on):
     os.environ['MB_FEIGNED_RETREAT'] = '1' if on else '0'
-    import systems.mass_battle.sim.config as C
+    import modules.mass_battle.config as C
     importlib.reload(C)
-    import systems.mass_battle.sim.resolution as R
+    import modules.mass_battle.resolution as R
     importlib.reload(R)
-    import systems.mass_battle.sim.hierarchy.units as U
+    import modules.mass_battle.hierarchy.units as U
     importlib.reload(U)
-    import systems.mass_battle.sim.orchestration as O
+    import modules.mass_battle.orchestration as O
     importlib.reload(O)
     return C, O
 
@@ -163,7 +163,7 @@ def test_overextended_pool_penalty_applies_only_when_gated_on():
 
 def test_feign_retreat_is_a_recognized_order_safe_field():
     """'feign_retreat' passes Order's eager validation, matching every other pseudo-field."""
-    from systems.mass_battle.sim.hierarchy.units import Order
+    from modules.mass_battle.hierarchy.units import Order
     Order(trigger='immediate', behavior={'feign_retreat': True})   # does not raise
 
 
@@ -172,8 +172,8 @@ def test_feign_retreat_order_sets_the_unit_flag_not_the_subunit():
     and must never leak onto the Subunit as a real attribute -- same discipline as fire_signal's
     own leak test in test_mass_battle_signals.py."""
     _reload(on=True)
-    from systems.mass_battle.sim.core.contact import check_orders
-    from systems.mass_battle.sim.hierarchy.units import Order, Subunit, Unit
+    from modules.mass_battle.core.contact import check_orders
+    from modules.mass_battle.hierarchy.units import Order, Subunit, Unit
     su = Subunit(shape='Line', troop_type='infantry', tier=2, starting_position=(25, 25),
                  advance_dir=1, stance='balanced', unit_type='melee',
                  orders=(Order('tick:1', {'feign_retreat': True}),))
@@ -188,8 +188,8 @@ def test_feign_retreat_order_sets_the_unit_flag_not_the_subunit():
 
 def test_feign_retreat_order_does_not_fire_before_its_own_trigger():
     _reload(on=True)
-    from systems.mass_battle.sim.core.contact import check_orders
-    from systems.mass_battle.sim.hierarchy.units import Order, Subunit, Unit
+    from modules.mass_battle.core.contact import check_orders
+    from modules.mass_battle.hierarchy.units import Order, Subunit, Unit
     su = Subunit(shape='Line', troop_type='infantry', tier=2, starting_position=(25, 25),
                  advance_dir=1, stance='balanced', unit_type='melee',
                  orders=(Order('tick:5', {'feign_retreat': True}),))
@@ -205,8 +205,8 @@ def test_feign_retreat_end_to_end_through_resolve_feigned_retreat():
     pursuit call site, exactly as if `.feigned` had been set by hand (the only way this fully-built,
     ratified mechanic was reachable before this order-writable path existed)."""
     _, O = _reload(on=True)
-    from systems.mass_battle.sim.core.contact import check_orders
-    from systems.mass_battle.sim.hierarchy.units import Order, Subunit, Unit
+    from modules.mass_battle.core.contact import check_orders
+    from modules.mass_battle.hierarchy.units import Order, Subunit, Unit
     su = Subunit(shape='Line', troop_type='infantry', tier=2, starting_position=(25, 25),
                  advance_dir=1, stance='balanced', unit_type='melee',
                  orders=(Order('immediate', {'feign_retreat': True}),))

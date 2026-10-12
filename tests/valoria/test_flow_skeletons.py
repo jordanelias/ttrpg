@@ -331,7 +331,7 @@ RETIREMENT_SHIFTED = frozenset({
     # archived line anchor below the first cut moved or went out of range. The three symbols join
     # RETIRED_SYMBOLS below; every OTHER symbolled anchor into the file is still checked by symbol.
     # What is lost, stated: a bare line into `massbattle.py` is now advisory.
-    'systems/mass_battle/sim/massbattle.py',
+    'modules/mass_battle/massbattle.py',
     # Plan position `31c` replaced this workbench's `start_trace`/`get_trace` calls with one
     # `with tracing()` block (the two accessors join RETIRED_SYMBOLS), so its archived anchors moved.
     'systems/mass_battle/sim/workbench/trace.py',
@@ -388,7 +388,7 @@ RETIRED_SYMBOLS = frozenset({
     # `UNREACHABLE` was a marker word inside `_emit_public_governance_transfer`'s docstring, cited
     # by the factions skeleton. It went with the function.
     'UNREACHABLE',
-    # `systems/mass_battle/sim/massbattle.py`'s strategic adapter, deleted at plan position `29b`
+    # `modules/mass_battle/massbattle.py`'s strategic adapter, deleted at plan position `29b`
     # (2026-10-01) with `game_state.Faction`, the duck-typed input it read. Same shape as the pair above:
     # the three tokens survive only as prose about their own deletion (that file's header note and
     # docstrings), so by the `echo_scheduler` rule they are retired, not missing by accident.

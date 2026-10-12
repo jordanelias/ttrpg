@@ -24,7 +24,7 @@ if REPO_ROOT not in sys.path:
 
 # massbattle imports units at its tail (units late-binds back) — import the package module first to
 # avoid the circular-import trap of importing units directly.
-from systems.mass_battle.sim import massbattle as MB  # noqa: E402
+from modules.mass_battle import massbattle as MB  # noqa: E402
 
 
 #: The ported engine's own standard line concentration for a test fixture

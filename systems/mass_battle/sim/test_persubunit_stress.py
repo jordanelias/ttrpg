@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 # allow direct in-package run too:
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from systems.mass_battle.sim.orchestration import (  # noqa: E402
+from modules.mass_battle.orchestration import (  # noqa: E402
     Subunit, Unit, subunit_combat_pool, morale_check_phase, rout_resolution,
     discipline_check_phase, reset_morale_between_battles, stats_for, TROOP_TYPE_STATS,
     SIDE_A_START_ROW, SIDE_B_START_ROW)
@@ -253,7 +253,7 @@ def test_agg_discipline_per_subunit():
 
 def test_between_turn_recovery_per_subunit():
     print("S18 — between_turn_recovery recovers per-subunit Morale (finding 6; recovery temporarily enabled)")
-    import systems.mass_battle.sim.orchestration as _O
+    import modules.mass_battle.orchestration as _O
     own = mk_su('heavy_infantry', col=8, morale=6, morale_start=6, discipline=5)
     u = mk_unit([own])
     own.erode_morale(2)                          # own morale 6 -> 4

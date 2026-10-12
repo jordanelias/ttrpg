@@ -1,13 +1,13 @@
-"""systems.mass_battle.sim.troop_types.registry — troop-type stat presets + gated role menus.
+"""modules.mass_battle.troop_types.registry — troop-type stat presets + gated role menus.
 Stage-1 behaviour-frozen extract from orchestration.py (TROOP_TYPE_STATS, stats_for, roles_for,
 role_allowed). The "stat home" for the taxonomy (ED-1018): a subunit OF a type draws these
 per-subunit combat stats. Depends on config (TROOP_TYPE_ROLES) only — no up-DAG import, no cycle.
 Re-imported by orchestration via star-import (Subunit.of_type and the stress-test imports unchanged).
 [canonical: mass_battle_v30.md §B.2 troop table; config TROOP_TYPE_ROLES/ROLE_SPEC]"""
-from systems.mass_battle.sim.config import *
-import systems.mass_battle.sim.config as _cfg
+from modules.mass_battle.config import *
+import modules.mass_battle.config as _cfg
 import functools as _functools
-from systems.mass_battle.sim.equipment import loadout_for
+from modules.mass_battle.equipment import loadout_for
 
 __all__ = ['roles_for', 'role_allowed', 'TROOP_TYPE_STATS', 'stats_for',
            'REACH_SHORT', 'REACH_MELEE_DEFAULT', 'TROOP_TYPE_REACH', 'reach_for',
@@ -143,7 +143,7 @@ def support_weight(depth, troop_type):
 # its role -- ED-1095/T4's mistake was defaulting a mounted_archers spec to role='Kite' without
 # this half, so the unit never actually got unit_type='ranged' (role='Kite' carries no unit_type
 # of its own; ROLE_SPEC never has). The primitive already existed and was already "NOT YET WIRED
-# into resolution" per its own docstring: systems.mass_battle.sim.equipment.loadout_for(troop_type) returns
+# into resolution" per its own docstring: modules.mass_battle.equipment.loadout_for(troop_type) returns
 # (weapon_record, armour_record) from the provisional TROOP_LOADOUT table (mass_battle_v30 §B.2 +
 # the mounted_archers extension added alongside this fix); a weapon record's `reach` field is
 # already exactly 'melee'/'ranged' (equipment/weapons.py ARSENAL). This wires that existing,

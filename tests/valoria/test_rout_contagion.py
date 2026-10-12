@@ -26,7 +26,7 @@ _SIM = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sim'))
 if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
-from systems.mass_battle.sim.config import ROUT_CASCADE_FRAC
+from modules.mass_battle.config import ROUT_CASCADE_FRAC
 from systems.mass_battle.sim.engine import build_army, SIDE_A_START_ROW
 
 
@@ -96,7 +96,7 @@ def test_threshold_1_0_is_inert():
     comment on the constant). Rewritten to pin the boundary value explicitly, the same pattern
     `test_a_lowered_threshold_breaks_the_army_early` immediately below already uses, so this test
     keeps meaning "1.0 is inert" regardless of any future default change."""
-    import systems.mass_battle.sim.hierarchy.units as U
+    import modules.mass_battle.hierarchy.units as U
     u = _unit(3)
     u.subunits[0].routed = True
     u.subunits[1].routed = True
@@ -159,7 +159,7 @@ def test_a_two_body_army_at_exactly_half_does_not_cascade_at_the_shipped_default
 
 def test_a_lowered_threshold_breaks_the_army_early():
     """The mechanism itself: below 1.0, a decisive portion breaking is enough."""
-    import systems.mass_battle.sim.hierarchy.units as U
+    import modules.mass_battle.hierarchy.units as U
     u = _unit(3)
     u.subunits[0].routed = True
     assert u._broken_share() == pytest.approx(1 / 3)

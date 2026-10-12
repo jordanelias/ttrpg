@@ -27,10 +27,10 @@ import os, random, statistics
 os.environ.setdefault('LANCHESTER_ENABLED', '1')
 os.environ.setdefault('PER_CELL', '0')
 
-from systems.mass_battle.sim.config import BLOCK_SIZE, TROOPS_PER_TIER   # [ED-MB-0050 / A6a] the annihilation threshold
+from modules.mass_battle.config import BLOCK_SIZE, TROOPS_PER_TIER   # [ED-MB-0050 / A6a] the annihilation threshold
 from systems.mass_battle.sim.engine import (Subunit, Unit, run_battle,
                                 SIDE_A_START_ROW, SIDE_B_START_ROW, LANCHESTER_ENABLED)
-import systems.mass_battle.sim.core.state as _state   # [ED-MB-0050 / A6a] patched by _rout_disabled below
+import modules.mass_battle.core.state as _state   # [ED-MB-0050 / A6a] patched by _rout_disabled below
 
 # --- signature thresholds (class-B tolerances; signatures per spec §4) ---
 # [ED-MB-0045 superseding row, item (1)] ONE band for the big-force win quantity. It replaces the

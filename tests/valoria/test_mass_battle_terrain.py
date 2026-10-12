@@ -3,7 +3,7 @@
 `mass_battle_v30.md` §A.9 ENVIRONMENTAL MODIFIERS names six canonical rows; its Phase-3 (ED-780)
 extension says a battle's terrain should be found by "querying the geography at battle coordinates
 ... no separate declaration required". The engagement's own province tid IS that query key —
-`systems.mass_battle.sim.terrain.terrain_row_for_territory` reads
+`modules.mass_battle.terrain.terrain_row_for_territory` reads
 `systems/settlements/valoria_geography_v30.yaml` directly (its `provinces:` and `terrain:` keys;
 canon's own citation, `designs/territory/...::terrain_polygons`, is stale in both path and key).
 
@@ -24,7 +24,7 @@ cares about fortification now passes `fort_level` explicitly rather than reading
 """
 import pytest
 
-from systems.mass_battle.sim.terrain import (
+from modules.mass_battle.terrain import (
     terrain_row_for_territory, _point_in_polygon, _load_geography, _TYPE_TO_ROW,
     NARROW_PASS, UPHILL, FOREST_BROKEN, WALLS, OPEN_FLAT, RIVER_CROSSING,
 )
@@ -191,7 +191,7 @@ def test_open_ground_resolves_unmodified(monkeypatch):
 # units built by `_weighted_unit`.
 
 def _units():
-    from systems.mass_battle.sim.massbattle import _weighted_unit
+    from modules.mass_battle.massbattle import _weighted_unit
     return _weighted_unit('side_a', 10), _weighted_unit('side_b', 10)
 
 
@@ -199,7 +199,7 @@ def test_run_and_grade_accepts_every_row_without_crashing():
     """`_run_and_grade`'s `terrain` parameter went from always-None (a [GAP], silently discarded)
     to a real value -- every row this lookup can produce must be a safe, non-crashing input, even the
     ones with no mechanical effect wired yet."""
-    from systems.mass_battle.sim.massbattle import _run_and_grade
+    from modules.mass_battle.massbattle import _run_and_grade
 
     for row in (NARROW_PASS, UPHILL, FOREST_BROKEN, WALLS, OPEN_FLAT, 'river_crossing', None):
         a, b = _units()
@@ -213,7 +213,7 @@ def test_forest_broken_forces_a_fast_side_to_standard_speed():
     happens through the real function, not just in isolation -- it does NOT prove the write has any
     downstream effect. It does not: `run_battle` (what this function actually calls) never reads
     `.speed` at all, so this branch is inert on its own terms. See `_run_and_grade`'s own docstring."""
-    from systems.mass_battle.sim.massbattle import _run_and_grade
+    from modules.mass_battle.massbattle import _run_and_grade
 
     a, b = _units()
     # The pre-condition this test depends on: `_weighted_unit`'s armies are never Fast by
@@ -231,8 +231,8 @@ def test_walls_raise_the_defenders_dr_and_only_the_defenders_dr():
     bonus and that it lands once: the defender is `unit_b` (`march` is the only verb contesting a field,
     and its target side is `other`). The control is the same pair on OPEN_FLAT, whose DR must not move.
     The stochastic 8-seed test in `test_mass_battle_provider.py` cannot tell the sides apart."""
-    from systems.mass_battle.sim.massbattle import _run_and_grade
-    from systems.mass_battle.sim.terrain import WALLS_DEFENDER_DR
+    from modules.mass_battle.massbattle import _run_and_grade
+    from modules.mass_battle.terrain import WALLS_DEFENDER_DR
 
     a, b = _units()
     a0, b0 = a.dr, b.dr
@@ -251,8 +251,8 @@ def test_walls_dr_override_replaces_a9s_number_only_on_a_walls_field():
     in. An int REPLACES `WALLS_DEFENDER_DR` on the defender (0 = the control, 1, and A.9's own number
     spelled out must equal the `None` default), and on a field that is not WALLS it is inert -- the
     control that stops the parameter reading as a general DR knob."""
-    from systems.mass_battle.sim.massbattle import _run_and_grade
-    from systems.mass_battle.sim.terrain import WALLS_DEFENDER_DR
+    from modules.mass_battle.massbattle import _run_and_grade
+    from modules.mass_battle.terrain import WALLS_DEFENDER_DR
 
     seen = {}
     for label, walls_dr in (('none', None), ('a9', WALLS_DEFENDER_DR), ('zero', 0), ('one', 1)):
@@ -272,7 +272,7 @@ def test_walls_dr_override_replaces_a9s_number_only_on_a_walls_field():
 def test_open_flat_does_not_touch_speed():
     """Control: the same Fast side, OPEN_FLAT terrain, must stay Fast (no modifier is A.9's own
     definition of the open-flat row)."""
-    from systems.mass_battle.sim.massbattle import _run_and_grade
+    from modules.mass_battle.massbattle import _run_and_grade
 
     a, b = _units()
     a.speed = 'Fast'
@@ -295,7 +295,7 @@ def _terrain_dice(u):
 def test_each_row_puts_its_a9_dice_on_the_right_side_once(row, attacker, defender):
     """Which unit takes which die, and that it lands once -- the stochastic tests below cannot tell the
     sides apart. Spelled as A.9's own numbers, so a constant moved off canon's die count fails here."""
-    from systems.mass_battle.sim.massbattle import _run_and_grade
+    from modules.mass_battle.massbattle import _run_and_grade
 
     a, b = _units()
     assert _terrain_dice(a) == _terrain_dice(b) == (0, 0), "a fresh unit already carries terrain dice"
@@ -308,7 +308,7 @@ def test_river_crossing_steps_the_crosser_one_speed_tier_slower(before, after):
     """A.9: "River crossing | −1 Speed tier" -- the crosser only, floored at Slow. Inert on the season
     path, like forest's speed half (`run_battle` never reads `.speed`); pinned so the write is right
     the day a reader exists."""
-    from systems.mass_battle.sim.massbattle import _run_and_grade
+    from modules.mass_battle.massbattle import _run_and_grade
 
     a, b = _units()
     a.speed = before
@@ -329,7 +329,7 @@ def test_a_dice_row_resolves_differently_from_open_flat_and_identically_with_its
     MB-05, 3/16 after, for both rows at these weights -- one-off figures, not asserted. RIVER_CROSSING's
     speed step is inert here (see the test above), so the zeroed arm is equal for it too."""
     import random
-    from systems.mass_battle.sim import massbattle as MB
+    from modules.mass_battle import massbattle as MB
 
     def fight(r, seed):
         a, b = _units()
@@ -359,8 +359,16 @@ def test_resolve_field_carries_the_river_crossing_signal_to_the_engine():
     defenders never end with fewer survivors."""
     import random
     from engine.season.harness.populated import build_realm
+    from dataclasses import replace
     from engine.season.queries import world_q
-    from systems.mass_battle.sim.massbattle import resolve_field
+    from engine.season.seam.wrappers.mass_battle import field_input
+    from modules.mass_battle.massbattle import resolve_field
+
+    def record(**facts):
+        # `resolve_field` takes the host's record since plan position `31c`; the two sides are the
+        # host builder's (`field_input`), the place is this test's.
+        return replace(field_input(w, att, dfn, 'r_valoria'), territory='T1', fort_level=0.0,
+                       stances=(0.0, 0.0), walls_dr=None, **facts)
 
     w = build_realm(0)
     att = world_q.mustered(w, 'set_s_014', 'fac_crown')
@@ -368,8 +376,8 @@ def test_resolve_field_carries_the_river_crossing_signal_to_the_engine():
     assert att and dfn, "the provider's fixture sides no longer muster"
     checked = differs = 0
     for seed in range(16):
-        crossed = resolve_field(w, att, dfn, territory='T1', river_crossing=True, rng=random.Random(seed))
-        dry = resolve_field(w, att, dfn, territory='T1', rng=random.Random(seed))
+        crossed = resolve_field(record(river_crossing=True), rng=random.Random(seed))
+        dry = resolve_field(record(river_crossing=False), rng=random.Random(seed))
         assert crossed['defender_size_pct'] >= dry['defender_size_pct'], (seed, crossed, dry)
         differs += crossed != dry
         checked += 1

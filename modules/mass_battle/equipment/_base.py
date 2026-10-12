@@ -1,4 +1,4 @@
-"""systems.mass_battle.sim.equipment._base — shared substrate for the standalone equipment registries.
+"""modules.mass_battle.equipment._base — shared substrate for the standalone equipment registries.
 
 A tiny, dependency-free building block the weapons and armour modules share: an OPEN record (any field
 set is allowed, so the schema can evolve as the primitive grounding is worked out) plus a mutable

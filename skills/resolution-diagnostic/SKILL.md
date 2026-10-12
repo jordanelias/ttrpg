@@ -43,7 +43,7 @@ Diagnose substrate and advantage separately:
 | **substrate** | `engine/dice_engine/dice_engine.py` | `roll_pool` (discrete), `continuous_engine_sample` (fractional), `degree_from_net` (**the** ladder, single owner for every scale) |
 | **advantage** | `engine/dice_engine/sigma_leverage.py` — `[CANONICAL]` | turns signed σ-unit advantages into a **μ-shift** on the roll; single-sources σ-leverage for **combat and social contest only** |
 | pinned by | `engine/tests/test_sigma_leverage_parity.py` + `engine/tests/goldens/sigma_leverage_parity.json` | the execution artifact. Read it before claiming behaviour |
-| ⚠ **a second σ path** | `systems/mass_battle/sim/resolution.py` | **declared divergent** (no `engine.*` dependency): own `_sigma_softcap`, `_sigma_net_boost` with a local `_SIG_PER_DIE`, `roll_pool_fractional`, local `compute_degree` with `_DEGREE_EPS`. Ladder half guarded by `tests/valoria/test_degree_ladder_single_owner.py` — do not re-file. σ half and pool floor unguarded. **In scope: reading only `engine/dice_engine/` misses it** |
+| ⚠ **a second σ path** | `modules/mass_battle/resolution.py` | **declared divergent** (no `engine.*` dependency): own `_sigma_softcap`, `_sigma_net_boost` with a local `_SIG_PER_DIE`, `roll_pool_fractional`, local `compute_degree` with `_DEGREE_EPS`. Ladder half guarded by `tests/valoria/test_degree_ladder_single_owner.py` — do not re-file. σ half and pool floor unguarded. **In scope: reading only `engine/dice_engine/` misses it** |
 
 **The API you are auditing against** — read it, do not restate it from memory:
 `sigma_n(pool)` = `0.8·√max(1,pool)` · `soft_cap(σ)` = `M_MAX·tanh(σ/M_MAX)`, `M_MAX = 1.5` ·
@@ -171,7 +171,7 @@ A property with no finding is reported as a **named attack that failed**, not as
   Check it is smooth, not that it is absent.
 - **TN never varies**; a mechanism wanting varying difficulty wants an **Ob**. Falsifier per layer:
   `sigma_leverage` raises `KeyError` (one-key `PER_DIE`); `dice_engine` raises `ValueError`
-  (`_require_tn7`); `systems/mass_battle/sim/resolution.py` uses a bare `assert`, stripped by
+  (`_require_tn7`); `modules/mass_battle/resolution.py` uses a bare `assert`, stripped by
   `python -O`.
 - **`systems/combat/combat_engine_v1/core.py`'s second, `2·Ob`-keyed ladder** is a declared HELD
   exception (`tests/valoria/test_degree_ladder_single_owner.py`): name it as a live S instance; do

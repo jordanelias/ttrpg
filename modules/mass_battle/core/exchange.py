@@ -1,17 +1,17 @@
-"""systems.mass_battle.sim.core.exchange — combat-pool assembly primitives.
+"""modules.mass_battle.core.exchange — combat-pool assembly primitives.
 Stage-1 behaviour-frozen extract from orchestration.py (derive_command, command_base_pool,
 subunit_combat_pool, _stamina_pool_penalty). Pure: depends on config + math + duck-typed
 unit/atom attributes only; imports nothing from orchestration (no cycle). Re-imported by
-orchestration via `from systems.mass_battle.sim.core.exchange import *` so every call site is unchanged.
+orchestration via `from modules.mass_battle.core.exchange import *` so every call site is unchanged.
 [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; ED-899 Command-only base -- SUPERSEDED
 for the base pool term by Jordan's 2026-07-08 directive, see config.py's POOL_QUALITY_MODEL;
 `derive_command`/`command_base_pool` below remain live for whatever still reads Command
 (morale, formation-hold speed, order-issuing, derive_rout), just no longer the combat pool]"""
 import math
 import os as _exch_os
-from systems.mass_battle.sim.config import *
-from systems.mass_battle.sim.troop_types.registry import support_weight
-from systems.mass_battle.sim.geometry import cells_to_orig_coords
+from modules.mass_battle.config import *
+from modules.mass_battle.troop_types.registry import support_weight
+from modules.mass_battle.geometry import cells_to_orig_coords
 
 __all__ = ['_stamina_pool_penalty', 'derive_command', 'clamp_command', 'command_base_pool',
            'subunit_combat_pool', 'pair_pool_contribution', '_pair_engaged_troops',

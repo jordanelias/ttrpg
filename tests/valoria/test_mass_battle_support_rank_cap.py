@@ -18,11 +18,11 @@ import os
 
 import pytest
 
-import systems.mass_battle.sim.config as C
-from systems.mass_battle.sim.troop_types.registry import support_ranks_for, support_weight
-from systems.mass_battle.sim.core.exchange import _pair_engaged_troops
-from systems.mass_battle.sim.geometry import _oriented_abs_map
-from systems.mass_battle.sim.hierarchy.units import Subunit
+import modules.mass_battle.config as C
+from modules.mass_battle.troop_types.registry import support_ranks_for, support_weight
+from modules.mass_battle.core.exchange import _pair_engaged_troops
+from modules.mass_battle.geometry import _oriented_abs_map
+from modules.mass_battle.hierarchy.units import Subunit
 
 from .test_reach_weapon_class import _charge_vs_brace, _standing, field_path  # noqa: F401  (fixture re-export)
 
@@ -146,7 +146,7 @@ def test_table_follows_the_weapon_classes():
     assert _cap('heavy_infantry') == _cap('cavalry')
     assert _cap('no_such_type') == _cap('infantry') == 1
     # derived from the reach map, so EVERY mapped type is covered and a reach edit moves its rank
-    from systems.mass_battle.sim.troop_types.registry import TROOP_TYPE_REACH
+    from modules.mass_battle.troop_types.registry import TROOP_TYPE_REACH
     expect = {0.1: 1, 0.2: 2, 0.3: 3}
     assert len(TROOP_TYPE_REACH) == 12
     assert {t: _cap(t) for t in TROOP_TYPE_REACH} == {t: expect[r] for t, r in TROOP_TYPE_REACH.items()}

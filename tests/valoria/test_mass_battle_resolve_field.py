@@ -1,4 +1,4 @@
-"""`systems/mass_battle/sim/massbattle.py::resolve_field` -- M3 of the driver-retirement plan
+"""`modules/mass_battle/massbattle.py::resolve_field` -- M3 of the driver-retirement plan
 (`ED-IN-0279`), the season-facing entry point `engine/season/seam/wrappers/mass_battle.py` calls.
 
 Lives here, not in `engine/season/tests/`, because it needs `from systems.mass_battle...` at
@@ -17,10 +17,22 @@ draft of this test tried the emergent-outcome route and found it unusable: at re
 calibration and both sides rout on contact regardless of who is stronger -- see
 `massbattle.py::_MIN_TROOPS`'s own disclosure of that gap.
 """
-from systems.mass_battle.sim import massbattle
+from dataclasses import replace
+
+from modules.mass_battle import massbattle
 
 from engine.season.harness.populated import build_realm
 from engine.season.queries import faction_q
+from engine.season.seam.wrappers.mass_battle import field_input
+
+
+def _record(w, side_a, side_b, *, territory=None, fort_level=0.0, stance_a=0.0, stance_b=0.0,
+            walls_dr=None, river_crossing=False):
+    """The record `resolve_field` takes since plan position `31c`: the host builder's (`field_input`) for
+    the two sides -- the weight projection is the host's -- with the fight's facts set as this test
+    states them. The keyword defaults are `resolve_field`'s own before the split."""
+    return replace(field_input(w, side_a, side_b, "r_valoria"), territory=territory, fort_level=fort_level,
+                   stances=(stance_a, stance_b), walls_dr=walls_dr, river_crossing=river_crossing)
 
 
 def test_resolve_field_sums_weight_per_side_into_troops_not_power(monkeypatch):
@@ -38,7 +50,7 @@ def test_resolve_field_sums_weight_per_side_into_troops_not_power(monkeypatch):
     w = build_realm(0)
     crown = faction_q.resolve(w, "fac_crown")
     guilds = faction_q.resolve(w, "fac_guilds")
-    massbattle.resolve_field(w, crown.members, guilds.members)
+    massbattle.resolve_field(_record(w, crown.members, guilds.members))
 
     assert captured["troops_a"] == sum(w.persons[p].weight for p in crown.members)
     assert captured["troops_b"] == sum(w.persons[p].weight for p in guilds.members)
@@ -55,5 +67,5 @@ def test_resolve_field_does_not_crash_on_a_zero_weight_side():
     crown = faction_q.resolve(w, "fac_crown")
     # `Unit.total_troops() == 0` divides by zero deep in `orchestration.resolve_engagements`;
     # `_MIN_TROOPS` exists so a truly empty side does not reach that crash.
-    result = massbattle.resolve_field(w, crown.members, [])
+    result = massbattle.resolve_field(_record(w, crown.members, []))
     assert result["degree"] in {"Overwhelming", "Success", "Partial", "Failure"}

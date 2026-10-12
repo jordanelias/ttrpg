@@ -39,8 +39,8 @@ import statistics
 import random
 from collections import namedtuple
 
-import systems.mass_battle.sim.orchestration as _orch
-import systems.mass_battle.sim.hierarchy.units as _hu
+import modules.mass_battle.orchestration as _orch
+import modules.mass_battle.hierarchy.units as _hu
 from systems.mass_battle.sim.engine import Subunit, Unit, run_battle
 
 GoalResult = namedtuple("GoalResult", "name passed measured expected anchor note")

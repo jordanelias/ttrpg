@@ -6,10 +6,10 @@ import sys
 
 
 import pytest  # noqa: E402
-from systems.mass_battle.sim.geometry import footprint_for  # noqa: E402
-from systems.mass_battle.sim.hierarchy.units import Subunit  # noqa: E402
+from modules.mass_battle.geometry import footprint_for  # noqa: E402
+from modules.mass_battle.hierarchy.units import Subunit  # noqa: E402
 from systems.mass_battle.sim.engine import build_army, build_envelopment  # noqa: E402
-from systems.mass_battle.sim.config import SIDE_A_START_ROW  # noqa: E402
+from modules.mass_battle.config import SIDE_A_START_ROW  # noqa: E402
 
 
 def test_density_bounds_cell_count():
@@ -117,7 +117,7 @@ def test_build_refused_flank_honors_strong_position():
 def test_explicit_width_depth_grid():
     """ED-MB-0026: explicit width×depth defines an exact frontage×depth grid; the two axes are coupled
     (cells = width·depth, density = troops/cells). Wide-shallow vs narrow-deep, same troops."""
-    from systems.mass_battle.sim.geometry import footprint_for  # noqa: E402
+    from modules.mass_battle.geometry import footprint_for  # noqa: E402
     wide = footprint_for('Line', 400, None, None, width=8, depth=2)
     deep = footprint_for('Line', 400, None, None, width=2, depth=8)
     assert len(wide) == len(deep) == 16, "width×depth sets the exact cell count"

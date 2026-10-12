@@ -1,4 +1,4 @@
-"""systems.mass_battle.sim.equipment — standalone, adaptable WEAPON and ARMOUR modules.
+"""modules.mass_battle.equipment — standalone, adaptable WEAPON and ARMOUR modules.
 
 Split out of troop_types per Jordan's directive (2026-06-30): "armour and weapons ... should be their own
 modules so that they can be cleanly adjusted to map better onto scene combat if it changes." A troop type
@@ -10,9 +10,9 @@ schema migration and without touching the troop taxonomy.
 NOT YET WIRED into resolution (the engine still reads DR/speed the old way). This is a data surface the
 movement / behaviour / tactics work will read from once the grounding is settled. Importing it changes no
 engine behaviour (byte-exact)."""
-from systems.mass_battle.sim.equipment import weapons, armour
-from systems.mass_battle.sim.equipment.weapons import ARSENAL
-from systems.mass_battle.sim.equipment.armour import ARMOURY
+from modules.mass_battle.equipment import weapons, armour
+from modules.mass_battle.equipment.weapons import ARSENAL
+from modules.mass_battle.equipment.armour import ARMOURY
 
 # Provisional troop -> (weapon, armour) loadout, transcribed from mass_battle_v30 §B.2. INERT (nothing
 # consumes it yet) and intentionally a thin NAMED association, NOT a derivation: the primitive mapping

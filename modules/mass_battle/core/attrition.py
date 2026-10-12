@@ -1,10 +1,10 @@
-"""systems.mass_battle.sim.core.attrition — Lanchester attrition LAW application.
+"""modules.mass_battle.core.attrition — Lanchester attrition LAW application.
 Stage-1 behaviour-frozen extract from orchestration.py. Applies the linear-law contact-frontage
 term (the square-law volley term still lives in volley_phase pending a later increment). Pure:
 config + duck-typed unit.hp/ncells only; the COEFFICIENTS (K_LINEAR/REF/DENSITY_REF) are config
 tunables injected here, not authored — the resolver APPLIES the law. No up-DAG import (no cycle).
 [spec designs/audit/2026-06-01-massbattle-stub-wiring/mb_lanchester_design.md §3a; Lanchester Linear Law]"""
-from systems.mass_battle.sim.config import *
+from modules.mass_battle.config import *
 
 __all__ = ['_lanchester_strength']
 

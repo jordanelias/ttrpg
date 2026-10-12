@@ -1,4 +1,4 @@
-"""systems.mass_battle.sim.config — module-level tunables/constants (behaviour-frozen P-A extract). Canonical comments preserved."""
+"""modules.mass_battle.config — module-level tunables/constants (behaviour-frozen P-A extract). Canonical comments preserved."""
 import os
 import os as _os
 import os as _sigma_os

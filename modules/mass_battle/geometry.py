@@ -1,10 +1,10 @@
-"""systems.mass_battle.sim.geometry — cell layout, facing/octagon, support vectors, cell speed.
+"""modules.mass_battle.geometry — cell layout, facing/octagon, support vectors, cell speed.
 Behaviour-frozen P-A extract. Depends only on config + stdlib.
 NB: explicit __all__ so underscore-prefixed helpers cross `import *`."""
 import math
 from dataclasses import dataclass
-from systems.mass_battle.sim.config import *
-from systems.mass_battle.sim.troop_types.registry import support_weight
+from modules.mass_battle.config import *
+from modules.mass_battle.troop_types.registry import support_weight
 
 __all__ = ['arrowhead_cells', 'line_cells', 'gapped_line_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', '_oriented_abs_map', 'support_engage_frac', 'cell_speed', '_oriented', 'CellBox', 'cellbox_from', 'obb_overlap', 'obb_front_reach_overlap', '_normalize_heading', '_rotate90', '_cellbox_axes', '_cellbox_corners', '_sat_separated', 'engaged_frontage', '_project_interval', '_merge_intervals', '_interval_union_length']
 
@@ -239,7 +239,7 @@ def _oriented_abs_map(atom):
     # _atom_avg_facing / octagon) would look up float cells against integer keys and silently drop them.
     # Toggles read at call time from hierarchy.units (units imports geometry -> no top-level cycle). OFF branch
     # is the verbatim prior cell_offsets build.
-    import systems.mass_battle.sim.hierarchy.units as _u
+    import modules.mass_battle.hierarchy.units as _u
     amap = {}
     if _u.FIELD_MOVEMENT and _u.MB_NODE_COHESION and hasattr(atom, '_node_pos'):
         # [Fable-audit B1 fix, 2026-07-24] Iterate the atom's LIVE continuous footprint (_oriented) and

@@ -29,17 +29,28 @@ side's morale decides when its unit routs) and the implementation of a Jordan ru
 from __future__ import annotations
 
 import random
+from dataclasses import replace
 
 import pytest
 
-from systems.mass_battle.sim import massbattle as MB
+from modules.mass_battle import massbattle as MB
 
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.harness.populated import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.queries import world_q
 from engine.season.seam.wrappers import mass_battle as provider
+from engine.season.seam.wrappers.mass_battle import field_input
 from engine.season.state.carriers import Act
+
+
+def _record(w, side_a, side_b, *, territory=None, fort_level=0.0, stance_a=0.0, stance_b=0.0,
+            walls_dr=None, river_crossing=False):
+    """The record `resolve_field` takes since plan position `31c`: the host builder's (`field_input`) for
+    the two sides -- the weight projection is the host's -- with the fight's facts set as this test
+    states them. The keyword defaults are `resolve_field`'s own before the split."""
+    return replace(field_input(w, side_a, side_b, "r_valoria"), territory=territory, fort_level=fort_level,
+                   stances=(stance_a, stance_b), walls_dr=walls_dr, river_crossing=river_crossing)
 
 
 def _captured_units(monkeypatch, **kwargs):
@@ -55,7 +66,7 @@ def _captured_units(monkeypatch, **kwargs):
 
     monkeypatch.setattr(MB, "_run_and_grade", fake)
     w = build_realm(0)
-    MB.resolve_field(w, ["p_npc_033"], ["p_npc_004"], **kwargs)
+    MB.resolve_field(_record(w, ["p_npc_033"], ["p_npc_004"], **kwargs))
     return captured["a"], captured["b"]
 
 
@@ -109,8 +120,8 @@ def test_resolve_field_is_still_deterministic_under_a_fixed_seed():
         w = build_realm(0)
         att = world_q.mustered(w, "set_s_014", "fac_crown")
         dfn = world_q.mustered(w, "set_s_036", "fac_church_of_solmund")
-        return MB.resolve_field(w, att, dfn, territory="T9", fort_level=1.0,
-                                stance_a=-1.0, stance_b=0.0, rng=random.Random(seed))
+        return MB.resolve_field(_record(w, att, dfn, territory="T9", fort_level=1.0,
+                                        stance_a=-1.0, stance_b=0.0), rng=random.Random(seed))
 
     r1, r2 = _run(12345), _run(12345)
     assert r1 == r2, f"same-seed resolve_field diverged: {r1} vs {r2}"

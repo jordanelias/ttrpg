@@ -31,8 +31,8 @@ _SIM = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sim'))
 if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
-import systems.mass_battle.sim.orchestration as O                                   # noqa: E402
-from systems.mass_battle.sim.resolution import tracing, tracing_on                # noqa: E402
+import modules.mass_battle.orchestration as O                                   # noqa: E402
+from modules.mass_battle.resolution import tracing, tracing_on                # noqa: E402
 from systems.mass_battle.sim.engine import build_unit, run_battle                   # noqa: E402
 
 _ANCHOR = 9

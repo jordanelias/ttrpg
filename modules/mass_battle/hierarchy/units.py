@@ -1,4 +1,4 @@
-"""systems.mass_battle.sim.hierarchy.units — Subunit and Unit dataclasses (the unit/subunit hierarchy).
+"""modules.mass_battle.hierarchy.units — Subunit and Unit dataclasses (the unit/subunit hierarchy).
 Stage-1 behaviour-frozen extract from orchestration.py. The DATA model + the per-object geometry/
 movement/state methods. Depends only on LOWER layers — config, geometry (_oriented/footprint_for/
 cell_speed/octagon), core.exchange (derive_command/_stamina_pool_penalty/subunit_combat_pool),
@@ -7,15 +7,15 @@ troop_types.registry (stats_for), percell (build_column_grid) — and never impo
 is unchanged. [canonical: mass_battle_v30.md §A.3b/§A.4; derived_stats unit composition]"""
 import math
 import random as _cell_random
-from systems.mass_battle.sim import rngsource  # single owner of engine randomness (see rngsource.py)
+from modules.mass_battle import rngsource  # single owner of engine randomness (see rngsource.py)
 from dataclasses import dataclass, field
 from typing import List, Tuple, Optional, Dict, Set
-from systems.mass_battle.sim.config import *
-from systems.mass_battle.sim.geometry import *
-from systems.mass_battle.sim.core.exchange import *
-from systems.mass_battle.sim.troop_types.registry import *
-from systems.mass_battle.sim.percell import *
-from systems.mass_battle.sim.resolution import *
+from modules.mass_battle.config import *
+from modules.mass_battle.geometry import *
+from modules.mass_battle.core.exchange import *
+from modules.mass_battle.troop_types.registry import *
+from modules.mass_battle.percell import *
+from modules.mass_battle.resolution import *
 
 import os as _hu_os
 # Consumer-local maneuver toggles (read by advance_cells; runtime-togglable by validators on this
@@ -1576,7 +1576,7 @@ class Subunit:
         fast = getattr(self, 'troop_type', None) == 'cavalry' or getattr(self, 'unit_type', None) == 'cavalry'
         if fast:
             return self._envelop_wheel_goal(enemy_cells)
-        from systems.mass_battle.sim import perimeter as _peri   # wired here; perimeter imports only geometry/config (no cycle)
+        from modules.mass_battle import perimeter as _peri   # wired here; perimeter imports only geometry/config (no cycle)
         faces = _peri.perimeter_faces(enemy_cells)
         if not faces:
             return self._envelop_goal_legacy(enemy_cells)

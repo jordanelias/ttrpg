@@ -27,7 +27,7 @@ leaf both modules import at top level now), which deletes the npe -> game_state 
 
 Two other cycle families are OUT OF SCOPE and must NOT move:
   - the 9-module systems.social_contest.sim.contest.* cycle (documented intentional-during-rebuild)
-  - the 2 mass-battle cycles (systems.mass_battle.sim.massbattle <-> .units;
+  - the 2 mass-battle cycles (modules.mass_battle.massbattle <-> .units;
     the 5-module systems.mass_battle.sim.* cycle) — routed to the MB session's own plan
 """
 import importlib.util
@@ -94,7 +94,7 @@ def test_exactly_three_cycles_remain_and_they_are_the_expected_families():
     is worth stating as a result.
 
     Through 2026-08-23 there were three: the social_contest family, the canon mass-battle family,
-    and `systems.mass_battle.sim.massbattle <-> systems.mass_battle.sim.units`. That third one was
+    and `modules.mass_battle.massbattle <-> systems.mass_battle.sim.units`. That third one was
     the OLD engine's late-binding twin — `units.py` reached back into `massbattle.py`'s namespace
     for constants and helpers, and `massbattle.py` re-exported the dataclasses `units.py` defined.
     Jordan's port replaced both files: `units.py` is gone, and `massbattle.py` is now a thin
@@ -124,7 +124,7 @@ def test_exactly_three_cycles_remain_and_they_are_the_expected_families():
     # The massbattle<->units family is DELETED, not merely absent — asserted so a future edit that
     # reintroduces it fails here rather than quietly restoring a cycle the port removed.
     reintroduced = [c for c in cycles
-                    if set(c) == {'systems.mass_battle.sim.massbattle', 'systems.mass_battle.sim.units'}]
+                    if set(c) == {'modules.mass_battle.massbattle', 'systems.mass_battle.sim.units'}]
     assert not reintroduced, (
         f"the massbattle<->units cycle is back: {reintroduced}. It died with the 2026-08-24 port "
         f"(units.py deleted, massbattle.py reduced to a strategic adapter). Reintroducing it means "

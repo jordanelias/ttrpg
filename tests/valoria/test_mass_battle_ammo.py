@@ -32,12 +32,12 @@ import random
 
 import pytest
 
-import systems.mass_battle.sim.orchestration as _orch
-from systems.mass_battle.sim.config import (SIDE_A_START_ROW, SIDE_B_START_ROW, MB_VOLLEYS_START,
+import modules.mass_battle.orchestration as _orch
+from modules.mass_battle.config import (SIDE_A_START_ROW, SIDE_B_START_ROW, MB_VOLLEYS_START,
                                              MB_VOLLEYS_RESUPPLY, MB_KITE_STANDOFF, VOLLEY_MAX_RANGE)
 from systems.mass_battle.sim.engine import build_army
-from systems.mass_battle.sim.hierarchy.units import Subunit, Unit
-from systems.mass_battle.sim.orchestration import volley_phase, between_turn_recovery
+from modules.mass_battle.hierarchy.units import Subunit, Unit
+from modules.mass_battle.orchestration import volley_phase, between_turn_recovery
 
 
 @pytest.fixture(autouse=True)
@@ -79,7 +79,7 @@ def test_ammo_defaults_on_at_the_source():
     env = dict(os.environ)
     env.pop('MB_AMMO_ENABLED', None)
     out = subprocess.run(
-        [sys.executable, '-c', 'from systems.mass_battle.sim.config import MB_AMMO_ENABLED; print(MB_AMMO_ENABLED)'],
+        [sys.executable, '-c', 'from modules.mass_battle.config import MB_AMMO_ENABLED; print(MB_AMMO_ENABLED)'],
         cwd=os.path.join(os.path.dirname(__file__), '..', '..'), env=env, capture_output=True, text=True, timeout=30)
     assert out.stdout.strip() == 'True', f"MB_AMMO_ENABLED must default ON; got {out.stdout!r} / {out.stderr[-300:]}"
 

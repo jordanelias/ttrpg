@@ -52,9 +52,20 @@ already imports `massbattle` the same way from that location; this follows it ra
 """
 import random
 
+import pytest
+
 from engine.season.harness.populated import build_realm
+from engine.season.loop.driver import SeasonDriver
 from engine.season.queries import faction_q, world_q
 from engine.season.seam.contest import contest
+
+
+@pytest.fixture(autouse=True, scope="module")
+def _module_entries_registered():
+    """Plan position `31c`: the adapter calls the module entry through `MODULE_ENTRIES`, which the
+    registrar fills at driver construction; a direct `contest()` or `resolve()` needs one constructed
+    in the process (as `31b`'s combat tests do)."""
+    SeasonDriver(build_realm(0))
 
 
 def _bare(target):

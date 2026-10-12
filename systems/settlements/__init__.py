@@ -1,5 +1,5 @@
 """systems/settlements/ — the settlements data directory: `valoria_geography_v30.yaml` (read by
-`systems/mass_battle/sim/terrain.py` and `engine/season/harness/populated.py`) and `valoria_map_v30.svg`.
+`modules/mass_battle/terrain.py` and `engine/season/harness/populated.py`) and `valoria_map_v30.svg`.
 
 The `sim/` oracle that lived here (`systems.settlements.sim.*`, moved from sim/territory/ at ED-IN-0071 P4)
 was deleted at plan position `29c`; each file has an exact `FORK:5c5d8ec6` row in

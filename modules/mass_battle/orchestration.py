@@ -152,19 +152,19 @@
 #     that's a REAL missing mechanism to add (not a band-aid to re-introduce).
 
 import random, math, statistics, time
-from systems.mass_battle.sim import rngsource  # single owner of engine randomness (see rngsource.py)
+from modules.mass_battle import rngsource  # single owner of engine randomness (see rngsource.py)
 from dataclasses import dataclass, field
 from typing import List, Tuple, Optional, Dict, Set
 
 # [canonical: designs/provincial/mass_battle_v30.md §map — 25×25 grid, 5-cell buffer per side]
-from systems.mass_battle.sim.config import *  # P-A: constants extracted to mass_battle/config.py
-from systems.mass_battle.sim.core.exchange import *  # [Stage-1] pool primitives extracted to core.exchange
-from systems.mass_battle.sim.core.state import *  # [Stage-1] morale/discipline/rout transitions extracted to core.state
-from systems.mass_battle.sim.core.attrition import *  # [Stage-1] Lanchester attrition law extracted to core.attrition
-from systems.mass_battle.sim.core.contact import *  # [Stage-1] targeting/contact extracted to core.contact
-from systems.mass_battle.sim.troop_types.registry import *  # [Stage-1] troop-type stats/roles extracted
-from systems.mass_battle.sim.hierarchy.units import *  # [Stage-1] Subunit/Unit data model extracted
-from systems.mass_battle.sim.resolution import *  # [Stage-1] sigma head (roll/degree/morale-sigma/trace) — restored: import rode into hierarchy with the class block
+from modules.mass_battle.config import *  # P-A: constants extracted to mass_battle/config.py
+from modules.mass_battle.core.exchange import *  # [Stage-1] pool primitives extracted to core.exchange
+from modules.mass_battle.core.state import *  # [Stage-1] morale/discipline/rout transitions extracted to core.state
+from modules.mass_battle.core.attrition import *  # [Stage-1] Lanchester attrition law extracted to core.attrition
+from modules.mass_battle.core.contact import *  # [Stage-1] targeting/contact extracted to core.contact
+from modules.mass_battle.troop_types.registry import *  # [Stage-1] troop-type stats/roles extracted
+from modules.mass_battle.hierarchy.units import *  # [Stage-1] Subunit/Unit data model extracted
+from modules.mass_battle.resolution import *  # [Stage-1] sigma head (roll/degree/morale-sigma/trace) — restored: import rode into hierarchy with the class block
 # [canonical: designs/provincial/mass_battle_v30.md §units — 15×15 cell unit grid fits T4 pattern]
 # v20 fix: symmetric deployment. Both sides 7 rows from center (row 12).
 # [canonical: designs/provincial/mass_battle_v30.md §deployment]
@@ -379,7 +379,7 @@ def phase_boundary(unit_a, unit_b, phase_idx):
 # ─── CELL PATTERNS ───────────────────────────────────────────────────────────
 # [canonical: mass_battle_v30.md §Shapes — per-tier cell grid dimensions, Jordan design]
 
-from systems.mass_battle.sim.geometry import *  # P-A stage 2: geometry extracted
+from modules.mass_battle.geometry import *  # P-A stage 2: geometry extracted
 
 # ─── ATOM ────────────────────────────────────────────────────────────────────
 
@@ -468,7 +468,7 @@ MB_ROLLUP_FLANK_REACH = float(_sigma_os.environ.get('MB_ROLLUP_FLANK_REACH', '1.
 # again double-counts attrition. So the defender cell must retain real depth (>= floor) to be rollable.
 MB_ROLLUP_MIN_DEPTH = float(_sigma_os.environ.get('MB_ROLLUP_MIN_DEPTH', '2.0'))  # defender must still have this depth
 
-from systems.mass_battle.sim.percell import *  # P-A stage 3: percell extracted
+from modules.mass_battle.percell import *  # P-A stage 3: percell extracted
 import os
 MB_FIXING_FLANK = (os.environ.get("MB_FIXING_FLANK", "1") == "1")
 MB_ENVELOP_SHOCK = (os.environ.get("MB_ENVELOP_SHOCK", "1") == "1")  # B: envelopment moral-shock on a fixed unit struck flank/rear (toggle; default ON)

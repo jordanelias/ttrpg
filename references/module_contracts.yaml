@@ -62,7 +62,7 @@ composition_roles:
     needed_by: "engine/season/seam/wrappers/combat.py — the host adapter `@provider(\"contest\", \"personal_combat\")` builds the typed input record (`combat_input`) and calls this entry through `manifest.MODULE_ENTRIES` (plan position `31b`, A-25). The prize row `the body` (`engine/season/rosters.yaml` `contest_subsystems`) names it in `module_entry:`, and `manifest/registry.py::check_contest_prizes` refuses at driver construction a prize row whose `module_entry:` no composition row declares, or one that disagrees with it. `verb: fight` is the registrar's one verb per row; `accept`, which contests the same prize, reaches this entry through the prize row, not through a second row (the registrar refuses one target under two roles)."
 
   mass_battle.resolve_field:
-    target: "systems.mass_battle.sim.massbattle:resolve_field"
+    target: "modules.mass_battle.massbattle:resolve_field"
     needed_by: "engine/season/seam/wrappers/mass_battle.py — the `a field` prize's provider (ED-IN-0279, M3). This is the sanctioned route into systems/mass_battle/sim/ from engine/season/: massbattle.py's own internal imports are already proper dotted `systems.mass_battle.sim.*` (no flat/bare-import problem the way combat_engine_v1 has), so this goes through composition_roles rather than adding a second PATH_SEAM_ALLOWED entry that this subsystem's shape does not need."
 
 modules:
@@ -431,7 +431,7 @@ modules:
     aliases: ["Mass Combat"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "mass_battle"   # Key Type Registry vocabulary
     doc: .designs/systems/mass_battle/reference/mass_battle_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
-    # sim_module: deliberately absent until the MB lane adds it (reported `undeclared`, not `unresolvable`); mechanics_index.yaml carries `mass_battle -> systems/mass_battle/sim/massbattle.py`.
+    # sim_module: deliberately absent until the MB lane adds it (reported `undeclared`, not `unresolvable`); mechanics_index.yaml carries `mass_battle -> modules/mass_battle/massbattle.py`.
     scales: [scene]
     resolver: dice_pool
     state: []
@@ -454,8 +454,8 @@ modules:
         ARE NOT TWO VERSIONS OF ONE ENGINE -- they are a LIVE-BUT-STALE engine and a DEVELOPED-BUT-UNWIRED one,
         and the fork was about to carry the wrong one. CANON = systems/mass_battle/sim/ (28 modules, 11,269 LOC,
         last touched 2026-07-31, carries the PC_* flags in 12 files, and is what CI byte-exact goldens run via
-        bat.py). LIVE = systems/mass_battle/sim/massbattle.py (5 modules, 2,375 LOC, last touched 2026-07-21,
-        ZERO PC_* flags) -- verified by resolving the import: faction_action.py:431 does `from systems.mass_battle.sim.massbattle
+        bat.py). LIVE = modules/mass_battle/massbattle.py (5 modules, 2,375 LOC, last touched 2026-07-21,
+        ZERO PC_* flags) -- verified by resolving the import: faction_action.py:431 does `from modules.mass_battle.massbattle
         import resolve_mass_battle`, so the ~30-45 battles/campaign run on the SMALL tree. CONSEQUENCE: every
         MB-lane result -- Track F, the flag bisects, the geometry spec S1-S4, the 9 red CI tests -- is measured
         on a tree the campaign never executes. FORK IMPACT: plan of record section 5 says carry systems/*/sim

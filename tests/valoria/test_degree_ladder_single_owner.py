@@ -115,17 +115,17 @@ def _threadwork_operations():
 def _massbattle_canon():
     """The mass-battle ladder. THERE IS NOW ONE OF THEM, WHICH IS THE POINT.
 
-    Until 2026-08-24 this file enrolled TWO: `systems/mass_battle/sim/massbattle.py`'s
+    Until 2026-08-24 this file enrolled TWO: `modules/mass_battle/massbattle.py`'s
     `compute_degree` (the engine the campaign ran) and `tests/sim/mass_battle/resolution.py`'s
     (the canon engine's). Jordan's port of the canon engine over `systems/mass_battle/sim/`
     dissolved the twin — `massbattle.py` is now a thin strategic adapter with no ladder of its own,
-    and the single remaining implementation lives at `systems/mass_battle/sim/resolution.py`.
+    and the single remaining implementation lives at `modules/mass_battle/resolution.py`.
 
     That is a real deduplication, not a bookkeeping change: two implementations of a degree ladder
     that had to be kept equivalent by measurement are now one implementation. The enrolment shrinks
     by one and this docstring is why.
     """
-    m = importlib.import_module('systems.mass_battle.sim.resolution')
+    m = importlib.import_module('modules.mass_battle.resolution')
     return lambda net, ob: band(m.compute_degree(net, ob))
 
 
@@ -153,7 +153,7 @@ def _dice_model_skill():
 LADDERS = {
     'engine/dice_engine/dice_engine.py (OWNER)': _owner,
     'systems/threadwork/sim/operations.py': _threadwork_operations,
-    'systems/mass_battle/sim/resolution.py': _massbattle_canon,
+    'modules/mass_battle/resolution.py': _massbattle_canon,
     'skills/valoria-dice-model/valoria_dice.py': _dice_model_skill,
     # MIGRATED 2026-08-27 (ED-SC-0031) out of HELD. The ninth ladder — the one the 2026-08-12
     # census missed despite it living in the owner's own package — now returns the owner's bands
@@ -372,7 +372,7 @@ LADDER_OWNERS = {
 
 DECLARED_ADAPTERS = {
     # — spells the ladder out instead of importing it, equivalence held by the test above —
-    'systems/mass_battle/sim/resolution.py': (
+    'modules/mass_battle/resolution.py': (
         'The canon engine (J2), which deliberately takes no engine.* dependency. PATH MOVED '
         '2026-08-24: it was tests/sim/mass_battle/resolution.py until Jordan ported the canon '
         'engine over systems/mass_battle/sim/. The twin it used to be measured against — '
@@ -386,7 +386,7 @@ DECLARED_ADAPTERS = {
         "test above pins it as exactly the owner's four bands folded to three."),
 
     # — PRODUCE bands from something that is not a dice margin. Not ladders; nothing to route. —
-    'systems/mass_battle/sim/massbattle.py': (
+    'modules/mass_battle/massbattle.py': (
         '`_run_and_grade` maps ROUT STATE and surviving-size fractions to a band for '
         '`resolve_field`. (`resolve_mass_battle`, its strategic twin, and the `faction_action` ladder '
         'that `LADDERS` once enrolled were deleted at plan position `29b`.) Its one real net/ob ladder, '

@@ -224,7 +224,7 @@ def test_a_march_on_an_unheld_settlement_refuses_rather_than_crashing_the_season
 def test_a_won_field_writes_casualties_and_stance_on_the_defender_only():
     """FALSIFIER for a real, verified gap: `Won` (the ATTACKER wins, defenders lose) had NO
     execution coverage anywhere in this build. `test_a_lost_field...` above only exercises `Lost`,
-    and `systems/mass_battle/sim/massbattle.py`'s own disclosed limitation -- corpus-scale forces
+    and `modules/mass_battle/massbattle.py`'s own disclosed limitation -- corpus-scale forces
     (single/double-digit `weight` sums) rout on contact regardless of size, so `attacker_wins`
     (hence `Won`) may be UNREACHABLE through a real fold at this fixture's scale -- measured
     directly: the 6-attacker/2-defender REVERSE of the scenario below still resolved `Lost`.

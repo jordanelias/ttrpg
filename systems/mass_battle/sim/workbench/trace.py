@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'
 from systems.mass_battle.sim.engine import (  # noqa: E402
     build_unit, build_army, build_envelopment, build_refused_flank, resolve_battle,
     SIDE_A_START_ROW, SIDE_B_START_ROW)
-from systems.mass_battle.sim.resolution import tracing  # noqa: E402
+from modules.mass_battle.resolution import tracing  # noqa: E402
 import random  # noqa: E402
 
 # Deployment anchor columns per (shape, tier) — mirrors bat.py's own table (workbench owns its own

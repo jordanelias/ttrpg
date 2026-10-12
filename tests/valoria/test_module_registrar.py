@@ -34,7 +34,8 @@ row by `manifest/registry.py::check_contest_prizes`. Its falsifier (3), the fres
 disagreement arms after it.
 
 Plan position `31b` (IN-04) landed the second production entry row, `combat.fight` (the prize row `the
-body`); the fresh-process deletion test now runs once per prize-named role.
+body`); the fresh-process deletion test now runs once per prize-named role. Plan position `31c` (IN-05)
+landed the third, `mass_battle.resolve_field` (the prize row `a field`), and with it `31c`'s falsifier (3).
 
 Plan position IN-41 (`SM-11` + `SM-9`; it left the plan at B-B's close, `4a2e4494`), which split the retired `decline_note:` column into
 `effect_decline_note:`, `formation_decline_note:` and `requires_decline_note:`: falsifier (1)
@@ -184,7 +185,7 @@ def test_a_production_entry_row_deleted_in_a_fresh_process_refuses_naming_it():
     `social_contest.roll`; a test of `named[0]` alone would have stopped covering the first row the day a
     second sorted ahead of it)."""
     named = _run(_PRIZE_ENTRIES + "print(repr(named))\n")
-    assert len(named) >= 2, f"fewer prize-named entry rows than `31a` + `31b` landed: {named}"
+    assert len(named) >= 3, f"fewer prize-named entry rows than `31a`, `31b` and `31c` landed: {named}"
     for i in range(len(named)):
         got = _run(_PRIZE_ENTRIES + f"""
 role = named[{i}]

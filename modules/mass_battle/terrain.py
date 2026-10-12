@@ -1,4 +1,4 @@
-"""systems.mass_battle.sim.terrain — A7 (ED-MB-0067 Part A / ED-780): geography-derived battle terrain.
+"""modules.mass_battle.terrain — A7 (ED-MB-0067 Part A / ED-780): geography-derived battle terrain.
 
 [canonical: mass_battle_v30.md §A.9 ENVIRONMENTAL MODIFIERS + its Phase-3 (ED-780) extension — "When a
 mass battle resolves at engagement coordinates that intersect
@@ -44,7 +44,7 @@ import os
 
 import yaml
 
-_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # modules/mass_battle/ since `31c`
 _GEOGRAPHY_YAML = os.path.join(_REPO_ROOT, 'systems', 'settlements', 'valoria_geography_v30.yaml')
 
 # A.9's six canonical rows (mass_battle_v30.md §A.9, a closed table — this module invents no seventh).

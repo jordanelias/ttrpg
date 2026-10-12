@@ -11,9 +11,9 @@ import pytest  # noqa: E402
 
 def _reload(on):
     os.environ['MB_TROOP_DENSITY_CAP'] = '1' if on else '0'
-    import systems.mass_battle.sim.config as C
+    import modules.mass_battle.config as C
     importlib.reload(C)
-    import systems.mass_battle.sim.geometry as G
+    import modules.mass_battle.geometry as G
     importlib.reload(G)
     return C, G
 
@@ -59,7 +59,7 @@ def test_on_none_troop_type_uses_full_cap():
 
 def teardown_module(module):
     os.environ.pop('MB_TROOP_DENSITY_CAP', None)
-    import systems.mass_battle.sim.config as C
+    import modules.mass_battle.config as C
     importlib.reload(C)
-    import systems.mass_battle.sim.geometry as G
+    import modules.mass_battle.geometry as G
     importlib.reload(G)

@@ -61,11 +61,11 @@ from __future__ import annotations
 
 import math
 
-from systems.mass_battle.sim import rngsource
-from systems.mass_battle.sim.config import CELL_CAP
-from systems.mass_battle.sim.hierarchy.units import Subunit, Unit
-from systems.mass_battle.sim.orchestration import run_battle
-from systems.mass_battle.sim.terrain import (FOREST_BROKEN, RIVER_CROSSING, RIVER_CROSSING_OFF_D,
+from modules.mass_battle import rngsource
+from modules.mass_battle.config import CELL_CAP
+from modules.mass_battle.hierarchy.units import Subunit, Unit
+from modules.mass_battle.orchestration import run_battle
+from modules.mass_battle.terrain import (FOREST_BROKEN, RIVER_CROSSING, RIVER_CROSSING_OFF_D,
                                              SPEED_TIERS, UPHILL, UPHILL_ATTACKER_OFF_D,
                                              UPHILL_DEFENDER_DEF_D, WALLS, WALLS_DEFENDER_DR,
                                              terrain_row_for_territory)
@@ -75,7 +75,7 @@ from systems.mass_battle.sim.terrain import (FOREST_BROKEN, RIVER_CROSSING, RIVE
 #: NOT the canonical degree ladder (`engine/dice_engine/dice_engine.degree_from_net`, margin-based);
 #: they are a bespoke post-hoc classification of a finished battle's survivor ratios, and
 #: reconciling the two is open MB-lane work, not a port concern.
-# [canonical: carried over unchanged from the pre-port adapter, systems/mass_battle/sim/massbattle.py
+# [canonical: carried over unchanged from the pre-port adapter, modules/mass_battle/massbattle.py
 #  @ FORK ref e4070d4^ — see this module's header. NOT independently derived: they are the same three
 #  survivor-ratio thresholds the campaign has used since Phase 7, preserved verbatim so the engine
 #  swap is a single-variable experiment. Their GROUNDING is open MB-lane work — no canon states them.]

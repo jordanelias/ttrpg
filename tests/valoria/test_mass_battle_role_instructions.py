@@ -15,9 +15,9 @@ import random
 
 import pytest
 
-import systems.mass_battle.sim.config as C
-import systems.mass_battle.sim.hierarchy.units as _hu
-import systems.mass_battle.sim.orchestration as _orch
+import modules.mass_battle.config as C
+import modules.mass_battle.hierarchy.units as _hu
+import modules.mass_battle.orchestration as _orch
 from systems.mass_battle.sim.engine import build_army, build_unit
 
 from .test_reach_weapon_class import field_path  # noqa: F401  (fixture re-export)
@@ -90,7 +90,7 @@ def test_an_order_that_releases_to_balanced_beats_the_role_keyword(wired):
     """The engine's own release idiom (build_envelopment, build_refused_flank) writes
     {'stance': 'balanced'}. 'balanced' is also the neutral default, so it must be remembered as WRITTEN:
     a ShieldWall released by an Order moves again instead of re-asserting its 'hold' keyword."""
-    from systems.mass_battle.sim.core.contact import check_orders
+    from modules.mass_battle.core.contact import check_orders
     u = build_army([{'role': 'ShieldWall', 'troop_type': 'heavy_infantry',
                      'orders': (_hu.Order('tick:3', {'stance': 'balanced'}),)}], 'R', 'A')
     su = u.subunits[0]

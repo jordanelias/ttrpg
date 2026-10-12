@@ -1,9 +1,9 @@
-"""systems.mass_battle.sim.percell — per-column density/depth grid, casualty distribution, fatigue,
+"""modules.mass_battle.percell — per-column density/depth grid, casualty distribution, fatigue,
 envelopment-sigma, defender depth, stamina. Behaviour-frozen P-A extract.
 Depends on config + geometry."""
 import math
-from systems.mass_battle.sim.config import *
-from systems.mass_battle.sim.geometry import *
+from modules.mass_battle.config import *
+from modules.mass_battle.geometry import *
 
 __all__ = ['_erode_cell_morale_from_damage', '_apply_with_spill', '_ColBlock', 'build_column_grid', '_engaged_cols', 'distribute_casualties', 'distribute_casualties_cellwise', 'sync_col_grid', '_fatigue_sigma', '_defender_depth', 'update_stamina', 'apply_to_subunit']
 

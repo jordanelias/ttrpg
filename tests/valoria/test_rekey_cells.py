@@ -18,7 +18,7 @@ _SIM = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sim'))
 if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
-import systems.mass_battle.sim.hierarchy.units as U                       # noqa: E402
+import modules.mass_battle.hierarchy.units as U                       # noqa: E402
 from systems.mass_battle.sim.engine import build_army                     # noqa: E402
 
 # Containers rekey_cells owns. cell_morale / cell_start_troops / cell_breakpoint are EXCLUDED on

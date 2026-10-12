@@ -28,14 +28,14 @@ import sys
 
 import pytest  # noqa: E402
 
-import systems.mass_battle.sim.hierarchy.units as _hu  # noqa: E402
-import systems.mass_battle.sim.orchestration as _orch  # noqa: E402
-import systems.mass_battle.sim.core.contact as _contact  # noqa: E402
-from systems.mass_battle.sim.geometry import (  # noqa: E402
+import modules.mass_battle.hierarchy.units as _hu  # noqa: E402
+import modules.mass_battle.orchestration as _orch  # noqa: E402
+import modules.mass_battle.core.contact as _contact  # noqa: E402
+from modules.mass_battle.geometry import (  # noqa: E402
     cellbox_from, engaged_frontage, _project_interval, _cellbox_corners,
     _normalize_heading, _rotate90,
 )
-from systems.mass_battle.sim.core.attrition import _lanchester_strength  # noqa: E402
+from modules.mass_battle.core.attrition import _lanchester_strength  # noqa: E402
 from systems.mass_battle.sim.engine import build_unit  # noqa: E402
 from systems.mass_battle.sim import validators as _val  # noqa: E402
 
@@ -144,7 +144,7 @@ def test_lanchester_zero_frontage_no_casualties():
 
 
 def _hu_lanchester_ref():
-    from systems.mass_battle.sim.config import LANCHESTER_STRENGTH_REF
+    from modules.mass_battle.config import LANCHESTER_STRENGTH_REF
     return LANCHESTER_STRENGTH_REF
 
 

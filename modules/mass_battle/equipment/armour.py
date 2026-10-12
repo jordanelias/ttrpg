@@ -1,4 +1,4 @@
-"""systems.mass_battle.sim.equipment.armour — the ARMOUR module: a standalone, adaptable armour catalogue.
+"""modules.mass_battle.equipment.armour — the ARMOUR module: a standalone, adaptable armour catalogue.
 
 Separated out of the troop taxonomy (Jordan 2026-06-30): a troop type NAMES an armour; it no longer
 embeds armour facts. A dedicated module lets the armour model evolve on its own and later be re-mapped
@@ -19,7 +19,7 @@ changes no engine behaviour (byte-exact).
 [canonical: params/mass_combat.md §Ranged DR Table — None=0 / Light=1 / Medium=2 / Heavy=3 vs Piercing]
 [provisional source: mass_battle_v30.md §B.2 — TTRPG Armour column]
 """
-from systems.mass_battle.sim.equipment._base import Registry
+from modules.mass_battle.equipment._base import Registry
 
 # Descriptive vocabulary. `tier` is the §B.2 armour class; `material` mirrors the personal-combat
 # tier->material mapping in SPIRIT (so the future cross-scale bridge is short) but is a provisional tag,

@@ -15,7 +15,7 @@ direct reports (distinct officers used + any un-officered subunits) <= the gener
 import pytest
 
 from systems.mass_battle.sim.engine import build_army, SUBUNIT_CAP
-from systems.mass_battle.sim.hierarchy.units import Officer
+from modules.mass_battle.hierarchy.units import Officer
 
 
 def _line_spec(officer=None):
@@ -35,7 +35,7 @@ def test_officer_command_defaults_to_tier3_baseline():
 
 def test_officer_command_derives_from_charisma_and_cognition_like_a_general():
     """Same derivation a Unit's own Command uses (derive_command, ED-899) -- no second formula."""
-    from systems.mass_battle.sim.core.exchange import derive_command
+    from modules.mass_battle.core.exchange import derive_command
     o = Officer(name='Aulus', charisma=6, cognition=4)
     assert o.command == derive_command(6, 4)
 

@@ -13,9 +13,9 @@ the next one) -- no messenger latency is modelled either way.
 """
 import pytest
 
-from systems.mass_battle.sim.core.contact import check_orders
-from systems.mass_battle.sim.hierarchy.units import Order, Subunit, Unit
-from systems.mass_battle.sim.orchestration import reset_morale_between_battles
+from modules.mass_battle.core.contact import check_orders
+from modules.mass_battle.hierarchy.units import Order, Subunit, Unit
+from modules.mass_battle.orchestration import reset_morale_between_battles
 
 
 def _signal_unit(signal_name='advance'):

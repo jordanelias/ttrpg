@@ -1,4 +1,4 @@
-"""systems.mass_battle.sim.equipment.weapons — the WEAPONS module: a standalone, adaptable weapon catalogue.
+"""modules.mass_battle.equipment.weapons — the WEAPONS module: a standalone, adaptable weapon catalogue.
 
 Separated out of the troop taxonomy (Jordan 2026-06-30): a troop type NAMES a weapon; it no longer
 embeds weapon facts. Splitting weapons into their own module lets the weapon model evolve on its own and
@@ -18,7 +18,7 @@ DYNAMIC: register / override / extend ARSENAL at import or runtime. ADAPTABLE: r
 surface. NOT YET WIRED into resolution, so importing this changes no engine behaviour (byte-exact).
 [provisional source: mass_battle_v30.md §B.2 — TTRPG Weapon column + Anti-Armour / Volley keywords]
 """
-from systems.mass_battle.sim.equipment._base import Registry
+from modules.mass_battle.equipment._base import Registry
 
 # Descriptive vocabulary (intentionally aligned in SPIRIT with the personal-combat head/material model so
 # the future mapping is short, but kept as plain provisional tags — no cross-engine binding yet):

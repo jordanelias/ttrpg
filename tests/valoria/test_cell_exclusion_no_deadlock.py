@@ -40,8 +40,8 @@ import sys
 
 import pytest  # noqa: E402
 
-import systems.mass_battle.sim.hierarchy.units as _hu  # noqa: E402
-import systems.mass_battle.sim.orchestration as _orch  # noqa: E402
+import modules.mass_battle.hierarchy.units as _hu  # noqa: E402
+import modules.mass_battle.orchestration as _orch  # noqa: E402
 from systems.mass_battle.sim import validators as _val  # noqa: E402
 from systems.mass_battle.sim.engine import build_unit  # noqa: E402
 

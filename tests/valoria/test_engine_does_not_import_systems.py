@@ -538,7 +538,7 @@ def test_the_import_probe_can_observe_both_kinds_of_leak():
       2. the `sys.path` + BARE NAME shape `combat_bridge` uses, where the loaded module is called
          `wrapper`, not `systems.combat.…`. The old name-prefix probe reported this one as clean.
     """
-    dotted = _modules_loaded_from_systems('import systems.mass_battle.sim.massbattle\n')
+    dotted = _modules_loaded_from_systems('import modules.mass_battle.massbattle\n')
     assert dotted, 'the probe reports NOTHING for a plain dotted import — it is broken'
 
     bare = _modules_loaded_from_systems(

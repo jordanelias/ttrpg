@@ -1,4 +1,4 @@
-"""systems.mass_battle.sim.core.state — morale / discipline / rout state transitions.
+"""modules.mass_battle.core.state — morale / discipline / rout state transitions.
 Stage-1 behaviour-frozen extract from orchestration.py. The SOLE site (with the exchange pool)
 of the resolver layer that MUTATES unit/subunit morale, discipline, and rout. Pure w.r.t.
 modules: depends on config + duck-typed unit/atom methods (erode_morale, derive_rout,
@@ -7,9 +7,9 @@ orchestration via star-import so phase_boundary and every caller are unchanged.
 [canonical: mass_battle_v30.md §A.4 morale/discipline, §A.12 rout]"""
 import math
 import random  # [ED-MB-0031] stochastic-rout draw — the SAME seeded global stream roll_pool uses (reproducible per seed)
-from systems.mass_battle.sim import rngsource  # single owner of engine randomness (see rngsource.py)
-from systems.mass_battle.sim.config import *
-from systems.mass_battle.sim.core.exchange import D_YIELD  # [ED-MB-0024] DG-2 yield discipline gate (single owner: core.exchange)
+from modules.mass_battle import rngsource  # single owner of engine randomness (see rngsource.py)
+from modules.mass_battle.config import *
+from modules.mass_battle.core.exchange import D_YIELD  # [ED-MB-0024] DG-2 yield discipline gate (single owner: core.exchange)
 
 __all__ = ['morale_check_phase', 'rout_resolution', 'discipline_check_phase']
 

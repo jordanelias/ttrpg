@@ -47,7 +47,7 @@ _SIM = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sim'))
 if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
-import systems.mass_battle.sim.orchestration as O                                  # noqa: E402
+import modules.mass_battle.orchestration as O                                  # noqa: E402
 from systems.mass_battle.sim.engine import build_army, SIDE_A_START_ROW            # noqa: E402
 
 
@@ -145,7 +145,7 @@ def test_shipped_bound_truncates_nothing_on_a_cascading_workload():
     resolver calls produced more than one depth group and requires that count to be non-zero
     before the zero-truncation claim is allowed to mean anything.
     """
-    from systems.mass_battle.sim.config import MAX_SUB_PHASES
+    from modules.mass_battle.config import MAX_SUB_PHASES
     multi_group_calls = 0
     truncated = 0
     max_groups = 0

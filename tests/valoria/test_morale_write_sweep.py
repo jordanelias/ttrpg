@@ -32,7 +32,7 @@ import pytest
 _ENGINE_ROOT = os.path.abspath(os.path.join(
     os.path.dirname(__file__), '..', '..', 'systems', 'mass_battle', 'sim'))
 
-import systems.mass_battle.sim.orchestration as O  # noqa: E402
+import modules.mass_battle.orchestration as O  # noqa: E402
 from systems.mass_battle.sim.engine import build_army  # noqa: E402
 
 
