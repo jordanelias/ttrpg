@@ -13504,7 +13504,10 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     pattern = re.compile(r"\bnet\b\s*=|roll_pool|\broll_net\b|\bnet_boost\b|\bsuccesses\b")
     producers = set()
     for f in files.package_modules():
-        if f == files.TEST_PY:
+        # The HOST's code, not its tests: `test_social_contest_module.py` calls the dice engine on
+        # purpose, as the independent oracle for the module's roll (this file was the only test
+        # excluded while no other test named a producer).
+        if files.TESTS_DIR in f.parents:
             continue
         rel = f.relative_to(files.PACKAGE_DIR).as_posix()
         for i, line in enumerate(_code_only_lines(f), 1):

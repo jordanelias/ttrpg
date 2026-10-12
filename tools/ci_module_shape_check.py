@@ -40,11 +40,15 @@ import ci_common  # noqa: E402
 
 REPO_ROOT = ci_common.REPO
 
-# Runtime container roots this guard patrols.
+# Runtime container roots this guard patrols. Plan position `31a` adds every code root that is
+# module code WHOLE -- a `ci_common.MODULE_CODE_ROOTS` row whose glob under it is `*` (`modules/`,
+# A-25: reachable running code only) -- read from that owner, never typed here. `systems/` stays
+# patrolled at the combat engine alone: the rest of it is legacy and unplugged code.
 RUNTIME_ROOTS = (
     'sim',
     'systems/combat/combat_engine_v1',
     'engine',
+    *(top for top, under in ci_common.MODULE_CODE_ROOTS if under == '*'),
 )
 
 EXCLUDE_PARTS = ('tests', 'workbench', 'archives', 'deprecated', '__pycache__')

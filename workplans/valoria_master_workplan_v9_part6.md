@@ -249,10 +249,11 @@ emits `finding.none` and deposits nothing"* (closed at ladder step 3 on 2026-09-
 What is missing is a degree producer. `ED-FI-0009` is `open`, `needs_jordan: true` (J-22, 2026-10-01: its stop condition hit, see its last ledger row); its earlier carve's
 obstacle column, attribute gate and depth derivation were overturned by a critic and are **not** to be
 re-introduced.
-**INSTRUCTION.** Compose on the single owners: the actor's pool from `sigma.py::_pool_of` (capability via
-`rosters.yaml: verb_capability`, else `pool_default`), the obstacle from `_obstacle_of`'s existing
-default for a non-person subject, and the degree from `dice_engine.degree_from_net` — the one ladder.
-**Stop condition:** R-09's set-equality test pins exactly one roll owner (S27.2). If producing an
+**INSTRUCTION.** Compose on the single owners: the actor's pool and the obstacle from the host input builder
+`seam/wrappers/sigma.py::contest_input` (IN-03, `31a`) — its `_pool_of` (capability via
+`rosters.yaml: verb_capability`, else `pool_default`) and its `_obstacle_of`'s existing
+default for a non-person subject — and the degree from `dice_engine.degree_from_net` — the one ladder.
+**Stop condition:** R-09's producer scan pins the roll to one owner, the `social_contest` module's entry, with the host producing none (S27.2). If producing an
 inquiry degree cannot route through that owner without a `contests:` shape, stop and register — that is
 the design question, not a reason to add a second resolver. Depth has no carrier; build none. Effect
 target: `loop/effects_information.py` (the inquiries' effects) — `Failure` deposits nothing.

@@ -25,7 +25,7 @@ edit (CLAUDE.md §0.4).
 4. **The lane's validator**, not all of them. `python tools/valoria_local.py --staged` runs the
    staged-file validators; it **does not run pytest**, so local-green is not CI-green. Then the one
    validator that owns what you touched — check `references/ci_checks_registry.yaml`'s `role:` line.
-   - **Layer conformance:** if the diff touches `engine/season/` code, run the `layer-conformance`
+   - **Layer conformance:** if the diff touches `engine/season/` or `modules/` code, run the `layer-conformance`
      skill's Lens B on the files you changed; if it adds a tool, a guard, a hook or a governance
      rule, run Lens A. Its output is edits to this commit, not a document. A diff touching neither
      skips this.
