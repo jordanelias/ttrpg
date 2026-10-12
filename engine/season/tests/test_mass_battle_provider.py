@@ -327,8 +327,9 @@ def test_a_march_across_the_river_resolves_differently_from_the_same_march_dry(m
     was before MB-05r -- T3's polygon row, OPEN_FLAT -- so the crossing is the only difference.
 
     THE FALSIFIER, BOTH WAYS. Before MB-05r the host passed `river_crossing=False` on every field and
-    the crossing and dry arms were EQUAL on all 16 seeds (run 2026-10-12 against `5422ed1e`, this
-    test's loop with `_origin_of` absent, on its first fixture, a T3 army marching on T9); after, they
+    the crossing and dry arms were EQUAL on all 16 seeds (run 2026-10-12: against `5422ed1e` with
+    `_origin_of` absent, on this test's first fixture, a T3 army marching on T9; and on this one with
+    `field_input`'s origin forced back to `None`, the unwired host); after, they
     differ on at least one (3 of 16 on this fixture, measured 2026-10-12, not asserted -- `>= 1` is,
     and `checked` keeps it honest). The record assertion closes the loop on the signal itself."""
     from engine.season.seam.wrappers.mass_battle import field_input
