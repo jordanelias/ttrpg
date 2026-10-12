@@ -16,7 +16,7 @@ if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
 from systems.mass_battle.sim.engine import build_army, SIDE_A_START_ROW, SIDE_B_START_ROW
-from systems.mass_battle.sim.orchestration import _expire_charger_latches, reset_morale_between_battles
+from modules.mass_battle.orchestration import _expire_charger_latches, reset_morale_between_battles
 
 
 def _unit(faction, col=20, troop_type='cavalry'):

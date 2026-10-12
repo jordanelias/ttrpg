@@ -18,12 +18,15 @@
     freezes one `Faction` into (plan position `20-iii`), and `WAR_MOOD`, the `Proposition.mood`
     value `at_war` reads -- and refuses at import if `SHEET_KIND`'s roster row stops being
     `Faction`'s fields. Still no function here writes.
+  * `inputs`    -- not a query module: the typed INPUT records the host builds for a module entry
+    (A-25, plan positions `31a`, `31b`), a stdlib-only leaf a module may import. No function, no state.
 
 `04_CODE_ARCHITECTURE.md` §A.2: *"queries/ ownerless functions: world_q (World first) · person_q
 (asker first) · cache (barrier-built) · faction_q (§B.6.1's VIEW, §B.10-12's `resolve`/`at_war`)"*
 -- FOUR members as of `20-ii`, and the table below it gives every function here the token column
 `—`: **no function in this package takes a write token, so none of them can write.** **All four
-of the enumerated modules exist**, and the package is no longer a superset of the roster.
+of the enumerated modules exist**; the package is still a superset of the roster by exactly `inputs`
+(above), which holds records rather than functions.
 
 ⚠ **THIS IS THE SAME AMBIGUITY `world_q.py` AND THIS FILE ALREADY RESOLVED ONCE, THE OTHER WAY --
 NAMED, NOT SILENTLY CONTRADICTED.** `world_q.py`'s own docstring argues against a `polity_q.py`

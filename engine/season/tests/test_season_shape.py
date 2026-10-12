@@ -8607,6 +8607,7 @@ def test_the_seam_calls_personal_combat_rather_than_naming_it():
     if C.engine() is None:                     # a NAMED gap, never a silent skip
         assert C.load_error(), "the engine is unavailable and the seam reports no reason"
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+    SeasonDriver(P.tiny_world())   # `31b`: registers the module entries a direct `contest()` calls
 
     out = contest(w, "S", "the body", ["p_low", "p_mid"], 0, 2, ["act1"])
     assert out["status"] == "RESOLVED" and out["module"] == "personal_combat", out
@@ -8655,11 +8656,12 @@ def test_the_combat_seam_derives_one_field_and_it_decides_something():
     w = P.tiny_world()
     if C.engine() is None:
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+    SeasonDriver(P.tiny_world())   # `31b`: registers the module entries a direct `contest()` calls
     scale = w.fixtures.get("condition_scale")
     ends = {}
     for body in (scale, 700, 400, 50):
         w.persons["p_low"].body = body
-        ends[body] = C.derive_party(w.persons["p_low"], w.fixtures, "x").end
+        ends[body] = C.party_end(w.persons["p_low"], w.fixtures)   # `derive_party(...).end` until `31b`
     assert ends[scale] > ends[700] > ends[400] > ends[50] >= 1, (
         f"the derived `end` is not monotone in body condition: {ends}. A dying fighter must not "
         "be as durable as a healthy one, and the floor of 1 is why a dying one still fights")
@@ -13489,20 +13491,52 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # verified against both files directly before landing. No exemption set needed; a real second
     # producer anywhere else still turns this red, and no future file collides with this pattern
     # by accident the way `arms.py` did.
+    #
+    # ⚠⚠ PLAN POSITION `31a` MOVED THE PRODUCER OUT OF THE PACKAGE, AND THE SCAN WIDENED WITH IT.
+    # The roll is `modules/social_contest/roll.py` now (A-25); `seam/wrappers/sigma.py` keeps the
+    # host adapter and the input builder and produces nothing. `files.package_modules()` walks this
+    # package only, so the old pin would have gone green on an EMPTY set -- passing by finding
+    # nothing. Two assertions replace it: the HOST produces no margin (the season package's set is
+    # empty: the host builds the record and calls the entry, it never rolls), and the scan over every
+    # code root (`ci_common.MODULE_CODE_DIRS`, never spelled here or in `data/files.py`) is a
+    # SUPERSET naming the moved file. Superset, not equality, because `systems/` holds legacy and
+    # unplugged sims that roll their own (the σ composition's source is one of them) and `31b`/`31c`
+    # move more resolvers into `modules/`; the one-owner property this guarded is now "the host rolls
+    # nothing", and a margin is a module's to produce.
+    pattern = re.compile(r"\bnet\b\s*=|roll_pool|\broll_net\b|\bnet_boost\b|\bsuccesses\b")
     producers = set()
     for f in files.package_modules():
-        if f == files.TEST_PY:
+        # The HOST's code, not its tests: `test_social_contest_module.py` calls the dice engine on
+        # purpose, as the independent oracle for the module's roll (this file was the only test
+        # excluded while no other test named a producer).
+        if files.TESTS_DIR in f.parents:
             continue
         rel = f.relative_to(files.PACKAGE_DIR).as_posix()
         for i, line in enumerate(_code_only_lines(f), 1):
-            if re.search(r"\bnet\b\s*=|roll_pool|\broll_net\b|\bnet_boost\b|\bsuccesses\b", line):
+            if pattern.search(line):
                 producers.add(rel)
-    assert producers == {"seam/wrappers/sigma.py"}, (
-        f"the margin producers are {sorted(producers)}. Exactly one module may produce a margin — "
-        "`S27.2` names a second resolver as this architecture's highest-value refusal, and the "
-        "ladder reads `degree_from_net`, which is a single owner on the other side. An EMPTY set "
-        "means `U1`'s provider is gone and `H-98`'s `the ladder branch has no producer` is true "
-        "again; anything else is a second producer and must be adjudicated before it lands")
+    assert producers == set(), (
+        f"the season package produces a margin in {sorted(producers)}. Since `31a` the host builds "
+        "the typed input record and calls the module entry; the roll is the module's. `S27.2` names "
+        "a second resolver as this architecture's highest-value refusal -- adjudicate before it lands")
+    sys.path.insert(0, str(files.REPO_ROOT / "tools"))
+    import ci_common
+    scanned, module_producers = set(), set()
+    for root in ci_common.MODULE_CODE_DIRS:
+        for f in sorted((files.REPO_ROOT / root).rglob("*.py")):
+            if "__pycache__" in f.parts:
+                continue
+            rel = f.relative_to(files.REPO_ROOT).as_posix()
+            scanned.add(rel)
+            if any(pattern.search(line) for line in _code_only_lines(f)):
+                module_producers.add(rel)
+    moved = "modules/social_contest/roll.py"
+    assert moved in scanned, (
+        f"the code-root scan never read {moved!r} ({len(scanned)} files scanned): it walks "
+        "`ci_common.MODULE_CODE_DIRS`, and a root it does not reach passes by finding nothing")
+    assert module_producers >= {moved}, (
+        f"{moved!r} produces no margin: `U1`'s provider is gone (A-25 moved it to the module) and "
+        "`H-98`'s `the ladder branch has no producer` is true again")
 
 
 def _code_only_lines(path: Path) -> list:
@@ -13552,6 +13586,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
     from ..seam.wrappers import combat as C
     if C.engine() is None:
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+    SeasonDriver(P.tiny_world())   # `31b`: registers the module entries a direct `contest()` calls
     w = _w(); w.step = Step.RESOLVE
     raw = contest(w, "R", "the body", ["p_low", "p_mid"], 0, 2, ["we0"])
     assert raw["wound_state"]["p_low"]["felled"] is True, raw["wound_state"]

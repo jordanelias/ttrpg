@@ -37,10 +37,12 @@
      is a live UPHILL field, so "no garrison" alone is no longer "open ground".
   7. AN UPHILL FIELD RESOLVES DIFFERENTLY FROM THE SAME FIELD ON OPEN GROUND (MB-05, A.9's Uphill row):
      block 5's bare fixture as found (T9 -> UPHILL) against itself with the territory read made `None`
-     (OPEN_FLAT). The other two MB-05 rows have no provider test, and why is a finding, not an
-     omission: RIVER_CROSSING needs a signal this provider cannot derive (it holds the target rung,
-     not the march's origin) -- `resolve_field`'s own test is in `tests/valoria/test_mass_battle_terrain.py`;
-     NARROW_PASS is not applied (`massbattle._run_and_grade`'s docstring says why it would change nothing).
+     (OPEN_FLAT). NARROW_PASS has no provider test: it is not applied (`massbattle._run_and_grade`'s
+     docstring says why it would change nothing).
+  8. A MARCH ACROSS THE RIVER RESOLVES DIFFERENTLY FROM THE SAME MARCH DRY (MB-05r): the host derives the
+     march's origin from the attacking side (`_origin_of`) and the module decides the crossing from it;
+     with no origin, or one on the target's own bank, the field is exactly what it was.
+  9. THE LOYALTY GAIN (MB-03) reaches the record, and its `0` arm is the shipped field.
 
 Block 6 (`resolve_field` sums `Person.weight` per side into army SIZE, not quality) lives in
 `tests/valoria/test_mass_battle_resolve_field.py`, not here: it needs `from systems.mass_battle...`
@@ -52,9 +54,20 @@ already imports `massbattle` the same way from that location; this follows it ra
 """
 import random
 
+import pytest
+
 from engine.season.harness.populated import build_realm
+from engine.season.loop.driver import SeasonDriver
 from engine.season.queries import faction_q, world_q
 from engine.season.seam.contest import contest
+
+
+@pytest.fixture(autouse=True, scope="module")
+def _module_entries_registered():
+    """Plan position `31c`: the adapter calls the module entry through `MODULE_ENTRIES`, which the
+    registrar fills at driver construction; a direct `contest()` or `resolve()` needs one constructed
+    in the process (as `31b`'s combat tests do)."""
+    SeasonDriver(build_realm(0))
 
 
 def _bare(target):
@@ -291,3 +304,103 @@ def test_an_uphill_field_resolves_differently_from_the_same_field_on_open_ground
         differs += uphill["result"] != open_["result"]
     assert checked == 16
     assert differs >= 1, "an uphill field fought identically to open ground on every seed (MB-05)"
+
+
+def _fight_from(monkeypatch, w, attackers, target, subject, seed, *, dry):
+    """The provider's fight, with the march's origin read as found or -- `dry` -- made `None`, the
+    no-origin default (`_origin_of`, MB-05r). Patched for this one call only."""
+    from engine.season.seam.wrappers import mass_battle as wrapper
+    with monkeypatch.context() as m:
+        if dry:
+            m.setattr(wrapper, "_origin_of", lambda _w, _pids: None, raising=False)
+        r = wrapper.resolve(w, attackers, ["c"], "a field", subject=subject, rung=target,
+                            rng=random.Random(seed))
+    assert r["status"] == "RESOLVED" and r["unopposed"] is False, f"seed {seed}: not fought: {r}"
+    return r["result"]
+
+
+def test_a_march_across_the_river_resolves_differently_from_the_same_march_dry(monkeypatch):
+    """MB-05r -- A.9's River-crossing row, DERIVED BY THE HOST. `set_s_004` (T2, west of the Valoris)
+    musters one Crown man, who marches on the bare `set_s_008` (T3, east of it), held there by one
+    Varfell man: the straight line between the two territories' anchors crosses `river-valoris`, so the
+    field is RIVER_CROSSING. The SAME march with the origin read made `None` (`dry`) is the field as it
+    was before MB-05r -- T3's polygon row, OPEN_FLAT -- so the crossing is the only difference.
+
+    THE FALSIFIER, BOTH WAYS. Before MB-05r the host passed `river_crossing=False` on every field and
+    the crossing and dry arms were EQUAL on all 16 seeds (run 2026-10-12: against `5422ed1e` with
+    `_origin_of` absent, on this test's first fixture, a T3 army marching on T9; and on this one with
+    `field_input`'s origin forced back to `None`, the unwired host); after, they
+    differ on at least one (3 of 16 on this fixture, measured 2026-10-12, not asserted -- `>= 1` is,
+    and `checked` keeps it honest). The record assertion closes the loop on the signal itself."""
+    from engine.season.seam.wrappers.mass_battle import field_input
+    target, subject = "set_s_008", "fac_varfell"
+    w = _bare(target)
+    attackers = world_q.mustered(w, "set_s_004", "fac_crown")
+    assert attackers, "the fixture no longer musters a Crown army at set_s_004 (T2)"
+    checked = differs = 0
+    for seed in range(16):
+        crossed = _fight_from(monkeypatch, w, attackers, target, subject, seed, dry=False)
+        dry = _fight_from(monkeypatch, w, attackers, target, subject, seed, dry=True)
+        checked += 1
+        differs += crossed != dry
+    assert checked == 16
+    assert differs >= 1, "a march across the river fought identically to the same march dry (MB-05r)"
+    rec = field_input(w, attackers, world_q.mustered(w, target, subject), target)
+    assert (rec.origin, rec.territory) == ("T2", "T3"), f"the march's origin was not derived: {rec}"
+
+
+def test_no_origin_and_a_same_bank_origin_leave_the_field_as_it_was(monkeypatch):
+    """MB-05r's DEFAULT, UNCHANGED. (1) A side spread over several territories has no one origin:
+    `fac_crown`'s whole membership read at `r_valoria` gets `origin` `None`, so no crossing can be
+    derived for it. (2) An origin on the target's own bank crosses nothing: the 2-man Crown army of
+    blocks 5-7 (T14) marches on `set_s_036` (T9) and resolves IDENTICALLY with its origin read and
+    with it made `None` on all 16 seeds (`==`, not `approx`) -- the pre-MB-05r field, since `None` is
+    what the host passed before."""
+    from engine.season.seam.wrappers.mass_battle import field_input
+    w = build_realm(0)
+    crown = faction_q.resolve(w, "fac_crown")
+    spread = field_input(w, crown.members, world_q.mustered(w, "r_valoria", "fac_guilds"), "r_valoria")
+    assert spread.origin is None, f"a side spanning territories was given one origin: {spread.origin}"
+    target, subject = "set_s_036", "fac_church_of_solmund"
+    w = _bare(target)
+    attackers = world_q.mustered(w, "set_s_014", "fac_crown")
+    rec = field_input(w, attackers, world_q.mustered(w, target, subject), target)
+    assert rec.origin == "T14", f"the same-bank army's origin moved: {rec.origin}"
+    checked = 0
+    for seed in range(16):
+        assert (_fight_from(monkeypatch, w, attackers, target, subject, seed, dry=False)
+                == _fight_from(monkeypatch, w, attackers, target, subject, seed, dry=True)), (
+            f"seed {seed}: a same-bank origin moved the field")
+        checked += 1
+    assert checked == 16
+
+
+def test_the_loyalty_gain_reaches_the_record_and_its_zero_arm_is_the_shipped_field():
+    """MB-03 (`ED-MB-0078`'s superseding row) -- each side's build-time loyalty row, behind the
+    `field_morale_loyalty_gain` fixture, on the provider's own fixture (the 2-man Crown army of
+    `set_s_014` against the Church's six at the garrisoned `set_s_036`).
+
+      * THE RECORD CARRIES BOTH SIDES' LOYALTY AND THE GAIN: the two sides' loyalty means differ (Crown
+        and Church members hold different rows toward their creeds' utterers), and the record's gain
+        is the fixture's, swept.
+      * `0` IS THE CONTROL AND THE SHIPPED DEFAULT.
+
+    ⚠ THE OUTCOME DOES NOT MOVE AT THIS SCALE, AND THAT IS A MEASUREMENT, NOT A GAP IN THIS TEST. Run
+    2026-10-12: 25 realm march pairs (every Crown side at `set_s_001` against every other faction's
+    mustered side, and three more) at gain 1 against gain 0 over 16 seeds each -- 0 results moved. A
+    season side's troops are its raw weight sum (single digits), and it routs on the engine's troop
+    floor before morale is read (`massbattle._MIN_TROOPS`'s disclosed scale gap). So the morale-start
+    itself is the observer, read off the constructed Units in
+    `tests/valoria/test_mass_battle_d1_morale_baseline.py` (which may import the module); this test
+    observes the wiring up to the record. The 0-of-25 figure is a one-off reading, not asserted."""
+    from engine.season.seam.wrappers.mass_battle import field_input
+    target, subject = "set_s_036", "fac_church_of_solmund"
+    default = build_realm(0)
+    assert default.fixtures.get("field_morale_loyalty_gain") == 0, "the shipped gain moved off the control"
+    swept = build_realm(0)
+    swept.fixtures = swept.fixtures.sweep("field_morale_loyalty_gain", 1)
+    attackers = world_q.mustered(default, "set_s_014", "fac_crown")
+    defenders = world_q.mustered(default, target, subject)
+    rec = field_input(swept, attackers, defenders, target)
+    assert rec.loyalty_gain == 1, f"the swept gain did not reach the record: {rec.loyalty_gain}"
+    assert rec.loyalties[0] != rec.loyalties[1], f"the two sides' loyalty did not differ: {rec.loyalties}"

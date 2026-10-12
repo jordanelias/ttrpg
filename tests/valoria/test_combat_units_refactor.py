@@ -18,7 +18,7 @@ import math
 import os
 import sys
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
 sys.path.insert(0, ENGINE)
 
 GOLDEN_PATH = os.path.join(os.path.dirname(__file__), 'r3_identity_golden.json')

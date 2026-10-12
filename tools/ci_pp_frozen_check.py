@@ -52,8 +52,10 @@ PP_FROZEN_CEILING = 726
 # Left boundary excludes OPP-/APP-/etc.; right boundary stops PP-72 matching inside PP-726.
 PP_CITATION_RE = re.compile(r'(?<![A-Za-z0-9])PP-(\d+)\b')
 
-SCAN_ROOTS = ('canon/', 'systems/', 'references/', 'registers/', 'workplans/',
-              'godot/', 'engine/', 'proposals/', 'tools/')
+# The game-code roots (`systems/`, and `modules/` since plan position `31a`) come from their one
+# owner, `ci_common.MODULE_CODE_DIRS` (A-25): a PP id cited in module code is under the ceiling too.
+SCAN_ROOTS = ('canon/', *(f'{d}/' for d in ci_common.MODULE_CODE_DIRS), 'references/', 'registers/',
+              'workplans/', 'godot/', 'engine/', 'proposals/', 'tools/')
 SCAN_EXTS = ('.md', '.yaml', '.jsonl', '.py', '.json')
 
 ARCHIVE_POINTER_RE = re.compile(r'(deprecated/archives/patches/[A-Za-z0-9_.]+\.yaml)')

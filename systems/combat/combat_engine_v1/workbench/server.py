@@ -14,6 +14,7 @@ Endpoints (all JSON except GET /):
 import sys, os, json
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import numpy as np

@@ -5,7 +5,7 @@ description: >
   which layer an artifact binds (0 the agent, 1 how code is written, 2 the game); whether prose is
   being made a mechanism only code can carry; whether a proposed guard earns its existence; whether
   work reaches for a level beneath Layer 0 (there is none — edit CLAUDE.md); whether a new scheme is
-  spelled "Layer". LENS B (Layer-1 conformance): checks `engine/season/` against
+  spelled "Layer". LENS B (Layer-1 conformance): checks `engine/season/` and `modules/` against
   `architecture/meta/04_CODE_ARCHITECTURE.md` by path, grades each finding STRUCTURAL / MECHANICAL /
   CONVENTION per that document's §0, and reads both halves of a §A.2 row. Definitions stay with their
   owners (CLAUDE.md's layer table, `architecture/`); this skill owns the method and copies no table or

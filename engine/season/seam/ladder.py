@@ -12,6 +12,15 @@ in the package namespace that is permanently stale the moment the first call fir
 established this and it holds one directory down: a test that swaps the ladder must name
 `seam.ladder._LADDER`, not `seam._LADDER`.
 
+⚠ **`04`'s T-k IS READ NARROWLY HERE, AND THIS IS WHERE THE READING IS RECORDED (plan position `31b`).**
+T-k (`04:122`) says *"the ladder lives once, in the seam"*. Read narrowly: `degree_from_net`
+(`engine/dice_engine/dice_engine.py`) is the ONE margin ladder and `degree_of` (below) its ONE dispatcher.
+`combat_degree` and `field_degree` STAY in the seam and are not ladders in that sense: each grades a
+provider's own result against roster edges (`combat_band_edges` over `wound_quantities`;
+`field_degree_bands`) and holds no band table of its own. So when `31b` and `31c` move the personal-combat
+and mass-battle engines into `modules/`, these two reads do not travel with them, and neither position
+touches the deferred dice-engine import (`degree_ladder()`, below).
+
 Moved whole from the flat `seam.py` by unit L2 of
 `workplans/2026-09-09-layer1-conformance-plan.md` (ED-IN-0206).
 """
@@ -50,9 +59,12 @@ from ..gaps import Unspecified
 #      PRE-RULING bands). The falsifier that this is a call and not a copy is
 #      `test_we_the_ladder_is_the_trees_and_not_a_copy_of_it`, which monkeypatches
 #      `degree_from_net` and requires every margin here to follow it.
-#      ⚠ SUPERSEDED (plan position `8`'s record sweep): `seam/wrappers/sigma.py` now produces a `net`
-#      for `fight`, `tell` and `march` (`test_we_only_a_verb_that_declares_contests_can_be_graded_today`
-#      pins the producer set to {sigma.py}); what follows is the original rationale.
+#      ⚠ SUPERSEDED (plan position `8`'s record sweep; `31a` moved the roll): a `net` is produced for
+#      `fight`, `tell` and `march` by the MODULES (`modules/social_contest/roll.py`), not by
+#      `seam/wrappers/sigma.py`, which only builds the record and calls the entry.
+#      `test_we_only_a_verb_that_declares_contests_can_be_graded_today` asserts the season package's
+#      producer set is EMPTY and that a scan of the module code roots finds `roll.py` (a superset
+#      check); what follows is the original rationale.
 #      ⚠ AND ITS OPERAND DOES NOT EXIST YET, WHICH IS SAID HERE RATHER THAN DISCOVERED LATER.
 #      `degree_from_net` reads `net - ob`. NOTHING IN THIS TRACER PRODUCES A `net`: there is no
 #      roll anywhere in `shape.py`, `Act.pool` / `Act.obstacle` are read only by `S27.4`'s
@@ -96,7 +108,7 @@ _LADDER_ERROR: str = ""
 def degree_ladder() -> Optional[tuple]:
     """`(degree_from_net, DEGREE_LABEL)` from the tree's owner, or `None` with a NAMED reason.
 
-    Deferred and by path, which is `combat_seam.engine()`'s shape and for its reason: the tracer
+    Deferred and by path, which is `seam/wrappers/combat.py::engine()`'s shape and for its reason: the tracer
     still runs where the engine tree is absent, degrading to a named gap rather than an
     ImportError at import. The repo root carries no top-level modules, so putting it on
     `sys.path` shadows none of this directory's bare-name imports."""

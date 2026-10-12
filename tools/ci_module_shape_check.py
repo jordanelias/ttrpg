@@ -10,7 +10,7 @@ Enforces the holonic container rules on ENGINE/SIM RUNTIME code
      sigma kernel from the frozen tests/sim/v32-combat-balance station, dragging numpy into
      the engine runtime).
   2. NO imports from tests/ trees in runtime code (`from tests...` / `import tests...`).
-  3. INFO-tier: module-scope numeric-literal constants in combat_engine_v1 runtime modules
+  3. INFO-tier: module-scope numeric-literal constants in the combat engine's runtime modules
      (outside config.py, the declared Class-C container) that carry no provenance tag.
      Constant-VALUE provenance is ci_sim_fabrication_check.py's job (changed-lines, ledger-
      backed) — this only surfaces untagged module-scope literals as drift candidates. It
@@ -40,12 +40,23 @@ import ci_common  # noqa: E402
 
 REPO_ROOT = ci_common.REPO
 
-# Runtime container roots this guard patrols.
+# Runtime container roots this guard patrols. Plan position `31a` adds every code root that is
+# module code WHOLE -- a `ci_common.MODULE_CODE_ROOTS` row whose glob under it is `*` (`modules/`,
+# A-25: reachable running code only) -- read from that owner, never typed here. `systems/` stays
+# patrolled at the combat engine's directory alone: the rest of it is legacy and unplugged code. Plan
+# position `31b` moved the engine's reachable set to `modules/combat/` (patrolled by the `modules` row);
+# the files its import walk did not reach stayed in `systems/combat/combat_engine_v1/`.
 RUNTIME_ROOTS = (
     'sim',
     'systems/combat/combat_engine_v1',
     'engine',
+    *(top for top, under in ci_common.MODULE_CODE_ROOTS if under == '*'),
 )
+
+# The INFO tier's scope: the combat engine, both halves of the `31b` split (the `modules/` half is
+# read from the owner of which modules ship their own export).
+COMBAT_ENGINE_PREFIXES = ('systems/combat/combat_engine_v1/',
+                          *(f'modules/{n}/' for n in ci_common.MODULES_WITH_OWN_EXPORT))
 
 EXCLUDE_PARTS = ('tests', 'workbench', 'archives', 'deprecated', '__pycache__')
 
@@ -93,7 +104,7 @@ def check(verbose=True):
             line = src[:m.start()].count('\n') + 1
             violations.append(f"{rel}:{line}: runtime import from tests/ package")
 
-        if rel.startswith('systems/combat/combat_engine_v1/') and not rel.endswith('/config.py'):
+        if rel.startswith(COMBAT_ENGINE_PREFIXES) and not rel.endswith('/config.py'):
             for i, raw in enumerate(src.splitlines(), 1):
                 cm = CONST_RE.match(raw)
                 if cm:

@@ -14,10 +14,10 @@ full battery/hashing harness, not a unit-level pytest.
 """
 import pytest
 
-import systems.mass_battle.sim.hierarchy.units as _hu
-from systems.mass_battle.sim.config import FOV_HALF_DEG
-from systems.mass_battle.sim.core.contact import _visible_enemy_cells, check_orders
-from systems.mass_battle.sim.hierarchy.units import Order, Subunit, Unit
+import modules.mass_battle.hierarchy.units as _hu
+from modules.mass_battle.config import FOV_HALF_DEG
+from modules.mass_battle.core.contact import _visible_enemy_cells, check_orders
+from modules.mass_battle.hierarchy.units import Order, Subunit, Unit
 
 
 def _facing_unit(facing):

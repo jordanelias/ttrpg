@@ -12,11 +12,17 @@ import ast, os, sys, collections, json, re
 # (test_no_dead_exported_engine_params), so an absolute machine path here would error on every
 # other checkout — CI runs at /home/runner/work/..., the exact /home/claude-hardcode failure
 # class CLAUDE.md §8 retired tools for (caught by the E0 adversarial gate, 2026-07-29).
-ENG = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FILES = [f for f in sorted(os.listdir(ENG)) if f.endswith('.py')]
-WB = os.path.join(ENG, 'workbench')
+# Plan position `31b` moved the engine's reachable set to `modules/combat/` (flat names kept); what was not
+# reached from `wrapper`/`combatant` (`capabilities.py`, `state_graph.py`) and this workbench stayed here. The
+# scan reads both: ENG is the moved engine, LEFT the directory this workbench sits in.
+LEFT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPO = os.path.abspath(os.path.join(LEFT, '..', '..', '..'))
+ENG = os.path.join(REPO, 'modules', 'combat')
+_PATHS = {f: os.path.join(d, f) for d in (LEFT, ENG) for f in os.listdir(d) if f.endswith('.py')}
+FILES = sorted(_PATHS)
+WB = os.path.join(LEFT, 'workbench')
 WBF = [os.path.join('workbench', f) for f in sorted(os.listdir(WB)) if f.endswith('.py')]
-ALL = [(f, os.path.join(ENG, f)) for f in FILES] + [(f, os.path.join(ENG, f)) for f in WBF]
+ALL = [(f, _PATHS[f]) for f in FILES] + [(f, os.path.join(LEFT, f)) for f in WBF]
 
 trees = {}
 srcs = {}
@@ -56,7 +62,6 @@ dup_consts = {k: v for k, v in consts.items() if len(set(v)) > 1}
 # combat_systems.can_choke -- which is called at tests/valoria/test_combat_units_refactor.py:118 and pinned
 # per-weapon in r3_identity_golden.json. That was the SECOND false positive from this scope bug (WoundTracker
 # was the first, caught by hand). A caller-analysis that cannot see the test suite is not a caller analysis.
-REPO = os.path.abspath(os.path.join(ENG, '..', '..', '..'))
 
 # LAZY (ED-PC-0042): this sweep reads every .py under tests/ and runs two regexes per engine function over
 # the concatenation — ~20 s. It used to run at import, which was free while this file was only ever a

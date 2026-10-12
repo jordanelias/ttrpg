@@ -59,6 +59,11 @@ RNG_METHODS = ('random', 'randrange', 'uniform', 'betavariate', 'gauss')
 
 _ENGINE_DIR = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+    'modules', 'combat')
+# Plan position `31b` moved the reachable set; what `wrapper`/`combatant` do not import (`capabilities.py`,
+# `state_graph.py`) stayed here, and the static inventory reads both (it is reachability-independent).
+_LEFT_DIR = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
     'systems', 'combat', 'combat_engine_v1')
 _DICE_ENGINE = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
@@ -79,8 +84,8 @@ def static_draw_sites(paths=None):
     1 times in 256 fights, so a dynamic-only pin would be one tuning change away from missing a new
     draw on a cold branch. A static count cannot miss it."""
     if paths is None:
-        paths = [os.path.join(_ENGINE_DIR, f)
-                 for f in sorted(os.listdir(_ENGINE_DIR)) if f.endswith('.py')]
+        paths = [os.path.join(d, f) for d in (_ENGINE_DIR, _LEFT_DIR)
+                 for f in sorted(os.listdir(d)) if f.endswith('.py')]
         paths.append(_DICE_ENGINE)
     found = []
     for p in paths:

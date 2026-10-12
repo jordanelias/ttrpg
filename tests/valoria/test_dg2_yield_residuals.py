@@ -18,17 +18,17 @@ import pytest  # noqa: E402
 def _reload(**flags):
     for k in ('MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'MB_YIELD_POCKET'):
         os.environ[k] = '1' if flags.get(k) else '0'
-    import systems.mass_battle.sim.config as C
+    import modules.mass_battle.config as C
     importlib.reload(C)
-    import systems.mass_battle.sim.core.exchange as X
+    import modules.mass_battle.core.exchange as X
     importlib.reload(X)
-    import systems.mass_battle.sim.core.state as S
+    import modules.mass_battle.core.state as S
     importlib.reload(S)
-    import systems.mass_battle.sim.hierarchy.units as U
+    import modules.mass_battle.hierarchy.units as U
     importlib.reload(U)
     import systems.mass_battle.sim.engine as E
     importlib.reload(E)
-    import systems.mass_battle.sim.orchestration as O
+    import modules.mass_battle.orchestration as O
     importlib.reload(O)
     return C, X, S, U, E, O
 

@@ -8,9 +8,13 @@ graph properties plus one small live smoke that the trace actually visits the co
 import os
 import sys
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
+# `state_graph.py` and the workbench were not reached from `wrapper`/`combatant` and stayed where the engine
+# was (plan position `31b`).
+LEFT = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
-sys.path.insert(0, os.path.join(ENGINE, 'workbench'))
+sys.path.insert(0, LEFT)
+sys.path.insert(0, os.path.join(LEFT, 'workbench'))
 
 import state_graph as G  # noqa: E402
 

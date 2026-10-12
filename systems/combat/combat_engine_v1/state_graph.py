@@ -15,6 +15,7 @@ truth by THIS file. The map's stale items (DAMAGE_SCALE removed; precommit now c
 because the graph is data + tested, not prose."""
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
 
 # Trace-event kinds the engine emits (wrapper._emit). The emit-legality test checks every `emits` is here.
 TRACE_KINDS = {

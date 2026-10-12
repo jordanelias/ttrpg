@@ -101,7 +101,7 @@ def test_own_strength_fires_when_attrited():
 def test_own_strength_does_not_fire_at_full_strength():
     """own_strength:0.5 must NOT fire before the subunit is actually down to half — checked pre-battle."""
     sr = SIDE_A_START_ROW
-    from systems.mass_battle.sim.core.contact import check_orders
+    from modules.mass_battle.core.contact import check_orders
     ua = build_army([{'shape': 'Line', 'troop_type': 'infantry', 'unit_type': 'melee', 'stance': 'balanced',
                       'width': 6, 'depth': 2, 'troops': 1200, 'starting_position': (sr, 25),
                       'orders': (Order(trigger='own_strength:0.5', behavior={'stance': 'retreat'}),)}], 'A', 'A')

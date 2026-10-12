@@ -37,6 +37,7 @@ import collections
 
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
 import core
 import wrapper
 import combat_systems as S

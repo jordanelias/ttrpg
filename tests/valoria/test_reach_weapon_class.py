@@ -28,14 +28,14 @@ import sys
 
 import pytest  # noqa: E402
 
-import systems.mass_battle.sim.hierarchy.units as _hu  # noqa: E402
-import systems.mass_battle.sim.orchestration as _orch  # noqa: E402
-import systems.mass_battle.sim.troop_types.registry as _reg  # noqa: E402
-from systems.mass_battle.sim.troop_types.registry import reach_for, stats_for, unit_type_for  # noqa: E402
-from systems.mass_battle.sim.equipment import loadout_for  # noqa: E402
+import modules.mass_battle.hierarchy.units as _hu  # noqa: E402
+import modules.mass_battle.orchestration as _orch  # noqa: E402
+import modules.mass_battle.troop_types.registry as _reg  # noqa: E402
+from modules.mass_battle.troop_types.registry import reach_for, stats_for, unit_type_for  # noqa: E402
+from modules.mass_battle.equipment import loadout_for  # noqa: E402
 from systems.mass_battle.sim.engine import build_unit  # noqa: E402
 from systems.mass_battle.sim import validators as _val  # noqa: E402
-from systems.mass_battle.sim.config import FOV_HALF_DEG, VOLLEY_MAX_RANGE  # noqa: E402
+from modules.mass_battle.config import FOV_HALF_DEG, VOLLEY_MAX_RANGE  # noqa: E402
 
 from ._conservation import assert_troop_conservation  # noqa: E402
 

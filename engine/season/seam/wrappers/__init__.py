@@ -1,4 +1,4 @@
-"""`seam/wrappers/` -- `04_CODE_ARCHITECTURE.md` §A.2: *"one wrapper per deferred subsystem"*, and
+"""`seam/wrappers/` -- `04_CODE_ARCHITECTURE.md` §A.2 (the line *"one wrapper per deferred subsystem"* was amended there), and
 the §A.2 table's row for them is the shortest in the document: they own **"nothing, ever"**, they
 read the projection, and they emit a `Margin`.
 

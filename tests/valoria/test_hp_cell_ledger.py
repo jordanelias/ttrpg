@@ -15,7 +15,7 @@ if _SIM not in sys.path:
 
 import pytest
 from systems.mass_battle.sim.engine import build_army, SIDE_A_START_ROW
-from systems.mass_battle.sim.percell import distribute_casualties, _apply_with_spill
+from modules.mass_battle.percell import distribute_casualties, _apply_with_spill
 
 
 class _FakeAtom:

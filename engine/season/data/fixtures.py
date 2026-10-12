@@ -588,6 +588,24 @@ DEFAULT_FIXTURES = Fixtures(
     # `field_casualty_model` above, deferred to the same reader.
     field_morale_weight=1,   # `H-148`, swept 0 / 1 / 3
     field_grudge_weight=1,   # `H-148`, swept 0 / 1 / 3
+    # MB-03 (`ED-MB-0078`'s superseding row: d.1's *"faction state sets the morale baseline"*, option
+    # (b)). HOW HARD A SIDE'S BUILD-TIME LOYALTY ROW MOVES ITS STARTING MORALE: the side's weight-mean
+    # stance toward its faction creed's utterer (`data/cast.py::stance_from_loyalty`'s row, -5..+5,
+    # read by `seam/wrappers/mass_battle.py`) is added to `massbattle._morale_start` at this gain. `0`
+    # IS THE CONTROL AND IS SHIPPED: battle history only, option (a), the field as it was. The arms,
+    # each derived and none tuned: `0.4` = (Morale ceiling 7 - base 5) / the row's bound 5, the gain
+    # at which the bound lands exactly ON the ceiling -- and since `massbattle._morale_start` rounds
+    # half-up, a side of loyalty >= 3.75 already starts at 7 at 0.4 (5 + 0.4 * 4.0 = 6.6 -> 7; at
+    # `build_realm(0)` every creed-holding faction fields at least one such side); `1` = the 1:1 unit
+    # `_morale_start` already gives the morale row (and the row's own reading, 2026-10-01). Every
+    # creed-holding faction's WHOLE-MEMBERSHIP weight-mean rounds to the ceiling at 1 (measured
+    # 2026-10-12: Church 4.0, Loewenritter 4.0, Restoration 2.75, Hafenmark 2.25, Varfell 2.0, Crown
+    # 1.64 -> 6.64 -> 7; Guilds and Schoenland have no creed and read 0), but a fielded SIDE reads its
+    # own members' mean, and a low-loyalty side does not saturate: the Crown's two at `set_s_014` (0.5)
+    # start at 5 at 0.4 and 6 at 1, the Church's six at `set_s_036` (4.0) at 7 at both
+    # (`test_mass_battle_d1_morale_baseline.py`'s pinned rows). Injection site: this line, read by
+    # `seam/wrappers/mass_battle.py::field_input` into the record's `loyalty_gain`.
+    field_morale_loyalty_gain=0,  # `H-148`, swept 0 (control, SHIPPED) / 0.4 / 1
     # `H-150` (plan position `20-v`). THE DEFENDER DR A WALLED FIELD ADDS -- A.9's one Walls number,
     # applied 1:1 to the engine's own `Unit.dr` (an ASSUMPTION about the unit, which is why it is
     # swept). `None` IS THE DEFAULT AND IT MEANS A.9's NUMBER, NOT "NO WALLS": `engine/` cannot name
@@ -596,7 +614,7 @@ DEFAULT_FIXTURES = Fixtures(
     # re-ruled. An int overrides it for the season: `3` spells A.9's number out (it reproduces `None`
     # exactly, which `test_mass_battle_provider.py` asserts), `0` is the CONTROL (the only live
     # difference between a walled and an open field removed), `1` the middle arm. Injection site: this
-    # line, read by `seam/wrappers/mass_battle.py::resolve()` and handed to `resolve_field(walls_dr=)`.
+    # line, read by `seam/wrappers/mass_battle.py::field_input` into the record's `walls_dr` (`31c`).
     field_walls_dr=None,     # `H-150`, swept 3 (A.9, = the default) / 0 (control) / 1
     # IN-08 H3 (`ED-IN-0261`'s scar model). `scar_step` -- a float magnitude per unit of alignment,
     # written on the wounded person by `_eff_kill` -- RETIRED with that mechanism: the scar is a

@@ -2885,3 +2885,111 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 | `proposals/2026-09-16-term-ownership/` | `FORK:a7e2c666` | FORKED (2026-10-06, every file in the directory retired in the same commit; the directory-prefix row for documents that cite it as a directory. unratified drafts: `offices_draft.yaml` is `engine/season/offices.yaml`, `key_type_registry.yaml` belongs to the retired Key substrate (`ED-IN-0232`); the Gather's disposition applied (`ED-IN-0289`)) |
 | `tests/valoria/test_friction_cev.py` | `tests/valoria/test_friction.py` | MOVED (2026-10-08, B-D2 MB-01: the CEV flag takes the ordinary word, ED-MB-0045) |
 | `systems/mass_battle/sim/provenance.py` | `FORK:54b6278a` | FORKED (2026-10-08, B-D2 MB-02, ED-MB-0057: a data-only primitive-provenance registry with no reader anywhere in the tree; the ref is main's B-C squash commit, which still carries the file) |
+
+## 2026-10-12 — the personal-combat engine's reachable set → `modules/combat/` (plan position `31b`, A-25)
+
+<!-- The import walk from `wrapper` and `combatant` (the two names `engine/substrate/pc_engine.py` loads) reached 13 of
+     the directory's 15 modules; those moved, FLAT names kept (they bare-import each other). `capabilities.py`,
+     `state_graph.py` and `workbench/` were not reached and STAYED at `systems/combat/combat_engine_v1/`, so the
+     directory-prefix row below never answers for them: `pathres.resolve` returns LIVE for a path that exists before it
+     reads any row, and a name under the old directory that exists in neither place stays DEAD. The 13 exact rows are
+     for `tools/ci_claim_provenance_check.py`, which asks `load_alias_map()` for an EXACT row (see the 2026-10-03
+     section's note). The `designs/scene/combat_engine_v1/` rows re-point the 2026-07-17 aliases into the moved files
+     for `tools/broken_dependency_checker.py`, which resolves ONE hop and does not chain (a live ED-1080 citation of
+     `designs/scene/combat_engine_v1/weapon_physics.py` read as broken without its row); a later row wins. -->
+
+| old path | new path |
+|---|---|
+| `systems/combat/combat_engine_v1/` | `modules/combat/` |
+| `systems/combat/combat_engine_v1/ability_primitives.py` | `modules/combat/ability_primitives.py` |
+| `systems/combat/combat_engine_v1/combat_systems.py` | `modules/combat/combat_systems.py` |
+| `systems/combat/combat_engine_v1/combatant.py` | `modules/combat/combatant.py` |
+| `systems/combat/combat_engine_v1/config.py` | `modules/combat/config.py` |
+| `systems/combat/combat_engine_v1/contact.py` | `modules/combat/contact.py` |
+| `systems/combat/combat_engine_v1/core.py` | `modules/combat/core.py` |
+| `systems/combat/combat_engine_v1/geometry.py` | `modules/combat/geometry.py` |
+| `systems/combat/combat_engine_v1/tradition.py` | `modules/combat/tradition.py` |
+| `systems/combat/combat_engine_v1/traditions.py` | `modules/combat/traditions.py` |
+| `systems/combat/combat_engine_v1/vocabulary.py` | `modules/combat/vocabulary.py` |
+| `systems/combat/combat_engine_v1/weapon_physics.py` | `modules/combat/weapon_physics.py` |
+| `systems/combat/combat_engine_v1/weapons.py` | `modules/combat/weapons.py` |
+| `systems/combat/combat_engine_v1/wrapper.py` | `modules/combat/wrapper.py` |
+| `designs/scene/combat_engine_v1/ability_primitives.py` | `modules/combat/ability_primitives.py` |
+| `designs/scene/combat_engine_v1/combat_systems.py` | `modules/combat/combat_systems.py` |
+| `designs/scene/combat_engine_v1/combatant.py` | `modules/combat/combatant.py` |
+| `designs/scene/combat_engine_v1/config.py` | `modules/combat/config.py` |
+| `designs/scene/combat_engine_v1/contact.py` | `modules/combat/contact.py` |
+| `designs/scene/combat_engine_v1/core.py` | `modules/combat/core.py` |
+| `designs/scene/combat_engine_v1/geometry.py` | `modules/combat/geometry.py` |
+| `designs/scene/combat_engine_v1/tradition.py` | `modules/combat/tradition.py` |
+| `designs/scene/combat_engine_v1/traditions.py` | `modules/combat/traditions.py` |
+| `designs/scene/combat_engine_v1/vocabulary.py` | `modules/combat/vocabulary.py` |
+| `designs/scene/combat_engine_v1/weapon_physics.py` | `modules/combat/weapon_physics.py` |
+| `designs/scene/combat_engine_v1/weapons.py` | `modules/combat/weapons.py` |
+| `designs/scene/combat_engine_v1/wrapper.py` | `modules/combat/wrapper.py` |
+| `designs/scene/combat_engine_v1/systems.py` | `modules/combat/combat_systems.py` |
+
+## 2026-10-12 — the mass-battle engine's reachable closure → `modules/mass_battle/` (plan position `31c`, A-25)
+
+<!-- The import walk from `massbattle.py::resolve_field` reached 23 of the directory's 30 tracked Python files
+     outside `workbench/`. 22 moved as a PACKAGE (`modules/mass_battle/`, with its own new `__init__.py`; their imports
+     are dotted, rewritten `systems.mass_battle.sim.<x>` -> `modules.mass_battle.<x>`); the 23rd, the package
+     `__init__.py`, stays because the unmoved files still import through it. `engine.py`,
+     `bat.py`, `validators.py`, `lanchester_signature.py`, `tactic_cards.py`, `altonian_reinforcements.py`,
+     `test_persubunit_stress.py` and `workbench/` were not reached and STAYED at `systems/mass_battle/sim/`, so the
+     directory-prefix row below never answers for them: `pathres.resolve` returns LIVE for a path that exists before
+     it reads any row. The exact rows are for `tools/ci_claim_provenance_check.py` (an EXACT row, as at `31b`); the two
+     for `massbattle.py` and `hierarchy/units.py` supersede those files' SYMBOL-LEVEL `FORK:` rows above, which said
+     "the file stays" (later row wins), since the file now lives at the new path. The `tests/sim/mass_battle/` rows
+     re-point the 2026-08-24 port's prefix row into the moved files for `tools/broken_dependency_checker.py`, which
+     resolves ONE hop (live ED-MB citations of `tests/sim/mass_battle/config.py` and three more read as broken without
+     them); the `sim/provincial/massbattle.py` row likewise. -->
+
+| old path | new path |
+|---|---|
+| `systems/mass_battle/sim/` | `modules/mass_battle/` |
+| `systems/mass_battle/sim/config.py` | `modules/mass_battle/config.py` |
+| `systems/mass_battle/sim/core/__init__.py` | `modules/mass_battle/core/__init__.py` |
+| `systems/mass_battle/sim/core/attrition.py` | `modules/mass_battle/core/attrition.py` |
+| `systems/mass_battle/sim/core/contact.py` | `modules/mass_battle/core/contact.py` |
+| `systems/mass_battle/sim/core/exchange.py` | `modules/mass_battle/core/exchange.py` |
+| `systems/mass_battle/sim/core/state.py` | `modules/mass_battle/core/state.py` |
+| `systems/mass_battle/sim/equipment/__init__.py` | `modules/mass_battle/equipment/__init__.py` |
+| `systems/mass_battle/sim/equipment/_base.py` | `modules/mass_battle/equipment/_base.py` |
+| `systems/mass_battle/sim/equipment/armour.py` | `modules/mass_battle/equipment/armour.py` |
+| `systems/mass_battle/sim/equipment/weapons.py` | `modules/mass_battle/equipment/weapons.py` |
+| `systems/mass_battle/sim/geometry.py` | `modules/mass_battle/geometry.py` |
+| `systems/mass_battle/sim/hierarchy/__init__.py` | `modules/mass_battle/hierarchy/__init__.py` |
+| `systems/mass_battle/sim/hierarchy/units.py` | `modules/mass_battle/hierarchy/units.py` |
+| `systems/mass_battle/sim/massbattle.py` | `modules/mass_battle/massbattle.py` |
+| `systems/mass_battle/sim/orchestration.py` | `modules/mass_battle/orchestration.py` |
+| `systems/mass_battle/sim/percell.py` | `modules/mass_battle/percell.py` |
+| `systems/mass_battle/sim/perimeter.py` | `modules/mass_battle/perimeter.py` |
+| `systems/mass_battle/sim/resolution.py` | `modules/mass_battle/resolution.py` |
+| `systems/mass_battle/sim/rngsource.py` | `modules/mass_battle/rngsource.py` |
+| `systems/mass_battle/sim/terrain.py` | `modules/mass_battle/terrain.py` |
+| `systems/mass_battle/sim/troop_types/__init__.py` | `modules/mass_battle/troop_types/__init__.py` |
+| `systems/mass_battle/sim/troop_types/registry.py` | `modules/mass_battle/troop_types/registry.py` |
+| `tests/sim/mass_battle/config.py` | `modules/mass_battle/config.py` |
+| `tests/sim/mass_battle/core/__init__.py` | `modules/mass_battle/core/__init__.py` |
+| `tests/sim/mass_battle/core/attrition.py` | `modules/mass_battle/core/attrition.py` |
+| `tests/sim/mass_battle/core/contact.py` | `modules/mass_battle/core/contact.py` |
+| `tests/sim/mass_battle/core/exchange.py` | `modules/mass_battle/core/exchange.py` |
+| `tests/sim/mass_battle/core/state.py` | `modules/mass_battle/core/state.py` |
+| `tests/sim/mass_battle/equipment/__init__.py` | `modules/mass_battle/equipment/__init__.py` |
+| `tests/sim/mass_battle/equipment/_base.py` | `modules/mass_battle/equipment/_base.py` |
+| `tests/sim/mass_battle/equipment/armour.py` | `modules/mass_battle/equipment/armour.py` |
+| `tests/sim/mass_battle/equipment/weapons.py` | `modules/mass_battle/equipment/weapons.py` |
+| `tests/sim/mass_battle/geometry.py` | `modules/mass_battle/geometry.py` |
+| `tests/sim/mass_battle/hierarchy/__init__.py` | `modules/mass_battle/hierarchy/__init__.py` |
+| `tests/sim/mass_battle/hierarchy/units.py` | `modules/mass_battle/hierarchy/units.py` |
+| `tests/sim/mass_battle/massbattle.py` | `modules/mass_battle/massbattle.py` |
+| `tests/sim/mass_battle/orchestration.py` | `modules/mass_battle/orchestration.py` |
+| `tests/sim/mass_battle/percell.py` | `modules/mass_battle/percell.py` |
+| `tests/sim/mass_battle/perimeter.py` | `modules/mass_battle/perimeter.py` |
+| `tests/sim/mass_battle/resolution.py` | `modules/mass_battle/resolution.py` |
+| `tests/sim/mass_battle/rngsource.py` | `modules/mass_battle/rngsource.py` |
+| `tests/sim/mass_battle/terrain.py` | `modules/mass_battle/terrain.py` |
+| `tests/sim/mass_battle/troop_types/__init__.py` | `modules/mass_battle/troop_types/__init__.py` |
+| `tests/sim/mass_battle/troop_types/registry.py` | `modules/mass_battle/troop_types/registry.py` |
+| `sim/provincial/massbattle.py` | `modules/mass_battle/massbattle.py` |

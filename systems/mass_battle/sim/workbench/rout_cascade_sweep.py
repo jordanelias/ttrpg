@@ -93,7 +93,7 @@ def _worker(n, expect_value=None):
     (module docstring) would have raised ModuleNotFoundError exactly like bat.py's pre-ED-MB-0070
     bug. Fixed the same way: make the worker self-sufficient, don't rely on the caller's environment
     alone."""
-    from systems.mass_battle.sim import config as _cfg
+    from modules.mass_battle import config as _cfg
     import gauge_mb
 
     if expect_value is not None and _cfg.ROUT_CASCADE_FRAC != expect_value:

@@ -84,7 +84,7 @@ def test_the_totality_guard_can_fail():
     # code
     ('engine/dice_engine/dice_engine.py', 'keep'),
     ('engine/substrate/keys.py', 'keep'),
-    ('systems/mass_battle/sim/massbattle.py', 'keep'),
+    ('modules/mass_battle/massbattle.py', 'keep'),
     # prose with NO code pair -> authoritative spec
     ('canon/philosophical_foundations.md', 'keep'),
     # prose WITH a code pair, WHERE THE CODE SUPERSEDED IT -> the prose goes (Jordan, 2026-08-04),

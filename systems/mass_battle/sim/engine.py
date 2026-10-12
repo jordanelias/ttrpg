@@ -3,29 +3,29 @@ Imports all modules and re-exports the full namespace, so `from systems.mass_bat
 (and the sim_mb_sigma.py shim) yields the same names the monolith exposed.
 Also defines MECHANICS: a registry of canonical mechanic -> implementing symbol + toggle +
 canonical source + status, with a self-test asserting every registered mechanic resolves."""
-from systems.mass_battle.sim.config import *
-from systems.mass_battle.sim.core.exchange import *  # [Stage-1] resolver layer: pool-assembly primitives
-from systems.mass_battle.sim.core.state import *     # [Stage-1] resolver layer: morale/discipline/rout transitions
-from systems.mass_battle.sim.core.attrition import * # [Stage-1] resolver layer: Lanchester attrition law
-from systems.mass_battle.sim.core.contact import *   # [Stage-1] targeting + contact detection
-from systems.mass_battle.sim.troop_types.registry import *  # [Stage-1] troop-type stats + gated roles
-from systems.mass_battle.sim.hierarchy.units import *  # [Stage-1] Subunit/Unit data model
-from systems.mass_battle.sim.geometry import *
-from systems.mass_battle.sim.percell import *
-from systems.mass_battle.sim.resolution import *
-from systems.mass_battle.sim.orchestration import *
+from modules.mass_battle.config import *
+from modules.mass_battle.core.exchange import *  # [Stage-1] resolver layer: pool-assembly primitives
+from modules.mass_battle.core.state import *     # [Stage-1] resolver layer: morale/discipline/rout transitions
+from modules.mass_battle.core.attrition import * # [Stage-1] resolver layer: Lanchester attrition law
+from modules.mass_battle.core.contact import *   # [Stage-1] targeting + contact detection
+from modules.mass_battle.troop_types.registry import *  # [Stage-1] troop-type stats + gated roles
+from modules.mass_battle.hierarchy.units import *  # [Stage-1] Subunit/Unit data model
+from modules.mass_battle.geometry import *
+from modules.mass_battle.percell import *
+from modules.mass_battle.resolution import *
+from modules.mass_battle.orchestration import *
 
-import systems.mass_battle.sim.config as _cfg
-import systems.mass_battle.sim.core.exchange as _ce
-import systems.mass_battle.sim.core.state as _cs
-import systems.mass_battle.sim.core.attrition as _ca
-import systems.mass_battle.sim.core.contact as _cc
-import systems.mass_battle.sim.troop_types.registry as _tt
-import systems.mass_battle.sim.hierarchy.units as _hu
-import systems.mass_battle.sim.geometry as _geo
-import systems.mass_battle.sim.percell as _pc
-import systems.mass_battle.sim.resolution as _res
-import systems.mass_battle.sim.orchestration as _orch
+import modules.mass_battle.config as _cfg
+import modules.mass_battle.core.exchange as _ce
+import modules.mass_battle.core.state as _cs
+import modules.mass_battle.core.attrition as _ca
+import modules.mass_battle.core.contact as _cc
+import modules.mass_battle.troop_types.registry as _tt
+import modules.mass_battle.hierarchy.units as _hu
+import modules.mass_battle.geometry as _geo
+import modules.mass_battle.percell as _pc
+import modules.mass_battle.resolution as _res
+import modules.mass_battle.orchestration as _orch
 
 # Re-export contract used by gauge_mb.py (and any external caller):
 #   Subunit, Unit, run_battle, run_multi_turn_battle, run_multi_unit_battle,

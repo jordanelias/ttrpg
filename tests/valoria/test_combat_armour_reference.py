@@ -25,7 +25,7 @@ import sys
 
 import pytest
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
 
 # Tolerance sized from the two regressions this gate is built from. Because seeds are deterministic per (weapon,
 # tier), an unchanged engine reproduces the reference EXACTLY — the tolerance is absorbing legitimate small shifts in
@@ -35,7 +35,7 @@ TOLERANCE = 0.15
 
 
 def _instrument():
-    sys.path.insert(0, os.path.join(ENGINE, 'workbench'))
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1', 'workbench'))   # the workbench stayed at plan position `31b`
     import armour_participation
     return armour_participation
 

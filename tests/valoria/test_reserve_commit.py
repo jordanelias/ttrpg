@@ -18,15 +18,15 @@ import pytest  # noqa: E402
 
 def _reload(on):
     os.environ['MB_RESERVE_COMMIT'] = '1' if on else '0'
-    import systems.mass_battle.sim.config as C
+    import modules.mass_battle.config as C
     importlib.reload(C)
-    import systems.mass_battle.sim.resolution as R
+    import modules.mass_battle.resolution as R
     importlib.reload(R)
-    import systems.mass_battle.sim.hierarchy.units as U
+    import modules.mass_battle.hierarchy.units as U
     importlib.reload(U)
     import systems.mass_battle.sim.engine as E
     importlib.reload(E)
-    import systems.mass_battle.sim.orchestration as O
+    import modules.mass_battle.orchestration as O
     importlib.reload(O)
     return C, E, O
 
@@ -45,7 +45,7 @@ def _pair(on, a_instructions=(), b_instructions=()):
 
 def test_unit_in_reserve_predicate():
     _, _, O = _reload(on=True), None, None  # noqa: F841
-    import systems.mass_battle.sim.orchestration as O2
+    import modules.mass_battle.orchestration as O2
     import systems.mass_battle.sim.engine as E2
     reserve = E2.build_unit('Line', 3, 'R', 'A', 20, instructions=('reserve',))
     normal = E2.build_unit('Line', 3, 'N', 'A', 20, instructions=('hold',))

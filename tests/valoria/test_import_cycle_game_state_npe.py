@@ -114,7 +114,9 @@ def test_exactly_three_cycles_remain_and_they_are_the_expected_families():
         return all(m.startswith(prefix) for m in cyc)
 
     contest = [c for c in cycles if _matches(c, 'systems.social_contest.sim.contest')]
-    mb_canon = [c for c in cycles if _matches(c, 'systems.mass_battle.sim')]
+    # The canon MB family moved whole with `massbattle.py`'s import closure to `modules/mass_battle/` at
+    # plan position `31c`; its prefix is the package's.
+    mb_canon = [c for c in cycles if _matches(c, 'modules.mass_battle')]
     # The one remaining declared season cycle, matched by its EXACT member set rather than by a
     # prefix. A prefix match would silently absorb a SECOND season cycle a later carving step
     # introduces, which is the one thing this count exists to catch.
@@ -133,7 +135,7 @@ def test_exactly_three_cycles_remain_and_they_are_the_expected_families():
     checked = 0
     for family_name, family in (
         ('social_contest.contest', contest),
-        ('systems.mass_battle.sim', mb_canon),
+        ('modules.mass_battle', mb_canon),
         ('engine.season harness __main__ edge', harness_main),
     ):
         checked += 1

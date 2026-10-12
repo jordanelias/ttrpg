@@ -182,7 +182,7 @@ Last, unchanged in substance: GO-01 (`26`). **The Godot engine version is UNRESO
 Key-runtime rows marked RETIRED at B-C (GO-03, landed). `references/module_contracts.yaml`'s `engine_clock` row got its `doc:`
 (the propagation spec) at B-C (IN-42 = GO-02, landed). `engine/autoload/engine_clock.py` is deleted (`28-iii`, PR #450); the temporal spine is `engine/season/loop/driver.py` +
 `loop/calendar.py`, which that row describes, so `CLAUDE.md` §6's "starting with `engine_clock`" means the season calendar
-(Layer 0: listed at IN-44, not edited here). `godot/skeleton/` is not a head start. Path: GO-04 (B-L's tail; its gate landed at B-C) · GO-01 (J-9) → (IN-05 → GO-05)
+(Layer 0: listed at IN-44, not edited here). `godot/skeleton/` is not a head start. Path: GO-01 (J-9) → GO-05 (its IN-05 gate met: B-L closed, `fc4f3ba9`)
 (`_part3` §A(2)).
 
 ## 2. ⭐ START HERE — the first commands the next session runs
@@ -201,7 +201,7 @@ commit and the run stops for a cleared window (`methodology-execute`, `CLAUDE.md
 has read §K's still-held list and `_part5` §J. `main` was red from PR #456 on one test
 (`test_flow_skeletons.py::test_contract_names_resolve_in_the_generated_index[combat]`); the one-line fix (`personal_combat`
 joins `RETIRED_CONTRACTS`) is built and rides the adoption branch (`7b619328`), so it is not a position — read `All Gates
-Green` on `main` once the branch merges. B-C is closed. B-D is closed: D1 (`9054df80`), D2 (`b31d2c31`), D3 (`0a690b30`). B-G is closed (`0f998f64`). B-H is closed (`c13144b9`). B-E is closed (`ac9724fc`). B-I is PARTIAL (`c3a698ce..627e4bc6`): IN-11 (`2a2ed152`), IN-50 (`5fa6ac16`) and IN-18 G6 (`66bf51f9`) landed; IN-09 and IN-10 were falsified and reverted (H-203), so B-I's remainder is IN-53 → IN-10 → IN-33, then IN-18 G5; IN-53 was then built and falsified and reverted, and is itself blocked on H-207 (the fix lies outside its EDITS; unscheduled), so the remainder is blocked again; IN-09 stays in B-I, BLK on a writ reaching its executor (H-203's second half; no position schedules it). No batch is gate-free (`_part3` §B's header lists the gates); B-J waits on IN-10 (SC-03a needs it); then … the spine `_part3` §B names. Every batch runs
+Green` on `main` once the branch merges. B-C is closed. B-D is closed: D1 (`9054df80`), D2 (`b31d2c31`), D3 (`0a690b30`). B-G is closed (`0f998f64`). B-H is closed (`c13144b9`). B-E is closed (`ac9724fc`). B-I is PARTIAL (`c3a698ce..627e4bc6`): IN-11 (`2a2ed152`), IN-50 (`5fa6ac16`) and IN-18 G6 (`66bf51f9`) landed; IN-09 and IN-10 were falsified and reverted (H-203), so B-I's remainder is IN-53 → IN-10 → IN-33, then IN-18 G5; IN-53 was then built and falsified and reverted, and is itself blocked on H-207 (the fix lies outside its EDITS; unscheduled), so the remainder is blocked again; IN-09 stays in B-I, BLK on a writ reaching its executor (H-203's second half; scheduled as IN-10 (c), delegated 2026-10-12). No batch is gate-free (`_part3` §B's header lists the gates); B-J waits on IN-10 (SC-03a needs it); then … the spine `_part3` §B names. Every batch runs
 through `methodology-execute` (`CLAUDE.md` §9), and a batch's READ-FIRST list names the sites to read (the pins file is far too
 large to read whole: grep the assertion).
 
@@ -216,18 +216,14 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 
 | handle | alias | lane | STATE | GATE (the entry holds the whole of it) | R | batch | home |
 |---|---|---|---|---|---|---|---|
-| IN-03 | `31a` | IN/SC | B | — | — | B-L | `_part4` |
-| IN-04 | `31b`; #457 SEAM-LADDER | IN/PC | BLK | IN-03 (PC-02, PC-03, PC-04 landed, `9054df80`) | — | B-L | `_part4` |
-| IN-05 | `31c`; SM-7 | IN/MB | BLK | IN-04 | — | B-L | `_part4` |
 | IN-06 | `33`; #457 D5; A-24's threadwork; H-47 | IN/WR/FI | B | build (design landed at B-C; re-reviewed after B-H, closed `c13144b9`) | — | B-S | `_part4` |
 | IN-07 | `36` | IN/SE | B | build (design landed at B-C) | — | B-T | `_part4` |
-| IN-09 | `19b` | IN | BLK | a writ reaching its executor (H-203's second half; unscheduled) | R-05 | B-I | `_part5` |
+| IN-09 | `19b` | IN | BLK | a writ reaching its executor (H-203's second half; scheduled as IN-10 (c), delegated 2026-10-12) | R-05 | B-I | `_part5` |
 | IN-10 | #453 step 1 | IN/SC | BLK | IN-53 | R-04, R-05 | B-I | `_part5` |
 | IN-12 | #453 steps 5, 5a, 6, 7, 9, 10, 11, 13 | IN/SC/SE/MB | BLK | per step | R-04, R-05, R-09 | B-K · B-M · B-Q · B-R | `_part5` |
-| IN-13 | #453 step 8 | IN/MB | BLK | IN-05 | R-07, R-05, R-01 | B-M | `_part5` |
+| IN-13 | #453 step 8 | IN/MB | BLK | IN-12 step 6 | R-07, R-05, R-01 | B-M | `_part5` |
 | IN-14 | #457 BOUND-ATTENTION; H-92, H-10 | IN | ask-then | — | — | B-Z | `_part4` |
 | IN-18 | telling G5, G8 (step 2a, G1–G3 landed `ac9724fc`; G6 landed `66bf51f9`) | IN | BLK | IN-10's `oblige` (G5) | — | B-I | `_part4` |
-| IN-22 | #457 CARRY-SHORTFALL's live arm (reach and paying halves landed at B-E, `ac9724fc`); #445 P-2 | IN/SE | BLK | H-160 limit (3), unscheduled (SE-01 landed `d12c8db9`) | — | B-F | `_part5` |
 | IN-23 | #457 CARRY-STABILITY | IN | B | — | — | B-U | `_part5` |
 | IN-26 | #457 BOUND-PAPER; H-156 (a)/(b); `Record.ttl` | IN/SC | BLK | SC-01, FI-01 | R-05 | B-Q | `_part5` |
 | IN-27 | #457 END-VICTORY; H-176 (GD-1) | IN/FA | BLK | IN-37 | — | B-U | `_part5` |
@@ -242,15 +238,15 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-38 | `13`-rest | IN | B | — | R-09, R-06 | B-V | `_part5` |
 | IN-40 | H-101 | IN/FA/SE | BLK | IN-10 | R-04 | B-J | `_part5` |
 | IN-44 | SM-10, SM-12; A-24's wording | IN | J | Layer 0/1: Jordan's files | — | — | `_part8` (table, not an entry) |
-| IN-45 | `forge` `carry` `work` `migrate` | IN/SC/SE | BLK | IN-10, SC-03a, IN-22 | R-05 | B-K | `_part5` |
-| IN-46 | = SM-6 | IN/PC | B | review (design landed at B-C); no build batch | R-04 | B-L (re-read) | `_part4` |
+| IN-45 | `forge` `carry` `work` `migrate` | IN/SC/SE | BLK | IN-10, SC-03a | R-05 | B-K | `_part5` |
+| IN-46 | = SM-6 | IN/PC | B | build (design landed at B-C); no build batch | R-04 | none (re-read at B-L, `e77794a2`) | `_part4` |
 | IN-47 | #445 (character sheet) | IN/PC/WR | B | review (design landed at B-C); no build batch | R-04 | none (reviewed at B-H, `c13144b9`) | `_part4` |
 | IN-48 | H-108 (delegation half) | IN/FA/SE | BLK | IN-10 (IN-11 landed `2a2ed152`) | R-04 | B-J | `_part5` |
 | IN-49 | H-163 limit 3 | SE/IN | BLK | IN-10 | R-04, R-05 | B-K | `_part5` |
 | IN-51 | #453 R-5 (b) | IN/FA/SE | BLK | IN-12 | R-05 | B-R | `_part5` |
 | IN-52 | the levy-to-field feed (from IN-07's design); LF-1..LF-3 | IN/SE/MB | BLK | IN-49, IN-07's extractions | — | B-T | `_part4` |
 | IN-53 | H-203 | IN/SC | BLK | H-207 (unscheduled) | R-04, R-05 | B-I | `_part5` |
-| SC-01 | `22` steps 11–16 | SC | BLK | IN-03 | R-04, R-05, R-08, R-09, M2 | B-N | `_part6` |
+| SC-01 | `22` steps 11–16 | SC | BLK | B-N's entry gate; SC-03a (the fired-slot step) | R-04, R-05, R-08, R-09, M2 | B-N | `_part6` |
 | SC-02 | `22a` → `23` → `22b` | SC | BLK | SC-01 | — | B-P | `_part6` |
 | SC-03a | #453 steps 2b, 3 | SC | BLK | IN-10 (IN-11 landed `2a2ed152`) | R-05 | B-J | `_part6` |
 | SC-03b | #453 step 4; H-162 | SC | BLK | SC-01, SC-08, SC-03a | R-05, R-04 | B-O | `_part6` |
@@ -263,24 +259,19 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | SE-03 | ED-SE-0053 §A.6–A.8 | SE | BLK | IN-28 | — | B-K | `_part6` |
 | SE-04 | #457 CAST-POPULACE; H-170, H-171 | SE | BLK | IN-07 | — | B-T | `_part6` |
 | SE-05 | = IN-30 | — | — | — | — | B-U | `_part5` |
-| MB-03 | ED-MB-0078 | MB | BLK | IN-05 | — | B-L | `_part7` |
-| MB-05r | A7 terrain: RIVER_CROSSING season wiring | MB | BLK | IN-05 | — | B-L | `_part7` |
 | MB-07r | J-18 (A): flip the depth support cap ON | MB | BLK | J (recalibration; the golden gate's time budget) | — | B-Z | `_part7` |
 | MB-08 | #445 U-1, U-2, U-6 | MB | LEAVE | named, unscheduled | — | B-Z | `_part7` |
-| MB-09 | = IN-05 | — | — | — | — | B-L | `_part4` |
 | PC-05 | ED-PC-0013 (1) | PC | BLK | GO-01, GO-05 | — | B-Z | `_part7` |
-| PC-06 | #445 M-1/S-4, S-2/L-1, K-1/K-5, K-3 (S-1 landed at B-E, `ac9724fc`) | PC | BLK | IN-04 (M-1), IN-03 (S-2/L-1), IN-06 (K-3) | R-05 | B-L · B-S | `_part7` |
+| PC-06 | #445 K-1/K-5, K-3 (S-1 landed at B-E, `ac9724fc`; M-1/S-4, S-2/L-1 at B-L, `9ad86e87`) | PC | BLK | IN-06 (K-3) | R-05 | B-S | `_part7` |
 | PC-08 | Phase 4a/4b/5, WS-7; #445 M-2..M-6, K-4/V-3 | PC | LEAVE | named, unscheduled | — | B-Z | `_part7` |
-| PC-09 | = IN-04 | — | — | — | — | B-L | `_part4` |
-| FI-01 | `ED-FI-0009`; J-22 (A); #445 S-6 | FI | BLK | SC-01, SC-03b, IN-03 | R-05, R-09 | B-O | `_part6` |
+| FI-01 | `ED-FI-0009`; J-22 (A); #445 S-6 | FI | BLK | SC-01, SC-03b | R-05, R-09 | B-O | `_part6` |
 | FI-02 | SM-3 | FI | BLK | FI-01 | — | B-O | `_part6` |
 | FI-03 | ED-FI-0002 | FI | BLK | IN-06 | — | B-S | `_part6` |
 | FI-05 | = IN-32 | — | — | — | — | B-S | `_part5` |
 | WR-01 | `27` remainder: the R-14 term, the `engine/season/` reach | WR | BLK | IN-06 | — | B-S | `_part7` |
 | WR-05 | = IN-35 | — | — | — | — | B-S | `_part5` |
 | GO-01 | `26`; D2 tenth attribute | GO | J | J-9 | — | B-Z | `_part7` |
-| GO-04 | ED-IN-0017 seam audit | GO | B | — | — | B-L | `_part7` |
-| GO-05 | SM-13; ED-PC-0013 (1) | GO | BLK | IN-05, GO-01 | — | B-Z | `_part7` |
+| GO-05 | SM-13; ED-PC-0013 (1) | GO | BLK | GO-01 | — | B-Z | `_part7` |
 | GO-06 | `valoria-game` parity | GO | BLK | `valoria-game` checkout | — | B-Z | `_part7` |
 | FA-01 | #445 P-3; FORCE-FOREIGN's cast | FA | B | mechanism | R-04 | B-J · B-V | `_part7` |
 | FA-02 | = IN-30 | — | — | — | — | B-U | `_part5` |
@@ -320,7 +311,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | SEAM-LADDER · END-VICTORY | merged into IN-04 · IN-27 |
 | §7 D1 · D2 · D3 · D4 · D5 · D6 | IN-35 · IN-34 (landed `44fdb4df`) · answered: no dated pins (T-c) · IN-36, FA-01 · A-24 → IN-06 · IN-27 (D2, D4, D6 answered as the plan's recommendation, RS-21) |
 
-**#445** (`proposals/2026-09-30-character-and-play-surface/`): S-1 → landed at B-E (`ac9724fc`) · M-1/S-4, S-2/L-1, K-1/K-5, K-3 → PC-06 · U-3 → landed at B-D2 (`b31d2c31`)
+**#445** (`proposals/2026-09-30-character-and-play-surface/`): S-1 → landed at B-E (`ac9724fc`) · M-1/S-4, S-2/L-1 → landed at B-L (`9ad86e87`) · K-1/K-5, K-3 → PC-06 · U-3 → landed at B-D2 (`b31d2c31`)
 · U-1/U-2/U-6 → MB-08 · P-1 → IN-08 · P-2 → IN-22 · P-3 → FA-01 · P-4, V-4, V-5 → SC-07 · S-6 → FI-01 · V-1 → J-2
 (answered) · K-2 only with its first reader · M-2..M-6, K-4/V-3 → PC-08.
 

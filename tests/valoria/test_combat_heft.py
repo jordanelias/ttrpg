@@ -9,7 +9,7 @@ not collapsed onto longsword within the (former) heavy class.
 import os
 import sys
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
 sys.path.insert(0, ENGINE)
 
 import core  # noqa: E402

@@ -2,7 +2,7 @@
 
 `seam/ladder.py::combat_degree` used to be two literals (`if st["felled"]` / `st["wounds"] > 0`).
 It now walks `COMBAT_EDGES`, loaded and validated at import by `rosters.load_combat_band_edges`, over
-the quantities `wound_quantities` lists -- the same list `seam/wrappers/combat.py::_state` lifts the
+the quantities `wound_quantities` lists -- the same list `seam/wrappers/combat.py::_wound_state` lifts the
 scene with. What each test proves, and the control that stops it passing vacuously:
 
   1. THE LOADER REFUSES, AT LOAD, an edge on a quantity the tracker does not return -- exercised on
@@ -49,6 +49,9 @@ from engine.season.state.carriers import Act
 def engine_available():
     if C.engine() is None:
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+    # Plan position `31b`: the adapter calls the module entry through `MODULE_ENTRIES`, which the
+    # registrar fills at driver construction; a direct `contest()` needs one constructed in the process.
+    SeasonDriver(P.tiny_world())
 
 
 needs_engine = pytest.mark.usefixtures("engine_available")

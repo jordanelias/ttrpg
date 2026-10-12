@@ -1,5 +1,17 @@
-"""THE MASS-BATTLE PROVIDER -- the seam's wrapper around `systems/mass_battle/sim/massbattle.py`'s
-season-facing entry point, `resolve_field`. Wired M3 of the driver-retirement plan
+"""THE MASS-BATTLE PROVIDER -- the host adapter and the host INPUT BUILDER for the `mass_battle` module's
+entry, `modules/mass_battle/massbattle.py::resolve_field` (plan position `31c`, A-25).
+
+PLAN POSITION `31c` SPLIT THIS MODULE AS `31a` SPLIT `sigma.py`. What stays here is the HOST: the input
+builder `field_input` (`World` -> `queries/inputs.py::MassBattleInput`: each side's member weights, the
+place, its fortification, each side's stance, the walls fixture) and the adapter `resolve`, which keeps
+the PARTY-GAP refusals and the `Unopposed` branch, calls the module entry the prize row names
+(`module_entry:`, registered in `manifest.MODULE_ENTRIES` from its composition row, `entry: verb_call`,
+`verb: march`) and lifts what comes back. The fight itself -- the Units, the terrain row, the battle and
+its survivor-ratio grade -- is the module's, reached by string. `loop/sides.py` stays host too: it builds
+the claimants the record's weights are read for. Below, `massbattle`'s functions are the ENTRY's
+module's since `31c`.
+
+Wired M3 of the driver-retirement plan
 (`ED-IN-0279`); `rosters.yaml`'s "a field" row previously had a `module:` and NO `provider:`,
 whose own comment said the absence WAS the row -- *"sides need `faction_q.resolve` (04 §C.5.1)"*.
 M2 built `faction_q.resolve`; this is the call that reads it.
@@ -25,7 +37,7 @@ branch, which is what "generalizing without changing their behaviour" meant.
 
 ⚠ **WHO ATTACKS, WHO DEFENDS, AND WHAT AN EMPTY DEFENDING SIDE MEANS ARE `march`'s OWN eligibility
 and effects, RULED AND BUILT (M4, `ED-IN-0279` clause (b), 2026-09-28)** -- an empty defending side
-is `Unopposed` (the branch at line ~99 below), never an auto-win manufactured here.
+is `Unopposed` (the `Unopposed` branch in `resolve` below), never an auto-win manufactured here.
 
 ⚠⚠ **WHAT A GARRISON DOES TO THIS FIGHT IS NOW READ, AND THE READ IS ALL THIS MODULE ADDS (plan
 position `20-iv`, `H-150`).** Jordan's ruling (planning round 2) fixed garrison STRENGTH as a Site's
@@ -38,7 +50,10 @@ hands them on as plain values -- it decides none of what they do:
     (the one owner of that id relation, which `harness/populated.py` mints through);
   * its FORTIFICATION, `world_q.fortification_of` at the target;
   * each side's MORALE source, `_side_stance` below;
-and, since plan position `20-v`, one injected value: the `field_walls_dr` fixture (`H-150`).
+and, since plan position `20-v`, one injected value: the `field_walls_dr` fixture (`H-150`). Since MB-05r
+and MB-03, two more facts and one more value: the attacking side's ORIGIN territory (`_origin_of`), each
+side's build-time LOYALTY row (`_side_stance` with `_creed_referent`), and the
+`field_morale_loyalty_gain` fixture.
 What a fortification DOES is `massbattle.resolve_field`'s and `terrain.py`'s: any positive value
 makes the field A.9's `WALLS` row, whose one number (defender +3 DR) the engine applies to `Unit.dr`
 1:1 (an ASSUMPTION about the unit, `H-150`). The number is canon's, not invented here -- `None` in the
@@ -55,27 +70,29 @@ onto the three bands `march` writes on (`seam/ladder.py::field_degree`). Manufac
 from the survivor-ratio classification would have been the second resolver S27.2 refuses; reading
 a marker this function already derives is not that.
 
-⚠ **NO NEW `sys.path` SEAM.** `resolve_field` is reached through `composition.require`
-(`references/module_contracts.yaml`'s `mass_battle.resolve_field` role), not a direct
-`systems.mass_battle...` import -- `tests/valoria/test_engine_does_not_import_systems.py`'s
-`BASELINE_TOTAL` ratchet is zero dotted `systems.*` imports anywhere under `engine/`, and
-`PATH_SEAM_ALLOWED` is one entry (`substrate/pc_engine.py`, needed only because
-`combat_engine_v1/` bare-imports its own siblings). `massbattle.py`'s own imports are already
-proper dotted `systems.mass_battle.sim.*`, so it has no such problem and needs no second entry --
-the composition-role indirection is the correct-fit channel, not a workaround.
+⚠ **NO NEW `sys.path` SEAM, AND NO IMPORT OF THE MODULE.** `resolve_field` is reached by STRING: the
+composition row `mass_battle.resolve_field` (`references/module_contracts.yaml`) names it, the registrar
+resolves it at driver construction into `MODULE_ENTRIES`, and `resolve` below looks it up there by the
+role its prize row names -- `engine/` never imports module code. `PATH_SEAM_ALLOWED`
+(`tests/valoria/test_engine_does_not_import_systems.py`) keeps its one entry: the moved closure's own
+imports are dotted `modules.mass_battle.*`, a package, so it needs no path seam.
 """
 from __future__ import annotations
 
 import random
 from typing import Any, Optional
 
-# ⚠ THE LEAF, NOT THE PACKAGE. See combat.py/sigma.py's own note: importing `...manifest` (which
-# re-exports from `registry.py`, which imports `seam/wrappers/*` to register them) would close the
-# import cycle `manifest/providers.py` exists to break.
+# `providers` is imported by module, as combat.py and sigma.py do (see their notes on the manifest
+# import order); the entry lookup is `_entry.py`'s, which imports `registrar` and `registry` the same way.
 from ...manifest.providers import provider
+from ...data.geography import geography
 from ...data.rosters import territory_id_of
+from ...queries.inputs import MassBattleInput
 from ...queries.person_q import stance_toward
 from ...queries import world_q
+from ._entry import entry_for
+
+_PROVIDER = "mass_battle"
 
 
 def _territory_of(w: Any, rung: str) -> Optional[str]:
@@ -92,16 +109,32 @@ def _territory_of(w: Any, rung: str) -> Optional[str]:
     return None
 
 
-def _side_stance(w: Any, pids: list) -> float:
-    """A side's weight-mean stance toward each member's OWN faction -- the season's morale carrier
-    (`massbattle._morale_start`'s docstring says why it is this one).
+def _creed_referent(w: Any, fac: str) -> Optional[str]:
+    """Whom a member of faction `fac` holds their build-time LOYALTY row toward: the subject of the
+    faction's creed Proposition when its mood is OUGHT (its authored leader), else `None` (MB-03).
+
+    This is the writer's own rule read back, not a second one: `harness/populated.py` appends the
+    row `(prop.subject, *cast.stance_from_loyalty(...))` exactly when the creed's mood is OUGHT, and a
+    HOLDS faction (`Guilds`, `Schoenland`: no leader or template in canon) gets no row and reads `None`
+    here -- `cast.loyalty`'s *"`None` FOR A FACTION WITH NO TEMPLATE, NEVER A DEFAULT"*. ⚠ The row
+    names a PERSON, the creed's utterer, not the faction: that is why the morale row (`_eff_march`,
+    on the faction id) and this one are two referents and are read and handed on separately."""
+    prop = w.propositions.get(fac)
+    return prop.subject if prop is not None and str(prop.mood).upper() == "OUGHT" else None
+
+
+def _side_stance(w: Any, pids: list, referent=lambda w, fac: fac) -> float:
+    """A side's weight-mean stance toward a referent its members' OWN faction names -- by default the
+    faction itself, the season's morale carrier (`massbattle._morale_start`'s docstring says why it is
+    this one); with `referent=_creed_referent`, the creed's utterer, the build-time loyalty row (MB-03).
 
     Each member's faction is `world_q.faction_holding`, the one owner of *which faction a person
     coheres under*, and the stance is `queries.person_q.stance_toward`, the one reader of a stance row
     (valence x weight, summed over the rows naming that referent). A member committed to no faction
     or to two reads `None` there and contributes zero -- `faction_holding`'s own *"NONE AND MANY BOTH
-    RETURN None, AND NEITHER IS A DEFAULT"*. Weighted by `Person.weight` because `resolve_field` sizes
-    the side by the same weights: a cohort of ten carries ten men's morale. An empty side reads 0."""
+    RETURN None, AND NEITHER IS A DEFAULT"* -- and so does a member whose faction names no referent.
+    Weighted by `Person.weight` because `resolve_field` sizes the side by the same weights: a cohort
+    of ten carries ten men's morale. An empty side reads 0."""
     total = 0
     acc = 0.0
     for pid in pids:
@@ -109,27 +142,73 @@ def _side_stance(w: Any, pids: list) -> float:
         if p is None:
             continue
         fac = world_q.faction_holding(w, pid)
-        acc += p.weight * (stance_toward(p, fac) if fac is not None else 0.0)
+        ref = referent(w, fac) if fac is not None else None
+        acc += p.weight * (stance_toward(p, ref) if ref is not None else 0.0)
         total += p.weight
     return acc / total if total else 0.0
 
 
-def _resolver():
-    """`resolve_field`, by composition role. Deferred: a module-level import here would put
-    `engine.substrate.composition` — and, transitively, `systems.mass_battle...` — on every
-    caller's import path merely for importing this wrapper, not for calling it."""
-    from engine.substrate import composition
-    return composition.require("mass_battle.resolve_field")
+def _origin_of(w: Any, pids: list) -> Optional[str]:
+    """The geography territory id the attacking side marched FROM, or `None` (MB-05r).
+
+    `contest()` hands this provider the target rung and never the origin, and no seam parameter is
+    added for it: on the season path `loop/sides.py::sides_of` musters `claimants` at the actor's
+    origin settlement (`world_q.mustered`, the settlement's subtree), so every claimant's home
+    (`world_q.home_of`, read once) sits under that settlement and `_territory_of` reads the same
+    territory for each. A side whose homes name no territory, or more than one (a caller passing a
+    faction's whole membership), has no one origin and reads `None` -- the default, under which no
+    crossing is derived and the field is what it was before MB-05r."""
+    homes = world_q.home_of(w)
+    by_home: dict = {}                      # one `_territory_of` walk per distinct home, this call only
+    found = set()
+    for pid in pids:
+        if pid not in homes:
+            found.add(None)
+            continue
+        home = homes[pid]
+        if home not in by_home:
+            by_home[home] = _territory_of(w, home)
+        found.add(by_home[home])
+    return found.pop() if len(found) == 1 else None
 
 
-@provider("contest", "mass_battle")
+def field_input(w: Any, claimants: list, other: list, rung: str) -> MassBattleInput:
+    """THE HOST INPUT BUILDER (plan position `31c`, A-25): `World` -> the frozen record the field reads.
+
+    Reads `w.persons` (each side member's `weight`, and the stances `_side_stance` reads), the rung
+    ancestry (`_territory_of`, at the target and at the claimants' homes for `_origin_of`), the
+    target's fortification, the creeds' Propositions (`_creed_referent`) and `w.fixtures`, and nothing
+    else; the module that consumes the record never sees `World`. Its precondition is the adapter's
+    PARTY-GAP checks and a non-empty defending side (`resolve`, below). A member id `World` does not
+    hold contributes no weight, as `resolve_field` read it before the split.
+
+    MB-05r: `origin` is the World half of the river-crossing fact; whether the line from it to the
+    target crosses a river is the geography's, which the module reads (`terrain.py::river_crossed`) off
+    the record's `geography` -- the file `data/geography.py` reads once per process; the module opens none.
+    MB-03: `loyalties` and `loyalty_gain` are the build-time loyalty rows and the fixture gain; what
+    they do to the morale-start is `massbattle._morale_start`'s."""
+    def weights(side: list) -> tuple:
+        return tuple(w.persons[pid].weight for pid in side if pid in w.persons)
+    return MassBattleInput(
+        weights=(weights(claimants), weights(other)),
+        territory=_territory_of(w, rung),
+        fort_level=world_q.fortification_of(w, rung),
+        stances=(_side_stance(w, claimants), _side_stance(w, other)),
+        walls_dr=w.fixtures.get("field_walls_dr"),
+        origin=_origin_of(w, claimants),
+        loyalties=(_side_stance(w, claimants, _creed_referent), _side_stance(w, other, _creed_referent)),
+        loyalty_gain=w.fixtures.get("field_morale_loyalty_gain"),
+        geography=geography())
+
+
+@provider("contest", _PROVIDER)
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
             rng: Optional[random.Random] = None, rung: str = "") -> dict:
     """CALL the mass-battle engine. Returns what it said; decides nothing itself.
 
     `claimants`: one side's `PersonId[]`, expected already resolved (§C.5.1) by whoever called
-    `contest()` -- see this module's docstring for why nothing does that yet.
+    `contest()`: `loop/sides.py::sides_of` builds them for a `march`.
     `subject`: the OTHER side's faction Proposition id.
     `rung`: where the defence is scoped (M4, `ED-IN-0279` clause (a)) -- `subject`'s faction is
     resolved to its `members` (`faction_q.resolve`, the same function M2 built) and THEN
@@ -144,14 +223,15 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     this module's docstring) and callers should not read it as one."""
     if not claimants:
         return dict(status="PARTY-GAP", why="a field battle needs at least one claimant",
-                    module="mass_battle")
+                    module=_PROVIDER)
     if subject is None:
         return dict(status="PARTY-GAP", why="a field battle needs a named opposing faction "
-                    "(subject); none given", module="mass_battle")
+                    "(subject); none given", module=_PROVIDER)
     if not rung:
         return dict(status="PARTY-GAP", why="a field battle needs a place to scope the "
-                    "defending side to (rung); none given", module="mass_battle")
+                    "defending side to (rung); none given", module=_PROVIDER)
     other = world_q.mustered(w, rung, subject)
+    parties = {"claimants": claimants, "subject_members": other}
     if not other:
         # ⚠ AN EMPTY DEFENDING SIDE IS `Unopposed`, NOT A CALL TO `resolve_field` (M4,
         # `ED-IN-0279` clause (a)). `resolve_field`'s own docstring: *"AN EMPTY `side_b` gets
@@ -161,27 +241,23 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         # means for the game, but it does not launder "nobody mustered" into a fabricated fight
         # against a floor-sized phantom unit either. `attacker_wins`/`unopposed` are top-level so
         # `seam/ladder.py::field_degree` can grade this without opening `result`.
-        return dict(status="RESOLVED", module="mass_battle", resolver="dice_pool",
+        return dict(status="RESOLVED", module=_PROVIDER, resolver="dice_pool",
                     attacker_wins=True, unopposed=True,
                     result=dict(attacker_wins=True, degree="Unopposed",
                                 attacker_size_pct=1.0, defender_size_pct=0.0),
-                    winner=claimants,
-                    parties={"claimants": claimants, "subject_members": other})
-    try:
-        engine_resolve_field = _resolver()
-    except Exception as e:
-        return dict(status="ENGINE-UNAVAILABLE", why=f"{type(e).__name__}: {e}", module="mass_battle")
-    # PLAN POSITION `20-iv`: the place and the two sides' morale, read here and decided there
-    # (`H-150` -- `fortification_of`'s caller on the battle path).
+                    winner=claimants, parties=parties)
+    # ⚠ THE ENTRY IS LOOKED UP BY THE ROLE THE PRIZE ROW NAMES (`module_entry:`), IN `MODULE_ENTRIES`,
+    # as `sigma.py` and `combat.py` look theirs up (`31a`, `31b`): a call reaching here with the role
+    # unregistered (no driver constructed in the process) is the typed `ENGINE-UNAVAILABLE`.
+    entry, refusal = entry_for(prize, _PROVIDER)
+    if entry is None:
+        return refusal
+    # PLAN POSITION `20-iv`: the place and the two sides' morale, read here (`field_input`) and decided
+    # there (`H-150` -- `fortification_of`'s caller on the battle path).
     # PLAN POSITION `20-v`: the walls' DR is the `field_walls_dr` fixture (`H-150`), `None` = A.9's
-    # own number, which `massbattle` reads from `terrain.py` -- this wrapper decides none of it.
-    result = engine_resolve_field(w, claimants, other,
-                                  territory=_territory_of(w, rung),
-                                  fort_level=world_q.fortification_of(w, rung),
-                                  stance_a=_side_stance(w, claimants),
-                                  stance_b=_side_stance(w, other),
-                                  walls_dr=w.fixtures.get("field_walls_dr"), rng=rng)
-    return dict(status="RESOLVED", module="mass_battle", resolver="dice_pool",
+    # own number, which the module reads from its terrain table -- this adapter decides none of it.
+    result = entry.fn(field_input(w, claimants, other, rung), rng)
+    return dict(status="RESOLVED", module=_PROVIDER, resolver="dice_pool",
                 # ⚠ LIFTED TO TOP LEVEL, NOT LEFT NESTED UNDER `result` (M4). `degree_of`
                 # (`seam/ladder.py`) reads a provider's return directly -- `wound_state` and
                 # `net`/`ob` are already top-level for the other two providers -- so a third,
@@ -191,4 +267,4 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
                 attacker_wins=result.get("attacker_wins"), unopposed=False,
                 result=result,
                 winner=(claimants if result.get("attacker_wins") else other),
-                parties={"claimants": claimants, "subject_members": other})
+                parties=parties)

@@ -97,7 +97,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
     ⚠ A WOUND CANNOT KILL, AND THE FLOOR IS STRUCTURAL RATHER THAN NUMERIC. The `Wounded` band
     means the engine did NOT fell this person; a model that took their body to 0 would contradict
-    the band it is implementing. `max(1, ...)` is `combat_seam.derive_party`'s own floor
+    the band it is implementing. `max(1, ...)` is `seam/wrappers/combat.py::party_end`'s own floor
     (*"a dying person still fights"*), followed rather than reinvented."""
     d = a.payload if isinstance(a.payload, dict) else {}
     who = d.get("subject")

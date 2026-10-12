@@ -331,7 +331,12 @@ RETIREMENT_SHIFTED = frozenset({
     # archived line anchor below the first cut moved or went out of range. The three symbols join
     # RETIRED_SYMBOLS below; every OTHER symbolled anchor into the file is still checked by symbol.
     # What is lost, stated: a bare line into `massbattle.py` is now advisory.
+    # Keyed on the path the archived anchors CITE; since plan position `31c` the ledger resolves it to
+    # `modules/mass_battle/massbattle.py`, where the symbols are checked.
     'systems/mass_battle/sim/massbattle.py',
+    # Plan position `31c` replaced this workbench's `start_trace`/`get_trace` calls with one
+    # `with tracing()` block (the two accessors join RETIRED_SYMBOLS), so its archived anchors moved.
+    'systems/mass_battle/sim/workbench/trace.py',
     # Plan position `27` (2026-10-01) wired mending and struck the two rendering stubs and the
     # `ms_track`/`knots` seam from these four LIVE files (opposing 259 -> 237 lines, co_movement
     # 152 -> 141, rendering 42 -> 41, operations re-numbered by the new `recover` call), so archived
@@ -390,6 +395,10 @@ RETIRED_SYMBOLS = frozenset({
     # the three tokens survive only as prose about their own deletion (that file's header note and
     # docstrings), so by the `echo_scheduler` rule they are retired, not missing by accident.
     'resolve_mass_battle', '_faction_to_unit', '_morale_start_from_stability',
+    # The mass-battle engine's module-global trace buffer and its two accessors, deleted at plan position
+    # `31c` (AX-4: the buffer is now the list a `resolution.tracing()` block yields). The archived skeleton
+    # cites `workbench/trace.py`'s caller of the second; that file joins RETIREMENT_SHIFTED above.
+    'start_trace', 'get_trace',
 })
 
 # CALL SITES, not symbols, that plan position `27` (2026-10-01) struck. `apply_ms_delta` and
@@ -458,7 +467,14 @@ def _anchor_failures(relpath):
             candidate = os.path.join(ROOT, archived(filepath))
             if os.path.isfile(candidate):
                 target = candidate
-        where = f"{relpath} -> `{filepath}:{start_s}{'-' + end_s if end_s else ''}"
+        if not os.path.isfile(target):
+            # A MOVED path resolves through the ledger to where the file lives now, and the anchor is
+            # checked there (plan position `31b` moved the personal-combat engine to `modules/combat/`
+            # by `git mv`, so the cited lines are the same lines). `pathres.resolve` owns the answer.
+            moved = pathres.resolve(filepath)
+            if moved.status == pathres.ALIASED:
+                target = os.path.join(ROOT, moved.live_path)
+        where =f"{relpath} -> `{filepath}:{start_s}{'-' + end_s if end_s else ''}"
         where += f" {symbol}`" if symbol else "`"
 
         if not os.path.isfile(target) and filepath in RETIRED_GENERATED:

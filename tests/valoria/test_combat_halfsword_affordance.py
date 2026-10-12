@@ -9,7 +9,7 @@ whitelist. These tests pin: (1) the byte-identical-at-parity acceptance (derived
 import os
 import sys
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
 sys.path.insert(0, ENGINE)
 
 import combat_systems as S  # noqa: E402

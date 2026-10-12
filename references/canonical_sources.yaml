@@ -76,8 +76,8 @@ systems:
   core_engine:
     archived: ".designs/ — design doc quarantined 2026-09-16; see references/restructure_ledger.md. Canon for this system is the code (CLAUDE.md §0.05)."
   combat:
-    # systems/combat/combat_engine_v1/ is the CANONICAL personal-combat resolver (config.py = live Class-C parameter source). SHA-track via freshness_gate.py --update.
-    resolution_engine: "systems/combat/combat_engine_v1/"
+    # modules/combat/ (systems/combat/combat_engine_v1/ until plan position `31b`) is the CANONICAL personal-combat resolver (config.py = live Class-C parameter source). SHA-track via freshness_gate.py --update.
+    resolution_engine: "modules/combat/"
     resolution_engine_canonical_status: "CANONICAL combat_engine_v1 (ratified ED-900; ALL 2026-06 work re-ratified+approved ED-904, Jordan); supersedes combat_v30 RESOLUTION layer; config.py is the live parameter source"
   threadwork:
     archived: ".designs/ — design doc quarantined 2026-09-16; see references/restructure_ledger.md. Canon for this system is the code (CLAUDE.md §0.05)."
@@ -241,7 +241,7 @@ systems:
     archived: ".designs/ — design doc quarantined 2026-09-16; see references/restructure_ledger.md. Canon for this system is the code (CLAUDE.md §0.05)."
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "af6a398b86fbe22df35cac151dfc3e1531d67f92"
+    canonical_sha__references__module_contracts_yaml: "a61ec617e94e89979610c1edc4eeaab97839778f"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Its governing skill and assessor (valoria-module-adjudicator) were Key-based and are retired (ED-IN-0232, ED-IN-0265). Stage-1 full-graph extraction pending."

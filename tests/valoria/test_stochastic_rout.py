@@ -21,8 +21,8 @@ _SIM = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sim'))
 if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
-import systems.mass_battle.sim.config as C  # noqa: E402
-import systems.mass_battle.sim.core.state as S  # noqa: E402
+import modules.mass_battle.config as C  # noqa: E402
+import modules.mass_battle.core.state as S  # noqa: E402
 from systems.mass_battle.sim.engine import build_army, resolve_battle, SIDE_A_START_ROW, SIDE_B_START_ROW  # noqa: E402
 
 
@@ -92,7 +92,7 @@ def test_break_fires_when_casualties_cross():
 def _mean_loser_casualties(on, n=16, cells=False):
     """`cells` controls MB_CELL_MORALE, which must be pinned rather than inherited — see
     test_loser_breaks_near_historical_band and test_per_cell_break_subsumes_the_body_level_one."""
-    import systems.mass_battle.sim.hierarchy.units as U
+    import modules.mass_battle.hierarchy.units as U
     prev = S.MB_STOCHASTIC_ROUT
     prev_cells = U.MB_CELL_MORALE
     S.MB_STOCHASTIC_ROUT = on

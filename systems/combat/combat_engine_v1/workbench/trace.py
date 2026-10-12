@@ -5,6 +5,7 @@ the narrator/explorer show come from probabilities.py (the local distribution at
 repeating the fight. For win-rates over many fights use the montecarlo path (workbench server), never this."""
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
 import numpy as np
 import random
 import wrapper

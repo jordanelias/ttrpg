@@ -389,7 +389,7 @@ removed is at its fork ref; every old path resolves through `references/restruct
 - **Versioning ≠ currency.** Three orthogonal axes coexist with **no reliable mapping**: filename `_v30`,
   in-file `## Version: vN.N`, and the `v40` generation marker. **Only `CURRENT.md` and a head's
   `## Status:` line can tell you what is current** (`_v30` is nominally current, yet the live combat
-  head is `systems/combat/combat_engine_v1/`, with no suffix).
+  head is `modules/combat/`, with no suffix).
 - **ID systems.** `PP-NNN` patches (`registers/patch_register_active.yaml`), `ED-NNN` editorial items
   (`registers/editorial_ledger.jsonl`), `LB-NN` workplan lane-blocks.
   `references/id_reservations.yaml` is the allocation source of truth — read `next_free`, allocate, bump,

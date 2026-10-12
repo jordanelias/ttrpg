@@ -95,7 +95,7 @@
     },
     {
       "value": "mass_battle.DISCIPLINE_LOSS_THRESHOLD",
-      "value_file": "systems/mass_battle/sim/config.py",
+      "value_file": "modules/mass_battle/config.py",
       "token": "DISCIPLINE",
       "pointer": "Discipline",
       "pointer_key": "mass.discipline",
@@ -103,7 +103,7 @@
     },
     {
       "value": "mass_battle.MIN_DISCIPLINE",
-      "value_file": "systems/mass_battle/sim/config.py",
+      "value_file": "modules/mass_battle/config.py",
       "token": "DISCIPLINE",
       "pointer": "Discipline",
       "pointer_key": "mass.discipline",
@@ -127,7 +127,7 @@
     },
     {
       "value": "mass_battle._SEASON_FORCE_POWER",
-      "value_file": "systems/mass_battle/sim/massbattle.py",
+      "value_file": "modules/mass_battle/massbattle.py",
       "token": "POWER",
       "pointer": "Power",
       "pointer_key": "mass.power",
@@ -167,7 +167,7 @@
     },
     {
       "value": "mass_battle.RANGED_DR_DEFAULT",
-      "value_file": "systems/mass_battle/sim/config.py",
+      "value_file": "modules/mass_battle/config.py",
       "token": "DR",
       "pointer": "Damage Resistance",
       "pointer_key": "nc.DR",
@@ -175,7 +175,7 @@
     },
     {
       "value": "mass_battle.WALLS_DEFENDER_DR",
-      "value_file": "systems/mass_battle/sim/terrain.py",
+      "value_file": "modules/mass_battle/terrain.py",
       "token": "DR",
       "pointer": "Damage Resistance",
       "pointer_key": "nc.DR",
@@ -295,7 +295,7 @@
     },
     {
       "value": "mass_battle.STAMINA_EXHAUSTED_POOL_PENALTY",
-      "value_file": "systems/mass_battle/sim/config.py",
+      "value_file": "modules/mass_battle/config.py",
       "token": "POOL",
       "pointer": "Thread Pool Score",
       "pointer_key": "prac.tps",
@@ -303,7 +303,7 @@
     },
     {
       "value": "mass_battle.STAMINA_POOL_THRESHOLDS",
-      "value_file": "systems/mass_battle/sim/config.py",
+      "value_file": "modules/mass_battle/config.py",
       "token": "POOL",
       "pointer": "Thread Pool Score",
       "pointer_key": "prac.tps",
@@ -327,7 +327,7 @@
     },
     {
       "value": "mass_battle.STANCE_COMMITMENT",
-      "value_file": "systems/mass_battle/sim/config.py",
+      "value_file": "modules/mass_battle/config.py",
       "token": "STANCE",
       "pointer": "stance",
       "pointer_key": "season.stance",
@@ -335,7 +335,7 @@
     },
     {
       "value": "mass_battle.STANCE_SPEED_MOD",
-      "value_file": "systems/mass_battle/sim/config.py",
+      "value_file": "modules/mass_battle/config.py",
       "token": "STANCE",
       "pointer": "stance",
       "pointer_key": "season.stance",
@@ -343,7 +343,7 @@
     },
     {
       "value": "mass_battle.INTENT_DEFENSE_D",
-      "value_file": "systems/mass_battle/sim/config.py",
+      "value_file": "modules/mass_battle/config.py",
       "token": "DEFENSE",
       "pointer": "Defense",
       "pointer_key": "set.defense",
@@ -383,7 +383,7 @@
     },
     {
       "value": "mass_battle.TROOPS_PER_TIER",
-      "value_file": "systems/mass_battle/sim/config.py",
+      "value_file": "modules/mass_battle/config.py",
       "token": "TIER",
       "pointer": "Facility Tier",
       "pointer_key": "set.facility_tier",
@@ -399,7 +399,7 @@
     },
     {
       "value": "mass_battle.SUPPORT_WEIGHTS",
-      "value_file": "systems/mass_battle/sim/config.py",
+      "value_file": "modules/mass_battle/config.py",
       "token": "SUPPORT",
       "pointer": "Popular Support",
       "pointer_key": "set.popular_support",
@@ -407,7 +407,7 @@
     },
     {
       "value": "mass_battle.SUPPORT_WEIGHT_FLOOR",
-      "value_file": "systems/mass_battle/sim/config.py",
+      "value_file": "modules/mass_battle/config.py",
       "token": "SUPPORT",
       "pointer": "Popular Support",
       "pointer_key": "set.popular_support",
@@ -415,7 +415,7 @@
     },
     {
       "value": "mass_battle.TIP_SUPPORT_GAP",
-      "value_file": "systems/mass_battle/sim/config.py",
+      "value_file": "modules/mass_battle/config.py",
       "token": "SUPPORT",
       "pointer": "Popular Support",
       "pointer_key": "set.popular_support",
@@ -423,7 +423,7 @@
     },
     {
       "value": "mass_battle.STAMINA_DRAIN_PER_CONTACT_CELL",
-      "value_file": "systems/mass_battle/sim/config.py",
+      "value_file": "modules/mass_battle/config.py",
       "token": "CONTACT",
       "pointer": "Thread Fatigue",
       "pointer_key": "thread.thread_fatigue",

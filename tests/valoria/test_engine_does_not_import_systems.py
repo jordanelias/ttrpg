@@ -227,7 +227,7 @@ def test_this_check_can_observe_its_own_failure(tmp_path):
 
 #: The ONE surviving seam, declared rather than invisible. `engine/substrate/pc_engine.py` (until
 #: 2026-09-25, `engine/cross_scale/combat_bridge.py`'s own loader) inserts
-#: `systems/combat/combat_engine_v1/` onto `sys.path` and imports `combatant` and `wrapper` by BARE
+#: `modules/combat/` (until plan position `31b`, `systems/combat/combat_engine_v1/`) onto `sys.path` and imports `combatant` and `wrapper` by BARE
 #: NAME. It was invisible to every instrument in this file until 2026-08-22: both regexes
 #: look for the literal token `systems`, and the import probe below used to filter `sys.modules` by
 #: the `systems.` prefix — under which those two modules appear as `combatant` and `wrapper`.
@@ -538,12 +538,12 @@ def test_the_import_probe_can_observe_both_kinds_of_leak():
       2. the `sys.path` + BARE NAME shape `combat_bridge` uses, where the loaded module is called
          `wrapper`, not `systems.combat.…`. The old name-prefix probe reported this one as clean.
     """
-    dotted = _modules_loaded_from_systems('import systems.mass_battle.sim.massbattle\n')
+    dotted = _modules_loaded_from_systems('import modules.mass_battle.massbattle\n')
     assert dotted, 'the probe reports NOTHING for a plain dotted import — it is broken'
 
     bare = _modules_loaded_from_systems(
-        "sys.path.insert(0, os.path.join(os.path.abspath('.'), 'systems', 'combat', "
-        "'combat_engine_v1'))\nimport combatant\n")
+        "sys.path.insert(0, os.path.join(os.path.abspath('.'), 'modules', 'combat'))\n"
+        "import combatant\n")
     assert bare, (
         'the probe reports NOTHING for a module loaded by sys.path + bare name. That is the exact '
         'seam it was rewritten to see; a name-prefix filter cannot, because the module is called '
@@ -553,8 +553,8 @@ def test_the_import_probe_can_observe_both_kinds_of_leak():
 
 
 def test_every_scan_here_reads_modules_as_well_as_systems(tmp_path):
-    """A-25, the hermetic half of its falsifier. `modules/` does not exist in the
-    repo yet, so the real tree cannot show that these scans would SEE a module — this plants one in a
+    """A-25, the hermetic half of its falsifier. The real `modules/` tree cannot
+    show that these scans would SEE a module (they would pass on it were it empty) — this plants one in a
     temporary tree and asserts each instrument fires, for BOTH roots. (The other half, a plant under
     a real `modules/_plant/`, was run when the position landed and is recorded in its commit.)
 

@@ -46,7 +46,7 @@ import json
 import os
 import sys
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
 sys.path.insert(0, ENGINE)
 
 GOLDEN = os.path.join(os.path.dirname(__file__), 'golden_element_parity.json')

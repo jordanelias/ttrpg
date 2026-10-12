@@ -408,9 +408,13 @@ def test_the_canon_mass_battle_engine_resolves_its_internal_edges_natively():
     root = sa.Path(_ROOT)
     mods = sa.collect_py_modules(root)
     g, _ = sa.build_g_code(root, mods)
+    # Plan position `31c` split the engine: `massbattle.py`'s import closure is the package
+    # `modules.mass_battle`, and `engine.py`, `bat.py` and the harnesses stayed under `systems/`. The
+    # engine is both halves, so an internal edge is one whose two ends lie in either.
+    engine = ('modules.mass_battle', 'systems.mass_battle.sim')
     internal = sum(
-        1 for m in g if m.startswith('systems.mass_battle.sim')
-        for t in g[m] if t.startswith('systems.mass_battle.sim')
+        1 for m in g if m.startswith(engine)
+        for t in g[m] if t.startswith(engine)
     )
     assert internal >= 20, (
         f"the canon mass-battle engine resolved only {internal} internal edges — it is in G_code "

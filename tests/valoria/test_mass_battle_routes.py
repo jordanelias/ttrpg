@@ -23,14 +23,14 @@ import math
 
 import pytest
 
-import systems.mass_battle.sim.hierarchy.units as _hu
-import systems.mass_battle.sim.orchestration as _orch
-from systems.mass_battle.sim.config import (SIDE_A_START_ROW, SIDE_B_START_ROW, TICKS_PER_PHASE,
+import modules.mass_battle.hierarchy.units as _hu
+import modules.mass_battle.orchestration as _orch
+from modules.mass_battle.config import (SIDE_A_START_ROW, SIDE_B_START_ROW, TICKS_PER_PHASE,
                                              MB_CAVALRY_SPEED_MULT, ROUTE_BUDGET_TICKS)
-from systems.mass_battle.sim.core.contact import check_orders
-from systems.mass_battle.sim.hierarchy.units import Order, Subunit, Unit
-from systems.mass_battle.sim.orchestration import run_battle
-from systems.mass_battle.sim.resolution import start_trace, get_trace
+from modules.mass_battle.core.contact import check_orders
+from modules.mass_battle.hierarchy.units import Order, Subunit, Unit
+from modules.mass_battle.orchestration import run_battle
+from modules.mass_battle.resolution import tracing
 
 
 def _bare_subunit(faction='A', col=25, troop_type='infantry', target_condition=None):
@@ -182,12 +182,9 @@ def test_dropped_waypoint_is_traced_not_silent():
     observe-only trace seam, resolution.trace_event -- zero cost when tracing is off), not just a
     silently shorter route."""
     u, su, anchor, (B, C) = _route_unit_from_offsets((5, 15))   # B within budget; cumulative to C is not
-    start_trace(True)
-    try:
+    with tracing() as recorded:
         check_orders(u, 1, [])
-        events = [e for e in get_trace() if e.get('cat') == 'route_clamped']
-    finally:
-        start_trace(False)
+        events = [e for e in recorded if e.get('cat') == 'route_clamped']
     assert su.route == (B,)
     assert len(events) == 1, f"expected exactly one route_clamped trace event, got {events}"
     assert events[0]['dropped'] == 1 and events[0]['kept'] == 1
@@ -197,12 +194,9 @@ def test_dropped_waypoint_is_not_traced_when_nothing_is_dropped():
     """Control: a route that fits entirely within budget must NOT emit a route_clamped event --
     otherwise the trace would be noise, not a diagnostic."""
     u, su, anchor, route = _route_unit_from_offsets((2, 4))
-    start_trace(True)
-    try:
+    with tracing() as recorded:
         check_orders(u, 1, [])
-        events = [e for e in get_trace() if e.get('cat') == 'route_clamped']
-    finally:
-        start_trace(False)
+        events = [e for e in recorded if e.get('cat') == 'route_clamped']
     assert events == []
 
 
@@ -238,12 +232,9 @@ def test_emergent_yield_abandons_a_route_rather_than_resuming_it_later():
     assert su.route == (B,)
     su.yielding = True
     assert su.yield_active, "control: yield_active must actually be True for this test to mean anything"
-    start_trace(True)
-    try:
+    with tracing() as recorded:
         assert su._resolve_route_goal() is None, "the route must not be offered as a goal while yield_active"
-        events = [e for e in get_trace() if e.get('cat') == 'route_abandoned']
-    finally:
-        start_trace(False)
+        events = [e for e in recorded if e.get('cat') == 'route_abandoned']
     assert su.route == () and su._route_idx == 0, "the route must be CLEARED (abandoned), not merely suspended"
     assert len(events) == 1 and events[0]['reason'] == 'yield', f"expected one route_abandoned/yield event, got {events}"
     su.yielding = False
@@ -262,12 +253,9 @@ def test_retreat_stance_abandons_a_route_rather_than_resuming_it_later():
     check_orders(u, 1, [])
     assert su.route == (B,)
     su.stance = 'retreat'
-    start_trace(True)
-    try:
+    with tracing() as recorded:
         assert su._resolve_route_goal() is None, "the route must not be offered as a goal while stance=='retreat'"
-        events = [e for e in get_trace() if e.get('cat') == 'route_abandoned']
-    finally:
-        start_trace(False)
+        events = [e for e in recorded if e.get('cat') == 'route_abandoned']
     assert su.route == () and su._route_idx == 0, "route data must be CLEARED (abandoned), not merely suspended"
     assert len(events) == 1 and events[0]['reason'] == 'retreat'
     su.stance = 'balanced'
@@ -293,12 +281,9 @@ def test_a_stalled_waypoint_is_dropped_after_the_route_budget_in_ticks():
         goal = su._resolve_route_goal()
         assert goal == B, "must keep offering the SAME unreached waypoint while under the tick bound"
     assert su._route_idx == 0, "control: cursor must not have moved yet"
-    start_trace(True)
-    try:
+    with tracing() as recorded:
         goal = su._resolve_route_goal()
-        events = [e for e in get_trace() if e.get('cat') == 'route_waypoint_stalled']
-    finally:
-        start_trace(False)
+        events = [e for e in recorded if e.get('cat') == 'route_waypoint_stalled']
     assert su._route_idx == 1, "the stalled waypoint must be force-dropped once the tick bound is reached"
     assert goal == C, "the goal must now be the NEXT waypoint (the route continues, it does not abort)"
     assert len(events) == 1 and events[0]['idx'] == 0, f"expected one route_waypoint_stalled event at idx 0, got {events}"

@@ -31,10 +31,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 from trace import run_traced_battle
-from systems.mass_battle.sim import config as _cfg
-from systems.mass_battle.sim.hierarchy import units as _units
-from systems.mass_battle.sim import geometry as _geo
-from systems.mass_battle.sim.troop_types import registry as _troop_registry
+from modules.mass_battle import config as _cfg
+from modules.mass_battle.hierarchy import units as _units
+from modules.mass_battle import geometry as _geo
+from modules.mass_battle.troop_types import registry as _troop_registry
 from systems.mass_battle.sim.engine import SUBUNIT_CAP
 
 _STATIC = os.path.join(os.path.dirname(__file__), 'static')

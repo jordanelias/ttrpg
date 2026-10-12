@@ -46,12 +46,26 @@ composition_roles:
   # validates it beside `kind:` (`_ENTRIES`); `engine/season/manifest/registrar.py` registers every row that
   # carries one into `MODULE_ENTRIES` at driver construction, resolving the target by string, and refuses a
   # `verb:` that names no verb row and an entry registered twice. A row with no `entry:` is not a module
-  # entry: `mass_battle.resolve_field` keeps its `require()` caller and is re-keyed `entry: verb_call`,
-  # `verb: march` at `31c`.
+  # entry. Since `31c` every row here carries one: `mass_battle.resolve_field`, the last without, was
+  # re-keyed `entry: verb_call`, `verb: march` with its target moved to `modules/mass_battle/`.
+
+  social_contest.roll:
+    target: "modules.social_contest.roll:roll"
+    entry: verb_call
+    verb: tell
+    needed_by: "engine/season/seam/wrappers/sigma.py — the host adapter `@provider(\"contest\", \"sigma_leverage\")` builds the typed input record and calls this entry through `manifest.MODULE_ENTRIES` (plan position `31a`, A-25). The registrar's first production row. The prize rows `a standing` and `a proposition` (`engine/season/rosters.yaml` `contest_subsystems`) name it in `module_entry:`, and `manifest/registry.py::check_contest_prizes` refuses at driver construction a prize row whose `module_entry:` no composition row declares, or one that disagrees with it."
+
+  combat.fight:
+    target: "modules.combat.fight:fight"
+    entry: verb_call
+    verb: fight
+    needed_by: "engine/season/seam/wrappers/combat.py — the host adapter `@provider(\"contest\", \"personal_combat\")` builds the typed input record (`combat_input`) and calls this entry through `manifest.MODULE_ENTRIES` (plan position `31b`, A-25). The prize row `the body` (`engine/season/rosters.yaml` `contest_subsystems`) names it in `module_entry:`, and `manifest/registry.py::check_contest_prizes` refuses at driver construction a prize row whose `module_entry:` no composition row declares, or one that disagrees with it. `verb: fight` is the registrar's one verb per row; `accept`, which contests the same prize, reaches this entry through the prize row, not through a second row (the registrar refuses one target under two roles)."
 
   mass_battle.resolve_field:
-    target: "systems.mass_battle.sim.massbattle:resolve_field"
-    needed_by: "engine/season/seam/wrappers/mass_battle.py — the `a field` prize's provider (ED-IN-0279, M3). This is the sanctioned route into systems/mass_battle/sim/ from engine/season/: massbattle.py's own internal imports are already proper dotted `systems.mass_battle.sim.*` (no flat/bare-import problem the way combat_engine_v1 has), so this goes through composition_roles rather than adding a second PATH_SEAM_ALLOWED entry that this subsystem's shape does not need."
+    target: "modules.mass_battle.massbattle:resolve_field"
+    entry: verb_call
+    verb: march
+    needed_by: "engine/season/seam/wrappers/mass_battle.py — the host adapter `@provider(\"contest\", \"mass_battle\")` builds the typed input record (`field_input`) and calls this entry through `manifest.MODULE_ENTRIES` (plan position `31c`, A-25; the `a field` prize's provider since ED-IN-0279, M3). The prize row `a field` (`engine/season/rosters.yaml` `contest_subsystems`) names it in `module_entry:`, and `manifest/registry.py::check_contest_prizes` refuses at driver construction a prize row whose `module_entry:` no composition row declares, or one that disagrees with it. The target moved from `systems/mass_battle/sim/` with the import closure of `massbattle.py` at `31c` (a package: its imports are dotted, so no `PATH_SEAM_ALLOWED` entry)."
 
 modules:
 
@@ -419,7 +433,7 @@ modules:
     aliases: ["Mass Combat"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "mass_battle"   # Key Type Registry vocabulary
     doc: .designs/systems/mass_battle/reference/mass_battle_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
-    # sim_module: deliberately absent until the MB lane adds it (reported `undeclared`, not `unresolvable`); mechanics_index.yaml carries `mass_battle -> systems/mass_battle/sim/massbattle.py`.
+    # sim_module: deliberately absent until the MB lane adds it (reported `undeclared`, not `unresolvable`); mechanics_index.yaml carries `mass_battle -> modules/mass_battle/massbattle.py`.
     scales: [scene]
     resolver: dice_pool
     state: []
@@ -447,7 +461,7 @@ modules:
         import resolve_mass_battle`, so the ~30-45 battles/campaign run on the SMALL tree. CONSEQUENCE: every
         MB-lane result -- Track F, the flag bisects, the geometry spec S1-S4, the 9 red CI tests -- is measured
         on a tree the campaign never executes. FORK IMPACT: plan of record section 5 says carry systems/*/sim
-        and LEAVE tests/, which would carry the stale engine and abandon canon. Section 5 corrected. [SUPERSEDED 2026-10-01: `faction_action.py` and `resolve_mass_battle` were deleted at plan position `29b`; the only live caller of `massbattle.py` is now `seam/wrappers/mass_battle.py` through `resolve_field`.] [BUILD `gated` since the Batch 1a close: the provider runs only when ENCOUNTER admits a march past H-149 target-kind check, and none of the realm marches do (`hole_register.yaml` H-149).]'
+        and LEAVE tests/, which would carry the stale engine and abandon canon. Section 5 corrected. [SUPERSEDED 2026-10-01: `faction_action.py` and `resolve_mass_battle` were deleted at plan position `29b`; the only live caller of `massbattle.py` is now `seam/wrappers/mass_battle.py` through `resolve_field`.] [SUPERSEDED, plan position `31c`: the canon tree this note names is now `modules/mass_battle/` (the reachable closure); `systems/mass_battle/sim/` keeps the harnesses and workbench.] [BUILD `gated` since the Batch 1a close: the provider runs only when ENCOUNTER admits a march past H-149 target-kind check, and none of the realm marches do (`hole_register.yaml` H-149).]'
 
   - module: domain_actions
     aliases: ["Domain Echo"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
@@ -815,8 +829,8 @@ modules:
 
   - module: combat   # one identity per module, its directory name; the prize row `the body` (`engine/season/rosters.yaml` `contest_subsystems`) names it by this key. Its PROVIDER keeps the name `personal_combat` -- a provider name says what runs, not whose module it is
     registry_system: "personal_combat"   # Key Type Registry vocabulary
-    doc: systems/combat/combat_engine_v1/   # CANONICAL (ED-900/904; docket ED-1029)
-    sim_module: systems/combat/combat_engine_v1/
+    doc: systems/combat/combat_engine_v1/   # CANONICAL (ED-900/904; docket ED-1029). The DESIGN prose (`.designs/` mirrors this path); the code moved to `sim_module:` at plan position `31b`
+    sim_module: modules/combat/
     godot_home: godot/skeleton/engines/combat/   # CombatEngine (BaseEngine) + Strike/Wound modules (slice)
     typed_params: engine/engine_params/combat_engine_v1.json   # GENERATED from config.py + core.py (tools/export_engine_params.py, schema v2 — OPT-AV-17 added the core-constants section); round-trip-checked blocking in CI; the port regenerates from THIS, never hand-edits (ED-1050 discipline; ED-1052 seed)
     scales: [personal]

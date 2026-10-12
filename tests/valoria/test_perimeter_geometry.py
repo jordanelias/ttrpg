@@ -7,8 +7,8 @@ import sys
 
 
 import pytest  # noqa: E402
-from systems.mass_battle.sim.geometry import CELL_PATTERN_FN  # noqa: E402
-from systems.mass_battle.sim.perimeter import (  # noqa: E402
+from modules.mass_battle.geometry import CELL_PATTERN_FN  # noqa: E402
+from modules.mass_battle.perimeter import (  # noqa: E402
     target_points, perimeter_faces, nearest_target, approach_alignment, _centroid, SHARP_TIP_DEG,
 )
 

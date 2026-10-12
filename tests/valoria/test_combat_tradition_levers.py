@@ -21,7 +21,7 @@ import sys
 
 import pytest
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
 sys.path.insert(0, ENGINE)
 
 import random  # noqa: E402
@@ -133,7 +133,7 @@ def test_levers_add_texture_without_shifting_balance():
     floor lowered to a proportional 2% (~2.5x margin below the new true minimum, same margin ED-PC-0034 used
     against the old true rate) — still failing loudly if the levers go dead."""
     import os as _os
-    _wb = _os.path.join(ENGINE, 'workbench'); sys.path.insert(0, _wb)
+    _wb = _os.path.join(_os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1', 'workbench'); sys.path.insert(0, _wb)   # stayed at `31b`
     from trace import run_traced_fight  # noqa: E402
     OFF = dict(CFG, LEGIB_EDGELINE_K=0, BIND_SPINE_K=0, GRAB_EDGE_K=0, CHOKE_ACCURACY_K=0, FACING_REGIME_K=0)
 

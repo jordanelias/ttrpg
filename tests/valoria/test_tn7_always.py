@@ -47,7 +47,7 @@ import pytest
 
 from engine.dice_engine import dice_engine as de
 from engine.dice_engine import sigma_leverage as sl
-from systems.mass_battle.sim import resolution as mb
+from modules.mass_battle import resolution as mb
 
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
@@ -105,7 +105,7 @@ def test_the_mass_battle_roller_uses_the_same_face_window():
                 return face
 
         import contextlib
-        from systems.mass_battle.sim import rngsource
+        from modules.mass_battle import rngsource
         with contextlib.ExitStack() as stack:
             stack.enter_context(rngsource.using(_FixedRng()))
             got = mb.roll_pool(1)
@@ -282,6 +282,6 @@ def test_the_hand_rolled_scan_actually_reaches_a_hand_roller():
     """
     files = dict(_files_that_roll_their_own_d10s())
     assert files, "no file rolls its own d10 any more — this scan is now vacuous"
-    assert "systems/mass_battle/sim/resolution.py" in files, sorted(files)
+    assert "modules/mass_battle/resolution.py" in files, sorted(files)
     parsed = sum(1 for _p, t in files.items() for _ in [ast.parse(t)])
     assert parsed >= 2, f"only {parsed} hand-rolling file(s) parsed"

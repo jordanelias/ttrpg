@@ -97,6 +97,17 @@ MODULE_CODE_ROOTS = (
 # regex, or tests a loaded module's file against a prefix.
 MODULE_CODE_DIRS = tuple(name for name, _ in MODULE_CODE_ROOTS)
 
+# ── one owner: the module directories whose constants ship through their OWN typed export (plan position `31b`) ──
+# Such a module is module code -- every `MODULE_CODE_DIRS` scan reads it -- but it is NOT a sim-reference
+# root: `sim_reference_roots()` skips a whole-directory (`*`) row's match whose name is listed here. So
+# `tools/export_sim_params.py` does not re-export its constants into `sim_params.json` beside its own
+# export, `tools/export_game_constants.py` keeps reading that export, and `tools/ci_sim_fabrication_check.py`
+# and `tools/ci_quantity_vocabulary_check.py` keep the scope they had before the module moved.
+#   `combat` -- `tools/export_engine_params.py` -> `engine/engine_params/combat_engine_v1.json` (ED-1052). It
+#   was outside every sim root at `systems/combat/combat_engine_v1/`; bringing it in is ED-IN-0119's PC-lane
+#   call (the fabrication check's KNOWN GAP), not the move's.
+MODULES_WITH_OWN_EXPORT = ('combat',)
+
 
 def sim_reference_roots(repo_root=None):
     """Every directory the 1:1 Python sim reference now lives under. ONE OWNER (ED-IN-0087).
@@ -121,7 +132,8 @@ def sim_reference_roots(repo_root=None):
     root = repo_root or _REPO
     roots = [os.path.join(root, 'engine')]
     for top, under in MODULE_CODE_ROOTS:
-        roots += sorted(glob.glob(os.path.join(root, top, under)))
+        roots += sorted(p for p in glob.glob(os.path.join(root, top, under))
+                        if not (under == '*' and os.path.basename(p) in MODULES_WITH_OWN_EXPORT))
     # `modules/*` matches `modules/__pycache__` once anything is imported from there; it is a
     # directory but never a module, and a prefix for it would claim a tree that holds no source.
     return [p for p in roots if os.path.isdir(p) and os.path.basename(p) != '__pycache__']

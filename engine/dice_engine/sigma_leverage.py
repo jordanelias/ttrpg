@@ -13,7 +13,7 @@ Purpose
 Single-source the σ-leverage modifier layer for BOTH combat and social-contest, retiring:
   • the test-dir dependency (tests/sim/v32-combat-balance/m1_dice_sigma_core.py)
   • the numpy dependency that file carried
-  • the combat sys.path.insert hack (systems/combat/combat_engine_v1/core.py:3)
+  • the combat sys.path.insert hack (formerly systems/combat/combat_engine_v1/core.py:3; the file is now modules/combat/core.py)
   • the distillation report's "two σ-kernels" debt
 
 Separation of concerns (D0-2):
@@ -321,7 +321,7 @@ def roll_net_continuous(pool: float, tn: int = TN_STANDARD, rng: random.Random |
     without a control is not a measurement):
       * faction strategic actions — 4-season seeded campaign, 40 calls, **20 already fractional**
         (4.3, 4.6, 4.9, 5.3, 5.5, …), every one silently rounded before this change. These MOVE.
-      * personal combat, via `systems/combat/combat_engine_v1/core.py:56` — 749 calls driven
+      * personal combat, via `modules/combat/core.py:56` — 749 calls driven
         through `workbench.balance.winrate` at n=120, **749 integral, 0 fractional**, because
         `core.resolution_pool()` returns `max(POOL_FLOOR, int(round(history)) + BASE_POOL)` and no
         call site modifies it. `int(round(n)) == n` for integral n, so combat is value-identical

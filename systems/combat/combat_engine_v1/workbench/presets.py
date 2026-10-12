@@ -15,6 +15,7 @@ cfg), so nothing global mutates. promote_diff() renders the overlay as a reviewa
 the actual canonical write stays a deliberate, ratified step (Class A can never be in an overlay)."""
 import sys, os, json, copy
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../../tests/sim/v32-combat-balance'))  # measurement harness reaches into the FROZEN v32 validation station BY DESIGN (dev tooling; doctrine container-hygiene exclusion, ED-1085)
 import config
 import core
@@ -97,7 +98,7 @@ def promote_diff(overrides):
     body = "\n".join(rows) if rows else "  (no changes vs current config.CFG)"
     ledger_stub = {
         "kind": "combat-tuning-promotion",
-        "target": "systems/combat/combat_engine_v1/config.py (CFG)",
+        "target": "modules/combat/config.py (CFG)",
         "overrides": {k: overrides[k] for k in sorted(overrides) if k in base},
         "note": "PROPOSED via workbench scratch preset; ratify before writing to config.py (Class-C seeds).",
     }

@@ -34,7 +34,7 @@ from systems.mass_battle.sim.engine import (  # noqa: E402
     Subunit, Unit, SIDE_A_START_ROW, SIDE_B_START_ROW,
     run_battle, run_multi_turn_battle, build_unit, build_army, build_envelopment, build_refused_flank,
     resolve_battle, _centered_line_cols)
-from systems.mass_battle.sim.config import TROOPS_PER_TIER, MB_VOLLEYS_START  # noqa: E402
+from modules.mass_battle.config import TROOPS_PER_TIER, MB_VOLLEYS_START  # noqa: E402
 
 # ─────────────────────────────────────────────────────────────────────────────────────────────────
 # [ED-MB-0027] HONEST-GAUGE density-matching constants (fiat register §1 measurement integrity).
@@ -563,12 +563,12 @@ def run(mode, tests=TESTS, n=60):  # [Jordan directive 2026-07-01: default sampl
 
 if __name__=='__main__':
     # Cavalry rows are PER_CELL=1-only (engine gates charge_pen + speed mult on PER_CELL). Read the
-    # RESOLVED config value (systems.mass_battle.sim.config.PER_CELL), not a second, independently-defaulted
+    # RESOLVED config value (modules.mass_battle.config.PER_CELL), not a second, independently-defaulted
     # os.environ.get -- the latter drifted out of sync with config.PER_CELL's own default the moment
     # gate 4 (ED-MB-0001) flipped PER_CELL's default '0'->'1': a bare invocation now runs the engine
     # with PER_CELL=True, but a locally re-derived '0' fallback here would still silently exclude
     # CAV_TESTS, exactly the mode-key mismatch bat.py's compute() was fixed for at the same time.
-    import systems.mass_battle.sim.config as _mb_cfg
+    import modules.mass_battle.config as _mb_cfg
     _pc = _mb_cfg.PER_CELL
     _tests = TESTS + (CAV_TESTS if _pc else [])
     s=run('single', _tests); m=run('multi', _tests)

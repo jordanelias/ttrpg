@@ -27,6 +27,16 @@ on, since no data at `30` declares that a row must exist, so the fresh-process f
 (8) `test_the_composition_export_round_trips`, with
 `test_engine_does_not_import_systems.py::test_importing_every_engine_module_pulls_in_no_subsystem`.
 
+Plan position `31a` (IN-03) landed the first production entry row (`ID-13` above is history) and
+places the declaration that a row must exist: a prize row's `module_entry:`, held to its composition
+row by `manifest/registry.py::check_contest_prizes`. Its falsifier (3), the fresh-process form of
+`30`'s (2): `test_a_production_entry_row_deleted_in_a_fresh_process_refuses_naming_it`, with the two
+disagreement arms after it.
+
+Plan position `31b` (IN-04) landed the second production entry row, `combat.fight` (the prize row `the
+body`); the fresh-process deletion test now runs once per prize-named role. Plan position `31c` (IN-05)
+landed the third, `mass_battle.resolve_field` (the prize row `a field`), and with it `31c`'s falsifier (3).
+
 Plan position IN-41 (`SM-11` + `SM-9`; it left the plan at B-B's close, `4a2e4494`), which split the retired `decline_note:` column into
 `effect_decline_note:`, `formation_decline_note:` and `requires_decline_note:`: falsifier (1)
 `test_a_row_with_an_untyped_precondition_nothing_evaluates_refuses_naming_the_verb`, with its converse
@@ -119,18 +129,22 @@ def test_a_planted_entry_is_registered_by_string_at_construction_and_idempotentl
     unchanged."""
     got = _run("""
 verb = _verbs[0]
+production = sorted(r for r, row in composition.ROLES.items() if row.get("entry") and r != "planted.entry")
 before = sorted(MODULE_ENTRIES)
 first = construct()
 after = {r: (e.entry, e.verb, e.target, e.fn.__name__) for r, e in MODULE_ENTRIES.items()}
 second = construct()
 again = {r: (e.entry, e.verb, e.target, e.fn.__name__) for r, e in MODULE_ENTRIES.items()}
-print(repr((verb, before, first, after, second, again)))
+print(repr((verb, production, before, first, after, second, again)))
 """, head=_HEAD_BEFORE_THE_SEASON_IMPORTS)
-    verb, before, first, after, second, again = got
+    verb, production, before, first, after, second, again = got
     assert before == [], f"MODULE_ENTRIES was filled before any driver was constructed: {before}"
     assert first is None and second is None, (first, second)
-    assert after == {"planted.entry": ("verb_call", verb, "engine.dice_engine.dice_engine:degree_from_net",
-                                       "degree_from_net")}, after
+    # `31a` landed the first production entry row; the table holds the planted row and every
+    # production row carrying `entry:` (derived from the rows, not named).
+    assert set(after) == {"planted.entry", *production}, (after, production)
+    assert after["planted.entry"] == ("verb_call", verb, "engine.dice_engine.dice_engine:degree_from_net",
+                                      "degree_from_net"), after
     assert again == after, "a second construction changed MODULE_ENTRIES -- the registrar is not idempotent"
 
 
@@ -148,6 +162,83 @@ del composition.ROLES["planted.entry"]
 print(repr(construct()))
 """)
     _assert_refused(refusal, "planted.entry", "no composition row declares")
+
+
+#: The roles the prize rows name in `module_entry:` -- read from the rows, never named here.
+_PRIZE_ENTRIES = """
+import engine.season.manifest.registry as R
+named = sorted({row.get("module_entry") for row in R.roster_map("contest_subsystems", "prizes").values()
+                if isinstance(row, dict) and row.get("module_entry")})
+"""
+
+
+def test_a_production_entry_row_deleted_in_a_fresh_process_refuses_naming_it():
+    """Plan position `31a`'s falsifier (3) -- `30`'s falsifier (2) in its FRESH-PROCESS form: delete a
+    production composition row before any driver exists -> driver construction refuses naming it.
+
+    The registrar alone cannot see this (its table is empty in a fresh process, so it holds nothing
+    to miss); the declaration that the row must exist is the prize row's `module_entry:`, and
+    `manifest/registry.py::check_contest_prizes` refuses its absence. `before == []` is what makes this
+    the fresh-process form: the refusal cannot be the registrar's unbacked-entry one.
+
+    EVERY named role, one fresh process each (plan position `31b` added `combat.fight` beside `31a`'s
+    `social_contest.roll`; a test of `named[0]` alone would have stopped covering the first row the day a
+    second sorted ahead of it)."""
+    named = _run(_PRIZE_ENTRIES + "print(repr(named))\n")
+    assert len(named) >= 3, f"fewer prize-named entry rows than `31a`, `31b` and `31c` landed: {named}"
+    for i in range(len(named)):
+        got = _run(_PRIZE_ENTRIES + f"""
+role = named[{i}]
+in_rows = role in composition.ROLES
+before = sorted(MODULE_ENTRIES)
+if in_rows:
+    del composition.ROLES[role]
+print(repr((role, in_rows, before, construct())))
+""")
+        role, in_rows, before, refusal = got
+        assert in_rows, f"the prize rows name {role!r}, which no composition row declares"
+        assert before == [], f"MODULE_ENTRIES was filled before construction: {before}"
+        _assert_refused(refusal, repr(role), "module_entry", "no composition row declares")
+
+
+def test_a_prize_entry_whose_composition_row_targets_another_module_refuses_naming_it():
+    """`31a`, agreement fact 2: the composition row's target lies in a module other than the prize
+    row's `module:` -- the two owners of which module is called disagree. Planted by re-targeting the
+    row at an engine callable (its package is not the prize's module)."""
+    got = _run(_PRIZE_ENTRIES + """
+role = named[0]
+composition.ROLES[role] = dict(composition.ROLES[role], target=TARGET)
+print(repr((role, construct())))
+""")
+    role, refusal = got
+    _assert_refused(refusal, repr(role), "is not a `verb_call` into module")
+
+
+def test_a_prize_entry_bound_to_a_verb_whose_prize_does_not_name_it_refuses_naming_it():
+    """`31a`, agreement fact 3: the composition row's `verb:` contests a prize whose row does not
+    name the entry, so the verb the entry is bound to can never reach it. The verb is chosen from the
+    tables -- a contested verb whose prize row names another entry or none -- not named.
+
+    Since `31c` every contested verb is some entry row's `verb:`, so the chosen verb is already bound;
+    rebinding the role to it alone would trip the registrar's one-entry-per-verb refusal first and test
+    that instead. So the two rows SWAP verbs: each is then bound to a verb whose prize names the other,
+    and construction refuses fact 3 for whichever prize row it checks first -- naming that pair."""
+    got = _run(_PRIZE_ENTRIES + """
+role = named[0]
+verb = sorted(v for v, r in VERB_TABLE.items() if r.contests
+              and (R.resolve("contest", r.contests) or {}).get("module_entry") != role)[0]
+own = composition.ROLES[role].get("verb")
+other = [k for k, row in composition.ROLES.items() if k != role and row.get("verb") == verb]
+for k in other:
+    composition.ROLES[k] = dict(composition.ROLES[k], verb=own)
+composition.ROLES[role] = dict(composition.ROLES[role], verb=verb)
+print(repr((role, verb, other, own, construct())))
+""")
+    role, verb, other, own, refusal = got
+    assert refusal is not None and "no prize row among them" in refusal[1], refusal
+    pairs = [(role, verb)] + [(k, own) for k in other]
+    assert any(repr(r) in refusal[1] and repr(v) in refusal[1] for r, v in pairs), (
+        f"the refusal names none of the swapped pairs {pairs}: {refusal}")
 
 
 def test_a_verb_call_row_naming_no_verb_refuses_naming_it():
@@ -374,6 +465,7 @@ def test_the_populated_realm_constructs_a_driver_and_every_check_ran():
     got = _run("""
 import engine.season.manifest as M
 from engine.season.harness.populated import build_realm
+production = sorted(r for r, row in composition.ROLES.items() if row.get("entry"))
 seen = {}
 for name in ("register_module_entries", "check_rows", "check_contest_prizes", "check_effects",
              "check_preconditions"):
@@ -385,15 +477,16 @@ for name in ("register_module_entries", "check_rows", "check_contest_prizes", "c
     setattr(M, name, wrapped)
 w = build_realm(0)
 SeasonDriver(w)
-print(repr(seen))
+print(repr((production, seen)))
 """)
+    production, got = got
     assert set(got) == {"register_module_entries", "check_rows", "check_contest_prizes",
                         "check_effects", "check_preconditions"}, got
     assert (got["check_rows"] and got["check_contest_prizes"] and got["check_effects"]
             and got["check_preconditions"]), got
-    assert got["register_module_entries"] == 0, (
-        f"{got['register_module_entries']} production row(s) registered; at `30` there are none "
-        "(ID-13), and the first is `31a`'s -- re-read this test when one lands")
+    # `31a` landed the first production entry row (ID-13); the registrar registers every one of them.
+    assert production, "no production composition row carries `entry:`; `31a`'s row is gone"
+    assert got["register_module_entries"] == len(production), (got, production)
 
 
 def test_the_composition_export_round_trips():

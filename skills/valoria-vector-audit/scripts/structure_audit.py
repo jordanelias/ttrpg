@@ -181,8 +181,10 @@ def degrees(adj, nodes):
 # ZERO simulation code — the code-architecture layer was blind to the entire engine for five days
 # and nothing failed. See EXTRA_CODE_ROOTS for the live-engine-under-tests/ exception, and
 # tests/valoria/test_structure_audit.py::test_code_roots_all_exist for the guard that makes this
-# class of silent-blindness fail loudly on recurrence.
-CODE_ROOTS = ('engine', 'systems', 'tools')
+# class of silent-blindness fail loudly on recurrence. The game-code roots besides `engine/` are
+# `ci_common.MODULE_CODE_DIRS` (`systems`, and `modules` since A-25), read from that owner: plan position
+# `31b` moved the personal-combat engine into `modules/combat/`, which a hand list without it left unjoined.
+CODE_ROOTS = ('engine', *ci_common.MODULE_CODE_DIRS, 'tools')
 
 # Live engine code that sits UNDER a SKIP_DIR_PARTS directory and would otherwise be invisible.
 # `systems/mass_battle/sim/` is the actively-developed multi-unit battle engine (~10.5k LOC, last

@@ -87,7 +87,7 @@ def test_a_basename_heuristic_would_still_see_none_of_it():
 
 
 @pytest.mark.parametrize('path,expected', [
-    ('systems/mass_battle/sim/massbattle.py', True),
+    ('modules/mass_battle/massbattle.py', True),
     ('engine/season/loop/driver.py', True),
     ('engine/substrate/keys.py', True),
     ('tests/sim/mass_battle/bat.py', True),      # frozen, but was already in scope — not dropped
@@ -165,7 +165,7 @@ def test_the_exclusion_did_not_swallow_real_reference_code():
     """The other direction — the exclusion is by root, and must not reach the oracle or the
     throwaway audit sims that the basename rule exists to keep."""
     mod = _load()
-    assert mod.is_sim_file('systems/mass_battle/sim/massbattle.py') is True
+    assert mod.is_sim_file('modules/mass_battle/massbattle.py') is True
     assert mod.is_sim_file('audit/2026-04-30-architecture-session/sims/pp686_sim.py') is True
     assert mod.is_sim_file('tests/sim/mass_battle/bat.py') is True
 

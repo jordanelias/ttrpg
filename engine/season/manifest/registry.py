@@ -1,6 +1,8 @@
 """`manifest/registry.py` -- the role -> provider rows and the checks over them: `check_rows()`, and
 (plan position `30`) the driver-construction refusals `check_contest_prizes()` and `check_effects()`,
-and (plan position IN-41) `check_preconditions()`, refusal (a)'s precondition twin.
+and (plan position IN-41) `check_preconditions()`, refusal (a)'s precondition twin. Plan position
+`31a` adds `check_contest_prizes()`'s third half: a prize row's `module_entry:` agrees with its
+composition row.
 
 A REGISTRY, in this repo, is a register (see `harness/register.py`) that code reads at load to look
 a key up; these rows are one.
@@ -164,10 +166,16 @@ def resolve(role: str, key: Any) -> Optional[dict]:
     # reaching into the roster row a second way -- one reader, not two.
     step = row.get("step") if isinstance(row, dict) else None
     declares = row.get("declares") if isinstance(row, dict) else None
+    # Plan position `31a` (A-25). `module_entry:` names the composition role the provider calls
+    # through `MODULE_ENTRIES` -- the prize row's half of *"two owners say which module is called"*.
+    # Absent means the provider calls no module entry (yet). Read here for `step:`'s reason: one
+    # reader of the row, not two; `check_contest_prizes()` holds it to its composition row.
+    module_entry = row.get("module_entry") if isinstance(row, dict) else None
     contracts = files.MODULE_CONTRACTS_YAML
     if not contracts.exists():
         return dict(module=name, provider=provider_name, resolver="unknown",
-                    doc="module_contracts.yaml not found", step=step, declares=declares)
+                    doc="module_contracts.yaml not found", step=step, declares=declares,
+                    module_entry=module_entry)
     for m in _contracts():
         if m.get("module") == name:
             # ⚠ THE PYTHON, NOT THE MARKDOWN. Jordan, 2026-09-02: *"we aren't using the .md or
@@ -183,7 +191,7 @@ def resolve(role: str, key: Any) -> Optional[dict]:
                               f"`doc:` is {m.get('doc')!r} and is out of date)")
             return dict(module=name, provider=provider_name,
                         resolver=m.get("resolver") or "undeclared", doc=where,
-                        step=step, declares=declares)
+                        step=step, declares=declares, module_entry=module_entry)
     raise Unspecified(
         f"`{roster}` maps {key!r} to {name!r}, which is in no module contract", "S39",
         needs="a module named in references/module_contracts.yaml",
@@ -284,10 +292,15 @@ def unclaimed_contest_prizes(verb_table: dict) -> list:
         prizes = getattr(row, "contests", None)
         if not prizes:
             continue
-        for p in ([prizes] if isinstance(prizes, str) else list(prizes)):
+        for p in _as_list(prizes):
             if str(p) not in claimed:
                 out.append((verb, str(p)))
     return out
+
+
+def _as_list(x: Any) -> list:
+    """A verb's `contests:` is one prize name or a list of them; either way, a list."""
+    return [x] if isinstance(x, str) else list(x)
 
 
 def check_contest_prizes(verb_table: dict) -> list:
@@ -298,6 +311,8 @@ def check_contest_prizes(verb_table: dict) -> list:
     2. A prize row whose `provider:` nobody registered -- refused naming the PRIZE. `has()` asks the
        CODE (`PROVIDERS`, filled when `seam/` is imported), not the data; a row with no `provider:`
        at all is the same defect, since nothing can be registered under no name.
+    3. (plan position `31a`) A prize row whose `module_entry:` disagrees with its composition row, or
+       names one no row declares -- refused naming the role (`_check_module_entry`, below).
 
     ⚠ HALF 2 IS WHY `loop/driver.py::resolvable_verbs()` LOST ITS `manifest.has` CLAUSE. That clause
     dropped a contested verb from the game SILENTLY when its prize's provider was not registered;
@@ -316,7 +331,8 @@ def check_contest_prizes(verb_table: dict) -> list:
     checked = []
     for role, (roster, column) in _ROLE_ROSTERS.items():
         for key in roster_map(roster, column):
-            name = (resolve(role, key) or {}).get("provider")
+            row = resolve(role, key) or {}
+            name = row.get("provider")
             if not name or not has(role, name):
                 raise Unspecified(
                     f"`{roster}` prize {key!r} names provider {name!r}, which nobody registered", "S43",
@@ -325,8 +341,61 @@ def check_contest_prizes(verb_table: dict) -> list:
                     law="S43 -- a missing provider is a STARTUP FAILURE WITH A NAME IN IT; before "
                         "plan position `30` it silently removed every verb contesting the prize "
                         "from the game")
+            _check_module_entry(role, key, row, verb_table)
             checked.append((role, key))
     return checked
+
+
+def _check_module_entry(role: str, key: Any, row: dict, verb_table: dict) -> None:
+    """Refusal (c), half 3 -- plan position `31a`: **a prize row's `module_entry:` and its composition
+    row agree** (A-25: *"two owners say which module is called -- the prize row and the composition
+    row"*). A prize row with no `module_entry:` calls no module entry and is not checked.
+
+    THIS IS THE DECLARATION THAT A ROW MUST EXIST. The registrar refuses only a role it already holds
+    (`manifest/registrar.py`), so in a fresh process a deleted composition row left nothing to refuse
+    on (plan position `30`'s falsifier 2, observed only within one process). The prize row names the
+    role, so the row's absence is refused here, at driver construction, naming it. The composition
+    rows are read through `engine/substrate/composition.py` (data loaded at import), never through
+    `MODULE_ENTRIES`, so this refusal does not depend on a driver having been constructed earlier in
+    the process. Agreement is three facts, each refused naming the role:
+      1. a composition row declares the role and carries `entry:`;
+      2. it is a `verb_call` whose target lies in the prize row's `module:` -- the module's one
+         identity is its directory name, the target's first package under its root (A-25);
+      3. its `verb:` contests a prize whose row names the same role, so the verb the entry is bound
+         to reaches it through the seam."""
+    entry_role = row.get("module_entry")
+    if entry_role is None:
+        return
+    from engine.substrate import composition
+
+    law = ("A-25 -- two owners say which module is called, the prize row (`contest_subsystems`) and "
+           "the composition row; they agree or the driver does not construct")
+    comp = composition.ROLES.get(entry_role)
+    if comp is None or not comp.get("entry"):
+        raise Unspecified(
+            f"{role}:{key!r} names `module_entry: {entry_role!r}`, which no composition row declares "
+            f"as an entry", "04 PART E step 10",
+            needs="the composition row back in references/module_contracts.yaml `composition_roles:` "
+                  "(re-run tools/export_composition.py), or the prize row's `module_entry:` fixed",
+            law=law)
+    parts = str(comp["target"]).split(":", 1)[0].split(".")
+    if comp.get("entry") != "verb_call" or len(parts) < 2 or parts[1] != row.get("module"):
+        raise Unspecified(
+            f"{role}:{key!r} names `module_entry: {entry_role!r}`, whose composition row "
+            f"(`entry: {comp.get('entry')}`, target {comp['target']!r}) is not a `verb_call` into "
+            f"module {row.get('module')!r}", "04 PART E step 10",
+            needs="the prize row and the composition row naming the same module, by its directory",
+            law=law)
+    verb = comp.get("verb")
+    contests = getattr(verb_table.get(verb), "contests", None) or []
+    prizes = _as_list(contests)
+    if not any((resolve(role, p) or {}).get("module_entry") == entry_role for p in prizes):
+        raise Unspecified(
+            f"composition row {entry_role!r} binds `verb: {verb!r}`, which contests {prizes!r}; no "
+            f"prize row among them names `module_entry: {entry_role!r}` (prize {key!r} does)",
+            "04 PART E step 10",
+            needs="the composition row's `verb:` naming a verb whose prize calls this entry",
+            law=law)
 
 
 # ---------------------------------------------------------------------------

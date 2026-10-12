@@ -39,7 +39,7 @@ def _volley_loss(dr, n=12):
     melee also consumes `eff_dr`, and that melee protection masks the volley inversion (my first version
     of this test passed against the known-buggy code for exactly that reason). Drive volley_phase
     directly and read its own reported loss."""
-    from systems.mass_battle.sim.orchestration import volley_phase
+    from modules.mass_battle.orchestration import volley_phase
     total = 0.0
     for s_ in range(n):
         random.seed(1_000_000 + s_)
@@ -62,11 +62,11 @@ def test_armour_is_monotonically_protective_against_missiles():
 
 def test_volley_scale_is_independent_of_target_quality():
     """The Size->troops volley conversion must not read the target's own stats."""
-    from systems.mass_battle.sim.config import VOLLEY_LETHALITY_SCALE
+    from modules.mass_battle.config import VOLLEY_LETHALITY_SCALE
     assert isinstance(VOLLEY_LETHALITY_SCALE, (int, float))
     # A unit's own discipline/command/dr must not appear in the conversion factor.
     import inspect
-    from systems.mass_battle.sim import orchestration
+    from modules.mass_battle import orchestration
     src = inspect.getsource(orchestration.run_battle)
     assert 'volley_hp_scale = lambda u: VOLLEY_LETHALITY_SCALE' in src, (
         "volley_hp_scale must be a flat constant; a per-target expression reintroduces the inversion")

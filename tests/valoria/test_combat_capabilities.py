@@ -7,8 +7,10 @@ from what the engine enforces.
 import os
 import sys
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
+ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
 sys.path.insert(0, ENGINE)
+# `capabilities.py` was not reached from `wrapper`/`combatant` and stayed where the engine was (plan position `31b`).
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1'))
 
 import capabilities as C  # noqa: E402
 import combat_systems as S  # noqa: E402

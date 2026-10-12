@@ -1,11 +1,15 @@
-"""THE σ-LEVERAGE PROVIDER — the seam's wrapper around the resolver Jordan named.
+"""THE σ-LEVERAGE PROVIDER — the host adapter and the host INPUT BUILDER for the `social_contest`
+module's roll (plan position `31a`, A-25).
 
-`04_CODE_ARCHITECTURE.md` §A.2:164 types `seam/wrappers/*` as writing *"nothing, ever"*, reading
+`04_CODE_ARCHITECTURE.md` §A.2:182 types `seam/wrappers/*` as writing *"nothing, ever"*, reading
 *"the projection"*, returning *"a `Margin`"*, holding token *"none"*. This module is that row. It
-DECIDES NOTHING: it derives a pool and an obstacle from what the actor and the subject genuinely
-have, calls the σ layer, and returns the net/ob pair as a dict — the shape `combat_seam` already
-returns and `degree_of` already grades. It NEVER returns a band; `seam/ladder.py` reads one by
-calling `degree_from_net`, which is the single owner.
+DECIDES NOTHING: `contest_input` (the host input builder) derives a pool and an obstacle from what
+the actor and the subject genuinely have and freezes them into `queries/inputs.py::SocialContestInput`;
+`resolve` (the adapter) keeps S27.4's refusal, then calls the module entry the prize row names
+(`module_entry:`, registered in `manifest.MODULE_ENTRIES` from its composition row) and returns what
+it returned -- the net/ob pair as a dict, the shape `combat_seam` already returns and `degree_of`
+already grades. It NEVER returns a band; `seam/ladder.py` reads one by calling `degree_from_net`,
+which is the single owner. The roll itself is `modules/social_contest/roll.py`, reached by string.
 
 ⚠ THIS DOCSTRING NAMES NO BAND, ON PURPOSE AND UNDER A MEASURED CONSTRAINT.
 `tests/valoria/test_degree_ladder_single_owner.py`'s `_PRODUCES_BAND` scan reads raw file TEXT
@@ -16,7 +20,8 @@ Keep it band-free.
 RULED, ED-SC-0037. JORDAN, 2026-09-09, VERBATIM: *"we have the sigma leverage d10 resolver in
 engine to use."* A third option neither of that row's two costed.
 
-⚠⚠ **BOTH IMPORTS, AND THE SECOND ONE IS THE POINT.** `roll_net` ALONE APPLIES ZERO σ-LEVERAGE:
+⚠⚠ **BOTH IMPORTS, AND THE SECOND ONE IS THE POINT** -- they are the module's now
+(`modules/social_contest/roll.py`), carried there with this reasoning. `roll_net` ALONE APPLIES ZERO σ-LEVERAGE:
 `sigma_leverage.py::roll_net` is a back-compat shim — *"The authoritative implementation is
 dice_engine.roll_pool"* — that floors the pool, delegates, and **drops `roll_pool`'s `ob`
 parameter**, which `roll_pool` accepts and grades on. Importing it alone is strictly `roll_pool`
@@ -27,7 +32,7 @@ own, at `systems/social_contest/sim/contest/resolver.py:302`:
 
     net = roll_net(pool) + net_boost(lev, pool)
 
-⚠ **THE SEAM STILL DERIVES AN OBSTACLE, AND AN EARLIER READING OF ED-SC-0037 CLAIMED IT DID NOT.**
+⚠ **THE HOST STILL DERIVES AN OBSTACLE (`contest_input`), AND AN EARLIER READING OF ED-SC-0037 CLAIMED IT DID NOT.**
 `sigma_leverage.eff_ob` CONSUMES `base_ob` and is *"DISPLAY ONLY (not the resolution value)"* by its
 own docstring; `effective_ob` is a pure arg-order alias of it; `sigma_space_ob_shift` takes no
 `base_ob` at all and returns a shift. The live composition has the CALLER supply `base_ob`. So
@@ -35,14 +40,15 @@ ED-SC-0037's cost 1 — *"the interim provider derives its own obstacle in-seam,
 obstacle site"* — is UNCHANGED, not answered, and `interim: true` on the prize row is what carries
 it. ED-SC-0033 clause (3)'s single owner is the PROCEEDINGS SUBSYSTEM, not this module.
 
-⚠ **THE PLACEMENT QUESTION, ADJUDICATED AT THE SITE RATHER THAN ASSUMED.** `04 §A.2:135` reads
-*"one wrapper per **deferred subsystem**"*, and `sigma_leverage` is not a deferred subsystem — it is
+⚠ **THE PLACEMENT QUESTION, ADJUDICATED AT THE SITE RATHER THAN ASSUMED.** `04 §A.2` read
+*"one wrapper per **deferred subsystem**"* (that line was since amended, ED-IN-0284 and ED-IN-0285; see 04:147-151), and `sigma_leverage` is not a deferred subsystem — it is
 an in-engine resolver under `engine/dice_engine/`. Two readings were available: **(i)** it is a wrapper
-BY ROLE — it writes nothing, returns a margin, holds no token, which is exactly the `04:164` row, and
+BY ROLE — it writes nothing, returns a margin, holds no token, which is exactly the `04:182` row, and
 a module satisfying that contract IS that row whatever supplies the margin; **(ii)** §A.2's
 enumeration is short by one and the finding goes on the ledger. **This unit takes (i).**
 ⚠ AND IT SATISFIES THREE OF THAT ROW'S FOUR COLUMNS, NOT FOUR. Column 3 is *"a `Margin`"* and this
-returns a **dict**; column 2 is *"the projection"* and the signature takes `w`, a World.
+returns a **dict**; column 2 is *"the projection"* and the signature takes `w`, a World -- the
+ADAPTER's does; since `31a` the MODULE reads only the typed record `contest_input` builds.
 `combat.resolve(w, …)` is the precedent for both — **and it is a precedent for the deviation, not
 for conformance.** Typing `Margin` across both providers is a `seam/` item of its own; minting the
 type for one provider while the other returns a dict would give the seam two return shapes, which
@@ -52,9 +58,10 @@ is worse than either.
 the actor genuinely has, leave every other operand at its registered fixture, and return a typed gap
 rather than fabricate a party.
 
-⚠ THIS MODULE IMPORTS NOTHING FROM `systems/` AND INSERTS NO `sys.path`. It reaches
-`engine.dice_engine.sigma_leverage` by dotted path, which the package already does for
-`engine.dice_engine.dice_engine`, so NO entry is added to
+⚠ THIS MODULE IMPORTS NOTHING FROM `systems/` OR `modules/` AND INSERTS NO `sys.path`. The roll is
+reached by STRING: the composition row `social_contest.roll` names it, the registrar resolves it at
+driver construction into `MODULE_ENTRIES`, and `resolve` below looks it up there by the role its
+prize row names. NO entry is added to
 `tests/valoria/test_engine_does_not_import_systems.py::PATH_SEAM_ALLOWED`. That set is shrink-only.
 """
 from __future__ import annotations
@@ -63,13 +70,13 @@ import random
 from typing import Any, Optional
 
 from ...data.rosters import VERB_CAPABILITY
-# ⚠ THE LEAF, NOT THE PACKAGE. `...manifest` re-exports from `registry.py`, which imports
-# THIS module to register it — importing the package here closes that loop and the cycle
-# guard counts it. `manifest/providers.py` imports nothing and is safe to reach from here.
+# ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
+# here closes a loop back into this package (`_entry.py` says the same of the entry lookup).
 from ...manifest.providers import provider
+from ...queries.inputs import SocialContestInput
+from ._entry import entry_for
 
-# RULED, ED-SC-0037. Both names; see the docstring for why `roll_net` alone is the bare pool roll.
-from engine.dice_engine.sigma_leverage import net_boost, roll_net
+_PROVIDER = "sigma_leverage"
 
 
 def _capability(entity: Any, verb: str):
@@ -115,21 +122,46 @@ def _obstacle_of(w: Any, subject: Optional[str], verb: str, fx: Any) -> float:
     ⚠ AND THIS IS REGISTERED AS AN nth SITE IN A FAMILY THE TREE RECORDS AS DISAGREEING, not as a
     single owner arriving: `H-127` carries that, and ED-SC-0033 clause (3) names the proceedings
     subsystem as the owner this defers to."""
-    if subject and subject in getattr(w, "persons", {}):
+    if subject and subject in w.persons:
         have = _capability(w.persons[subject], verb)
         if have is not None:
             return float(have) / 2.0
     return float(fx.get("obstacle_default"))
 
 
-@provider("contest", "sigma_leverage")
+def contest_input(w: Any, claimants: list, *, verb: str = "",
+                  subject: Optional[str] = None) -> SocialContestInput:
+    """THE HOST INPUT BUILDER (plan position `31a`, A-25): `World` -> the frozen record the roll reads.
+
+    Reads `w.persons` (the actor, `claimants[0]`, and a person subject) and `w.fixtures`, and nothing
+    else; the module that consumes the record never sees `World`. Its precondition is the adapter's
+    PARTY-GAP checks (`resolve`, below): at least one claimant, and the first a person.
+    `leverage` is zero until something supplies leverage -- an `assumption` reading with no
+    producer, and stating it as zero is the honest form: a fabricated leverage would be a number
+    nobody chose."""
+    fx = w.fixtures
+    return SocialContestInput(
+        pool=_pool_of(w.persons[claimants[0]], verb, fx),
+        ob=_obstacle_of(w, subject, verb, fx),
+        obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
+        leverage=0.0)
+
+
+@provider("contest", _PROVIDER)
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
             rng: Optional[random.Random] = None, rung: str = "") -> dict:
-    """Roll for one contested act. Returns a net/ob pair, NEVER a band.
+    """Roll for one contested act: build the record, refuse S27.4, call the module entry. Returns a
+    net/ob pair, NEVER a band.
 
-    RESOLVED -> dict(status, module, resolver, pool, ob, net, leverage)
+    RESOLVED -> dict(status, module, resolver, pool, ob, net, leverage)   # the entry's own return
     REFUSED  -> dict(status, why, pool, ob)   # S27.4: ob > obstacle_refusal_multiple x pool
+
+    ⚠ THE ENTRY IS LOOKED UP BY THE ROLE THE PRIZE ROW NAMES (`module_entry:`), IN `MODULE_ENTRIES`.
+    The registrar fills that table at driver construction from the composition row, and
+    `manifest.check_contest_prizes` refuses construction when the two rows disagree; a call reaching
+    here with the role unregistered (no driver constructed in the process) is `ENGINE-UNAVAILABLE`,
+    `combat.py`'s typed refusal, never a direct import of the module.
 
     ⚠ `rung` IS ACCEPTED AND NOT USED HERE, THE SAME DELIBERATE NON-CHANGE AS IN `combat.py`
     (M4, `ED-IN-0279` clause (a)). A leverage roll derives its obstacle from the parties
@@ -150,23 +182,15 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     which is §8's *the rule lives once* stated for a rule with two legitimate operands."""
     if not claimants:
         return dict(status="PARTY-GAP", why="a contest needs at least one claimant",
-                    module="sigma_leverage")
-    actor = w.persons.get(claimants[0]) if hasattr(w, "persons") else None
-    if actor is None:
+                    module=_PROVIDER)
+    if w.persons.get(claimants[0]) is None:
         return dict(status="PARTY-GAP", why=f"claimant is not a person: {claimants[0]!r}",
-                    module="sigma_leverage")
-    fx = w.fixtures
-    pool = _pool_of(actor, verb, fx)
-    ob = _obstacle_of(w, subject, verb, fx)
-    mult = fx.get("obstacle_refusal_multiple")
-    if ob > mult * max(pool, 0):
-        return dict(status="REFUSED", why="S27.4", module="sigma_leverage",
-                    resolver="d10_sigma", pool=pool, ob=ob)
-    # THE COMPOSITION IS THE TREE'S OWN. `roll_net` is the discrete d10 engine; `net_boost` is the
-    # μ-shift that makes this σ-leverage rather than a pool roll. `lev` is zero until something
-    # supplies leverage — an `assumption` reading with no producer, and stating it as zero is the
-    # honest form: a fabricated leverage would be a number nobody chose.
-    lev = 0.0
-    net = roll_net(pool, rng=rng) + net_boost(lev, pool)
-    return dict(status="RESOLVED", module="sigma_leverage", resolver="d10_sigma",
-                pool=pool, ob=ob, net=net, leverage=lev)
+                    module=_PROVIDER)
+    inp = contest_input(w, claimants, verb=verb, subject=subject)
+    if inp.ob > inp.obstacle_refusal_multiple * max(inp.pool, 0):
+        return dict(status="REFUSED", why="S27.4", module=_PROVIDER,
+                    resolver="d10_sigma", pool=inp.pool, ob=inp.ob)
+    entry, refusal = entry_for(prize, _PROVIDER)
+    if entry is None:
+        return refusal
+    return entry.fn(inp, rng)

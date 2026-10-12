@@ -644,7 +644,7 @@ EXPECTED = {
 
 
 def _cfg_mod():
-    import systems.mass_battle.sim.config as _cfg
+    import modules.mass_battle.config as _cfg
     return _cfg
 
 
@@ -714,7 +714,7 @@ def compute():
     (grid-path) golden digest. The comparison would still fail loud (a real behaviour difference), but
     the mismatch would misleadingly read as a regression rather than "you're on the field path, check
     against unit_field/cell_field instead" -- this key naming makes that unambiguous."""
-    import systems.mass_battle.sim.hierarchy.units as _u
+    import modules.mass_battle.hierarchy.units as _u
     # Read the RESOLVED config value, not a second, independently-defaulted os.environ.get -- the
     # latter drifted out of sync with config.PER_CELL's own default the moment gate 4 (ED-MB-0001)
     # flipped PER_CELL's default '0'->'1': a bare invocation would have run the (now-default) 'cell'
