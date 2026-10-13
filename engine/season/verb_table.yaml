@@ -157,10 +157,6 @@ verbs:
     scale_note: "conferral seats an office, and an office sits at a rung"
     stratum:     "binding_decision"
     eligibility: ["remit:confer"]
-    referent_class: Office
-    referent_class_note: "IN-53 (H-207). THE REFERENT CLASS: the carrier type a Candidate of this verb must be about -- the office conferred. `decision/options.py::opening_set` forms a `confer` only on a referent its question carries as `Office` (`state/carriers.py::Question.classes`, stamped by `queries/world_q.py::questions_for` from `rosters.yaml: question_sources.referent_class`: today the vacant seats `need` widens with), because a person-side reader has no World and cannot tell an office id from a rung, person, Record or Site id; `data/verbs.py` refuses at load a class no source stamps. MEASURED before this column (`30d38a12`): formed on every referent a question named, refused by the fold on every one. The office the act names is read by `loop/predicates.py::office_named_by` (`subject`, or a hand-built act's `office`)."
-    counterparty: to
-    counterparty_note: "IN-53: THE CONFEREE IS THE SECOND SIDE, AND A COMPUTED `confer` MUST CARRY HIM. The row is untyped (`_req_confer`'s `or` and its cardinality have no cell in the closed grammar, and the fold evaluates a typed cell OR a predicate, never both, `loop/resolve.py`), and an untyped row carries nothing -- so a computed `confer` carried only `subject`, and once a seat admitted it `_eff_confer`'s `_operand(a, 'to')` raised `InstrumentDefect` (H-207 cause 4). `to` is a `known_person_operands` member, so `VerbRow.known_person_operands` fans the Candidate over the persons the conferrer KNOWS (`give`'s receiver, `tell`'s hearer): one bag per known person, none when he knows nobody. `determine`'s precedent for a row naming its second side; the fold's counterparty clause (`loop/resolve.py::_admits`) refuses a hand-built `confer` naming nobody or the conferrer himself as `confer.refused`, before the effect would raise. Formed only on an Office referent (`referent_class` above)."
     beneficiary: "subject"
     requires:    "the office's conferral basis, and 1-per-object: no live hold on the object, or the holder-Proposition has zero live commit (§54 it. 20)"
     writes:      ["Tenure.until", "Tenure.since"]
@@ -848,8 +844,6 @@ verbs:
     scale_note: "as `confer` -- it unseats the same office"
     stratum:     "binding_decision"
     eligibility: ["remit:revoke"]
-    referent_class: Office
-    referent_class_note: "IN-53 (H-207), as `confer`'s: formed only on a referent its question carries as `Office` (`Question.classes`), the office unseated being the act's `subject` (`loop/predicates.py::office_named_by`). Today the only Office referents are the vacant seats `need` widens with, which `_req_revoke`'s live-hold clause refuses; a computed `revoke` executing is not required (ruled 2026-10-12, H-207)."
     beneficiary: "none"
     beneficiary_note: "revocation is taken AGAINST the holder and FOR the revoking remit -- an Office, which no Candidate carries. Same shape as `dispatch`."
     requires:    "the office's revocation basis, and a live hold exists"

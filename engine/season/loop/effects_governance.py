@@ -12,7 +12,7 @@ cross-file helpers this file's effects call (`_exercised_office`, `_new_oblige_t
 from __future__ import annotations
 
 from ..data.rosters import RELEASABLE_KINDS
-from ..loop.predicates import office_described_by, office_named_by
+from ..loop.predicates import office_described_by
 from ..state.carriers import Tenure
 from ..state.gate import NO_CHANGE, Change, Subject
 from ..state.ids import H
@@ -46,6 +46,7 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     seat's revocation basis exercised through the same `via` (or `T-m`, where the incumbent is the
     actor). Without them the gate raises `NotYours` and puts both edges back. `_req_confer` asks the
     same two predicates first, so the shipped fold refuses (and emits) before this ever runs."""
+    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
     # ⚠ `to` WAS `d.get("to") or a.actor` -- a silent default that seated the ACTOR whenever the
     # act named nobody, which is the same class as `_eff_transfer`'s four and is deleted with
     # them. A conferral onto nobody is a malformed act, not a self-conferral.
@@ -56,12 +57,7 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     # `_req_confer` returns False when the payload names none -- `corpus_run`'s own output lists
     # `confer` among the verbs "foldable but never even attempted". The improvement is real (a
     # silent self-conferral becomes a loud `InstrumentDefect`) and nothing measurable moved.
-    # ⚠ IN-53 MAKES THAT STALE: a computed `confer` names its office on `subject` (`office_named_by`,
-    # formed on a vacant seat its `need` question carries) and its conferee on `to` -- the row's
-    # `counterparty: to`, a person the conferrer knows (`VerbRow.known_person_operands`). `_operand`
-    # still raises for a hand-built act naming none, but the fold's counterparty clause refuses that
-    # act first (`confer.refused`), so the raise is only the backstop.
-    obj, to = office_named_by(a), _operand(a, "to")
+    obj, to = d.get("office"), _operand(a, "to")
     if not obj or obj not in w.offices:
         return NO_CHANGE
     closed = [t for t in w.tenures if t.kind == "hold" and t.object == obj and t.live]
@@ -224,7 +220,8 @@ def _eff_revoke(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     seat -- or `T-m` if the incumbent is the actor. A revocation with no seat is refused at the gate
     and the hold put back; `_req_revoke` asks the same `may_revoke` first. ⚠ F3 IS ASKED BEFORE F9,
     so a seatless revocation is `NotYours` -- never excused as a no-op."""
-    obj = office_named_by(a)          # IN-53: `office`, else the computed act's `subject`
+    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
+    obj = d.get("office")
     return _closing(w, [t for t in w.tenures if t.kind == "hold" and t.object == obj and t.live])
 
 

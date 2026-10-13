@@ -571,22 +571,7 @@ rosters:
       **801 of 1,068 deliberations**, so three quarters of the time this roster's order does not
       decide the answer and a hash does. Recorded 2026-09-04 by the `W-D` adversarial pass;
       disposition on `H-54`, no rule changed.
-      `referent_class:` (IN-53, H-207 'VACANCY AS NEED') -- THE REFERENT CLASS A SOURCE STAMPS: the
-      carrier type of the referents the source WIDENS its questions with, beyond the one that
-      occasioned them, or `null` for none. `need` widens each of a person's questions with the
-      vacant seats he may fill (`queries/world_q.py::questions_for`, Q4), every one an `Office`; a
-      claim's subject and an ambition's subject are of no one class and are stamped nothing. The
-      resolver stamps the class per referent (`state/carriers.py::Question.classes`) because
-      `decision/questions.py::aggregate_questions` folds questions under ONE source and unions the
-      pairs; a verb row's `referent_class:` column (`verb_table.yaml`, validated by `data/verbs.py`)
-      names the class it acts on, and `decision/options.py::opening_set` forms that verb only on a
-      referent the question carries as that class. Person-side and World-free (L2): the comparison is
-      two declarations, never an id test. Keyed on exactly `values:` (refused at import,
-      `data/rosters.py`). Adds no source, so every person's `qs[0]` keeps its id and source (`H-54`).
     values: [claim_landed, need]
-    referent_class:
-      claim_landed: null
-      need: Office
 
   person_predicates:
     source: "#353 §14 `:331` — `marks[]` … \"heritage · grade · Church standing · office · residence\""

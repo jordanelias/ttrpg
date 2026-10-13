@@ -47,12 +47,10 @@ from typing import Optional
 from . import files
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .matrix import MATRIX, Step
-from .requires import (
-    KNOWN_PERSON_OPERANDS, REQUIRES_OPERANDS, VIA, TypedRequires, build_typed_requires,
-)
+from .requires import REQUIRES_OPERANDS, VIA, TypedRequires, build_typed_requires
 from .rosters import (
-    PURSUIT_AXES, PURSUITS, REFERENT_CLASSES, RELEASABLE_KINDS, RUNG_KINDS, STRATA, TENURE_KINDS,
-    load_yaml, require_member, roster, roster_map,
+    PURSUIT_AXES, PURSUITS, RELEASABLE_KINDS, RUNG_KINDS, STRATA, TENURE_KINDS, load_yaml,
+    require_member, roster, roster_map,
     table,
     table_meta,
 )
@@ -229,38 +227,6 @@ class VerbRow:
     # split. NOT `requires_typed_note`, which says why the cell is untyped and stands on rows a
     # registered predicate DOES evaluate (`oblige`, `release`).
     requires_decline_note: str = ""
-    # IN-53 (H-207): THE REFERENT CLASS -- the carrier type (`Office`) a Candidate of this verb must
-    # be ABOUT. `""` is the declared absence: the verb forms on any referent, as every row did
-    # before. A named class must be one some question source stamps (`rosters.yaml: question_sources.
-    # referent_class`, read as `rosters.REFERENT_CLASSES`) or the load refuses; `opening_set` then
-    # forms the verb only on a referent the question carries as that class (`formed_from`,
-    # `Question.class_of`). It exists because `opening_set` has no World (L2) and cannot ask what kind
-    # of thing a referent is: `confer` and `revoke` formed on every rung, person, Record and Site a
-    # question named and were refused by the fold on every one (`30d38a12`).
-    referent_class: str = ""
-
-    def formed_from(self, referent_class: Optional[str]) -> bool:
-        """MAY A CANDIDATE OF THIS VERB BE FORMED ON A REFERENT OF `referent_class`? Yes when the row
-        declares no `referent_class:`; otherwise only when the referent was stamped with exactly that
-        class (`Question.class_of`). A referent of no stamped class (`None`) satisfies no classed
-        verb. The one owner of the comparison; `opening_set` calls it once per (verb, referent)."""
-        return not self.referent_class or referent_class == self.referent_class
-
-    def known_person_operands(self) -> tuple:
-        """THE OPERANDS A CANDIDATE OF THIS ROW TAKES FROM SOMEBODY THE PERSON KNOWS, one bag per
-        person known (`decision/options.py::operand_bags`) -- the ONE owner, read by `operand_bags`
-        and `act_key`.
-
-        A TYPED row answers its cell's (`TypedRequires.known_person_operands`: `tell`'s and `give`'s
-        `to`, beside a bound `subject`). An UNTYPED row carries nothing, EXCEPT the one second party
-        it names that a known person can fill: its `counterparty:` where that is a
-        `known_person_operands` member (IN-53: `confer`'s `to`, the conferee, beside the office as
-        `subject`). Any other untyped counterparty (`oblige`'s `subject`) stays the declared hole it
-        was -- no Candidate. Read off the row's columns and the roster; no verb name."""
-        if self.requires_typed is not None:
-            return self.requires_typed.known_person_operands()
-        return ((self.counterparty,)
-                if self.counterparty and self.counterparty in KNOWN_PERSON_OPERANDS else ())
 
     def precondition_evaluable(self, predicates) -> bool:
         """Can the fold evaluate this row's precondition: none at all, a typed cell, or a
@@ -571,8 +537,7 @@ def _load_verb_table() -> dict:
                       str(r.get("counterparty") or "").strip(),
                       refusals_by_clause=by_clause,
                       effect_decline_note=str(r.get("effect_decline_note") or "").strip(),
-                      requires_decline_note=str(r.get("requires_decline_note") or "").strip(),
-                      referent_class=str(r.get("referent_class") or "").strip())
+                      requires_decline_note=str(r.get("requires_decline_note") or "").strip())
         # THE COUNTERPARTY IS AN OPERAND THE ACT CARRIES, OR IT IS NOTHING. `opening_set` compares
         # it with the person; a name the typed cell does not BIND is absent from every Candidate,
         # so the comparison would pass silently and the rule would be a column nothing enforced.
@@ -591,15 +556,6 @@ def _load_verb_table() -> dict:
                 "`requires_typed:` cell does not bind (or, on an untyped row, which is no "
                 "`requires_operands` member). A counterparty is compared with the person forming "
                 "the Candidate, and only a bound operand is always carried.")
-        # IN-53: A REFERENT CLASS IS ONE SOME QUESTION SOURCE STAMPS, OR THE LOAD REFUSES. A class no
-        # source declares (a typo, or a source never built) would make the verb unformable from every
-        # question, silently -- the always-false membership test `rosters.yaml`'s header refuses.
-        if row.referent_class and row.referent_class not in REFERENT_CLASSES:
-            raise SystemExit(
-                f"verb_table.yaml: {name!r} declares referent_class {row.referent_class!r}, which "
-                f"no question source stamps (the classes are {sorted(REFERENT_CLASSES)}, from "
-                "`rosters.yaml: question_sources.referent_class`). `opening_set` forms the verb "
-                "only on a referent stamped with that class, so an undeclared one never forms.")
         # A row that declares `requires_typed: none` must SAY WHY. The three admissible reasons
         # are a well-formedness constraint on the Act (§F.24a: `issue`, `open_case` -- *"they
         # belong in the `Act` schema and are refused at construction"*), a `per act` cell, and an
@@ -959,8 +915,8 @@ def act_key(verb: str, subject, operands) -> str:
     key = "" if subject is None else str(subject)
     row = VERB_TABLE.get(verb)
     ops = operands if isinstance(operands, dict) else {}
-    if row is not None:
-        for n in row.known_person_operands():
+    if row is not None and row.requires_typed is not None:
+        for n in row.requires_typed.known_person_operands():
             if ops.get(n) is not None:
                 key += f">{ops[n]}"
     if ops.get(VIA) is not None:

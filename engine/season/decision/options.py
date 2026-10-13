@@ -128,14 +128,6 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         opposes_subject = subject_is_opponent(row)
         said_of_entity: dict = {}           # entity -> `said_of` (this row's own-ledger read, per entity)
         for subject in q.referents:
-            # IN-53: A ROW THAT DECLARES A REFERENT CLASS FORMS ONLY ON A REFERENT OF THAT CLASS
-            # (`VerbRow.formed_from`). The class is read off the QUESTION (`Question.class_of`),
-            # stamped resolver-side and unioned by the fold -- no World, no id test, no verb name --
-            # because this function cannot ask what kind of thing an id is (L2). First, so nothing
-            # below is paid for a referent the row could never be about; a row declaring no class
-            # passes every referent, as before.
-            if not row.formed_from(q.class_of(subject)):
-                continue
             # ⚠⚠ A CONTEST NEEDS TWO CLAIMANTS, AND A PERSON IS NOT THEIR OWN ADVERSARY.
             # `move`'s `contain_path` cell keeps the same shape of rule -- *"a node is not a path
             # to itself"* -- as the reader's own, and this is that rule one seam over. It reads
@@ -391,9 +383,9 @@ def exercised_seat(p: Person, row: "Optional[VerbRow]") -> Optional[str]:
     Candidate per seat (`exercisable_seats`), the seat riding on it (`VIA` in its operands) to
     `Act.via` (`seat_of`), and the fold's gate asks that seat. The person cannot say which seat
     reaches a target (that needs the containment tree, which is not the person's state), so a seat
-    that does not reach it is refused there. `revoke` and `confer` reach it since IN-53: a computed
-    act of either names its office on `subject` (`loop/predicates.py::office_named_by`), formed only
-    on an Office referent (`H-207`).
+    that does not reach it is refused there. ⚠ STILL MASKED for `revoke` and `confer`: a computed
+    act of either carries no `office` operand, so `loop/predicates.py`'s `_req_revoke` /
+    `_req_confer` refuse before the seat is asked (`H-207` causes 1, 2, 4).
     Traces nothing: the admission it mirrors already traced. A verb on no row (`row is None` -- a
     hand-ranked candidate naming an invented verb) exercises nothing; the fold refuses the verb
     itself, and inventing a seat for it here would be a second answer."""
@@ -945,7 +937,7 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
     re-deliberates -- a scene tax with nothing behind it. Recorded, with the measurement owed, at
     the telling workplan's T4b *As built* line. `give` (plan position `14`) shares the shape: its
     receiver is a known person and its `with` conjunct the fold's."""
-    fan = row.known_person_operands()
+    fan = row.requires_typed.known_person_operands() if row.requires_typed is not None else ()
     if not fan:
         ops = _operands(p, row, q, subject, fx, {}, seat)
         return [] if ops is None else [ops]
@@ -969,9 +961,7 @@ def _operands(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixtures",
     `None` for a bound operand nobody can supply. The rules are `operands_for`'s docstring's."""
     req = row.requires_typed
     if req is None:
-        # An UNTYPED row carries nothing but what a known person fills for its named counterparty
-        # (`VerbRow.known_person_operands`: `confer`'s `to`, IN-53); `given` is empty for every other.
-        return dict(given)
+        return {}
     bound = tuple(req.operands())
     admitted = req.needs()
     names = bound + tuple(n for n in _REFERENT_OPERANDS if n in admitted and n not in bound)

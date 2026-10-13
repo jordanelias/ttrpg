@@ -138,12 +138,8 @@ def test_14_no_declined_row_is_resolvable_and_no_unbindable_counterparty_row_for
     assert not leaked, (f"{leaked} became resolvable, so it can be formed, attempted and refused in "
                         "every world -- the always-refused set grows by a row this position declined")
     assert len(DECLINED) >= 1 and all(v in VERB_TABLE for v in DECLINED), DECLINED
-    # the untyped rows naming a second party their cell cannot carry: formed by nobody. IN-53:
-    # `confer`'s `to` is filled by a known person (`VerbRow.known_person_operands`), so it is
-    # carriable and leaves this set; `oblige`'s `subject` is not.
-    unbindable = sorted(v for v, r in VERB_TABLE.items()
-                        if r.counterparty and r.requires_typed is None
-                        and not r.known_person_operands())
+    # the untyped rows naming a second party their cell cannot carry: formed by nobody
+    unbindable = sorted(v for v, r in VERB_TABLE.items() if r.counterparty and r.requires_typed is None)
     assert unbindable == ["oblige"], unbindable
     w = P.tiny_world()
     referents = ("off_duke", "off_dicastery", "p_mid", "Hh")
