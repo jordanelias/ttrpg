@@ -22,9 +22,13 @@ Candidate forms only on a held writ his own ledger names.
       seasons, the real chooser): every attempted act of the three answers a writ its actor held and
       the fold admitted, and each of the three EXECUTES >= 1.
 
-MUTATIONS, run at the build (results in H-203's IN-09 OUTCOME): `writs_held` returning `()` reddens
-(5) and (7); the `own_ledger` conjunct deleted from `comply` reddens (2); `referent_named` dropped
-from the three reddens (5)'s 'not before his ledger names it'.
+MUTATIONS, run at the build on the unit tests (the realm half not re-run under them): `writs_held`
+returning `()` reddens (5) twice and (6); the `own_ledger` conjunct deleted from `comply` reddens (2)
+for `comply`; `referent_named` dropped from the three reddens (1) for each and (5)'s 'not before his
+ledger names it'.
+
+THE EXIT AS MEASURED (H-203's IN-09 OUTCOME): `comply` executes; `evade / defy` and `construe` form
+and are never released -- (7)'s exit test is RED for those two, by the stopping rule (selection).
 """
 from collections import Counter
 import dataclasses
