@@ -840,19 +840,20 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     plants five defects on `levy`'s row and each load raises naming it. (`Basis`, §F.24a form 7,
     added no refusal: `_build_clause`'s existing checks close its operand and stem.)
 
-    ⚠ 66 -> 67, v9 IN-53, ONE NEW LOAD-TIME REFUSAL. `verbs.py` 27 -> 28: a `referent_class:` column
-    naming a class no question source stamps (`rosters.yaml: question_sources.referent_class`) would
-    make the verb unformable from every question. Falsifier:
-    `test_in53_vacancy_need.py::test_in53v_c_the_loader_refuses_a_class_no_source_stamps` plants
-    `Ofice` on `confer` and the load raises naming it. (The source -> class map's keying refusal in
-    `data/rosters.py` is an `Unspecified`, not a `SystemExit`, so it is not counted here.)"""
+    ⚠ 66 -> 69, v9 IN-53 (DECISION 2026-10-13 D1/D2), THREE NEW LOAD-TIME REFUSALS, `verbs.py`
+    27 -> 30: a `referent_class:` column naming a class `rosters.yaml: referent_classes` does not
+    declare (the verb would be unformable from every question); a `counterparty_may_be_self:` that
+    is not a boolean; and one on a row whose counterparty no known person fills (it would waive the
+    fold's self-exclusion for hand-built acts alone). Falsifier:
+    `test_in53_vacancy_need.py::test_in53v_c_the_loader_refuses` plants each and the load raises
+    naming it."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 67, (
-        f"{total} load-time exits across the model set, expected 67. Per file: "
+    assert total == 69, (
+        f"{total} load-time exits across the model set, expected 69. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
