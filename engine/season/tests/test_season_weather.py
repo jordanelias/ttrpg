@@ -57,17 +57,22 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # another person, who receives its content deposit, and the seasons diverge from there. Build hash
 # unchanged. Was 56d44b5a... / 808951dd... after one and two seasons; `BASE_EVENTS` re-recorded with it
 # (was 7527/05d85451..., 21735/680e93d8...).
+# RE-PINNED at v9 IN-33 (H-58), A DELIBERATION MOVE DECLARED BY OUTCOME: `exchange` is typed and
+# resolvable, so its attempts (every one refused in the realm: a self-exchange's no-op receipt, a
+# `to` that is no rung, or an empty hearth) take scenes and emit `exchange.refused` from season 1.
+# Build hash unchanged (nothing stored moves at build). Was 80aef84c... / b87bd251... after one and two
+# seasons; `BASE_EVENTS` re-recorded with it (was 7508/b8a1f5ff..., 21120/9dc7a16b...).
 BASE_HASHES = {0: "11989dcf5e1c25afab556bf3f234a200",
-               1: "80aef84c49e0c6d63aac266fabf46af3",
-               2: "b87bd251f536915f086ea0fa3b015248"}
+               1: "271c28f581f67834e1bb898242ddc3e5",
+               2: "2ffabee99bd82f76023b39cf804a65f1"}
 
 # The pre-IN-34 base (d47077d5), `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event
 # count and the sha256 of its ordered `kind|id` lines after one season and after two. A ONE-TIME PROOF
 # that the schema re-pin of `BASE_HASHES` moved nothing at the event level (the hash folds
 # `repr(Person)`, which gained a field; the events did not move); re-recorded together with
 # `BASE_HASHES`, never alone. A hazard that fired at the control would change the sequence.
-BASE_EVENTS = {1: (7508, "b8a1f5ff4ae77037a00cbad9c28fd665229c09fdd3e5c75e173d5a8698981dbc"),
-               2: (21120, "9dc7a16b7ea31e81bfad66a80b85346d1983f65ccd9dd1f225102dcac8767e00")}
+BASE_EVENTS = {1: (7598, "60b0b6ff947d38945d59a451b4f0390f8576c70fd087b659e514b5d50ef05c91"),
+               2: (21266, "61500c5d882cd6d6b745bcc9dab14f7ca6cd6018503b8e031c4d5dfb740b0180")}
 
 
 def _digest(w) -> tuple:

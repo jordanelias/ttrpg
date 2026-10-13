@@ -54,6 +54,7 @@ exercised by this run.**
 | `budget_leg_penalty` | `1` | no — a harness fixture |
 | `default_store_kind` | `grain` | no — a harness fixture |
 | `default_transfer_amount` | `1` | no — a harness fixture |
+| `default_return_kind` | `salt` | no — a harness fixture |
 | `body_step` | `0` | no — a harness fixture |
 | `age_step` | `0.0` | no — a harness fixture |
 | `illness_rate` | `0.0` | no — a harness fixture |
