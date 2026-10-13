@@ -32,7 +32,8 @@ from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import MATRIX
 from ..data.rosters import (
     BINDS_BASES, BODY_FUNCTION, CONFERRAL_BASES, QUESTION_SOURCES, RECORD_KIND_KEYS, RECORD_KINDS,
-    REMIT_ACTS, REVOCATION_BASES, RUNG_KINDS, office_faction, require_member, title_domain,
+    REFERENT_CLASSES, REMIT_ACTS, REVOCATION_BASES, RUNG_KINDS, office_faction, require_member,
+    title_domain,
 )
 from ..gaps import Forbidden, Unowned, Unspecified
 
@@ -448,13 +449,41 @@ class Question:
 
     `source` is one of `question_sources` in `rosters.yaml`. `referents` are the ids the question
     is ABOUT -- §F1 clause 3: "subject in referents(q)". `about` is the originating object's id,
-    kept so a Candidate can say WHY it exists without the resolver re-deriving it."""
+    kept so a Candidate can say WHY it exists without the resolver re-deriving it.
+
+    `classes` (IN-53, H-207) is THE REFERENT'S OWN CLASS, per referent: `((id, class), ...)` for the
+    referents a source stamped (`rosters.yaml: question_sources.referent_class`; `Office` for the
+    vacant seats `need` widens with), filled by `queries/world_q.py::questions_for`, which has the
+    World. It rides on the REFERENT and not on `source` because `decision/questions.py::
+    aggregate_questions` folds several questions under ONE source; a class kept per referent is
+    unioned by the fold. `opening_set` has no World (L2) and cannot ask what an id IS; it asks
+    `class_of`, and a referent with no stamped class answers `None`, which satisfies no verb that
+    declares one. A plain field like `referents`: a Question is not in `World._STATE_COLLECTIONS`
+    and is never hashed, so the field moves no `content_hash`; `()` is every question before IN-53."""
     id: str
     source: str
     referents: tuple
     about: str = ""
+    classes: tuple = ()
+
+    def class_of(self, referent: str) -> Optional[str]:
+        """The stamped class of `referent`, or `None` when no source stamped one for it."""
+        for r, c in self.classes:
+            if r == referent:
+                return c
+        return None
 
     def __post_init__(self) -> None:
+        bad = [(r, c) for r, c in self.classes
+               if r not in self.referents or c not in REFERENT_CLASSES]
+        if bad:
+            raise Forbidden(
+                f"question {self.id!r} stamps a class on a referent it is not about, or a class no "
+                f"source stamps: {bad}", "IN-53",
+                needs="`classes` pairs only referents of the question with a "
+                      "`question_sources.referent_class` value",
+                law="a class is a fact about a referent the question names; one for an id it does "
+                    "not name, or of no declared class, is read by nothing and hides a stamping error")
         if self.source not in QUESTION_SOURCES:
             raise Forbidden(
                 f"question source {self.source!r} is not in the question_sources roster",

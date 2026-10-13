@@ -36,7 +36,7 @@ from typing import Callable, Optional
 from ..data.requires import UNKNOWN, binding_from_act
 from ..data.rosters import (
     FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, RUNG_KINDS, SITE_KINDS,
-    TENURE_KINDS,
+    SOURCE_REFERENT_CLASS, TENURE_KINDS,
 )
 from ..gaps import Forbidden, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
@@ -56,7 +56,7 @@ from ..state.containment import descendants, parent_of  # noqa: F401 -- re-expor
 from ..state.containment import ancestry, home_of  # noqa: F401 -- re-exported
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
-from ..state.gate import BENCH_BASIS, may_determine, purview_reaches, sits_over
+from ..state.gate import BENCH_BASIS, may_determine, may_fill, purview_reaches, sits_over
 from ..state.ids import ROOT, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
@@ -1533,6 +1533,36 @@ def ambitions(w: World, p: Person) -> list:
     return out
 
 
+def vacancies(w: World, p: Person) -> tuple:
+    """THE VACANT SEATS `p` MAY FILL (IN-53, H-207 'VACANCY AS NEED'), sorted by id: every Office
+    with no live `hold` -- the test `_req_confer` runs before its `or` disjunct -- for which
+    `may_fill` holds through some seat of `p`'s own live `hold`s whose grant carries `confer`
+    (`Tenure.granted_acts`, the one owner of the grant's shape). `()` for a person granted no
+    `confer`, which is nearly everyone, so the store is read only for a conferrer.
+
+    Resolver-side and read-only: it supplies seat IDS, which `questions_for` adds to the person's
+    `need` questions; whether the conferral then passes is the fold's (`_req_confer`). It asks the
+    write gate's own `may_fill`, so it names no seat the gate would refuse to have filled through
+    that seat. `confer` is named here because it is the remit act the predicate it mirrors serves."""
+    seats = [t.object for t in p.tenures
+             if t.kind == "hold" and t.live and t.object in w.offices and "confer" in t.granted_acts]
+    if not seats:
+        return ()
+    held = {t.object for t in w.tenures if t.kind == "hold" and t.live}
+    return tuple(o.id for o in sorted(w.offices.values(), key=lambda o: o.id)
+                 if o.id not in held and any(may_fill(w, p.id, s, o) for s in seats))
+
+
+def _stamped(q: Question, added: tuple) -> Question:
+    """`q` with the class its source declares (`rosters.yaml: question_sources.referent_class`)
+    stamped on the referents in `added` -- the ones the source WIDENED it with (IN-53). `q` itself
+    when the source declares none or nothing was added, so an unwidened question is unchanged."""
+    cls = SOURCE_REFERENT_CLASS[q.source]
+    if cls is None or not added:
+        return q
+    return replace(q, classes=tuple((o, cls) for o in added))
+
+
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
     """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier.
 
@@ -1626,8 +1656,21 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # an ambition act in a quiet season.
     # `17`: the live-`commit`-to-an-OUGHT rule is `ambitions`' alone (above; R-06's READ), so this
     # asks it rather than restating it; one Question per ambition, in edge order, as before.
-    for pid in ambitions(w, p):
-        out.append(Question(f"q:need:{pid}", "need", (w.propositions[pid].subject,), pid))
+    # IN-53 (H-207 'VACANCY AS NEED'): A VACANT SEAT THE PERSON MAY FILL IS A NEED. Its id WIDENS
+    # the referents of every `need` question, `(subject, *vacant)`, stamped with the class `need`
+    # declares (`rosters.yaml: question_sources.referent_class`) so only a row declaring that class
+    # (`confer`, `revoke`) forms on it; a person with vacancies and no ambition gets one `need`
+    # question per vacancy. No source is added and no question displaced, so `qs[0]` keeps its id
+    # and source under `first` (`H-54`); with no vacancy the output is byte-identical.
+    vacant = vacancies(w, p)
+    mine = ambitions(w, p)
+    for pid in mine:
+        subj = w.propositions[pid].subject
+        refs = (subj,) + tuple(o for o in vacant if o != subj)
+        out.append(_stamped(Question(f"q:need:{pid}", "need", refs, pid), vacant))
+    if not mine:
+        for o in vacant:
+            out.append(_stamped(Question(f"q:need:{o}", "need", (o,), o), (o,)))
 
     # ⚠ TWO ORDERINGS LIVE IN THIS ONE LINE AND ONLY THE FIRST IS DECLARED ANYWHERE.
     # `order[q.source]` is `rosters.yaml: question_sources`, whose own note says ORDER IS SEMANTIC

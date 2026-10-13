@@ -27,6 +27,7 @@ from __future__ import annotations
 
 from typing import Optional
 
+from ..data.requires import binding_from_act
 from ..data.rosters import BINDS_BASES, RELEASABLE_KINDS, RUNG_KINDS
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..state.carriers import Office, subject_of
@@ -117,8 +118,7 @@ def _req_confer(w: "World", a: "Act") -> bool:
     `04 §C.2`'s own F3 note names `confer` beside `revoke` as *"writing `Tenure.until` on an edge
     whose subject is somebody else"*, which is why the displacement is T-o and not a second reading
     of the conferral basis."""
-    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    obj = d.get("office")
+    obj = office_named_by(a)
     if not obj or obj not in w.offices:
         return False
     off = w.offices[obj]
@@ -130,6 +130,16 @@ def _req_confer(w: "World", a: "Act") -> bool:
         return True                        # 1-per-object satisfied
     # THE `or` DISJUNCT: a held office is still conferrable when the holder-Proposition carries
     # no live `commit`. §54 item 20.
+    # ⚠ READ AGAINST THE ROW AT IN-53 step (4) AND KEPT, WITH THE REASON. §54 item 20 (*"a
+    # memberless faction's `hold`"*) counts the live `commit` edges TO a Proposition that HOLDS; this
+    # counts any live `commit` BY the holder. The literal reading is unreachable as built: a `hold`
+    # is a PERSON's edge (`holonic §15`; `World._refuse_bad_hold`), so no Proposition holds a seat,
+    # and the tree already migrated the row to the holder (`harness/probes.py` F2: *"~~holder-
+    # Proposition~~ -> holder, per `holonic §15`"*). Taking the literal reading would make this
+    # disjunct, and with it `confer`'s displacement under T-o, dead code
+    # (`test_g3_not_yours.py::test_g3_confer_refuses_at_the_precondition_what_the_gate_would_refuse`
+    # arm `c3` reddens, measured); F2's *"zero commits to the cause he held it for"* needs a
+    # seat -> cause map nothing declares. Neither is this position's to invent; left as it is.
     holder = next((t.subject for t in w.tenures
                    if t.kind == "hold" and t.object == obj and t.live), None)
     if holder is None or any(t.kind == "commit" and t.subject == holder and t.live
@@ -137,6 +147,22 @@ def _req_confer(w: "World", a: "Act") -> bool:
         return False
     # G3: displacing the holder CLOSES HIS EDGE -- T-o, through the seat exercised.
     return holder == a.actor or may_revoke(w, a.actor, a.via, off)
+
+
+def office_named_by(a: "Act") -> "Optional[str]":
+    """THE OFFICE A `confer` OR `revoke` ACT NAMES -- the one reader `_req_confer`, `_req_revoke`,
+    `_eff_confer` and `_eff_revoke` share (IN-53 step 2).
+
+    A hand-built act supplies it on the payload's `office` key (the corpus overlays,
+    `corpus_run._check_office`); a COMPUTED act carries it as its `subject`, the Office referent of
+    the question it was formed from (`queries/world_q.py::questions_for`'s vacancies), read through
+    `binding_from_act`, the fold's own binding. `office` wins where both are present, so no
+    hand-built act changes meaning; `None` when the act names neither. Before this the four read
+    `office` alone, so a computed act passed nothing to the precondition and the effect wrote
+    nothing. `establish` is not a caller: the office it names does not exist yet
+    (`office_described_by`)."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    return d.get("office") or binding_from_act(a).get("subject")
 
 
 def office_described_by(a: "Act") -> "Optional[Office]":
@@ -377,8 +403,7 @@ def _req_revoke(w: "World", a: "Act") -> bool:
     *"so long as"* made PURVIEW sufficient while Part E kept the remit necessary. Ruling (3) is
     silent on the remit, so the same question now reads *is the seat above sufficient?* -- still
     `H-91`'s, still not resolved by editing the transcribed `eligibility:` column."""
-    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    obj = d.get("office")
+    obj = office_named_by(a)
     if not obj or obj not in w.offices:
         return False
     off = w.offices[obj]
