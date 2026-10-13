@@ -11925,8 +11925,14 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # examine, restore 16; migrate, move 1). The two verbs the message warns about are checked:
     # `tell` and `surveil` are absent on both sides.
     # [GROUNDED: measured at v9 IN-11 -- ARC-01 shipped drops read off the test's own printed `shipped` list on this tree (318) and on a copy of the base tree `c3a698ce` (109, the 12 verbs above)]
+    # ⚠ {14 verbs} -> {12 verbs}, v9 IN-33 (H-58), UNIT: VERBS IN THE DROP SET, DIRECTION: DOWN BY TWO,
+    # NONE ADDED. OUT: `move` and `migrate` (one drop each on `p_b` at IN-11), by the act mix --
+    # `exchange` is resolvable and its refused attempts take scenes in this multi-season case, so the
+    # belief that dropped those two Candidates is no longer deposited in time. `exchange` itself does
+    # not drop here (its first conjunct's `stores` read is never deposited about `r_realm` or `p_b`).
+    # `tell` and `surveil` are absent. A re-record, read off the test's own printed `shipped` list.
     assert {v for v, _ in live} == {"accept", "build", "challenge", "commit", "examine", "fight",
-                                    "found", "give", "interview", "migrate", "move", "petition",
+                                    "found", "give", "interview", "petition",
                                     "research", "restore"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
