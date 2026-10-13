@@ -750,9 +750,10 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     the seat's rung (`treasury_of`, `H-160` limit 1); as himself, from where he stands.
 
     ⚠ THE CHAIN IS NOT THE ROUTER `G2` FORBIDS, on `WorldReader.read`'s own precedent. It
-    enumerates the CLOSED OPERAND VOCABULARY -- `rosters.yaml: requires_operands`, eight names,
-    where an unrostered one already refuses at load -- and not verbs, entities or outcomes. There
-    is no shape to forbid instead: each of the eight is a different question, and a per-verb table
+    enumerates the CLOSED OPERAND VOCABULARY -- `rosters.yaml: requires_operands`, ten names since
+    v9 IN-33 added `exchange`'s `return_kind`/`return_amount`, where an unrostered one already
+    refuses at load -- and not verbs, entities or outcomes. There
+    is no shape to forbid instead: each name is a different question, and a per-verb table
     would be the special case `G2` is actually about.
 
     THE RULE IT IMPLEMENTS, stated once so the branches are readable as one decision rather than
@@ -863,6 +864,16 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     if name == "kind":
         return store_kind_of(p, q) or fx.get("default_store_kind")
     if name == "amount":
+        return fx.get("default_transfer_amount")
+    # v9 IN-33 (H-58) [ASSUMPTION; medium; Jordan to correct]: WHAT THE ACTOR RECEIVES IN RETURN --
+    # `exchange`'s other side. The question names what the actor gives (`kind`/`amount`, above) and
+    # nothing about what comes back, so both are the third rule's: values the design states no
+    # number for, fixtures. `return_kind` is its own (`default_return_kind`); `return_amount` is the
+    # instrument's one unit of matter moved by an act (`default_transfer_amount`). No writ or
+    # shortfall claim answers either (their rosters do not list them). REVERT: delete both branches.
+    if name == "return_kind":
+        return fx.get("default_return_kind")
+    if name == "return_amount":
         return fx.get("default_transfer_amount")
     return None
 

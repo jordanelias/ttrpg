@@ -152,7 +152,10 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 # (DECISION 2026-10-13 D1; was `(70, 70, "d9bebd8c...")`): exactly two Candidates leave, diffed
 # against e716f10b -- `confer` on `Hh` and on `off_duke`, because `confer` now forms only on a
 # referent the question carries as `Office` and this question carries none; no Candidate is added.
-_CONTROL = (68, 68, "3e72994de755495e4fbaa136ac92c632e9262f0c11c10e27a6cb93e010bf72f8")
+# RE-PINNED AT v9 IN-09: 68 -> 66. `comply` is typed and `referent_named`, so it no longer forms on
+# a referent the person's own ledger does not name; it was formed on arbitrary referents before and
+# then filtered out by `resolvable_verbs()`, so no behaviour moves (`aperture 4 0` other rows equal).
+_CONTROL = (66, 66, "891d3653ba8b5ff4b141165fcd4548904b307bd0be437a7e0f3f5275c7c4625d")
 
 
 def _control_reading():

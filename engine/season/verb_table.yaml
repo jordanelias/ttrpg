@@ -310,17 +310,27 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "none"
-    beneficiary_note: "the counterparty is the other beneficiary and is exactly what `exchange` cannot carry -- the second of the two `requires_typed: none` rows, for want of an operand name for the other side of a trade."
+    beneficiary_note: "both sides benefit and both are RUNGS (`from` and `to`), and a beneficiary that is not a person is the `none` member (`rosters.yaml: beneficiary_kinds`) -- `restore`'s and `found`'s reason."
     requires:    "both sides' stores cover their side of the exchange"
-    requires_typed: none
-    requires_typed_note: "W3's own cell — *both sides' stores cover their side of the exchange*. §F.24a form 2 TWICE, one clause per side, and the SECOND side cannot be written: it needs the counterparty's matter kind and quantity, and `rosters.yaml: requires_operands` is closed with no names for them. ⚠ TYPING ONE SIDE ONLY IS THE `_req_confer` DEFECT — a dropped conjunct is an over-admission, and `G4` weighs it equally with an invention. Stays on REQUIRES_PREDICATES with no predicate, so the fold refuses."
-    requires_decline_note: "PLAN POSITION IN-41 (`SM-11`): nothing evaluates this precondition. The cell is untyped for the reason `requires_typed_note:` gives -- the second side's matter kind and quantity have no names in the closed `requires_operands` (`H-94`), and typing one side is the `_req_confer` defect -- and no `REQUIRES_PREDICATES` entry exists, for the same reason. The verb is out of the game on this gate as well as on its missing effect (`effect_decline_note:`)."
-    writes:      ["Rung.stores"]
+    requires_typed:
+      all:
+        - form:      scalar_threshold
+          of:        from
+          scalar:    stores
+          key:       kind
+          threshold: amount
+        - form:      scalar_threshold
+          of:        to
+          scalar:    stores
+          key:       return_kind
+          threshold: return_amount
+    requires_typed_note: "v9 IN-33 (H-58) TYPES W3's OWN CELL — *both sides' stores cover their side of the exchange*: §F.24a form 2 TWICE, one clause per side, unnamed (one flat `exchange.refused`, as `transfer`'s). Side one is `transfer`'s cell verbatim, `stores(from, kind) >= amount`: the actor gives `amount` of `kind` from where he stands. Side two is `stores(to, return_kind) >= return_amount`: the other side gives back `return_amount` of `return_kind`. It could not be written before IN-33 because `rosters.yaml: requires_operands` had no names for the second side -- inside the eight, one `kind` and one `amount` would bind BOTH sides, a like-for-like swap that moves nothing. IN-33 coined `return_kind` / `return_amount` (*in return*: what comes back), the reserved coining `H-94` held. Operands, person-side (`decision/options.py::_derive_operand`): `from`, `kind`, `amount`, `to` exactly as `transfer`'s (`to` is the question's referent, the other larder); `return_kind` is the fixture `default_return_kind` and `return_amount` is `default_transfer_amount` -- DECISION [ASSUMPTION; medium; Jordan to correct] at `hole_register.yaml` H-58, REVERT there."
+    counterparty_note: "NO `counterparty:` COLUMN, `transfer`'s shape: the other side of an exchange is a STORE, `to`, the question's referent rung -- and the `stores` stem reads a rung (`queries/world_q.py::WorldReader.read`), so a known PERSON (`give`'s and `tell`'s fan) has no store to cover a side. A rung trading with itself is refused by the gate's no-op receipt (`loop/effects_economy.py::_eff_exchange`)."
+    writes:      ["Rung.stores", "Rung.stores"]
     emits:       ["exchange.made"]
     emits_on_refusal: ["exchange.refused"]
     grade:       "assumption"
-    writes_note: "`(Rung, stores)` x2, one per side -- as `transfer`"
-    effect_decline_note: "PLAN POSITION `14` (U7-own) DECLINED IT, FOR THIS ROW'S OWN REASON (`requires_typed_note`): the second side's matter kind and quantity have no names in the closed `requires_operands`, and `T4`'s `operand_bags` supplies a known PERSON for `to`, not what he gives back. Typing one side is the `_req_confer` defect; coining the names is filling `H-94` by keyword argument -- a second binding mechanism this position may not build."
+    writes_note: "`(Rung, stores)` x2, one per side -- as `transfer`. v9 IN-33: `loop/effects_economy.py::_eff_exchange`, `_shift` twice (the actor's `kind` out to `to`, `to`'s `return_kind` back), both rungs named; declines a side that is no rung and a kind traded for itself."
     source:      "W3 -- #353 `:1899` names it and Part E omits it. Modelled on `transfer`, whose scarcity property (§27.1) it must share: the second party on an emptied larder gets a DIFFERENT Event, not a raise."
   - verb:        "forge"
     stratum:     "uncontested_material"

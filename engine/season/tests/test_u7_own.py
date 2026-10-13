@@ -40,7 +40,9 @@ from engine.season.state.carriers import Act, Candidate, Claim, Question, View
 # receipt; none may become resolvable without the reason being answered first.
 # roster-exempt: TEST EXPECTATION, the declined set this position's falsifier asserts.
 # v9 IN-11 (#453 R-3 (b)): `repudiate` LEFT -- its row is cut, not built (`release` ends a `commit`).
-DECLINED = ("carry", "exchange", "forge", "succeed", "thread_read", "tie / knot")
+# v9 IN-33 (H-58): `exchange` LEFT -- typed on its two coined operands (`return_kind`,
+# `return_amount`) with an effect, `_eff_exchange`; re-recorded.
+DECLINED = ("carry", "forge", "succeed", "thread_read", "tie / knot")
 
 
 def _view(w, pid):

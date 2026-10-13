@@ -1203,12 +1203,16 @@ def test_a_blocker_outranks_an_unaimed_row():
     is resolvable and no longer gaps. `exchange` replaces it -- the other row that carried
     `requires_typed: none` for want of an operand name (`rosters.yaml: requires_operands`' note). The
     assertion it feeds is unchanged; only the planted verb moved, and the guard below fails loudly if
-    `exchange` is ever made resolvable too."""
+    `exchange` is ever made resolvable too.
+
+    ⚠ RE-RECORDED AT v9 IN-33: IT WAS. IN-33 typed `exchange` (H-58, `return_kind`/`return_amount`),
+    so the planted verb is `evade / defy` -- reverted to `requires_typed: none` at IN-09's
+    amendment, so `resolvable_verbs()` excludes it. Same guard, same assertion."""
     from engine.season.loop.driver import resolvable_verbs
-    assert "exchange" not in resolvable_verbs(), (
-        "`exchange` became resolvable: plant another verb `resolvable_verbs()` excludes")
+    assert "evade / defy" not in resolvable_verbs(), (
+        "`evade / defy` became resolvable: plant another verb `resolvable_verbs()` excludes")
     planted = {"T": {EX.need_sha("a declared row that gaps"): {
-        "need": "a declared row that gaps", "exercises": ["exchange"]}}}
+        "need": "a declared row that gaps", "exercises": ["evade / defy"]}}}
     saved, R.OVERLAY = R.OVERLAY, planted
     try:
         got = R.grade({"id": "T", "season_requires": [
@@ -1219,7 +1223,7 @@ def test_a_blocker_outranks_an_unaimed_row():
         R.OVERLAY = saved
     assert got["verdict"] == "BLOCKED", got
     assert got["core_unmapped"] == 1, got          # the undeclared row is still reported
-    assert got["blockers"] == ["exchange"], got["blockers"]
+    assert got["blockers"] == ["evade / defy"], got["blockers"]
 
 
 def test_no_playable_case_has_an_unmapped_core_row():
@@ -8598,9 +8602,13 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # fourth seat NPC-038's pilot cast adds, not an authored `office:`/`ought:`). It is formed in no
     # live world now, executed in none. Confirmed against the same `live` rows `corpus_run` prints
     # (`foldable but never even attempted`: 9 -> 10).
+    # ⚠ TEN -> ELEVEN, v9 IN-09 (2026-10-13): `comply` JOINS. It is typed now and forms only on a writ
+    # the person holds and his ledger names (`referent_named`); none of the 143 cases seats a person
+    # who holds one, so it is foldable and never attempted here, as it is in `build_realm(0)`, where
+    # `aperture 4 0` shows it executing once (a different corpus, as `march`'s note says).
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "oblige", "open_case",
-                                              "determine", "dispatch"}, (
+                                              "determine", "dispatch", "comply"}, (
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
@@ -9225,7 +9233,9 @@ def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_fo
     # observes it forming once both exist. Derived from the data, never a verb name.
     needs_held = {v for v, r in VERB_TABLE.items() if r.requires_typed is not None
                   and (r.requires_typed.known_person_operands()
-                       or r.requires_typed.named_own_ledger_operands())}
+                       or r.requires_typed.named_own_ledger_operands()
+                       or r.referent_named)}   # v9 IN-09: a row formed only on a referent the
+                                               # person's own ledger names (`comply`: a held writ)
     typed_own = {v for v, r in VERB_TABLE.items()
                  if r.requires_typed is not None and person_side_eligible(p, r)} - needs_held
     assert typed_own <= offered, (
@@ -10125,7 +10135,11 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # one seated person in the fixture, `p_high` (`off_duke`), which is the only way the binding's
     # new structural member -- the seat, `via` -- can be observed at all.
     WALK_REMIT: frozenset = frozenset({"levy", "open_case", "determine", "issue"})
-    WALK_EXCLUDES: frozenset = frozenset({"march"}) | WALK_REMIT
+    # v9 IN-09: a row declaring `referent_named` forms only on a referent the person's own ledger
+    # names (`comply`: a writ he holds), and this question names none, so it is not in the walk.
+    # DERIVED FROM THE ROW'S OWN COLUMN, never from a verb name.
+    WALK_NAMED: frozenset = frozenset(vb for vb, r in VERB_TABLE.items() if r.referent_named)
+    WALK_EXCLUDES: frozenset = frozenset({"march"}) | WALK_REMIT | WALK_NAMED
     cands = [c for c in decision.opening_set(p, v, q, w.fixtures)
              if VERB_TABLE[c.verb].requires_typed is not None]
     assert {c.verb for c in cands} == all_typed - WALK_EXCLUDES, (

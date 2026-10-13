@@ -237,6 +237,40 @@ def _eff_transfer(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
                   + tuple(Subject.edge(t, "term.renewed") for t, _ in renewed), perform)
 
 
+@effect_for("exchange")
+def _eff_exchange(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-33 (H-58): BOTH SIDES' STORES MOVE, EACH ONE WAY -- `_shift` twice, `transfer`'s one
+    body. The actor's side gives `amount` of `kind` from `from` to `to`; the other side gives
+    `return_amount` of `return_kind` from `to` back to `from`. Matter is conserved per kind.
+
+    WHAT IT NAMES: both rungs, giver first, each earning `exchange.made` (`_eff_transfer`'s G4
+    contract). A rung trading with ITSELF moves nothing (each shift lands on the one store and
+    cancels), so the gate's no-op receipt refuses it as `exchange.refused`, exactly as a
+    self-transfer is refused -- no clause here.
+
+    DECLINES (`NO_CHANGE` -> `exchange.refused`): a side that is no rung (`_eff_transfer`'s reason:
+    an unperformable exchange refuses, it does not half-happen), and A KIND TRADED FOR ITSELF -- at
+    equal amounts it moves nothing, and at unequal ones it is a `transfer` of the difference
+    wearing an exchange's name. Whether each side's store covers its side is the precondition's
+    (the row's two `scalar_threshold` conjuncts), not this body's."""
+    src = w.rungs.get(_operand(a, "from"))
+    dst = w.rungs.get(_operand(a, "to"))
+    kind, amount = _operand(a, "kind"), _operand(a, "amount")
+    back, back_amount = _operand(a, "return_kind"), _operand(a, "return_amount")
+    if src is None or dst is None or kind == back:
+        TRACE.decision(f"exchange of {kind!r} for {back!r} between {_operand(a, 'from')!r} and "
+                       f"{_operand(a, 'to')!r}: a side is no rung, or a kind is traded for itself",
+                       "E3/S27.1", chose="change nothing, so the fold emits the refusal",
+                       alternatives=["move one side anyway (matter leaves the world)"])
+        return NO_CHANGE
+
+    def perform() -> None:
+        _shift(src, dst, kind, amount)
+        _shift(dst, src, back, back_amount)
+    return Change((Subject.entity("rungs", src.id, "exchange.made"),
+                   Subject.entity("rungs", dst.id, "exchange.made")), perform)
+
+
 def _renewals(w: "World", a: "Act", src: str, dst: str, amount) -> list:
     """PLAN POSITION `17b` -- WHICH `oblige` TERMS A `transfer` RENEWS, as `[(edge, its new Term)]`.
     The whole of *"payment by `transfer` renewing `oblige` terms"* (the plan's Contradiction-1 box;

@@ -888,6 +888,9 @@ def _build_clause(verb: str, cell: dict) -> Requirement:
     except TypeError as e:
         raise SystemExit(f"verb_table.yaml: {verb!r}'s {form!r} cell does not fit the form: {e}")
     allowed = set(REQUIRES_FORM_NEEDS.get(form) or ())
+    # THE CLOSURE. A name joins `requires_operands` only by a roster edit made at the position that
+    # owns it -- v9 IN-33 added `exchange`'s `return_kind` (the matter kind the actor receives in
+    # return) and `return_amount` (how many units), H-94's reserved coining -- never by a cell.
     for o in req.operands():
         if o not in REQUIRES_OPERANDS:
             raise SystemExit(
