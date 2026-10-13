@@ -45,23 +45,24 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # `off_duke_varfell` moved from `rung_above_same_faction` to the new basis, a data change alone
 # (`Office.revocation` is hashed). Was 0a7e27c4... / d188461a... / 33b1ae3b.... `BASE_EVENTS` below is
 # unchanged, which is the proof that no event moved.
-# RE-PINNED at v9 IN-53 (H-207 'vacancy as need'), A DELIBERATION MOVE DECLARED BY OUTCOME: `confer`
-# and `revoke` now form only on an Office referent (`referent_class`), so the always-refused attempts
-# they made on persons, Sites and Records stop (season 1), and from season 1 a conferrer's vacancies
-# widen his `need` questions. The build hash is unchanged (nothing stored moves). Was c2230a36... /
-# 88f6f243... after one and two seasons; `BASE_EVENTS` re-recorded with it (was 7526/e56f8652...,
+# RE-PINNED at v9 IN-53 (H-207, DECISION 2026-10-13 D1/D2), A DELIBERATION MOVE DECLARED BY OUTCOME:
+# `confer` now forms only on a referent its question carries as `Office` (the vacant seats a conferrer
+# may fill, riding on the question he answers), so its always-refused attempts on persons, Sites and
+# Records stop from season 1; `revoke` and every other row form exactly as before (the class is a
+# partition). The build hash is unchanged (nothing stored moves). Was c2230a36... / 88f6f243... after
+# one and two seasons at e716f10b; `BASE_EVENTS` re-recorded with it (was 7526/e56f8652...,
 # 21508/dc3c440a...).
 BASE_HASHES = {0: "11989dcf5e1c25afab556bf3f234a200",
-               1: "d5a7d50d4ececb0923fb4f5575593b85",
-               2: "08ecce87e5289f3fa73b6ac398eb6b04"}
+               1: "56d44b5a588afc9575ef2b3b69e8e465",
+               2: "808951dd023d640be92755678195c112"}
 
 # The pre-IN-34 base (d47077d5), `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event
 # count and the sha256 of its ordered `kind|id` lines after one season and after two. A ONE-TIME PROOF
 # that the schema re-pin of `BASE_HASHES` moved nothing at the event level (the hash folds
 # `repr(Person)`, which gained a field; the events did not move); re-recorded together with
 # `BASE_HASHES`, never alone. A hazard that fired at the control would change the sequence.
-BASE_EVENTS = {1: (7519, "534f14c212ee59fd8eed784c33a902f3cc154159c3e511d85f71376a62943f8f"),
-               2: (20933, "6e9731c70abb0e36af4ad6f681d76aeabf888a71dae1493f48c1d9bcc07b0a11")}
+BASE_EVENTS = {1: (7527, "05d854511133d0f28566c2d40aadd1104d730845cef9bc2c2f2ca5c43b65ad15"),
+               2: (21735, "680e93d8bf406220a0e64a8c832cbf1114f2266e869979420853a803f6eeb627")}
 
 
 def _digest(w) -> tuple:
