@@ -1203,16 +1203,12 @@ def test_a_blocker_outranks_an_unaimed_row():
     is resolvable and no longer gaps. `exchange` replaces it -- the other row that carried
     `requires_typed: none` for want of an operand name (`rosters.yaml: requires_operands`' note). The
     assertion it feeds is unchanged; only the planted verb moved, and the guard below fails loudly if
-    `exchange` is ever made resolvable too.
-
-    ⚠ RE-RECORDED AT v9 IN-33: IT WAS. IN-33 typed `exchange` (H-58, `return_kind`/`return_amount`),
-    so the planted verb is `evade / defy` -- reverted to `requires_typed: none` at IN-09's
-    amendment, so `resolvable_verbs()` excludes it. Same guard, same assertion."""
+    `exchange` is ever made resolvable too."""
     from engine.season.loop.driver import resolvable_verbs
-    assert "evade / defy" not in resolvable_verbs(), (
-        "`evade / defy` became resolvable: plant another verb `resolvable_verbs()` excludes")
+    assert "exchange" not in resolvable_verbs(), (
+        "`exchange` became resolvable: plant another verb `resolvable_verbs()` excludes")
     planted = {"T": {EX.need_sha("a declared row that gaps"): {
-        "need": "a declared row that gaps", "exercises": ["evade / defy"]}}}
+        "need": "a declared row that gaps", "exercises": ["exchange"]}}}
     saved, R.OVERLAY = R.OVERLAY, planted
     try:
         got = R.grade({"id": "T", "season_requires": [
@@ -1223,7 +1219,7 @@ def test_a_blocker_outranks_an_unaimed_row():
         R.OVERLAY = saved
     assert got["verdict"] == "BLOCKED", got
     assert got["core_unmapped"] == 1, got          # the undeclared row is still reported
-    assert got["blockers"] == ["evade / defy"], got["blockers"]
+    assert got["blockers"] == ["exchange"], got["blockers"]
 
 
 def test_no_playable_case_has_an_unmapped_core_row():
@@ -4048,18 +4044,10 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
     # that stopped at them before. `redeposits` is still 1 (asserted above), so the echo-model
     # exclusion is untouched; the extra depth is acts citing the Event that occasioned them.
     # [GROUNDED: measured at IN-50 by printing the published chain on this tree and at its base `2a2ed152` -- depth 10 here, 5 there]
-    # ⚠⚠ **10 -> 8, v9 IN-33 (H-58), BY THE ACT MIX AND NOT A CLOCK -- A RE-RECORD, SAID SO.**
-    # `exchange` is typed and resolvable, and the headless persons spend two scenes on it over the
-    # published two seasons (both `exchange.refused`), so fewer investigate-and-record rounds land:
-    # `record.created` 8 -> 6, `finding.made` 14 -> 9, `finding.none` 4 -> 3, `transfer.refused` 1
-    # -> 0, `work.unavailable` 1 -> 0, `travel.blocked` 3 -> 4. `redeposits` is still 1 (asserted
-    # above) and the four-season depth clause (>= 4) still holds.
-    # [GROUNDED: measured at IN-33 by `headless.run(2, 0)` on this tree and on a `git worktree` at its base `128299db`]
-    assert d_pub == 8, (
-        f"the published two-season run reaches {d_pub}, not the 8 that `scene_budget` rounds of "
+    assert d_pub == 10, (
+        f"the published two-season run reaches {d_pub}, not the 10 that `scene_budget` rounds of "
         "deposit-and-decay produce over two seasons with `11a`'s repeated investigate-and-record "
-        "chaining and refusals that cite their occasion (10 before IN-33's `exchange` took two of "
-        "its scenes; 5 before IN-50; 7 before IN-08 "
+        "chaining and refusals that cite their occasion (5 before IN-50; 7 before IN-08 "
         "re-scored the chooser; 10 before T4's tellings took two of its "
         "scenes). With `redeposits == 1` still "
         "holding, a different number means the ROUND COUNT "
@@ -5690,26 +5678,9 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     # ten seasons, computed chooser -- `Hh` grain 8 x 10, `S` monotone up]
     assert world_q.subsistence_draw(w) == {}, (
         "`tiny_world` has an eater again; re-measure the hearth rather than reading this note")
-    # ⚠ RE-ATTRIBUTED AT v9 IN-33 (H-58), AS THIS ASSERTION'S MESSAGE ASKED, AND THE WRITER IS NOT
-    # THE NEW VERB. MEASURED: `Hh`'s grain goes 8, 8, 7, 7, 7, 6, ... and every unit is a
-    # `transfer.made` out of `Hh` to a person-rung (`p_low`, `p_mid`, one grain each); `exchange`
-    # executes nowhere here (all 11 attempts refused: a self-exchange's no-op, a person-rung or Site
-    # holding no salt, a Record or Proposition that is no rung). Its refused attempts take scenes and
-    # move the ranking, so two transfers that were not taken before are taken now -- a TRAJECTORY move.
-    # Controls, run here: with `exchange` suppressed the hearth holds its opening stock in every
-    # season exactly as before (and no transfer out of it executes). Asserted as: the hearth's loss is
-    # exactly the grain its executed transfers carried out.
-    ids = {a.id: a for a in minted}
-    carried_out = sum((a.payload or {}).get("amount", 0) for a in ids.values()
-                      if a.verb == "transfer" and (a.payload or {}).get("from") == "Hh"
-                      and any(e.kind == "transfer.made" and a.id in (e.causes or []) for e in w.log))
-    assert hearth[0] - hearth[-1] == carried_out, (
-        f"the hearth moved {hearth} and its executed transfers carried {carried_out} out: something "
-        "other than `transfer` now writes `Hh`'s larder -- re-attribute it before re-pinning")
-    ctl_hist, _, _ = _ten_seasons(P.tiny_world(), verbs=resolvable_verbs() - {"exchange"})
-    ctl = [h["Hh"].get("grain", 0) for h in ctl_hist]
-    assert ctl == [ctl[0]] * len(ctl), (
-        f"with `exchange` suppressed the hearth still moved with nobody drawing on it: {ctl}")
+    assert hearth == [hearth[0]] * len(hearth), (
+        f"the hearth moved with nobody drawing on it: {hearth}. Something other than the draw now "
+        "writes `Hh`'s larder -- re-attribute it before re-pinning")
     assert settle == sorted(settle) and settle[-1] > settle[0], (
         f"the settlement no longer overflows: {settle}")
     assert minted, "the chooser minted nothing; this test cannot observe H-94"
@@ -7811,11 +7782,7 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠⚠ SIX -> FIVE, v9 IN-11 (#453 §10.4 step 2): `commit` LEAVES, INTO THE EXECUTED SET -- the
     # utterer's `hold` makes the Proposition a referent (the `ever` note above; 30 worlds). The
     # position's EXIT instrument (#453 `:2458`). A re-record, said so.
-    # ⚠⚠ FIVE -> SIX, v9 IN-33 (H-58): `exchange` JOINS -- typed on its coined `return_kind`/
-    # `return_amount` and resolvable, it is attempted in the corpus and refused in every world (no
-    # corpus world puts a stocked actor's question on ANOTHER rung holding `default_return_kind`; a
-    # rung trading with itself is the gate's no-op refusal). A re-record, said so.
-    assert refused_only == {"build", "exchange", "found", "migrate", "work",
+    assert refused_only == {"build", "found", "migrate", "work",
                             "survey"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
@@ -8296,17 +8263,7 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
         # `utter` 126 unmoved. THE SAME-BREATH CHECK: the universal set is empty on both sides; the status census MOVED by
         # one case, 1 RUNS-ALONE-UNDECLARED -> 0 (103 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED), and `corpus_run`'s NPC R3 reads
         # 46 of 46 where it read 45 (NPC-090's R3 now passes); ARC 97 of 97 on both sides.
-        # ⚠⚠ **136 -> 137, v9 IN-33 (H-58: `exchange` typed on its coined `return_kind`/`return_amount`),
-        # MEASURED AGAINST A CLEAN `git worktree` AT ITS BASE `128299db` (136 there; same 143 live worlds,
-        # seed 0).** THE UNIT AND THE DIRECTION: variety ROSE by one, `live` did not move; `exchange` is
-        # attempted and refused in every world (it joins the always-refused set) and its scenes re-rank
-        # the rest -- 88 cases' executed sets moved. Per-verb world counts executed, before -> after:
-        # `accept` 92 -> 87, `challenge` 76 -> 74, `commit` 30 -> 32, `give` 6 -> 8, `interview` 51 -> 36,
-        # `move` 51 -> 44, `petition` 68 -> 65, `reconstruct` 131 -> 128, `release` 8 -> 9, `research`
-        # 71 -> 66, `restore` 7 -> 8, `speak` 81 -> 78, `surveil` 81 -> 76, `tell` 118 -> 113, `transfer`
-        # 84 -> 70, `utter` 126 -> 125; `exchange` 0 -> 0. THE SAME-BREATH CHECK: the universal set is
-        # asserted below; the status census is identical (103 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED).
-    assert len(by_sig) == 137, (
+    assert len(by_sig) == 136, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -9338,11 +9295,8 @@ def test_wa_a_planted_claim_removes_transfer_and_a_larger_one_leaves_it():
     assert ("transfer", "Hh") not in empty_granary, (
         "a person who believes the hearth holds NO grain still offered themselves `transfer`. "
         "Clause 4 is not reading the verb's typed cell")
-    # RE-RECORDED AT v9 IN-33 (H-58): `exchange x Hh` goes too, BY CONSTRUCTION -- its first
-    # conjunct is `transfer`'s cell verbatim (`stores(from, kind) >= amount`, `from` the same hearth),
-    # so the one planted belief contradicts both rows' same requirement and nothing else.
-    assert base - empty_granary == {("transfer", "Hh"), ("exchange", "Hh")}, (
-        f"the plant removed {sorted(base - empty_granary)} -- more than the Candidates whose "
+    assert base - empty_granary == {("transfer", "Hh")}, (
+        f"the plant removed {sorted(base - empty_granary)} -- more than the one Candidate whose "
         "requirement it contradicts. A filter that removes everything is not a filter")
 
     full_granary = plant(9)
@@ -9852,10 +9806,7 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # ⚠⚠ `commit` LEAVES, v9 IN-11 (#453 §10.4 step 2): `_eff_utter` opens the utterer's `hold`, so a
     # Proposition is a referent and `commit` executes in 30 corpus worlds (the same note there). The
     # BO-9/BO-10 gap the message below names is closed by the hold, not by widening Q4. A re-record.
-    # ⚠⚠ `exchange` JOINS, v9 IN-33 (H-58): typed and resolvable, attempted, refused in every corpus
-    # world (the same note at `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s
-    # `refused_only`). A re-record.
-    assert set(refused) - set(executed) == {"work", "found", "exchange",
+    assert set(refused) - set(executed) == {"work", "found",
                                             "build", "migrate", "survey"}, (
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
@@ -10706,14 +10657,9 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
         f"{[c.verb for c in after]}")
     print(f"\n  W-B — acceptance: candidates {len(before)} -> {len(after)} "
           f"(dropped {sorted({c.verb for c in before} - {c.verb for c in after})})")
-    # RE-RECORDED AT v9 IN-33 (H-58): TWO go, `transfer` and `exchange`, BY CONSTRUCTION -- `exchange`'s
-    # first conjunct is `transfer`'s cell verbatim on the same `from`, so the one deposited belief
-    # contradicts the same requirement in both rows; no other verb drops.
-    dropped = sorted(c.verb for c in before if c not in after)
-    assert dropped == ["exchange", "transfer"] and len(after) == len(before) - 2, (
-        f"{len(before)} -> {len(after)} candidates, dropped {dropped}. Exactly the two Candidates "
-        "reading `stores(from, kind) >= amount` should go — a larger drop means the deposit "
-        "contradicted a verb this test did not plant a belief about")
+    assert len(after) == len(before) - 1, (
+        f"{len(before)} -> {len(after)} candidates. Exactly one Candidate should go — a larger "
+        "drop means the deposit contradicted a verb this test did not plant a belief about")
     # ⚠ 22 -> 27, ED-FI-0009: five of the six investigation acts are resolvable and form here.
     # THE DELTA ABOVE IS THE PROPERTY AND IT IS UNCHANGED — exactly one Candidate goes — so what
     # moved is the denominator, not the mechanism. `thread_read` is the sixth and does not form:
@@ -10772,10 +10718,7 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # Candidate on `S` though it was not resolvable. (`evade / defy` and `construe` were typed beside
     # it and reverted, so they still form one each on `S`.) The drop is still exactly `transfer`.
     # [GROUNDED: measured at v9 IN-09 -- `opening_set` on `S` lists 31 verbs on a `git worktree` at `905b7a21` and 30 here, the one missing verb `comply`]
-    # ⚠ 29 -> 28 AFTER, v9 IN-33: `exchange` (untyped, it formed one Candidate on `S` and nothing
-    # dropped it) is typed on `transfer`'s first conjunct and drops with it; `before` is unchanged
-    # at 30 (it formed on `S` untyped and forms there typed).
-    assert (len(before), len(after)) == (30, 28), (
+    assert (len(before), len(after)) == (30, 29), (
         f"the absolute counts moved to {(len(before), len(after))}. They are the denominator the "
         "delta above is read against, and the delta alone does not reproduce them — re-derive "
         "`H-122`'s reading rather than adjusting this line")
@@ -11009,41 +10952,35 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # referent: `("prop:d72c11edf1b392a4", "exists:Record", 0)` -- a Record-cell read refused on a
     # Proposition subject -- replaces `("p_carin", "exists:works", 0)` at index 13; every other
     # entry and the order are unchanged. A re-record, read off the failing assertion's own output.
-    # ⚠⚠ **29 -> 30, v9 IN-33 (H-58), ACT MIX AGAIN, UNIT: ENTRIES, DIRECTION: UP. A RE-RECORD, SAID
-    # SO.** `exchange` is resolvable and takes two of the headless persons' scenes over the published
-    # seasons (both `exchange.refused`; `record.created` 8 -> 6 at two seasons, measured against a
-    # `git worktree` at `128299db`), so which record ids are minted and which Events reach WITNESS
-    # moved. Read off the failing assertion's own output; still none evicted.
     assert actor_end == [("einhir_texts", "exists:Record", 0),
                          ("hearth_ostvik", "stores:grain", 0),
                          ("rec:6bf46a143f347c12", "exists:Person", 0),
                          ("rec:6bf46a143f347c12", "exists:Site", 0),
                          ("rec:6bf46a143f347c12", "exists:Record", 1),
                          ("hearth_ostvik", "exists:Record", 0),
+                         ("rec:1f791fe28b8313bd", "exists:Record", 1),
                          ("rec:6bf46a143f347c12", "exists:Record", 1),
-                         ("rec:b976bbb8e2968fec", "exists:Record", 1),
-                         ("rec:ca05073718043888", "exists:Record", 1),
-                         ("rec:ca05073718043888", "exists:Proposition", 0),
-                         ("hearth_ostvik", "exists:Rung", 1),
-                         ("hearth_ostvik", "present_at:p_carin", True),
-                         ("hearth_ostvik", "exists:Person", 0),
+                         ("rec:87a5f74d55eb53da", "exists:Record", 1),
+                         ("p_carin", "exists:Record", 0),
                          ("rec:6bf46a143f347c12", "exists:Record", 1),
-                         ("hearth_ostvik", "stores:grain", 0),
+                         ("rec:c9a2e4d73a61d251", "exists:Record", 1),
+                         ("rec:e26a98748e37db93", "exists:Record", 1),
+                         ("prop:d72c11edf1b392a4", "exists:Record", 0),
+                         ("rec:6bf46a143f347c12", "exists:Site", 0),
+                         ("rec:6bf46a143f347c12", "exists:Record", 1),
                          ("rec:6bf46a143f347c12", "exists:Proposition", 0),
-                         ("hearth_ostvik", "exists:Person", 0),
+                         ("rec:6bf46a143f347c12", "exists:Person", 0),
+                         ("rec:1f791fe28b8313bd", "exists:Person", 0),
+                         ("rec:1f791fe28b8313bd", "exists:Proposition", 0),
+                         ("p_carin", "exists:Record", 0),
+                         ("rec:87a5f74d55eb53da", "exists:Record", 1),
+                         ("rec:87a5f74d55eb53da", "exists:Proposition", 0),
                          ("hearth_ostvik", "exists:Record", 0),
-                         ("hearth_ostvik", "exists:Site", 0),
-                         ("hearth_ostvik", "exists:Proposition", 0),
-                         ("rec:1cd800cab4404268", "exists:Record", 1),
-                         ("rec:1cd800cab4404268", "exists:Site", 0),
-                         ("rec:1cd800cab4404268", "exists:Proposition", 0),
-                         ("rec:1cd800cab4404268", "exists:Person", 0),
-                         ("rec:1cd800cab4404268", "exists:Record", 1),
-                         ("rec:6095547f999b4ff8", "exists:Person", 0),
-                         ("rec:6095547f999b4ff8", "exists:Record", 1),
+                         ("hearth_ostvik", "exists:Person", 0),
+                         ("p_carin", "exists:Proposition", 0),
                          ("p_bailiff", "exists:Site", 0),
                          ("p_bailiff", "exists:Record", 0),
-                         ("p_bailiff", "exists:Proposition", 0)], (
+                         ("hearth_ostvik", "stores:grain", 0)], (
         f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
         "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
         "default moved back toward `total`, or a new deposit channel opened — and every `H-40` / "
@@ -11505,12 +11442,9 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # read. `petition` STAYS in the set though it is no longer attempted in THIS sequence -- its
     # Candidate still drops on a belief another verb's refusal deposited (cross-verb, as `restore`).
     # [GROUNDED: measured at IN-08's cells commit -- drops on {accept, challenge, commit, examine, fight, give, interview, petition, research, restore, transfer}; resolved-act counts on this tree and on a `git worktree` at `13715804` as above]
-    # ⚠⚠ ELEVEN -> TWELVE, v9 IN-33 (H-58): `exchange` JOINS, BY ITS CELL -- its first conjunct is
-    # `transfer`'s (`stores(from, kind) >= amount`), so the `stores:grain` belief `transfer`'s refusal
-    # deposits drops `exchange`'s Candidate on the same hearth too; no verb left. A re-record, said so.
-    assert {v for v, _ in hl_live} == {"accept", "challenge", "commit", "examine", "exchange",
-                                       "fight", "give", "interview", "petition", "research",
-                                       "restore", "transfer"}, (
+    assert {v for v, _ in hl_live} == {"accept", "challenge", "commit", "examine", "fight", "give",
+                                       "interview", "petition", "research", "restore",
+                                       "transfer"}, (
         f"the headless drops are on {sorted({v for v, _ in hl_live})}. `examine`/`restore`/"
         "`interview`/`fight`/`research` are the `exists:` and `existence:`-cell drops the "
         "investigation and combat acts open, and `restore` is the one worth naming on its own: it "
@@ -11709,16 +11643,8 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # Proposition in `reach`, so it is a referent, and `transfer`'s Candidate on it is dropped on a
     # deposited read. Every one of the 24 pairs above survives.
     # [GROUNDED: measured at v9 IN-11 -- the test's own printed `shipped` list on this tree and on a copy of the base tree `c3a698ce`, filtered to `takeable`: 24 there, 25 here, set difference IN as above, OUT none]
-    # ⚠ 25 -> 40, v9 IN-33 (H-58), UNIT: (verb, subject) PAIRS, DIRECTION: UP. SEVEN are `exchange`'s,
-    # BY ITS CELL: its first conjunct is `transfer`'s, so it drops on exactly the seven referents
-    # `transfer` drops on here (`hearth_ostvik`, `p_bailiff` and five Record ids). The other eight are
-    # the act mix: `exchange`'s refused attempts take scenes, so which Records are minted and which
-    # reads are deposited moved (`commit` 1 -> 4 pairs, `examine` 1 -> 4, `restore` 1 -> 4, `give`,
-    # `research` and `transfer` on `p_bailiff` where they were on `p_carin`; record ids are per-run).
-    # The clause fires wider, which is the direction the floor is for.
-    # [GROUNDED: measured at v9 IN-33 -- the dropped set printed on this tree, 40 pairs, 7 of them `exchange`'s and 7 `transfer`'s on the same referents]
-    assert len(dropped) == 40, (
-        f"{len(dropped)} executable clause-4 drops, not 40. The drops are the channel itself; if "
+    assert len(dropped) == 25, (
+        f"{len(dropped)} executable clause-4 drops, not 25. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
         "failure than the loss of outcome-relevance recorded above.")
     # ⚠⚠⚠ **THE BITE CAME BACK UNDER G1a, THE GUARD ABOVE DEMANDED A REASON, AND THE REASON IS
@@ -11763,19 +11689,7 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # basis, the three persons' pursuits migrated): the ranking no longer re-reaches these two in a
     # round the belief does not cover. §F1 clause 4 bites again.
     # [GROUNDED: measured at IN-08's cells commit -- `bit` = {('petition', 'rec:6bf46a143f347c12'), ('transfer', 'rec:6bf46a143f347c12')}; drop timings and control/shipped takings as above, read by wrapping `belief_contradicts` as `hl_drops` does, with the driver's `round`]
-    # ⚠⚠ **2 -> 7 AT v9 IN-33 (H-58), A LARGER SET, RE-RECORDED AND ITS LIMIT SAID.** Both IN-08 pairs
-    # survive; five join: `('exchange', 'rec:b976bbb8e2968fec')` (the new row, dropped on its
-    # `transfer`-shared conjunct), `('give', 'hearth_ostvik')`, `('restore', 'p_bailiff')`,
-    # `('transfer', 'p_bailiff')`, `('transfer', 'rec:ca05073718043888')`. Cause: the act mix --
-    # `exchange`'s refused attempts take scenes in both arms, so the shipped arm re-reaches fewer
-    # dropped Candidates in a round the belief does not cover. MEASURED: the set, read off this
-    # assertion's own output. NOT MEASURED: the per-pair drop timings the IN-08 note grounds; each of
-    # the five is taken in the `none` control and never in the shipped arm (that is what `bit` is),
-    # but whether each DENIES in every season, rather than deferring past the horizon, is unchecked.
-    assert bit == {("exchange", "rec:b976bbb8e2968fec"), ("give", "hearth_ostvik"),
-                   ("petition", "rec:6bf46a143f347c12"), ("restore", "p_bailiff"),
-                   ("transfer", "p_bailiff"), ("transfer", "rec:6bf46a143f347c12"),
-                   ("transfer", "rec:ca05073718043888")}, (
+    assert bit == {("petition", "rec:6bf46a143f347c12"), ("transfer", "rec:6bf46a143f347c12")}, (
         f"the clause-4 bite is {sorted(bit)}. A non-empty bite here would be a NEW acceptance-chain "
         "pair and should be named and grounded as one, not silently accepted; check whether the "
         "shift is a real recovered denial or another fold-order artifact of `seen`'s deposit volume "
@@ -11925,14 +11839,8 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # examine, restore 16; migrate, move 1). The two verbs the message warns about are checked:
     # `tell` and `surveil` are absent on both sides.
     # [GROUNDED: measured at v9 IN-11 -- ARC-01 shipped drops read off the test's own printed `shipped` list on this tree (318) and on a copy of the base tree `c3a698ce` (109, the 12 verbs above)]
-    # ⚠ {14 verbs} -> {12 verbs}, v9 IN-33 (H-58), UNIT: VERBS IN THE DROP SET, DIRECTION: DOWN BY TWO,
-    # NONE ADDED. OUT: `move` and `migrate` (one drop each on `p_b` at IN-11), by the act mix --
-    # `exchange` is resolvable and its refused attempts take scenes in this multi-season case, so the
-    # belief that dropped those two Candidates is no longer deposited in time. `exchange` itself does
-    # not drop here (its first conjunct's `stores` read is never deposited about `r_realm` or `p_b`).
-    # `tell` and `surveil` are absent. A re-record, read off the test's own printed `shipped` list.
     assert {v for v, _ in live} == {"accept", "build", "challenge", "commit", "examine", "fight",
-                                    "found", "give", "interview", "petition",
+                                    "found", "give", "interview", "migrate", "move", "petition",
                                     "research", "restore"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
@@ -14006,11 +13914,9 @@ def test_u2_a_deposit_in_one_round_changes_a_later_rounds_candidate_set_in_the_s
         "the plant's effect is visible in round 0 -- it lands at the END of round 0, so a round-0 "
         "effect means it is reaching `p_bailiff` before it was deposited")
     # [GROUNDED: measured 2026-09-27 on this tree with `seen` (`R8.1`) live -- a round-0 plant removes exactly `transfer` from `p_bailiff`'s ambient candidate set in rounds 1-4 and adds nothing; the belief it deposits (`hearth_ostvik`/`stores:grain`=0) contradicts `transfer`'s form and §F1 clause 4 drops it]
-    # RE-RECORDED AT v9 IN-33 (H-58): `exchange` goes with `transfer`, BY ITS CELL -- its first
-    # conjunct is `transfer`'s on the same `from`, so the one `stores:grain = 0` belief contradicts both.
-    assert lost_delta.get(1) == {"exchange", "transfer"} and not plant_delta.get(1), (
+    assert lost_delta.get(1) == {"transfer"} and not plant_delta.get(1), (
         f"the round-0 plant's delta at round 1 is -{sorted(lost_delta.get(1, ()))} "
-        f"+{sorted(plant_delta.get(1, ()))}, not -{{'exchange', 'transfer'}} +{{}}. The plant deposits a "
+        f"+{sorted(plant_delta.get(1, ()))}, not -{{'transfer'}} +{{}}. The plant deposits a "
         "`stores:grain = 0` belief about the rung `p_bailiff` holds, which is what §F1 clause 4's "
         "`transfer` row should contradict; a different delta is a new finding and must be measured "
         "rather than silently re-pinned")
@@ -14043,17 +13949,7 @@ def test_u2_a_deposit_in_one_round_changes_a_later_rounds_candidate_set_in_the_s
         f"a claim landing at the end of ROUND 2 already shows a delta against the ambient baseline "
         f"at round 1 or 2: lost {late_delta_lost}, gained {late_delta_gained}. It is reaching "
         "`p_bailiff` before it was deposited")
-    # ⚠⚠ RE-RECORDED AT v9 IN-33 (H-58), A TRAJECTORY MOVE, AND WHAT IT COSTS THIS ARM IS SAID: the
-    # round-2 plant's delta is now EMPTY in every round, because the AMBIENT run already holds the
-    # belief it plants -- `p_bailiff`'s own refused `exchange`/`transfer` on `hearth_ostvik` in round 1
-    # deposits the same `stores:grain = 0` read, so from round 2 the unplanted control no longer forms
-    # either (measured: control rounds 2-4 carry neither; on a `git worktree` at `128299db` the control
-    # carries `transfer` through round 3 and the late plant removes it there). The plant adds nothing
-    # the ledger does not already say. R-03's general claim is still shown by the round-0 plant above
-    # (round 1 loses `exchange` and `transfer`). So the clause is: a delta after round 2, OR the plant's
-    # targets are already gone from the ambient baseline after round 2 -- asserted, not assumed.
-    _ambient = all(not ({"transfer", "exchange"} & set(control[r])) for r in control if r > 2)
-    assert any(late_delta_lost.get(r) or late_delta_gained.get(r) for r in late if r > 2) or _ambient, (
+    assert any(late_delta_lost.get(r) or late_delta_gained.get(r) for r in late if r > 2), (
         f"a claim landing at the end of ROUND 2 produced no delta against the ambient baseline in "
         f"any round after it landed: lost {late_delta_lost}, gained {late_delta_gained}. "
         "`questions_for`'s `since` is the pair `(tick, round)` and `witness` stamps the round it "

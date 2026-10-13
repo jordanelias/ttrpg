@@ -1595,21 +1595,11 @@ rosters:
       (`comply` carried the same reason, for a DISPENSATION, until v9 IN-09 typed it without a new
       name: the act's `subject` IS the held writ, a `Record` of kind `dispensation` --
       `verb_table.yaml`'s `comply` row.)
-      ⚠ v9 IN-33 (H-58, the position H-94 reserved the coining to) ADDED TWO, AND ONLY TWO, FOR
-      `exchange`'s OTHER SIDE: `return_kind` -- the matter kind the actor RECEIVES IN RETURN -- and
-      `return_amount` -- how many units of it. The plain sense of *in return*: in an exchange the
-      actor gives `amount` of `kind` from `from` to `to`, and `to` gives `return_amount` of
-      `return_kind` back. `kind`/`amount` keep their one meaning (what moves from `from`), so no
-      name carries two. Inside the old eight a two-sided cell could only bind one kind and one
-      amount for both sides -- a like-for-like swap that moves nothing. The closure still binds:
-      the roster is closed over these ten, and a cell naming any other operand refuses at load
-      (`data/requires.py::_build_clause`). Derived person-side in
-      `decision/options.py::_derive_operand`.
       ⚠ WHERE AN OPERAND COMES FROM IS NOT THIS ROSTER'S QUESTION. Today it is `Act.payload`,
       which carries only `subject` for a computed act, so most cells bind incompletely and
       evaluate to UNKNOWN -- which the fold reports as a refusal, exactly as the untyped
       predicates did.
-    values: [actor, subject, from, to, site, kind, amount, floor, return_kind, return_amount]
+    values: [actor, subject, from, to, site, kind, amount, floor]
 
   writ_sourced_operands:
     source: >-
@@ -1807,7 +1797,7 @@ rosters:
     values: [existence, scalar_threshold, contain_path, cardinality, relation, own_ledger, basis]
     needs:
       existence:        [subject, site, from, to]
-      scalar_threshold: [subject, site, from, to, kind, amount, floor, return_kind, return_amount]
+      scalar_threshold: [subject, site, from, to, kind, amount, floor]
       contain_path:     [actor, subject, from, to]
       cardinality:      [subject, from, to]
       relation:         [actor, subject, site, from, to]

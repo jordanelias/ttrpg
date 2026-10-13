@@ -493,16 +493,6 @@ DEFAULT_FIXTURES = Fixtures(
     # `stores >= 0` admits every giver: a run at this point shows how much of the transfer
     # behaviour rests on the default rather than on the world.
     default_transfer_amount=1,         # `H-94`, swept 0 / 1 / 3
-    # v9 IN-33 (`H-58`) [ASSUMPTION; medium; Jordan to correct]. THE MATTER KIND AN `exchange`
-    # RECEIVES IN RETURN (`return_kind`). The design names an exchange's two sides and supplies no
-    # kind for the second, so it is `default_store_kind`'s shape: declare, default, sweep.
-    # `return_amount` takes `default_transfer_amount` above (one unit back per default unit given),
-    # so no second new fixture. `salt` because it is a STOCKED kind other than `kind`'s default
-    # (`rosters.yaml: site_yield`: harbours yield grain and salt), so a default exchange is grain for
-    # salt. ARMS: `salt` (shipped) · `timber` (the other stocked family, a seam's) · `coin` (THE
-    # CONTROL: registered, produced by no site and held by no rung, so the second side reads 0 and
-    # every exchange refuses). REVERT: delete this fixture with IN-33.
-    default_return_kind="salt",        # `H-58`, swept salt / timber / coin
     # ⚠ ITEM 3b. HOW MUCH BODY ONE UNIT OF UNMET SUBSISTENCE COSTS. `AX-5` names three
     # self-motions and BODIES IS THE ONE WITH NO WRITER; `04 §A.3.3` asks for the shortfall to
     # reach `Person.body` through the gate, and the write matrix licenses `(Person, body)` at

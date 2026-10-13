@@ -155,13 +155,7 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 # RE-PINNED AT v9 IN-09: 68 -> 66. `comply` is typed and `referent_named`, so it no longer forms on
 # a referent the person's own ledger does not name; it was formed on arbitrary referents before and
 # then filtered out by `resolvable_verbs()`, so no behaviour moves (`aperture 4 0` other rows equal).
-# RE-PINNED AT v9 IN-33 (H-58): 66 -> 64. `exchange` is typed (`stores(from, kind) >= amount` and
-# its other side): untyped it formed one operand-less Candidate on each of the two referents, and
-# typed it needs `from`, which this person (no live `contain` Tenure; `exchange` is `own`-eligible,
-# so no seat's treasury) cannot derive, so both leave and nothing is added. ATTRIBUTED: with
-# `exchange`'s row set back to `requires_typed=None` in-process the reading is exactly the old
-# `(66, 66, "891d3653...")`.
-_CONTROL = (64, 64, "68f05c613af0df01bb716b3400cbdeace6b25c753caaf0361dd2070fccb8a55e")
+_CONTROL = (66, 66, "891d3653ba8b5ff4b141165fcd4548904b307bd0be437a7e0f3f5275c7c4625d")
 
 
 def _control_reading():
