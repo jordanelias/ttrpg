@@ -372,6 +372,10 @@ jobs:
     # in), then IN-10 (a) added a second 4-season realm fixture, and every verb position of B-I and
     # after adds a falsifier on the same run. `engine/season/tests/conftest.py::realm_4s` is now the one
     # shared run; 30 minutes is 2x the 14m30s observation, one hosted observation and not a distribution.
+    # ⚠ CORRECTED at the B-I close: the fixture is session-scoped, which under xdist means once PER
+    # WORKER that runs one of its tests, so until the step below gained `--dist loadgroup` (its three
+    # files grouped on one worker) "one shared run" was true only of a single-process run. The cap was
+    # not re-derived after the grouping; nothing has measured a hosted run with it.
     timeout-minutes: 30
     permissions:
       contents: read
@@ -400,7 +404,11 @@ jobs:
       # `-n auto` and no `-m`, for the reason `unit-tests` records: it changes WHERE tests run, never
       # WHICH, and a `-m` filter here is a shipping-gate coverage cut that
       # tests/valoria/test_pytest_marker_discipline.py::test_ci_invocation_is_unfiltered rejects.
-      - run: python -m pytest engine/season/tests -q -n auto
+      # `--dist loadgroup` (batch B-I close, 2026-10-13) is a scheduler too, never a filter: the three
+      # files reading the session-scoped `conftest.py::realm_4s` mark themselves
+      # `xdist_group("realm_4s")`, so ONE worker builds the 4-season run; under plain `-n auto` every
+      # worker that drew one of their tests built its own.
+      - run: python -m pytest engine/season/tests -q -n auto --dist loadgroup
       # The nine acceptance requirements (Jordan, 2026-09-05) — fails a row claiming a status
       # with no measurement behind it, or naming a measure command that resolves to nothing.
       # ⚠ `-m`, AND UNDER `harness/`. The decomposition (ED-IN-0203) made this a package

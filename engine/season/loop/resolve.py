@@ -37,7 +37,7 @@ from ..queries.person_q import (broken_by, confided_outside, conviction_after_cr
                                  elements_violated_by)
 from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_by
 from ..seam import ContestError, Resolution, contest, degree_of
-from ..state.carriers import Act, Event, StateChange
+from ..state.carriers import Act, Event, StateChange, subject_of
 from ..state.gate import Change, NoOpReceipt, Subject, Token, seat_hold
 from ..state.ids import draw_factory, H
 from ..state.world import World
@@ -167,7 +167,18 @@ def _occasion_ids(self, w: "World", a: Act) -> list:
     sc = self.scenes.get(getattr(a, "scene", None) or "")
     if sc is None:
         return []
-    return [c for c in occasioned_by(w, getattr(sc, "occasion", None)) if c != a.id]
+    occ = getattr(sc, "occasion", None)
+    # Batch B-I close (F1): AN ACT ON A CLASSED REFERENT ANSWERS THE STANDING OCCASION, NOT THE
+    # QUESTION IT RODE ON. A vacancy, a seat told of or a writ held is stamped onto whatever
+    # question the person answers (`queries/world_q.py::questions_for`, IN-53 D1), so that
+    # question's own occasion -- a `claim_landed` question's originating Event -- is unrelated to
+    # an act formed on the classed referent. Such an act gets `[ROOT]`, as a Q4 `need` does (plan
+    # IN-53 step 3); one whose subject is ALSO a plain referent keeps the question's occasion.
+    subj = subject_of(a)
+    if (subj and subj not in getattr(occ, "referents", ())
+            and any(r == subj for r, _ in getattr(occ, "classes", ()))):
+        return []
+    return [c for c in occasioned_by(w, occ) if c != a.id]
 
 def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
     """§E2's FIRST TWO STEPS, FOR BOTH PATHS: eligibility, then `requires` against the world the

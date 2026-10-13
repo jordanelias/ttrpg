@@ -32,7 +32,7 @@ from engine.season.loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from engine.season.loop.effects import EFFECTS
 from engine.season.queries.world_q import hold_force
 from engine.season.state import gate as G
-from engine.season.state.carriers import Record, Tenure
+from engine.season.state.carriers import Record, Rung, Tenure
 from engine.season.state.ids import H, draw_factory
 
 
@@ -103,6 +103,13 @@ def test_in10c_the_gate_admits_a_newborns_first_hold_and_nothing_else():
     tie = w.add_tenure(Tenure("tt", "p_low", "r_n2", "tie", since=w.tick))
     assert G.tenure_write_basis(w, tie, None, "p_high", None, frozenset(),
                                 born=frozenset({"r_n2"})) is None
+    # A NEWBORN RUNG (batch B-I close, A1): founding opens only its `contain`. A first `hold` on it
+    # would feed `in_holdings` and the `rung_above_in_holdings` revocation basis -- a claim of
+    # ownership nobody made (`loop/effects_founding.py`, H-166) -- so the clause is Records only.
+    w.rungs["r_rung"] = Rung("r_rung", "hearth")
+    hr = w.add_tenure(Tenure("thr", "p_low", "r_rung", "hold", since=w.tick))
+    assert G.tenure_write_basis(w, hr, None, "p_high", None, frozenset(),
+                                born=frozenset({"r_rung"})) is None
 
 
 # (3) THE FALSIFIER, IN COMPUTED PLAY ------------------------------------------------------------

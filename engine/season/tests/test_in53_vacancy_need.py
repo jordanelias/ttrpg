@@ -24,8 +24,11 @@ and the one reader of the office a `confer` names (`loop/predicates.py::office_n
       `counterparty_may_be_self` that is no boolean or sits on a row the fan does not reach.
   (d) the office reader; a computed `confer` executes end to end, onto another and onto himself;
       one naming nobody is refused.
-  (e) `build_realm(0)`, 3 seasons through the real chooser: `confer` executes >= 1 with `via`, into
-      a seat with no live hold when it resolved; the crowd-out control on executions.
+  (e) `build_realm(0)`, 4 seasons through the real chooser (`conftest.py::realm_4s`): `confer`
+      executes >= 1 with `via`, into a seat with no live hold when it resolved, and every executed
+      `confer` names an Office.
+  (f) the U2 fingerprint moves when a classed referent opens or is told of under an unchanged
+      question id (`loop/deliberate.py::_inputs_fingerprint`).
 
 MUTATIONS, run at the build: `vacant = vacancies(w, p)` -> `vacant = ()` in `questions_for`, and the
 self term in `operand_bags` deleted -- each reddens this file (counts in H-207's OUTCOME).
@@ -35,14 +38,8 @@ from collections import Counter
 
 import pytest
 
-from engine.season.harness import populated as POP
-from engine.season.harness.corpus_run import attribute
-from engine.season.loop.driver import SeasonDriver, resolvable_verbs
-from engine.season.decision import make_chooser
-from engine.season.state.ids import H, draw_factory
-
 from engine.season.data import verbs as _verbs
-from engine.season.data.matrix import WriteClass
+from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.rosters import REFERENT_CLASSES
 from engine.season.data.verbs import VERB_TABLE
 from engine.season.decision import aggregate_questions, assemble
@@ -52,9 +49,14 @@ from engine.season.loop import predicates as _preds
 from engine.season.loop.driver import mint_token
 from engine.season.queries import world_q
 from engine.season.state.carriers import Act, Claim, Proposition, Question, Tenure
+from engine.season.state.ids import ROOT
 from engine.season.state.gate import may_fill
 
 from .test_g3_not_yours import _gov_world, _hold
+
+# One `realm_4s` build per run: every test of this file goes to one xdist worker with the other two
+# realm files' under CI's `--dist loadgroup` (`conftest.py::realm_4s`).
+pytestmark = pytest.mark.xdist_group("realm_4s")
 
 
 def _know(w, pid, *others):
@@ -122,13 +124,18 @@ def test_in53v_a_the_first_question_carries_them_and_keeps_its_id_source_and_ref
 
 def test_in53v_a_control_with_no_vacancy_the_questions_are_byte_identical(monkeypatch):
     """Seat every vacant office, so nobody has a vacancy: the questions then equal, field for field,
-    what `questions_for` returns with the vacancy reader stubbed to `()`."""
+    what `questions_for` returns with the vacancy reader stubbed to `()`. Every person holds an
+    ambition, so there ARE questions to compare (batch B-I close, L6: with none, both sides were
+    empty and the comparison could not fail)."""
     w, _ = _gov_world()
     held = {t.object for t in w.tenures if t.kind == "hold" and t.live}
     for i, o in enumerate(sorted(set(w.offices) - held)):
         w.add_tenure(Tenure(f"t_fill{i}", "p_mid", o, "hold", since=0))
+    for pid in w.persons:
+        _ambition(w, pid, f"prop_{pid}", "R")
     assert all(world_q.vacancies(w, p) == () for p in w.persons.values())
     real = {pid: world_q.questions_for(w, p) for pid, p in w.persons.items()}
+    assert all(real.values()), real
     monkeypatch.setattr(world_q, "vacancies", lambda w, p: ())
     stub = {pid: world_q.questions_for(w, p) for pid, p in w.persons.items()}
     assert real == stub and repr(real) == repr(stub)
@@ -193,7 +200,8 @@ def test_in53v_b_only_confer_forms_on_a_classed_referent_and_only_on_one():
     w, _ = _gov_world()
     for pid in w.persons:
         _know(w, pid, *[o for o in w.persons if o != pid])
-    checked = 0
+        _ambition(w, pid, f"prop_{pid}", "R")          # plain referents, so other rows form too
+    checked = other = 0
     for pid, p in w.persons.items():
         for q in world_q.questions_for(w, p):
             only_classed = {r for r, _ in q.classes} - set(q.referents)
@@ -203,7 +211,10 @@ def test_in53v_b_only_confer_forms_on_a_classed_referent_and_only_on_one():
                     checked += c.verb == "confer"
                 else:
                     assert c.subject not in only_classed, (pid, q.id, c)
-    assert checked >= 4, checked
+                    other += bool(only_classed)
+    # Batch B-I close (L6): the second branch compared something -- Candidates of unclassed rows
+    # formed from a question that carried an Office-only referent.
+    assert checked >= 4 and other >= 1, (checked, other)
 
 
 def test_in53v_b_no_office_referent_outside_reach():
@@ -315,17 +326,57 @@ def test_in53v_d_a_confer_naming_nobody_is_refused():
     assert kinds == ["confer.refused"] and _hold(w, "off_reeve") is None, kinds
 
 
+def test_in53v_d_an_act_on_a_classed_referent_cites_no_unrelated_occasion():
+    """A vacancy rides on whatever question the person answers (D1), so a `confer` can be packed in
+    a scene whose occasion is a `claim_landed` question about something else. Its occasion is the
+    STANDING one, `[ROOT]` as a Q4 `need` has (plan IN-53 step 3; batch B-I close, F1), never the
+    unrelated claim's originating Event. Control: an act on the same scene's PLAIN referent still
+    cites it, and so does one whose subject is both plain and classed."""
+    from engine.season.state.carriers import Event, Scene, StateChange
+    w, d = _gov_world()
+    origin = Event("ev_v_origin", "speech.made", [], [ROOT], w.tick)
+    w.log.append(origin)
+    w.log.append(Event("ev_v_deposit", "claim.deposited",
+                       [StateChange("claim_v", "set", "Act")], [origin.id], w.tick))
+    q = Question("q:claim:claim_v", "claim_landed", ("S",), "claim_v", (("off_reeve", "Office"),))
+    d.scenes["sc_v"] = Scene("sc_v", "p_king", [], occasion=q)
+    assert world_q.occasioned_by(w, q) == [origin.id]          # the scene HAS an occasion
+    a = Act(id="cf_v", actor="p_king", verb="confer", via="off_crown", scene="sc_v",
+            payload={"subject": "off_reeve", "to": "p_king"})
+    out = d.resolve(mint_token(w, WriteClass.ACTS), [a],
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert "tenure.opened" in [e.kind for e in out], [e.kind for e in out]
+    assert not [e for e in out if origin.id in e.causes], [(e.kind, e.causes) for e in out]
+    plain = Act(id="pl_v", actor="p_king", verb="work", scene="sc_v", payload={"subject": "S"})
+    assert d._occasion_ids(w, plain) == [origin.id]
+    both = Question("q:claim:claim_v", "claim_landed", ("off_reeve",), "claim_v",
+                    (("off_reeve", "Office"),))
+    d.scenes["sc_v2"] = Scene("sc_v2", "p_king", [], occasion=both)
+    assert d._occasion_ids(w, dataclasses.replace(a, id="cf_v2", scene="sc_v2")) == [origin.id]
+
+
+def test_in53v_d_a_confer_onto_no_living_person_is_refused():
+    """The conferee must be a living person (batch B-I close, C1): `to` comes from the conferrer's
+    own claims (`known_persons`), which can name somebody since dead; an id `w.persons` does not hold
+    is refused at the precondition (`_req_confer`), never filed as a seat held by nobody."""
+    w, d = _gov_world()
+    kinds = _fold_confer(w, d, {"subject": "off_reeve", "to": "p_ghost"}, "off_crown")
+    assert kinds == ["confer.refused"] and _hold(w, "off_reeve") is None, kinds
+    w, d = _gov_world()
+    w.step = Step.MATTER                    # a death, in `loop/matter.py`'s own write shape
+    w.write("Tenure", mint_token(w, WriteClass.MATTER), lambda: w.remove_person("p_mid"),
+            record_kind="Tenure", fieldname="until", driver="Event",
+            caused_person_exists="p_mid", emits="tenure.closed", subject="p_mid", causes=[ROOT])
+    w.step = Step.RESOLVE
+    assert "p_mid" not in w.persons
+    kinds = _fold_confer(w, d, {"subject": "off_reeve", "to": "p_mid"}, "off_crown")
+    assert kinds == ["confer.refused"] and _hold(w, "off_reeve") is None, kinds
+
+
 # ======================================================================================
 # (e) THE EXIT, ON `build_realm(0)`: 4 SEASONS THROUGH THE REAL CHOOSER, NOTHING FORCED (the plan's
 # instrument is `aperture 4 0`; at 3 seasons seed 0 `confer` executes 0 times, at 4 it executes once)
 # ======================================================================================
-
-#: Executed `issue`+`levy`+`transfer` on the base commit (e716f10b), `build_realm(0)`, 4 seasons,
-#: seed 0, `corpus_run.attribute`'s `made` -- the crowd-out control's floor, less one per `confer`
-#: executed (each may displace at most one act).
-_BASE_EXECUTED_ILT = 7      # issue 2 + levy 0 + transfer 5, `aperture 4 0` realm row at the base
-SEASONS = 4
-
 
 # The 4-season run is `conftest.py::realm_4s` (one run for every file that reads it).
 
@@ -341,12 +392,63 @@ def test_in53v_e_confer_executes_into_a_seat_nobody_held(realm_4s):
     assert into_vacant, sorted(Counter(a.verb for a, made, _ in rows if made).items())
 
 
-def test_in53v_e_the_crowd_out_control(realm_4s):
+def test_in53v_e_every_executed_confer_names_an_office(realm_4s):
+    # RE-RECORDED AT v9 IN-10 (c): the executed-count floor (`issue`+`levy`+`transfer` at the base,
+    # less the `confer`s) is retired. It compared 5 to 7 acts across a whole trajectory, and any later
+    # item that moves who holds a writ moves it (IN-10 (c): `issue` 2 -> 3, `transfer` 4 -> 2, no
+    # formation count changes), so it cannot tell a crowd-out from a different trajectory. The
+    # control is the formation test above (`test_in53v_a_the_partition_moves_no_other_rows_
+    # formations`, exact by construction) and H-207's pooled control (b). RENAMED at the batch B-I
+    # close: what this holds is that every EXECUTED `confer` names an Office, and that there is one.
     w, _, rows, _ = realm_4s
-    # RE-RECORDED AT v9 IN-10 (c): the executed-count floor (`_BASE_EXECUTED_ILT` less the `confer`s)
-    # is retired. It compared 5 to 7 acts across a whole trajectory, and any later item that moves
-    # who holds a writ moves it (IN-10 (c): `issue` 2 -> 3, `transfer` 4 -> 2, no formation count
-    # changes), so it cannot tell a crowd-out from a different trajectory. The control is the
-    # formation test above (`test_in53v_a_the_partition_moves_no_other_rows_formations`), exact by
-    # construction; what this test still holds is that every executed `confer` names an Office.
-    assert all(_preds.office_named_by(a) in w.offices for a, _, _ in rows if a.verb == "confer")
+    confers = [a for a, made, _ in rows if a.verb == "confer" and made]
+    assert confers, "no `confer` executed, so this observed nothing"
+    assert all(_preds.office_named_by(a) in w.offices for a in confers), confers
+
+
+# ======================================================================================
+# (f) THE U2 FINGERPRINT SEES THE CLASSED REFERENTS (batch B-I close, L1): `loop/deliberate.py::
+# _inputs_fingerprint` must move whenever `opening_set` would form a different set, or the driver
+# serves a stale queue. Both arms keep every question id fixed, which is the case the id alone missed.
+# ======================================================================================
+
+def _fp_and_formed(w, pid, since=None):
+    from engine.season.loop.deliberate import _inputs_fingerprint
+    from engine.season.state.carriers import Sensation
+    p = w.persons[pid]
+    qs = world_q.questions_for(w, p, since)
+    return ([q.id for q in qs], _inputs_fingerprint(p, qs, Sensation(0)),
+            _sig(c for q in qs for c in _formed(w, pid, q)))
+
+
+def test_in53v_f_a_vacancy_opening_under_a_standing_question_moves_the_fingerprint():
+    """`p_king` answers an ambition question. `off_reeve` is seated (no vacancy), then its hold
+    closes: the question keeps its id and gains the seat as `Office`, `confer` forms on it -- and the
+    fingerprint must move, though nothing of `p_king`'s own (tenures, ledger) did."""
+    w, _ = _gov_world()
+    _ambition(w, "p_king", "prop_k", "R")
+    w.add_tenure(Tenure("t_seat_reeve", "p_mid", "off_reeve", "hold", since=0))
+    ids0, fp0, sig0 = _fp_and_formed(w, "p_king")
+    _hold(w, "off_reeve").until = w.tick
+    ids1, fp1, sig1 = _fp_and_formed(w, "p_king")
+    assert ids1 == ids0 == ["q:need:prop_k"], (ids0, ids1)
+    assert sig1 != sig0 and any("'confer', 'off_reeve'" in s for s in sig1), sig1
+    assert fp1 != fp0, "the vacancy moved the candidate set and left the fingerprint unmoved"
+
+
+def test_in53v_f_being_told_of_a_seat_already_carried_moves_the_fingerprint():
+    """`off_reeve` is already `p_king`'s vacancy, so being TOLD of it moves no class and no id -- but
+    `oblige` (`referent_named`) starts forming on it. `since` is past the told claim, so Q2 does not
+    admit it as a question of its own (it would move the ids by itself, and the arm would observe
+    nothing): what is left is the seventh term."""
+    from .test_in10a_oblige_formable import _told
+    w, _ = _gov_world()
+    _ambition(w, "p_king", "prop_k", "R")
+    since = (w.tick, 1)
+    ids0, fp0, sig0 = _fp_and_formed(w, "p_king", since)
+    _told(w, "p_king", "off_reeve")
+    ids1, fp1, sig1 = _fp_and_formed(w, "p_king", since)
+    assert ids1 == ids0 == ["q:need:prop_k"], (ids0, ids1)
+    assert fp1[0] == fp0[0], "the classes moved: this arm no longer isolates the told term"
+    assert sig1 != sig0 and any("'oblige', 'off_reeve'" in s for s in sig1), sig1
+    assert fp1 != fp0, "being told of the seat moved the candidate set, not the fingerprint"

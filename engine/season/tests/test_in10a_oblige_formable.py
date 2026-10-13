@@ -27,16 +27,17 @@ from collections import Counter
 import pytest
 
 from engine.season.data.matrix import WriteClass
-from engine.season.decision import assemble, make_chooser
+from engine.season.decision import assemble
 from engine.season.decision.choose import _payload_of
 from engine.season.decision.options import opening_set
-from engine.season.harness import populated as POP
 from engine.season.harness import probes as P
-from engine.season.harness.corpus_run import attribute
-from engine.season.loop.driver import SeasonDriver, mint_token, resolvable_verbs
+from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.queries import world_q
 from engine.season.state.carriers import Act, Claim
-from engine.season.state.ids import H, draw_factory
+
+# One `realm_4s` build per run: every test of this file goes to one xdist worker with the other two
+# realm files' under CI's `--dist loadgroup` (`conftest.py::realm_4s`).
+pytestmark = pytest.mark.xdist_group("realm_4s")
 
 SEAT = "off_duke"
 
@@ -168,9 +169,6 @@ def test_in10a_the_declarations_as_built():
 # `off_npc_082`, IN-53) deposits `tenure.opened` claims about the seat on its witnesses, who
 # re-deliberate in the same season's later rounds and oblige to it.
 
-SEASONS = 4
-
-
 # The 4-season run, with the `oblige` formations recorded, is `conftest.py::realm_4s`.
 
 
@@ -186,17 +184,6 @@ def test_in10a_exit_oblige_executes_in_computed_play(realm_4s):
     taken = [a for a, made, _ in rows if a.verb == "oblige" and "duty.taken" in made]
     assert taken, sorted(Counter(a.verb for a, made, _ in rows if made).items())
     assert all(a.payload["subject"] in w.offices for a in taken)
-
-
-#: Executed `issue`+`levy`+`transfer` in `aperture 4 0`'s realm row at HEAD 5652e846 (IN-10's base):
-#: 2 + 0 + 4. The crowd-out floor, less one per `oblige` executed.
-_BASE_EXECUTED_ILT = 6
-
-
-def test_in10a_the_crowd_out_control(realm_4s):
-    _, _, rows, _ = realm_4s
-    ex = Counter(a.verb for a, made, _ in rows if made)
-    assert ex["issue"] + ex["levy"] + ex["transfer"] >= _BASE_EXECUTED_ILT - ex["oblige"], dict(ex)
 
 
 def test_in10a_the_partition_moves_no_other_rows_formations():

@@ -399,9 +399,11 @@ def exercised_seat(p: Person, row: "Optional[VerbRow]") -> Optional[str]:
     Candidate per seat (`exercisable_seats`), the seat riding on it (`VIA` in its operands) to
     `Act.via` (`seat_of`), and the fold's gate asks that seat. The person cannot say which seat
     reaches a target (that needs the containment tree, which is not the person's state), so a seat
-    that does not reach it is refused there. `revoke` and `confer` reach it since IN-53: a computed
-    act of either names its office on `subject` (`loop/predicates.py::office_named_by`), formed only
-    on an Office referent (`H-207`).
+    that does not reach it is refused there. `confer` reaches it since IN-53: a computed `confer`
+    names its office on `subject` (`loop/predicates.py::office_named_by`), formed only on an Office
+    referent (`H-207`). `revoke` does not (D1): it declares no referent class and reads its office
+    from the payload's `office` alone (`_req_revoke`), so a computed `revoke` stays refused at its
+    precondition as at the base.
     Traces nothing: the admission it mirrors already traced. A verb on no row (`row is None` -- a
     hand-ranked candidate naming an invented verb) exercises nothing; the fold refuses the verb
     itself, and inventing a seat for it here would be a second answer."""

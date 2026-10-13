@@ -126,6 +126,13 @@ def _req_confer(w: "World", a: "Act") -> bool:
         return False                       # no conferral basis: the office cannot be conferred
     if not may_fill(w, a.actor, a.via, off):
         return False                       # G3: the seat exercised does not reach the seat conferred
+    # Batch B-I close (C1): THE CONFEREE IS A LIVING PERSON. `to` comes from the conferrer's own
+    # claims (`known_persons`), which can name somebody since dead, and nothing downstream asks:
+    # `_admits` refuses only a missing or self `to`, and the gate admits the hold under the
+    # conferral basis, which reads `via` alone. `tell` gets this from its `hearer` conjunct; this row
+    # is untyped, so it is asked here.
+    if binding_from_act(a).get("to") not in w.persons:
+        return False
     if not any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures):
         return True                        # 1-per-object satisfied
     # THE `or` DISJUNCT: a held office is still conferrable when the holder-Proposition carries

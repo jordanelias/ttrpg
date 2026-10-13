@@ -172,7 +172,7 @@ verbs:
     counterparty_may_be_self: true
     counterparty_may_be_self_note: "IN-53 (H-207, DECISION 2026-10-13 D2) [ASSUMPTION; medium; Jordan to correct]. THE CONFERRER MAY CONFER ON HIMSELF: the lord who assumes a vacant seat (the cast already has one person holding several). `decision/options.py::operand_bags` ranges `to` over the persons he knows PLUS himself -- he knows himself from his own state, so `known_persons` keeps its three sources (AX-2, ED-IN-0282) -- and both counterparty sites (`opening_set`, `loop/resolve.py::_admits`) waive the self-exclusion for this row alone (`VerbRow.self_counterparty_refused`). ED-IN-0210 ruling 1 (*verbs are not fiats*) is not crossed: a self-conferral writes `Tenure(actor, office)`, not the `Tenure(X,X)` self-loop; it can fail on the world's terms (`may_fill` through `Act.via`, 1-per-object) and be undone by `revoke`; the write gate opens a seat-`hold` under `conferral` even for the actor's own (`state/gate.py::tenure_write_basis`). REVERT: delete this column."
     beneficiary: "subject"
-    requires:    "the office's conferral basis, and 1-per-object: no live hold on the object, or the holder-Proposition has zero live commit (§54 it. 20)"
+    requires:    "the office's conferral basis, the conferee is a living person, and 1-per-object: no live hold on the object, or the holder-Proposition has zero live commit (§54 it. 20)"
     writes:      ["Tenure.until", "Tenure.since", "Tenure.term"]
     writes_note: "IN-10 (b) (#453 §7.2 `:1382`, §9.6 `:2071`: 'the edits are `_eff_confer` and the row's `writes:`'): `Tenure.term` ADDED, on `oblige`'s precedent (plan position `17b`) -- `_eff_confer` opens the seat-hold WITH the term the act declares (`loop/effects_governance.py::_declared_term`, the payload's `term`, a length in seasons; `Term(tick + n, act)`), so undeclared that write would ride under `Tenure.since`'s gate. Check-only, like the second pair. A computed `confer` declares none and opens an untermed hold exactly as before; a termed one is REGENCY or a TERM-LIMITED SEAT, matured at MATTER (`loop/matter.py`'s term branch) under `T-n`, which leaves the seat vacant. The conferral basis admits the opened edge whole (`state/gate.py`). LIMIT carried from #453: the effect still closes EVERY live hold on the seat, so a termed regent displaces the principal; delegation without a hold is IN-48's. [ASSUMPTION; medium; Jordan to correct -- the term's source: an act-declared payload length, `create_record`'s `stages` precedent, since no operand of the closed eight and no live Record kind carries one. REVERT: drop this pair and `_declared_term`.]"
     emits:       ["tenure.opened", "tenure.closed"]
@@ -295,8 +295,8 @@ verbs:
     beneficiary: "actor"
     requires:    "as comply"
     requires_typed: none
-    requires_typed_note: "§E3 `:431` — *as `comply`*, and it inherits `comply`'s reason unchanged: the operand is a Dispensation and the closed operand roster has no name for one."
-    requires_decline_note: "PLAN POSITION IN-41 (`SM-11`): as `comply`, for `comply`'s reason -- untyped for want of a Dispensation operand (`H-94`), no `REQUIRES_PREDICATES` entry, so nothing evaluates the precondition and `resolvable_verbs()` leaves the verb out."
+    requires_typed_note: "§E3 `:431` — *as `comply`*. Untyped, and NO LONGER FOR `comply`'S REASON: `comply` is typed since v9 IN-09 (the act's `subject` read as the writ, no operand coined), and this row was typed the same way in that batch and REVERTED to this base row because it executed 0 times through the real chooser (the stopping rule per verb, H-203 / H-44 AMENDED 2026-10-13; the typed row is in `60073e75`). It stays untyped because nothing in computed play chooses it, not because its operand cannot be named."
+    requires_decline_note: "PLAN POSITION IN-41 (`SM-11`), carried after v9 IN-09: untyped (see `requires_typed_note:` -- the IN-09 typing was reverted at 0 executions), no `REQUIRES_PREDICATES` entry, so nothing evaluates the precondition and `resolvable_verbs()` leaves the verb out."
     writes:      []
     emits:       ["compliance.withheld"]
     emits_on_refusal: ["compliance.impossible"]
@@ -310,7 +310,7 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "none"
-    beneficiary_note: "the counterparty is the other beneficiary and is exactly what `exchange` cannot carry -- the second of the two `requires_typed: none` rows, for want of an operand name for the other side of a trade."
+    beneficiary_note: "the counterparty is the other beneficiary and is exactly what `exchange` cannot carry -- left untyped, unlike `comply` since v9 IN-09, for want of operand names for the other side of a trade (the return's kind and amount): IN-33 coined two and was reverted at 0 executions (H-58)."
     requires:    "both sides' stores cover their side of the exchange"
     requires_typed: none
     requires_typed_note: "W3's own cell — *both sides' stores cover their side of the exchange*. §F.24a form 2 TWICE, one clause per side, and the SECOND side cannot be written: it needs the counterparty's matter kind and quantity, and `rosters.yaml: requires_operands` is closed with no names for them. ⚠ TYPING ONE SIDE ONLY IS THE `_req_confer` DEFECT — a dropped conjunct is an over-admission, and `G4` weighs it equally with an invention. Stays on REQUIRES_PREDICATES with no predicate, so the fold refuses."
@@ -809,8 +809,8 @@ verbs:
     beneficiary: "actor"
     requires:    "as comply — ⚠ emitter- or receiver-side is absent, D18"
     requires_typed: none
-    requires_typed_note: "§E3 `:432` — *as `comply` — ⚠ **emitter- or receiver-side is `absent`, D18***. Grade `absent`. Even setting aside `comply`'s operand problem, WHOSE ledger is read is the thing `D18` records as missing, and a typed cell would have to pick one. §42.2.1: the honest behaviour is to refuse, not to pick."
-    requires_decline_note: "PLAN POSITION IN-41 (`SM-11`): as `comply` (`H-94`), and the grade is `absent` besides -- whose ledger is read is the thing `D18` records as missing, so a predicate would have to pick one, and §42.2.1's honest behaviour is to refuse rather than pick. Nothing evaluates the precondition; `resolvable_verbs()` leaves the verb out."
+    requires_typed_note: "§E3 `:432` — *as `comply` — ⚠ **emitter- or receiver-side is `absent`, D18***. Grade `absent`. `comply`'s operand is answered since v9 IN-09 (its `subject` read as the writ), and this row's IN-09 typing was REVERTED at 0 executions through the real chooser (H-203 / H-44 AMENDED 2026-10-13; the typed row is in `60073e75`); beyond that, WHOSE ledger is read is the thing `D18` records as missing, and a typed cell would have to pick one. §42.2.1: the honest behaviour is to refuse, not to pick."
+    requires_decline_note: "PLAN POSITION IN-41 (`SM-11`), carried after v9 IN-09 (the typing reverted, `requires_typed_note:`), and the grade is `absent` besides -- whose ledger is read is the thing `D18` records as missing, so a predicate would have to pick one, and §42.2.1's honest behaviour is to refuse rather than pick. Nothing evaluates the precondition; `resolvable_verbs()` leaves the verb out."
     writes:      []
     emits:       ["terms.distorted"]
     emits_on_refusal: ["construal.impossible"]

@@ -61,11 +61,14 @@ BASE_HASHES = {0: "11989dcf5e1c25afab556bf3f234a200",
                1: "80aef84c49e0c6d63aac266fabf46af3",
                2: "b87bd251f536915f086ea0fa3b015248"}
 
-# The pre-IN-34 base (d47077d5), `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event
-# count and the sha256 of its ordered `kind|id` lines after one season and after two. A ONE-TIME PROOF
-# that the schema re-pin of `BASE_HASHES` moved nothing at the event level (the hash folds
-# `repr(Person)`, which gained a field; the events did not move); re-recorded together with
-# `BASE_HASHES`, never alone. A hazard that fired at the control would change the sequence.
+# `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
+# ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
+# (d47077d5) as a one-time proof that the schema re-pin of `BASE_HASHES` moved nothing at the event
+# level; it is NO LONGER that base's values. Re-recorded with `BASE_HASHES` at v9 IN-53 (7526 -> 7527,
+# 21508 -> 21735: `confer`'s always-refused attempts stopped) and at v9 IN-10 (c) (-> 7508, 21120: a
+# writ held by its addressee), so the values below are IN-10 (c)'s and this is a change detector on
+# the seasons-1-2 event sequence, not a pre-IN-34 control. Unmoved by the batch B-I close's fixes
+# (fingerprint, conferee, founding, occasion). Re-recorded together with `BASE_HASHES`, never alone.
 BASE_EVENTS = {1: (7508, "b8a1f5ff4ae77037a00cbad9c28fd665229c09fdd3e5c75e173d5a8698981dbc"),
                2: (21120, "9dc7a16b7ea31e81bfad66a80b85346d1983f65ccd9dd1f225102dcac8767e00")}
 

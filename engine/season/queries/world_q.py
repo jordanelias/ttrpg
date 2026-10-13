@@ -1545,7 +1545,11 @@ def vacancies(w: World, p: Person) -> tuple:
     Resolver-side and read-only: it supplies seat IDS, which `questions_for` adds to the question
     the person answers, as classed referents (D1); whether the conferral then passes is the fold's (`_req_confer`). It asks the
     write gate's own `may_fill`, so it names no seat the gate would refuse to have filled through
-    that seat. `confer` is named here because it is the remit act the predicate it mirrors serves."""
+    that seat. `confer` is named here because it is the remit act the predicate it mirrors serves.
+    ⚠ THAT PROMISE IS THIS FUNCTION'S, NOT THE CLASS'S: the seats a person was told of
+    (`seats_named`) ride the same `Office` class and `confer` does not declare `referent_named`, so
+    it forms on a told-of seat `may_fill` would refuse (or one he holds) too, and the fold refuses it
+    there at the cost of a scene (batch B-I close, C4; H-207)."""
     seats = [t.object for t in p.tenures
              if t.kind == "hold" and t.live and t.object in w.offices and "confer" in t.granted_acts]
     if not seats:
@@ -1609,7 +1613,12 @@ def _stamped(q: Question, added: tuple, w: World) -> Question:
 
 
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
-    """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier.
+    """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus THREE
+    STANDING OCCASIONS stamped onto the first question as classed referents (`_stamped`, below the
+    sort): the vacant seats the person may fill (`vacancies`, IN-53), the seats he has been told of
+    (`seats_named`, v9 IN-10 (a)) and the writs he holds (`writs_held`, v9 IN-09). They are not
+    sources: no id or source changes; a person with one of them and no question gets one `need`
+    question carrying them.
 
     ⚠ THIS CLOSES `H-04` AND §61's `NoProducer`, which between them blocked every NPC case: with
     no producer for `q`, `assemble(person, question)` was UNSATISFIABLE and DELIBERATE had no

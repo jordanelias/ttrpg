@@ -45,6 +45,10 @@ from engine.season.queries import world_q
 from engine.season.queries.world_q import hold_force
 from engine.season.state.carriers import Act, Claim
 
+# One `realm_4s` build per run: every test of this file goes to one xdist worker with the other two
+# realm files' under CI's `--dist loadgroup` (`conftest.py::realm_4s`).
+pytestmark = pytest.mark.xdist_group("realm_4s")
+
 VERB, GIVEN, REFUSED = "comply", "compliance.given", "compliance.impossible"
 HOLDER, OTHER = "p_low", "p_mid"                  # `tiny_world`: both in Hh
 WRIT = "rec_writ"
@@ -224,15 +228,19 @@ def test_in09_the_partition_moves_no_other_rows_formations():
 # `compliance.impossible`: his own ledger held a claim on it).
 
 
-def test_in09_falsifier_every_attempt_answers_a_writ_its_actor_held_and_had_read(realm_4s):
+def test_in09_falsifier_every_attempt_answers_a_writ_its_actor_holds_and_is_not_refused(realm_4s):
+    # Batch B-I close (L4): the refusal is read from the row's THIRD element (the refusal kinds the
+    # log holds for the act); `made` never carries one, so `REFUSED not in made` could not fail. The
+    # hold is the LIVE one at the end of the run (a writ given away or a holder dead reads red here
+    # for that reason, not for this falsifier's).
     w, _, rows, _ = realm_4s
-    tried = [(a, made) for a, made, _ in rows if a.verb == VERB]
+    tried = [(a, refused) for a, _, refused in rows if a.verb == VERB]
     assert tried, "no `comply` was attempted, so the falsifier observed nothing"
-    for a, made in tried:
+    for a, refused in tried:
         rid = a.payload["subject"]
-        assert any(t.kind == "hold" and t.subject == a.actor and t.object == rid
-                   for t in w.tenures), (a.actor, rid, "never held the writ")
-        assert REFUSED not in made, (a.actor, rid, made)
+        assert any(t.kind == "hold" and t.live and t.subject == a.actor and t.object == rid
+                   for t in w.tenures), (a.actor, rid, "does not hold the writ")
+        assert REFUSED not in refused, (a.actor, rid, refused)
 
 
 def test_in09_exit_comply_executes_in_computed_play(realm_4s):

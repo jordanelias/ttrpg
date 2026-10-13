@@ -709,9 +709,16 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                   the cascade may close an edge through the death of what it names, and nothing
                   else; this may open the edge that places what was just born, and nothing else --
                   not a second parent, not an edge from a thing that already existed, not any kind
-                  but `contain`. See the block at the clause for why it is a basis at all. ⚠ IN-10
-                  (c) WIDENED IT BY ONE KIND: the first and only `hold` on a non-seat thing the
-                  same write made -- a writ minted into its addressee's hand (`_eff_issue`).
+                  but `contain` (save the one widening next). See the block at the clause for why
+                  it is a basis at all. ⚠ IN-10 (c) WIDENED IT BY ONE KIND, FOR ONE CARRIER: the
+                  first and only `hold` on a
+                  RECORD the same write made -- a writ minted into its addressee's hand
+                  (`_eff_issue`). Never on a newborn Rung (batch B-I close, A1): a hold there
+                  feeds `in_holdings` and the `rung_above_in_holdings` revocation basis, a claim
+                  of ownership nobody made (`loop/effects_founding.py`, H-166). ⚠ LAYER 1 IS
+                  BEHIND THE CODE HERE: `architecture/meta/04_CODE_ARCHITECTURE.md` §C.2
+                  (`:609-610`) still defines founding as opening a `contain` only; amending it is
+                  Jordan's (IN-44), and this clause is recorded at H-203, not ratified there.
 
     ⚠ JUDGED ON THE WORLD THE WRITE LEAVES. `World.write` asks this after `apply()`, so `T-o` and
     `conferral` read `seat_hold` -- is the actor seated in `via`? -- AFTER the effect ran. `04 §B.8`'s
@@ -729,8 +736,9 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     BUILT AT POSITION 16. The giver's close is `T-m`. The RECEIVER'S open matches none of the other
     bases -- five at the time this was written, eight now (⚠ COUNT CORRECTED, terminal Phase-2-close
     critique, 2026-09-30): `renewal` (`17b`) and `determination` (`19`) admit no opening of a `hold`
-    at all (an `oblige` only), and `founding` (`24e`) admits only a `contain` for a newborn `Rung` --
-    it is not the receiver's act, no seat is exercised (`give` is `own`-eligible, `via` is
+    at all (an `oblige` only), and `founding` (`24e`) admits a `contain` for a newborn `Rung` and,
+    since IN-10 (c), the first `hold` on a newborn RECORD only -- neither is a `give`: it is not the
+    receiver's act, no seat is exercised (`give` is `own`-eligible, `via` is
     `None`), and nothing ceased to exist. So it has its own basis, CAUSATION-BOUND like the cascade
     rather than authority-bound like T-o: *a `hold` opened on an object that is NOT a seat, of the
     same kind and object as an edge the actor OWNED, was live before, and closed under `T-m` in this
@@ -817,8 +825,13 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                         for o in w.tenures)):
         return FOUNDING
     # IN-10 (c) (H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): THE SAME
-    # BIRTH, ONE EDGE KIND OVER -- the FIRST `hold` on a non-seat thing this same write brought into
-    # existence, and the ONLY live one on it. A writ is minted INTO ITS ADDRESSEE'S HAND
+    # BIRTH, ONE EDGE KIND OVER -- the FIRST `hold` on a RECORD this same write brought into
+    # existence, and the ONLY live one on it. RECORDS ONLY (batch B-I close, A1): a seat is excluded
+    # by `seat is None`, and a newborn Rung by `t.object in w.records` -- `found` opens its
+    # `contain` and nothing else, since a hold on a place feeds `in_holdings` and the
+    # `rung_above_in_holdings` revocation basis (`loop/effects_founding.py`, H-166). 04 §C.2
+    # (`:609-610`) still defines founding as a `contain` only; amending it is Jordan's.
+    # A writ is minted INTO ITS ADDRESSEE'S HAND
     # (`loop/effects_information.py::_eff_issue`): the issuer keeps no edge, so `T-m` (the actor
     # owns the edge) cannot admit the addressee's, `handover` needs an edge the actor ended, and no
     # seat is opened. CAUSATION-BOUND like the `contain` clause above: the licence is the birth the
@@ -827,6 +840,7 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     # refused both. A thing that already existed is outside it (that is `handover`'s, by `give`).
     # REVERT: delete this clause with `_eff_issue`'s holder (every kind back on its maker).
     if (opened and t.kind == "hold" and seat is None and t.object in born
+            and t.object in w.records
             and not any(o is not t and o.kind == "hold" and o.object == t.object and o.live
                         for o in w.tenures)):
         return FOUNDING

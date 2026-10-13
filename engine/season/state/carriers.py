@@ -453,9 +453,10 @@ class Question:
 
     `classes` (IN-53, H-207, DECISION 2026-10-13 D1) are THE CLASSED REFERENTS: `((id, class),
     ...)`, a SECOND PARTITION beside `referents`, filled by `queries/world_q.py::questions_for`
-    (which has the World; `_stamped`, the one stamp site: the vacant seats a person may fill, as
-    `Office`). A verb row declaring `referent_class: C` forms ONLY on the ids carried here as `C`;
-    a row declaring none forms ONLY on `referents`, exactly as before IN-53 (`referents_for`, read
+    (which has the World; `_stamped`, the one stamp site): the vacant seats a person may fill
+    (`vacancies`, IN-53) and the seats he has been told of (`seats_named`, v9 IN-10 (a)), as
+    `Office`, and the writs he holds (`writs_held`, v9 IN-09), as `Record`. A verb row declaring
+    `referent_class: C` forms ONLY on the ids carried here as `C`; a row declaring none forms ONLY on `referents`, exactly as before IN-53 (`referents_for`, read
     by `VerbRow.referents_of`). Kept apart rather than spliced into `referents` so the partition is
     exact: an id may be BOTH a plain referent (a claim about the seat) and a classed one (the seat
     as a vacancy), and neither side's formations move the other's. It rides per referent, not on
