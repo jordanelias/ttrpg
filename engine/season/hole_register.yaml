@@ -672,7 +672,7 @@ rows:
     default:   "the other side of an exchange gives back `return_amount` of `return_kind`; a computed act takes `return_kind` from the fixture `default_return_kind` (salt) and `return_amount` from `default_transfer_amount` (1, `H-94`'s)"
     site:      "fixture `default_return_kind` in `DEFAULT_FIXTURES` (`data/fixtures.py`), read by `decision/options.py::_derive_operand` for the operand `return_kind`; `return_amount` reads `default_transfer_amount` (swept at `H-94`)"
     sweep:     [salt, timber, coin]
-    unblocks:  "`exchange` in computed play (v9 IN-33); see `cite:` for what was measured"
+    unblocks:  "`exchange` in computed play (v9 IN-33) -- MEASURED NOT REACHED: typed and attempted 100 times in four realm seasons, executed 0 (see `cite:`)"
     cite:      >-
       v9 IN-33, B-I, 2026-10-13 (base HEAD 128299db, after IN-09). STOPPED FIRST, then BUILT on the
       orchestrator's ruling (CLAUDE.md §0 ladder steps 3 and 5: the plan position is titled *two
@@ -707,6 +707,29 @@ rows:
       no site and held by no rung, so the second side reads 0 and every exchange refuses -- run on the
       hand-built world, `test_in33_b_the_controls_refuse_and_move_nothing`). REVERT 3: delete the
       fixture, the two `_derive_operand` branches and the decline.
+      OUTCOME, MEASURED (`aperture 4 0`, edited tree, PYTHONHASHSEED=0): NOT BUILT -- THE STOPPING
+      RULE. `exchange` is typed, resolvable, formed, offered and attempted, and EXECUTES 0 TIMES
+      through the real chooser. Realm row formed/offered/attempted/executed, base -> edited: `exchange`
+      83/0/0/0 -> 83/83/100/0 (base 'formed 83' was the untyped row on every referent, filtered out
+      by `resolvable_verbs()`); spine 13/0/0/0 -> 13/13/4/0. WHERE IT DIED, every one of the 100 realm
+      attempts refused (wrapping `SeasonDriver._admits` on the same 4-season run): 54 a rung trading
+      with itself (a settlement cohort's `from` is its own settlement and so is its question's
+      referent; the cell admits, the gate's no-op receipt refuses), 35 a `to` that is no rung (a Site,
+      Record or Proposition referent; the cell reads UNKNOWN), 9 the actor's side short (`from` a
+      hearth, and hearths hold nothing -- `H-160`'s cause), 2 the other side short (a person-rung
+      holding no salt). NO attempt paired a stocked `from` with ANOTHER rung: the only persons whose
+      larder is stocked are settlement cohorts, and no question in four seasons puts another
+      settlement before one. Hand-built (`tests/test_in33_exchange.py`, 14 tests): both sides move and
+      each kind is conserved; the six controls (the `coin` arm, a kind for itself, a rung with
+      itself, either side short, a side that is no rung) refuse and move nothing; the unit falsifiers
+      are mutation-checked red. CROWD-OUT, TWO READINGS: formation of every other row is unchanged
+      by construction (`test_in33_c_no_other_rows_formation_moves`); the TRAJECTORY is not -- the 100
+      refused attempts take scenes, and realm `comply` 2/2/1/1 -> 1/1/0/0, `oblige` 60/60/17/17 ->
+      0/0/0/0 (IN-53's season-4 self-conferral no longer happens, so no seat is told of), `confer`
+      3/3/5/1 -> 3/3/0/0, `issue` 14/14/13/3 -> 15/15/13/3, `levy` 16/16/7/0 -> 16/16/5/0, `transfer`
+      83/83/128/2 -> 83/83/118/2, `give` 31/31/39/0 -> 30/30/42/0, `tell` 32/32/79/79 -> 30/30/81/81;
+      IN-09's, IN-10 (a)'s and IN-53 (e)'s computed-play exits go RED on `realm_4s`. Left in the built
+      state for the orchestrator; no scoring, alignment, aggregation or eligibility change was made.
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-59
     tier:      1

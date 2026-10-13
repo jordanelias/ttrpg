@@ -11763,7 +11763,19 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # basis, the three persons' pursuits migrated): the ranking no longer re-reaches these two in a
     # round the belief does not cover. §F1 clause 4 bites again.
     # [GROUNDED: measured at IN-08's cells commit -- `bit` = {('petition', 'rec:6bf46a143f347c12'), ('transfer', 'rec:6bf46a143f347c12')}; drop timings and control/shipped takings as above, read by wrapping `belief_contradicts` as `hl_drops` does, with the driver's `round`]
-    assert bit == {("petition", "rec:6bf46a143f347c12"), ("transfer", "rec:6bf46a143f347c12")}, (
+    # ⚠⚠ **2 -> 7 AT v9 IN-33 (H-58), A LARGER SET, RE-RECORDED AND ITS LIMIT SAID.** Both IN-08 pairs
+    # survive; five join: `('exchange', 'rec:b976bbb8e2968fec')` (the new row, dropped on its
+    # `transfer`-shared conjunct), `('give', 'hearth_ostvik')`, `('restore', 'p_bailiff')`,
+    # `('transfer', 'p_bailiff')`, `('transfer', 'rec:ca05073718043888')`. Cause: the act mix --
+    # `exchange`'s refused attempts take scenes in both arms, so the shipped arm re-reaches fewer
+    # dropped Candidates in a round the belief does not cover. MEASURED: the set, read off this
+    # assertion's own output. NOT MEASURED: the per-pair drop timings the IN-08 note grounds; each of
+    # the five is taken in the `none` control and never in the shipped arm (that is what `bit` is),
+    # but whether each DENIES in every season, rather than deferring past the horizon, is unchecked.
+    assert bit == {("exchange", "rec:b976bbb8e2968fec"), ("give", "hearth_ostvik"),
+                   ("petition", "rec:6bf46a143f347c12"), ("restore", "p_bailiff"),
+                   ("transfer", "p_bailiff"), ("transfer", "rec:6bf46a143f347c12"),
+                   ("transfer", "rec:ca05073718043888")}, (
         f"the clause-4 bite is {sorted(bit)}. A non-empty bite here would be a NEW acceptance-chain "
         "pair and should be named and grounded as one, not silently accepted; check whether the "
         "shift is a real recovered denial or another fold-order artifact of `seen`'s deposit volume "
