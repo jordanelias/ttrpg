@@ -154,3 +154,45 @@ def test_in33_c_no_other_rows_formation_moves(monkeypatch):
             c for c in base if c.verb != VERB), pid
         checked += sum(c.verb == VERB for c in now[pid])
     assert checked >= len(w.persons), checked
+
+
+# (d) THE FALSIFIER AND THE EXIT IN COMPUTED PLAY: `build_realm(0)`, 4 SEASONS, THE REAL CHOOSER ---
+#
+# The run is `conftest.py::realm_4s` (one shared run; `aperture 4 0` is the plan's instrument).
+
+
+def test_in33_d_every_attempted_exchange_carries_two_sides_of_different_kinds(realm_4s):
+    _, _, rows, _ = realm_4s
+    tried = [a for a, _, _ in rows if a.verb == VERB]
+    assert tried, "no `exchange` was attempted, so the falsifier observed nothing"
+    for a in tried:
+        pl = a.payload
+        assert {"from", "to", "kind", "amount", "return_kind", "return_amount"} <= set(pl), pl
+        assert pl["kind"] != pl["return_kind"], pl
+
+
+def test_in33_exit_exchange_executes_in_computed_play(realm_4s):
+    """EXIT (the plan's): `exchange.made` in `w.log` from a computed act. RED AT IN-33's BUILD -- the
+    stopping rule; see H-58's `cite:` for where every attempt died."""
+    w, _, rows, _ = realm_4s
+    done = [a for a, made, _ in rows if a.verb == VERB and MADE in made]
+    assert done, sorted((a.payload.get("from") == a.payload.get("to"), tuple(made))
+                        for a, made, _ in rows if a.verb == VERB)[:10]
+    assert any(e.kind == MADE for e in w.log)
+
+
+def test_in33_c_a_question_naming_the_return_kind_forms_no_exchange():
+    """The like-for-like decline: when the question names the kind that would come back (here a
+    held `stores:<kind>` claim about the referent, `store_kind_of`), `kind` and `return_kind` are
+    one kind and no `exchange` forms; `transfer` on the same question still forms (control)."""
+    from engine.season.state.carriers import Claim
+    w = P.tiny_world()
+    p = w.persons["p_low"]
+    back = w.fixtures.get("default_return_kind")
+    c = Claim(id="c_in33", holder="p_low", subject="S", predicate=f"stores:{back}", value=5,
+              when=0, source="seen", confidence=1, visibility="own")
+    p.ledger.append(c)
+    q = Question("q:in33k", "claim_landed", ("S",), about="c_in33")
+    got = opening_set(p, View("p_low", [], w.fixtures.get("view_k")), q, w.fixtures)
+    assert not [x for x in got if x.verb == VERB], [x.operands for x in got if x.verb == VERB]
+    assert [x for x in got if x.verb == "transfer" and x.operands["kind"] == back], "control"

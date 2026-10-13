@@ -668,12 +668,45 @@ rows:
     hole:      "62/54 carry-over: the EXCHANGE form (#353 `:1899`)"
     kind:      "SCHEMA_ROW"
     owner:     "the resolver (Part E)"
-    grade:     "absent"
-    default:   "none"
-    site:      ""
-    sweep:     []
-    unblocks:  "unmeasured"
-    cite:      ""
+    grade:     "assumption"
+    default:   "the other side of an exchange gives back `return_amount` of `return_kind`; a computed act takes `return_kind` from the fixture `default_return_kind` (salt) and `return_amount` from `default_transfer_amount` (1, `H-94`'s)"
+    site:      "fixture `default_return_kind` in `DEFAULT_FIXTURES` (`data/fixtures.py`), read by `decision/options.py::_derive_operand` for the operand `return_kind`; `return_amount` reads `default_transfer_amount` (swept at `H-94`)"
+    sweep:     [salt, timber, coin]
+    unblocks:  "`exchange` in computed play (v9 IN-33); see `cite:` for what was measured"
+    cite:      >-
+      v9 IN-33, B-I, 2026-10-13 (base HEAD 128299db, after IN-09). STOPPED FIRST, then BUILT on the
+      orchestrator's ruling (CLAUDE.md §0 ladder steps 3 and 5: the plan position is titled *two
+      counterparty operands*, lists `rosters.yaml` in its EDITS, and `H-94` reserves the coining to
+      it; `requires_operands` is Layer-2 data, so no Layer-1 amendment). The stop: inside the closed
+      eight a two-sided cell binds one `kind` and one `amount` for BOTH sides -- a like-for-like
+      swap that moves nothing (`build_typed_requires` loads it as `('from','kind','amount','to')`),
+      and a third name refuses at load (*Coining an operand is filling `H-94` by keyword argument*).
+      DECISION 1 (ORCHESTRATOR'S), THE NAMES: `return_kind` (the matter kind the actor receives IN
+      RETURN) and `return_amount` (how many units), added to `rosters.yaml: requires_operands` (8 ->
+      10) and to `scalar_threshold`'s `needs:`; the closure still binds over the ten (falsifier
+      `tests/test_in33_exchange.py::test_in33_a_an_operand_outside_the_roster_still_refuses_at_load`).
+      DECISION 2 [ASSUMPTION; medium; Jordan to correct], THE CELL AND THE EFFECT: W3's own cell as two
+      `scalar_threshold` conjuncts, `stores(from, kind) >= amount` (`transfer`'s, verbatim) and
+      `stores(to, return_kind) >= return_amount`; `loop/effects_economy.py::_eff_exchange` is `_shift`
+      twice, both rungs named, declining a side that is no rung and a kind traded for itself; a rung
+      trading with itself nets to nothing and the gate's no-op receipt refuses it, as a self-transfer.
+      `writes:` `Rung.stores` x2 (`transfer`'s). THE OTHER SIDE IS A STORE, `to`, the question's
+      referent rung -- `transfer`'s reading, the row's own source (*modelled on `transfer`*) -- and
+      NOT a known person (`give`/`tell`'s fan): the `stores` stem reads a rung, and a person has
+      none. No `counterparty:` column, as `transfer`. Eligibility stays `own` (W3's). REVERT 2: the
+      row back to `requires_typed: none` with its two decline notes, delete `_eff_exchange`.
+      DECISION 3 [ASSUMPTION; medium; Jordan to correct], WHAT COMES BACK: `kind`/`amount` keep their
+      derivation (the question's matter, a shortfall claim, else `default_store_kind`); `return_kind`
+      is a fixture, `default_return_kind = salt` (a stocked kind other than `kind`'s default: harbours
+      yield grain and salt, `rosters.yaml: site_yield`), and `return_amount` is
+      `default_transfer_amount` -- `_derive_operand`'s third rule, *an operand the design supplies no
+      value for is a fixture*; no writ or shortfall claim answers either. A bag whose `return_kind` is
+      its `kind` (a question naming salt) forms NO Candidate (`decision/options.py::_operands`, read
+      off the operand names): a kind traded for itself is refused by the effect anyway, and the person
+      can see it. Sweep arms: `salt` (shipped) · `timber` (a seam's) · `coin` (THE CONTROL: produced by
+      no site and held by no rung, so the second side reads 0 and every exchange refuses -- run on the
+      hand-built world, `test_in33_b_the_controls_refuse_and_move_nothing`). REVERT 3: delete the
+      fixture, the two `_derive_operand` branches and the decline.
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-59
     tier:      1

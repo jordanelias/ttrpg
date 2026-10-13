@@ -1030,6 +1030,16 @@ def _operands(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixtures",
                        "§F1/H-94")
             return None
         out[name] = v
+    # v9 IN-33 (H-58): WHAT COMES BACK IN RETURN IS ANOTHER KIND. A bag whose `return_kind` is its
+    # own `kind` is a kind traded for itself -- nothing, or a `transfer` of the difference -- and
+    # `_eff_exchange` refuses it; the person can see the two operands are one kind (own derivation,
+    # no World), so it is declined here rather than spent as a scene on a refusal that teaches
+    # nothing (the counterparty self-decline's reason, `opening_set`). Read off the operand names,
+    # never a verb name: only a cell binding `return_kind` carries it.
+    if "return_kind" in out and out["return_kind"] == out.get("kind"):
+        TRACE.note(f"{row.verb!r} by {p.id}: `return_kind` is `kind` ({out['return_kind']!r}), "
+                   f"a kind traded for itself; NO Candidate is formed", "H-58")
+        return None
     return out
 
 
