@@ -951,7 +951,7 @@ def not_yours(refused: list, actor: Optional[str], via: Optional[str], record_ki
               f"its seat's own seated holder exercising it), {DETERMINATION} (an `oblige` "
               f"opened on the judging seat exercised, for a person its bench's ground holds), or "
               f"{FOUNDING} (a `contain` opened for a thing this same write brought into "
-              f"existence, its only parent; or the first and only `hold` on such a thing that is "
+              f"existence, its only parent; or the first and only `hold` on a newborn Record that is "
               f"not a seat)",
         law="04 §C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner "
             "writes only under a declared basis. Per-verb eligibility enforced this by "

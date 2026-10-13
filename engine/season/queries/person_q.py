@@ -19,8 +19,10 @@ Measured:
   signature and self-declares as a person Query at its own first statement --
   `TRACE.query("entrenchment", "person")`. It reads a `Person` and three ints and touches nothing
   else, which is exactly the *"`PersonInterior` snapshot only"* the table allows. So it is here.
-- **Every function in `world_q.py` takes `w: World` first** -- all thirteen, checked by `ast`. There
-  is no misfiled person-first Query hiding in the world-side module.
+- **Nearly every function in `world_q.py` takes `w: World` first**; the helpers `named` and
+  `_stamped` do not (04:116 splits the two families by module, not by first parameter), and no
+  check enforces the first-parameter rule. There is no misfiled person-first Query hiding in the
+  world-side module: the person-side scan below is what holds the line.
 
 ⚠ **§A.3 ROW 2's PROPERTY IS THE POINT, NOT THE FILE COUNT.** *"one `Query` class holding both
 families"* becomes *"two modules; the second cannot import the first"*, forced by T-f: *"in one
