@@ -1549,7 +1549,8 @@ def vacancies(w: World, p: Person) -> tuple:
     ⚠ THAT PROMISE IS THIS FUNCTION'S, NOT THE CLASS'S: the seats a person was told of
     (`seats_named`) ride the same `Office` class and `confer` does not declare `referent_named`, so
     it forms on a told-of seat `may_fill` would refuse (or one he holds) too, and the fold refuses it
-    there at the cost of a scene (batch B-I close, C4; H-207)."""
+    there at the cost of a scene (batch B-I close, C4; H-207). A seat he holds himself is refused as
+    a no-op by `_req_confer` (Phase 3 F1: conferring a seat on its own holder)."""
     seats = [t.object for t in p.tenures
              if t.kind == "hold" and t.live and t.object in w.offices and "confer" in t.granted_acts]
     if not seats:

@@ -1021,8 +1021,8 @@ VERB_TABLE = _load_verb_table()
 def act_key(verb: str, subject, operands) -> str:
     """WHAT AN ACT'S ID IS OF, AFTER ITS VERB: `H(seed, tick, actor, f"act:{verb}:{act_key}")`.
     The subject, and -- for a row whose cell binds a known-person operand beside `subject`
-    (`TypedRequires.known_person_operands`: `tell`'s `to`, and since plan position `14` `give`'s) --
-    that operand too, as `subject>to`.
+    (`VerbRow.known_person_operands`: `tell`'s `to`, since plan position `14` `give`'s, and since IN-53
+    the untyped `confer`'s) -- that operand too, as `subject>to`.
 
     ⚠ TELLING WORKPLAN `T4`, AND IT IS MEASURED NECESSITY: one topic now forms one `tell` per person
     the teller knows, so two acts in one deliberation shared `(actor, verb, subject)` and therefore

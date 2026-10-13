@@ -197,8 +197,8 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 # verb name, and the loader guarantees the operand is carried.
                 # ⚠ AND A SECOND SIDE NOBODY CAN NAME IS NO SECOND SIDE (plan position 16). On a TYPED
                 # row the loader guarantees the counterparty is carried, so `None` cannot arise there.
-                # On an UNTYPED row (`oblige`; `give` until plan position `14` typed it) nothing is
-                # carried, and forming the Candidate would mint an act with no second party --
+                # On an UNTYPED row (`give` until plan position `14` typed it; `oblige` carries its
+                # `subject` since IN-10 (a)) nothing may be carried, and forming the Candidate would mint an act with no second party --
                 # refused by the fold every time, for the instrument's reason. MEASURED before this
                 # clause, the `give` row without it: 3 such acts in
                 # `headless.run(3, 0)` and 41 in `populated.run(2, 0)`, every one `give.refused`, and

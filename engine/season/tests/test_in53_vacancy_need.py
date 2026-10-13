@@ -292,10 +292,10 @@ def test_in53v_d_one_office_reader_subject_or_office():
     assert _preds.office_named_by(Act("a", "p", "confer", payload={})) is None
 
 
-def _fold_confer(w, d, payload, via):
+def _fold_confer(w, d, payload, via, aid="cf"):
     return [e.kind for e in d.resolve(
         mint_token(w, WriteClass.ACTS),
-        [Act(id="cf", actor="p_king", verb="confer", payload=payload, via=via)],
+        [Act(id=aid, actor="p_king", verb="confer", payload=payload, via=via)],
         contest_max_depth=w.fixtures.get("contest_max_depth"))]
 
 
@@ -312,6 +312,27 @@ def test_in53v_d_a_computed_confer_fills_the_vacant_seat(to):
     payload = {"subject": c.subject, **{k: v for k, v in c.operands.items() if k != "via"}}
     kinds = _fold_confer(w, d, payload, via)
     assert "tenure.opened" in kinds and _hold(w, "off_reeve").subject == to, kinds
+
+
+@pytest.mark.parametrize("to", ["p_mid", "p_king"])
+def test_in53v_g_conferring_a_seat_on_its_own_holder_is_refused(to):
+    """B-I close, Phase 3 F1: a seat conferred on the person who already holds it changes nothing but
+    would close and reopen his edge, and (his ledger then naming the seat) feed itself every season.
+    Red before `_req_confer`'s `holder == conferee` refusal; the first conferral and a conferral on
+    somebody ELSE are the controls (both admitted)."""
+    w, d = _gov_world()
+    assert "tenure.opened" in _fold_confer(w, d, {"subject": "off_reeve", "to": to}, "off_crown")
+    first = _hold(w, "off_reeve")
+    assert first.subject == to
+    again = _fold_confer(w, d, {"subject": "off_reeve", "to": to}, "off_crown", aid="cf2")
+    assert again == ["confer.refused"], again
+    assert _hold(w, "off_reeve") is first and first.live        # untouched: no close, no reopen
+
+
+def test_in53v_g_a_list_valued_subject_is_refused_never_raised():
+    """Sibling of the unhashable `to`: a hand-built `confer` whose subject is a list refuses."""
+    w, d = _gov_world()
+    assert _fold_confer(w, d, {"subject": ["off_reeve"], "to": "p_mid"}, "off_crown") == ["confer.refused"]
 
 
 def test_in53v_d_a_confer_naming_nobody_is_refused():

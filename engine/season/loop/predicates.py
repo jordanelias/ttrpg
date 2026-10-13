@@ -119,8 +119,8 @@ def _req_confer(w: "World", a: "Act") -> bool:
     whose subject is somebody else"*, which is why the displacement is T-o and not a second reading
     of the conferral basis."""
     obj = office_named_by(a)
-    if not obj or obj not in w.offices:
-        return False
+    if not obj or not isinstance(obj, str) or obj not in w.offices:
+        return False                       # (a list `subject`/`office` is unhashable: refuse, never raise)
     off = w.offices[obj]
     if not has_conferral_basis(off):
         return False                       # no conferral basis: the office cannot be conferred
@@ -151,8 +151,10 @@ def _req_confer(w: "World", a: "Act") -> bool:
     # seat -> cause map nothing declares. Neither is this position's to invent; left as it is.
     holder = next((t.subject for t in tenures
                    if t.kind == "hold" and t.object == obj and t.live), None)
-    if holder is None or any(t.kind == "commit" and t.subject == holder and t.live
-                             for t in tenures):
+    if holder is None or holder == conferee:
+        return False                       # B-I close, Phase 3 F1: conferring a seat on its own holder
+                                           # changes nothing but closes and reopens his edge
+    if any(t.kind == "commit" and t.subject == holder and t.live for t in tenures):
         return False
     # G3: displacing the holder CLOSES HIS EDGE -- T-o, through the seat exercised.
     return holder == a.actor or may_revoke(w, a.actor, a.via, off)
