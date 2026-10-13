@@ -120,22 +120,35 @@ bound). It creates no document and no directory. A finding that needs no ruling 
   2026-09-29 revert (H-79) is the precedent.
   **RULED 2026-10-13 (the session's user: *"Relax exit rules."*), applied to every position's EXIT and FALSIFIER:** a
   verb position is BUILT when it is wired and proven by a falsifier on a hand-built world (the cause controlled, a
-  mutation red); its executed count in the realm row of `aperture 4 0` is **recorded at its hole row, not required**. The
-  stopping rule reverts a falsifier that fails on a hand-built world; it does not revert a verb for executing 0 times
-  through the real chooser, whose selection is authored alignment-cell and character data, not wiring. A realm exit test
-  that asserts one position's execution is a recorded reading and not a gate on a LATER position: when a later item moves
-  the seed-0 trajectory and one goes red, the reading is re-recorded with its cause and the later item is not reverted.
+  mutation red): DONE-test (§0.2), which `CLAUDE.md` §0.2 accepts as written — a test that drives the verb through the
+  real fold is an execution artifact. Its executed count in the realm is **not required and not taken for it**; when a
+  propagation reading (TEST HORIZON, below) runs, the verb's row is recorded at its hole row. The stopping rule reverts
+  a falsifier that fails on a hand-built world; it does not revert a verb for executing 0 times through the real
+  chooser, whose selection is authored alignment-cell and character data, not wiring. **No test asserts that a verb
+  executed in the seed-0 realm:** the ones that did (IN-53 (e), IN-10 (a) (4), IN-09 (7)) and their shared four-season
+  fixture were deleted under this rule on 2026-10-13 — deleting an assertion a ruling retired, never a skip or xfail.
   Positions reverted at B-I for a realm count of 0 (IN-09's `evade / defy` and `construe`, IN-33's `exchange`) are
-  restorable from their checkpoints under this rule (`_part5` IN-09, IN-33).
-- **CI CADENCE, RULED 2026-10-13 (the session's user; the words are in `methodology-execute`'s CHECKPOINTS AND BASELINES).**
-  CI runs once at the end of a batch, on the commit that closes it, and once more after the fixes that run calls for.
-  Every earlier commit of the batch carries `[skip ci]`; a one- or two-season probe or the covering test file judges a
-  change in between. A previously run CI is the baseline for the next item: readings are not re-taken.
+  restorable from their checkpoints under this rule (`_part5` IN-09, IN-33). An entry's EXIT or FALSIFIER still
+  written as "executes ≥ 1 in `aperture 4 0`" or "0 times → not built" reads under this bullet. It relaxes a
+  POSITION's exit, not a requirement's `met`: R-04's and R-05's `met` still read computed play through their own
+  `measure:` (`engine/season/requirements.yaml`) [ASSUMPTION; medium; the user to correct. Revert: those `met`s read
+  DONE-test too, an edit to `requirements.yaml` and `_part2` R-04/R-05].
+- **CI CADENCE, RULED 2026-10-13 (the session's user; the words and the mechanics — `[skip ci]`, baselines — are in
+  `methodology-execute`'s CHECKPOINTS AND BASELINES; where CI falls among the closing phases is `methodology-close`'s).**
+  CI runs twice per batch: at its end, and once more to confirm the commit carrying every fix, CI's and the closing
+  sequence's. No WIP checkpoint or other commit in between starts a run; a one- or two-season probe or the covering
+  test file judges a change in between. The previous CI run is the baseline for the next: readings are not re-taken.
 - **TEST HORIZON, RULED 2026-10-13 (the session's user: *"a verb error etc in season 1 is just as valid as a verb error in
   season 4 because the issue is with the machinery itself"*; *"whatever season has the error is the season that is the last
   in sequence for testing"*).** A probe or test runs season by season and ENDS at the first season in which a verb errors;
   it does not run on to a fixed season count. An error at season 1 is as real a defect as one at season 4 (a refusal, an
   `InstrumentDefect`, a gate raise). A fixed four-season run is only for a reading that needs four seasons to occur.
+  **`aperture 4 0` runs only when how a change PROPAGATES over game time is what is being evaluated, never as a
+  per-verb execution gate** (RULED 2026-10-13, the session's user: *"the point of aperture 4 0 0 0 to simulate four
+  seasons is to see how the simulation propagates changes and behaves accoridngly over a longer period of game time.
+  there's no point running it in full unless we're evaluating how something propagates over time"*). [ASSUMPTION;
+  medium; the user to correct: a requirement row's `measure:` naming it (R-04, R-05) is such a reading, taken when
+  the row is measured, not per position. Revert: those rows move to a shorter horizon too.]
 - **Must NOT, in any batch:** edit `.designs/` or `.audit/`; cite a `.md` as the reason a behaviour is correct; build a
   guard whose subject is process (§0.1 pt 5); create a directory or standing document; author a cell, a Godot version, or
   a Jordan item's answer; build anything in `engine/mc_v18.py`;

@@ -4,6 +4,8 @@
 ## Reads after `workplans/valoria_master_workplan_v9_part6.md`. Standing sections and §K (the adoption ledger) are in `valoria_master_workplan_v9_part8.md`; the batches (§B: membership rules §B.0, batch table §B.1, handoff cards §B.2) and the file-collision matrix (§C) are `valoria_master_workplan_v9_part3.md`.
 ## Grade under `CLAUDE.md` §0.2: `paper`. A position here is done when its EXIT instrument has run and its FALSIFIER has been observed to be able to fail, not when the entry is deleted.
 
+**Read every EXIT and FALSIFIER below under `valoria_master_workplan_v9.md` §0.5 (RULED 2026-10-13):** a verb position's "executes ≥ 1 in `aperture 4 0`" (or "in computed play") and "0 times → not built" are superseded by THE STOPPING RULE's relaxed exit — BUILT on a hand-built-world falsifier, the realm count recorded when a propagation reading runs, not required — and `aperture 4 0` runs only as TEST HORIZON allows.
+
 ---
 
 ## 0. How an entry here reads

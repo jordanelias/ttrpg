@@ -1,6 +1,6 @@
 """IN-53 (H-207 'VACANCY AS NEED', DECISION 2026-10-13 D1/D2) -- a vacant seat a person may fill
 rides, as a CLASSED referent, on the question he answers; `confer` forms on it with a conferee who
-may be himself, and executes in computed play.
+may be himself, and executes end to end through the fold ((d)).
 
 The pieces, each of which can fail here: `queries/world_q.py::vacancies` (every Office with no live
 `hold` that `may_fill` reaches through a seat of the person granting `confer`) and the post-sort
@@ -24,9 +24,8 @@ and the one reader of the office a `confer` names (`loop/predicates.py::office_n
       `counterparty_may_be_self` that is no boolean or sits on a row the fan does not reach.
   (d) the office reader; a computed `confer` executes end to end, onto another and onto himself;
       one naming nobody is refused.
-  (e) `build_realm(0)`, 4 seasons through the real chooser (`conftest.py::realm_4s`): `confer`
-      executes >= 1 with `via`, into a seat with no live hold when it resolved, and every executed
-      `confer` names an Office.
+  (e) RETIRED 2026-10-13 (the session user's "Relax exit rules"; plan §0.5): the realm-execution
+      exit on `build_realm(0)` at 4 seasons is a recorded reading, not a test.
   (f) the U2 fingerprint moves when a classed referent opens or is told of under an unchanged
       question id (`loop/deliberate.py::_inputs_fingerprint`).
 
@@ -34,7 +33,6 @@ MUTATIONS, run at the build: `vacant = vacancies(w, p)` -> `vacant = ()` in `que
 self term in `operand_bags` deleted -- each reddens this file (counts in H-207's OUTCOME).
 """
 import dataclasses
-from collections import Counter
 
 import pytest
 
@@ -53,10 +51,6 @@ from engine.season.state.ids import ROOT
 from engine.season.state.gate import may_fill
 
 from .test_g3_not_yours import _gov_world, _hold
-
-# One `realm_4s` build per run: every test of this file goes to one xdist worker with the other two
-# realm files' under CI's `--dist loadgroup` (`conftest.py::realm_4s`).
-pytestmark = pytest.mark.xdist_group("realm_4s")
 
 
 def _know(w, pid, *others):
@@ -371,39 +365,6 @@ def test_in53v_d_a_confer_onto_no_living_person_is_refused():
     assert "p_mid" not in w.persons
     kinds = _fold_confer(w, d, {"subject": "off_reeve", "to": "p_mid"}, "off_crown")
     assert kinds == ["confer.refused"] and _hold(w, "off_reeve") is None, kinds
-
-
-# ======================================================================================
-# (e) THE EXIT, ON `build_realm(0)`: 4 SEASONS THROUGH THE REAL CHOOSER, NOTHING FORCED (the plan's
-# instrument is `aperture 4 0`; at 3 seasons seed 0 `confer` executes 0 times, at 4 it executes once)
-# ======================================================================================
-
-# The 4-season run is `conftest.py::realm_4s` (one run for every file that reads it).
-
-
-def test_in53v_e_confer_executes_into_a_seat_nobody_held(realm_4s):
-    """At least one computed `confer` executes, through a seat (`via`), opening a hold and closing
-    none -- the seat had no live hold when the act resolved (`_eff_confer` names a closure for every
-    live hold it displaces, G4)."""
-    w, _, rows, _ = realm_4s
-    into_vacant = [a for a, made, _ in rows
-                   if a.verb == "confer" and made and a.via in w.offices
-                   and "tenure.opened" in made and "tenure.closed" not in made]
-    assert into_vacant, sorted(Counter(a.verb for a, made, _ in rows if made).items())
-
-
-def test_in53v_e_every_executed_confer_names_an_office(realm_4s):
-    # RE-RECORDED AT v9 IN-10 (c): the executed-count floor (`issue`+`levy`+`transfer` at the base,
-    # less the `confer`s) is retired. It compared 5 to 7 acts across a whole trajectory, and any later
-    # item that moves who holds a writ moves it (IN-10 (c): `issue` 2 -> 3, `transfer` 4 -> 2, no
-    # formation count changes), so it cannot tell a crowd-out from a different trajectory. The
-    # control is the formation test above (`test_in53v_a_the_partition_moves_no_other_rows_
-    # formations`, exact by construction) and H-207's pooled control (b). RENAMED at the batch B-I
-    # close: what this holds is that every EXECUTED `confer` names an Office, and that there is one.
-    w, _, rows, _ = realm_4s
-    confers = [a for a, made, _ in rows if a.verb == "confer" and made]
-    assert confers, "no `confer` executed, so this observed nothing"
-    assert all(_preds.office_named_by(a) in w.offices for a in confers), confers
 
 
 # ======================================================================================

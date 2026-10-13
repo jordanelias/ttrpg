@@ -14,16 +14,16 @@ names it), spliced onto the question the person answers in `questions_for`, and 
       no claim the questions are unchanged (the control);
   (3) the Candidate formed from that question folds to `duty.taken` -- the edge `establishment_of`
       reads -- and a person told of no seat forms none;
-  (4) THE FALSIFIER IN COMPUTED PLAY (`build_realm(0)`, 4 seasons, the real chooser): every `oblige`
-      act any person attempted names a seat his own ledger was told of.
+  (4) RETIRED 2026-10-13 (the session user's "Relax exit rules"; plan §0.5): the realm falsifier
+      and exit on `build_realm(0)` at 4 seasons. The falsifier read `ledger_names`, the function the
+      formation reads (H-203's own note: circular), and was non-vacuous only when seed 0's season-4
+      `confer` executed; (1)-(3) and the partition control below prove the wiring.
 
 MUTATIONS, run at the build: `seats_named` returning every office (the seat no longer named by a
 deposit or a Record) reddens (1) and (2) -- formation still holds, because `referent_named` asks the
 same owner (`person_q.ledger_names`) person-side; deleting that decline in `opening_set` reddens
 `test_in10a_a_conferrers_vacancy_is_not_a_seat_he_was_told_of` and `test_obligees.py::test_17a_...`.
 """
-from collections import Counter
-
 import pytest
 
 from engine.season.data.matrix import WriteClass
@@ -34,10 +34,6 @@ from engine.season.harness import probes as P
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.queries import world_q
 from engine.season.state.carriers import Act, Claim
-
-# One `realm_4s` build per run: every test of this file goes to one xdist worker with the other two
-# realm files' under CI's `--dist loadgroup` (`conftest.py::realm_4s`).
-pytestmark = pytest.mark.xdist_group("realm_4s")
 
 SEAT = "off_duke"
 
@@ -160,30 +156,6 @@ def test_in10a_the_declarations_as_built():
     # RE-RECORDED AT v9 IN-09: `comply` declares it too (was `{"oblige"}`).
     assert {v for v, r in VERB_TABLE.items() if r.referent_named} == {"oblige", "comply"}
     assert VERB_TABLE["oblige"].referent_class == "Office"
-
-
-# (4) THE FALSIFIER AND THE EXIT IN COMPUTED PLAY: `build_realm(0)`, 4 SEASONS, THE REAL CHOOSER -----
-#
-# `aperture 4 0` (the plan's instrument) reads the realm row; this is its unit form, at the same
-# seasons and seed. Measured at the build: the season-4 self-conferral (`p_npc_032` onto
-# `off_npc_082`, IN-53) deposits `tenure.opened` claims about the seat on its witnesses, who
-# re-deliberate in the same season's later rounds and oblige to it.
-
-# The 4-season run, with the `oblige` formations recorded, is `conftest.py::realm_4s`.
-
-
-def test_in10a_falsifier_no_oblige_forms_on_a_seat_nobody_told_him_of(realm_4s):
-    _, _, _, formed = realm_4s
-    assert formed, "no `oblige` Candidate formed, so the falsifier observed nothing"
-    untold = [f for f in formed if not f[2]]
-    assert not untold, untold[:5]
-
-
-def test_in10a_exit_oblige_executes_in_computed_play(realm_4s):
-    w, _, rows, _ = realm_4s
-    taken = [a for a, made, _ in rows if a.verb == "oblige" and "duty.taken" in made]
-    assert taken, sorted(Counter(a.verb for a, made, _ in rows if made).items())
-    assert all(a.payload["subject"] in w.offices for a in taken)
 
 
 def test_in10a_the_partition_moves_no_other_rows_formations():

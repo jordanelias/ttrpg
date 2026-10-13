@@ -4,6 +4,8 @@
 ## Reads after `workplans/valoria_master_workplan_v9.md` (§1 milestones, §3 state index, §4 crosswalk); graph and batches are `_part3` §A/§B. One section per row of `engine/season/requirements.yaml`; this part carries no decision of its own.
 ## Grade under `CLAUDE.md` §0.2: `paper`. A row of THE NINE moves only on its own `measured:` block, which `python -m engine.season.harness.register --requirements` validates. Nothing here moves a row.
 
+**Read every EXIT and FALSIFIER below under `valoria_master_workplan_v9.md` §0.5 (RULED 2026-10-13):** a verb position's "executes ≥ 1 in `aperture 4 0`" (or "in computed play") and "0 times → not built" are superseded by THE STOPPING RULE's relaxed exit — BUILT on a hand-built-world falsifier, the realm count recorded when a propagation reading runs, not required — and `aperture 4 0` runs only as TEST HORIZON allows. A requirement's `met` (R-04, R-05) is not a position exit and still reads its own `measure:` (§0.5's [ASSUMPTION]).
+
 **How each section is built.** Statement (verbatim, Jordan 2026-09-05) · status and the measured reading,
 refreshed from the instruments read below where they disagree with the row's `measured:` text · what
 moves it (positions, with batch) · what it needs that no position owned before this plan · the design

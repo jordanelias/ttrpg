@@ -4,6 +4,8 @@
 ## Reads after `workplans/valoria_master_workplan_v9_part2.md`. Owns THE ORDER: the dependency graph (§A), the batches (§B: membership rules §B.0, batch table §B.1, handoff cards §B.2), the file-collision matrix (§C), the live ordering edges carried from v8 (§O.2), the file census (§O.3), the run discipline (§O.4) and the pre-flight remainder (§P). Each position's entry (WHAT, EXIT, FALSIFIER) lives once, in its home part (`_part4`…`_part7`); this part names handles only.
 ## Grade under `CLAUDE.md` §0.2: `paper`. Line numbers drift; re-derive every site by its symbol (`CLAUDE.md` §0.1 pt 3).
 
+**Read every EXIT and FALSIFIER below under `valoria_master_workplan_v9.md` §0.5 (RULED 2026-10-13):** a verb position's "executes ≥ 1 in `aperture 4 0`" (or "in computed play") and "0 times → not built" are superseded by THE STOPPING RULE's relaxed exit — BUILT on a hand-built-world falsifier, the realm count recorded when a propagation reading runs, not required — and `aperture 4 0` runs only as TEST HORIZON allows.
+
 ---
 
 ## A. DEPENDENCY GRAPH

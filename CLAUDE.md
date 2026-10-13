@@ -494,7 +494,7 @@ re-implement a rule.** Known live violations, treated as bugs rather than propag
 
 ```sh
 python tools/session_provision.py                # installs pyyaml pytest numpy pytest-xdist if absent; silent
-python -m pytest tests/valoria -q -n auto        # the gate; CI runs it on every push (§0.4)
+python -m pytest tests/valoria -q -n auto        # the gate; CI runs it on a push not marked [skip ci] (§0.4)
 python -m pytest tests/valoria/test_<x>.py -q    # the inner loop: seconds. This is the mid-session run.
 ```
 

@@ -4,6 +4,8 @@
 ## Reads after `workplans/valoria_master_workplan_v9_part4.md`.
 ## Grade under `CLAUDE.md` §0.2: `paper`.
 
+**Read every EXIT and FALSIFIER below under `valoria_master_workplan_v9.md` §0.5 (RULED 2026-10-13):** a verb position's "executes ≥ 1 in `aperture 4 0`" (or "in computed play") and "0 times → not built" are superseded by THE STOPPING RULE's relaxed exit — BUILT on a hand-built-world falsifier, the realm count recorded when a propagation reading runs, not required — and `aperture 4 0` runs only as TEST HORIZON allows.
+
 **Held back** (`_part8` §K): every row left on §J's queue is OPEN and Jordan's to answer individually; a merge answers none
 of them, and no position gated on one becomes buildable because this file merged. The ten items Jordan released on 2026-10-06
 ("adopt plan recommendations then") are §J.1's ANSWERED rows: each is the plan's recommendation, ratified on merge
