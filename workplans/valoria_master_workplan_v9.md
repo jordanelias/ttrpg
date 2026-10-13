@@ -131,6 +131,11 @@ bound). It creates no document and no directory. A finding that needs no ruling 
   CI runs once at the end of a batch, on the commit that closes it, and once more after the fixes that run calls for.
   Every earlier commit of the batch carries `[skip ci]`; a one- or two-season probe or the covering test file judges a
   change in between. A previously run CI is the baseline for the next item: readings are not re-taken.
+- **TEST HORIZON, RULED 2026-10-13 (the session's user: *"a verb error etc in season 1 is just as valid as a verb error in
+  season 4 because the issue is with the machinery itself"*; *"whatever season has the error is the season that is the last
+  in sequence for testing"*).** A probe or test runs season by season and ENDS at the first season in which a verb errors;
+  it does not run on to a fixed season count. An error at season 1 is as real a defect as one at season 4 (a refusal, an
+  `InstrumentDefect`, a gate raise). A fixed four-season run is only for a reading that needs four seasons to occur.
 - **Must NOT, in any batch:** edit `.designs/` or `.audit/`; cite a `.md` as the reason a behaviour is correct; build a
   guard whose subject is process (§0.1 pt 5); create a directory or standing document; author a cell, a Godot version, or
   a Jordan item's answer; build anything in `engine/mc_v18.py`;
