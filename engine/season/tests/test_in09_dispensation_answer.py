@@ -18,9 +18,9 @@ Candidate forms only on a held writ his own ledger names.
       only once his ledger names it; with no writ held the questions are unchanged (the control);
   (6) THE CROWD-OUT CONTROL AT FORMATION (`test_in53v_a_the_partition_moves_no_other_rows_formations`'
       form): every row declaring no `referent_class:` forms exactly what the question forms stripped;
-  (7) THE FALSIFIER AND THE EXIT IN COMPUTED PLAY: `build_realm(0)`, 4 seasons, the real chooser --
-      every Candidate of the three names a writ its former held and his ledger named, and each of the
-      three EXECUTES >= 1.
+  (7) THE FALSIFIER AND THE EXIT IN COMPUTED PLAY (`conftest.py::realm_4s`: `build_realm(0)`, 4
+      seasons, the real chooser): every attempted act of the three answers a writ its actor held and
+      the fold admitted, and each of the three EXECUTES >= 1.
 
 MUTATIONS, run at the build (results in H-203's IN-09 OUTCOME): `writs_held` returning `()` reddens
 (5) and (7); the `own_ledger` conjunct deleted from `comply` reddens (2); `referent_named` dropped
@@ -34,18 +34,15 @@ import pytest
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.rosters import RECORD_CONTENT
 from engine.season.data.verbs import RECORD_REFERENT_KINDS, VERB_TABLE
-from engine.season.decision import assemble, make_chooser
+from engine.season.decision import assemble
 from engine.season.decision.options import opening_set
-from engine.season.harness import populated as POP
 from engine.season.harness import probes as P
-from engine.season.harness.corpus_run import attribute
 from engine.season.loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from engine.season.loop.effects import EFFECTS
 from engine.season.loop.witness import content_value
 from engine.season.queries import world_q
 from engine.season.queries.world_q import hold_force
 from engine.season.state.carriers import Act, Claim
-from engine.season.state.ids import H, draw_factory
 
 THREE = ("comply", "evade / defy", "construe")
 EMITS = {"comply": "compliance.given", "evade / defy": "compliance.withheld",
@@ -228,51 +225,31 @@ def test_in09_the_partition_moves_no_other_rows_formations():
 
 
 # (7) THE FALSIFIER AND THE EXIT IN COMPUTED PLAY: `build_realm(0)`, 4 SEASONS, THE REAL CHOOSER -----
-
-SEASONS = 4
-
-
-@pytest.fixture(scope="module")
-def realm4():
-    """`populated.run`'s construction over `SEASONS` seasons, with `choose.opening_set` WRAPPED
-    (instrumentation only) to record, for every Candidate of the three, whether its former held the
-    writ live and his own ledger held a claim on it at that moment."""
-    from engine.season.decision import choose as CH
-    formed = []
-    real = CH.opening_set
-    w = POP.build_realm(0)
-
-    def watching(p, v, q, fx):
-        out = real(p, v, q, fx)
-        for c in out:
-            if c.verb in THREE:
-                holds = any(t.kind == "hold" and t.live and t.object == c.subject
-                            for t in w.tenures if t.subject == p.id)
-                knows = any(cl.subject == c.subject for cl in p.ledger)
-                formed.append((p.id, c.verb, c.subject, holds, knows))
-        return out
-    with pytest.MonkeyPatch.context() as mp:
-        mp.setattr(CH, "opening_set", watching)
-        d = SeasonDriver(w)
-        mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-        ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                          draw=draw_factory(w.world_seed, lambda: w.tick))
-        for _ in range(SEASONS):
-            d.season(ch, question=None, subsistence=POP.P.SUBSIST,
-                     contest_max_depth=w.fixtures.get("contest_max_depth"))
-    return w, attribute(w, d, SEASONS), formed
+#
+# The 4-season run is `conftest.py::realm_4s` (one shared run; `aperture 4 0` is the plan's
+# instrument, this its unit form). Formation-time conditions are (5)'s; here the observable is the
+# ACT: every attempted act of the three names a dispensation its actor held, and the fold admitted
+# it (no `compliance.impossible` / `construal.impossible`: his own ledger held a claim on it).
 
 
-def test_in09_falsifier_no_candidate_forms_on_a_writ_unheld_or_unknown(realm4):
-    _, _, formed = realm4
-    assert formed, "no Candidate of the three formed, so the falsifier observed nothing"
-    bad = [f for f in formed if not (f[3] and f[4])]
-    assert not bad, bad[:5]
+def _attempted(rows):
+    return [(a, made) for a, made, _ in rows if a.verb in THREE]
+
+
+def test_in09_falsifier_every_attempt_answers_a_writ_its_actor_held_and_had_read(realm_4s):
+    w, _, rows, _ = realm_4s
+    tried = _attempted(rows)
+    assert tried, "no act of the three was attempted, so the falsifier observed nothing"
+    for a, made in tried:
+        rid = a.payload["subject"]
+        assert any(t.kind == "hold" and t.subject == a.actor and t.object == rid
+                   for t in w.tenures), (a.actor, a.verb, rid, "never held the writ")
+        assert REFUSAL[a.verb] not in made, (a.actor, a.verb, rid, made)
 
 
 @pytest.mark.parametrize("verb", THREE)
-def test_in09_exit_each_executes_in_computed_play(realm4, verb):
-    w, rows, _ = realm4
+def test_in09_exit_each_executes_in_computed_play(realm_4s, verb):
+    w, _, rows, _ = realm_4s
     done = [a for a, made, _ in rows if a.verb == verb and EMITS[verb] in made]
     assert done, (verb, sorted(Counter(a.verb for a, made, _ in rows if made).items()))
     assert all(w.records[a.payload["subject"]].kind == "dispensation" for a in done)
