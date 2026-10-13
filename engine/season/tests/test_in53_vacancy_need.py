@@ -308,14 +308,15 @@ def test_in53v_d_a_confer_naming_nobody_is_refused():
 
 
 # ======================================================================================
-# (e) THE EXIT, ON `build_realm(0)`: 3 SEASONS THROUGH THE REAL CHOOSER, NOTHING FORCED
+# (e) THE EXIT, ON `build_realm(0)`: 4 SEASONS THROUGH THE REAL CHOOSER, NOTHING FORCED (the plan's
+# instrument is `aperture 4 0`; at 3 seasons seed 0 `confer` executes 0 times, at 4 it executes once)
 # ======================================================================================
 
-#: Executed `issue`+`levy`+`transfer` on the base commit (e716f10b), `build_realm(0)`, 3 seasons,
+#: Executed `issue`+`levy`+`transfer` on the base commit (e716f10b), `build_realm(0)`, 4 seasons,
 #: seed 0, `corpus_run.attribute`'s `made` -- the crowd-out control's floor, less one per `confer`
 #: executed (each may displace at most one act).
-_BASE_EXECUTED_ILT = 6
-SEASONS = 3
+_BASE_EXECUTED_ILT = 7      # issue 2 + levy 0 + transfer 5, `aperture 4 0` realm row at the base
+SEASONS = 4
 
 
 @pytest.fixture(scope="module")
