@@ -508,10 +508,10 @@ falsified attempt and its revert net to zero in that range (nothing to review; t
 A position its own falsifier rejects is committed with a `Falsified: <handle>` trailer, then `git revert`ed,
 and the hole row cites both SHAs (the live plan's stopping rule). Dispatch a long build in bounded pieces
 that return in tens of minutes, not one that returns in an hour. A pre-commit validator that fails a
-checkpoint is fixed or reported, never bypassed with `--no-verify`. Every push runs CI (CLAUDE.md §0.4), so
-push checkpoints at hand-backs, not on a timer.
+checkpoint is fixed or reported, never bypassed with `--no-verify`.
+**RULED 2026-10-13 (the session's user: *"we don't need a CI run for a WIP checkpoint ... A WIP checkpoint is just committing work so we don't lose it"*; *"We run CI at the end of a batch, correct whatever is required then, implement all fixes and changes and everything as per the closing sequence, and then we run CI again to confirm"*; *"we also don't need to re-run an entire CI if we can tell from one season or two if something isn't working"*): CI runs ONCE at the end of a batch, on the commit that closes it, and ONCE MORE after the fixes that run calls for. Every earlier commit of the batch (WIP checkpoints, `Item:` commits, `Falsified:` reverts) carries `[skip ci]` in its body, which GitHub honours for a push, so it starts no run. Between those two runs, judge a change with the cheapest instrument that can see it: a one- or two-season probe or the one covering test file, never a full CI run.** Producers build in `isolation: worktree` and the orchestrator merges a verified result as one commit, so the main tree is clean between items.
 
-**Baselines.** A reading is reusable only on the tree it was taken on. Every reading names its SHA
+**Baselines — RULED 2026-10-13 (the session's user: *"Every previously run CI is a baseline to use for the next run CI, so we don't need to constantly take baselines"*): the readings recorded at the last green CI commit are the baseline for the next item. Do not re-measure a baseline already held; an item records its own after-reading, which becomes the next item's baseline. Re-measure only when the diff since that commit touches what the instrument reaches AND the item cannot be judged without it.** (Earlier text, kept for the reasoning:)  A reading is reusable only on the tree it was taken on. Every reading names its SHA
 (`reading @<sha>`) and is recorded in the first commit made after it completes; it is reusable only if
 `git diff <sha>..HEAD` touches nothing the instrument can reach. **Chain them:** an item records the
 readings it has in its commit body; the next item's before-reading is that record. The spot check must run

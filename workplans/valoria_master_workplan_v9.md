@@ -118,6 +118,19 @@ bound). It creates no document and no directory. A finding that needs no ruling 
   only if a human decision is needed (`needs_jordan: true`, after the five-step ladder) → record the attack in the commit
   message → continue with the next gate-free item. **Never widen the position to make the falsifier pass.** `10`'s
   2026-09-29 revert (H-79) is the precedent.
+  **RULED 2026-10-13 (the session's user: *"Relax exit rules."*), applied to every position's EXIT and FALSIFIER:** a
+  verb position is BUILT when it is wired and proven by a falsifier on a hand-built world (the cause controlled, a
+  mutation red); its executed count in the realm row of `aperture 4 0` is **recorded at its hole row, not required**. The
+  stopping rule reverts a falsifier that fails on a hand-built world; it does not revert a verb for executing 0 times
+  through the real chooser, whose selection is authored alignment-cell and character data, not wiring. A realm exit test
+  that asserts one position's execution is a recorded reading and not a gate on a LATER position: when a later item moves
+  the seed-0 trajectory and one goes red, the reading is re-recorded with its cause and the later item is not reverted.
+  Positions reverted at B-I for a realm count of 0 (IN-09's `evade / defy` and `construe`, IN-33's `exchange`) are
+  restorable from their checkpoints under this rule (`_part5` IN-09, IN-33).
+- **CI CADENCE, RULED 2026-10-13 (the session's user; the words are in `methodology-execute`'s CHECKPOINTS AND BASELINES).**
+  CI runs once at the end of a batch, on the commit that closes it, and once more after the fixes that run calls for.
+  Every earlier commit of the batch carries `[skip ci]`; a one- or two-season probe or the covering test file judges a
+  change in between. A previously run CI is the baseline for the next item: readings are not re-taken.
 - **Must NOT, in any batch:** edit `.designs/` or `.audit/`; cite a `.md` as the reason a behaviour is correct; build a
   guard whose subject is process (§0.1 pt 5); create a directory or standing document; author a cell, a Godot version, or
   a Jordan item's answer; build anything in `engine/mc_v18.py`;
