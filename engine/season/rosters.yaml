@@ -587,7 +587,12 @@ rosters:
       vacant seats a person may fill (`queries/world_q.py::vacancies`), which `questions_for` adds to
       the question the person answers (`_stamped`); a class is the carrier's own type name, so a
       stamp of a type this roster does not name is refused at the Question's construction.
-    values: [Office]
+      `Record` (v9 IN-09, H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): the
+      writs a person HOLDS (`queries/world_q.py::writs_held` -- a live `hold` on a Record of a kind
+      `data/verbs.py::RECORD_REFERENT_KINDS` derives from the rows declaring this class), which
+      `questions_for` adds to the question he answers beside his seats; only `comply`, `evade / defy`
+      and `construe` declare it. REVERT: drop the value and the three rows' column.
+    values: [Office, Record]
 
   person_predicates:
     source: "#353 §14 `:331` — `marks[]` … \"heritage · grade · Church standing · office · residence\""
@@ -1583,10 +1588,12 @@ rosters:
     note: >-
       ⚠ THE OPERAND VOCABULARY IS CLOSED, AND THAT CLOSURE IS WHAT STOPS THE GRAMMAR BECOMING A
       SECOND RESOLVER. A cell naming an operand outside this roster REFUSES AT LOAD. It is the
-      reason `comply` and `exchange` carry `requires_typed: none` rather than a typed cell: the
-      first needs a DISPENSATION and the second needs the counterparty's side of a trade, and
-      neither has a name here. Coining one would be filling `H-94` by keyword argument, which is
-      the ruling `H-94` is waiting for and not a table edit.
+      reason `exchange` carries `requires_typed: none` rather than a typed cell: it needs the
+      counterparty's side of a trade, which has no name here. Coining one would be filling `H-94`
+      by keyword argument, which is the ruling `H-94` is waiting for and not a table edit.
+      (`comply` carried the same reason, for a DISPENSATION, until v9 IN-09 typed it without a new
+      name: the act's `subject` IS the held writ, a `Record` of kind `dispensation` --
+      `verb_table.yaml`'s `comply` row.)
       ⚠ WHERE AN OPERAND COMES FROM IS NOT THIS ROSTER'S QUESTION. Today it is `Act.payload`,
       which carries only `subject` for a computed act, so most cells bind incompletely and
       evaluate to UNKNOWN -- which the fold reports as a refusal, exactly as the untyped

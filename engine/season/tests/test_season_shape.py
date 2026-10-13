@@ -1197,9 +1197,18 @@ def test_a_blocker_outranks_an_unaimed_row():
 
     ⚠ REWRITTEN FOR `W10`. It used to plant two needs and rely on the regex router to reach a
     probe for one of them — so it tested the router as much as the grading rule. The rule is now
-    stated over declarations, which is where it belongs and where it can be read."""
+    stated over declarations, which is where it belongs and where it can be read.
+
+    ⚠ RE-RECORDED AT v9 IN-09: THE GAPPING VERB WAS `comply`, and IN-09 typed its cell, so `comply`
+    is resolvable and no longer gaps. `exchange` replaces it -- the other row that carried
+    `requires_typed: none` for want of an operand name (`rosters.yaml: requires_operands`' note). The
+    assertion it feeds is unchanged; only the planted verb moved, and the guard below fails loudly if
+    `exchange` is ever made resolvable too."""
+    from engine.season.loop.driver import resolvable_verbs
+    assert "exchange" not in resolvable_verbs(), (
+        "`exchange` became resolvable: plant another verb `resolvable_verbs()` excludes")
     planted = {"T": {EX.need_sha("a declared row that gaps"): {
-        "need": "a declared row that gaps", "exercises": ["comply"]}}}
+        "need": "a declared row that gaps", "exercises": ["exchange"]}}}
     saved, R.OVERLAY = R.OVERLAY, planted
     try:
         got = R.grade({"id": "T", "season_requires": [
@@ -1210,7 +1219,7 @@ def test_a_blocker_outranks_an_unaimed_row():
         R.OVERLAY = saved
     assert got["verdict"] == "BLOCKED", got
     assert got["core_unmapped"] == 1, got          # the undeclared row is still reported
-    assert got["blockers"] == ["comply"], got["blockers"]
+    assert got["blockers"] == ["exchange"], got["blockers"]
 
 
 def test_no_playable_case_has_an_unmapped_core_row():
@@ -10694,7 +10703,12 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # `subject`, `kind: commit`) bound only `subject`, so it formed one Candidate on `S` though the
     # verb was never resolvable. The drop is still exactly `transfer`.
     # [GROUNDED: measured at v9 IN-11 -- `opening_set` on `S` lists 32 verbs on a copy of the base tree `c3a698ce` and 31 here, the one missing verb `repudiate`]
-    assert (len(before), len(after)) == (31, 30), (
+    # ⚠ 31 -> 28, v9 IN-09: `comply`, `evade / defy` and `construe` declare `referent_class: Record`,
+    # so they form only on a held writ stamped on the question and never on a plain referent like
+    # `S`; untyped, each formed one Candidate on `S` though none was resolvable. The drop is still
+    # exactly `transfer`.
+    # [GROUNDED: measured at v9 IN-09 -- `opening_set` on `S` lists 31 verbs on a `git worktree` at `905b7a21` and 28 here, the three missing verbs `comply`, `evade / defy`, `construe`]
+    assert (len(before), len(after)) == (28, 27), (
         f"the absolute counts moved to {(len(before), len(after))}. They are the denominator the "
         "delta above is read against, and the delta alone does not reproduce them — re-derive "
         "`H-122`'s reading rather than adjusting this line")

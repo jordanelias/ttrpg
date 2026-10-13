@@ -505,7 +505,7 @@ rows:
     site:      ""
     sweep:     []
     unblocks:  "unmeasured"
-    cite:      ""
+    cite:      "KEPT AND RE-SCOPED AT v9 IN-09 (`workplans/valoria_master_workplan_v9_part5.md` IN-09; #453 `:502`, `:551-552`) [medium; Jordan to correct; revert: Jordan wants the nine types first, and they land as rows before the cells are typed]. Under #453's hook `comply` writes nothing itself and emits `compliance.given`, and what it performs is the separate act the writ names, so `comply`, `evade / defy` and `construe` are typed and execute WITHOUT any term-type row (`verb_table.yaml`, each row `writes: []`, no effect). The 'per the term's own row' writes of the original hole no longer gate the three verbs. WHAT REMAINS HERE: which acts a dispensation's `terms` may name (the nine types, still enumerated nowhere), and with it any link between an executed `comply` and the act it promises -- today a `compliance.given` is a public statement, not a performance."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-45
     tier:      1

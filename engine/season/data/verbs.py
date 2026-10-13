@@ -1194,6 +1194,28 @@ REFUSAL_KINDS = frozenset(k for r in VERB_TABLE.values() for k in r.emits_on_ref
 # Every kind a DEED claim can carry: emitted, and by no row on refusal (`is_deed`'s set).
 DEED_KINDS = EMITTED_KINDS - REFUSAL_KINDS
 
+
+def _derive_record_referent_kinds() -> frozenset:
+    """IN-09 (H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): THE RECORD KINDS
+    A HELD DOCUMENT IS AN OCCASION FOR -- the `kind` of every `existence` clause of `subject` on a row
+    declaring `referent_class: Record` (`comply`, `evade / defy`, `construe`: `dispensation`). Read off
+    the rows that answer a held Record, so the stamp (`queries/world_q.py::writs_held`) and the cell
+    the fold asks cannot name different kinds, and no kind literal lives at the stamp site. Empty when
+    no row declares the class: then nothing is stamped."""
+    from .requires import AllOf, Existence
+    out = set()
+    for row in VERB_TABLE.values():
+        if row.referent_class != "Record" or row.requires_typed is None:
+            continue
+        req = row.requires_typed.requirement
+        for c in (req.clauses if isinstance(req, AllOf) else (req,)):
+            if isinstance(c, Existence) and c.of == "subject":
+                out.add(c.kind)
+    return frozenset(out)
+
+
+RECORD_REFERENT_KINDS = _derive_record_referent_kinds()
+
 # An authored alignment cell for an EVENT KIND rather than a verb is keyed `deed:<kind>` in the same
 # axis row. Admitted only where `<kind>` is in `EMITTED_KINDS` (`_load_alignment`): a deed key for a
 # kind no verb emits is a weight on an event nobody can see. None is authored today.

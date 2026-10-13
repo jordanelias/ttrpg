@@ -38,6 +38,8 @@ from ..data.rosters import (
     FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, RUNG_KINDS, SITE_KINDS,
     TENURE_KINDS,
 )
+# IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows.
+from ..data.verbs import RECORD_REFERENT_KINDS
 from ..gaps import Forbidden, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
@@ -1568,15 +1570,42 @@ def seats_named(w: World, p: Person) -> tuple:
     return tuple(sorted(o for o in ledger_names(p.ledger) if o in w.offices))
 
 
+def writs_held(w: World, p: Person) -> tuple:
+    """THE WRITS `p` HOLDS (v9 IN-09, H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to
+    correct]), sorted by id: the Records on `p`'s own live `hold` edges whose kind a row declaring
+    `referent_class: Record` answers (`data/verbs.py::RECORD_REFERENT_KINDS`, `dispensation`). #453
+    `:502`: *"the executor holds the writ ... `comply` forms on the held writ"*; since IN-10 (c) a
+    writ is minted into its addressee's hand, so this is the order he was given. `()` for nearly
+    everyone (three writs are issued in four realm seasons).
+
+    A STANDING OCCASION, `vacancies`' shape: resolver-side and read-only, it supplies Record IDS,
+    which `questions_for` adds to the question the person answers as CLASSED referents, and whether
+    the act then passes is the fold's (the rows' typed cells: the actor's own ledger holds a claim on
+    the writ). It reads `p`'s own edges and the store only for the kinds of the Records they name.
+    ⚠ NO 'ALREADY ANSWERED' DECLINE: a holder who complied once is offered the writ again while he
+    holds it -- the scene tax IN-10 (a) recorded for a repeated `oblige` (H-203)."""
+    if not RECORD_REFERENT_KINDS:
+        return ()
+    return tuple(sorted({t.object for t in p.tenures
+                         if t.kind == "hold" and t.live and t.object in w.records
+                         and w.records[t.object].kind in RECORD_REFERENT_KINDS}))
+
+
+def _carrier(w: World, o: str):
+    """The carrier an id stamped as a classed referent names: a seat (`w.offices`) or a document
+    (`w.records`). The class is its type name (`_stamped`)."""
+    return w.offices[o] if o in w.offices else w.records[o]
+
+
 def _stamped(q: Question, added: tuple, w: World) -> Question:
     """`q` carrying the ids in `added` as CLASSED referents (IN-53, DECISION 2026-10-13 D1) -- the
     one stamp site. Each id's class is its carrier's own type name read off the World (`Office` for
-    a seat in `w.offices`), never a literal, and `Question` refuses a class
-    `rosters.yaml: referent_classes` does not declare. The plain `referents` are untouched (the
-    class is a partition). `q` itself when nothing is added."""
+    a seat in `w.offices`, `Record` for a document in `w.records` since IN-09), never a literal, and
+    `Question` refuses a class `rosters.yaml: referent_classes` does not declare. The plain
+    `referents` are untouched (the class is a partition). `q` itself when nothing is added."""
     if not added:
         return q
-    return replace(q, classes=q.classes + tuple((o, type(w.offices[o]).__name__) for o in added))
+    return replace(q, classes=q.classes + tuple((o, type(_carrier(w, o)).__name__) for o in added))
 
 
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
@@ -1708,8 +1737,12 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # `terms` names it -- #453 K-25), by IN-53 D1's precedent, after his vacancies and never twice.
     # The class is `Office` either way, so every row declaring it (`confer`, `oblige`) forms on both;
     # whether a seat is held is the fold's question, not the referent's.
+    # IN-09 (H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE WRITS
+    # HE HOLDS (`writs_held`), after the seats, as `Record` -- only `comply`, `evade / defy` and
+    # `construe` declare that class, so no other row's formations move. REVERT: drop the term.
     vacant = vacancies(w, p)
-    added = vacant + tuple(o for o in seats_named(w, p) if o not in vacant)
+    added = (vacant + tuple(o for o in seats_named(w, p) if o not in vacant)
+             + writs_held(w, p))
     if added:
         head = out[0] if out else Question(f"q:need:{added[0]}", "need", (), added[0])
         out[:1] = [_stamped(head, added, w)]
