@@ -451,39 +451,41 @@ class Question:
     is ABOUT -- §F1 clause 3: "subject in referents(q)". `about` is the originating object's id,
     kept so a Candidate can say WHY it exists without the resolver re-deriving it.
 
-    `classes` (IN-53, H-207) is THE REFERENT'S OWN CLASS, per referent: `((id, class), ...)` for the
-    referents a source stamped (`rosters.yaml: question_sources.referent_class`; `Office` for the
-    vacant seats `need` widens with), filled by `queries/world_q.py::questions_for`, which has the
-    World. It rides on the REFERENT and not on `source` because `decision/questions.py::
-    aggregate_questions` folds several questions under ONE source; a class kept per referent is
-    unioned by the fold. `opening_set` has no World (L2) and cannot ask what an id IS; it asks
-    `class_of`, and a referent with no stamped class answers `None`, which satisfies no verb that
-    declares one. A plain field like `referents`: a Question is not in `World._STATE_COLLECTIONS`
-    and is never hashed, so the field moves no `content_hash`; `()` is every question before IN-53."""
+    `classes` (IN-53, H-207, DECISION 2026-10-13 D1) are THE CLASSED REFERENTS: `((id, class),
+    ...)`, a SECOND PARTITION beside `referents`, filled by `queries/world_q.py::questions_for`
+    (which has the World; `_stamped`, the one stamp site: the vacant seats a person may fill, as
+    `Office`). A verb row declaring `referent_class: C` forms ONLY on the ids carried here as `C`;
+    a row declaring none forms ONLY on `referents`, exactly as before IN-53 (`referents_for`, read
+    by `VerbRow.referents_of`). Kept apart rather than spliced into `referents` so the partition is
+    exact: an id may be BOTH a plain referent (a claim about the seat) and a classed one (the seat
+    as a vacancy), and neither side's formations move the other's. It rides per referent, not on
+    `source`, because `decision/questions.py::aggregate_questions` folds several questions under ONE
+    source and unions the pairs. A Question is not in `World._STATE_COLLECTIONS` and is never
+    hashed, so the field moves no `content_hash`; `()` is every question before IN-53."""
     id: str
     source: str
     referents: tuple
     about: str = ""
     classes: tuple = ()
 
-    def class_of(self, referent: str) -> Optional[str]:
-        """The stamped class of `referent`, or `None` when no source stamped one for it."""
-        for r, c in self.classes:
-            if r == referent:
-                return c
-        return None
+    def referents_for(self, cls: Optional[str]) -> tuple:
+        """THE REFERENTS A ROW DECLARING `cls` FORMS ON: the plain `referents` for `None` (a row
+        declaring no class), else the ids carried in `classes` as exactly `cls`, in their order."""
+        if cls is None:
+            return self.referents
+        return tuple(r for r, c in self.classes if c == cls)
 
     def __post_init__(self) -> None:
-        bad = [(r, c) for r, c in self.classes
-               if r not in self.referents or c not in REFERENT_CLASSES]
-        if bad:
+        bad = [rc for rc in self.classes
+               if not (isinstance(rc, tuple) and len(rc) == 2 and rc[1] in REFERENT_CLASSES)]
+        if bad or len(set(self.classes)) != len(self.classes):
             raise Forbidden(
-                f"question {self.id!r} stamps a class on a referent it is not about, or a class no "
-                f"source stamps: {bad}", "IN-53",
-                needs="`classes` pairs only referents of the question with a "
-                      "`question_sources.referent_class` value",
-                law="a class is a fact about a referent the question names; one for an id it does "
-                    "not name, or of no declared class, is read by nothing and hides a stamping error")
+                f"question {self.id!r} carries a classed referent of no declared class, or one "
+                f"twice: {bad or self.classes}", "IN-53",
+                needs="`classes` pairs `(id, class)` once each, the class a "
+                      "`rosters.yaml: referent_classes` value",
+                law="a class is read by the verb rows that declare it; one no row may declare is "
+                    "read by nothing and hides a stamping error")
         if self.source not in QUESTION_SOURCES:
             raise Forbidden(
                 f"question source {self.source!r} is not in the question_sources roster",

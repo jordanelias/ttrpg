@@ -36,7 +36,7 @@ from typing import Callable, Optional
 from ..data.requires import UNKNOWN, binding_from_act
 from ..data.rosters import (
     FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, RUNG_KINDS, SITE_KINDS,
-    SOURCE_REFERENT_CLASS, TENURE_KINDS,
+    TENURE_KINDS,
 )
 from ..gaps import Forbidden, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
@@ -1540,8 +1540,8 @@ def vacancies(w: World, p: Person) -> tuple:
     (`Tenure.granted_acts`, the one owner of the grant's shape). `()` for a person granted no
     `confer`, which is nearly everyone, so the store is read only for a conferrer.
 
-    Resolver-side and read-only: it supplies seat IDS, which `questions_for` adds to the person's
-    `need` questions; whether the conferral then passes is the fold's (`_req_confer`). It asks the
+    Resolver-side and read-only: it supplies seat IDS, which `questions_for` adds to the question
+    the person answers, as classed referents (D1); whether the conferral then passes is the fold's (`_req_confer`). It asks the
     write gate's own `may_fill`, so it names no seat the gate would refuse to have filled through
     that seat. `confer` is named here because it is the remit act the predicate it mirrors serves."""
     seats = [t.object for t in p.tenures
@@ -1553,14 +1553,15 @@ def vacancies(w: World, p: Person) -> tuple:
                  if o.id not in held and any(may_fill(w, p.id, s, o) for s in seats))
 
 
-def _stamped(q: Question, added: tuple) -> Question:
-    """`q` with the class its source declares (`rosters.yaml: question_sources.referent_class`)
-    stamped on the referents in `added` -- the ones the source WIDENED it with (IN-53). `q` itself
-    when the source declares none or nothing was added, so an unwidened question is unchanged."""
-    cls = SOURCE_REFERENT_CLASS[q.source]
-    if cls is None or not added:
+def _stamped(q: Question, added: tuple, w: World) -> Question:
+    """`q` carrying the ids in `added` as CLASSED referents (IN-53, DECISION 2026-10-13 D1) -- the
+    one stamp site. Each id's class is its carrier's own type name read off the World (`Office` for
+    a seat in `w.offices`), never a literal, and `Question` refuses a class
+    `rosters.yaml: referent_classes` does not declare. The plain `referents` are untouched (the
+    class is a partition). `q` itself when nothing is added."""
+    if not added:
         return q
-    return replace(q, classes=tuple((o, cls) for o in added))
+    return replace(q, classes=q.classes + tuple((o, type(w.offices[o]).__name__) for o in added))
 
 
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
@@ -1656,21 +1657,8 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # an ambition act in a quiet season.
     # `17`: the live-`commit`-to-an-OUGHT rule is `ambitions`' alone (above; R-06's READ), so this
     # asks it rather than restating it; one Question per ambition, in edge order, as before.
-    # IN-53 (H-207 'VACANCY AS NEED'): A VACANT SEAT THE PERSON MAY FILL IS A NEED. Its id WIDENS
-    # the referents of every `need` question, `(subject, *vacant)`, stamped with the class `need`
-    # declares (`rosters.yaml: question_sources.referent_class`) so only a row declaring that class
-    # (`confer`, `revoke`) forms on it; a person with vacancies and no ambition gets one `need`
-    # question per vacancy. No source is added and no question displaced, so `qs[0]` keeps its id
-    # and source under `first` (`H-54`); with no vacancy the output is byte-identical.
-    vacant = vacancies(w, p)
-    mine = ambitions(w, p)
-    for pid in mine:
-        subj = w.propositions[pid].subject
-        refs = (subj,) + tuple(o for o in vacant if o != subj)
-        out.append(_stamped(Question(f"q:need:{pid}", "need", refs, pid), vacant))
-    if not mine:
-        for o in vacant:
-            out.append(_stamped(Question(f"q:need:{o}", "need", (o,), o), (o,)))
+    for pid in ambitions(w, p):
+        out.append(Question(f"q:need:{pid}", "need", (w.propositions[pid].subject,), pid))
 
     # ⚠ TWO ORDERINGS LIVE IN THIS ONE LINE AND ONLY THE FIRST IS DECLARED ANYWHERE.
     # `order[q.source]` is `rosters.yaml: question_sources`, whose own note says ORDER IS SEMANTIC
@@ -1692,6 +1680,18 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # not a repair, so it is declared and left alone.
     order = {src: i for i, src in enumerate(QUESTION_SOURCES)}
     out.sort(key=lambda q: (order[q.source], q.id))
+    # IN-53 (H-207, DECISION 2026-10-13 D1): A VACANT SEAT THE PERSON MAY FILL IS A STANDING
+    # OCCASION, AND IT RIDES ON WHATEVER QUESTION HE ANSWERS. After the sort, so it displaces
+    # nothing: `out[0]` -- the question every aggregation rule delivers (`first` returns it; `all`/
+    # `one_per_source` keep its id and source) -- carries the vacancies as CLASSED referents
+    # (`_stamped`), which only a row declaring that class forms on (`Question.referents_for`, a
+    # partition: its plain `referents` are untouched). A person with vacancies and no question gets
+    # one `need` question carrying them (the 'no ambition' case). No source added, no id or source
+    # changed (`H-54`); with no vacancy the output is byte-identical.
+    vacant = vacancies(w, p)
+    if vacant:
+        head = out[0] if out else Question(f"q:need:{vacant[0]}", "need", (), vacant[0])
+        out[:1] = [_stamped(head, vacant, w)]
     return out
 
 

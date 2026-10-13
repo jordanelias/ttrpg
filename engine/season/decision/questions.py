@@ -70,9 +70,8 @@ def aggregate_questions(qs: list, rule: str):
     # `all` and `one_per_source` widen the REFERENTS rather than the question count, because
     # `assemble` takes one question. The person brings everything they are being asked about.
     refs = tuple(sorted({r for q in qs for r in q.referents}))
-    # IN-53: the fold is stamped with `qs[0]`'s source, so a class kept on a LATER question's source
-    # would be lost; a referent's class rides on the question per referent (`Question.classes`), so
-    # the fold UNIONS it -- a seat offered as an Office is still one. `first` returns `qs[0]` as is.
+    # IN-53: the classed referents (`Question.classes`, a partition beside `referents`) are UNIONED
+    # like the referents -- a seat offered as an Office is still one. `first` returns `qs[0]` as is.
     classes = tuple(sorted({rc for q in qs for rc in q.classes}))
     return Question(f"q:agg:{rule}:{qs[0].id}", qs[0].source, refs, qs[0].about, classes)
 

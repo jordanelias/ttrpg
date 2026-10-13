@@ -57,8 +57,10 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     # `confer` among the verbs "foldable but never even attempted". The improvement is real (a
     # silent self-conferral becomes a loud `InstrumentDefect`) and nothing measurable moved.
     # ⚠ IN-53 MAKES THAT STALE: a computed `confer` names its office on `subject` (`office_named_by`,
-    # formed on a vacant seat its `need` question carries) and its conferee on `to` -- the row's
-    # `counterparty: to`, a person the conferrer knows (`VerbRow.known_person_operands`). `_operand`
+    # formed on a vacant seat the question he answers carries) and its conferee on `to` -- the
+    # row's `counterparty: to`, a person the conferrer knows or the conferrer himself (D2,
+    # `counterparty_may_be_self`: an EXPLICIT self-conferral, named on `to`, which this body seats
+    # like any other; what stays deleted is the silent default for an act naming nobody). `_operand`
     # still raises for a hand-built act naming none, but the fold's counterparty clause refuses that
     # act first (`confer.refused`), so the raise is only the backstop.
     obj, to = office_named_by(a), _operand(a, "to")
@@ -224,7 +226,8 @@ def _eff_revoke(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     seat -- or `T-m` if the incumbent is the actor. A revocation with no seat is refused at the gate
     and the hold put back; `_req_revoke` asks the same `may_revoke` first. ⚠ F3 IS ASKED BEFORE F9,
     so a seatless revocation is `NotYours` -- never excused as a no-op."""
-    obj = office_named_by(a)          # IN-53: `office`, else the computed act's `subject`
+    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
+    obj = d.get("office")
     return _closing(w, [t for t in w.tenures if t.kind == "hold" and t.object == obj and t.live])
 
 

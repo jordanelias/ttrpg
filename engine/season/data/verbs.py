@@ -230,21 +230,35 @@ class VerbRow:
     # registered predicate DOES evaluate (`oblige`, `release`).
     requires_decline_note: str = ""
     # IN-53 (H-207): THE REFERENT CLASS -- the carrier type (`Office`) a Candidate of this verb must
-    # be ABOUT. `""` is the declared absence: the verb forms on any referent, as every row did
-    # before. A named class must be one some question source stamps (`rosters.yaml: question_sources.
-    # referent_class`, read as `rosters.REFERENT_CLASSES`) or the load refuses; `opening_set` then
-    # forms the verb only on a referent the question carries as that class (`formed_from`,
-    # `Question.class_of`). It exists because `opening_set` has no World (L2) and cannot ask what kind
-    # of thing a referent is: `confer` and `revoke` formed on every rung, person, Record and Site a
-    # question named and were refused by the fold on every one (`30d38a12`).
+    # be ABOUT. `""` is the declared absence: the verb forms on the question's PLAIN referents, as
+    # every row did before. A named class must be a `rosters.yaml: referent_classes` value or the
+    # load refuses; the verb then forms ONLY on referents the question carries as that class, and
+    # never on its plain ones (`referents_of`, `Question.referents_for`): the class is a PARTITION
+    # (DECISION 2026-10-13 D1), so a classed referent never reaches an undeclared row. It exists
+    # because `opening_set` has no World (L2) and cannot ask what kind of thing a referent is:
+    # `confer` formed on every rung, person, Record and Site a question named and was refused by
+    # the fold on every one (`30d38a12`).
     referent_class: str = ""
+    # IN-53 (H-207, DECISION 2026-10-13 D2): MAY THE COUNTERPARTY BE THE PERSON THEMSELF? `False`
+    # (every row but one) keeps ED-IN-0210's counterparty clause as it was: no Candidate, and no
+    # admitted act, whose counterparty is its actor. `True` (`confer`: the lord who assumes a vacant
+    # seat) adds the person to the known persons the fan ranges over (`decision/options.py::
+    # operand_bags`) and waives the self-exclusion at both counterparty sites (`opening_set`,
+    # `loop/resolve.py::_admits`). The loader admits it only on a row whose counterparty a known
+    # person fills (`known_person_operands`), the only rows the fan reaches.
+    counterparty_may_be_self: bool = False
 
-    def formed_from(self, referent_class: Optional[str]) -> bool:
-        """MAY A CANDIDATE OF THIS VERB BE FORMED ON A REFERENT OF `referent_class`? Yes when the row
-        declares no `referent_class:`; otherwise only when the referent was stamped with exactly that
-        class (`Question.class_of`). A referent of no stamped class (`None`) satisfies no classed
-        verb. The one owner of the comparison; `opening_set` calls it once per (verb, referent)."""
-        return not self.referent_class or referent_class == self.referent_class
+    def referents_of(self, q) -> tuple:
+        """THE REFERENTS OF QUESTION `q` A CANDIDATE OF THIS VERB MAY BE FORMED ON: `q`'s plain
+        referents when the row declares no `referent_class:`, else only those `q` carries as that
+        class (`Question.referents_for`). The one owner of the partition; `opening_set` iterates it."""
+        return q.referents_for(self.referent_class or None)
+
+    def self_counterparty_refused(self, other, actor) -> bool:
+        """IS `other`, ON THIS ROW'S COUNTERPARTY OPERAND, NO SECOND PARTY? Nobody (`None`) always;
+        the actor himself unless the row declares `counterparty_may_be_self`. The one owner of the
+        test `opening_set` (person-side) and `loop/resolve.py::_admits` (the fold) both ask."""
+        return other is None or (other == actor and not self.counterparty_may_be_self)
 
     def known_person_operands(self) -> tuple:
         """THE OPERANDS A CANDIDATE OF THIS ROW TAKES FROM SOMEBODY THE PERSON KNOWS, one bag per
@@ -572,7 +586,8 @@ def _load_verb_table() -> dict:
                       refusals_by_clause=by_clause,
                       effect_decline_note=str(r.get("effect_decline_note") or "").strip(),
                       requires_decline_note=str(r.get("requires_decline_note") or "").strip(),
-                      referent_class=str(r.get("referent_class") or "").strip())
+                      referent_class=str(r.get("referent_class") or "").strip(),
+                      counterparty_may_be_self=r.get("counterparty_may_be_self", False))
         # THE COUNTERPARTY IS AN OPERAND THE ACT CARRIES, OR IT IS NOTHING. `opening_set` compares
         # it with the person; a name the typed cell does not BIND is absent from every Candidate,
         # so the comparison would pass silently and the rule would be a column nothing enforced.
@@ -591,15 +606,32 @@ def _load_verb_table() -> dict:
                 "`requires_typed:` cell does not bind (or, on an untyped row, which is no "
                 "`requires_operands` member). A counterparty is compared with the person forming "
                 "the Candidate, and only a bound operand is always carried.")
-        # IN-53: A REFERENT CLASS IS ONE SOME QUESTION SOURCE STAMPS, OR THE LOAD REFUSES. A class no
-        # source declares (a typo, or a source never built) would make the verb unformable from every
-        # question, silently -- the always-false membership test `rosters.yaml`'s header refuses.
+        # IN-53: A REFERENT CLASS IS A DECLARED ONE, OR THE LOAD REFUSES. A class the roster does not
+        # name (a typo) would make the verb unformable from every question, silently -- the
+        # always-false membership test `rosters.yaml`'s header refuses.
         if row.referent_class and row.referent_class not in REFERENT_CLASSES:
             raise SystemExit(
                 f"verb_table.yaml: {name!r} declares referent_class {row.referent_class!r}, which "
-                f"no question source stamps (the classes are {sorted(REFERENT_CLASSES)}, from "
-                "`rosters.yaml: question_sources.referent_class`). `opening_set` forms the verb "
-                "only on a referent stamped with that class, so an undeclared one never forms.")
+                f"is not a declared class (the classes are {sorted(REFERENT_CLASSES)}, from "
+                "`rosters.yaml: referent_classes`). `opening_set` forms the verb only on a "
+                "referent carried as that class, so an undeclared one never forms.")
+        # IN-53 D2: `counterparty_may_be_self` IS A BOOLEAN, AND ONLY ON A ROW THE FAN REACHES. A
+        # string `"false"` would read truthy; and on a row whose counterparty no known person fills
+        # (`oblige`'s `subject`, `petition`'s bound `to`) the person is never added to any bag, so
+        # the column would waive the fold's self-exclusion for hand-built acts alone -- a fiat
+        # admitted through the back door, which ED-IN-0210 ruling 1 refuses.
+        if not isinstance(row.counterparty_may_be_self, bool):
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares counterparty_may_be_self "
+                f"{row.counterparty_may_be_self!r}; it is `true` or `false`")
+        if row.counterparty_may_be_self and (
+                not row.counterparty or row.counterparty not in row.known_person_operands()):
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares counterparty_may_be_self, but its counterparty "
+                f"{row.counterparty!r} is not an operand a known person fills "
+                f"({list(row.known_person_operands())}). The column adds the person to that fan "
+                "(`decision/options.py::operand_bags`); on any other row it would only waive the "
+                "fold's self-exclusion.")
         # A row that declares `requires_typed: none` must SAY WHY. The three admissible reasons
         # are a well-formedness constraint on the Act (§F.24a: `issue`, `open_case` -- *"they
         # belong in the `Act` schema and are refused at construction"*), a `per act` cell, and an

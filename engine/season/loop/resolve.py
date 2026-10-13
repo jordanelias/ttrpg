@@ -284,9 +284,12 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
     # an act that passed its whole precondition reaches this. `opening_set` declines the same case
     # person-side, so no computed act is ever refused here; it replaces the per-effect copy
     # `_eff_petition` carried (a petition addressed to its petitioner).
+    # IN-53 D2 (H-207): the self half is waived for a row declaring `counterparty_may_be_self`
+    # (`confer`: a self-conferral writes `Tenure(actor, office)`, not a self-loop); one owner of the
+    # test, `VerbRow.self_counterparty_refused`, which `opening_set` asks too.
     if row.counterparty:
         other = binding_from_act(a).get(row.counterparty)
-        if other is None or other == a.actor:
+        if row.self_counterparty_refused(other, a.actor):
             TRACE.decision(f"{a.verb} by {a.actor}: no second party on `{row.counterparty}`",
                            "ED-IN-0210", chose="emit the refusal",
                            alternatives=["admit a self-relation (a fiat)"])

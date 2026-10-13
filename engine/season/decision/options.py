@@ -127,15 +127,12 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         ledger_of = row.requires_typed.named_own_ledger_operands() if row.requires_typed else ()
         opposes_subject = subject_is_opponent(row)
         said_of_entity: dict = {}           # entity -> `said_of` (this row's own-ledger read, per entity)
-        for subject in q.referents:
-            # IN-53: A ROW THAT DECLARES A REFERENT CLASS FORMS ONLY ON A REFERENT OF THAT CLASS
-            # (`VerbRow.formed_from`). The class is read off the QUESTION (`Question.class_of`),
-            # stamped resolver-side and unioned by the fold -- no World, no id test, no verb name --
-            # because this function cannot ask what kind of thing an id is (L2). First, so nothing
-            # below is paid for a referent the row could never be about; a row declaring no class
-            # passes every referent, as before.
-            if not row.formed_from(q.class_of(subject)):
-                continue
+        # IN-53 (H-207, DECISION 2026-10-13 D1): THE CLASS IS A PARTITION. A row declaring a
+        # `referent_class:` iterates only the referents the question carries as that class; a row
+        # declaring none iterates the plain `referents`, exactly as before (`VerbRow.referents_of`,
+        # `Question.referents_for`) -- no World, no id test, no verb name, because this function
+        # cannot ask what kind of thing an id is (L2).
+        for subject in row.referents_of(q):
             # ⚠⚠ A CONTEST NEEDS TWO CLAIMANTS, AND A PERSON IS NOT THEIR OWN ADVERSARY.
             # `move`'s `contain_path` cell keeps the same shape of rule -- *"a node is not a path
             # to itself"* -- as the reader's own, and this is that rule one seam over. It reads
@@ -189,7 +186,9 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 # `release` dropped out of the corpus's executed set because they took its scenes --
                 # position `15`'s *constant scene tax with nothing behind it*, the shape the petition
                 # row's seat reading was refused for.
-                if row.counterparty and ops.get(row.counterparty) in (None, p.id):
+                # IN-53 D2: the self half waived for a row declaring `counterparty_may_be_self`
+                # (`VerbRow.self_counterparty_refused`, the one owner the fold asks too).
+                if row.counterparty and row.self_counterparty_refused(ops.get(row.counterparty), p.id):
                     continue
                 # `19`: THE SEAT THE ACT WILL BE EXERCISED THROUGH rides into the belief test as it rides
                 # onto `Act.via` (`pack_scenes`), so a `basis` conjunct is asked of the same seat both
@@ -950,6 +949,12 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
         ops = _operands(p, row, q, subject, fx, {}, seat)
         return [] if ops is None else [ops]
     people = known_persons(p.ledger, p.id)
+    # IN-53 D2 (H-207): A ROW DECLARING `counterparty_may_be_self` (`confer`) ALSO RANGES OVER THE
+    # PERSON THEMSELF -- a person knows himself from his own state, so this adds no source of
+    # knowledge and no world read (`known_persons` stays its three sources, AX-2, ED-IN-0282); the
+    # lord who assumes a vacant seat. Appended after the known, so their bags keep their order.
+    if row.counterparty_may_be_self and p.id not in people:
+        people = tuple(people) + (p.id,)
     if not people:
         TRACE.note(f"{row.verb!r} needs {list(fan)} from a person {p.id} knows, and they know "
                    f"nobody; NO Candidate is formed (T4)", "§F1/H-94")

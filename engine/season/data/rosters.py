@@ -633,26 +633,10 @@ PURSUIT_AXES = roster("pursuit_axes")
 # (`from_descriptor: affiliation_roster`); its intensity bounds are the leaf's.
 AFFILIATIONS = roster("affiliations")
 QUESTION_SOURCES = roster("question_sources", ordered=True)
-# IN-53: THE REFERENT CLASS EACH QUESTION SOURCE STAMPS (`rosters.yaml: question_sources.
-# referent_class`) -- the carrier type of the referents a source WIDENS its questions with, or `None`
-# for a source that stamps none. `queries/world_q.py::questions_for` (which has the World) stamps it
-# per referent on the Question it builds (`Question.classes`), `decision/questions.py` unions it, and
-# `decision/options.py::opening_set` compares it with a verb row's `referent_class:` column
-# (`data/verbs.py` validates the column against `REFERENT_CLASSES` at load). Keyed on exactly the
-# sources, refused at import: a source with no declaration would make `questions_for` read an absent
-# key, and a declaration for no source is a column nothing reads.
-SOURCE_REFERENT_CLASS = roster_map("question_sources", "referent_class")
-if set(SOURCE_REFERENT_CLASS) != set(QUESTION_SOURCES):
-    raise Unspecified(
-        f"`question_sources.referent_class` keys {sorted(SOURCE_REFERENT_CLASS)}; it must key "
-        f"exactly the sources {list(QUESTION_SOURCES)}", "rosters.yaml",
-        needs="declare one referent class (or `null`, none stamped) per question source",
-        law="IN-53 -- a verb that declares a referent class forms only on a referent stamped with "
-            "that class, so every source must say which class, if any, it stamps")
-#: The referent classes some question source stamps: the closed set a verb row's `referent_class:`
-#: and a `Question.classes` pair may name. Derived from the map, so a class no source stamps cannot
-#: be declared by a verb -- such a verb could never be formed, a typo or a missing source.
-REFERENT_CLASSES = frozenset(c for c in SOURCE_REFERENT_CLASS.values() if c is not None)
+#: IN-53 (H-207, DECISION 2026-10-13 D1): THE CLASSES A QUESTION MAY CARRY A REFERENT AS -- the
+#: closed set a `Question.classes` pair and a verb row's `referent_class:` column may name. A classed
+#: referent is a partition beside the plain `referents` (`rosters.yaml: referent_classes`' note).
+REFERENT_CLASSES = roster("referent_classes")
 PERSON_PREDICATES = roster("person_predicates")
 VIEW_BUILDER_RULES = roster("view_builder_rules")
 QUESTION_AGGREGATION = roster("question_aggregation", ordered=True)

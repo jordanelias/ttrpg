@@ -150,17 +150,19 @@ def _req_confer(w: "World", a: "Act") -> bool:
 
 
 def office_named_by(a: "Act") -> "Optional[str]":
-    """THE OFFICE A `confer` OR `revoke` ACT NAMES -- the one reader `_req_confer`, `_req_revoke`,
-    `_eff_confer` and `_eff_revoke` share (IN-53 step 2).
+    """THE OFFICE A `confer` ACT NAMES -- the one reader `_req_confer` and `_eff_confer` share
+    (IN-53 step 2).
 
     A hand-built act supplies it on the payload's `office` key (the corpus overlays,
-    `corpus_run._check_office`); a COMPUTED act carries it as its `subject`, the Office referent of
-    the question it was formed from (`queries/world_q.py::questions_for`'s vacancies), read through
-    `binding_from_act`, the fold's own binding. `office` wins where both are present, so no
-    hand-built act changes meaning; `None` when the act names neither. Before this the four read
+    `corpus_run._check_office`); a COMPUTED act carries it as its `subject`, the classed Office
+    referent of the question it was formed from (`queries/world_q.py::questions_for`'s vacancies),
+    read through `binding_from_act`, the fold's own binding. `office` wins where both are present,
+    so no hand-built act changes meaning; `None` when the act names neither. Before this both read
     `office` alone, so a computed act passed nothing to the precondition and the effect wrote
-    nothing. `establish` is not a caller: the office it names does not exist yet
-    (`office_described_by`)."""
+    nothing. ⚠ `revoke` IS NOT A CALLER (DECISION 2026-10-13 D1): it declares no referent class and
+    keeps the base's `office`-only read, so a computed `revoke` stays refused at its precondition as
+    at the base (H-207 (A): a computed `revoke` is not driven). `establish` is not a caller either:
+    the office it names does not exist yet (`office_described_by`)."""
     d = a.payload if isinstance(a.payload, dict) else {}
     return d.get("office") or binding_from_act(a).get("subject")
 
@@ -403,7 +405,8 @@ def _req_revoke(w: "World", a: "Act") -> bool:
     *"so long as"* made PURVIEW sufficient while Part E kept the remit necessary. Ruling (3) is
     silent on the remit, so the same question now reads *is the seat above sufficient?* -- still
     `H-91`'s, still not resolved by editing the transcribed `eligibility:` column."""
-    obj = office_named_by(a)
+    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
+    obj = d.get("office")
     if not obj or obj not in w.offices:
         return False
     off = w.offices[obj]
