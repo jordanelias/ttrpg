@@ -131,8 +131,9 @@ def _req_confer(w: "World", a: "Act") -> bool:
     # `_admits` refuses only a missing or self `to`, and the gate admits the hold under the
     # conferral basis, which reads `via` alone. `tell` gets this from its `hearer` conjunct; this row
     # is untyped, so it is asked here.
-    if binding_from_act(a).get("to") not in w.persons:
-        return False
+    conferee = binding_from_act(a).get("to")
+    if not isinstance(conferee, str) or conferee not in w.persons:
+        return False                       # (a list `to` is unhashable: refuse, never raise)
     if not any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures):
         return True                        # 1-per-object satisfied
     # THE `or` DISJUNCT: a held office is still conferrable when the holder-Proposition carries
