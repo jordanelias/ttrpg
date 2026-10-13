@@ -156,7 +156,9 @@ def test_in10a_the_loader_refuses_a_malformed_referent_named(monkeypatch, verb, 
 
 def test_in10a_the_declarations_as_built():
     from engine.season.data.verbs import VERB_TABLE
-    assert {v for v, r in VERB_TABLE.items() if r.referent_named} == {"oblige"}
+    # RE-RECORDED AT v9 IN-09: the three writ rows declare it too (was `{"oblige"}`).
+    assert {v for v, r in VERB_TABLE.items() if r.referent_named} == {
+        "oblige", "comply", "evade / defy", "construe"}
     assert VERB_TABLE["oblige"].referent_class == "Office"
 
 
@@ -170,44 +172,18 @@ def test_in10a_the_declarations_as_built():
 SEASONS = 4
 
 
-@pytest.fixture(scope="module")
-def realm4():
-    """`populated.run`'s construction over `SEASONS` seasons, with `choose.opening_set` WRAPPED
-    (instrumentation only) to record, for every `oblige` Candidate any person forms, whether his own
-    ledger named the seat at that moment."""
-    from engine.season.decision import choose as CH
-    from engine.season.queries.person_q import ledger_names
-    formed = []
-    real = CH.opening_set
-
-    def watching(p, v, q, fx):
-        out = real(p, v, q, fx)
-        for c in out:
-            if c.verb == "oblige":
-                formed.append((p.id, c.subject, c.subject in ledger_names(p.ledger)))
-        return out
-    w = POP.build_realm(0)
-    with pytest.MonkeyPatch.context() as mp:
-        mp.setattr(CH, "opening_set", watching)
-        d = SeasonDriver(w)
-        mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-        ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                          draw=draw_factory(w.world_seed, lambda: w.tick))
-        for _ in range(SEASONS):
-            d.season(ch, question=None, subsistence=POP.P.SUBSIST,
-                     contest_max_depth=w.fixtures.get("contest_max_depth"))
-    return w, attribute(w, d, SEASONS), formed
+# The 4-season run, with the `oblige` formations recorded, is `conftest.py::realm_4s`.
 
 
-def test_in10a_falsifier_no_oblige_forms_on_a_seat_nobody_told_him_of(realm4):
-    _, _, formed = realm4
+def test_in10a_falsifier_no_oblige_forms_on_a_seat_nobody_told_him_of(realm_4s):
+    _, _, _, formed = realm_4s
     assert formed, "no `oblige` Candidate formed, so the falsifier observed nothing"
     untold = [f for f in formed if not f[2]]
     assert not untold, untold[:5]
 
 
-def test_in10a_exit_oblige_executes_in_computed_play(realm4):
-    w, rows, _ = realm4
+def test_in10a_exit_oblige_executes_in_computed_play(realm_4s):
+    w, _, rows, _ = realm_4s
     taken = [a for a, made, _ in rows if a.verb == "oblige" and "duty.taken" in made]
     assert taken, sorted(Counter(a.verb for a, made, _ in rows if made).items())
     assert all(a.payload["subject"] in w.offices for a in taken)
@@ -218,8 +194,8 @@ def test_in10a_exit_oblige_executes_in_computed_play(realm4):
 _BASE_EXECUTED_ILT = 6
 
 
-def test_in10a_the_crowd_out_control(realm4):
-    _, rows, _ = realm4
+def test_in10a_the_crowd_out_control(realm_4s):
+    _, _, rows, _ = realm_4s
     ex = Counter(a.verb for a, made, _ in rows if made)
     assert ex["issue"] + ex["levy"] + ex["transfer"] >= _BASE_EXECUTED_ILT - ex["oblige"], dict(ex)
 

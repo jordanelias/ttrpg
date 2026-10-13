@@ -225,7 +225,8 @@ def test_in53v_b_no_office_referent_outside_reach():
 # ======================================================================================
 
 def test_in53v_c_the_classes_survive_the_fold_and_are_closed():
-    assert REFERENT_CLASSES == {"Office"}
+    # RE-RECORDED AT v9 IN-09: `Record` joins (was `{"Office"}`), the held writs `writs_held` stamps.
+    assert REFERENT_CLASSES == {"Office", "Record"}
     a = Question("q:claim:x", "claim_landed", ("S",), "x")
     b = Question("q:need:off_reeve", "need", (), "off_reeve", (("off_reeve", "Office"),))
     for rule in ("all", "one_per_source"):
@@ -253,8 +254,10 @@ def _planted(monkeypatch, verb, key, value):
 
 
 def test_in53v_c_the_declarations_as_built():
-    # RE-RECORDED AT v9 IN-10 (a): `oblige` declares the class (was `{"confer"}`).
-    assert {v for v, r in VERB_TABLE.items() if r.referent_class} == {"confer", "oblige"}
+    # RE-RECORDED AT v9 IN-10 (a): `oblige` declares the class (was `{"confer"}`); AT v9 IN-09 the
+    # three writ rows declare `Record` (was `{"confer", "oblige"}`).
+    assert {v for v, r in VERB_TABLE.items() if r.referent_class} == {
+        "confer", "oblige", "comply", "evade / defy", "construe"}
     assert VERB_TABLE["confer"].referent_class == VERB_TABLE["oblige"].referent_class == "Office"
     assert {v for v, r in VERB_TABLE.items() if r.counterparty_may_be_self} == {"confer"}
     assert VERB_TABLE["confer"].known_person_operands() == ("to",)
@@ -325,33 +328,22 @@ _BASE_EXECUTED_ILT = 7      # issue 2 + levy 0 + transfer 5, `aperture 4 0` real
 SEASONS = 4
 
 
-@pytest.fixture(scope="module")
-def realm3():
-    """`populated.run`'s construction, line for line, over `SEASONS` seasons."""
-    w = POP.build_realm(0)
-    d = SeasonDriver(w)
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                      draw=draw_factory(w.world_seed, lambda: w.tick))
-    for _ in range(SEASONS):
-        d.season(ch, question=None, subsistence=POP.P.SUBSIST,
-                 contest_max_depth=w.fixtures.get("contest_max_depth"))
-    return w, d, attribute(w, d, SEASONS)
+# The 4-season run is `conftest.py::realm_4s` (one run for every file that reads it).
 
 
-def test_in53v_e_confer_executes_into_a_seat_nobody_held(realm3):
+def test_in53v_e_confer_executes_into_a_seat_nobody_held(realm_4s):
     """At least one computed `confer` executes, through a seat (`via`), opening a hold and closing
     none -- the seat had no live hold when the act resolved (`_eff_confer` names a closure for every
     live hold it displaces, G4)."""
-    w, _, rows = realm3
+    w, _, rows, _ = realm_4s
     into_vacant = [a for a, made, _ in rows
                    if a.verb == "confer" and made and a.via in w.offices
                    and "tenure.opened" in made and "tenure.closed" not in made]
     assert into_vacant, sorted(Counter(a.verb for a, made, _ in rows if made).items())
 
 
-def test_in53v_e_the_crowd_out_control(realm3):
-    w, _, rows = realm3
+def test_in53v_e_the_crowd_out_control(realm_4s):
+    w, _, rows, _ = realm_4s
     # RE-RECORDED AT v9 IN-10 (c): the executed-count floor (`_BASE_EXECUTED_ILT` less the `confer`s)
     # is retired. It compared 5 to 7 acts across a whole trajectory, and any later item that moves
     # who holds a writ moves it (IN-10 (c): `issue` 2 -> 3, `transfer` 4 -> 2, no formation count

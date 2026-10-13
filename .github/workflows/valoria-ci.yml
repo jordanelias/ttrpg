@@ -367,7 +367,12 @@ jobs:
     # own: one hosted observation, not a distribution. The cap was set before any completed run existed
     # (same as sim-regression's); re-derive it the next time a run lands within a few minutes of it, which
     # is how sim-regression's 5-minute cap went wrong (ED-IN-0198).
-    timeout-minutes: 20
+    # RE-DERIVED 2026-10-13 (v9 B-I, run 38362814770, PR #472 @905b7a21): this job was `cancelled` at the
+    # 20-minute cap. The runs before it finished in 13m to 14m30s (IN-53's 4-season exit test already
+    # in), then IN-10 (a) added a second 4-season realm fixture, and every verb position of B-I and
+    # after adds a falsifier on the same run. `engine/season/tests/conftest.py::realm_4s` is now the one
+    # shared run; 30 minutes is 2x the 14m30s observation, one hosted observation and not a distribution.
+    timeout-minutes: 30
     permissions:
       contents: read
     steps:
