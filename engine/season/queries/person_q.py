@@ -625,6 +625,31 @@ def intent_named(c) -> tuple:
     return tuple(v for _n, v in c.value)
 
 
+#: THE CONTENT KEYS THAT SAY WHAT A DOCUMENT IS ABOUT -- every key `rosters.yaml: record_kinds.
+#: content.read_from` reads off the minting act's `subject` (`terms`, today). Derived from the roster
+#: that types the schema, never from a value's strings (`world_q.named`'s ruling, one key over).
+ABOUT_KEYS = tuple(k for k, src in (RECORD_CONTENT.get("read_from") or {}).items() if src == "subject")
+
+
+def ledger_names(claims) -> frozenset:
+    """EVERY ID THIS HOLDER HAS BEEN TOLD OF, from their OWN claims only (IN-10 (a), AX-2): the
+    subject of every claim they hold -- a deposit, chiefly a witness's `tenure.opened` claim about a
+    seat (#453 K-25) -- and what every document they hold is ABOUT (`ABOUT_KEYS` in a
+    `content:<kind>` claim's value: a held Record's `terms`). An addressee is not what a document is
+    about, so a writ's `to` is not read. The ONE owner of "named by a held Record or a deposit":
+    `world_q.seats_named` keeps the seats among it, and `decision/options.py::opening_set` asks it of
+    a row declaring `referent_named` -- one rule for the source and the formation."""
+    stem = RECORD_CONTENT.get("predicate")
+    out = set()
+    for c in claims:
+        out.add(c.subject)
+        s, sep, _ = str(c.predicate).partition(":")
+        if sep and s == stem and c.value is not None:
+            said = dict(c.value)
+            out.update(v for k in ABOUT_KEYS for v in (said.get(k),) if isinstance(v, str))
+    return frozenset(out)
+
+
 def known_persons(claims, actor) -> tuple:
     """THE PERSONS THIS HOLDER KNOWS OF, from their OWN claims only -- sorted ids, never `actor`
     (telling workplan `T4`, `ED-IN-0282`). Three sources, and no other:

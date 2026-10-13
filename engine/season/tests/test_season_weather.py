@@ -52,17 +52,22 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # partition). The build hash is unchanged (nothing stored moves). Was c2230a36... / 88f6f243... after
 # one and two seasons at e716f10b; `BASE_EVENTS` re-recorded with it (was 7526/e56f8652...,
 # 21508/dc3c440a...).
+# RE-PINNED at v9 IN-10 (c) (H-203), A TRAJECTORY MOVE DECLARED: a writ is minted into its ADDRESSEE's
+# hand and the issuer keeps none, so season 1's one dispensation (`p_npc_037` -> `p_npc_020`) is held by
+# another person, who receives its content deposit, and the seasons diverge from there. Build hash
+# unchanged. Was 56d44b5a... / 808951dd... after one and two seasons; `BASE_EVENTS` re-recorded with it
+# (was 7527/05d85451..., 21735/680e93d8...).
 BASE_HASHES = {0: "11989dcf5e1c25afab556bf3f234a200",
-               1: "56d44b5a588afc9575ef2b3b69e8e465",
-               2: "808951dd023d640be92755678195c112"}
+               1: "80aef84c49e0c6d63aac266fabf46af3",
+               2: "b87bd251f536915f086ea0fa3b015248"}
 
 # The pre-IN-34 base (d47077d5), `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event
 # count and the sha256 of its ordered `kind|id` lines after one season and after two. A ONE-TIME PROOF
 # that the schema re-pin of `BASE_HASHES` moved nothing at the event level (the hash folds
 # `repr(Person)`, which gained a field; the events did not move); re-recorded together with
 # `BASE_HASHES`, never alone. A hazard that fired at the control would change the sequence.
-BASE_EVENTS = {1: (7527, "05d854511133d0f28566c2d40aadd1104d730845cef9bc2c2f2ca5c43b65ad15"),
-               2: (21735, "680e93d8bf406220a0e64a8c832cbf1114f2266e869979420853a803f6eeb627")}
+BASE_EVENTS = {1: (7508, "b8a1f5ff4ae77037a00cbad9c28fd665229c09fdd3e5c75e173d5a8698981dbc"),
+               2: (21120, "9dc7a16b7ea31e81bfad66a80b85346d1983f65ccd9dd1f225102dcac8767e00")}
 
 
 def _digest(w) -> tuple:

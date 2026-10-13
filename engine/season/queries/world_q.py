@@ -41,7 +41,7 @@ from ..data.rosters import (
 from ..gaps import Forbidden, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
-from .person_q import intent_named
+from .person_q import intent_named, ledger_names
 from ..state.attribution import anchor_of, causing_act
 from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE (G3, plan position 6). The
@@ -1553,6 +1553,21 @@ def vacancies(w: World, p: Person) -> tuple:
                  if o.id not in held and any(may_fill(w, p.id, s, o) for s in seats))
 
 
+def seats_named(w: World, p: Person) -> tuple:
+    """THE SEATS `p` HAS BEEN TOLD OF (IN-10 (a), #453 K-25 / `:524`), sorted by id: the Offices
+    among `person_q.ledger_names(p.ledger)` -- a claim about the seat (chiefly the `tenure.opened`
+    claim a witness of a conferral holds, `epistemic.claim_subjects`' Tenure expansion) or a held
+    document whose `terms` names it. `()` for nearly everyone: before any seat changes hands no
+    ledger holds a claim about one (H-203).
+
+    Reads `p`'s OWN LEDGER, never the store's Records (AX-2: a document's content is what the person
+    holding it believes); the World is asked only which ids are seats (`w.offices`), the class
+    `_stamped` stamps. Resolver-side and read-only, `vacancies`' shape: it supplies seat IDS, which
+    `questions_for` adds to the question the person answers as CLASSED referents, and whether an act
+    on one passes is the fold's (`_req_oblige`, `_req_confer`)."""
+    return tuple(sorted(o for o in ledger_names(p.ledger) if o in w.offices))
+
+
 def _stamped(q: Question, added: tuple, w: World) -> Question:
     """`q` carrying the ids in `added` as CLASSED referents (IN-53, DECISION 2026-10-13 D1) -- the
     one stamp site. Each id's class is its carrier's own type name read off the World (`Office` for
@@ -1688,10 +1703,16 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # partition: its plain `referents` are untouched). A person with vacancies and no question gets
     # one `need` question carrying them (the 'no ambition' case). No source added, no id or source
     # changed (`H-54`); with no vacancy the output is byte-identical.
+    # IN-10 (a) (H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE
+    # SEATS HE HAS BEEN TOLD OF (`seats_named`: a deposit about the seat, or a held document whose
+    # `terms` names it -- #453 K-25), by IN-53 D1's precedent, after his vacancies and never twice.
+    # The class is `Office` either way, so every row declaring it (`confer`, `oblige`) forms on both;
+    # whether a seat is held is the fold's question, not the referent's.
     vacant = vacancies(w, p)
-    if vacant:
-        head = out[0] if out else Question(f"q:need:{vacant[0]}", "need", (), vacant[0])
-        out[:1] = [_stamped(head, vacant, w)]
+    added = vacant + tuple(o for o in seats_named(w, p) if o not in vacant)
+    if added:
+        head = out[0] if out else Question(f"q:need:{added[0]}", "need", (), added[0])
+        out[:1] = [_stamped(head, added, w)]
     return out
 
 

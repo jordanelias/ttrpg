@@ -247,6 +247,14 @@ class VerbRow:
     # `loop/resolve.py::_admits`). The loader admits it only on a row whose counterparty a known
     # person fills (`known_person_operands`), the only rows the fan reaches.
     counterparty_may_be_self: bool = False
+    # IN-10 (a) (H-203, DECISION 2026-10-13): MUST A CLASSED REFERENT BE ONE THE PERSON WAS TOLD OF?
+    # `False` (every row but one): the row forms on every referent its class partition yields -- for
+    # `confer`, the vacancies `world_q.vacancies` stamps, which no ledger names. `True` (`oblige`):
+    # only on a referent the person's OWN LEDGER names (`queries/person_q.py::ledger_names`: a
+    # deposit about it, or a held document whose `terms` it is -- #453 K-25), asked person-side in
+    # `decision/options.py::opening_set` with no World (L2). The loader admits it only beside a
+    # `referent_class:`; one class, two sources, and this column is which one a row may answer.
+    referent_named: bool = False
 
     def referents_of(self, q) -> tuple:
         """THE REFERENTS OF QUESTION `q` A CANDIDATE OF THIS VERB MAY BE FORMED ON: `q`'s plain
@@ -269,8 +277,10 @@ class VerbRow:
         `to`, beside a bound `subject`). An UNTYPED row carries nothing, EXCEPT the one second party
         it names that a known person can fill: its `counterparty:` where that is a
         `known_person_operands` member (IN-53: `confer`'s `to`, the conferee, beside the office as
-        `subject`). Any other untyped counterparty (`oblige`'s `subject`) stays the declared hole it
-        was -- no Candidate. Read off the row's columns and the roster; no verb name."""
+        `subject`). Any other untyped counterparty (`oblige`'s `subject`) is filled by no known
+        person -- no fan; since IN-10 (a) `oblige`'s seat is the classed referent the Candidate is
+        formed on (`decision/options.py::_operands`). Read off the row's columns and the roster; no
+        verb name."""
         if self.requires_typed is not None:
             return self.requires_typed.known_person_operands()
         return ((self.counterparty,)
@@ -587,7 +597,8 @@ def _load_verb_table() -> dict:
                       effect_decline_note=str(r.get("effect_decline_note") or "").strip(),
                       requires_decline_note=str(r.get("requires_decline_note") or "").strip(),
                       referent_class=str(r.get("referent_class") or "").strip(),
-                      counterparty_may_be_self=r.get("counterparty_may_be_self", False))
+                      counterparty_may_be_self=r.get("counterparty_may_be_self", False),
+                      referent_named=r.get("referent_named", False))
         # THE COUNTERPARTY IS AN OPERAND THE ACT CARRIES, OR IT IS NOTHING. `opening_set` compares
         # it with the person; a name the typed cell does not BIND is absent from every Candidate,
         # so the comparison would pass silently and the rule would be a column nothing enforced.
@@ -615,6 +626,18 @@ def _load_verb_table() -> dict:
                 f"is not a declared class (the classes are {sorted(REFERENT_CLASSES)}, from "
                 "`rosters.yaml: referent_classes`). `opening_set` forms the verb only on a "
                 "referent carried as that class, so an undeclared one never forms.")
+        # IN-10 (a): `referent_named` IS A BOOLEAN, AND ONLY BESIDE A `referent_class:` -- on a row
+        # forming on plain referents it would decline nothing the class partition offered, a
+        # column read by nothing.
+        if not isinstance(row.referent_named, bool):
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares referent_named {row.referent_named!r}; it is "
+                "`true` or `false`")
+        if row.referent_named and not row.referent_class:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares referent_named without a referent_class; the "
+                "column narrows a CLASSED referent to one the person's own ledger names "
+                "(`decision/options.py::opening_set`), and this row forms on plain referents.")
         # IN-53 D2: `counterparty_may_be_self` IS A BOOLEAN, AND ONLY ON A ROW THE FAN REACHES. A
         # string `"false"` would read truthy; and on a row whose counterparty no known person fills
         # (`oblige`'s `subject`, `petition`'s bound `to`) the person is never added to any bag, so

@@ -143,7 +143,10 @@ def test_in53v_a_the_partition_moves_no_other_rows_formations():
     """THE CROWD-OUT CONTROL AT FORMATION, BY CONSTRUCTION: over every person and question (as
     built, and folded under `all`/`one_per_source`), with the vacancies on them, every Candidate of
     every row but `confer` equals what the same question forms with its classed referents stripped;
-    and stripped, `confer` forms nothing."""
+    and stripped, `confer` forms nothing. RE-RECORDED AT v9 IN-10 (a): "every row but `confer`" is
+    now every row declaring no `referent_class:` -- `oblige` declares `Office` too (a seat the person
+    was told of), so both are the classed side of the partition and neither forms when stripped."""
+    classed_rows = {v for v, r in VERB_TABLE.items() if r.referent_class}
     w, _ = _gov_world()
     _hold(w, "off_duke2").until = w.tick
     for pid in w.persons:
@@ -156,8 +159,8 @@ def test_in53v_a_the_partition_moves_no_other_rows_formations():
         for q in qs + [f for f in folded if f is not None]:
             got = _formed(w, pid, q)
             bare = _formed(w, pid, dataclasses.replace(q, classes=()))
-            assert _sig(c for c in got if c.verb != "confer") == _sig(bare), (pid, q.id)
-            assert not [c for c in bare if c.verb == "confer"], (pid, q.id)
+            assert _sig(c for c in got if c.verb not in classed_rows) == _sig(bare), (pid, q.id)
+            assert not [c for c in bare if c.verb in classed_rows], (pid, q.id)
             checked += bool(q.classes)
     assert checked >= 3, checked
 
@@ -184,7 +187,9 @@ def test_in53v_b_confer_forms_on_the_vacancy_with_to_over_known_persons_and_hims
 
 def test_in53v_b_only_confer_forms_on_a_classed_referent_and_only_on_one():
     """Every `confer` Candidate names a referent its question carries as `Office`; no other row
-    forms on an id it carries ONLY classed."""
+    forms on an id it carries ONLY classed. RE-RECORDED AT v9 IN-10 (a): `oblige`, which declares the
+    class too, is held to `confer`'s rule (no `oblige` forms here: nobody was told of a seat)."""
+    classed_rows = {v for v, r in VERB_TABLE.items() if r.referent_class}
     w, _ = _gov_world()
     for pid in w.persons:
         _know(w, pid, *[o for o in w.persons if o != pid])
@@ -193,9 +198,9 @@ def test_in53v_b_only_confer_forms_on_a_classed_referent_and_only_on_one():
         for q in world_q.questions_for(w, p):
             only_classed = {r for r, _ in q.classes} - set(q.referents)
             for c in _formed(w, pid, q):
-                if c.verb == "confer":
+                if c.verb in classed_rows:
                     assert (c.subject, "Office") in q.classes, (pid, q.id, c)
-                    checked += 1
+                    checked += c.verb == "confer"
                 else:
                     assert c.subject not in only_classed, (pid, q.id, c)
     assert checked >= 4, checked
@@ -248,8 +253,9 @@ def _planted(monkeypatch, verb, key, value):
 
 
 def test_in53v_c_the_declarations_as_built():
-    assert {v for v, r in VERB_TABLE.items() if r.referent_class} == {"confer"}
-    assert VERB_TABLE["confer"].referent_class == "Office"
+    # RE-RECORDED AT v9 IN-10 (a): `oblige` declares the class (was `{"confer"}`).
+    assert {v for v, r in VERB_TABLE.items() if r.referent_class} == {"confer", "oblige"}
+    assert VERB_TABLE["confer"].referent_class == VERB_TABLE["oblige"].referent_class == "Office"
     assert {v for v, r in VERB_TABLE.items() if r.counterparty_may_be_self} == {"confer"}
     assert VERB_TABLE["confer"].known_person_operands() == ("to",)
     assert VERB_TABLE["oblige"].known_person_operands() == ()       # untyped `subject`: no fan
@@ -346,7 +352,10 @@ def test_in53v_e_confer_executes_into_a_seat_nobody_held(realm3):
 
 def test_in53v_e_the_crowd_out_control(realm3):
     w, _, rows = realm3
-    ex = Counter(a.verb for a, made, _ in rows if made)
-    ilt = ex["issue"] + ex["levy"] + ex["transfer"]
-    assert ilt >= _BASE_EXECUTED_ILT - ex["confer"], (dict(ex), _BASE_EXECUTED_ILT)
+    # RE-RECORDED AT v9 IN-10 (c): the executed-count floor (`_BASE_EXECUTED_ILT` less the `confer`s)
+    # is retired. It compared 5 to 7 acts across a whole trajectory, and any later item that moves
+    # who holds a writ moves it (IN-10 (c): `issue` 2 -> 3, `transfer` 4 -> 2, no formation count
+    # changes), so it cannot tell a crowd-out from a different trajectory. The control is the
+    # formation test above (`test_in53v_a_the_partition_moves_no_other_rows_formations`), exact by
+    # construction; what this test still holds is that every executed `confer` names an Office.
     assert all(_preds.office_named_by(a) in w.offices for a, _, _ in rows if a.verb == "confer")

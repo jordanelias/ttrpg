@@ -846,14 +846,19 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     is not a boolean; and one on a row whose counterparty no known person fills (it would waive the
     fold's self-exclusion for hand-built acts alone). Falsifier:
     `test_in53_vacancy_need.py::test_in53v_c_the_loader_refuses` plants each and the load raises
-    naming it."""
+    naming it.
+
+    ⚠ 69 -> 71, v9 IN-10 (a) (H-203, DECISION 2026-10-13), TWO NEW LOAD-TIME REFUSALS, `verbs.py`
+    30 -> 32: a `referent_named:` that is not a boolean, and one on a row declaring no
+    `referent_class:` (it would decline nothing a class partition offered). Falsifier:
+    `test_in10a_oblige_formable.py::test_in10a_the_loader_refuses_a_malformed_referent_named`."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 69, (
-        f"{total} load-time exits across the model set, expected 69. Per file: "
+    assert total == 71, (
+        f"{total} load-time exits across the model set, expected 71. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 

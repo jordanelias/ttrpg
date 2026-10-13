@@ -38,7 +38,7 @@ from ..loop import effects as EF
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..loop.predicates import REQUIRES_PREDICATES
 from ..queries import world_q
-from ..state.carriers import Act, Office, Question, View
+from ..state.carriers import Act, Claim, Office, Question, View
 from ..state.gate import NO_CHANGE
 
 SEAT = "off_duke"
@@ -280,18 +280,42 @@ def _oblige_candidates(w, pid, referents):
 
 
 def test_17a_no_person_forms_an_oblige_it_cannot_name_a_seat_for(monkeypatch):
-    """`counterparty: subject` on the untyped row: nothing is carried, so no Candidate forms -- even
-    for a question ABOUT the seat. CONTROL: clear the column and they form, each one an act the fold
-    would refuse for a non-seat referent -- the scene tax `7a`'s `commit` measured on the corpus."""
+    """RE-RECORDED AT v9 IN-10 (a), AS IT FLIPS. It read: `counterparty: subject` on the untyped row
+    carries nothing, so no Candidate forms -- even for a question ABOUT the seat; control, the column
+    cleared, and they form on every plain referent. Now the row declares `referent_class: Office`
+    (`verb_table.yaml`): a question merely naming the seat among its PLAIN referents still forms
+    none, and neither does the person, rung or hearth beside it; the same seat carried as an
+    `Office`-CLASSED referent -- a seat the person was told of (`world_q.seats_named`) -- forms
+    exactly one, ON THE SEAT, carrying it on `subject` (`options._operands`) -- and only once his own
+    ledger names it (`referent_named`): classed but never told of, none. CONTROL: clear both columns
+    and the row forms on the plain referents instead (each an act the fold would refuse for a
+    non-seat referent -- the scene tax `7a`'s `commit` measured)."""
     w, _d = _world()
     referents = (SEAT, "p_low", "Hh")
     assert VERB_TABLE["oblige"].counterparty == "subject"
-    assert not _oblige_candidates(w, "p_mid", referents), "an `oblige` Candidate was formed"
+    assert VERB_TABLE["oblige"].referent_class == "Office"
+    assert not _oblige_candidates(w, "p_mid", referents), "an `oblige` formed on a plain referent"
+    p = w.persons["p_mid"]
+    classed = Question("q:ob", "need", referents, classes=((SEAT, "Office"),))
+
+    def formed():
+        return [c for c in opening_set(p, View("p_mid", [], w.fixtures.get("view_k")), classed,
+                                       w.fixtures) if c.verb == "oblige"]
+    # CLASSED BUT NEVER TOLD OF (`referent_named`): a seat his own ledger does not name forms none.
+    assert VERB_TABLE["oblige"].referent_named is True
+    assert formed() == [], "an `oblige` formed on a seat no deposit or held Record names"
+    p.ledger.append(Claim("c_17a_told", "p_mid", SEAT, "tenure.opened", True, 0, "firsthand", 100,
+                          "own"))
+    got = formed()
+    assert [(c.subject, c.operands) for c in got] == [(SEAT, {"subject": SEAT})], got
     monkeypatch.setitem(VERB_TABLE, "oblige",
-                        dataclasses.replace(VERB_TABLE["oblige"], counterparty=""))
-    assert _oblige_candidates(w, "p_mid", referents), (
-        "control: with the column cleared no Candidate forms either, so the column is not what "
-        "declined them")
+                        dataclasses.replace(VERB_TABLE["oblige"], referent_class="",
+                                            referent_named=False))
+    plain = [c for c in opening_set(p, View("p_mid", [], w.fixtures.get("view_k")), classed,
+                                    w.fixtures) if c.verb == "oblige"]
+    assert sorted(c.subject for c in plain) == sorted(referents), (
+        "control: with the class cleared the row forms on the plain referents (the seat among "
+        f"them), so the class is what confines it to the seat: {plain}")
 
 
 # ================================================================================================

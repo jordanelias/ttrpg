@@ -38,7 +38,9 @@ from ..data.rosters import (
 from ..data.verbs import ELIGIBILITY_KINDS, VERB_TABLE, align
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
-from ..queries.person_q import LedgerReader, crisis_weights, known_persons, regard, said_of
+from ..queries.person_q import (
+    LedgerReader, crisis_weights, known_persons, ledger_names, regard, said_of,
+)
 from ..state.carriers import Candidate, Claim, Person, Question, View
 from ..trace_log import TRACE
 
@@ -127,12 +129,19 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         ledger_of = row.requires_typed.named_own_ledger_operands() if row.requires_typed else ()
         opposes_subject = subject_is_opponent(row)
         said_of_entity: dict = {}           # entity -> `said_of` (this row's own-ledger read, per entity)
+        # IN-10 (a) (H-203): a row declaring `referent_named` forms only on a classed referent the
+        # person's OWN LEDGER names (`person_q.ledger_names`: a deposit, or a held document's
+        # `terms`) -- `oblige` on a seat he was told of, never on a vacancy a world read stamped.
+        # Own state, no World; computed once per row, only for such a row.
+        told = ledger_names(p.ledger) if row.referent_named else None
         # IN-53 (H-207, DECISION 2026-10-13 D1): THE CLASS IS A PARTITION. A row declaring a
         # `referent_class:` iterates only the referents the question carries as that class; a row
         # declaring none iterates the plain `referents`, exactly as before (`VerbRow.referents_of`,
         # `Question.referents_for`) -- no World, no id test, no verb name, because this function
         # cannot ask what kind of thing an id is (L2).
         for subject in row.referents_of(q):
+            if told is not None and subject not in told:
+                continue
             # ⚠⚠ A CONTEST NEEDS TWO CLAIMANTS, AND A PERSON IS NOT THEIR OWN ADVERSARY.
             # `move`'s `contain_path` cell keeps the same shape of rule -- *"a node is not a path
             # to itself"* -- as the reader's own, and this is that rule one seam over. It reads
@@ -976,7 +985,11 @@ def _operands(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixtures",
     if req is None:
         # An UNTYPED row carries nothing but what a known person fills for its named counterparty
         # (`VerbRow.known_person_operands`: `confer`'s `to`, IN-53); `given` is empty for every other.
-        return dict(given)
+        # IN-10 (a): AND ITS COUNTERPARTY WHERE THAT IS THE REFERENT ITSELF (`counterparty:
+        # subject`, `oblige`'s seat), so the counterparty clause here and the fold's read the seat
+        # the Candidate is formed on rather than nothing. The payload is unchanged (`_payload_of`
+        # puts `subject` on every computed act); only the person-side decline can now see it.
+        return dict(given, **({"subject": subject} if row.counterparty == "subject" else {}))
     bound = tuple(req.operands())
     admitted = req.needs()
     names = bound + tuple(n for n in _REFERENT_OPERANDS if n in admitted and n not in bound)

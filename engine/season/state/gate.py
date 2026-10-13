@@ -216,7 +216,9 @@ DETERMINATION = "determination"
 # is to founding as confer is to conferral) and in the ordinary word for bringing a place into being.
 # CAUSATION-BOUND, the mirror of `cascade`: a Tenure lives and dies THROUGH its object
 # (`holonic §15.3`), so what closes an edge through a death may also open one through a birth -- and
-# nothing else. See the block in `tenure_write_basis`.
+# nothing else. See the block in `tenure_write_basis`. IN-10 (c) widens it by one edge kind: the
+# first and only `hold` on a non-seat thing the same write made (a writ minted into its addressee's
+# hand), the same birth licensing the edge that places the newborn in somebody's custody.
 FOUNDING = "founding"
 
 # THE REMIT ACT THAT MAKES A SEAT A JUDGING SEAT -- `H-32`'s swept default, and the `bench_basis` of
@@ -707,7 +709,9 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                   the cascade may close an edge through the death of what it names, and nothing
                   else; this may open the edge that places what was just born, and nothing else --
                   not a second parent, not an edge from a thing that already existed, not any kind
-                  but `contain`. See the block at the clause for why it is a basis at all.
+                  but `contain`. See the block at the clause for why it is a basis at all. ⚠ IN-10
+                  (c) WIDENED IT BY ONE KIND: the first and only `hold` on a non-seat thing the
+                  same write made -- a writ minted into its addressee's hand (`_eff_issue`).
 
     ⚠ JUDGED ON THE WORLD THE WRITE LEAVES. `World.write` asks this after `apply()`, so `T-o` and
     `conferral` read `seat_hold` -- is the actor seated in `via`? -- AFTER the effect ran. `04 §B.8`'s
@@ -810,6 +814,20 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     # refused -- the ladder's *one parent* is a property of the store, not of this effect's habit.
     if (opened and t.kind == "contain" and t.subject in born
             and not any(o is not t and o.kind == "contain" and o.subject == t.subject and o.live
+                        for o in w.tenures)):
+        return FOUNDING
+    # IN-10 (c) (H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): THE SAME
+    # BIRTH, ONE EDGE KIND OVER -- the FIRST `hold` on a non-seat thing this same write brought into
+    # existence, and the ONLY live one on it. A writ is minted INTO ITS ADDRESSEE'S HAND
+    # (`loop/effects_information.py::_eff_issue`): the issuer keeps no edge, so `T-m` (the actor
+    # owns the edge) cannot admit the addressee's, `handover` needs an edge the actor ended, and no
+    # seat is opened. CAUSATION-BOUND like the `contain` clause above: the licence is the birth the
+    # store observed, never a claim by the caller; one holder per thing (`give`'s convention,
+    # `holonic §15`), checked on the world the write leaves, so a write opening two first holds is
+    # refused both. A thing that already existed is outside it (that is `handover`'s, by `give`).
+    # REVERT: delete this clause with `_eff_issue`'s holder (every kind back on its maker).
+    if (opened and t.kind == "hold" and seat is None and t.object in born
+            and not any(o is not t and o.kind == "hold" and o.object == t.object and o.live
                         for o in w.tenures)):
         return FOUNDING
     if (closed and actor is None and was.term is not None
@@ -919,7 +937,8 @@ def not_yours(refused: list, actor: Optional[str], via: Optional[str], record_ki
               f"its seat's own seated holder exercising it), {DETERMINATION} (an `oblige` "
               f"opened on the judging seat exercised, for a person its bench's ground holds), or "
               f"{FOUNDING} (a `contain` opened for a thing this same write brought into "
-              f"existence, its only parent)",
+              f"existence, its only parent; or the first and only `hold` on such a thing that is "
+              f"not a seat)",
         law="04 §C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner "
             "writes only under a declared basis. Per-verb eligibility enforced this by "
             "CONVENTION until G3; a revocation with no seat in Act.via is refused here, so 'a "
