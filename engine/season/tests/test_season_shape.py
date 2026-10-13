@@ -851,7 +851,20 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     ⚠ 69 -> 71, v9 IN-10 (a) (H-203, DECISION 2026-10-13), TWO NEW LOAD-TIME REFUSALS, `verbs.py`
     30 -> 32: a `referent_named:` that is not a boolean, and one on a row declaring no
     `referent_class:` (it would decline nothing a class partition offered). Falsifier:
-    `test_in10a_oblige_formable.py::test_in10a_the_loader_refuses_a_malformed_referent_named`."""
+    `test_in10a_oblige_formable.py::test_in10a_the_loader_refuses_a_malformed_referent_named`.
+
+    ⚠ 71 -> 70, batch B-I Phase-2 `/simplify` (`6a421a4b`), A CONSOLIDATION, NOT A DROPPED REFUSAL --
+    and the commit did not re-pin it (`[skip ci]`; this test read 70 against 71 at that tip). The two
+    boolean checks (`referent_named`, `counterparty_may_be_self`) became ONE loop over both columns
+    with one `raise SystemExit`; both columns are still refused (`test_in53v_c_the_loader_refuses`'s
+    `"true"` arm, `test_in10a_the_loader_refuses_a_malformed_referent_named`). `verbs.py` 32 -> 31.
+
+    ⚠ 70 -> 71, batch B-I close, layer-conformance (H-207's A7), ONE NEW LOAD-TIME REFUSAL,
+    `verbs.py` 31 -> 32: a `referent_class: Record` row whose cell names no `existence` kind of
+    `subject` held by `rosters.yaml: record_kinds` (`RECORD_REFERENT_KINDS` would lack it and
+    `writs_held` would stamp nothing for the row -- a declared row read by nothing, `04` §A.1 ID-13).
+    Falsifier: `test_in09_dispensation_answer.py::test_in09_the_loader_refuses_a_record_row_naming_
+    no_record_kind`, three planted cells, red on all three with the refusal disabled."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"

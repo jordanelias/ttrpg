@@ -52,8 +52,8 @@ from .requires import (
     build_typed_requires,
 )
 from .rosters import (
-    PURSUIT_AXES, PURSUITS, REFERENT_CLASSES, RELEASABLE_KINDS, RUNG_KINDS, STRATA, TENURE_KINDS,
-    load_yaml, require_member, roster, roster_map,
+    PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS, RUNG_KINDS, STRATA,
+    TENURE_KINDS, load_yaml, require_member, roster, roster_map,
     table,
     table_meta,
 )
@@ -533,6 +533,21 @@ def _derive_openers_from_effects() -> dict:
 _OPENERS_FROM_EFFECTS = _derive_openers_from_effects()
 
 
+def _record_kinds_answered(row: "VerbRow") -> Optional[frozenset]:
+    """THE RECORD KINDS ONE ROW ANSWERS A HELD DOCUMENT OF (IN-09): for a row declaring
+    `referent_class: Record`, the `kind` of every `existence` clause of `subject` in its typed cell
+    (`comply`: `dispensation`); `None` for a row declaring any other class or none. The ONE owner:
+    `_load_verb_table` refuses a `Record` row it leaves empty, and `_derive_record_referent_kinds`
+    unions it into the set `queries/world_q.py::writs_held` stamps by."""
+    if row.referent_class != "Record":
+        return None
+    if row.requires_typed is None:
+        return frozenset()
+    req = row.requires_typed.requirement
+    return frozenset(c.kind for c in (req.clauses if isinstance(req, AllOf) else (req,))
+                     if isinstance(c, Existence) and c.of == "subject")
+
+
 def _load_verb_table() -> dict:
     import yaml as _y
     if not VERB_TABLE_YAML.exists():
@@ -627,6 +642,19 @@ def _load_verb_table() -> dict:
                 f"is not a declared class (the classes are {sorted(REFERENT_CLASSES)}, from "
                 "`rosters.yaml: referent_classes`). `opening_set` forms the verb only on a "
                 "referent carried as that class, so an undeclared one never forms.")
+        # IN-09 (batch B-I close, layer-conformance, A7): A `Record` ROW NAMES THE RECORD KINDS IT
+        # ANSWERS, OR THE LOAD REFUSES. `writs_held` stamps a held Record only if its kind is one a
+        # `Record` row's typed cell asks `existence` of on `subject` (`RECORD_REFERENT_KINDS`, read
+        # off `_record_kinds_answered`); a row naming none, or naming a kind `rosters.yaml:
+        # record_kinds` does not hold, would be stamped nothing and never form -- a declared row read
+        # by nothing, which `04` §A.1's ID-13 row binds `data/` to raise on.
+        _kinds = _record_kinds_answered(row)
+        if _kinds is not None and (not _kinds or not _kinds <= RECORD_KINDS):
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares referent_class 'Record' and its "
+                f"`requires_typed:` cell names {sorted(_kinds) or 'no'} `existence` kind(s) of "
+                f"`subject` (the record kinds are {sorted(RECORD_KINDS)}). `writs_held` stamps a "
+                "held Record only of a kind such a clause names, so this row would never form.")
         # IN-10 (a) / IN-53 D2: `referent_named` and `counterparty_may_be_self` ARE BOOLEANS -- a
         # string `"false"` would read truthy.
         for col in ("referent_named", "counterparty_may_be_self"):
@@ -1200,16 +1228,9 @@ def _derive_record_referent_kinds() -> frozenset:
     declaring `referent_class: Record` (`comply`: `dispensation`). Read off
     the rows that answer a held Record, so the stamp (`queries/world_q.py::writs_held`) and the cell
     the fold asks cannot name different kinds, and no kind literal lives at the stamp site. Empty when
-    no row declares the class: then nothing is stamped."""
-    out = set()
-    for row in VERB_TABLE.values():
-        if row.referent_class != "Record" or row.requires_typed is None:
-            continue
-        req = row.requires_typed.requirement
-        for c in (req.clauses if isinstance(req, AllOf) else (req,)):
-            if isinstance(c, Existence) and c.of == "subject":
-                out.add(c.kind)
-    return frozenset(out)
+    no row declares the class: then nothing is stamped. A row declaring it and naming no record kind
+    is refused at load (`_load_verb_table`), so the set is empty only when no row declares `Record`."""
+    return frozenset(k for row in VERB_TABLE.values() for k in (_record_kinds_answered(row) or ()))
 
 
 RECORD_REFERENT_KINDS = _derive_record_referent_kinds()

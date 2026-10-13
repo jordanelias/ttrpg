@@ -29,6 +29,8 @@ returning `()` reddens (5) twice and (6); the `own_ledger` conjunct deleted from
 """
 import dataclasses
 
+import pytest
+
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.rosters import RECORD_CONTENT
 from engine.season.data.verbs import RECORD_REFERENT_KINDS, VERB_TABLE
@@ -99,6 +101,25 @@ def test_in09_the_row_is_typed_resolvable_classed_and_emission_only():
 def test_in09_the_record_class_is_declared_by_comply_alone_and_answers_dispensations():
     assert {v for v, r in VERB_TABLE.items() if r.referent_class == "Record"} == {VERB}
     assert RECORD_REFERENT_KINDS == frozenset({"dispensation"})
+
+
+@pytest.mark.parametrize("cell,match", [
+    ({"form": "own_ledger", "of": "subject"}, "names no `existence` kind"),    # no existence clause
+    ("none", "names no `existence` kind"),                                    # untyped: no cell at all
+    ({"all": [{"form": "existence", "of": "subject", "kind": "Office"},       # a kind no Record has
+              {"form": "own_ledger", "of": "subject"}]}, r"names \['Office'\] `existence`"),
+])
+def test_in09_the_loader_refuses_a_record_row_naming_no_record_kind(monkeypatch, cell, match):
+    """Batch B-I close, layer-conformance (A7): a `referent_class: Record` row whose cell names no
+    `existence` kind of `subject` that `rosters.yaml: record_kinds` holds would leave
+    `RECORD_REFERENT_KINDS` without its kind, so `writs_held` stamps nothing for it and the row never
+    forms -- a declared row read by nothing (`04` §A.1, ID-13). Planted on `comply`; the shipped row
+    is the control (it loads, above)."""
+    from engine.season.data import verbs as _verbs
+    from .test_in53_vacancy_need import _planted
+    _planted(monkeypatch, VERB, "requires_typed", cell)
+    with pytest.raises(SystemExit, match=match):
+        _verbs._load_verb_table()
 
 
 # (2) THE CARRIED FALSIFIER -------------------------------------------------------------------------

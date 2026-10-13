@@ -30,8 +30,7 @@ from ..data.requires import (
     CELL_STEMS, SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS, VIA, WRIT_SOURCED_OPERANDS,
 )
 from ..data.rosters import (
-    CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, RECORD_CONTENT, WITNESS_CHANNELS,
-    require_member,
+    CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, WITNESS_CHANNELS, require_member,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
@@ -39,7 +38,7 @@ from ..data.verbs import ELIGIBILITY_KINDS, VERB_TABLE, align
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
 from ..queries.person_q import (
-    LedgerReader, crisis_weights, known_persons, ledger_names, regard, said_of,
+    LedgerReader, content_said, crisis_weights, known_persons, ledger_names, regard, said_of,
 )
 from ..state.carriers import Candidate, Claim, Person, Question, View
 from ..trace_log import TRACE
@@ -689,10 +688,10 @@ def _from_content_claim(p: Person, q: "Question", name: str):
     c = _claim_by_id(p, q.about)
     if c is None:
         return None
-    stem, sep, _ = str(c.predicate).partition(":")
-    if not sep or stem != RECORD_CONTENT.get("predicate") or c.value is None:
+    said = content_said(c)          # `person_q`'s one reader of the content claim's shape
+    if said is None:
         return None
-    v = dict(c.value).get(name)
+    v = said.get(name)
     if isinstance(v, tuple):
         return v[0] if len(v) == 1 else None
     return v

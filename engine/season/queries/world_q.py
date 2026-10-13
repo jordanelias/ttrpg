@@ -43,7 +43,7 @@ from ..data.verbs import RECORD_REFERENT_KINDS
 from ..gaps import Forbidden, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
-from .person_q import intent_named, ledger_names
+from .person_q import content_said, intent_named, ledger_names
 from ..state.attribution import anchor_of, causing_act
 from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE (G3, plan position 6). The
@@ -613,10 +613,10 @@ def named(c) -> tuple:
     got = intent_named(c)            # `()` unless the stem is the intent's, which is never `content:`
     if got:                          # (`person_q._check_intent_claim`'s `taken` refuses that at import)
         return got
-    stem, sep, _ = str(c.predicate).partition(":")
-    if not sep or stem != RECORD_CONTENT.get("predicate") or c.value is None:
+    said = content_said(c)           # `person_q`'s one reader of the content claim's shape
+    if said is None:
         return ()
-    ids = dict(c.value).get(RECORD_CONTENT.get("addressee"))
+    ids = said.get(RECORD_CONTENT.get("addressee"))
     return tuple(ids) if ids else ()
 
 

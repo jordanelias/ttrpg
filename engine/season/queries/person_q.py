@@ -625,6 +625,19 @@ def intent_named(c) -> tuple:
     return tuple(v for _n, v in c.value)
 
 
+def content_said(c) -> "dict | None":
+    """WHAT A HELD DOCUMENT'S CONTENT CLAIM SAYS: the value of a `content:<kind>` claim (or `Said`)
+    as a key -> value dict (`rosters.yaml: record_kinds.content`), `None` for any other predicate or
+    a claim with no value. `intent_named`'s shape for the other content-bearing stem: the one reader
+    of that claim's shape that `ledger_names`, `world_q.named` and `decision/options.py::
+    _from_content_claim` share (batch B-I close, layer-conformance: the three had each parsed it;
+    `loop/witness.py`'s Partial-telling rewrite still guards it its own way, on a tuple value)."""
+    stem, sep, _ = str(c.predicate).partition(":")
+    if not sep or stem != RECORD_CONTENT.get("predicate") or c.value is None:
+        return None
+    return dict(c.value)
+
+
 #: THE CONTENT KEYS THAT SAY WHAT A DOCUMENT IS ABOUT -- every key `rosters.yaml: record_kinds.
 #: content.read_from` reads off the minting act's `subject` (`terms`, today). Derived from the roster
 #: that types the schema, never from a value's strings (`world_q.named`'s ruling, one key over).
@@ -639,13 +652,11 @@ def ledger_names(claims) -> frozenset:
     about, so a writ's `to` is not read. The ONE owner of "named by a held Record or a deposit":
     `world_q.seats_named` keeps the seats among it, and `decision/options.py::opening_set` asks it of
     a row declaring `referent_named` -- one rule for the source and the formation."""
-    stem = RECORD_CONTENT.get("predicate")
     out = set()
     for c in claims:
         out.add(c.subject)
-        s, sep, _ = str(c.predicate).partition(":")
-        if sep and s == stem and c.value is not None:
-            said = dict(c.value)
+        said = content_said(c)
+        if said is not None:
             for k in ABOUT_KEYS:
                 v = said.get(k)
                 if isinstance(v, str):
