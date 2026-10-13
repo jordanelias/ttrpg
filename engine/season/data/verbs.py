@@ -1198,7 +1198,7 @@ DEED_KINDS = EMITTED_KINDS - REFUSAL_KINDS
 def _derive_record_referent_kinds() -> frozenset:
     """IN-09 (H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): THE RECORD KINDS
     A HELD DOCUMENT IS AN OCCASION FOR -- the `kind` of every `existence` clause of `subject` on a row
-    declaring `referent_class: Record` (`comply`, `evade / defy`, `construe`: `dispensation`). Read off
+    declaring `referent_class: Record` (`comply`: `dispensation`). Read off
     the rows that answer a held Record, so the stamp (`queries/world_q.py::writs_held`) and the cell
     the fold asks cannot name different kinds, and no kind literal lives at the stamp site. Empty when
     no row declares the class: then nothing is stamped."""

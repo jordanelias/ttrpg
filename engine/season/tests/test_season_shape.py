@@ -10703,12 +10703,12 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # `subject`, `kind: commit`) bound only `subject`, so it formed one Candidate on `S` though the
     # verb was never resolvable. The drop is still exactly `transfer`.
     # [GROUNDED: measured at v9 IN-11 -- `opening_set` on `S` lists 32 verbs on a copy of the base tree `c3a698ce` and 31 here, the one missing verb `repudiate`]
-    # ⚠ 31 -> 28, v9 IN-09: `comply`, `evade / defy` and `construe` declare `referent_class: Record`,
-    # so they form only on a held writ stamped on the question and never on a plain referent like
-    # `S`; untyped, each formed one Candidate on `S` though none was resolvable. The drop is still
-    # exactly `transfer`.
-    # [GROUNDED: measured at v9 IN-09 -- `opening_set` on `S` lists 31 verbs on a `git worktree` at `905b7a21` and 28 here, the three missing verbs `comply`, `evade / defy`, `construe`]
-    assert (len(before), len(after)) == (28, 27), (
+    # ⚠ 31 -> 30, v9 IN-09: `comply` declares `referent_class: Record`, so it forms only on a held
+    # writ stamped on the question and never on a plain referent like `S`; untyped, it formed one
+    # Candidate on `S` though it was not resolvable. (`evade / defy` and `construe` were typed beside
+    # it and reverted, so they still form one each on `S`.) The drop is still exactly `transfer`.
+    # [GROUNDED: measured at v9 IN-09 -- `opening_set` on `S` lists 31 verbs on a `git worktree` at `905b7a21` and 30 here, the one missing verb `comply`]
+    assert (len(before), len(after)) == (30, 29), (
         f"the absolute counts moved to {(len(before), len(after))}. They are the denominator the "
         "delta above is read against, and the delta alone does not reproduce them — re-derive "
         "`H-122`'s reading rather than adjusting this line")

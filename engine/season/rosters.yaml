@@ -590,8 +590,9 @@ rosters:
       `Record` (v9 IN-09, H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): the
       writs a person HOLDS (`queries/world_q.py::writs_held` -- a live `hold` on a Record of a kind
       `data/verbs.py::RECORD_REFERENT_KINDS` derives from the rows declaring this class), which
-      `questions_for` adds to the question he answers beside his seats; only `comply`, `evade / defy`
-      and `construe` declare it. REVERT: drop the value and the three rows' column.
+      `questions_for` adds to the question he answers beside his seats; only `comply` declares it
+      (`evade / defy` and `construe` were typed beside it and reverted, executing 0 times; H-203).
+      REVERT: drop the value and the row's column.
     values: [Office, Record]
 
   person_predicates:

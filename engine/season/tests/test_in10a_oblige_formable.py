@@ -156,9 +156,8 @@ def test_in10a_the_loader_refuses_a_malformed_referent_named(monkeypatch, verb, 
 
 def test_in10a_the_declarations_as_built():
     from engine.season.data.verbs import VERB_TABLE
-    # RE-RECORDED AT v9 IN-09: the three writ rows declare it too (was `{"oblige"}`).
-    assert {v for v, r in VERB_TABLE.items() if r.referent_named} == {
-        "oblige", "comply", "evade / defy", "construe"}
+    # RE-RECORDED AT v9 IN-09: `comply` declares it too (was `{"oblige"}`).
+    assert {v for v, r in VERB_TABLE.items() if r.referent_named} == {"oblige", "comply"}
     assert VERB_TABLE["oblige"].referent_class == "Office"
 
 

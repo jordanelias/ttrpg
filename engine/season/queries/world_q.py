@@ -1738,8 +1738,8 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # The class is `Office` either way, so every row declaring it (`confer`, `oblige`) forms on both;
     # whether a seat is held is the fold's question, not the referent's.
     # IN-09 (H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE WRITS
-    # HE HOLDS (`writs_held`), after the seats, as `Record` -- only `comply`, `evade / defy` and
-    # `construe` declare that class, so no other row's formations move. REVERT: drop the term.
+    # HE HOLDS (`writs_held`), after the seats, as `Record` -- only `comply` declares that class, so
+    # no other row's formations move. REVERT: drop the term.
     vacant = vacancies(w, p)
     added = (vacant + tuple(o for o in seats_named(w, p) if o not in vacant)
              + writs_held(w, p))
