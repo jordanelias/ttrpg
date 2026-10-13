@@ -48,7 +48,8 @@ from . import files
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .matrix import MATRIX, Step
 from .requires import (
-    KNOWN_PERSON_OPERANDS, REQUIRES_OPERANDS, VIA, TypedRequires, build_typed_requires,
+    KNOWN_PERSON_OPERANDS, REQUIRES_OPERANDS, VIA, AllOf, Existence, TypedRequires,
+    build_typed_requires,
 )
 from .rosters import (
     PURSUIT_AXES, PURSUITS, REFERENT_CLASSES, RELEASABLE_KINDS, RUNG_KINDS, STRATA, TENURE_KINDS,
@@ -626,29 +627,27 @@ def _load_verb_table() -> dict:
                 f"is not a declared class (the classes are {sorted(REFERENT_CLASSES)}, from "
                 "`rosters.yaml: referent_classes`). `opening_set` forms the verb only on a "
                 "referent carried as that class, so an undeclared one never forms.")
-        # IN-10 (a): `referent_named` IS A BOOLEAN, AND ONLY BESIDE A `referent_class:` -- on a row
-        # forming on plain referents it would decline nothing the class partition offered, a
-        # column read by nothing.
-        if not isinstance(row.referent_named, bool):
-            raise SystemExit(
-                f"verb_table.yaml: {name!r} declares referent_named {row.referent_named!r}; it is "
-                "`true` or `false`")
+        # IN-10 (a) / IN-53 D2: `referent_named` and `counterparty_may_be_self` ARE BOOLEANS -- a
+        # string `"false"` would read truthy.
+        for col in ("referent_named", "counterparty_may_be_self"):
+            if not isinstance(getattr(row, col), bool):
+                raise SystemExit(
+                    f"verb_table.yaml: {name!r} declares {col} {getattr(row, col)!r}; it is "
+                    "`true` or `false`")
+        # IN-10 (a): `referent_named` ONLY BESIDE A `referent_class:` -- on a row forming on plain
+        # referents it would decline nothing the class partition offered, a column read by nothing.
         if row.referent_named and not row.referent_class:
             raise SystemExit(
                 f"verb_table.yaml: {name!r} declares referent_named without a referent_class; the "
                 "column narrows a CLASSED referent to one the person's own ledger names "
                 "(`decision/options.py::opening_set`), and this row forms on plain referents.")
-        # IN-53 D2: `counterparty_may_be_self` IS A BOOLEAN, AND ONLY ON A ROW THE FAN REACHES. A
-        # string `"false"` would read truthy; and on a row whose counterparty no known person fills
-        # (`oblige`'s `subject`, `petition`'s bound `to`) the person is never added to any bag, so
-        # the column would waive the fold's self-exclusion for hand-built acts alone -- a fiat
-        # admitted through the back door, which ED-IN-0210 ruling 1 refuses.
-        if not isinstance(row.counterparty_may_be_self, bool):
-            raise SystemExit(
-                f"verb_table.yaml: {name!r} declares counterparty_may_be_self "
-                f"{row.counterparty_may_be_self!r}; it is `true` or `false`")
+        # IN-53 D2: `counterparty_may_be_self` ONLY ON A ROW THE FAN REACHES. On a row whose
+        # counterparty no known person fills (`oblige`'s `subject`, `petition`'s bound `to`) the
+        # person is never added to any bag, so the column would waive the fold's self-exclusion for
+        # hand-built acts alone -- a fiat admitted through the back door, which ED-IN-0210 ruling 1
+        # refuses. (An empty counterparty is no operand a known person fills.)
         if row.counterparty_may_be_self and (
-                not row.counterparty or row.counterparty not in row.known_person_operands()):
+                row.counterparty not in row.known_person_operands()):
             raise SystemExit(
                 f"verb_table.yaml: {name!r} declares counterparty_may_be_self, but its counterparty "
                 f"{row.counterparty!r} is not an operand a known person fills "
@@ -1202,7 +1201,6 @@ def _derive_record_referent_kinds() -> frozenset:
     the rows that answer a held Record, so the stamp (`queries/world_q.py::writs_held`) and the cell
     the fold asks cannot name different kinds, and no kind literal lives at the stamp site. Empty when
     no row declares the class: then nothing is stamped."""
-    from .requires import AllOf, Existence
     out = set()
     for row in VERB_TABLE.values():
         if row.referent_class != "Record" or row.requires_typed is None:

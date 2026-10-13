@@ -41,12 +41,18 @@ def descendants(w: "World", rung_id: str) -> list[str]:
     """S6.1 -- the CONTAINMENT TREE and only it. S38.1: ITERATIVE, with a visited set --
     the reference graph is cyclic ON PURPOSE and a tree walk hangs on the NORMAL case."""
     TRACE.query("descendants", "resolver")
+    # One read of the store: each object's live `contain` subjects, in Tenure order -- the order a
+    # per-node scan of `w.tenures` visits them in, so the walk's output is unchanged.
+    children: dict = {}
+    for t in w.tenures:
+        if t.kind == "contain" and t.live:
+            children.setdefault(t.object, []).append(t.subject)
     out, seen, stack = [], {rung_id}, [rung_id]
     while stack:
         cur = stack.pop()
-        for t in w.tenures:
-            if t.kind == "contain" and t.object == cur and t.live and t.subject not in seen:
-                seen.add(t.subject); out.append(t.subject); stack.append(t.subject)
+        for sub in children.get(cur, ()):
+            if sub not in seen:
+                seen.add(sub); out.append(sub); stack.append(sub)
     return out
 
 

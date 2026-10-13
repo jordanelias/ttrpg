@@ -108,12 +108,19 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     axis = fx.get("refusal_axis")
     tolerance = refusal_tolerance(p, axis)
     weigh = ledger_weigh(p, fx)
+    # Own-ledger reads every row asks alike, computed at most once per call and only when a row
+    # needs one: `ledger_names` for a `referent_named` row, `known_persons` for a fanned row's bags.
+    named: Optional[frozenset] = None
+    people: Optional[tuple] = None
     for verb, row in sorted(VERB_TABLE.items()):
         if not person_side_eligible(p, row):
             continue
         if tolerance is not None and refuses(verb, axis, tolerance):
             TRACE.note(f"{p.id} refuses {verb!r}: its `{axis}` alignment exceeds their own "
                        f"projected weight {tolerance:+.3f} (ED-IN-0261)", "H-146")
+            continue
+        refs = row.referents_of(q)
+        if not refs:
             continue
         # `19`: the seat(s) this row's act would exercise -- the untraced walk `pack_scenes` names
         # `Act.via` by (`seat_of`) -- for the belief test's `basis` conjunct below.
@@ -132,14 +139,16 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # IN-10 (a) (H-203): a row declaring `referent_named` forms only on a classed referent the
         # person's OWN LEDGER names (`person_q.ledger_names`: a deposit, or a held document's
         # `terms`) -- `oblige` on a seat he was told of, never on a vacancy a world read stamped.
-        # Own state, no World; computed once per row, only for such a row.
-        told = ledger_names(p.ledger) if row.referent_named else None
+        # Own state, no World; computed once per call, only if such a row has a referent.
+        if row.referent_named and named is None:
+            named = ledger_names(p.ledger)
+        told = named if row.referent_named else None
         # IN-53 (H-207, DECISION 2026-10-13 D1): THE CLASS IS A PARTITION. A row declaring a
         # `referent_class:` iterates only the referents the question carries as that class; a row
         # declaring none iterates the plain `referents`, exactly as before (`VerbRow.referents_of`,
         # `Question.referents_for`) -- no World, no id test, no verb name, because this function
         # cannot ask what kind of thing an id is (L2).
-        for subject in row.referents_of(q):
+        for subject in refs:
             if told is not None and subject not in told:
                 continue
             # ⚠⚠ A CONTEST NEEDS TWO CLAIMANTS, AND A PERSON IS NOT THEIR OWN ADVERSARY.
@@ -174,8 +183,10 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             # PERSON (`operand_bags`), which forms one per person the teller knows.
             # `H-134`: seat-major, each seat's own bags (`from` is that seat's rung). One seat: the
             # one pass `operand_bags` made before.
+            if people is None and row.known_person_operands():
+                people = known_persons(p.ledger, p.id)
             bagged = [(st, ops) for st in (seats or (None,))
-                      for ops in operand_bags(p, row, q, subject, fx, seat=st)]
+                      for ops in operand_bags(p, row, q, subject, fx, seat=st, people=people)]
             for st, ops in bagged:
                 # ⚠ AND A TWO-SIDED ACT NEEDS A SECOND SIDE (plan position `15`, `ED-IN-0210` ruling
                 # 2). The rule above, one column over: a row naming its `counterparty:` operand forms
@@ -937,7 +948,8 @@ def operands_for(p: Person, row: "VerbRow", q: "Question", subject,
 
 
 def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
-                 fx: "Fixtures", seat: Optional[str] = None) -> list[dict]:
+                 fx: "Fixtures", seat: Optional[str] = None,
+                 people: Optional[tuple] = None) -> list[dict]:
     """EVERY OPERAND BAG `p` CAN FORM FOR `row` ON `subject` -- `[]` when none (telling workplan
     `T4`, `ED-IN-0282`). One bag for every row whose operands all come from `_derive_operand`
     (`operands_for`'s rule, unchanged); for a row whose cell binds a known-person operand beside
@@ -954,12 +966,14 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
     both conjuncts, so a refused telling to an absent hearer is retried whenever the teller
     re-deliberates -- a scene tax with nothing behind it. Recorded, with the measurement owed, at
     the telling workplan's T4b *As built* line. `give` (plan position `14`) shares the shape: its
-    receiver is a known person and its `with` conjunct the fold's."""
+    receiver is a known person and its `with` conjunct the fold's. `people` is `known_persons`'
+    answer when the caller already holds it (`opening_set`, once per call); `None` computes it."""
     fan = row.known_person_operands()
     if not fan:
         ops = _operands(p, row, q, subject, fx, {}, seat)
         return [] if ops is None else [ops]
-    people = known_persons(p.ledger, p.id)
+    if people is None:
+        people = known_persons(p.ledger, p.id)
     # IN-53 D2 (H-207): A ROW DECLARING `counterparty_may_be_self` (`confer`) ALSO RANGES OVER THE
     # PERSON THEMSELF -- a person knows himself from his own state, so this adds no source of
     # knowledge and no world read (`known_persons` stays its three sources, AX-2, ED-IN-0282); the
@@ -991,7 +1005,7 @@ def _operands(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixtures",
         # subject`, `oblige`'s seat), so the counterparty clause here and the fold's read the seat
         # the Candidate is formed on rather than nothing. The payload is unchanged (`_payload_of`
         # puts `subject` on every computed act); only the person-side decline can now see it.
-        return dict(given, **({"subject": subject} if row.counterparty == "subject" else {}))
+        return {**given, "subject": subject} if row.counterparty == "subject" else dict(given)
     bound = tuple(req.operands())
     admitted = req.needs()
     names = bound + tuple(n for n in _REFERENT_OPERANDS if n in admitted and n not in bound)

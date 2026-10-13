@@ -32,8 +32,6 @@ import dataclasses
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.rosters import RECORD_CONTENT
 from engine.season.data.verbs import RECORD_REFERENT_KINDS, VERB_TABLE
-from engine.season.decision import assemble
-from engine.season.decision.options import opening_set
 from engine.season.harness import probes as P
 from engine.season.loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from engine.season.loop.effects import EFFECTS
@@ -41,6 +39,8 @@ from engine.season.loop.witness import content_value
 from engine.season.queries import world_q
 from engine.season.queries.world_q import hold_force
 from engine.season.state.carriers import Act, Claim
+
+from .test_in53_vacancy_need import _formed, _sig
 
 VERB, GIVEN, REFUSED = "comply", "compliance.given", "compliance.impossible"
 HOLDER, OTHER = "p_low", "p_mid"                  # `tiny_world`: both in Hh
@@ -82,15 +82,6 @@ def _fold(w, d, actor, verb, subject, key):
     return [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS),
                                     Act(id=key, actor=actor, verb=verb,
                                         payload={"subject": subject}))]
-
-
-def _formed(w, pid, q):
-    p = w.persons[pid]
-    return opening_set(p, assemble(p, q, 12), q, w.fixtures)
-
-
-def _sig(cs):
-    return sorted(repr((c.verb, c.subject, sorted(c.operands.items()))) for c in cs)
 
 
 # (1) ----------------------------------------------------------------------------------------------

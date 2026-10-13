@@ -646,7 +646,10 @@ def ledger_names(claims) -> frozenset:
         s, sep, _ = str(c.predicate).partition(":")
         if sep and s == stem and c.value is not None:
             said = dict(c.value)
-            out.update(v for k in ABOUT_KEYS for v in (said.get(k),) if isinstance(v, str))
+            for k in ABOUT_KEYS:
+                v = said.get(k)
+                if isinstance(v, str):
+                    out.add(v)
     return frozenset(out)
 
 

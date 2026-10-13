@@ -23,25 +23,18 @@ from collections import Counter
 
 import pytest
 
-from engine.season.data.matrix import Step, WriteClass
 from engine.season.harness import populated as POP
 from engine.season.harness import probes as P
 from engine.season.harness.corpus_run import attribute
 from engine.season.decision import make_chooser
-from engine.season.loop.driver import SeasonDriver, mint_token, resolvable_verbs
+from engine.season.loop.driver import SeasonDriver, resolvable_verbs
 from engine.season.loop.effects import EFFECTS
 from engine.season.queries.world_q import hold_force
 from engine.season.state import gate as G
 from engine.season.state.carriers import Record, Rung, Tenure
 from engine.season.state.ids import H, draw_factory
 
-
-def _mint(w, act):
-    """`test_record_kind_fold._mint`'s shape: the effect through the gate at a synthetic RESOLVE."""
-    w.step = Step.RESOLVE
-    return w.write("exists", mint_token(w, WriteClass.ACTS), None, record_kind="Record",
-                   fieldname="exists", driver="Act", actor=act.actor, via=act.via,
-                   change=EFFECTS[act.verb](w, act))
+from .test_record_kind_fold import _mint
 
 
 def _edges_on(w, rid):

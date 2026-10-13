@@ -1588,28 +1588,18 @@ def writs_held(w: World, p: Person) -> tuple:
     the writ). It reads `p`'s own edges and the store only for the kinds of the Records they name.
     ⚠ NO 'ALREADY ANSWERED' DECLINE: a holder who complied once is offered the writ again while he
     holds it -- the scene tax IN-10 (a) recorded for a repeated `oblige` (H-203)."""
-    if not RECORD_REFERENT_KINDS:
-        return ()
     return tuple(sorted({t.object for t in p.tenures
                          if t.kind == "hold" and t.live and t.object in w.records
                          and w.records[t.object].kind in RECORD_REFERENT_KINDS}))
 
 
-def _carrier(w: World, o: str):
-    """The carrier an id stamped as a classed referent names: a seat (`w.offices`) or a document
-    (`w.records`). The class is its type name (`_stamped`)."""
-    return w.offices[o] if o in w.offices else w.records[o]
-
-
 def _stamped(q: Question, added: tuple, w: World) -> Question:
     """`q` carrying the ids in `added` as CLASSED referents (IN-53, DECISION 2026-10-13 D1) -- the
-    one stamp site. Each id's class is its carrier's own type name read off the World (`Office` for
-    a seat in `w.offices`, `Record` for a document in `w.records` since IN-09), never a literal, and
-    `Question` refuses a class `rosters.yaml: referent_classes` does not declare. The plain
-    `referents` are untouched (the class is a partition). `q` itself when nothing is added."""
-    if not added:
-        return q
-    return replace(q, classes=q.classes + tuple((o, type(_carrier(w, o)).__name__) for o in added))
+    one stamp site. Each id's class is the collection the World holds it in (`World.class_of`:
+    `Office` for a seat in `w.offices`, `Record` for a document in `w.records` since IN-09), never a
+    literal, and `Question` refuses a class `rosters.yaml: referent_classes` does not declare. The
+    plain `referents` are untouched (the class is a partition)."""
+    return replace(q, classes=q.classes + tuple((o, w.class_of(o)) for o in added))
 
 
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:

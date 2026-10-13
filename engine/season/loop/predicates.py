@@ -124,17 +124,18 @@ def _req_confer(w: "World", a: "Act") -> bool:
     off = w.offices[obj]
     if not has_conferral_basis(off):
         return False                       # no conferral basis: the office cannot be conferred
-    if not may_fill(w, a.actor, a.via, off):
-        return False                       # G3: the seat exercised does not reach the seat conferred
     # Batch B-I close (C1): THE CONFEREE IS A LIVING PERSON. `to` comes from the conferrer's own
     # claims (`known_persons`), which can name somebody since dead, and nothing downstream asks:
     # `_admits` refuses only a missing or self `to`, and the gate admits the hold under the
     # conferral basis, which reads `via` alone. `tell` gets this from its `hearer` conjunct; this row
-    # is untyped, so it is asked here.
+    # is untyped, so it is asked here -- before `may_fill`'s purview walk, the dearer conjunct.
     conferee = binding_from_act(a).get("to")
     if not isinstance(conferee, str) or conferee not in w.persons:
         return False                       # (a list `to` is unhashable: refuse, never raise)
-    if not any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures):
+    if not may_fill(w, a.actor, a.via, off):
+        return False                       # G3: the seat exercised does not reach the seat conferred
+    tenures = w.tenures                    # one view for the three scans below
+    if not any(t.kind == "hold" and t.object == obj and t.live for t in tenures):
         return True                        # 1-per-object satisfied
     # THE `or` DISJUNCT: a held office is still conferrable when the holder-Proposition carries
     # no live `commit`. §54 item 20.
@@ -148,10 +149,10 @@ def _req_confer(w: "World", a: "Act") -> bool:
     # (`test_g3_not_yours.py::test_g3_confer_refuses_at_the_precondition_what_the_gate_would_refuse`
     # arm `c3` reddens, measured); F2's *"zero commits to the cause he held it for"* needs a
     # seat -> cause map nothing declares. Neither is this position's to invent; left as it is.
-    holder = next((t.subject for t in w.tenures
+    holder = next((t.subject for t in tenures
                    if t.kind == "hold" and t.object == obj and t.live), None)
     if holder is None or any(t.kind == "commit" and t.subject == holder and t.live
-                             for t in w.tenures):
+                             for t in tenures):
         return False
     # G3: displacing the holder CLOSES HIS EDGE -- T-o, through the seat exercised.
     return holder == a.actor or may_revoke(w, a.actor, a.via, off)

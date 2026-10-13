@@ -164,6 +164,7 @@ def test_in10a_the_partition_moves_no_other_rows_formations():
     what the same question forms with its classed referents stripped."""
     from engine.season.data.verbs import VERB_TABLE
     from .test_g3_not_yours import _gov_world
+    from .test_in53_vacancy_need import _sig
     import dataclasses
     classed_rows = {v for v, r in VERB_TABLE.items() if r.referent_class}
     w, _ = _gov_world()
@@ -176,7 +177,6 @@ def test_in10a_the_partition_moves_no_other_rows_formations():
             v = assemble(p, q, 12)
             got = opening_set(p, v, q, w.fixtures)
             bare = opening_set(p, v, dataclasses.replace(q, classes=()), w.fixtures)
-            sig = lambda cs: sorted(repr((c.verb, c.subject, sorted(c.operands.items()))) for c in cs)
-            assert sig(c for c in got if c.verb not in classed_rows) == sig(bare), (pid, q.id)
+            assert _sig(c for c in got if c.verb not in classed_rows) == _sig(bare), (pid, q.id)
             checked += any(c.verb == "oblige" for c in got)
     assert checked >= 3, checked

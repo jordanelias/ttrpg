@@ -70,7 +70,7 @@ def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) ->
     plan, at = works_target(kind, d.get("subject_matter"))      # (None, None) for any other kind
     if works_for(w, at, plan):
         return NO_CHANGE
-    return _mint_document(w, a, kind, d.get("subject_matter"), d.get("rung") or a.actor, a.actor)
+    return _mint_document(w, a, kind, d.get("subject_matter"), d.get("rung") or a.actor)
 
 
 def _content_of(a: "Act", kind: str) -> Optional[dict]:
@@ -125,16 +125,16 @@ def _makers_hold(w: "World", actor: str, obj: str) -> Tenure:
     return Tenure(H(w.world_seed, w.tick, actor, f"hold:{obj}"), actor, obj, "hold", since=w.tick)
 
 
-def _mint_document(w: "World", a: "Act", kind: str, content, rung: str, holder: str) -> Change:
+def _mint_document(w: "World", a: "Act", kind: str, content, rung: str,
+                   holder: Optional[str] = None) -> Change:
     """THE ONE MINT: a `Record` of `kind` saying `content`, drawn up at `rung`, and `holder`'s
     `hold` on it -- `create_record`, `issue` and `petition` are three readings of an act onto this
     body, which is r2 `02` §A.6's *one function, three registrations* with the kind supplied by the
     verb that knows it rather than by a table beside the effects (`OPENERS-DERIVE`'s precedent: the
     construction is the single owner of what a verb makes).
 
-    ⚠ IN-10 (c): THE HOLDER IS THE CALLER'S, LIKE THE KIND. Every minter passes its maker
-    (`a.actor`) except `issue`, which passes the writ's addressee (`_eff_issue`): a dispensation is
-    minted INTO THE HAND OF THE PERSON IT ORDERS, and the issuer keeps no edge (one holder per
+    ⚠ IN-10 (c): THE HOLDER IS THE CALLER'S, LIKE THE KIND. It defaults to the maker (`a.actor`);
+    only `issue` passes one, the writ's addressee (`_eff_issue`): a dispensation is minted INTO THE HAND OF THE PERSON IT ORDERS, and the issuer keeps no edge (one holder per
     Record, `give`'s convention). The addressee's edge is admitted at the gate under `founding`'s
     newborn-`hold` clause (`state/gate.py`), the maker's under `T-m` as before.
 
@@ -156,7 +156,7 @@ def _mint_document(w: "World", a: "Act", kind: str, content, rung: str, holder: 
         term = w.fixtures.get("record_stage_term")
         stages = [(w.tick + (i + 1) * term, f"stage{i + 1}", a.id) for i in range(n)]
     rec = Record(rid, rung, kind, subject_matter=content, stages=stages)
-    held = _makers_hold(w, holder, rid)
+    held = _makers_hold(w, a.actor if holder is None else holder, rid)
 
     def perform() -> None:
         w.records[rid] = rec
@@ -208,7 +208,7 @@ def _eff_issue(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     The edge is admitted at the gate under `founding`'s newborn-`hold` clause. ONE executor: a list
     of one collapses, and a writ to several stays in its maker's hand as before (`_addressee`,
     `_from_content_claim`'s singleton rule one seam over: which of several is unruled).
-    REVERT: pass `a.actor` here as every other minter does (and drop the gate clause)."""
+    REVERT: pass no holder here, as every other minter does (and drop the gate clause)."""
     content = _content_of(a, "dispensation")
     return _mint_document(w, a, "dispensation", content, _seat_rung(w, a), _addressee(a))
 
@@ -261,7 +261,7 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     d = a.payload if isinstance(a.payload, dict) else {}
     if docketed(w, matter) or d.get("record") in w.records:
         return NO_CHANGE
-    made = _mint_document(w, a, "text", None, _seat_rung(w, a), a.actor)
+    made = _mint_document(w, a, "text", None, _seat_rung(w, a))
     item = {"date": None, "matter": matter}
 
     def perform() -> None:
@@ -361,8 +361,7 @@ def _eff_petition(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
     formable shape and HELD it on measurement, the row's `formation_decline_note`), and which the receiver
     can only reach once `give` (position `16`) puts the petition in his hand. The fold makes both
     sides NAMEABLE on the document; neither side can yet end it."""
-    return _mint_document(w, a, "petition", _content_of(a, "petition"), _operand(a, "from"),
-                          a.actor)
+    return _mint_document(w, a, "petition", _content_of(a, "petition"), _operand(a, "from"))
 
 
 @effect_for("survey")
@@ -429,8 +428,7 @@ def _eff_survey(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     if prop is None:
         return NO_CHANGE
     sheet = asdict(faction_q.resolve(w, prop))
-    return _mint_document(w, a, faction_q.SHEET_KIND, sheet, place_of(w, a.actor) or a.actor,
-                          a.actor)
+    return _mint_document(w, a, faction_q.SHEET_KIND, sheet, place_of(w, a.actor) or a.actor)
 
 
 @effect_for("give")
