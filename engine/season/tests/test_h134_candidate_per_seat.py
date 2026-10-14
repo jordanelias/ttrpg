@@ -148,8 +148,14 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 # --------------------------------------------------------------------------------------
 
 # `(n candidates, n acts, sha256 of the repr of (candidates, acts))` for `p_one` -- captured by
-# running `_control_reading` on the tree at f9ce11b0, BEFORE this change.
-_CONTROL = (70, 70, "d9bebd8cdece6a438939510e295bb1bdb8062fd72bbac75821f76de7ec8d5484")
+# running `_control_reading` on the tree at f9ce11b0, BEFORE this change. RE-RECORDED AT IN-53
+# (DECISION 2026-10-13 D1; was `(70, 70, "d9bebd8c...")`): exactly two Candidates leave, diffed
+# against e716f10b -- `confer` on `Hh` and on `off_duke`, because `confer` now forms only on a
+# referent the question carries as `Office` and this question carries none; no Candidate is added.
+# RE-PINNED AT v9 IN-09: 68 -> 66. `comply` is typed and `referent_named`, so it no longer forms on
+# a referent the person's own ledger does not name; it was formed on arbitrary referents before and
+# then filtered out by `resolvable_verbs()`, so no behaviour moves (`aperture 4 0` other rows equal).
+_CONTROL = (66, 66, "891d3653ba8b5ff4b141165fcd4548904b307bd0be437a7e0f3f5275c7c4625d")
 
 
 def _control_reading():

@@ -15,9 +15,9 @@ description: >
   the resolved sequence (or the freshly-stated plan) for approval before anything is built, per
   CLAUDE.md §0's "ambiguous or spanning lanes" rule. PHASE 0.2+: read each item's own instruction
   (a workplan position's content-owner entry, or the stated plan for an ad hoc task) and dispatch a
-  `valoria-author` producer to build it — one producer by default, fanned into
-  `isolation: worktree` lanes only when the instruction itself names independent sub-parts with no
-  shared file — then commit. **No full pytest suite, no `/code-review`/`/simplify`/
+  `valoria-author` producer to build it in `isolation: worktree` — one producer by default, fanned
+  into several only when the instruction itself names independent sub-parts with no shared file —
+  then merge the verified result as one commit. **No full pytest suite, no `/code-review`/`/simplify`/
   `layer-conformance`, and no agonist/antagonist fan or terminal critique after each item** — those
   are BATCH-CLOSE's job, not Phase 0's, run once per batch (§BATCHES) or at the run's own final
   `/close`, never per item.
@@ -175,8 +175,9 @@ it, paraphrase it, or draft a second version for the producer — hand it the sa
 ### 0.3 Size the build — one producer is the default
 
 Dispatch one `Agent({ subagent_type: "valoria-author", ... })` to build the entire instruction,
-sequentially. No `isolation: worktree` is needed for a single producer — nothing else is writing
-this tree concurrently within this run.
+sequentially, in `isolation: worktree` — one producer or several (RULED 2026-10-13, the session's
+user: *"just batch the work so the tree is clean"*): the working branch's tree stays clean between
+items, and only a verified result reaches it, as the item's one commit (0.4).
 
 **Fan only when the instruction itself names genuinely independent sub-parts that share no file**
 — the same test the live plan's own hard-serial-edge table (reached through `CURRENT.md`) exists to
@@ -186,7 +187,7 @@ workplan positions are one commit, one step, one producer.
 
 When fanned:
 
-- each producer runs `isolation: worktree`, and is handed **only its own sub-part's instruction**,
+- each producer is handed **only its own sub-part's instruction**,
   never the others' — the same "handed output, not reasoning" discipline Phase 1 uses to keep
   critics independent, applied here to keep parallel write lanes from cross-contaminating;
 - each returns a receipt — path, what changed, one line — `valoria-author`'s own contract, so a
@@ -196,14 +197,14 @@ When fanned:
   its agonist fan.
 
 **Either way — one producer or several — the producer never commits** (0.5); that is always the
-**orchestrator's** own next action once a receipt (or, when fanned, 0.4's integration) is in hand.
-The default, single-producer path has no worktree to merge, so it skips 0.4 and goes straight from
-receipt to the orchestrator's commit.
+**orchestrator's** own next action once a receipt is in hand and 0.4's integration is done.
 
-### 0.4 Integrate — only when fanned
+### 0.4 Integrate
 
-The **orchestrator**, not a subagent, merges each worktree into the working branch, in an order
-that respects any named serial edge between the sub-parts, **then commits.** **If two lanes touched
+The **orchestrator**, not a subagent, verifies each worktree's result (the covering test file, or a
+one- or two-season probe: CHECKPOINTS AND BASELINES) and merges it into the working branch — when
+fanned, in an order that respects any named serial edge between the sub-parts — **then commits the
+item as one commit.** **If two lanes touched
 the same file, the split was wrong, not the merge** — stop, do not resolve the collision by hand,
 and rebuild that file's portion as one producer instead. A silent auto-merge of a same-file
 collision is exactly the failure the `FALSIFIERS` table below is written to catch.
@@ -350,16 +351,16 @@ run BATCH-CLOSE from the phase after `close`, and take `open` as the batch's sta
 the row against the tree before trusting it:** every `built` handle must have a commit in
 `open..HEAD` carrying `Item: <handle>`, and every such trailer there must be in the row; where
 they disagree, the commits win — correct the row and say so; if they cannot be reconciled, ask.
-**Then look at the tree:** a killed run leaves residue. If `git status` is dirty, it is the killed
-item's unsaved build. Find the item's latest `[<scope>] WIP checkpoint: <handle>` commit (`git log --grep='WIP checkpoint:'
-open..HEAD`; unanchored, since the subject opens with the `[scope]` tag): where one exists, `git stash push -u` the residue (reversible) and CONTINUE from
+**Then look at the tree:** a killed run leaves residue, in a producer's worktree (`git worktree
+list`) or, if `git status` is dirty, in the working tree. It is the killed item's unsaved build. Find the item's latest `[<scope>] WIP checkpoint: <handle>` commit (`git log --all --grep='WIP checkpoint:'`;
+unanchored, since the subject opens with the `[scope]` tag; `--all`, since a checkpoint sits on its producer's worktree branch): where one exists, `git stash push -u` the residue (reversible) and CONTINUE from
 that checkpoint, naming its SHA in the producer's brief; where none exists, stash it and rebuild. A handle
 with a checkpoint but no `Item:` commit is "continue", not "build whole". A `Falsified: <handle>` trailer
 marks an attempt its own falsifier rejected and a revert undid: it is not rebuilt, and the hole row it
 cites is its record. Never commit residue as an `Item:`; a checkpoint is the only unreviewed commit.
 Instrument worktrees (detached, named for their instrument) are removed and the instrument re-run; they are
-not integrated. `git worktree list` shows fan lanes left behind: integrate or
-remove each. **A position the plan or handoff already records as BUILT with its close not run** enters at
+not integrated. `git worktree list` shows producer worktrees left behind: verify and integrate
+(0.4) or remove each. **A position the plan or handoff already records as BUILT with its close not run** enters at
 BATCH-CLOSE: write the row with `built` filled and `open` the range start that record names; if it
 names none, ask. An invocation whose text does not match an in-flight batch stops and reports
 it (`STOPPED`); it never opens a second batch.
@@ -417,7 +418,8 @@ against a working-tree diff, since nothing is left uncommitted by the time a bat
   something CI will not (cl.1), over only the files and suites the batch's diff can reach (§0.4's
   closing paragraph); a
   batch of prose or ledger edits runs just the files that read what it touched. No item inside the
-  batch runs it.
+  batch runs it. CI's two runs per batch — one at its end, one confirming its fixes — are CHECKPOINTS
+  AND BASELINES'.
 - Its **Phase 3 tier, escalation trigger, checklist, and the top-down/bottom-up handshake**
   (§3.1–3.7) apply as written there, run against the batch's post-Phase-2 diff. INTERDEPENDENCIES
   and the FORWARD/BACKWARD SWEEPS are more likely to find something real here than at single-item
@@ -497,27 +499,43 @@ this spelling.
 
 ---
 
-## CHECKPOINTS AND BASELINES — Jordan's directive, 2026-10-09 (a container restart killed a running producer)
+## CHECKPOINTS AND BASELINES — Jordan's directive, 2026-10-09 (a container restart killed a running producer); CI cadence and baselines RULED 2026-10-13
 
-**Checkpoints.** Work that exists only in the working tree is one restart from lost. Commit and push a
-checkpoint at every producer hand-back *before* verifying it, and before any long instrument run:
-subject `[<scope>] WIP checkpoint: <handle>` (CLAUDE.md §2's `[scope]` format, 72 characters at most, so keep the handle short; "unreviewed" goes in the body; recover with the unanchored `git log --grep='WIP checkpoint:'`), **no `Item:` trailer** (so the in-flight row never lists
-it; the item's own commit follows on top), trailers as any commit. Producers still never commit — the
-orchestrator checkpoints. A checkpoint is recovery, not review: BATCH-CLOSE reviews the whole range, and a
+**Checkpoints.** Work that exists only in a working tree is one restart from lost. At every producer hand-back
+*before* verifying it, and before any long instrument run, the orchestrator commits a checkpoint **on the
+producer's worktree branch** and pushes that branch: subject `[<scope>] WIP checkpoint: <handle>` (CLAUDE.md §2's `[scope]` format, 72 characters at most, so keep the handle short; "unreviewed" goes in the body; recover with the unanchored `git log --all --grep='WIP checkpoint:'`), **no `Item:` trailer** (so the in-flight row never lists
+it; the item's own commit is the verified merge, 0.4), trailers as any commit. Producers still never commit — the
+orchestrator checkpoints. A checkpoint is recovery, not review, and starts no CI run (*"A WIP checkpoint is just committing work so we don't lose it"*): BATCH-CLOSE reviews the whole range, and a
 falsified attempt and its revert net to zero in that range (nothing to review; the hole row is the record).
 A position its own falsifier rejects is committed with a `Falsified: <handle>` trailer, then `git revert`ed,
 and the hole row cites both SHAs (the live plan's stopping rule). Dispatch a long build in bounded pieces
 that return in tens of minutes, not one that returns in an hour. A pre-commit validator that fails a
-checkpoint is fixed or reported, never bypassed with `--no-verify`. Every push runs CI (CLAUDE.md §0.4), so
-push checkpoints at hand-backs, not on a timer.
+checkpoint is fixed or reported, never bypassed with `--no-verify`.
 
-**Baselines.** A reading is reusable only on the tree it was taken on. Every reading names its SHA
-(`reading @<sha>`) and is recorded in the first commit made after it completes; it is reusable only if
-`git diff <sha>..HEAD` touches nothing the instrument can reach. **Chain them:** an item records the
-readings it has in its commit body; the next item's before-reading is that record. The spot check must run
-at the same season count as the reading it vouches for (a 1-season hash is necessary, not sufficient: an
-effect that first shows in season 2 leaves it unchanged). Producers are *given* their before-readings and
-are not asked to re-derive them. No new document holds the readings (CLAUDE.md §1, §0.1 pt 5).
+**CI cadence — RULED 2026-10-13 (the session's user: *"we don't need a CI run for a WIP checkpoint ... A WIP checkpoint is just committing work so we don't lose it"*; *"We run CI at the end of a batch, correct whatever is required then, implement all fixes and changes and everything as per the closing sequence, and then we run CI again to confirm that we successfully did it"*; *"we also don't need to re-run an entire CI if we can tell from one season or two if something isn't working"*).** CI runs twice per batch:
+1. **At the end of the batch** — the push of its last `Item:` commit, which opens BATCH-CLOSE.
+2. **To confirm** — the push of the commit carrying every fix, CI's and the closing sequence's. A red confirming run is fixed with the failing file only (CLAUDE.md §0.4 cl.4), then pushed once more.
+
+Where the two fall among the closing phases is `methodology-close`'s (its "Where CI runs").
+
+Every other commit of the batch — checkpoints, earlier `Item:` commits, `Falsified:` commits and their
+reverts — carries `[skip ci]` in its message. GitHub reads it from the HEAD commit of a push or a pull
+request, so what matters is that no other push's head commit lacks it; this repo's CI triggers only on a
+push to `main` or a pull request into it, so a push of a producer's worktree branch with no PR starts
+nothing either way. Between the two runs, judge a change with the cheapest instrument that can see it — the
+covering test file, or a one- or two-season probe — never a full CI run, and never CI to find what a probe
+already shows. How many seasons a probe runs, and when `aperture 4 0` runs at all, is the live plan's
+test-horizon rule.
+
+**Baselines — RULED 2026-10-13 (the session's user: *"Every previously run CI is a baseline to use for the next run CI, so we don't need to constantly take baselines since we've already ran a CI"*).**
+The readings of the previous CI run, and the after-reading each item records since, are the baseline: a
+baseline already held is not re-taken. Every reading names its SHA (`reading @<sha>`) and is recorded in the
+first commit made after it completes (an item's, in its commit body); the next item's before-reading is
+that record, and producers are *given* their before-readings, never asked to re-derive them. Re-measure only
+when `git diff <sha>..HEAD` touches what the instrument can reach AND the item cannot be judged without it;
+then re-measure at the reading's own season count (a 1-season hash cannot vouch for a 4-season reading),
+while an error is seen at the first season it occurs. No new document holds the readings (CLAUDE.md §1,
+§0.1 pt 5).
 
 **Running a slow instrument** (measured here: `aperture 1 0` 36 s, `aperture 4 0` 20 min, ~30x for 4x the
 seasons, so cost is superlinear in seasons and the unit is not "one realm, one season").
@@ -586,6 +604,7 @@ seasons, so cost is superlinear in seasons and the unit is not "one realm, one s
 | "the batch was expunged" | a finished position, or its in-flight row, is still present after the boundary commit, or that commit added a narrative, a "done" row or a count beyond what the plan's own rule for finished positions prescribes |
 | "the batch resumed from its row" | a resumed batch rebuilt an item whose handle was in `built`, skipped one that was not, or re-ran a BATCH-CLOSE phase at or before `close` — or the row was trusted over the commits where they disagreed |
 | "BATCH-CLOSE ran once per batch" | the full pytest suite, `/code-review`, `/simplify`, `layer-conformance`, the agonist/antagonist fan, or the terminal critique ran between two items of the *same* batch, or the review phases did not run before the batch's items were reported done (the suite runs per CLAUDE.md §0.4 cl.1, not unconditionally) |
+| "CI ran twice per batch" | a CI run started on a commit other than the batch's last `Item:` commit or the commit confirming its fixes (a pushed head commit without `[skip ci]`), or a full CI run was used to find what a covering test file or a one- or two-season probe could show |
 | every Phase 1–3 claim, at BATCH-CLOSE | `methodology-close`'s own falsifier table, unchanged, checked against the batch's cumulative post-Phase-0 diff |
 
 **If this skill's guidance conflicts with `CLAUDE.md`, `architecture/`, or `methodology-close`,

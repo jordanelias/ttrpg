@@ -573,6 +573,29 @@ rosters:
       disposition on `H-54`, no rule changed.
     values: [claim_landed, need]
 
+  referent_classes:
+    source: "v9 IN-53 (H-207 'VACANCY AS NEED', DECISION 2026-10-13 D1)"
+    open: false
+    note: >-
+      THE CLASSES A QUESTION MAY CARRY A REFERENT AS, and the closed set a verb row's
+      `referent_class:` column may name (`verb_table.yaml`, validated by `data/verbs.py`). A CLASSED
+      referent is a second partition of a question's referents (`state/carriers.py::Question.classes`),
+      beside its plain `referents`: a row declaring a class forms ONLY on referents carried as that
+      class, and a row declaring none forms ONLY on the plain ones, exactly as before IN-53
+      (`decision/options.py::opening_set`, through `VerbRow.referents_of`). It exists because
+      `opening_set` has no World (L2) and cannot ask what kind of thing an id is. `Office`: the
+      vacant seats a person may fill (`queries/world_q.py::vacancies`, IN-53) AND the seats he has
+      been told of (`seats_named`, v9 IN-10 (a)), which `questions_for` adds to the question the
+      person answers (`_stamped`); a class is the carrier's own type name, so a
+      stamp of a type this roster does not name is refused at the Question's construction.
+      `Record` (v9 IN-09, H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): the
+      writs a person HOLDS (`queries/world_q.py::writs_held` -- a live `hold` on a Record of a kind
+      `data/verbs.py::RECORD_REFERENT_KINDS` derives from the rows declaring this class), which
+      `questions_for` adds to the question he answers beside his seats; only `comply` declares it
+      (`evade / defy` and `construe` were typed beside it and reverted, executing 0 times; H-203).
+      REVERT: drop the value and the row's column.
+    values: [Office, Record]
+
   person_predicates:
     source: "#353 §14 `:331` — `marks[]` … \"heritage · grade · Church standing · office · residence\""
     open: true
@@ -1567,10 +1590,12 @@ rosters:
     note: >-
       ⚠ THE OPERAND VOCABULARY IS CLOSED, AND THAT CLOSURE IS WHAT STOPS THE GRAMMAR BECOMING A
       SECOND RESOLVER. A cell naming an operand outside this roster REFUSES AT LOAD. It is the
-      reason `comply` and `exchange` carry `requires_typed: none` rather than a typed cell: the
-      first needs a DISPENSATION and the second needs the counterparty's side of a trade, and
-      neither has a name here. Coining one would be filling `H-94` by keyword argument, which is
-      the ruling `H-94` is waiting for and not a table edit.
+      reason `exchange` carries `requires_typed: none` rather than a typed cell: it needs the
+      counterparty's side of a trade, which has no name here. Coining one would be filling `H-94`
+      by keyword argument, which is the ruling `H-94` is waiting for and not a table edit.
+      (`comply` carried the same reason, for a DISPENSATION, until v9 IN-09 typed it without a new
+      name: the act's `subject` IS the held writ, a `Record` of kind `dispensation` --
+      `verb_table.yaml`'s `comply` row.)
       ⚠ WHERE AN OPERAND COMES FROM IS NOT THIS ROSTER'S QUESTION. Today it is `Act.payload`,
       which carries only `subject` for a computed act, so most cells bind incompletely and
       evaluate to UNKNOWN -- which the fold reports as a refusal, exactly as the untyped

@@ -222,8 +222,10 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # starts mid-campaign) still lapses at the next one rather than living forever.
     # ⚠ ORDER: SORTED BY EDGE ID (subject, then object, breaking ties), so the emission order -- and
     # with it every emission id's draw ordinal -- is a property of the world, not of store order (R4).
-    # Nothing matures in any corpus run today: no computed act forms an `oblige`, the only kind
-    # opened with a term (`17a`), so this branch moves no artifact until one does.
+    # Since IN-10 (a) a computed `oblige` forms and executes, and `_eff_oblige` opens it with the
+    # term `w.tick + oblige_term` (`17a`), so this branch moves a realm run once such a term
+    # matures; a `confer`'s seat-hold carries a term only when the act declares one
+    # (`effects_governance._declared_term`, IN-10 (b)), which no computed act does.
     for t in sorted((t for t in w.tenures if t.live and t.term is not None
                      and t.term.matures_at <= w.tick),
                     key=lambda t: (t.id, t.subject, t.object)):

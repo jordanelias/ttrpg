@@ -633,6 +633,10 @@ PURSUIT_AXES = roster("pursuit_axes")
 # (`from_descriptor: affiliation_roster`); its intensity bounds are the leaf's.
 AFFILIATIONS = roster("affiliations")
 QUESTION_SOURCES = roster("question_sources", ordered=True)
+#: IN-53 (H-207, DECISION 2026-10-13 D1): THE CLASSES A QUESTION MAY CARRY A REFERENT AS -- the
+#: closed set a `Question.classes` pair and a verb row's `referent_class:` column may name. A classed
+#: referent is a partition beside the plain `referents` (`rosters.yaml: referent_classes`' note).
+REFERENT_CLASSES = roster("referent_classes")
 PERSON_PREDICATES = roster("person_predicates")
 VIEW_BUILDER_RULES = roster("view_builder_rules")
 QUESTION_AGGREGATION = roster("question_aggregation", ordered=True)

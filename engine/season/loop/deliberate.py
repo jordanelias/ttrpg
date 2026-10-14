@@ -57,6 +57,7 @@ from ..data.matrix import Step
 from ..data.requires import REQUIRES_STEMS
 from ..data.verbs import act_key, opportunity_key
 from ..decision import aggregate_questions
+from ..queries.person_q import ledger_names
 from ..gaps import Forbidden, Ungraded
 from ..state.carriers import Act, Person
 from ..state.world import World
@@ -448,7 +449,12 @@ def _inputs_fingerprint(p: Person, qs: list, s: Sensation) -> tuple:
     the other five terms breaks NOTHING in that fixture — they are declared-and-unfalsified,
     not shown redundant, because no world there moves one without also moving `q_ids`.
 
-      * `q_ids`      — `questions_for`'s whole output. Covers `claim_landed` (a claim LANDING,
+      * `q_ids`      — `questions_for`'s whole output: each question's id AND its classed
+                       referents (`Question.classes`, IN-53 / IN-10 / IN-09 -- the vacancies, the
+                       seats told of and the writs held that `_stamped` adds to the first question
+                       without changing its id; batch B-I close, L1: the id alone missed a vacancy
+                       opening under a person who already had a question).
+                       Covers `claim_landed` (a claim LANDING,
                        which is why it is computed with `since`, and now ADMITTED through
                        `reach(w, p)` / `place_of` rather than only `c.subject == p.id or c.subject
                        in mine` -- position `11a` folded `date_due` and `band_crossed` into it) and
@@ -486,6 +492,13 @@ def _inputs_fingerprint(p: Person, qs: list, s: Sensation) -> tuple:
       * `body` / `travel_leg` — `budget`'s condition and distance penalties. A person wounded in round 1
                        has fewer scenes in round 2, and that must re-open their triage rather than
                        silently shrink a queue they chose against a larger number.
+      * `told`       — (LAST, so the U2 falsifier's `drop=0` arm keeps meaning `q_ids`) the classed
+                       referents of `qs` that `person_q.ledger_names` says this person was told
+                       of: the `referent_named` decline in `decision/options.py::opening_set`
+                       (`oblige`, `comply`) reads exactly this, so a seat already carried as a
+                       vacancy that he is then TOLD of moves no class and no id, yet starts an
+                       `oblige` forming. Restricted to the classed ids, not the whole
+                       `ledger_names` set, for the whole-ledger reason above.
 
     ⚠ `said_of` and `known_persons` read `seen` and event-kind claims OUTSIDE the `ledger` term above;
     `q_ids` covers them only through Q2's reach. `regard`'s deed half does too, read through
@@ -495,14 +508,16 @@ def _inputs_fingerprint(p: Person, qs: list, s: Sensation) -> tuple:
     ⚠ WHAT IS NOT HERE, AND WHY THAT IS SAFE: `w.fixtures` is constant within a season (the sweep
     arms are chosen at `build_world`), and `self.round` is not an input to any of the five readers
     — a person's options do not depend on which round it is, only on what has happened."""
+    classed = {r for q in qs for r, _ in q.classes}
     return (
-        tuple(q.id for q in qs),
+        tuple((q.id, q.classes) for q in qs),
         s.subsistence,
         tuple(sorted((t.id, t.kind, t.object, t.live) for t in p.tenures)),
         tuple((c.id, c.value, c.confidence) for c in p.ledger
               if str(c.predicate).partition(":")[0] in REQUIRES_STEMS),
         p.body,
         tuple(p.travel_leg),
+        tuple(sorted(classed & ledger_names(p.ledger))) if classed else (),
     )
 
 

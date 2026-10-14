@@ -838,14 +838,40 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     malformed or repeated top-level name. Falsifiers:
     `test_u7_remit.py::test_19_the_loader_refuses_a_keyed_row_that_does_not_key_exactly_its_clauses`
     plants five defects on `levy`'s row and each load raises naming it. (`Basis`, §F.24a form 7,
-    added no refusal: `_build_clause`'s existing checks close its operand and stem.)"""
+    added no refusal: `_build_clause`'s existing checks close its operand and stem.)
+
+    ⚠ 66 -> 69, v9 IN-53 (DECISION 2026-10-13 D1/D2), THREE NEW LOAD-TIME REFUSALS, `verbs.py`
+    27 -> 30: a `referent_class:` column naming a class `rosters.yaml: referent_classes` does not
+    declare (the verb would be unformable from every question); a `counterparty_may_be_self:` that
+    is not a boolean; and one on a row whose counterparty no known person fills (it would waive the
+    fold's self-exclusion for hand-built acts alone). Falsifier:
+    `test_in53_vacancy_need.py::test_in53v_c_the_loader_refuses` plants each and the load raises
+    naming it.
+
+    ⚠ 69 -> 71, v9 IN-10 (a) (H-203, DECISION 2026-10-13), TWO NEW LOAD-TIME REFUSALS, `verbs.py`
+    30 -> 32: a `referent_named:` that is not a boolean, and one on a row declaring no
+    `referent_class:` (it would decline nothing a class partition offered). Falsifier:
+    `test_in10a_oblige_formable.py::test_in10a_the_loader_refuses_a_malformed_referent_named`.
+
+    ⚠ 71 -> 70, batch B-I Phase-2 `/simplify` (`6a421a4b`), A CONSOLIDATION, NOT A DROPPED REFUSAL --
+    and the commit did not re-pin it (`[skip ci]`; this test read 70 against 71 at that tip). The two
+    boolean checks (`referent_named`, `counterparty_may_be_self`) became ONE loop over both columns
+    with one `raise SystemExit`; both columns are still refused (`test_in53v_c_the_loader_refuses`'s
+    `"true"` arm, `test_in10a_the_loader_refuses_a_malformed_referent_named`). `verbs.py` 32 -> 31.
+
+    ⚠ 70 -> 71, batch B-I close, layer-conformance (H-207's A7), ONE NEW LOAD-TIME REFUSAL,
+    `verbs.py` 31 -> 32: a `referent_class: Record` row whose cell names no `existence` kind of
+    `subject` held by `rosters.yaml: record_kinds` (`RECORD_REFERENT_KINDS` would lack it and
+    `writs_held` would stamp nothing for the row -- a declared row read by nothing, `04` §A.1 ID-13).
+    Falsifier: `test_in09_dispensation_answer.py::test_in09_the_loader_refuses_a_record_row_naming_
+    no_record_kind`, three planted cells, red on all three with the refusal disabled."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 66, (
-        f"{total} load-time exits across the model set, expected 66. Per file: "
+    assert total == 71, (
+        f"{total} load-time exits across the model set, expected 71. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
@@ -1184,9 +1210,18 @@ def test_a_blocker_outranks_an_unaimed_row():
 
     ⚠ REWRITTEN FOR `W10`. It used to plant two needs and rely on the regex router to reach a
     probe for one of them — so it tested the router as much as the grading rule. The rule is now
-    stated over declarations, which is where it belongs and where it can be read."""
+    stated over declarations, which is where it belongs and where it can be read.
+
+    ⚠ RE-RECORDED AT v9 IN-09: THE GAPPING VERB WAS `comply`, and IN-09 typed its cell, so `comply`
+    is resolvable and no longer gaps. `exchange` replaces it -- the other row that carried
+    `requires_typed: none` for want of an operand name (`rosters.yaml: requires_operands`' note). The
+    assertion it feeds is unchanged; only the planted verb moved, and the guard below fails loudly if
+    `exchange` is ever made resolvable too."""
+    from engine.season.loop.driver import resolvable_verbs
+    assert "exchange" not in resolvable_verbs(), (
+        "`exchange` became resolvable: plant another verb `resolvable_verbs()` excludes")
     planted = {"T": {EX.need_sha("a declared row that gaps"): {
-        "need": "a declared row that gaps", "exercises": ["comply"]}}}
+        "need": "a declared row that gaps", "exercises": ["exchange"]}}}
     saved, R.OVERLAY = R.OVERLAY, planted
     try:
         got = R.grade({"id": "T", "season_requires": [
@@ -1197,7 +1232,7 @@ def test_a_blocker_outranks_an_unaimed_row():
         R.OVERLAY = saved
     assert got["verdict"] == "BLOCKED", got
     assert got["core_unmapped"] == 1, got          # the undeclared row is still reported
-    assert got["blockers"] == ["comply"], got["blockers"]
+    assert got["blockers"] == ["exchange"], got["blockers"]
 
 
 def test_no_playable_case_has_an_unmapped_core_row():
@@ -8576,9 +8611,13 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # fourth seat NPC-038's pilot cast adds, not an authored `office:`/`ought:`). It is formed in no
     # live world now, executed in none. Confirmed against the same `live` rows `corpus_run` prints
     # (`foldable but never even attempted`: 9 -> 10).
+    # ⚠ TEN -> ELEVEN, v9 IN-09 (2026-10-13): `comply` JOINS. It is typed now and forms only on a writ
+    # the person holds and his ledger names (`referent_named`); none of the 143 cases seats a person
+    # who holds one, so it is foldable and never attempted here, as it is in `build_realm(0)`, where
+    # `aperture 4 0` shows it executing once (a different corpus, as `march`'s note says).
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "oblige", "open_case",
-                                              "determine", "dispatch"}, (
+                                              "determine", "dispatch", "comply"}, (
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
@@ -9203,7 +9242,9 @@ def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_fo
     # observes it forming once both exist. Derived from the data, never a verb name.
     needs_held = {v for v, r in VERB_TABLE.items() if r.requires_typed is not None
                   and (r.requires_typed.known_person_operands()
-                       or r.requires_typed.named_own_ledger_operands())}
+                       or r.requires_typed.named_own_ledger_operands()
+                       or r.referent_named)}   # v9 IN-09: a row formed only on a referent the
+                                               # person's own ledger names (`comply`: a held writ)
     typed_own = {v for v, r in VERB_TABLE.items()
                  if r.requires_typed is not None and person_side_eligible(p, r)} - needs_held
     assert typed_own <= offered, (
@@ -10103,7 +10144,11 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # one seated person in the fixture, `p_high` (`off_duke`), which is the only way the binding's
     # new structural member -- the seat, `via` -- can be observed at all.
     WALK_REMIT: frozenset = frozenset({"levy", "open_case", "determine", "issue"})
-    WALK_EXCLUDES: frozenset = frozenset({"march"}) | WALK_REMIT
+    # v9 IN-09: a row declaring `referent_named` forms only on a referent the person's own ledger
+    # names (`comply`: a writ he holds), and this question names none, so it is not in the walk.
+    # DERIVED FROM THE ROW'S OWN COLUMN, never from a verb name.
+    WALK_NAMED: frozenset = frozenset(vb for vb, r in VERB_TABLE.items() if r.referent_named)
+    WALK_EXCLUDES: frozenset = frozenset({"march"}) | WALK_REMIT | WALK_NAMED
     cands = [c for c in decision.opening_set(p, v, q, w.fixtures)
              if VERB_TABLE[c.verb].requires_typed is not None]
     assert {c.verb for c in cands} == all_typed - WALK_EXCLUDES, (
@@ -10681,7 +10726,12 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # `subject`, `kind: commit`) bound only `subject`, so it formed one Candidate on `S` though the
     # verb was never resolvable. The drop is still exactly `transfer`.
     # [GROUNDED: measured at v9 IN-11 -- `opening_set` on `S` lists 32 verbs on a copy of the base tree `c3a698ce` and 31 here, the one missing verb `repudiate`]
-    assert (len(before), len(after)) == (31, 30), (
+    # ⚠ 31 -> 30, v9 IN-09: `comply` declares `referent_class: Record`, so it forms only on a held
+    # writ stamped on the question and never on a plain referent like `S`; untyped, it formed one
+    # Candidate on `S` though it was not resolvable. (`evade / defy` and `construe` were typed beside
+    # it and reverted, so they still form one each on `S`.) The drop is still exactly `transfer`.
+    # [GROUNDED: measured at v9 IN-09 -- `opening_set` on `S` lists 31 verbs on a `git worktree` at `905b7a21` and 30 here, the one missing verb `comply`]
+    assert (len(before), len(after)) == (30, 29), (
         f"the absolute counts moved to {(len(before), len(after))}. They are the denominator the "
         "delta above is read against, and the delta alone does not reproduce them — re-derive "
         "`H-122`'s reading rather than adjusting this line")

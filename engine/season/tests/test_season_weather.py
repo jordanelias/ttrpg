@@ -45,17 +45,32 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # `off_duke_varfell` moved from `rung_above_same_faction` to the new basis, a data change alone
 # (`Office.revocation` is hashed). Was 0a7e27c4... / d188461a... / 33b1ae3b.... `BASE_EVENTS` below is
 # unchanged, which is the proof that no event moved.
+# RE-PINNED at v9 IN-53 (H-207, DECISION 2026-10-13 D1/D2), A DELIBERATION MOVE DECLARED BY OUTCOME:
+# `confer` now forms only on a referent its question carries as `Office` (the vacant seats a conferrer
+# may fill, riding on the question he answers), so its always-refused attempts on persons, Sites and
+# Records stop from season 1; `revoke` and every other row form exactly as before (the class is a
+# partition). The build hash is unchanged (nothing stored moves). Was c2230a36... / 88f6f243... after
+# one and two seasons at e716f10b; `BASE_EVENTS` re-recorded with it (was 7526/e56f8652...,
+# 21508/dc3c440a...).
+# RE-PINNED at v9 IN-10 (c) (H-203), A TRAJECTORY MOVE DECLARED: a writ is minted into its ADDRESSEE's
+# hand and the issuer keeps none, so season 1's one dispensation (`p_npc_037` -> `p_npc_020`) is held by
+# another person, who receives its content deposit, and the seasons diverge from there. Build hash
+# unchanged. Was 56d44b5a... / 808951dd... after one and two seasons; `BASE_EVENTS` re-recorded with it
+# (was 7527/05d85451..., 21735/680e93d8...).
 BASE_HASHES = {0: "11989dcf5e1c25afab556bf3f234a200",
-               1: "c2230a36c97b14ce64dbd0e6cb8fa131",
-               2: "88f6f2436eff40f8b52db1b18d5d49c8"}
+               1: "80aef84c49e0c6d63aac266fabf46af3",
+               2: "b87bd251f536915f086ea0fa3b015248"}
 
-# The pre-IN-34 base (d47077d5), `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event
-# count and the sha256 of its ordered `kind|id` lines after one season and after two. A ONE-TIME PROOF
-# that the schema re-pin of `BASE_HASHES` moved nothing at the event level (the hash folds
-# `repr(Person)`, which gained a field; the events did not move); re-recorded together with
-# `BASE_HASHES`, never alone. A hazard that fired at the control would change the sequence.
-BASE_EVENTS = {1: (7526, "e56f8652be7f7cd52352bdf07ef17dcc555daf83e267a37b0eecafc096ec82e7"),
-               2: (21508, "dc3c440ad533b0548d69bfdc8b092e3ccc03ff622baa9a5167a92c839c2b42f4")}
+# `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
+# ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
+# (d47077d5) as a one-time proof that the schema re-pin of `BASE_HASHES` moved nothing at the event
+# level; it is NO LONGER that base's values. Re-recorded with `BASE_HASHES` at v9 IN-53 (7526 -> 7527,
+# 21508 -> 21735: `confer`'s always-refused attempts stopped) and at v9 IN-10 (c) (-> 7508, 21120: a
+# writ held by its addressee), so the values below are IN-10 (c)'s and this is a change detector on
+# the seasons-1-2 event sequence, not a pre-IN-34 control. Unmoved by the batch B-I close's fixes
+# (fingerprint, conferee, founding, occasion). Re-recorded together with `BASE_HASHES`, never alone.
+BASE_EVENTS = {1: (7508, "b8a1f5ff4ae77037a00cbad9c28fd665229c09fdd3e5c75e173d5a8698981dbc"),
+               2: (21120, "9dc7a16b7ea31e81bfad66a80b85346d1983f65ccd9dd1f225102dcac8767e00")}
 
 
 def _digest(w) -> tuple:

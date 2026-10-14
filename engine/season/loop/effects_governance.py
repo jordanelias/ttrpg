@@ -11,9 +11,12 @@ cross-file helpers this file's effects call (`_exercised_office`, `_new_oblige_t
 
 from __future__ import annotations
 
+from typing import Optional
+
 from ..data.rosters import RELEASABLE_KINDS
-from ..loop.predicates import office_described_by
-from ..state.carriers import Tenure
+from ..gaps import InstrumentDefect
+from ..loop.predicates import office_described_by, office_named_by
+from ..state.carriers import Tenure, Term
 from ..state.gate import NO_CHANGE, Change, Subject
 from ..state.ids import H
 
@@ -22,6 +25,32 @@ from .effects_shared import _exercised_office, _new_oblige_term, _operand, _shif
 # --- THE GOVERNANCE SLICE'S EFFECTS. `dispatch` needs none: Part E gives it `writes: []`, so an
 # order is an EMISSION and nothing else, which is `L1` in one row -- a dispatch does not move a
 # person, it tells one, and whether they go is their own act next season.
+
+#: IN-10 (b): THE PAYLOAD KEY A `confer` DECLARES ITS SEAT-HOLD'S TERM UNDER -- the carrier's own field
+#: name (`Tenure.term`), not a `requires_operands` member: no typed cell binds it (the row is untyped),
+#: exactly as `create_record`'s act-declared `stages` and a hand-built `confer`'s `office` are payload
+#: keys the effect reads and no cell does. A computed act carries none.
+TERM_KEY = "term"
+
+
+def _declared_term(w: "World", a: "Act") -> "Optional[Term]":
+    """THE TERM A `confer` DECLARES ON THE HOLD IT OPENS (IN-10 (b), #453 `:1382`/`:2071`): `None`
+    when the act declares none -- every computed act, and every conferral before IN-10, so an
+    untermed seat is what it was -- else `Term(w.tick + n, a.id)` for a declared length `n` in
+    seasons, `_new_oblige_term`'s shape: matured at the MATTER barrier of tick `w.tick + n`, citing
+    this act (AX-5). A declared length that is not a positive whole number is a CALLER defect,
+    raised as `_operand` raises for a missing operand, never a guessed term."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    n = d.get(TERM_KEY)
+    if n is None:
+        return None
+    if isinstance(n, bool) or not isinstance(n, int) or n < 1:
+        raise InstrumentDefect(
+            f"a {a.verb!r} declares term {n!r}; a seat-hold's term is a positive whole number of "
+            f"seasons (`Term.matures_at = tick + n`), and fabricating one would name a term nobody "
+            f"declared")
+    return Term(w.tick + n, a.id)
+
 
 @effect_for("confer")
 def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
@@ -46,7 +75,6 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     seat's revocation basis exercised through the same `via` (or `T-m`, where the incumbent is the
     actor). Without them the gate raises `NotYours` and puts both edges back. `_req_confer` asks the
     same two predicates first, so the shipped fold refuses (and emits) before this ever runs."""
-    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
     # ⚠ `to` WAS `d.get("to") or a.actor` -- a silent default that seated the ACTOR whenever the
     # act named nobody, which is the same class as `_eff_transfer`'s four and is deleted with
     # them. A conferral onto nobody is a malformed act, not a self-conferral.
@@ -57,11 +85,23 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     # `_req_confer` returns False when the payload names none -- `corpus_run`'s own output lists
     # `confer` among the verbs "foldable but never even attempted". The improvement is real (a
     # silent self-conferral becomes a loud `InstrumentDefect`) and nothing measurable moved.
-    obj, to = d.get("office"), _operand(a, "to")
+    # ⚠ IN-53 MAKES THAT STALE: a computed `confer` names its office on `subject` (`office_named_by`,
+    # formed on a vacant seat the question he answers carries) and its conferee on `to` -- the
+    # row's `counterparty: to`, a person the conferrer knows or the conferrer himself (D2,
+    # `counterparty_may_be_self`: an EXPLICIT self-conferral, named on `to`, which this body seats
+    # like any other; what stays deleted is the silent default for an act naming nobody). `_operand`
+    # still raises for a hand-built act naming none, but the fold's counterparty clause refuses that
+    # act first (`confer.refused`), so the raise is only the backstop.
+    obj, to = office_named_by(a), _operand(a, "to")
     if not obj or obj not in w.offices:
         return NO_CHANGE
     closed = [t for t in w.tenures if t.kind == "hold" and t.object == obj and t.live]
-    nt = Tenure(H(w.world_seed, w.tick, to, f"hold:{obj}"), to, obj, "hold", w.tick)
+    # IN-10 (b) (#453 §7.2/§9.6 `:1382`, `:2071`): A SEAT-HOLD MAY CARRY A TERM -- regency, the
+    # term-limited seat. The term is the OPENING ACT's declaration (T-n, *'the opening act declares
+    # the terms'*), read off the act as `create_record` reads its act-declared `stages`; MATTER
+    # matures it and closes the hold under `T-n`, so the seat falls vacant when the term comes.
+    nt = Tenure(H(w.world_seed, w.tick, to, f"hold:{obj}"), to, obj, "hold", w.tick,
+                term=_declared_term(w, a))
 
     def perform() -> None:
         for t in closed:

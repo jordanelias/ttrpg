@@ -70,7 +70,10 @@ def aggregate_questions(qs: list, rule: str):
     # `all` and `one_per_source` widen the REFERENTS rather than the question count, because
     # `assemble` takes one question. The person brings everything they are being asked about.
     refs = tuple(sorted({r for q in qs for r in q.referents}))
-    return Question(f"q:agg:{rule}:{qs[0].id}", qs[0].source, refs, qs[0].about)
+    # IN-53: the classed referents (`Question.classes`, a partition beside `referents`) are UNIONED
+    # like the referents -- a seat offered as an Office is still one. `first` returns `qs[0]` as is.
+    classes = tuple(sorted({rc for q in qs for rc in q.classes}))
+    return Question(f"q:agg:{rule}:{qs[0].id}", qs[0].source, refs, qs[0].about, classes)
 
 
 def view_ids(p: Person, q: Any, k: int, rule: str) -> list:

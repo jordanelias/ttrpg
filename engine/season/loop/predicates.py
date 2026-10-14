@@ -27,6 +27,7 @@ from __future__ import annotations
 
 from typing import Optional
 
+from ..data.requires import binding_from_act
 from ..data.rosters import BINDS_BASES, RELEASABLE_KINDS, RUNG_KINDS
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..state.carriers import Office, subject_of
@@ -117,26 +118,64 @@ def _req_confer(w: "World", a: "Act") -> bool:
     `04 §C.2`'s own F3 note names `confer` beside `revoke` as *"writing `Tenure.until` on an edge
     whose subject is somebody else"*, which is why the displacement is T-o and not a second reading
     of the conferral basis."""
-    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    obj = d.get("office")
-    if not obj or obj not in w.offices:
-        return False
+    obj = office_named_by(a)
+    if not obj or not isinstance(obj, str) or obj not in w.offices:
+        return False                       # (a list `subject`/`office` is unhashable: refuse, never raise)
     off = w.offices[obj]
     if not has_conferral_basis(off):
         return False                       # no conferral basis: the office cannot be conferred
+    # Batch B-I close (C1): THE CONFEREE IS A LIVING PERSON. `to` comes from the conferrer's own
+    # claims (`known_persons`), which can name somebody since dead, and nothing downstream asks:
+    # `_admits` refuses only a missing or self `to`, and the gate admits the hold under the
+    # conferral basis, which reads `via` alone. `tell` gets this from its `hearer` conjunct; this row
+    # is untyped, so it is asked here -- before `may_fill`'s purview walk, the dearer conjunct.
+    conferee = binding_from_act(a).get("to")
+    if not isinstance(conferee, str) or conferee not in w.persons:
+        return False                       # (a list `to` is unhashable: refuse, never raise)
     if not may_fill(w, a.actor, a.via, off):
         return False                       # G3: the seat exercised does not reach the seat conferred
-    if not any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures):
+    tenures = w.tenures                    # one view for the three scans below
+    if not any(t.kind == "hold" and t.object == obj and t.live for t in tenures):
         return True                        # 1-per-object satisfied
     # THE `or` DISJUNCT: a held office is still conferrable when the holder-Proposition carries
     # no live `commit`. §54 item 20.
-    holder = next((t.subject for t in w.tenures
+    # ⚠ READ AGAINST THE ROW AT IN-53 step (4) AND KEPT, WITH THE REASON. §54 item 20 (*"a
+    # memberless faction's `hold`"*) counts the live `commit` edges TO a Proposition that HOLDS; this
+    # counts any live `commit` BY the holder. The literal reading is unreachable as built: a `hold`
+    # is a PERSON's edge (`holonic §15`; `World._refuse_bad_hold`), so no Proposition holds a seat,
+    # and the tree already migrated the row to the holder (`harness/probes.py` F2: *"~~holder-
+    # Proposition~~ -> holder, per `holonic §15`"*). Taking the literal reading would make this
+    # disjunct, and with it `confer`'s displacement under T-o, dead code
+    # (`test_g3_not_yours.py::test_g3_confer_refuses_at_the_precondition_what_the_gate_would_refuse`
+    # arm `c3` reddens, measured); F2's *"zero commits to the cause he held it for"* needs a
+    # seat -> cause map nothing declares. Neither is this position's to invent; left as it is.
+    holder = next((t.subject for t in tenures
                    if t.kind == "hold" and t.object == obj and t.live), None)
-    if holder is None or any(t.kind == "commit" and t.subject == holder and t.live
-                             for t in w.tenures):
+    if holder is None or holder == conferee:
+        return False                       # B-I close, Phase 3 F1: conferring a seat on its own holder
+                                           # changes nothing but closes and reopens his edge
+    if any(t.kind == "commit" and t.subject == holder and t.live for t in tenures):
         return False
     # G3: displacing the holder CLOSES HIS EDGE -- T-o, through the seat exercised.
     return holder == a.actor or may_revoke(w, a.actor, a.via, off)
+
+
+def office_named_by(a: "Act") -> "Optional[str]":
+    """THE OFFICE A `confer` ACT NAMES -- the one reader `_req_confer` and `_eff_confer` share
+    (IN-53 step 2).
+
+    A hand-built act supplies it on the payload's `office` key (the corpus overlays,
+    `corpus_run._check_office`); a COMPUTED act carries it as its `subject`, the classed Office
+    referent of the question it was formed from (`queries/world_q.py::questions_for`'s vacancies),
+    read through `binding_from_act`, the fold's own binding. `office` wins where both are present,
+    so no hand-built act changes meaning; `None` when the act names neither. Before this both read
+    `office` alone, so a computed act passed nothing to the precondition and the effect wrote
+    nothing. ⚠ `revoke` IS NOT A CALLER (DECISION 2026-10-13 D1): it declares no referent class and
+    keeps the base's `office`-only read, so a computed `revoke` stays refused at its precondition as
+    at the base (H-207 (A): a computed `revoke` is not driven). `establish` is not a caller either:
+    the office it names does not exist yet (`office_described_by`)."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    return d.get("office") or binding_from_act(a).get("subject")
 
 
 def office_described_by(a: "Act") -> "Optional[Office]":

@@ -30,15 +30,16 @@ from ..data.requires import (
     CELL_STEMS, SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS, VIA, WRIT_SOURCED_OPERANDS,
 )
 from ..data.rosters import (
-    CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, RECORD_CONTENT, WITNESS_CHANNELS,
-    require_member,
+    CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, WITNESS_CHANNELS, require_member,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import ELIGIBILITY_KINDS, VERB_TABLE, align
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
-from ..queries.person_q import LedgerReader, crisis_weights, known_persons, regard, said_of
+from ..queries.person_q import (
+    LedgerReader, content_said, crisis_weights, known_persons, ledger_names, regard, said_of,
+)
 from ..state.carriers import Candidate, Claim, Person, Question, View
 from ..trace_log import TRACE
 
@@ -106,12 +107,19 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     axis = fx.get("refusal_axis")
     tolerance = refusal_tolerance(p, axis)
     weigh = ledger_weigh(p, fx)
+    # Own-ledger reads every row asks alike, computed at most once per call and only when a row
+    # needs one: `ledger_names` for a `referent_named` row, `known_persons` for a fanned row's bags.
+    named: Optional[frozenset] = None
+    people: Optional[tuple] = None
     for verb, row in sorted(VERB_TABLE.items()):
         if not person_side_eligible(p, row):
             continue
         if tolerance is not None and refuses(verb, axis, tolerance):
             TRACE.note(f"{p.id} refuses {verb!r}: its `{axis}` alignment exceeds their own "
                        f"projected weight {tolerance:+.3f} (ED-IN-0261)", "H-146")
+            continue
+        refs = row.referents_of(q)
+        if not refs:
             continue
         # `19`: the seat(s) this row's act would exercise -- the untraced walk `pack_scenes` names
         # `Act.via` by (`seat_of`) -- for the belief test's `basis` conjunct below.
@@ -127,7 +135,21 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         ledger_of = row.requires_typed.named_own_ledger_operands() if row.requires_typed else ()
         opposes_subject = subject_is_opponent(row)
         said_of_entity: dict = {}           # entity -> `said_of` (this row's own-ledger read, per entity)
-        for subject in q.referents:
+        # IN-10 (a) (H-203): a row declaring `referent_named` forms only on a classed referent the
+        # person's OWN LEDGER names (`person_q.ledger_names`: a deposit, or a held document's
+        # `terms`) -- `oblige` on a seat he was told of, never on a vacancy a world read stamped.
+        # Own state, no World; computed once per call, only if such a row has a referent.
+        if row.referent_named and named is None:
+            named = ledger_names(p.ledger)
+        told = named if row.referent_named else None
+        # IN-53 (H-207, DECISION 2026-10-13 D1): THE CLASS IS A PARTITION. A row declaring a
+        # `referent_class:` iterates only the referents the question carries as that class; a row
+        # declaring none iterates the plain `referents`, exactly as before (`VerbRow.referents_of`,
+        # `Question.referents_for`) -- no World, no id test, no verb name, because this function
+        # cannot ask what kind of thing an id is (L2).
+        for subject in refs:
+            if told is not None and subject not in told:
+                continue
             # ⚠⚠ A CONTEST NEEDS TWO CLAIMANTS, AND A PERSON IS NOT THEIR OWN ADVERSARY.
             # `move`'s `contain_path` cell keeps the same shape of rule -- *"a node is not a path
             # to itself"* -- as the reader's own, and this is that rule one seam over. It reads
@@ -160,8 +182,10 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             # PERSON (`operand_bags`), which forms one per person the teller knows.
             # `H-134`: seat-major, each seat's own bags (`from` is that seat's rung). One seat: the
             # one pass `operand_bags` made before.
+            if people is None and row.known_person_operands():
+                people = known_persons(p.ledger, p.id)
             bagged = [(st, ops) for st in (seats or (None,))
-                      for ops in operand_bags(p, row, q, subject, fx, seat=st)]
+                      for ops in operand_bags(p, row, q, subject, fx, seat=st, people=people)]
             for st, ops in bagged:
                 # ⚠ AND A TWO-SIDED ACT NEEDS A SECOND SIDE (plan position `15`, `ED-IN-0210` ruling
                 # 2). The rule above, one column over: a row naming its `counterparty:` operand forms
@@ -173,15 +197,17 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 # verb name, and the loader guarantees the operand is carried.
                 # ⚠ AND A SECOND SIDE NOBODY CAN NAME IS NO SECOND SIDE (plan position 16). On a TYPED
                 # row the loader guarantees the counterparty is carried, so `None` cannot arise there.
-                # On an UNTYPED row (`oblige`; `give` until plan position `14` typed it) nothing is
-                # carried, and forming the Candidate would mint an act with no second party --
+                # On an UNTYPED row (`give` until plan position `14` typed it; `oblige` carries its
+                # `subject` since IN-10 (a)) nothing may be carried, and forming the Candidate would mint an act with no second party --
                 # refused by the fold every time, for the instrument's reason. MEASURED before this
                 # clause, the `give` row without it: 3 such acts in
                 # `headless.run(3, 0)` and 41 in `populated.run(2, 0)`, every one `give.refused`, and
                 # `release` dropped out of the corpus's executed set because they took its scenes --
                 # position `15`'s *constant scene tax with nothing behind it*, the shape the petition
                 # row's seat reading was refused for.
-                if row.counterparty and ops.get(row.counterparty) in (None, p.id):
+                # IN-53 D2: the self half waived for a row declaring `counterparty_may_be_self`
+                # (`VerbRow.self_counterparty_refused`, the one owner the fold asks too).
+                if row.counterparty and row.self_counterparty_refused(ops.get(row.counterparty), p.id):
                     continue
                 # `19`: THE SEAT THE ACT WILL BE EXERCISED THROUGH rides into the belief test as it rides
                 # onto `Act.via` (`pack_scenes`), so a `basis` conjunct is asked of the same seat both
@@ -383,9 +409,11 @@ def exercised_seat(p: Person, row: "Optional[VerbRow]") -> Optional[str]:
     Candidate per seat (`exercisable_seats`), the seat riding on it (`VIA` in its operands) to
     `Act.via` (`seat_of`), and the fold's gate asks that seat. The person cannot say which seat
     reaches a target (that needs the containment tree, which is not the person's state), so a seat
-    that does not reach it is refused there. ⚠ STILL MASKED for `revoke` and `confer`: a computed
-    act of either carries no `office` operand, so `loop/predicates.py`'s `_req_revoke` /
-    `_req_confer` refuse before the seat is asked (`H-207` causes 1, 2, 4).
+    that does not reach it is refused there. `confer` reaches it since IN-53: a computed `confer`
+    names its office on `subject` (`loop/predicates.py::office_named_by`), formed only on an Office
+    referent (`H-207`). `revoke` does not (D1): it declares no referent class and reads its office
+    from the payload's `office` alone (`_req_revoke`), so a computed `revoke` stays refused at its
+    precondition as at the base.
     Traces nothing: the admission it mirrors already traced. A verb on no row (`row is None` -- a
     hand-ranked candidate naming an invented verb) exercises nothing; the fold refuses the verb
     itself, and inventing a seat for it here would be a second answer."""
@@ -660,10 +688,10 @@ def _from_content_claim(p: Person, q: "Question", name: str):
     c = _claim_by_id(p, q.about)
     if c is None:
         return None
-    stem, sep, _ = str(c.predicate).partition(":")
-    if not sep or stem != RECORD_CONTENT.get("predicate") or c.value is None:
+    said = content_said(c)          # `person_q`'s one reader of the content claim's shape
+    if said is None:
         return None
-    v = dict(c.value).get(name)
+    v = said.get(name)
     if isinstance(v, tuple):
         return v[0] if len(v) == 1 else None
     return v
@@ -919,7 +947,8 @@ def operands_for(p: Person, row: "VerbRow", q: "Question", subject,
 
 
 def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
-                 fx: "Fixtures", seat: Optional[str] = None) -> list[dict]:
+                 fx: "Fixtures", seat: Optional[str] = None,
+                 people: Optional[tuple] = None) -> list[dict]:
     """EVERY OPERAND BAG `p` CAN FORM FOR `row` ON `subject` -- `[]` when none (telling workplan
     `T4`, `ED-IN-0282`). One bag for every row whose operands all come from `_derive_operand`
     (`operands_for`'s rule, unchanged); for a row whose cell binds a known-person operand beside
@@ -936,12 +965,20 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
     both conjuncts, so a refused telling to an absent hearer is retried whenever the teller
     re-deliberates -- a scene tax with nothing behind it. Recorded, with the measurement owed, at
     the telling workplan's T4b *As built* line. `give` (plan position `14`) shares the shape: its
-    receiver is a known person and its `with` conjunct the fold's."""
-    fan = row.requires_typed.known_person_operands() if row.requires_typed is not None else ()
+    receiver is a known person and its `with` conjunct the fold's. `people` is `known_persons`'
+    answer when the caller already holds it (`opening_set`, once per call); `None` computes it."""
+    fan = row.known_person_operands()
     if not fan:
         ops = _operands(p, row, q, subject, fx, {}, seat)
         return [] if ops is None else [ops]
-    people = known_persons(p.ledger, p.id)
+    if people is None:
+        people = known_persons(p.ledger, p.id)
+    # IN-53 D2 (H-207): A ROW DECLARING `counterparty_may_be_self` (`confer`) ALSO RANGES OVER THE
+    # PERSON THEMSELF -- a person knows himself from his own state, so this adds no source of
+    # knowledge and no world read (`known_persons` stays its three sources, AX-2, ED-IN-0282); the
+    # lord who assumes a vacant seat. Appended after the known, so their bags keep their order.
+    if row.counterparty_may_be_self and p.id not in people:
+        people = tuple(people) + (p.id,)
     if not people:
         TRACE.note(f"{row.verb!r} needs {list(fan)} from a person {p.id} knows, and they know "
                    f"nobody; NO Candidate is formed (T4)", "§F1/H-94")
@@ -961,7 +998,13 @@ def _operands(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixtures",
     `None` for a bound operand nobody can supply. The rules are `operands_for`'s docstring's."""
     req = row.requires_typed
     if req is None:
-        return {}
+        # An UNTYPED row carries nothing but what a known person fills for its named counterparty
+        # (`VerbRow.known_person_operands`: `confer`'s `to`, IN-53); `given` is empty for every other.
+        # IN-10 (a): AND ITS COUNTERPARTY WHERE THAT IS THE REFERENT ITSELF (`counterparty:
+        # subject`, `oblige`'s seat), so the counterparty clause here and the fold's read the seat
+        # the Candidate is formed on rather than nothing. The payload is unchanged (`_payload_of`
+        # puts `subject` on every computed act); only the person-side decline can now see it.
+        return {**given, "subject": subject} if row.counterparty == "subject" else dict(given)
     bound = tuple(req.operands())
     admitted = req.needs()
     names = bound + tuple(n for n in _REFERENT_OPERANDS if n in admitted and n not in bound)

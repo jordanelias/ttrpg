@@ -72,6 +72,11 @@ def test_14_every_counterparty_row_is_refused_at_the_fold_when_the_act_names_no_
             payload = {**other, **({row.counterparty: named} if named is not None else {})}
             ok, kinds, _ = d._admits(w, Act(id=f"cp_{key}", actor="p_low", verb=row.verb,
                                              payload=payload), open_row)
+            if key == "self" and row.counterparty_may_be_self:
+                # IN-53 D2: a row declaring `counterparty_may_be_self` (`confer`) admits the actor
+                # on its counterparty -- and ONLY such a row (the loop's other rows refuse it).
+                assert ok is True and not kinds, (row.verb, key, ok, kinds)
+                continue
             assert ok is False and tuple(kinds) == tuple(want), (row.verb, key, ok, kinds)
         # CONTROL: a second party who is somebody else is admitted by the same clause
         ok, kinds, _ = d._admits(w, Act(id="cp_other", actor="p_low", verb=row.verb,
@@ -79,6 +84,8 @@ def test_14_every_counterparty_row_is_refused_at_the_fold_when_the_act_names_no_
         assert ok is True and not kinds, (row.verb, kinds)
         checked += 1
     assert checked == len(rows) >= 1
+    # IN-53 D2: exactly one row waives the self half, so every other row above was refused on it
+    assert [r.verb for r in rows if r.counterparty_may_be_self] == ["confer"]
 
 
 # ======================================================================================
@@ -138,8 +145,12 @@ def test_14_no_declined_row_is_resolvable_and_no_unbindable_counterparty_row_for
     assert not leaked, (f"{leaked} became resolvable, so it can be formed, attempted and refused in "
                         "every world -- the always-refused set grows by a row this position declined")
     assert len(DECLINED) >= 1 and all(v in VERB_TABLE for v in DECLINED), DECLINED
-    # the untyped rows naming a second party their cell cannot carry: formed by nobody
-    unbindable = sorted(v for v, r in VERB_TABLE.items() if r.counterparty and r.requires_typed is None)
+    # the untyped rows naming a second party their cell cannot carry: formed by nobody. IN-53:
+    # `confer`'s `to` is filled by a known person (`VerbRow.known_person_operands`), so it is
+    # carriable and leaves this set; `oblige`'s `subject` is not.
+    unbindable = sorted(v for v, r in VERB_TABLE.items()
+                        if r.counterparty and r.requires_typed is None
+                        and not r.known_person_operands())
     assert unbindable == ["oblige"], unbindable
     w = P.tiny_world()
     referents = ("off_duke", "off_dicastery", "p_mid", "Hh")

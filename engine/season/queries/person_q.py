@@ -19,8 +19,10 @@ Measured:
   signature and self-declares as a person Query at its own first statement --
   `TRACE.query("entrenchment", "person")`. It reads a `Person` and three ints and touches nothing
   else, which is exactly the *"`PersonInterior` snapshot only"* the table allows. So it is here.
-- **Every function in `world_q.py` takes `w: World` first** -- all thirteen, checked by `ast`. There
-  is no misfiled person-first Query hiding in the world-side module.
+- **Nearly every function in `world_q.py` takes `w: World` first**; the helpers `named` and
+  `_stamped` do not (04:116 splits the two families by module, not by first parameter), and no
+  check enforces the first-parameter rule. There is no misfiled person-first Query hiding in the
+  world-side module: the person-side scan below is what holds the line.
 
 ⚠ **§A.3 ROW 2's PROPERTY IS THE POINT, NOT THE FILE COUNT.** *"one `Query` class holding both
 families"* becomes *"two modules; the second cannot import the first"*, forced by T-f: *"in one
@@ -623,6 +625,45 @@ def intent_named(c) -> tuple:
     if not sep or stem != INTENT_STEM or not isinstance(c.value, tuple):
         return ()
     return tuple(v for _n, v in c.value)
+
+
+def content_said(c) -> "dict | None":
+    """WHAT A HELD DOCUMENT'S CONTENT CLAIM SAYS: the value of a `content:<kind>` claim (or `Said`)
+    as a key -> value dict (`rosters.yaml: record_kinds.content`), `None` for any other predicate or
+    a claim with no value. `intent_named`'s shape for the other content-bearing stem: the one reader
+    of that claim's shape that `ledger_names`, `world_q.named` and `decision/options.py::
+    _from_content_claim` share (batch B-I close, layer-conformance: the three had each parsed it;
+    `loop/witness.py`'s Partial-telling rewrite still guards it its own way, on a tuple value)."""
+    stem, sep, _ = str(c.predicate).partition(":")
+    if not sep or stem != RECORD_CONTENT.get("predicate") or c.value is None:
+        return None
+    return dict(c.value)
+
+
+#: THE CONTENT KEYS THAT SAY WHAT A DOCUMENT IS ABOUT -- every key `rosters.yaml: record_kinds.
+#: content.read_from` reads off the minting act's `subject` (`terms`, today). Derived from the roster
+#: that types the schema, never from a value's strings (`world_q.named`'s ruling, one key over).
+ABOUT_KEYS = tuple(k for k, src in (RECORD_CONTENT.get("read_from") or {}).items() if src == "subject")
+
+
+def ledger_names(claims) -> frozenset:
+    """EVERY ID THIS HOLDER HAS BEEN TOLD OF, from their OWN claims only (IN-10 (a), AX-2): the
+    subject of every claim they hold -- a deposit, chiefly a witness's `tenure.opened` claim about a
+    seat (#453 K-25) -- and what every document they hold is ABOUT (`ABOUT_KEYS` in a
+    `content:<kind>` claim's value: a held Record's `terms`). An addressee is not what a document is
+    about, so a writ's `to` is not read. The ONE owner of "named by a held Record or a deposit":
+    `world_q.seats_named` keeps the seats among it, and `decision/options.py::opening_set` asks it of
+    a row declaring `referent_named` -- one rule for the source and the formation."""
+    out = set()
+    for c in claims:
+        out.add(c.subject)
+        said = content_said(c)
+        if said is not None:
+            for k in ABOUT_KEYS:
+                v = said.get(k)
+                if isinstance(v, str):
+                    out.add(v)
+    return frozenset(out)
 
 
 def known_persons(claims, actor) -> tuple:

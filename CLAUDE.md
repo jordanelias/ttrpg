@@ -255,7 +255,7 @@ Timings: `CLAUDE_RATIONALE.md` §0.4 — re-measure rather than quote them.
 
 1. **The full suite runs AT MOST once per commit, and only when it can observe something CI will not
    (RULED).**
-   CI runs it on every push. Name what a local run would catch first; a diff of prose, ledgers, skills
+   CI runs it on every push not marked `[skip ci]`. Name what a local run would catch first; a diff of prose, ledgers, skills
    or links runs only the test files that read what it touched (`grep -rl <path> tests/`).
 2. **Mid-session, run only the file covering what you touched.** If you cannot name it, find it — that
    costs seconds.
@@ -494,7 +494,7 @@ re-implement a rule.** Known live violations, treated as bugs rather than propag
 
 ```sh
 python tools/session_provision.py                # installs pyyaml pytest numpy pytest-xdist if absent; silent
-python -m pytest tests/valoria -q -n auto        # the gate; CI runs it on every push (§0.4)
+python -m pytest tests/valoria -q -n auto        # the gate; CI runs it on a push not marked [skip ci] (§0.4)
 python -m pytest tests/valoria/test_<x>.py -q    # the inner loop: seconds. This is the mid-session run.
 ```
 

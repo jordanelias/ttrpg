@@ -68,6 +68,15 @@ is not a duplicate of that step, it is why that step should find nothing new by 
 copied, run once against a whole batch's cumulative diff rather than once per item; a change to
 the sequence, the tiers or the checklists below is made once, here.
 
+**Where CI runs relative to the phases — RULED 2026-10-13 (the session's user: *"We run CI at the
+end of a batch, correct whatever is required then, implement all fixes and changes and everything as
+per the closing sequence, and then we run CI again to confirm that we successfully did it"*).** Twice,
+and inside no phase: the first run starts as Phase 1 opens, on the diff under review, and its reds are
+reconciled beside Phases 1–3's findings (1.5, 3.7); the second runs on the commit carrying every fix,
+after Phase 3 and `/close`, and confirms. Neither run replaces a phase, and a green run is not evidence
+about any of them. Which commits start no run is `methodology-execute`'s CHECKPOINTS AND BASELINES.
+[ASSUMPTION; medium; the user to correct — the first run's place; revert: it runs after Phase 3.]
+
 ---
 
 ## THE THREE PHASES, AND WHY THE ORDER IS NOT NEGOTIABLE

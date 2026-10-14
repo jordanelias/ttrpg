@@ -38,10 +38,12 @@ from ..data.rosters import (
     FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, RUNG_KINDS, SITE_KINDS,
     TENURE_KINDS,
 )
+# IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows.
+from ..data.verbs import RECORD_REFERENT_KINDS
 from ..gaps import Forbidden, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
-from .person_q import intent_named
+from .person_q import content_said, intent_named, ledger_names
 from ..state.attribution import anchor_of, causing_act
 from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE (G3, plan position 6). The
@@ -56,7 +58,7 @@ from ..state.containment import descendants, parent_of  # noqa: F401 -- re-expor
 from ..state.containment import ancestry, home_of  # noqa: F401 -- re-exported
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
-from ..state.gate import BENCH_BASIS, may_determine, purview_reaches, sits_over
+from ..state.gate import BENCH_BASIS, may_determine, may_fill, purview_reaches, sits_over
 from ..state.ids import ROOT, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
@@ -611,10 +613,10 @@ def named(c) -> tuple:
     got = intent_named(c)            # `()` unless the stem is the intent's, which is never `content:`
     if got:                          # (`person_q._check_intent_claim`'s `taken` refuses that at import)
         return got
-    stem, sep, _ = str(c.predicate).partition(":")
-    if not sep or stem != RECORD_CONTENT.get("predicate") or c.value is None:
+    said = content_said(c)           # `person_q`'s one reader of the content claim's shape
+    if said is None:
         return ()
-    ids = dict(c.value).get(RECORD_CONTENT.get("addressee"))
+    ids = said.get(RECORD_CONTENT.get("addressee"))
     return tuple(ids) if ids else ()
 
 
@@ -1533,8 +1535,81 @@ def ambitions(w: World, p: Person) -> list:
     return out
 
 
+def vacancies(w: World, p: Person) -> tuple:
+    """THE VACANT SEATS `p` MAY FILL (IN-53, H-207 'VACANCY AS NEED'), sorted by id: every Office
+    with no live `hold` -- the test `_req_confer` runs before its `or` disjunct -- for which
+    `may_fill` holds through some seat of `p`'s own live `hold`s whose grant carries `confer`
+    (`Tenure.granted_acts`, the one owner of the grant's shape). `()` for a person granted no
+    `confer`, which is nearly everyone, so the store is read only for a conferrer.
+
+    Resolver-side and read-only: it supplies seat IDS, which `questions_for` adds to the question
+    the person answers, as classed referents (D1); whether the conferral then passes is the fold's (`_req_confer`). It asks the
+    write gate's own `may_fill`, so it names no seat the gate would refuse to have filled through
+    that seat. `confer` is named here because it is the remit act the predicate it mirrors serves.
+    ⚠ THAT PROMISE IS THIS FUNCTION'S, NOT THE CLASS'S: the seats a person was told of
+    (`seats_named`) ride the same `Office` class and `confer` does not declare `referent_named`, so
+    it forms on a told-of seat `may_fill` would refuse (or one he holds) too, and the fold refuses it
+    there at the cost of a scene (batch B-I close, C4; H-207). A seat he holds himself is refused as
+    a no-op by `_req_confer` (Phase 3 F1: conferring a seat on its own holder)."""
+    seats = [t.object for t in p.tenures
+             if t.kind == "hold" and t.live and t.object in w.offices and "confer" in t.granted_acts]
+    if not seats:
+        return ()
+    held = {t.object for t in w.tenures if t.kind == "hold" and t.live}
+    return tuple(o.id for o in sorted(w.offices.values(), key=lambda o: o.id)
+                 if o.id not in held and any(may_fill(w, p.id, s, o) for s in seats))
+
+
+def seats_named(w: World, p: Person) -> tuple:
+    """THE SEATS `p` HAS BEEN TOLD OF (IN-10 (a), #453 K-25 / `:524`), sorted by id: the Offices
+    among `person_q.ledger_names(p.ledger)` -- a claim about the seat (chiefly the `tenure.opened`
+    claim a witness of a conferral holds, `epistemic.claim_subjects`' Tenure expansion) or a held
+    document whose `terms` names it. `()` for nearly everyone: before any seat changes hands no
+    ledger holds a claim about one (H-203).
+
+    Reads `p`'s OWN LEDGER, never the store's Records (AX-2: a document's content is what the person
+    holding it believes); the World is asked only which ids are seats (`w.offices`), the class
+    `_stamped` stamps. Resolver-side and read-only, `vacancies`' shape: it supplies seat IDS, which
+    `questions_for` adds to the question the person answers as CLASSED referents, and whether an act
+    on one passes is the fold's (`_req_oblige`, `_req_confer`)."""
+    return tuple(sorted(o for o in ledger_names(p.ledger) if o in w.offices))
+
+
+def writs_held(w: World, p: Person) -> tuple:
+    """THE WRITS `p` HOLDS (v9 IN-09, H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to
+    correct]), sorted by id: the Records on `p`'s own live `hold` edges whose kind a row declaring
+    `referent_class: Record` answers (`data/verbs.py::RECORD_REFERENT_KINDS`, `dispensation`). #453
+    `:502`: *"the executor holds the writ ... `comply` forms on the held writ"*; since IN-10 (c) a
+    writ is minted into its addressee's hand, so this is the order he was given. `()` for nearly
+    everyone (three writs are issued in four realm seasons).
+
+    A STANDING OCCASION, `vacancies`' shape: resolver-side and read-only, it supplies Record IDS,
+    which `questions_for` adds to the question the person answers as CLASSED referents, and whether
+    the act then passes is the fold's (the rows' typed cells: the actor's own ledger holds a claim on
+    the writ). It reads `p`'s own edges and the store only for the kinds of the Records they name.
+    ⚠ NO 'ALREADY ANSWERED' DECLINE: a holder who complied once is offered the writ again while he
+    holds it -- the scene tax IN-10 (a) recorded for a repeated `oblige` (H-203)."""
+    return tuple(sorted({t.object for t in p.tenures
+                         if t.kind == "hold" and t.live and t.object in w.records
+                         and w.records[t.object].kind in RECORD_REFERENT_KINDS}))
+
+
+def _stamped(q: Question, added: tuple, w: World) -> Question:
+    """`q` carrying the ids in `added` as CLASSED referents (IN-53, DECISION 2026-10-13 D1) -- the
+    one stamp site. Each id's class is the collection the World holds it in (`World.class_of`:
+    `Office` for a seat in `w.offices`, `Record` for a document in `w.records` since IN-09), never a
+    literal, and `Question` refuses a class `rosters.yaml: referent_classes` does not declare. The
+    plain `referents` are untouched (the class is a partition)."""
+    return replace(q, classes=q.classes + tuple((o, w.class_of(o)) for o in added))
+
+
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
-    """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier.
+    """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus THREE
+    STANDING OCCASIONS stamped onto the first question as classed referents (`_stamped`, below the
+    sort): the vacant seats the person may fill (`vacancies`, IN-53), the seats he has been told of
+    (`seats_named`, v9 IN-10 (a)) and the writs he holds (`writs_held`, v9 IN-09). They are not
+    sources: no id or source changes; a person with one of them and no question gets one `need`
+    question carrying them.
 
     ⚠ THIS CLOSES `H-04` AND §61's `NoProducer`, which between them blocked every NPC case: with
     no producer for `q`, `assemble(person, question)` was UNSATISFIABLE and DELIBERATE had no
@@ -1649,6 +1724,28 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # not a repair, so it is declared and left alone.
     order = {src: i for i, src in enumerate(QUESTION_SOURCES)}
     out.sort(key=lambda q: (order[q.source], q.id))
+    # IN-53 (H-207, DECISION 2026-10-13 D1): A VACANT SEAT THE PERSON MAY FILL IS A STANDING
+    # OCCASION, AND IT RIDES ON WHATEVER QUESTION HE ANSWERS. After the sort, so it displaces
+    # nothing: `out[0]` -- the question every aggregation rule delivers (`first` returns it; `all`/
+    # `one_per_source` keep its id and source) -- carries the vacancies as CLASSED referents
+    # (`_stamped`), which only a row declaring that class forms on (`Question.referents_for`, a
+    # partition: its plain `referents` are untouched). A person with vacancies and no question gets
+    # one `need` question carrying them (the 'no ambition' case). No source added, no id or source
+    # changed (`H-54`); with no vacancy the output is byte-identical.
+    # IN-10 (a) (H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE
+    # SEATS HE HAS BEEN TOLD OF (`seats_named`: a deposit about the seat, or a held document whose
+    # `terms` names it -- #453 K-25), by IN-53 D1's precedent, after his vacancies and never twice.
+    # The class is `Office` either way, so every row declaring it (`confer`, `oblige`) forms on both;
+    # whether a seat is held is the fold's question, not the referent's.
+    # IN-09 (H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE WRITS
+    # HE HOLDS (`writs_held`), after the seats, as `Record` -- only `comply` declares that class, so
+    # no other row's formations move. REVERT: drop the term.
+    vacant = vacancies(w, p)
+    added = (vacant + tuple(o for o in seats_named(w, p) if o not in vacant)
+             + writs_held(w, p))
+    if added:
+        head = out[0] if out else Question(f"q:need:{added[0]}", "need", (), added[0])
+        out[:1] = [_stamped(head, added, w)]
     return out
 
 

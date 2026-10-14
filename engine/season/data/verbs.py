@@ -47,10 +47,13 @@ from typing import Optional
 from . import files
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .matrix import MATRIX, Step
-from .requires import REQUIRES_OPERANDS, VIA, TypedRequires, build_typed_requires
+from .requires import (
+    KNOWN_PERSON_OPERANDS, REQUIRES_OPERANDS, VIA, AllOf, Existence, TypedRequires,
+    build_typed_requires,
+)
 from .rosters import (
-    PURSUIT_AXES, PURSUITS, RELEASABLE_KINDS, RUNG_KINDS, STRATA, TENURE_KINDS, load_yaml,
-    require_member, roster, roster_map,
+    PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS, RUNG_KINDS, STRATA,
+    TENURE_KINDS, load_yaml, require_member, roster, roster_map,
     table,
     table_meta,
 )
@@ -227,6 +230,62 @@ class VerbRow:
     # split. NOT `requires_typed_note`, which says why the cell is untyped and stands on rows a
     # registered predicate DOES evaluate (`oblige`, `release`).
     requires_decline_note: str = ""
+    # IN-53 (H-207): THE REFERENT CLASS -- the carrier type (`Office`) a Candidate of this verb must
+    # be ABOUT. `""` is the declared absence: the verb forms on the question's PLAIN referents, as
+    # every row did before. A named class must be a `rosters.yaml: referent_classes` value or the
+    # load refuses; the verb then forms ONLY on referents the question carries as that class, and
+    # never on its plain ones (`referents_of`, `Question.referents_for`): the class is a PARTITION
+    # (DECISION 2026-10-13 D1), so a classed referent never reaches an undeclared row. It exists
+    # because `opening_set` has no World (L2) and cannot ask what kind of thing a referent is:
+    # `confer` formed on every rung, person, Record and Site a question named and was refused by
+    # the fold on every one (`30d38a12`).
+    referent_class: str = ""
+    # IN-53 (H-207, DECISION 2026-10-13 D2): MAY THE COUNTERPARTY BE THE PERSON THEMSELF? `False`
+    # (every row but one) keeps ED-IN-0210's counterparty clause as it was: no Candidate, and no
+    # admitted act, whose counterparty is its actor. `True` (`confer`: the lord who assumes a vacant
+    # seat) adds the person to the known persons the fan ranges over (`decision/options.py::
+    # operand_bags`) and waives the self-exclusion at both counterparty sites (`opening_set`,
+    # `loop/resolve.py::_admits`). The loader admits it only on a row whose counterparty a known
+    # person fills (`known_person_operands`), the only rows the fan reaches.
+    counterparty_may_be_self: bool = False
+    # IN-10 (a) (H-203, DECISION 2026-10-13): MUST A CLASSED REFERENT BE ONE THE PERSON WAS TOLD OF?
+    # `False` (every row but one): the row forms on every referent its class partition yields -- for
+    # `confer`, the vacancies `world_q.vacancies` stamps, which no ledger names. `True` (`oblige`):
+    # only on a referent the person's OWN LEDGER names (`queries/person_q.py::ledger_names`: a
+    # deposit about it, or a held document whose `terms` it is -- #453 K-25), asked person-side in
+    # `decision/options.py::opening_set` with no World (L2). The loader admits it only beside a
+    # `referent_class:`; one class, two sources, and this column is which one a row may answer.
+    referent_named: bool = False
+
+    def referents_of(self, q) -> tuple:
+        """THE REFERENTS OF QUESTION `q` A CANDIDATE OF THIS VERB MAY BE FORMED ON: `q`'s plain
+        referents when the row declares no `referent_class:`, else only those `q` carries as that
+        class (`Question.referents_for`). The one owner of the partition; `opening_set` iterates it."""
+        return q.referents_for(self.referent_class or None)
+
+    def self_counterparty_refused(self, other, actor) -> bool:
+        """IS `other`, ON THIS ROW'S COUNTERPARTY OPERAND, NO SECOND PARTY? Nobody (`None`) always;
+        the actor himself unless the row declares `counterparty_may_be_self`. The one owner of the
+        test `opening_set` (person-side) and `loop/resolve.py::_admits` (the fold) both ask."""
+        return other is None or (other == actor and not self.counterparty_may_be_self)
+
+    def known_person_operands(self) -> tuple:
+        """THE OPERANDS A CANDIDATE OF THIS ROW TAKES FROM SOMEBODY THE PERSON KNOWS, one bag per
+        person known (`decision/options.py::operand_bags`) -- the ONE owner, read by `operand_bags`
+        and `act_key`.
+
+        A TYPED row answers its cell's (`TypedRequires.known_person_operands`: `tell`'s and `give`'s
+        `to`, beside a bound `subject`). An UNTYPED row carries nothing, EXCEPT the one second party
+        it names that a known person can fill: its `counterparty:` where that is a
+        `known_person_operands` member (IN-53: `confer`'s `to`, the conferee, beside the office as
+        `subject`). Any other untyped counterparty (`oblige`'s `subject`) is filled by no known
+        person -- no fan; since IN-10 (a) `oblige`'s seat is the classed referent the Candidate is
+        formed on (`decision/options.py::_operands`). Read off the row's columns and the roster; no
+        verb name."""
+        if self.requires_typed is not None:
+            return self.requires_typed.known_person_operands()
+        return ((self.counterparty,)
+                if self.counterparty and self.counterparty in KNOWN_PERSON_OPERANDS else ())
 
     def precondition_evaluable(self, predicates) -> bool:
         """Can the fold evaluate this row's precondition: none at all, a typed cell, or a
@@ -474,6 +533,21 @@ def _derive_openers_from_effects() -> dict:
 _OPENERS_FROM_EFFECTS = _derive_openers_from_effects()
 
 
+def _record_kinds_answered(row: "VerbRow") -> Optional[frozenset]:
+    """THE RECORD KINDS ONE ROW ANSWERS A HELD DOCUMENT OF (IN-09): for a row declaring
+    `referent_class: Record`, the `kind` of every `existence` clause of `subject` in its typed cell
+    (`comply`: `dispensation`); `None` for a row declaring any other class or none. The ONE owner:
+    `_load_verb_table` refuses a `Record` row it leaves empty, and `_derive_record_referent_kinds`
+    unions it into the set `queries/world_q.py::writs_held` stamps by."""
+    if row.referent_class != "Record":
+        return None
+    if row.requires_typed is None:
+        return frozenset()
+    req = row.requires_typed.requirement
+    return frozenset(c.kind for c in (req.clauses if isinstance(req, AllOf) else (req,))
+                     if isinstance(c, Existence) and c.of == "subject")
+
+
 def _load_verb_table() -> dict:
     import yaml as _y
     if not VERB_TABLE_YAML.exists():
@@ -537,7 +611,10 @@ def _load_verb_table() -> dict:
                       str(r.get("counterparty") or "").strip(),
                       refusals_by_clause=by_clause,
                       effect_decline_note=str(r.get("effect_decline_note") or "").strip(),
-                      requires_decline_note=str(r.get("requires_decline_note") or "").strip())
+                      requires_decline_note=str(r.get("requires_decline_note") or "").strip(),
+                      referent_class=str(r.get("referent_class") or "").strip(),
+                      counterparty_may_be_self=r.get("counterparty_may_be_self", False),
+                      referent_named=r.get("referent_named", False))
         # THE COUNTERPARTY IS AN OPERAND THE ACT CARRIES, OR IT IS NOTHING. `opening_set` compares
         # it with the person; a name the typed cell does not BIND is absent from every Candidate,
         # so the comparison would pass silently and the rule would be a column nothing enforced.
@@ -556,6 +633,55 @@ def _load_verb_table() -> dict:
                 "`requires_typed:` cell does not bind (or, on an untyped row, which is no "
                 "`requires_operands` member). A counterparty is compared with the person forming "
                 "the Candidate, and only a bound operand is always carried.")
+        # IN-53: A REFERENT CLASS IS A DECLARED ONE, OR THE LOAD REFUSES. A class the roster does not
+        # name (a typo) would make the verb unformable from every question, silently -- the
+        # always-false membership test `rosters.yaml`'s header refuses.
+        if row.referent_class and row.referent_class not in REFERENT_CLASSES:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares referent_class {row.referent_class!r}, which "
+                f"is not a declared class (the classes are {sorted(REFERENT_CLASSES)}, from "
+                "`rosters.yaml: referent_classes`). `opening_set` forms the verb only on a "
+                "referent carried as that class, so an undeclared one never forms.")
+        # IN-09 (batch B-I close, layer-conformance, A7): A `Record` ROW NAMES THE RECORD KINDS IT
+        # ANSWERS, OR THE LOAD REFUSES. `writs_held` stamps a held Record only if its kind is one a
+        # `Record` row's typed cell asks `existence` of on `subject` (`RECORD_REFERENT_KINDS`, read
+        # off `_record_kinds_answered`); a row naming none, or naming a kind `rosters.yaml:
+        # record_kinds` does not hold, would be stamped nothing and never form -- a declared row read
+        # by nothing, which `04` §A.1's ID-13 row binds `data/` to raise on.
+        _kinds = _record_kinds_answered(row)
+        if _kinds is not None and (not _kinds or not _kinds <= RECORD_KINDS):
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares referent_class 'Record' and its "
+                f"`requires_typed:` cell names {sorted(_kinds) or 'no'} `existence` kind(s) of "
+                f"`subject` (the record kinds are {sorted(RECORD_KINDS)}). `writs_held` stamps a "
+                "held Record only of a kind such a clause names, so this row would never form.")
+        # IN-10 (a) / IN-53 D2: `referent_named` and `counterparty_may_be_self` ARE BOOLEANS -- a
+        # string `"false"` would read truthy.
+        for col in ("referent_named", "counterparty_may_be_self"):
+            if not isinstance(getattr(row, col), bool):
+                raise SystemExit(
+                    f"verb_table.yaml: {name!r} declares {col} {getattr(row, col)!r}; it is "
+                    "`true` or `false`")
+        # IN-10 (a): `referent_named` ONLY BESIDE A `referent_class:` -- on a row forming on plain
+        # referents it would decline nothing the class partition offered, a column read by nothing.
+        if row.referent_named and not row.referent_class:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares referent_named without a referent_class; the "
+                "column narrows a CLASSED referent to one the person's own ledger names "
+                "(`decision/options.py::opening_set`), and this row forms on plain referents.")
+        # IN-53 D2: `counterparty_may_be_self` ONLY ON A ROW THE FAN REACHES. On a row whose
+        # counterparty no known person fills (`oblige`'s `subject`, `petition`'s bound `to`) the
+        # person is never added to any bag, so the column would waive the fold's self-exclusion for
+        # hand-built acts alone -- a fiat admitted through the back door, which ED-IN-0210 ruling 1
+        # refuses. (An empty counterparty is no operand a known person fills.)
+        if row.counterparty_may_be_self and (
+                row.counterparty not in row.known_person_operands()):
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares counterparty_may_be_self, but its counterparty "
+                f"{row.counterparty!r} is not an operand a known person fills "
+                f"({list(row.known_person_operands())}). The column adds the person to that fan "
+                "(`decision/options.py::operand_bags`); on any other row it would only waive the "
+                "fold's self-exclusion.")
         # A row that declares `requires_typed: none` must SAY WHY. The three admissible reasons
         # are a well-formedness constraint on the Act (§F.24a: `issue`, `open_case` -- *"they
         # belong in the `Act` schema and are refused at construction"*), a `per act` cell, and an
@@ -895,8 +1021,8 @@ VERB_TABLE = _load_verb_table()
 def act_key(verb: str, subject, operands) -> str:
     """WHAT AN ACT'S ID IS OF, AFTER ITS VERB: `H(seed, tick, actor, f"act:{verb}:{act_key}")`.
     The subject, and -- for a row whose cell binds a known-person operand beside `subject`
-    (`TypedRequires.known_person_operands`: `tell`'s `to`, and since plan position `14` `give`'s) --
-    that operand too, as `subject>to`.
+    (`VerbRow.known_person_operands`: `tell`'s `to`, since plan position `14` `give`'s, and since IN-53
+    the untyped `confer`'s) -- that operand too, as `subject>to`.
 
     ⚠ TELLING WORKPLAN `T4`, AND IT IS MEASURED NECESSITY: one topic now forms one `tell` per person
     the teller knows, so two acts in one deliberation shared `(actor, verb, subject)` and therefore
@@ -915,8 +1041,8 @@ def act_key(verb: str, subject, operands) -> str:
     key = "" if subject is None else str(subject)
     row = VERB_TABLE.get(verb)
     ops = operands if isinstance(operands, dict) else {}
-    if row is not None and row.requires_typed is not None:
-        for n in row.requires_typed.known_person_operands():
+    if row is not None:
+        for n in row.known_person_operands():
             if ops.get(n) is not None:
                 key += f">{ops[n]}"
     if ops.get(VIA) is not None:
@@ -1094,6 +1220,20 @@ REFUSAL_KINDS = frozenset(k for r in VERB_TABLE.values() for k in r.emits_on_ref
 
 # Every kind a DEED claim can carry: emitted, and by no row on refusal (`is_deed`'s set).
 DEED_KINDS = EMITTED_KINDS - REFUSAL_KINDS
+
+
+def _derive_record_referent_kinds() -> frozenset:
+    """IN-09 (H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): THE RECORD KINDS
+    A HELD DOCUMENT IS AN OCCASION FOR -- the `kind` of every `existence` clause of `subject` on a row
+    declaring `referent_class: Record` (`comply`: `dispensation`). Read off
+    the rows that answer a held Record, so the stamp (`queries/world_q.py::writs_held`) and the cell
+    the fold asks cannot name different kinds, and no kind literal lives at the stamp site. Empty when
+    no row declares the class: then nothing is stamped. A row declaring it and naming no record kind
+    is refused at load (`_load_verb_table`), so the set is empty only when no row declares `Record`."""
+    return frozenset(k for row in VERB_TABLE.values() for k in (_record_kinds_answered(row) or ()))
+
+
+RECORD_REFERENT_KINDS = _derive_record_referent_kinds()
 
 # An authored alignment cell for an EVENT KIND rather than a verb is keyed `deed:<kind>` in the same
 # axis row. Admitted only where `<kind>` is in `EMITTED_KINDS` (`_load_alignment`): a deed key for a

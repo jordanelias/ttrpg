@@ -72,15 +72,20 @@ def test_world_carries_no_petitions_and_no_dispensations_store():
 
 
 def test_a_hold_on_a_dispensation_lands_on_a_record_the_sweep_recognises():
+    """RE-RECORDED AT IN-10 (c): the writ is minted into its ADDRESSEE's hand, and the issuer keeps
+    none (was: two addressees, held by the issuer `p_high`). One addressee, because a writ has one
+    holder; a writ to several stays with its maker (`_addressee`; `test_in10c_...`)."""
     w = P.tiny_world()
     act = P.Act_(w, w.persons["p_high"], "issue",
-                 payload={"subject": "prop_x", "to": ["p_low", "p_mid"]}, via="off_duke")
+                 payload={"subject": "prop_x", "to": ["p_low"]}, via="off_duke")
     _mint(w, act)
     rid = f"rec:{act.id}"
     rec = w.records[rid]
     assert rec.kind == "dispensation"
     h = hold_force(w, rid)
-    assert h is not None and h.subject == "p_high" and h.live, "the issuer does not hold the writ"
+    assert h is not None and h.subject == "p_low" and h.live, "the addressee does not hold the writ"
+    assert not any(t.subject == "p_high" and t.object == rid for t in w.tenures), (
+        "the issuer kept an edge on the writ he issued")
     assert rid in I._entities(w), "the sweep's entity set cannot see the writ"
     assert not I.tenure_referent(w), I.tenure_referent(w)
     # WHERE IT IS DRAWN UP: the issuer's seat's rung, off `Act.via` (r2 `03` §A.10).
@@ -126,8 +131,9 @@ def test_petition_and_issue_are_resolvable_and_carry_is_not():
     assert "issue" in rv, "`issue` has a typed precondition (position `19`) and an effect (`15`)"
     assert VERB_TABLE["issue"].requires_typed is not None
     assert "carry" not in rv, "`carry` writes `(DocketItem, matter)` and has no effect (`H-63`)"
-    for verb in ("issue", "petition"):
-        assert VERB_TABLE[verb].writes == ("Record.exists",), VERB_TABLE[verb].writes
+    # IN-10 (c): `issue` declares the addressee's `hold` it opens (somebody else's edge).
+    assert VERB_TABLE["issue"].writes == ("Record.exists", "Tenure.since"), VERB_TABLE["issue"].writes
+    assert VERB_TABLE["petition"].writes == ("Record.exists",), VERB_TABLE["petition"].writes
     # The derived opener map still sees the mint through the shared helper.
     assert {"confer", "create_record", "issue", "petition"} <= set(_OPENERS_FROM_EFFECTS["hold"])
 
@@ -217,10 +223,16 @@ def test_the_dispensation_artifact_runs_through_the_real_precondition(monkeypatc
     writ = writs[0]
     assert writ.subject_matter == {"terms": "prop_x", "to": ["p_low"], "at": None}, writ
     assert writ.rung == "D"
-    got = _content_claims(w.persons["p_high"], writ.id)
+    # RE-RECORDED AT IN-10 (c): the writ is minted into the ADDRESSEE's hand, so the content claim
+    # (the deposit for a new holder) is `p_low`'s, and the issuer -- who no longer holds it -- has
+    # none (was: `p_high`'s ledger, the issuer holding his own writ).
+    assert not _content_claims(w.persons["p_high"], writ.id)
+    got = _content_claims(w.persons["p_low"], writ.id)
     assert [c.predicate for c in got] == [f"{_CONTENT}:dispensation"], got
     assert dict(got[0].value) == {"terms": "prop_x", "to": ("p_low",), "at": None}, got[0].value
-    assert got[0].source.startswith("firsthand")
+    # The deposit carries the ADMITTING channel's source: `p_low` is not at the issuing seat's
+    # rung, so the writ reaches him `told_by` (was `firsthand`, the issuer present at his own act).
+    assert got[0].source == "told_by", got[0].source
 
 
 # ======================================================================================
