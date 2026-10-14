@@ -111,32 +111,24 @@ def _makers_hold(w: "World", actor: str, obj: str) -> Tenure:
     Tenure owned by the holder, never a field on the thing held), opened `since` this tick. The one
     owner of its construction: `_mint_document`'s Record and `_eff_utter`'s Proposition both mint it
     here. The id is `H(seed, tick, actor, f"hold:{obj}")`, unsalted by the act (a maker makes one
-    thing per id). ⚠ IN-10 (c): `actor` is the HOLDER -- the maker for every minter but `issue`,
-    whose writ opens in its addressee's hand (`_eff_issue`). ⚠ `"hold"` STAYS A STRING LITERAL IN THIS FILE: `data/verbs.py::OPENERS-DERIVE`
+    thing per id). ⚠ `"hold"` STAYS A STRING LITERAL IN THIS FILE: `data/verbs.py::OPENERS-DERIVE`
     walks a decorated effect into the same-file helpers it calls and reads the kind off the literal,
     so the six minters reaching this call -- `create_record`, `issue`, `open_case`, `petition`, `survey`
     (through `_mint_document`) and `utter` (through `_eff_utter`) -- remain `hold`'s openers.
 
-    ⚠ NONE OF THE SIX DECLARES `Tenure.since` IN ITS `writes:` -- EXCEPT `issue` SINCE IN-10 (c),
-    whose hold is its addressee's edge, not its maker's (`verb_table.yaml`'s `issue` row). The hold opens inside the declared
+    ⚠ NONE OF THE SIX DECLARES `Tenure.since` IN ITS `writes:`. The hold opens inside the declared
     `Proposition.exists` / `Record.exists` write, and only the authority check (`refuse_unauthored`)
     sees it. CONVENTION against `04` §C.2/§C.4 and PART D's rows on matrix and step: no scan sees it.
     Declaring it would add a gated write and move the hash, so it is not done."""
     return Tenure(H(w.world_seed, w.tick, actor, f"hold:{obj}"), actor, obj, "hold", since=w.tick)
 
 
-def _mint_document(w: "World", a: "Act", kind: str, content, rung: str,
-                   holder: Optional[str] = None) -> Change:
-    """THE ONE MINT: a `Record` of `kind` saying `content`, drawn up at `rung`, and `holder`'s
+def _mint_document(w: "World", a: "Act", kind: str, content, rung: str) -> Change:
+    """THE ONE MINT: a `Record` of `kind` saying `content`, drawn up at `rung`, and the maker's
     `hold` on it -- `create_record`, `issue` and `petition` are three readings of an act onto this
     body, which is r2 `02` §A.6's *one function, three registrations* with the kind supplied by the
     verb that knows it rather than by a table beside the effects (`OPENERS-DERIVE`'s precedent: the
     construction is the single owner of what a verb makes).
-
-    ⚠ IN-10 (c): THE HOLDER IS THE CALLER'S, LIKE THE KIND. It defaults to the maker (`a.actor`);
-    only `issue` passes one, the writ's addressee (`_eff_issue`): a dispensation is minted INTO THE HAND OF THE PERSON IT ORDERS, and the issuer keeps no edge (one holder per
-    Record, `give`'s convention). The addressee's edge is admitted at the gate under `founding`'s
-    newborn-`hold` clause (`state/gate.py`), the maker's under `T-m` as before.
 
     ⚠ THE ADDRESSEE KEY IS STORED AS AN ID LIST, whatever the act carried (`record_kinds.content.
     addressee`, r2 §A.9.1), so a petition to one person and a writ to five executors spell the
@@ -156,7 +148,7 @@ def _mint_document(w: "World", a: "Act", kind: str, content, rung: str,
         term = w.fixtures.get("record_stage_term")
         stages = [(w.tick + (i + 1) * term, f"stage{i + 1}", a.id) for i in range(n)]
     rec = Record(rid, rung, kind, subject_matter=content, stages=stages)
-    held = _makers_hold(w, a.actor if holder is None else holder, rid)
+    held = _makers_hold(w, a.actor, rid)
 
     def perform() -> None:
         w.records[rid] = rec
@@ -198,31 +190,8 @@ def _eff_issue(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     ⚠ A COMPUTED `issue` IS ADDRESSED TO WHAT IT IS ABOUT -- `terms` and `to` both bind the
     question's one referent (`H-94`'s single-referent limit), so its `terms` names the executor
     himself: a writ to a man about that man. `petition`'s row records the identical limit for the
-    identical reason, and `15c`'s held-writ `to` is what separates the two when a person holds one.
-
-    ⚠ IN-10 (c) (H-203, SCHEDULED 2026-10-12 [ASSUMPTION; medium; Jordan to correct]): THE WRIT
-    REACHES ITS ADDRESSEE. The `hold` opens on the act's `to` -- the executor the row's
-    `executors` conjunct asked to be a person -- and the issuer keeps none: one holder per Record
-    (`give`'s convention), and the person a writ orders is the one who can comply with, evade or
-    construe it, which needs it in his hand (H-203: of 18 writs, none was held by its addressee).
-    The edge is admitted at the gate under `founding`'s newborn-`hold` clause. ONE executor: a list
-    of one collapses, and a writ to several stays in its maker's hand as before (`_addressee`,
-    `_from_content_claim`'s singleton rule one seam over: which of several is unruled).
-    REVERT: pass no holder here, as every other minter does (and drop the gate clause)."""
-    content = _content_of(a, "dispensation")
-    return _mint_document(w, a, "dispensation", content, _seat_rung(w, a), _addressee(a))
-
-
-def _addressee(a: "Act") -> str:
-    """THE ONE HAND A WRIT IS MINTED INTO: the act's `to`, a singleton list collapsed. A writ to
-    SEVERAL executors (r2 `02` §A.3's list; probe `F5`, a hand-built act -- the fold refuses a list at
-    the `executors` conjunct) names no one holder, and WHICH of several is unruled, so it DECLINES
-    to the maker, as before IN-10: `decision/options.py::_from_content_claim`'s singleton rule (one
-    is not a choice; more than one declines), one seam over. A missing `to` raises (`_operand`)."""
-    to = _operand(a, "to")
-    if isinstance(to, (list, tuple)):
-        return to[0] if len(to) == 1 else a.actor
-    return to
+    identical reason, and `15c`'s held-writ `to` is what separates the two when a person holds one."""
+    return _mint_document(w, a, "dispensation", _content_of(a, "dispensation"), _seat_rung(w, a))
 
 
 @effect_for("open_case")

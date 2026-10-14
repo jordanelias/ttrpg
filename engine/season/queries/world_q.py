@@ -1579,9 +1579,11 @@ def writs_held(w: World, p: Person) -> tuple:
     """THE WRITS `p` HOLDS (v9 IN-09, H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to
     correct]), sorted by id: the Records on `p`'s own live `hold` edges whose kind a row declaring
     `referent_class: Record` answers (`data/verbs.py::RECORD_REFERENT_KINDS`, `dispensation`). #453
-    `:502`: *"the executor holds the writ ... `comply` forms on the held writ"*; since IN-10 (c) a
-    writ is minted into its addressee's hand, so this is the order he was given. `()` for nearly
-    everyone (three writs are issued in four realm seasons).
+    `:502`: *"the executor holds the writ ... `comply` forms on the held writ"*. ONLY A WRIT THAT
+    NAMES HIM: a writ is minted into its maker's hand (the writ-to-addressee mint, IN-10 (c), was
+    refused 2026-10-14: the user, ED-IN-0292 (1), *"just say no for now"*), so a holder who is not
+    in the writ's addressee list is the issuer or a custodian, not the person the writ orders, and
+    is offered nothing. A writ reaches its addressee only by a `give`. `()` for nearly everyone.
 
     A STANDING OCCASION, `vacancies`' shape: resolver-side and read-only, it supplies Record IDS,
     which `questions_for` adds to the question the person answers as CLASSED referents, and whether
@@ -1589,9 +1591,13 @@ def writs_held(w: World, p: Person) -> tuple:
     the writ). It reads `p`'s own edges and the store only for the kinds of the Records they name.
     ⚠ NO 'ALREADY ANSWERED' DECLINE: a holder who complied once is offered the writ again while he
     holds it -- the scene tax IN-10 (a) recorded for a repeated `oblige` (H-203)."""
+    def _addressees_of(rec) -> tuple:
+        sm = rec.subject_matter
+        return tuple(sm.get(RECORD_CONTENT.get("addressee")) or ()) if isinstance(sm, dict) else ()
     return tuple(sorted({t.object for t in p.tenures
                          if t.kind == "hold" and t.live and t.object in w.records
-                         and w.records[t.object].kind in RECORD_REFERENT_KINDS}))
+                         and w.records[t.object].kind in RECORD_REFERENT_KINDS
+                         and p.id in _addressees_of(w.records[t.object])}))
 
 
 def _stamped(q: Question, added: tuple, w: World) -> Question:
