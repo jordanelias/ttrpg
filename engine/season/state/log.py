@@ -41,10 +41,11 @@ class EventLog:
     """Append-only event log with provenance checks. Indexable, iterable, reversible."""
 
     # roster-exempt: MECHANISM -- the log's own private attributes, as on `state/gate.py`.
-    __slots__ = ("_events", "_ids", "_gate", "_act_ids")
+    __slots__ = ("_events", "_ids", "_gate", "_act_ids", "_on_append")
 
     def __init__(self, gate: Any = None,
-                 act_ids: Optional[Callable[[], frozenset]] = None) -> None:
+                 act_ids: Optional[Callable[[], frozenset]] = None,
+                 on_append: Optional[Callable[[Event], None]] = None) -> None:
         self._events: list[Event] = []
         self._ids: set[str] = set()
         self._gate = gate
@@ -53,6 +54,12 @@ class EventLog:
         # store can walk it), and the act ids change as RESOLVE folds. A thunk reads them at
         # append time without the log knowing what produced them.
         self._act_ids = act_ids or (lambda: frozenset())
+        # IN-56. A CALLABLE, FOR THE SAME REASON AS `act_ids`: the owner of a LOG INDEX (`World`'s
+        # last-emission maps) needs the act store to key an Event by what it is about
+        # (`anchor_of`), and this module may read nothing (`04` §A.2). The log tells its owner an
+        # Event was appended and reads nothing to do it. Every append -- `append`, `extend`, a
+        # probe's direct `w.log.append` -- passes the one line below, so no site can bypass it.
+        self._on_append = on_append
 
     def append(self, ev: Event) -> None:
         if not isinstance(ev, Event):
@@ -72,8 +79,14 @@ class EventLog:
                             "is an Event reporting a state change that did not happen, which "
                             "is ID-9's own worked example")
 
-        known = self._ids | self._act_ids() | {ROOT}
-        unresolvable = [c for c in ev.causes if c not in known]
+        # IN-56. MEMBERSHIP, NOT A UNION. The line this replaced built `self._ids | self._act_ids()
+        # | {ROOT}` -- a copy of every id in the log -- on every append (18.7 s of a 19.3 s profile).
+        # The refusal is unchanged: a cause is resolved if it is ROOT, a prior Event id or an act id;
+        # `self._act_ids()` is evaluated once, and only when some cause is neither.
+        unresolvable = [c for c in ev.causes if c != ROOT and c not in self._ids]
+        if unresolvable:
+            act_ids_now = self._act_ids()
+            unresolvable = [c for c in unresolvable if c not in act_ids_now]
         if unresolvable:
             raise Forbidden(
                 f"Event {ev.id!r} ({ev.kind}) names cause(s) that resolve to nothing: "
@@ -86,6 +99,8 @@ class EventLog:
 
         self._events.append(ev)
         self._ids.add(ev.id)
+        if self._on_append is not None:
+            self._on_append(ev)
 
     # -- the list surface every existing reader already uses -------------------------------
     def __iter__(self) -> Iterator[Event]:
