@@ -303,13 +303,64 @@ def purview_reaches(w: "World", seat: Office, rung: Optional[str]) -> bool:
     §A.6 measured the one-rung difference). EXCLUSIVE ON THE SEAT is not decided here: that is a
     property of what is being done (`may_fill` refuses `via == the seat filled`), not of purview.
 
-    ⚠ A SEAT WITH NO RUNG REACHES NOTHING, and a rung of `None` is reached by nothing. The cluster
-    seat (`Office.rung is None`, S6.2) has no ground, so it has purview nowhere -- a CONTENT fact
-    about such a seat, not a permission failure. ⚠ AND IT DOES NOT ASK DIRECTION UPWARD: a Duke has
-    no purview over the realm above him. Upward reach is petition, never purview."""
-    if seat.rung is None or rung is None:
+    ⚠ A SEAT WITH NO RUNG REACHES NOTHING BY ITS OWN GROUND, and a rung of `None` is reached by
+    nothing. The cluster seat (`Office.rung is None`, S6.2) has no ground, so by rung containment it
+    has purview nowhere -- a CONTENT fact about such a seat, not a permission failure. (The oblige
+    clause below is the one way such a seat reaches anything: by a sworn holder's ground, not its
+    own.) ⚠ AND IT DOES NOT ASK DIRECTION UPWARD: a Duke has no purview over the realm above him.
+    Upward reach is petition, never purview.
+
+    ⚠ THE OBLIGE CLAUSE (v9 IN-40, `H-101` -- vassalage across factions, #453 §7.2). A seat ALSO
+    reaches the ground of every seat whose holder owes IT a live `oblige` (`sworn_to`, below): that
+    held seat's rung and its descendants, exactly the first disjunct asked of the sworn holder's
+    seat. NO STORED PARENT: `H-101`'s cite rejects one (*a static parent field would freeze the
+    pre-detachment state as permanent*), so "under" is read off an edge the SUBORDINATE owns -- the
+    swearer's own `oblige : Person -> Office`. It is still not upward: the edge is the vassal's act,
+    read DOWNWARD from the seat sworn to; the swearer's own seat gains nothing over the seat he swore
+    to, and a seat nobody has sworn to reaches nothing new. A DETACHMENT is the edge ceasing to be
+    live -- the swearer's `release`, or its `term` maturing at MATTER unrenewed (#453 `:1389-1391`)
+    -- after which the same question answers no, with nothing else written: the Ehrenwall Split.
+      * ONE EDGE DEEP [ASSUMPTION; medium; Jordan to correct; revert: recurse through
+        `purview_reaches` of each held seat instead of `_ground_reaches`]. A vassal's own sworn
+        vassals are NOT reached through him: the vassal's vassal swore to the vassal's seat, not to
+        this one, and the edge is the swearer's act -- "the vassal of my vassal is not my vassal".
+        What the vassal's ground CONTAINS is reached (the first disjunct, asked of his seat), so a
+        sworn Grandmaster's commanderies inside his rung are reached; a lord who swore to the
+        Grandmaster from ground outside it is not. Non-recursive, so a cycle of mutual `oblige`s
+        terminates by construction.
+      * ANY HELD SEAT OF THE SWEARER (a live `hold` on an Office), not only one: the edge is sworn
+        by the PERSON (#453 `:2076`, *"the Grandmaster forswore the King"*), and his seats are
+        what he brings. A swearer who holds no seat brings no ground -- an establishment member
+        or a council member who holds nothing extends no purview."""
+    if rung is None:
+        return False
+    if _ground_reaches(w, seat, rung):
+        return True
+    return any(_ground_reaches(w, w.offices[h.object], rung)
+               for t in sworn_to(w, seat.id)
+               for h in w.tenures
+               if h.kind == "hold" and h.live and h.subject == t.subject and h.object in w.offices)
+
+
+def _ground_reaches(w: "World", seat: Office, rung: str) -> bool:
+    """THE CONTAINMENT DISJUNCT, ONCE: `rung` is `seat`'s own rung or one of its `descendants`. A
+    rungless seat has no ground. `purview_reaches` asks it of the seat exercised and, under the oblige
+    clause, of each seat a sworn holder holds -- never recursively."""
+    if seat.rung is None:
         return False
     return rung == seat.rung or rung in descendants(w, seat.rung)
+
+
+def sworn_to(w: "World", seat_id: Optional[str]) -> list:
+    """THE LIVE `oblige` EDGES SWORN TO A SEAT -- every live `oblige` Tenure whose OBJECT is `seat_id`,
+    in `w.tenures` order. ONE WALK, TWO READERS: `purview_reaches`' oblige clause (v9 IN-40) and
+    `queries/world_q.py::establishment_of` (the persons obliged to a seat), which composes on it. It
+    lives here, not in `queries/`, because the gate asks it and `state/` may not import `queries/`
+    (`ancestry`'s move to `state/containment.py`, plan position `19`, is the precedent); `world_q`
+    re-exports it as its Query. `[]` for an unknown seat or `None`."""
+    if seat_id is None:
+        return []
+    return [t for t in w.tenures if t.kind == "oblige" and t.object == seat_id and t.live]
 
 
 def seated_on_the_rung_above(w: "World", seat: Office, off: Office) -> bool:

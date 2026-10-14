@@ -59,6 +59,11 @@ from ..state.containment import ancestry, home_of  # noqa: F401 -- re-exported
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
 from ..state.gate import BENCH_BASIS, may_determine, may_fill, purview_reaches, sits_over
+# ⚠ AND `sworn_to` BY THE SAME ROUTE (v9 IN-40, `H-101`): THE QUERY OF THE LIVE `oblige` EDGES SWORN
+# TO A SEAT. `purview_reaches`' oblige clause asks it, and the gate may not import this module, so
+# its one body lives in `state/gate.py`; `world_q.sworn_to is gate.sworn_to`. `establishment_of`
+# (below) composes on it.
+from ..state.gate import sworn_to  # noqa: F401 -- re-exported
 from ..state.ids import ROOT, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
@@ -590,8 +595,13 @@ def reach(w: World, p: Person) -> set[str]:
 def governors_of(w: World, rung_id: Optional[str]) -> list[str]:
     """v9 IN-22 (#457 `CARRY-SHORTFALL`, `H-160` limit 2) -- THE PERSONS WHOSE SEAT'S PURVIEW REACHES
     `rung_id`: every live `hold` on an Office for which `state/gate.py::purview_reaches` answers
-    True, by its holder, sorted. `[]` for a rung no seat reaches, for `None`, and for a rungless
-    seat's holder (`purview_reaches`' own *a seat with no rung reaches nothing*).
+    True, by its holder, sorted. `[]` for a rung no seat reaches and for `None`; a rungless seat's
+    holder is listed only through `purview_reaches`' oblige clause (v9 IN-40), never by its own ground.
+
+    ⚠ v9 IN-40: WHERE THE OBLIGE CLAUSE FIRES, THIS IS WIDER THAN `reach`'s LIMB 4, which may not read
+    another person's tenures and so cannot see a sworn holder's seats. A superior listed here for his
+    vassal's ground is deposited a claim no question of his admits. Measured inert in `build_realm(0)`
+    (its one live `oblige`'s swearer holds no seat); named, not repaired, at IN-40.
 
     ⚠ THE SAME RELATION AS `reach`'s LIMB 4, ASKED FROM THE RUNG'S SIDE. Limb 4 unions
     `{seat.rung} | descendants(seat.rung)` over the person's own holds, and `purview_reaches` is
@@ -1491,8 +1501,9 @@ def establishment_of(w: World, office_id: str) -> list[str]:
     the size is however many have obliged. `ARCH §B.7` call 2 rejected that number by name (*"a
     number nobody can source"*); closed in `hole_register.yaml` at `17a`."""
     TRACE.query("establishment_of", "resolver")
-    return [t.subject for t in w.tenures
-            if t.kind == "oblige" and t.object == office_id and t.live and t.subject in w.persons]
+    # v9 IN-40: the walk is `sworn_to`'s (`state/gate.py`, re-exported at the import block), shared with
+    # `purview_reaches`' oblige clause, so *who is sworn to this seat* has one answer.
+    return [t.subject for t in sworn_to(w, office_id) if t.subject in w.persons]
 
 
 def upkeep_of(w: World, office_id: str) -> int:

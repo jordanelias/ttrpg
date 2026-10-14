@@ -2021,6 +2021,15 @@ rows:
       If a Cardinal is under the Confessor, the Confessor's purview reaches that seat; after
       Jarnstal Drift 3 it does not. Today `office.faction` answers Löwenritter and nothing can ask
       what that is under, so the purview test cannot tell the two states of either event apart.
+      ⚠ v9 IN-40 BUILT THE ACROSS-FACTION READING, WITH NO STORED PARENT: `purview_reaches`'
+      oblige clause (`engine/season/state/gate.py`) -- a seat also reaches the ground of every seat
+      whose holder owes it a live `oblige` (`sworn_to`, re-exported as `world_q.sworn_to`), one edge
+      deep [ASSUMPTION; medium; Jordan to correct]. The clause is scale-blind (any Office, rung or
+      cluster), so the Split and the Drift are the same event: the swearer's `release`, or the term
+      maturing unrenewed at MATTER, after which the purview test tells the two states apart
+      (`engine/season/tests/test_in40_oblige_purview.py`). The grade is left as filed: no fixture
+      sweeps the chain depth, so R2's three points are not available. Still open: `world_q.reach`
+      limb 4 and `faction_q.purview` re-derive the containment walk and do not see the clause.
     source: Jordan 2026-09-02 -- "the ability to be under", extended to offices
 
 
