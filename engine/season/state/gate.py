@@ -280,7 +280,9 @@ def seat_hold(w: "World", actor: Optional[str], via: Optional[str]) -> Optional[
 
     ⚠ A `hold` AND NOTHING ELSE SEATS A PERSON TODAY. `04:332` says *"a regent has the seat's
     purview"*, and no relation in the tree makes a person a seat's regent (`oblige`, `04 §B.7`
-    call 2's council membership, has no effect and no reader here). So a regent is expressible only
+    call 2's council membership, seats nobody; ⚠ SINCE v9 IN-40 a live, non-imposed `oblige` to a
+    seat IS read, by `purview_reaches`' oblige clause, as vassalage -- a delegation carrier built
+    on it would also extend the delegated seat's purview over the delegate's own ground). So a regent is expressible only
     as a holder; delegation without a `hold` is `H-108`'s, still open, and this does not close it.
     Returned as the Tenure, not the Office, because `_eligible`'s remit branch reads the GRANT the
     holder has (`Tenure.granted_acts`, the `13e` snapshot), not the office's live remit."""
