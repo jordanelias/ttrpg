@@ -28,7 +28,7 @@ from __future__ import annotations
 from typing import Optional
 
 from ..data.requires import binding_from_act
-from ..data.rosters import BINDS_BASES, RELEASABLE_KINDS, RUNG_KINDS
+from ..data.rosters import BINDS_BASES, DELEGATE_KIND, RELEASABLE_KINDS, RUNG_KINDS, SEAT_KINDS
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..queries.world_q import BAN_KIND, restrained
 from ..state.carriers import Office, subject_of
@@ -40,7 +40,7 @@ from ..state.carriers import Office, subject_of
 # here and the gate there cannot disagree (`CLAUDE.md` §8) -- and a `monkeypatch` of this module's
 # `has_conferral_basis` still reaches both preconditions that call it by that name.
 from ..state.gate import (  # noqa: F401 -- `REVOCATION_RULES`, `in_holdings`, `seated_on_the_rung_above` re-exported
-    REVOCATION_RULES, has_conferral_basis, in_holdings, may_fill, may_revoke,
+    REVOCATION_RULES, has_conferral_basis, in_holdings, may_delegate, may_fill, may_revoke,
     seated_on_the_rung_above)
 
 
@@ -123,6 +123,23 @@ def _req_confer(w: "World", a: "Act") -> bool:
     if not obj or not isinstance(obj, str) or obj not in w.offices:
         return False                       # (a list `subject`/`office` is unhashable: refuse, never raise)
     off = w.offices[obj]
+    # v9 IN-48 (H-108's delegation half): A `confer` NAMING ITS OWN SEAT DELEGATES IT. Taken BEFORE the
+    # conferral basis, because a delegation does not FILL the seat (most confer-granting seats declare
+    # `conferral: None`, and their holders may still delegate). Admitted on four tests: `to` is a
+    # living person; `to` is not banned (`_eff_confer`'s rule, asked early); `to` holds no live seat
+    # edge (`hold` or `delegate`) on the seat; and `may_delegate`, the gate's own predicate. The
+    # standing tests live HERE and not in `may_delegate`, so a CLOSURE is never refused because the
+    # delegate's standing changed after the opening.
+    if obj == a.via:
+        delegate = binding_from_act(a).get("to")
+        if not isinstance(delegate, str) or delegate not in w.persons:
+            return False
+        if restrained(w, delegate, BAN_KIND):
+            return False
+        if any(t.kind in SEAT_KINDS and t.subject == delegate and t.object == obj and t.live
+               for t in w.tenures):
+            return False
+        return may_delegate(w, a.actor, a.via, off, delegate)
     if not has_conferral_basis(off):
         return False                       # no conferral basis: the office cannot be conferred
     # Batch B-I close (C1): THE CONFEREE IS A LIVING PERSON. `to` comes from the conferrer's own
@@ -428,6 +445,17 @@ def _req_revoke(w: "World", a: "Act") -> bool:
     if not obj or obj not in w.offices:
         return False
     off = w.offices[obj]
+    # v9 IN-48: A `revoke` OF ITS OWN SEAT NAMING A `to` DISMISSES A DELEGATE -- the holder's closing
+    # arm of the `delegation` basis, asked through `may_delegate` (so a delegate cannot dismiss a
+    # co-delegate), and admitted only if `to` has a live `delegate` edge on the seat. HAND-BUILT ONLY:
+    # the row declares no `counterparty:`, so no computed act carries a `to`. A `revoke` naming its own
+    # seat with NO `to` takes the path below and refuses there exactly as before.
+    if obj == a.via and "to" in d:
+        to = d.get("to")
+        if not isinstance(to, str) or not may_delegate(w, a.actor, a.via, off, to):
+            return False
+        return any(t.kind == DELEGATE_KIND and t.subject == to and t.object == obj and t.live
+                   for t in w.tenures)
     # ⚠ G3: THE WRITE GATE'S T-o PREDICATE, ASKED EARLY -- `may_revoke` is `seat_hold` (`via`
     # present, the actor seated in it) + the basis on the roster (`None` or off-roster: the seat
     # cannot be stripped) + the rule that basis names, asked of `via`'s seat. Before G3 the rule

@@ -177,6 +177,7 @@ verbs:
     writes_note: "IN-10 (b) (#453 §7.2 `:1382`, §9.6 `:2071`: 'the edits are `_eff_confer` and the row's `writes:`'): `Tenure.term` ADDED, on `oblige`'s precedent (plan position `17b`) -- `_eff_confer` opens the seat-hold WITH the term the act declares (`loop/effects_governance.py::_declared_term`, the payload's `term`, a length in seasons; `Term(tick + n, act)`), so undeclared that write would ride under `Tenure.since`'s gate. Check-only, like the second pair. A computed `confer` declares none and opens an untermed hold exactly as before; a termed one is REGENCY or a TERM-LIMITED SEAT, matured at MATTER (`loop/matter.py`'s term branch) under `T-n`, which leaves the seat vacant. The conferral basis admits the opened edge whole (`state/gate.py`). LIMIT carried from #453: the effect still closes EVERY live hold on the seat, so a termed regent displaces the principal; delegation without a hold is IN-48's. [ASSUMPTION; medium; Jordan to correct -- the term's source: an act-declared payload length, `create_record`'s `stages` precedent, since no operand of the closed eight and no live Record kind carries one. REVERT: drop this pair and `_declared_term`.]"
     emits:       ["tenure.opened", "tenure.closed"]
     emits_on_refusal: ["confer.refused"]
+    delegation_note: "v9 IN-48 (H-108's delegation half). A `confer` whose `office` IS its own `via` DELEGATES the seat rather than filling it: `_req_confer` takes that branch before the conferral basis (a delegation does not fill the seat) and admits it when the conferee is a living, unbanned person holding neither a `hold` nor a `delegate` on the seat and `state/gate.py::may_delegate` holds (the actor HOLDS the seat -- a delegate cannot delegate further -- and names someone else); `_eff_confer` then opens a `delegate` edge (Person -> Office) for `to`, closing nothing, with the act's declared `term` and an optional declared `acts` subset (intersected with the seat's live remit at opening). The gate admits it under `delegation`. On the ordinary branch, seating a person closes his own live `delegate` edge on that seat (`conferral`'s closing arm). NO COMPUTED ACT TAKES THE BRANCH: `decision/options.py::opening_set` forms no Candidate of a delegate-opening verb on the seat it would be exercised through (the DECLINE, [ASSUMPTION; medium; Jordan to correct; revert: allow once a person-side reason to delegate exists])."
     grade:       "ruled"
     eligibility_note: "⚠ W3 AUDIT: §E3's eligibility cell carried a PRECONDITION as well as the remit act — `remit:confer + ...`. The fold split on the first `:` and tested the whole tail against the remit roster, so it NEVER MATCHED and a holder of the remit was silently refused. The act is the eligibility; the basis is a `requires`."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
@@ -825,7 +826,7 @@ verbs:
     beneficiary: "subject"
     requires:    "a live tenure of a releasable kind, owned by the actor, toward the subject"
     requires_typed: none
-    domain:      [hold, commit, oblige, succeed, tie, knot]
+    domain:      [hold, commit, oblige, succeed, tie, knot, delegate]
     writes:      ["Tenure.until"]
     emits:       ["tenure.closed", "commitment.ended"]
     emits_on_refusal: ["release.refused"]
@@ -869,6 +870,7 @@ verbs:
     writes:      ["Tenure.until"]
     emits:       ["tenure.closed"]
     emits_on_refusal: ["revoke.refused"]
+    delegation_note: "v9 IN-48 (H-108's delegation half). A `revoke` whose `office` IS its own `via` AND whose payload names a `to` DISMISSES that person's `delegate` edge on the seat -- the holder ending a delegation -- and closes nothing else, never a `hold` (`_req_revoke` and `_eff_revoke`'s branch, the gate's `delegation` basis). HAND-BUILT ONLY: the row declares no `counterparty:`, so no computed act carries a `to`. A `revoke` naming its own `via` with no `to` takes the ordinary path and refuses there exactly as before (a seat is never on the rung above itself)."
     grade:       "ruled"
     eligibility_note: "⚠ W3 AUDIT: §E3's eligibility cell carried a PRECONDITION as well as the remit act — `remit:revoke + ...`. The fold split on the first `:` and tested the whole tail against the remit roster, so it NEVER MATCHED and a holder of the remit was silently refused. The act is the eligibility; the basis is a `requires`."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"

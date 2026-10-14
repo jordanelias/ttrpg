@@ -36,7 +36,7 @@ from typing import Callable, Optional
 from ..data.requires import UNKNOWN, binding_from_act
 from ..data.rosters import (
     BAN_KIND, DETAIN_KIND, FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
-    RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, TENURE_KINDS,
+    RESTRAINT_KINDS, RUNG_KINDS, SEAT_KINDS, SITE_KINDS, TENURE_KINDS,
 )
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows.
 from ..data.verbs import RECORD_REFERENT_KINDS
@@ -64,6 +64,20 @@ from ..state.gate import BENCH_BASIS, may_determine, may_fill, purview_reaches, 
 # its one body lives in `state/gate.py`; `world_q.sworn_to is gate.sworn_to`. `establishment_of`
 # (below) composes on it.
 from ..state.gate import sworn_to
+# v9 IN-48: `seat_hold`, THE ONE OWNER OF *WHO SITS IN A SEAT* -- a `hold`, or a `delegate` edge while
+# the seat has a live `hold` (dormancy). The seat readers below that widen to `SEAT_KINDS` ask it of a
+# `delegate` edge, so a dormant delegate gains nothing (`_sits_through`).
+from ..state.gate import seat_hold
+
+
+def _sits_through(w: World, t: Tenure) -> bool:
+    """v9 IN-48 (A4) [ASSUMPTION; medium; Jordan to correct; revert: these readers stay `hold`-only]:
+    WHETHER THE SEAT EDGE `t` IS ONE ITS OWNER SITS THROUGH NOW. A live `hold` always is (exactly the
+    test these readers made before); a live `delegate` edge only where `seat_hold` returns it -- the
+    seat has a live `hold`, and the delegate holds none himself. Anything else is not."""
+    if not t.live or t.kind not in SEAT_KINDS:
+        return False
+    return t.kind == "hold" or seat_hold(w, t.subject, t.object) is t
 from ..state.ids import ROOT, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
@@ -584,7 +598,9 @@ def reach(w: World, p: Person) -> set[str]:
     while cur is not None and cur not in seen:
         R.add(cur); seen.add(cur); cur = parent_of(w, cur)
     for t in p.tenures:
-        if t.kind == "hold" and t.live and t.object in w.offices:
+        # v9 IN-48 (A4): the seat's knowledge goes with its exercise -- a delegate's seat reaches too,
+        # through `seat_hold`'s dormancy rule (`_sits_through`).
+        if t.object in w.offices and _sits_through(w, t):
             rg = w.offices[t.object].rung
             if rg is not None:
                 R.add(rg); R.update(descendants(w, rg))
@@ -617,9 +633,11 @@ def governors_of(w: World, rung_id: Optional[str]) -> list[str]:
     (`01` §A.4.4) and is not called from WITNESS."""
     if rung_id is None:
         return []
+    # v9 IN-48 (A4): a live seat edge its owner sits through (`_sits_through`: a `hold`, or a
+    # non-dormant `delegate`) -- the same widening `reach`'s limb 4 takes, so the two stay one relation.
     return sorted({t.subject for t in w.tenures
-                   if t.kind == "hold" and t.live and t.subject in w.persons
-                   and t.object in w.offices
+                   if t.kind in SEAT_KINDS and t.live and t.subject in w.persons
+                   and t.object in w.offices and _sits_through(w, t)
                    and purview_reaches(w, w.offices[t.object], rung_id)})
 
 
@@ -1610,8 +1628,11 @@ def vacancies(w: World, p: Person) -> tuple:
     it forms on a told-of seat `may_fill` would refuse (or one he holds) too, and the fold refuses it
     there at the cost of a scene (batch B-I close, C4; H-207). A seat he holds himself is refused as
     a no-op by `_req_confer` (Phase 3 F1: conferring a seat on its own holder)."""
+    # v9 IN-48: a seat `p` sits through as a delegate fills vacancies as the holder's would (`may_fill`
+    # reads `seat_hold`, which admits him), so it is listed too -- dormant, it is not (`_sits_through`).
     seats = [t.object for t in p.tenures
-             if t.kind == "hold" and t.live and t.object in w.offices and "confer" in t.granted_acts]
+             if t.kind in SEAT_KINDS and t.live and t.object in w.offices
+             and "confer" in t.granted_acts and _sits_through(w, t)]
     if not seats:
         return ()
     held = {t.object for t in w.tenures if t.kind == "hold" and t.live}

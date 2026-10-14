@@ -121,7 +121,15 @@ rosters:
       `oblige` (#453 §8.3). Their readers: `move`/`migrate` decline a person holding a live `detain`,
       a mustered army excludes him (`loop/sides.py`), `oblige` refuses a `ban` holder service and
       `confer` declines to seat one.
-    values: [hold, contain, commit, oblige, succeed, tie, knot, reside, detain, ban]
+      ⚠ `delegate` (Person -> Office) IS THE ELEVENTH, ADDED AT v9 IN-48 (H-108's delegation half):
+      a seat exercised by someone who does not hold it -- a regent beside a living principal, a
+      governor. The seat's sitting holder opens it through that seat (a `confer` whose `office` is its
+      own `via`, the gate's `delegation` basis); it carries the seat's grant (or a subset declared at
+      opening); `state/gate.py::seat_hold` reads it only while the seat has a live `hold`. A kind and
+      not an `oblige` with a marker, on the `detain`/`ban` model: an `oblige` is opened by its owner
+      and closed by no obligee, so the delegate would write his own delegation and the principal
+      could not end it. It IS in `release`'s domain (a delegate may lay the office down).
+    values: [hold, contain, commit, oblige, succeed, tie, knot, reside, detain, ban, delegate]
     # ⚠ LOADER INVARIANT 6's SECOND HALF (`04 §B.13 #6`, `04:466-467`, `ID-14`): every kind's OPENER
     # set is declared. THIS ROW USED TO CARRY THE MAPPING BY HAND -- `openers: {hold: [confer,
     # create_record], contain: [move], commit: [], oblige: [], succeed: [], tie: [], knot: []}` --
