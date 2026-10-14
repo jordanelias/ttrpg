@@ -16,6 +16,7 @@ from typing import Optional
 from ..data.rosters import RELEASABLE_KINDS
 from ..gaps import InstrumentDefect
 from ..loop.predicates import office_described_by, office_named_by
+from ..queries.world_q import BAN_KIND, restrained
 from ..state.carriers import Tenure, Term
 from ..state.gate import NO_CHANGE, Change, Subject
 from ..state.ids import H
@@ -94,6 +95,14 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     # act first (`confer.refused`), so the raise is only the backstop.
     obj, to = office_named_by(a), _operand(a, "to")
     if not obj or obj not in w.offices:
+        return NO_CHANGE
+    # v9 SC-03a (#453 §10.4 step 3, §8.1 Excommunication): A BANNED PERSON IS NOT SEATED. The
+    # conferee holds a live `ban` (`world_q.restrained`, the restraint's one read), so the act
+    # declines and the fold emits the row's refusal. An EFFECT decline and not `may_fill`: that
+    # predicate decides the CONFERRER's authority through his seat, never the conferee's standing
+    # (#453 K-53). ANY seat [ASSUMPTION; medium; revert: ask the banning seat's purview of
+    # `obj`'s rung].
+    if restrained(w, to, BAN_KIND):
         return NO_CHANGE
     closed = [t for t in w.tenures if t.kind == "hold" and t.object == obj and t.live]
     # IN-10 (b) (#453 §7.2/§9.6 `:1382`, `:2071`): A SEAT-HOLD MAY CARRY A TERM -- regency, the

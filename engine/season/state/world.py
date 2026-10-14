@@ -320,9 +320,9 @@ class World:
             raise Unowned(
                 f"tenure {t.id!r} has kind {t.kind!r}, which is not on the roster",
                 "S15", needs=f"a kind from rosters.yaml: tenure_kinds {sorted(TENURE_KINDS)}",
-                law="#353 §15 -- the Tenure kinds (its seven, and `reside` since plan position "
-                    "`19c`) are a CLOSED set. An unrostered kind is "
-                    "not an error at write time and a silent never-match at read time")
+                law=f"#353 §15 -- the Tenure kinds ({len(TENURE_KINDS)} on the roster, "
+                    f"`rosters.yaml: tenure_kinds`) are a CLOSED set. An unrostered kind is "
+                    f"not an error at write time and a silent never-match at read time")
         if t.kind == "hold":
             self._refuse_bad_hold(t)
             self._grant_remit(t)

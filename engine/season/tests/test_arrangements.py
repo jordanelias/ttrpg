@@ -2,9 +2,9 @@
 
 Falsifiers named by the source docs this position builds from (`21_RECONCILIATION.md` PHASE 2 step
 6, `19_PLAN.md` step 11, `03_PARAMETERS.md` PART D): a fourteenth key fails naming the row; a
-declared-disposal row with no quorum fails the load; a thirteenth (here: a fourth) arrangement
-loads with no code change; a speech-kind whose reachable bands name a band outside the ladder fails
-to load. Scoped to the THREE seeded games (`arrangements.yaml`'s own header states why not all
+declared-disposal row with no quorum fails the load; a thirteenth (here: another, beyond the
+seeded rows) arrangement loads with no code change; a speech-kind whose reachable bands name a band outside the ladder fails
+to load. Scoped to the SEVEN seeded games (three until v9 SC-03a; `arrangements.yaml`'s own header states why not all
 twelve) and the SIX seeded speech kinds (same file, why not all ten).
 """
 
@@ -18,8 +18,25 @@ from ..data import arrangements as A
 from ..data.rosters import LADDER_RUNGS, load_yaml
 
 
-def test_the_three_seeded_arrangements_load():
-    assert set(A.ARRANGEMENTS) == {"arbitration", "parliamentary_debate", "council_of_state"}
+def test_the_seven_seeded_arrangements_load():
+    """THREE until v9 SC-03a, which seeded the four `<tenure>` rows (`arrangements.yaml`'s header)
+    once `detain` and `ban` became `tenure_kinds` members. The four dispose those two kinds and
+    nothing else, each a `bench` disposal -- the loader stays green on them (the position's own
+    falsifier clause)."""
+    assert set(A.ARRANGEMENTS) == {"arbitration", "parliamentary_debate", "council_of_state",
+                                   "legal_trial", "tribunal", "interrogation",
+                                   "inquisition_hearing"}
+    sc03a = ("legal_trial", "tribunal", "interrogation", "inquisition_hearing")
+    assert {A.ARRANGEMENTS[r]["disposes"] for r in sc03a} == {"detain", "ban"}
+    assert all(A.ARRANGEMENTS[r]["disposal"] == "bench" for r in sc03a)
+    # §E.2's own differences, each locatable in the row: an interrogation's subject cannot appeal
+    # and speaks when scripted; the inquisition hearing is the same with a bench, an appeal and
+    # documents interposed; the tribunal is the trial with an admitted floor and no appeal.
+    assert A.ARRANGEMENTS["interrogation"]["order"] == A.ARRANGEMENTS["inquisition_hearing"]["order"]
+    assert A.ARRANGEMENTS["interrogation"]["appeal_basis"] == "none" != \
+        A.ARRANGEMENTS["inquisition_hearing"]["appeal_basis"]
+    assert (A.ARRANGEMENTS["tribunal"]["floor"], A.ARRANGEMENTS["legal_trial"]["floor"]) == \
+        ("admitted", "open")
     arb = A.ARRANGEMENTS["arbitration"]
     assert arb["disposal"] == "bench" and arb["appeal_basis"] == "none"
     parl = A.ARRANGEMENTS["parliamentary_debate"]
@@ -66,10 +83,11 @@ def _reload_with(extra_yaml_text: str):
     return arrangements, kinds
 
 
-def test_a_fourth_arrangement_loads_with_no_code_change():
+def test_another_arrangement_loads_with_no_code_change():
     """`19_PLAN.md` step 11's own artifact, run at this position's smaller seeded scale: "the
     thirteenth game loads with no code change." A well-formed new row, added as DATA ONLY, loads
-    through the unmodified `_load_arrangement`."""
+    through the unmodified `_load_arrangement`. (Named "another", not "a fourth": three rows were
+    seeded when this was written and seven are now -- the row added is one beyond whatever is seeded.)"""
     extra = textwrap.dedent("""
         arrangements:
           - id:               examination
@@ -87,7 +105,8 @@ def test_a_fourth_arrangement_loads_with_no_code_change():
             disposal_reach:     room
     """)
     arrangements, _ = _reload_with(extra)
-    assert "examination" in arrangements and len(arrangements) == 4
+    # v9 SC-03a: the seeded count is read, not pinned (it was `== 4` at three seeded rows).
+    assert "examination" in arrangements and len(arrangements) == len(A.ARRANGEMENTS) + 1
 
 
 def test_a_fifteenth_key_fails_naming_the_row():

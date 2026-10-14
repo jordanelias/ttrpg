@@ -157,7 +157,9 @@ def holdings(w: World, prop: str) -> list:
 def purview(w: World, seat: str) -> list:
     """Every rung `seat`'s purview reaches: its own rung plus every descendant. The SET form of
     `state/gate.py::purview_reaches(w, off, rung) -> bool` -- `rung in purview(w, seat)` is that
-    predicate, and both compose on the identical `containment.descendants` walk
+    predicate (⚠ SINCE v9 IN-40 ONLY WHERE NO SEAT-HOLDER HAS SWORN AN `oblige` TO `seat`: the
+    predicate's oblige clause adds the swearer's ground, and this set form does not see it), and both
+    compose on the identical `containment.descendants` walk
     (`state/gate.py::purview_reaches`'s own docstring, and `world_q.reach`'s inline purview limb,
     `:445-450`, which unions the same two terms for the identical reason: `descendants` EXCLUDES
     its own rung, so the seat's rung must be unioned in explicitly or a Duke seated at his own
