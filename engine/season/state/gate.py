@@ -46,7 +46,7 @@ from typing import Any, Callable, Optional
 
 from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import MATRIX, WriteClass
-from ..data.rosters import CONFERRAL_BASES, RESTRAINT_KINDS, REVOCATION_BASES, TENURE_KINDS
+from ..data.rosters import CONFERRAL_BASES, DETAIN_KIND, RESTRAINT_KINDS, REVOCATION_BASES, TENURE_KINDS
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .carriers import Office, Receipt, Tenure
 # ⚠ NO `World` IMPORT, NOT EVEN UNDER `TYPE_CHECKING`: `world` imports this module, and the tree's
@@ -246,11 +246,6 @@ BENCH_BASIS = "determine"
 # split, below), so *the kind the docketed row disposes* is the effect's to read, and the gate bounds
 # it by *a kind some row disposes* -- derived from `arrangements.yaml`, never listed here.
 UNDECLARED_DISPOSAL = "oblige"
-# THE PAYLOAD KEY THAT MARKS A DETERMINATION-IMPOSED `oblige` (`_eff_determine`'s `_disposal` writes it,
-# value the determining act's id): the edge is a SENTENCE, not an OATH. ONE OWNER, two readers --
-# `purview_reaches`' oblige clause skips an edge carrying it, so a convict's imposed oblige gives the
-# judging seat no purview over his own seat ground (IN-40 only reads what a man swore).
-DETERMINED_BY = "determined_by"
 DISPOSABLE_KINDS = frozenset(
     {UNDECLARED_DISPOSAL} | {row["disposes"] for row in ARRANGEMENTS.values()
                              if row["disposes"] in TENURE_KINDS})
@@ -353,7 +348,7 @@ def purview_reaches(w: "World", seat: Office, rung: Optional[str]) -> bool:
         or a council member who holds nothing extends no purview.
       * AN IMPOSED OBLIGE IS NOT AN OATH. A determination with no declared arrangement opens an
         `oblige` on the judging seat for the convict (`_disposal`); that edge carries payload
-        `DETERMINED_BY` and is SKIPPED here, or the bench would gain purview over the ground of every
+        `DETERMINED_BY` (`Tenure.imposed`) and is SKIPPED here, or the bench would gain purview over the ground of every
         man it sentences. `sworn_to` still lists it (`establishment_of` is the persons bound, sworn
         or sentenced); only this clause tells the two apart. A sworn edge (`_swear`, a populated
         oblige) carries no payload and counts."""
@@ -363,8 +358,7 @@ def purview_reaches(w: "World", seat: Office, rung: Optional[str]) -> bool:
         return True
     # The swearers are collected first so `w.tenures` is walked once for their seats, not once per
     # sworn edge (this is asked on every purview precondition).
-    swearers = {t.subject for t in sworn_to(w, seat.id)
-                if not (isinstance(t.payload, dict) and DETERMINED_BY in t.payload)}
+    swearers = {t.subject for t in sworn_to(w, seat.id) if not t.imposed}
     if not swearers:
         return False
     return any(_ground_reaches(w, w.offices[h.object], rung)
@@ -998,7 +992,7 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     # is: the custody edge's object is the ISSUING seat (K-17/K-52), which the enforcement seat acts
     # through but does not own. Opening only -- custody ends by a bench (`determination`) or by
     # `pardon` (step 5), never by the arresting hand.
-    if (opened and t.kind == "detain" and t.object in w.offices
+    if (opened and t.kind == DETAIN_KIND and t.object in w.offices
             and may_warrant(w, actor, via, t.subject)):
         return WARRANT
     if seat is None:

@@ -63,7 +63,7 @@ from ..state.gate import BENCH_BASIS, may_determine, may_fill, purview_reaches, 
 # TO A SEAT. `purview_reaches`' oblige clause asks it, and the gate may not import this module, so
 # its one body lives in `state/gate.py`; `world_q.sworn_to is gate.sworn_to`. `establishment_of`
 # (below) composes on it.
-from ..state.gate import sworn_to  # noqa: F401 -- re-exported
+from ..state.gate import sworn_to
 from ..state.ids import ROOT, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
@@ -370,13 +370,12 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
     in to make the signature look busier).
     ⚠ PLAN POSITION `19` BUILT THE DOCKETING HALF AND NOT THE MAPPING: `open_case` now puts a matter
     on `World.docket` (`docketed`, above), and `determine` asks this function -- through `WorldReader`'s
-    `bench.size` stem -- for the bench at the matter's PLACE (`place_of`). What still does not exist
-    is the docket item naming its ARRANGEMENT row, so `matter` stays unused here and the basis stays
-    the one constant (`BENCH_BASIS`).
+    `bench.size` stem -- for the bench at the matter's PLACE (`place_of`).
     ⚠ v9 SC-03a BUILT THE MAPPING'S CARRIER, AND STILL NOT THIS READ: a docket item now names its
     arrangement (`DOCKET_ARRANGEMENT`, `docketed_under`, written by a hand-built `open_case`; a
     computed one names `None`), and `_eff_determine` reads the row's `disposes:`. `matter` stays
-    unused HERE because every seeded row's `bench_basis` is `determine` -- the constant already -- so
+    unused HERE, and the basis stays the one constant (`BENCH_BASIS`), because every seeded row's
+    `bench_basis` is `determine` -- the constant already -- so
     wiring `bench_basis_of` would change no bench; it is the one line above, the day a row declares
     another basis.
 

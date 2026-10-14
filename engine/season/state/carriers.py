@@ -67,6 +67,11 @@ class Term:
     declared_by: str
 
 
+# THE PAYLOAD KEY THAT MARKS A DETERMINATION-IMPOSED `oblige` (`_eff_determine`'s `_disposal` writes it,
+# value the determining act's id): the edge is a SENTENCE, not an OATH. Read through `Tenure.imposed`.
+DETERMINED_BY = "determined_by"
+
+
 @dataclass
 class Tenure:
     """S15 -- THE ONE EDGE. Owned by its SUBJECT (S15.1)."""
@@ -105,6 +110,11 @@ class Tenure:
         return self.until is None
 
     @property
+    def imposed(self) -> bool:
+        """A determination imposed this edge (an `oblige` sentence); it is not an oath the holder swore."""
+        return isinstance(self.payload, dict) and DETERMINED_BY in self.payload
+
+    @property
     def granted_acts(self) -> tuple:
         """THE GRANT THIS TENURE CARRIES -- `H-71` arm 2, and the ONE owner of the payload's shape.
 
@@ -114,8 +124,8 @@ class Tenure:
         first writer; `World._grant_remit` is the payload's ONLY writer; its readers are this
         property and `seat_rung` below: §8 -- the shape of a payload is a
         rule, so it lives once. (An `oblige` a determination imposes carries one other key,
-        `gate.DETERMINED_BY`, so that `purview_reaches` does not read it as an oath; that key's
-        one owner is the gate.) A caller that reaches into `payload["remit_acts"]` itself has
+        `DETERMINED_BY`, read through `imposed` above, so that `purview_reaches` does not read it
+        as an oath.) A caller that reaches into `payload["remit_acts"]` itself has
         re-implemented it and will drift.
 
         WHAT IT IS, and it is NOT a mirror of the office. `H-71`'s ruled arm 2: *"THE GRANT RIDES

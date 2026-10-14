@@ -23,7 +23,8 @@ from ..queries.world_q import (
     faction_holding, hold_force, place_of, works_for, works_target,
 )
 from ..state.carriers import Proposition, Record, Tenure
-from ..state.gate import DETERMINED_BY, DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject
+from ..state.carriers import DETERMINED_BY
+from ..state.gate import DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject
 from ..state.ids import H
 
 from .effects_shared import _new_oblige_term, _operand, effect_for

@@ -48,6 +48,8 @@ def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # would have raised `TypeError` if it had ever fired -- a guard that crashes instead of
     # reporting, unfired because the precondition refuses first. One owner is also one place for
     # that mistake to be made.
+    if restrained(w, a.actor, DETAIN_KIND):
+        return _decline_custody(w, a, dest)
     # ⚠ A DESTINATION THE LADDER WILL NOT SEAT THE MOVER IN IS A BLOCKED TRAVEL, NOT A CRASH, and
     # this branch is `W-C`'s doing: once `move` carries a real `to`, a person can name any rung
     # their containment path reaches, and `contain.path` asks for a SHARED ANCESTOR -- which a
@@ -56,8 +58,6 @@ def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # so the fold emits `move`'s own `emits_on_refusal`. The rule itself is not re-implemented:
     # `World.contain_ascends` is the one owner and `add_tenure` still RAISES on it, because a
     # caller writing the edge directly is a bug where a person attempting the journey is not.
-    if restrained(w, a.actor, DETAIN_KIND):
-        return _decline_custody(w, a, dest)
     if not w.contain_ascends(a.actor, dest):
         # ⚠ THE INSTANCE DETAIL SITS AFTER ` -> `, WHICH IS `report.py`'s CLUSTER KEY
         # (`d.what.split(" -> ")[0]`). Putting the actor and the destination in the prefix would
