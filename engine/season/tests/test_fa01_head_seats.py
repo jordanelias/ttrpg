@@ -92,6 +92,11 @@ def _fold(w, d, a: Act) -> tuple:
     return rows[0]
 
 
+def _again(a: Act) -> Act:
+    """The same act, as a new object, to fold on another world."""
+    return Act(id=a.id, actor=a.actor, verb=a.verb, via=a.via, payload=a.payload)
+
+
 def _computed_acts_via(w, pid: str, seats: set) -> list:
     """Every act `pid`'s own decision machinery forms THROUGH one of `seats` this tick -- no act hand-built
     (the shape of the IN-48 build's `_computed_acts_via`, reverted at the B-J close, `40926a95`; no file
@@ -138,7 +143,7 @@ def test_fa01_exit_a_heads_computed_act_executes_via_its_seat_and_refuses_with_t
     # the first loop folded them in.
     wc, dc = _built()
     for f, a in executed.items():
-        made, no = _fold(wc, dc, Act(id=a.id, actor=a.actor, verb=a.verb, via=a.via, payload=a.payload))
+        made, no = _fold(wc, dc, _again(a))
         assert made and not no, (f, a.verb, a.via, made, no)
 
     # THE FALSIFIER: a second build of the same seed, each head's own-faction seat closed (the seat
@@ -150,7 +155,7 @@ def test_fa01_exit_a_heads_computed_act_executes_via_its_seat_and_refuses_with_t
         assert not _own_seats(w2, f, pid)
     refused = 0
     for f, a in executed.items():
-        made, no = _fold(w2, d2, Act(id=a.id, actor=a.actor, verb=a.verb, via=a.via, payload=a.payload))
+        made, no = _fold(w2, d2, _again(a))
         assert no and not made, (f, a.verb, a.via, made, no)
         refused += 1
     assert refused == len(executed) >= len(EXECUTES_AT_FIRST_FOLD), refused
