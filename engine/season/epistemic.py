@@ -630,6 +630,50 @@ def live_channels(mode: str) -> tuple:
             "silently ignores the growth would run the new arm as whatever fell through")
 
 
+def held_claim_ids(w: "World") -> frozenset:
+    """THE ID OF EVERY CLAIM SOME PERSON'S LEDGER HOLDS NOW -- the operand `changes_only_held_claims`
+    asks. `Person.ledger` is the only home of a Claim (`state/carriers.py::Claim`: *"lives in the
+    HOLDER'S OWN ledger"*; no other store holds one), so this is a read of the ledgers and not a
+    structure kept beside them. ⚠ BUILT BY THE CALLER, PER FAN, AND NEVER STORED: a stored set would
+    go stale on the first deposit or eviction, and the one caller (`loop/witness.py::witness`) builds
+    the fan before any of that barrier's deposits, so the answer cannot move under it."""
+    return frozenset(c.id for p in w.persons.values() for c in p.ledger)
+
+
+def changes_only_held_claims(w: "World", e: "Event", held: frozenset, mode: str) -> bool:
+    """IN-55 / RS-24. Does this Event change nothing but Claims some ledger holds, with no act behind
+    it -- the Event `observers_for` answers `[]` for under `mode`, so the fan need not be asked?
+
+    DERIVED PER EVENT, FROM WHAT THE EVENT CARRIES AND WHAT THE LEDGERS HOLD -- never a kind list
+    (scripting drift): today `claim.decayed` meets it (`loop/matter.py`'s decay pass writes a held
+    claim's confidence), and so would any later emitter that writes a held claim and nothing else.
+    Why the channels cannot admit it, one by one: no act caused it, so `post_remit` (reads
+    `Act.via`) and the actor tier of `anchor_of` have nothing to read; every change subject is a
+    claim id, a hash (`state/ids.py::H`) that is no person, site, record, date or rung, so the
+    anchor is the claim, `place_of` answers `None` (`co_located` admits nobody), `witness_key`'s
+    `pid == anchor` and its knot test have no person to match, and `document_key` needs a `hold`
+    whose object is that claim id; `chronicle` filters on a verb's `emits:` and no verb emits a
+    claim-changing kind. `test_in55_held_claim_fan_skip.py` executes that over a season.
+
+    ⚠ NOT "EVERY CHANGE SUBJECT RESOLVES IN NO WORLD STORE". That also matches a MATTER death:
+    `loop/matter.py::_die` routes through `World.remove_person`, which pops the person before
+    WITNESS, and `person.died` is witnessed (H-206: `world_q.event_place`'s departed limb). The test
+    here is that the subject IS a held claim -- positive, not a failure to resolve.
+
+    ⚠ NOT UNDER `total`. That arm asks no predicate -- `observers_for` credits every person -- so it
+    fans a claim-changing Event to everyone, and skipping it would turn the control into a narrow
+    arm (found by `test_season_shape.py::test_r7_two_persons_hold_different_things_and_at_total_they_
+    cannot` on the first wiring). The other two arms (`presence_only`, `all_five`) ask channels, and
+    the argument above holds for both.
+
+    WHEN IN DOUBT THE FAN RUNS. An Event with no change (`condition.band_crossed`, anchored through
+    its cause), a change with no subject, or a claim id no ledger holds any more (its holder died, or
+    the cap evicted it, or this very Event removed it) is NOT skipped."""
+    if mode == "total" or not e.changes or causing_act(w, e) is not None:
+        return False
+    return all(c.subject and c.subject in held for c in e.changes)
+
+
 def observers_for(w: "World", e: "Event", mode: str, everyone: list) -> list:
     """Who witnesses this Event, under the fan-out mode `H-33` declares -- as `(person, channel)`
     pairs, ONE channel per person, in `everyone`'s order.
