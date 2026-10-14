@@ -1685,16 +1685,17 @@ def _stamped(q: Question, added: tuple, w: World) -> Question:
 def attention_key(w: World, p: Person) -> Callable[[Question], tuple]:
     """THE ORDER `p` ANSWERS HIS QUESTIONS IN (v9 IN-57, RS-22: *"sorted by saliency to
     ambition/needs then office/tenure then then convictions"*) -- a sort key over `questions_for`'s
-    output, built once per call. Four tiers, the first that holds:
+    output, built once per call. Five tiers, the first that holds:
 
-      0. a `need` question, or one whose referent is the subject of one of `p`'s own ambitions
-         (`ambitions`, the one owner of the live-`commit`-to-an-OUGHT rule);
+      0. a question, not the `need` question, whose referent is the subject of one of `p`'s own
+         ambitions (`ambitions`, the one owner of the live-`commit`-to-an-OUGHT rule);
       1. a referent among `p`'s own live-tenure objects or inside a seat's purview (`own_purview`,
          `reach`'s limbs 2 and 4);
       2. a question whose `about` is a deed claim in `p`'s own ledger with nonzero valence under
          `p`'s pursuits (`deed_valence(to_axes(crisis_weights(p, scar_weight_shift)), c)`, as
          `deeds_judged` scores it), ordered by -|valence|;
-      3. the rest.
+      3. the `need` question -- the standing ambition question, PLAN `W5`'s quiet-season fallback;
+      4. the rest.
 
     `(order[source], q.id)` -- the key before IN-57 -- stays the final tiebreak, so within a tier
     the old order holds; magnitudes inside tiers 0-1 are not ranked (LIMIT). A source added later
@@ -1704,8 +1705,11 @@ def attention_key(w: World, p: Person) -> Callable[[Question], tuple]:
     proposition's subject, a seat's rung and its descendants) and the scar-shift arm
     (`Fixtures.scar_weight_shift`, the value `choose` projects with). Never the log, never another
     person, never how important an event is (intent: `07_DYNAMICS.md` §7).
-    [ASSUMPTION; medium; Jordan to correct -- the four membership tests. Revert: the `(source, id)`
-    key.]"""
+    [ASSUMPTION; medium; Jordan to correct -- the five membership tests. The entry's tier 0 put the
+    `need` question first; that arm (measured, `build_realm(0)`, two seasons: events 21,735 ->
+    15,738, `news.told` 14 -> 7; first-season chained told claims 0 at every seed 0..39; corpus
+    executed verbs 21 -> 12) starved news, so the standing question ranks after the salient claims.
+    Revert: the entry's tier 0 literal (`need` in tier 0); before IN-57, the `(source, id)` key.]"""
     order = {src: i for i, src in enumerate(QUESTION_SOURCES)}
     aims = {w.propositions[pid].subject for pid in ambitions(w, p)} - {None}
     mine = own_purview(w, p)
@@ -1720,12 +1724,14 @@ def attention_key(w: World, p: Person) -> Callable[[Question], tuple]:
 
     def key(q: Question) -> tuple:
         tie = (order[q.source], q.id)
-        if q.source == "need" or any(r in aims for r in q.referents):
+        if q.source == "need":
+            return (3, 0.0) + tie
+        if any(r in aims for r in q.referents):
             return (0, 0.0) + tie
         if any(r in mine for r in q.referents):
             return (1, 0.0) + tie
         v = valence(q.about)
-        return ((2, -abs(v)) if v else (3, 0.0)) + tie
+        return ((2, -abs(v)) if v else (4, 0.0)) + tie
     return key
 
 
@@ -1831,8 +1837,8 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
         out.append(Question(f"q:need:{pid}", "need", (w.propositions[pid].subject,), pid))
 
     # v9 IN-57 (RS-22, A-26): THE ORDER IS A TIERED READ OF THE PERSON'S OWN STATE
-    # (`attention_key`, above): ambition and need, then office and tenure, then convictions, then
-    # the rest. Before IN-57 the whole key was `(order[q.source], q.id)`, and for `claim_landed`
+    # (`attention_key`, above): a claim about an ambition's subject, then office and tenure, then
+    # convictions, then the standing `need` question, then the rest. Before IN-57 the whole key was `(order[q.source], q.id)`, and for `claim_landed`
     # `q.id` is `f"q:claim:{c.id}"`, a CONTENT HASH, so which question a person answered was
     # settled by lexicographic order over hashes (MEASURED over 89 corpus baselines, `wd_extra.py`:
     # the leading source shared with another question in 801 of 1,068 deliberations; `H-54`). That

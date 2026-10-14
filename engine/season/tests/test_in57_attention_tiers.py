@@ -1,23 +1,27 @@
 """v9 IN-57 (RS-22, A-26) -- `world_q.attention_key`: the order a person answers his questions in is
-a tiered read of his own state (0 ambition/need, 1 own tenure or seat purview, 2 a deed claim with
-nonzero valence under his pursuits, by -|valence|, 3 the rest), `(order[source], q.id)` the final
-tiebreak.
+a tiered read of his own state (0 a claim about an ambition's subject, 1 own tenure or seat purview,
+2 a deed claim with nonzero valence under his pursuits, by -|valence|, 3 the standing `need`
+question, 4 the rest), `(order[source], q.id)` the final tiebreak.
 
 What each test proves, and the failure it can observe:
 
   (a) `test_an_ambition_about_x_is_answered_before_a_hash_earlier_claim_about_y` -- the entry's
       first falsifier. A control asserts the OLD key would have answered Y first, so the test is
       not vacuous; reverting the key reddens it.
-  (b) `test_the_four_tiers_order_against_the_old_key` -- one person holding a question in every
-      tier, ids chosen so the old key orders them exactly backwards; tier 2 by -|valence|.
+  (a2) `test_a_person_whose_only_question_is_need_answers_it` and
+      `test_a_tier_1_claim_precedes_the_need_question` -- the `need` question is PLAN `W5`'s
+      quiet-season fallback: answered when nothing salient landed, after a salient claim when one
+      did. The entry's tier 0 (need first) reddens the second.
+  (b) `test_the_five_tiers_order_against_the_old_key` -- one person holding a question in every
+      tier, ids chosen so the old key orders them otherwise; tier 2 by -|valence|.
   (c) `test_the_same_question_keys_differently_for_two_persons_with_different_state` and
       `test_one_person_keys_alike_under_worlds_differing_only_outside_his_own_state` -- the entry's
       second falsifier. A key that reads the log, another person or the store's size reddens (c2).
   (d) `test_reach_composes_on_own_purview` -- the rule lives once: `reach` is `{p.id}` | the ladder
       | `own_purview`, over every realm person.
   (e) `test_seed_0_season_1_each_person_answers_a_tier_0_or_1_question_first_where_he_has_one` --
-      the EXIT line, over every `questions_for` call DELIBERATE receives in the first season of
-      `build_realm(0)`; it asserts it asserted.
+      the EXIT line under these tiers, over every `questions_for` call DELIBERATE receives in the
+      first season of `build_realm(0)`; it asserts it asserted.
 """
 from __future__ import annotations
 
@@ -39,6 +43,7 @@ from ..state.world import World
 
 ORDER = {s: i for i, s in enumerate(QUESTION_SOURCES)}
 PURSUITS = {"community": 3}
+NEED_TIER = 3
 
 
 def old_key(q: Question) -> tuple:
@@ -76,44 +81,71 @@ def _ambitious(pid="p_a") -> tuple:
     return p, _world_with(p, [Proposition("o_x", "OUGHT", "X", "X ought to be so", True, 0)])
 
 
+def _admits_x(p: Person) -> None:
+    """A claim about X reaches `p`'s questions only through `reach`; a `hold` on X puts it there.
+    Tier 0 is tested before tier 1, so the claim still reads as the ambition's."""
+    p.tenures.append(Tenure(f"t_{p.id}_x", p.id, "X", "hold", 0))
+
+
 # ---------------------------------------------------------------------------
-# (a), (b) -- the order
+# (a), (a2), (b) -- the order
 # ---------------------------------------------------------------------------
 
 def test_an_ambition_about_x_is_answered_before_a_hash_earlier_claim_about_y():
     p, w = _ambitious()
-    # Y is the person himself (reach's limb 1, no tier): the claim is admitted and outranks
-    # nothing. A second variant puts Y among his own tenures (tier 1): the ambition still wins.
+    _admits_x(p)
+    # Y is the person himself (reach's limb 1, no tier) and, second, one of his own tenure's
+    # objects (tier 1): the claim about X answers first against either.
+    p.tenures.append(Tenure("t_y", p.id, "Y", "hold", 0))
+    p.ledger += [_claim("c_000", p.id, "Y"), _claim("c_001", p.id, p.id),
+                 _claim("c_zzz", p.id, "X")]
+    qs = world_q.questions_for(w, p)
+    assert sorted(qs, key=old_key)[0].referents == ("Y",), "control: the old key answered Y first"
+    assert qs[0].source == "claim_landed" and qs[0].referents == ("X",), [q.id for q in qs]
+
+
+def test_a_person_whose_only_question_is_need_answers_it():
+    p, w = _ambitious()
+    qs = world_q.questions_for(w, p)
+    assert [q.id for q in qs] == ["q:need:o_x"]
+    # ... and a claim with no tier (about himself, no deed) stays behind it
     p.ledger.append(_claim("c_000", p.id, p.id))
     qs = world_q.questions_for(w, p)
-    assert sorted(qs, key=old_key)[0].referents == (p.id,), "control: the old key answered Y first"
-    assert qs[0].source == "need" and qs[0].referents == ("X",), [q.id for q in qs]
-
-    p.tenures.append(Tenure("t_y", p.id, "Y", "hold", 0))
-    p.ledger.append(_claim("c_001", p.id, "Y"))
-    qs = world_q.questions_for(w, p)
-    assert sorted(qs, key=old_key)[0].referents[0] in (p.id, "Y")
-    assert qs[0].referents == ("X",), [q.id for q in qs]
+    assert sorted(qs, key=old_key)[0].id == "q:claim:c_000", "control: the old key put it first"
+    assert qs[0].id == "q:need:o_x", [q.id for q in qs]
 
 
-def test_the_four_tiers_order_against_the_old_key():
+def test_a_tier_1_claim_precedes_the_need_question():
     p, w = _ambitious()
+    p.tenures.append(Tenure("t_obj", p.id, "obj_t", "hold", 0))
+    p.ledger.append(_claim("c_3", p.id, "obj_t"))
+    qs = world_q.questions_for(w, p)
+    key = world_q.attention_key(w, p)
+    assert [q.id for q in qs] == ["q:claim:c_3", "q:need:o_x"], [q.id for q in qs]
+    assert [key(q)[0] for q in qs] == [1, NEED_TIER]
+
+
+def test_the_five_tiers_order_against_the_old_key():
+    p, w = _ambitious()
+    _admits_x(p)
     p.pursuits = dict(PURSUITS)
     small, big = _deed_kinds(p.pursuits)
     p.tenures.append(Tenure("t_obj", p.id, "obj_t", "hold", 0))
     p.ledger += [
-        _claim("c_0", p.id, p.id),                               # tier 3: about me, no deed
+        _claim("c_0", p.id, p.id),                               # tier 4: about me, no deed
         _claim("c_1", p.id, p.id, small, True),                  # tier 2, small |valence|
         _claim("c_2", p.id, p.id, big, True),                    # tier 2, large |valence|
         _claim("c_3", p.id, "obj_t"),                            # tier 1: my own tenure's object
+        _claim("c_4", p.id, "X"),                                # tier 0: my ambition's subject
     ]
     qs = world_q.questions_for(w, p)
     ids = [q.id for q in qs]
     assert [q.id for q in sorted(qs, key=old_key)] == [
-        "q:claim:c_0", "q:claim:c_1", "q:claim:c_2", "q:claim:c_3", "q:need:o_x"]
-    assert ids == ["q:need:o_x", "q:claim:c_3", "q:claim:c_2", "q:claim:c_1", "q:claim:c_0"], ids
+        "q:claim:c_0", "q:claim:c_1", "q:claim:c_2", "q:claim:c_3", "q:claim:c_4", "q:need:o_x"]
+    assert ids == ["q:claim:c_4", "q:claim:c_3", "q:claim:c_2", "q:claim:c_1", "q:need:o_x",
+                   "q:claim:c_0"], ids
     key = world_q.attention_key(w, p)
-    assert [key(q)[0] for q in qs] == [0, 1, 2, 2, 3]
+    assert [key(q)[0] for q in qs] == [0, 1, 2, 2, NEED_TIER, 4]
 
 
 def test_a_seat_purview_is_tier_1_and_the_ladder_above_home_is_not():
@@ -134,7 +166,7 @@ def test_a_seat_purview_is_tier_1_and_the_ladder_above_home_is_not():
         ladder.append(cur); cur = parent_of(w, cur)
     outside = [r for r in ladder if r not in mine]
     assert outside, "control: a rung on the ladder lies outside his purview"
-    assert key(Question("q:claim:z", "claim_landed", (outside[-1],), "z"))[0] == 3
+    assert key(Question("q:claim:z", "claim_landed", (outside[-1],), "z"))[0] == 4
 
 
 # ---------------------------------------------------------------------------
@@ -156,7 +188,7 @@ def test_the_same_question_keys_differently_for_two_persons_with_different_state
     w.persons[b.id] = b
     q = PROBES[0]                                                # a claim about X
     assert world_q.attention_key(w, a)(q) != world_q.attention_key(w, b)(q)
-    assert world_q.attention_key(w, a)(q)[0] == 0 and world_q.attention_key(w, b)(q)[0] == 3
+    assert world_q.attention_key(w, a)(q)[0] == 0 and world_q.attention_key(w, b)(q)[0] == 4
     b.tenures.append(Tenure("t_bx", b.id, "X", "hold", 0))      # B's own tenure on X: tier 1
     assert world_q.attention_key(w, b)(q)[0] == 1
     # tier 2 is read through the person's own pursuits: the same deed claim, two holders
@@ -165,7 +197,7 @@ def test_the_same_question_keys_differently_for_two_persons_with_different_state
     a.pursuits = dict(PURSUITS)
     a.ledger.append(c); b.ledger.append(c)
     qd = Question("q:claim:c_d", "claim_landed", ("elsewhere",), "c_d")
-    assert world_q.attention_key(w, a)(qd)[0] == 2 and world_q.attention_key(w, b)(qd)[0] == 3
+    assert world_q.attention_key(w, a)(qd)[0] == 2 and world_q.attention_key(w, b)(qd)[0] == 4
 
 
 def _other_state(w: World) -> World:
@@ -194,7 +226,7 @@ def test_one_person_keys_alike_under_worlds_differing_only_outside_his_own_state
     assert len(w2.log) > len(w.log) and len(w2.persons) > len(w.persons)   # the worlds differ
     k1, k2 = world_q.attention_key(w, p), world_q.attention_key(w2, p2)
     tiers = {k1(q)[0] for q in PROBES}
-    assert tiers == {0, 1, 2, 3}, tiers                          # every tier is probed
+    assert tiers == {0, 1, 2, NEED_TIER, 4}, tiers                # every tier is probed
     for q in PROBES:
         assert k1(q) == k2(q), q.id
 
@@ -250,6 +282,7 @@ def test_seed_0_season_1_each_person_answers_a_tier_0_or_1_question_first_where_
         checked += 1
         assert tiers[0] <= 1, (pid, list(zip(ids, tiers)))
         moved += ids[0] != old_ids[0]
-    # MEASURED at IN-57: 390 calls, 348 holding a tier-0/1 question, 172 first questions moved.
+    # MEASURED at IN-57: 393 calls, 299 holding a tier-0/1 question, 100 of those first questions
+    # moved against the old key; first-question tiers {0: 52, 1: 247, 2: 1, 3 (need): 51}.
     assert checked >= 200, checked
     assert moved >= 1, "control: the tiered key changed no person's first question"

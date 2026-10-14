@@ -6723,7 +6723,9 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # `p_bailiff`; the two refusals `restore.refused` and `kill.refused` are IN-50's new links (a
     # refusal now cites its scene's occasion). So the depth is still set by the act mix: the one-link
     # gap is a trailing stage on an otherwise identical chain, not the depth clause discriminating.
-    assert (depths[3], depths[6]) == (12, 13), (
+    # IN-57: (12, 13) -> (13, 13), a re-record: the attention-tier key moved the act mix (the old
+    # `(source, id)` key reproduces (12, 13)); depths[6] no longer exceeds depths[3].
+    assert (depths[3], depths[6]) == (13, 13), (
         f"the maturation depth ceiling moved: {depths}. This is a MEASUREMENT of a mixed chain "
         "whose length the act mix sets, not a discriminator — `H-80`'s discriminator is the COUNT, "
         "asserted below and still live. Re-pin these two numbers with the unit that moved them. "
@@ -7704,9 +7706,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `corpus_run.run_case` over the same 143 live worlds, seed 0, against a copy of the base tree
     # (`c3a698ce`): `commit` executes in 30 worlds (0 before; still refused in 139, its old
     # non-Proposition referents). `issue`, `levy`, `utter` unmoved (1, 1, 126).
-    assert ever == {"accept", "challenge", "commit", "create_record", "examine", "interview", "fight",
-                    "give", "issue", "levy", "move", "petition", "reconstruct", "release", "research",
-                    "restore", "speak", "surveil", "tell", "transfer", "utter"}, (
+    # ⚠⚠ v9 IN-57, 21 -> 18: `examine`, `levy` AND `restore` LEAVE, into the refused set. A RE-RECORD:
+    # the attention-tier key (`world_q.attention_key`) answers claims about the person's ambitions,
+    # tenures and purview before the claims these three formed on. MEASURED by `python -m
+    # engine.season.harness.corpus_run`, seed 0 (the old `(source, id)` key: 21); `H-96` is
+    # re-measured by this run -- its behaviour count below is asserted on the same `live`.
+    assert ever == {"accept", "challenge", "commit", "create_record", "interview", "fight",
+                    "give", "issue", "move", "petition", "reconstruct", "release", "research",
+                    "speak", "surveil", "tell", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
     # ⚠ `move` JOINED `transfer` HERE, AND IT IS THE SAME HOLE. Both are refused for want of an
@@ -7796,8 +7803,10 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠⚠ SIX -> FIVE, v9 IN-11 (#453 §10.4 step 2): `commit` LEAVES, INTO THE EXECUTED SET -- the
     # utterer's `hold` makes the Proposition a referent (the `ever` note above; 30 worlds). The
     # position's EXIT instrument (#453 `:2458`). A re-record, said so.
+    # ⚠⚠ v9 IN-57, FIVE -> EIGHT: `examine`, `levy` AND `restore` JOIN, out of the executed set
+    # (the `ever` note above): still attempted, refused everywhere. A re-record, said so.
     assert refused_only == {"build", "found", "migrate", "work",
-                            "survey"}, (
+                            "survey", "examine", "levy", "restore"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -8277,7 +8286,12 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
         # `utter` 126 unmoved. THE SAME-BREATH CHECK: the universal set is empty on both sides; the status census MOVED by
         # one case, 1 RUNS-ALONE-UNDECLARED -> 0 (103 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED), and `corpus_run`'s NPC R3 reads
         # 46 of 46 where it read 45 (NPC-090's R3 now passes); ARC 97 of 97 on both sides.
-    assert len(by_sig) == 136, (
+        # ⚠⚠ **136 -> 122, v9 IN-57 (the attention-tier key, `world_q.attention_key`), MEASURED BY
+        # `corpus_run`, seed 0, AGAINST A WORKTREE AT ITS BASE `5b5e31ef` (136 there).** THE UNIT AND THE
+        # DIRECTION: variety FELL by 14; `examine`, `levy`, `restore` leave the executed set. THE
+        # SAME-BREATH CHECK: the status census MOVED, 0 -> 5 RUNS-ALONE-UNDECLARED (98 RUNS-UNDECLARED ·
+        # 40 SPAN-UNAUTHORED), R3 NPC 46 -> 43 of 46, ARC 97 -> 91 of 97; `told_by` 1 -> 0.
+    assert len(by_sig) == 122, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -8461,9 +8475,11 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # empty on both sides.
     # ⚠⚠ v9 IN-11 (#453 §10.4 step 2): `commit` JOINS -- the `ever` and `by_sig` notes above (30
     # worlds of 143). Every executed verb still varies; `universal` is empty on both sides.
-    assert varying == {"accept", "challenge", "commit", "create_record", "examine", "fight", "give",
-                       "interview", "issue", "levy", "move",
-                       "petition", "reconstruct", "release", "research", "restore", "speak",
+    # ⚠⚠ v9 IN-57: `examine`, `levy` AND `restore` LEAVE -- the `ever` and `by_sig` notes above.
+    # Every executed verb still varies; `universal` is empty on both sides.
+    assert varying == {"accept", "challenge", "commit", "create_record", "fight", "give",
+                       "interview", "issue", "move",
+                       "petition", "reconstruct", "release", "research", "speak",
                        "surveil", "tell", "transfer", "utter"}, (
         sorted(varying))
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
@@ -9750,9 +9766,12 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # ⚠⚠ v9 IN-11 (#453 §10.4 step 2): `commit` JOINS (20 -> 21) -- `_eff_utter` opens the utterer's
     # `hold`, so a Proposition is a referent; 30 worlds. Nothing leaves. The per-verb world counts
     # are at the same test's `by_sig` note.
-    assert set(executed) == {"accept", "challenge", "commit", "create_record", "examine", "interview",
-                             "fight", "give", "issue", "levy",
-                             "move", "petition", "reconstruct", "release", "research", "restore",
+    # ⚠⚠ v9 IN-57: `examine`, `levy` AND `restore` LEAVE (21 -> 18), into the refused set: the
+    # attention-tier key answers a claim about an ambition's subject, then the person's own tenures
+    # and purview, before the claims these acts formed on. `corpus_run`, seed 0; the old key: 21.
+    assert set(executed) == {"accept", "challenge", "commit", "create_record", "interview",
+                             "fight", "give", "issue",
+                             "move", "petition", "reconstruct", "release", "research",
                              "speak", "surveil", "tell", "transfer", "utter"}, (
         f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
         "ED-FI-0009's, 10 -> 11 is `release`'s, 11 -> 12 is `H-71`'s, 12 -> 13 is the admission "
@@ -9765,8 +9784,9 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
         "14 -> 15 is `24f`'s (`restore` back once the corpus stopped eating, see above), 15 -> 16 "
         "is `20-ii`'s (`release` back in one of 54 newly-representable worlds, see above), 16 -> 17 "
         "is `14`'s (`give` in, see above), 17 -> 20 is IN-08's cells commit's (`challenge`, "
-        "`accept`, `levy` in, see above), 20 -> 21 is v9 IN-11's (`commit` in, see above), and "
-        "any further movement is a fresh one")
+        "`accept`, `levy` in, see above), 20 -> 21 is v9 IN-11's (`commit` in, see above), 21 -> 18 "
+        "is v9 IN-57's (`examine`, `levy`, `restore` out, see above), and any further movement is "
+        "a fresh one")
     # ⚠ `dispatch` JOINED `work` UNDER `R8.1` FOR A DIFFERENT REASON, stated above the executed-set
     # assertion: its precondition needs a PERSON referent, and the question that used to supply
     # one in NPC-033 is now outranked (hash order, `H-54`) by a `seen` claim about a rung. It is
@@ -9820,8 +9840,11 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # ⚠⚠ `commit` LEAVES, v9 IN-11 (#453 §10.4 step 2): `_eff_utter` opens the utterer's `hold`, so a
     # Proposition is a referent and `commit` executes in 30 corpus worlds (the same note there). The
     # BO-9/BO-10 gap the message below names is closed by the hold, not by widening Q4. A re-record.
+    # ⚠⚠ v9 IN-57: `examine`, `levy` AND `restore` JOIN, out of the executed set (the note at the
+    # executed-set assertion above): attempted, refused everywhere. A re-record.
     assert set(refused) - set(executed) == {"work", "found",
-                                            "build", "migrate", "survey"}, (
+                                            "build", "migrate", "survey",
+                                            "examine", "levy", "restore"}, (
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
         "condition never clears the floor in this corpus; `dispatch` LEFT at `17-cast` (see above; it "
@@ -10966,35 +10989,25 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # referent: `("prop:d72c11edf1b392a4", "exists:Record", 0)` -- a Record-cell read refused on a
     # Proposition subject -- replaces `("p_carin", "exists:works", 0)` at index 13; every other
     # entry and the order are unchanged. A re-record, read off the failing assertion's own output.
+    # IN-57: 29 -> 17 entries, a re-record read off the failing assertion's own output: the
+    # attention-tier key moved this world's act mix (the old `(source, id)` key reproduces the 29).
     assert actor_end == [("einhir_texts", "exists:Record", 0),
                          ("hearth_ostvik", "stores:grain", 0),
                          ("rec:6bf46a143f347c12", "exists:Person", 0),
                          ("rec:6bf46a143f347c12", "exists:Site", 0),
                          ("rec:6bf46a143f347c12", "exists:Record", 1),
                          ("hearth_ostvik", "exists:Record", 0),
-                         ("rec:1f791fe28b8313bd", "exists:Record", 1),
                          ("rec:6bf46a143f347c12", "exists:Record", 1),
-                         ("rec:87a5f74d55eb53da", "exists:Record", 1),
-                         ("p_carin", "exists:Record", 0),
-                         ("rec:6bf46a143f347c12", "exists:Record", 1),
-                         ("rec:c9a2e4d73a61d251", "exists:Record", 1),
-                         ("rec:e26a98748e37db93", "exists:Record", 1),
-                         ("prop:d72c11edf1b392a4", "exists:Record", 0),
-                         ("rec:6bf46a143f347c12", "exists:Site", 0),
-                         ("rec:6bf46a143f347c12", "exists:Record", 1),
-                         ("rec:6bf46a143f347c12", "exists:Proposition", 0),
-                         ("rec:6bf46a143f347c12", "exists:Person", 0),
-                         ("rec:1f791fe28b8313bd", "exists:Person", 0),
-                         ("rec:1f791fe28b8313bd", "exists:Proposition", 0),
-                         ("p_carin", "exists:Record", 0),
-                         ("rec:87a5f74d55eb53da", "exists:Record", 1),
-                         ("rec:87a5f74d55eb53da", "exists:Proposition", 0),
-                         ("hearth_ostvik", "exists:Record", 0),
+                         ("rec:b976bbb8e2968fec", "exists:Record", 1),
+                         ("rec:ca05073718043888", "exists:Record", 1),
+                         ("rec:ca05073718043888", "exists:Proposition", 0),
+                         ("hearth_ostvik", "exists:Rung", 1),
+                         ("hearth_ostvik", "present_at:p_carin", True),
                          ("hearth_ostvik", "exists:Person", 0),
-                         ("p_carin", "exists:Proposition", 0),
-                         ("p_bailiff", "exists:Site", 0),
-                         ("p_bailiff", "exists:Record", 0),
-                         ("hearth_ostvik", "stores:grain", 0)], (
+                         ("hearth_ostvik", "exists:Person", 0),
+                         ("hearth_ostvik", "exists:Record", 0),
+                         ("hearth_ostvik", "exists:Site", 0),
+                         ("hearth_ostvik", "exists:Proposition", 0)], (
         f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
         "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
         "default moved back toward `total`, or a new deposit channel opened — and every `H-40` / "
@@ -11657,8 +11670,10 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # Proposition in `reach`, so it is a referent, and `transfer`'s Candidate on it is dropped on a
     # deposited read. Every one of the 24 pairs above survives.
     # [GROUNDED: measured at v9 IN-11 -- the test's own printed `shipped` list on this tree and on a copy of the base tree `c3a698ce`, filtered to `takeable`: 24 there, 25 here, set difference IN as above, OUT none]
-    assert len(dropped) == 25, (
-        f"{len(dropped)} executable clause-4 drops, not 25. The drops are the channel itself; if "
+    # IN-57: 25 -> 22, a re-record: the attention-tier key moved the act mix and so the referents
+    # Candidates form on (the old `(source, id)` key reproduces 25). The channel still fires.
+    assert len(dropped) == 22, (
+        f"{len(dropped)} executable clause-4 drops, not 22. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
         "failure than the loss of outcome-relevance recorded above.")
     # ⚠⚠⚠ **THE BITE CAME BACK UNDER G1a, THE GUARD ABOVE DEMANDED A REASON, AND THE REASON IS
@@ -12583,7 +12598,9 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # (9 > 4) -- holds; `total` is no longer the widest arm (6), a population move at one fan-out
     # setting, not a default moving (no fixture changed).
     # [GROUNDED: measured at IN-08's cells commit, NPC-088 slice, seed 0, 4 seasons at 2 slots -- genuine/diverged `none` 37/4, `actor` 35/9, `total` 29/6; base `13715804` 32/5, 32/7, 30/11]
-    assert (got["none"]["genuine"], got["none"]["diverged"]) == (37, 4), got
+    # IN-57: 37/4 -> 38/5, a re-record: the attention-tier key moved NPC-088's act mix (the old
+    # `(source, id)` key reproduces the prior pins).
+    assert (got["none"]["genuine"], got["none"]["diverged"]) == (38, 5), got
     # Reproduce with the `fork_case` loop above, run at each `fan_out_mode`.
     # [GROUNDED: measured 2026-09-07 — 16 genuine forks, 0 divergences at the shipped arm]
     # ⚠ 14 of 18 -> 17 of 19 under `U4`: the sampled tie-break moved the act a fork's person takes,
@@ -12619,7 +12636,8 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # CANDIDATE MECHANISM, UNMEASURED -- a new referent in his `reach`, or the `budget_office_bonus` scene every live
     # `hold` buys (`decision/budget.py`); no arm isolates either, and h9's three `scar_weight_shift` arms moving
     # -3/-1/0 (`test_h9_crisis_reader.py`) is not what one budget mechanism alone would predict.]
-    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (32, 9), (
+    # IN-57: 32/9 -> 30/8, a re-record (same cause as the `none` pin above); 8 > 5 still holds.
+    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (30, 8), (
         f"the shipped default diverged {got['actor']['diverged']} times of "
         f"{got['actor']['genuine']}: {got}. `W-D`'s acceptance was lost at `all_five` on "
         "2026-09-07 and recovered on 2026-09-10 when §F1 clause 4 got producers other than "
@@ -12661,7 +12679,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # [GROUNDED: measured 2026-09-30 at plan position `19c`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- `total` arm genuine 32, diverged 11; 32/10 with `migrate` unresolvable]
     # [GROUNDED: 32/11 -> 30/11 at plan position `24f`, 2026-09-30 -- divergence unmoved; mechanism in the `none`-arm `24f` block above]
     # [GROUNDED: 30/11 -> 29/6 at IN-08's cells commit (B-G) -- the re-scored ranking and the duel pair; mechanism and both trees' figures in the `none`-arm IN-08 block above]
-    assert (got["total"]["genuine"], got["total"]["diverged"]) == (26, 6), got    # IN-11: 29/6 -> 26/6 (the actor-arm note)
+    assert (got["total"]["genuine"], got["total"]["diverged"]) == (30, 8), got    # IN-11: 29/6 -> 26/6 (the actor-arm note); IN-57: -> 30/8 (the attention-tier key)
     # AND THE TWO LAYERS ARE SEPARATED. The finding is the DECISION count above; this is the layer
     # beneath it — whether the fork moved the act stream at all.
     #
@@ -12795,7 +12813,10 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
         # 35%). The floor above (`4 * acts_differ > genuine`) holds in all three: 60 > 37, 48 > 32,
         # 36 > 26.
         # [GROUNDED: measured at v9 IN-11, NPC-088 slice, seed 0, 4 seasons at 2 slots, read off the failing assertion's own `got` -- (acts_differ, genuine): `none` (15, 37), `actor` (12, 32), `total` (9, 26)]
-        "none": (15, 37), "actor": (12, 32), "total": (9, 26)}, (
+        # IN-57: a re-record -- the attention-tier key moved NPC-088's act mix (the old `(source, id)`
+        # key reproduces the prior pins). `acts_differ/genuine` ROSE in every arm: `none` 15/37 ->
+        # 18/38, `actor` 12/32 -> 14/30, `total` 9/26 -> 14/30; the floor holds (72 > 38, 56 > 30, 56 > 30).
+        "none": (18, 38), "actor": (14, 30), "total": (14, 30)}, (
         f"the recoverability figures moved: {{k: (v['acts_differ'], v['genuine']) for k, v in got.items()}}. "
         "This is a RE-PIN DECISION, not necessarily a failure — but it is one somebody has to "
         "make deliberately, because `acts_differ / genuine` is how much of a fork the scene tick "
@@ -12826,9 +12847,10 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     does: `questions_for(w, p)` takes one, and clause 3 is `subject in referents(q)`.
 
     ⚠⚠ **THE CARRIER IS NOT "THE LEDGER'S APPEND ORDER", WHICH IS WHAT THIS DOCSTRING SAID UNTIL
-    2026-09-04. `questions_for` SORTS, AND THE SORT DESTROYS APPEND ORDER.** Its last two lines are
+    2026-09-04. `questions_for` SORTS, AND THE SORT DESTROYS APPEND ORDER.** Its last two lines were
     `order = {src: i for i, src in enumerate(QUESTION_SOURCES)}` then
-    `out.sort(key=lambda q: (order[q.source], q.id))`. Several `claim_landed` questions SHARE a
+    `out.sort(key=lambda q: (order[q.source], q.id))` -- until v9 IN-57, which sorts on
+    `world_q.attention_key` and keeps that pair as the tiebreak within a tier. Several `claim_landed` questions SHARE a
     source, so among them `q.id` ALONE decides — and `q.id` is `f"q:claim:{c.id}"` where `c.id` is
     a CONTENT HASH, `H(w.world_seed, w.tick, pid, f"claim:{e.id}:{n}")`, minted in
     `SeasonDriver.witness` off the depositing Event's own id. **So which question a person answers
@@ -13037,7 +13059,9 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # CHANNEL** (`test_wd_a_fork_changes_...`'s IN-08 block: the re-scored ranking and the duel
     # pair). `verbonly` still EQUALS `wide` at this arm (9 both); not 0, so the guarded loss is not it.
     # [GROUNDED: measured at IN-08's cells commit, NPC-088 slice, seed 0, 4 seasons at 2 slots -- shipped arm verbonly 9, equal to wide; `none` 4/4, `total` 6/6]
-    assert got["actor"]["verbonly"] == 9, (
+    # IN-57: 9 -> 8, a re-record: the sibling test's population move (the attention-tier key); still
+    # equal to `wide` (8 both), not 0.
+    assert got["actor"]["verbonly"] == 8, (
         f"the shipped default adds {got['actor']['verbonly']} VERB-SET divergences: {got}. A 0 "
         "means the clause-4 producers the six investigation acts opened are gone again and the "
         "2026-09-07 loss is back; any other number means the population moved and must be "
@@ -13114,7 +13138,8 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # and every other arm unmoved; `destroy_record` made formable as well (`A-13`, held) moves nothing.
     # [GROUNDED: measured 2026-10-01 at plan position `14` -- fingerprint genuine/wide: `none` 32/5, `actor` 32/7, `total` 30/11 (from 32/4, 32/7, 30/11); with `destroy_record` formable too, identical]
     # [GROUNDED: measured at IN-08's cells commit (B-G) -- fingerprint genuine/wide: `none` 37/4, `actor` 35/9, `total` 29/6 (from 32/5, 32/7, 30/11); the sibling test's IN-08 move, same `fork_case` instrument, same cause]
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (37, 4), got
+    # IN-57: 37/4 -> 38/5, the sibling test's move (the attention-tier key).
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (38, 5), got
     # [GROUNDED: re-measured 2026-09-10 under `U4` — `actor` wide 17 of 19 under the widened fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (29, 9) at the shipped arm]
     # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person a person-subject
@@ -13131,7 +13156,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # ⚠⚠ **33/10 -> 31/7, PLAN POSITION `7a`, 2026-09-29 -- SAME MECHANISM AS THE `none`-ARM BLOCK
     # ABOVE, AND `wide` STILL EQUALS `verbonly` (7 both).**
     # [GROUNDED: measured 2026-09-29 on this tree after position `7a`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- shipped arm genuine 31, wide 7]
-    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (32, 9), got     # `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`)
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (30, 8), got     # `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 30/8
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- `total` 5 of 18 under the widened (verb, subject) fingerprint]
     # [GROUNDED: re-measured 2026-09-10 under `U4` -- `total` 5 of 19 under the widened (verb, subject) fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (28, 3) at the `total` arm]
@@ -13162,7 +13187,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # formed wherever `move` is. `wide` still equals `verbonly` (11 both); 32/10 with `migrate`
     # unresolvable.
     # [GROUNDED: measured 2026-09-30 at plan position `19c`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- `total` genuine 32, wide 11 (= verbonly 11); 32/10 with `migrate`'s `@effect_for` removed]
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (26, 6), got    # `24f`: 32/11 -> 30/11; IN-08: -> 29/6; IN-11: -> 26/6
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (30, 8), got    # `24f`: 32/11 -> 30/11; IN-08: -> 29/6; IN-11: -> 26/6; IN-57: -> 30/8
 
 
 # ===========================================================================
