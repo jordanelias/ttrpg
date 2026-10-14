@@ -1,6 +1,6 @@
 # Valoria — Master Workplan v9: the one plan for every lane — what is genuinely open, in build order
 
-## Status: RATIFIED on merge (ED-1094, ED-IN-0286) — held back: §K
+## Status: RATIFIED on merge (ED-1094, ED-IN-0286) — held back: §K; the common-fact store (RS-29, `_part5` §J.2 row 7)
 ## Lane: IN (cross-cutting). It is the ONE active plan (`CLAUDE.md` §2) for all nine lanes — IN, SC, SE, MB, PC, FI, WR, GO, FA. **No carve-out:** the 2026-10-01 telling workplan is absorbed (§0.6).
 ## Reads in order: this file (how to read, milestones, start here, state index, crosswalk) → `_part2` (THE NINE, one section per row) → `_part3` (orchestration: dependency graph §A, the file-affinity batches §B with their membership rules and handoff cards, file-collision matrix, pre-flight) → `_part4` (IN I: the instruments, the modules specs, the telling tail's G5, G8) → `_part5` (IN II: cells, verbs, forcing, cast; §A answered; A-25; §J the Jordan queue) → `_part6` (SC, SE, FI) → `_part7` (MB, PC, WR, GO, FA) → `_part8` (standing content; §K the adoption ledger; the Layer-0/1 edits owed).
 ## Grade under `CLAUDE.md` §0.2: `paper` throughout. A plan, not an execution artifact. Every reading here names its command and the date it was read; the evidence is the thing cited, never this file.
