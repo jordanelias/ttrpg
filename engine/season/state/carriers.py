@@ -105,6 +105,18 @@ class Tenure:
     # the `Office.establishment` deletion's shape in reverse, not a behaviour change.
     term: Optional[Term] = None
 
+    # IN-54. A COUNT OF FIELD ASSIGNMENTS TO ANY TENURE, class-wide: the version `queries/cache.py`'s
+    # object-side Tenure index is keyed on (its docstring states the invalidation rule). Not a dataclass
+    # field (no annotation), so `repr` -- and therefore `World.content_hash` -- never sees it. Process-wide
+    # rather than per-World on purpose: a Tenure does not know its World, and a bump from another world only
+    # costs the other index a rebuild (never a wrong answer). Precedent for a carrier owning
+    # `__setattr__`: `Rung`.
+    writes = 0
+
+    def __setattr__(self, name, value):
+        Tenure.writes += 1
+        object.__setattr__(self, name, value)
+
     @property
     def live(self) -> bool:
         return self.until is None

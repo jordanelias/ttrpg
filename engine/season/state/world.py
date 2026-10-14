@@ -218,6 +218,10 @@ class World:
         self.step: Optional[Step] = None
         self.frozen = False
         self._barrier_cache: dict = {}
+        # IN-54. Tenures entering or leaving the store with no field assigned -- the half of the
+        # object-side index's version `Tenure.writes` cannot see (`queries/cache.py` states the rule).
+        # Underscore, so `content_hash` never folds it (`test_h118`'s exclusion).
+        self._tenure_structure = 0
         self._in_parallel_map = False
         self.writes: list[tuple] = []
         # `W4`. The Events `write()` emitted during the current barrier, so a caller that needs an
@@ -338,7 +342,14 @@ class World:
                     "deleted by `13d-i`) walk sideways or loop, and Jordan's governance "
                     "canon reads purview off that walk")
         (self.persons[t.subject].tenures if t.subject in self.persons else self._unowned).append(t)
+        self._tenure_structure += 1
         return t
+
+    def tenure_version(self) -> tuple:
+        """THE VERSION THE OBJECT-SIDE TENURE INDEX IS KEYED ON (`queries/cache.py::tenure_index`, whose
+        docstring states the rule): `(Tenure.writes, _tenure_structure)`. O(1), because it is asked once
+        per (event, person)."""
+        return (Tenure.writes, self._tenure_structure)
 
     def class_of(self, entity_id: str) -> "str | None":
         """WHICH COLLECTION HOLDS THIS ID -- the one resolver, returning `None` for an id the
@@ -439,6 +450,7 @@ class World:
             else:
                 (t.subject, t.object, t.kind, t.since, t.until, t.degree, t.payload, t.term) = \
                     _written_fields(was, copy=False)
+        self._tenure_structure += 1
 
     # -- G4: WHAT A SUBJECT READS, BEFORE AND AFTER A WRITE ------------------------------------
     def state_of(self, s: Subject) -> Any:
@@ -730,6 +742,7 @@ class World:
                     self._departed[who] = (t.object, self.tick)        # H-206: where he stood
                 t.until = self.tick
         self.persons.pop(who, None)
+        self._tenure_structure += 1
         # ⚠⚠ THE PERSON'S OWN `person`-KIND RUNG DIES WITH THEM, and leaving it behind was a
         # LATENT ID-SCHEME DEFECT that only a death could reach. `class_of`'s own docstring names
         # the hazard -- *"no id is currently in two of these. If one ever is, this returns the

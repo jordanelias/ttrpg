@@ -434,9 +434,13 @@ def _ch_document_key(w: "World", e, pid) -> bool:
     the actor under `both`, so the attribution leak this paragraph describes survives on THAT
     claim; `seen` is added beside it, as `R8.1` rules, not in its place.
     """
-    return any(t.kind == "hold" and t.subject == pid and t.object == c.subject and t.live
-               for c in e.changes if c.subject
-               for t in w.tenures)
+    # IN-54: read through `cache.tenure_index` (object-side Tenures, version-keyed -- its docstring
+    # states the invalidation rule) rather than scanning `w.tenures` per (event, person). The answer
+    # is the scan's: `pid` holds, live, an object some change of this Event wrote.
+    held = cache.tenure_index(w).holds.get(pid)
+    if not held:
+        return False
+    return any(c.subject in held for c in e.changes if c.subject)
 
 
 def _ch_witness_key(w: "World", e, pid) -> bool:
@@ -447,8 +451,10 @@ def _ch_witness_key(w: "World", e, pid) -> bool:
         return False
     if pid == anchor:
         return True
-    return any(t.kind == "knot" and t.live and pid in (t.subject, t.object)
-               and anchor in (t.subject, t.object) for t in w.tenures)
+    # IN-54: `pid != anchor` here, so a live knot with both in its two ends is exactly the pair
+    # `(pid, anchor)` or `(anchor, pid)`. Read through `cache.tenure_index`, as `_ch_document_key` does.
+    knots = cache.tenure_index(w).knots
+    return (pid, anchor) in knots or (anchor, pid) in knots
 
 
 def _ch_post_remit(w: "World", e, pid) -> bool:
