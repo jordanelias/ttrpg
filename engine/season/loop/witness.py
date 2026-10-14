@@ -35,8 +35,9 @@ from ..data.verbs import VERB_TABLE
 # holder's own stance (`regard`). `04:178` is exceeded on those two reads. Layer-conformance, B-E close:
 # CONVENTION, no scan reads this step's imports; the spec is ambiguous, `decision/` chosen.
 from ..decision.options import ledger_weigh, refracted_confidence
-from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, claim_subjects,
-                         live_channels, observers_for, seen_of, seen_subject)
+from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, changes_only_held_claims,
+                         claim_subjects, held_claim_ids, live_channels, observers_for, seen_of,
+                         seen_subject)
 from ..queries import cache, world_q
 from ..queries.world_q import hold_force
 from ..state.attribution import actor_of
@@ -288,8 +289,17 @@ def witness(self, token: Token, events: list[Event]) -> int:
     mode = w.fixtures.get("fan_out_mode")
     # Plan position `15d`: the third term is THE CHANNEL that admitted `pid` -- the strongest, by
     # `WITNESS_CHANNELS`' declared precedence -- and no longer the mode, which is `mode` above.
+    # IN-55 / RS-24: an Event that changes only claims some ledger holds, with no act behind it, is
+    # witnessed by nobody (`epistemic.changes_only_held_claims` says why, and which Events and which
+    # modes -- never `total` -- it is not), so `observers_for` is not asked. `claim.decayed` is the
+    # whole of it today: MEASURED under `all_five` on
+    # `populated.run(2, 0)`, 6,445 of the 8,773 Events fanned, 0 with an observer, and the bulk of the
+    # fan's time. The ledgers are read HERE, once, before any deposit of this barrier, and held in a
+    # local -- stored nowhere, so there is nothing to go stale. The skip changes no deposit.
+    held = held_claim_ids(w)
     fan: list[tuple[str, Event, str]] = [
-        (pid, e, ch) for e in events for pid, ch in observers_for(w, e, mode, everyone)]
+        (pid, e, ch) for e in events if not changes_only_held_claims(w, e, held, mode)
+        for pid, ch in observers_for(w, e, mode, everyone)]
     # (this count is the FAN alone: IN-22's purview extension below appends after it)
     TRACE.decision(f"fan-out over {len(events)} events -> {len(fan)} deposits", "S28/S61",
                    chose=f"mode={mode} over {len(everyone)} persons "
