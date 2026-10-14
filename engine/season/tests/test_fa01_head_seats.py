@@ -15,7 +15,7 @@ decision machinery and the real fold:
      `harness/aperture.py` also reads). Then, on a second build of the same seed with the head's seat
      closed, THE SAME ACT refuses.
 
-⚠ MEASURED BEFORE ANY EDIT, 2026-10-14, on `40926a95` (build hash `11989dcf5e1c25afab556bf3f234a200`): the
+⚠ MEASURED BEFORE ANY EDIT, 2026-10-14, on `40926a95` (the IN-48 build, since reverted: its opening-set decline never fired in the realm and the build hash is unchanged after the revert, so the reading holds on `e00d5b3c`) (build hash `11989dcf5e1c25afab556bf3f234a200`): the
 plan's measure of "seated" was `grep -E '^    faction:' engine/season/offices.yaml` (Crown 8, Church 1,
 Hafenmark 1, Restoration 1, Varfell 1, null 17). That column is read ONLY for a MINTED row
 (`offices.yaml`'s header, "only a MINTED seat carries this file's `id`, `post`, `body` and `faction`"); a
@@ -27,7 +27,7 @@ and its falsifier. The sixth, the Restoration Movement's head (minted `off_resto
 (`issue.unauthorized`: the seat's purview does not reach the executor) -- a fact about that seat's ground
 and remit, not about seating, and not widened here (`offices.yaml`'s J-8 note: remit is a grant decision).
 
-Cost: two `build_realm(0)` and a handful of folds; seconds, against `aperture 4 0`'s ~20 minutes for the
+Cost: three `build_realm(0)` and a handful of folds; seconds, against `aperture 4 0`'s ~20 minutes for the
 same observation (CLAUDE.md §0.4: the cheapest instrument that can see it).
 """
 
