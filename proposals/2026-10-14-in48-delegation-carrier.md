@@ -405,8 +405,21 @@ before any clause, by wrapping `REQUIRES_PREDICATES["confer"]`. The test asserts
 (`assert checked >= N`, with `N` the number of `_req_confer` entries observed) and that the
 `office == via` count is 0 under the DECLINE.
 
-**Re-run at HEAD `46c08d9c`, entry instrument, `build_realm` seeds 0 and 1, two seasons each:**
-RESULT_PENDING
+**Re-run at HEAD `46c08d9c`: the entry instrument, `build_realm` seeds 0 and 1, two seasons each.**
+
+**`_req_confer` was entered 0 times in total, so the count observed nothing.** It is not evidence that
+`office == via` is absent. Two caveats:
+- `checked == 0` means I also could not show that the wrap is on the path the fold dispatches through.
+  The fold reads `predicates.REQUIRES_PREDICATES` by module, `loop/predicates.py:18`.
+- The earlier four-season run of seed 0 is the only sign of where `confer` starts: 5 `may_fill` calls
+  from `_req_confer` and 4 `confer.refused`, all in season 4, and none in seasons 1-3.
+
+**The build must therefore:**
+- run the entry instrument for at least four seasons;
+- assert `checked >= N` with `N > 0`, which is what shows the wrap is live;
+- then assert `office == via` is 0 under the DECLINE.
+
+A run that enters `_req_confer` zero times is a failed measurement, not a pass.
 
 ---
 
