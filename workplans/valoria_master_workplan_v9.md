@@ -1,6 +1,6 @@
 # Valoria — Master Workplan v9: the one plan for every lane — what is genuinely open, in build order
 
-## Status: RATIFIED on merge (ED-1094, ED-IN-0286) — held back: §K
+## Status: RATIFIED on merge (ED-1094, ED-IN-0286) — held back: §K; the common-fact store (RS-29, `_part5` §J.2 row 7)
 ## Lane: IN (cross-cutting). It is the ONE active plan (`CLAUDE.md` §2) for all nine lanes — IN, SC, SE, MB, PC, FI, WR, GO, FA. **No carve-out:** the 2026-10-01 telling workplan is absorbed (§0.6).
 ## Reads in order: this file (how to read, milestones, start here, state index, crosswalk) → `_part2` (THE NINE, one section per row) → `_part3` (orchestration: dependency graph §A, the file-affinity batches §B with their membership rules and handoff cards, file-collision matrix, pre-flight) → `_part4` (IN I: the instruments, the modules specs, the telling tail's G5, G8) → `_part5` (IN II: cells, verbs, forcing, cast; §A answered; A-25; §J the Jordan queue) → `_part6` (SC, SE, FI) → `_part7` (MB, PC, WR, GO, FA) → `_part8` (standing content; §K the adoption ledger; the Layer-0/1 edits owed).
 ## Grade under `CLAUDE.md` §0.2: `paper` throughout. A plan, not an execution artifact. Every reading here names its command and the date it was read; the evidence is the thing cited, never this file.
@@ -61,7 +61,7 @@ record."*). v8's one-line history (its `_part6` §H.1) is not carried; read it a
 No existing position number changes meaning. Every surviving v8 number (`31a`, `22`, `19b`, `9`, `26`, `33`, `36`,
 `2-ii`, …) is kept as the **ALIAS** of a v9 handle. **The v9 handle is lane-tagged, `<LANE>-nn`** (§3; §4 maps both ways,
 plus the #453 and #457 handles). A position added after adoption continues its lane's run of handles; a bare number (from
-`37`) is used only for a position with neither an alias nor a handle — none today. A handle's batch is `_part3` §B's; `B-A`…`B-Z` are file-affinity batches (§B.0's rules place a late position), not a count of phases. Retired numbers are never reused (§4,
+`37`) is used only for a position with neither an alias nor a handle — none today. A handle's batch is `_part3` §B's; `B-A`…`B-Z` are file-affinity batches (§B.0's rules place a late position), not a count of phases. Retired numbers and handles are never reused (§4,
 last list). **None of these handles allocates a ledger id.** An id is allocated when the position is built.
 
 ⚠ **One collision, named so nobody resolves it by guessing.** In the 2026-09-28 plan's Phase-1 list, "item 11" was position
@@ -273,8 +273,15 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-47 | #445 (character sheet) | IN/PC/WR | B | review (design landed at B-C); no build batch | R-04 | none (reviewed at B-H, `c13144b9`) | `_part4` |
 | IN-48 | H-108 (delegation half) | IN/FA/SE | B | — (IN-40 landed `3f320093`; IN-10 (a), (b) and IN-11 landed `905b7a21`, `2a2ed152`) | R-04 | B-J | `_part5` |
 | IN-49 | H-163 limit 3 | SE/IN | BLK | IN-10 | R-04, R-05 | B-K | `_part5` |
-| IN-51 | #453 R-5 (b) | IN/FA/SE | BLK | IN-12 | R-05 | B-R | `_part5` |
 | IN-52 | the levy-to-field feed (from IN-07's design); LF-1..LF-3 | IN/SE/MB | BLK | IN-49, IN-07's extractions | — | B-T | `_part4` |
+| IN-54 | RS-24: the witness Tenure index | IN | B | — (design first: the invalidation rule) | — | B-W | `_part5` |
+| IN-55 | RS-24: the claim-only fan skip | IN | B | IN-54 (F); M-skip (I) | — | B-W | `_part5` |
+| IN-56 | RS-24: the last-emission index; the append | IN | B | — | — | B-W | `_part5` |
+| IN-57 | RS-22: attention tiers | IN | B | — (no IN-14 edge, `_part3` §A(3)) | R-08, R-06 (contributor) | B-W | `_part5` |
+| IN-58 | RS-23, RS-24: grievance at read | IN/FA | B | — (IN-40 landed at B-J); M-polarity, M-who (I); the `11` re-take after IN-57 (E15) | R-07 (contributor) | B-W | `_part5` |
+| IN-59 | RS-26: the access gate | IN/SC/PC | BLK | IN-60; B-V's guard content and W2's arm for its audience half | R-04 (contributor), R-05 | B-Y | `_part5` |
+| IN-60 | RS-26: the security Query | IN/SE/FA | BLK | IN-36's guard content (D, B-V) | R-04 (contributor) | B-Y | `_part5` |
+| IN-61 | RS-27: succession (replaces IN-51, retired); #453 R-5 (b) re-specified | IN/FA/SE | BLK | SC-04 (D, B-P); ED-IN-0292 (2) (J); IN-12 (R: "after IN-12") | R-05, R-04 | B-R | `_part5` |
 | SC-01 | `22` steps 11–16 | SC | BLK | B-N's entry gate (SC-03a landed `c2f855d2`) | R-04, R-05, R-08, R-09, M2 | B-N | `_part6` |
 | SC-02 | `22a` → `23` → `22b` | SC | BLK | SC-01 | — | B-P | `_part6` |
 | SC-03b | #453 step 4; H-162 | SC | BLK | SC-01, SC-08 (SC-03a landed `c2f855d2`) | R-05, R-04 | B-O | `_part6` |
@@ -292,6 +299,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | PC-05 | ED-PC-0013 (1) | PC | BLK | GO-01, GO-05 | — | B-Z | `_part7` |
 | PC-06 | #445 K-1/K-5, K-3 (S-1 landed at B-E, `ac9724fc`; M-1/S-4, S-2/L-1 at B-L, `9ad86e87`) | PC | BLK | IN-06 (K-3) | R-05 | B-S | `_part7` |
 | PC-08 | Phase 4a/4b/5, WS-7; #445 M-2..M-6, K-4/V-3 | PC | LEAVE | named, unscheduled | — | B-Z | `_part7` |
+| PC-10 | RS-25: duel terms and the yield (PC-10a module, PC-10b season) | PC/IN | B (PC-10a) · BLK (PC-10b) | PC-10b: PC-10a (D) | R-05 | B-Y | `_part7` |
 | FI-01 | `ED-FI-0009`; J-22 (A); #445 S-6 | FI | BLK | SC-01, SC-03b | R-05, R-09 | B-O | `_part6` |
 | FI-02 | SM-3 | FI | BLK | FI-01 | — | B-O | `_part6` |
 | FI-03 | ED-FI-0002 | FI | BLK | IN-06 | — | B-S | `_part6` |
@@ -307,7 +315,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 
 ## 4. CROSSWALK — v8 and the proposals ↔ v9
 
-**Batches B-A … B-T, B-U, B-V, B-Z** (members, shared files, entry gates, exit instruments, re-records, lanes, handoff cards): `_part3` §B, the only copy.
+**Batches B-A … B-T, B-U, B-V, B-W, B-Y, B-Z** (B-W and B-Y placed by ruling, RS-28; members, shared files, entry gates, exit instruments, re-records, lanes, handoff cards): `_part3` §B, the only copy.
 
 | v8 position · telling · §SM | v9 |
 |---|---|
@@ -326,7 +334,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | §10.4 step 1 · step 2 · steps 2b + 3 · step 4 · step 8 | IN-10 (sub-steps landed `905b7a21`; the enabler open) · IN-11 (landed `2a2ed152`) · SC-03a (landed `c2f855d2`) · SC-03b · IN-13 |
 | steps 5, 5a, 6, 7, 9, 10, 11, 13 | IN-12, one sub-entry per step |
 | step 2a (`known_persons` widening) | IN-18 (landed at B-E, `ac9724fc`, with its re-pin) |
-| "later" (R-5, `inheritance`) | IN-51 (B-R; RS-21 item 9) |
+| "later" (R-5, `inheritance`) | IN-61 (B-R; RS-21 item 9, re-specified by RS-27: the heir's claim) |
 | R-1(b) R-3(b) R-4(b) R-8(b) R-9(a) · §13.9 kill/wound | adopted at the step each names (§K (a)) · adopted: `kill` and `wound` are not verbs (RS-5, Jordan's own words), only `challenge` → `accept` is added (`_part5` IN-08) |
 
 | #457 — `proposals/2026-10-04-forcing-churn-and-the-story-bar.md` | v9 |
@@ -355,3 +363,4 @@ H-180, H-181 → re-checked at IN-17 (landed `ac9724fc`; both stay absent) · H-
 - `24h` P6 — superseded by IN-11 (landed `2a2ed152`): #453 R-3 cuts `repudiate`; its pricing, owed as a `deed:commitment.ended` cell, is `engine/season/hole_register.yaml` H-205.
 - `24h` P7 — retired on IN-09's typed `comply` cell (`128299db`); J-10 closes with J-2 there [medium].
 - `10` — U5/R-07; carved out to the telling workplan by v8, absorbed here as IN-16–IN-18 (§0.6).
+- IN-51 — #453 R-5 (b) read as `inheritance` filled by CENSUS at `person.died`; retired unbuilt on 2026-10-14, superseded by IN-61 (RS-27: the heir is a title who claims the throne by his own act). The handle is not reused.
