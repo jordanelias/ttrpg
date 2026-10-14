@@ -605,9 +605,11 @@ def governors_of(w: World, rung_id: Optional[str]) -> list[str]:
 
     ⚠ THE SAME RELATION AS `reach`'s LIMB 4, ASKED FROM THE RUNG'S SIDE. Limb 4 unions
     `{seat.rung} | descendants(seat.rung)` over the person's own holds, and `purview_reaches` is
-    `rung == seat.rung or rung in descendants(seat.rung)` -- one walk (`descendants`), so a person
-    this lists has `rung_id` in `reach(w, p)`, and a claim about `rung_id` deposited into his ledger
-    is admitted by `questions_for`'s clause 1. That is what makes the WITNESS route that calls this
+    `rung == seat.rung or rung in descendants(seat.rung)` (plus, v9 IN-40, the oblige clause above) --
+    one walk (`descendants`), so a person this lists by his OWN ground has `rung_id` in `reach(w, p)`,
+    and a claim about `rung_id` deposited into his ledger is admitted by `questions_for`'s clause 1.
+    A person listed ONLY through the oblige clause does not (paragraph above): there the deposit is
+    not admitted by any question. Where it is his own ground, that is what makes the WITNESS route that calls this
     (`loop/witness.py`, the purview deposit) end in a question rather than in a silent ledger slot.
 
     ⚠ A WORLD READ, AND NOT A FAN BY ITSELF. It reads `w.tenures`/`w.offices`/the containment tree

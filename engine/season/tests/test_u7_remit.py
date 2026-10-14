@@ -414,8 +414,11 @@ def test_19_the_determination_basis_refuses_each_clause_it_needs(case):
     assert [t for t in w2.tenures if t.id == "t_disposal"], "control: the lawful disposal was refused"
 
 
-def test_19_determination_admits_an_opening_only():
-    """AUTHORITY TO BIND IS NOT AUTHORITY TO RE-GRADE: an EXISTING `oblige` on the seat, owned by the
+def test_19_determination_opens_only_a_disposed_kind_and_closes_only_a_restraint():
+    """(Named for the basis as it stands since v9 SC-03a, which widened it from "an opening only": it
+    OPENS a disposed kind and CLOSES a `detain`/`ban`, and re-grades nothing. The assertions below are
+    the re-grade half, unchanged; `test_sc03a_the_determination_basis_*` are the widened halves.)
+    AUTHORITY TO BIND IS NOT AUTHORITY TO RE-GRADE: an EXISTING `oblige` on the seat, owned by the
     party, RE-GRADED (its `degree` changed) through the judge's seat, meets no basis --
     `determination` asks `opened` first. ⚠ NARROWED FROM "changed in any field" (found by the
     second sub-batch's layer-conformance critic, 2026-09-30): a `term` pushed later on this same
@@ -637,6 +640,26 @@ def test_sc03a_an_open_case_under_a_seeded_arrangement_names_that_row_and_the_pe
     assert world_q.docketed(w, PARTY) == []
 
 
+def test_sc03a_open_case_declines_an_arrangement_it_cannot_dispose_and_a_malformed_operand():
+    """COR2/COR6: a docket item naming a row whose `disposes:` is not a Tenure kind (a `Record`, or
+    `none`) would wedge the matter -- `determine` declines it forever and `docketed` blocks a second
+    `open_case`. So `open_case` DECLINES it up front (`case.refused`), and the matter stays openable
+    (CONTROL: the same matter opened with no arrangement executes). A list-valued arrangement or a
+    dict-valued petition (unhashable) is declined, never raised.
+    Mutation: drop the `disposes` test in `_eff_open_case` (red: the Record row dockets); drop the
+    `isinstance` guards (red: `TypeError` out of the fold)."""
+    w, d = _world()
+    record_rows = [n for n, r in sorted(ARRANGEMENTS.items()) if r["disposes"] not in G.DISPOSABLE_KINDS]
+    assert record_rows, "fixture: no seeded row disposes a non-Tenure kind"
+    for i, row in enumerate(record_rows):
+        assert _kinds(_fold(w, d, _open(f"oc{i}", arrangement=row))) == ["case.refused"], row
+        assert world_q.docketed(w, PARTY) == [], row
+    assert _kinds(_fold(w, d, _open("oc_list", arrangement=["x"]))) == ["case.refused"]
+    assert _kinds(_fold(w, d, _open("oc_dict", petition={"a": 1}))) == ["case.refused"]
+    assert world_q.docketed(w, PARTY) == []
+    assert _kinds(_fold(w, d, _open("oc_ok"))) == ["case.opened"], "the matter was wedged"
+
+
 def test_sc03a_a_determination_under_disposes_ban_opens_a_ban_and_release_is_refused_on_it():
     """#453 §10.4 step 3's observable, and §8.3's reason for the kind: the bench opens the kind the
     docketed row `disposes:` -- a `ban`, owned by the party, on the seat exercised, and no `oblige` --
@@ -671,6 +694,23 @@ def test_sc03a_move_is_refused_while_a_detain_is_live():
     assert _kinds(_fold(w, d, Act(id="mg", actor=PARTY, verb="migrate", payload={"to": "S"}))) \
         == list(VERB_TABLE["migrate"].refusal_for(WRITE_CLAUSE))
     assert [t for t in w.tenures if t.subject == PARTY and t.kind == "contain" and t.live] == legs
+
+
+def test_sc03a_a_ban_does_not_stop_travel_and_a_second_sentence_of_one_kind_is_declined():
+    """Two claims the `detain` test above cannot make, each with its mutation. (a) A `ban` holder
+    TRAVELS (`travel.moved`): `restrained` is asked of one kind, so the custody refusal is `detain`'s
+    and not any restraint's. Mutation: `world_q.restrained` matches `t.kind in RESTRAINT_KINDS`, any restraint (red here). (b) A second
+    `open_case` + `determine` under the SAME `ban` row on the same seat and party is declined on the
+    `write` clause: the effect's one-live-edge-per-kind test reads the DISPOSED kind, not `oblige`.
+    Mutation: `_eff_determine`'s `t.kind == kind` back to `t.kind == "oblige"` (red: a second ban
+    opens, `matter.determined`)."""
+    w, d = _sentenced(BAN_KIND)
+    assert _kinds(_fold(w, d, Act(id="mv", actor=PARTY, verb="move",
+                                  payload={"to": "S"}))) == ["travel.moved"]
+    row = _row_disposing(BAN_KIND)
+    assert _kinds(_fold(w, d, _open("oc2", arrangement=row, petition=_petition(w)))) == ["case.opened"]
+    assert _kinds(_fold(w, d, _determine("dt2"))) == list(VERB_TABLE["determine"].refusal_for(WRITE_CLAUSE))
+    assert len(_edges(w, BAN_KIND)) == 1 and not _edges(w, "oblige")
 
 
 def test_sc03a_the_determination_basis_closes_a_restraint_and_nothing_else():
@@ -734,15 +774,55 @@ def test_sc03a_the_warrant_basis_opens_a_detain_for_a_seat_granted_dispatch_over
     a prisoner outside the purview, an unseated actor, an object that is not a seat."""
     w, _ = _world()
 
-    def basis(actor=DUKE, via=SEAT, prisoner=PARTY, obj="off_dicastery"):
-        return G.tenure_write_basis(w, Tenure("t_w", prisoner, obj, DETAIN_KIND, since=w.tick),
+    def basis(actor=DUKE, via=SEAT, prisoner=PARTY, obj="off_dicastery", kind=DETAIN_KIND):
+        return G.tenure_write_basis(w, Tenure("t_w", prisoner, obj, kind, since=w.tick),
                                     None, actor, via, frozenset())
     assert basis() == G.WARRANT
     assert basis(prisoner=OUTSIDER) is None
     assert basis(actor="p_other") is None
     assert basis(obj="Hh") is None
+    # Each of these is a mutation's twin (run red once locally, SC-03a fix pass):
+    #   a warrant opens a `detain` and no other kind -- drop `t.kind == "detain"` and an `oblige` on a
+    #   prisoner in purview is admitted as `warrant`;
+    assert basis(kind="oblige") is None
+    #   a warrant is an OPENING -- drop `opened` and a closure of a live detain is admitted;
+    live = Tenure("t_live", PARTY, "off_dicastery", DETAIN_KIND, since=w.tick)
+    shut = Tenure("t_live", PARTY, "off_dicastery", DETAIN_KIND, since=w.tick, until=w.tick)
+    assert G.tenure_write_basis(w, shut, live, DUKE, SEAT, frozenset()) is None
+    #   and a man does not arrest himself -- the owner (T-m) is refused a restraint of his own
+    #   (COR4), and `may_warrant` refuses the prisoner who is the actor.
+    assert basis(prisoner=DUKE) is None
     G.seat_hold(w, DUKE, SEAT).payload = {"remit_acts": ("issue", "determine")}
     assert basis() is None
+
+
+def test_sc03a_an_owner_can_neither_open_nor_close_his_own_restraint_at_the_gate():
+    """COR4: `T-m` (the owner's discretion) does not reach a `detain` or a `ban`. A prisoner closing his
+    own custody or opening one for himself through `World.write` is refused (`NotYours`, store put
+    back), by any `via` -- and the judging seat's closure of the same edge still passes (the control).
+    Mutation: drop `t.kind not in RESTRAINT_KINDS` from `T-m` (red: the owner's own closure admitted)."""
+    w, _ = _world()
+    w.step = Step.RESOLVE
+    checked = 0
+    for kind in sorted(RESTRAINT_KINDS):
+        t = Tenure(f"t_{kind}", PARTY, SEAT, kind, since=w.tick)
+        w.add_tenure(t)
+        for via in (None, SEAT):
+            with pytest.raises(NotYours):
+                w.write("Tenure", mint_token(w, WriteClass.ACTS),
+                        lambda t=t: setattr(t, "until", w.tick), record_kind="Tenure",
+                        fieldname="until", driver="Act", actor=PARTY, via=via)
+            assert t.live, f"the owner's own closure of his {kind} was not put back"
+            mine = Tenure(f"t_mine_{kind}_{via}", PARTY, SEAT, kind, since=w.tick)
+            with pytest.raises(NotYours):
+                w.write("Tenure", mint_token(w, WriteClass.ACTS), lambda m=mine: w.add_tenure(m),
+                        record_kind="Tenure", fieldname="since", driver="Act", actor=PARTY, via=via)
+            assert mine not in w.tenures, f"the owner's own opening of a {kind} was not put back"
+        w.write("Tenure", mint_token(w, WriteClass.ACTS), lambda t=t: setattr(t, "until", w.tick),
+                record_kind="Tenure", fieldname="until", driver="Act", actor=DUKE, via=SEAT)
+        assert not t.live, f"control: the judging seat's closure of the {kind} was refused"
+        checked += 1
+    assert checked == 2
 
 
 def test_sc03a_a_ban_holder_is_refused_service_and_seating():

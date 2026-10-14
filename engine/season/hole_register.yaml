@@ -2024,12 +2024,20 @@ rows:
       ⚠ v9 IN-40 BUILT THE ACROSS-FACTION READING, WITH NO STORED PARENT: `purview_reaches`'
       oblige clause (`engine/season/state/gate.py`) -- a seat also reaches the ground of every seat
       whose holder owes it a live `oblige` (`sworn_to`, re-exported as `world_q.sworn_to`), one edge
-      deep [ASSUMPTION; medium; Jordan to correct]. The clause is scale-blind (any Office, rung or
-      cluster), so the Split and the Drift are the same event: the swearer's `release`, or the term
-      maturing unrenewed at MATTER, after which the purview test tells the two states apart
-      (`engine/season/tests/test_in40_oblige_purview.py`). The grade is left as filed: no fixture
-      sweeps the chain depth, so R2's three points are not available. Still open: `world_q.reach`
-      limb 4 and `faction_q.purview` re-derive the containment walk and do not see the clause.
+      deep [ASSUMPTION; medium; Jordan to correct]. The clause expresses a detachment only where
+      the swearer's ground lies outside the sworn seat's own ground (hand-built:
+      test_in40_oblige_purview.py). In build_realm(0) neither event is expressible: the Grand Master
+      sits at T1 under the realm seat (T1's parent rung is the Crown duchy duchy_valorsmark, which
+      Crown seats already reach by their own ground), and the Cardinals sit on the Confessor's own
+      T9. The clause reaches may_fill and the purview Basis, not revocation (REVOCATION_RULES reads
+      no purview). A determination-imposed oblige carries payload determined_by and is not an oath
+      (SC-03a x IN-40 close). The grade is left as filed: no fixture sweeps the chain depth, so
+      R2's three points are not available. Still open: `world_q.reach` limb 4 and
+      `faction_q.purview` re-derive the containment walk and do not see the clause; + governors_of
+      -> loop/witness.py:425 deposits, epistemic._ch_post_remit (a vassal standing on his own ground
+      counts as at his lord's seat), and the WorldReader purview Basis (world_q.py: open_case, levy,
+      issue) all read the clause; faction_q.purview's claimed equivalence holds only with no sworn
+      seat-holder.
     source: Jordan 2026-09-02 -- "the ability to be under", extended to offices
 
 

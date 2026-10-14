@@ -73,9 +73,10 @@ def _decline_custody(w: "World", a: "Act", dest: str) -> Change:
     """v9 SC-03a (#453 §10.4 step 3, K-53): A PERSON HOLDING A LIVE `detain` DOES NOT TRAVEL OR
     SETTLE -- the custody edge's first reader, shared by `move` and `migrate` because the journey is
     one (`_relocate`). Asked FIRST, before the ladder: a prisoner's road is closed whether or not it
-    exists. Declines (`NO_CHANGE`), so the fold emits the row's own `write`-clause refusal --
-    `travel.blocked` for `move` (a prisoner's journey IS blocked, the fact a witness learns), and
-    `migrate.refused` for `migrate`. ⚠ A person's OTHER acts are not refused by custody here: which
+    exists. Declines (`NO_CHANGE`), so the fold emits the row's own refusal: `move`'s FLAT
+    `emits_on_refusal`, `travel.blocked` (a prisoner's journey IS blocked, the fact a witness learns;
+    `move` keys no clause), and `migrate`'s `write`-clause refusal, `migrate.refused` (the only one of
+    the two whose refusal is keyed per clause). ⚠ A person's OTHER acts are not refused by custody here: which
     acts a prisoner may still take (speak, petition, commit) is unruled, and #453 names only these
     readers. ⚠ AN [ASSUMPTION], STATED: the custody holds wherever the detaining seat is
     (`world_q.restrained` reads any live `detain`), so no destination is open to him."""
@@ -147,8 +148,8 @@ def _eff_migrate(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
 
     G3 -- EVERY EDGE IS THE ACTOR'S OWN (`T-m`): the `contain` legs and the `reside` edges are the
     migrant's, as subject, so the gate admits all four writes with no seat and NO NEW BASIS -- checked
-    against `tenure_write_basis`'s nine rather than assumed: the closures are the owner's discretion,
-    and an opening whose subject is the actor is `T-m`'s own case (it excludes only a SEAT-hold).
+    against `tenure_write_basis`'s ten rather than assumed: the closures are the owner's discretion,
+    and an opening whose subject is the actor is `T-m`'s own case (it excludes a SEAT-hold, a term rewrite and, since SC-03a, a `detain`/`ban` -- none of them a `contain` or `reside`).
 
     G4 -- WHAT IT NAMES: THE MIGRANT, WHOLE, `move`'s reason: both edges are stored on the Person, so
     his digest carries them and his `travel_leg`, and one receipt says a migration happened.

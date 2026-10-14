@@ -2,8 +2,8 @@
 
 Falsifiers named by the source docs this position builds from (`21_RECONCILIATION.md` PHASE 2 step
 6, `19_PLAN.md` step 11, `03_PARAMETERS.md` PART D): a fourteenth key fails naming the row; a
-declared-disposal row with no quorum fails the load; a thirteenth (here: a fourth) arrangement
-loads with no code change; a speech-kind whose reachable bands name a band outside the ladder fails
+declared-disposal row with no quorum fails the load; a thirteenth (here: another, beyond the
+seeded rows) arrangement loads with no code change; a speech-kind whose reachable bands name a band outside the ladder fails
 to load. Scoped to the SEVEN seeded games (three until v9 SC-03a; `arrangements.yaml`'s own header states why not all
 twelve) and the SIX seeded speech kinds (same file, why not all ten).
 """
@@ -83,10 +83,11 @@ def _reload_with(extra_yaml_text: str):
     return arrangements, kinds
 
 
-def test_a_fourth_arrangement_loads_with_no_code_change():
+def test_another_arrangement_loads_with_no_code_change():
     """`19_PLAN.md` step 11's own artifact, run at this position's smaller seeded scale: "the
     thirteenth game loads with no code change." A well-formed new row, added as DATA ONLY, loads
-    through the unmodified `_load_arrangement`."""
+    through the unmodified `_load_arrangement`. (Named "another", not "a fourth": three rows were
+    seeded when this was written and seven are now -- the row added is one beyond whatever is seeded.)"""
     extra = textwrap.dedent("""
         arrangements:
           - id:               examination

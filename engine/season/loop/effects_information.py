@@ -23,7 +23,7 @@ from ..queries.world_q import (
     faction_holding, hold_force, place_of, works_for, works_target,
 )
 from ..state.carriers import Proposition, Record, Tenure
-from ..state.gate import NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject
+from ..state.gate import DETERMINED_BY, DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject
 from ..state.ids import H
 
 from .effects_shared import _new_oblige_term, _operand, effect_for
@@ -169,10 +169,12 @@ def _seat_rung(w: "World", a: "Act") -> str:
     `create_record`'s own reading of the act, the one existing default rather than a new one.
 
     ⚠ FACTORED AT PLAN POSITION `19` OUT OF `_eff_issue`, WHERE IT WAS THREE INLINE LINES, BECAUSE
-    `_eff_open_case` DRAWS ITS CASE FILE UP THE SAME WAY (§8). For both, the fallback is now
-    unreachable from an ADMITTED act: each row's `purview` conjunct (`data/requires.py::Basis`)
-    refuses a rungless seat -- a cluster seat has purview nowhere -- so a seat that reaches the
-    mint always has a rung. It stays for the hand-built act that skips the precondition."""
+    `_eff_open_case` DRAWS ITS CASE FILE UP THE SAME WAY (§8). For both, the fallback is no longer
+    guaranteed unreachable from an ADMITTED act: each row's `purview` conjunct (`data/requires.py::
+    Basis`) refuses a rungless seat only by its OWN ground, and since v9 IN-40 a rungless seat passes
+    when a sworn holder brings ground (`state/gate.py::purview_reaches`' oblige clause). Such a seat
+    reaches the mint with no rung of its own, and the fallback draws the case file up at the act's
+    declared `rung` or the actor's id. It also serves the hand-built act that skips the precondition."""
     seat = w.offices.get(a.via) if a.via else None
     d = a.payload if isinstance(a.payload, dict) else {}
     return seat.rung if seat is not None and seat.rung is not None else (d.get("rung") or a.actor)
@@ -247,9 +249,17 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     matter = _operand(a, "subject")
     d = a.payload if isinstance(a.payload, dict) else {}
     arrangement, petition = d.get(DOCKET_ARRANGEMENT), d.get(DOCKET_PETITION)
-    if arrangement is not None and arrangement not in ARRANGEMENTS:
+    # A NAMED arrangement must be a row id (`str` first: a list or dict payload is unhashable and
+    # `in ARRANGEMENTS` would raise) whose `disposes:` is a Tenure kind `determine` can open
+    # (`DISPOSABLE_KINDS`) -- else the matter would dock and `determine` decline it forever, and
+    # `docketed` would block any second `open_case` (a wedge). `None` -- every computed case -- is
+    # the realm's path, unchanged.
+    if arrangement is not None and not (
+            isinstance(arrangement, str) and arrangement in ARRANGEMENTS
+            and ARRANGEMENTS[arrangement]["disposes"] in DISPOSABLE_KINDS):
         return NO_CHANGE
-    if petition is not None and getattr(w.records.get(petition), "kind", None) != "petition":
+    if petition is not None and not (
+            isinstance(petition, str) and getattr(w.records.get(petition), "kind", None) == "petition"):
         return NO_CHANGE
     if docketed(w, matter) or d.get("record") in w.records:
         return NO_CHANGE
@@ -281,8 +291,9 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         `writes:`, and is unbuilt (named, not guessed). So does a docket naming two rows for one
         matter (only a hand-planted docket can), rather than choose between them. The bullet below
         is the `oblige` case's reasoning, unchanged:
-      * KIND `oblige`. `arrangements.yaml`'s one seeded `disposes:` that is a Tenure kind is
-        `arbitration`'s `oblige`; the other two dispose a `Record`. C-1 (`21_RECONCILIATION.md:167`,
+      * KIND `oblige`. Five of `arrangements.yaml`'s seven seeded rows dispose a Tenure kind (`oblige`
+        for `arbitration`, `detain` and `ban` for the SC-03a rows); the other two dispose a `Record`.
+        This bullet is the `oblige` case: C-1 (`21_RECONCILIATION.md:167`,
         RULED A there): *"who owns the Tenure a determiner opens: its SUBJECT ... exactly `confer`,
         which opens a `hold` whose subject is the conferee"*, and its price, stated: *"the subject
         may `release` what the finding opened (T-m) ... a convict can discharge his own penance"* --
@@ -300,7 +311,8 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         him, and so joins its `establishment_of` like any obligee. REJECTED: the seat that opened
         the case -- the docket item does not record it, and adding a key nobody else reads would be
         a field for one reader.
-      * CARRYING `_eff_oblige`'s TERM (`oblige_term`, `H-159`), declared by THIS act (T-n: *"the
+      * (`oblige` only -- `detain` and `ban` open with NO term, `_disposal`'s assumption.) CARRYING
+        `_eff_oblige`'s TERM (`oblige_term`, `H-159`), declared by THIS act (T-n: *"the
         opening act declares the terms"*), so a disposal lapses at MATTER like any unpaid service,
         citing the determination that wound it (AX-5). `None` (the control) opens it with none.
       * NO `degree`. The row wrote `Tenure.degree` and nothing ever did; an UNCONTESTED act carries
@@ -370,7 +382,11 @@ def _disposal(w: "World", a: "Act", party: str, seat: str, kind: str) -> Optiona
     custody a timer nobody declared; the arrangement's `term_required` key has no reader yet."""
     tid = H(w.world_seed, w.tick, party, f"{kind}:{seat}:{a.id}")
     if kind == UNDECLARED_DISPOSAL:
-        return Tenure(tid, party, seat, "oblige", since=w.tick, term=_new_oblige_term(w, a))
+        # `payload={"determined_by": a.id}` marks the edge as IMPOSED, not sworn: `state/gate.py::
+        # purview_reaches`' oblige clause reads an OATH and skips an edge carrying this key (a sentence
+        # must not hand the bench the convict's own seat ground). `establishment_of` still lists him.
+        return Tenure(tid, party, seat, "oblige", since=w.tick, term=_new_oblige_term(w, a),
+                      payload={DETERMINED_BY: a.id})
     if kind == DETAIN_KIND:
         return Tenure(tid, party, seat, "detain", since=w.tick)
     if kind == BAN_KIND:

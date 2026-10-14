@@ -149,6 +149,20 @@ def test_in40_ehrenwall_split_by_an_unrenewed_term_at_matter():
         "the purview outlived the lapsed oblige")
 
 
+def test_in40_the_swearers_ground_goes_when_he_gives_up_the_seat_he_brought():
+    """The sworn purview is the swearer's LIVE holds: the oblige stands, but once the Grandmaster ends
+    his own `hold` on the Löwenritter seat he brings no ground. Mutation: drop `h.live` from the
+    clause's hold walk (red: a closed `hold` still extends the purview)."""
+    w, d = _world()
+    _swear(w, d, MASTER, CROWN, "ob_hold")
+    assert _reaches(w, CROWN, "D2")
+    out = _fold(w, d, Act(id="step_down", actor=MASTER, verb="release", payload={"subject": LION}))
+    assert _kinds(out) == ["tenure.closed"], _kinds(out)
+    assert [t.subject for t in world_q.sworn_to(w, CROWN)] == [MASTER], "the oath ended with the seat"
+    assert not _reaches(w, CROWN, "D2") and not _reaches(w, CROWN, "C"), (
+        "a closed hold still brought its ground to the sworn seat")
+
+
 def test_in40_the_split_moves_an_outcome_through_the_fold():
     """WHO HAS PURVIEW OVER WHOM CHANGES WHAT EXECUTES: the duke, exercising the Crown seat, may fill
     the Löwenritter reeve's seat at `C` only while the Grandmaster is sworn to it (`may_fill` ->
@@ -231,3 +245,37 @@ def test_in40_one_edge_deep_a_vassals_vassal_is_not_reached_through_him():
     _swear(w, d, DUKE, LION, "ob_cycle")                     # the duke swears back: a cycle
     assert _reaches(w, LION, "D") and _reaches(w, CROWN, "D2")
     assert not _reaches(w, BARONY, "D2"), "nobody swore to the barony"
+
+
+# ================================================================================================
+# 5 -- A DETERMINATION-IMPOSED OBLIGE IS NOT AN OATH (SC-03a x IN-40 close)
+# ================================================================================================
+
+def _convicted(w, d, key="sent"):
+    """`DUKE`, exercising the Crown seat (a judging seat over `Hh`, where `MASTER` lives), opens a case
+    on `MASTER` and determines it with NO declared arrangement -- the undeclared disposal, an
+    `oblige` of `MASTER`'s on the Crown seat that he never swore."""
+    out = _fold(w, d, Act(id=f"{key}_oc", actor=DUKE, verb="open_case", via=CROWN,
+                          payload={"subject": MASTER}))
+    assert _kinds(out) == ["case.opened"], ("fixture: the case was not opened", _kinds(out))
+    out = _fold(w, d, Act(id=f"{key}_dt", actor=DUKE, verb="determine", via=CROWN,
+                          payload={"subject": MASTER}))
+    assert _kinds(out) == ["matter.determined"], ("fixture: not determined", _kinds(out))
+
+
+def test_in40_a_determination_imposed_oblige_is_not_an_oath_and_extends_no_purview():
+    """A judge's finding binds the convict to the bench (he joins `establishment_of`, C-1) and must not
+    hand the bench the convict's own seat ground: the clause reads an OATH, and a sentence is not one.
+    CONTROL, one clause away: the same man voluntarily sworn to the same seat DOES extend it.
+    Mutation: drop the `determined_by` skip in `purview_reaches` (red at the reach assertion)."""
+    w, d = _world()
+    assert not _reaches(w, CROWN, "D2"), "fixture: the Crown seat reaches D2 with nobody bound"
+    _convicted(w, d)
+    assert MASTER in world_q.establishment_of(w, CROWN), "the sentence did not bind him to the bench"
+    [edge] = world_q.sworn_to(w, CROWN)
+    assert edge.payload == {"determined_by": "sent_dt"}, edge.payload
+    assert not _reaches(w, CROWN, "D2") and not _reaches(w, CROWN, "C"), (
+        "a convict's imposed oblige gave the judging seat purview over his own seat ground")
+    w2, d2 = _world()
+    _swear(w2, d2, MASTER, CROWN, "oath")
+    assert _reaches(w2, CROWN, "D2") and _reaches(w2, CROWN, "C"), "control: a sworn oblige must reach"

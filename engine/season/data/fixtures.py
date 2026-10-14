@@ -839,8 +839,9 @@ DEFAULT_FIXTURES = Fixtures(
     # not `19`'s. `arrangements.yaml` owns a real `quorum:` key, required only on `disposal:
     # declared` rows, and no docketed matter maps to its arrangement yet (`judging_set`'s
     # docstring), so this is the stand-in for that key, `record_stage_term`'s shape.
-    # `1` is SHIPPED and it is the LOOSEST value, not an argued one: the one seeded arrangement whose
-    # disposal is a Tenure (`arbitration`) has ONE decider, so a bench of one must be able to sit --
+    # `1` is SHIPPED and it is the LOOSEST value, not an argued one: `arbitration`, a seeded
+    # arrangement whose disposal is a Tenure (since v9 SC-03a, four others are -- `detain`, `ban`),
+    # has ONE decider, so a bench of one must be able to sit --
     # `speech_kinds`' *"the loosest floor rather than an authored restriction"* (`arrangements.yaml`).
     # At `1` the conjunct cannot refuse an actor the bench conjunct admitted (he is himself a member),
     # which is stated, not hidden: it is observable at `2` and `3`, where a lone judge is refused.
