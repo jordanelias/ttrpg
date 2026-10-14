@@ -2,6 +2,7 @@
 
 ## Status: PROPOSED (2026-10-14) · design only, builds nothing · reference under `CLAUDE.md` §0.05
 ## Position: IN-31 (H-100), `workplans/valoria_master_workplan_v9_part5.md` `### IN-31` · Lane: IN (SE) · IDs: none allocated
+## ⚠ Measured at HEAD `40926a95`, where IN-48's `delegate` carrier was built. THAT BUILD WAS REVERTED at the B-J close (it contradicts ratified Layer 1; `proposals/2026-10-14-in48-delegation-carrier.md` §9). Every passage below that names IN-48's `delegate` edge or dismissal branch (§0 table row, §2.4, §3.1, falsifier 8, §7's IN-48 edit) is CONDITIONAL on a delegation carrier surviving, and says nothing until one does; the provenance reading and the appointed/elected/None dispositions do not depend on it.
 ## Measured at HEAD `40926a95` (B-J; IN-48 built). A path with no top-level directory is under `engine/season/`.
 ## Revised 2026-10-14 for an independent critic's twelve findings. The orchestrator took the decisions marked ORCH (ladder steps 4-5); where one is new it is marked [ASSUMPTION; medium; Jordan to correct], with its revert.
 

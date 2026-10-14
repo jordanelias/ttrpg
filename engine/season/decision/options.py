@@ -30,20 +30,11 @@ from ..data.requires import (
     CELL_STEMS, SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS, VIA, WRIT_SOURCED_OPERANDS,
 )
 from ..data.rosters import (
-    CHANNEL_CLAIM_SOURCE, DELEGATE_KIND, PERSON_PREDICATES, PURSUIT_AXES, SEAT_KINDS,
-    WITNESS_CHANNELS, require_member,
+    CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, WITNESS_CHANNELS, require_member,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
-from ..data.verbs import _OPENERS_FROM_EFFECTS, ELIGIBILITY_KINDS, VERB_TABLE, align
-
-# v9 IN-48 (ORCH point 7): THE VERBS WHOSE EFFECT OPENS A `delegate` EDGE -- read off the derived
-# opener map (`data/verbs.py::_derive_openers_from_effects`, the one owner of *which verb opens which
-# kind*; `data/arrangements.py` imports it the same way), never a verb name. `opening_set` forms no
-# Candidate of one of these on the seat it would be exercised through: no computed decision opens a
-# delegation [ASSUMPTION; medium; Jordan to correct; revert: drop the decline once a person-side
-# reason to delegate exists].
-_DELEGATE_OPENERS = frozenset(_OPENERS_FROM_EFFECTS.get(DELEGATE_KIND) or ())
+from ..data.verbs import ELIGIBILITY_KINDS, VERB_TABLE, align
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
 from ..queries.person_q import (
@@ -196,12 +187,6 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             bagged = [(st, ops) for st in (seats or (None,))
                       for ops in operand_bags(p, row, q, subject, fx, seat=st, people=people)]
             for st, ops in bagged:
-                # v9 IN-48 THE DECLINE: a delegate-opening verb's Candidate on the very seat it would be
-                # exercised through is a DELEGATION (`_req_confer`'s `office == via` branch), and no
-                # computed decision opens one. The Candidate is not formed (H-207 C4: a told-of own
-                # seat rides the same class as a vacancy).
-                if verb in _DELEGATE_OPENERS and st is not None and subject == st:
-                    continue
                 # ⚠ AND A TWO-SIDED ACT NEEDS A SECOND SIDE (plan position `15`, `ED-IN-0210` ruling
                 # 2). The rule above, one column over: a row naming its `counterparty:` operand forms
                 # no Candidate whose counterparty is the person -- a petition to oneself is the
@@ -466,12 +451,8 @@ def _granting_holds(p: Person, act: str, need_treasury: bool = False) -> tuple:
     from the seat's rung (`treasury_of`), so a seat whose grant carries no rung grants nothing such
     an act can be exercised through, and is passed over. Every reader of the seat (`opening_set`'s
     belief seat, `_operands`, `pack_scenes`' `via`) goes through here, so `via` and `from` agree."""
-    # v9 IN-48: `SEAT_KINDS` -- a live `delegate` edge carries the seat's grant as a `hold` does, so a
-    # delegate forms acts through the seat. ⚠ NO DORMANCY HERE: this reads the person's own edges and no
-    # `World` (L2), so a delegate on a vacant seat still forms the act, and the fold refuses it
-    # (`state/gate.py::seat_hold`) -- clause 4's shape: the person learns otherwise.
     return tuple(dict.fromkeys(
-        t.object for t in p.tenures if t.kind in SEAT_KINDS and t.live and act in t.granted_acts
+        t.object for t in p.tenures if t.kind == "hold" and t.live and act in t.granted_acts
         and (not need_treasury or t.seat_rung is not None)))
 
 
@@ -631,8 +612,8 @@ def treasury_of(p: Person, seat: str) -> Optional[str]:
     `opening_set` formed the Candidate for, `exercised_seat`'s for one seat) gives from the seat's rung, because that is where the seat's
     matter is, and `loop/effects_economy.py::_renewals` already reads a payment of upkeep as exactly
     that (`seat.rung == from`). One rule for both positions of the actor, no verb named."""
-    return next((t.seat_rung for t in p.tenures      # v9 IN-48: a delegate's seat too
-                 if t.kind in SEAT_KINDS and t.live and t.object == seat), None)
+    return next((t.seat_rung for t in p.tenures
+                 if t.kind == "hold" and t.live and t.object == seat), None)
 
 
 def _claim_by_id(p: Person, claim_id) -> Optional["Claim"]:

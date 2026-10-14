@@ -49,8 +49,7 @@ from typing import Any, Callable, Optional
 # conformance B4, disposition 3: §C.2 is the later, more specific row, and is the one taken).
 from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import MATRIX, WriteClass
-from ..data.rosters import (CONFERRAL_BASES, DELEGATE_KIND, DETAIN_KIND, RESTRAINT_KINDS,
-                            REVOCATION_BASES, SEAT_KINDS, TENURE_KINDS)
+from ..data.rosters import CONFERRAL_BASES, DETAIN_KIND, RESTRAINT_KINDS, REVOCATION_BASES, TENURE_KINDS
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .carriers import Office, Receipt, Tenure
 # ⚠ NO `World` IMPORT, NOT EVEN UNDER `TYPE_CHECKING`: `world` imports this module, and the tree's
@@ -268,12 +267,6 @@ WARRANT = "warrant"
 # `meta: remit_unruled`) -- so which posts carry the grant, and whether it is a remit act at all, is
 # Jordan's to rule, and this basis moves with the ruling.
 WARRANT_ACT = "dispatch"
-# THE ELEVENTH BASIS (v9 IN-48, H-108's delegation half): `delegation` -- an OPENING, or a PURE CLOSURE,
-# of a `delegate` edge on the seat exercised, by that seat's own sitting HOLDER, for someone else
-# (`may_delegate`). Named for the act it licenses, in the ordinary word (ED-IN-0179): *"conferred the
-# regency on his brother"*. AUTHORITY-BOUND on `via`, like `renewal`, and REFLEXIVE ON THE SEAT like
-# it -- the opposite of `conferral`, which refuses `via == off`. It cannot grade, re-term or re-grant.
-DELEGATION = "delegation"
 
 
 def seat_hold(w: "World", actor: Optional[str], via: Optional[str]) -> Optional[Tenure]:
@@ -285,38 +278,20 @@ def seat_hold(w: "World", actor: Optional[str], via: Optional[str]) -> Optional[
     being a string anyone may write. `None` for a missing actor, a missing `via`, a `via` that is
     not an office, and an actor with no live `hold` on it.
 
-    v9 IN-48 (H-108's delegation half): TWO KINDS SEAT A PERSON (`data/rosters.py::SEAT_KINDS`).
-    `04:332` says *"a regent has the seat's purview"*, and a `delegate` edge (Person -> Office,
-    opened by the seat's holder through that seat, `may_delegate`) is that regent. This returns, in
-    order: the actor's live `hold` on `via` if he has one (the hold PREFERRED); else his live
-    `delegate` edge on `via`, which carries the seat's grant like a `hold` -- but ONLY WHILE SOME live
-    `hold` on `via` exists (dormancy, below); else `None`. Every reader
-    of this function -- the fold's remit branch, `may_revoke`, `may_fill`, `may_renew`, `may_warrant`
-    -- therefore admits a delegate's act through the seat, and refuses it the instant the edge ends.
-    ⚠ `may_determine` and `may_delegate` ask the KIND of what this returns and admit a `hold` only.
-    ⚠ NOT `oblige`: since v9 IN-40 a live, non-imposed `oblige` to a seat is vassalage
-    (`purview_reaches`' oblige clause), and `sworn_to` reads `oblige` alone, so a delegation never
-    extends the delegated seat's purview over the delegate's own ground.
+    ⚠ A `hold` AND NOTHING ELSE SEATS A PERSON TODAY. `04:332` says *"a regent has the seat's
+    purview"*, and no relation in the tree makes a person a seat's regent (`oblige`, `04 §B.7`
+    call 2's council membership, seats nobody; ⚠ SINCE v9 IN-40 a live, non-imposed `oblige` to a
+    seat IS read, by `purview_reaches`' oblige clause, as vassalage -- a delegation carrier built
+    on it would also extend the delegated seat's purview over the delegate's own ground). So a regent is expressible only
+    as a holder; delegation without a `hold` is `H-108`'s, still open, and this does not close it.
     Returned as the Tenure, not the Office, because `_eligible`'s remit branch reads the GRANT the
     holder has (`Tenure.granted_acts`, the `13e` snapshot), not the office's live remit."""
     if not actor or not via or via not in w.offices:
         return None
-    delegated, occupied = None, False
     for t in w.tenures:
-        if t.object != via or not t.live:
-            continue
-        if t.kind == "hold":
-            if t.subject == actor:
-                return t
-            occupied = True
-        elif t.kind == DELEGATE_KIND and t.subject == actor and delegated is None:
-            delegated = t
-    # v9 IN-48 (ORCH point 2) [ASSUMPTION; medium; Jordan to correct; revert: return `delegated`
-    # unconditionally -- the delegation is the seat's, a permanent regent through a vacancy]: A
-    # DELEGATION IS DORMANT WHILE THE SEAT HAS NO LIVE `hold`. The principal's death (the cascade) or
-    # resignation leaves the edge live and unread; a later holder revives it, and may `revoke` it. No
-    # cascade, no field.
-    return delegated if occupied else None
+        if t.kind == "hold" and t.subject == actor and t.object == via and t.live:
+            return t
+    return None
 
 
 def purview_reaches(w: "World", seat: Office, rung: Optional[str]) -> bool:
@@ -635,33 +610,6 @@ def may_renew(w: "World", actor: Optional[str], via: Optional[str], off: Office)
     return via == off.id and seat_hold(w, actor, via) is not None
 
 
-def may_delegate(w: "World", actor: Optional[str], via: Optional[str], off: Optional[Office],
-                 delegate: Optional[str]) -> bool:
-    """THE DELEGATION BASIS, AS ONE PREDICATE (v9 IN-48, H-108's delegation half): may `actor`,
-    exercising `via`, open or end `delegate`'s `delegate` edge on the seat `off`?
-
-    Three conjuncts, each the one owner of its rule:
-      1. `via` IS `off` -- a delegation comes only from the seat's own holder, through that seat, as
-         `may_renew` is reflexive on the seat. So no OUTSIDE seat installs a regent: a puppet put in
-         from outside stays expressible only as a holder seated by `confer` (a named residue).
-      2. the actor sits in it through a `hold` (`seat_hold`, asked of its KIND): a delegate cannot
-         delegate further, nor dismiss a co-delegate.
-      3. `delegate` is a PERSON other than the actor (only a person exercises a seat; a holder does
-         not delegate to himself).
-
-    Asked by the gate's `delegation` clause for every opened or purely closed `delegate` edge, and by
-    `_req_confer`/`_req_revoke` before their effects run -- `may_fill`'s shape: one owner, two readers.
-    WHAT IT DOES NOT DECIDE: the conferee's standing at OPENING (a living, unbanned person holding no
-    seat edge on `off` already) -- `_req_confer`'s, so a CLOSURE is never refused because the
-    delegate's standing changed after."""
-    if off is None or via is None or via != off.id:
-        return False
-    t = seat_hold(w, actor, via)
-    if t is None or t.kind != "hold":
-        return False
-    return delegate is not None and delegate != actor and delegate in w.persons
-
-
 def sits_over(w: "World", seat: Office, rung: Optional[str]) -> bool:
     """THE BENCH'S CONTAINMENT TEST, ONCE: does `seat` sit in judgment over `rung`?
 
@@ -736,11 +684,7 @@ def may_determine(w: "World", actor: Optional[str], via: Optional[str], party: O
     branch, so a disposal edge on the judging seat is judged here and never reaches `T-o`/`conferral`
     (which claim every seat-`hold`); a `hold` is not a `DISPOSABLE_KIND` and no row disposes one."""
     t = seat_hold(w, actor, via)
-    # v9 IN-48 (ORCH point 4) [ASSUMPTION; medium; Jordan to correct; revert: admit `SEAT_KINDS` here
-    # and in `queries/world_q.py::judging_set` together, and a delegate sits in judgment]: A `hold`,
-    # NOT A DELEGATION. Bench membership is holders (`judging_set` reads `hold` alone), so a delegate
-    # adds no quorum, and the gate must agree with the bench: a delegate cannot `determine`.
-    if t is None or t.kind != "hold" or BENCH_BASIS not in t.granted_acts:
+    if t is None or BENCH_BASIS not in t.granted_acts:
         return False
     if party is None or party == actor or party not in w.persons:
         return False
@@ -822,17 +766,15 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     `released` is every OBJECT on which the same write ended the actor's own live `hold` under
     `T-m` and has not yet handed it on -- computed by `refuse_unauthored` from the batch it holds,
     because this function sees one Tenure and cannot (see `handover` below). Empty by default, so a
-    caller judging a Tenure alone gets the answer of every basis but `handover` (ten, since v9
-    IN-48 added `delegation`; nine since v9 SC-03a added `warrant`; eight since `24e` added
-    `founding`; seven since `19` added `determination`; six since `17b` built `T-n` and added
-    `renewal`; five before).
+    caller judging a Tenure alone gets the answer of every basis but `handover` (nine, since v9
+    SC-03a added `warrant`; eight since `24e` added `founding`; seven since `19` added
+    `determination`; six since `17b` built `T-n` and added `renewal`; five before).
 
-    THE ELEVEN BASES, AND WHAT EACH MAY WRITE -- a basis admits a KIND of change, not any change:
+    THE TEN BASES, AND WHAT EACH MAY WRITE -- a basis admits a KIND of change, not any change:
 
       `T-m`       the actor IS the owner -- `was.subject` for an existing edge, `t.subject` for a
                   new one. Anything the owner does to their own edge EXCEPT open or re-grant a
-                  seat edge -- a `hold` on a seat, or (v9 IN-48) a `delegate` edge (never T-m's,
-                  even the actor's own -- `conferral`'s or `delegation`'s alone) or rewind
+                  seat-`hold` (never T-m's, even the actor's own -- `conferral`'s alone) or rewind
                   its `term` (`release`, `move`'s legs, `create_record`'s `hold` are what remains)
                   -- a `term` rewrite on an existing edge is `T-n`'s or `renewal`'s to admit, never
                   T-m's (BATCH-CLOSE, methodology-close Phase 1, 2026-09-30: the bare guard once
@@ -865,16 +807,6 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
       `conferral` an OPENING of a `hold` on a SEAT, or a change to that `hold`'s grant (`payload`)
                   alone, by `may_fill`. The re-grant is `establish`'s re-stamp (`13f`): the grant a
                   seat confers on its holder, written by the authority that may fill the seat.
-                  v9 IN-48 adds ONE CLOSING ARM: a PURE CLOSURE of a `delegate` edge on the seat,
-                  by `may_fill`, whose owner holds a live `hold` on that seat in the world the
-                  write leaves -- seating a delegate in the seat he exercised ends his delegation.
-      `delegation` (v9 IN-48) an OPENING, or a PURE CLOSURE, of a `delegate` edge on the seat
-                  exercised, by `may_delegate` -- `via` IS the seat, the actor sits in it through
-                  a `hold`, and the edge's owner is another person. The holder's `confer` naming
-                  his own seat opens it; his `revoke` naming the seat and the delegate (`to`)
-                  closes it. AUTHORITY-BOUND and REFLEXIVE ON THE SEAT, `renewal`'s shape. It
-                  cannot grade, re-term or re-grant; the opening is judged whole, with the grant
-                  the one writer stamped (`World._grant_remit`).
       `handover`  an OPENING of a `hold` on something that is NOT a seat, whose object is in
                   `released` -- the actor ended their own live `hold` on that object under `T-m`
                   in this same write. `give` (plan position 16) is the verb; the basis is general
@@ -971,10 +903,7 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
         return None
     moved = _moved(t, was)
     closed = _closes(t, was, moved)
-    # v9 IN-48: `SEAT_KINDS`, NOT `hold` ALONE -- so the T-m carve-out below refuses an owner OPENING
-    # (or re-granting) his own `delegate` edge exactly as it refuses a self-opened seat-`hold`, and
-    # still admits his `release` (a pure closure). A delegate cannot write his own delegation.
-    seat = w.offices.get(t.object) if t.kind in SEAT_KINDS else None
+    seat = w.offices.get(t.object) if t.kind == "hold" else None
     # ⚠ T-M NEVER ADMITS OPENING OR RE-GRANTING A SEAT-HOLD, EVEN THE ACTOR'S OWN (found by the
     # antagonist pass, 2026-09-26: "the wrong answer is a quietly permissive gate" was exactly
     # this). `owner` on an OPENED edge is read from the write itself (`t.subject`), so "the actor
@@ -1075,23 +1004,6 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
         return WARRANT
     if seat is None:
         return None
-    # v9 IN-48: A `delegate` EDGE IS JUDGED HERE AND NEVER REACHES `T-o`/`conferral` BELOW, which stay
-    # `hold`-only. `delegation`: an OPENING (judged whole, as `conferral` and `determination` judge
-    # theirs -- the grant the one writer stamped rides with it) or a PURE CLOSURE, by `may_delegate`
-    # -- the seat's own holder, through that seat, for somebody else. Nothing admits a `term` or
-    # `payload` change on a live one: a delegation is re-granted by ending it and opening another.
-    if t.kind == DELEGATE_KIND:
-        if (opened or closed) and may_delegate(w, actor, via, seat, t.subject):
-            return DELEGATION
-        # `conferral`'s ONE CLOSING ARM (ORCH point 3): a `confer` seating a person in `seat` closes his
-        # own `delegate` edge on it. Admitted when `via` may fill the seat AND the edge's owner holds a
-        # live `hold` on it in the world the write leaves -- judged on one change, as this function's
-        # *"JUDGED ON THE WORLD THE WRITE LEAVES"* rule says, so it needs no two-pass licence.
-        if (closed and may_fill(w, actor, via, seat)
-                and any(o.kind == "hold" and o.subject == t.subject and o.object == seat.id and o.live
-                        for o in w.tenures)):
-            return CONFERRAL
-        return None
     if closed and may_revoke(w, actor, via, seat):
         return T_O
     if (opened or moved == {"payload"}) and may_fill(w, actor, via, seat):
@@ -1109,10 +1021,10 @@ def refuse_unauthored(w: "World", changes: list, actor: Optional[str], via: Opti
     the edge it refused is as it was (`NotYours`' own raise is `World.write`'s, via `not_yours`).
 
     TWO PASSES, BECAUSE ONE BASIS SPANS TWO TENURES (position 16). The first judges every change
-    on its own -- the ten bases that need nothing but the change, the actor, `via`, `gone` and
+    on its own -- the nine bases that need nothing but the change, the actor, `via`, `gone` and
     `born` (five until plan position `17b` built `T-n` and added `renewal`, six until `19` added
-    `determination`, seven until `24e` added `founding`, eight until v9 SC-03a added `warrant`,
-    nine until v9 IN-48 added `delegation`; none of them reads another CHANGE of
+    `determination`, seven until `24e` added `founding`, eight until v9 SC-03a added `warrant`;
+    none of them reads another CHANGE of
     the batch -- `founding`'s one-parent check reads the store the write left, which holds them).
     From those verdicts it takes the `handover` licence: the object of every `hold` this actor
     ENDED under `T-m` in this write, counted. The second re-judges only what the first refused,
@@ -1181,10 +1093,7 @@ def not_yours(refused: list, actor: Optional[str], via: Optional[str], record_ki
               f"kind some arrangement disposes opened -- or a `detain`/`ban` closed -- on the "
               f"judging seat exercised, for a person its bench's ground holds), {WARRANT} (a "
               f"`detain` opened on a seat, for a person the exercised seat's purview reaches, by "
-              f"a holder granted `{WARRANT_ACT}`), {DELEGATION} (a `delegate` edge opened or "
-              f"closed on the seat exercised, by that seat's own holder, for another person), "
-              f"{CONFERRAL}'s closing arm (a `delegate` edge closed on a seat via may fill, its "
-              f"owner now holding that seat), or "
+              f"a holder granted `{WARRANT_ACT}`), or "
               f"{FOUNDING} (a `contain` opened for a thing this same write brought into "
               f"existence, its only parent)",
         law="04 §C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner "

@@ -1,6 +1,6 @@
 # IN-48: the delegation carrier (a seat exercised by someone who does not hold it)
 
-## Status: PROPOSED (2026-10-14) · design only, builds nothing · reference under `CLAUDE.md` §0.05
+## Status: PROPOSED (2026-10-14) · HELD: built at `40926a95` and REVERTED because it contradicts ratified Layer 1 (§9) · reference under `CLAUDE.md` §0.05
 ## Position: IN-48 (H-108's delegation half), `workplans/valoria_master_workplan_v9_part5.md` `### IN-48` · Lane: IN (FA SE) · IDs: none allocated
 ## Measured at HEAD `46c08d9c` (B-J boundary 1; IN-40 landed `3f320093`). A path with no top-level directory is under `engine/season/`.
 ## Revised 2026-10-14 for an independent critic's findings. The orchestrator took the decisions marked ORCH (ladder step 5), each [ASSUMPTION; medium; Jordan to correct], with its revert named where it is applied.
@@ -479,3 +479,56 @@ Each assumption is [medium; Jordan to correct] and marked inline:
 - **ORCH, point 7:** DECLINE (§2.7). Revert: allow when a reason to delegate exists.
 - **The opener is `confer`/`revoke` with `office == via`, not a new `delegate` verb.** A new verb would
   cost a full row, a `remit_acts` member and an R-05 row that cannot execute without a decision source.
+
+---
+
+## 9. Held: the build contradicts ratified Layer 1 (B-J close, Phase 1, 2026-10-14)
+
+The carrier was built at `40926a95`, all thirteen falsifiers passing, and reverted at the close before it
+reached `main`. An independent cross-examiner and the compliance reviewer found, and the orchestrator
+opened and confirmed, that this design contradicts text of `architecture/` (Layer 1, RATIFIED, ED-IN-0204,
+binding as agent instruction) that §1 above never cites:
+`architecture/meta/01_AXIOMS.md:1465-1467` (delegation is *conferring a seat*; a regency is a seat conferred
+over the domain while the title stays put), `:1528-1530` (*"`tenure_kinds` does not move; no new carrier"*),
+`:1544`, `:1569` (*"Delegation does not need a delegation mechanism. It needs the `conferral` basis to be
+specified"*; the build's branch runs BEFORE `has_conferral_basis`), `:1640`; and
+`architecture/meta/04_CODE_ARCHITECTURE.md:351` (*"delegation = `establish` → `confer` → `revoke`"*, MECHANICAL).
+The plan's IN-48 entry assumed "an already-rostered `tenure_kinds` member" and said "attacked at the design";
+that licenses testing the assumption, not amending Layer 1, and it has no `Layer-1 amendment` field. A
+Layer-1 amendment is Jordan's (the `carry` precedent in `_part5` IN-45; SC-03a's `detain`/`ban` were named
+by a ratified source, ED-IN-0288, and contradicted no Layer-1 sentence).
+
+**What this changes.** §1's candidate list omitted Layer 1's own route: `establish` a second seat over the
+domain, `confer` it, with IN-10's `Tenure.term` for "revoke at majority". The position returns to design on
+THAT route first. Its open question, to be MEASURED: no rung-above revocation basis lets a principal revoke a
+same-rung seat early. Only if that route fails on a named measurement is the `delegate` kind (this document)
+put to Jordan, as one `needs_jordan` row with both options, and `architecture/` is then amended by him
+(`_part8` IN-44 lists the Layer-1 edits owed, none by a batch).
+
+**If this design is resumed, the Phase 1 findings that apply** (each was verified against the tree):
+1. `rung_above_in_holdings` is judged on the DELEGATE's own holdings (`gate.py` `may_revoke` passes `actor`
+   to the rule; `in_holdings` reads `t.subject == actor`), which also governs a delegate's `confer` that
+   displaces an incumbent and the T-o clause. Fix: judge the principal (the occupying hold's subject).
+2. A superior's displacing `confer` leaves the principal's third-party delegates live and revives them for
+   the successor, who can end them only by a hand-built `revoke` naming `to` (the closing arm names only the
+   conferee's own edge).
+3. A seat that grants `confer` but not `revoke` can open a delegation and cannot dismiss it (`_eligible`
+   runs first). Every shipped confer-granting seat also grants `revoke`.
+4. A delegate's grant, full or declared, is the seat's remit at opening; `establish` re-stamps `hold`s only.
+5. `reach` and `governors_of` read other people's tenures through the dormancy rule; their docstrings said
+   they may not.
+6. Test gaps to close: `delegate != actor` at the bare gate; "hold preferred" with the delegate listed
+   BEFORE the hold; the EXIT test must judge execution with `harness/corpus_run.py::attribute` (refusal kinds
+   include `<verb>.unauthorized`), with a same-world control; `reach`, `vacancies`, `treasury_of` and
+   `_hold_tenure_ends` named by an assertion.
+7. Stale text to correct with the build: `state/carriers.py` `granted_acts` ("every kind but `hold`"),
+   `gate.py` ("nine now", `seat` "computed only for hold"), `epistemic.py:166-171, :229-247`,
+   `verb_table.yaml` `confer` `writes_note`, `world_q.py` `reach` limb 4; `gate.py:289` cites `04:332` for
+   `04:350`.
+8. Measured on the build, `build_realm(0)`, four seasons, 1162 s: `_req_confer` entered 0, 0, 0, 5 times with
+   0 own-seat; the same on the base (so the realm cannot tell the DECLINE from none); on the `_gov_world`
+   fixture over four seasons, DECLINE off 39 entries with 11 own-seat and 2 delegations opened by computed
+   decisions; DECLINE on 26 entries and 0 and 0. Build and one-season hashes were unchanged
+   (`11989dcf5e1c25afab556bf3f234a200`, `0f8e0144220a3665d3286a9a54c39f3e`).
+9. H-108 would have been graded `assumption`, not `measured` (four medium residues), and its "puppet rulers"
+   unblock was not met (no outside seat installs a regent).

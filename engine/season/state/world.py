@@ -38,7 +38,7 @@ from typing import Any, Callable, Optional
 from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
 from ..data.matrix import Step, WriteClass, matrix_row, partition_lookup
 from ..data.rosters import (
-    DELEGATE_KIND, HOLD_OBJECT_KINDS, HOLD_SUBJECT_KINDS, RUNG_KINDS, SEAT_KINDS, TENURE_KINDS, roster)
+    HOLD_OBJECT_KINDS, HOLD_SUBJECT_KINDS, RUNG_KINDS, TENURE_KINDS, roster)
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, Unowned, Unspecified
 from ..trace_log import TRACE
 from .attribution import anchor_of
@@ -325,12 +325,6 @@ class World:
                     f"not an error at write time and a silent never-match at read time")
         if t.kind == "hold":
             self._refuse_bad_hold(t)
-        elif t.kind == DELEGATE_KIND:
-            self._refuse_bad_delegate(t)
-        # v9 IN-48: BOTH SEAT KINDS CARRY THE GRANT (`data/rosters.py::SEAT_KINDS`). A `delegate` edge
-        # is a second way to sit in a seat, so it is stamped by this one writer exactly as a `hold`
-        # is, and `Tenure.granted_acts`/`seat_rung` read it the same way.
-        if t.kind in SEAT_KINDS:
             self._grant_remit(t)
         if t.kind == "contain" and not self.contain_ascends(t.subject, t.object):
             sub, obj = self.rungs[t.subject], self.rungs[t.object]
@@ -499,7 +493,7 @@ class World:
         self._staged = {}
         return out
 
-    def _grant_remit(self, t: Tenure, force: bool = False, within=None) -> bool:
+    def _grant_remit(self, t: Tenure, force: bool = False) -> bool:
         """`H-71` arm 2, THE WRITE HALF: seating a holder writes the office's remit acts into the
         `hold` Tenure's `payload`, so the grant rides on the thing the holder owns.
 
@@ -544,13 +538,6 @@ class World:
 
         Leaves a payload another writer already set alone, and writes nothing for a `hold` whose
         object is not an office (`hold` also takes Rung, Record and Proposition per `holonic §15`).
-
-        v9 IN-48: `within`, A DECLARED SUBSET. A `confer` opening a `delegate` edge may declare the acts
-        it delegates (`loop/effects_governance.py::ACTS_KEY`); its effect then calls this with
-        `force=True, within=<those acts>`, and the grant is the office's LIVE remit filtered to them,
-        in the remit's own order -- bounded at opening, a snapshot after (`_eff_establish` re-stamps
-        `hold`s only). `None` (every other caller) is the whole remit, exactly as before. The key keeps
-        this one writer.
         """
         off = self.offices.get(t.object)
         if off is None:
@@ -564,8 +551,7 @@ class World:
                 TRACE.note(f"`hold` {t.id!r} opened on {t.object!r}, which the world does not "
                            f"hold yet -- no remit granted until an `establish` founds it")
             return False
-        grant = tuple(off.remit_acts) if within is None else tuple(
-            a for a in off.remit_acts if a in within)
+        grant = tuple(off.remit_acts)
         # `H-160` limit 1 / `H-158`: THE GRANT ALSO SAYS WHERE THE SEAT'S TREASURY IS -- the seat's
         # rung, read person-side by `Tenure.seat_rung` (its one reader of the key), so a holder paying
         # through his seat can name the rung he pays out of without a `World`. Written with the acts,
@@ -627,28 +613,6 @@ class World:
                 needs=f"an object on rosters.yaml: hold_object_kinds {sorted(HOLD_OBJECT_KINDS)}",
                 law="holonic §15 -- `hold : Person -> Office | Rung | Record | Proposition`. A "
                     "`hold` on a Site is the class the table excludes and nothing refused")
-
-    def _refuse_bad_delegate(self, t: Tenure) -> None:
-        """v9 IN-48 (H-108's delegation half): A `delegate` EDGE IS `Person -> Office`, refused
-        otherwise, on `_refuse_bad_hold`'s pattern -- so a build-placed edge (the EXIT's) is checked
-        by the one writer, not only an act's. A delegation is the exercise of a SEAT by a PERSON:
-        on a Rung, a Record or a Proposition it would seat nobody (`seat_hold` reads offices only),
-        and owned by anything but a person it would be an exercise nobody can act through.
-
-        ⚠ AN UNRESOLVABLE ID PASSES, as `_refuse_bad_hold`'s does (`class_of`'s *"not yet"*)."""
-        sub, obj = self.class_of(t.subject), self.class_of(t.object)
-        if sub is not None and sub != "Person":
-            raise Forbidden(
-                f"`{DELEGATE_KIND}` tenure {t.id!r} has subject {t.subject!r}, which is a {sub}",
-                "S15", needs="a Person subject: the delegate who exercises the seat",
-                law="IN-48 -- `delegate : Person -> Office`; a delegation owned by anything but a "
-                    "person names nobody who can act through the seat")
-        if obj is not None and obj != "Office":
-            raise Forbidden(
-                f"`{DELEGATE_KIND}` tenure {t.id!r} has object {t.object!r}, which is a {obj}",
-                "S15", needs="an Office object: the seat delegated",
-                law="IN-48 -- `delegate : Person -> Office`; a delegation of something that is not a "
-                    "seat seats nobody, since `seat_hold` reads offices only")
 
     def remove_person(self, who: str) -> list:
         """THE ONE DEATH CASCADE: every live edge naming this person closes, then they are gone.

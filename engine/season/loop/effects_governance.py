@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from typing import Optional
 
-from ..data.rosters import DELEGATE_KIND, RELEASABLE_KINDS
+from ..data.rosters import RELEASABLE_KINDS
 from ..gaps import InstrumentDefect
 from ..loop.predicates import office_described_by, office_named_by
 from ..queries.world_q import BAN_KIND, restrained
@@ -32,29 +32,6 @@ from .effects_shared import _exercised_office, _new_oblige_term, _operand, _shif
 #: exactly as `create_record`'s act-declared `stages` and a hand-built `confer`'s `office` are payload
 #: keys the effect reads and no cell does. A computed act carries none.
 TERM_KEY = "term"
-
-#: v9 IN-48 (A1) [ASSUMPTION; medium; Jordan to correct; revert: drop this key and the `within` call,
-#: so every delegation carries the seat's full grant]: THE PAYLOAD KEY A DELEGATING `confer` DECLARES
-#: THE ACTS IT DELEGATES UNDER -- `TERM_KEY`'s shape, a payload key no typed cell binds (a computed act
-#: never opens a delegation, the DECLINE in `decision/options.py::opening_set`). The grant is the seat's
-#: LIVE remit filtered to these acts at opening (`World._grant_remit`'s `within`), so the key on the
-#: edge keeps its one writer. Absent: the full grant.
-ACTS_KEY = "acts"
-
-
-def _declared_acts(a: "Act") -> "Optional[tuple]":
-    """The acts a delegating `confer` declares (`ACTS_KEY`), or `None` for the full grant. A
-    declaration that is not a list of act names is a CALLER defect, raised as `_declared_term` raises
-    for a malformed term, never a guessed grant."""
-    d = a.payload if isinstance(a.payload, dict) else {}
-    acts = d.get(ACTS_KEY)
-    if acts is None:
-        return None
-    if not isinstance(acts, (list, tuple)) or not all(isinstance(x, str) for x in acts):
-        raise InstrumentDefect(
-            f"a {a.verb!r} declares acts {acts!r}; a delegation's acts are a list of remit act "
-            f"names, and fabricating a grant would delegate what nobody declared")
-    return tuple(acts)
 
 
 def _declared_term(w: "World", a: "Act") -> "Optional[Term]":
@@ -127,28 +104,7 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     # `obj`'s rung].
     if restrained(w, to, BAN_KIND):
         return NO_CHANGE
-    # v9 IN-48 (H-108's delegation half): A `confer` NAMING ITS OWN SEAT DELEGATES IT -- a `delegate`
-    # edge for `to` on the seat, opened by its holder through it (the gate's `delegation` basis). It
-    # computes no `closed` list, so it cannot close a `hold`: the principal keeps his seat (a termed
-    # regent who DISPLACES him is IN-10's seat-hold term, the branch below). Its term is the act's
-    # declaration, as a seat-hold's is; its grant the seat's, or the declared subset (`ACTS_KEY`).
-    # ⚠ THE KIND IS SPELLED LITERALLY: `data/verbs.py::_derive_openers_from_effects` reads a kind only
-    # as a string constant at a `Tenure(...)` call, and derives `delegate`'s opener set from this line.
-    if obj == a.via:
-        dt = Tenure(H(w.world_seed, w.tick, to, f"delegate:{obj}:{a.id}"), to, obj, "delegate",
-                    w.tick, term=_declared_term(w, a))
-        acts = _declared_acts(a)
-
-        def delegate() -> None:
-            w.add_tenure(dt)
-            if acts is not None:
-                w._grant_remit(dt, force=True, within=acts)
-        return Change((Subject.edge(dt, "tenure.opened"),), delegate)
-    # v9 IN-48 (ORCH point 3): SEATING A PERSON CLOSES HIS OWN LIVE `delegate` EDGE ON THE SAME SEAT, or
-    # he would hold a delegation on a seat he now holds. The gate admits it under `conferral`'s closing
-    # arm (`state/gate.py::tenure_write_basis`); a self-conferral reaches `T-m` first.
-    closed = [t for t in w.tenures if t.object == obj and t.live
-              and (t.kind == "hold" or (t.kind == DELEGATE_KIND and t.subject == to))]
+    closed = [t for t in w.tenures if t.kind == "hold" and t.object == obj and t.live]
     # IN-10 (b) (#453 §7.2/§9.6 `:1382`, `:2071`): A SEAT-HOLD MAY CARRY A TERM -- regency, the
     # term-limited seat. The term is the OPENING ACT's declaration (T-n, *'the opening act declares
     # the terms'*), read off the act as `create_record` reads its act-declared `stages`; MATTER
@@ -315,13 +271,6 @@ def _eff_revoke(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     so a seatless revocation is `NotYours` -- never excused as a no-op."""
     d = (a.payload or {}) if isinstance(a.payload, dict) else {}
     obj = d.get("office")
-    # v9 IN-48: THE HOLDER DISMISSING A DELEGATE -- a `revoke` of its own seat naming `to` closes that
-    # person's live `delegate` edge on the seat and nothing else, never a `hold` (the gate's
-    # `delegation` basis, closing arm). No `to`: the ordinary path, unchanged.
-    if obj is not None and obj == a.via and "to" in d:
-        to = d.get("to")
-        return _closing(w, [t for t in w.tenures if t.kind == DELEGATE_KIND and t.subject == to
-                            and t.object == obj and t.live])
     return _closing(w, [t for t in w.tenures if t.kind == "hold" and t.object == obj and t.live])
 
 

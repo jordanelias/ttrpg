@@ -56,8 +56,8 @@ from typing import Optional
 
 from .data.requires import binding_of, evaluate
 from .data.rosters import (
-    CLAIM_SUBJECT_RULES, FAN_OUT_MODES, OBSERVATION_TERMS, SEAT_KINDS, SEEN_PREDICATE,
-    TERMS_SUPPLIED_BY, WITNESS_CHANNELS, require_member)
+    CLAIM_SUBJECT_RULES, FAN_OUT_MODES, OBSERVATION_TERMS, SEEN_PREDICATE, TERMS_SUPPLIED_BY,
+    WITNESS_CHANNELS, require_member)
 from .data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow
 from .gaps import Unspecified
 from .state.attribution import anchor_of, causing_act
@@ -174,12 +174,9 @@ def _hold_tenure_ends(w: "World", subject: str) -> tuple:
     writing left `seen_subject` depositing a `hold` Tenure's own opaque id -- unwitnessable, because
     no live Tenure has a Tenure's own id as its `object` (`questions_for`'s `mine`), so Q2 could
     never fire for exactly the office-conferral/revocation events `R8.4`'s last row names. One
-    owner closes that gap for both callers at once.
-
-    v9 IN-48: BOTH SEAT KINDS (`data/rosters.py::SEAT_KINDS`), so a delegation's receipt names both its
-    ends -- the delegate and the seat -- exactly as a seating's does."""
+    owner closes that gap for both callers at once."""
     t = _tenure_by_id(w, subject)
-    if t is not None and t.kind in SEAT_KINDS:
+    if t is not None and t.kind == "hold":
         return (subject,) if t.subject == t.object else (t.subject, t.object)
     return (subject,)
 

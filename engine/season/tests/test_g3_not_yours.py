@@ -235,25 +235,9 @@ def test_g3_the_conferral_opener_is_admitted_only_through_a_seat_with_purview(ga
         if c.get("no_basis"):
             w.offices["off_reeve"].conferral = None
         with pytest.raises(NotYours):
-            if c.get("seat_self"):
-                # v9 IN-48: a `confer` whose `office` IS its `via` is a DELEGATION now (it opens a
-                # `delegate` edge and closes nothing -- `test_in48_delegation.py`), so the act no
-                # longer asks this clause. The clause is asked of the write that act used to make:
-                # every live hold on the seat closed, the conferee's `hold` opened, through the seat.
-                held = [t for t in w.tenures if t.kind == "hold" and t.object == "off_reeve" and t.live]
-                nt = Tenure("t_cf_self", "p_mid", "off_reeve", "hold", w.tick)
-
-                def conferral_onto_via():
-                    for t in held:
-                        t.until = w.tick
-                    w.add_tenure(nt)
-                w.write("Tenure", mint_token(w, WriteClass.ACTS), conferral_onto_via,
-                        record_kind="Tenure", fieldname="until", driver="Act",
-                        actor=c["actor"], via=c["via"])
-            else:
-                d._fold(w, mint_token(w, WriteClass.ACTS),
-                        Act(id="cf", actor=c["actor"], verb="confer",
-                            payload={"office": "off_reeve", "to": "p_mid"}, via=c["via"]))
+            d._fold(w, mint_token(w, WriteClass.ACTS),
+                    Act(id="cf", actor=c["actor"], verb="confer",
+                        payload={"office": "off_reeve", "to": "p_mid"}, via=c["via"]))
         assert not [t for t in w.tenures if t.object == "off_reeve" and t.subject == "p_mid"], (
             f"{why}: the refused opener left the conferee a hold")
         if c.get("seat_self"):
