@@ -467,6 +467,21 @@ if not RESTRAINT_KINDS <= frozenset(TENURE_KINDS):
         needs="a `detain` and a `ban` member, or every restraint reader retired with them",
         law="#453 §8.3 -- a kind its holder may not release must exist to be excluded; a name "
             "the roster does not carry would exclude nothing and read as a world with no prisoner")
+# v9 IN-48 (H-108's delegation half): THE KINDS THROUGH WHICH A PERSON SITS IN A SEAT. A `hold` is
+# the seat's custody; a `delegate` (Person -> Office) is its exercise by someone who does not hold it,
+# opened by the sitting holder through that same seat (`state/gate.py::may_delegate`). ONE OWNER, read
+# by `state/gate.py::seat_hold` (which returns a `delegate` edge only while the seat has a live
+# `hold`), `World.add_tenure` (both carry the grant), and the person-side seat readers. A kind, not an
+# `oblige` with a marker, on the `detain`/`ban` precedent (`rosters.yaml: tenure_kinds`' note).
+DELEGATE_KIND = "delegate"
+SEAT_KINDS = frozenset({"hold", DELEGATE_KIND})
+if not SEAT_KINDS <= frozenset(TENURE_KINDS):
+    raise Unspecified(
+        f"seat kinds {sorted(SEAT_KINDS - frozenset(TENURE_KINDS))} are not `tenure_kinds` members "
+        f"({sorted(TENURE_KINDS)})", "rosters.yaml -- tenure_kinds",
+        needs="a `hold` and a `delegate` member, or every seat reader retired with them",
+        law="IN-48 -- a seat exercised by a non-holder must be an edge the roster carries; a name "
+            "the roster does not carry would seat nobody and read as a world with no regent")
 # ⚠ ID-14 (04:391) IS OPEN FOR `detain`/`ban`: `determine` opens both and no effect closes either (the gate
 # admits a bench closure; `pardon` is IN-12 step 5), and loader invariant 6 compares `release`'s domain
 # against THIS line, so it cannot see the gap. Recorded at `workplans/valoria_master_workplan_v9_part5.md` IN-12 row 5.
