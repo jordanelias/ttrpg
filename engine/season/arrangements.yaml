@@ -32,6 +32,14 @@
 # ambiguity reasons, plainly, not because the loader could not carry them -- "the loader accepts a
 # thirteenth arrangement with no code change" is the artifact, and it is true of any well-formed row,
 # seeded or not.
+# ⚠ v9 SC-03a SEEDED THE FOUR `<tenure>` ROWS NAMED ABOVE (block at the end of `arrangements:`), now
+# that `detain` and `ban` are `tenure_kinds` members -- SEVEN rows (so "the remaining seven" above is
+# as of plan position `18`; four of them are seeded now). ⚠ AND THE COUNT ABOVE IS ONE SHORT: §E.2's
+# `excommunication deliberation` block ALSO writes `disposes: <tenure>`, so §E.2 has FIVE `<tenure>`
+# rows, not four. Its prose says the disposal *"severs a `commit`"*, but #453 §8.1
+# (`proposals/2026-10-03-verb-coverage-and-gap-fill.md:1466`) reads excommunication as a `ban`, opened
+# by `determine` under a Church arrangement with `disposes: ban` -- an OPENING, which `disposes:`
+# can name. It is not seeded here; it is SC-04's, with the remaining rows.
 
 speech_kinds:
   # `19_PLAN.md` step 7: "the roster the design promised and never wrote... Ten members; the two
@@ -135,3 +143,92 @@ arrangements:
     proofs:             []
     disposes:           Record
     disposal_reach:      realm
+
+  # ════════════════════════════════════════════════════════════════════════════════════════════════
+  # v9 SC-03a (#453 §10.4 step 3, §8.3; K-53/K-55; ratified as intent, ED-IN-0288): THE FOUR ROWS THE
+  # HEADER ABOVE LEFT UNSEEDED FOR THEIR `<tenure>` PLACEHOLDER. `detain` and `ban` answer it. Every
+  # key but `disposes:` is TRANSCRIBED from `03_PARAMETERS.md` §E.2 (the copy at
+  # `proposals/2026-09-05-proceedings-subsystem/03_PARAMETERS.md:590-646`), under the thirteen-key
+  # collapse the header states: `registers`, `verdict_reasons` and `stakes_grade` dropped, and each
+  # row's `records_dissent` AGREES with its old `verdict_reasons` (true+given, false+withheld), so the
+  # one-key collapse needs no judgment on any of the four.
+  # ⚠ WHICH ROW DISPOSES WHICH KIND IS AN [ASSUMPTION; medium; SC-03a's; revert: swap the two kinds
+  # on any row -- a data edit, no code reads a row by name]. The source writes `<tenure>` on all four
+  # and #453 §8.1 assigns the kinds to STATES (custody, excommunication, outlawry), never to rows.
+  # Read: a SECULAR bench imprisons (`legal_trial`, `interrogation` -> `detain`: the interrogated
+  # subject is already in custody, and a trial's terminal sentence is the cell); a body disposing of
+  # MEMBERSHIP excludes (`tribunal`, whose finding *"binds the order"* -> `ban`; `inquisition_hearing`,
+  # the Church's bench, whose terminal outcome is excommunication, #453 §8.1 -> `ban`).
+
+  # ── legal trial — the issue ladder, in public, with advocates ─────────────────────────────────
+  # §E.2, transcribed in full but `disposes:`. `records_dissent: true` + old `given` AGREE.
+  - id:               legal_trial
+    disposal:          bench
+    bench_basis:        determine
+    floor:              open
+    records_dissent:    true
+    venue_min_rank:     settlement
+    term_required:      true
+    appeal_basis:       determine
+    interposed:         [person, procedure]
+    order:              rank
+    proofs:             [record, testimony, oath]
+    disposes:           detain
+    disposal_reach:      settlement
+
+  # ── tribunal — a standing commission, admitted floor ──────────────────────────────────────────
+  # §E.2 writes this row as a DIFF against the trial ("differs from a trial in three keys"): `floor`,
+  # `interposed`, `appeal_basis`, plus `disposal_reach: body`; every other key is the trial's,
+  # transcribed (no `inherits:` mechanism, `council_of_state`'s reason). `floor: admitted:<basis>` is
+  # written bare -- the source names no basis, and the loader admits bare `admitted` (§E.2 writes it
+  # bare on three games). ⚠ `appeal_basis: none` makes the finding final, so the disposal must be
+  # closable by another act (§E.2's own P-12 flag): the `ban` is closable by `pardon` (#453 step 5,
+  # unbuilt); the gate's `determination` closure arm admits a bench's closure of it
+  # (`state/gate.py`), but no effect writes one yet.
+  - id:               tribunal
+    disposal:          bench
+    bench_basis:        determine
+    floor:              admitted
+    records_dissent:    true
+    venue_min_rank:     settlement
+    term_required:      true
+    appeal_basis:       none
+    interposed:         [office, procedure]
+    order:              rank
+    proofs:             [record, testimony, oath]
+    disposes:           ban
+    disposal_reach:      body
+
+  # ── interrogation — the questioner decides, and the subject cannot win ────────────────────────
+  # §E.2, transcribed in full but `disposes:`. `records_dissent: false` + old `withheld` AGREE.
+  - id:               interrogation
+    disposal:          bench
+    bench_basis:        determine
+    floor:              closed
+    records_dissent:    false
+    venue_min_rank:     hearth
+    term_required:      false
+    appeal_basis:       none
+    interposed:         []
+    order:              scripted
+    proofs:             [testimony, confession]
+    disposes:           detain
+    disposal_reach:      room
+
+  # ── inquisition hearing — an interrogation with a bench ───────────────────────────────────────
+  # §E.2's block omits `disposal:`; §E.1's table gives `bench` for the row, and its title -- *"an
+  # interrogation WITH A BENCH"* -- says the same. Every other key transcribed. `records_dissent:
+  # false` + old `withheld` AGREE.
+  - id:               inquisition_hearing
+    disposal:          bench
+    bench_basis:        determine
+    floor:              closed
+    records_dissent:    false
+    venue_min_rank:     settlement
+    term_required:      false
+    appeal_basis:       determine
+    interposed:         [office, procedure, document]
+    order:              scripted
+    proofs:             [testimony, confession, record]
+    disposes:           ban
+    disposal_reach:      body

@@ -52,25 +52,28 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # partition). The build hash is unchanged (nothing stored moves). Was c2230a36... / 88f6f243... after
 # one and two seasons at e716f10b; `BASE_EVENTS` re-recorded with it (was 7526/e56f8652...,
 # 21508/dc3c440a...).
-# RE-PINNED at v9 IN-10 (c) (H-203), A TRAJECTORY MOVE DECLARED: a writ is minted into its ADDRESSEE's
-# hand and the issuer keeps none, so season 1's one dispensation (`p_npc_037` -> `p_npc_020`) is held by
-# another person, who receives its content deposit, and the seasons diverge from there. Build hash
-# unchanged. Was 56d44b5a... / 808951dd... after one and two seasons; `BASE_EVENTS` re-recorded with it
-# (was 7527/05d85451..., 21735/680e93d8...).
+# IN-10 (c) (a writ minted into its addressee's hand) WAS PINNED HERE AND IS REVERTED, 2026-10-14
+# (ED-IN-0292 (1), the user: no): the hashes below are the pre-(c) values, 56d44b5a... / 808951dd...
+# after one and two seasons, reproduced exactly; `BASE_EVENTS` likewise (7527/05d85451...,
+# 21735/680e93d8...).
+# RE-PINNED at v9 SC-03a, A SCHEMA MOVE DECLARED: the docket item gains `arrangement` and `petition`
+# (both None on the realm's one item, `b_s_036_cathedral`, since no computed `open_case` names a row),
+# and `content_hash` folds a docket item as a sorted dict of reprs. Was 56d44b5a... / 808951dd...
+# after one and two seasons. The build hash and `BASE_EVENTS` are unchanged; deleting the two keys from
+# the docket after each season reproduces the old pair exactly, so the move is the keys alone.
 BASE_HASHES = {0: "11989dcf5e1c25afab556bf3f234a200",
-               1: "80aef84c49e0c6d63aac266fabf46af3",
-               2: "b87bd251f536915f086ea0fa3b015248"}
+               1: "0f8e0144220a3665d3286a9a54c39f3e",
+               2: "ccb33d62c4828028ca838199251b7673"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
 # (d47077d5) as a one-time proof that the schema re-pin of `BASE_HASHES` moved nothing at the event
 # level; it is NO LONGER that base's values. Re-recorded with `BASE_HASHES` at v9 IN-53 (7526 -> 7527,
-# 21508 -> 21735: `confer`'s always-refused attempts stopped) and at v9 IN-10 (c) (-> 7508, 21120: a
-# writ held by its addressee), so the values below are IN-10 (c)'s and this is a change detector on
+# 21508 -> 21735: `confer`'s always-refused attempts stopped), so the values below are IN-53's and this is a change detector on
 # the seasons-1-2 event sequence, not a pre-IN-34 control. Unmoved by the batch B-I close's fixes
 # (fingerprint, conferee, founding, occasion). Re-recorded together with `BASE_HASHES`, never alone.
-BASE_EVENTS = {1: (7508, "b8a1f5ff4ae77037a00cbad9c28fd665229c09fdd3e5c75e173d5a8698981dbc"),
-               2: (21120, "9dc7a16b7ea31e81bfad66a80b85346d1983f65ccd9dd1f225102dcac8767e00")}
+BASE_EVENTS = {1: (7527, "05d854511133d0f28566c2d40aadd1104d730845cef9bc2c2f2ca5c43b65ad15"),
+               2: (21735, "680e93d8bf406220a0e64a8c832cbf1114f2266e869979420853a803f6eeb627")}
 
 
 def _digest(w) -> tuple:

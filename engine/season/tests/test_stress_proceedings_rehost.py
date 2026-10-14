@@ -17,8 +17,8 @@ docketed matter all at once, which is more build than this position's remaining 
 five below are the ones THIS position's own five parts directly resolve or reverse, so re-hosting
 them is checking THIS commit rather than inventing new engine surface to trace through. Each is an
 EXECUTION against a real `World`/`engine.season` API, per the old plan's own instruction, never a
-manufactured pass: several assert the CURRENT tree's real, disclosed gaps (C-1, the unseeded nine of
-twelve games) rather than a flattering result.
+manufactured pass: several assert the CURRENT tree's real, disclosed gaps (C-1, the games still
+unseeded -- nine of twelve when written, five since v9 SC-03a) rather than a flattering result.
 
 NOT PORTED, NAMED RATHER THAN SILENTLY DROPPED (33 of 38): `ST-01·02·05·06·07·09..22·24..29·31..38`.
 Most need `speak`/`determine` resolution machinery (`19_PLAN.md` PHASE 2 steps 11-16), the docket

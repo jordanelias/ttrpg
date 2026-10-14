@@ -927,9 +927,10 @@ def _load_verb_table() -> dict:
     # `contain` is excluded because it is the one Tenure kind whose subject may be a Rung (PART D
     # row 13) and whose end is a MOVE, not a release -- `_eff_move` closes the old leg and opens
     # the new one, so a releasable `contain` would let a person leave a place for nowhere. Every
-    # other kind is an edge a person opened and must be able to end (T-m).
+    # other kind in RELEASABLE_KINDS is an edge a person opened and must be able to end (T-m); a kind
+    # outside it (`contain`, `reside`, `detain`, `ban`) is NOT checked here for a closer.
     #
-    # This is the check `open-without-close in the vocabulary` names: add an eighth tenure kind to
+    # This is the check `open-without-close in the vocabulary` names, for the releasable kinds: add an eighth tenure kind to
     # `rosters.yaml` and forget its closer, and the load fails HERE rather than shipping a relation
     # nothing can end.
     #

@@ -35,12 +35,12 @@ from typing import Callable, Optional
 
 from ..data.requires import UNKNOWN, binding_from_act
 from ..data.rosters import (
-    FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, RUNG_KINDS, SITE_KINDS,
-    TENURE_KINDS,
+    BAN_KIND, DETAIN_KIND, FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
+    RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, TENURE_KINDS,
 )
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows.
 from ..data.verbs import RECORD_REFERENT_KINDS
-from ..gaps import Forbidden, Unspecified
+from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
 from .person_q import content_said, intent_named, ledger_names
@@ -59,6 +59,11 @@ from ..state.containment import ancestry, home_of  # noqa: F401 -- re-exported
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
 from ..state.gate import BENCH_BASIS, may_determine, may_fill, purview_reaches, sits_over
+# ⚠ AND `sworn_to` BY THE SAME ROUTE (v9 IN-40, `H-101`): THE QUERY OF THE LIVE `oblige` EDGES SWORN
+# TO A SEAT. `purview_reaches`' oblige clause asks it, and the gate may not import this module, so
+# its one body lives in `state/gate.py`; `world_q.sworn_to is gate.sworn_to`. `establishment_of`
+# (below) composes on it.
+from ..state.gate import sworn_to
 from ..state.ids import ROOT, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
@@ -165,13 +170,34 @@ def docketed(w: World, matter: Optional[str]) -> list[dict]:
 
     A docket item is a plain dict on `World.docket` (a `_STATE_SEQUENCES` member, so the content
     hash folds it): CALENDAR forms one per sitting with `matter: None` (`loop/calendar.py`, an empty
-    slot), and `open_case` appends `{"date": None, "matter": <subject>}`. `matter is None` is never
+    slot), and `open_case` appends `{"date": None, "matter": <subject>, DOCKET_ARRANGEMENT: <row id
+    or None>, DOCKET_PETITION: <Record id or None>}` (v9 SC-03a, K-55: the item names the arrangement
+    it is heard under and the petition it rose from; `docketed_under` reads the first). `matter is None` is never
     docketed -- an empty slot names nothing, and a `None` subject asks about nothing -- so a
     determination that CLEARS an item's matter (writes it back to `None`) takes the matter off the
     docket without deleting the slot the calendar formed."""
     if matter is None:
         return []
     return [d for d in w.docket if d.get("matter") == matter]
+
+
+# v9 SC-03a (#453 §10.4 step 2b, K-55): THE TWO KEYS A DOCKET ITEM GAINED, named once, `TERM_KEY`'s
+# shape (`loop/effects_governance.py`) -- each is also the PAYLOAD key a hand-built `open_case`
+# declares it under, so the act's word and the item's word cannot drift. `DOCKET_ARRANGEMENT` names an
+# `arrangements.yaml` row (`_eff_determine` reads the kind it `disposes:`); `DOCKET_PETITION` names the
+# `petition` Record the matter rose from (its reader, `interrogate` and the contested bench reading the
+# charge the petition's `terms` names, is #453 §10.4 step 5's, not yet built). A computed `open_case`
+# carries neither -- no operand channel names them (`H-80`/§F1) -- and writes both as `None`.
+DOCKET_ARRANGEMENT = "arrangement"
+DOCKET_PETITION = "petition"
+
+
+def docketed_under(w: World, matter: Optional[str]) -> set:
+    """THE ARRANGEMENT ROWS THE DOCKET HEARS `matter` UNDER -- every `DOCKET_ARRANGEMENT` named by an
+    item `docketed` lists for it, `None` included for an item that names none. One element in every
+    world an act built (`open_case` declines a matter already docketed); more than one only in a
+    hand-planted docket, which `_eff_determine` declines rather than choosing between."""
+    return {d.get(DOCKET_ARRANGEMENT) for d in docketed(w, matter)}
 
 
 # ===========================================================================
@@ -344,9 +370,14 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
     in to make the signature look busier).
     ⚠ PLAN POSITION `19` BUILT THE DOCKETING HALF AND NOT THE MAPPING: `open_case` now puts a matter
     on `World.docket` (`docketed`, above), and `determine` asks this function -- through `WorldReader`'s
-    `bench.size` stem -- for the bench at the matter's PLACE (`place_of`). What still does not exist
-    is the docket item naming its ARRANGEMENT row, so `matter` stays unused here and the basis stays
-    the one constant (`BENCH_BASIS`).
+    `bench.size` stem -- for the bench at the matter's PLACE (`place_of`).
+    ⚠ v9 SC-03a BUILT THE MAPPING'S CARRIER, AND STILL NOT THIS READ: a docket item now names its
+    arrangement (`DOCKET_ARRANGEMENT`, `docketed_under`, written by a hand-built `open_case`; a
+    computed one names `None`), and `_eff_determine` reads the row's `disposes:`. `matter` stays
+    unused HERE, and the basis stays the one constant (`BENCH_BASIS`), because every seeded row's
+    `bench_basis` is `determine` -- the constant already -- so
+    wiring `bench_basis_of` would change no bench; it is the one line above, the day a row declares
+    another basis.
 
     ⚠ A SEAT WITH NO `scope_rung` REACHES NOTHING -- the office-cluster case (S6.2, `Office.rung
     is None`) has no ground to be contained on, exactly as `purview_reaches` treats it. It is a
@@ -563,14 +594,21 @@ def reach(w: World, p: Person) -> set[str]:
 def governors_of(w: World, rung_id: Optional[str]) -> list[str]:
     """v9 IN-22 (#457 `CARRY-SHORTFALL`, `H-160` limit 2) -- THE PERSONS WHOSE SEAT'S PURVIEW REACHES
     `rung_id`: every live `hold` on an Office for which `state/gate.py::purview_reaches` answers
-    True, by its holder, sorted. `[]` for a rung no seat reaches, for `None`, and for a rungless
-    seat's holder (`purview_reaches`' own *a seat with no rung reaches nothing*).
+    True, by its holder, sorted. `[]` for a rung no seat reaches and for `None`; a rungless seat's
+    holder is listed only through `purview_reaches`' oblige clause (v9 IN-40), never by its own ground.
+
+    ⚠ v9 IN-40: WHERE THE OBLIGE CLAUSE FIRES, THIS IS WIDER THAN `reach`'s LIMB 4, which may not read
+    another person's tenures and so cannot see a sworn holder's seats. A superior listed here for his
+    vassal's ground is deposited a claim no question of his admits. Measured inert in `build_realm(0)`
+    (its one live `oblige`'s swearer holds no seat); named, not repaired, at IN-40.
 
     ⚠ THE SAME RELATION AS `reach`'s LIMB 4, ASKED FROM THE RUNG'S SIDE. Limb 4 unions
     `{seat.rung} | descendants(seat.rung)` over the person's own holds, and `purview_reaches` is
-    `rung == seat.rung or rung in descendants(seat.rung)` -- one walk (`descendants`), so a person
-    this lists has `rung_id` in `reach(w, p)`, and a claim about `rung_id` deposited into his ledger
-    is admitted by `questions_for`'s clause 1. That is what makes the WITNESS route that calls this
+    `rung == seat.rung or rung in descendants(seat.rung)` (plus, v9 IN-40, the oblige clause above) --
+    one walk (`descendants`), so a person this lists by his OWN ground has `rung_id` in `reach(w, p)`,
+    and a claim about `rung_id` deposited into his ledger is admitted by `questions_for`'s clause 1.
+    A person listed ONLY through the oblige clause does not (paragraph above): there the deposit is
+    not admitted by any question. Where it is his own ground, that is what makes the WITNESS route that calls this
     (`loop/witness.py`, the purview deposit) end in a question rather than in a silent ledger slot.
 
     ⚠ A WORLD READ, AND NOT A FAN BY ITSELF. It reads `w.tenures`/`w.offices`/the containment tree
@@ -958,6 +996,26 @@ def residence_of(w: World) -> dict:
                     "residence as it opens the new, so this world was built by hand")
         out[t.subject] = t.object
     return out
+
+
+def restrained(w: World, person: Optional[str], kind: str) -> bool:
+    """DOES `person` OWN A LIVE EDGE OF THE RESTRAINT `kind` -- a `detain` (he is in custody) or a
+    `ban` (he is excluded)? v9 SC-03a (#453 §10.4 step 3, K-53): the ONE read behind every reader
+    the two kinds ship with, so *is this man a prisoner* cannot mean one thing to `move` and another
+    to a muster: `_eff_move`/`_eff_migrate` and `loop/sides.py` ask it of `DETAIN_KIND`,
+    `_req_oblige` and `_eff_confer` of `BAN_KIND`.
+
+    ⚠ ANY SEAT, AND THAT IS AN [ASSUMPTION; medium; revert: also require the edge's object seat's
+    purview to reach where the restraint is read]: a custody holds a man everywhere (he is not free
+    to travel to a place the detaining seat does not govern), and #453 §8.1 states the ban's readers
+    without a scope (*"a banned person cannot serve or be seated"*). A kind off `RESTRAINT_KINDS` is a
+    caller defect -- every other kind has a reader of its own -- and raises rather than answer False."""
+    if kind not in RESTRAINT_KINDS:
+        raise InstrumentDefect(
+            f"`restrained` asked of {kind!r}, not a restraint kind ({sorted(RESTRAINT_KINDS)})")
+    if person is None:
+        return False
+    return any(t.kind == kind and t.subject == person and t.live for t in w.tenures)
 
 
 def population(w: World, rung_id: str, residence: Optional[dict] = None) -> int:
@@ -1444,8 +1502,9 @@ def establishment_of(w: World, office_id: str) -> list[str]:
     the size is however many have obliged. `ARCH §B.7` call 2 rejected that number by name (*"a
     number nobody can source"*); closed in `hole_register.yaml` at `17a`."""
     TRACE.query("establishment_of", "resolver")
-    return [t.subject for t in w.tenures
-            if t.kind == "oblige" and t.object == office_id and t.live and t.subject in w.persons]
+    # v9 IN-40: the walk is `sworn_to`'s (`state/gate.py`, re-exported at the import block), shared with
+    # `purview_reaches`' oblige clause, so *who is sworn to this seat* has one answer.
+    return [t.subject for t in sworn_to(w, office_id) if t.subject in w.persons]
 
 
 def upkeep_of(w: World, office_id: str) -> int:
@@ -1579,9 +1638,11 @@ def writs_held(w: World, p: Person) -> tuple:
     """THE WRITS `p` HOLDS (v9 IN-09, H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to
     correct]), sorted by id: the Records on `p`'s own live `hold` edges whose kind a row declaring
     `referent_class: Record` answers (`data/verbs.py::RECORD_REFERENT_KINDS`, `dispensation`). #453
-    `:502`: *"the executor holds the writ ... `comply` forms on the held writ"*; since IN-10 (c) a
-    writ is minted into its addressee's hand, so this is the order he was given. `()` for nearly
-    everyone (three writs are issued in four realm seasons).
+    `:502`: *"the executor holds the writ ... `comply` forms on the held writ"*. ONLY A WRIT THAT
+    NAMES HIM: a writ is minted into its maker's hand (the writ-to-addressee mint, IN-10 (c), was
+    refused 2026-10-14: the user, ED-IN-0292 (1), *"just say no for now"*), so a holder who is not
+    in the writ's addressee list is the issuer or a custodian, not the person the writ orders, and
+    is offered nothing. A writ reaches its addressee only by a `give`. `()` for nearly everyone.
 
     A STANDING OCCASION, `vacancies`' shape: resolver-side and read-only, it supplies Record IDS,
     which `questions_for` adds to the question the person answers as CLASSED referents, and whether
@@ -1589,9 +1650,13 @@ def writs_held(w: World, p: Person) -> tuple:
     the writ). It reads `p`'s own edges and the store only for the kinds of the Records they name.
     ⚠ NO 'ALREADY ANSWERED' DECLINE: a holder who complied once is offered the writ again while he
     holds it -- the scene tax IN-10 (a) recorded for a repeated `oblige` (H-203)."""
+    def _addressees_of(rec) -> tuple:
+        sm = rec.subject_matter
+        return tuple(sm.get(RECORD_CONTENT.get("addressee")) or ()) if isinstance(sm, dict) else ()
     return tuple(sorted({t.object for t in p.tenures
                          if t.kind == "hold" and t.live and t.object in w.records
-                         and w.records[t.object].kind in RECORD_REFERENT_KINDS}))
+                         and w.records[t.object].kind in RECORD_REFERENT_KINDS
+                         and p.id in _addressees_of(w.records[t.object])}))
 
 
 def _stamped(q: Question, added: tuple, w: World) -> Question:

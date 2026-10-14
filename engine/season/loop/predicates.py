@@ -30,6 +30,7 @@ from typing import Optional
 from ..data.requires import binding_from_act
 from ..data.rosters import BINDS_BASES, RELEASABLE_KINDS, RUNG_KINDS
 from ..gaps import Forbidden, Unowned, Unspecified
+from ..queries.world_q import BAN_KIND, restrained
 from ..state.carriers import Office, subject_of
 # G3: THE SEAT-AUTHORITY RULES LIVE WITH THE GATE THAT ENFORCES THEM. `seated_on_the_rung_above`,
 # `REVOCATION_RULES` and `has_conferral_basis` were defined here; the write gate's F3 clause now
@@ -347,7 +348,7 @@ def _req_oblige(w: "World", a: "Act") -> bool:
     re-build must take the id from the payload and refuse a non-office: that is `_req_oblige`'s
     job."* So clause 1 is the reversion's own lesson.
 
-    FOUR CLAUSES, EACH A REFUSAL (`duty.refused`) AND NONE A RAISE:
+    FIVE CLAUSES (four until v9 SC-03a), EACH A REFUSAL (`duty.refused`) AND NONE A RAISE:
       1. the subject is a seat -- `w.offices`. A person, a rung, a Record or a bare string refuses.
          (`holonic §15` also allows `oblige : Person -> Person`; no position builds that half, and
          `establishment_of` asks only about seats, so admitting it here would open edges nothing
@@ -368,6 +369,10 @@ def _req_oblige(w: "World", a: "Act") -> bool:
       4. no live `oblige` from the actor to this seat -- one edge per pair. `oblige` is MANY per
          person (`holonic §15`; probe `P40` holds two), never two to the same seat, which would make
          `establishment_of` list one person twice.
+      5. v9 SC-03a (#453 §10.4 step 3, §8.1 Excommunication): the actor holds no live `ban` -- a
+         banned person cannot serve (`world_q.restrained`, the restraint's one read). ANY seat, not
+         only the banning seat's purview [ASSUMPTION; medium; revert: ask the ban's seat's
+         `purview_reaches` of this seat's rung]: #453 states the reader without a scope.
     ⚠ NOT BUILT, AND SAID SO: `03` §A.9's reach clause (*"its `rung` reaches the actor's containing
     rung"*). `05` RULED (b) closes `ARCH F.17` by `binds` *"rather than by a substitute rule"*, and the
     reach clause was part of `03`'s substitute. A person may oblige to a seat from anywhere; what he
@@ -387,7 +392,9 @@ def _req_oblige(w: "World", a: "Act") -> bool:
     mine = [t for t in w.tenures if t.subject == a.actor and t.object == seat and t.live]
     if any(t.kind == "hold" for t in mine):
         return False                       # 3. the occupant is not his own seat's obligee
-    return not any(t.kind == "oblige" for t in mine)   # 4. one edge per (person, seat)
+    if any(t.kind == "oblige" for t in mine):
+        return False                       # 4. one edge per (person, seat)
+    return not restrained(w, a.actor, BAN_KIND)   # 5. v9 SC-03a: a banned man serves no seat
 
 
 @requires_predicate("revoke")
