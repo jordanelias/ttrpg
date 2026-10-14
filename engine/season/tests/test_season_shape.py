@@ -699,7 +699,8 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     named by `04_CODE_ARCHITECTURE.md` PART D row 15 in as many words: *"`release` generic; the
     loader asserts its domain equals `tenure_kinds \\ {contain}`"*. It fires while
     `verb_table.yaml` is being read, so an eighth tenure kind added to `rosters.yaml` without a
-    closer FAILS THE LOAD rather than shipping a relation nothing can end. The run-time side is
+    closer FAILS THE LOAD (for a releasable kind: since v9 SC-03a `detain`/`ban` are outside
+    `RELEASABLE_KINDS` and are not checked) rather than shipping a relation nothing can end. The run-time side is
     unchanged: `_req_release` returns False and the fold emits `release.refused`, per §E2.
     ⚠ AND THE ASSERTION HAS CONTENT ONLY BECAUSE THE COLUMN IS DECLARED. A derived `domain:` would
     make invariant 6 compare the roster against itself — §0.1 pt 2, an assertion that cannot

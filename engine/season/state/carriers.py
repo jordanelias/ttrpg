@@ -121,7 +121,7 @@ class Tenure:
         ⚠ `payload` HAD ZERO WRITERS AND ZERO READERS UNTIL THIS LANDED, which by the same test
         the deleted `conferrer` field failed (above) made it a field that *"does not exist, wearing
         a schema's clothes"*. This property and `World._grant_remit` are its first reader and its
-        first writer; `World._grant_remit` is the payload's ONLY writer; its readers are this
+        first writer; `World._grant_remit` is the ONLY writer of the grant (`remit_acts`); its readers are this
         property and `seat_rung` below: §8 -- the shape of a payload is a
         rule, so it lives once. (An `oblige` a determination imposes carries one other key,
         `DETERMINED_BY`, read through `imposed` above, so that `purview_reaches` does not read it

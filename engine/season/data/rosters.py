@@ -467,6 +467,9 @@ if not RESTRAINT_KINDS <= frozenset(TENURE_KINDS):
         needs="a `detain` and a `ban` member, or every restraint reader retired with them",
         law="#453 §8.3 -- a kind its holder may not release must exist to be excluded; a name "
             "the roster does not carry would exclude nothing and read as a world with no prisoner")
+# ⚠ ID-14 (04:391) IS OPEN FOR `detain`/`ban`: `determine` opens both and no effect closes either (the gate
+# admits a bench closure; `pardon` is IN-12 step 5), and loader invariant 6 compares `release`'s domain
+# against THIS line, so it cannot see the gap. Recorded at `workplans/valoria_master_workplan_v9_part5.md` IN-12 row 5.
 RELEASABLE_KINDS = frozenset(TENURE_KINDS) - {"contain", "reside"} - RESTRAINT_KINDS
 # `holonic §15`'s DOMAIN and CODOMAIN for the `hold` row, read by `World._refuse_bad_hold`.
 # Rostered rather than inlined at the guard (Jordan, 2026-09-02 -- *definitions are not

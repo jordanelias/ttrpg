@@ -44,6 +44,9 @@ from collections import Counter
 from dataclasses import dataclass
 from typing import Any, Callable, Optional
 
+# ⚠ 04 §A.2:164 says the gate "may read: the write matrix"; §C.2 (04:572-611) has it read seats,
+# purview and a bench's ground, hence data/rosters, data/arrangements and the stores (layer-
+# conformance B4, disposition 3: §C.2 is the later, more specific row, and is the one taken).
 from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import MATRIX, WriteClass
 from ..data.rosters import CONFERRAL_BASES, DETAIN_KIND, RESTRAINT_KINDS, REVOCATION_BASES, TENURE_KINDS
@@ -154,7 +157,8 @@ class NoToken(InstrumentDefect):
 # (`RESTRAINT_KINDS`), never an `oblige`. `warrant` opens a `detain` on a seat for a person the
 # exercised seat's purview reaches, by a holder granted `WARRANT_ACT`. `T-m` no longer admits an
 # owner opening or closing his own restraint. `04 §C.2` still enumerates nine and is Layer 1 text
-# (Jordan's), not edited here.
+# (the IN-44 table's row, `workplans/valoria_master_workplan_v9_part8.md`: "no batch edits these
+# files; Jordan does"), not edited here.
 #
 # WHAT IS HERE AND WHAT IS NOT. This module owns the JUDGMENT -- which basis, if any, admits one
 # Tenure change -- and the seat-authority rules the judgment composes on (ruling (3)'s revocation
@@ -932,8 +936,9 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     # ⚠ T-M NEVER ADMITS AN OWNER OPENING OR CLOSING HIS OWN RESTRAINT EITHER (v9 SC-03a close, COR4):
     # a `detain`/`ban` is the one kind whose holder cannot release it (`RELEASABLE_KINDS`), and a
     # prisoner closing his own at the gate would be exactly that release by another door, or
-    # self-opening one a bench had not imposed. Only `determination` (a bench) and `warrant` open or
-    # close one -- no effect writes a restraint with the actor as the owner.
+    # self-opening one a bench had not imposed. Only `determination` (a bench) and `warrant` open one;
+    # `determination` (a bench), or `cascade` on a death, closes one -- no effect writes a restraint
+    # with the actor as the owner.
     if (actor is not None and actor == owner
             and t.kind not in RESTRAINT_KINDS
             and not (seat is not None and not closed)
@@ -990,8 +995,8 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     # v9 SC-03a, K-52: THE WARRANT. An OPENED `detain` whose object is a SEAT and whose owner the
     # exercised seat may take into custody (`may_warrant`). Not `via`-objected as `determination`
     # is: the custody edge's object is the ISSUING seat (K-17/K-52), which the enforcement seat acts
-    # through but does not own. Opening only -- custody ends by a bench (`determination`) or by
-    # `pardon` (step 5), never by the arresting hand.
+    # through but does not own. Opening only -- custody ends by a bench (`determination`: admitted
+    # here, no effect writes that closure yet) or by `pardon` (step 5), never by the arresting hand.
     if (opened and t.kind == DETAIN_KIND and t.object in w.offices
             and may_warrant(w, actor, via, t.subject)):
         return WARRANT
@@ -1017,7 +1022,7 @@ def refuse_unauthored(w: "World", changes: list, actor: Optional[str], via: Opti
     on its own -- the nine bases that need nothing but the change, the actor, `via`, `gone` and
     `born` (five until plan position `17b` built `T-n` and added `renewal`, six until `19` added
     `determination`, seven until `24e` added `founding`, eight until v9 SC-03a added `warrant`;
-    none of the five reads another CHANGE of
+    none of them reads another CHANGE of
     the batch -- `founding`'s one-parent check reads the store the write left, which holds them).
     From those verdicts it takes the `handover` licence: the object of every `hold` this actor
     ENDED under `T-m` in this write, counted. The second re-judges only what the first refused,

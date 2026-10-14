@@ -793,7 +793,8 @@ rows:
       re-open the design."* It is the ANTONYM half of the table: `oblige`, `commit`, `tie`, `knot`,
       `succeed` and `hold` all end through it, so a seat can now be laid down rather than only
       taken away by `revoke`. The loader asserts its `domain:` equals `tenure_kinds \ {contain}`
-      (invariant 6, PART D row 15), so an eighth tenure kind without a closer fails the load.
+      (invariant 6, PART D row 15), so an eighth tenure kind without a closer fails the load
+      (a releasable one: `detain`/`ban` sit outside `RELEASABLE_KINDS` since v9 SC-03a).
       ⚠ **WHAT IT IS AND IS NOT, MEASURED AGAINST A CONTROL RATHER THAN ASSERTED.** Both arms at
       seed 0 over the same 143 corpus cases, the control from a worktree at the commit before it:
       distinct executed sets **10 -> 14** (it recovers most of what `U4` spent), `release` executes
