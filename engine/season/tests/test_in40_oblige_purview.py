@@ -1,5 +1,5 @@
 """v9 IN-40 -- `H-101`, VASSALAGE: SOMETHING CAN BE UNDER SOMETHING, ACROSS FACTIONS.
-`workplans/valoria_master_workplan_v9_part5.md` `### IN-40`.
+v9 IN-40 (landed `3f320093`; its entry left the plan at the B-J boundary).
 
 What the position built, each asked of the real fold, the real MATTER barrier and the real gate:
   * `state/gate.py::purview_reaches`' OBLIGE CLAUSE: a seat also reaches the ground (rung and its
