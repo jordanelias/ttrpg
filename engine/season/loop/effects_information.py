@@ -14,12 +14,16 @@ from __future__ import annotations
 from dataclasses import asdict
 from typing import Optional
 
+from ..data.arrangements import ARRANGEMENTS
 from ..data.requires import REQUIRES_OPERANDS
 from ..data.rosters import RECORD_CONTENT, RECORD_KIND_KEYS
 from ..queries import faction_q
-from ..queries.world_q import docketed, faction_holding, hold_force, place_of, works_for, works_target
+from ..queries.world_q import (
+    BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_PETITION, docketed, docketed_under,
+    faction_holding, hold_force, place_of, works_for, works_target,
+)
 from ..state.carriers import Proposition, Record, Tenure
-from ..state.gate import NO_CHANGE, Change, Subject
+from ..state.gate import NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject
 from ..state.ids import H
 
 from .effects_shared import _new_oblige_term, _operand, effect_for
@@ -210,9 +214,10 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         `create_record`'s does"*). Kind `text`, with no content: a `case` kind with its own keys is
         a `record_kinds` member with no reader yet (that roster's own note: a kind lands WITH the
         reader that needs it), and the matter is carried where it is read -- on the docket.
-      * THE DOCKET ITEM -- `{"date": None, "matter": <subject>}`, `World.docket`'s own shape, with
-        no date because no sitting was convened for it (`convene`'s dates fire VACANT in every
-        computed world: nothing sets a date's holder, so CALENDAR never forms a slot to fill).
+      * THE DOCKET ITEM -- `{"date": None, "matter": <subject>, DOCKET_ARRANGEMENT: ...,
+        DOCKET_PETITION: ...}`, `World.docket`'s own shape, with no date because no sitting was
+        convened for it (`convene`'s dates fire VACANT in every computed world: nothing sets a date's
+        holder, so CALENDAR never forms a slot to fill).
 
     G4 -- WHAT IT NAMES: THE CASE FILE, whole, as `create_record` names its Record; it always moves
     (a new id). ⚠ THE DOCKET APPEND IS NOT A NAMED SUBJECT AND CANNOT BE ONE: `Subject`'s three shapes
@@ -225,13 +230,32 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     naming a case-file id that already exists (the only way the mint could be a no-op).
 
     Where it is drawn up: `_seat_rung`, as `issue`. `via.scope`'s purview reaching the matter is the
-    row's precondition (`Basis`, `purview`), asked before this runs."""
+    row's precondition (`Basis`, `purview`), asked before this runs.
+
+    ⚠ v9 SC-03a (#453 §10.4 step 2b, K-55): THE ITEM NAMES THE ARRANGEMENT ROW THE MATTER IS HEARD
+    UNDER AND THE PETITION IT ROSE FROM, read off the act under the item's own key names
+    (`world_q.DOCKET_ARRANGEMENT`/`DOCKET_PETITION`, `TERM_KEY`'s shape: payload keys no typed cell
+    binds). Two readers answer `_eff_determine`'s old objection to a key *"nobody else reads"*: the
+    determination reads the row's `disposes:`, and `interrogate`/the contested bench will read the
+    petition's charge (#453 step 5). A COMPUTED `open_case` carries neither (no operand channel names
+    them, `H-80`/§F1) and writes both `None` -- which is why every world where `open_case` executes
+    moves its content hash once (the item gained two keys) and no further. TWO MORE DECLINES, before
+    anything is built, so a docket never names what does not exist: an arrangement no
+    `arrangements.yaml` row carries, and a petition that is not a Record of kind `petition`.
+    ⚠ WHICH arrangement a computed case is heard under is NOT DERIVED here -- no source exists
+    (`queries/world_q.py::judging_set` records the gap); a hand-built act declares it."""
     matter = _operand(a, "subject")
     d = a.payload if isinstance(a.payload, dict) else {}
+    arrangement, petition = d.get(DOCKET_ARRANGEMENT), d.get(DOCKET_PETITION)
+    if arrangement is not None and arrangement not in ARRANGEMENTS:
+        return NO_CHANGE
+    if petition is not None and getattr(w.records.get(petition), "kind", None) != "petition":
+        return NO_CHANGE
     if docketed(w, matter) or d.get("record") in w.records:
         return NO_CHANGE
     made = _mint_document(w, a, "text", None, _seat_rung(w, a))
-    item = {"date": None, "matter": matter}
+    item = {"date": None, "matter": matter,
+            DOCKET_ARRANGEMENT: arrangement, DOCKET_PETITION: petition}
 
     def perform() -> None:
         made.apply()
@@ -246,6 +270,17 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     *"a determination opens the disposal Tenure on its subject via the seat"*.
 
     THE DISPOSAL TENURE, AND WHY IT IS THIS ONE -- each choice named with the reading it rejects:
+      * ⚠ v9 SC-03a (#453 §10.4 steps 2b/3, K-55): THE KIND IS THE DOCKETED ARRANGEMENT'S. The docket
+        item names the row the matter is heard under (`world_q.docketed_under`, written by
+        `open_case`), and the edge opened is the kind that row `disposes:` -- `oblige`, `detain` or
+        `ban` -- through ONE LITERAL `Tenure(...)` SITE PER KIND (`_disposal`, below), so the derived
+        opener map reads `determine` beside each and C-1's report stays empty. An item naming NO row
+        -- every computed case -- disposes `state/gate.py::UNDECLARED_DISPOSAL`, the `oblige` the
+        bullet below argues, so every world without a declared arrangement determines as before.
+        A row disposing a `Record` or `none` DECLINES: a Record disposal is not on this row's
+        `writes:`, and is unbuilt (named, not guessed). So does a docket naming two rows for one
+        matter (only a hand-planted docket can), rather than choose between them. The bullet below
+        is the `oblige` case's reasoning, unchanged:
       * KIND `oblige`. `arrangements.yaml`'s one seeded `disposes:` that is a Tenure kind is
         `arbitration`'s `oblige`; the other two dispose a `Record`. C-1 (`21_RECONCILIATION.md:167`,
         RULED A there): *"who owns the Tenure a determiner opens: its SUBJECT ... exactly `confer`,
@@ -280,7 +315,9 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
 
     ONE DECLINE (`NO_CHANGE` -> `determine.refused` on the `write` clause), a NEGATION the grammar
     cannot spell: the party already owes this seat a live `oblige` (one edge per person and seat --
-    `_req_oblige` clause 4's rule; a second would list him twice in `establishment_of`). The second
+    `_req_oblige` clause 4's rule; a second would list him twice in `establishment_of`) -- since
+    SC-03a, a live edge OF THE DISPOSED KIND on this seat (a man already banned by this bench is not
+    banned twice), beside the two arrangement declines above. The second
     this body carried -- the party is the actor, a judge binding himself -- was already DEAD: the
     `bench` conjunct's `may_determine` refuses it first (`determine.unauthorized`), and an act
     naming no subject dies at `party`, so the fold's `counterparty` clause (`loop/resolve.py::
@@ -296,12 +333,19 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
 
     G4 -- WHAT IT NAMES: THE EDGE, which always moves (absent -> present)."""
     party, seat = _operand(a, "subject"), a.via
-    if (seat is None
-            or any(t.kind == "oblige" and t.subject == party and t.object == seat and t.live
-                   for t in w.tenures)):
+    rows = docketed_under(w, party)
+    if seat is None or len(rows) > 1:
         return NO_CHANGE
-    nt = Tenure(H(w.world_seed, w.tick, party, f"oblige:{seat}:{a.id}"), party, seat, "oblige",
-                since=w.tick, term=_new_oblige_term(w, a))
+    row = next(iter(rows), None)
+    if row is not None and row not in ARRANGEMENTS:
+        return NO_CHANGE                  # a hand-planted item naming no row `open_case` admits
+    kind = ARRANGEMENTS[row]["disposes"] if row is not None else UNDECLARED_DISPOSAL
+    if any(t.kind == kind and t.subject == party and t.object == seat and t.live
+           for t in w.tenures):
+        return NO_CHANGE
+    nt = _disposal(w, a, party, seat, kind)
+    if nt is None:
+        return NO_CHANGE
     items = docketed(w, party)
 
     def perform() -> None:
@@ -309,6 +353,29 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         for item in items:
             item["matter"] = None
     return Change((Subject.edge(nt),), perform)
+
+
+def _disposal(w: "World", a: "Act", party: str, seat: str, kind: str) -> Optional[Tenure]:
+    """THE DISPOSAL EDGE OF `kind`, owned by `party` on `seat` -- one LITERAL `Tenure(...)` per
+    disposable kind, because `data/verbs.py::_derive_openers_from_effects` reads an opener's kind off
+    the literal (and walks this same-file helper as if inlined). `None` for any other kind -- a
+    `Record` or `none` disposal, or a Tenure kind a future row names with no site here -- so the
+    effect declines rather than open an edge the row did not ask for.
+
+    `oblige` carries `_eff_oblige`'s declared term (`H-159`), exactly as before SC-03a, and its id is
+    byte-identical to the pre-SC-03a one (`oblige:<seat>:<act>`). `detain` and `ban` carry NO term
+    [ASSUMPTION; medium; SC-03a; revert: pass `term=_new_oblige_term(w, a)` to both]: #453 §8.1
+    writes both as lasting *"until pardon"* / *"until released"*, `oblige_term` is the length of a
+    SERVICE (`H-159`), not of a sentence, and a restraint lapsing at MATTER would make the bench's
+    custody a timer nobody declared; the arrangement's `term_required` key has no reader yet."""
+    tid = H(w.world_seed, w.tick, party, f"{kind}:{seat}:{a.id}")
+    if kind == UNDECLARED_DISPOSAL:
+        return Tenure(tid, party, seat, "oblige", since=w.tick, term=_new_oblige_term(w, a))
+    if kind == DETAIN_KIND:
+        return Tenure(tid, party, seat, "detain", since=w.tick)
+    if kind == BAN_KIND:
+        return Tenure(tid, party, seat, "ban", since=w.tick)
+    return None
 
 
 @effect_for("petition")

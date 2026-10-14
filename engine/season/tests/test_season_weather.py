@@ -56,9 +56,14 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # (ED-IN-0292 (1), the user: no): the hashes below are the pre-(c) values, 56d44b5a... / 808951dd...
 # after one and two seasons, reproduced exactly; `BASE_EVENTS` likewise (7527/05d85451...,
 # 21735/680e93d8...).
+# RE-PINNED at v9 SC-03a, A SCHEMA MOVE DECLARED: the docket item gains `arrangement` and `petition`
+# (both None on the realm's one item, `b_s_036_cathedral`, since no computed `open_case` names a row),
+# and `content_hash` folds a docket item as a sorted dict of reprs. Was 56d44b5a... / 808951dd...
+# after one and two seasons. The build hash and `BASE_EVENTS` are unchanged; deleting the two keys from
+# the docket after each season reproduces the old pair exactly, so the move is the keys alone.
 BASE_HASHES = {0: "11989dcf5e1c25afab556bf3f234a200",
-               1: "56d44b5a588afc9575ef2b3b69e8e465",
-               2: "808951dd023d640be92755678195c112"}
+               1: "0f8e0144220a3665d3286a9a54c39f3e",
+               2: "ccb33d62c4828028ca838199251b7673"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base

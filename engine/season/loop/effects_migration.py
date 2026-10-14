@@ -9,7 +9,9 @@ for `effect_for`, `_operand` and the shared §10-ladder refusal `_decline_ascent
 
 from __future__ import annotations
 
-from ..queries.world_q import RESIDE_KIND, ancestry, capacity, population, residence_of
+from ..queries.world_q import (
+    DETAIN_KIND, RESIDE_KIND, ancestry, capacity, population, residence_of, restrained,
+)
 from ..state.carriers import Tenure
 from ..state.gate import NO_CHANGE, Change, Subject
 from ..state.ids import H
@@ -54,6 +56,8 @@ def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # so the fold emits `move`'s own `emits_on_refusal`. The rule itself is not re-implemented:
     # `World.contain_ascends` is the one owner and `add_tenure` still RAISES on it, because a
     # caller writing the edge directly is a bug where a person attempting the journey is not.
+    if restrained(w, a.actor, DETAIN_KIND):
+        return _decline_custody(w, a, dest)
     if not w.contain_ascends(a.actor, dest):
         # ⚠ THE INSTANCE DETAIL SITS AFTER ` -> `, WHICH IS `report.py`'s CLUSTER KEY
         # (`d.what.split(" -> ")[0]`). Putting the actor and the destination in the prefix would
@@ -63,6 +67,23 @@ def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # ⚠ PLAN POSITION `19c`: WHAT A `move` LEAVES BEHIND IS THE MOVER'S `reside` EDGE -- it is not
     # touched here, so a traveller still lives where he lived (`_eff_migrate`'s docstring).
     return Change((Subject.entity("persons", a.actor),), lambda: _relocate(w, a, dest))
+
+
+def _decline_custody(w: "World", a: "Act", dest: str) -> Change:
+    """v9 SC-03a (#453 §10.4 step 3, K-53): A PERSON HOLDING A LIVE `detain` DOES NOT TRAVEL OR
+    SETTLE -- the custody edge's first reader, shared by `move` and `migrate` because the journey is
+    one (`_relocate`). Asked FIRST, before the ladder: a prisoner's road is closed whether or not it
+    exists. Declines (`NO_CHANGE`), so the fold emits the row's own `write`-clause refusal --
+    `travel.blocked` for `move` (a prisoner's journey IS blocked, the fact a witness learns), and
+    `migrate.refused` for `migrate`. ⚠ A person's OTHER acts are not refused by custody here: which
+    acts a prisoner may still take (speak, petition, commit) is unruled, and #453 names only these
+    readers. ⚠ AN [ASSUMPTION], STATED: the custody holds wherever the detaining seat is
+    (`world_q.restrained` reads any live `detain`), so no destination is open to him."""
+    TRACE.decision(f"a {a.verb} by a person in custody -> {a.actor} into {dest!r}", "SC-03a",
+                   chose="change nothing, so the fold emits the row's refusal",
+                   alternatives=["let him go (a prisoner walks out of custody)",
+                                 "refuse only a destination outside the detaining seat's purview"])
+    return NO_CHANGE
 
 
 def _relocate(w: "World", a: "Act", dest: str) -> None:
@@ -151,6 +172,8 @@ def _eff_migrate(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     and the distance penalty is the journey's, so two verbs pricing one journey two ways would be the
     S defect (*calculations consistent in methodology*)."""
     dest = _operand(a, "to")
+    if restrained(w, a.actor, DETAIN_KIND):
+        return _decline_custody(w, a, dest)
     if not w.contain_ascends(a.actor, dest):
         return _decline_ascent(
             f"a migration's destination is not up the §10 ladder -> {a.actor} into {dest!r}")

@@ -29,7 +29,9 @@ from typing import Optional
 
 from .. import manifest
 from ..data.rosters import MARCH_TARGET_KINDS, faction_prop_id
-from ..queries.world_q import ancestry, holder_faction_of, home_of, mustered
+from ..queries.world_q import (
+    DETAIN_KIND, ancestry, holder_faction_of, home_of, mustered, restrained,
+)
 from ..state.carriers import Act
 from ..state.world import World
 
@@ -81,6 +83,13 @@ def sides_of(w: World, a: Act, target: Optional[str],
         origin = next((r for r in chain if w.rungs.get(r) is not None
                        and w.rungs[r].kind == "settlement"), None)
         claimants = mustered(w, origin, faction) if origin and faction else []
+        # v9 SC-03a (#453 §10.4 step 3, K-53): A PRISONER IS NOT IN THE ARMY. Every claimant holding
+        # a live `detain` is excluded (`world_q.restrained`, the custody's one read), order kept. ⚠
+        # THE ATTACKING SIDE ONLY, AND THAT IS NAMED, NOT SETTLED: the DEFENDERS are mustered by the
+        # provider (`seam/wrappers/mass_battle.py`, `mustered` at the target), which #453 does not
+        # name as a reader; moving the exclusion into `mustered` itself would cover both sides from
+        # one owner and is the cleaner home, left to the lane that owns that wrapper.
+        claimants = [p for p in claimants if not restrained(w, p, DETAIN_KIND)]
         # ⚠ `H-149` (`march_target_kinds`, closed at `[settlement]`) IS ENFORCED HERE, NOT LEFT
         # DECLARED-AND-UNREAD (found by `valoria-critic`: `_eff_march`'s own comment claimed this
         # check and it did not exist). `requires_typed` only answers *does a Rung of this id

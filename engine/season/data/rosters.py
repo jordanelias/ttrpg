@@ -450,7 +450,24 @@ TENURE_KINDS = roster("tenure_kinds")
 # releasable residence would let a person leave a home for nowhere. Still ONE derivation (this
 # line): `verb_table.yaml`'s declared `release` domain is unchanged, because the six kinds it lists
 # are exactly what remains, and loader invariant 6 compares the two.
-RELEASABLE_KINDS = frozenset(TENURE_KINDS) - {"contain", "reside"}
+# ⚠ FOUR MEMBERS SINCE v9 SC-03a (#453 §8.2/§8.3, K-53), AND FOR A DIFFERENT REASON THAN THE FIRST
+# TWO: `detain` and `ban` end by an AUTHORITY, not a relocation. Each is a sentence (a custody, an
+# exclusion) its holder would otherwise end himself under `release` (`_req_release` admits any live
+# edge of a releasable kind the actor owns), so the convict's own act would undo the bench's. Named
+# once as `RESTRAINT_KINDS`, because the write gate reads the same pair as the only kinds its
+# `determination` basis may CLOSE (`state/gate.py::tenure_write_basis`) -- one set, two readers.
+# Each member is also named alone, for the readers that ask about ONE of them
+# (`queries/world_q.py::restrained`: `move` declines a `detain` holder, `confer` a `ban` holder).
+DETAIN_KIND, BAN_KIND = "detain", "ban"
+RESTRAINT_KINDS = frozenset({DETAIN_KIND, BAN_KIND})
+if not RESTRAINT_KINDS <= frozenset(TENURE_KINDS):
+    raise Unspecified(
+        f"restraint kinds {sorted(RESTRAINT_KINDS - frozenset(TENURE_KINDS))} are not "
+        f"`tenure_kinds` members ({sorted(TENURE_KINDS)})", "rosters.yaml -- tenure_kinds",
+        needs="a `detain` and a `ban` member, or every restraint reader retired with them",
+        law="#453 §8.3 -- a kind its holder may not release must exist to be excluded; a name "
+            "the roster does not carry would exclude nothing and read as a world with no prisoner")
+RELEASABLE_KINDS = frozenset(TENURE_KINDS) - {"contain", "reside"} - RESTRAINT_KINDS
 # `holonic §15`'s DOMAIN and CODOMAIN for the `hold` row, read by `World._refuse_bad_hold`.
 # Rostered rather than inlined at the guard (Jordan, 2026-09-02 -- *definitions are not
 # hardcoded*), so widening `hold` to a new carrier is a data edit and an absent roster

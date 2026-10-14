@@ -35,12 +35,12 @@ from typing import Callable, Optional
 
 from ..data.requires import UNKNOWN, binding_from_act
 from ..data.rosters import (
-    FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, RUNG_KINDS, SITE_KINDS,
-    TENURE_KINDS,
+    BAN_KIND, DETAIN_KIND, FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
+    RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, TENURE_KINDS,
 )
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows.
 from ..data.verbs import RECORD_REFERENT_KINDS
-from ..gaps import Forbidden, Unspecified
+from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
 from .person_q import content_said, intent_named, ledger_names
@@ -165,13 +165,34 @@ def docketed(w: World, matter: Optional[str]) -> list[dict]:
 
     A docket item is a plain dict on `World.docket` (a `_STATE_SEQUENCES` member, so the content
     hash folds it): CALENDAR forms one per sitting with `matter: None` (`loop/calendar.py`, an empty
-    slot), and `open_case` appends `{"date": None, "matter": <subject>}`. `matter is None` is never
+    slot), and `open_case` appends `{"date": None, "matter": <subject>, DOCKET_ARRANGEMENT: <row id
+    or None>, DOCKET_PETITION: <Record id or None>}` (v9 SC-03a, K-55: the item names the arrangement
+    it is heard under and the petition it rose from; `docketed_under` reads the first). `matter is None` is never
     docketed -- an empty slot names nothing, and a `None` subject asks about nothing -- so a
     determination that CLEARS an item's matter (writes it back to `None`) takes the matter off the
     docket without deleting the slot the calendar formed."""
     if matter is None:
         return []
     return [d for d in w.docket if d.get("matter") == matter]
+
+
+# v9 SC-03a (#453 §10.4 step 2b, K-55): THE TWO KEYS A DOCKET ITEM GAINED, named once, `TERM_KEY`'s
+# shape (`loop/effects_governance.py`) -- each is also the PAYLOAD key a hand-built `open_case`
+# declares it under, so the act's word and the item's word cannot drift. `DOCKET_ARRANGEMENT` names an
+# `arrangements.yaml` row (`_eff_determine` reads the kind it `disposes:`); `DOCKET_PETITION` names the
+# `petition` Record the matter rose from (its reader, `interrogate` and the contested bench reading the
+# charge the petition's `terms` names, is #453 §10.4 step 5's, not yet built). A computed `open_case`
+# carries neither -- no operand channel names them (`H-80`/§F1) -- and writes both as `None`.
+DOCKET_ARRANGEMENT = "arrangement"
+DOCKET_PETITION = "petition"
+
+
+def docketed_under(w: World, matter: Optional[str]) -> set:
+    """THE ARRANGEMENT ROWS THE DOCKET HEARS `matter` UNDER -- every `DOCKET_ARRANGEMENT` named by an
+    item `docketed` lists for it, `None` included for an item that names none. One element in every
+    world an act built (`open_case` declines a matter already docketed); more than one only in a
+    hand-planted docket, which `_eff_determine` declines rather than choosing between."""
+    return {d.get(DOCKET_ARRANGEMENT) for d in docketed(w, matter)}
 
 
 # ===========================================================================
@@ -347,6 +368,12 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
     `bench.size` stem -- for the bench at the matter's PLACE (`place_of`). What still does not exist
     is the docket item naming its ARRANGEMENT row, so `matter` stays unused here and the basis stays
     the one constant (`BENCH_BASIS`).
+    ⚠ v9 SC-03a BUILT THE MAPPING'S CARRIER, AND STILL NOT THIS READ: a docket item now names its
+    arrangement (`DOCKET_ARRANGEMENT`, `docketed_under`, written by a hand-built `open_case`; a
+    computed one names `None`), and `_eff_determine` reads the row's `disposes:`. `matter` stays
+    unused HERE because every seeded row's `bench_basis` is `determine` -- the constant already -- so
+    wiring `bench_basis_of` would change no bench; it is the one line above, the day a row declares
+    another basis.
 
     ⚠ A SEAT WITH NO `scope_rung` REACHES NOTHING -- the office-cluster case (S6.2, `Office.rung
     is None`) has no ground to be contained on, exactly as `purview_reaches` treats it. It is a
@@ -958,6 +985,26 @@ def residence_of(w: World) -> dict:
                     "residence as it opens the new, so this world was built by hand")
         out[t.subject] = t.object
     return out
+
+
+def restrained(w: World, person: Optional[str], kind: str) -> bool:
+    """DOES `person` OWN A LIVE EDGE OF THE RESTRAINT `kind` -- a `detain` (he is in custody) or a
+    `ban` (he is excluded)? v9 SC-03a (#453 §10.4 step 3, K-53): the ONE read behind every reader
+    the two kinds ship with, so *is this man a prisoner* cannot mean one thing to `move` and another
+    to a muster: `_eff_move`/`_eff_migrate` and `loop/sides.py` ask it of `DETAIN_KIND`,
+    `_req_oblige` and `_eff_confer` of `BAN_KIND`.
+
+    ⚠ ANY SEAT, AND THAT IS AN [ASSUMPTION; medium; revert: also require the edge's object seat's
+    purview to reach where the restraint is read]: a custody holds a man everywhere (he is not free
+    to travel to a place the detaining seat does not govern), and #453 §8.1 states the ban's readers
+    without a scope (*"a banned person cannot serve or be seated"*). A kind off `RESTRAINT_KINDS` is a
+    caller defect -- every other kind has a reader of its own -- and raises rather than answer False."""
+    if kind not in RESTRAINT_KINDS:
+        raise InstrumentDefect(
+            f"`restrained` asked of {kind!r}, not a restraint kind ({sorted(RESTRAINT_KINDS)})")
+    if person is None:
+        return False
+    return any(t.kind == kind and t.subject == person and t.live for t in w.tenures)
 
 
 def population(w: World, rung_id: str, residence: Optional[dict] = None) -> int:
