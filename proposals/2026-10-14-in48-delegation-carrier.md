@@ -11,6 +11,8 @@ The brief is the IN-48 entry: INSTRUCTION, DEPS, EXIT and FALSIFIER. This docume
 
 ## 0. Verdict
 
+> **HELD (B-J close, 2026-10-14): sections 0 to 8 below describe a build that was reverted because it contradicts ratified Layer 1. Read §9 first; nothing here is live.**
+
 **The carrier is a new `tenure_kinds` member, `delegate : Person → Office`.** The delegate owns it and
 its object is the seat. The seat's sitting HOLDER opens it through that same seat: a hand-built
 `confer` whose `office` is its own `via`, naming the delegate on `to`. The write gate admits it under

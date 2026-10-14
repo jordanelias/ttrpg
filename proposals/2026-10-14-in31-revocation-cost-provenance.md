@@ -12,6 +12,8 @@ The brief is the IN-31 entry: WHAT, DEPS, EDITS, EXIT and FALSIFIER. This docume
 
 ## 0. Verdict
 
+> **Passages that name IN-48's `delegate` edge are CONDITIONAL: that carrier was built and reverted (see the banner above and `proposals/2026-10-14-in48-delegation-carrier.md` §9).**
+
 **The provenance carrier already exists. It is `Office.conferral` for a `hold`, and `Tenure.kind` for
 a `delegate` edge. No field is added, so the Tenure schema does not move.**
 

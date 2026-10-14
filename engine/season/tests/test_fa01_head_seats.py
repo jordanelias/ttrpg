@@ -94,7 +94,8 @@ def _fold(w, d, a: Act) -> tuple:
 
 def _computed_acts_via(w, pid: str, seats: set) -> list:
     """Every act `pid`'s own decision machinery forms THROUGH one of `seats` this tick -- no act hand-built
-    (`test_in48_delegation.py::_computed_acts_via`'s shape)."""
+    (the shape of the IN-48 build's `_computed_acts_via`, reverted at the B-J close, `40926a95`; no file
+    carries it now)."""
     p = w.persons[pid]
     acts = []
     for q in world_q.questions_for(w, p):
@@ -131,6 +132,14 @@ def test_fa01_exit_a_heads_computed_act_executes_via_its_seat_and_refuses_with_t
     assert EXECUTES_AT_FIRST_FOLD <= set(executed), sorted(executed)
     for a in executed.values():
         assert a.via is not None
+
+    # THE CONTROL: the same acts folded on a FRESH build with every seat standing. They execute there too,
+    # so the refusal below comes from the closed seat and not from the acts having left the shared world
+    # the first loop folded them in.
+    wc, dc = _built()
+    for f, a in executed.items():
+        made, no = _fold(wc, dc, Act(id=a.id, actor=a.actor, verb=a.verb, via=a.via, payload=a.payload))
+        assert made and not no, (f, a.verb, a.via, made, no)
 
     # THE FALSIFIER: a second build of the same seed, each head's own-faction seat closed (the seat
     # removed from under him; the office and every other edge stand), and THE SAME ACT folded again.
