@@ -339,6 +339,40 @@ build `11989dcf` unchanged (commit `c2f855d2`).
 `office == via`, which is refused today and would open or close a delegation after the build.
 MEASURED, see §4.1.
 
+### 4.1 The measurement
+
+**The method.** I wrapped three predicates and counted calls by `via == off.id`:
+`loop/predicates.py`'s `may_fill` (asked by `_req_confer`) and `may_revoke` (asked by `_req_revoke`),
+and `queries/world_q.py`'s `may_fill` (asked by `vacancies`), which is the control. Then I ran
+`harness.populated.build_realm(0)` through `run()` for four seasons on HEAD `46c08d9c`.
+
+**Totals after season 4:**
+
+| predicate | `via != off` | `office == via` |
+|---|---|---|
+| `world_q.may_fill` (control) | 289 calls | 0 |
+| `predicates.may_fill` | 5 calls | 0 |
+| `predicates.may_revoke` | 0 calls | 0 |
+
+The log over the same run holds `confer.refused` 4, `revoke.refused` 11, `tenure.opened` 1 and
+`tenure.closed` 9. Every `revoke` refused before `may_revoke` was reached, on an `office` that is not a
+seat (`loop/predicates.py:427-429`). An `office == via` that names a real seat would have passed that
+check and been counted.
+
+An earlier run of seeds 0 and 1 for two seasons each also counted **0** predicate calls.
+
+**So no seeded run measured here reaches the new branches.** I expect no outcome to move, and the build
+re-checks this with its own control. This is the scope of the measurement: seed 0 over four seasons,
+and seeds 0 and 1 over two. It does not cover the corpus.
+
+**The live path, so the build knows where to look.** `opening_set` can form a computed `confer` on a
+seat the actor was TOLD of, and that seat can be one he holds (`queries/world_q.py:1600-1605`;
+H-207, C4). If that seat is also the one `seat_of` picks for `via`, the act is `office == via`. Today
+it is refused. After the build it opens a delegation to a person he knows. The build must either
+measure that this stays at zero across the corpus or decline it in `opening_set`.
+[ASSUMPTION; medium; Jordan to correct; revert: allow it, since a told-of own seat delegated to a known
+person is a decision source the EXIT could use].
+
 ---
 
 ## 5. Falsifiers the build must add
