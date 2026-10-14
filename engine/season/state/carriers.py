@@ -113,7 +113,9 @@ class Tenure:
         a schema's clothes"*. This property and `World._grant_remit` are its first reader and its
         first writer; `World._grant_remit` is the payload's ONLY writer; its readers are this
         property and `seat_rung` below: §8 -- the shape of a payload is a
-        rule, so it lives once. A caller that reaches into `payload["remit_acts"]` itself has
+        rule, so it lives once. (An `oblige` a determination imposes carries one other key,
+        `gate.DETERMINED_BY`, so that `purview_reaches` does not read it as an oath; that key's
+        one owner is the gate.) A caller that reaches into `payload["remit_acts"]` itself has
         re-implemented it and will drift.
 
         WHAT IT IS, and it is NOT a mirror of the office. `H-71`'s ruled arm 2: *"THE GRANT RIDES

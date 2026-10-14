@@ -361,11 +361,15 @@ def purview_reaches(w: "World", seat: Office, rung: Optional[str]) -> bool:
         return False
     if _ground_reaches(w, seat, rung):
         return True
+    # The swearers are collected first so `w.tenures` is walked once for their seats, not once per
+    # sworn edge (this is asked on every purview precondition).
+    swearers = {t.subject for t in sworn_to(w, seat.id)
+                if not (isinstance(t.payload, dict) and DETERMINED_BY in t.payload)}
+    if not swearers:
+        return False
     return any(_ground_reaches(w, w.offices[h.object], rung)
-               for t in sworn_to(w, seat.id)
-               if not (isinstance(t.payload, dict) and DETERMINED_BY in t.payload)
                for h in w.tenures
-               if h.kind == "hold" and h.live and h.subject == t.subject and h.object in w.offices)
+               if h.kind == "hold" and h.live and h.subject in swearers and h.object in w.offices)
 
 
 def _ground_reaches(w: "World", seat: Office, rung: str) -> bool:
