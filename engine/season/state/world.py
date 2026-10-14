@@ -205,7 +205,20 @@ class World:
         # set grows as RESOLVE folds, and a log holding a store could walk it.
         self.gate = Gate()
         self.acts = ActStore()
-        self.log = EventLog(self.gate, lambda: self.acts.ids())
+        # IN-56. THE LAST-EMISSION INDEX, a LOG INDEX and not an object-side one (`04` AX-4): it is
+        # kept ON APPEND, because MATTER emits within its own step and reads its last emission in
+        # that same step, so a barrier cache would be stale exactly where it is read. Two maps,
+        # `(kind, anchor) -> id` and `(kind, a subject the Event's changes name) -> id`; the second is
+        # `last_emission_of(..., written=True)`'s lookup (H-129's fix shape), and without it that
+        # keyword would have to scan again. They live here, not in `state/log`, because `anchor_of`
+        # needs the act store and the log may read nothing (`04` §A.2): the log calls `_on_logged`
+        # on every append (a bound method, so a `deepcopy` of the World rebinds it to the copy).
+        # Underscore, so `content_hash` never folds them (`test_h118`'s exclusion): derived from the
+        # log, which the hash folds. Not pickled -- a World does not pickle (its `act_ids` thunk is a
+        # lambda), so there is no load path to rebuild them on.
+        self._last_by_anchor: dict[tuple, str] = {}
+        self._last_by_subject: dict[tuple, str] = {}
+        self.log = EventLog(self.gate, lambda: self.acts.ids(), self._on_logged)
         self.dates: dict[str, dict] = {}
         self.docket: list[dict] = []
         # ⚠ `petitions` AND `dispensations` WERE TWO PLAIN DICTS HERE AND ARE DELETED (plan position
@@ -1273,13 +1286,21 @@ class World:
         holds for it -- one emitter, one match, `subj` returned by construction -- just not for
         the reason this sentence states. Not corrected further here: the count is cosmetic and
         the property this paragraph defends is unaffected."""
-        for e in reversed(self.log):
-            if e.kind != kind:
-                continue
-            if (any(c.subject == subject for c in e.changes) if written
-                    else anchor_of(self, e) == subject):
-                return e.id
-        return None
+        # IN-56. A LOOKUP. The two maps are filled by `_on_logged` on every append, so the answer
+        # is the last-appended Event of `kind` that matches -- what the reverse scan returned.
+        return (self._last_by_subject if written else self._last_by_anchor).get((kind, subject))
+
+    def _on_logged(self, e: Event) -> None:
+        """IN-56. The log calls this after EVERY append (`EventLog(on_append=...)`), so a probe's
+        direct `w.log.append` is indexed as surely as `write()`'s own emission. `anchor_of` is read
+        HERE, with the Event already in the log, which is the state the scan read it in: an act is
+        in the store before any Event naming it is admitted, the store never removes one, and an
+        appended Event is not edited, so the value cannot change between this call and a query.
+        An Event with several changes registers each DISTINCT subject; a later Event of the same
+        key overwrites, as the reverse scan stopped at the latest."""
+        self._last_by_anchor[(e.kind, anchor_of(self, e))] = e.id
+        for subj in {c.subject for c in e.changes}:
+            self._last_by_subject[(e.kind, subj)] = e.id
 
     def discard_caches(self) -> None:
         self._barrier_cache.clear()
