@@ -181,7 +181,9 @@ def deed_doer(c, seen: tuple):
     killer in the same round. The price, stated: a person who both struck and was struck in one
     round is judged a patient by nobody that round.
     LIMIT, stated: where the ACTOR died attacking, the sighting names him as `who` of his own death,
-    so no killer is named. Holder-side and World-free: `Seen` is read by its fields, never imported
+    so no killer is named. A `seen` on the same subject, `when` and `round` that names NO `who` (a
+    channel that withheld the actor) makes the pairing ambiguous, so `None`: an unnamed hand may be
+    the one that did it. Holder-side and World-free: `Seen` is read by its fields, never imported
     (AX-2)."""
     if c.chain or not is_deed(c) or c.predicate not in PAIRED_KINDS:
         return None
@@ -192,7 +194,9 @@ def deed_doer(c, seen: tuple):
     whos = set()
     for s in by_subject.get((c.subject, c.when, c.round), ()):
         who = getattr(s.value, "who", None)
-        if who is None or who == c.subject or getattr(s.value, "stratum", None) not in strata:
+        if who is None:
+            return None             # an actorless sighting on the same key: ambiguous, never guess
+        if who == c.subject or getattr(s.value, "stratum", None) not in strata:
             continue
         whos.add(who)
     return next(iter(whos)) if len(whos) == 1 else None
@@ -204,9 +208,11 @@ def _bond(p: Person, patient: str, lean: float) -> float:
     half only, normalised as `teller_weight` normalises regard. In `[0, 2]`, and the deed term
     `lean · _bond` FALLS as `a` rises whatever the pursuits' sign: full allegiance doubles a
     condemnation and cancels an approval; full enmity doubles an approval and cancels a
-    condemnation; no stance (`a = 0`) judges the deed by pursuits alone. [ASSUMPTION; medium;
+    condemnation; no stance (`a = 0`) judges the deed by pursuits alone. The judge who IS the
+    patient is his own full ally (`a = 1`): no stance row names oneself, and reading it would judge
+    his own attacker as a stranger's. [ASSUMPTION; medium;
     Jordan to correct -- the form of the factor; revert: no factor and the two cells unauthored.]"""
-    a = max(-1.0, min(1.0, stance_toward(p, patient) / STANCE_MAX))
+    a = 1.0 if patient == p.id else max(-1.0, min(1.0, stance_toward(p, patient) / STANCE_MAX))
     return 1.0 - a if lean > 0 else 1.0 + a
 
 
@@ -231,7 +237,9 @@ def deed_valence(axis_w: dict, c) -> float:
 def _lean(axis_w: dict, kind: str) -> float:
     """`Σ_axis axis_w[axis] · align_kind(kind, axis)`: how pursuits projected to `axis_w` lean on a
     deed of `kind`. One owner for the unpaired (`deed_valence`) and the paired (IN-58) scoring."""
-    return sum(axis_w[ax] * _verbs.align_kind(kind, ax) for ax in PURSUIT_AXES)
+    # sorted: PURSUIT_AXES is a frozenset, and a float sum's order would move with PYTHONHASHSEED
+    # while callers test the result for exact zero.
+    return sum(axis_w[ax] * _verbs.align_kind(kind, ax) for ax in sorted(PURSUIT_AXES))
 
 
 def regard(p: Person, referent: str, fx=None) -> float:

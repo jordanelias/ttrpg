@@ -24,6 +24,10 @@
   (e) `test_the_control_arm_total_is_never_skipped_...` -- under `total` the same Event fans to
       everyone, so the predicate (which takes the mode) refuses it; the other two arms answer `[]`.
       Found red on the first wiring, by `test_season_shape.py::test_r7_two_persons_hold_...`.
+  (f) `test_the_skip_changes_the_work_and_nothing_else` -- A/B, one season: the same hash and log
+      with the predicate forced False. (a) also pins the selected-kind census to `claim.decayed`.
+  (g) `test_a_kind_the_chronicle_admits_is_not_selected` -- a planted `binding_decision` row emitting
+      the held-claim-only kind makes `chronicle` admit it, and the predicate refuses it.
 """
 
 from __future__ import annotations
@@ -104,6 +108,23 @@ def test_m_skip_every_selected_event_has_no_observer_under_all_five(season_run):
         f"{len(m['observers'])} selected Events have observers, e.g. {m['observers'][:3]}: "
         "the predicate is falsified, not to be coded around")
     assert m["selected"] < m["barrier_events"], "the predicate selected every Event"
+    # the census `loop/witness.py`'s IN-55 comment states: `claim.decayed` is the whole of it today
+    assert set(m["kinds"]) == {"claim.decayed"}, m["kinds"]
+
+
+def test_the_skip_changes_the_work_and_nothing_else(monkeypatch):
+    """A/B: one season of `build_realm(0)` with the skip, and one with the predicate forced False
+    (every Event fanned). The world hash and the log are identical -- the skip moves no deposit."""
+    def one(skip: bool):
+        if not skip:
+            monkeypatch.setattr(WIT, "changes_only_held_claims", lambda *a, **k: False)
+        w = POP.build_realm(0)
+        POP.run(1, 0, w=w)
+        monkeypatch.undo()
+        return w.content_hash(), [(e.kind, e.id) for e in w.log]
+    (h_skip, log_skip), (h_fan, log_fan) = one(True), one(False)
+    assert log_skip, "fixture: the season logged nothing"
+    assert h_skip == h_fan and log_skip == log_fan
 
 
 def test_the_wired_skip_is_taken_for_the_selected_events(season_run):
@@ -201,6 +222,20 @@ def test_the_predicate_selects_a_held_claim_only_event_and_refuses_each_other_sh
     act = Act(id="a_in55", actor="p_high", verb="speak", payload={})
     w.acts.append(act)
     assert not pred(_ev("e9", ["c_held"], causes=[act.id])), "an Event with an act was selected"
+
+
+def test_a_kind_the_chronicle_admits_is_not_selected(monkeypatch):
+    """`chronicle` admits on `e.kind` alone: plant a `binding_decision` row emitting the held-claim-only
+    kind, and the same Event is no longer selected (the fan runs). Control: selected before the plant."""
+    from types import SimpleNamespace
+    w = P.tiny_world()
+    w.persons["p_high"].ledger.append(_claim("c_held", "p_high"))
+    held, e = EP.held_claim_ids(w), _ev("e_chron", ["c_held"])
+    assert EP.changes_only_held_claims(w, e, held, "all_five"), "control: not selected before the plant"
+    monkeypatch.setitem(EP.VERB_TABLE, "v_in55_planted",
+                        SimpleNamespace(stratum="binding_decision", emits=(e.kind,)))
+    assert EP._ch_chronicle(w, e, None), "fixture: the planted row does not reach the chronicle"
+    assert not EP.changes_only_held_claims(w, e, held, "all_five"), "a chronicled kind was selected"
 
 
 def test_a_claim_removed_from_its_ledger_is_no_longer_held_so_its_event_is_not_selected():

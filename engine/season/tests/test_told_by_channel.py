@@ -1868,7 +1868,14 @@ def test_g1_regard_at_control_reads_no_ledger_and_a_victims_kind_judges_nothing(
     assert "person.died" in PQ.PAIRED_KINDS
     assert any(V.align_kind("person.died", ax) for ax in PURSUIT_AXES), (
         "IN-58's cell is not authored: this no longer tests that an authored cell stays off the subject")
-    a.ledger.append(Claim("c_g1_died", a.id, "p_other", "person.died", True, 0, "firsthand", 100, "own"))
+    from ..data.pursuits import to_axes
+    from ..data.rosters import PURSUITS
+    assert PQ._lean(to_axes(PQ.crisis_weights(a)), "person.died"), (
+        "hearer a has no lean: the with/without comparison is vacuous")
+    died = Claim("c_g1_died", a.id, "p_other", "person.died", True, 0, "firsthand", 100, "own")
+    e = next(e for e in sorted(PURSUITS) if PQ._lean(to_axes({e: 1.0}), "person.died"))
+    assert PQ.deed_valence(to_axes({e: 1.0}), died) == 0.0     # a PAIRED_KINDS claim: 0 on its subject
+    a.ledger.append(died)
     j_with, _ = PQ.deeds_judged(a, "p_other")
     a.ledger.pop()
     j_without, _ = PQ.deeds_judged(a, "p_other")
