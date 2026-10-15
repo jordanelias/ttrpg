@@ -2,7 +2,10 @@
 # (ED-IN-0293 (8)); the loader is `data/goals.py`, the ONE reader, which refuses every row that
 # breaks the schema below. Its reader is IN-68 (`harness/populated.py`), which mints one OUGHT
 # Proposition per row at world-gen. v9 FA-05 authors the first rows (the Crown, the Löwenritter, the
-# Riskbreakers, the Inquisitors, the Restoration Movement): a declared content-hash MOVER.
+# Riskbreakers, the Inquisitors, the Restoration Movement): a declared content-hash MOVER. v9 FA-06 adds
+# every other organization's: the file must hold a row for each faction with an authored head and each
+# body with a seated member, and `harness/populated.py::seed_goals` REFUSES a world that seats one it does
+# not (`build_realm(goals_complete=)`, default on).
 #
 # A GOAL ATTACHES AT EVERY ORGANIZATIONAL LEVEL: a faction (`rosters.yaml: factions`), a body
 # (`rosters.yaml: office_bodies.faction`) or a seat (`offices.yaml: seats`). It only changes what a
@@ -123,12 +126,15 @@ goals:
     text: the Inquisitors find heretical activity -- whoever an Inquisitor knows to have done an Einhir-revivalist deed
     object: {kind: deed_doers, engaging: einhir_restoration}
     pursuits: {doctrine: 0.6, justice: 0.2, stability: 0.2}
+    derives: {from: goal_church_root_out_heresy, kind: establishes}
     source: >-
       The coordinator's relay of the user, 2026-10-14 (not in ED-IN-0293): the Inquisitors find heretical
       activity; heretical activity read as Einhir-revivalist activity (a deed whose kind engages
       `einhir_restoration`, sign-free, IN-67). [ASSUMPTION; medium; Jordan to correct -- "Inquisitors" =
       the holders of seats in the Cardinal of Justice's body (`off_senior_inquisitor` sits there,
-      `offices.yaml`), and heresy = the Einhir affiliation; a +1-signed engagement is the revert.]
+      `offices.yaml`), and heresy = the Einhir affiliation; a +1-signed engagement is the revert.] v9
+      FA-06: `establishes` from the Church's own heresy goal (the Cardinal of Justice's body is the
+      Church's arm that roots it out: the Church's other members hold the broader goal, these the narrower).
 
   # ---- Restoration Movement (faction; reformist template) --------------------------------------------
   - id: goal_restoration_einhir_revival
@@ -154,3 +160,270 @@ goals:
       every season and `fight` forms on them, so violent attempts can rise; the evading acts wait on
       IN-09's `evade / defy` and the arrest. [ASSUMPTION; medium; Jordan to correct -- who captures
       them; revert: the user names the capturers.]
+
+  # ======================================================================================================
+  # v9 FA-06 (ED-FA-0039, continued): every other organization's goals. The aims below are the author's
+  # reading of the ORIGINAL design work as intent and vocabulary only (`.designs/systems/factions/
+  # reference/faction_state_authoring_v30.md` §2-§7 missions; `faction_canon_v30.md` §7 the Nine Political
+  # Axes, §10 sub-organizations, Part B Strategic Goals and Foil Dynamics; `.designs/systems/world/
+  # reference/worldbuilding_v30.md` §3.1, §4.1, §5, §6.1) -- quarantined, never the reason a behaviour is
+  # correct. EVERY pursuit weight below is the author's [ASSUMPTION; medium; Jordan to correct]. A rival's
+  # goal carries `stance -1` toward the rival head's seat (the Nine Political Axes as data): Hafenmark
+  # toward the Confessor (axes 1, 3, 6), the Church toward the Restoration leader (axes 2, 4, 9).
+  # ======================================================================================================
+
+  # ---- Crown (further aims) --------------------------------------------------------------------------
+  - id: goal_crown_resist_altonia
+    org: {faction: Crown}
+    text: the Crown resists Altonia -- the peninsula is not accommodated away
+    object: {kind: orientation}
+    pursuits: {honour: 0.4, stability: 0.3, liberty: 0.3}
+    source: >-
+      Intent only: `faction_canon_v30` Part B Crown, Foil Dynamics axis 8 (External threat), and Doctrine
+      Notes (Altonia as the external invasion). [CONFLICT in the sources, resolved here: the canon splits
+      the Crown on axis 8 -- an accommodation faction (the King) against a resistance faction (the Widow
+      Regent); the plan names the Crown's aim as resistance to Altonia, and an orientation takes neither
+      side. ASSUMPTION; medium; Jordan to correct -- revert: delete the row and the accommodation reading
+      stands. Altonia itself is not a faction yet (IN-36).]
+  - id: goal_crown_inner_circle_counsel
+    org: {body: Inner Circle}
+    text: the Inner Circle keeps the king's counsel -- the realm's arms, treasury and intelligence sound
+    object: {kind: orientation}
+    pursuits: {stewardship: 0.4, stability: 0.3, honour: 0.2, wealth: 0.1}
+    source: >-
+      Intent only: `faction_canon_v30` Part B Crown, Sub-Organizations (Royal Marshal, Lord Treasurer,
+      Spymaster, the Archbishop's Representative, the Royal Guard Captain). [ASSUMPTION; medium; Jordan to
+      correct -- the body's aim read as sustaining the sovereign it counsels; the weights.]
+  - id: goal_crown_ministries_administer
+    org: {body: Ministries}
+    text: the Ministries execute the realm's government services -- records kept, registers true
+    object: {kind: orientation}
+    pursuits: {stewardship: 0.5, stability: 0.3, justice: 0.2}
+    source: >-
+      Intent only: `worldbuilding_v30` §6.1 (Ministries execute government services) and `faction_canon_v30`
+      §10 (the Ministry of the Peninsula's registrar-to-clerk ladder). [ASSUMPTION; medium; Jordan to
+      correct -- the weights.]
+
+  # ---- Church of Solmund -----------------------------------------------------------------------------
+  - id: goal_church_solmundan_orthodoxy
+    org: {faction: Church of Solmund}
+    text: the Church establishes Solmundan Orthodoxy across the peninsula
+    object: {kind: orientation}
+    pursuits: {doctrine: 0.6, stability: 0.2, virtue: 0.2}
+    source: >-
+      Intent only: `faction_state_authoring_v30` §3 (mission: "Establish Solmundan Orthodoxy across the
+      peninsula"); `faction_canon_v30` Part B Church, Strategic Goals. [ASSUMPTION; medium; Jordan to
+      correct -- the weights, which echo the `ecclesiastical` template's lean on doctrine.]
+  - id: goal_church_root_out_heresy
+    org: {faction: Church of Solmund}
+    text: the Church roots out heresy -- whoever a churchman knows to have done an Einhir-revivalist deed
+    object: {kind: deed_doers, engaging: einhir_restoration}
+    pursuits: {doctrine: 0.7, justice: 0.2, stability: 0.1}
+    source: >-
+      Intent only: `faction_canon_v30` Part B Church, Institutional Beliefs ("heresy is to be rooted out
+      wherever it is found") and Cultural Identity (practitioner activity read as heresy). The Cardinal of
+      Justice's body `establishes` the narrower Inquisitors goal over it (FA-05's row). Heresy read as the
+      Einhir affiliation, as FA-05 reads it. [ASSUMPTION; medium; Jordan to correct -- revert: delete the
+      row and the Inquisitors' `derives`.]
+  - id: goal_church_suppress_restoration
+    org: {faction: Church of Solmund}
+    text: the Church suppresses the Restoration Movement -- its leader is the Church's rival
+    object: {kind: seat_holders, seats: [off_restoration_leader]}
+    stance: -1
+    pursuits: {doctrine: 0.6, stability: 0.4}
+    source: >-
+      Intent only: `faction_canon_v30` Part B Church, Strategic Goals ("suppress Restoration Movement") and
+      Foil Dynamics (axes 2, 4: the Restoration the Church's primary opposition). A rival goal: `stance -1`
+      toward the rival head's seat. DECLARED RISK as FA-05's evade-capture row: `fight` may form on the
+      Restoration leader. [ASSUMPTION; medium; Jordan to correct -- revert: delete the row.]
+  - id: goal_holy_see_orthodoxy
+    org: {body: Holy See}
+    text: the Holy See keeps the Confessor's doctrine whole -- orthodoxy preserved and pastoral care extended to every territory
+    object: {kind: orientation}
+    pursuits: {doctrine: 0.5, virtue: 0.3, stability: 0.2}
+    source: >-
+      Intent only: `faction_canon_v30` Part B Church, Institutional Beliefs 1-2 and Cultural Identity (the
+      Confessor's sincere devotion, pastoral care); `faction_state_authoring_v30` §3 (leader). [ASSUMPTION;
+      medium; Jordan to correct -- the weights.]
+  - id: goal_cardinal_fortitude_enforcement
+    org: {body: Cardinal of Fortitude}
+    text: the Cardinal of Fortitude keeps the Templars' enforcement -- incursions suppressed, the Church's arms ready
+    object: {kind: orientation}
+    pursuits: {stability: 0.4, honour: 0.3, doctrine: 0.3}
+    source: >-
+      Intent only: `worldbuilding_v30` §3.1 (Fortitude: military arm, Knights Templar, enforcement,
+      monstrous incursion suppression); `faction_canon_v30` Part B Church, Sub-Organizations (Templar
+      sub-ladder). [ASSUMPTION; medium; Jordan to correct -- the weights; Templar independence (axis 6) is
+      not carried.]
+  - id: goal_cardinal_prudence_tithes
+    org: {body: Cardinal of Prudence}
+    text: the Cardinal of Prudence keeps the Church's tithes, charities and lands in good order
+    object: {kind: orientation}
+    pursuits: {stewardship: 0.4, wealth: 0.3, virtue: 0.3}
+    source: >-
+      Intent only: `worldbuilding_v30` §3.1 (Prudence: economic arm -- tithes, charities, Church land
+      management). [ASSUMPTION; medium; Jordan to correct -- the weights.]
+  - id: goal_cardinal_temperance_learning
+    org: {body: Cardinal of Temperance}
+    text: the Cardinal of Temperance keeps the Church's learning -- universities, observatories, monasteries and archives
+    object: {kind: orientation}
+    pursuits: {scholastics: 0.5, doctrine: 0.3, stability: 0.2}
+    source: >-
+      Intent only: `worldbuilding_v30` §3.1 (Temperance: knowledge arm -- universities, observatories,
+      monasteries, archives); `faction_state_authoring_v30` §3 (the Altonian diplomacy track is not
+      carried). [ASSUMPTION; medium; Jordan to correct -- the weights.]
+
+  # ---- Hafenmark (mercantile-procedural) -------------------------------------------------------------
+  - id: goal_hafenmark_dynastic_assertion
+    org: {faction: Hafenmark}
+    text: Hafenmark asserts the dynasty of its constitutional duchy
+    object: {kind: orientation}
+    pursuits: {honour: 0.3, stewardship: 0.3, wealth: 0.2, stability: 0.2}
+    source: >-
+      Intent only: `faction_state_authoring_v30` §4 (mission: "Establish Dynastic Assertion of the
+      Hafenmark Constitutional Duchy"; the burgher class its beneficiary). [ASSUMPTION; medium; Jordan to
+      correct -- the weights.]
+  - id: goal_hafenmark_constitutional_order
+    org: {faction: Hafenmark}
+    text: Hafenmark keeps the constitutional order -- rule by procedure, not by decree
+    object: {kind: orientation}
+    pursuits: {justice: 0.5, stability: 0.3, liberty: 0.2}
+    source: >-
+      Intent only: `faction_state_authoring_v30` §4 (parliamentary and procedural acts; the most rigid,
+      procedural culture of the six); `faction_canon_v30` §7 axis 3 (constitutional monarchy against
+      theocratic governance). [ASSUMPTION; medium; Jordan to correct -- the weights.]
+  - id: goal_hafenmark_church_influence_suppressed
+    org: {faction: Hafenmark}
+    text: Hafenmark suppresses the Church's influence -- the Confessor is its rival
+    object: {kind: seat_holders, seats: [off_confessor]}
+    stance: -1
+    pursuits: {liberty: 0.4, justice: 0.3, stewardship: 0.3}
+    source: >-
+      Intent only: `faction_canon_v30` §7 axes 1, 3 and 6 (Crown / Hafenmark against the Church on
+      sovereignty, legitimacy and military authority) and Part B Church, Strategic Goals ("counter Hafenmark
+      Sovereign Authority Doctrine"). A rival goal: `stance -1` toward the rival head's seat. DECLARED
+      RISK as the Church's: `fight` may form on the Confessor. [ASSUMPTION; medium; Jordan to correct --
+      revert: delete the row.]
+  - id: goal_hafenmark_inner_council_counsel
+    org: {body: Inner Council}
+    text: the Inner Council keeps the duchess's counsel -- law, arms and the communes answered by procedure
+    object: {kind: orientation}
+    pursuits: {justice: 0.4, stewardship: 0.3, wealth: 0.3}
+    source: >-
+      Intent only: `faction_canon_v30` §10 (Inner Council: legal advisor, military commander, commune
+      representative) and `faction_state_authoring_v30` §4. [ASSUMPTION; medium; Jordan to correct -- the
+      weights.]
+
+  # ---- Varfell (military order) ----------------------------------------------------------------------
+  - id: goal_varfell_southernmost_dominion
+    org: {faction: Varfell}
+    text: Varfell holds the Southernmost dominion -- Askeheim, the region the two gates open on
+    object: {kind: rung, rung: terr_T15}
+    pursuits: {honour: 0.5, reputation: 0.3, stewardship: 0.2}
+    source: >-
+      Intent only: `faction_state_authoring_v30` §5 (mission: "Establish Southernmost Dominion through
+      military conquest"). The Southernmost region is T15 Askeheim on `systems/settlements/
+      valoria_geography_v30.yaml` (`region: Southernmost`), the one territory no faction holds. [ASSUMPTION;
+      medium; Jordan to correct -- the region read as T15; the weights.]
+  - id: goal_varfell_oastad_gate
+    org: {faction: Varfell}
+    text: Varfell holds Oastad, its gate to Askeheim
+    object: {kind: rung, rung: terr_T13}
+    pursuits: {honour: 0.4, stability: 0.4, stewardship: 0.2}
+    derives: {from: goal_varfell_southernmost_dominion, kind: influences}
+    source: >-
+      Intent only: `valoria_geography_v30.yaml` T13 Oastad ("Varfell southern gate to Askeheim"), the foot of
+      the Southernmost dominion. `influences`: the dominion goal still binds the persons who hold the gate.
+      [ASSUMPTION; medium; Jordan to correct -- the second referent; the weights.]
+  - id: goal_varfell_thread_knowledge
+    org: {faction: Varfell}
+    text: Varfell keeps the Thread truth accessible -- knowledge of the Thread is its to hold
+    object: {kind: orientation}
+    pursuits: {scholastics: 0.5, liberty: 0.3, individuality: 0.2}
+    source: >-
+      Intent only: `faction_canon_v30` §7 axis 2 (Knowledge: Thread truth accessible, Varfell and
+      Restoration against the Church) and §9 (Varfell's Private Collection). [ASSUMPTION; medium; Jordan to
+      correct -- the weights.]
+  - id: goal_jarl_council_confederacy
+    org: {body: Jarl Council}
+    text: the Jarl Council keeps the confederacy's oral law and the Jarls' held ground
+    object: {kind: orientation}
+    pursuits: {community: 0.4, honour: 0.3, stability: 0.3}
+    source: >-
+      Intent only: `faction_canon_v30` §10 (Jarl Council; Senior Jarls of the Highlands, the Skald-Chiefs) and
+      `faction_state_authoring_v30` §5 (the Jarl Confederacy structurally multi-root, oral-law). [ASSUMPTION;
+      medium; Jordan to correct -- the weights.]
+
+  # ---- Guilds (no authored head; the body's seated members hold the goals) ---------------------------
+  - id: goal_guilds_commerce_sustained
+    org: {faction: Guilds}
+    text: the Guilds keep commerce sustained
+    object: {kind: orientation}
+    pursuits: {wealth: 0.6, stewardship: 0.2, stability: 0.2}
+    source: >-
+      Intent only: `faction_canon_v30` §7 axis 5 (Economic control) and §9 (the Guilds' Economic Leverage);
+      `worldbuilding_v30` §5 (Guild structure). [ASSUMPTION; medium; Jordan to correct -- the weights.]
+  - id: goal_guilds_no_faction_controls
+    org: {faction: Guilds}
+    text: no faction controls the Guilds -- guild autonomy against state and Church taxation
+    object: {kind: orientation}
+    pursuits: {liberty: 0.5, wealth: 0.3, individuality: 0.2}
+    source: >-
+      Intent only: `faction_canon_v30` §7 axis 5 (Guild autonomy against State / Church taxation) and
+      `worldbuilding_v30` §5.3 (Guild Forum Revolt: the Guilds withdraw from Ministry oversight).
+      [ASSUMPTION; medium; Jordan to correct -- stated as an orientation, not a stance toward a named
+      head.]
+  - id: goal_guild_masters_trade
+    org: {body: Guild}
+    text: the guild masters keep the trades honest and the guildhalls independent
+    object: {kind: orientation}
+    pursuits: {wealth: 0.4, stewardship: 0.3, reputation: 0.3}
+    source: >-
+      Intent only: `worldbuilding_v30` §5.1 (Guild Masters and Free Masters hold burgher status);
+      `faction_canon_v30` §9. [ASSUMPTION; medium; Jordan to correct -- the weights.]
+
+  # ---- Restoration Movement (further aims) -----------------------------------------------------------
+  - id: goal_restoration_caste_ended
+    org: {faction: Restoration Movement}
+    text: the Restoration Movement ends the caste order -- communal sovereignty in its place
+    object: {kind: orientation}
+    pursuits: {justice: 0.4, liberty: 0.3, individuality: 0.3}
+    source: >-
+      Intent only: `faction_state_authoring_v30` §6 (mission: "Establish Cultural Revolution through
+      Communal Sovereignty") and `faction_canon_v30` Part B Crown, Arc F (anti-caste-suppression as policy).
+      [ASSUMPTION; medium; Jordan to correct -- the mission read as ending the caste order; the weights.]
+  - id: goal_restoration_practitioners_protected
+    org: {faction: Restoration Movement}
+    text: the Restoration Movement protects the practitioners the Church would save from themselves
+    object: {kind: orientation}
+    pursuits: {community: 0.4, liberty: 0.4, virtue: 0.2}
+    source: >-
+      Intent only: `faction_canon_v30` Part B Church, Institutional Beliefs 3 and Foil Dynamics (axes 2, 9:
+      practitioners against the Church). [ASSUMPTION; medium; Jordan to correct -- the weights.]
+
+  # ---- Loewenritter (other bodies; none holds a seated member in build_realm(0) today) ----------------
+  - id: goal_lions_table_coordination
+    org: {body: "Lions' Table"}
+    text: the Lions' Table coordinates the Order's arms and keeps the Royal Guard
+    object: {kind: orientation}
+    pursuits: {stability: 0.4, honour: 0.4, stewardship: 0.2}
+    source: >-
+      Intent only: `worldbuilding_v30` §4.1 (Lions' Table: military coordination, levy operations, Royal
+      Guard). [ASSUMPTION; medium; Jordan to correct -- the weights. Lions' Helm is not given a row: the
+      source records it as having no mechanics.]
+  - id: goal_knights_of_the_peace_patrol
+    org: {body: Knights of the Peace}
+    text: the Knights of the Peace patrol the roads and protect the people
+    object: {kind: orientation}
+    pursuits: {community: 0.4, justice: 0.3, stability: 0.3}
+    source: >-
+      Intent only: `worldbuilding_v30` §4.1 (Knights of the Peace: road patrol, civilian protection, law
+      enforcement). [ASSUMPTION; medium; Jordan to correct -- the weights.]
+  - id: goal_royal_investigators_inquiry
+    org: {body: Royal Investigators}
+    text: the Royal Investigators investigate, counter espionage and prosecute at court
+    object: {kind: orientation}
+    pursuits: {justice: 0.5, stability: 0.3, scholastics: 0.2}
+    source: >-
+      Intent only: `worldbuilding_v30` §4.1 (Royal Investigators: investigation, counter-espionage, court
+      prosecution). [ASSUMPTION; medium; Jordan to correct -- the weights.]

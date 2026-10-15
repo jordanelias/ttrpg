@@ -444,7 +444,28 @@ def seat_cohorts(w: World, rows: list, names: dict | None = None) -> list:
     return out
 
 
-def seed_goals(w: World, rows: tuple, authored: dict, cid_of: dict, partial: bool = False) -> dict:
+def goals_missing(w: World, rows: tuple) -> list:
+    """THE ORGANIZATIONS THIS BUILT WORLD SEATS THAT NO GOAL ROW IS ABOUT (v9 FA-06): `["faction X", "body Y",
+    ...]`, in roster order. A faction is seated by an AUTHORED HEAD that stands in the cast (`cast.
+    faction_leader`, the same read `seed_goals` binds a faction goal's head by); a body by a live `hold` of
+    a seat whose `Office.body` it is. Either needs a row whose `org:` is that faction or body -- a goal of
+    any kind, an `orientation` included. A faction with no head and a body with no seated holder
+    (`Lions' Helm`, an unfilled seat) is asked for nothing: a goal there binds no one."""
+    have = {(g.org_kind, g.org) for g in rows}
+    seated = {o.body for oid, o in w.offices.items() if o.body
+              and any(t.kind == "hold" and t.live and t.object == oid and t.subject in w.persons
+                      for t in w.tenures)}
+    out = []
+    for fac in FACTIONS:
+        lead = cast.faction_leader(fac)
+        if lead and f"p_{_slug(lead)}" in w.persons and ("faction", fac) not in have:
+            out.append(f"faction {fac!r}")
+    out += [f"body {b!r}" for b in BODY_FACTION if b in seated and ("body", b) not in have]
+    return out
+
+
+def seed_goals(w: World, rows: tuple, authored: dict, cid_of: dict, partial: bool = False,
+               complete: bool = True) -> dict:
     """SEED THE ORGANIZATIONS' GOALS IN A BUILT WORLD (v9 IN-68, A-32; ED-IN-0293 (8), (10)). `rows` are
     `data/goals.py` `Goal`s, `authored` is `_office_census["authored"]` (an `offices.yaml` seat id -> the
     Office id that stands for it: NOT the same string for a loop-built seat), `cid_of` the built cast's
@@ -481,7 +502,23 @@ def seed_goals(w: World, rows: tuple, authored: dict, cid_of: dict, partial: boo
 
     `partial` drops, without a sound, a goal whose person or seats the cap removed (the per-case loops'
     own rule); a complete cast refuses it. A goal id already a Proposition's refuses (a mint would
-    replace it)."""
+    replace it).
+
+    `complete` (v9 FA-06, the SHIPPED DEFAULT) refuses a world that seats an organization no row is about:
+    a faction with an authored head, or a body with a seated member, and no goal -- `goals_missing` names
+    each. It is the law of the shipped file, so a test that plants a PARTIAL goals file passes `False`
+    (`build_realm(..., goals_complete=False)`); `build_realm(goals=False)`, the control arm, mints nothing and
+    asks for nothing. [ASSUMPTION; medium; Jordan to correct -- revert: no completeness refusal.]"""
+    if complete:
+        missing = goals_missing(w, rows)
+        if missing:
+            raise Unspecified(
+                "goals.yaml holds no goal for " + ", ".join(missing),
+                "goals.yaml -- completeness",
+                needs="a row whose `org:` is each named faction or body (an `orientation` row counts)",
+                law="v9 FA-06 -- every faction with an authored head and every body with a seated member holds "
+                    "at least one goal; none is guessed")
+
     def refuse(cls, g, what: str, needs: str):
         raise cls(f"goal {g.id!r}: {what}", f"goals.yaml -- {g.id}", needs=needs,
                   law="v9 IN-68 (A-32) -- a goal is seeded onto what the built realm holds; none is guessed")
@@ -586,12 +623,17 @@ def seed_goals(w: World, rows: tuple, authored: dict, cid_of: dict, partial: boo
 
 
 def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
-                goals: bool = True) -> World:
+                goals: bool = True, goals_complete: bool = True) -> World:
     """The whole map, its buildings, and one person per season loop.
 
     `goals` seeds `goals.yaml`'s organization goals (`seed_goals`, v9 IN-68). `False` is the CONTROL
     ARM (`harness/decision_spread.py --control`): the same realm with no goal minted, committed to or
-    stanced. The shipped file is empty, so both arms build the same world until a goal is authored.
+    stanced. The shipped file carries rows (FA-05, FA-06), so the arms differ.
+
+    `goals_complete` (v9 FA-06) is the COMPLETENESS REFUSAL's switch, `True` by default: the world that
+    seats a faction head or a body member with no goal row refuses, naming it (`goals_missing`). A test
+    that plants a deliberately partial goals file passes `False`; nothing else does. Ignored when
+    `goals` is `False` (the control arm seeds nothing and asks for nothing).
 
     `cap` limits the cast for a fast run; `None` seats every case. The cap is a PARAMETER and never
     a hidden default -- a run that quietly seated twenty people while reporting on a hundred and
@@ -1405,10 +1447,12 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # and the ties (so a goal Proposition cannot enter a tie's pools), and before the cohorts, which
     # commit to nothing. World-gen only: a person committed here stays committed through a succession
     # unless a `release` ends it, while a `seat_holders` referent follows the seat (IN-67). `goals=False`
-    # builds the control arm; the shipped `goals.yaml` is empty, so neither arm moves a hash today.
+    # builds the control arm; the shipped `goals.yaml` carries rows (FA-05, FA-06), so the arms differ.
+    # v9 FA-06: the world that seats an organization no row is about REFUSES (`goals_complete`).
     w._goal_census = seed_goals(
         w, goals_data.goals() if goals else (), w._office_census["authored"],
-        {f"p_{_slug(str(c.get('id')))}": str(c.get("id")) for c in cases}, partial=cap is not None)
+        {f"p_{_slug(str(c.get('id')))}": str(c.get("id")) for c in cases}, partial=cap is not None,
+        complete=goals and goals_complete)
 
     # -- THE POPULATION: ONE AUTHORED COHORT PER POPULATED RUNG (plan position `24f`) ------------
     #

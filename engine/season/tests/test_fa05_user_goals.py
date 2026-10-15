@@ -54,11 +54,13 @@ def _shipped_doc() -> dict:
 
 
 def _realm(monkeypatch, tmp_path, rows, **kw):
-    """`build_realm(0)` over `rows` planted through the loader's patch point."""
+    """`build_realm(0)` over `rows` planted through the loader's patch point. The rows are a PARTIAL file, so
+    FA-06's completeness refusal is switched off here (`goals_complete=False`)."""
     path = tmp_path / "goals.yaml"
     path.write_text(yaml.safe_dump({"goals": list(rows)}, allow_unicode=True), encoding="utf-8")
     monkeypatch.setattr(goals, "GOALS_YAML", path)
     monkeypatch.setattr(goals, "_CACHE", None)
+    kw.setdefault("goals_complete", False)
     return P.build_realm(0, **kw)
 
 
@@ -78,11 +80,12 @@ def shipped():
 
 def test_fa05_the_rows_load_seed_and_carry_their_provenance(shipped):
     rows = goals.goals()
-    assert {g.id for g in rows} == ALL and len(rows) == 9
+    # FA-06 (`test_fa06_org_goals.py`) adds rows beside these nine; the shipped counts are its to pin
+    assert ALL <= {g.id for g in rows}
     c = P.census(shipped)
-    assert (c["goals"], c["goal_orientation"], c["goal_dropped"]) == (7, 2, 0)
+    assert c["goals"] >= 7 and c["goal_orientation"] >= 2 and c["goal_dropped"] == 0
     assert c["goal_commits"] > 0 and c["goal_stance_rows"] > 0
-    for g in rows:
+    for g in (g for g in rows if g.id in ALL):
         assert g.source.strip() and g.pursuits and g.text.strip(), g.id
         assert (g.id in shipped.propositions) == (g.id not in ORIENTATIONS), g.id
     byid = {g.id: g for g in rows}
@@ -109,20 +112,24 @@ def test_fa05_the_rows_load_seed_and_carry_their_provenance(shipped):
 # (b) delete one row and its commits vanish
 # ---------------------------------------------------------------------------------------------------
 
-@pytest.mark.parametrize("gone, held_by", [(INQ, INQUISITORS), (RES_EVADE, None)])
-def test_fa05_deleting_a_row_removes_its_proposition_and_its_commits(monkeypatch, tmp_path, shipped, gone, held_by):
+@pytest.mark.parametrize("gone, held_by, handed_back", [(INQ, INQUISITORS, 2), (RES_EVADE, None, 0)])
+def test_fa05_deleting_a_row_removes_its_proposition_and_its_commits(monkeypatch, tmp_path, shipped, gone, held_by,
+                                                                    handed_back):
     full = P.census(shipped)
     assert gone in shipped.propositions and (held_by is None or _committed(shipped, gone) == held_by), \
         "control: the shipped realm holds the row and its commits"
     n_commits = len(_committed(shipped, gone))
     assert n_commits > 0
     rows = [r for r in _shipped_doc()["goals"] if r["id"] != gone]
-    assert len(rows) == 8
+    assert len(rows) == len(_shipped_doc()["goals"]) - 1
     w = _realm(monkeypatch, tmp_path, rows)
     assert gone not in w.propositions and _committed(w, gone) == set()
     c = P.census(w)
     assert c["goals"] == full["goals"] - 1
-    assert c["goal_commits"] == full["goal_commits"] - n_commits, "exactly the deleted row's commits vanish"
+    # FA-06: the Inquisitors' row `establishes` over the Church's heresy goal, so deleting it hands its two
+    # persons back to the parent goal (`handed_back`); a row nothing derives from hands nobody back
+    assert c["goal_commits"] == full["goal_commits"] - n_commits + handed_back, \
+        "exactly the deleted row's commits vanish (less those the parent goal takes back)"
     assert w.content_hash() != shipped.content_hash(), "the hash observes the row"
 
 
