@@ -39,6 +39,8 @@ does: `choose` and `options` read `stance_toward` and `said_of` from here. The A
 
 from __future__ import annotations
 
+import functools
+
 from engine.substrate.descriptors import AFFILIATION_CONCERNS, PURSUITS
 
 from ..data import verbs as _verbs
@@ -115,14 +117,11 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
         if axis_w is None:
             axis_w = projected_axes(p, scar_shift)
         if paired:
-            lean = _lean(axis_w, c.predicate)
-            if not lean:
-                continue            # no authored lean on `p`'s axes: nothing to weigh, no pairing read
             if seen is None:
-                seen = _seen_index(p.ledger)
-            if deed_doer(c, seen) != referent:
+                seen = functools.cache(lambda: _seen_index(p.ledger))
+            doer, v = paired_deed_term(p, axis_w, c, seen)
+            if doer != referent:
                 continue
-            v = lean * _bond(p, c.subject, lean)
         else:
             v = deed_valence(axis_w, c)
         # FIRSTHAND only is judged (`dissents`' and `record`'s precedent, `decision/options.py`):
@@ -265,6 +264,26 @@ def deed_doers(ledger, spec: dict, holder: str, against=()) -> tuple:
         if doer is not None and doer != holder and doer not in out:
             out.append(doer)
     return tuple(out)
+
+
+def paired_deed_term(p: Person, axis_w: dict, c, seen_of) -> tuple:
+    """`(doer, term)`: THE ONE SCORER OF A PAIRED DEED CLAIM (v9 IN-58, IN-72; `CLAUDE.md` §8, the rule
+    lives once). `c` is a deed claim `p` holds; `axis_w` is `p`'s projected pursuits; `seen_of` is a
+    zero-argument callable returning `_seen_index(p.ledger)` (called only when a pairing is read).
+    `doer` is the one `deed_doer` names and `term = lean · bond` (`_lean`, `_bond`) is what the deed
+    adds to `p`'s judgement of that doer; `deeds_judged` sums it and `world_q.attention_key`'s tier 2
+    ranks a claim by `|term|`. `(None, 0.0)` for every claim that is not a paired deed, that `p`'s
+    pursuits do not lean on, that is told (`chain`), or whose pairing names no doer (no `seen`, `who`
+    withheld, ambiguous): an unpaired claim scores 0, so a hidden actor stays hidden. Person-side (AX-2)."""
+    if c.predicate not in PAIRED_KINDS or c.chain:
+        return None, 0.0
+    lean = _lean(axis_w, c.predicate)
+    if not lean:
+        return None, 0.0            # no authored lean on `p`'s axes: nothing to weigh, no pairing read
+    doer = deed_doer(c, seen_of())
+    if doer is None:
+        return None, 0.0
+    return doer, lean * _bond(p, c.subject, lean)
 
 
 def _bond(p: Person, patient: str, lean: float) -> float:

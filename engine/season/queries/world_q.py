@@ -46,7 +46,8 @@ from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # the asker-first module (which may not import this one; this edge runs the other way).
 from .person_q import content_said, intent_named, ledger_names
 # v9 IN-57: `attention_key`'s tier 2 scores a deed claim by `deed_valence`, one owner per factor.
-from .person_q import crisis_weights, deed_valence, projected_axes
+from .person_q import (
+    _seen_index, crisis_weights, deed_valence, paired_deed_term, projected_axes)
 # v9 IN-69: the one cosine (`cast.loyalty` calls it too).
 from ..data.pursuits import alignment
 # v9 IN-67: `goal_referents` reads a goal's `object:` off the ONE loader and a `deed_doers` goal's
@@ -1772,16 +1773,12 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None) -> Callable[
       1. a referent among `p`'s own live-tenure objects or inside a seat's purview (`own_purview`,
          `reach`'s limbs 2 and 4);
       2. a question whose `about` is a deed claim in `p`'s own ledger with nonzero valence under
-         `p`'s pursuits (`deed_valence(projected_axes(p, scar_weight_shift), c)`), ordered by
-         -|valence|. ⚠ Since IN-58 `person_q.deed_valence` returns 0 for `PAIRED_KINDS`: a death or
-         wound claim is judged for its doer only inside `deeds_judged` (through `deed_doer`, the
-         `seen.who` pairing), so it never reaches this tier and falls to tier 4 for a witness who
-         is not an ambition holder on, or in the purview of, the victim or the killer -- BELOW the
-         standing `need` question. Consequence: IN-12 step 5's RS-23 conjunct (a petition against a
-         killer) needs a hearer to answer a question whose referent is the killer, which under
-         `question_aggregation_rule: first` such a hearer almost never does. The design fix --
-         score a paired claim in tier 2 by `|_lean * _bond|` via `deed_doer`, one scorer in
-         `person_q` shared with `deeds_judged` -- is a declared hash mover, not taken here;
+         `p`'s pursuits, ordered by -|valence|: an unpaired kind by `deed_valence(projected_axes(p,
+         scar_weight_shift), c)`; a `PAIRED_KINDS` claim (a death or wound -- `deed_valence` is 0 for
+         it, IN-58) by `|lean * bond|` for the doer its `seen.who` pairing names
+         (`person_q.paired_deed_term`, the ONE scorer `deeds_judged` sums too; v9 IN-72, RS-23). A
+         paired claim whose pairing names no doer (no `seen`, `who` withheld, ambiguous) scores 0 and
+         stays in tier 4, so a hidden actor stays hidden;
       3. the `need` question -- the standing ambition question, PLAN `W5`'s quiet-season fallback;
       4. the rest -- AND every question whose claim records HIS OWN act (`Claim.doer == p.id`,
          stamped by WITNESS), whatever its referent: the echo of his own deed is not news.
@@ -1833,6 +1830,10 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None) -> Callable[
         return projected_axes(p, w.fixtures.get("scar_weight_shift"))
 
     @functools.cache
+    def seen_of() -> tuple:
+        return _seen_index(p.ledger)
+
+    @functools.cache
     def weights() -> dict:
         return crisis_weights(p, w.fixtures.get("scar_weight_shift"))
 
@@ -1868,7 +1869,11 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None) -> Callable[
                             if any(r in refs for r in q.referents))) + tie
         if any(r in mine for r in q.referents):
             return (1, 0.0) + tie
-        v = deed_valence(axis_w(), held) if held is not None else 0.0
+        if held is None:
+            return (4, 0.0) + tie
+        # IN-72: a paired claim (death, wound) scores `|lean · bond|` for the doer its `seen.who`
+        # pairing names, `person_q.paired_deed_term` -- the scorer `deeds_judged` sums; unpaired: 0.
+        v = deed_valence(axis_w(), held) or paired_deed_term(p, axis_w(), held, seen_of)[1]
         return ((2, -abs(v)) if v else (4, 0.0)) + tie
     return key
 
