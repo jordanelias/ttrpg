@@ -124,6 +124,11 @@ ARRANGEMENTS_YAML = PACKAGE_DIR / "arrangements.yaml"
 # `harness/populated.py::build_realm` beside the case-derived cast. Anchored here for the same
 # reason every sibling registry above is: one path owner, never a local `__file__`.
 COHORTS_YAML = PACKAGE_DIR / "cohorts.yaml"
+# `goals.yaml` -- v9 IN-66 (ED-IN-0293 (8)): the AUTHORED goals of the organizations (faction, body,
+# seat), each an OUGHT Proposition `harness/populated.py` mints at world-gen once IN-68 reads them.
+# Read through `data/goals.py`, the ONE loader. Anchored here for the same reason every sibling
+# registry above is: one path owner, never a local `__file__`.
+GOALS_YAML = PACKAGE_DIR / "goals.yaml"
 
 # The degree sweep's two arm modules (plus their shared `sweep_core`), imported by source in two
 # tests. Moved out of `proposals/2026-09-04-degree-sweep` to `engine/reference/degree-sweep/` so

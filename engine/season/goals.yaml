@@ -1,0 +1,29 @@
+# `engine/season/goals.yaml` -- WORLD-GEN CONTENT: the authored goals of the organizations. v9 IN-66
+# (ED-IN-0293 (8)); the loader is `data/goals.py`, the ONE reader, which refuses every row that
+# breaks the schema below. Its reader is IN-68 (`harness/populated.py`), which mints one OUGHT
+# Proposition per row at world-gen; nothing reads this file yet, so the shipped list is EMPTY and
+# no content hash moves.
+#
+# A GOAL ATTACHES AT EVERY ORGANIZATIONAL LEVEL: a faction (`rosters.yaml: factions`), a body
+# (`rosters.yaml: office_bodies.faction`) or a seat (`offices.yaml: seats`). It only changes what a
+# person attends to; it never acts, and nothing aggregates (A-31).
+#
+# ROW SCHEMA (one goal = one row):
+#   id:       the Proposition id the row mints. Unique.
+#   org:      EXACTLY ONE of `{faction: <name>}` | `{body: <name>}` | `{seat: <seat id>}`.
+#   text:     the Proposition's predicate, for display.
+#   object:   `{kind: <goal_object_kinds member>, ...}` and the kind's referent fields:
+#               person        -> `case: <cast case id>`
+#               seat_holders  -> `seats: [<seat id>, ...]`
+#               rung          -> `rung: <rung id>`   (checked at seeding, IN-68, once rungs exist)
+#               deed_doers    -> EXACTLY ONE of `against: <goal id>` | `engaging: <affiliation>`
+#                                | `kinds: [<deed kind>, ...]`
+#               orientation   -> no referent (mints no Proposition)
+#   stance:   optional, -1 or +1: the sign of the stance row each member takes toward the referent.
+#   pursuits: REQUIRED, at least one: `{<pursuit>: <weight > 0>}` -- the goal's lean over the
+#             canonical fifteen.
+#   derives:  optional `{from: <goal id>, kind: <goal_derivations member>}`. A body goal derives only
+#             from a goal of its own faction, a seat goal only from a goal of its own body or
+#             faction; a faction goal derives only from a faction goal. Acyclic.
+#   source:   a provenance string (`offices.yaml`'s `source:` precedent).
+goals: []
