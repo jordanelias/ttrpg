@@ -12,23 +12,18 @@ What each clause observes, and what it is the falsifier of:
   (c) `test_a_planted_change_to_a_channel_predicate_changes_the_fan_list` -- the control: the fan
       list `[(pid, event, channel)]` the comparison is about can be seen to move when a predicate
       moves.
-  (d) `test_a_tenure_written_between_two_calls_in_one_barrier_window_is_seen` -- the mid-RESOLVE
-      case: no `discard_caches()` between the calls, a Tenure opened, closed and reopened between
-      them, and a knot likewise; every answer follows.
+  (d) `test_a_tenure_written_between_two_asks_is_seen_after_a_discard` -- the index is a
+      PER-BARRIER cache, valid because every barrier calls `discard_caches()` first. A Tenure opened,
+      closed and reopened between two asks is NOT seen without a discard (the cached answer comes
+      back -- which shows the discard is what the design relies on) and IS seen after one; a knot
+      likewise.
 
 ⚠ WHAT (a) CANNOT SEE, MEASURED: over the realm's two seasons no call has a CLOSED `hold` on the Event's
 changed thing, so deleting the `t.live` clause from the index build leaves (a) green. The liveness
 clause is observed by (d) alone, which closes and reopens an edge. Both are needed.
-
-`test_no_bare_tenure_list_surgery_outside_the_store` is the sweep over the half of the version the
-field-assignment counter cannot see (CLAUDE.md §0.1 pt 1, `tests/valoria/test_morale_write_sweep.py`'s
-shape): production code adds and removes Tenures through `World` only.
 """
 
 from __future__ import annotations
-
-import ast
-import pathlib
 
 import pytest
 
@@ -129,9 +124,10 @@ def test_the_index_answers_every_call_as_a_live_scan_does(realm_run):
 
 
 def test_the_index_is_built_far_less_often_than_it_is_asked(realm_run):
-    """The point of the index: one build per version, not one per (event, person). The comparison
+    """The point of the index: one build per barrier, not one per (event, person). The comparison
     in (a) would pass as well for an index rebuilt on every call."""
     total = sum(realm_run.checks.values())
+    assert total >= MIN_CHECKS, f"only {total} asks were counted -- the ratio below is vacuous"
     assert realm_run.builds >= 1, "the build was never counted: the wrapper is not on the call path"
     assert realm_run.builds * 10 < total, (realm_run.builds, total)
 
@@ -143,7 +139,7 @@ def test_a_planted_stale_index_entry_fails_the_per_call_comparison(realm_run):
     idx = cache.tenure_index(w)
     pid, obj = "p_stale_holder", "off_stale"
     assert pid not in idx.holds
-    key = "tenures@%d.%d" % w.tenure_version()
+    key = "tenures"
     e = Event(id="e_stale", kind="k", changes=[P.about(obj)], causes=[ROOT], emitted_at=1)
     assert disagreements(w, e, pid) == [], "fixture: the clean index already disagrees"
     w._barrier_cache[key] = cache.TenureIndex({**idx.holds, pid: frozenset({obj})}, idx.knots)
@@ -174,98 +170,37 @@ def test_a_planted_change_to_a_channel_predicate_changes_the_fan_list(realm_run,
 
 
 # -- (d) ---------------------------------------------------------------------------------------
-def test_a_tenure_written_between_two_calls_in_one_barrier_window_is_seen():
+def test_a_tenure_written_between_two_asks_is_seen_after_a_discard():
+    """The direct-caller contract `queries/cache.py` states: a Tenure write between two asks is seen
+    after `w.discard_caches()`, and NOT without it. Each write is checked both ways -- the stale
+    answer first, then the discarded one -- so the discard is shown to be the whole of what keeps
+    the answer current. MUTATION (run): delete the `w.discard_caches()` calls below -> red."""
     w = P.tiny_world()
     doc = Event(id="e_doc", kind="k", changes=[P.about("off_dicastery")], causes=[ROOT], emitted_at=1)
     kn = Event(id="e_kn", kind="k", changes=[P.about("p_other")], causes=[ROOT], emitted_at=1)
     doc_key, wit_key = EP.CHANNEL_PREDICATES["document_key"], EP.CHANNEL_PREDICATES["witness_key"]
 
-    # the window opens: the index is built and cached; NO discard_caches() from here on
-    assert not doc_key(w, doc, "p_mid") and not wit_key(w, kn, "p_mid")
-    built = set(w._barrier_cache)
+    def after_write(pred, e, pid, want):
+        assert pred(w, e, pid) is (not want), "no discard yet: the cached answer should still stand"
+        w.discard_caches()
+        assert pred(w, e, pid) is want, "after discard_caches() the write was not seen"
+
+    assert not doc_key(w, doc, "p_mid") and not wit_key(w, kn, "p_mid")   # the index is built here
 
     hold = w.add_tenure(Tenure("t_in54_hold", "p_mid", "off_dicastery", "hold", since=0))
-    assert doc_key(w, doc, "p_mid"), "an opened hold was not seen (structure counter)"
+    after_write(doc_key, doc, "p_mid", True)            # an opened hold
     hold.until = 3
-    assert not doc_key(w, doc, "p_mid"), "a closed hold was still answered (field counter)"
+    after_write(doc_key, doc, "p_mid", False)           # a closed hold (the `t.live` clause)
     hold.until = None
-    assert doc_key(w, doc, "p_mid"), "a reopened hold was not seen"
+    after_write(doc_key, doc, "p_mid", True)            # a reopened hold
 
     knot = w.add_tenure(Tenure("t_in54_knot", "p_mid", "p_other", "knot", since=0))
-    assert wit_key(w, kn, "p_mid") and not wit_key(w, kn, "p_low")
+    after_write(wit_key, kn, "p_mid", True)
+    assert not wit_key(w, kn, "p_low")
     knot.until = 3
-    assert not wit_key(w, kn, "p_mid")
-    assert set(w._barrier_cache) - built, "the index was never rebuilt -- the clause above is vacuous"
+    after_write(wit_key, kn, "p_mid", False)
 
+    w.discard_caches()
     for pid in w.persons:
         for e in (doc, kn):
             assert disagreements(w, e, pid) == []
-
-
-def test_the_version_counts_a_field_assignment_and_leaves_the_hash_alone():
-    w = P.tiny_world()
-    h = w.content_hash()
-    before = w.tenure_version()
-    t = next(iter(w.tenures))
-    t.until = t.until                       # an assignment of the same value still counts
-    assert w.tenure_version() != before
-    assert w.content_hash() == h
-    before = w.tenure_version()
-    w._tenure_structure += 1
-    assert w.tenure_version() != before and w.content_hash() == h
-
-
-def test_a_tenure_added_with_no_field_write_after_the_build_is_seen():
-    """The STRUCTURE half of the version: a Tenure constructed (a field write, counted) BEFORE the
-    index is built, then added, moves only `_tenure_structure`. A knot, not an office hold: a hold
-    passes through `_grant_remit`, which writes `payload` and would move `Tenure.writes` anyway.
-    MUTATION (run): delete `self._tenure_structure += 1` in `World.add_tenure` -> red."""
-    w = P.tiny_world()
-    kn = Event(id="e_kn", kind="k", changes=[P.about("p_other")], causes=[ROOT], emitted_at=1)
-    wit_key = EP.CHANNEL_PREDICATES["witness_key"]
-    t = Tenure("t_in54_late_knot", "p_mid", "p_other", "knot", since=0)
-    assert not wit_key(w, kn, "p_mid")          # the index is built here, at the post-construction version
-    writes = w.tenure_version()[0]
-    w.add_tenure(t)
-    assert w.tenure_version()[0] == writes, "add_tenure wrote a field: this no longer isolates the structure counter"
-    assert wit_key(w, kn, "p_mid"), "a Tenure added after the build was not seen (structure counter)"
-
-
-# -- the half of the version the field counter cannot see ------------------------------------------
-_MUTATORS = {"append", "extend", "insert", "remove", "pop", "clear", "sort", "reverse"}
-_STORES = {"tenures", "_unowned"}
-# shrink-only: the harness probes that build a world and then edit it by hand (`state/world.py` is
-# the store itself and is exempt as a whole).
-_ALLOWED = {"harness/probes.py": 1}
-
-
-def _list_surgery(src: str) -> int:
-    n = 0
-    for node in ast.walk(ast.parse(src)):
-        if isinstance(node, (ast.Assign, ast.AugAssign)):
-            targets = node.targets if isinstance(node, ast.Assign) else [node.target]
-            n += sum(isinstance(t, ast.Attribute) and t.attr in _STORES for t in targets)
-        elif (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
-              and node.func.attr in _MUTATORS and isinstance(node.func.value, ast.Attribute)
-              and node.func.value.attr in _STORES):
-            n += 1
-    return n
-
-
-def test_no_bare_tenure_list_surgery_outside_the_store():
-    root = pathlib.Path(__file__).resolve().parents[1]
-    found = {}
-    for path in sorted(root.rglob("*.py")):
-        rel = path.relative_to(root).as_posix()
-        if rel.startswith("tests/") or rel == "state/world.py":
-            continue
-        n = _list_surgery(path.read_text(encoding="utf-8"))
-        if n:
-            found[rel] = n
-    assert found == _ALLOWED, found
-
-
-def test_the_sweep_can_see_a_planted_surgery_site():
-    assert _list_surgery("def f(p, t):\n    p.tenures.append(t)\n") == 1
-    assert _list_surgery("def f(p):\n    p.tenures = []\n") == 1
-    assert _list_surgery("def f(w, t):\n    w.add_tenure(t)\n") == 0

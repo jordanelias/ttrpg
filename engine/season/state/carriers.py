@@ -105,18 +105,6 @@ class Tenure:
     # the `Office.establishment` deletion's shape in reverse, not a behaviour change.
     term: Optional[Term] = None
 
-    # IN-54. A COUNT OF FIELD ASSIGNMENTS TO ANY TENURE, class-wide: the version `queries/cache.py`'s
-    # object-side Tenure index is keyed on (its docstring states the invalidation rule). Not a dataclass
-    # field (no annotation), so `repr` -- and therefore `World.content_hash` -- never sees it. Process-wide
-    # rather than per-World on purpose: a Tenure does not know its World, and a bump from another world only
-    # costs the other index a rebuild (never a wrong answer). Precedent for a carrier owning
-    # `__setattr__`: `Rung`.
-    writes = 0
-
-    def __setattr__(self, name, value):
-        Tenure.writes += 1
-        object.__setattr__(self, name, value)
-
     @property
     def live(self) -> bool:
         return self.until is None
@@ -351,9 +339,11 @@ class Claim:
     # when the claim records HIS OWN act, else `None`. WITNESS stamps it only where the witness is
     # the actor (`loop/witness.py`, `pid == act.actor`) on the event-kind, `obs`, `seen` and content
     # deposits, never on a told copy: a person always knows his own act, so it leaks nothing a
-    # channel withholds. Its reader is `queries/world_q.py::attention_key`, which sorts the echo of
-    # his own deed last -- it is not news. KEYWORD-ONLY, default `None`: every other construction
-    # (told copies, tests, fixtures) is untouched.
+    # channel withholds. Its one reader in game code is `queries/world_q.py::attention_key`, which
+    # sorts the echo of his own deed last -- it is not news (`harness/soak.py` serialises it). Not
+    # `person_q.deed_doer`, which infers the DOER OF ANOTHER'S deed from `seen.who`; this field is only
+    # the holder's own id on his own act's deposits. KEYWORD-ONLY, default `None`: every other
+    # construction (told copies, tests, fixtures) is untouched.
     doer: Optional[str] = field(default=None, kw_only=True)
 
     @property

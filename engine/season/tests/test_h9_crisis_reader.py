@@ -3,17 +3,23 @@ a person whose scar count on a pursuit has reached 2 gives that pursuit's weight
 as the swept `Fixtures` arm `scar_weight_shift` (control `0`, shipped), read where `choose` scores.
 
 THE PLAN'S FALSIFIER: fork divergence at the `total` arm rises above the baseline while the control
-arm is unmoved. ⚠ THE BASELINE IS A PROXY, NOT ED-IN-0261'S. It is the W-D NPC-088 slice, one seed
-(29 genuine / 6 diverged at `observation_deposit_mode=total`; the arm at 1 reads 32/10). ED-IN-0261's
+arm is unmoved. ⚠ AT v9 IN-57 THE `total` FORK TEST COMPARES THE RATE, NOT THE COUNT: the genuine
+count moves with the arm and the diverged count reads equal (10 -> 10), so the assertion compares
+10/36 -> 10/32. On this slice at IN-57 the arm is therefore shown to CHANGE THE FORK POPULATION, not
+to reach a later decision; that reading is routed to IN-65 (scar measurement) in the B-X batch.
+⚠ THE BASELINE IS A PROXY, NOT ED-IN-0261'S. It is the W-D NPC-088 slice, one seed
+(29 genuine / 6 diverged at `observation_deposit_mode=total` when first measured, 36/10 at IN-57;
+the arm at 1 reads 32/10). ED-IN-0261's
 own figure (2,403 forks reconverge 100%, later-decision divergence ~4%) is a corpus figure and was
 NOT re-taken here, so this test does not say the arm closes that loop. And 6 -> 10 is not a rate over
 the same forks: the genuine population moves too (29 -> 32), so read diverged/genuine as a pair or a
 rate (6/29 -> 10/32). Each clause is an executed test below that can fail:
   * the control (`0`) is the unmodified read -- `crisis_weights` returns `Person.pursuits` ITSELF, and
-    the `W-D` slice at `total` reads the baseline pair `test_season_shape.py` pins (29 genuine, 6
-    diverged) when the arm is `0`;
-  * the non-zero arm moves it: diverged at `total` rises above that baseline (a vacuous arm -- one
-    nobody's scar reaches -- would leave it at 6, so the assertion can fail);
+    the `W-D` slice at `total` reads the baseline pair `test_season_shape.py` pins (`_BASELINE_TOTAL`,
+    36 genuine / 10 diverged at IN-57) when the arm is `0`;
+  * the non-zero arm moves it: the diverged RATE at `total` rises above that baseline's (10/36 ->
+    10/32 at IN-57; a vacuous arm -- one nobody's scar reaches -- would leave the pair at 36/10, so the
+    assertion can fail);
   * the arm is a READER: it writes no `Person` field and moves no scar;
   * a one-season populated world is moved by the arm (hash differs from the control) and holds
     people the shift can act on -- at the threshold, with another pursuit to give weight to.

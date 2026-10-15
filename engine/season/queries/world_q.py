@@ -594,8 +594,11 @@ def own_purview(w: World, p: Person) -> set[str]:
     `attention_key`'s tier 1 read one rule: every live Tenure's object (`mine`), and
     `{seat.rung} | descendants(seat.rung)` over every live `hold` on an Office with a rung (the
     inclusive walk, LB-2e). Reads `p`'s own tenures and the office/rung stores only; no ledger
-    (`reach`'s AX-2 note). No TRACE row: `reach` writes its own, and `runs/TRACE.txt` folds rows
-    per call."""
+    (`reach`'s AX-2 note). Writes no TRACE row of its own, but `descendants`, which it calls,
+    writes a `TRACE.query` (`state/containment.py`), and `reach` and `attention_key` each compute
+    it, so one `questions_for` walks a seat's subtree twice. Handing one computation to both moves
+    `runs/TRACE.txt` and `results.json`'s QUERY count (measured: 29,405 -> 28,620; no game state
+    moves), which is why the two calls stand."""
     P = set()
     for t in p.tenures:
         if not t.live:
@@ -1699,10 +1702,15 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None) -> Callable[
          `reach`'s limbs 2 and 4);
       2. a question whose `about` is a deed claim in `p`'s own ledger with nonzero valence under
          `p`'s pursuits (`deed_valence(projected_axes(p, scar_weight_shift), c)`), ordered by
-         -|valence|. ⚠ Since IN-58 `person_q.deed_valence` returns 0 for `PAIRED_KINDS` (a death or
-         wound claim is judged for its doer only inside `deeds_judged`, through the `seen.who`
-         pairing), so those claims never reach this tier and fall to tier 4 -- a deliberate
-         departure from a single scorer, recorded in IN-58;
+         -|valence|. ⚠ Since IN-58 `person_q.deed_valence` returns 0 for `PAIRED_KINDS`: a death or
+         wound claim is judged for its doer only inside `deeds_judged` (through `deed_doer`, the
+         `seen.who` pairing), so it never reaches this tier and falls to tier 4 for a witness who
+         is not an ambition holder on, or in the purview of, the victim or the killer -- BELOW the
+         standing `need` question. Consequence: IN-12 step 5's RS-23 conjunct (a petition against a
+         killer) needs a hearer to answer a question whose referent is the killer, which under
+         `question_aggregation_rule: first` such a hearer almost never does. The design fix --
+         score a paired claim in tier 2 by `|_lean * _bond|` via `deed_doer`, one scorer in
+         `person_q` shared with `deeds_judged` -- is a declared hash mover, not taken here;
       3. the `need` question -- the standing ambition question, PLAN `W5`'s quiet-season fallback;
       4. the rest -- AND every question whose claim records HIS OWN act (`Claim.doer == p.id`,
          stamped by WITNESS), whatever its referent: the echo of his own deed is not news.
@@ -1725,7 +1733,10 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None) -> Callable[
     on his ambition's subject -- chiefly its refusal (`release.refused`, `migrate.refused`,
     `travel.blocked`) -- and acted on that subject again: 80% of first claim questions were his own
     act's echo (34% before IN-57), and the corpus's R3 propagation fell 46 -> 43 of 46 NPC cases and
-    97 -> 91 of 97 ARC cases; the screen restores 46/46 and 97/97. Revert: the screen off (B), the
+    97 -> 91 of 97 ARC cases; the screen restores 46/46 and 97/97. With the screen the corpus
+    still shows combat high (felled 82, wounded 116 against base 47/66), through `accept` forming
+    with no challenge behind it (HANDOFF_IN's accept residue): the screen did not restore that.
+    Revert: the screen off (B), the
     entry's tier 0 literal (`need` in tier 0), or before IN-57 the `(source, id)` key.]"""
     if ambs is None:
         ambs = ambitions(w, p)

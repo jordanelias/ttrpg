@@ -34,6 +34,9 @@ from ..data.verbs import VERB_TABLE
 # `epistemic`, test_season_shape's allow-list); it reads the verb table (`_happened`, `dissents`) and the
 # holder's own stance (`regard`). `04:178` is exceeded on those two reads. Layer-conformance, B-E close:
 # CONVENTION, no scan reads this step's imports; the spec is ambiguous, `decision/` chosen.
+# IN-55's `held_claim_ids(w)` exceeds `04:178` a second time, beside the refraction reads: it reads every
+# holder's ledger id set (to decide whether an Event changes only held claims, and so skip its fan),
+# writes no ledger, and is a CONVENTION exceedance justified by IN-55's measured saving.
 from ..decision.options import ledger_weigh, refracted_confidence
 from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, changes_only_held_claims,
                          claim_subjects, held_claim_ids, live_channels, observers_for, seen_of,

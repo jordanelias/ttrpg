@@ -434,8 +434,8 @@ def _ch_document_key(w: "World", e, pid) -> bool:
     the actor under `both`, so the attribution leak this paragraph describes survives on THAT
     claim; `seen` is added beside it, as `R8.1` rules, not in its place.
     """
-    # IN-54: read through `cache.tenure_index` (object-side Tenures, version-keyed -- its docstring
-    # states the invalidation rule) rather than scanning `w.tenures` per (event, person). The answer
+    # IN-54: read through `cache.tenure_index` (object-side Tenures, a per-barrier cache -- its
+    # docstring states why that is valid) rather than scanning `w.tenures` per (event, person). The answer
     # is the scan's: `pid` holds, live, an object some change of this Event wrote.
     held = cache.tenure_index(w).holds.get(pid)
     if not held:

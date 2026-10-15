@@ -139,6 +139,9 @@ def test_the_previous_holders_document_key_stops_firing_and_the_receivers_starts
     # CONTROL: before the handover the channel is the giver's and not the receiver's
     assert doc(w, filed, GIVER) and not doc(w, filed, RECEIVER)
     _give(w, d, rid, RECEIVER)
+    # the barrier the loop would cross before the next ask: the Tenure index is a per-barrier cache
+    # (`queries/cache.py`), so a direct caller that writes Tenures between two asks discards first.
+    w.discard_caches()
     assert not doc(w, filed, GIVER), "the previous holder's channel still fires for the Record"
     assert doc(w, filed, RECEIVER), "the new holder's channel does not fire for the Record"
 

@@ -24,8 +24,9 @@
   (e) `test_the_control_arm_total_is_never_skipped_...` -- under `total` the same Event fans to
       everyone, so the predicate (which takes the mode) refuses it; the other two arms answer `[]`.
       Found red on the first wiring, by `test_season_shape.py::test_r7_two_persons_hold_...`.
-  (f) `test_the_skip_changes_the_work_and_nothing_else` -- A/B, one season: the same hash and log
-      with the predicate forced False. (a) also pins the selected-kind census to `claim.decayed`.
+  (f) `test_the_skip_changes_the_work_and_nothing_else` -- A/B over `SEASONS` seasons: the same hash
+      and log with the predicate forced False, and the skip arm asserts the predicate selected at
+      least `MIN_SELECTED` Events. (a) also pins the selected-kind census to `claim.decayed`.
   (g) `test_a_kind_the_chronicle_admits_is_not_selected` -- a planted `binding_decision` row emitting
       the held-claim-only kind makes `chronicle` admit it, and the predicate refuses it.
 """
@@ -113,17 +114,31 @@ def test_m_skip_every_selected_event_has_no_observer_under_all_five(season_run):
 
 
 def test_the_skip_changes_the_work_and_nothing_else(monkeypatch):
-    """A/B: one season of `build_realm(0)` with the skip, and one with the predicate forced False
-    (every Event fanned). The world hash and the log are identical -- the skip moves no deposit."""
+    """A/B: `SEASONS` seasons of `build_realm(0)` with the skip, and the same with the predicate
+    forced False (every Event fanned). The world hash and the log are identical -- the skip moves no
+    deposit. `SEASONS`, not one: decay first fires in the second season, so a one-season A/B has a
+    skip arm in which the predicate selects nothing and cannot fail. The skip arm therefore counts
+    the predicate's True answers through a wrapper and asserts at least `MIN_SELECTED` of them.
+    MUTATION (run): the skip arm's wrapper forcing False -> `selected == 0` -> red."""
+    selected = [0]
+    real = WIT.changes_only_held_claims
+
+    def counted(*a, **k):
+        got = real(*a, **k)
+        selected[0] += bool(got)
+        return got
+
     def one(skip: bool):
-        if not skip:
-            monkeypatch.setattr(WIT, "changes_only_held_claims", lambda *a, **k: False)
+        monkeypatch.setattr(WIT, "changes_only_held_claims",
+                            counted if skip else (lambda *a, **k: False))
         w = POP.build_realm(0)
-        POP.run(1, 0, w=w)
+        POP.run(SEASONS, 0, w=w)
         monkeypatch.undo()
         return w.content_hash(), [(e.kind, e.id) for e in w.log]
     (h_skip, log_skip), (h_fan, log_fan) = one(True), one(False)
     assert log_skip, "fixture: the season logged nothing"
+    assert selected[0] >= MIN_SELECTED, (
+        f"the skip arm selected {selected[0]} Events -- the A/B compares two identical arms")
     assert h_skip == h_fan and log_skip == log_fan
 
 
