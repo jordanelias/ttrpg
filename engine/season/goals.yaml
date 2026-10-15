@@ -1,8 +1,8 @@
 # `engine/season/goals.yaml` -- WORLD-GEN CONTENT: the authored goals of the organizations. v9 IN-66
 # (ED-IN-0293 (8)); the loader is `data/goals.py`, the ONE reader, which refuses every row that
 # breaks the schema below. Its reader is IN-68 (`harness/populated.py`), which mints one OUGHT
-# Proposition per row at world-gen; nothing reads this file yet, so the shipped list is EMPTY and
-# no content hash moves.
+# Proposition per row at world-gen. v9 FA-05 authors the first rows (the Crown, the Löwenritter, the
+# Riskbreakers, the Inquisitors, the Restoration Movement): a declared content-hash MOVER.
 #
 # A GOAL ATTACHES AT EVERY ORGANIZATIONAL LEVEL: a faction (`rosters.yaml: factions`), a body
 # (`rosters.yaml: office_bodies.faction`) or a seat (`offices.yaml: seats`). It only changes what a
@@ -28,4 +28,129 @@
 #             from a goal of its own faction, a seat goal only from a goal of its own body or
 #             faction; a faction goal derives only from a faction goal. Acyclic.
 #   source:   a provenance string (`offices.yaml`'s `source:` precedent).
-goals: []
+
+# v9 FA-05 (ED-FA-0039). Ids, seats, affiliations and deed kinds below are the REGISTRIES' (offices.yaml,
+# rosters.yaml, data/affiliations.py, data/verbs.py::DEED_KINDS), not the plan text's: the loader refuses
+# any that does not resolve. A row's `source:` quotes the user where the user spoke (ED-IN-0293 rows 3-4,
+# 2026-10-14) and carries [ASSUMPTION] where the reading is the author's.
+goals:
+  # ---- Crown (faction) -------------------------------------------------------------------------------
+  - id: goal_crown_peninsular_sovereignty
+    org: {faction: Crown}
+    text: the Crown holds the peninsula under the dynasty -- the king's seat is the Crown's goal
+    object: {kind: seat_holders, seats: [off_king]}
+    stance: 1
+    pursuits: {stability: 0.4, honour: 0.3, stewardship: 0.3}
+    source: >-
+      ED-IN-0293 row 3 (8), the user, 2026-10-14: "each faction needs to have goals". The Crown's own goal
+      is the 2026-10-15 session's extract of the original design (Peninsular Sovereignty as the one
+      victory condition, `references/canonical_sources.yaml` victory entry; intent and vocabulary only).
+      [ASSUMPTION; medium; Jordan to correct -- the extract's Crown goal, read as the dynasty holding the
+      throne; authored here, not in FA-06, because the Loewenritter rows derive from it. Revert: the user
+      names the Crown's goal.]
+
+  # ---- Loewenritter (faction; the Crown's army, ED-IN-0293 row 2 (7)) --------------------------------
+  - id: goal_lowenritter_military_security
+    org: {faction: Löwenritter}
+    text: the Loewenritter keep the realm militarily secure and stable
+    object: {kind: orientation}
+    pursuits: {stability: 0.6, honour: 0.4}
+    derives: {from: goal_crown_peninsular_sovereignty, kind: influences}
+    source: >-
+      ED-IN-0293 row 4 (9), the user, 2026-10-14: "lowenritter is to have military security and
+      stability". An orientation: it mints no Proposition and its pursuits join the faction's expected
+      vector (IN-69). `derives: influences` from the Crown row: a Loewenritter member commits to both.
+      [ASSUMPTION; medium; Jordan to correct -- the pursuit weights, and that the Crown's goal reaches the
+      Loewenritter by `influences` (the oath, FA-04, is person-level; membership commits only to the
+      faction's OWN creed).]
+  - id: goal_lowenritter_throne_security
+    org: {faction: Löwenritter}
+    text: the Loewenritter keep the king's seat secure
+    object: {kind: seat_holders, seats: [off_king]}
+    stance: 1
+    pursuits: {honour: 0.5, stability: 0.5}
+    derives: {from: goal_crown_peninsular_sovereignty, kind: influences}
+    source: >-
+      ED-IN-0293 row 4 (9), the user, 2026-10-14: "lowenritter is to have military security and
+      stability" -- the security read as of the realm's sovereign. [ASSUMPTION; medium; Jordan to correct
+      -- "security" read as the throne's security, the Riskbreakers' example of it being "ensure safety of
+      royal family monarch" (row 3). Revert: the user names what the Loewenritter secure.]
+
+  # ---- Riskbreakers (body of the Loewenritter, ED-IN-0293 row 2 (7)) ----------------------------------
+  - id: goal_riskbreakers_royal_safety
+    org: {body: Riskbreakers}
+    text: the Riskbreakers ensure the safety of the royal family and the monarch
+    object: {kind: seat_holders, seats: [off_king, off_widow_regent, off_heir, off_princess]}
+    stance: 1
+    pursuits: {stability: 0.5, honour: 0.3, family: 0.2}
+    derives: {from: goal_lowenritter_throne_security, kind: establishes}
+    source: >-
+      ED-IN-0293 row 3 (8), the user, 2026-10-14: "riskbreaker goal is to ensure safety of royal family
+      monarch as well as prevent corruption and threats". The royal family and the monarch are the four
+      Royal Family seats on offices.yaml (the registry decides the ids). `establishes` replaces the
+      Loewenritter's throne-security goal for the Riskbreakers, which this narrows. [ASSUMPTION; medium;
+      Jordan to correct -- the pursuit weights; "royal family" = the king, the regent, the heir, the
+      princess.]
+  - id: goal_riskbreakers_prevent_threats
+    org: {body: Riskbreakers}
+    text: the Riskbreakers prevent threats to the royal family -- whoever a Riskbreaker knows to have done harm to them
+    object: {kind: deed_doers, against: goal_riskbreakers_royal_safety}
+    pursuits: {stability: 0.5, justice: 0.3, honour: 0.2}
+    derives: {from: goal_lowenritter_throne_security, kind: establishes}
+    source: >-
+      ED-IN-0293 row 3 (8), the user, 2026-10-14: "riskbreaker goal is to ensure safety of royal family
+      monarch as well as prevent corruption and threats". A threat is a deed whose patient is among the
+      royal-safety goal's referents (the pairing rule, IN-58, never reading a victim as the doer),
+      known only from the holder's own ledger (AX-2). [ASSUMPTION; medium; Jordan to correct -- "threats"
+      as harm done to the royal family, not threats to the realm at large.]
+  - id: goal_riskbreakers_prevent_corruption
+    org: {body: Riskbreakers}
+    text: the Riskbreakers prevent corruption -- whoever a Riskbreaker knows to have distorted the terms of a ruling or destroyed a record
+    object: {kind: deed_doers, kinds: [terms.distorted, record.destroyed]}
+    pursuits: {justice: 0.6, virtue: 0.4}
+    derives: {from: goal_lowenritter_throne_security, kind: establishes}
+    source: >-
+      ED-IN-0293 row 3 (8), the user, 2026-10-14: "riskbreaker goal is to ensure safety of royal family
+      monarch as well as prevent corruption and threats". Which DEED_KINDS are corruption is the author's:
+      `terms.distorted` (the `construe` verb: a law's or ruling's terms bent) and `record.destroyed` (the
+      `destroy_record` verb: evidence put out of reach); `record.created` is left out because
+      `create_record` emits it beside `forge`, and the claim does not say which. [ASSUMPTION; medium;
+      revert: Jordan names the kinds.]
+
+  # ---- Inquisitors (the Cardinal of Justice's body; seats off_cardinal_justice, off_senior_inquisitor) ----
+  - id: goal_inquisitors_find_heresy
+    org: {body: Cardinal of Justice}
+    text: the Inquisitors find heretical activity -- whoever an Inquisitor knows to have done an Einhir-revivalist deed
+    object: {kind: deed_doers, engaging: einhir_restoration}
+    pursuits: {doctrine: 0.6, justice: 0.2, stability: 0.2}
+    source: >-
+      The coordinator's relay of the user, 2026-10-14 (not in ED-IN-0293): the Inquisitors find heretical
+      activity; heretical activity read as Einhir-revivalist activity (a deed whose kind engages
+      `einhir_restoration`, sign-free, IN-67). [ASSUMPTION; medium; Jordan to correct -- "Inquisitors" =
+      the holders of seats in the Cardinal of Justice's body (`off_senior_inquisitor` sits there,
+      `offices.yaml`), and heresy = the Einhir affiliation; a +1-signed engagement is the revert.]
+
+  # ---- Restoration Movement (faction; reformist template) --------------------------------------------
+  - id: goal_restoration_einhir_revival
+    org: {faction: Restoration Movement}
+    text: the Restoration Movement revives the Einhir way
+    object: {kind: orientation}
+    pursuits: {justice: 0.3, liberty: 0.25, community: 0.2, virtue: 0.15, scholastics: 0.1}
+    source: >-
+      The coordinator's relay of the user, 2026-10-14 (not in ED-IN-0293): the Restoration Movement's
+      aim is Einhir revival. An orientation: it mints no Proposition. [ASSUMPTION; medium; Jordan to
+      correct -- the pursuits are its `reformist` role template's own lean (`rosters.yaml:
+      role_templates`).]
+  - id: goal_restoration_evade_capture
+    org: {faction: Restoration Movement}
+    text: the Restoration Movement evades capture -- the Cardinal of Justice and the Senior Inquisitor are its enemies
+    object: {kind: seat_holders, seats: [off_cardinal_justice, off_senior_inquisitor]}
+    stance: -1
+    pursuits: {liberty: 0.7, individuality: 0.3}
+    source: >-
+      The coordinator's relay of the user, 2026-10-14 (not in ED-IN-0293): the Restoration Movement
+      evades capture. The capturers are read as the two seats of the Cardinal of Justice's body, stance
+      -1. DECLARED RISK: a -1 `seat_holders` goal makes those holders referents of a `need` question
+      every season and `fight` forms on them, so violent attempts can rise; the evading acts wait on
+      IN-09's `evade / defy` and the arrest. [ASSUMPTION; medium; Jordan to correct -- who captures
+      them; revert: the user names the capturers.]

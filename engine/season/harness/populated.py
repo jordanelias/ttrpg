@@ -460,8 +460,11 @@ def seed_goals(w: World, rows: tuple, authored: dict, cid_of: dict, partial: boo
       * a seat goal    -> the live holder of the seat.
 
     `derives` combines levels: `establishes` takes the PARENT goal off every person of the child's org
-    (they do not commit to it); `influences` leaves both. [ASSUMPTION; medium; Jordan to correct --
-    revert: head and seat-holders only.]
+    (they do not commit to it); `influences` keeps both -- the child's persons ALSO commit to the parent
+    goal (v9 FA-05: before, nothing read `influences` and the parent never reached a child org of another
+    faction), and its stance rows are written as the parent's own members get theirs, the loyalty being to
+    the faction of the org that reached them. [ASSUMPTION; medium; Jordan to correct -- revert: head and
+    seat-holders only.]
 
     The subject, per kind: `person` -> that person; `rung` -> the rung (REFUSED if this world built no such
     rung -- a rung exists only once built, so the loader could not check it); `seat_holders` -> the first
@@ -552,9 +555,20 @@ def seed_goals(w: World, rows: tuple, authored: dict, cid_of: dict, partial: boo
     for g in rows:
         if g.derives_kind == "establishes":
             taken_off[g.derives_from].update(bound[g.id][1])
+    # `influences`: the child's persons ALSO hold the parent goal, and the parent of a parent while the
+    # chain stays `influences` (an `establishes` link stops it: that link replaces). Each carries the FACTION
+    # OF THE ORG THAT REACHED HIM, so a stance row's loyalty is to his own organization, the parent's own
+    # members keeping theirs. [ASSUMPTION; medium; Jordan to correct -- revert: the parent org's faction.]
+    by_id = {g.id: g for g in rows}
+    reach: dict = {g.id: {pid: bound[g.id][0] for pid in bound[g.id][1]} for g in rows}
+    for g in rows:
+        cur = g
+        while cur.derives_kind == "influences":
+            for pid in bound[g.id][1]:
+                reach[cur.derives_from].setdefault(pid, bound[g.id][0])
+            cur = by_id[cur.derives_from]
     for g, referents in minted:
-        fac, persons = bound[g.id]
-        for pid in persons:
+        for pid, fac in reach[g.id].items():
             if pid in taken_off[g.id]:
                 continue
             w.add_tenure(Tenure(f"t_{g.id}_{pid}_commit", pid, g.id, "commit", 0))

@@ -110,12 +110,13 @@ def test_in66_the_two_rosters_are_closed_and_hold_the_ruled_members():
         assert rosters._ROSTERS[name]["open"] is False, name
 
 
-def test_in66_the_shipped_goals_file_is_empty_and_loads_to_no_goals(monkeypatch):
+def test_in66_the_shipped_goals_file_loads_through_the_one_loader(monkeypatch):
+    """The file was empty until v9 FA-05 authored its first rows (`test_fa05_user_goals.py` reads them); what
+    stays IN-66's is that the shipped file is the loader's own path and loads with no row refused."""
     assert files.GOALS_YAML.is_file() and goals.GOALS_YAML == files.GOALS_YAML
     raw = yaml.safe_load(files.GOALS_YAML.read_text(encoding="utf-8"))
-    assert raw["goals"] == [], "the shipped file is empty: nothing reads it until IN-68"
     monkeypatch.setattr(goals, "_CACHE", None)
-    assert goals.goals() == () and goals.goal("g_fac") is None
+    assert len(goals.goals()) == len(raw["goals"]) and goals.goal("g_fac") is None
 
 
 def test_in66_the_lazy_reader_loads_a_file_through_its_patch_point(monkeypatch, tmp_path):

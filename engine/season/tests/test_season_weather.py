@@ -71,9 +71,14 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # RE-PINNED at v9 IN-71 (B-X), A MECHANISM MOVE DECLARED: `crisis_weights` scales `doctrine` by religious
 # conviction (H-188). The BUILD hash is equal (no stored vector moved); one and two seasons moved,
 # a0e82b82... -> cc650fcf... and dc561dd5... -> 8f4d2088...; `BASE_EVENTS` re-recorded with them.
-BASE_HASHES = {0: "33c20c4c49a5734b70844f53ad3e3aec",
-               1: "9095b9210b2929094ebe109671ffa232",
-               2: "10b1abab56dc48f2addd67da0d317abc"}
+# RE-PINNED at v9 FA-05 (B-X), MECHANISM AND DATA MOVES DECLARED, taken once for the three movers since the
+# last pin: IN-69 (salience orders questions within tiers 0 and 3: one season 9095b921... -> a74673b1...,
+# the build hash equal), IN-72 (equal in seed 0) and FA-05 (nine goal rows seeded: the build hash moves, 25
+# commits and 29 stance rows, plus the `influences` seeding fix, 29 and 33). The pin sat red between IN-69's
+# commit and this one (no per-item run of this file). Was 33c20c4c... / 9095b921... / 10b1abab...
+BASE_HASHES = {0: "41fdb68558a94f464b80c28f62ccb273",
+               1: "c7f7506fa8c643de815a8cbf37d89188",
+               2: "ec6b82f34290243e9abac63b09c22fd9"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -91,8 +96,9 @@ BASE_HASHES = {0: "33c20c4c49a5734b70844f53ad3e3aec",
 # RE-PINNED at v9 FA-04 (B-X), A DATA MOVE DECLARED: the Grand Master's oath is one seeded `oblige` Tenure
 # (`off_king`'s `obligees: ["NPC-070"]`), so the build hash moves and the log gains its one build-time event.
 # Was 472050b8... / cc650fcf... / 8f4d2088... (build, one, two seasons); events 7186 -> 7187, 19797 -> 19798.
-BASE_EVENTS = {1: (7187, "0f1fe566e3852e929a662d0480a7138b90329e482453c75c0188551dcce9a364"),
-               2: (19798, "62771792983f191d658d515c58b44e048286231312fb7b3d0163a8398fbe2dbc")}
+# RE-RECORDED at v9 FA-05 with `BASE_HASHES` (7187 -> 6542, 19798 -> 18583).
+BASE_EVENTS = {1: (6542, "f52c6018ea23e58d8e72ba87c5e9a1b32b8845127855a846cb7283ff73ef2bfb"),
+               2: (18583, "24ba1104f4d6b0d94a09962c043b894c2e555cdead6133aac682b68344a221d2")}
 
 
 def _digest(w) -> tuple:

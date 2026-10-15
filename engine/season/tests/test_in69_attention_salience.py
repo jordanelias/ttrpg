@@ -121,8 +121,10 @@ def _old_order(w, p):
 # (a) one owner of the cosine
 # ---------------------------------------------------------------------------------------------------
 
-def test_one_owner_cast_loyalty_and_the_key_return_the_same_cosine():
-    """For one (person, template) pair, the key's salience IS the cosine `loyalty` maps onto 0..100."""
+def test_one_owner_cast_loyalty_and_the_key_return_the_same_cosine(monkeypatch, tmp_path):
+    """For one (person, template) pair, the key's salience IS the cosine `loyalty` maps onto 0..100.
+    Over an EMPTY goals file: the faction expects its template alone (v9 FA-05's rows add to it)."""
+    _plant(monkeypatch, tmp_path)
     row = cast.row("NPC-033")
     pursuits = cast.pursuits_of(row)
     p = _person("p_n", pursuits, (FID,))
@@ -268,8 +270,8 @@ def test_expected_is_the_template_plus_the_orgs_goals_orientation_included(monke
 # (g) the shipped goals file
 # ---------------------------------------------------------------------------------------------------
 
-def test_the_shipped_goals_file_gives_a_want_and_a_creed_only():
-    assert goals.goals() == (), "control: the shipped goals file is empty"
+def test_an_empty_goals_file_gives_a_want_and_a_creed_only(monkeypatch, tmp_path):
+    assert _plant(monkeypatch, tmp_path) == (), "control: the planted goals file is empty"
     with_, against = _most_and_least_aligned()
     w, p = _creed_world({with_: 1.0})
     key = world_q.attention_key(w, p)

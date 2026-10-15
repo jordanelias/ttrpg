@@ -143,6 +143,51 @@ def test_in68_influences_leaves_the_child_orgs_members_committed_to_both(monkeyp
     assert CIRCLE_HOLDERS <= _committed(w, "g_heir") & _committed(w, "g_king")
 
 
+LOWEN = {"faction": "Löwenritter"}
+
+
+def _across(kind):
+    """The parent is the Crown's; the child is the Loewenritter's -- another faction, so none of the child's
+    persons is among the parent's own."""
+    return [_heir(stance=1), _king(org=LOWEN, derives={"from": "g_heir", "kind": kind})]
+
+
+def test_in68_influences_across_factions_carries_the_parent_goal_to_the_child_orgs_persons(monkeypatch, tmp_path):
+    """v9 FA-05's finding: `influences` was read by nothing, so a child org of another faction never held the
+    parent. MUTATION (run, both ways): the same rows with `establishes` -- which is what `influences` behaved
+    as before the fix -- leaves the child's persons without the parent, and the predicate below sees it."""
+    w = _realm(monkeypatch, tmp_path, *_across("influences"))
+    crown = set(members(w, faction_prop_id("Crown")))
+    lowen = _committed(w, "g_king")
+    assert lowen and not lowen & crown, "control: the child's persons are no Crown member"
+    assert lowen <= _committed(w, "g_heir"), "influences: the child's persons hold the parent as well"
+    assert crown <= _committed(w, "g_heir"), "and the parent keeps its own"
+    for pid in sorted(lowen):
+        r = cast.row("NPC-" + pid.rsplit("_", 1)[1])
+        st = cast.stance_from_loyalty(cast.loyalty(r, "Löwenritter")) if r else None
+        if st is not None:       # the parent's stance, the loyalty his own faction's
+            assert (HEIR, st[0], st[1]) in _stance_of(w, pid), pid
+    m = _realm(monkeypatch, tmp_path, *_across("establishes"))
+    assert not _committed(m, "g_king") <= _committed(m, "g_heir"), "falsifier: as `establishes` they do not"
+
+
+def test_in68_influences_climbs_while_the_chain_stays_influences_and_stops_at_establishes(monkeypatch, tmp_path):
+    """Church goal <- Crown goal <- Loewenritter goal, three factions: none of the Loewenritter's persons is
+    a Crown or Church member, so each goal they hold is one the chain carried."""
+    church = {"faction": "Church of Solmund"}
+    chain = [_row("g_top", church, {"kind": "person", "case": "NPC-031"}),
+             _king("g_mid", org=CROWN, derives={"from": "g_top", "kind": "influences"}),
+             _king("g_low", org=LOWEN, derives={"from": "g_mid", "kind": "influences"})]
+    w = _realm(monkeypatch, tmp_path, *chain)
+    low = _committed(w, "g_low")
+    assert low and not low & (set(members(w, faction_prop_id("Crown"))) | set(members(w, faction_prop_id("Church of Solmund"))))
+    assert low <= _committed(w, "g_mid") and low <= _committed(w, "g_top"), "climbs while influences"
+    chain[2]["derives"]["kind"] = "establishes"
+    m = _realm(monkeypatch, tmp_path, *chain)
+    assert not _committed(m, "g_low") & _committed(m, "g_mid"), "establishes takes the parent off"
+    assert not _committed(m, "g_low") & _committed(m, "g_top"), "and the chain stops there"
+
+
 # ---------------------------------------------------------------------------------------------------
 # (c) orientation mints nothing
 # ---------------------------------------------------------------------------------------------------
@@ -255,12 +300,15 @@ def test_in68_goals_false_mints_nothing_though_the_file_names_goals(monkeypatch,
     assert len(off.propositions) == len(on.propositions) - 3
 
 
-def test_in68_the_shipped_empty_goals_file_builds_the_control_arms_realm(monkeypatch):
-    assert goals.goals() == (), "control: the shipped file is empty"
-    shipped, off = P.build_realm(0), P.build_realm(0, goals=False)
-    assert shipped.content_hash() == off.content_hash()
-    assert P.census(shipped) == P.census(off)
-    assert P.census(shipped)["goals"] == 0 and "goal_commits" in P.census(shipped)
+def test_in68_an_empty_goals_file_builds_the_control_arms_realm(monkeypatch, tmp_path):
+    """The shipped file was empty until v9 FA-05; an empty one is still the control arm's realm. The
+    control that the hash observes the shipped rows is `test_fa05_user_goals.py`'s."""
+    empty = _realm(monkeypatch, tmp_path)
+    assert goals.goals() == (), "control: the planted file is empty"
+    off = P.build_realm(0, goals=False)
+    assert empty.content_hash() == off.content_hash()
+    assert P.census(empty) == P.census(off)
+    assert P.census(empty)["goals"] == 0 and "goal_commits" in P.census(empty)
 
 
 def test_in68_a_seat_holders_goal_reads_the_seat_a_loop_built_realm_built_it_as(monkeypatch, tmp_path):
