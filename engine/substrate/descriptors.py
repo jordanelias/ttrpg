@@ -134,6 +134,11 @@ AXIS_SCALE = _DATA['axis_roster'].get('scale', '')
 AFFILIATIONS = tuple(_DATA['affiliation_roster']['names'])
 AFFILIATION_FLOOR = _DATA['affiliation_roster']['scale']['floor']
 AFFILIATION_CEILING = _DATA['affiliation_roster']['scale']['ceiling']
+#: `{concern: (member, ...)}` -- the Church, Einhir, Altonia, each with the members that answer it
+#: (v9 IN-64, ED-IN-0293 (2)); validated by the exporter (rostered, non-empty, none filed twice).
+#: `engine/season/data/cast.py::conviction_of` refuses a cast row holding no member of a concern.
+#: Indexed, not `.get`: an export without the key would otherwise read as "no concern to satisfy".
+AFFILIATION_CONCERNS = {c: tuple(ms) for c, ms in _DATA['affiliation_roster']['concerns'].items()}
 
 # ⚠ THERE IS NO ALIAS MAP, AND ITS REMOVAL IS THE POINT (corrected 2026-08-24, same day it was
 # added, by an adversarial pass). This module briefly carried

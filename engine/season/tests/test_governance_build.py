@@ -1878,7 +1878,9 @@ def test_8a_every_authored_seat_constructs_against_the_live_rosters():
 
     doc = load_yaml(files.OFFICES_YAML.read_text(encoding="utf-8"))
     seats = doc["seats"]
-    assert len(seats) == 29, f"expected 29 authored seats, found {len(seats)}"
+    # 29 -> 31 at v9 IN-64: the two Riskbreakers rows (`off_riskbreaker_covert`, `_doctrine`),
+    # both `appointed` and revocation `null` (precedent `off_grand_master`).
+    assert len(seats) == 31, f"expected 31 authored seats, found {len(seats)}"
     ids = [s["id"] for s in seats]
     assert len(ids) == len(set(ids)), f"duplicate seat id(s): {sorted(i for i in ids if ids.count(i) > 1)}"
     for s in seats:
@@ -1890,9 +1892,9 @@ def test_8a_every_authored_seat_constructs_against_the_live_rosters():
     # names (a distribution that does not sum to the table's own row count).
     cnf = Counter(s["conferral"] for s in seats)
     rvk = Counter(s["revocation"] for s in seats)
-    assert sum(cnf.values()) == 29 and sum(rvk.values()) == 29
-    assert cnf == Counter({"appointed": 15, "elected": 8, None: 6}), cnf
-    assert rvk == Counter({"rung_above_same_faction": 13, "rung_above_in_holdings": 2, None: 14}), rvk
+    assert sum(cnf.values()) == 31 and sum(rvk.values()) == 31
+    assert cnf == Counter({"appointed": 17, "elected": 8, None: 6}), cnf
+    assert rvk == Counter({"rung_above_same_faction": 13, "rung_above_in_holdings": 2, None: 16}), rvk
 
 
 def test_8a_a_repeated_row_id_refuses_at_load_instead_of_being_collapsed(tmp_path, monkeypatch):
@@ -1909,7 +1911,7 @@ def test_8a_a_repeated_row_id_refuses_at_load_instead_of_being_collapsed(tmp_pat
     monkeypatch.setattr(rosters, "OFFICES_YAML", path)
 
     path.write_text(yaml.safe_dump(real), encoding="utf-8")
-    assert len(rosters._load_offices()["seats"]) == 29
+    assert len(rosters._load_offices()["seats"]) == 31
 
     first = real["seats"][0]
     for twin in (dict(first), dict(first, holder="NPC-999", post="Somebody Else")):
@@ -1949,7 +1951,7 @@ def test_8a_every_authored_seat_carries_its_authored_basis_after_the_overlay():
         checked += 1
         checked_a_real_conferral = checked_a_real_conferral or off.conferral is not None
         checked_a_real_revocation = checked_a_real_revocation or off.revocation is not None
-    assert checked == len(doc["seats"]) == 29, checked
+    assert checked == len(doc["seats"]) == 31, checked
     assert checked_a_real_conferral and checked_a_real_revocation, (
         "every seat checked had a None basis -- this test cannot tell the overlay ran")
 
@@ -2023,7 +2025,7 @@ def test_13d_iii_every_authored_anchor_resolves_to_one_live_rung_of_its_own_kind
             f"stands at {off.rung!r}")
         by_kind[kind] += 1
         new_resolved += row["note"].startswith("[NEW]")
-    assert sum(by_kind.values()) == len(_seat_rows()) == 29, by_kind
+    assert sum(by_kind.values()) == len(_seat_rows()) == 31, by_kind
     assert set(by_kind) == {"realm", "duchy", "territory"}, (
         f"{by_kind}: a form no row uses is not observed here -- the settlement form has its own test")
     assert new_resolved == 10, f"{new_resolved} `[NEW]`-marked rows resolved; r2 `03` marks ten"
@@ -2216,7 +2218,7 @@ def test_13d_iii_a_cap_keeps_exactly_the_seats_whose_holders_it_kept():
     assert ids.index(obligee) >= cap, "the obligee is inside the cap: this probe cannot drop it"
     w = build_realm(seed=0, cap=cap)
     kept = {r["id"] for r in OFFICES_SEATS if f"p_{r['holder'].lower().replace('-', '_')}" in w.persons}
-    assert 0 < len(kept) < len(OFFICES_SEATS) == 29, len(kept)
+    assert 0 < len(kept) < len(OFFICES_SEATS) == 31, len(kept)
     assert set(w._office_census["authored"]) == kept, sorted(set(w._office_census["authored"]) ^ kept)
     assert row["id"] in w._office_census["authored"]
     assert f"p_{obligee.lower().replace('-', '_')}" not in w.persons
@@ -2313,7 +2315,9 @@ def test_13d_iii_every_seat_the_realm_builds_has_a_rung_but_the_one_declared_exc
     w = _realm13
     cen = w._office_census
     assert cen["unauthored"] == ["off_npc_084"], cen["unauthored"]
-    assert len(w.offices) == cen["seated"] == 30
+    # 30 -> 32 seated, 29 -> 31 anchored at v9 IN-64: the cast's `Löwenritter (Riskbreakers)` cells
+    # (NPC-005, NPC-080) seat two Riskbreakers seats, each authored a row in `offices.yaml`.
+    assert len(w.offices) == cen["seated"] == 32
     anchored = 0
     for oid, off in w.offices.items():
         if oid in cen["unauthored"]:
@@ -2322,7 +2326,7 @@ def test_13d_iii_every_seat_the_realm_builds_has_a_rung_but_the_one_declared_exc
         assert off.rung is not None and off.scope_rung == off.rung, (
             f"{oid} ({off.post!r}): rung {off.rung!r}, scope {off.scope_rung!r}")
         anchored += 1
-    assert anchored == 29 == len(cen["authored"]), anchored
+    assert anchored == 31 == len(cen["authored"]), anchored
 
 
 def test_13d_iii_the_six_rows_no_loop_seat_stands_for_are_minted_from_the_row_alone(_realm13):
@@ -2383,7 +2387,7 @@ def test_13d_iii_the_remit_overlay_replaces_the_default_and_leaves_only_the_unru
         if not authored:
             empty_rows += 1
         checked += 1
-    assert checked == 29 and empty_rows >= 1, (checked, empty_rows)
+    assert checked == 31 and empty_rows >= 1, (checked, empty_rows)
     assert set(w.offices["off_npc_084"].remit_acts) == set(REMIT_DEFAULT), (
         "the seat no row authors lost the testing default -- the fill path the overlay replaces "
         "only where a row exists")

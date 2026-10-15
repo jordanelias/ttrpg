@@ -198,33 +198,69 @@ def pursuits_of(r: dict) -> dict:
     ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): this function was
     `convictions_of`. It still reads `r.get("convictions")` -- `references/npc_registry.yaml`'s
     own key -- UNCHANGED; the values under it were migrated to the fifteen pursuits in IN-08's
-    cells commit (the registry's header names the rule)."""
+    cells commit (the registry's header names the rule).
+
+    ⚠ A ROW NAMING FEWER THAN THE FULL ROSTER IS REFUSED (v9 IN-64, ED-IN-0293 (1): *"every NPC
+    must have a fully populated and coherent 15x7 pursuit-axis matrix"*). The roster is the leaf's
+    `PURSUITS` (through `rosters`), never a count typed here. An EMPTY mapping is "no row" -- the
+    caller's `cast.row(cid) or {}` for a corpus case added ahead of its registry row, the normal
+    authoring order -- and returns `{}`, so `harness/populated.py` still falls back to
+    `seed_pursuits` there."""
     from .pursuits import pursuit
+    from .rosters import PURSUITS
     out: dict = {}
+    if not r:
+        return out                      # no row: the caller's `seed_pursuits` fallback
     block = r.get("convictions") or {}
-    if not isinstance(block, dict):
-        return out
-    for group, rows in block.items():
-        if not isinstance(rows, list):
-            continue                    # `cultural_label` / `self_other_initial` sit here too
-        for entry in rows:
-            if isinstance(entry, dict) and entry.get("conviction") is not None:
-                out[pursuit(str(entry["conviction"]))] = float(entry.get("weight") or 0.0)
+    if isinstance(block, dict):
+        for group, rows in block.items():
+            if not isinstance(rows, list):
+                continue                # `cultural_label` / `self_other_initial` sit here too
+            for entry in rows:
+                if isinstance(entry, dict) and entry.get("conviction") is not None:
+                    out[pursuit(str(entry["conviction"]))] = float(entry.get("weight") or 0.0)
+    missing = [p for p in PURSUITS if p not in out]
+    if missing:
+        raise Unspecified(
+            f"cast row {r.get('id', '?')} names {len(out)} of the {len(PURSUITS)} pursuits; "
+            f"missing {missing}", "references/npc_registry.yaml",
+            needs="a weight on every pursuit of `descriptor_registry.yaml: pursuit_roster`",
+            law="ED-IN-0293 (1): every NPC holds a fully populated pursuit vector (v9 IN-64)")
     return out
 
 
 def conviction_of(r: dict) -> dict:
     """`{affiliation: intensity}` from the row's `affiliations:` mapping -- `Person.conviction`'s
     authored source (IN-08 H10), validated through `data/affiliations.py::conviction_map`, the one
-    owner of both checks (a rostered name, an int on the 0-5 spine). `{}` for a row with none.
+    owner of both checks (a rostered name, an int on the 0-5 spine). `{}` for NO row (an empty
+    mapping, the caller's `cast.row(cid) or {}`).
 
     ⚠ NOT THE ROW'S `convictions:` BLOCK. That key predates the rename and holds PURSUITS
     (`pursuits_of` above); a religious affiliation is a different object, and reading it out of the
-    pursuit `doctrine` would invent which side a person is on. [ASSUMPTION] No row in
-    `references/npc_registry.yaml` carries `affiliations:` yet -- the per-person content is
-    unauthored -- so every cast person is filled with `{}`, the zero vector (no affiliation held)."""
+    pursuit `doctrine` would invent which side a person is on.
+
+    ⚠ A ROW WITHOUT A MEMBER OF EACH CONCERN IS REFUSED (v9 IN-64, ED-IN-0293 (2): *"every NPC
+    must have a conviction concerning einhir, altonia and church"*). Every row of
+    `references/npc_registry.yaml` carries `affiliations:` since IN-64 (authored at `4e942bac`).
+    The concerns and their members are `descriptor_registry.yaml: affiliation_roster.concerns`,
+    read through the leaf (`AFFILIATION_CONCERNS`), never a set typed here. A held 0 is a member
+    present -- a considered rejection (IN-63) -- so an opponent satisfies the concern."""
+    from engine.substrate.descriptors import AFFILIATION_CONCERNS
     from .affiliations import conviction_map
-    return conviction_map(r.get("affiliations"), where=f"{r.get('id', '?')}: affiliations")
+    where = f"{r.get('id', '?')}: affiliations"
+    held = conviction_map(r.get("affiliations"), where=where)
+    if not r:
+        return held                     # no row: nothing authored, nothing to refuse
+    unmet = [c for c, members in AFFILIATION_CONCERNS.items()
+             if not any(m in held for m in members)]
+    if unmet:
+        raise Unspecified(
+            f"cast row {r.get('id', '?')} holds no conviction concerning {unmet}", where,
+            needs="a member of each concern of `descriptor_registry.yaml: affiliation_roster."
+                  "concerns` (a 0 counts: a considered rejection)",
+            law="ED-IN-0293 (2): every NPC holds a conviction concerning Einhir, Altonia and the "
+                "Church (v9 IN-64)")
+    return held
 
 
 def title_of(r: dict) -> Optional[str]:
