@@ -668,8 +668,11 @@ def changes_only_held_claims(w: "World", e: "Event", held: frozenset, mode: str)
 
     WHEN IN DOUBT THE FAN RUNS. An Event with no change (`condition.band_crossed`, anchored through
     its cause), a change with no subject, or a claim id no ledger holds any more (its holder died, or
-    the cap evicted it, or this very Event removed it) is NOT skipped."""
-    if mode == "total" or not e.changes or causing_act(w, e) is not None:
+    the cap evicted it, or this very Event removed it) is NOT skipped. Nor is an Event whose kind
+    the `chronicle` channel admits (`_ch_chronicle` reads `e.kind` alone, so it would admit
+    everyone): no row emits a claim-changing kind today, and that is a fact of the table, not of
+    this predicate."""
+    if mode == "total" or not e.changes or causing_act(w, e) is not None or _ch_chronicle(w, e, None):
         return False
     return all(c.subject and c.subject in held for c in e.changes)
 

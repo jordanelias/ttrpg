@@ -2656,14 +2656,16 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     assert sorted(q.id for q in qs) != sorted(q.id for q in cqs), (
         "the two arms' Question sets are identical again -- dwellings are DONE·INERT once more; "
         "either relabel this test back to `24d-i`'s or find what silently narrowed `reach`")
-    # ⚠ v9 IN-57 RETIRED THE ACT-COUNT ARM (`out["acts"] != cout["acts"]`). A dwelling question is
-    # tier 4, the lowest, under `world_q.attention_key` -- the dwelling sits on the ladder above the
-    # resident's home (`reach`'s limb 3, which is no tier), and below even the standing `need`
-    # question -- so it is never first while he holds a question of any higher tier. MEASURED at
-    # IN-57, seed 0, one season: 86 dwelling questions, all tier 4; both arms' first questions
-    # identical; 605 acts each. Before IN-57 a dwelling claim's hash id could sort first, which is
-    # what moved the count. The Question-id inequality above still observes a narrowed `reach`, the
-    # regression that arm's message named.
+    # ⚠ v9 IN-57 INVERTED THE ACT-COUNT ARM (`out["acts"] != cout["acts"]` became `==`). A dwelling
+    # question is tier 4, the lowest, under `world_q.attention_key` -- the dwelling sits on the
+    # ladder above the resident's home (`reach`'s limb 3, which is no tier), and below even the
+    # standing `need` question -- so it is never first while he holds a question of any higher
+    # tier. MEASURED at IN-57, seed 0, one season: 86 dwelling questions, all tier 4; both arms'
+    # first questions identical; 605 acts each, asserted below. Before IN-57 a dwelling claim's hash
+    # id could sort first, which is what moved the count. The Question-id inequality above still
+    # observes a narrowed `reach`, the regression that arm's message named.
+    assert out["acts"] == cout["acts"], (
+        "a dwelling question was answered first: IN-57's tier 4 no longer sorts it last")
 # H2 -- `ED-IN-0261`'s DEONTOLOGICAL GATE, `H-146`. A refusal at `opening_set`, not a score term:
 # the person's projected weight on the gating axis IS the threshold, and a verb that axis engages
 # past it never forms a Candidate. Roster-generic: the axis is whatever `Fixtures refusal_axis`

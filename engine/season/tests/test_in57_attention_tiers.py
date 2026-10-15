@@ -192,6 +192,56 @@ def test_the_five_tiers_order_against_the_old_key():
     assert [key(q)[0] for q in qs] == [0, 1, 2, 2, NEED_TIER, 4]
 
 
+def _scar_flip():
+    """Two held pursuits `(a, b)` and two deed kinds whose tier-2 order (by -|valence|, then id)
+    differs between `crisis_weights` at shift 0 and at shift 1 when `a` is scarred to threshold --
+    read off the shipped tables, the first such quadruple in sorted order. None if the tables hold
+    none (the test then fails rather than pass vacuously)."""
+    from ..data.rosters import PURSUITS as ALL
+    from ..queries.person_q import SCAR_WEIGHT_SHIFT_AT, crisis_weights
+    kinds = sorted(V.DEED_KINDS)
+    for a in sorted(ALL):
+        for b in sorted(ALL):
+            if a == b:
+                continue
+            p = Person("p_s", "p_s")
+            p.pursuits, p.scar = {a: 1.0, b: 1.0}, {a: SCAR_WEIGHT_SHIFT_AT}
+
+            def size(shift):
+                ax = to_axes(crisis_weights(p, shift))
+                return {k: abs(deed_valence(ax, _claim("c", "p", "p", k, True))) for k in kinds}
+            v0, v1 = size(0.0), size(1.0)
+            for i, k1 in enumerate(kinds):
+                for k2 in kinds[i + 1:]:
+                    # all four nonzero (both claims stay in tier 2) and strictly ordered both ways
+                    if 0 < v0[k2] < v0[k1] and 0 < v1[k1] < v1[k2] or 0 < v0[k1] < v0[k2] and 0 < v1[k2] < v1[k1]:
+                        return a, b, k1, k2
+    return None
+
+
+def test_the_scar_shift_arm_reorders_tier_2():
+    """`attention_key` projects with `Fixtures.scar_weight_shift`, the value `choose` projects with:
+    a person scarred to threshold on one held pursuit ranks two deed claims about himself one way at
+    shift 0 and the other way at shift 1. MUTATION (run): `attention_key` reading `0` in place of
+    `w.fixtures.get("scar_weight_shift")` leaves the two orders equal -> red."""
+    from ..queries.person_q import SCAR_WEIGHT_SHIFT_AT
+    flip = _scar_flip()
+    assert flip is not None, "no pursuit pair and kind pair flip under the shift: the arm is unobservable"
+    a, b, k1, k2 = flip
+    p = Person("p_a", "p_a")
+    p.pursuits, p.scar = {a: 1.0, b: 1.0}, {a: SCAR_WEIGHT_SHIFT_AT}
+    p.ledger += [_claim("c_1", p.id, p.id, k1, True), _claim("c_2", p.id, p.id, k2, True)]
+    w = _world_with(p)
+    orders = {}
+    for shift in (0.0, 1.0):
+        w.fixtures = w.fixtures.sweep("scar_weight_shift", shift)
+        key = world_q.attention_key(w, p)
+        qs = [q for q in world_q.questions_for(w, p) if q.about in ("c_1", "c_2")]
+        assert len(qs) == 2 and all(key(q)[0] == 2 for q in qs), [(q.id, key(q)) for q in qs]
+        orders[shift] = [q.about for q in qs]
+    assert orders[0.0] != orders[1.0], (flip, orders)
+
+
 def test_a_seat_purview_is_tier_1_and_the_ladder_above_home_is_not():
     """Limb 4 (the seat's rung and below) is tier 1; limb 3 (the ladder) is in `reach` but is no
     tier (`own_purview` is limbs 2 and 4 only)."""

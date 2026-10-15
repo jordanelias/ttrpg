@@ -4069,6 +4069,7 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
     # on the record their own act made (`test_u2_...`'s re-record shows the same move at one round).
     # The base and the key without the screen both read 10 (measured); `redeposits` is still 1
     # (asserted above) and the four-season depth clause (>= 4) still holds.
+    # [GROUNDED: measured at B-W by printing the published chain on this tree and on a `git worktree` at its base `5b5e31ef` -- depth 8 here, `claim.deposited <- travel.blocked(carin) <- survey.refused(bailiff) <- travel.blocked(carin) <- survey.refused(bailiff) <- travel.blocked(carin) <- commitment.refused(bailiff) <- kill.refused(carin)`; depth 10 there, five `record.created` links among its ten]
     assert d_pub == 8, (
         f"the published two-season run reaches {d_pub}, not the 8 that `scene_budget` rounds of "
         "deposit-and-decay produce over two seasons with `11a`'s repeated investigate-and-record "
@@ -6741,7 +6742,7 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # finding.none, finding.none, finding.made, record.created, term.matured, record.created,
     # term.matured, term.matured`; n=6 (14) the same first ten links, then `transfer.refused,
     # work.unavailable, record.created, term.matured`. Both run through `record.created` and are
-    # act-mixed (actors `p_carin`, `p_bailiff`), and n=6 carries FEWER `term.matured` links (2)
+    # act-mixed (actors `p_carin`, `p_bailiff`), and n=6 carries FEWER `term.matured` links (3)
     # than n=3 (4): the extra link is an act, not a stage, so the depth clause is not
     # discriminating again. (12, 13) at the base; (13, 13) with the tiers and no screen.
     assert (depths[3], depths[6]) == (13, 14), (

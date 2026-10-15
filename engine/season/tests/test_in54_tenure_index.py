@@ -100,13 +100,22 @@ def realm_run():
             return got
         return wrapped
 
+    run.builds = 0
+    build = cache._build_tenure_index
+
+    def counted_build(w):
+        run.builds += 1
+        return build(w)
+
     for n in ORACLES:
         EP.CHANNEL_PREDICATES[n] = wrap(n)
+    cache._build_tenure_index = counted_build
     try:
         w = POP.build_realm(0)
         POP.run(seasons=2, seed=0, w=w)
     finally:
         EP.CHANNEL_PREDICATES.update(originals)
+        cache._build_tenure_index = build
     run.w = w
     return run
 
@@ -117,6 +126,14 @@ def test_the_index_answers_every_call_as_a_live_scan_does(realm_run):
     for name, n in realm_run.checks.items():
         assert n >= MIN_CHECKS, f"{name}: only {n} calls were compared -- the comparison is a no-op"
         assert realm_run.true[name] > 0, f"{name}: every compared answer was False"
+
+
+def test_the_index_is_built_far_less_often_than_it_is_asked(realm_run):
+    """The point of the index: one build per version, not one per (event, person). The comparison
+    in (a) would pass as well for an index rebuilt on every call."""
+    total = sum(realm_run.checks.values())
+    assert realm_run.builds >= 1, "the build was never counted: the wrapper is not on the call path"
+    assert realm_run.builds * 10 < total, (realm_run.builds, total)
 
 
 # -- (b) ---------------------------------------------------------------------------------------
@@ -193,8 +210,25 @@ def test_the_version_counts_a_field_assignment_and_leaves_the_hash_alone():
     t.until = t.until                       # an assignment of the same value still counts
     assert w.tenure_version() != before
     assert w.content_hash() == h
-    assert "writes" not in repr(t) and "_tenure_structure" not in "".join(
-        f"{n}" for n in ("persons", "rungs", "offices", "sites", "records", "propositions", "dates"))
+    before = w.tenure_version()
+    w._tenure_structure += 1
+    assert w.tenure_version() != before and w.content_hash() == h
+
+
+def test_a_tenure_added_with_no_field_write_after_the_build_is_seen():
+    """The STRUCTURE half of the version: a Tenure constructed (a field write, counted) BEFORE the
+    index is built, then added, moves only `_tenure_structure`. A knot, not an office hold: a hold
+    passes through `_grant_remit`, which writes `payload` and would move `Tenure.writes` anyway.
+    MUTATION (run): delete `self._tenure_structure += 1` in `World.add_tenure` -> red."""
+    w = P.tiny_world()
+    kn = Event(id="e_kn", kind="k", changes=[P.about("p_other")], causes=[ROOT], emitted_at=1)
+    wit_key = EP.CHANNEL_PREDICATES["witness_key"]
+    t = Tenure("t_in54_late_knot", "p_mid", "p_other", "knot", since=0)
+    assert not wit_key(w, kn, "p_mid")          # the index is built here, at the post-construction version
+    writes = w.tenure_version()[0]
+    w.add_tenure(t)
+    assert w.tenure_version()[0] == writes, "add_tenure wrote a field: this no longer isolates the structure counter"
+    assert wit_key(w, kn, "p_mid"), "a Tenure added after the build was not seen (structure counter)"
 
 
 # -- the half of the version the field counter cannot see ------------------------------------------

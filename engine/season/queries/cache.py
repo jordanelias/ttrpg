@@ -66,7 +66,9 @@ adder, and the index will not see it until a field write or a counted structure 
 one such site, a harness probe (`probes.py`, `p42`); the rest are tests that build a world and then
 ask. `engine/season/tests/test_in54_tenure_index.py` fails on a new one. A mutation of a Tenure's
 `payload` IN PLACE (`payload["x"] = ...`) is not a field assignment and is not counted -- the index
-reads no payload.
+reads no payload. Nor is a person removed by hand outside `remove_person` (`w.persons.pop(...)` at
+`harness/probes.py:903`, `del w.persons[...]` at `:1114`), whose Tenures leave `w.tenures` with no
+count, nor any slice or `del` surgery on a Tenure list, which the sweep's mutator set does not name.
 
 NOT `establishment_of`. `_ch_post_remit` keeps a live re-scan: caching that Query was tried and
 reverted (r2 `05` §A.1.5 RULED (d)); the index files `hold` and `knot` and answers nothing about

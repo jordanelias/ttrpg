@@ -203,8 +203,40 @@ def test_in58_the_factor_falls_with_allegiance_whatever_the_pursuits_sign():
         terms = [PQ.deeds_judged(_judge(e, [("s", v, 5)], _deed("s"), _seen("s", "x")), "x")[0]
                  for v in (-5, 0, 5)]
         assert terms[0] >= terms[1] >= terms[2] and terms[0] > terms[2], (e, lean, terms)
-        assert terms[1] == pytest.approx(lean), (e, lean, terms)
+        assert terms[1] == lean, (e, lean, terms)
     assert signs == {True, False}, "the shipped cells lean one way for every pursuit: half untested"
+
+
+def test_in58_a_judge_who_is_the_patient_never_warms_to_his_attacker():
+    """A wounded survivor who witnessed his own wound holds `(self, kind)` paired to `x`. No stance
+    row names oneself, so the stored half would read 0 and judge `x` as a stranger would -- for a
+    pursuit leaning positive on the deed, RAISING his regard of his own attacker. `_bond` reads the
+    judge who IS the patient as his own full ally: the term is never positive, and negative wherever
+    the lean is. MUTATION (run): `_bond` reading `stance_toward(p, patient)` for the patient too
+    turns this red on every positive-lean pursuit."""
+    checked = negative = 0
+    for kind in ("person.died", "body.changed"):
+        for e in sorted(PURSUITS):
+            lean = PQ._lean(to_axes({e: 1.0}), kind)
+            if not lean:
+                continue
+            p = _judge(e, (), _deed("p_judge", kind), _seen("p_judge", "x"))
+            term = PQ.deeds_judged(p, "x")[0]
+            assert term <= 0.0, (kind, e, lean, term)
+            if lean < 0:
+                assert term < 0.0, (kind, e, lean, term)
+                negative += 1
+            checked += 1
+    assert checked and negative, (checked, negative)
+
+
+def test_in58_an_actorless_sighting_on_the_same_key_makes_the_pairing_ambiguous():
+    """A `seen` naming `x` and a `seen` naming nobody on the same subject, `when` and `round`: the
+    unnamed hand may be the doer, so the pairing names nobody."""
+    d = _deed("s")
+    idx = lambda *cs: PQ._seen_index(cs)
+    assert PQ.deed_doer(d, idx(_seen("s", "x"))) == "x"                         # the control
+    assert PQ.deed_doer(d, idx(_seen("s", "x", n=0), _seen("s", None, n=1))) is None
 
 
 def test_in58_deeds_judged_never_asks_regard(monkeypatch):
