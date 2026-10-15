@@ -192,9 +192,18 @@ axis_roster:
 # Church-adjacent", §6.1 item 1); merging it into `thread_truth` is a roster edit here.
 # `scale:` "0-5" is the draft's recommendation (a), the one ruled number (the absorbed Truth spine,
 # ED-IN-0075); `player_sees: bands` is inherited from the same ruling; band NAMES are unauthored.
+# A FIFTH, `altonian_civics`, is POLITICAL rather than religious (ED-IN-0293, the user 2026-10-14:
+# Altonia as an affiliation "to explain what kind of political structure they want"); every
+# affiliation's machinery (`incompatible`, the shared `sacred` engagement column) reads it alike.
+# The scale has no AGAINST direction: an intensity is how strongly one holds the pole, and a stored 0 is
+# a considered REJECTION of it -- a present key, distinct from an absent one (IN-63; plan A-35).
+# `concerns:` (v9 IN-64, ED-IN-0293 (2)) files members under the three things every cast row must hold
+# a conviction concerning -- the Church, Einhir, Altonia. `data/cast.py::conviction_of` refuses a row
+# with no member of a concern, reading the grouping from the export, never from a set of its own.
+# A member may sit under at most one concern; a member under none (`thread_truth`) is held freely.
 affiliation_roster:
   source: "ED-IN-0251 R1/R2; content from candidate_affiliation_content.md §1.3, §3.2, folded in by RS-1 (ED-IN-0291)"
-  count: 4
+  count: 5
   scale: "0-5"
   player_sees: bands
   names:
@@ -202,6 +211,11 @@ affiliation_roster:
     - inner_tradition      # the Church-adjacent apophatic lineage of thread practice
     - thread_truth         # the Thread as the ground of being (the absorbed Truth track's pole 0)
     - einhir_restoration   # Einhir-as-theology, the Restoration counter-theology (pole 0 of the territory track)
+    - altonian_civics      # the Altonian imperial order as the political structure one wants (Altonia, the empire); civic, not a theology (ED-IN-0293)
+  concerns:
+    church: [solmund_orthodoxy, inner_tradition]
+    einhir: [einhir_restoration]
+    altonia: [altonian_civics]
 
 # ============================================================================
 # REGISTERED BY REFERENCE -- authoritative content stays in the source doc (no re-transcription).

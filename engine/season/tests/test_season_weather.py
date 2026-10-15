@@ -64,9 +64,13 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # RE-PINNED at v9 IN-57 (B-W), A HASH MOVE DECLARED: the attention key re-orders each person's questions
 # and `Claim.doer` is a hashed field. Was 0f8e0144... / ccb33d62... after one and two seasons; the build
 # hash is unchanged. The base values reproduce on the pre-IN-57 commit 5b5e31ef; IN-58 moved nothing.
-BASE_HASHES = {0: "11989dcf5e1c25afab556bf3f234a200",
-               1: "8840d8f972cc8d165fab984de3b99a1c",
-               2: "2eedf7b05371d0b05bf1edf1ecebb2bb"}
+# RE-PINNED at v9 IN-64 (B-X), A DATA MOVE DECLARED: the cast's fifteen pursuits and three-concern
+# affiliations (ED-IN-0293, `4e942bac`), opponents at 0 (IN-63), and the two Riskbreakers seat rows
+# (anchored at T1). Every stored vector of the 46 cast persons moves, so the build hash moves too.
+# Was 11989dcf... / 8840d8f9... / 2eedf7b0... (build, one, two seasons) on IN-63's tree e6adc4bf.
+BASE_HASHES = {0: "472050b8782e0a64b0e9390a5eaecbc1",
+               1: "a0e82b82abe3d9ccb4eb04cbd8220881",
+               2: "dc561dd50af501876b803cda199926d9"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -77,8 +81,10 @@ BASE_HASHES = {0: "11989dcf5e1c25afab556bf3f234a200",
 # (fingerprint, conferee, founding, occasion). Re-recorded together with `BASE_HASHES`, never alone.
 # RE-RECORDED at v9 IN-57 (B-W) with `BASE_HASHES`: the attention key re-orders each person's questions, so
 # fewer and different acts follow (7527 -> 6624, 21735 -> 17285); IN-58 moved nothing.
-BASE_EVENTS = {1: (6624, "9b0c88f4c4e33064b578df2af2b831de17198fdc96744c73ec0184dd556336d2"),
-               2: (17285, "b62b444dbc487578555dc7399f5f29464e7583ef7f2f170875c24cf6d591f208")}
+# RE-RECORDED at v9 IN-64 with `BASE_HASHES`: full pursuit vectors re-rank every cast person's
+# candidates (6624 -> 7309, 17285 -> 20220).
+BASE_EVENTS = {1: (7309, "ca986eeea14787472d117cc929cd2fcef6b448c0b2286bfccef6f3a6f8fb1bf4"),
+               2: (20220, "00b4d6021b30f66df560b01beded45efbb2955124c04eaaf14fe2620756ee1ab")}
 
 
 def _digest(w) -> tuple:

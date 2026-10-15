@@ -40,6 +40,18 @@ def _pairs(value):
     return [(a, b) for a, row in cells.items() for b, v in row.items() if v is value]
 
 
+def _complete(held: dict) -> dict:
+    """`held`, plus each concern it leaves unmet at 0 on that concern's first member: a planted row
+    must pass `cast.conviction_of`'s concern refusal (v9 IN-64), and a 0 -- a considered rejection,
+    IN-63 -- strains nothing, so the planted pair alone decides `confliction`."""
+    from engine.substrate.descriptors import AFFILIATION_CONCERNS
+    out = dict(held)
+    for members in AFFILIATION_CONCERNS.values():
+        if not any(m in out for m in members):
+            out[members[0]] = 0
+    return out
+
+
 def test_h10_roster_and_scale_come_from_the_single_owner():
     """The season roster is the leaf's, and full intensity is a real ceiling above the floor."""
     from engine.substrate.descriptors import AFFILIATIONS as LEAF
@@ -83,7 +95,7 @@ def test_h10_two_incompatible_affiliations_at_full_intensity_load_and_conflict()
     the ceiling, under the `min` reading."""
     checked = 0
     for a, b in _pairs(True):
-        held = cast.conviction_of({"id": "planted", "affiliations": {a: _FULL, b: _FULL}})
+        held = cast.conviction_of({"id": "planted", "affiliations": _complete({a: _FULL, b: _FULL})})
         p = Person("p_h10", conviction=held)
         assert confliction(p) == _FULL, (a, b, confliction(p))
         checked += 1
@@ -97,7 +109,7 @@ def test_h10_control_a_pair_that_does_not_strain_reads_zero(value):
     pairs = _pairs(value)
     assert pairs, f"no shipped pair reads {value!r}; this control checks nothing"
     for a, b in pairs:
-        p = Person("p_h10", conviction=cast.conviction_of({"affiliations": {a: _FULL, b: _FULL}}))
+        p = Person("p_h10", conviction=cast.conviction_of({"affiliations": _complete({a: _FULL, b: _FULL})}))
         assert confliction(p) == 0, (a, b)
     for a in sorted(AFFILIATIONS):
         assert confliction(Person("p_one", conviction={a: _FULL})) == 0
@@ -111,7 +123,7 @@ def test_h10_intensity_and_name_are_refused_off_the_roster_and_scale():
             cast.conviction_of({"affiliations": {a: bad}})
     with pytest.raises(Unspecified):
         cast.conviction_of({"affiliations": {"threadwork": 3}})
-    assert cast.conviction_of({"affiliations": {a: 0}}) == {a: 0}   # IN-63: a zero is a held position
+    assert cast.conviction_of({"affiliations": _complete({a: 0})})[a] == 0   # IN-63: a zero is held
     assert cast.conviction_of({}) == {}
 
 
@@ -137,13 +149,15 @@ def test_h10_witness_and_matter_cannot_write_conviction_and_resolve_can():
 
 
 def test_h10_world_builder_fills_conviction_from_the_authored_row(monkeypatch):
-    """The field is FILLED, not merely declared. No registry row carries `affiliations:` today, so
-    the shipped fill is `{}` everywhere -- indistinguishable from a builder that never filled it. So
-    the row source is planted: every cast row gains one strained pair at full intensity, and every
-    person the builder seeded from a row must carry exactly that vector (and conflict)."""
+    """The field is FILLED, not merely declared. Every registry row carries `affiliations:` since v9
+    IN-64 (ED-IN-0293, authored at `4e942bac`), so a non-empty fill alone would not tell this test's
+    planted vector from the authored one. So the row source is planted: every cast row's
+    affiliations are REPLACED by one strained pair at full intensity (each other concern met at 0,
+    which strains nothing), and every person the builder seeded from a row must carry exactly that
+    vector (and conflict)."""
     from engine.season.harness import populated
     a, b = _pairs(True)[0]
-    planted = {a: _FULL, b: _FULL}
+    planted = _complete({a: _FULL, b: _FULL})
     real_row = cast.row
 
     def _row(cid):
@@ -165,10 +179,16 @@ def test_h10_exporter_refuses_an_unbounded_or_open_scale():
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     names = ["a", "b"]
-    assert mod._affiliation_roster({"affiliation_roster": {"names": names, "scale": "0-5"}})[
+    # v9 IN-64: the block also requires `concerns`; every arm carries a lawful one, so each refusal
+    # below is the scale's or the count's, not a missing `concerns`.
+    concerns = {"x": ["a"]}
+    assert mod._affiliation_roster({"affiliation_roster": {"names": names, "scale": "0-5",
+                                                           "concerns": concerns}})[
         "scale"] == {"floor": 0, "ceiling": 5}
     for scale in (None, "0-5+", "5-0", "0-1.5"):
         with pytest.raises(SystemExit):
-            mod._affiliation_roster({"affiliation_roster": {"names": names, "scale": scale}})
+            mod._affiliation_roster({"affiliation_roster": {"names": names, "scale": scale,
+                                                            "concerns": concerns}})
     with pytest.raises(SystemExit):
-        mod._affiliation_roster({"affiliation_roster": {"names": names, "count": 3, "scale": "0-5"}})
+        mod._affiliation_roster({"affiliation_roster": {"names": names, "count": 3, "scale": "0-5",
+                                                        "concerns": concerns}})

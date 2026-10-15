@@ -12,19 +12,17 @@ THE PLAN'S FALSIFIER, each an executed test: a hand-built `{solmund_orthodoxy: 5
   * `-1` and `6` still refuse; a bool and a float still refuse.
 The MUTATION (count 0 as held in `conviction_after_crisis`) turns the crisis tests red; it was run and
 reverted when this file was written, and the tests below assert the facts it would break.
-The hash-EQUAL exit is the precondition that no affiliation is authored on the base.
+The hash-EQUAL exit held on IN-63's base, where no affiliation was authored; v9 IN-64 authored them.
 """
 from __future__ import annotations
 
 import pytest
 
 from engine.season.data import affiliations as A
-from engine.season.data import cast
 from engine.season.data.matrix import Step
 from engine.season.data.rosters import AFFILIATIONS
 from engine.season.epistemic import observers_for
 from engine.season.gaps import Unspecified
-from engine.season.harness import populated
 from engine.season.harness import probes as P
 from engine.season.queries.person_q import (SCAR_CRISIS_AT, broken_by, confliction,
                                             conviction_after_crisis, elements_violated_by,
@@ -64,18 +62,10 @@ def test_in63_conviction_map_keeps_an_explicit_zero_and_still_refuses_outside_th
         A.conviction_map({"threadwork": 0})        # a zero does not excuse an unrostered name
 
 
-def test_in63_no_affiliation_is_authored_on_the_base_so_the_hash_is_equal():
-    """The EXIT's precondition: every registry row loads to `{}` and the built realm holds no
-    conviction, so keeping a zero changes no stored value (the two-season hash is compared in the
-    receipt, `2eedf7b0...` before and after)."""
-    checked = 0
-    for cid, r in sorted(cast._rows().items()):
-        assert not r.get("affiliations"), cid
-        assert cast.conviction_of(r) == {}, cid
-        checked += 1
-    assert checked >= 40, checked
-    w = populated.build_realm(0)
-    assert w.persons and all(p.conviction == {} for p in w.persons.values())
+# The EXIT's precondition test (no row carried `affiliations:` on IN-63's base, so keeping a zero
+# moved no stored value; two-season hash `2eedf7b0...` before and after) was retired at v9 IN-64,
+# which authors every cast row's affiliations and stores the opponents' zeros
+# (`test_in64_cast_integration.py`). Its subject died with that base.
 
 
 # ------------------------------------------------------------------------------ confliction

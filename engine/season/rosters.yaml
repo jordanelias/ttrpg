@@ -2095,7 +2095,8 @@ tables:
     default_cell: null
     keys: [affiliations, affiliations]
     note: >-
-      Six pairs over four affiliations; five filled (one cited, four derived) and one null. The
+      Ten pairs over five affiliations; five filled (one cited, four derived) and five null (pair 6,
+      and the four `altonian_civics` pairs added with that roster member, ED-IN-0293). The
       draft's four `altonian_theocracy` pairs died with that struck candidate. The per-pair argument
       is the draft's §2 table; the values here are the build's (`CLAUDE.md` §0.05).
     cells:
@@ -2108,6 +2109,13 @@ tables:
         einhir_restoration: null   # pair 6, null: no source either way (the knife-edge is Jordan's to promote)
       thread_truth:
         einhir_restoration: false  # pair 8, derived: the same pole of both tracks
+      # ED-IN-0293: `altonian_civics` is a political structure, not a theology; no source says it
+      # strains against any creed, so its four pairs are keyed (considered) and null (no source).
+      altonian_civics:
+        solmund_orthodoxy: null
+        inner_tradition: null
+        thread_truth: null
+        einhir_restoration: null
 
   # IN-08 H11 -- WHAT AN ACT DOES TO A HELD AFFILIATION: the verb x affiliation table (J-5's C4, the
   # draft's rule R-C4, folded into the build by Jordan 2026-10-06, RS-1, ED-IN-0291). Read by

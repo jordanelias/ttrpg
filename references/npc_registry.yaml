@@ -12,6 +12,18 @@
 # one from and are DROPPED, not homed: NPC-033 Utility .30, NPC-086 Utility .20 (§4.3's own drops)
 # and NPC-089 Identity .50 (§4.3 left it to Jordan; dropped on the same precedent) [ASSUMPTION].
 #
+# ED-IN-0293 (the user, 2026-10-14: every NPC holds a full pursuit vector and a conviction on
+# Einhir, Altonia and the Church): every row's `convictions.primary` names ALL FIFTEEN pursuits.
+# The weights authored before it are kept unchanged and listed first; the ones it added follow,
+# small unless the row's own text warrants more. Every row also carries `affiliations:`, holding a
+# Church member (`solmund_orthodoxy` and/or `inner_tradition`), `einhir_restoration` and
+# `altonian_civics`; the comment on each row's `affiliations:` line states its basis. The scale has
+# no AGAINST direction: a 0 is a considered REJECTION of the pole, kept as a present key (IN-63), so
+# an opponent the row's comment names holds 0 (re-encoded from the producer's "present but low (1)"
+# at v9 IN-64); a 1 is a pole held weakly, not opposed. THE WHOLE AUTHORING IS [ASSUMPTION; medium;
+# Jordan to correct]. `engine/season/data/cast.py` refuses a row naming fewer than the fifteen, or
+# holding no member of a concern (`descriptor_registry.yaml: affiliation_roster.concerns`).
+#
 # Stats are deferred per npc_roster_v30 (most rows carry `stats: null`).
 # History and discussion: references/npc_registry_history.md
 
@@ -19,9 +31,11 @@ schema:
   required: [id, first_name, last_name, faction, role, status]
   optional: [age, birthplace, territory, ts, coherence, stats, convictions, affiliations, goals, arc_trajectory, notes]
   # `affiliations:` (IN-08 H10) is `{<affiliation>: <int 0-5>}` over
-  # `references/descriptor_registry.yaml: affiliation_roster` -- the person's RELIGIOUS affiliations,
-  # read by `engine/season/data/cast.py::conviction_of` into `Person.conviction`. NOT `convictions:`,
-  # which holds pursuits. No row carries it yet.
+  # `references/descriptor_registry.yaml: affiliation_roster` -- the person's religious affiliations
+  # and, since ED-IN-0293, `altonian_civics` (the political structure they want), read by
+  # `engine/season/data/cast.py::conviction_of` into `Person.conviction`. NOT `convictions:`,
+  # which holds pursuits. Every row carries it (ED-IN-0293), with a member of each concern
+  # (`affiliation_roster.concerns`); an int 0-5 per pole, 0 a considered rejection (IN-63).
 
 # ═══════════════════════════════════════════════════════════════
 # ROSTER NPCs (systems/npcs/reference/npc_roster_v30.md)
@@ -49,11 +63,29 @@ characters:
       primary:
         - {conviction: stewardship, weight: 0.40}
         - {conviction: community, weight: 0.20}
+        - {conviction: virtue, weight: 0.05}
+        - {conviction: honour, weight: 0.06}
+        - {conviction: liberty, weight: 0.05}
+        - {conviction: justice, weight: 0.04}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.02}
+        - {conviction: scholastics, weight: 0.10}
+        - {conviction: stability, weight: 0.12}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: doctrine, weight: 0.06}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.03}
+        - {conviction: love, weight: 0.03}
       cultural_label: varfell_alpine  # [ASSUMPTION: placeholder per PP-685 §3 — Southernmost template not yet defined]
       self_other_initial: -0.30
     goals: ["Maintain substrate stability", "Protect Southernmost practitioners", "Continue the work regardless of interference"]
     arc_trajectory: "Warden-Chief navigating Church pressure and Thread instability"
     resonant_style: Evidence  # per edeyja_npc.md
+    affiliations:  # ED-IN-0293: Warden-Chief, highest-TS practitioner under Church pressure: inner tradition + thread truth; Einhir, Altonia low (the work, not politics; no outsider has earned the wardens' knowledge, extract :471)
+      inner_tradition: 4
+      thread_truth: 5
+      einhir_restoration: 1
+      altonian_civics: 1
     source: systems/npcs/reference/edeyja_npc.md, npc_roster_v30 §1
     notes: "Highest TS of any living practitioner. Survived proximity to a major Gap/tear."
 
@@ -73,10 +105,28 @@ characters:
       primary:
         - {conviction: justice, weight: 0.50}
         - {conviction: stewardship, weight: 0.30}
+        - {conviction: virtue, weight: 0.05}
+        - {conviction: honour, weight: 0.08}
+        - {conviction: liberty, weight: 0.10}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.03}
+        - {conviction: scholastics, weight: 0.06}
+        - {conviction: stability, weight: 0.04}
+        - {conviction: individuality, weight: 0.04}
+        - {conviction: community, weight: 0.12}
+        - {conviction: doctrine, weight: 0.06}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.05}
+        - {conviction: love, weight: 0.03}
       cultural_label: restoration_reformist
       self_other_initial: -0.10
     goals: ["Serve Varfell intelligence", "Privately sympathize with Restoration Movement"]
     arc_trajectory: "Dual loyalty — personal sympathy vs professional duty. If Vaynard eliminated, takes Varfell leadership (PP-486)."
+    affiliations:  # ED-IN-0293: Varfell operative; sympathizes with Restoration Movement: einhir_restoration 4 + justice/liberty/community (the RM reformist profile) carry it; "knowledge must serve the community", cannot target RM (extract :467); thread-sensitive
+      solmund_orthodoxy: 1
+      thread_truth: 2
+      einhir_restoration: 4
+      altonian_civics: 1
     source: npc_roster_v30 §2
     notes: "Vaynard's intelligence operative. Thread-sensitive. RM-adjacent targets consistently 1 season behind. Southern Einhir solidarity."
 
@@ -96,10 +146,28 @@ characters:
       primary:
         - {conviction: justice, weight: 0.40}
         - {conviction: stewardship, weight: 0.25}
+        - {conviction: virtue, weight: 0.06}
+        - {conviction: honour, weight: 0.05}
+        - {conviction: liberty, weight: 0.15}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.02}
+        - {conviction: scholastics, weight: 0.06}
+        - {conviction: stability, weight: 0.02}
+        - {conviction: individuality, weight: 0.04}
+        - {conviction: community, weight: 0.15}
+        - {conviction: doctrine, weight: 0.08}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.04}
+        - {conviction: love, weight: 0.03}
       cultural_label: varfell_alpine
       self_other_initial: -0.30
     goals: ["Cultural restoration", "Equity and social contract"]
     arc_trajectory: "Visibility as vulnerability — permanent Heresy Investigation target"
+    affiliations:  # ED-IN-0293: RM leader; goal: Einhir revival while evading capture (visibility is her vulnerability, reputation .02): Einhir restoration 5, liberty/community .15; diverges from a Movement that calls threadwork folklore: "Thread substrate is probably real" (extract :470), thread_truth 2
+      solmund_orthodoxy: 1
+      thread_truth: 2
+      einhir_restoration: 5
+      altonian_civics: 1
     source: npc_roster_v30 §3
     notes: "TS 25 — above practitioner threshold but below Forgetting resistance gate (29). PP-665 rename from Maret Vossen."
 
@@ -119,17 +187,35 @@ characters:
       primary:
         - {conviction: doctrine, weight: 0.60}
         - {conviction: stability, weight: 0.20}
+        - {conviction: virtue, weight: 0.06}
+        - {conviction: honour, weight: 0.08}
+        - {conviction: liberty, weight: 0.02}
+        - {conviction: justice, weight: 0.10}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.04}
+        - {conviction: scholastics, weight: 0.05}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: community, weight: 0.03}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.02}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.03}
       cultural_label: ecclesiastical
       self_other_initial: 0.00
     goals: ["Investigate heresy", "Enforce Church orthodoxy"]
     arc_trajectory: "Latent TS — doesn't know he's Thread Sensitive. PC diagnosis possible (Cognition vs Ob 2)."
+    affiliations:  # ED-IN-0293: Field Inquisitor (Church > Cardinal of Justice > Inquisition); office goal: finding heretical (Einhir-revivalist) activity: doctrine .60, orthodoxy 5; einhir_restoration 0, opposed (a considered rejection, IN-63); private conclusions contradict his public role (extract :463): thread_truth 1
+      solmund_orthodoxy: 5
+      thread_truth: 1
+      einhir_restoration: 0
+      altonian_civics: 1
     source: npc_roster_v30 §4
     notes: "TS 15. Attributes Thread perception to investigative instinct. Field Inquisitor, NOT Cardinal. Savonarola archetype."
 
   - id: NPC-005
     first_name: Sigrid
     last_name: Torsvald
-    faction: Löwenritter
+    faction: Löwenritter (Riskbreakers)
     role: TS Riskbreaker (Covert)
     status: canonical
     age: null  # [GAP]
@@ -142,10 +228,28 @@ characters:
       primary:
         - {conviction: stewardship, weight: 0.40}
         - {conviction: honour, weight: 0.20}
+        - {conviction: virtue, weight: 0.06}
+        - {conviction: liberty, weight: 0.04}
+        - {conviction: justice, weight: 0.10}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.02}
+        - {conviction: scholastics, weight: 0.05}
+        - {conviction: stability, weight: 0.12}
+        - {conviction: individuality, weight: 0.04}
+        - {conviction: community, weight: 0.05}
+        - {conviction: doctrine, weight: 0.04}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.03}
+        - {conviction: love, weight: 0.03}
       cultural_label: lowenritter_military
       self_other_initial: 0.00
     goals: ["Mission success", "Minimize Thread collateral"]
     arc_trajectory: "Risk-averse on Thread collateral despite Riskbreaker doctrine — TS lets her perceive damage colleagues can't."
+    affiliations:  # ED-IN-0293: Riskbreaker (Crown > Löwenritter > Riskbreakers); office goal: safety of the royal family and monarch, preventing corruption and threats (stability .12, justice .10, honour .20); diverges: a TS 35 practitioner undercover from her own institution (extract :469), thread_truth 3
+      solmund_orthodoxy: 2
+      thread_truth: 3
+      einhir_restoration: 1
+      altonian_civics: 1
     source: npc_roster_v30 §5
 
   - id: NPC-006
@@ -164,10 +268,27 @@ characters:
       primary:
         - {conviction: honour, weight: 0.35}
         - {conviction: stability, weight: 0.25}
+        - {conviction: virtue, weight: 0.06}
+        - {conviction: liberty, weight: 0.04}
+        - {conviction: justice, weight: 0.06}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.05}
+        - {conviction: scholastics, weight: 0.03}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: community, weight: 0.08}
+        - {conviction: doctrine, weight: 0.04}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.03}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.08}
       cultural_label: lowenritter_military
       self_other_initial: -0.10
     goals: ["Counter Altonian threat", "Strengthen peninsular defenses"]
     arc_trajectory: "External threat fixated — evaluates every action against Altonian metric. Brandt succession if Ehrenwall falls."
+    affiliations:  # ED-IN-0293: Löwenritter officer (Crown > Löwenritter > Lions' Table); order goal: military security and stability (honour .35, stability .25); fixated on the Altonian threat: altonian_civics 0, opposed (a considered rejection, IN-63)
+      solmund_orthodoxy: 2
+      einhir_restoration: 1
+      altonian_civics: 0
     source: npc_roster_v30 §6
     notes: "Named after birthplace Halvardshelm — confirmed intentional."
 
@@ -187,10 +308,27 @@ characters:
       primary:
         - {conviction: wealth, weight: 0.50}
         - {conviction: community, weight: 0.10}
+        - {conviction: virtue, weight: 0.02}
+        - {conviction: honour, weight: 0.02}
+        - {conviction: liberty, weight: 0.05}
+        - {conviction: justice, weight: 0.03}
+        - {conviction: reputation, weight: 0.08}
+        - {conviction: scholastics, weight: 0.04}
+        - {conviction: stability, weight: 0.08}
+        - {conviction: individuality, weight: 0.04}
+        - {conviction: doctrine, weight: 0.02}
+        - {conviction: happiness, weight: 0.04}
+        - {conviction: family, weight: 0.04}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.05}
       cultural_label: hafenmark_procedural
       self_other_initial: +0.10
     goals: ["Maximize Guilds Wealth", "Protect artisan livelihoods"]
     arc_trajectory: "Profit-maximizing — sacrifices Guilds Mandate for Wealth. Thread-touched supply chain discoverable."
+    affiliations:  # ED-IN-0293: Guilds representative, profit first: nominal orthodoxy; no text on Einhir or Altonia, both low
+      solmund_orthodoxy: 2
+      einhir_restoration: 1
+      altonian_civics: 1
     source: npc_roster_v30 §7
 
   - id: NPC-008
@@ -208,10 +346,28 @@ characters:
     convictions:
       primary:
         - {conviction: stability, weight: 0.60}
+        - {conviction: virtue, weight: 0.04}
+        - {conviction: honour, weight: 0.06}
+        - {conviction: liberty, weight: 0.02}
+        - {conviction: justice, weight: 0.06}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.04}
+        - {conviction: scholastics, weight: 0.06}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: community, weight: 0.04}
+        - {conviction: doctrine, weight: 0.03}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.03}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.03}
       cultural_label: valorian_court
       self_other_initial: 0.00
     goals: ["Maintain procedural correctness", "Block radical action through procedure"]
     arc_trajectory: "CONSERVATIVE — blocks radical action through procedure, not force. Cognition-heavy social contest target."
+    affiliations:  # ED-IN-0293: Ministry clerk (Crown > Ministries), procedural conservative: Einhir revival is the radical action he blocks (einhir_restoration 0, opposed, IN-63); a bureaucratic order leans Altonian (2)
+      solmund_orthodoxy: 2
+      einhir_restoration: 0
+      altonian_civics: 2
     source: npc_roster_v30 §8
 
   - id: NPC-009
@@ -230,10 +386,27 @@ characters:
       primary:
         - {conviction: stability, weight: 0.30}
         - {conviction: reputation, weight: 0.30}
+        - {conviction: virtue, weight: 0.04}
+        - {conviction: honour, weight: 0.05}
+        - {conviction: liberty, weight: 0.02}
+        - {conviction: justice, weight: 0.04}
+        - {conviction: wealth, weight: 0.06}
+        - {conviction: scholastics, weight: 0.05}
+        - {conviction: individuality, weight: 0.06}
+        - {conviction: community, weight: 0.03}
+        - {conviction: doctrine, weight: 0.03}
+        - {conviction: happiness, weight: 0.03}
+        - {conviction: family, weight: 0.03}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.04}
       cultural_label: valorian_court
       self_other_initial: -0.10
     goals: ["Efficient Crown administration", "Maintain personal indispensability"]
     arc_trajectory: "OVERPERFORMER — runs every important task. Flattery vulnerability (−1 Ob on social actions acknowledging competence)."
+    affiliations:  # ED-IN-0293: Crown minister (Lord Steward): nominal orthodoxy; no text on Einhir or Altonia, both low
+      solmund_orthodoxy: 2
+      einhir_restoration: 1
+      altonian_civics: 1
     source: npc_roster_v30 §9
 
   - id: NPC-010
@@ -252,10 +425,27 @@ characters:
       primary:
         - {conviction: wealth, weight: 0.30}
         - {conviction: honour, weight: 0.30}
+        - {conviction: virtue, weight: 0.03}
+        - {conviction: liberty, weight: 0.05}
+        - {conviction: justice, weight: 0.03}
+        - {conviction: reputation, weight: 0.06}
+        - {conviction: scholastics, weight: 0.02}
+        - {conviction: stability, weight: 0.04}
+        - {conviction: individuality, weight: 0.05}
+        - {conviction: community, weight: 0.05}
+        - {conviction: doctrine, weight: 0.02}
+        - {conviction: happiness, weight: 0.03}
+        - {conviction: family, weight: 0.10}
+        - {conviction: love, weight: 0.04}
+        - {conviction: stewardship, weight: 0.02}
       cultural_label: hafenmark_procedural  # [ASSUMPTION: placeholder — niflhel template not yet defined]
       self_other_initial: +0.10
     goals: ["Maintain Virke trade network", "Protect personal trust relationships"]
     arc_trajectory: "Personal loyalty to partners vs family directives. Third conflict with family triggers enforcement."
+    affiliations:  # ED-IN-0293: syndicate broker outside every faction: all three at the floor (no text); family directives carry family .10
+      solmund_orthodoxy: 1
+      einhir_restoration: 1
+      altonian_civics: 1
     source: npc_roster_v30 §10
 
   - id: NPC-011
@@ -275,10 +465,27 @@ characters:
       primary:
         - {conviction: virtue, weight: 0.50}
         - {conviction: stability, weight: 0.20}
+        - {conviction: honour, weight: 0.06}
+        - {conviction: liberty, weight: 0.03}
+        - {conviction: justice, weight: 0.05}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.04}
+        - {conviction: scholastics, weight: 0.04}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: community, weight: 0.03}
+        - {conviction: doctrine, weight: 0.04}
+        - {conviction: happiness, weight: 0.03}
+        - {conviction: family, weight: 0.10}
+        - {conviction: love, weight: 0.12}
+        - {conviction: stewardship, weight: 0.08}
       cultural_label: altonian  # [ASSUMPTION: placeholder — altonian template not yet defined in PP-684 §5]
       self_other_initial: -0.20
     goals: ["Protect Elske's safety", "Maintain province stability", "Sandbag imperial directives"]
     arc_trajectory: "PROTECTIVE — priority is Elske's safety. Virtue = Byzantine governance-as-moral-cultivation. Periodic visitor, royal welcome. Flips if Elske Loyalty ≤ 2. Manuel II Palaiologos archetype."
+    affiliations:  # ED-IN-0293: Altonian Doux; faction aim: Altonia generically wants to conquer Valoria; head diverges: he sandbags imperial directives for Elske, so imperial civics 3, not the ceiling, and leans toward the Crown through love .12 / family .10
+      solmund_orthodoxy: 1
+      einhir_restoration: 1
+      altonian_civics: 3
     source: npc_roster_v30 §11
 
   - id: NPC-012
@@ -297,10 +504,27 @@ characters:
       primary:
         - {conviction: wealth, weight: 0.30}
         - {conviction: stability, weight: 0.30}
+        - {conviction: virtue, weight: 0.03}
+        - {conviction: honour, weight: 0.04}
+        - {conviction: liberty, weight: 0.03}
+        - {conviction: justice, weight: 0.03}
+        - {conviction: reputation, weight: 0.04}
+        - {conviction: scholastics, weight: 0.03}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: community, weight: 0.05}
+        - {conviction: doctrine, weight: 0.02}
+        - {conviction: happiness, weight: 0.08}
+        - {conviction: family, weight: 0.08}
+        - {conviction: love, weight: 0.04}
+        - {conviction: stewardship, weight: 0.03}
       cultural_label: hafenmark_procedural  # [ASSUMPTION: placeholder — Schoenland template not defined]
       self_other_initial: 0.00
     goals: ["Maintain stable trade", "Avoid escalation", "Return home eventually"]
     arc_trajectory: "STABILITY-SEEKING — natural ally for peace, obstacle for escalation. Motivated by homesickness (discoverable via Read Ob 2)."
+    affiliations:  # ED-IN-0293: Schoenland factor, homesick, trading under Altonian treaties: foreign to the Church; treaty trade order at 2
+      solmund_orthodoxy: 1
+      einhir_restoration: 1
+      altonian_civics: 2
     source: npc_roster_v30 §12
 
   - id: NPC-013
@@ -319,10 +543,27 @@ characters:
       primary:
         - {conviction: stability, weight: 0.50}
         - {conviction: liberty, weight: 0.30}
+        - {conviction: virtue, weight: 0.03}
+        - {conviction: honour, weight: 0.03}
+        - {conviction: justice, weight: 0.03}
+        - {conviction: wealth, weight: 0.12}
+        - {conviction: reputation, weight: 0.05}
+        - {conviction: scholastics, weight: 0.04}
+        - {conviction: individuality, weight: 0.03}
+        - {conviction: community, weight: 0.03}
+        - {conviction: doctrine, weight: 0.08}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.02}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.05}
       cultural_label: ecclesiastical
       self_other_initial: +0.10
     goals: ["Maximize Church Wealth throughput", "Aggressive tithe collection"]
     arc_trajectory: "Parish Revolt arc or PC intervention path. Inadvertently funds Church charitable mission while undermining cultural authority."
+    affiliations:  # ED-IN-0293: Cardinal of Prudence (Church > Cardinal of Prudence), the economic arm: wealth .12, orthodoxy 3; diverges from the Church's doctrine-first profile (liberty .30)
+      solmund_orthodoxy: 3
+      einhir_restoration: 1
+      altonian_civics: 1
     source: npc_roster_v30 §13, npc_character_analyses_v30_infill
 
 # ═══════════════════════════════════════════════════════════════
@@ -346,10 +587,28 @@ characters:
       primary:
         - {conviction: virtue, weight: 0.45}
         - {conviction: stability, weight: 0.30}
+        - {conviction: honour, weight: 0.10}
+        - {conviction: liberty, weight: 0.02}
+        - {conviction: justice, weight: 0.06}
+        - {conviction: wealth, weight: 0.03}
+        - {conviction: reputation, weight: 0.05}
+        - {conviction: scholastics, weight: 0.03}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: community, weight: 0.05}
+        - {conviction: doctrine, weight: 0.04}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.08}
+        - {conviction: love, weight: 0.04}
+        - {conviction: stewardship, weight: 0.08}
       cultural_label: valorian_court
       self_other_initial: -0.10
     goals: null  # [GAP]
     arc_trajectory: "Canonical Crown Captain per sim continuity §1.2. Royal Assassination Fuse target (Arc F Eliminated → Lenneth Widow Regent)."
+    affiliations:  # ED-IN-0293: King (Crown); head diverges: privately sympathizes with Restoration, thinks the Thread may be real, does not act (extract :460): einhir_restoration 2, thread_truth 1 under orthodoxy 3
+      solmund_orthodoxy: 3
+      thread_truth: 1
+      einhir_restoration: 2
+      altonian_civics: 1
     source: faction_canon_v30 §Crown
     notes: "TS 28 per character_canon — no threshold crossing. Honor enters via valorian_court cultural template."
 
@@ -370,10 +629,28 @@ characters:
       primary:
         - {conviction: doctrine, weight: 0.50}
         - {conviction: stability, weight: 0.20}
+        - {conviction: virtue, weight: 0.08}
+        - {conviction: honour, weight: 0.05}
+        - {conviction: liberty, weight: 0.02}
+        - {conviction: justice, weight: 0.05}
+        - {conviction: wealth, weight: 0.03}
+        - {conviction: reputation, weight: 0.05}
+        - {conviction: scholastics, weight: 0.04}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: community, weight: 0.05}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.02}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.05}
       cultural_label: ecclesiastical
       self_other_initial: 0.00
     goals: null  # [GAP]
     arc_trajectory: null  # [GAP]
+    affiliations:  # ED-IN-0293: Confessor (Church > Holy See), sincerely devout; head diverges: his arc is a head holding the forbidden belief (extract :462): thread_truth 1 under orthodoxy 5; Einhir 0, opposed (a considered rejection, IN-63)
+      solmund_orthodoxy: 5
+      thread_truth: 1
+      einhir_restoration: 0
+      altonian_civics: 1
     source: faction_canon_v30 §Church
     notes: "Canonical per engine/params/bg/core.md L233. Agent in Crown Inner Circle via Father Gustav Linder."
 
@@ -396,9 +673,28 @@ characters:
     certainty: 3
     stats: null  # [GAP]
     convictions:
-      primary: null  # [GAP: no conviction data in canon — off-board]
+      primary:  # ED-IN-0293: was null ([GAP: no conviction data in canon — off-board]); all fifteen authored
+        - {conviction: virtue, weight: 0.08}
+        - {conviction: honour, weight: 0.06}
+        - {conviction: liberty, weight: 0.03}
+        - {conviction: justice, weight: 0.04}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.04}
+        - {conviction: scholastics, weight: 0.03}
+        - {conviction: stability, weight: 0.10}
+        - {conviction: individuality, weight: 0.03}
+        - {conviction: community, weight: 0.06}
+        - {conviction: doctrine, weight: 0.03}
+        - {conviction: happiness, weight: 0.06}
+        - {conviction: family, weight: 0.20}
+        - {conviction: love, weight: 0.20}
+        - {conviction: stewardship, weight: 0.06}
     goals: null  # [GAP]
     arc_trajectory: "Off-board diplomatic asset. Elske Loyalty stat drives Laskaris PROTECTIVE behavior. Return arc possible."
+    affiliations:  # ED-IN-0293: Valorian princess (Crown > Royal Family) married into Altonia: family/love lead; leans Altonian by marriage (civics 2) but Valorian-born, so not toward the conquest Altonia wants; orthodoxy 2 by birth
+      solmund_orthodoxy: 2
+      einhir_restoration: 1
+      altonian_civics: 2
     source: faction_canon_v30 §Crown
     notes: "Royal Assassination Fuse — not a direct target but her safety drives Alexios's behavior."
 
@@ -416,9 +712,28 @@ characters:
     coherence: null  # [GAP]
     stats: null  # [GAP]
     convictions:
-      primary: null  # [GAP: "Conviction emergence window Seasons 1–8" per ED-618 — convictions develop during play]
+      primary:  # ED-IN-0293: was null (GAP: convictions emerge in play, window Seasons 1–8, ED-618); all fifteen authored, near-flat
+        - {conviction: virtue, weight: 0.05}
+        - {conviction: honour, weight: 0.05}
+        - {conviction: liberty, weight: 0.05}
+        - {conviction: justice, weight: 0.05}
+        - {conviction: wealth, weight: 0.05}
+        - {conviction: reputation, weight: 0.05}
+        - {conviction: scholastics, weight: 0.05}
+        - {conviction: stability, weight: 0.07}
+        - {conviction: individuality, weight: 0.05}
+        - {conviction: community, weight: 0.05}
+        - {conviction: doctrine, weight: 0.05}
+        - {conviction: happiness, weight: 0.05}
+        - {conviction: family, weight: 0.08}
+        - {conviction: love, weight: 0.05}
+        - {conviction: stewardship, weight: 0.05}
     goals: null  # [GAP]
     arc_trajectory: "Arc E Bereaved Father (Royal Assassination Fuse target). Conviction emergence window Seasons 1–8 (ED-618)."
+    affiliations:  # ED-IN-0293: heir apparent (Crown > Royal Family), convictions left by canon to emerge in play: near-flat vector, nominal orthodoxy
+      solmund_orthodoxy: 2
+      einhir_restoration: 1
+      altonian_civics: 1
     source: faction_canon_v30 §Crown
     notes: "Heir apparent. Convictions intentionally undefined at game start — emerge during play."
 
@@ -438,10 +753,27 @@ characters:
       primary:
         - {conviction: justice, weight: 0.45}
         - {conviction: liberty, weight: 0.25}
+        - {conviction: virtue, weight: 0.05}
+        - {conviction: honour, weight: 0.04}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.03}
+        - {conviction: scholastics, weight: 0.12}
+        - {conviction: stability, weight: 0.04}
+        - {conviction: individuality, weight: 0.03}
+        - {conviction: community, weight: 0.08}
+        - {conviction: doctrine, weight: 0.06}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.08}
+        - {conviction: love, weight: 0.04}
+        - {conviction: stewardship, weight: 0.06}
       cultural_label: valorian_court
       self_other_initial: -0.20
     goals: ["Einhir revival through Crown authority", "Caste dismantlement through royal decree"]
     arc_trajectory: "Arc D The Avenger. If Almud eliminated (Arc F): becomes Widow Regent. Pro-Restoration — institutional revivalist, allied with Yrsa Vossen."
+    affiliations:  # ED-IN-0293: Queen (Crown > Royal Family); sympathizes with Restoration Movement (allied with Yrsa Vossen): einhir_restoration 5 + justice/liberty carry it; archivist (scholastics)
+      solmund_orthodoxy: 1
+      einhir_restoration: 5
+      altonian_civics: 1
     source: npc_character_analyses §2, faction_canon_v30 §Crown
     notes: "Queen Lenneth Almqvist. Archivist by training. PP-685 §2.3 ecclesiastical profile was misattribution. Lenneth archive awakened Torsvald's TS (character_analyses_infill §5)."
 
@@ -460,10 +792,28 @@ characters:
     convictions:
       primary:
         - {conviction: liberty, weight: 0.30}
+        - {conviction: virtue, weight: 0.02}
+        - {conviction: honour, weight: 0.03}
+        - {conviction: justice, weight: 0.04}
+        - {conviction: wealth, weight: 0.04}
+        - {conviction: reputation, weight: 0.04}
+        - {conviction: scholastics, weight: 0.10}
+        - {conviction: stability, weight: 0.08}
+        - {conviction: individuality, weight: 0.06}
+        - {conviction: community, weight: 0.03}
+        - {conviction: doctrine, weight: 0.02}
+        - {conviction: happiness, weight: 0.03}
+        - {conviction: family, weight: 0.02}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.03}
       cultural_label: valorian_court
       self_other_initial: 0.00
     goals: null  # [GAP]
     arc_trajectory: "Sole inner-circle contact to settlement-layer intelligence brokers. Truth 3 (lowest in Inner Circle)."
+    affiliations:  # ED-IN-0293: Spymaster (Crown > Inner Circle), Truth 3, lowest of the circle: all three low; Utility .30 stays dropped
+      solmund_orthodoxy: 1
+      einhir_restoration: 1
+      altonian_civics: 1
     source: faction_canon_v30 §Crown sub-Organizations
 
   - id: NPC-034
@@ -483,10 +833,27 @@ characters:
       primary:
         - {conviction: doctrine, weight: 0.60}
         - {conviction: stability, weight: 0.20}
+        - {conviction: virtue, weight: 0.05}
+        - {conviction: honour, weight: 0.05}
+        - {conviction: liberty, weight: 0.02}
+        - {conviction: justice, weight: 0.04}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.04}
+        - {conviction: scholastics, weight: 0.04}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: community, weight: 0.03}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.02}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.03}
       cultural_label: ecclesiastical
       self_other_initial: 0.00
     goals: null  # [GAP]
     arc_trajectory: "Dual-loyalty NPC — Himlensendt's agent inside Crown Inner Circle. Truth 5 (highest)."
+    affiliations:  # ED-IN-0293: Himlensendt's agent (Church > Holy See) seated in Crown > Inner Circle, Truth 5: orthodoxy at ceiling; the Church side of his dual loyalty dominates
+      solmund_orthodoxy: 5
+      einhir_restoration: 1
+      altonian_civics: 1
     source: faction_canon_v30 §Crown sub-Organizations
 
   - id: NPC-035
@@ -504,10 +871,28 @@ characters:
     convictions:
       primary:
         - {conviction: stability, weight: 0.60}
+        - {conviction: virtue, weight: 0.04}
+        - {conviction: honour, weight: 0.12}
+        - {conviction: liberty, weight: 0.02}
+        - {conviction: justice, weight: 0.03}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.03}
+        - {conviction: scholastics, weight: 0.02}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: community, weight: 0.05}
+        - {conviction: doctrine, weight: 0.03}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.03}
+        - {conviction: love, weight: 0.03}
+        - {conviction: stewardship, weight: 0.05}
       cultural_label: lowenritter_military
       self_other_initial: -0.10
     goals: null  # [GAP]
     arc_trajectory: "Pre-designated allegiance to Almud personally. His removal triggers Löwenritter Autonomy escalation toward Split."
+    affiliations:  # ED-IN-0293: Royal Guard Captain (Crown > Inner Circle; liaison to Crown > Löwenritter, whose goal is military security and stability), sworn to Almud personally (honour .12)
+      solmund_orthodoxy: 2
+      einhir_restoration: 1
+      altonian_civics: 1
     source: faction_canon_v30 §Crown sub-Organizations
 
   - id: NPC-036
@@ -525,10 +910,28 @@ characters:
     convictions:
       primary:
         - {conviction: stability, weight: 0.60}
+        - {conviction: virtue, weight: 0.03}
+        - {conviction: honour, weight: 0.10}
+        - {conviction: liberty, weight: 0.02}
+        - {conviction: justice, weight: 0.03}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.04}
+        - {conviction: scholastics, weight: 0.03}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: community, weight: 0.05}
+        - {conviction: doctrine, weight: 0.03}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.03}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.05}
       cultural_label: valorian_court
       self_other_initial: 0.00
     goals: null  # [GAP]
     arc_trajectory: null  # [GAP]
+    affiliations:  # ED-IN-0293: Royal Marshal (Crown > Inner Circle), no further text: nominal orthodoxy; Einhir, Altonia low
+      solmund_orthodoxy: 2
+      einhir_restoration: 1
+      altonian_civics: 1
     source: faction_canon_v30 §Crown sub-Organizations
 
   - id: NPC-037
@@ -546,10 +949,28 @@ characters:
     convictions:
       primary:
         - {conviction: stability, weight: 0.60}
+        - {conviction: virtue, weight: 0.03}
+        - {conviction: honour, weight: 0.04}
+        - {conviction: liberty, weight: 0.02}
+        - {conviction: justice, weight: 0.04}
+        - {conviction: wealth, weight: 0.10}
+        - {conviction: reputation, weight: 0.04}
+        - {conviction: scholastics, weight: 0.05}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: community, weight: 0.03}
+        - {conviction: doctrine, weight: 0.03}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.03}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.04}
       cultural_label: valorian_court
       self_other_initial: 0.00
     goals: null  # [GAP]
     arc_trajectory: null  # [GAP]
+    affiliations:  # ED-IN-0293: Lord Treasurer (Crown > Inner Circle), no further text: nominal orthodoxy; Einhir, Altonia low
+      solmund_orthodoxy: 2
+      einhir_restoration: 1
+      altonian_civics: 1
     source: faction_canon_v30 §Crown sub-Organizations
     notes: "Crown Lord Treasurer. Cardinal Reichard STRUCK."
 
@@ -575,10 +996,27 @@ characters:
       primary:
         - {conviction: doctrine, weight: 0.60}
         - {conviction: stability, weight: 0.20}
+        - {conviction: virtue, weight: 0.05}
+        - {conviction: honour, weight: 0.05}
+        - {conviction: liberty, weight: 0.02}
+        - {conviction: justice, weight: 0.12}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.04}
+        - {conviction: scholastics, weight: 0.03}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: community, weight: 0.03}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.02}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.03}
       cultural_label: ecclesiastical
       self_other_initial: 0.00
     goals: null  # [GAP]
     arc_trajectory: null  # [GAP]
+    affiliations:  # ED-IN-0293: Cardinal Justice over the Inquisition (Church > Cardinal of Justice); office goal: finding heretical (Einhir-revivalist) activity: doctrine .60, justice .12, orthodoxy 5; einhir_restoration 0, opposed (a considered rejection, IN-63)
+      solmund_orthodoxy: 5
+      einhir_restoration: 0
+      altonian_civics: 1
     source: faction_canon_v30 §Church
     notes: "Cardinal Justice. Per Jordan 2026-05-08."
 
@@ -598,10 +1036,28 @@ characters:
       primary:
         - {conviction: scholastics, weight: 0.35}
         - {conviction: doctrine, weight: 0.25}
+        - {conviction: virtue, weight: 0.06}
+        - {conviction: honour, weight: 0.04}
+        - {conviction: liberty, weight: 0.04}
+        - {conviction: justice, weight: 0.04}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.04}
+        - {conviction: stability, weight: 0.08}
+        - {conviction: individuality, weight: 0.03}
+        - {conviction: community, weight: 0.04}
+        - {conviction: happiness, weight: 0.03}
+        - {conviction: family, weight: 0.02}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.04}
       cultural_label: ecclesiastical
       self_other_initial: -0.10
     goals: null  # [GAP]
     arc_trajectory: "Scholar's Dilemma — TS exposure via archive work."
+    affiliations:  # ED-IN-0293: Cardinal for Temperance (Church > Cardinal of Temperance, archives): orthodoxy 4; Scholar's Dilemma, protects Thread-significant texts (extract :464), so thread_truth 1, in strain
+      solmund_orthodoxy: 4
+      thread_truth: 1
+      einhir_restoration: 1
+      altonian_civics: 1
     source: faction_canon_v30 §Church
     notes: "NPC-051 ('Klapp') references in arcs (Klapp Combat, Klapp Thread, etc.) refer to this character's surname, not a separate NPC."
 
@@ -621,10 +1077,27 @@ characters:
       primary:
         - {conviction: doctrine, weight: 0.50}
         - {conviction: stability, weight: 0.30}
+        - {conviction: virtue, weight: 0.05}
+        - {conviction: honour, weight: 0.08}
+        - {conviction: liberty, weight: 0.02}
+        - {conviction: justice, weight: 0.04}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.03}
+        - {conviction: scholastics, weight: 0.02}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: community, weight: 0.04}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.02}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.05}
       cultural_label: ecclesiastical
       self_other_initial: 0.00
     goals: null  # [GAP]
     arc_trajectory: null  # [GAP]
+    affiliations:  # ED-IN-0293: Cardinal for Fortitude (Church > Cardinal of Fortitude, the military arm): orthodoxy at ceiling
+      solmund_orthodoxy: 5
+      einhir_restoration: 1
+      altonian_civics: 1
     source: faction_canon_v30 §Church
 
 # ═══════════════════════════════════════════════════════════════
@@ -644,9 +1117,28 @@ characters:
     coherence: null  # [GAP]
     stats: null  # [GAP]
     convictions:
-      primary: null  # [GAP]
+      primary:  # ED-IN-0293: was null ([GAP]); all fifteen authored
+        - {conviction: virtue, weight: 0.06}
+        - {conviction: honour, weight: 0.05}
+        - {conviction: liberty, weight: 0.20}
+        - {conviction: justice, weight: 0.30}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.04}
+        - {conviction: scholastics, weight: 0.05}
+        - {conviction: stability, weight: 0.03}
+        - {conviction: individuality, weight: 0.04}
+        - {conviction: community, weight: 0.20}
+        - {conviction: doctrine, weight: 0.08}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.04}
+        - {conviction: love, weight: 0.03}
+        - {conviction: stewardship, weight: 0.10}
     goals: null  # [GAP]
     arc_trajectory: null  # [GAP]
+    affiliations:  # ED-IN-0293: RM visible leadership beside Yrsa Vossen (no authored vector; read off the RM reformist profile); goal: Einhir revival while evading capture: Einhir restoration 5, liberty .20
+      solmund_orthodoxy: 1
+      einhir_restoration: 5
+      altonian_civics: 1
     source: faction_canon_v30 §11 (caste/organization hierarchy)
     notes: "RESOLVED: distinct character from NPC-013 Aldric Tormann (Church Cardinal Prudence). Aldric Hann is RM visible leadership. Two different factions, different surnames."
 
@@ -667,10 +1159,27 @@ characters:
       primary:
         - {conviction: justice, weight: 0.30}
         - {conviction: stability, weight: 0.50}
+        - {conviction: virtue, weight: 0.04}
+        - {conviction: honour, weight: 0.05}
+        - {conviction: liberty, weight: 0.10}
+        - {conviction: wealth, weight: 0.05}
+        - {conviction: reputation, weight: 0.06}
+        - {conviction: scholastics, weight: 0.06}
+        - {conviction: individuality, weight: 0.04}
+        - {conviction: community, weight: 0.04}
+        - {conviction: doctrine, weight: 0.04}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.02}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.04}
       cultural_label: hafenmark_procedural
       self_other_initial: -0.30
     goals: ["Sovereign Authority Doctrine", "Constitutional framework supersedes Church jurisdiction", "Hafenmark parliamentary sovereignty"]
     arc_trajectory: "Six foil pairings per npc_foils_v30: Almud ↔ Baralta (Custodian/Claimant); Lenneth ↔ Baralta (campaign-defining); Baralta ↔ Vaynard (total opposition)."
+    affiliations:  # ED-IN-0293: Duchess; head diverges: a divine-right claimant behind the procedural frame, faith privatised, Church to be subordinated (extract :465): orthodoxy 2; Einhir 0 (total opposition to Vaynard); parliamentary, not imperial, so altonian_civics 0 (both considered rejections, IN-63)
+      solmund_orthodoxy: 2
+      einhir_restoration: 0
+      altonian_civics: 0
     source: npc_behavior_v30 §2.3, npc_character_analyses §6, faction_canon_v30
 
   - id: NPC-052
@@ -690,10 +1199,28 @@ characters:
       primary:
         - {conviction: justice, weight: 0.35}
         - {conviction: individuality, weight: 0.30}
+        - {conviction: virtue, weight: 0.03}
+        - {conviction: honour, weight: 0.05}
+        - {conviction: liberty, weight: 0.08}
+        - {conviction: wealth, weight: 0.03}
+        - {conviction: reputation, weight: 0.08}
+        - {conviction: scholastics, weight: 0.04}
+        - {conviction: stability, weight: 0.02}
+        - {conviction: community, weight: 0.10}
+        - {conviction: doctrine, weight: 0.06}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.03}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.04}
       cultural_label: lowenritter_military
       self_other_initial: -0.40
     goals: ["Einhir cultural revival at any cost", "Varfell military expansion", "Dismantle post-war caste order", "Intelligence-first approach to RM"]
     arc_trajectory: "Von Lohengramm programme — revolutionary expulsion. If eliminated, Maret Uln succession (PP-486)."
+    affiliations:  # ED-IN-0293: Duke of Varfell, Einhir revival at any cost: einhir_restoration 5; head diverges: holds Thread knowledge no faction can be trusted with (extract :466): thread_truth 2, individuality .30 against the Jarls' community
+      solmund_orthodoxy: 1
+      thread_truth: 2
+      einhir_restoration: 5
+      altonian_civics: 1
     source: npc_behavior_v30 §2.4, npc_character_analyses_infill §5, faction_canon_v30
     notes: "PP-650 STRUCK on Cultural Reformation + VTM associations; character active. Reinhardt von Lohengramm archetype per Jordan."
 
@@ -713,7 +1240,24 @@ characters:
       primary:
         - {conviction: stability, weight: 0.60}
         - {conviction: liberty, weight: 0.20}
+        - {conviction: virtue, weight: 0.04}
+        - {conviction: honour, weight: 0.10}
+        - {conviction: justice, weight: 0.03}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.03}
+        - {conviction: scholastics, weight: 0.02}
+        - {conviction: individuality, weight: 0.03}
+        - {conviction: community, weight: 0.05}
+        - {conviction: doctrine, weight: 0.03}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.02}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.04}
     arc_trajectory: "Drives Autonomy track (Loyal→Restless→Autonomous→Split). Brandt succession if removed. Konrad von Jungingen archetype — if Autonomy track reaches Split, the Tannenberg parallel completes."
+    affiliations:  # ED-IN-0293: Grandmaster of the Löwenritter (the Crown's army; a top-level roster faction here); order goal: military security and stability (stability .60); head diverges: "Almud is faltering, I must be ready to act" (extract :468), liberty .20 drives the Autonomy track away from the Crown
+      solmund_orthodoxy: 2
+      einhir_restoration: 1
+      altonian_civics: 1
     source: behavior_v30 §2.5
 
   - id: NPC-071
@@ -729,6 +1273,23 @@ characters:
       primary:
         - {conviction: stability, weight: 0.40}
         - {conviction: scholastics, weight: 0.30}
+        - {conviction: virtue, weight: 0.03}
+        - {conviction: honour, weight: 0.04}
+        - {conviction: liberty, weight: 0.05}
+        - {conviction: justice, weight: 0.10}
+        - {conviction: wealth, weight: 0.03}
+        - {conviction: reputation, weight: 0.03}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: community, weight: 0.03}
+        - {conviction: doctrine, weight: 0.02}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.02}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.03}
+    affiliations:  # ED-IN-0293: legal advisor to Baralta (Hafenmark > Inner Council), the constitutional line: all three low
+      solmund_orthodoxy: 1
+      einhir_restoration: 1
+      altonian_civics: 1
     source: behavior_v30 §2.16
 
   - id: NPC-072
@@ -743,6 +1304,24 @@ characters:
     convictions:
       primary:
         - {conviction: stability, weight: 0.70}
+        - {conviction: virtue, weight: 0.03}
+        - {conviction: honour, weight: 0.08}
+        - {conviction: liberty, weight: 0.02}
+        - {conviction: justice, weight: 0.03}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.03}
+        - {conviction: scholastics, weight: 0.02}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: community, weight: 0.04}
+        - {conviction: doctrine, weight: 0.02}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.03}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.04}
+    affiliations:  # ED-IN-0293: Military Commander (Hafenmark > Inner Council), no further text: nominal orthodoxy
+      solmund_orthodoxy: 2
+      einhir_restoration: 1
+      altonian_civics: 1
     source: behavior_v30 §2.16
 
   - id: NPC-073
@@ -757,6 +1336,24 @@ characters:
     convictions:
       primary:
         - {conviction: stewardship, weight: 0.70}
+        - {conviction: virtue, weight: 0.03}
+        - {conviction: honour, weight: 0.06}
+        - {conviction: liberty, weight: 0.03}
+        - {conviction: justice, weight: 0.04}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.02}
+        - {conviction: scholastics, weight: 0.02}
+        - {conviction: stability, weight: 0.04}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: community, weight: 0.10}
+        - {conviction: doctrine, weight: 0.04}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.05}
+        - {conviction: love, weight: 0.02}
+    affiliations:  # ED-IN-0293: Senior Jarl (Varfell > Jarl Council), einhir_traditional: Einhir restoration 4; Church low
+      solmund_orthodoxy: 1
+      einhir_restoration: 4
+      altonian_civics: 1
     source: behavior_v30 §2.17
 
   - id: NPC-074
@@ -771,6 +1368,24 @@ characters:
     convictions:
       primary:
         - {conviction: community, weight: 0.70}
+        - {conviction: virtue, weight: 0.03}
+        - {conviction: honour, weight: 0.05}
+        - {conviction: liberty, weight: 0.03}
+        - {conviction: justice, weight: 0.04}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.04}
+        - {conviction: scholastics, weight: 0.04}
+        - {conviction: stability, weight: 0.02}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: doctrine, weight: 0.05}
+        - {conviction: happiness, weight: 0.03}
+        - {conviction: family, weight: 0.06}
+        - {conviction: love, weight: 0.03}
+        - {conviction: stewardship, weight: 0.05}
+    affiliations:  # ED-IN-0293: Skald-Chief (Varfell > Jarl Council), keeper of Einhir tradition: Einhir restoration 5
+      solmund_orthodoxy: 1
+      einhir_restoration: 5
+      altonian_civics: 1
     source: behavior_v30 §2.17
 
   - id: NPC-075
@@ -789,14 +1404,32 @@ characters:
       primary:
         - {conviction: stewardship, weight: 0.60}
         - {conviction: justice, weight: 0.20}
+        - {conviction: virtue, weight: 0.04}
+        - {conviction: honour, weight: 0.06}
+        - {conviction: liberty, weight: 0.02}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.02}
+        - {conviction: scholastics, weight: 0.04}
+        - {conviction: stability, weight: 0.08}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: community, weight: 0.05}
+        - {conviction: doctrine, weight: 0.04}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.02}
+        - {conviction: love, weight: 0.02}
     goals: ["The work. Only the work."]
     arc_trajectory: "Arc C: death-Mending seals one Gap permanently (RS +5). 31 years at the Southernmost. Chernobyl liquidator archetype."
+    affiliations:  # ED-IN-0293: Second Senior Warden, 31 years at the Southernmost, einhir_traditional: inner tradition + thread truth; Einhir 2 by tradition
+      inner_tradition: 3
+      thread_truth: 4
+      einhir_restoration: 2
+      altonian_civics: 1
     source: arc_expansion_v30
 
   - id: NPC-080
     first_name: Vidar
     last_name: Haldorsen
-    faction: Löwenritter
+    faction: Löwenritter (Riskbreakers)
     role: Riskbreaker (doctrine-following — foil to Torsvald)
     status: proposed
     ts: 0
@@ -807,13 +1440,30 @@ characters:
       primary:
         - {conviction: honour, weight: 0.60}
         - {conviction: stability, weight: 0.20}
+        - {conviction: virtue, weight: 0.05}
+        - {conviction: liberty, weight: 0.02}
+        - {conviction: justice, weight: 0.08}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.04}
+        - {conviction: scholastics, weight: 0.02}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: community, weight: 0.04}
+        - {conviction: doctrine, weight: 0.04}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.02}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.03}
     arc_trajectory: "Completes missions Sigrid aborts. TS 0 = can't see Thread collateral. Pre-germ-theory surgeon archetype — perceptual limitation, not malice. Cannot see Thread collateral (TS 0)."
+    affiliations:  # ED-IN-0293: doctrine-following Riskbreaker (Crown > Löwenritter > Riskbreakers); office goal: safety of the royal family and monarch, preventing corruption and threats (honour .60, stability .20, justice .08); TS 0, no thread_truth; orthodoxy 3
+      solmund_orthodoxy: 3
+      einhir_restoration: 1
+      altonian_civics: 1
     source: proposed
 
   - id: NPC-081
     first_name: Uta
     last_name: Falkenrath
-    faction: Hafenmark (Inner Council #4)
+    faction: Hafenmark (Inner Council)  # seat #4 (the unquoted `#4)` had eaten the paren)
     role: Commune Representative (Banneret)
     status: proposed
     cultural_label: hafenmark_procedural
@@ -822,13 +1472,30 @@ characters:
       primary:
         - {conviction: community, weight: 0.50}
         - {conviction: stability, weight: 0.30}
+        - {conviction: virtue, weight: 0.04}
+        - {conviction: honour, weight: 0.03}
+        - {conviction: liberty, weight: 0.06}
+        - {conviction: justice, weight: 0.08}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.04}
+        - {conviction: scholastics, weight: 0.02}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: doctrine, weight: 0.02}
+        - {conviction: happiness, weight: 0.03}
+        - {conviction: family, weight: 0.03}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.06}
     arc_trajectory: "IC seat #4. Succession candidate if Baralta falls (popular mandate). Niklaus von Flüe archetype — Swiss mediator at the Diet of Stans (1481), commune voice against city power-politics."
+    affiliations:  # ED-IN-0293: commune representative, seat #4 (Hafenmark > Inner Council), a mediator: nominal orthodoxy
+      solmund_orthodoxy: 2
+      einhir_restoration: 1
+      altonian_civics: 1
     source: proposed
 
   - id: NPC-082
     first_name: Njal
     last_name: Torberg
-    faction: Varfell (Jarl Council #5)
+    faction: Varfell (Jarl Council)  # seat #5 (the unquoted `#5)` had eaten the paren)
     role: Military Jarl
     status: proposed
     cultural_label: einhir_traditional
@@ -837,7 +1504,24 @@ characters:
       primary:
         - {conviction: community, weight: 0.60}
         - {conviction: honour, weight: 0.20}
+        - {conviction: virtue, weight: 0.03}
+        - {conviction: liberty, weight: 0.05}
+        - {conviction: justice, weight: 0.05}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.03}
+        - {conviction: scholastics, weight: 0.02}
+        - {conviction: stability, weight: 0.02}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: doctrine, weight: 0.04}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.04}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.04}
     arc_trajectory: "Fights for Einhir, not Vaynard. Fracture line if Vaynard's ego diverges from cause. Einar Thambarskelfir archetype — conditional loyalty to the cause, not the person."
+    affiliations:  # ED-IN-0293: Military Jarl, seat #5 (Varfell > Jarl Council), fights for Einhir, not Vaynard: Einhir restoration 5
+      solmund_orthodoxy: 1
+      einhir_restoration: 5
+      altonian_civics: 1
     source: proposed
 
   - id: NPC-083
@@ -852,7 +1536,25 @@ characters:
     convictions:
       primary:
         - {conviction: stability, weight: 0.80}
+        - {conviction: virtue, weight: 0.03}
+        - {conviction: honour, weight: 0.04}
+        - {conviction: liberty, weight: 0.02}
+        - {conviction: justice, weight: 0.04}
+        - {conviction: wealth, weight: 0.03}
+        - {conviction: reputation, weight: 0.04}
+        - {conviction: scholastics, weight: 0.02}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: community, weight: 0.03}
+        - {conviction: doctrine, weight: 0.03}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.02}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.05}
     arc_trajectory: "Switchboard NPC at geographic chokepoint (5 adjacencies). Matilda of Tuscany archetype — governed critical territory at the intersection of Pope and Emperor."
+    affiliations:  # ED-IN-0293: Crown governor of Ehrenfeld at the Pope-and-Emperor junction (Matilda archetype, the Pope's side): orthodoxy 3
+      solmund_orthodoxy: 3
+      einhir_restoration: 1
+      altonian_civics: 1
     source: proposed
 
   - id: NPC-084
@@ -866,7 +1568,25 @@ characters:
     convictions:
       primary:
         - {conviction: community, weight: 0.70}
+        - {conviction: virtue, weight: 0.04}
+        - {conviction: honour, weight: 0.03}
+        - {conviction: liberty, weight: 0.03}
+        - {conviction: justice, weight: 0.06}
+        - {conviction: wealth, weight: 0.04}
+        - {conviction: reputation, weight: 0.02}
+        - {conviction: scholastics, weight: 0.02}
+        - {conviction: stability, weight: 0.03}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: doctrine, weight: 0.03}
+        - {conviction: happiness, weight: 0.03}
+        - {conviction: family, weight: 0.03}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.08}
     arc_trajectory: "Internal opposition to Feldhaus. Pushes Mandate over Wealth. Katharina Schütz Zell archetype — guild-class communal advocate."
+    affiliations:  # ED-IN-0293: Zunftmeisterin (Guilds > Guild), Mandate over Wealth: nominal orthodoxy
+      solmund_orthodoxy: 2
+      einhir_restoration: 1
+      altonian_civics: 1
     source: proposed
 
   - id: NPC-085
@@ -881,7 +1601,24 @@ characters:
       primary:
         - {conviction: liberty, weight: 0.50}
         - {conviction: scholastics, weight: 0.30}
+        - {conviction: virtue, weight: 0.02}
+        - {conviction: honour, weight: 0.03}
+        - {conviction: justice, weight: 0.10}
+        - {conviction: wealth, weight: 0.05}
+        - {conviction: reputation, weight: 0.04}
+        - {conviction: stability, weight: 0.03}
+        - {conviction: individuality, weight: 0.04}
+        - {conviction: community, weight: 0.04}
+        - {conviction: doctrine, weight: 0.02}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.02}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.02}
     arc_trajectory: "Defends guild autonomy against Crown regulation. Bartolus de Saxoferrato archetype."
+    affiliations:  # ED-IN-0293: Guild advocate for guild autonomy against the Crown: all three low
+      solmund_orthodoxy: 1
+      einhir_restoration: 1
+      altonian_civics: 1
     source: proposed
 
   - id: NPC-086
@@ -895,7 +1632,25 @@ characters:
     convictions:
       primary:
         - {conviction: scholastics, weight: 0.60}
+        - {conviction: virtue, weight: 0.03}
+        - {conviction: honour, weight: 0.03}
+        - {conviction: liberty, weight: 0.03}
+        - {conviction: justice, weight: 0.04}
+        - {conviction: wealth, weight: 0.04}
+        - {conviction: reputation, weight: 0.03}
+        - {conviction: stability, weight: 0.05}
+        - {conviction: individuality, weight: 0.03}
+        - {conviction: community, weight: 0.03}
+        - {conviction: doctrine, weight: 0.02}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.02}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.03}
     arc_trajectory: "Has data proving southern sea route is physically blocked, not politically. Undermines Varfell conspiracy narrative. Fra Mauro archetype."
+    affiliations:  # ED-IN-0293: Guild surveyor whose data undercuts the Varfell narrative: empirical, all three low; Utility .20 stays dropped
+      solmund_orthodoxy: 1
+      einhir_restoration: 1
+      altonian_civics: 1
     source: proposed
 
   - id: NPC-087
@@ -910,7 +1665,24 @@ characters:
       primary:
         - {conviction: community, weight: 0.50}
         - {conviction: justice, weight: 0.30}
+        - {conviction: virtue, weight: 0.05}
+        - {conviction: honour, weight: 0.03}
+        - {conviction: liberty, weight: 0.10}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.02}
+        - {conviction: scholastics, weight: 0.10}
+        - {conviction: stability, weight: 0.02}
+        - {conviction: individuality, weight: 0.03}
+        - {conviction: doctrine, weight: 0.06}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.03}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.08}
     arc_trajectory: "Illegal Einhir education in southwest. Player discovery → protect/report/leverage. Josef Dobrovský archetype."
+    affiliations:  # ED-IN-0293: hedge-school teacher (RM); goal: Einhir revival (illegal Einhir education) while evading capture: Einhir restoration 4, community .50, liberty .10, reputation .02
+      solmund_orthodoxy: 1
+      einhir_restoration: 4
+      altonian_civics: 1
     source: proposed
 
   - id: NPC-088
@@ -925,7 +1697,24 @@ characters:
       primary:
         - {conviction: liberty, weight: 0.60}
         - {conviction: justice, weight: 0.20}
+        - {conviction: virtue, weight: 0.04}
+        - {conviction: honour, weight: 0.04}
+        - {conviction: wealth, weight: 0.02}
+        - {conviction: reputation, weight: 0.02}
+        - {conviction: scholastics, weight: 0.10}
+        - {conviction: stability, weight: 0.02}
+        - {conviction: individuality, weight: 0.04}
+        - {conviction: community, weight: 0.06}
+        - {conviction: doctrine, weight: 0.08}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.02}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.03}
     arc_trajectory: "Propagation mechanism. Hand-copied manuscripts increase Church AP. Lollard copyist archetype — each copy takes weeks, possession is a heresy charge, no press to seize."
+    affiliations:  # ED-IN-0293: copyist of suppressed Einhir texts (RM); goal: Einhir revival while evading capture (each copy a heresy charge): Einhir restoration 5, liberty .60, reputation .02
+      solmund_orthodoxy: 1
+      einhir_restoration: 5
+      altonian_civics: 1
     source: proposed
 
   - id: NPC-089
@@ -939,7 +1728,25 @@ characters:
     convictions:
       primary:
         - {conviction: stability, weight: 0.30}
+        - {conviction: virtue, weight: 0.08}
+        - {conviction: honour, weight: 0.10}
+        - {conviction: liberty, weight: 0.02}
+        - {conviction: justice, weight: 0.05}
+        - {conviction: wealth, weight: 0.06}
+        - {conviction: reputation, weight: 0.12}
+        - {conviction: scholastics, weight: 0.04}
+        - {conviction: individuality, weight: 0.04}
+        - {conviction: community, weight: 0.03}
+        - {conviction: doctrine, weight: 0.04}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.03}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.04}
     arc_trajectory: "Decides whether Altonia probes, presses, or invades. Sincere imperialist. Basil Boioannes archetype."
+    affiliations:  # ED-IN-0293: Katepano; faction aim: Altonia generically wants to conquer Valoria, and she decides probe/press/invade as a sincere imperialist: Altonian civics 5, reputation .12, honour .10, wealth .06; Valorian Church and Einhir low; Identity .50 stays dropped
+      solmund_orthodoxy: 1
+      einhir_restoration: 1
+      altonian_civics: 5
     source: proposed
 
   - id: NPC-090
@@ -953,7 +1760,25 @@ characters:
     convictions:
       primary:
         - {conviction: stability, weight: 0.80}
+        - {conviction: virtue, weight: 0.03}
+        - {conviction: honour, weight: 0.05}
+        - {conviction: liberty, weight: 0.02}
+        - {conviction: justice, weight: 0.05}
+        - {conviction: wealth, weight: 0.10}
+        - {conviction: reputation, weight: 0.03}
+        - {conviction: scholastics, weight: 0.03}
+        - {conviction: individuality, weight: 0.02}
+        - {conviction: community, weight: 0.02}
+        - {conviction: doctrine, weight: 0.02}
+        - {conviction: happiness, weight: 0.02}
+        - {conviction: family, weight: 0.02}
+        - {conviction: love, weight: 0.02}
+        - {conviction: stewardship, weight: 0.02}
     arc_trajectory: "Enforces ancient trade treaties. Counterparty to Solberg. Book of the Eparch archetype."
+    affiliations:  # ED-IN-0293: Kommerkiarios; faction aim: Altonia generically wants to conquer Valoria, pressed here through the ancient trade treaties (stability .80, wealth .10): Altonian civics 4, the instrument rather than the decider
+      solmund_orthodoxy: 1
+      einhir_restoration: 1
+      altonian_civics: 4
     source: proposed
 
 
