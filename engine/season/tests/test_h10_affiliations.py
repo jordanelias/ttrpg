@@ -111,7 +111,7 @@ def test_h10_intensity_and_name_are_refused_off_the_roster_and_scale():
             cast.conviction_of({"affiliations": {a: bad}})
     with pytest.raises(Unspecified):
         cast.conviction_of({"affiliations": {"threadwork": 3}})
-    assert cast.conviction_of({"affiliations": {a: 0}}) == {}
+    assert cast.conviction_of({"affiliations": {a: 0}}) == {a: 0}   # IN-63: a zero is a held position
     assert cast.conviction_of({}) == {}
 
 

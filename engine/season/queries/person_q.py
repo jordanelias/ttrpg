@@ -449,8 +449,11 @@ def conviction_after_crisis(p: Person, among: frozenset | None = None) -> dict:
         by that fraction needs a rounding rule nobody has chosen.
       * DESTROYED -- nothing else is held: `x` drops, leaving the zero vector (no affiliation
         held, a real state).
-    "Held" is a present key: `conviction_map` drops a zero, so every key is held at 1 or more
-    [ASSUMPTION: the draft's "held above threshold" is read as held at all].
+    "Held" is an intensity ABOVE 0 (IN-63): `conviction_map` keeps an explicit 0, a considered
+    rejection, so a present key is not a held one. A rejected pole is never in crisis, never an heir
+    a fold lands on, and never counts as "something else is held" for the destroyed branch; a fold
+    or a destruction leaves the other rejected poles as they were. [ASSUMPTION: the draft's "held
+    above threshold" is read as held at all, i.e. above 0.]
 
     ⚠ UNDER THE SHARED COLUMN THE FOLD'S DIRECTION IS INTENSITY'S, NOT CONTENT'S. The draft gives
     the direction as *"which affiliation was scarred"*, but `affiliation_engagement`'s shared column
@@ -476,19 +479,21 @@ def conviction_after_crisis(p: Person, among: frozenset | None = None) -> dict:
         return p.conviction
     held = dict(p.conviction)
     scar = p.scar or {}
-    crisis = [x for x in sorted(held) if scar.get(x, 0) >= SCAR_CRISIS_AT
+    # "Held" is above 0 (IN-63): a stored 0 is a rejection, which no count can crisis.
+    crisis = [x for x in sorted(held) if held[x] > 0 and scar.get(x, 0) >= SCAR_CRISIS_AT
               and (among is None or x in among)]
     if not crisis:
         return p.conviction
     # `crisis` and `heirs` are in name order and `max` keeps the FIRST of equal keys, so a tie on
     # intensity goes to the lowest name.
     x = max(crisis, key=held.__getitem__)
-    heirs = [y for y in sorted(held) if y != x and frozenset((x, y)) in _aff.INCOMPATIBLE]
+    heirs = [y for y in sorted(held)
+             if y != x and held[y] > 0 and frozenset((x, y)) in _aff.INCOMPATIBLE]
     if heirs:
         y = max(heirs, key=held.__getitem__)
         held[y] = min(AFFILIATION_CEILING, held[y] + held[x])
         del held[x]
-    elif len(held) == 1:
+    elif not any(v > 0 for k, v in held.items() if k != x):
         del held[x]
     else:                            # RESTABILISE -- not built (above)
         return p.conviction

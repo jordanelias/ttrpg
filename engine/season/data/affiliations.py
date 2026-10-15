@@ -40,10 +40,13 @@ def conviction_map(raw, where: str = "Person.conviction") -> dict:
 
     Every key must be rostered and every value an int inside `[AFFILIATION_FLOOR,
     AFFILIATION_CEILING]` -- a float or a bool is refused, not rounded, because an intensity is a
-    held fixed-point int on the ruled 0-5 spine. A zero intensity is DROPPED: an affiliation nobody
-    holds is absent, not 0 (the `Person.scar` precedent), so an unaffiliated person's `repr` carries
-    `conviction={}` whatever its source wrote. Keys are sorted, so two sources holding the same
-    vector produce the same `repr` and the same `World.content_hash`."""
+    held fixed-point int on the ruled 0-5 spine. A ZERO IS KEPT (IN-63): on `affiliation_roster`'s
+    0-5 scale 0 is the rejected pole -- a position the person has considered and holds against --
+    which is not the same as an affiliation never considered (an absent key). Every reader of the
+    mapping counts a position HELD only above 0 (`queries/person_q.py::_held`, `confliction`,
+    `conviction_after_crisis`), so a stored 0 strains nothing, is scarred by nothing and receives no
+    crisis. A person holding nothing authored still reads `conviction={}`. Keys are sorted, so two
+    sources holding the same vector produce the same `repr` and the same `World.content_hash`."""
     if raw is None:
         return {}
     if not isinstance(raw, dict):
@@ -61,8 +64,7 @@ def conviction_map(raw, where: str = "Person.conviction") -> dict:
                 needs=f"an int in [{AFFILIATION_FLOOR}, {AFFILIATION_CEILING}]",
                 law="references/descriptor_registry.yaml: affiliation_roster.scale -- the intensity "
                     "spine is the absorbed Truth track's 0-5 (ED-IN-0075), held as an int")
-        if val:
-            out[name] = val
+        out[name] = val
     return out
 
 
