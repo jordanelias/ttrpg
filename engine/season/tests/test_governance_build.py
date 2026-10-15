@@ -2114,15 +2114,17 @@ def test_13d_iii_a_minted_row_may_not_reuse_a_standing_seat_id(_realm13, monkeyp
 
 
 def test_13d_iii_a_seat_may_not_list_its_own_holder_among_its_obligees(monkeypatch):
-    """`_req_oblige` clause 3's rule at world-gen: the occupant is not his own seat's obligee. The
-    one row that authors obligees is given its own holder as one; the realm must refuse, naming the
-    seat. (The real file's obligee is another person -- `_realm13` builds it.)"""
+    """`_req_oblige` clause 3's rule at world-gen: the occupant is not his own seat's obligee.
+    `off_restoration_leader` (one of the two rows that author obligees; the other is FA-04's
+    `off_king`, probed in `test_fa04_oblige_purview.py`) is given its own holder as one; the realm
+    must refuse, naming the seat. (The real file's obligee is another person -- `_realm13` builds
+    it.)"""
     from ..harness import populated
 
     real = populated.OFFICES_SEATS
     withs = [r for r in real if r.get("obligees")]
-    assert len(withs) == 1, [r["id"] for r in withs]
-    row = withs[0]
+    assert [r["id"] for r in withs] == ["off_king", "off_restoration_leader"], [r["id"] for r in withs]
+    row = next(r for r in withs if r["id"] == "off_restoration_leader")
     assert row["holder"] not in row["obligees"], "the real row already lists its holder"
     rows = [dict(r, obligees=list(r["obligees"]) + [r["holder"]]) if r is row else r for r in real]
     monkeypatch.setattr(populated, "OFFICES_SEATS", rows)
@@ -2211,7 +2213,7 @@ def test_13d_iii_a_cap_keeps_exactly_the_seats_whose_holders_it_kept():
     from ..data.rosters import OFFICES_SEATS
     from ..harness.run_cases import load_cases
 
-    row = next(r for r in OFFICES_SEATS if r.get("obligees"))
+    row = next(r for r in OFFICES_SEATS if r["id"] == "off_restoration_leader")
     (obligee,) = row["obligees"]
     ids = [c["id"] for c in load_cases("NPC")]
     cap = ids.index(row["holder"]) + 1
@@ -2226,14 +2228,14 @@ def test_13d_iii_a_cap_keeps_exactly_the_seats_whose_holders_it_kept():
 
 
 def test_13d_iii_an_obligee_not_in_the_cast_refuses_and_a_cap_skips_it(_realm13, monkeypatch):
-    """`if opid not in w.persons: raise` (the obligee pass). The one row that authors obligees is
-    given one no case carries; the full cast refuses it, naming the obligee. (The capped arm, where
-    the same shape is a silent skip, is `test_13d_iii_a_cap_keeps_exactly_the_seats...` above.)
+    """`if opid not in w.persons: raise` (the obligee pass). `off_restoration_leader`'s row is
+    given an obligee no case carries; the full cast refuses it, naming the obligee. (The capped arm,
+    where the same shape is a silent skip, is `test_13d_iii_a_cap_keeps_exactly_the_seats...` above.)
     CONTROL: the real obligee builds in `_realm13`. Mutation: delete the raise."""
     from ..harness import populated
 
     real = populated.OFFICES_SEATS
-    row = next(r for r in real if r.get("obligees"))
+    row = next(r for r in real if r["id"] == "off_restoration_leader")
     assert world_q.establishment_of(_realm13, row["id"]) == ["p_npc_041"]
     _populated_rows(monkeypatch, [dict(r, obligees=["NPC-998"]) if r is row else r for r in real])
     with pytest.raises(Unspecified) as red:
@@ -2355,15 +2357,18 @@ def test_13d_iii_the_six_rows_no_loop_seat_stands_for_are_minted_from_the_row_al
 
 
 def test_13d_iii_an_authored_obligee_serves_the_seat_with_no_term(_realm13):
-    """`offices.yaml`'s one non-empty `obligees` (`off_restoration_leader` -> NPC-041) is an `oblige`
-    Tenure, so `establishment_of` -- the Query that replaced the `establishment` field -- answers
-    it. No term: a seed has no opening act to declare one (`04 §B.8`'s `term?`, lawful null)."""
+    """`offices.yaml`'s two non-empty `obligees` (`off_king` -> NPC-070, FA-04; and
+    `off_restoration_leader` -> NPC-041) are each an `oblige` Tenure, so `establishment_of` -- the
+    Query that replaced the `establishment` field -- answers them. No term: a seed has no opening
+    act to declare one (`04 §B.8`'s `term?`, lawful null)."""
     w = _realm13
     withs = [r for r in _seat_rows() if r.get("obligees")]
-    assert [r["id"] for r in withs] == ["off_restoration_leader"], withs
-    assert world_q.establishment_of(w, "off_restoration_leader") == ["p_npc_041"]
-    t = next(t for t in w.tenures if t.kind == "oblige" and t.object == "off_restoration_leader")
-    assert t.term is None and t.live
+    assert [r["id"] for r in withs] == ["off_king", "off_restoration_leader"], withs
+    for row_id, sworn in (("off_king", "p_npc_070"), ("off_restoration_leader", "p_npc_041")):
+        seat = w._office_census["authored"][row_id]   # `off_king` is a row id; its loop-built seat is `off_npc_020`
+        assert world_q.establishment_of(w, seat) == [sworn]
+        t = next(t for t in w.tenures if t.kind == "oblige" and t.object == seat)
+        assert t.term is None and t.live
 
 
 def test_13d_iii_the_remit_overlay_replaces_the_default_and_leaves_only_the_unruled_act(_realm13):

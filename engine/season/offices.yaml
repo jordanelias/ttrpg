@@ -188,7 +188,7 @@ seats:
     conferral:  null   # hereditary succession; see the header's translation note
     revocation: null   # no rung above the realm
     holder:     "NPC-020"
-    obligees:   []
+    obligees:   ["NPC-070"]   # FA-04 (ED-IN-0293 (7)): the Grand Master's oath makes the Löwenritter a subfaction of the Crown; her `release` of it is the Split
     source:     "systems/world/reference/worldbuilding_v30.md:24"
     note:       "[LIVE]. draft `titles:` row 1 (r2 03 §A.15 row 1)."
 

@@ -71,9 +71,9 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # RE-PINNED at v9 IN-71 (B-X), A MECHANISM MOVE DECLARED: `crisis_weights` scales `doctrine` by religious
 # conviction (H-188). The BUILD hash is equal (no stored vector moved); one and two seasons moved,
 # a0e82b82... -> cc650fcf... and dc561dd5... -> 8f4d2088...; `BASE_EVENTS` re-recorded with them.
-BASE_HASHES = {0: "472050b8782e0a64b0e9390a5eaecbc1",
-               1: "cc650fcf8fef3b6829640b88ecb4555f",
-               2: "8f4d20881fe26526ccd133367a30ad2b"}
+BASE_HASHES = {0: "33c20c4c49a5734b70844f53ad3e3aec",
+               1: "9095b9210b2929094ebe109671ffa232",
+               2: "10b1abab56dc48f2addd67da0d317abc"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -88,8 +88,11 @@ BASE_HASHES = {0: "472050b8782e0a64b0e9390a5eaecbc1",
 # candidates (6624 -> 7309, 17285 -> 20220).
 # RE-RECORDED at v9 IN-71 with `BASE_HASHES`: the doctrine coupling re-ranks the devout and the lukewarm
 # apart (7309 -> 7186, 20220 -> 19797).
-BASE_EVENTS = {1: (7186, "f846bcafee4760af204f44bbc7128683348bee2b05505acbe6f7d648953fe9d2"),
-               2: (19797, "8356004607b5966746d9a7f7fe257d9f258bc83d2e3f4abf0bb090edd9a3e0dd")}
+# RE-PINNED at v9 FA-04 (B-X), A DATA MOVE DECLARED: the Grand Master's oath is one seeded `oblige` Tenure
+# (`off_king`'s `obligees: ["NPC-070"]`), so the build hash moves and the log gains its one build-time event.
+# Was 472050b8... / cc650fcf... / 8f4d2088... (build, one, two seasons); events 7186 -> 7187, 19797 -> 19798.
+BASE_EVENTS = {1: (7187, "0f1fe566e3852e929a662d0480a7138b90329e482453c75c0188551dcce9a364"),
+               2: (19798, "62771792983f191d658d515c58b44e048286231312fb7b3d0163a8398fbe2dbc")}
 
 
 def _digest(w) -> tuple:
