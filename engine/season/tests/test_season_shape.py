@@ -3485,8 +3485,9 @@ def test_t2_one_rebind_moves_score_and_gate(monkeypatch):
 
 def test_t2_align_kind_reads_the_one_emitter_and_a_deed_key_needs_an_emitted_kind(monkeypatch):
     """`align_kind(kind, axis)` = an authored `deed:<kind>` cell, else `align` of the ONE verb that
-    emits the kind, else 0. Nothing calls it yet (the regard function's primitive); this is its
-    contract, on a throwaway table -- no `deed:` cell is authored in `rosters.yaml`."""
+    emits the kind, else 0. Its contract, on a throwaway table; a shared kind reads its authored
+    `deed:` cell where one exists (v9 IN-58 authors `deed:person.died` and `deed:body.changed`) and 0
+    otherwise."""
     from ..data.verbs import DEED_PREFIX, EMITTED_KINDS, KIND_VERB, _load_alignment, align_kind
 
     # The rule recomputed from the table independently of `_derive_kind_verb`.
@@ -3505,8 +3506,13 @@ def test_t2_align_kind_reads_the_one_emitter_and_a_deed_key_needs_an_emitted_kin
             assert align_kind(kind, axis) == align(verb, axis), (kind, verb, axis)
             checked += bool(align(verb, axis))
     assert checked >= 1, "no single-emitter kind has a non-zero cell, so equality proved nothing"
+    unauthored = 0
     for kind in shared:
-        assert align_kind(kind, sorted(PURSUIT_AXES)[0]) == 0.0
+        for axis in PURSUIT_AXES:
+            cell = data_verbs.ALIGNMENT.get(axis, {}).get(DEED_PREFIX + kind)
+            assert align_kind(kind, axis) == (0.0 if cell is None else cell), (kind, axis)
+            unauthored += cell is None
+    assert unauthored >= 1, "every shared kind is celled on every axis: the 0 branch went unobserved"
     assert align_kind("t2_no_such_kind", sorted(PURSUIT_AXES)[0]) == 0.0
 
     kind, verb = next((k, vb) for k, vb in sorted(KIND_VERB.items())
