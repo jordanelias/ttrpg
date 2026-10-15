@@ -9496,7 +9496,7 @@
   "P36": {
    "id": "P36",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 30 candidates were OFFERED from the computed option set and only 37 of 45 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['challenge', 'migrate', 'move', 'petition', 'utter', 'work'] -- 6 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 30 candidates were OFFERED from the computed option set and only 37 of 45 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['challenge', 'migrate', 'move', 'petition', 'surveil'] -- 5 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
    "kind": null,
    "section": "S17",
    "title": "a choice branches three ways",
@@ -9912,7 +9912,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (65a885c67d9d...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (e57dab1d3a66...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -11194,12 +11194,12 @@
  "_trace_counts": {
   "STEP": 7192,
   "BARRIER": 1895,
-  "DECISION": 1914,
-  "QUERY": 29413,
-  "WRITE": 15462,
-  "EVENT": 15257,
-  "ACT": 98,
-  "CLAIM": 1707,
+  "DECISION": 1915,
+  "QUERY": 29405,
+  "WRITE": 15448,
+  "EVENT": 15246,
+  "ACT": 97,
+  "CLAIM": 1697,
   "GAP": 85,
   "NOTE": 153
  },

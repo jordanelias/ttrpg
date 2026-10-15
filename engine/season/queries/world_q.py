@@ -1695,37 +1695,51 @@ def attention_key(w: World, p: Person) -> Callable[[Question], tuple]:
          `p`'s pursuits (`deed_valence(to_axes(crisis_weights(p, scar_weight_shift)), c)`, as
          `deeds_judged` scores it), ordered by -|valence|;
       3. the `need` question -- the standing ambition question, PLAN `W5`'s quiet-season fallback;
-      4. the rest.
+      4. the rest -- AND every question whose claim records HIS OWN act (`Claim.doer == p.id`,
+         stamped by WITNESS), whatever its referent: the echo of his own deed is not news.
 
     `(order[source], q.id)` -- the key before IN-57 -- stays the final tiebreak, so within a tier
     the old order holds; magnitudes inside tiers 0-1 are not ranked (LIMIT). A source added later
     takes its tier from its referents, so `question_sources`' order is not edited.
 
-    ⚠ READS ONLY `p`'S OWN STATE: his edges, ledger and pursuits, the stores those edges name (a
-    proposition's subject, a seat's rung and its descendants) and the scar-shift arm
-    (`Fixtures.scar_weight_shift`, the value `choose` projects with). Never the log, never another
-    person, never how important an event is (intent: `07_DYNAMICS.md` §7).
-    [ASSUMPTION; medium; Jordan to correct -- the five membership tests. The entry's tier 0 put the
-    `need` question first; that arm (measured, `build_realm(0)`, two seasons: events 21,735 ->
-    15,738, `news.told` 14 -> 7; first-season chained told claims 0 at every seed 0..39; corpus
-    executed verbs 21 -> 12) starved news, so the standing question ranks after the salient claims.
-    Revert: the entry's tier 0 literal (`need` in tier 0); before IN-57, the `(source, id)` key.]"""
+    ⚠ READS ONLY THE QUESTION AND `p`'S OWN STATE: his edges, ledger (a held claim's `doer` among it)
+    and pursuits, the stores those edges name (a proposition's subject, a seat's rung and its
+    descendants) and the scar-shift arm (`Fixtures.scar_weight_shift`, the value `choose` projects
+    with). Never the log, never another person, never how important an event is (intent:
+    `07_DYNAMICS.md` §7).
+    [ASSUMPTION; medium; Jordan to correct -- the five membership tests and the own-act screen.
+    The entry's tier 0 put the `need` question first; that arm (measured, `build_realm(0)`, two
+    seasons: events 21,735 -> 15,738, `news.told` 14 -> 7; first-season chained told claims 0 at
+    every seed 0..39; corpus executed verbs 21 -> 12) starved news, so the standing question ranks
+    after the salient claims. Without the own-act screen a person answered the echo of his own act
+    on his ambition's subject -- chiefly its refusal (`release.refused`, `migrate.refused`,
+    `travel.blocked`) -- and acted on that subject again: 80% of first claim questions were his own
+    act's echo (34% before IN-57), and the corpus's R3 propagation fell 46 -> 43 of 46 NPC cases and
+    97 -> 91 of 97 ARC cases; the screen restores 46/46 and 97/97. Revert: the screen off (B), the
+    entry's tier 0 literal (`need` in tier 0), or before IN-57 the `(source, id)` key.]"""
     order = {src: i for i, src in enumerate(QUESTION_SOURCES)}
     aims = {w.propositions[pid].subject for pid in ambitions(w, p)} - {None}
     mine = own_purview(w, p)
     lazy: dict = {}
 
-    def valence(about: str) -> float:
-        if not lazy:
+    def _held(about: str):
+        if "held" not in lazy:
             lazy["held"] = {c.id: c for c in p.ledger}
+        return lazy["held"].get(about)
+
+    def valence(about: str) -> float:
+        if "axis_w" not in lazy:
             lazy["axis_w"] = to_axes(crisis_weights(p, w.fixtures.get("scar_weight_shift")))
-        c = lazy["held"].get(about)
+        c = _held(about)
         return deed_valence(lazy["axis_w"], c) if c is not None else 0.0
 
     def key(q: Question) -> tuple:
         tie = (order[q.source], q.id)
         if q.source == "need":
             return (3, 0.0) + tie
+        held = _held(q.about)
+        if held is not None and held.doer == p.id:
+            return (4, 0.0) + tie
         if any(r in aims for r in q.referents):
             return (0, 0.0) + tie
         if any(r in mine for r in q.referents):
@@ -1838,8 +1852,9 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
 
     # v9 IN-57 (RS-22, A-26): THE ORDER IS A TIERED READ OF THE PERSON'S OWN STATE
     # (`attention_key`, above): a claim about an ambition's subject, then office and tenure, then
-    # convictions, then the standing `need` question, then the rest. Before IN-57 the whole key was `(order[q.source], q.id)`, and for `claim_landed`
-    # `q.id` is `f"q:claim:{c.id}"`, a CONTENT HASH, so which question a person answered was
+    # convictions, then the standing `need` question, then the rest, where a claim recording his
+    # own act (`Claim.doer`) also sorts. Before IN-57 the whole key was `(order[q.source], q.id)`,
+    # and for `claim_landed` `q.id` is `f"q:claim:{c.id}"`, a CONTENT HASH, so which question a person answered was
     # settled by lexicographic order over hashes (MEASURED over 89 corpus baselines, `wd_extra.py`:
     # the leading source shared with another question in 801 of 1,068 deliberations; `H-54`). That
     # pair is now the final tiebreak only. The sort still destroys the ledger's append order.

@@ -493,7 +493,12 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # act, *"may be wrong ... by its OWN mechanism -- a person does not witness themselves"*,
         # and this formula is layer (3)'s. An Event no person acted (`actor_of` is `None`) has no
         # performer, so every witness of it refracts.
-        refracting = bool(gain) and actor_of(w, e) != pid
+        actor = actor_of(w, e)
+        refracting = bool(gain) and actor != pid
+        # v9 IN-57 (ED-IN-0294): `Claim.doer` -- the witness's own id when the Event is HIS OWN act,
+        # stamped on the event-kind, `obs`, `seen` and content deposits below (never on a told copy).
+        # He knows his own act, so it leaks nothing a channel withholds; `attention_key` reads it.
+        doer = pid if actor == pid else None
         # `H-201`: THE ACT THE EVENT-KIND AND `seen` DEPOSITS REPORT, AND HOW THIS WITNESS WEIGHS
         # THEIR OWN LEDGER -- `dissents`' act-level prior, *could the actor have done this, on what
         # I hold*. Read once per (witness, Event), only when refracting, so the control reads
@@ -528,7 +533,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
             # pair. Unstamped, every claim would read `round = 0` and a later round's deposit would
             # sort BEFORE the deliberation that should see it — Q2 dead inside the season, which is
             # the exact shape of the bug that kept Q2 dead across seasons before the `tick - 1` fix.
-            c = Claim(cid, pid, subj, e.kind, True, w.tick, src, conf, "own", self.round)
+            c = Claim(cid, pid, subj, e.kind, True, w.tick, src, conf, "own", self.round,
+                      doer=doer)
             if refracting:
                 c = _refract(c, p, channel, gain, prior_act, prior_weigh)
             # `W4`. THE DEPOSIT EMITS, AND THAT IS WHAT GIVES A DECAY AN ANTECEDENT.
@@ -646,7 +652,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 # increasing, so no two ids collide.
                 oc = Claim(H(w.world_seed, w.tick, pid, f"obs:{e.id}:{len(seen_obs)}"),
                            pid, o.subject, o.predicate, o.value, w.tick, src, conf, "own",
-                           self.round)   # `U2`: see the deposit above
+                           self.round, doer=doer)   # `U2`: see the deposit above
                 if refracting:
                     oc = _refract(oc, p, channel, gain)
                 w.write("claim_ledger", token,
@@ -669,7 +675,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
         if _seen is not None:
             sc = Claim(H(w.world_seed, w.tick, pid, f"seen:{e.id}"),
                        pid, _seen[0], SEEN_PREDICATE, _seen[1], w.tick, src, conf, "own",
-                       self.round)   # `U2`: see the first deposit
+                       self.round, doer=doer)   # `U2`: see the first deposit
             if refracting:
                 sc = _refract(sc, p, channel, gain, prior_act, prior_weigh)
             w.write("claim_ledger", token,
@@ -698,7 +704,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 continue
             dc = Claim(H(w.world_seed, w.tick, pid, f"content:{e.id}:{rec.id}"),
                        pid, rec.id, pred, said, w.tick, src, conf,
-                       "own", self.round)   # `U2`: see the first deposit
+                       "own", self.round, doer=doer)   # `U2`: see the first deposit
             if refracting:
                 dc = _refract(dc, p, channel, gain)
             w.write("claim_ledger", token,

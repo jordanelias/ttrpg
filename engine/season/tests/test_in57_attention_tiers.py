@@ -1,7 +1,8 @@
 """v9 IN-57 (RS-22, A-26) -- `world_q.attention_key`: the order a person answers his questions in is
 a tiered read of his own state (0 a claim about an ambition's subject, 1 own tenure or seat purview,
 2 a deed claim with nonzero valence under his pursuits, by -|valence|, 3 the standing `need`
-question, 4 the rest), `(order[source], q.id)` the final tiebreak.
+question, 4 the rest -- and every claim whose `doer` is the asker, the echo of his own act),
+`(order[source], q.id)` the final tiebreak.
 
 What each test proves, and the failure it can observe:
 
@@ -12,6 +13,11 @@ What each test proves, and the failure it can observe:
       `test_a_tier_1_claim_precedes_the_need_question` -- the `need` question is PLAN `W5`'s
       quiet-season fallback: answered when nothing salient landed, after a salient claim when one
       did. The entry's tier 0 (need first) reddens the second.
+  (a3) `test_a_claim_recording_his_own_act_ranks_after_a_foreign_occasioned_claim` -- arm C's
+      falsifier: a claim whose `doer` is the asker (his only tier-0 candidate) sorts after a
+      foreign-occasioned tier-1 claim and the `need` question; a control asserts it is first with
+      `doer` cleared. `test_witness_stamps_doer_exactly_on_the_holders_own_acts` is the stamp's
+      own falsifier over a live season (disable the stamp and it reddens).
   (b) `test_the_five_tiers_order_against_the_old_key` -- one person holding a question in every
       tier, ids chosen so the old key orders them otherwise; tier 2 by -|valence|.
   (c) `test_the_same_question_keys_differently_for_two_persons_with_different_state` and
@@ -26,6 +32,7 @@ What each test proves, and the failure it can observe:
 from __future__ import annotations
 
 import copy
+import dataclasses
 
 import pytest
 
@@ -36,8 +43,10 @@ from ..harness import populated as POP
 from ..loop import driver as DRV
 from ..queries import world_q
 from ..queries.person_q import deed_valence
-from ..state.carriers import Claim, Event, Person, Proposition, Question, StateChange, Tenure
+from ..state.carriers import (Claim, Event, Person, Proposition, Question, StateChange,
+                              Tenure)
 from ..state.containment import home_of, parent_of
+from ..state.attribution import causing_act
 from ..state.ids import ROOT
 from ..state.world import World
 
@@ -125,6 +134,41 @@ def test_a_tier_1_claim_precedes_the_need_question():
     assert [key(q)[0] for q in qs] == [1, NEED_TIER]
 
 
+def _echo_world():
+    """p_a: an ambition about X (whose claims reach him through a `hold` on X) and a tenure on Y.
+    He holds a claim about X recording HIS OWN refused act (`doer` = p_a, as WITNESS stamps it) --
+    his only tier-0 candidate -- and a claim about Y recording p_q's act. The own-act claim's id
+    sorts first."""
+    p, w = _ambitious()
+    _admits_x(p)
+    p.tenures.append(Tenure("t_y", p.id, "Y", "hold", 0))
+    w.persons["p_q"] = Person("p_q", "p_q")
+    own = _claim("c_000", p.id, "X", "release.refused", True)
+    p.ledger += [dataclasses.replace(own, doer=p.id), _claim("c_zzz", p.id, "Y", "speech.made", True)]
+    return p, w
+
+
+def test_a_claim_recording_his_own_act_ranks_after_a_foreign_occasioned_claim():
+    """C's falsifier: the echo of his own act is not news. Without `doer` the own-act claim about
+    his ambition's subject is tier 0 and answered first (the control below); with it, the claim
+    sorts with the rest, after the foreign-occasioned claim (tier 1) and the `need` question."""
+    p, w = _echo_world()
+    qs = world_q.questions_for(w, p)
+    assert [q.about for q in qs] == ["c_zzz", "o_x", "c_000"], [q.id for q in qs]
+    assert [world_q.attention_key(w, p)(q)[0] for q in qs] == [1, NEED_TIER, 4]
+    p.ledger[-2] = dataclasses.replace(p.ledger[-2], doer=None)
+    assert world_q.questions_for(w, p)[0].about == "c_000", (
+        "control: without `doer` the own-act claim about X is tier 0 and first")
+
+
+def test_another_persons_doer_is_not_the_screen():
+    """The key compares `doer` with the ASKER: a claim stamped with someone else's id (which
+    WITNESS never writes, asserted below on a live season) does not demote it."""
+    p, w = _echo_world()
+    p.ledger[-2] = dataclasses.replace(p.ledger[-2], doer="p_q")
+    assert world_q.questions_for(w, p)[0].about == "c_000"
+
+
 def test_the_five_tiers_order_against_the_old_key():
     p, w = _ambitious()
     _admits_x(p)
@@ -179,6 +223,7 @@ PROBES = (
     Question("q:claim:c7", "claim_landed", ("p_a",), "c7"),
     Question("q:claim:c6", "claim_landed", ("elsewhere",), "c6"),
     Question("q:need:o_x", "need", ("X",), "o_x"),
+    Question("q:claim:c5", "claim_landed", ("X",), "c5"),   # his own act's echo: tier 4, not 0
 )
 
 
@@ -221,6 +266,7 @@ def test_one_person_keys_alike_under_worlds_differing_only_outside_his_own_state
     p.pursuits = dict(PURSUITS)
     p.tenures.append(Tenure("t_obj", p.id, "obj_t", "hold", 0))
     p.ledger.append(_claim("c7", p.id, p.id, _deed_kinds(PURSUITS)[1], True))
+    p.ledger.append(dataclasses.replace(_claim("c5", p.id, "X", "release.refused", True), doer=p.id))
     w2 = _other_state(w)
     p2 = w2.persons[p.id]
     assert len(w2.log) > len(w.log) and len(w2.persons) > len(w.persons)   # the worlds differ
@@ -270,19 +316,49 @@ def season_1():
         POP.run(1, 0, w=w)
     finally:
         DRV.questions_for = real
-    return seen
+    return seen, w
+
+
+def test_witness_stamps_doer_exactly_on_the_holders_own_acts(season_1):
+    """`Claim.doer` is set on a held claim IF AND ONLY IF the Event it records was caused by the
+    holder's own act -- read here the long way, through the log (`claim.deposited` -> the recorded
+    Event -> `causing_act`), which the key may not do and a test may. Never on a told copy, never
+    anyone's id but the holder's; asserts it asserted (stamped and unstamped both populated)."""
+    _, w = season_1
+    dep, ev = {}, {}
+    for e in w.log:
+        ev[e.id] = e
+        if e.kind == "claim.deposited":
+            for c in e.changes:
+                dep[c.subject] = [x for x in (e.causes or []) if x != ROOT]
+    stamped = unstamped = 0
+    for p in w.persons.values():
+        for c in p.ledger:
+            if c.id not in dep:
+                continue
+            own = any((a := causing_act(w, ev[x])) is not None and a.actor == p.id
+                      for x in dep[c.id] if x in ev)
+            assert c.doer in (None, p.id), (p.id, c)
+            assert (c.doer == p.id) == own, (p.id, c.id, c.predicate, c.doer, own)
+            if c.doer is not None:
+                assert c.source != "told_by" and not c.chain, c
+            stamped += c.doer is not None
+            unstamped += c.doer is None
+    # MEASURED at IN-57, `build_realm(0)`, one season: 1,652 of 5,238 held claims stamped.
+    assert stamped >= 1000 and unstamped >= 1000, (stamped, unstamped)
 
 
 def test_seed_0_season_1_each_person_answers_a_tier_0_or_1_question_first_where_he_has_one(
         season_1):
     checked = moved = 0
-    for pid, tiers, ids, old_ids in season_1:
+    for pid, tiers, ids, old_ids in season_1[0]:
         if not any(t <= 1 for t in tiers):
             continue
         checked += 1
         assert tiers[0] <= 1, (pid, list(zip(ids, tiers)))
         moved += ids[0] != old_ids[0]
-    # MEASURED at IN-57: 393 calls, 299 holding a tier-0/1 question, 100 of those first questions
-    # moved against the old key; first-question tiers {0: 52, 1: 247, 2: 1, 3 (need): 51}.
-    assert checked >= 200, checked
+    # MEASURED at IN-57 (with the own-act screen): 390 calls, 133 holding a tier-0/1 question, 80 of
+    # those first questions moved against the old key; first-question tiers {0: 28, 1: 105, 2: 1,
+    # 3 (need): 108, 4: 105}. Without the screen 299 calls held one: most were his own act's echo.
+    assert checked >= 100, checked
     assert moved >= 1, "control: the tiered key changed no person's first question"

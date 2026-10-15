@@ -347,6 +347,14 @@ class Claim:
     # it took the old positional slot of `teller`, and a stray string passed there would read as a
     # chain of one-character hops.
     chain: tuple = field(default=(), kw_only=True)
+    # `doer` (v9 IN-57, ED-IN-0294: Layer 1 amended by the user, `04` §B.9) -- the holder's own id
+    # when the claim records HIS OWN act, else `None`. WITNESS stamps it only where the witness is
+    # the actor (`loop/witness.py`, `pid == act.actor`) on the event-kind, `obs`, `seen` and content
+    # deposits, never on a told copy: a person always knows his own act, so it leaks nothing a
+    # channel withholds. Its reader is `queries/world_q.py::attention_key`, which sorts the echo of
+    # his own deed last -- it is not news. KEYWORD-ONLY, default `None`: every other construction
+    # (told copies, tests, fixtures) is untouched.
+    doer: Optional[str] = field(default=None, kw_only=True)
 
     @property
     def teller(self) -> Optional[str]:

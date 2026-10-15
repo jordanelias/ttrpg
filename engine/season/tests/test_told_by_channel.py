@@ -284,9 +284,9 @@ def test_15d_falsifier_the_realm_holds_hearsay_no_telling_minted(monkeypatch):
     # `told_by` is unchanged at seeds 0-9. The assertions below are unmoved.
     # ⚠ RE-PINNED SEED 18 -> 20 AT v9 IN-57, BY THE SAME RULE: the attention-tier key moved the act
     # mix and seed 18's first season minted no chained told claim (9 before). The same quantity over
-    # seeds 0-39, on the tree after: chained > 0 at seeds 20 (3), 25 (6), 28 (3), 32 (7); before,
-    # 18 (9), 20 (3), 25 (7), 28 (3). Seed 20 is the lowest with more than one. The assertions below
-    # are unmoved.
+    # seeds 0-39, on the tree after (the tiers with the own-act screen): chained > 0 at seeds 20 (3),
+    # 21 (7), 25 (13), 28 (3), 32 (7), 33 (7); before, 18 (9), 20 (3), 25 (7), 28 (3). Seed 20 is the
+    # lowest with more than one. The assertions below are unmoved.
     SEED = 20
 
     def told_by_count() -> tuple:

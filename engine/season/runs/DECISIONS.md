@@ -3,7 +3,7 @@
 Every branch the shape took that could have gone another way, with the alternatives
 it did not take. A decision nobody records is a decision nobody can audit.
 
-**1914 decisions taken, 70 distinct.**
+**1915 decisions taken, 70 distinct.**
 
 ### ordering 0 acts  ·  `S27/S32`  ·  taken 726x
 - **chose:** five strata, then a content-derived hash key over one global array  (726x)
@@ -27,8 +27,8 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - *not taken:* a clock that generates (forbidden)
 - *not taken:* a world-gen roster (S54 item 18 -- not a clock, not folded in)
 
-### ordering 1 acts  ·  `S27/S32`  ·  taken 40x
-- **chose:** five strata, then a content-derived hash key over one global array  (40x)
+### ordering 1 acts  ·  `S27/S32`  ·  taken 41x
+- **chose:** five strata, then a content-derived hash key over one global array  (41x)
 - *not taken:* completion order
 - *not taken:* per-container sort (voids the fold)
 - *not taken:* rank
@@ -39,8 +39,8 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'chronicle', 'post_remit'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
-### fan-out over 1 events  ·  `S28/S61`  ·  taken 24x
-- **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (20x)
+### fan-out over 1 events  ·  `S28/S61`  ·  taken 25x
+- **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (21x)
 - **chose:** mode=all_five over 6 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (4x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
 - *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'chronicle', 'post_remit'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
@@ -53,17 +53,17 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'chronicle', 'post_remit'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
-### ordering 2 acts  ·  `S27/S32`  ·  taken 12x
-- **chose:** five strata, then a content-derived hash key over one global array  (12x)
-- *not taken:* completion order
-- *not taken:* per-container sort (voids the fold)
-- *not taken:* rank
-
 ### fan-out over 166 events  ·  `S28/S61`  ·  taken 12x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (12x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
 - *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'chronicle', 'post_remit'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
+
+### ordering 2 acts  ·  `S27/S32`  ·  taken 11x
+- **chose:** five strata, then a content-derived hash key over one global array  (11x)
+- *not taken:* completion order
+- *not taken:* per-container sort (voids the fold)
+- *not taken:* rank
 
 ### site_harbour crossed the `bulk_shipping` floor  ·  `S12.1/S3-L5`  ·  taken 8x
 - **chose:** EMIT a witnessable Event; write no social row; produce no outcome  (8x)
@@ -84,12 +84,6 @@ it did not take. A decision nobody records is a decision nobody can audit.
 ### fan-out over 5 events  ·  `S28/S61`  ·  taken 5x
 - **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (4x)
 - **chose:** mode=all_five over 6 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (1x)
-- *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'chronicle', 'post_remit'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
-- *not taken:* total (S61's specified behaviour, and H-33's control arm)
-
-### fan-out over 2 events  ·  `S28/S61`  ·  taken 5x
-- **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (5x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
 - *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'chronicle', 'post_remit'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
@@ -119,6 +113,12 @@ it did not take. A decision nobody records is a decision nobody can audit.
 ### transfer by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 4x
 - **chose:** emit the refusal -- scarcity falls out of the fold  (4x)
 - *not taken:* raise (no Event, no witness, no arc)
+
+### fan-out over 2 events  ·  `S28/S61`  ·  taken 4x
+- **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (4x)
+- *not taken:* shard per rung (retired: made the parallelism claim unsound)
+- *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'chronicle', 'post_remit'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 45 events  ·  `S28/S61`  ·  taken 4x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (4x)
@@ -155,6 +155,10 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - *not taken:* completion order
 - *not taken:* per-container sort (voids the fold)
 - *not taken:* rank
+
+### migrate by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 3x
+- **chose:** emit the refusal -- scarcity falls out of the fold  (3x)
+- *not taken:* raise (no Event, no witness, no arc)
 
 ### fan-out over 94 events  ·  `S28/S61`  ·  taken 3x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (3x)
@@ -222,10 +226,6 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'chronicle', 'post_remit'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
-### work by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 2x
-- **chose:** emit the refusal -- scarcity falls out of the fold  (2x)
-- *not taken:* raise (no Event, no witness, no arc)
-
 ### fan-out over 6 events  ·  `S28/S61`  ·  taken 2x
 - **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (2x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
@@ -282,10 +282,6 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
 - *not taken:* raise (no Event, no witness, no arc)
 
-### migrate by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
-- **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
-- *not taken:* raise (no Event, no witness, no arc)
-
 ### challenge by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
 - **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
 - *not taken:* raise (no Event, no witness, no arc)
@@ -294,7 +290,11 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
 - *not taken:* raise (no Event, no witness, no arc)
 
-### fight by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
+### move by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
+- **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
+- *not taken:* raise (no Event, no witness, no arc)
+
+### surveil by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
 - **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
 - *not taken:* raise (no Event, no witness, no arc)
 
