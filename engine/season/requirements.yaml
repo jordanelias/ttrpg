@@ -417,6 +417,8 @@ rows:
       `False -> True`. The rise is IN-57's attention key ordering a person's questions by his own state instead of a hash, and the
       screen of his own act's echo (`Claim.doer?`, ED-IN-0294): without that screen R3 read 43 of 46 and 91 of 97. The status stays
       `met` (the bar is 96 %); the direction, toward "flips absorbed", is recorded for B-X's re-takes, which read against these.
+      CAVEAT (the /code-review of the B-W close): fewer distinct behaviours would also raise reconvergence by construction
+      (distinct executed signatures 136 -> 106, executed verbs 21 -> 17); no control separates 'flips absorbed' from 'less variety'.
       One run per arm, noise unmeasured.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [IN-10, IN-11, IN-13, FI-01, H-116, IN-50]
