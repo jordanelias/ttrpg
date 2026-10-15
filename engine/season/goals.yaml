@@ -19,7 +19,9 @@
 #               deed_doers    -> EXACTLY ONE of `against: <goal id>` | `engaging: <affiliation>`
 #                                | `kinds: [<deed kind>, ...]`
 #               orientation   -> no referent (mints no Proposition)
-#   stance:   optional, -1 or +1: the sign of the stance row each member takes toward the referent.
+#   stance:   optional, -1 or +1: the goal's side toward the referent. Each member's row is the creed's own
+#             (`cast.stance_from_loyalty` of the member's loyalty to the org), multiplied by this sign, so
+#             a member below indifference takes the opposite side (IN-68).
 #   pursuits: REQUIRED, at least one: `{<pursuit>: <weight > 0>}` -- the goal's lean over the
 #             canonical fifteen.
 #   derives:  optional `{from: <goal id>, kind: <goal_derivations member>}`. A body goal derives only

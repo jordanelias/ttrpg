@@ -1647,12 +1647,13 @@ def goal_referents(w: World, p: Person, prop) -> tuple:
     goal = _goals.goal(prop.id)
     if goal is None:
         return (prop.subject,)
-    return _goal_referents(w, p, goal, prop.subject, frozenset())
+    return _goal_referents(w, p, goal, prop, frozenset())
 
 
-def _goal_referents(w: World, p: Person, goal, subject, path: frozenset) -> tuple:
-    """`goal_referents` for a loaded `goal` whose Proposition's subject is `subject`; `path` the goal
-    ids on the way down. ⚠ `against:` NAMES ANOTHER GOAL, whose referents are themselves computed, and
+def _goal_referents(w: World, p: Person, goal, prop, path: frozenset) -> tuple:
+    """`goal_referents` for a loaded `goal` whose Proposition is `prop` (None if the world minted none);
+    `path` the goal ids on the way down. ⚠ `against:` NAMES ANOTHER GOAL, whose referents are themselves
+    computed, and
     the loader does not refuse a cycle among them (A against B, B against A): a goal met twice on the
     path yields `()` -- the looping goal has no referent -- so the read terminates. A target goal with
     no Proposition in the world has no subject: `person`/`rung` read `()` for it, the other kinds need
@@ -1660,10 +1661,13 @@ def _goal_referents(w: World, p: Person, goal, subject, path: frozenset) -> tupl
     if goal.id in path:
         return ()
     obj, kind = goal.object, goal.object["kind"]
+    subject = prop.subject if prop is not None else None
     if kind in ("person", "rung"):
         return (subject,) if subject is not None else ()
     if kind == "seat_holders":
-        seats = set(obj["seats"])
+        # The Office ids seeding recorded (`Proposition.scope`: a loop-built seat is not named by its
+        # `offices.yaml` id); a world that minted no scope reads the listed ids as Office ids.
+        seats = set(prop.scope) if prop is not None and prop.scope else set(obj["seats"])
         return tuple(dict.fromkeys(t.subject for t in w.tenures
                                    if t.kind == "hold" and t.live and t.object in seats
                                    and t.subject in w.persons))
@@ -1673,9 +1677,7 @@ def _goal_referents(w: World, p: Person, goal, subject, path: frozenset) -> tupl
     if "against" in obj:
         target = _goals.goal(obj["against"])
         if target is not None:
-            prop = w.propositions.get(target.id)
-            against = _goal_referents(w, p, target, prop.subject if prop is not None else None,
-                                      path | {goal.id})
+            against = _goal_referents(w, p, target, w.propositions.get(target.id), path | {goal.id})
     return deed_doers(p.ledger, obj, p.id, against)
 
 

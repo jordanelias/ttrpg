@@ -35,9 +35,9 @@ WHAT EACH MODE READS, AND WHETHER IT PLAYS A SEASON (each prints the answer in i
                the `--season` reading and the `--decisions` attribution counts under that arm.
 
   --control    ARM 0: every person's `pursuits` replaced by the realm-mean vector (the mean of the persons
-               who hold one). Goals unseeded and cohort temperaments off are further switches IN-68 and
-               SE-06 add; before they land the arm prints that those two are a no-op. Applies to
-               --persons, --decisions and --season.
+               who hold one) and goals unseeded (`build_realm(goals=False)`, IN-68). Cohort temperaments
+               off is a further switch SE-06 adds; before it lands the arm prints that it is a no-op.
+               Applies to --persons, --decisions and --season.
   --null       `data/verbs.py::alignment_at('uniform')` (H-66, `:1407-1414`: *"`uniform` IS THE CONTROL"*)
                bound for the reading and restored after. Under it the pursuit term is one number for every
                candidate, so a top attributed to `pursuit` is a defect of the attribution. Applies to
@@ -423,7 +423,7 @@ def _decider_total(r: dict) -> dict:
 
 
 def _build(seed: int, control: bool):
-    w = build_realm(seed)
+    w = build_realm(seed, goals=not control)
     if control:
         apply_control(w)
     return w
@@ -471,8 +471,8 @@ def main(argv=None) -> int:
     arm = "control: pursuits = realm mean" if a.control else (
         "null: alignment uniform" if a.null else "shipped")
     if a.control:
-        print("--control: goals unseeded and cohort temperaments off are NOT YET SWITCHES "
-              "(IN-68, SE-06): a no-op here; only the pursuits arm is applied")
+        print("--control: goals are unseeded (IN-68: `build_realm(goals=False)`; a no-op until "
+              "`goals.yaml` carries a row); cohort temperaments off is NOT YET A SWITCH (SE-06)")
     with (null_alignment() if a.null else contextlib.nullcontext()):
         if a.persons:
             if a.null:
