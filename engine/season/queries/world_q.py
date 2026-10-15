@@ -46,7 +46,9 @@ from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # the asker-first module (which may not import this one; this edge runs the other way).
 from .person_q import content_said, intent_named, ledger_names
 # v9 IN-57: `attention_key`'s tier 2 scores a deed claim by `deed_valence`, one owner per factor.
-from .person_q import deed_valence, projected_axes
+from .person_q import crisis_weights, deed_valence, projected_axes
+# v9 IN-69: the one cosine (`cast.loyalty` calls it too).
+from ..data.pursuits import alignment
 # v9 IN-67: `goal_referents` reads a goal's `object:` off the ONE loader and a `deed_doers` goal's
 # doers off the person-side family.
 from ..data import goals as _goals
@@ -1784,8 +1786,20 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None) -> Callable[
       4. the rest -- AND every question whose claim records HIS OWN act (`Claim.doer == p.id`,
          stamped by WITNESS), whatever its referent: the echo of his own deed is not news.
 
+    SALIENCE ORDERS WITHIN TIERS 0 AND 3, DESCENDING, NEVER ACROSS TIERS (v9 IN-69, ED-IN-0293 (10)): the
+    key's second slot is `-salience`, the cosine (`data/pursuits.py::alignment`, the owner `cast.loyalty`
+    calls) of `p`'s `crisis_weights` against what the ambition's organization expects of its members: an
+    org goal -> `expected(org) + goal.pursuits`, the faction creed -> `expected(faction)` (`data/goals.py::
+    expected`: the role template plus the org's goals' pursuits); `p`'s own want (every other ambition)
+    -> `0.0`, indifference. A `need` question takes its own ambition's salience, a tier-0 claim the
+    maximum over the ambitions whose `goal_referents` contain its referent. So a member whose pursuits
+    point with his faction answers the org goal that fits him best first, and one who points against it
+    answers his own want first. Tier 2 keeps -|valence|; tiers 1 and 4 carry 0. Salience is `p`'s own
+    state against the stores his edges name (AX-2). An org that expects nothing (no template, no goal)
+    reads `0.0`.
+
     `(order[source], q.id)` -- the key before IN-57 -- stays the final tiebreak, so within a tier
-    the old order holds; magnitudes inside tiers 0-1 are not ranked (LIMIT). A source added later
+    (and a salience) the old order holds; magnitudes inside tier 1 are not ranked (LIMIT). A source added later
     takes its tier from its referents, so `question_sources`' order is not edited. `ambs` is
     `ambitions(w, p)` where the caller already holds it (`questions_for`); `None` computes it.
 
@@ -1809,7 +1823,8 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None) -> Callable[
     entry's tier 0 literal (`need` in tier 0), or before IN-57 the `(source, id)` key.]"""
     if ambs is None:
         ambs = ambitions(w, p)
-    aims = {r for pid in ambs for r in goal_referents(w, p, w.propositions[pid])} - {None}
+    refs_of = {pid: set(goal_referents(w, p, w.propositions[pid])) - {None} for pid in ambs}
+    aims = set().union(*refs_of.values())
     mine = own_purview(w, p)
     held_by_id = {c.id: c for c in p.ledger}
 
@@ -1817,15 +1832,40 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None) -> Callable[
     def axis_w() -> dict:
         return projected_axes(p, w.fixtures.get("scar_weight_shift"))
 
+    @functools.cache
+    def weights() -> dict:
+        return crisis_weights(p, w.fixtures.get("scar_weight_shift"))
+
+    @functools.cache
+    def salience(pid: str) -> float:
+        """How far the ambition `pid` points where `p` does, `[-1, +1]` (v9 IN-69): an org goal against
+        `expected(org) + goal.pursuits`, a faction's creed against `expected(faction)`, `p`'s own want
+        (any other ambition) `0.0` -- indifference, the cosine's midpoint. `alignment` is `None` for an
+        organization expecting nothing (no template, no goal) and for a `p` with no pursuits: `0.0`."""
+        goal = _goals.goal(pid)
+        if goal is not None:
+            target = _goals.expected(goal.org_kind, goal.org)
+            for name, wt in goal.pursuits.items():
+                target[name] = target.get(name, 0.0) + float(wt)
+        elif pid in FACTION_BY_PROP:
+            target = _goals.expected("faction", FACTION_BY_PROP[pid])
+        else:
+            return 0.0
+        cosine = alignment(weights(), target)
+        return 0.0 if cosine is None else cosine
+
     def key(q: Question) -> tuple:
         tie = (_SOURCE_ORDER[q.source], q.id)
+        # Salience orders WITHIN tiers 0 and 3, descending (second slot is ascending); across tiers the
+        # first slot decides, so no salience lifts a question over another tier's.
         if q.source == "need":
-            return (3, 0.0) + tie
+            return (3, -salience(q.about) if q.about in refs_of else 0.0) + tie
         held = held_by_id.get(q.about)
         if held is not None and held.doer == p.id:
             return (4, 0.0) + tie
         if any(r in aims for r in q.referents):
-            return (0, 0.0) + tie
+            return (0, -max(salience(pid) for pid, refs in refs_of.items()
+                            if any(r in refs for r in q.referents))) + tie
         if any(r in mine for r in q.referents):
             return (1, 0.0) + tie
         v = deed_valence(axis_w(), held) if held is not None else 0.0
