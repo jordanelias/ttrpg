@@ -105,12 +105,14 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
     for c in p.ledger:
         if not is_deed(c):
             continue
-        if c.predicate in PAIRED_KINDS:
-            # IN-58: judged for the DOER the pairing names, never for the claim's subject.
-            if c.chain:
-                continue            # a told copy carries no `seen`: it is never paired
-            if axis_w is None:
-                axis_w = to_axes(crisis_weights(p, scar_shift))
+        # IN-58: a paired kind is judged for the DOER the pairing names, never for its subject; a
+        # told copy carries no `seen`, so it is never paired.
+        paired = c.predicate in PAIRED_KINDS
+        if (c.chain if paired else c.subject != referent):
+            continue
+        if axis_w is None:
+            axis_w = projected_axes(p, scar_shift)
+        if paired:
             lean = _lean(axis_w, c.predicate)
             if not lean:
                 continue            # no authored lean on `p`'s axes: nothing to weigh, no pairing read
@@ -119,11 +121,7 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
             if deed_doer(c, seen) != referent:
                 continue
             v = lean * _bond(p, c.subject, lean)
-        elif c.subject != referent:
-            continue
         else:
-            if axis_w is None:
-                axis_w = to_axes(crisis_weights(p, scar_shift))
             v = deed_valence(axis_w, c)
         # FIRSTHAND only is judged (`dissents`' and `record`'s precedent, `decision/options.py`):
         # a `told_by` claim whose chain is empty is still hearsay, and lands in `told`.
@@ -143,9 +141,7 @@ PAIRED_KINDS = frozenset(k for k in _verbs.DEED_KINDS if k not in _verbs.KIND_VE
 # only if what the witness saw was an act of one of them (`Seen.stratum`). Every channel showing
 # `who` shows `stratum` (`rosters.yaml: observation_terms.supplied_by`), so the test never drops a
 # pairing that `who` alone would have made; it refuses a third party's DIFFERENT act on the patient in
-# the same round being read as the deed's doer. (The collision MEASURED at IN-58 was the patient's
-# own `move` in the round he was wounded, which `who != subject` already refuses; this one was not
-# observed on `build_realm(0)` or the corpus, and costs one set lookup.)
+# the same round being read as the deed's doer.
 _KIND_STRATA = {k: frozenset(r.stratum for r in _verbs.VERB_TABLE.values() if k in r.emits)
                 for k in PAIRED_KINDS}
 
@@ -237,9 +233,12 @@ def deed_valence(axis_w: dict, c) -> float:
 def _lean(axis_w: dict, kind: str) -> float:
     """`Σ_axis axis_w[axis] · align_kind(kind, axis)`: how pursuits projected to `axis_w` lean on a
     deed of `kind`. One owner for the unpaired (`deed_valence`) and the paired (IN-58) scoring."""
-    # sorted: PURSUIT_AXES is a frozenset, and a float sum's order would move with PYTHONHASHSEED
-    # while callers test the result for exact zero.
-    return sum(axis_w[ax] * _verbs.align_kind(kind, ax) for ax in sorted(PURSUIT_AXES))
+    return sum(axis_w[ax] * _verbs.align_kind(kind, ax) for ax in _AXES)
+
+
+# sorted: PURSUIT_AXES is a frozenset, and a float sum's order would move with PYTHONHASHSEED
+# while callers test the result for exact zero.
+_AXES = tuple(sorted(PURSUIT_AXES))
 
 
 def regard(p: Person, referent: str, fx=None) -> float:
@@ -417,6 +416,11 @@ def crisis_weights(p: Person, shift: float = 0.0) -> dict:
     for e, w in heirs.items():
         out[e] = w + given * w / pool
     return out
+
+
+def projected_axes(p: Person, shift: float = 0.0) -> dict:
+    """`p`'s pursuits projected to the axes, `to_axes(crisis_weights(p, shift))`: person-side (AX-2)."""
+    return to_axes(crisis_weights(p, shift))
 
 
 def conviction_after_crisis(p: Person, among: frozenset | None = None) -> dict:
@@ -668,7 +672,7 @@ def said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | None
     pursuits."""
     pool = [c for c in claims if c.subject == subject] if claims else []
     if teller is not None and fx is not None and pool and _slant(fx) == "valence":
-        axis_w = to_axes(crisis_weights(teller, fx.get("scar_weight_shift")))
+        axis_w = projected_axes(teller, fx.get("scar_weight_shift"))
         strength = {id(c): abs(deed_valence(axis_w, c)) for c in pool}
         top = max(strength.values())
         if top > 0:

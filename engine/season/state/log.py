@@ -79,10 +79,8 @@ class EventLog:
                             "is an Event reporting a state change that did not happen, which "
                             "is ID-9's own worked example")
 
-        # IN-56. MEMBERSHIP, NOT A UNION. The line this replaced built `self._ids | self._act_ids()
-        # | {ROOT}` -- a copy of every id in the log -- on every append (18.7 s of a 19.3 s profile).
-        # The refusal is unchanged: a cause is resolved if it is ROOT, a prior Event id or an act id;
-        # `self._act_ids()` is evaluated once, and only when some cause is neither.
+        # IN-56. MEMBERSHIP, NOT A UNION: a cause is resolved if it is ROOT, a prior Event id or an
+        # act id; `self._act_ids()` is evaluated once, and only when some cause is neither.
         unresolvable = [c for c in ev.causes if c != ROOT and c not in self._ids]
         if unresolvable:
             act_ids_now = self._act_ids()

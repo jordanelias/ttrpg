@@ -25,7 +25,6 @@ from __future__ import annotations
 
 from typing import Any, Callable, Optional
 from ..data.cast import STANCE_MAX
-from ..data.pursuits import to_axes
 from ..data.requires import (
     CELL_STEMS, SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS, VIA, WRIT_SOURCED_OPERANDS,
 )
@@ -38,7 +37,7 @@ from ..data.verbs import ELIGIBILITY_KINDS, VERB_TABLE, align
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
 from ..queries.person_q import (
-    LedgerReader, content_said, crisis_weights, known_persons, ledger_names, regard, said_of,
+    LedgerReader, content_said, known_persons, ledger_names, projected_axes, regard, said_of,
 )
 from ..state.carriers import Candidate, Claim, Person, Question, View
 from ..trace_log import TRACE
@@ -308,7 +307,7 @@ def project(p: Person, scar_shift: float = 0.0) -> dict:
     reached threshold 2 gives weight to the others. `0`, the shipped control, hands `to_axes` the
     person's own `pursuits` untouched. Only `choose`'s score passes it; `refusal_tolerance` (dormant)
     reads the unshifted weight."""
-    return to_axes(crisis_weights(p, scar_shift))
+    return projected_axes(p, scar_shift)
 
 
 def refusal_tolerance(p: Person, axis: Optional[str]) -> Optional[float]:

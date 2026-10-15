@@ -289,14 +289,9 @@ def witness(self, token: Token, events: list[Event]) -> int:
     mode = w.fixtures.get("fan_out_mode")
     # Plan position `15d`: the third term is THE CHANNEL that admitted `pid` -- the strongest, by
     # `WITNESS_CHANNELS`' declared precedence -- and no longer the mode, which is `mode` above.
-    # IN-55 / RS-24: an Event that changes only claims some ledger holds, with no act behind it, is
-    # witnessed by nobody (`epistemic.changes_only_held_claims` says why, and which Events and which
-    # modes -- never `total` -- it is not), so `observers_for` is not asked. `claim.decayed` is the
-    # whole of it today: MEASURED under `all_five` on
-    # `populated.run(2, 0)`, 6,445 of the 8,773 Events fanned, 0 with an observer, and the bulk of the
-    # fan's time. The ledgers are read HERE, once, before any deposit of this barrier, and held in a
-    # local -- stored nowhere, so there is nothing to go stale. The skip changes no deposit.
-    held = held_claim_ids(w)
+    # IN-55: an Event that changes only held claims, with no act, fans to nobody
+    # (epistemic.changes_only_held_claims); the ledgers are read here once, before any deposit.
+    held = held_claim_ids(w) if mode != "total" else frozenset()
     fan: list[tuple[str, Event, str]] = [
         (pid, e, ch) for e in events if not changes_only_held_claims(w, e, held, mode)
         for pid, ch in observers_for(w, e, mode, everyone)]
@@ -495,9 +490,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # performer, so every witness of it refracts.
         actor = actor_of(w, e)
         refracting = bool(gain) and actor != pid
-        # v9 IN-57 (ED-IN-0294): `Claim.doer` -- the witness's own id when the Event is HIS OWN act,
-        # stamped on the event-kind, `obs`, `seen` and content deposits below (never on a told copy).
-        # He knows his own act, so it leaks nothing a channel withholds; `attention_key` reads it.
+        # v9 IN-57: Claim.doer -- stamped only where the witness is the actor (see carriers.Claim.doer).
         doer = pid if actor == pid else None
         # `H-201`: THE ACT THE EVENT-KIND AND `seen` DEPOSITS REPORT, AND HOW THIS WITNESS WEIGHS
         # THEIR OWN LEDGER -- `dissents`' act-level prior, *could the actor have done this, on what
@@ -604,9 +597,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # `observed` (`loop/matter.py`, `19d`). What it records is a named rung's shortfall,
         # relative to no holder, and it is what anyone standing at the drained larder or holding it
         # saw. Before `19d`, no actorless Event carried an observation (MATTER's and CALENDAR's
-        # emitted `()`), so this clause changed no deposit on any world that existed. `actor` is
-        # the one `actor_of(w, e)` bound above for this (pid, Event) pair, not recomputed. `none`
-        # is still the control and deposits nothing.
+        # emitted `()`), so this clause changed no deposit on any world that existed. `none` is
+        # still the control and deposits nothing.
         if (obs_mode != "none" and e.observed
                 and (obs_mode == "total" or actor is None or pid == actor)):
             seen_obs = seen_obs_by_pid.setdefault(pid, set())

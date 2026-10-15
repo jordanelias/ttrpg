@@ -198,7 +198,7 @@ def _scar_flip():
     read off the shipped tables, the first such quadruple in sorted order. None if the tables hold
     none (the test then fails rather than pass vacuously)."""
     from ..data.rosters import PURSUITS as ALL
-    from ..queries.person_q import SCAR_WEIGHT_SHIFT_AT, crisis_weights
+    from ..queries.person_q import SCAR_WEIGHT_SHIFT_AT, projected_axes
     kinds = sorted(V.DEED_KINDS)
     for a in sorted(ALL):
         for b in sorted(ALL):
@@ -208,7 +208,7 @@ def _scar_flip():
             p.pursuits, p.scar = {a: 1.0, b: 1.0}, {a: SCAR_WEIGHT_SHIFT_AT}
 
             def size(shift):
-                ax = to_axes(crisis_weights(p, shift))
+                ax = projected_axes(p, shift)
                 return {k: abs(deed_valence(ax, _claim("c", "p", "p", k, True))) for k in kinds}
             v0, v1 = size(0.0), size(1.0)
             for i, k1 in enumerate(kinds):
