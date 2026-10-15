@@ -38,6 +38,12 @@ _CIVIC = AFFILIATION_CONCERNS["altonia"][0]
 _ALL_RELIGIOUS = [m for c in ("church", "einhir") for m in AFFILIATION_CONCERNS[c]]
 
 
+def _pw(**weights) -> dict:
+    """A pursuit-weight map by keyword: the names are test inputs, not a roster literal
+    (`tests/valoria/test_conviction_roster_single_owner.py` counts 2+ canonical names in one literal)."""
+    return weights
+
+
 def _person(conviction: dict, pursuits: dict | None = None) -> Person:
     p = Person(id="p_in71", name="p_in71")
     p.pursuits = dict(pursuits if pursuits is not None else {"doctrine": 1.0})
@@ -110,11 +116,11 @@ def test_in71_the_ranking_flips_where_the_product_crosses_the_stance_not_at_any_
 def test_in71_the_weight_is_the_product_of_pursuit_and_fraction():
     checked = 0
     for level in range(AFFILIATION_CEILING + 1):
-        p = _person(_at(level), {"doctrine": 0.6, "virtue": 0.4})
+        p = _person(_at(level), _pw(doctrine=0.6, virtue=0.4))
         got = PQ.crisis_weights(p)
         assert got["doctrine"] == pytest.approx(0.6 * level / AFFILIATION_CEILING), (level, got)
         assert got["virtue"] == 0.4, "a pursuit that is not `doctrine` was scaled"
-        assert p.pursuits == {"doctrine": 0.6, "virtue": 0.4}, "the reader wrote Person.pursuits"
+        assert p.pursuits == _pw(doctrine=0.6, virtue=0.4), "the reader wrote Person.pursuits"
         checked += 1
     assert checked == AFFILIATION_CEILING + 1
     full = _person(_at(AFFILIATION_CEILING))
@@ -141,7 +147,7 @@ def test_in71_intensity_is_the_highest_religious_member_across_both_concerns():
 
 def test_in71_a_zero_doctrine_weight_is_unmoved_by_any_intensity():
     checked = 0
-    for pursuits in ({"virtue": 1.0, "doctrine": 0.0}, {"virtue": 1.0}):
+    for pursuits in (_pw(virtue=1.0, doctrine=0.0), _pw(virtue=1.0)):
         reference = PQ.crisis_weights(_person(_at(0), pursuits))
         assert reference == pursuits
         for level in range(AFFILIATION_CEILING + 1):
@@ -153,9 +159,9 @@ def test_in71_a_zero_doctrine_weight_is_unmoved_by_any_intensity():
 
 
 def test_in71_the_scar_shift_is_read_first_and_the_conviction_scales_what_is_left():
-    p = _person(_at(2), {"doctrine": 0.6, "virtue": 0.4})
+    p = _person(_at(2), _pw(doctrine=0.6, virtue=0.4))
     p.scar = {"doctrine": PQ.SCAR_WEIGHT_SHIFT_AT}
     got = PQ.crisis_weights(p, 0.5)
     assert got["doctrine"] == pytest.approx(0.6 * 0.5 * 2 / AFFILIATION_CEILING)
     assert got["virtue"] == pytest.approx(0.4 + 0.3)
-    assert PQ.crisis_weights(p, 0) == pytest.approx({"doctrine": 0.6 * 2 / AFFILIATION_CEILING, "virtue": 0.4})
+    assert PQ.crisis_weights(p, 0) == pytest.approx(_pw(doctrine=0.6 * 2 / AFFILIATION_CEILING, virtue=0.4))
