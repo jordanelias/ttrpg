@@ -57,11 +57,14 @@ def _king(gid="g_king", org=CIRCLE, **kw):
 
 
 def _realm(monkeypatch, tmp_path, *rows, **kw):
-    """`build_realm(0, **kw)` over a hand-built goals file, planted through the loader's patch point."""
+    """`build_realm(0, **kw)` over a hand-built goals file, planted through the loader's patch point. The
+    file is deliberately PARTIAL, so FA-06's completeness refusal is switched off here (`goals_complete=
+    False`); `test_fa06_org_goals.py` is where it is exercised."""
     path = tmp_path / "goals.yaml"
     path.write_text(yaml.safe_dump({"goals": list(rows)}, allow_unicode=True), encoding="utf-8")
     monkeypatch.setattr(goals, "GOALS_YAML", path)
     monkeypatch.setattr(goals, "_CACHE", None)
+    kw.setdefault("goals_complete", False)
     return P.build_realm(0, **kw)
 
 
@@ -93,7 +96,7 @@ def test_in68_a_faction_goal_reaches_its_members_and_its_head(monkeypatch, tmp_p
     # the head who is no member: planted by rebinding the owner of "who heads this faction"
     real = cast.faction_leader
     monkeypatch.setattr(cast, "faction_leader", lambda f: "NPC-040" if f == "Crown" else real(f))
-    w2 = P.build_realm(0)
+    w2 = P.build_realm(0, goals_complete=False)
     assert "p_npc_040" not in members(w2, faction_prop_id("Crown")), "control: the head is no member"
     assert _committed(w2, "g_heir") == set(members(w2, faction_prop_id("Crown"))) | {"p_npc_040"}
 

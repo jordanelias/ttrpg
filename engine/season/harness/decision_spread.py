@@ -471,8 +471,8 @@ def main(argv=None) -> int:
     arm = "control: pursuits = realm mean" if a.control else (
         "null: alignment uniform" if a.null else "shipped")
     if a.control:
-        print("--control: goals are unseeded (IN-68: `build_realm(goals=False)`; a no-op until "
-              "`goals.yaml` carries a row); cohort temperaments off is NOT YET A SWITCH (SE-06)")
+        print("--control: goals are unseeded (IN-68: `build_realm(goals=False)`; the shipped "
+              "`goals.yaml` carries rows since FA-05, FA-06); cohort temperaments off is NOT YET A SWITCH (SE-06)")
     with (null_alignment() if a.null else contextlib.nullcontext()):
         if a.persons:
             if a.null:

@@ -1628,7 +1628,7 @@ def goal_referents(w: World, p: Person, prop) -> tuple:
     question (`harness/populated.py`'s rule, *an OUGHT about nobody is not a motive*, now at read).
 
     The Proposition's id IS the goal's id (`data/goals.py`, the row mints it), so a Proposition no goal
-    names -- every creed, tie and want today, the shipped `goals.yaml` being empty -- reads
+    names -- every creed, tie and want, and every Proposition a goal row does not mint -- reads
     `(prop.subject,)` exactly as before. A goal reads by the kind of its `object:` (`_goal_referents`):
 
       * `person`, `rung` -> `(prop.subject,)`: seeding (IN-68) minted the Proposition about them;

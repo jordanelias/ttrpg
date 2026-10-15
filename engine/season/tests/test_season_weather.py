@@ -76,9 +76,13 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # the build hash equal), IN-72 (equal in seed 0) and FA-05 (nine goal rows seeded: the build hash moves, 25
 # commits and 29 stance rows, plus the `influences` seeding fix, 29 and 33). The pin sat red between IN-69's
 # commit and this one (no per-item run of this file). Was 33c20c4c... / 9095b921... / 10b1abab...
-BASE_HASHES = {0: "41fdb68558a94f464b80c28f62ccb273",
-               1: "c7f7506fa8c643de815a8cbf37d89188",
-               2: "ec6b82f34290243e9abac63b09c22fd9"}
+# RE-PINNED at v9 FA-06 (B-X), A DATA MOVE DECLARED: 26 goal rows beside FA-05's nine (35; 12 mint a
+# Proposition, 23 are orientations; commits 29 -> 55, stance rows 33 -> 44), and the Inquisitors' row now
+# `establishes` over the Church's heresy goal. Was 41fdb685... / c7f7506f... / ec6b82f3... (build, one, two
+# seasons); one season 585 -> 602 acts, `fight` 4 -> 4 (Olafsson on Haelgrund gone, Jarnstal on Vossen new).
+BASE_HASHES = {0: "545729e90081241f3f29fef12c360a3e",
+               1: "93608c2246ed858fd5728dea5ef13467",
+               2: "61782df4794ebcd40f7da793af099264"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -97,8 +101,9 @@ BASE_HASHES = {0: "41fdb68558a94f464b80c28f62ccb273",
 # (`off_king`'s `obligees: ["NPC-070"]`), so the build hash moves and the log gains its one build-time event.
 # Was 472050b8... / cc650fcf... / 8f4d2088... (build, one, two seasons); events 7186 -> 7187, 19797 -> 19798.
 # RE-RECORDED at v9 FA-05 with `BASE_HASHES` (7187 -> 6542, 19798 -> 18583).
-BASE_EVENTS = {1: (6542, "f52c6018ea23e58d8e72ba87c5e9a1b32b8845127855a846cb7283ff73ef2bfb"),
-               2: (18583, "24ba1104f4d6b0d94a09962c043b894c2e555cdead6133aac682b68344a221d2")}
+# RE-RECORDED at v9 FA-06 with `BASE_HASHES` (6542 -> 7094, 18583 -> 19454).
+BASE_EVENTS = {1: (7094, "6d6d31a0e6ca8c7c03984a786ec9f1ac9ca1fa86a85e2c21106433ff311b5c4d"),
+               2: (19454, "3c472f650b275b4edc43bb8715bc8d30c5e958ec66cdec365a68406acf2be725")}
 
 
 def _digest(w) -> tuple:
