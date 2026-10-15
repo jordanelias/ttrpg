@@ -80,9 +80,12 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # Proposition, 23 are orientations; commits 29 -> 55, stance rows 33 -> 44), and the Inquisitors' row now
 # `establishes` over the Church's heresy goal. Was 41fdb685... / c7f7506f... / ec6b82f3... (build, one, two
 # seasons); one season 585 -> 602 acts, `fight` 4 -> 4 (Olafsson on Haelgrund gone, Jarnstal on Vossen new).
-BASE_HASHES = {0: "545729e90081241f3f29fef12c360a3e",
-               1: "93608c2246ed858fd5728dea5ef13467",
-               2: "61782df4794ebcd40f7da793af099264"}
+# RE-PINNED at the v9 B-X BATCH-CLOSE (d84e98eb), A DATA MOVE DECLARED: `goals.yaml`'s two heresy goals'
+# `text:` changed and a Proposition's value is hashed, so all three hashes moved; the event counts and digests
+# below are unchanged. Was 545729e9... / 93608c22... / 61782df4... (build, one, two seasons).
+BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
+               1: "bb08f4b28a5009c0aa27c133ce6229ff",
+               2: "cdeda7fd8a29ace0896babdce1a86922"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base

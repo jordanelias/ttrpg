@@ -125,7 +125,7 @@ def realm_mean_conviction(w) -> dict:
     is the absence of a view, as in `realm_mean_pursuits`)."""
     holders = [p for p in w.persons.values() if p.conviction]
     names = sorted({k for p in holders for k in p.conviction})
-    return {k: sum(float(p.conviction.get(k, 0)) for p in holders) / len(holders) for k in names}
+    return {k: round(sum(float(p.conviction.get(k, 0)) for p in holders) / len(holders)) for k in names}
 
 
 def apply_control(w) -> dict:
@@ -221,10 +221,11 @@ def projected_vector(p, fx) -> list:
     return [axis_w[ax] for ax in PURSUIT_AXES]
 
 
-def territory_of(w, pid: str) -> str:
+def territory_of(w, pid: str, homes: Optional[dict] = None) -> str:
     """The first TERRITORY rung on the person's home ancestry (`containment.ancestry`, the one walk);
-    their home rung itself when none is a territory."""
-    home = world_q.home_of(w).get(pid)
+    their home rung itself when none is a territory. `homes` is `world_q.home_of(w)` where the caller
+    already holds it (a loop over persons), else it is read here -- the map is a scan of every tenure."""
+    home = (world_q.home_of(w) if homes is None else homes).get(pid)
     if home is None:
         return "-"
     for r in world_q.ancestry(w, home):
@@ -261,9 +262,10 @@ def read_persons(w) -> dict:
         groups.setdefault(profile_key(w, w.persons[pid]), []).append(pid)
     identical = {k: v for k, v in groups.items() if len(v) > 1}
     cohorts: dict = {}
+    homes = world_q.home_of(w)
     for pid in ids:
         if w.persons[pid].is_cohort:
-            cohorts.setdefault(territory_of(w, pid), []).append(pid)
+            cohorts.setdefault(territory_of(w, pid, homes), []).append(pid)
     return {
         "persons": len(ids), "cast": sum(1 for pid in ids if not w.persons[pid].is_cohort),
         "cohorts": sum(1 for pid in ids if w.persons[pid].is_cohort),

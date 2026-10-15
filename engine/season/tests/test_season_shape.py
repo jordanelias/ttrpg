@@ -8318,10 +8318,7 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
         # `commit`, `examine`, `levy`, `restore` leave the executed set. THE SAME-BREATH CHECK: the
         # universal set is empty on both sides and the status census is UNMOVED (103 RUNS-UNDECLARED ·
         # 40 SPAN-UNAUTHORED); R3 NPC 46 of 46, ARC 97 of 97, as at the base.
-    # ⚠⚠ **106 -> 115, v9 IN-71 (H-188: `doctrine` scaled by religious conviction in `crisis_weights`), MEASURED
-    # BY THIS TEST'S OWN RUN, seed 0, AGAINST THE SAME TEST AT IN-64's `c0097acd` (106 there).** THE DIRECTION:
-    # variety ROSE by nine; the pursuit dot now differs between persons who held one `doctrine` weight.
-    assert len(by_sig) == 115, (
+    assert len(by_sig) == 106, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -12653,9 +12650,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # [GROUNDED: measured at IN-08's cells commit, NPC-088 slice, seed 0, 4 seasons at 2 slots -- genuine/diverged `none` 37/4, `actor` 35/9, `total` 29/6; base `13715804` 32/5, 32/7, 30/11]
     # IN-57: 37/4 -> 40/4, a re-record: the attention-tier key (with its own-act screen) moved
     # NPC-088's act mix; 38/5 with the tiers and no screen.
-    # IN-71: 40/4 -> 35/3, a re-record: `doctrine`'s pull now scales with religious conviction (`crisis_weights`),
-    # which re-ranks NPC-088's candidates; 11 > 3 below still holds.
-    assert (got["none"]["genuine"], got["none"]["diverged"]) == (35, 3), got
+    assert (got["none"]["genuine"], got["none"]["diverged"]) == (40, 4), got
     # Reproduce with the `fork_case` loop above, run at each `fan_out_mode`.
     # [GROUNDED: measured 2026-09-07 — 16 genuine forks, 0 divergences at the shipped arm]
     # ⚠ 14 of 18 -> 17 of 19 under `U4`: the sampled tie-break moved the act a fork's person takes,
@@ -12692,8 +12687,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # `hold` buys (`decision/budget.py`); no arm isolates either, and h9's three `scar_weight_shift` arms moving
     # -3/-1/0 (`test_h9_crisis_reader.py`) is not what one budget mechanism alone would predict.]
     # IN-57: 32/9 -> 36/11, a re-record (same cause as the `none` pin above); 11 > 4 still holds.
-    # IN-71: 36/11 -> 34/9 (same cause as the `none` pin above); 9 > 3 still holds.
-    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (34, 9), (
+    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (36, 11), (
         f"the shipped default diverged {got['actor']['diverged']} times of "
         f"{got['actor']['genuine']}: {got}. `W-D`'s acceptance was lost at `all_five` on "
         "2026-09-07 and recovered on 2026-09-10 when §F1 clause 4 got producers other than "
@@ -12735,7 +12729,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # [GROUNDED: measured 2026-09-30 at plan position `19c`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- `total` arm genuine 32, diverged 11; 32/10 with `migrate` unresolvable]
     # [GROUNDED: 32/11 -> 30/11 at plan position `24f`, 2026-09-30 -- divergence unmoved; mechanism in the `none`-arm `24f` block above]
     # [GROUNDED: 30/11 -> 29/6 at IN-08's cells commit (B-G) -- the re-scored ranking and the duel pair; mechanism and both trees' figures in the `none`-arm IN-08 block above]
-    assert (got["total"]["genuine"], got["total"]["diverged"]) == (34, 9), got    # IN-11: 29/6 -> 26/6 (the actor-arm note); IN-57: -> 36/10 (the attention-tier key); IN-71: -> 34/9 (the doctrine coupling)
+    assert (got["total"]["genuine"], got["total"]["diverged"]) == (36, 10), got    # IN-11: 29/6 -> 26/6 (the actor-arm note); IN-57: -> 36/10 (the attention-tier key)
     # AND THE TWO LAYERS ARE SEPARATED. The finding is the DECISION count above; this is the layer
     # beneath it — whether the fork moved the act stream at all.
     #
@@ -12872,7 +12866,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
         # IN-57: a re-record -- the attention-tier key (with its own-act screen) moved NPC-088's act
         # mix. `acts_differ/genuine` ROSE in every arm: `none` 15/37 -> 18/40, `actor` 12/32 -> 18/36,
         # `total` 9/26 -> 18/36; the floor holds (72 > 40, 72 > 36, 72 > 36).
-        "none": (11, 35), "actor": (11, 34), "total": (11, 34)}, (   # IN-71: 18/40, 18/36, 18/36 -> 11/35, 11/34, 11/34
+        "none": (18, 40), "actor": (18, 36), "total": (18, 36)}, (
         f"the recoverability figures moved: {{k: (v['acts_differ'], v['genuine']) for k, v in got.items()}}. "
         "This is a RE-PIN DECISION, not necessarily a failure — but it is one somebody has to "
         "make deliberately, because `acts_differ / genuine` is how much of a fork the scene tick "
@@ -13117,8 +13111,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # [GROUNDED: measured at IN-08's cells commit, NPC-088 slice, seed 0, 4 seasons at 2 slots -- shipped arm verbonly 9, equal to wide; `none` 4/4, `total` 6/6]
     # IN-57: 9 -> 11, a re-record: the sibling test's population move (the attention-tier key with
     # its own-act screen); still equal to `wide` (11 both), not 0.
-    # IN-71: 11 -> 9 (the doctrine coupling re-ranks NPC-088; the verb-set divergences fall with the `diverged` pin).
-    assert got["actor"]["verbonly"] == 9, (
+    assert got["actor"]["verbonly"] == 11, (
         f"the shipped default adds {got['actor']['verbonly']} VERB-SET divergences: {got}. A 0 "
         "means the clause-4 producers the six investigation acts opened are gone again and the "
         "2026-09-07 loss is back; any other number means the population moved and must be "
@@ -13196,7 +13189,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # [GROUNDED: measured 2026-10-01 at plan position `14` -- fingerprint genuine/wide: `none` 32/5, `actor` 32/7, `total` 30/11 (from 32/4, 32/7, 30/11); with `destroy_record` formable too, identical]
     # [GROUNDED: measured at IN-08's cells commit (B-G) -- fingerprint genuine/wide: `none` 37/4, `actor` 35/9, `total` 29/6 (from 32/5, 32/7, 30/11); the sibling test's IN-08 move, same `fork_case` instrument, same cause]
     # IN-57: 37/4 -> 40/4, the sibling test's move (the attention-tier key).
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (35, 3), got    # IN-71: 40/4 -> 35/3
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (40, 4), got
     # [GROUNDED: re-measured 2026-09-10 under `U4` — `actor` wide 17 of 19 under the widened fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (29, 9) at the shipped arm]
     # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person a person-subject
@@ -13213,7 +13206,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # ⚠⚠ **33/10 -> 31/7, PLAN POSITION `7a`, 2026-09-29 -- SAME MECHANISM AS THE `none`-ARM BLOCK
     # ABOVE, AND `wide` STILL EQUALS `verbonly` (7 both).**
     # [GROUNDED: measured 2026-09-29 on this tree after position `7a`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- shipped arm genuine 31, wide 7]
-    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (34, 9), got     # `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 36/11; IN-71: -> 34/9
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (36, 11), got     # `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 36/11
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- `total` 5 of 18 under the widened (verb, subject) fingerprint]
     # [GROUNDED: re-measured 2026-09-10 under `U4` -- `total` 5 of 19 under the widened (verb, subject) fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (28, 3) at the `total` arm]
@@ -13244,7 +13237,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # formed wherever `move` is. `wide` still equals `verbonly` (11 both); 32/10 with `migrate`
     # unresolvable.
     # [GROUNDED: measured 2026-09-30 at plan position `19c`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- `total` genuine 32, wide 11 (= verbonly 11); 32/10 with `migrate`'s `@effect_for` removed]
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (34, 9), got    # `24f`: 32/11 -> 30/11; IN-08: -> 29/6; IN-11: -> 26/6; IN-57: -> 36/10; IN-71: -> 34/9
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (36, 10), got    # `24f`: 32/11 -> 30/11; IN-08: -> 29/6; IN-11: -> 26/6; IN-57: -> 36/10
 
 
 # ===========================================================================

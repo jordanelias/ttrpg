@@ -474,9 +474,8 @@ SCAR_CRISIS_AT = 3  # [JUSTIFIED: the ruled threshold, not a swept value -- `ED-
 #: theology, ED-IN-0293). Names of a pursuit and of two concerns -- each checked against its roster
 #: below -- not figures: the intensity bound is the spine's own ceiling.
 #: [ASSUMPTION; medium; Jordan to correct -- v9 IN-71, builder and dismantler alike; revert: the Church's
-#: members only, or a swept gain rather than a straight scaling]. ⚠ WHERE NO `Person.conviction` IS FILLED
-#: (the corpus builder `build_at`, so the `11` and corpus worlds) `religious_intensity` is 0 and this
-#: ZEROES `doctrine` rather than scaling it.
+#: members only, or a swept gain rather than a straight scaling]. A person with NO `Person.conviction`
+#: (the corpus builder `build_at`'s worlds) is read unscaled by `crisis_weights`, not as intensity 0.
 DOCTRINE_PURSUIT = "doctrine"
 RELIGIOUS_CONCERNS = ("church", "einhir")
 if DOCTRINE_PURSUIT not in PURSUITS or not set(RELIGIOUS_CONCERNS) <= set(AFFILIATION_CONCERNS):
@@ -501,12 +500,18 @@ def crisis_weights(p: Person, shift: float = 0.0) -> dict:
 
     `doctrine` is multiplied by `religious_intensity(p)` -- `w_doctrine * intensity * row_doctrine`
     once `to_axes` applies the row, MULTIPLICATIVELY and not as a second additive term. A weight of
-    0, a person at full intensity, or no `doctrine` key returns the shift's result itself; any
-    other person reads a copy with that one weight scaled, `Person.pursuits` untouched.
+    0, a person at full intensity, no `doctrine` key, or NO `conviction` AT ALL returns the shift's
+    result itself; any other person reads a copy with that one weight scaled, `Person.pursuits`
+    untouched. A person whose `conviction` is `{}` has no religious content recorded -- ABSENT IS NOT
+    HELD, never 0 (IN-63) -- so his `doctrine` is read unscaled, as before IN-71 [ASSUMPTION; medium;
+    Jordan to correct -- found at the v9 B-X close: as first built, `{}` read intensity 0 and ZEROED
+    `doctrine` for every corpus (`build_at`) world, the very hazard H-188's `cite:` named; revert: scale
+    a conviction-less person by 0]. A STORED 0 on every religious member is a held rejection and does
+    zero it.
     """
     out = _scar_shifted(p, shift)
     w = out.get(DOCTRINE_PURSUIT)
-    if not w:
+    if not w or not p.conviction:
         return out
     k = religious_intensity(p)
     if k == 1.0:
