@@ -621,7 +621,7 @@ rows:
     kind:      "PRODUCER ×2"
     owner:     "Person (person-side)"
     grade:     "assumption"
-    default:   "`need` half DISCHARGED as Q4 of `questions_for`; aggregation defaults to `first` — the first question in `question_sources` order, which is the incumbent behaviour declared"
+    default:   "`need` half DISCHARGED as Q4 of `questions_for`; aggregation defaults to `first` — the first question in `world_q.attention_key` order (v9 IN-57; `question_sources` order is its within-tier tiebreak), the incumbent behaviour declared"
     site:      "Fixtures question_aggregation_rule -> decision.aggregate_questions, called by deliberate; rules from rosters.yaml question_aggregation"
     sweep:     ["first", "all", "one_per_source"]
     unblocks:  "every NPC season — it decides which question a budget-bounded person answers"

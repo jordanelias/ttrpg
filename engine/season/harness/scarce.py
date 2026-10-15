@@ -191,7 +191,7 @@ def run(seasons: int = 3, seed: int = 0, w: World | None = None,
     testing"*). Everything after that is the shipped loop: the chooser's score and packing, the
     fold, WITNESS. The override exists because WHICH of a person's questions they answer is
     `H-54`'s open rule, not this position's. At the shipped `question_aggregation_rule: first`, a
-    person answers `qs[0]`, which is the lowest HASH among their landed questions. MEASURED at
+    person answers `qs[0]`, which is the first under `world_q.attention_key` since v9 IN-57 (the lowest HASH among their landed questions only within a tier; the measurement below predates it). MEASURED at
     `19d` in this world, four seasons, override off, at each of `first`/`all`/`one_per_source`:
     the steward holds both shortfall claims and deliberates 15/19/15 times, and none of those
     deliberations is about a shortfall claim, because claims about his own granary sort first.

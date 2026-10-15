@@ -424,7 +424,7 @@ Act     := ( id, actor : PersonId, via : SeatId?, verb, refs, payload, terms?, s
 Scene   := ( id, person, occasion : Question, place : RungId, interactions : Act[] )
 Receipt := ( id minted BY THE GATE, kind, field, subject id, before, after )
 Event   := ( id, kind, changes[] : Receipt[], causes[] NON-EMPTY or [ROOT], emitted_at, degree? )
-Claim   := ( id, holder, subject, predicate, value, when, source, confidence, visibility?, doer? )   -- doer?: ED-IN-0294 (user, 2026-10-14): the holder's own id, stamped by WITNESS only on his own act's deposits, never a told copy; read by the attention key (v9 IN-57); not an actor on a witnessed record (T-d)
+Claim   := ( id, holder, subject, predicate, value, when, source, confidence, visibility?, doer? )   -- doer?: ED-IN-0294 (user, 2026-10-15): the holder's own id, stamped by WITNESS only on his own act's deposits, never a told copy; read by the attention key (v9 IN-57); not an actor on a witnessed record (T-d)
 ```
 
 **No `actor`, no `target`, no `subject` on `Event` — STRUCTURAL:** the fields do not exist, and
