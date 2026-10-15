@@ -4464,6 +4464,19 @@ rows:
     cite:      "BUILT AND LANDED DARK at `Item: IN-34` (a first attempt, b4f7a917, was reverted for H-206). Probe at `age_step` 0.25 on `build_realm(0)`, one season: one `person.died` for a seat-holder with causes [ROOT]; the 7 persons at his place held 14 claims naming him (7 `person.died`, 7 `seen`), the persons elsewhere held none; at step 0 the same holder lives and no claim names his death. Tests sweep their own arms only (AGE_ARMS, ILL_ARMS in `engine/season/tests/test_in34_bodies_clock.py`). NAMING: `Person.born` (an int tick) collides with `born` in the write gate (a frozenset of ids a write created, `world.py` ~1084, `state/gate.py` ~795, 04:585), against CLAUDE.md §4's word rule; renaming to `born_at` (as `Event.emitted_at`) changes the `Person` repr and costs a re-pin of the IN-34 hashes and BASE_EVENTS, so it was not taken in BF2 and is cheapest before anything else pins the field."
     source:    "v9 IN-34 (`workplans/valoria_master_workplan_v9_part5.md`), #457 D2, H-206, 2026-10-11"
 
+  - id:        H-209
+    tier:      1
+    hole:      "A DEAD VICTIM'S DEATH CLAIM NEVER BECOMES A QUESTION, SO IN-72 DOES NOT UNBLOCK RS-23'S PETITION CONJUNCT (IN-12 step 5). `questions_for` admits a claim only when its subject, or the subject's place, is in the holder's `reach` (`queries/world_q.py`), and a dead man has no place (`place_of`'s person limb is deliberately not widened, `world_q.py` ~500: it would move every reader of an old claim). IN-72 scores a paired claim in tier 2 and is correct for a claim that reaches the question set, but a non-actor witness's `person.died` claim never does"
+    kind:      "MECHANISM"
+    owner:     "the IN-12 step 5 builder (B-R)"
+    grade:     "measured"
+    default:   "the claim is held and never asked about; IN-72's tier 2 acts on wound (`body.changed`) and `contest.undecided` claims only"
+    site:      "`engine/season/queries/world_q.py` `questions_for` (the `reach` admission), `reach`, `place_of`"
+    sweep:     ["leave as is (shipped): RS-23's petition conjunct stays unfed", "admit a dead subject's claim through the place `World.departed_from` records (the actorless-event limb's source), an Event-tick-bound place", "widen `reach` for a dead subject to the place he last stood, which moves every reader of an old claim"]
+    unblocks:  "IN-12 step 5's RS-23 conjunct (a petition against a killer from a hearer whose regard moved)"
+    cite:      "MEASURED at `Item: IN-72` (e6adbc65), seed 0, six seasons: 11 non-actor `person.died` claims held, 0 in `reach`; wound claims: 16 (witness, claim) pairs reached questions, 6 from 4 witnesses ranked tier 2, none a first question. Asked with ED-IN-0296 (recorded, not asked there)"
+    source:    "v9 IN-72 (`workplans/valoria_master_workplan_v9_part5.md`), RS-23, ED-IN-0296, 2026-10-15"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

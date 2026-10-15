@@ -439,6 +439,16 @@ rows:
       Equal arms are not evidence the movers did nothing: the one-season hash moved at IN-69 (`decision_spread --season`,
       9095b921 -> a74673b1, acts 593 -> 590) and not at IN-72, and the `11` cases fork on a window these reorderings
       rarely reach; one run per arm, noise unmeasured, as at the first re-take.
+
+      **B-X CLOSE RE-TAKE (v9 FA-05, FA-06; `11`, E15), 2026-10-15, `2x3` only, 143 cases, 0 failed, seed 0,
+      PYTHONHASHSEED=0, reading @15dcc59a (after FA-06; `git archive` copy, 12 chunks, three at a time):** none 1711/2000 = 85.55 % -
+      actor 1151/1982 = 58.07 % - total 1179/1989 = 59.28 %, still BELOW the 96 % bar, `none >= actor` True; EQUAL to the second
+      re-take's. Conjunct 1 (`corpus_run`, `EXIT 0`): R3 46 of 46 (NPC) and 97 of 97 (ARC), planted control `False -> True`.
+      The status stays `met`. ⚠ THIS READING CANNOT SEE FA-05 OR FA-06: the instrument's worlds are built by
+      `engine/reference/degree-sweep/sweep_core.py` and `arm9_forking.py`, which name neither `build_realm`, `populated` nor
+      `goals` (grep, 2026-10-15), so no goal row, commit or stance row reaches a `11` case; the equality is the instrument's
+      blindness to the mover, not a measurement that the goals leave reconvergence alone. What the goals do to decisions
+      is read by `decision_spread` (R-06's B-X EXIT reading).
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [IN-10, IN-11, IN-13, FI-01, H-116, IN-50]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1: regard is computed at read; the cross-person half is IN-10's, IN-11's, IN-13's); H-111 is FI-01's deposit half
@@ -1094,6 +1104,24 @@ rows:
       60-degree bar; the `doctrine` row is PROVISIONAL. Distinct executed sets 118 -> 135. Stays
       `partial` for the reasons above that this did not touch (the corpus cast is still one shared
       OUGHT per world).
+      **B-X EXIT READING (v9 IN-62 instrument, B-X1..B-X3), 2026-10-15, seed 0, PYTHONHASHSEED=0, @15dcc59a; arm B is IN-62's
+      commit-message base reading @462c68a4 (B-W's close tree); recorded, never pinned. THE HEADLINE EXIT IS FALSE.**
+      `--decisions` (six common referents, 18 common candidates, 83 persons): shipped deciding term draw 420 / pursuit 78
+      (B: 426 / 72; arm 0 `--control`: 431 / 67); distinct tops 107 summed over the referents (arm 0: 100; B: 108 at 18 each);
+      `--null`: draw 498 of 498. Legs (1) and (2) hold against arm 0. `--persons`: 0 identical cast profiles; pairs above 0.99
+      11 (B: 37), median cosine 0.4632 (B: 0.2989). `--season` (1 season): shipped 602 acts, **79 distinct executed multisets**
+      (largest shared by 3); arm 0 612 acts, **82** (largest 1); `--null` 580 acts, 82; B 579 acts, **81**. Leg (4) FALLS against
+      B (81 -> 79) and the arm-0 control executes MORE distinct signatures than the tree (82 vs 79). Leg (3), distinct tops among
+      persons committed to one faction's creed, summed over the six referents (a scratch probe on `read_decisions`'s `tops`, not
+      an instrument output; grouping by the first `fac_` commit): shipped 184, arm 0 191, so it does NOT rise against arm 0.
+      [CONFIDENCE: medium on leg 3: the grouping is mine.] Attention is not collapsed (shipped season-1 deliberations: creed 29,
+      other need 32, own want 35; IN-69's probe has two Riskbreakers of one faction answering different first goals). Reading:
+      the pursuits decide 78 of 498 (person, referent) tops against arm 0's 67 but they also
+      concentrate persons onto the same top verbs, and the draw alone spreads executions wider than the goal-bearing realm does.
+      Per the card, a rise against arm 0 with a fall against B is routed to the content and the mechanism is not reverted;
+      here a leg against arm 0 also fails, which makes the claim FALSE as stated, and ED-IN-0296 carries it to Jordan.
+      `--arms` (1 season per arm; hash, acts, multisets): first/legacy 93608c22 602 79; first/declared e521091d 571 78;
+      all/legacy 60c345e7 533 80; all/declared 459c75c6 524 79.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' line"
     blocks: [IN-38, IN-08, IN-18, IN-12]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W27: `17` landed (build_at seats a `cast:`), IN-38 remains; H-62 re-scoped to IN-08, IN-18, IN-12 step 9
